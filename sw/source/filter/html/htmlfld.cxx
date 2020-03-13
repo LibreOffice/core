@@ -43,7 +43,7 @@ namespace {
 struct HTMLNumFormatTableEntry
 {
     const char *pName;
-    NfIndexTableOffset const eFormat;
+    NfIndexTableOffset eFormat;
 };
 
 }

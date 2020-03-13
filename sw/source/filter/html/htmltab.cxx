@@ -120,8 +120,8 @@ class HTMLTableContext
     SwFrameFormat *pFrameFormat;        // the Fly frame::Frame, containing the table
     std::unique_ptr<SwPosition> pPos;   // position behind the table
 
-    size_t const nContextStAttrMin;
-    size_t const nContextStMin;
+    size_t nContextStAttrMin;
+    size_t nContextStMin;
 
     bool    bRestartPRE : 1;
     bool    bRestartXMP : 1;
@@ -443,14 +443,14 @@ private:
     bool m_bInheritedRightBorder;
     bool m_bBordersSet;               // the border is set already
     bool m_bForceFrame;
-    bool const m_bTableAdjustOfTag;         // comes nTableAdjust from <TABLE>?
+    bool m_bTableAdjustOfTag;         // comes nTableAdjust from <TABLE>?
     sal_uInt32 m_nHeadlineRepeat;         // repeating rows
-    bool const m_bIsParentHead;
+    bool m_bIsParentHead;
     bool m_bHasParentSection;
-    bool const m_bHasToFly;
-    bool const m_bFixedCols;
+    bool m_bHasToFly;
+    bool m_bFixedCols;
     bool m_bColSpec;                  // where there COL(GROUP)-elements?
-    bool const m_bPercentWidth;                 // width is declared in %
+    bool m_bPercentWidth;                 // width is declared in %
 
     SwHTMLParser *m_pParser;          // the current parser
     std::unique_ptr<HTMLTableCnts> m_xParentContents;
@@ -460,13 +460,13 @@ private:
     std::shared_ptr<SwHTMLTableLayout> m_xLayoutInfo;
 
     // the following parameters are from the <TABLE>-Tag
-    sal_uInt16 const m_nWidth;                  // width of the table
+    sal_uInt16 m_nWidth;                  // width of the table
     sal_uInt16 m_nHeight;                 // absolute height of the table
-    SvxAdjust const m_eTableAdjust;             // drawing::Alignment of the table
-    sal_Int16 const m_eVertOrientation;         // Default vertical direction of the cells
+    SvxAdjust m_eTableAdjust;             // drawing::Alignment of the table
+    sal_Int16 m_eVertOrientation;         // Default vertical direction of the cells
     sal_uInt16 m_nBorder;                 // width of the external border
-    HTMLTableFrame const m_eFrame;          // frame around the table
-    HTMLTableRules const m_eRules;          // frame in the table
+    HTMLTableFrame m_eFrame;          // frame around the table
+    HTMLTableRules m_eRules;          // frame in the table
     bool m_bTopCaption;               // Caption of the table
 
     void InitCtor(const HTMLTableOptions& rOptions);
@@ -2845,7 +2845,7 @@ class CellSaveStruct : public SectionSaveStruct
 
     sal_Int16 m_eVertOri;
 
-    bool const m_bHead : 1;
+    bool m_bHead : 1;
     bool m_bPercentWidth : 1;
     bool m_bHasNumFormat : 1;
     bool m_bHasValue : 1;
@@ -4480,7 +4480,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
 
 class CaptionSaveStruct : public SectionSaveStruct
 {
-    SwPosition const aSavePos;
+    SwPosition aSavePos;
     SwHTMLNumRuleInfo aNumRuleInfo; // valid numbering
 
 public:
@@ -4918,8 +4918,8 @@ namespace
     class IndexInRange
     {
     private:
-        SwNodeIndex const maStart;
-        SwNodeIndex const maEnd;
+        SwNodeIndex maStart;
+        SwNodeIndex maEnd;
     public:
         explicit IndexInRange(const SwNodeIndex& rStart, const SwNodeIndex& rEnd)
             : maStart(rStart)

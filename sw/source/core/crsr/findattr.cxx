@@ -186,8 +186,8 @@ class SwAttrCheckArr
     sal_uInt16 m_nArrStart, m_nArrLen;
     sal_uInt16 m_nFound, m_nStackCount;
     SfxItemSet m_aComapeSet;
-    bool const m_bNoColls;
-    bool const m_bForward;
+    bool m_bNoColls;
+    bool m_bForward;
 
 public:
     SwAttrCheckArr( const SfxItemSet& rSet, bool bForward, bool bNoCollections );
@@ -1196,7 +1196,7 @@ namespace {
 /// parameters for search for attributes
 struct SwFindParaAttr : public SwFindParas
 {
-    bool const m_bNoCollection;
+    bool m_bNoCollection;
     const SfxItemSet *pSet, *pReplSet;
     const i18nutil::SearchOptions2 *pSearchOpt;
     SwCursor& m_rCursor;

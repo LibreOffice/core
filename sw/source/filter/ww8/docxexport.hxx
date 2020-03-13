@@ -105,7 +105,7 @@ class DocxExport : public MSWordExportBase
     std::unique_ptr<DocxSdrExport> m_pSdrExport;
 
     /// If the result will be a .docm file or not.
-    bool const m_bDocm;
+    bool m_bDocm;
 
     /// Export is done into template (.dotx)
     bool const m_bTemplate;

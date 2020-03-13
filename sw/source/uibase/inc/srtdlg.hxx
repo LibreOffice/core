@@ -27,7 +27,7 @@ class SwWrtShell;
 
 class SwSortDlg : public weld::GenericDialogController
 {
-    weld::Window* const m_pParent;
+    weld::Window* m_pParent;
     std::unique_ptr<weld::Label> m_xColLbl;
 
     std::unique_ptr<weld::CheckButton> m_xKeyCB1;
@@ -60,9 +60,9 @@ class SwSortDlg : public weld::GenericDialogController
 
     std::unique_ptr<weld::CheckButton> m_xCaseCB;
 
-    OUString const aColText;
-    OUString const aRowText;
-    OUString const aNumericText;
+    OUString aColText;
+    OUString aRowText;
+    OUString aNumericText;
 
     SwWrtShell          &rSh;
     std::unique_ptr<CollatorResource> m_xColRes;

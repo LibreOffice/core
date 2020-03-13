@@ -28,7 +28,7 @@
 class SwShadowCursor
 {
     VclPtr<vcl::Window> pWin;
-    Color const aCol;
+    Color aCol;
     Point aOldPt;
     long nOldHeight;
     sal_uInt16 nOldMode;

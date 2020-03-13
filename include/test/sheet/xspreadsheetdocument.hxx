@@ -27,7 +27,7 @@ protected:
     ~XSpreadsheetDocument() {}
 
 private:
-    sal_Int32 const mnSheets;
+    sal_Int32 mnSheets;
 };
 
 }

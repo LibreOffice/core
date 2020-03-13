@@ -68,12 +68,12 @@ class SwMultiTOXTabDialog : public SfxTabDialogController
 
     CurTOXType              m_eCurrentTOXType;
 
-    OUString const          m_sUserDefinedIndex;
-    sal_uInt16 const        m_nInitialTOXType;
+    OUString                m_sUserDefinedIndex;
+    sal_uInt16              m_nInitialTOXType;
 
     bool                m_bEditTOX;
     bool                m_bExampleCreated;
-    bool const          m_bGlobalFlag;
+    bool                m_bGlobalFlag;
 
     std::unique_ptr<SwOneExampleFrame> m_xExampleFrame;
     std::unique_ptr<weld::CheckButton> m_xShowExampleCB;
@@ -119,7 +119,7 @@ class SwTOXSelectTabPage : public SfxTabPage
 
     OUString        aStyleArr[MAXLEVEL];
     OUString        sAutoMarkURL;
-    OUString const  sAutoMarkType;
+    OUString        sAutoMarkType;
     OUString        sAddStyleUser;
     OUString        sAddStyleContent;
 
@@ -227,7 +227,7 @@ class SwTokenWindow
     bool            m_bValid;
     OUString        m_aButtonTexts[TOKEN_END]; // Text of the buttons
     OUString        m_aButtonHelpTexts[TOKEN_END]; // QuickHelpText of the buttons
-    OUString const  m_sCharStyle;
+    OUString        m_sCharStyle;
     Link<SwFormToken&,void>   m_aButtonSelectedHdl;
     SwTOXWidget* m_pActiveCtrl;
     Link<LinkParamNone*,void> m_aModifyHdl;
@@ -302,11 +302,11 @@ private:
 
 class SwTOXEntryTabPage : public SfxTabPage
 {
-    OUString const  sDelimStr;
+    OUString        sDelimStr;
     OUString        sLevelStr;
     OUString        sAuthTypeStr;
 
-    OUString const  sNoCharStyle;
+    OUString        sNoCharStyle;
     SwForm*         m_pCurrentForm;
 
     CurTOXType      aLastTOXType;

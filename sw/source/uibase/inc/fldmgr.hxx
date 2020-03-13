@@ -60,23 +60,23 @@ enum SwFieldGroups
 
 struct SwFieldGroupRgn
 {
-    sal_uInt16 const nStart;
-    sal_uInt16 const nEnd;
+    sal_uInt16 nStart;
+    sal_uInt16 nEnd;
 };
 
 // the field manager handles the insertation of fields
 // with command strings
 struct SwInsertField_Data
 {
-    SwFieldTypesEnum const m_nTypeId;
-    sal_uInt16 const m_nSubType;
+    SwFieldTypesEnum m_nTypeId;
+    sal_uInt16 m_nSubType;
     const OUString m_sPar1;
     const OUString m_sPar2;
-    sal_uInt32 const m_nFormatId;
-    SwWrtShell* const m_pSh;
-    sal_Unicode const m_cSeparator;
-    bool const m_bIsAutomaticLanguage;
-    css::uno::Any const m_aDBDataSource;
+    sal_uInt32 m_nFormatId;
+    SwWrtShell* m_pSh;
+    sal_Unicode m_cSeparator;
+    bool m_bIsAutomaticLanguage;
+    css::uno::Any m_aDBDataSource;
     css::uno::Any m_aDBConnection;
     css::uno::Any m_aDBColumn;
     weld::Widget* m_pParent; // parent widget used for SwWrtShell::StartInputFieldDlg()

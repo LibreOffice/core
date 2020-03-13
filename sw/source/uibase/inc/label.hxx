@@ -32,7 +32,7 @@ class Printer;
 class SwLabDlg : public SfxTabDialogController
 {
     SwLabelConfig   aLabelsCfg;
-    SwDBManager* const     pDBManager;
+    SwDBManager*    pDBManager;
     SwLabPrtPage* m_pPrtPage;
 
     std::vector<sal_uInt16> aTypeIds;
@@ -41,7 +41,7 @@ class SwLabDlg : public SfxTabDialogController
     std::unique_ptr<SwLabRecs> m_pRecs;
     OUString   aLstGroup;
     OUString   m_sBusinessCardDlg;
-    bool const       m_bLabel;
+    bool       m_bLabel;
     void          ReplaceGroup_( const OUString &rMake );
 
     virtual void PageCreated(const OString& rId, SfxTabPage &rPage) override;

@@ -35,9 +35,9 @@ class SwRangeRedline;
 
 class SwOutlineContent : public SwContent
 {
-    SwOutlineNodes::size_type const nOutlinePos;
-    sal_uInt8 const   nOutlineLevel;
-    bool const    bIsMoveable;
+    SwOutlineNodes::size_type nOutlinePos;
+    sal_uInt8   nOutlineLevel;
+    bool    bIsMoveable;
     public:
         SwOutlineContent(   const SwContentType* pCnt,
                             const OUString& rName,
@@ -56,7 +56,7 @@ class SwOutlineContent : public SwContent
 class SwRegionContent : public SwContent
 {
 
-    sal_uInt8 const   nRegionLevel;
+    sal_uInt8   nRegionLevel;
 
     public:
         SwRegionContent(    const SwContentType* pCnt,
@@ -70,7 +70,7 @@ class SwRegionContent : public SwContent
 
 class SwURLFieldContent : public SwContent
 {
-    OUString const sURL;
+    OUString sURL;
     const SwTextINetFormat* pINetAttr;
 
 public:
@@ -105,7 +105,7 @@ public:
 
 class SwGraphicContent : public SwContent
 {
-    OUString const      sLink;
+    OUString      sLink;
 public:
     SwGraphicContent(const SwContentType* pCnt, const OUString& rName, const OUString& rLink, long nYPos)
         : SwContent( pCnt, rName, nYPos ), sLink( rLink )
@@ -140,11 +140,11 @@ class SwContentType : public SwTypeNumber
     SwWrtShell*         m_pWrtShell;
     std::unique_ptr<SwContentArr>
                         m_pMember;            // array for content
-    OUString const      m_sContentTypeName;   // name of content type
-    OUString const      m_sSingleContentTypeName; // name of content type, singular
+    OUString            m_sContentTypeName;   // name of content type
+    OUString            m_sSingleContentTypeName; // name of content type, singular
     OUString            m_sTypeToken;         // attachment for URL
     size_t              m_nMemberCount;       // content count
-    ContentTypeId const m_nContentType;       // content type's Id
+    ContentTypeId       m_nContentType;       // content type's Id
     sal_uInt8           m_nOutlineLevel;
     bool                m_bDataValid :    1;
     bool                m_bEdit:          1;  // can this type be edited?

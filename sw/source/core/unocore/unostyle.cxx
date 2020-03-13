@@ -132,15 +132,15 @@ class SwStyleProperties_Impl;
         using GetCountOrName_t = std::function<sal_Int32 (const SwDoc&, OUString*, sal_Int32)>;
         using CreateStyle_t = std::function<uno::Reference<css::style::XStyle>(SfxStyleSheetBasePool*, SwDocShell*, const OUString&)>;
         using TranslateIndex_t = std::function<sal_uInt16(const sal_uInt16)>;
-        SfxStyleFamily const m_eFamily;
-        sal_uInt16 const m_nPropMapType;
+        SfxStyleFamily m_eFamily;
+        sal_uInt16 m_nPropMapType;
         uno::Reference<beans::XPropertySetInfo> m_xPSInfo;
-        SwGetPoolIdFromName const m_aPoolId;
-        OUString const m_sName;
+        SwGetPoolIdFromName m_aPoolId;
+        OUString m_sName;
         const char* m_pResId;
-        GetCountOrName_t const m_fGetCountOrName;
-        CreateStyle_t const m_fCreateStyle;
-        TranslateIndex_t const m_fTranslateIndex;
+        GetCountOrName_t m_fGetCountOrName;
+        CreateStyle_t m_fCreateStyle;
+        TranslateIndex_t m_fTranslateIndex;
         StyleFamilyEntry(SfxStyleFamily eFamily, sal_uInt16 nPropMapType, SwGetPoolIdFromName aPoolId, OUString const& sName, const char* pResId, GetCountOrName_t const & fGetCountOrName, CreateStyle_t const & fCreateStyle, TranslateIndex_t const & fTranslateIndex)
                 : m_eFamily(eFamily)
                 , m_nPropMapType(nPropMapType)
@@ -175,9 +175,9 @@ class SwStyleProperties_Impl;
     using collectionbits_t = sal_uInt16;
     struct ParagraphStyleCategoryEntry
     {
-        paragraphstyle_t const m_eCategory;
-        SfxStyleSearchBits const m_nSwStyleBits;
-        collectionbits_t const m_nCollectionBits;
+        paragraphstyle_t m_eCategory;
+        SfxStyleSearchBits m_nSwStyleBits;
+        collectionbits_t m_nCollectionBits;
         ParagraphStyleCategoryEntry(paragraphstyle_t eCategory, SfxStyleSearchBits nSwStyleBits, collectionbits_t nCollectionBits)
                 : m_eCategory(eCategory)
                 , m_nSwStyleBits(nSwStyleBits)
@@ -314,7 +314,7 @@ class SwXStyle : public cppu::WeakImplHelper
     OUString m_sStyleName;
     const StyleFamilyEntry& m_rEntry;
     bool m_bIsDescriptor;
-    bool const m_bIsConditional;
+    bool m_bIsConditional;
     OUString m_sParentStyleName;
 
 protected:
@@ -1504,7 +1504,7 @@ private:
     rtl::Reference<SwDocStyleSheet> m_xNewBase;
     SfxItemSet* m_pItemSet;
     std::unique_ptr<SfxItemSet> m_pMyItemSet;
-    OUString const m_rStyleName;
+    OUString m_rStyleName;
     const SwAttrSet* m_pParentStyle;
 public:
     SwStyleBase_Impl(SwDoc& rSwDoc, const OUString& rName, const SwAttrSet* pParentStyle)
@@ -1551,7 +1551,7 @@ public:
     struct ItemSetOverrider
     {
         SwStyleBase_Impl& m_rStyleBase;
-        SfxItemSet* const m_pOldSet;
+        SfxItemSet* m_pOldSet;
         ItemSetOverrider(SwStyleBase_Impl& rStyleBase, SfxItemSet* pTemp)
                 : m_rStyleBase(rStyleBase)
                 , m_pOldSet(m_rStyleBase.m_pItemSet)
@@ -3394,7 +3394,7 @@ class SwAutoStylesEnumImpl
     std::vector<std::shared_ptr<SfxItemSet>> mAutoStyles;
     std::vector<std::shared_ptr<SfxItemSet>>::iterator aIter;
     SwDoc* pDoc;
-    IStyleAccess::SwAutoStyleFamily const eFamily;
+    IStyleAccess::SwAutoStyleFamily eFamily;
 public:
     SwAutoStylesEnumImpl( SwDoc* pInitDoc, IStyleAccess::SwAutoStyleFamily eFam );
     bool hasMoreElements() { return aIter != mAutoStyles.end(); }

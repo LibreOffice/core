@@ -58,7 +58,7 @@ enum class RegionMode
 //mini rtti
 class SwTypeNumber
 {
-    sal_uInt8 const nTypeId;
+    sal_uInt8 nTypeId;
 
     public:
         SwTypeNumber(sal_uInt8 nId) :nTypeId(nId){}
@@ -70,8 +70,8 @@ class SwTypeNumber
 class SwContent : public SwTypeNumber
 {
     const SwContentType*    pParent;
-    OUString const          sContentName;
-    long const              nYPosition;
+    OUString                sContentName;
+    long                    nYPosition;
         // some subclasses appear to use this for a tools/gen.hxx-style
         // geometric Y position, while e.g. SwOutlineContent wants to store
         // the index in its subtree

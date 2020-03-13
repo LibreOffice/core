@@ -555,7 +555,7 @@ class SwXOutlineTarget final : public cppu::WeakImplHelper
 >
 {
     const SfxItemPropertySet*   pPropSet;
-    OUString const              sOutlineText;
+    OUString                    sOutlineText;
 
 public:
     SwXOutlineTarget(const OUString& rOutlineText);
@@ -607,8 +607,8 @@ public:
 // After printing the view options are restored
 class SwViewOptionAdjust_Impl
 {
-    SwViewShell *      m_pShell;
-    SwViewOption const m_aOldViewOptions;
+    SwViewShell *   m_pShell;
+    SwViewOption    m_aOldViewOptions;
 public:
     SwViewOptionAdjust_Impl( SwViewShell& rSh, const SwViewOption &rViewOptions );
     ~SwViewOptionAdjust_Impl();

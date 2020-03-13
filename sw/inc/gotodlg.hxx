@@ -37,7 +37,7 @@ public:
 
 private:
     SwView       *m_pCreateView;
-    SfxBindings * const m_rBindings;
+    SfxBindings  *m_rBindings;
     sal_uInt16   mnMaxPageCnt;
 
     std::unique_ptr<weld::Entry> mxMtrPageCtrl;

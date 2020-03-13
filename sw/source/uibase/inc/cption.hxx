@@ -31,7 +31,7 @@ class SwView;
 
 class SwCaptionDialog : public SfxDialogController
 {
-    OUString const      m_sNone;
+    OUString m_sNone;
     TextFilterAutoConvert m_aTextFilter;
     SwView       &rView; // search per active, avoid View
     std::unique_ptr<SwFieldMgr> pMgr;      // pointer to save the include

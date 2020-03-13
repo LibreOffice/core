@@ -128,7 +128,7 @@ class SAL_DLLPUBLIC_RTTI SwInsertConfig final : public utl::ConfigItem
     bool            m_bCaptionOrderNumberingFirst; //#i61007# caption order starting with numbering
 
     SwInsertTableOptions    m_aInsTableOpts;
-    bool const            m_bIsWeb;
+    bool            m_bIsWeb;
 
     const css::uno::Sequence<OUString>& GetPropertyNames() const;
 

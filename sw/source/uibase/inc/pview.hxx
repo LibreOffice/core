@@ -170,7 +170,7 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
     // to support keyboard the number of the page to go to can be set too
     sal_uInt16 m_nNewPage;
     // visible range
-    OUString const m_sPageStr;
+    OUString m_sPageStr;
     Size m_aDocSize;
     tools::Rectangle               m_aVisArea;
 

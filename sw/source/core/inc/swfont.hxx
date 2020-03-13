@@ -957,7 +957,7 @@ inline void SwFont::SetHighlightColor( const Color& aNewColor )
 class SwUnderlineFont
 {
     Point m_aPos;
-    TextFrameIndex const m_nEnd;
+    TextFrameIndex m_nEnd;
     std::unique_ptr<SwFont> m_pFont;
 
 public:

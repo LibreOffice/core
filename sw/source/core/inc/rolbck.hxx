@@ -117,8 +117,8 @@ class SwHistorySetText : public SwHistoryHint
     const sal_uLong m_nNodeIndex;
     const sal_Int32 m_nStart;
     const sal_Int32 m_nEnd;
-    bool const m_bFormatIgnoreStart : 1;
-    bool const m_bFormatIgnoreEnd   : 1;
+    bool m_bFormatIgnoreStart : 1;
+    bool m_bFormatIgnoreEnd   : 1;
 
 public:
     SwHistorySetText( SwTextAttr* pTextHt, sal_uLong nNode );

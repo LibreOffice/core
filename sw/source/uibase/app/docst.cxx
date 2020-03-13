@@ -557,11 +557,11 @@ public:
     VclPtr<SfxAbstractApplyTabDialog> m_pDlg;
 private:
     SwDocShell &m_rDocSh;
-    bool const m_bNew;
+    bool m_bNew;
     rtl::Reference< SwDocStyleSheet > m_xTmp;
-    SfxStyleFamily const m_nFamily;
+    SfxStyleFamily m_nFamily;
     rtl::Reference< SfxStyleSheetBasePool > m_xBasePool;
-    bool const m_bModified;
+    bool m_bModified;
 };
 
 }

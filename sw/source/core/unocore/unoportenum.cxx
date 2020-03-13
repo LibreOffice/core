@@ -87,7 +87,7 @@ namespace
     struct SwXBookmarkPortion_Impl
     {
         Reference<XTextContent>     xBookmark;
-        BkmType const               nBkmType;
+        BkmType                     nBkmType;
         const SwPosition            aPosition;
 
         SwXBookmarkPortion_Impl(uno::Reference<text::XTextContent> const& xMark,

@@ -273,7 +273,7 @@ namespace {
 class SwZoomBox_Impl final : public InterimItemWindow
 {
     std::unique_ptr<weld::ComboBox> m_xWidget;
-    sal_uInt16 const nSlotId;
+    sal_uInt16       nSlotId;
     bool             bRelease;
 
     DECL_LINK(SelectHdl, weld::ComboBox&, void);
@@ -493,7 +493,7 @@ class SwJumpToSpecificBox_Impl final : public InterimItemWindow
 {
     std::unique_ptr<weld::Entry> m_xWidget;
 
-    sal_uInt16 const nSlotId;
+    sal_uInt16 nSlotId;
 
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(SelectHdl, weld::Entry&, bool);
@@ -903,7 +903,7 @@ public:
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 
 private:
-    Type const                 meType;
+    Type                     meType;
 };
 
 }

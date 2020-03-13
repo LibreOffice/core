@@ -167,7 +167,7 @@ class SwAuthorMarkPane
     friend class SwAuthMarkModalDlg;
     friend class SwAuthMarkFloatDlg;
 
-    bool const      bNewEntry;
+    bool            bNewEntry;
     bool            bBibAccessInitialized;
 
     SwWrtShell*     pSh;

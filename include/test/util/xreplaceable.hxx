@@ -29,8 +29,8 @@ protected:
     ~XReplaceable() {}
 
 private:
-        OUString const maSearchString;
-        OUString const maReplaceString;
+        OUString maSearchString;
+        OUString maReplaceString;
 };
 
 }

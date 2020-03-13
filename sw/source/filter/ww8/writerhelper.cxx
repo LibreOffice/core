@@ -136,7 +136,7 @@ namespace
     class anchoredto
     {
     private:
-        sal_uLong const mnNode;
+        sal_uLong mnNode;
     public:
         explicit anchoredto(sal_uLong nNode) : mnNode(nNode) {}
         bool operator()(const ww8::Frame &rFrame) const
@@ -686,7 +686,7 @@ namespace sw
         class SameOpenRedlineType
         {
         private:
-            RedlineType const meType;
+            RedlineType meType;
         public:
             explicit SameOpenRedlineType(RedlineType eType) : meType(eType) {}
             bool operator()(const std::unique_ptr<SwFltStackEntry> & pEntry) const

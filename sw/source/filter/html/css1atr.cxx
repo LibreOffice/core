@@ -211,7 +211,7 @@ namespace {
 class SwCSS1OutMode
 {
     SwHTMLWriter& rWrt;
-    sal_uInt16 const nOldMode;
+    sal_uInt16 nOldMode;
 
 public:
 

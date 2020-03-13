@@ -81,7 +81,7 @@ class SwInsertDBColAutoPilot : public SfxDialogController, public utl::ConfigIte
     SwInsDBColumns  aDBColumns;
     const SwDBData  aDBData;
 
-    OUString const  sNoTmpl;
+    OUString        sNoTmpl;
 
     SwView*         pView;
     std::unique_ptr<SwTableAutoFormat> m_xTAutoFormat;

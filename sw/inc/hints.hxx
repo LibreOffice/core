@@ -64,15 +64,15 @@ public:
 class SwFormatChg final : public SwMsgPoolItem
 {
 public:
-    SwFormat * const pChangedFormat;
+    SwFormat *pChangedFormat;
     SwFormatChg( SwFormat *pFormat );
 };
 
 class SwInsText final : public SwMsgPoolItem
 {
 public:
-    sal_Int32 const nPos;
-    sal_Int32 const nLen;
+    sal_Int32 nPos;
+    sal_Int32 nLen;
 
     SwInsText( sal_Int32 nP, sal_Int32 nL );
 };
@@ -80,7 +80,7 @@ public:
 class SwDelChr final : public SwMsgPoolItem
 {
 public:
-    sal_Int32 const nPos;
+    sal_Int32 nPos;
 
     SwDelChr( sal_Int32 nP );
 };
@@ -88,8 +88,8 @@ public:
 class SwDelText final : public SwMsgPoolItem
 {
 public:
-    sal_Int32 const nStart;
-    sal_Int32 const nLen;
+    sal_Int32 nStart;
+    sal_Int32 nLen;
 
     SwDelText( sal_Int32 nS, sal_Int32 nL );
 };
@@ -112,8 +112,8 @@ public:
 class RedlineDelText final : public SfxHint
 {
 public:
-    sal_Int32 const nStart;
-    sal_Int32 const nLen;
+    sal_Int32 nStart;
+    sal_Int32 nLen;
 
     RedlineDelText(sal_Int32 nS, sal_Int32 nL);
 };
@@ -133,9 +133,9 @@ public:
 class SwUpdateAttr final : public SwMsgPoolItem
 {
 private:
-    sal_Int32 const m_nStart;
-    sal_Int32 const m_nEnd;
-    sal_uInt16 const m_nWhichAttr;
+    sal_Int32 m_nStart;
+    sal_Int32 m_nEnd;
+    sal_uInt16 m_nWhichAttr;
     std::vector<sal_uInt16> m_aWhichFmtAttrs; // attributes changed inside RES_TXTATR_AUTOFMT
 
 public:
@@ -227,7 +227,7 @@ public:
  */
 class SwAttrSetChg final : public SwMsgPoolItem
 {
-    bool const m_bDelSet;
+    bool m_bDelSet;
     SwAttrSet* m_pChgSet;           ///< what has changed
     const SwAttrSet* m_pTheChgdSet; ///< is only used to compare
 public:
@@ -254,7 +254,7 @@ public:
 class SwCondCollCondChg final : public SwMsgPoolItem
 {
 public:
-    SwFormat * const pChangedFormat;
+    SwFormat *pChangedFormat;
     SwCondCollCondChg( SwFormat *pFormat );
 };
 
@@ -287,7 +287,7 @@ public:
 
 class SwStringMsgPoolItem final : public SwMsgPoolItem
 {
-    OUString const m_sStr;
+    OUString m_sStr;
 public:
 
     const OUString& GetString() const { return m_sStr; }

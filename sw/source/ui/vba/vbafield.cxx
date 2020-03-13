@@ -72,7 +72,7 @@ namespace {
 class SwVbaReadFieldParams
 {
 private:
-    OUString const aData;
+    OUString aData;
     sal_Int32 nLen, nFnd, nNext, nSavPtr;
     OUString aFieldName;
 public:

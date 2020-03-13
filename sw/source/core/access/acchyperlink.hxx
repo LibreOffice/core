@@ -37,8 +37,8 @@ class SwAccessibleHyperlink
     friend class SwAccessibleHyperTextData;
     SwFormatINetFormat * m_pHyperlink;
     ::rtl::Reference< SwAccessibleParagraph > m_xParagraph;
-    sal_Int32 const m_nStartIndex;
-    sal_Int32 const m_nEndIndex;
+    sal_Int32 m_nStartIndex;
+    sal_Int32 m_nEndIndex;
 
     SwAccessibleHyperlink(const SwTextAttr &,
                           SwAccessibleParagraph &,

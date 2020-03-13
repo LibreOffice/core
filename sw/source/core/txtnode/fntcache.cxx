@@ -248,12 +248,12 @@ struct CalcLinePosData
 {
     SwDrawTextInfo& rInf;
     vcl::Font& rFont;
-    TextFrameIndex const nCnt;
+    TextFrameIndex nCnt;
     const bool bSwitchH2V;
     const bool bSwitchH2VLRBT;
     const bool bSwitchL2R;
-    long const nHalfSpace;
-    long* const pKernArray;
+    long nHalfSpace;
+    long* pKernArray;
     const bool bBidiPor;
 
     CalcLinePosData( SwDrawTextInfo& _rInf, vcl::Font& _rFont,

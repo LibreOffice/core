@@ -84,7 +84,7 @@ namespace {
 
 class SwVbaCodeNameProvider : public ::cppu::WeakImplHelper< document::XCodeNameQuery >
 {
-    SwDocShell* const mpDocShell;
+    SwDocShell* mpDocShell;
     OUString msThisDocumentCodeName;
 public:
     explicit SwVbaCodeNameProvider( SwDocShell* pDocShell ) : mpDocShell( pDocShell ) {}
@@ -223,7 +223,7 @@ public:
 
 class SwVbaObjectForCodeNameProvider : public ::cppu::WeakImplHelper< container::XNameAccess >
 {
-    SwDocShell* const mpDocShell;
+    SwDocShell* mpDocShell;
 public:
     explicit SwVbaObjectForCodeNameProvider( SwDocShell* pDocShell ) : mpDocShell( pDocShell )
     {
@@ -271,7 +271,7 @@ namespace {
 struct  ProvNamesId_Type
 {
     const char *    pName;
-    SwServiceType const   nType;
+    SwServiceType   nType;
 };
 
 }

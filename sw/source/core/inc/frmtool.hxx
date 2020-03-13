@@ -229,7 +229,7 @@ protected:
     SwTwips mnFlyAnchorOfstNoWrap;
     bool     mbHadFollow;
     bool     mbInvaKeep;
-    bool const     mbValidSize;
+    bool     mbValidSize;
 
 public:
     SwFrameNotify( SwFrame *pFrame );
@@ -253,7 +253,7 @@ public:
 
 class SwFlyNotify : public SwLayNotify
 {
-    SwPageFrame * const pOldPage;
+    SwPageFrame *pOldPage;
     const SwRect aFrameAndSpace;
 
 public:

@@ -61,7 +61,7 @@ namespace
         }
 
         SwCursor* m_pCursor;
-        SwCursorSaveState const m_aSaveState;
+        SwCursorSaveState m_aSaveState;
     };
 
     bool lcl_ReverseMarkOrderingByEnd(const ::sw::mark::IMark* pFirst,

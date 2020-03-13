@@ -377,7 +377,7 @@ public:
 
 class SAL_DLLPUBLIC_RTTI SwMacroFieldType final : public SwFieldType
 {
-    SwDoc* const m_pDoc;
+    SwDoc* m_pDoc;
 
 public:
     SwMacroFieldType(SwDoc*);
@@ -426,7 +426,7 @@ public:
 class SAL_DLLPUBLIC_RTTI SwPostItFieldType final : public SwFieldType
 {
 private:
-    SwDoc* const mpDoc;
+    SwDoc* mpDoc;
 public:
     SwPostItFieldType(SwDoc* pDoc);
 
@@ -678,7 +678,7 @@ public:
 
 class SwScriptFieldType final : public SwFieldType
 {
-    SwDoc* const m_pDoc;
+    SwDoc* m_pDoc;
 public:
     SwScriptFieldType( SwDoc* pDoc );
 

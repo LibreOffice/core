@@ -2704,7 +2704,7 @@ class SwHyperlinkIter_Impl
 {
     SwTextFrame const& m_rFrame;
     sw::MergedAttrIter m_Iter;
-    TextFrameIndex const m_nStt;
+    TextFrameIndex m_nStt;
     TextFrameIndex m_nEnd;
 
 public:

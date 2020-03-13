@@ -41,9 +41,9 @@ namespace {
 class ShadowPrimitive : public drawinglayer::primitive2d::DiscreteMetricDependentPrimitive2D
 {
 private:
-    basegfx::B2DPoint const           maBasePosition;
-    basegfx::B2DPoint const           maSecondPosition;
-    ShadowState const                 maShadowState;
+    basegfx::B2DPoint           maBasePosition;
+    basegfx::B2DPoint           maSecondPosition;
+    ShadowState                 maShadowState;
 
 protected:
     virtual void create2DDecomposition(

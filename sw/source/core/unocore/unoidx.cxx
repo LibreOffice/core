@@ -2645,7 +2645,7 @@ namespace {
 
 struct TokenType_ {
     const char *pName;
-    enum FormTokenType const eTokenType;
+    enum FormTokenType eTokenType;
 };
 
 }

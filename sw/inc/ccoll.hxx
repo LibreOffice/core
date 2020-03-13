@@ -30,8 +30,8 @@ enum class Master_CollCondition;
 
 struct CommandStruct
 {
-    Master_CollCondition const nCnd;
-    sal_uLong const nSubCond;
+    Master_CollCondition nCnd;
+    sal_uLong nSubCond;
 };
 
 sal_Int16       GetCommandContextIndex( const OUString &rContextName );

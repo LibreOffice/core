@@ -36,7 +36,7 @@ protected:
     ~XElementAccess() {}
 
 private:
-    css::uno::Type const m_aType;
+    css::uno::Type m_aType;
 };
 
 } // namespace apitest

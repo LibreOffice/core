@@ -61,15 +61,15 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg final
     SwRedlineDataChildArr   m_RedlineChildren;
     SwRedlineDataParentSortArr m_aUsedSeqNo;
     Timer                   m_aSelectTimer;
-    OUString const          m_sInserted;
-    OUString const          m_sDeleted;
-    OUString const          m_sFormated;
-    OUString const          m_sTableChgd;
-    OUString const          m_sFormatCollSet;
+    OUString                m_sInserted;
+    OUString                m_sDeleted;
+    OUString                m_sFormated;
+    OUString                m_sTableChgd;
+    OUString                m_sFormatCollSet;
     OUString                m_sFilterAction;
-    OUString const          m_sAutoFormat;
+    OUString                m_sAutoFormat;
     bool                    m_bOnlyFormatedRedlines;
-    bool const              m_bRedlnAutoFormat;
+    bool                    m_bRedlnAutoFormat;
 
     // prevent update dialog data during longer operations (cf #102657#)
     bool                    m_bInhibitActivate;

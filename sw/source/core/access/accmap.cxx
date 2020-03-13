@@ -392,7 +392,7 @@ private:
     SwRect      maOldBox;                       // the old bounds for CHILD_POS_CHANGED
                                                 // and POS_CHANGED
     uno::WeakReference < XAccessible > mxAcc;   // The object that fires the event
-    SwAccessibleChild const maFrameOrObj;       // the child for CHILD_POS_CHANGED and
+    SwAccessibleChild maFrameOrObj;             // the child for CHILD_POS_CHANGED and
                                                 // the same as xAcc for any other
                                                 // event type
     EventType   meType;                         // The event type
@@ -657,8 +657,8 @@ namespace {
 
 struct SwAccessibleParaSelection
 {
-    TextFrameIndex const nStartOfSelection;
-    TextFrameIndex const nEndOfSelection;
+    TextFrameIndex nStartOfSelection;
+    TextFrameIndex nEndOfSelection;
 
     SwAccessibleParaSelection(const TextFrameIndex nStartOfSelection_,
                               const TextFrameIndex nEndOfSelection_)

@@ -268,7 +268,7 @@ namespace sw
     };
     struct DrawFrameFormatHint final: SfxHint
     {
-        DrawFrameFormatHintId const m_eId;
+        DrawFrameFormatHintId m_eId;
         DrawFrameFormatHint(DrawFrameFormatHintId eId) : m_eId(eId) {};
         virtual ~DrawFrameFormatHint() override;
     };

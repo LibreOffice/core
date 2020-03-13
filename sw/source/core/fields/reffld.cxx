@@ -1254,7 +1254,7 @@ namespace {
 struct RefIdsMap
 {
 private:
-    OUString const aName;
+    OUString aName;
     std::set<sal_uInt16> aIds;
     std::set<sal_uInt16> aDstIds;
     std::map<sal_uInt16, sal_uInt16> sequencedIds; /// ID numbers sorted by sequence number.

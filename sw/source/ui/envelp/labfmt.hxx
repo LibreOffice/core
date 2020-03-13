@@ -31,16 +31,16 @@ class SwLabFormatPage;
 
 class SwLabPreview : public weld::CustomWidgetController
 {
-    Color const m_aGrayColor;
+    Color m_aGrayColor;
 
-    OUString const m_aHDistStr;
-    OUString const m_aVDistStr;
-    OUString const m_aWidthStr;
-    OUString const m_aHeightStr;
-    OUString const m_aLeftStr;
-    OUString const m_aUpperStr;
-    OUString const m_aColsStr;
-    OUString const m_aRowsStr;
+    OUString m_aHDistStr;
+    OUString m_aVDistStr;
+    OUString m_aWidthStr;
+    OUString m_aHeightStr;
+    OUString m_aLeftStr;
+    OUString m_aUpperStr;
+    OUString m_aColsStr;
+    OUString m_aRowsStr;
 
     long m_lHDistWidth;
     long m_lVDistWidth;

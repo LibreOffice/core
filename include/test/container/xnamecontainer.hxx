@@ -49,7 +49,7 @@ protected:
     ~XNameContainer() {}
 
 private:
-    OUString const m_aName;
+    OUString m_aName;
     css::uno::Any m_aElement;
 };
 

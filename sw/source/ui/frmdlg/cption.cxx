@@ -46,7 +46,7 @@ namespace {
 class SwSequenceOptionDialog : public weld::GenericDialogController
 {
     SwView&         m_rView;
-    OUString const  m_aFieldTypeName;
+    OUString        m_aFieldTypeName;
 
     std::unique_ptr<weld::ComboBox> m_xLbLevel;
     std::unique_ptr<weld::Entry> m_xEdDelim;

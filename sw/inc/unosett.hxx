@@ -151,7 +151,7 @@ private:
     SwDocShell*                 m_pDocShell; // Only if used as chapter numbering.
     SwNumRule*                  m_pNumRule;
     const SfxItemPropertySet*   m_pPropertySet;
-    bool const                  m_bOwnNumRuleCreated;
+    bool                        m_bOwnNumRuleCreated;
 protected:
     virtual ~SwXNumberingRules() override;
 

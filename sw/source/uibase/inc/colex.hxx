@@ -87,7 +87,7 @@ class SW_DLLPUBLIC SwColumnOnlyExample : public weld::CustomWidgetController
 private:
     Size        m_aWinSize;
 
-    Size const     m_aFrameSize;
+    Size        m_aFrameSize;
     SwFormatCol    m_aCols;
 
 protected:

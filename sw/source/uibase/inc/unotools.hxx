@@ -47,9 +47,9 @@ class SW_DLLPUBLIC SwOneExampleFrame : public weld::CustomWidgetController
 
     OUString        m_sArgumentURL;
 
-    SwView* const    m_pModuleView;
+    SwView*         m_pModuleView;
 
-    sal_uInt32 const m_nStyleFlags;
+    sal_uInt32      m_nStyleFlags;
 
     bool            m_bIsInitialized;
 

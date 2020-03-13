@@ -144,7 +144,7 @@ class SwSetExpField;
 
 class SW_DLLPUBLIC SwSetExpFieldType final : public SwValueFieldType
 {
-    OUString const m_sName;
+    OUString       m_sName;
     OUString      m_sDelim;
     sal_uInt16      m_nType;
     sal_uInt8       m_nLevel;
@@ -270,7 +270,7 @@ inline bool SwSetExpField::IsSequenceField() const
 
 class SAL_DLLPUBLIC_RTTI SwInputFieldType final : public SwFieldType
 {
-    SwDoc* const mpDoc;
+    SwDoc* mpDoc;
 public:
     SwInputFieldType( SwDoc* pDoc );
 
@@ -286,7 +286,7 @@ class SW_DLLPUBLIC SwInputField final : public SwField
     OUString maHelp;
     OUString maToolTip;
     sal_uInt16 mnSubType;
-    bool const mbIsFormField;
+    bool mbIsFormField;
 
     SwFormatField* mpFormatField; // attribute to which the <SwInputField> belongs to
 

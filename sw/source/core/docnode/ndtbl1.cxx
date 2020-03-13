@@ -75,7 +75,7 @@ public:
 
 private:
     SwFrameFormat *pOld, *pNew;
-    sal_Int16 const nType;
+    sal_Int16 nType;
 };
 
 }

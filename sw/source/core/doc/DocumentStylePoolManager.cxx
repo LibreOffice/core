@@ -118,8 +118,8 @@ namespace
     void lcl_SetDfltFont( DefaultFontType nFntType, SfxItemSet& rSet )
     {
         static struct {
-            sal_uInt16 const nResLngId;
-            sal_uInt16 const nResFntId;
+            sal_uInt16 nResLngId;
+            sal_uInt16 nResFntId;
         } aArr[ 3 ] = {
             { RES_CHRATR_LANGUAGE, RES_CHRATR_FONT },
             { RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_FONT },
@@ -142,8 +142,8 @@ namespace
                             DefaultFontType nCTLFntType, SfxItemSet& rSet )
     {
         static struct {
-            sal_uInt16 const nResLngId;
-            sal_uInt16 const nResFntId;
+            sal_uInt16 nResLngId;
+            sal_uInt16 nResFntId;
             DefaultFontType nFntType;
         } aArr[ 3 ] = {
             { RES_CHRATR_LANGUAGE, RES_CHRATR_FONT, static_cast<DefaultFontType>(0) },

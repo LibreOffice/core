@@ -106,7 +106,7 @@ class SwXAutoStyles final :
     public cppu::WeakImplHelper< css::style::XAutoStyles >,
     public SwUnoCollection
 {
-    SwDocShell * const m_pDocShell;
+    SwDocShell *m_pDocShell;
     css::uno::Reference< css::style::XAutoStyleFamily > m_xAutoCharStyles;
     css::uno::Reference< css::style::XAutoStyleFamily > m_xAutoRubyStyles;
     css::uno::Reference< css::style::XAutoStyleFamily > m_xAutoParaStyles;
@@ -134,7 +134,7 @@ public:
 class SwXAutoStyleFamily final : public cppu::WeakImplHelper< css::style::XAutoStyleFamily >, public SvtListener
 {
     SwDocShell *m_pDocShell;
-    IStyleAccess::SwAutoStyleFamily const m_eFamily;
+    IStyleAccess::SwAutoStyleFamily m_eFamily;
 
 
 public:
@@ -178,9 +178,9 @@ class SwXAutoStyle final : public cppu::WeakImplHelper
     public SvtListener
 {
 private:
-    std::shared_ptr<SfxItemSet>            mpSet;
-    IStyleAccess::SwAutoStyleFamily const  meFamily;
-    SwDoc&                                 mrDoc;
+    std::shared_ptr<SfxItemSet>         mpSet;
+    IStyleAccess::SwAutoStyleFamily     meFamily;
+    SwDoc&                              mrDoc;
 
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException

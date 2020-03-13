@@ -136,7 +136,7 @@ public:
 class SW_DLLPUBLIC SwAuthenticator :
     public cppu::WeakImplHelper<css::mail::XAuthenticator>
 {
-    OUString const m_aUserName;
+    OUString m_aUserName;
     OUString m_aPassword;
     weld::Window* m_pParentWindow;
 public:
@@ -157,9 +157,9 @@ public:
 
 class SW_DLLPUBLIC SwConnectionContext : public cppu::WeakImplHelper<css::uno::XCurrentContext>
 {
-    OUString const m_sMailServer;
-    sal_Int16 const m_nPort;
-    OUString const m_sConnectionType;
+    OUString m_sMailServer;
+    sal_Int16 m_nPort;
+    OUString m_sConnectionType;
 
 public:
     SwConnectionContext(const OUString& rMailServer, sal_Int16 nPort, const OUString& rConnectionType);
@@ -197,11 +197,11 @@ class SW_DLLPUBLIC SwMailTransferable :
         public SwMutexBase,
         public cppu::WeakComponentImplHelper<css::datatransfer::XTransferable, css::beans::XPropertySet>
 {
-    OUString const  m_aMimeType;
-    OUString const  m_sBody;
-    OUString const  m_aURL;
-    OUString const  m_aName;
-    bool const m_bIsBody;
+    OUString  m_aMimeType;
+    OUString  m_sBody;
+    OUString  m_aURL;
+    OUString  m_aName;
+    bool m_bIsBody;
 
     public:
     SwMailTransferable(const OUString& rURL, const OUString& rName, const OUString& rMimeType);

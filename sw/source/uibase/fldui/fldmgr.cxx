@@ -280,13 +280,13 @@ namespace {
 // field types and subtypes
 struct SwFieldPack
 {
-    SwFieldTypesEnum const nTypeId;
+    SwFieldTypesEnum nTypeId;
 
-    const char**       pSubTypeResIds;
-    size_t const       nSubTypeLength;
+    const char** pSubTypeResIds;
+    size_t       nSubTypeLength;
 
-    const char**       pFormatResIds;
-    size_t const       nFormatLength;
+    const char** pFormatResIds;
+    size_t       nFormatLength;
 };
 
 }

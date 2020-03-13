@@ -42,8 +42,8 @@ enum ValidationFormat
 // run of unit tests ...
 class OOO_DLLPUBLIC_TEST BootstrapFixture : public BootstrapFixtureBase
 {
-  bool const m_bNeedUCB;
-  bool const m_bAssertOnDialog;
+  bool m_bNeedUCB;
+  bool m_bAssertOnDialog;
 
 protected:
   css::uno::Reference<css::uno::XComponentContext> mxComponentContext;

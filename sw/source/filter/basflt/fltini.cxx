@@ -398,7 +398,7 @@ namespace
 
 struct CharSetNameMap
 {
-    rtl_TextEncoding const eCode;
+    rtl_TextEncoding eCode;
     const char* pName;
 };
 

@@ -28,7 +28,7 @@ typedef CollTestImplHelper< ooo::vba::word::XListLevels > SwVbaListLevels_BASE;
 class SwVbaListLevels : public SwVbaListLevels_BASE
 {
 private:
-    SwVbaListHelperRef const pListHelper;
+    SwVbaListHelperRef pListHelper;
 
 public:
     /// @throws css::uno::RuntimeException

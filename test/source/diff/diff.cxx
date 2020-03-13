@@ -88,8 +88,8 @@ private:
     void cppunitAssertEqualDouble(const xmlNodePtr node, const xmlAttrPtr attr, double expected, double found, double delta);
 
     ToleranceContainer toleranceContainer;
-    xmlDocPtr const xmlFile1;
-    xmlDocPtr const xmlFile2;
+    xmlDocPtr xmlFile1;
+    xmlDocPtr xmlFile2;
     std::string fileName;
 };
 

@@ -145,7 +145,7 @@ private:
     friend void InitCore();            // For creating/deleting of version maps.
     friend void FinitCore();
 
-    SwDoc* const m_pDoc;
+    SwDoc* m_pDoc;
 
 public:
     SwAttrPool( SwDoc* pDoc );

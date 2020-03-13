@@ -203,14 +203,14 @@ class HTMLAttrContext
 {
     HTMLAttrs m_aAttrs;      // the attributes created in the context
 
-    OUString const    m_aClass;          // context class
+    OUString    m_aClass;          // context class
 
     std::unique_ptr<HTMLAttrContext_SaveDoc> m_pSaveDocContext;
     std::unique_ptr<SfxItemSet> m_pFrameItemSet;
 
-    HtmlTokenId const m_nToken;         // the token of the context
+    HtmlTokenId m_nToken;         // the token of the context
 
-    sal_uInt16 const  m_nTextFormatColl;    // a style created in the context or zero
+    sal_uInt16  m_nTextFormatColl;    // a style created in the context or zero
 
     sal_uInt16  m_nLeftMargin;        // a changed left border
     sal_uInt16  m_nRightMargin;       // a changed right border
@@ -223,7 +223,7 @@ class HTMLAttrContext
 
     bool    m_bLRSpaceChanged : 1;    // left/right border, changed indent?
     bool    m_bULSpaceChanged : 1;    // top/bottom border changed?
-    bool const    m_bDefaultTextFormatColl : 1;// nTextFormatColl is only default
+    bool    m_bDefaultTextFormatColl : 1;// nTextFormatColl is only default
     bool    m_bSpansSection : 1;      // the context opens a SwSection
     bool    m_bPopStack : 1;          // delete above stack elements
     bool    m_bFinishPREListingXMP : 1;
@@ -336,7 +336,7 @@ class SwHTMLParser : public SfxHTMLParser, public SvtListener
      */
     std::unique_ptr<ImportProgress> m_xProgress;
 
-    OUString const      m_aPathToFile;
+    OUString      m_aPathToFile;
     OUString      m_sBaseURL;
     OUString      m_aBasicLib;
     OUString      m_aBasicModule;
@@ -939,7 +939,7 @@ struct SwPendingData
 
 struct SwPending
 {
-    HtmlTokenId const nToken;
+    HtmlTokenId nToken;
     std::unique_ptr<SwPendingData> pData;
 
     SwPending( HtmlTokenId nTkn )
