@@ -33,9 +33,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
-#include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
-#include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
@@ -44,11 +42,8 @@
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include <com/sun/star/sdbc/XDriverManager.hpp>
 #include <com/sun/star/sdbc/DriverManager.hpp>
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/ucb/AuthenticationRequest.hpp>
 #include <com/sun/star/ucb/XInteractionSupplyAuthentication.hpp>
-#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/view/XPrintable.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interaction.hxx>
@@ -59,15 +54,12 @@
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <osl/process.h>
 #include <sal/log.hxx>
 #include <svtools/miscopt.hxx>
 #include <tools/urlobj.hxx>
-#include <typelib/typedescription.hxx>
-#include <unotools/confignode.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <rtl/digest.h>
 

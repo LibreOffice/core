@@ -25,10 +25,6 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/sequence.hxx>
 
-#include <algorithm>
-#include <functional>
-#include <o3tl/functional.hxx>
-
 namespace dbaccess
 {
 
