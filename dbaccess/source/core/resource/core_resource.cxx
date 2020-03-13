@@ -23,7 +23,6 @@
 
 // ---- needed as long as we have no contexts for components ---
 #include <rtl/instance.hxx>
-#include <svl/solar.hrc>
 
 namespace dbaccess
 {

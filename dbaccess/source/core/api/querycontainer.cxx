@@ -18,7 +18,6 @@
  */
 
 #include <querycontainer.hxx>
-#include <stringconstants.hxx>
 #include "query.hxx"
 #include <objectnameapproval.hxx>
 #include <veto.hxx>
@@ -30,8 +29,6 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdb/QueryDefinition.hpp>
-
-#include <connectivity/dbexception.hxx>
 
 #include <osl/diagnose.h>
 #include <comphelper/uno3.hxx>

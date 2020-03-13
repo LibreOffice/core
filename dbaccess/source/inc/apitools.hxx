@@ -22,6 +22,7 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/component.hxx>
 #include <osl/mutex.hxx>

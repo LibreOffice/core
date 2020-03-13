@@ -18,15 +18,9 @@
  */
 
 #include "datacolumn.hxx"
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <stringconstants.hxx>
 #include <strings.hxx>
-#include <apitools.hxx>
 
 using namespace dbaccess;
 using namespace ::com::sun::star::sdbc;

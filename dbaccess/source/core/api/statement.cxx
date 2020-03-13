@@ -20,7 +20,6 @@
 #include <statement.hxx>
 #include "resultset.hxx"
 #include <stringconstants.hxx>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <cppuhelper/queryinterface.hxx>
@@ -28,7 +27,6 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <connectivity/dbexception.hxx>
 
