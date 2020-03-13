@@ -570,14 +570,9 @@ const VectorGraphicDataPtr& Graphic::getVectorGraphicData() const
     return mxImpGraphic->getVectorGraphicData();
 }
 
-void Graphic::setPageNumber(sal_Int32 nPageNumber)
-{
-    mxImpGraphic->mnPageNumber = nPageNumber;
-}
-
 sal_Int32 Graphic::getPageNumber() const
 {
-    return mxImpGraphic->mnPageNumber;
+    return mxImpGraphic->getPageNumber();
 }
 
 OUString Graphic::getOriginURL() const

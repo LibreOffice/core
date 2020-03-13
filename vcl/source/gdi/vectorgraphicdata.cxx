@@ -32,6 +32,7 @@
 #include <vcl/canvastools.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/wmfexternal.hxx>
@@ -145,7 +146,10 @@ void VectorGraphicData::ensurePdfReplacement()
 
     // use PDFium directly
     std::vector<Bitmap> aBitmaps;
-    vcl::RenderPDFBitmaps(maVectorGraphicDataArray.getConstArray(), maVectorGraphicDataArray.getLength(), aBitmaps, 0, 1/*, fResolutionDPI*/);
+    sal_Int32 nUsePageIndex = 0;
+    if (mnPageIndex >= 0)
+        nUsePageIndex = mnPageIndex;
+    vcl::RenderPDFBitmaps(maVectorGraphicDataArray.getConstArray(), maVectorGraphicDataArray.getLength(), aBitmaps, nUsePageIndex, 1/*, fResolutionDPI*/);
     maReplacement = aBitmaps[0];
 }
 
@@ -200,7 +204,9 @@ void VectorGraphicData::ensureSequenceAndRange()
                 uno::Sequence< ::beans::PropertyValue > aSequence;
 
                 if (mpExternalHeader)
+                {
                     aSequence = mpExternalHeader->getSequence();
+                }
 
                 if (myInputStream.is())
                     maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xEmfParser->getDecomposition(myInputStream, maPath, aSequence));
@@ -210,7 +216,10 @@ void VectorGraphicData::ensureSequenceAndRange()
             case VectorGraphicDataType::Pdf:
             {
                 const uno::Reference<graphic::XPdfDecomposer> xPdfDecomposer = graphic::PdfTools::create(xContext);
-                auto xPrimitive2D = xPdfDecomposer->getDecomposition(maVectorGraphicDataArray);
+                uno::Sequence<beans::PropertyValue> aDecompositionParameters = comphelper::InitPropertySequence({
+                    {"PageIndex", uno::makeAny<sal_Int32>(mnPageIndex)},
+                });
+                auto xPrimitive2D = xPdfDecomposer->getDecomposition(maVectorGraphicDataArray, aDecompositionParameters);
                 maSequence = comphelper::sequenceToContainer<std::deque<uno::Reference<graphic::XPrimitive2D>>>(xPrimitive2D);
 
                 break;
@@ -261,7 +270,8 @@ auto VectorGraphicData::getSizeBytes() -> std::pair<State, size_t>
 VectorGraphicData::VectorGraphicData(
     const VectorGraphicDataArray& rVectorGraphicDataArray,
     const OUString& rPath,
-    VectorGraphicDataType eVectorDataType)
+    VectorGraphicDataType eVectorDataType,
+    sal_Int32 nPageIndex)
 :   maVectorGraphicDataArray(rVectorGraphicDataArray),
     maPath(rPath),
     mbSequenceCreated(false),
@@ -269,7 +279,8 @@ VectorGraphicData::VectorGraphicData(
     maSequence(),
     maReplacement(),
     mNestedBitmapSize(0),
-    meVectorGraphicDataType(eVectorDataType)
+    meVectorGraphicDataType(eVectorDataType),
+    mnPageIndex(nPageIndex)
 {
 }
 
@@ -283,7 +294,8 @@ VectorGraphicData::VectorGraphicData(
     maSequence(),
     maReplacement(),
     mNestedBitmapSize(0),
-    meVectorGraphicDataType(eVectorDataType)
+    meVectorGraphicDataType(eVectorDataType),
+    mnPageIndex(-1)
 {
     SvFileStream rIStm(rPath, StreamMode::STD_READ);
     if(rIStm.GetError())
