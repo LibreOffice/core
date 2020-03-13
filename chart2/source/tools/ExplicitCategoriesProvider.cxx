@@ -192,7 +192,7 @@ void ExplicitCategoriesProvider::convertCategoryAnysToText( uno::Sequence< OUStr
             double fDouble = 0;
             if( aAny>>=fDouble )
             {
-                if( !::rtl::math::isNan(fDouble) )
+                if( !std::isnan(fDouble) )
                     aText = aNumberFormatterWrapper.getFormattedString(
                         nAxisNumberFormat, fDouble, nLabelColor, bColorChanged );
             }
@@ -438,7 +438,7 @@ static bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >&
                 bool bContainsNan = false;
                 if( (aAny>>=aTest) && aTest.isEmpty() ) //empty String
                     bContainsEmptyString = true;
-                else if( (aAny>>=fTest) &&  ::rtl::math::isNan(fTest) )
+                else if( (aAny>>=fTest) &&  std::isnan(fTest) )
                     bContainsNan = true;
 
                 if( !bContainsEmptyString && !bContainsNan )

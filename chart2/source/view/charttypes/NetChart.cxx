@@ -373,7 +373,7 @@ void NetChart::createShapes()
                     m_pPosHelper = &getPlottingPositionHelper(nAttachedAxisIndex);
 
                     double fAdd = pSeries->getYValue( nIndex );
-                    if( !::rtl::math::isNan(fAdd) && !std::isinf(fAdd) )
+                    if( !std::isnan(fAdd) && !std::isinf(fAdd) )
                         aLogicYSumMap[nAttachedAxisIndex] += fabs( fAdd );
                 }
             }
@@ -411,7 +411,7 @@ void NetChart::createShapes()
                         fLogicX = DateHelper::RasterizeDateValue( fLogicX, m_aNullDate, m_nTimeResolution );
                     double fLogicY = pSeries->getYValue(nIndex);
 
-                    if( m_bArea && ( ::rtl::math::isNan(fLogicY) || std::isinf(fLogicY) ) )
+                    if( m_bArea && ( std::isnan(fLogicY) || std::isinf(fLogicY) ) )
                     {
                         if( pSeries->getMissingValueTreatment() == css::chart::MissingValueTreatment::LEAVE_GAP )
                         {
@@ -431,9 +431,9 @@ void NetChart::createShapes()
                         fLogicY = fabs( fLogicY )/aLogicYSumMap[nAttachedAxisIndex];
                     }
 
-                    if(    ::rtl::math::isNan(fLogicX) || std::isinf(fLogicX)
-                        || ::rtl::math::isNan(fLogicY) || std::isinf(fLogicY)
-                        || ::rtl::math::isNan(fLogicZ) || std::isinf(fLogicZ) )
+                    if(    std::isnan(fLogicX) || std::isinf(fLogicX)
+                        || std::isnan(fLogicY) || std::isinf(fLogicY)
+                        || std::isnan(fLogicZ) || std::isinf(fLogicZ) )
                     {
                         if( pSeries->getMissingValueTreatment() == css::chart::MissingValueTreatment::LEAVE_GAP )
                         {

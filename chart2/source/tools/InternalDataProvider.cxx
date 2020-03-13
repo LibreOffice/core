@@ -1485,7 +1485,7 @@ double SAL_CALL InternalDataProvider::getNotANumber()
 
 sal_Bool SAL_CALL InternalDataProvider::isNotANumber( double nNumber )
 {
-    return ::rtl::math::isNan( nNumber )
+    return std::isnan( nNumber )
         || std::isinf( nNumber );
 }
 // lang::XInitialization:

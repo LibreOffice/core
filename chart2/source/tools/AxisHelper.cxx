@@ -214,7 +214,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                                     sal_Int32 nCount = aCats.getLength();
                                     for( sal_Int32 i = 0; i < nCount; ++i )
                                     {
-                                        if( (aCats[i]>>=fTest) && !::rtl::math::isNan(fTest) )
+                                        if( (aCats[i]>>=fTest) && !std::isnan(fTest) )
                                         {
                                             bHasValidDoubles=true;
                                             break;

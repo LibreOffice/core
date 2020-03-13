@@ -668,7 +668,7 @@ void AreaChart::createShapes()
                     m_pPosHelper = &getPlottingPositionHelper(nAttachedAxisIndex);
 
                     double fAdd = pSeries->getYValue( nIndex );
-                    if( !::rtl::math::isNan(fAdd) && !std::isinf(fAdd) )
+                    if( !std::isnan(fAdd) && !std::isinf(fAdd) )
                         rLogicYSumMap[nAttachedAxisIndex] += fabs( fAdd );
                 }
             }
@@ -712,7 +712,7 @@ void AreaChart::createShapes()
                     double fLogicX = pSeries->getXValue(nIndex);
                     if (bDateCategory)
                     {
-                        if (rtl::math::isNan(fLogicX))
+                        if (std::isnan(fLogicX))
                             continue;
 
                         fLogicX = DateHelper::RasterizeDateValue( fLogicX, m_aNullDate, m_nTimeResolution );
@@ -729,9 +729,9 @@ void AreaChart::createShapes()
                         fLogicY = fabs( fLogicY )/rLogicYSumMap[nAttachedAxisIndex];
                     }
 
-                    if(    ::rtl::math::isNan(fLogicX) || std::isinf(fLogicX)
-                            || ::rtl::math::isNan(fLogicY) || std::isinf(fLogicY)
-                            || ::rtl::math::isNan(fLogicZ) || std::isinf(fLogicZ) )
+                    if(    std::isnan(fLogicX) || std::isinf(fLogicX)
+                            || std::isnan(fLogicY) || std::isinf(fLogicY)
+                            || std::isnan(fLogicZ) || std::isinf(fLogicZ) )
                     {
                         if( pSeries->getMissingValueTreatment() == css::chart::MissingValueTreatment::LEAVE_GAP )
                         {

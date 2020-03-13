@@ -2526,7 +2526,7 @@ void ChartExport::exportSeriesValues( const Reference< chart2::data::XDataSequen
 
     for( sal_Int32 i = 0; i < ptCount; i++ )
     {
-        if (!rtl::math::isNan(aValues[i]))
+        if (!std::isnan(aValues[i]))
         {
             pFS->startElement(FSNS(XML_c, XML_pt), XML_idx, OString::number(i));
             pFS->startElement(FSNS(XML_c, XML_v));

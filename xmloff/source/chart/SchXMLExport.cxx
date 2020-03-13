@@ -663,7 +663,7 @@ uno::Sequence< OUString > lcl_DataSequenceToStringSequence(
         {
             //lcl_clearIfNoValuesButTextIsContained - replace by indices if the values are not appropriate
             bool bHasValue = std::any_of(aValuesSequence.begin(), aValuesSequence.end(),
-                [](double fValue) { return !::rtl::math::isNan( fValue ); });
+                [](double fValue) { return !std::isnan( fValue ); });
             if(!bHasValue)
             {
                 //no double value is contained
@@ -2491,7 +2491,7 @@ namespace
         if( xNumericalDataSequence.is() )
         {
             Sequence< double >  aDoubles( xNumericalDataSequence->getNumericalData() );
-            if (std::any_of(aDoubles.begin(), aDoubles.end(), [](double fDouble) { return !::rtl::math::isNan( fDouble ); }))
+            if (std::any_of(aDoubles.begin(), aDoubles.end(), [](double fDouble) { return !std::isnan( fDouble ); }))
                 return false;//have double value
         }
         else
@@ -2499,7 +2499,7 @@ namespace
             aData = xDataSequence->getData();
             double fDouble = 0.0;
             bool bHaveDouble = std::any_of(aData.begin(), aData.end(),
-                [&fDouble](const uno::Any& rData) { return (rData >>= fDouble) && !::rtl::math::isNan( fDouble ); });
+                [&fDouble](const uno::Any& rData) { return (rData >>= fDouble) && !std::isnan( fDouble ); });
             if (bHaveDouble)
                 return false;//have double value
         }

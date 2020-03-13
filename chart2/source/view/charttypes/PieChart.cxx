@@ -399,7 +399,7 @@ double PieChart::getMinimumX()
 }
 double PieChart::getMaxOffset()
 {
-    if (!::rtl::math::isNan(m_fMaxOffset))
+    if (!std::isnan(m_fMaxOffset))
         // Value already cached.  Use it.
         return m_fMaxOffset;
 
@@ -592,7 +592,7 @@ void PieChart::createShapes()
             {
                 //@todo warn somehow that negative values are treated as positive
             }
-            if( ::rtl::math::isNan(fY) )
+            if( std::isnan(fY) )
                 continue;
             aParam.mfLogicYSum += fabs(fY);
         }
@@ -624,7 +624,7 @@ void PieChart::createShapes()
             uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries, xSeriesTarget);
             ///collect data point information (logic coordinates, style ):
             double fLogicYValue = fabs(pSeries->getYValue( nPointIndex ));
-            if( ::rtl::math::isNan(fLogicYValue) )
+            if( std::isnan(fLogicYValue) )
                 continue;
             if(fLogicYValue==0.0)//@todo: continue also if the resolution is too small
                 continue;
@@ -678,7 +678,7 @@ void PieChart::createShapes()
                 if(bHasFillColorMapping)
                 {
                     double nPropVal = pSeries->getValueByProperty(nPointIndex, "FillColor");
-                    if(!rtl::math::isNan(nPropVal))
+                    if(!std::isnan(nPropVal))
                     {
                         uno::Reference< beans::XPropertySet > xProps( xPointShape, uno::UNO_QUERY_THROW );
                         xProps->setPropertyValue("FillColor", uno::Any(static_cast<sal_Int32>( nPropVal)));
