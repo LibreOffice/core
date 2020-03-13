@@ -132,7 +132,7 @@ struct AdapterImpl
 {
     oslInterlockedCount         m_nRef;
     FactoryImpl *               m_pFactory;
-    void * const                m_key; // map key
+    void *                      m_key; // map key
     uno_Interface *             m_pReceiver; // XInvocation receiver
 
     std::vector<InterfaceAdapterImpl>  m_vInterfaces;
