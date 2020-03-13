@@ -35,8 +35,8 @@ namespace drawinglayer
         class SdrConnectorPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
-            attribute::SdrLineShadowTextAttribute const       maSdrLSTAttribute;
-            ::basegfx::B2DPolygon const                       maUnitPolygon;
+            attribute::SdrLineShadowTextAttribute       maSdrLSTAttribute;
+            ::basegfx::B2DPolygon                       maUnitPolygon;
 
             // local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;

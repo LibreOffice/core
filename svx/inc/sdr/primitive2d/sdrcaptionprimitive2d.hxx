@@ -36,11 +36,11 @@ namespace drawinglayer
         class SdrCaptionPrimitive2D final : public BufferedDecompositionPrimitive2D
         {
         private:
-            ::basegfx::B2DHomMatrix const               maTransform;
-            attribute::SdrLineFillShadowTextAttribute const   maSdrLFSTAttribute;
+            ::basegfx::B2DHomMatrix                     maTransform;
+            attribute::SdrLineFillShadowTextAttribute   maSdrLFSTAttribute;
             ::basegfx::B2DPolygon                       maTail;
-            double const                                mfCornerRadiusX;    // [0.0..1.0] relative to 1/2 width
-            double const                                mfCornerRadiusY;    // [0.0..1.0] relative to 1/2 height
+            double                                      mfCornerRadiusX;    // [0.0..1.0] relative to 1/2 width
+            double                                      mfCornerRadiusY;    // [0.0..1.0] relative to 1/2 height
 
             // local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;

@@ -203,8 +203,8 @@ public:
  */
 class SVXCORE_DLLPUBLIC SdrObjUserData
 {
-    SdrInventor const                     nInventor;
-    sal_uInt16 const                      nIdentifier;
+    SdrInventor                      nInventor;
+    sal_uInt16                       nIdentifier;
 
     void operator=(const SdrObjUserData& rData) = delete;
     bool operator==(const SdrObjUserData& rData) const = delete;
@@ -1041,8 +1041,8 @@ struct SVXCORE_DLLPUBLIC SdrObjectFreeOp
 
 struct SdrObjCreatorParams
 {
-    SdrInventor const nInventor;
-    sal_uInt16 const  nObjIdentifier;
+    SdrInventor nInventor;
+    sal_uInt16  nObjIdentifier;
     SdrModel&   rSdrModel;
 };
 

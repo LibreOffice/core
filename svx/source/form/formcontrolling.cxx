@@ -68,9 +68,9 @@ namespace svx
     {
         struct FeatureDescription
         {
-            OUString const   sURL;           // the URL
-            sal_Int32 const  nSlotId;        // the SFX-compatible slot ID
-            sal_Int16 const  nFormFeature;   // the css.form.runtime.FormFeature ID
+            OUString sURL;           // the URL
+            sal_Int32       nSlotId;        // the SFX-compatible slot ID
+            sal_Int16       nFormFeature;   // the css.form.runtime.FormFeature ID
         };
         typedef ::std::vector< FeatureDescription > FeatureDescriptions;
 
@@ -121,7 +121,7 @@ namespace svx
 
         struct MatchFeatureDescriptionBySlotId
         {
-            sal_Int32 const   m_nSlotId;
+            sal_Int32   m_nSlotId;
             explicit MatchFeatureDescriptionBySlotId( sal_Int32 _nSlotId ) :m_nSlotId( _nSlotId ) { }
 
             bool operator()( const FeatureDescription& _compare )
@@ -133,7 +133,7 @@ namespace svx
 
         struct MatchFeatureDescriptionByFormFeature
         {
-            sal_Int32 const   m_nFormFeature;
+            sal_Int32   m_nFormFeature;
             explicit MatchFeatureDescriptionByFormFeature( sal_Int32 _nFormFeature ) :m_nFormFeature( _nFormFeature ) { }
 
             bool operator()( const FeatureDescription& _compare )

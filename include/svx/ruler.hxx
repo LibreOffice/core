@@ -104,7 +104,7 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     long            lLogicNullOffset;     // in logic coordinates
     long            lAppNullOffset;       // in logic coordinates
     long            lInitialDragPos;
-    SvxRulerSupportFlags const nFlags;
+    SvxRulerSupportFlags nFlags;
     SvxRulerDragFlags    nDragType;
     sal_uInt16      nDefTabType;
     sal_uInt16      nTabCount;

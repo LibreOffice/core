@@ -207,25 +207,25 @@ private:
         be set from the outside.  Furthermore, it changes according to the
         draw page's display mode.
     */
-    OUString const                      msDescription;
+    OUString                     msDescription;
 
     /** Name of this object.  It changes according the draw page's
         display mode.
     */
-    OUString const                      msName;
+    OUString                     msName;
 
     /// Reference to the parent object.
     css::uno::Reference< css::accessibility::XAccessible >
-                                        mxParent;
+                                 mxParent;
 
     /// Bounding box
-    tools::Rectangle const              maBoundingBox;
+    tools::Rectangle             maBoundingBox;
 
     /// index of child in parent
-    long const                          mnIndexInParent;
+    long                         mnIndexInParent;
 
     /// Indicates, if object is checked
-    bool                                mbIsChecked;
+    bool                         mbIsChecked;
 };
 
 

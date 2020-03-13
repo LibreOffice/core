@@ -67,7 +67,7 @@ namespace svx
             virtual void        AddSupportedFormats() override;
             virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
 
-            OXFormsDescriptor const m_aDescriptor;
+            OXFormsDescriptor m_aDescriptor;
 
         public:
 

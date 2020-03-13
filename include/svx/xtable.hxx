@@ -56,7 +56,7 @@ public:
 class SVXCORE_DLLPUBLIC XLineEndEntry final : public XPropertyEntry
 {
 private:
-    basegfx::B2DPolyPolygon const aB2DPolyPolygon;
+    basegfx::B2DPolyPolygon aB2DPolyPolygon;
 
 public:
     XLineEndEntry(const basegfx::B2DPolyPolygon& rB2DPolyPolygon, const OUString& rName);
@@ -71,7 +71,7 @@ public:
 class SVXCORE_DLLPUBLIC XDashEntry final : public XPropertyEntry
 {
 private:
-    XDash const   aDash;
+    XDash   aDash;
 
 public:
     XDashEntry(const XDash& rDash, const OUString& rName);
@@ -86,7 +86,7 @@ public:
 class SVXCORE_DLLPUBLIC XHatchEntry final : public XPropertyEntry
 {
 private:
-    XHatch const  aHatch;
+    XHatch  aHatch;
 
 public:
     XHatchEntry(const XHatch& rHatch, const OUString& rName);
@@ -101,7 +101,7 @@ public:
 class SVXCORE_DLLPUBLIC XGradientEntry final : public XPropertyEntry
 {
 private:
-    XGradient const  aGradient;
+    XGradient  aGradient;
 
 public:
     XGradientEntry(const XGradient& rGradient, const OUString& rName);
@@ -116,7 +116,7 @@ public:
 class SVXCORE_DLLPUBLIC XBitmapEntry final : public XPropertyEntry
 {
 private:
-    GraphicObject const   maGraphicObject;
+    GraphicObject   maGraphicObject;
 
 public:
     XBitmapEntry(const GraphicObject& rGraphicObject, const OUString& rName);
@@ -153,10 +153,10 @@ class XGradientList ; typedef rtl::Reference< class XGradientList > XGradientLis
 class SVXCORE_DLLPUBLIC XPropertyList : public cppu::OWeakObject
 {
 protected:
-    XPropertyListType const   meType;
+    XPropertyListType   meType;
     OUString            maName; // not persistent
     OUString            maPath;
-    OUString const      maReferer;
+    OUString            maReferer;
 
     std::vector< std::unique_ptr<XPropertyEntry> > maList;
 

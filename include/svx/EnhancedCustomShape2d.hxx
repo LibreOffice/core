@@ -117,8 +117,8 @@ class SVXCORE_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
         css::uno::Sequence< css::beans::PropertyValues >                          seqHandles;
         css::uno::Sequence< css::awt::Size >                                      seqSubViewSize;
 
-        bool const              bFilled         : 1;
-        bool const              bStroked        : 1;
+        bool                    bFilled         : 1;
+        bool                    bStroked        : 1;
 
         bool                    bFlipH;
         bool                    bFlipV;

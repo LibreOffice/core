@@ -144,7 +144,7 @@ namespace svx
 
         ODataAccessDescriptor      m_aDescriptor;
         OUString                   m_sCompatibleFormat;
-        ColumnTransferFormatFlags const  m_nFormatFlags;
+        ColumnTransferFormatFlags  m_nFormatFlags;
     };
 
 

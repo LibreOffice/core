@@ -57,7 +57,7 @@ class E3dDragMethod : public SdrDragMethod
 {
 protected:
     ::std::vector< E3dDragMethodUnit >  maGrp;
-    E3dDragConstraint const             meConstraint;
+    E3dDragConstraint                   meConstraint;
     Point                               maLastPos;
     tools::Rectangle                           maFullBound;
     bool                                mbMoveFull;

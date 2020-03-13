@@ -30,9 +30,9 @@ namespace drawinglayer::attribute
         {
         public:
             // one set of attributes for FormText (FontWork) outline visualisation
-            LineAttribute const                       maLineAttribute;
-            StrokeAttribute const                     maStrokeAttribute;
-            sal_uInt8 const                           mnTransparence;
+            LineAttribute                       maLineAttribute;
+            StrokeAttribute                     maStrokeAttribute;
+            sal_uInt8                           mnTransparence;
 
             ImpSdrFormTextOutlineAttribute(
                 const LineAttribute& rLineAttribute,

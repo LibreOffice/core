@@ -182,7 +182,7 @@ public:
 
 class SVXCORE_DLLPUBLIC SdrUndoMoveObj final : public SdrUndoObj
 {
-    Size const                        aDistance;     // Distance by which we move
+    Size                        aDistance;     // Distance by which we move
 
 public:
     SdrUndoMoveObj(SdrObject& rNewObj, const Size& rDist): SdrUndoObj(rNewObj),aDistance(rDist) {}
@@ -364,8 +364,8 @@ public:
 
 class SdrUndoObjOrdNum final : public SdrUndoObj
 {
-    sal_uInt32 const                      nOldOrdNum;
-    sal_uInt32 const                      nNewOrdNum;
+    sal_uInt32                      nOldOrdNum;
+    sal_uInt32                      nNewOrdNum;
 
 public:
     SdrUndoObjOrdNum(SdrObject& rNewObj, sal_uInt32 nOldOrdNum1, sal_uInt32 nNewOrdNum1);
@@ -381,8 +381,8 @@ public:
 
 class SVXCORE_DLLPUBLIC SdrUndoObjectLayerChange final : public SdrUndoObj
 {
-    SdrLayerID const                  maOldLayer;
-    SdrLayerID const                  maNewLayer;
+    SdrLayerID                  maOldLayer;
+    SdrLayerID                  maNewLayer;
 
 public:
     SdrUndoObjectLayerChange(SdrObject& rObj, SdrLayerID aOldLayer, SdrLayerID aNewLayer);
@@ -400,7 +400,7 @@ protected:
                                 pNewText;
     bool                        bNewTextAvailable;
     bool                        bEmptyPresObj;
-    sal_Int32 const             mnText;
+    sal_Int32                   mnText;
 
 public:
     SdrUndoObjSetText(SdrObject& rNewObj, sal_Int32 nText );
@@ -462,9 +462,9 @@ private:
 class SdrUndoLayer : public SdrUndoAction
 {
 protected:
-    SdrLayer* const             pLayer;
+    SdrLayer*                   pLayer;
     SdrLayerAdmin*              pLayerAdmin;
-    sal_uInt16 const            nNum;
+    sal_uInt16                  nNum;
     bool                        bItsMine;
 
 protected:
@@ -620,8 +620,8 @@ public:
 
 class SdrUndoSetPageNum final : public SdrUndoPage
 {
-    sal_uInt16 const                      nOldPageNum;
-    sal_uInt16 const                      nNewPageNum;
+    sal_uInt16                      nOldPageNum;
+    sal_uInt16                      nNewPageNum;
 
 public:
     SdrUndoSetPageNum(SdrPage& rNewPg, sal_uInt16 nOldPageNum1, sal_uInt16 nNewPageNum1)
@@ -646,7 +646,7 @@ public:
 class SdrUndoPageMasterPage : public SdrUndoPage
 {
 protected:
-    bool const                  mbOldHadMasterPage;
+    bool                        mbOldHadMasterPage;
     SdrLayerIDSet               maOldSet;
     sal_uInt16                  maOldMasterPageNumber;
 

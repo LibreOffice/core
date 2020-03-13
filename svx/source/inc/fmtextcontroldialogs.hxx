@@ -29,7 +29,7 @@ namespace svx
     class TextControlCharAttribDialog : public SfxTabDialogController
     {
     private:
-        SvxFontListItem const m_aFontList;
+        SvxFontListItem m_aFontList;
 
     public:
         TextControlCharAttribDialog(weld::Window* pParent, const SfxItemSet& rCoreSet, const SvxFontListItem& rFontList);

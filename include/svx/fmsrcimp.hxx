@@ -160,7 +160,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC FmSearchEngine final
     // Since the iterator could have more columns, as managed here (in this field listbox),
     // a mapping of this css::form keys on the indices of the respective columns is kept in the iterator
 
-    CharClass const         m_aCharacterClassficator;
+    CharClass               m_aCharacterClassficator;
     CollatorWrapper         m_aStringCompare;
 
     // the collection of all interesting fields (or their css::data::XDatabaseVariant interfaces and FormatKeys)

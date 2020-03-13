@@ -277,8 +277,8 @@ class SVXCORE_DLLPUBLIC SdrFormatter {
     long      nDiv_;
     short     nComma_;
     bool      bDirty;
-    MapUnit const   eSrcMU;
-    MapUnit const   eDstMU;
+    MapUnit   eSrcMU;
+    MapUnit   eDstMU;
 private:
     SVX_DLLPRIVATE void Undirty();
 public:
