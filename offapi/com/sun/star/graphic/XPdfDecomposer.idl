@@ -27,9 +27,15 @@ interface XPdfDecomposer : ::com::sun::star::uno::XInterface
         @param xPdfData
         The PDF data.
 
+        @param xDecompositionParameters
+        Parameters for decomposition. Parameters include:
+
+        sal_Int32 Page - which page to use
+
         @since LibreOffice 7.0
      */
-    sequence<XPrimitive2D> getDecomposition([in] sequence<byte> xPdfData);
+    sequence<XPrimitive2D> getDecomposition([in] sequence<byte> xPdfData,
+                                            [in] sequence<com::sun::star::beans::PropertyValue> xDecompositionParameters);
 };
 
 }; }; }; };
