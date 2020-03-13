@@ -278,8 +278,7 @@ class chartDataLabels(UITestCase):
         formatted = dialog.getChild("formatted")
 
         # Select currency
-        categoryformat.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
-        categoryformat.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
+        categoryformat.getChild("4").executeAction("SELECT", tuple());
 
         self.assertEqual(get_state_as_dict(categoryformat)["SelectEntryText"], "Currency")
 
