@@ -123,7 +123,7 @@ public:
 
 class ViewContactOfGrid final : public ViewContactOfPageSubObject
 {
-    bool const                                        mbFront : 1;
+    bool                                        mbFront : 1;
 
     virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
     virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;
@@ -137,7 +137,7 @@ public:
 
 class ViewContactOfHelplines final : public ViewContactOfPageSubObject
 {
-    bool const                                        mbFront : 1;
+    bool                                        mbFront : 1;
 
     virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
     virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;

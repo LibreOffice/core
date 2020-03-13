@@ -997,7 +997,7 @@ protected:
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
-    SvXMLGraphicHelperMode const        m_eGraphicHelperMode;
+    SvXMLGraphicHelperMode              m_eGraphicHelperMode;
     Reference< XGraphicObjectResolver > m_xGraphicObjectResolver;
     Reference< XGraphicStorageHandler > m_xGraphicStorageHandler;
     Reference< XBinaryStreamResolver >  m_xBinaryStreamResolver;

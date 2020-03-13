@@ -157,18 +157,18 @@ class ImpSdrPdfImport final
 
     ::std::vector<SdrObject*> maTmpList;
     ScopedVclPtr<VirtualDevice> mpVD;
-    tools::Rectangle const maScaleRect;
+    tools::Rectangle maScaleRect;
     const std::shared_ptr<std::vector<sal_Int8>> mpPdfData;
     size_t mnMapScalingOfs; // from here on, not edited with MapScaling
     std::unique_ptr<SfxItemSet> mpLineAttr;
     std::unique_ptr<SfxItemSet> mpFillAttr;
     std::unique_ptr<SfxItemSet> mpTextAttr;
     SdrModel* mpModel;
-    SdrLayerID const mnLayer;
+    SdrLayerID mnLayer;
     Color maOldLineColor;
     sal_Int32 mnLineWidth;
     static constexpr css::drawing::LineCap gaLineCap = css::drawing::LineCap_BUTT;
-    XDash const maDash;
+    XDash maDash;
 
     bool mbMov;
     bool mbSize;

@@ -27,7 +27,7 @@
 
 class SVX_DLLPUBLIC SvxGraphicItem final : public SfxPoolItem
 {
-    Graphic const         aGraphic;
+    Graphic         aGraphic;
 
 public:
                             SvxGraphicItem( const Graphic& rGraphic);

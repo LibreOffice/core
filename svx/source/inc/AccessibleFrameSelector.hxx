@@ -125,7 +125,7 @@ private:
 
     FrameSelector*      mpFrameSel;
 
-    FrameBorderType const     meBorder;
+    FrameBorderType     meBorder;
 };
 
 

@@ -31,21 +31,21 @@ namespace sdr
         class SVXCORE_DLLPUBLIC OverlayAnimatedBitmapEx final : public OverlayObjectWithBasePosition
         {
             // the Bitmaps
-            BitmapEx const                                maBitmapEx1;
-            BitmapEx const                                maBitmapEx2;
+            BitmapEx                                maBitmapEx1;
+            BitmapEx                                maBitmapEx2;
 
             // position of the basePosition inside the Bitmaps, in pixels
-            sal_uInt16 const                              mnCenterX1;
-            sal_uInt16 const                              mnCenterY1;
-            sal_uInt16 const                              mnCenterX2;
-            sal_uInt16 const                              mnCenterY2;
+            sal_uInt16                              mnCenterX1;
+            sal_uInt16                              mnCenterY1;
+            sal_uInt16                              mnCenterX2;
+            sal_uInt16                              mnCenterY2;
 
             // #i53216# added CursorBlinkTime (in ms)
-            sal_uInt32 const                              mnBlinkTime;
+            sal_uInt32                              mnBlinkTime;
 
             // optional shear and rotation
-            double const                                  mfShearX;
-            double const                                  mfRotation;
+            double                                  mfShearX;
+            double                                  mfRotation;
 
             // Flag to remember which state to draw. Inited with false (0)
             bool                                    mbOverlayState : 1;

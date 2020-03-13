@@ -50,10 +50,10 @@ protected:
     drawinglayer::primitive2d::Primitive2DContainer  maPrimitive2DSequence;
 
     // text animation allowed?
-    bool const                                       mbTextAnimationAllowed : 1;
+    bool                                            mbTextAnimationAllowed : 1;
 
     // graphic animation allowed?
-    bool const                                       mbGraphicAnimationAllowed : 1;
+    bool                                            mbGraphicAnimationAllowed : 1;
 
     // as tooling, the process() implementation takes over API handling and calls this
     // virtual render method when the primitive implementation is BasePrimitive2D-based.

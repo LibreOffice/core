@@ -64,7 +64,7 @@ private:
     ::sfx2::sidebar::ControllerItem                     maGammaControl;
     ::sfx2::sidebar::ControllerItem                     maModeControl;
 
-    SfxBindings* const                                  mpBindings;
+    SfxBindings*                                        mpBindings;
 
     //ui controls
     std::unique_ptr<weld::MetricSpinButton> mxMtrBrightness;

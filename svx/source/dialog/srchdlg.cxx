@@ -736,7 +736,7 @@ public:
     }
 private:
     SvxSearchDialog& mrDialog;
-    bool const mbValue;
+    bool mbValue;
 };
 
 }

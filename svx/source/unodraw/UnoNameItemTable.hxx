@@ -42,7 +42,7 @@ private:
     SdrModel*       mpModel;
     SfxItemPool*    mpModelPool;
     sal_uInt16          mnWhich;
-    sal_uInt8 const     mnMemberId;
+    sal_uInt8           mnMemberId;
 
     ItemPoolVector maItemSetVector;
 

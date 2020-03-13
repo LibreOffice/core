@@ -26,7 +26,7 @@
 class SVX_DLLPUBLIC OfaPtrItem final : public SfxPoolItem
 {
 private:
-    void* const pPtr;
+    void* pPtr;
 
 public:
                              OfaPtrItem( sal_uInt16 nWhich, void *pPtr );

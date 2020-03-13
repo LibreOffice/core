@@ -38,7 +38,7 @@ namespace sdr
         class SVXCORE_DLLPUBLIC OverlaySelection final : public OverlayObject
         {
             // type of overlay
-            OverlayType const                   meOverlayType;
+            OverlayType                         meOverlayType;
 
             // geometry of overlay
             std::vector< basegfx::B2DRange >    maRanges;
@@ -49,7 +49,7 @@ namespace sdr
             OverlayType                         maLastOverlayType;
             sal_uInt16                          mnLastTransparence;
 
-            bool const                          mbBorder : 1;
+            bool                                mbBorder : 1;
 
             // geometry creation for OverlayObject, can use local *Last* values
             virtual drawinglayer::primitive2d::Primitive2DContainer createOverlayObjectPrimitive2DSequence() override;

@@ -28,7 +28,7 @@ class NumberingToolBoxControl;
 
 class NumberingPopup : public WeldToolbarPopup
 {
-    NumberingPageType const mePageType;
+    NumberingPageType mePageType;
     NumberingToolBoxControl& mrController;
     std::unique_ptr<SvxNumValueSet> mxValueSet;
     std::unique_ptr<weld::CustomWeld> mxValueSetWin;
