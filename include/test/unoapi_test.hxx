@@ -32,7 +32,7 @@ protected:
 
 
 private:
-    OUString const m_aBaseString;
+    OUString m_aBaseString;
 };
 
 #endif // INCLUDED_TEST_UNOAPI_TEST_HXX

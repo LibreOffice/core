@@ -61,7 +61,7 @@ namespace
     // #i68520#
     struct AnchoredObjOrder
     {
-        bool const mbR2L;
+        bool mbR2L;
         SwRectFn mfnRect;
 
         AnchoredObjOrder( const bool bR2L,

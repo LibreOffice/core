@@ -73,9 +73,9 @@ namespace {
 struct XMLServiceMapEntry_Impl
 {
     const char *sFilterService;
-    sal_Int32 const nFilterServiceLen;
+    sal_Int32   nFilterServiceLen;
 
-    sal_uInt32 const n1;
+    sal_uInt32  n1;
     sal_uInt16  n2, n3;
     sal_uInt8   n4, n5, n6, n7, n8, n9, n10, n11;
 };

@@ -80,8 +80,8 @@ class SwAccessibleTableData_Impl
     Int32Set_Impl   maColumns;
     Point   maTabFramePos;
     const SwTabFrame *mpTabFrame;
-    bool const mbIsInPagePreview;
-    bool const mbOnlyTableColumnHeader;
+    bool mbIsInPagePreview;
+    bool mbOnlyTableColumnHeader;
 
     void CollectData( const SwFrame *pFrame );
 

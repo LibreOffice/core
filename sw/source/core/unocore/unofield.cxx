@@ -118,8 +118,8 @@ namespace {
 
 struct ServiceIdResId
 {
-    SwFieldIds const    nResId;
-    SwServiceType const nServiceId;
+    SwFieldIds    nResId;
+    SwServiceType nServiceId;
 };
 
 }
@@ -413,7 +413,7 @@ public:
     SwDoc*          m_pDoc;
     SwFieldType* m_pType;
 
-    SwFieldIds const      m_nResTypeId;
+    SwFieldIds      m_nResTypeId;
 
     OUString        m_sParam1;  // Content / Database / NumberingSeparator
     OUString        m_sParam2;  // -    /DataTablename
@@ -1100,7 +1100,7 @@ public:
     rtl::Reference<SwTextAPIObject> m_xTextObject;
     bool m_bIsDescriptor;
     bool m_bCallUpdate;
-    SwServiceType const m_nServiceId;
+    SwServiceType m_nServiceId;
     OUString m_sTypeName;
     std::unique_ptr<SwFieldProperties_Impl> m_pProps;
 

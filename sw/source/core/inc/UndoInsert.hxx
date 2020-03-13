@@ -46,8 +46,8 @@ class SwUndoInsert: public SwUndo, private SwUndoSaveContent
     std::unique_ptr<SwRedlineData> m_pRedlData;
     sal_uLong m_nNode;
     sal_Int32 m_nContent, m_nLen;
-    bool const m_bIsWordDelim : 1;
-    bool const m_bIsAppend : 1;
+    bool m_bIsWordDelim : 1;
+    bool m_bIsAppend : 1;
     bool m_bWithRsid : 1;
 
     const SwInsertFlags m_nInsertFlags;
@@ -167,18 +167,18 @@ class SwUndoInsertLabel : public SwUndo
         } NODE;
     };
 
-    OUString const m_sText;
+    OUString m_sText;
     // #i39983# the separator is drawn with a character style
-    OUString const m_sSeparator;
-    OUString const m_sNumberSeparator;
-    OUString const m_sCharacterStyle;
+    OUString m_sSeparator;
+    OUString m_sNumberSeparator;
+    OUString m_sCharacterStyle;
     // #i26791# - re-store of drawing object position no longer needed
-    sal_uInt16 const m_nFieldId;
-    SwLabelType const m_eType;
+    sal_uInt16 m_nFieldId;
+    SwLabelType m_eType;
     SdrLayerID m_nLayerId;              // for character objects
-    bool const m_bBefore        :1;
+    bool m_bBefore        :1;
     bool m_bUndoKeep      :1;
-    bool const m_bCopyBorder        :1;
+    bool m_bCopyBorder        :1;
 
 public:
     SwUndoInsertLabel( const SwLabelType eTyp, const OUString &rText,

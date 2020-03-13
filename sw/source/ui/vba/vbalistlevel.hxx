@@ -29,7 +29,7 @@ class SwVbaListLevel : public SwVbaListLevel_BASE
 {
 private:
     SwVbaListHelperRef pListHelper;
-    sal_Int32 const mnLevel;
+    sal_Int32 mnLevel;
 
 public:
     /// @throws css::uno::RuntimeException

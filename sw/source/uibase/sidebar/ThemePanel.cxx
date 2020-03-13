@@ -62,7 +62,7 @@ class StyleRedefinition
     ColorVariable maVariable;
 
 public:
-    OUString const maElementName;
+    OUString maElementName;
 
 public:
     explicit StyleRedefinition(const OUString& aElementName)

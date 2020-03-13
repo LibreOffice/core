@@ -15,7 +15,7 @@
   */
 class SwDashedLine : public FixedLine
 {
-    Color& (* const m_pColorFn)();
+    Color& (*m_pColorFn)();
 
 public:
     SwDashedLine( vcl::Window* pParent, Color& ( *pColorFn )() );

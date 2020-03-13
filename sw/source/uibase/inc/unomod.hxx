@@ -73,7 +73,7 @@ class SwXPrintSettings final : public comphelper::ChainablePropertySet
 {
     friend class SwXDocumentSettings;
 
-    SwXPrintSettingsType const meType;
+    SwXPrintSettingsType meType;
     SwPrintData * mpPrtOpt;
     SwDoc *mpDoc;
 

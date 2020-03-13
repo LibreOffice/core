@@ -39,7 +39,7 @@ public:
 class SwBlankPortion : public SwExpandPortion
 {
     sal_Unicode m_cChar;
-    bool const m_bMulti;        // For multiportion brackets
+    bool m_bMulti;        // For multiportion brackets
 public:
     SwBlankPortion( sal_Unicode cCh, bool bMult = false )
         : m_cChar( cCh ), m_bMulti( bMult )
@@ -59,7 +59,7 @@ public:
 
 class SwPostItsPortion : public SwExpandPortion
 {
-    bool const    bScript;
+    bool    bScript;
 public:
     explicit SwPostItsPortion( bool bScrpt );
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;

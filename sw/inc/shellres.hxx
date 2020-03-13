@@ -26,37 +26,37 @@
 
 struct SW_DLLPUBLIC ShellResource
 {
-    OUString const        aPostItAuthor;
-    OUString const        aPostItPage;
-    OUString const        aPostItLine;
+    OUString        aPostItAuthor;
+    OUString        aPostItPage;
+    OUString        aPostItLine;
 
     // Calc error-strings.
-    OUString const        aCalc_Syntax;
-    OUString const        aCalc_ZeroDiv;
-    OUString const        aCalc_Brack;
-    OUString const        aCalc_Pow;
-    OUString const        aCalc_Overflow;
-    OUString const        aCalc_Default;
-    OUString const        aCalc_Error;
+    OUString        aCalc_Syntax;
+    OUString        aCalc_ZeroDiv;
+    OUString        aCalc_Brack;
+    OUString        aCalc_Pow;
+    OUString        aCalc_Overflow;
+    OUString        aCalc_Default;
+    OUString        aCalc_Error;
 
     // For GetRefField - referenced item not found.
-    OUString const        aGetRefField_RefItemNotFound;
+    OUString        aGetRefField_RefItemNotFound;
     // For some list boxes - string "none"
-    OUString const        aStrNone;
+    OUString        aStrNone;
     // For fixed fields.
-    OUString const        aFixedStr;
+    OUString        aFixedStr;
     // Custom fields of type css::util::Duration.
-    OUString const        sDurationFormat;
+    OUString        sDurationFormat;
 
     //Names of TOXs.
-    OUString const        aTOXIndexName;
-    OUString const        aTOXUserName;
-    OUString const        aTOXContentName;
-    OUString const        aTOXIllustrationsName;
-    OUString const        aTOXObjectsName;
-    OUString const        aTOXTablesName;
-    OUString const        aTOXAuthoritiesName;
-    OUString const        aTOXCitationName;
+    OUString        aTOXIndexName;
+    OUString        aTOXUserName;
+    OUString        aTOXContentName;
+    OUString        aTOXIllustrationsName;
+    OUString        aTOXObjectsName;
+    OUString        aTOXTablesName;
+    OUString        aTOXAuthoritiesName;
+    OUString        aTOXCitationName;
 
     std::vector<OUString> aDocInfoLst;
 
@@ -79,9 +79,9 @@ struct SW_DLLPUBLIC ShellResource
 private:
     void GetAutoFormatNameLst_() const;
     mutable std::unique_ptr<std::vector<OUString>> pAutoFormatNameLst;
-    OUString const        sPageDescFirstName;
-    OUString const        sPageDescFollowName;
-    OUString const        sPageDescName;
+    OUString        sPageDescFirstName;
+    OUString        sPageDescFollowName;
+    OUString        sPageDescName;
 };
 
 inline const std::vector<OUString>& ShellResource::GetAutoFormatNameLst() const

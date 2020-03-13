@@ -1497,7 +1497,7 @@ struct DelTabPara
     SwTextNode* pLastNd;
     SwNodes& rNds;
     SwUndoTableToText* pUndo;
-    sal_Unicode const cCh;
+    sal_Unicode cCh;
 
     DelTabPara( SwNodes& rNodes, sal_Unicode cChar, SwUndoTableToText* pU ) :
         pLastNd(nullptr), rNds( rNodes ), pUndo( pU ), cCh( cChar ) {}

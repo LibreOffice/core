@@ -441,7 +441,7 @@ class DisableCallbackAction
 {
     private:
         SwRootFrame & m_rRootFrame;
-        bool const m_bOldCallbackActionState;
+        bool m_bOldCallbackActionState;
 
     public:
         explicit DisableCallbackAction(SwRootFrame & rRootFrame)

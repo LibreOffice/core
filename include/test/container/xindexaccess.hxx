@@ -36,7 +36,7 @@ protected:
     ~XIndexAccess() {}
 
 private:
-    sal_Int32 const m_nItems;
+    sal_Int32 m_nItems;
 };
 
 } // namespace apitest

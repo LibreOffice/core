@@ -36,7 +36,7 @@ class SwHeaderFooterWin : public SwFrameMenuButtonBase
 {
     VclBuilder            m_aBuilder;
     OUString              m_sLabel;
-    bool const            m_bIsHeader;
+    bool                  m_bIsHeader;
     VclPtr<PopupMenu>     m_pPopupMenu;
     VclPtr<vcl::Window>   m_pLine;
     bool                  m_bIsAppearing;

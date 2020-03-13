@@ -49,7 +49,7 @@ protected:
     css::uno::Reference<css::sheet::XSpreadsheet> xSheet;
 
 private:
-    OUString const maNameToRemove;
+    OUString maNameToRemove;
 };
 
 } // namespace apitest

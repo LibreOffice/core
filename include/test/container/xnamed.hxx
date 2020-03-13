@@ -40,7 +40,7 @@ protected:
     ~XNamed() {}
 
 private:
-    OUString const m_aTestName;
+    OUString m_aTestName;
 };
 
 }

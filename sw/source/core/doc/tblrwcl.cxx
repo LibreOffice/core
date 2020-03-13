@@ -212,7 +212,7 @@ struct CpyPara
     sal_uInt16 nCpyCnt, nInsPos;
     sal_uInt16 nLnIdx, nBoxIdx;
     sal_uInt8 nDelBorderFlag;
-    bool const bCpyContent;
+    bool bCpyContent;
 
     CpyPara( SwTableNode* pNd, sal_uInt16 nCopies, CpyTabFrames& rFrameArr )
         : pDoc( pNd->GetDoc() ), pTableNd( pNd ), rTabFrameArr(rFrameArr),

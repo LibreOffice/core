@@ -1788,7 +1788,7 @@ namespace {
 struct VerticallyMergedCell
 {
     std::vector<uno::Reference< beans::XPropertySet > > aCells;
-    sal_Int32 const                                     nLeftPosition;
+    sal_Int32                                           nLeftPosition;
     bool                                                bOpen;
 
     VerticallyMergedCell(uno::Reference< beans::XPropertySet > const& rxCell,
@@ -2483,7 +2483,7 @@ class SwXHeadFootText::Impl
 {
     public:
         SwFrameFormat* m_pHeadFootFormat;
-        bool const m_bIsHeader;
+        bool m_bIsHeader;
 
         Impl(SwFrameFormat& rHeadFootFormat, const bool bIsHeader)
             : m_pHeadFootFormat(&rHeadFootFormat)

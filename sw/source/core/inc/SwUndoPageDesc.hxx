@@ -66,7 +66,7 @@ public:
 
 class SwUndoPageDescDelete : public SwUndo
 {
-    SwPageDescExt const aOld;
+    SwPageDescExt aOld;
     SwDoc * pDoc;
 
     void DoImpl();

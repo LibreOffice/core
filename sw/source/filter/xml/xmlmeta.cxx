@@ -79,7 +79,7 @@ enum SvXMLTokenMapAttrs
 };
 
 struct statistic {
-    SvXMLTokenMapAttrs const token;
+    SvXMLTokenMapAttrs token;
     const char* name;
     sal_uInt16 SwDocStat::* target16;
     sal_uLong  SwDocStat::* target32; /* or 64, on LP64 platforms */

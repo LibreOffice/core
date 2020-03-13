@@ -77,9 +77,9 @@ public:
     */
 
 private:
-    LayerId const m_eLayerId;
-    sal_uInt32 const m_nOrdNum;
-    Point const m_nPosNum;
+    LayerId m_eLayerId;
+    sal_uInt32 m_nOrdNum;
+    Point m_nPosNum;
 };
 
 

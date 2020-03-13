@@ -28,10 +28,10 @@ class SwWrtShell;
 // frame dialog
 class SwFrameDlg : public SfxTabDialogController
 {
-    bool const m_bFormat;
-    bool const m_bNew;
+    bool m_bFormat;
+    bool m_bNew;
     const SfxItemSet&   m_rSet;
-    OUString const m_sDlgType;
+    OUString m_sDlgType;
     SwWrtShell* m_pWrtShell;
 
     virtual void PageCreated(const OString& rId, SfxTabPage &rPage) override;

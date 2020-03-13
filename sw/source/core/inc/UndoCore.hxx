@@ -211,7 +211,7 @@ public:
 
 class SwUndoOutlineLeftRight : public SwUndo, private SwUndRng
 {
-    short const m_nOffset;
+    short m_nOffset;
 
 public:
     SwUndoOutlineLeftRight( const SwPaM& rPam, short nOffset );

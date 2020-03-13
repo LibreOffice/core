@@ -28,8 +28,8 @@ class SwRootFrame;
 class SwFieldHint : public SfxHint
 {
 public:
-    SwPaM* const m_pPaM;
-    SwRootFrame const*const m_pLayout;
+    SwPaM* m_pPaM;
+    SwRootFrame const* m_pLayout;
 
     SwFieldHint(SwPaM *const pPaM, SwRootFrame const*const pLayout)
         : m_pPaM(pPaM)

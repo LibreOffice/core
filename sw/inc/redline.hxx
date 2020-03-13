@@ -94,7 +94,7 @@ class SW_DLLPUBLIC SwRedlineData
     DateTime m_aStamp;
     RedlineType m_eType;
     bool m_bAutoFormat;
-    std::size_t const m_nAuthor;
+    std::size_t m_nAuthor;
     sal_uInt16 m_nSeqNo;
 
 public:
@@ -156,7 +156,7 @@ class SW_DLLPUBLIC SwRangeRedline : public SwPaM
     SwNodeIndex* m_pContentSect;
     bool m_bDelLastPara : 1;
     bool m_bIsVisible : 1;
-    sal_uInt32 const m_nId;
+    sal_uInt32 m_nId;
 
     std::optional<long> m_oLOKLastNodeTop;
 

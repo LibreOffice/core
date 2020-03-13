@@ -1346,8 +1346,8 @@ namespace {
 // TabPage for Redlining
 struct CharAttr
 {
-    sal_uInt16 const nItemId;
-    sal_uInt16 const nAttr;
+    sal_uInt16 nItemId;
+    sal_uInt16 nAttr;
 };
 
 }

@@ -126,7 +126,7 @@ private:
     typedef std::vector<std::unique_ptr<SwFltStackEntry>> Entries;
     Entries m_Entries;
 
-    sal_uLong const nFieldFlags;
+    sal_uLong nFieldFlags;
 
     bool bHasSdOD;
     bool bSdODChecked;
@@ -212,9 +212,9 @@ class SwFltAnchorListener : public SvtListener
 class SW_DLLPUBLIC SwFltRedline : public SfxPoolItem
 {
 public:
-    DateTime const        aStamp;
-    RedlineType const     eType;
-    std::size_t const     nAutorNo;
+    DateTime        aStamp;
+    RedlineType     eType;
+    std::size_t     nAutorNo;
 
     SwFltRedline(RedlineType   eType_,
                  std::size_t     nAutorNo_,
@@ -234,10 +234,10 @@ class SW_DLLPUBLIC SwFltBookmark : public SfxPoolItem
 {
 private:
 
-    long const mnHandle;
+    long mnHandle;
     OUString maName;
-    OUString const maVal;
-    bool const mbIsTOCBookmark;
+    OUString maVal;
+    bool mbIsTOCBookmark;
 
 public:
     SwFltBookmark( const OUString& rNa,
@@ -311,7 +311,7 @@ SW_DLLPUBLIC void UpdatePageDescs(SwDoc &rDoc, size_t nInPageDescOffset);
 class ImportProgress
 {
 private:
-    SwDocShell * const m_pDocShell;
+    SwDocShell *m_pDocShell;
 public:
     ImportProgress(SwDocShell *pDocShell, long nStartVal, long nEndVal)
         : m_pDocShell(pDocShell)

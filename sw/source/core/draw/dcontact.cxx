@@ -996,8 +996,8 @@ class NestedUserCallHdl
 {
     private:
         SwDrawContact* mpDrawContact;
-        bool const mbParentUserCallActive;
-        SdrUserCallType const meParentUserCallEventType;
+        bool mbParentUserCallActive;
+        SdrUserCallType meParentUserCallEventType;
 
     public:
         NestedUserCallHdl( SwDrawContact* _pDrawContact,

@@ -85,8 +85,8 @@ namespace
     struct PaMEntry
     {
         SwPaM* m_pPaM;
-        bool const m_isMark;
-        sal_Int32 const m_nContent;
+        bool m_isMark;
+        sal_Int32 m_nContent;
     };
     struct OffsetUpdater
     {

@@ -195,7 +195,7 @@ private:
     OUString                m_sCurrentText;
 
     SwMailMergeConfigItem&  m_rConfigItem;
-    DialogType const        m_eType;
+    DialogType              m_eType;
 
     Idle m_aSelectionChangedIdle;
 
@@ -246,8 +246,8 @@ public:
 class SwAssignFieldsControl;
 class SwAssignFieldsDialog : public SfxDialogController
 {
-    OUString const          m_sNone;
-    OUString const          m_rPreviewString;
+    OUString                m_sNone;
+    OUString                m_rPreviewString;
 
     SwMailMergeConfigItem&  m_rConfigItem;
 

@@ -905,8 +905,8 @@ struct SwFindParaText : public SwFindParas
     SwCursor& m_rCursor;
     SwRootFrame const* m_pLayout;
     utl::TextSearch m_aSText;
-    bool const m_bReplace;
-    bool const m_bSearchInNotes;
+    bool m_bReplace;
+    bool m_bSearchInNotes;
 
     SwFindParaText(const i18nutil::SearchOptions2& rOpt, bool bSearchInNotes,
             bool bRepl, SwCursor& rCursor, SwRootFrame const*const pLayout)

@@ -36,7 +36,7 @@ struct SwCSVData
 class SwFindEntryDialog;
 class SwCreateAddressListDialog : public SfxDialogController
 {
-    OUString const          m_sAddressListFilterName;
+    OUString                m_sAddressListFilterName;
     OUString                m_sURL;
 
     std::unique_ptr<SwCSVData>     m_pCSVData;

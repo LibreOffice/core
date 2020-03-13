@@ -63,7 +63,7 @@ namespace {
 
 struct PercentHdl
 {
-    SwDocShell* const pDSh;
+    SwDocShell* pDSh;
     sal_uLong nActPos;
     bool bBack, bNodeIdx;
 

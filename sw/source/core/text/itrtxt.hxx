@@ -301,7 +301,7 @@ class SwHookOut
 {
     SwTextSizeInfo* pInf;
     VclPtr<OutputDevice> pOut;
-    bool const bOnWin;
+    bool bOnWin;
 public:
     explicit SwHookOut( SwTextSizeInfo& rInfo );
     ~SwHookOut();

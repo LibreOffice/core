@@ -162,7 +162,7 @@ enum class SwFormatFieldHintWhich
 class SW_DLLPUBLIC SwFormatFieldHint final : public SfxHint
 {
     const SwFormatField*   m_pField;
-    SwFormatFieldHintWhich const m_nWhich;
+    SwFormatFieldHintWhich m_nWhich;
     const SwView*     m_pView;
 
 public:

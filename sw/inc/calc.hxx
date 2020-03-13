@@ -194,7 +194,7 @@ class SwCalc
     sal_Int32   m_nCommandPos;
 
     SwDoc&      m_rDoc;
-    SvtSysLocale const m_aSysLocale;
+    SvtSysLocale m_aSysLocale;
     const LocaleDataWrapper* m_pLocaleDataWrapper;
     CharClass*  m_pCharClass;
 

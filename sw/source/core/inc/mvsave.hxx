@@ -56,10 +56,10 @@ namespace sw { namespace mark
                 const SwIndex* pIdx =nullptr);
 
     private:
-            OUString const m_aName;
+            OUString m_aName;
             OUString m_aShortName;
             vcl::KeyCode m_aCode;
-            IDocumentMarkAccess::MarkType const m_eOrigBkmType;
+            IDocumentMarkAccess::MarkType m_eOrigBkmType;
             sal_uLong m_nNode1;
             sal_uLong m_nNode2;
             sal_Int32 m_nContent1;
@@ -98,10 +98,10 @@ void DelBookmarks(const SwNodeIndex& rStt,
  *  location. */
 struct SaveFly
 {
-    sal_uLong const nNdDiff;      /// relative node difference
-    sal_Int32 const nContentIndex; ///< index in node
-    SwFrameFormat* const pFrameFormat;      /// the fly's frame format
-    bool const isAtInsertNode;   ///< if true, anchor _at_ insert node index
+    sal_uLong nNdDiff;      /// relative node difference
+    sal_Int32 nContentIndex; ///< index in node
+    SwFrameFormat* pFrameFormat;      /// the fly's frame format
+    bool isAtInsertNode;   ///< if true, anchor _at_ insert node index
 
     SaveFly( sal_uLong nNodeDiff, sal_Int32 const nCntntIdx, SwFrameFormat* pFormat, bool bInsert )
         : nNdDiff(nNodeDiff)
@@ -186,7 +186,7 @@ class SaveRedlEndPosForRestore
 {
     std::vector<SwPosition*> mvSavArr;
     std::unique_ptr<SwNodeIndex> mpSaveIndex;
-    sal_Int32 const mnSaveContent;
+    sal_Int32 mnSaveContent;
 
 public:
     SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx, sal_Int32 nContent );

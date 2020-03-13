@@ -39,16 +39,16 @@ namespace {
 class AnchorPrimitive : public drawinglayer::primitive2d::DiscreteMetricDependentPrimitive2D
 {
 private:
-    basegfx::B2DPolygon const       maTriangle;
-    basegfx::B2DPolygon const       maLine;
-    basegfx::B2DPolygon const       maLineTop;
+    basegfx::B2DPolygon             maTriangle;
+    basegfx::B2DPolygon             maLine;
+    basegfx::B2DPolygon             maLineTop;
     const AnchorState               maAnchorState;
-    basegfx::BColor const           maColor;
+    basegfx::BColor                 maColor;
 
     // discrete line width
-    double const                    mfDiscreteLineWidth;
+    double                          mfDiscreteLineWidth;
 
-    bool const                      mbLineSolid : 1;
+    bool                            mbLineSolid : 1;
 
 protected:
     virtual void create2DDecomposition(

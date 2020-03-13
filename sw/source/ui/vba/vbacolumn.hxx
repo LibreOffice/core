@@ -29,7 +29,7 @@ class SwVbaColumn : public SwVbaColumn_BASE
 {
 private:
     css::uno::Reference< css::text::XTextTable > mxTextTable;
-    sal_Int32 const mnIndex;
+    sal_Int32 mnIndex;
 
 public:
     /// @throws css::uno::RuntimeException

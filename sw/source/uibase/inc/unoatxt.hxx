@@ -165,8 +165,8 @@ class SwXAutoTextEntry final
         >
 {
     SwGlossaries*   pGlossaries;
-    OUString const  sGroupName;
-    OUString const  sEntryName;
+    OUString        sGroupName;
+    OUString        sEntryName;
     SwDocShellRef   xDocSh;
     rtl::Reference<SwXBodyText>
                     mxBodyText;

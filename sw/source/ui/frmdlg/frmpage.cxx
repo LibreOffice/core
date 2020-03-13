@@ -81,8 +81,8 @@ namespace {
 
 struct StringIdPair_Impl
 {
-    SvxSwFramePosString::StringId const eHori;
-    SvxSwFramePosString::StringId const eVert;
+    SvxSwFramePosString::StringId eHori;
+    SvxSwFramePosString::StringId eVert;
 };
 
 }
@@ -131,20 +131,20 @@ namespace {
 
 struct RelationMap
 {
-    SvxSwFramePosString::StringId const eStrId;
-    SvxSwFramePosString::StringId const eMirrorStrId;
-    LB const         nLBRelation;
-    sal_Int16 const  nRelation;
+    SvxSwFramePosString::StringId eStrId;
+    SvxSwFramePosString::StringId eMirrorStrId;
+    LB         nLBRelation;
+    sal_Int16  nRelation;
 };
 
 }
 
 struct FrameMap
 {
-    SvxSwFramePosString::StringId const eStrId;
-    SvxSwFramePosString::StringId const eMirrorStrId;
-    sal_Int16 const  nAlign;
-    LB const         nLBRelations;
+    SvxSwFramePosString::StringId eStrId;
+    SvxSwFramePosString::StringId eMirrorStrId;
+    sal_Int16  nAlign;
+    LB         nLBRelations;
 };
 
 
@@ -2113,7 +2113,7 @@ void SwFramePage::Init(const SfxItemSet& rSet)
             const SvGlobalName& rFactNm( pSh->GetOLEObject()->getClassID() );
 
             static struct GlobalNameId {
-                sal_uInt32 const n1;
+                sal_uInt32 n1;
                 sal_uInt16 n2, n3;
                 sal_uInt8 b8, b9, b10, b11, b12, b13, b14, b15;
             } const aGlbNmIds[] = { { SO3_SM_CLASSID_60 }, { SO3_SM_CLASSID_50 },

@@ -30,7 +30,7 @@ class EmbeddedObjectRef;
 class SwOleClient final : public SfxInPlaceClient
 {
     bool m_IsInDoVerb;
-    bool const m_IsOldCheckForOLEInCaption;
+    bool m_IsOldCheckForOLEInCaption;
 
     virtual void ObjectAreaChanged() override;
     virtual void RequestNewObjectArea( tools::Rectangle& ) override;

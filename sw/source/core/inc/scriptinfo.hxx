@@ -59,8 +59,8 @@ private:
     //! Records a single change in direction.
     struct DirectionChangeInfo
     {
-        TextFrameIndex const position; //!< Character position at which we change direction.
-        sal_uInt8 const       type;     //!< Direction that we change to.
+        TextFrameIndex position; //!< Character position at which we change direction.
+        sal_uInt8       type;     //!< Direction that we change to.
         DirectionChangeInfo(TextFrameIndex pos, sal_uInt8 typ) : position(pos), type(typ) {};
     };
     std::vector<DirectionChangeInfo> m_DirectionChanges;

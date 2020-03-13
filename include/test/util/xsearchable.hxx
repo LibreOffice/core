@@ -30,8 +30,8 @@ public:
     virtual css::uno::Reference< css::uno::XInterface > init() = 0;
 
 private:
-    OUString const maSearchString;
-    sal_Int32 const mnCount;
+    OUString maSearchString;
+    sal_Int32 mnCount;
 };
 
 }

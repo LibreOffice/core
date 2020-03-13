@@ -120,8 +120,8 @@ public:
     ::comphelper::OInterfaceContainerHelper2 m_EventListeners;
     SfxItemPropertySet const& m_rPropSet;
     bool m_bIsDescriptor;
-    sal_Int32 const m_nSelectionStartPos;
-    sal_Int32 const m_nSelectionEndPos;
+    sal_Int32 m_nSelectionStartPos;
+    sal_Int32 m_nSelectionEndPos;
     OUString m_sText;
     uno::Reference<text::XText> m_xParentText;
     SwTextNode* m_pTextNode;

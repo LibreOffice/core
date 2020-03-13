@@ -52,7 +52,7 @@ public:
 class SwUndoDrawGroup : public SwUndo
 {
     std::unique_ptr<SwUndoGroupObjImpl[]> pObjArr;
-    sal_uInt16 const nSize;
+    sal_uInt16 nSize;
     bool bDelFormat;
 
 public:

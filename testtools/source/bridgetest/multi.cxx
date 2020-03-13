@@ -34,7 +34,7 @@ struct CheckFailed {
     explicit CheckFailed(OUString const & theMessage): message(theMessage)
     {}
 
-    OUString const message;
+    OUString message;
 };
 
 template< typename T > void checkEqual(T const & value, T const & argument) {

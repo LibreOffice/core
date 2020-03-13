@@ -68,10 +68,10 @@ namespace {
 class SwDropSave
 {
     SwTextPaintInfo* pInf;
-    sal_Int32 const nIdx;
-    sal_Int32 const nLen;
-    long const nX;
-    long const nY;
+    sal_Int32 nIdx;
+    sal_Int32 nLen;
+    long nX;
+    long nY;
 
 public:
     explicit SwDropSave( const SwTextPaintInfo &rInf );

@@ -70,7 +70,7 @@ public:
 // TabPage printer settings additions
 class SwAddPrinterTabPage : public SfxTabPage
 {
-    OUString const sNone;
+    OUString sNone;
     bool bAttrModified;
     bool bPreview;
 
@@ -143,9 +143,9 @@ class SwStdFontTabPage : public SfxTabPage
 
     sal_uInt8 m_nFontGroup; //fontcfg.hxx: FONT_GROUP_[STANDARD|CJK|CTL]
 
-    OUString const m_sScriptWestern;
-    OUString const m_sScriptAsian;
-    OUString const m_sScriptComplex;
+    OUString m_sScriptWestern;
+    OUString m_sScriptAsian;
+    OUString m_sScriptComplex;
 
     std::unique_ptr<weld::Label> m_xLabelFT;
     std::unique_ptr<weld::ComboBox> m_xStandardBox;
@@ -256,7 +256,7 @@ public:
 class SwMarkPreview : public weld::CustomWidgetController
 {
     Color m_aBgCol;    // background
-    Color const m_aTransCol; // transparency
+    Color m_aTransCol; // transparency
     Color m_aMarkCol;  // marks
     Color m_aLineCol;  // general lines
     Color m_aShadowCol; // shadow

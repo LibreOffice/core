@@ -150,12 +150,12 @@ public:
 class SW_DLLPUBLIC SwReader: public SwDocFac
 {
     SvStream* mpStrm;
-    tools::SvRef<SotStorage> const mpStg;
+    tools::SvRef<SotStorage> mpStg;
     css::uno::Reference < css::embed::XStorage > mxStg;
-    SfxMedium* const mpMedium;     // Who wants to obtain a Medium (W4W).
+    SfxMedium* mpMedium;     // Who wants to obtain a Medium (W4W).
 
-    SwPaM* const mpCursor;
-    OUString const maFileName;
+    SwPaM* mpCursor;
+    OUString maFileName;
     OUString msBaseURL;
     bool mbSkipImages;
 
@@ -508,7 +508,7 @@ class SW_DLLPUBLIC SwWriter
     css::uno::Reference < css::embed::XStorage > m_xStg;
     SfxMedium* m_pMedium;
 
-    SwPaM* const m_pOutPam;
+    SwPaM* m_pOutPam;
     SwCursorShell *m_pShell;
     SwDoc &m_rDoc;
 
@@ -535,9 +535,9 @@ ErrCode GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS );
 struct SwReaderWriterEntry
 {
     Reader* pReader;
-    FnGetReader const fnGetReader;
-    FnGetWriter const fnGetWriter;
-    bool const bDelReader;
+    FnGetReader fnGetReader;
+    FnGetWriter fnGetWriter;
+    bool bDelReader;
 
     SwReaderWriterEntry( const FnGetReader fnReader, const FnGetWriter fnWriter, bool bDel )
         : pReader( nullptr ), fnGetReader( fnReader ), fnGetWriter( fnWriter ), bDelReader( bDel )

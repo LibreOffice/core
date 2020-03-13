@@ -27,7 +27,7 @@ typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XAddin > SwVbaAddin_BA
 class SwVbaAddin : public SwVbaAddin_BASE
 {
 private:
-    OUString const msFileURL;
+    OUString msFileURL;
     bool mbInstalled;
 
 public:

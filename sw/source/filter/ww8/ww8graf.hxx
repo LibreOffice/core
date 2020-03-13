@@ -59,7 +59,7 @@ private:
 
     std::stack<sal_uInt16> maIndexes;
 
-    sw::util::SetLayer const maSetLayer;
+    sw::util::SetLayer maSetLayer;
 
     sal_uLong mnNoInitialObjects;
     sal_uLong mnInlines;

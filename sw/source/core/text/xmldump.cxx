@@ -32,7 +32,7 @@ namespace {
 class XmlPortionDumper:public SwPortionHandler
 {
   private:
-    xmlTextWriterPtr const writer;
+    xmlTextWriterPtr writer;
     TextFrameIndex ofs;
     const OUString& m_rText;
     OUString m_aLine;

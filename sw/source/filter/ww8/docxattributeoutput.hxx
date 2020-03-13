@@ -870,7 +870,7 @@ private:
             : grfNode( n ), size( s ), pSdrObj(sObj) {};
 
         const SwGrfNode* grfNode;
-        Size const size;
+        Size size;
         const SdrObject* pSdrObj;
     };
     std::unique_ptr< std::vector<PostponedGraphic> > m_pPostponedGraphic;

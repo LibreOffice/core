@@ -61,13 +61,13 @@ namespace {
 
 class SwXMLConditionParser_Impl
 {
-    OUString const sInput;
+    OUString sInput;
 
     Master_CollCondition nCondition;
     sal_uInt32 nSubCondition;
 
     sal_Int32 nPos;
-    sal_Int32 const nLength;
+    sal_Int32 nLength;
 
     inline bool SkipWS();
     inline bool MatchChar( sal_Unicode c );

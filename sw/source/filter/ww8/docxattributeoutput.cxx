@@ -2442,8 +2442,8 @@ namespace
 
 struct NameToId
 {
-    OUString const  maName;
-    sal_Int32 const maId;
+    OUString  maName;
+    sal_Int32 maId;
 };
 
 const NameToId constNameToIdMapping[] =

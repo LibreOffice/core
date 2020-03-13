@@ -325,7 +325,7 @@ namespace myImplHelpers
     class IfBeforeStart
     {
     private:
-        sal_Int32 const mnStart;
+        sal_Int32 mnStart;
     public:
         explicit IfBeforeStart(sal_Int32 nStart) : mnStart(nStart) {}
         bool operator()(const sw::util::CharRunEntry &rEntry) const
