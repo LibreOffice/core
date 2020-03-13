@@ -282,7 +282,7 @@ class FileLockBytes :
 {
     /** Representation.
      */
-    oslFileHandle const                   m_hFile;
+    oslFileHandle                         m_hFile;
     sal_uInt32                            m_nSize;
     rtl::Reference< PageData::Allocator > m_xAllocator;
 
@@ -510,10 +510,10 @@ class MappedLockBytes :
 {
     /** Representation.
      */
-    sal_uInt8 * const m_pData;
-    sal_uInt32 const  m_nSize;
+    sal_uInt8 * m_pData;
+    sal_uInt32  m_nSize;
     sal_uInt16  m_nPageSize;
-    oslFileHandle const m_hFile;
+    oslFileHandle m_hFile;
 
     /** PageData::Allocator implementation.
      */

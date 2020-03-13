@@ -37,8 +37,8 @@ namespace {
 
 struct Link
 {
-    OUString const m_name;
-    OUString const m_target;
+    OUString m_name;
+    OUString m_target;
 
     Link( OUString const & name, OUString const & target )
         : m_name( name )

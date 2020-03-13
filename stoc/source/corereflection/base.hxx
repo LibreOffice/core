@@ -140,8 +140,8 @@ class IdlClassImpl
     rtl::Reference<IdlReflectionServiceImpl>
                                  m_xReflection;
 
-    OUString const               _aName;
-    css::uno::TypeClass const    _eTypeClass;
+    OUString                    _aName;
+    css::uno::TypeClass         _eTypeClass;
 
     typelib_TypeDescription *   _pTypeDescr;
 
@@ -321,7 +321,7 @@ class IdlMemberImpl
 {
     rtl::Reference<IdlReflectionServiceImpl>
                                 m_xReflection;
-    OUString const              _aName;
+    OUString                    _aName;
 
     typelib_TypeDescription *   _pTypeDescr;
     typelib_TypeDescription *   _pDeclTypeDescr;
