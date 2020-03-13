@@ -223,19 +223,12 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<Bitmap>& rBi
 
 bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
 {
-    // Save the original PDF stream for later use.
-    SvMemoryStream aMemoryStream;
-    if (!getCompatibleStream(rStream, aMemoryStream, STREAM_SEEK_TO_BEGIN, STREAM_SEEK_TO_END))
-        return false;
-    const sal_uInt32 nStreamLength = aMemoryStream.TellEnd();
-    VectorGraphicDataArray aPdfData(nStreamLength);
-    aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
-    aMemoryStream.ReadBytes(aPdfData.begin(), nStreamLength);
-    if (aMemoryStream.GetError())
+    VectorGraphicDataArray aPdfDataArray = createVectorGraphicDataArray(rStream);
+    if (!aPdfDataArray.hasElements())
         return false;
 
-    auto aVectorGraphicDataPtr
-        = std::make_shared<VectorGraphicData>(aPdfData, OUString(), VectorGraphicDataType::Pdf);
+    auto aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(aPdfDataArray, OUString(),
+                                                                     VectorGraphicDataType::Pdf);
 
     rGraphic = Graphic(aVectorGraphicDataPtr);
     return true;
@@ -291,13 +284,12 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<std::pair<Graphic, Si
         const size_t nPageHeight = pointToPixel(fPageHeight, fResolutionDPI);
 
         auto aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(
-            aPdfDataArray, OUString(), VectorGraphicDataType::Pdf);
+            aPdfDataArray, OUString(), VectorGraphicDataType::Pdf, nPageIndex);
 
         // Create the Graphic with the VectorGraphicDataPtr and link the original PDF stream.
         // We swap out this Graphic as soon as possible, and a later swap in
         // actually renders the correct Bitmap on demand.
         Graphic aGraphic(aVectorGraphicDataPtr);
-        aGraphic.setPageNumber(nPageIndex);
         aGraphic.SetGfxLink(pGfxLink);
 
         rGraphics.emplace_back(std::move(aGraphic), Size(nPageWidth, nPageHeight));

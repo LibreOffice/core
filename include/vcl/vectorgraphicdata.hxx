@@ -70,6 +70,9 @@ private:
     // extra:
     std::unique_ptr<WmfExternal> mpExternalHeader;
 
+    // If the vector format has more pages this denotes which page to render
+    sal_Int32 mnPageIndex;
+
     // on demand creators
     void ensurePdfReplacement();
     void ensureReplacement();
@@ -82,10 +85,9 @@ public:
     VectorGraphicData(
         const VectorGraphicDataArray& rVectorGraphicDataArray,
         const OUString& rPath,
-        VectorGraphicDataType eVectorDataType);
-    VectorGraphicData(
-        const OUString& rPath,
-        VectorGraphicDataType eVectorDataType);
+        VectorGraphicDataType eVectorDataType,
+        sal_Int32 nPageIndex = -1);
+    VectorGraphicData(const OUString& rPath, VectorGraphicDataType eVectorDataType);
     ~VectorGraphicData();
 
     /// compare op
@@ -107,6 +109,8 @@ public:
     const std::deque< css::uno::Reference< css::graphic::XPrimitive2D > >& getPrimitive2DSequence() const;
     const BitmapEx& getReplacement() const;
     BitmapChecksum GetChecksum() const;
+
+    sal_Int32 getPageIndex() const { return mnPageIndex; }
 };
 
 typedef std::shared_ptr< VectorGraphicData > VectorGraphicDataPtr;
