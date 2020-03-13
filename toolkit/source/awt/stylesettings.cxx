@@ -91,7 +91,7 @@ namespace toolkit
         }
 
     private:
-        SolarMutexGuard const  m_aGuard;
+        SolarMutexGuard  m_aGuard;
     };
 
     }
