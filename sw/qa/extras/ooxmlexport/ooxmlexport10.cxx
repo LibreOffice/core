@@ -1194,13 +1194,14 @@ DECLARE_OOXMLEXPORT_TEST(testTableMarginAdjustment, "table.fodt")
     auto const xTable(getParagraphOrTable(1));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTable, "LeftMargin"));
 
-    // currently no compatibilityMode is generated, it's only round-tripped if
-    // it exists in the input; if it doesn't exist, the default is "12" (old)
+    // Now that compatibilityMode is set to 2013's 15 (new), expect the new values,
+    // since LO is exporting in the NEW way now instead of the OLD way.
+    // This was 55 when using 2007's compatibilityMode of 12 (old)
 
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPath(pXmlDoc, "//w:tbl[1]/w:tblPr[1]/w:tblInd[1]", "type", "dxa");
-    assertXPath(pXmlDoc, "//w:tbl[1]/w:tblPr[1]/w:tblInd[1]", "w", "55");
+    assertXPath(pXmlDoc, "//w:tbl[1]/w:tblPr[1]/w:tblInd[1]", "w", "0");
 }
 
 DECLARE_OOXMLEXPORT_TEST( testTableCellMargin, "table-cell-margin.docx" )
