@@ -58,7 +58,7 @@ enum class SvxIconChoiceCtrlPositionMode
 
 class SvxIconChoiceCtrlEntry
 {
-    Image const aImage;
+    Image aImage;
 
     OUString aText;
     OUString aQuickHelpText;

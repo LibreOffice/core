@@ -141,9 +141,9 @@ namespace svt::table
 
         struct ActionMapEntry
         {
-            sal_uInt16 const              nKeyCode;
-            sal_uInt16 const              nKeyModifier;
-            TableControlAction const  eAction;
+            sal_uInt16              nKeyCode;
+            sal_uInt16              nKeyModifier;
+            TableControlAction  eAction;
         }
         static const aKnownActions[] = {
             { KEY_DOWN,     0,          cursorDown },

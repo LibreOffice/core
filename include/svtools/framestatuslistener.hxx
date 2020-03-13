@@ -75,7 +75,7 @@ class FrameStatusListener : public css::frame::XStatusListener,
             Listener( const css::util::URL& rURL, const css::uno::Reference< css::frame::XDispatch >& rDispatch ) :
                 aURL( rURL ), xDispatch( rDispatch ) {}
 
-            css::util::URL const aURL;
+            css::util::URL aURL;
             css::uno::Reference< css::frame::XDispatch > xDispatch;
         };
 

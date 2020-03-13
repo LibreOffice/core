@@ -68,7 +68,7 @@ namespace {
 
 class InstallLangpack : public Idle
 {
-    std::vector<OUString> const m_aPackages;
+    std::vector<OUString> m_aPackages;
 public:
     explicit InstallLangpack(const std::vector<OUString>& rPackages)
         : Idle("install langpack")

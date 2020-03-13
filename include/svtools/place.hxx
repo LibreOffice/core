@@ -18,7 +18,7 @@ private:
     OUString msName;
     INetURLObject maUrl;
 
-    bool const mbEditable;
+    bool mbEditable;
 
 public:
 

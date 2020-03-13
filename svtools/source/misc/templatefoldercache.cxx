@@ -113,7 +113,7 @@ namespace svt
     public:
 
     private:
-        INetURLObject const           m_aURL;
+        INetURLObject           m_aURL;
         util::DateTime          m_aLastModified;    // date of last modification as reported by UCP
         TemplateFolderContent   m_aSubContents;     // sorted (by name) list of the children
 
@@ -393,7 +393,7 @@ namespace svt
         bool                            m_bNeedsUpdate : 1;
         bool                            m_bKnowState : 1;
         bool                            m_bValidCurrentState : 1;
-        bool const                      m_bAutoStoreState : 1;
+        bool                            m_bAutoStoreState : 1;
 
     public:
         explicit TemplateFolderCacheImpl( bool _bAutoStoreState );

@@ -41,7 +41,7 @@ class FileControl final : public vcl::Window
 {
     VclPtr<Edit>       maEdit;
     VclPtr<PushButton> maButton;
-    OUString const           maButtonText;
+    OUString           maButtonText;
     FileControlMode_Internal    mnInternalFlags;
 
     void     Resize() override;
