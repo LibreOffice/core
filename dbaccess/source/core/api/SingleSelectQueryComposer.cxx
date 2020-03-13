@@ -29,9 +29,7 @@
 #include <sdbcoretools.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/i18n/LocaleData.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/sdb/BooleanComparisonMode.hpp>
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
@@ -43,20 +41,15 @@
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
-#include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/util/NumberFormatter.hpp>
 
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/PColumn.hxx>
 #include <connectivity/predicateinput.hxx>
-#include <unotools/syslocale.hxx>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
-#include <unotools/configmgr.hxx>
 #include <unotools/sharedunocomponent.hxx>
 
 #include <memory>

@@ -18,17 +18,13 @@
  */
 
 #include <View.hxx>
-#include <stringconstants.hxx>
 #include <strings.hxx>
 
-#include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <cppuhelper/exc_hlp.hxx>
 #include <tools/diagnose_ex.h>
-#include <unotools/sharedunocomponent.hxx>
 
 namespace dbaccess
 {

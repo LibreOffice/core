@@ -18,24 +18,19 @@
  */
 
 #include <ContainerMediator.hxx>
-#include <stringconstants.hxx>
 #include <PropertyForward.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XRename.hpp>
-#include <connectivity/dbtools.hxx>
 #include <comphelper/property.hxx>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
 namespace dbaccess
 {
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
-    using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::sdbcx;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;

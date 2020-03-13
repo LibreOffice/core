@@ -18,15 +18,11 @@
  */
 
 #include <bookmarkcontainer.hxx>
-#include <stringconstants.hxx>
-#include <apitools.hxx>
 
 #include <osl/diagnose.h>
 #include <comphelper/enumhelper.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <comphelper/types.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star::uno;

@@ -19,15 +19,12 @@
 
 #include <apitools.hxx>
 #include <tablecontainer.hxx>
-#include <stringconstants.hxx>
 #include <table.hxx>
 #include <sal/log.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/processfactory.hxx>
-#include <tools/debug.hxx>
 #include <core_resource.hxx>
 #include <strings.hrc>
-#include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -35,10 +32,6 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include <com/sun/star/sdbc/KeyRule.hpp>
-#include <com/sun/star/sdbcx/KeyType.hpp>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <comphelper/types.hxx>
@@ -47,7 +40,6 @@
 #include <TableDeco.hxx>
 #include <sdbcoretools.hxx>
 #include <ContainerMediator.hxx>
-#include <definitioncolumn.hxx>
 #include <objectnameapproval.hxx>
 #include <tools/diagnose_ex.h>
 
