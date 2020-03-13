@@ -176,7 +176,7 @@ public:
 private:
     SvNumberFormatter*      pFormatter;
     SvNumberFormatTable*    pCurFmtTable;
-    SvxNumberValueType const eValType;
+    SvxNumberValueType      eValType;
     OUString                aValStr;
     double                  nValNum;
     bool                    bUndoAddList;

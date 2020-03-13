@@ -40,9 +40,9 @@ namespace svx
     private:
         css::uno::Reference< css::frame::XDispatch >
                                         m_xDispatcher;
-        css::util::URL const            m_aFeatureURL;
+        css::util::URL                  m_aFeatureURL;
         css::uno::Any                   m_aFeatureState;
-        SfxSlotId const                 m_nSlotId;
+        SfxSlotId                       m_nSlotId;
         FmTextControlShell*             m_pInvalidator;
         bool                            m_bFeatureEnabled;
 

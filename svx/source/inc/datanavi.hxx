@@ -210,8 +210,8 @@ namespace svxform
     class XFormsPage : public TabPage
     {
     private:
-        MethodString const                m_aMethodString;
-        ReplaceString const               m_aReplaceString;
+        MethodString                m_aMethodString;
+        ReplaceString               m_aReplaceString;
 
         VclPtr<ToolBox>             m_pToolBox;
         VclPtr<DataTreeListBox>     m_pItemList;
@@ -226,7 +226,7 @@ namespace svxform
 
         VclPtr<DataNavigatorWindow> m_pNaviWin;
         bool                        m_bHasModel;
-        DataGroupType const               m_eGroup;
+        DataGroupType               m_eGroup;
         // these strings are not valid on the Submission and Binding Page
         // mb: furthermore these are properties of an instance, thus
         // it would be much better to get/set them through the UIHelper
@@ -388,10 +388,10 @@ namespace svxform
 
         ItemNode*           m_pItemNode;
         DataItemType        m_eItemType;
-        OUString const            m_sFL_Element;
-        OUString const            m_sFL_Attribute;
-        OUString const            m_sFL_Binding;
-        OUString const            m_sFT_BindingExp;
+        OUString            m_sFL_Element;
+        OUString            m_sFL_Attribute;
+        OUString            m_sFL_Binding;
+        OUString            m_sFT_BindingExp;
 
         std::unique_ptr<weld::Frame> m_xItemFrame;
         std::unique_ptr<weld::Label> m_xNameFT;
@@ -436,7 +436,7 @@ namespace svxform
     {
     private:
         Idle                           m_aResultIdle;
-        OUString const                       m_sPropertyName;
+        OUString                       m_sPropertyName;
 
         css::uno::Reference< css::xforms::XFormsUIHelper1 >
                                        m_xUIHelper;
@@ -521,10 +521,10 @@ namespace svxform
     class AddSubmissionDialog : public weld::GenericDialogController
     {
     private:
-        MethodString const        m_aMethodString;
-        ReplaceString const       m_aReplaceString;
+        MethodString         m_aMethodString;
+        ReplaceString        m_aReplaceString;
 
-        ItemNode* const     m_pItemNode;
+        ItemNode*            m_pItemNode;
 
         css::uno::Reference< css::xforms::XFormsUIHelper1 >
                             m_xUIHelper;

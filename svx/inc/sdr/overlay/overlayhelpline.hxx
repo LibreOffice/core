@@ -31,7 +31,7 @@ namespace sdr
         class OverlayHelplineStriped final : public OverlayObjectWithBasePosition
         {
             // remember HelpLineKind
-            SdrHelpLineKind const                             meKind;
+            SdrHelpLineKind                             meKind;
 
             // geometry creation for OverlayObject
             virtual drawinglayer::primitive2d::Primitive2DContainer createOverlayObjectPrimitive2DSequence() override;

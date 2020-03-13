@@ -200,7 +200,7 @@ private:
     // Model, Page, View etc. for favourites
     std::unique_ptr<FmFormModel>         pModel;
 
-    SfxBindings* const                   pBindings;
+    SfxBindings*                         pBindings;
     std::unique_ptr<Svx3DCtrlItem>       pControllerItem;
 
     std::unique_ptr<SvxConvertTo3DItem>  pConvertTo3DItem;

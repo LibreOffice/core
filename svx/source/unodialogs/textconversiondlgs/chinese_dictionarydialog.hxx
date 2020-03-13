@@ -36,11 +36,11 @@ struct DictionaryEntry final
 
     ~DictionaryEntry();
 
-    OUString const m_aTerm;
-    OUString const m_aMapping;
+    OUString m_aTerm;
+    OUString m_aMapping;
     sal_Int16     m_nConversionPropertyType; //linguistic2::ConversionPropertyType
 
-    bool const     m_bNewEntry;
+    bool     m_bNewEntry;
 };
 
 class DictionaryList

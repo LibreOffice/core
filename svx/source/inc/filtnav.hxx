@@ -54,7 +54,7 @@ class FmFilterAdapter;
 
 class FmFilterData
 {
-    FmParentData* const    m_pParent;
+    FmParentData*    m_pParent;
     OUString         m_aText;
 
 public:
@@ -126,8 +126,8 @@ public:
 
 class FmFilterItem : public FmFilterData
 {
-    OUString const      m_aFieldName;
-    const sal_Int32     m_nComponentIndex;
+    OUString      m_aFieldName;
+    sal_Int32     m_nComponentIndex;
 
 public:
     FmFilterItem(

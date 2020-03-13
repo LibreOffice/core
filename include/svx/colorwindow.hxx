@@ -63,15 +63,15 @@ private:
     VclPtr<PushButton>  mpButtonNoneColor;
     VclPtr<PushButton>  mpButtonPicker;
     VclPtr<FixedLine>   mpAutomaticSeparator;
-    OUString const      maCommand;
+    OUString            maCommand;
     Link<const NamedColor&, void> maSelectedLink;
 
     VclPtr<vcl::Window> mxParentWindow;
     std::shared_ptr<PaletteManager> mxPaletteManager;
     ColorStatus&  mrColorStatus;
 
-    ColorSelectFunction const maColorSelectFunction;
-    bool const mbReuseParentForPicker;
+    ColorSelectFunction maColorSelectFunction;
+    bool                mbReuseParentForPicker;
 
     DECL_LINK( SelectHdl, ValueSet*, void );
     DECL_LINK( SelectPaletteHdl, ListBox&, void);
@@ -141,11 +141,11 @@ class SVXCORE_DLLPUBLIC ColorWindow final : public WeldToolbarPopup
 private:
     const sal_uInt16    theSlotId;
     OUString            maCommand;
-    weld::Window* const mpParentWindow;
+    weld::Window*       mpParentWindow;
     MenuOrToolMenuButton maMenuButton;
     std::shared_ptr<PaletteManager> mxPaletteManager;
     ColorStatus&  mrColorStatus;
-    ColorSelectFunction const maColorSelectFunction;
+    ColorSelectFunction  maColorSelectFunction;
 
     std::unique_ptr<ColorValueSet> mxColorSet;
     std::unique_ptr<ColorValueSet> mxRecentColorSet;

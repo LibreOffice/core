@@ -176,7 +176,7 @@ namespace {
 
 class FmFilterHint : public SfxHint
 {
-    FmFilterData* const   m_pData;
+    FmFilterData*   m_pData;
 
 public:
     explicit FmFilterHint(FmFilterData* pData):m_pData(pData){}
@@ -185,7 +185,7 @@ public:
 
 class FmFilterInsertedHint : public FmFilterHint
 {
-    size_t const m_nPos;   // Position relative to the parent of the data
+    size_t m_nPos;   // Position relative to the parent of the data
 
 public:
     FmFilterInsertedHint(FmFilterData* pData, size_t nRelPos)

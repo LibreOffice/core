@@ -174,10 +174,10 @@ class GalleryHint final : public SfxHint
 {
 private:
 
-    GalleryHintType const     mnType;
-    OUString const            maThemeName;
-    OUString const            maStringData;
-    void* const               mnData1;
+    GalleryHintType     mnType;
+    OUString            maThemeName;
+    OUString            maStringData;
+    void*               mnData1;
 
 public:
 

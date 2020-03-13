@@ -53,9 +53,9 @@ private:
     std::unique_ptr<weld::ComboBox> m_xInterpolationCombo;
 
     SdrGrafObj*     m_xGraphicObj;
-    Graphic const     m_aGraphic;
-    Size const        m_aViewSize100mm;
-    tools::Rectangle  m_aCropRectangle;
+    Graphic         m_aGraphic;
+    Size            m_aViewSize100mm;
+    tools::Rectangle m_aCropRectangle;
     SfxBindings&    m_rBindings;
 
     double          m_dResolution;
