@@ -643,7 +643,7 @@ class ImplIntrospectionAccess : public IntrospectionAccessHelper
     friend class Implementation;
 
     // Object under examination
-    Any const maInspectedObject;
+    Any maInspectedObject;
 
     // As interface
     Reference<XInterface> mxIface;
