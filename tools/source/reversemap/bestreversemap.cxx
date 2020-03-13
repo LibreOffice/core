@@ -17,7 +17,7 @@ namespace {
 
 struct Encoder
 {
-    rtl_UnicodeToTextConverter const m_aConverter;
+    rtl_UnicodeToTextConverter m_aConverter;
     bool m_bCapable;
     const char *m_pEncoding;
     Encoder(rtl_TextEncoding nEncoding, const char *pEncoding)
