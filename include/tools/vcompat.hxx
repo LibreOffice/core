@@ -39,7 +39,7 @@ class UNLESS_MERGELIBS(TOOLS_DLLPUBLIC) VersionCompat
     SvStream*       mpRWStm;
     sal_uInt32      mnCompatPos;
     sal_uInt32      mnTotalSize;
-    StreamMode const mnStmMode;
+    StreamMode      mnStmMode;
     sal_uInt16      mnVersion;
 
                     VersionCompat( const VersionCompat& ) = delete;

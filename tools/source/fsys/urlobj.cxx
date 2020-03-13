@@ -291,14 +291,14 @@ struct INetURLObject::SchemeInfo
 {
     char const * m_pScheme;
     char const * m_pPrefix;
-    bool const m_bAuthority;
-    bool const m_bUser;
-    bool const m_bAuth;
-    bool const m_bPassword;
-    bool const m_bHost;
-    bool const m_bPort;
-    bool const m_bHierarchical;
-    bool const m_bQuery;
+    bool m_bAuthority;
+    bool m_bUser;
+    bool m_bAuth;
+    bool m_bPassword;
+    bool m_bHost;
+    bool m_bPort;
+    bool m_bHierarchical;
+    bool m_bQuery;
 };
 
 struct INetURLObject::PrefixInfo
@@ -307,8 +307,8 @@ struct INetURLObject::PrefixInfo
 
     char const * m_pPrefix;
     char const * m_pTranslatedPrefix;
-    INetProtocol const m_eScheme;
-    Kind const m_eKind;
+    INetProtocol m_eScheme;
+    Kind         m_eKind;
 };
 
 // static

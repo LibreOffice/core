@@ -252,12 +252,12 @@ void appendISO88591(OUStringBuffer & rText, char const * pBegin,
 
 struct Parameter
 {
-    OString const m_aAttribute;
-    OString const m_aCharset;
-    OString const m_aLanguage;
-    OString const m_aValue;
-    sal_uInt32 const m_nSection;
-    bool const m_bExtended;
+    OString m_aAttribute;
+    OString m_aCharset;
+    OString m_aLanguage;
+    OString m_aValue;
+    sal_uInt32 m_nSection;
+    bool m_bExtended;
 
     bool operator<(const Parameter& rhs) const // is used by std::list<Parameter>::sort
     {
@@ -741,7 +741,7 @@ bool equalIgnoreCase(const char * pBegin1,
 struct EncodingEntry
 {
     char const * m_aName;
-    rtl_TextEncoding const m_eEncoding;
+    rtl_TextEncoding m_eEncoding;
 };
 
 // The source for the following table is <ftp://ftp.iana.org/in-notes/iana/

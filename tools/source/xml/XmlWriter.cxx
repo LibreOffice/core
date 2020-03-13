@@ -40,7 +40,7 @@ struct XmlWriterImpl
     {
     }
 
-    SvStream* const mpStream;
+    SvStream* mpStream;
     xmlTextWriterPtr mpWriter;
     bool mbWriteXmlHeader;
 };
