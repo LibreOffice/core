@@ -689,7 +689,7 @@ en-US = "Load [ProductName] during system start-up"
 en-US = "Some files that need to be updated are currently in use."
 
 [OOO_CONTROL_323]
-en-US = "The following applications are using files that need to be updated by this setup. You can let Installation Wizard close them and attempt to restart them or reboot the machine later."
+en-US = "The following applications are using files that need to be updated by this setup. You can let Installation Wizard close them and attempt to restart them, or reboot the system later to complete the setup."
 
 [OOO_CONTROL_324]
 en-US = "{&DialogDefaultBold}Files in Use"
