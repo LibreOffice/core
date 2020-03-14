@@ -1,3 +1,12 @@
+gendict_bin = executable('gendict',
+  'source/breakiterator/gendict.cxx',
+  include_directories: [main_inc],
+  cpp_args: ['-DLIBO_INTERNAL_ONLY',
+             #'-DDICT_JA_ZH_IN_DATAFILE',
+             ],
+  link_with: sal_lib,
+)
+
 breakgen = find_program('breakgen.py')
 
 g = generator(breakgen,
@@ -143,5 +152,33 @@ localedata_en_lib = shared_library('localedata_en',
   link_with: [
   ],
   dependencies: [],
+  install: true,
+)
+
+dict_ja_lib = shared_library('dict_ja',
+  custom_target('gen_ja_dict',
+    input: ['source/breakiterator/data/ja.dic'],
+    output: ['dict_ja.cxx'],
+    command: [gendict_bin,
+              '@INPUT@',
+              '@OUTPUT@',
+              'ja'],
+  ),
+  include_directories: [main_inc],
+  gnu_symbol_visibility: 'hidden',
+  install: true,
+)
+
+dict_zh_lib = shared_library('dict_zh',
+  custom_target('gen_zha_dict',
+    input: ['source/breakiterator/data/zh.dic'],
+    output: ['dict_zh.cxx'],
+    command: [gendict_bin,
+              '@INPUT@',
+              '@OUTPUT@',
+              'zh'],
+  ),
+  include_directories: [main_inc],
+  gnu_symbol_visibility: 'hidden',
   install: true,
 )
