@@ -2007,11 +2007,7 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, S
         rFont.SetPropr( static_cast<sal_uInt8>(nProp) );
 
         short nEsc = rEsc.GetEsc();
-        if ( nEsc == DFLT_ESC_AUTO_SUPER )
-            nEsc = .8 * (100 - nProp);
-        else if ( nEsc == DFLT_ESC_AUTO_SUB )
-            nEsc = .2 * -(100 - nProp);
-        rFont.SetEscapement( nEsc );
+        rFont.SetNonAutoEscapement( nEsc );
     }
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_PAIRKERNING ) == SfxItemState::SET ) )
         rFont.SetKerning( rSet.Get( EE_CHAR_PAIRKERNING ).GetValue() ? FontKerning::FontSpecific : FontKerning::NONE );
