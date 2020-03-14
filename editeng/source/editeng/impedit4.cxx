@@ -69,6 +69,7 @@
 #include <unotools/textsearch.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/help.hxx>
+#include <vcl/metric.hxx>
 #include <svtools/rtfkeywd.hxx>
 #include <editeng/edtdlg.hxx>
 
@@ -928,14 +929,23 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
             sal_uInt16 const nProp = static_cast<const SvxEscapementItem&>(rItem).GetProportionalHeight();
             sal_uInt16 nProp100 = nProp*100;    // For SWG-Token Prop in 100th percent.
             short nEsc = static_cast<const SvxEscapementItem&>(rItem).GetEsc();
+            const FontMetric& rFontMetric = GetRefDevice()->GetFontMetric();
+            double fFontHeight = rFontMetric.GetAscent() + rFontMetric.GetDescent();
+            double fAutoAscent = .8;
+            double fAutoDescent = .2;
+            if ( fFontHeight )
+            {
+                fAutoAscent = rFontMetric.GetAscent() / fFontHeight;
+                fAutoDescent = rFontMetric.GetDescent() / fFontHeight;
+            }
             if ( nEsc == DFLT_ESC_AUTO_SUPER )
             {
-                nEsc =  .8 * (100 - nProp);
+                nEsc =  fAutoAscent * (100 - nProp);
                 nProp100++; // A 1 afterwards means 'automatic'.
             }
             else if ( nEsc == DFLT_ESC_AUTO_SUB )
             {
-                nEsc =  .2 * -(100 - nProp);
+                nEsc =  fAutoDescent * -(100 - nProp);
                 nProp100++;
             }
             // SWG:
