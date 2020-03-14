@@ -266,17 +266,13 @@ EditCharAttribEscapement::EditCharAttribEscapement( const SvxEscapementItem& rAt
     assert(rAttr.Which() == EE_CHAR_ESCAPEMENT);
 }
 
-void EditCharAttribEscapement::SetFont( SvxFont& rFont, OutputDevice* )
+void EditCharAttribEscapement::SetFont( SvxFont& rFont, OutputDevice* pOutDev )
 {
     sal_uInt16 const nProp = static_cast<const SvxEscapementItem*>(GetItem())->GetProportionalHeight();
     rFont.SetPropr( static_cast<sal_uInt8>(nProp) );
 
     short nEsc = static_cast<const SvxEscapementItem*>(GetItem())->GetEsc();
-    if ( nEsc == DFLT_ESC_AUTO_SUPER )
-        nEsc =  .8 * (100 - nProp);
-    else if ( nEsc == DFLT_ESC_AUTO_SUB )
-        nEsc =  .2 * -(100 - nProp);
-    rFont.SetEscapement( nEsc );
+    rFont.SetNonAutoEscapement( nEsc, pOutDev );
 }
 
 
