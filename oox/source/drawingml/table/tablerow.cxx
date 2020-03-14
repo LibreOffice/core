@@ -18,13 +18,6 @@
  */
 
 #include <drawingml/table/tablerow.hxx>
-#include <oox/drawingml/drawingmltypes.hxx>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
-#include <oox/helper/propertyset.hxx>
-#include <com/sun/star/table/XTable.hpp>
-#include <com/sun/star/table/XMergeableCellRange.hpp>
-#include <com/sun/star/table/BorderLine2.hpp>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star;

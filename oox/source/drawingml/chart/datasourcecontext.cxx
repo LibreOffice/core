@@ -21,7 +21,6 @@
 
 #include <oox/drawingml/chart/datasourcemodel.hxx>
 
-#include <comphelper/processfactory.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>

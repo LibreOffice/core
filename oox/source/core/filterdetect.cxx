@@ -19,7 +19,6 @@
 
 #include <oox/core/filterdetect.hxx>
 
-#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <comphelper/docpasswordhelper.hxx>
 #include <unotools/mediadescriptor.hxx>

@@ -9,13 +9,10 @@
 
 #include "effectpropertiescontext.hxx"
 #include "effectproperties.hxx"
-#include <oox/drawingml/drawingmltypes.hxx>
-#include <drawingml/misccontexts.hxx>
+#include <drawingml/colorchoicecontext.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
-
-#include <sal/log.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;

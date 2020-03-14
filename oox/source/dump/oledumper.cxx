@@ -19,14 +19,7 @@
 
 #include <oox/dump/oledumper.hxx>
 
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
-#include <osl/file.hxx>
-#include <osl/thread.h>
 #include <rtl/tencinfo.h>
-#include <oox/core/filterbase.hxx>
-#include <oox/helper/binaryoutputstream.hxx>
-#include <oox/ole/olestorage.hxx>
 #include <oox/ole/vbainputstream.hxx>
 
 #ifdef DBG_UTIL

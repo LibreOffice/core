@@ -20,18 +20,14 @@
 #include "datamodel.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
-#include <drawingml/customshapeproperties.hxx>
 #include <drawingml/fillproperties.hxx>
 #include <drawingml/textbody.hxx>
 #include <drawingml/textparagraph.hxx>
 #include <drawingml/textrun.hxx>
 #include <oox/drawingml/shape.hxx>
-#include <oox/token/namespaces.hxx>
-#include <svx/DiagramDataInterface.hxx>
 #include <comphelper/xmltools.hxx>
 
 #include <unordered_set>
-#include <iostream>
 #include <fstream>
 
 using namespace ::com::sun::star;

@@ -25,9 +25,8 @@
 #include <drawingml/fillproperties.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
-#include <sfx2/docfile.hxx>
-#include <vcl/GraphicLoader.hxx>
 #include <vcl/GraphicExternalLink.hxx>
+#include <vcl/graph.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

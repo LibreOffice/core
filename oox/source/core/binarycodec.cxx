@@ -19,8 +19,6 @@
 
 #include <oox/core/binarycodec.hxx>
 
-#include <algorithm>
-#include <string.h>
 #include <oox/helper/attributelist.hxx>
 
 #include <osl/diagnose.h>

@@ -31,10 +31,7 @@
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
-#include <com/sun/star/chart2/XFormattedString2.hpp>
-#include <com/sun/star/chart2/FormattedString.hpp>
 #include <osl/diagnose.h>
-#include <basegfx/numeric/ftools.hxx>
 #include <drawingml/chart/datasourceconverter.hxx>
 #include <drawingml/chart/seriesmodel.hxx>
 #include <drawingml/chart/titleconverter.hxx>
@@ -42,8 +39,6 @@
 #include <drawingml/chart/typegroupmodel.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/containerhelper.hxx>
-#include <oox/helper/attributelist.hxx>
-#include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include <drawingml/lineproperties.hxx>

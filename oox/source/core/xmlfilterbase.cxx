@@ -23,17 +23,12 @@
 #include <set>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/beans/Pair.hpp>
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
-#include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
-#include <com/sun/star/document/XDocumentProperties.hpp>
 #include <o3tl/any.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/docinfohelper.hxx>
@@ -48,7 +43,6 @@
 #include <oox/core/fragmenthandler.hxx>
 #include <oox/core/recordparser.hxx>
 #include <oox/core/relationshandler.hxx>
-#include <oox/helper/containerhelper.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/helper/zipstorage.hxx>
 #include <oox/ole/olestorage.hxx>
@@ -66,9 +60,8 @@
 #include <comphelper/ofopxmlhelper.hxx>
 
 #include <oox/crypto/DocumentEncryption.hxx>
-#include <tools/date.hxx>
-#include <tools/datetime.hxx>
 #include <tools/urlobj.hxx>
+#include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Duration.hpp>
 #include <sax/tools/converter.hxx>
 #include <oox/token/namespacemap.hxx>

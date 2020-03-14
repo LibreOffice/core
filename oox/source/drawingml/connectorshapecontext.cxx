@@ -19,24 +19,18 @@
 
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
-#include <com/sun/star/container/XNamed.hpp>
 
 #include <oox/drawingml/connectorshapecontext.hxx>
-#include <oox/drawingml/graphicshapecontext.hxx>
-#include <drawingml/lineproperties.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
-#include <drawingml/customshapegeometry.hxx>
-#include <drawingml/textbodycontext.hxx>
 
 using namespace oox::core;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::xml::sax;
 
 namespace oox::drawingml {

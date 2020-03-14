@@ -22,8 +22,6 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
-#include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
-#include <com/sun/star/drawing/CircleKind.hpp>
 #include <drawingml/textbodyproperties.hxx>
 #include <drawingml/textbody.hxx>
 #include <drawingml/customshapegeometry.hxx>
@@ -34,11 +32,6 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
-#include <svx/EnhancedCustomShapeGeometry.hxx>
-#include <comphelper/propertysequence.hxx>
-#include <comphelper/propertyvalue.hxx>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/sequence.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star;

@@ -18,7 +18,6 @@
  */
 
 #include <drawingml/linepropertiescontext.hxx>
-#include <oox/drawingml/drawingmltypes.hxx>
 #include <drawingml/misccontexts.hxx>
 #include <drawingml/lineproperties.hxx>
 #include <oox/helper/attributelist.hxx>

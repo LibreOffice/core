@@ -19,7 +19,6 @@
 
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
-#include <oox/drawingml/drawingmltypes.hxx>
 #include <drawingml/textbodyproperties.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
