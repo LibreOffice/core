@@ -1542,7 +1542,9 @@ bool SwDoc::RemoveInvisibleContent()
 
 bool SwDoc::HasInvisibleContent() const
 {
-    if(SwIterator<SwFormatField,SwFieldType>(*getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::HiddenPara)).First())
+    std::vector<SwFormatField*> vFields;
+    getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::HiddenPara)->GatherFields(vFields);
+    if(vFields.size())
         return true;
 
     // Search for any hidden paragraph (hidden text attribute)
