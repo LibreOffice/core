@@ -511,39 +511,23 @@ sal_uInt16 PostItField_::GetPageNo(
     return 0;
 }
 
-bool sw_GetPostIts(
-    IDocumentFieldsAccess const * pIDFA,
-    SetGetExpFields * pSrtLst )
+bool sw_GetPostIts(IDocumentFieldsAccess const* pIDFA, SetGetExpFields* pSrtLst)
 {
-    bool bHasPostIts = false;
-
-    SwFieldType* pFieldType = pIDFA->GetSysFieldType( SwFieldIds::Postit );
+    SwFieldType* pFieldType = pIDFA->GetSysFieldType(SwFieldIds::Postit);
     assert(pFieldType);
 
-    if( pFieldType->HasWriterListeners() )
-    {
-        // Found modify object; insert all fields into the array
-        SwIterator<SwFormatField,SwFieldType> aIter( *pFieldType );
-        for( SwFormatField* pField = aIter.First(); pField;  pField = aIter.Next() )
+    std::vector<SwFormatField*> vFields;
+    pFieldType->GatherFields(vFields);
+    if(pSrtLst)
+        for(auto pField: vFields)
         {
-            const SwTextField* pTextField;
-            if( nullptr != ( pTextField = pField->GetTextField() ) &&
-                pTextField->GetTextNode().GetNodes().IsDocNodes() )
-            {
-                bHasPostIts = true;
-                if (pSrtLst)
-                {
-                    SwNodeIndex aIdx( pTextField->GetTextNode() );
-                    std::unique_ptr<PostItField_> pNew(new PostItField_( aIdx, pTextField ));
-                    pSrtLst->insert( std::move(pNew) );
-                }
-                else
-                    break;  // we just wanted to check for the existence of postits ...
-            }
-        }
-    }
+            auto pTextField = pField->GetTextField();
+            SwNodeIndex aIdx(pTextField->GetTextNode());
+            std::unique_ptr<PostItField_> pNew(new PostItField_(aIdx, pTextField));
+            pSrtLst->insert(std::move(pNew));
 
-    return bHasPostIts;
+        }
+    return vFields.size()>0;
 }
 
 static void lcl_FormatPostIt(
