@@ -1407,20 +1407,11 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         }
         // 5. REMARKS
         {
-            uno::Reference< XBlob > xBlob   = xRow->getBlob(4);
-            OUString sDescription;
-
-            if (xBlob.is())
+            uno::Reference< XClob > xClob = xRow->getClob(4);
+            if (xClob.is())
             {
-                // TODO: we should actually be using CLOB here instead.
-                // However we haven't implemented CLOB yet, so use BLOB.
-                sal_Int32 aBlobLength = static_cast<sal_Int32>(xBlob->length());
-                sDescription = OUString(reinterpret_cast<char*>(xBlob->getBytes(1, aBlobLength).getArray()),
-                                        aBlobLength,
-                                        RTL_TEXTENCODING_UTF8);
+                aCurrentRow[5] = new ORowSetValueDecorator(xClob->getSubString(0, xClob->length()));
             }
-
-            aCurrentRow[5] = new ORowSetValueDecorator(sDescription);
         }
 
         aResults.push_back(aCurrentRow);
