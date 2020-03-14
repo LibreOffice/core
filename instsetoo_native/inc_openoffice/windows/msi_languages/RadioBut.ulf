@@ -47,5 +47,5 @@ en-US = "Only for &me ([USERNAME])"
 en-US = "&Close the applications and attempt to restart them."
 
 [OOO_RADIOBUTTON_11]
-en-US = "&Do not close applications. A reboot will be required."
+en-US = "&Do not close applications. A reboot will be required to complete the setup."
 
