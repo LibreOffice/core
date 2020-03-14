@@ -1597,12 +1597,9 @@ bool SwDoc::ConvertFieldsToText(SwRootFrame const& rLayout)
         if ( SwFieldIds::Postit == pCurType->Which() )
             continue;
 
-        SwIterator<SwFormatField,SwFieldType> aIter( *pCurType );
-        std::vector<const SwFormatField*> aFieldFormats;
-        for( SwFormatField* pCurFieldFormat = aIter.First(); pCurFieldFormat; pCurFieldFormat = aIter.Next() )
-            aFieldFormats.push_back(pCurFieldFormat);
-
-        for(const auto& rpFieldFormat : aFieldFormats)
+        std::vector<SwFormatField*> vFieldFormats;
+        pCurType->GatherFields(vFieldFormats, false);
+        for(const auto& rpFieldFormat : vFieldFormats)
         {
             const SwTextField *pTextField = rpFieldFormat->GetTextField();
             // skip fields that are currently not in the document
