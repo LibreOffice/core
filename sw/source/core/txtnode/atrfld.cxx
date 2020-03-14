@@ -275,11 +275,15 @@ void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
             pGatherRefFieldsHint->m_rvRFields.push_back(static_cast<SwGetRefField*>(GetField()));
     } else if (const auto pGatherFieldsHint = dynamic_cast<const sw::GatherFieldsHint*>( &rHint ))
     {
-        if(!GetTextField())
-            return;
-        SwTextNode* pNd = GetTextField()->GetpTextNode();
-        if(pNd && pNd->GetNodes().IsDocNodes())
-            pGatherFieldsHint->m_rvFields.push_back(this);
+        if(pGatherFieldsHint->m_bCollectOnlyInDocNodes)
+        {
+            if(!GetTextField())
+                return;
+            SwTextNode* pNd = GetTextField()->GetpTextNode();
+            if(!pNd || !pNd->GetNodes().IsDocNodes())
+                return;
+        }
+        pGatherFieldsHint->m_rvFields.push_back(this);
     }
 }
 

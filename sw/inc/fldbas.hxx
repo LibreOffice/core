@@ -279,7 +279,7 @@ public:
     bool HasHiddenInformationNotes();
     void GatherNodeIndex(std::vector<sal_uLong>& rvNodeIndex);
     void GatherRefFields(std::vector<SwGetRefField*>& rvRFields, const sal_uInt16 nTyp);
-    void GatherFields(std::vector<SwFormatField*>& rvFormatFields) const;
+    void GatherFields(std::vector<SwFormatField*>& rvFormatFields, bool bCollectOnlyInDocNodes=true) const;
 };
 
 inline void SwFieldType::UpdateFields() const

@@ -190,9 +190,9 @@ void SwFieldType::GatherRefFields(std::vector<SwGetRefField*>& rvRFields, const 
     CallSwClientNotify(sw::GatherRefFieldsHint(rvRFields, nTyp));
 }
 
-void SwFieldType::GatherFields(std::vector<SwFormatField*>& rvFields) const
+void SwFieldType::GatherFields(std::vector<SwFormatField*>& rvFields, bool bCollectOnlyInDocNodes) const
 {
-    CallSwClientNotify(sw::GatherFieldsHint(rvFields));
+    CallSwClientNotify(sw::GatherFieldsHint(rvFields, bCollectOnlyInDocNodes));
 }
 
 void SwFieldTypes::dumpAsXml(xmlTextWriterPtr pWriter) const
