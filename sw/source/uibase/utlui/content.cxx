@@ -4268,9 +4268,34 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
     }
 }
 
+static void lcl_AssureStdModeAtShell(SwWrtShell* pWrtShell)
+{
+    // deselect any drawing or frame and leave editing mode
+    SdrView* pSdrView = pWrtShell->GetDrawView();
+    if (pSdrView && pSdrView->IsTextEdit() )
+    {
+        bool bLockView = pWrtShell->IsViewLocked();
+        pWrtShell->LockView(true);
+        pWrtShell->EndTextEdit();
+        pWrtShell->LockView(bLockView);
+    }
+
+    if (pWrtShell->IsSelFrameMode() || pWrtShell->IsObjSelected())
+    {
+        pWrtShell->UnSelectFrame();
+        pWrtShell->LeaveSelFrameMode();
+        pWrtShell->GetView().LeaveDrawCreate();
+        pWrtShell->EnterStdMode();
+        pWrtShell->DrawSelChanged();
+        pWrtShell->GetView().StopShellTimer();
+    }
+    else
+        pWrtShell->EnterStdMode();
+}
+
 void SwContentTree::GotoContent(const SwContent* pCnt)
 {
-    m_pActiveShell->EnterStdMode();
+    lcl_AssureStdModeAtShell(m_pActiveShell);
 
     bool bSel = false;
     switch(pCnt->GetParent()->GetType())
@@ -4327,7 +4352,6 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
         }
         break;
         case ContentTypeId::POSTIT:
-            m_pActiveShell->GetView().GetPostItMgr()->AssureStdModeAtShell();
             m_pActiveShell->GotoFormatField(*static_cast<const SwPostItContent*>(pCnt)->GetPostIt());
         break;
         case ContentTypeId::DRAWOBJECT:
