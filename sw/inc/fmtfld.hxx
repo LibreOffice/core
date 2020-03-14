@@ -68,8 +68,9 @@ namespace sw {
         GatherRefFieldsHint(std::vector<SwGetRefField*>& rvRFields, const sal_uInt16 nType) : m_rvRFields(rvRFields), m_nType(nType) {};
     };
     struct GatherFieldsHint final : SfxHint {
+        const bool m_bCollectOnlyInDocNodes;
         std::vector<SwFormatField*>& m_rvFields;
-        GatherFieldsHint(std::vector<SwFormatField*>& rvFields) : m_rvFields(rvFields) {};
+        GatherFieldsHint(std::vector<SwFormatField*>& rvFields, bool bCollectOnlyInDocNodes = true) : m_bCollectOnlyInDocNodes(bCollectOnlyInDocNodes), m_rvFields(rvFields) {};
     };
 }
 

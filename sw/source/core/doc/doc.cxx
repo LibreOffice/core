@@ -1400,11 +1400,10 @@ bool SwDoc::RemoveInvisibleContent()
         {
             if (const SwFieldType* pType = pTypeGuard->get())
             {
-                SwIterator<SwFormatField, SwFieldType> aIter(*pType);
-                for (SwFormatField* pFormatField = aIter.First(); pFormatField;
-                     pFormatField = aIter.Next())
-                    bRet |= HandleHidingField(*pFormatField, GetNodes(),
-                                              getIDocumentContentOperations());
+                std::vector<SwFormatField*> vFields;
+                pType->GatherFields(vFields);
+                for(auto pFormatField: vFields)
+                    bRet |= HandleHidingField(*pFormatField, GetNodes(), getIDocumentContentOperations());
             }
         }
     }
