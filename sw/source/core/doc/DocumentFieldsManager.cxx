@@ -710,15 +710,14 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
 
     if( pFieldType )
     {
-        SwIterator<SwFormatField,SwFieldType> aIter( *pFieldType );
-        for( SwFormatField* pFormatField = aIter.Last(); pFormatField; pFormatField = aIter.Previous() )
+        std::vector<SwFormatField*> vFields;
+        pFieldType->GatherFields(vFields);
+        for(SwFormatField* pFormatField: vFields)
         {
                 // start calculation at the end
                 // new fields are inserted at the beginning of the modify chain
                 // that gives faster calculation on import
                 // mba: do we really need this "optimization"? Is it still valid?
-                if (!pFormatField->GetTextField())
-                    continue;
                 SwTableField *const pField(static_cast<SwTableField*>(pFormatField->GetField()));
                 if (nsSwExtendedSubType::SUB_CMD & pField->GetSubType())
                     continue;
@@ -728,8 +727,6 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                 {
                     // table where this field is located
                     const SwTextNode& rTextNd = pFormatField->GetTextField()->GetTextNode();
-                    if( !rTextNd.GetNodes().IsDocNodes() )
-                        continue;
                     const SwTableNode* pTableNd = rTextNd.FindTableNode();
                     if( !pTableNd )
                         continue;
