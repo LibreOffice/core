@@ -654,11 +654,11 @@ static void lcl_MakeFieldLst(
 {
     // always search the 1. frame
     Point aPt;
-    SwTextField* pTextField = nullptr;
-    SwIterator<SwFormatField,SwFieldType> aIter(rFieldType);
-    for( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
+    std::vector<SwFormatField*> vFields;
+    rFieldType.GatherFields(vFields, false);
+    for(SwFormatField* pFormatField: vFields)
     {
-        pTextField = pFormatField->GetTextField();
+        SwTextField* pTextField = pFormatField->GetTextField();
         if ( pTextField != nullptr
              && ( !bChkInpFlag
                   || static_cast<const SwSetExpField*>(pTextField->GetFormatField().GetField())->GetInputFlag() ) )
