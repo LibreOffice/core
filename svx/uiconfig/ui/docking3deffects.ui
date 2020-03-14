@@ -34,8 +34,8 @@
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment6">
-    <property name="lower">1</property>
-    <property name="upper">1000</property>
+    <property name="lower">0</property>
+    <property name="upper">90</property>
     <property name="step_increment">5</property>
     <property name="page_increment">10</property>
   </object>
