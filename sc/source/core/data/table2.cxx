@@ -52,6 +52,7 @@
 #include <compressedarray.hxx>
 #include <brdcst.hxx>
 #include <refdata.hxx>
+#include <docsh.hxx>
 
 #include <scitems.hxx>
 #include <editeng/boxitem.hxx>
@@ -1167,6 +1168,14 @@ void ScTable::CopyToTable(
         return;
 
     bool bIsUndoDoc = pDestTab->pDocument->IsUndo();
+
+    if (bIsUndoDoc && (nFlags & InsertDeleteFlags::CONTENTS))
+    {
+        // Copying formulas may create sheet-local named expressions on the
+        // destination sheet. Add existings to Undo first.
+        pDestTab->SetRangeName( std::unique_ptr<ScRangeName>( new ScRangeName( *GetRangeName())));
+    }
+
     if (nFlags != InsertDeleteFlags::NONE)
     {
         InsertDeleteFlags nTempFlags( nFlags &
@@ -1320,6 +1329,21 @@ void ScTable::UndoToTable(
     {
         bool bWidth  = (nRow1==0 && nRow2==pDocument->MaxRow() && mpColWidth && pDestTab->mpColWidth);
         bool bHeight = (nCol1==0 && nCol2==pDocument->MaxCol() && mpRowHeights && pDestTab->mpRowHeights);
+
+        if ((nFlags & InsertDeleteFlags::CONTENTS) && mpRangeName)
+        {
+            // Undo sheet-local named expressions created during copying
+            // formulas. If mpRangeName is not set then the Undo wasn't even
+            // set to an empty ScRangeName map so don't "undo" that.
+            pDestTab->SetRangeName( std::unique_ptr<ScRangeName>( new ScRangeName( *GetRangeName())));
+            if (!pDestTab->pDocument->IsClipOrUndo())
+            {
+                ScDocShell* pDocSh = static_cast<ScDocShell*>(pDestTab->pDocument->GetDocumentShell());
+                if (pDocSh)
+                    pDocSh->SetAreasChangedNeedBroadcast();
+            }
+
+        }
 
         for ( SCCOL i = 0; i < aCol.size(); i++)
         {
