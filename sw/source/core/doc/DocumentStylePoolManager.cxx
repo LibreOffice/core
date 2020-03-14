@@ -1629,6 +1629,8 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
             aSet.Put( SwFormatHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::FRAME ));
             aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
             aSet.Put( SwFormatSurround( css::text::WrapTextMode_DYNAMIC ));
+            aSet.Put( SvxLRSpaceItem( 181, 181, 0, 0, RES_LR_SPACE ) );
+            aSet.Put( SvxULSpaceItem( 181, 181, RES_UL_SPACE ) );
         }
         break;
     case RES_POOLFRM_FORMEL:
