@@ -1735,10 +1735,11 @@ SwTextField * DocumentFieldsManager::GetTextFieldAtPos(const SwPosition & rPos)
 ///       optimization currently only available when no fields exist.
 bool DocumentFieldsManager::containsUpdatableFields()
 {
-    for (auto const & pFieldType : *mpFieldTypes)
+    std::vector<SwFormatField*> vFields;
+    for (auto const& pFieldType: *mpFieldTypes)
     {
-        SwIterator<SwFormatField,SwFieldType> aIter(*pFieldType);
-        if (aIter.First())
+        pFieldType->GatherFields(vFields);
+        if(vFields.size()>0)
             return true;
     }
     return false;
