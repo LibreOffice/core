@@ -1455,9 +1455,9 @@ void DocumentFieldsManager::SetFixFields( const DateTime* pNewDateTime )
 
     for(SwFieldIds aType : aTypes)
     {
-        SwFieldType* pFieldType = GetSysFieldType( aType );
-        SwIterator<SwFormatField,SwFieldType> aIter( *pFieldType );
-        for( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
+        std::vector<SwFormatField*> vFields;
+        GetSysFieldType(aType)->GatherFields(vFields);
+        for(auto pFormatField: vFields)
         {
             if (pFormatField->GetTextField())
             {
