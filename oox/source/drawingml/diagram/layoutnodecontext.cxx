@@ -22,7 +22,6 @@
 #include <oox/helper/attributelist.hxx>
 #include <oox/drawingml/shapecontext.hxx>
 #include <drawingml/customshapeproperties.hxx>
-#include "diagramdefinitioncontext.hxx"
 #include "constraintlistcontext.hxx"
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>

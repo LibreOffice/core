@@ -20,7 +20,6 @@
 #include <drawingml/textrun.hxx>
 
 #include <com/sun/star/text/ControlCharacter.hpp>
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

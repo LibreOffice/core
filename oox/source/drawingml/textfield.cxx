@@ -19,11 +19,8 @@
 
 #include <drawingml/textfield.hxx>
 
-#include <list>
-
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
-#include <sal/log.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XTextField.hpp>

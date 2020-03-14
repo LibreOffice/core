@@ -4,3 +4,69 @@ blacklist:
     oox/source/docprop/docprophandler.hxx:
     # Needed for macro defines
     - oox/token/namespaces.hxx
+    oox/source/core/filterbase.cxx:
+    # Actually used
+    - comphelper/scopeguard.hxx
+    oox/source/core/xmlfilterbase.cxx:
+    # Actually used
+    - com/sun/star/xml/sax/XFastSAXSerializable.hpp
+    oox/source/crypto/DocumentEncryption.cxx:
+    # Actually used
+    - com/sun/star/io/XStream.hpp
+    oox/source/crypto/DocumentDecryption.cxx:
+    # Actually used
+    - com/sun/star/beans/NamedValue.hpp
+    - com/sun/star/io/XStream.hpp
+    oox/source/docprop/ooxmldocpropimport.cxx:
+    # Actually used
+    - com/sun/star/embed/XStorage.hpp
+    oox/source/docprop/docprophandler.cxx:
+    # Actually used
+    - boost/algorithm/string.hpp
+    oox/source/drawingml/drawingmltypes.cxx:
+    # Actually used
+    - com/sun/star/drawing/Hatch.hpp
+    - com/sun/star/xml/sax/XFastAttributeList.hpp
+    oox/source/drawingml/customshapeproperties.cxx:
+    # Actually used
+    - com/sun/star/awt/Size.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/drawing/XShape.hpp
+    oox/source/drawingml/lineproperties.cxx:
+    # Actually used
+    - com/sun/star/drawing/LineCap.hpp
+    - com/sun/star/drawing/LineJoint.hpp
+    - com/sun/star/drawing/LineStyle.hpp
+    oox/source/drawingml/shape.cxx:
+    # Actually used
+    - diagram/datamodel.hxx
+    # Needed for direct member access
+    - com/sun/star/xml/dom/XDocument.hpp
+    oox/source/drawingml/textparagraph.cxx:
+    # Actually used
+    - com/sun/star/text/XText.hpp
+    - com/sun/star/text/XTextCursor.hpp
+    oox/source/drawingml/textparagraphproperties.cxx:
+    # Actually used
+    - com/sun/star/graphic/XGraphic.hpp
+    - com/sun/star/style/ParagraphAdjust.hpp
+    oox/source/drawingml/chart/axisconverter.cxx:
+    # Actually used
+    - com/sun/star/chart2/XCoordinateSystem.hpp
+    oox/source/drawingml/chart/chartconverter.cxx:
+    # Actually used
+    - com/sun/star/chart2/XChartDocument.hpp
+    oox/source/drawingml/chart/converterbase.cxx:
+    # Actually used
+    - com/sun/star/chart2/XChartDocument.hpp
+    - com/sun/star/uno/XComponentContext.hpp
+    oox/source/drawingml/chart/titleconverter.cxx:
+    # Actually used
+    - com/sun/star/chart2/XDiagram.hpp
+    - com/sun/star/chart2/XTitled.hpp
+    oox/source/drawingml/chart/typegroupconverter.cxx:
+    # Actually used
+    - com/sun/star/chart2/XCoordinateSystem.hpp
+    oox/source/drawingml/diagram/diagram.cxx:
+    # Actually used
+    - com/sun/star/xml/dom/XDocument.hpp

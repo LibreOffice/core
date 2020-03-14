@@ -18,8 +18,6 @@
  */
 
 #include <drawingml/textbody.hxx>
-#include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <drawingml/textparagraph.hxx>
 #include <oox/helper/propertyset.hxx>

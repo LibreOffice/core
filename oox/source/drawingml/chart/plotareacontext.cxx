@@ -23,7 +23,6 @@
 #include <drawingml/chart/axiscontext.hxx>
 #include <drawingml/chart/plotareamodel.hxx>
 #include <drawingml/chart/seriescontext.hxx>
-#include <drawingml/chart/titlecontext.hxx>
 #include <drawingml/chart/typegroupcontext.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/attributelist.hxx>

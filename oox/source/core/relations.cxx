@@ -19,9 +19,6 @@
 
 #include <oox/core/relations.hxx>
 
-#include <rtl/ustrbuf.hxx>
-#include <oox/helper/helper.hxx>
-
 namespace oox::core {
 
 namespace {

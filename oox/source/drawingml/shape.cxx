@@ -22,9 +22,9 @@
 #include <oox/drawingml/theme.hxx>
 #include <drawingml/fillproperties.hxx>
 #include <drawingml/graphicproperties.hxx>
-#include <drawingml/scene3dcontext.hxx>
 #include <drawingml/lineproperties.hxx>
 #include <drawingml/presetgeometrynames.hxx>
+#include <drawingml/shape3dproperties.hxx>
 #include "effectproperties.hxx"
 #include <oox/drawingml/shapepropertymap.hxx>
 #include <drawingml/textbody.hxx>
@@ -46,7 +46,7 @@
 #include <oox/mathml/importutils.hxx>
 #include <oox/mathml/import.hxx>
 #include <oox/token/properties.hxx>
-#include "diagram/diagram.hxx"
+#include "diagram/datamodel.hxx"
 
 #include <comphelper/classids.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -62,12 +62,10 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/xml/AttributeData.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
@@ -87,8 +85,8 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
-#include <svl/outstrm.hxx>
 #include <svx/svdtrans.hxx>
+#include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <vcl/graph.hxx>
@@ -98,11 +96,7 @@
 #include <sal/log.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unoshape.hxx>
-#include <svx/xfillit0.hxx>
 #include <svx/sdtaitm.hxx>
-#include <svx/DiagramDataInterface.hxx>
-
-#include <vcl/wmf.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star;

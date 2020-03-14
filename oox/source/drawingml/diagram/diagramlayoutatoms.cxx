@@ -32,7 +32,6 @@
 #include <drawingml/textparagraph.hxx>
 #include <drawingml/textrun.hxx>
 #include <drawingml/customshapeproperties.hxx>
-#include <tools/gen.hxx>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
 
 using namespace ::com::sun::star;

@@ -28,7 +28,6 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 
-#include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 
 

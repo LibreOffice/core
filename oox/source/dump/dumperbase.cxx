@@ -23,7 +23,6 @@
 #include <string_view>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/TextOutputStream.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <osl/file.hxx>

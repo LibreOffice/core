@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <osl/mutex.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <unordered_map>

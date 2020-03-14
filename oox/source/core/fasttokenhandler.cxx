@@ -20,7 +20,6 @@
 #include <oox/core/fasttokenhandler.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <oox/helper/helper.hxx>
 #include <oox/token/tokenmap.hxx>
 #include <cppuhelper/supportsservice.hxx>
 

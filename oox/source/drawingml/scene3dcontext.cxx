@@ -18,12 +18,7 @@
  */
 
 #include <drawingml/scene3dcontext.hxx>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <cppuhelper/exc_hlp.hxx>
 #include <drawingml/colorchoicecontext.hxx>
-#include <oox/drawingml/drawingmltypes.hxx>
-#include <drawingml/fillproperties.hxx>
-#include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>

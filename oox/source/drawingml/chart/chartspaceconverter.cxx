@@ -28,13 +28,10 @@
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/drawingml/chart/chartconverter.hxx>
-#include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
-#include <oox/helper/graphichelper.hxx>
 #include <drawingml/chart/chartdrawingfragment.hxx>
 #include <drawingml/chart/chartspacemodel.hxx>
 #include <drawingml/chart/plotareaconverter.hxx>

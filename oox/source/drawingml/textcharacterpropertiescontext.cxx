@@ -20,13 +20,10 @@
 #include <drawingml/textcharacterpropertiescontext.hxx>
 
 #include <oox/helper/attributelist.hxx>
-#include <oox/drawingml/drawingmltypes.hxx>
 #include <drawingml/colorchoicecontext.hxx>
 #include <drawingml/misccontexts.hxx>
+#include <drawingml/textcharacterproperties.hxx>
 #include <drawingml/texteffectscontext.hxx>
-#include <drawingml/lineproperties.hxx>
-#include <drawingml/textparagraphproperties.hxx>
-#include <oox/core/relations.hxx>
 #include "hyperlinkcontext.hxx"
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
