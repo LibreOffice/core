@@ -19,6 +19,12 @@ break_sources = g.process('source/breakiterator/data/char.txt',
                           'source/breakiterator/data/sent.txt',
                           )
 
+openoffice_c = custom_target('openoffice.c',
+  output: 'OpenOffice_dat.c',
+  command: [find_program('oogen.py'),
+            '@OUTPUT@',
+            '@PRIVATE_DIR@'])
+
 i18npool_lib = shared_library('i18npoollo',
   'source/breakiterator/breakiterator_cjk.cxx',
   'source/breakiterator/breakiteratorImpl.cxx',
@@ -93,7 +99,8 @@ i18npool_lib = shared_library('i18npoollo',
   'source/transliteration/transliteration_Numeric.cxx',
   'source/transliteration/transliteration_OneToOne.cxx',
   break_sources,
-  'breakiterator/OpenOffice_dat.c',
+  openoffice_c,
+  #'breakiterator/OpenOffice_dat.c',
   udk_fake_h, off_fake_h,
   cpp_args: ['-DLIBO_INTERNAL_ONLY'],
   include_directories: [main_inc, udkh_inc, offapi_inc, 'inc'],
