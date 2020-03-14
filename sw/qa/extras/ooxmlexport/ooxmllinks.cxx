@@ -22,7 +22,7 @@
 
 // bAbsolute - decide if output link should be converted to absolute
 // bUseTempDir - decide if link should be modified to be placed in temp dir - for testing relative links
-#define DECLARE_LINKS_EXPORT_TEST(TestName, FileName, bAbsolute, bUseTempDir)                      \
+#define DECLARE_LINKS_EXPORT_EXPORTONLY_TEST(TestName, FileName, bAbsolute, bUseTempDir)                      \
     class TestName : public Test                                                                   \
     {                                                                                              \
     protected:                                                                                     \
@@ -175,88 +175,67 @@ DECLARE_LINKS_IMPORT_TEST(testTdf123627_import, "tdf123627.docx", USE_RELATIVE)
 
 /* EXPORT */
 
-DECLARE_LINKS_EXPORT_TEST(testRelativeToRelativeExport, "relative-link.docx", USE_RELATIVE,
+DECLARE_LINKS_EXPORT_EXPORTONLY_TEST(testRelativeToRelativeExport, "relative-link.docx", USE_RELATIVE,
                           USE_TEMP_DIR)
 {
     xmlDocPtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
-    if (!pXmlDoc)
-        return;
 
     assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']", "Target",
                 "relative.docx");
 }
 
-DECLARE_LINKS_EXPORT_TEST(testRelativeToAbsoluteExport, "relative-link.docx", USE_ABSOLUTE,
+DECLARE_LINKS_EXPORT_EXPORTONLY_TEST(testRelativeToAbsoluteExport, "relative-link.docx", USE_ABSOLUTE,
                           DONT_MODIFY_LINK)
 {
     xmlDocPtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
-    if (!pXmlDoc)
-        return;
-
     OUString sTarget = getXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[2]", "Target");
     CPPUNIT_ASSERT(sTarget.startsWith("file:///"));
     CPPUNIT_ASSERT(sTarget.endsWith("relative.docx"));
 }
 
-DECLARE_LINKS_EXPORT_TEST(testAbsoluteToRelativeExport, "absolute-link.docx", USE_RELATIVE,
+DECLARE_LINKS_EXPORT_EXPORTONLY_TEST(testAbsoluteToRelativeExport, "absolute-link.docx", USE_RELATIVE,
                           USE_TEMP_DIR)
 {
     xmlDocPtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
-    if (!pXmlDoc)
-        return;
-
     assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[2]", "Target", "test.docx");
 }
 
-DECLARE_LINKS_EXPORT_TEST(testAbsoluteToAbsoluteExport, "absolute-link.docx", USE_ABSOLUTE,
+DECLARE_LINKS_EXPORT_EXPORTONLY_TEST(testAbsoluteToAbsoluteExport, "absolute-link.docx", USE_ABSOLUTE,
                           DONT_MODIFY_LINK)
 {
     xmlDocPtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
-    if (!pXmlDoc)
-        return;
-
     OUString sTarget = getXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[2]", "Target");
     CPPUNIT_ASSERT(sTarget.startsWith("file:///"));
     CPPUNIT_ASSERT(sTarget.endsWith("test.docx"));
 }
 
-DECLARE_LINKS_EXPORT_TEST(testTdf123627_export, "tdf123627.docx", USE_RELATIVE, USE_TEMP_DIR)
+DECLARE_LINKS_EXPORT_EXPORTONLY_TEST(testTdf123627_export, "tdf123627.docx", USE_RELATIVE, USE_TEMP_DIR)
 {
     xmlDocPtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
-    if (!pXmlDoc)
-        return;
-
     assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']", "Target",
                 "test.docx");
 }
 
-DECLARE_LINKS_EXPORT_TEST(testTdf126590_export, "tdf126590.docx", USE_ABSOLUTE, DONT_MODIFY_LINK)
+DECLARE_LINKS_EXPORT_EXPORTONLY_TEST(testTdf126590_export, "tdf126590.docx", USE_ABSOLUTE, DONT_MODIFY_LINK)
 {
     xmlDocPtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
-    if (!pXmlDoc)
-        return;
     // in the original file: Target="file:///C:\TEMP\test.docx" => invalid file URI
     assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']", "Target",
                 "file:///C:/TEMP/test.docx");
 }
 
-DECLARE_LINKS_EXPORT_TEST(testTdf126768_export, "tdf126768.docx", USE_ABSOLUTE, DONT_MODIFY_LINK)
+DECLARE_LINKS_EXPORT_EXPORTONLY_TEST(testTdf126768_export, "tdf126768.docx", USE_ABSOLUTE, DONT_MODIFY_LINK)
 {
     xmlDocPtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
-    if (!pXmlDoc)
-        return;
     // in the original file: "file:///C:\\TEMP\\test.docx" => invalid file URI
     assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']", "Target",
                 "file:///C:/TEMP/test.docx");
 }
 
-DECLARE_LINKS_EXPORT_TEST(testNon_ascii_link_export, "non_ascii_link.docx", USE_ABSOLUTE,
+DECLARE_LINKS_EXPORT_EXPORTONLY_TEST(testNon_ascii_link_export, "non_ascii_link.docx", USE_ABSOLUTE,
                           DONT_MODIFY_LINK)
 {
     xmlDocPtr pXmlDoc = parseExport("word/_rels/document.xml.rels");
-    if (!pXmlDoc)
-        return;
-
     OUString sTarget = "file:///C:/TEMP/%C3%A9kezet.docx";
     assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']", "Target",
                 INetURLObject::decode( sTarget, INetURLObject::DecodeMechanism::ToIUri,
