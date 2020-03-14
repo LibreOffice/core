@@ -136,19 +136,13 @@ void SwDBFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             if( sTmp != m_sColumn )
             {
                 m_sColumn = sTmp;
-                SwIterator<SwFormatField,SwFieldType> aIter( *this );
-                SwFormatField* pFormatField = aIter.First();
-                while(pFormatField)
+                std::vector<SwFormatField*> vFields;
+                GatherFields(vFields);
+                for(auto pFormatField: vFields)
                 {
-                    // field in Undo?
-                    SwTextField *pTextField = pFormatField->GetTextField();
-                    if(pTextField && pTextField->GetTextNode().GetNodes().IsDocNodes() )
-                    {
-                        SwDBField* pDBField = static_cast<SwDBField*>(pFormatField->GetField());
-                        pDBField->ClearInitialized();
-                        pDBField->InitContent();
-                    }
-                    pFormatField = aIter.Next();
+                    SwDBField* pDBField = static_cast<SwDBField*>(pFormatField->GetField());
+                    pDBField->ClearInitialized();
+                    pDBField->InitContent();
                 }
             }
         }
