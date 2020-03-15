@@ -553,9 +553,10 @@ void SwSetExpFieldType::Modify( const SfxPoolItem*, const SfxPoolItem* )
 
 void SwSetExpFieldType::SetSeqFormat(sal_uLong nFormat)
 {
-    SwIterator<SwFormatField,SwFieldType> aIter(*this);
-    for( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
-        pFormatField->GetField()->ChangeFormat( nFormat );
+    std::vector<SwFormatField*> vFields;
+    GatherFields(vFields, false);
+    for(auto pFormatField: vFields)
+        pFormatField->GetField()->ChangeFormat(nFormat);
 }
 
 sal_uLong SwSetExpFieldType::GetSeqFormat() const
@@ -563,8 +564,9 @@ sal_uLong SwSetExpFieldType::GetSeqFormat() const
     if( !HasWriterListeners() )
         return SVX_NUM_ARABIC;
 
-    const SwField *pField = SwIterator<SwFormatField,SwSetExpFieldType>(*this).First()->GetField();
-    return pField->GetFormat();
+    std::vector<SwFormatField*> vFields;
+    GatherFields(vFields, false);
+    return vFields.front()->GetField()->GetFormat();
 }
 
 void SwSetExpFieldType::SetSeqRefNo( SwSetExpField& rField )
@@ -575,17 +577,11 @@ void SwSetExpFieldType::SetSeqRefNo( SwSetExpField& rField )
     std::vector<sal_uInt16> aArr;
 
     // check if number is already used and if a new one needs to be created
-    SwIterator<SwFormatField,SwFieldType> aIter( *this );
-    for( SwFormatField* pF = aIter.First(); pF; pF = aIter.Next() )
-    {
-        const SwTextNode* pNd;
-        if( pF->GetField() != &rField && pF->GetTextField() &&
-            nullptr != ( pNd = pF->GetTextField()->GetpTextNode() ) &&
-            pNd->GetNodes().IsDocNodes() )
-        {
-            InsertSort( aArr, static_cast<SwSetExpField*>(pF->GetField())->GetSeqNumber() );
-        }
-    }
+    std::vector<SwFormatField*> vFields;
+    GatherFields(vFields);
+    for(SwFormatField* pF: vFields)
+        if(pF->GetField() != &rField)
+            InsertSort(aArr, static_cast<SwSetExpField*>(pF->GetField())->GetSeqNumber());
 
     // check first if number already exists
     sal_uInt16 nNum = rField.GetSeqNumber();
@@ -622,13 +618,12 @@ size_t SwSetExpFieldType::GetSeqFieldList(SwSeqFieldList& rList,
 
     IDocumentRedlineAccess const& rIDRA(GetDoc()->getIDocumentRedlineAccess());
 
-    SwIterator<SwFormatField,SwFieldType> aIter( *this );
-    for( SwFormatField* pF = aIter.First(); pF; pF = aIter.Next() )
+    std::vector<SwFormatField*> vFields;
+    GatherFields(vFields);
+    for(SwFormatField* pF: vFields)
     {
         const SwTextNode* pNd;
-        if( pF->GetTextField() &&
-            nullptr != ( pNd = pF->GetTextField()->GetpTextNode() ) &&
-            pNd->GetNodes().IsDocNodes()
+        if( nullptr != ( pNd = pF->GetTextField()->GetpTextNode() )
             && (!pLayout || !pLayout->IsHideRedlines()
                 || !sw::IsFieldDeletedInModel(rIDRA, *pF->GetTextField())))
         {
@@ -638,7 +633,6 @@ size_t SwSetExpFieldType::GetSeqFieldList(SwSeqFieldList& rList,
             rList.InsertSort( aNew );
         }
     }
-
     return rList.Count();
 }
 
