@@ -46,44 +46,15 @@ namespace drawinglayer::primitive2d
 
                     if(aSize.Width() && aSize.Height())
                     {
-                        // we have a graphic (bitmap or metafile) with some size
-                        if(rAttribute.getTiling())
-                        {
-                            // get object range and create tiling matrices
-                            std::vector< basegfx::B2DHomMatrix > aMatrices;
-                            texture::GeoTexSvxTiled aTiling(
-                                rAttribute.getGraphicRange(),
-                                rAttribute.getOffsetX(),
-                                rAttribute.getOffsetY());
+                        // add graphic without tiling
+                        const basegfx::B2DHomMatrix aObjectTransform(
+                            getTransformation() * basegfx::utils::createScaleTranslateB2DHomMatrix(
+                                rAttribute.getGraphicRange().getRange(),
+                                rAttribute.getGraphicRange().getMinimum()));
 
-                            // get matrices and realloc retval
-                            aTiling.appendTransformations(aMatrices);
-
-                            // prepare content primitive
-                            Primitive2DContainer xSeq;
-                            create2DDecompositionOfGraphic(xSeq,
-                                rGraphic,
-                                basegfx::B2DHomMatrix());
-
-                            for(size_t a(0); a < aMatrices.size(); a++)
-                            {
-                                rContainer.push_back(new TransformPrimitive2D(
-                                    getTransformation() * aMatrices[a],
-                                    xSeq));
-                            }
-                        }
-                        else
-                        {
-                            // add graphic without tiling
-                            const basegfx::B2DHomMatrix aObjectTransform(
-                                getTransformation() * basegfx::utils::createScaleTranslateB2DHomMatrix(
-                                    rAttribute.getGraphicRange().getRange(),
-                                    rAttribute.getGraphicRange().getMinimum()));
-
-                            create2DDecompositionOfGraphic(rContainer,
-                                rGraphic,
-                                aObjectTransform);
-                        }
+                        create2DDecompositionOfGraphic(rContainer,
+                            rGraphic,
+                            aObjectTransform);
                     }
                 }
             }
