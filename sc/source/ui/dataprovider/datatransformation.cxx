@@ -123,6 +123,7 @@ void MergeColumnTransformation::Transform(ScDocument& rDoc) const
     {
         nMaxRow = getLastRow(rDoc, itr);
     }
+    assert(nMaxRow != -1);
 
     SCCOL nTargetCol = *maColumns.begin();
 
@@ -197,6 +198,8 @@ void TextTransformation::Transform(ScDocument& rDoc) const
     {
         nEndRow = getLastRow(rDoc, rCol);
     }
+    assert(nEndRow != -1);
+
     for(auto& rCol : mnCol)
     {
         switch (maType)
@@ -307,6 +310,7 @@ void AggregateFunction::Transform(ScDocument& rDoc) const
     {
         nEndRow = getLastRow(rDoc, itr);
     }
+    assert(nEndRow != -1);
 
     for (auto& rCol : maColumns)
     {
@@ -424,6 +428,7 @@ void NumberTransformation::Transform(ScDocument& rDoc) const
     {
         nEndRow = getLastRow(rDoc, rCol);
     }
+    assert(nEndRow != -1);
 
     for(auto& rCol : mnCol)
     {
@@ -718,6 +723,7 @@ void DateTimeTransformation::Transform(ScDocument& rDoc) const
     {
         nEndRow = getLastRow(rDoc, rCol);
     }
+    assert(nEndRow != -1);
 
     for(auto& rCol : mnCol)
     {
