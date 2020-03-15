@@ -1503,42 +1503,46 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             const uno::Reference<datatransfer::XTransferable>& xTransferable
                 = aDataHelper.GetTransferable();
             SotClipboardFormatId format = SotClipboardFormatId::STRING;
+            bool bSuccess = false;
             if (xTransferable.is() && HasClipboardFormat(format))
             {
-                auto pStrBuffer = std::make_shared<OUString>();
-                aDataHelper.GetString(format, *pStrBuffer);
-                auto pStrm = std::make_shared<ScImportStringStream>(*pStrBuffer);
-                ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                VclPtr<AbstractScImportAsciiDlg> pDlg(pFact->CreateScImportAsciiDlg(
-                    pWin ? pWin->GetFrameWeld() : nullptr, OUString(), pStrm.get(), SC_PASTETEXT));
-                ScRange aRange;
-                SCCOL nPosX = 0;
-                SCROW nPosY = 0;
-                if (GetViewData()->GetSimpleArea(aRange) == SC_MARK_SIMPLE)
+                OUString sStrBuffer;
+                bSuccess = aDataHelper.GetString(format, sStrBuffer);
+                if (bSuccess)
                 {
-                    nPosX = aRange.aStart.Col();
-                    nPosY = aRange.aStart.Row();
+                    auto pStrm = std::make_shared<ScImportStringStream>(sStrBuffer);
+                    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                    VclPtr<AbstractScImportAsciiDlg> pDlg(pFact->CreateScImportAsciiDlg(
+                        pWin ? pWin->GetFrameWeld() : nullptr, OUString(), pStrm.get(), SC_PASTETEXT));
+                    ScRange aRange;
+                    SCCOL nPosX = 0;
+                    SCROW nPosY = 0;
+                    if (GetViewData()->GetSimpleArea(aRange) == SC_MARK_SIMPLE)
+                    {
+                        nPosX = aRange.aStart.Col();
+                        nPosY = aRange.aStart.Row();
+                    }
+                    else
+                    {
+                        nPosX = GetViewData()->GetCurX();
+                        nPosY = GetViewData()->GetCurY();
+                    }
+                    ScAddress aCellPos(nPosX, nPosY, GetViewData()->GetTabNo());
+                    auto pObj = std::make_shared<ScImportExport>(GetViewData()->GetDocument(), aCellPos);
+                    pObj->SetOverwriting(true);
+                    if (pDlg->Execute()) {
+                        ScAsciiOptions aOptions;
+                        pDlg->GetOptions(aOptions);
+                        pDlg->SaveParameters();
+                        pObj->SetExtOptions(aOptions);
+                        pObj->ImportString(sStrBuffer, format);
+                    }
+                    pDlg->disposeOnce();
+                    rReq.SetReturnValue(SfxInt16Item(nSlot, 1)); // 1 = success, 0 = fail
+                    rReq.Done();
                 }
-                else
-                {
-                    nPosX = GetViewData()->GetCurX();
-                    nPosY = GetViewData()->GetCurY();
-                }
-                ScAddress aCellPos(nPosX, nPosY, GetViewData()->GetTabNo());
-                auto pObj = std::make_shared<ScImportExport>(GetViewData()->GetDocument(), aCellPos);
-                pObj->SetOverwriting(true);
-                if (pDlg->Execute()) {
-                    ScAsciiOptions aOptions;
-                    pDlg->GetOptions(aOptions);
-                    pDlg->SaveParameters();
-                    pObj->SetExtOptions(aOptions);
-                    pObj->ImportString(*pStrBuffer, format);
-                }
-                pDlg->disposeOnce();
-                rReq.SetReturnValue(SfxInt16Item(nSlot, 1)); // 1 = success, 0 = fail
-                rReq.Done();
             }
-            else
+            if (!bSuccess)
             {
                 rReq.SetReturnValue(SfxInt16Item(nSlot, 0)); // 0 = fail
                 rReq.Ignore();
