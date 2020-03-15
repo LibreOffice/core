@@ -40,6 +40,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void TestDrawString();
     void TestDrawStringTransparent();
     void TestDrawLine();
+    void TestLinearGradient();
 
     Primitive2DSequence parseEmf(const OUString& aSource);
 
@@ -49,6 +50,7 @@ public:
     CPPUNIT_TEST(TestDrawString);
     CPPUNIT_TEST(TestDrawStringTransparent);
     CPPUNIT_TEST(TestDrawLine);
+    CPPUNIT_TEST(TestLinearGradient);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -153,6 +155,30 @@ void Test::TestDrawLine()
     // check correct import of the DrawLine: color and width of the line
     assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygonstroke/line", "color", "#000000");
     assertXPath(pDocument, "/primitive2D/metafile/transform/polypolygonstroke/line", "width", "33");
+}
+
+void Test::TestLinearGradient()
+{
+    // This unit checks for a correct import of an EMF+ file with LinearGradient brush
+    Primitive2DSequence aSequence = parseEmf("/emfio/qa/cppunit/emf/data/TestLinearGradient.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::tools::Primitive2dXmlDump dumper;
+    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform", "xy11", "1.0000656512605");
+    assertXPath(pDocument, "/primitive2D/metafile/transform", "xy12", "0");
+    assertXPath(pDocument, "/primitive2D/metafile/transform", "xy13", "0");
+    assertXPath(pDocument, "/primitive2D/metafile/transform", "xy21", "0");
+    assertXPath(pDocument, "/primitive2D/metafile/transform", "xy22", "1.00013140604468");
+    assertXPath(pDocument, "/primitive2D/metafile/transform", "xy23", "0");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygon", "height", "7610");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygon", "width", "15232");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygon", "path", "m0 0h15232v7610h-15232z");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/svglineargradient[1]", "endx", "0");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/svglineargradient[1]", "endy", "-1");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/svglineargradient[2]", "endx", "0");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/svglineargradient[2]", "endy", "-1");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
