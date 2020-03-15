@@ -101,6 +101,9 @@ public:
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
     virtual void        GetFocus() override;
 
+    void Enable() {m_xWidget->set_sensitive(true); InterimItemWindow::Enable();}
+    void Disable() {m_xWidget->set_sensitive(false); InterimItemWindow::Disable();}
+
 private:
     FontHeightToolBoxControl&                  m_rCtrl;
     OUString                                   m_aCurText;
