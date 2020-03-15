@@ -719,7 +719,7 @@ void DomainMapperTableManager::endOfRowAction()
     else if ( !pCellWidths->empty() &&
                ( m_nLayoutType == NS_ooxml::LN_Value_doc_ST_TblLayout_fixed
                  || pCellWidths->size() == ( nGrids + m_nGridAfter )
-                 || ((bIsIncompleteGrid = true) && nGrids + m_nGridAfter > pTableGrid->size() && pCellWidths->size() > 0) )
+                 || ((bIsIncompleteGrid = true) && nGrids + m_nGridAfter > pTableGrid->size()) )
              )
     {
         // If we're here, then the number of cells does not equal to the amount
