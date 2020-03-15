@@ -30,7 +30,7 @@ typedef cppu::ImplInheritanceHelper< ScVbaControl, ov::msforms::XTextBox, css::s
 
 class ScVbaTextBox : public TextBoxImpl_BASE
 {
-    bool const mbDialog;
+    bool mbDialog;
 public:
     ScVbaTextBox( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper, bool bDialog = false );
    // Attributes

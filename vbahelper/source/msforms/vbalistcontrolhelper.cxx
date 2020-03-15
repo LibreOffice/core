@@ -32,8 +32,8 @@ class ListPropListener : public PropListener
 {
 private:
     uno::Reference< beans::XPropertySet > m_xProps;
-    uno::Any const m_pvargIndex;
-    uno::Any const m_pvarColumn;
+    uno::Any m_pvargIndex;
+    uno::Any m_pvarColumn;
 
 public:
     ListPropListener( const uno::Reference< beans::XPropertySet >& xProps, const uno::Any& pvargIndex, const uno::Any& pvarColumn );

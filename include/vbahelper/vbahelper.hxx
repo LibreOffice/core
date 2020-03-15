@@ -241,9 +241,9 @@ private:
     css::uno::Reference< css::awt::XWindow > mxWindow;
     css::uno::Reference< css::beans::XPropertySet > mxModelProps;
     css::uno::Reference< css::awt::XUnitConversion > mxUnitConv;
-    double const mfOffsetX;
-    double const mfOffsetY;
-    bool const mbDialog;
+    double mfOffsetX;
+    double mfOffsetY;
+    bool mbDialog;
 };
 
 class VBAHELPER_DLLPUBLIC ContainerUtilities
