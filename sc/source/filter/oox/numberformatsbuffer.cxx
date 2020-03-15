@@ -2053,7 +2053,7 @@ void NumberFormatsBuffer::insertBuiltinFormats()
     {
         // do not put the current system locale for default table
         Locale aLocale;
-        if( (*aVIt)->mpcParent[ 0 ] != '\0' )
+        if( (*aVIt)->mpcParent[ 0 ] != '\0' && OUString::createFromAscii((*aVIt)->mpcLocale) != maLocaleStr )
             aLocale = aSysLocale;
         for( const BuiltinFormat* pBuiltin = (*aVIt)->mpFormats; pBuiltin && (pBuiltin->mnNumFmtId >= 0); ++pBuiltin )
         {
