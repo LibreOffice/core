@@ -878,9 +878,9 @@ namespace emfplushelper
                 if (brush->type == BrushTypeLinearGradient)
                 {
                     // support for public enum EmfPlusWrapMode
-                    basegfx::B2DPoint aStartPoint = Map(brush->firstPointX, brush->firstPointY);
+                    basegfx::B2DPoint aStartPoint = Map(brush->firstPointX, 0.0);
                     aStartPoint = aPolygonTransformation * aStartPoint;
-                    basegfx::B2DPoint aEndPoint = Map(brush->firstPointX + brush->secondPointX, brush->firstPointY + brush->secondPointY);
+                    basegfx::B2DPoint aEndPoint = Map(brush->firstPointX + brush->aWidth, 0.0);
                     aEndPoint = aPolygonTransformation * aEndPoint;
 
                     // support for public enum EmfPlusWrapMode
