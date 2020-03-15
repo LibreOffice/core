@@ -87,3 +87,21 @@ test('cppuweak', unittester,
     )
   ]
 )
+
+# FIXME, this should probably not be here, but running some binaries
+# generated during the build (e.g. saxparser) require this.
+
+configure_file(input: 'unorc.in',
+  output: 'unorc',
+  install: true,
+  install_dir: get_option('bindir'),
+  copy: true)
+
+services_rdb = custom_target('services_rdb',
+  input: '../solenv/bin/packcomponents.xslt',
+  output: 'services.rdb',
+  command: [find_program('genservices.py'),
+            '@OUTPUT@',
+            '@INPUT@',
+            ]
+)
