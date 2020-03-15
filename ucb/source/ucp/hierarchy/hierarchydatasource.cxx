@@ -84,7 +84,7 @@ class HierarchyDataAccess : public cppu::OWeakObject,
     uno::Reference< container::XElementAccess >          m_xCfgEA;
     uno::Reference< util::XChangesNotifier >             m_xCfgCN;
     uno::Reference< util::XChangesBatch >                m_xCfgCB;
-    bool const m_bReadOnly;
+    bool m_bReadOnly;
 
 public:
     HierarchyDataAccess( const uno::Reference<

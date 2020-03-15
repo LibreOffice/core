@@ -393,7 +393,7 @@ class XResultSet_impl :
         bool                                m_nIsOpen;
         sal_Int32                           m_nRow;
         bool                                m_nWasNull;
-        sal_Int32 const                     m_nOpenMode;
+        sal_Int32                           m_nOpenMode;
         bool                                m_bRowCountFinal;
 
         typedef std::vector< css::uno::Reference< css::ucb::XContentIdentifier > > IdentSet;
@@ -405,8 +405,8 @@ class XResultSet_impl :
         const OUString                 m_aBaseDirectory;
 
         osl::Directory                        m_aFolder;
-        css::uno::Sequence< css::beans::Property > const      m_sProperty;
-        css::uno::Sequence< css::ucb::NumberedSortingInfo > const  m_sSortingInfo;
+        css::uno::Sequence< css::beans::Property >      m_sProperty;
+        css::uno::Sequence< css::ucb::NumberedSortingInfo >  m_sSortingInfo;
 
         osl::Mutex                          m_aMutex;
         osl::Mutex                          m_aEventListenerMutex;

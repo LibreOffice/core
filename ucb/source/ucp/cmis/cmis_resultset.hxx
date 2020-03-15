@@ -20,7 +20,7 @@ namespace cmis
 
     class DynamicResultSet : public ::ucbhelper::ResultSetImplHelper
     {
-        ChildrenProvider* const m_pChildrenProvider;
+        ChildrenProvider* m_pChildrenProvider;
         css::uno::Reference< css::ucb::XCommandEnvironment > m_xEnv;
 
         private:

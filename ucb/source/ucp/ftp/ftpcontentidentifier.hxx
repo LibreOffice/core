@@ -51,7 +51,7 @@ namespace ftp {
 
     private:
 
-        OUString const m_ident;
+        OUString m_ident;
     };
 
 }

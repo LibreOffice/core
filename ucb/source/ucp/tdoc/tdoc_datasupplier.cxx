@@ -47,7 +47,7 @@ namespace {
 
 struct ResultListEntry
 {
-    OUString const                            aURL;
+    OUString                                  aURL;
     uno::Reference< ucb::XContentIdentifier > xId;
     uno::Reference< ucb::XContent >           xContent;
     uno::Reference< sdbc::XRow >              xRow;

@@ -36,7 +36,7 @@ public:
     virtual OUString SAL_CALL getContentProviderScheme() override;
 
 private:
-    OUString const m_aContentId;
+    OUString m_aContentId;
     OUString m_aProviderScheme;
 };
 

@@ -30,7 +30,7 @@ namespace cmis
     {
         const css::uno::Reference< css::ucb::XCommandEnvironment>& m_xEnv;
         const css::uno::Reference< css::uno::XComponentContext >& m_xContext;
-        OUString const m_sHostname;
+        OUString m_sHostname;
 
         public:
             CertValidationHandler (
