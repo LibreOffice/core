@@ -22,7 +22,7 @@
 
 // bAbsolute - decide if output link should be converted to absolute
 // bUseTempDir - decide if link should be modified to be placed in temp dir - for testing relative links
-#define DECLARE_LINKS_EXPORT_TEST(TestName, FileName, bAbsolute, bUseTempDir)                      \
+#define DECLARE_LINKS_EXPORT_EXPORTONLY_TEST(TestName, FileName, bAbsolute, bUseTempDir)                      \
     class TestName : public Test                                                                   \
     {                                                                                              \
     protected:                                                                                     \
