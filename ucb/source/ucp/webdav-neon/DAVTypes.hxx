@@ -195,9 +195,9 @@ namespace webdav_ucp
 
     struct ProppatchValue
     {
-        ProppatchOperation const  operation;
-        OUString const            name;
-        css::uno::Any const       value;
+        ProppatchOperation  operation;
+        OUString            name;
+        css::uno::Any       value;
 
         ProppatchValue( const ProppatchOperation o,
                         const OUString & n,

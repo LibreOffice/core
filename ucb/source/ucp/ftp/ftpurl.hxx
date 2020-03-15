@@ -59,7 +59,7 @@ namespace ftp {
 
     private:
 
-        sal_Int32 const n_err;
+        sal_Int32 n_err;
     };
 
     class CurlInput {

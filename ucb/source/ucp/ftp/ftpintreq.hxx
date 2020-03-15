@@ -71,7 +71,7 @@ namespace ftp {
 
     private:
 
-        XInteractionApproveImpl* const p1;
+        XInteractionApproveImpl* p1;
 
         css::uno::Reference<css::task::XInteractionRequest> m_xRequest;
 

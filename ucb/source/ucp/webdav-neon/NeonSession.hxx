@@ -52,10 +52,10 @@ private:
     OUString     m_aProxyName;
     sal_Int32         m_nPort;
     sal_Int32         m_nProxyPort;
-    css::uno::Sequence< css::beans::NamedValue > const m_aFlags;
+    css::uno::Sequence< css::beans::NamedValue > m_aFlags;
     HttpSession *     m_pHttpSession;
     bool m_bNeedNewSession = false; // Something happened that could invalidate m_pHttpSession
-    void * const      m_pRequestData;
+    void *            m_pRequestData;
     const ucbhelper::InternetProxyDecider & m_rProxyDecider;
 
     // @@@ This should really be per-request data. But Neon currently
