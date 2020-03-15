@@ -67,6 +67,8 @@ class DomainMapperTableManager : public TableManager
     std::unique_ptr<TablePropertiesHandler> m_pTablePropsHandler;
     PropertyMapPtr            m_pStyleProps;
 
+    bool shouldInsertRow(IntVectorPtr pCellWidths, IntVectorPtr pTableGrid, size_t nGrids, bool& rIsIncompleteGrid);
+
     virtual void clearData() override;
 
 public:

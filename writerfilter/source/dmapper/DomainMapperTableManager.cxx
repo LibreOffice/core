@@ -517,6 +517,18 @@ void DomainMapperTableManager::endOfCellAction()
     ++m_nCell.back( );
 }
 
+bool DomainMapperTableManager::shouldInsertRow(IntVectorPtr pCellWidths, IntVectorPtr pTableGrid, size_t nGrids, bool& rIsIncompleteGrid)
+{
+    if (pCellWidths->empty())
+        return false;
+    if (m_nLayoutType == NS_ooxml::LN_Value_doc_ST_TblLayout_fixed)
+        return true;
+    if (pCellWidths->size() == (nGrids + m_nGridAfter))
+        return true;
+    rIsIncompleteGrid = true;
+    return nGrids + m_nGridAfter > pTableGrid->size();
+}
+
 void DomainMapperTableManager::endOfRowAction()
 {
 #ifdef DBG_UTIL
@@ -716,11 +728,7 @@ void DomainMapperTableManager::endOfRowAction()
 #endif
         insertRowProps(pPropMap);
     }
-    else if ( !pCellWidths->empty() &&
-               ( m_nLayoutType == NS_ooxml::LN_Value_doc_ST_TblLayout_fixed
-                 || pCellWidths->size() == ( nGrids + m_nGridAfter )
-                 || ((bIsIncompleteGrid = true) && nGrids + m_nGridAfter > pTableGrid->size()) )
-             )
+    else if (shouldInsertRow(pCellWidths, pTableGrid, nGrids, bIsIncompleteGrid))
     {
         // If we're here, then the number of cells does not equal to the amount
         // defined by the grid, even after taking care of
