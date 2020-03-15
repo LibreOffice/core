@@ -1316,18 +1316,16 @@ void SwTOXBaseSection::UpdateSequence(const SwTextNode* pOwnChapterNode,
     if(!pSeqField)
         return;
 
-    SwIterator<SwFormatField,SwFieldType> aIter( *pSeqField );
-    for( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
+    std::vector<SwFormatField*> vFields;
+    pSeqField->GatherFields(vFields);
+    for(auto pFormatField: vFields)
     {
         const SwTextField* pTextField = pFormatField->GetTextField();
-        if(!pTextField)
-            continue;
         SwTextNode& rTextNode = pTextField->GetTextNode();
         ::SetProgressState( 0, pDoc->GetDocShell() );
 
         if (rTextNode.GetText().getLength() &&
             rTextNode.getLayoutFrame(pLayout) &&
-            rTextNode.GetNodes().IsDocNodes() &&
             ( !IsFromChapter() ||
                 ::lcl_FindChapterNode(rTextNode, pLayout) == pOwnChapterNode)
             && (!pLayout || !pLayout->IsHideRedlines()
