@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7480f8ff_e8dd6e97",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmllinks.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-15T21:45:39Z",
+      "side": 1,
+      "message": "I must had been explicit last time. What I wanted to ask was \"what is the idea behind the specific change in this line\".\n\nBecause what I see is you simply rename the macro, without any functional change. And so the change here is simply cosmetic. I haven\u0027t in fact checked the macro code; so do you say that the macro was already doing export-only testing, and so the rename makes it clear? or otherwise why do you believe that renaming the macro is adequate for the task?",
+      "range": {
+        "startLine": 25,
+        "startChar": 29,
+        "endLine": 25,
+        "endChar": 40
+      },
+      "revId": "73e6376f6ba9681d0b83606628572b81d3719374",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
