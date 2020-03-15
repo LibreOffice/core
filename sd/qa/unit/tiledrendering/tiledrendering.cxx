@@ -99,6 +99,7 @@ public:
     void testCursorVisibility_SingleClick();
     void testCursorVisibility_DoubleClick();
     void testCursorVisibility_MultiView();
+    void testCursorVisibility_Escape();
     void testViewLock();
     void testUndoLimiting();
     void testCreateViewGraphicSelection();
@@ -152,6 +153,7 @@ public:
     CPPUNIT_TEST(testCursorVisibility_SingleClick);
     CPPUNIT_TEST(testCursorVisibility_DoubleClick);
     CPPUNIT_TEST(testCursorVisibility_MultiView);
+    CPPUNIT_TEST(testCursorVisibility_Escape);
     CPPUNIT_TEST(testViewLock);
     CPPUNIT_TEST(testUndoLimiting);
     CPPUNIT_TEST(testCreateViewGraphicSelection);
@@ -1266,7 +1268,7 @@ void SdTiledRenderingTest::testCursorVisibility_MultiView()
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdPage* pActualPage = pViewShell->GetActualPage();
     SdrObject* pObject1 = pActualPage->GetObj(0);
-    CPPUNIT_ASSERT(pObject1 != nullptr);
+    CPPUNIT_ASSERT(pObject1);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_TITLETEXT), pObject1->GetObjIdentifier());
     SdrTextObj* pTextObject = static_cast<SdrTextObj*>(pObject1);
 
@@ -1275,12 +1277,10 @@ void SdTiledRenderingTest::testCursorVisibility_MultiView()
     pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     const int nView2 = SfxLokHelper::getView();
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT(aView1.m_bCursorVisibleChanged == false);
-    CPPUNIT_ASSERT(aView1.m_aViewCursorVisibilities[nView2] == false);
+    CPPUNIT_ASSERT_EQUAL(false, aView1.m_bCursorVisibleChanged);
+    CPPUNIT_ASSERT_EQUAL(false, aView1.m_aViewCursorVisibilities[nView2]);
 
-    // Make sure that typing in the first view causes an invalidation in the
-    // second view as well, even if the second view was created after begin
-    // text edit in the first view.
+    // Also check that the second view gets the notifications.
     ViewCallback aView2;
 
     SfxLokHelper::setView(nView1);
@@ -1298,8 +1298,52 @@ void SdTiledRenderingTest::testCursorVisibility_MultiView()
 
     // We must be in text editing mode and have cursor visible.
     CPPUNIT_ASSERT(pViewShell->GetView()->IsTextEdit());
-    CPPUNIT_ASSERT(aView1.m_bCursorVisible == true);
-    CPPUNIT_ASSERT(aView1.m_aViewCursorVisibilities[nView2] == false);
+    CPPUNIT_ASSERT(aView1.m_bCursorVisible);
+    CPPUNIT_ASSERT_EQUAL(false, aView1.m_aViewCursorVisibilities[nView2]);
+
+    CPPUNIT_ASSERT_EQUAL(false, aView2.m_bCursorVisible);
+    CPPUNIT_ASSERT_EQUAL(false, aView2.m_aViewCursorVisibilities[nView1]);
+    CPPUNIT_ASSERT_EQUAL(false, aView2.m_aViewCursorVisibilities[nView2]);
+}
+
+void SdTiledRenderingTest::testCursorVisibility_Escape()
+{
+    // Load doc.
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    ViewCallback aView1;
+
+    // Begin text edit on the only object on the slide.
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pObject1 = pActualPage->GetObj(0);
+    CPPUNIT_ASSERT(pObject1 != nullptr);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_TITLETEXT), pObject1->GetObjIdentifier());
+    SdrTextObj* pTextObject = static_cast<SdrTextObj*>(pObject1);
+
+    // Click once on the text to start editing.
+    const ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
+    const auto centerX = convertMm100ToTwip(aRect.getX() + (aRect.getWidth() / 2));
+    const auto centerY = convertMm100ToTwip(aRect.getY() + (aRect.getHeight() / 2));
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      centerX, centerY,
+                                      1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
+                                      centerX, centerY,
+                                      1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // We must be in text editing mode and have cursor visible.
+    CPPUNIT_ASSERT(pViewShell->GetView()->IsTextEdit());
+    CPPUNIT_ASSERT(aView1.m_bCursorVisible);
+
+    // End editing by pressing the escape key.
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
+    Scheduler::ProcessEventsToIdle();
+
+    // We must be in text editing mode and have cursor visible.
+    CPPUNIT_ASSERT(!pViewShell->GetView()->IsTextEdit());
+    CPPUNIT_ASSERT_EQUAL(false, aView1.m_bCursorVisible);
 }
 
 void SdTiledRenderingTest::testViewLock()
