@@ -31,8 +31,8 @@ class ScVbaCommandBar : public CommandBar_BASE
 private:
     VbaCommandBarHelperRef pCBarHelper;
     css::uno::Reference< css::container::XIndexAccess > m_xBarSettings;
-    OUString const    m_sResourceUrl;
-    bool const        m_bIsMenu;
+    OUString    m_sResourceUrl;
+    bool        m_bIsMenu;
 
 public:
     /// @throws css::uno::RuntimeException

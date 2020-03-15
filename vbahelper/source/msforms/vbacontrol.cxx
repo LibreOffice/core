@@ -436,8 +436,8 @@ namespace {
 
 struct PointerStyles
 {
-   long const msoPointerStyle;
-   PointerStyle const loPointStyle;
+   long msoPointerStyle;
+   PointerStyle loPointStyle;
 };
 
 }
