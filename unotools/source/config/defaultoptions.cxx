@@ -114,8 +114,8 @@ namespace {
 
 struct PathToDefaultMapping_Impl
 {
-    SvtPathOptions::Paths const   _ePath;
-    PathStrPtr const              _pDefaultPath;
+    SvtPathOptions::Paths   _ePath;
+    PathStrPtr              _pDefaultPath;
 };
 
 }

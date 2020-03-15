@@ -47,7 +47,7 @@ namespace utl
     struct NodeValueAccessor
     {
     private:
-        OUString const            sRelativePath;      // the relative path of the node
+        OUString            sRelativePath;      // the relative path of the node
         LocationType        eLocationType;      // the type of location where the value is stored
         void*               pLocation;          // the pointer to the location
         Type                aDataType;          // the type object pointed to by pLocation

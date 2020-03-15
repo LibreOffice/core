@@ -164,7 +164,7 @@ class StringCalculator : public ::cppu::WeakImplHelper< css::util::XStringWidth 
         }
 
     private:
-        weld::Widget* const m_pDevice;
+        weld::Widget* m_pDevice;
 };
 
 }

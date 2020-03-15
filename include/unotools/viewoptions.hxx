@@ -234,8 +234,8 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtViewOptions final : public utl::deta
 
         /// specify which list of views in configuration is used! This can't be a static value!!!
         /// ... because we need this value to work with right static data container.
-        EViewType const           m_eViewType;
-        OUString const     m_sViewName;
+        EViewType           m_eViewType;
+        OUString     m_sViewName;
 
         /*Attention
 

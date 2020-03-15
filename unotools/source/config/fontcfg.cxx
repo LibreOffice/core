@@ -453,7 +453,7 @@ namespace {
 struct ImplFontAttrWeightSearchData
 {
     const char*             mpStr;
-    FontWeight const              meWeight;
+    FontWeight              meWeight;
 };
 
 }
@@ -483,7 +483,7 @@ namespace {
 struct ImplFontAttrWidthSearchData
 {
     const char*             mpStr;
-    FontWidth const               meWidth;
+    FontWidth               meWidth;
 };
 
 }
@@ -508,7 +508,7 @@ namespace {
 struct ImplFontAttrTypeSearchData
 {
     const char*             mpStr;
-    ImplFontAttrs const           mnType;
+    ImplFontAttrs           mnType;
 };
 
 }
@@ -799,7 +799,7 @@ namespace {
 struct enum_convert
 {
     const char* pName;
-    int const          nEnum;
+    int          nEnum;
 };
 
 }

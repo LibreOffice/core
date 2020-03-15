@@ -328,7 +328,7 @@ namespace DOM
     // IO context functions for libxml2 interaction
     struct IOContext {
         Reference< XOutputStream > stream;
-        bool const allowClose;
+        bool allowClose;
     };
 
     }

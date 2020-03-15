@@ -74,7 +74,7 @@ namespace utl
                                         m_xHierarchyAccess;
             css::uno::Reference< css::util::XChangesListener >
                                         xChangeLstnr;
-            ConfigItemMode const              m_nMode;
+            ConfigItemMode              m_nMode;
             bool                        m_bIsModified;
             bool                        m_bEnableInternalNotification;
             sal_Int16                   m_nInValueChange;

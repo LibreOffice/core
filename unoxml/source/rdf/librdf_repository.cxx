@@ -412,7 +412,7 @@ private:
     NamedGraphMap_t m_NamedGraphs;
 
     /// type conversion helper - stateless
-    librdf_TypeConverter const m_TypeConverter;
+    librdf_TypeConverter m_TypeConverter;
 
     /// set of xml:ids of elements with xhtml:content
     ::std::set< OUString > m_RDFaXHTMLContentSet;
