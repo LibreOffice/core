@@ -54,6 +54,16 @@
 
 namespace emfplushelper
 {
+
+    typedef enum
+    {
+        WrapModeTile = 0x00000000,
+        WrapModeTileFlipX = 0x00000001,
+        WrapModeTileFlipY = 0x00000002,
+        WrapModeTileFlipXY = 0x00000003,
+        WrapModeClamp = 0x00000004
+    } WrapMode;
+
     const char* emfTypeToName(sal_uInt16 type)
     {
         switch (type)
@@ -887,10 +897,10 @@ namespace emfplushelper
                     drawinglayer::primitive2d::SpreadMethod aSpreadMethod(drawinglayer::primitive2d::SpreadMethod::Pad);
                     switch(brush->wrapMode)
                     {
-                        case 0 : aSpreadMethod = drawinglayer::primitive2d::SpreadMethod::Repeat; break;
-                        case 1 :
-                        case 2 :
-                        case 3 : aSpreadMethod = drawinglayer::primitive2d::SpreadMethod::Reflect; break;
+                        case WrapModeTile:
+                        case WrapModeTileFlipY: aSpreadMethod = drawinglayer::primitive2d::SpreadMethod::Repeat; break;
+                        case WrapModeTileFlipX:
+                        case WrapModeTileFlipXY: aSpreadMethod = drawinglayer::primitive2d::SpreadMethod::Reflect; break;
                         default: break;
                     }
 
