@@ -1172,7 +1172,7 @@ void ScTable::CopyToTable(
     if (bIsUndoDoc && (nFlags & InsertDeleteFlags::CONTENTS))
     {
         // Copying formulas may create sheet-local named expressions on the
-        // destination sheet. Add existings to Undo first.
+        // destination sheet. Add existing to Undo first.
         pDestTab->SetRangeName( std::unique_ptr<ScRangeName>( new ScRangeName( *GetRangeName())));
     }
 
