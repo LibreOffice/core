@@ -26,10 +26,6 @@
 #include <vcl/image.hxx>
 #include <vcl/ptrstyle.hxx>
 
-#ifdef DEBUG
-#include <sfx2/sidebar/Tools.hxx>
-#endif
-
 namespace sfx2::sidebar {
 
 namespace
