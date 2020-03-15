@@ -14,6 +14,7 @@
 #include <tools/XmlWriter.hxx>
 
 #include <memory>
+#include <sal/log.hxx>
 
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/Tools.hxx>
@@ -138,7 +139,7 @@ xmlDocPtr Primitive2dXmlDump::dumpAndParse(
     std::unique_ptr<sal_uInt8[]> pBuffer(new sal_uInt8[nSize + 1]);
     pStream->ReadBytes(pBuffer.get(), nSize);
     pBuffer[nSize] = 0;
-
+    SAL_INFO("drawinglayer", "Parsed XML: " << pBuffer.get());
     xmlDocPtr pDoc = xmlParseDoc(reinterpret_cast<xmlChar*>(pBuffer.get()));
 
     return pDoc;
@@ -252,6 +253,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 double fRotate, fShearX;
                 if(rTextSimplePortionPrimitive2D.getTextTransform().decompose(aScale, aTranslate, fRotate, fShearX))
                 {
+                    rWriter.attribute("width", aScale.getX());
                     rWriter.attribute("height", aScale.getY());
                 }
                 rWriter.attribute("x", aTranslate.getX());
@@ -314,10 +316,30 @@ void Primitive2dXmlDump::decomposeAndWrite(
             {
                 const SvgLinearGradientPrimitive2D& rSvgLinearGradientPrimitive2D = dynamic_cast<const SvgLinearGradientPrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("svglineargradient");
+                basegfx::B2DPoint aStartAttribute = rSvgLinearGradientPrimitive2D.getStart();
                 basegfx::B2DPoint aEndAttribute = rSvgLinearGradientPrimitive2D.getEnd();
 
+                rWriter.attribute("startx", aStartAttribute.getX());
+                rWriter.attribute("starty", aStartAttribute.getY());
                 rWriter.attribute("endx", aEndAttribute.getX());
                 rWriter.attribute("endy", aEndAttribute.getY());
+                //rWriter.attribute("spreadmethod", (int)rSvgLinearGradientPrimitive2D.getSpreadMethod());
+                rWriter.attributeDouble("opacity", rSvgLinearGradientPrimitive2D.getGradientEntries().front().getOpacity());
+
+                rWriter.startElement("transform");
+                basegfx::B2DHomMatrix const & rMatrix = rSvgLinearGradientPrimitive2D.getGradientTransform();
+                rWriter.attributeDouble("xy11", rMatrix.get(0,0));
+                rWriter.attributeDouble("xy12", rMatrix.get(0,1));
+                rWriter.attributeDouble("xy13", rMatrix.get(0,2));
+                rWriter.attributeDouble("xy21", rMatrix.get(1,0));
+                rWriter.attributeDouble("xy22", rMatrix.get(1,1));
+                rWriter.attributeDouble("xy23", rMatrix.get(1,2));
+                rWriter.attributeDouble("xy31", rMatrix.get(2,0));
+                rWriter.attributeDouble("xy32", rMatrix.get(2,1));
+                rWriter.attributeDouble("xy33", rMatrix.get(2,2));
+                rWriter.endElement();
+
+                writePolyPolygon(rWriter, rSvgLinearGradientPrimitive2D.getPolyPolygon());
 
                 rWriter.endElement();
             }
