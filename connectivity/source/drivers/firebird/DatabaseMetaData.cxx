@@ -1654,9 +1654,12 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
     aCurrentRow[1] = new ORowSetValueDecorator(); // Catalog - can be null
     aCurrentRow[2] = new ORowSetValueDecorator(); // Schema - can be null
     aCurrentRow[5] = new ORowSetValueDecorator(); // Index Catalog -- can be null
-    // According to wikipedia firebird uses clustered indices.
-    // The documentation does not specifically seem to specify this.
-    aCurrentRow[7] = new ORowSetValueDecorator(IndexType::CLUSTERED); // 7. INDEX TYPE
+    // Wikipedia indicates:
+    // 'Firebird makes all indices of the database behave like well-tuned "clustered indexes" used by other architectures.'
+    // but it's not "CLUSTERED", neither "STATISTIC" nor "HASHED" (the other specific types from offapi/com/sun/star/sdbc/IndexType.idl)
+    // According to https://www.ibphoenix.com/resources/documents/design/doc_18,
+    // it seems another type => OTHER
+    aCurrentRow[7] = new ORowSetValueDecorator(IndexType::OTHER); // 7. INDEX TYPE
     aCurrentRow[13] = new ORowSetValueDecorator(); // Filter Condition -- can be null
 
     while(xRs->next())
