@@ -94,6 +94,82 @@ namespace
 
         return nSteps;
     }
+
+    void makeOffsetXPattern(BitmapEx& rBitmapEx, sal_Int32 nX)
+    {
+        const Size aSize(rBitmapEx.GetSizePixel());
+        const sal_Int32 nW = aSize.Width() - nX;
+        const sal_Int32 nH = aSize.Height();
+
+        if (nW <= 0)
+            return;
+
+        rBitmapEx.Expand(0, nH);
+
+        const Size aCopySize1(nW, nH);
+        rBitmapEx.CopyPixel(
+                tools::Rectangle(Point(nX, nH), aCopySize1),
+                tools::Rectangle(Point(0, 0), aCopySize1),
+                nullptr);
+
+        const Size aCopySize2(nX, nH);
+        rBitmapEx.CopyPixel(
+                tools::Rectangle(Point(0, nH), aCopySize2),
+                tools::Rectangle(Point(nW, 0), aCopySize2),
+                nullptr);
+    }
+
+    void makeOffsetYPattern(BitmapEx& rBitmapEx, sal_Int32 nY)
+    {
+        const Size aSize(rBitmapEx.GetSizePixel());
+        const sal_Int32 nW = aSize.Width();
+        const sal_Int32 nH = aSize.Height() - nY;
+
+        if (nH <= 0)
+            return;
+
+        rBitmapEx.Expand(nW, 0);
+
+        const Size aCopySize1(nW, nH);
+        rBitmapEx.CopyPixel(
+                tools::Rectangle(Point(nW, nY), aCopySize1),
+                tools::Rectangle(Point(0, 0), aCopySize1),
+                nullptr);
+
+        const Size aCopySize2(nW, nY);
+        rBitmapEx.CopyPixel(
+                tools::Rectangle(Point(nW, 0), aCopySize2),
+                tools::Rectangle(Point(0, nH), aCopySize2),
+                nullptr);
+    }
+
+    // Make tiled pattern to target size based on original bitmap.
+    void makeTiledPattern(BitmapEx& rBitmapEx,const Size& rTargetSize)
+    {
+        Size aSize(rBitmapEx.GetSizePixel());
+        sal_Int32 nXFactor = std::min<sal_Int32>(rTargetSize.Width() / aSize.Width(), 1);
+        sal_Int32 nYFactor = std::min<sal_Int32>(rTargetSize.Height() / aSize.Height(), 1);
+
+        const tools::Rectangle aRectSrc(Point(0,0), aSize);
+
+        if (nXFactor == 1 && nYFactor == 1)
+            return;
+
+        rBitmapEx.Expand((nXFactor - 1) * aSize.Width(),(nYFactor - 1) * aSize.Height());
+
+
+        for(sal_Int32 nX = 0; nX <= nXFactor; ++nX)
+        {
+            for(sal_Int32 nY = 0; nY <= nYFactor; ++nY)
+            {
+                if (nX == 0 && nY == 0)
+                    continue;
+
+                const tools::Rectangle aRectDst(Point(nX * aSize.Width(), nY * aSize.Height()), aSize);
+                rBitmapEx.CopyPixel(aRectDst, aRectSrc, nullptr);
+            }
+        }
+    }
 }
 
 namespace drawinglayer::processor2d
@@ -429,17 +505,22 @@ namespace drawinglayer::processor2d
 
                             // extract discrete size of graphic
                             // caution: when getting to zero, nothing would be painted; thus, do not allow this
-                            const sal_Int32 nBWidth(std::max(sal_Int32(1), basegfx::fround(aGraphicRange.getWidth())));
-                            const sal_Int32 nBHeight(std::max(sal_Int32(1), basegfx::fround(aGraphicRange.getHeight())));
+                            sal_Int32 nBWidth(std::max(sal_Int32(1), basegfx::fround(aGraphicRange.getWidth())));
+                            sal_Int32 nBHeight(std::max(sal_Int32(1), basegfx::fround(aGraphicRange.getHeight())));
 
                             // only do something when bitmap fill has a size in discrete units
                             if(nBWidth > 0 && nBHeight > 0)
                             {
                                 // nBWidth, nBHeight is the pixel size of the needed bitmap. To not need to scale it
                                 // in vcl many times, create a size-optimized version
-                                const Size aNeededBitmapSizePixel(nBWidth, nBHeight);
+                                Size aNeededBitmapSizePixel(nBWidth, nBHeight);
                                 BitmapEx aBitmapEx(rFillGraphicAttribute.getGraphic().GetBitmapEx());
                                 const bool bPreScaled(nBWidth * nBHeight < (250 * 250));
+
+                                const sal_Int32 nOffsetX(basegfx::fround(rFillGraphicAttribute.getOffsetX() * nBWidth));
+                                const sal_Int32 nOffsetY(basegfx::fround(rFillGraphicAttribute.getOffsetY() * nBHeight));
+                                bool bBitmapTiled = false;
+
 
                                 // ... but only up to a maximum size, else it gets too expensive
                                 if(bPreScaled)
@@ -453,6 +534,31 @@ namespace drawinglayer::processor2d
                                     }
 
                                     aBitmapEx.Scale(aNeededBitmapSizePixel, BmpScaleFlag::Interpolate);
+
+                                    if ((nOWidth / nBWidth) * (nOHeight / nBHeight) > 500)
+                                    {
+                                        if (nOffsetX)
+                                            makeOffsetXPattern(aBitmapEx, nOffsetX);
+
+                                        if (nOffsetY)
+                                            makeOffsetYPattern(aBitmapEx, nOffsetY);
+
+                                        const Size aTargetSize(std::min<sal_Int32>(250, nOWidth),
+                                            std::min<sal_Int32>(250, nOHeight));
+
+                                        makeTiledPattern(aBitmapEx, aTargetSize);
+
+                                        Size aNewSize(aBitmapEx.GetSizePixel());
+
+                                        if (aNeededBitmapSizePixel != aNewSize)
+                                        {
+                                            nBWidth = aNewSize.Width();
+                                            nBHeight = aNewSize.Height();
+                                            aNeededBitmapSizePixel = aNewSize;
+                                        }
+
+                                        bBitmapTiled = true;
+                                    }
                                 }
 
                                 bool bPainted(false);
@@ -527,9 +633,7 @@ namespace drawinglayer::processor2d
                                     mpOutputDevice->EnableMapMode(false);
 
                                     // check if offset is used
-                                    const sal_Int32 nOffsetX(basegfx::fround(rFillGraphicAttribute.getOffsetX() * nBWidth));
-
-                                    if(nOffsetX)
+                                    if(nOffsetX && !bBitmapTiled)
                                     {
                                         // offset in X, so iterate over Y first and draw lines
                                         for(sal_Int32 nYPos(nBTop); nYPos < nOTop + nOHeight; nYPos += nBHeight, nPosY++)
@@ -556,12 +660,12 @@ namespace drawinglayer::processor2d
                                     else
                                     {
                                         // check if offset is used
-                                        const sal_Int32 nOffsetY(basegfx::fround(rFillGraphicAttribute.getOffsetY() * nBHeight));
+                                        sal_Int32 nBOffsetTop = bBitmapTiled ? nBTop : (nBTop - nBHeight + nOffsetY);
 
                                         // possible offset in Y, so iterate over X first and draw columns
                                         for(sal_Int32 nXPos(nBLeft); nXPos < nOLeft + nOWidth; nXPos += nBWidth, nPosX++)
                                         {
-                                            for(sal_Int32 nYPos((nPosX % 2) ? nBTop - nBHeight + nOffsetY : nBTop);
+                                            for(sal_Int32 nYPos((nPosX % 2) ? nBOffsetTop : nBTop);
                                                 nYPos < nOTop + nOHeight; nYPos += nBHeight)
                                             {
                                                 const ::tools::Rectangle aOutRectPixel(Point(nXPos, nYPos), aNeededBitmapSizePixel);

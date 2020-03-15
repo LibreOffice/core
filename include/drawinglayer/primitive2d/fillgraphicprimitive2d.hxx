@@ -70,6 +70,9 @@ namespace drawinglayer
             /// compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const override;
 
+            /// Use buffered ( or create a new one ) primitives if rVisitor is
+            /// not a preferred container. For preferred container, it's already
+            /// initialized when it's constructed.
             virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
                     const geometry::ViewInformation2D& rViewInformation) const override;
 
