@@ -34,30 +34,23 @@ bool SwEditShell::IsFieldDataSourceAvailable(OUString& rUsedDataSource) const
     const SwFieldTypes * pFieldTypes = GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
     uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
     uno::Reference<sdb::XDatabaseContext> xDBContext = sdb::DatabaseContext::create(xContext);
-    for(const auto & pFieldType : *pFieldTypes)
+    std::vector<SwFormatField*> vFields;
+    for(const auto& pFieldType : *pFieldTypes)
     {
         if(IsUsed(*pFieldType) && pFieldType->Which() == SwFieldIds::Database)
+            pFieldType->GatherFields(vFields);
+    }
+    for(auto pFormatField: vFields)
+    {
+        const SwDBData& rData = static_cast<SwDBFieldType*>(pFormatField->GetField()->GetTyp())->GetDBData();
+        try
         {
-            SwIterator<SwFormatField,SwFieldType> aIter( *pFieldType );
-            SwFormatField* pFormatField = aIter.First();
-            while(pFormatField)
-            {
-                if(pFormatField->IsFieldInDoc())
-                {
-                    const SwDBData& rData =
-                            static_cast<SwDBFieldType*>(pFormatField->GetField()->GetTyp())->GetDBData();
-                    try
-                    {
-                        return xDBContext->getByName(rData.sDataSource).hasValue();
-                    }
-                    catch(uno::Exception const &)
-                    {
-                        rUsedDataSource = rData.sDataSource;
-                        return false;
-                    }
-                }
-                pFormatField = aIter.Next();
-            }
+            return xDBContext->getByName(rData.sDataSource).hasValue();
+        }
+        catch(uno::Exception const &)
+        {
+            rUsedDataSource = rData.sDataSource;
+            return false;
         }
     }
     return true;
