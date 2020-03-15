@@ -130,39 +130,30 @@ bool SwInputFieldList::BuildSortLst()
     const size_t nSize = rFieldTypes.size();
 
     // iterate over all types
-    for( size_t i = 0; i < nSize; ++i )
+    std::vector<SwFormatField*> vFields;
+    for(size_t i = 0; i < nSize; ++i)
     {
         SwFieldType* pFieldType = rFieldTypes[ i ].get();
         const SwFieldIds nType = pFieldType->Which();
-
-        if( SwFieldIds::SetExp == nType || SwFieldIds::Input == nType )
+        if(SwFieldIds::SetExp == nType || SwFieldIds::Input == nType)
+            pFieldType->GatherFields(vFields);
+    }
+    for(auto pFormatField: vFields)
+    {
+        const SwTextField* pTextField = pFormatField->GetTextField();
+        auto pSetExpField = dynamic_cast<SwSetExpField*>(pFormatField->GetField());
+        if(pSetExpField && !pSetExpField->GetInputFlag())
+            continue;
+        // not in TempList, thus add to SortList
+        auto it = maTmpLst.find(pTextField);
+        if(maTmpLst.end() == it)
         {
-            SwIterator<SwFormatField,SwFieldType> aIter( *pFieldType );
-            for( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
-            {
-                const SwTextField* pTextField = pFormatField->GetTextField();
-
-                //  process only InputFields and interactive SetExpFields
-                if( !pTextField || ( SwFieldIds::SetExp == nType &&
-                    !static_cast<SwSetExpField*>(pFormatField->GetField())->GetInputFlag()))
-                    continue;
-
-                const SwTextNode& rTextNode = pTextField->GetTextNode();
-                if( rTextNode.GetNodes().IsDocNodes() )
-                {
-                    // not in TempList, thus add to SortList
-                    auto it = maTmpLst.find( pTextField );
-                    if( maTmpLst.end() == it )
-                    {
-                        SwNodeIndex aIdx( rTextNode );
-                        std::unique_ptr<SetGetExpField> pNew(new SetGetExpField(aIdx, pTextField ));
-                        mpSrtLst->insert( std::move(pNew) );
-                    }
-                    else
-                        maTmpLst.erase( it );
-                }
-            }
+            SwNodeIndex aIdx(pTextField->GetTextNode());
+            std::unique_ptr<SetGetExpField> pNew(new SetGetExpField(aIdx, pTextField ));
+            mpSrtLst->insert(std::move(pNew));
         }
+        else
+            maTmpLst.erase(it);
     }
 
     // the pointers are not needed anymore
