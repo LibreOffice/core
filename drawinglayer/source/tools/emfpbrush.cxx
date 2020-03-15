@@ -246,7 +246,7 @@ namespace emfplushelper
             case BrushTypeLinearGradient:
             {
                 s.ReadUInt32(additionalFlags).ReadInt32(wrapMode);
-                SAL_INFO("drawinglayer", "EMF+\t\t\t\tLinear gradient, additional flags: 0x" << std::hex << additionalFlags << std::dec);
+                SAL_INFO("drawinglayer", "EMF+\t\t\t\tLinear gradient, additional flags: 0x" << std::hex << additionalFlags << std::dec << ", wrapMode: " << wrapMode);
                 s.ReadFloat(firstPointX).ReadFloat(firstPointY).ReadFloat(aWidth).ReadFloat(aHeight);
                 SAL_INFO("drawinglayer", "EMF+\t\t\t\tFirst gradient point: " << firstPointX << ":" << firstPointY
                                          << ", size " << aWidth << "x" << aHeight);
