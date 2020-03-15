@@ -402,20 +402,19 @@ bool SwDBField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             nSubTyp |= nsSwExtendedSubType::SUB_INVISIBLE;
         SetSubType(nSubTyp);
         //invalidate text node
-        if(GetTyp())
+        auto pType = GetTyp();
+        if(!pType)
+            break;
+        std::vector<SwFormatField*> vFields;
+        pType->GatherFields(vFields, false);
+        for(auto pFormatField: vFields)
         {
-            SwIterator<SwFormatField,SwFieldType> aIter( *GetTyp() );
-            SwFormatField* pFormatField = aIter.First();
-            while(pFormatField)
+            SwTextField* pTextField = pFormatField->GetTextField();
+            if(pTextField && static_cast<SwDBField*>(pFormatField->GetField()) == this)
             {
-                SwTextField *pTextField = pFormatField->GetTextField();
-                if(pTextField && static_cast<SwDBField*>(pFormatField->GetField()) == this )
-                {
-                    //notify the change
-                    pTextField->NotifyContentChange(*pFormatField);
-                    break;
-                }
-                pFormatField = aIter.Next();
+                //notify the change
+                pTextField->NotifyContentChange(*pFormatField);
+                break;
             }
         }
     }
