@@ -50,7 +50,7 @@ class LocaleDataWrapper;
 class UNOTOOLS_DLLPUBLIC IntlWrapper
 {
 private:
-    LanguageTag const         maLanguageTag;
+    LanguageTag         maLanguageTag;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     std::unique_ptr<LocaleDataWrapper>  pLocaleData;

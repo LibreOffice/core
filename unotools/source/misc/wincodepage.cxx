@@ -20,9 +20,9 @@ rtl_TextEncoding impl_getWinTextEncodingFromLangStrANSI(const char* pLanguage)
 
     struct LangEncodingDef
     {
-        const char* const        mpLangStr;
-        decltype(nLangLen) const mnLangStrLen;
-        rtl_TextEncoding const   meTextEncoding;
+        const char*        mpLangStr;
+        decltype(nLangLen) mnLangStrLen;
+        rtl_TextEncoding   meTextEncoding;
     };
     static LangEncodingDef const aLanguageTab[] =
     {
@@ -82,9 +82,9 @@ rtl_TextEncoding impl_getWinTextEncodingFromLangStrOEM(const char* pLanguage)
 
     struct LangEncodingDef
     {
-        const char* const        mpLangStr;
-        decltype(nLangLen) const mnLangStrLen;
-        rtl_TextEncoding const   meTextEncoding;
+        const char*        mpLangStr;
+        decltype(nLangLen) mnLangStrLen;
+        rtl_TextEncoding   meTextEncoding;
     };
     static LangEncodingDef const aLanguageTab[] =
     {
