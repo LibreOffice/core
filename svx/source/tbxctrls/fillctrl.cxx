@@ -870,7 +870,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillAttrHdl, weld::ComboBox&, void)
                     const XGradient aGradient = pItem->GetGradientList()->GetGradient(nPos)->GetGradient();
                     const XFillGradientItem aXFillGradientItem(mpLbFillAttr->get_active_text(), aGradient);
 
-                    // #i122676# Change FillStyle and Gradinet in one call
+                    // #i122676# Change FillStyle and Gradient in one call
                     SfxViewFrame::Current()->GetDispatcher()->ExecuteList(
                         SID_ATTR_FILL_GRADIENT, SfxCallMode::RECORD,
                         bFillStyleChange
