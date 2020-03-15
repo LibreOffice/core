@@ -27,7 +27,7 @@
 #include <vcl/ptrstyle.hxx>
 
 #ifdef DEBUG
-#include <sfx2/sidebar/Tools.hxx>
+#include <sidebar/Tools.hxx>
 #endif
 
 namespace sfx2::sidebar {
