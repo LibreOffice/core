@@ -54,6 +54,16 @@
 
 namespace emfplushelper
 {
+
+    enum
+    {
+        WrapModeTile = 0x00000000,
+        WrapModeTileFlipX = 0x00000001,
+        WrapModeTileFlipY = 0x00000002,
+        WrapModeTileFlipXY = 0x00000003,
+        WrapModeClamp = 0x00000004
+    };
+
     const char* emfTypeToName(sal_uInt16 type)
     {
         switch (type)
@@ -788,7 +798,7 @@ namespace emfplushelper
             {
                 if (brush->type == BrushTypePathGradient && !(brush->additionalFlags & 0x1))
                 {
-                    SAL_WARN("drawinglayer", "EMF+\t TODO Verify proper displaying of BrushTypePathGradient with flags: " <<  std::hex << brush->additionalFlags << std::dec);
+                    SAL_WARN("drawinglayer", "EMF+\t TODO Implement displaying BrushTypePathGradient with Boundary: ");
                 }
                 ::basegfx::B2DHomMatrix aTextureTransformation;
 
@@ -887,11 +897,20 @@ namespace emfplushelper
                     drawinglayer::primitive2d::SpreadMethod aSpreadMethod(drawinglayer::primitive2d::SpreadMethod::Pad);
                     switch(brush->wrapMode)
                     {
-                        case 0 : aSpreadMethod = drawinglayer::primitive2d::SpreadMethod::Repeat; break;
-                        case 1 :
-                        case 2 :
-                        case 3 : aSpreadMethod = drawinglayer::primitive2d::SpreadMethod::Reflect; break;
-                        default: break;
+                        case WrapModeTile:
+                        case WrapModeTileFlipY:
+                        {
+                            aSpreadMethod = drawinglayer::primitive2d::SpreadMethod::Repeat;
+                            break;
+                        }
+                        case WrapModeTileFlipX:
+                        case WrapModeTileFlipXY:
+                        {
+                            aSpreadMethod = drawinglayer::primitive2d::SpreadMethod::Reflect;
+                            break;
+                        }
+                        default:
+                            break;
                     }
 
                     // create the same one used for SVG
