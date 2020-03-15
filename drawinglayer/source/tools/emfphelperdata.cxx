@@ -776,9 +776,14 @@ namespace emfplushelper
 
                 if (brush->type == BrushTypeLinearGradient)
                 {
+<<<<<<< HEAD   (f7fb6d lok: status update - avoid SIGFPE on zero range.)
                     basegfx::B2DPoint aStartPoint = Map(brush->firstPointX, brush->firstPointY);
+=======
+                    // support for public enum EmfPlusWrapMode
+                    basegfx::B2DPoint aStartPoint = Map(brush->firstPointX, 0.0);
+>>>>>>> CHANGE (490804 tdf#124424 Fix orientation of the LinearGradient)
                     aStartPoint = aPolygonTransformation * aStartPoint;
-                    basegfx::B2DPoint aEndPoint = Map(brush->firstPointX + brush->secondPointX, brush->firstPointY + brush->secondPointY);
+                    basegfx::B2DPoint aEndPoint = Map(brush->firstPointX + brush->aWidth, 0.0);
                     aEndPoint = aPolygonTransformation * aEndPoint;
 
                     // create the same one used for SVG

@@ -47,8 +47,8 @@ namespace emfplushelper
         , wrapMode(0)
         , firstPointX(0.0)
         , firstPointY(0.0)
-        , secondPointX(0.0)
-        , secondPointY(0.0)
+        , aWidth(0.0)
+        , aHeight(0.0)
         , hasTransformation(false)
         , blendPoints(0)
         , blendFactors(nullptr)
@@ -153,9 +153,16 @@ namespace emfplushelper
                     s.Seek(pos + pathLength);
 
                     const ::basegfx::B2DRectangle aBounds(::basegfx::utils::getRange(path->GetPolygon(rR, false)));
+<<<<<<< HEAD   (f7fb6d lok: status update - avoid SIGFPE on zero range.)
                     secondPointX = aBounds.getWidth();
                     secondPointY = aBounds.getHeight();
                     SAL_INFO("drawinglayer", "EMF+\t polygon bounding box: " << aBounds.getMinX() << "," << aBounds.getMinY() << " " << aBounds.getWidth() << "x" << aBounds.getHeight());
+=======
+                    aWidth = aBounds.getWidth();
+                    aHeight = aBounds.getHeight();
+                    SAL_INFO("drawinglayer", "EMF+\t\t\t\tPolygon bounding box: " << aBounds.getMinX() << "," << aBounds.getMinY() << " "
+                                                                             << aBounds.getWidth() << "x" << aBounds.getHeight());
+>>>>>>> CHANGE (490804 tdf#124424 Fix orientation of the LinearGradient)
                 }
                 else
                 {
@@ -170,9 +177,16 @@ namespace emfplushelper
                     s.Seek(pos + 8 * boundaryPointCount);
 
                     const ::basegfx::B2DRectangle aBounds(::basegfx::utils::getRange(path->GetPolygon(rR, false)));
+<<<<<<< HEAD   (f7fb6d lok: status update - avoid SIGFPE on zero range.)
                     secondPointX = aBounds.getWidth();
                     secondPointY = aBounds.getHeight();
                     SAL_INFO("drawinglayer", "EMF+\t polygon bounding box: " << aBounds.getMinX() << "," << aBounds.getMinY() << " " << aBounds.getWidth() << "x" << aBounds.getHeight());
+=======
+                    aWidth = aBounds.getWidth();
+                    aHeight = aBounds.getHeight();
+                    SAL_INFO("drawinglayer", "EMF+\t\t\t\tPolygon bounding box: " << aBounds.getMinX() << "," << aBounds.getMinY() << " "
+                                                                             << aBounds.getWidth() << "x" << aBounds.getHeight());
+>>>>>>> CHANGE (490804 tdf#124424 Fix orientation of the LinearGradient)
                 }
 
                 if (additionalFlags & 0x02)
@@ -241,9 +255,16 @@ namespace emfplushelper
             case BrushTypeLinearGradient:
             {
                 s.ReadUInt32(additionalFlags).ReadInt32(wrapMode);
+<<<<<<< HEAD   (f7fb6d lok: status update - avoid SIGFPE on zero range.)
                 SAL_INFO("drawinglayer", "EMF+\tlinear gradient, additional flags: 0x" << std::hex << additionalFlags << std::dec);
                 s.ReadFloat(firstPointX).ReadFloat(firstPointY).ReadFloat(secondPointX).ReadFloat(secondPointY);
                 SAL_INFO("drawinglayer", "EMF+\tFirst gradinet point: " << firstPointX << ":" << firstPointY << ", second gradient point " << secondPointX << ":" << secondPointY);
+=======
+                SAL_INFO("drawinglayer", "EMF+\t\t\t\tLinear gradient, additional flags: 0x" << std::hex << additionalFlags << std::dec);
+                s.ReadFloat(firstPointX).ReadFloat(firstPointY).ReadFloat(aWidth).ReadFloat(aHeight);
+                SAL_INFO("drawinglayer", "EMF+\t\t\t\tFirst gradient point: " << firstPointX << ":" << firstPointY
+                                         << ", size " << aWidth << "x" << aHeight);
+>>>>>>> CHANGE (490804 tdf#124424 Fix orientation of the LinearGradient)
                 sal_uInt32 color;
                 s.ReadUInt32(color);
                 solidColor = ::Color(0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
