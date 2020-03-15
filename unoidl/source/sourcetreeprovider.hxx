@@ -34,7 +34,7 @@ private:
     virtual ~SourceTreeProvider() throw () override;
 
     Manager & manager_;
-    OUString const uri_;
+    OUString uri_;
     mutable std::map< OUString, rtl::Reference<Entity> > cache_; //TODO: at manager
 };
 

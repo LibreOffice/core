@@ -125,7 +125,7 @@ public:
     };
 
     struct Member {
-        OUString const mandatory;
+        OUString mandatory;
         std::set<OUString> optional;
 
         explicit Member(const OUString & theMandatory): mandatory(theMandatory) {}
@@ -143,7 +143,7 @@ public:
         YYLTYPE location, yyscan_t yyscanner, SourceProviderScannerData * data,
         OUString const & name);
 
-    bool const singleBase;
+    bool singleBase;
     std::vector<DirectBase> directMandatoryBases;
     std::vector<DirectBase> directOptionalBases;
     std::vector<unoidl::InterfaceTypeEntity::Attribute> directAttributes;
@@ -204,7 +204,7 @@ public:
 
             OUString name;
 
-            SourceProviderType const type;
+            SourceProviderType type;
 
             bool rest;
         };
@@ -215,13 +215,13 @@ public:
             name(theName), annotations(theAnnotations)
         {}
 
-        OUString const name;
+        OUString name;
 
         std::vector< Parameter > parameters;
 
         std::vector< OUString > exceptions;
 
-        std::vector< OUString > const annotations;
+        std::vector< OUString > annotations;
     };
 
     explicit SourceProviderSingleInterfaceBasedServiceEntityPad(
