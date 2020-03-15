@@ -967,7 +967,11 @@ const void* SvTreeListBox::NextSearchEntry( const void* _pCurrentSearchEntry, OU
         &&  !IsExpanded( pEntry )
         )
     {
-        pEntry = pEntry->NextSibling();
+        SvTreeListEntry* pNextSiblingEntry = pEntry->NextSibling();
+        if ( !pNextSiblingEntry )
+            pEntry = Next( pEntry );
+        else
+            pEntry = pNextSiblingEntry;
     }
     else
     {
