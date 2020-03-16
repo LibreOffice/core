@@ -100,7 +100,7 @@ void ListLevel::SetValue( Id nId, sal_Int32 nValue )
         case NS_ooxml::LN_CT_Lvl_start:
             m_nIStartAt = nValue;
         break;
-        case NS_ooxml::LN_CT_Lvl_numFmt:
+        case NS_ooxml::LN_CT_NumFmt_val:
             m_nNFC = nValue;
         break;
         case NS_ooxml::LN_CT_Lvl_isLgl:
@@ -738,6 +738,8 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
         break;
         case NS_ooxml::LN_CT_Lvl_start:
         case NS_ooxml::LN_CT_Lvl_numFmt:
+        case NS_ooxml::LN_CT_NumFmt_format:
+        case NS_ooxml::LN_CT_NumFmt_val:
         case NS_ooxml::LN_CT_Lvl_isLgl:
         case NS_ooxml::LN_CT_Lvl_legacy:
             if ( pCurrentLvl.get( ) )
@@ -960,18 +962,29 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                 bIsStartVisited = true;
             break;
             case NS_ooxml::LN_CT_Lvl_numFmt:
-            case NS_ooxml::LN_CT_Lvl_isLgl:
-            case NS_ooxml::LN_CT_Lvl_legacy:
+            {
+                writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+                if (pProperties.get())
+                {
+                    pProperties->resolve(*this);
+                }
                 if (ListLevel::Pointer pCurrentLevel = m_pCurrentDefinition->GetCurrentLevel())
                 {
-                    pCurrentLevel->SetValue( nSprmId, nIntValue );
                     if( !bIsStartVisited )
                     {
                         pCurrentLevel->SetValue( NS_ooxml::LN_CT_Lvl_start, 0 );
                         bIsStartVisited = true;
                     }
                 }
+            }
             break;
+            case NS_ooxml::LN_CT_Lvl_isLgl:
+            case NS_ooxml::LN_CT_Lvl_legacy:
+                if (ListLevel::Pointer pCurrentLevel = m_pCurrentDefinition->GetCurrentLevel())
+                {
+                    pCurrentLevel->SetValue(nSprmId, nIntValue);
+                }
+                break;
             case NS_ooxml::LN_CT_Lvl_suff:
             {
                 if (ListLevel::Pointer pCurrentLevel = m_pCurrentDefinition->GetCurrentLevel())
