@@ -61,6 +61,7 @@ public:
      */
     void testPPTXHiddenDataSeries();
     void testPPTXPercentageNumberFormats();
+    void testPieChartLabelsNumFormat();
     void testPPTXStackedNonStackedYAxis();
     void testPPTChartSeries();
     void testODPChartSeries();
@@ -175,6 +176,7 @@ public:
     CPPUNIT_TEST(testPPTXSparseChartSeries);
     CPPUNIT_TEST(testPPTXHiddenDataSeries);
     CPPUNIT_TEST(testPPTXPercentageNumberFormats);
+    CPPUNIT_TEST(testPieChartLabelsNumFormat);
     CPPUNIT_TEST(testPPTXStackedNonStackedYAxis);
     CPPUNIT_TEST(testODPChartSeries);
     CPPUNIT_TEST(testBnc864396);
@@ -708,6 +710,18 @@ void Chart2ImportTest::testPPTXPercentageNumberFormats()
     CPPUNIT_ASSERT_EQUAL(nPercentFormatDecimalShort, nNumberFormat);
     sal_Int16 nType = getNumberFormatType(xChartDoc, nNumberFormat);
     CPPUNIT_ASSERT_MESSAGE("Y axis should be a percent format.", (nType & util::NumberFormat::PERCENT));
+}
+
+void Chart2ImportTest::testPieChartLabelsNumFormat()
+{
+    load("/chart2/qa/extras/data/xlsx/", "tdfPieNumFormat.xlsx");
+    uno::Reference< chart::XChartDocument > xChartDoc(getChartCompFromSheet(0, mxComponent), UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    // test data point labels format
+    Reference<beans::XPropertySet> xDataPointPropSet(xChartDoc->getDiagram()->getDataPointProperties(0, 0), uno::UNO_SET_THROW);
+    chart2::DataPointLabel aLabel;
+    xDataPointPropSet->getPropertyValue("Label") >>= aLabel;
+    CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumber);
 }
 
 void Chart2ImportTest::testPPTXStackedNonStackedYAxis()
