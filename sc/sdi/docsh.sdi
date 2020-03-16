@@ -75,6 +75,7 @@ interface TableDocument
     SID_SHARE_DOC           [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_NOTEBOOKBAR         [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_LANGUAGE_STATUS     [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_SPELLCHECK_IGNORE_ALL     [ ExecMethod = Execute; StateMethod = GetState; ]
 }
 
 

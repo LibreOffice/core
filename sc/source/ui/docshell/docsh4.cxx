@@ -1230,6 +1230,30 @@ void ScDocShell::Execute( SfxRequest& rReq )
             }
         }
         break;
+        case SID_SPELLCHECK_IGNORE_ALL:
+        {
+            ScViewData* pViewData = GetViewData();
+            if (!pViewData)
+                return;
+
+            EditView* pEditView = pViewData->GetEditView(pViewData->GetActivePart());
+            if (!pEditView)
+                return;
+
+            OUString sIgnoreText;
+            const SfxStringItem* pItem2 = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+            if (pItem2)
+                sIgnoreText = pItem2->GetValue();
+
+            const OUString sSpellingType("Spelling");
+            if(sIgnoreText == sSpellingType)
+            {
+                ESelection aOldSel = pEditView->GetSelection();
+                pEditView->SpellIgnoreWord();
+                pEditView->SetSelection( aOldSel );
+            }
+        }
+        break;
         default:
         {
             // small (?) hack -> forwarding of the slots to TabViewShell
