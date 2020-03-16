@@ -134,9 +134,9 @@ private:
 
     uno::Reference< uno::XComponentContext >     m_xContext;
     uno::Reference< ucb::XContentProvider >      m_xProvider;
-    uno::Sequence< beans::Property > const       m_seq;
-    URLParameter const                           m_aURLParameter;
-    Databases* const                             m_pDatabases;
+    uno::Sequence< beans::Property >             m_seq;
+    URLParameter                                 m_aURLParameter;
+    Databases*                                   m_pDatabases;
 
 public:
 
@@ -171,9 +171,9 @@ private:
 
     uno::Reference< uno::XComponentContext >     m_xContext;
     uno::Reference< ucb::XContentProvider >      m_xProvider;
-    uno::Sequence< beans::Property > const       m_seq;
+    uno::Sequence< beans::Property >             m_seq;
     URLParameter                                 m_aURLParameter;
-    Databases* const                             m_pDatabases;
+    Databases*                                   m_pDatabases;
 
 public:
 

@@ -386,7 +386,7 @@ namespace chelp {
         ItemSet                             m_aItems;
         std::vector<OUString>               m_aPath;
 
-        css::uno::Sequence< css::beans::Property > const          m_sProperty;
+        css::uno::Sequence< css::beans::Property >           m_sProperty;
 
         osl::Mutex                          m_aMutex;
         std::unique_ptr<comphelper::OInterfaceContainerHelper2>   m_pDisposeEventListeners;
