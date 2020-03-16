@@ -30,8 +30,6 @@ class ScDocument;
 class XMLCodeNameProvider : public ::cppu::WeakImplHelper< css::container::XNameAccess >
 {
     ScDocument* mpDoc;
-    OUString msDocName;
-    OUString msCodeNameProp;
 
     static bool _getCodeName( const css::uno::Any& aAny,
                            OUString& rCodeName );
