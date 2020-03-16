@@ -381,6 +381,27 @@ void DrawDocShell::Execute( SfxRequest& rReq )
             }
         }
         break;
+        case SID_SPELLCHECK_APPLY_SUGGESTION:
+        {
+            SdrView* pSdrView = mpViewShell->GetDrawView();
+            if (!pSdrView)
+                return;
+
+            EditView& rEditView = pSdrView->GetTextEditOutlinerView()->GetEditView();
+            OUString sApplyText;
+            const SfxStringItem* pItem2 = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+            if (pItem2)
+                sApplyText = pItem2->GetValue();
+
+            const OUString sSpellingRule("Spelling_");
+            sal_Int32 nPos = 0;
+            if(-1 != (nPos = sApplyText.indexOf( sSpellingRule )))
+            {
+                sApplyText = sApplyText.replaceAt(nPos, sSpellingRule.getLength(), "");
+                rEditView.InsertText( sApplyText );
+            }
+        }
+        break;
 
         case SID_NOTEBOOKBAR:
         {

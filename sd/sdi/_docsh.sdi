@@ -83,5 +83,11 @@ interface DrawDocument
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
+
+    SID_SPELLCHECK_APPLY_SUGGESTION
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
 }
 
