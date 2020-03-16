@@ -13,7 +13,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict, type_text
 import org.libreoffice.unotest
 import pathlib
-from uitest.path import get_srcdir_url
+
 def get_url_for_data_file(file_name):
     return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
@@ -41,6 +41,12 @@ class chartWall(UITestCase):
     xOKBtn = xDialog.getChild("ok")
     self.ui_test.close_dialog_through_button(xOKBtn)
 
+    xWall = document.Sheets[0].Charts[0].getEmbeddedObject().getFirstDiagram().Wall
+    self.assertEqual(xWall.LineWidth, 0)
+    self.assertEqual(xWall.LineTransparence, 0)
+    self.assertEqual(hex(xWall.FillColor), '0xe6e6e6')
+    self.assertEqual(xWall.FillTransparence, 0)
+
     gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
     gridwin.executeAction("ACTIVATE", tuple())
     xChartMainTop = self.xUITest.getTopFocusWindow()
@@ -51,8 +57,6 @@ class chartWall(UITestCase):
     #Click on tab "Borders".
     tabcontrol = xDialog.getChild("tabcontrol")
     select_pos(tabcontrol, "0")
-    # print(xDialog.getChildren())
-    #
 
     xWidth = xDialog.getChild("MTR_FLD_LINE_WIDTH")
     transparency = xDialog.getChild("MTR_LINE_TRANSPARENT")
@@ -62,6 +66,11 @@ class chartWall(UITestCase):
 
     xOKBtn = xDialog.getChild("ok")
     self.ui_test.close_dialog_through_button(xOKBtn)
+
+    self.assertEqual(xWall.LineWidth, 100)
+    self.assertEqual(xWall.LineTransparence, 5)
+    self.assertEqual(hex(xWall.FillColor), '0xe6e6e6')
+    self.assertEqual(xWall.FillTransparence, 0)
 
     #reopen and verify tab "Borders".
     gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
@@ -79,6 +88,11 @@ class chartWall(UITestCase):
 
     self.assertEqual(get_state_as_dict(xWidth)["Text"], "0.10 cm")
     self.assertEqual(get_state_as_dict(transparency)["Text"], "5%")
+
+    self.assertEqual(xWall.LineWidth, 100)
+    self.assertEqual(xWall.LineTransparence, 5)
+    self.assertEqual(hex(xWall.FillColor), '0xe6e6e6')
+    self.assertEqual(xWall.FillTransparence, 0)
 
     #Click on tab "Area"
     tabcontrol = xDialog.getChild("tabcontrol")
@@ -107,6 +121,11 @@ class chartWall(UITestCase):
     xOKBtn = xDialog.getChild("ok")
     self.ui_test.close_dialog_through_button(xOKBtn)
 
+    self.assertEqual(xWall.LineWidth, 100)
+    self.assertEqual(xWall.LineTransparence, 5)
+    self.assertEqual(hex(xWall.FillColor), '0x23a9d3')
+    self.assertEqual(xWall.FillTransparence, 0)
+
     #reopen and verify tab "Area".
     gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
     gridwin.executeAction("ACTIVATE", tuple())
@@ -127,6 +146,11 @@ class chartWall(UITestCase):
     self.assertEqual(get_state_as_dict(gCustom)["Text"], "169")
     self.assertEqual(get_state_as_dict(bCustom)["Text"], "211")
 
+    self.assertEqual(xWall.LineWidth, 100)
+    self.assertEqual(xWall.LineTransparence, 5)
+    self.assertEqual(hex(xWall.FillColor), '0x23a9d3')
+    self.assertEqual(xWall.FillTransparence, 0)
+
     #change tab "Transparency"
     select_pos(tabcontrol, "2")
     transparency = xDialog.getChild("RBT_TRANS_LINEAR")
@@ -137,6 +161,11 @@ class chartWall(UITestCase):
 
     xOKBtn = xDialog.getChild("ok")
     self.ui_test.close_dialog_through_button(xOKBtn)
+
+    self.assertEqual(xWall.LineWidth, 100)
+    self.assertEqual(xWall.LineTransparence, 5)
+    self.assertEqual(hex(xWall.FillColor), '0x23a9d3')
+    self.assertEqual(xWall.FillTransparence, 51)
 
     #reopen and verify tab "Transparency"
     gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
@@ -156,8 +185,18 @@ class chartWall(UITestCase):
     self.assertEqual(get_state_as_dict(transparency)["Checked"], "true")
     self.assertEqual(get_state_as_dict(transparencyPercent)["Text"], "51%")
 
+    self.assertEqual(xWall.LineWidth, 100)
+    self.assertEqual(xWall.LineTransparence, 5)
+    self.assertEqual(hex(xWall.FillColor), '0x23a9d3')
+    self.assertEqual(xWall.FillTransparence, 51)
+
     xOKBtn = xDialog.getChild("ok")
     self.ui_test.close_dialog_through_button(xOKBtn)
+
+    self.assertEqual(xWall.LineWidth, 100)
+    self.assertEqual(xWall.LineTransparence, 5)
+    self.assertEqual(hex(xWall.FillColor), '0x23a9d3')
+    self.assertEqual(xWall.FillTransparence, 51)
 
     self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
