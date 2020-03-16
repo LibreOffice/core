@@ -73,6 +73,9 @@ public:
     virtual bool RenderAndCacheNativeControl(CompatibleDC& rWhite, CompatibleDC& rBlack, int nX,
                                              int nY, ControlCacheKey& aControlCacheKey) override;
 
+    virtual bool DrawTextLayout(const GenericSalLayout& layout) override;
+    // TODO This method of text drawing can probably be removed once DrawTextLayout()
+    // is fully usable.
     virtual bool UseTextDraw() const override { return true; }
     virtual void PreDrawText() override;
     virtual void PostDrawText() override;

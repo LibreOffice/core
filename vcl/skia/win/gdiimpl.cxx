@@ -13,11 +13,16 @@
 #include <vcl/skia/SkiaHelper.hxx>
 #include <skia/utils.hxx>
 #include <skia/zone.hxx>
+#include <win/winlayout.hxx>
 
 #include <SkColorFilter.h>
 #include <SkPixelRef.h>
+#include <SkTypeface_win.h>
+#include <SkFont.h>
 #include <tools/sk_app/win/WindowContextFactory_win.h>
 #include <tools/sk_app/WindowContext.h>
+
+#include <windows.h>
 
 WinSkiaSalGraphicsImpl::WinSkiaSalGraphicsImpl(WinSalGraphics& rGraphics,
                                                SalGeometryProvider* mpProvider)
@@ -101,6 +106,56 @@ bool WinSkiaSalGraphicsImpl::RenderAndCacheNativeControl(CompatibleDC& rWhite, C
         return true;
     SkiaControlCachePair pair(aControlCacheKey, std::move(image));
     SkiaControlsCache::get().insert(std::move(pair));
+    return true;
+}
+
+bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
+{
+    const WinFontInstance& rWinFont = static_cast<const WinFontInstance&>(rLayout.GetFont());
+    float fHScale = rWinFont.getHScale();
+
+    assert(dynamic_cast<const WinFontInstance*>(&rLayout.GetFont()));
+    const WinFontInstance* pWinFont = static_cast<const WinFontInstance*>(&rLayout.GetFont());
+    const HFONT hLayoutFont = pWinFont->GetHFONT();
+    LOGFONT logFont;
+    if (::GetObjectW(hLayoutFont, sizeof(logFont), &logFont) == 0)
+    {
+        assert(false);
+        return false;
+    }
+    // Wrap the font in Skia's SkTypeFace subclass that's been patched
+    // to use it.
+    sk_sp<SkTypeface> typeface(SkCreateTypefaceFromLOGFONT(logFont, hLayoutFont));
+    // lfHeight actually depends on DPI, so it's not really font height as such,
+    // but for LOGFONT-based typefaces Skia simply sets lfHeight back to this value
+    // directly.
+    // This is probably not necessary since we pass also the HFONT itself, but better
+    // forward that information too, in case SkFont uses it somehow.
+    double fontHeight = logFont.lfHeight;
+    if (fontHeight < 0)
+        fontHeight = -fontHeight;
+    SkFont font(typeface, fontHeight, fHScale, 0);
+    // Skia needs to be explicitly told what kind of antialiasing should be used,
+    // get it from system settings. This does not actually matter for the text
+    // rendering itself, since it will use the font passed to Skia in the code above
+    // (and that one uses DEFAULT_QUALITY, so Windows will select the appropriate AA setting),
+    // but Skia internally chooses the format to which the glyphs will be rendered
+    // based on this setting (subpixel AA requires colors, others do not).
+    BOOL set;
+    if (SystemParametersInfo(SPI_GETFONTSMOOTHING, 0, &set, 0) && set)
+    {
+        UINT set2;
+        if (SystemParametersInfo(SPI_GETFONTSMOOTHINGTYPE, 0, &set2, 0)
+            && set2 == FE_FONTSMOOTHINGCLEARTYPE)
+            font.setEdging(SkFont::Edging::kSubpixelAntiAlias);
+        else
+            font.setEdging(SkFont::Edging::kAntiAlias);
+    }
+    assert(dynamic_cast<SkiaSalGraphicsImpl*>(mWinParent.GetImpl()));
+    SkiaSalGraphicsImpl* impl = static_cast<SkiaSalGraphicsImpl*>(mWinParent.GetImpl());
+    COLORREF color = ::GetTextColor(mWinParent.getHDC());
+    Color salColor(GetRValue(color), GetGValue(color), GetBValue(color));
+    impl->drawGenericLayout(rLayout, salColor, font);
     return true;
 }
 
