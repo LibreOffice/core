@@ -71,7 +71,6 @@ private:
     ScExternalRefLink(const ScExternalRefLink&) = delete;
 
     sal_uInt16  mnFileId;
-    OUString    maFilterName;
     ScDocument* mpDoc;
     bool        mbDoRefresh;
 };
