@@ -73,7 +73,8 @@ dialogs = [
     # {"command": ".uno:AddName", "closeButton": "cancel"},
         # Cancel button tested in uitest/demo_ui/edit.py
         # "add" button tested in uitest/calc_tests/create_range_name.py
-    {"command": ".uno:DefineName", "closeButton": "cancel"},
+    #{"command": ".uno:DefineName", "closeButton": "cancel"},
+        # tested in sc/qa/uitest/calc_tests9/tdf130371.py
     # {"command": ".uno:SheetInsertName", "closeButton": "close"},
         # dialog does not open
     {"command": ".uno:CreateNames", "closeButton": "cancel", "skipTestOK": True},
