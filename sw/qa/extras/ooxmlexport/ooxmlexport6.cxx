@@ -459,9 +459,10 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128752, "tdf128752.docx")
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf119054, "tdf119054.docx")
 {
     xmlDocPtr pXmlDoc = parseExport();
-    // Don't overwrite before and after spacing of Heading2 by table style
-    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr/w:spacing", "before");
-    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr/w:spacing", "after");
+    // Don't overwrite before and after spacing of Heading2 by table style.
+    // Heading2 overrides table style's values from DocDefaults.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr/w:spacing", "before", "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr/w:spacing", "after", "360");
     // Use table style based single line spacing instead of the docDefaults' 254
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr/w:spacing", "line", "240");
 }

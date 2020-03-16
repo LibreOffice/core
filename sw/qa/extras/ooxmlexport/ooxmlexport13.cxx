@@ -347,9 +347,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf118947_tableStyle, "tdf118947_tableStyle.docx")
     xParaEnum = xParaEnumAccess->createEnumeration();
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Notice that this is 8pt font in compatibility mode."), xPara->getString());
-    // Even though not specified, Table-Style distributes the DocDefault font/justification unless overrideTableStyleFontSizeAndJustification.
-    // DocDefault is 8pt.
-    //CPPUNIT_ASSERT_EQUAL_MESSAGE("Compat mode has 8pt font size", 8.f, getProperty<float>(xPara, "CharHeight"));
+    // Even though not specified, Table-Style distributes the properties in DocDefault. DocDefault fontsize is 8pt.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Compat mode has 8pt font size", 8.f, getProperty<float>(getRun(xPara,1), "CharHeight"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Normal has 0pt space below paragraph", sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaBottomMargin"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Table sets 10pt space above paragraph", sal_Int32(353), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Table style sets 0 right margin", sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaRightMargin"));
