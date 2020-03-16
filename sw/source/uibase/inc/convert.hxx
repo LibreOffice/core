@@ -21,6 +21,12 @@
 
 #include <sfx2/basedlgs.hxx>
 #include <tblafmt.hxx>
+#include <tools/link.hxx>
+#include <sal/types.h>
+#include <rtl/ustring.hxx>
+#include <vcl/weld.hxx>
+#include "wrtsh.hxx"
+#include "autoformatpreview.hxx"
 
 class VclContainer;
 class SwTableAutoFormat;
@@ -30,31 +36,55 @@ struct SwInsertTableOptions;
 
 class SwConvertTableDlg : public SfxDialogController
 {
+    OUString const  m_aStrTitle;
+    OUString const  m_aStrLabel;
+    OUString const  m_aStrClose;
+    OUString const  m_aStrDelTitle;
+    OUString const  m_aStrDelMsg;
+    OUString const  m_aStrRenameTitle;
+    OUString const  m_aStrInvalidFormat;
+
+    sal_uInt8       m_nIndex;
+    sal_uInt8       m_nDfltStylePos;
+    bool            m_bCoreDataChanged : 1;
+    bool const      m_bSetAutoFormat : 1;
+
+    std::unique_ptr<SwTableAutoFormatTable> m_xTableTable;
+    std::unique_ptr<weld::Button> m_xAutoFormatBtn;
     std::unique_ptr<weld::RadioButton> m_xTabBtn;
     std::unique_ptr<weld::RadioButton> m_xSemiBtn;
     std::unique_ptr<weld::RadioButton> m_xParaBtn;
     std::unique_ptr<weld::RadioButton> m_xOtherBtn;
     std::unique_ptr<weld::Entry> m_xOtherEd;
     std::unique_ptr<weld::CheckButton> m_xKeepColumn;
-
     std::unique_ptr<weld::Container> m_xOptions;
-
     std::unique_ptr<weld::CheckButton> m_xHeaderCB;
     std::unique_ptr<weld::CheckButton> m_xRepeatHeaderCB;
-
     std::unique_ptr<weld::Container> m_xRepeatRows;
     std::unique_ptr<weld::SpinButton> m_xRepeatHeaderNF;
-
     std::unique_ptr<weld::CheckButton> m_xDontSplitCB;
-    std::unique_ptr<weld::Button> m_xAutoFormatBtn;
-
     std::unique_ptr<SwTableAutoFormat> mxTAutoFormat;
-    SwWrtShell*     pShell;
+    std::unique_ptr<weld::TreeView> m_xLbFormat;
+    std::unique_ptr<weld::CheckButton> m_xBtnNumFormat;
+    std::unique_ptr<weld::CheckButton> m_xBtnBorder;
+    std::unique_ptr<weld::CheckButton> m_xBtnFont;
+    std::unique_ptr<weld::CheckButton> m_xBtnPattern;
+    std::unique_ptr<weld::CheckButton> m_xBtnAlignment;
+    std::unique_ptr<weld::Button> m_xBtnCancel;
+    AutoFormatPreview m_aWndPreview;
+    std::unique_ptr<weld::CustomWeld> m_xWndPreview;
+
+    SwWrtShell* const     pShell;
+
+    void Init(  );
+    void UpdateChecks( const SwTableAutoFormat&, bool bEnableBtn );
 
     DECL_LINK(AutoFormatHdl, weld::Button&, void);
     DECL_LINK(BtnHdl, weld::Button&, void);
     DECL_LINK(CheckBoxHdl, weld::Button&, void);
+    DECL_LINK(CheckHdl, weld::ToggleButton&, void);
     DECL_LINK(ReapeatHeaderCheckBoxHdl, weld::Button&, void);
+    DECL_LINK(SelFormatHdl, weld::TreeView&, void);
 
 public:
     SwConvertTableDlg(SwView& rView, bool bToTable);
@@ -62,6 +92,11 @@ public:
     void GetValues( sal_Unicode& rDelim,
                     SwInsertTableOptions& rInsTableOpts,
                     SwTableAutoFormat const*& prTAFormat );
+
+    virtual ~SwConvertTableDlg() override;
+    virtual short run() override;
+    std::unique_ptr<SwTableAutoFormat> FillAutoFormatOfIndex() const;
+
 };
 
 #endif
