@@ -124,13 +124,6 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
 
     bool bShowValue   = !rDataLabel.mbDeleted && rDataLabel.mobShowVal.get( !bMSO2007Doc );
     bool bShowPercent = !rDataLabel.mbDeleted && rDataLabel.mobShowPercent.get( !bMSO2007Doc ) && (rTypeInfo.meTypeCategory == TYPECATEGORY_PIE);
-    if( bShowValue &&
-        !bShowPercent && rTypeInfo.meTypeCategory == TYPECATEGORY_PIE &&
-        rDataLabel.maNumberFormat.maFormatCode.indexOf('%') >= 0 )
-    {
-        bShowValue = false;
-        bShowPercent = true;
-    }
     bool bShowCateg   = !rDataLabel.mbDeleted && rDataLabel.mobShowCatName.get( !bMSO2007Doc );
     bool bShowSymbol  = !rDataLabel.mbDeleted && rDataLabel.mobShowLegendKey.get( !bMSO2007Doc );
 
