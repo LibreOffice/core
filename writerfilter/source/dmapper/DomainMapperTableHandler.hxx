@@ -42,8 +42,8 @@ struct TableInfo;
 /// A horizontally merged cell is in fact a range of cells till its merge is performed.
 struct HorizontallyMergedCell
 {
-    sal_Int32 const m_nFirstRow;
-    sal_Int32 const m_nFirstCol;
+    sal_Int32 m_nFirstRow;
+    sal_Int32 m_nFirstCol;
     sal_Int32 m_nLastRow;
     sal_Int32 m_nLastCol;
     HorizontallyMergedCell(sal_Int32 nFirstRow, sal_Int32 nFirstCol)

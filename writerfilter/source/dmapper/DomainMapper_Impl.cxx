@@ -170,7 +170,7 @@ namespace {
 struct FieldConversion
 {
     const char*     cFieldServiceName;
-    FieldId const   eFieldId;
+    FieldId         eFieldId;
 };
 
 }
@@ -3038,8 +3038,8 @@ static sal_Int16 lcl_ParseNumberingType( const OUString& rCommand )
         //todo: might make sense to hash this list, too
         struct NumberingPairs
         {
-            const char*     cWordName;
-            sal_Int16 const nType;
+            const sal_Char* cWordName;
+            sal_Int16 nType;
         };
         static const NumberingPairs aNumberingPairs[] =
         {
@@ -4071,9 +4071,9 @@ void DomainMapper_Impl::handleAuthor
     constexpr sal_uInt8 SET_DATE = 0x04;
     struct DocPropertyMap
     {
-        const char*     pDocPropertyName;
-        const char*     pServiceName;
-        sal_uInt8 const nFlags;
+        const sal_Char* pDocPropertyName;
+        const sal_Char* pServiceName;
+        sal_uInt8       nFlags;
     };
     static const DocPropertyMap aDocProperties[] =
     {

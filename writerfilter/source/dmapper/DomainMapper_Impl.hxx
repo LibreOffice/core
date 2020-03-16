@@ -132,7 +132,7 @@ enum class SkipFootnoteSeparator
  */
 class HeaderFooterContext
 {
-    bool const m_bTextInserted;
+    bool      m_bTextInserted;
     sal_Int32 m_nTableDepth;
 
 public:
@@ -283,7 +283,7 @@ struct DeletableTabStop : public css::style::TabStop
 /// helper to remember bookmark start position
 struct BookmarkInsertPosition
 {
-    bool const                                                       m_bIsStartOfText;
+    bool                                                             m_bIsStartOfText;
     OUString                                                         m_sBookmarkName;
     css::uno::Reference<css::text::XTextRange> m_xTextRange;
     BookmarkInsertPosition(bool bIsStartOfText, const OUString& rName, css::uno::Reference<css::text::XTextRange> const& xTextRange):
@@ -295,8 +295,8 @@ struct BookmarkInsertPosition
 
 struct PermInsertPosition
 {
-    bool const        m_bIsStartOfText;
-    sal_Int32 const   m_Id;
+    bool        m_bIsStartOfText;
+    sal_Int32   m_Id;
     OUString    m_Ed;
     OUString    m_EdGrp;
 
@@ -379,9 +379,9 @@ struct FloatingTableInfo
 {
     css::uno::Reference<css::text::XTextRange> m_xStart;
     css::uno::Reference<css::text::XTextRange> m_xEnd;
-    css::uno::Sequence<css::beans::PropertyValue> const m_aFrameProperties;
-    sal_Int32 const m_nTableWidth;
-    sal_Int32 const m_nTableWidthType;
+    css::uno::Sequence<css::beans::PropertyValue> m_aFrameProperties;
+    sal_Int32 m_nTableWidth;
+    sal_Int32 m_nTableWidthType;
     /// Break type of the section that contains this table.
     sal_Int32 m_nBreakType = -1;
 
@@ -431,7 +431,7 @@ public:
     typedef std::map < sal_Int32, PermInsertPosition >    PermMap_t;
 
 private:
-    SourceDocumentType const                                                        m_eDocumentType;
+    SourceDocumentType                                                              m_eDocumentType;
     DomainMapper&                                                                   m_rDMapper;
     OUString m_aBaseUrl;
     css::uno::Reference<css::text::XTextDocument> m_xTextDocument;
@@ -582,8 +582,8 @@ private:
 public:
     css::uno::Reference<css::text::XTextRange> m_xInsertTextRange;
 private:
-    bool const m_bIsNewDoc;
-    bool const m_bIsReadGlossaries;
+    bool m_bIsNewDoc;
+    bool m_bIsReadGlossaries;
 public:
     DomainMapper_Impl(
             DomainMapper& rDMapper,

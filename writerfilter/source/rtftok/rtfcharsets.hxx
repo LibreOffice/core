@@ -17,8 +17,8 @@ namespace rtftok
 /// RTF legacy charsets
 struct RTFEncoding
 {
-    int const charset;
-    int const codepage;
+    int charset;
+    int codepage;
 };
 extern RTFEncoding const aRTFEncodings[];
 extern int nRTFEncodings;

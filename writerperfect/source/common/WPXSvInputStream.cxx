@@ -104,13 +104,13 @@ struct OLEStreamData
       * This is not @c OUString, because we need to be able to
       * produce const char* from it.
       */
-    OString const name;
+    OString name;
     /** librevenge name of the stream.
       *
       * This is not @c OUString, because we need to be able to
       * produce const char* from it.
       */
-    OString const RVNGname;
+    OString RVNGname;
 };
 
 typedef std::unordered_map<OUString, std::size_t> NameMap_t;
@@ -278,7 +278,7 @@ struct ZipStreamData
       * This is not @c OUString, because we need to be able to
       * produce const char* from it.
       */
-    OString const aName;
+    OString aName;
 };
 
 /** Representation of a Zip storage.

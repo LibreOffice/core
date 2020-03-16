@@ -81,9 +81,9 @@ private:
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
-    Stream * const mpStream;
-    OOXMLDocumentImpl* const mpDocument;
-    sal_Int32 const mnXNoteId;
+    Stream * mpStream;
+    OOXMLDocumentImpl* mpDocument;
+    sal_Int32 mnXNoteId;
     mutable rtl::Reference<OOXMLFastContextHandler> mxContextHandler;
     rtl::Reference<OOXMLFastContextHandler> const & getContextHandler() const;
 };

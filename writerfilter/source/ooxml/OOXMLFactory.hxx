@@ -55,9 +55,9 @@ enum class ResourceType {
 
 struct AttributeInfo
 {
-    Token_t const m_nToken;
-    ResourceType const m_nResource;
-    Id const m_nRef;
+    Token_t m_nToken;
+    ResourceType m_nResource;
+    Id m_nRef;
 };
 
 class OOXMLFactory_ns : public virtual SvRefBase {

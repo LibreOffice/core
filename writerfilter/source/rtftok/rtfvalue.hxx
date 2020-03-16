@@ -77,14 +77,14 @@ public:
     RTFValue& operator=(RTFValue const& rOther) = delete;
 
 private:
-    int const m_nValue = 0;
+    int m_nValue = 0;
     OUString m_sValue;
     tools::SvRef<RTFSprms> m_pAttributes;
     tools::SvRef<RTFSprms> m_pSprms;
     css::uno::Reference<css::drawing::XShape> m_xShape;
     css::uno::Reference<css::io::XInputStream> m_xStream;
     css::uno::Reference<css::embed::XEmbeddedObject> m_xObject;
-    bool const m_bForceString = false;
+    bool m_bForceString = false;
     tools::SvRef<RTFShape> m_pShape;
     tools::SvRef<RTFPicture> m_pPicture;
 };
