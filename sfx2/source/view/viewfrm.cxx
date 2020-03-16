@@ -183,13 +183,15 @@ private:
     std::unique_ptr<weld::MessageDialog> m_xQueryBox;
 public:
     SfxQueryOpenAsTemplate(weld::Window* pParent, bool bAllowIgnoreLock)
-        : m_xQueryBox(Application::CreateMessageDialog(pParent, VclMessageType::Question, VclButtonsType::NONE,
-                      SfxResId(bAllowIgnoreLock ? STR_QUERY_OPENASTEMPLATE_ALLOW_IGNORE : STR_QUERY_OPENASTEMPLATE)))
+        : m_xQueryBox(Application::CreateMessageDialog(pParent, VclMessageType::Question, VclButtonsType::NONE, ""))
     {
         m_xQueryBox->add_button(SfxResId(STR_QUERY_OPENASTEMPLATE_OPENCOPY_BTN), RET_YES);
+        bAllowIgnoreLock
+            = bAllowIgnoreLock && officecfg::Office::Common::Misc::AllowOverrideLocking::get();
         if (bAllowIgnoreLock)
             m_xQueryBox->add_button(SfxResId(STR_QUERY_OPENASTEMPLATE_OPEN_BTN), RET_IGNORE);
         m_xQueryBox->add_button(Button::GetStandardText( StandardButtonType::Cancel ), RET_CANCEL);
+        m_xQueryBox->set_primary_text(SfxResId(bAllowIgnoreLock ? STR_QUERY_OPENASTEMPLATE_ALLOW_IGNORE : STR_QUERY_OPENASTEMPLATE));
         m_xQueryBox->set_default_response(RET_YES);
     }
     short run() { return m_xQueryBox->run(); }
