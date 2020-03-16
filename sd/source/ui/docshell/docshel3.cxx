@@ -360,6 +360,27 @@ void DrawDocShell::Execute( SfxRequest& rReq )
             Broadcast(SfxHint(SfxHintId::LanguageChanged));
         }
         break;
+        case SID_SPELLCHECK_IGNORE_ALL:
+        {
+            SdrView* pSdrView = mpViewShell->GetDrawView();
+            if (!pSdrView)
+                return;
+
+            EditView& rEditView = pSdrView->GetTextEditOutlinerView()->GetEditView();
+            OUString sIgnoreText;
+            const SfxStringItem* pItem2 = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+            if (pItem2)
+                sIgnoreText = pItem2->GetValue();
+
+            const OUString sSpellingType("Spelling");
+            if(sIgnoreText == sSpellingType)
+            {
+                ESelection aOldSel = rEditView.GetSelection();
+                rEditView.SpellIgnoreWord();
+                rEditView.SetSelection( aOldSel );
+            }
+        }
+        break;
 
         case SID_NOTEBOOKBAR:
         {
