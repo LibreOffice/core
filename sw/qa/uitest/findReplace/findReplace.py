@@ -126,7 +126,7 @@ class findReplace(UITestCase):
         self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
         xDialog = self.xUITest.getTopFocusWindow()
         searchterm = xDialog.getChild("searchterm")
-        searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"T(est|other)\>"}))   #find
+        searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"T(est|other)\\>"}))   #find
         replaceterm = xDialog.getChild("replaceterm")
         replaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":"replaced$1"})) #replace
         regexp = xDialog.getChild("regexp")
