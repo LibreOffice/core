@@ -250,6 +250,9 @@ SfxItemSet& ScStyleSheet::GetItemSet()
 
 bool ScStyleSheet::IsUsed() const
 {
+    if ( GetFamily() == SfxStyleFamily::Page ) // Hack to make custom page styles deletable again
+        return false;
+
     if ( GetFamily() == SfxStyleFamily::Para )
     {
         // Always query the document to let it decide if a rescan is necessary,
