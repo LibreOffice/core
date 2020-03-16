@@ -79,13 +79,14 @@ handleLockedDocumentRequest_(
     std::vector< OUString > aArguments;
     aArguments.push_back( aDocumentURL );
 
+    bool bAllowOverride = xRetry.is() && officecfg::Office::Common::Misc::AllowOverrideLocking::get();
+
     sal_Int32 nResult = RET_CANCEL;
     if ( nMode == UUI_DOC_LOAD_LOCK )
     {
         aArguments.push_back( !aInfo.isEmpty()
                               ? aInfo
                               : Translate::get( STR_UNKNOWNUSER, aResLocale) );
-        bool bAllowOverride = xRetry.is() && officecfg::Office::Common::Misc::AllowOverrideLocking::get();
         aArguments.push_back( bAllowOverride
                               ? Translate::get( STR_OPENLOCKED_ALLOWIGNORE_MSG, aResLocale )
                               : "" );
@@ -93,7 +94,7 @@ handleLockedDocumentRequest_(
         aMessage = UUIInteractionHelper::replaceMessageWithArguments(
             aMessage, aArguments );
 
-        OpenLockedQueryBox aDialog(pParent, aResLocale, aMessage, xRetry.is());
+        OpenLockedQueryBox aDialog(pParent, aResLocale, aMessage, bAllowOverride);
         nResult = aDialog.run();
     }
     else if ( nMode == UUI_DOC_SAVE_LOCK )
@@ -102,12 +103,12 @@ handleLockedDocumentRequest_(
                               ? aInfo
                               : Translate::get( STR_UNKNOWNUSER,
                                            aResLocale ) );
-        aMessage = Translate::get(xRetry.is() ? STR_OVERWRITE_IGNORELOCK_MSG : STR_TRYLATER_MSG,
+        aMessage = Translate::get(bAllowOverride ? STR_OVERWRITE_IGNORELOCK_MSG : STR_TRYLATER_MSG,
             aResLocale);
         aMessage = UUIInteractionHelper::replaceMessageWithArguments(
             aMessage, aArguments );
 
-        TryLaterQueryBox aDialog(pParent, aResLocale, aMessage, xRetry.is());
+        TryLaterQueryBox aDialog(pParent, aResLocale, aMessage, bAllowOverride);
         nResult = aDialog.run();
     }
     else if ( nMode == UUI_DOC_OWN_LOAD_LOCK ||
