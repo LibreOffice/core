@@ -105,6 +105,8 @@ using namespace ::com::sun::star;
 #include <memory>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <helpids.h>
+#include <editeng/eeitem.hxx>
+#include <editeng/langitem.hxx>
 
 #include <svx/xdef.hxx>
 
@@ -1166,9 +1168,14 @@ void ScDocShell::Execute( SfxRequest& rReq )
             if ( !aLangText.isEmpty() )
             {
                 LanguageType eLang, eLatin, eCjk, eCtl;
+                const OUString aSelectionLangPrefix("Current_");
+                const OUString aParagraphLangPrefix("Paragraph_");
                 const OUString aDocLangPrefix("Default_");
                 const OUString aNoLang("LANGUAGE_NONE");
                 const OUString aResetLang("RESET_LANGUAGES");
+
+                bool bSelection = false;
+                bool bParagraph = false;
 
                 ScDocument& rDoc = GetDocument();
                 rDoc.GetLanguage( eLatin, eCjk, eCtl );
@@ -1211,8 +1218,52 @@ void ScDocShell::Execute( SfxRequest& rReq )
                         }
                     }
                 }
+                else if (-1 != (nPos = aLangText.indexOf( aSelectionLangPrefix )))
+                {
+                    bSelection = true;
+                    aLangText = aLangText.replaceAt( nPos, aSelectionLangPrefix.getLength(), "" );
+                }
+                else if (-1 != (nPos = aLangText.indexOf( aParagraphLangPrefix )))
+                {
+                    bParagraph = true;
+                    aLangText = aLangText.replaceAt( nPos, aParagraphLangPrefix.getLength(), "" );
+                }
 
-                if ( eLang != eLatin )
+                if (bSelection || bParagraph)
+                {
+                    ScViewData* pViewData = GetViewData();
+                    if (!pViewData)
+                        return;
+
+                    EditView* pEditView = pViewData->GetEditView(pViewData->GetActivePart());
+                    if (!pEditView)
+                        return;
+
+                    const LanguageType nLangToUse = SvtLanguageTable::GetLanguageType( aLangText );
+                    SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( nLangToUse );
+
+                    SfxItemSet aAttrs = pEditView->GetEditEngine()->GetEmptyItemSet();
+                    if (nScriptType == SvtScriptType::LATIN)
+                        aAttrs.Put( SvxLanguageItem( nLangToUse, EE_CHAR_LANGUAGE ) );
+                    if (nScriptType == SvtScriptType::COMPLEX)
+                        aAttrs.Put( SvxLanguageItem( nLangToUse, EE_CHAR_LANGUAGE_CTL ) );
+                    if (nScriptType == SvtScriptType::ASIAN)
+                        aAttrs.Put( SvxLanguageItem( nLangToUse, EE_CHAR_LANGUAGE_CJK ) );
+                    ESelection aOldSel;
+                    if (bParagraph)
+                    {
+                        ESelection aSel = pEditView->GetSelection();
+                        aOldSel = aSel;
+                        aSel.nStartPos = 0;
+                        aSel.nEndPos = EE_TEXTPOS_ALL;
+                        pEditView->SetSelection( aSel );
+                    }
+
+                    pEditView->SetAttribs( aAttrs );
+                    if (bParagraph)
+                        pEditView->SetSelection( aOldSel );
+                }
+                else if ( eLang != eLatin )
                 {
                     if ( ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell() )
                     {
