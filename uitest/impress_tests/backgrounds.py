@@ -18,13 +18,15 @@ class ImpressBackgrounds(UITestCase):
         if btn == 'btnnone':
             self.assertEqual(document.DrawPages.getByIndex(0).Background, None)
         elif btn == 'btncolor':
-            self.assertEqual(document.DrawPages.getByIndex(0).Background.FillColor, 7512015)
-            self.assertEqual(document.DrawPages.getByIndex(0).Background.FillColor, 7512015)
+            self.assertEqual(
+              hex(document.DrawPages.getByIndex(0).Background.FillColor), '0x729fcf')
+            self.assertEqual(
+              hex(document.DrawPages.getByIndex(0).Background.FillColor), '0x729fcf')
         elif btn == 'btngradient':
             self.assertEqual(
               document.DrawPages.getByIndex(0).Background.FillGradient.Style, LINEAR)
             self.assertEqual(
-              document.DrawPages.getByIndex(0).Background.FillGradient.StartColor, 14543051)
+              hex(document.DrawPages.getByIndex(0).Background.FillGradient.StartColor), '0xdde8cb')
             self.assertEqual(
               document.DrawPages.getByIndex(0).Background.FillGradient.Angle, 300)
             self.assertEqual(
