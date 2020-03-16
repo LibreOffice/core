@@ -108,14 +108,10 @@ static int getNumberFormat(int nParam)
 
 namespace rtftok
 {
-RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
+bool RTFDocumentImpl::dispatchTableSprmValue(RTFKeyword nKeyword, int nParam)
 {
-    setNeedSect(true);
-    checkUnicode(/*bUnicode =*/nKeyword != RTF_U, /*bHex =*/true);
-    RTFSkipDestination aSkip(*this);
     int nSprm = 0;
     tools::SvRef<RTFValue> pIntValue(new RTFValue(nParam));
-    // Trivial table sprms.
     switch (nKeyword)
     {
         case RTF_LEVELJC:
@@ -157,9 +153,17 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     if (nSprm > 0)
     {
         m_aStates.top().getTableSprms().set(nSprm, pIntValue);
-        return RTFError::OK;
+        return true;
     }
-    // Trivial character sprms.
+
+    return false;
+}
+
+bool RTFDocumentImpl::dispatchCharacterSprmValue(RTFKeyword nKeyword, int nParam)
+{
+    int nSprm = 0;
+    tools::SvRef<RTFValue> pIntValue(new RTFValue(nParam));
+
     switch (nKeyword)
     {
         case RTF_FS:
@@ -196,9 +200,16 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     if (nSprm > 0)
     {
         m_aStates.top().getCharacterSprms().set(nSprm, pIntValue);
-        return RTFError::OK;
+        return true;
     }
-    // Trivial character attributes.
+
+    return false;
+}
+
+bool RTFDocumentImpl::dispatchCharacterAttributeValue(RTFKeyword nKeyword, int nParam)
+{
+    int nSprm = 0;
+
     switch (nKeyword)
     {
         case RTF_LANG:
@@ -238,9 +249,17 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         if (nKeyword == RTF_LANG && m_bNeedPap)
             putNestedAttribute(m_aStates.top().getParagraphSprms(), NS_ooxml::LN_EG_RPrBase_lang,
                                nSprm, pValue);
-        return RTFError::OK;
+        return true;
     }
-    // Trivial paragraph sprms.
+
+    return false;
+}
+
+bool RTFDocumentImpl::dispatchParagraphSprmValue(RTFKeyword nKeyword, int nParam)
+{
+    int nSprm = 0;
+    tools::SvRef<RTFValue> pIntValue(new RTFValue(nParam));
+
     switch (nKeyword)
     {
         case RTF_ITAP:
@@ -269,10 +288,16 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             dispatchFlag(RTF_INTBL); // sets newly pushed buffer as current
             assert(m_aStates.top().getCurrentBuffer() == &m_aTableBufferStack.back());
         }
-        return RTFError::OK;
+        return true;
     }
 
-    // Info group.
+    return false;
+}
+
+bool RTFDocumentImpl::dispatchInfoValue(RTFKeyword nKeyword, int nParam)
+{
+    int nSprm = 0;
+
     switch (nKeyword)
     {
         case RTF_YR:
@@ -308,10 +333,12 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         default:
             break;
     }
-    if (nSprm > 0)
-        return RTFError::OK;
 
-    // Frame size / position.
+    return nSprm > 0;
+}
+
+bool RTFDocumentImpl::dispatchFrameValue(RTFKeyword nKeyword, int nParam)
+{
     Id nId = 0;
     switch (nKeyword)
     {
@@ -344,6 +371,386 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         if (m_aStates.top().getCurrentBuffer() != &m_aTableBufferStack.back())
             m_aStates.top().getFrame().setSprm(nId, nParam);
 
+        return true;
+    }
+
+    return false;
+}
+
+bool RTFDocumentImpl::dispatchTableValue(RTFKeyword nKeyword, int nParam)
+{
+    int nSprm = 0;
+    tools::SvRef<RTFValue> pIntValue(new RTFValue(nParam));
+
+    switch (nKeyword)
+    {
+        case RTF_CELLX:
+        {
+            int& rCurrentCellX(
+                (Destination::NESTEDTABLEPROPERTIES == m_aStates.top().getDestination())
+                    ? m_nNestedCurrentCellX
+                    : m_nTopLevelCurrentCellX);
+            int nCellX = nParam - rCurrentCellX;
+            const int COL_DFLT_WIDTH
+                = 41; // sw/source/filter/inc/wrtswtbl.hxx, minimal possible width of cells.
+            if (!nCellX)
+                nCellX = COL_DFLT_WIDTH;
+
+            // If there is a negative left margin, then the first cellx is relative to that.
+            RTFValue::Pointer_t pTblInd
+                = m_aStates.top().getTableRowSprms().find(NS_ooxml::LN_CT_TblPrBase_tblInd);
+            if (rCurrentCellX == 0 && pTblInd.get())
+            {
+                RTFValue::Pointer_t pWidth
+                    = pTblInd->getAttributes().find(NS_ooxml::LN_CT_TblWidth_w);
+                if (pWidth.get() && pWidth->getInt() < 0)
+                    nCellX = -1 * (pWidth->getInt() - nParam);
+            }
+
+            rCurrentCellX = nParam;
+            auto pXValue = new RTFValue(nCellX);
+            m_aStates.top().getTableRowSprms().set(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue,
+                                                   RTFOverwrite::NO_APPEND);
+            if (Destination::NESTEDTABLEPROPERTIES == m_aStates.top().getDestination())
+            {
+                m_nNestedCells++;
+                // Push cell properties.
+                m_aNestedTableCellsSprms.push_back(m_aStates.top().getTableCellSprms());
+                m_aNestedTableCellsAttributes.push_back(m_aStates.top().getTableCellAttributes());
+            }
+            else
+            {
+                m_nTopLevelCells++;
+                // Push cell properties.
+                m_aTopLevelTableCellsSprms.push_back(m_aStates.top().getTableCellSprms());
+                m_aTopLevelTableCellsAttributes.push_back(m_aStates.top().getTableCellAttributes());
+            }
+
+            m_aStates.top().getTableCellSprms() = m_aDefaultState.getTableCellSprms();
+            m_aStates.top().getTableCellAttributes() = m_aDefaultState.getTableCellAttributes();
+            // We assume text after a row definition always belongs to the table, to handle text before the real INTBL token
+            dispatchFlag(RTF_INTBL);
+            if (!m_nCellxMax)
+            {
+                // Wasn't in table, but now is -> tblStart.
+                RTFSprms aAttributes;
+                RTFSprms aSprms;
+                aSprms.set(NS_ooxml::LN_tblStart, new RTFValue(1));
+                writerfilter::Reference<Properties>::Pointer_t pProperties
+                    = new RTFReferenceProperties(aAttributes, aSprms);
+                Mapper().props(pProperties);
+            }
+            m_nCellxMax = std::max(m_nCellxMax, nParam);
+            return true;
+        }
+        break;
+        case RTF_TRRH:
+        {
+            OUString hRule("auto");
+            if (nParam < 0)
+            {
+                tools::SvRef<RTFValue> pAbsValue(new RTFValue(-nParam));
+                std::swap(pIntValue, pAbsValue);
+
+                hRule = "exact";
+            }
+            else if (nParam > 0)
+                hRule = "atLeast";
+
+            putNestedAttribute(m_aStates.top().getTableRowSprms(),
+                               NS_ooxml::LN_CT_TrPrBase_trHeight, NS_ooxml::LN_CT_Height_val,
+                               pIntValue);
+
+            auto pHRule = new RTFValue(hRule);
+            putNestedAttribute(m_aStates.top().getTableRowSprms(),
+                               NS_ooxml::LN_CT_TrPrBase_trHeight, NS_ooxml::LN_CT_Height_hRule,
+                               pHRule);
+            return true;
+        }
+        break;
+        case RTF_TRLEFT:
+        {
+            // the value is in twips
+            putNestedAttribute(m_aStates.top().getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblInd,
+                               NS_ooxml::LN_CT_TblWidth_type,
+                               new RTFValue(NS_ooxml::LN_Value_ST_TblWidth_dxa));
+            putNestedAttribute(m_aStates.top().getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblInd,
+                               NS_ooxml::LN_CT_TblWidth_w, new RTFValue(nParam));
+            auto const aDestination = m_aStates.top().getDestination();
+            int& rCurrentTRLeft((Destination::NESTEDTABLEPROPERTIES == aDestination)
+                                    ? m_nNestedTRLeft
+                                    : m_nTopLevelTRLeft);
+            int& rCurrentCellX((Destination::NESTEDTABLEPROPERTIES == aDestination)
+                                   ? m_nNestedCurrentCellX
+                                   : m_nTopLevelCurrentCellX);
+            rCurrentTRLeft = rCurrentCellX = nParam;
+            return true;
+        }
+        break;
+        case RTF_CLSHDNG:
+        {
+            int nValue = -1;
+            switch (nParam)
+            {
+                case 500:
+                    nValue = NS_ooxml::LN_Value_ST_Shd_pct5;
+                    break;
+                case 1000:
+                    nValue = NS_ooxml::LN_Value_ST_Shd_pct10;
+                    break;
+                case 1200:
+                    nValue = NS_ooxml::LN_Value_ST_Shd_pct12;
+                    break;
+                case 1500:
+                    nValue = NS_ooxml::LN_Value_ST_Shd_pct15;
+                    break;
+                case 2000:
+                    nValue = NS_ooxml::LN_Value_ST_Shd_pct20;
+                    break;
+                case 2500:
+                    nValue = NS_ooxml::LN_Value_ST_Shd_pct25;
+                    break;
+                case 3000:
+                    nValue = NS_ooxml::LN_Value_ST_Shd_pct30;
+                    break;
+                case 3500:
+                    nValue = NS_ooxml::LN_Value_ST_Shd_pct35;
+                    break;
+                case 3700:
+                    nValue = NS_ooxml::LN_Value_ST_Shd_pct37;
+                    break;
+                case 4000:
+                    nValue = NS_ooxml::LN_Value_ST_Shd_pct40;
+                    break;
+                case 4500:
+                    nValue = NS_ooxml::LN_Value_ST_Shd_pct45;
+                    break;
+                case 5000:
+                    nValue = NS_ooxml::LN_Value_ST_Shd_pct50;
+                    break;
+                case 5500:
+                    nValue = NS_ooxml::LN_Value_ST_Shd_pct55;
+                    break;
+                case 6000:
+                    nValue = NS_ooxml::LN_Value_ST_Shd_pct60;
+                    break;
+                case 6200:
+                    nValue = NS_ooxml::LN_Value_ST_Shd_pct62;
+                    break;
+                case 6500:
+                    nValue = NS_ooxml::LN_Value_ST_Shd_pct65;
+                    break;
+                case 7000:
+                    nValue = NS_ooxml::LN_Value_ST_Shd_pct70;
+                    break;
+                case 7500:
+                    nValue = NS_ooxml::LN_Value_ST_Shd_pct75;
+                    break;
+                case 8000:
+                    nValue = NS_ooxml::LN_Value_ST_Shd_pct80;
+                    break;
+                case 8500:
+                    nValue = NS_ooxml::LN_Value_ST_Shd_pct85;
+                    break;
+                case 8700:
+                    nValue = NS_ooxml::LN_Value_ST_Shd_pct87;
+                    break;
+                case 9000:
+                    nValue = NS_ooxml::LN_Value_ST_Shd_pct90;
+                    break;
+                case 9500:
+                    nValue = NS_ooxml::LN_Value_ST_Shd_pct95;
+                    break;
+                default:
+                    break;
+            }
+            if (nValue != -1)
+                putNestedAttribute(m_aStates.top().getTableCellSprms(),
+                                   NS_ooxml::LN_CT_TcPrBase_shd, NS_ooxml::LN_CT_Shd_val,
+                                   new RTFValue(nValue));
+            return true;
+        }
+        break;
+        case RTF_CLPADB:
+        case RTF_CLPADL:
+        case RTF_CLPADR:
+        case RTF_CLPADT:
+        {
+            RTFSprms aAttributes;
+            aAttributes.set(NS_ooxml::LN_CT_TblWidth_type,
+                            new RTFValue(NS_ooxml::LN_Value_ST_TblWidth_dxa));
+            aAttributes.set(NS_ooxml::LN_CT_TblWidth_w, new RTFValue(nParam));
+            // Top and left is swapped, that's what Word does.
+            switch (nKeyword)
+            {
+                case RTF_CLPADB:
+                    nSprm = NS_ooxml::LN_CT_TcMar_bottom;
+                    break;
+                case RTF_CLPADL:
+                    nSprm = NS_ooxml::LN_CT_TcMar_top;
+                    break;
+                case RTF_CLPADR:
+                    nSprm = NS_ooxml::LN_CT_TcMar_right;
+                    break;
+                case RTF_CLPADT:
+                    nSprm = NS_ooxml::LN_CT_TcMar_left;
+                    break;
+                default:
+                    break;
+            }
+            putNestedSprm(m_aStates.top().getTableCellSprms(), NS_ooxml::LN_CT_TcPrBase_tcMar,
+                          nSprm, new RTFValue(aAttributes));
+            return true;
+        }
+        break;
+        case RTF_TRPADDFB:
+        case RTF_TRPADDFL:
+        case RTF_TRPADDFR:
+        case RTF_TRPADDFT:
+        {
+            RTFSprms aAttributes;
+            switch (nParam)
+            {
+                case 3:
+                    aAttributes.set(NS_ooxml::LN_CT_TblWidth_type,
+                                    new RTFValue(NS_ooxml::LN_Value_ST_TblWidth_dxa));
+                    break;
+            }
+            switch (nKeyword)
+            {
+                case RTF_TRPADDFB:
+                    nSprm = NS_ooxml::LN_CT_TcMar_bottom;
+                    break;
+                case RTF_TRPADDFL:
+                    nSprm = NS_ooxml::LN_CT_TcMar_left;
+                    break;
+                case RTF_TRPADDFR:
+                    nSprm = NS_ooxml::LN_CT_TcMar_right;
+                    break;
+                case RTF_TRPADDFT:
+                    nSprm = NS_ooxml::LN_CT_TcMar_top;
+                    break;
+                default:
+                    break;
+            }
+            putNestedAttribute(m_aStates.top().getTableCellSprms(), NS_ooxml::LN_CT_TcPrBase_tcMar,
+                               nSprm, new RTFValue(aAttributes));
+            putNestedAttribute(m_aDefaultState.getTableCellSprms(), NS_ooxml::LN_CT_TcPrBase_tcMar,
+                               nSprm, new RTFValue(aAttributes));
+            return true;
+        }
+        break;
+        case RTF_TRPADDB:
+        case RTF_TRPADDL:
+        case RTF_TRPADDR:
+        case RTF_TRPADDT:
+        {
+            RTFSprms aAttributes;
+            aAttributes.set(NS_ooxml::LN_CT_TblWidth_w, new RTFValue(nParam));
+            switch (nKeyword)
+            {
+                case RTF_TRPADDB:
+                    nSprm = NS_ooxml::LN_CT_TcMar_bottom;
+                    break;
+                case RTF_TRPADDL:
+                    nSprm = NS_ooxml::LN_CT_TcMar_left;
+                    break;
+                case RTF_TRPADDR:
+                    nSprm = NS_ooxml::LN_CT_TcMar_right;
+                    break;
+                case RTF_TRPADDT:
+                    nSprm = NS_ooxml::LN_CT_TcMar_top;
+                    break;
+                default:
+                    break;
+            }
+            putNestedSprm(m_aStates.top().getTableCellSprms(), NS_ooxml::LN_CT_TcPrBase_tcMar,
+                          nSprm, new RTFValue(aAttributes));
+            putNestedSprm(m_aDefaultState.getTableCellSprms(), NS_ooxml::LN_CT_TcPrBase_tcMar,
+                          nSprm, new RTFValue(aAttributes));
+            return true;
+        }
+        break;
+        case RTF_TRGAPH:
+            // Half of the space between the cells of a table row: default left/right table cell margin.
+            if (nParam > 0)
+            {
+                RTFSprms aAttributes;
+                aAttributes.set(NS_ooxml::LN_CT_TblWidth_type,
+                                new RTFValue(NS_ooxml::LN_Value_ST_TblWidth_dxa));
+                aAttributes.set(NS_ooxml::LN_CT_TblWidth_w, pIntValue);
+                putNestedSprm(m_aStates.top().getTableRowSprms(),
+                              NS_ooxml::LN_CT_TblPrBase_tblCellMar, NS_ooxml::LN_CT_TblCellMar_left,
+                              new RTFValue(aAttributes));
+                putNestedSprm(m_aStates.top().getTableRowSprms(),
+                              NS_ooxml::LN_CT_TblPrBase_tblCellMar,
+                              NS_ooxml::LN_CT_TblCellMar_right, new RTFValue(aAttributes));
+            }
+            return true;
+            break;
+        case RTF_TRFTSWIDTH:
+            putNestedAttribute(m_aStates.top().getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblW,
+                               NS_ooxml::LN_CT_TblWidth_type, pIntValue);
+            return true;
+            break;
+        case RTF_TRWWIDTH:
+            putNestedAttribute(m_aStates.top().getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblW,
+                               NS_ooxml::LN_CT_TblWidth_w, pIntValue);
+            return true;
+            break;
+        default:
+            break;
+    }
+
+    return false;
+}
+
+RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
+{
+    setNeedSect(true);
+    checkUnicode(/*bUnicode =*/nKeyword != RTF_U, /*bHex =*/true);
+    RTFSkipDestination aSkip(*this);
+    int nSprm = 0;
+    tools::SvRef<RTFValue> pIntValue(new RTFValue(nParam));
+    // Trivial table sprms.
+    if (dispatchTableSprmValue(nKeyword, nParam))
+    {
+        return RTFError::OK;
+    }
+
+    // Trivial character sprms.
+    if (dispatchCharacterSprmValue(nKeyword, nParam))
+    {
+        return RTFError::OK;
+    }
+
+    // Trivial character attributes.
+    if (dispatchCharacterAttributeValue(nKeyword, nParam))
+    {
+        return RTFError::OK;
+    }
+
+    // Trivial paragraph sprms.
+    if (dispatchParagraphSprmValue(nKeyword, nParam))
+    {
+        return RTFError::OK;
+    }
+
+    // Info group.
+    if (dispatchInfoValue(nKeyword, nParam))
+    {
+        return RTFError::OK;
+    }
+
+    // Frame size / position.
+    if (dispatchFrameValue(nKeyword, nParam))
+    {
+        return RTFError::OK;
+    }
+
+    // Table-related values.
+    if (dispatchTableValue(nKeyword, nParam))
+    {
         return RTFError::OK;
     }
 
@@ -601,7 +1008,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             auto pValue = new RTFValue(int(true));
             m_aStates.top().getCharacterAttributes().set(NS_ooxml::LN_CT_EastAsianLayout_combine,
                                                          pValue);
-            nId = 0;
+            Id nId = 0;
             switch (nParam)
             {
                 case 0:
@@ -871,106 +1278,6 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     m_aStates.top().getShape().setWrap(text::WrapTextMode_THROUGH);
                     break;
             }
-        }
-        break;
-        case RTF_CELLX:
-        {
-            int& rCurrentCellX(
-                (Destination::NESTEDTABLEPROPERTIES == m_aStates.top().getDestination())
-                    ? m_nNestedCurrentCellX
-                    : m_nTopLevelCurrentCellX);
-            int nCellX = nParam - rCurrentCellX;
-            const int COL_DFLT_WIDTH
-                = 41; // sw/source/filter/inc/wrtswtbl.hxx, minimal possible width of cells.
-            if (!nCellX)
-                nCellX = COL_DFLT_WIDTH;
-
-            // If there is a negative left margin, then the first cellx is relative to that.
-            RTFValue::Pointer_t pTblInd
-                = m_aStates.top().getTableRowSprms().find(NS_ooxml::LN_CT_TblPrBase_tblInd);
-            if (rCurrentCellX == 0 && pTblInd.get())
-            {
-                RTFValue::Pointer_t pWidth
-                    = pTblInd->getAttributes().find(NS_ooxml::LN_CT_TblWidth_w);
-                if (pWidth.get() && pWidth->getInt() < 0)
-                    nCellX = -1 * (pWidth->getInt() - nParam);
-            }
-
-            rCurrentCellX = nParam;
-            auto pXValue = new RTFValue(nCellX);
-            m_aStates.top().getTableRowSprms().set(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue,
-                                                   RTFOverwrite::NO_APPEND);
-            if (Destination::NESTEDTABLEPROPERTIES == m_aStates.top().getDestination())
-            {
-                m_nNestedCells++;
-                // Push cell properties.
-                m_aNestedTableCellsSprms.push_back(m_aStates.top().getTableCellSprms());
-                m_aNestedTableCellsAttributes.push_back(m_aStates.top().getTableCellAttributes());
-            }
-            else
-            {
-                m_nTopLevelCells++;
-                // Push cell properties.
-                m_aTopLevelTableCellsSprms.push_back(m_aStates.top().getTableCellSprms());
-                m_aTopLevelTableCellsAttributes.push_back(m_aStates.top().getTableCellAttributes());
-            }
-
-            m_aStates.top().getTableCellSprms() = m_aDefaultState.getTableCellSprms();
-            m_aStates.top().getTableCellAttributes() = m_aDefaultState.getTableCellAttributes();
-            // We assume text after a row definition always belongs to the table, to handle text before the real INTBL token
-            dispatchFlag(RTF_INTBL);
-            if (!m_nCellxMax)
-            {
-                // Wasn't in table, but now is -> tblStart.
-                RTFSprms aAttributes;
-                RTFSprms aSprms;
-                aSprms.set(NS_ooxml::LN_tblStart, new RTFValue(1));
-                writerfilter::Reference<Properties>::Pointer_t pProperties
-                    = new RTFReferenceProperties(aAttributes, aSprms);
-                Mapper().props(pProperties);
-            }
-            m_nCellxMax = std::max(m_nCellxMax, nParam);
-        }
-        break;
-        case RTF_TRRH:
-        {
-            OUString hRule("auto");
-            if (nParam < 0)
-            {
-                tools::SvRef<RTFValue> pAbsValue(new RTFValue(-nParam));
-                std::swap(pIntValue, pAbsValue);
-
-                hRule = "exact";
-            }
-            else if (nParam > 0)
-                hRule = "atLeast";
-
-            putNestedAttribute(m_aStates.top().getTableRowSprms(),
-                               NS_ooxml::LN_CT_TrPrBase_trHeight, NS_ooxml::LN_CT_Height_val,
-                               pIntValue);
-
-            auto pHRule = new RTFValue(hRule);
-            putNestedAttribute(m_aStates.top().getTableRowSprms(),
-                               NS_ooxml::LN_CT_TrPrBase_trHeight, NS_ooxml::LN_CT_Height_hRule,
-                               pHRule);
-        }
-        break;
-        case RTF_TRLEFT:
-        {
-            // the value is in twips
-            putNestedAttribute(m_aStates.top().getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblInd,
-                               NS_ooxml::LN_CT_TblWidth_type,
-                               new RTFValue(NS_ooxml::LN_Value_ST_TblWidth_dxa));
-            putNestedAttribute(m_aStates.top().getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblInd,
-                               NS_ooxml::LN_CT_TblWidth_w, new RTFValue(nParam));
-            auto const aDestination = m_aStates.top().getDestination();
-            int& rCurrentTRLeft((Destination::NESTEDTABLEPROPERTIES == aDestination)
-                                    ? m_nNestedTRLeft
-                                    : m_nTopLevelTRLeft);
-            int& rCurrentCellX((Destination::NESTEDTABLEPROPERTIES == aDestination)
-                                   ? m_nNestedCurrentCellX
-                                   : m_nTopLevelCurrentCellX);
-            rCurrentTRLeft = rCurrentCellX = nParam;
         }
         break;
         case RTF_COLS:
@@ -1312,89 +1619,6 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             m_aStates.top().getDrawingObject().setFillColorB(nParam);
             m_aStates.top().getDrawingObject().setHasFillColor(true);
             break;
-        case RTF_CLSHDNG:
-        {
-            int nValue = -1;
-            switch (nParam)
-            {
-                case 500:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct5;
-                    break;
-                case 1000:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct10;
-                    break;
-                case 1200:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct12;
-                    break;
-                case 1500:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct15;
-                    break;
-                case 2000:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct20;
-                    break;
-                case 2500:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct25;
-                    break;
-                case 3000:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct30;
-                    break;
-                case 3500:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct35;
-                    break;
-                case 3700:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct37;
-                    break;
-                case 4000:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct40;
-                    break;
-                case 4500:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct45;
-                    break;
-                case 5000:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct50;
-                    break;
-                case 5500:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct55;
-                    break;
-                case 6000:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct60;
-                    break;
-                case 6200:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct62;
-                    break;
-                case 6500:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct65;
-                    break;
-                case 7000:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct70;
-                    break;
-                case 7500:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct75;
-                    break;
-                case 8000:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct80;
-                    break;
-                case 8500:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct85;
-                    break;
-                case 8700:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct87;
-                    break;
-                case 9000:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct90;
-                    break;
-                case 9500:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct95;
-                    break;
-                default:
-                    break;
-            }
-            if (nValue != -1)
-                putNestedAttribute(m_aStates.top().getTableCellSprms(),
-                                   NS_ooxml::LN_CT_TcPrBase_shd, NS_ooxml::LN_CT_Shd_val,
-                                   new RTFValue(nValue));
-        }
-        break;
         case RTF_DODHGT:
             m_aStates.top().getDrawingObject().setDhgt(nParam);
             break;
@@ -1436,103 +1660,6 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             // Shape is below text -> send it to the background.
             m_aStates.top().getShape().setInBackground(nParam != 0);
             break;
-        case RTF_CLPADB:
-        case RTF_CLPADL:
-        case RTF_CLPADR:
-        case RTF_CLPADT:
-        {
-            RTFSprms aAttributes;
-            aAttributes.set(NS_ooxml::LN_CT_TblWidth_type,
-                            new RTFValue(NS_ooxml::LN_Value_ST_TblWidth_dxa));
-            aAttributes.set(NS_ooxml::LN_CT_TblWidth_w, new RTFValue(nParam));
-            // Top and left is swapped, that's what Word does.
-            switch (nKeyword)
-            {
-                case RTF_CLPADB:
-                    nSprm = NS_ooxml::LN_CT_TcMar_bottom;
-                    break;
-                case RTF_CLPADL:
-                    nSprm = NS_ooxml::LN_CT_TcMar_top;
-                    break;
-                case RTF_CLPADR:
-                    nSprm = NS_ooxml::LN_CT_TcMar_right;
-                    break;
-                case RTF_CLPADT:
-                    nSprm = NS_ooxml::LN_CT_TcMar_left;
-                    break;
-                default:
-                    break;
-            }
-            putNestedSprm(m_aStates.top().getTableCellSprms(), NS_ooxml::LN_CT_TcPrBase_tcMar,
-                          nSprm, new RTFValue(aAttributes));
-        }
-        break;
-        case RTF_TRPADDFB:
-        case RTF_TRPADDFL:
-        case RTF_TRPADDFR:
-        case RTF_TRPADDFT:
-        {
-            RTFSprms aAttributes;
-            switch (nParam)
-            {
-                case 3:
-                    aAttributes.set(NS_ooxml::LN_CT_TblWidth_type,
-                                    new RTFValue(NS_ooxml::LN_Value_ST_TblWidth_dxa));
-                    break;
-            }
-            switch (nKeyword)
-            {
-                case RTF_TRPADDFB:
-                    nSprm = NS_ooxml::LN_CT_TcMar_bottom;
-                    break;
-                case RTF_TRPADDFL:
-                    nSprm = NS_ooxml::LN_CT_TcMar_left;
-                    break;
-                case RTF_TRPADDFR:
-                    nSprm = NS_ooxml::LN_CT_TcMar_right;
-                    break;
-                case RTF_TRPADDFT:
-                    nSprm = NS_ooxml::LN_CT_TcMar_top;
-                    break;
-                default:
-                    break;
-            }
-            putNestedAttribute(m_aStates.top().getTableCellSprms(), NS_ooxml::LN_CT_TcPrBase_tcMar,
-                               nSprm, new RTFValue(aAttributes));
-            putNestedAttribute(m_aDefaultState.getTableCellSprms(), NS_ooxml::LN_CT_TcPrBase_tcMar,
-                               nSprm, new RTFValue(aAttributes));
-        }
-        break;
-        case RTF_TRPADDB:
-        case RTF_TRPADDL:
-        case RTF_TRPADDR:
-        case RTF_TRPADDT:
-        {
-            RTFSprms aAttributes;
-            aAttributes.set(NS_ooxml::LN_CT_TblWidth_w, new RTFValue(nParam));
-            switch (nKeyword)
-            {
-                case RTF_TRPADDB:
-                    nSprm = NS_ooxml::LN_CT_TcMar_bottom;
-                    break;
-                case RTF_TRPADDL:
-                    nSprm = NS_ooxml::LN_CT_TcMar_left;
-                    break;
-                case RTF_TRPADDR:
-                    nSprm = NS_ooxml::LN_CT_TcMar_right;
-                    break;
-                case RTF_TRPADDT:
-                    nSprm = NS_ooxml::LN_CT_TcMar_top;
-                    break;
-                default:
-                    break;
-            }
-            putNestedSprm(m_aStates.top().getTableCellSprms(), NS_ooxml::LN_CT_TcPrBase_tcMar,
-                          nSprm, new RTFValue(aAttributes));
-            putNestedSprm(m_aDefaultState.getTableCellSprms(), NS_ooxml::LN_CT_TcPrBase_tcMar,
-                          nSprm, new RTFValue(aAttributes));
-        }
-        break;
         case RTF_FI:
         {
             if (m_aStates.top().getDestination() == Destination::LISTLEVEL)
@@ -1583,30 +1710,6 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_OUTLINELEVEL:
             m_aStates.top().getParagraphSprms().set(NS_ooxml::LN_CT_PPrBase_outlineLvl, pIntValue);
             break;
-        case RTF_TRGAPH:
-            // Half of the space between the cells of a table row: default left/right table cell margin.
-            if (nParam > 0)
-            {
-                RTFSprms aAttributes;
-                aAttributes.set(NS_ooxml::LN_CT_TblWidth_type,
-                                new RTFValue(NS_ooxml::LN_Value_ST_TblWidth_dxa));
-                aAttributes.set(NS_ooxml::LN_CT_TblWidth_w, pIntValue);
-                putNestedSprm(m_aStates.top().getTableRowSprms(),
-                              NS_ooxml::LN_CT_TblPrBase_tblCellMar, NS_ooxml::LN_CT_TblCellMar_left,
-                              new RTFValue(aAttributes));
-                putNestedSprm(m_aStates.top().getTableRowSprms(),
-                              NS_ooxml::LN_CT_TblPrBase_tblCellMar,
-                              NS_ooxml::LN_CT_TblCellMar_right, new RTFValue(aAttributes));
-            }
-            break;
-        case RTF_TRFTSWIDTH:
-            putNestedAttribute(m_aStates.top().getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblW,
-                               NS_ooxml::LN_CT_TblWidth_type, pIntValue);
-            break;
-        case RTF_TRWWIDTH:
-            putNestedAttribute(m_aStates.top().getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblW,
-                               NS_ooxml::LN_CT_TblWidth_w, pIntValue);
-            break;
         case RTF_PROPTYPE:
         {
             switch (nParam)
@@ -1637,7 +1740,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_ANIMTEXT:
         {
-            nId = 0;
+            Id nId = 0;
             switch (nParam)
             {
                 case 0:
@@ -1663,7 +1766,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         }
         case RTF_STEXTFLOW:
         {
-            nId = 0;
+            Id nId = 0;
             switch (nParam)
             {
                 case 0:

@@ -696,6 +696,13 @@ public:
     RTFError dispatchSymbol(RTFKeyword nKeyword) override;
     RTFError dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam) override;
     RTFError dispatchValue(RTFKeyword nKeyword, int nParam) override;
+    bool dispatchTableSprmValue(RTFKeyword nKeyword, int nParam);
+    bool dispatchCharacterSprmValue(RTFKeyword nKeyword, int nParam);
+    bool dispatchCharacterAttributeValue(RTFKeyword nKeyword, int nParam);
+    bool dispatchParagraphSprmValue(RTFKeyword nKeyword, int nParam);
+    bool dispatchInfoValue(RTFKeyword nKeyword, int nParam);
+    bool dispatchFrameValue(RTFKeyword nKeyword, int nParam);
+    bool dispatchTableValue(RTFKeyword nKeyword, int nParam);
     RTFError resolveChars(char ch) override;
     RTFError pushState() override;
     RTFError beforePopState(RTFParserState& rState);
