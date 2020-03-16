@@ -2060,7 +2060,12 @@ void SfxCommonTemplateDialog_Impl::EnableDelete()
             pStyleSheetPool->Find(aTemplName,eFam, pTreeBox->IsVisible()? SfxStyleSearchBits::All : nFilter);
 
         OSL_ENSURE(pStyle, "Style not found");
-        if (pStyle && pStyle->IsUserDefined() && (pStyle->HasParentSupport() || !pStyle->IsUsed()))
+        // bIsCalcPageStyle is a hack to allow Calc page styles to be deleted
+        // remove when IsUsed is fixed for Calc page style
+        uno::Reference<frame::XFrame > xFrame = GetObjectShell()->GetFrame()->GetFrame().GetFrameInterface();
+        bool bIsCalcPageStyle = (vcl::CommandInfoProvider::GetModuleIdentifier(xFrame) == "com.sun.star.sheet.SpreadsheetDocument") &&
+                                (pStyle->GetFamily() == SfxStyleFamily::Page);
+        if (pStyle && pStyle->IsUserDefined() && (bIsCalcPageStyle || pStyle->HasParentSupport() || !pStyle->IsUsed()))
             bEnableDelete = true;
     }
     EnableDel(bEnableDelete);
