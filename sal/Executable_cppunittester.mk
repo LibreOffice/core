@@ -28,4 +28,12 @@ $(eval $(call gb_Executable_add_exception_objects,cppunittester,\
 	sal/cppunittester/cppunittester \
 ))
 
+ifeq ($(COM),MSC)
+
+$(eval $(call gb_Executable_add_ldflags,cppunittester,\
+    /STACK:10000000 \
+))
+
+endif
+
 # vim: set noet sw=4 ts=4:
