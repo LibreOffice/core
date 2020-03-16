@@ -250,7 +250,7 @@ class TableData : public virtual SvRefBase
     /**
        depth of the current table in a hierarchy of tables
      */
-    unsigned int const mnDepth;
+    unsigned int mnDepth;
 
     /**
        initialize mpRow

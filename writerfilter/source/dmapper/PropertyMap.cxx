@@ -1809,7 +1809,7 @@ namespace {
 class NamedPropertyValue
 {
 private:
-    OUString const m_aName;
+    OUString m_aName;
 
 public:
     explicit NamedPropertyValue( const OUString& i_aStr )

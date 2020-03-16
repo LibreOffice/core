@@ -190,7 +190,7 @@ private:
     bool      bYSizeValid;
 
 public:
-    GraphicImportType const eGraphicImportType;
+    GraphicImportType eGraphicImportType;
     DomainMapper&   rDomainMapper;
 
     sal_Int32 nLeftPosition;

@@ -223,7 +223,7 @@ private:
     // 'temporarily' the section page settings are imported as page styles
     // empty strings mark page settings as not yet imported
 
-    bool const                                      m_bIsFirstSection;
+    bool                                            m_bIsFirstSection;
     css::uno::Reference< css::text::XTextRange >    m_xStartingRange;
 
     OUString                                        m_sFirstPageStyleName;

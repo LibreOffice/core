@@ -221,8 +221,8 @@ PropertyMapPtr TableStyleSheetEntry::GetLocalPropertiesFromMask( sal_Int32 nMask
 {
     // Order from right to left
     struct TblStyleTypeAndMask {
-        sal_Int32 const       mask;
-        TblStyleType const    type;
+        sal_Int32       mask;
+        TblStyleType    type;
     };
 
     static const TblStyleTypeAndMask aOrderedStyleTable[] =
@@ -256,8 +256,8 @@ namespace {
 
 struct ListCharStylePropertyMap_t
 {
-    OUString const         sCharStyleName;
-    PropertyValueVector_t const   aPropertyValues;
+    OUString         sCharStyleName;
+    PropertyValueVector_t   aPropertyValues;
 
     ListCharStylePropertyMap_t(const OUString& rCharStyleName, const PropertyValueVector_t& rPropertyValues):
         sCharStyleName( rCharStyleName ),
@@ -281,7 +281,7 @@ struct StyleSheetTable_Impl
     OUString                                m_sDefaultParaStyleName; //WW8 name
     ListCharStylePropertyVector_t           m_aListCharStylePropertyVector;
     bool                                    m_bHasImportedDefaultParaProps;
-    bool const                              m_bIsNewDoc;
+    bool                                    m_bIsNewDoc;
 
     StyleSheetTable_Impl(DomainMapper& rDMapper, uno::Reference< text::XTextDocument> const& xTextDocument, bool bIsNewDoc);
 
