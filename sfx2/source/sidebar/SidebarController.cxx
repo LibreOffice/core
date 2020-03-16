@@ -1222,9 +1222,9 @@ void SidebarController::RequestCloseDeck()
     {
         const vcl::ILibreOfficeKitNotifier* pNotifier = mpCurrentDeck->GetLOKNotifier();
         auto pMobileNotifier = SfxViewShell::Current();
-        if (pMobileNotifier && comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
+        if (pMobileNotifier && comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView()))
         {
-            // Mobile.
+            // Mobile phone.
             std::stringstream aStream;
             boost::property_tree::ptree aTree;
             aTree.put("id", mpParentWindow->get_id()); // TODO could be missing - sort out

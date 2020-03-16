@@ -524,7 +524,7 @@ void FuText::ImpSetAttributesForNewTextObject(SdrTextObj* pTxtObj)
             pTxtObj->AdjustTextFrameWidthAndHeight();
             aSet.Put(makeSdrTextMaxFrameHeightItem(pTxtObj->GetLogicRect().GetSize().Height()));
             pTxtObj->SetMergedItemSet(aSet);
-            if (comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
+            if (comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView()) || comphelper::LibreOfficeKit::isTablet(SfxLokHelper::getView()))
                 pTxtObj->SetText(SdResId(STR_PRESOBJ_TEXT_EDIT_MOBILE));
         }
         else if( nSlotId == SID_ATTR_CHAR_VERTICAL )
