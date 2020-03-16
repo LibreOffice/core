@@ -215,7 +215,7 @@ void Deck::Resize()
     Window::Resize();
 
     if (comphelper::LibreOfficeKit::isActive() &&
-        comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()) &&
+        comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView()) &&
         GetLOKNotifier())
     {
         mpIdleNotify->Start();
@@ -341,7 +341,7 @@ void Deck::RequestLayout()
             bChangeNeeded = true;
         }
         if (mnMinimalWidth > 0 && (mnMinimalWidth != aParentSize.Width() || GetSizePixel().Width() != mnMinimalWidth)
-                && comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
+                && comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView()))
         {
             aParentSize.setWidth(mnMinimalWidth);
             bChangeNeeded = true;

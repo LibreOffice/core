@@ -47,7 +47,7 @@
 
 ScCondFrmtEntry::ScCondFrmtEntry(ScCondFormatList* pParent, ScDocument* pDoc, const ScAddress& rPos)
     : mpParent(pParent)
-    , mxBuilder(Application::CreateBuilder(pParent->GetContainer(), (comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView())?OUString("modules/scalc/ui/conditionalentrymobile.ui"):OUString("modules/scalc/ui/conditionalentry.ui"))))
+    , mxBuilder(Application::CreateBuilder(pParent->GetContainer(), (comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView())?OUString("modules/scalc/ui/conditionalentrymobile.ui"):OUString("modules/scalc/ui/conditionalentry.ui"))))
     , mxBorder(mxBuilder->weld_widget("border"))
     , mxGrid(mxBuilder->weld_container("grid"))
     , mxFtCondNr(mxBuilder->weld_label("number"))

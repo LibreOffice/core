@@ -43,8 +43,11 @@ static LanguageTag g_aLanguageTag("en-US", true);
 /// Scaling of the cairo canvas painting for hi-dpi
 static double g_fDPIScale(1.0);
 
-/// List of <viewid, bMobile> pairs
-static std::map<int, bool> g_vIsViewMobile;
+/// Which views are on mobile phones?
+static std::map<int, bool> g_vIsViewMobilePhone;
+
+/// Which views are on tablets?
+static std::map<int, bool> g_vIsViewTablet;
 
 void setActive(bool bActive)
 {
@@ -56,18 +59,28 @@ bool isActive()
     return g_bActive;
 }
 
-void setMobile(int nViewId, bool bMobile)
+void setMobilePhone(int nViewId, bool bIsMobilePhone)
 {
-    if (g_vIsViewMobile.find(nViewId) != g_vIsViewMobile.end())
-        g_vIsViewMobile[nViewId] = bMobile;
-    else
-        g_vIsViewMobile.insert(std::make_pair(nViewId, bMobile));
+    g_vIsViewMobilePhone[nViewId] = bIsMobilePhone;
 }
 
-bool isMobile(int nViewId)
+bool isMobilePhone(int nViewId)
 {
-    if (g_vIsViewMobile.find(nViewId) != g_vIsViewMobile.end())
-        return g_vIsViewMobile[nViewId];
+    if (g_vIsViewMobilePhone.find(nViewId) != g_vIsViewMobilePhone.end())
+        return g_vIsViewMobilePhone[nViewId];
+    else
+        return false;
+}
+
+void setTablet(int nViewId, bool bIsTablet)
+{
+    g_vIsViewTablet[nViewId] = bIsTablet;
+}
+
+bool isTablet(int nViewId)
+{
+    if (g_vIsViewTablet.find(nViewId) != g_vIsViewTablet.end())
+        return g_vIsViewTablet[nViewId];
     else
         return false;
 }
