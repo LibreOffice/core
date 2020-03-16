@@ -246,7 +246,7 @@ class SvXMLStylesContext_Impl
 
     std::vector<rtl::Reference<SvXMLStyleContext>> aStyles;
     mutable std::unique_ptr<IndicesType> pIndices;
-    bool const bAutomaticStyle;
+    bool bAutomaticStyle;
 
 #if OSL_DEBUG_LEVEL > 0
     mutable sal_uInt32 m_nIndexCreated;

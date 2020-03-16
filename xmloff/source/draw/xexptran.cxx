@@ -162,7 +162,7 @@ static void Imp_PutDoubleChar(OUStringBuffer& rStr, const SvXMLUnitConverter& rC
 
 struct ImpSdXMLExpTransObj2DBase
 {
-    sal_uInt16 const            mnType;
+    sal_uInt16                  mnType;
     explicit ImpSdXMLExpTransObj2DBase(sal_uInt16 nType)
     :   mnType(nType) {}
 };
@@ -182,37 +182,37 @@ namespace {
 
 struct ImpSdXMLExpTransObj2DRotate : public ImpSdXMLExpTransObj2DBase
 {
-    double const                mfRotate;
+    double                      mfRotate;
     explicit ImpSdXMLExpTransObj2DRotate(double fVal)
     :   ImpSdXMLExpTransObj2DBase(IMP_SDXMLEXP_TRANSOBJ2D_ROTATE), mfRotate(fVal) {}
 };
 struct ImpSdXMLExpTransObj2DScale : public ImpSdXMLExpTransObj2DBase
 {
-    ::basegfx::B2DTuple const   maScale;
+    ::basegfx::B2DTuple         maScale;
     explicit ImpSdXMLExpTransObj2DScale(const ::basegfx::B2DTuple& rNew)
     :   ImpSdXMLExpTransObj2DBase(IMP_SDXMLEXP_TRANSOBJ2D_SCALE), maScale(rNew) {}
 };
 struct ImpSdXMLExpTransObj2DTranslate : public ImpSdXMLExpTransObj2DBase
 {
-    ::basegfx::B2DTuple const   maTranslate;
+    ::basegfx::B2DTuple         maTranslate;
     explicit ImpSdXMLExpTransObj2DTranslate(const ::basegfx::B2DTuple& rNew)
     :   ImpSdXMLExpTransObj2DBase(IMP_SDXMLEXP_TRANSOBJ2D_TRANSLATE), maTranslate(rNew) {}
 };
 struct ImpSdXMLExpTransObj2DSkewX : public ImpSdXMLExpTransObj2DBase
 {
-    double const                mfSkewX;
+    double                      mfSkewX;
     explicit ImpSdXMLExpTransObj2DSkewX(double fVal)
     :   ImpSdXMLExpTransObj2DBase(IMP_SDXMLEXP_TRANSOBJ2D_SKEWX), mfSkewX(fVal) {}
 };
 struct ImpSdXMLExpTransObj2DSkewY : public ImpSdXMLExpTransObj2DBase
 {
-    double const                mfSkewY;
+    double                      mfSkewY;
     explicit ImpSdXMLExpTransObj2DSkewY(double fVal)
     :   ImpSdXMLExpTransObj2DBase(IMP_SDXMLEXP_TRANSOBJ2D_SKEWY), mfSkewY(fVal) {}
 };
 struct ImpSdXMLExpTransObj2DMatrix : public ImpSdXMLExpTransObj2DBase
 {
-    ::basegfx::B2DHomMatrix const maMatrix;
+    ::basegfx::B2DHomMatrix     maMatrix;
     explicit ImpSdXMLExpTransObj2DMatrix(const ::basegfx::B2DHomMatrix& rNew)
     :   ImpSdXMLExpTransObj2DBase(IMP_SDXMLEXP_TRANSOBJ2D_MATRIX), maMatrix(rNew) {}
 };
@@ -542,7 +542,7 @@ void SdXMLImExTransform2D::GetFullTransform(::basegfx::B2DHomMatrix& rFullTrans)
 
 struct ImpSdXMLExpTransObj3DBase
 {
-    sal_uInt16 const            mnType;
+    sal_uInt16                  mnType;
     explicit ImpSdXMLExpTransObj3DBase(sal_uInt16 nType)
     :   mnType(nType) {}
 };
@@ -562,37 +562,37 @@ namespace {
 
 struct ImpSdXMLExpTransObj3DRotateX : public ImpSdXMLExpTransObj3DBase
 {
-    double const                mfRotateX;
+    double                      mfRotateX;
     explicit ImpSdXMLExpTransObj3DRotateX(double fVal)
     :   ImpSdXMLExpTransObj3DBase(IMP_SDXMLEXP_TRANSOBJ3D_ROTATE_X), mfRotateX(fVal) {}
 };
 struct ImpSdXMLExpTransObj3DRotateY : public ImpSdXMLExpTransObj3DBase
 {
-    double const                mfRotateY;
+    double                      mfRotateY;
     explicit ImpSdXMLExpTransObj3DRotateY(double fVal)
     :   ImpSdXMLExpTransObj3DBase(IMP_SDXMLEXP_TRANSOBJ3D_ROTATE_Y), mfRotateY(fVal) {}
 };
 struct ImpSdXMLExpTransObj3DRotateZ : public ImpSdXMLExpTransObj3DBase
 {
-    double const                mfRotateZ;
+    double                      mfRotateZ;
     explicit ImpSdXMLExpTransObj3DRotateZ(double fVal)
     :   ImpSdXMLExpTransObj3DBase(IMP_SDXMLEXP_TRANSOBJ3D_ROTATE_Z), mfRotateZ(fVal) {}
 };
 struct ImpSdXMLExpTransObj3DScale : public ImpSdXMLExpTransObj3DBase
 {
-    ::basegfx::B3DTuple const   maScale;
+    ::basegfx::B3DTuple         maScale;
     explicit ImpSdXMLExpTransObj3DScale(const ::basegfx::B3DTuple& rNew)
     :   ImpSdXMLExpTransObj3DBase(IMP_SDXMLEXP_TRANSOBJ3D_SCALE), maScale(rNew) {}
 };
 struct ImpSdXMLExpTransObj3DTranslate : public ImpSdXMLExpTransObj3DBase
 {
-    ::basegfx::B3DTuple const   maTranslate;
+    ::basegfx::B3DTuple         maTranslate;
     explicit ImpSdXMLExpTransObj3DTranslate(const ::basegfx::B3DTuple& rNew)
     :   ImpSdXMLExpTransObj3DBase(IMP_SDXMLEXP_TRANSOBJ3D_TRANSLATE), maTranslate(rNew) {}
 };
 struct ImpSdXMLExpTransObj3DMatrix : public ImpSdXMLExpTransObj3DBase
 {
-    ::basegfx::B3DHomMatrix const maMatrix;
+    ::basegfx::B3DHomMatrix     maMatrix;
     explicit ImpSdXMLExpTransObj3DMatrix(const ::basegfx::B3DHomMatrix& rNew)
     :   ImpSdXMLExpTransObj3DBase(IMP_SDXMLEXP_TRANSOBJ3D_MATRIX), maMatrix(rNew) {}
 };

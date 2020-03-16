@@ -41,7 +41,7 @@ class XMLOFF_DLLPUBLIC SvxXMLListStyleContext final
     std::unique_ptr<SvxXMLListStyle_Impl> pLevelStyles;
 
     bool                        bConsecutive : 1;
-    bool const                  bOutline : 1;
+    bool                        bOutline : 1;
 
     SAL_DLLPRIVATE virtual void SetAttribute( sal_uInt16 nPrefixKey,
                                const OUString& rLocalName,

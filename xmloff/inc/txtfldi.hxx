@@ -187,7 +187,7 @@ class XMLSenderFieldImportContext : public XMLTextFieldImportContext
 protected:
     // variables for access in subclass
     bool bFixed;
-    sal_uInt16 const nElementToken;   /// token for this element field
+    sal_uInt16 nElementToken;   /// token for this element field
 
 public:
 
@@ -394,7 +394,7 @@ class XMLDatabaseFieldImportContext : public XMLTextFieldImportContext
 
     bool bDisplay;
     bool bDisplayOK;
-    bool const bUseDisplay;
+    bool bUseDisplay;
 
 protected:
     bool bDatabaseOK;
@@ -534,8 +534,8 @@ class XMLSimpleDocInfoImportContext : public XMLTextFieldImportContext
 
 protected:
     bool bFixed;
-    bool const bHasAuthor;
-    bool const bHasContent;
+    bool bHasAuthor;
+    bool bHasContent;
 
 public:
 
@@ -913,7 +913,7 @@ class XMLReferenceFieldImportContext final : public XMLTextFieldImportContext
 {
     OUString sName;
     OUString sLanguage;
-    sal_uInt16 const nElementToken;
+    sal_uInt16 nElementToken;
     sal_Int16 nSource;
     sal_Int16 nType;
 
@@ -978,7 +978,7 @@ public:
 class XMLDdeFieldImportContext final : public XMLTextFieldImportContext
 {
     OUString sName;
-    OUString const sPropertyContent;
+    OUString sPropertyContent;
 
 public:
 
@@ -1107,7 +1107,7 @@ class XMLAnnotationImportContext final : public XMLTextFieldImportContext
     css::uno::Reference < css::text::XTextCursor >  mxCursor;
     css::uno::Reference < css::text::XTextCursor >  mxOldCursor;
 
-    sal_uInt16 const m_nToken;
+    sal_uInt16 m_nToken;
 
 public:
 

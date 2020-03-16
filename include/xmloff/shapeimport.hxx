@@ -199,7 +199,7 @@ class SvXMLShapeContext : public SvXMLImportContext
 {
 protected:
     css::uno::Reference< css::drawing::XShape >   mxShape;
-    bool const                                    mbTemporaryShape;
+    bool                                          mbTemporaryShape;
     OUString                                      msHyperlink;
 
 public:

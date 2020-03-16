@@ -35,7 +35,7 @@ class XMLTextFrameHyperlinkContext : public SvXMLImportContext
     OUString              sHRef;
     OUString              sName;
     OUString              sTargetFrameName;
-    css::text::TextContentAnchorType const eDefaultAnchorType;
+    css::text::TextContentAnchorType eDefaultAnchorType;
     SvXMLImportContextRef   xFrameContext;
     bool                    bMap;
 

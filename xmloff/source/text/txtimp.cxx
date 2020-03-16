@@ -572,11 +572,11 @@ struct XMLTextImportHelper::Impl
 
     SvXMLImport & m_rSvXMLImport;
 
-    bool const m_bInsertMode : 1;
-    bool const m_bStylesOnlyMode : 1;
-    bool const m_bBlockMode : 1;
-    bool const m_bProgress : 1;
-    bool const m_bOrganizerMode : 1;
+    bool m_bInsertMode : 1;
+    bool m_bStylesOnlyMode : 1;
+    bool m_bBlockMode : 1;
+    bool m_bProgress : 1;
+    bool m_bOrganizerMode : 1;
     bool m_bBodyContentStarted : 1;
 
     /// Are we inside a <text:deletion> element (deleted redline section)

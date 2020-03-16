@@ -51,10 +51,10 @@ namespace {
 
 struct Effect
 {
-    XMLEffect const meKind;
-    XMLEffectDirection const meDirection;
-    sal_Int16 const mnStartScale;
-    bool const mbIn;
+    XMLEffect meKind;
+    XMLEffectDirection meDirection;
+    sal_Int16 mnStartScale;
+    bool mbIn;
 };
 
 }

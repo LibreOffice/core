@@ -40,7 +40,7 @@ private:
 
     std::unique_ptr<XMLFontAutoStylePool_Impl> m_pFontAutoStylePool;
     std::set<OUString> m_aNames;
-    bool const m_bTryToEmbedFonts;
+    bool m_bTryToEmbedFonts;
     std::unordered_map<OString, OUString> m_aEmbeddedFontFiles;
 
     OUString embedFontFile(OUString const & rFileUrl, OUString const & rFamilyName);

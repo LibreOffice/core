@@ -51,12 +51,12 @@ namespace {
 
 class XMLFontAutoStylePoolEntry_Impl
 {
-    OUString const    sName;
-    OUString const    sFamilyName;
-    OUString const    sStyleName;
-    FontFamily const  nFamily;
-    FontPitch const   nPitch;
-    rtl_TextEncoding const eEnc;
+    OUString    sName;
+    OUString    sFamilyName;
+    OUString    sStyleName;
+    FontFamily  nFamily;
+    FontPitch   nPitch;
+    rtl_TextEncoding eEnc;
 
 public:
 

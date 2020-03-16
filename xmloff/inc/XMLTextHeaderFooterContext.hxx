@@ -39,8 +39,8 @@ class XMLTextHeaderFooterContext final : public SvXMLImportContext
     const OUString sTextLeft;
 
     bool    bInsertContent : 1;
-    bool const    bLeft : 1;
-    bool const    bFirst : 1;
+    bool    bLeft : 1;
+    bool    bFirst : 1;
 
 public:
 

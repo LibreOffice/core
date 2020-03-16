@@ -49,7 +49,7 @@ private:
 
     SchXMLImportHelper&                mrImportHelper;
     css::uno::Reference<css::chart2::XDataSeries > mxSeries;
-    css::awt::Size const               maChartSize;
+    css::awt::Size                     maChartSize;
     std::vector< RegressionStyle >&    mrRegressionStyleVector;
 };
 
@@ -71,7 +71,7 @@ public:
 private:
     SchXMLImportHelper&                           mrImportHelper;
     RegressionStyle&                              mrRegressionStyle;
-    css::awt::Size const                          maChartSize;
+    css::awt::Size                                maChartSize;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLREGRESSIONCURVEOBJECTCONTEXT_HXX

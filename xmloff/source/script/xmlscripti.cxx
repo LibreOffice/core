@@ -45,7 +45,7 @@ class XMLScriptChildContext : public SvXMLImportContext
 private:
     css::uno::Reference< css::frame::XModel >                 m_xModel;
     css::uno::Reference< css::document::XEmbeddedScripts >    m_xDocumentScripts;
-    OUString const m_aLanguage;
+    OUString m_aLanguage;
 
 public:
     XMLScriptChildContext( SvXMLImport& rImport,

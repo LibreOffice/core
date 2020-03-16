@@ -62,7 +62,7 @@ class XMLPropertyBackpatcher
 {
 
     /// name of property that gets set or backpatched
-     OUString const sPropertyName;
+     OUString sPropertyName;
 
     /// backpatch list type
     typedef ::std::vector<

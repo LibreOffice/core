@@ -45,8 +45,8 @@ enum class XmlStyleFamily;
 class XMLAutoStylePoolProperties
 {
     OUString                     msName;
-    ::std::vector< XMLPropertyState > const   maProperties;
-    sal_uInt32 const                          mnPos;
+    ::std::vector< XMLPropertyState >   maProperties;
+    sal_uInt32                          mnPos;
 
 public:
 
@@ -66,7 +66,7 @@ public:
     typedef std::vector<std::unique_ptr<XMLAutoStylePoolProperties>> PropertiesListType;
 
 private:
-    OUString const msParent;
+    OUString msParent;
     PropertiesListType m_PropertiesList;
 
 public:
@@ -101,8 +101,8 @@ struct XMLAutoStyleFamily
     typedef std::set<std::unique_ptr<XMLAutoStylePoolParent>,
         comphelper::UniquePtrValueLess<XMLAutoStylePoolParent>> ParentSetType;
 
-    XmlStyleFamily const mnFamily;
-    OUString const maStrFamilyName;
+    XmlStyleFamily mnFamily;
+    OUString maStrFamilyName;
     rtl::Reference<SvXMLExportPropertyMapper> mxMapper;
 
     ParentSetType m_ParentSet;
@@ -110,8 +110,8 @@ struct XMLAutoStyleFamily
     std::set<OUString> maReservedNameSet;
     sal_uInt32 mnCount;
     sal_uInt32 mnName;
-    OUString const maStrPrefix;
-    bool const mbAsFamily;
+    OUString maStrPrefix;
+    bool mbAsFamily;
 
     XMLAutoStyleFamily( XmlStyleFamily nFamily, const OUString& rStrName,
             const rtl::Reference<SvXMLExportPropertyMapper>& rMapper,
