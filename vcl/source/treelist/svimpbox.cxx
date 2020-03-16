@@ -394,13 +394,11 @@ void SvImpLBox::PageDown( sal_uInt16 nDelta )
     ShowCursor( false );
 
     m_nFlags &= ~LBoxFlags::Filling;
-    m_pView->Update();
     m_pStartEntry = pNext;
 
     if( nRealDelta >= m_nVisibleCount )
     {
         m_pView->Invalidate( GetVisibleArea() );
-        m_pView->Update();
     }
     else
     {
@@ -432,12 +430,10 @@ void SvImpLBox::PageUp( sal_uInt16 nDelta )
     m_nFlags &= ~LBoxFlags::Filling;
     ShowCursor( false );
 
-    m_pView->Update();
     m_pStartEntry = pPrev;
     if( nRealDelta >= m_nVisibleCount )
     {
         m_pView->Invalidate( GetVisibleArea() );
-        m_pView->Update();
     }
     else
     {
@@ -3268,7 +3264,6 @@ IMPL_LINK(SvImpLBox, MyUserEvent, void*, pArg, void )
     if( !pArg )
     {
         m_pView->Invalidate();
-        m_pView->Update();
     }
     else
     {

@@ -826,7 +826,6 @@ SlideSorterView::DrawLock::~DrawLock()
         if (mpWindow)
         {
             mpWindow->Invalidate(mrView.maRedrawRegion);
-            mpWindow->Update();
         }
 }
 

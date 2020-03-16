@@ -406,7 +406,6 @@ void SpinField::MouseButtonDown( const MouseEvent& rMEvt )
 
         if (mbUpperIn || mbLowerIn)
         {
-            Update();
             CaptureMouse();
             if (mbRepeat)
                 maRepeatTimer.Start();
@@ -428,14 +427,12 @@ void SpinField::MouseButtonUp(const MouseEvent& rMEvt)
     {
         mbUpperIn = false;
         Invalidate(maUpperRect);
-        Update();
         Up();
     }
     else if (mbLowerIn)
     {
         mbLowerIn = false;
         Invalidate(maLowerRect);
-        Update();
         Down();
     }
 
@@ -461,7 +458,6 @@ void SpinField::MouseMove(const MouseEvent& rMEvt)
 
                 mbUpperIn = bNewUpperIn;
                 Invalidate(maUpperRect);
-                Update();
             }
         }
         else if (mbInitialDown)
@@ -479,7 +475,6 @@ void SpinField::MouseMove(const MouseEvent& rMEvt)
 
                 mbLowerIn = bNewLowerIn;
                 Invalidate(maLowerRect);
-                Update();
             }
         }
     }
