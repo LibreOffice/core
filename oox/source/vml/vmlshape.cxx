@@ -784,6 +784,9 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
             eTextVerticalAdjust = drawing::TextVerticalAdjust_BOTTOM;
         PropertySet(xShape).setAnyProperty(PROP_TextVerticalAdjust, makeAny(eTextVerticalAdjust));
 
+        PropertySet(xShape).setAnyProperty(PROP_TextAutoGrowHeight,
+                                           makeAny(maTypeModel.mbAutoHeight));
+
         if (getTextBox())
         {
             getTextBox()->convert(xShape);
@@ -797,9 +800,6 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
                 xShape->setSize(aSize);
             }
         }
-
-        PropertySet(xShape).setAnyProperty(PROP_TextAutoGrowHeight,
-                                           makeAny(maTypeModel.mbAutoHeight));
     }
 
     // Import Legacy Fragments (if any)
