@@ -133,10 +133,6 @@ bool RTFDocumentImpl::dispatchTableSprmValue(RTFKeyword nKeyword, int nParam)
             pIntValue = new RTFValue(nValue);
             break;
         }
-        case RTF_LEVELNFC:
-            nSprm = NS_ooxml::LN_CT_Lvl_numFmt;
-            pIntValue = new RTFValue(getNumberFormat(nParam));
-            break;
         case RTF_LEVELSTARTAT:
             nSprm = NS_ooxml::LN_CT_Lvl_start;
             break;
@@ -153,6 +149,13 @@ bool RTFDocumentImpl::dispatchTableSprmValue(RTFKeyword nKeyword, int nParam)
     if (nSprm > 0)
     {
         m_aStates.top().getTableSprms().set(nSprm, pIntValue);
+        return true;
+    }
+    if (nKeyword == RTF_LEVELNFC)
+    {
+        pIntValue = new RTFValue(getNumberFormat(nParam));
+        putNestedAttribute(m_aStates.top().getTableSprms(), NS_ooxml::LN_CT_Lvl_numFmt,
+                           NS_ooxml::LN_CT_NumFmt_val, pIntValue);
         return true;
     }
 
