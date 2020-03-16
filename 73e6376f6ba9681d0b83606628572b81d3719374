@@ -46,6 +46,30 @@
       "revId": "73e6376f6ba9681d0b83606628572b81d3719374",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce6648fe_5bc1e8fe",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmllinks.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-16T21:51:04Z",
+      "side": 1,
+      "message": "So the change seems to be:\n\n1. Rename the macro from DECLARE_LINKS_EXPORT_TEST to DECLARE_LINKS_EXPORT_EXPORTONLY_TEST, likely to make its name akigned with names of related macros in other tests; the macro itself already only tested \"export-only\" case - see that line 58 declares \"Import_Export_Import\" test, and there\u0027s no \"Import\" test like present in e.g. DECLARE_SW_ROUNDTRIP_TEST from sw/qa/inc/swmodeltestbase.hxx;\n\n2. Remove the useless and wrong checks for null return from parseExport from relevant tests.\n\nIn fact, that is what *you* should had written in the *commit message* to describe what you did. I tried to give you some hints, but ended up doing this (most important in this change!) job myself :-(.",
+      "parentUuid": "3730155f_a645fdc6",
+      "range": {
+        "startLine": 25,
+        "startChar": 29,
+        "endLine": 25,
+        "endChar": 40
+      },
+      "revId": "73e6376f6ba9681d0b83606628572b81d3719374",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
