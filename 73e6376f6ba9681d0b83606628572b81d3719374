@@ -22,6 +22,30 @@
       "revId": "73e6376f6ba9681d0b83606628572b81d3719374",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3730155f_a645fdc6",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmllinks.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1002486
+      },
+      "writtenOn": "2020-03-16T13:58:34Z",
+      "side": 1,
+      "message": "the tests for eg @ln178 i have changed export to exportonly, this macro getting the values from  that test, as i \u0027ve changed the name of the test @ln178 the values passing to the macro also have to be changed..as its functioning correctly for exportonly testing .",
+      "parentUuid": "7480f8ff_e8dd6e97",
+      "range": {
+        "startLine": 25,
+        "startChar": 29,
+        "endLine": 25,
+        "endChar": 40
+      },
+      "revId": "73e6376f6ba9681d0b83606628572b81d3719374",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
