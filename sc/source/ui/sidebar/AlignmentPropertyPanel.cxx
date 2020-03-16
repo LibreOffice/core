@@ -175,7 +175,7 @@ boost::property_tree::ptree AlignmentPropertyPanel::DumpAsPropertyTree()
 {
     boost::property_tree::ptree aTree = PanelLayout::DumpAsPropertyTree();
 
-    if (comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
+    if (comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView()))
     {
         eraseNode(aTree, "textorientbox");
     }
