@@ -98,15 +98,15 @@ public:
 
 class SwUndoTableToText : public SwUndo
 {
-    OUString sTableNm;
-    std::unique_ptr<SwDDEFieldType> pDDEFieldType;
-    std::unique_ptr<SaveTable> pTableSave;
+    OUString m_sTableName;
+    std::unique_ptr<SwDDEFieldType> m_pDDEFieldType;
+    std::unique_ptr<SaveTable> m_pTableSave;
     SwTableToTextSaves m_vBoxSaves;
-    std::unique_ptr<SwHistory> pHistory;
-    sal_uLong nSttNd, nEndNd;
-    sal_Unicode cSeparator;
-    sal_uInt16 nHdlnRpt;
-    bool bCheckNumFormat : 1;
+    std::unique_ptr<SwHistory> m_pHistory;
+    sal_uLong m_nStartNode, m_nEndNode;
+    sal_Unicode m_cSeparator;
+    sal_uInt16 m_nHeadlineRepeat;
+    bool m_bCheckNumFormat : 1;
 
 public:
     SwUndoTableToText( const SwTable& rTable, sal_Unicode cCh );
@@ -209,12 +209,12 @@ class SwUndoMove;
 
 class SwUndoTableMerge : public SwUndo, private SwUndRng
 {
-    sal_uLong nTableNode;
-    std::unique_ptr<SaveTable> pSaveTable;
+    sal_uLong m_nTableNode;
+    std::unique_ptr<SaveTable> m_pSaveTable;
     std::set<sal_uLong> m_Boxes;
-    std::vector<sal_uLong> aNewSttNds;
+    std::vector<sal_uLong> m_aNewStartNodes;
     std::vector<std::unique_ptr<SwUndoMove>> m_vMoves;
-    std::unique_ptr<SwHistory> pHistory;
+    std::unique_ptr<SwHistory> m_pHistory;
 
 public:
     SwUndoTableMerge( const SwPaM& rTableSel );
@@ -229,7 +229,7 @@ public:
     void SetSelBoxes( const SwSelBoxes& rBoxes );
 
     void AddNewBox( sal_uLong nSttNdIdx )
-        { aNewSttNds.push_back( nSttNdIdx ); }
+        { m_aNewStartNodes.push_back( nSttNdIdx ); }
 
     void SaveCollection( const SwTableBox& rBox );
 };
@@ -267,7 +267,7 @@ struct UndoTableCpyTable_Entry;
 class SwUndoTableCpyTable : public SwUndo
 {
     std::vector<std::unique_ptr<UndoTableCpyTable_Entry>> m_vArr;
-    std::unique_ptr<SwUndoTableNdsChg> pInsRowUndo;
+    std::unique_ptr<SwUndoTableNdsChg> m_pInsRowUndo;
 
     //b6341295: When redlining is active, PrepareRedline has to create the
     //redlining attributes for the new and the old table cell content
@@ -355,9 +355,9 @@ public:
 
 class SwUndoTableHeadline : public SwUndo
 {
-    sal_uLong nTableNd;
-    sal_uInt16 nOldHeadline;
-    sal_uInt16 nNewHeadline;
+    sal_uLong m_nTableNode;
+    sal_uInt16 m_nOldHeadline;
+    sal_uInt16 m_nNewHeadline;
 
 public:
     SwUndoTableHeadline( const SwTable&, sal_uInt16 nOldHdl,  sal_uInt16 nNewHdl );
