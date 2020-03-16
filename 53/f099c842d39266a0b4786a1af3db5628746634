@@ -1,0 +1,9 @@
+Verified+1: Jenkins
+Code-Review+2: Miklos Vajna <vmiklos@collabora.com>
+Code-Review+1: Justin Luth <justin_luth@sil.org>
+Code-Review+1: Mike Kaganski <mike.kaganski@collabora.com>
+Submitted-by: Miklos Vajna <vmiklos@collabora.com>
+Submitted-at: Mon, 16 Mar 2020 14:01:08 +0100
+Reviewed-on: https://gerrit.libreoffice.org/c/core/+/90439
+Project: core
+Branch: refs/heads/master
