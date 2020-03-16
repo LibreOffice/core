@@ -1198,6 +1198,11 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
     }
 }
 
+OUString EditView::SpellIgnoreWord()
+{
+    return pImpEditView->SpellIgnoreWord();
+}
+
 void EditView::SelectCurrentWord( sal_Int16 nWordType )
 {
     EditSelection aCurSel( pImpEditView->GetEditSelection() );

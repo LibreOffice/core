@@ -77,5 +77,11 @@ interface DrawDocument
         ExecMethod = Execute;
         StateMethod = GetState;
     ]
+
+    SID_SPELLCHECK_IGNORE_ALL
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
 }
 
