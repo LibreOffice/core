@@ -28,7 +28,7 @@ public:
     void resolve(Table& rHandler) override;
 
 private:
-    Entries_t const m_aEntries;
+    Entries_t m_aEntries;
 };
 } // namespace rtftok
 } // namespace writerfilter

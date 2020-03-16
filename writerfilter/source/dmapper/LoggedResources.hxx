@@ -41,7 +41,7 @@ public:
     static void attribute(const std::string & rName, sal_uInt32 nValue);
 
 private:
-    std::string const msPrefix;
+    std::string msPrefix;
 };
 #endif
 

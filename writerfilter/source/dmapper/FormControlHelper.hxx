@@ -41,7 +41,7 @@ public:
     void processField(css::uno::Reference<css::text::XFormField> const& xFormField);
     bool hasFFDataHandler() const { return (m_pFFData != nullptr); }
 private:
-    FFDataHandler::Pointer_t const m_pFFData;
+    FFDataHandler::Pointer_t m_pFFData;
     struct FormControlHelper_Impl;
     tools::SvRef<FormControlHelper_Impl> m_pImpl;
 

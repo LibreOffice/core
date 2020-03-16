@@ -130,7 +130,7 @@ class TableRowBuffer : public virtual SvRefBase
     RTFBuffer_t m_aBuffer;
     ::std::deque<RTFSprms> m_aCellsSprms;
     ::std::deque<RTFSprms> m_aCellsAttributes;
-    int const m_nCells;
+    int m_nCells;
     writerfilter::Reference<Properties>::Pointer_t m_pParaProperties;
     writerfilter::Reference<Properties>::Pointer_t m_pFrameProperties;
     writerfilter::Reference<Properties>::Pointer_t m_pRowProperties;
@@ -960,7 +960,7 @@ private:
     int m_nListPictureId;
 
     /// New document means not pasting into an existing one.
-    bool const m_bIsNewDoc;
+    bool m_bIsNewDoc;
     /// The media descriptor contains e.g. the base URL of the document.
     const utl::MediaDescriptor& m_rMediaDescriptor;
 
