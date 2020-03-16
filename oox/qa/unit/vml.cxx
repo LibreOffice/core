@@ -91,6 +91,24 @@ CPPUNIT_TEST_FIXTURE(OoxVmlTest, testSpt202ShapeType)
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.TextShape"), xShape->getShapeType());
 }
 
+CPPUNIT_TEST_FIXTURE(OoxVmlTest, testShapeNonAutosizeWithText)
+{
+    // Load a document which has a group shape, containing a single child.
+    // 17.78 cm is the full group shape width, 19431/64008 is the child shape's relative width inside
+    // that, so 5.3975 cm should be the shape width.
+    load("shape-non-autosize-with-text.docx");
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Actual  : 1115
+    // - Expected: 5398
+    // because the width was determined using its text size, not using the explicit size.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5398), xShape->getSize().Width);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
