@@ -1076,13 +1076,13 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
 
         if (comphelper::LibreOfficeKit::isActive())
         {
-            // For mobile, send the context menu structure
-            if (comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
+            // For mobile phone, send the context menu structure
+            if (comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView()))
             {
                 LOKSendSpellPopupMenu(aPopupMenu, nGuessLangWord, nGuessLangPara, nWords);
                 return;
             }
-            else // For desktop, we use the tunneled dialog
+            else // For desktop or tablet, we use the tunneled dialog
                 aPopupMenu->SetLOKNotifier(SfxViewShell::Current());
         }
         sal_uInt16 nId = aPopupMenu->Execute(pImpEditView->GetWindow(), aTempRect, PopupMenuFlags::NoMouseUpClose);

@@ -337,7 +337,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             {
                 // Do CSV dialog if more than one line. But not if invoked from Automation.
                 sal_Int32 nDelim = pStrBuffer->indexOf('\n');
-                if (!comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()) && !comphelper::Automation::AutomationInvokedZone::isActive()
+                if (!comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView()) && !comphelper::Automation::AutomationInvokedZone::isActive()
                     && nDelim >= 0 && nDelim != pStrBuffer->getLength () - 1)
                 {
                     vcl::Window* pParent = GetActiveWin();
