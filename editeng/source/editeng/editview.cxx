@@ -66,6 +66,9 @@
 #include <comphelper/lok.hxx>
 #include <sfx2/viewsh.hxx>
 #include <osl/diagnose.h>
+#include <sfx2/lokhelper.hxx>
+#include <boost/property_tree/json_parser.hpp>
+#include <sfx2/dispatch.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -848,6 +851,41 @@ bool EditView::IsWrongSpelledWordAtPos( const Point& rPosPixel, bool bMarkIfWron
     return pImpEditView->IsWrongSpelledWord( aPaM , bMarkIfWrong );
 }
 
+static void LOKSendSpellPopupMenu(Menu* pMenu, LanguageType nGuessLangWord,
+                                  LanguageType nGuessLangPara, sal_uInt16 nSuggestions)
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    // First we need to set item commends for the context menu.
+    OUString aTmpWord( SvtLanguageTable::GetLanguageString( nGuessLangWord ) );
+    OUString aTmpPara( SvtLanguageTable::GetLanguageString( nGuessLangPara ) );
+
+    pMenu->SetItemCommand(pMenu->GetItemId("ignore"), ".uno:SpellCheckIgnoreAll?Type:string=Spelling");
+    pMenu->SetItemCommand(MN_WORDLANGUAGE, ".uno:LanguageStatus?Language:string=Current_" + aTmpWord);
+    pMenu->SetItemCommand(MN_PARALANGUAGE, ".uno:LanguageStatus?Language:string=Paragraph_" + aTmpPara);
+
+    for(int i = 0; i < nSuggestions; ++i)
+    {
+        sal_uInt16 nItemId = MN_ALTSTART + i;
+        OUString sCommandString = ".uno:SpellCheckApplySuggestion?ApplyRule:string=Spelling_" + pMenu->GetItemText(nItemId);
+        pMenu->SetItemCommand(nItemId, sCommandString);
+    }
+
+    // Then we generate the menu structure and send it to the client code.
+    if (SfxViewShell* pViewShell = SfxViewShell::Current())
+    {
+        boost::property_tree::ptree aMenu = SfxDispatcher::fillPopupMenu(pMenu);
+        boost::property_tree::ptree aRoot;
+        aRoot.add_child("menu", aMenu);
+
+        std::stringstream aStream;
+        boost::property_tree::write_json(aStream, aRoot, true);
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CONTEXT_MENU, aStream.str().c_str());
+        return;
+     }
+}
+
 void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo&,void> const * pCallBack )
 {
     Point aPos ( pImpEditView->GetWindow()->PixelToLogic( rPosPixel ) );
@@ -1032,7 +1070,16 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
 
 
         if (comphelper::LibreOfficeKit::isActive())
-            aPopupMenu->SetLOKNotifier(SfxViewShell::Current());
+        {
+            // For mobile, send the context menu structure
+            if (comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
+            {
+                LOKSendSpellPopupMenu(aPopupMenu, nGuessLangWord, nGuessLangPara, nWords);
+                return;
+            }
+            else // For desktop, we use the tunneled dialog
+                aPopupMenu->SetLOKNotifier(SfxViewShell::Current());
+        }
         sal_uInt16 nId = aPopupMenu->Execute(pImpEditView->GetWindow(), aTempRect, PopupMenuFlags::NoMouseUpClose);
 
         aPaM2 = pImpEditView->pEditEngine->pImpEditEngine->CreateEditPaM(aP2);
