@@ -62,9 +62,9 @@ public:
 
         try
         {
-            if (comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
+            if (comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView()))
             {
-                // Mobile.
+                // Mobile phone.
                 std::stringstream aStream;
                 boost::property_tree::ptree aTree = m_rSidebarDockingWin.DumpAsPropertyTree();
                 aTree.put("id", m_rSidebarDockingWin.GetLOKWindowId());
@@ -78,7 +78,7 @@ public:
             }
 
             // Notify the sidebar is created, and its LOKWindowId, which
-            // is needed on both Mobile and Desktop.
+            // is needed on mobile phones, tablets, and desktop.
             const Point pos = Point(m_rSidebarDockingWin.GetOutOffXPixel(),
                                     m_rSidebarDockingWin.GetOutOffYPixel());
             const OString posMessage = pos.toString();

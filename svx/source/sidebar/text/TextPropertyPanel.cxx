@@ -47,14 +47,14 @@ TextPropertyPanel::TextPropertyPanel ( vcl::Window* pParent, const css::uno::Ref
     get(mpToolBoxFontColor, "colorbar_others");
     get(mpToolBoxBackgroundColor, "colorbar_background");
 
-    bool isMobile = false;
+    bool isMobilePhone = false;
     if (comphelper::LibreOfficeKit::isActive() &&
-        comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()))
-        isMobile = true;
+        comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView()))
+        isMobilePhone = true;
     VclPtr<ToolBox> xSpacingBar;
     get(xSpacingBar, "spacingbar");
-    xSpacingBar->Show(!isMobile);
-    xSpacingBar->ShowItem(0, !isMobile);
+    xSpacingBar->Show(!isMobilePhone);
+    xSpacingBar->ShowItem(0, !isMobilePhone);
 }
 
 TextPropertyPanel::~TextPropertyPanel()

@@ -931,8 +931,8 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
 
 void ChartController::execute_DoubleClick( const Point* pMousePixel )
 {
-    bool isMobile = comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView());
-    if (isMobile)
+    bool isMobilePhone = comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView());
+    if (isMobilePhone)
         return;
 
     bool bEditText = false;
