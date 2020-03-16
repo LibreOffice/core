@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73fe3ce2_1ef328db",
+        "filename": "cui/source/dialogs/cuifmsearch.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-16T08:54:56Z",
+      "side": 1,
+      "message": "If it turns out that none of the original DBG_ASSERT are replaced with SAL_WARN/INFO, there is no need to include \u003csal/log.hxx\u003e (though \u003ccassert\u003e should be included when assert is used).",
+      "revId": "219aa412f4dffb38cea11fe40332c2cd98740f41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "743ba0fc_4b889448",
+        "filename": "cui/source/dialogs/cuifmsearch.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-16T08:54:56Z",
+      "side": 1,
+      "message": "This replacement looks reasonable, given that m_pSearchEngine is unconditionally dereferenced on the next line anyway.",
+      "revId": "219aa412f4dffb38cea11fe40332c2cd98740f41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a2f66f32_1aaa7bb4",
+        "filename": "cui/source/dialogs/cuifmsearch.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-16T08:54:56Z",
+      "side": 1,
+      "message": "What is the guarantee that the above cannot happen?",
+      "revId": "219aa412f4dffb38cea11fe40332c2cd98740f41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13b80ac3_a005fe49",
+        "filename": "cui/source/dialogs/cuifmsearch.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-16T08:54:56Z",
+      "side": 1,
+      "message": "What is the guarantee that the above cannot happen?",
+      "revId": "219aa412f4dffb38cea11fe40332c2cd98740f41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b922a01e_57beaad9",
+        "filename": "cui/source/dialogs/cuifmsearch.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-16T08:54:56Z",
+      "side": 1,
+      "message": "What is the guarantee that the above cannot happen?",
+      "revId": "219aa412f4dffb38cea11fe40332c2cd98740f41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "409d28d8_da99435f",
+        "filename": "cui/source/dialogs/cuifmsearch.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-16T08:54:56Z",
+      "side": 1,
+      "message": "What is the guarantee that the above cannot happen?",
+      "revId": "219aa412f4dffb38cea11fe40332c2cd98740f41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7fa7e165_179592e5",
+        "filename": "cui/source/dialogs/cuifmsearch.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-16T08:54:56Z",
+      "side": 1,
+      "message": "What is the guarantee that the above cannot happen?",
+      "revId": "219aa412f4dffb38cea11fe40332c2cd98740f41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d7ebffb_052f49ac",
+        "filename": "cui/source/dialogs/cuifmsearch.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-16T08:54:56Z",
+      "side": 1,
+      "message": "What is the guarantee that the above cannot happen?",
+      "revId": "219aa412f4dffb38cea11fe40332c2cd98740f41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "930ad657_d0488e4b",
+        "filename": "cui/source/dialogs/cuifmsearch.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-16T08:54:56Z",
+      "side": 1,
+      "message": "What is the guarantee that the above cannot happen?",
+      "revId": "219aa412f4dffb38cea11fe40332c2cd98740f41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
