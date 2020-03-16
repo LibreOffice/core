@@ -73,7 +73,7 @@ private:
     css::uno::Reference< css::beans::XPropertySetInfo > m_xInfo;
     static constexpr OUStringLiteral g_aColorPropName = "FillColor";
     Color     m_nColor;
-    Color const     m_nDefaultColor;
+    Color     m_nDefaultColor;
 };
 
 } //  namespace chart

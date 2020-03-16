@@ -25,8 +25,8 @@
 class PageHeaderFooterContext : public SvXMLImportContext
 {
     ::std::vector< XMLPropertyState > &     rProperties;
-    sal_Int32 const                         nStartIndex;
-    sal_Int32 const                         nEndIndex;
+    sal_Int32                               nStartIndex;
+    sal_Int32                               nEndIndex;
     bool                                bHeader;
     const rtl::Reference < SvXMLImportPropertyMapper > rMap;
 

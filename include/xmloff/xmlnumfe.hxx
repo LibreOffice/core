@@ -48,7 +48,7 @@ class XMLOFF_DLLPUBLIC SvXMLNumFmtExport final
 {
 private:
     SvXMLExport&                rExport;
-    OUString const              sPrefix;
+    OUString                    sPrefix;
     SvNumberFormatter*          pFormatter;
     OUStringBuffer       sTextContent;
     std::unique_ptr<SvXMLNumUsedList_Impl>      pUsedList;

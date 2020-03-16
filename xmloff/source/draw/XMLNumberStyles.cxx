@@ -35,10 +35,10 @@ namespace {
 
 struct SdXMLDataStyleNumber
 {
-    enum XMLTokenEnum const meNumberStyle;
-    bool const    mbLong;
-    bool const    mbTextual;
-    bool const    mbDecimal02;
+    enum XMLTokenEnum meNumberStyle;
+    bool    mbLong;
+    bool    mbTextual;
+    bool    mbDecimal02;
     const char* mpText;
 };
 
@@ -93,8 +93,8 @@ SdXMLDataStyleNumber const aSdXMLDataStyleNumbers[] =
 struct SdXMLFixedDataStyle
 {
     const char* mpName;
-    bool const  mbAutomatic;
-    bool const  mbDateStyle;
+    bool    mbAutomatic;
+    bool    mbDateStyle;
     sal_uInt8   mpFormat[8];
 };
 
@@ -484,7 +484,7 @@ class SdXMLNumberFormatMemberImportContext : public SvXMLImportContext
 private:
     SdXMLNumberFormatImportContext* mpParent;
 
-    OUString const maNumberStyle;
+    OUString maNumberStyle;
     bool mbLong;
     bool mbTextual;
     bool mbDecimal02;

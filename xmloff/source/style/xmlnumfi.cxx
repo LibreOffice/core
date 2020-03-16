@@ -51,8 +51,8 @@ namespace {
 
 struct SvXMLNumFmtEntry
 {
-    OUString const    aName;
-    sal_uInt32 const  nKey;
+    OUString   aName;
+    sal_uInt32  nKey;
     bool        bRemoveAfterUse;
 
     SvXMLNumFmtEntry( const OUString& rN, sal_uInt32 nK, bool bR ) :
@@ -118,7 +118,7 @@ namespace {
 class SvXMLNumFmtElementContext : public SvXMLImportContext
 {
     SvXMLNumFormatContext&  rParent;
-    sal_uInt16 const        nType;
+    sal_uInt16              nType;
     OUStringBuffer          aContent;
     SvXMLNumberInfo         aNumInfo;
     LanguageType            nElementLang;
@@ -309,15 +309,15 @@ namespace {
 
 struct SvXMLDefaultDateFormat
 {
-    NfIndexTableOffset const          eFormat;
-    SvXMLDateElementAttributes const  eDOW;
-    SvXMLDateElementAttributes const  eDay;
-    SvXMLDateElementAttributes const  eMonth;
-    SvXMLDateElementAttributes const  eYear;
-    SvXMLDateElementAttributes const  eHours;
-    SvXMLDateElementAttributes const  eMins;
-    SvXMLDateElementAttributes const  eSecs;
-    bool const                        bSystem;
+    NfIndexTableOffset          eFormat;
+    SvXMLDateElementAttributes  eDOW;
+    SvXMLDateElementAttributes  eDay;
+    SvXMLDateElementAttributes  eMonth;
+    SvXMLDateElementAttributes  eYear;
+    SvXMLDateElementAttributes  eHours;
+    SvXMLDateElementAttributes  eMins;
+    SvXMLDateElementAttributes  eSecs;
+    bool                        bSystem;
 };
 
 }

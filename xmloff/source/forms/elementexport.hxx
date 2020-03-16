@@ -41,7 +41,7 @@ namespace xmloff
     class OElementExport : public OPropertyExport
     {
     protected:
-        css::uno::Sequence< css::script::ScriptEventDescriptor > const
+        css::uno::Sequence< css::script::ScriptEventDescriptor >
                                 m_aEvents;
 
         std::unique_ptr<SvXMLElementExport> m_pXMLElement;          // XML element doing the concrete startElement etc.
@@ -91,8 +91,8 @@ namespace xmloff
         typedef std::set<sal_Int16> Int16Set;
             // used below
 
-        OUString const          m_sControlId;           // the control id to use when exporting
-        OUString const          m_sReferringControls;   // list of referring controls (i.e. their id's)
+        OUString                m_sControlId;           // the control id to use when exporting
+        OUString                m_sReferringControls;   // list of referring controls (i.e. their id's)
         sal_Int16               m_nClassId;             // class id of the control we're representing
         ElementType             m_eType;                // (XML) type of the control we're representing
         CCAFlags                m_nIncludeCommon;       // common control attributes to include

@@ -214,7 +214,7 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public cppu::WeakImplHelper<
 
     SAL_DLLPRIVATE void InitCtor_();
 
-    SvXMLImportFlags const  mnImportFlags;
+    SvXMLImportFlags  mnImportFlags;
     std::set< OUString > embeddedFontUrlsKnown;
     bool isFastContext;
     css::uno::Reference< css::xml::sax::XFastParser > mxParser;

@@ -193,7 +193,7 @@ public:
 class XMLConfigItemMapIndexedContext : public XMLConfigBaseContext
 {
 private:
-    OUString const maConfigItemName;
+    OUString maConfigItemName;
 
 public:
     XMLConfigItemMapIndexedContext(SvXMLImport& rImport,

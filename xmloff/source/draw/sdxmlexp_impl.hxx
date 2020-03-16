@@ -108,7 +108,7 @@ class SdXMLExport : public SvXMLExport
     SdXMLFormatMap  maUsedDateStyles;           // this is a vector with the used formattings for date fields
     SdXMLFormatMap  maUsedTimeStyles;           // this is a vector with the used formattings for time fields
 
-    bool const      mbIsDraw;
+    bool            mbIsDraw;
 
     virtual void ExportStyles_(bool bUsed) override;
     virtual void ExportAutoStyles_() override;

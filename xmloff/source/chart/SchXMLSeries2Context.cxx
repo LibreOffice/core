@@ -510,7 +510,7 @@ struct DomainInfo
         : aRole(rRole), aRange(rRange), nIndexForLocalData(nIndex)
     {}
 
-    OUString const aRole;
+    OUString aRole;
     OUString aRange;
     sal_Int32 nIndexForLocalData;
 };

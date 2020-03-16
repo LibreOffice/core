@@ -35,7 +35,7 @@ class XMLFontStyleContextFontFace : public SvXMLStyleContext
     css::uno::Any aPitch;
     css::uno::Any aEnc;
 
-    SvXMLImportContextRef const xStyles;
+    SvXMLImportContextRef xStyles;
 
     XMLFontStylesContext *GetStyles()
     {

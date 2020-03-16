@@ -49,7 +49,7 @@ class XMLParaContext : public SvXMLImportContext
     // Lost outline numbering in master document (#i73509#)
     bool                 mbOutlineLevelAttrFound;
     bool                 bIgnoreLeadingSpace;
-    bool const           bHeading;
+    bool                 bHeading;
     bool                 bIsListHeader;
     bool                 bIsRestart;
     sal_Int16            nStartValue;

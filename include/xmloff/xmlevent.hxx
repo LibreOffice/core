@@ -75,7 +75,7 @@ struct XMLEventName
 struct XMLEventNameTranslation
 {
     const char* sAPIName;
-    sal_uInt16 const nPrefix;    // namespace prefix
+    sal_uInt16 nPrefix;    // namespace prefix
     const char* sXMLName;
 };
 

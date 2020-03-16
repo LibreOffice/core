@@ -36,7 +36,7 @@ class SvXMLImport;
 class XMLOpacityPropertyHdl final : public XMLPropertyHandler
 {
 private:
-    SvXMLImport* const    mpImport;
+    SvXMLImport*    mpImport;
 public:
     explicit XMLOpacityPropertyHdl( SvXMLImport* pImport );
     virtual ~XMLOpacityPropertyHdl() override;

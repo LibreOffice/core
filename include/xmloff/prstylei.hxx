@@ -42,7 +42,7 @@ class XMLOFF_DLLPUBLIC XMLPropStyleContext : public SvXMLStyleContext
 private:
     ::std::vector< XMLPropertyState >          maProperties;
     css::uno::Reference < css::style::XStyle > mxStyle;
-    SvXMLImportContextRef const                mxStyles;
+    SvXMLImportContextRef                      mxStyles;
 
     XMLPropStyleContext(XMLPropStyleContext const &) = delete;
     XMLPropStyleContext& operator =(XMLPropStyleContext const &) = delete;

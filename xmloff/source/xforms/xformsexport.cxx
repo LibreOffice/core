@@ -110,7 +110,7 @@ struct ExportTable
 {
     const char* pPropertyName;
     sal_uInt16 const nNamespace;
-    sal_uInt16 const nToken;
+    sal_uInt16 nToken;
     convert_t const aConverter;
 };
 

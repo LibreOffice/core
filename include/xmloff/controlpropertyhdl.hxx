@@ -75,7 +75,7 @@ namespace xmloff
         virtual bool exportXML( OUString& _rStrExpValue, const css::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const override;
 
     private:
-        BorderFacet const m_eFacet;
+        BorderFacet m_eFacet;
     };
 
 

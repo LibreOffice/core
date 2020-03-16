@@ -58,7 +58,7 @@ class XMLFootnoteConfigHelper : public SvXMLImportContext
 {
     OUStringBuffer sBuffer;
     XMLFootnoteConfigurationImportContext& rConfig;
-    bool const bIsBegin;
+    bool bIsBegin;
 
 public:
 

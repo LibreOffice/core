@@ -187,11 +187,11 @@ void ImpXMLEXPPageMasterInfo::SetName(const OUString& rStr)
 
 class ImpXMLAutoLayoutInfo
 {
-    sal_uInt16 const                   mnType;
-    ImpXMLEXPPageMasterInfo* const     mpPageMasterInfo;
+    sal_uInt16                  mnType;
+    ImpXMLEXPPageMasterInfo*    mpPageMasterInfo;
     OUString                    msLayoutName;
-    tools::Rectangle                   maTitleRect;
-    tools::Rectangle                   maPresRect;
+    tools::Rectangle            maTitleRect;
+    tools::Rectangle            maPresRect;
     sal_Int32                   mnGapX;
     sal_Int32                   mnGapY;
 

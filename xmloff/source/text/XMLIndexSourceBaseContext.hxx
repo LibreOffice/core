@@ -75,7 +75,7 @@ enum IndexSourceParamEnum
  */
 class XMLIndexSourceBaseContext : public SvXMLImportContext
 {
-    bool const bUseLevelFormats;
+    bool bUseLevelFormats;
     bool bChapterIndex;     /// chapter-wise or document index?
     bool bRelativeTabs;     /// tab stops relative to margin or indent?
 

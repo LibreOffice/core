@@ -31,7 +31,7 @@ public:
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 
 private:
-    bool const m_bCrossingValue;
+    bool m_bCrossingValue;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_CHART_XMLAXISPOSITIONPROPERTYHDL_HXX

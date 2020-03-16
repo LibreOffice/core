@@ -174,7 +174,7 @@ public:
 class SdXMLStylesContext : public SvXMLStylesContext
 {
     rtl::Reference< SvXMLImportPropertyMapper > xPresImpPropMapper;
-    bool const                         mbIsAutoStyle;
+    bool                    mbIsAutoStyle;
     std::unique_ptr<SvXMLNumFmtHelper> mpNumFmtHelper;
     std::unique_ptr<SvNumberFormatter> mpNumFormatter;
 

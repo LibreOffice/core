@@ -33,8 +33,8 @@ template<typename EnumT>
 struct SvXMLEnumMapEntry
 {
 private:
-    ::xmloff::token::XMLTokenEnum const   eToken;
-    sal_uInt16 const                      nValue;
+    ::xmloff::token::XMLTokenEnum   eToken;
+    sal_uInt16                      nValue;
 public:
     SvXMLEnumMapEntry(::xmloff::token::XMLTokenEnum eToken_, EnumT nValue_)
         : eToken(eToken_), nValue(static_cast<sal_uInt16>(nValue_)) {}
@@ -71,8 +71,8 @@ struct SvXMLEnumStringMapEntry
 {
 private:
     const char *    pName;
-    sal_Int32 const       nNameLength;
-    sal_uInt16 const      nValue;
+    sal_Int32       nNameLength;
+    sal_uInt16      nValue;
 public:
     SvXMLEnumStringMapEntry(const char * pName_, sal_Int32 nNameLength_, EnumT nValue_)
         : pName(pName_), nNameLength(nNameLength_), nValue(nValue_) {}

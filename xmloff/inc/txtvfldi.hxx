@@ -121,14 +121,14 @@ private:
     bool bHintOK;                   /// sHint was set
     bool bDisplayOK;                /// sDisplayFormula/-None were set
 
-    bool const bSetFormula;               /// set Formula property
-    bool const bSetFormulaDefault;        /// use content as default for formula
-    bool const bSetDescription;           /// set sDescription with Hint-property
-    bool const bSetHelp;
-    bool const bSetHint;
-    bool const bSetVisible;               /// set IsVisible
+    bool bSetFormula;               /// set Formula property
+    bool bSetFormulaDefault;        /// use content as default for formula
+    bool bSetDescription;           /// set sDescription with Hint-property
+    bool bSetHelp;
+    bool bSetHint;
+    bool bSetVisible;               /// set IsVisible
     bool bSetDisplayFormula;        /// set DisplayFormula (sub type???)
-    bool const bSetPresentation;          /// set presentation frm elem. content?
+    bool bSetPresentation;          /// set presentation frm elem. content?
 
 public:
 
@@ -377,7 +377,7 @@ private:
  */
 class XMLVariableDeclsImportContext final : public SvXMLImportContext
 {
-    enum VarType const eVarDeclsContextType;
+    enum VarType eVarDeclsContextType;
     XMLTextImportHelper& rImportHelper;
 
 public:

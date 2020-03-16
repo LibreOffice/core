@@ -27,7 +27,7 @@
 */
 class XMLClipPropertyHandler final : public XMLPropertyHandler
 {
-    bool const m_bODF11;
+    bool m_bODF11;
 public:
     XMLClipPropertyHandler( bool bODF11 );
     virtual ~XMLClipPropertyHandler() override;

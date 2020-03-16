@@ -27,8 +27,8 @@
 
 class SvI18NMapEntry_Key
 {
-    sal_uInt16 const      nKind;
-    OUString const   aName;
+    sal_uInt16      nKind;
+    OUString   aName;
 public:
     SvI18NMapEntry_Key( sal_uInt16 nKnd, const OUString& rName ) :
         nKind( nKnd ),

@@ -35,8 +35,8 @@ namespace {
 
 struct FontWeightMapper
 {
-    float const fWeight;
-    sal_uInt16 const nValue;
+    float fWeight;
+    sal_uInt16 nValue;
 };
 
 }

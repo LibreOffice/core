@@ -37,7 +37,7 @@ class XMLHint_Impl
     css::uno::Reference < css::text::XTextRange > xStart;
     css::uno::Reference < css::text::XTextRange > xEnd;
 
-    sal_uInt8 const nType;
+    sal_uInt8 nType;
 
 public:
 
@@ -64,7 +64,7 @@ public:
 
 class XMLStyleHint_Impl : public XMLHint_Impl
 {
-    OUString const           sStyleName;
+    OUString                 sStyleName;
 
 public:
 
@@ -80,7 +80,7 @@ public:
 
 class XMLReferenceHint_Impl : public XMLHint_Impl
 {
-    OUString const           sRefName;
+    OUString                 sRefName;
 
 public:
 
@@ -163,7 +163,7 @@ public:
 class XMLTextFrameHint_Impl : public XMLHint_Impl
 {
     // OD 2004-04-20 #i26791#
-    SvXMLImportContextRef const xContext;
+    SvXMLImportContextRef xContext;
 
 public:
 
@@ -216,7 +216,7 @@ public:
 // Core impl. of the unification of drawing objects and Writer fly frames (#i26791#)
 class XMLDrawHint_Impl : public XMLHint_Impl
 {
-    SvXMLImportContextRef const xContext;
+    SvXMLImportContextRef xContext;
 
 public:
 

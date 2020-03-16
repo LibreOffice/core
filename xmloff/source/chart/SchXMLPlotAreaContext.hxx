@@ -129,12 +129,12 @@ private:
     bool & mrColHasLabels;
     bool & mrRowHasLabels;
     css::chart::ChartDataRowSource & mrDataRowSource;
-    OUString const maChartTypeServiceName;
+    OUString maChartTypeServiceName;
 
     tSchXMLLSequencesPerIndex & mrLSequencesPerIndex;
 
     bool mbGlobalChartTypeUsedBySeries;
-    css::awt::Size const maChartSize;
+    css::awt::Size maChartSize;
 };
 
 class SchXMLDataLabelSpanContext: public SvXMLImportContext
@@ -226,7 +226,7 @@ public:
 private:
     SchXMLImportHelper& mrImportHelper;
     css::uno::Reference< css::chart::X3DDisplay > mxWallFloorSupplier;
-    ContextType const meContextType;
+    ContextType meContextType;
 
 public:
     SchXMLWallFloorContext( SchXMLImportHelper& rImportHelper,
@@ -252,7 +252,7 @@ public:
 private:
     SchXMLImportHelper& mrImportHelper;
     css::uno::Reference< css::chart::XStatisticDisplay > mxStockPropProvider;
-    ContextType const meContextType;
+    ContextType meContextType;
 
 public:
     SchXMLStockContext( SchXMLImportHelper& rImportHelper,
@@ -293,8 +293,8 @@ private:
     SchXMLImportHelper &                           mrImportHelper;
     ::std::vector< DataRowPointStyle > &           mrStyleVector;
     css::uno::Reference< css::chart2::XDataSeries > m_xSeries;
-    ContextType const                              meContextType;
-    OUString const maSeriesStyleName;
+    ContextType                                    meContextType;
+    OUString maSeriesStyleName;
     tSchXMLLSequencesPerIndex& mrLSequencesPerIndex;
 };
 

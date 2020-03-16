@@ -135,7 +135,7 @@ struct RegressionStyle
     css::uno::Reference<
                 css::beans::XPropertySet > m_xEquationProperties;
 
-    OUString const msStyleName;
+    OUString msStyleName;
 
     RegressionStyle(const css::uno::Reference<
                           css::chart2::XDataSeries >& xSeries,

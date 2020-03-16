@@ -37,7 +37,7 @@ namespace {
 struct TokenTable
 {
     const char*                         pS;
-    EnhancedCustomShapeTokenEnum const  pE;
+    EnhancedCustomShapeTokenEnum        pE;
 };
 
 }

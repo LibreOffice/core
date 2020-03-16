@@ -78,10 +78,10 @@ private:
 
 struct MergeInfo
 {
-    sal_Int32 const mnStartColumn;
-    sal_Int32 const mnStartRow;
-    sal_Int32 const mnEndColumn;
-    sal_Int32 const mnEndRow;
+    sal_Int32 mnStartColumn;
+    sal_Int32 mnStartRow;
+    sal_Int32 mnEndColumn;
+    sal_Int32 mnEndRow;
 
     MergeInfo( sal_Int32 nStartColumn, sal_Int32 nStartRow, sal_Int32 nColumnSpan, sal_Int32 nRowSpan )
         : mnStartColumn( nStartColumn ), mnStartRow( nStartRow ), mnEndColumn( nStartColumn + nColumnSpan - 1 ), mnEndRow( nStartRow + nRowSpan - 1 ) {};

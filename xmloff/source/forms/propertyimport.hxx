@@ -156,7 +156,7 @@ namespace xmloff
     */
     class OPropertyElementsContext : public SvXMLImportContext
     {
-        OPropertyImportRef const  m_xPropertyImporter;    // to add the properties
+        OPropertyImportRef  m_xPropertyImporter;    // to add the properties
 
     public:
         OPropertyElementsContext(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rName,

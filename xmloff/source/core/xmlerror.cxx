@@ -50,18 +50,18 @@ public:
                  const OUString& rPublicId,
                  const OUString& rSystemId);
 
-    sal_Int32 const nId;  /// error ID
+    sal_Int32 nId;  /// error ID
 
-    OUString const sExceptionMessage;/// message of original exception (if available)
+    OUString sExceptionMessage;/// message of original exception (if available)
 
     // XLocator information:
-    sal_Int32 const nRow;     /// row number where error occurred (or -1 for unknown)
-    sal_Int32 const nColumn;  /// column number where error occurred (or -1)
-    OUString const sPublicId; /// public identifier
-    OUString const sSystemId; /// public identifier
+    sal_Int32 nRow;     /// row number where error occurred (or -1 for unknown)
+    sal_Int32 nColumn;  /// column number where error occurred (or -1)
+    OUString sPublicId; /// public identifier
+    OUString sSystemId; /// public identifier
 
     /// message Parameters
-    Sequence<OUString> const aParams;
+    Sequence<OUString> aParams;
 };
 
 
