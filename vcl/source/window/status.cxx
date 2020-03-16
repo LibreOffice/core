@@ -504,7 +504,6 @@ void DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, cons
                 pEraseWindow->Invalidate(aRect, InvalidateFlags::NoChildren     |
                                                 InvalidateFlags::NoClipChildren |
                                                 InvalidateFlags::Transparent);
-                pEraseWindow->Update();
             }
             rRenderContext.Push(PushFlags::CLIPREGION);
             rRenderContext.IntersectClipRegion(rFramePosSize);
@@ -1173,7 +1172,6 @@ void StatusBar::SetItemText( sal_uInt16 nItemId, const OUString& rText, int nCha
             {
                 tools::Rectangle aRect = ImplGetItemRectPos(nPos);
                 Invalidate(aRect);
-                Update();
             }
         }
     }
@@ -1228,7 +1226,6 @@ void StatusBar::SetItemData( sal_uInt16 nItemId, void* pNewData )
         {
             tools::Rectangle aRect = ImplGetItemRectPos(nPos);
             Invalidate(aRect, InvalidateFlags::NoErase);
-            Update();
         }
     }
 }
@@ -1258,7 +1255,6 @@ void StatusBar::RedrawItem(sal_uInt16 nItemId)
     {
         tools::Rectangle aRect = ImplGetItemRectPos(nPos);
         Invalidate(aRect);
-        Update();
     }
 }
 
@@ -1333,7 +1329,6 @@ void StatusBar::StartProgressMode( const OUString& rText )
     if ( IsReallyVisible() )
     {
         Invalidate();
-        Update();
     }
 }
 
@@ -1354,7 +1349,6 @@ void StatusBar::SetProgressValue( sal_uInt16 nNewPercent )
         if ((nTime_ms - mnLastProgressPaint_ms) > 100)
         {
             Invalidate(maPrgsFrameRect);
-            Update();
             mnLastProgressPaint_ms = nTime_ms;
         }
     }
@@ -1370,7 +1364,6 @@ void StatusBar::EndProgressMode()
     if ( IsReallyVisible() )
     {
         Invalidate();
-        Update();
     }
 }
 
@@ -1378,17 +1371,8 @@ void StatusBar::SetText(const OUString& rText)
 {
     if ((GetStyle() & WB_RIGHT) && !mbProgressMode && IsReallyVisible() && IsUpdateMode())
     {
-        if (mbFormat)
-        {
-            Invalidate();
-            Window::SetText(rText);
-        }
-        else
-        {
-            Invalidate();
-            Window::SetText(rText);
-            Update();
-        }
+        Window::SetText(rText);
+        Invalidate();
     }
     else if (mbProgressMode)
     {
@@ -1396,7 +1380,6 @@ void StatusBar::SetText(const OUString& rText)
         if (IsReallyVisible())
         {
             Invalidate();
-            Update();
         }
     }
     else

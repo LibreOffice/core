@@ -110,7 +110,6 @@ void OSectionView::MakeVisible( const tools::Rectangle& rRect, vcl::Window& rWin
         rWin.Scroll( -nScrollX, -nScrollY );
         aMap.SetOrigin( Point( aOrg.X() - nScrollX, aOrg.Y() - nScrollY ) );
         rWin.SetMapMode( aMap );
-        rWin.Update();
         rWin.Invalidate();
 
         if ( m_pReportWindow )
