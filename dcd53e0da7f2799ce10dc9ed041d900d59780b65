@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cb56ae1d_41a241cf",
+        "filename": "sw/source/uibase/inc/convert.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-03-16T19:27:02Z",
+      "side": 1,
+      "message": "Be careful with trailing spaces. I suggest you enable in setting or get a plugin for your editor to strip trailing spaces on save. Normally git doesn\u0027t allow you to commit if you have trailing spaces so I wonder how you managed to do that.",
+      "revId": "dcd53e0da7f2799ce10dc9ed041d900d59780b65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
