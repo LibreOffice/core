@@ -194,6 +194,7 @@ public:
     void testPreserveTextWhitespaceXLSX();
     void testPreserveTextWhitespace2XLSX();
     void testTextDirectionXLSX();
+    void testTdf129985();
 
     void testRefStringXLSX();
     void testRefStringConfigXLSX();
@@ -327,6 +328,7 @@ public:
     CPPUNIT_TEST(testMoveCellAnchoredShapesODS);
     CPPUNIT_TEST(testMatrixMultiplicationXLSX);
     CPPUNIT_TEST(testTextDirectionXLSX);
+    CPPUNIT_TEST(testTdf129985);
 
     CPPUNIT_TEST(testRefStringXLSX);
     CPPUNIT_TEST(testRefStringConfigXLSX);
@@ -3998,6 +4000,19 @@ void ScExportTest::testTextDirectionXLSX()
 
     assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[2]/x:alignment", "readingOrder", "1");//LTR
     assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[3]/x:alignment", "readingOrder", "2");//RTL
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf129985()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf129985.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[2]", "formatCode", "m/d/yyyy");
 
     xDocSh->DoClose();
 }
