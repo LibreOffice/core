@@ -35,6 +35,9 @@ public:
         abort();
     };
 
+    // Implementation for WinSalGraphics::DrawTextLayout().
+    // Returns true if handled, if false, then WinSalGraphics will handle it itself.
+    virtual bool DrawTextLayout(const GenericSalLayout&) { return false; }
     // If true is returned, the following functions are used for text rendering.
     virtual bool UseTextDraw() const { return false; }
     virtual void PreDrawText() {}
