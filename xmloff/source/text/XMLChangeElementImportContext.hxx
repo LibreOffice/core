@@ -51,7 +51,7 @@ class XMLChangeElementImportContext : public SvXMLImportContext
      *
      * So if bAcceptContent is true, we are importing a <text:deletion> element
      */
-    bool const bAcceptContent;
+    bool bAcceptContent;
 
     /// context of enclosing <text:changed-region> element
     XMLChangedRegionImportContext& rChangedRegion;

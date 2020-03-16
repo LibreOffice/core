@@ -734,7 +734,7 @@ namespace {
 class XMLGrfMirrorPropHdl_Impl : public XMLPropertyHandler
 {
     const OUString sVal;
-    bool const bHori;
+    bool bHori;
 
 public:
     XMLGrfMirrorPropHdl_Impl( enum XMLTokenEnum eVal, bool bH ) :

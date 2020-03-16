@@ -43,7 +43,7 @@ class XMLTextListAutoStylePoolEntry_Impl
     OUString    sName;
     OUString    sInternalName;
     Reference < XIndexReplace > xNumRules;
-    sal_uInt32 const  nPos;
+    sal_uInt32  nPos;
     bool    bIsNamed;
 
 

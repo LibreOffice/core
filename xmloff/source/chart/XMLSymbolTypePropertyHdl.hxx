@@ -31,7 +31,7 @@ public:
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 
 private:
-    bool const m_bIsNamedSymbol;
+    bool m_bIsNamedSymbol;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_CHART_XMLSYMBOLTYPEPROPERTYHDL_HXX

@@ -64,9 +64,9 @@ private:
     sal_Int32 m_nAxisType;//css::chart::ChartAxisType
     bool m_bAxisTypeImported;
     bool m_bDateScaleImported;
-    bool const m_bAddMissingXAxisForNetCharts; //to correct errors from older versions
-    bool const m_bAdaptWrongPercentScaleValues; //to correct errors from older versions
-    bool const m_bAdaptXAxisOrientationForOld2DBarCharts; //to correct different behaviour from older versions
+    bool m_bAddMissingXAxisForNetCharts; //to correct errors from older versions
+    bool m_bAdaptWrongPercentScaleValues; //to correct errors from older versions
+    bool m_bAdaptXAxisOrientationForOld2DBarCharts; //to correct different behaviour from older versions
     bool& m_rbAxisPositionAttributeImported;
 
     css::uno::Reference< css::drawing::XShape > getTitleShape() const;

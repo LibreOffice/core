@@ -104,7 +104,7 @@ public:
 
 class XMLPMPropHdl_Print : public XMLPropertyHandler
 {
-    OUString const         sAttrValue;
+    OUString         sAttrValue;
 
 public:
     explicit XMLPMPropHdl_Print( enum ::xmloff::token::XMLTokenEnum eValue );

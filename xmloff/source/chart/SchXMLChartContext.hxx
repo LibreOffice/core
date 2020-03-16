@@ -49,12 +49,12 @@ struct SeriesDefaultsAndStyles
     css::uno::Any    maSymbolTypeDefault;
     css::uno::Any    maDataCaptionDefault;
 
-    css::uno::Any const  maErrorIndicatorDefault;
-    css::uno::Any const  maErrorCategoryDefault;
-    css::uno::Any const  maConstantErrorLowDefault;
-    css::uno::Any const  maConstantErrorHighDefault;
-    css::uno::Any const  maPercentageErrorDefault;
-    css::uno::Any const  maErrorMarginDefault;
+    css::uno::Any    maErrorIndicatorDefault;
+    css::uno::Any    maErrorCategoryDefault;
+    css::uno::Any    maConstantErrorLowDefault;
+    css::uno::Any    maConstantErrorHighDefault;
+    css::uno::Any    maPercentageErrorDefault;
+    css::uno::Any    maErrorMarginDefault;
 
     css::uno::Any    maMeanValueDefault;
     css::uno::Any    maRegressionCurvesDefault;

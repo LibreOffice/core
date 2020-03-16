@@ -59,8 +59,8 @@ namespace xmloff
 
         static struct AlignmentTranslationEntry
         {
-            ParagraphAdjust const nParagraphValue;
-            sal_Int16 const       nControlValue;
+            ParagraphAdjust nParagraphValue;
+            sal_Int16       nControlValue;
         }
         const AlignmentTranslations[] =
         {

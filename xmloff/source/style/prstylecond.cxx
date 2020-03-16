@@ -30,8 +30,8 @@ namespace {
 struct ConditionMap
 {
         char const* aInternal;
-        XMLTokenEnum const nExternal;
-        int const         aValue;
+        XMLTokenEnum nExternal;
+        int          aValue;
 };
 
 }

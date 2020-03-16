@@ -29,7 +29,7 @@ class SvXMLImport;
 class XMLWordWrapPropertyHdl final : public XMLPropertyHandler
 {
 private:
-    SvXMLImport* const mpImport;
+    SvXMLImport* mpImport;
 
 public:
     XMLWordWrapPropertyHdl( SvXMLImport* pImport );

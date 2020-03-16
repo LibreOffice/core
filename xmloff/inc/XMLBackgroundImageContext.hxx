@@ -30,7 +30,7 @@ namespace com { namespace sun { namespace star {
 class XMLBackgroundImageContext final : public XMLElementPropertyContext
 {
     XMLPropertyState aPosProp;
-    sal_Int32 const m_nBitmapModeIdx;
+    sal_Int32 m_nBitmapModeIdx;
     XMLPropertyState aFilterProp;
     XMLPropertyState aTransparencyProp;
 

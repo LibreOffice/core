@@ -36,7 +36,7 @@ class SvXMLExport;
 struct XMLNumberFormat
 {
     OUString   sCurrency;
-    sal_Int32 const  nNumberFormat;
+    sal_Int32  nNumberFormat;
     sal_Int16  nType;
     bool       bIsStandard : 1;
 

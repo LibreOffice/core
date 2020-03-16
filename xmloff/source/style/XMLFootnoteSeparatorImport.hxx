@@ -41,7 +41,7 @@ class XMLFootnoteSeparatorImport : public SvXMLImportContext
 {
     ::std::vector<XMLPropertyState> & rProperties;
     rtl::Reference<XMLPropertySetMapper> rMapper;
-    sal_Int32 const nPropIndex;
+    sal_Int32 nPropIndex;
 
 public:
 

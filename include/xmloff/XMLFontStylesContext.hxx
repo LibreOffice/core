@@ -43,7 +43,7 @@ class XMLOFF_DLLPUBLIC XMLFontStylesContext final : public SvXMLStylesContext
 
     std::unique_ptr<SvXMLTokenMap>           pFontStyleAttrTokenMap;
 
-    rtl_TextEncoding const        eDfltEncoding;
+    rtl_TextEncoding        eDfltEncoding;
 
     virtual SvXMLStyleContext *CreateStyleChildContext( sal_uInt16 nPrefix,
         const OUString& rLocalName,

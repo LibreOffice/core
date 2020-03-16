@@ -75,7 +75,7 @@ class MultiPropertySetHelper
     const css::uno::Any* pValues;
 
     /// an empty Any
-    css::uno::Any const aEmptyAny;
+    css::uno::Any aEmptyAny;
 
 public:
 

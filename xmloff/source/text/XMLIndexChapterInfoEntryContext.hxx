@@ -39,7 +39,7 @@ class XMLIndexChapterInfoEntryContext : public XMLIndexSimpleEntryContext
     // chapter format
     sal_Int16 nChapterInfo;
     bool bChapterInfoOK;
-    bool const bTOC;
+    bool bTOC;
     sal_Int16 nOutlineLevel;
     bool bOutlineLevelOK;
 

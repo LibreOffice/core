@@ -265,7 +265,7 @@ public:
     OUString msChartAddress;
     css::uno::Sequence< sal_Int32 > maSequenceMapping;
 
-    OUString const msCLSID;
+    OUString msCLSID;
 
     OUString maSrcShellID;
     OUString maDestShellID;
@@ -343,7 +343,7 @@ public:
     }
 
 private:
-    OUString const m_aRole;
+    OUString m_aRole;
 };
 
 template< typename T >
