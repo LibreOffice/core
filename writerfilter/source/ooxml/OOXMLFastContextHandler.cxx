@@ -116,6 +116,7 @@ bool OOXMLFastContextHandler::prepareMceContext(Token_t nElement, const uno::Ref
             static const char* aFeatures[] = {
                 "wps",
                 "wpg",
+                "w14",
             };
             for (const char *p : aFeatures)
             {
