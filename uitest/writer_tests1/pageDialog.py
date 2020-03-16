@@ -36,16 +36,16 @@ class WriterPageDialog(UITestCase):
                 document.StyleFamilies.PageStyles.Standard.BackColor, -1)
         elif btn == 'btncolor':
             self.assertEqual(
-                document.StyleFamilies.PageStyles.Standard.BackColor, 7512015)
+                hex(document.StyleFamilies.PageStyles.Standard.BackColor), '0x729fcf')
             self.assertEqual(
-                document.StyleFamilies.PageStyles.Standard.FillColor, 7512015)
+                hex(document.StyleFamilies.PageStyles.Standard.FillColor), '0x729fcf')
             self.assertEqual(
-                document.StyleFamilies.PageStyles.Standard.FillColor, 7512015)
+                hex(document.StyleFamilies.PageStyles.Standard.FillColor), '0x729fcf')
         elif btn == 'btngradient':
             self.assertEqual(
                 document.StyleFamilies.PageStyles.Standard.FillGradient.Style, LINEAR)
             self.assertEqual(
-                document.StyleFamilies.PageStyles.Standard.FillGradient.StartColor, 14543051)
+                hex(document.StyleFamilies.PageStyles.Standard.FillGradient.StartColor), '0xdde8cb')
             self.assertEqual(
                 document.StyleFamilies.PageStyles.Standard.FillGradient.Angle, 300)
             self.assertEqual(
