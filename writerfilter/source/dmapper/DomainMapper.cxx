@@ -1180,6 +1180,37 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             m_pImpl->startOrEndPermissionRange(nIntValue);
             break;
         }
+        case NS_ooxml::LN_CT_NumFmt_val:
+        {
+            try
+            {
+                uno::Reference<beans::XPropertySet> xFtnEdnSettings;
+                if (m_pImpl->IsInFootnoteProperties())
+                {
+                    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(
+                        m_pImpl->GetTextDocument(), uno::UNO_QUERY);
+                    if (xFootnotesSupplier.is())
+                        xFtnEdnSettings = xFootnotesSupplier->getFootnoteSettings();
+                }
+                else
+                {
+                    uno::Reference<text::XEndnotesSupplier> xEndnotesSupplier(
+                        m_pImpl->GetTextDocument(), uno::UNO_QUERY);
+                    if (xEndnotesSupplier.is())
+                        xFtnEdnSettings = xEndnotesSupplier->getEndnoteSettings();
+                }
+                if (xFtnEdnSettings.is())
+                {
+                    sal_Int16 nNumType = ConversionHelper::ConvertNumberingType(nIntValue);
+                    xFtnEdnSettings->setPropertyValue(getPropertyName(PROP_NUMBERING_TYPE),
+                                                      uno::makeAny(nNumType));
+                }
+            }
+            catch (const uno::Exception&)
+            {
+            }
+        }
+        break;
         default:
             SAL_WARN("writerfilter", "DomainMapper::lcl_attribute: unhandled token: " << nName);
     }
@@ -2290,10 +2321,18 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     //endnotes in word can be at section end or document end - writer supports only the latter
     // -> so this property can be ignored
     break;
-    case NS_ooxml::LN_EG_FtnEdnNumProps_numStart:
-    case NS_ooxml::LN_EG_FtnEdnNumProps_numRestart:
     case NS_ooxml::LN_CT_FtnProps_numFmt:
     case NS_ooxml::LN_CT_EdnProps_numFmt:
+    {
+        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+        if (pProperties.get())
+        {
+            pProperties->resolve(*this);
+        }
+    }
+    break;
+    case NS_ooxml::LN_EG_FtnEdnNumProps_numStart:
+    case NS_ooxml::LN_EG_FtnEdnNumProps_numRestart:
     {
         try
         {

@@ -12880,6 +12880,7 @@
           <value>thaiNumbers</value>
           <!-- Thai Counting System -->
           <value>thaiCounting</value>
+          <value>custom</value>
         </choice>
       </define>
       <define name="ST_PageOrientation">
@@ -14795,6 +14796,9 @@
         </attribute>
       </define>
       <define name="CT_NumFmt">
+        <attribute name="format">
+          <data type="string"/>
+        </attribute>
         <attribute name="val">
           <ref name="ST_NumberFormat"/>
         </attribute>
@@ -17750,6 +17754,7 @@
       <value tokenid="ooxml:Value_ST_NumberFormat_thaiLetters">thaiLetters</value>
       <value tokenid="ooxml:Value_ST_NumberFormat_thaiNumbers">thaiNumbers</value>
       <value tokenid="ooxml:Value_ST_NumberFormat_thaiCounting">thaiCounting</value>
+      <value tokenid="ooxml:Value_ST_NumberFormat_custom">custom</value>
     </resource>
     <resource name="ST_PageOrientation" resource="List">
       <value tokenid="ooxml:Value_ST_PageOrientation_portrait">portrait</value>
@@ -18522,8 +18527,9 @@
     <resource name="CT_EdnPos" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_EdnPos_val" action="setValue"/>
     </resource>
-    <resource name="CT_NumFmt" resource="Value">
-      <attribute name="val" tokenid="ooxml:CT_NumFmt_val" action="setValue"/>
+    <resource name="CT_NumFmt" resource="Properties">
+      <attribute name="format" tokenid="ooxml:CT_NumFmt_format"/>
+      <attribute name="val" tokenid="ooxml:CT_NumFmt_val"/>
     </resource>
     <resource name="ST_RestartNumber" resource="List">
       <value tokenid="ooxml:Value_ST_RestartNumber_continuous">continuous</value>

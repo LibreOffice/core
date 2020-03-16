@@ -294,10 +294,13 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     }
     if (nParam >= 0)
     {
-        auto pValue = new RTFValue(nParam);
+        auto pInner = new RTFValue(nParam);
+        RTFSprms aAttributes;
+        aAttributes.set(NS_ooxml::LN_CT_NumFmt_val, pInner);
+        auto pOuter = new RTFValue(aAttributes);
         putNestedSprm(m_aDefaultState.getParagraphSprms(),
                       NS_ooxml::LN_EG_SectPrContents_footnotePr, NS_ooxml::LN_CT_FtnProps_numFmt,
-                      pValue);
+                      pOuter);
         return RTFError::OK;
     }
 
@@ -351,9 +354,12 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     }
     if (nParam >= 0)
     {
-        auto pValue = new RTFValue(nParam);
+        auto pInner = new RTFValue(nParam);
+        RTFSprms aAttributes;
+        aAttributes.set(NS_ooxml::LN_CT_NumFmt_val, pInner);
+        auto pOuter = new RTFValue(aAttributes);
         putNestedSprm(m_aDefaultState.getParagraphSprms(), NS_ooxml::LN_EG_SectPrContents_endnotePr,
-                      NS_ooxml::LN_CT_EdnProps_numFmt, pValue);
+                      NS_ooxml::LN_CT_EdnProps_numFmt, pOuter);
         return RTFError::OK;
     }
 
@@ -1087,16 +1093,17 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_PNDEC:
         {
             auto pValue = new RTFValue(NS_ooxml::LN_Value_ST_NumberFormat_decimal);
-            m_aStates.top().getTableSprms().set(NS_ooxml::LN_CT_Lvl_numFmt, pValue);
+            putNestedAttribute(m_aStates.top().getTableSprms(), NS_ooxml::LN_CT_Lvl_numFmt,
+                               NS_ooxml::LN_CT_NumFmt_val, pValue);
         }
         break;
         case RTF_PNLVLBLT:
         {
             m_aStates.top().getTableAttributes().set(NS_ooxml::LN_CT_AbstractNum_nsid,
                                                      new RTFValue(1));
-            m_aStates.top().getTableSprms().set(
-                NS_ooxml::LN_CT_Lvl_numFmt,
-                new RTFValue(NS_ooxml::LN_Value_ST_NumberFormat_bullet));
+            putNestedAttribute(m_aStates.top().getTableSprms(), NS_ooxml::LN_CT_Lvl_numFmt,
+                               NS_ooxml::LN_CT_NumFmt_val,
+                               new RTFValue(NS_ooxml::LN_Value_ST_NumberFormat_bullet));
         }
         break;
         case RTF_LANDSCAPE:
