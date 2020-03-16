@@ -53,7 +53,7 @@ struct MenuItemData
     bool            bIsTemporary;           // Temporary inserted ('No selection possible')
     bool            bHiddenOnGUI;
     Size            aSz;                    // only temporarily valid
-    OUString const  aAccessibleName;        // accessible name
+    OUString        aAccessibleName;        // accessible name
 
     std::unique_ptr<SalMenuItem> pSalMenuItem; // access to native menu
 

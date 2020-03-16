@@ -604,7 +604,7 @@ BitmapEx OpenGLHelper::ConvertBufferToBitmapEx(const sal_uInt8* const pBuffer, l
 const char* OpenGLHelper::GLErrorString(GLenum errorCode)
 {
     static const struct {
-        GLenum const code;
+        GLenum code;
         const char *string;
     } errors[]=
     {

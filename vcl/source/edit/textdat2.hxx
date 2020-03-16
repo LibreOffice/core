@@ -99,9 +99,9 @@ public:
 
 struct TEWritingDirectionInfo
 {
-    bool const         bLeftToRight;
-    sal_Int32 const    nStartPos;
-    sal_Int32 const    nEndPos;
+    bool         bLeftToRight;
+    sal_Int32    nStartPos;
+    sal_Int32    nEndPos;
     TEWritingDirectionInfo( bool LeftToRight, sal_Int32 Start, sal_Int32 End )
         : bLeftToRight {LeftToRight}
         , nStartPos {Start}
@@ -170,7 +170,7 @@ inline bool TextLine::operator == ( const TextLine& rLine ) const
 class TEParaPortion
 {
 private:
-    TextNode* const         mpNode;
+    TextNode*               mpNode;
 
     std::vector<TextLine>   maLines;
     TETextPortionList       maTextPortions;

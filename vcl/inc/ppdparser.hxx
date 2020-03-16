@@ -65,7 +65,7 @@ class PPDKey
     typedef std::unordered_map< OUString, PPDValue > hash_type;
     typedef std::vector< PPDValue* > value_type;
 
-    OUString const      m_aKey;
+    OUString            m_aKey;
     hash_type           m_aValues;
     value_type          m_aOrderedValues;
     const PPDValue*     m_pDefaultValue;

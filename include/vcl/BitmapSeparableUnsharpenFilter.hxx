@@ -29,7 +29,7 @@ public:
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
 
 private:
-    double const mfRadius;
+    double mfRadius;
 };
 
 #endif

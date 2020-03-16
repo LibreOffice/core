@@ -30,7 +30,7 @@ public:
 
 /// Create this to not only enter the zone, but set VCL context.
 class OpenGLVCLContextZone {
-    OpenGLZone const aZone;
+    OpenGLZone aZone;
 public:
     OpenGLVCLContextZone();
 };

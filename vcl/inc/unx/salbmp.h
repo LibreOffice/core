@@ -156,8 +156,8 @@ private:
 
     Pixmap          maPixmap;
     SalTwoRect      maTwoRect;
-    long const            mnDepth;
-    SalX11Screen const    mnXScreen;
+    long            mnDepth;
+    SalX11Screen    mnXScreen;
 
     static void     ImplDraw(
                         Drawable aSrcDrawable,

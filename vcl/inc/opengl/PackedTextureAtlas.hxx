@@ -30,8 +30,8 @@ class VCL_DLLPUBLIC PackedTextureAtlasManager final
 {
     std::vector<std::unique_ptr<PackedTexture>> maPackedTextures;
 
-    int const mnTextureWidth;
-    int const mnTextureHeight;
+    int mnTextureWidth;
+    int mnTextureHeight;
 
     void CreateNewTexture();
 

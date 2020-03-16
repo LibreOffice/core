@@ -611,9 +611,9 @@ public:
     // helper functions for user to create a single control
     struct UIControlOptions
     {
-        OUString const   maDependsOnName;
-        sal_Int32 const  mnDependsOnEntry;
-        bool const       mbAttachToDependency;
+        OUString         maDependsOnName;
+        sal_Int32        mnDependsOnEntry;
+        bool             mbAttachToDependency;
         OUString         maGroupHint;
         bool             mbInternalOnly;
         bool             mbEnabled;

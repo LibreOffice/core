@@ -1600,7 +1600,7 @@ public:
     char*       mpPtr;
 
     char        maSubsetName[256];
-    bool const  mbPfbSubset;
+    bool        mbPfbSubset;
     int         mnHexLineCol;
 };
 

@@ -108,10 +108,10 @@ struct DDInfo
 
 struct Impl_IMEInfos
 {
-    OUString const aOldTextAfterStartPos;
+    OUString      aOldTextAfterStartPos;
     std::unique_ptr<ExtTextInputAttr[]>
                   pAttribs;
-    sal_Int32 const nPos;
+    sal_Int32     nPos;
     sal_Int32     nLen;
     bool          bCursor;
     bool          bWasCursorOverwrite;

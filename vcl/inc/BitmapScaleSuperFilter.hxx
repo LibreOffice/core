@@ -31,8 +31,8 @@ public:
     virtual BitmapEx execute(BitmapEx const& rBitmap) const override;
 
 private:
-    double const mrScaleX;
-    double const mrScaleY;
+    double mrScaleX;
+    double mrScaleY;
 
 };
 

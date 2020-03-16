@@ -145,7 +145,7 @@ protected:
     Bitmap maBitmap;
     BitmapBuffer* mpBuffer;
     ColorMask maColorMask;
-    BitmapAccessMode const mnAccessMode;
+    BitmapAccessMode mnAccessMode;
 };
 
 

@@ -142,7 +142,7 @@ class VCL_DLLPUBLIC GraphicDescriptor final
     sal_uInt16          nBitsPerPixel;
     sal_uInt16          nPlanes;
     GraphicFileFormat   nFormat;
-    bool const          bOwnStream;
+    bool                bOwnStream;
     sal_uInt8 mnNumberOfImageComponents;
     bool                bIsTransparent;
     bool                bIsAlpha;
@@ -329,7 +329,7 @@ private:
                     DECL_LINK( FilterCallback, ConvertData&, bool );
 
     std::unique_ptr<FilterErrorEx> pErrorEx;
-    bool const                     bUseConfig;
+    bool                bUseConfig;
 };
 
 #endif // INCLUDED_VCL_GRAPHICFILTER_HXX

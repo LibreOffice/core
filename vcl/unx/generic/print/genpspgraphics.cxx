@@ -539,7 +539,7 @@ namespace {
 class ImplPspFontData : public FreetypeFontFace
 {
 private:
-    sal_IntPtr const              mnFontId;
+    sal_IntPtr              mnFontId;
 
 public:
     explicit ImplPspFontData( const psp::FastPrintFontInfo& );

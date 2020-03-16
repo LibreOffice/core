@@ -36,7 +36,7 @@ private:
     Idle                            maUpdateMenuBarIdle;
 
     bool                            mbInActivateCallback;
-    bool const                      mbMenuBar;
+    bool                            mbMenuBar;
     bool                            mbNeedsUpdate;
     bool                            mbReturnFocusToDocument;
     bool                            mbAddedGrab;
@@ -141,8 +141,8 @@ public:
 
     GtkSalMenu*         mpParentMenu;       // The menu into which this menu item is inserted
     GtkSalMenu*         mpSubMenu;          // Submenu of this item (if defined)
-    MenuItemType const  mnType;             // Item type
-    sal_uInt16 const    mnId;               // Item ID
+    MenuItemType        mnType;             // Item type
+    sal_uInt16          mnId;               // Item ID
     bool                mbVisible;          // Item visibility.
 };
 

@@ -37,11 +37,11 @@ class GIFLZWDecompressor
     sal_uInt8*              pBlockBuf;
     sal_uLong               nInputBitsBuf;
     bool                    bEOIFound;
-    sal_uInt8 const         nDataSize;
+    sal_uInt8               nDataSize;
     sal_uInt8               nBlockBufSize;
     sal_uInt8               nBlockBufPos;
-    sal_uInt16 const        nClearCode;
-    sal_uInt16 const        nEOICode;
+    sal_uInt16              nClearCode;
+    sal_uInt16              nEOICode;
     sal_uInt16              nTableSize;
     sal_uInt16              nCodeSize;
     sal_uInt16              nOldCode;

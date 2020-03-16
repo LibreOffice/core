@@ -31,8 +31,8 @@ typedef struct _cairo_surface cairo_surface_t;
 
 class VCL_DLLPUBLIC SvpSalVirtualDevice : public SalVirtualDevice
 {
-    DeviceFormat const                  m_eFormat;
-    cairo_surface_t* const              m_pRefSurface;
+    DeviceFormat                        m_eFormat;
+    cairo_surface_t*                    m_pRefSurface;
     cairo_surface_t*                    m_pSurface;
     bool                                m_bOwnsSurface; // nearly always true, except for edge case of tdf#127529
     basegfx::B2IVector                  m_aFrameSize;

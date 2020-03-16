@@ -138,7 +138,7 @@ public:
     GtkStyleContext* createOldContext(GtkControlPart ePart);
     GtkStyleContext* makeContext(GtkWidgetPath *pPath, GtkStyleContext *pParent);
 private:
-    GtkWidget       * const mpWindow;
+    GtkWidget              *mpWindow;
     static GtkStyleContext *mpWindowStyle;
     static GtkStyleContext *mpButtonStyle;
     static GtkStyleContext *mpLinkButtonStyle;

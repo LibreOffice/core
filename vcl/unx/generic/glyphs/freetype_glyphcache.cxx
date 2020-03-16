@@ -735,7 +735,7 @@ private:
                     mpFlagAry;
 
     FT_Vector       maPosition;
-    sal_uInt16 const mnMaxPoints;
+    sal_uInt16      mnMaxPoints;
     sal_uInt16      mnPoints;
     sal_uInt16      mnPoly;
     bool            bHasOffline;

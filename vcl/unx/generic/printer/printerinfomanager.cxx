@@ -694,8 +694,8 @@ struct SystemCommandParameters
     const char*     pPrintCommand;
     const char*     pForeToken;
     const char*     pAftToken;
-    unsigned int const    nForeTokenCount;
-    tokenHandler const    pHandler;
+    unsigned int    nForeTokenCount;
+    tokenHandler    pHandler;
 };
 
 }

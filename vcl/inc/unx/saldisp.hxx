@@ -278,7 +278,7 @@ protected:
 
     SalX11Screen                 m_nXDefaultScreen;
     std::vector< ScreenData >    m_aScreens;
-    ScreenData const      m_aInvalidScreenData;
+    ScreenData      m_aInvalidScreenData;
     Pair            aResolution_;       // [dpi]
     sal_uLong       nMaxRequestSize_;   // [byte]
 

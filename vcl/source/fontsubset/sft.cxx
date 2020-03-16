@@ -1046,9 +1046,9 @@ static sal_uInt32 getGlyph0(const sal_uInt8* cmap, sal_uInt32, sal_uInt32 c) {
 namespace {
 
 struct subHeader2 {
-    sal_uInt16 const firstCode;
-    sal_uInt16 const entryCount;
-    sal_uInt16 const idDelta;
+    sal_uInt16 firstCode;
+    sal_uInt16 entryCount;
+    sal_uInt16 idDelta;
     sal_uInt16 idRangeOffset;
 };
 

@@ -27,8 +27,8 @@ public:
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
 
 private:
-    sal_uInt16 const mnAzimuthAngle100;
-    sal_uInt16 const mnElevationAngle100;
+    sal_uInt16 mnAzimuthAngle100;
+    sal_uInt16 mnElevationAngle100;
 };
 
 #endif

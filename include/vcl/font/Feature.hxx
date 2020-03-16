@@ -99,7 +99,7 @@ struct Feature
     Feature(FeatureID const& rID, FeatureType eType);
 
     FeatureID m_aID;
-    FeatureType const m_eType;
+    FeatureType m_eType;
     FeatureDefinition m_aDefinition;
 };
 

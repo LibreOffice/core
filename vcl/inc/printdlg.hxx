@@ -190,13 +190,13 @@ namespace vcl
         std::unique_ptr<weld::Expander>         mxLayoutExpander;
         std::unique_ptr<weld::Widget>           mxCustom;
 
-        OUString const                          maPrintToFileText;
+        OUString                                maPrintToFileText;
         OUString                                maPrintText;
-        OUString const                          maDefPrtText;
+        OUString                                maDefPrtText;
 
         OUString                                maPageStr;
-        OUString const                          maNoPageStr;
-        OUString const                          maNoPreviewStr;
+        OUString                                maNoPageStr;
+        OUString                                maNoPreviewStr;
         sal_Int32                               mnCurPage;
         sal_Int32                               mnCachedPages;
 

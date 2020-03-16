@@ -37,7 +37,7 @@ namespace vcl { namespace unohelper {
                             public ::cppu::OWeakObject
     {
     private:
-        OUString const  maText;
+        OUString        maText;
 
     public:
                         TextDataObject( const OUString& rText );

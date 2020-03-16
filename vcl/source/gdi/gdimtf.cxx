@@ -2601,7 +2601,7 @@ namespace
     {
     private:
         ImplMetaReadData& m_rData;
-        rtl_TextEncoding const m_eOrigCharSet;
+        rtl_TextEncoding m_eOrigCharSet;
     public:
         DepthGuard(ImplMetaReadData& rData, SvStream const & rIStm)
             : m_rData(rData)

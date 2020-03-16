@@ -95,7 +95,7 @@ public:
 class VCL_DLLPUBLIC CommandExtTextInputData
 {
 private:
-    OUString const       maText;
+    OUString            maText;
     std::unique_ptr<ExtTextInputAttr[]> mpTextAttr;
     sal_Int32           mnCursorPos;
     sal_uInt16          mnCursorFlags;
@@ -207,7 +207,7 @@ enum class ShowDialogId
 
 class VCL_DLLPUBLIC CommandDialogData
 {
-    ShowDialogId const   m_nDialogId;
+    ShowDialogId   m_nDialogId;
 public:
     CommandDialogData( ShowDialogId nDialogId )
     : m_nDialogId( nDialogId )
@@ -243,7 +243,7 @@ enum class MediaCommand
 
 class VCL_DLLPUBLIC CommandMediaData
 {
-    MediaCommand const m_nMediaId;
+    MediaCommand m_nMediaId;
     bool m_bPassThroughToOS;
 public:
     CommandMediaData(MediaCommand nMediaId)
@@ -271,7 +271,7 @@ public:
 
 class VCL_DLLPUBLIC CommandSwipeData
 {
-    double const mnVelocityX;
+    double mnVelocityX;
 public:
     CommandSwipeData()
         : mnVelocityX(0)
@@ -287,8 +287,8 @@ public:
 
 class VCL_DLLPUBLIC CommandLongPressData
 {
-    double const mnX;
-    double const mnY;
+    double mnX;
+    double mnY;
 public:
     CommandLongPressData()
         : mnX(0)

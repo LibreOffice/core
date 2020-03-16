@@ -26,7 +26,7 @@ class TextUndoDelPara : public TextUndo
 {
 private:
     bool            mbDelObject;
-    sal_uInt32 const mnPara;
+    sal_uInt32      mnPara;
     TextNode*       mpNode; // points at the valid not-destroyed object
 
 public:
@@ -42,8 +42,8 @@ public:
 class TextUndoConnectParas : public TextUndo
 {
 private:
-    sal_uInt32 const          mnPara;
-    sal_Int32 const           mnSepPos;
+    sal_uInt32          mnPara;
+    sal_Int32           mnSepPos;
 
 public:
                     TextUndoConnectParas( TextEngine* pTextEngine, sal_uInt32 nPara, sal_Int32 nSepPos );
@@ -58,8 +58,8 @@ public:
 class TextUndoSplitPara : public TextUndo
 {
 private:
-    sal_uInt32 const          mnPara;
-    sal_Int32 const           mnSepPos;
+    sal_uInt32          mnPara;
+    sal_Int32           mnSepPos;
 
 public:
                     TextUndoSplitPara( TextEngine* pTextEngine, sal_uInt32 nPara, sal_Int32 nSepPos );
@@ -91,8 +91,8 @@ public:
 class TextUndoRemoveChars : public TextUndo
 {
 private:
-    TextPaM const         maTextPaM;
-    OUString const        maText;
+    TextPaM         maTextPaM;
+    OUString        maText;
 
 public:
                     TextUndoRemoveChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const OUString& rStr );

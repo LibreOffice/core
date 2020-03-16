@@ -32,7 +32,7 @@ enum SalSessionEventType
 
 struct SalSessionEvent
 {
-    SalSessionEventType const         m_eType;
+    SalSessionEventType         m_eType;
 
     SalSessionEvent( SalSessionEventType eType )
             : m_eType( eType )
@@ -41,7 +41,7 @@ struct SalSessionEvent
 
 struct SalSessionInteractionEvent : public SalSessionEvent
 {
-    bool const                        m_bInteractionGranted;
+    bool                        m_bInteractionGranted;
 
     SalSessionInteractionEvent( bool bGranted )
             : SalSessionEvent( Interaction ),
@@ -51,7 +51,7 @@ struct SalSessionInteractionEvent : public SalSessionEvent
 
 struct SalSessionSaveRequestEvent : public SalSessionEvent
 {
-    bool const                        m_bShutdown;
+    bool                        m_bShutdown;
 
     SalSessionSaveRequestEvent( bool bShutdown )
             : SalSessionEvent( SaveRequest ),

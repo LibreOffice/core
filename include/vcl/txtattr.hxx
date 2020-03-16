@@ -61,7 +61,7 @@ public:
 class VCL_DLLPUBLIC TextAttribFontColor final : public TextAttrib
 {
 private:
-    Color const   maColor;
+    Color   maColor;
 
 public:
                             TextAttribFontColor( const Color& rColor );
@@ -77,7 +77,7 @@ public:
 class VCL_DLLPUBLIC TextAttribFontWeight final : public TextAttrib
 {
 private:
-    FontWeight const  meWeight;
+    FontWeight  meWeight;
 
 public:
                             TextAttribFontWeight( FontWeight eWeight );

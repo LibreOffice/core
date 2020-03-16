@@ -21,9 +21,9 @@ private:
     std::vector<Vertex>& mrVertices;
     std::vector<GLuint>& mrIndices;
     GLubyte mR, mG, mB, mA;
-    GLfloat const mfLineWidth;
-    GLfloat const mfLineWidthAndAA;
-    size_t const mnInitialIndexSize;
+    GLfloat mfLineWidth;
+    GLfloat mfLineWidthAndAA;
+    size_t mnInitialIndexSize;
     bool mbIncomplete;
 
 public:

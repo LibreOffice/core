@@ -201,8 +201,8 @@ struct SalSurroundingTextRequestEvent
 
 struct SalSurroundingTextSelectionChangeEvent
 {
-    sal_uLong const mnStart;        // The beginning index of selected range
-    sal_uLong const mnEnd;          // The end index of selected range
+    sal_uLong       mnStart;        // The beginning index of selected range
+    sal_uLong       mnEnd;          // The end index of selected range
 };
 
 struct SalQueryCharPositionEvent

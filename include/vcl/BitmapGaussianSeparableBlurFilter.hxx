@@ -34,7 +34,7 @@ public:
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
 
 private:
-    double const mfRadius;
+    double mfRadius;
 
     static bool convolutionPass(const Bitmap& rBitmap, Bitmap& aNewBitmap,
                                 BitmapReadAccess const* pReadAcc, int aNumberOfContributions,

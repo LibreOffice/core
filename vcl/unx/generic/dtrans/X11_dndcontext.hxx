@@ -35,7 +35,7 @@ namespace x11 {
     class DropTargetDropContext :
         public ::cppu::WeakImplHelper<css::datatransfer::dnd::XDropTargetDropContext>
     {
-        ::Window const                        m_aDropWindow;
+        ::Window                              m_aDropWindow;
         rtl::Reference<SelectionManager>      m_xManager;
     public:
         DropTargetDropContext( ::Window, SelectionManager& );
@@ -50,7 +50,7 @@ namespace x11 {
     class DropTargetDragContext :
         public ::cppu::WeakImplHelper<css::datatransfer::dnd::XDropTargetDragContext>
     {
-        ::Window const                        m_aDropWindow;
+        ::Window                              m_aDropWindow;
         rtl::Reference<SelectionManager>      m_xManager;
     public:
         DropTargetDragContext( ::Window, SelectionManager& );
@@ -64,7 +64,7 @@ namespace x11 {
     class DragSourceContext :
         public ::cppu::WeakImplHelper<css::datatransfer::dnd::XDragSourceContext>
     {
-        ::Window const                        m_aDropWindow;
+        ::Window                              m_aDropWindow;
         rtl::Reference<SelectionManager>      m_xManager;
     public:
         DragSourceContext( ::Window, SelectionManager& );

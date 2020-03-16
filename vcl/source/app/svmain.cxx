@@ -611,8 +611,8 @@ namespace {
 // only one call is allowed
 struct WorkerThreadData
 {
-    oslWorkerFunction const   pWorker;
-    void * const              pThreadData;
+    oslWorkerFunction   pWorker;
+    void *              pThreadData;
     WorkerThreadData( oslWorkerFunction pWorker_, void * pThreadData_ )
         : pWorker( pWorker_ )
         , pThreadData( pThreadData_ )

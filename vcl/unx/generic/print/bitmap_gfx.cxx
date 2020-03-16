@@ -66,7 +66,7 @@ class HexEncoder : public ByteEncoder
 {
 private:
 
-    osl::File* const mpFile;
+    osl::File*      mpFile;
     sal_uInt32      mnColumn;
     sal_uInt32      mnOffset;
     OStringBuffer   mpFileBuffer;
@@ -136,7 +136,7 @@ class Ascii85Encoder : public ByteEncoder
 {
 private:
 
-    osl::File* const mpFile;
+    osl::File*      mpFile;
     sal_uInt32      mnByte;
     sal_uInt8       mpByteBuffer[4];
 

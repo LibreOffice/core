@@ -26,7 +26,7 @@ public:
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
 
 private:
-    Color const maColor;
+    Color maColor;
 };
 
 #endif

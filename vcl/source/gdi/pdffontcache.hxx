@@ -32,9 +32,9 @@ namespace vcl
     {
         struct FontIdentifier
         {
-            sal_IntPtr const      m_nFontId;
-            bool const            m_bVertical;
-            std::type_info* const m_typeFontFace;
+            sal_IntPtr      m_nFontId;
+            bool            m_bVertical;
+            std::type_info* m_typeFontFace;
 
             FontIdentifier( const PhysicalFontFace*, bool bVertical );
 

@@ -280,7 +280,7 @@ namespace {
 struct PrintJobAsync
 {
     std::shared_ptr<PrinterController>  mxController;
-    JobSetup const                      maInitSetup;
+    JobSetup                            maInitSetup;
 
     PrintJobAsync(const std::shared_ptr<PrinterController>& i_xController,
                   const JobSetup& i_rInitSetup)
