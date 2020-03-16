@@ -30,7 +30,7 @@ namespace x11 {
     class X11Transferable : public ::cppu::WeakImplHelper< css::datatransfer::XTransferable >
     {
         SelectionManager&               m_rManager;
-        Atom const                m_aSelection;
+        Atom                m_aSelection;
     public:
         X11Transferable( SelectionManager& rManager, Atom selection );
         virtual ~X11Transferable() override;

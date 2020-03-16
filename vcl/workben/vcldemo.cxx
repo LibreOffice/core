@@ -359,9 +359,9 @@ public:
                                   aToplevelRegions[2].BottomRight());
                 DemoRenderer::clearRects(rDev,aSubRegions);
                 static struct {
-                    bool const mbClip;
-                    bool const mbArabicText;
-                    bool const mbRotate;
+                    bool mbClip;
+                    bool mbArabicText;
+                    bool mbRotate;
                 } const aRenderData[] = {
                     { false, false, false },
                     { false, true,  false },

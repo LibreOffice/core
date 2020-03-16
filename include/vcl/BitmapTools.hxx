@@ -43,8 +43,8 @@ class VCL_DLLPUBLIC RawBitmap
 {
 friend BitmapEx VCL_DLLPUBLIC CreateFromData( RawBitmap&& rawBitmap );
     std::unique_ptr<sal_uInt8[]> mpData;
-    Size const maSize;
-    sal_uInt8 const mnBitCount;
+    Size maSize;
+    sal_uInt8 mnBitCount;
 public:
     RawBitmap(Size const & rSize, sal_uInt8 nBitCount)
         : maSize(rSize),

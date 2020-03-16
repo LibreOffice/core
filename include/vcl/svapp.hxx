@@ -210,7 +210,7 @@ public:
     }
 
 private:
-    Type const aEvent;
+    Type aEvent;
     std::vector<OUString> aData;
 };
 

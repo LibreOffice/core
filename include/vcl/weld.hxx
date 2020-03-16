@@ -1783,7 +1783,7 @@ public:
 
 class VCL_DLLPUBLIC TimeSpinButton final
 {
-    TimeFieldFormat const m_eFormat;
+    TimeFieldFormat m_eFormat;
     std::unique_ptr<weld::SpinButton> m_xSpinButton;
     Link<TimeSpinButton&, void> m_aValueChangedHdl;
 

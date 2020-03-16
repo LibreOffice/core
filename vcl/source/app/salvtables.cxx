@@ -676,7 +676,7 @@ class SalInstanceMenu : public weld::Menu
 private:
     VclPtr<PopupMenu> m_xMenu;
 
-    bool const m_bTakeOwnership;
+    bool       m_bTakeOwnership;
     sal_uInt16 m_nLastId;
 
     DECL_LINK(SelectMenuHdl, ::Menu*, bool);

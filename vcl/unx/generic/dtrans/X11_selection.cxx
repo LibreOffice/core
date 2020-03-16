@@ -113,7 +113,7 @@ struct NativeTypeEntry
     Atom            nAtom;
     const char*     pType;              // Mime encoding on our side
     const char*     pNativeType;        // string corresponding to nAtom for the case of nAtom being uninitialized
-    int const       nFormat;            // the corresponding format
+    int             nFormat;            // the corresponding format
 };
 
 }

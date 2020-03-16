@@ -81,7 +81,7 @@ class RunDialog :
 {
 private:
     osl::Mutex maLock;
-    GtkWidget * const mpDialog;
+    GtkWidget *mpDialog;
     bool mbTerminateDesktop;
     css::uno::Reference<css::awt::XExtendedToolkit> mxToolkit;
     css::uno::Reference<css::frame::XDesktop> mxDesktop;

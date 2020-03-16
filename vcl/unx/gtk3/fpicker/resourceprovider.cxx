@@ -31,7 +31,7 @@ using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 
 static const struct
 {
-    sal_Int32 const ctrlId;
+    sal_Int32 ctrlId;
     const char *resId;
 } CtrlIdToResIdTable[] = {
     { CHECKBOX_AUTOEXTENSION,                   STR_FPICKER_AUTO_EXTENSION },

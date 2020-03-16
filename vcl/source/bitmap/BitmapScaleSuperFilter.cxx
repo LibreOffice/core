@@ -48,7 +48,7 @@ constexpr sal_uInt8 MAP(sal_uInt8 cVal0, sal_uInt8 cVal1, BilinearWeightType nFr
 
 struct ScaleContext
 {
-    BitmapReadAccess* const mpSrc;
+    BitmapReadAccess*  mpSrc;
     BitmapWriteAccess* mpDest;
     long mnDestW;
     bool mbHMirr;
@@ -102,10 +102,10 @@ typedef void (*ScaleRangeFn)(ScaleContext &rContext, long nStartY, long nEndY);
 
 class ScaleTask : public comphelper::ThreadTask
 {
-    ScaleRangeFn const mpScaleRangeFunction;
+    ScaleRangeFn mpScaleRangeFunction;
     ScaleContext& mrContext;
-    const long mnStartY;
-    const long mnEndY;
+    long mnStartY;
+    long mnEndY;
 
 public:
     explicit ScaleTask(const std::shared_ptr<comphelper::ThreadTaskTag>& pTag,

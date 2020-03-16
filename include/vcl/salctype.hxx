@@ -48,7 +48,7 @@ public:
 
     Graphic             maGraphic;
     SvStream&           mrStm;
-    ConvertDataFormat const   mnFormat;
+    ConvertDataFormat   mnFormat;
 
                         ConvertData( const Graphic& rGraphic, SvStream& rStm, ConvertDataFormat nFormat ) :
                             maGraphic( rGraphic ), mrStm( rStm ), mnFormat( nFormat ) {}

@@ -243,7 +243,7 @@ class TestBitmap : public cppu::WeakImplHelper< rendering::XIntegerReadOnlyBitma
                                                  rendering::XIntegerBitmapColorSpace >
 {
 private:
-    geometry::IntegerSize2D const  maSize;
+    geometry::IntegerSize2D        maSize;
     uno::Sequence<sal_Int8>        maComponentTags;
     uno::Sequence<sal_Int32>       maComponentBitCounts;
     rendering::IntegerBitmapLayout maLayout;

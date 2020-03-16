@@ -249,7 +249,7 @@ class VCL_DLLPUBLIC ImplControlValue
     friend class SalFrame;
 
     private:
-        ControlType const mType;
+        ControlType     mType;
         ButtonValue     mTristate;    // Tristate value: on, off, mixed
         long            mNumber;      // numeric value
     protected:

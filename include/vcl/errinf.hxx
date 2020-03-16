@@ -141,7 +141,7 @@ public:
     static std::unique_ptr<ErrorInfo> GetErrorInfo(ErrCode);
 
 private:
-    ErrCode const           nUserId;
+    ErrCode                 nUserId;
 };
 
 class SAL_WARN_UNUSED VCL_DLLPUBLIC DynamicErrorInfo : public ErrorInfo
@@ -170,7 +170,7 @@ public:
     const OUString&         GetErrorString() const { return aString; }
 
 private:
-    OUString const          aString;
+    OUString                aString;
 
 };
 
@@ -185,8 +185,8 @@ public:
     const OUString& GetArg2() const { return aArg2; }
 
 private:
-    OUString const aArg1;
-    OUString const aArg2;
+    OUString aArg1;
+    OUString aArg2;
 
 };
 

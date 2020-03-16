@@ -34,7 +34,7 @@ public:
     FcPattern*          GetPattern() const;
     static void         cairo_font_options_substitute(FcPattern* pPattern);
 private:
-    FcPattern* const mpPattern;
+    FcPattern* mpPattern;
 };
 
 

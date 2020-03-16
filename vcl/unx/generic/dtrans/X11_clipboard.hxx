@@ -41,7 +41,7 @@ namespace x11 {
 
         rtl::Reference<SelectionManager>                        m_xSelectionManager;
         ::std::vector< css::uno::Reference< css::datatransfer::clipboard::XClipboardListener > > m_aListeners;
-        Atom const                                              m_aSelection;
+        Atom                                                    m_aSelection;
 
         X11Clipboard( SelectionManager& rManager, Atom aSelection );
 

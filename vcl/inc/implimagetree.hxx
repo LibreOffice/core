@@ -40,10 +40,10 @@ namespace com { namespace sun { namespace star { namespace container {
 struct ImageRequestParameters
 {
     OUString msName;
-    OUString const msStyle;
+    OUString msStyle;
     BitmapEx& mrBitmap;
     bool mbLocalized;
-    ImageLoadFlags const meFlags;
+    ImageLoadFlags meFlags;
     bool mbWriteImageToCache;
     sal_Int32 mnScalePercentage;
 

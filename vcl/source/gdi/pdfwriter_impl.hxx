@@ -112,10 +112,10 @@ constexpr sal_Int32 g_nInheritedPageHeight = 842; // default A4 in inch/72
 
 struct PDFPage
 {
-    VclPtr<PDFWriterImpl>             m_pWriter;
-    double const                      m_nPageWidth;           // in inch/72
-    double const                      m_nPageHeight;          // in inch/72
-    PDFWriter::Orientation const      m_eOrientation;
+    VclPtr<PDFWriterImpl>       m_pWriter;
+    double                      m_nPageWidth;           // in inch/72
+    double                      m_nPageHeight;          // in inch/72
+    PDFWriter::Orientation      m_eOrientation;
     sal_Int32                   m_nPageObject;
     std::vector<sal_Int32>      m_aStreamObjects;
     sal_Int32                   m_nStreamLengthObject;

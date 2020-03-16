@@ -134,7 +134,7 @@ private:
     bool                mbIDATComplete : 1; // true if finished with enough IDAT chunks
     bool                mbpHYs : 1;         // true if physical size of pixel available
     bool                mbIgnoreGammaChunk : 1;
-    bool const          mbIgnoreCRC : 1; // skip checking CRCs while fuzzing
+    bool                mbIgnoreCRC : 1; // skip checking CRCs while fuzzing
 
 #if OSL_DEBUG_LEVEL > 0
     // do some checks in debug mode

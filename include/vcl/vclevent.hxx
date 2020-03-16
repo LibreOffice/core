@@ -205,7 +205,7 @@ class VCL_DLLPUBLIC VclMenuEvent final : public VclSimpleEvent
 {
 private:
     VclPtr<Menu> pMenu;
-    sal_uInt16 const mnPos;
+    sal_uInt16 mnPos;
 
     VclMenuEvent(VclMenuEvent const &) = delete;
     VclMenuEvent& operator =(VclMenuEvent const &) = delete;

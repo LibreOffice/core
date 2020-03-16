@@ -22,7 +22,7 @@ namespace {
 
 struct Node
 {
-    tools::Rectangle const mRectangle;
+    tools::Rectangle mRectangle;
     std::unique_ptr<Node> mLeftNode;
     std::unique_ptr<Node> mRightNode;
     bool mOccupied;

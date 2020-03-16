@@ -98,7 +98,7 @@ class GtkSalFrame;
 class GtkSalDisplay : public SalGenericDisplay
 {
     GtkSalSystem*                   m_pSys;
-    GdkDisplay* const               m_pGdkDisplay;
+    GdkDisplay*                     m_pGdkDisplay;
     o3tl::enumarray<PointerStyle, GdkCursor*> m_aCursors;
     bool                            m_bStartupCompleted;
     bool                            m_bX11Display;

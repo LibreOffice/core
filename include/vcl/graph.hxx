@@ -53,11 +53,11 @@ class GraphicReader;
 class SAL_WARN_UNUSED VCL_DLLPUBLIC GraphicConversionParameters
 {
 private:
-    Size const            maSizePixel;            // default is (0,0)
+    Size            maSizePixel;            // default is (0,0)
 
-    bool const            mbUnlimitedSize : 1;    // default is false
-    bool const            mbAntiAliase : 1;       // default is false
-    bool const            mbSnapHorVerLines : 1;  // default is false
+    bool            mbUnlimitedSize : 1;    // default is false
+    bool            mbAntiAliase : 1;       // default is false
+    bool            mbSnapHorVerLines : 1;  // default is false
 
 public:
     GraphicConversionParameters(

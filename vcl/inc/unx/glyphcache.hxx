@@ -198,7 +198,7 @@ private:
     long                    mnSin;
 
     int                     mnWidth;
-    int const               mnPrioAntiAlias;
+    int                     mnPrioAntiAlias;
     FreetypeFontInfo*       mpFontInfo;
     FT_Int                  mnLoadFlags;
     double                  mfStretch;

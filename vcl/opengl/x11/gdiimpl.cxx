@@ -78,7 +78,7 @@ private:
     {
     private:
         errorHandler oldErrorHandler;
-        Display* const mdpy;
+        Display* mdpy;
 
     public:
         TempErrorHandler(Display* dpy, errorHandler newErrorHandler)

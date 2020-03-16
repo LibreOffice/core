@@ -30,7 +30,7 @@
 // data to be sent with docking events
 struct DockingData
 {
-    Point const       maMousePos;     // in
+    Point       maMousePos;     // in
     tools::Rectangle   maTrackRect;    // in/out
     bool        mbFloating;     // out
 
@@ -41,9 +41,9 @@ struct DockingData
 
 struct EndDockingData
 {
-    tools::Rectangle const   maWindowRect;    // in
-    bool const        mbFloating;      // in
-    bool const        mbCancelled;     // in
+    tools::Rectangle   maWindowRect;    // in
+    bool        mbFloating;      // in
+    bool        mbCancelled;     // in
 
     EndDockingData( const tools::Rectangle& rRect, bool b, bool bCancelled ) :
         maWindowRect( rRect ), mbFloating( b ), mbCancelled( bCancelled )
@@ -52,8 +52,8 @@ struct EndDockingData
 
 struct EndPopupModeData
 {
-    Point const       maFloatingPos;    // in
-    bool const        mbTearoff;        // in
+    Point       maFloatingPos;    // in
+    bool        mbTearoff;        // in
 
     EndPopupModeData( const Point& rPos, bool bTearoff ) :
         maFloatingPos( rPos ), mbTearoff( bTearoff )

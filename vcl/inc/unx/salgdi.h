@@ -314,8 +314,8 @@ private:
 
     bool                            bWindow_ : 1;       // is Window
     bool                            bVirDev_ : 1;       // is VirDev
-    bool const                      m_bOpenGL : 1;
-    bool const                      m_bSkia  : 1;
+    bool                            m_bOpenGL : 1;
+    bool                            m_bSkia  : 1;
 
 private:
     std::unique_ptr<SalGraphicsImpl> mxImpl;

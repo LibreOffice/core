@@ -54,7 +54,7 @@ private:
     bool            mbInSyncExecute;
     bool            mbInClose;
     bool            mbModalMode;
-    InitFlag const  mnInitFlag; // used for deferred init
+    InitFlag        mnInitFlag; // used for deferred init
 
     VclPtr<VclButtonBox> mpActionArea;
     VclPtr<VclBox>       mpContentArea;

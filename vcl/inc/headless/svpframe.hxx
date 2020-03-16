@@ -40,7 +40,7 @@ class SvpSalFrame : public SalFrame
     SvpSalInstance*                     m_pInstance;
     SvpSalFrame*                        m_pParent;       // pointer to parent frame
     std::list< SvpSalFrame* >           m_aChildren;     // List of child frames
-    SalFrameStyleFlags const            m_nStyle;
+    SalFrameStyleFlags                  m_nStyle;
     bool                                m_bVisible;
 #ifndef IOS
     cairo_surface_t*                    m_pSurface;

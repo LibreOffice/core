@@ -126,7 +126,7 @@ public:
     static const int decoration_All         = 0x10000000;
 
 protected:
-    SalDisplay* const       m_pSalDisplay;      // Display to use
+    SalDisplay*             m_pSalDisplay;      // Display to use
     Display*                m_pDisplay;         // X Display of SalDisplay
     OUString                m_aWMName;
     Atom                    m_aWMAtoms[ NetAtomMax];

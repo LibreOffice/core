@@ -39,8 +39,8 @@ class GlyphSet
 {
 private:
 
-    sal_Int32 const     mnFontID;
-    bool const          mbVertical;
+    sal_Int32           mnFontID;
+    bool                mbVertical;
     OString             maBaseName;
 
     typedef std::unordered_map< sal_GlyphId, sal_uInt8 > glyph_map_t;

@@ -938,8 +938,8 @@ struct PDFNewJobParameters
 
 struct PDFPrintFile
 {
-    OUString const       maTmpURL;
-    PDFNewJobParameters const maParameters;
+    OUString       maTmpURL;
+    PDFNewJobParameters maParameters;
 
     PDFPrintFile( const OUString& i_rURL, const PDFNewJobParameters& i_rNewParameters )
     : maTmpURL( i_rURL )

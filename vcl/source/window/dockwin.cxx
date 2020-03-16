@@ -56,7 +56,7 @@ class ImplDockFloatWin : public FloatingWindow
 {
 private:
     VclPtr<DockingWindow> mpDockWin;
-    sal_uInt64 const      mnLastTicks;
+    sal_uInt64      mnLastTicks;
     Idle            maDockIdle;
     Point           maDockPos;
     tools::Rectangle       maDockRect;

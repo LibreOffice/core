@@ -109,7 +109,7 @@ protected:
     std::unique_ptr<SystemQueueInfo>
                                       m_pQueueInfo;
 
-    Type const                        m_eType;
+    Type                              m_eType;
     bool                              m_bUseIncludeFeature;
     bool                              m_bUseJobPatch;
     OUString                     m_aSystemDefaultPaper;

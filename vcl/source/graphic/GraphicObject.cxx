@@ -289,7 +289,7 @@ void lclImplAdjust( Animation& rAnimation, const GraphicAttr& rAttr, GraphicAdju
 struct GrfSimpleCacheObj
 {
     Graphic     maGraphic;
-    GraphicAttr const maAttr;
+    GraphicAttr maAttr;
 
                 GrfSimpleCacheObj( const Graphic& rGraphic, const GraphicAttr& rAttr ) :
                     maGraphic( rGraphic ), maAttr( rAttr ) {}

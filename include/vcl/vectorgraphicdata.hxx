@@ -56,7 +56,7 @@ private:
     VectorGraphicDataArray      maVectorGraphicDataArray;
 
     // The absolute Path if available
-    OUString const              maPath;
+    OUString                    maPath;
 
     // on demand created content
     bool                        mbSequenceCreated;
@@ -64,7 +64,7 @@ private:
     std::deque< css::uno::Reference< css::graphic::XPrimitive2D > > maSequence;
     BitmapEx                    maReplacement;
     size_t                      mNestedBitmapSize;
-    VectorGraphicDataType const meVectorGraphicDataType;
+    VectorGraphicDataType       meVectorGraphicDataType;
 
     // extra:
     std::unique_ptr<WmfExternal> mpExternalHeader;

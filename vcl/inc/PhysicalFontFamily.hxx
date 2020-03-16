@@ -83,7 +83,7 @@ private:
     std::vector< rtl::Reference<PhysicalFontFace> > maFontFaces;
 
     OUString            maFamilyName;       // original font family name
-    OUString const      maSearchName;       // normalized font family name
+    OUString            maSearchName;       // normalized font family name
     OUString            maMapNames;         // fontname aliases
     FontTypeFaces       mnTypeFaces;        // Typeface Flags
     FontFamily          meFamily;

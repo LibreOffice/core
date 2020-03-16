@@ -610,8 +610,8 @@ struct ImpFilterLibCacheEntry
 #ifndef DISABLE_DYNLOADING
     osl::Module             maLibrary;
 #endif
-    OUString const          maFiltername;
-    OUString const          maFormatName;
+    OUString                maFiltername;
+    OUString                maFormatName;
     PFilterCall             mpfnImport;
 
     ImpFilterLibCacheEntry(const OUString& rPathname, const OUString& rFiltername, const OUString& rFormatName);

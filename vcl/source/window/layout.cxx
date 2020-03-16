@@ -692,7 +692,7 @@ namespace {
 struct ButtonOrder
 {
     const char* m_aType;
-    int const m_nPriority;
+    int m_nPriority;
 };
 
 }
@@ -744,7 +744,7 @@ namespace {
 
 class sortButtons
 {
-    bool const m_bVerticalContainer;
+    bool m_bVerticalContainer;
 public:
     explicit sortButtons(bool bVerticalContainer)
         : m_bVerticalContainer(bVerticalContainer)

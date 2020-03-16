@@ -194,7 +194,7 @@ namespace o3tl
 class VCL_DLLPUBLIC HelpEvent
 {
 private:
-    Point const     maPos;
+    Point           maPos;
     HelpEventMode   mnMode;
     bool            mbKeyboardActivated;
 
@@ -224,9 +224,9 @@ private:
     /// RenderContext to which we should draw - can be a VirtualDevice or anything.
     VclPtr<vcl::RenderContext> mpRenderContext;
 
-    tools::Rectangle const    maOutRect;
-    sal_uInt16 const          mnItemId;
-    sal_uInt16 const          mnStyle;
+    tools::Rectangle           maOutRect;
+    sal_uInt16          mnItemId;
+    sal_uInt16          mnStyle;
 
 public:
     UserDrawEvent(vcl::Window* pWindow, vcl::RenderContext* pRenderContext,
@@ -253,7 +253,7 @@ inline UserDrawEvent::UserDrawEvent(vcl::Window* pWindow, vcl::RenderContext* pR
 class VCL_DLLPUBLIC TrackingEvent
 {
 private:
-    MouseEvent const    maMEvt;
+    MouseEvent          maMEvt;
     TrackingEventFlags  mnFlags;
 
 public:

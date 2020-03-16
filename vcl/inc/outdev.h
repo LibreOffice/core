@@ -86,7 +86,7 @@ struct ImplFontSubstEntry
 {
     OUString                  maSearchName;
     OUString                  maSearchReplaceName;
-    AddFontSubstituteFlags const mnFlags;
+    AddFontSubstituteFlags    mnFlags;
 
     ImplFontSubstEntry(  const OUString& rFontName, const OUString& rSubstFontName, AddFontSubstituteFlags nSubstFlags );
 };

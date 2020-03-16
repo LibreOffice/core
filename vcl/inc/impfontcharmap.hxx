@@ -47,7 +47,7 @@ private:
     const sal_uInt32*   mpRangeCodes;     // pairs of StartCode/(EndCode+1)
     const int*          mpStartGlyphs;    // range-specific mapper to glyphs
     const sal_uInt16*   mpGlyphIds;       // individual glyphid mappings
-    int const           mnRangeCount;
+    int                 mnRangeCount;
     int                 mnCharCount;      // covered codepoints
 };
 

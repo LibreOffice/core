@@ -20,9 +20,9 @@ class FixedTextureAtlasManager final
 {
     std::vector<std::unique_ptr<FixedTexture>> maFixedTextures;
 
-    int const mWidthFactor;
-    int const mHeightFactor;
-    int const mSubTextureSize;
+    int mWidthFactor;
+    int mHeightFactor;
+    int mSubTextureSize;
 
     void CreateNewTexture();
 

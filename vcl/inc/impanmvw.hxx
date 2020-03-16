@@ -47,13 +47,13 @@ private:
 
     friend class Animation;
 
-    Animation* const      mpParent;
+    Animation*      mpParent;
     VclPtr<OutputDevice>  mpRenderContext;
-    long const            mnExtraData;
-    Point const           maPt;
-    Point                 maDispPt;
-    Point                 maRestPt;
-    Size const            maSz;
+    long            mnExtraData;
+    Point           maPt;
+    Point           maDispPt;
+    Point           maRestPt;
+    Size            maSz;
     Size            maSzPix;
     Size            maDispSz;
     Size            maRestSz;
@@ -64,8 +64,8 @@ private:
     Disposal        meLastDisposal;
     bool            mbIsPaused;
     bool            mbIsMarked;
-    bool const      mbIsMirroredHorizontally;
-    bool const      mbIsMirroredVertically;
+    bool            mbIsMirroredHorizontally;
+    bool            mbIsMirroredVertically;
 
 public:
                     ~ImplAnimView();

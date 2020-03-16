@@ -51,7 +51,7 @@ class XBMReader : public GraphicReader
                         pHexTable;
     BitmapColor         aWhite;
     BitmapColor         aBlack;
-    long const          nLastPos;
+    long                nLastPos;
     long                nWidth;
     long                nHeight;
     bool                bStatus;

@@ -97,9 +97,9 @@ namespace vcl {
 
     struct Run
     {
-        int32_t const nStart;
-        int32_t const nEnd;
-        UScriptCode const nCode;
+        int32_t nStart;
+        int32_t nEnd;
+        UScriptCode nCode;
         Run(int32_t nStart_, int32_t nEnd_, UScriptCode nCode_)
             : nStart(nStart_)
             , nEnd(nEnd_)
