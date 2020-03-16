@@ -1208,6 +1208,10 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                     // If this is a table style, save its contents as-is for roundtrip purposes.
                     TableStyleSheetEntry* pTableEntry = static_cast<TableStyleSheetEntry *>(pEntry.get());
                     aTableStylesVec.push_back(pTableEntry->GetInteropGrabBag());
+
+                    // if DocDefaults exist, MS Word includes these in the table style definition.
+                    pEntry->pProperties->InsertProps( m_pImpl->m_pDefaultCharProps, /*bOverwrite=*/false );
+                    pEntry->pProperties->InsertProps( m_pImpl->m_pDefaultParaProps, /*bOverwrite=*/false );
                 }
             }
 
