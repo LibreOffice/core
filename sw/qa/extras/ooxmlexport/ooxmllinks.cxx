@@ -27,7 +27,7 @@
     {                                                                                              \
     protected:                                                                                     \
         virtual OUString getTestName() override { return #TestName; }                    \
-        virtual void postLoad(const char*) override                                                \
+        virtual void (const char*) override                                                \
         {                                                                                          \
             if (!bUseTempDir)                                                                      \
                 return;                                                                            \
