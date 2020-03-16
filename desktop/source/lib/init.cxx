@@ -1491,6 +1491,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             case LOK_CALLBACK_TEXT_VIEW_SELECTION:
             case LOK_CALLBACK_VIEW_CURSOR_VISIBLE:
             case LOK_CALLBACK_CALC_FUNCTION_LIST:
+            case LOK_CALLBACK_JSDIALOG:
             {
                 const int nViewId = lcl_getViewId(payload);
                 removeAll(
