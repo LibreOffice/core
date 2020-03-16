@@ -265,7 +265,7 @@ namespace treeview {
         css::uno::Reference< css::ucb::XSimpleFileAccess3 >   m_xSFA;
 
         IteratorState                                                               m_eState;
-        OUString const                                                              m_aLanguage;
+        OUString                                                               m_aLanguage;
 
         css::uno::Sequence< css::uno::Reference
             < css::deployment::XPackage > >                              m_aUserPackagesSeq;

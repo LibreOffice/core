@@ -168,7 +168,7 @@ namespace chelp {
         bool m_bHelpDataFileRead;
         bool m_bUseDB;
 
-        OUString const m_aURL;
+        OUString  m_aURL;
 
         OUString  m_aTag;
         OUString  m_aId;
