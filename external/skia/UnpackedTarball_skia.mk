@@ -28,6 +28,7 @@ skia_patches := \
     msvc-vectorcall-sse.patch.1 \
     clang11-flax-vector-conversion.patch.0 \
     fontconfig-get-typeface.patch.0 \
+    windows-hfont-typeface.patch.0 \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 

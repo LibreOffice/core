@@ -543,11 +543,13 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout, HDC hDC, bo
 
 void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 {
-    HDC hDC = getHDC();
+    WinSalGraphicsImplBase* pImpl = dynamic_cast<WinSalGraphicsImplBase*>(mpImpl.get());
+    if( !mbPrinter && pImpl->DrawTextLayout(rLayout))
+        return; // handled by pImpl
 
+    HDC hDC = getHDC();
     const WinFontInstance* pWinFont = static_cast<const WinFontInstance*>(&rLayout.GetFont());
     const HFONT hLayoutFont = pWinFont->GetHFONT();
-    WinSalGraphicsImplBase* pImpl = dynamic_cast<WinSalGraphicsImplBase*>(mpImpl.get());
     bool bUseClassic = !pImpl->UseTextDraw() || mbPrinter;
 
     // Our DirectWrite renderer is incomplete, skip it for vertical text where glyphs are not
