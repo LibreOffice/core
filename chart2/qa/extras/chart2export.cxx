@@ -2597,16 +2597,27 @@ void Chart2ExportTest::testTdf126076()
 
 void Chart2ExportTest::testTdf75330()
 {
-    mbSkipValidation = true;
     load("/chart2/qa/extras/data/ods/", "legend_overlay.ods");
     reload("calc8");
-    uno::Reference< chart2::XChartDocument > xChart2Doc = getChartDocFromSheet(0, mxComponent);
-    uno::Reference< chart::XChartDocument > xChartDoc (xChart2Doc, uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xLegend = xChartDoc->getLegend();
-    Reference<beans::XPropertySet> xPropertySet(xLegend, uno::UNO_QUERY_THROW);
-    bool bOverlay = false;
-    CPPUNIT_ASSERT(xPropertySet->getPropertyValue("Overlay") >>= bOverlay);
-    CPPUNIT_ASSERT(bOverlay);
+    {
+        uno::Reference<chart2::XChartDocument> xChart2Doc = getChartDocFromSheet(0, mxComponent);
+        uno::Reference<chart::XChartDocument> xChartDoc(xChart2Doc, uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xLegend = xChartDoc->getLegend();
+        Reference<beans::XPropertySet> xPropertySet(xLegend, uno::UNO_QUERY_THROW);
+        bool bOverlay = false;
+        CPPUNIT_ASSERT(xPropertySet->getPropertyValue("Overlay") >>= bOverlay);
+        CPPUNIT_ASSERT(bOverlay);
+    }
+    reload("Calc Office Open XML");
+    {
+        uno::Reference<chart2::XChartDocument> xChart2Doc = getChartDocFromSheet(0, mxComponent);
+        uno::Reference<chart::XChartDocument> xChartDoc(xChart2Doc, uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xLegend = xChartDoc->getLegend();
+        Reference<beans::XPropertySet> xPropertySet(xLegend, uno::UNO_QUERY_THROW);
+        bool bOverlay = false;
+        CPPUNIT_ASSERT(xPropertySet->getPropertyValue("Overlay") >>= bOverlay);
+        CPPUNIT_ASSERT(bOverlay);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);

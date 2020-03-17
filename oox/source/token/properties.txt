@@ -347,6 +347,7 @@ Opaque
 Orientation
 OutputPosition
 OverlapSequence
+Overlay
 PageScale
 PageStyle
 PageToggle

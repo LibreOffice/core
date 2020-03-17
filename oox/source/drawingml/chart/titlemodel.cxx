@@ -50,9 +50,9 @@ LegendEntryModel::~LegendEntryModel()
 {
 }
 
-LegendModel::LegendModel(bool bMSO2007Doc) :
+LegendModel::LegendModel() :
     mnPosition( XML_r ),
-    mbOverlay( !bMSO2007Doc )
+    mbOverlay( false )
 {
 }
 
