@@ -660,11 +660,11 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
         oRotation = ConversionHelper::decodeRotation(maTypeModel.maRotation);
     if (!maTypeModel.maFlip.isEmpty())
     {
-        if (maTypeModel.maFlip == "x")
+        if (maTypeModel.maFlip.startsWith("x"))
         {
             bFlipX = true;
         }
-        else if (maTypeModel.maFlip == "y")
+        if (maTypeModel.maFlip.endsWith("y"))
         {
             bFlipY = true;
         }
@@ -820,17 +820,10 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
         // When flip has 'x' or 'y', the associated ShapeRect will be changed but direction change doesn't occur.
         // It might occur internally in SdrObject of "sw" module, not here.
         // The associated properties "PROP_MirroredX" and "PROP_MirroredY" have to be set here so that direction change will occur internally.
-        if (bFlipX || bFlipY)
-        {
-            assert(!(bFlipX && bFlipY));
-            css::beans::PropertyValue aProp;
-            if (bFlipX)
-                aProp.Name = "MirroredX";
-            else
-                aProp.Name = "MirroredY";
-            aProp.Value <<= true;
-            aPropVec.push_back(aProp);
-        }
+        if (bFlipX)
+            aPropVec.push_back(comphelper::makePropertyValue("MirroredX", true));
+        if (bFlipY)
+            aPropVec.push_back(comphelper::makePropertyValue("MirroredY", true));
 
         if (!maTypeModel.maAdjustments.isEmpty())
         {
