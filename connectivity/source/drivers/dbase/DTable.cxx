@@ -277,7 +277,7 @@ void ODbaseTable::fillColumns()
     if(!m_aColumns.is())
         m_aColumns = new OSQLColumns();
     else
-        m_aColumns->get().clear();
+        m_aColumns->clear();
 
     m_aTypes.clear();
     m_aPrecisions.clear();
@@ -287,7 +287,7 @@ void ODbaseTable::fillColumns()
     const sal_Int32 nFieldCount = (m_aHeader.headerLength - 1) / 32 - 1;
     OSL_ENSURE(nFieldCount,"No columns in table!");
 
-    m_aColumns->get().reserve(nFieldCount);
+    m_aColumns->reserve(nFieldCount);
     m_aTypes.reserve(nFieldCount);
     m_aPrecisions.reserve(nFieldCount);
     m_aScales.reserve(nFieldCount);
@@ -426,7 +426,7 @@ void ODbaseTable::fillColumns()
                                                     bIsCurrency,
                                                     bCase,
                                                     m_CatalogName, getSchema(), getName());
-        m_aColumns->get().push_back(xCol);
+        m_aColumns->push_back(xCol);
     } // for (; i < nFieldCount; i++)
     OSL_ENSURE(i,"No columns in table!");
 }
@@ -636,9 +636,9 @@ void ODbaseTable::refreshColumns()
     ::osl::MutexGuard aGuard( m_aMutex );
 
     ::std::vector< OUString> aVector;
-    aVector.reserve(m_aColumns->get().size());
+    aVector.reserve(m_aColumns->size());
 
-    for (auto const& column : m_aColumns->get())
+    for (auto const& column : *m_aColumns)
         aVector.push_back(Reference< XNamed>(column,UNO_QUERY_THROW)->getName());
 
     if(m_xColumns)
@@ -758,16 +758,16 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
 
     // Mark record as deleted
     _rRow->setDeleted(bIsCurRecordDeleted);
-    *(_rRow->get())[0] = m_nFilePos;
+    *(*_rRow)[0] = m_nFilePos;
 
     if (!bRetrieveData)
         return true;
 
     std::size_t nByteOffset = 1;
     // Fields:
-    OSQLColumns::Vector::const_iterator aIter = _rCols.get().begin();
-    OSQLColumns::Vector::const_iterator aEnd  = _rCols.get().end();
-    const std::size_t nCount = _rRow->get().size();
+    OSQLColumns::const_iterator aIter = _rCols.begin();
+    OSQLColumns::const_iterator aEnd  = _rCols.end();
+    const std::size_t nCount = _rRow->size();
     for (std::size_t i = 1; aIter != aEnd && nByteOffset <= m_nBufferSize && i < nCount;++aIter, i++)
     {
         // Lengths depending on data type:
@@ -798,7 +798,7 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
         }
 
         // Is the variable bound?
-        if ( !(_rRow->get())[i]->isBound() )
+        if ( !(*_rRow)[i]->isBound() )
         {
             // No - next field.
             nByteOffset += nLen;
@@ -822,12 +822,12 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
             if (nLastPos < 0)
             {
                 // Empty string.  Skip it.
-                (_rRow->get())[i]->setNull();
+                (*_rRow)[i]->setNull();
             }
             else
             {
                 // Commit the string.  Use intern() to ref-count it.
-                *(_rRow->get())[i] = OUString::intern(pData, static_cast<sal_Int32>(nLastPos+1), m_eEncoding);
+                *(*_rRow)[i] = OUString::intern(pData, static_cast<sal_Int32>(nLastPos+1), m_eEncoding);
             }
         } // if (nType == DataType::CHAR || nType == DataType::VARCHAR)
         else if ( DataType::TIMESTAMP == nType )
@@ -837,13 +837,13 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
             memcpy(&nTime, pData+ 4, 4);
             if ( !nDate && !nTime )
             {
-                (_rRow->get())[i]->setNull();
+                (*_rRow)[i]->setNull();
             }
             else
             {
                 css::util::DateTime aDateTime;
                 lcl_CalDate(nDate,nTime,aDateTime);
-                *(_rRow->get())[i] = aDateTime;
+                *(*_rRow)[i] = aDateTime;
             }
         }
         else if ( DataType::INTEGER == nType )
@@ -852,7 +852,7 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
             if (o3tl::make_unsigned(nLen) > sizeof(nValue))
                 return false;
             memcpy(&nValue, pData, nLen);
-            *(_rRow->get())[i] = nValue;
+            *(*_rRow)[i] = nValue;
         }
         else if ( DataType::DOUBLE == nType )
         {
@@ -876,7 +876,7 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
                 memcpy(&d, pData, nLen);
             }
 
-            *(_rRow->get())[i] = d;
+            *(*_rRow)[i] = d;
         }
         else
         {
@@ -902,7 +902,7 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
             {
                 // Empty string.  Skip it.
                 nByteOffset += nLen;
-                (_rRow->get())[i]->setNull();   // no values -> done
+                (*_rRow)[i]->setNull();   // no values -> done
                 continue;
             }
 
@@ -914,7 +914,7 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
                 {
                     if (aStr.getLength() != nLen)
                     {
-                        (_rRow->get())[i]->setNull();
+                        (*_rRow)[i]->setNull();
                         break;
                     }
                     const sal_uInt16  nYear   = static_cast<sal_uInt16>(aStr.copy( 0, 4 ).toInt32());
@@ -922,11 +922,11 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
                     const sal_uInt16  nDay    = static_cast<sal_uInt16>(aStr.copy( 6, 2 ).toInt32());
 
                     const css::util::Date aDate(nDay,nMonth,nYear);
-                    *(_rRow->get())[i] = aDate;
+                    *(*_rRow)[i] = aDate;
                 }
                 break;
                 case DataType::DECIMAL:
-                    *(_rRow->get())[i] = ORowSetValue(aStr);
+                    *(*_rRow)[i] = ORowSetValue(aStr);
                 break;
                 case DataType::BIT:
                 {
@@ -938,7 +938,7 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
                         case 'J':   b = true; break;
                         default:    b = false; break;
                     }
-                    *(_rRow->get())[i] = b;
+                    *(*_rRow)[i] = b;
                 }
                 break;
                 case DataType::LONGVARBINARY:
@@ -948,16 +948,16 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
                     const long nBlockNo = aStr.toInt32();   // read blocknumber
                     if (nBlockNo > 0 && m_pMemoStream) // Read data from memo-file, only if
                     {
-                        if ( !ReadMemo(nBlockNo, (_rRow->get())[i]->get()) )
+                        if ( !ReadMemo(nBlockNo, (*_rRow)[i]->get()) )
                             break;
                     }
                     else
-                        (_rRow->get())[i]->setNull();
+                        (*_rRow)[i]->setNull();
                 }   break;
                 default:
                     SAL_WARN( "connectivity.drivers","Wrong type");
             }
-            (_rRow->get())[i]->setTypeKind(nType);
+            (*_rRow)[i]->setTypeKind(nType);
         }
 
         nByteOffset += nLen;
@@ -1494,7 +1494,7 @@ bool ODbaseTable::InsertRow(OValueRefVector& rRow, const Reference<XIndexAccess>
 
             // raise number if successfully
             m_aHeader.nbRecords++;
-            *rRow.get()[0] = m_nFilePos;                                // set bookmark
+            *rRow[0] = m_nFilePos;                                // set bookmark
             m_nFilePos = nTempPos;
         }
     }
@@ -1542,7 +1542,7 @@ bool ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
     std::size_t nFilePos = m_aHeader.headerLength + static_cast<long>(m_nFilePos-1) * m_aHeader.recordLength;
     m_pFileStream->Seek(nFilePos);
 
-    OValueRefRow aRow = new OValueRefVector(_rCols.get().size());
+    OValueRefRow aRow = new OValueRefVector(_rCols.size());
 
     if (!fetchRow(aRow,_rCols,true))
         return false;
@@ -1566,14 +1566,14 @@ bool ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
                 ODbaseIndex* pIndex = reinterpret_cast< ODbaseIndex* >( xTunnel->getSomething(ODbaseIndex::getUnoTunnelId()) );
                 OSL_ENSURE(pIndex,"ODbaseTable::DeleteRow: No Index returned!");
 
-                OSQLColumns::Vector::const_iterator aIter = std::find_if(_rCols.get().begin(), _rCols.get().end(),
-                    [&aCase, &aColName](const OSQLColumns::Vector::value_type& rxCol) {
+                OSQLColumns::const_iterator aIter = std::find_if(_rCols.begin(), _rCols.end(),
+                    [&aCase, &aColName](const OSQLColumns::value_type& rxCol) {
                         return aCase(getString(rxCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME))), aColName); });
-                if (aIter == _rCols.get().end())
+                if (aIter == _rCols.end())
                     continue;
 
-                auto nPos = static_cast<sal_Int32>(std::distance(_rCols.get().begin(), aIter)) + 1;
-                pIndex->Delete(m_nFilePos,*(aRow->get())[nPos]);
+                auto nPos = static_cast<sal_Int32>(std::distance(_rCols.begin(), aIter)) + 1;
+                pIndex->Delete(m_nFilePos,*(*aRow)[nPos]);
             }
         }
     }
@@ -1663,7 +1663,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
         if (xIndex.is())
         {
             // first check if the value is different to the old one and when if it conform to the index
-            if(pOrgRow.is() && (rRow.get()[nPos]->getValue().isNull() || rRow.get()[nPos] == (pOrgRow->get())[nPos]))
+            if(pOrgRow.is() && (rRow[nPos]->getValue().isNull() || rRow[nPos] == (*pOrgRow)[nPos]))
                 continue;
             else
             {
@@ -1672,7 +1672,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
                 ODbaseIndex* pIndex = reinterpret_cast< ODbaseIndex* >( xTunnel->getSomething(ODbaseIndex::getUnoTunnelId()) );
                 OSL_ENSURE(pIndex,"ODbaseTable::UpdateBuffer: No Index returned!");
 
-                if (pIndex->Find(0,*rRow.get()[nPos]))
+                if (pIndex->Find(0,*rRow[nPos]))
                 {
                     // There is no unique value
                     if ( aColName.isEmpty() )
@@ -1763,7 +1763,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
 
 
         ++nPos; // the row values start at 1
-        const ORowSetValue &thisColVal = rRow.get()[nPos]->get();
+        const ORowSetValue &thisColVal = rRow[nPos]->get();
         const bool thisColIsBound = thisColVal.isBound();
         const bool thisColIsNull = !thisColIsBound || thisColVal.isNull();
         // don't overwrite non-bound columns
@@ -1781,7 +1781,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
             OSL_ENSURE(pIndex,"ODbaseTable::UpdateBuffer: No Index returned!");
             // Update !!
             if (pOrgRow.is() && !thisColIsNull)
-                pIndex->Update(m_nFilePos, *(pOrgRow->get())[nPos], thisColVal);
+                pIndex->Update(m_nFilePos, *(*pOrgRow)[nPos], thisColVal);
             else
                 pIndex->Insert(m_nFilePos, thisColVal);
         }
@@ -1877,7 +1877,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
                         // Write value right-justified, padded with blanks to the left.
                         memcpy(pData+nLen-nValueLen,aDefaultValue.getStr(),nValueLen);
                         // write the resulting double back
-                        *rRow.get()[nPos] = toDouble(aDefaultValue);
+                        *rRow[nPos] = toDouble(aDefaultValue);
                     }
                     else
                     {
@@ -2464,19 +2464,19 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
     if(_nPos)
     {
         aInsertRow = new OValueRefVector(_pNewTable->m_xColumns->getCount());
-        std::for_each(aInsertRow->get().begin(),aInsertRow->get().end(),TSetRefBound(true));
+        std::for_each(aInsertRow->begin(),aInsertRow->end(),TSetRefBound(true));
     }
     else
         aInsertRow = aRow;
 
     // we only have to bind the values which we need to copy into the new table
-    std::for_each(aRow->get().begin(),aRow->get().end(),TSetRefBound(true));
-    if(_nPos && (_nPos < static_cast<sal_Int32>(aRow->get().size())))
-        (aRow->get())[nPos]->setBound(false);
+    std::for_each(aRow->begin(),aRow->end(),TSetRefBound(true));
+    if(_nPos && (_nPos < static_cast<sal_Int32>(aRow->size())))
+        (*aRow)[nPos]->setBound(false);
 
 
     sal_Int32 nCurPos;
-    OValueRefVector::Vector::const_iterator aIter;
+    OValueRefVector::const_iterator aIter;
     for(sal_uInt32 nRowPos = 0; nRowPos < m_aHeader.nbRecords;++nRowPos)
     {
         bool bOk = seekRow( IResultSetHelper::BOOKMARK, nRowPos+1, nCurPos );
@@ -2488,9 +2488,9 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
                 // special handling when pos == 0 then we don't have to distinguish between the two rows
                 if(_nPos)
                 {
-                    aIter = aRow->get().begin()+1;
+                    aIter = aRow->begin()+1;
                     sal_Int32 nCount = 1;
-                    for(OValueRefVector::Vector::iterator aInsertIter = aInsertRow->get().begin()+1; aIter != aRow->get().end() && aInsertIter != aInsertRow->get().end();++aIter,++nCount)
+                    for(OValueRefVector::iterator aInsertIter = aInsertRow->begin()+1; aIter != aRow->end() && aInsertIter != aInsertRow->end();++aIter,++nCount)
                     {
                         if(nPos != nCount)
                         {

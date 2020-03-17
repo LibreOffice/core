@@ -51,7 +51,7 @@ OResultSetMetaData::~OResultSetMetaData()
 
 void OResultSetMetaData::checkColumnIndex(sal_Int32 column)
 {
-    if(column <= 0 || column > static_cast<sal_Int32>(m_xColumns->get().size()))
+    if(column <= 0 || column > static_cast<sal_Int32>(m_xColumns->size()))
         throwInvalidIndexException(*this);
 }
 
@@ -64,13 +64,13 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnDisplaySize( sal_Int32 column )
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnType( sal_Int32 column )
 {
     checkColumnIndex(column);
-    return getINT32((m_xColumns->get())[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
+    return getINT32((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
 }
 
 
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount(  )
 {
-    return m_xColumns->get().size();
+    return m_xColumns->size();
 }
 
 
@@ -90,8 +90,8 @@ OUString SAL_CALL OResultSetMetaData::getColumnName( sal_Int32 column )
 {
     checkColumnIndex(column);
 
-    Any aName((m_xColumns->get())[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
-    return aName.hasValue() ? getString(aName) : getString((m_xColumns->get())[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
+    Any aName((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
+    return aName.hasValue() ? getString(aName) : getString((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
 }
 
 OUString SAL_CALL OResultSetMetaData::getTableName( sal_Int32 /*column*/ )
@@ -107,7 +107,7 @@ OUString SAL_CALL OResultSetMetaData::getCatalogName( sal_Int32 /*column*/ )
 OUString SAL_CALL OResultSetMetaData::getColumnTypeName( sal_Int32 column )
 {
     checkColumnIndex(column);
-    return getString((m_xColumns->get())[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)));
+    return getString((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)));
 }
 
 OUString SAL_CALL OResultSetMetaData::getColumnLabel( sal_Int32 column )
@@ -124,7 +124,7 @@ OUString SAL_CALL OResultSetMetaData::getColumnServiceName( sal_Int32 /*column*/
 sal_Bool SAL_CALL OResultSetMetaData::isCurrency( sal_Int32 column )
 {
     checkColumnIndex(column);
-    return getBOOL((m_xColumns->get())[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY)));
+    return getBOOL((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY)));
 }
 
 
@@ -141,20 +141,20 @@ sal_Bool SAL_CALL OResultSetMetaData::isSigned( sal_Int32 /*column*/ )
 sal_Int32 SAL_CALL OResultSetMetaData::getPrecision( sal_Int32 column )
 {
     checkColumnIndex(column);
-    return getINT32((m_xColumns->get())[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)));
+    return getINT32((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)));
 }
 
 sal_Int32 SAL_CALL OResultSetMetaData::getScale( sal_Int32 column )
 {
     checkColumnIndex(column);
-    return getINT32((m_xColumns->get())[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)));
+    return getINT32((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)));
 }
 
 
 sal_Int32 SAL_CALL OResultSetMetaData::isNullable( sal_Int32 column )
 {
     checkColumnIndex(column);
-    return getINT32((m_xColumns->get())[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE)));
+    return getINT32((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE)));
 }
 
 
@@ -168,8 +168,8 @@ sal_Bool SAL_CALL OResultSetMetaData::isReadOnly( sal_Int32 column )
 {
     checkColumnIndex(column);
     return m_pTable->isReadOnly() || (
-                            (m_xColumns->get())[column-1]->getPropertySetInfo()->hasPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FUNCTION)) &&
-                                ::cppu::any2bool((m_xColumns->get())[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FUNCTION))));
+                            (*m_xColumns)[column-1]->getPropertySetInfo()->hasPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FUNCTION)) &&
+                                ::cppu::any2bool((*m_xColumns)[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FUNCTION))));
 }
 
 

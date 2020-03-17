@@ -82,8 +82,8 @@ bool OStaticSet::fetchRow()
     {
         m_aSet.push_back(new connectivity::ORowVector< connectivity::ORowSetValue >(m_xSetMetaData->getColumnCount()));
         m_aSetIter = m_aSet.end() - 1;
-        ((*m_aSetIter)->get())[0] = getRow();
-        OCacheSet::fillValueRow(*m_aSetIter,((*m_aSetIter)->get())[0]);
+        (**m_aSetIter)[0] = getRow();
+        OCacheSet::fillValueRow(*m_aSetIter,(**m_aSetIter)[0]);
     }
     else
         m_bEnd = true;
@@ -100,8 +100,8 @@ void OStaticSet::fillAllRows()
             ORowSetRow pRow = new connectivity::ORowVector< connectivity::ORowSetValue >(nColumnCount);
             m_aSet.push_back(pRow);
             m_aSetIter = m_aSet.end() - 1;
-            (pRow->get())[0] = getRow();
-            OCacheSet::fillValueRow(pRow,(pRow->get())[0]);
+            (*pRow)[0] = getRow();
+            OCacheSet::fillValueRow(pRow,(*pRow)[0]);
         }
         m_bEnd = true;
     }
@@ -253,7 +253,7 @@ void OStaticSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OS
     {
         m_aSet.push_back(new ORowVector< ORowSetValue >(*_rInsertRow)); // we don't know where the new row is so we append it to the current rows
         m_aSetIter = m_aSet.end() - 1;
-        ((*m_aSetIter)->get())[0] = (_rInsertRow->get())[0] = getBookmark();
+        (**m_aSetIter)[0] = (*_rInsertRow)[0] = getBookmark();
         m_bEnd = false;
     }
 }
@@ -263,7 +263,7 @@ void OStaticSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connectivity::OS
     OCacheSet::deleteRow(_rDeleteRow,_xTable);
     if(m_bDeleted)
     {
-        ORowSetMatrix::iterator aPos = m_aSet.begin()+(_rDeleteRow->get())[0].getInt32();
+        ORowSetMatrix::iterator aPos = m_aSet.begin()+(*_rDeleteRow)[0].getInt32();
         if(aPos == (m_aSet.end()-1))
             m_aSetIter = m_aSet.end();
         m_aSet.erase(aPos);

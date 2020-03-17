@@ -57,7 +57,7 @@ void OComponentTable::refreshColumns()
 
     ::std::vector< OUString> aVector;
 
-    for(const auto& rxColumn : m_aColumns->get())
+    for(const auto& rxColumn : *m_aColumns)
         aVector.push_back(Reference< XNamed>(rxColumn,UNO_QUERY_THROW)->getName());
 
     if(m_xColumns)

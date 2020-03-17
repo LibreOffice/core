@@ -150,14 +150,12 @@ void OWriterTable::fillColumns()
 
         // check if the column name already exists
         OUString aAlias = aColumnName;
-        auto aFind
-            = connectivity::find(m_aColumns->get().begin(), m_aColumns->get().end(), aAlias, aCase);
+        auto aFind = connectivity::find(m_aColumns->begin(), m_aColumns->end(), aAlias, aCase);
         sal_Int32 nExprCnt = 0;
-        while (aFind != m_aColumns->get().end())
+        while (aFind != m_aColumns->end())
         {
             aAlias = aColumnName + OUString::number(++nExprCnt);
-            aFind = connectivity::find(m_aColumns->get().begin(), m_aColumns->get().end(), aAlias,
-                                       aCase);
+            aFind = connectivity::find(m_aColumns->begin(), m_aColumns->end(), aAlias, aCase);
         }
 
         auto pColumn = new sdbcx::OColumn(
@@ -165,7 +163,7 @@ void OWriterTable::fillColumns()
             nDecimals, eType, false, false, bCurrency, bStoresMixedCaseQuotedIdentifiers,
             m_CatalogName, getSchema(), getName());
         uno::Reference<XPropertySet> xCol = pColumn;
-        m_aColumns->get().push_back(xCol);
+        m_aColumns->push_back(xCol);
     }
 }
 
@@ -231,21 +229,19 @@ bool OWriterTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, bool
     // read the bookmark
 
     _rRow->setDeleted(false);
-    *(_rRow->get())[0] = m_nFilePos;
+    *(*_rRow)[0] = m_nFilePos;
 
     if (!bRetrieveData)
         return true;
 
     // fields
 
-    const OValueRefVector::Vector::size_type nCount
-        = std::min(_rRow->get().size(), _rCols.get().size() + 1);
-    for (OValueRefVector::Vector::size_type i = 1; i < nCount; i++)
+    const OValueRefVector::size_type nCount = std::min(_rRow->size(), _rCols.size() + 1);
+    for (OValueRefVector::size_type i = 1; i < nCount; i++)
     {
-        if ((_rRow->get())[i]->isBound())
+        if ((*_rRow)[i]->isBound())
         {
-            lcl_SetValue((_rRow->get())[i]->get(), m_xTable, m_nStartCol, m_bHasHeaders, m_nFilePos,
-                         i);
+            lcl_SetValue((*_rRow)[i]->get(), m_xTable, m_nStartCol, m_bHasHeaders, m_nFilePos, i);
         }
     }
     return true;

@@ -55,34 +55,29 @@ namespace connectivity
     typedef std::map<OUString,OSQLTable,comphelper::UStringMixLess> OSQLTables;
 
     // class ORefVector allows reference counting on a std::vector
-    template< class VectorVal > class ORefVector : public salhelper::SimpleReferenceObject
+    template< class VectorVal > class ORefVector : public salhelper::SimpleReferenceObject,
+        public std::vector< VectorVal >
     {
-        std::vector< VectorVal > m_vector;
-
     protected:
         virtual ~ORefVector() override {}
     public:
         typedef std::vector< VectorVal > Vector;
 
         ORefVector() {}
-        ORefVector(size_t _st) : m_vector(_st) {}
+        ORefVector(size_t _st) : std::vector< VectorVal >(_st) {}
         ORefVector(const ORefVector& rOther)
             : salhelper::SimpleReferenceObject()
-            , m_vector(rOther.m_vector)
+            , std::vector< VectorVal >(rOther)
         {}
 
         ORefVector& operator=(const ORefVector& _rRH)
         {
             if ( &_rRH != this )
             {
-                m_vector = _rRH.m_vector;
+                std::vector< VectorVal >::operator=(_rRH);
             }
             return *this;
         }
-
-        std::vector< VectorVal > & get() { return m_vector; }
-        std::vector< VectorVal > const & get() const { return m_vector; }
-
     };
 
     // class ORowVector includes refcounting and initialize himself
@@ -101,16 +96,16 @@ namespace connectivity
     // search from first to last the column with the name _rVal
     // when no such column exist last is returned
     OOO_DLLPUBLIC_DBTOOLS
-    OSQLColumns::Vector::const_iterator find(   const OSQLColumns::Vector::const_iterator& first,
-                                        const OSQLColumns::Vector::const_iterator& last,
+    OSQLColumns::const_iterator find(   const OSQLColumns::const_iterator& first,
+                                        const OSQLColumns::const_iterator& last,
                                         const OUString& _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase);
 
     // search from first to last the column with the realname _rVal
     // when no such column exist last is returned
     OOO_DLLPUBLIC_DBTOOLS
-    OSQLColumns::Vector::const_iterator findRealName(   const OSQLColumns::Vector::const_iterator& first,
-                                                const OSQLColumns::Vector::const_iterator& last,
+    OSQLColumns::const_iterator findRealName(   const OSQLColumns::const_iterator& first,
+                                                const OSQLColumns::const_iterator& last,
                                                 const OUString& _rVal,
                                                 const ::comphelper::UStringMixEqual& _rCase);
 
@@ -118,8 +113,8 @@ namespace connectivity
     // search from first to last the column with the property _rProp equals the value _rVal
     // when no such column exist last is returned
     OOO_DLLPUBLIC_DBTOOLS
-    OSQLColumns::Vector::const_iterator find(   OSQLColumns::Vector::const_iterator first,
-                                        const OSQLColumns::Vector::const_iterator& last,
+    OSQLColumns::const_iterator find(   OSQLColumns::const_iterator first,
+                                        const OSQLColumns::const_iterator& last,
                                         const OUString& _rProp,
                                         const OUString& _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase);

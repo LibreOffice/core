@@ -965,6 +965,9 @@ bool Dialog::ImplStartExecute()
     // FIXME: no layouting, workaround some clipping issues
     ImplAdjustNWFSizes();
 
+    if (mpDialogParent)
+        mpDialogParent->ImplGetFrame()->BeginSheet(ImplGetFrame()); //  only does anything on macOS
+
     css::uno::Reference< css::uno::XComponentContext > xContext(
         comphelper::getProcessComponentContext());
     bool bForceFocusAndToFront(officecfg::Office::Common::View::NewDocumentHandling::ForceFocusAndToFront::get(xContext));

@@ -484,7 +484,7 @@ Any ORowSetCache::getBookmark(  )
         return Any(); // this is allowed here because the rowset knows what it is doing
     }
 
-    return lcl_getBookmark(((*m_aMatrixIter)->get())[0],m_xCacheSet.get());
+    return lcl_getBookmark((**m_aMatrixIter)[0],m_xCacheSet.get());
 }
 
 bool ORowSetCache::moveToBookmark( const Any& bookmark )
@@ -553,7 +553,7 @@ void ORowSetCache::updateNull(sal_Int32 columnIndex,ORowSetValueVector::Vector& 
 {
     checkUpdateConditions(columnIndex);
 
-    ORowSetValueVector::Vector& rInsert = (*m_aInsertRow)->get();
+    ORowSetValueVector::Vector& rInsert = **m_aInsertRow;
     if ( !rInsert[columnIndex].isNull() )
     {
         rInsert[columnIndex].setBound(true);
@@ -573,7 +573,7 @@ void ORowSetCache::updateValue(sal_Int32 columnIndex,const ORowSetValue& x
 {
     checkUpdateConditions(columnIndex);
 
-    ORowSetValueVector::Vector& rInsert = (*m_aInsertRow)->get();
+    ORowSetValueVector::Vector& rInsert = **m_aInsertRow;
     if ( rInsert[columnIndex] != x )
     {
         rInsert[columnIndex].setBound(true);
@@ -597,7 +597,7 @@ void ORowSetCache::updateCharacterStream( sal_Int32 columnIndex, const Reference
     if(x.is())
         x->readBytes(aSeq,length);
 
-    ORowSetValueVector::Vector& rInsert = (*m_aInsertRow)->get();
+    ORowSetValueVector::Vector& rInsert = **m_aInsertRow;
     rInsert[columnIndex].setBound(true);
     rInsert[columnIndex] = aSeq;
     rInsert[columnIndex].setModified(true);
@@ -614,7 +614,7 @@ void ORowSetCache::updateObject( sal_Int32 columnIndex, const Any& x
 {
     checkUpdateConditions(columnIndex);
 
-    ORowSetValueVector::Vector& rInsert = (*m_aInsertRow)->get();
+    ORowSetValueVector::Vector& rInsert = **m_aInsertRow;
     ORowSetValue aTemp;
     aTemp.fill(x);
     if ( rInsert[columnIndex] != aTemp )
@@ -636,7 +636,7 @@ void ORowSetCache::updateNumericObject( sal_Int32 columnIndex, const Any& x
 {
     checkUpdateConditions(columnIndex);
 
-    ORowSetValueVector::Vector& rInsert = (*m_aInsertRow)->get();
+    ORowSetValueVector::Vector& rInsert = **m_aInsertRow;
     ORowSetValue aTemp;
     aTemp.fill(x);
     if ( rInsert[columnIndex] != aTemp )
@@ -1277,19 +1277,19 @@ bool ORowSetCache::insertRow(std::vector< Any >& o_aBookmarks)
     if ( bRet )
     {
         ++m_nRowCount;
-        Any aBookmark = ((*m_aInsertRow)->get())[0].makeAny();
+        Any aBookmark = (**m_aInsertRow)[0].makeAny();
         m_bAfterLast = m_bBeforeFirst = false;
         if(aBookmark.hasValue())
         {
             moveToBookmark(aBookmark);
             // update the cached values
-            ORowSetValueVector::Vector& rCurrentRow = (*m_aMatrixIter)->get();
+            ORowSetValueVector::Vector& rCurrentRow = **m_aMatrixIter;
             ORowSetMatrix::const_iterator aIter = m_pMatrix->begin();
             for(;aIter != m_pMatrix->end();++aIter)
             {
-                if ( m_aMatrixIter != aIter && aIter->is() && m_xCacheSet->columnValuesUpdated((*aIter)->get(),rCurrentRow) )
+                if ( m_aMatrixIter != aIter && aIter->is() && m_xCacheSet->columnValuesUpdated(**aIter,rCurrentRow) )
                 {
-                    o_aBookmarks.push_back(lcl_getBookmark((*aIter)->get()[0], m_xCacheSet.get()));
+                    o_aBookmarks.push_back(lcl_getBookmark((**aIter)[0], m_xCacheSet.get()));
                 }
             }
         }
@@ -1325,7 +1325,7 @@ void ORowSetCache::updateRow( ORowSetMatrix::iterator const & _rUpdateRow, std::
     if(isAfterLast() || isBeforeFirst())
         throw SQLException(DBA_RES(RID_STR_NO_UPDATEROW),nullptr,SQLSTATE_GENERAL,1000,Any() );
 
-    Any aBookmark = ((*_rUpdateRow)->get())[0].makeAny();
+    Any aBookmark = (**_rUpdateRow)[0].makeAny();
     OSL_ENSURE(aBookmark.hasValue(),"Bookmark must have a value!");
     // here we don't have to reposition our CacheSet, when we try to update a row,
     // the row was already fetched
@@ -1337,13 +1337,13 @@ void ORowSetCache::updateRow( ORowSetMatrix::iterator const & _rUpdateRow, std::
     if ( moveToBookmark(aBookmark) )
     {
         // update the cached values
-        ORowSetValueVector::Vector& rCurrentRow = (*m_aMatrixIter)->get();
+        ORowSetValueVector::Vector& rCurrentRow = **m_aMatrixIter;
         ORowSetMatrix::const_iterator aIter = m_pMatrix->begin();
         for(;aIter != m_pMatrix->end();++aIter)
         {
-            if ( m_aMatrixIter != aIter && aIter->is() && m_xCacheSet->columnValuesUpdated((*aIter)->get(),rCurrentRow) )
+            if ( m_aMatrixIter != aIter && aIter->is() && m_xCacheSet->columnValuesUpdated(**aIter,rCurrentRow) )
             {
-                o_aBookmarks.push_back(lcl_getBookmark((*aIter)->get()[0], m_xCacheSet.get()));
+                o_aBookmarks.push_back(lcl_getBookmark((**aIter)[0], m_xCacheSet.get()));
             }
         }
     }
@@ -1405,8 +1405,8 @@ void ORowSetCache::moveToInsertRow(  )
         *m_aInsertRow = new ORowSetValueVector(m_xMetaData->getColumnCount());
 
     // we don't unbound the bookmark column
-    ORowSetValueVector::Vector::iterator aIter = (*m_aInsertRow)->get().begin()+1;
-    ORowSetValueVector::Vector::const_iterator aEnd = (*m_aInsertRow)->get().end();
+    ORowSetValueVector::Vector::iterator aIter = (*m_aInsertRow)->begin()+1;
+    ORowSetValueVector::Vector::const_iterator aEnd = (*m_aInsertRow)->end();
     for(sal_Int32 i = 1;aIter != aEnd;++aIter,++i)
     {
         aIter->setBound(false);
@@ -1491,7 +1491,7 @@ void ORowSetCache::setUpdateIterator(const ORowSetMatrix::iterator& _rOriginalRo
 
     (*(*m_aInsertRow)) = *(*_rOriginalRow);
     // we don't unbound the bookmark column
-    for(auto& rItem : (*m_aInsertRow)->get())
+    for(auto& rItem : **m_aInsertRow)
         rItem.setModified(false);
 }
 
@@ -1507,7 +1507,7 @@ void ORowSetCache::checkPositionFlags()
 
 void ORowSetCache::checkUpdateConditions(sal_Int32 columnIndex)
 {
-    if(m_bAfterLast || columnIndex >= static_cast<sal_Int32>((*m_aInsertRow)->get().size()))
+    if(m_bAfterLast || columnIndex >= static_cast<sal_Int32>((*m_aInsertRow)->size()))
         throwFunctionSequenceException(m_xSet.get());
 }
 
@@ -1618,8 +1618,8 @@ void ORowSetCache::clearInsertRow()
     // we don't unbound the bookmark column
     if ( m_aInsertRow != m_pInsertMatrix->end() && m_aInsertRow->is() )
     {
-        ORowSetValueVector::Vector::iterator aIter = (*m_aInsertRow)->get().begin()+1;
-        ORowSetValueVector::Vector::const_iterator aEnd = (*m_aInsertRow)->get().end();
+        ORowSetValueVector::Vector::iterator aIter = (*m_aInsertRow)->begin()+1;
+        ORowSetValueVector::Vector::const_iterator aEnd = (*m_aInsertRow)->end();
         for(;aIter != aEnd;++aIter)
         {
             aIter->setBound(false);
@@ -1710,7 +1710,7 @@ void ORowSetCache::impl_updateRowFromCache_throw(ORowSetValueVector::Vector& io_
     {
         for (auto const& elem : *m_pMatrix)
         {
-            if ( elem.is() && m_xCacheSet->updateColumnValues(elem->get(),io_aRow,o_ChangedColumns))
+            if ( elem.is() && m_xCacheSet->updateColumnValues(*elem,io_aRow,o_ChangedColumns))
             {
                 return;
             }

@@ -187,9 +187,9 @@ void OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _
         if ( m_pKeyColumnNames->find(columnName.first) != m_pKeyColumnNames->end() )
         {
             aResultSetChanged[columnName.second.sTableName] = m_aJoinedKeyColumns.find(columnName.second.nPosition) != m_aJoinedKeyColumns.end();
-            lcl_fillKeyCondition(columnName.second.sTableName,sQuotedColumnName,(_rOriginalRow->get())[columnName.second.nPosition],aKeyConditions);
+            lcl_fillKeyCondition(columnName.second.sTableName,sQuotedColumnName,(*_rOriginalRow)[columnName.second.nPosition],aKeyConditions);
         }
-        if((_rInsertRow->get())[columnName.second.nPosition].isModified())
+        if((*_rInsertRow)[columnName.second.nPosition].isModified())
         {
             if ( m_aJoinedKeyColumns.find(columnName.second.nPosition) != m_aJoinedKeyColumns.end() )
                 throw SQLException();
@@ -197,7 +197,7 @@ void OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _
             std::map<sal_Int32,sal_Int32>::const_iterator aJoinIter = m_aJoinedColumns.find(columnName.second.nPosition);
             if ( aJoinIter != m_aJoinedColumns.end() )
             {
-                (_rInsertRow->get())[aJoinIter->second] = (_rInsertRow->get())[columnName.second.nPosition];
+                (*_rInsertRow)[aJoinIter->second] = (*_rInsertRow)[columnName.second.nPosition];
             }
             OUStringBuffer& rPart = aSql[columnName.second.sTableName];
             if ( !rPart.isEmpty() )
@@ -247,17 +247,17 @@ void OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity:
             aResultSetChanged[columnName.second.sTableName] = false;
 
         const OUString sQuotedColumnName = ::dbtools::quoteName( aQuote,columnName.second.sRealName);
-        if ( (_rInsertRow->get())[columnName.second.nPosition].isModified() )
+        if ( (*_rInsertRow)[columnName.second.nPosition].isModified() )
         {
             if ( m_aJoinedKeyColumns.find(columnName.second.nPosition) != m_aJoinedKeyColumns.end() )
             {
-                lcl_fillKeyCondition(columnName.second.sTableName,sQuotedColumnName,(_rInsertRow->get())[columnName.second.nPosition],aKeyConditions);
+                lcl_fillKeyCondition(columnName.second.sTableName,sQuotedColumnName,(*_rInsertRow)[columnName.second.nPosition],aKeyConditions);
                 aResultSetChanged[columnName.second.sTableName] = true;
             }
             std::map<sal_Int32,sal_Int32>::const_iterator aJoinIter = m_aJoinedColumns.find(columnName.second.nPosition);
             if ( aJoinIter != m_aJoinedColumns.end() )
             {
-                (_rInsertRow->get())[aJoinIter->second] = (_rInsertRow->get())[columnName.second.nPosition];
+                (*_rInsertRow)[aJoinIter->second] = (*_rInsertRow)[columnName.second.nPosition];
             }
             OUStringBuffer& rPart = aSql[columnName.second.sTableName];
             if ( !rPart.isEmpty() )
@@ -300,7 +300,7 @@ void OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity:
                     {
                         if ( keyColumnName.second.sTableName == elem.first )
                         {
-                            setParameter(i++,xParameter,(_rInsertRow->get())[keyColumnName.second.nPosition],keyColumnName.second.nType,keyColumnName.second.nScale);
+                            setParameter(i++,xParameter,(*_rInsertRow)[keyColumnName.second.nPosition],keyColumnName.second.nType,keyColumnName.second.nScale);
                         }
                     }
                     Reference<XResultSet> xRes = xPrep->executeQuery();
@@ -333,7 +333,7 @@ void OptimisticSet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivity::
         {
             // only delete rows which aren't the key in the join
             const OUString sQuotedColumnName = ::dbtools::quoteName( aQuote,columnName.second.sRealName);
-            lcl_fillKeyCondition(columnName.second.sTableName,sQuotedColumnName,(_rDeleteRow->get())[columnName.second.nPosition],aKeyConditions);
+            lcl_fillKeyCondition(columnName.second.sTableName,sQuotedColumnName,(*_rDeleteRow)[columnName.second.nPosition],aKeyConditions);
         }
     }
     Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
@@ -361,13 +361,13 @@ void OptimisticSet::executeDelete(const ORowSetRow& _rDeleteRow,const OUString& 
     for (auto const& keyColumnName : *m_pKeyColumnNames)
     {
         if ( keyColumnName.second.sTableName == i_sTableName )
-            setParameter(i++,xParameter,(_rDeleteRow->get())[keyColumnName.second.nPosition],keyColumnName.second.nType,keyColumnName.second.nScale);
+            setParameter(i++,xParameter,(*_rDeleteRow)[keyColumnName.second.nPosition],keyColumnName.second.nType,keyColumnName.second.nScale);
     }
     m_bDeleted = xPrep->executeUpdate() > 0;
 
     if(m_bDeleted)
     {
-        sal_Int32 nBookmark = ::comphelper::getINT32((_rDeleteRow->get())[0].getAny());
+        sal_Int32 nBookmark = ::comphelper::getINT32((*_rDeleteRow)[0].getAny());
         if(m_aKeyIter == m_aKeyMap.find(nBookmark) && m_aKeyIter != m_aKeyMap.end())
             ++m_aKeyIter;
         m_aKeyMap.erase(nBookmark);

@@ -42,7 +42,7 @@ void OEvoabResultSetMetaData::setEvoabFields(const ::rtl::Reference<connectivity
 {
         static const char aName[] = "Name";
 
-        for (const auto& rxColumn : xColumns->get())
+        for (const auto& rxColumn : *xColumns)
         {
                 OUString aFieldName;
 

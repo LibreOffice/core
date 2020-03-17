@@ -104,13 +104,13 @@ OParseColumn::OParseColumn( const OUString& Name,
     const Reference< XDatabaseMetaData >& _rxDBMetaData,const Reference< XNameAccess>& i_xQueryColumns )
 {
     sal_Int32 nColumnCount = _rxResMetaData->getColumnCount();
-    ::rtl::Reference aReturn( new OSQLColumns ); aReturn->get().reserve( nColumnCount );
+    ::rtl::Reference aReturn( new OSQLColumns ); aReturn->reserve( nColumnCount );
 
     StringMap aColumnMap;
     for ( sal_Int32 i = 1; i <= nColumnCount; ++i )
     {
         OParseColumn* pColumn = createColumnForResultSet( _rxResMetaData, _rxDBMetaData, i,aColumnMap );
-        aReturn->get().push_back( pColumn );
+        aReturn->push_back( pColumn );
         if ( i_xQueryColumns.is() && i_xQueryColumns->hasByName(pColumn->getRealName()) )
         {
             Reference<XPropertySet> xColumn(i_xQueryColumns->getByName(pColumn->getRealName()),UNO_QUERY_THROW);

@@ -57,7 +57,7 @@ void MacabResultSetMetaData::setMacabFields(const ::rtl::Reference<connectivity:
 
     aHeader = aRecords->getHeader();
 
-    for (const auto& rxColumn : xColumns->get())
+    for (const auto& rxColumn : *xColumns)
     {
         OUString aFieldName;
         sal_uInt32 nFieldNumber;
