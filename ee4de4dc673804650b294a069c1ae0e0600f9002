@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "69a7f1e9_2e7a910a",
+        "filename": "sfx2/source/control/recentdocsviewitem.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-17T09:46:02Z",
+      "side": 1,
+      "message": "* osl::Thread is deprecated; new code should use salhelper::Thread.\n\n* Every thread that is spawned must explicitly be joined.",
+      "revId": "ee4de4dc673804650b294a069c1ae0e0600f9002",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "915eb226_af4dafd8",
+        "filename": "sfx2/source/control/recentdocsviewitem.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-17T09:46:02Z",
+      "side": 1,
+      "message": "pass by const\u0026 instead?",
+      "range": {
+        "startLine": 39,
+        "startChar": 21,
+        "endLine": 39,
+        "endChar": 35
+      },
+      "revId": "ee4de4dc673804650b294a069c1ae0e0600f9002",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e28eefdf_daf7120a",
+        "filename": "sfx2/source/control/recentdocsviewitem.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-17T09:46:02Z",
+      "side": 1,
+      "message": "Should this rather be of type `BitmapEx\u0026`?  (If not, the below m_aBitmap.Adjust appears to be dead code, and the FileCheckThread ctor should take aBitmap by const\u0026.  If yes, there\u0027s a data race with both threads accessing aThumbnail below.)",
+      "revId": "ee4de4dc673804650b294a069c1ae0e0600f9002",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c49a889_27e60281",
+        "filename": "sfx2/source/control/recentdocsviewitem.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-17T09:46:02Z",
+      "side": 1,
+      "message": "see utl::UCBContentHelper::Exists (include/unotools/ucbhelper.hxx)",
+      "revId": "ee4de4dc673804650b294a069c1ae0e0600f9002",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
