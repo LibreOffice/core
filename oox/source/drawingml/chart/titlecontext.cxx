@@ -88,7 +88,6 @@ TitleContext::~TitleContext()
 
 ContextHandlerRef TitleContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    bool bMSO2007Doc = getFilter().isMSO2007Document();
     // this context handler is used for <c:title> only
     switch( nElement )
     {
@@ -96,7 +95,7 @@ ContextHandlerRef TitleContext::onCreateContext( sal_Int32 nElement, const Attri
             return new LayoutContext( *this, mrModel.mxLayout.create() );
 
         case C_TOKEN( overlay ):
-            mrModel.mbOverlay = rAttribs.getBool( XML_val, !bMSO2007Doc );
+            mrModel.mbOverlay = rAttribs.getBool( XML_val, true );
             return nullptr;
 
         case C_TOKEN( spPr ):
@@ -147,7 +146,6 @@ LegendContext::~LegendContext()
 
 ContextHandlerRef LegendContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    bool bMSO2007Doc = getFilter().isMSO2007Document();
     // this context handler is used for <c:legend> only
     switch( nElement )
     {
@@ -162,7 +160,7 @@ ContextHandlerRef LegendContext::onCreateContext( sal_Int32 nElement, const Attr
             return new LegendEntryContext( *this, mrModel.maLegendEntries.create() );
 
         case C_TOKEN( overlay ):
-            mrModel.mbOverlay = rAttribs.getBool( XML_val, !bMSO2007Doc );
+            mrModel.mbOverlay = rAttribs.getBool( XML_val, true );
             return nullptr;
 
         case C_TOKEN( spPr ):

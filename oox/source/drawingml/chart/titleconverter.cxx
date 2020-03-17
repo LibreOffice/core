@@ -249,6 +249,9 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
 
         if (bTopRight && !bManualLayout)
             aPropSet.setProperty( PROP_RelativePosition , makeAny(eRelPos));
+
+        aPropSet.setProperty(PROP_Overlay, mrModel.mbOverlay);
+
         if (mrModel.maLegendEntries.size() > 0)
             legendEntriesFormatting(rxDiagram);
     }

@@ -98,7 +98,7 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
                 case C_TOKEN( floor ):
                     return new WallFloorContext( *this, mrModel.mxFloor.create() );
                 case C_TOKEN( legend ):
-                    return new LegendContext( *this, mrModel.mxLegend.create(bMSO2007Document) );
+                    return new LegendContext( *this, mrModel.mxLegend.create() );
                 case C_TOKEN( plotArea ):
                     return new PlotAreaContext( *this, mrModel.mxPlotArea.create() );
                 case C_TOKEN( plotVisOnly ):

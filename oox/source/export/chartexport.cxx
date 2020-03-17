@@ -1197,7 +1197,11 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
 
         if (strPos != nullptr)
         {
-            pFS->singleElement(FSNS(XML_c, XML_overlay), XML_val, "0");
+            uno::Any aOverlay = xProp->getPropertyValue("Overlay");
+            if(aOverlay.get<bool>())
+                pFS->singleElement(FSNS(XML_c, XML_overlay), XML_val, "1");
+            else
+                pFS->singleElement(FSNS(XML_c, XML_overlay), XML_val, "0");
         }
 
         // shape properties
