@@ -22,6 +22,7 @@ setdefaults()
     done
 
     exedir="${dir}"/workdir/LinkTarget/Executable
+    exedir="${dir}"/instdir/program
     export URE_BOOTSTRAP=file://"${dir}"/instdir/program/fundamentalrc
 }
 

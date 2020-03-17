@@ -1,13 +1,18 @@
-salhelper_lib = shared_library('salhelperlo',
+salhelper_lib = shared_library('uno_salhelpergcc3',
   'source/condition.cxx',
   'source/dynload.cxx',
   'source/simplereferenceobject.cxx',
   'source/thread.cxx',
   'source/timer.cxx',
   include_directories: [main_inc],
-  cpp_args: ['-DLIBO_INTERNAL_ONLY',
-             '-DSALHELPER_DLLIMPLEMENTATION'],
-  link_with: sal_lib,
+  cpp_args: [
+    '-DLIBO_INTERNAL_ONLY',
+    '-DSALHELPER_DLLIMPLEMENTATION',
+  ],
+  link_with: [
+    sal_lib,
+  ],
+  soversion : '3',
   gnu_symbol_visibility: 'hidden',
   install: true,
 )

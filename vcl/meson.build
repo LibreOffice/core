@@ -422,7 +422,7 @@ vcl_lib = shared_library('vcllo',
              '-DDLLIMPLEMENTATION_UITEST',
              '-DCUI_DLL_NAME="libcuilo.so"',
              '-DGLM_ENABLE_EXPERIMENTAL',
-             '-DDESKTOP_DETECTOR_DLL_NAME="libdesktopdetector.so"',
+             '-DDESKTOP_DETECTOR_DLL_NAME="libdesktop_detectorlo.so"',
              '-DTK_DLL_NAME="libtklo.so"'],
   link_with: [
     basegfx_lib,
@@ -636,7 +636,7 @@ executable('vcldemo',
   ],
 )
 
-desktopdetector_lib = shared_library('desktopdetector',
+desktopdetector_lib = shared_library('desktop_detectorlo',
   'unx/generic/desktopdetect/desktopdetector.cxx',
   udk_fake_h, off_fake_h,
   cpp_args: ['-DLIBO_INTERNAL_ONLY'],
@@ -654,7 +654,9 @@ desktopdetector_lib = shared_library('desktopdetector',
     cppu_lib,
     sal_lib,
   ],
-  dependencies: [x11_dep],
+  dependencies: [
+    x11_core_dep,
+  ],
   install: true,
 )
 

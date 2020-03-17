@@ -78,7 +78,7 @@ sofficeapp_lib = shared_library('sofficeapp',
   install: true,
 )
 
-soffice_bin = executable('soffice', 'source/app/main.c',
+soffice_bin = executable('soffice.bin', 'source/app/main.c',
   include_directories: [main_inc],
   link_with: [sofficeapp_lib, sal_lib],
   install: true,

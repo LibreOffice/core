@@ -26,7 +26,7 @@ rc = subprocess.call(['genbrk',
 if rc != 0:
     sys.exit(rc)
 
-rc = subprocess.call(['genccode',
+rc = subprocess.call(['/usr/sbin/genccode',
                       '-n',
                       'OpenOffice',
                       '-d',

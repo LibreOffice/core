@@ -27,7 +27,7 @@ line.brk
 sent.brk
 ''')
 
-rc = subprocess.call(['gencmn',
+rc = subprocess.call(['/usr/sbin/gencmn',
                       '-n',
                       'OpenOffice',
                       '-t',

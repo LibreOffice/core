@@ -14,7 +14,12 @@ pyuno_lib = shared_library('pyuno',
   cpp_args: ['-DLO_DLLIMPLEMENTATION_PYUNO',
              '-DLIBO_INTERNAL_ONLY'],
   include_directories: [main_inc, udkh_inc, 'inc'],
-  link_with: [cppu_lib, cppuhelper_lib, sal_lib, salhelper_lib],
+  link_with: [
+    cppu_lib,
+    cppuhelper_lib,
+    sal_lib,
+    salhelper_lib,
+  ],
   dependencies: [python3_dep],
   install: true,
 )

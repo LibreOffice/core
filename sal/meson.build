@@ -68,7 +68,7 @@ else
   system_link_args = []
 endif
 
-sal_lib = shared_library('sallo',
+sal_lib = shared_library('uno_sal',
   'rtl/alloc_arena.cxx',
   'rtl/alloc_cache.cxx',
   'rtl/alloc_fini.cxx',
@@ -121,6 +121,7 @@ sal_lib = shared_library('sallo',
     osx_frameworks_dep,
     thread_dep,
   ],
+  soversion : '3',
   gnu_symbol_visibility: 'hidden',
   install: true,
 )

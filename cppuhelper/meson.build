@@ -6,7 +6,7 @@ temp_hack = static_library('cppuuno',
   include_directories: [main_inc, udkh_inc, offapi_inc, cpphelper_uno_inc],
 )
 
-cppuhelper_lib = shared_library('cppuhelperlo',
+cppuhelper_lib = shared_library('uno_cppuhelpergcc3',
   'source/access_control.cxx',
   'source/bootstrap.cxx',
   'source/compat.cxx',
@@ -33,7 +33,10 @@ cppuhelper_lib = shared_library('cppuhelperlo',
   'source/findsofficepath.c',
   udk_fake_h, off_fake_h, cppuhelper_fake_h,
   include_directories: [main_inc, udkh_inc, offapi_inc, cpphelper_uno_inc],
-  cpp_args: ['-DCPPUHELPER_DLLIMPLEMENTATION', '-DLIBO_INTERNAL_ONLY'],
+  cpp_args: [
+    '-DCPPUHELPER_DLLIMPLEMENTATION',
+    '-DLIBO_INTERNAL_ONLY',
+  ],
   link_with: [
     cppu_lib,
     reg_lib,
@@ -43,6 +46,7 @@ cppuhelper_lib = shared_library('cppuhelperlo',
     unoidl_lib,
     xmlreader_lib
   ],
+  soversion : '3',
   gnu_symbol_visibility: 'hidden',
   install: true,
 )
