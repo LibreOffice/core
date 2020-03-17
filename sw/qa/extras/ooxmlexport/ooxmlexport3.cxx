@@ -1103,6 +1103,21 @@ DECLARE_OOXMLEXPORT_TEST(testVerticalBorders, "calendar3.docx")
     assertXPathChildren(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[3]/w:tcPr/w:tcBorders", 2);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testArrowFlipXY, "tdf100751_arrowBothFlip.docx")
+{
+    // tdf#100751: Both x and y flip should happen.
+
+    uno::Reference<drawing::XShape> arrow = getShape(1);
+    uno::Reference<beans::XPropertySet> arrowProperties(arrow, uno::UNO_QUERY);
+    bool isX, isY;
+
+    arrowProperties->getPropertyValue("MirroredX") >>= isX;
+    arrowProperties->getPropertyValue("MirroredY") >>= isY;
+
+    CPPUNIT_ASSERT(isX);
+    CPPUNIT_ASSERT(isY);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
