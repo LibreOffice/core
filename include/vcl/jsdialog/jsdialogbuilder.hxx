@@ -52,6 +52,10 @@ public:
     virtual std::unique_ptr<weld::Notebook> weld_notebook(const OString& id,
                                                           bool bTakeOwnership = false) override;
 
+    static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent,
+                                                    VclMessageType eMessageType,
+                                                    VclButtonsType eButtonType,
+                                                    const OUString& rPrimaryMessage);
     static weld::Widget* FindWeldWidgetsMap(vcl::LOKWindowId nWindowId, const OString& rWidget);
 };
 
@@ -144,6 +148,16 @@ public:
     virtual void remove_page(const OString& rIdent) override;
 
     virtual void append_page(const OString& rIdent, const OUString& rLabel) override;
+};
+
+class VCL_DLLPUBLIC JSMessageDialog : public SalInstanceMessageDialog, public JSDialogSender
+{
+public:
+    JSMessageDialog(::MessageDialog* pDialog, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+
+    virtual void set_primary_text(const OUString& rText) override;
+
+    virtual void set_secondary_text(const OUString& rText) override;
 };
 
 #endif

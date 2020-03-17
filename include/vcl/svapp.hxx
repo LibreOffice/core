@@ -1345,7 +1345,8 @@ public:
     static weld::Builder* CreateInterimBuilder(weld::Widget* pParent, const OUString &rUIFile); //for the duration of same SfxTabPages in mixed parent types
 
     static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
-                                                    VclButtonsType eButtonType, const OUString& rPrimaryMessage);
+                                                    VclButtonsType eButtonType, const OUString& rPrimaryMessage,
+                                                    bool bMobile = false);
 
     static weld::Window* GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow);
 private:
