@@ -174,6 +174,8 @@ public:
     virtual FactoryFunction GetUITestFactory() const override;
 
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
+
+    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 };
 
 #endif // INCLUDED_VCL_VCLMEDIT_HXX

@@ -38,6 +38,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/weld.hxx>
 #include <osl/diagnose.h>
+#include <tools/json_writer.hxx>
 
 class ImpVclMEdit : public SfxListener
 {
@@ -1550,6 +1551,13 @@ bool VclMultiLineEdit::set_property(const OString &rKey, const OUString &rValue)
     else
         return Edit::set_property(rKey, rValue);
     return true;
+}
+
+void VclMultiLineEdit::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
+{
+    Edit::DumpAsPropertyTree(rJsonWriter);
+
+    rJsonWriter.put("cursor", pImpVclMEdit->GetTextWindow()->GetTextView()->IsCursorEnabled());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
