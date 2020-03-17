@@ -317,7 +317,9 @@ sal_Bool SAL_CALL Desktop::terminate()
         if ( xPipeTerminator.is() )
             xPipeTerminator->notifyTermination( aEvent );
 
-        // further termination is postponed to shutdown
+        // further termination is postponed to shutdown, if LO already runs the main loop
+        if (!Application::IsInExecute())
+            shutdown();
     }
     else
         m_bIsShutdown = true;
