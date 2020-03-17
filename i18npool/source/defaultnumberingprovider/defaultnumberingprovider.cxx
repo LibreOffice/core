@@ -553,11 +553,11 @@ bool should_ignore( const OUString& s )
 }
 
 /**
- * Turn nNumber into a string and pad the result to 2 using zero characters.
+ * Turn nNumber into a string and pad the result to nLimit by inserting zero characters at the
+ * start.
  */
-static OUString lcl_formatArabicZero(sal_Int32 nNumber)
+static OUString lcl_formatArabicZero(sal_Int32 nNumber, sal_Int32 nLimit)
 {
-    sal_Int32 nLimit = 2;
     OUString aRet = OUString::number(nNumber);
     sal_Int32 nDiff = nLimit - aRet.getLength();
 
@@ -938,7 +938,11 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
              break;
 
           case ARABIC_ZERO:
-               result += lcl_formatArabicZero(number);
+               result += lcl_formatArabicZero(number, 2);
+               break;
+
+          case ARABIC_ZERO3:
+               result += lcl_formatArabicZero(number, 3);
                break;
 
           default:
