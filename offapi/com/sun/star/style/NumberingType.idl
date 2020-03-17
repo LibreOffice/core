@@ -499,6 +499,13 @@ published constants NumberingType
         @since LibreOffice 7.0
      */
     const short ARABIC_ZERO = 64;
+
+    /** Numbering is in Arabic numbers, padded with zero to have a length of at least three, as
+        "001, 002, ..., 100, 101, ...".
+
+        @since LibreOffice 7.0
+     */
+    const short ARABIC_ZERO3 = 65;
 };
 
 
