@@ -30,7 +30,6 @@
 #include <salobj.hxx>
 #include <salmenu.hxx>
 #include <svdata.hxx>
-#include <messagedialog.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <utility>
 #include <vcl/builder.hxx>
@@ -879,42 +878,36 @@ weld::Container* SalInstanceDialog::weld_content_area()
     return new SalInstanceContainer(m_xDialog->get_content_area(), m_pBuilder, false);
 }
 
-class SalInstanceMessageDialog : public SalInstanceDialog, public virtual weld::MessageDialog
+SalInstanceMessageDialog::SalInstanceMessageDialog(::MessageDialog* pDialog, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : SalInstanceDialog(pDialog, pBuilder, bTakeOwnership)
+    , m_xMessageDialog(pDialog)
 {
-private:
-    VclPtr<::MessageDialog> m_xMessageDialog;
-public:
-    SalInstanceMessageDialog(::MessageDialog* pDialog, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : SalInstanceDialog(pDialog, pBuilder, bTakeOwnership)
-        , m_xMessageDialog(pDialog)
-    {
-    }
+}
 
-    virtual void set_primary_text(const OUString& rText) override
-    {
-        m_xMessageDialog->set_primary_text(rText);
-    }
+void SalInstanceMessageDialog::set_primary_text(const OUString& rText)
+{
+    m_xMessageDialog->set_primary_text(rText);
+}
 
-    virtual OUString get_primary_text() const override
-    {
-        return m_xMessageDialog->get_primary_text();
-    }
+OUString SalInstanceMessageDialog::get_primary_text() const
+{
+    return m_xMessageDialog->get_primary_text();
+}
 
-    virtual void set_secondary_text(const OUString& rText) override
-    {
-        m_xMessageDialog->set_secondary_text(rText);
-    }
+void SalInstanceMessageDialog::set_secondary_text(const OUString& rText)
+{
+    m_xMessageDialog->set_secondary_text(rText);
+}
 
-    virtual OUString get_secondary_text() const override
-    {
-        return m_xMessageDialog->get_secondary_text();
-    }
+OUString SalInstanceMessageDialog::get_secondary_text() const
+{
+    return m_xMessageDialog->get_secondary_text();
+}
 
-    virtual Container* weld_message_area() override
-    {
-        return new SalInstanceContainer(m_xMessageDialog->get_message_area(), m_pBuilder, false);
-    }
-};
+weld::Container* SalInstanceMessageDialog::weld_message_area()
+{
+    return new SalInstanceContainer(m_xMessageDialog->get_message_area(), m_pBuilder, false);
+}
 
 class SalInstanceFrame : public SalInstanceContainer, public virtual weld::Frame
 {
