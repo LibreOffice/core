@@ -204,6 +204,30 @@ std::unique_ptr<weld::Notebook> JSInstanceBuilder::weld_notebook(const OString& 
     return pWeldWidget;
 }
 
+weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParent,
+                                                            VclMessageType eMessageType,
+                                                            VclButtonsType eButtonType,
+                                                            const OUString& rPrimaryMessage)
+{
+    SalInstanceWidget* pParentInstance = dynamic_cast<SalInstanceWidget*>(pParent);
+    SystemWindow* pParentWidget = pParentInstance ? pParentInstance->getSystemWindow() : nullptr;
+    VclPtrInstance<::MessageDialog> xMessageDialog(pParentWidget, rPrimaryMessage, eMessageType,
+                                                   eButtonType);
+
+    const vcl::ILibreOfficeKitNotifier* pNotifier = xMessageDialog->GetLOKNotifier();
+    if (pNotifier)
+    {
+        std::stringstream aStream;
+        boost::property_tree::ptree aTree = xMessageDialog->DumpAsPropertyTree();
+        aTree.put("id", xMessageDialog->GetLOKWindowId());
+        boost::property_tree::write_json(aStream, aTree);
+        const std::string message = aStream.str();
+        pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
+    }
+
+    return new JSMessageDialog(xMessageDialog, nullptr, true);
+}
+
 JSLabel::JSLabel(VclPtr<vcl::Window> aOwnedToplevel, FixedText* pLabel,
                  SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : JSWidget<SalInstanceLabel, FixedText>(aOwnedToplevel, pLabel, pBuilder, bTakeOwnership)
@@ -320,5 +344,24 @@ void JSNotebook::remove_page(const OString& rIdent)
 void JSNotebook::append_page(const OString& rIdent, const OUString& rLabel)
 {
     SalInstanceNotebook::append_page(rIdent, rLabel);
+    notifyDialogState();
+}
+
+JSMessageDialog::JSMessageDialog(::MessageDialog* pDialog, SalInstanceBuilder* pBuilder,
+                                 bool bTakeOwnership)
+    : SalInstanceMessageDialog(pDialog, pBuilder, bTakeOwnership)
+    , JSDialogSender(m_xMessageDialog)
+{
+}
+
+void JSMessageDialog::set_primary_text(const OUString& rText)
+{
+    SalInstanceMessageDialog::set_primary_text(rText);
+    notifyDialogState();
+}
+
+void JSMessageDialog::set_secondary_text(const OUString& rText)
+{
+    SalInstanceMessageDialog::set_secondary_text(rText);
     notifyDialogState();
 }
