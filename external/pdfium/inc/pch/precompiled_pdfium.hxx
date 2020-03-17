@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-01 12:22:35 using:
+ Generated on 2020-03-11 14:44:55 using:
  ./bin/update_pch external/pdfium pdfium --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -65,6 +65,7 @@
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <build/build_config.h>
+#include <constants/access_permissions.h>
 #include <constants/annotation_common.h>
 #include <constants/annotation_flags.h>
 #include <constants/form_fields.h>
@@ -77,7 +78,7 @@
 #include <core/fpdfapi/cmaps/GB1/cmaps_gb1.h>
 #include <core/fpdfapi/cmaps/Japan1/cmaps_japan1.h>
 #include <core/fpdfapi/cmaps/Korea1/cmaps_korea1.h>
-#include <core/fpdfapi/cmaps/cmap_int.h>
+#include <core/fpdfapi/cmaps/fpdf_cmaps.h>
 #include <core/fpdfapi/edit/cpdf_contentstream_write_utils.h>
 #include <core/fpdfapi/edit/cpdf_creator.h>
 #include <core/fpdfapi/edit/cpdf_pagecontentgenerator.h>
@@ -109,8 +110,7 @@
 #include <core/fpdfapi/page/cpdf_contentmarks.h>
 #include <core/fpdfapi/page/cpdf_contentparser.h>
 #include <core/fpdfapi/page/cpdf_devicecs.h>
-#include <core/fpdfapi/page/cpdf_dibbase.h>
-#include <core/fpdfapi/page/cpdf_dibtransferfunc.h>
+#include <core/fpdfapi/page/cpdf_dib.h>
 #include <core/fpdfapi/page/cpdf_docpagedata.h>
 #include <core/fpdfapi/page/cpdf_expintfunc.h>
 #include <core/fpdfapi/page/cpdf_form.h>
@@ -143,6 +143,7 @@
 #include <core/fpdfapi/page/cpdf_textstate.h>
 #include <core/fpdfapi/page/cpdf_tilingpattern.h>
 #include <core/fpdfapi/page/cpdf_transferfunc.h>
+#include <core/fpdfapi/page/cpdf_transferfuncdib.h>
 #include <core/fpdfapi/page/cpdf_transparency.h>
 #include <core/fpdfapi/parser/cfdf_document.h>
 #include <core/fpdfapi/parser/cpdf_array.h>
@@ -198,7 +199,6 @@
 #include <core/fpdfdoc/cline.h>
 #include <core/fpdfdoc/cpdf_aaction.h>
 #include <core/fpdfdoc/cpdf_action.h>
-#include <core/fpdfdoc/cpdf_actionfields.h>
 #include <core/fpdfdoc/cpdf_annot.h>
 #include <core/fpdfdoc/cpdf_annotlist.h>
 #include <core/fpdfdoc/cpdf_apsettings.h>
@@ -207,7 +207,6 @@
 #include <core/fpdfdoc/cpdf_color_utils.h>
 #include <core/fpdfdoc/cpdf_defaultappearance.h>
 #include <core/fpdfdoc/cpdf_dest.h>
-#include <core/fpdfdoc/cpdf_docjsactions.h>
 #include <core/fpdfdoc/cpdf_filespec.h>
 #include <core/fpdfdoc/cpdf_formcontrol.h>
 #include <core/fpdfdoc/cpdf_formfield.h>
@@ -335,6 +334,7 @@
 #include <core/fxge/cfx_cliprgn.h>
 #include <core/fxge/cfx_color.h>
 #include <core/fxge/cfx_defaultrenderdevice.h>
+#include <core/fxge/cfx_drawutils.h>
 #include <core/fxge/cfx_face.h>
 #include <core/fxge/cfx_folderfontinfo.h>
 #include <core/fxge/cfx_font.h>
@@ -356,7 +356,6 @@
 #include <core/fxge/dib/cfx_dibbase.h>
 #include <core/fxge/dib/cfx_dibextractor.h>
 #include <core/fxge/dib/cfx_dibitmap.h>
-#include <core/fxge/dib/cfx_filtereddib.h>
 #include <core/fxge/dib/cfx_imagerenderer.h>
 #include <core/fxge/dib/cfx_imagestretcher.h>
 #include <core/fxge/dib/cfx_imagetransformer.h>
@@ -389,6 +388,7 @@
 #include <fpdfsdk/cpdfsdk_interactiveform.h>
 #include <fpdfsdk/cpdfsdk_pageview.h>
 #include <fpdfsdk/cpdfsdk_pauseadapter.h>
+#include <fpdfsdk/cpdfsdk_renderpage.h>
 #include <fpdfsdk/cpdfsdk_widget.h>
 #include <fpdfsdk/cpdfsdk_widgethandler.h>
 #include <fpdfsdk/formfiller/cffl_button.h>
