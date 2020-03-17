@@ -46,6 +46,30 @@
       "revId": "4a96fb8ec0130e1036913093836bcf28bc37a49b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5661a1c3_53892ff0",
+        "filename": "writerfilter/source/dmapper/SettingsTable.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-03-17T16:05:27Z",
+      "side": 0,
+      "message": "\u003e  Currently enforcement turns on all protection in your new code.\nYikes: even that statement is totally wrong... Sorry for all the noise.",
+      "parentUuid": "6f24deef_0d4fa370",
+      "range": {
+        "startLine": 358,
+        "startChar": 38,
+        "endLine": 358,
+        "endChar": 39
+      },
+      "revId": "4a96fb8ec0130e1036913093836bcf28bc37a49b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
