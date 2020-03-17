@@ -22,6 +22,30 @@
       "revId": "3e050eedf7ccccaed3164848f61148269336153f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b90cae7_cc295f57",
+        "filename": "sw/uiconfig/swriter/ui/converttexttable.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1002345
+      },
+      "writtenOn": "2020-03-17T14:17:10Z",
+      "side": 1,
+      "message": "changing the context wasn\u0027t required.",
+      "parentUuid": "7ce70b69_9f272749",
+      "range": {
+        "startLine": 509,
+        "startChar": 87,
+        "endLine": 509,
+        "endChar": 109
+      },
+      "revId": "3e050eedf7ccccaed3164848f61148269336153f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
