@@ -7,20 +7,20 @@ index fd44d62e94..f9e90f185f 100644
      bool isOpen() const { return fOpen; }
  
 -#ifdef SK_DEBUG
-+#ifdef SK_TRACE_VK_RESOURCES
++#ifdef SK_TRACE_MANAGED_RESOURCES
      void dumpInfo() const override {
          SkDebugf("GrVkCommandPool: %p (%d refs)\n", fCommandPool, this->getRefCnt());
      }
 diff --git a/src/gpu/vk/GrVkResource.h b/src/gpu/vk/GrVkResource.h
 index 7b9949ba1b..4e8fb48c7c 100644
---- a/src/gpu/vk/GrVkResource.h
-+++ b/src/gpu/vk/GrVkResource.h
+--- a/src/gpu/GrManagedResource.h
++++ b/src/gpu/GrManagedResource.h
 @@ -17,7 +17,7 @@ class GrVkGpu;
  
  // uncomment to enable tracing of resource refs
  #ifdef SK_DEBUG
--#define SK_TRACE_VK_RESOURCES
-+//#define SK_TRACE_VK_RESOURCES
+-#define SK_TRACE_MANAGED_RESOURCES
++//#define SK_TRACE_MANAGED_RESOURCES
  #endif
  
- /** \class GrVkResource
+ /** \class GrManagedResource

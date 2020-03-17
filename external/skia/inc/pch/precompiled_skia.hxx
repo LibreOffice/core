@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-01-31 10:35:49 using:
+ Generated on 2020-03-17 20:41:27 using:
  ./bin/update_pch external/skia skia --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect /home/seli/build/src/l2/external/skia/inc/pch/precompiled_skia.hxx "make external/skia.build" --find-conflicts
+ ./bin/update_pch_bisect ./external/skia/inc/pch/precompiled_skia.hxx "make external/skia.build" --find-conflicts
 */
 
 #if PCH_LEVEL >= 1
@@ -39,7 +39,6 @@
 #include <errno.h>
 #include <float.h>
 #include <functional>
-#include <initializer_list>
 #include <inttypes.h>
 #include <iterator>
 #include <limits.h>
@@ -97,8 +96,8 @@
 #include <include/core/SkCubicMap.h>
 #include <include/core/SkData.h>
 #include <include/core/SkDataTable.h>
+#include <include/core/SkDeferredDisplayList.h>
 #include <include/core/SkDeferredDisplayListRecorder.h>
-#include <include/core/SkDeque.h>
 #include <include/core/SkDocument.h>
 #include <include/core/SkDrawLooper.h>
 #include <include/core/SkDrawable.h>
@@ -109,7 +108,6 @@
 #include <include/core/SkFontLCDConfig.h>
 #include <include/core/SkFontMetrics.h>
 #include <include/core/SkFontMgr.h>
-#include <include/core/SkFontTypes.h>
 #include <include/core/SkGraphics.h>
 #include <include/core/SkICC.h>
 #include <include/core/SkImage.h>
@@ -117,6 +115,7 @@
 #include <include/core/SkImageFilter.h>
 #include <include/core/SkImageGenerator.h>
 #include <include/core/SkImageInfo.h>
+#include <include/core/SkM44.h>
 #include <include/core/SkMallocPixelRef.h>
 #include <include/core/SkMaskFilter.h>
 #include <include/core/SkMath.h>
@@ -150,7 +149,6 @@
 #include <include/core/SkStrokeRec.h>
 #include <include/core/SkSurface.h>
 #include <include/core/SkSurfaceCharacterization.h>
-#include <include/core/SkSurfaceProps.h>
 #include <include/core/SkSwizzle.h>
 #include <include/core/SkTextBlob.h>
 #include <include/core/SkTileMode.h>
@@ -162,7 +160,6 @@
 #include <include/core/SkVertices.h>
 #include <include/core/SkYUVAIndex.h>
 #include <include/core/SkYUVASizeInfo.h>
-#include <include/docs/SkPDFDocument.h>
 #include <include/effects/Sk1DPathEffect.h>
 #include <include/effects/Sk2DPathEffect.h>
 #include <include/effects/SkAlphaThresholdFilter.h>
@@ -213,9 +210,6 @@
 #include <include/gpu/GrContextOptions.h>
 #include <include/gpu/GrContextThreadSafeProxy.h>
 #include <include/gpu/GrDriverBugWorkarounds.h>
-#include <include/gpu/GrGpuResource.h>
-#include <include/gpu/GrSurface.h>
-#include <include/gpu/GrTexture.h>
 #include <include/gpu/GrTypes.h>
 #include <include/gpu/gl/GrGLAssembleHelpers.h>
 #include <include/gpu/gl/GrGLAssembleInterface.h>
@@ -236,17 +230,16 @@
 #include <include/private/GrSingleOwner.h>
 #include <include/private/GrTypesPriv.h>
 #include <include/private/GrVkTypesPriv.h>
-#include <include/private/SkBitmaskEnum.h>
 #include <include/private/SkChecksum.h>
 #include <include/private/SkColorData.h>
-#include <include/private/SkDeferredDisplayList.h>
+#include <include/private/SkDeque.h>
 #include <include/private/SkEncodedInfo.h>
 #include <include/private/SkFixed.h>
 #include <include/private/SkFloatBits.h>
 #include <include/private/SkFloatingPoint.h>
 #include <include/private/SkHalf.h>
+#include <include/private/SkIDChangeListener.h>
 #include <include/private/SkImageInfoPriv.h>
-#include <include/private/SkM44.h>
 #include <include/private/SkMacros.h>
 #include <include/private/SkMalloc.h>
 #include <include/private/SkMutex.h>
@@ -267,7 +260,6 @@
 #include <include/private/SkTo.h>
 #include <include/private/SkVx.h>
 #include <include/third_party/skcms/skcms.h>
-#include <include/utils/Sk3D.h>
 #include <include/utils/SkBase64.h>
 #include <include/utils/SkCamera.h>
 #include <include/utils/SkCanvasStateUtils.h>
@@ -295,11 +287,8 @@
 #include <src/codec/SkFrameHolder.h>
 #include <src/codec/SkIcoCodec.h>
 #include <src/codec/SkJpegCodec.h>
-#include <src/codec/SkJpegDecoderMgr.h>
-#include <src/codec/SkJpegUtility.h>
 #include <src/codec/SkMaskSwizzler.h>
 #include <src/codec/SkMasks.h>
-#include <src/codec/SkParseEncodedOrigin.h>
 #include <src/codec/SkPngCodec.h>
 #include <src/codec/SkPngPriv.h>
 #include <src/codec/SkRawCodec.h>
@@ -319,7 +308,6 @@
 #include <src/core/SkAutoBlitterChoose.h>
 #include <src/core/SkAutoMalloc.h>
 #include <src/core/SkAutoPixmapStorage.h>
-#include <src/core/SkBBoxHierarchy.h>
 #include <src/core/SkBigPicture.h>
 #include <src/core/SkBitmapCache.h>
 #include <src/core/SkBitmapController.h>
@@ -440,6 +428,7 @@
 #include <src/core/SkSafeMath.h>
 #include <src/core/SkSafeRange.h>
 #include <src/core/SkScaleToSides.h>
+#include <src/core/SkScalerCache.h>
 #include <src/core/SkScalerContext.h>
 #include <src/core/SkScan.h>
 #include <src/core/SkScanPriv.h>
@@ -450,7 +439,6 @@
 #include <src/core/SkSpecialSurface.h>
 #include <src/core/SkSpriteBlitter.h>
 #include <src/core/SkStreamPriv.h>
-#include <src/core/SkStrike.h>
 #include <src/core/SkStrikeCache.h>
 #include <src/core/SkStrikeForGPU.h>
 #include <src/core/SkStrikeSpec.h>
@@ -462,7 +450,6 @@
 #include <src/core/SkTDynamicHash.h>
 #include <src/core/SkTInternalLList.h>
 #include <src/core/SkTLList.h>
-#include <src/core/SkTLS.h>
 #include <src/core/SkTLazy.h>
 #include <src/core/SkTSearch.h>
 #include <src/core/SkTSort.h>
@@ -480,6 +467,7 @@
 #include <src/core/SkVMBlitter.h>
 #include <src/core/SkValidationUtils.h>
 #include <src/core/SkVertState.h>
+#include <src/core/SkVerticesPriv.h>
 #include <src/core/SkWriteBuffer.h>
 #include <src/core/SkWritePixelsRec.h>
 #include <src/core/SkWriter32.h>
@@ -526,6 +514,7 @@
 #include <src/gpu/GrDrawOpAtlas.h>
 #include <src/gpu/GrDrawOpTest.h>
 #include <src/gpu/GrDrawingManager.h>
+#include <src/gpu/GrDynamicAtlas.h>
 #include <src/gpu/GrEagerVertexAllocator.h>
 #include <src/gpu/GrFPArgs.h>
 #include <src/gpu/GrFixedClip.h>
@@ -534,11 +523,13 @@
 #include <src/gpu/GrGlyph.h>
 #include <src/gpu/GrGpu.h>
 #include <src/gpu/GrGpuBuffer.h>
+#include <src/gpu/GrGpuResource.h>
 #include <src/gpu/GrGpuResourceCacheAccess.h>
 #include <src/gpu/GrGpuResourcePriv.h>
 #include <src/gpu/GrImageContextPriv.h>
 #include <src/gpu/GrImageInfo.h>
 #include <src/gpu/GrImageTextureMaker.h>
+#include <src/gpu/GrManagedResource.h>
 #include <src/gpu/GrMemoryPool.h>
 #include <src/gpu/GrMesh.h>
 #include <src/gpu/GrNativeRect.h>
@@ -588,6 +579,7 @@
 #include <src/gpu/GrStencilClip.h>
 #include <src/gpu/GrStencilSettings.h>
 #include <src/gpu/GrStyle.h>
+#include <src/gpu/GrSurface.h>
 #include <src/gpu/GrSurfaceContext.h>
 #include <src/gpu/GrSurfaceContextPriv.h>
 #include <src/gpu/GrSurfacePriv.h>
@@ -597,6 +589,7 @@
 #include <src/gpu/GrSwizzle.h>
 #include <src/gpu/GrTessellator.h>
 #include <src/gpu/GrTestUtils.h>
+#include <src/gpu/GrTexture.h>
 #include <src/gpu/GrTextureAdjuster.h>
 #include <src/gpu/GrTextureMaker.h>
 #include <src/gpu/GrTexturePriv.h>
@@ -670,6 +663,7 @@
 #include <src/gpu/effects/generated/GrComposeLerpRedEffect.h>
 #include <src/gpu/effects/generated/GrConfigConversionEffect.h>
 #include <src/gpu/effects/generated/GrConstColorProcessor.h>
+#include <src/gpu/effects/generated/GrDeviceSpaceEffect.h>
 #include <src/gpu/effects/generated/GrEllipseEffect.h>
 #include <src/gpu/effects/generated/GrHSLToRGBFilterEffect.h>
 #include <src/gpu/effects/generated/GrLumaColorFilterEffect.h>
@@ -766,12 +760,14 @@
 #include <src/gpu/ops/GrRegionOp.h>
 #include <src/gpu/ops/GrShadowRRectOp.h>
 #include <src/gpu/ops/GrSimpleMeshDrawOpHelper.h>
+#include <src/gpu/ops/GrSimpleMeshDrawOpHelperWithStencil.h>
 #include <src/gpu/ops/GrSmallPathRenderer.h>
 #include <src/gpu/ops/GrStencilAndCoverPathRenderer.h>
 #include <src/gpu/ops/GrStencilPathOp.h>
 #include <src/gpu/ops/GrStrokeRectOp.h>
 #include <src/gpu/ops/GrTessellatingPathRenderer.h>
 #include <src/gpu/ops/GrTextureOp.h>
+#include <src/gpu/tessellate/GrDrawAtlasPathOp.h>
 #include <src/gpu/tessellate/GrFillPathShader.h>
 #include <src/gpu/tessellate/GrGpuTessellationPathRenderer.h>
 #include <src/gpu/tessellate/GrPathParser.h>
@@ -830,7 +826,6 @@
 #include <src/image/SkSurface_Base.h>
 #include <src/image/SkSurface_Gpu.h>
 #include <src/images/SkImageEncoderPriv.h>
-#include <src/images/SkJPEGWriteUtility.h>
 #include <src/lazy/SkDiscardableMemoryPool.h>
 #include <src/pathops/SkAddIntersections.h>
 #include <src/pathops/SkIntersectionHelper.h>
@@ -856,31 +851,6 @@
 #include <src/pathops/SkPathOpsTypes.h>
 #include <src/pathops/SkPathWriter.h>
 #include <src/pathops/SkReduceOrder.h>
-#include <src/pdf/SkBitmapKey.h>
-#include <src/pdf/SkClusterator.h>
-#include <src/pdf/SkDeflate.h>
-#include <src/pdf/SkJpegInfo.h>
-#include <src/pdf/SkKeyedImage.h>
-#include <src/pdf/SkPDFBitmap.h>
-#include <src/pdf/SkPDFDevice.h>
-#include <src/pdf/SkPDFDocumentPriv.h>
-#include <src/pdf/SkPDFFont.h>
-#include <src/pdf/SkPDFFormXObject.h>
-#include <src/pdf/SkPDFGlyphUse.h>
-#include <src/pdf/SkPDFGradientShader.h>
-#include <src/pdf/SkPDFGraphicStackState.h>
-#include <src/pdf/SkPDFGraphicState.h>
-#include <src/pdf/SkPDFMakeCIDGlyphWidthsArray.h>
-#include <src/pdf/SkPDFMakeToUnicodeCmap.h>
-#include <src/pdf/SkPDFMetadata.h>
-#include <src/pdf/SkPDFResourceDict.h>
-#include <src/pdf/SkPDFShader.h>
-#include <src/pdf/SkPDFSubsetFont.h>
-#include <src/pdf/SkPDFTag.h>
-#include <src/pdf/SkPDFType1Font.h>
-#include <src/pdf/SkPDFTypes.h>
-#include <src/pdf/SkPDFUnion.h>
-#include <src/pdf/SkPDFUtils.h>
 #include <src/ports/SkOSLibrary.h>
 #include <src/sfnt/SkOTTableTypes.h>
 #include <src/sfnt/SkOTTable_OS_2.h>
@@ -897,7 +867,6 @@
 #include <src/shaders/SkLights.h>
 #include <src/shaders/SkLocalMatrixShader.h>
 #include <src/shaders/SkPictureShader.h>
-#include <src/shaders/SkRTShader.h>
 #include <src/shaders/SkShaderBase.h>
 #include <src/shaders/gradients/Sk4fGradientBase.h>
 #include <src/shaders/gradients/Sk4fLinearGradient.h>
@@ -925,6 +894,7 @@
 #include <src/sksl/SkSLParser.h>
 #include <src/sksl/SkSLPipelineStageCodeGenerator.h>
 #include <src/sksl/SkSLSPIRVCodeGenerator.h>
+#include <src/sksl/SkSLSPIRVtoHLSL.h>
 #include <src/sksl/SkSLSectionAndParameterHelper.h>
 #include <src/sksl/SkSLString.h>
 #include <src/sksl/SkSLStringStream.h>
@@ -979,7 +949,6 @@
 #include <src/sksl/ir/SkSLWhileStatement.h>
 #include <src/utils/SkCanvasStack.h>
 #include <src/utils/SkCharToGlyphCache.h>
-#include <src/utils/SkClipStackUtils.h>
 #include <src/utils/SkDashPathPriv.h>
 #include <src/utils/SkFloatToDecimal.h>
 #include <src/utils/SkJSON.h>
