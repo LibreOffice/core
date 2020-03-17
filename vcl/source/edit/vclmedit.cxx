@@ -1536,4 +1536,13 @@ bool VclMultiLineEdit::set_property(const OString &rKey, const OUString &rValue)
     return true;
 }
 
+boost::property_tree::ptree VclMultiLineEdit::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree = Edit::DumpAsPropertyTree();
+
+    aTree.put("cursor", pImpVclMEdit->GetTextWindow()->GetTextView()->IsCursorEnabled());
+
+    return aTree;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
