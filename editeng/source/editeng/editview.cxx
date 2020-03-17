@@ -857,7 +857,7 @@ static void LOKSendSpellPopupMenu(Menu* pMenu, LanguageType nGuessLangWord,
     if (!comphelper::LibreOfficeKit::isActive())
         return;
 
-    // First we need to set item commends for the context menu.
+    // First we need to set item commands for the context menu.
     OUString aTmpWord( SvtLanguageTable::GetLanguageString( nGuessLangWord ) );
     OUString aTmpPara( SvtLanguageTable::GetLanguageString( nGuessLangPara ) );
 
