@@ -1304,7 +1304,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
             }
             break;
 
-        case RES_POOLCOLL_DOC_SUBTITEL:         // Document subtitle
+        case RES_POOLCOLL_DOC_SUBTITLE:         // Document subtitle
             {
                 SvxULSpaceItem aUL( PT_3, PT_6, RES_UL_SPACE );
                 aSet.Put( aUL );

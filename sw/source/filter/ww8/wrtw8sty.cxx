@@ -261,7 +261,7 @@ sal_uInt16 MSWordStyles::GetWWId( const SwFormat& rFormat )
         case RES_POOLCOLL_BULLET_NONUM3:    nRet = 70;  break;
         case RES_POOLCOLL_BULLET_NONUM4:    nRet = 71;  break;
         case RES_POOLCOLL_BULLET_NONUM5:    nRet = 72;  break;
-        case RES_POOLCOLL_DOC_SUBTITEL:     nRet = 74;  break;
+        case RES_POOLCOLL_DOC_SUBTITLE:     nRet = 74;  break;
         case RES_POOLCOLL_GREETING:         nRet = 75;  break;
         case RES_POOLCOLL_TEXT_IDENT:       nRet = 77;  break;
 

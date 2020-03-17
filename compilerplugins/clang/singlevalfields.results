@@ -801,7 +801,7 @@ sw/source/filter/ww8/ww8par5.cxx:1566
     
 sw/source/filter/ww8/ww8par5.cxx:1567
     SwWW8ImplReader::Read_F_DocInfo aName11
-    TITEL
+    TITLE
 sw/source/filter/ww8/ww8par5.cxx:1569
     SwWW8ImplReader::Read_F_DocInfo aName12
     TITRE
@@ -819,7 +819,7 @@ sw/source/filter/ww8/ww8par5.cxx:1576
     ERSTELLDATUM
 sw/source/filter/ww8/ww8par5.cxx:1578
     SwWW8ImplReader::Read_F_DocInfo aName22
-    CRÉÉ
+    CRï¿½ï¿½
 sw/source/filter/ww8/ww8par5.cxx:1580
     SwWW8ImplReader::Read_F_DocInfo aName23
     CREATED
@@ -849,7 +849,7 @@ sw/source/filter/ww8/ww8par5.cxx:1594
     ZULETZTGEDRUCKT
 sw/source/filter/ww8/ww8par5.cxx:1596
     SwWW8ImplReader::Read_F_DocInfo aName42
-    DERNIÈREIMPRESSION
+    DERNIï¿½REIMPRESSION
 sw/source/filter/ww8/ww8par5.cxx:1598
     SwWW8ImplReader::Read_F_DocInfo aName43
     LASTPRINTED
@@ -861,10 +861,10 @@ sw/source/filter/ww8/ww8par5.cxx:1602
     
 sw/source/filter/ww8/ww8par5.cxx:1603
     SwWW8ImplReader::Read_F_DocInfo aName51
-    ÜBERARBEITUNGSNUMMER
+    ï¿½BERARBEITUNGSNUMMER
 sw/source/filter/ww8/ww8par5.cxx:1605
     SwWW8ImplReader::Read_F_DocInfo aName52
-    NUMÉRODEREVISION
+    NUMï¿½RODEREVISION
 sw/source/filter/ww8/ww8par5.cxx:1607
     SwWW8ImplReader::Read_F_DocInfo aName53
     REVISIONNUMBER

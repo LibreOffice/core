@@ -722,7 +722,7 @@
 #define STR_TOX_ILL                             NC_("STR_TOX_ILL", "Table of Figures")
 // SubType DocInfo
 #define FLD_DOCINFO_TITLE                       NC_("FLD_DOCINFO_TITEL", "Title")
-#define FLD_DOCINFO_SUBJECT                     NC_("FLD_DOCINFO_THEMA", "Subject")
+#define FLD_DOCINFO_SUBJECT                     NC_("FLD_DOCINFO_SUBJECT", "Subject")
 #define FLD_DOCINFO_KEYS                        NC_("FLD_DOCINFO_KEYS", "Keywords")
 #define FLD_DOCINFO_COMMENT                     NC_("FLD_DOCINFO_COMMENT", "Comments")
 #define FLD_DOCINFO_CREATE                      NC_("FLD_DOCINFO_CREATE", "Created")
