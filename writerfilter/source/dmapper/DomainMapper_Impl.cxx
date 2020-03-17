@@ -84,6 +84,7 @@
 #include <oox/token/tokens.hxx>
 
 #include <cmath>
+#include <optional>
 #include <map>
 #include <tuple>
 #include <unordered_map>
@@ -1766,7 +1767,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     m_aParagraphsToEndTable.push_back(aPending);
 
                     // hidden empty paragraph with a not hidden shape, set as not hidden
-                    o3tl::optional<PropertyMap::Property> pHidden;
+                    std::optional<PropertyMap::Property> pHidden;
                     if ( !m_aAnchoredObjectAnchors.empty() && (pHidden = pParaContext->getProperty(PROP_CHAR_HIDDEN)) )
                     {
                         bool bIsHidden;
