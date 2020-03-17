@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d126c7d4_74e3a2b8",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1214,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-03-17T05:24:53Z",
+      "side": 1,
+      "message": "I think I\u0027ll wrap this up in an if OverrideTableStyleFontSizeAndJustification compatSetting flag later on. Let\u0027s just push this for now and then we can see if the flag ends up being helpful or hurtful in this case.",
+      "range": {
+        "startLine": 1213,
+        "startChar": 20,
+        "endLine": 1214,
+        "endChar": 107
+      },
+      "revId": "27e15565eba964806e9da1eb4bc30cfab770904e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
