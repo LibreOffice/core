@@ -1332,7 +1332,8 @@ public:
     static weld::Builder* CreateInterimBuilder(vcl::Window* pParent, const OUString &rUIFile); //for the duration of vcl parent windows
 
     static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
-                                                    VclButtonsType eButtonType, const OUString& rPrimaryMessage);
+                                                    VclButtonsType eButtonType, const OUString& rPrimaryMessage,
+                                                    bool bMobile = false);
 
     static weld::Window* GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow);
 private:
