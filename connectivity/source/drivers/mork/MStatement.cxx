@@ -142,8 +142,8 @@ OCommonStatement::StatementType OCommonStatement::parseSql( const OUString& sql 
             xNames.set(m_xColNames,UNO_QUERY);
             // set the binding of the resultrow
             m_aRow          = new OValueVector(xNames->getCount());
-            (m_aRow->get())[0].setBound(true);
-            std::for_each(m_aRow->get().begin()+1,m_aRow->get().end(),TSetBound(false));
+            (*m_aRow)[0].setBound(true);
+            std::for_each(m_aRow->begin()+1,m_aRow->end(),TSetBound(false));
             // create the column mapping
             createColumnMapping();
 
@@ -395,7 +395,7 @@ void OCommonStatement::createColumnMapping()
 
     // initialize the column index map (mapping select columns to table columns)
     ::rtl::Reference<connectivity::OSQLColumns> xColumns = m_pSQLIterator->getSelectColumns();
-    m_aColMapping.resize(xColumns->get().size() + 1);
+    m_aColMapping.resize(xColumns->size() + 1);
     for (i=0; i<m_aColMapping.size(); ++i)
         m_aColMapping[i] = static_cast<sal_Int32>(i);
 

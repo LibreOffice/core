@@ -81,8 +81,8 @@ namespace connectivity
                                                                     // to compare with the restrictions
             OSkipDeletedSet                         m_aSkipDeletedSet;
 
-            ::rtl::Reference<OKeySet>                   m_pFileSet;
-            OKeySet::Vector::iterator               m_aFileSetIter;
+            ::rtl::Reference<OKeySet>               m_pFileSet;
+            OKeySet::iterator                       m_aFileSetIter;
 
 
             std::unique_ptr<OSortIndex>             m_pSortIndex;
@@ -266,7 +266,7 @@ namespace connectivity
             void setSelectRow(const OValueRefRow& _rRow)
             {
                 m_aSelectRow = _rRow;
-                m_nColumnCount = m_aSelectRow->get().size();
+                m_nColumnCount = m_aSelectRow->size();
             }
             void setColumnMapping(const std::vector<sal_Int32>& _aColumnMapping)   { m_aColMapping = _aColumnMapping; }
             void setSqlAnalyzer(OSQLAnalyzer* _pSQLAnalyzer)                     { m_pSQLAnalyzer = _pSQLAnalyzer; }

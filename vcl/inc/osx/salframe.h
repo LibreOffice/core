@@ -161,6 +161,8 @@ public:
 
     void UpdateFrameGeometry();
 
+    virtual void BeginSheet(SalFrame* pSheetFrame) const override;
+
     // trigger painting of the window
     void SendPaintEvent( const tools::Rectangle* pRect = nullptr );
 

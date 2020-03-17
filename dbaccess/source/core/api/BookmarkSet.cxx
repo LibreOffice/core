@@ -83,14 +83,14 @@ void OBookmarkSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::
     {
         xUpd->moveToInsertRow();
         sal_Int32 i = 1;
-        connectivity::ORowVector< ORowSetValue > ::Vector::iterator aEnd = _rInsertRow->get().end();
-        for(connectivity::ORowVector< ORowSetValue > ::Vector::iterator aIter = _rInsertRow->get().begin()+1;aIter != aEnd;++aIter,++i)
+        connectivity::ORowVector< ORowSetValue > ::Vector::iterator aEnd = _rInsertRow->end();
+        for(connectivity::ORowVector< ORowSetValue > ::Vector::iterator aIter = _rInsertRow->begin()+1;aIter != aEnd;++aIter,++i)
         {
             aIter->setSigned(m_aSignedFlags[i-1]);
             updateColumn(i,xUpdRow,*aIter);
         }
         xUpd->insertRow();
-        (*_rInsertRow->get().begin()) = m_xRowLocate->getBookmark();
+        (*_rInsertRow->begin()) = m_xRowLocate->getBookmark();
     }
     else
         ::dbtools::throwSQLException( DBA_RES( RID_STR_NO_XRESULTSETUPDATE ), StandardSQLState::GENERAL_ERROR, *this );
@@ -103,9 +103,9 @@ void OBookmarkSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _r
         ::dbtools::throwSQLException( DBA_RES( RID_STR_NO_XROWUPDATE ), StandardSQLState::GENERAL_ERROR, *this );
 
     sal_Int32 i = 1;
-    connectivity::ORowVector< ORowSetValue > ::Vector::const_iterator aOrgIter = _rOriginalRow->get().begin()+1;
-    connectivity::ORowVector< ORowSetValue > ::Vector::iterator aEnd = _rInsertRow->get().end();
-    for(connectivity::ORowVector< ORowSetValue > ::Vector::iterator aIter = _rInsertRow->get().begin()+1;aIter != aEnd;++aIter,++i,++aOrgIter)
+    connectivity::ORowVector< ORowSetValue > ::Vector::const_iterator aOrgIter = _rOriginalRow->begin()+1;
+    connectivity::ORowVector< ORowSetValue > ::Vector::iterator aEnd = _rInsertRow->end();
+    for(connectivity::ORowVector< ORowSetValue > ::Vector::iterator aIter = _rInsertRow->begin()+1;aIter != aEnd;++aIter,++i,++aOrgIter)
     {
         aIter->setSigned(aOrgIter->isSigned());
         updateColumn(i,xUpdRow,*aIter);

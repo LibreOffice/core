@@ -54,10 +54,10 @@ namespace dbaccess
     std::unique_ptr<OPrivateColumns> OPrivateColumns::createWithIntrinsicNames( const ::rtl::Reference< ::connectivity::OSQLColumns >& _rColumns,
         bool _bCase, ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex )
     {
-        std::vector< OUString > aNames; aNames.reserve( _rColumns->get().size() );
+        std::vector< OUString > aNames; aNames.reserve( _rColumns->size() );
 
         OUString sColumName;
-        for (auto const& column : _rColumns->get())
+        for (auto const& column : *_rColumns)
         {
             Reference< XPropertySet > xColumn(column, UNO_SET_THROW);
             xColumn->getPropertyValue( PROPERTY_NAME ) >>= sColumName;
@@ -79,11 +79,11 @@ namespace dbaccess
     {
         if ( m_aColumns.is() )
         {
-            ::connectivity::OSQLColumns::Vector::const_iterator aIter = find(m_aColumns->get().begin(),m_aColumns->get().end(),_rName,isCaseSensitive());
-            if(aIter == m_aColumns->get().end())
-                aIter = findRealName(m_aColumns->get().begin(),m_aColumns->get().end(),_rName,isCaseSensitive());
+            ::connectivity::OSQLColumns::Vector::const_iterator aIter = find(m_aColumns->begin(),m_aColumns->end(),_rName,isCaseSensitive());
+            if(aIter == m_aColumns->end())
+                aIter = findRealName(m_aColumns->begin(),m_aColumns->end(),_rName,isCaseSensitive());
 
-            if(aIter != m_aColumns->get().end())
+            if(aIter != m_aColumns->end())
                 return connectivity::sdbcx::ObjectType(*aIter,UNO_QUERY);
 
             OSL_FAIL("Column not found in collection!");

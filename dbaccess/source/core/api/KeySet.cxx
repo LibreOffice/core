@@ -249,7 +249,7 @@ void OKeySet::setOneKeyColumnParameter( sal_Int32 &nPos, const Reference< XParam
 
 OUStringBuffer OKeySet::createKeyFilter()
 {
-    connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aIter = m_aKeyIter->second.first->get().begin();
+    connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aIter = m_aKeyIter->second.first->begin();
 
     static const char aAnd[] = " AND ";
     const OUString aQuote    = getIdentifierQuoteString();
@@ -337,8 +337,8 @@ void OKeySet::ensureStatement( )
     // do we already have a statement for the current combination of NULLness
     // of key & foreign columns?
     std::vector<bool> FilterColumnsNULL;
-    FilterColumnsNULL.reserve(m_aKeyIter->second.first->get().size());
-    for (auto const& elem : m_aKeyIter->second.first->get())
+    FilterColumnsNULL.reserve(m_aKeyIter->second.first->size());
+    for (auto const& elem : *m_aKeyIter->second.first)
         FilterColumnsNULL.push_back(elem.isNull());
     vStatements_t::const_iterator pNewStatement(m_vStatements.find(FilterColumnsNULL));
     if(pNewStatement == m_vStatements.end())
@@ -478,7 +478,7 @@ void OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrigi
         if ( m_pKeyColumnNames->find(columnName.first) != m_pKeyColumnNames->end() )
         {
             sKeyCondition.append(::dbtools::quoteName( aQuote,columnName.second.sRealName));
-            if((_rOriginalRow->get())[columnName.second.nPosition].isNull())
+            if((*_rOriginalRow)[columnName.second.nPosition].isNull())
                 sKeyCondition.append(sIsNull);
             else
                 sKeyCondition.append(sParam);
@@ -491,7 +491,7 @@ void OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrigi
                 if(indexColumn->hasByName(columnName.first))
                 {
                     sIndexCondition.append(::dbtools::quoteName( aQuote,columnName.second.sRealName));
-                    if((_rOriginalRow->get())[columnName.second.nPosition].isNull())
+                    if((*_rOriginalRow)[columnName.second.nPosition].isNull())
                         sIndexCondition.append(sIsNull);
                     else
                     {
@@ -503,7 +503,7 @@ void OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrigi
                 }
             }
         }
-        if((_rInsertRow->get())[columnName.second.nPosition].isModified())
+        if((*_rInsertRow)[columnName.second.nPosition].isModified())
         {
             aSql.append(::dbtools::quoteName( aQuote,columnName.second.sRealName)).append(aPara);
         }
@@ -556,15 +556,15 @@ void OKeySet::executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rO
         if ( i_sTableName.isEmpty() || columnName.second.sTableName == i_sTableName )
         {
             sal_Int32 nPos = columnName.second.nPosition;
-            if((_rInsertRow->get())[nPos].isModified())
+            if((*_rInsertRow)[nPos].isModified())
             {
                 if ( bRefetch )
                 {
                     bRefetch = std::find(m_aFilterColumns.begin(),m_aFilterColumns.end(),columnName.second.sRealName) == m_aFilterColumns.end();
                 }
                 impl_convertValue_throw(_rInsertRow,columnName.second);
-                (_rInsertRow->get())[nPos].setSigned((_rOriginalRow->get())[nPos].isSigned());
-                setParameter(i++,xParameter,(_rInsertRow->get())[nPos],columnName.second.nType,columnName.second.nScale);
+                (*_rInsertRow)[nPos].setSigned((*_rOriginalRow)[nPos].isSigned());
+                setParameter(i++,xParameter,(*_rInsertRow)[nPos],columnName.second.nType,columnName.second.nScale);
             }
         }
     }
@@ -573,7 +573,7 @@ void OKeySet::executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rO
     {
         if ( i_sTableName.isEmpty() || keyColumnName.second.sTableName == i_sTableName )
         {
-            setParameter(i++,xParameter,(_rOriginalRow->get())[keyColumnName.second.nPosition],keyColumnName.second.nType,keyColumnName.second.nScale);
+            setParameter(i++,xParameter,(*_rOriginalRow)[keyColumnName.second.nPosition],keyColumnName.second.nType,keyColumnName.second.nScale);
         }
     }
     if ( !_aIndexColumnPositions.empty() )
@@ -582,7 +582,7 @@ void OKeySet::executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rO
         auto aIter = m_pColumnNames->begin();
         for (auto const& indexColumnPosition : _aIndexColumnPositions)
         {
-            setParameter(i++,xParameter,(_rOriginalRow->get())[indexColumnPosition],(_rOriginalRow->get())[indexColumnPosition].getTypeKind(),aIter->second.nScale);
+            setParameter(i++,xParameter,(*_rOriginalRow)[indexColumnPosition],(*_rOriginalRow)[indexColumnPosition].getTypeKind(),aIter->second.nScale);
             ++aIter;
         }
     }
@@ -590,7 +590,7 @@ void OKeySet::executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rO
     m_bUpdated = nRowsUpdated > 0;
     if(m_bUpdated)
     {
-        const sal_Int32 nBookmark = ::comphelper::getINT32((_rInsertRow->get())[0].getAny());
+        const sal_Int32 nBookmark = ::comphelper::getINT32((*_rInsertRow)[0].getAny());
         m_aKeyIter = m_aKeyMap.find(nBookmark);
         m_aKeyIter->second.second.first = 2;
         m_aKeyIter->second.second.second = xRow;
@@ -614,7 +614,7 @@ void OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLT
     bool bModified = false;
     for (auto const& columnName : *m_pColumnNames)
     {
-        if((_rInsertRow->get())[columnName.second.nPosition].isModified())
+        if((*_rInsertRow)[columnName.second.nPosition].isModified())
         {
             if ( bRefetch )
             {
@@ -647,15 +647,15 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
         if ( i_sTableName.isEmpty() || columnName.second.sTableName == i_sTableName )
         {
             const sal_Int32 nPos = columnName.second.nPosition;
-            if((_rInsertRow->get())[nPos].isModified())
+            if((*_rInsertRow)[nPos].isModified())
             {
-                if((_rInsertRow->get())[nPos].isNull())
-                    xParameter->setNull(i++,(_rInsertRow->get())[nPos].getTypeKind());
+                if((*_rInsertRow)[nPos].isNull())
+                    xParameter->setNull(i++,(*_rInsertRow)[nPos].getTypeKind());
                 else
                 {
                     impl_convertValue_throw(_rInsertRow,columnName.second);
-                    (_rInsertRow->get())[nPos].setSigned(m_aSignedFlags[nPos-1]);
-                    setParameter(i++,xParameter,(_rInsertRow->get())[nPos],columnName.second.nType,columnName.second.nScale);
+                    (*_rInsertRow)[nPos].setSigned(m_aSignedFlags[nPos-1]);
+                    setParameter(i++,xParameter,(*_rInsertRow)[nPos],columnName.second.nType,columnName.second.nScale);
                 }
             }
         }
@@ -668,17 +668,17 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
         // first insert the default values into the insertrow
         for (auto const& columnName : *m_pColumnNames)
         {
-            if ( !(_rInsertRow->get())[columnName.second.nPosition].isModified() )
+            if ( !(*_rInsertRow)[columnName.second.nPosition].isModified() )
             {
                 if(columnName.second.bNullable && columnName.second.sDefaultValue.isEmpty())
                 {
-                    (_rInsertRow->get())[columnName.second.nPosition].setTypeKind(columnName.second.nType);
-                    (_rInsertRow->get())[columnName.second.nPosition].setNull();
+                    (*_rInsertRow)[columnName.second.nPosition].setTypeKind(columnName.second.nType);
+                    (*_rInsertRow)[columnName.second.nPosition].setNull();
                 }
                 else
                 {
-                    (_rInsertRow->get())[columnName.second.nPosition] = columnName.second.sDefaultValue;
-                    (_rInsertRow->get())[columnName.second.nPosition].setTypeKind(columnName.second.nType);
+                    (*_rInsertRow)[columnName.second.nPosition] = columnName.second.sDefaultValue;
+                    (*_rInsertRow)[columnName.second.nPosition].setTypeKind(columnName.second.nType);
                 }
             }
         }
@@ -700,7 +700,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
                     {
                         SelectColumnsMetaData::const_iterator aFind = m_pKeyColumnNames->find(*aAutoIter);
                         if ( aFind != m_pKeyColumnNames->end() )
-                            (_rInsertRow->get())[aFind->second.nPosition].fill(j, aFind->second.nType, xRow);
+                            (*_rInsertRow)[aFind->second.nPosition].fill(j, aFind->second.nType, xRow);
                     }
                     bAutoValuesFetched = true;
                 }
@@ -751,7 +751,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
                         // we will only fetch values which are keycolumns
                         SelectColumnsMetaData::const_iterator aFind = m_pKeyColumnNames->find(autoColumn);
                         if ( aFind != aEnd )
-                            (_rInsertRow->get())[aFind->second.nPosition].fill(j++, aFind->second.nType, xRow);
+                            (*_rInsertRow)[aFind->second.nPosition].fill(j++, aFind->second.nType, xRow);
                     }
                 }
                 ::comphelper::disposeComponent(xStatement);
@@ -771,7 +771,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
 
         m_aKeyIter = m_aKeyMap.emplace( aKeyIter->first + 1, OKeySetValue(aKeyRow,std::pair<sal_Int32,Reference<XRow> >(1,Reference<XRow>())) ).first;
         // now we set the bookmark for this row
-        (_rInsertRow->get())[0] = makeAny(static_cast<sal_Int32>(m_aKeyIter->first));
+        (*_rInsertRow)[0] = makeAny(static_cast<sal_Int32>(m_aKeyIter->first));
         tryRefetch(_rInsertRow,bRefetch);
     }
 }
@@ -791,17 +791,17 @@ void OKeySet::tryRefetch(const ORowSetRow& _rInsertRow,bool bRefetch)
     }
     if ( !bRefetch )
     {
-        m_aKeyIter->second.second.second = new OPrivateRow(_rInsertRow->get());
+        m_aKeyIter->second.second.second = new OPrivateRow(*_rInsertRow);
     }
 }
 
 void OKeySet::copyRowValue(const ORowSetRow& _rInsertRow, ORowSetRow const & _rKeyRow, sal_Int32 i_nBookmark)
 {
-    connectivity::ORowVector< ORowSetValue >::Vector::iterator aIter = _rKeyRow->get().begin();
+    connectivity::ORowVector< ORowSetValue >::Vector::iterator aIter = _rKeyRow->begin();
 
     // check the if the parameter values have been changed
-    OSL_ENSURE((m_aParameterValueForCache->get().size()-1) == m_pParameterNames->size(),"OKeySet::copyRowValue: Parameter values and names differ!");
-    connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aParaValuesIter = m_aParameterValueForCache->get().begin() +1;
+    OSL_ENSURE((m_aParameterValueForCache->size()-1) == m_pParameterNames->size(),"OKeySet::copyRowValue: Parameter values and names differ!");
+    connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aParaValuesIter = m_aParameterValueForCache->begin() +1;
 
     bool bChanged = false;
     sal_Int32 i = 1;
@@ -809,11 +809,11 @@ void OKeySet::copyRowValue(const ORowSetRow& _rInsertRow, ORowSetRow const & _rK
     {
         ORowSetValue aValue(*aParaValuesIter);
         aValue.setSigned(m_aSignedFlags[parameterName.second.nPosition-1]);
-        if ( (_rInsertRow->get())[parameterName.second.nPosition] != aValue )
+        if ( (*_rInsertRow)[parameterName.second.nPosition] != aValue )
         {
             rtl::Reference aCopy(
                 new ORowSetValueVector(*m_aParameterValueForCache));
-            (aCopy->get())[i] = (_rInsertRow->get())[parameterName.second.nPosition];
+            (*aCopy)[i] = (*_rInsertRow)[parameterName.second.nPosition];
             m_aUpdatedParameter[i_nBookmark] = aCopy;
             bChanged = true;
         }
@@ -829,7 +829,7 @@ void OKeySet::copyRowValue(const ORowSetRow& _rInsertRow, ORowSetRow const & _rK
     for (auto const& keyColumnName : *m_pKeyColumnNames)
     {
         impl_convertValue_throw(_rInsertRow,keyColumnName.second);
-        *aIter = (_rInsertRow->get())[keyColumnName.second.nPosition];
+        *aIter = (*_rInsertRow)[keyColumnName.second.nPosition];
         aIter->setTypeKind(keyColumnName.second.nType);
         ++aIter;
     }
@@ -866,7 +866,7 @@ void OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivity::OSQLTa
         if ( m_pKeyColumnNames->find(columnName.first) != m_pKeyColumnNames->end() )
         {
             aSql.append(::dbtools::quoteName( aQuote,columnName.second.sRealName));
-            if((_rDeleteRow->get())[columnName.second.nPosition].isNull())
+            if((*_rDeleteRow)[columnName.second.nPosition].isNull())
             {
                 SAL_WARN("dbaccess", "can a primary key be null");
                 aSql.append(" IS NULL");
@@ -882,7 +882,7 @@ void OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivity::OSQLTa
                 if(indexColumn->hasByName(columnName.first))
                 {
                     sIndexCondition.append(::dbtools::quoteName( aQuote,columnName.second.sRealName));
-                    if((_rDeleteRow->get())[columnName.second.nPosition].isNull())
+                    if((*_rDeleteRow)[columnName.second.nPosition].isNull())
                         sIndexCondition.append(" IS NULL");
                     else
                     {
@@ -906,14 +906,14 @@ void OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivity::OSQLTa
     sal_Int32 i = 1;
     for (auto const& keyColumnName : *m_pKeyColumnNames)
     {
-        setParameter(i++,xParameter,(_rDeleteRow->get())[keyColumnName.second.nPosition],keyColumnName.second.nType,keyColumnName.second.nScale);
+        setParameter(i++,xParameter,(*_rDeleteRow)[keyColumnName.second.nPosition],keyColumnName.second.nType,keyColumnName.second.nScale);
     }
 
     // now we have to set the index values
     auto aIter = m_pColumnNames->begin();
     for (auto const& indexColumnPosition : aIndexColumnPositions)
     {
-        setParameter(i++,xParameter,(_rDeleteRow->get())[indexColumnPosition],(_rDeleteRow->get())[indexColumnPosition].getTypeKind(),aIter->second.nScale);
+        setParameter(i++,xParameter,(*_rDeleteRow)[indexColumnPosition],(*_rDeleteRow)[indexColumnPosition].getTypeKind(),aIter->second.nScale);
         ++aIter;
     }
 
@@ -921,7 +921,7 @@ void OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivity::OSQLTa
 
     if(m_bDeleted)
     {
-        sal_Int32 nBookmark = ::comphelper::getINT32((_rDeleteRow->get())[0].getAny());
+        sal_Int32 nBookmark = ::comphelper::getINT32((*_rDeleteRow)[0].getAny());
         if(m_aKeyIter == m_aKeyMap.find(nBookmark) && m_aKeyIter != m_aKeyMap.end())
             ++m_aKeyIter;
         m_aKeyMap.erase(nBookmark);
@@ -1144,13 +1144,13 @@ bool OKeySet::doTryRefetch_throw()
     OUpdatedParameter::const_iterator aUpdateFind = m_aUpdatedParameter.find(m_aKeyIter->first);
     if ( aUpdateFind == m_aUpdatedParameter.end() )
     {
-        aParaIter = m_aParameterValueForCache->get().begin();
-        aParaEnd = m_aParameterValueForCache->get().end();
+        aParaIter = m_aParameterValueForCache->begin();
+        aParaEnd = m_aParameterValueForCache->end();
     }
     else
     {
-        aParaIter = aUpdateFind->second->get().begin();
-        aParaEnd = aUpdateFind->second->get().end();
+        aParaIter = aUpdateFind->second->begin();
+        aParaEnd = aUpdateFind->second->end();
     }
 
     for(++aParaIter;aParaIter != aParaEnd;++aParaIter,++nPos)
@@ -1159,7 +1159,7 @@ bool OKeySet::doTryRefetch_throw()
     }
 
     // now set the primary key column values
-    connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aIter = m_aKeyIter->second.first->get().begin();
+    connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aIter = m_aKeyIter->second.first->begin();
     for (auto const& keyColumnName : *m_pKeyColumnNames)
         setOneKeyColumnParameter(nPos,xParameter,*aIter++,keyColumnName.second.nType,keyColumnName.second.nScale);
     for (auto const& foreignColumnName : *m_pForeignColumnNames)
@@ -1239,7 +1239,7 @@ bool OKeySet::fetchRow()
         ::comphelper::disposeComponent(m_xSet);
         m_xRow.set(m_xDriverRow, UNO_SET_THROW);
 
-        connectivity::ORowVector< ORowSetValue >::Vector::iterator aIter = aKeyRow->get().begin();
+        connectivity::ORowVector< ORowSetValue >::Vector::iterator aIter = aKeyRow->begin();
         // copy key columns
         for (auto const& keyColumnName : *m_pKeyColumnNames)
         {
@@ -1493,7 +1493,7 @@ void getColumnPositions(const Reference<XNameAccess>& _rxQueryColumns,
 
 void OKeySet::impl_convertValue_throw(const ORowSetRow& _rInsertRow,const SelectColumnDescription& i_aMetaData)
 {
-    ORowSetValue& aValue((_rInsertRow->get())[i_aMetaData.nPosition]);
+    ORowSetValue& aValue((*_rInsertRow)[i_aMetaData.nPosition]);
     switch(i_aMetaData.nType)
     {
         case DataType::DECIMAL:

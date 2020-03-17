@@ -160,8 +160,8 @@ void OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQ
     OUStringBuffer aValues(" VALUES ( ");
     OUString aQuote = getIdentifierQuoteString();
     sal_Int32 i = 1;
-    ORowVector< ORowSetValue >::Vector::const_iterator aIter = _rInsertRow->get().begin()+1;
-    connectivity::ORowVector< ORowSetValue > ::Vector::iterator aEnd = _rInsertRow->get().end();
+    ORowVector< ORowSetValue >::Vector::const_iterator aIter = _rInsertRow->begin()+1;
+    connectivity::ORowVector< ORowSetValue > ::Vector::iterator aEnd = _rInsertRow->end();
     for(; aIter != aEnd;++aIter)
     {
         aSql.append(::dbtools::quoteName( aQuote,m_xSetMetaData->getColumnName(i++)) ).append(",");
@@ -177,7 +177,7 @@ void OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQ
         Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql.makeStringAndClear()));
         Reference< XParameters > xParameter(xPrep,UNO_QUERY);
         i = 1;
-        for(aIter = _rInsertRow->get().begin()+1; aIter != aEnd;++aIter,++i)
+        for(aIter = _rInsertRow->begin()+1; aIter != aEnd;++aIter,++i)
         {
             if(aIter->isNull())
                 xParameter->setNull(i,aIter->getTypeKind());
@@ -233,8 +233,8 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
 
     OUString sIsNull(" IS NULL");
     OUString sParam(" = ?");
-    ORowVector< ORowSetValue >::Vector::const_iterator aIter = _rRow->get().begin()+1;
-    ORowVector< ORowSetValue >::Vector::const_iterator aEnd = _rRow->get().end();
+    ORowVector< ORowSetValue >::Vector::const_iterator aIter = _rRow->begin()+1;
+    ORowVector< ORowSetValue >::Vector::const_iterator aEnd = _rRow->end();
     for(; aIter != aEnd;++aIter,++nCheckCount,++i)
     {
         aColumnName = m_xSetMetaData->getColumnName(i);
@@ -296,8 +296,8 @@ void OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOri
     Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql.makeStringAndClear()));
     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
     sal_Int32 i = 1;
-    connectivity::ORowVector< ORowSetValue > ::Vector::iterator aEnd = _rInsertRow->get().end();
-    for(ORowVector< ORowSetValue >::Vector::const_iterator aIter = _rInsertRow->get().begin()+1; aIter != aEnd;++aIter)
+    connectivity::ORowVector< ORowSetValue > ::Vector::iterator aEnd = _rInsertRow->end();
+    for(ORowVector< ORowSetValue >::Vector::const_iterator aIter = _rInsertRow->begin()+1; aIter != aEnd;++aIter)
     {
         if(aIter->isModified())
         {
@@ -307,7 +307,7 @@ void OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOri
     }
     for (auto const& orgValue : aOrgValues)
     {
-        setParameter(i,xParameter,(_rOriginalRow->get())[orgValue],m_xSetMetaData->getColumnType(i),m_xSetMetaData->getScale(i));
+        setParameter(i,xParameter,(*_rOriginalRow)[orgValue],m_xSetMetaData->getColumnType(i),m_xSetMetaData->getScale(i));
         ++i;
     }
 
@@ -358,7 +358,7 @@ void OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connectivity::OSQ
     sal_Int32 i = 1;
     for (auto const& orgValue : aOrgValues)
     {
-        setParameter(i,xParameter,(_rDeleteRow->get())[orgValue],m_xSetMetaData->getColumnType(i),m_xSetMetaData->getScale(i));
+        setParameter(i,xParameter,(*_rDeleteRow)[orgValue],m_xSetMetaData->getColumnType(i),m_xSetMetaData->getScale(i));
         ++i;
     }
 
@@ -381,8 +381,8 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
     if(!aBookmark.hasValue())
         aBookmark <<= _nPosition;
 
-    connectivity::ORowVector< ORowSetValue >::Vector::iterator aIter = _rRow->get().begin();
-    connectivity::ORowVector< ORowSetValue >::Vector::iterator aEnd = _rRow->get().end();
+    connectivity::ORowVector< ORowSetValue >::Vector::iterator aIter = _rRow->begin();
+    connectivity::ORowVector< ORowSetValue >::Vector::iterator aEnd = _rRow->end();
     (*aIter) = aBookmark;
     ++aIter;
     for(sal_Int32 i=1;aIter != aEnd;++aIter,++i)

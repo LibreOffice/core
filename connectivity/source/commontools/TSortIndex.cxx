@@ -85,10 +85,10 @@ struct TKeyValueFunc
     Freeze();
 
     ::rtl::Reference<OKeySet> pKeySet = new OKeySet();
-    pKeySet->get().reserve(m_aKeyValues.size());
+    pKeySet->reserve(m_aKeyValues.size());
     std::transform(m_aKeyValues.begin()
                     ,m_aKeyValues.end()
-                    ,std::back_inserter(pKeySet->get())
+                    ,std::back_inserter(*pKeySet)
                     ,::o3tl::select1st<TIntValuePairVector::value_type>());
     pKeySet->setFrozen();
     return pKeySet;

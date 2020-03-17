@@ -184,7 +184,7 @@ sal_Bool SAL_CALL ORowSetBase::wasNull(  )
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
     return !((m_nLastColumnIndex != -1) && !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->is())
-           || ((*m_aCurrentRow)->get())[m_nLastColumnIndex].isNull();
+           || (**m_aCurrentRow)[m_nLastColumnIndex].isNull();
 }
 
 const ORowSetValue& ORowSetBase::getValue(sal_Int32 columnIndex)
@@ -235,9 +235,9 @@ const ORowSetValue& ORowSetBase::impl_getValue(sal_Int32 columnIndex)
         }
         OSL_ENSURE(!m_aCurrentRow.isNull() && m_aCurrentRow < m_pCache->getEnd() && aCacheIter != m_pCache->m_aCacheIterators.end(),"Invalid iterator set for currentrow!");
         ORowSetRow rRow = *m_aCurrentRow;
-        OSL_ENSURE(rRow.is() && o3tl::make_unsigned(columnIndex) < (rRow->get()).size(),"Invalid size of vector!");
+        OSL_ENSURE(rRow.is() && o3tl::make_unsigned(columnIndex) < rRow->size(),"Invalid size of vector!");
 #endif
-        return ((*m_aCurrentRow)->get())[m_nLastColumnIndex = columnIndex];
+        return (**m_aCurrentRow)[m_nLastColumnIndex = columnIndex];
     }
 
     // we should normally never reach this
@@ -344,7 +344,7 @@ Reference< css::io::XInputStream > SAL_CALL ORowSetBase::getBinaryStream( sal_In
     }
 
     if ( bValidCurrentRow )
-        return new ::comphelper::SequenceInputStream(((*m_aCurrentRow)->get())[m_nLastColumnIndex = columnIndex].getSequence());
+        return new ::comphelper::SequenceInputStream((**m_aCurrentRow)[m_nLastColumnIndex = columnIndex].getSequence());
 
     // we should normally never reach this
     return Reference< css::io::XInputStream >();
@@ -1170,7 +1170,7 @@ void ORowSetBase::firePropertyChange(const ORowSetRow& _rOldRow)
     {
         try
         {
-            dataColumn->fireValueChange(_rOldRow.is() ? (_rOldRow->get())[i+1] : ::connectivity::ORowSetValue());
+            dataColumn->fireValueChange(_rOldRow.is() ? (*_rOldRow)[i+1] : ::connectivity::ORowSetValue());
         }
         catch (const Exception&)
         {

@@ -80,22 +80,22 @@ void WrappedResultSet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
 {
     m_xUpd->moveToInsertRow();
     sal_Int32 i = 1;
-    connectivity::ORowVector< ORowSetValue > ::Vector::const_iterator aEnd = _rInsertRow->get().end();
-    for(connectivity::ORowVector< ORowSetValue > ::Vector::iterator aIter = _rInsertRow->get().begin()+1;aIter != aEnd;++aIter,++i)
+    connectivity::ORowVector< ORowSetValue > ::Vector::const_iterator aEnd = _rInsertRow->end();
+    for(connectivity::ORowVector< ORowSetValue > ::Vector::iterator aIter = _rInsertRow->begin()+1;aIter != aEnd;++aIter,++i)
     {
         aIter->setSigned(m_aSignedFlags[i-1]);
         updateColumn(i,m_xUpdRow,*aIter);
     }
     m_xUpd->insertRow();
-    (*_rInsertRow->get().begin()) = getBookmark();
+    (*_rInsertRow->begin()) = getBookmark();
 }
 
 void WrappedResultSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOriginalRow,const connectivity::OSQLTable& /*_xTable*/  )
 {
     sal_Int32 i = 1;
-    connectivity::ORowVector< ORowSetValue > ::Vector::const_iterator aOrgIter = _rOriginalRow->get().begin()+1;
-    connectivity::ORowVector< ORowSetValue > ::Vector::iterator aEnd = _rInsertRow->get().end();
-    for(connectivity::ORowVector< ORowSetValue > ::Vector::iterator aIter = _rInsertRow->get().begin()+1;aIter != aEnd;++aIter,++i,++aOrgIter)
+    connectivity::ORowVector< ORowSetValue > ::Vector::const_iterator aOrgIter = _rOriginalRow->begin()+1;
+    connectivity::ORowVector< ORowSetValue > ::Vector::iterator aEnd = _rInsertRow->end();
+    for(connectivity::ORowVector< ORowSetValue > ::Vector::iterator aIter = _rInsertRow->begin()+1;aIter != aEnd;++aIter,++i,++aOrgIter)
     {
         aIter->setSigned(aOrgIter->isSigned());
         updateColumn(i,m_xUpdRow,*aIter);
