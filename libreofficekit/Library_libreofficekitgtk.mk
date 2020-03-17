@@ -20,7 +20,8 @@ $(eval $(call gb_Library_use_externals,libreofficekitgtk,\
     boost_headers \
 ))
 
-$(eval $(call gb_Library_add_cxxflags,libreofficekitgtk,\
+$(eval $(call gb_Library_set_include,libreofficekitgtk,\
+    $$(INCLUDE) \
     $$(GTK3_CFLAGS) \
 ))
 
