@@ -59,7 +59,8 @@ void SkiaTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalGr
 
     assert(dynamic_cast<SkiaSalGraphicsImpl*>(rGraphics.GetImpl()));
     SkiaSalGraphicsImpl* impl = static_cast<SkiaSalGraphicsImpl*>(rGraphics.GetImpl());
-    impl->drawGenericLayout(rLayout, mnTextColor, font);
+    impl->drawGenericLayout(rLayout, mnTextColor, font,
+                            SkiaSalGraphicsImpl::GlyphOrientation::Apply);
 }
 
 void SkiaTextRender::ClearDevFontCache() { fontManager.reset(); }

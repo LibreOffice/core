@@ -203,14 +203,20 @@ public:
     void drawBitmap(const SalTwoRect& rPosAry, const SkBitmap& aBitmap,
                     SkBlendMode eBlendMode = SkBlendMode::kSrcOver);
 
-    void drawGenericLayout(const GenericSalLayout& layout, Color textColor, const SkFont& font);
+    enum class GlyphOrientation
+    {
+        Apply,
+        Ignore
+    };
+    void drawGenericLayout(const GenericSalLayout& layout, Color textColor, const SkFont& font,
+                           GlyphOrientation glyphOrientation);
 
 protected:
     // To be called before any drawing.
     void preDraw();
     // To be called after any drawing.
     void postDraw();
-    // The canvas to drawn to. Will be diverted to a temporary for Xor mode.
+    // The canvas to draw to. Will be diverted to a temporary for Xor mode.
     SkCanvas* getDrawCanvas() { return mXorMode ? getXorCanvas() : mSurface->getCanvas(); }
 
     virtual void createSurface();
