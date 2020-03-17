@@ -1265,7 +1265,7 @@ static double toCos(int degree10th) { return SkScalarCos(toRadian(degree10th)); 
 static double toSin(int degree10th) { return SkScalarSin(toRadian(degree10th)); }
 
 void SkiaSalGraphicsImpl::drawGenericLayout(const GenericSalLayout& layout, Color textColor,
-                                            const SkFont& font)
+                                            const SkFont& font, double orientationAngle)
 {
     std::vector<SkGlyphID> glyphIds;
     std::vector<SkRSXform> glyphForms;
@@ -1274,7 +1274,6 @@ void SkiaSalGraphicsImpl::drawGenericLayout(const GenericSalLayout& layout, Colo
     Point aPos;
     const GlyphItem* pGlyph;
     int nStart = 0;
-    double orientationAngle = layout.GetOrientation(); // 10th of degree
     while (layout.GetNextGlyph(&pGlyph, aPos, nStart))
     {
         glyphIds.push_back(pGlyph->glyphId());

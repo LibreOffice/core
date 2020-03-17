@@ -155,7 +155,8 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
     SkiaSalGraphicsImpl* impl = static_cast<SkiaSalGraphicsImpl*>(mWinParent.GetImpl());
     COLORREF color = ::GetTextColor(mWinParent.getHDC());
     Color salColor(GetRValue(color), GetGValue(color), GetBValue(color));
-    impl->drawGenericLayout(rLayout, salColor, font);
+    // Use 0 orientation angle, the font already is set up to have glyphs rotated as needed.
+    impl->drawGenericLayout(rLayout, salColor, font, 0);
     return true;
 }
 

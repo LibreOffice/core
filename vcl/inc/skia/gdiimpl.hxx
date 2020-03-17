@@ -203,7 +203,8 @@ public:
     void drawBitmap(const SalTwoRect& rPosAry, const SkBitmap& aBitmap,
                     SkBlendMode eBlendMode = SkBlendMode::kSrcOver);
 
-    void drawGenericLayout(const GenericSalLayout& layout, Color textColor, const SkFont& font);
+    void drawGenericLayout(const GenericSalLayout& layout, Color textColor, const SkFont& font,
+                           double orientationAngle);
 
 protected:
     // To be called before any drawing.
