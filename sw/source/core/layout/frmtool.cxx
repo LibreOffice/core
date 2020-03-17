@@ -3452,9 +3452,9 @@ bool IsFrameInSameContext( const SwFrame *pInnerFrame, const SwFrame *pFrame )
 
 static SwTwips lcl_CalcCellRstHeight( SwLayoutFrame *pCell )
 {
-    if ( pCell->Lower()->IsContentFrame() || pCell->Lower()->IsSctFrame() )
+    SwFrame *pLow = pCell->Lower();
+    if ( pLow && (pLow->IsContentFrame() || pLow->IsSctFrame()) )
     {
-        SwFrame *pLow = pCell->Lower();
         long nHeight = 0, nFlyAdd = 0;
         do
         {
@@ -3481,7 +3481,6 @@ static SwTwips lcl_CalcCellRstHeight( SwLayoutFrame *pCell )
     else
     {
         long nRstHeight = 0;
-        SwFrame *pLow = pCell->Lower();
         while (pLow && pLow->IsLayoutFrame())
         {
             nRstHeight += ::CalcRowRstHeight(static_cast<SwLayoutFrame*>(pLow));
