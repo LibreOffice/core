@@ -1753,7 +1753,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 css::uno::Reference<css::beans::XPropertySet> xParaProps(xTextRange, uno::UNO_QUERY);
 
                 // table style precedence and not hidden shapes anchored to hidden empty table paragraphs
-                if (xParaProps && m_nTableDepth > 0)
+                if (xParaProps && (m_nTableDepth > 0 || !m_aAnchoredObjectAnchors.empty()) )
                 {
                     // table style has got bigger precedence than docDefault style
                     // collect these pending paragraph properties to process in endTable()
@@ -1763,8 +1763,11 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     uno::Reference<text::XTextCursor> xCur2 =  xTextRange->getText()->createTextCursorByRange(xCur);
                     uno::Reference<text::XParagraphCursor> xParaCursor(xCur2, uno::UNO_QUERY_THROW);
                     xParaCursor->gotoStartOfParagraph(false);
-                    TableParagraph aPending{xParaCursor, xCur, pParaContext, xParaProps};
-                    m_aParagraphsToEndTable.push_back(aPending);
+                    if (m_nTableDepth > 0)
+                    {
+                        TableParagraph aPending{xParaCursor, xCur, pParaContext, xParaProps};
+                        m_aParagraphsToEndTable.push_back(aPending);
+                    }
 
                     // hidden empty paragraph with a not hidden shape, set as not hidden
                     std::optional<PropertyMap::Property> pHidden;
