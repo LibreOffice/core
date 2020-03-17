@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ce70b69_9f272749",
+        "filename": "sw/uiconfig/swriter/ui/converttexttable.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-03-17T13:48:02Z",
+      "side": 1,
+      "message": "You copy/paste from the autoformat dialog without changing the context.",
+      "range": {
+        "startLine": 509,
+        "startChar": 87,
+        "endLine": 509,
+        "endChar": 109
+      },
+      "revId": "3e050eedf7ccccaed3164848f61148269336153f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
