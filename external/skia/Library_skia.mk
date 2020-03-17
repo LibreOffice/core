@@ -46,7 +46,6 @@ endif
 
 $(eval $(call gb_Library_use_externals,skia,\
     zlib \
-    libjpeg \
     libpng \
 ))
 
@@ -91,9 +90,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/codec/SkColorTable \
     UnpackedTarball/skia/src/codec/SkEncodedInfo \
     UnpackedTarball/skia/src/codec/SkIcoCodec \
-    UnpackedTarball/skia/src/codec/SkJpegCodec \
-    UnpackedTarball/skia/src/codec/SkJpegDecoderMgr \
-    UnpackedTarball/skia/src/codec/SkJpegUtility \
     UnpackedTarball/skia/src/codec/SkMasks \
     UnpackedTarball/skia/src/codec/SkMaskSwizzler \
     UnpackedTarball/skia/src/codec/SkParseEncodedOrigin \
@@ -351,8 +347,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/image/SkSurface \
     UnpackedTarball/skia/src/image/SkSurface_Raster \
     UnpackedTarball/skia/src/images/SkImageEncoder \
-    UnpackedTarball/skia/src/images/SkJpegEncoder \
-    UnpackedTarball/skia/src/images/SkJPEGWriteUtility \
     UnpackedTarball/skia/src/images/SkPngEncoder \
     UnpackedTarball/skia/src/images/SkWebpEncoder \
     UnpackedTarball/skia/src/lazy/SkDiscardableMemoryPool \
@@ -388,28 +382,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/pathops/SkPathOpsWinding \
     UnpackedTarball/skia/src/pathops/SkPathWriter \
     UnpackedTarball/skia/src/pathops/SkReduceOrder \
-    UnpackedTarball/skia/src/pdf/SkClusterator \
-    UnpackedTarball/skia/src/pdf/SkDeflate \
-    UnpackedTarball/skia/src/pdf/SkJpegInfo \
-    UnpackedTarball/skia/src/pdf/SkKeyedImage \
-    UnpackedTarball/skia/src/pdf/SkPDFBitmap \
-    UnpackedTarball/skia/src/pdf/SkPDFDevice \
-    UnpackedTarball/skia/src/pdf/SkPDFDocument \
-    UnpackedTarball/skia/src/pdf/SkPDFFont \
-    UnpackedTarball/skia/src/pdf/SkPDFFormXObject \
-    UnpackedTarball/skia/src/pdf/SkPDFGradientShader \
-    UnpackedTarball/skia/src/pdf/SkPDFGraphicStackState \
-    UnpackedTarball/skia/src/pdf/SkPDFGraphicState \
-    UnpackedTarball/skia/src/pdf/SkPDFMakeCIDGlyphWidthsArray \
-    UnpackedTarball/skia/src/pdf/SkPDFMakeToUnicodeCmap \
-    UnpackedTarball/skia/src/pdf/SkPDFMetadata \
-    UnpackedTarball/skia/src/pdf/SkPDFResourceDict \
-    UnpackedTarball/skia/src/pdf/SkPDFShader \
-    UnpackedTarball/skia/src/pdf/SkPDFSubsetFont \
-    UnpackedTarball/skia/src/pdf/SkPDFTag \
-    UnpackedTarball/skia/src/pdf/SkPDFTypes \
-    UnpackedTarball/skia/src/pdf/SkPDFType1Font \
-    UnpackedTarball/skia/src/pdf/SkPDFUtils \
     UnpackedTarball/skia/src/sfnt/SkOTTable_name \
     UnpackedTarball/skia/src/sfnt/SkOTUtils \
     UnpackedTarball/skia/src/shaders/gradients/SkGradientShader \
@@ -875,96 +847,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/tools/sk_app/unix/VulkanWindowContext_unix \
 ))
 endif
-
-
-#    UnpackedTarball/skia/src/android/SkAndroidFrameworkUtils \
-#    UnpackedTarball/skia/src/android/SkAnimatedImage \
-#    UnpackedTarball/skia/src/android/SkBitmapRegionCodec \
-#    UnpackedTarball/skia/src/android/SkBitmapRegionDecoder \
-
-#    UnpackedTarball/skia/src/codec/SkHeifCodec \
-#    UnpackedTarball/skia/src/codec/SkRawCodec \
-#    UnpackedTarball/skia/src/codec/SkWebpCodec \
-#    UnpackedTarball/skia/src/codec/SkWuffsCodec \
-#    UnpackedTarball/skia/src/utils/SkAnimCodecPlayer \
-
-#    UnpackedTarball/skia/src/gpu/gl/android/GrGLMakeNativeInterface_android \
-#    UnpackedTarball/skia/src/gpu/gl/egl/GrGLMakeNativeInterface_egl \
-#    UnpackedTarball/skia/src/gpu/gl/glfw/GrGLMakeNativeInterface_glfw \
-#    UnpackedTarball/skia/src/gpu/gl/iOS/GrGLMakeNativeInterface_iOS \
-#    UnpackedTarball/skia/src/gpu/gl/mac/GrGLMakeNativeInterface_mac \
-
-#    UnpackedTarball/skia/src/opts/SkOpts_crc32 \
-
-#    UnpackedTarball/skia/src/ports/SkDebug_android \
-#    UnpackedTarball/skia/src/ports/SkDiscardableMemory_none \
-#    UnpackedTarball/skia/src/ports/SkFontConfigInterface \
-#    UnpackedTarball/skia/src/ports/SkFontConfigInterface_direct \
-#    UnpackedTarball/skia/src/ports/SkFontConfigInterface_direct_factory \
-#    UnpackedTarball/skia/src/ports/SkFontHost_mac \
-#    UnpackedTarball/skia/src/ports/SkFontMgr_android \
-#    UnpackedTarball/skia/src/ports/SkFontMgr_android_factory \
-#    UnpackedTarball/skia/src/ports/SkFontMgr_android_parser \
-#    UnpackedTarball/skia/src/ports/SkFontMgr_custom \
-#    UnpackedTarball/skia/src/ports/SkFontMgr_custom_directory \
-#    UnpackedTarball/skia/src/ports/SkFontMgr_custom_directory_factory \
-#    UnpackedTarball/skia/src/ports/SkFontMgr_custom_embedded \
-#    UnpackedTarball/skia/src/ports/SkFontMgr_custom_embedded_factory \
-#    UnpackedTarball/skia/src/ports/SkFontMgr_custom_empty \
-#    UnpackedTarball/skia/src/ports/SkFontMgr_custom_empty_factory \
-#    UnpackedTarball/skia/src/ports/SkFontMgr_empty_factory \
-#    UnpackedTarball/skia/src/ports/SkFontMgr_FontConfigInterface \
-#    UnpackedTarball/skia/src/ports/SkFontMgr_FontConfigInterface_factory \
-#    UnpackedTarball/skia/src/ports/SkFontMgr_fuchsia \
-#    UnpackedTarball/skia/src/ports/SkImageEncoder_CG \
-#    UnpackedTarball/skia/src/ports/SkImageEncoder_WIC \
-#    UnpackedTarball/skia/src/ports/SkImageGeneratorCG \
-#    UnpackedTarball/skia/src/ports/SkImageGeneratorWIC \
-#    UnpackedTarball/skia/src/ports/SkImageGenerator_skia \
-#    UnpackedTarball/skia/src/ports/SkMemory_malloc \
-#    UnpackedTarball/skia/src/ports/SkMemory_mozalloc \
-#    UnpackedTarball/skia/src/ports/SkRemotableFontMgr_win_dw \
-#    UnpackedTarball/skia/src/ports/SkTLS_none \
-
-#    UnpackedTarball/skia/src/utils/mac/SkCreateCGImageRef \
-#    UnpackedTarball/skia/src/utils/mac/SkStream_mac \
-#    UnpackedTarball/skia/src/utils/win/SkAutoCoInitialize \
-#    UnpackedTarball/skia/src/utils/win/SkDWrite \
-#    UnpackedTarball/skia/src/utils/win/SkDWriteFontFileStream \
-#    UnpackedTarball/skia/src/utils/win/SkDWriteGeometrySink \
-#    UnpackedTarball/skia/src/utils/win/SkHRESULT \
-#    UnpackedTarball/skia/src/utils/win/SkIStream \
-#    UnpackedTarball/skia/src/utils/win/SkWGL_win \
-
-#    UnpackedTarball/skia/src/core/SkPicture_none \
-#    UnpackedTarball/skia/src/gpu/ccpr/GrCoverageCountingPathRenderer_none \
-#    UnpackedTarball/skia/src/gpu/gl/GrGLMakeNativeInterface_none \
-#    UnpackedTarball/skia/src/gpu/GrPathRendering_none \
-#    UnpackedTarball/skia/src/pdf/SkDocument_PDF_None \
-
-#    UnpackedTarball/skia/src/svg/SkSVGCanvas \
-#    UnpackedTarball/skia/src/svg/SkSVGDevice \
-#    UnpackedTarball/skia/src/xml/SkDOM \
-#    UnpackedTarball/skia/src/xml/SkXMLParser \
-#    UnpackedTarball/skia/src/xml/SkXMLWriter \
-
-#    UnpackedTarball/skia/src/utils/SkLuaCanvas \
-#    UnpackedTarball/skia/src/utils/SkLua \
-
-#    UnpackedTarball/skia/src/gpu/dawn/GrDawnCaps \
-#    UnpackedTarball/skia/src/gpu/dawn/GrDawnGpuCommandBuffer \
-#    UnpackedTarball/skia/src/gpu/dawn/GrDawnGpu \
-#    UnpackedTarball/skia/src/gpu/dawn/GrDawnRenderTarget \
-#    UnpackedTarball/skia/src/gpu/dawn/GrDawnUtil \
-#    UnpackedTarball/skia/src/sksl/SkSLMain \
-#    UnpackedTarball/skia/src/sksl/lex/Main \
-#    UnpackedTarball/skia/src/sksl/lex/NFA \
-#    UnpackedTarball/skia/src/sksl/lex/RegexNode \
-#    UnpackedTarball/skia/src/sksl/lex/RegexParser \
-
-#    UnpackedTarball/skia/src/atlastext/SkAtlasTextContext \
-#    UnpackedTarball/skia/src/atlastext/SkAtlasTextTarget \
-#    UnpackedTarball/skia/src/atlastext/SkInternalAtlasTextContext \
 
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/third_party/skcms/skcms \
