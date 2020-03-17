@@ -138,7 +138,10 @@ namespace Translate
 #endif
         gen.add_messages_path(sPath.getStr());
 #if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
+        // allow gettext to find these .mo files e.g. so gtk dialogs can use them
         bindtextdomain(pPrefixName, sPath.getStr());
+        // tdf#131069 gtk, and anything sane, always wants utf-8 strings as output
+        bind_textdomain_codeset(pPrefixName, "UTF-8");
 #endif
         gen.add_messages_domain(pPrefixName);
 
