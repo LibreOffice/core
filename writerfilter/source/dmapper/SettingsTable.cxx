@@ -776,6 +776,35 @@ void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& x
     }
 }
 
+bool SettingsTable::GetCompatSettingValue( const OUString& sCompatName ) const
+{
+    bool bRet = false;
+    for (const auto& rProp : m_pImpl->m_aCompatSettings)
+    {
+        if (rProp.Name == "compatSetting") //always true
+        {
+            css::uno::Sequence<css::beans::PropertyValue> aCurrentCompatSettings;
+            rProp.Value >>= aCurrentCompatSettings;
+
+            OUString sName;
+            OUString sUri;
+
+            aCurrentCompatSettings[0].Value >>= sName;
+            aCurrentCompatSettings[1].Value >>= sUri;
+
+            if (sName == sCompatName && sUri == "http://schemas.microsoft.com/office/word")
+            {
+                OUString sVal;
+                aCurrentCompatSettings[2].Value >>= sVal;
+                // if repeated, what happens?  Last one wins
+                bRet = sVal.toBoolean();
+            }
+        }
+    }
+
+    return bRet;
+}
+
 //Keep this function in-sync with the one in sw/.../docxattributeoutput.cxx
 sal_Int32 SettingsTable::GetWordCompatibilityMode() const
 {
@@ -784,21 +813,21 @@ sal_Int32 SettingsTable::GetWordCompatibilityMode() const
 
     for (const auto& rProp : m_pImpl->m_aCompatSettings)
     {
-        if (rProp.Name == "compatSetting")
+        if (rProp.Name == "compatSetting") //always true
         {
             css::uno::Sequence<css::beans::PropertyValue> aCurrentCompatSettings;
             rProp.Value >>= aCurrentCompatSettings;
 
             OUString sName;
             OUString sUri;
-            OUString sVal;
 
             aCurrentCompatSettings[0].Value >>= sName;
             aCurrentCompatSettings[1].Value >>= sUri;
-            aCurrentCompatSettings[2].Value >>= sVal;
 
             if (sName == "compatibilityMode" && sUri == "http://schemas.microsoft.com/office/word")
             {
+                OUString sVal;
+                aCurrentCompatSettings[2].Value >>= sVal;
                 const sal_Int32 nValidMode = sVal.toInt32();
                 // if repeated, highest mode wins in MS Word. 11 is the first valid mode.
                 if ( nValidMode > 10 && nValidMode > m_pImpl->m_nWordCompatibilityMode )

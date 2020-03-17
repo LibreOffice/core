@@ -87,6 +87,7 @@ class SettingsTable : public LoggedProperties, public LoggedTable
 
     void ApplyProperties(css::uno::Reference<css::text::XTextDocument> const& xDoc);
 
+    bool GetCompatSettingValue( const OUString& sCompatName ) const;
     sal_Int32 GetWordCompatibilityMode() const;
 
     const OUString & GetCurrentDatabaseDataSource() const;

@@ -334,7 +334,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf118947_tableStyle, "tdf118947_tableStyle.docx")
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
     uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Table grid settings set line-spacing to 250% instead of single-spacing, which is set as a document default."), xPara->getString());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("TextBody has 10pt font size", 10.f, getProperty<float>(xPara, "CharHeight"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("TextBody has 10pt font size", 11.f, getProperty<float>(xPara, "CharHeight"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("TextBody has 1pt space below paragraph", sal_Int32(35), getProperty<sal_Int32>(xPara, "ParaBottomMargin"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Table has 10pt space above paragraph", sal_Int32(353), getProperty<sal_Int32>(xPara, "ParaTopMargin"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Table style sets 0 right margin", sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaRightMargin"));
@@ -342,11 +342,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf118947_tableStyle, "tdf118947_tableStyle.docx")
     // table-style based paragraph background color
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Missing paragraph background color in cell A1", sal_Int32(0xCCFFCC), getProperty<sal_Int32>(xPara, "ParaBackColor"));
 
+    // This cell is affected by compatSetting overrideTableStyleFontSizeAndJustification=0 (the default value)
     xCell.set(xTable->getCellByName("A2"), uno::UNO_QUERY);
     xParaEnumAccess.set(xCell->getText(), uno::UNO_QUERY);
     xParaEnum = xParaEnumAccess->createEnumeration();
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Notice that this is 8pt font in compatibility mode."), xPara->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Notice that this is 8pt font, right aligned in compatibility mode."), xPara->getString());
     // Even though not specified, Table-Style distributes the properties in DocDefault. DocDefault fontsize is 8pt.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Compat mode has 8pt font size", 8.f, getProperty<float>(getRun(xPara,1), "CharHeight"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Normal has 0pt space below paragraph", sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaBottomMargin"));
@@ -354,6 +355,25 @@ DECLARE_OOXMLEXPORT_TEST(testTdf118947_tableStyle, "tdf118947_tableStyle.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Table style sets 0 right margin", sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaRightMargin"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Table sets 2.5 line-spacing", sal_Int16(250), getProperty<style::LineSpacing>(xPara, "ParaLineSpacing").Height, 1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Paragraph background color in cell A2", sal_Int32(-1), getProperty<sal_Int32>(xPara, "ParaBackColor"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Compat mode overrides left adjust", style::ParagraphAdjust_RIGHT,
+                                 static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xPara, "ParaAdjust")));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf118947_tableStyle2, "tdf118947_tableStyle2.docx")
+{
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+    // This cell is affected by compatSetting overrideTableStyleFontSizeAndJustification=1 (no goofy exception)
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A2"), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xCell->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Notice that this is 12pt font, left aligned in non-compatibility mode."), xPara->getString());
+    // Even though not specified, Table-Style tries to distribute the properties in DocDefault. DocDefault fontsize is 8pt.
+    // However, this is overridden by the default style's specified fontsize of 12 and left justify.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Non-Compat mode has 12pt font size", 12.f, getProperty<float>(getRun(xPara,1), "CharHeight"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Non-Compat mode keeps the style's left adjust", style::ParagraphAdjust_LEFT,
+                                 static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xPara, "ParaAdjust")));
 }
 
 DECLARE_OOXMLEXPORT_TEST(tdf123912_protectedForm, "tdf123912_protectedForm.odt")
