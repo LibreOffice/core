@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75f2a673_020c763f",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 3725,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-03-17T07:15:31Z",
+      "side": 1,
+      "message": "make this a better comment: Look at docxexport.cxx function whatever() to see the TargetCompatMode.",
+      "range": {
+        "startLine": 3725,
+        "startChar": 92,
+        "endLine": 3725,
+        "endChar": 99
+      },
+      "revId": "e7fa77b8218b81ec85c3b9924c753ac05ba87582",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a2ec056_2b039c34",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableHandler.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-03-17T07:15:31Z",
+      "side": 1,
+      "message": "// undefined should not be possible any more for DOCX (but it is for RTF). In either case, continue to treat this as version 12 during import.",
+      "range": {
+        "startLine": 619,
+        "startChar": 8,
+        "endLine": 619,
+        "endChar": 28
+      },
+      "revId": "e7fa77b8218b81ec85c3b9924c753ac05ba87582",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
