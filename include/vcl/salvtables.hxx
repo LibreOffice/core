@@ -733,7 +733,7 @@ public:
 
 class SalInstanceMessageDialog : public SalInstanceDialog, public virtual weld::MessageDialog
 {
-private:
+protected:
     VclPtr<::MessageDialog> m_xMessageDialog;
 
 public:
