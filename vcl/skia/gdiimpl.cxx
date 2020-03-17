@@ -304,6 +304,7 @@ void SkiaSalGraphicsImpl::DeInit() { destroySurface(); }
 
 void SkiaSalGraphicsImpl::preDraw()
 {
+    assert(comphelper::SolarMutex::get()->IsCurrentThread());
     SkiaZone::enter(); // matched in postDraw()
     checkSurface();
     assert(!mXorMode || mXorExtents.isEmpty()); // must be reset in postDraw()
