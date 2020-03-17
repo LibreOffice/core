@@ -33,9 +33,8 @@ are the same.
 
 #define SK_VULKAN 1
 
-#define SK_HAS_JPEG_LIBRARY 1
-
-#define SK_HAS_PNG_LIBRARY 1
+#define SK_CODEC_DECODES_PNG 1
+#define SK_ENCODE_PNG 1
 
 #define SK_GAMMA_APPLY_TO_A8
 
