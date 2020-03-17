@@ -44,20 +44,6 @@ index 191b6a3ce5..26754acccd 100644
  
  #ifdef VK_USE_PLATFORM_WIN32_KHR
  // windows wants to define this as CreateSemaphoreA or CreateSemaphoreW
-diff --git a/src/utils/Sk3D.cpp b/src/utils/Sk3D.cpp
-index 0df42b5fa9..97b85233b3 100644
---- a/src/utils/Sk3D.cpp
-+++ b/src/utils/Sk3D.cpp
-@@ -38,6 +38,9 @@ void Sk3LookAt(SkMatrix44* dst, const SkPoint3& eye, const SkPoint3& center, con
-     dst->invert(dst);
- }
- 
-+#undef far
-+#undef near
-+
- bool Sk3Perspective(SkMatrix44* dst, float near, float far, float angle) {
-     SkASSERT(far > near);
- 
 diff --git a/src/utils/win/SkDWriteGeometrySink.h b/src/utils/win/SkDWriteGeometrySink.h
 index 019539b191..5dd7bef353 100644
 --- a/src/utils/win/SkDWriteGeometrySink.h

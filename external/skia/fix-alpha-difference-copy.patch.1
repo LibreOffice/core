@@ -3,7 +3,7 @@ index 6ae7893681..3878eb3b81 100644
 --- a/src/core/SkBlitter_Sprite.cpp
 +++ b/src/core/SkBlitter_Sprite.cpp
 @@ -179,7 +179,7 @@ SkBlitter* SkBlitter::ChooseSprite(const SkPixmap& dst, const SkPaint& paint,
-     SkASSERT(allocator != nullptr);
+     SkASSERT(alloc != nullptr);
  
      // TODO: in principle SkRasterPipelineSpriteBlitter could be made to handle this.
 -    if (source.alphaType() == kUnpremul_SkAlphaType) {

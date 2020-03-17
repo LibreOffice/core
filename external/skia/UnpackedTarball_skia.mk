@@ -27,6 +27,7 @@ skia_patches := \
     fix-gcc-x86.patch.1	\
     msvc-vectorcall-sse.patch.1 \
     clang11-flax-vector-conversion.patch.0 \
+    clang-attributes-warning.patch.1 \
     fontconfig-get-typeface.patch.0 \
     windows-hfont-typeface.patch.0 \
 
