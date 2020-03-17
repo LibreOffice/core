@@ -171,6 +171,8 @@ public:
     virtual FactoryFunction GetUITestFactory() const override;
 
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
+
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 };
 
 #endif // INCLUDED_VCL_VCLMEDIT_HXX
