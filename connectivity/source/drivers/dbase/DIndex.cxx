@@ -533,7 +533,7 @@ void ODbaseIndex::CreateImpl()
     memset(&m_aHeader,0,sizeof(m_aHeader));
     sal_Int32 nType = 0;
     ::rtl::Reference<OSQLColumns> aCols = m_pTable->getTableColumns();
-    const Reference< XPropertySet > xTableCol(*find(aCols->get().begin(),aCols->get().end(),aName,::comphelper::UStringMixEqual(isCaseSensitive())));
+    const Reference< XPropertySet > xTableCol(*find(aCols->begin(),aCols->end(),aName,::comphelper::UStringMixEqual(isCaseSensitive())));
 
     xTableCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)) >>= nType;
 

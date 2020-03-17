@@ -107,13 +107,13 @@ void OFlatTable::fillColumns(const css::lang::Locale& _aLocale)
     if(!m_aColumns.is())
         m_aColumns = new OSQLColumns();
     else
-        m_aColumns->get().clear();
+        m_aColumns->clear();
 
     m_aTypes.clear();
     m_aPrecisions.clear();
     m_aScales.clear();
     // reserve some space
-    m_aColumns->get().reserve(nFieldCount+1);
+    m_aColumns->reserve(nFieldCount+1);
     m_aTypes.assign(nFieldCount+1,DataType::SQLNULL);
     m_aPrecisions.assign(nFieldCount+1,-1);
     m_aScales.assign(nFieldCount+1,-1);
@@ -168,12 +168,12 @@ void OFlatTable::fillColumns(const css::lang::Locale& _aLocale)
     {
         // check if the columname already exists
         OUString aAlias(aColumnNames[i]);
-        OSQLColumns::Vector::const_iterator aFind = connectivity::find(m_aColumns->get().begin(),m_aColumns->get().end(),aAlias,aCase);
+        OSQLColumns::const_iterator aFind = connectivity::find(m_aColumns->begin(),m_aColumns->end(),aAlias,aCase);
         sal_Int32 nExprCnt = 0;
-        while(aFind != m_aColumns->get().end())
+        while(aFind != m_aColumns->end())
         {
             aAlias = aColumnNames[i] + OUString::number(++nExprCnt);
-            aFind = connectivity::find(m_aColumns->get().begin(),m_aColumns->get().end(),aAlias,aCase);
+            aFind = connectivity::find(m_aColumns->begin(),m_aColumns->end(),aAlias,aCase);
         }
 
         sdbcx::OColumn* pColumn = new sdbcx::OColumn(aAlias,aTypeNames[i],OUString(),OUString(),
@@ -187,7 +187,7 @@ void OFlatTable::fillColumns(const css::lang::Locale& _aLocale)
                                                 bCase,
                                                 m_CatalogName, getSchema(), getName());
         Reference< XPropertySet> xCol = pColumn;
-        m_aColumns->get().push_back(xCol);
+        m_aColumns->push_back(xCol);
     }
 
     m_pFileStream->Seek(m_aRowPosToFilePos[0].second);
@@ -494,9 +494,9 @@ void OFlatTable::refreshColumns()
     ::osl::MutexGuard aGuard( m_aMutex );
 
     ::std::vector< OUString> aVector;
-    aVector.reserve(m_aColumns->get().size());
+    aVector.reserve(m_aColumns->size());
 
-    for (auto const& column : m_aColumns->get())
+    for (auto const& column : *m_aColumns)
         aVector.push_back(Reference< XNamed>(column,UNO_QUERY_THROW)->getName());
 
     if(m_xColumns)
@@ -567,7 +567,7 @@ sal_Int64 OFlatTable::getSomething( const Sequence< sal_Int8 > & rId )
 
 bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool bRetrieveData)
 {
-    *(_rRow->get())[0] = m_nFilePos;
+    *(*_rRow)[0] = m_nFilePos;
 
     if (!bRetrieveData)
         return true;
@@ -591,10 +591,10 @@ bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool 
     const sal_Unicode cThousandDelimiter = pConnection->getThousandDelimiter();
     // Fields:
     sal_Int32 nStartPos = 0;
-    OSQLColumns::Vector::const_iterator aIter = _rCols.get().begin();
-    OSQLColumns::Vector::const_iterator aEnd = _rCols.get().end();
-    const OValueRefVector::Vector::size_type nCount = _rRow->get().size();
-    for (OValueRefVector::Vector::size_type i = 1;
+    OSQLColumns::const_iterator aIter = _rCols.begin();
+    OSQLColumns::const_iterator aEnd = _rCols.end();
+    const OValueRefVector::size_type nCount = _rRow->size();
+    for (OValueRefVector::size_type i = 1;
          aIter != aEnd && i < nCount;
          ++aIter, i++)
     {
@@ -602,7 +602,7 @@ bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool 
 
         if (aStr.isEmpty())
         {
-            (_rRow->get())[i]->setNull();
+            (*_rRow)[i]->setNull();
         }
         else
         {
@@ -620,18 +620,18 @@ bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool 
                         switch(nType)
                         {
                             case DataType::DATE:
-                                *(_rRow->get())[i] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDate(nRes,m_aNullDate));
+                                *(*_rRow)[i] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDate(nRes,m_aNullDate));
                                 break;
                             case DataType::TIMESTAMP:
-                                *(_rRow->get())[i] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDateTime(nRes,m_aNullDate));
+                                *(*_rRow)[i] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDateTime(nRes,m_aNullDate));
                                 break;
                             default:
-                                *(_rRow->get())[i] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toTime(nRes));
+                                *(*_rRow)[i] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toTime(nRes));
                         }
                     }
                     catch(Exception&)
                     {
-                        (_rRow->get())[i]->setNull();
+                        (*_rRow)[i]->setNull();
                     }
                 }   break;
                 case DataType::DOUBLE:
@@ -676,19 +676,19 @@ bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool 
 
                     // #99178# OJ
                     if ( DataType::DECIMAL == nType || DataType::NUMERIC == nType )
-                        *(_rRow->get())[i] = OUString(OUString::number(nVal));
+                        *(*_rRow)[i] = OUString(OUString::number(nVal));
                     else
-                        *(_rRow->get())[i] = nVal;
+                        *(*_rRow)[i] = nVal;
                 } break;
 
                 default:
                 {
                     // Copy Value as String in Row-Variable
-                    *(_rRow->get())[i] = ORowSetValue(aStr);
+                    *(*_rRow)[i] = ORowSetValue(aStr);
                 }
                 break;
             } // switch(nType)
-            (_rRow->get())[i]->setTypeKind(nType);
+            (*_rRow)[i]->setTypeKind(nType);
         }
     }
     return result;

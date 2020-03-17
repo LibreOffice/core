@@ -503,7 +503,7 @@ namespace connectivity
         OValueRefVector(){}
         OValueRefVector(size_t _st) : ODeleteVector< ORowSetValueDecoratorRef >(_st)
         {
-            for (auto & elem : get())
+            for (auto & elem : *this)
                 elem = new ORowSetValueDecorator;
         }
     };
@@ -513,7 +513,7 @@ namespace connectivity
     {
         ::std::vector<sal_Int32> m_nParameterIndexes;
     public:
-        OAssignValues(Vector::size_type n) : OValueRefVector(n),m_nParameterIndexes(n+1,SQL_NO_PARAMETER){}
+        OAssignValues(size_type n) : OValueRefVector(n),m_nParameterIndexes(n+1,SQL_NO_PARAMETER){}
 
         void setParameterIndex(sal_Int32 _nId,sal_Int32 _nParameterIndex) { m_nParameterIndexes[_nId] = _nParameterIndex;}
         sal_Int32 getParameterIndex(sal_Int32 _nId) const { return m_nParameterIndexes[_nId]; }

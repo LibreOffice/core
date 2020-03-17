@@ -85,14 +85,14 @@ void OPreparedStatement::scanParameter(OSQLParseNode* pParseNode,std::vector< OS
 
 std::unique_ptr<OKeyValue> OResultSet::GetOrderbyKeyValue(OValueRefRow const & _rRow)
 {
-    sal_uInt32 nBookmarkValue = std::abs(static_cast<sal_Int32>((_rRow->get())[0]->getValue()));
+    sal_uInt32 nBookmarkValue = std::abs(static_cast<sal_Int32>((*_rRow)[0]->getValue()));
 
     std::unique_ptr<OKeyValue> pKeyValue = OKeyValue::createKeyValue(nBookmarkValue);
 
     for (auto const& elem : m_aOrderbyColumnNumber)
     {
-        OSL_ENSURE(elem < static_cast<sal_Int32>(_rRow->get().size()),"Invalid index for orderkey values!");
-        pKeyValue->pushKey(new ORowSetValueDecorator((_rRow->get())[elem]->getValue()));
+        OSL_ENSURE(elem < static_cast<sal_Int32>(_rRow->size()),"Invalid index for orderkey values!");
+        pKeyValue->pushKey(new ORowSetValueDecorator((*_rRow)[elem]->getValue()));
     }
 
     return pKeyValue;

@@ -177,7 +177,7 @@ void OSQLAnalyzer::setSelectionEvaluationResult(OValueRefRow const & _pRow,const
             if ( nPos < static_cast< sal_Int32 >( _rColumnMapping.size() ) )
                 map = _rColumnMapping[nPos];
             if ( map > 0 )
-                selectionEval.second->startSelection( (_pRow->get())[map] );
+                selectionEval.second->startSelection( (*_pRow)[map] );
         }
         ++nPos;
     }
