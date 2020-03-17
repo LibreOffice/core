@@ -417,6 +417,9 @@ draw_constructor_list = [
     "css_comp_Impress_oox_PowerPointExport",
 # writerperfect/source/draw/wpftdraw.component
     "com_sun_star_comp_Draw_VisioImportFilter_get_implementation",
+# writerperfect/source/writer/wpftwriter.component
+     "com_sun_star_comp_Writer_EPUBExportFilter_get_implementation",
+     "com_sun_star_comp_Writer_EPUBExportUIComponent_get_implementation",
     ]
 
 writer_factory_list = [
