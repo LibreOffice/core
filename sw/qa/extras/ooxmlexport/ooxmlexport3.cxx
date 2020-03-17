@@ -1103,6 +1103,54 @@ DECLARE_OOXMLEXPORT_TEST(testVerticalBorders, "calendar3.docx")
     assertXPathChildren(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[3]/w:tcPr/w:tcBorders", 2);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testArrowFlipXY, "tdf100751_arrowBothFlip.docx")
+{
+    // tdf#100751: Both x and y flip should happen.
+
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+
+    OUString arrowStyle = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:group/v:shape[2]", "style");
+    CPPUNIT_ASSERT(arrowStyle.indexOf(u"flip:xy") != sal_Int32(-1));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testArrowNoFlip, "tdf100751_arrowNoFlip.docx")
+{
+    // tdf#100751: Flip should not appear.
+
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+
+    OUString arrowStyle = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:group/v:shape[2]", "style");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), arrowStyle.indexOf(u"flip"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testArrowXFlip, "tdf100751_arrowXFlip.docx")
+{
+    // tdf#100751: Flip X.
+
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+
+    OUString arrowStyle = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:group/v:shape[2]", "style");
+    CPPUNIT_ASSERT(arrowStyle.indexOf(u"flip:x") != sal_Int32(-1));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testArrowYFlip, "tdf100751_arrowYFlip.docx")
+{
+    // tdf#100751: Flip Y.
+
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+
+    OUString arrowStyle = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:group/v:shape[2]", "style");
+    CPPUNIT_ASSERT(arrowStyle.indexOf(u"flip:y") != sal_Int32(-1));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
