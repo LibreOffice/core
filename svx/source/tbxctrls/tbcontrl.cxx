@@ -2069,9 +2069,14 @@ IMPL_LINK(ColorWindow, AutoColorClickHdl, weld::Button&, rButton, void)
 
     maSelectedLink.Call(aNamedColor);
 
-    maColorSelectFunction(maCommand, aNamedColor);
+    // deliberate take a copy here in case maMenuButton.set_inactive
+    // triggers a callback that destroys ourself
+    ColorSelectFunction aColorSelectFunction(maColorSelectFunction);
+    OUString sCommand(maCommand);
 
     maMenuButton.set_inactive();
+
+    aColorSelectFunction(sCommand, aNamedColor);
 }
 
 IMPL_LINK_NOARG(SvxColorWindow, OpenPickerClickHdl, Button*, void)
