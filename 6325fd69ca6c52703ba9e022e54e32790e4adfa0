@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "52920963_d3f64bc3",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport14.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-03-17T06:57:39Z",
+      "side": 1,
+      "message": "where name\u003dcompatibilityMode as in theory other compatSettings could be added later on, and shouldn\u0027t error out in that case.",
+      "range": {
+        "startLine": 659,
+        "startChar": 44,
+        "endLine": 659,
+        "endChar": 59
+      },
+      "revId": "6325fd69ca6c52703ba9e022e54e32790e4adfa0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e06af074_0704de7a",
+        "filename": "sw/source/filter/ww8/docxexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1043,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-03-17T06:57:39Z",
+      "side": 1,
+      "message": "You are writing out this section twice in most cases - since most of MS DOCX files have a compat setting. It should be written out afterwards - if there are no real XML_compat\u0027s.",
+      "range": {
+        "startLine": 1043,
+        "startChar": 35,
+        "endLine": 1043,
+        "endChar": 45
+      },
+      "revId": "6325fd69ca6c52703ba9e022e54e32790e4adfa0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35417a87_f8662de6",
+        "filename": "sw/source/filter/ww8/docxexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1163,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-03-17T06:57:39Z",
+      "side": 1,
+      "message": "There are a lot more compatSettings than just compatibilityMode. So this won\u0027t work. You have to check if the name is \"compatibilityMode\".",
+      "range": {
+        "startLine": 1163,
+        "startChar": 24,
+        "endLine": 1163,
+        "endChar": 38
+      },
+      "revId": "6325fd69ca6c52703ba9e022e54e32790e4adfa0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
