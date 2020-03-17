@@ -19,6 +19,7 @@
 #include "DomainMapperTableHandler.hxx"
 #include "DomainMapper_Impl.hxx"
 #include "StyleSheetTable.hxx"
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/table/TableBorderDistances.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
@@ -1119,11 +1120,29 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
                 rParaProp.m_rPropertySet->getPropertyValue("ParaStyleName") >>= sParaStyleName;
                 StyleSheetEntryPtr pEntry = m_rDMapper_Impl.GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(sParaStyleName);
                 uno::Any aParaStyle = m_rDMapper_Impl.GetPropertyFromStyleSheet(eId, pEntry, true, true, &bDocDefault);
+                // A very strange compatibility rule says that the DEFAULT style's specified fontsize of 11 or 12
+                // or a specified left justify will always be overridden by the table-style.
+                // Normally this rule is applied, so always do this unless a compatSetting indicates otherwise.
+                bool bCompatOverride = false;
+                if ( (eId == PROP_CHAR_HEIGHT || eId == PROP_PARA_ADJUST) && sParaStyleName == m_rDMapper_Impl.GetDefaultParaStyleName() )
+                {
+                    if ( eId == PROP_CHAR_HEIGHT )
+                        bCompatOverride = aParaStyle == uno::Any(double(11)) || aParaStyle == uno::Any(double(12));
+                    else if ( eId == PROP_PARA_ADJUST )
+                    {
+                        style::ParagraphAdjust eAdjust(style::ParagraphAdjust_CENTER);
+                        aParaStyle >>= eAdjust;
+                        bCompatOverride = eAdjust == style::ParagraphAdjust_LEFT;
+                    }
+
+                    // The wording is confusing here. Normally, the paragraph style DOES override the table-style.
+                    // But for these two special situations, do not override the table-style. So the default is false.
+                    // If false, then "CompatOverride" the normal behaviour, and apply the table-style's value.
+                    bCompatOverride &= !m_rDMapper_Impl.GetSettingsTable()->GetCompatSettingValue("overrideTableStyleFontSizeAndJustification");
+                }
+
                 // use table style when no paragraph style setting or a docDefault value is applied instead of it
-                if ( aParaStyle == uno::Any() || bDocDefault ||
-                   // set default behaviour of MSO ("overrideTableStyleFontSizeAndJustification" exception):
-                   // if Normal style defines 11 pt or 12 pt font heights, table style overrides its font size
-                   (eId == PROP_CHAR_HEIGHT && sParaStyleName == "Standard" && (aParaStyle == uno::Any(double(11)) || aParaStyle == uno::Any(double(12))))) try
+                if ( aParaStyle == uno::Any() || bDocDefault || bCompatOverride ) try
                 {
                     // check property state of paragraph
                     uno::Reference<text::XParagraphCursor> xParagraph(
