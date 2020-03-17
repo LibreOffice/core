@@ -670,13 +670,20 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
         oRotation = ConversionHelper::decodeRotation(maTypeModel.maRotation);
     if (!maTypeModel.maFlip.isEmpty())
     {
-        if (maTypeModel.maFlip == "x")
+        OUString flips = maTypeModel.maFlip;
+        for (const sal_Unicode* it = flips.getStr(); *it; ++it)
         {
-            bFlipX = true;
-        }
-        else if (maTypeModel.maFlip == "y")
-        {
-            bFlipY = true;
+            switch (*it)
+            {
+            case sal_Unicode(u'x'):
+                    bFlipX = true;
+                    break;
+            case sal_Unicode(u'y'):
+                    bFlipY = true;
+                    break;
+            default:
+                    break;
+            }
         }
     }
 
@@ -832,14 +839,20 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
         // The associated properties "PROP_MirroredX" and "PROP_MirroredY" have to be set here so that direction change will occur internally.
         if (bFlipX || bFlipY)
         {
-            assert(!(bFlipX && bFlipY));
+            // It can be both x and y.
             css::beans::PropertyValue aProp;
             if (bFlipX)
+            {
                 aProp.Name = "MirroredX";
-            else
+                aProp.Value <<= true;
+                aPropVec.push_back(aProp);
+            }
+            if (bFlipY)
+            {
                 aProp.Name = "MirroredY";
-            aProp.Value <<= true;
-            aPropVec.push_back(aProp);
+                aProp.Value <<= true;
+                aPropVec.push_back(aProp);
+            }
         }
 
         if (!maTypeModel.maAdjustments.isEmpty())
