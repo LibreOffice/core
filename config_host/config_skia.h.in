@@ -36,8 +36,6 @@ are the same.
 #define SK_CODEC_DECODES_PNG 1
 #define SK_ENCODE_PNG 1
 
-#define SK_GAMMA_APPLY_TO_A8
-
 #define SK_ASSUME_GL 1
 
 #define SK_ASSUME_GL_ES 0
