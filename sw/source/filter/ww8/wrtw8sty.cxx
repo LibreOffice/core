@@ -251,7 +251,7 @@ sal_uInt16 MSWordStyles::GetWWId( const SwFormat& rFormat )
         case RES_POOLCOLL_NUM_LEVEL3:       nRet = 59;  break;
         case RES_POOLCOLL_NUM_LEVEL4:       nRet = 60;  break;
         case RES_POOLCOLL_NUM_LEVEL5:       nRet = 61;  break;
-        case RES_POOLCOLL_DOC_TITEL:        nRet = 62;  break;
+        case RES_POOLCOLL_DOC_TITLE:        nRet = 62;  break;
         case RES_POOLCOLL_DOC_APPENDIX:     nRet = 63;  break;
         case RES_POOLCOLL_SIGNATURE:        nRet = 64;  break;
         case RES_POOLCOLL_TEXT:             nRet = 66;  break;
@@ -261,7 +261,7 @@ sal_uInt16 MSWordStyles::GetWWId( const SwFormat& rFormat )
         case RES_POOLCOLL_BULLET_NONUM3:    nRet = 70;  break;
         case RES_POOLCOLL_BULLET_NONUM4:    nRet = 71;  break;
         case RES_POOLCOLL_BULLET_NONUM5:    nRet = 72;  break;
-        case RES_POOLCOLL_DOC_SUBTITEL:     nRet = 74;  break;
+        case RES_POOLCOLL_DOC_SUBTITLE:     nRet = 74;  break;
         case RES_POOLCOLL_GREETING:         nRet = 75;  break;
         case RES_POOLCOLL_TEXT_IDENT:       nRet = 77;  break;
 
