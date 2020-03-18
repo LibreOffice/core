@@ -19,6 +19,8 @@ interface XPrimitive2D;
 /** XPdfDecomposer interface
 
     This renders a PDF data into a bitmap and returns it as a primitive.
+
+    @since LibreOffice 7.0
  */
 interface XPdfDecomposer : ::com::sun::star::uno::XInterface
 {
@@ -31,8 +33,6 @@ interface XPdfDecomposer : ::com::sun::star::uno::XInterface
         Parameters for decomposition. Parameters include:
 
         sal_Int32 Page - which page to use
-
-        @since LibreOffice 7.0
      */
     sequence<XPrimitive2D> getDecomposition([in] sequence<byte> xPdfData,
                                             [in] sequence<com::sun::star::beans::PropertyValue> xDecompositionParameters);

@@ -15,7 +15,9 @@
 module com { module sun { module star { module graphic
 {
 
-/** Service to convert a PDF stream into a bitmap primitive.
+/** Service to convert a PDF stream into a 2D primitive.
+
+    @since LibreOffice 7.0
  */
 
 service PdfTools : XPdfDecomposer;
