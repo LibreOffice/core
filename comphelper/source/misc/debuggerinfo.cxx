@@ -23,7 +23,7 @@
 
 namespace comphelper
 {
-#if defined DBG_UTIL && !defined NDEBUG
+#if defined DBG_UTIL
 bool isDebuggerAttached()
 {
 #if defined(_WIN32)
