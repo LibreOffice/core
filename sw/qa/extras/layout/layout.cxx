@@ -2658,6 +2658,18 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf130380)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(6727, nY, 50);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf129095)
+{
+    SwDoc* pDoc = createDoc("tdf129095.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf116925)
 {
     SwDoc* pDoc = createDoc("tdf116925.docx");
