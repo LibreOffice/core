@@ -924,4 +924,24 @@ public:
     virtual Container* weld_message_area() override;
 };
 
+class SalInstanceCheckButton : public SalInstanceButton, public virtual weld::CheckButton
+{
+private:
+    VclPtr<CheckBox> m_xCheckButton;
+
+    DECL_LINK(ToggleHdl, CheckBox&, void);
+public:
+    SalInstanceCheckButton(CheckBox* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+
+    virtual void set_active(bool active) override;
+
+    virtual bool get_active() const override;
+
+    virtual void set_inconsistent(bool inconsistent) override;
+
+    virtual bool get_inconsistent() const override;
+
+    virtual ~SalInstanceCheckButton() override;
+};
+
 #endif
