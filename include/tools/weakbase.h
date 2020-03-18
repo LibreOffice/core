@@ -22,7 +22,6 @@
 #include <sal/types.h>
 #include <rtl/ref.hxx>
 #include <tools/toolsdllapi.h>
-#include <config_options.h>
 
 /** the template classes in this header are helper to implement weak references
     to implementation objects that are not refcounted.
@@ -124,7 +123,7 @@ private:
 };
 
 /** derive your implementation classes from this class if you want them to support weak references */
-class UNLESS_MERGELIBS(TOOLS_DLLPUBLIC) WeakBase
+class TOOLS_DLLPUBLIC WeakBase
 {
     template<typename T> friend class WeakReference;
 
