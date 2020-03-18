@@ -169,6 +169,7 @@ std::unique_ptr<GenericSalLayout> FreeTypeTextRenderImpl::GetTextLayout(int nFal
     return std::make_unique<GenericSalLayout>(*mpFreetypeFont[nFallbackLevel]->GetFontInstance());
 }
 
+#if ENABLE_CAIRO_CANVAS
 SystemFontData FreeTypeTextRenderImpl::GetSysFontData( int nFallbackLevel ) const
 {
     SystemFontData aSysFontData;
@@ -189,6 +190,7 @@ SystemFontData FreeTypeTextRenderImpl::GetSysFontData( int nFallbackLevel ) cons
 
     return aSysFontData;
 }
+#endif
 
 bool FreeTypeTextRenderImpl::CreateFontSubset(
                                    const OUString& rToFile,
