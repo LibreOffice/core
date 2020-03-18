@@ -32,7 +32,7 @@ interface XPdfDecomposer : ::com::sun::star::uno::XInterface
         @param xDecompositionParameters
         Parameters for decomposition. Parameters include:
 
-        sal_Int32 Page - which page to use
+        sal_Int32 PageIndex - which page to use
      */
     sequence<XPrimitive2D> getDecomposition([in] sequence<byte> xPdfData,
                                             [in] sequence<com::sun::star::beans::PropertyValue> xDecompositionParameters);
