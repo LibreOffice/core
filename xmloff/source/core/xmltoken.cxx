@@ -3357,7 +3357,7 @@ namespace xmloff::token {
     // get OUString representation of token
     const OUString& GetXMLToken( enum XMLTokenEnum eToken )
     {
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
         static bool s_bChecked = false;
         if (!s_bChecked)
         {
