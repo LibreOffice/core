@@ -1550,7 +1550,7 @@ void SvxNumberFormatTabPage::OptHdl_Impl(const weld::Widget* pOptCtrl)
                                  : ( (m_xEdDenominator->get_sensitive() && m_xEdDenominator->get_visible())
                                    ? static_cast<sal_uInt16>(m_xEdDenominator->get_value())
                                    : sal_uInt16(0) );
-        sal_uInt16    nLeadZeroes = (m_xEdLeadZeroes->get_sensitive())
+        sal_uInt16    nLeadZeroes = m_xEdLeadZeroes->get_sensitive()
                                  ? static_cast<sal_uInt16>(m_xEdLeadZeroes->get_value())
                                  : sal_uInt16(0);
         if ( pNumFmtShell->GetStandardName() == m_xEdFormat->get_text() )

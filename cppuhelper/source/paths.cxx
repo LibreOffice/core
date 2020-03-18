@@ -114,7 +114,7 @@ bool cppu::nextDirectoryItem(osl::Directory & directory, OUString * url) {
 void cppu::decodeRdbUri(OUString * uri, bool * optional, bool * directory)
 {
     assert(uri != nullptr && optional != nullptr && directory != nullptr);
-    if(!(uri->isEmpty()))
+    if(!uri->isEmpty())
     {
         *optional = (*uri)[0] == '?';
         if (*optional) {

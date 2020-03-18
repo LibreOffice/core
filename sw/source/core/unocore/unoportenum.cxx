@@ -935,7 +935,7 @@ lcl_ExportHints(
                 case RES_TXTATR_TOXMARK:
                 case RES_TXTATR_REFMARK:
                 {
-                    bool bIsPoint = !(pAttr->GetEnd());
+                    bool bIsPoint = !pAttr->GetEnd();
                     if (!bRightMoveForbidden || !bIsPoint)
                     {
                         if (bIsPoint)

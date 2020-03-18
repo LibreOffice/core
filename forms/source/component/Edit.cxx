@@ -189,7 +189,7 @@ void OEditControl::keyPressed(const css::awt::KeyEvent& e)
 
     // Not for multiline edits
     Any aTmp( xSet->getPropertyValue(PROPERTY_MULTILINE));
-    if ((aTmp.getValueType().equals(cppu::UnoType<bool>::get())) && getBOOL(aTmp))
+    if (aTmp.getValueType().equals(cppu::UnoType<bool>::get()) && getBOOL(aTmp))
         return;
 
     Reference<XFormComponent>  xFComp(xSet, UNO_QUERY);

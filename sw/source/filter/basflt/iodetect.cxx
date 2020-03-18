@@ -117,7 +117,7 @@ bool SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter)
 
     bool bRet = ERRCODE_NONE == rStg.GetError() &&
         ( nStgFormatId == SotClipboardFormatId::NONE || rFilter.GetFormat() == nStgFormatId ) &&
-        ( rStg.IsContained( SwIoSystem::GetSubStorageName( rFilter )) );
+        rStg.IsContained( SwIoSystem::GetSubStorageName( rFilter ) );
     if( bRet )
     {
         /* Bug 53445 - there are Excel Docs w/o ClipBoardId! */

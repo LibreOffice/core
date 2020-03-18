@@ -723,14 +723,16 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
 
                     // also set correct StartNode for all decreased nodes
                     while( aTmpSIdx < aTmpEIdx )
-                        if( nullptr != (( pCurrentNode = &aTmpEIdx.GetNode())->GetEndNode()) )
+                    {
+                        pCurrentNode = &aTmpEIdx.GetNode();
+                        if( nullptr != pCurrentNode->GetEndNode() )
                             aTmpEIdx = pCurrentNode->StartOfSectionIndex();
                         else
                         {
                             pCurrentNode->m_pStartOfSection = pTmpStt;
                             --aTmpEIdx;
                         }
-
+                    }
                     --aIdx;     // after the inserted StartNode
                     --aRg.aEnd; // before StartNode
                     // copy array. CAUTION: all indices after

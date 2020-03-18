@@ -129,7 +129,7 @@ void SwFrame::MakeLeftPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotify
     if( pPrv )
     {
         aFrm.Pos( pPrv->getFrameArea().Pos() );
-        aFrm.Pos().AdjustX( -(aFrm.Width()) );
+        aFrm.Pos().AdjustX( -aFrm.Width() );
     }
     else
     {

@@ -2430,7 +2430,7 @@ XFillFloatTransparenceItem::XFillFloatTransparenceItem(const XGradient& rTheGrad
 
 bool XFillFloatTransparenceItem::operator==( const SfxPoolItem& rItem ) const
 {
-    return ( NameOrIndex::operator==(rItem) ) &&
+    return NameOrIndex::operator==(rItem) &&
            ( GetGradientValue() == static_cast<const XFillGradientItem&>(rItem).GetGradientValue() ) &&
            ( bEnabled == static_cast<const XFillFloatTransparenceItem&>(rItem).bEnabled );
 }

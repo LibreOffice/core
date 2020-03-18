@@ -132,7 +132,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             } else {
                 sPair_t const pair(depFileUrl, outputFile);
                 nErrors = produceFile(outputFileUrl,
-                            (options.isValid("-M")) ? &pair : nullptr);
+                            options.isValid("-M") ? &pair : nullptr);
             }
 
             idlc()->reset();

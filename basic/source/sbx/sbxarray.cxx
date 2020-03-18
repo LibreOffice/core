@@ -288,7 +288,7 @@ SbxVariable* SbxArray::Find( const OUString& rName, SbxClassType t )
         sal_uInt16 nVarHash = rEntry.mpVar->GetHashCode();
         if ( (!nVarHash || nVarHash == nHash)
             && (t == SbxClassType::DontCare || rEntry.mpVar->GetClass() == t)
-            && (rEntry.mpVar->GetName().equalsIgnoreAsciiCase(rName)))
+            && rEntry.mpVar->GetName().equalsIgnoreAsciiCase(rName))
         {
             p = rEntry.mpVar.get();
             p->ResetFlag(SbxFlagBits::ExtFound);

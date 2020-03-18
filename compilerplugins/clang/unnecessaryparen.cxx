@@ -103,6 +103,7 @@ public:
     bool VisitVarDecl(const VarDecl *);
     bool VisitCXXOperatorCallExpr(const CXXOperatorCallExpr *);
     bool VisitUnaryExprOrTypeTraitExpr(UnaryExprOrTypeTraitExpr const *);
+    bool VisitUnaryOperator(UnaryOperator const *);
     bool VisitConditionalOperator(ConditionalOperator const * expr);
     bool VisitBinaryConditionalOperator(BinaryConditionalOperator const * expr);
     bool VisitMemberExpr(const MemberExpr *f);
@@ -143,6 +144,8 @@ private:
 
     bool removeParens(ParenExpr const * expr);
 
+    void checkAssignment(const CXXOperatorCallExpr* callExpr);
+
     std::unordered_set<ParenExpr const *> handled_;
 };
 
@@ -163,6 +166,24 @@ bool UnnecessaryParen::VisitConditionalOperator(ConditionalOperator const * expr
 
 bool UnnecessaryParen::VisitBinaryConditionalOperator(BinaryConditionalOperator const * expr) {
     handleUnreachableCodeConditionParens(expr->getCond());
+    return true;
+}
+
+bool UnnecessaryParen::VisitUnaryOperator(const UnaryOperator* unaryOp)
+{
+    if (ignoreLocation(unaryOp))
+        return true;
+    // If we have a address-of or dereference operator preceding a parenthesied member expression,
+    // those are often there for readability
+    auto op = unaryOp->getOpcode();
+    if (op != UO_AddrOf && op != UO_Deref)
+        return true;
+    auto parenExpr = dyn_cast<ParenExpr>(unaryOp->getSubExpr()->IgnoreImpCasts());
+    if (!parenExpr)
+        return true;
+    auto subExpr = ignoreAllImplicit(parenExpr->getSubExpr());
+    if (isa<CXXMemberCallExpr>(subExpr) && !isPrecededBy_BAD_CAST(parenExpr))
+        handled_.insert(parenExpr);
     return true;
 }
 
@@ -187,6 +208,19 @@ bool UnnecessaryParen::VisitParenExpr(const ParenExpr* parenExpr)
             << parenExpr->getSourceRange();
         handled_.insert(subParenExpr);
     }
+
+    if (isa<CXXMemberCallExpr>(subExpr) && !isPrecededBy_BAD_CAST(parenExpr))
+    {
+        if (compat::getBeginLoc(parenExpr).isMacroID())
+            return true;
+        report(
+            DiagnosticsEngine::Warning, "parentheses around member expr",
+            compat::getBeginLoc(parenExpr))
+            << parenExpr->getSourceRange();
+        handled_.insert(parenExpr);
+        return true;
+    }
+
 
     // Somewhat redundantly add parenExpr to handled_, so that issues within InitListExpr don't get
     // reported twice (without having to change TraverseInitListExpr to only either traverse the
@@ -409,8 +443,28 @@ bool UnnecessaryParen::VisitCXXOperatorCallExpr(const CXXOperatorCallExpr* callE
 {
     if (ignoreLocation(callExpr))
         return true;
-    if (callExpr->getNumArgs() != 2)
+
+    checkAssignment(callExpr);
+
+    // If we have a address-of or dereference operator preceding a parenthesied member expression,
+    // those are often there for readability
+    auto op = callExpr->getOperator();
+    if (op != OO_Amp && op != OO_Star)
         return true;
+    auto parenExpr = dyn_cast<ParenExpr>(ignoreAllImplicit(callExpr->getArg(0)));
+    if (!parenExpr)
+        return true;
+    auto subExpr = ignoreAllImplicit(parenExpr->getSubExpr());
+    if (isa<CXXMemberCallExpr>(subExpr) && !isPrecededBy_BAD_CAST(parenExpr))
+        handled_.insert(parenExpr);
+
+    return true;
+}
+
+void UnnecessaryParen::checkAssignment(const CXXOperatorCallExpr* callExpr)
+{
+    if (callExpr->getNumArgs() != 2)
+        return;
 
     // Same logic as CXXOperatorCallExpr::isAssignmentOp(), which our supported clang
     // doesn't have yet.
@@ -421,35 +475,34 @@ bool UnnecessaryParen::VisitCXXOperatorCallExpr(const CXXOperatorCallExpr* callE
         Opc != OO_LessLessEqual && Opc != OO_GreaterGreaterEqual &&
         Opc != OO_AmpEqual && Opc != OO_CaretEqual &&
         Opc != OO_PipeEqual)
-        return true;
+        return;
     auto parenExpr = dyn_cast<ParenExpr>(ignoreAllImplicit(callExpr->getArg(1)));
     if (!parenExpr)
-        return true;
+        return;
     if (compat::getBeginLoc(parenExpr).isMacroID())
-        return true;
+        return;
     // Sometimes parentheses make the RHS of an assignment easier to read by
     // visually disambiguating the = from a call to ==
     auto sub = parenExpr->getSubExpr();
     if (auto subBinOp = dyn_cast<BinaryOperator>(sub))
     {
         if (!(subBinOp->isMultiplicativeOp() || subBinOp->isAdditiveOp() || subBinOp->isPtrMemOp()))
-            return true;
+            return;
     }
     if (auto subOperatorCall = dyn_cast<CXXOperatorCallExpr>(sub))
     {
         auto op = subOperatorCall->getOperator();
         if (!((op >= OO_Plus && op <= OO_Exclaim) || (op >= OO_ArrowStar && op <= OO_Subscript)))
-            return true;
+            return;
     }
     if (isa<ConditionalOperator>(sub))
-        return true;
+        return;
 
     report(
         DiagnosticsEngine::Warning, "parentheses immediately inside assignment",
         compat::getBeginLoc(parenExpr))
         << parenExpr->getSourceRange();
     handled_.insert(parenExpr);
-    return true;
 }
 
 bool UnnecessaryParen::VisitVarDecl(const VarDecl* varDecl)

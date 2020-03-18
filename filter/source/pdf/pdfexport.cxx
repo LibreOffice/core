@@ -1190,7 +1190,7 @@ void PDFExport::ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rP
     pDev->SetFont(aFont);
     pDev->SetMapMode( MapMode( MapUnit::MapPoint ) );
     int w = 0;
-    int watermarkcount = ((rPageSize.Width()) / 200)+1;
+    int watermarkcount = (rPageSize.Width() / 200)+1;
     long nTextWidth = rPageSize.Width() / (watermarkcount*1.5);
     OUString oneLineText = watermark;
 

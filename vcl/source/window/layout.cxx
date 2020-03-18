@@ -86,7 +86,7 @@ void VclContainer::setLayoutAllocation(vcl::Window &rChild, const Point &rAllocP
             if (aChildPreferredSize.Width() < rChildAlloc.Width())
                 aChildSize.setWidth( aChildPreferredSize.Width() );
             aChildPos.AdjustX(rChildAlloc.Width() );
-            aChildPos.AdjustX( -(aChildSize.Width()) );
+            aChildPos.AdjustX( -aChildSize.Width() );
             break;
         case VclAlign::Center:
             if (aChildPreferredSize.Width() < aChildSize.Width())
@@ -107,7 +107,7 @@ void VclContainer::setLayoutAllocation(vcl::Window &rChild, const Point &rAllocP
             if (aChildPreferredSize.Height() < rChildAlloc.Height())
                 aChildSize.setHeight( aChildPreferredSize.Height() );
             aChildPos.AdjustY(rChildAlloc.Height() );
-            aChildPos.AdjustY( -(aChildSize.Height()) );
+            aChildPos.AdjustY( -aChildSize.Height() );
             break;
         case VclAlign::Center:
             if (aChildPreferredSize.Height() < aChildSize.Height())
@@ -1411,7 +1411,7 @@ void VclFrame::setAllocation(const Size &rAllocation)
         aLabelSize.setHeight( std::min(aLabelSize.Height(), aAllocation.Height()) );
         aLabelSize.setWidth( std::min(aLabelSize.Width(), aAllocation.Width()) );
         setLayoutAllocation(*pLabel, aChildPos, aLabelSize);
-        aAllocation.AdjustHeight( -(aLabelSize.Height()) );
+        aAllocation.AdjustHeight( -aLabelSize.Height() );
         aChildPos.AdjustY(aLabelSize.Height() );
     }
 
@@ -1662,7 +1662,7 @@ void VclExpander::setAllocation(const Size &rAllocation)
         setLayoutAllocation(*pLabel, aLabelPos, aLabelSize);
     }
 
-    aAllocation.AdjustHeight( -(aExpanderSize.Height()) );
+    aAllocation.AdjustHeight( -aExpanderSize.Height() );
     aChildPos.AdjustY(aExpanderSize.Height() );
 
     if (pChild && pChild->IsVisible())
@@ -1911,9 +1911,9 @@ Size VclScrolledWindow::getVisibleChildSize() const
 {
     Size aRet(GetSizePixel());
     if (m_pVScroll->IsVisible())
-        aRet.AdjustWidth( -(m_pVScroll->GetSizePixel().Width()) );
+        aRet.AdjustWidth( -m_pVScroll->GetSizePixel().Width() );
     if (m_pHScroll->IsVisible())
-        aRet.AdjustHeight( -(m_pHScroll->GetSizePixel().Height()) );
+        aRet.AdjustHeight( -m_pHScroll->GetSizePixel().Height() );
     aRet.AdjustHeight(-2);
     aRet.AdjustWidth(-2);
     return aRet;

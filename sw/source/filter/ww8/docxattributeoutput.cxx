@@ -5576,7 +5576,7 @@ void DocxAttributeOutput::WritePostponedDMLDrawing()
     for( const auto & rPostponedDrawing : *pPostponedDMLDrawings )
     {
         // Avoid w:drawing within another w:drawing.
-        if ( IsAlternateContentChoiceOpen() && !( m_rExport.SdrExporter().IsDrawingOpen()) )
+        if ( IsAlternateContentChoiceOpen() && ! m_rExport.SdrExporter().IsDrawingOpen() )
            m_rExport.SdrExporter().writeDMLDrawing(rPostponedDrawing.object, rPostponedDrawing.frame, m_anchorId++);
         else
             m_rExport.SdrExporter().writeDMLAndVMLDrawing(rPostponedDrawing.object, *rPostponedDrawing.frame, m_anchorId++);
@@ -8194,11 +8194,11 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
     else
     {
         FastAttributeList *pLRSpaceAttrList = FastSerializerHelper::createAttrList();
-        if((0 != rLRSpace.GetTextLeft()) || (rLRSpace.IsExplicitZeroMarginValLeft()))
+        if((0 != rLRSpace.GetTextLeft()) || rLRSpace.IsExplicitZeroMarginValLeft())
         {
             pLRSpaceAttrList->add( FSNS( XML_w, ( bEcma ? XML_left : XML_start ) ), OString::number(  rLRSpace.GetTextLeft() ) );
         }
-        if((0 != rLRSpace.GetRight()) || (rLRSpace.IsExplicitZeroMarginValRight()))
+        if((0 != rLRSpace.GetRight()) || rLRSpace.IsExplicitZeroMarginValRight())
         {
             pLRSpaceAttrList->add( FSNS( XML_w, ( bEcma ? XML_right : XML_end ) ), OString::number(  rLRSpace.GetRight() ) );
         }

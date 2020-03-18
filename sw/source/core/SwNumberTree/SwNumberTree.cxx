@@ -355,7 +355,7 @@ void SwNumberTreeNode::MoveGreaterChildren( SwNumberTreeNode& _rCompareNode,
         // #i60652#
         if ( !mChildren.empty() )
         {
-            SetLastValid( --(mChildren.end()) );
+            SetLastValid( --mChildren.end() );
         }
     }
 
@@ -1139,7 +1139,7 @@ const SwNumberTreeNode* SwNumberTreeNode::GetPrecedingNodeOf(
         // and the <this> node isn't the root node.
         // Thus, compare the given node with the <this> node in order to check,
         // if the <this> node precedes the given node.
-        if ( !(rNode.LessThan( *this )) )
+        if ( !rNode.LessThan( *this ) )
         {
             pPrecedingNode = this;
         }

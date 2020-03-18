@@ -80,7 +80,7 @@ static LanguageType lcl_CfgAnyToLanguage( const uno::Any &rVal )
 {
     OUString aTmp;
     rVal >>= aTmp;
-    return (aTmp.isEmpty()) ? LANGUAGE_SYSTEM : LanguageTag::convertToLanguageTypeWithFallback( aTmp );
+    return aTmp.isEmpty() ? LANGUAGE_SYSTEM : LanguageTag::convertToLanguageTypeWithFallback( aTmp );
 }
 
 SvtLinguOptions::SvtLinguOptions()

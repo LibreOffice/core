@@ -605,7 +605,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, size_t nOldPos,
                                             ? pTmpAnchorFrame->FindFlyFrame() : nullptr;
             if ( pTmpParentObj &&
                  ( ( pTmpParentObj == pFlyFrame ) ||
-                   ( pFlyFrame->IsUpperOf( *pTmpParentObj ) ) ) )
+                   pFlyFrame->IsUpperOf( *pTmpParentObj ) ) )
             {
                 // move child object.,
                 pDrawPage->SetObjectOrdNum( i, nChildNewPos );

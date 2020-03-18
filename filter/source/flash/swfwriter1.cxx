@@ -551,7 +551,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
             break;
 
             case ALIGN_BOTTOM:
-                aBaseLinePos.AdjustY( -(aMetric.GetDescent()) );
+                aBaseLinePos.AdjustY( -aMetric.GetDescent() );
             break;
 
             default:
@@ -1527,7 +1527,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                         if( pAction->GetType() == MetaActionType::GRADIENTEX )
                             pGradAction = static_cast<const MetaGradientExAction*>(pAction);
                         else if( ( pAction->GetType() == MetaActionType::COMMENT ) &&
-                                 ( static_cast<const MetaCommentAction*>(pAction)->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_END") ) )
+                                 static_cast<const MetaCommentAction*>(pAction)->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_END") )
                         {
                             bDone = true;
                         }
@@ -1559,7 +1559,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                             pAction = rMtf.GetAction( i );
 
                             if( ( pAction->GetType() == MetaActionType::COMMENT ) &&
-                                     ( static_cast<const MetaCommentAction*>(pAction)->GetComment().equalsIgnoreAsciiCase("XPATHFILL_SEQ_END") ) )
+                                     static_cast<const MetaCommentAction*>(pAction)->GetComment().equalsIgnoreAsciiCase("XPATHFILL_SEQ_END") )
                             {
                                 bDone = true;
                             }
@@ -1589,7 +1589,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                             pAction = rMtf.GetAction( i );
 
                             if( ( pAction->GetType() == MetaActionType::COMMENT ) &&
-                                     ( static_cast<const MetaCommentAction*>(pAction)->GetComment().equalsIgnoreAsciiCase("XPATHSTROKE_SEQ_END") ) )
+                                     static_cast<const MetaCommentAction*>(pAction)->GetComment().equalsIgnoreAsciiCase("XPATHSTROKE_SEQ_END") )
                             {
                                 bDone = true;
                             }

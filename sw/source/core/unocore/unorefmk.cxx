@@ -319,7 +319,7 @@ SwXReferenceMark::getAnchor()
                     &m_pImpl->m_pDoc->GetNodes()))
             {
                 SwTextNode const& rTextNode = pTextMark->GetTextNode();
-                const std::unique_ptr<SwPaM> pPam( (pTextMark->End())
+                const std::unique_ptr<SwPaM> pPam( pTextMark->End()
                     ?   new SwPaM( rTextNode, *pTextMark->End(),
                                    rTextNode, pTextMark->GetStart())
                     :   new SwPaM( rTextNode, pTextMark->GetStart()) );
@@ -554,7 +554,7 @@ void SwXMetaText::PrepareForAttach( uno::Reference<text::XTextRange> & xRange,
     // create a new cursor to prevent modifying SwXTextRange
     xRange = static_cast<text::XWordCursor*>(
         new SwXTextCursor(*GetDoc(), &m_rMeta, CursorType::Meta, *rPam.GetPoint(),
-                (rPam.HasMark()) ? rPam.GetMark() : nullptr));
+                rPam.HasMark() ? rPam.GetMark() : nullptr));
 }
 
 bool SwXMetaText::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)

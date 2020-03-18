@@ -391,7 +391,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
 
             // No filter found => error
             // No type and no location => error
-            if (( aFilterName.isEmpty() ) ||
+            if ( aFilterName.isEmpty() ||
                 ( aTypeName.isEmpty()  && !bHasLocation ))
                 return eRet;
 

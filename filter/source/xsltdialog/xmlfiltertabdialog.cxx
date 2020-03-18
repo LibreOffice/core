@@ -74,7 +74,7 @@ bool XMLFilterTabDialog::onOk()
     OUString aReplace2;
 
     // 1. see if the filter name is ok
-    if( (mpNewInfo->maFilterName.isEmpty()) || (mpNewInfo->maFilterName != mpOldInfo->maFilterName) )
+    if( mpNewInfo->maFilterName.isEmpty() || (mpNewInfo->maFilterName != mpOldInfo->maFilterName) )
     {
         // if the user deleted the filter name, we reset the original filter name
         if( mpNewInfo->maFilterName.isEmpty() )
@@ -106,7 +106,7 @@ bool XMLFilterTabDialog::onOk()
     }
 
     // 2. see if the interface name is ok
-    if( (mpNewInfo->maInterfaceName.isEmpty()) || (mpNewInfo->maInterfaceName != mpOldInfo->maInterfaceName) )
+    if( mpNewInfo->maInterfaceName.isEmpty() || (mpNewInfo->maInterfaceName != mpOldInfo->maInterfaceName) )
     {
         // if the user deleted the interface name, we reset the original filter name
         if( mpNewInfo->maInterfaceName.isEmpty() )
@@ -196,7 +196,7 @@ bool XMLFilterTabDialog::onOk()
     }
 
     // see if we have at least an import or an export xslt
-    if((mpNewInfo->maImportXSLT.isEmpty()) && (mpNewInfo->maExportXSLT.isEmpty()) )
+    if(mpNewInfo->maImportXSLT.isEmpty() && mpNewInfo->maExportXSLT.isEmpty() )
     {
         pErrorId = STR_ERROR_EXPORT_XSLT_NOT_FOUND;
         sErrorPage = "transformation";

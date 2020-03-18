@@ -4317,7 +4317,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
         }
         g_bNoInterrupt = false;
         const Point aDocPos( PixelToLogic( rMEvt.GetPosPixel() ) );
-        if ((PixelToLogic(m_aStartPos).Y() == (aDocPos.Y())) && (PixelToLogic(m_aStartPos).X() == (aDocPos.X())))//To make sure it was not moved
+        if ((PixelToLogic(m_aStartPos).Y() == aDocPos.Y()) && (PixelToLogic(m_aStartPos).X() == aDocPos.X()))//To make sure it was not moved
         {
             SdrPageView* pPV = nullptr;
             SdrObject* pObj = pSdrView ? pSdrView->PickObj(aDocPos, pSdrView->getHitTolLog(), pPV, SdrSearchOptions::ALSOONMASTER) : nullptr;

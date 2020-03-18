@@ -1863,7 +1863,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
         rLib.bLink = pImplLib->mbLink;
         if( !bStorage || pImplLib->mbLink )
         {
-            rLib.aStorageURL = ( pImplLib->maUnexpandedStorageURL.getLength() ) ?
+            rLib.aStorageURL = pImplLib->maUnexpandedStorageURL.getLength() ?
                 pImplLib->maUnexpandedStorageURL : pImplLib->maLibInfoFileURL;
         }
         rLib.bReadOnly = pImplLib->mbReadOnly;

@@ -996,13 +996,13 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet* rSet)
     }
 
     pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_WIDTH );
-    sal_Int32 nWidth = std::max( pItem ? ( static_cast<const SfxUInt32Item*>(pItem)->GetValue()) : 0, sal_uInt32(1) );
+    sal_Int32 nWidth = std::max( pItem ? static_cast<const SfxUInt32Item*>(pItem)->GetValue() : 0, sal_uInt32(1) );
 
     m_xWidthMF->set_value(m_xWidthMF->normalize(nWidth), FieldUnit::TWIP);
     m_xWidthMF->save_value();
 
     pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_HEIGHT );
-    sal_Int32 nHeight = std::max( pItem ? ( static_cast<const SfxUInt32Item*>(pItem)->GetValue()) : 0, sal_uInt32(1) );
+    sal_Int32 nHeight = std::max( pItem ? static_cast<const SfxUInt32Item*>(pItem)->GetValue() : 0, sal_uInt32(1) );
     m_xHeightMF->set_value(m_xHeightMF->normalize(nHeight), FieldUnit::TWIP);
     m_xHeightMF->save_value();
     m_fWidthHeightRatio = double(nWidth) / double(nHeight);

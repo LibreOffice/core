@@ -553,11 +553,11 @@ void SdrHdl::CreateB2dIAObject()
                         Size aOffset = rOutDev.PixelToLogic(Size(4, 4));
 
                         if(eKind == SdrHdlKind::UpperLeft || eKind == SdrHdlKind::Upper || eKind == SdrHdlKind::UpperRight)
-                            aMoveOutsideOffset.AdjustY( -(aOffset.Width()) );
+                            aMoveOutsideOffset.AdjustY( -aOffset.Width() );
                         if(eKind == SdrHdlKind::LowerLeft || eKind == SdrHdlKind::Lower || eKind == SdrHdlKind::LowerRight)
                             aMoveOutsideOffset.AdjustY(aOffset.Height() );
                         if(eKind == SdrHdlKind::UpperLeft || eKind == SdrHdlKind::Left  || eKind == SdrHdlKind::LowerLeft)
-                            aMoveOutsideOffset.AdjustX( -(aOffset.Width()) );
+                            aMoveOutsideOffset.AdjustX( -aOffset.Width() );
                         if(eKind == SdrHdlKind::UpperRight || eKind == SdrHdlKind::Right || eKind == SdrHdlKind::LowerRight)
                             aMoveOutsideOffset.AdjustX(aOffset.Height() );
                     }

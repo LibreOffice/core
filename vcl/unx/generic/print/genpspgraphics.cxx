@@ -196,7 +196,7 @@ SalPrinterBmp::GetPaletteColor(sal_uInt32 nIdx) const
 {
     BitmapColor aColor(mpBmpBuffer->maPalette[nIdx]);
 
-    return ((aColor.GetBlue())        & 0x000000ff)
+    return (aColor.GetBlue()          & 0x000000ff)
          | ((aColor.GetGreen() <<  8) & 0x0000ff00)
          | ((aColor.GetRed()   << 16) & 0x00ff0000);
 }
@@ -210,7 +210,7 @@ SalPrinterBmp::GetPixelRGB (sal_uInt32 nRow, sal_uInt32 nColumn) const
     if (!!mpBmpBuffer->maPalette)
         GetPaletteColor(aColor.GetIndex());
 
-    return ((aColor.GetBlue())        & 0x000000ff)
+    return (aColor.GetBlue()          & 0x000000ff)
          | ((aColor.GetGreen() <<  8) & 0x0000ff00)
          | ((aColor.GetRed()   << 16) & 0x00ff0000);
 }

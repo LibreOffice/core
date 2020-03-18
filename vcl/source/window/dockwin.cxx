@@ -450,8 +450,8 @@ void DockingWindow::Tracking( const TrackingEvent& rTEvt )
             if ( aFrameMousePos.Y() > aFrameSize.Height()-1 )
                 aFrameMousePos.setY( aFrameSize.Height()-1 );
             aMousePos = ImplFrameToOutput( aFrameMousePos );
-            aMousePos.AdjustX( -(maMouseOff.X()) );
-            aMousePos.AdjustY( -(maMouseOff.Y()) );
+            aMousePos.AdjustX( -maMouseOff.X() );
+            aMousePos.AdjustY( -maMouseOff.Y() );
             Point aFramePos = ImplOutputToFrame( aMousePos );
             tools::Rectangle aTrackRect( aFramePos, Size( mnTrackWidth, mnTrackHeight ) );
             tools::Rectangle aCompRect = aTrackRect;

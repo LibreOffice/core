@@ -96,7 +96,7 @@ void SfxFilterListener::refreshed( const lang::EventObject& aSource )
     SolarMutexGuard aGuard;
     uno::Reference< util::XRefreshable > xContainer( aSource.Source, uno::UNO_QUERY );
     if(
-        (xContainer.is()           ) &&
+        xContainer.is()           &&
         (xContainer==m_xFilterCache)
       )
     {

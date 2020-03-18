@@ -2325,7 +2325,7 @@ SdrObject* SdPage::InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, 
 PresObjKind SdPage::GetPresObjKind(SdrObject* pObj) const
 {
     PresObjKind eKind = PRESOBJ_NONE;
-    if( (pObj != nullptr) && (maPresentationShapeList.hasShape(*pObj)) )
+    if( (pObj != nullptr) && maPresentationShapeList.hasShape(*pObj) )
     {
         SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pObj);
         if( pInfo )

@@ -212,8 +212,8 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
         if( ERRCODE_NONE != nErr )
         {
             OUString  aFilter( rFilterName );
-            bool    bWriteTransGrf = ( aFilter.equalsIgnoreAsciiCase( "transgrf" ) ) ||
-                                     ( aFilter.equalsIgnoreAsciiCase( "gif" ) ) ||
+            bool    bWriteTransGrf = aFilter.equalsIgnoreAsciiCase( "transgrf" ) ||
+                                     aFilter.equalsIgnoreAsciiCase( "gif" ) ||
                                      ( nFlags & XOutFlags::UseGifIfPossible ) ||
                                      ( ( nFlags & XOutFlags::UseGifIfSensible ) && ( bAnimated || bTransparent ) );
 

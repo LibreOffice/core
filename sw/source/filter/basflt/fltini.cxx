@@ -580,7 +580,7 @@ void SwAsciiOptions::ReadUserData( const OUString& rStr )
     if (nToken >= 0 && !(sToken = rStr.getToken(0, ',', nToken)).isEmpty()) // 4. Language tag
         m_nLanguage = LanguageTag::convertToLanguageTypeWithFallback(sToken);
     if (nToken >= 0 && !(sToken = rStr.getToken(0, ',', nToken)).isEmpty()) // 5. Include BOM?
-        m_bIncludeBOM = !(sToken.equalsIgnoreAsciiCase("FALSE"));
+        m_bIncludeBOM = !sToken.equalsIgnoreAsciiCase("FALSE");
 }
 
 void SwAsciiOptions::WriteUserData(OUString& rStr)

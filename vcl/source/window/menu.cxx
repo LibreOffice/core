@@ -2812,7 +2812,7 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::R
     if( pSFrom && pSFrom->IsMenuBar())
     {
         auto pMenuBarWindow = static_cast<MenuBarWindow*>(pSFrom->pWindow.get());
-        pMenuBarWindow->SetMBWHideAccel( !(pMenuBarWindow->GetMBWMenuKey()) );
+        pMenuBarWindow->SetMBWHideAccel( !pMenuBarWindow->GetMBWMenuKey() );
     }
 
     mpLayoutData.reset();

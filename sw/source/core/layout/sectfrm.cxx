@@ -2028,7 +2028,7 @@ SwLayoutFrame *SwFrame::GetPrevSctLeaf()
             // can have frame below it in the found layout leaf.
             // Thus, skipping zombie section frame, if possible.
             while ( pTmp && pTmp->IsSctFrame() &&
-                    !( static_cast<const SwSectionFrame*>(pTmp)->GetSection() ) &&
+                    ! static_cast<const SwSectionFrame*>(pTmp)->GetSection() &&
                     pTmp->GetNext()
                   )
             {
@@ -2036,7 +2036,7 @@ SwLayoutFrame *SwFrame::GetPrevSctLeaf()
             }
             if ( pTmp &&
                  ( !pTmp->IsSctFrame() ||
-                   ( static_cast<const SwSectionFrame*>(pTmp)->GetSection() )
+                   static_cast<const SwSectionFrame*>(pTmp)->GetSection()
                  )
                )
             {

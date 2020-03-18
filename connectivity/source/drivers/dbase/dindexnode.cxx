@@ -410,7 +410,7 @@ void ONDXPage::Delete(sal_uInt16 nNodePos)
         else
         {
             // merge with right neighbour
-            Merge(nParentNodePos + 1,((*aParent)[nParentNodePos + 1].GetChild(&rIndex,aParent)));
+            Merge(nParentNodePos + 1, (*aParent)[nParentNodePos + 1].GetChild(&rIndex,aParent));
             nParentNodePos++;
         }
         if (HasParent() && !(*aParent)[nParentNodePos].HasChild())

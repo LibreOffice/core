@@ -2123,11 +2123,11 @@ void ScTable::AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW
                     nIndex = 13;
             }
             // Body
-            if ((pData->IsEqualData(5, 6)) && (pData->IsEqualData(9, 10)) && (pData->IsEqualData(5, 9)))
+            if (pData->IsEqualData(5, 6) && pData->IsEqualData(9, 10) && pData->IsEqualData(5, 9))
                 AutoFormatArea(nStartCol + 1, nStartRow + 1, nEndCol-1, nEndRow - 1, *pPatternAttrs[5], nFormatNo);
             else
             {
-                if ((pData->IsEqualData(5, 9)) && (pData->IsEqualData(6, 10)))
+                if (pData->IsEqualData(5, 9) && pData->IsEqualData(6, 10))
                 {
                     nIndex = 5;
                     for (nCol = nStartCol + 1; nCol < nEndCol; nCol++)

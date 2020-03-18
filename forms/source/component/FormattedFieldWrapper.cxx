@@ -143,7 +143,7 @@ Any SAL_CALL OFormattedFieldWrapper::queryAggregation(const Type& _rType)
     {
         aReturn = OFormattedFieldWrapper_Base::queryAggregation(_rType);
 
-        if ((_rType.equals( cppu::UnoType<XServiceInfo>::get() ) ) && aReturn.hasValue())
+        if (_rType.equals( cppu::UnoType<XServiceInfo>::get() ) && aReturn.hasValue())
         {   // somebody requested an XServiceInfo interface and our base class provided it
             // check our aggregate if it has one, too
             ensureAggregate();

@@ -162,7 +162,7 @@ void StatusIndicatorFactory::reset(const css::uno::Reference< css::task::XStatus
     // But don't forget Reschedule!
     if (
         (xChild == xActive) &&
-        (xProgress.is()   )
+        xProgress.is()
        )
         xProgress->reset();
 
@@ -242,7 +242,7 @@ void StatusIndicatorFactory::setText(const css::uno::Reference< css::task::XStat
     // but don't forget to Reschedule!
     if (
         (xChild == xActive) &&
-        (xProgress.is()   )
+        xProgress.is()
        )
     {
         xProgress->setText(sText);
@@ -274,7 +274,7 @@ void StatusIndicatorFactory::setValue( const css::uno::Reference< css::task::XSt
     if (
         (xChild    == xActive) &&
         (nOldValue != nValue ) &&
-        (xProgress.is()      )
+        xProgress.is()
        )
     {
         xProgress->setValue(nValue);

@@ -1635,7 +1635,7 @@ std::unique_ptr<AddonsOptions_Impl::ImageEntry> AddonsOptions_Impl::ReadImageDat
             Image aImage;
             if (( aPropertyData[i] >>= aImageDataSeq ) &&
                 aImageDataSeq.hasElements() &&
-                ( CreateImageFromSequence( aImage, aImageDataSeq ) ) )
+                CreateImageFromSequence( aImage, aImageDataSeq ) )
             {
                 if ( !pEntry )
                     pEntry.reset(new ImageEntry);

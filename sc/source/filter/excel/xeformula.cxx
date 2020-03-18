@@ -173,7 +173,7 @@ XclExpFuncData::XclExpFuncData( const XclExpScToken& rTokData,
 {
     OSL_ENSURE( mrTokData.mpScToken, "XclExpFuncData::XclExpFuncData - missing core token" );
     // set name of an add-in function
-    if( (maExtFuncData.maFuncName.isEmpty()) && dynamic_cast< const FormulaExternalToken* >( mrTokData.mpScToken ) )
+    if( maExtFuncData.maFuncName.isEmpty() && dynamic_cast< const FormulaExternalToken* >( mrTokData.mpScToken ) )
         maExtFuncData.Set( GetScToken().GetExternal(), true, false );
 }
 

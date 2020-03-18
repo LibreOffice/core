@@ -96,7 +96,7 @@ public:
 
     bool            operator==( const Wallpaper& rWallpaper ) const;
     bool            operator!=( const Wallpaper& rWallpaper ) const
-                        { return !(Wallpaper::operator==( rWallpaper )); }
+                        { return !Wallpaper::operator==( rWallpaper ); }
 
     bool            IsEmpty() const
     {

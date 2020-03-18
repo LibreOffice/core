@@ -127,7 +127,7 @@ IMPL_LINK_NOARG( NumberFormatPropertyPanel, NumFormatValueHdl, weld::SpinButton&
                             : (mxEdDenominator->get_sensitive() && mxEdDenominator->get_visible())
                                 ? static_cast<sal_uInt16>(mxEdDenominator->get_value())
                                 : sal_uInt16(0);
-    sal_uInt16  nLeadZeroes = (mxEdLeadZeroes->get_sensitive())
+    sal_uInt16  nLeadZeroes = mxEdLeadZeroes->get_sensitive()
                             ? static_cast<sal_uInt16>(mxEdLeadZeroes->get_value())
                             : sal_uInt16(0);
 

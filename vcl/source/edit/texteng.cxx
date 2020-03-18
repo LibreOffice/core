@@ -874,7 +874,7 @@ tools::Rectangle TextEngine::GetEditCursor( const TextPaM& rPaM, bool bSpecial, 
     TextLine* pLine = nullptr;
     for (TextLine & rTmpLine : pPortion->GetLines())
     {
-        if ( ( rTmpLine.GetStart() == rPaM.GetIndex() ) || ( rTmpLine.IsIn( rPaM.GetIndex(), bSpecial ) ) )
+        if ( ( rTmpLine.GetStart() == rPaM.GetIndex() ) || rTmpLine.IsIn( rPaM.GetIndex(), bSpecial ) )
         {
             pLine = &rTmpLine;
             break;
@@ -1800,7 +1800,7 @@ void TextEngine::RecalcTextPortion( sal_uInt32 nPara, sal_Int32 nStartPos, sal_I
         // before nStartPos => a new Portion starts.
         // Otherwise the Portion is extended at nStartPos.
         // Or if at the very beginning ( StartPos 0 ) followed by a tab...
-        if ( ( pNode->GetCharAttribs().HasBoundingAttrib( nStartPos ) ) ||
+        if ( pNode->GetCharAttribs().HasBoundingAttrib( nStartPos ) ||
              ( nStartPos && ( pNode->GetText()[ nStartPos - 1 ] == '\t' ) ) ||
              ( !nStartPos && ( nNewChars < pNode->GetText().getLength() ) && pNode->GetText()[ nNewChars ] == '\t' ) )
         {

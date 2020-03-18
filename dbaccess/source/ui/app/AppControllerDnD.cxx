@@ -670,7 +670,7 @@ bool OApplicationController::paste( ElementType _eType, const svx::ODataAccessDe
 
                 DynamicTableOrQueryNameCheck aNameChecker( getConnection(), CommandType::QUERY );
                 ::dbtools::SQLExceptionInfo aDummy;
-                bool bNeedAskForName =  ( sCommand.isEmpty() )
+                bool bNeedAskForName =  sCommand.isEmpty()
                                             /* we did not have a source name, so the target name was auto-generated */
                                     ||  ( !aNameChecker.isNameValid( sTargetName, aDummy ) );
                                             /*  name is invalid in the target DB (e.g. because it already

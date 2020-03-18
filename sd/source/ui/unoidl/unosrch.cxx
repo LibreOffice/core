@@ -329,7 +329,7 @@ uno::Reference< css::uno::XInterface > SAL_CALL SdUnoSearchReplaceShape::findNex
                         xCurrentShape = nullptr;
 
                     xRange.set( xCurrentShape, uno::UNO_QUERY );
-                    if(!(xCurrentShape.is() && (xRange.is())))
+                    if(!(xCurrentShape.is() && xRange.is()))
                         xRange = nullptr;
                 }
                 else

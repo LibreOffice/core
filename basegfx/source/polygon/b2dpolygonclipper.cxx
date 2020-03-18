@@ -632,19 +632,19 @@ namespace basegfx::utils
 
                 sp[0].nx = +1.0;
                 sp[0].ny = +0.0;
-                sp[0].d = -(rRange.getMinX());
+                sp[0].d = -rRange.getMinX();
                 sp[0].clipmask = (RectClipFlags::LEFT << 4) | RectClipFlags::LEFT; // 0001 0001
                 sp[1].nx = -1.0;
                 sp[1].ny = +0.0;
-                sp[1].d = +(rRange.getMaxX());
+                sp[1].d = rRange.getMaxX();
                 sp[1].clipmask = (RectClipFlags::RIGHT << 4) | RectClipFlags::RIGHT; // 0010 0010
                 sp[2].nx = +0.0;
                 sp[2].ny = +1.0;
-                sp[2].d = -(rRange.getMinY());
+                sp[2].d = -rRange.getMinY();
                 sp[2].clipmask = (RectClipFlags::TOP << 4) | RectClipFlags::TOP; // 0100 0100
                 sp[3].nx = +0.0;
                 sp[3].ny = -1.0;
-                sp[3].d = +(rRange.getMaxY());
+                sp[3].d = rRange.getMaxY();
                 sp[3].clipmask = (RectClipFlags::BOTTOM << 4) | RectClipFlags::BOTTOM; // 1000 1000
 
                 // retrieve the number of vertices of the triangulated polygon
@@ -757,7 +757,7 @@ namespace basegfx::utils
                         stack[2] = rCandidate.getB2DPoint(nIndex);
 
                         // clipping judgement
-                        clipflag |= unsigned(!(rRange.isInside(stack[2])));
+                        clipflag |= unsigned(!rRange.isInside(stack[2]));
 
                         if(nIndex > 1)
                         {

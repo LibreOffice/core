@@ -1076,20 +1076,20 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
                 if(SfxItemState::DEFAULT <= pDispatch->QueryState(SID_ATTR_LANGUAGE, pItem))
                     pRet->Put(
                         SvxLanguageItem(
-                            (static_cast<const SvxLanguageItem*>(pItem)
-                             ->GetLanguage()),
+                            static_cast<const SvxLanguageItem*>(pItem)
+                             ->GetLanguage(),
                             SID_ATTR_LANGUAGE));
                 if(SfxItemState::DEFAULT <= pDispatch->QueryState(SID_ATTR_CHAR_CJK_LANGUAGE, pItem))
                     pRet->Put(
                         SvxLanguageItem(
-                            (static_cast<const SvxLanguageItem*>(pItem)
-                             ->GetLanguage()),
+                            static_cast<const SvxLanguageItem*>(pItem)
+                             ->GetLanguage(),
                             SID_ATTR_CHAR_CJK_LANGUAGE));
                 if(SfxItemState::DEFAULT <= pDispatch->QueryState(SID_ATTR_CHAR_CTL_LANGUAGE, pItem))
                     pRet->Put(
                         SvxLanguageItem(
-                            (static_cast<const SvxLanguageItem*>(pItem)
-                             ->GetLanguage()),
+                            static_cast<const SvxLanguageItem*>(pItem)
+                             ->GetLanguage(),
                             SID_ATTR_CHAR_CTL_LANGUAGE));
 
                 pRet->Put(aHyphen);

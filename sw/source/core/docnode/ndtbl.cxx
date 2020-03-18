@@ -1203,7 +1203,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
             {
                 assert(SwNodeIndex(*pPrev, +1) == rCell.aStart);
                 SwPaM pam(rCell.aStart, 0, *pPrev,
-                        (pPrev->GetNode().IsContentNode())
+                        pPrev->GetNode().IsContentNode()
                             ? pPrev->GetNode().GetContentNode()->Len() : 0);
                 rIDRA.SplitRedline(pam);
                 pPrev = &rCell.aEnd;
@@ -1211,7 +1211,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
         }
         // another one to break between last cell and node after table
         SwPaM pam(SwNodeIndex(*pPrev, +1), 0, *pPrev,
-                    (pPrev->GetNode().IsContentNode())
+                    pPrev->GetNode().IsContentNode()
                         ? pPrev->GetNode().GetContentNode()->Len() : 0);
         rIDRA.SplitRedline(pam);
     }

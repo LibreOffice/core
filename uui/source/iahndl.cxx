@@ -165,7 +165,7 @@ UUIInteractionHelper::handleRequest(
         Link<void*,void> aLink(&aHD,handlerequest);
         Application::PostUserEvent(aLink,this);
         comphelper::SolarMutex& rSolarMutex = Application::GetSolarMutex();
-        sal_uInt32 nLockCount = (rSolarMutex.IsCurrentThread()) ? rSolarMutex.release(true) : 0;
+        sal_uInt32 nLockCount = rSolarMutex.IsCurrentThread() ? rSolarMutex.release(true) : 0;
         aHD.wait();
         if (nLockCount)
             rSolarMutex.acquire(nLockCount);
@@ -216,7 +216,7 @@ UUIInteractionHelper::getStringFromRequest(
         Link<void*,void> aLink(&aHD,getstringfromrequest);
         Application::PostUserEvent(aLink,this);
         comphelper::SolarMutex& rSolarMutex = Application::GetSolarMutex();
-        sal_uInt32 nLockCount = (rSolarMutex.IsCurrentThread()) ? rSolarMutex.release(true) : 0;
+        sal_uInt32 nLockCount = rSolarMutex.IsCurrentThread() ? rSolarMutex.release(true) : 0;
         aHD.wait();
         if (nLockCount)
             rSolarMutex.acquire(nLockCount);

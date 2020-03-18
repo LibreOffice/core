@@ -281,7 +281,7 @@ void ScrollableWindow::Scroll( long nDeltaX, long nDeltaY, ScrollFlags )
     // scrolling horizontally?
     if ( nDeltaX != 0 )
     {
-        aNewPixOffset.AdjustX( -(aDeltaPix.Width()) );
+        aNewPixOffset.AdjustX( -aDeltaPix.Width() );
         if ( ( aOutPixSz.Width() - aNewPixOffset.X() ) > aTotPixSz.Width() )
             aNewPixOffset.setX( - ( aTotPixSz.Width() - aOutPixSz.Width() ) );
         else if ( aNewPixOffset.X() > 0 )
@@ -291,7 +291,7 @@ void ScrollableWindow::Scroll( long nDeltaX, long nDeltaY, ScrollFlags )
     // scrolling vertically?
     if ( nDeltaY != 0 )
     {
-        aNewPixOffset.AdjustY( -(aDeltaPix.Height()) );
+        aNewPixOffset.AdjustY( -aDeltaPix.Height() );
         if ( ( aOutPixSz.Height() - aNewPixOffset.Y() ) > aTotPixSz.Height() )
             aNewPixOffset.setY( - ( aTotPixSz.Height() - aOutPixSz.Height() ) );
         else if ( aNewPixOffset.Y() > 0 )

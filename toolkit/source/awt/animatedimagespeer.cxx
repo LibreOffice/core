@@ -207,7 +207,7 @@ namespace toolkit
                     for ( size_t nImageSet = 0; nImageSet < nImageSetCount; ++nImageSet )
                     {
                         ::std::vector< CachedImage > const& rImageSet( i_data.aCachedImageSets[ nImageSet ] );
-                        if  (   ( rImageSet.empty() )
+                        if  (   rImageSet.empty()
                             ||  ( !lcl_ensureImage_throw( xGraphicProvider, isHighContrast, rImageSet[0] ) )
                             )
                         {

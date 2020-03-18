@@ -6125,7 +6125,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
     Point aAlignOffset;
     if ( eAlign == ALIGN_BOTTOM )
-        aAlignOffset.AdjustY( -(aRefDevFontMetric.GetDescent()) );
+        aAlignOffset.AdjustY( -aRefDevFontMetric.GetDescent() );
     else if ( eAlign == ALIGN_TOP )
         aAlignOffset.AdjustY(aRefDevFontMetric.GetAscent() );
     if( aAlignOffset.X() || aAlignOffset.Y() )
@@ -6296,7 +6296,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     aOffset += Point( nEmphWidth2, nEmphHeight2 );
 
     if ( eAlign == ALIGN_BOTTOM )
-        aOffset.AdjustY( -(GetFontInstance()->mxFontMetric->GetDescent()) );
+        aOffset.AdjustY( -GetFontInstance()->mxFontMetric->GetDescent() );
     else if ( eAlign == ALIGN_TOP )
         aOffset.AdjustY(GetFontInstance()->mxFontMetric->GetAscent() );
 

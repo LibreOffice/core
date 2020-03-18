@@ -2179,7 +2179,7 @@ namespace svt::table
 
     ColPos TableControl_Impl::impl_getColumnForOrdinate( long const i_ordinate ) const
     {
-        if ( ( m_aColumnWidths.empty() ) || ( i_ordinate < 0 ) )
+        if ( m_aColumnWidths.empty() || ( i_ordinate < 0 ) )
             return COL_INVALID;
 
         if ( i_ordinate < m_nRowHeaderWidthPixel )

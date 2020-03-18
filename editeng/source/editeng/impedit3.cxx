@@ -653,12 +653,12 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     bool bQuickFormat = false;
     if ( !bEmptyNodeWithPolygon && !HasScriptType( nPara, i18n::ScriptType::COMPLEX ) )
     {
-        if ( ( pParaPortion->IsSimpleInvalid() ) && ( nInvalidDiff > 0 ) &&
+        if ( pParaPortion->IsSimpleInvalid() && ( nInvalidDiff > 0 ) &&
              ( pNode->GetString().indexOf( CH_FEATURE, nInvalidStart ) > nInvalidEnd ) )
         {
             bQuickFormat = true;
         }
-        else if ( ( pParaPortion->IsSimpleInvalid() ) && ( nInvalidDiff < 0 ) )
+        else if ( pParaPortion->IsSimpleInvalid() && ( nInvalidDiff < 0 ) )
         {
             // check if delete over the portion boundaries was done...
             sal_Int32 nStart = nInvalidStart;  // DOUBLE !!!!!!!!!!!!!!!
@@ -2826,7 +2826,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
         // Font is not restored...
     }
 
-    if ( ( ( rFont.GetColor() == COL_AUTO ) || ( IsForceAutoColor() ) ) && pOut )
+    if ( ( ( rFont.GetColor() == COL_AUTO ) || IsForceAutoColor() ) && pOut )
     {
         // #i75566# Do not use AutoColor when printing OR Pdf export
         const bool bPrinting(OUTDEV_PRINTER == pOut->GetOutDevType());
@@ -3018,7 +3018,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
             else
             {
                 if( IsTopToBottom() )
-                    aStartPos.AdjustX( -(pPortion->GetFirstLineOffset()) );
+                    aStartPos.AdjustX( -pPortion->GetFirstLineOffset() );
                 else
                     aStartPos.AdjustX(pPortion->GetFirstLineOffset() );
             }
@@ -3049,14 +3049,14 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                     if ( IsTopToBottom() )
                     {
                         aTmpPos.AdjustY(pLine->GetStartPosX() );
-                        aTmpPos.AdjustX( -(pLine->GetMaxAscent()) );
-                        aStartPos.AdjustX( -(pLine->GetHeight()) );
+                        aTmpPos.AdjustX( -pLine->GetMaxAscent() );
+                        aStartPos.AdjustX( -pLine->GetHeight() );
                         if (nLine != nLastLine)
                             aStartPos.AdjustX( -nVertLineSpacing );
                     }
                     else
                     {
-                        aTmpPos.AdjustY( -(pLine->GetStartPosX()) );
+                        aTmpPos.AdjustY( -pLine->GetStartPosX() );
                         aTmpPos.AdjustX(pLine->GetMaxAscent() );
                         aStartPos.AdjustX(pLine->GetHeight() );
                         if (nLine != nLastLine)
@@ -3238,7 +3238,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                                     }
                                                     else
                                                     {
-                                                        aBottomRightRectPos.AdjustX( -(pLine->GetHeight()) );
+                                                        aBottomRightRectPos.AdjustX( -pLine->GetHeight() );
                                                         aBottomRightRectPos.AdjustY(2 * nHalfBlankWidth );
                                                     }
                                                 }
@@ -3598,7 +3598,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                         if ( bDrawFrame )
                                         {
                                             Point aTopLeft( aTmpPos );
-                                            aTopLeft.AdjustY( -(pLine->GetMaxAscent()) );
+                                            aTopLeft.AdjustY( -pLine->GetMaxAscent() );
                                             if ( nOrientation )
                                                 aTopLeft = lcl_ImplCalcRotatedPos( aTopLeft, aOrigin, nSin, nCos );
                                             tools::Rectangle aRect( aTopLeft, rTextPortion.GetSize() );
@@ -3618,7 +3618,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                                     if ( auto pUrlField = dynamic_cast< const SvxURLField* >( pFieldData ) )
                                                     {
                                                         Point aTopLeft( aTmpPos );
-                                                        aTopLeft.AdjustY( -(pLine->GetMaxAscent()) );
+                                                        aTopLeft.AdjustY( -pLine->GetMaxAscent() );
 
                                                         tools::Rectangle aRect( aTopLeft, rTextPortion.GetSize() );
                                                         vcl::PDFExtOutDevBookmarkEntry aBookmark;
@@ -3859,8 +3859,8 @@ void ImpEditEngine::Paint( ImpEditView* pView, const tools::Rectangle& rRect, Ou
     if ( !IsVertical() )
     {
         aStartPos = pView->GetOutputArea().TopLeft();
-        aStartPos.AdjustX( -(pView->GetVisDocLeft()) );
-        aStartPos.AdjustY( -(pView->GetVisDocTop()) );
+        aStartPos.AdjustX( -pView->GetVisDocLeft() );
+        aStartPos.AdjustY( -pView->GetVisDocTop() );
     }
     else
     {
@@ -3868,12 +3868,12 @@ void ImpEditEngine::Paint( ImpEditView* pView, const tools::Rectangle& rRect, Ou
         {
             aStartPos = pView->GetOutputArea().TopRight();
             aStartPos.AdjustX(pView->GetVisDocTop() );
-            aStartPos.AdjustY( -(pView->GetVisDocLeft()) );
+            aStartPos.AdjustY( -pView->GetVisDocLeft() );
         }
         else
         {
             aStartPos = pView->GetOutputArea().BottomLeft();
-            aStartPos.AdjustX( -(pView->GetVisDocTop()) );
+            aStartPos.AdjustX( -pView->GetVisDocTop() );
             aStartPos.AdjustY(pView->GetVisDocLeft() );
         }
     }

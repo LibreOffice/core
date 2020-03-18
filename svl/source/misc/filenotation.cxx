@@ -50,7 +50,7 @@ namespace svt
 
         m_sSystem = _rSystemPath;
         if  (  ( osl_File_E_None != osl_getFileURLFromSystemPath( m_sSystem.pData, &m_sFileURL.pData ) )
-            && ( m_sFileURL.isEmpty() )
+            && m_sFileURL.isEmpty()
             )
         {
             if ( !_rSystemPath.isEmpty() )

@@ -297,7 +297,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
 
     Reference<rdf::XDocumentMetadataAccess> CreateDMAUninitialized()
     {
-        return (m_pObjectShell.is())
+        return m_pObjectShell.is()
             ? new ::sfx2::DocumentMetadataAccess(
                 ::comphelper::getProcessComponentContext(), *m_pObjectShell)
             : nullptr;
@@ -4183,7 +4183,7 @@ Reference< frame::XController2 > SAL_CALL SfxBaseModel::createViewController(
     // determine previous shell (used in some special cases)
     Reference< XController > xPreviousController( i_rFrame->getController() );
     const Reference< XModel > xMe( this );
-    if  (   ( xPreviousController.is() )
+    if  (   xPreviousController.is()
         &&  ( xMe != xPreviousController->getModel() )
         )
     {

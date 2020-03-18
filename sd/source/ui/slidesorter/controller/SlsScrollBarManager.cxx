@@ -338,9 +338,9 @@ void ScrollBarManager::SetWindowOrigin (
     // Adapt the remaining space accordingly.
     ::tools::Rectangle aRemainingSpace (rAvailableArea);
     if (bShowVertical)
-        aRemainingSpace.AdjustRight( -(mpVerticalScrollBar->GetSizePixel().Width()) );
+        aRemainingSpace.AdjustRight( -mpVerticalScrollBar->GetSizePixel().Width() );
     if (bShowHorizontal)
-        aRemainingSpace.AdjustBottom( -(mpHorizontalScrollBar->GetSizePixel().Height()) );
+        aRemainingSpace.AdjustBottom( -mpHorizontalScrollBar->GetSizePixel().Height() );
 
     return aRemainingSpace;
 }
@@ -356,9 +356,9 @@ bool ScrollBarManager::TestScrollBarVisibilities (
     // visible in this combination.
     Size aBrowserSize (rAvailableArea.GetSize());
     if (bHorizontalScrollBarVisible)
-        aBrowserSize.AdjustHeight( -(mpHorizontalScrollBar->GetSizePixel().Height()) );
+        aBrowserSize.AdjustHeight( -mpHorizontalScrollBar->GetSizePixel().Height() );
     if (bVerticalScrollBarVisible)
-        aBrowserSize.AdjustWidth( -(mpVerticalScrollBar->GetSizePixel().Width()) );
+        aBrowserSize.AdjustWidth( -mpVerticalScrollBar->GetSizePixel().Width() );
 
     // Tell the view to rearrange its page objects and check whether the
     // page objects can be shown without clipping.

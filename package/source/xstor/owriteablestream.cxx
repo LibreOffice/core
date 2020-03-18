@@ -1245,7 +1245,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
     }
     else if ( ( nStreamMode & embed::ElementModes::READWRITE ) == embed::ElementModes::SEEKABLEREAD )
     {
-        if ( !m_xCacheStream.is() && m_aTempURL.isEmpty() && !( m_xPackageStream->getDataStream().is() ) )
+        if ( !m_xCacheStream.is() && m_aTempURL.isEmpty() && !m_xPackageStream->getDataStream().is() )
         {
             // The stream does not exist in the storage
             throw io::IOException();
@@ -1293,7 +1293,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
         }
         else if ( !m_bHasInsertedStreamOptimization )
         {
-            if ( m_aTempURL.isEmpty() && !m_xCacheStream.is() && !( m_xPackageStream->getDataStream().is() ) )
+            if ( m_aTempURL.isEmpty() && !m_xCacheStream.is() && !m_xPackageStream->getDataStream().is() )
             {
                 // The stream does not exist in the storage
                 m_bHasDataToFlush = true;

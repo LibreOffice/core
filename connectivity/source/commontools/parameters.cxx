@@ -586,7 +586,7 @@ namespace dbtools
                 // do we, for this name, know where to place the values?
                 ParameterInformation::const_iterator aParamInfo = m_aParameterInformation.find( *pDetailFields );
                 if  (  ( aParamInfo == m_aParameterInformation.end() )
-                    || ( aParamInfo->second.aInnerIndexes.empty() )
+                    || aParamInfo->second.aInnerIndexes.empty()
                     )
                 {
                     SAL_WARN( "connectivity.commontools", "ParameterManager::fillLinkedParameters: nothing known about this detail field!" );
@@ -910,7 +910,7 @@ namespace dbtools
                 // parameter column
                 ParameterInformation::const_iterator aParamInfo = m_aParameterInformation.find( *pDetailFields );
                 if  (  ( aParamInfo == m_aParameterInformation.end() )
-                    || ( aParamInfo->second.aInnerIndexes.empty() )
+                    || aParamInfo->second.aInnerIndexes.empty()
                     )
                 {
                     SAL_WARN( "connectivity.commontools", "ParameterManager::resetParameterValues: nothing known about this detail field!" );

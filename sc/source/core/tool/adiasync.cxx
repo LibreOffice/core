@@ -130,7 +130,7 @@ void ScAddInAsync::RemoveDocument( ScDocument* pDocumentP )
             p->erase( iter2 );
             if ( p->empty() )
             {   // this AddIn is not used anymore
-                theAddInAsyncTbl.erase( --(iter1.base()) );
+                theAddInAsyncTbl.erase( --iter1.base() );
             }
         }
     }

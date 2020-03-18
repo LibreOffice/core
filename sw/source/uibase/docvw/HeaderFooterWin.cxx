@@ -390,7 +390,7 @@ bool SwHeaderFooterWin::IsEmptyHeaderFooter( ) const
     const SwPageDesc* pDesc = GetPageFrame()->GetPageDesc();
 
     bool const bFirst(GetPageFrame()->OnFirstPage());
-    const SwFrameFormat *const pFormat = (GetPageFrame()->OnRightPage())
+    const SwFrameFormat *const pFormat = GetPageFrame()->OnRightPage()
         ? pDesc->GetRightFormat(bFirst)
         : pDesc->GetLeftFormat(bFirst);
 

@@ -168,7 +168,7 @@ public:
     }
     bool operator!=(const Color& rColor) const
     {
-        return !(Color::operator==(rColor));
+        return !Color::operator==(rColor);
     }
 
     // Return color as RGB hex string

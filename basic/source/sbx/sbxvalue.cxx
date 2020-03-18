@@ -999,7 +999,7 @@ bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
                             bOk = ( *(aL.pDecimal) -= *(aR.pDecimal) );
                             break;
                         case SbxNEG:
-                            bOk = ( aL.pDecimal->neg() );
+                            bOk = aL.pDecimal->neg();
                             break;
                         default:
                             SetError( ERRCODE_BASIC_BAD_ARGUMENT );

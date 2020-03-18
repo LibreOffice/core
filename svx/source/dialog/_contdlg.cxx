@@ -135,12 +135,12 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
             if( fWH <= 1.0 )
             {
                 aSizePix.setHeight(512);
-                aSizePix.setWidth( FRound( ( aSizePix.Height() ) * fWH ) );
+                aSizePix.setWidth( FRound( aSizePix.Height() * fWH ) );
             }
             else
             {
                 aSizePix.setWidth(512);
-                aSizePix.setHeight( FRound( ( aSizePix.Width() ) / fWH ) );
+                aSizePix.setHeight( FRound( aSizePix.Width() / fWH ) );
             }
         }
 

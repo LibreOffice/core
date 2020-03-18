@@ -2792,7 +2792,7 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const OUString& aPropertyName )
         }
         else if ( aPropertyName == SC_UNO_ISADJUSTHEIGHTENABLED )
         {
-            aRet <<= !( rDoc.IsAdjustHeightLocked() );
+            aRet <<= ! rDoc.IsAdjustHeightLocked();
         }
         else if ( aPropertyName == SC_UNO_ISEXECUTELINKENABLED )
         {

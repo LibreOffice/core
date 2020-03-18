@@ -229,7 +229,7 @@ bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFo
         SwTextAttr *pTextAttr;
         // While we've not reached the end of the StartArray && the TextAttribute starts at position 0...
         while ((m_nStartIndex < pHints->Count()) &&
-               !((pTextAttr = pHints->Get(m_nStartIndex))->GetStart()))
+               !(pTextAttr = pHints->Get(m_nStartIndex))->GetStart())
         {
             // open the TextAttributes
             Chg( pTextAttr );

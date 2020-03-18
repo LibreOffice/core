@@ -126,7 +126,7 @@ IMPL_LINK_NOARG(OSplitterView, ResizeHdl, void*, void)
         aSplitPos.setX( aPlaygroundPos.X() );
         aSplitSize.setWidth( aPlaygroundSize.Width() );
 
-        if( ( aSplitPos.Y() + aSplitSize.Height() ) > ( aPlaygroundSize.Height() ))
+        if( ( aSplitPos.Y() + aSplitSize.Height() ) > aPlaygroundSize.Height() )
             aSplitPos.setY( aPlaygroundSize.Height() - aSplitSize.Height() );
 
         if( aSplitPos.Y() <= aPlaygroundPos.Y() )

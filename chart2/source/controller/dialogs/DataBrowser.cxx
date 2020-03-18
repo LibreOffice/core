@@ -1337,7 +1337,7 @@ void DataBrowser::ImplAdjustHeaderControls()
         if( (*aIt)->GetStartColumn() == i )
             nStartPos = nCurrentPos;
 
-        nCurrentPos += (GetColumnWidth( i ));
+        nCurrentPos += GetColumnWidth( i );
 
         if( (*aIt)->GetEndColumn() == i )
         {

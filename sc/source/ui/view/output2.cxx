@@ -1923,7 +1923,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                             // except when font size is from conditional formatting.
                             if ( eType != OUTTYPE_PRINTER ||
                                     ( mpDoc->GetRowFlags( nCellY, nTab ) & CRFlags::ManualSize ) ||
-                                    ( aVars.HasCondHeight() ) )
+                                    aVars.HasCondHeight() )
                                 bVClip = true;
                         }
 
@@ -1990,7 +1990,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
 
                             //  redo text width adjustment in logic units
                             if (bRightAdjusted)
-                                aDrawTextPos.AdjustX( -(aVars.GetOriginalWidth()) );
+                                aDrawTextPos.AdjustX( -aVars.GetOriginalWidth() );
                         }
 
                         // in Metafiles always use DrawTextArray to ensure that positions are
@@ -4226,7 +4226,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
 
         // with SetVertical, the start position is top left of
         // the whole output area, not the text itself
-        aLogicStart.AdjustX( -(rParam.mpEngine->GetPaperSize().Width()) );
+        aLogicStart.AdjustX( -rParam.mpEngine->GetPaperSize().Width() );
 
         rParam.mpEngine->Draw(mpDev, aLogicStart);
     }
@@ -4953,8 +4953,8 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 if ( bLayoutRTL )
                                 {
                                     if (bPixelToLogic)
-                                        aLogicStart.AdjustX( -(mpRefDevice->PixelToLogic(
-                                                        Size( nCellWidth, 0 ) ).Width()) );
+                                        aLogicStart.AdjustX( -mpRefDevice->PixelToLogic(
+                                                        Size( nCellWidth, 0 ) ).Width() );
                                     else
                                         aLogicStart.AdjustX( -nCellWidth );
                                 }

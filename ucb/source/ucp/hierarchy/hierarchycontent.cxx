@@ -737,7 +737,7 @@ void HierarchyContent::queryChildren( HierarchyContentRefVector& rChildren )
 
         // Is aURL a prefix of aChildURL?
         if ( ( aChildURL.getLength() > nLen ) &&
-             ( aChildURL.startsWith( aURL ) ) )
+             aChildURL.startsWith( aURL ) )
         {
             sal_Int32 nPos = aChildURL.indexOf( '/', nLen );
 

@@ -161,7 +161,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
                                             sRightName.isEmpty() &&
                                             (
                                                 (! xParentFrame.is() )    ||
-                                                (  xDesktop.is()     )
+                                                xDesktop.is()
                                             )
                                          );
     if (bTopLevelDocumentWindow)

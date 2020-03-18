@@ -1115,8 +1115,8 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
         }
         else
         {
-            aMousePos.AdjustX( -(maFrameData.maMouseOff.X()) );
-            aMousePos.AdjustY( -(maFrameData.maMouseOff.Y()) );
+            aMousePos.AdjustX( -maFrameData.maMouseOff.X() );
+            aMousePos.AdjustY( -maFrameData.maMouseOff.Y() );
 
             if ( maFrameData.mnHitTest & BorderWindowHitTest::Title )
             {

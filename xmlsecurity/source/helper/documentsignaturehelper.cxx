@@ -216,7 +216,7 @@ DocumentSignatureHelper::CreateElementList(
                     const Sequence< OUString > aElementNames = rxStore->getElementNames();
                     for ( const auto& rName : aElementNames )
                     {
-                        if ( ( rName.match( "Object " ) ) && rxStore->isStorageElement( rName ) )
+                        if ( rName.match( "Object " ) && rxStore->isStorageElement( rName ) )
                         {
                             Reference < css::embed::XStorage > xTmpSubStore = rxStore->openStorageElement( rName, css::embed::ElementModes::READ );
                             ImplFillElementList(aElements, xTmpSubStore, rName+aSep, true, mode);

@@ -587,7 +587,7 @@ void CustomAnimationPane::updateControls()
                 mpLBProperty->setSubControl( nullptr );
             }
 
-            bool bEnable = (pSubControl != nullptr) && (pSubControl->getControl()->IsEnabled());
+            bool bEnable = (pSubControl != nullptr) && pSubControl->getControl()->IsEnabled();
             mpLBProperty->Enable( bEnable );
             mpFTProperty->Enable( bEnable );
         }
@@ -715,7 +715,7 @@ void CustomAnimationPane::updateControls()
             {
                 ++aIter;
             }
-            while( (aIter != mpMainSequence->getEnd()) && !(mpCustomAnimationList->isExpanded(*aIter) ) );
+            while( (aIter != mpMainSequence->getEnd()) && !mpCustomAnimationList->isExpanded(*aIter) );
 
             if( aIter == mpMainSequence->getEnd() )
                 bEnableDown = false;
@@ -1971,7 +1971,7 @@ double CustomAnimationPane::getDuration() const
 {
     double fDuration = 0;
 
-    if(!(mpCBXDuration->GetText()).isEmpty())
+    if(!mpCBXDuration->GetText().isEmpty())
     {
         fDuration = static_cast<double>(mpCBXDuration->GetValue())/100.0;
     }
@@ -2162,7 +2162,7 @@ IMPL_LINK_NOARG(CustomAnimationPane, UpdateAnimationLB, ListBox&, void)
 
 IMPL_LINK_NOARG(CustomAnimationPane, DurationModifiedHdl, Edit&, void)
 {
-    if(!(mpCBXDuration->GetText()).isEmpty() )
+    if(!mpCBXDuration->GetText().isEmpty() )
     {
         double duration_value = static_cast<double>(mpCBXDuration->GetValue());
         if(duration_value <= 0.0)

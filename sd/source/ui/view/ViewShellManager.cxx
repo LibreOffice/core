@@ -714,7 +714,7 @@ void ViewShellManager::Implementation::UpdateShellStack()
     CreateShells();
 
     // Update the pointer to the top-most active view shell.
-    mpTopViewShell = (maActiveViewShells.empty())
+    mpTopViewShell = maActiveViewShells.empty()
         ? nullptr : maActiveViewShells.begin()->mpShell;
 
 

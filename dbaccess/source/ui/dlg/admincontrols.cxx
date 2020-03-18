@@ -177,19 +177,19 @@ namespace dbaui
             return false;
 
         if  (   m_xHostPortRadio->get_active()
-            &&  (   ( m_xHostName->get_text().isEmpty() )
-                ||  ( m_xPort->get_text().isEmpty() )
+            &&  (   m_xHostName->get_text().isEmpty()
+                ||  m_xPort->get_text().isEmpty()
                 )
             )
             return false;
 
 #ifdef UNX
-        if  (   ( m_xSocketRadio->get_active() )
-            &&  ( m_xSocket->get_text().isEmpty() )
+        if  (   m_xSocketRadio->get_active()
+            &&  m_xSocket->get_text().isEmpty()
             )
 #else
-        if  (   ( m_xNamedPipeRadio->get_active() )
-            &&  ( m_xNamedPipe->get_text().isEmpty() )
+        if  (   m_xNamedPipeRadio->get_active()
+            &&  m_xNamedPipe->get_text().isEmpty()
             )
 #endif
             return false;

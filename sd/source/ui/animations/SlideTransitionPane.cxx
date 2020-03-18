@@ -819,7 +819,7 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
 
     //duration
 
-    if( mxCBX_duration->get_sensitive() && (!(mxCBX_duration->get_text()).isEmpty()) )
+    if( mxCBX_duration->get_sensitive() && (!mxCBX_duration->get_text().isEmpty()) )
     {
         aResult.mfDuration = static_cast<double>(mxCBX_duration->get_value(FieldUnit::SECOND))/100.0;
         aResult.mbDurationAmbiguous = false;

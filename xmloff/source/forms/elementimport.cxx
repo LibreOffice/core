@@ -1994,7 +1994,7 @@ namespace xmloff
             sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName, &sLocalName );
 
             if  (   ( nPrefix == OAttributeMetaData::getCommonControlAttributeNamespace( CCAFlags::TargetLocation ) )
-                &&  ( sLocalName.equalsAscii( OAttributeMetaData::getCommonControlAttributeName( CCAFlags::TargetLocation ) ) )
+                &&  sLocalName.equalsAscii( OAttributeMetaData::getCommonControlAttributeName( CCAFlags::TargetLocation ) )
                 )
             {
                 OUString sValue = _xAttrList->getValueByIndex( i );

@@ -619,7 +619,7 @@ void MenuBarWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16
     size_t nCount = m_pMenu->pItemList->size();
 
     Size aOutputSize = GetOutputSizePixel();
-    aOutputSize.AdjustWidth( -(m_aCloseBtn->GetSizePixel().Width()) );
+    aOutputSize.AdjustWidth( -m_aCloseBtn->GetSizePixel().Width() );
 
     for (size_t n = 0; n < nCount; n++)
     {
@@ -920,7 +920,7 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     }
 
     // shrink the area of the buttons
-    aOutputSize.AdjustWidth( -(m_aCloseBtn->GetSizePixel().Width()) );
+    aOutputSize.AdjustWidth( -m_aCloseBtn->GetSizePixel().Width() );
 
     pBuffer->SetFillColor(rStyleSettings.GetMenuColor());
     m_pMenu->ImplPaint(*pBuffer, aOutputSize, 0);

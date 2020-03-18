@@ -229,7 +229,7 @@ SvTreeListEntry* SvTreeListEntry::PrevSibling() const
 SvTreeListEntry* SvTreeListEntry::LastSibling() const
 {
     SvTreeListEntries& rChildren = pParent->m_Children;
-    return (rChildren.empty()) ? nullptr : rChildren.back().get();
+    return rChildren.empty() ? nullptr : rChildren.back().get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

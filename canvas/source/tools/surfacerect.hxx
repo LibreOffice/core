@@ -81,8 +81,8 @@ namespace canvas
             const sal_Int32 y1(maPos.getY());
             const sal_Int32 x2(x1 + maSize.getX() - 1);
             const sal_Int32 y2(y1 + maSize.getY() - 1);
-            if(!(r.pointInside(x1,y1))) return false;
-            if(!(r.pointInside(x2,y2))) return false;
+            if(!r.pointInside(x1,y1)) return false;
+            if(!r.pointInside(x2,y2)) return false;
             return true;
         }
     };

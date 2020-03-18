@@ -980,7 +980,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
 
     else if (
              ( sTargetFrameName==SPECIALTARGET_SELF ) ||
-             ( sTargetFrameName.isEmpty()           )
+             sTargetFrameName.isEmpty()
             )
     {
         xTarget = this;

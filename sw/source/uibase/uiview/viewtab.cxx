@@ -657,7 +657,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
         SvxLRSpaceItem aNewMargin( RES_LR_SPACE );
         aNewMargin.SetTextLeft( aParaMargin.GetTextLeft() + aParaMargin.GetTextFirstLineOffset() );
         aNewMargin.SetRight( aParaMargin.GetRight() );
-        aNewMargin.SetTextFirstLineOffset( (aParaMargin.GetTextFirstLineOffset()) * -1 );
+        aNewMargin.SetTextFirstLineOffset( aParaMargin.GetTextFirstLineOffset() * -1 );
 
         rSh.SetAttrItem( aNewMargin );
         break;
@@ -1844,7 +1844,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         if(bVerticalWriting)
                         {
                             aRect.Pos() += Point(aTmpRect.Left(), aTmpRect.Top());
-                            aRect.Pos().AdjustY( -(rPageRect.Top()) );
+                            aRect.Pos().AdjustY( -rPageRect.Top() );
                             aColItem.SetLeft(aRect.Top());
                             aColItem.SetRight(nPageHeight - aRect.Bottom());
                         }
@@ -2116,7 +2116,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         nEnd = nWidth - pCol->GetRight();
                     }
                     aRectangle.SetRight( rPageRect.Right() - nEnd );
-                    aRectangle.AdjustLeft( -(rPageRect.Left()) );
+                    aRectangle.AdjustLeft( -rPageRect.Left() );
 
                     if(nNum > 1)
                     {
@@ -2132,7 +2132,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     {
                         // Move the rectangle to the correct absolute position.
                         aRectangle.AdjustLeft(aAbsRect.Left() );
-                        aRectangle.AdjustRight( -(aAbsRect.Left()) );
+                        aRectangle.AdjustRight( -aAbsRect.Left() );
                         // Include distance to the border.
                         aRectangle.AdjustRight( -((nOuterWidth - nTotalWidth) / 2) );
                     }

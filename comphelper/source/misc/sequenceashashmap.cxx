@@ -92,7 +92,7 @@ void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::uno::Any >& lS
         if (lSource[i] >>= lP)
         {
             if (
-                (lP.Name.isEmpty()) ||
+                lP.Name.isEmpty() ||
                 (!lP.Value.hasValue())
                )
                 throw css::lang::IllegalArgumentException(
@@ -106,7 +106,7 @@ void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::uno::Any >& lS
         if (lSource[i] >>= lN)
         {
             if (
-                (lN.Name.isEmpty()) ||
+                lN.Name.isEmpty() ||
                 (!lN.Value.hasValue())
                )
                 throw css::lang::IllegalArgumentException(

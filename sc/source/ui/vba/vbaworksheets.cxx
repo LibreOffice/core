@@ -393,7 +393,7 @@ ScVbaWorksheets::Copy ( const uno::Any& Before, const uno::Any& After)
         uno::Reference<excel::XWorksheet> xWorksheet(Item( uno::makeAny( nItem ), uno::Any() ), uno::UNO_QUERY_THROW );
         Sheets.push_back(xWorksheet);
     }
-    bool bNewDoc = (!(Before >>= xSheet) && !(After >>=xSheet)&& !(Before.hasValue()) && !(After.hasValue()));
+    bool bNewDoc = (!(Before >>= xSheet) && !(After >>=xSheet)&& !Before.hasValue() && !After.hasValue());
 
     uno::Reference< excel::XWorksheet > xSrcSheet;
     if ( bNewDoc )

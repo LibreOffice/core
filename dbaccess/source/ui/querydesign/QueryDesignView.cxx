@@ -2529,7 +2529,7 @@ void OQueryDesignView::resizeDocumentView(tools::Rectangle& _rPlayground)
     Point   aSplitPos( _rPlayground.Left(), nSplitPos );
     Size    aSplitSize( _rPlayground.GetSize().Width(), m_aSplitter->GetSizePixel().Height() );
 
-    if( ( aSplitPos.Y() + aSplitSize.Height() ) > ( aPlaygroundSize.Height() ))
+    if( ( aSplitPos.Y() + aSplitSize.Height() ) > aPlaygroundSize.Height() )
         aSplitPos.setY( aPlaygroundSize.Height() - aSplitSize.Height() );
 
     if( aSplitPos.Y() <= aPlaygroundPos.Y() )

@@ -291,14 +291,14 @@ tools::Rectangle SvResizeHelper::GetTrackRectPixel( const Point & rTrackPos ) co
                 aTrackRect.AdjustTop(aDiff.Y() );
                 // ugly solution for resizing OLE objects in RTL
                 if( bRTL )
-                    aTrackRect.AdjustLeft( -(aDiff.X()) );
+                    aTrackRect.AdjustLeft( -aDiff.X() );
                 else
                     aTrackRect.SetRight( aBR.X() + aDiff.X() );
                 break;
             case 3:
                 // ugly solution for resizing OLE objects in RTL
                 if( bRTL )
-                    aTrackRect.AdjustLeft( -(aDiff.X()) );
+                    aTrackRect.AdjustLeft( -aDiff.X() );
                 else
                     aTrackRect.SetRight( aBR.X() + aDiff.X() );
                 break;
@@ -306,7 +306,7 @@ tools::Rectangle SvResizeHelper::GetTrackRectPixel( const Point & rTrackPos ) co
                 aTrackRect.SetBottom( aBR.Y() + aDiff.Y() );
                 // ugly solution for resizing OLE objects in RTL
                 if( bRTL )
-                    aTrackRect.AdjustLeft( -(aDiff.X()) );
+                    aTrackRect.AdjustLeft( -aDiff.X() );
                 else
                     aTrackRect.SetRight( aBR.X() + aDiff.X() );
                 break;

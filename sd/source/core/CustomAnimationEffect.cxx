@@ -266,7 +266,7 @@ void CustomAnimationEffect::setNode( const css::uno::Reference< css::animations:
 
     mfAbsoluteDuration = mfDuration;
     double fRepeatCount = 1.0;
-    if( (mxNode->getRepeatCount()) >>= fRepeatCount )
+    if( mxNode->getRepeatCount() >>= fRepeatCount )
         mfAbsoluteDuration *= fRepeatCount;
 
     checkForText();

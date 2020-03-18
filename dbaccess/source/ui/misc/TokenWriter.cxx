@@ -473,7 +473,7 @@ bool ORTFImportExport::Write()
                 {
                     sal_Int32 nPos = -1;
                     OSL_VERIFY( *pSelIter >>= nPos );
-                    bContinue = ( m_xResultSet->absolute( nPos ) );
+                    bContinue = m_xResultSet->absolute( nPos );
                 }
 
                 if ( bContinue )

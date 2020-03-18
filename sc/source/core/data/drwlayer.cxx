@@ -1288,7 +1288,7 @@ void ScDrawLayer::MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCR
             aMove.AdjustX(pDoc->GetColWidth(s+nCol1,nTab) );
     else
         for (SCCOL s=-1; s>=nDx; s--)
-            aMove.AdjustX( -(pDoc->GetColWidth(s+nCol1,nTab)) );
+            aMove.AdjustX( -pDoc->GetColWidth(s+nCol1,nTab) );
     if (nDy > 0)
         aMove.AdjustY(pDoc->GetRowHeight( nRow1, nRow1+nDy-1, nTab) );
     else

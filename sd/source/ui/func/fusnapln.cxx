@@ -88,7 +88,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
                 sal_uInt16 nHitLog = static_cast<sal_uInt16>(mpWindow->PixelToLogic(Size(HITPIX,0)).Width());
                 bLineExist = mpView->PickHelpLine(aLinePos, nHitLog, *mpWindow, nHelpLine, pPV);
                 if ( bLineExist )
-                    aLinePos = (pPV->GetHelpLines())[nHelpLine].GetPos();
+                    aLinePos = pPV->GetHelpLines()[nHelpLine].GetPos();
                 else
                     pPV = mpView->GetSdrPageView();
 
@@ -100,7 +100,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
         else
         {
             assert(pPV!=nullptr);
-            aLinePos = (pPV->GetHelpLines())[nHelpLine].GetPos();
+            aLinePos = pPV->GetHelpLines()[nHelpLine].GetPos();
             pPV->LogicToPagePos(aLinePos);
             bLineExist = true;
         }
@@ -115,7 +115,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
         {
             pDlg->HideRadioGroup();
 
-            const SdrHelpLine& rHelpLine = (pPV->GetHelpLines())[nHelpLine];
+            const SdrHelpLine& rHelpLine = pPV->GetHelpLines()[nHelpLine];
 
             if ( rHelpLine.GetKind() == SdrHelpLineKind::Point )
             {
@@ -180,7 +180,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
     }
     else
     {
-        const SdrHelpLine& rHelpLine = (pPV->GetHelpLines())[nHelpLine];
+        const SdrHelpLine& rHelpLine = pPV->GetHelpLines()[nHelpLine];
         pPV->SetHelpLine(nHelpLine, SdrHelpLine(rHelpLine.GetKind(), aHlpPos));
     }
 }

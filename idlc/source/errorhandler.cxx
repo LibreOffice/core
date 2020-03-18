@@ -532,7 +532,7 @@ void ErrorHandler::inheritanceError(NodeType nodeType, const OString* name, AstD
 {
     if ( nodeType == NT_interface &&
          (pDecl->getNodeType() == NT_interface) &&
-         !(static_cast<AstInterface const *>(pDecl)->isDefined()) )
+         !static_cast<AstInterface const *>(pDecl)->isDefined() )
     {
         errorHeader(ErrorCode::CannotInheritFromForward);
         fprintf(stderr, "interface '%s' cannot inherit from forward declared interface '%s'\n",

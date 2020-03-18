@@ -604,10 +604,10 @@ namespace basctl
                     xDialogModel = _rxExistingDialogModel;
                 else
                     xDialogModel.set(
-                        ( aContext->getServiceManager()->
+                        aContext->getServiceManager()->
                           createInstanceWithContext(
                               "com.sun.star.awt.UnoControlDialogModel",
-                              aContext ) ),
+                              aContext ),
                         UNO_QUERY_THROW );
 
                 // import dialog model

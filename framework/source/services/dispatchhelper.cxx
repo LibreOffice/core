@@ -77,7 +77,7 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
     const css::uno::Sequence<css::beans::PropertyValue>& lArguments)
 {
     // check for valid parameters
-    if ((!xDispatchProvider.is()) || (!m_xContext.is()) || (sURL.isEmpty()))
+    if ((!xDispatchProvider.is()) || (!m_xContext.is()) || sURL.isEmpty())
     {
         return css::uno::Any();
     }

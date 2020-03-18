@@ -99,7 +99,7 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     Size gridSize(100,70);
     if(pView->GetDPIScaleFactor() > 1)
     {
-      gridSize.setHeight( gridSize.Height() * ( pView->GetDPIScaleFactor()) );
+      gridSize.setHeight( gridSize.Height() * pView->GetDPIScaleFactor() );
     }
     SetGrid(gridSize);
 }
@@ -930,7 +930,7 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
                     tools::Rectangle aRect( GetEntryBoundRect( pCursor ) );
                     if( aRect.Top())
                     {
-                        aRect.AdjustBottom( -(aRect.Top()) );
+                        aRect.AdjustBottom( -aRect.Top() );
                         aRect.SetTop( 0 );
                         MakeVisible( aRect );
                     }
@@ -985,7 +985,7 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
                     tools::Rectangle aRect( GetEntryBoundRect(pCursor));
                     if( aRect.Left() )
                     {
-                        aRect.AdjustRight( -(aRect.Left()) );
+                        aRect.AdjustRight( -aRect.Left() );
                         aRect.SetLeft( 0 );
                         MakeVisible( aRect );
                     }

@@ -255,9 +255,9 @@ sal_Int32 OutlinerView::ImpCheckMousePos(const Point& rPosPix, MouseTarget& reTa
         Point aPaperPos( aMousePosWin );
         tools::Rectangle aOutArea = pEditView->GetOutputArea();
         tools::Rectangle aVisArea = pEditView->GetVisArea();
-        aPaperPos.AdjustX( -(aOutArea.Left()) );
+        aPaperPos.AdjustX( -aOutArea.Left() );
         aPaperPos.AdjustX(aVisArea.Left() );
-        aPaperPos.AdjustY( -(aOutArea.Top()) );
+        aPaperPos.AdjustY( -aOutArea.Top() );
         aPaperPos.AdjustY(aVisArea.Top() );
 
         bool bBullet;

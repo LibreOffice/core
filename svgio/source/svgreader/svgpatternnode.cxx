@@ -203,8 +203,8 @@ namespace svgio::svgreader
 
             if(objectBoundingBox == aPatternUnits)
             {
-                rfW = (getWidth().isSet()) ? getWidth().getNumber() : 0.0;
-                rfH = (getHeight().isSet()) ? getHeight().getNumber() : 0.0;
+                rfW = getWidth().isSet() ? getWidth().getNumber() : 0.0;
+                rfH = getHeight().isSet() ? getHeight().getNumber() : 0.0;
 
                 if(Unit_percent == getWidth().getUnit())
                 {
@@ -218,8 +218,8 @@ namespace svgio::svgreader
             }
             else
             {
-                rfW = (getWidth().isSet()) ? getWidth().solve(rUser, xcoordinate) : 0.0;
-                rfH = (getHeight().isSet()) ? getHeight().solve(rUser, ycoordinate) : 0.0;
+                rfW = getWidth().isSet() ? getWidth().solve(rUser, xcoordinate) : 0.0;
+                rfH = getHeight().isSet() ? getHeight().solve(rUser, ycoordinate) : 0.0;
 
                 // make relative to rGeoRange
                 rfW /= fTargetWidth;
@@ -231,8 +231,8 @@ namespace svgio::svgreader
 
             if(objectBoundingBox == aPatternUnits)
             {
-                rfX = (getX().isSet()) ? getX().getNumber() : 0.0;
-                rfY = (getY().isSet()) ? getY().getNumber() : 0.0;
+                rfX = getX().isSet() ? getX().getNumber() : 0.0;
+                rfY = getY().isSet() ? getY().getNumber() : 0.0;
 
                 if(Unit_percent == getX().getUnit())
                 {
@@ -246,8 +246,8 @@ namespace svgio::svgreader
             }
             else
             {
-                rfX = (getX().isSet()) ? getX().solve(rUser, xcoordinate) : 0.0;
-                rfY = (getY().isSet()) ? getY().solve(rUser, ycoordinate) : 0.0;
+                rfX = getX().isSet() ? getX().solve(rUser, xcoordinate) : 0.0;
+                rfY = getY().isSet() ? getY().solve(rUser, ycoordinate) : 0.0;
 
                 // make relative to rGeoRange
                 rfX = (rfX - rGeoRange.getMinX()) / fTargetWidth;

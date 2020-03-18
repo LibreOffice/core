@@ -155,7 +155,7 @@ namespace drawinglayer::primitive2d
         bool SdrGrafPrimitive2D::isTransparent() const
         {
             return ((0 != getGraphicAttr().GetTransparency())
-                || (getGraphicObject().IsTransparent()));
+                || getGraphicObject().IsTransparent());
         }
 
         // provide unique ID

@@ -106,10 +106,10 @@ tools::Rectangle SwShadowCursor::GetRect() const
     Size aSz( nWidth, nH );
 
     if( text::HoriOrientation::RIGHT == nOldMode )
-        aPt.AdjustX( -(aSz.Width()) );
+        aPt.AdjustX( -aSz.Width() );
     else if( text::HoriOrientation::CENTER == nOldMode )
     {
-        aPt.AdjustX( -(aSz.Width()) );
+        aPt.AdjustX( -aSz.Width() );
         aSz.setWidth( aSz.Width() * 2 );
     }
 

@@ -153,11 +153,10 @@ bool IncomingRequest::execute_throw(
                     static_cast< uno_Interface * >(
                         bridge_->getCppToBinaryMapping().mapInterface(
                             ifc.get(),
-                            (css::uno::TypeDescription(
+                            css::uno::TypeDescription(
                                 cppu::UnoType<
                                     css::uno::Reference<
-                                        css::uno::XInterface > >::get()).
-                             get()))),
+                                        css::uno::XInterface > >::get()).get())),
                     SAL_NO_ACQUIRE);
                 *returnValue = BinaryAny(
                     css::uno::TypeDescription(

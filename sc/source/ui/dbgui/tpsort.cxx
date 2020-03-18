@@ -679,7 +679,7 @@ bool ScTabPageSortOptions::FillItemSet( SfxItemSet* rArgSet )
     aNewSortData.nDestRow        = theOutPos.Row();
     aNewSortData.nDestTab        = theOutPos.Tab();
     aNewSortData.bUserDef        = m_xBtnSortUser->get_active();
-    aNewSortData.nUserIndex      = (m_xBtnSortUser->get_active())
+    aNewSortData.nUserIndex      = m_xBtnSortUser->get_active()
                                    ? m_xLbSortUser->get_active()
                                    : 0;
 
@@ -722,7 +722,7 @@ void ScTabPageSortOptions::ActivatePage( const SfxItemSet& rSet )
             m_xBtnLeftRight->set_active( !pDlg->GetByRows() );
         }
 
-        m_xBtnHeader->set_label( (pDlg->GetByRows())
+        m_xBtnHeader->set_label( pDlg->GetByRows()
                             ? aStrColLabel
                             : aStrRowLabel );
     }

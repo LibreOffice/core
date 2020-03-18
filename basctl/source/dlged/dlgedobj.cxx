@@ -144,8 +144,8 @@ bool DlgEdObj::TransformSdrToControlCoordinates(
     aFormPos = pDevice->LogicToPixel( aFormPos, MapMode( MapUnit::Map100thMM ) );
 
     // subtract form position
-    aPos.AdjustWidth( -(aFormPos.Width()) );
-    aPos.AdjustHeight( -(aFormPos.Height()) );
+    aPos.AdjustWidth( -aFormPos.Width() );
+    aPos.AdjustHeight( -aFormPos.Height() );
 
     // take window borders into account
     Reference< beans::XPropertySet > xPSetForm( pForm->GetUnoControlModel(), UNO_QUERY );
@@ -455,7 +455,7 @@ void DlgEdObj::NameChange( const  css::beans::PropertyChangeEvent& evt )
 
     if ( aNewName != aOldName )
     {
-        Reference< container::XNameAccess > xNameAcc((GetDlgEdForm()->GetUnoControlModel()), UNO_QUERY);
+        Reference< container::XNameAccess > xNameAcc(GetDlgEdForm()->GetUnoControlModel(), UNO_QUERY);
         if ( xNameAcc.is() && xNameAcc->hasByName(aOldName) )
         {
             if (!xNameAcc->hasByName(aNewName) && !aNewName.isEmpty())
@@ -747,7 +747,7 @@ OUString DlgEdObj::GetDefaultName() const
 OUString DlgEdObj::GetUniqueName() const
 {
     OUString aUniqueName;
-    uno::Reference< container::XNameAccess > xNameAcc((GetDlgEdForm()->GetUnoControlModel()), uno::UNO_QUERY);
+    uno::Reference< container::XNameAccess > xNameAcc(GetDlgEdForm()->GetUnoControlModel(), uno::UNO_QUERY);
 
     if ( xNameAcc.is() )
     {

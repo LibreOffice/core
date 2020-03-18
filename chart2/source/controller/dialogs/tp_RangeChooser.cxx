@@ -253,7 +253,7 @@ bool RangeChooserTabPage::isValid()
         || ( m_xCB_FirstRowAsLabel->get_active()    && !m_xRB_Rows->get_active() );
     bool bHasCategories = ( m_xCB_FirstColumnAsLabel->get_active() && m_xRB_Columns->get_active() )
         || ( m_xCB_FirstRowAsLabel->get_active()    && m_xRB_Rows->get_active() );
-    bool bIsValid = ( aRange.isEmpty() ) ||
+    bool bIsValid = aRange.isEmpty() ||
         m_rDialogModel.getRangeSelectionHelper()->verifyArguments(
             DataSourceHelper::createArguments(
                 aRange, Sequence< sal_Int32 >(), m_xRB_Columns->get_active(), bFirstCellAsLabel, bHasCategories ));

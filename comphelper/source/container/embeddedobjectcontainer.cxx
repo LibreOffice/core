@@ -1328,7 +1328,7 @@ bool EmbeddedObjectContainer::StoreChildren(bool _bOasisFormat,bool _bObjectsOnl
                     // '_bObjectsOnly' mean we are storing to alien formats.
                     //  'isStorageElement' mean current object is NOT a MS OLE format. (may also include in future), i120168
                     if (_bObjectsOnly && (nCurState == embed::EmbedStates::LOADED || nCurState == embed::EmbedStates::RUNNING)
-                        && (pImpl->mxStorage->isStorageElement( *pIter ) ))
+                        && pImpl->mxStorage->isStorageElement( *pIter ) )
                     {
                         uno::Reference< util::XModifiable > xModifiable( xObj->getComponent(), uno::UNO_QUERY );
                         if ( xModifiable.is() && xModifiable->isModified())

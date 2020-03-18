@@ -776,7 +776,7 @@ SbxVariable* SbiStdObject::Find( const OUString& rName, SbxClassType t )
         {
             if( ( p->nArgs & nSrchMask )
              && ( p->nHash == nHash_ )
-             && ( rName.equalsIgnoreAsciiCaseAscii( p->pName ) ) )
+             && rName.equalsIgnoreAsciiCaseAscii( p->pName ) )
             {
                 bFound = true;
                 if( p->nArgs & COMPTMASK_ )

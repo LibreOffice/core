@@ -2344,7 +2344,7 @@ void SwRootFrame::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* p
                         // 1. the last empty page in a row
                         // 2. after an empty page
                         const bool bDontAddGap = ( pPageToAdjust->IsEmptyPage() && pPageToAdjust->GetNext() == pEndOfRow ) ||
-                                                 ( static_cast<SwPageFrame*>(pPageToAdjust->GetPrev())->IsEmptyPage() );
+                                                 static_cast<SwPageFrame*>(pPageToAdjust->GetPrev())->IsEmptyPage();
 
                         if  ( !bDontAddGap )
                             nX = nX + nGapBetweenPages;
@@ -2528,7 +2528,7 @@ SwTextGridItem const* GetGridItem(SwPageFrame const*const pPage)
 
 sal_uInt16 GetGridWidth(SwTextGridItem const& rG, SwDoc const& rDoc)
 {
-    return (rDoc.IsSquaredPageMode()) ? rG.GetBaseHeight() : rG.GetBaseWidth();
+    return rDoc.IsSquaredPageMode() ? rG.GetBaseHeight() : rG.GetBaseWidth();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

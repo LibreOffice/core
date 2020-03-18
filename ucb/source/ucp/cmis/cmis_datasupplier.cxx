@@ -53,13 +53,13 @@ namespace cmis
     OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
     {
         auto const xTemp(queryContentIdentifier(nIndex));
-        return (xTemp.is()) ? xTemp->getContentIdentifier() : OUString();
+        return xTemp.is() ? xTemp->getContentIdentifier() : OUString();
     }
 
     uno::Reference< ucb::XContentIdentifier > DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
     {
         auto const xTemp(queryContent(nIndex));
-        return (xTemp.is()) ? xTemp->getIdentifier() : uno::Reference<ucb::XContentIdentifier>();
+        return xTemp.is() ? xTemp->getIdentifier() : uno::Reference<ucb::XContentIdentifier>();
     }
 
     uno::Reference< ucb::XContent > DataSupplier::queryContent( sal_uInt32 nIndex )

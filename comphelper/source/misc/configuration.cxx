@@ -165,9 +165,8 @@ comphelper::detail::ConfigurationWrapper::getGroupReadOnly(
     OUString const & path) const
 {
     return css::uno::Reference< css::container::XHierarchicalNameAccess >(
-        (css::configuration::ReadOnlyAccess::create(
-            context_, getDefaultLocale(context_))->
-         getByHierarchicalName(path)),
+        css::configuration::ReadOnlyAccess::create(
+            context_, getDefaultLocale(context_))->getByHierarchicalName(path),
         css::uno::UNO_QUERY_THROW);
 }
 
@@ -185,9 +184,8 @@ comphelper::detail::ConfigurationWrapper::getSetReadOnly(
     OUString const & path) const
 {
     return css::uno::Reference< css::container::XNameAccess >(
-        (css::configuration::ReadOnlyAccess::create(
-            context_, getDefaultLocale(context_))->
-         getByHierarchicalName(path)),
+        css::configuration::ReadOnlyAccess::create(
+            context_, getDefaultLocale(context_))->getByHierarchicalName(path),
         css::uno::UNO_QUERY_THROW);
 }
 

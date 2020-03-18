@@ -86,8 +86,8 @@ Point SvxDrawOutlinerViewForwarder::PixelToLogic( const Point& rPoint, const Map
                                                    rMapMode ) );
         Point aTextOffset( GetTextOffset() );
 
-        aPoint2.AdjustX( -(aTextOffset.X()) );
-        aPoint2.AdjustY( -(aTextOffset.Y()) );
+        aPoint2.AdjustX( -aTextOffset.X() );
+        aPoint2.AdjustY( -aTextOffset.Y() );
 
         return aPoint2;
     }

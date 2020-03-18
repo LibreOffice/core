@@ -1221,9 +1221,9 @@ void SfxViewFrame::SetBorderPixelImpl
     {
         tools::Rectangle aEditArea( Point(), GetWindow().GetOutputSizePixel() );
         aEditArea.AdjustLeft(rBorder.Left() );
-        aEditArea.AdjustRight( -(rBorder.Right()) );
+        aEditArea.AdjustRight( -rBorder.Right() );
         aEditArea.AdjustTop(rBorder.Top() );
-        aEditArea.AdjustBottom( -(rBorder.Bottom()) );
+        aEditArea.AdjustBottom( -rBorder.Bottom() );
         pVSh->GetWindow()->SetPosSizePixel( aEditArea.TopLeft(), aEditArea.GetSize() );
     }
 }

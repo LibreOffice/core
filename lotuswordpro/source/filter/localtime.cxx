@@ -176,7 +176,7 @@ bool LtgLocalTime(long rtime,LtTm& rtm)
     if ((rtime > 3 * DAY_SEC)&&(rtime < LONG_MAX - 3 * DAY_SEC))
     {
         std::unique_ptr<icu::TimeZone> pLocalZone(icu::TimeZone::createDefault());
-        long offset = (pLocalZone->getRawOffset())/1000;
+        long offset = pLocalZone->getRawOffset() / 1000;
         pLocalZone.reset();
         long ltime = rtime + offset;
         return LtgGmTime(ltime,rtm);

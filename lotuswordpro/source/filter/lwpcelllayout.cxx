@@ -345,7 +345,7 @@ rtl::Reference<XFCell> LwpCellLayout::ConvertCell(LwpObjectID aTableID, sal_uInt
 LwpPara* LwpCellLayout::GetLastParaOfPreviousStory()
 {
     LwpObjectID* pPreStoryID = GetPreviousCellStory();
-    if (pPreStoryID && !(pPreStoryID->IsNull()))
+    if (pPreStoryID && !pPreStoryID->IsNull())
     {
         LwpStory* pPreStory = dynamic_cast<LwpStory*>(pPreStoryID->obj(VO_STORY).get());
         assert(pPreStory);

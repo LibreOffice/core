@@ -93,8 +93,8 @@ static bool is_gnome_desktop( Display* pDisplay )
                 {
                     OString aWMName( reinterpret_cast<char*>(pProp) );
                     if (
-                        (aWMName.equalsIgnoreAsciiCase("gnome-shell")) ||
-                        (aWMName.equalsIgnoreAsciiCase("gnome-panel"))
+                        aWMName.equalsIgnoreAsciiCase("gnome-shell") ||
+                        aWMName.equalsIgnoreAsciiCase("gnome-panel")
                        )
                     {
                         ret = true;

@@ -750,14 +750,14 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                     {
                     case E_QUERY:
                         aReturn.bEnabled =  ( getContainer()->getSelectionCount() > 0 )
-                                        &&  ( getContainer()->isALeafSelected() );
+                                        &&  getContainer()->isALeafSelected();
                         break;
                     case E_TABLE:
                         aReturn.bEnabled = false;
                         // there's one exception: views which support altering their underlying
                         // command can be edited in SQL view, too
                         if  (   ( getContainer()->getSelectionCount() > 0 )
-                            &&  ( getContainer()->isALeafSelected() )
+                            &&  getContainer()->isALeafSelected()
                             )
                         {
                             std::vector< OUString > aSelected;
@@ -2548,7 +2548,7 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
         return false;
     }
 
-    if ( m_xModel.is() && ( m_xModel != _rxModel ) && ( _rxModel.is() ) )
+    if ( m_xModel.is() && ( m_xModel != _rxModel ) && _rxModel.is() )
     {
         OSL_ENSURE( false, "OApplicationController::attachModel: missing implementation: setting a new model while we have another one!" );
         // we'd need to completely update our view here, close sub components, and the like

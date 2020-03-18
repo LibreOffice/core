@@ -473,7 +473,7 @@ SwTwips SwTextAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
                 else
                     nCompress = 10000 - nCompress;
 
-                ( pCurrent->GetKanaComp() )[ nKanaIdx ] = static_cast<sal_uInt16>(nCompress);
+                pCurrent->GetKanaComp()[ nKanaIdx ] = static_cast<sal_uInt16>(nCompress);
                 nKanaDiffSum = 0;
             }
 
@@ -486,7 +486,7 @@ SwTwips SwTextAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
 
     // set portion width
     nKanaIdx = 0;
-    sal_uInt16 nCompress = ( pCurrent->GetKanaComp() )[ nKanaIdx ];
+    sal_uInt16 nCompress = pCurrent->GetKanaComp()[ nKanaIdx ];
     pPos = pCurrent->GetNextPortion();
     long nDecompress = 0;
 
@@ -516,7 +516,7 @@ SwTwips SwTextAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
                 static_cast<SwTabPortion*>(pPos)->SetFixWidth( pPos->Width() );
 
             if ( ++nKanaIdx < pCurrent->GetKanaComp().size() )
-                nCompress = ( pCurrent->GetKanaComp() )[ nKanaIdx ];
+                nCompress = pCurrent->GetKanaComp()[ nKanaIdx ];
 
             nDecompress = 0;
         }

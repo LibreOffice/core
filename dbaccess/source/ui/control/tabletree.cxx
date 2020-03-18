@@ -574,7 +574,7 @@ void OTableTreeListBox::implEmphasize(SvTreeListEntry* _pEntry, bool _bChecked, 
 void TableTreeListBox::implEmphasize(weld::TreeIter& rEntry, bool _bChecked, bool _bUpdateDescendants, bool _bUpdateAncestors)
 {
     // special emphasizing handling for the "all objects" entry
-    bool bAllObjectsEntryAffected = haveVirtualRoot() && (getAllObjectsEntry()->equal(rEntry));
+    bool bAllObjectsEntryAffected = haveVirtualRoot() && getAllObjectsEntry()->equal(rEntry);
     if  (   m_xTreeView->iter_has_child(rEntry) // the entry has children
         ||  bAllObjectsEntryAffected            // or it is the "all objects" entry
         )

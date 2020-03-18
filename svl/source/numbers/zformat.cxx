@@ -1203,7 +1203,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                             }
                         }
                         NumFor[nIndex].Enlarge(nCnt);
-                        pSc->CopyInfo(&(NumFor[nIndex].Info()), nCnt);
+                        pSc->CopyInfo(&NumFor[nIndex].Info(), nCnt);
                         // type check
                         if (nIndex == 0)
                         {
@@ -1314,7 +1314,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                 if ( nCnt )
                 {
                     NumFor[0].Enlarge(nCnt);
-                    pSc->CopyInfo( &(NumFor[0].Info()), nCnt );
+                    pSc->CopyInfo( &NumFor[0].Info(), nCnt );
                     sBuff.append(aAdd);
                 }
             }
@@ -1334,7 +1334,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                 if ( nCnt )
                 {
                     NumFor[nIndex].Enlarge(nCnt);
-                    pSc->CopyInfo( &(NumFor[nIndex].Info()), nCnt );
+                    pSc->CopyInfo( &NumFor[nIndex].Info(), nCnt );
                     sBuff.append(";");
                     sBuff.append(aAdd);
                 }
@@ -1352,7 +1352,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                 if ( nCnt )
                 {
                     NumFor[nIndex].Enlarge(nCnt);
-                    pSc->CopyInfo( &(NumFor[nIndex].Info()), nCnt );
+                    pSc->CopyInfo( &NumFor[nIndex].Info(), nCnt );
                     sBuff.append(";");
                     sBuff.append(aAdd);
                 }

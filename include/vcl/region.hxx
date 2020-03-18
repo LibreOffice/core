@@ -118,7 +118,7 @@ public:
     vcl::Region& operator=( const tools::Rectangle& rRect );
 
     bool operator==( const vcl::Region& rRegion ) const;
-    bool operator!=( const vcl::Region& rRegion ) const { return !(Region::operator==( rRegion )); }
+    bool operator!=( const vcl::Region& rRegion ) const { return !Region::operator==( rRegion ); }
 
     friend VCL_DLLPUBLIC SvStream& ReadRegion( SvStream& rIStm, vcl::Region& rRegion );
     friend VCL_DLLPUBLIC SvStream& WriteRegion( SvStream& rOStm, const vcl::Region& rRegion );

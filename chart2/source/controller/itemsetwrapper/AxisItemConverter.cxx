@@ -480,7 +480,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
 
         case SCHATTR_AXIS_MAX:
             // only if auto if false
-            if( ! (rItemSet.Get( SCHATTR_AXIS_AUTO_MAX ).GetValue() ))
+            if( ! rItemSet.Get( SCHATTR_AXIS_AUTO_MAX ).GetValue() )
             {
                 rItemSet.Get( nWhichId ).QueryValue( aValue );
 
@@ -503,7 +503,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
 
         case SCHATTR_AXIS_MIN:
             // only if auto if false
-            if( ! (rItemSet.Get( SCHATTR_AXIS_AUTO_MIN ).GetValue() ))
+            if( ! rItemSet.Get( SCHATTR_AXIS_AUTO_MIN ).GetValue() )
             {
                 rItemSet.Get( nWhichId ).QueryValue( aValue );
 
@@ -671,7 +671,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
             break;
         case SCHATTR_AXIS_TIME_RESOLUTION:
             // only if auto is false
-            if( ! ( rItemSet.Get( SCHATTR_AXIS_AUTO_TIME_RESOLUTION ).GetValue() ))
+            if( !  rItemSet.Get( SCHATTR_AXIS_AUTO_TIME_RESOLUTION ).GetValue() )
             {
                 rItemSet.Get( nWhichId ).QueryValue( aValue );
 
@@ -696,7 +696,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
         case SCHATTR_AXIS_ORIGIN:
         {
             // only if auto is false
-            if( ! (rItemSet.Get( SCHATTR_AXIS_AUTO_ORIGIN ).GetValue() ))
+            if( ! rItemSet.Get( SCHATTR_AXIS_AUTO_ORIGIN ).GetValue() )
             {
                 rItemSet.Get( nWhichId ).QueryValue( aValue );
 

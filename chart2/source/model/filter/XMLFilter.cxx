@@ -117,7 +117,7 @@ uno::Reference< embed::XStorage > lcl_getWriteStorage(
         OUString aMediaType;
         if ( ! xProp.is() ||
              ! ( xProp->getPropertyValue( "MediaType") >>= aMediaType ) ||
-             ( aMediaType.isEmpty() ))
+             aMediaType.isEmpty() )
         {
             xProp->setPropertyValue( "MediaType", uno::Any( _sMediaType ));
         }

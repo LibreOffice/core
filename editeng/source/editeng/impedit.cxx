@@ -1182,7 +1182,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
         }
 
         CursorDirection nCursorDir = CursorDirection::NONE;
-        if ( IsInsertMode() && !aEditSelection.HasRange() && ( pEditEngine->pImpEditEngine->HasDifferentRTLLevels( aPaM.GetNode() ) ) )
+        if ( IsInsertMode() && !aEditSelection.HasRange() && pEditEngine->pImpEditEngine->HasDifferentRTLLevels( aPaM.GetNode() ) )
         {
             sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, bool(nShowCursorFlags & GetCursorFlags::PreferPortionStart) );
             const TextPortion& rTextPortion = pParaPortion->GetTextPortions()[nTextPortion];
@@ -1605,8 +1605,8 @@ bool ImpEditView::IsBulletArea( const Point& rPos, sal_Int32* pPara )
         nY += pParaPortion->GetFirstLineOffset();
         if ( ( aDocPos.Y() > ( nY + aBulletArea.Top() ) ) &&
              ( aDocPos.Y() < ( nY + aBulletArea.Bottom() ) ) &&
-             ( aDocPos.X() > ( aBulletArea.Left() ) ) &&
-             ( aDocPos.X() < ( aBulletArea.Right() ) ) )
+             ( aDocPos.X() > aBulletArea.Left() ) &&
+             ( aDocPos.X() < aBulletArea.Right() ) )
         {
             if ( pPara )
                 *pPara = nPara;

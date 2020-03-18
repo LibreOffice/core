@@ -121,7 +121,7 @@ bool ScFormulaOptions::operator==( const ScFormulaOptions& rOpt ) const
 
 bool ScFormulaOptions::operator!=( const ScFormulaOptions& rOpt ) const
 {
-    return !(operator==(rOpt));
+    return !operator==(rOpt);
 }
 
 ScTpFormulaItem::ScTpFormulaItem( const ScFormulaOptions& rOpt ) :

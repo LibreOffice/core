@@ -979,7 +979,7 @@ try
             if (   ( pResult != aNewProperties.end() )
                 && ( pResult->Name == pOldProps[i].Name )
                 && ( (pResult->Attributes & PropertyAttribute::READONLY) == 0 )
-                && ( pResult->Type.equals(pOldProps[i].Type)) )
+                && pResult->Type.equals(pOldProps[i].Type) )
             {   // Attributes match and the property is not read-only
                 try
                 {

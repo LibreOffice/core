@@ -1776,7 +1776,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu, bool )
                                             if ( xPropSet.is() )
                                             {
                                                 Reference< XUIConfigurationPersistence > xUICfgMgr;
-                                                if (( xPropSet->getPropertyValue("ConfigurationSource") >>= xUICfgMgr ) && ( xUICfgMgr.is() ))
+                                                if (( xPropSet->getPropertyValue("ConfigurationSource") >>= xUICfgMgr ) && xUICfgMgr.is() )
                                                     xUICfgMgr->store();
                                             }
                                         }
@@ -1897,8 +1897,8 @@ IMPL_STATIC_LINK( ToolBarManager, ExecuteHdl_Impl, void*, p, void )
     {
         // Asynchronous execution as this can lead to our own destruction!
         if (( pExecuteInfo->nCmd == EXEC_CMD_CLOSETOOLBAR ) &&
-            ( pExecuteInfo->xLayoutManager.is() ) &&
-            ( pExecuteInfo->xWindow.is() ))
+            pExecuteInfo->xLayoutManager.is() &&
+            pExecuteInfo->xWindow.is() )
         {
             // Use docking window close to close the toolbar. The toolbar layout manager is
             // listener and will react correctly according to the context sensitive
@@ -1909,12 +1909,12 @@ IMPL_STATIC_LINK( ToolBarManager, ExecuteHdl_Impl, void*, p, void )
                 pDockWin->Close();
         }
         else if (( pExecuteInfo->nCmd == EXEC_CMD_UNDOCKTOOLBAR ) &&
-                 ( pExecuteInfo->xLayoutManager.is() ))
+                 pExecuteInfo->xLayoutManager.is() )
         {
             pExecuteInfo->xLayoutManager->floatWindow( pExecuteInfo->aToolbarResName );
         }
         else if (( pExecuteInfo->nCmd == EXEC_CMD_DOCKTOOLBAR ) &&
-                 ( pExecuteInfo->xLayoutManager.is() ))
+                 pExecuteInfo->xLayoutManager.is() )
         {
             css::awt::Point aPoint;
             aPoint.X = aPoint.Y = SAL_MAX_INT32;
@@ -1923,7 +1923,7 @@ IMPL_STATIC_LINK( ToolBarManager, ExecuteHdl_Impl, void*, p, void )
                                                       aPoint );
         }
         else if (( pExecuteInfo->nCmd == EXEC_CMD_DOCKALLTOOLBARS ) &&
-                 ( pExecuteInfo->xLayoutManager.is() ))
+                 pExecuteInfo->xLayoutManager.is() )
         {
             pExecuteInfo->xLayoutManager->dockAllWindows( UIElementType::TOOLBAR );
         }

@@ -172,7 +172,7 @@ SbiSymDef* SbiSymPool::Find( const OUString& rName, bool bSearchInParents )
     {
         SbiSymDef &r = *m_Data[ nCount - i - 1 ];
         if( ( !r.nProcId || ( r.nProcId == nProcId)) &&
-            ( r.aName.equalsIgnoreAsciiCase(rName)))
+            r.aName.equalsIgnoreAsciiCase(rName))
         {
             return &r;
         }

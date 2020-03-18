@@ -173,7 +173,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
 
     ScViewData& rData = rViewSh.GetViewData();
     if ( rData.GetDocument()->IsNegativePage( rData.GetTabNo() ) )
-        aInsertPos.AdjustX( -(aLogicSize.Width()) );       // move position to left edge
+        aInsertPos.AdjustX( -aLogicSize.Width() );       // move position to left edge
 
     ScLimitSizeOnDrawPage( aLogicSize, aInsertPos, pPage->GetSize() );
 
@@ -230,7 +230,7 @@ static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
     ScLimitSizeOnDrawPage( aSize, aInsertPos, pPage->GetSize() );
 
     if( rData.GetDocument()->IsNegativePage( rData.GetTabNo() ) )
-        aInsertPos.AdjustX( -(aSize.Width()) );
+        aInsertPos.AdjustX( -aSize.Width() );
 
     OUString realURL;
     if (bLink)

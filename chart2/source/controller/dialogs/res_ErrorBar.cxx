@@ -247,7 +247,7 @@ void ErrorBarResources::UpdateControlStates()
 
     // unit for metric fields
     bool bIsErrorMargin(
-        ( m_xRbFunction->get_active()) &&
+        m_xRbFunction->get_active() &&
         ( m_xLbFunction->get_active() == CHART_LB_FUNCTION_ERROR_MARGIN ));
     bool bIsPercentage( m_xRbPercent->get_active() || bIsErrorMargin );
     FieldUnit eFieldUnit = FieldUnit::NONE;
@@ -699,7 +699,7 @@ void ErrorBarResources::disposingRangeSelection()
 void ErrorBarResources::isRangeFieldContentValid(weld::Entry& rEdit)
 {
     OUString aRange( rEdit.get_text());
-    bool bIsValid = ( aRange.isEmpty() ) ||
+    bool bIsValid = aRange.isEmpty() ||
         ( m_apRangeSelectionHelper.get() &&
           m_apRangeSelectionHelper->verifyCellRange( aRange ));
 

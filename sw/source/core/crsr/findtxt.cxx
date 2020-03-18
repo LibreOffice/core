@@ -288,7 +288,7 @@ lcl_CleanStr(const SwTextNode& rNd,
                         // replacement and remove afterwards all at a string's
                         // end (might be normal 0x7f).
                         const bool bEmpty = pNextHint->Which() != RES_TXTATR_FIELD
-                            || (static_txtattr_cast<SwTextField const*>(pNextHint)->GetFormatField().GetField()->ExpandField(true, pLayout).isEmpty());
+                            || static_txtattr_cast<SwTextField const*>(pNextHint)->GetFormatField().GetField()->ExpandField(true, pLayout).isEmpty();
                         if ( bEmpty && nStart == nCurrent )
                         {
                             rArr.push_back( nCurrent );

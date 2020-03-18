@@ -726,7 +726,7 @@ void SvxColorTabPage::SetPropertyList( XPropertyListType t, const XPropertyListR
 
 void SvxColorTabPage::SetColorList( const XColorListRef& pColList )
 {
-    SetPropertyList( XPropertyListType::Color, XPropertyListRef( ( pColList.get() ) ) );
+    SetPropertyList( XPropertyListType::Color, XPropertyListRef( pColList.get() ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

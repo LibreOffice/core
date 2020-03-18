@@ -46,7 +46,7 @@ std::unique_ptr<TextAttrib> TextAttribFontColor::Clone() const
 
 bool TextAttribFontColor::operator==( const TextAttrib& rAttr ) const
 {
-    return ( ( TextAttrib::operator==(rAttr ) ) &&
+    return ( TextAttrib::operator==(rAttr ) &&
                 ( maColor == static_cast<const TextAttribFontColor&>(rAttr).maColor ) );
 }
 
@@ -67,7 +67,7 @@ std::unique_ptr<TextAttrib> TextAttribFontWeight::Clone() const
 
 bool TextAttribFontWeight::operator==( const TextAttrib& rAttr ) const
 {
-    return ( ( TextAttrib::operator==(rAttr ) ) &&
+    return ( TextAttrib::operator==(rAttr ) &&
                 ( meWeight == static_cast<const TextAttribFontWeight&>(rAttr).meWeight ) );
 }
 

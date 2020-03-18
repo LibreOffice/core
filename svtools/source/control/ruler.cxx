@@ -1318,7 +1318,7 @@ void Ruler::ImplDraw(vcl::RenderContext& rRenderContext)
     {
         aOffPos.setX( mnVirOff );
         if (mpData->bTextRTL)
-            aVirDevSize.AdjustWidth( -(maExtraRect.GetWidth()) );
+            aVirDevSize.AdjustWidth( -maExtraRect.GetWidth() );
 
         aOffPos.setY( RULER_OFF );
     }

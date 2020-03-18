@@ -59,7 +59,7 @@ namespace connectivity { namespace jdbc
 
         bool isActive() const
         {
-            return  ( m_currentThread.is() )
+            return  m_currentThread.is()
                 &&  ( m_setContextClassLoaderMethod != nullptr );
         }
 

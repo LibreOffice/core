@@ -719,7 +719,7 @@ bool DictionaryNeo::addEntry_Impl(const uno::Reference< XDictionaryEntry >& xDic
         Reference< XSpellAlternatives > xTmpRes;
         xSpell.set( xLngSvcMgr->getSpellChecker(), UNO_QUERY );
         Sequence< css::beans::PropertyValue > aEmptySeq;
-        if (xSpell.is() && (xSpell->isValid( SPELLML_SUPPORT, static_cast<sal_uInt16>(nLanguage), aEmptySeq )))
+        if (xSpell.is() && xSpell->isValid( SPELLML_SUPPORT, static_cast<sal_uInt16>(nLanguage), aEmptySeq ))
         {
             // "Grammar By" sample word is a Hunspell dictionary word?
             if (xSpell->isValid( xDicEntry->getReplacementText(), static_cast<sal_uInt16>(nLanguage), aEmptySeq ))

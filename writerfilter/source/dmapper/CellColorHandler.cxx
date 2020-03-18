@@ -323,7 +323,7 @@ void CellColorHandler::disableInteropGrabBag()
 
 bool CellColorHandler::isInteropGrabBagEnabled() const
 {
-    return !(m_aInteropGrabBagName.isEmpty());
+    return !m_aInteropGrabBagName.isEmpty();
 }
 
 } //namespace writerfilter

@@ -159,7 +159,7 @@ void SAL_CALL ImportDocumentHandler::startElement(const OUString & _sName, const
     bool bExport = true;
     if ( _sName == "office:report" )
     {
-        const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
+        const sal_Int16 nLength = _xAttrList.is() ? _xAttrList->getLength() : 0;
         static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
         try
         {
@@ -207,7 +207,7 @@ void SAL_CALL ImportDocumentHandler::startElement(const OUString & _sName, const
     }
     else if ( _sName == "rpt:master-detail-field" )
     {
-        const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
+        const sal_Int16 nLength = _xAttrList.is() ? _xAttrList->getLength() : 0;
         ::std::unique_ptr<SvXMLTokenMap> pMasterElemTokenMap( OXMLHelper::GetSubDocumentElemTokenMap());
         try
         {
@@ -253,7 +253,7 @@ void SAL_CALL ImportDocumentHandler::startElement(const OUString & _sName, const
     else if ( _sName == "chart:plot-area" )
     {
         bool bHasCategories = true;
-        const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
+        const sal_Int16 nLength = _xAttrList.is() ? _xAttrList->getLength() : 0;
         for(sal_Int16 i = 0; i < nLength; ++i)
         {
             OUString sLocalName;

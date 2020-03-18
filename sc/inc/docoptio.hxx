@@ -128,7 +128,7 @@ inline bool ScDocOptions::operator==( const ScDocOptions& rOpt ) const
 
 inline bool ScDocOptions::operator!=( const ScDocOptions& rOpt ) const
 {
-    return !(operator==(rOpt));
+    return !operator==(rOpt);
 }
 
 // Item for preferences dialog - calculation

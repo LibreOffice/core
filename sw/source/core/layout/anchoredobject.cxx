@@ -892,7 +892,7 @@ Point SwAnchoredObject::GetRelPosToChar() const
 Point SwAnchoredObject::GetRelPosToLine() const
 {
     Point aRelPos = GetObjRect().Pos();
-    aRelPos.AdjustY( -(GetLastTopOfLine()) );
+    aRelPos.AdjustY( -GetLastTopOfLine() );
 
     return aRelPos;
 }

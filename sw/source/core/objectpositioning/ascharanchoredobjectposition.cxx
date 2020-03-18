@@ -180,7 +180,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
 
     // consider BIDI-multiportion by adjusting proposed anchor position
     if( mnFlags & AsCharFlags::Bidi )
-        aAnchorPos.AdjustX( -(aObjBoundRect.Width()) );
+        aAnchorPos.AdjustX( -aObjBoundRect.Width() );
 
     // calculate relative position considering rotation and inside rotation
     // reverse direction.

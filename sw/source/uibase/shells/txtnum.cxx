@@ -55,7 +55,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         else
             rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bMode ) );
 
-        if ( bMode != (GetShell().SelectionHasNumber()) ) // #i29560#
+        if ( bMode != GetShell().SelectionHasNumber() ) // #i29560#
         {
             rReq.Done();
             if( bMode )
@@ -84,7 +84,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         else
             rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bMode ) );
 
-        if ( bMode != (GetShell().SelectionHasBullet()) ) // #i29560#
+        if ( bMode != GetShell().SelectionHasBullet() ) // #i29560#
         {
             rReq.Done();
             if( bMode )

@@ -890,8 +890,8 @@ Point SvxTextEditSourceImpl::PixelToLogic( const Point& rPoint, const MapMode& r
         Point aPoint2( OutputDevice::LogicToLogic( aPoint1,
                                                    MapMode(mpModel->GetScaleUnit()),
                                                    rMapMode ) );
-        aPoint2.AdjustX( -(maTextOffset.X()) );
-        aPoint2.AdjustY( -(maTextOffset.Y()) );
+        aPoint2.AdjustX( -maTextOffset.X() );
+        aPoint2.AdjustY( -maTextOffset.Y() );
 
         return aPoint2;
     }

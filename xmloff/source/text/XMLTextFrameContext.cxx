@@ -1413,7 +1413,7 @@ void XMLTextFrameContext::EndElement()
     SvXMLImportContextRef const pMultiContext(solveMultipleImages());
 
     SvXMLImportContext const*const pContext =
-        (pMultiContext.is()) ? pMultiContext.get() : m_xImplContext.get();
+        pMultiContext.is() ? pMultiContext.get() : m_xImplContext.get();
     XMLTextFrameContext_Impl *pImpl = const_cast<XMLTextFrameContext_Impl*>(dynamic_cast< const XMLTextFrameContext_Impl*>( pContext ));
     assert(!pMultiContext.is() || pImpl);
     if( pImpl )

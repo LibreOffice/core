@@ -225,7 +225,7 @@ void AnimationWindow::dispose()
 
 IMPL_LINK_NOARG(AnimationWindow, ClickFirstHdl, weld::Button&, void)
 {
-    m_nCurrentFrame = (m_FrameList.empty()) ? EMPTY_FRAMELIST : 0;
+    m_nCurrentFrame = m_FrameList.empty() ? EMPTY_FRAMELIST : 0;
     UpdateControl();
 }
 
@@ -352,7 +352,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, weld::Button&, rButton, void )
 IMPL_LINK_NOARG(AnimationWindow, ClickLastHdl, weld::Button&, void)
 {
     m_nCurrentFrame =
-        (m_FrameList.empty()) ? EMPTY_FRAMELIST : m_FrameList.size() - 1 ;
+        m_FrameList.empty() ? EMPTY_FRAMELIST : m_FrameList.size() - 1 ;
     UpdateControl();
 }
 

@@ -148,7 +148,7 @@ size_t ScPageRowEntry::CountVisible() const
 
 static long lcl_LineTotal(const ::editeng::SvxBorderLine* pLine)
 {
-    return pLine ? ( pLine->GetScaledWidth() ) : 0;
+    return pLine ? pLine->GetScaledWidth() : 0;
 }
 
 void ScPrintFunc::Construct( const ScPrintOptions* pOptions )
@@ -1530,7 +1530,7 @@ void ScPrintFunc::LocateArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     SCCOL nCol;
     Point aTwipOffset;
     for (nCol=0; nCol<nX1; nCol++)
-        aTwipOffset.AdjustX( -(pDoc->GetColWidth( nCol, nPrintTab )) );
+        aTwipOffset.AdjustX( -pDoc->GetColWidth( nCol, nPrintTab ) );
     aTwipOffset.AdjustY( -sal_Int32(pDoc->GetRowHeight( 0, nY1-1, nPrintTab )) );
 
     Point aMMOffset( aTwipOffset );

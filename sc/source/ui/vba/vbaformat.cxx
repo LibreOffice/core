@@ -703,7 +703,7 @@ ScVbaFormat< Ifc... >::getReadingOrder(  )
         if (!isAmbiguous(sWritingMode))
         {
             text::WritingMode aWritingMode = text::WritingMode_LR_TB;
-            if ( ( mxPropertySet->getPropertyValue(sWritingMode) ) >>= aWritingMode )
+            if ( mxPropertySet->getPropertyValue(sWritingMode) >>= aWritingMode )
                 switch (aWritingMode)
                 {
                     case text::WritingMode_LR_TB:

@@ -2353,7 +2353,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                                 //Is a Non-Standard Outline Style
                                 (RES_POOLCOLL_HEADLINE1 > nPoolId || RES_POOLCOLL_HEADLINE9 < nPoolId) &&
                                 //Has a valid outline level
-                                (pColl->IsAssignedToListLevelOfOutlineStyle()) &&
+                                pColl->IsAssignedToListLevelOfOutlineStyle() &&
                                 // Is less than the lowest known non-standard level
                                 (pColl->GetAssignedOutlineStyleLevel() < nPosOfLowestNonStandardLvl)
                                 )
@@ -3180,8 +3180,8 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
         assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
         sal_uInt16 nScript = g_pBreakIt->GetBreakIter()->getScriptType( pField->GetPar1(), 0);
 
-        long nHeight = static_cast<const SvxFontHeightItem&>((GetExport().GetItem(
-            GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript)))).GetHeight();
+        long nHeight = static_cast<const SvxFontHeightItem&>(GetExport().GetItem(
+            GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript))).GetHeight();
 
         nHeight = (nHeight + 10) / 20; //Font Size in points;
 

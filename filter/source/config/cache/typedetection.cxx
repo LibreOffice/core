@@ -88,7 +88,7 @@ OUString SAL_CALL TypeDetection::queryTypeByURL(const OUString& sURL)
     cache.detectFlatForURL(aURL, lFlatTypes);
 
     if (
-        (lFlatTypes.empty()                                ) &&
+        lFlatTypes.empty()                                &&
         (!cache.isFillState(FilterCache::E_CONTAINS_TYPES))
        )
     {
@@ -1073,9 +1073,9 @@ OUString TypeDetection::impl_askUserForTypeAndFilterIfAllowed(utl::MediaDescript
     // and not for "missing files". Especially if detection is done by a stream only
     // we can't check if the stream points to an "existing content"!
     if (
-        (sURL.isEmpty()                                     ) || // "non existing file" ?
+        sURL.isEmpty()                                           || // "non existing file" ?
         (!xStream.is()                                         ) || // non existing file !
-        (sURL.equalsIgnoreAsciiCase("private:stream"))    // not a good idea .-)
+        sURL.equalsIgnoreAsciiCase("private:stream")    // not a good idea .-)
        )
         return OUString();
 

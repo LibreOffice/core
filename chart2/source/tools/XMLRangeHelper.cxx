@@ -119,7 +119,7 @@ void lcl_getSingleCellAddressFromXMLString(
     // parse number for row
     while( rtl::isAsciiDigit( pStrArray[ i ] ) && i >= 0 )
         i--;
-    rOutCell.nRow = (aCellStr.copy( i + 1 )).toInt32() - 1;
+    rOutCell.nRow = aCellStr.copy( i + 1 ).toInt32() - 1;
     // a dollar in XML means absolute (whereas in UI it means relative)
     if( pStrArray[ i ] == aDollar )
     {

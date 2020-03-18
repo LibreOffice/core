@@ -1198,8 +1198,8 @@ void SwView::Execute(SfxRequest &rReq)
             SfxViewFrame* pViewFrame = GetViewFrame();
             if (rReq.GetArgs() != nullptr)
                 pViewFrame->SetChildWindow (FN_SPELL_GRAMMAR_DIALOG,
-                    static_cast<const SfxBoolItem&>( (rReq.GetArgs()->
-                        Get(FN_SPELL_GRAMMAR_DIALOG))).GetValue());
+                    static_cast<const SfxBoolItem&>( rReq.GetArgs()->
+                        Get(FN_SPELL_GRAMMAR_DIALOG)).GetValue());
             else
                 pViewFrame->ToggleChildWindow(FN_SPELL_GRAMMAR_DIALOG);
 

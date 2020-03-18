@@ -590,8 +590,8 @@ namespace frm
 
         tools::Rectangle aPlayground( aPos, aSize );
         Size aOnePixel( _pDev->PixelToLogic( Size( 1, 1 ) ) );
-        aPlayground.AdjustRight( -(aOnePixel.Width()) );
-        aPlayground.AdjustBottom( -(aOnePixel.Height()) );
+        aPlayground.AdjustRight( -aOnePixel.Width() );
+        aPlayground.AdjustBottom( -aOnePixel.Height() );
 
         // background
         _pDev->SetLineColor();

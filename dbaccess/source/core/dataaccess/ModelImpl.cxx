@@ -1181,7 +1181,7 @@ void ODatabaseModelImpl::impl_switchToLogicalURL( const OUString& i_rDocumentURL
     const OUString sOldURL( m_sDocumentURL );
     // update our name, if necessary
     if  (   ( m_sName == m_sDocumentURL )   // our name is our old URL
-        ||  ( m_sName.isEmpty() )        // we do not have a name, yet (i.e. are not registered at the database context)
+        ||  m_sName.isEmpty()               // we do not have a name, yet (i.e. are not registered at the database context)
         )
     {
         INetURLObject aURL( i_rDocumentURL );

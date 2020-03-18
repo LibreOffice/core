@@ -467,7 +467,7 @@ TVChildTarget::SearchAndInsert(std::unique_ptr<TVDom> p, TVDom* tvDom)
     sal_Int32 p_int = p->id.toInt32();
 
     for(i = tvDom->children.begin(); i!=tvDom->children.end(); ++i)
-        if (!((*i)->isLeaf()) &&
+        if (!(*i)->isLeaf() &&
             ((*i)->id.getLength() == p->id.getLength()) &&
             (p->id.replaceAt((*i)->parent->id.getLength(), p->id.getLength()-(*i)->parent->id.getLength(), "") == (*i)->parent->id))      //prefix check
         {

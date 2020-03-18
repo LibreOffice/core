@@ -950,8 +950,8 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
             aMtf.WindStart();
 
             const Size  aExtSize( aOut->PixelToLogic( Size( 0, 0  ) ) );
-            Size        aBoundSize( aBound.GetWidth() + ( aExtSize.Width() ),
-                                    aBound.GetHeight() + ( aExtSize.Height() ) );
+            Size        aBoundSize( aBound.GetWidth() + aExtSize.Width(),
+                                    aBound.GetHeight() + aExtSize.Height() );
 
             aMtf.SetPrefMapMode( aMap );
             aMtf.SetPrefSize( aBoundSize );

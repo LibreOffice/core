@@ -5099,7 +5099,7 @@ void PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aChar
     sal_uInt16  nStringLen = aString.getLength();
 
     rIn.ReadUInt16( nDummy16 );
-    nCharCount = (rIn.good()) ? nDummy16 : 0;
+    nCharCount = rIn.good() ? nDummy16 : 0;
     rIn.ReadUInt16( nDummy16 );
     nCharsToRead = nStringLen - ( nCharReadCnt + nCharCount );
     if ( nCharsToRead < 0 )

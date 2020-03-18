@@ -1609,9 +1609,9 @@ void ScTable::QuickSort( ScSortInfoArray* pArray, SCCOLROW nLo, SCCOLROW nHi )
         SCCOLROW nj = nHi;
         do
         {
-            while ((ni <= nHi) && (Compare(pArray, ni, nLo)) < 0)
+            while ((ni <= nHi) && Compare(pArray, ni, nLo) < 0)
                 ni++;
-            while ((nj >= nLo) && (Compare(pArray, nLo, nj)) < 0)
+            while ((nj >= nLo) && Compare(pArray, nLo, nj) < 0)
                 nj--;
             if (ni <= nj)
             {

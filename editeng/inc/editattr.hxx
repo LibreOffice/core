@@ -355,7 +355,7 @@ public:
 
     bool operator == ( const EditCharAttribField& rAttr ) const;
     bool operator != ( const EditCharAttribField& rAttr ) const
-                                    { return !(operator == ( rAttr ) ); }
+                                    { return !operator == ( rAttr ); }
 
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
     std::optional<Color>&   GetTextColor()      { return mxTxtColor; }

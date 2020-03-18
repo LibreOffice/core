@@ -1297,7 +1297,7 @@ SdrObjectUniquePtr XclImpArcObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, c
         case EXC_OBJ_ARC_TR:
             nStartAngle = 0;
             nEndAngle = 9000;
-            aNewRect.AdjustLeft( -(rAnchorRect.GetWidth()) );
+            aNewRect.AdjustLeft( -rAnchorRect.GetWidth() );
             aNewRect.AdjustBottom(rAnchorRect.GetHeight() );
         break;
         case EXC_OBJ_ARC_TL:
@@ -1310,13 +1310,13 @@ SdrObjectUniquePtr XclImpArcObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, c
             nStartAngle = 18000;
             nEndAngle = 27000;
             aNewRect.AdjustRight(rAnchorRect.GetWidth() );
-            aNewRect.AdjustTop( -(rAnchorRect.GetHeight()) );
+            aNewRect.AdjustTop( -rAnchorRect.GetHeight() );
         break;
         case EXC_OBJ_ARC_BR:
             nStartAngle = 27000;
             nEndAngle = 0;
-            aNewRect.AdjustLeft( -(rAnchorRect.GetWidth()) );
-            aNewRect.AdjustTop( -(rAnchorRect.GetHeight()) );
+            aNewRect.AdjustLeft( -rAnchorRect.GetWidth() );
+            aNewRect.AdjustTop( -rAnchorRect.GetHeight() );
         break;
     }
     SdrCircKind eObjKind = maFillData.IsFilled() ? SdrCircKind::Section : SdrCircKind::Arc;

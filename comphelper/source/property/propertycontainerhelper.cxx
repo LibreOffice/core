@@ -256,7 +256,7 @@ bool OPropertyContainerHelper::convertFastPropertyValue(
 
             // argument check
             if  (   !   (   (bMayBeVoid && !aNewRequestedValue.hasValue())                      // void is allowed if the attribute says so
-                        ||  (aNewRequestedValue.getValueType().equals(aPos->aProperty.Type))    // else the types have to be equal
+                        ||  aNewRequestedValue.getValueType().equals(aPos->aProperty.Type)      // else the types have to be equal
                         )
                 )
             {

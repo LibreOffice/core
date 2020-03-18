@@ -133,8 +133,7 @@ SvStream& Out_Char(SvStream& rStream, sal_Unicode c,
                     sal_uInt32 const nFlags =
                         RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
                         RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR;
-                    bool bWriteAsUnicode = !(sBuf.convertToString(&sConverted,
-                                         eDestEnc, nFlags))
+                    bool bWriteAsUnicode = !sBuf.convertToString(&sConverted, eDestEnc, nFlags)
                                             || (RTL_TEXTENCODING_UTF8==eDestEnc); // #i43933# do not export UTF-8 chars in RTF;
                     if (bWriteAsUnicode)
                     {

@@ -2637,7 +2637,7 @@ void SvxRuler::CalcMinMax()
                 {
                     if(nDragType & SvxRulerDragFlags::OBJECT_SIZE_PROPORTIONAL)
                     {
-                        nMaxLeft = (mxColumnItem->Count()) * glMinFrame + lNullPix;
+                        nMaxLeft = mxColumnItem->Count() * glMinFrame + lNullPix;
                     }
                     else
                     {

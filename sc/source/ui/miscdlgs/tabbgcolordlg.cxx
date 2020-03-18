@@ -98,7 +98,7 @@ IMPL_LINK_NOARG(ScTabBgColorDlg, SelectPaletteLBHdl, weld::ComboBox&, void)
 IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorDblClickHdl_Impl, SvtValueSet*, void)
 {
     sal_uInt16 nItemId = m_xTabBgColorSet->GetSelectedItemId();
-    Color aColor = nItemId ? ( m_xTabBgColorSet->GetItemColor( nItemId ) ) : COL_AUTO;
+    Color aColor = nItemId ? m_xTabBgColorSet->GetItemColor( nItemId ) : COL_AUTO;
     m_aTabBgColor = aColor;
     m_xDialog->response(RET_OK);
 }
@@ -107,7 +107,7 @@ IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorDblClickHdl_Impl, SvtValueSet*, void)
 IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorOKHdl_Impl, weld::Button&, void)
 {
     sal_uInt16 nItemId = m_xTabBgColorSet->GetSelectedItemId();
-    Color aColor = nItemId ? ( m_xTabBgColorSet->GetItemColor( nItemId ) ) : COL_AUTO;
+    Color aColor = nItemId ? m_xTabBgColorSet->GetItemColor( nItemId ) : COL_AUTO;
     m_aTabBgColor = aColor;
     m_xDialog->response(RET_OK);
 }
@@ -130,7 +130,7 @@ bool ScTabBgColorDlg::ScTabBgColorValueSet::KeyInput( const KeyEvent& rKEvt )
         case KEY_RETURN:
         {
             sal_uInt16 nItemId = GetSelectedItemId();
-            const Color& aColor = nItemId ? ( GetItemColor( nItemId ) ) : COL_AUTO;
+            const Color& aColor = nItemId ? GetItemColor( nItemId ) : COL_AUTO;
             m_pTabBgColorDlg->m_aTabBgColor = aColor;
             m_pTabBgColorDlg->response(RET_OK);
             return true;

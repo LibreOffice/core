@@ -1234,7 +1234,7 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
             }
             const OUString& rElementLocalName = OUString( XML_CAST( localName ), strlen( XML_CAST( localName )), RTL_TEXTENCODING_UTF8 );
             rEvent.msNamespace = sNamespace;
-            rEvent.msElementName = (aElementPrefix.isEmpty())? rElementLocalName : aElementPrefix + ":" + rElementLocalName;
+            rEvent.msElementName = aElementPrefix.isEmpty() ? rElementLocalName : aElementPrefix + ":" + rElementLocalName;
         }
         else // token is always preferred.
             rEvent.msElementName.clear();
@@ -1261,7 +1261,7 @@ void FastSaxParserImpl::addUnknownElementWithPrefix(const xmlChar **attributes, 
         aNamespaceURI = OUString( XML_CAST( attributes[ i + 2 ] ), strlen( XML_CAST( attributes[ i + 2 ] )), RTL_TEXTENCODING_UTF8 );
     const OString& rPrefix = OString( XML_CAST( attributes[ i + 1 ] ));
     const OString& rLocalName = OString( XML_CAST( attributes[ i ] ));
-    OString aQualifiedName = (rPrefix.isEmpty())? rLocalName : rPrefix + ":" + rLocalName;
+    OString aQualifiedName = rPrefix.isEmpty() ? rLocalName : rPrefix + ":" + rLocalName;
     xAttributes->addUnknown( aNamespaceURI, aQualifiedName,
         OString( XML_CAST( attributes[ i + 3 ] ), attributes[ i + 4 ] - attributes[ i + 3 ] ));
     SAL_WARN("xmloff", "unknown element " << aQualifiedName << " " << aNamespaceURI);

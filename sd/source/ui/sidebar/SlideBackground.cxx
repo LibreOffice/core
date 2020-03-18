@@ -789,7 +789,7 @@ OUString const & SlideBackground::GetBitmapSetOrDefault()
 
 OUString const & SlideBackground::GetPatternSetOrDefault()
 {
-    if( !mpBitmapItem || !(mpBitmapItem->isPattern()))
+    if( !mpBitmapItem || !mpBitmapItem->isPattern())
     {
         SfxObjectShell* pSh = SfxObjectShell::Current();
         const SvxPatternListItem * pPtrnListItem = pSh->GetItem(SID_PATTERN_LIST);

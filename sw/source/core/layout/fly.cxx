@@ -2495,13 +2495,13 @@ Size SwFlyFrame::CalcRel( const SwFormatFrameSize &rSz ) const
 
         if ( rSz.GetWidthPercent() == SwFormatFrameSize::SYNCED )
         {
-            aRet.setWidth( aRet.Width() * ( aRet.Height()) );
-            aRet.setWidth( aRet.Width() / ( rSz.GetHeight()) );
+            aRet.setWidth( aRet.Width() * aRet.Height() );
+            aRet.setWidth( aRet.Width() / rSz.GetHeight() );
         }
         else if ( rSz.GetHeightPercent() == SwFormatFrameSize::SYNCED )
         {
-            aRet.setHeight( aRet.Height() * ( aRet.Width()) );
-            aRet.setHeight( aRet.Height() / ( rSz.GetWidth()) );
+            aRet.setHeight( aRet.Height() * aRet.Width() );
+            aRet.setHeight( aRet.Height() / rSz.GetWidth() );
         }
     }
     return aRet;

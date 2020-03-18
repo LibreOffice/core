@@ -298,7 +298,7 @@ void Reader::readMessage(Unmarshal & unmarshal) {
                               cppu::UnoType<
                                   css::uno::Reference<
                                       css::uno::XInterface > >::get()))
-                      && (css::uno::TypeDescription(
+                      && css::uno::TypeDescription(
                               *static_cast<
                                   typelib_TypeDescriptionReference ** >(
                                       inArgs[0].getValue(inArgs[0].getType()))).
@@ -306,7 +306,7 @@ void Reader::readMessage(Unmarshal & unmarshal) {
                               css::uno::TypeDescription(
                                   cppu::UnoType<
                                       css::uno::Reference<
-                                          css::uno::XInterface > >::get())))))
+                                          css::uno::XInterface > >::get()))))
                 {
                     throw css::uno::RuntimeException(
                         "URP: queryInterface request message with unknown OID '"
@@ -353,9 +353,8 @@ void Reader::readReplyMessage(Unmarshal & unmarshal, sal_uInt8 flags1) {
         ret = unmarshal.readValue(
             css::uno::TypeDescription(cppu::UnoType< css::uno::Any >::get()));
         if (!typelib_typedescription_isAssignableFrom(
-                (css::uno::TypeDescription(
-                    cppu::UnoType< css::uno::RuntimeException >::get()).
-                 get()),
+                css::uno::TypeDescription(
+                    cppu::UnoType< css::uno::RuntimeException >::get()).get(),
                 ret.getType().get()))
         {
             sal_Int32 n = 0;

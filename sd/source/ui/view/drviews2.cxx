@@ -530,7 +530,7 @@ public:
             Point aPosition(aRectangle.Center().X(), aRectangle.Bottom());
 
             aPosition.AdjustX( -(aTextSize.Width() / 2) );
-            aPosition.AdjustY( -(aTextSize.Height()) );
+            aPosition.AdjustY( -aTextSize.Height() );
 
             pObject->SetLogicRect(::tools::Rectangle(aPosition, aTextSize));
         }

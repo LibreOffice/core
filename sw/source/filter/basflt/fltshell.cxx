@@ -495,12 +495,12 @@ static bool IterateNumrulePiece( const SwNodeIndex& rEnd,
                                 SwNodeIndex& rTmpStart, SwNodeIndex& rTmpEnd )
 {
     while( ( rTmpStart <= rEnd )
-           && !( rTmpStart.GetNode().IsTextNode() ) )    // look for valid start
+           && !rTmpStart.GetNode().IsTextNode() )    // look for valid start
         ++rTmpStart;
 
     rTmpEnd = rTmpStart;
     while( ( rTmpEnd <= rEnd )
-           && ( rTmpEnd.GetNode().IsTextNode() ) )       // look for valid end + 1
+           && rTmpEnd.GetNode().IsTextNode() )       // look for valid end + 1
         ++rTmpEnd;
 
     --rTmpEnd;                                      // valid end

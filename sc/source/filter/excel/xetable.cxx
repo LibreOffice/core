@@ -2406,7 +2406,7 @@ XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysE
             // texts.
             const sal_uInt16 nHeight = rDoc.GetRowHeight(nFrom, nScTab, false);
             if ( !pPrevEntry || ( nFrom == nXclRow ) ||
-                 ( maOutlineBfr.IsCollapsed() ) ||
+                 maOutlineBfr.IsCollapsed() ||
                  ( maOutlineBfr.GetLevel() != 0 ) ||
                  ( bRowAlwaysEmpty && !pPrevEntry->IsEmpty() ) ||
                  ( bHidden != pPrevEntry->IsHidden() ) ||

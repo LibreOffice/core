@@ -50,7 +50,7 @@ namespace pcr
                 if (xIFace.is())
                 {   // we have a chance to check if it's a formatted field model
                     Reference< XServiceInfo >  xInfo(xIFace, UNO_QUERY);
-                    if (xInfo.is() && (xInfo->supportsService(SERVICE_COMPONENT_FORMATTEDFIELD)))
+                    if (xInfo.is() && xInfo->supportsService(SERVICE_COMPONENT_FORMATTEDFIELD))
                         sClassName = PcrRes(RID_STR_PROPTITLE_FORMATTED);
                     else if (!xInfo.is())
                     {

@@ -56,7 +56,7 @@ struct SAL_WARN_UNUSED OOO_DLLPUBLIC_XMLREADER Span {
     }
 
     bool operator!=(Span const & text) const {
-        return !(operator==(text));
+        return !operator==(text);
     }
 
     bool equals(char const * textBegin, sal_Int32 textLength) const {

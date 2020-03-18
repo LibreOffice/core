@@ -1464,8 +1464,8 @@ void ScXMLExport::OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, con
                 }
                 if (nIndex == nPrevIndex && bHidden == bPrevHidden && bFiltered == bPrevFiltered &&
                     !(bHasRowHeader && ((nRow == aRowHeaderRange.aStart.Row()) || (nRow - 1 == aRowHeaderRange.aEnd.Row()))) &&
-                    !(pGroupRows->IsGroupStart(nRow)) &&
-                    !(pGroupRows->IsGroupEnd(nRow - 1)))
+                    !pGroupRows->IsGroupStart(nRow) &&
+                    !pGroupRows->IsGroupEnd(nRow - 1))
                     ++nEqualRows;
                 else
                 {
@@ -1645,7 +1645,7 @@ void ScXMLExport::FillFieldGroup(ScOutlineArray* pFields, ScMyOpenCloseColumnRow
             const ScOutlineEntry* pEntry = pFields->GetEntry(i, j);
             aGroup.nField = pEntry->GetStart();
             aGroup.nLevel = static_cast<sal_Int16>(i);
-            aGroup.bDisplay = !(pEntry->IsHidden());
+            aGroup.bDisplay = !pEntry->IsHidden();
             pGroups->AddGroup(aGroup, pEntry->GetEnd());
         }
     }

@@ -674,7 +674,7 @@ void SvxNumRule::Store( SvStream &rStream )
     rStream.WriteUInt16( static_cast<sal_uInt16>(eNumberingType) );
 
     FontToSubsFontConverter pConverter = nullptr;
-    bool bConvertBulletFont = ( rStream.GetVersion() <= SOFFICE_FILEFORMAT_50 ) && ( rStream.GetVersion() );
+    bool bConvertBulletFont = ( rStream.GetVersion() <= SOFFICE_FILEFORMAT_50 ) && rStream.GetVersion();
     for(sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
     {
         sal_uInt16 nSetFlag(aFmtsSet[i] ? 2 : 0); // fdo#68648 store that too

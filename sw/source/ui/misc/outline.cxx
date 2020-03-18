@@ -824,9 +824,9 @@ static long lcl_DrawBullet(vcl::RenderContext* pVDev, const SwNumFormat& rFormat
     // via Uno it's possible that no font has been set!
     vcl::Font aFont(rFormat.GetBulletFont() ? *rFormat.GetBulletFont() : aTmpFont);
     Size aTmpSize(rSize);
-    aTmpSize.setWidth( aTmpSize.Width() * ( rFormat.GetBulletRelSize()) );
+    aTmpSize.setWidth( aTmpSize.Width() * rFormat.GetBulletRelSize() );
     aTmpSize.setWidth( aTmpSize.Width() / 100 ) ;
-    aTmpSize.setHeight( aTmpSize.Height() * ( rFormat.GetBulletRelSize()) );
+    aTmpSize.setHeight( aTmpSize.Height() * rFormat.GetBulletRelSize() );
     aTmpSize.setHeight( aTmpSize.Height() / 100 ) ;
     // in case of a height of zero it is drawn in original height
     if(!aTmpSize.Height())

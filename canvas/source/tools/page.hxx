@@ -116,7 +116,7 @@ namespace canvas
             // select this surface before wiping the contents
             // since a specific implementation could trigger
             // a rendering operation here...
-            if(!(pSurface->selectTexture()))
+            if(!pSurface->selectTexture())
                 return false;
 
             // call refresh() if requested, otherwise we're up to date...

@@ -215,7 +215,7 @@ void SAL_CALL CallbackDocumentHandler::startFastElement( sal_Int32 nElement , co
 {
     const OUString& rPrefix = CallbackDocumentHandler::getNamespacePrefixFromToken( nElement );
     const OUString& rLocalName = CallbackDocumentHandler::getNameFromToken( nElement );
-    startUnknownElement( aDefaultNamespace, (rPrefix.isEmpty())? rLocalName : rPrefix + aNamespaceSeparator + rLocalName, Attribs );
+    startUnknownElement( aDefaultNamespace, rPrefix.isEmpty() ? rLocalName : rPrefix + aNamespaceSeparator + rLocalName, Attribs );
 }
 
 void SAL_CALL CallbackDocumentHandler::startUnknownElement( const OUString& /*Namespace*/, const OUString& Name, const Reference< XFastAttributeList >& Attribs  )
@@ -254,7 +254,7 @@ void SAL_CALL CallbackDocumentHandler::endFastElement( sal_Int32 nElement )
 {
     const OUString& rPrefix = CallbackDocumentHandler::getNamespacePrefixFromToken( nElement );
     const OUString& rLocalName = CallbackDocumentHandler::getNameFromToken( nElement );
-    endUnknownElement( aDefaultNamespace, (rPrefix.isEmpty())? rLocalName : rPrefix + aNamespaceSeparator + rLocalName );
+    endUnknownElement( aDefaultNamespace, rPrefix.isEmpty() ? rLocalName : rPrefix + aNamespaceSeparator + rLocalName );
 }
 
 

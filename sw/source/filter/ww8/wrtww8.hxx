@@ -1397,7 +1397,7 @@ public:
     {
         return (
                  (mnWid == rIn.mnWid) && (mnHei == rIn.mnHei) &&
-                 (maFly.RefersToSameFrameAs(rIn.maFly))
+                 maFly.RefersToSameFrameAs(rIn.maFly)
                );
     }
 };

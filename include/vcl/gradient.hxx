@@ -80,7 +80,7 @@ public:
     Gradient&       operator=( Gradient&& rGradient );
     bool            operator==( const Gradient& rGradient ) const;
     bool            operator!=( const Gradient& rGradient ) const
-                        { return !(Gradient::operator==( rGradient )); }
+                        { return !Gradient::operator==( rGradient ); }
 };
 
 #endif // INCLUDED_VCL_GRADIENT_HXX

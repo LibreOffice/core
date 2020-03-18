@@ -390,7 +390,7 @@ void XRMResMerge::WorkOnDesc(
                 sCur = aLanguages[ n ];
                 OString sText;
                 if ( !sCur.equalsIgnoreAsciiCase("en-US")  &&
-                    ( pEntrys->GetText( sText, sCur, true )) &&
+                    pEntrys->GetText( sText, sCur, true ) &&
                     !sText.isEmpty())
                 {
                     OString sAdditionalLine{ "\n        "  + rOpenTag };
@@ -470,7 +470,7 @@ void XRMResMerge::EndOfText(
                 sCur = aLanguages[ n ];
                 OString sContent;
                 if (!sCur.equalsIgnoreAsciiCase("en-US") &&
-                    ( pEntrys->GetText( sContent, sCur, true )) &&
+                    pEntrys->GetText( sContent, sCur, true ) &&
                     !sContent.isEmpty() &&
                     helper::isWellFormedXML( sContent ))
                 {

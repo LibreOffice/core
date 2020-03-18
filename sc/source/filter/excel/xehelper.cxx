@@ -488,7 +488,7 @@ XclExpStringRef lclCreateFormattedString(
             sal_Int32 nXclPortionStart = xString->Len();
             // add portion text to Excel string
             XclExpStringHelper::AppendString( *xString, rRoot, aXclPortionText );
-            if( (nXclPortionStart < xString->Len()) || (aParaText.isEmpty()) )
+            if( (nXclPortionStart < xString->Len()) || aParaText.isEmpty() )
             {
                 /*  Construct font from current edit engine text portion. Edit engine
                     creates different portions for different script types, no need to loop. */

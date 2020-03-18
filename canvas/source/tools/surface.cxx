@@ -181,7 +181,7 @@ namespace canvas
             pRenderModule->pushVertex(vertex);
         }
 
-        return !(pRenderModule->isError());
+        return !pRenderModule->isError();
     }
 
     bool Surface::drawRectangularArea(
@@ -302,7 +302,7 @@ namespace canvas
             pRenderModule->pushVertex(vertex);
         }
 
-        return !(pRenderModule->isError());
+        return !pRenderModule->isError();
     }
 
     bool Surface::drawWithClip( double                          fAlpha,
@@ -398,7 +398,7 @@ namespace canvas
             }
         }
 
-        return !(pRenderModule->isError());
+        return !pRenderModule->isError();
     }
 
     void Surface::prepareRendering()
@@ -426,7 +426,7 @@ namespace canvas
             // in case this fragment is still not located on any of the
             // available pages ['naked'], we force the page manager to
             // do it now, no way to defer this any longer...
-            if(!(mpFragment->select(mbIsDirty)))
+            if(!mpFragment->select(mbIsDirty))
                 mpPageManager->nakedFragment(mpFragment);
 
         }

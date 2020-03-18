@@ -1285,7 +1285,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                     sal_Unicode nCharCode = rKeyEvent.GetCharCode();
                     pEditView->pImpEditView->DrawSelectionXOR();
                     // Autocorrection?
-                    if ( ( pImpEditEngine->GetStatus().DoAutoCorrect() ) &&
+                    if ( pImpEditEngine->GetStatus().DoAutoCorrect() &&
                         ( SvxAutoCorrect::IsAutoCorrectChar( nCharCode ) ||
                           pImpEditEngine->IsNbspRunNext() ) )
                     {
@@ -1837,7 +1837,7 @@ void EditEngine::SetFlatMode( bool bFlat)
 
 bool EditEngine::IsFlatMode() const
 {
-    return !( pImpEditEngine->aStatus.UseCharAttribs() );
+    return !pImpEditEngine->aStatus.UseCharAttribs();
 }
 
 void EditEngine::SetControlWord( EEControlBits nWord )

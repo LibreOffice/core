@@ -235,7 +235,7 @@ void OSectionWindow::Resize()
     long nEndWidth = long(REPORT_ENDMARKER_WIDTH * GetMapMode().GetScaleX());
 
     const Point aThumbPos = m_pParent->getView()->getThumbPos();
-    aOutputSize.AdjustWidth( -(aThumbPos.X()) );
+    aOutputSize.AdjustWidth( -aThumbPos.X() );
     aOutputSize.AdjustHeight( -m_aSplitter->GetSizePixel().Height() );
 
     if ( m_aStartMarker->isCollapsed() )

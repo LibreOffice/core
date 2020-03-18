@@ -377,10 +377,10 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
         // Otherwise try to dispatch it ...
         Reference < XPrintable > xDoc;
         if(
-            ( aName.startsWith( ".uno" ) )  ||
-            ( aName.startsWith( "slot:" ) )  ||
-            ( aName.startsWith( "macro:" ) )  ||
-            ( aName.startsWith("vnd.sun.star.script") )
+            aName.startsWith( ".uno" )  ||
+            aName.startsWith( "slot:" )  ||
+            aName.startsWith( "macro:" )  ||
+            aName.startsWith("vnd.sun.star.script")
           )
         {
             // Attention: URL must be parsed full. Otherwise some detections on it will fail!

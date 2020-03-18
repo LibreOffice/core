@@ -570,8 +570,8 @@ void ImplDockingWindowWrapper::Tracking( const TrackingEvent& rTEvt )
             if ( aFrameMousePos.Y() > aFrameSize.Height()-1 )
                 aFrameMousePos.setY( aFrameSize.Height()-1 );
             aMousePos = GetWindow()->ImplFrameToOutput( aFrameMousePos );
-            aMousePos.AdjustX( -(maMouseOff.X()) );
-            aMousePos.AdjustY( -(maMouseOff.Y()) );
+            aMousePos.AdjustX( -maMouseOff.X() );
+            aMousePos.AdjustY( -maMouseOff.Y() );
             Point aPos = GetWindow()->ImplOutputToFrame( aMousePos );
             tools::Rectangle aTrackRect( aPos, Size( mnTrackWidth, mnTrackHeight ) );
             tools::Rectangle aCompRect = aTrackRect;

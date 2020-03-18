@@ -194,7 +194,7 @@ namespace drawinglayer::attribute
                         // is important, too, so use isWrongListEqual since there is no WrongList
                         // comparison in the regular OutlinerParaObject compare (since it's
                         // not-persistent data)
-                        if(!(getOutlinerParaObject().isWrongListEqual(rCandidate.getOutlinerParaObject())))
+                        if(!getOutlinerParaObject().isWrongListEqual(rCandidate.getOutlinerParaObject()))
                         {
                             return false;
                         }

@@ -143,7 +143,7 @@ void SwXMLBrushItemImportContext::EndElement()
             pItem->SetGraphicPos(GPOS_TILED);
     }
 
-    if (!(pItem->GetGraphic()))
+    if (!pItem->GetGraphic())
         pItem->SetGraphicPos(GPOS_NONE);
     else if (GPOS_NONE == pItem->GetGraphicPos())
         pItem->SetGraphicPos(GPOS_TILED);

@@ -393,7 +393,7 @@ void SvXMLNamespaceMap::AddAtIndex( const OUString& rPrefix,
         nKey = GetKeyByName( rName );
 
     assert(XML_NAMESPACE_NONE != nKey);
-    if( XML_NAMESPACE_NONE != nKey && ! ( aNameHash.count ( rPrefix ) ) )
+    if( XML_NAMESPACE_NONE != nKey && ! aNameHash.count ( rPrefix ) )
     {
         Add_( rPrefix, rName, nKey );
     }

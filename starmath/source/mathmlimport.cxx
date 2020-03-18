@@ -157,7 +157,7 @@ ErrCode SmXMLImportWrapper::Import(SfxMedium &rMedium)
     xInfoSet->setPropertyValue("BaseURI", makeAny(baseURI));
 
     sal_Int32 nSteps=3;
-    if ( !(rMedium.IsStorage()))
+    if ( !rMedium.IsStorage() )
         nSteps = 1;
 
     sal_Int32 nProgressRange(nSteps);

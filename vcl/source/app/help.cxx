@@ -643,14 +643,14 @@ void ImplSetHelpWindowPos( vcl::Window* pHelpWin, sal_uInt16 nHelpWinStyle, Quic
         if ( nStyle & QuickHelpFlags::Left )
             ;
         else if ( nStyle & QuickHelpFlags::Right )
-            aPos.AdjustX( -(aSz.Width()) );
+            aPos.AdjustX( -aSz.Width() );
         else
             aPos.AdjustX( -(aSz.Width()/2) );
 
         if ( nStyle & QuickHelpFlags::Top )
             ;
         else if ( nStyle & QuickHelpFlags::Bottom )
-            aPos.AdjustY( -(aSz.Height()) );
+            aPos.AdjustY( -aSz.Height() );
         else
             aPos.AdjustY( -(aSz.Height()/2) );
     }

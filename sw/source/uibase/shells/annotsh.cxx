@@ -1205,7 +1205,7 @@ void SwAnnotationShell::GetNoteState(SfxItemSet &rSet)
 
         if (pPostItMgr && pPostItMgr->HasActiveSidebarWin())
         {
-            if ( (pPostItMgr->GetActiveSidebarWin()->IsProtected()) &&
+            if ( pPostItMgr->GetActiveSidebarWin()->IsProtected() &&
                     ( (nSlotId==FN_DELETE_COMMENT) || (nSlotId==FN_REPLY) ) )
                 rSet.DisableItem( nWhich );
         }
@@ -1642,7 +1642,7 @@ void SwAnnotationShell::StateUndo(SfxItemSet &rSet)
                         rSh.GetDoStrings( SwWrtShell::UNDO, aItem );
                     }
                     else if ((nWhich == SID_GETREDOSTRINGS) &&
-                             (rSh.GetFirstRedoInfo(nullptr, nullptr)))
+                             rSh.GetFirstRedoInfo(nullptr, nullptr))
                     {
                         rSh.GetDoStrings( SwWrtShell::UNDO, aItem );
                     }

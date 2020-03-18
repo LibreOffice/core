@@ -3254,7 +3254,7 @@ sal_uLong ScTable::GetRowHeight( SCROW nStartRow, SCROW nEndRow, bool bHiddenAsZ
         while (nRow <= nEndRow)
         {
             SCROW nLastRow = -1;
-            if (!( ( RowHidden(nRow, nullptr, &nLastRow) ) && bHiddenAsZero ) )
+            if (!( RowHidden(nRow, nullptr, &nLastRow) && bHiddenAsZero ) )
             {
                 if (nLastRow > nEndRow)
                     nLastRow = nEndRow;

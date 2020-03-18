@@ -59,7 +59,7 @@ public:
     MapMode&        operator=( MapMode&& rMapMode );
     bool            operator==( const MapMode& rMapMode ) const;
     bool            operator!=( const MapMode& rMapMode ) const
-                        { return !(MapMode::operator==( rMapMode )); }
+                        { return !MapMode::operator==( rMapMode ); }
     bool            IsDefault() const;
 
     friend SvStream& ReadMapMode( SvStream& rIStm, MapMode& rMapMode );

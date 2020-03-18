@@ -509,7 +509,7 @@ bool ScTpSubTotalOptions::FillItemSet( SfxItemSet* rArgSet )
     theSubTotalData.bDoSort         = m_xBtnSort->get_active();
     theSubTotalData.bAscending      = m_xBtnAscending->get_active();
     theSubTotalData.bUserDef        = m_xBtnUserDef->get_active();
-    theSubTotalData.nUserIndex      = (m_xBtnUserDef->get_active())
+    theSubTotalData.nUserIndex      = m_xBtnUserDef->get_active()
                                     ? m_xLbUserDef->get_active()
                                     : 0;
 

@@ -507,8 +507,8 @@ void ImplDrawButton( OutputDevice *const pDev, tools::Rectangle aFillRect,
         else
         {
             // shrink fill rect
-            aFillRect.AdjustRight( -(aBrdSize.Width()) );
-            aFillRect.AdjustBottom( -(aBrdSize.Height()) );
+            aFillRect.AdjustRight( -aBrdSize.Width() );
+            aFillRect.AdjustBottom( -aBrdSize.Height() );
             // draw bottom and right borders (aOrigFillRect-aFillRect)
             pDev->DrawRect( tools::Rectangle( aOrigFillRect.Left(), aFillRect.Bottom()+1,
                                        aOrigFillRect.Right(), aOrigFillRect.Bottom() ) );

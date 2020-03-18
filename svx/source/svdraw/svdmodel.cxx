@@ -806,7 +806,7 @@ SdrModel::GetDocumentStream( OUString const& rURL,
         uno::Reference<io::XStream> const xStream(
             ::comphelper::OStorageHelper::GetStreamAtPackageURL(
                 xStorage, rURL, embed::ElementModes::READ, rProxy));
-        return (xStream.is()) ? xStream->getInputStream() : nullptr;
+        return xStream.is() ? xStream->getInputStream() : nullptr;
     }
     catch (container::NoSuchElementException const&)
     {

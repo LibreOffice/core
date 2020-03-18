@@ -1134,7 +1134,7 @@ SwSbxValue SwCalc::PrimFunc(bool &rChkPow)
             SAL_INFO("sw.calc", "-");
             SwSbxValue nErg;
             GetToken();
-            nErg.PutDouble( -(Prim().GetDouble()) );
+            nErg.PutDouble( -Prim().GetDouble() );
             return nErg;
             break;
         }

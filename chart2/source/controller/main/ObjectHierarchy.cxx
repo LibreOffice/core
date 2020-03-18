@@ -543,7 +543,7 @@ bool ImplObjectHierarchy::hasChildren( const ObjectIdentifier& rParent )
     {
         tChildMap::const_iterator aIt( m_aChildMap.find( rParent ));
         if( aIt != m_aChildMap.end())
-            return ! (aIt->second.empty());
+            return ! aIt->second.empty();
     }
     return false;
 }

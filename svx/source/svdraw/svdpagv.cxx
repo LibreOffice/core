@@ -649,9 +649,9 @@ void SdrPageView::ImpInvalidateHelpLineArea(sal_uInt16 nNum) const
                 OutputDevice& rOutDev = pCandidate->GetOutputDevice();
                 tools::Rectangle aR(rHL.GetBoundRect(rOutDev));
                 Size aSiz(rOutDev.PixelToLogic(Size(1,1)));
-                aR.AdjustLeft( -(aSiz.Width()) );
+                aR.AdjustLeft( -aSiz.Width() );
                 aR.AdjustRight(aSiz.Width() );
-                aR.AdjustTop( -(aSiz.Height()) );
+                aR.AdjustTop( -aSiz.Height() );
                 aR.AdjustBottom(aSiz.Height() );
                 const_cast<SdrView&>(GetView()).InvalidateOneWin(rOutDev, aR);
             }

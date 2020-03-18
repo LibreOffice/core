@@ -695,7 +695,7 @@ SvXMLImportContext *ScXMLImport::CreateMetaContext(
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             GetModel(), uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentProperties> const xDocProps(
-            (IsStylesOnlyMode()) ? nullptr : xDPS->getDocumentProperties());
+            IsStylesOnlyMode() ? nullptr : xDPS->getDocumentProperties());
         pContext = new SvXMLMetaDocumentContext(*this, xDocProps);
     }
 
@@ -706,7 +706,7 @@ SvXMLImportContext *ScXMLImport::CreateScriptContext()
 {
     SvXMLImportContext* pContext = nullptr;
 
-    if( !(IsStylesOnlyMode()) )
+    if( !IsStylesOnlyMode() )
     {
         pContext = new XMLScriptContext( *this, GetModel() );
     }

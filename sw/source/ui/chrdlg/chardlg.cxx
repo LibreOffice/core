@@ -103,7 +103,7 @@ void SwCharDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
     if (rId == "font")
     {
         SvxFontListItem aFontListItem( *static_cast<const SvxFontListItem*>(
-           ( m_rView.GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) ) ) );
+           m_rView.GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) ) );
         aSet.Put (SvxFontListItem( aFontListItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
         if(m_nDialogMode != SwCharDlgMode::Draw && m_nDialogMode != SwCharDlgMode::Ann)
             aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_PREVIEW_CHARACTER));

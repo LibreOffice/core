@@ -1819,7 +1819,7 @@ namespace pcr
                 }
 
                 bool bIsEnabled =   (  ( eLSType == ListSourceType_VALUELIST )
-                                    || ( sListSource.isEmpty() )
+                                    || sListSource.isEmpty()
                                         );
                 _rxInspectorUI->enablePropertyUI( PROPERTY_STRINGITEMLIST, bIsEnabled );
             }

@@ -160,9 +160,8 @@ void SvxAsianConfig::SetStartEndChars(
             el->setPropertyValue("EndCharacters", css::uno::makeAny(*endChars));
         } else {
             css::uno::Reference< css::beans::XPropertySet > el(
-                (css::uno::Reference< css::lang::XSingleServiceFactory >(
-                    set, css::uno::UNO_QUERY_THROW)->
-                 createInstance()),
+                css::uno::Reference< css::lang::XSingleServiceFactory >(
+                    set, css::uno::UNO_QUERY_THROW)->createInstance(),
                 css::uno::UNO_QUERY_THROW);
             el->setPropertyValue("StartCharacters", css::uno::makeAny(*startChars));
             el->setPropertyValue("EndCharacters", css::uno::makeAny(*endChars));

@@ -765,7 +765,7 @@ bool EffectMigration::ConvertPreset( const OUString& rPresetId, const OUString* 
             if( rPresetId.equalsAscii( p->mpPresetId ) &&
                 (( p->mpPresetSubType == nullptr ) ||
                  ( pPresetSubType == nullptr) ||
-                 ( pPresetSubType->equalsAscii( p->mpPresetSubType )) ) )
+                 pPresetSubType->equalsAscii( p->mpPresetSubType ) ) )
             {
                 rEffect = p->meEffect;
                 return true;
@@ -1246,7 +1246,7 @@ OUString EffectMigration::GetSoundFile( SvxShape* pShape )
             EffectSequence::iterator aIter;
 
             for(    aIter = pMainSequence->getBegin();
-                    (aSoundFile.isEmpty()) && (aIter != pMainSequence->getEnd());
+                    aSoundFile.isEmpty() && (aIter != pMainSequence->getEnd());
                     ++aIter )
             {
                 CustomAnimationEffectPtr pEffect( *aIter );

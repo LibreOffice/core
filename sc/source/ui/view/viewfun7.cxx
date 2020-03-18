@@ -343,7 +343,7 @@ bool ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::X
         // don't call AdjustInsertPos
         Point aInsPos = rPos;
         if ( GetViewData().GetDocument()->IsNegativePage( GetViewData().GetTabNo() ) )
-            aInsPos.AdjustX( -(aSize.Width()) );
+            aInsPos.AdjustX( -aSize.Width() );
         tools::Rectangle aRect( aInsPos, aSize );
 
         ScDrawView* pDrView = GetScDrawView();
@@ -426,7 +426,7 @@ bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
     Size aSize = pWin->LogicToLogic( rGraphic.GetPrefSize(), &aSourceMap, &aDestMap );
 
     if ( GetViewData().GetDocument()->IsNegativePage( GetViewData().GetTabNo() ) )
-        aPos.AdjustX( -(aSize.Width()) );
+        aPos.AdjustX( -aSize.Width() );
 
     GetViewData().GetViewShell()->SetDrawShell( true );
     tools::Rectangle aRect(aPos, aSize);

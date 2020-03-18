@@ -268,7 +268,7 @@ void TemplateLocalView::insertItems(const std::vector<TemplateItemProperties> &r
         else
         {
             OUString sHelpText = SfxResId(STR_TEMPLATE_TOOLTIP);
-            sHelpText = (sHelpText.replaceFirst("$1", pCur->aName)).replaceFirst("$2", pCur->aRegionName);
+            sHelpText = sHelpText.replaceFirst("$1", pCur->aName).replaceFirst("$2", pCur->aRegionName);
             pChild->setHelpText(sHelpText);
         }
 
@@ -1123,7 +1123,7 @@ void SfxTemplateLocalView::insertItems(const std::vector<TemplateItemProperties>
         else
         {
             OUString sHelpText = SfxResId(STR_TEMPLATE_TOOLTIP);
-            sHelpText = (sHelpText.replaceFirst("$1", pCur->aName)).replaceFirst("$2", pCur->aRegionName);
+            sHelpText = sHelpText.replaceFirst("$1", pCur->aName).replaceFirst("$2", pCur->aRegionName);
             pChild->setHelpText(sHelpText);
         }
 

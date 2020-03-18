@@ -216,7 +216,7 @@ HierarchyContentProvider::getRootConfigReadNameAccess(
     if (it == m_aConfigProviderMap.end())
         return uno::Reference< container::XHierarchicalNameAccess >();
 
-    if ( !( (*it).second.xRootReadAccess.is() ) )
+    if ( !(*it).second.xRootReadAccess.is() )
     {
         if ( (*it).second.bTriedToGetRootReadAccess )
         {

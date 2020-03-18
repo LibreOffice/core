@@ -147,7 +147,7 @@ void LwpFrame::RegisterStyle(std::unique_ptr<XFFrameStyle>& rFrameStyle)
 
         //Get content obj;
         /*LwpObject* pObj =*/ m_pLayout->GetContent().obj();
-        if(m_pLayout->IsGroupHead()&&(m_pLayout->IsMinimumHeight()))
+        if(m_pLayout->IsGroupHead() && m_pLayout->IsMinimumHeight())
         {
             //process grouplayout height. there is problems now
             pXFFrame->SetHeight( fHeight );

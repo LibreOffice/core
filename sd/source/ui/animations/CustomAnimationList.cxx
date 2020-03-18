@@ -1338,8 +1338,8 @@ void CustomAnimationList::Paint(vcl::RenderContext& rRenderContext, const ::tool
 
     aRect.AdjustLeft(aOffset.X() );
     aRect.AdjustTop(aOffset.Y() );
-    aRect.AdjustRight( -(aOffset.X()) );
-    aRect.AdjustBottom( -(aOffset.Y()) );
+    aRect.AdjustRight( -aOffset.X() );
+    aRect.AdjustBottom( -aOffset.Y() );
 
     rRenderContext.DrawText(aRect, SdResId(STR_CUSTOMANIMATION_LIST_HELPTEXT),
                             DrawTextFlags::MultiLine | DrawTextFlags::WordBreak | DrawTextFlags::Center | DrawTextFlags::VCenter );

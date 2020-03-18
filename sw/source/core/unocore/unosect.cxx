@@ -453,7 +453,7 @@ SwXTextSection::getAnchor()
     if(pSectFormat)
     {
         const SwNodeIndex* pIdx;
-        if( nullptr != ( pSectFormat->GetSection() ) &&
+        if( nullptr != pSectFormat->GetSection() &&
             nullptr != ( pIdx = pSectFormat->GetContent().GetContentIdx() ) &&
             pIdx->GetNode().GetNodes().IsDocNodes() )
         {

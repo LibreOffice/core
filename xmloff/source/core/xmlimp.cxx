@@ -672,7 +672,7 @@ std::unique_ptr<SvXMLNamespaceMap> SvXMLImport::processNSAttributes(
             }
         }
         else if( ( rAttrName.getLength() >= 5 ) &&
-            ( rAttrName.startsWith( GetXMLToken(XML_XMLNS) ) ) &&
+            rAttrName.startsWith( GetXMLToken(XML_XMLNS) ) &&
             ( rAttrName.getLength() == 5 || ':' == rAttrName[5] ) )
         {
             if( !pRewindMap )

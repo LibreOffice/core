@@ -888,7 +888,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
                     }
                 }
 
-                CalculateGraphicBulletSize( ( mvPortions.empty() ) ? 24 : mvPortions.front()->mnCharHeight );
+                CalculateGraphicBulletSize( mvPortions.empty() ? 24 : mvPortions.front()->mnCharHeight );
 
                 switch( nNumberingType )
                 {

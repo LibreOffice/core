@@ -615,7 +615,7 @@ void SpinField::ImplCalcButtonAreas(OutputDevice* pDev, const Size& rOutSz, tool
         long nW = rStyleSettings.GetScrollBarSize();
         nW = GetDrawPixel( pDev, nW );
         aDropDownSize = Size( CalcZoom( nW ), aSize.Height() );
-        aSize.AdjustWidth( -(aDropDownSize.Width()) );
+        aSize.AdjustWidth( -aDropDownSize.Width() );
         rDDArea = tools::Rectangle( Point( aSize.Width(), 0 ), aDropDownSize );
         rDDArea.AdjustTop( -1 );
     }
@@ -672,7 +672,7 @@ void SpinField::ImplCalcButtonAreas(OutputDevice* pDev, const Size& rOutSz, tool
         }
         else
         {
-            aSize.AdjustWidth( -(CalcZoom( GetDrawPixel( pDev, rStyleSettings.GetSpinSize() ) )) );
+            aSize.AdjustWidth( -CalcZoom( GetDrawPixel( pDev, rStyleSettings.GetSpinSize() ) ) );
 
             rSpinUpArea = tools::Rectangle( aSize.Width(), 0, rOutSz.Width()-aDropDownSize.Width()-1, nBottom1 );
             rSpinDownArea = tools::Rectangle( rSpinUpArea.Left(), nTop2, rSpinUpArea.Right(), nBottom2 );

@@ -79,15 +79,15 @@ IMPL_LINK_NOARG(SwBlink, Blinker, Timer *, void)
                 switch ( pTmp->GetDirection() )
                 {
                     case 900:
-                        aPos.AdjustX( -(pTmp->GetPortion()->GetAscent()) );
-                        aPos.AdjustY( -(pTmp->GetPortion()->Width()) );
+                        aPos.AdjustX( -pTmp->GetPortion()->GetAscent() );
+                        aPos.AdjustY( -pTmp->GetPortion()->Width() );
                         nWidth = pTmp->GetPortion()->SvLSize().Height();
                         nHeight = pTmp->GetPortion()->SvLSize().Width();
                         break;
                     case 1800:
                         aPos.AdjustY( -(pTmp->GetPortion()->Height() -
                                     pTmp->GetPortion()->GetAscent()) );
-                        aPos.AdjustX( -(pTmp->GetPortion()->Width()) );
+                        aPos.AdjustX( -pTmp->GetPortion()->Width() );
                         nWidth = pTmp->GetPortion()->SvLSize().Width();
                         nHeight = pTmp->GetPortion()->SvLSize().Height();
                         break;
@@ -98,7 +98,7 @@ IMPL_LINK_NOARG(SwBlink, Blinker, Timer *, void)
                         nHeight = pTmp->GetPortion()->SvLSize().Width();
                         break;
                     default:
-                        aPos.AdjustY( -(pTmp->GetPortion()->GetAscent()) );
+                        aPos.AdjustY( -pTmp->GetPortion()->GetAscent() );
                         nWidth = pTmp->GetPortion()->SvLSize().Width();
                         nHeight = pTmp->GetPortion()->SvLSize().Height();
                 }

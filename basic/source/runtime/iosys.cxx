@@ -149,7 +149,7 @@ bool hasUno()
         {
             Reference< XUniversalContentBroker > xManager = UniversalContentBroker::create(xContext);
 
-            if ( !( xManager->queryContentProvider( "file:///" ).is() ) )
+            if ( ! xManager->queryContentProvider( "file:///" ).is() )
             {
                 // No UCB
                 bRetVal = false;

@@ -1060,7 +1060,7 @@ HierarchyEntry::iterator::~iterator()
 const HierarchyEntryData& HierarchyEntry::iterator::operator*() const
 {
     if ( ( m_pImpl->pos != -1 )
-         && ( m_pImpl->dir.is() )
+         && m_pImpl->dir.is()
          && ( m_pImpl->pos < m_pImpl->names.getLength() ) )
     {
         try

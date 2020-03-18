@@ -100,7 +100,7 @@ ScVbaLineFormat::getBeginArrowheadStyle()
     sal_Int32 nLineType = office::MsoArrowheadStyle::msoArrowheadNone;
     OUString sLineName;
     m_xPropertySet->getPropertyValue( "LineStartName" ) >>= sLineName;
-    if( ( sLineName.getLength() > 7 ) && ( sLineName.indexOf( "msArray" ) ) != -1 )
+    if( ( sLineName.getLength() > 7 ) && sLineName.indexOf( "msArray" ) != -1 )
     {
         sal_Int32 nIndex = sLineName.indexOf( ' ' );
         OUString sName = sLineName.copy( 0, nIndex );

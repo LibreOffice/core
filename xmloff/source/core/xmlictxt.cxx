@@ -73,7 +73,7 @@ void SAL_CALL SvXMLImportContext::startFastElement(sal_Int32 nElement, const uno
     mrImport.isFastContext = false;
     const OUString& rPrefix = SvXMLImport::getNamespacePrefixFromToken(nElement, &GetImport().GetNamespaceMap());
     const OUString& rLocalName = SvXMLImport::getNameFromToken( nElement );
-    startUnknownElement( SvXMLImport::aDefaultNamespace, (rPrefix.isEmpty())? rLocalName : rPrefix + SvXMLImport::aNamespaceSeparator + rLocalName, Attribs );
+    startUnknownElement( SvXMLImport::aDefaultNamespace, rPrefix.isEmpty() ? rLocalName : rPrefix + SvXMLImport::aNamespaceSeparator + rLocalName, Attribs );
 }
 
 void SAL_CALL SvXMLImportContext::startUnknownElement(const OUString & /*rNamespace*/, const OUString & rElementName,
@@ -119,7 +119,7 @@ void SAL_CALL SvXMLImportContext::endFastElement(sal_Int32 nElement)
     mrImport.isFastContext = false;
     const OUString& rPrefix = SvXMLImport::getNamespacePrefixFromToken(nElement, &GetImport().GetNamespaceMap());
     const OUString& rLocalName = SvXMLImport::getNameFromToken( nElement );
-    endUnknownElement( SvXMLImport::aDefaultNamespace, (rPrefix.isEmpty())? rLocalName : rPrefix + SvXMLImport::aNamespaceSeparator + rLocalName );
+    endUnknownElement( SvXMLImport::aDefaultNamespace, rPrefix.isEmpty() ? rLocalName : rPrefix + SvXMLImport::aNamespaceSeparator + rLocalName );
 }
 
 void SAL_CALL SvXMLImportContext::endUnknownElement (const OUString & /*rNamespace*/, const OUString & rElementName)

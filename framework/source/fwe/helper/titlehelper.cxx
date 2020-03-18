@@ -247,7 +247,7 @@ void SAL_CALL TitleHelper::disposing(const css::lang::EventObject& aEvent)
         return;
 
     if (
-        (xNumbers.is ()                                                   ) &&
+        xNumbers.is ()                                                   &&
         (nLeasedNumber != css::frame::UntitledNumbersConst::INVALID_NUMBER)
        )
        xNumbers->releaseNumber (nLeasedNumber);

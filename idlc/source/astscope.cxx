@@ -63,7 +63,7 @@ AstDeclaration* AstScope::addDeclaration(AstDeclaration* pDecl)
         }
         if ( (pDeclaration->getNodeType() == NT_interface)
              && (pDecl->getNodeType() == NT_interface)
-             && !(static_cast<AstInterface*>(pDeclaration)->isDefined()) )
+             && !static_cast<AstInterface*>(pDeclaration)->isDefined() )
         {
             m_declarations.push_back(pDecl);
             return pDecl;

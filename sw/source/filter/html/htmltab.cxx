@@ -1540,7 +1540,7 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
 {
     SwTableLine *pLine;
     if (!pUpper && 0 == nTopRow)
-        pLine = (m_pSwTable->GetTabLines())[0];
+        pLine = m_pSwTable->GetTabLines()[0];
     else
         pLine = new SwTableLine( m_pLineFrameFormatNoHeight ? m_pLineFrameFormatNoHeight
                                                      : m_pLineFormat,
@@ -2367,8 +2367,8 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
 
     // get the default line and box format
     // remember the first box and unlist it from the first row
-    SwTableLine *pLine1 = (m_pSwTable->GetTabLines())[0];
-    m_xBox1.reset((pLine1->GetTabBoxes())[0]);
+    SwTableLine *pLine1 = m_pSwTable->GetTabLines()[0];
+    m_xBox1.reset(pLine1->GetTabBoxes()[0]);
     pLine1->GetTabBoxes().erase(pLine1->GetTabBoxes().begin());
 
     m_pLineFormat = static_cast<SwTableLineFormat*>(pLine1->GetFrameFormat());
@@ -2387,8 +2387,8 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
         if( m_nHeight < MINLAY )
             m_nHeight = MINLAY;
 
-        (m_pSwTable->GetTabLines())[0]->ClaimFrameFormat();
-        (m_pSwTable->GetTabLines())[0]->GetFrameFormat()
+        m_pSwTable->GetTabLines()[0]->ClaimFrameFormat();
+        m_pSwTable->GetTabLines()[0]->GetFrameFormat()
             ->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Minimum, 0, m_nHeight ) );
     }
 

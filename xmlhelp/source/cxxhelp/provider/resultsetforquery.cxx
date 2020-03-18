@@ -204,7 +204,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
                     for( int i = 0 ; i < nItemCount ; ++i )
                     {
                         const HitItem& rItem = rQueryResultVector[ i ];
-                        if( (aResultSet.find( rItem.m_aURL )) != aResultSet.end() )
+                        if( aResultSet.find( rItem.m_aURL ) != aResultSet.end() )
                         {
                             HitItem aItemCopy( rItem );
                             aItemCopy.m_fScore /= nQueryListSize;   // To get average score

@@ -249,7 +249,7 @@ MasterScriptProvider::getScript( const OUString& scriptURI )
 
     if ( !sfUri->hasParameter( langKey ) ||
          !sfUri->hasParameter( locKey ) ||
-         ( sfUri->getName().isEmpty()  ) )
+         sfUri->getName().isEmpty() )
     {
         throw provider::ScriptFrameworkErrorException(
             "Incorrect format for Script URI: " + scriptURI,

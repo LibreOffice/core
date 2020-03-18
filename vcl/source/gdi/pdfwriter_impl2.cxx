@@ -84,13 +84,13 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
     if( aSize.Width() < 0 )
     {
         aSize.setWidth( aSize.Width() * -1 );
-        aPoint.AdjustX( -(aSize.Width()) );
+        aPoint.AdjustX( -aSize.Width() );
         nMirrorFlags |= BmpMirrorFlags::Horizontal;
     }
     if( aSize.Height() < 0 )
     {
         aSize.setHeight( aSize.Height() * -1 );
-        aPoint.AdjustY( -(aSize.Height()) );
+        aPoint.AdjustY( -aSize.Height() );
         nMirrorFlags |= BmpMirrorFlags::Vertical;
     }
 
@@ -543,7 +543,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                             if( pAction->GetType() == MetaActionType::GRADIENTEX )
                                 pGradAction = static_cast<const MetaGradientExAction*>(pAction);
                             else if( ( pAction->GetType() == MetaActionType::COMMENT ) &&
-                                     ( static_cast<const MetaCommentAction*>(pAction)->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_END")) )
+                                     static_cast<const MetaCommentAction*>(pAction)->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_END") )
                             {
                                 bDone = true;
                             }

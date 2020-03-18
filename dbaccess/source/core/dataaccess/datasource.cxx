@@ -367,7 +367,7 @@ Reference<XConnection> OSharedConnectionManager::getConnection( const OUString& 
 
     OUString sUser = user;
     OUString sPassword = password;
-    if ((sUser.isEmpty()) && (sPassword.isEmpty()) && (!_pDataSource->m_pImpl->m_sUser.isEmpty()))
+    if (sUser.isEmpty() && sPassword.isEmpty() && (!_pDataSource->m_pImpl->m_sUser.isEmpty()))
     {   // ease the usage of this method. data source which are intended to have a user automatically
         // fill in the user/password combination if the caller of this method does not specify otherwise
         sUser = _pDataSource->m_pImpl->m_sUser;
@@ -680,7 +680,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
 
     OUString sUser(_rUid);
     OUString sPwd(_rPwd);
-    if ((sUser.isEmpty()) && (sPwd.isEmpty()) && (!m_pImpl->m_sUser.isEmpty()))
+    if (sUser.isEmpty() && sPwd.isEmpty() && (!m_pImpl->m_sUser.isEmpty()))
     {   // ease the usage of this method. data source which are intended to have a user automatically
         // fill in the user/password combination if the caller of this method does not specify otherwise
         sUser = m_pImpl->m_sUser;

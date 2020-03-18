@@ -627,7 +627,7 @@ SfxDocumentMetaData::getMetaText(const char* i_name) const
     const OUString name( OUString::createFromAscii(i_name) );
     assert(m_meta.find(name) != m_meta.end());
     css::uno::Reference<css::xml::dom::XNode> xNode = m_meta.find(name)->second;
-    return (xNode.is()) ? getNodeText(xNode) : OUString();
+    return xNode.is() ? getNodeText(xNode) : OUString();
 }
 
 bool

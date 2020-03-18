@@ -1171,8 +1171,8 @@ void SvxPositionSizeTabPage::UpdateControlStates()
 {
     const bool bPosProtect =  m_xTsbPosProtect->get_state() == TRISTATE_TRUE;
     const bool bSizeProtect = m_xTsbSizeProtect->get_state() == TRISTATE_TRUE;
-    const bool bHeightChecked = !mbIgnoreAutoGrowHeight && (m_xTsbAutoGrowHeight->get_active());
-    const bool bWidthChecked = !mbIgnoreAutoGrowWidth && (m_xTsbAutoGrowWidth->get_active());
+    const bool bHeightChecked = !mbIgnoreAutoGrowHeight && m_xTsbAutoGrowHeight->get_active();
+    const bool bWidthChecked = !mbIgnoreAutoGrowWidth && m_xTsbAutoGrowWidth->get_active();
 
     m_xFlPosition->set_sensitive(!bPosProtect && !mbPageDisabled);
 

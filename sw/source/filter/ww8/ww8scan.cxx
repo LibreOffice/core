@@ -4328,7 +4328,7 @@ long WW8PLCFx_Book::GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen )
     rEnd = WW8_CP_MAX;
     rLen = 0;
 
-    if (!pBook[0] || !pBook[1] || !nIMax || (pBook[nIsEnd]->GetIdx()) >= nIMax)
+    if (!pBook[0] || !pBook[1] || !nIMax || pBook[nIsEnd]->GetIdx() >= nIMax)
     {
         rStart = rEnd = WW8_CP_MAX;
         return -1;
@@ -4581,7 +4581,7 @@ long WW8PLCFx_AtnBook::GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen
     rEnd = WW8_CP_MAX;
     rLen = 0;
 
-    if (!m_pBook[0] || !m_pBook[1] || !nIMax || (m_pBook[static_cast<int>(m_bIsEnd)]->GetIdx()) >= nIMax)
+    if (!m_pBook[0] || !m_pBook[1] || !nIMax || m_pBook[static_cast<int>(m_bIsEnd)]->GetIdx() >= nIMax)
     {
         rStart = rEnd = WW8_CP_MAX;
         return -1;
@@ -4710,7 +4710,7 @@ long WW8PLCFx_FactoidBook::GetNoSprms(WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& r
     rEnd = WW8_CP_MAX;
     rLen = 0;
 
-    if (!m_pBook[0] || !m_pBook[1] || !m_nIMax || (m_pBook[static_cast<int>(m_bIsEnd)]->GetIdx()) >= m_nIMax)
+    if (!m_pBook[0] || !m_pBook[1] || !m_nIMax || m_pBook[static_cast<int>(m_bIsEnd)]->GetIdx() >= m_nIMax)
     {
         rStart = rEnd = WW8_CP_MAX;
         return -1;
@@ -5201,7 +5201,7 @@ void WW8PLCFMan::GetSprmEnd( short nIdx, WW8PLCFManResult* pRes ) const
 
     const WW8PLCFxDesc* p = &m_aD[nIdx];
 
-    if (!(p->pIdStack->empty()))
+    if (!p->pIdStack->empty())
         pRes->nSprmId = p->pIdStack->top();       // get end position
     else
     {
@@ -5317,7 +5317,7 @@ void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
     }
     else
     {
-        if (!(p->pIdStack->empty()))
+        if (!p->pIdStack->empty())
             p->pIdStack->pop();
         if (p->pIdStack->empty())
         {
@@ -5595,7 +5595,7 @@ void WW8PLCFxDesc::Save( WW8PLCFxSave1& rSave ) const
             WW8PLCFxDesc aD;
             aD.nStartPos = nOrigStartPos+nCpOfs;
             aD.nCpOfs = rSave.nCpOfs = nCpOfs;
-            if (!(pPLCFx->SeekPos(aD.nStartPos)))
+            if (!pPLCFx->SeekPos(aD.nStartPos))
             {
                 aD.nEndPos = WW8_CP_MAX;
                 pPLCFx->SetDirty(true);
@@ -5619,7 +5619,7 @@ void WW8PLCFxDesc::Restore( const WW8PLCFxSave1& rSave )
             WW8PLCFxDesc aD;
             aD.nStartPos = rSave.nStartCp+rSave.nCpOfs;
             nCpOfs = aD.nCpOfs = rSave.nCpOfs;
-            if (!(pPLCFx->SeekPos(aD.nStartPos)))
+            if (!pPLCFx->SeekPos(aD.nStartPos))
             {
                 aD.nEndPos = WW8_CP_MAX;
                 pPLCFx->SetDirty(true);

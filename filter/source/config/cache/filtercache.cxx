@@ -263,8 +263,8 @@ std::vector<OUString> FilterCache::getMatchingItemsByProps(      EItemType  eTyp
     for (auto const& elem : rList)
     {
         if (
-            (elem.second.haveProps(lIProps)    ) &&
-            (elem.second.dontHaveProps(lEProps))
+            elem.second.haveProps(lIProps)    &&
+            elem.second.dontHaveProps(lEProps)
            )
         {
             lKeys.push_back(elem.first);
@@ -836,8 +836,8 @@ css::uno::Any FilterCache::impl_getDirectCFGValue(const OUString& sDirectKey)
 
     if (
         (!::utl::splitLastFromConfigurationPath(sDirectKey, sRoot, sKey)) ||
-        (sRoot.isEmpty()                                             ) ||
-        (sKey.isEmpty()                                              )
+        sRoot.isEmpty()                                                   ||
+        sKey.isEmpty()
        )
         return css::uno::Any();
 
@@ -1143,7 +1143,7 @@ void FilterCache::impl_validateAndOptimize()
 
     if (
         (!(aDirectValue >>= sDefaultFrameLoader)) ||
-        (sDefaultFrameLoader.isEmpty()       )
+        sDefaultFrameLoader.isEmpty()
        )
     {
         sLog.append("error\t:\t" "There is no valid default frame loader!?\n");
@@ -2111,8 +2111,8 @@ CacheItem FilterCache::impl_readOldItem(const css::uno::Reference< css::containe
     xItem->getByName( "Data" ) >>= sData;
     lData = impl_tokenizeString(sData, ',');
     if (
-        (sData.isEmpty()) ||
-        (lData.empty()    )
+        sData.isEmpty() ||
+        lData.empty()
        )
     {
         throw css::uno::Exception( "Can not read old item property DATA.", css::uno::Reference< css::uno::XInterface >());

@@ -2134,8 +2134,8 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
     Size aHalfConSiz(nMarkHdSiz,nMarkHdSiz);
     aHalfConSiz=pOut->PixelToLogic(aHalfConSiz);
     tools::Rectangle aMouseRect(rPt,rPt);
-    aMouseRect.AdjustLeft( -(aHalfConSiz.Width()) );
-    aMouseRect.AdjustTop( -(aHalfConSiz.Height()) );
+    aMouseRect.AdjustLeft( -aHalfConSiz.Width() );
+    aMouseRect.AdjustTop( -aHalfConSiz.Height() );
     aMouseRect.AdjustRight(aHalfConSiz.Width() );
     aMouseRect.AdjustBottom(aHalfConSiz.Height() );
     sal_uInt16 nBoundHitTol=static_cast<sal_uInt16>(aHalfConSiz.Width())/2; if (nBoundHitTol==0) nBoundHitTol=1;

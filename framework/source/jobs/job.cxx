@@ -434,8 +434,8 @@ void Job::impl_reactForJobResult( /*IN*/ const css::uno::Any& aResult )
     // write back the job specific configuration data ...
     // If the environment allow it and if this job has a configuration!
     if (
-        (m_aJobCfg.hasConfig()                            ) &&
-        (aAnalyzedResult.existPart(JobResult::E_ARGUMENTS))
+        m_aJobCfg.hasConfig()                           &&
+        aAnalyzedResult.existPart(JobResult::E_ARGUMENTS)
        )
     {
         m_aJobCfg.setJobConfig(aAnalyzedResult.getArguments());
@@ -445,8 +445,8 @@ void Job::impl_reactForJobResult( /*IN*/ const css::uno::Any& aResult )
     // Note: this option is available inside the environment EXECUTOR only
     if (
 //        (eEnvironment == JobData::E_EXECUTION              ) &&
-        (m_aJobCfg.hasConfig()                             ) &&
-        (aAnalyzedResult.existPart(JobResult::E_DEACTIVATE))
+        m_aJobCfg.hasConfig()                            &&
+        aAnalyzedResult.existPart(JobResult::E_DEACTIVATE)
        )
     {
         m_aJobCfg.disableJob();
@@ -456,8 +456,8 @@ void Job::impl_reactForJobResult( /*IN*/ const css::uno::Any& aResult )
     // Note: this option is available inside the environment DISPATCH only
     if (
         (eEnvironment == JobData::E_DISPATCH                   ) &&
-        (m_xResultListener.is()                                ) &&
-        (aAnalyzedResult.existPart(JobResult::E_DISPATCHRESULT))
+        m_xResultListener.is()                               &&
+        aAnalyzedResult.existPart(JobResult::E_DISPATCHRESULT)
        )
     {
         // Attention: Because the listener expect that the original object send this event ...

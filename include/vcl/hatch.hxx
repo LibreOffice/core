@@ -52,7 +52,7 @@ public:
 
     Hatch&          operator=( const Hatch& rHatch );
     bool            operator==( const Hatch& rHatch ) const;
-    bool            operator!=( const Hatch& rHatch ) const { return !(Hatch::operator==( rHatch ) ); }
+    bool            operator!=( const Hatch& rHatch ) const { return !Hatch::operator==( rHatch ); }
 
     HatchStyle      GetStyle() const { return mpImplHatch->meStyle; }
 

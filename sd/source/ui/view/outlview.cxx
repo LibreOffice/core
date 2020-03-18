@@ -1016,7 +1016,7 @@ void OutlineView::FillOutliner()
 
         // take text from title shape
         SdrTextObj* pTO = GetTitleTextObject(pPage);
-        if(pTO && !(pTO->IsEmptyPresObj()))
+        if(pTO && !pTO->IsEmptyPresObj())
         {
             OutlinerParaObject* pOPO = pTO->GetOutlinerParaObject();
             if (pOPO)
@@ -1058,7 +1058,7 @@ void OutlineView::FillOutliner()
         if (!pTO) // if no subtile found, try outline
             pTO = GetOutlineTextObject(pPage);
 
-        if(pTO && !(pTO->IsEmptyPresObj())) // found some text
+        if(pTO && !pTO->IsEmptyPresObj()) // found some text
         {
             OutlinerParaObject* pOPO = pTO->GetOutlinerParaObject();
             if (pOPO)
@@ -1600,7 +1600,7 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo, void)
         aTextPos.AdjustY((aOutSize.Height() - aTextSz.Height()) / 2 );
         if ( !bRightToLeftPara )
         {
-            aTextPos.AdjustX( -(aTextSz.Width()) );
+            aTextPos.AdjustX( -aTextSz.Width() );
         }
         else
         {
@@ -1609,7 +1609,7 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo, void)
     }
     else
     {
-        aTextPos.AdjustY( -(aTextSz.Width()) );
+        aTextPos.AdjustY( -aTextSz.Width() );
         aTextPos.AdjustX(nBulletHeight / 2 );
     }
     pInfo->mpOutDev->DrawText( aTextPos, aPageText );

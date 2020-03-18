@@ -597,7 +597,7 @@ void SwUndoResetAttr::RedoImpl(::sw::UndoRedoContext & rContext)
         if( nCnt ) {
             if( 1 < nCnt ) {
                 // search for the right one
-                SwHistoryHint* pHHint = (GetHistory())[ 0 ];
+                SwHistoryHint* pHHint = GetHistory()[ 0 ];
                 if( pHHint && HSTRY_SETTOXMARKHNT == pHHint->Which() ) {
                     while( nCnt ) {
                         if ( static_cast<SwHistorySetTOXMark*>(pHHint)

@@ -646,7 +646,7 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
                 GetTextFrame()->SwitchLTRtoRTL( aPoint );
 
             if ( ComplexTextLayoutFlags::BiDiStrong != GetOut()->GetLayoutMode() )
-                aPoint.AdjustX( -(rPor.Width()) );
+                aPoint.AdjustX( -rPor.Width() );
 
             if ( GetTextFrame()->IsVertical() )
                 GetTextFrame()->SwitchHorizontalToVertical( aPoint );
@@ -832,7 +832,7 @@ void SwTextPaintInfo::CalcRect( const SwLinePortion& rPor,
                              (  bFrameDir && DIR_LEFT2RIGHT == GetDirection() );
 
     if ( bCounterDir )
-        aPoint.AdjustX( -(aSize.Width()) );
+        aPoint.AdjustX( -aSize.Width() );
 
     SwRect aRect( aPoint, aSize );
 

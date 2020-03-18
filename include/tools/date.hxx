@@ -175,7 +175,7 @@ public:
      */
     sal_uInt16      GetDaysInMonth() const;
 
-    sal_uInt16      GetDaysInYear() const { return (IsLeapYear()) ? 366 : 365; }
+    sal_uInt16      GetDaysInYear() const { return IsLeapYear() ? 366 : 365; }
     bool            IsLeapYear() const;
 
     /** If the represented date is valid (1<=month<=12, 1<=day<=(28,29,30,31)

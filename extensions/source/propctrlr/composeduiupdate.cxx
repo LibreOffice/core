@@ -408,7 +408,7 @@ namespace pcr
 
             void operator()( const ImplMapHandlerToUI::value_type& _rUI )
             {
-                StringBag& rBag( ((_rUI.second.get())->*m_pGetter)() );
+                StringBag& rBag( (_rUI.second.get()->*m_pGetter)() );
                 m_rBag.insert( rBag.begin(), rBag.end() );
             }
 
@@ -430,7 +430,7 @@ namespace pcr
 
             void operator()( const ImplMapHandlerToUI::value_type& _rUI )
             {
-                clearContainer( ((_rUI.second.get())->*m_pGetter)() );
+                clearContainer( (_rUI.second.get()->*m_pGetter)() );
             }
 
             static void clearAll( const ImplMapHandlerToUI& _rMap, CachedInspectorUI::FGetStringBag _pGetter )
@@ -460,7 +460,7 @@ namespace pcr
 
             void operator()( const OUString& _rPropertyName )
             {
-                ((m_xUpdater.get())->*m_pSetter)( _rPropertyName );
+                (m_xUpdater.get()->*m_pSetter)( _rPropertyName );
             }
 
             static void forEach( const StringBag& _rProperties, const Reference< XObjectInspectorUI >& _rxDelegatorUI, FPropertyUISetter _pSetter )
@@ -539,7 +539,7 @@ namespace pcr
 
         void DefaultStringKeyBooleanUIUpdate::updateUIForKey( const OUString& _rKey, bool _bFlag ) const
         {
-            ((m_xUIUpdate.get())->*m_pSetter)( _rKey, _bFlag );
+            (m_xUIUpdate.get()->*m_pSetter)( _rKey, _bFlag );
         }
 
 

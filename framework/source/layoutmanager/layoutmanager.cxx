@@ -2318,7 +2318,7 @@ bool LayoutManager::implts_doLayout( bool bForceRequestBorderSpace, bool bOuterR
             // don't contain the status bar!
             aStatusBarSize = implts_getStatusBarSize();
             aContainerSize = implts_getContainerWindowOutputSize();
-            aContainerSize.AdjustHeight( -(aStatusBarSize.Height()) );
+            aContainerSize.AdjustHeight( -aStatusBarSize.Height() );
 
             if ( m_xToolbarManager.is() )
                 m_xToolbarManager->doLayout(aContainerSize);
@@ -2326,7 +2326,7 @@ bool LayoutManager::implts_doLayout( bool bForceRequestBorderSpace, bool bOuterR
             // Position the status bar
             if ( aStatusBarSize.Height() > 0 )
             {
-                implts_setStatusBarPosSize( ::Point( 0, std::max(( aContainerSize.Height() ), long( 0 ))),
+                implts_setStatusBarPosSize( ::Point( 0, std::max( aContainerSize.Height(), long( 0 ))),
                                             ::Size( aContainerSize.Width(),aStatusBarSize.Height() ));
             }
 

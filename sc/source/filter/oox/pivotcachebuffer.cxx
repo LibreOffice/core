@@ -726,7 +726,7 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
                 Reference< XNamed > xGroupName;
                 OUString aAutoName;
                 Reference< XIndexAccess > xGroupsIA( aGroupInfo.Groups, UNO_QUERY_THROW );
-                for( sal_Int32 nIdx = 0, nCount = xGroupsIA->getCount(); (nIdx < nCount) && (aAutoName.isEmpty()); ++nIdx ) try
+                for( sal_Int32 nIdx = 0, nCount = xGroupsIA->getCount(); (nIdx < nCount) && aAutoName.isEmpty(); ++nIdx ) try
                 {
                     Reference< XNameAccess > xItemsNA( xGroupsIA->getByIndex( nIdx ), UNO_QUERY_THROW );
                     if( xItemsNA->hasByName( aFirstItem ) )

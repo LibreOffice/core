@@ -57,25 +57,25 @@ bool DateTime::IsBetween( const DateTime& rFrom, const DateTime& rTo ) const
 
 bool DateTime::operator >( const DateTime& rDateTime ) const
 {
-    return (Date::operator>( rDateTime )) ||
+    return Date::operator>( rDateTime ) ||
          (Date::operator==( rDateTime ) && tools::Time::operator>( rDateTime ));
 }
 
 bool DateTime::operator <( const DateTime& rDateTime ) const
 {
-    return (Date::operator<( rDateTime )) ||
+    return Date::operator<( rDateTime ) ||
          (Date::operator==( rDateTime ) && tools::Time::operator<( rDateTime ));
 }
 
 bool DateTime::operator >=( const DateTime& rDateTime ) const
 {
-    return (Date::operator>( rDateTime )) ||
+    return Date::operator>( rDateTime ) ||
          (Date::operator==( rDateTime ) && tools::Time::operator>=( rDateTime ));
 }
 
 bool DateTime::operator <=( const DateTime& rDateTime ) const
 {
-    return (Date::operator<( rDateTime )) ||
+    return Date::operator<( rDateTime ) ||
          (Date::operator==( rDateTime ) && tools::Time::operator<=( rDateTime ));
 }
 

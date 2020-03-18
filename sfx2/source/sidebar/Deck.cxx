@@ -141,8 +141,8 @@ void Deck::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*r
     const int nBorderSize(Theme::GetInteger(Theme::Int_DeckBorderSize));
     aBox.AdjustLeft(aPadding.Left() );
     aBox.AdjustTop(aPadding.Top() );
-    aBox.AdjustRight( -(aPadding.Right()) );
-    aBox.AdjustBottom( -(aPadding.Bottom()) );
+    aBox.AdjustRight( -aPadding.Right() );
+    aBox.AdjustBottom( -aPadding.Bottom() );
     const sfx2::sidebar::Paint& rHorizontalBorderPaint(Theme::GetPaint(Theme::Paint_HorizontalBorder));
     DrawHelper::DrawBorder(rRenderContext, aBox,
                            SvBorder(nBorderSize, nBorderSize, nBorderSize, nBorderSize),

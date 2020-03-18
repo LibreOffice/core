@@ -306,7 +306,7 @@ void SvLBoxButton::Paint(
 
     //Native drawing
     bool bNativeOK = false;
-    ControlType eCtrlType = (pData->IsRadio())? ControlType::Radiobutton : ControlType::Checkbox;
+    ControlType eCtrlType = pData->IsRadio() ? ControlType::Radiobutton : ControlType::Checkbox;
     if ( rRenderContext.IsNativeControlSupported( eCtrlType, ControlPart::Entire) )
     {
         Size aSize(pData->Width(), pData->Height());
@@ -378,7 +378,7 @@ void SvLBoxButton::InitViewData(SvTreeListBox* pView,SvTreeListEntry* pEntry, Sv
         pViewData = pView->GetViewDataItem( pEntry, this );
     Size aSize( pData->Width(), pData->Height() );
 
-    ControlType eCtrlType = (pData->IsRadio())? ControlType::Radiobutton : ControlType::Checkbox;
+    ControlType eCtrlType = pData->IsRadio() ? ControlType::Radiobutton : ControlType::Checkbox;
     if ( pView )
         ImplAdjustBoxSize(aSize, eCtrlType, *pView);
     pViewData->mnWidth = aSize.Width();

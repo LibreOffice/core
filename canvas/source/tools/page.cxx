@@ -31,7 +31,7 @@ namespace canvas
 
     void Page::validate()
     {
-        if(!(isValid()))
+        if(!isValid())
         {
             for( const auto& rFragmentPtr : mpFragments )
                 rFragmentPtr->refresh();

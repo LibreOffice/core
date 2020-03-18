@@ -853,7 +853,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 case text::RelOrientation::PRINT_AREA:
                 case text::RelOrientation::PAGE_PRINT_AREA:
                 {
-                    aPos.AdjustX( -(pFrame->GetRightMargin()) );
+                    aPos.AdjustX( -pFrame->GetRightMargin() );
                 }
                 break;
             }

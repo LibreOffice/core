@@ -1533,14 +1533,14 @@ void SAL_CALL librdf_Repository::setStatementRDFa(
     // ensure that the metadatable has an XML ID
     i_xObject->ensureMetadataReference();
     const beans::StringPair mdref( i_xObject->getMetadataReference() );
-    if ((mdref.First.isEmpty()) || (mdref.Second.isEmpty())) {
+    if (mdref.First.isEmpty() || mdref.Second.isEmpty()) {
         throw uno::RuntimeException(
                 "librdf_Repository::setStatementRDFa: "
                 "ensureMetadataReference did not", *this);
     }
     OUString const sXmlId(mdref.First + "#" + mdref.Second);
     OUString const sContext(s_nsOOo + sXmlId);
-    OUString const content( (i_rRDFaContent.isEmpty())
+    OUString const content( i_rRDFaContent.isEmpty()
             ? xTextRange->getString()
             : i_rRDFaContent );
     uno::Reference<rdf::XNode> xContent;
@@ -1610,7 +1610,7 @@ void SAL_CALL librdf_Repository::removeStatementRDFa(
     }
 
     const beans::StringPair mdref( i_xElement->getMetadataReference() );
-    if ((mdref.First.isEmpty()) || (mdref.Second.isEmpty())) {
+    if (mdref.First.isEmpty() || mdref.Second.isEmpty()) {
         return; // nothing to do...
     }
 
@@ -1628,7 +1628,7 @@ librdf_Repository::getStatementRDFa(
             "librdf_Repository::getStatementRDFa: Element is null", *this, 0);
     }
     const beans::StringPair mdref( i_xElement->getMetadataReference() );
-    if ((mdref.First.isEmpty()) || (mdref.Second.isEmpty())) {
+    if (mdref.First.isEmpty() || mdref.Second.isEmpty()) {
         return beans::Pair< uno::Sequence<rdf::Statement>, sal_Bool >();
     }
     OUString const sXmlId(mdref.First + "#" + mdref.Second);

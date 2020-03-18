@@ -123,7 +123,7 @@ static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const tools::Rectangle& 
     if ( bTextBelow )
         aOuter.AdjustBottom(aTextSize.Height() );
     else
-        aOuter.AdjustTop( -(aTextSize.Height()) );
+        aOuter.AdjustTop( -aTextSize.Height() );
 
     pDev->SetLineColor();
     pDev->SetFillColor( rColor );

@@ -368,7 +368,7 @@ void BrowserDataWin::Command( const CommandEvent& rEvt )
     if ( ( (rEvt.GetCommand() == CommandEventId::Wheel) ||
            (rEvt.GetCommand() == CommandEventId::StartAutoScroll) ||
            (rEvt.GetCommand() == CommandEventId::AutoScroll) ) &&
-         ( HandleScrollCommand( rEvt, pBox->aHScroll.get(), pBox->pVScroll ) ) )
+         HandleScrollCommand( rEvt, pBox->aHScroll.get(), pBox->pVScroll ) )
       return;
 
     Point aEventPos( rEvt.GetMousePosPixel() );

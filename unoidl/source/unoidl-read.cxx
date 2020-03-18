@@ -236,9 +236,8 @@ void scanMap(
                         Entity(
                             ent,
                             (!published
-                             || (static_cast<unoidl::PublishableEntity *>(
-                                     ent.get())
-                                 ->isPublished())))))
+                             || static_cast<unoidl::PublishableEntity *>(ent.get())
+                                 ->isPublished()))))
                 .first);
             switch (ent->getSort()) {
             case unoidl::Entity::SORT_ENUM_TYPE:

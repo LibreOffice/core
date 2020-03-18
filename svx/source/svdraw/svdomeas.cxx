@@ -675,7 +675,7 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
         }
         if (bUpsideDown) {
             aTextPos.AdjustX(aTextSize2.Height() );
-            aTextPos.AdjustY( -(aTextSize2.Width()) );
+            aTextPos.AdjustY( -aTextSize2.Width() );
         }
     }
     if (aMPol.nTextAngle!=aGeo.nRotationAngle) {

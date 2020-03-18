@@ -608,7 +608,7 @@ OUString XMLTableImportContext::GetDefaultCellStyleName() const
     OUString sStyleName( msDefaultCellStyleName );
 
     // if there is still no style name, try default style name from column
-    if( (sStyleName.isEmpty()) && (mnCurrentColumn < sal::static_int_cast<sal_Int32>(maColumnInfos.size())) )
+    if( sStyleName.isEmpty() && (mnCurrentColumn < sal::static_int_cast<sal_Int32>(maColumnInfos.size())) )
         sStyleName = maColumnInfos[mnCurrentColumn]->msDefaultCellStyleName;
 
     return sStyleName;

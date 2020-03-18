@@ -1060,7 +1060,7 @@ bool EditTextObjectImpl::Equals( const EditTextObjectImpl& rCompare, bool bCompa
 
     for (size_t i = 0, n = aContents.size(); i < n; ++i)
     {
-        if (!(aContents[i]->Equals( *(rCompare.aContents[i]), bComparePool)))
+        if (!aContents[i]->Equals( *(rCompare.aContents[i]), bComparePool))
             return false;
     }
 

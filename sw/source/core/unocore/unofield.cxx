@@ -2381,7 +2381,7 @@ uno::Any SAL_CALL SwXTextField::getPropertyValue(const OUString& rPropertyName)
 
                 // get text node for the text field
                 const SwFormatField *pFieldFormat =
-                    (m_pImpl->GetField()) ? m_pImpl->GetFormatField() : nullptr;
+                    m_pImpl->GetField() ? m_pImpl->GetFormatField() : nullptr;
                 const SwTextField* pTextField = pFieldFormat
                     ? m_pImpl->GetFormatField()->GetTextField() : nullptr;
                 if(!pTextField)

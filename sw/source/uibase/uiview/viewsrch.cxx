@@ -503,7 +503,7 @@ bool SwView::SearchAndWrap(bool bApi)
     // selected regions as the cursor doesn't mark the selection in that case.)
     m_pWrtShell->GetCursor()->Normalize( s_pSrchItem->GetBackward() );
 
-    if (!m_pWrtShell->HasSelection() && (s_pSrchItem->HasStartPoint()))
+    if (!m_pWrtShell->HasSelection() && s_pSrchItem->HasStartPoint())
     {
         // No selection -> but we have a start point (top left corner of the
         // current view), start searching from there, not from the current

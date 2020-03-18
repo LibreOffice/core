@@ -187,7 +187,7 @@ IMPL_LINK(AboutDialog, SizeAllocHdl, const Size&, rSize, void)
     if (rSize.Width() == aBackgroundBitmap.GetSizePixel().Width())
         return;
     // Load background image
-    if (!(Application::GetSettings().GetStyleSettings().GetHighContrastMode()))
+    if (!Application::GetSettings().GetStyleSettings().GetHighContrastMode())
     {
         SfxApplication::loadBrandSvg("shell/about", aBackgroundBitmap, rSize.Width());
         Graphic aGraphic(aBackgroundBitmap);

@@ -1070,7 +1070,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
         RTFSprms aAnchorWrapAttributes;
         m_aStates.top().getShape().getAnchorAttributes().set(
             NS_ooxml::LN_CT_Anchor_behindDoc,
-            new RTFValue((m_aStates.top().getShape().getInBackground()) ? 1 : 0));
+            new RTFValue(m_aStates.top().getShape().getInBackground() ? 1 : 0));
         RTFSprms aAnchorSprms;
         for (const auto& rCharacterAttribute : m_aStates.top().getCharacterAttributes())
         {

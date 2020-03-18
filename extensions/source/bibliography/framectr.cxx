@@ -245,7 +245,7 @@ uno::Reference< frame::XDispatch >  BibFrameController_Impl::queryDispatch( cons
         CmdToInfoCache::const_iterator pIter = rCmdCache.find( aURL.Complete );
         if ( pIter != rCmdCache.end() )
         {
-            if (( m_xDatMan->HasActiveConnection() ) ||
+            if ( m_xDatMan->HasActiveConnection() ||
                 ( !pIter->second.bActiveConnection ))
                 return static_cast<frame::XDispatch*>(this);
         }

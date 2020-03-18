@@ -430,13 +430,13 @@ namespace xforms
                 pReason = RID_STR_XFORMS_VALUE_IS_NOT_A;
 
             // check range
-            else if( ( m_aMaxInclusive.hasValue() ) && f > m_fCachedMaxInclusive )
+            else if( m_aMaxInclusive.hasValue() && f > m_fCachedMaxInclusive )
                 pReason = RID_STR_XFORMS_VALUE_MAX_INCL;
-            else if( ( m_aMaxExclusive.hasValue() ) && f >= m_fCachedMaxExclusive )
+            else if( m_aMaxExclusive.hasValue() && f >= m_fCachedMaxExclusive )
                 pReason = RID_STR_XFORMS_VALUE_MAX_EXCL;
-            else if( ( m_aMinInclusive.hasValue() ) && f < m_fCachedMinInclusive )
+            else if( m_aMinInclusive.hasValue() && f < m_fCachedMinInclusive )
                 pReason = RID_STR_XFORMS_VALUE_MIN_INCL;
-            else if( ( m_aMinExclusive.hasValue() ) && f <= m_fCachedMinExclusive )
+            else if( m_aMinExclusive.hasValue() && f <= m_fCachedMinExclusive )
                 pReason = RID_STR_XFORMS_VALUE_MIN_EXCL;
         }
         return pReason;

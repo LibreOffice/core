@@ -215,7 +215,7 @@ void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
     {
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
         if( ( rAttrName.getLength() >= 5 ) &&
-            ( rAttrName.startsWith( GetXMLToken(XML_XMLNS) ) ) &&
+            rAttrName.startsWith( GetXMLToken(XML_XMLNS) ) &&
             ( rAttrName.getLength() == 5 || ':' == rAttrName[5] ) )
         {
             if( !pRewindMap )

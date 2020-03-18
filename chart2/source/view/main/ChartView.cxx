@@ -901,7 +901,7 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( ChartModel&
 
                 bool bAutoMinorInterval = true;
                 if( aScale.IncrementData.SubIncrements.hasElements() )
-                    bAutoMinorInterval = !( aScale.IncrementData.SubIncrements[0].IntervalCount.hasValue() );
+                    bAutoMinorInterval = ! aScale.IncrementData.SubIncrements[0].IntervalCount.hasValue();
                 if( bAutoMinorInterval )
                 {
                     if( !aExplicitIncrementDest.SubIncrements.empty() && !aExplicitIncrementSource.SubIncrements.empty() )

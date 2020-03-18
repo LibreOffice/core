@@ -348,7 +348,7 @@ void SvImpLBox::CursorDown()
         m_pView->Update();
         m_pStartEntry = pNextFirstToDraw;
         tools::Rectangle aArea( GetVisibleArea() );
-        m_pView->Scroll( 0, -(m_pView->GetEntryHeight()), aArea, ScrollFlags::NoChildren );
+        m_pView->Scroll( 0, -m_pView->GetEntryHeight(), aArea, ScrollFlags::NoChildren );
         m_pView->Update();
         ShowCursor( true );
         m_pView->NotifyScrolled();
@@ -1092,7 +1092,7 @@ void SvImpLBox::DrawNet(vcl::RenderContext& rRenderContext)
                 aPos2.setX( aPos1.X() );
             }
             aPos2.setY( aPos1.Y() );
-            aPos2.AdjustX( -(m_pView->GetIndent()) );
+            aPos2.AdjustX( -m_pView->GetIndent() );
             rRenderContext.DrawLine(aPos1, aPos2);
         }
         nY += nEntryHeight;
@@ -1106,7 +1106,7 @@ void SvImpLBox::DrawNet(vcl::RenderContext& rRenderContext)
         // first text (node bitmap, too)
         if (!m_pView->nContextBmpWidthMax)
             aPos1.AdjustX(rExpandedNodeBitmap.GetSizePixel().Width() / 2 );
-        aPos1.AdjustX( -(m_pView->GetIndent()) );
+        aPos1.AdjustX( -m_pView->GetIndent() );
         aPos1.setY( GetEntryLine( pEntry ) );
         aPos1.AdjustY(nEntryHeightDIV2 );
         pChild = pEntry->LastSibling();

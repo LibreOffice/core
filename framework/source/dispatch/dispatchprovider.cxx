@@ -196,7 +196,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
     else if (
              (sTargetFrameName==SPECIALTARGET_SELF)  ||
              (sTargetFrameName==SPECIALTARGET_TOP )  ||
-             (sTargetFrameName.isEmpty())
+             sTargetFrameName.isEmpty()
             )
     {
         xDispatcher = implts_searchProtocolHandler(aURL);
@@ -317,7 +317,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
 
     else if (
              (sTargetFrameName==SPECIALTARGET_SELF)  ||
-             (sTargetFrameName.isEmpty())
+             sTargetFrameName.isEmpty()
             )
     {
         // There exist a hard coded interception for special URLs.
@@ -362,7 +362,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
         // The result will be clear. He can't handle it - but he would try it.
         if (
             ( ! xDispatcher.is()             )  &&
-            ( implts_isLoadableContent(aURL) )
+            implts_isLoadableContent(aURL)
            )
         {
             xDispatcher = implts_getOrCreateDispatchHelper( E_SELFDISPATCHER, xFrame );

@@ -235,7 +235,7 @@ static const sal_Int32  RESOURCEURL_PREFIX_SIZE = strlen(RESOURCEURL_PREFIX);
 sal_Int16 RetrieveTypeFromResourceURL( const OUString& aResourceURL )
 {
 
-    if (( aResourceURL.startsWith( RESOURCEURL_PREFIX ) ) &&
+    if (aResourceURL.startsWith( RESOURCEURL_PREFIX ) &&
         ( aResourceURL.getLength() > RESOURCEURL_PREFIX_SIZE ))
     {
         OUString    aTmpStr     = aResourceURL.copy( RESOURCEURL_PREFIX_SIZE );
@@ -256,7 +256,7 @@ sal_Int16 RetrieveTypeFromResourceURL( const OUString& aResourceURL )
 
 OUString RetrieveNameFromResourceURL( const OUString& aResourceURL )
 {
-    if (( aResourceURL.startsWith( RESOURCEURL_PREFIX ) ) &&
+    if (aResourceURL.startsWith( RESOURCEURL_PREFIX ) &&
         ( aResourceURL.getLength() > RESOURCEURL_PREFIX_SIZE ))
     {
         sal_Int32 nIndex = aResourceURL.lastIndexOf( '/' );
@@ -372,7 +372,7 @@ void ModuleUIConfigurationManager::impl_preloadUIElementTypeList( Layer eLayer, 
                     OUString aUIElementName( aUIElementNames[n].copy( 0, nIndex ));
 
                     if (!aUIElementName.isEmpty() &&
-                        ( aExtension.equalsIgnoreAsciiCase("xml")))
+                        aExtension.equalsIgnoreAsciiCase("xml"))
                     {
                         aUIElementData.aResourceURL = aResURLPrefix + aUIElementName;
                         aUIElementData.aName        = aUIElementNames[n];

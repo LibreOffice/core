@@ -94,7 +94,7 @@ public:
     Cursor&         operator=( const Cursor& rCursor );
     bool            operator==( const Cursor& rCursor ) const;
     bool            operator!=( const Cursor& rCursor ) const
-                        { return !(Cursor::operator==( rCursor )); }
+                        { return !Cursor::operator==( rCursor ); }
 
     void            DrawToDevice(OutputDevice& rRenderContext);
 

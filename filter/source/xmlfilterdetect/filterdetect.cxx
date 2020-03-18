@@ -176,13 +176,13 @@ OUString SAL_CALL FilterDetect::detect( css::uno::Sequence< css::beans::Property
 
         sal_Int32 new_nlength=0;
         sal_Int32 i = 0 ;
-        while ((i < nLength) && (sTypeName.isEmpty()))
+        while ((i < nLength) && sTypeName.isEmpty())
         {
             Any elem = xTypeCont->getByName(myTypes[i]);
             elem >>=lProps;
             new_nlength = lProps.getLength();
             sal_Int32 j =0;
-            while (j < new_nlength && (sTypeName.isEmpty()))
+            while (j < new_nlength && sTypeName.isEmpty())
             {
                 OUString tmpStr;
                 lProps[j].Value >>=tmpStr;

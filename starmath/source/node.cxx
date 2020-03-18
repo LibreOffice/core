@@ -696,7 +696,7 @@ Point lcl_GetExtraPos(const SmRect &rRootSymbol,
 
     // from this calculate topleft edge of 'rExtra'
     aPos.AdjustX( -(rExtra.GetWidth() + rExtra.GetItalicRightSpace()) );
-    aPos.AdjustY( -(rExtra.GetHeight()) );
+    aPos.AdjustY( -rExtra.GetHeight() );
     // if there's enough space move a bit less to the right
     // examples: "nroot i a", "nroot j a"
     // (it looks better if we don't use italic-spaces here)

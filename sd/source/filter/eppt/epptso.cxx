@@ -634,7 +634,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
         nCharCount = pPara->CharacterCount();
 
         if ( ( pPara->meTextAdjust == css::beans::PropertyState_DIRECT_VALUE ) ||
-            ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_Adjust, pPara->mnTextAdjust ) ) )
+            mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_Adjust, pPara->mnTextAdjust ) )
             nPropertyFlags |= 0x00000800;
         nLineSpacing = pPara->mnLineSpacing;
 
@@ -666,23 +666,23 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
                     nLineSpacing = static_cast<sal_Int16>( static_cast<double>(nLineSpacing) / 4.40972 );
             }
             if ( ( pPara->meLineSpacing == css::beans::PropertyState_DIRECT_VALUE ) ||
-                ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_LineFeed, nLineSpacing ) ) )
+                mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_LineFeed, nLineSpacing ) )
                 nPropertyFlags |= 0x00001000;
         }
         if ( ( pPara->meLineSpacingTop == css::beans::PropertyState_DIRECT_VALUE ) ||
-            ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_UpperDist, pPara->mnLineSpacingTop ) ) )
+            mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_UpperDist, pPara->mnLineSpacingTop ) )
             nPropertyFlags |= 0x00002000;
         if ( ( pPara->meLineSpacingBottom == css::beans::PropertyState_DIRECT_VALUE ) ||
-            ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_LowerDist, pPara->mnLineSpacingBottom ) ) )
+            mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_LowerDist, pPara->mnLineSpacingBottom ) )
             nPropertyFlags |= 0x00004000;
         if ( ( pPara->meForbiddenRules == css::beans::PropertyState_DIRECT_VALUE ) ||
-            ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_UpperDist, pPara->mbForbiddenRules ? 1 : 0 ) ) )
+            mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_UpperDist, pPara->mbForbiddenRules ? 1 : 0 ) )
             nPropertyFlags |= 0x00020000;
         if ( ( pPara->meParagraphPunctation == css::beans::PropertyState_DIRECT_VALUE ) ||
-            ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_UpperDist, pPara->mbParagraphPunctation ? 1 : 0 ) ) )
+            mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_UpperDist, pPara->mbParagraphPunctation ? 1 : 0 ) )
             nPropertyFlags |= 0x00080000;
         if ( ( pPara->meBiDi == css::beans::PropertyState_DIRECT_VALUE ) ||
-            ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_BiDi, pPara->mnBiDi ) ) )
+            mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, ParaAttr_BiDi, pPara->mnBiDi ) )
             nPropertyFlags |= 0x00200000;
 
         sal_Int32 nBuRealSize = pPara->nBulletRealSize;
@@ -899,19 +899,19 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                 nCharAttr  |= ( i & 0x3f ) << 10;
             }
             if ( ( rPortion.meFontName == css::beans::PropertyState_DIRECT_VALUE ) ||
-                ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Font, rPortion.mnFont ) ) )
+                mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Font, rPortion.mnFont ) )
                 nPropertyFlags |= 0x00010000;
             if ( ( rPortion.meAsianOrComplexFont == css::beans::PropertyState_DIRECT_VALUE ) ||
-                ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_AsianOrComplexFont, rPortion.mnAsianOrComplexFont ) ) )
+                mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_AsianOrComplexFont, rPortion.mnAsianOrComplexFont ) )
                 nPropertyFlags |= 0x00200000;
             if ( ( rPortion.meCharHeight == css::beans::PropertyState_DIRECT_VALUE ) ||
-                ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_FontHeight, rPortion.mnCharHeight ) ) )
+                mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_FontHeight, rPortion.mnCharHeight ) )
                 nPropertyFlags |= 0x00020000;
             if ( ( rPortion.meCharColor == css::beans::PropertyState_DIRECT_VALUE ) ||
-                ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_FontColor, nCharColor & 0xffffff ) ) )
+                mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_FontColor, nCharColor & 0xffffff ) )
                 nPropertyFlags |= 0x00040000;
             if ( ( rPortion.meCharEscapement == css::beans::PropertyState_DIRECT_VALUE ) ||
-                ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Escapement, rPortion.mnCharEscapement ) ) )
+                mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Escapement, rPortion.mnCharEscapement ) )
                 nPropertyFlags |= 0x00080000;
 
             sal_uInt32 nCharCount = rPortion.Count();

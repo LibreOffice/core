@@ -667,7 +667,7 @@ IMPL_LINK(SwEditRegionDlg, GetFirstEntryHdl, weld::TreeView&, rBox, void)
         SwSectionData const& rData( pRepr->GetSectionData() );
         m_xConditionED->set_text(rData.GetCondition());
         m_xHideCB->set_sensitive(true);
-        m_xHideCB->set_state((rData.IsHidden()) ? TRISTATE_TRUE : TRISTATE_FALSE);
+        m_xHideCB->set_state(rData.IsHidden() ? TRISTATE_TRUE : TRISTATE_FALSE);
         bool bHide = TRISTATE_TRUE == m_xHideCB->get_state();
         m_xConditionED->set_sensitive(bHide);
         m_xConditionFT->set_sensitive(bHide);
@@ -699,12 +699,12 @@ IMPL_LINK(SwEditRegionDlg, GetFirstEntryHdl, weld::TreeView&, rBox, void)
         }
         UseFileHdl(*m_xFileCB);
         DDEHdl(*m_xDDECB);
-        m_xProtectCB->set_state((rData.IsProtectFlag())
+        m_xProtectCB->set_state(rData.IsProtectFlag()
                 ? TRISTATE_TRUE : TRISTATE_FALSE);
         m_xProtectCB->set_sensitive(true);
 
         // edit in readonly sections
-        m_xEditInReadonlyCB->set_state((rData.IsEditInReadonlyFlag())
+        m_xEditInReadonlyCB->set_state(rData.IsEditInReadonlyFlag()
                 ? TRISTATE_TRUE : TRISTATE_FALSE);
         m_xEditInReadonlyCB->set_sensitive(true);
 

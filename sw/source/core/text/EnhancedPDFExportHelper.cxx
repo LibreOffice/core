@@ -1352,7 +1352,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                     std::vector<SwTextAttr *> const charAttrs(
                         pos.first->GetTextAttrsAt(pos.second, RES_TXTATR_CHARFMT));
                     // TODO: handle more than 1 char style?
-                    const SwCharFormat* pCharFormat = (charAttrs.size())
+                    const SwCharFormat* pCharFormat = charAttrs.size()
                         ? (*charAttrs.begin())->GetCharFormat().GetCharFormat() : nullptr;
                     if ( pCharFormat )
                         SwStyleNameMapper::FillProgName( pCharFormat->GetName(), sStyleName, SwGetPoolIdFromName::TxtColl );

@@ -254,7 +254,7 @@ OUString Binding::explainInvalid()
     OUString sReason;
     if( ! maBindingExpression.getNode().is() )
     {
-        sReason = ( maBindingExpression.getExpression().isEmpty() )
+        sReason = maBindingExpression.getExpression().isEmpty()
             ? getResource( RID_STR_XFORMS_NO_BINDING_EXPRESSION )
             : getResource( RID_STR_XFORMS_INVALID_BINDING_EXPRESSION );
     }

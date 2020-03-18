@@ -939,7 +939,7 @@ void SwTableColumnPage::UpdateCols( sal_uInt16 nCurrentPos )
 
     for( sal_uInt16 i = 0; i < m_nNoOfCols; i++ )
     {
-        nSum += (m_pTableData->GetColumns())[i].nWidth;
+        nSum += m_pTableData->GetColumns()[i].nWidth;
     }
     SwTwips nDiff = nSum - m_nTableWidth;
 

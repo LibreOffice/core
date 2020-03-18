@@ -454,7 +454,7 @@ void DbGridColumn::Paint(OutputDevice& rDev,
                          const Reference< XNumberFormatter >& xFormatter)
 {
     bool bEnabled = ( rDev.GetOutDevType() != OUTDEV_WINDOW )
-                ||  ( static_cast< vcl::Window& >( rDev ).IsEnabled() );
+                ||  static_cast< vcl::Window& >( rDev ).IsEnabled();
 
     FmXDataCell* pDataCell = dynamic_cast<FmXDataCell*>( m_pCell.get() );
     if (pDataCell)

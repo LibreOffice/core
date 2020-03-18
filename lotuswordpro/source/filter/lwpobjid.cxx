@@ -188,7 +188,7 @@ rtl::Reference<LwpObject> LwpObjectID::obj(VO_TYPE tag) const
     LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
     LwpObjectFactory* pObjMgr = pGlobal->GetLwpObjFactory();
     rtl::Reference<LwpObject> pObj = pObjMgr->QueryObject(*this);
-    if( tag!=VO_INVALID &&  (pObj.is()) )
+    if( tag!=VO_INVALID && pObj.is() )
     {
         if(static_cast<sal_uInt32>(tag) != pObj->GetTag())
         {

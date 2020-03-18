@@ -1935,7 +1935,7 @@ SwUnoCursorHelper::GetPropertyStates(
                     SwUnoCursorHelper::GetCursorAttr( rPaM, *pSet );
                 }
 
-                pStates[i] = ( pSet->Count() )
+                pStates[i] = pSet->Count()
                     ? rPropSet.getPropertyState( *pEntry, *pSet )
                     : beans::PropertyState_DEFAULT_VALUE;
 
@@ -1950,7 +1950,7 @@ SwUnoCursorHelper::GetPropertyStates(
                                 rPaM, *pSetParent, true, false );
                     }
 
-                    pStates[i] = ( pSetParent->Count() )
+                    pStates[i] = pSetParent->Count()
                         ? rPropSet.getPropertyState( *pEntry, *pSetParent )
                         : beans::PropertyState_DEFAULT_VALUE;
                 }

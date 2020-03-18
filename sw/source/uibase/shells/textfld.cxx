@@ -163,7 +163,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             {
                 bool bRet = false;
                 SwFieldType* pField = rSh.GetFieldType( 0, SwFieldIds::Input );
-                const bool bAddSetExpressionFields = !( rSh.GetViewOptions()->IsReadonly() );
+                const bool bAddSetExpressionFields = ! rSh.GetViewOptions()->IsReadonly();
                 if ( pField != nullptr
                      && rSh.MoveFieldType(
                             pField,

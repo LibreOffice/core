@@ -131,7 +131,7 @@ void FrameListAnalyzer::impl_analyze()
     // But look, if this analyze step is really needed.
     if (
         (m_eDetectMode & FrameAnalyzerFlags::Help) &&
-        (m_xReferenceFrame.is()                                ) &&
+        m_xReferenceFrame.is()                     &&
         (m_xReferenceFrame->getName() == SPECIALTARGET_HELPTASK)
        )
     {
@@ -149,7 +149,7 @@ void FrameListAnalyzer::impl_analyze()
             css::uno::Reference< css::frame::XFrame > xFrame;
             if (
                 !(xFrameContainer->getByIndex(i) >>= xFrame) ||
-                !(xFrame.is()                              ) ||
+                !xFrame.is()                                 ||
                  (xFrame==m_xReferenceFrame                )
                )
                 continue;

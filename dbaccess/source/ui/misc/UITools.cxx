@@ -307,7 +307,7 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
     #endif
             if  (   (
                         _sTypeName.isEmpty()
-                    ||  (aIter->second->aTypeName.equalsIgnoreAsciiCase(_sTypeName))
+                    ||  aIter->second->aTypeName.equalsIgnoreAsciiCase(_sTypeName)
                     )
                 &&  (
                         (
@@ -331,7 +331,7 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                 sal_Int32 nPrec = aIter->second->nPrecision;
                 sal_Int32 nScale = aIter->second->nMaximumScale;
                 // search the best matching type (now comparing the local names)
-                if  (   (aIter->second->aLocalTypeName.equalsIgnoreAsciiCase(_sTypeName))
+                if  (   aIter->second->aLocalTypeName.equalsIgnoreAsciiCase(_sTypeName)
                     &&  (nPrec  >= _nPrecision)
                     &&  (nScale >= _nScale)
                     &&  ( (_bAutoIncrement && aIter->second->bAutoIncrement) || !_bAutoIncrement )

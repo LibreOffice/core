@@ -1092,7 +1092,7 @@ void SwContentFrame::MakePrtArea( const SwBorderAttrs &rAttrs )
                 aRectFnSet.SetHeight( aPrt, 0 );
             }
 
-            nUpper = -( aRectFnSet.GetHeight(getFrameArea()) );
+            nUpper = -aRectFnSet.GetHeight(getFrameArea());
         }
         else
         {

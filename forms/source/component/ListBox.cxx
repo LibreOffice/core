@@ -1759,7 +1759,7 @@ namespace frm
 
         if  (   !hasExternalListSource( )
             &&  ( m_eListSourceType != ListSourceType_VALUELIST )
-            &&  ( m_xCursor.is() )
+            &&  m_xCursor.is()
             )
         {
             loadData( _bForce );

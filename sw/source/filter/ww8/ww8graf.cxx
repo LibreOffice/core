@@ -1739,10 +1739,10 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject const * pSdrObj,
     rInnerDist.AdjustRight(nLineThick );
     rInnerDist.AdjustBottom(nLineThick );
 
-    rInnerDist.AdjustLeft( -(aBox.CalcLineWidth( SvxBoxItemLine::LEFT )) );
-    rInnerDist.AdjustTop( -(aBox.CalcLineWidth( SvxBoxItemLine::TOP )) );
-    rInnerDist.AdjustRight( -(aBox.CalcLineWidth( SvxBoxItemLine::RIGHT )) );
-    rInnerDist.AdjustBottom( -(aBox.CalcLineWidth( SvxBoxItemLine::BOTTOM )) );
+    rInnerDist.AdjustLeft( -aBox.CalcLineWidth( SvxBoxItemLine::LEFT ) );
+    rInnerDist.AdjustTop( -aBox.CalcLineWidth( SvxBoxItemLine::TOP ) );
+    rInnerDist.AdjustRight( -aBox.CalcLineWidth( SvxBoxItemLine::RIGHT ) );
+    rInnerDist.AdjustBottom( -aBox.CalcLineWidth( SvxBoxItemLine::BOTTOM ) );
 
     // set distances from box's border to text contained within the box
     if( 0 < rInnerDist.Left() )
@@ -1754,8 +1754,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject const * pSdrObj,
     if( 0 < rInnerDist.Bottom() )
         aBox.SetDistance( static_cast<sal_uInt16>(rInnerDist.Bottom()), SvxBoxItemLine::BOTTOM );
 
-    bool bFixSize = !(WW8ITEMVALUE(rOldSet, SDRATTR_TEXT_AUTOGROWHEIGHT,
-        SdrOnOffItem));
+    bool bFixSize = !WW8ITEMVALUE(rOldSet, SDRATTR_TEXT_AUTOGROWHEIGHT, SdrOnOffItem);
 
     // Size: SwFormatFrameSize
     if( SfxItemState::SET != rFlySet.GetItemState(RES_FRM_SIZE, false) )

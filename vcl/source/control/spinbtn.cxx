@@ -178,13 +178,13 @@ void SpinButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangl
 
 void SpinButton::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if ( maUpperRect.IsInside( rMEvt.GetPosPixel() ) && ( ImplIsUpperEnabled() ) )
+    if ( maUpperRect.IsInside( rMEvt.GetPosPixel() ) && ImplIsUpperEnabled() )
     {
         mbUpperIn   = true;
         mbInitialUp = true;
         Invalidate( maUpperRect );
     }
-    else if ( maLowerRect.IsInside( rMEvt.GetPosPixel() ) && ( ImplIsLowerEnabled() ) )
+    else if ( maLowerRect.IsInside( rMEvt.GetPosPixel() ) && ImplIsLowerEnabled() )
     {
         mbLowerIn     = true;
         mbInitialDown = true;

@@ -1012,7 +1012,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL XFrameImpl::findFrame( const 
 
     else if (
         ( sTargetFrameName==SPECIALTARGET_SELF ) ||
-        ( sTargetFrameName.isEmpty()           )
+        sTargetFrameName.isEmpty()
        )
     {
         xTarget = this;
@@ -1112,7 +1112,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL XFrameImpl::findFrame( const 
             if (
                 ( ! xTarget.is()                                      ) &&
                 (nSearchFlags &  css::frame::FrameSearchFlag::SIBLINGS) &&
-                (   xParent.is()                                      ) // search on siblings is impossible without a parent
+                xParent.is()                                      // search on siblings is impossible without a parent
                )
             {
                 css::uno::Reference< css::frame::XFramesSupplier > xSupplier( xParent, css::uno::UNO_QUERY );
@@ -1159,7 +1159,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL XFrameImpl::findFrame( const 
             if (
                 ( ! xTarget.is()                                    ) &&
                 (nSearchFlags &  css::frame::FrameSearchFlag::PARENT) &&
-                (   xParent.is()                                    )
+                xParent.is()
                )
             {
                 if (xParent->getName() == sTargetFrameName)
@@ -1460,7 +1460,7 @@ sal_Bool SAL_CALL XFrameImpl::setComponent(const css::uno::Reference< css::awt::
     // because controller may want to access its window!
     // But check for real changes - may the new controller is the old one.
     if (
-        (xOldController.is()          )   &&
+        xOldController.is()          &&
         (xOldController != xController)
        )
     {
@@ -1496,7 +1496,7 @@ sal_Bool SAL_CALL XFrameImpl::setComponent(const css::uno::Reference< css::awt::
     // see before
     // Check for real changes too.
     if (
-        (xOldComponentWindow.is()               )   &&
+        xOldComponentWindow.is()               &&
         (xOldComponentWindow != xComponentWindow)
        )
     {
@@ -3285,7 +3285,7 @@ void XFrameImpl::impl_checkMenuCloser()
     // There is no other frame... means no other document frame. The help module
     // will be handled separately and must(!) be ignored here... excepting if we include ourself the help.
     else if (
-        (aAnalyzer.m_lOtherVisibleFrames.empty()) &&
+        aAnalyzer.m_lOtherVisibleFrames.empty() &&
         (!aAnalyzer.m_bReferenceIsHelp) &&
         (!aAnalyzer.m_bReferenceIsHidden) &&
         (!aAnalyzer.m_bReferenceIsBacking)

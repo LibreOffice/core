@@ -220,7 +220,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed )
     {
         Size aSize = pTmpFnt->GetTextSize_( aDrawInf );
         if( m_bGoLeft )
-            aTmpPos.AdjustX( -(aSize.Width()) );
+            aTmpPos.AdjustX( -aSize.Width() );
         // calculate rectangle containing the line number
         SwRect aRct( Point( aTmpPos.X(),
                          aTmpPos.Y() - pTmpFnt->GetAscent( m_pSh, *m_pSh->GetOut() )
@@ -234,7 +234,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed )
         }
     }
     else if( m_bGoLeft )
-        aTmpPos.AdjustX( -(pTmpFnt->GetTextSize_( aDrawInf ).Width()) );
+        aTmpPos.AdjustX( -pTmpFnt->GetTextSize_( aDrawInf ).Width() );
     aDrawInf.SetPos( aTmpPos );
     if( bPaint )
         pTmpFnt->DrawText_( aDrawInf );

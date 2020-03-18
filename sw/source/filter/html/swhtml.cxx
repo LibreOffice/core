@@ -883,7 +883,7 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
                     xDPS->getDocumentProperties());
                 OSL_ENSURE(xDocProps.is(), "DocumentProperties is null");
                 if ( xDocProps.is() && (xDocProps->getAutoloadSecs() > 0) &&
-                     (xDocProps->getAutoloadURL().isEmpty()) )
+                     xDocProps->getAutoloadURL().isEmpty() )
                 {
                     xDocProps->setAutoloadURL(m_aPathToFile);
                 }
@@ -2559,7 +2559,7 @@ void SwHTMLParser::Show()
     // is the current node not visible anymore, then we use a bigger increment
     if( pVSh )
     {
-        m_nParaCnt = (m_pPam->GetPoint()->nNode.GetNode().IsInVisibleArea(pVSh))
+        m_nParaCnt = m_pPam->GetPoint()->nNode.GetNode().IsInVisibleArea(pVSh)
             ? 5 : 50;
     }
 }
@@ -5038,7 +5038,7 @@ SwTwips SwHTMLParser::GetCurrentBrowseWidth()
         m_aHTMLPageSize.setHeight( rSz.GetHeight() - rUL.GetUpper() - rUL.GetLower() );
 
         if( 1 < rCol.GetNumCols() )
-            m_aHTMLPageSize.setWidth( m_aHTMLPageSize.Width() / ( rCol.GetNumCols()) );
+            m_aHTMLPageSize.setWidth( m_aHTMLPageSize.Width() / rCol.GetNumCols() );
     }
 
     return m_aHTMLPageSize.Width();

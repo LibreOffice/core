@@ -962,7 +962,7 @@ const void* SvTreeListBox::NextSearchEntry( const void* _pCurrentSearchEntry, OU
     SvTreeListEntry* pEntry = const_cast< SvTreeListEntry* >( static_cast< const SvTreeListEntry* >( _pCurrentSearchEntry ) );
 
     if  (   (   ( GetChildCount( pEntry ) > 0 )
-            ||  ( pEntry->HasChildrenOnDemand() )
+              ||  pEntry->HasChildrenOnDemand()
             )
         &&  !IsExpanded( pEntry )
         )
@@ -2438,7 +2438,7 @@ void SvTreeListBox::EditItemText(SvTreeListEntry* pEntry, SvLBoxString* pItem, c
     }
     Point aOrigin( GetMapMode().GetOrigin() );
     aPos += aOrigin; // convert to win coordinates
-    aSize.AdjustWidth( -(aOrigin.X()) );
+    aSize.AdjustWidth( -aOrigin.X() );
     tools::Rectangle aRect( aPos, aSize );
     EditText( pItem->GetText(), aRect, rSelection );
 }
@@ -2552,7 +2552,7 @@ SvTreeListEntry* SvTreeListBox::GetEntry( const Point& rPos, bool bHit ) const
     if( pEntry && bHit )
     {
         long nLine = pImpl->GetEntryLine( pEntry );
-        if( !(pImpl->EntryReallyHit( pEntry, rPos, nLine)) )
+        if( !pImpl->EntryReallyHit( pEntry, rPos, nLine) )
             return nullptr;
     }
     return pEntry;

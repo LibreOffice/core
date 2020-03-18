@@ -559,7 +559,7 @@ void SAL_CALL VBAMacroResolver::initialize( const uno::Sequence< uno::Any >& rAr
         throw uno::RuntimeException();
 
     // second argument: VBA project name
-    if( !(rArgs[ 1 ] >>= maProjectName) || (maProjectName.isEmpty()) )
+    if( !(rArgs[ 1 ] >>= maProjectName) || maProjectName.isEmpty() )
         throw uno::RuntimeException();
 }
 

@@ -124,7 +124,7 @@ void SAL_CALL TagWindowAsModified::disposing(const css::lang::EventObject& aEven
 
     css::uno::Reference< css::frame::XFrame > xFrame(m_xFrame.get(), css::uno::UNO_QUERY);
     if (
-        (xFrame.is ()           ) &&
+        xFrame.is ()          &&
         (aEvent.Source == xFrame)
        )
     {
@@ -134,7 +134,7 @@ void SAL_CALL TagWindowAsModified::disposing(const css::lang::EventObject& aEven
 
     css::uno::Reference< css::frame::XModel > xModel(m_xModel.get(), css::uno::UNO_QUERY);
     if (
-        (xModel.is ()           ) &&
+        xModel.is ()          &&
         (aEvent.Source == xModel)
        )
     {

@@ -839,7 +839,7 @@ void ScDPOutput::CalcSizes()
 
         nRowCount = aData.getLength();
         const uno::Sequence<sheet::DataResult>* pRowAry = aData.getConstArray();
-        nColCount = nRowCount ? ( pRowAry[0].getLength() ) : 0;
+        nColCount = nRowCount ? pRowAry[0].getLength() : 0;
 
         nHeaderSize = 1;
         if (GetHeaderLayout() && pColFields.empty())

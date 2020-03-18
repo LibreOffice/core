@@ -1732,7 +1732,7 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
                     m_pFrame->SwitchHorizontalToVertical( aTmpPoint );
 
                 if( bChgNodeInner && pTmp->getFrameArea().IsInside( aTmpPoint ) &&
-                    !( pTmp->IsProtected() ) )
+                    !pTmp->IsProtected() )
                 {
                     pFlyPor->GetFlyCursorOfst(aTmpPoint, *pPos, pCMS);
                     // After a change of the frame, our font must be still

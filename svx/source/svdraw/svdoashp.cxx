@@ -2596,8 +2596,8 @@ void SdrObjCustomShape::TakeTextAnchorRect( tools::Rectangle& rAnchorRect ) cons
         Point aRotateRef( maSnapRect.Center() );
         rAnchorRect.AdjustLeft(GetTextLeftDistance() );
         rAnchorRect.AdjustTop(GetTextUpperDistance() );
-        rAnchorRect.AdjustRight( -(GetTextRightDistance()) );
-        rAnchorRect.AdjustBottom( -(GetTextLowerDistance()) );
+        rAnchorRect.AdjustRight( -GetTextRightDistance() );
+        rAnchorRect.AdjustBottom( -GetTextLowerDistance() );
         ImpJustifyRect( rAnchorRect );
 
         if ( rAnchorRect.GetWidth() < 2 )

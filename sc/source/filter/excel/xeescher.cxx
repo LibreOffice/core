@@ -1197,8 +1197,8 @@ XclExpNote::XclExpNote(const XclExpRoot& rRoot, const ScAddress& rScPos,
                     // AutoFill style would change if Postit.cxx object creation values are changed
                     OUString aCol(aItemSet.Get(XATTR_FILLCOLOR).GetValue());
                     mbAutoFill  = aCol.isEmpty() && (aItemSet.Get(XATTR_FILLSTYLE).GetValue() == drawing::FillStyle_SOLID);
-                    mbRowHidden = (rRoot.GetDoc().RowHidden(maScPos.Row(),maScPos.Tab()));
-                    mbColHidden = (rRoot.GetDoc().ColHidden(maScPos.Col(),maScPos.Tab()));
+                    mbRowHidden = rRoot.GetDoc().RowHidden(maScPos.Row(),maScPos.Tab());
+                    mbColHidden = rRoot.GetDoc().ColHidden(maScPos.Col(),maScPos.Tab());
                 }
                 // stAuthor (variable): An XLUnicodeString that specifies the name of the comment
                 // author. String length MUST be greater than or equal to 1 and less than or equal

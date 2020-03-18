@@ -795,7 +795,7 @@ void PosSizePropertyPanel::executeSize()
     }
     else
     {
-        if ( (mxMtrWidth->get_value_changed_from_saved()) && (mxMtrHeight->get_value_changed_from_saved()))
+        if ( mxMtrWidth->get_value_changed_from_saved() && mxMtrHeight->get_value_changed_from_saved())
             GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM,
                 SfxCallMode::RECORD, { &aWidthItem, &aHeightItem, &aPointItem });
         else if( mxMtrWidth->get_value_changed_from_saved())

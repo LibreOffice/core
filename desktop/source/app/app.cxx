@@ -1495,7 +1495,7 @@ int Desktop::Main()
         if ( !pExecGlobals->bRestartRequested )
         {
             if ((!rCmdLineArgs.WantsToLoadDocument() && !rCmdLineArgs.IsInvisible() && !rCmdLineArgs.IsHeadless() && !rCmdLineArgs.IsQuickstart()) &&
-                (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::STARTMODULE)) &&
+                SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::STARTMODULE) &&
                 (!bExistsRecoveryData                                                  ) &&
                 (!bExistsSessionData                                                   ) &&
                 (!Application::AnyInput( VclInputFlags::APPEVENT )                          ))

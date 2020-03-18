@@ -152,7 +152,7 @@ sal_Bool SAL_CALL PropertySetContainer::hasElements()
 {
     SolarMutexGuard g;
 
-    return !( m_aPropertySetVector.empty() );
+    return ! m_aPropertySetVector.empty();
 }
 
 }

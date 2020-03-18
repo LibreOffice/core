@@ -987,7 +987,7 @@ void ScUndoReplace::Undo()
         // Undo document has no row/column information, thus copy with
         // bColRowFlags = FALSE to not destroy Outline groups
 
-        InsertDeleteFlags nUndoFlags = (pSearchItem->GetPattern()) ? InsertDeleteFlags::ATTRIB : InsertDeleteFlags::CONTENTS;
+        InsertDeleteFlags nUndoFlags = pSearchItem->GetPattern() ? InsertDeleteFlags::ATTRIB : InsertDeleteFlags::CONTENTS;
         pUndoDoc->CopyToDocument( 0,      0,      0,
                                   rDoc.MaxCol(), rDoc.MaxRow(), MAXTAB,
                                   nUndoFlags, false, rDoc, nullptr, false );   // without row flags

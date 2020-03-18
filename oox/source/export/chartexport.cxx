@@ -2841,7 +2841,7 @@ void ChartExport::_exportAxis(
     if(GetProperty( xAxisProp, "AutoMax" ) )
         mAny >>= bAutoMax;
 
-    if( !bAutoMax && (GetProperty( xAxisProp, "Max" ) ) )
+    if( !bAutoMax && GetProperty( xAxisProp, "Max" ) )
     {
         double dMax = 0;
         mAny >>= dMax;
@@ -2852,7 +2852,7 @@ void ChartExport::_exportAxis(
     if(GetProperty( xAxisProp, "AutoMin" ) )
         mAny >>= bAutoMin;
 
-    if( !bAutoMin && (GetProperty( xAxisProp, "Min" ) ) )
+    if( !bAutoMin && GetProperty( xAxisProp, "Min" ) )
     {
         double dMin = 0;
         mAny >>= dMin;
@@ -2954,7 +2954,7 @@ void ChartExport::_exportAxis(
     bool bDisplayLabel = true;
     if(GetProperty( xAxisProp, "DisplayLabels" ) )
         mAny >>= bDisplayLabel;
-    if( bDisplayLabel && (GetProperty( xAxisProp, "LabelPosition" ) ) )
+    if( bDisplayLabel && GetProperty( xAxisProp, "LabelPosition" ) )
     {
         css::chart::ChartAxisLabelPosition eLabelPosition = css::chart::ChartAxisLabelPosition_NEAR_AXIS;
         mAny >>= eLabelPosition;
@@ -3062,7 +3062,7 @@ void ChartExport::_exportAxis(
     if(GetProperty( xAxisProp, "AutoStepMain" ) )
         mAny >>= bAutoStepMain;
 
-    if( !bAutoStepMain && (GetProperty( xAxisProp, "StepMain" ) ) )
+    if( !bAutoStepMain && GetProperty( xAxisProp, "StepMain" ) )
     {
         double dMajorUnit = 0;
         mAny >>= dMajorUnit;
@@ -3073,7 +3073,7 @@ void ChartExport::_exportAxis(
     if(GetProperty( xAxisProp, "AutoStepHelp" ) )
         mAny >>= bAutoStepHelp;
 
-    if( !bAutoStepHelp && (GetProperty( xAxisProp, "StepHelp" ) ) )
+    if( !bAutoStepHelp && GetProperty( xAxisProp, "StepHelp" ) )
     {
         double dMinorUnit = 0;
         mAny >>= dMinorUnit;

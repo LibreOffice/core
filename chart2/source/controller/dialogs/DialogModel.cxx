@@ -351,7 +351,7 @@ struct lcl_addSeriesNumber
     sal_Int32 operator() ( sal_Int32 nCurrentNumber, const Reference< XDataSeriesContainer > & xCnt ) const
     {
         if( xCnt.is())
-            return nCurrentNumber + (xCnt->getDataSeries().getLength());
+            return nCurrentNumber + xCnt->getDataSeries().getLength();
         return nCurrentNumber;
     }
 };

@@ -75,7 +75,7 @@ namespace basegfx
         virtual bool operator==(const BColorModifier& rCompare) const = 0;
         bool operator!=(const BColorModifier& rCompare) const
         {
-            return !(operator==(rCompare));
+            return !operator==(rCompare);
         }
 
         // compute modified color

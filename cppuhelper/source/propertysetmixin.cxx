@@ -481,9 +481,8 @@ void PropertySetMixinImpl::Impl::setProperty(
     css::uno::Any v(
         wrapValue(
             object, value,
-            (css::uno::Reference< css::reflection::XIdlField2 >(
-                m_idlClass->getField(name), css::uno::UNO_QUERY_THROW)->
-             getType()),
+            css::uno::Reference< css::reflection::XIdlField2 >(
+                m_idlClass->getField(name), css::uno::UNO_QUERY_THROW)->getType(),
             ((i->second.property.Attributes
               & css::beans::PropertyAttribute::MAYBEAMBIGUOUS)
              != 0),

@@ -48,7 +48,7 @@ bool TargetHelper::isValidNameForFrame(const OUString& sName)
     // some special targets are really special ones :-)
     // E.g. the are really used to locate one frame inside the frame tree.
     if (
-        (sName.isEmpty()                                    ) ||
+        sName.isEmpty()                                    ||
         (TargetHelper::matchSpecialTarget(sName, ESpecialTarget::HelpTask)) ||
         (TargetHelper::matchSpecialTarget(sName, ESpecialTarget::Beamer)  )
        )

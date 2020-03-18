@@ -355,7 +355,7 @@ bool SwWW8ImplReader::SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp,
         aRes.nStartPos = aRes.nEndPos;
         aRes.pMemPos = nullptr;
         //Seek to our next block of properties
-        if (!(pPap->SeekPos(aRes.nStartPos)))
+        if (!pPap->SeekPos(aRes.nStartPos))
         {
             aRes.nEndPos = WW8_CP_MAX;
             pPap->SetDirty(true);
@@ -1815,7 +1815,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
         WW8_TablePos *pTabPos  = nullptr;
 
         // search end of a tab row
-        if(!(m_pIo->SearchRowEnd(pPap, nStartCp, m_pIo->m_nInTable)))
+        if(!m_pIo->SearchRowEnd(pPap, nStartCp, m_pIo->m_nInTable))
         {
             m_bOk = false;
             break;
@@ -2003,7 +2003,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
         aRes.pMemPos = nullptr;
         aRes.nStartPos = nStartCp;
 
-        if (!(pPap->SeekPos(aRes.nStartPos)))
+        if (!pPap->SeekPos(aRes.nStartPos))
         {
             aRes.nEndPos = WW8_CP_MAX;
             pPap->SetDirty(true);
@@ -2047,7 +2047,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
         // it back to where we are trying to make a table
         m_pIo->m_xPlcxMan->GetPap()->nOrigStartPos = aRes.nStartPos;
         m_pIo->m_xPlcxMan->GetPap()->nCpOfs = aRes.nCpOfs;
-        if (!(pPap->SeekPos(aRes.nStartPos)))
+        if (!pPap->SeekPos(aRes.nStartPos))
         {
             aRes.nEndPos = WW8_CP_MAX;
             pPap->SetDirty(true);

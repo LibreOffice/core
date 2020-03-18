@@ -106,7 +106,7 @@ static void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, const Refer
             try
             {
                 Reference< XPropertySet > xPropSet;
-                if (( xActionTriggerContainer->getByIndex( i ) >>= xPropSet ) && ( xPropSet.is() ))
+                if (( xActionTriggerContainer->getByIndex( i ) >>= xPropSet ) && xPropSet.is())
                 {
                     if ( IsSeparator( xPropSet ))
                     {

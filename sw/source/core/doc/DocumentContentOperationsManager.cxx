@@ -2148,7 +2148,7 @@ bool DocumentContentOperationsManager::DeleteAndJoin( SwPaM & rPam,
     if ( lcl_StrLenOverflow( rPam ) )
         return false;
 
-    return lcl_DoWithBreaks( *this, rPam, (m_rDoc.getIDocumentRedlineAccess().IsRedlineOn())
+    return lcl_DoWithBreaks( *this, rPam, m_rDoc.getIDocumentRedlineAccess().IsRedlineOn()
                 ? &DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl
                 : &DocumentContentOperationsManager::DeleteAndJoinImpl,
                 bForceJoinNext );
@@ -3278,7 +3278,7 @@ bool DocumentContentOperationsManager::ReplaceRange( SwPaM& rPam, const OUString
         rStart = SwPosition(*rNodes[iter->first - nOffset]->GetTextNode(), iter->second + 1);
         if (rStart < rEnd) // check if part is empty
         {
-            bRet &= (m_rDoc.getIDocumentRedlineAccess().IsRedlineOn())
+            bRet &= m_rDoc.getIDocumentRedlineAccess().IsRedlineOn()
                 ? DeleteAndJoinWithRedlineImpl(aPam)
                 : DeleteAndJoinImpl(aPam, false);
             nOffset = iter->first - rStart.nNode.GetIndex(); // deleted fly nodes...

@@ -618,8 +618,8 @@ void SdXMLNumberFormatImportContext::add( OUString const & rNumberStyle, bool bL
             (pStyleMember->mbLong == bLong) &&
             (pStyleMember->mbTextual == bTextual) &&
             (pStyleMember->mbDecimal02 == bDecimal02) &&
-            ( ( (pStyleMember->mpText == nullptr) && (rText.isEmpty()) ) ||
-              ( pStyleMember->mpText && (rText.equalsAscii( pStyleMember->mpText ) ) ) ) )
+            ( ( (pStyleMember->mpText == nullptr) && rText.isEmpty() ) ||
+              ( pStyleMember->mpText && rText.equalsAscii( pStyleMember->mpText ) ) ) )
         {
             mnElements[mnIndex++] = nIndex + 1;
             return;

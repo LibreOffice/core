@@ -145,7 +145,7 @@ void JobData::setAlias( const OUString& sAlias )
         css::uno::Reference< css::container::XNameAccess > xArgumentList;
         if (
             (aValue >>= xArgumentList)  &&
-            (xArgumentList.is()      )
+            xArgumentList.is()
            )
         {
             css::uno::Sequence< OUString > lArgumentNames = xArgumentList->getElementNames();
@@ -514,7 +514,7 @@ std::vector< OUString > JobData::getEnabledJobsForEvent( const css::uno::Referen
         css::uno::Reference< css::beans::XPropertySet > xJob;
         if (
             !(xJobList->getByName(jobName) >>= xJob) ||
-            !(xJob.is()     )
+            !xJob.is()
            )
         {
            continue;

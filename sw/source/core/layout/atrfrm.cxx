@@ -1462,7 +1462,7 @@ SwFormatAnchor::SwFormatAnchor( RndStdIds nRnd, sal_uInt16 nPage )
 
 SwFormatAnchor::SwFormatAnchor( const SwFormatAnchor &rCpy )
     : SfxPoolItem( RES_ANCHOR )
-    , m_pContentAnchor( (rCpy.GetContentAnchor())
+    , m_pContentAnchor( rCpy.GetContentAnchor()
             ?  new SwPosition( *rCpy.GetContentAnchor() ) : nullptr )
     , m_eAnchorId( rCpy.GetAnchorId() )
     , m_nPageNumber( rCpy.GetPageNum() )
@@ -1502,7 +1502,7 @@ SwFormatAnchor& SwFormatAnchor::operator=(const SwFormatAnchor& rAnchor)
         // OD 2004-05-05 #i28701# - get always new increased order number
         m_nOrder = ++m_nOrderCounter;
 
-        m_pContentAnchor.reset( (rAnchor.GetContentAnchor())
+        m_pContentAnchor.reset( rAnchor.GetContentAnchor()
             ? new SwPosition(*(rAnchor.GetContentAnchor()))
             : nullptr );
     }
@@ -3231,7 +3231,7 @@ bool SwFlyFrameFormat::IsBackgroundBrushInherited() const
         std::shared_ptr<SvxBrushItem> aBackground(makeBackgroundBrushItem());
         if ( aBackground &&
              (aBackground->GetColor() == COL_TRANSPARENT) &&
-             !(aBackground->GetGraphicObject()) )
+             !aBackground->GetGraphicObject() )
         {
             return true;
         }

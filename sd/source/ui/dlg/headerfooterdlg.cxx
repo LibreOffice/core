@@ -380,7 +380,7 @@ HeaderFooterTabPage::HeaderFooterTabPage(weld::Container* pParent, SdDrawDocumen
 {
     mxCTPreview->init( pActualPage ?
             (pActualPage->IsMasterPage() ? pActualPage : static_cast<SdPage*>(&(pActualPage->TRG_GetMasterPage()))) :
-            (pDoc->GetMasterSdPage( 0, bHandoutMode ? PageKind::Notes : PageKind::Standard )) );
+            pDoc->GetMasterSdPage( 0, bHandoutMode ? PageKind::Notes : PageKind::Standard ) );
 
     if( mbHandoutMode )
     {

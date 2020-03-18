@@ -359,9 +359,9 @@ void SdrObjEditView::ModelHasChanged()
                         tools::Rectangle aTmpRect(aOldArea);
                         sal_uInt16 nPixSiz = pOLV->GetInvalidateMore() + 1;
                         Size aMore(pWin->PixelToLogic(Size(nPixSiz, nPixSiz)));
-                        aTmpRect.AdjustLeft(-(aMore.Width()));
+                        aTmpRect.AdjustLeft(-aMore.Width());
                         aTmpRect.AdjustRight(aMore.Width());
-                        aTmpRect.AdjustTop(-(aMore.Height()));
+                        aTmpRect.AdjustTop(-aMore.Height());
                         aTmpRect.AdjustBottom(aMore.Height());
                         InvalidateOneWin(*pWin, aTmpRect);
                     }
@@ -1741,8 +1741,8 @@ bool SdrObjEditView::IsTextEditFrameHit(const Point& rHit) const
                 if (!aEditArea.IsInside(rHit))
                 {
                     Size aSiz(pWin->PixelToLogic(Size(nPixSiz, nPixSiz)));
-                    aEditArea.AdjustLeft(-(aSiz.Width()));
-                    aEditArea.AdjustTop(-(aSiz.Height()));
+                    aEditArea.AdjustLeft(-aSiz.Width());
+                    aEditArea.AdjustTop(-aSiz.Height());
                     aEditArea.AdjustRight(aSiz.Width());
                     aEditArea.AdjustBottom(aSiz.Height());
                     bOk = aEditArea.IsInside(rHit);

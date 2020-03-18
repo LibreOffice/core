@@ -104,7 +104,7 @@ static OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
             if (xIFace.is())
             {   // we have a chance to check if it's a formatted field model
                 Reference< XServiceInfo >  xInfo(xIFace, UNO_QUERY);
-                if (xInfo.is() && (xInfo->supportsService(FM_SUN_COMPONENT_FORMATTEDFIELD)))
+                if (xInfo.is() && xInfo->supportsService(FM_SUN_COMPONENT_FORMATTEDFIELD))
                     pClassNameResourceId = RID_STR_PROPTITLE_FORMATTED;
                 else if (!xInfo.is())
                 {

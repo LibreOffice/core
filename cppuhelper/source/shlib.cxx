@@ -80,8 +80,7 @@ css::uno::Environment getEnvironmentFromModule(
     if (fp1 != nullptr) {
         (*fp1)(
             &name, reinterpret_cast<uno_Environment **>(&env),
-            (OUStringToOString(implementation, RTL_TEXTENCODING_ASCII_US)
-             .getStr()),
+            OUStringToOString(implementation, RTL_TEXTENCODING_ASCII_US).getStr(),
             target.get());
     } else {
         component_getImplementationEnvironmentFunc fp2

@@ -1700,7 +1700,7 @@ namespace svxform
                     // hidden layer (#i28502#), or something like this.
                     // In the first case, it will be deleted below, in the second case, we currently don't
                     // delete it, as there's no real (working!) API for this, neither in UNO nor in non-UNO.
-                    m_arrCurrentSelection.erase( --(it.base()) );
+                    m_arrCurrentSelection.erase( --it.base() );
                 }
                 else
                    ++it;

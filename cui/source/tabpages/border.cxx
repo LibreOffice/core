@@ -1464,7 +1464,7 @@ void SvxBorderTabPage::UpdateRemoveAdjCellBorderCB( sal_uInt16 nPreset )
     bool bBorderDeletionReq = false;
     for ( size_t i=0; i < SAL_N_ELEMENTS( eTypes1 ); ++i )
     {
-        if( pOldBoxItem->GetLine( eTypes2[i] ) || !( pOldBoxInfoItem->IsValid( eTypes1[i].second ) ) )
+        if( pOldBoxItem->GetLine( eTypes2[i] ) || ! pOldBoxInfoItem->IsValid( eTypes1[i].second ) )
         {
             if( m_aFrameSel.GetFrameBorderState( eTypes1[i].first ) == svx::FrameBorderState::Hide )
             {

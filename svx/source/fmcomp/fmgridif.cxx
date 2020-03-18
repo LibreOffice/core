@@ -1090,7 +1090,7 @@ void FmXGridPeer::disposing(const EventObject& e)
     {
         const Sequence< URL>& aSupportedURLs = getSupportedURLs();
         const URL* pSupportedURLs = aSupportedURLs.getConstArray();
-        for ( sal_Int32 i=0; i < ( aSupportedURLs.getLength() ) && !bKnownSender; ++i, ++pSupportedURLs )
+        for ( sal_Int32 i=0; i < aSupportedURLs.getLength() && !bKnownSender; ++i, ++pSupportedURLs )
         {
             if ( m_pDispatchers[i] == e.Source )
             {

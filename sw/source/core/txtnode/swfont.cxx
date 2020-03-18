@@ -1489,10 +1489,10 @@ void SwDrawTextInfo::Shift( sal_uInt16 nDir )
         break;
     case 900 :
         OSL_ENSURE( m_aPos.Y() >= GetSize().Width(), "Going underground" );
-        m_aPos.AdjustY( -(GetSize().Width()) );
+        m_aPos.AdjustY( -GetSize().Width() );
         break;
     case 1800 :
-        m_aPos.AdjustX( -(GetSize().Width()) );
+        m_aPos.AdjustX( -GetSize().Width() );
         break;
     case 2700 :
         m_aPos.AdjustY(GetSize().Width() );

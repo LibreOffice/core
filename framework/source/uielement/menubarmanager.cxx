@@ -637,7 +637,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu, bool )
         {
             sal_uInt16 nItemId = pMenu->GetItemId( nPos );
             if (( pMenu->GetItemType( nPos ) != MenuItemType::SEPARATOR ) &&
-                ( pMenu->GetItemText( nItemId ).isEmpty() ))
+                pMenu->GetItemText( nItemId ).isEmpty() )
             {
                 OUString aCommand = pMenu->GetItemCommand( nItemId );
                 if ( !aCommand.isEmpty() ) {
@@ -1029,7 +1029,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
         }
 
         if (( pMenu->IsMenuBar() || bAccessibilityEnabled ) &&
-            ( pMenu->GetItemText( nItemId ).isEmpty() ))
+            pMenu->GetItemText( nItemId ).isEmpty() )
         {
             if ( !aItemCommand.isEmpty() )
                 pMenu->SetItemText( nItemId, RetrieveLabelFromCommand( aItemCommand ));

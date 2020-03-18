@@ -1108,7 +1108,7 @@ SvNumberFormatTable& SvNumberFormatter::GetEntryTable(
     {
         while (it != aFTable.end() && it->second->GetLanguage() == ActLnge)
         {   // copy entries of queried type to output table
-            if ((it->second->GetType()) & eType)
+            if (it->second->GetType() & eType)
                 (*pFormatTable)[ it->first ] = it->second.get();
             ++it;
         }

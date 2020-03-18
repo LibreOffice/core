@@ -62,9 +62,9 @@ tools::Rectangle SdrHelpLine::GetBoundRect(const OutputDevice& rOut) const
         case SdrHelpLineKind::Horizontal: aRet.SetLeft(-aOfs.X() ); aRet.SetRight(-aOfs.X()+aSiz.Width() );  break;
         case SdrHelpLineKind::Point     : {
             Size aRad(rOut.PixelToLogic(Size(SDRHELPLINE_POINT_PIXELSIZE,SDRHELPLINE_POINT_PIXELSIZE)));
-            aRet.AdjustLeft( -(aRad.Width()) );
+            aRet.AdjustLeft( -aRad.Width() );
             aRet.AdjustRight(aRad.Width() );
-            aRet.AdjustTop( -(aRad.Height()) );
+            aRet.AdjustTop( -aRad.Height() );
             aRet.AdjustBottom(aRad.Height() );
         } break;
     } // switch

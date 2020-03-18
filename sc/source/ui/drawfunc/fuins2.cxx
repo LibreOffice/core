@@ -340,7 +340,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView*
 
             Point aPnt = rViewSh.GetInsertPos();
             if ( rData.GetDocument()->IsNegativePage( rData.GetTabNo() ) )
-                aPnt.AdjustX( -(aSize.Width()) );      // move position to left edge
+                aPnt.AdjustX( -aSize.Width() );      // move position to left edge
             tools::Rectangle aRect (aPnt, aSize);
             SdrOle2Obj* pObj = new SdrOle2Obj(
                 *pDoc, // TTTT should be reference

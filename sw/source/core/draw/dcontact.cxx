@@ -1093,7 +1093,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
     // #i35007#
     // improvement: determine as-character anchored object flag only once.
     const bool bAnchoredAsChar = ObjAnchoredAsChar();
-    const bool bNotify = !(GetFormat()->GetDoc()->IsInDtor()) &&
+    const bool bNotify = !GetFormat()->GetDoc()->IsInDtor() &&
                          ( css::text::WrapTextMode_THROUGH != GetFormat()->GetSurround().GetSurround() ) &&
                          !bAnchoredAsChar;
     switch( eType )
@@ -1596,7 +1596,7 @@ void SwDrawContact::DisconnectFromLayout( bool _bMoveMasterToInvisibleLayer )
 
     // --> #i36181# - notify background of drawing object
     if ( _bMoveMasterToInvisibleLayer &&
-         !(GetFormat()->GetDoc()->IsInDtor()) &&
+         !GetFormat()->GetDoc()->IsInDtor() &&
          GetAnchorFrame() && !GetAnchorFrame()->IsInDtor() )
     {
         const tools::Rectangle aOldRect( maAnchoredDrawObj.GetObjRectWithSpaces().SVRect() );

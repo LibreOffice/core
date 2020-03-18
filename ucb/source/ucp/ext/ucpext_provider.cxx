@@ -100,7 +100,7 @@ namespace ucb::ucp::ext
     {
         void lcl_ensureAndTransfer( OUString& io_rIdentifierFragment, OUStringBuffer& o_rNormalization, const sal_Unicode i_nLeadingChar )
         {
-            if ( ( io_rIdentifierFragment.isEmpty() ) || ( io_rIdentifierFragment[0] != i_nLeadingChar ) )
+            if ( io_rIdentifierFragment.isEmpty() || ( io_rIdentifierFragment[0] != i_nLeadingChar ) )
                 throw IllegalIdentifierException();
             io_rIdentifierFragment = io_rIdentifierFragment.copy( 1 );
             o_rNormalization.append( i_nLeadingChar );

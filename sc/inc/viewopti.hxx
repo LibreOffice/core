@@ -70,7 +70,7 @@ public:
 
     void                    SetDefaults();
     bool                    operator== ( const ScGridOptions& rOpt ) const;
-    bool                    operator!= ( const ScGridOptions& rOpt ) const { return !(operator==(rOpt)); }
+    bool                    operator!= ( const ScGridOptions& rOpt ) const { return !operator==(rOpt); }
 };
 
 // Options - View
@@ -99,7 +99,7 @@ public:
 
     ScViewOptions&          operator=  ( const ScViewOptions& rCpy );
     bool                    operator== ( const ScViewOptions& rOpt ) const;
-    bool                    operator!= ( const ScViewOptions& rOpt ) const { return !(operator==(rOpt)); }
+    bool                    operator!= ( const ScViewOptions& rOpt ) const { return !operator==(rOpt); }
 
 private:
     bool            aOptArr     [MAX_OPT];

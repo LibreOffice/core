@@ -220,8 +220,7 @@ codemaker::UnoType::Sort TypeManager::decompose(
             return s;
         case codemaker::UnoType::Sort::PolymorphicStructTemplate:
             if (args.size()
-                != (dynamic_cast<unoidl::PolymorphicStructTypeTemplateEntity&>(*ent).
-                    getTypeParameters().size()))
+                != dynamic_cast<unoidl::PolymorphicStructTypeTemplateEntity&>(*ent).getTypeParameters().size())
             {
                 throw CannotDumpException(
                     "bad number of template arguments for \"" + n

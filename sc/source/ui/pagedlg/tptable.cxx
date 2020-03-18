@@ -467,7 +467,7 @@ static bool lcl_PutScaleItem( sal_uInt16    nWhich,
                       sal_uInt16            nValue )
 {
     bool bIsSel = (rListBox.get_active() == nLBEntry);
-    bool bDataChanged = (rListBox.get_value_changed_from_saved()) ||
+    bool bDataChanged = rListBox.get_value_changed_from_saved() ||
                         rEd.get_value_changed_from_saved() ||
                         !WAS_DEFAULT( nWhich, rOldSet );
 
@@ -492,7 +492,7 @@ static bool lcl_PutScaleItem2( sal_uInt16               nWhich,
     sal_uInt16 nValue1 = rEd1.get_sensitive() ? rEd1.get_value() : 0;
     sal_uInt16 nValue2 = rEd2.get_sensitive() ? rEd2.get_value() : 0;
     bool bIsSel = (rListBox.get_active() == nLBEntry);
-    bool bDataChanged = (rListBox.get_value_changed_from_saved()) ||
+    bool bDataChanged = rListBox.get_value_changed_from_saved() ||
                         nValue1 != nOrigScalePageWidth ||
                         nValue1 != nOrigScalePageHeight ||
                         !WAS_DEFAULT( nWhich, rOldSet );
@@ -519,7 +519,7 @@ static bool lcl_PutScaleItem3( sal_uInt16    nWhich,
                       sal_uInt16            nValue )
 {
     bool bIsSel = (rListBox.get_active() == nLBEntry);
-    bool bDataChanged = (rListBox.get_value_changed_from_saved()) ||
+    bool bDataChanged = rListBox.get_value_changed_from_saved() ||
                         rEd.get_value_changed_from_saved() ||
                         !WAS_DEFAULT( nWhich, rOldSet );
 

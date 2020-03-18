@@ -2925,7 +2925,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
                 if (aPos.Col() >= 0 && (aSpellCheckCell.meType == CELLTYPE_STRING || aSpellCheckCell.meType == CELLTYPE_EDIT))
                     nColSpellError = aPos.Col();
 
-                bSpellError = (mpSpellCheckCxt->isMisspelled(nColSpellError, nCellY));
+                bSpellError = mpSpellCheckCxt->isMisspelled(nColSpellError, nCellY);
                 if (bSpellError)
                 {
                     // Check and see if a misspelled word is under the mouse pointer.
@@ -4200,7 +4200,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                         nTabs.push_back(i);
                         for(SCTAB j=i+1;j<nTabCount;j++)
                         {
-                            if((!pSourceDoc->IsVisible(j))&&(pSourceDoc->IsScenario(j)))
+                            if((!pSourceDoc->IsVisible(j)) && pSourceDoc->IsScenario(j))
                             {
                                 nTabs.push_back( j );
                                 i=j;

@@ -2757,7 +2757,7 @@ void ToolbarLayoutManager::implts_calcDockingPosSize(
                     {
                         if ( bHorizontalDockArea )
                         {
-                            sal_Int32 nSize = ::std::max( sal_Int32( 0 ), std::min( sal_Int32(( aContainerWinSize.Width() ) - aWindowRect.Right() ),
+                            sal_Int32 nSize = ::std::max( sal_Int32( 0 ), std::min( sal_Int32( aContainerWinSize.Width() - aWindowRect.Right() ),
                                                                                     sal_Int32( aTrackingRect.getWidth() )));
                             if ( nSize == 0 )
                             {

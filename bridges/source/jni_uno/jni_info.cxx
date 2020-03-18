@@ -79,8 +79,7 @@ JNI_interface_type_info::JNI_interface_type_info(
         jni,
         find_class(
             jni,
-            ( OUStringToOString( uno_name, RTL_TEXTENCODING_JAVA_UTF8 ).
-              getStr() ) ) );
+            OUStringToOString( uno_name, RTL_TEXTENCODING_JAVA_UTF8 ).getStr() ) );
     JLocalAutoRef jo_type( jni, create_type( jni, static_cast<jclass>(jo_class.get()) ) );
 
     // get proxy ctor

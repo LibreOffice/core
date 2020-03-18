@@ -268,7 +268,7 @@ namespace cppu_threadpool
                 }
                 pQueue = (*ii).second.first;
 
-                if( (*ii).second.second && ( (*ii).second.second->isBusy() ) )
+                if( (*ii).second.second && (*ii).second.second->isBusy() )
                 {
                     pQueue->suspend();
                 }

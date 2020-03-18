@@ -1130,7 +1130,7 @@ bool GetFrameInPage( const SwContentFrame *pCnt, SwWhichPage fnWhichPage,
         SwTextFrame const*const pFrame(static_cast<const SwTextFrame*>(pCnt));
         TextFrameIndex const nIdx((fnPosPage == GetFirstSub)
             ? pFrame->GetOffset()
-            : (pFrame->GetFollow())
+            : pFrame->GetFollow()
                 ? pFrame->GetFollow()->GetOffset() - TextFrameIndex(1)
                 : TextFrameIndex(pFrame->GetText().getLength()));
         *pPam->GetPoint() = pFrame->MapViewToModelPos(nIdx);

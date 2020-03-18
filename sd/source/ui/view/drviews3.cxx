@@ -1098,7 +1098,7 @@ void  DrawViewShell::GetSnapItemState( SfxItemSet &rSet )
     if ( !mpDrawView->PickHelpLine(aMPos, nHitLog, *GetActiveWindow(), nHelpLine, pPV) )
         return;
 
-    const SdrHelpLine& rHelpLine = (pPV->GetHelpLines())[nHelpLine];
+    const SdrHelpLine& rHelpLine = pPV->GetHelpLines()[nHelpLine];
 
     if ( rHelpLine.GetKind() == SdrHelpLineKind::Point )
     {

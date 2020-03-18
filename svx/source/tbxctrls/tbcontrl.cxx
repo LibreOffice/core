@@ -390,7 +390,7 @@ private:
     {
         auto nMinWidth = GetDrawingArea()->get_ref_device().approximate_digit_width() * 15;
         Size aSize(nMinWidth, aTxtSize.Height());
-        aSize.AdjustWidth( -(aTxtSize.Width()) );
+        aSize.AdjustWidth( -aTxtSize.Width() );
         aSize.AdjustWidth( -6 );
 
         // SourceUnit to Twips

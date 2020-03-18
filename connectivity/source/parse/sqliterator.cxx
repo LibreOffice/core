@@ -328,7 +328,7 @@ void OSQLParseTreeIterator::impl_getQueryParameterColumns( const OSQLTable& _rQu
     // parse the sub query
     do {
 
-    if ( !bEscapeProcessing || ( sSubQueryCommand.isEmpty() ) )
+    if ( !bEscapeProcessing || sSubQueryCommand.isEmpty() )
         break;
 
     OUString sError;

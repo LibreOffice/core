@@ -80,7 +80,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
             case sdbc::DataType::VARCHAR:
             case sdbc::DataType::LONGVARCHAR:
                 aString = xRow->getString(nRowPos);
-                bEmptyFlag = ( aString.isEmpty() ) && xRow->wasNull();
+                bEmptyFlag = aString.isEmpty() && xRow->wasNull();
                 break;
 
             case sdbc::DataType::DATE:

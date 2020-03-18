@@ -1314,7 +1314,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, tools::Rect
                 else
                 {
                     aPoint = aInnerRect.TopRight();
-                    aPoint.AdjustX( -(aSize.Width()) );
+                    aPoint.AdjustX( -aSize.Width() );
                 }
             }
             else
@@ -1338,7 +1338,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, tools::Rect
                 else
                 {
                     aPoint = aInnerRect.BottomLeft();
-                    aPoint.AdjustY( -(aSize.Height()) );
+                    aPoint.AdjustY( -aSize.Height() );
                 }
             }
             else

@@ -1301,7 +1301,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction const & rAct, GDIMetaF
 
         while( pSkipAct
             && ((pSkipAct->GetType() != MetaActionType::COMMENT )
-                || !(static_cast<MetaCommentAction*>(pSkipAct)->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_END"))))
+                || !static_cast<MetaCommentAction*>(pSkipAct)->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_END")))
         {
             pSkipAct = rMtf.GetAction(++a);
         }

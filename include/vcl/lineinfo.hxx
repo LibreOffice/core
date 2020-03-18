@@ -61,7 +61,7 @@ public:
     LineInfo&       operator=( const LineInfo& rLineInfo );
     LineInfo&       operator=( LineInfo&& rLineInfo );
     bool            operator==( const LineInfo& rLineInfo ) const;
-    bool            operator!=( const LineInfo& rLineInfo ) const { return !(LineInfo::operator==( rLineInfo ) ); }
+    bool            operator!=( const LineInfo& rLineInfo ) const { return !LineInfo::operator==( rLineInfo ); }
 
     void            SetStyle( LineStyle eStyle );
     LineStyle       GetStyle() const { return mpImplLineInfo->meStyle; }

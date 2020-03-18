@@ -57,7 +57,7 @@ public:
     bool operator==(const Image& rImage) const;
     bool operator!=(const Image& rImage) const
     {
-        return !(Image::operator==(rImage));
+        return !Image::operator==(rImage);
     }
 
     OUString GetStock() const;

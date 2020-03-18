@@ -634,7 +634,7 @@ void SfxDispatcher::DoDeactivate_Impl(bool bMDI, SfxViewFrame const * pNew)
         DBG_ASSERT( xImp->bActive, "Deactivate error" );
         xImp->bActive = false;
 
-        if ( xImp->pFrame && !(xImp->pFrame->GetObjectShell()->IsInPlaceActive() ) )
+        if ( xImp->pFrame && !xImp->pFrame->GetObjectShell()->IsInPlaceActive() )
         {
             SfxWorkWindow *pWorkWin = xImp->pFrame->GetFrame().GetWorkWindow_Impl();
             if ( pWorkWin )

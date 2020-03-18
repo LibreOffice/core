@@ -538,7 +538,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     //     can detect such protocol schemata too :-)
 
     if(
-        (sURL.isEmpty()                                          ) ||
+        sURL.isEmpty()                                       ||
         (ProtocolCheck::isProtocol(sURL,EProtocol::Uno    )) ||
         (ProtocolCheck::isProtocol(sURL,EProtocol::Slot   )) ||
         (ProtocolCheck::isProtocol(sURL,EProtocol::Macro  )) ||
@@ -1702,8 +1702,8 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
     // the current position and size must be used.
     css::uno::Reference< css::awt::XWindow2 > xVisibleCheck(xWindow, css::uno::UNO_QUERY);
     if (
-        (xVisibleCheck.is()        ) &&
-        (xVisibleCheck->isVisible())
+        xVisibleCheck.is()        &&
+        xVisibleCheck->isVisible()
        )
        return;
 

@@ -138,7 +138,7 @@ static MapMode lcl_MoveMapMode( const MapMode& rMap, const Size& rMove )
 {
     MapMode aNew = rMap;
     Point aOrigin = aNew.GetOrigin();
-    aOrigin.AdjustX( -(rMove.Width()) );
+    aOrigin.AdjustX( -rMove.Width() );
     aOrigin.AdjustY( -rMove.Height() );
     aNew.SetOrigin(aOrigin);
     return aNew;

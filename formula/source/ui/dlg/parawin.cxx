@@ -116,7 +116,7 @@ void ParaWin::UpdateArgDesc( sal_uInt16 nArg )
             sal_uInt16 nRealArg = (nArg < aVisibleArgMapping.size()) ? aVisibleArgMapping[nArg] : nArg;
             aArgDesc  = pFuncDesc->getParameterDescription(nRealArg);
             aArgName  = pFuncDesc->getParameterName(nRealArg) + " " +
-                ((pFuncDesc->isParameterOptional(nRealArg)) ? m_sOptional : m_sRequired);
+                (pFuncDesc->isParameterOptional(nRealArg) ? m_sOptional : m_sRequired);
         }
         else if ( nArgs < PAIRED_VAR_ARGS )
         {
@@ -162,7 +162,7 @@ void ParaWin::UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 i )
         if(nArg<nArgs)
         {
             sal_uInt16 nRealArg = aVisibleArgMapping[nArg];
-            SetArgNameFont  (i,(pFuncDesc->isParameterOptional(nRealArg))
+            SetArgNameFont  (i,pFuncDesc->isParameterOptional(nRealArg)
                                             ? aFntLight : aFntBold );
             SetArgName      (i,pFuncDesc->getParameterName(nRealArg));
         }

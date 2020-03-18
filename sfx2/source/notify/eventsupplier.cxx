@@ -77,7 +77,7 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUString & aName, const uno::
         if  (   ( aNormalizedDescriptor.size() == 1 )
             &&  !aNormalizedDescriptor.has( PROP_EVENT_TYPE ) //TODO
             &&  ( aNormalizedDescriptor.get( PROP_EVENT_TYPE ) >>= sType )
-            &&  ( sType.isEmpty() )
+            &&  sType.isEmpty()
             )
         {
             // An empty event type means no binding. Therefore reset data

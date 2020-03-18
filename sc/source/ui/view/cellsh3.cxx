@@ -181,7 +181,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     const SfxPoolItem* pDontCommitItem;
                     bool bCommit = true;
                     if (pReqArgs->HasItem(FN_PARAM_1, &pDontCommitItem))
-                        bCommit = !(static_cast<const SfxBoolItem*>(pDontCommitItem)->GetValue());
+                        bCommit = !static_cast<const SfxBoolItem*>(pDontCommitItem)->GetValue();
 
                     ScInputHandler* pHdl = SC_MOD()->GetInputHdl( pTabViewShell );
                     if (bCommit)

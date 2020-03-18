@@ -2112,7 +2112,7 @@ void AutoRecovery::implts_startListening()
     } /* SAFE */
 
     if (
-        (  xCFG.is()                ) &&
+        xCFG.is()                &&
         (! bListenForConfigChanges)
        )
     {
@@ -2136,7 +2136,7 @@ void AutoRecovery::implts_startListening()
     }
 
     if (
-        (  xBroadcaster.is()  ) &&
+        xBroadcaster.is()  &&
         (! bListenForDocEvents)
        )
     {
@@ -2431,8 +2431,8 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     // It's not really a full featured office document. It doesn't provide a URL, any filter, a factory URL etcpp.
     // TODO file bug to Basic IDE developers. They must remove the office document API from its service.
     if (
-        (aNew.OrgURL.isEmpty()) &&
-        (aNew.FactoryURL.isEmpty())
+        aNew.OrgURL.isEmpty() &&
+        aNew.FactoryURL.isEmpty()
        )
     {
         OSL_FAIL( "AutoRecovery::implts_registerDocument: this should not happen anymore!" );
@@ -4048,7 +4048,7 @@ bool AutoRecovery::impl_enoughDiscSpace(sal_Int32 nRequiredSpace)
     ::osl::FileBase::RC aRC         = ::osl::Directory::getVolumeInfo(sBackupPath, aInfo);
 
     if (
-        (aInfo.isValid(osl_VolumeInfo_Mask_FreeSpace)) &&
+        aInfo.isValid(osl_VolumeInfo_Mask_FreeSpace) &&
         (aRC == ::osl::FileBase::E_None         )
        )
     {
@@ -4091,7 +4091,7 @@ void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&    
     css::uno::Reference< css::frame::XFrame > xFrame = xNewFrame;
     if (
         (!xFrame.is()       ) &&
-        (rInfo.Document.is())
+        rInfo.Document.is()
        )
     {
         css::uno::Reference< css::frame::XController > xController = rInfo.Document->getCurrentController();
@@ -4111,7 +4111,7 @@ void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&    
     // In such case we must create our own progress !
     if (
         (! xExternalProgress.is()) &&
-        (xFrame.is()             )
+        xFrame.is()
        )
     {
         css::uno::Reference< css::task::XStatusIndicatorFactory > xProgressFactory(xFrame, css::uno::UNO_QUERY);
@@ -4130,8 +4130,8 @@ void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&    
     // if our applications make it wrong. In such case the internal progress resists at the same frame
     // and there is no need to forward progress activities to e.g. an outside dialog .-)
     if (
-        (xExternalProgress.is()) &&
-        (xFrame.is()           )
+        xExternalProgress.is() &&
+        xFrame.is()
        )
     {
         css::uno::Reference< css::beans::XPropertySet > xFrameProps(xFrame, css::uno::UNO_QUERY);
@@ -4156,7 +4156,7 @@ void AutoRecovery::impl_forgetProgress(const AutoRecovery::TDocumentInfo&       
     css::uno::Reference< css::frame::XFrame > xFrame = xNewFrame;
     if (
         (!xFrame.is()       ) &&
-        (rInfo.Document.is())
+        rInfo.Document.is()
        )
     {
         css::uno::Reference< css::frame::XController > xController = rInfo.Document->getCurrentController();

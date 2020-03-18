@@ -69,7 +69,7 @@ PresStyleMap& SdStyleFamilyImpl::getStyleSheets()
         const sal_Int32 nLen = aLayoutName.indexOf(SD_LT_SEPARATOR ) + 4;
         aLayoutName = aLayoutName.copy(0, nLen );
 
-        if( (maStyleSheets.empty()) || !(*maStyleSheets.begin()).second->GetName().startsWith( aLayoutName) )
+        if( maStyleSheets.empty() || !(*maStyleSheets.begin()).second->GetName().startsWith( aLayoutName) )
         {
             maStyleSheets.clear();
 

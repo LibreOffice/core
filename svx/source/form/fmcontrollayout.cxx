@@ -262,7 +262,7 @@ namespace svxform
                     {
                         _rxControlModel->setPropertyValue( FM_PROP_BORDER, makeAny( nVisualEffect ) );
                         if  (   ( nVisualEffect == VisualEffect::FLAT )
-                            &&  ( xPSI->hasPropertyByName( FM_PROP_BORDERCOLOR ) )
+                            &&  xPSI->hasPropertyByName( FM_PROP_BORDERCOLOR )
                             )
                             // light gray flat border
                             _rxControlModel->setPropertyValue( FM_PROP_BORDERCOLOR, makeAny( sal_Int32(0x00C0C0C0) ) );

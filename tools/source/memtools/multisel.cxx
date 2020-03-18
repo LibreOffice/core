@@ -356,7 +356,7 @@ void MultiSelection::Remove( sal_Int32 nIndex )
             aSels.erase( aSels.begin() + nSubSelPos );
         } else {
             // shorten this sub selection
-            --( aSels[ nSubSelPos++ ].Max() );
+            -- aSels[ nSubSelPos++ ].Max();
         }
 
         // adjust the selected counter
@@ -366,8 +366,8 @@ void MultiSelection::Remove( sal_Int32 nIndex )
     // shift the sub selections behind the removed index
     for ( sal_Int32 nPos = nSubSelPos; nPos < sal_Int32(aSels.size()); ++nPos )
     {
-        --( aSels[ nPos ].Min() );
-        --( aSels[ nPos ].Max() );
+        -- aSels[ nPos ].Min();
+        -- aSels[ nPos ].Max();
     }
 
     bCurValid = false;

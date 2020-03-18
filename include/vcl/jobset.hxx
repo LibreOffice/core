@@ -41,7 +41,7 @@ public:
 
     bool                operator==( const JobSetup& rJobSetup ) const;
     bool                operator!=( const JobSetup& rJobSetup ) const
-                            { return !(JobSetup::operator==( rJobSetup )); }
+                            { return !JobSetup::operator==( rJobSetup ); }
 
     SAL_DLLPRIVATE ImplJobSetup&        ImplGetData();
     SAL_DLLPRIVATE const ImplJobSetup&  ImplGetConstData() const;

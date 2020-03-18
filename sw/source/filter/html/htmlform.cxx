@@ -974,7 +974,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             float fVal = static_cast< float >(
-                (static_cast<const SvxFontHeightItem *>(pItem)->GetHeight()) / 20.0 );
+                static_cast<const SvxFontHeightItem *>(pItem)->GetHeight() / 20.0 );
             aTmp <<= fVal;
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }

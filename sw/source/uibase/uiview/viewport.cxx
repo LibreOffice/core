@@ -356,7 +356,7 @@ void SwView::CalcPt( Point *pPt, const tools::Rectangle &rRect,
     else if( rRect.Bottom() > m_aVisArea.Bottom() )   // Downward shift
     {
         pPt->setY( rRect.Bottom() -
-                    (m_aVisArea.GetHeight()) + ( nRangeY != USHRT_MAX ?
+                    m_aVisArea.GetHeight() + ( nRangeY != USHRT_MAX ?
             nRangeY : nYScroll ) );
         pPt->setY( SetVScrollMax( pPt->Y() ) );
     }
@@ -364,7 +364,7 @@ void SwView::CalcPt( Point *pPt, const tools::Rectangle &rRect,
     if ( rRect.Right() > m_aVisArea.Right() )         // Shift right
     {
         pPt->setX( rRect.Right()  -
-                    (m_aVisArea.GetWidth()) +
+                    m_aVisArea.GetWidth() +
                     (nRangeX != USHRT_MAX ? nRangeX : nXScroll) );
         pPt->setX( SetHScrollMax( pPt->X() ) );
     }

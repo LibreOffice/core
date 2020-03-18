@@ -107,8 +107,7 @@ void Proxy::do_dispatch(
         css::uno::Any exc(cppu::getCaughtException());
         uno_copyAndConvertData(
             *exception, &exc,
-            (css::uno::TypeDescription(cppu::UnoType< css::uno::Any >::get()).
-             get()),
+            css::uno::TypeDescription(cppu::UnoType< css::uno::Any >::get()).get(),
             bridge_->getCppToBinaryMapping().get());
     }
 }

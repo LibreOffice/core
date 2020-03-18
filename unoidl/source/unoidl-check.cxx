@@ -174,8 +174,7 @@ void checkMap(
         if (entA->getSort() == unoidl::Entity::SORT_MODULE) {
             checkMap(
                 providerB, name + ".",
-                (static_cast<unoidl::ModuleEntity *>(entA.get())
-                 ->createCursor()),
+                static_cast<unoidl::ModuleEntity *>(entA.get())->createCursor(),
                 ignoreUnpublished);
         } else {
             bool pubA = dynamic_cast<unoidl::PublishableEntity&>(*entA).isPublished();
@@ -703,8 +702,7 @@ void checkMap(
                                 << "accumulation-based service " << name
                                 << " direct mandatory base service #"
                                 << (i
-                                    - (ent2A->getDirectMandatoryBaseServices()
-                                       .begin())
+                                    - ent2A->getDirectMandatoryBaseServices().begin()
                                     + 1)
                                 << " changed from " << i->name << " to "
                                 << j->name << std::endl;
@@ -763,8 +761,7 @@ void checkMap(
                                 << "accumulation-based service " << name
                                 << " direct mandatory base interface #"
                                 << (i
-                                    - (ent2A->getDirectMandatoryBaseInterfaces()
-                                       .begin())
+                                    - ent2A->getDirectMandatoryBaseInterfaces().begin()
                                     + 1)
                                 << " changed from " << i->name << " to "
                                 << j->name << std::endl;
@@ -786,8 +783,7 @@ void checkMap(
                     }
                     for (auto & i: ent2A->getDirectOptionalBaseInterfaces()) {
                         if (std::none_of(
-                                (ent2B->getDirectOptionalBaseInterfaces()
-                                 .begin()),
+                                ent2B->getDirectOptionalBaseInterfaces().begin(),
                                 ent2B->getDirectOptionalBaseInterfaces().end(),
                                 EqualsAnnotation(i.name)))
                         {
@@ -920,8 +916,7 @@ void checkIds(
         case unoidl::Entity::SORT_MODULE:
             checkIds(
                 providerA, name + ".",
-                (static_cast<unoidl::ModuleEntity *>(entB.get())
-                 ->createCursor()));
+                static_cast<unoidl::ModuleEntity *>(entB.get())->createCursor());
             break;
         case unoidl::Entity::SORT_ENUM_TYPE:
             if (!entA.is()) {
@@ -1094,9 +1089,8 @@ void checkIds(
                         entB.get()));
                 std::vector<unoidl::AccumulationBasedServiceEntity::Property>::size_type
                     n(entA.is()
-                      ? (static_cast<unoidl::AccumulationBasedServiceEntity *>(
-                             entA.get())
-                         ->getDirectProperties().size())
+                      ? static_cast<unoidl::AccumulationBasedServiceEntity *>(
+                             entA.get())->getDirectProperties().size()
                       : 0);
                 assert(n <= ent2B->getDirectProperties().size());
                 for (auto i(ent2B->getDirectProperties().begin() +n);

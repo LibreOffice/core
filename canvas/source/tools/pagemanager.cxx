@@ -85,7 +85,7 @@ namespace canvas
         // okay, one last chance is left, we try all available
         // pages again. maybe some other fragment was deleted
         // and we can exploit the space.
-        while( !( relocate( pFragment ) ) )
+        while( ! relocate( pFragment ) )
         {
             // no way, we need to free up some space...
             // TODO(F1): this is a heuristic, could
@@ -95,7 +95,7 @@ namespace canvas
             sal_uInt32 nCurrMaxArea = 0;
             for( auto aCurr = maFragments.begin(); aCurr != aEnd; ++aCurr )
             {
-                if( *aCurr && !( ( *aCurr )->isNaked() ) )
+                if( *aCurr && !( *aCurr )->isNaked() )
                 {
                     const ::basegfx::B2ISize& rSize( ( *aCurr )->getSize() );
                     sal_uInt32                nArea( rSize.getX() * rSize.getY() );

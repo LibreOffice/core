@@ -2254,7 +2254,7 @@ void MathType::HandleSubSupScript(SmNode *pNode,int nLevel)
     if (nVariation2 != 0xff)
         pS->WriteUChar( END );
 
-    if (nullptr != (pNode->GetSubNode(RSUP+1)))
+    if (nullptr != pNode->GetSubNode(RSUP+1))
     {
         nVariation=0;
         if (pNode->GetSubNode(RSUB+1))

@@ -849,7 +849,7 @@ static int lcl_LUP_decompose( ScMatrix* mA, const SCSIZE n,
 
     bool bSingular=false;
     for (SCSIZE i=0; i<n && !bSingular; i++)
-        bSingular = (mA->GetDouble(i,i)) == 0.0;
+        bSingular = mA->GetDouble(i,i) == 0.0;
     if (bSingular)
         nSign = 0;
 
@@ -1939,7 +1939,7 @@ double lcl_GetColumnEuclideanNorm(const ScMatrixRef& pMatA, SCSIZE nC, SCSIZE nR
 {
     double fNorm = 0.0;
     for (SCSIZE row=nR; row<nN; row++)
-        fNorm  += (pMatA->GetDouble(nC,row)) * (pMatA->GetDouble(nC,row));
+        fNorm  += pMatA->GetDouble(nC,row) * pMatA->GetDouble(nC,row);
     return sqrt(fNorm);
 }
 
@@ -1949,7 +1949,7 @@ double lcl_TGetColumnEuclideanNorm(const ScMatrixRef& pMatA, SCSIZE nR, SCSIZE n
 {
     double fNorm = 0.0;
     for (SCSIZE col=nC; col<nN; col++)
-        fNorm  += (pMatA->GetDouble(col,nR)) * (pMatA->GetDouble(col,nR));
+        fNorm  += pMatA->GetDouble(col,nR) * pMatA->GetDouble(col,nR);
     return sqrt(fNorm);
 }
 

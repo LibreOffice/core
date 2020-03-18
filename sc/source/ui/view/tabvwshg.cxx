@@ -105,7 +105,7 @@ void ScTabViewShell::InsertURLButton( const OUString& rName, const OUString& rUR
     Size aSize = GetActiveWin()->PixelToLogic(Size(140, 20));
 
     if ( pDoc->IsNegativePage(nTab) )
-        aPos.AdjustX( -(aSize.Width()) );
+        aPos.AdjustX( -aSize.Width() );
 
     pObj->SetLogicRect(tools::Rectangle(aPos, aSize));
 

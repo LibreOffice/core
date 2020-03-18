@@ -364,7 +364,7 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
                 // works on the last input character, this is especially in Korean text often done
                 // quotes that are inside of the string are not replaced!
                 const sal_Unicode nCharCode = aSel.Min().GetNode()->GetChar( aSel.Min().GetIndex() );
-                if ( ( GetStatus().DoAutoCorrect() ) && ( ( nCharCode == '\"' ) || ( nCharCode == '\'' ) ) )
+                if ( GetStatus().DoAutoCorrect() && ( ( nCharCode == '\"' ) || ( nCharCode == '\'' ) ) )
                 {
                     aSel = DeleteSelected( aSel );
                     aSel = AutoCorrect( aSel, nCharCode, mpIMEInfos->bWasCursorOverwrite );
@@ -4215,7 +4215,7 @@ tools::Rectangle ImpEditEngine::GetEditCursor( ParaPortion* pPortion, sal_Int32 
     for (sal_Int32 nLine = 0; nLine < nLineCount; ++nLine)
     {
         const EditLine& rTmpLine = pPortion->GetLines()[nLine];
-        if ( ( rTmpLine.GetStart() == nIndex ) || ( rTmpLine.IsIn( nIndex, bEOL ) ) )
+        if ( ( rTmpLine.GetStart() == nIndex ) || rTmpLine.IsIn( nIndex, bEOL ) )
         {
             pLine = &rTmpLine;
             break;

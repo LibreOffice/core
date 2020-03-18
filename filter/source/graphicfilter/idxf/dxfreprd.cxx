@@ -151,7 +151,7 @@ OUString getLODefaultLanguage()
 
 rtl_TextEncoding DXFRepresentation::getTextEncoding() const
 {
-    return (isTextEncodingSet()) ?
+    return isTextEncodingSet() ?
         mEnc :
         osl_getTextEncodingFromLocale(nullptr); // Use default encoding if none specified
 }
@@ -252,8 +252,8 @@ void DXFRepresentation::ReadHeader(DXFGroupReader & rDGR)
                     continue;
                 // FIXME: we really need a whole table of
                 // $DWGCODEPAGE to encodings mappings
-                else if ( (rDGR.GetS().equalsIgnoreAsciiCase("ANSI_932")) ||
-                          (rDGR.GetS().equalsIgnoreAsciiCase("DOS932")) )
+                else if ( rDGR.GetS().equalsIgnoreAsciiCase("ANSI_932") ||
+                          rDGR.GetS().equalsIgnoreAsciiCase("DOS932") )
                 {
                     setTextEncoding(RTL_TEXTENCODING_MS_932);
                 }

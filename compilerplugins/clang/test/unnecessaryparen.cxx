@@ -11,6 +11,8 @@
 #include <string>
 #include <rtl/ustring.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/XInterface.hpp>
 
 #define MACRO (1)
 
@@ -138,4 +140,24 @@ class Foo2
     }
 };
 
+namespace test3
+{
+    int f(const css::uno::Reference<css::uno::XInterface>& xCurrentShape, const css::uno::Reference<css::uno::XInterface>& xRange)
+    {
+        // expected-error@+1 {{parentheses around member expr [loplugin:unnecessaryparen]}}
+        if(!(xCurrentShape.is() && (xRange.is())))
+            return 1;
+        return 0;
+    }
+
+    struct Foo { int& get(); };
+    void g(std::shared_ptr<int*> p1, Foo p2)
+    {
+        auto v1 = &(p2.get()); (void) v1;
+        auto v2 = *(p1.get()); (void) v2;
+
+        std::vector<int> vec;
+        *(vec.begin());
+    }
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

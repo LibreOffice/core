@@ -1855,7 +1855,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
     if (bAddUndo && !rDoc.IsUndoEnabled())
         bAddUndo = false;
 
-    if ( !rMark.IsMarked() && !rMark.IsMultiMarked() && (pSearchItem->HasStartPoint()) )
+    if ( !rMark.IsMarked() && !rMark.IsMultiMarked() && pSearchItem->HasStartPoint() )
     {
         // No selection -> but we have a start point (top left corner of the
         // current view), start searching from there, not from the current

@@ -91,7 +91,7 @@ namespace {
 
 OUString getVersion( OUString const & sVersion )
 {
-    return ( sVersion.isEmpty() ) ? OUString( "0" ) : sVersion;
+    return sVersion.isEmpty() ? OUString( "0" ) : sVersion;
 }
 
 OUString getVersion( const uno::Reference< deployment::XPackage > &rPackage )

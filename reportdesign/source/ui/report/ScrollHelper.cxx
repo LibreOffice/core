@@ -125,7 +125,7 @@ Size OScrollWindowHelper::ResizeScrollBars()
     if ( aOutPixSz.Width() == 0 || aOutPixSz.Height() == 0 )
         return aOutPixSz;
 
-    aOutPixSz.AdjustHeight( -(m_aReportWindow->getRulerHeight()) );
+    aOutPixSz.AdjustHeight( -m_aReportWindow->getRulerHeight() );
     // determine the size of the output-area and if we need scrollbars
     const long nScrSize = GetSettings().GetStyleSettings().GetScrollBarSize();
     bool bVVisible = false; // by default no vertical-ScrollBar

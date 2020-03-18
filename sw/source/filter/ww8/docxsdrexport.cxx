@@ -469,7 +469,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         bool bLclInTabCell = true;
         if (pObj)
         {
-            uno::Reference<drawing::XShape> xShape((const_cast<SdrObject*>(pObj)->getUnoShape()),
+            uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pObj)->getUnoShape(),
                                                    uno::UNO_QUERY);
             uno::Sequence<beans::PropertyValue> propList = lclGetProperty(xShape, "InteropGrabBag");
             if (propList.hasElements())

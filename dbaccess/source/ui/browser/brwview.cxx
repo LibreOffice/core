@@ -203,7 +203,7 @@ void UnoDataBrowserView::resizeDocumentView(tools::Rectangle& _rPlayground)
         aSplitSize  = m_pSplitter->GetOutputSizePixel();
         aSplitSize.setHeight( aPlaygroundSize.Height() );
 
-        if( ( aSplitPos.X() + aSplitSize.Width() ) > ( aPlaygroundSize.Width() ))
+        if( ( aSplitPos.X() + aSplitSize.Width() ) > aPlaygroundSize.Width() )
             aSplitPos.setX( aPlaygroundSize.Width() - aSplitSize.Width() );
 
         if( aSplitPos.X() <= aPlaygroundPos.X() )
@@ -222,7 +222,7 @@ void UnoDataBrowserView::resizeDocumentView(tools::Rectangle& _rPlayground)
 
             Point aStatusPos( aPlaygroundPos.X() + 2, aTreeViewPos.Y() + aTreeViewSize.Height() - aStatusSize.Height() );
             m_pStatus->SetPosSizePixel( aStatusPos, aStatusSize );
-            aTreeViewSize.AdjustHeight( -(aStatusSize.Height()) );
+            aTreeViewSize.AdjustHeight( -aStatusSize.Height() );
         }
 
         // set the size of treelistbox

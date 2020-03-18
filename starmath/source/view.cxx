@@ -313,7 +313,7 @@ void SmGraphicWindow::SetCursor(const SmNode *pNode)
     // get appropriate rectangle
     Point aOffset (pNode->GetTopLeft() - pTree->GetTopLeft()),
           aTLPos  (GetFormulaDrawPos() + aOffset);
-    aTLPos.AdjustX( -(pNode->GetItalicLeftSpace()) );
+    aTLPos.AdjustX( -pNode->GetItalicLeftSpace() );
     Size  aSize   (pNode->GetItalicSize());
 
     SetCursor(tools::Rectangle(aTLPos, aSize));

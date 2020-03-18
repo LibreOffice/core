@@ -3244,8 +3244,8 @@ void CheckBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     pDev->DrawRect( aStateRect );
     aStateRect.AdjustLeft(aBrd1Size.Width() );
     aStateRect.AdjustTop(aBrd1Size.Height() );
-    aStateRect.AdjustRight( -(aBrd1Size.Width()) );
-    aStateRect.AdjustBottom( -(aBrd1Size.Height()) );
+    aStateRect.AdjustRight( -aBrd1Size.Width() );
+    aStateRect.AdjustBottom( -aBrd1Size.Height() );
     if ( meState == TRISTATE_INDET )
         pDev->SetFillColor( COL_LIGHTGRAY );
     else
@@ -3256,8 +3256,8 @@ void CheckBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     {
         aStateRect.AdjustLeft(aBrd2Size.Width() );
         aStateRect.AdjustTop(aBrd2Size.Height() );
-        aStateRect.AdjustRight( -(aBrd2Size.Width()) );
-        aStateRect.AdjustBottom( -(aBrd2Size.Height()) );
+        aStateRect.AdjustRight( -aBrd2Size.Width() );
+        aStateRect.AdjustBottom( -aBrd2Size.Height() );
         Point   aPos11( aStateRect.TopLeft() );
         Point   aPos12( aStateRect.BottomRight() );
         Point   aPos21( aStateRect.TopRight() );

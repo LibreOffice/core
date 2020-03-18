@@ -152,7 +152,7 @@ ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, Sequence< PropertyValue 
                 else if ( nLen == 1 )
                 {
                     Reference< text::XTextRange > xTextRange( xIndexAccess->getByIndex( 0 ), UNO_QUERY );
-                    if ( xTextRange.is() && ( xTextRange->getString().isEmpty() ) )
+                    if ( xTextRange.is() && xTextRange->getString().isEmpty() )
                         mbSelectionPresent = false;
                 }
             }

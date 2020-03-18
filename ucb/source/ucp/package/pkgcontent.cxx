@@ -1676,7 +1676,7 @@ void Content::transfer(
     }
 
     // Is source a package content?
-    if ( ( rInfo.SourceURL.isEmpty() ) ||
+    if ( rInfo.SourceURL.isEmpty() ||
          ( rInfo.SourceURL.compareTo(
             m_aUri.getUri(), PACKAGE_URL_SCHEME_LENGTH + 3 ) != 0 ) )
     {
@@ -2027,7 +2027,7 @@ void Content::queryChildren( ContentRefList& rChildren )
 
         // Is aURL a prefix of aChildURL?
         if ( ( aChildURL.getLength() > nLen ) &&
-             ( aChildURL.startsWith( aURL ) ) )
+             aChildURL.startsWith( aURL ) )
         {
             if ( aChildURL.indexOf( '/', nLen ) == -1 )
             {

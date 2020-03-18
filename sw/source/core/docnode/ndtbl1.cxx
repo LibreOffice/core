@@ -207,7 +207,7 @@ static bool FindBox_( FndBox_ & rBox, LinesAndTable* pPara )
 
         if (pPara->m_bInsertLines)
         {
-            const SwTableLines &rLines = (rBox.GetBox())
+            const SwTableLines &rLines = rBox.GetBox()
                                     ? rBox.GetBox()->GetTabLines()
                                     : pPara->m_rTable.GetTabLines();
             if (rBox.GetLines().size() == rLines.size())

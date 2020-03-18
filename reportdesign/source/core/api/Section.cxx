@@ -537,7 +537,7 @@ uno::Reference< drawing::XShapeGroup > SAL_CALL
 OSection::group(uno::Reference< drawing::XShapes > const& xShapes)
 {
     // no lock because m_xDrawPage_ShapeGrouper is const
-    return (m_xDrawPage_ShapeGrouper.is())
+    return m_xDrawPage_ShapeGrouper.is()
         ? m_xDrawPage_ShapeGrouper->group(xShapes)
         : nullptr;
 }
@@ -554,7 +554,7 @@ OSection::ungroup(uno::Reference<drawing::XShapeGroup> const& xGroup)
 uno::Reference<container::XNameContainer> SAL_CALL OSection::getForms()
 {
     // no lock because m_xDrawPage_FormSupplier is const
-    return (m_xDrawPage_FormSupplier.is())
+    return m_xDrawPage_FormSupplier.is()
         ? m_xDrawPage_FormSupplier->getForms()
         : nullptr;
 }
@@ -562,7 +562,7 @@ uno::Reference<container::XNameContainer> SAL_CALL OSection::getForms()
 sal_Bool SAL_CALL OSection::hasForms()
 {
     // no lock because m_xDrawPage_FormSupplier is const
-    return (m_xDrawPage_FormSupplier.is())
+    return m_xDrawPage_FormSupplier.is()
         && m_xDrawPage_FormSupplier->hasForms();
 }
 
@@ -573,7 +573,7 @@ sal_Int64 OSection::getSomething( const uno::Sequence< sal_Int8 > & rId )
 {
     if (isUnoTunnelId<OSection>(rId) )
         return reinterpret_cast<sal_Int64>(this);
-    return (m_xDrawPage_Tunnel.is()) ? m_xDrawPage_Tunnel->getSomething(rId) : 0;
+    return m_xDrawPage_Tunnel.is() ? m_xDrawPage_Tunnel->getSomething(rId) : 0;
 }
 
 uno::Sequence< sal_Int8 > OSection::getUnoTunnelId()

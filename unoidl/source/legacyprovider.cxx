@@ -337,8 +337,7 @@ rtl::Reference< Entity > readEntity(
                         }
                         params.emplace_back(
                             reader.getMethodParameterName(j, k),
-                            (reader.getMethodParameterTypeName(j, k).
-                             replace('/', '.')),
+                            reader.getMethodParameterTypeName(j, k).replace('/', '.'),
                             dir);
                     }
                     std::vector< OUString > excs;
@@ -629,9 +628,7 @@ rtl::Reference< Entity > readEntity(
                             }
                             if ((mode & RT_PARAM_REST) != 0
                                 && !(m == 1
-                                     && ((reader.getMethodParameterTypeName(
-                                              j, 0))
-                                         == "any")))
+                                     && (reader.getMethodParameterTypeName(j, 0) == "any")))
                             {
                                 throw FileFormatException(
                                     key.getRegistryName(),
@@ -644,8 +641,7 @@ rtl::Reference< Entity > readEntity(
                             }
                             params.emplace_back(
                                 reader.getMethodParameterName(j, k),
-                                (reader.getMethodParameterTypeName(j, k).
-                                 replace('/', '.')),
+                                reader.getMethodParameterTypeName(j, k).replace('/', '.'),
                                 (mode & RT_PARAM_REST) != 0);
                         }
                         std::vector< OUString > excs;

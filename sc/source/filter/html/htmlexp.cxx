@@ -447,14 +447,14 @@ const SfxItemSet& ScHTMLExport::PageDefaults( SCTAB nTab )
         const SfxItemSet& rSetPara = pStyleSheet->GetItemSet();
 
         aHTMLStyle.nDefaultScriptType = ScGlobal::GetDefaultScriptType();
-        aHTMLStyle.aFontFamilyName = static_cast<const SvxFontItem&>((rSetPara.Get(
+        aHTMLStyle.aFontFamilyName = static_cast<const SvxFontItem&>(rSetPara.Get(
                         ScGlobal::GetScriptedWhichID(
                             aHTMLStyle.nDefaultScriptType, ATTR_FONT
-                            )))).GetFamilyName();
-        aHTMLStyle.nFontHeight = static_cast<const SvxFontHeightItem&>((rSetPara.Get(
+                            ))).GetFamilyName();
+        aHTMLStyle.nFontHeight = static_cast<const SvxFontHeightItem&>(rSetPara.Get(
                         ScGlobal::GetScriptedWhichID(
                             aHTMLStyle.nDefaultScriptType, ATTR_FONT_HEIGHT
-                            )))).GetHeight();
+                            ))).GetHeight();
         aHTMLStyle.nFontSizeNumber = GetFontSizeNumber( static_cast< sal_uInt16 >( aHTMLStyle.nFontHeight ) );
     }
 

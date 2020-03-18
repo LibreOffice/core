@@ -516,7 +516,7 @@ ScVbaWorksheet::Move( const uno::Any& Before, const uno::Any& After )
     uno::Reference<excel::XWorksheet> xSheet;
     OUString aCurrSheetName = getName();
 
-    if (!(Before >>= xSheet) && !(After >>=xSheet)&& !(Before.hasValue()) && !(After.hasValue()))
+    if (!(Before >>= xSheet) && !(After >>=xSheet)&& !Before.hasValue() && !After.hasValue())
     {
         uno::Reference< sheet::XSheetCellCursor > xSheetCellCursor = getSheet()->createCursor( );
         uno::Reference<sheet::XUsedAreaCursor> xUsedCursor(xSheetCellCursor,uno::UNO_QUERY_THROW);
@@ -550,7 +550,7 @@ void
 ScVbaWorksheet::Copy( const uno::Any& Before, const uno::Any& After )
 {
     uno::Reference<excel::XWorksheet> xSheet;
-    if (!(Before >>= xSheet) && !(After >>=xSheet)&& !(Before.hasValue()) && !(After.hasValue()))
+    if (!(Before >>= xSheet) && !(After >>=xSheet)&& !Before.hasValue() && !After.hasValue())
     {
         createSheetCopyInNewDoc(getName());
         return;

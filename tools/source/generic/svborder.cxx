@@ -26,8 +26,8 @@ tools::Rectangle & operator += ( tools::Rectangle & rRect, const SvBorder & rBor
     aS.AdjustWidth(rBorder.Left() + rBorder.Right() );
     aS.AdjustHeight(rBorder.Top() + rBorder.Bottom() );
 
-    rRect.AdjustLeft( -(rBorder.Left()) );
-    rRect.AdjustTop( -(rBorder.Top()) );
+    rRect.AdjustLeft( -rBorder.Left() );
+    rRect.AdjustTop( -rBorder.Top() );
     rRect.SetSize( aS );
     return rRect;
 }

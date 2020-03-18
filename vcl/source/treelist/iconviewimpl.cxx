@@ -70,7 +70,7 @@ void IconViewImpl::CursorDown()
         m_pView->Update();
         m_pStartEntry = pNextFirstToDraw;
         tools::Rectangle aArea( GetVisibleArea() );
-        m_pView->Scroll( 0, -(m_pView->GetEntryHeight()), aArea, ScrollFlags::NoChildren );
+        m_pView->Scroll( 0, -m_pView->GetEntryHeight(), aArea, ScrollFlags::NoChildren );
         m_pView->Update();
         ShowCursor( true );
         m_pView->NotifyScrolled();

@@ -64,7 +64,7 @@ OUString SwDateTimeField::ExpandImpl(SwRootFrame const*const) const
 {
     double fVal;
 
-    if (!(IsFixed()))
+    if (!IsFixed())
     {
         DateTime aDateTime( DateTime::SYSTEM );
         fVal = GetDateTime(GetDoc(), aDateTime);

@@ -845,7 +845,7 @@ OUString SwSetExpField::ExpandImpl(SwRootFrame const*const pLayout) const
 /// @return the field name
 OUString SwSetExpField::GetFieldName() const
 {
-    SwFieldTypesEnum const nStrType( (IsSequenceField())
+    SwFieldTypesEnum const nStrType( IsSequenceField()
                             ? SwFieldTypesEnum::Sequence
                             : mbInput
                                 ? SwFieldTypesEnum::SetInput

@@ -645,7 +645,7 @@ namespace
     bool isFormControllerURL( const OUString& _rURL )
     {
         return  ( _rURL.getLength() > RTL_CONSTASCII_LENGTH( ".uno:FormController/" ) )
-            &&  ( _rURL.startsWith( ".uno:FormController/" ) );
+            &&  _rURL.startsWith( ".uno:FormController/" );
     }
 }
 

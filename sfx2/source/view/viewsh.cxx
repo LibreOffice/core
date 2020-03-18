@@ -1987,13 +1987,13 @@ bool SfxViewShell::HandleNotifyEvent_Impl( NotifyEvent const & rEvent )
 
 bool SfxViewShell::HasKeyListeners_Impl() const
 {
-    return (pImpl->m_pController.is())
+    return pImpl->m_pController.is()
         && pImpl->m_pController->HasKeyListeners_Impl();
 }
 
 bool SfxViewShell::HasMouseClickListeners_Impl() const
 {
-    return (pImpl->m_pController.is())
+    return pImpl->m_pController.is()
         && pImpl->m_pController->HasMouseClickListeners_Impl();
 }
 

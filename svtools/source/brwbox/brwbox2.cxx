@@ -736,7 +736,7 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
         }
 
         aRealPos.AdjustY(aHeaderSize.Height() );
-        aRealSize.AdjustHeight( -(aHeaderSize.Height()) );
+        aRealSize.AdjustHeight( -aHeaderSize.Height() );
     }
 
     // draw our own content (with clipping)
@@ -1064,7 +1064,7 @@ void BrowseBox::UpdateScrollbars()
     if (GetDataRowHeight())
     {
         // needs VScroll?
-        nMaxRows = (pDataWin->GetSizePixel().Height()) / GetDataRowHeight();
+        nMaxRows = pDataWin->GetSizePixel().Height() / GetDataRowHeight();
         bNeedsVScroll =    pDataWin->bAutoVScroll
                             ?   nTopRow || ( nRowCount > nMaxRows )
                             :   !pDataWin->bNoVScroll;

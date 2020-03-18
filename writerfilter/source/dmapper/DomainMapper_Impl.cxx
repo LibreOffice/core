@@ -2312,7 +2312,7 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
         {
             bool bLeft = eType == SectionPropertyMap::PAGE_LEFT;
             bool bFirst = eType == SectionPropertyMap::PAGE_FIRST;
-            if ((!bLeft && !GetSettingsTable()->GetEvenAndOddHeaders()) || (GetSettingsTable()->GetEvenAndOddHeaders()))
+            if ((!bLeft && !GetSettingsTable()->GetEvenAndOddHeaders()) || GetSettingsTable()->GetEvenAndOddHeaders())
             {
                 //switch on header/footer use
                 xPageStyle->setPropertyValue(
@@ -4137,7 +4137,7 @@ void DomainMapper_Impl::handleAuthor
     size_t nMap = 0;
     for( ; nMap < SAL_N_ELEMENTS(aDocProperties); ++nMap )
     {
-        if ((rFirstParam.equalsAscii(aDocProperties[nMap].pDocPropertyName)) && (!xPropertySetInfo->hasPropertyByName(rFirstParam)))
+        if (rFirstParam.equalsAscii(aDocProperties[nMap].pDocPropertyName) && (!xPropertySetInfo->hasPropertyByName(rFirstParam)))
         {
             sFieldServiceName =
             OUString::createFromAscii
@@ -6858,7 +6858,7 @@ void DomainMapper_Impl::disableInteropGrabBag()
 
 bool DomainMapper_Impl::isInteropGrabBagEnabled() const
 {
-    return !(m_aInteropGrabBagName.isEmpty());
+    return !m_aInteropGrabBagName.isEmpty();
 }
 
 void DomainMapper_Impl::appendGrabBag(std::vector<beans::PropertyValue>& rInteropGrabBag, const OUString& aKey, const OUString& aValue)

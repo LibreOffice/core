@@ -296,7 +296,7 @@ sal_Int64 SAL_CALL SwXTextDocument::getSomething( const Sequence< sal_Int8 >& rI
     Any aNumTunnel = xNumFormatAgg->queryAggregation(cppu::UnoType<XUnoTunnel>::get());
     Reference<XUnoTunnel> xNumTunnel;
     aNumTunnel >>= xNumTunnel;
-    return (xNumTunnel.is()) ? xNumTunnel->getSomething(rId) : 0;
+    return xNumTunnel.is() ? xNumTunnel->getSomething(rId) : 0;
 }
 
 Any SAL_CALL SwXTextDocument::queryInterface( const uno::Type& rType )

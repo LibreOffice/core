@@ -110,7 +110,7 @@ SwNodeType SwAccessibleFrameBase::GetNodeType( const SwFlyFrame *pFlyFrame )
         if( pNdIdx )
         {
             const SwContentNode *pCNd =
-                (pNdIdx->GetNodes())[pNdIdx->GetIndex()+1]->GetContentNode();
+                pNdIdx->GetNodes()[pNdIdx->GetIndex()+1]->GetContentNode();
             if( pCNd )
                 nType = pCNd->GetNodeType();
         }

@@ -153,7 +153,7 @@ public:
     Font&               operator=( Font&& ) noexcept;
     bool                operator==( const Font& ) const;
     bool                operator!=( const Font& rFont ) const
-                            { return !(Font::operator==( rFont )); }
+                            { return !Font::operator==( rFont ); }
     bool                IsSameInstance( const Font& ) const;
 
     friend VCL_DLLPUBLIC SvStream&  ::ReadFont( SvStream& rIStm, vcl::Font& );

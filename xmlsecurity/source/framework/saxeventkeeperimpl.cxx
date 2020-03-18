@@ -139,7 +139,7 @@ BufferNode* SAXEventKeeperImpl::addNewElementMarkBuffers()
          * This situation can only happen in the "Forwarding" mode.
          */
         if ( (m_pCurrentBufferNode != nullptr) &&
-             (m_xXMLDocument->isCurrent(m_pCurrentBufferNode->getXMLElement())))
+             m_xXMLDocument->isCurrent(m_pCurrentBufferNode->getXMLElement()))
         {
             pBufferNode = m_pCurrentBufferNode;
         }
@@ -426,7 +426,7 @@ void SAXEventKeeperImpl::smashBufferNode(
                 m_xXMLDocument->clearUselessData(m_pRootBufferNode->getXMLElement(),
                     aChildElements,
                     bIsNotBlocking?nullptr:
-                                   (m_pCurrentBlockingBufferNode->getXMLElement()));
+                                   m_pCurrentBlockingBufferNode->getXMLElement());
 
                 /*
                  * remove the node if it is empty, then if its parent is also
@@ -476,7 +476,7 @@ void SAXEventKeeperImpl::smashBufferNode(
                  */
                 m_xXMLDocument->clearUselessData(pBufferNode->getXMLElement(),
                     aChildElements,
-                    bIsBlockInside?(m_pCurrentBlockingBufferNode->getXMLElement()):
+                    bIsBlockInside ? m_pCurrentBlockingBufferNode->getXMLElement() :
                                nullptr);
 
                 /*
@@ -668,7 +668,7 @@ void SAXEventKeeperImpl::releaseElementMarkBuffer()
                             m_xNextHandler,
                             this,
                             pBufferNode->getXMLElement(),
-                            (pTempCurrentBlockingBufferNode == nullptr)?nullptr:(pTempCurrentBlockingBufferNode->getXMLElement()));
+                            (pTempCurrentBlockingBufferNode == nullptr) ? nullptr : pTempCurrentBlockingBufferNode->getXMLElement());
 
                         m_bIsForwarding = false;
 
@@ -995,7 +995,7 @@ void SAL_CALL SAXEventKeeperImpl::startElement(
      * forward this event
      */
     if ((m_pCurrentBlockingBufferNode == nullptr) &&
-        (m_xNextHandler.is()) &&
+        m_xNextHandler.is() &&
         (!m_bIsForwarding) &&
         (m_pNewBlocker == nullptr))
     {
@@ -1034,7 +1034,7 @@ void SAL_CALL SAXEventKeeperImpl::endElement( const OUString& aName )
      * forward this event
      */
     if ((m_pCurrentBlockingBufferNode == nullptr) &&
-        (m_xNextHandler.is()) &&
+        m_xNextHandler.is() &&
         (!m_bIsForwarding))
     {
         m_xNextHandler->endElement(aName);

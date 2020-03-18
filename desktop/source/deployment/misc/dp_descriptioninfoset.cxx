@@ -357,9 +357,9 @@ void DescriptionInfoset::checkBlacklist() const
             {"nodepath", css::uno::Any(OUString("/org.openoffice.Office.ExtensionDependencies/Extensions"))}
         }));
         css::uno::Reference< css::container::XNameAccess > blacklist(
-            (css::configuration::theDefaultProvider::get(m_context)
+            css::configuration::theDefaultProvider::get(m_context)
              ->createInstanceWithArguments(
-                 "com.sun.star.configuration.ConfigurationAccess", args)),
+                 "com.sun.star.configuration.ConfigurationAccess", args),
             css::uno::UNO_QUERY_THROW);
 
         // check first if a blacklist entry is available

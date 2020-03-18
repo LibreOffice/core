@@ -2074,7 +2074,7 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
     //TODO: use Hierarchy and Level in SaveData !!!!
 
     //  modify pDestObj if set, this object otherwise
-    ScDPSaveData* pModifyData = pDestObj ? ( pDestObj->pSaveData.get() ) : pSaveData.get();
+    ScDPSaveData* pModifyData = pDestObj ? pDestObj->pSaveData.get() : pSaveData.get();
     OSL_ENSURE( pModifyData, "no data?" );
     if ( pModifyData )
     {

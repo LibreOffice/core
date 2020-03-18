@@ -226,7 +226,7 @@ void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Refere
 {
     if (
         (!xWindow.is()                ) ||
-        ( sWindowState.isEmpty() )
+        sWindowState.isEmpty()
        )
         return;
 

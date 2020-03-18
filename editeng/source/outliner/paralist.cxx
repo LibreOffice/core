@@ -208,7 +208,7 @@ void ParagraphList::Expand( Paragraph const * pParent )
     for ( sal_Int32 n = 1; n <= nChildCount; n++  )
     {
         Paragraph* pPara = GetParagraph( nPos+n );
-        if ( !( pPara->IsVisible() ) )
+        if ( !pPara->IsVisible() )
         {
             pPara->bVisible = true;
             aVisibleStateChangedHdl.Call( *pPara );

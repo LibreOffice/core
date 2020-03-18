@@ -65,7 +65,7 @@ namespace DOM
             OUString prefix(reinterpret_cast<const char*>(pPrefix),
                 strlen(reinterpret_cast<const char*>(pPrefix)),
                 RTL_TEXTENCODING_UTF8);
-            OUString name = (prefix.isEmpty())
+            OUString name = prefix.isEmpty()
                 ? OUString( "xmlns" ) : "xmlns:" + prefix;
             const xmlChar *pHref = pNs->href;
             OUString val(reinterpret_cast<const char*>(pHref),
@@ -80,14 +80,14 @@ namespace DOM
                     reinterpret_cast<xmlNodePtr>(pAttr));
             OSL_ENSURE(pNode != nullptr, "CNode::get returned 0");
             OUString prefix = pNode->getPrefix();
-            OUString name = (prefix.isEmpty())
+            OUString name = prefix.isEmpty()
                 ? pNode->getLocalName()
                 : prefix + ":" + pNode->getLocalName();
             OUString val  = pNode->getNodeValue();
             pAttrs->AddAttribute(name, type, val);
         }
         OUString prefix = getPrefix();
-        OUString name = (prefix.isEmpty())
+        OUString name = prefix.isEmpty()
             ? getLocalName()
             : prefix + ":" + getLocalName();
         Reference< XAttributeList > xAttrList(pAttrs);
