@@ -129,6 +129,16 @@ public:
     }
 };
 
+class VCL_DLLPUBLIC JSDialog : public JSWidget<SalInstanceDialog, ::Dialog>
+{
+public:
+    JSDialog(VclPtr<vcl::Window> aOwnedToplevel, ::Dialog* pDialog, SalInstanceBuilder* pBuilder,
+             bool bTakeOwnership);
+
+    virtual void collapse(weld::Widget* pEdit, weld::Widget* pButton) override;
+    virtual void undo_collapse() override;
+};
+
 class JSLabel : public JSWidget<SalInstanceLabel, FixedText>
 {
 public:
