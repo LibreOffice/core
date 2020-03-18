@@ -1,0 +1,28 @@
+--- ./src/ports/SkFontHost_win.cpp.sav	2020-03-18 10:26:52.470184300 +0100
++++ ./src/ports/SkFontHost_win.cpp	2020-03-18 12:08:04.598406700 +0100
+@@ -1215,17 +1215,23 @@
+         // since the caller may require A8 for maskfilters, we can't check for BW
+         // ... until we have the caller tell us that explicitly
+         const SkGdiRGB* src = (const SkGdiRGB*)bits;
++#if defined(SK_GAMMA_APPLY_TO_A8)
+         if (fPreBlend.isApplicable()) {
+             RGBToA8<true>(src, srcRB, glyph, fPreBlend.fG);
+-        } else {
++        } else
++#endif
++        {
+             RGBToA8<false>(src, srcRB, glyph, fPreBlend.fG);
+         }
+     } else {    // LCD16
+         const SkGdiRGB* src = (const SkGdiRGB*)bits;
+         SkASSERT(SkMask::kLCD16_Format == glyph.fMaskFormat);
++#if defined(SK_GAMMA_APPLY_TO_A8)
+         if (fPreBlend.isApplicable()) {
+             RGBToLcd16<true>(src, srcRB, glyph, fPreBlend.fR, fPreBlend.fG, fPreBlend.fB);
+-        } else {
++        } else
++#endif
++        {
+             RGBToLcd16<false>(src, srcRB, glyph, fPreBlend.fR, fPreBlend.fG, fPreBlend.fB);
+         }
+     }
