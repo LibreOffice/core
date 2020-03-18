@@ -1869,7 +1869,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                             // all text portions contain the same value, so next setPropertyValue() won't overwrite part of them
                             xRunProperties->getPropertyState(rParaProp.Name) == css::beans::PropertyState_DIRECT_VALUE )
                         {
-                            xParaProps->setPropertyValue( rParaProp.Name, rParaProp.Value );
+                            uno::Reference<beans::XPropertySet> xRunPropertySet(xCur, uno::UNO_QUERY);
+                            xParaProps->setPropertyValue( rParaProp.Name, xRunPropertySet->getPropertyValue(rParaProp.Name) );
                         }
                     }
 
