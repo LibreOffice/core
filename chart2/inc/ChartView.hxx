@@ -182,7 +182,7 @@ public:
 private: //methods
     void createShapes();
     void createShapes2D( const css::awt::Size& rPageSize );
-    bool createAxisTitleShapes2D( CreateShapeParam2D& rParam, const css::awt::Size& rPageSize );
+    bool createAxisTitleShapes2D( CreateShapeParam2D& rParam, const css::awt::Size& rPageSize, bool bHasRelativeSize );
     void getMetaFile( const css::uno::Reference< css::io::XOutputStream >& xOutStream
                       , bool bUseHighContrast );
     SdrPage* getSdrPage();
