@@ -1044,6 +1044,7 @@ static const Supported_NumberingType aSupportedTypes[] =
         {style::NumberingType::CHARS_GREEK_UPPER_LETTER,   C_GR_A ", " C_GR_B ", ... (gr)", LANG_ALL},
         {style::NumberingType::CHARS_GREEK_LOWER_LETTER,   S_GR_A ", " S_GR_B ", ... (gr)", LANG_ALL},
         {style::NumberingType::ARABIC_ZERO, "01, 02, 03, ...", LANG_ALL},
+        {style::NumberingType::ARABIC_ZERO3, "001, 002, 003, ...", LANG_ALL},
 };
 static const sal_Int32 nSupported_NumberingTypes = SAL_N_ELEMENTS(aSupportedTypes);
 
