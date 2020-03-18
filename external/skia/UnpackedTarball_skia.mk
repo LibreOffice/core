@@ -30,6 +30,7 @@ skia_patches := \
     clang-attributes-warning.patch.1 \
     fontconfig-get-typeface.patch.0 \
     windows-hfont-typeface.patch.0 \
+    windows-text-gamma.patch.0 \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 
