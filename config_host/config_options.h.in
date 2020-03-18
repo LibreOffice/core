@@ -7,7 +7,7 @@
 
 /*
  * Whether we want to link as many object files as possible into one big object.
- * True in case of --enable-lto or --enable-mergelibs.
+ * True in case of --enable-lto.
  */
 #define STATIC_LINKING 0
 
