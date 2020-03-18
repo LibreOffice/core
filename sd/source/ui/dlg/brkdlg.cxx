@@ -21,8 +21,9 @@
 #include <sfx2/progress.hxx>
 
 #include <svx/svdetc.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/scheduler.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 
 #include <sdresid.hxx>
 #include <drawview.hxx>
@@ -125,7 +126,7 @@ IMPL_LINK( BreakDlg, UpDate, void*, nInit, bool )
     // make sure dialog gets painted, it is intended to
     // show the progress to the user. Also necessary to
     // provide a clickable cancel button
-    Application::Reschedule(true);
+    Scheduler::ProcessEventsToIdle();
 
     // return okay-value (-> !cancel)
     return !m_bCancel;
