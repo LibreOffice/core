@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a823e78_606dea78",
+        "filename": "include/connectivity/CommonTools.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-18T09:03:10Z",
+      "side": 1,
+      "message": "Possibly this can go, too?",
+      "range": {
+        "startLine": 64,
+        "startChar": 8,
+        "endLine": 64,
+        "endChar": 48
+      },
+      "revId": "e5230535877e30c3b874495e8794faa3a42d8017",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
