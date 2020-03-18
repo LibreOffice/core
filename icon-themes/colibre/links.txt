@@ -846,12 +846,8 @@ cmd/sc_rehearsetimings.png cmd/sc_timefield.png
 cmd/sc_numberformattime.png cmd/sc_timefield.png
 
 # Arrange
-cmd/lc_setobjecttoforeground.png cmd/lc_bringtofront.png
-cmd/sc_setobjecttoforeground.png cmd/sc_bringtofront.png
 cmd/sc_arrangemenu.png cmd/sc_bringtofront.png
 cmd/sc_arrangeframemenu.png cmd/sc_bringtofront.png
-cmd/lc_setobjecttobackground.png cmd/lc_sendtoback.png
-cmd/sc_setobjecttobackground.png cmd/sc_sendtoback.png
 
 # Calc
 cmd/sc_fieldmenu.png cmd/sc_insertfieldctrl.png
