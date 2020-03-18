@@ -280,6 +280,43 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf107975)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130746)
+{
+    load(DATA_DIRECTORY, "tdf130746.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+
+    dispatchCommand(mxComponent, ".uno:JumpToNextTable", {});
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
+        xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(),
+                                              uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
+
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCursor->getPage());
+
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_UP | KEY_MOD2);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCursor->getPage());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130680)
 {
     load(DATA_DIRECTORY, "tdf130680.odt");
