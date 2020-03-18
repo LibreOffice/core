@@ -1074,8 +1074,9 @@ void SwGetRefFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew
     // update to all GetReference fields
     if( !pNew && !pOld )
     {
-        SwIterator<SwFormatField,SwFieldType> aIter( *this );
-        for( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
+        std::vector<SwFormatField*> vFields;
+        GatherFields(vFields, false);
+        for(auto pFormatField: vFields)
         {
             // update only the GetRef fields
             //JP 3.4.2001: Task 71231 - we need the correct language
@@ -1160,8 +1161,9 @@ SwTextNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark
             if( pFieldType && pFieldType->HasWriterListeners() &&
                 nsSwGetSetExpType::GSE_SEQ & static_cast<SwSetExpFieldType*>(pFieldType)->GetType() )
             {
-                SwIterator<SwFormatField,SwFieldType> aIter( *pFieldType );
-                for( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
+                std::vector<SwFormatField*> vFields;
+                pFieldType->GatherFields(vFields, false);
+                for(auto pFormatField: vFields)
                 {
                     SwTextField *const pTextField(pFormatField->GetTextField());
                     if (pTextField && nSeqNo ==
@@ -1282,23 +1284,12 @@ public:
 void RefIdsMap::GetFieldIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds)
 {
     SwFieldType *const pType = rDoc.getIDocumentFieldsAccess().GetFieldType(SwFieldIds::SetExp, aName, false);
-
     if (!pType)
         return;
-
-    SwIterator<SwFormatField,SwFieldType> aIter( *pType );
-    for (SwFormatField const* pF = aIter.First(); pF; pF = aIter.Next())
-    {
-        if (pF->GetTextField())
-        {
-            SwTextNode const*const pNd = pF->GetTextField()->GetpTextNode();
-            if (pNd && pNd->GetNodes().IsDocNodes())
-            {
-                rIds.insert(static_cast<SwSetExpField const*>(pF->GetField())
-                                ->GetSeqNumber());
-            }
-        }
-    }
+    std::vector<SwFormatField*> vFields;
+    pType->GatherFields(vFields);
+    for(const auto pF: vFields)
+        rIds.insert(static_cast<SwSetExpField const*>(pF->GetField())->GetSeqNumber());
 }
 
 /// Get a sorted list of the footnote/endnote IDs from a document.
@@ -1330,17 +1321,18 @@ void RefIdsMap::Init( SwDoc& rDoc, SwDoc& rDestDoc, bool bField )
 
         // Change the Sequence number of all SetExp fields in the source document
         SwFieldType* pType = rDoc.getIDocumentFieldsAccess().GetFieldType( SwFieldIds::SetExp, aName, false );
-        if( pType )
+        if(pType)
         {
-            SwIterator<SwFormatField,SwFieldType> aIter( *pType );
-            for( SwFormatField* pF = aIter.First(); pF; pF = aIter.Next() )
-                if( pF->GetTextField() )
-                {
-                    SwSetExpField *const pSetExp(
-                            static_cast<SwSetExpField *>(pF->GetField()));
-                    sal_uInt16 const n = pSetExp->GetSeqNumber();
-                    pSetExp->SetSeqNumber( sequencedIds[n] );
-                }
+            std::vector<SwFormatField*> vFields;
+            pType->GatherFields(vFields, false);
+            for(auto pF: vFields)
+            {
+                if(!pF->GetTextField())
+                    continue;
+                SwSetExpField *const pSetExp(static_cast<SwSetExpField *>(pF->GetField()));
+                sal_uInt16 const n = pSetExp->GetSeqNumber();
+                pSetExp->SetSeqNumber(sequencedIds[n]);
+            }
         }
     }
     else
@@ -1430,8 +1422,9 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
         RefIdsMap aFntMap { OUString() };
         std::vector<std::unique_ptr<RefIdsMap>> aFieldMap;
 
-        SwIterator<SwFormatField,SwFieldType> aIter( *this );
-        for( SwFormatField* pField = aIter.First(); pField; pField = aIter.Next() )
+        std::vector<SwFormatField*> vFields;
+        GatherFields(vFields);
+        for(auto pField: vFields)
         {
             SwGetRefField& rRefField = *static_cast<SwGetRefField*>(pField->GetField());
             switch( rRefField.GetSubType() )
