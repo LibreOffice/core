@@ -1293,7 +1293,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
                             0, SwNumRule::GetBullIndent( 4 ), 0, PT_6 );
             break;
 
-        case RES_POOLCOLL_DOC_TITEL:            // Document Title
+        case RES_POOLCOLL_DOC_TITLE:            // Document Title
             {
                 SetAllScriptItem( aSet, SvxWeightItem( WEIGHT_BOLD, RES_CHRATR_WEIGHT ) );
                 SetAllScriptItem( aSet, SvxFontHeightItem( PT_28, 100, RES_CHRATR_FONTSIZE ) );
@@ -1304,7 +1304,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
             }
             break;
 
-        case RES_POOLCOLL_DOC_SUBTITEL:         // Document subtitle
+        case RES_POOLCOLL_DOC_SUBTITLE:         // Document subtitle
             {
                 SvxULSpaceItem aUL( PT_3, PT_6, RES_UL_SPACE );
                 aSet.Put( aUL );
