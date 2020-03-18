@@ -266,6 +266,14 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
              {
                 mpWindow->ReleaseMouse();
 
+                // If tiled rendering, let client handles URL execution and early returns.
+                if (comphelper::LibreOfficeKit::isActive())
+                {
+                    SfxViewShell& rSfxViewShell = mpViewShell->GetViewShellBase();
+                    rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, aVEvt.pURLField->GetURL().toUtf8().getStr());
+                    return true;
+                }
+
                 if (!lcl_followHyperlinkAllowed(rMEvt))
                     return true;
 
@@ -274,14 +282,6 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 SfxBoolItem aBrowseItem( SID_BROWSE, true );
                 SfxViewFrame* pFrame = mpViewShell->GetViewFrame();
                 mpWindow->ReleaseMouse();
-
-                // If tiled rendering, let client handles URL execution and early returns.
-                if (comphelper::LibreOfficeKit::isActive())
-                {
-                    SfxViewShell& rSfxViewShell = mpViewShell->GetViewShellBase();
-                    rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, aVEvt.pURLField->GetURL().toUtf8().getStr());
-                    return true;
-                }
 
                 if (rMEvt.IsMod1())
                 {
