@@ -663,7 +663,9 @@ void ChartElementsPanel::setTitleVisible(TitleHelper::eTitleType eTitle, bool bV
     }
     else
     {
-        TitleHelper::hideTitle(eTitle, mxModel);
+        // TODO tdf#92768 use TitleHelper::hideTitle() here once there is
+        // rendering suport for the property "Visible"
+        TitleHelper::removeTitle(eTitle, mxModel);
     }
 }
 
