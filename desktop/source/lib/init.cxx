@@ -3640,6 +3640,23 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
                             bContinueWithLOKWindow = true;
                     }
                 }
+                else if (sControlType == "spinfield")
+                {
+                    auto pSpinField = dynamic_cast<weld::SpinButton*>(pWidget);
+                    if (pSpinField)
+                    {
+                        if (sAction == "plus")
+                        {
+                            pSpinField->set_value(pSpinField->get_value() + 1);
+                        }
+                        else if (sAction == "minus")
+                        {
+                            pSpinField->set_value(pSpinField->get_value() - 1);
+                        }
+                        else
+                            bContinueWithLOKWindow = true;
+                    }
+                }
                 else
                 {
                     bContinueWithLOKWindow = true;
