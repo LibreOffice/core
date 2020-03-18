@@ -70,16 +70,16 @@ public:
 #endif
 
 private:
-    // Reset the cached images allocated in GetSkImage()/GetAlphaSkImage().
-    void ResetSkImages();
-    // Call to ensure mBitmap or mBuffer have data (will convert from mImage
-    // if necessary).
+    // Reset the cached images allocated in GetSkImage()/GetAlphaSkImage(),
+    // and also the SkBitmap allocated in GetAsSkBitmap().
+    void ResetCachedData();
+    // Call to ensure mBuffer has data (will convert from mImage if necessary).
     void EnsureBitmapData();
     void EnsureBitmapData() const { return const_cast<SkiaSalBitmap*>(this)->EnsureBitmapData(); }
     // Like EnsureBitmapData(), but will also make any shared data unique.
     // Call before changing the data.
     void EnsureBitmapUniqueData();
-    // Allocate mBitmap or mBuffer (with uninitialized contents).
+    // Allocate mBuffer (with uninitialized contents).
     bool CreateBitmapData();
     SkBitmap GetAsSkBitmap() const;
 #ifdef DBG_UTIL
@@ -92,11 +92,10 @@ private:
     friend inline std::basic_ostream<charT, traits>&
     operator<<(std::basic_ostream<charT, traits>& stream, const SkiaSalBitmap* bitmap)
     {
-        // B - has SkBitmap, D - has data buffer, I/i - has SkImage (on GPU/CPU),
+        // B - has SkBitmap, I/i - has SkImage (on GPU/CPU),
         // A/a - has alpha SkImage (on GPU/CPU)
         return stream << static_cast<const void*>(bitmap) << " " << bitmap->GetSize() << "/"
                       << bitmap->mBitCount << (!bitmap->mBitmap.isNull() ? "B" : "")
-                      << (bitmap->mBuffer.get() ? "D" : "")
                       << (bitmap->mImage ? (bitmap->mImage->isTextureBacked() ? "I" : "i") : "")
                       << (bitmap->mAlphaImage ? (bitmap->mAlphaImage->isTextureBacked() ? "A" : "a")
                                               : "");
@@ -106,18 +105,17 @@ private:
     int mBitCount = 0; // bpp
     Size mSize;
     // The contents of the bitmap may be stored in several different ways:
-    // As SkBitmap, if format is supported by Skia.
-    // As mBuffer buffer, if format is not supported by Skia.
+    // As mBuffer buffer, which normally stores pixels in the given format.
     // As SkImage, as cached GPU-backed data, but sometimes also a result of some operation.
-    // There is no "master" storage that the others would be derived from. The usual
-    // mode of operation is that mBitmap or mBuffer hold the data, mImage is created
+    // There is no "master" storage that the other would be derived from. The usual
+    // mode of operation is that mBuffer holds the data, mImage is created
     // on demand as GPU-backed cached data by calling GetSkImage(), and the cached mImage
     // is reset by ResetCachedImage(). But sometimes only mImage will be set and in that case
-    // mBitmap/mBuffer must be filled from it on demand if necessary by EnsureBitmapData().
-    SkBitmap mBitmap;
-    sk_sp<SkImage> mImage; // possibly GPU-backed
+    // mBuffer must be filled from it on demand if necessary by EnsureBitmapData().
     boost::shared_ptr<sal_uInt8[]> mBuffer;
     int mScanlineSize; // size of one row in mBuffer
+    SkBitmap mBitmap; // cached mBuffer, if needed
+    sk_sp<SkImage> mImage; // possibly GPU-backed
     sk_sp<SkImage> mAlphaImage; // cached contents as alpha image, possibly GPU-backed
 #ifdef DBG_UTIL
     int mWriteAccessCount = 0; // number of write AcquireAccess() that have not been released
