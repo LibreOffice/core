@@ -13,7 +13,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/layout.hxx>
-#include <messagedialog.hxx>
+#include <vcl/messagedialog.hxx>
 
 class SalInstanceBuilder : public weld::Builder
 {
