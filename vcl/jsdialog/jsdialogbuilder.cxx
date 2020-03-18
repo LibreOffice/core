@@ -163,8 +163,8 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id, 
 
     InsertWindowToMap(m_nWindowId);
 
-    std::unique_ptr<weld::Dialog> pRet(pDialog ? new SalInstanceDialog(pDialog, this, false)
-                                               : nullptr);
+    std::unique_ptr<weld::Dialog> pRet(
+        pDialog ? new JSDialog(m_aOwnedToplevel, pDialog, this, false) : nullptr);
     if (bTakeOwnership && pDialog)
     {
         assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
@@ -352,6 +352,24 @@ weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParen
     }
 
     return new JSMessageDialog(xMessageDialog, nullptr, true);
+}
+
+JSDialog::JSDialog(VclPtr<vcl::Window> aOwnedToplevel, ::Dialog* pDialog,
+                   SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : JSWidget<SalInstanceDialog, ::Dialog>(aOwnedToplevel, pDialog, pBuilder, bTakeOwnership)
+{
+}
+
+void JSDialog::collapse(weld::Widget* pEdit, weld::Widget* pButton)
+{
+    SalInstanceDialog::collapse(pEdit, pButton);
+    notifyDialogState();
+}
+
+void JSDialog::undo_collapse()
+{
+    SalInstanceDialog::undo_collapse();
+    notifyDialogState();
 }
 
 JSLabel::JSLabel(VclPtr<vcl::Window> aOwnedToplevel, FixedText* pLabel,
