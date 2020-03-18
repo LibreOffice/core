@@ -2020,7 +2020,7 @@ double lcl_getPageLayoutDistancePercentage()
 }
 
 bool getAvailablePosAndSizeForDiagram(
-    CreateShapeParam2D& rParam, const awt::Size & rPageSize, const uno::Reference<XDiagram>& xDiagram )
+    CreateShapeParam2D& rParam, const awt::Size & rPageSize, const uno::Reference< beans::XPropertySet >& xProp)
 {
     rParam.mbUseFixedInnerSize = false;
 
@@ -2031,11 +2031,6 @@ bool getAvailablePosAndSizeForDiagram(
     rParam.maRemainingSpace.Width -= 2*nXDistance;
     rParam.maRemainingSpace.Y += nYDistance;
     rParam.maRemainingSpace.Height -= 2*nYDistance;
-
-    if (rParam.maRemainingSpace.Width <= 0 || rParam.maRemainingSpace.Height <= 0)
-        return false;
-
-    uno::Reference< beans::XPropertySet > xProp(xDiagram, uno::UNO_QUERY);
 
     bool bPosSizeExcludeAxes = false;
     if( xProp.is() )
@@ -2049,6 +2044,9 @@ bool getAvailablePosAndSizeForDiagram(
         rParam.maRemainingSpace.Width = static_cast<sal_Int32>(aRelativeSize.Primary*rPageSize.Width);
         rParam.mbUseFixedInnerSize = bPosSizeExcludeAxes;
     }
+
+    if (rParam.maRemainingSpace.Width <= 0 || rParam.maRemainingSpace.Height <= 0)
+        return false;
 
     //position:
     chart2::RelativePosition aRelativePosition;
@@ -2940,6 +2938,11 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
 
     //create the group shape for diagram and axes first to have title and legends on top of it
     uno::Reference< XDiagram > xDiagram( mrChartModel.getFirstDiagram() );
+    uno::Reference< beans::XPropertySet > xProp(xDiagram, uno::UNO_QUERY);
+    bool bHasRelativeSize = false;
+    if( xProp.is() && xProp->getPropertyValue("RelativeSize").hasValue() )
+        bHasRelativeSize = true;
+
     OUString aDiagramCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM, OUString::number( 0 ) ) );//todo: other index if more than one diagram is possible
     uno::Reference< drawing::XShapes > xDiagramPlusAxesPlusMarkHandlesGroup_Shapes(
             pShapeFactory->createGroup2D(mxRootShape,aDiagramCID) );
@@ -2962,13 +2965,13 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
     lcl_createTitle(
         TitleHelper::MAIN_TITLE, mxRootShape, m_xShapeFactory, mrChartModel,
         aParam.maRemainingSpace, rPageSize, ALIGN_TOP, bAutoPositionDummy);
-    if (aParam.maRemainingSpace.Width <= 0 || aParam.maRemainingSpace.Height <= 0)
+    if (!bHasRelativeSize && (aParam.maRemainingSpace.Width <= 0 || aParam.maRemainingSpace.Height <= 0))
         return;
 
     lcl_createTitle(
         TitleHelper::SUB_TITLE, mxRootShape, m_xShapeFactory, mrChartModel,
         aParam.maRemainingSpace, rPageSize, ALIGN_TOP, bAutoPositionDummy );
-    if (aParam.maRemainingSpace.Width <= 0|| aParam.maRemainingSpace.Height <= 0)
+    if (!bHasRelativeSize && (aParam.maRemainingSpace.Width <= 0 || aParam.maRemainingSpace.Height <= 0))
         return;
 
     aParam.mpSeriesPlotterContainer = std::make_shared<SeriesPlotterContainer>(m_aVCooSysList);
@@ -2995,16 +2998,17 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
         LegendHelper::getLegend( mrChartModel ), mxRootShape, m_xShapeFactory, m_xCC,
         aParam.maRemainingSpace, rPageSize, mrChartModel, aParam.mpSeriesPlotterContainer->getLegendEntryProviderList(),
         lcl_getDefaultWritingModeFromPool( m_pDrawModelWrapper ) );
-    if (aParam.maRemainingSpace.Width <= 0 || aParam.maRemainingSpace.Height <= 0)
+
+    if (!bHasRelativeSize && (aParam.maRemainingSpace.Width <= 0 || aParam.maRemainingSpace.Height <= 0))
         return;
 
-    if (!createAxisTitleShapes2D(aParam, rPageSize))
+    if (!createAxisTitleShapes2D(aParam, rPageSize, bHasRelativeSize))
         return;
 
     bool bDummy = false;
     bool bIsVertical = DiagramHelper::getVertical(xDiagram, bDummy, bDummy);
 
-    if (getAvailablePosAndSizeForDiagram(aParam, rPageSize, mrChartModel.getFirstDiagram()))
+    if (getAvailablePosAndSizeForDiagram(aParam, rPageSize, xProp))
     {
         awt::Rectangle aUsedOuterRect = impl_createDiagramAndContent(aParam, rPageSize);
 
@@ -3061,7 +3065,7 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
     }
 }
 
-bool ChartView::createAxisTitleShapes2D( CreateShapeParam2D& rParam, const css::awt::Size& rPageSize )
+bool ChartView::createAxisTitleShapes2D( CreateShapeParam2D& rParam, const css::awt::Size& rPageSize, bool bHasRelativeSize )
 {
     uno::Reference<XDiagram> xDiagram = mrChartModel.getFirstDiagram();
 
@@ -3071,19 +3075,19 @@ bool ChartView::createAxisTitleShapes2D( CreateShapeParam2D& rParam, const css::
     if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 0 ) )
         rParam.mpVTitleX = lcl_createTitle( TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION, mxRootShape, m_xShapeFactory, mrChartModel
                 , rParam.maRemainingSpace, rPageSize, ALIGN_BOTTOM, rParam.mbAutoPosTitleX );
-    if (rParam.maRemainingSpace.Width <= 0 ||rParam.maRemainingSpace.Height <= 0)
+    if (!bHasRelativeSize && (rParam.maRemainingSpace.Width <= 0 || rParam.maRemainingSpace.Height <= 0))
         return false;
 
     if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 1 ) )
         rParam.mpVTitleY = lcl_createTitle( TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION, mxRootShape, m_xShapeFactory, mrChartModel
                 , rParam.maRemainingSpace, rPageSize, ALIGN_LEFT, rParam.mbAutoPosTitleY );
-    if (rParam.maRemainingSpace.Width <= 0 || rParam.maRemainingSpace.Height <= 0)
+    if (!bHasRelativeSize && (rParam.maRemainingSpace.Width <= 0 || rParam.maRemainingSpace.Height <= 0))
         return false;
 
     if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 2 ) )
         rParam.mpVTitleZ = lcl_createTitle( TitleHelper::Z_AXIS_TITLE, mxRootShape, m_xShapeFactory, mrChartModel
                 , rParam.maRemainingSpace, rPageSize, ALIGN_RIGHT, rParam.mbAutoPosTitleZ );
-    if (rParam.maRemainingSpace.Width <= 0 || rParam.maRemainingSpace.Height <= 0)
+    if (!bHasRelativeSize && (rParam.maRemainingSpace.Width <= 0 || rParam.maRemainingSpace.Height <= 0))
         return false;
 
     bool bDummy = false;
@@ -3092,13 +3096,13 @@ bool ChartView::createAxisTitleShapes2D( CreateShapeParam2D& rParam, const css::
     if( ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimension ) )
         rParam.mpVTitleSecondX = lcl_createTitle( TitleHelper::SECONDARY_X_AXIS_TITLE, mxRootShape, m_xShapeFactory, mrChartModel
                 , rParam.maRemainingSpace, rPageSize, bIsVertical? ALIGN_RIGHT : ALIGN_TOP, rParam.mbAutoPosSecondTitleX );
-    if (rParam.maRemainingSpace.Width <= 0 || rParam.maRemainingSpace.Height <= 0)
+    if (!bHasRelativeSize && (rParam.maRemainingSpace.Width <= 0 || rParam.maRemainingSpace.Height <= 0))
         return false;
 
     if( ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimension ) )
         rParam.mpVTitleSecondY = lcl_createTitle( TitleHelper::SECONDARY_Y_AXIS_TITLE, mxRootShape, m_xShapeFactory, mrChartModel
                 , rParam.maRemainingSpace, rPageSize, bIsVertical? ALIGN_TOP : ALIGN_RIGHT, rParam.mbAutoPosSecondTitleY );
-    if (rParam.maRemainingSpace.Width <= 0 || rParam.maRemainingSpace.Height <= 0)
+    if (!bHasRelativeSize && (rParam.maRemainingSpace.Width <= 0 || rParam.maRemainingSpace.Height <= 0))
         return false;
 
     return true;
