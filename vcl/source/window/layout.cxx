@@ -16,7 +16,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <messagedialog.hxx>
+#include <vcl/messagedialog.hxx>
 #include <window.h>
 #include <boost/multi_array.hpp>
 #include <officecfg/Office/Common.hxx>
