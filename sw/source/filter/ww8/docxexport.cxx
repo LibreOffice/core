@@ -1102,7 +1102,7 @@ void DocxExport::WriteSettings()
      * Its focus is on sharing files between multiple users, tracking the lowest supported mode in the group.
      * It is to BENEFIT older programs by not using certain new features that they don't understand.
      *
-     * The next time the compat mode needs to be changed, I forsee the following steps:
+     * The next time the compat mode needs to be changed, I foresee the following steps:
      * 1.) Accept the new mode: Start round-tripping the new value, indicating we understand that format.
      * 2.) Many years later, change the TargetCompatilityMode for new documents, when we no longer care
      *     about working with perfect compatibility with older versions of MS Word.
