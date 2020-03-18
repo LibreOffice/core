@@ -93,8 +93,8 @@ public:
 
     virtual void DragFinished(sal_Int8 nDropAction) override
     {
-        m_aEndDragHdl.Call(this);
         SvTabListBox::DragFinished(nDropAction);
+        m_aEndDragHdl.Call(this);
     }
 
     virtual void ModelHasCleared() override
