@@ -211,7 +211,10 @@ sal_uLong StorageStream::Write( const void* pData, sal_uLong nSize )
 sal_uInt64 StorageStream::Seek( sal_uInt64 n )
 {
     if( Validate() )
-        return nPos = pEntry->Seek( n );
+    {
+        nPos = pEntry->Seek( n );
+        return nPos;
+    }
     else
         return n;
 }

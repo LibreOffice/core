@@ -1064,17 +1064,16 @@ const SwFormatRefMark* SwDoc::GetRefMark( const OUString& rName ) const
 /// @return the RefMark per index - for Uno
 const SwFormatRefMark* SwDoc::GetRefMark( sal_uInt16 nIndex ) const
 {
-    const SwTextRefMark* pTextRef;
     const SwFormatRefMark* pRet = nullptr;
 
     sal_uInt32 nCount = 0;
     for (const SfxPoolItem* pItem : GetAttrPool().GetItemSurrogates(RES_TXTATR_REFMARK))
     {
         auto pRefMark = dynamic_cast<const SwFormatRefMark*>(pItem);
-
-        if( pRefMark &&
-            nullptr != (pTextRef = pRefMark->GetTextRefMark()) &&
-            &pTextRef->GetTextNode().GetNodes() == &GetNodes() )
+        if( !pRefMark )
+            continue;
+        const SwTextRefMark* pTextRef = pRefMark->GetTextRefMark();
+        if( pTextRef && &pTextRef->GetTextNode().GetNodes() == &GetNodes() )
         {
             if(nCount == nIndex)
             {
@@ -1092,16 +1091,14 @@ const SwFormatRefMark* SwDoc::GetRefMark( sal_uInt16 nIndex ) const
 // OS 25.06.96: From now on we always return the reference count
 sal_uInt16 SwDoc::GetRefMarks( std::vector<OUString>* pNames ) const
 {
-    const SwTextRefMark* pTextRef;
-
     sal_uInt16 nCount = 0;
     for (const SfxPoolItem* pItem : GetAttrPool().GetItemSurrogates(RES_TXTATR_REFMARK))
     {
         auto pRefMark = dynamic_cast<const SwFormatRefMark*>(pItem);
-
-        if( pRefMark &&
-            nullptr != (pTextRef = pRefMark->GetTextRefMark()) &&
-            &pTextRef->GetTextNode().GetNodes() == &GetNodes() )
+        if( !pRefMark )
+            continue;
+        const SwTextRefMark* pTextRef = pRefMark->GetTextRefMark();
+        if( pTextRef && &pTextRef->GetTextNode().GetNodes() == &GetNodes() )
         {
             if( pNames )
             {
@@ -1207,16 +1204,16 @@ void SwDoc::InvalidateAutoCompleteFlag()
 
 const SwFormatINetFormat* SwDoc::FindINetAttr( const OUString& rName ) const
 {
-    const SwTextINetFormat* pTextAttr;
-    const SwTextNode* pTextNd;
     for (const SfxPoolItem* pItem : GetAttrPool().GetItemSurrogates(RES_TXTATR_INETFMT))
     {
         auto pFormatItem = dynamic_cast<const SwFormatINetFormat*>(pItem);
-        if( pFormatItem &&
-            pFormatItem->GetName() == rName &&
-            nullptr != ( pTextAttr = pFormatItem->GetTextINetFormat()) &&
-            nullptr != ( pTextNd = pTextAttr->GetpTextNode() ) &&
-            &pTextNd->GetNodes() == &GetNodes() )
+        if( !pFormatItem || pFormatItem->GetName() != rName )
+            continue;
+        const SwTextINetFormat* pTextAttr = pFormatItem->GetTextINetFormat();
+        if( !pTextAttr )
+            continue;
+        const SwTextNode* pTextNd = pTextAttr->GetpTextNode();
+        if( pTextNd && &pTextNd->GetNodes() == &GetNodes() )
         {
             return pFormatItem;
         }
@@ -1264,9 +1261,9 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bIm
         ++aEndOfDoc;
         while( aIndx < aEndOfDoc )
         {
-            SwNode *pNode;
             bool bDelete = false;
-            if( (pNode = &aIndx.GetNode())->IsTextNode() )
+            SwNode *pNode = &aIndx.GetNode();
+            if( pNode->IsTextNode() )
             {
                 SwTextNode *pNd = pNode->GetTextNode();
                 if( pNd->HasSwAttrSet() )
@@ -1323,9 +1320,10 @@ void RemoveOrDeleteContents(SwTextNode* pTextNd, IDocumentContentOperations& xOp
 bool HandleHidingField(SwFormatField& rFormatField, const SwNodes& rNodes,
                        IDocumentContentOperations& xOperations)
 {
-    SwTextNode* pTextNd;
-    if (rFormatField.GetTextField()
-        && nullptr != (pTextNd = rFormatField.GetTextField()->GetpTextNode())
+    if( !rFormatField.GetTextField() )
+        return false;
+    SwTextNode* pTextNd = rFormatField.GetTextField()->GetpTextNode();
+    if( pTextNd
         && pTextNd->GetpSwpHints() && pTextNd->IsHiddenByParaField()
         && &pTextNd->GetNodes() == &rNodes)
     {

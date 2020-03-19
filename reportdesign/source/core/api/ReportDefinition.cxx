@@ -1173,10 +1173,11 @@ void SAL_CALL OReportDefinition::connectController( const uno::Reference< frame:
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     m_pImpl->m_aControllers.push_back(_xController);
-    sal_Int32 nCount;
-    if ( _xController.is() && m_pImpl->m_xViewData.is() && ( nCount = m_pImpl->m_xViewData->getCount()) != 0)
+    if ( _xController.is() && m_pImpl->m_xViewData.is() )
     {
-        _xController->restoreViewData(m_pImpl->m_xViewData->getByIndex(nCount - 1));
+        sal_Int32 nCount = m_pImpl->m_xViewData->getCount();
+        if (nCount)
+            _xController->restoreViewData(m_pImpl->m_xViewData->getByIndex(nCount - 1));
     }
 }
 

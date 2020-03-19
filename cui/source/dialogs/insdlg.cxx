@@ -462,7 +462,11 @@ short SfxInsertFloatingFrameDialog::run()
         bOK = m_xStorage.is();
     }
 
-    if ( bOK && ( nRet = InsertObjectDialog_Impl::run() ) == RET_OK )
+    if (!bOK)
+        return RET_OK;
+
+    nRet = InsertObjectDialog_Impl::run();
+    if ( nRet == RET_OK )
     {
         OUString aURL;
         if (!m_xEDURL->get_text().isEmpty())

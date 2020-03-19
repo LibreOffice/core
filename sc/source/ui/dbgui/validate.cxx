@@ -862,7 +862,8 @@ bool ScValidationDlg::SetupRefDlg()
     if( EnterRefMode() )
     {
         SetModal( false );
-        return  m_bOwnRefHdlr = true && EnterRefStatus();
+        m_bOwnRefHdlr = true;
+        return EnterRefStatus();
     }
 
     return false;

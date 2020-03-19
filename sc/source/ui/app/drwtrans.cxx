@@ -142,17 +142,18 @@ ScDrawTransferObj::ScDrawTransferObj( std::unique_ptr<SdrModel> pClipModel, ScDo
                                 if ( (aAny >>= sTmp) && !sTmp.isEmpty() )
                                 {
                                     OUString aUrl = sTmp;
-                                    OUString aAbs;
-                                    const SfxMedium* pMedium;
-                                    if (pContainerShell && (pMedium = pContainerShell->GetMedium()) != nullptr)
+                                    OUString aAbs = aUrl;
+                                    if (pContainerShell)
                                     {
-                                        bool bWasAbs = true;
-                                        aAbs = pMedium->GetURLObject().smartRel2Abs( aUrl, bWasAbs ).
-                                                    GetMainURL(INetURLObject::DecodeMechanism::NONE);
-                                        // full path as stored INetBookmark must be encoded
+                                        const SfxMedium* pMedium = pContainerShell->GetMedium();
+                                        if (pMedium)
+                                        {
+                                            bool bWasAbs = true;
+                                            aAbs = pMedium->GetURLObject().smartRel2Abs( aUrl, bWasAbs ).
+                                                        GetMainURL(INetURLObject::DecodeMechanism::NONE);
+                                            // full path as stored INetBookmark must be encoded
+                                        }
                                     }
-                                    else
-                                        aAbs = aUrl;
 
                                     // Label
                                     OUString aLabel;

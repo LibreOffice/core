@@ -585,7 +585,8 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
     sal_uInt16 nOutLvlBits = 0;
     for (size_t n = 0, nSize = m_rDoc.GetTextFormatColls()->size(); n < nSize; ++n)
     {
-        if( nId == ( pNewColl = (*m_rDoc.GetTextFormatColls())[ n ] )->GetPoolFormatId() )
+        pNewColl = (*m_rDoc.GetTextFormatColls())[ n ];
+        if( nId == pNewColl->GetPoolFormatId() )
         {
             return pNewColl;
         }
@@ -1467,11 +1468,13 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
 
     while( nArrCnt-- )
         for( size_t n = 0; n < (*pArray[nArrCnt]).GetFormatCount(); ++n )
-            if( nId == ( pNewFormat = (*pArray[ nArrCnt ] ).GetFormat( n ) )->
-                    GetPoolFormatId() )
+        {
+            pNewFormat = (*pArray[ nArrCnt ] ).GetFormat( n );
+            if( nId == pNewFormat->GetPoolFormatId() )
             {
                 return pNewFormat;
             }
+        }
 
     OUString aNm(SwResId(pRCId));
     SwAttrSet aSet( m_rDoc.GetAttrPool(), pWhichRange );
@@ -1873,7 +1876,8 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
 
     for (size_t n = 0; n < m_rDoc.GetNumRuleTable().size(); ++n )
     {
-        if (nId == ( pNewRule = m_rDoc.GetNumRuleTable()[ n ] )->GetPoolFormatId())
+        pNewRule = m_rDoc.GetNumRuleTable()[ n ];
+        if (nId == pNewRule->GetPoolFormatId())
         {
             return pNewRule;
         }
@@ -2497,9 +2501,11 @@ bool DocumentStylePoolManager::IsPoolFormatUsed( sal_uInt16 nId ) const
         bFnd = false;
         while( nArrCnt-- && !bFnd )
             for( size_t n = 0; !bFnd && n < (*pArray[nArrCnt]).GetFormatCount(); ++n )
-                if( nId == ( pNewFormat = (*pArray[ nArrCnt ] ).GetFormat( n ) )->
-                        GetPoolFormatId() )
+            {
+                pNewFormat = (*pArray[ nArrCnt ] ).GetFormat( n );
+                if( nId == pNewFormat->GetPoolFormatId() )
                     bFnd = true;
+            }
     }
 
     // Not found or no dependencies?

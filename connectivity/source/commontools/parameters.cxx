@@ -236,7 +236,7 @@ namespace dbtools
             o_rNewParamName += "_";
         }
 
-        return sFilter += " =:" + o_rNewParamName;
+        return sFilter + " =:" + o_rNewParamName;
     }
 
 

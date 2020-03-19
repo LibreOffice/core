@@ -1002,8 +1002,13 @@ void ONDXPage::SearchAndReplace(const ONDXKey& rSearch,
         sal_uInt16 nPos = NODE_NOTFOUND;
         ONDXPage* pPage = this;
 
-        while (pPage && (nPos = pPage->Search(rSearch)) == NODE_NOTFOUND)
+        while (pPage)
+        {
+            nPos = pPage->Search(rSearch);
+            if (nPos != NODE_NOTFOUND)
+                break;
             pPage = pPage->aParent;
+        }
 
         if (pPage)
         {

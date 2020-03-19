@@ -138,7 +138,8 @@ ErrCode SvxOpenGraphicDialog::Execute()
             }
             else
             {
-                if( (nImpRet=rFilter.CanImportGraphic( aObj, nFormatNum, &nRetFormat )) != ERRCODE_NONE )
+                nImpRet = rFilter.CanImportGraphic( aObj, nFormatNum, &nRetFormat );
+                if( nImpRet != ERRCODE_NONE )
                     nImpRet = rFilter.CanImportGraphic( aObj, GRFILTER_FORMAT_DONTKNOW, &nRetFormat );
             }
 

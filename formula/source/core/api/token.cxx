@@ -1392,9 +1392,12 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissing( const MissingConvention &
                     OpCode eOp;
                     if (rConv.isPODF() && pCtx[ nFn ].mpFunc && pCtx[ nFn ].mpFunc->GetOpCode() == ocAddress)
                         pOcas[ nOcas++ ] = nFn;     // entering ADDRESS() if PODF
-                    else if ((rConv.isODFF() || rConv.isOOXML()) && pCtx[ nFn ].mpFunc &&
-                            ((eOp = pCtx[ nFn ].mpFunc->GetOpCode()) == ocDBCount || eOp == ocDBCount2))
-                        pOcds[ nOcds++ ] = nFn;     // entering DCOUNT() or DCOUNTA() if ODFF or OOXML
+                    else if ((rConv.isODFF() || rConv.isOOXML()) && pCtx[ nFn ].mpFunc)
+                    {
+                        eOp = pCtx[ nFn ].mpFunc->GetOpCode();
+                        if (eOp == ocDBCount || eOp == ocDBCount2)
+                            pOcds[ nOcds++ ] = nFn;     // entering DCOUNT() or DCOUNTA() if ODFF or OOXML
+                    }
                 }
             break;
             case ocClose:
@@ -1608,10 +1611,11 @@ const FormulaToken* FormulaTokenIterator::PeekNextOperator()
 {
     const FormulaToken* t = nullptr;
     short nIdx = maStack.back().nPC;
-    while (!t && ((t = GetNonEndOfPathToken( ++nIdx)) != nullptr))
+    for (;;)
     {
-        if (t->GetOpCode() == ocPush)
-            t = nullptr;   // ignore operands
+        t = GetNonEndOfPathToken( ++nIdx);
+        if (t == nullptr || t->GetOpCode() != ocPush)
+            break;   // ignore operands
     }
     if (!t && maStack.size() > 1)
     {

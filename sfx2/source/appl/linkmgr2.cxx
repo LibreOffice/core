@@ -476,15 +476,16 @@ void LinkManager::InsertFileLink(
 // (for now this is only of interest for the file links!)
 void LinkManager::CancelTransfers()
 {
-    SvFileObject* pFileObj;
 
     const sfx2::SvBaseLinks& rLnks = GetLinks();
     for( size_t n = rLnks.size(); n; )
     {
         const sfx2::SvBaseLink& rLnk = *rLnks[--n];
-        if (OBJECT_CLIENT_FILE == (OBJECT_CLIENT_FILE & rLnk.GetObjType())
-            && nullptr != (pFileObj = static_cast<SvFileObject*>(rLnk.GetObj())))
-            pFileObj->CancelTransfers();
+        if (OBJECT_CLIENT_FILE == (OBJECT_CLIENT_FILE & rLnk.GetObjType()))
+        {
+            if (SvFileObject* pFileObj = static_cast<SvFileObject*>(rLnk.GetObj()))
+                pFileObj->CancelTransfers();
+        }
     }
 }
 

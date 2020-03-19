@@ -621,9 +621,11 @@ const ScStyleSheet* ScColumn::GetSelectionStyle( const ScMarkData& rMark, bool& 
         ScAttrIterator aAttrIter( pAttrArray.get(), nTop, nBottom, pDocument->GetDefPattern() );
         SCROW nRow;
         SCROW nDummy;
-        const ScPatternAttr* pPattern;
-        while (bEqual && ( pPattern = aAttrIter.Next( nRow, nDummy ) ) != nullptr)
+        while (bEqual)
         {
+            const ScPatternAttr* pPattern = aAttrIter.Next( nRow, nDummy );
+            if (!pPattern)
+                break;
             pNewStyle = pPattern->GetStyleSheet();
             rFound = true;
             if ( !pNewStyle || ( pStyle && pNewStyle != pStyle ) )
@@ -647,9 +649,11 @@ const ScStyleSheet* ScColumn::GetAreaStyle( bool& rFound, SCROW nRow1, SCROW nRo
     ScAttrIterator aAttrIter( pAttrArray.get(), nRow1, nRow2, GetDoc()->GetDefPattern() );
     SCROW nRow;
     SCROW nDummy;
-    const ScPatternAttr* pPattern;
-    while (bEqual && ( pPattern = aAttrIter.Next( nRow, nDummy ) ) != nullptr)
+    while (bEqual)
     {
+        const ScPatternAttr* pPattern = aAttrIter.Next( nRow, nDummy );
+        if (!pPattern)
+            break;
         pNewStyle = pPattern->GetStyleSheet();
         rFound = true;
         if ( !pNewStyle || ( pStyle && pNewStyle != pStyle ) )

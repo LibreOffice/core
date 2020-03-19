@@ -134,7 +134,10 @@ bool HStreamIODev::setCompressed(bool flag)
 {
     compressed = flag;
     if (flag)
-        return nullptr != (_gzfp = gz_open(*_stream));
+    {
+        _gzfp = gz_open(*_stream);
+        return nullptr != _gzfp;
+    }
     else if (_gzfp)
     {
         gz_flush(_gzfp, Z_FINISH);

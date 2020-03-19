@@ -213,10 +213,12 @@ sal_Int32 SAL_CALL rtl_ustr_ascii_compare( const sal_Unicode* pStr1,
     assert(pStr1);
     assert(pStr2);
     sal_Int32 nRet;
-    while ( ((nRet = static_cast<sal_Int32>(*pStr1)-
-                     static_cast<sal_Int32>(static_cast<unsigned char>(*pStr2))) == 0) &&
-            *pStr2 )
+    for (;;)
     {
+        nRet = static_cast<sal_Int32>(*pStr1)-
+                     static_cast<sal_Int32>(static_cast<unsigned char>(*pStr2));
+        if (!(nRet == 0 && *pStr2 ))
+            break;
         /* Check ASCII range */
         SAL_WARN_IF( (static_cast<unsigned char>(*pStr2)) > 127, "rtl.string",
                     "rtl_ustr_ascii_compare - Found char > 127" );
@@ -238,10 +240,12 @@ sal_Int32 SAL_CALL rtl_ustr_ascii_compare_WithLength( const sal_Unicode* pStr1,
     assert(nStr1Len >= 0);
     assert(pStr2);
     sal_Int32 nRet = 0;
-    while( ((nRet = (nStr1Len ? static_cast<sal_Int32>(*pStr1) : 0)-
-                    static_cast<sal_Int32>(static_cast<unsigned char>(*pStr2))) == 0) &&
-           nStr1Len && *pStr2 )
+    for (;;)
     {
+        nRet = (nStr1Len ? static_cast<sal_Int32>(*pStr1) : 0) -
+               static_cast<sal_Int32>(static_cast<unsigned char>(*pStr2));
+        if (!(nRet == 0 && nStr1Len && *pStr2 ))
+            break;
         /* Check ASCII range */
         SAL_WARN_IF( (static_cast<unsigned char>(*pStr2)) > 127, "rtl.string",
                     "rtl_ustr_ascii_compare_WithLength - Found char > 127" );

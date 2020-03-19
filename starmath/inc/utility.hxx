@@ -46,8 +46,7 @@ inline Fraction Sm100th_mmToPts(long nNum100th_mm)
     // 'nNum100th_mm' (in 100th of mm).
 {
     SAL_WARN_IF( nNum100th_mm < 0, "starmath", "Ooops..." );
-    Fraction  aTmp (7227L, 254000L);
-    return aTmp *= Fraction(nNum100th_mm);
+    return Fraction(7227L, 254000L) * Fraction(nNum100th_mm);
 }
 
 

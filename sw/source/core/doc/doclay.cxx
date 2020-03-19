@@ -492,7 +492,10 @@ static bool lcl_TstFlyRange( const SwPaM* pPam, const SwPosition* pFlyPos,
                      (nPamEndContentIndex > nFlyContentIndex )));
         }
 
-    } while( !bOk && pPam != ( pTmp = pTmp->GetNext() ));
+        if( bOk )
+            break;
+        pTmp = pTmp->GetNext();
+    } while( pPam != pTmp );
     return bOk;
 }
 
@@ -1393,10 +1396,10 @@ const SwFlyFrameFormat* SwDoc::FindFlyByName( const OUString& rName, SwNodeType 
     for( auto it = range.first; it != range.second; it++ )
     {
         const SwFrameFormat* pFlyFormat = *it;
-        const SwNodeIndex* pIdx = nullptr;
-        if( RES_FLYFRMFMT == pFlyFormat->Which() && pFlyFormat->GetName() == rName &&
-            nullptr != ( pIdx = pFlyFormat->GetContent().GetContentIdx() ) &&
-            pIdx->GetNode().GetNodes().IsDocNodes() )
+        if( RES_FLYFRMFMT != pFlyFormat->Which() || pFlyFormat->GetName() != rName )
+            continue;
+        const SwNodeIndex* pIdx = pFlyFormat->GetContent().GetContentIdx();
+        if( pIdx && pIdx->GetNode().GetNodes().IsDocNodes() )
         {
             if( nNdTyp != SwNodeType::NONE )
             {
@@ -1457,7 +1460,8 @@ void SwDoc::SetAllUniqueFlyNames()
 
     for( n = GetSpzFrameFormats()->size(); n; )
     {
-        if( RES_FLYFRMFMT == (pFlyFormat = (*GetSpzFrameFormats())[ --n ])->Which() )
+        pFlyFormat = (*GetSpzFrameFormats())[ --n ];
+        if( RES_FLYFRMFMT == pFlyFormat->Which() )
         {
             const OUString& aNm = pFlyFormat->GetName();
             if ( !aNm.isEmpty() )
@@ -1506,10 +1510,9 @@ void SwDoc::SetAllUniqueFlyNames()
 
     for( n = aArr.size(); n; )
     {
-        const SwNodeIndex* pIdx;
-
-        if( nullptr != ( pIdx = ( pFlyFormat = aArr[ --n ])->GetContent().GetContentIdx() )
-            && pIdx->GetNode().GetNodes().IsDocNodes() )
+        pFlyFormat = aArr[ --n ];
+        const SwNodeIndex* pIdx = pFlyFormat->GetContent().GetContentIdx();
+        if( pIdx && pIdx->GetNode().GetNodes().IsDocNodes() )
         {
             switch( GetNodes()[ pIdx->GetIndex() + 1 ]->GetNodeType() )
             {

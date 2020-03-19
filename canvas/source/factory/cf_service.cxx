@@ -321,13 +321,13 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
 
     // try to reuse last working implementation for given service name
     const CacheVector::iterator aEnd(m_aCachedImplementations.end());
-    CacheVector::iterator aMatch;
-    if( (aMatch=std::find_if(
+    auto aMatch = std::find_if(
                     m_aCachedImplementations.begin(),
                     aEnd,
                     [&serviceName](CachePair const& cp)
                     { return serviceName == cp.first; }
-                    )) != aEnd) {
+                    );
+    if( aMatch != aEnd ) {
         Reference<XInterface> xCanvas( use( aMatch->second, args, xContext ) );
         if(xCanvas.is())
             return xCanvas;
@@ -335,35 +335,35 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
 
     // lookup in available service list
     const AvailVector::const_iterator aAvailEnd(m_aAvailableImplementations.end());
-    AvailVector::const_iterator aAvailImplsMatch;
-    if( (aAvailImplsMatch=std::find_if(
+    auto aAvailImplsMatch = std::find_if(
                     m_aAvailableImplementations.begin(),
                     aAvailEnd,
                     [&serviceName](AvailPair const& ap)
                     { return serviceName == ap.first; }
-                    )) == aAvailEnd ) {
+                    );
+    if( aAvailImplsMatch == aAvailEnd ) {
         return Reference<XInterface>();
     }
 
     const AvailVector::const_iterator aAAEnd(m_aAAImplementations.end());
-    AvailVector::const_iterator aAAImplsMatch;
-    if( (aAAImplsMatch=std::find_if(
+    auto aAAImplsMatch = std::find_if(
                     m_aAAImplementations.begin(),
                     aAAEnd,
                     [&serviceName](AvailPair const& ap)
                     { return serviceName == ap.first; }
-                    )) == aAAEnd) {
+                    );
+    if( aAAImplsMatch == aAAEnd ) {
         return Reference<XInterface>();
     }
 
     const AvailVector::const_iterator aAccelEnd(m_aAcceleratedImplementations.end());
-    AvailVector::const_iterator aAccelImplsMatch;
-    if( (aAccelImplsMatch=std::find_if(
+    auto aAccelImplsMatch = std::find_if(
                     m_aAcceleratedImplementations.begin(),
                     aAccelEnd,
                     [&serviceName](AvailPair const& ap)
                     { return serviceName == ap.first; }
-                    )) == aAccelEnd ) {
+                    );
+    if( aAccelImplsMatch == aAccelEnd ) {
         return Reference<XInterface>();
     }
 

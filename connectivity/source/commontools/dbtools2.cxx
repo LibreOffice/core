@@ -116,10 +116,11 @@ OUString createStandardTypePart(const Reference< XPropertySet >& xColProp,const 
         }
     }
 
-    sal_Int32 nIndex = 0;
-    if ( !sAutoIncrementValue.isEmpty() && (nIndex = sTypeName.indexOf(sAutoIncrementValue)) != -1 )
+    if ( !sAutoIncrementValue.isEmpty() )
     {
-        sTypeName = sTypeName.replaceAt(nIndex,sTypeName.getLength() - nIndex,OUString());
+        sal_Int32 nIndex = sTypeName.indexOf(sAutoIncrementValue);
+        if (nIndex != -1)
+            sTypeName = sTypeName.replaceAt(nIndex,sTypeName.getLength() - nIndex,OUString());
     }
 
     if ( (nPrecision > 0 || nScale > 0) && bUseLiteral )

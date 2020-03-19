@@ -514,14 +514,16 @@ void SwNumRule::CheckCharFormats( SwDoc* pDoc )
 {
     for(auto& rpNumFormat : maFormats)
     {
-        SwCharFormat* pFormat;
-        if( rpNumFormat && nullptr != ( pFormat = rpNumFormat->GetCharFormat() ) &&
-            pFormat->GetDoc() != pDoc )
+        if( rpNumFormat )
         {
-            // copy
-            SwNumFormat* pNew = new SwNumFormat( *rpNumFormat );
-            pNew->SetCharFormat( pDoc->CopyCharFormat( *pFormat ) );
-            rpNumFormat.reset(pNew);
+            SwCharFormat* pFormat = rpNumFormat->GetCharFormat();
+            if( pFormat && pFormat->GetDoc() != pDoc )
+            {
+                // copy
+                SwNumFormat* pNew = new SwNumFormat( *rpNumFormat );
+                pNew->SetCharFormat( pDoc->CopyCharFormat( *pFormat ) );
+                rpNumFormat.reset(pNew);
+            }
         }
     }
 }

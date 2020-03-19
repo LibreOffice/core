@@ -64,7 +64,8 @@ void DocumentChartDataProviderManager::CreateChartInternalDataProviders( const S
         while (nullptr != (pStNd = aIdx.GetNode().GetStartNode()))
         {
             ++aIdx;
-            if( nullptr != ( pONd = aIdx.GetNode().GetOLENode() ) &&
+            pONd = aIdx.GetNode().GetOLENode();
+            if( pONd &&
                 aName == pONd->GetChartTableName() /* OLE node is chart? */ &&
                 nullptr != (pONd->getLayoutFrame( m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout() )) /* chart frame is not hidden */ )
             {

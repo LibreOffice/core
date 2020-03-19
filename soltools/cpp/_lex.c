@@ -624,10 +624,14 @@ int
 int
     fillbuf(Source * s)
 {
-    int n;
+    int n = 0;
 
-    if (s->fd < 0 || (n = read(s->fd, (char *) s->inl, INS / 8)) <= 0)
-        n = 0;
+    if (s->fd >= 0)
+    {
+        n = read(s->fd, (char *) s->inl, INS / 8);
+        if (n <= 0)
+            n = 0;
+    }
     s->inl += n;
     s->inl[0] = s->inl[1] = s->inl[2] = s->inl[3] = EOB;
     if (n == 0)

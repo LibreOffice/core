@@ -312,7 +312,8 @@ namespace sw
                 if(m_pPosition)
                     while( m_pPosition->m_pLeft )
                         m_pPosition = m_pPosition->m_pLeft;
-                return m_pCurrent = m_pPosition;
+                m_pCurrent = m_pPosition;
+                return m_pCurrent;
             }
             ~ClientIteratorBase() override
             {
@@ -326,7 +327,7 @@ namespace sw
             // SwModify::Add() asserts this
             bool IsChanged() const { return m_pPosition != m_pCurrent; }
             // ensures the iterator to point at a current client
-            WriterListener* Sync() { return m_pCurrent = m_pPosition; }
+            WriterListener* Sync() { m_pCurrent = m_pPosition; return m_pCurrent; }
     };
 }
 

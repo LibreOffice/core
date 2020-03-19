@@ -8180,8 +8180,8 @@ void ScInterpreter::ScIndirect()
             // Anything else that resolves to one reference could be added
             // here, but we don't want to compile every arbitrary string. This
             // is already nasty enough...
-            sal_Int32 nIndex = 0;
-            if ((nIndex = sRefStr.indexOf('[')) >= 0 && sRefStr.indexOf(']',nIndex+1) > nIndex)
+            sal_Int32 nIndex = sRefStr.indexOf('[');
+            if (nIndex >= 0 && sRefStr.indexOf(']',nIndex+1) > nIndex)
             {
                 do
                 {

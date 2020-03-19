@@ -633,12 +633,14 @@ struct value
             break;
 
         case NAME1:
-            if ((np = lookup(tp, 0)) != NULL && np->flag & (ISDEFINED | ISMAC))
+            np = lookup(tp, 0);
+            if (np != NULL && np->flag & (ISDEFINED | ISMAC))
                 v.val = 1;
             break;
 
         case NAME2:
-            if ((np = lookup(tp, 0)) != NULL && np->flag & (ISARCHITECTURE))
+            np = lookup(tp, 0);
+            if (np != NULL && np->flag & (ISARCHITECTURE))
                 v.val = 1;
             break;
 
@@ -700,16 +702,19 @@ struct value
             if (*p == '\\')
             {
                 p += 1;
-                if ((i = digit(*p)) >= 0 && i <= 7)
+                i = digit(*p);
+                if (i >= 0 && i <= 7)
                 {
                     n = i;
                     p += 1;
-                    if ((i = digit(*p)) >= 0 && i <= 7)
+                    i = digit(*p);
+                    if (i >= 0 && i <= 7)
                     {
                         p += 1;
                         n <<= 3;
                         n += i;
-                        if ((i = digit(*p)) >= 0 && i <= 7)
+                        i = digit(*p);
+                        if (i >= 0 && i <= 7)
                         {
                             p += 1;
                             n <<= 3;
@@ -721,7 +726,8 @@ struct value
                     if (*p == 'x')
                     {
                         p += 1;
-                        while ((i = digit(*p)) >= 0 && i <= 15)
+                        i = digit(*p);
+                        while (i >= 0 && i <= 15)
                         {
                             p += 1;
                             n <<= 4;

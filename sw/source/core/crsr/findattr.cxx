@@ -394,7 +394,8 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTextAttr& rAttr )
                     }
                     else if( pArrPtr->nStt <= aTmp.nStt )
                     {
-                        if( ( pCmp = &m_pFindArr[ n ])->nWhich )
+                        pCmp = &m_pFindArr[ n ];
+                        if( pCmp->nWhich )
                         {
                             if( pCmp->nEnd < pArrPtr->nEnd ) // extend
                                 pCmp->nEnd = pArrPtr->nEnd;
@@ -419,7 +420,8 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTextAttr& rAttr )
                     *pTmpItem ))
                 {
                     // search attribute and extend if needed
-                    if( !( pCmp = &m_pFindArr[ nWhch - m_nArrStart ])->nWhich )
+                    pCmp = &m_pFindArr[ nWhch - m_nArrStart ];
+                    if( !pCmp->nWhich )
                     {
                         *pCmp = aTmp; // not found, insert
                         m_nFound++;
@@ -439,24 +441,28 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTextAttr& rAttr )
             }
 
             // then is has to go on the stack
-            if( !bContinue && ( pCmp = &m_pFindArr[ nWhch - m_nArrStart ])->nWhich )
+            if( !bContinue )
             {
-                // exists on stack, only if it is even bigger
-                if( pCmp->nEnd > aTmp.nEnd )
+                pCmp = &m_pFindArr[ nWhch - m_nArrStart ];
+                if (pCmp->nWhich )
                 {
-                    OSL_ENSURE( !m_pStackArr[ nWhch - m_nArrStart ].nWhich,
-                                    "slot on stack is still in use" );
+                    // exists on stack, only if it is even bigger
+                    if( pCmp->nEnd > aTmp.nEnd )
+                    {
+                        OSL_ENSURE( !m_pStackArr[ nWhch - m_nArrStart ].nWhich,
+                                        "slot on stack is still in use" );
 
-                    if( aTmp.nStt <= pCmp->nStt )
-                        pCmp->nStt = aTmp.nEnd;
-                    else
-                        pCmp->nEnd = aTmp.nStt;
+                        if( aTmp.nStt <= pCmp->nStt )
+                            pCmp->nStt = aTmp.nEnd;
+                        else
+                            pCmp->nEnd = aTmp.nStt;
 
-                    m_pStackArr[ nWhch - m_nArrStart ] = *pCmp;
-                    m_nStackCount++;
+                        m_pStackArr[ nWhch - m_nArrStart ] = *pCmp;
+                        m_nStackCount++;
+                    }
+                    pCmp->nWhich = 0;
+                    m_nFound--;
                 }
-                pCmp->nWhich = 0;
-                m_nFound--;
             }
         }
         if( pIter )
@@ -547,7 +553,8 @@ bool SwAttrCheckArr::SetAttrBwd( const SwTextAttr& rAttr )
                     }
                     else if( pArrPtr->nEnd >= aTmp.nEnd )
                     {
-                        if( ( pCmp = &m_pFindArr[ n ])->nWhich )
+                        pCmp = &m_pFindArr[ n ];
+                        if( pCmp->nWhich )
                         {
                             if( pCmp->nStt > pArrPtr->nStt ) // extend
                                 pCmp->nStt = pArrPtr->nStt;
@@ -571,7 +578,8 @@ bool SwAttrCheckArr::SetAttrBwd( const SwTextAttr& rAttr )
                     *pTmpItem ) )
                 {
                     // search attribute and extend if needed
-                    if( !( pCmp = &m_pFindArr[ nWhch - m_nArrStart ])->nWhich )
+                    pCmp = &m_pFindArr[ nWhch - m_nArrStart ];
+                    if( !pCmp->nWhich )
                     {
                         *pCmp = aTmp; // not found, insert
                         m_nFound++;
@@ -591,24 +599,28 @@ bool SwAttrCheckArr::SetAttrBwd( const SwTextAttr& rAttr )
             }
 
             // then is has to go on the stack
-            if( !bContinue && ( pCmp = &m_pFindArr[ nWhch - m_nArrStart ])->nWhich )
+            if( !bContinue )
             {
-                // exists on stack, only if it is even bigger
-                if( pCmp->nStt < aTmp.nStt )
+                pCmp = &m_pFindArr[ nWhch - m_nArrStart ];
+                if( pCmp->nWhich )
                 {
-                    OSL_ENSURE( !m_pStackArr[ nWhch - m_nArrStart ].nWhich,
-                            "slot on stack is still in use" );
+                    // exists on stack, only if it is even bigger
+                    if( pCmp->nStt < aTmp.nStt )
+                    {
+                        OSL_ENSURE( !m_pStackArr[ nWhch - m_nArrStart ].nWhich,
+                                "slot on stack is still in use" );
 
-                    if( aTmp.nEnd <= pCmp->nEnd )
-                        pCmp->nEnd = aTmp.nStt;
-                    else
-                        pCmp->nStt = aTmp.nEnd;
+                        if( aTmp.nEnd <= pCmp->nEnd )
+                            pCmp->nEnd = aTmp.nStt;
+                        else
+                            pCmp->nStt = aTmp.nEnd;
 
-                    m_pStackArr[ nWhch - m_nArrStart ] = *pCmp;
-                    m_nStackCount++;
+                        m_pStackArr[ nWhch - m_nArrStart ] = *pCmp;
+                        m_nStackCount++;
+                    }
+                    pCmp->nWhich = 0;
+                    m_nFound--;
                 }
-                pCmp->nWhich = 0;
-                m_nFound--;
             }
         }
         if( pIter )
@@ -706,7 +718,9 @@ static bool lcl_SearchForward( const SwTextNode& rTextNd, SwAttrCheckArr& rCmpAr
     if( rCmpArr.Found() )
     {
         for( ; nPos < rHtArr.Count(); ++nPos )
-            if( !rCmpArr.SetAttrFwd( *( pAttr = rHtArr.Get( nPos )) ) )
+        {
+            pAttr = rHtArr.Get( nPos );
+            if( !rCmpArr.SetAttrFwd( *pAttr ) )
             {
                 if( rCmpArr.GetNdStt() < pAttr->GetStart() )
                 {
@@ -719,6 +733,7 @@ static bool lcl_SearchForward( const SwTextNode& rTextNd, SwAttrCheckArr& rCmpAr
                 // continue search
                 break;
             }
+        }
 
         if( nPos == rHtArr.Count() && rCmpArr.Found() )
         {
@@ -731,14 +746,18 @@ static bool lcl_SearchForward( const SwTextNode& rTextNd, SwAttrCheckArr& rCmpAr
 
     sal_Int32 nSttPos;
     for( ; nPos < rHtArr.Count(); ++nPos )
-        if( rCmpArr.SetAttrFwd( *( pAttr = rHtArr.Get( nPos )) ) )
+    {
+        pAttr = rHtArr.Get( nPos );
+        if( rCmpArr.SetAttrFwd( *pAttr ) )
         {
             // Do multiple start at that position? Do also check those:
             nSttPos = pAttr->GetStart();
-            while( ++nPos < rHtArr.Count() && nSttPos ==
-                    ( pAttr = rHtArr.Get( nPos ))->GetStart() &&
-                    rCmpArr.SetAttrFwd( *pAttr ) )
-                ;
+            while( ++nPos < rHtArr.Count() )
+            {
+                pAttr = rHtArr.Get( nPos );
+                if( nSttPos != pAttr->GetStart() || !rCmpArr.SetAttrFwd( *pAttr ) )
+                    break;
+            }
 
             if( !rCmpArr.Found() )
                 continue;
@@ -750,9 +769,13 @@ static bool lcl_SearchForward( const SwTextNode& rTextNd, SwAttrCheckArr& rCmpAr
             lcl_SetAttrPam( rPam, nSttPos, &nEndPos, true );
             return true;
         }
+    }
 
-    if( !rCmpArr.CheckStack() ||
-        (nSttPos = rCmpArr.Start()) > (nEndPos = rCmpArr.End()) )
+    if( !rCmpArr.CheckStack() )
+        return false;
+    nSttPos = rCmpArr.Start();
+    nEndPos = rCmpArr.End();
+    if( nSttPos > nEndPos )
         return false;
 
     lcl_SetAttrPam( rPam, nSttPos, &nEndPos, true );
@@ -782,7 +805,9 @@ static bool lcl_SearchBackward( const SwTextNode& rTextNd, SwAttrCheckArr& rCmpA
     if( rCmpArr.Found() )
     {
         while( nPos )
-            if( !rCmpArr.SetAttrBwd( *( pAttr = rHtArr.GetSortedByEnd( --nPos )) ) )
+        {
+            pAttr = rHtArr.GetSortedByEnd( --nPos );
+            if( !rCmpArr.SetAttrBwd( *pAttr ) )
             {
                 nSttPos = pAttr->GetAnyEnd();
                 if( nSttPos < rCmpArr.GetNdEnd() )
@@ -796,6 +821,7 @@ static bool lcl_SearchBackward( const SwTextNode& rTextNd, SwAttrCheckArr& rCmpA
                 // continue search
                 break;
             }
+        }
 
         if( !nPos && rCmpArr.Found() )
         {
@@ -807,16 +833,20 @@ static bool lcl_SearchBackward( const SwTextNode& rTextNd, SwAttrCheckArr& rCmpA
     }
 
     while( nPos )
-        if( rCmpArr.SetAttrBwd( *( pAttr = rHtArr.GetSortedByEnd( --nPos )) ) )
+    {
+        pAttr = rHtArr.GetSortedByEnd( --nPos );
+        if( rCmpArr.SetAttrBwd( *pAttr ) )
         {
             // Do multiple start at that position? Do also check those:
             if( nPos )
             {
                 nEndPos = pAttr->GetAnyEnd();
-                while( --nPos && nEndPos ==
-                        ( pAttr = rHtArr.GetSortedByEnd( nPos ))->GetAnyEnd() &&
-                        rCmpArr.SetAttrBwd( *pAttr ) )
-                    ;
+                while( --nPos )
+                {
+                    pAttr = rHtArr.GetSortedByEnd( nPos );
+                    if( nEndPos != pAttr->GetAnyEnd() || !rCmpArr.SetAttrBwd( *pAttr ) )
+                        break;
+                }
             }
             if( !rCmpArr.Found() )
                 continue;
@@ -828,9 +858,13 @@ static bool lcl_SearchBackward( const SwTextNode& rTextNd, SwAttrCheckArr& rCmpA
             lcl_SetAttrPam( rPam, nSttPos, &nEndPos, false );
             return true;
         }
+    }
 
-    if( !rCmpArr.CheckStack() ||
-        (nSttPos = rCmpArr.Start()) > (nEndPos = rCmpArr.End()) )
+    if( !rCmpArr.CheckStack() )
+        return false;
+    nSttPos = rCmpArr.Start();
+    nEndPos = rCmpArr.End();
+    if( nSttPos > nEndPos )
         return false;
 
     lcl_SetAttrPam( rPam, nSttPos, &nEndPos, false );

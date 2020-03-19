@@ -99,7 +99,11 @@ void
                 break;
 
             case 'V':
-                for (n = 0; (c = optarg[n]) != '\0'; n++)
+                for (n = 0;; n++)
+                {
+                    c = optarg[n];
+                    if (c == '\0')
+                        break;
                     switch (c)
                     {
                         case 'i':
@@ -125,10 +129,15 @@ void
                         default:
                             error(WARNING, "Unknown verbose option %c", c);
                     }
+                }
                 break;
 
             case 'X':
-                for (n = 0; (c = optarg[n]) != '\0'; n++)
+                for (n = 0;; n++)
+                {
+                    c = optarg[n];
+                    if (c == '\0')
+                        break;
                     switch (c)
                     {
                         case 'a':
@@ -167,6 +176,7 @@ void
                         default:
                             error(WARNING, "Unknown extension option %c", c);
                     }
+                }
                 break;
 
             case '+':

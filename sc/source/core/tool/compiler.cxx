@@ -2954,8 +2954,10 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
             bFound = true;
         }
     }
-    OpCode eOp;
-    if (bFound && ((eOp = maRawToken.GetOpCode()) == ocSub || eOp == ocNegSub))
+    if (!bFound)
+        return false;
+    OpCode eOp = maRawToken.GetOpCode();
+    if (eOp == ocSub || eOp == ocNegSub)
     {
         bool bShouldBeNegSub =
             (eLastOp == ocOpen || eLastOp == ocSep || eLastOp == ocNegSub ||
@@ -4026,12 +4028,14 @@ void ScCompiler::AutoCorrectParsedSymbol()
         {
             OUString aSymbol( aCorrectedSymbol );
             OUString aDoc;
-            sal_Int32 nPosition;
-            if ( aSymbol[0] == '\''
-              && ((nPosition = aSymbol.indexOf( "'#" )) != -1) )
-            {   // Split off 'Doc'#, may be d:\... or whatever
-                aDoc = aSymbol.copy(0, nPosition + 2);
-                aSymbol = aSymbol.copy(nPosition + 2);
+            if ( aSymbol[0] == '\'' )
+            {
+                sal_Int32 nPosition = aSymbol.indexOf( "'#" );
+                if (nPosition != -1)
+                {   // Split off 'Doc'#, may be d:\... or whatever
+                    aDoc = aSymbol.copy(0, nPosition + 2);
+                    aSymbol = aSymbol.copy(nPosition + 2);
+                }
             }
             sal_Int32 nRefs = comphelper::string::getTokenCount(aSymbol, ':');
             bool bColons;

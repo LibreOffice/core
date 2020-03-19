@@ -74,7 +74,8 @@ namespace basegfx
     B2DRange operator*( const ::basegfx::B2DHomMatrix& rMat, const B2DRange& rB2DRange )
     {
         B2DRange aRes( rB2DRange );
-        return aRes *= rMat;
+        aRes *= rMat;
+        return aRes;
     }
 
 } // end of namespace basegfx

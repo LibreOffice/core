@@ -87,9 +87,13 @@ SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, sal_Int32 nNewValue )
     SwIndex* pFnd = const_cast<SwIndex*>(&rIdx);
     if (rIdx.m_nIndex > nNewValue) // move forwards
     {
-        SwIndex* pPrv;
-        while ((nullptr != (pPrv = pFnd->m_pPrev)) && (pPrv->m_nIndex > nNewValue))
+        for (;;)
+        {
+            SwIndex* pPrv = pFnd->m_pPrev;
+            if (!pPrv || pPrv->m_nIndex <= nNewValue)
+                break;
             pFnd = pPrv;
+        }
 
         if( pFnd != this )
         {
@@ -107,9 +111,13 @@ SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, sal_Int32 nNewValue )
     }
     else if (rIdx.m_nIndex < nNewValue)
     {
-        SwIndex* pNxt;
-        while ((nullptr != (pNxt = pFnd->m_pNext)) && (pNxt->m_nIndex < nNewValue))
+        for (;;)
+        {
+            SwIndex* pNxt = pFnd->m_pNext;
+            if (!pNxt || pNxt->m_nIndex >= nNewValue)
+                break;
             pFnd = pNxt;
+        }
 
         if( pFnd != this )
         {

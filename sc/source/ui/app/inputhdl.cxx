@@ -3265,8 +3265,13 @@ void ScInputHandler::AddRefEntry()
     OUString aText = GetEditText(mpEditEngine.get());
     sal_Unicode cLastChar = 0;
     sal_Int32 nPos = aText.getLength() - 1;
-    while (nPos >= 0 && ((cLastChar = aText[nPos]) == ' ')) //checking space
+    while (nPos >= 0) //checking space
+    {
+        cLastChar = aText[nPos];
+        if (cLastChar != ' ')
+            break;
         --nPos;
+    }
 
     bool bAppendSeparator = (cLastChar != '(' && cLastChar != cSep && cLastChar != '=');
     if (bAppendSeparator)
@@ -3285,7 +3290,9 @@ void ScInputHandler::SetReference( const ScRange& rRef, const ScDocument& rDoc )
     HideTip();
 
     const ScDocument* pThisDoc = nullptr;
-    bool bOtherDoc = (pRefViewSh && ((pThisDoc = pRefViewSh->GetViewData().GetDocument()) != &rDoc));
+    if (pRefViewSh)
+        pThisDoc = pRefViewSh->GetViewData().GetDocument();
+    bool bOtherDoc = (pThisDoc != &rDoc);
     if (bOtherDoc && !rDoc.GetDocumentShell()->HasName())
     {
         // References to unnamed document; that doesn't work

@@ -223,11 +223,11 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
         }
         else
         {
-            while ( 0 == ( nLastRead = maInflater.doInflateSegment( aData, nRead, aData.getLength() - nRead ) ) ||
-                  ( nRead + nLastRead != nRequestedBytes && mnZipCurrent < mnZipEnd ) )
+            for (;;)
             {
-                nRead += nLastRead;
-
+                nLastRead = maInflater.doInflateSegment( aData, nRead, aData.getLength() - nRead );
+                if ( 0 != nLastRead && ( nRead + nLastRead == nRequestedBytes || mnZipCurrent >= mnZipEnd ) )
+                    break;
                 if ( nRead > nRequestedBytes )
                     throw RuntimeException(
                         "Should not be possible to read more than requested!" );

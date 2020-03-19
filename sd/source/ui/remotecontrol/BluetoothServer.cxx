@@ -1278,10 +1278,9 @@ void SAL_CALL BluetoothServer::run()
             sockaddr_rc aRemoteAddr;
             socklen_t aRemoteAddrLen = sizeof(aRemoteAddr);
 
-            int nClient;
             SAL_INFO( "sdremote.bluetooth", "performing accept" );
-            if ( ( nClient = accept( aSocketFD.fd, reinterpret_cast<sockaddr*>(&aRemoteAddr), &aRemoteAddrLen)) < 0 &&
-                 errno != EAGAIN )
+            int nClient = accept( aSocketFD.fd, reinterpret_cast<sockaddr*>(&aRemoteAddr), &aRemoteAddrLen);
+            if ( nClient < 0 && errno != EAGAIN )
             {
                 SAL_WARN( "sdremote.bluetooth", "accept failed with errno " << errno );
             } else {

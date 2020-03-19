@@ -1544,7 +1544,7 @@ OUString FormulaProcessorBase::generateAddress2dString( const BinAddress& rAddre
 {
     OUStringBuffer aBuffer;
     // column
-    for( sal_Int32 nTemp = rAddress.mnCol; nTemp >= 0; (nTemp /= 26) -= 1 )
+    for( sal_Int32 nTemp = rAddress.mnCol; nTemp >= 0; nTemp = (nTemp / 26) - 1 )
         aBuffer.insert( 0, sal_Unicode( 'A' + (nTemp % 26) ) );
     if( bAbsolute )
         aBuffer.insert( 0, '$' );

@@ -79,6 +79,11 @@ EventSharedPtr generateEvent(
 
         // TODO(F1): Respect aEvent.Repeat value
 
+        auto event2shape = [&] () {
+            if (aEvent.Source >>= xShape)
+                pShape = rContext.mpSubsettableShapeManager->lookupShape(xShape);
+        };
+
         switch (aEvent.Trigger) {
         default:
             ENSURE_OR_THROW( false, "unexpected event trigger!" );
@@ -121,8 +126,8 @@ EventSharedPtr generateEvent(
             break;
         case animations::EventTrigger::ON_CLICK:
             // try to extract XShape event source
-            if ((aEvent.Source >>= xShape) &&
-                (pShape = rContext.mpSubsettableShapeManager->lookupShape(xShape)).get())
+            event2shape();
+            if (pShape.get())
             {
                 pEvent = makeDelay( rFunctor,
                                     nDelay2 + nAdditionalDelay,
@@ -137,8 +142,8 @@ EventSharedPtr generateEvent(
             break;
         case animations::EventTrigger::ON_DBL_CLICK:
             // try to extract XShape event source
-            if ((aEvent.Source >>= xShape) &&
-                (pShape = rContext.mpSubsettableShapeManager->lookupShape(xShape)).get())
+            event2shape();
+            if (pShape.get())
             {
                 pEvent = makeDelay( rFunctor,
                                     nDelay2 + nAdditionalDelay,
@@ -153,8 +158,8 @@ EventSharedPtr generateEvent(
             break;
         case animations::EventTrigger::ON_MOUSE_ENTER:
             // try to extract XShape event source
-            if ((aEvent.Source >>= xShape) &&
-                (pShape = rContext.mpSubsettableShapeManager->lookupShape(xShape)).get())
+            event2shape();
+            if (pShape.get())
             {
                 pEvent = makeDelay( rFunctor,
                                     nDelay2 + nAdditionalDelay,
@@ -169,8 +174,8 @@ EventSharedPtr generateEvent(
             break;
         case animations::EventTrigger::ON_MOUSE_LEAVE:
             // try to extract XShape event source
-            if ((aEvent.Source >>= xShape) &&
-                (pShape = rContext.mpSubsettableShapeManager->lookupShape(xShape)).get())
+            event2shape();
+            if (pShape.get())
             {
                 pEvent = makeDelay( rFunctor,
                                     nDelay2 + nAdditionalDelay,

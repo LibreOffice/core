@@ -910,8 +910,8 @@ bool appendToFilter(const Reference<XConnection>& _xConnection,
             {
                 if(rItem.indexOf('%') != -1)
                 {
-                    sal_Int32 nLen;
-                    if((nLen = rItem.lastIndexOf('.')) != -1 && !rItem.compareTo(_sName,nLen))
+                    sal_Int32 nLen = rItem.lastIndexOf('.');
+                    if(nLen != -1 && !rItem.compareTo(_sName,nLen))
                         bHasToInsert = false;
                     else if(rItem.getLength() == 1)
                         bHasToInsert = false;

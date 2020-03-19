@@ -423,7 +423,8 @@ sal_Int32 StgDirEntry::Seek( sal_Int32 nNew )
         nNew = m_pStgStrm->GetPos();
     }
 
-    return m_nPos = nNew;
+    m_nPos = nNew;
+    return m_nPos;
 }
 
 // Read

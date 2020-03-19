@@ -742,11 +742,13 @@ void SAL_CALL CURI::initialize(const css::uno::Sequence< css::uno::Any > & aArgu
     }
 
     // split parameter
-    sal_Int32 idx;
-    if (    ((idx = arg0.indexOf    ('#')) < 0)
-        &&  ((idx = arg0.lastIndexOf('/')) < 0)
-        &&  ((idx = arg0.lastIndexOf(':')) < 0) )
- {
+    sal_Int32 idx = arg0.indexOf('#');
+    if (idx < 0)
+        idx = arg0.lastIndexOf('/');
+    if (idx < 0)
+        idx = arg0.lastIndexOf(':');
+    if (idx < 0)
+    {
         throw css::lang::IllegalArgumentException(
             "CURI::initialize: argument not splittable: no separator [#/:]", *this, 0);
     }

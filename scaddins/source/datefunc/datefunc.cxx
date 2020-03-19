@@ -735,9 +735,18 @@ OUString SAL_CALL ScaDateAddIn::getRot13( const OUString& aSrcString )
     for( sal_Int32 nIndex = 0; nIndex < aBuffer.getLength(); nIndex++ )
     {
         sal_Unicode cChar = aBuffer[nIndex];
-        if( ((cChar >= 'a') && (cChar <= 'z') && ((cChar += 13) > 'z')) ||
-            ((cChar >= 'A') && (cChar <= 'Z') && ((cChar += 13) > 'Z')) )
-            cChar -= 26;
+        if( (cChar >= 'a') && (cChar <= 'z'))
+        {
+            cChar += 13;
+            if (cChar > 'z')
+                cChar -= 26;
+        }
+        else if( (cChar >= 'A') && (cChar <= 'Z') )
+        {
+            cChar += 13;
+            if (cChar > 'Z')
+                cChar -= 26;
+        }
         aBuffer[nIndex] = cChar;
     }
     return aBuffer.makeStringAndClear();

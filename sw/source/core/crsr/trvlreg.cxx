@@ -40,9 +40,11 @@ bool GotoPrevRegion( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosRegi
     SwNodeIndex aOldIdx = aIdx;
     sal_uLong nLastNd = rCurrentCursor.GetDoc()->GetNodes().Count() - 1;
     do {
-        while( aIdx.GetIndex() &&
-            nullptr == ( pNd = aIdx.GetNode().StartOfSectionNode()->GetSectionNode()) )
+        while( aIdx.GetIndex() )
         {
+            pNd = aIdx.GetNode().StartOfSectionNode()->GetSectionNode();
+            if (pNd)
+                break;
             --aIdx;
             if ( aIdx == aOldIdx )
             {
@@ -113,9 +115,11 @@ bool GotoNextRegion( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosRegi
     SwNodeIndex aOldIdx = aIdx;
     sal_uLong nEndCount = aIdx.GetNode().GetNodes().Count()-1;
     do {
-        while( aIdx.GetIndex() < nEndCount &&
-                nullptr == ( pNd = aIdx.GetNode().GetSectionNode()) )
+        while( aIdx.GetIndex() < nEndCount )
         {
+            pNd = aIdx.GetNode().GetSectionNode();
+            if (pNd)
+                break;
             ++aIdx;
             if ( aIdx == aOldIdx )
             {
@@ -245,19 +249,19 @@ bool SwCursor::GotoRegion( const OUString& rName )
     for( SwSectionFormats::size_type n = rFormats.size(); n; )
     {
         const SwSectionFormat* pFormat = rFormats[ --n ];
-        const SwNodeIndex* pIdx = nullptr;
-        const SwSection* pSect;
-        if( nullptr != ( pSect = pFormat->GetSection() ) &&
-            pSect->GetSectionName() == rName &&
-            nullptr != ( pIdx = pFormat->GetContent().GetContentIdx() ) &&
-            pIdx->GetNode().GetNodes().IsDocNodes() )
+        const SwSection* pSect = pFormat->GetSection();
+        if( pSect && pSect->GetSectionName() == rName )
         {
-            // area in normal nodes array
-            SwCursorSaveState aSaveState( *this );
+            const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
+            if( pIdx && pIdx->GetNode().GetNodes().IsDocNodes() )
+            {
+                // area in normal nodes array
+                SwCursorSaveState aSaveState( *this );
 
-            GetPoint()->nNode = *pIdx;
-            Move( fnMoveForward, GoInContent );
-            bRet = !IsSelOvr();
+                GetPoint()->nNode = *pIdx;
+                Move( fnMoveForward, GoInContent );
+                bRet = !IsSelOvr();
+            }
         }
     }
     return bRet;

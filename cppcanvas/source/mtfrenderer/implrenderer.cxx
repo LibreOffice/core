@@ -1628,9 +1628,11 @@ namespace cppcanvas::internal
                         {
                             MetaGradientExAction* pGradAction = nullptr;
                             bool bDone( false );
-                            while( !bDone &&
-                                   (pCurrAct=rMtf.NextAction()) != nullptr )
+                            while( !bDone )
                             {
+                                pCurrAct=rMtf.NextAction();
+                                if (!pCurrAct)
+                                    break;
                                 switch( pCurrAct->GetType() )
                                 {
                                     // extract gradient info

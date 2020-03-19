@@ -431,11 +431,10 @@ tools::Rectangle* SpinButton::ImplFindPartRect( const Point& rPt )
 
 bool SpinButton::PreNotify( NotifyEvent& rNEvt )
 {
-    const MouseEvent* pMouseEvt = nullptr;
-
-    if ((rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != nullptr)
+    if (rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE)
     {
-        if (!pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged())
+        const MouseEvent* pMouseEvt = rNEvt.GetMouseEvent();
+        if (pMouseEvt && !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged())
         {
             // trigger redraw if mouse over state has changed
             if (IsNativeControlSupported(ControlType::Spinbox, ControlPart::Entire) ||

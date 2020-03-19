@@ -280,9 +280,11 @@ void Parser::readBinaryData( uno::Sequence<sal_Int8>& rBuf )
     sal_Int8*           pBuf( rBuf.getArray() );
     sal_uInt64          nBytesRead(0);
     oslFileError        nRes=osl_File_E_None;
-    while( nFileLen &&
-           osl_File_E_None == (nRes=osl_readFile( m_pErr, pBuf, nFileLen, &nBytesRead )) )
+    while( nFileLen )
     {
+        nRes = osl_readFile( m_pErr, pBuf, nFileLen, &nBytesRead );
+        if (osl_File_E_None != nRes )
+            break;
         pBuf += nBytesRead;
         nFileLen -= sal::static_int_cast<sal_Int32>(nBytesRead);
     }
@@ -1101,18 +1103,23 @@ bool xpdf_ImportFromFile(const OUString& rURL,
                 oslFileError nRes;
 
                 // skip garbage \r \n at start of line
-                while( osl_File_E_None == (nRes = aBuffering.read(&aChar, 1, &nBytesRead)) &&
-                       nBytesRead == 1 &&
-                       (aChar == '\n' || aChar == '\r') ) ;
+                for (;;)
+                {
+                    nRes = aBuffering.read(&aChar, 1, &nBytesRead);
+                    if (osl_File_E_None != nRes || nBytesRead != 1 || !(aChar == '\n' || aChar == '\r') )
+                        break;
+                }
                 if ( osl_File_E_None != nRes )
                     break;
 
                 if( aChar != '\n' && aChar != '\r' )
                     line.append( aChar );
 
-                while( osl_File_E_None == (nRes = aBuffering.read(&aChar, 1, &nBytesRead)) &&
-                       nBytesRead == 1 && aChar != '\n' && aChar != '\r' )
+                for (;;)
                 {
+                    nRes = aBuffering.read(&aChar, 1, &nBytesRead);
+                    if ( osl_File_E_None != nRes || nBytesRead != 1 || aChar == '\n' || aChar == '\r' )
+                        break;
                     line.append( aChar );
                 }
                 if ( osl_File_E_None != nRes )

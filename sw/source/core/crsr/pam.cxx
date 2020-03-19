@@ -229,9 +229,13 @@ static bool lcl_ChkOneRange( CHKSECTION eSec, bool bChkSections,
     if( !pNd->StartOfSectionIndex() )
         return false;
 
-    while( ( pTmp = pNd->StartOfSectionNode())->EndOfSectionNode() !=
-            &rBaseEnd )
+    for (;;)
+    {
+        pTmp = pNd->StartOfSectionNode();
+        if (pTmp->EndOfSectionNode() == &rBaseEnd )
+            break;
         pNd = pTmp;
+    }
 
     sal_uLong nSttIdx = pNd->GetIndex(), nEndIdx = pNd->EndOfSectionIndex();
     return nSttIdx <= nStt && nStt <= nEndIdx &&

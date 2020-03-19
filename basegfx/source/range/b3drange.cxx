@@ -55,7 +55,8 @@ namespace basegfx
     B3DRange operator*( const ::basegfx::B3DHomMatrix& rMat, const B3DRange& rB3DRange )
     {
         B3DRange aRes( rB3DRange );
-        return aRes *= rMat;
+        aRes *= rMat;
+        return aRes;
     }
 
 } // end of namespace basegfx

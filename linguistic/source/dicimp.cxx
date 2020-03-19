@@ -542,8 +542,11 @@ int DictionaryNeo::cmpDicEntry(const OUString& rWord1,
     {
         // skip chars to be ignored
         IgnState = false;
-        while (nIdx1 < nLen1  &&  ((cChar1 = rWord1[ nIdx1 ]) == cIgnChar || cChar1 == cIgnBeg || IgnState ))
+        while (nIdx1 < nLen1)
         {
+            cChar1 = rWord1[ nIdx1 ];
+            if (cChar1 != cIgnChar && cChar1 != cIgnBeg && !IgnState )
+                break;
             if ( cChar1 == cIgnBeg )
                 IgnState = true;
             else if (cChar1 == cIgnEnd)
@@ -552,8 +555,11 @@ int DictionaryNeo::cmpDicEntry(const OUString& rWord1,
             nNumIgnChar1++;
         }
         IgnState = false;
-        while (nIdx2 < nLen2  &&  ((cChar2 = rWord2[ nIdx2 ]) == cIgnChar || cChar2 == cIgnBeg || IgnState ))
+        while (nIdx2 < nLen2)
         {
+            cChar2 = rWord2[ nIdx2 ];
+            if (cChar2 != cIgnChar && cChar2 != cIgnBeg && !IgnState )
+                break;
             if ( cChar2 == cIgnBeg )
                 IgnState = true;
             else if (cChar2 == cIgnEnd)

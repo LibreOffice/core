@@ -571,17 +571,21 @@ void SwSelPaintRects::Invalidate( const SwRect& rRect )
     // visible area, it is never aligned on one pixel at the right/bottom.
     // This has to be determined here and if that is the case the
     // rectangle has to be expanded.
-    if( GetShell()->m_bVisPortChgd && 0 != ( nSz = size()) )
+    if( GetShell()->m_bVisPortChgd )
     {
-        SwSelPaintRects::Get1PixelInLogic( *GetShell() );
-        iterator it = begin();
-        for( ; nSz--; ++it )
+        nSz = size();
+        if (nSz != 0)
         {
-            SwRect& rRectIt = *it;
-            if( rRectIt.Right() == GetShell()->m_aOldRBPos.X() )
-                rRectIt.Right( rRectIt.Right() + s_nPixPtX );
-            if( rRectIt.Bottom() == GetShell()->m_aOldRBPos.Y() )
-                rRectIt.Bottom( rRectIt.Bottom() + s_nPixPtY );
+            SwSelPaintRects::Get1PixelInLogic( *GetShell() );
+            iterator it = begin();
+            for( ; nSz--; ++it )
+            {
+                SwRect& rRectIt = *it;
+                if( rRectIt.Right() == GetShell()->m_aOldRBPos.X() )
+                    rRectIt.Right( rRectIt.Right() + s_nPixPtX );
+                if( rRectIt.Bottom() == GetShell()->m_aOldRBPos.Y() )
+                    rRectIt.Bottom( rRectIt.Bottom() + s_nPixPtY );
+            }
         }
     }
 }

@@ -1189,16 +1189,20 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                 executeMethodWithUndo(RID_STR_UNDO_REMOVE_SELECTION,::std::mem_fn(&ODesignView::Delete));
             break;
         case SID_GRID_USE:
-            getDesignView()->setGridSnap(m_bGridUse = !m_bGridUse);
+            m_bGridUse = !m_bGridUse;
+            getDesignView()->setGridSnap(m_bGridUse);
             break;
         case SID_HELPLINES_MOVE:
-            getDesignView()->setDragStripes(m_bHelplinesMove = !m_bHelplinesMove);
+            m_bHelplinesMove = !m_bHelplinesMove;
+            getDesignView()->setDragStripes(m_bHelplinesMove);
             break;
         case SID_GRID_VISIBLE:
-            getDesignView()->toggleGrid(m_bGridVisible = !m_bGridVisible);
+            m_bGridVisible = !m_bGridVisible;
+            getDesignView()->toggleGrid(m_bGridVisible);
             break;
         case SID_RULER:
-            getDesignView()->showRuler(m_bShowRuler = !m_bShowRuler);
+            m_bShowRuler = !m_bShowRuler;
+            getDesignView()->showRuler(m_bShowRuler);
             break;
         case SID_OBJECT_SELECT:
             getDesignView()->SetMode(DlgEdMode::Select);

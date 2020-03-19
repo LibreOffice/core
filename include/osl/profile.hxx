@@ -160,8 +160,13 @@ namespace osl {
                 sal_Char* pBuf = new sal_Char[ n+1 ];
                 osl_getProfileSectionEntries( profile, rSection.getStr(), pBuf, n+1 );
                 size_t nLen;
-                for( n = 0; ( nLen = strlen( pBuf+n ) ); n += nLen+1 )
+                for( n = 0; ; n += nLen+1 )
+                {
+                    nLen = strlen( pBuf+n );
+                    if (!nLen)
+                        break;
                     aEntries.push_back( rtl::OString( pBuf+n ) );
+                }
                 delete[] pBuf;
             }
 
@@ -182,8 +187,13 @@ namespace osl {
                 sal_Char* pBuf = new sal_Char[ n+1 ];
                 osl_getProfileSections( profile, pBuf, n+1 );
                 size_t nLen;
-                for( n = 0; ( nLen = strlen( pBuf+n ) ); n += nLen+1 )
+                for( n = 0; ; n += nLen+1 )
+                {
+                    nLen = strlen( pBuf+n );
+                    if (!nLen)
+                        break;
                     aSections.push_back( rtl::OString( pBuf+n ) );
+                }
                 delete[] pBuf;
             }
 

@@ -263,22 +263,26 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
                 m_aWMName = "ReflectionX";
             XFree( pProperty );
         }
-        else if( (aRwmRunning = XInternAtom( m_pDisplay, "_WRQ_WM_RUNNING", True )) != None &&
-            XGetWindowProperty( m_pDisplay,
-                                m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() ),
-                                aRwmRunning,
-                                0, 32,
-                                False,
-                                XA_STRING,
-                                &aRealType,
-                                &nFormat,
-                                &nItems,
-                                &nBytesLeft,
-                                &pProperty ) == 0 )
+        else
         {
-            if( aRealType == XA_STRING )
-                m_aWMName = "ReflectionX Windows";
-            XFree( pProperty );
+            aRwmRunning = XInternAtom( m_pDisplay, "_WRQ_WM_RUNNING", True );
+            if( aRwmRunning != None &&
+                XGetWindowProperty( m_pDisplay,
+                                    m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() ),
+                                    aRwmRunning,
+                                    0, 32,
+                                    False,
+                                    XA_STRING,
+                                    &aRealType,
+                                    &nFormat,
+                                    &nItems,
+                                    &nBytesLeft,
+                                    &pProperty ) == 0 )
+            {
+                if( aRealType == XA_STRING )
+                    m_aWMName = "ReflectionX Windows";
+                XFree( pProperty );
+            }
         }
     }
     if( m_aWMName.isEmpty() )

@@ -511,12 +511,12 @@ namespace canvas
                         ValueType()
                     };
 
-                const MapEntry* pRes;
                 const MapEntry* pEnd = mpMap+mnEntries;
-                if( (pRes=::std::lower_bound( mpMap,
+                const MapEntry* pRes = ::std::lower_bound( mpMap,
                                               pEnd,
                                               aSearchKey,
-                                              &mapComparator )) != pEnd )
+                                              &mapComparator );
+                if( pRes != pEnd )
                 {
                     // place to _insert before_ found - is it equal to
                     // the search key?

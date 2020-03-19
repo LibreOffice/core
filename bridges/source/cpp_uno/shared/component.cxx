@@ -98,7 +98,8 @@ static void s_stub_computeObjectIdentifier(va_list * pParam)
                 // ];good guid
                 oid.append( cppu_cppenv_getStaticOIdPart() );
                 OUString aRet( oid.makeStringAndClear() );
-                ::rtl_uString_acquire( *ppOId = aRet.pData );
+                *ppOId = aRet.pData;
+                ::rtl_uString_acquire( *ppOId );
             }
         }
         catch (const ::com::sun::star::uno::RuntimeException & e)

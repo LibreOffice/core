@@ -379,10 +379,11 @@ sal_Int32 MultiSelection::FirstSelected()
     nCurSubSel = 0;
 
     bCurValid = !aSels.empty();
-    if ( bCurValid )
-        return nCurIndex = aSels[ 0 ].Min();
+    if ( !bCurValid )
+        return SFX_ENDOFSELECTION;
 
-    return SFX_ENDOFSELECTION;
+    nCurIndex = aSels[ 0 ].Min();
+    return nCurIndex;
 }
 
 sal_Int32 MultiSelection::LastSelected()
@@ -390,10 +391,11 @@ sal_Int32 MultiSelection::LastSelected()
     nCurSubSel = aSels.size() - 1;
     bCurValid = !aSels.empty();
 
-    if ( bCurValid )
-        return nCurIndex = aSels[ nCurSubSel ].Max();
+    if ( !bCurValid )
+        return SFX_ENDOFSELECTION;
 
-    return SFX_ENDOFSELECTION;
+    nCurIndex = aSels[ nCurSubSel ].Max();
+    return nCurIndex;
 }
 
 sal_Int32 MultiSelection::NextSelected()
@@ -406,11 +408,12 @@ sal_Int32 MultiSelection::NextSelected()
         return ++nCurIndex;
 
     // are there further sub selections?
-    if ( ++nCurSubSel < sal_Int32(aSels.size()) )
-        return nCurIndex = aSels[ nCurSubSel ].Min();
+    if ( ++nCurSubSel >= sal_Int32(aSels.size()) )
+        // we are at the end!
+        return SFX_ENDOFSELECTION;
 
-    // we are at the end!
-    return SFX_ENDOFSELECTION;
+    nCurIndex = aSels[ nCurSubSel ].Min();
+    return nCurIndex;
 }
 
 void MultiSelection::SetTotalRange( const Range& rTotRange )

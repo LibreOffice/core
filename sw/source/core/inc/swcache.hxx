@@ -231,8 +231,12 @@ inline SwCacheAccess::SwCacheAccess( SwCache &rC, const void *pOwn, bool bSeek )
     m_pObj( nullptr ),
     m_pOwner( pOwn )
 {
-    if ( bSeek && m_pOwner && nullptr != (m_pObj = m_rCache.Get( m_pOwner )) )
-        m_pObj->Lock();
+    if ( bSeek && m_pOwner )
+    {
+        m_pObj = m_rCache.Get( m_pOwner );
+        if (m_pObj)
+            m_pObj->Lock();
+    }
 }
 
 inline SwCacheAccess::SwCacheAccess( SwCache &rC, const void* nCacheId,
@@ -241,8 +245,12 @@ inline SwCacheAccess::SwCacheAccess( SwCache &rC, const void* nCacheId,
     m_pObj( nullptr ),
     m_pOwner( nCacheId )
 {
-    if ( m_pOwner && nullptr != (m_pObj = m_rCache.Get( m_pOwner, nIndex )) )
-        m_pObj->Lock();
+    if ( m_pOwner )
+    {
+        m_pObj = m_rCache.Get( m_pOwner, nIndex );
+        if (m_pObj)
+            m_pObj->Lock();
+    }
 }
 
 inline SwCacheObj *SwCacheAccess::Get(bool const isDuplicateOwnerAllowed = true)

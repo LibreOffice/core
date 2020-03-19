@@ -1293,8 +1293,10 @@ const ORowSetValue& ORowSet::getInsertValue(sal_Int32 columnIndex)
     checkCache();
 
     if ( m_pCache && isInsertRow() )
-        return  (**m_pCache->m_aInsertRow)[m_nLastColumnIndex = columnIndex];
-
+    {
+        m_nLastColumnIndex = columnIndex;
+        return  (**m_pCache->m_aInsertRow)[m_nLastColumnIndex];
+    }
     return getValue(columnIndex);
 }
 
@@ -1377,7 +1379,8 @@ Reference< css::io::XInputStream > SAL_CALL ORowSet::getBinaryStream( sal_Int32 
     if ( m_pCache && isInsertRow() )
     {
         checkCache();
-        return new ::comphelper::SequenceInputStream((**m_pCache->m_aInsertRow)[m_nLastColumnIndex = columnIndex].getSequence());
+        m_nLastColumnIndex = columnIndex;
+        return new ::comphelper::SequenceInputStream((**m_pCache->m_aInsertRow)[m_nLastColumnIndex].getSequence());
     }
 
     return ORowSetBase::getBinaryStream(columnIndex);
@@ -1389,7 +1392,8 @@ Reference< css::io::XInputStream > SAL_CALL ORowSet::getCharacterStream( sal_Int
     if(m_pCache && isInsertRow() )
     {
         checkCache();
-        return new ::comphelper::SequenceInputStream((**m_pCache->m_aInsertRow)[m_nLastColumnIndex = columnIndex].getSequence());
+        m_nLastColumnIndex = columnIndex;
+        return new ::comphelper::SequenceInputStream((**m_pCache->m_aInsertRow)[m_nLastColumnIndex].getSequence());
     }
 
     return ORowSetBase::getCharacterStream(columnIndex);
@@ -1411,7 +1415,8 @@ Reference< XBlob > SAL_CALL ORowSet::getBlob( sal_Int32 columnIndex )
     if ( m_pCache && isInsertRow() )
     {
         checkCache();
-        return new ::connectivity::BlobHelper((**m_pCache->m_aInsertRow)[m_nLastColumnIndex = columnIndex].getSequence());
+        m_nLastColumnIndex = columnIndex;
+        return new ::connectivity::BlobHelper((**m_pCache->m_aInsertRow)[m_nLastColumnIndex].getSequence());
     }
     return ORowSetBase::getBlob(columnIndex);
 }

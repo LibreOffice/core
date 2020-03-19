@@ -68,7 +68,8 @@ namespace basegfx
     B3DPoint operator*( const ::basegfx::B3DHomMatrix& rMat, const B3DPoint& rPoint )
     {
         B3DPoint aRes( rPoint );
-        return aRes *= rMat;
+        aRes *= rMat;
+        return aRes;
     }
 } // end of namespace basegfx
 

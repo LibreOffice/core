@@ -732,32 +732,35 @@ bool ScValidationData::GetSelectionFromFormula(
     ScRange aRange;
 
     ScTokenArray* pArr = const_cast<ScTokenArray*>(&rTokArr);
-    formula::FormulaTokenArrayPlainIterator aIter(*pArr);
-    formula::FormulaToken* t = nullptr;
-    if (pArr->GetLen() == 1 && (t = aIter.GetNextReferenceOrName()) != nullptr)
+    if (pArr->GetLen() == 1)
     {
-        OpCode eOpCode = t->GetOpCode();
-        if (eOpCode == ocDBArea || eOpCode == ocTableRef)
+        formula::FormulaTokenArrayPlainIterator aIter(*pArr);
+        formula::FormulaToken* t = aIter.GetNextReferenceOrName();
+        if (t)
         {
-            if (const ScDBData* pDBData = pDocument->GetDBCollection()->getNamedDBs().findByIndex(t->GetIndex()))
+            OpCode eOpCode = t->GetOpCode();
+            if (eOpCode == ocDBArea || eOpCode == ocTableRef)
             {
-                pDBData->GetArea(aRange);
-                bRef = true;
+                if (const ScDBData* pDBData = pDocument->GetDBCollection()->getNamedDBs().findByIndex(t->GetIndex()))
+                {
+                    pDBData->GetArea(aRange);
+                    bRef = true;
+                }
             }
-        }
-        else if (eOpCode == ocName)
-        {
-            const ScRangeData* pName = pDocument->FindRangeNameBySheetAndIndex( t->GetSheet(), t->GetIndex());
-            if (pName && pName->IsReference(aRange))
+            else if (eOpCode == ocName)
             {
-                bRef = true;
+                const ScRangeData* pName = pDocument->FindRangeNameBySheetAndIndex( t->GetSheet(), t->GetIndex());
+                if (pName && pName->IsReference(aRange))
+                {
+                    bRef = true;
+                }
             }
-        }
-        else if (t->GetType() != svIndex)
-        {
-            if (pArr->IsValidReference(aRange, rPos))
+            else if (t->GetType() != svIndex)
             {
-                bRef = true;
+                if (pArr->IsValidReference(aRange, rPos))
+                {
+                    bRef = true;
+                }
             }
         }
     }

@@ -203,13 +203,15 @@ void SAL_CALL OMySQLTable::alterColumnByName(const OUString& colName,
                 }
                 else
                 {
-                    sal_Int32 nIndex = 0;
-                    if (!sTypeName.isEmpty()
-                        && (nIndex = sTypeName.indexOf(s_sAutoIncrement)) != -1)
+                    if (!sTypeName.isEmpty())
                     {
-                        sTypeName = sTypeName.copy(0, nIndex);
-                        descriptor->setPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPENAME),
-                                                     makeAny(sTypeName));
+                        sal_Int32 nIndex = sTypeName.indexOf(s_sAutoIncrement);
+                        if (nIndex != -1)
+                        {
+                            sTypeName = sTypeName.copy(0, nIndex);
+                            descriptor->setPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPENAME),
+                                                         makeAny(sTypeName));
+                        }
                     }
                 }
             }

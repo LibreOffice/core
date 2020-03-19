@@ -1396,17 +1396,19 @@ void FormulaCompiler::Factor()
             eOp = Expression();
             // Do not ignore error here, regardless of mbStopOnError, to not
             // change the formula expression in case of an unexpected state.
-            if (pArr->GetCodeError() == FormulaError::NONE)
+            if (pArr->GetCodeError() == FormulaError::NONE && pc >= 2)
             {
                 // Left and right operands must be reference or function
                 // returning reference to form a range list.
-                const FormulaToken* p;
-                if (pc >= 2
-                        && ((p = pCode[-2]) != nullptr) && isPotentialRangeType( p, true, false)
-                        && ((p = pCode[-1]) != nullptr) && isPotentialRangeType( p, true, true))
+                const FormulaToken* p = pCode[-2];
+                if (p && isPotentialRangeType( p, true, false))
                 {
-                    pFacToken->NewOpCode( ocUnion, FormulaToken::PrivateAccess());
-                    PutCode( pFacToken);
+                    p = pCode[-1];
+                    if (p && isPotentialRangeType( p, true, true))
+                    {
+                        pFacToken->NewOpCode( ocUnion, FormulaToken::PrivateAccess());
+                        PutCode( pFacToken);
+                    }
                 }
             }
         }

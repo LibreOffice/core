@@ -81,24 +81,42 @@ void HTMLParser::ParseScriptOptions( OUString& rLangString, const OUString& rBas
 void HTMLParser::RemoveSGMLComment( OUString &rString )
 {
     sal_Unicode c = 0;
-    while( !rString.isEmpty() &&
-           ( ' '==(c=rString[0]) || '\t'==c || '\r'==c || '\n'==c ) )
-        rString = rString.copy( 1 );
+    sal_Int32 idx = 0;
+    while (idx < rString.getLength())
+    {
+        c = rString[idx];
+        if (!( c==' ' || c=='\t' || c=='\r' || c=='\n' ) )
+            break;
+        idx++;
+    }
+    if (idx)
+        rString = rString.copy( idx );
 
-    while( !rString.isEmpty() &&
-           ( ' '==(c=rString[rString.getLength()-1])
-           || '\t'==c || '\r'==c || '\n'==c ) )
-        rString = rString.copy( 0, rString.getLength()-1 );
-
+    idx = rString.getLength() - 1;
+    while (idx > 0)
+        // Can never get to 0 because that would mean the string contains only whitespace, and the first
+        // loop would already have removed all of those.
+    {
+        c = rString[idx];
+        if (!( c==' ' || c=='\t' || c=='\r' || c=='\n' ) )
+            break;
+        idx--;
+    }
+    if (idx != rString.getLength() - 1)
+        rString = rString.copy( 0, idx );
 
     // remove SGML comments
     if( rString.startsWith( "<!--" ) )
     {
         // the whole line
         sal_Int32 nPos = 4;
-        while( nPos < rString.getLength() &&
-            ( ( c = rString[nPos] ) != '\r' && c != '\n' ) )
+        while( nPos < rString.getLength() )
+        {
+            c = rString[nPos];
+            if (c == '\r' || c == '\n')
+                break;
             ++nPos;
+        }
         if( c == '\r' && nPos+1 < rString.getLength() &&
             '\n' == rString[nPos+1] )
             ++nPos;

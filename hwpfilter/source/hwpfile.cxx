@@ -106,11 +106,11 @@ int HWPFile::Open(std::unique_ptr<HStream> stream)
 
     char idstr[HWPIDLen];
 
-    if (ReadBlock(idstr, HWPIDLen) < HWPIDLen
-        || HWP_V30 != (version = detect_hwp_version(idstr)))
-    {
+    if (ReadBlock(idstr, HWPIDLen) < HWPIDLen)
         return SetState(HWP_UNSUPPORTED_VERSION);
-    }
+    version = detect_hwp_version(idstr);
+    if (HWP_V30 != version)
+        return SetState(HWP_UNSUPPORTED_VERSION);
     return HWP_NoError;
 }
 

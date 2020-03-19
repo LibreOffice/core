@@ -665,7 +665,10 @@ sal_Int32 FastGetPos(const Array& rArray, const Val* p, sal_Int32& rLastPos)
     // The world's lamest linear search from svarray...
     for (sal_Int32 nIdx = 0; nIdx < nArrayLen; ++nIdx)
         if (rArray.at(nIdx).get() == p)
-            return rLastPos = nIdx;
+        {
+            rLastPos = nIdx;
+            return rLastPos;
+        }
 
     // XXX "not found" condition for sal_Int32 indexes
     return EE_PARA_NOT_FOUND;

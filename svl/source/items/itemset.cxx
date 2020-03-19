@@ -425,7 +425,10 @@ SfxItemState SfxItemSet::GetItemState( sal_uInt16 nWhich,
                 pPtr += 2;
             }
         }
-    } while (bSrchInParent && nullptr != (pCurrentSet = pCurrentSet->m_pParent));
+        if (!bSrchInParent)
+            break;
+        pCurrentSet = pCurrentSet->m_pParent;
+    } while (nullptr != pCurrentSet);
     return eRet;
 }
 
@@ -695,10 +698,12 @@ void SfxItemSet::MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo )
                      {return (lhs.first-1) <= rhs.second && (rhs.first-1) <= lhs.second;};
 
     std::vector<std::pair<sal_uInt16, sal_uInt16> >::iterator it = aRangesTable.begin();
-    std::vector<std::pair<sal_uInt16, sal_uInt16> >::iterator itNext;
     // we got at least one range
-    while ((itNext = std::next(it)) != aRangesTable.end())
+    for (;;)
     {
+        auto itNext = std::next(it);
+        if (itNext == aRangesTable.end())
+            break;
         // check neighbouring ranges, find first range which overlaps or adjoins a previous range
         if (needMerge(*it, *itNext))
         {
@@ -923,7 +928,10 @@ const SfxPoolItem& SfxItemSet::Get( sal_uInt16 nWhich, bool bSrchInParent) const
 //TODO: Search until end of Range: What are we supposed to do now? To the Parent or Default??
 //      if( !*pPtr )            // Until the end of the search Range?
 //      break;
-    } while (bSrchInParent && nullptr != (pCurrentSet = pCurrentSet->m_pParent));
+        if (!bSrchInParent)
+            break;
+        pCurrentSet = pCurrentSet->m_pParent;
+    } while (nullptr != pCurrentSet);
 
     // Get the Default from the Pool and return
     SAL_WARN_IF(!m_pPool, "svl.items", "no Pool, but status is ambiguous, with ID/pos " << nWhich);

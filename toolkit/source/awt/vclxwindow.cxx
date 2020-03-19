@@ -2441,8 +2441,7 @@ sal_Bool SAL_CALL VCLXWindow::isInPopupMode(  )
 void SAL_CALL VCLXWindow::setOutputSize( const css::awt::Size& aSize )
 {
     SolarMutexGuard aGuard;
-    VclPtr<vcl::Window> pWindow;
-    if( (pWindow = GetWindow()) != nullptr )
+    if( VclPtr<vcl::Window> pWindow = GetWindow() )
     {
         DockingWindow *pDockingWindow = dynamic_cast< DockingWindow* >(pWindow.get());
         if( pDockingWindow )
@@ -2455,8 +2454,7 @@ void SAL_CALL VCLXWindow::setOutputSize( const css::awt::Size& aSize )
 css::awt::Size SAL_CALL VCLXWindow::getOutputSize(  )
 {
     SolarMutexGuard aGuard;
-    VclPtr<vcl::Window> pWindow;
-    if( (pWindow = GetWindow()) != nullptr )
+    if( VclPtr<vcl::Window> pWindow = GetWindow() )
     {
         DockingWindow *pDockingWindow = dynamic_cast< DockingWindow* >(pWindow.get());
         if( pDockingWindow )

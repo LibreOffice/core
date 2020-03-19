@@ -451,15 +451,16 @@ bool SwDoc::SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,
         pUndo.reset(new SwUndoChangeFootNote( rPam, rNumStr, bIsEndNote ));
     }
 
-    SwTextFootnote* pTextFootnote = nullptr;
-    sal_uLong nIdx;
     bool bChg = false;
     bool bTypeChgd = false;
     const size_t nPosSave = nPos;
-    while( nPos < rFootnoteArr.size() &&
-            (( nIdx = SwTextFootnote_GetIndex((pTextFootnote = rFootnoteArr[ nPos++ ] )))
-                < nEndNd || ( nIdx == nEndNd &&
-                nEndCnt >= pTextFootnote->GetStart() )) )
+    while( nPos < rFootnoteArr.size() )
+    {
+        SwTextFootnote* pTextFootnote = rFootnoteArr[ nPos++ ];
+        sal_uLong nIdx = SwTextFootnote_GetIndex(pTextFootnote);
+        if( nIdx >= nEndNd &&
+            ( nIdx != nEndNd || nEndCnt < pTextFootnote->GetStart() ) )
+            continue;
         if( nIdx > nSttNd || ( nIdx == nSttNd &&
                 nSttCnt <= pTextFootnote->GetStart() ) )
         {
@@ -484,12 +485,16 @@ bool SwDoc::SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,
                 }
             }
         }
+    }
 
     nPos = nPosSave;       // There are more in the front!
-    while( nPos &&
-            (( nIdx = SwTextFootnote_GetIndex((pTextFootnote = rFootnoteArr[ --nPos ] )))
-                > nSttNd || ( nIdx == nSttNd &&
-                nSttCnt <= pTextFootnote->GetStart() )) )
+    while( nPos )
+    {
+        SwTextFootnote* pTextFootnote = rFootnoteArr[ --nPos ];
+        sal_uLong nIdx = SwTextFootnote_GetIndex(pTextFootnote);
+        if( nIdx <= nSttNd &&
+            ( nIdx != nSttNd || nSttCnt > pTextFootnote->GetStart() ) )
+            continue;
         if( nIdx < nEndNd || ( nIdx == nEndNd &&
             nEndCnt >= pTextFootnote->GetStart() ) )
         {
@@ -512,6 +517,7 @@ bool SwDoc::SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,
                 }
             }
         }
+    }
 
     // Who needs to be triggered?
     if( bChg )

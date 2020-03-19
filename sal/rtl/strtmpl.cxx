@@ -101,10 +101,12 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compare )( const IMPL_RTL_STRCODE* pStr1,
     else
     {
         sal_Int32 nRet;
-        while ( ((nRet = static_cast<sal_Int32>(IMPL_RTL_USTRCODE(*pStr1))-
-                         static_cast<sal_Int32>(IMPL_RTL_USTRCODE(*pStr2))) == 0) &&
-                *pStr2 )
+        for (;;)
         {
+            nRet = static_cast<sal_Int32>(IMPL_RTL_USTRCODE(*pStr1)) -
+                   static_cast<sal_Int32>(IMPL_RTL_USTRCODE(*pStr2));
+            if (!(nRet == 0 && *pStr2 ))
+                break;
             pStr1++;
             pStr2++;
         }

@@ -1965,16 +1965,17 @@ bool ScColumn::ParseString(
     sal_uInt32 nIndex = 0;
     sal_uInt32 nOldIndex = 0;
     SvNumFormatType eNumFormatType = SvNumFormatType::ALL;
-    sal_Unicode cFirstChar;
     if (!aParam.mpNumFormatter)
         aParam.mpNumFormatter = GetDoc()->GetFormatTable();
 
+    sal_Unicode cFirstChar = 0; // Text
     nIndex = nOldIndex = GetNumberFormat( GetDoc()->GetNonThreadedContext(), nRow );
-    if ( rString.getLength() > 1
-            && (eNumFormatType = aParam.mpNumFormatter->GetType(nIndex)) != SvNumFormatType::TEXT )
-        cFirstChar = rString[0];
-    else
-        cFirstChar = 0; // Text
+    if ( rString.getLength() > 1 )
+    {
+        eNumFormatType = aParam.mpNumFormatter->GetType(nIndex);
+        if ( eNumFormatType != SvNumFormatType::TEXT )
+            cFirstChar = rString[0];
+    }
 
     svl::SharedStringPool& rPool = GetDoc()->GetSharedStringPool();
 

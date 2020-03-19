@@ -612,7 +612,8 @@ bool ScRefHandler::EnterRefMode()
 
     m_aHelper.SetDispatcherLock( true );
 
-    return m_bInRefMode = true;
+    m_bInRefMode = true;
+    return m_bInRefMode;
 }
 
 ScRefHandler::~ScRefHandler() COVERITY_NOEXCEPT_FALSE

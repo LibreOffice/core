@@ -257,7 +257,7 @@ Point SvResizeHelper::GetTrackPosPixel( const tools::Rectangle & rRect ) const
             aPos = aRect.TopLeft() - aOuter.TopLeft();
             break;
     }
-    return aPos += aSelPos;
+    return aPos + aSelPos;
 }
 
 /*************************************************************************

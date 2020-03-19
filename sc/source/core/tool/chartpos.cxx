@@ -204,10 +204,14 @@ void ScChartPositioner::GlueState()
             else
                 *p = CellState::Free;
         }
-        if ( bGlue && *(p = (pA.get() + (((static_cast<sal_uLong>(nCol)+1) * nR) - 1))) == CellState::Free )
-        {   // mark column as totally unused
-            *p = CellState::Glue;
-            bGlueCols = true; // one unused column at least
+        if ( bGlue )
+        {
+            p = pA.get() + (((static_cast<sal_uLong>(nCol)+1) * nR) - 1);
+            if (*p == CellState::Free)
+            {   // mark column as totally unused
+                *p = CellState::Glue;
+                bGlueCols = true; // one unused column at least
+            }
         }
     }
 
@@ -227,10 +231,14 @@ void ScChartPositioner::GlueState()
             else
                 *p = CellState::Free;
         }
-        if ( bGlue && *(p = (pA.get() + (((static_cast<sal_uLong>(nC)-1) * nR) + nRow))) == CellState::Free )
-        {   // mark row as totally unused
-            *p = CellState::Glue;
-            bGlueRows = true; // one unused row at least
+        if ( bGlue )
+        {
+            p = pA.get() + (((static_cast<sal_uLong>(nC)-1) * nR) + nRow);
+            if (*p == CellState::Free )
+            {   // mark row as totally unused
+                *p = CellState::Glue;
+                bGlueRows = true; // one unused row at least
+            }
         }
     }
 

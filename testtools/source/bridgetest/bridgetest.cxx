@@ -158,9 +158,12 @@ static bool equals( const TestData & rData1, const TestData & rData2 )
 {
     sal_Int32 nLen;
 
-    if ((rData1.Sequence == rData2.Sequence) &&
-        equals( static_cast<const TestElement &>(rData1), static_cast<const TestElement &>(rData2) ) &&
-        (nLen = rData1.Sequence.getLength()) == rData2.Sequence.getLength())
+    if (rData1.Sequence != rData2.Sequence)
+        return false;
+    if (!equals( static_cast<const TestElement &>(rData1), static_cast<const TestElement &>(rData2) ))
+        return false;
+    nLen = rData1.Sequence.getLength();
+    if (nLen == rData2.Sequence.getLength())
     {
         // once again by hand sequence ==
         const TestElement * pElements1 = rData1.Sequence.getConstArray();

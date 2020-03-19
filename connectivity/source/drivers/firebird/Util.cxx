@@ -394,11 +394,13 @@ OUString firebird::escapeWith( const OUString& sText, const char aKey, const cha
 {
     OUString sRet(sText);
     sal_Int32 aIndex = 0;
-    while( (aIndex = sRet.indexOf(aKey, aIndex)) > 0 &&
-            aIndex < sRet.getLength())
+    for (;;)
     {
-            sRet = sRet.replaceAt(aIndex, 1, OUStringChar(aEscapeChar) + OUStringChar(aKey)  );
-            aIndex+= 2;
+        aIndex = sRet.indexOf(aKey, aIndex);
+        if ( aIndex <= 0 || aIndex >= sRet.getLength())
+            break;
+        sRet = sRet.replaceAt(aIndex, 1, OUStringChar(aEscapeChar) + OUStringChar(aKey)  );
+        aIndex += 2;
     }
 
     return sRet;

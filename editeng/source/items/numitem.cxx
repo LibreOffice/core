@@ -894,16 +894,17 @@ void SvxNumRule::UnLinkGraphics()
         const SvxBrushItem* pBrush = aFmt.GetBrush();
         if(SVX_NUM_BITMAP == aFmt.GetNumberingType())
         {
-            const Graphic* pGraphic = nullptr;
-            if(pBrush &&
-                !pBrush->GetGraphicLink().isEmpty() &&
-                    nullptr != (pGraphic = pBrush->GetGraphic()))
+            if(pBrush && !pBrush->GetGraphicLink().isEmpty())
             {
-                SvxBrushItem aTempItem(*pBrush);
-                aTempItem.SetGraphicLink("");
-                aTempItem.SetGraphic(*pGraphic);
-                sal_Int16    eOrient = aFmt.GetVertOrient();
-                aFmt.SetGraphicBrush( &aTempItem, &aFmt.GetGraphicSize(), &eOrient );
+                const Graphic* pGraphic = pBrush->GetGraphic();
+                if (pGraphic)
+                {
+                    SvxBrushItem aTempItem(*pBrush);
+                    aTempItem.SetGraphicLink("");
+                    aTempItem.SetGraphic(*pGraphic);
+                    sal_Int16    eOrient = aFmt.GetVertOrient();
+                    aFmt.SetGraphicBrush( &aTempItem, &aFmt.GetGraphicSize(), &eOrient );
+                }
             }
         }
         else if((SVX_NUM_BITMAP|LINK_TOKEN) == static_cast<int>(aFmt.GetNumberingType()))

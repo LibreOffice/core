@@ -260,7 +260,8 @@ void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, long nDist, s
         const long      nYOff = FRound( ( rRect.Right() - rRect.Left() ) * fTan );
         long            nPY;
 
-        rInc = Size( 0, nDist = FRound( nDist / cos( fAngle ) ) );
+        nDist = FRound( nDist / cos( fAngle ) );
+        rInc = Size( 0, nDist );
 
         if( nAngle > 0 )
         {
@@ -292,7 +293,8 @@ void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, long nDist, s
         const long   nXOff = FRound( ( rRect.Bottom() - rRect.Top() ) / fTan );
         long         nPX;
 
-        rInc = Size( nDist = FRound( nDist / sin( fAngle ) ), 0 );
+        nDist = FRound( nDist / sin( fAngle ) );
+        rInc = Size( nDist, 0 );
 
         if( nAngle > 0 )
         {

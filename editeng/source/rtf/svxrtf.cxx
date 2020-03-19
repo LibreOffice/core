@@ -398,8 +398,11 @@ void SvxRTFParser::ReadColorTable()
     int nToken;
     sal_uInt8 nRed = 0xff, nGreen = 0xff, nBlue = 0xff;
 
-    while( '}' != ( nToken = GetNextToken() ) && IsParserWorking() )
+    for (;;)
     {
+        nToken = GetNextToken();
+        if ( '}' == nToken || !IsParserWorking() )
+            break;
         switch( nToken )
         {
         case RTF_RED:   nRed = sal_uInt8(nTokenValue);      break;

@@ -438,15 +438,14 @@ void SvxSearchDialog::Construct_Impl()
 
     bool bSearchComponent1 = false;
     bool bSearchComponent2 = false;
-    if(xDispatchProv.is() &&
-            (pImpl->xCommand1Dispatch = xDispatchProv->queryDispatch(pImpl->aCommand1URL, sTarget, 0)).is())
+    if(xDispatchProv.is())
     {
-        bSearchComponent1 = true;
-    }
-    if(xDispatchProv.is() &&
-            (pImpl->xCommand2Dispatch = xDispatchProv->queryDispatch(pImpl->aCommand2URL, sTarget, 0)).is())
-    {
-        bSearchComponent2 = true;
+        pImpl->xCommand1Dispatch = xDispatchProv->queryDispatch(pImpl->aCommand1URL, sTarget, 0);
+        if (pImpl->xCommand1Dispatch.is())
+            bSearchComponent1 = true;
+        pImpl->xCommand2Dispatch = xDispatchProv->queryDispatch(pImpl->aCommand2URL, sTarget, 0);
+        if (pImpl->xCommand2Dispatch.is())
+            bSearchComponent2 = true;
     }
 
     if( bSearchComponent1 || bSearchComponent2 )
@@ -1976,8 +1975,8 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl, weld::Button&, void)
         const SfxPoolItem* pItem;
         for( sal_uInt16 n = 0; n < pList->Count(); ++n )
         {
-            SearchAttrItem* pAItem;
-            if( !IsInvalidItem( (pAItem = &pList->GetObject(n))->pItem ) &&
+            SearchAttrItem* pAItem = &pList->GetObject(n);
+            if( !IsInvalidItem( pAItem->pItem ) &&
                 SfxItemState::SET == aOutSet.GetItemState(
                     pAItem->pItem->Which(), false, &pItem ) )
             {

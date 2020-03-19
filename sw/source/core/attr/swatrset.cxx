@@ -263,9 +263,8 @@ bool SwAttrSet::SetModifyAtAttr( const SwModify* pModify )
     {
         // If CharFormat is set and it is set in different attribute pools then
         // the CharFormat has to be copied.
-        SwCharFormat* pCharFormat;
-        if( nullptr != ( pCharFormat = const_cast<SwFormatDrop*>(static_cast<const SwFormatDrop*>(pItem))->GetCharFormat() )
-            && GetPool() != pCharFormat->GetAttrSet().GetPool() )
+        SwCharFormat* pCharFormat = const_cast<SwFormatDrop*>(static_cast<const SwFormatDrop*>(pItem))->GetCharFormat();
+        if( pCharFormat && GetPool() != pCharFormat->GetAttrSet().GetPool() )
         {
            pCharFormat = GetDoc()->CopyCharFormat( *pCharFormat );
            const_cast<SwFormatDrop*>(static_cast<const SwFormatDrop*>(pItem))->SetCharFormat( pCharFormat );
@@ -370,20 +369,23 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
 
             const SwPageDesc* pPgDesc;
             if( pSrcDoc != pDstDoc && SfxItemState::SET == GetItemState(
-                                            RES_PAGEDESC, false, &pItem ) &&
-                nullptr != ( pPgDesc = static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc()) )
+                                            RES_PAGEDESC, false, &pItem ))
             {
-                tmpSet.reset(new SfxItemSet(*this));
-
-                SwPageDesc* pDstPgDesc = pDstDoc->FindPageDesc(pPgDesc->GetName());
-                if( !pDstPgDesc )
+                pPgDesc = static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc();
+                if( pPgDesc )
                 {
-                    pDstPgDesc = pDstDoc->MakePageDesc(pPgDesc->GetName());
-                    pDstDoc->CopyPageDesc( *pPgDesc, *pDstPgDesc );
+                    tmpSet.reset(new SfxItemSet(*this));
+
+                    SwPageDesc* pDstPgDesc = pDstDoc->FindPageDesc(pPgDesc->GetName());
+                    if( !pDstPgDesc )
+                    {
+                        pDstPgDesc = pDstDoc->MakePageDesc(pPgDesc->GetName());
+                        pDstDoc->CopyPageDesc( *pPgDesc, *pDstPgDesc );
+                    }
+                    SwFormatPageDesc aDesc( pDstPgDesc );
+                    aDesc.SetNumOffset( static_cast<const SwFormatPageDesc*>(pItem)->GetNumOffset() );
+                    tmpSet->Put( aDesc );
                 }
-                SwFormatPageDesc aDesc( pDstPgDesc );
-                aDesc.SetNumOffset( static_cast<const SwFormatPageDesc*>(pItem)->GetNumOffset() );
-                tmpSet->Put( aDesc );
             }
 
             if( pSrcDoc != pDstDoc && SfxItemState::SET == GetItemState( RES_ANCHOR, false, &pItem )

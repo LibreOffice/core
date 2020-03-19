@@ -179,16 +179,18 @@ sal_uInt16 SwDoc::CallEvent( SvMacroItemId nEvent, const SwCallMouseEvent& rCall
             if( bCheckPtr )
             {
                 const SwFrameFormat* pFormat = rCallEvent.PTR.IMAP.pFormat;
-                const ImageMap* pIMap;
-                if (GetSpzFrameFormats()->IsAlive(pFormat) &&
-                    nullptr != (pIMap = pFormat->GetURL().GetMap()) )
+                if (GetSpzFrameFormats()->IsAlive(pFormat))
                 {
-                    for( size_t nPos = pIMap->GetIMapObjectCount(); nPos; )
-                        if( pIMapObj == pIMap->GetIMapObject( --nPos ))
-                        {
-                            bCheckPtr = false;      // misuse as a flag
-                            break;
-                        }
+                    const ImageMap* pIMap = pFormat->GetURL().GetMap();
+                    if (pIMap)
+                    {
+                        for( size_t nPos = pIMap->GetIMapObjectCount(); nPos; )
+                            if( pIMapObj == pIMap->GetIMapObject( --nPos ))
+                            {
+                                bCheckPtr = false;      // misuse as a flag
+                                break;
+                            }
+                    }
                 }
             }
             if( !bCheckPtr )

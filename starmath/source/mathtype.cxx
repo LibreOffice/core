@@ -684,8 +684,13 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
             {
                 sal_Unicode cChar = 0;
                 sal_Int32 nI = rRet.getLength()-1;
-                while (nI && ((cChar = rRet[nI]) == ' '))
+                while (nI)
+                {
+                    cChar = rRet[nI];
+                    if (cChar != ' ')
+                        break;
                     --nI;
+                }
                 if ((cChar == '=') || (cChar == '+') || (cChar == '-'))
                     rRet.append("{}");
             }

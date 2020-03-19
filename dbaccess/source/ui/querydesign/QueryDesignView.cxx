@@ -568,8 +568,11 @@ namespace
 
             OTableFieldDescRef aDragLeft  = new OTableFieldDesc();
             OTableFieldDescRef aDragRight = new OTableFieldDesc();
-            if ( eOk != ( eErrorCode = FillDragInfo(_pView,pNode->getChild(0),aDragLeft)) ||
-                eOk != ( eErrorCode = FillDragInfo(_pView,pNode->getChild(2),aDragRight)))
+            eErrorCode = FillDragInfo(_pView,pNode->getChild(0),aDragLeft);
+            if ( eOk != eErrorCode )
+                return eErrorCode;
+            eErrorCode = FillDragInfo(_pView,pNode->getChild(2),aDragRight);
+            if ( eOk != eErrorCode )
                 return eErrorCode;
 
             if ( pLeftTable )
@@ -1504,16 +1507,19 @@ namespace
                         }
                     }
                 }
-                else if (pParamNode && eOk != (eErrorCode = FillDragInfo(_pView,pParamNode,aDragLeft))
-                        && SQL_ISRULE(pParamNode,num_value_exp))
+                else if (pParamNode)
                 {
-                    OUString sParameterValue;
-                    pParamNode->parseNodeToStr( sParameterValue,
-                                                xConnection,
-                                                &rController.getParser().getContext());
-                    nFunctionType |= FKT_NUMERIC;
-                    aDragLeft->SetField(sParameterValue);
-                    eErrorCode = eOk;
+                    eErrorCode = FillDragInfo(_pView,pParamNode,aDragLeft);
+                    if ( eOk != eErrorCode && SQL_ISRULE(pParamNode,num_value_exp))
+                    {
+                        OUString sParameterValue;
+                        pParamNode->parseNodeToStr( sParameterValue,
+                                                    xConnection,
+                                                    &rController.getParser().getContext());
+                        nFunctionType |= FKT_NUMERIC;
+                        aDragLeft->SetField(sParameterValue);
+                        eErrorCode = eOk;
+                    }
                 }
                 aDragLeft->SetFunctionType(nFunctionType);
                 if ( bHaving )
@@ -1553,8 +1559,11 @@ namespace
             if ( SQL_ISRULE(pCondition->getChild(0), column_ref ) && SQL_ISRULE(pCondition->getChild(pCondition->count()-1), column_ref ) )
             {
                 OTableFieldDescRef aDragRight = new OTableFieldDesc();
-                if (eOk != ( eErrorCode = FillDragInfo(_pView,pCondition->getChild(0),aDragLeft)) ||
-                    eOk != ( eErrorCode = FillDragInfo(_pView,pCondition->getChild(2),aDragRight)))
+                eErrorCode = FillDragInfo(_pView,pCondition->getChild(0),aDragLeft);
+                if (eOk != eErrorCode)
+                    return eErrorCode;
+                eErrorCode = FillDragInfo(_pView,pCondition->getChild(2),aDragRight);
+                if (eOk != eErrorCode)
                     return eErrorCode;
 
                 OQueryTableConnection* pConn = static_cast<OQueryTableConnection*>(

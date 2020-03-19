@@ -847,14 +847,24 @@ css::uno::Sequence< sal_Int32 > string2intarray( const OUString & str )
     {
         sal_Int32 start = 0;
         sal_uInt32 c;
-        while ( iswspace( (c=str.iterateCodePoints(&start)) ) )
+        for (;;)
+        {
+            c = str.iterateCodePoints(&start);
+            if (!iswspace(c))
+                break;
             if ( start == strlen)
                 return ret;
+        }
         if ( c != L'{' )
             return ret;
-        while ( iswspace( c=str.iterateCodePoints(&start) ) )
+        for (;;)
+        {
+            c = str.iterateCodePoints(&start);
+            if ( !iswspace(c) )
+                break;
             if ( start == strlen)
                 return ret;
+        }
         if ( c == L'}' )
             return ret;
 

@@ -219,8 +219,11 @@ bool ImpSvNumberInputScan::NextNumberStringSymbol( const sal_Unicode*& pStr,
     const sal_Unicode* pHere = pStr;
     sal_Int32 nChars = 0;
 
-    while ( ((cToken = *pHere) != 0) && eState != SsStop)
+    for (;;)
     {
+        cToken = *pHere;
+        if (cToken == 0 || eState == SsStop)
+            break;
         pHere++;
         switch (eState)
         {
@@ -292,8 +295,11 @@ bool ImpSvNumberInputScan::SkipThousands( const sal_Unicode*& pStr,
     ScanState eState = SsStart;
     sal_Int32 nCounter = 0; // counts 3 digits
 
-    while ( ((cToken = *pHere) != 0) && eState != SsStop)
+    for (;;)
     {
+        cToken = *pHere;
+        if (cToken == 0 || eState == SsStop)
+            break;
         pHere++;
         switch (eState)
         {
@@ -1135,13 +1141,15 @@ bool ImpSvNumberInputScan::CanForceToIso8601( DateOrder eDateOrder )
     switch (eDateOrder)
     {
         case DateOrder::DMY:               // "day" value out of range => ISO 8601 year
-            if ((n = sStrArray[nNums[0]].toInt32()) < 1 || n > 31)
+            n = sStrArray[nNums[0]].toInt32();
+            if (n < 1 || n > 31)
             {
                 nCanForceToIso8601 = 2;
             }
         break;
         case DateOrder::MDY:               // "month" value out of range => ISO 8601 year
-            if ((n = sStrArray[nNums[0]].toInt32()) < 1 || n > 12)
+            n = sStrArray[nNums[0]].toInt32();
+            if (n < 1 || n > 12)
             {
                 nCanForceToIso8601 = 2;
             }
@@ -1426,7 +1434,8 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
                                 do
                                 {
                                     ++nPos;
-                                } while ((c = rPat[--nPatCheck]) != 'Y' && c != 'M' && c != 'D');
+                                    c = rPat[--nPatCheck];
+                                } while (c != 'Y' && c != 'M' && c != 'D');
                             }
                     }
                 }

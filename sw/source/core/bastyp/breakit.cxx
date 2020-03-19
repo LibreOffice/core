@@ -105,18 +105,18 @@ sal_uInt16 SwBreakIt::GetRealScriptOfText( const OUString& rText, sal_Int32 nPos
                     break;
             }
         }
-        if( i18n::ScriptType::WEAK == nScript &&
-            nPos &&
-            0 < ( nChgPos = m_xBreak->beginOfScript(rText, nPos, nScript) ) )
+        if( i18n::ScriptType::WEAK == nScript && nPos )
         {
-            nScript = m_xBreak->getScriptType(rText, nChgPos-1);
+            nChgPos = m_xBreak->beginOfScript(rText, nPos, nScript);
+            if( 0 < nChgPos )
+                nScript = m_xBreak->getScriptType(rText, nChgPos-1);
         }
 
-        if( i18n::ScriptType::WEAK == nScript &&
-            rText.getLength() > ( nChgPos = m_xBreak->endOfScript(rText, nPos, nScript) ) &&
-            0 <= nChgPos )
+        if( i18n::ScriptType::WEAK == nScript )
         {
-            nScript = m_xBreak->getScriptType(rText, nChgPos);
+            nChgPos = m_xBreak->endOfScript(rText, nPos, nScript);
+            if( rText.getLength() > nChgPos && 0 <= nChgPos )
+                nScript = m_xBreak->getScriptType(rText, nChgPos);
         }
     }
     if( i18n::ScriptType::WEAK == nScript )

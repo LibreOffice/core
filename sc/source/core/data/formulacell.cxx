@@ -881,9 +881,11 @@ ScFormulaCell::ScFormulaCell(const ScFormulaCell& rCell, ScDocument& rDoc, const
     if( !bCompile )
     {   // Name references with references and ColRowNames
         formula::FormulaTokenArrayPlainIterator aIter(*pCode);
-        formula::FormulaToken* t;
-        while ( ( t = aIter.GetNextReferenceOrName() ) != nullptr && !bCompile )
+        for (;;)
         {
+            formula::FormulaToken* t = aIter.GetNextReferenceOrName();
+            if (!t || bCompile)
+                break;
             if ( t->IsExternalRef() )
             {
                 // External name, cell, and area references.
@@ -1094,15 +1096,17 @@ void ScFormulaCell::GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows )
 {
     MaybeInterpret();
 
-    const ScMatrix* pMat = nullptr;
-    if (pCode->GetCodeError() == FormulaError::NONE && aResult.GetType() == svMatrixCell &&
-            ((pMat = aResult.GetToken()->GetMatrix()) != nullptr))
-        pMat->GetDimensions( rCols, rRows );
-    else
+    if (pCode->GetCodeError() == FormulaError::NONE && aResult.GetType() == svMatrixCell)
     {
-        rCols = 0;
-        rRows = 0;
+        const ScMatrix* pMat = aResult.GetToken()->GetMatrix();
+        if (pMat)
+        {
+            pMat->GetDimensions( rCols, rRows );
+            return;
+        }
     }
+    rCols = 0;
+    rRows = 0;
 }
 
 void ScFormulaCell::ResetDirty() { bDirty = bTableOpDirty = mbPostponedDirty = false; }
@@ -1699,14 +1703,17 @@ bool ScFormulaCell::Interpret(SCROW nStartOffset, SCROW nEndOffset)
                      * added above with rRecursionHelper.Insert() should always
                      * be 'this', shouldn't it? */
                     ScFormulaCell* pLastCell = nullptr;
-                    if (rRecursionHelper.GetList().size() > 1 &&
-                            ((pLastCell = rRecursionHelper.GetList().back().pCell) != this))
+                    if (rRecursionHelper.GetList().size() > 1)
                     {
-                        pDocument->IncInterpretLevel();
-                        ScInterpreterContextGetterGuard aContextGetterGuard(*pDocument, pDocument->GetFormatTable());
-                        pLastCell->InterpretTail(
-                            *aContextGetterGuard.GetInterpreterContext(), SCITP_CLOSE_ITERATION_CIRCLE);
-                        pDocument->DecInterpretLevel();
+                        pLastCell = rRecursionHelper.GetList().back().pCell;
+                        if (pLastCell != this)
+                        {
+                            pDocument->IncInterpretLevel();
+                            ScInterpreterContextGetterGuard aContextGetterGuard(*pDocument, pDocument->GetFormatTable());
+                            pLastCell->InterpretTail(
+                                *aContextGetterGuard.GetInterpreterContext(), SCITP_CLOSE_ITERATION_CIRCLE);
+                            pDocument->DecInterpretLevel();
+                        }
                     }
                     // Start at 1, init things.
                     rRecursionHelper.StartIteration();
@@ -2039,8 +2046,8 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
             const SvNumFormatType nRetType = pInterpreter->GetRetFormatType();
             if (nRetType == SvNumFormatType::LOGICAL)
             {
-                double fVal;
-                if ((fVal = aNewResult.GetDouble()) != 1.0 && fVal != 0.0)
+                double fVal = aNewResult.GetDouble();
+                if (fVal != 1.0 && fVal != 0.0)
                     bForceNumberFormat = false;
                 else
                 {
@@ -2112,10 +2119,14 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
                         bSetFormat = false;
                         nFormatType = nOldFormatType;   // that? or number?
                     }
-                    else if ((fVal = aNewResult.GetDouble()) != 1.0 && fVal != 0.0)
+                    else
                     {
-                        bSetFormat = false;
-                        nFormatType = SvNumFormatType::NUMBER;
+                        fVal = aNewResult.GetDouble();
+                        if (fVal != 1.0 && fVal != 0.0)
+                        {
+                            bSetFormat = false;
+                            nFormatType = SvNumFormatType::NUMBER;
+                        }
                     }
                 }
             }

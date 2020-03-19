@@ -2055,8 +2055,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 // test for already existing names
                 bool    bLoop = true;
                 sal_uInt16  nRet = 0;
-                while( bLoop && ( (nRet = pDlg->Execute()) == RET_OK ) )
+                while( bLoop )
                 {
+                    nRet = pDlg->Execute();
+                    if (nRet != RET_OK)
+                        break;
                     pDlg->GetAttr( aNewAttr );
                     aLayerName   = static_cast<const SfxStringItem &>( aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
                     if (bDelete)

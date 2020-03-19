@@ -504,13 +504,19 @@ static int next_token(MzString &white, MzString &token, istream *strm)
 
   token = nullptr;
   white = nullptr;
-  if( !strm->good() || (ch = strm->get()) == std::istream::traits_type::eof() )
+  if( !strm->good() )
+    return 0;
+  ch = strm->get();
+  if( ch == std::istream::traits_type::eof() )
     return 0;
 
   // read preceding ws
   if( IS_WS(ch) ) {
-    do white << static_cast<char>(ch);
-    while( IS_WS(ch = strm->get()) );
+    do
+    {
+        white << static_cast<char>(ch);
+        ch = strm->get();
+    } while (IS_WS(ch));
   }
 
   if( ch == '\\' || ch & 0x80
@@ -544,8 +550,12 @@ static int next_token(MzString &white, MzString &token, istream *strm)
       token = "^";
   }
   else if( IS_BINARY(ch) ) {
-    do token << static_cast<char>(ch);
-    while( IS_BINARY(ch = strm->get()) );
+    do
+    {
+        token << static_cast<char>(ch);
+        ch = strm->get();
+    }
+    while( IS_BINARY(ch) );
     strm->putback(static_cast<char>(ch));
   }
   else if( ch != std::istream::traits_type::eof() && rtl::isAsciiDigit(ch) ) {
@@ -572,8 +582,13 @@ static std::istream::int_type read_white_space(MzString& outs, istream *strm)
   }
   else {
     std::istream::int_type ch;
-    while( IS_WS(ch = strm->get()) )
-      outs << static_cast<char>(ch);
+    for (;;)
+    {
+        ch = strm->get();
+        if (!IS_WS(ch))
+            break;
+        outs << static_cast<char>(ch);
+    }
     strm->putback(static_cast<char>(ch));
     result = ch;
   }
@@ -741,9 +756,13 @@ static char eq2ltxconv(MzString& sstr, istream *strm, const char *sentinel)
           sstr.replace(pos, ' ');
       }
       sstr << token;
-      while( (ch = strm->get()) != std::istream::traits_type::eof()
-             && IS_WS(ch) )
+      for (;;)
+      {
+        ch = strm->get();
+        if ( ch == std::istream::traits_type::eof() || !IS_WS(ch) )
+            break;
         sstr << static_cast<char>(ch);
+      }
       if( ch != '{' )
         sstr << "{}";
       else {

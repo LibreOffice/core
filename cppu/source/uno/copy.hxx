@@ -244,7 +244,8 @@ inline void _copyConstructAnyFromData(
         }
         else
         {
-            _acquire( pDestAny->pReserved = *static_cast<void **>(pSource), acquire );
+            pDestAny->pReserved = *static_cast<void **>(pSource);
+            _acquire( pDestAny->pReserved, acquire );
         }
         break;
     default:
@@ -640,7 +641,10 @@ inline void _copyConstructData(
         if (mapping)
             *static_cast<void **>(pDest) = _map( *static_cast<void **>(pSource), pType, pTypeDescr, mapping );
         else
-            _acquire( *static_cast<void **>(pDest) = *static_cast<void **>(pSource), acquire );
+        {
+            *static_cast<void **>(pDest) = *static_cast<void **>(pSource);
+            _acquire( *static_cast<void **>(pDest), acquire );
+        }
         break;
     default:
         break;

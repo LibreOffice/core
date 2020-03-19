@@ -660,8 +660,11 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
     TreeFileIterator aTreeIt( locale );
     OUString aTreeFile;
     sal_Int32 nFileSize;
-    while( !(aTreeFile = aTreeIt.nextTreeFile( nFileSize ) ).isEmpty() )
+    for (;;)
     {
+        aTreeFile = aTreeIt.nextTreeFile( nFileSize );
+        if( aTreeFile.isEmpty() )
+            break;
         configData.vFileLen.push_back( nFileSize );
         configData.vFileURL.push_back( aTreeFile );
     }

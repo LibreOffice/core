@@ -1894,10 +1894,10 @@ const SfxItemSet& ScHTMLTable::GetCurrItemSet() const
 ScHTMLSize ScHTMLTable::GetSpan( const ScHTMLPos& rCellPos ) const
 {
     ScHTMLSize aSpan( 1, 1 );
-    const ScRange* pRange = nullptr;
-    if(  ( (pRange = maVMergedCells.Find( rCellPos.MakeAddr() ) ) != nullptr)
-      || ( (pRange = maHMergedCells.Find( rCellPos.MakeAddr() ) ) != nullptr)
-      )
+    const ScRange* pRange = maVMergedCells.Find( rCellPos.MakeAddr() );
+    if (!pRange)
+        pRange = maHMergedCells.Find( rCellPos.MakeAddr() );
+    if (pRange)
         aSpan.Set( pRange->aEnd.Col() - pRange->aStart.Col() + 1, pRange->aEnd.Row() - pRange->aStart.Row() + 1 );
     return aSpan;
 }
@@ -2386,8 +2386,15 @@ void ScHTMLTable::InsertNewCell( const ScHTMLSize& rSpanSize )
 
     /*  Find an unused cell by skipping all merged ranges that cover the
         current cell position stored in maCurrCell. */
-    while( ((pRange = maVMergedCells.Find( maCurrCell.MakeAddr() )) != nullptr) || ((pRange = maHMergedCells.Find( maCurrCell.MakeAddr() )) != nullptr) )
+    for (;;)
+    {
+        pRange = maVMergedCells.Find( maCurrCell.MakeAddr() );
+        if (!pRange)
+            pRange = maHMergedCells.Find( maCurrCell.MakeAddr() );
+        if (!pRange)
+            break;
         maCurrCell.mnCol = pRange->aEnd.Col() + 1;
+    }
     mpCurrEntryVector = &maEntryMap[ maCurrCell ];
 
     /*  If the new cell is merged horizontally, try to find collisions with

@@ -661,10 +661,10 @@ extern "C" void typelib_typedescription_newEmpty(
     pRet->nRefCount = 1; // reference count is initially 1
     pRet->nStaticRefCount = 0;
     pRet->eTypeClass = eTypeClass;
-    pRet->pTypeName = nullptr;
     pRet->pUniqueIdentifier = nullptr;
     pRet->pReserved = nullptr;
-    rtl_uString_acquire( pRet->pTypeName = pTypeName );
+    pRet->pTypeName = pTypeName;
+    rtl_uString_acquire( pRet->pTypeName );
     pRet->pSelf = pRet;
     pRet->bComplete = true;
     pRet->nSize = 0;
@@ -740,17 +740,17 @@ void newTypeDescription(
                         typelib_typedescriptionreference_new(
                             pTmp->ppTypeRefs +i, pCompoundMembers[i].eTypeClass,
                             pCompoundMembers[i].pTypeName );
-                        rtl_uString_acquire(
-                            pTmp->ppMemberNames[i]
-                            = pCompoundMembers[i].pMemberName );
+                        pTmp->ppMemberNames[i]
+                            = pCompoundMembers[i].pMemberName;
+                        rtl_uString_acquire( pTmp->ppMemberNames[i] );
                     } else {
                         typelib_typedescriptionreference_new(
                             pTmp->ppTypeRefs +i,
                             pStructMembers[i].aBase.eTypeClass,
                             pStructMembers[i].aBase.pTypeName );
-                        rtl_uString_acquire(
-                            pTmp->ppMemberNames[i]
-                            = pStructMembers[i].aBase.pMemberName );
+                        pTmp->ppMemberNames[i]
+                            = pStructMembers[i].aBase.pMemberName;
+                        rtl_uString_acquire(pTmp->ppMemberNames[i]);
                     }
                     // write offset
                     sal_Int32 size;
@@ -843,7 +843,8 @@ extern "C" void SAL_CALL typelib_typedescription_newEnum(
     pEnum->ppEnumNames       = new rtl_uString * [ nEnumValues ];
     for ( sal_Int32 nPos = nEnumValues; nPos--; )
     {
-        rtl_uString_acquire( pEnum->ppEnumNames[nPos] = ppEnumNames[nPos] );
+        pEnum->ppEnumNames[nPos] = ppEnumNames[nPos];
+        rtl_uString_acquire( pEnum->ppEnumNames[nPos] );
     }
     pEnum->pEnumValues      = new sal_Int32[ nEnumValues ];
     ::memcpy( pEnum->pEnumValues, pEnumValues, nEnumValues * sizeof(sal_Int32) );
@@ -1127,8 +1128,8 @@ extern "C" void SAL_CALL typelib_typedescription_newInterfaceMethod(
         for( sal_Int32 i = 0; i < nParams; i++ )
         {
             // get the name of the parameter
-            (*ppRet)->pParams[ i ].pName = nullptr;
-            rtl_uString_acquire( (*ppRet)->pParams[ i ].pName = pParams[i].pParamName );
+            (*ppRet)->pParams[ i ].pName = pParams[i].pParamName;
+            rtl_uString_acquire( (*ppRet)->pParams[ i ].pName );
             (*ppRet)->pParams[ i ].pTypeRef = nullptr;
             // get the type name of the parameter and create the weak reference
             typelib_typedescriptionreference_new(
@@ -1722,7 +1723,8 @@ typelib_TypeDescriptionReference ** copyExceptions(
     typelib_TypeDescriptionReference ** p
         = new typelib_TypeDescriptionReference *[count];
     for (sal_Int32 i = 0; i < count; ++i) {
-        typelib_typedescriptionreference_acquire(p[i] = source[i]);
+        p[i] = source[i];
+        typelib_typedescriptionreference_acquire(p[i]);
     }
     return p;
 }
@@ -1746,21 +1748,25 @@ bool createDerivedInterfaceMemberDescription(
                     = reinterpret_cast<
                     typelib_InterfaceMethodTypeDescription * >(*result);
                 newMethod->aBase.nPosition = position;
+                newMethod->aBase.pMemberName
+                    = baseMethod->aBase.pMemberName;
                 rtl_uString_acquire(
-                    newMethod->aBase.pMemberName
-                    = baseMethod->aBase.pMemberName);
+                    newMethod->aBase.pMemberName);
+                newMethod->pReturnTypeRef = baseMethod->pReturnTypeRef;
                 typelib_typedescriptionreference_acquire(
-                    newMethod->pReturnTypeRef = baseMethod->pReturnTypeRef);
+                    newMethod->pReturnTypeRef);
                 newMethod->nParams = baseMethod->nParams;
                 newMethod->pParams = new typelib_MethodParameter[
                     newMethod->nParams];
                 for (sal_Int32 i = 0; i < newMethod->nParams; ++i) {
+                    newMethod->pParams[i].pName
+                        = baseMethod->pParams[i].pName;
                     rtl_uString_acquire(
-                        newMethod->pParams[i].pName
-                        = baseMethod->pParams[i].pName);
+                        newMethod->pParams[i].pName);
+                    newMethod->pParams[i].pTypeRef
+                        = baseMethod->pParams[i].pTypeRef;
                     typelib_typedescriptionreference_acquire(
-                        newMethod->pParams[i].pTypeRef
-                        = baseMethod->pParams[i].pTypeRef);
+                        newMethod->pParams[i].pTypeRef);
                     newMethod->pParams[i].bIn = baseMethod->pParams[i].bIn;
                     newMethod->pParams[i].bOut = baseMethod->pParams[i].bOut;
                 }
@@ -1787,13 +1793,13 @@ bool createDerivedInterfaceMemberDescription(
                     = reinterpret_cast<
                     typelib_InterfaceAttributeTypeDescription * >(*result);
                 newAttribute->aBase.nPosition = position;
-                rtl_uString_acquire(
-                    newAttribute->aBase.pMemberName
-                    = baseAttribute->aBase.pMemberName);
+                newAttribute->aBase.pMemberName
+                    = baseAttribute->aBase.pMemberName;
+                rtl_uString_acquire(newAttribute->aBase.pMemberName);
                 newAttribute->bReadOnly = baseAttribute->bReadOnly;
-                typelib_typedescriptionreference_acquire(
-                    newAttribute->pAttributeTypeRef
-                    = baseAttribute->pAttributeTypeRef);
+                newAttribute->pAttributeTypeRef
+                    = baseAttribute->pAttributeTypeRef;
+                typelib_typedescriptionreference_acquire(newAttribute->pAttributeTypeRef);
                 newAttribute->pInterface
                     = reinterpret_cast< typelib_InterfaceTypeDescription * >(
                         interface);
@@ -2077,7 +2083,8 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_new(
         pTDR->eTypeClass = eTypeClass;
         pTDR->pUniqueIdentifier = nullptr;
         pTDR->pReserved = nullptr;
-        rtl_uString_acquire( pTDR->pTypeName = pTypeName );
+        pTDR->pTypeName = pTypeName;
+        rtl_uString_acquire( pTDR->pTypeName );
         pTDR->pType = nullptr;
         *ppTDR = pTDR;
     }

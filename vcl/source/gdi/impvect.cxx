@@ -564,7 +564,9 @@ void ImplChain::ImplEndAdd( sal_uLong nFlag )
             for( sal_uLong i = 0; i < mnCount; )
             {
                 const ChainMove& rMove = aImplMove[ mpCodes[ i ] ];
-                aArr[ ++i ] = Point( nLastX += rMove.nDX, nLastY += rMove.nDY );
+                nLastX += rMove.nDX;
+                nLastY += rMove.nDY;
+                aArr[ ++i ] = Point( nLastX, nLastY );
             }
 
             aArr.ImplSetRealSize( mnCount + 1 );

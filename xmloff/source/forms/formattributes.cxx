@@ -262,7 +262,8 @@ namespace xmloff
         aAssignment.aPropertyType = _rType;
 
         // redundance, the accessor is stored in aAssignment.sAttributeName, too
-        return m_aKnownProperties[sAttributeName] = aAssignment;
+        m_aKnownProperties[sAttributeName] = aAssignment;
+        return m_aKnownProperties[sAttributeName];
     }
 
 }   // namespace xmloff

@@ -1444,8 +1444,11 @@ sal_Int32 SvNumberformat::ImpGetNumber(OUStringBuffer& rString,
     sal_Unicode cToken;
     sal_Int32 nLen = rString.getLength();
     OUStringBuffer sBuffSymbol;
-    while ( nPos < nLen && ((cToken = rString[nPos]) != ']') )
+    while ( nPos < nLen )
     {
+        cToken = rString[nPos];
+        if (cToken == ']')
+            break;
         if (cToken == ' ')
         {                                               // delete spaces
             rString.remove(nPos,1);
@@ -1610,8 +1613,11 @@ SvNumberformat::LocaleType SvNumberformat::ImpGetLocaleType(const OUString& rStr
     sal_Unicode cToken = 0;
     sal_Int32 nStart = nPos;
     sal_Int32 nLen = rString.getLength();
-    while ( nPos < nLen && (nPos - nStart < 8) && ((cToken = rString[nPos]) != ']') )
+    while ( nPos < nLen && (nPos - nStart < 8) )
     {
+        cToken = rString[nPos];
+        if (cToken == ']')
+            break;
         if ( '0' <= cToken && cToken <= '9' )
         {
             nNum *= 16;
@@ -2010,15 +2016,17 @@ OUString SvNumberformat::StripNewCurrencyDelimiters( const OUString& rStr )
             do
             {
                 nDash = rStr.indexOf( '-', ++nEnd );
+                nEnd = GetQuoteEnd( rStr, nDash );
             }
-            while ( (nEnd = GetQuoteEnd( rStr, nDash )) >= 0 );
+            while ( nEnd >= 0 );
             sal_Int32 nClose;
             nEnd = nStartPos - 1;
             do
             {
                 nClose = rStr.indexOf( ']', ++nEnd );
+                nEnd = GetQuoteEnd( rStr, nClose );
             }
-            while ( (nEnd = GetQuoteEnd( rStr, nClose )) >= 0 );
+            while ( nEnd >= 0 );
 
             if(nClose < 0)
             {

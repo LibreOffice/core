@@ -212,7 +212,8 @@ XResultSet_impl::OneMore()
         {
             m_aFolder.close();
             isFinalChanged();
-            return ( m_nIsOpen = false );
+            m_nIsOpen = false;
+            return m_nIsOpen;
         }
         else if( err == osl::FileBase::E_None )
         {

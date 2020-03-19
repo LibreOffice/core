@@ -111,16 +111,18 @@ public:
 inline css::uno::Reference< css::linguistic2::XLinguProperties >
         HyphenatorDispatcher::GetPropSet()
 {
-    return xPropSet.is() ?
-                xPropSet : xPropSet = ::linguistic::GetLinguProperties();
+    if (!xPropSet.is())
+        xPropSet = ::linguistic::GetLinguProperties();
+    return xPropSet;
 }
 
 
 inline css::uno::Reference< css::linguistic2::XSearchableDictionaryList >
         HyphenatorDispatcher::GetDicList()
 {
-    return xDicList.is() ?
-                xDicList : xDicList = ::linguistic::GetDictionaryList();
+    if (!xDicList.is())
+        xDicList = ::linguistic::GetDictionaryList();
+    return xDicList;
 }
 
 

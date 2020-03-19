@@ -122,9 +122,8 @@ namespace
             if( sNm == sCompare )
             {
                 // found, so get the data
-                const SwNodeIndex* pIdx;
-                if( nullptr != (pIdx = pSectFormat->GetContent().GetContentIdx() ) &&
-                    &pSectFormat->GetDoc()->GetNodes() == &pIdx->GetNodes() )
+                const SwNodeIndex* pIdx = pSectFormat->GetContent().GetContentIdx();
+                if( pIdx && &pSectFormat->GetDoc()->GetNodes() == &pIdx->GetNodes() )
                 {
                     // a table in the normal NodesArr
                     pItem->pSectNd = pIdx->GetNode().GetSectionNode();
@@ -142,17 +141,18 @@ namespace
         OUString sNm( GetAppCharClass().lowercase( pTableFormat->GetName() ));
         if ( sNm == pItem->m_Item )
         {
-            SwTable* pTmpTable;
-            SwTableBox* pFBox;
-            if( nullptr != ( pTmpTable = SwTable::FindTable( pTableFormat ) ) &&
-                nullptr != ( pFBox = pTmpTable->GetTabSortBoxes()[0] ) &&
-                pFBox->GetSttNd() &&
-                &pTableFormat->GetDoc()->GetNodes() == &pFBox->GetSttNd()->GetNodes() )
+            SwTable* pTmpTable = SwTable::FindTable( pTableFormat );
+            if( pTmpTable )
             {
-                // a table in the normal NodesArr
-                pItem->pTableNd = const_cast<SwTableNode*>(
-                                            pFBox->GetSttNd()->FindTableNode());
-                return false;
+                SwTableBox* pFBox = pTmpTable->GetTabSortBoxes()[0];
+                if( pFBox && pFBox->GetSttNd() &&
+                    &pTableFormat->GetDoc()->GetNodes() == &pFBox->GetSttNd()->GetNodes() )
+                {
+                    // a table in the normal NodesArr
+                    pItem->pTableNd = const_cast<SwTableNode*>(
+                                                pFBox->GetSttNd()->FindTableNode());
+                    return false;
+                }
             }
             // If the name is already correct, but not the rest then we don't have them.
             // The names are always unique.
@@ -337,13 +337,16 @@ void DocumentLinksAdministrationManager::SetData( const OUString& rItem )
     {
         // bookmarks
         ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*m_rDoc.getIDocumentMarkAccess(), rItem, bCaseSensitive);
-        if(pBkmk && pBkmk->IsExpanded()
-            && (nullptr == (pObj = pBkmk->GetRefObject())))
+        if(pBkmk && pBkmk->IsExpanded())
         {
-            // mark found, but no link yet -> create hotlink
-            pObj = new SwServerObject(*pBkmk);
-            pBkmk->SetRefObject(pObj);
-            GetLinkManager().InsertServer(pObj);
+            pObj = pBkmk->GetRefObject();
+            if( !pObj )
+            {
+                // mark found, but no link yet -> create hotlink
+                pObj = new SwServerObject(*pBkmk);
+                pBkmk->SetRefObject(pObj);
+                GetLinkManager().InsertServer(pObj);
+            }
         }
         if(pObj)
             return pObj;
@@ -356,13 +359,16 @@ void DocumentLinksAdministrationManager::SetData( const OUString& rItem )
                 break;
         }
 
-        if(aPara.pSectNd
-            && (nullptr == (pObj = aPara.pSectNd->GetSection().GetObject())))
+        if(aPara.pSectNd)
         {
-            // section found, but no link yet -> create hotlink
-            pObj = new SwServerObject( *aPara.pSectNd );
-            aPara.pSectNd->GetSection().SetRefObject( pObj );
-            GetLinkManager().InsertServer(pObj);
+            pObj = aPara.pSectNd->GetSection().GetObject();
+            if( !pObj )
+            {
+                // section found, but no link yet -> create hotlink
+                pObj = new SwServerObject( *aPara.pSectNd );
+                aPara.pSectNd->GetSection().SetRefObject( pObj );
+                GetLinkManager().InsertServer(pObj);
+            }
         }
         if(pObj)
             return pObj;
@@ -378,13 +384,16 @@ void DocumentLinksAdministrationManager::SetData( const OUString& rItem )
         if (!(lcl_FindTable(pFormat, &aPara)))
             break;
     }
-    if(aPara.pTableNd
-        && (nullptr == (pObj = aPara.pTableNd->GetTable().GetObject())))
+    if(aPara.pTableNd)
     {
-        // table found, but no link yet -> create hotlink
-        pObj = new SwServerObject(*aPara.pTableNd);
-        aPara.pTableNd->GetTable().SetRefObject(pObj);
-        GetLinkManager().InsertServer(pObj);
+        pObj = aPara.pTableNd->GetTable().GetObject();
+        if( !pObj )
+        {
+            // table found, but no link yet -> create hotlink
+            pObj = new SwServerObject(*aPara.pTableNd);
+            aPara.pTableNd->GetTable().SetRefObject(pObj);
+            GetLinkManager().InsertServer(pObj);
+        }
     }
     return pObj;
 }
@@ -477,12 +486,18 @@ bool DocumentLinksAdministrationManager::SelectServerObj( const OUString& rStr, 
             SwNodeIndex* pIdx;
             SwNode* pNd;
             const SwFlyFrameFormat* pFlyFormat = m_rDoc.FindFlyByName( sName );
-            if( pFlyFormat &&
-                nullptr != ( pIdx = const_cast<SwNodeIndex*>(pFlyFormat->GetContent().GetContentIdx()) ) &&
-                !( pNd = &pIdx->GetNode())->IsNoTextNode() )
+            if( pFlyFormat )
             {
-                rpRange.reset(new SwNodeRange( *pNd, 1, *pNd->EndOfSectionNode() ));
-                return true;
+                pIdx = const_cast<SwNodeIndex*>(pFlyFormat->GetContent().GetContentIdx());
+                if( pIdx )
+                {
+                    pNd = &pIdx->GetNode();
+                    if( !pNd->IsNoTextNode() )
+                    {
+                        rpRange.reset(new SwNodeRange( *pNd, 1, *pNd->EndOfSectionNode() ));
+                        return true;
+                    }
+                }
             }
         }
         else if( sCmp == "region" )

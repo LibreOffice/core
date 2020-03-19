@@ -970,8 +970,8 @@ bool FuPoor::MouseButtonUp (const MouseEvent& rMEvt)
     SetMouseButtonCode(rMEvt.GetButtons());
 
     aDelayToScrollTimer.Stop ();
-    return bScrollable  =
-        bDelayActive = false;
+    bScrollable = bDelayActive = false;
+    return bScrollable;
 }
 
 bool FuPoor::MouseButtonDown(const MouseEvent& rMEvt)

@@ -129,7 +129,8 @@ void
             error(ERROR, "Unidentifiable control line");
         return;                         /* else empty line */
     }
-    if ((np = lookup(tp, 0)) == NULL || ((np->flag & ISKW) == 0 && !skipping))
+    np = lookup(tp, 0);
+    if (np == NULL || ((np->flag & ISKW) == 0 && !skipping))
     {
         error(WARNING, "Unknown preprocessor control %t", tp);
         return;

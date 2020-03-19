@@ -92,9 +92,11 @@ void ZipPackageEntry::doSetParent ( ZipPackageFolder * pNewParent )
 
 void SAL_CALL ZipPackageEntry::setParent( const uno::Reference< XInterface >& xNewParent )
 {
-    sal_Int64 nTest(0);
+    if ( !xNewParent.is() )
+        throw NoSupportException(THROW_WHERE );
     uno::Reference < XUnoTunnel > xTunnel ( xNewParent, UNO_QUERY );
-    if ( !xNewParent.is() || ( nTest = xTunnel->getSomething ( ZipPackageFolder::getUnoTunnelId () ) ) == 0 )
+    sal_Int64 nTest = xTunnel->getSomething ( ZipPackageFolder::getUnoTunnelId () );
+    if ( nTest == 0 )
         throw NoSupportException(THROW_WHERE );
 
     ZipPackageFolder *pNewParent = reinterpret_cast < ZipPackageFolder * > ( nTest );

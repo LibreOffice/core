@@ -285,8 +285,8 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, ConvertDat
         // get URL
         if( SgaObjKind::SvDraw == eObjKind )
         {
-            OUString aFileName( "gallery/svdraw/dd" );
-            aNewURL = INetURLObject( aFileName += OUString::number( ++nNextNumber % 99999999 ), INetProtocol::PrivSoffice );
+            OUString aFileName = "gallery/svdraw/dd" + OUString::number( ++nNextNumber % 99999999 );
+            aNewURL = INetURLObject( aFileName, INetProtocol::PrivSoffice );
 
             bExists = false;
 
@@ -1384,8 +1384,8 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
             {
                 if( SgaObjKind::SvDraw == pObj->eObjKind )
                 {
-                    OUString aDummyURL( "gallery/svdraw/" );
-                    pObj->aURL = INetURLObject( aDummyURL += aFileName, INetProtocol::PrivSoffice );
+                    OUString aDummyURL = "gallery/svdraw/" + aFileName;
+                    pObj->aURL = INetURLObject( aDummyURL, INetProtocol::PrivSoffice );
                 }
                 else
                 {

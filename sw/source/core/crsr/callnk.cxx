@@ -197,8 +197,13 @@ SwCallLink::~SwCallLink() COVERITY_NOEXCEPT_FALSE
 
     const SwFrame* pFrame;
     const SwFlyFrame *pFlyFrame;
-    if (!m_rShell.ActionPend() && nullptr != (pFrame = pCNd->getLayoutFrame(m_rShell.GetLayout(), nullptr, nullptr)) &&
-        nullptr != ( pFlyFrame = pFrame->FindFlyFrame() ) && !m_rShell.IsTableMode() )
+    if (m_rShell.ActionPend())
+        return;
+    pFrame = pCNd->getLayoutFrame(m_rShell.GetLayout(), nullptr, nullptr);
+    if (!pFrame)
+        return;
+    pFlyFrame = pFrame->FindFlyFrame();
+    if ( pFlyFrame && !m_rShell.IsTableMode() )
     {
         const SwNodeIndex* pIndex = pFlyFrame->GetFormat()->GetContent().GetContentIdx();
         OSL_ENSURE( pIndex, "Fly without Content" );
@@ -224,9 +229,13 @@ long SwCallLink::getLayoutFrame(const SwRootFrame* pRoot,
         if( pFrame->HasFollow() )
         {
             TextFrameIndex const nPos(pFrame->MapModelToView(&rNd, nCntPos));
-            while( nullptr != ( pNext = pFrame->GetFollow() ) &&
-                    nPos >= pNext->GetOffset())
+            for (;;)
+            {
+                pNext = pFrame->GetFollow();
+                if(!pNext || nPos < pNext->GetOffset())
+                    break;
                 pFrame = pNext;
+            }
         }
 
         return pFrame->getFrameArea().Left();

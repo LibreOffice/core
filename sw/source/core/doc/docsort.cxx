@@ -246,8 +246,11 @@ OUString SwSortBoxElement::GetKey(sal_uInt16 nKey) const
             // Iterate over all the Box's TextNodes
             const SwNode *pNd = nullptr, *pEndNd = pMyBox->GetSttNd()->EndOfSectionNode();
             for( sal_uLong nIdx = pMyBox->GetSttIdx() + 1; pNd != pEndNd; ++nIdx )
-                if( ( pNd = pDoc->GetNodes()[ nIdx ])->IsTextNode() )
+            {
+                pNd = pDoc->GetNodes()[ nIdx ];
+                if( pNd->IsTextNode() )
                     aRetStr.append(pNd->GetTextNode()->GetText());
+            }
         }
     }
     return aRetStr.makeStringAndClear();
@@ -345,11 +348,14 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
             pRedlPam->GetPoint()->nNode.Assign( aEndIdx.GetNode() );
             pCNd = pRedlPam->GetContentNode();
             sal_Int32 nCLen = 0;
-            if( !pCNd &&
-                nullptr != (pCNd = GetNodes()[ aEndIdx.GetIndex()-1 ]->GetContentNode()))
+            if( !pCNd )
             {
-                nCLen = pCNd->Len();
-                pRedlPam->GetPoint()->nNode.Assign( *pCNd );
+                pCNd = GetNodes()[ aEndIdx.GetIndex()-1 ]->GetContentNode();
+                if( pCNd )
+                {
+                    nCLen = pCNd->Len();
+                    pRedlPam->GetPoint()->nNode.Assign( *pCNd );
+                }
             }
             pRedlPam->GetPoint()->nContent.Assign( pCNd, nCLen );
 

@@ -123,8 +123,11 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
     vector< vector<HitItem> > aIndexFolderResultVectorVector;
 
     bool bTemporary;
-    while( !(idxDir = aIndexFolderIt.nextIndexFolder( bExtension, bTemporary )).isEmpty() )
+    for (;;)
     {
+        idxDir = aIndexFolderIt.nextIndexFolder( bExtension, bTemporary );
+        if( idxDir.isEmpty() )
+            break;
         vector<HitItem> aIndexFolderResultVector;
 
         try

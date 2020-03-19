@@ -182,8 +182,9 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
                         &pTD, sTypeName.pData, 0, 0, 0, 0, 0, nullptr, 3, pMembers );
 
                     ::typelib_typedescription_register( reinterpret_cast<typelib_TypeDescription **>(&pTD) );
+                    s_aTypes[typelib_TypeClass_INTERFACE] = pTD->aBase.pWeakRef;
                     ::typelib_typedescriptionreference_acquire(
-                        s_aTypes[typelib_TypeClass_INTERFACE] = pTD->aBase.pWeakRef );
+                        s_aTypes[typelib_TypeClass_INTERFACE] );
                     // another static ref:
                     ++s_aTypes[typelib_TypeClass_INTERFACE]->nStaticRefCount;
                     ::typelib_typedescription_release( &pTD->aBase );
@@ -212,8 +213,9 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
                     ::typelib_typedescription_new(
                         &pTD1, typelib_TypeClass_EXCEPTION, sTypeName1.pData, nullptr, 2, aMembers );
                     typelib_typedescription_register( &pTD1 );
+                    s_aTypes[typelib_TypeClass_EXCEPTION] = pTD1->pWeakRef;
                     typelib_typedescriptionreference_acquire(
-                        s_aTypes[typelib_TypeClass_EXCEPTION] = pTD1->pWeakRef );
+                        s_aTypes[typelib_TypeClass_EXCEPTION]);
                     // another static ref:
                     ++s_aTypes[typelib_TypeClass_EXCEPTION]->nStaticRefCount;
                     // RuntimeException
@@ -369,8 +371,9 @@ void init(
                     }
                     for ( sal_Int32 i = 0 ; i < nMembers; ++i )
                     {
+                        pComp->ppTypeRefs[i] = ppMembers[i];
                         ::typelib_typedescriptionreference_acquire(
-                            pComp->ppTypeRefs[i] = ppMembers[i] );
+                            pComp->ppTypeRefs[i] );
                         // write offset
                         typelib_TypeDescription * pTD = nullptr;
                         TYPELIB_DANGER_GET( &pTD, pComp->ppTypeRefs[i] );

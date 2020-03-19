@@ -8,6 +8,7 @@
  */
 
 #include <map>
+#include <memory>
 #include <rtl/ustring.hxx>
 
 namespace test1
@@ -17,18 +18,19 @@ int foo(int);
 void main()
 {
     int x = 1;
-    foo(x = 2); // expected-error {{buried assignment, very hard to read [loplugin:buriedassign]}}
+    foo(x = 2);
+    // expected-error@-1 {{buried assignment, rather put on own line [loplugin:buriedassign]}}
     int y = x = 1; // no warning expected
     (void)y;
-    int z = foo(
-        x = 1); // expected-error {{buried assignment, very hard to read [loplugin:buriedassign]}}
+    int z = foo(x = 1);
+    // expected-error@-1 {{buried assignment, rather put on own line [loplugin:buriedassign]}}
     (void)z;
     switch (x = 1)
-    { // expected-error@-1 {{buried assignment, very hard to read [loplugin:buriedassign]}}
+    { // expected-error@-1 {{buried assignment, rather put on own line [loplugin:buriedassign]}}
     }
     std::map<int, int> map1;
-    map1[x = 1]
-        = 1; // expected-error@-1 {{buried assignment, very hard to read [loplugin:buriedassign]}}
+    map1[x = 1] = 1;
+    // expected-error@-1 {{buried assignment, rather put on own line [loplugin:buriedassign]}}
 }
 }
 
@@ -51,16 +53,17 @@ MyInt foo(MyInt);
 void main()
 {
     MyInt x = 1;
-    foo(x = 2); // expected-error {{buried assignment, very hard to read [loplugin:buriedassign]}}
+    foo(x = 2);
+    // expected-error@-1 {{buried assignment, rather put on own line [loplugin:buriedassign]}}
     MyInt y = x = 1; // no warning expected
     (void)y;
-    MyInt z = foo(
-        x = 1); // expected-error {{buried assignment, very hard to read [loplugin:buriedassign]}}
+    MyInt z = foo(x = 1);
+    // expected-error@-1 {{buried assignment, rather put on own line [loplugin:buriedassign]}}
     (void)z;
     z = x; // no warning expected
     std::map<MyInt, int> map1;
-    map1[x = 1]
-        = 1; // expected-error@-1 {{buried assignment, very hard to read [loplugin:buriedassign]}}
+    map1[x = 1] = 1;
+    // expected-error@-1 {{buried assignment, rather put on own line [loplugin:buriedassign]}}
 }
 }
 
@@ -73,8 +76,24 @@ void main(OUString sUserAutoCorrFile, OUString sExt)
         sRet = sUserAutoCorrFile; // no warning expected
     if (sUserAutoCorrFile == "yyy")
         (sRet = sUserAutoCorrFile)
-            += sExt; // expected-error@-1 {{buried assignment, very hard to read [loplugin:buriedassign]}}
+            += sExt; // expected-error@-1 {{buried assignment, rather put on own line [loplugin:buriedassign]}}
 }
 }
 
+// no warning expected
+namespace test4
+{
+struct Task
+{
+    void exec();
+};
+std::unique_ptr<Task> pop();
+
+void foo()
+{
+    std::unique_ptr<Task> pTask;
+    while ((pTask = pop()))
+        pTask->exec();
+}
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

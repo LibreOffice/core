@@ -3711,19 +3711,22 @@ void ScInterpreter::ScColRowNameAuto()
         if (aAbs.aEnd.Row() > nRow2)
             aAbs.aEnd.SetRow(nRow2);
         SCROW nMyRow;
-        if ( aPos.Col() == nStartCol
-          && nStartRow <= (nMyRow = aPos.Row()) && nMyRow <= aAbs.aEnd.Row())
-        {   //Formula in the same column and within the range
-            if ( nMyRow == nStartRow )
-            {   // take the rest under the name
-                nStartRow++;
-                if ( nStartRow > pDok->MaxRow() )
-                    nStartRow = pDok->MaxRow();
-                aAbs.aStart.SetRow(nStartRow);
-            }
-            else
-            {   // below the name to the formula cell
-                aAbs.aEnd.SetRow(nMyRow - 1);
+        if ( aPos.Col() == nStartCol )
+        {
+            nMyRow = aPos.Row();
+            if ( nStartRow <= nMyRow && nMyRow <= aAbs.aEnd.Row())
+            {   //Formula in the same column and within the range
+                if ( nMyRow == nStartRow )
+                {   // take the rest under the name
+                    nStartRow++;
+                    if ( nStartRow > pDok->MaxRow() )
+                        nStartRow = pDok->MaxRow();
+                    aAbs.aStart.SetRow(nStartRow);
+                }
+                else
+                {   // below the name to the formula cell
+                    aAbs.aEnd.SetRow(nMyRow - 1);
+                }
             }
         }
     }
@@ -3734,19 +3737,22 @@ void ScInterpreter::ScColRowNameAuto()
         if (aAbs.aEnd.Col() > nCol2)
             aAbs.aEnd.SetCol(nCol2);
         SCCOL nMyCol;
-        if ( aPos.Row() == nStartRow
-          && nStartCol <= (nMyCol = aPos.Col()) && nMyCol <= aAbs.aEnd.Col())
-        {   //Formula in the same column and within the range
-            if ( nMyCol == nStartCol )
-            {    // take the rest under the name
-                nStartCol++;
-                if ( nStartCol > pDok->MaxCol() )
-                    nStartCol = pDok->MaxCol();
-                aAbs.aStart.SetCol(nStartCol);
-            }
-            else
-            {   // below the name to the formula cell
-                aAbs.aEnd.SetCol(nMyCol - 1);
+        if ( aPos.Row() == nStartRow )
+        {
+            nMyCol = aPos.Col();
+            if (nStartCol <= nMyCol && nMyCol <= aAbs.aEnd.Col())
+            {   //Formula in the same column and within the range
+                if ( nMyCol == nStartCol )
+                {    // take the rest under the name
+                    nStartCol++;
+                    if ( nStartCol > pDok->MaxCol() )
+                        nStartCol = pDok->MaxCol();
+                    aAbs.aStart.SetCol(nStartCol);
+                }
+                else
+                {   // below the name to the formula cell
+                    aAbs.aEnd.SetCol(nMyCol - 1);
+                }
             }
         }
     }
@@ -3966,9 +3972,11 @@ StackVar ScInterpreter::Interpret()
 
     OpCode eOp = ocNone;
     aCode.Reset();
-    while( ( pCur = aCode.Next() ) != nullptr
-            && (nGlobalError == FormulaError::NONE || nErrorFunction <= nErrorFunctionCount) )
+    for (;;)
     {
+        pCur = aCode.Next();
+        if (!pCur || (nGlobalError != FormulaError::NONE && nErrorFunction > nErrorFunctionCount) )
+            break;
         eOp = pCur->GetOpCode();
         cPar = pCur->GetByte();
         if ( eOp == ocPush )

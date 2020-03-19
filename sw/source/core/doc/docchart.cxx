@@ -83,16 +83,13 @@ void SwDoc::DoUpdateAllCharts()
         const SwFrameFormats& rTableFormats = *GetTableFrameFormats();
         for( size_t n = 0; n < rTableFormats.size(); ++n )
         {
-            SwTable* pTmpTable;
-            const SwTableNode* pTableNd;
             const SwFrameFormat* pFormat = rTableFormats[ n ];
-
-            if( nullptr != ( pTmpTable = SwTable::FindTable( pFormat ) ) &&
-                nullptr != ( pTableNd = pTmpTable->GetTableNode() ) &&
-                pTableNd->GetNodes().IsDocNodes() )
-            {
-                UpdateCharts_( *pTmpTable, *pVSh );
-            }
+            if( SwTable* pTmpTable = SwTable::FindTable( pFormat ) )
+                if( const SwTableNode* pTableNd = pTmpTable->GetTableNode() )
+                    if( pTableNd->GetNodes().IsDocNodes() )
+                    {
+                        UpdateCharts_( *pTmpTable, *pVSh );
+                    }
         }
     }
 }
@@ -105,8 +102,8 @@ void SwDoc::UpdateCharts_( const SwTable& rTable, SwViewShell const & rVSh ) con
     while( nullptr != (pStNd = aIdx.GetNode().GetStartNode()) )
     {
         ++aIdx;
-        SwOLENode *pONd;
-        if( nullptr != ( pONd = aIdx.GetNode().GetOLENode() ) &&
+        SwOLENode *pONd = aIdx.GetNode().GetOLENode();
+        if( pONd &&
             aName == pONd->GetChartTableName() &&
             pONd->getLayoutFrame( rVSh.GetLayout() ) )
         {
@@ -142,8 +139,8 @@ void SwDoc::SetTableName( SwFrameFormat& rTableFormat, const OUString &rNewName 
         const SwFrameFormats& rTable = *GetTableFrameFormats();
         for( size_t i = rTable.size(); i; )
         {
-            const SwFrameFormat* pFormat;
-            if( !( pFormat = rTable[ --i ] )->IsDefault() &&
+            const SwFrameFormat* pFormat = rTable[ --i ];
+            if( !pFormat->IsDefault() &&
                 pFormat->GetName() == rNewName && IsUsed( *pFormat ) )
             {
                 bNameFound = true;

@@ -156,7 +156,13 @@ void ScCsvGrid::UpdateOffsetX()
 {
     sal_Int32 nLastLine = GetLastVisLine() + 1;
     sal_Int32 nDigits = 2;
-    while( nLastLine /= 10 ) ++nDigits;
+    for (;;)
+    {
+        nLastLine /= 10;
+        if (!nLastLine)
+            break;
+        ++nDigits;
+    }
     nDigits = std::max( nDigits, sal_Int32( 3 ) );
     Execute(CSVCMD_SETHDRWIDTH, GetDrawingArea()->get_approximate_digit_width() * nDigits);
 }

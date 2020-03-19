@@ -529,9 +529,11 @@ bool SwTable::InsertRow_( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     FndBox_* pFndBox = &aFndBox;
     {
         FndLine_* pFndLine;
-        while( 1 == pFndBox->GetLines().size() &&
-            1 == (pFndLine = pFndBox->GetLines()[0].get())->GetBoxes().size())
+        while( 1 == pFndBox->GetLines().size() )
         {
+            pFndLine = pFndBox->GetLines()[0].get();
+            if( 1 != pFndLine->GetBoxes().size() )
+                break;
             // Don't go down too far! One Line with Box needs to remain!
             FndBox_ *const pTmpBox = pFndLine->GetBoxes().front().get();
             if( !pTmpBox->GetLines().empty() )
@@ -1364,13 +1366,16 @@ static void lcl_Merge_MoveBox(FndBox_ & rFndBox, InsULPara *const pULPara)
                 lcl_CpyBoxes( 0, nPos, *pBoxes, pULPara->pInsLine );
         }
         else                // Right
+        {
             // if there are Boxes behind it, move them
-            if( (nPos = pFndTableBox->GetUpper()->GetBoxPos( pFndTableBox )) +1 < static_cast<sal_uInt16>(pBoxes->size()) )
+            nPos = pFndTableBox->GetUpper()->GetBoxPos( pFndTableBox );
+            if( nPos +1 < static_cast<sal_uInt16>(pBoxes->size()) )
             {
                 nInsPos = pULPara->pInsLine->GetTabBoxes().size();
                 lcl_CpyBoxes( nPos+1, pBoxes->size(),
                                     *pBoxes, pULPara->pInsLine );
             }
+        }
     }
     // Upper/Lower and still deeper?
     else if (!rFndBox.GetLines().empty())
@@ -1431,7 +1436,8 @@ static void lcl_Merge_MoveLine(FndLine_& rFndLine, InsULPara *const pULPara)
             if( pULPara->bUL )  // Upper ?
             {
                 // If there are Lines before it, move them
-                if( 0 != ( nPos = pLines->GetPos( pFndLn )) )
+                nPos = pLines->GetPos( pFndLn );
+                if( 0 != nPos )
                     lcl_CpyLines( 0, nPos, *pLines, pULPara->pInsBox );
             }
             else
@@ -1465,7 +1471,8 @@ static void lcl_Merge_MoveLine(FndLine_& rFndLine, InsULPara *const pULPara)
             if( pULPara->bUL )  // Upper ?
             {
                 // If there are Lines before it, move them
-                if( 0 != ( nPos = pLines->GetPos( pFndLn )) )
+                nPos = pLines->GetPos( pFndLn );
+                if( 0 != nPos )
                     lcl_CpyLines( 0, nPos, *pLines, pLMBox, 0 );
             }
             else
@@ -2189,14 +2196,17 @@ SwTableBox* SwTableLine::FindNextBox( const SwTable& rTable,
     const SwTableLine* pLine = this;            // for M800
     SwTableBox* pBox;
     sal_uInt16 nFndPos;
-    if( !GetTabBoxes().empty() && pSrchBox &&
-        USHRT_MAX != ( nFndPos = GetBoxPos( pSrchBox )) &&
-        nFndPos + 1 != static_cast<sal_uInt16>(GetTabBoxes().size()) )
+    if( !GetTabBoxes().empty() && pSrchBox )
     {
-        pBox = GetTabBoxes()[ nFndPos + 1 ];
-        while( !pBox->GetTabLines().empty() )
-            pBox = pBox->GetTabLines().front()->GetTabBoxes()[0];
-        return pBox;
+        nFndPos = GetBoxPos( pSrchBox );
+        if( USHRT_MAX != nFndPos &&
+            nFndPos + 1 != static_cast<sal_uInt16>(GetTabBoxes().size()) )
+        {
+            pBox = GetTabBoxes()[ nFndPos + 1 ];
+            while( !pBox->GetTabLines().empty() )
+                pBox = pBox->GetTabLines().front()->GetTabBoxes()[0];
+            return pBox;
+        }
     }
 
     if( GetUpper() )
@@ -2237,17 +2247,19 @@ SwTableBox* SwTableLine::FindPreviousBox( const SwTable& rTable,
     const SwTableLine* pLine = this;            // for M800
     SwTableBox* pBox;
     sal_uInt16 nFndPos;
-    if( !GetTabBoxes().empty() && pSrchBox &&
-        USHRT_MAX != ( nFndPos = GetBoxPos( pSrchBox )) &&
-        nFndPos )
+    if( !GetTabBoxes().empty() && pSrchBox )
     {
-        pBox = GetTabBoxes()[ nFndPos - 1 ];
-        while( !pBox->GetTabLines().empty() )
+        nFndPos = GetBoxPos( pSrchBox );
+        if( USHRT_MAX != nFndPos && nFndPos )
         {
-            pLine = pBox->GetTabLines().back();
-            pBox = pLine->GetTabBoxes().back();
+            pBox = GetTabBoxes()[ nFndPos - 1 ];
+            while( !pBox->GetTabLines().empty() )
+            {
+                pLine = pBox->GetTabLines().back();
+                pBox = pLine->GetTabBoxes().back();
+            }
+            return pBox;
         }
-        return pBox;
     }
 
     if( GetUpper() )
@@ -2326,8 +2338,11 @@ static SwTwips lcl_GetDistance( SwTableBox* pBox, bool bLeft )
     bool bFirst = true;
     SwTwips nRet = 0;
     SwTableLine* pLine;
-    while( pBox && nullptr != ( pLine = pBox->GetUpper() ) )
+    while( pBox )
     {
+        pLine = pBox->GetUpper();
+        if( !pLine )
+            break;
         sal_uInt16 nStt = 0, nPos = pLine->GetBoxPos( pBox );
 
         if( bFirst && !bLeft )

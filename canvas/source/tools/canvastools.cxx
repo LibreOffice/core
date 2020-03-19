@@ -911,7 +911,10 @@ namespace canvas::tools
                                                             const ::basegfx::B2DHomMatrix&      i_transformation )
         {
             if( i_srcRect.isEmpty() )
-                return o_transform=i_transformation;
+            {
+                o_transform = i_transformation;
+                return o_transform;
+            }
 
             // transform by given transformation
             ::basegfx::B2DRectangle aTransformedRect;

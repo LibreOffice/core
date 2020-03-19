@@ -135,8 +135,8 @@ sal_uInt16 SwDoc::GetCurTOXMark( const SwPosition& rPos,
         if( ( nSttIdx = pHt->GetStart() ) < nCurrentPos )
         {
             // also check the end
-            if( nullptr == ( pEndIdx = pHt->End() ) ||
-                *pEndIdx <= nCurrentPos )
+            pEndIdx = pHt->End();
+            if( nullptr == pEndIdx || *pEndIdx <= nCurrentPos )
                 continue;       // keep searching
         }
         else if( nSttIdx > nCurrentPos )
@@ -1017,12 +1017,16 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
             const OUString& sPrimKey = rMark.GetPrimaryKey();
             const OUString& sSecKey = rMark.GetSecondaryKey();
             const SwTOXMark* pNextMark = nullptr;
-            while(m_aSortArr.size() > (nCnt + nRange)&&
-                    m_aSortArr[nCnt + nRange]->GetType() == TOX_SORT_INDEX &&
-                    nullptr != (pNextMark = &(m_aSortArr[nCnt + nRange]->pTextMark->GetTOXMark())) &&
-                    pNextMark->GetPrimaryKey() == sPrimKey &&
-                    pNextMark->GetSecondaryKey() == sSecKey)
+            while(m_aSortArr.size() > (nCnt + nRange) &&
+                    m_aSortArr[nCnt + nRange]->GetType() == TOX_SORT_INDEX )
+            {
+                pNextMark = &(m_aSortArr[nCnt + nRange]->pTextMark->GetTOXMark());
+                if( !pNextMark ||
+                    pNextMark->GetPrimaryKey() != sPrimKey ||
+                    pNextMark->GetSecondaryKey() != sSecKey)
+                    break;
                 nRange++;
+            }
         }
         // pass node index of table-of-content section and default page description
         // to method <GenerateText(..)>.
@@ -1653,9 +1657,13 @@ void SwTOXBaseSection::UpdatePageNum()
                         TextFrameIndex const nPos(static_cast<SwTextFrame*>(pFrame)
                             ->MapModelToView(static_cast<SwTextNode const*>(rTOXSource.pNd),
                                 rTOXSource.nPos));
-                        while( nullptr != ( pNext = static_cast<SwTextFrame*>(pFrame->GetFollow()) )
-                                && nPos >= pNext->GetOffset())
+                        for (;;)
+                        {
+                            pNext = static_cast<SwTextFrame*>(pFrame->GetFollow());
+                            if (!pNext || nPos < pNext->GetOffset())
+                                break;
                             pFrame = pNext;
+                        }
                     }
 
                     SwPageFrame*  pTmpPage = pFrame->FindPageFrame();

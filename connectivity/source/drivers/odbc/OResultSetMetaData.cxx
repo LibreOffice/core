@@ -163,7 +163,8 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount(  )
         return m_nColCount;
     sal_Int16 nNumResultCols=0;
     OTools::ThrowException(m_pConnection,N3SQLNumResultCols(m_aStatementHandle,&nNumResultCols),m_aStatementHandle,SQL_HANDLE_STMT,*this);
-    return m_nColCount = nNumResultCols;
+    m_nColCount = nNumResultCols;
+    return m_nColCount;
 }
 
 

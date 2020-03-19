@@ -1215,11 +1215,13 @@ void SfxLibraryContainer::implScanExtensions()
 {
 #if HAVE_FEATURE_EXTENSIONS
     ScriptExtensionIterator aScriptIt;
-    OUString aLibURL;
 
     bool bPureDialogLib = false;
-    while ( !(aLibURL = aScriptIt.nextBasicOrDialogLibrary( bPureDialogLib )).isEmpty())
+    for (;;)
     {
+        OUString aLibURL = aScriptIt.nextBasicOrDialogLibrary( bPureDialogLib );
+        if (aLibURL.isEmpty())
+            break;
         if( bPureDialogLib && maInfoFileName == "script" )
         {
             continue;

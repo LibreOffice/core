@@ -574,8 +574,12 @@ void KeywordInfo::KeywordElement::init( Databases const *pDatabases,helpdatafile
 {
     std::vector< OUString > id,anchor;
     int idx = -1,k;
-    while( ( idx = ids.indexOf( ';',k = ++idx ) ) != -1 )
+    for (;;)
     {
+        k = ++idx;
+        idx = ids.indexOf( ';', k );
+        if( idx == -1 )
+            break;
         int h = ids.indexOf( '#', k );
         if( h < idx )
         {
@@ -700,8 +704,11 @@ KeywordInfo* Databases::getKeyword( const OUString& Database,
         KeyDataBaseFileIterator aDbFileIt( m_xContext, *this, Database, Language );
         OUString fileURL;
         bool bExtension = false;
-        while( !(fileURL = aDbFileIt.nextDbFile( bExtension )).isEmpty() )
+        for (;;)
         {
+            fileURL = aDbFileIt.nextDbFile( bExtension );
+            if( fileURL.isEmpty() )
+                break;
             OUString fileNameHDFHelp( fileURL );
             if( bExtension )
                 fileNameHDFHelp += "_";
@@ -851,8 +858,11 @@ Reference< XHierarchicalNameAccess > Databases::findJarFileForPath
     JarFileIterator aJarFileIt( m_xContext, *this, jar, Language );
     Reference< XHierarchicalNameAccess > xTestNA;
     Reference< deployment::XPackage > xParentPackageBundle;
-    while( (xTestNA = aJarFileIt.nextJarFile( xParentPackageBundle, o_pExtensionPath, o_pExtensionRegistryPath )).is() )
+    for (;;)
     {
+        xTestNA = aJarFileIt.nextJarFile( xParentPackageBundle, o_pExtensionPath, o_pExtensionRegistryPath );
+        if( !xTestNA.is() )
+            break;
         if( xTestNA.is() && xTestNA->hasByHierarchicalName( path ) )
         {
             bool bSuccess = true;
@@ -1025,9 +1035,11 @@ void Databases::setActiveText( const OUString& Module,
     bool bSuccess = false;
     if( !bFoundAsEmpty )
     {
-        helpdatafileproxy::Hdf* pHdf = nullptr;
-        while( !bSuccess && (pHdf = aDbIt.nextHdf()) != nullptr )
+        while( !bSuccess )
         {
+            helpdatafileproxy::Hdf* pHdf = aDbIt.nextHdf();
+            if( !pHdf )
+                break;
             bSuccess = pHdf->getValueForKey( id, aHDFData );
             nSize = aHDFData.getSize();
             pData = aHDFData.getData();

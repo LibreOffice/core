@@ -272,18 +272,19 @@ SFErrCodes StreamToFile(TrueTypeCreator *_this, const char* fname)
     FILE* fd;
 
     if ((r = StreamToMemory(_this, &ptr, &length)) != SFErrCodes::Ok) return r;
-    if (fname && (fd = fopen(fname, "wb")) != nullptr)
+    r = SFErrCodes::BadFile;
+    if (fname)
     {
-        if (fwrite(ptr, 1, length, fd) != length) {
-            r = SFErrCodes::FileIo;
-        } else {
-            r = SFErrCodes::Ok;
+        fd = fopen(fname, "wb");
+        if (fd)
+        {
+            if (fwrite(ptr, 1, length, fd) != length) {
+                r = SFErrCodes::FileIo;
+            } else {
+                r = SFErrCodes::Ok;
+            }
+            fclose(fd);
         }
-        fclose(fd);
-    }
-    else
-    {
-        r = SFErrCodes::BadFile;
     }
     free(ptr);
     return r;

@@ -657,9 +657,10 @@ const ScRefList*        ScRefListToken::GetRefList() const  { return &aRefList; 
       bool              ScRefListToken::IsArrayResult() const { return mbArrayResult; }
 bool ScRefListToken::operator==( const FormulaToken& r ) const
 {
-    const ScRefListToken* p;
-    return FormulaToken::operator==( r ) && &aRefList == r.GetRefList() &&
-        ((p = dynamic_cast<const ScRefListToken*>(&r)) != nullptr) && mbArrayResult == p->IsArrayResult();
+    if (!FormulaToken::operator==( r ) || &aRefList != r.GetRefList())
+        return false;
+    const ScRefListToken* p = dynamic_cast<const ScRefListToken*>(&r);
+    return p && mbArrayResult == p->IsArrayResult();
 }
 
 ScMatrixToken::ScMatrixToken( const ScMatrixRef& p ) :
@@ -2168,22 +2169,26 @@ void ScTokenArray::MergeRangeReference( const ScAddress & rPos )
     if (!pCode || !nLen)
         return;
     sal_uInt16 nIdx = nLen;
-    FormulaToken *p1, *p2, *p3;      // ref, ocRange, ref
+
     // The actual types are checked in extendRangeReference().
-    if (((p3 = PeekPrev(nIdx)) != nullptr) &&
-            (((p2 = PeekPrev(nIdx)) != nullptr) && p2->GetOpCode() == ocRange) &&
-            ((p1 = PeekPrev(nIdx)) != nullptr))
+    FormulaToken *p3 = PeekPrev(nIdx); // ref
+    if (!p3)
+        return;
+    FormulaToken *p2 = PeekPrev(nIdx); // ocRange
+    if (!p2 || p2->GetOpCode() != ocRange)
+        return;
+    FormulaToken *p1 = PeekPrev(nIdx); // ref
+    if (!p1)
+        return;
+    FormulaTokenRef p = extendRangeReference( *mxSheetLimits, *p1, *p3, rPos, true);
+    if (p)
     {
-        FormulaTokenRef p = extendRangeReference( *mxSheetLimits, *p1, *p3, rPos, true);
-        if (p)
-        {
-            p->IncRef();
-            p1->DecRef();
-            p2->DecRef();
-            p3->DecRef();
-            nLen -= 2;
-            pCode[ nLen-1 ] = p.get();
-        }
+        p->IncRef();
+        p1->DecRef();
+        p2->DecRef();
+        p3->DecRef();
+        nLen -= 2;
+        pCode[ nLen-1 ] = p.get();
     }
 }
 
@@ -2267,28 +2272,28 @@ bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
     switch ( eDir )
     {
         case DIR_BOTTOM :
-            if ( rPos.Row() < mxSheetLimits->mnMaxRow )
-                nRow = (nExtend = rPos.Row()) + 1;
-            else
+            if ( rPos.Row() >= mxSheetLimits->mnMaxRow )
                 return false;
+            nExtend = rPos.Row();
+            nRow = nExtend + 1;
         break;
         case DIR_RIGHT :
-            if ( rPos.Col() < mxSheetLimits->mnMaxCol )
-                nCol = static_cast<SCCOL>(nExtend = rPos.Col()) + 1;
-            else
+            if ( rPos.Col() >= mxSheetLimits->mnMaxCol )
                 return false;
+            nExtend = rPos.Col();
+            nCol = static_cast<SCCOL>(nExtend) + 1;
         break;
         case DIR_TOP :
-            if ( rPos.Row() > 0 )
-                nRow = (nExtend = rPos.Row()) - 1;
-            else
+            if ( rPos.Row() <= 0 )
                 return false;
+            nExtend = rPos.Row();
+            nRow = nExtend - 1;
         break;
         case DIR_LEFT :
-            if ( rPos.Col() > 0 )
-                nCol = static_cast<SCCOL>(nExtend = rPos.Col()) - 1;
-            else
+            if ( rPos.Col() <= 0 )
                 return false;
+            nExtend = rPos.Col();
+            nCol = static_cast<SCCOL>(nExtend) - 1;
         break;
         default:
             OSL_FAIL( "unknown Direction" );
