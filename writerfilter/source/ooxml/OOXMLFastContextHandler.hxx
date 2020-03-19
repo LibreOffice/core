@@ -226,7 +226,8 @@ protected:
     const css::uno::Reference< css::uno::XComponentContext >& getComponentContext() const { return m_xContext;}
 
     bool inPositionV;
-    bool mbLayoutInCell; // o:allowincell
+    bool mbAllowInCell; // o:allowincell
+    bool mbIsVMLfound;
     OOXMLValue::Pointer_t mpGridAfter;
 
 private:
