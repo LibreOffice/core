@@ -149,6 +149,24 @@
     },
     {
       "key": {
+        "uuid": "afff9701_2738f201",
+        "filename": "include/comphelper/sequence.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-03-19T18:05:10Z",
+      "side": 1,
+      "message": "no, I haven\u0027t made the plugin that smart yet. Still need to do this, and deal with bool conversion operators",
+      "parentUuid": "ddc67f11_1ab77b70",
+      "revId": "1ca633c9888eb2f6d5395491cbe82e4a6b4982ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6afaf274_37d60751",
         "filename": "soltools/cpp/_unix.c",
         "patchSetId": 1
