@@ -3845,19 +3845,13 @@ Reference< uno::XInterface > SchXMLExport_Oasis_Content_createInstance(const Ref
 }
 
 // Oasis format
-Sequence< OUString > SchXMLExport_Oasis_Meta_getSupportedServiceNames() throw()
-{
-    return Sequence< OUString > { "com.sun.star.comp.Chart.XMLOasisMetaExporter" };
-}
 
-OUString SchXMLExport_Oasis_Meta_getImplementationName() throw()
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_comp_Chart_XMLOasisMetaExporter_get_implementation(
+    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
 {
-    return "SchXMLExport.Oasis.Meta";
-}
-
-Reference< uno::XInterface > SchXMLExport_Oasis_Meta_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr)
-{
-    return static_cast<cppu::OWeakObject*>(new SchXMLExport( comphelper::getComponentContext(rSMgr), SchXMLExport_Oasis_Meta_getImplementationName(), SvXMLExportFlags::META | SvXMLExportFlags::OASIS  ));
+    return cppu::acquire(new SchXMLExport(pCtx, "SchXMLExport.Oasis.Meta",
+                                          SvXMLExportFlags::META | SvXMLExportFlags::OASIS));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
