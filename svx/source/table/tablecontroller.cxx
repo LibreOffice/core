@@ -221,7 +221,7 @@ bool SvxTableController::onKeyInput(const KeyEvent& rKEvt, vcl::Window* pWindow 
     if(!checkTableObject())
         return false;
 
-    SdrTableObj& rTableObj(*mxTableObj.get());
+    SdrTableObj& rTableObj(*mxTableObj);
     SdrModel& rModel(rTableObj.getSdrModelFromSdrObject());
 
     // check if we are read only
@@ -429,7 +429,7 @@ void SvxTableController::GetState( SfxItemSet& rSet )
     if(!mxTable.is() || !mxTableObj.is())
         return;
 
-    SdrTableObj& rTableObj(*mxTableObj.get());
+    SdrTableObj& rTableObj(*mxTableObj);
     SdrModel& rModel(rTableObj.getSdrModelFromSdrObject());
     std::unique_ptr<SfxItemSet> xSet;
     bool bVertDone(false);
@@ -519,7 +519,7 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
     if(!checkTableObject())
         return;
 
-    SdrTableObj& rTableObj(*mxTableObj.get());
+    SdrTableObj& rTableObj(*mxTableObj);
     SdrModel& rModel(rTableObj.getSdrModelFromSdrObject());
     bool bInsertAfter = true;
     sal_uInt16 nCount = 0;
@@ -893,7 +893,7 @@ void SvxTableController::onFormatTable(const SfxRequest& rReq)
     if(!mxTableObj.is())
         return;
 
-    SdrTableObj& rTableObj(*mxTableObj.get());
+    SdrTableObj& rTableObj(*mxTableObj);
     SdrModel& rModel(rTableObj.getSdrModelFromSdrObject());
     const SfxItemSet* pArgs = rReq.GetArgs();
 
@@ -1057,7 +1057,7 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
     if(!checkTableObject())
         return;
 
-    SdrTableObj& rTableObj(*mxTableObj.get());
+    SdrTableObj& rTableObj(*mxTableObj);
     SdrModel& rModel(rTableObj.getSdrModelFromSdrObject());
 
     if(!pArgs || (SfxItemState::SET != pArgs->GetItemState(SID_TABLE_STYLE, false)))
@@ -1143,7 +1143,7 @@ void SvxTableController::SetTableStyleSettings( const SfxItemSet* pArgs )
     if(!checkTableObject())
         return;
 
-    SdrTableObj& rTableObj(*mxTableObj.get());
+    SdrTableObj& rTableObj(*mxTableObj);
     SdrModel& rModel(rTableObj.getSdrModelFromSdrObject());
 
     TableStyleSettings aSettings(rTableObj.getTableStyleSettings() );
@@ -1189,7 +1189,7 @@ void SvxTableController::SetVertical( sal_uInt16 nSId )
     if(!checkTableObject())
         return;
 
-    SdrTableObj& rTableObj(*mxTableObj.get());
+    SdrTableObj& rTableObj(*mxTableObj);
     SdrModel& rModel(rTableObj.getSdrModelFromSdrObject());
 
     TableModelNotifyGuard aGuard( mxTable.get() );
@@ -1278,7 +1278,7 @@ void SvxTableController::SplitMarkedCells(const SfxRequest& rReq)
         Reference< XMergeableCellRange > xRange( mxTable->createCursorByRange( mxTable->getCellRangeByPosition( aStart.mnCol, aStart.mnRow, aEnd.mnCol, aEnd.mnRow ) ), UNO_QUERY_THROW );
         const sal_Int32 nRowCount = mxTable->getRowCount();
         const sal_Int32 nColCount = mxTable->getColumnCount();
-        SdrTableObj& rTableObj(*mxTableObj.get());
+        SdrTableObj& rTableObj(*mxTableObj);
 
         if( rTableObj.IsTextEditActive() )
             mrView.SdrEndTextEdit(true);
@@ -1317,7 +1317,7 @@ void SvxTableController::DistributeColumns(const bool bOptimize, const bool bMin
     if(!checkTableObject())
         return;
 
-    SdrTableObj& rTableObj(*mxTableObj.get());
+    SdrTableObj& rTableObj(*mxTableObj);
     SdrModel& rModel(rTableObj.getSdrModelFromSdrObject());
     const bool bUndo(rModel.IsUndoEnabled());
 
@@ -1340,7 +1340,7 @@ void SvxTableController::DistributeRows(const bool bOptimize, const bool bMinimi
     if(!checkTableObject())
         return;
 
-    SdrTableObj& rTableObj(*mxTableObj.get());
+    SdrTableObj& rTableObj(*mxTableObj);
     SdrModel& rModel(rTableObj.getSdrModelFromSdrObject());
     const bool bUndo(rModel.IsUndoEnabled());
 
@@ -1368,7 +1368,7 @@ bool SvxTableController::DeleteMarked()
     if(!checkTableObject() || !HasMarked())
         return false;
 
-    SdrTableObj& rTableObj(*mxTableObj.get());
+    SdrTableObj& rTableObj(*mxTableObj);
     SdrModel& rModel(rTableObj.getSdrModelFromSdrObject());
     const bool bUndo(rModel.IsUndoEnabled());
 
@@ -1480,7 +1480,7 @@ void SvxTableController::changeTableEdge(const SfxRequest& rReq)
         const sal_uInt16 nIndex = pIndex->GetValue();
         const sal_Int32 nOffset = convertTwipToMm100(pOffset->GetValue());
 
-        SdrTableObj& rTableObj(*mxTableObj.get());
+        SdrTableObj& rTableObj(*mxTableObj);
 
         sal_Int32 nEdgeIndex = -1;
         bool bHorizontal = sType.startsWith("row");
@@ -1895,7 +1895,7 @@ void SvxTableController::MergeRange( sal_Int32 nFirstCol, sal_Int32 nFirstRow, s
 
         if( xRange->isMergeable() )
         {
-            SdrTableObj& rTableObj(*mxTableObj.get());
+            SdrTableObj& rTableObj(*mxTableObj);
             SdrModel& rModel(rTableObj.getSdrModelFromSdrObject());
             const bool bUndo(rModel.IsUndoEnabled());
 
@@ -1961,7 +1961,7 @@ void SvxTableController::EditCell(const CellPos& rPos, vcl::Window* pWindow, Tbl
     if(nullptr == pPV || !checkTableObject())
         return;
 
-    SdrTableObj& rTableObj(*mxTableObj.get());
+    SdrTableObj& rTableObj(*mxTableObj);
 
     if(rTableObj.getSdrPageFromSdrObject() == pPV->GetPage())
     {
@@ -2142,7 +2142,7 @@ bool SvxTableController::ChangeFontSize(bool bGrow, const FontList* pFontList)
     if(!checkTableObject() || !mxTable.is())
         return false;
 
-    SdrTableObj& rTableObj(*mxTableObj.get());
+    SdrTableObj& rTableObj(*mxTableObj);
     SdrModel& rModel(rTableObj.getSdrModelFromSdrObject());
 
     if (mrView.IsTextEdit())
@@ -2618,7 +2618,7 @@ void SvxTableController::SetAttrToSelectedCells(const SfxItemSet& rAttr, bool bR
     if(!checkTableObject() || !mxTable.is())
         return;
 
-    SdrTableObj& rTableObj(*mxTableObj.get());
+    SdrTableObj& rTableObj(*mxTableObj);
     SdrModel& rModel(rTableObj.getSdrModelFromSdrObject());
     const bool bUndo(rModel.IsUndoEnabled());
 
@@ -2828,7 +2828,7 @@ bool SvxTableController::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNo
     if(!checkTableObject())
         return false;
 
-    SdrTableObj& rTableObj(*mxTableObj.get());
+    SdrTableObj& rTableObj(*mxTableObj);
     SdrModel& rModel(rTableObj.getSdrModelFromSdrObject());
     const bool bUndo(rModel.IsUndoEnabled());
 
@@ -3210,7 +3210,7 @@ bool SvxTableController::isRowHeader()
     if(!checkTableObject())
         return false;
 
-    SdrTableObj& rTableObj(*mxTableObj.get());
+    SdrTableObj& rTableObj(*mxTableObj);
     TableStyleSettings aSettings(rTableObj.getTableStyleSettings());
 
     return aSettings.mbUseFirstRow;
@@ -3221,7 +3221,7 @@ bool SvxTableController::isColumnHeader()
     if(!checkTableObject())
         return false;
 
-    SdrTableObj& rTableObj(*mxTableObj.get());
+    SdrTableObj& rTableObj(*mxTableObj);
     TableStyleSettings aSettings(rTableObj.getTableStyleSettings());
 
     return aSettings.mbUseFirstColumn;

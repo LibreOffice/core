@@ -102,7 +102,7 @@ bool CellUndo::Merge( SfxUndoAction *pNextAction )
 void CellUndo::setDataToCell( const Data& rData )
 {
     if( rData.mpProperties )
-        mxCell->mpProperties.reset(Cell::CloneProperties( rData.mpProperties, *mxObjRef.get(), *mxCell ));
+        mxCell->mpProperties.reset(Cell::CloneProperties( rData.mpProperties, *mxObjRef, *mxCell ));
     else
         mxCell->mpProperties.reset();
 
@@ -132,7 +132,7 @@ void CellUndo::getDataFromCell( Data& rData )
     if( mxObjRef.is() && mxCell.is() )
     {
         if( mxCell->mpProperties )
-            rData.mpProperties = mxCell->CloneProperties( *mxObjRef.get(), *mxCell);
+            rData.mpProperties = mxCell->CloneProperties( *mxObjRef, *mxCell);
 
         if( mxCell->GetOutlinerParaObject() )
             rData.mpOutlinerParaObject = new OutlinerParaObject(*mxCell->GetOutlinerParaObject());
