@@ -401,6 +401,7 @@ public:
     // Export the document.
     virtual ErrCode exportDoc( enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID );
 
+    void collectDataStyles(bool bFromUsedStyles);
     virtual void addDataStyle(const sal_Int32 nNumberFormat, bool bTimeFormat = false );
     virtual void exportDataStyles();
     virtual void exportAutoDataStyles();

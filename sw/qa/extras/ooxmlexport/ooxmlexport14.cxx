@@ -18,6 +18,7 @@
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
 
 class Test : public SwModelTestBase
 {
@@ -41,6 +42,16 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128207, "tdf128207.docx")
     CPPUNIT_ASSERT(p_XmlDoc);
     assertXPathContent(p_XmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:drawing/wp:anchor/wp:positionH/wp:posOffset", "4445");
 }
+
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf123873, "tdf123873.docx")
+{
+    //OLE Object were overlapped due to missing wrap import
+    xmlDocPtr p_XmlDoc = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(p_XmlDoc);
+    assertXPath(
+        p_XmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:drawing/wp:anchor/wp:wrapTopAndBottom");
+}
+
 
 DECLARE_OOXMLIMPORT_TEST(testTdf129888vml, "tdf129888vml.docx")
 {
@@ -88,6 +99,34 @@ DECLARE_OOXMLEXPORT_TEST(testTdf87569d, "tdf87569_drawingml.docx")
     xShapeProperties->getPropertyValue("HoriOrientRelation") >>= nValue;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("tdf87569_drawingml: The Shape is not in the table!",
                                  text::RelOrientation::FRAME, nValue);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf130610, "tdf130610_bold_in_2_styles.ott")
+{
+    // check character properties
+    {
+        uno::Reference<beans::XPropertySet> xStyle(
+            getStyles("CharacterStyles")->getByName("WollMuxRoemischeZiffer"),
+            uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Bold", awt::FontWeight::BOLD, getProperty<float>(xStyle, "CharWeight"));
+    }
+
+    // check paragraph properties
+    {
+        uno::Reference<beans::XPropertySet> xStyle(
+            getStyles("ParagraphStyles")->getByName("WollMuxVerfuegungspunkt"),
+            uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Bold", awt::FontWeight::BOLD, getProperty<float>(xStyle, "CharWeight"));
+    }
+
+    // check inline text properties
+    {
+        xmlDocPtr pXmlDoc =parseExport("word/document.xml");
+        if (pXmlDoc)
+        {
+            assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:rPr/w:b");
+        }
+    }
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf120315, "tdf120315.docx")
@@ -270,6 +309,24 @@ DECLARE_OOXMLEXPORT_TEST(testTdf129353, "tdf129353.docx")
                                   "Verne, J. G. (1870). Twenty Thousand Leagues Under the Sea. \n"
                                   ""), // ending with an empty paragraph
                          aIndexString);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testHyphenationAuto, "hyphenation.odt")
+{
+    // Explicitly set hyphenation=auto on document level
+    xmlDocPtr pXmlSettings = parseExport("word/settings.xml");
+    CPPUNIT_ASSERT(pXmlSettings);
+    assertXPath(pXmlSettings, "/w:settings/w:autoHyphenation", "val", "true");
+
+    // Second paragraph has explicitly enabled hyphenation
+    xmlDocPtr pXml = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(pXml);
+    assertXPath(pXml, "/w:document/w:body/w:p[2]/w:pPr/w:suppressAutoHyphens", "val", "false");
+
+    // Default paragraph style explicitly disables hyphens
+    xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
+    CPPUNIT_ASSERT(pXmlStyles);
+    assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:pPrDefault/w:pPr/w:suppressAutoHyphens", "val", "true");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

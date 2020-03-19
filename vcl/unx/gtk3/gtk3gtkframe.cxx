@@ -1479,6 +1479,9 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
     {
         m_bDefaultSize = false;
 
+        maGeometry.nWidth = nWidth;
+        maGeometry.nHeight = nHeight;
+
         if( isChild( false ) )
             widget_set_size_request(nWidth, nHeight);
         else if( ! ( m_nState & GDK_WINDOW_STATE_MAXIMIZED ) )
@@ -3389,8 +3392,12 @@ public:
             gint length(0);
             const guchar *rawdata = gtk_selection_data_get_data_with_length(m_pData,
                                                                             &length);
-            css::uno::Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(rawdata), length);
-            aRet <<= aSeq;
+            // seen here was rawhide == nullptr and length set to -1
+            if (rawdata)
+            {
+                css::uno::Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(rawdata), length);
+                aRet <<= aSeq;
+            }
         }
 
         gtk_selection_data_free(m_pData);

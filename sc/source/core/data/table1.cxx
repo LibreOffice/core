@@ -2038,11 +2038,24 @@ void ScTable::ExtendPrintArea( OutputDevice* pDev,
 
 void ScTable::MaybeAddExtraColumn(SCCOL& rCol, SCROW nRow, OutputDevice* pDev, double nPPTX, double nPPTY)
 {
-    ScRefCellValue aCell = aCol[rCol].GetCellValue(nRow);
+    // tdf#128873 we do not need to calculate text width (heavy operation)
+    // when we for sure know that an additional column will not be added
+    if (GetAllocatedColumnsCount() > rCol + 1)
+    {
+        ScRefCellValue aNextCell = aCol[rCol + 1].GetCellValue(nRow);
+        if (!aNextCell.isEmpty())
+        {
+            // return rCol as is
+            return;
+        }
+    }
+
+    ScColumn& rColumn = aCol[rCol];
+    ScRefCellValue aCell = rColumn.GetCellValue(nRow);
     if (!aCell.hasString())
         return;
 
-    long nPixel = aCol[rCol].GetTextWidth(nRow);
+    long nPixel = rColumn.GetTextWidth(nRow);
 
     // Width already calculated in Idle-Handler ?
     if ( TEXTWIDTH_DIRTY == nPixel )
@@ -2053,10 +2066,10 @@ void ScTable::MaybeAddExtraColumn(SCCOL& rCol, SCROW nRow, OutputDevice* pDev, d
         aOptions.bSkipMerged = false;
 
         Fraction aZoom(1,1);
-        nPixel = aCol[rCol].GetNeededSize(
+        nPixel = rColumn.GetNeededSize(
             nRow, pDev, nPPTX, nPPTY, aZoom, aZoom, true, aOptions, nullptr );
 
-        aCol[rCol].SetTextWidth(nRow, static_cast<sal_uInt16>(nPixel));
+        rColumn.SetTextWidth(nRow, static_cast<sal_uInt16>(nPixel));
     }
 
     long nTwips = static_cast<long>(nPixel / nPPTX);

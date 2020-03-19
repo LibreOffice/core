@@ -2168,6 +2168,51 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineCharAttributes)
     CheckRedlineCharAttributesHidden();
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineShowHideFootnotePagination)
+{
+    createDoc("redline_footnote_pagination.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
+    SwRootFrame* pLayout(pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
+    CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
+
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+
+    // check footnotes
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn", 6);
+    assertXPath(pXmlDoc, "/root/page[2]/ftncont/ftn", 3);
+    // check that first page ends with the y line and second page starts with z
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[last()]/LineBreak[last()]", "Line",
+                "yyyyyyyyy yyy yyyyyyyyyyyyyyyy yyyyyyy yyy yyyyy yyyyyyyyy yyy yyyyyyyyy ");
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/LineBreak[1]", "Line",
+                "zzz. zzz zzzz zzzz7 zzz zzz zzzzzzz zzz zzzz zzzzzzzzzzzzzz zzzzzzzzzzzz ");
+
+    // hide redlines - all still visible footnotes move to page 1
+    lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn", 2);
+    assertXPath(pXmlDoc, "/root/page[2]/ftncont/ftn", 0);
+
+    // show again - should now get the same result as on loading
+    lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+
+    // check footnotes
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn", 6);
+    assertXPath(pXmlDoc, "/root/page[2]/ftncont/ftn", 3);
+    // check that first page ends with the y line and second page starts with z
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[last()]/LineBreak[last()]", "Line",
+                "yyyyyyyyy yyy yyyyyyyyyyyyyyyy yyyyyyy yyy yyyyy yyyyyyyyy yyy yyyyyyyyy ");
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/LineBreak[1]", "Line",
+                "zzz. zzz zzzz zzzz7 zzz zzz zzzzzzz zzz zzzz zzzzzzzzzzzzzz zzzzzzzzzzzz ");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineNumberInNumbering)
 {
     SwDoc* pDoc = createDoc("tdf42748.fodt");
@@ -2363,6 +2408,30 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf122800)
         "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/textarray[@length='22']",
         9);
     // This failed, if the textarray length of the first axis label not 22.
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTruncatedAxisLabel)
+{
+    SwDoc* pDoc = createDoc("testTruncatedAxisLabel.odt");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // test the X axis label visibility
+    assertXPathContent(
+        pXmlDoc,
+        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/textarray[1]/text",
+        "Long axis label truncated 1");
+
+    // test the Y axis label visibility
+    assertXPathContent(
+        pXmlDoc,
+        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/textarray[3]/text",
+        "-5.00");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128996)
@@ -3656,6 +3725,24 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testStableAtPageAnchoredFlyPosition)
 
     // the anchored frame should not have moved
     CPPUNIT_ASSERT_EQUAL(aOrigRect, aRelayoutRect);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testBtlrTableRowSpan)
+{
+    // Load a document which has a table. The A1 cell has btlr text direction, and the A1..A3 cells
+    // are merged.
+    load(DATA_DIRECTORY, "btlr-table-row-span.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDocShell* pShell = pTextDoc->GetDocShell();
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump aDumper;
+    xmlDocPtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: USA
+    // - Actual  : West
+    // i.e. the "USA" text completely disappeared.
+    assertXPathContent(pXmlDoc, "//textarray[1]/text", "USA");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

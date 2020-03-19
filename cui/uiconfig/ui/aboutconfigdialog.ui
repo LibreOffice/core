@@ -191,6 +191,7 @@
                         </child>
                         <child>
                           <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                            <property name="resizable">True</property>
                             <property name="spacing">6</property>
                             <property name="title" translatable="yes" context="aboutconfigdialog|preference">Preference Name</property>
                             <property name="clickable">True</property>
@@ -210,6 +211,7 @@
                         </child>
                         <child>
                           <object class="GtkTreeViewColumn" id="treeviewcolumn3">
+                            <property name="resizable">True</property>
                             <property name="spacing">6</property>
                             <property name="title" translatable="yes" context="aboutconfigdialog|property">Property</property>
                             <property name="clickable">True</property>
@@ -223,6 +225,7 @@
                         </child>
                         <child>
                           <object class="GtkTreeViewColumn" id="treeviewcolumn4">
+                            <property name="resizable">True</property>
                             <property name="spacing">6</property>
                             <property name="title" translatable="yes" context="aboutconfigdialog|type">Type</property>
                             <property name="clickable">True</property>
@@ -236,6 +239,7 @@
                         </child>
                         <child>
                           <object class="GtkTreeViewColumn" id="treeviewcolumn5">
+                            <property name="resizable">True</property>
                             <property name="spacing">6</property>
                             <property name="title" translatable="yes" context="aboutconfigdialog|value">Value</property>
                             <property name="clickable">True</property>

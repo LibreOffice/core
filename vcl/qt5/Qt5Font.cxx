@@ -23,61 +23,109 @@
 #include <QtGui/QFont>
 #include <QtGui/QRawFont>
 
-static QFont::Weight GetQFontWeight(FontWeight eWeight)
+static inline void applyWeight(Qt5Font& rFont, FontWeight eWeight)
 {
     switch (eWeight)
     {
         case WEIGHT_THIN:
-            return QFont::Thin;
+            rFont.setWeight(QFont::Thin);
+            break;
         case WEIGHT_ULTRALIGHT:
-            return QFont::ExtraLight;
+            rFont.setWeight(QFont::ExtraLight);
+            break;
         case WEIGHT_LIGHT:
-            return QFont::Light;
+            rFont.setWeight(QFont::Light);
+            break;
         case WEIGHT_SEMILIGHT:
             [[fallthrough]];
-        case WEIGHT_DONTKNOW:
-            [[fallthrough]];
         case WEIGHT_NORMAL:
-            return QFont::Normal;
+            rFont.setWeight(QFont::Normal);
+            break;
         case WEIGHT_MEDIUM:
-            return QFont::Medium;
+            rFont.setWeight(QFont::Medium);
+            break;
         case WEIGHT_SEMIBOLD:
-            return QFont::DemiBold;
+            rFont.setWeight(QFont::DemiBold);
+            break;
         case WEIGHT_BOLD:
-            return QFont::Bold;
+            rFont.setWeight(QFont::Bold);
+            break;
         case WEIGHT_ULTRABOLD:
-            return QFont::ExtraBold;
+            rFont.setWeight(QFont::ExtraBold);
+            break;
         case WEIGHT_BLACK:
-            return QFont::Black;
-        case FontWeight_FORCE_EQUAL_SIZE:
-            assert(false && "FontWeight_FORCE_EQUAL_SIZE not implementable for QFont");
+            rFont.setWeight(QFont::Black);
+            break;
+        default:
+            break;
     }
+}
 
-    // so we would get enum not handled warning
-    return QFont::Normal;
+static inline void applyStretch(Qt5Font& rFont, FontWidth eWidthType)
+{
+    switch (eWidthType)
+    {
+        case WIDTH_DONTKNOW:
+            rFont.setStretch(QFont::AnyStretch);
+            break;
+        case WIDTH_ULTRA_CONDENSED:
+            rFont.setStretch(QFont::UltraCondensed);
+            break;
+        case WIDTH_EXTRA_CONDENSED:
+            rFont.setStretch(QFont::ExtraCondensed);
+            break;
+        case WIDTH_CONDENSED:
+            rFont.setStretch(QFont::Condensed);
+            break;
+        case WIDTH_SEMI_CONDENSED:
+            rFont.setStretch(QFont::SemiCondensed);
+            break;
+        case WIDTH_NORMAL:
+            rFont.setStretch(QFont::Unstretched);
+            break;
+        case WIDTH_SEMI_EXPANDED:
+            rFont.setStretch(QFont::SemiExpanded);
+            break;
+        case WIDTH_EXPANDED:
+            rFont.setStretch(QFont::Expanded);
+            break;
+        case WIDTH_EXTRA_EXPANDED:
+            rFont.setStretch(QFont::ExtraExpanded);
+            break;
+        case WIDTH_ULTRA_EXPANDED:
+            rFont.setStretch(QFont::UltraExpanded);
+            break;
+        default:
+            break;
+    }
+}
+
+static inline void applyStyle(Qt5Font& rFont, FontItalic eItalic)
+{
+    switch (eItalic)
+    {
+        case ITALIC_NONE:
+            rFont.setStyle(QFont::Style::StyleNormal);
+            break;
+        case ITALIC_OBLIQUE:
+            rFont.setStyle(QFont::Style::StyleOblique);
+            break;
+        case ITALIC_NORMAL:
+            rFont.setStyle(QFont::Style::StyleItalic);
+            break;
+        default:
+            break;
+    }
 }
 
 Qt5Font::Qt5Font(const PhysicalFontFace& rPFF, const FontSelectPattern& rFSP)
     : LogicalFontInstance(rPFF, rFSP)
 {
     setFamily(toQString(rPFF.GetFamilyName()));
-    setWeight(GetQFontWeight(rPFF.GetWeight()));
+    applyWeight(*this, rPFF.GetWeight());
     setPixelSize(rFSP.mnHeight);
-    switch (rFSP.GetItalic())
-    {
-        case ITALIC_DONTKNOW:
-        case FontItalic_FORCE_EQUAL_SIZE:
-            break;
-        case ITALIC_NONE:
-            setStyle(Style::StyleNormal);
-            break;
-        case ITALIC_OBLIQUE:
-            setStyle(Style::StyleOblique);
-            break;
-        case ITALIC_NORMAL:
-            setStyle(Style::StyleItalic);
-            break;
-    }
+    applyStretch(*this, rPFF.GetWidthType());
+    applyStyle(*this, rFSP.GetItalic());
 }
 
 static hb_blob_t* getFontTable(hb_face_t*, hb_tag_t nTableTag, void* pUserData)

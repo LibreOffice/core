@@ -3659,9 +3659,11 @@ public:
 
     virtual void swap(int pos1, int pos2) override
     {
+        int min = std::min(pos1, pos2);
+        int max = std::max(pos1, pos2);
         SvTreeList* pModel = m_xTreeView->GetModel();
-        SvTreeListEntry* pEntry1 = pModel->GetEntry(nullptr, pos1);
-        SvTreeListEntry* pEntry2 = pModel->GetEntry(nullptr, pos2);
+        SvTreeListEntry* pEntry1 = pModel->GetEntry(nullptr, min);
+        SvTreeListEntry* pEntry2 = pModel->GetEntry(nullptr, max);
         pModel->Move(pEntry1, pEntry2);
     }
 
@@ -6035,7 +6037,10 @@ IMPL_LINK(SalInstanceEntryTreeView, KeyPressListener, VclWindowEvent&, rEvent, v
         m_pTreeView->disable_notify_events();
         auto& rListBox = m_pTreeView->getTreeView();
         if (!rListBox.FirstSelected())
-            rListBox.Select(rListBox.First(), true);
+        {
+            if (SvTreeListEntry* pEntry = rListBox.First())
+                rListBox.Select(pEntry, true);
+        }
         else
             rListBox.KeyInput(rKeyEvent);
         m_xEntry->set_text(m_xTreeView->get_selected_text());

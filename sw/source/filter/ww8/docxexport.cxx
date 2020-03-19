@@ -358,12 +358,13 @@ void DocxExport::DoComboBox(const OUString& rName,
 
     m_pDocumentFS->singleElementNS(XML_w, XML_result, FSNS(XML_w, XML_val), OString::number(nId));
 
-    // Loop over the entries
-
-    for (const auto& rItem : rListItems)
+    // unfortunately Word 2013 refuses to load DOCX with more than 25 listEntry
+    SAL_WARN_IF(25 < rListItems.getLength(), "sw.ww8", "DocxExport::DoComboBox data loss with more than 25 entries");
+    auto const nSize(std::min(sal_Int32(25), rListItems.getLength()));
+    for (auto i = 0; i < nSize; ++i)
     {
         m_pDocumentFS->singleElementNS( XML_w, XML_listEntry,
-                FSNS( XML_w, XML_val ), rItem.toUtf8() );
+                FSNS(XML_w, XML_val), rListItems[i].toUtf8() );
     }
 
     m_pDocumentFS->endElementNS( XML_w, XML_ddList );
@@ -1006,13 +1007,14 @@ void DocxExport::WriteSettings()
     }
 
     // Automatic hyphenation: it's a global setting in Word, it's a paragraph setting in Writer.
-    // Use the setting from the default style.
+    // Set it's value to "auto" and disable on paragraph level, if no hyphenation is used there.
+    pFS->singleElementNS(XML_w, XML_autoHyphenation, FSNS(XML_w, XML_val), "true");
+
+    // Hyphenation details set depending on default style
     SwTextFormatColl* pColl = m_pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, /*bRegardLanguage=*/false);
     const SfxPoolItem* pItem;
     if (pColl && SfxItemState::SET == pColl->GetItemState(RES_PARATR_HYPHENZONE, false, &pItem))
     {
-        pFS->singleElementNS(XML_w, XML_autoHyphenation,
-                             FSNS(XML_w, XML_val), OString::boolean(static_cast<const SvxHyphenZoneItem*>(pItem)->IsHyphen()));
         if (static_cast<const SvxHyphenZoneItem*>(pItem)->IsNoCapsHyphenation())
             pFS->singleElementNS(XML_w, XML_doNotHyphenateCaps);
     }

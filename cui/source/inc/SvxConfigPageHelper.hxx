@@ -81,9 +81,6 @@ public:
     static css::uno::Sequence< css::beans::PropertyValue > ConvertToolbarEntry(
         const SvxConfigEntry* pEntry );
 
-    static bool showKeyConfigTabPage(
-        const css::uno::Reference< css::frame::XFrame >& xFrame );
-
     static bool EntrySort( SvxConfigEntry const * a, SvxConfigEntry const * b );
 
     static bool SvxConfigEntryModified( SvxConfigEntry const * pEntry );

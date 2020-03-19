@@ -343,7 +343,7 @@ namespace pcr
     class DropDownEditControl final : public Edit
     {
         VclPtr<OMultilineFloatingEdit>      m_pFloatingEdit;
-        VclPtr<MultiLineEdit>               m_pImplEdit;
+        VclPtr<Edit>                        m_pImplEdit;
         VclPtr<PushButton>                  m_pDropdownButton;
         MultiLineOperationMode              m_nOperationMode;
         bool                                m_bDropdown : 1;

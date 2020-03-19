@@ -827,7 +827,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
         break;
     }
 
-    if ( pOLV )
+    if ( nSlot != SID_STYLE_APPLY && pOLV )
     {
         pOLV->ShowCursor();
         pOLV->GetWindow()->GrabFocus();

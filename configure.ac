@@ -9,7 +9,7 @@ dnl in order to create a configure script.
 # several non-alphanumeric characters, those are split off and used only for the
 # ABOUTBOXPRODUCTVERSIONSUFFIX in openoffice.lst. Why that is necessary, no idea.
 
-AC_INIT([LibreOffice],[6.4.2.0.0+],[],[],[http://documentfoundation.org/])
+AC_INIT([LibreOffice],[6.4.3.0.0+],[],[],[http://documentfoundation.org/])
 
 dnl libnumbertext needs autoconf 2.68, but that can pick up autoconf268 just fine if it is installed
 dnl whereas aclocal (as run by autogen.sh) insists on using autoconf and fails hard
@@ -1583,8 +1583,8 @@ AC_ARG_WITH(galleries,
 AC_ARG_WITH(theme,
     AS_HELP_STRING([--with-theme="theme1 theme2..."],
         [Choose which themes to include. By default those themes with an '*' are included.
-         Possible choices: *breeze, *breeze_dark, *breeze_svg, *breeze_dark_svg, *colibre, *colibre_svg, *elementary,
-         *elementary_svg, *karasa_jaga, *karasa_jaga_svg, *sifr, *sifr_svg, *sifr_dark, *sifr_dark_svg, *tango.]),
+         Possible choices: *breeze, *breeze_dark, *breeze_dark_svg, *breeze_svg, *colibre, *colibre_svg, *elementary,
+         *elementary_svg, *karasa_jaga, *karasa_jaga_svg, *sifr, *sifr_dark, *sifr_dark_svg, *sifr_svg, *tango.]),
 ,)
 
 libo_FUZZ_ARG_WITH(helppack-integration,
@@ -2762,6 +2762,7 @@ dnl ===================================================================
 dnl Check macOS SDK and compiler
 dnl ===================================================================
 
+HAVE_MACOS_LD_PLATFORMVERSION=
 if test $_os = Darwin; then
 
     # If no --with-macosx-sdk option is given, look for one
@@ -3000,6 +3001,16 @@ if test $_os = Darwin; then
     AC_MSG_CHECKING([what macOS app bundle identifier to use])
     MACOSX_BUNDLE_IDENTIFIER=$with_macosx_bundle_identifier
     AC_MSG_RESULT([$MACOSX_BUNDLE_IDENTIFIER])
+
+    AC_MSG_CHECKING([whether the linker supports -platform_version])
+    save_LDFLAGS=$LDFLAGS
+    LDFLAGS="$LDFLAGS -Xlinker -platform_version -Xlinker macos \
+        -Xlinker $MAC_OS_X_VERSION_MIN_REQUIRED_DOTS -Xlinker 0.0.0"
+    AC_LINK_IFELSE([AC_LANG_PROGRAM()],
+        [AC_MSG_RESULT([yes])
+         HAVE_MACOS_LD_PLATFORMVERSION=TRUE],
+        [AC_MSG_RESULT([no])])
+    LDFLAGS=$save_LDFLAGS
 fi
 AC_SUBST(MACOSX_SDK_PATH)
 AC_SUBST(MACOSX_DEPLOYMENT_TARGET)
@@ -3012,6 +3023,7 @@ AC_SUBST(MACOSX_CODESIGNING_IDENTITY)
 AC_SUBST(MACOSX_PACKAGE_SIGNING_IDENTITY)
 AC_SUBST(ENABLE_MACOSX_SANDBOX)
 AC_SUBST(MACOSX_BUNDLE_IDENTIFIER)
+AC_SUBST(HAVE_MACOS_LD_PLATFORMVERSION)
 
 dnl ===================================================================
 dnl Check iOS SDK and compiler
@@ -11505,14 +11517,14 @@ dnl ===================================================================
 AC_MSG_CHECKING([which themes to include])
 # if none given use default subset of available themes
 if test "x$with_theme" = "x" -o "x$with_theme" = "xyes"; then
-    with_theme="breeze breeze_dark breeze_svg breeze_dark_svg colibre colibre_svg elementary elementary_svg karasa_jaga karasa_jaga_svg sifr sifr_svg sifr_dark sifr_dark_svg tango"
+    with_theme="breeze breeze_dark breeze_dark_svg breeze_svg colibre colibre_svg elementary elementary_svg karasa_jaga karasa_jaga_svg sifr sifr_svg sifr_dark sifr_dark_svg tango"
 fi
 
 WITH_THEMES=""
 if test "x$with_theme" != "xno"; then
     for theme in $with_theme; do
         case $theme in
-        breeze|breeze_dark|breeze_svg|breeze_dark_svg|colibre|colibre_svg|elementary|elementary_svg|karasa_jaga|karasa_jaga_svg|sifr|sifr_svg|sifr_dark|sifr_dark_svg|tango) real_theme="$theme" ;;
+        breeze|breeze_dark|breeze_dark_svg|breeze_svg|colibre|colibre_svg|elementary|elementary_svg|karasa_jaga|karasa_jaga_svg|sifr|sifr_svg|sifr_dark|sifr_dark_svg|tango) real_theme="$theme" ;;
         default) real_theme=colibre ;;
         *) AC_MSG_ERROR([Unknown value for --with-theme: $theme]) ;;
         esac

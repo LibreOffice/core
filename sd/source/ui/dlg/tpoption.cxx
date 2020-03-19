@@ -198,7 +198,7 @@ SdTpOptionsMisc::SdTpOptionsMisc(weld::Container* pPage, weld::DialogController*
     , m_xHeightLb(m_xBuilder->weld_label("heightlbl"))
     , m_xFiInfo2(m_xBuilder->weld_label("info2"))
     , m_xMtrFldOriginalHeight(m_xBuilder->weld_metric_spin_button("metricHeightFields", FieldUnit::MM))
-    , m_xCbxDistrot(m_xBuilder->weld_check_button("distrotcb"))
+    , m_xCbxDistort(m_xBuilder->weld_check_button("distortcb"))
     , m_xMtrFldInfo1(m_xBuilder->weld_metric_spin_button("metricInfo1Fields", FieldUnit::MM))
     , m_xMtrFldInfo2(m_xBuilder->weld_metric_spin_button("metricInfo2Fields", FieldUnit::MM))
 {
@@ -219,7 +219,7 @@ SdTpOptionsMisc::SdTpOptionsMisc(weld::Container* pPage, weld::DialogController*
     SetFieldUnit( *m_xMtrFldTabstop , eFUnit );
 
     // Impress is default mode, let' hide the entire scale frame etc.
-    m_xCbxDistrot->hide();
+    m_xCbxDistort->hide();
     m_xScaleFrame->hide();
 
     // fill ListBox with metrics
@@ -342,7 +342,8 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )
         m_xCbxEnableSdremote->get_state_changed_from_saved()        ||
         m_xCbxEnablePresenterScreen->get_state_changed_from_saved() ||
         m_xCbxCompatibility->get_state_changed_from_saved()         ||
-        m_xCbxUsePrinterMetrics->get_state_changed_from_saved() )
+        m_xCbxUsePrinterMetrics->get_state_changed_from_saved()     ||
+        m_xCbxDistort->get_state_changed_from_saved())
     {
         SdOptionsMiscItem aOptsItem;
 
@@ -359,6 +360,7 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )
             m_xCbxUsePrinterMetrics->get_active()
             ? css::document::PrinterIndependentLayout::DISABLED
             : css::document::PrinterIndependentLayout::ENABLED);
+        aOptsItem.GetOptionsMisc().SetCrookNoContortion( m_xCbxDistort->get_active() );
         rAttrs->Put( aOptsItem );
 
         bModified = true;
@@ -410,6 +412,7 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
     m_xCbxEnablePresenterScreen->set_active( aOptsItem.GetOptionsMisc().IsEnablePresenterScreen() );
     m_xCbxCompatibility->set_active( aOptsItem.GetOptionsMisc().IsSummationOfParagraphs() );
     m_xCbxUsePrinterMetrics->set_active( aOptsItem.GetOptionsMisc().GetPrinterIndependentLayout()==1 );
+    m_xCbxDistort->set_active( aOptsItem.GetOptionsMisc().IsCrookNoContortion() );
     m_xCbxStartWithTemplate->save_state();
     m_xCbxMarkedHitMovesAlways->save_state();
     m_xCbxQuickEdit->save_state();
@@ -421,6 +424,7 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
     m_xCbxEnablePresenterScreen->save_state();
     m_xCbxCompatibility->save_state();
     m_xCbxUsePrinterMetrics->save_state();
+    m_xCbxDistort->save_state();
 
     // metric
     sal_uInt16 nWhich = GetWhich( SID_ATTR_METRIC );
@@ -519,7 +523,7 @@ void SdTpOptionsMisc::SetDrawMode()
     m_xMtrFldOriginalWidth->show();
     m_xFiInfo2->show();
     m_xMtrFldOriginalHeight->show();
-    m_xCbxDistrot->show();
+    m_xCbxDistort->show();
     m_xCbxCompatibility->hide();
 }
 

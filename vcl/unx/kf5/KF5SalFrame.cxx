@@ -28,6 +28,7 @@
 #include <KConfigGroup>
 #include <KSharedConfig>
 
+#include <Qt5FontFace.hxx>
 #include "KF5SalFrame.hxx"
 
 #include <tools/color.hxx>
@@ -62,44 +63,9 @@ static vcl::Font toFont(const QFont& rQFont, const css::lang::Locale& rLocale)
                                    strlen(static_cast<const char*>(rQFont.family().toUtf8())),
                                    RTL_TEXTENCODING_UTF8);
 
-    // set italic
-    aInfo.m_eItalic = (qFontInfo.italic() ? ITALIC_NORMAL : ITALIC_NONE);
-
-    // set weight
-    int nWeight = qFontInfo.weight();
-    if (nWeight <= QFont::Light)
-        aInfo.m_eWeight = WEIGHT_LIGHT;
-    else if (nWeight <= QFont::Normal)
-        aInfo.m_eWeight = WEIGHT_NORMAL;
-    else if (nWeight <= QFont::DemiBold)
-        aInfo.m_eWeight = WEIGHT_SEMIBOLD;
-    else if (nWeight <= QFont::Bold)
-        aInfo.m_eWeight = WEIGHT_BOLD;
-    else
-        aInfo.m_eWeight = WEIGHT_ULTRABOLD;
-
-    // set width
-    int nStretch = rQFont.stretch();
-    if (nStretch == 0) // QFont::AnyStretch since Qt 5.8
-        aInfo.m_eWidth = WIDTH_DONTKNOW;
-    else if (nStretch <= QFont::UltraCondensed)
-        aInfo.m_eWidth = WIDTH_ULTRA_CONDENSED;
-    else if (nStretch <= QFont::ExtraCondensed)
-        aInfo.m_eWidth = WIDTH_EXTRA_CONDENSED;
-    else if (nStretch <= QFont::Condensed)
-        aInfo.m_eWidth = WIDTH_CONDENSED;
-    else if (nStretch <= QFont::SemiCondensed)
-        aInfo.m_eWidth = WIDTH_SEMI_CONDENSED;
-    else if (nStretch <= QFont::Unstretched)
-        aInfo.m_eWidth = WIDTH_NORMAL;
-    else if (nStretch <= QFont::SemiExpanded)
-        aInfo.m_eWidth = WIDTH_SEMI_EXPANDED;
-    else if (nStretch <= QFont::Expanded)
-        aInfo.m_eWidth = WIDTH_EXPANDED;
-    else if (nStretch <= QFont::ExtraExpanded)
-        aInfo.m_eWidth = WIDTH_EXTRA_EXPANDED;
-    else
-        aInfo.m_eWidth = WIDTH_ULTRA_EXPANDED;
+    aInfo.m_eItalic = Qt5FontFace::toFontItalic(qFontInfo.style());
+    aInfo.m_eWeight = Qt5FontFace::toFontWeight(qFontInfo.weight());
+    aInfo.m_eWidth = Qt5FontFace::toFontWidth(rQFont.stretch());
 
     SAL_INFO("vcl.kf5", "font name BEFORE system match: \"" << aInfo.m_aFamilyName << "\"");
 

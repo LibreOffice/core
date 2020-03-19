@@ -7698,11 +7698,13 @@ public:
 
     virtual void replace_selection(const OUString& rText) override
     {
+        disable_notify_events();
         gtk_editable_delete_selection(GTK_EDITABLE(m_pEntry));
         OString sText(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
         gint position = gtk_editable_get_position(GTK_EDITABLE(m_pEntry));
         gtk_editable_insert_text(GTK_EDITABLE(m_pEntry), sText.getStr(), sText.getLength(),
                                  &position);
+        enable_notify_events();
     }
 
     virtual void set_position(int nCursorPos) override
@@ -11407,6 +11409,24 @@ private:
         return pThis->signal_key_press(pEvent);
     }
 
+    // tdf#131076 we want return in a GtkComboBox to act like return in a
+    // GtkEntry and activate the default dialog/assistant button
+    bool combobox_activate()
+    {
+        GtkWidget *pComboBox = GTK_WIDGET(m_pComboBox);
+        GtkWidget *pToplevel = gtk_widget_get_toplevel(pComboBox);
+        GtkWindow *pWindow = GTK_WINDOW(pToplevel);
+        if (!pWindow)
+            return false;
+        if (!GTK_IS_DIALOG(pWindow) && !GTK_IS_ASSISTANT(pWindow))
+            return false;
+        bool bDone = false;
+        GtkWidget *pDefaultWidget = gtk_window_get_default_widget(pWindow);
+        if (pDefaultWidget && pDefaultWidget != m_pToggleButton && gtk_widget_get_sensitive(pDefaultWidget))
+            bDone = gtk_widget_activate(pDefaultWidget);
+        return bDone;
+    }
+
     bool signal_key_press(const GdkEventKey* pEvent)
     {
         KeyEvent aKEvt(GtkToVcl(*pEvent));
@@ -11415,7 +11435,8 @@ private:
 
         bool bDone = false;
 
-        switch (aKeyCode.GetCode())
+        auto nCode = aKeyCode.GetCode();
+        switch (nCode)
         {
             case KEY_DOWN:
             case KEY_UP:
@@ -11427,9 +11448,16 @@ private:
             case KEY_RIGHT:
             case KEY_RETURN:
                 m_aQuickSelectionEngine.Reset();
+                // tdf#131076 don't let bare return toggle menu popup active, but do allow deactive
+                if (nCode == KEY_RETURN && !pEvent->state && !m_bPopupActive)
+                    bDone = combobox_activate();
                 break;
             default:
-                bDone = m_aQuickSelectionEngine.HandleKeyEvent(aKEvt);
+                // tdf#131076 let base space toggle menu popup when its not already visible
+                if (nCode == KEY_SPACE && !pEvent->state && !m_bPopupActive)
+                    bDone = false;
+                else
+                    bDone = m_aQuickSelectionEngine.HandleKeyEvent(aKEvt);
                 break;
         }
 
@@ -12018,6 +12046,9 @@ private:
 
     bool signal_key_press(GdkEventKey* pEvent)
     {
+        if (pEvent->state) // only with no modifiers held
+            return false;
+
         if (pEvent->keyval == GDK_KEY_KP_Up || pEvent->keyval == GDK_KEY_Up || pEvent->keyval == GDK_KEY_KP_Page_Up || pEvent->keyval == GDK_KEY_Page_Up ||
             pEvent->keyval == GDK_KEY_KP_Down || pEvent->keyval == GDK_KEY_Down || pEvent->keyval == GDK_KEY_KP_Page_Down || pEvent->keyval == GDK_KEY_Page_Down)
         {
@@ -12336,6 +12367,31 @@ void ensure_intercept_drawing_area_accessibility()
     }
 }
 
+void ensure_disable_ctrl_page_up_down(GType eType)
+{
+    gpointer pClass = g_type_class_ref(eType);
+    GtkWidgetClass* pWidgetClass = GTK_WIDGET_CLASS(pClass);
+    GtkBindingSet* pBindingSet = gtk_binding_set_by_class(pWidgetClass);
+    gtk_binding_entry_remove(pBindingSet, GDK_KEY_Page_Up, GDK_CONTROL_MASK);
+    gtk_binding_entry_remove(pBindingSet, GDK_KEY_Page_Up, static_cast<GdkModifierType>(GDK_SHIFT_MASK|GDK_CONTROL_MASK));
+    gtk_binding_entry_remove(pBindingSet, GDK_KEY_Page_Down, GDK_CONTROL_MASK);
+    gtk_binding_entry_remove(pBindingSet, GDK_KEY_Page_Down, static_cast<GdkModifierType>(GDK_SHIFT_MASK|GDK_CONTROL_MASK));
+    g_type_class_unref(pClass);
+}
+
+// tdf#130400 disable ctrl+page_up and ctrl+page_down bindings so the
+// keystrokes are consumed by the surrounding notebook bindings instead
+void ensure_disable_ctrl_page_up_down_bindings()
+{
+    static bool bDone;
+    if (!bDone)
+    {
+        ensure_disable_ctrl_page_up_down(GTK_TYPE_TREE_VIEW);
+        ensure_disable_ctrl_page_up_down(GTK_TYPE_SPIN_BUTTON);
+        bDone = true;
+    }
+}
+
 }
 
 class GtkInstanceBuilder : public weld::Builder
@@ -12542,6 +12598,7 @@ public:
         , m_nNotifySignalId(0)
     {
         ensure_intercept_drawing_area_accessibility();
+        ensure_disable_ctrl_page_up_down_bindings();
 
         sal_Int32 nIdx = m_sHelpRoot.lastIndexOf('.');
         if (nIdx != -1)

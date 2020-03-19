@@ -66,8 +66,8 @@ sal_Int32 DlgSize::GetValue() const
 
 IMPL_LINK_NOARG(DlgSize, CbClickHdl, weld::ToggleButton&, void)
 {
-    m_xMF_VALUE->set_sensitive(m_xCB_STANDARD->get_active());
-    if (!m_xCB_STANDARD->get_active())
+    m_xMF_VALUE->set_sensitive(!m_xCB_STANDARD->get_active());
+    if (m_xCB_STANDARD->get_active())
     {
         // don't use getValue as this will use m_xCB_STANDARD->to determine if we're standard
         m_nPrevValue = static_cast<sal_Int32>(m_xMF_VALUE->get_value(FieldUnit::CM));

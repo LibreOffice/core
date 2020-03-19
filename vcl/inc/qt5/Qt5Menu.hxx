@@ -24,6 +24,17 @@ class QMenuBar;
 class Qt5MenuItem;
 class Qt5Frame;
 
+/*
+ * Qt5Menu can represent
+ * (1) the top-level menu of a menubar, in which case 'mbMenuBar' is true and
+ *     'mpQMenuBar' refers to the corresponding QMenuBar
+ * (2) another kind of menu (like a PopupMenu), in which case the corresponding QMenu
+ *     object is instantiated and owned by this Qt5Menu (held in 'mpOwnedQMenu').
+ * (3) a "submenu" in an existing menu (like (1)), in which case the corresponding
+ *     QMenu object is owned by the corresponding Qt5MenuItem.
+ *
+ * For (2) and (3), member 'mpQMenu' points to the corresponding QMenu object.
+ */
 class Qt5Menu : public QObject, public SalMenu
 {
     Q_OBJECT
@@ -34,6 +45,9 @@ private:
     Qt5Frame* mpFrame;
     bool mbMenuBar;
     QMenuBar* mpQMenuBar;
+    // self-created QMenu that this Qt5Menu represents, if applicable (s. comment for class)
+    std::unique_ptr<QMenu> mpOwnedQMenu;
+    // pointer to QMenu owned by the corresponding Qt5MenuItem or self (-> mpOwnedQMenu)
     QMenu* mpQMenu;
     QPushButton* mpCloseButton;
     QMetaObject::Connection maCloseButtonConnection;
@@ -58,6 +72,8 @@ public:
     virtual void SetFrame(const SalFrame* pFrame) override;
     const Qt5Frame* GetFrame() const;
     virtual void ShowMenuBar(bool bVisible) override;
+    virtual bool ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangle& rRect,
+                                     FloatWinPopupFlags nFlags) override;
     Qt5Menu* GetTopLevel();
     virtual void SetItemBits(unsigned nPos, MenuItemBits nBits) override;
     virtual void CheckItem(unsigned nPos, bool bCheck) override;

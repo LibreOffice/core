@@ -583,10 +583,10 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         lcl_adjustBorderDistance(rInfo, aLeftBorder, aRightBorder);
 
         // tdf#106742: since MS Word 2013 (compatibilityMode >= 15), top-level tables are handled the same as nested tables;
-        // this is also the default behavior in LO when DOCX doesn't define "compatibilityMode" option
+        // the default behavior when DOCX doesn't define "compatibilityMode" option is to add the cell spacing
         sal_Int32 nMode = m_rDMapper_Impl.GetSettingsTable()->GetWordCompatibilityMode();
 
-        if ( nMode > 0 && nMode <= 14 && rInfo.nNestLevel == 1 )
+        if (((nMode < 0) || (0 < nMode && nMode <= 14)) && rInfo.nNestLevel == 1)
         {
             m_aTableProperties->Insert( PROP_LEFT_MARGIN, uno::makeAny( nLeftMargin - nGapHalf - rInfo.nLeftBorderDistance ) );
         }
@@ -836,7 +836,17 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                 // Do not apply vertical borders to a one column table.
                 else if (m_aCellProperties.size() > 1 && aRowOfCellsIterator->size() <= 1)
                 {
-                    rInfo.pTableBorders->Erase(META_PROP_VERTICAL_BORDER);
+                    bool isOneCol = true;
+                    for (size_t i = nRow; i < m_aCellProperties.size(); i++)
+                    {
+                        if (m_aCellProperties[i].size() > 1)
+                        {
+                            isOneCol = false;
+                            break;
+                        }
+                    }
+                    if (isOneCol)
+                        rInfo.pTableBorders->Erase(META_PROP_VERTICAL_BORDER);
                 }
                 // Do not apply horizontal borders to a one row table.
                 else if (m_aCellProperties.size() == 1 && aRowOfCellsIterator->size() > 1)

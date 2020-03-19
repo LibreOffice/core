@@ -184,8 +184,8 @@ DECLARE_OOXMLEXPORT_TEST(testStyleInheritance, "style-inheritance.docx")
     // Check that we output real content of rPrDefault
     assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:rPrDefault/w:rPr/w:rFonts", "ascii", "Times New Roman");
     assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:rPrDefault/w:rPr/w:lang", "bidi", "ar-SA");
-    // pPrDefault is empty
-    assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:pPrDefault/w:pPr/*", 0);
+    // pPrDefault contains only one hyphenation propery
+    assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:pPrDefault/w:pPr/*", 1);
 
     // Check latent styles
     uno::Sequence<beans::PropertyValue> aGrabBag = getProperty< uno::Sequence<beans::PropertyValue> >(mxComponent, "InteropGrabBag");
@@ -1059,6 +1059,27 @@ DECLARE_OOXMLEXPORT_TEST(testBottomBorders, "tdf129452_BottomBorders.docx")
 
     assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[1]/w:tcPr/w:tcBorders/w:bottom [@w:val = 'nil']", 0);
     assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[2]/w:tcPr/w:tcBorders/w:bottom [@w:val = 'nil']", 0);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testNumberingLevels, "tdf95495.docx")
+{
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+
+    // tdf#95495: set list level of the custom style based on the setting of the parent style
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:pPr/w:numPr/w:ilvl [@w:val = '1']", 1);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testVerticalBorders, "calendar3.docx")
+{
+    // tdf#130799: Inside vertical borders of a table should not be missing.
+
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+    // Left and right borders.
+    assertXPathChildren(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[3]/w:tcPr/w:tcBorders", 2);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

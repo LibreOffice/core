@@ -266,6 +266,7 @@ SwAttrHandler::SwAttrHandler()
     : m_pIDocumentSettingAccess(nullptr)
     , m_pShell(nullptr)
     , m_bVertLayout(false)
+    , m_bVertLayoutLRBT(false)
 {
     memset( m_pDefaultArray, 0, NUM_DEFAULT_VALUES * sizeof(SfxPoolItem*) );
 }
@@ -287,7 +288,7 @@ void SwAttrHandler::Init( const SwAttrSet& rAttrSet,
 void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet* pAS,
                           const IDocumentSettingAccess& rIDocumentSettingAcces,
                           const SwViewShell* pSh,
-                          SwFont& rFnt, bool bVL )
+                          SwFont& rFnt, bool bVL, bool bVertLayoutLRBT )
 {
     // initialize default array
     memcpy( m_pDefaultArray, pPoolItem,
@@ -298,6 +299,7 @@ void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet* pAS,
 
     // do we have to apply additional paragraph attributes?
     m_bVertLayout = bVL;
+    m_bVertLayoutLRBT = bVertLayoutLRBT;
 
     if ( pAS && pAS->Count() )
     {
@@ -760,7 +762,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
 
             if ( !bTwoLineAct )
                 rFnt.SetVertical( static_cast<const SvxCharRotateItem&>(rItem).GetValue(),
-                                   m_bVertLayout );
+                                   m_bVertLayout, m_bVertLayoutLRBT );
 
             break;
         }

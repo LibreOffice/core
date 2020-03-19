@@ -1326,7 +1326,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
     for ( std::vector<FieldInfos>::iterator pIt = m_Fields.begin() + nFieldsInPrevHyperlink; pIt != m_Fields.end(); )
     {
         // Add the fields starts for all but hyperlinks and TOCs
-        if ( pIt->bOpen && pIt->pField )
+        if (pIt->bOpen && pIt->pField && pIt->eType != ww::eFORMDROPDOWN)
         {
             StartField_Impl( pNode, nPos, *pIt );
 
@@ -1391,7 +1391,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
     for ( std::vector<FieldInfos>::iterator pIt = m_Fields.begin(); pIt != m_Fields.end(); )
     {
         // Add the fields starts for hyperlinks, TOCs and index marks
-        if ( pIt->bOpen && !pIt->pField )
+        if (pIt->bOpen && (!pIt->pField || pIt->eType == ww::eFORMDROPDOWN))
         {
             StartRedline( m_pRedlineData );
             StartField_Impl( pNode, nPos, *pIt, true );
@@ -1926,10 +1926,68 @@ void DocxAttributeOutput::WriteFormDateStart(const OUString& sFullDate, const OU
     m_pSerializer->startElementNS(XML_w, XML_sdtContent);
 }
 
-void DocxAttributeOutput::WriteFormDateEnd()
+void DocxAttributeOutput::WriteSdtEnd()
 {
     m_pSerializer->endElementNS(XML_w, XML_sdtContent);
     m_pSerializer->endElementNS(XML_w, XML_sdt);
+}
+
+void DocxAttributeOutput::WriteSdtDropDownStart(
+        OUString const& rName,
+        OUString const& rSelected,
+        uno::Sequence<OUString> const& rListItems)
+{
+    m_pSerializer->startElementNS(XML_w, XML_sdt);
+    m_pSerializer->startElementNS(XML_w, XML_sdtPr);
+
+    m_pSerializer->singleElementNS(XML_w, XML_alias,
+        FSNS(XML_w, XML_val), OUStringToOString(rName, RTL_TEXTENCODING_UTF8));
+
+    sal_Int32 nId = comphelper::findValue(rListItems, rSelected);
+    if (nId == -1)
+    {
+        nId = 0;
+    }
+
+    m_pSerializer->startElementNS(XML_w, XML_dropDownList,
+            FSNS(XML_w, XML_lastValue), OString::number(nId));
+
+    for (auto const& rItem : rListItems)
+    {
+        auto const item(OUStringToOString(rItem, RTL_TEXTENCODING_UTF8));
+        m_pSerializer->singleElementNS(XML_w, XML_listItem,
+                FSNS(XML_w, XML_value), item,
+                FSNS(XML_w, XML_displayText), item);
+    }
+
+    m_pSerializer->endElementNS(XML_w, XML_dropDownList);
+    m_pSerializer->endElementNS(XML_w, XML_sdtPr);
+
+    m_pSerializer->startElementNS(XML_w, XML_sdtContent);
+}
+
+void DocxAttributeOutput::WriteSdtDropDownEnd(OUString const& rSelected,
+        uno::Sequence<OUString> const& rListItems)
+{
+    // note: rSelected might be empty?
+    sal_Int32 nId = comphelper::findValue(rListItems, rSelected);
+    if (nId == -1)
+    {
+        nId = 0;
+    }
+
+    // the lastValue only identifies the entry in the list, also export
+    // currently selected item's displayText as run content (if one exists)
+    if (rListItems.size())
+    {
+        m_pSerializer->startElementNS(XML_w, XML_r);
+        m_pSerializer->startElementNS(XML_w, XML_t);
+        m_pSerializer->writeEscaped(rListItems[nId]);
+        m_pSerializer->endElementNS(XML_w, XML_t);
+        m_pSerializer->endElementNS(XML_w, XML_r);
+    }
+
+    WriteSdtEnd();
 }
 
 void DocxAttributeOutput::StartField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos const & rInfos, bool bWriteRun )
@@ -1967,6 +2025,14 @@ void DocxAttributeOutput::StartField_Impl( const SwTextNode* pNode, sal_Int32 nP
 
         WriteFormDateStart( sFullDate, sDateFormat, sLang );
     }
+    else if (rInfos.eType == ww::eFORMDROPDOWN && rInfos.pField)
+    {
+        assert(!rInfos.pFieldmark);
+        SwDropDownField const& rField2(*static_cast<SwDropDownField const*>(rInfos.pField.get()));
+        WriteSdtDropDownStart(rField2.GetName(),
+                rField2.GetSelectedItem(),
+                rField2.GetItemSequence());
+    }
     else if ( rInfos.eType != ww::eNONE ) // HYPERLINK fields are just commands
     {
         if ( bWriteRun )
@@ -1974,27 +2040,16 @@ void DocxAttributeOutput::StartField_Impl( const SwTextNode* pNode, sal_Int32 nP
 
         if ( rInfos.eType == ww::eFORMDROPDOWN )
         {
-                m_pSerializer->startElementNS( XML_w, XML_fldChar,
-                    FSNS( XML_w, XML_fldCharType ), "begin" );
-                if ( rInfos.pFieldmark && !rInfos.pField )
-                    WriteFFData(  rInfos );
-                if ( rInfos.pField )
-                {
-                    const SwDropDownField& rField2 = *static_cast<const SwDropDownField*>(rInfos.pField.get());
-                    uno::Sequence<OUString> aItems =
-                        rField2.GetItemSequence();
-                    GetExport().DoComboBox(rField2.GetName(),
-                               rField2.GetHelp(),
-                               rField2.GetToolTip(),
-                               rField2.GetSelectedItem(), aItems);
-                }
-                m_pSerializer->endElementNS( XML_w, XML_fldChar );
+            m_pSerializer->startElementNS( XML_w, XML_fldChar,
+                FSNS( XML_w, XML_fldCharType ), "begin" );
+            assert( rInfos.pFieldmark && !rInfos.pField );
+            WriteFFData(rInfos);
+            m_pSerializer->endElementNS( XML_w, XML_fldChar );
 
-                if ( bWriteRun )
-                    m_pSerializer->endElementNS( XML_w, XML_r );
+            if ( bWriteRun )
+                m_pSerializer->endElementNS( XML_w, XML_r );
 
-                if ( !rInfos.pField )
-                    CmdField_Impl( pNode, nPos, rInfos, bWriteRun );
+            CmdField_Impl( pNode, nPos, rInfos, bWriteRun );
         }
         else
         {
@@ -2164,35 +2219,14 @@ void DocxAttributeOutput::DoWriteFieldRunProperties( const SwTextNode * pNode, s
             m_pSerializer->singleElementNS(XML_w, XML_webHidden);
         }
 
-        // 2. output color
-        if ( m_pColorAttrList.is() )
-        {
-            XFastAttributeListRef xAttrList( m_pColorAttrList.get() );
-            m_pColorAttrList.clear();
-
-            m_pSerializer->singleElementNS( XML_w, XML_color, xAttrList );
-        }
-
-        // 3. output all other character properties
+        // 2. find all active character properties
         SwWW8AttrIter aAttrIt( m_rExport, *pNode );
         aAttrIt.OutAttr( nPos, bWriteCombChars );
 
-        // 4. explicitly write the font-properties, to ensure all runs in the field have them
-        // see tdf#66401
-        if ( m_pFontsAttrList.is() )
-        {
-            XFastAttributeListRef xAttrList( m_pFontsAttrList.get() );
-            m_pFontsAttrList.clear();
-
-            m_pSerializer->singleElementNS( XML_w, XML_rFonts, xAttrList );
-        }
+        // 3. write the character properties
+        WriteCollectedRunProperties();
 
         m_pSerializer->endElementNS( XML_w, XML_rPr );
-
-        // During SwWW8AttrIter::OutAttr() call the new value of the text color could be set into [m_pColorAttrList].
-        // But we do not need to keep it any more and should clean up,
-        // While the next run could define a new color that is different to current one.
-        m_pColorAttrList.clear();
     }
 
     m_bPreventDoubleFieldsHandling = false;
@@ -2200,9 +2234,17 @@ void DocxAttributeOutput::DoWriteFieldRunProperties( const SwTextNode * pNode, s
 
 void DocxAttributeOutput::EndField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos& rInfos )
 {
-    if ( rInfos.eType == ww::eFORMDATE )
+    if (rInfos.eType == ww::eFORMDATE)
     {
-        WriteFormDateEnd();
+        WriteSdtEnd();
+        return;
+    }
+    if (rInfos.eType == ww::eFORMDROPDOWN && rInfos.pField)
+    {
+        // write selected item from End not Start to ensure that any bookmarks
+        // precede it
+        SwDropDownField const& rField(*static_cast<SwDropDownField const*>(rInfos.pField.get()));
+        WriteSdtDropDownEnd(rField.GetSelectedItem(), rField.GetItemSequence());
         return;
     }
 
@@ -3999,10 +4041,10 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
             // so, table_spacing + table_spacing_to_content = tblInd
 
             // tdf#106742: since MS Word 2013 (compatibilityMode >= 15), top-level tables are handled the same as nested tables;
-            // this is also the default behavior in LO when DOCX doesn't define "compatibilityMode" option
+            // the default behavior when DOCX doesn't define "compatibilityMode" option is to add the cell spacing
             sal_Int32 nMode = lcl_getWordCompatibilityMode( *m_rExport.m_pDoc );
 
-            if ( nMode > 0 && nMode <= 14 && m_tableReference->m_nTableDepth == 0 )
+            if (((nMode < 0) || (0 < nMode && nMode <= 14)) && m_tableReference->m_nTableDepth == 0)
             {
                 const SwTableBox*    pTabBox = pTableTextNodeInfoInner->getTableBox();
                 const SwFrameFormat* pFrameFormat = pTabBox->GetFrameFormat();
@@ -4604,7 +4646,7 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
             bMustWrite = static_cast< const SvxTabStopItem& >(rHt).Count() != 0;
             break;
         case RES_PARATR_HYPHENZONE:
-            bMustWrite = static_cast< const SvxHyphenZoneItem& >(rHt).IsHyphen();
+            bMustWrite = true;
             break;
         case RES_PARATR_NUMRULE:
             bMustWrite = !static_cast< const SwNumRuleItem& >(rHt).GetValue().isEmpty();
@@ -7567,6 +7609,21 @@ void DocxAttributeOutput::FootnoteEndnoteReference()
     }
 }
 
+static void WriteFootnoteSeparatorHeight(
+    ::sax_fastparser::FSHelperPtr const& pSerializer, SwTwips const nHeight)
+{
+    // try to get the height by setting font size of the paragraph
+    if (nHeight != 0)
+    {
+        pSerializer->startElementNS(XML_w, XML_pPr);
+        pSerializer->startElementNS(XML_w, XML_rPr);
+        pSerializer->singleElementNS(XML_w, XML_sz, FSNS(XML_w, XML_val),
+            OString::number((nHeight + 5) / 10));
+        pSerializer->endElementNS(XML_w, XML_rPr);
+        pSerializer->endElementNS(XML_w, XML_pPr);
+    }
+}
+
 void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
 {
     m_setFootnote = true;
@@ -7585,9 +7642,9 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
             FSNS( XML_w, XML_id ), OString::number(nIndex++),
             FSNS( XML_w, XML_type ), "separator" );
     m_pSerializer->startElementNS(XML_w, XML_p);
-    m_pSerializer->startElementNS(XML_w, XML_r);
 
     bool bSeparator = true;
+    SwTwips nHeight(0);
     if (bFootnotes)
     {
         const SwPageFootnoteInfo& rFootnoteInfo = m_rExport.m_pDoc->GetPageDesc(0).GetFootnoteInfo();
@@ -7595,8 +7652,12 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
         bSeparator = rFootnoteInfo.GetLineStyle() != SvxBorderLineStyle::NONE
                   && rFootnoteInfo.GetLineWidth() > 0
                   && double(rFootnoteInfo.GetWidth()) > 0;
+        nHeight = sw::FootnoteSeparatorHeight(rFootnoteInfo);
     }
 
+    WriteFootnoteSeparatorHeight(m_pSerializer, nHeight);
+
+    m_pSerializer->startElementNS(XML_w, XML_r);
     if (bSeparator)
         m_pSerializer->singleElementNS(XML_w, XML_separator);
     m_pSerializer->endElementNS( XML_w, XML_r );
@@ -7608,6 +7669,9 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
             FSNS( XML_w, XML_id ), OString::number(nIndex++),
             FSNS( XML_w, XML_type ), "continuationSeparator" );
     m_pSerializer->startElementNS(XML_w, XML_p);
+
+    WriteFootnoteSeparatorHeight(m_pSerializer, nHeight);
+
     m_pSerializer->startElementNS(XML_w, XML_r);
     if (bSeparator)
     {

@@ -141,13 +141,15 @@ model::SharedPageDescriptor FocusManager::GetFocusedPageDescriptor() const
     return mrSlideSorter.GetModel().GetPageDescriptor(mnPageIndex);
 }
 
-void FocusManager::SetFocusedPage (const model::SharedPageDescriptor& rpDescriptor)
+bool FocusManager::SetFocusedPage (const model::SharedPageDescriptor& rpDescriptor)
 {
     if (rpDescriptor.get() != nullptr)
     {
         FocusHider aFocusHider (*this);
         mnPageIndex = (rpDescriptor->GetPage()->GetPageNum()-1)/2;
+        return true;
     }
+    return false;
 }
 
 void FocusManager::SetFocusedPage (sal_Int32 nPageIndex)
@@ -156,9 +158,9 @@ void FocusManager::SetFocusedPage (sal_Int32 nPageIndex)
     mnPageIndex = nPageIndex;
 }
 
-void FocusManager::SetFocusedPageToCurrentPage()
+bool FocusManager::SetFocusedPageToCurrentPage()
 {
-    SetFocusedPage(mrSlideSorter.GetController().GetCurrentSlideManager()->GetCurrentSlide());
+    return SetFocusedPage(mrSlideSorter.GetController().GetCurrentSlideManager()->GetCurrentSlide());
 }
 
 bool FocusManager::IsFocusShowing() const

@@ -420,7 +420,7 @@ bool Qt5Widget::handleKeyEvent(Qt5Frame& rFrame, const QWidget& rWidget, QKeyEve
                                const ButtonKeyState eState)
 {
     sal_uInt16 nCode = GetKeyCode(pEvent->key(), pEvent->modifiers());
-    if (eState == ButtonKeyState::Pressed && nCode == 0 && !pEvent->text().isEmpty()
+    if (eState == ButtonKeyState::Pressed && nCode == 0 && pEvent->text().length() > 1
         && rWidget.testAttribute(Qt::WA_InputMethodEnabled))
     {
         commitText(rFrame, pEvent->text());
@@ -450,6 +450,16 @@ bool Qt5Widget::handleEvent(Qt5Frame& rFrame, const QWidget& rWidget, QEvent* pE
 {
     if (pEvent->type() == QEvent::ShortcutOverride)
     {
+        // ignore non-spontaneous QEvent::ShortcutOverride events,
+        // since such an extra event is sent e.g. with Orca screen reader enabled,
+        // so that two events of that kind (the "real one" and a non-spontaneous one)
+        // would otherwise be processed, resulting in duplicate input as 'handleKeyEvent'
+        // is called below (s. tdf#122053)
+        if (!pEvent->spontaneous())
+        {
+            return false;
+        }
+
         // Accepted event disables shortcut activation,
         // but enables keypress event.
         // If event is not accepted and shortcut is successfully activated,

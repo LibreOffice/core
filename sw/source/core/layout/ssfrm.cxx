@@ -607,7 +607,19 @@ SwRect SwFrame::GetPaintArea() const
             if( pTmp->IsVertical() )
                 nTmpLeft = (pNxt->getFrameArea().*fnRect->fnGetLeft)();
             else
-                nTmpRight = (pNxt->getFrameArea().*fnRect->fnGetRight)();
+            {
+                // pTmp is a row frame, but it's not vertical.
+                if (IsVertLRBT())
+                {
+                    // This frame cell is OK to expand towards the physical down direction.
+                    // Physical down is left.
+                    nTmpLeft = (pNxt->getFrameArea().*fnRect->fnGetLeft)();
+                }
+                else
+                {
+                    nTmpRight = (pNxt->getFrameArea().*fnRect->fnGetRight)();
+                }
+            }
         }
         OSL_ENSURE( pTmp, "GetPaintArea lost in time and space" );
         if( pTmp->IsPageFrame() || pTmp->IsFlyFrame() ||

@@ -81,6 +81,8 @@ void Qt5SvpGraphics::handleDamage(const tools::Rectangle& rDamagedRegion)
 
     QImage* pImage = static_cast<Qt5Graphics_Controls*>(m_pWidgetDraw.get())->getImage();
     assert(pImage);
+    if (pImage->width() == 0 || pImage->height() == 0)
+        return;
 
     BitmapBuffer aBuffer;
     QImage2BitmapBuffer(*pImage, aBuffer);

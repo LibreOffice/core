@@ -327,6 +327,9 @@ void OWizNameMatching::FillListBox(weld::TreeView& rTreeView, const ODatabaseExp
         rTreeView.set_id(nRow, OUString::number(reinterpret_cast<sal_Int64>(elem->second)));
         ++nRow;
     }
+
+    if (rTreeView.n_children())
+        rTreeView.select(0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

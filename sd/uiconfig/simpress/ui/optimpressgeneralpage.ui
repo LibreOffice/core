@@ -287,8 +287,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="distrotcb">
-                    <property name="label" translatable="yes" context="optimpressgeneralpage|distrotcb">Do not distort objects in curve</property>
+                  <object class="GtkCheckButton" id="distortcb">
+                    <property name="label" translatable="yes" context="optimpressgeneralpage|distortcb">Do not distort objects in curve</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>

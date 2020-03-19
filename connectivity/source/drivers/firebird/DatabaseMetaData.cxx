@@ -934,16 +934,16 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         // Numeric
         aRow[1] = new ORowSetValueDecorator(OUString("NUMERIC"));
         aRow[2] = new ORowSetValueDecorator(DataType::NUMERIC);
-        aRow[3] = new ORowSetValueDecorator(sal_Int16(15)); // Precision
-        aRow[14] = new ORowSetValueDecorator(sal_Int16(1)); // Minimum scale
-        aRow[15] = new ORowSetValueDecorator(sal_Int16(15)); // Max scale
+        aRow[3] = new ORowSetValueDecorator(sal_Int16(18)); // Precision
+        aRow[14] = new ORowSetValueDecorator(sal_Int16(0)); // Minimum scale
+        aRow[15] = new ORowSetValueDecorator(sal_Int16(18)); // Max scale
         tmp.push_back(aRow);
         // Decimal
         aRow[1] = new ORowSetValueDecorator(OUString("DECIMAL"));
         aRow[2] = new ORowSetValueDecorator(DataType::DECIMAL);
-        aRow[3] = new ORowSetValueDecorator(sal_Int16(15)); // Precision
-        aRow[14] = new ORowSetValueDecorator(sal_Int16(1)); // Minimum scale
-        aRow[15] = new ORowSetValueDecorator(sal_Int16(15)); // Max scale
+        aRow[3] = new ORowSetValueDecorator(sal_Int16(18)); // Precision
+        aRow[14] = new ORowSetValueDecorator(sal_Int16(0)); // Minimum scale
+        aRow[15] = new ORowSetValueDecorator(sal_Int16(18)); // Max scale
         tmp.push_back(aRow);
 
         aRow[6] = new ORowSetValueDecorator(); // Create Params
@@ -1247,7 +1247,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
             if (xDescriptionBlob.is())
             {
                 sal_Int32 aBlobLength = static_cast<sal_Int32>(xDescriptionBlob->length());
-                aDescription = OUString(reinterpret_cast<char*>(xDescriptionBlob->getBytes(0, aBlobLength).getArray()),
+                aDescription = OUString(reinterpret_cast<char*>(xDescriptionBlob->getBytes(1, aBlobLength).getArray()),
                                         aBlobLength,
                                         RTL_TEXTENCODING_UTF8);
             }
@@ -1414,7 +1414,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
                 // TODO: we should actually be using CLOB here instead.
                 // However we haven't implemented CLOB yet, so use BLOB.
                 sal_Int32 aBlobLength = static_cast<sal_Int32>(xBlob->length());
-                sDescription = OUString(reinterpret_cast<char*>(xBlob->getBytes(0, aBlobLength).getArray()),
+                sDescription = OUString(reinterpret_cast<char*>(xBlob->getBytes(1, aBlobLength).getArray()),
                                         aBlobLength,
                                         RTL_TEXTENCODING_UTF8);
             }

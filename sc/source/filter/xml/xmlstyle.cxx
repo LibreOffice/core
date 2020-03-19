@@ -792,44 +792,6 @@ ScXMLAutoStylePoolP::~ScXMLAutoStylePoolP()
 {
 }
 
-void ScXMLStyleExport::exportStyleAttributes(
-        const css::uno::Reference< css::style::XStyle > & rStyle )
-{
-    uno::Reference< beans::XPropertySet > xPropSet( rStyle, uno::UNO_QUERY );
-    if (xPropSet.is())
-    {
-        uno::Reference< beans::XPropertySetInfo > xPropSetInfo(xPropSet->getPropertySetInfo());
-        OUString sNumberFormat("NumberFormat");
-        if( xPropSetInfo->hasPropertyByName( sNumberFormat ) )
-        {
-            uno::Reference< beans::XPropertyState > xPropState( xPropSet, uno::UNO_QUERY );
-            if( xPropState.is() && (beans::PropertyState_DIRECT_VALUE ==
-                    xPropState->getPropertyState( sNumberFormat )) )
-            {
-                sal_Int32 nNumberFormat = 0;
-                if (xPropSet->getPropertyValue( sNumberFormat ) >>= nNumberFormat)
-                    GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_DATA_STYLE_NAME,
-                                                        GetExport().getDataStyleName(nNumberFormat) );
-            }
-        }
-    }
-}
-
-void ScXMLStyleExport::exportStyleContent( const css::uno::Reference<css::style::XStyle > & /* rStyle */ )
-{
-}
-
-ScXMLStyleExport::ScXMLStyleExport(
-        SvXMLExport& rExp,
-        SvXMLAutoStylePoolP *pAutoStyleP )
-    : XMLStyleExport(rExp, pAutoStyleP)
-{
-}
-
-ScXMLStyleExport::~ScXMLStyleExport()
-{
-}
-
 XMLScPropHdlFactory::XMLScPropHdlFactory()
     : XMLPropertyHandlerFactory()
 {
