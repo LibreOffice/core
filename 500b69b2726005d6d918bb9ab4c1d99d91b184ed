@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9bb0d6a6_5495bda9",
+        "filename": "bridges/source/cpp_uno/shared/vtablefactory.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-19T08:28:36Z",
+      "side": 1,
+      "message": "* This is worth a SAL_WARN.\n* There is no guarantee that errno still evaluates to the relevant value in (the expansion of macro) SAL_INFO.  Better save errno into a local variable first (see e.g. jfw_plugin_startJavaVirtualMachine in jvmfwk/plugins/sunmajor/pluginlib/sunjavaplugin.cxx for such a scenario).",
+      "revId": "500b69b2726005d6d918bb9ab4c1d99d91b184ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
