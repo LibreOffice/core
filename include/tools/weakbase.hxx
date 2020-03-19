@@ -83,6 +83,12 @@ inline reference_type * WeakReference< reference_type >::operator->() const
 }
 
 template< class reference_type >
+inline reference_type& WeakReference< reference_type >::operator*() const
+{
+    return *get();
+}
+
+template< class reference_type >
 inline bool WeakReference< reference_type >::operator==(const reference_type * pReferenceObject) const
 {
     return mpWeakConnection->mpReference == pReferenceObject;

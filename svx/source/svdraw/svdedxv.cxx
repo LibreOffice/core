@@ -1450,7 +1450,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
 
     if (GetModel() && mxTextEditObj.is())
     {
-        SdrHint aHint(SdrHintKind::EndEdit, *mxTextEditObj.get());
+        SdrHint aHint(SdrHintKind::EndEdit, *mxTextEditObj);
         GetModel()->Broadcast(aHint);
     }
 
@@ -2168,8 +2168,7 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
                 if (bUndo)
                 {
                     BegUndo(ImpGetDescriptionString(STR_EditSetAttributes));
-                    AddUndo(
-                        GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*mxTextEditObj.get()));
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*mxTextEditObj));
 
                     // If this is a text object also rescue the OutlinerParaObject since
                     // applying attributes to the object may change text layout when
@@ -2179,7 +2178,7 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
                     bool bRescueText = mxTextEditObj.get();
 
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(
-                        *mxTextEditObj.get(), false, !bNoEEItems || bRescueText));
+                        *mxTextEditObj, false, !bNoEEItems || bRescueText));
                     EndUndo();
                 }
 
@@ -2216,10 +2215,8 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
                 if (IsUndoEnabled())
                 {
                     BegUndo(ImpGetDescriptionString(STR_EditSetAttributes));
-                    AddUndo(
-                        GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*mxTextEditObj.get()));
-                    AddUndo(
-                        GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*mxTextEditObj.get()));
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*mxTextEditObj));
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*mxTextEditObj));
                     EndUndo();
                 }
 

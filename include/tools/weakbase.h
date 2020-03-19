@@ -97,6 +97,9 @@ public:
     /** returns the pointer to the reference object or null */
     inline reference_type * operator->() const;
 
+    /** returns a ref to the reference object */
+    inline reference_type& operator*() const;
+
     /** returns true if this instance references pReferenceObject */
     inline bool operator== (const reference_type * pReferenceObject) const;
 
