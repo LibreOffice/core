@@ -2240,13 +2240,13 @@ namespace
 
 OUString DbDateField::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< css::util::XNumberFormatter >& /*xFormatter*/, Color** /*ppColor*/)
 {
-     return lcl_setFormattedDate_nothrow(dynamic_cast<DateField&>(*m_pPainter.get()), _rxField);
+     return lcl_setFormattedDate_nothrow(dynamic_cast<DateField&>(*m_pPainter), _rxField);
 }
 
 
 void DbDateField::UpdateFromField(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/)
 {
-    lcl_setFormattedDate_nothrow(dynamic_cast<DateField&>(*m_pWindow.get()), _rxField);
+    lcl_setFormattedDate_nothrow(dynamic_cast<DateField&>(*m_pWindow), _rxField);
 }
 
 

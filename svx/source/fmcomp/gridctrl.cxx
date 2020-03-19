@@ -472,11 +472,11 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
 
     Point aButtonPos(nX,nY);
     const Size  aButtonSize(nH,nH);
-    SetPosAndSize(*m_aFirstBtn.get(), aButtonPos, aButtonSize);
-    SetPosAndSize(*m_aPrevBtn.get(), aButtonPos, aButtonSize);
-    SetPosAndSize(*m_aNextBtn.get(), aButtonPos, aButtonSize);
-    SetPosAndSize(*m_aLastBtn.get(), aButtonPos, aButtonSize);
-    SetPosAndSize(*m_aNewBtn.get(), aButtonPos, aButtonSize);
+    SetPosAndSize(*m_aFirstBtn, aButtonPos, aButtonSize);
+    SetPosAndSize(*m_aPrevBtn, aButtonPos, aButtonSize);
+    SetPosAndSize(*m_aNextBtn, aButtonPos, aButtonSize);
+    SetPosAndSize(*m_aLastBtn, aButtonPos, aButtonSize);
+    SetPosAndSize(*m_aNewBtn, aButtonPos, aButtonSize);
 
     nX = sal::static_int_cast< sal_uInt16 >(aButtonPos.X() + 1);
 

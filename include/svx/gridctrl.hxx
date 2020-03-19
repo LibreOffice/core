@@ -434,7 +434,7 @@ public:
     bool HasNavigationBar() const {return m_bNavigationBar;}
 
     DbGridControlOptions GetOptions() const {return m_nOptions;}
-    NavigationBar& GetNavigationBar() {return *m_aBar.get();}
+    NavigationBar& GetNavigationBar() {return *m_aBar;}
     DbGridControlOptions SetOptions(DbGridControlOptions nOpt);
         // The new options are interpreted with respect to the current data source. If it is unable
         // to update, to insert or to restore, the according options are ignored. If the grid isn't

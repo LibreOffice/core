@@ -1257,7 +1257,7 @@ void SvmTest::testGradient()
 {
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
-    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
 
     tools::Rectangle aRectangle(Point(1, 2), Size(4,5));
 

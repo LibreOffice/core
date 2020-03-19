@@ -624,7 +624,7 @@ void BitmapTest::testOctree()
     {
         // Reduce to 1 color
         Bitmap::ScopedReadAccess pAccess(aBitmap);
-        Octree aOctree(*pAccess.get(), 1);
+        Octree aOctree(*pAccess, 1);
         auto aBitmapPalette = aOctree.GetPalette();
         CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), aBitmapPalette.GetEntryCount());
         CPPUNIT_ASSERT_EQUAL(BitmapColor(0x7e, 0x7f, 0x7f), aBitmapPalette[0]);
@@ -633,7 +633,7 @@ void BitmapTest::testOctree()
     {
         // Reduce to 4 color
         Bitmap::ScopedReadAccess pAccess(aBitmap);
-        Octree aOctree(*pAccess.get(), 4);
+        Octree aOctree(*pAccess, 4);
         auto aBitmapPalette = aOctree.GetPalette();
         CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), aBitmapPalette.GetEntryCount());
         CPPUNIT_ASSERT_EQUAL(BitmapColor(0x7f, 0x7f, 0x7f), aBitmapPalette[0]);
@@ -645,7 +645,7 @@ void BitmapTest::testOctree()
     {
         // Reduce to 256 color
         Bitmap::ScopedReadAccess pAccess(aBitmap);
-        Octree aOctree(*pAccess.get(), 256);
+        Octree aOctree(*pAccess, 256);
         auto aBitmapPalette = aOctree.GetPalette();
         CPPUNIT_ASSERT_EQUAL(sal_uInt16(74), aBitmapPalette.GetEntryCount());
     }

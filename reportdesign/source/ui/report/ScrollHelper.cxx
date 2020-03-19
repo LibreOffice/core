@@ -54,8 +54,8 @@ OScrollWindowHelper::OScrollWindowHelper( ODesignView* _pDesignView)
 {
     SetMapMode( MapMode( MapUnit::Map100thMM ) );
 
-    impl_initScrollBar( *m_aHScroll.get() );
-    impl_initScrollBar( *m_aVScroll.get() );
+    impl_initScrollBar( *m_aHScroll );
+    impl_initScrollBar( *m_aVScroll );
 
     m_aReportWindow->SetMapMode( MapMode( MapUnit::Map100thMM ) );
     m_aReportWindow->Show();
@@ -174,11 +174,11 @@ Size OScrollWindowHelper::ResizeScrollBars()
     {
         Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH*m_pParent->getController().getZoomValue()),100);
         const sal_Int32 nNewWidth = aOutPixSz.Width() - aOffset.X() - static_cast<long>(aStartWidth);
-        lcl_setScrollBar(nNewWidth,Point( static_cast<long>(aStartWidth) + aOffset.X(), aOutPixSz.Height() ), Size( nNewWidth, nScrSize ), *m_aHScroll.get());
+        lcl_setScrollBar(nNewWidth,Point( static_cast<long>(aStartWidth) + aOffset.X(), aOutPixSz.Height() ), Size( nNewWidth, nScrSize ), *m_aHScroll);
     }
     {
         const sal_Int32 nNewHeight = aOutPixSz.Height() - m_aReportWindow->getRulerHeight();
-        lcl_setScrollBar(nNewHeight,Point( aOutPixSz.Width(), m_aReportWindow->getRulerHeight() ), Size( nScrSize,nNewHeight), *m_aVScroll.get());
+        lcl_setScrollBar(nNewHeight,Point( aOutPixSz.Width(), m_aReportWindow->getRulerHeight() ), Size( nScrSize,nNewHeight), *m_aVScroll);
     }
 
     return aOutPixSz;

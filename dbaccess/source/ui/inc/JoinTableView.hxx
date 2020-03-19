@@ -69,8 +69,8 @@ namespace dbaui
         void resetRange(const Point& _aSize);
 
         // own methods
-        ScrollBar& GetHScrollBar() { return *m_aHScrollBar.get(); }
-        ScrollBar& GetVScrollBar() { return *m_aVScrollBar.get(); }
+        ScrollBar& GetHScrollBar() { return *m_aHScrollBar; }
+        ScrollBar& GetVScrollBar() { return *m_aVScrollBar; }
     };
 
 

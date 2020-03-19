@@ -178,12 +178,17 @@ bool RedundantPointerOps::isSmartPointerType(const Expr* e)
     // written is derived from std::unique_ptr or std::shared_ptr for which the get
     // member function is declared at a base class):
     auto const tc2 = loplugin::TypeCheck(e->getType());
-    if ((tc2.ClassOrStruct("unique_ptr").StdNamespace()
+    if (tc2.ClassOrStruct("unique_ptr").StdNamespace()
            || tc2.ClassOrStruct("shared_ptr").StdNamespace()
-           || (tc2.Class("Reference").Namespace("uno").Namespace("star")
-               .Namespace("sun").Namespace("com").GlobalNamespace())
+           || tc2.Class("Reference").Namespace("uno").Namespace("star")
+                .Namespace("sun").Namespace("com").GlobalNamespace()
            || tc2.Class("Reference").Namespace("rtl").GlobalNamespace()
-           || tc2.Class("SvRef").Namespace("tools").GlobalNamespace()))
+           || tc2.Class("SvRef").Namespace("tools").GlobalNamespace()
+           || tc2.Class("WeakReference").Namespace("tools").GlobalNamespace()
+           || tc2.Class("ScopedReadAccess").Namespace("Bitmap").GlobalNamespace()
+           || tc2.Class("ScopedVclPtrInstance").GlobalNamespace()
+           || tc2.Class("VclPtr").GlobalNamespace()
+           || tc2.Class("ScopedVclPtr").GlobalNamespace())
     {
         return true;
     }
