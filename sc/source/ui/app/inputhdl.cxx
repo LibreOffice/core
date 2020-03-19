@@ -461,10 +461,16 @@ ReferenceMark ScInputHandler::GetReferenceMark( ScViewData& rViewData, ScDocShel
 
 void ScInputHandler::UpdateLokReferenceMarks()
 {
-    if ( !comphelper::LibreOfficeKit::isActive() || !pActiveViewSh )
+    if ( !comphelper::LibreOfficeKit::isActive())
         return;
 
-    ScViewData& rViewData = pActiveViewSh->GetViewData();
+    ScTabViewShell* pShell = pActiveViewSh ? pActiveViewSh
+                                : dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+
+    if (!pShell)
+        return;
+
+    ScViewData& rViewData = pShell->GetViewData();
     ScDocShell* pDocSh = rViewData.GetDocShell();
     ScRangeFindList* pRangeFinder = GetRangeFindList();
 
@@ -517,18 +523,18 @@ void ScInputHandler::UpdateLokReferenceMarks()
                                                                           nX1, nX2, nY1, nY2,
                                                                           nTab, rData.nColor );
 
-            ScInputHandler::SendReferenceMarks( pActiveViewSh, aReferenceMarks );
+            ScInputHandler::SendReferenceMarks( pShell, aReferenceMarks );
         }
     }
     else if ( nCount )
     {
-        ScInputHandler::SendReferenceMarks( pActiveViewSh, aReferenceMarks );
+        ScInputHandler::SendReferenceMarks( pShell, aReferenceMarks );
     }
     else
     {
         // Clear
         aReferenceMarks.clear();
-        ScInputHandler::SendReferenceMarks( pActiveViewSh, aReferenceMarks );
+        ScInputHandler::SendReferenceMarks( pShell, aReferenceMarks );
     }
 }
 
