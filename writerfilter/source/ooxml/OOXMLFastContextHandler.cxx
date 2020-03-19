@@ -37,6 +37,7 @@
 #include <dmapper/PropertyIds.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <dmapper/PropertyIds.hxx>
 
 static const sal_Unicode uCR = 0xd;
 static const sal_Unicode uFtnEdnRef = 0x2;
@@ -1669,34 +1670,15 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
 
             bool bIsPicture = Element == ( NMSP_dmlPicture | XML_pic );
 
-
             //tdf#87569: Fix table layout with correcting anchoring
             //If anchored object is in table, Word calculates its position from cell border
             //instead of page (what is set in the sample document)
             uno::Reference<beans::XPropertySet> xShapePropSet(xShape, uno::UNO_QUERY);
-            if(xShapePropSet && bIsPicture) //TODO make grabbag for textboxes as well
+            if (mnTableDepth > 0 && mbLayoutInCell && xShapePropSet.is()) //if we had a table
             {
-                uno::Sequence<beans::PropertyValue> aShapeGrabBag;
-                xShapePropSet->getPropertyValue("InteropGrabBag") >>= aShapeGrabBag;
-                beans::PropertyValue aLayInCell;
-                aLayInCell.Name = "LayoutInCell";
-                aLayInCell.Value <<= mbLayoutInCell;
-                aShapeGrabBag.realloc(1+aShapeGrabBag.size());
-                aShapeGrabBag[aShapeGrabBag.size() -1] = aLayInCell;
-                xShapePropSet->setPropertyValue("InteropGrabBag", uno::makeAny(aShapeGrabBag));
+                xShapePropSet->setPropertyValue(dmapper::getPropertyName(dmapper::PROP_FOLLOW_TEXT_FLOW),
+                                                uno::makeAny(true));
             }
-            if (mnTableDepth > 0 && mbLayoutInCell) //if we had a table
-            {
-                sal_Int16 nCurrentHorOriRel = {}; // spurious -Werror=maybe-uninitialized
-                xShapePropSet->getPropertyValue("HoriOrientRelation") >>= nCurrentHorOriRel;
-                //and the correction:
-                if (nCurrentHorOriRel == com::sun::star::text::RelOrientation::PAGE_FRAME)
-                {
-                    xShapePropSet->setPropertyValue("HoriOrientRelation",
-                                                    uno::makeAny(text::RelOrientation::FRAME));
-                }
-            }
-
             // Notify the dmapper that the shape is ready to use
             if ( !bIsPicture )
             {

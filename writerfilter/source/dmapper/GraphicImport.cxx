@@ -886,24 +886,12 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
 
                         //tdf#109411 If anchored object is in table, Word calculates its position from cell border
                         //instead of page (what is set in the sample document)
-                        if (xShapeProps)
+                        if (m_pImpl->rDomainMapper.IsInTable() && m_pImpl->bLayoutInCell)
                         {
-                            uno::Sequence<beans::PropertyValue> aShapeGrabBag;
-                            xShapeProps->getPropertyValue("InteropGrabBag") >>= aShapeGrabBag;
-                            beans::PropertyValue aLayInCell;
-                            aLayInCell.Name = "LayoutInCell";
-                            aLayInCell.Value <<= m_pImpl->bLayoutInCell;
-                            aShapeGrabBag.realloc(1 + aShapeGrabBag.size());
-                            aShapeGrabBag[aShapeGrabBag.size() - 1] = aLayInCell;
-                            xShapeProps->setPropertyValue("InteropGrabBag",
-                                                            uno::makeAny(aShapeGrabBag));
+                            xShapeProps->setPropertyValue(
+                                getPropertyName(dmapper::PROP_FOLLOW_TEXT_FLOW),
+                                uno::makeAny(true));
                         }
-                        if (m_pImpl->rDomainMapper.IsInTable() && m_pImpl->bLayoutInCell &&
-                            m_pImpl->nHoriRelation == text::RelOrientation::PAGE_FRAME && IsGraphic())
-                        {
-                            m_pImpl->nHoriRelation = text::RelOrientation::FRAME;
-                        }
-
                         m_pImpl->applyRelativePosition(xShapeProps, /*bRelativeOnly=*/true);
 
                         xShapeProps->setPropertyValue("SurroundContour", uno::makeAny(m_pImpl->bContour));
