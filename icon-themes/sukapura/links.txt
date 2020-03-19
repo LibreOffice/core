@@ -1195,9 +1195,15 @@ cmd/lc_thesaurusdialog.png cmd/lc_thesaurus.png
 cmd/sc_thesaurusdialog.png cmd/sc_thesaurus.png
 
 # View
+cmd/32/availabletoolbars.png cmd/32/showtoolbar.png
 cmd/32/sidebarmenu.png cmd/32/sidebar.png
+cmd/32/toolbarsmenu.png cmd/32/showtoolbar.png
+cmd/lc_availabletoolbars.png cmd/lc_showtoolbar.png
 cmd/lc_sidebarmenu.png cmd/lc_sidebar.png
+cmd/lc_toolbarsmenu.png cmd/lc_showtoolbar.png
+cmd/sc_availabletoolbars.png cmd/sc_showtoolbar.png
 cmd/sc_sidebarmenu.png cmd/sc_sidebar.png
+cmd/sc_toolbarsmenu.png cmd/sc_showtoolbar.png
 
 # Vertical Text Alignment
 cmd/32/cellvertbottom.png cmd/32/alignbottom.png
@@ -1480,10 +1486,10 @@ cmd/32/outputqualitycolor.png cmd/32/insertgraphic.png
 cmd/lc_outputqualitycolor.png cmd/lc_insertgraphic.png
 cmd/sc_outputqualitycolor.png cmd/sc_insertgraphic.png
 
-# InputLineVisible
-cmd/32/inputlinevisible.png cmd/32/dbviewfunctions.png
-cmd/lc_inputlinevisible.png cmd/lc_dbviewfunctions.png
-cmd/sc_inputlinevisible.png cmd/sc_dbviewfunctions.png
+# Show Formula
+cmd/32/toggleformula.png cmd/32/dbviewfunctions.png
+cmd/lc_toggleformula.png cmd/lc_dbviewfunctions.png
+cmd/sc_toggleformula.png cmd/sc_dbviewfunctions.png
 
 # Axis
 cmd/32/toggleaxisdescr.png cmd/32/helplinesvisible.png
