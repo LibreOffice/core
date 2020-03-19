@@ -614,6 +614,18 @@ sal_Int16 ConvertNumberingType(sal_Int32 nFmt)
     return nRet;
 }
 
+sal_Int16 ConvertCustomNumberFormat(const OUString& rFormat)
+{
+    sal_Int16 nRet = -1;
+
+    if (rFormat == "001, 002, 003, ...")
+    {
+        nRet = style::NumberingType::ARABIC_ZERO3;
+    }
+
+    return nRet;
+}
+
 util::DateTime ConvertDateStringToDateTime( const OUString& rDateTime )
 {
     util::DateTime aDateTime;

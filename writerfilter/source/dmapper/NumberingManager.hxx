@@ -45,6 +45,8 @@ class ListLevel : public PropertyMap
     sal_Int32                                     m_nIStartAt;       //LN_CT_Lvl_start
     sal_Int32                                     m_nStartOverride;
     sal_Int32                                     m_nNFC;            //LN_CT_Lvl_numFmt
+    /// LN_CT_NumFmt_format, in case m_nNFC is custom.
+    OUString m_aCustomNumberFormat;
     sal_Int16                                     m_nXChFollow;      //LN_IXCHFOLLOW
     OUString                               m_sBulletChar;
     css::awt::Size                         m_aGraphicSize;
@@ -69,6 +71,7 @@ public:
 
     // Setters for the import
     void SetValue( Id nId, sal_Int32 nValue );
+    void SetCustomNumberFormat(const OUString& rValue);
     void SetBulletChar( const OUString& sValue ) { m_sBulletChar = sValue; };
     void SetGraphicSize( const css::awt::Size& aValue ) { m_aGraphicSize = aValue; };
 

@@ -121,6 +121,19 @@ DECLARE_ODFEXPORT_TEST(testArabicZeroNumbering, "arabic-zero-numbering.docx")
                          aMap["NumberingType"].get<sal_uInt16>());
 }
 
+DECLARE_ODFEXPORT_TEST(testArabicZero3Numbering, "arabic-zero3-numbering.docx")
+{
+    auto xNumberingRules
+        = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), "NumberingRules");
+    comphelper::SequenceAsHashMap aMap(xNumberingRules->getByIndex(0));
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 65
+    // - Actual  : 4
+    // i.e. numbering type was ARABIC, not ARABIC_ZERO3.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(style::NumberingType::ARABIC_ZERO3),
+                         aMap["NumberingType"].get<sal_uInt16>());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testArabicZeroNumberingFootnote)
 {
     // Create a document, set footnote numbering type to ARABIC_ZERO.

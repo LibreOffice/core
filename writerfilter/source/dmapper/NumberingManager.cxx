@@ -130,6 +130,8 @@ void ListLevel::SetValue( Id nId, sal_Int32 nValue )
     m_bHasValues = true;
 }
 
+void ListLevel::SetCustomNumberFormat(const OUString& rValue) { m_aCustomNumberFormat = rValue; }
+
 bool ListLevel::HasValues() const
 {
     return m_bHasValues;
@@ -190,7 +192,15 @@ uno::Sequence<beans::PropertyValue> ListLevel::GetLevelProperties(bool bDefaults
     if( m_nIStartAt >= 0)
         aNumberingProperties.push_back(lcl_makePropVal<sal_Int16>(PROP_START_WITH, m_nIStartAt) );
 
-    sal_Int16 nNumberFormat = ConversionHelper::ConvertNumberingType(m_nNFC);
+    sal_Int16 nNumberFormat = -1;
+    if (m_nNFC == NS_ooxml::LN_Value_ST_NumberFormat_custom)
+    {
+        nNumberFormat = ConversionHelper::ConvertCustomNumberFormat(m_aCustomNumberFormat);
+    }
+    else
+    {
+        nNumberFormat = ConversionHelper::ConvertNumberingType(m_nNFC);
+    }
     if( m_nNFC >= 0)
     {
         if (m_xGraphicBitmap.is())
@@ -692,8 +702,17 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
         case NS_ooxml::LN_CT_Lvl_isLgl:
         case NS_ooxml::LN_CT_Lvl_legacy:
             if ( pCurrentLvl.get( ) )
-                pCurrentLvl->SetValue( nName, sal_Int32( nIntValue ) );
-        break;
+            {
+                if (nName == NS_ooxml::LN_CT_NumFmt_format)
+                {
+                    pCurrentLvl->SetCustomNumberFormat(rVal.getString());
+                }
+                else
+                {
+                    pCurrentLvl->SetValue(nName, sal_Int32(nIntValue));
+                }
+            }
+            break;
         case NS_ooxml::LN_CT_Num_numId:
             m_pCurrentDefinition->SetId( rVal.getString().toInt32( ) );
         break;
