@@ -226,6 +226,11 @@ protected:
     const css::uno::Reference< css::uno::XComponentContext >& getComponentContext() const { return m_xContext;}
 
     bool inPositionV;
+<<<<<<< HEAD   (292c60 fix build)
+=======
+    bool mbAllowInCell; // o:allowincell
+    bool mbIsVMLfound;
+>>>>>>> CHANGE (27d04f tdf#119038 DOCX: fix FollowTextFlow handling)
     OOXMLValue::Pointer_t mpGridAfter;
 
 private:

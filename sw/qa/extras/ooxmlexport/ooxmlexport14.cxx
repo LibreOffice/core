@@ -32,24 +32,110 @@ protected:
     }
 };
 
+<<<<<<< HEAD   (292c60 fix build)
+=======
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128207, "tdf128207.docx")
+{
+    //There was the charts on each other, because their horizontal and vertical position was 0!
+    xmlDocPtr p_XmlDoc = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(p_XmlDoc);
+    assertXPathContent(p_XmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:drawing/wp:anchor/wp:positionH/wp:posOffset", "4445");
+}
+
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf123873, "tdf123873.docx")
+{
+    //OLE Object were overlapped due to missing wrap import
+    xmlDocPtr p_XmlDoc = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(p_XmlDoc);
+    assertXPath(
+        p_XmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:drawing/wp:anchor/wp:wrapTopAndBottom");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf130814model, "tdf130814.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x1F497D), getProperty<sal_Int32>(getRun(getParagraph(2), 1), "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(double(16), getProperty<double>(getRun(getParagraph(2), 1), "CharHeight"));
+    CPPUNIT_ASSERT_EQUAL(awt::FontUnderline::SINGLE, getProperty<sal_Int16>(getRun(getParagraph(2), 1), "CharUnderline"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Candara"), getProperty<OUString>(getRun(getParagraph(2), 1), "CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Arial Unicode MS"), getProperty<OUString>(getRun(getParagraph(2), 1), "CharFontNameAsian"));
+}
+
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf130814ooxml, "tdf130814.docx")
+{
+    xmlDocPtr p_XmlDoc = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(p_XmlDoc);
+    assertXPath(
+        p_XmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w:rFonts", "eastAsia", "Arial Unicode MS");
+    assertXPath(
+        p_XmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w:rFonts", "ascii", "Candara");
+    assertXPath(
+        p_XmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w:rFonts", "hAnsi", "Candara");
+    assertXPath(
+        p_XmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w:color", "val", "1F497D");
+    assertXPath(
+        p_XmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w:sz", "val", "32");
+    assertXPath(
+        p_XmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w:szCs", "val", "32");
+    assertXPath(
+        p_XmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w:u", "val", "single");
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf129888vml, "tdf129888vml.docx")
+{
+    //the line shape has anchor in the first cell however it has to
+    //be positioned to an another cell. To reach this we must handle
+    //the o:allowincell attribute of the shape, and its position has
+    //to be calculated from the page frame instead of the table:
+
+    uno::Reference<beans::XPropertySet> xShapeProperties(getShape(1), uno::UNO_QUERY);
+    bool bValue;
+    xShapeProperties->getPropertyValue("IsFollowingTextFlow") >>= bValue;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("tdf129888vml The line shape has bad place!",
+                                 false, bValue);
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf129888dml, "tdf129888dml.docx")
+{
+    //the shape has anchor in the first cell however it has to
+    //be positioned to the right side of the page. To reach this we must handle
+    //the layoutInCell attribute of the shape, and its position has
+    //to be calculated from the page frame instead of the table:
+
+    uno::Reference<beans::XPropertySet> xShapeProperties(getShape(1), uno::UNO_QUERY);
+    bool bValue;
+    xShapeProperties->getPropertyValue("IsFollowingTextFlow") >>= bValue;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("tdf129888dml The shape has bad place!",
+        false, bValue);
+}
+
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf130120, "tdf130120.docx")
+{
+    //Text for exporting the allowincell attribute:
+    xmlDocPtr p_XmlDoc = parseExport("word/document.xml");
+    assertXPath(p_XmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r/mc:AlternateContent/"
+        "mc:Choice/w:drawing/wp:anchor", "layoutInCell", "0");
+}
+
+
+>>>>>>> CHANGE (27d04f tdf#119038 DOCX: fix FollowTextFlow handling)
 DECLARE_OOXMLEXPORT_TEST(testTdf87569v, "tdf87569_vml.docx")
 {
     //the original tdf87569 sample has vml shapes...
     uno::Reference<beans::XPropertySet> xShapeProperties(getShape(1), uno::UNO_QUERY);
-    sal_Int16 nValue;
-    xShapeProperties->getPropertyValue("HoriOrientRelation") >>= nValue;
+    bool bValue;
+    xShapeProperties->getPropertyValue("IsFollowingTextFlow") >>= bValue;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("tdf87569_vml: The Shape is not in the table!",
-                                 text::RelOrientation::FRAME, nValue);
+                                 true, bValue);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf87569d, "tdf87569_drawingml.docx")
 {
     //if the original tdf87569 sample is upgraded it will have drawingml shapes...
     uno::Reference<beans::XPropertySet> xShapeProperties(getShape(1), uno::UNO_QUERY);
-    sal_Int16 nValue;
-    xShapeProperties->getPropertyValue("HoriOrientRelation") >>= nValue;
+    bool bValue;
+    xShapeProperties->getPropertyValue("IsFollowingTextFlow") >>= bValue;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("tdf87569_drawingml: The Shape is not in the table!",
-                                 text::RelOrientation::FRAME, nValue);
+                                 true, bValue);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf120315, "tdf120315.docx")

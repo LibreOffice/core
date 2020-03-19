@@ -465,7 +465,23 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         attrList->add(XML_distR, OString::number(nDistR).getStr());
         attrList->add(XML_simplePos, "0");
         attrList->add(XML_locked, "0");
+<<<<<<< HEAD   (292c60 fix build)
         attrList->add(XML_layoutInCell, "1");
+=======
+        bool bLclInTabCell = true;
+        if (pObj)
+        {
+            uno::Reference<drawing::XShape> xShape((const_cast<SdrObject*>(pObj)->getUnoShape()),
+                                                   uno::UNO_QUERY);
+            uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+            if (xShapeProps.is())
+                xShapeProps->getPropertyValue("IsFollowingTextFlow") >>= bLclInTabCell;
+        }
+        if (bLclInTabCell)
+            attrList->add(XML_layoutInCell, "1");
+        else
+            attrList->add(XML_layoutInCell, "0");
+>>>>>>> CHANGE (27d04f tdf#119038 DOCX: fix FollowTextFlow handling)
         bool bAllowOverlap = pFrameFormat->GetWrapInfluenceOnObjPos().GetAllowOverlap();
         attrList->add(XML_allowOverlap, bAllowOverlap ? "1" : "0");
         if (pObj != nullptr)

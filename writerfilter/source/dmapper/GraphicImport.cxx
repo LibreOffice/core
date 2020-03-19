@@ -262,7 +262,7 @@ public:
         ,nVertOrient(  text::VertOrientation::NONE )
         ,nVertRelation( text::RelOrientation::FRAME )
         ,nWrap(text::WrapTextMode_NONE)
-        ,bLayoutInCell(false)
+        ,bLayoutInCell(true)
         ,bOpaque( !rDMapper.IsInHeaderFooter() )
         ,bContour(false)
         ,bContourOutside(true)
@@ -642,7 +642,6 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
             {
                 uno::Reference< drawing::XShape> xShape;
                 rValue.getAny( ) >>= xShape;
-
                 if ( xShape.is( ) )
                 {
                     // Is it a graphic image
@@ -827,7 +826,12 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             eAnchorType = text::TextContentAnchorType_AT_CHARACTER;
 
                         xShapeProps->setPropertyValue("AnchorType", uno::makeAny(eAnchorType));
-
+                        if (m_pImpl->bLayoutInCell && bTextBox && m_pImpl->rDomainMapper.IsInTable()
+                            && m_pImpl->nHoriRelation == text::RelOrientation::PAGE_FRAME)
+                            m_pImpl->nHoriRelation = text::RelOrientation::FRAME;
+                        if(m_pImpl->rDomainMapper.IsInTable())
+                            xShapeProps->setPropertyValue(getPropertyName(PROP_FOLLOW_TEXT_FLOW),
+                                uno::makeAny(m_pImpl->bLayoutInCell));
                         //only the position orientation is handled in applyPosition()
                         m_pImpl->applyPosition(xShapeProps);
 
@@ -861,6 +865,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                                 xShapeProps->setPropertyValue("RotateAngle", uno::makeAny(nRotation));
                         }
 
+<<<<<<< HEAD   (292c60 fix build)
                         //tdf#109411 If anchored object is in table, Word calculates its position from cell border
                         //instead of page (what is set in the sample document)
                         if (m_pImpl->rDomainMapper.IsInTable() &&
@@ -868,6 +873,8 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         {
                             m_pImpl->nHoriRelation = text::RelOrientation::FRAME;
                         }
+=======
+>>>>>>> CHANGE (27d04f tdf#119038 DOCX: fix FollowTextFlow handling)
 
                         m_pImpl->applyRelativePosition(xShapeProps, /*bRelativeOnly=*/true);
 
@@ -1334,9 +1341,9 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
                 }
                 xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_SURROUND ),
                     uno::makeAny(static_cast<sal_Int32>(m_pImpl->nWrap)));
-                if( m_pImpl->rDomainMapper.IsInTable() && m_pImpl->bLayoutInCell )
+                if( m_pImpl->rDomainMapper.IsInTable())
                     xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_FOLLOW_TEXT_FLOW ),
-                        uno::makeAny(true));
+                        uno::makeAny(m_pImpl->bLayoutInCell));
 
                 xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_SURROUND_CONTOUR ),
                     uno::makeAny(m_pImpl->bContour));

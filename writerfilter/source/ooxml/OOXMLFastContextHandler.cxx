@@ -32,6 +32,13 @@
 #include "OOXMLFastContextHandler.hxx"
 #include "OOXMLFactory.hxx"
 #include "Handler.hxx"
+<<<<<<< HEAD   (292c60 fix build)
+=======
+#include <dmapper/PropertyIds.hxx>
+#include <comphelper/propertysequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+#include <dmapper/PropertyIds.hxx>
+>>>>>>> CHANGE (27d04f tdf#119038 DOCX: fix FollowTextFlow handling)
 
 static const sal_Unicode uCR = 0xd;
 static const sal_Unicode uFtnEdnRef = 0x2;
@@ -65,6 +72,11 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
   mpStream(nullptr),
   mnTableDepth(0),
   inPositionV(false),
+<<<<<<< HEAD   (292c60 fix build)
+=======
+  mbAllowInCell(true),
+  mbIsVMLfound(false),
+>>>>>>> CHANGE (27d04f tdf#119038 DOCX: fix FollowTextFlow handling)
   m_xContext(context),
   m_bDiscardChildren(false),
   m_bTookChoice(false)
@@ -85,6 +97,11 @@ OOXMLFastContextHandler::OOXMLFastContextHandler(OOXMLFastContextHandler * pCont
   mpParserState(pContext->mpParserState),
   mnTableDepth(pContext->mnTableDepth),
   inPositionV(pContext->inPositionV),
+<<<<<<< HEAD   (292c60 fix build)
+=======
+  mbAllowInCell(pContext->mbAllowInCell),
+  mbIsVMLfound(pContext->mbIsVMLfound),
+>>>>>>> CHANGE (27d04f tdf#119038 DOCX: fix FollowTextFlow handling)
   m_xContext(pContext->m_xContext),
   m_bDiscardChildren(pContext->m_bDiscardChildren),
   m_bTookChoice(pContext->m_bTookChoice)
@@ -1663,6 +1680,18 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
 
             bool bIsPicture = Element == ( NMSP_dmlPicture | XML_pic );
 
+<<<<<<< HEAD   (292c60 fix build)
+=======
+            //tdf#87569: Fix table layout with correcting anchoring
+            //If anchored object is in table, Word calculates its position from cell border
+            //instead of page (what is set in the sample document)
+            uno::Reference<beans::XPropertySet> xShapePropSet(xShape, uno::UNO_QUERY);
+            if (mnTableDepth > 0 && xShapePropSet.is() && mbIsVMLfound) //if we had a table
+            {
+                xShapePropSet->setPropertyValue(dmapper::getPropertyName(dmapper::PROP_FOLLOW_TEXT_FLOW),
+                                                uno::makeAny(mbAllowInCell));
+            }
+>>>>>>> CHANGE (27d04f tdf#119038 DOCX: fix FollowTextFlow handling)
             // Notify the dmapper that the shape is ready to use
             if ( !bIsPicture )
             {
@@ -1713,7 +1742,7 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
     bool bGroupShape = Element == Token_t(NMSP_vml | XML_group);
     // drawingML version also counts as a group shape.
     bGroupShape |= mrShapeContext->getStartToken() == Token_t(NMSP_wpg | XML_wgp);
-
+    mbIsVMLfound = (getNamespace(Element) == NMSP_vmlOffice) || (getNamespace(Element) == NMSP_vml);
     switch (oox::getNamespace(Element))
     {
         case NMSP_doc:
@@ -1735,6 +1764,14 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
                                                            pChildContext,
                                                            this);
 
+<<<<<<< HEAD   (292c60 fix build)
+=======
+                    //tdf129888 store allowincell attribute of the VML shape
+                    if (Attribs->hasAttribute(NMSP_vmlOffice | XML_allowincell))
+                        mbAllowInCell
+                            = !(Attribs->getValue(NMSP_vmlOffice | XML_allowincell) == "f");
+
+>>>>>>> CHANGE (27d04f tdf#119038 DOCX: fix FollowTextFlow handling)
                     if (!bGroupShape)
                     {
                         pWrapper->addNamespace(NMSP_doc);
