@@ -32,7 +32,8 @@
   <implementation name="SchXMLExport.Oasis.Content">
     <service name="com.sun.star.comp.Chart.XMLOasisContentExporter"/>
   </implementation>
-  <implementation name="SchXMLExport.Oasis.Meta">
+  <implementation name="SchXMLExport.Oasis.Meta"
+      constructor="com_sun_star_comp_Chart_XMLOasisMetaExporter_get_implementation">
     <service name="com.sun.star.comp.Chart.XMLOasisMetaExporter"/>
   </implementation>
   <implementation name="SchXMLExport.Oasis.Styles">
