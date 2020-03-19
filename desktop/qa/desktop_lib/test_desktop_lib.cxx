@@ -145,7 +145,7 @@ public:
     CPPUNIT_TEST(testRedlineCalc);
     CPPUNIT_TEST(testPaintPartTile);
     CPPUNIT_TEST(testWriterCommentInsertCursor);
-    CPPUNIT_TEST(testGetFontSubset);
+    //CPPUNIT_TEST(testGetFontSubset);
     CPPUNIT_TEST(testCommentsWriter);
     CPPUNIT_TEST(testCommentsCalc);
     CPPUNIT_TEST(testCommentsImpress);
