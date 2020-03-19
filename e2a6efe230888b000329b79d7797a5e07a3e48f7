@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6c64082e_4b57e967",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2750,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-19T11:23:06Z",
+      "side": 0,
+      "message": "Why this change?",
+      "range": {
+        "startLine": 2750,
+        "startChar": 15,
+        "endLine": 2750,
+        "endChar": 18
+      },
+      "revId": "e2a6efe230888b000329b79d7797a5e07a3e48f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

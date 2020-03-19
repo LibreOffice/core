@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f99f93e8_8159bb48",
+        "filename": "basic/source/inc/runtime.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-19T11:23:06Z",
+      "side": 1,
+      "message": "Maybe simply SetIsMissing?",
+      "range": {
+        "startLine": 352,
+        "startChar": 9,
+        "endLine": 352,
+        "endChar": 32
+      },
+      "revId": "2cba4e905bff074d1c24efd887f455735b2182f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1edf0f22_31efaed5",
+        "filename": "basic/source/inc/runtime.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-19T11:23:06Z",
+      "side": 1,
+      "message": "And this - just IsMissing?",
+      "range": {
+        "startLine": 354,
+        "startChar": 9,
+        "endLine": 354,
+        "endChar": 32
+      },
+      "revId": "2cba4e905bff074d1c24efd887f455735b2182f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a35fe807_fa753fdf",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-19T11:23:06Z",
+      "side": 1,
+      "message": "Will this just rewrite any data except flags in SbxInfo? why not get the existing info (only create if nullptr returned), and modify?",
+      "range": {
+        "startLine": 627,
+        "startChar": 4,
+        "endLine": 629,
+        "endChar": 27
+      },
+      "revId": "2cba4e905bff074d1c24efd887f455735b2182f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "551a6fb5_36d1ffe5",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-19T11:23:06Z",
+      "side": 1,
+      "message": "So any error will be \"missing\"?",
+      "range": {
+        "startLine": 635,
+        "startChar": 118,
+        "endLine": 635,
+        "endChar": 126
+      },
+      "revId": "2cba4e905bff074d1c24efd887f455735b2182f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
