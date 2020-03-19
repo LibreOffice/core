@@ -40,6 +40,7 @@ struct SwXTextField final : public test::BootstrapFixture,
                             public apitest::XComponent
 {
     virtual void setUp() override;
+    void tearDown() override;
 
     Reference<XInterface> init() override;
     void triggerDesktopTerminate() override;
@@ -49,6 +50,9 @@ struct SwXTextField final : public test::BootstrapFixture,
     CPPUNIT_TEST(testRemoveEventListener);
     //CPPUNIT_TEST(testDisposedByDesktopTerminate);
     CPPUNIT_TEST_SUITE_END();
+
+private:
+    css::uno::Reference<css::lang::XComponent> component_;
 };
 
 void SwXTextField::setUp()
@@ -58,14 +62,22 @@ void SwXTextField::setUp()
         frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
 }
 
+void SwXTextField::tearDown()
+{
+    if (component_.is())
+    {
+        component_->dispose();
+    }
+}
+
 void SwXTextField::triggerDesktopTerminate() { mxDesktop->terminate(); }
 
 Reference<XInterface> SwXTextField::init()
 {
-    auto xComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
-    CPPUNIT_ASSERT(xComponent.is());
-    Reference<text::XTextDocument> xTextDocument(xComponent, UNO_QUERY_THROW);
-    Reference<lang::XMultiServiceFactory> xMSF(xComponent, UNO_QUERY_THROW);
+    component_ = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    CPPUNIT_ASSERT(component_.is());
+    Reference<text::XTextDocument> xTextDocument(component_, UNO_QUERY_THROW);
+    Reference<lang::XMultiServiceFactory> xMSF(component_, UNO_QUERY_THROW);
 
     Reference<XPropertySet> xFieldMaster(
         xMSF->createInstance("com.sun.star.text.FieldMaster.Database"), UNO_QUERY_THROW);
