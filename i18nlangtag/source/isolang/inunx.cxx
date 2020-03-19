@@ -99,8 +99,9 @@ static void getPlatformSystemLanguageImpl( LanguageType& rSystemLanguage,
                 OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
                 rSystemLanguage = nLang;
 #ifdef DEBUG
-                if ( rSystemLanguage == LANGUAGE_DONTKNOW )
-                    fprintf( stderr, "intnunx.cxx:  failed to convert osl_getProcessLocale() language to system language.\n" );
+                SAL_WARN_IF(rSystemLanguage == LANGUAGE_DONTKNOW,
+                        "i18nlangtag",
+                        "intnunx.cxx:  failed to convert osl_getProcessLocale() language to system language.");
 #endif
             }
 #else   /* MACOSX */

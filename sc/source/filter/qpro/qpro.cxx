@@ -271,28 +271,34 @@ bool ScQProReader::nextRecord()
     mpStream->ReadUInt16( mnId ).ReadUInt16( mnLength );
 
     mnOffset = mpStream->Tell();
-#ifdef DEBUG_SC_QPRO
-    fprintf( stderr, "Read record 0x%x length 0x%x at offset 0x%x\n",
-        (unsigned)mnId, (unsigned)mnLength, (unsigned)mnOffset );
 
-#if 1  // rather verbose
+#ifdef DEBUG_SC_QPRO
+    SAL_INFO("sc.filter.qpro", std::hex << std::showbase
+            << "read record " << (unsigned)mnId
+            << " length " << (unsigned)mnLength
+            << " at offset " << (unsigned)mnOffset);
+
     int len = mnLength;
     while (len > 0) {
         int i, chunk = std::min(len, 16);
         unsigned char data[16];
-        mpStream->Read( data, chunk );
+        mpStream->ReadBytes( data, chunk );
 
+        std::ostringstream oss;
+        oss << std::setprecision(2)
+            << std::hex;
         for (i = 0; i < chunk; i++)
-            fprintf( stderr, "%.2x ", data[i] );
-        fprintf( stderr, "| " );
+            oss << data[i] << " ";
+        oss << "| ";
         for (i = 0; i < chunk; i++)
-            fprintf( stderr, "%c", data[i] < 127 && data[i] > 30 ? data[i] : '.' );
-        fprintf( stderr, "\n" );
+            oss << ((data[i] < 127 && data[i] > 30) ?
+                    data[i] :
+                    '.');
+        SAL_INFO("sc.filter.qpro", oss.str());
 
         len -= chunk;
     }
     mpStream->Seek( mnOffset );
-#endif
 #endif
     return true;
 }

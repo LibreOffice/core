@@ -18,6 +18,7 @@
  */
 
 #include <stdio.h>
+#include "sal/log.hxx"
 #include "LocaleNode.hxx"
 
 // The document handler, which is needed for the saxparser
@@ -25,7 +26,7 @@
 
 OFileWriter::OFileWriter(const char *pcFile, const char *locale ): theLocale(locale) {
 
-    printf("file generated=%s\n", pcFile);
+    SAL_INFO("i18npool", "file generated=" << pcFile);
     m_f = fopen(pcFile, "w");
 }
 

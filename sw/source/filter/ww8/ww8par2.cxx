@@ -3634,7 +3634,7 @@ void WW8RStyle::ImportSprms(sal_uInt8 *pSprms, short nLen, bool bPap)
     while (const sal_uInt8* pSprm = aSprmIter.GetSprms())
     {
 #ifdef DEBUGSPRMREADER
-        fprintf(stderr, "id is %x\n", aIter.GetCurrentId());
+        SAL_INFO("sw.filter", "id is " << std::hex << aSprmIter.GetCurrentId());
 #endif
         mpIo->ImportSprm(pSprm, aSprmIter.GetRemLen(), aSprmIter.GetCurrentId());
         aSprmIter.advance();

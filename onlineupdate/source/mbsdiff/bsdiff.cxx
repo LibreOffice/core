@@ -358,13 +358,10 @@ int main(int argc,char *argv[])
                 reporterr(1,NULL);
 
 #ifdef DEBUG_bsmedberg
-            printf("Writing a block:\n"
-                   "    X: %u\n"
-                   "    Y: %u\n"
-                   "    Z: %i\n",
-                   (uint32_t) lenf,
-                   (uint32_t) ((scan-lenb)-(lastscan+lenf)),
-                   (uint32_t) ((pos-lenb)-(lastpos+lenf)));
+            SAL_INFO("onlineupdate", "Writing a block:");
+            SAL_INFO("onlineupdate", "X: " << (uint32_t) lenf);
+            SAL_INFO("onlineupdate", "Y: " << (uint32_t) ((scan-lenb)-(lastscan+lenf)));
+            SAL_INFO("onlineupdate", "Z: " << (uint32_t) ((pos-lenb)-(lastpos+lenf)));
 #endif
 
             ++numtriples;

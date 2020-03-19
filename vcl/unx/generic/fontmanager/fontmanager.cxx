@@ -680,7 +680,6 @@ void PrintFontManager::initialize()
         m_nNextFontID = 1;
         m_aFonts.clear();
     }
-
 #if OSL_DEBUG_LEVEL > 1
     clock_t aStart;
     clock_t aStep1;
@@ -721,14 +720,18 @@ void PrintFontManager::initialize()
 
 #if OSL_DEBUG_LEVEL > 1
     aStep1 = times( &tms );
-#endif
 
-#if OSL_DEBUG_LEVEL > 1
     aStep2 = times( &tms );
-    fprintf( stderr, "PrintFontManager::initialize: collected %" SAL_PRI_SIZET "u fonts\n", m_aFonts.size() );
+    SAL_INFO("vcl.unx.fontmanager", "PrintFontManager::initialize: collected "
+            << m_aFonts.size()
+            << " fonts.");
     double fTick = (double)sysconf( _SC_CLK_TCK );
-    fprintf( stderr, "Step 1 took %lf seconds\n", (double)(aStep1 - aStart)/fTick );
-    fprintf( stderr, "Step 2 took %lf seconds\n", (double)(aStep2 - aStep1)/fTick );
+    SAL_INFO("vcl.unx.fontmanager", "Step 1 took "
+            << ((double)(aStep1 - aStart)/fTick)
+            << " seconds.");
+    SAL_INFO("vcl.unx.fontmanager", "Step 2 took "
+            << ((double)(aStep2 - aStep1)/fTick)
+            << " seconds.");
 #endif
 
     #ifdef CALLGRIND_COMPILE

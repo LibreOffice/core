@@ -31,6 +31,7 @@
 #include <vector>
 #include <stdlib.h>
 #include <string.h>
+#include <sal/log.hxx>
 
 #include "grammar.hxx"
 #include "lexer.hxx"

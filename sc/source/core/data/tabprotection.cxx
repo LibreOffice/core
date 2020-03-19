@@ -325,9 +325,14 @@ void ScTableProtectionImpl::setPasswordHash(
     maPassHash = aPassword;
 
 #if DEBUG_TAB_PROTECTION
+    std::ostringstream oss;
+    oss << std::setprecision(2)
+        << std::hex
+        << std::uppercase;
     for (sal_Int8 n : aPassword)
-        printf("%2.2X ", static_cast<sal_uInt8>(n));
-    printf("\n");
+        oss << std::setw(2)
+            << static_cast<sal_uInt8>(n) << " ";
+    SAL_INFO("sc.core", oss.str());
 #endif
 }
 
@@ -357,8 +362,10 @@ void ScTableProtectionImpl::setPasswordHash( const OUString& rAlgorithmName, con
 bool ScTableProtectionImpl::verifyPassword(const OUString& aPassText) const
 {
 #if DEBUG_TAB_PROTECTION
-    fprintf(stdout, "ScTableProtectionImpl::verifyPassword: input = '%s'\n",
-            OUStringToOString(aPassText, RTL_TEXTENCODING_UTF8).getStr());
+    SAL_INFO("sc.core", "ScTableProtectionImpl::verifyPassword: input = '"
+            << OUStringToOString(
+                aPassText, RTL_TEXTENCODING_UTF8).getStr()
+            << "'.");
 #endif
 
     if (mbEmptyPass)
@@ -376,10 +383,15 @@ bool ScTableProtectionImpl::verifyPassword(const OUString& aPassText) const
         aHash = hashPassword(aHash, meHash2);
 
 #if DEBUG_TAB_PROTECTION
-        fprintf(stdout, "ScTableProtectionImpl::verifyPassword: hash = ");
+        std::ostringstream oss;
+        oss << "ScTableProtectionImpl::verifyPassword: hash = ";
+        oss << std::setprecision(2)
+            << std::hex
+            << std::uppercase;
         for (sal_Int32 i = 0; i < aHash.getLength(); ++i)
-            printf("%2.2X ", static_cast<sal_uInt8>(aHash[i]));
-        printf("\n");
+            oss << std::setw(2)
+                << static_cast<sal_uInt8>(aHash[i]) << " ";
+        SAL_INFO("sc.core", oss.str());
 #endif
 
         if (aHash == maPassHash)

@@ -39,6 +39,7 @@
 #include <stdio.h>
 
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #define SERVICE_NAME "com.sun.star.migration.Java"
 #define IMPL_NAME "com.sun.star.comp.desktop.migration.Java"
@@ -246,13 +247,14 @@ void JavaMigration::migrateJavarc()
             {
                 OSL_FAIL("[Service implementation " IMPL_NAME
                            "] XJob::execute: jfw_setSelectedJRE failed.");
-                fprintf(stderr, "\nCannot migrate Java. An error occurred.\n");
+                SAL_WARN("desktop.migration", "cannot migrate Java. An error "
+                        << "occurred.");
             }
         }
         else if (err == JFW_E_FAILED_VERSION)
         {
-            fprintf(stderr, "\nCannot migrate Java settings because the version of the Java  "
-                    "is not supported anymore.\n");
+            SAL_WARN("desktop.migration", "cannot migrate Java settings because "
+                    << "the version of the Java is not supported anymore.");
         }
     }
 }

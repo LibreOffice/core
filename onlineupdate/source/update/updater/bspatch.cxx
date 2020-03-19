@@ -133,13 +133,10 @@ MBS_ApplyPatch(const MBSPatchHeader *header, FILE* patchFile,
             ctrlsrc->z = ntohl(ctrlsrc->z);
 
 #ifdef DEBUG_bsmedberg
-            printf("Applying block:\n"
-                   " x: %u\n"
-                   " y: %u\n"
-                   " z: %i\n",
-                   ctrlsrc->x,
-                   ctrlsrc->y,
-                   ctrlsrc->z);
+            SAL_INFO("onlineupdate", "Applying block:");
+            SAL_INFO("onlineupdate", "x: " << ctrlsrc->x);
+            SAL_INFO("onlineupdate", "y: " << ctrlsrc->y);
+            SAL_INFO("onlineupdate", "z: " << ctrlsrc->z);
 #endif
 
             /* Add x bytes from oldfile to x bytes from the diff block */

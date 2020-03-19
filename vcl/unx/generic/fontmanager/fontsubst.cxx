@@ -132,18 +132,30 @@ bool FcPreMatchSubstitution::FindFontSubstitute(FontSelectPattern &rFontSelData)
     const bool bHaveSubstitute = !uselessmatch( rFontSelData, aOut );
 
 #ifdef DEBUG
-    const OString aOrigName(OUStringToOString(rFontSelData.maTargetName,
-        RTL_TEXTENCODING_UTF8));
-    const OString aSubstName(OUStringToOString(aOut.maSearchName,
-        RTL_TEXTENCODING_UTF8));
-    printf( "FcPreMatchSubstitution \"%s\" bipw=%d%d%d%d -> ",
-        aOrigName.getStr(), rFontSelData.GetWeight(), rFontSelData.GetItalic(),
-        rFontSelData.GetPitch(), rFontSelData.GetWidthType() );
+    std::ostringstream oss;
+    oss << "FcPreMatchSubstitution \""
+        << OUStringToOString(
+            rFontSelData.maTargetName,
+            RTL_TEXTENCODING_UTF8).getStr()
+        << "\" bipw="
+        << rFontSelData.GetWeight()
+        << rFontSelData.GetItalic()
+        << rFontSelData.GetPitch()
+        << rFontSelData.GetWidthType()
+        << " -> ";
     if( !bHaveSubstitute )
-        printf( "no substitute available\n" );
+        oss << "no substitute available.";
     else
-        printf( "\"%s\" bipw=%d%d%d%d\n", aSubstName.getStr(),
-        aOut.GetWeight(), aOut.GetItalic(), aOut.GetPitch(), aOut.GetWidthType() );
+        oss << "\""
+            << OUStringToOString(
+                    aOut.maSearchName,
+                    RTL_TEXTENCODING_UTF8).getStr()
+            << "\" bipw="
+            << aOut.GetWeight()
+            << aOut.GetItalic()
+            << aOut.GetPitch()
+            << aOut.GetWidthType();
+    SAL_INFO("vcl.unx.fontmanager", oss.str());
 #endif
 
     if( bHaveSubstitute )
@@ -182,18 +194,30 @@ bool FcGlyphFallbackSubstitution::FindFontSubstitute(FontSelectPattern& rFontSel
     const bool bHaveSubstitute = !uselessmatch( rFontSelData, aOut );
 
 #ifdef DEBUG
-    const OString aOrigName(OUStringToOString(rFontSelData.maTargetName,
-        RTL_TEXTENCODING_UTF8));
-    const OString aSubstName(OUStringToOString(aOut.maSearchName,
-        RTL_TEXTENCODING_UTF8));
-    printf( "FcGFSubstitution \"%s\" bipw=%d%d%d%d ->",
-        aOrigName.getStr(), rFontSelData.GetWeight(), rFontSelData.GetItalic(),
-        rFontSelData.GetPitch(), rFontSelData.GetWidthType() );
+    std::ostringstream oss;
+    oss << "FcGFSubstitution \""
+        << OUStringToOString(
+            rFontSelData.maTargetName,
+            RTL_TEXTENCODING_UTF8).getStr()
+        << "\" bipw="
+        << rFontSelData.GetWeight()
+        << rFontSelData.GetItalic()
+        << rFontSelData.GetPitch()
+        << rFontSelData.GetWidthType()
+        << " -> ";
     if( !bHaveSubstitute )
-        printf( "no substitute available\n" );
+        oss << "no substitute available.";
     else
-        printf( "\"%s\" bipw=%d%d%d%d\n", aSubstName.getStr(),
-        aOut.GetWeight(), aOut.GetItalic(), aOut.GetPitch(), aOut.GetWidthType() );
+        oss << "\""
+            << OUStringToOString(
+                    aOut.maSearchName,
+                    RTL_TEXTENCODING_UTF8).getStr()
+            << "\" bipw="
+            << aOut.GetWeight()
+            << aOut.GetItalic()
+            << aOut.GetPitch()
+            << aOut.GetWidthType();
+    SAL_INFO("vcl.unx.fontmanager", oss.str());
 #endif
 
     if( bHaveSubstitute )

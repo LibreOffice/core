@@ -62,14 +62,14 @@ void HelpParser::Dump(LangHashMap* rElem_in,const OString & sKey_in)
 {
     OString x;
     OString y;
-    fprintf(stdout,"+------------%s-----------+\n",sKey_in.getStr() );
+    SAL_INFO("l10ntools", "+------------" << sKey_in.getStr() << "-----------+");
     for (auto const& posn : *rElem_in)
     {
         x=posn.first;
         y=posn.second->ToOString();
-        fprintf(stdout,"key=%s value=%s\n",x.getStr(),y.getStr());
+        SAL_INFO("l10ntools", "key=" << x.getStr() << " value=" << y.getStr());
     }
-    fprintf(stdout,"+--------------------------+\n");
+    SAL_INFO("l10ntools", "+--------------------------+");
 }
 #endif
 
@@ -174,9 +174,9 @@ void HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile* pMergeDataFile 
         auto posm = aXMLStrHM->find(pos);
         LangHashMap*  aLangHM = posm->second;
 #if OSL_DEBUG_LEVEL > 2
-        printf("*********************DUMPING HASHMAP***************************************");
+        SAL_INFO("l10ntools", "*********************DUMPING HASHMAP***************************************");
         Dump(aXMLStrHM);
-        printf("DBG: sHelpFile = %s\n",sHelpFile.getStr() );
+        SAL_INFO("l10ntools", "DBG: sHelpFile = " << sHelpFile.getStr());
 #endif
 
         s_ResData.sGId      =  posm->first;

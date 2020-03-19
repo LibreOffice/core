@@ -87,10 +87,7 @@ const char * dbg_out(const void * pVoid)
 const char * dbg_out(const OUString & aStr)
 {
     aDbgOutResult = OUStringToOString(aStr, RTL_TEXTENCODING_ASCII_US);
-
-    if (bDbgOutStdErr)
-        fprintf(stderr, "%s", aDbgOutResult.getStr());
-
+    SAL_INFO_IF(bDbgOutStdErr, "sw.core", aDbgOutResult.getStr());
     return aDbgOutResult.getStr();
 }
 

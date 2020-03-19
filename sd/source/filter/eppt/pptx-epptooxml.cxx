@@ -1323,8 +1323,7 @@ void PowerPointExport::ImplWritePPTXLayout(sal_Int32 nOffset, sal_uInt32 nMaster
     Reference< drawing::XDrawPage > xSlide = xDrawPages->insertNewByIndex(xDrawPages->getCount());
 
 #ifdef DEBUG
-    if (xSlide.is())
-        printf("new page created\n");
+    SAL_INFO_IF(xSlide.is(), "sd.filter", "new page created.");
 #endif
 
     Reference< beans::XPropertySet > xPropSet(xSlide, uno::UNO_QUERY);

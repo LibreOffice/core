@@ -52,10 +52,6 @@ using ::rtl::math::approxEqual;
 using ::std::vector;
 using ::std::set;
 
-// iterators have very high frequency use -> custom debug.
-// #define debugiter(...) fprintf(stderr, __VA_ARGS__)
-#define debugiter(...)
-
 namespace {
 
 template<typename Iter>
@@ -2124,7 +2120,7 @@ ScRefCellValue* ScHorizontalCellIterator::GetNext( SCCOL& rCol, SCROW& rRow )
 {
     if (!mbMore)
     {
-        debugiter("no more !\n");
+        SAL_INFO("sc.core", "no more !");
         return nullptr;
     }
 
@@ -2133,12 +2129,13 @@ ScRefCellValue* ScHorizontalCellIterator::GetNext( SCCOL& rCol, SCROW& rRow )
 
     rCol = mnCol = r.mnCol;
     rRow = mnRow;
-    debugiter("return col %d row %d\n", (int)rCol, (int)rRow);
+    SAL_INFO("sc.core", "return col " << (int)rCol << " row " << (int)rRow);
 
     size_t nOffset = static_cast<size_t>(mnRow) - r.maPos->position;
     maCurCell = sc::toRefCell(r.maPos, nOffset);
     Advance();
-    debugiter("advance to: col %d row %d\n", (int)maColPos->mnCol, (int)mnRow);
+    SAL_INFO("sc.core", "advance to: col "
+            << (int)maColPos->mnCol << " row " << (int)mnRow);
 
     return &maCurCell;
 }
@@ -2171,8 +2168,8 @@ bool ScHorizontalCellIterator::SkipInvalidInRow()
             if (nRow < r.maPos->position + r.maPos->size)
             {
                 mnCol = maColPos->mnCol;
-                debugiter("found valid cell at column %d, row %d\n",
-                          (int)mnCol, (int)mnRow);
+                SAL_INFO("sc.core", "found valid cell at column "
+                        << (int)mnCol << ", row " << (int)mnRow);
                 assert(r.maPos->type != sc::element_type_empty);
                 return true;
             }
@@ -2191,26 +2188,27 @@ bool ScHorizontalCellIterator::SkipInvalidInRow()
                 }
                 if (!bMoreBlocksInColumn)
                 {
-                    debugiter("remove column %d at row %d\n",
-                              (int)maColPos->mnCol, (int)nRow);
+                    SAL_INFO("sc.core", "remove column "
+                            << (int)maColPos->mnCol << " at row " << (int)nRow);
                     maColPos = maColPositions.erase(maColPos);
                     if (maColPositions.empty())
                     {
-                        debugiter("no more columns\n");
+                        SAL_INFO("sc.core", "no more columns.");
                         mbMore = false;
                     }
                 }
                 else
                 {
-                    debugiter("advanced column %d to block starting row %d, retrying\n",
-                              (int)maColPos->mnCol, r.maPos->position);
+                    SAL_INFO("sc.core", "advanced column "
+                            << (int)maColPos->mnCol << " to block starting row "
+                            << r.maPos->position << ", retrying.");
                 }
             }
         }
         else
         {
-            debugiter("skip empty cells at column %d, row %d\n",
-                      (int)maColPos->mnCol, (int)nRow);
+            SAL_INFO("sc.core", "skip empty cells at column "
+                    << (int)maColPos->mnCol << ", row " << (int)nRow);
             ++maColPos;
         }
     }
@@ -2218,7 +2216,7 @@ bool ScHorizontalCellIterator::SkipInvalidInRow()
     // No more columns with anything interesting in them ?
     if (maColPositions.empty())
     {
-        debugiter("no more live columns left - done\n");
+        SAL_INFO("sc.core", "no more live columns left - done.");
         mbMore = false;
         return true;
     }
@@ -2238,7 +2236,7 @@ SCROW ScHorizontalCellIterator::FindNextNonEmptyRow()
     }
 
     SCROW nRow = std::max(static_cast<SCROW>(nNextRow), mnRow);
-    debugiter("Next non empty row is %d\n", (int) nRow);
+    SAL_INFO("sc.core", "next non empty row is " << (int)nRow);
     return nRow;
 }
 
@@ -2266,10 +2264,10 @@ void ScHorizontalCellIterator::SkipInvalid()
         }
 
         maColPos = maColPositions.begin();
-        debugiter("moving to next row\n");
+        SAL_INFO("sc.core", "moving to next row.");
         if (SkipInvalidInRow())
         {
-            debugiter("moved to valid cell in next row (or end)\n");
+            SAL_INFO("sc.core", "moved to valid cell in next row (or end).");
             return;
         }
 

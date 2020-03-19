@@ -16,6 +16,7 @@
 #include <cassert>
 #include <algorithm>
 #include <rtl/math.hxx>
+#include <sal/log.hxx>
 #include "black_scholes.hxx"
 
 // options prices and greeks in the Black-Scholes model
@@ -180,7 +181,8 @@ double bincash(double S, double vol, double rd, double rf,
             val = -pm*dnorm(d2)*sqrt(tau)/vol;
             break;
         default:
-            printf("bincash: greek %d not implemented\n", greeks );
+            SAL_WARN("scaddins", "bincash: greek "
+                    << greeks << " not implemented.");
             abort();
         }
     }
@@ -279,7 +281,8 @@ double binasset(double S, double vol, double rd, double rf,
             val = -tau*S*pnorm(pm*d1) - pm*S*dnorm(d1)*sqrt(tau)/vol;
             break;
         default:
-            printf("binasset: greek %d not implemented\n", greeks );
+            SAL_WARN("scaddins", "binasset: greek "
+                    << greeks << " not implemented.");
             abort();
         }
     }
@@ -641,7 +644,8 @@ static double barrier_term(double S, double vol, double rd, double rf,
               );
         break;
     default:
-        printf("barrier_term: greek %d not implemented\n", greek );
+        SAL_WARN("scaddins", "barrier_term: greek "
+                << greek << " not implemented.");
         abort();
     }
     return val;
@@ -697,7 +701,8 @@ static double barrier_double_term( double S, double vol, double rd, double rf,
               barrier_term(S,vol,rd,rf,tau,K,B1,B2,sc,pc,fd,types::Value);
         break;
     default:
-        printf("barrier_double_term: greek %d not implemented\n", greek );
+        SAL_WARN("scaddins", "barrier_double_term: greek "
+                << greek << " not implemented.");
         abort();
     }
     return val;
