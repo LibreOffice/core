@@ -475,15 +475,9 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         {
             uno::Reference<drawing::XShape> xShape((const_cast<SdrObject*>(pObj)->getUnoShape()),
                                                    uno::UNO_QUERY);
-            uno::Sequence<beans::PropertyValue> propList = lclGetProperty(xShape, "InteropGrabBag");
-            if (propList.hasElements())
-            {
-                auto pLclProp = std::find_if(
-                    std::begin(propList), std::end(propList),
-                    [](const beans::PropertyValue& rProp) { return rProp.Name == "LayoutInCell"; });
-                if (pLclProp && pLclProp != propList.end())
-                    pLclProp->Value >>= bLclInTabCell;
-            }
+            uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+            if (xShapeProps.is())
+                xShapeProps->getPropertyValue("IsFollowingTextFlow") >>= bLclInTabCell;
         }
         if (bLclInTabCell)
             attrList->add(XML_layoutInCell, "1");

@@ -84,10 +84,10 @@ DECLARE_OOXMLIMPORT_TEST(testTdf129888vml, "tdf129888vml.docx")
     //to be calculated from the page frame instead of the table:
 
     uno::Reference<beans::XPropertySet> xShapeProperties(getShape(1), uno::UNO_QUERY);
-    sal_Int16 nValue;
-    xShapeProperties->getPropertyValue("HoriOrientRelation") >>= nValue;
+    bool bValue;
+    xShapeProperties->getPropertyValue("IsFollowingTextFlow") >>= bValue;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("tdf129888vml The line shape has bad place!",
-                                 text::RelOrientation::PAGE_FRAME, nValue);
+                                 false, bValue);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf129888dml, "tdf129888dml.docx")
@@ -98,18 +98,18 @@ DECLARE_OOXMLIMPORT_TEST(testTdf129888dml, "tdf129888dml.docx")
     //to be calculated from the page frame instead of the table:
 
     uno::Reference<beans::XPropertySet> xShapeProperties(getShape(1), uno::UNO_QUERY);
-    sal_Int16 nValue;
-    xShapeProperties->getPropertyValue("HoriOrientRelation") >>= nValue;
+    bool bValue;
+    xShapeProperties->getPropertyValue("IsFollowingTextFlow") >>= bValue;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("tdf129888dml The shape has bad place!",
-                                 text::RelOrientation::PAGE_FRAME, nValue);
+        false, bValue);
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf130120, "tdf130120.docx")
 {
-   //Text for exporting the allowincell attribute:
+    //Text for exporting the allowincell attribute:
     xmlDocPtr p_XmlDoc = parseExport("word/document.xml");
     assertXPath(p_XmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r/mc:AlternateContent/"
-                          "mc:Choice/w:drawing/wp:anchor","layoutInCell","0");
+        "mc:Choice/w:drawing/wp:anchor", "layoutInCell", "0");
 }
 
 
@@ -117,20 +117,20 @@ DECLARE_OOXMLEXPORT_TEST(testTdf87569v, "tdf87569_vml.docx")
 {
     //the original tdf87569 sample has vml shapes...
     uno::Reference<beans::XPropertySet> xShapeProperties(getShape(1), uno::UNO_QUERY);
-    sal_Int16 nValue;
-    xShapeProperties->getPropertyValue("HoriOrientRelation") >>= nValue;
+    bool bValue;
+    xShapeProperties->getPropertyValue("IsFollowingTextFlow") >>= bValue;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("tdf87569_vml: The Shape is not in the table!",
-                                 text::RelOrientation::FRAME, nValue);
+                                 true, bValue);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf87569d, "tdf87569_drawingml.docx")
 {
     //if the original tdf87569 sample is upgraded it will have drawingml shapes...
     uno::Reference<beans::XPropertySet> xShapeProperties(getShape(1), uno::UNO_QUERY);
-    sal_Int16 nValue;
-    xShapeProperties->getPropertyValue("HoriOrientRelation") >>= nValue;
+    bool bValue;
+    xShapeProperties->getPropertyValue("IsFollowingTextFlow") >>= bValue;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("tdf87569_drawingml: The Shape is not in the table!",
-                                 text::RelOrientation::FRAME, nValue);
+                                 true, bValue);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf130610, "tdf130610_bold_in_2_styles.ott")

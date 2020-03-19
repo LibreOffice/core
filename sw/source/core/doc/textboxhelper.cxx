@@ -61,8 +61,8 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape)
         pShape->GetDoc()->GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
     uno::Reference<text::XTextContentAppend> xTextContentAppend(xTextDocument->getText(),
                                                                 uno::UNO_QUERY);
-    xTextContentAppend->appendTextContent(xTextFrame, uno::Sequence<beans::PropertyValue>());
 
+    xTextContentAppend->appendTextContent(xTextFrame, uno::Sequence<beans::PropertyValue>());
     // Link FLY and DRAW formats, so it becomes a text box (needed for syncProperty calls).
     uno::Reference<text::XTextFrame> xRealTextFrame(xTextFrame, uno::UNO_QUERY);
     auto pTextFrame = dynamic_cast<SwXTextFrame*>(xRealTextFrame.get());
@@ -109,6 +109,8 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape)
     syncProperty(pShape, RES_FRM_SIZE, MID_FRMSIZE_SIZE, uno::makeAny(xShape->getSize()));
 
     uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
+    syncProperty(pShape, RES_FOLLOW_TEXT_FLOW, MID_FOLLOW_TEXT_FLOW,
+                 xShapePropertySet->getPropertyValue(UNO_NAME_IS_FOLLOWING_TEXT_FLOW));
     syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_ORIENT,
                  xShapePropertySet->getPropertyValue(UNO_NAME_HORI_ORIENT));
     syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_RELATION,
