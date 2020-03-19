@@ -63,7 +63,8 @@ jboolean Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
     (void) jRegKey;
     (void) loader;
 
-    fprintf(stderr, "Hmm, %s called for %s\n", __PRETTY_FUNCTION__, OUStringToOString(aLibName, osl_getThreadTextEncoding()).getStr());
+    SAL_INFO("javaunohelper", "Hmm, " << __PRETTY_FUNCTION__ << " called for "
+            << OUStringToOString(aLibName, osl_getThreadTextEncoding()).getStr());
 #else
     osl::Module lib(aLibName, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL);
     if (lib.is())
@@ -146,7 +147,8 @@ jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
     (void) jRegKey;
     (void) loader;
 
-    fprintf(stderr, "Hmm, %s called for %s\n", __PRETTY_FUNCTION__, OUStringToOString(aLibName, osl_getThreadTextEncoding()).getStr());
+    SAL_INFO("javaunohelper", "Hmm, " << __PRETTY_FUNCTION__ << " called for "
+            << OUStringToOString(aLibName, osl_getThreadTextEncoding()).getStr());
 #endif
 
     aLibName += SAL_DLLEXTENSION;

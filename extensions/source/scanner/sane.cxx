@@ -34,28 +34,23 @@
 #include <memory>
 
 #if (OSL_DEBUG_LEVEL > 0) || defined DBG_UTIL
-#include <stdarg.h>
-#define dump_state( a, b, c, d ) fprintf( stderr, a, b, c, d );
+#include <sal/log.hxx>
+#define dump_state(state, msg) \
+    SAL_WARN("extensions.scanner", msg                      \
+            << " returned error "                           \
+            << state                                        \
+            << " ("                                         \
+            << p_strstatus(state)                           \
+            << ")");
+#define SHOW_DEBUG_MSG 1
 #else
-#define dump_state( a, b, c, d ) ;
+#define dump_state(state, msg)
 #endif
-static void dbg_msg( const char* pString, ... )
-{
-#if (OSL_DEBUG_LEVEL > 0) || defined DBG_UTIL
-    va_list ap;
-    va_start( ap, pString );
-    vfprintf( stderr, pString, ap );
-    va_end( ap );
-#else
-    (void)pString;
-#endif
-}
 
 #define FAIL_SHUTDOWN_STATE( x, y, z ) \
     if( x != SANE_STATUS_GOOD )                             \
     {                                                       \
-        dump_state( "%s returned error %d (%s)\n",          \
-                 y, x, p_strstatus( x ) );                  \
+        dump_state(x, y);                                   \
         DeInit();                                           \
         return z;                                           \
     }
@@ -63,16 +58,14 @@ static void dbg_msg( const char* pString, ... )
 #define FAIL_STATE( x, y, z ) \
     if( x != SANE_STATUS_GOOD )                             \
     {                                                       \
-        dump_state( "%s returned error %d (%s)\n",          \
-                 y, x, p_strstatus( x ) );                  \
+        dump_state(x, y);                                   \
         return z;                                           \
     }
 
 #define DUMP_STATE( x, y ) \
     if( x != SANE_STATUS_GOOD )                             \
     {                                                       \
-        dump_state( "%s returned error %d (%s)\n",          \
-                 y, x, p_strstatus( x ) );                  \
+        dump_state(x, y);                                   \
     }
 
 int             Sane::nRefCount = 0;
@@ -138,9 +131,12 @@ SANE_Status Sane::ControlOption( int nOption, SANE_Action nAction,
             case SANE_ACTION_SET_AUTO:
                 pAction = "SANE_ACTION_SET_AUTO";break;
         }
-        dbg_msg( "Option: \"%s\" action: %s\n",
-                 OUStringToOString(GetOptionName(nOption), osl_getThreadTextEncoding()).getStr(),
-                 pAction );
+        SAL_INFO("extensions.scanner", "Option: \""
+                << OUStringToOString(
+                    GetOptionName(nOption),
+                    osl_getThreadTextEncoding()).getStr()
+                << "\" action: "
+                << pAction);
     }
 #endif
     if( nInfo &  SANE_INFO_RELOAD_OPTIONS )
@@ -231,10 +227,12 @@ void Sane::Init()
             for( nDevices = 0 ; ppDevices[ nDevices ]; nDevices++ ) ;
         }
     }
-#if (OSL_DEBUG_LEVEL > 0) || defined DBG_UTIL
+#ifdef SHOW_DEBUG_MSG
     else
-        fprintf( stderr, "libsane%s could not be opened: %s\n", SAL_DLLEXTENSION,
-                 dlerror() );
+        SAL_WARN("extensions.scanner", "libsane"
+                << SAL_DLLEXTENSION
+                << " could not be opened: "
+                << dlerror());
 #endif
 }
 
@@ -525,8 +523,12 @@ bool Sane::CheckConsistency( const char* pMes, bool bInit )
     if( pZero != mppOptions[0] )
         bConsistent = false;
 
-    if( ! bConsistent )
-        dbg_msg( "Sane is not consistent. (%s)\n", pMes );
+#ifdef SHOW_DEBUG_MSG
+    SAL_WARN_IF(!bConsistent,
+            "extensions.scanner", "Sane is not consistent. ("
+            << pMes
+            << ").");
+#endif
 
     return bConsistent;
 }
@@ -618,11 +620,11 @@ bool Sane::Start( BitmapTransporter& rBitmap )
                 bSuccess = false;
                 break;
             }
-#if (OSL_DEBUG_LEVEL > 0) || defined DBG_UTIL
+#ifdef SHOW_DEBUG_MSG
             const char* const ppFormats[] = { "SANE_FRAME_GRAY", "SANE_FRAME_RGB",
                                   "SANE_FRAME_RED", "SANE_FRAME_GREEN",
                                   "SANE_FRAME_BLUE", "Unknown !!!" };
-            fprintf( stderr, "Parameters for frame %d:\n", nStream );
+            SAL_INFO("extensions.scanner", "Parameters for frame " << nStream << ":");
             if( static_cast<
                     typename std::make_unsigned<
                         typename std::underlying_type<SANE_Frame>::type>::type>(
@@ -631,11 +633,11 @@ bool Sane::Start( BitmapTransporter& rBitmap )
             {
                 aParams.format = SANE_Frame(5);
             }
-            fprintf( stderr, "format:           %s\n", ppFormats[ static_cast<int>(aParams.format) ] );
-            fprintf( stderr, "last_frame:       %s\n", aParams.last_frame ? "TRUE" : "FALSE" );
-            fprintf( stderr, "depth:            %d\n", static_cast<int>(aParams.depth) );
-            fprintf( stderr, "pixels_per_line:  %d\n", static_cast<int>(aParams.pixels_per_line) );
-            fprintf( stderr, "bytes_per_line:   %d\n", static_cast<int>(aParams.bytes_per_line) );
+            SAL_INFO("extensions.scanner", "format:           " << ppFormats[ static_cast<int>(aParams.format) ]);
+            SAL_INFO("extensions.scanner", "last_frame:       " << (aParams.last_frame ? "TRUE" : "FALSE"));
+            SAL_INFO("extensions.scanner", "depth:            " << static_cast<int>(aParams.depth));
+            SAL_INFO("extensions.scanner", "pixels_per_line:  " << static_cast<int>(aParams.pixels_per_line));
+            SAL_INFO("extensions.scanner", "bytes_per_line:   " << static_cast<int>(aParams.bytes_per_line));
 #endif
             if( ! pBuffer )
             {
@@ -887,7 +889,10 @@ bool Sane::Start( BitmapTransporter& rBitmap )
     ReloadOptions();
 
 
-    dbg_msg( "Sane::Start returns with %s\n", bSuccess ? "TRUE" : "FALSE" );
+#ifdef SHOW_DEBUG_MSG
+    SAL_INFO("extensions.scanner", "Sane::Start returns with "
+            << (bSuccess ? "TRUE" : "FALSE"));
+#endif
 
     return bSuccess;
 }
@@ -904,7 +909,11 @@ int Sane::GetRange( int n, std::unique_ptr<double[]>& rpDouble )
     int nItems, i;
     bool bIsFixed = mppOptions[n]->type == SANE_TYPE_FIXED;
 
-    dbg_msg( "Sane::GetRange of option %s ", mppOptions[n]->name );
+#ifdef SHOW_DEBUG_MSG
+    std::ostringstream oss;
+    oss << std::scientific;
+    oss << "Sane::GetRange of option " << mppOptions[n]->name << " ";
+#endif
     if(mppOptions[n]->constraint_type == SANE_CONSTRAINT_RANGE )
     {
         double fMin, fMax, fQuant;
@@ -922,8 +931,16 @@ int Sane::GetRange( int n, std::unique_ptr<double[]>& rpDouble )
         }
         if( fQuant != 0.0 )
         {
-            dbg_msg( "quantum range [ %lg ; %lg ; %lg ]\n",
-                     fMin, fQuant, fMax );
+#ifdef SHOW_DEBUG_MSG
+            SAL_INFO("extensions.scanner", oss.str()
+                    << "quantum range [ "
+                    << fMin
+                    << " ; "
+                    << fQuant
+                    << " ; "
+                    << fMax
+                    << " ]");
+#endif
             nItems = static_cast<int>((fMax - fMin)/fQuant)+1;
             rpDouble.reset(new double[ nItems ]);
             double fValue = fMin;
@@ -934,8 +951,14 @@ int Sane::GetRange( int n, std::unique_ptr<double[]>& rpDouble )
         }
         else
         {
-            dbg_msg( "normal range [ %lg %lg ]\n",
-                     fMin, fMax );
+#ifdef SHOW_DEBUG_MSG
+            SAL_INFO("extensions.scanner", oss.str()
+                    << "normal range [ "
+                    << fMin
+                    << " "
+                    << fMax
+                    << " ]");
+#endif
             rpDouble.reset(new double[2]);
             rpDouble[0] = fMin;
             rpDouble[1] = fMax;
@@ -952,8 +975,13 @@ int Sane::GetRange( int n, std::unique_ptr<double[]>& rpDouble )
                 SANE_UNFIX( mppOptions[n]->constraint.word_list[i+1] ) :
                 static_cast<double>(mppOptions[n]->constraint.word_list[i+1]);
         }
-        dbg_msg( "wordlist [ %lg ... %lg ]\n",
-                 rpDouble[ 0 ], rpDouble[ nItems-1 ] );
+#ifdef SHOW_DEBUG_MSG
+        SAL_INFO("extensions.scanner", "wordlist [ "
+                << rpDouble[ 0 ]
+                << " ... "
+                << rpDouble[ nItems-1 ]
+                << " ].");
+#endif
         return nItems;
     }
 }

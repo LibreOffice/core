@@ -25,6 +25,7 @@
 
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <tools/stream.hxx>
 
 #include "fontmap.hxx"

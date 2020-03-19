@@ -568,18 +568,22 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg, s
 
         const double fAverageTimePerPaint(fAddedTimes / (double)REMEMBERED_TIMES_COUNT);
 
-        fprintf(stderr, "-----------(start result)----------\n");
-        fprintf(stderr, "StartTime : %" SAL_PRIuUINT64 ", StopTime: %" SAL_PRIuUINT64 ", NeededTime: %" SAL_PRIuUINT64 ", TimePerPaint: %f\n", nStartTime, nStopTime, nNeededTime, fTimePerPaint);
-        fprintf(stderr, "Remembered times: ");
+        SAL_INFO("svx.svdraw", "-----------(start result)----------");
+        SAL_INFO("svx.svdraw", "StartTime : " << nStartTime
+                << ", StopTime: " << nStopTime
+                << ", NeededTime: " << nNeededTime
+                << ", TimePerPaint: " << fTimePerPaint);
 
+        std::ostringstream oss;
+        oss << "Remembered times: ";
         for(a = 0; a < REMEMBERED_TIMES_COUNT; a++)
         {
-            fprintf(stderr, "%d: %f ", a, fLastTimes[a]);
+            oss << a << ": " << fLastTimes[a] << " ";
         }
+        SAL_INFO("svx.svdraw", oss.str());
 
-        fprintf(stderr, "\n");
-        fprintf(stderr, "AverageTimePerPaint: %f\n", fAverageTimePerPaint);
-        fprintf(stderr, "-----------(stop result)----------\n");
+        SAL_INFO("svx.svdraw", "AverageTimePerPaint: " << fAverageTimePerPaint);
+        SAL_INFO("svx.svdraw", "-----------(stop result)----------");
     }
 #endif // SVX_REPAINT_TIMER_TEST
 }

@@ -430,9 +430,13 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
     }
 
     // error treatment
-    fprintf( stderr, "\n%s --- %s: ( %" SAL_PRIuUINTPTR ", %" SAL_PRIuUINTPTR " )\n",
-             OUStringToOString(aFileName, RTL_TEXTENCODING_UTF8).getStr(),
-             "error", nRow, nColumn );
+    SAL_INFO("idl",
+             OUStringToOString(aFileName, RTL_TEXTENCODING_UTF8).getStr()
+             << " --- error: ( "
+             << nRow
+             << ", "
+             << nColumn
+             << " )");
 
     if( !aErrorText.isEmpty() )
     { // error set
@@ -448,8 +452,10 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
     if( rTok.IsIdentifier() )
     {
         OString aN = GetIdlApp().pHashTable->GetNearString( rTok.GetString() );
-        if( !aN.isEmpty() )
-            fprintf( stderr, "%s versus %s\n", rTok.GetString().getStr(), aN.getStr() );
+        SAL_INFO_IF(!aN.isEmpty(),
+                "idl", rTok.GetString().getStr()
+                << " versus "
+                << aN.getStr());
     }
 }
 

@@ -124,8 +124,8 @@ tryLink( osl::Module &rModule, const char *pName, const ApiMap (&pMap)[N])
             rModule.getFunctionSymbol(OUString::createFromAscii(pMap[i].sym_name)));
         if( !aMethod )
         {
-            fprintf( stderr, "Warning: missing symbol '%s' in '%s'\n",
-                 pMap[ i ].sym_name, pName );
+            SAL_WAR("connectivity.evoab2", "missing symbol '"
+                    << pMap[ i ].sym_name << "' in '" << pName << "'.");
             return false;
         }
         *pMap[ i ].ref_value = aMethod;
@@ -173,7 +173,7 @@ bool EApiInit()
             }
         }
     }
-    fprintf( stderr, "Can find no compliant libebook client libraries\n" );
+    SAL_WAR("connectivity.evoab2", "can find no compliant libebook client libraries.");
     return false;
 }
 

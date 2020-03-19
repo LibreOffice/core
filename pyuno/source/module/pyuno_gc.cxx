@@ -20,6 +20,7 @@
 #include "pyuno_impl.hxx"
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <rtl/ref.hxx>
 #include <salhelper/thread.hxx>
@@ -96,8 +97,10 @@ void GCThread::execute()
     }
     catch( const css::uno::RuntimeException & e )
     {
-        OString msg = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
-        fprintf( stderr, "Leaking python objects bridged to UNO for reason %s\n",msg.getStr());
+        SAL_WARN("pyuno", "Leaking python objects bridged to UNO for reason "
+                << OUStringToOString(
+                    e.Message,
+                    RTL_TEXTENCODING_ASCII_US).getStr());
     }
 }
 

@@ -153,7 +153,7 @@ std::type_info * RTTI::getRTTI(typelib_TypeDescription const & pTypeDescr)
                 // the symbol is prefixed with _ZTI
                 char const * rttiName = symName.getStr() +4;
 #if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr,"generated rtti for %s\n", rttiName );
+                SAL_INFO("bridges.x8664", "generated rtti for " << rttiName);
 #endif
                 std::unique_ptr<Generated> newRtti;
                 switch (pTypeDescr.eTypeClass) {

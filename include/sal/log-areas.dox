@@ -46,6 +46,7 @@ certain functionality.
 @li @c bridges
 @li @c bridges.ios
 @li @c bridges.osx
+@li @c bridges.x8664
 
 @section canvas
 
@@ -145,7 +146,10 @@ certain functionality.
 @li @c sc.core.formulacell - ScFormulaCell and group
 @li @c sc.core.formulagroup
 @li @c sc.core.grouparealistener - sc::FormulaGroupAreaListener
+@li @c sc.core.lup
 @li @c sc.filter - Calc filter
+@li @c sc.filter.xlcrypt
+@li @c sc.filter.qpro
 @li @c sc.lok.docsize
 @li @c sc.lok.header
 @li @c sc.lok.poshelper
@@ -170,6 +174,7 @@ certain functionality.
 @li @c desktop.deployment
 @li @c desktop.lib
 @li @c desktop.migration
+@li @c desktop.minidump
 @li @c desktop.offacc
 @li @c desktop.opengl
 @li @c desktop.splash
@@ -504,8 +509,14 @@ certain functionality.
 @li @c vcl.sm.debug
 @li @c vcl.uitest - The UI testing framework code
 @li @c vcl.unity
+@li @c vcl.unx.app
 @li @c vcl.unx.dtrans
+@li @c vcl.unx.fontmanager
+@li @c vcl.unx.gdi
+@li @c vcl.unx.gtk3
 @li @c vcl.unx.print
+@li @c vcl.unx.printer
+@li @c vcl.unx.window
 @li @c vcl.virdev
 @li @c vcl.watchdog
 @li @c vcl.window
@@ -613,19 +624,23 @@ certain functionality.
 @li @c cppcanvas.emf
 @li @c dtrans
 @li @c helpcompiler
+@li @c hwpfilter
 @li @c idl
 @li @c javaunohelper
 @li @c jvmaccess
 @li @c lingucomponent
 @li @c linguistic
 @li @c lwp - lotuswordpro
+@li @c onlineupdate
 @li @c opencl
 @li @c opencl.device
 @li @c opencl.file
+@li @c pyuno
 @li @c registry
 @li @c reportdesign
 @li @c rsc
 @li @c sax
+@li @c scaddins
 @li @c scripting
 @li @c scripting.provider
 @li @c shell

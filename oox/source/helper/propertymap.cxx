@@ -47,6 +47,7 @@ using ::com::sun::star::text::WritingMode;
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
+#include <rtl/strbuf.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/propertynames.hxx>
 using ::com::sun::star::uno::Any;
@@ -278,7 +279,7 @@ Reference< XPropertySet > PropertyMap::makePropertySet() const
 }
 
 #if OSL_DEBUG_LEVEL > 0
-static void lclDumpAnyValue( const Any& value)
+static void lclDumpAnyValue(const Any& value, std::string prefix)
 {
     OUString strValue;
     Sequence< OUString > strArray;
@@ -306,89 +307,137 @@ static void lclDumpAnyValue( const Any& value)
     Reference< XIndexReplace > xNumRule;
 
     if( value >>= strValue )
-            fprintf (stderr,"\"%s\"\n", USS( strValue ) );
+            SAL_INFO("oox", prefix
+                    << "\"" << USS(strValue) << "\"");
     else if( value >>= strArray ) {
-            fprintf (stderr,"%s\n", USS(value.getValueTypeName()));
+            SAL_INFO("oox", prefix
+                    << USS(value.getValueTypeName()));
             for( int i=0; i<strArray.getLength(); i++ )
-                fprintf (stderr,"\t\t\t[%3d] \"%s\"\n", i, USS( strArray[i] ) );
+                    SAL_INFO("oox", "[" << std::setw(3) << i << "] \""
+                            << USS(strArray[i]) << "\"");
     } else if( value >>= propArray ) {
-            fprintf (stderr,"%s\n", USS(value.getValueTypeName()));
+            SAL_INFO("oox", prefix
+                    << USS(value.getValueTypeName()));
             for( int i=0; i<propArray.getLength(); i++ ) {
-                fprintf (stderr,"\t\t\t[%3d] %s (%s) ", i, USS( propArray[i].Name ), USS(propArray[i].Value.getValueTypeName()) );
-                lclDumpAnyValue( propArray[i].Value );
+                    std::ostringstream oss;
+                    oss << "[" << std::setw(3) << i << "] "
+                        << USS(propArray[i].Name) << " ("
+                        << USS(propArray[i].Value.getValueTypeName())
+                        << ")";
+                    lclDumpAnyValue(propArray[i].Value, oss.str());
             }
     } else if( value >>= propArrayArray ) {
-            fprintf (stderr,"%s\n", USS(value.getValueTypeName()));
+            SAL_INFO("oox", prefix
+                    << USS(value.getValueTypeName()));
             for( int i=0; i<propArrayArray.getLength(); i++ ) {
-                fprintf (stderr,"\t\t\t[%3d] ", i);
-                lclDumpAnyValue( makeAny (propArrayArray[i]) );
+                    std::ostringstream oss;
+                    oss << "[" << std::setw(3) << i << "] ";
+                    lclDumpAnyValue(makeAny(propArrayArray[i]), oss.str());
             }
     } else if( value >>= anyArray ) {
-            fprintf (stderr,"%s\n", USS(value.getValueTypeName()));
+            SAL_INFO("oox", prefix
+                    << USS(value.getValueTypeName()));
             for( int i=0; i<anyArray.getLength(); i++ ) {
-                fprintf (stderr,"\t\t\t[%3d] (%s) ", i, USS(value.getValueTypeName()) );
-                lclDumpAnyValue( anyArray[i] );
+                    std::ostringstream oss;
+                    oss << "[" << std::setw(3) << i << "] ("
+                        << USS(value.getValueTypeName())
+                        << ")";
+                    lclDumpAnyValue(anyArray[i], oss.str());
             }
     } else if( value >>= adjArray ) {
-            fprintf (stderr,"%s\n", USS(value.getValueTypeName()));
+            SAL_INFO("oox", prefix
+                    << USS(value.getValueTypeName()));
             for( int i=0; i<adjArray.getLength(); i++ ) {
-                fprintf (stderr,"\t\t\t[%3d] (%s) ", i, USS(adjArray[i].Value.getValueTypeName()) );
-                lclDumpAnyValue( adjArray[i].Value );
+                    std::ostringstream oss;
+                    oss << "[" << std::setw(3) << i << "] ("
+                        << USS(adjArray[i].Value.getValueTypeName())
+                        << ")";
+                    lclDumpAnyValue(adjArray[i].Value, oss.str());
             }
     } else if( value >>= segArray ) {
-            fprintf (stderr,"%s\n", USS(value.getValueTypeName()));
+            SAL_INFO("oox", prefix
+                    << USS(value.getValueTypeName()));
             for( int i=0; i<segArray.getLength(); i++ ) {
-                fprintf (stderr,"\t\t\t[%3d] ", i );
-                lclDumpAnyValue( makeAny( segArray[i] ) );
+                    std::ostringstream oss;
+                    oss << "[" << std::setw(3) << i << "] ";
+                    lclDumpAnyValue(makeAny(segArray[i]), oss.str());
             }
     } else if( value >>= ppArray ) {
-            fprintf (stderr,"%s\n", USS(value.getValueTypeName()));
+            SAL_INFO("oox", prefix
+                    << USS(value.getValueTypeName()));
             for( int i=0; i<ppArray.getLength(); i++ ) {
-                fprintf (stderr,"\t\t\t[%3d] ", i );
-                lclDumpAnyValue( makeAny( ppArray[i] ) );
+                    std::ostringstream oss;
+                    oss << "[" << std::setw(3) << i << "] ";
+                    lclDumpAnyValue(makeAny(ppArray[i]), oss.str());
             }
     } else if( value >>= segment ) {
-            fprintf (stderr,"Command: %d Count: %d\n", segment.Command, segment.Count);
+            SAL_INFO("oox", prefix
+                    << "Command: " << segment.Command
+                    << " Count: " << segment.Count);
     } else if( value >>= pp ) {
-            fprintf (stderr,"First: ");
-            lclDumpAnyValue( makeAny (pp.First) );
-            fprintf (stderr,"\t\t\t      Second: ");
-            lclDumpAnyValue( makeAny (pp.Second) );
+            { std::ostringstream oss;
+              oss << prefix << "First: ";
+              lclDumpAnyValue(makeAny(pp.First), oss.str()); }
+            { std::ostringstream oss;
+              oss << prefix << "Second: ";
+              lclDumpAnyValue(makeAny(pp.Second), oss.str()); }
     } else if( value >>= par ) {
-            fprintf (stderr,"Parameter (%s): ", USS(par.Value.getValueTypeName()));
-            lclDumpAnyValue( par.Value );
+            std::ostringstream oss;
+            oss << prefix
+                << "Parameter (" << USS(par.Value.getValueTypeName()) << "): ";
+            lclDumpAnyValue(par.Value, oss.str());
     } else if( value >>= aMatrix ) {
-            fprintf (stderr,"Matrix\n%f %f %f\n%f %f %f\n%f %f %f\n", aMatrix.Line1.Column1, aMatrix.Line1.Column2, aMatrix.Line1.Column3, aMatrix.Line2.Column1, aMatrix.Line2.Column2, aMatrix.Line2.Column3, aMatrix.Line3.Column1, aMatrix.Line3.Column2, aMatrix.Line3.Column3);
+            SAL_INFO("oox", prefix << "Matrix");
+            SAL_INFO("oox", aMatrix.Line1.Column1 << " "
+                    << aMatrix.Line1.Column2 << " "
+                    << aMatrix.Line1.Column3);
+            SAL_INFO("oox", aMatrix.Line2.Column1 << " "
+                    << aMatrix.Line2.Column2 << " "
+                    << aMatrix.Line2.Column3);
+            SAL_INFO("oox", aMatrix.Line3.Column1 << " "
+                    << aMatrix.Line3.Column2 << " "
+                    << aMatrix.Line3.Column3);
     } else if( value >>= intValue )
-            fprintf (stderr,"%-10" SAL_PRIdINT32 "  (hex: %" SAL_PRIxUINT32 ")\n", intValue, intValue);
+            SAL_INFO("oox", prefix
+                    << std::setw(10) << std::left << intValue
+                    << "  (hex: " << std::hex << intValue << ").");
     else if( value >>= uintValue )
-            fprintf (stderr,"%-10" SAL_PRIuUINT32 "  (hex: %" SAL_PRIxUINT32 ")\n", uintValue, uintValue);
+            SAL_INFO("oox", prefix
+                    << std::setw(10) << std::left << uintValue
+                    << "  (hex: " << std::hex << uintValue << ").");
     else if( value >>= int16Value )
-            fprintf (stderr,"%-10d  (hex: %x)\n", int16Value, int16Value);
+            SAL_INFO("oox", prefix
+                    << std::setw(10) << std::left << int16Value
+                    << "  (hex: " << std::hex << int16Value << ").");
     else if( value >>= uint16Value )
-            fprintf (stderr,"%-10d  (hex: %x)\n", uint16Value, uint16Value);
+            SAL_INFO("oox", prefix
+                    << std::setw(10) << std::left << uint16Value
+                    << "  (hex: " << std::hex << uint16Value << ").");
     else if( value >>= floatValue )
-            fprintf (stderr,"%f\n", floatValue);
+            SAL_INFO("oox", prefix << floatValue);
     else if( value >>= boolValue )
-            fprintf (stderr,"%-10d  (bool)\n", boolValue);
+            SAL_INFO("oox", prefix
+                    << std::setw(10) << std::left << boolValue);
     else if( value >>= xNumRule ) {
-            fprintf (stderr, "XIndexReplace\n");
+            SAL_INFO("oox", prefix << "XIndexReplace.");
             if (xNumRule.is()) {
                 for (int k=0; k<xNumRule->getCount(); k++) {
                     Sequence< PropertyValue > aBulletPropSeq;
-                    fprintf (stderr, "level %d\n", k);
+                    SAL_INFO("oox", "level " << k);
                     if (xNumRule->getByIndex (k) >>= aBulletPropSeq) {
                         for (int j=0; j<aBulletPropSeq.getLength(); j++) {
-                            fprintf(stderr, "%46s = ", USS (aBulletPropSeq[j].Name));
-                            lclDumpAnyValue (aBulletPropSeq[j].Value);
+                            std::ostringstream oss;
+                            oss << std::setw(46) << " = " << USS(aBulletPropSeq[j].Name);
+                            lclDumpAnyValue(aBulletPropSeq[j].Value, oss.str());
                         }
                     }
                 }
             } else {
-                fprintf (stderr, "empty reference\n");
+                SAL_INFO("oox", "empty reference.");
             }
     } else if( value >>= aWritingMode )
-            fprintf(stderr, "%d writing mode\n", static_cast<int>(aWritingMode));
+            SAL_INFO("oox", prefix
+                    << static_cast<int>(aWritingMode) << " writing mode.");
     else if( value >>= aTextVertAdj ) {
             const char* s = "unknown";
             switch( aTextVertAdj ) {
@@ -408,7 +457,7 @@ static void lclDumpAnyValue( const Any& value)
                 s = "make_fixed_size";
                 break;
             }
-            fprintf (stderr, "%s\n", s);
+            SAL_INFO("oox", prefix << s);
     } else if( value >>= aTextHorizAdj ) {
         const char* s = "unknown";
         switch( aTextHorizAdj ) {
@@ -428,16 +477,21 @@ static void lclDumpAnyValue( const Any& value)
                 s = "make_fixed_size";
                 break;
         }
-        fprintf (stderr, "%s\n", s);
+        SAL_INFO("oox", prefix << s);
     } else if( value >>= spacing ) {
-        fprintf (stderr, "mode: %d value: %d\n", spacing.Mode, spacing.Height);
+        SAL_INFO("oox", prefix
+                << "mode: " << spacing.Mode
+                << " value: " << spacing.Height);
     } else if( value.isExtractableTo(::cppu::UnoType<sal_Int32>::get())) {
-        fprintf (stderr,"is extractable to int32\n");
+        SAL_INFO("oox", prefix << "is extractable to int32.");
     }
 //         else if( value >>= pointValue )
 //             fprintf (stderr,"%d            (RectanglePoint)\n", pointValue);
-        else
-      fprintf (stderr,"???           <unhandled type %s>\n", USS(value.getValueTypeName()));
+    else
+        SAL_INFO("oox", prefix
+                << "???           <unhandled type "
+                << USS(value.getValueTypeName())
+                << ">.");
 }
 
 #ifdef DBG_UTIL
@@ -449,22 +503,27 @@ void PropertyMap::dump( const Reference< XPropertySet >& rXPropSet )
     SAL_INFO("oox", "dump props, len: " << props.getLength ());
 
     for (int i=0; i < props.getLength (); i++) {
-        OString name = OUStringToOString( props [i].Name, RTL_TEXTENCODING_UTF8);
-        fprintf (stderr,"%30s = ", name.getStr() );
+        std::ostringstream oss;
+        oss << std::setw(30)
+            << OUStringToOString(
+                    props[i].Name, RTL_TEXTENCODING_UTF8).getStr()
+            << " = ";
 
         try {
-            lclDumpAnyValue (rXPropSet->getPropertyValue( props [i].Name ));
+            lclDumpAnyValue(rXPropSet->getPropertyValue(props[i].Name), oss.str());
         } catch (const Exception&) {
-            fprintf (stderr,"unable to get '%s' value\n", USS(props [i].Name));
+            SAL_WARN("oox", "unable to get '" << USS(props[i].Name) << "' value.");
         }
     }
 }
 #endif
 
-static void printLevel (int level)
+static OString getLevelOString(int level)
 {
+    OStringBuffer buffer;
     for (int i=0; i<level; i++)
-        fprintf (stderr, "    ");
+        buffer.append("    ");
+    return buffer.toString();
 }
 
 static const char *lclGetEnhancedParameterType( sal_uInt16 nType )
@@ -533,16 +592,20 @@ static void printParameterPairData(int level, EnhancedCustomShapeParameterPair c
     if (!(pp.Second.Value >>= nSecondValue))
         assert (false);
 
-    printLevel (level);
-    fprintf (stderr, "{\n");
-    printLevel (level + 1);
-    fprintf (stderr, "%s,\n", lclGetEnhancedParameterType(pp.First.Type));
-    printLevel (level + 1);
-    fprintf (stderr, "%s,\n", lclGetEnhancedParameterType(pp.Second.Type));
-    printLevel (level + 1);
-    fprintf (stderr, "%d, %d\n", static_cast<int>(nFirstValue), static_cast<int>(nSecondValue));
-    printLevel (level);
-    fprintf (stderr, "}");
+    OString levelString = getLevelOString(level);
+    OString nextLevelString = getLevelOString(level + 1);
+
+    SAL_INFO("oox", levelString.getStr()
+            << "{");
+    SAL_INFO("oox", nextLevelString.getStr()
+            << lclGetEnhancedParameterType(pp.First.Type) << ",");
+    SAL_INFO("oox", nextLevelString.getStr()
+            << lclGetEnhancedParameterType(pp.Second.Type) << ",");
+    SAL_INFO("oox", nextLevelString.getStr()
+            << static_cast<int>(nFirstValue) << ", "
+            << static_cast<int>(nSecondValue));
+    SAL_INFO("oox", levelString.getStr()
+            << "}");
 }
 
 static const char* lclDumpAnyValueCode( const Any& value, int level)
@@ -577,10 +640,12 @@ static const char* lclDumpAnyValueCode( const Any& value, int level)
     TextHorizontalAdjust aTextHorizAdj;
     Reference< XIndexReplace > xNumRule;
 
+    OString levelString = getLevelOString(level);
+
     if( value >>= strValue )
     {
-        printLevel (level);
-        fprintf (stderr,"OUString str = \"%s\";\n", USS( strValue ) );
+        SAL_INFO("oox", levelString.getStr()
+                << "OUString str = \"" << USS(strValue) << "\";");
         return "Any (str)";
     }
     else if( value >>= strArray )
@@ -588,87 +653,92 @@ static const char* lclDumpAnyValueCode( const Any& value, int level)
         if (strArray.getLength() == 0)
             return "Sequence< OUString >(0)";
 
-        printLevel (level);
-        fprintf (stderr,"static const char *aStrings[] = {\n");
+        SAL_INFO("oox", levelString.getStr() << "static const char *aStrings[] = {");
         for( int i=0; i<strArray.getLength(); i++ ) {
-            printLevel (level + 1);
-            fprintf (stderr,"\"%s\"%s\n", USS( strArray[i] ), i < strArray.getLength() - 1 ? "," : "" );
+            SAL_INFO("oox", getLevelOString(level + 1).getStr()
+                    << "\"" << USS(strArray[i]) << "\""
+                    << (i < strArray.getLength() - 1 ? "," : "" ));
         }
-        printLevel (level);
-        fprintf (stderr,"};\n");
+        SAL_INFO("oox", levelString.getStr() << "};");
         return "createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings )";
     }
     else if( value >>= propArray )
     {
-        printLevel (level);
-        fprintf (stderr,"Sequence< PropertyValue > aPropSequence (%" SAL_PRIdINT32 ");\n", propArray.getLength());
+        SAL_INFO("oox", levelString.getStr()
+                << "Sequence< PropertyValue > aPropSequence ("
+                << propArray.getLength() << ");");
+        OString nextLevelString = getLevelOString(level + 1);
         for( int i=0; i<propArray.getLength(); i++ ) {
-            printLevel (level);
-            fprintf (stderr, "{\n");
-            printLevel (level + 1);
-            fprintf (stderr, "aPropSequence [%d].Name = \"%s\";\n", i, USS( propArray[i].Name ));
-            const char *var = lclDumpAnyValueCode( propArray[i].Value, level + 1 );
-            printLevel (level + 1);
-            fprintf (stderr, "aPropSequence [%d].Value = makeAny (%s);\n", i, var);
-            printLevel (level);
-            fprintf (stderr, "}\n");
+            SAL_INFO("oox", levelString.getStr()
+                    << "{");
+            SAL_INFO("oox", nextLevelString.getStr()
+                    << "aPropSequence [" << i << "].Name = \"" << USS(propArray[i].Name) << "\";");
+            const char *var = lclDumpAnyValueCode(propArray[i].Value, level + 1);
+            SAL_INFO("oox", nextLevelString.getStr()
+                    << "aPropSequence [" << i << "].Value = makeAny (" << var << ");");
+            SAL_INFO("oox", levelString.getStr()
+                    << "}");
         }
         return "aPropSequence";
     }
     else if( value >>= sizeArray )
     {
-        printLevel (level);
-        fprintf (stderr, "Sequence< awt::Size > aSizeSequence (%" SAL_PRIdINT32 ");\n", sizeArray.getLength());
+        SAL_INFO("oox", levelString.getStr()
+                << "Sequence< awt::Size > aSizeSequence (" << sizeArray.getLength() << ");");
         for( int i=0; i<sizeArray.getLength(); i++ ) {
-            printLevel (level);
-            fprintf (stderr, "{\n");
+            SAL_INFO("oox", levelString.getStr() << "{");
             const char *var = lclDumpAnyValueCode (makeAny (sizeArray[i]), level + 1);
-            printLevel (level + 1);
-            fprintf (stderr, "aSizeSequence [%d] = %s;\n", i, var);
-            printLevel (level);
-            fprintf (stderr, "}\n");
+            SAL_INFO("oox", getLevelOString(level + 1).getStr()
+                    << "aSizeSequence [" << i << "] = " << var << ";");
+            SAL_INFO("oox", levelString.getStr()
+                    << "}");
         }
         return "aSizeSequence";
     }
     else if( value >>= propArrayArray )
     {
-        printLevel (level);
-        fprintf (stderr,"Sequence< Sequence < PropertyValue > > aPropSequenceSequence (%" SAL_PRIdINT32 ");\n", propArrayArray.getLength());
+        SAL_INFO("oox", levelString.getStr()
+                << "Sequence< Sequence < PropertyValue > > aPropSequenceSequence ("
+                << propArrayArray.getLength() << ");");
         for( int i=0; i<propArrayArray.getLength(); i++ ) {
-            printLevel (level);
-            fprintf (stderr, "{\n");
+            SAL_INFO("oox", levelString.getStr() << "{");
             const char *var = lclDumpAnyValueCode( makeAny (propArrayArray[i]), level + 1 );
-            printLevel (level + 1);
-            fprintf (stderr, "aPropSequenceSequence [%d] = %s;\n", i, var);
-            printLevel (level);
-            fprintf (stderr, "}\n");
+            SAL_INFO("oox", getLevelOString(level + 1).getStr()
+                    << "aPropSequenceSequence [" << i << "] = " << var << ";");
+            SAL_INFO("oox", levelString.getStr()
+                    << "}");
         }
         return "aPropSequenceSequence";
     }
     else if( value >>= anyArray )
     {
-        fprintf (stderr,"%s\n", USS(value.getValueTypeName()));
+        SAL_INFO("oox", USS(value.getValueTypeName()));
         for( int i=0; i<anyArray.getLength(); i++ ) {
-            fprintf (stderr,"\t\t\t[%3d] (%s) ", i, USS(value.getValueTypeName()) );
-            lclDumpAnyValue( anyArray[i] );
+            std::ostringstream oss;
+            oss << "[" << std::setw(3) << i << "] ("
+                << USS(value.getValueTypeName()) << ") ";
+            lclDumpAnyValue(anyArray[i], oss.str());
         }
     }
     else if( value >>= adjArray )
     {
-        printLevel (level);
-        fprintf (stderr,"Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (%" SAL_PRIdINT32 ");\n", adjArray.getLength());
+        SAL_INFO("oox", levelString.getStr()
+                << "Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence ("
+                << adjArray.getLength() << ");");
+        OString nextLevelString = getLevelOString(level + 1);
         for( int i=0; i<adjArray.getLength(); i++ ) {
-            printLevel (level);
-            fprintf (stderr, "{\n");
+            SAL_INFO("oox", levelString.getStr()
+                    << "{");
             const char *var = lclDumpAnyValueCode( adjArray[i].Value, level + 1 );
-            printLevel (level + 1);
-            fprintf (stderr, "aAdjSequence [%d].Value = %s;\n", i, var);
+            SAL_INFO("oox", nextLevelString.getStr()
+                    << "aAdjSequence [" << i << "].Value = " << var << ";");
             if (adjArray[i].Name.getLength() > 0) {
-                printLevel (level + 1);
-                fprintf (stderr, "aAdjSequence [%d].Name = \"%s\";\n", i, USS (adjArray[i].Name));
+                SAL_INFO("oox", nextLevelString.getStr()
+                        << "aAdjSequence [" << i << "].Name = \""
+                        << USS(adjArray[i].Name) << "\";");
             }
-            printLevel (level);
-            fprintf (stderr, "}\n");
+            SAL_INFO("oox", levelString.getStr()
+                    << "}");
         }
         return "aAdjSequence";
     }
@@ -677,124 +747,128 @@ static const char* lclDumpAnyValueCode( const Any& value, int level)
         if (segArray.getLength() == 0)
             return "Sequence< EnhancedCustomShapeSegment >(0)";
 
-        printLevel (level);
-        fprintf (stderr,"static const sal_uInt16 nValues[] = {\n");
-        printLevel (level);
-        fprintf (stderr,"// Command, Count\n");
+        SAL_INFO("oox", levelString.getStr()
+                << "static const sal_uInt16 nValues[] = {");
+        SAL_INFO("oox", levelString.getStr()
+                << "// Command, Count");
         for( int i = 0; i < segArray.getLength(); i++ ) {
-            printLevel (level + 1);
-            fprintf (stderr,"%d,%d%s\n", segArray[i].Command,
-                    segArray[i].Count, i < segArray.getLength() - 1 ? "," : "");
+            SAL_INFO("oox", getLevelOString(level + 1).getStr()
+                    << segArray[i].Command << ","
+                    << segArray[i].Count
+                    << (i < segArray.getLength() - 1 ? "," : ""));
         }
-        printLevel (level);
-        fprintf (stderr,"};\n");
+        SAL_INFO("oox", levelString.getStr()
+                << "};");
         return "createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues )";
     }
     else if( value >>= segTextFrame )
     {
-        printLevel (level);
-        fprintf (stderr, "Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (%" SAL_PRIdINT32 ");\n", segTextFrame.getLength());
+        SAL_INFO("oox", levelString.getStr()
+                << "Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq ("
+                << segTextFrame.getLength() << ");");
         for( int i=0; i<segTextFrame.getLength(); i++ ) {
-            printLevel (level);
-            fprintf (stderr, "{\n");
+            SAL_INFO("oox", levelString.getStr()
+                    << "{");
             const char *var = lclDumpAnyValueCode (makeAny (segTextFrame[i]), level + 1);
-            printLevel (level + 1);
-            fprintf (stderr, "aTextFrameSeq [%d] = %s;\n", i, var);
-            printLevel (level);
-            fprintf (stderr, "}\n");
+            SAL_INFO("oox", getLevelOString(level + 1).getStr()
+                    << "aTextFrameSeq [" << i << "] = " << var << ";");
+            SAL_INFO("oox", levelString.getStr() << "}");
         }
         return "aTextFrameSeq";
     }
     else if( value >>= ppArray )
     {
-        printLevel (level);
         if (ppArray.getLength() == 0)
             return "Sequence< EnhancedCustomShapeParameterPair >(0)";
 
-        fprintf (stderr, "static const CustomShapeProvider::ParameterPairData aData[] = {\n");
+        SAL_INFO("oox", levelString.getStr()
+                << "static const CustomShapeProvider::ParameterPairData aData[] = {");
         for( int i = 0; i < ppArray.getLength(); i++ ) {
             printParameterPairData(level + 1, ppArray[i]);
-            fprintf (stderr,"%s\n", i < ppArray.getLength() - 1 ? "," : "");
+            SAL_INFO("oox", getLevelOString(level + 1).getStr()
+                    << (i < ppArray.getLength() - 1 ? "," : ""));
         }
-        printLevel (level);
-        fprintf (stderr,"};\n");
+        SAL_INFO("oox", levelString.getStr()
+                << "};");
 
         return "createParameterPairSequence(SAL_N_ELEMENTS(aData), aData)";
     }
     else if( value >>= segment )
     {
-        printLevel (level);
-        fprintf (stderr, "EnhancedCustomShapeSegment aSegment;\n");
-        printLevel (level);
+        SAL_INFO("oox", levelString.getStr()
+                << "EnhancedCustomShapeSegment aSegment;");
         // TODO: use EnhancedCustomShapeSegmentCommand constants
-        fprintf (stderr, "aSegment.Command = %d;\n", segment.Command);
-        printLevel (level);
-        fprintf (stderr, "aSegment.Count = %d;\n", segment.Count);
+        SAL_INFO("oox", levelString.getStr()
+                << "aSegment.Command = " << segment.Command << ";");
+        SAL_INFO("oox", levelString.getStr()
+                << "aSegment.Count = " << segment.Count << ";");
         return "aSegment";
     }
     else if( value >>= textFrame )
     {
-        printLevel (level);
-        fprintf (stderr, "EnhancedCustomShapeTextFrame aTextFrame;\n");
-        printLevel (level);
-        fprintf (stderr, "{\n");
+        OString nextLevelString = getLevelOString(level + 1);
+
+        SAL_INFO("oox", levelString.getStr()
+                << "EnhancedCustomShapeTextFrame aTextFrame;");
+        SAL_INFO("oox", levelString.getStr()
+                << "{");
         {
             const char* var = lclDumpAnyValueCode( makeAny (textFrame.TopLeft), level + 1 );
-            printLevel (level + 1);
-            fprintf (stderr, "aTextFrame.TopLeft = %s;\n", var);
+            SAL_INFO("oox", nextLevelString.getStr()
+                    << "aTextFrame.TopLeft = " << var << ";");
         }
-        printLevel (level);
-        fprintf (stderr, "}\n");
+        SAL_INFO("oox", levelString.getStr()
+                << "}");
 
-        printLevel (level);
-        fprintf (stderr, "{\n");
+        SAL_INFO("oox", levelString.getStr()
+                << "{");
         {
             const char* var = lclDumpAnyValueCode( makeAny (textFrame.BottomRight), level + 1 );
-            printLevel (level + 1);
-            fprintf (stderr, "aTextFrame.BottomRight = %s;\n", var);
+            SAL_INFO("oox", nextLevelString.getStr()
+                    << "aTextFrame.BottomRight = " << var << ";");
         }
-        printLevel (level);
-        fprintf (stderr, "}\n");
+        SAL_INFO("oox", levelString.getStr()
+                << "}");
 
         return "aTextFrame";
     }
     else if( value >>= pp )
     {
-        printLevel (level);
-        fprintf (stderr, "static const CustomShapeProvider::ParameterPairData aData =\n");
+        SAL_INFO("oox", levelString.getStr()
+                << "static const CustomShapeProvider::ParameterPairData aData =");
         printParameterPairData(level, pp);
-        fprintf (stderr, ";\n");
+        SAL_INFO("oox", levelString.getStr()
+                << ";");
 
         return "createParameterPair(&aData)";
     }
     else if( value >>= par )
     {
-        printLevel (level);
-        fprintf (stderr,"EnhancedCustomShapeParameter aParameter;\n");
+        SAL_INFO("oox", levelString.getStr()
+                << "EnhancedCustomShapeParameter aParameter;");
         const char* var = lclDumpAnyValueCode( par.Value, level );
-        printLevel (level);
-        fprintf (stderr,"aParameter.Value = %s;\n", var);
-        printLevel (level);
-        fprintf (stderr,"aParameter.Type = %s;\n",
-                lclGetEnhancedParameterType(par.Type));
+        SAL_INFO("oox", levelString.getStr()
+                << "aParameter.Value = " << var << ";");
+        SAL_INFO("oox", levelString.getStr()
+                << "aParameter.Type = " << lclGetEnhancedParameterType(par.Type) << ";");
         return "aParameter";
     }
     else if( value >>= longValue )
     {
-        printLevel (level);
-        fprintf (stderr,"Any aAny ((sal_Int32) %ld);\n", longValue);
+        SAL_INFO("oox", levelString.getStr()
+                << "Any aAny ((sal_Int32) " << longValue << ");");
         return "aAny";
     }
     else if( value >>= intValue )
-        fprintf (stderr,"%" SAL_PRIdINT32 "            (hex: %" SAL_PRIxUINT32 ")\n", intValue, intValue);
+        SAL_INFO("oox", intValue << "            (hex: " << std::hex << intValue << ")");
     else if( value >>= uintValue )
-        fprintf (stderr,"%" SAL_PRIdINT32 "            (hex: %" SAL_PRIxUINT32 ")\n", uintValue, uintValue);
+        SAL_INFO("oox", uintValue << "            (hex: " << std::hex << uintValue << ")");
     else if( value >>= int16Value )
-        fprintf (stderr,"%d            (hex: %x)\n", int16Value, int16Value);
+        SAL_INFO("oox", int16Value << "            (hex: " << std::hex << int16Value << ")");
     else if( value >>= uint16Value )
-        fprintf (stderr,"%d            (hex: %x)\n", uint16Value, uint16Value);
+        SAL_INFO("oox", uint16Value << "            (hex: " << std::hex << uint16Value << ")");
     else if( value >>= floatValue )
-        fprintf (stderr,"%f\n", floatValue);
+        SAL_INFO("oox", floatValue);
     else if( value >>= boolValue ) {
         if (boolValue)
             return "(sal_Bool) sal_True";
@@ -802,20 +876,21 @@ static const char* lclDumpAnyValueCode( const Any& value, int level)
             return "(sal_Bool) sal_False";
     }
     else if( value >>= xNumRule ) {
-        fprintf (stderr, "XIndexReplace\n");
+        SAL_INFO("oox", "XIndexReplace.");
         for (int k=0; k<xNumRule->getCount(); k++) {
             Sequence< PropertyValue > aBulletPropSeq;
-            fprintf (stderr, "level %d\n", k);
+            SAL_INFO("oox", "level " << k);
             if (xNumRule->getByIndex (k) >>= aBulletPropSeq) {
                 for (int j=0; j<aBulletPropSeq.getLength(); j++) {
-                    fprintf(stderr, "%46s = ", USS (aBulletPropSeq[j].Name));
-                    lclDumpAnyValue (aBulletPropSeq[j].Value);
+                    std::ostringstream oss;
+                    oss << std::setw(46) << USS(aBulletPropSeq[j].Name) << " = ";
+                    lclDumpAnyValue(aBulletPropSeq[j].Value, oss.str());
                 }
             }
         }
     }
     else if( value >>= aWritingMode )
-        fprintf (stderr, "%d writing mode\n", static_cast<int>(aWritingMode));
+        SAL_INFO("oox", static_cast<int>(aWritingMode) << " writing mode.");
     else if( value >>= aTextVertAdj ) {
         const char* s = "unknown";
         switch( aTextVertAdj ) {
@@ -835,7 +910,7 @@ static const char* lclDumpAnyValueCode( const Any& value, int level)
                 s = "make_fixed_size";
                 break;
         }
-        fprintf (stderr, "%s\n", s);
+        SAL_INFO("oox", s);
     }
     else if( value >>= aTextHorizAdj ) {
         const char* s = "unknown";
@@ -856,38 +931,39 @@ static const char* lclDumpAnyValueCode( const Any& value, int level)
                 s = "make_fixed_size";
                 break;
         }
-        fprintf (stderr, "%s\n", s);
+        SAL_INFO("oox", s);
     }
     else if( value >>= spacing ) {
-        fprintf (stderr, "mode: %d value: %d\n", spacing.Mode, spacing.Height);
+        SAL_INFO("oox", "mode: " << spacing.Mode << " value: " << spacing.Height);
     }
     else if( value >>= rect ) {
-        printLevel (level);
-        fprintf (stderr, "awt::Rectangle aRectangle;\n");
-        printLevel (level);
-        fprintf (stderr, "aRectangle.X = %" SAL_PRIdINT32 ";\n", rect.X);
-        printLevel (level);
-        fprintf (stderr, "aRectangle.Y = %" SAL_PRIdINT32 ";\n", rect.Y);
-        printLevel (level);
-        fprintf (stderr, "aRectangle.Width = %" SAL_PRIdINT32 ";\n", rect.Width);
-        printLevel (level);
-        fprintf (stderr, "aRectangle.Height = %" SAL_PRIdINT32 ";\n", rect.Height);
+        SAL_INFO("oox", levelString.getStr()
+                << "awt::Rectangle aRectangle;");
+        SAL_INFO("oox", levelString.getStr()
+                << "aRectangle.X = " << rect.X << ";");
+        SAL_INFO("oox", levelString.getStr()
+                << "aRectangle.Y = " << rect.Y << ";");
+        SAL_INFO("oox", levelString.getStr()
+                << "aRectangle.Width = " << rect.Width << ";");
+        SAL_INFO("oox", levelString.getStr()
+                << "aRectangle.Height = " << rect.Height << ";");
         return "aRectangle";
     }
     else if( value >>= size ) {
-        printLevel (level);
-        fprintf (stderr, "awt::Size aSize;\n");
-        printLevel (level);
-        fprintf (stderr, "aSize.Width = %" SAL_PRIdINT32 ";\n", size.Width);
-        printLevel (level);
-        fprintf (stderr, "aSize.Height = %" SAL_PRIdINT32 ";\n", size.Height);
+        SAL_INFO("oox", levelString.getStr()
+                << "awt::Size aSize;");
+        SAL_INFO("oox", levelString.getStr()
+                << "aSize.Width = " << size.Width << ";");
+        SAL_INFO("oox", levelString.getStr()
+                << "aSize.Height = " << size.Height << ";");
         return "aSize";
     }
     else if( value.isExtractableTo(::cppu::UnoType<sal_Int32>::get())) {
-        fprintf (stderr,"is extractable to int32\n");
+        SAL_INFO("oox", "is extractable to int32.");
     }
     else
-        fprintf (stderr,"???           <unhandled type %s>\n", USS(value.getValueTypeName()));
+        SAL_INFO("oox", "???           <unhandled type "
+                << USS(value.getValueTypeName()) << ">");
 
     return "";
 }
@@ -905,18 +981,22 @@ void PropertyMap::dumpCode( const Reference< XPropertySet >& rXPropSet )
             continue;
 
         OString name = OUStringToOString( props [i].Name, RTL_TEXTENCODING_UTF8);
+
         int level = 1;
+        OString levelString = getLevelOString(level);
+        OString nextLevelString = getLevelOString(level + 1);
 
         try {
-            printLevel (level);
-            fprintf (stderr, "{\n");
+            SAL_INFO("oox", levelString.getStr()
+                    << "{");
             const char* var = lclDumpAnyValueCode (rXPropSet->getPropertyValue (props [i].Name), level + 1);
-            printLevel (level + 1);
-            fprintf (stderr,"aPropertyMap.setProperty(PROP_%s, %s);\n", name.getStr(), var);
-            printLevel (level);
-            fprintf (stderr, "}\n");
+            SAL_INFO("oox", nextLevelString.getStr()
+                    << "aPropertyMap.setProperty(PROP_"
+                    << name.getStr() << ", " << var << ");");
+            SAL_INFO("oox", levelString.getStr()
+                    << "}");
         } catch (const Exception&) {
-            fprintf (stderr,"unable to get '%s' value\n", USS(props [i].Name));
+            SAL_INFO("oox", "unable to get '" << USS(props[i].Name) << "' value.");
         }
     }
 }

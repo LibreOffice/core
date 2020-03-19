@@ -28,6 +28,7 @@
 #include <osl/process.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
+#include <sal/log.hxx>
 
 #include <typelib/typedescription.hxx>
 
@@ -213,8 +214,10 @@ static void readLoggingConfig( sal_Int32 *pLevel, FILE **ppFile )
             *pLevel = LogLevel::ARGS;
         else
         {
-            fprintf( stderr, "unknown loglevel %s\n",
-                     OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
+            SAL_WARN("pyuno", "unknown loglevel "
+                     << OUStringToOString(
+                         str,
+                         RTL_TEXTENCODING_UTF8).getStr());
         }
     }
     if( *pLevel <= LogLevel::NONE )
@@ -247,9 +250,10 @@ static void readLoggingConfig( sal_Int32 *pLevel, FILE **ppFile )
         }
         else
         {
-            fprintf( stderr, "couldn't create file %s\n",
-                     OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
-
+            SAL_WARN("pyuno", "couldn't create file "
+                    << OUStringToOString(
+                        str,
+                        RTL_TEXTENCODING_UTF8).getStr());
         }
     }
 }
@@ -967,8 +971,10 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
         RuntimeException e;
         e.Message = buf.makeStringAndClear();
 #if OSL_DEBUG_LEVEL > 0
-        fprintf( stderr, "Python exception: %s\n",
-                 OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr() );
+        SAL_WARN("pyuno", "Python exception: "
+                 << OUStringToOString(
+                     e.Message,
+                     RTL_TEXTENCODING_UTF8).getStr());
 #endif
         ret <<= e;
     }

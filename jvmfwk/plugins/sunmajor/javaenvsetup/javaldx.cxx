@@ -26,6 +26,7 @@
 #include <iostream>
 #include <sal/main.h>
 #include <sal/types.h>
+#include <sal/log.hxx>
 #include <osl/thread.h>
 #include <rtl/ustring.hxx>
 #include <rtl/byteseq.hxx>
@@ -63,7 +64,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         }
         else if (errcode != JFW_E_NONE && errcode != JFW_E_DIRECT_MODE)
         {
-            fprintf(stderr,"javaldx failed!\n");
+            SAL_WARN("jfw", "javaldx failed!.");
             return -1;
         }
 
