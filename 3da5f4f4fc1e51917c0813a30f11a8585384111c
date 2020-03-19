@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "40fbd814_68527a3c",
+        "filename": "chart2/source/view/main/ChartView.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1890,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-03-19T15:52:37Z",
+      "side": 1,
+      "message": "It\u0027s better to move this outside of the try block. According to the original code,\nxSeriesOrPointProp-\u003egetPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) can raise an exception, losing also CHART_UNONAME_NUMFT format...",
+      "range": {
+        "startLine": 1887,
+        "startChar": 0,
+        "endLine": 1890,
+        "endChar": 83
+      },
+      "revId": "3da5f4f4fc1e51917c0813a30f11a8585384111c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
