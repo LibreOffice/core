@@ -6439,7 +6439,7 @@ static OString impl_NumberingType( sal_uInt16 nNumberingType )
 }
 
 // Converting Level Numbering Format Code to string
-static OString impl_LevelNFC( sal_uInt16 nNumberingType , const SfxItemSet *pOutSet)
+static OString impl_LevelNFC(sal_uInt16 nNumberingType, const SfxItemSet* pOutSet, OString& rFormat)
 {
     OString aType;
 
@@ -6492,6 +6492,10 @@ static OString impl_LevelNFC( sal_uInt16 nNumberingType , const SfxItemSet *pOut
         case style::NumberingType::TEXT_ORDINAL: aType="ordinalText"; break;
         case style::NumberingType::SYMBOL_CHICAGO: aType="chicago"; break;
         case style::NumberingType::ARABIC_ZERO: aType = "decimalZero"; break;
+        case style::NumberingType::ARABIC_ZERO3:
+            aType = "custom";
+            rFormat = "001, 002, 003, ...";
+            break;
 /*
         Fallback the rest to decimal.
         case style::NumberingType::NATIVE_NUMBERING:
@@ -6849,12 +6853,32 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
                 FSEND );
     }
     // format
-    OString aFormat( impl_LevelNFC( nNumberingType ,pOutSet) );
+    OString aCustomFormat;
+    OString aFormat(impl_LevelNFC(nNumberingType, pOutSet, aCustomFormat));
 
     if ( !aFormat.isEmpty() )
-        m_pSerializer->singleElementNS( XML_w, XML_numFmt,
-                FSNS( XML_w, XML_val ), aFormat.getStr(),
-                FSEND );
+    {
+        if (aCustomFormat.isEmpty())
+        {
+            m_pSerializer->singleElementNS( XML_w, XML_numFmt,
+                    FSNS( XML_w, XML_val ), aFormat.getStr(),
+                    FSEND );
+        }
+        else
+        {
+            m_pSerializer->startElementNS(XML_mc, XML_AlternateContent, FSEND);
+            m_pSerializer->startElementNS(XML_mc, XML_Choice, XML_Requires, "w14", FSEND);
+
+            m_pSerializer->singleElementNS(XML_w, XML_numFmt, FSNS(XML_w, XML_val), aFormat,
+                                           FSNS(XML_w, XML_format), aCustomFormat, FSEND);
+
+            m_pSerializer->endElementNS(XML_mc, XML_Choice);
+            m_pSerializer->startElementNS(XML_mc, XML_Fallback, FSEND);
+            m_pSerializer->singleElementNS(XML_w, XML_numFmt, FSNS(XML_w, XML_val), "decimal", FSEND);
+            m_pSerializer->endElementNS(XML_mc, XML_Fallback);
+            m_pSerializer->endElementNS(XML_mc, XML_AlternateContent);
+        }
+    }
 
     // suffix
     const char *pSuffix = nullptr;
