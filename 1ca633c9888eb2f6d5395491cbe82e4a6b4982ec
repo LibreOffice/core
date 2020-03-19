@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "00e3fd16_2ff2151a",
+        "filename": "compilerplugins/clang/test/buriedassign.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-03-19T13:54:24Z",
+      "side": 1,
+      "message": "ah, that was just me making it easier to debug a problem\n(by looking for a name and then dumping the associated vardecl)",
+      "parentUuid": "6c3db57e_12fc67ec",
+      "range": {
+        "startLine": 55,
+        "startChar": 11,
+        "endLine": 55,
+        "endChar": 12
+      },
+      "revId": "1ca633c9888eb2f6d5395491cbe82e4a6b4982ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0ff9e645_d05daf64",
         "filename": "include/comphelper/sequence.hxx",
         "patchSetId": 1
