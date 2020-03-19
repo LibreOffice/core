@@ -509,10 +509,7 @@ void unoInterfaceProxyDispatch(
     uno_Interface * pUnoI, const typelib_TypeDescription * pMemberDescr,
     void * pReturn, void * pArgs[], uno_Any ** ppException )
 {
-#if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr, "unoInterfaceProxyDispatch\n");
-#endif
-
+    SAL_INFO("bridges.s390", "unoInterfaceProxyDispatch.");
 
     // is my surrogate
         bridges::cpp_uno::shared::UnoInterfaceProxy * pThis

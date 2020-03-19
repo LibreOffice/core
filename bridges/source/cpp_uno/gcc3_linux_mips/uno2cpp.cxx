@@ -72,9 +72,7 @@ namespace
     // never called
     if (! pAdjustedThisPtr ) CPPU_CURRENT_NAMESPACE::dummy_can_throw_anything("xxx"); // address something
 
-#ifdef BRDEBUG
-    fprintf(stderr,"in CallVirtualMethod\n");
-#endif
+    SAL_INFO("bridges.mips", "in CallVirtualMethod.");
 
     // Because of the MIPS O32 calling conventions we could be passing
     // parameters in both register types and on the stack. To create the
@@ -91,10 +89,8 @@ namespace
         "move %0,$2\n\t"
         :"=r"(p): : "$2","$29" );
 
-#ifdef BRDEBUG
      if (nStackLongs * 4 > 512 )
-         fprintf(stderr,"too many arguments");
-#endif
+         SAL_INFO("bridges.mips", "too many arguments");
 
     // now begin to load the C++ function arguments into storage
     nw = 0;
@@ -104,19 +100,17 @@ namespace
 
     // treat complex return pointer like any other parameter
 
-#ifdef BRDEBUG
-    fprintf(stderr,"overflow area pointer p=%p\n",p);
+    SAL_INFO("bridges.mips", "overflow area pointer p=" << p);
 
     /* Let's figure out what is really going on here*/
-    fprintf(stderr,"callVirtualMethod parameters string is %s\n",pPT);
+    SAL_INFO("bridges.mips", "callVirtualMethod parameters string is " << pPT);
     int k = nStackLongs;
     long * q = (long *)pStackLongs;
     while (k > 0) {
-      fprintf(stderr,"uno stack is: %x\n",(unsigned int)*q);
+      SAL_INFO("bridges.mips", "uno stack is: " << std::hex << (unsigned int)*q);
       k--;
       q++;
     }
-#endif
 
     /* parse the argument list up to the ending ) */
     while (*pPT != 'X') {
@@ -177,9 +171,7 @@ namespace
     mfunc = *((unsigned long **)mfunc);                 // the function is stored at the address
     ptr = (void (*)())mfunc;
 
-#ifdef BRDEBUG
-    fprintf(stderr,"calling function %p\n",mfunc);
-#endif
+    SAL_INFO("bridges.mips", "calling function " << mfunc);
 
     /* Set up the machine registers and invoke the function */
 
@@ -252,9 +244,7 @@ namespace
     char * pParamType = (char *) alloca(nParams+2);
     char * pPT = pParamType;
 
-#ifdef BRDEBUG
-  fprintf(stderr,"in cpp_call\n");
-#endif
+    SAL_INFO("bridges.mips", "in cpp_call.");
 
     // return
     typelib_TypeDescription * pReturnTypeDescr = 0;
@@ -479,9 +469,7 @@ void unoInterfaceProxyDispatch(
     = static_cast< bridges::cpp_uno::shared::UnoInterfaceProxy *> (pUnoI);
   //typelib_InterfaceTypeDescription * pTypeDescr = pThis->pTypeDescr;
 
-#ifdef BRDEBUG
-  fprintf(stderr,"in dispatch\n");
-#endif
+  SAL_INFO("bridges.mips", "in dispatch.");
 
   switch (pMemberDescr->eTypeClass)
   {

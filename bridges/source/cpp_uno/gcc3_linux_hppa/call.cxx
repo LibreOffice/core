@@ -96,17 +96,18 @@ void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
     pMethod += 4 * nVtableIndex;
     pMethod = *((sal_uInt32 *)pMethod);
 
-#if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr, "this is %p\n", pGPR[0]);
+    SAL_INFO("bridges.hppa", "this is " << pGPR[0]);
     for (int i = 0; i < hppa::MAX_GPR_REGS ; ++i)
-        fprintf(stderr, "normal reg %d is %d %x\n", i, pGPR[i], pGPR[i]);
+        SAL_INFO("bridges.hppa", "normal reg " << i << " is " << pGPR[i]
+                << std::hex << pGPR[i]);
 
     for (int i = 0; i < hppa::MAX_SSE_REGS ; ++i)
-        fprintf(stderr, "float reg %d is %x\n", i, pFPR[i]);
+        SAL_INFO("bridges.hppa", "float reg " << i << " is "
+                << std::hex << pGPR[i]);
 
     for (int i = 0; i < nStack; ++i)
-        fprintf(stderr, "stack bytes are %x\n", pStack[i]);
-#endif
+        SAL_INFO("bridges.hppa", "stack bytes are "
+                << std::hex << pStack[i]);
 
     //Always reserve 4 slots, and align to 8 bytes
     sal_uInt32 nStackBytes = ( ( nStack + 4 + 1 ) >> 1 ) * 8;

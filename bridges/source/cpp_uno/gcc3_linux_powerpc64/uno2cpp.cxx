@@ -157,21 +157,29 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
     if ( nGPR > ppc64::MAX_GPR_REGS )
         nGPR = ppc64::MAX_GPR_REGS;
 
-#if OSL_DEBUG_LEVEL > 2
-        // Let's figure out what is really going on here
-        {
-                fprintf( stderr, "= callVirtualMethod() =\nGPR's (%d): ", nGPR );
-                for ( int i = 0; i < nGPR; ++i )
-                        fprintf( stderr, "0x%lx, ", pGPR[i] );
-                fprintf( stderr, "\nFPR's (%d): ", nFPR );
-                for ( int i = 0; i < nFPR; ++i )
-                        fprintf( stderr, "0x%lx (%f), ", pFPR[i], pFPR[i] );
-                fprintf( stderr, "\nStack (%d): ", nStack );
-                for ( int i = 0; i < nStack; ++i )
-                        fprintf( stderr, "0x%lx, ", pStack[i] );
-                fprintf( stderr, "\n" );
-        }
-#endif
+    // Let's figure out what is really going on here
+    {
+        SAL_INFO("bridges.powerpc64", "callVirtualMethod().");
+
+        std::ostringstream oss;
+        oss << "GPR's (" << nGPR << "): ";
+        for ( int i = 0; i < nGPR; ++i )
+            oss << std::hex << "0x" << pGPR[i] << ", ";
+        SAL_INFO("bridges.powerpc64", oss);
+
+        std::ostringstream oss;
+        oss << "FPR's (" << nFPR << "): ";
+        for ( int i = 0; i < nFPR; ++i )
+            oss << std::hex << "0x" << pFPR[i]
+                << std::dex << " (" << pFPR[i] << "), ";
+        SAL_INFO("bridges.powerpc64", oss);
+
+        std::ostringstream oss;
+        oss << "Stack (" << nStack << "): ";
+        for ( int i = 0; i < nStack; ++i )
+            oss << std::hex << "0x" << pStack[i] << ", ";
+        SAL_INFO("bridges.powerpc64", oss);
+    }
 
     // Load parameters to stack, if necessary
     sal_uInt64 *stack = (sal_uInt64 *) __builtin_alloca( nStack * 8 );
@@ -315,34 +323,27 @@ static void cpp_call(
 
     if (pReturnTypeDescr)
     {
-#if OSL_DEBUG_LEVEL > 2
-        fprintf(stderr, "return type is %d\n", pReturnTypeDescr->eTypeClass);
-#endif
+        SAL_INFO("bridges.powerpc64", "return type is " << pReturnTypeDescr->eTypeClass);
         bool bSimpleReturn =!ppc64::return_in_hidden_param(pReturnTypeRef);
 
         if (bSimpleReturn)
         {
             pCppReturn = pUnoReturn; // direct way for simple types
-#if OSL_DEBUG_LEVEL > 2
-            fprintf(stderr, "simple return\n");
-#endif
+            SAL_INFO("bridges.powerpc64", "simple return.");
         }
         else
         {
             // complex return via ptr
             pCppReturn = (bridges::cpp_uno::shared::relatesToInterfaceType( pReturnTypeDescr )
                    ? alloca( pReturnTypeDescr->nSize ) : pUnoReturn);
-#if OSL_DEBUG_LEVEL > 2
-            fprintf(stderr, "pCppReturn/pUnoReturn is %lx/%lx", pCppReturn, pUnoReturn);
-#endif
+            SAL_INFO("bridges.powerpc64", "pCppReturn/pUnoReturn is " << std::hex
+                    << pCppReturn << "/" <<  pUnoReturn);
             INSERT_INT64( &pCppReturn, nGPR, pGPR, pStack, bOverflow );
         }
     }
     // push "this" pointer
         void * pAdjustedThisPtr = reinterpret_cast< void ** >( pThis->getCppI() ) + aVtableSlot.offset;
-#if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr, "this pointer is %p\n", pAdjustedThisPtr);
-#endif
+    SAL_INFO("bridges.powerpc64", "this pointer is " << pAdjustedThisPtr);
     INSERT_INT64( &pAdjustedThisPtr, nGPR, pGPR, pStack, bOverflow );
 
         // Args
@@ -354,9 +355,7 @@ static void cpp_call(
 
     sal_Int32 nTempIndices   = 0;
 
-#if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr, "n params is %d\n", nParams);
-#endif
+    SAL_INFO("bridges.powerpc64", "n params is " << nParams);
 
     for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
     {
@@ -364,10 +363,9 @@ static void cpp_call(
         typelib_TypeDescription * pParamTypeDescr = 0;
         TYPELIB_DANGER_GET( &pParamTypeDescr, rParam.pTypeRef );
 
-#if OSL_DEBUG_LEVEL > 2
-        fprintf(stderr, "param %d is %d %d %d\n", nPos, rParam.bOut, bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr ),
-            pParamTypeDescr->eTypeClass);
-#endif
+        SAL_INFO("bridges.powerpc64", "param " << nPos << " is " << rParam.bOut << " "
+                << bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr ) << " "
+                << pParamTypeDescr->eTypeClass);
 
         if (!rParam.bOut && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr ))
         {
@@ -377,17 +375,15 @@ static void cpp_call(
                         {
                         case typelib_TypeClass_HYPER:
                         case typelib_TypeClass_UNSIGNED_HYPER:
-#if OSL_DEBUG_LEVEL > 2
-                                fprintf(stderr, "hyper is %lx\n", pCppArgs[nPos]);
-#endif
+                                SAL_INFO("bridges.powerpc64", "hyper is " << std::hex
+                                        << pCppArgs[nPos]);
                                 INSERT_INT64( pCppArgs[nPos], nGPR, pGPR, pStack, bOverflow );
                                 break;
                         case typelib_TypeClass_LONG:
                         case typelib_TypeClass_UNSIGNED_LONG:
                         case typelib_TypeClass_ENUM:
-#if OSL_DEBUG_LEVEL > 2
-                                fprintf(stderr, "long is %x\n", pCppArgs[nPos]);
-#endif
+                                SAL_INFO("bridges.powerpc64", "long is " << std::hex
+                                        << pCppArgs[nPos]);
                                 INSERT_INT32( pCppArgs[nPos], nGPR, pGPR, pStack, bOverflow );
                                 break;
                         case typelib_TypeClass_SHORT:
@@ -415,14 +411,11 @@ static void cpp_call(
         }
         else // ptr to complex value | ref
         {
-#if OSL_DEBUG_LEVEL > 2
-            fprintf(stderr, "complex type again %d\n", rParam.bIn);
-#endif
+                        SAL_INFO("bridges.powerpc64", "complex type again " << rParam.bIn);
                         if (! rParam.bIn) // is pure out
                         {
-#if OSL_DEBUG_LEVEL > 2
-                fprintf(stderr, "complex size is %d\n", pParamTypeDescr->nSize );
-#endif
+                                SAL_INFO("bridges.powerpc64", "complex size is "
+                                        << pParamTypeDescr->nSize );
                                 // cpp out is constructed mem, uno out is not!
                                 uno_constructData(
                                         pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
@@ -434,9 +427,7 @@ static void cpp_call(
                         // is in/inout
                         else if (bridges::cpp_uno::shared::relatesToInterfaceType( pParamTypeDescr ))
                         {
-#if OSL_DEBUG_LEVEL > 2
-                fprintf(stderr, "this one\n");
-#endif
+                                SAL_INFO("bridges.powerpc64", "this one.");
                                 uno_copyAndConvertData(
                                         pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
                                         pUnoArgs[nPos], pParamTypeDescr, pThis->getBridge()->getUno2Cpp() );
@@ -447,9 +438,8 @@ static void cpp_call(
                         }
                         else // direct way
                         {
-#if OSL_DEBUG_LEVEL > 2
-                fprintf(stderr, "that one, passing %lx through\n", pUnoArgs[nPos]);
-#endif
+                                SAL_INFO("bridges.powerpc64", "that one, passing " << std::hex
+                                        << pUnoArgs[nPos] << " through.");
                                 pCppArgs[nPos] = pUnoArgs[nPos];
                                 // no longer needed
                                 TYPELIB_DANGER_RELEASE( pParamTypeDescr );

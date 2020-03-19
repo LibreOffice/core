@@ -54,9 +54,9 @@ namespace
         // pCallStack: ret, [return ptr], this, params
         char * pTopStack = (char *)(pCallStack + 0);
         char * pCppStack = pTopStack;
-#if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr, "cpp2uno_call\n");
-#endif
+
+        SAL_INFO("bridges.m68k", "cpp2uno_call.");
+
         // return
         typelib_TypeDescription * pReturnTypeDescr = 0;
         if (pReturnTypeRef)
@@ -70,16 +70,12 @@ namespace
         {
             if (bridges::cpp_uno::shared::isSimpleType( pReturnTypeDescr ))
             {
-#if OSL_DEBUG_LEVEL > 2
-        fprintf(stderr, "simple return\n");
-#endif
+                SAL_INFO("bridges.m68k", "simple return.");
                 pUnoReturn = pRegisterReturn; // direct way for simple types
             }
             else // complex return via ptr (pCppReturn)
             {
-#if OSL_DEBUG_LEVEL > 2
-        fprintf(stderr, "complex return\n");
-#endif
+                SAL_INFO("bridges.m68k", "complex return.");
                 pCppReturn = (void *)r8;
 
                 pUnoReturn = (bridges::cpp_uno::shared::relatesToInterfaceType( pReturnTypeDescr )
@@ -179,16 +175,13 @@ namespace
         uno_Any aUnoExc; // Any will be constructed by callee
         uno_Any * pUnoExc = &aUnoExc;
 
-#if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr, "before dispatch\n");
-#endif
+        SAL_INFO("bridges.m68k", "before dispatch.");
+
         // invoke uno dispatch call
         (*pThis->getUnoI()->pDispatcher)(
           pThis->getUnoI(), pMemberTypeDescr, pUnoReturn, pUnoArgs, &pUnoExc );
 
-#if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr, "after dispatch\n");
-#endif
+        SAL_INFO("bridges.m68k", "after dispatch.");
 
         // in case an exception occurred...
         if (pUnoExc)
@@ -264,13 +257,16 @@ namespace
         long sp, long r8,
         sal_Int64 * pRegisterReturn /* space for register return */ )
     {
-    void ** pCallStack = (void**)(sp);
-#if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr, "cpp_mediate with\n");
-    fprintf(stderr, "%x %x\n", nFunctionIndex, nVtableOffset);
-    fprintf(stderr, "and %x %x\n", pCallStack, pRegisterReturn);
-    fprintf(stderr, "and %x %x\n", pCallStack[0], pCallStack[1]);
-#endif
+        void ** pCallStack = (void**)(sp);
+
+        SAL_INFO("bridges.m68k", "cpp_mediate with.");
+        SAL_INFO("bridges.m68k", std::hex
+                << nFunctionIndex << " " << nVtableOffset);
+        SAL_INFO("bridges.m68k", std::hex << "and "
+                << pCallStack << " " << pRegisterReturn);
+        SAL_INFO("bridges.m68k", std::hex << "and "
+                << pCallStack[0] << " " << pCallStack[1]);
+
         static_assert( sizeof(sal_Int32)==sizeof(void *), "### unexpected!" );
 
         void *pThis = pCallStack[0];

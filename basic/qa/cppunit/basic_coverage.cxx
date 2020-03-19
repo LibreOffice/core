@@ -50,7 +50,7 @@ Coverage::Coverage()
 
 Coverage::~Coverage()
 {
-    fprintf(stderr,"basic coverage Summary : pass:%d\n", m_nb_tests_ok );
+    SAL_INFO("basic.qa", "basic coverage Summary : pass:" << m_nb_tests_ok);
 }
 
 void Coverage::test_failed()
@@ -62,7 +62,8 @@ void Coverage::test_failed()
 void Coverage::test_success()
 {
     m_nb_tests_ok += 1;
-    fprintf(stderr,"%s,PASS\n", OUStringToOString( m_sCurrentTest, RTL_TEXTENCODING_UTF8 ).getStr() );
+    SAL_INFO("basic.qa", OUStringToOString(
+                m_sCurrentTest, RTL_TEXTENCODING_UTF8 ).getStr() << ",PASS");
 }
 
 void Coverage::run_test(const OUString& sFileURL)
@@ -125,7 +126,8 @@ void Coverage::process_directory(const OUString& sDirName)
             }
         }
     }
-    fprintf(stderr,"end process directory\n");
+
+    SAL_INFO("basic.qa", "end process directory.");
 }
 
 void Coverage::Coverage_Iterator()

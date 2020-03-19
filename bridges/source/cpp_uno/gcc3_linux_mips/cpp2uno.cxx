@@ -76,9 +76,7 @@ namespace
         */
     int nw = 0; // number of words used by arguments
 
-#ifdef BRDEBUG
-    fprintf(stderr,"cpp2uno_call1\n");
-#endif
+    SAL_INFO("bridges.mips", "cpp2uno_call1.");
 
     /* C++ has [ret *] or this as the first arguments, so no arguments will
      * be passed in floating-point registers?
@@ -104,9 +102,7 @@ namespace
       if (bridges::cpp_uno::shared::isSimpleType( pReturnTypeDescr ))
       {
         pUnoReturn = pRegisterReturn; // direct way for simple types
-#ifdef BRDEBUG
-    fprintf(stderr,"cpp2uno_call:simplereturn\n");
-#endif
+        SAL_INFO("bridges.mips", "cpp2uno_call:simplereturn.");
       }
       else // complex return via ptr (pCppReturn)
       {
@@ -117,9 +113,7 @@ namespace
         pUnoReturn = (bridges::cpp_uno::shared::relatesToInterfaceType( pReturnTypeDescr )
             ? alloca( pReturnTypeDescr->nSize )
             : pCppReturn); // direct way
-#ifdef BRDEBUG
-    fprintf(stderr,"cpp2uno_call:complexreturn\n");
-#endif
+        SAL_INFO("bridges.mips", "cpp2uno_call:complexreturn.");
       }
     }
 
@@ -139,9 +133,7 @@ namespace
 
     sal_Int32 nTempIndices   = 0;
 
-#ifdef BRDEBUG
-    fprintf(stderr,"cpp2uno_call:nParams=%d\n",nParams);
-#endif
+    SAL_INFO("bridges.mips", "cpp2uno_call:nParams=" << nParams);
 
     for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
     {
@@ -158,26 +150,28 @@ namespace
           case typelib_TypeClass_DOUBLE:
           case typelib_TypeClass_HYPER:
           case typelib_TypeClass_UNSIGNED_HYPER:
-#ifdef BRDEBUG
-    fprintf(stderr,"cpp2uno_call:hyper=%d,%p\n",pParamTypeDescr->eTypeClass,gpreg[0]);
-#endif
+            SAL_INFO("bridges.mips", "cpp2uno_call:hyper="
+                    << pParamTypeDescr->eTypeClass << "," << gpreg[0]);
+
             if (nw < 3) {
               if (nw & 1) {
                 nw++;
                 gpreg++;
               }
-#ifdef BRDEBUG
-    fprintf(stderr,"cpp2uno_call:gpreg=%p,%p\n",gpreg[0],gpreg[1]);
-#endif
+
+              SAL_INFO("bridges.mips","cpp2uno_call:gpreg="
+                      << gpreg[0] << "," << gpreg[1]);
+
               pCppArgs[nPos] = gpreg;
               pUnoArgs[nPos] = gpreg;
               nw += 2;
               gpreg += 2;
             } else {
               if (((long)ovrflw) & 4) ovrflw++;
-#ifdef BRDEBUG
-    fprintf(stderr,"cpp2uno_call:overflw=%p,%p\n",ovrflw[0],ovrflw[1]);
-#endif
+
+              SAL_INFO("bridges.mips", "cpp2uno_call:overflw="
+                      << ovrflw[0] << "," << ovrflw[1]);
+
               pCppArgs[nPos] = ovrflw;
               pUnoArgs[nPos] = ovrflw;
               ovrflw += 2;
@@ -186,9 +180,9 @@ namespace
 
           case typelib_TypeClass_BYTE:
           case typelib_TypeClass_BOOLEAN:
-#ifdef BRDEBUG
-    fprintf(stderr,"cpp2uno_call:byte=%p,%p\n",gpreg[0],ovrflw[0]);
-#endif
+            SAL_INFO("bridges.mips", "cpp2uno_call:byte="
+                    << gpreg[0] << "," << ovrflw[0]);
+
             if (nw < 4) {
               pCppArgs[nPos] = ((char *)gpreg + 3*IS_BIG_ENDIAN);
               pUnoArgs[nPos] = ((char *)gpreg + 3*IS_BIG_ENDIAN);
@@ -205,9 +199,9 @@ namespace
           case typelib_TypeClass_CHAR:
           case typelib_TypeClass_SHORT:
           case typelib_TypeClass_UNSIGNED_SHORT:
-#ifdef BRDEBUG
-    fprintf(stderr,"cpp2uno_call:char=%p,%p\n",gpreg[0],ovrflw[0]);
-#endif
+            SAL_INFO("bridges.mips", "cpp2uno_call:char="
+                    << gpreg[0] << "," << ovrflw[0]);
+
             if (nw < 4) {
               pCppArgs[nPos] = ((char *)gpreg + 2*IS_BIG_ENDIAN);
               pUnoArgs[nPos] = ((char *)gpreg + 2*IS_BIG_ENDIAN);
@@ -222,9 +216,9 @@ namespace
 
 
           default:
-#ifdef BRDEBUG
-    fprintf(stderr,"cpp2uno_call:def=%p,%p\n",gpreg[0],ovrflw[0]);
-#endif
+            SAL_INFO("bridges.mips", "cpp2uno_call:def="
+                    << gpreg[0] << "," << ovrflw[0]);
+
             if (nw < 4) {
               pCppArgs[nPos] = gpreg;
               pUnoArgs[nPos] = gpreg;
@@ -244,9 +238,8 @@ namespace
       else // ptr to complex value | ref
       {
 
-#ifdef BRDEBUG
-    fprintf(stderr,"cpp2uno_call:ptr|ref\n");
-#endif
+        SAL_INFO("bridges.mips", "cpp2uno_call:ptr|ref.");
+
         if (nw < 4) {
           pCppArgs[nPos] = *(void **)gpreg;
           pCppStack = gpreg;
@@ -257,9 +250,8 @@ namespace
           pCppStack = ovrflw;
           ovrflw++;
         }
-#ifdef BRDEBUG
-    fprintf(stderr,"cpp2uno_call:pCppStack=%p\n",pCppStack);
-#endif
+
+        SAL_INFO("bridges.mips", "cpp2uno_call:pCppStack=" << pCppStack);
 
         if (! rParam.bIn) // is pure out
         {
@@ -278,24 +270,22 @@ namespace
           pTempIndices[nTempIndices] = nPos; // has to be reconverted
           // will be released at reconversion
           ppTempParamTypeDescr[nTempIndices++] = pParamTypeDescr;
-#ifdef BRDEBUG
-    fprintf(stderr,"cpp2uno_call:related to interface,%p,%d,pUnoargs[%d]=%p\n",*(void**)pCppStack,pParamTypeDescr->nSize,nPos,pUnoArgs[nPos]);
-#endif
+          SAL_INFO("bridges.mips", "cpp2uno_call:related to interface,"
+                  << *(void**)pCppStack << "," << pParamTypeDescr->nSize
+                  << ",pUnoargs[" << nPos << "]=" << pUnoArgs[nPos]);
         }
         else // direct way
         {
           pUnoArgs[nPos] = *(void **)pCppStack;
-#ifdef BRDEBUG
-    fprintf(stderr,"cpp2uno_call:direct,pUnoArgs[%d]=%p\n",nPos,pUnoArgs[nPos]);
-#endif
+          SAL_INFO("bridges.mips", "cpp2uno_call:direct,pUnoArgs["
+                  << nPos << "]=" << pUnoArgs[nPos]);
           // no longer needed
           TYPELIB_DANGER_RELEASE( pParamTypeDescr );
         }
       }
     }
-#ifdef BRDEBUG
-    fprintf(stderr,"cpp2uno_call2,%p,unoargs=%p\n",pThis->getUnoI()->pDispatcher,pUnoArgs);
-#endif
+    SAL_INFO("bridges.mips", "cpp2uno_call2," << pThis->getUnoI()->pDispatcher
+            << ",unoargs=" << pUnoArgs);
 
     // ExceptionHolder
     uno_Any aUnoExc; // Any will be constructed by callee
@@ -303,9 +293,7 @@ namespace
 
     // invoke uno dispatch call
     (*pThis->getUnoI()->pDispatcher)( pThis->getUnoI(), pMemberTypeDescr, pUnoReturn, pUnoArgs, &pUnoExc );
-#ifdef BRDEBUG
-    fprintf(stderr,"cpp2uno_call2,after dispatch\n");
-#endif
+    SAL_INFO("bridges.mips", "cpp2uno_call2,after dispatch.");
 
     // in case an exception occurred...
     if (pUnoExc)
@@ -380,10 +368,11 @@ namespace
   {
     static_assert(sizeof(sal_Int32)==sizeof(void *), "### unexpected!");
 
-#ifdef BRDEBUG
-    fprintf(stderr,"cpp_mediate1 gp=%p,fp=%p,ov=%p\n",gpreg,fpreg,ovrflw);
-    fprintf(stderr,"gp=%p,%p,%p,%p\n",gpreg[0],gpreg[1],gpreg[2],gpreg[3]);
-#endif
+    SAL_INFO("bridges.mips", "cpp_mediate1 gp="
+            << gpreg << ",fp=" << fpreg << ",ov=" << ovrflw);
+    SAL_INFO("bridges.mips", "gp="
+            << gpreg[0] << "," << gpreg[1] << ","
+            << gpreg[2] << "," gpreg[3]);
 
     // gpreg:  [ret *], this, [other gpr params]
     // fpreg:  [fpr params]
@@ -399,23 +388,19 @@ namespace
     {
       pThis = gpreg[0];
     }
-#ifdef BRDEBUG
-    fprintf(stderr,"cpp_mediate12,pThis=%p, nFunctionIndex=%d,nVtableOffset=%d\n",pThis,nFunctionIndex,nVtableOffset);
-#endif
+    SAL_INFO("bridges.mips", "cpp_mediate12,pThis=" << pThis
+            << ", nFunctionIndex=" << nFunctionIndex
+            << ",nVtableOffset=" << nVtableOffset);
 
     pThis = static_cast< char * >(pThis) - nVtableOffset;
     bridges::cpp_uno::shared::CppInterfaceProxy * pCppI
       = bridges::cpp_uno::shared::CppInterfaceProxy::castInterfaceToProxy(
           pThis);
-#ifdef BRDEBUG
-    fprintf(stderr,"cpp_mediate13,pCppI=%p\n",pCppI);
-#endif
 
+    SAL_INFO("bridges.mips", "cpp_mediate13,pCppI=" << pCppI);
     typelib_InterfaceTypeDescription * pTypeDescr = pCppI->getTypeDescr();
+    SAL_INFO("bridges.mips", "cpp_mediate2.");
 
-#ifdef BRDEBUG
-    fprintf(stderr,"cpp_mediate2\n");
-#endif
     if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
     {
         SAL_WARN(
@@ -436,19 +421,19 @@ namespace
 
     TypeDescription aMemberDescr( pTypeDescr->ppAllMembers[nMemberPos] );
 
-#ifdef BRDEBUG
-    fprintf(stderr,"cpp_mediate3\n");
+    SAL_INFO("bridges.mips", "cpp_mediate3.");
     OString cstr( OUStringToOString( aMemberDescr.get()->pTypeName, RTL_TEXTENCODING_ASCII_US ) );
-    fprintf( stderr, "calling %s, nFunctionIndex=%d\n", cstr.getStr(), nFunctionIndex );
-#endif
+    SAL_INFO("bridges.mips", "calling "
+            << OUStringToOString(
+                aMemberDescr.get()->pTypeName, RTL_TEXTENCODING_ASCII_US ).getStr()
+            << ", nFunctionIndex=" << nFunctionIndex);
+
     typelib_TypeClass eRet;
     switch (aMemberDescr.get()->eTypeClass)
     {
       case typelib_TypeClass_INTERFACE_ATTRIBUTE:
         {
-#ifdef BRDEBUG
-    fprintf(stderr,"cpp_mediate4\n");
-#endif
+          SAL_INFO("bridges.mips", "cpp_mediate4.");
           if (pTypeDescr->pMapMemberIndexToFunctionIndex[nMemberPos] == nFunctionIndex)
           {
             // is GET method
@@ -477,9 +462,7 @@ namespace
         }
       case typelib_TypeClass_INTERFACE_METHOD:
         {
-#ifdef BRDEBUG
-    fprintf(stderr,"cpp_mediate5\n");
-#endif
+          SAL_INFO("bridges.mips", "cpp_mediate5.");
           // is METHOD
           switch (nFunctionIndex)
           {
@@ -488,14 +471,10 @@ namespace
               eRet = typelib_TypeClass_VOID;
               break;
             case 2: // release()
-#ifdef BRDEBUG
-    fprintf(stderr,"cpp_mediate51\n");
-#endif
+              SAL_INFO("bridges.mips", "cpp_mediate51.");
               pCppI->releaseProxy(); // non virtual call!
               eRet = typelib_TypeClass_VOID;
-#ifdef BRDEBUG
-    fprintf(stderr,"cpp_mediate52\n");
-#endif
+              SAL_INFO("bridges.mips", "cpp_mediate52.");
               break;
             case 0: // queryInterface() opt
               {
@@ -535,9 +514,7 @@ namespace
         }
       default:
         {
-#ifdef BRDEBUG
-    fprintf(stderr,"cpp_mediate6\n");
-#endif
+          SAL_INFO("bridges.mips", "cpp_mediate6.");
           throw RuntimeException( "no member description found!", (XInterface *)pThis );
         }
     }
@@ -573,11 +550,11 @@ namespace
 
     memcpy( gpreg, pCallStack, 16);
 
-#ifdef BRDEBUG
-    fprintf(stderr,"in cpp_vtable_call nFunctionIndex is %d\n",nFunctionIndex);
-    fprintf(stderr,"in cpp_vtable_call nVtableOffset is %d\n",vTableOffset);
-    fprintf(stderr,"gp=%x,%x,%x,%x\n",gpreg[0],gpreg[1],gpreg[2],gpreg[3]);
-#endif
+    SAL_INFO("bridges.mips", "in cpp_vtable_call nFunctionIndex is " << nFunctionIndex);
+    SAL_INFO("bridges.mips", "in cpp_vtable_call nVtableOffset is " << vTableOffset);
+    SAL_INFO("bridges.mips", "gp=" << std::hex
+            << gpreg[0] << "," << gpreg[1] << ","
+            << gpreg[2] << "," << gpreg[3]);
 
     //sal_Bool bComplex = nFunctionIndex & 0x80000000 ? sal_True : sal_False;
 
@@ -638,12 +615,8 @@ namespace
   unsigned char *  codeSnippet( unsigned char * code, sal_Int32 functionIndex, sal_Int32 vtableOffset,
       bool simpleRetType)
   {
-
-#ifdef BRDEBUG
-     fprintf(stderr,"in codeSnippet functionIndex is %d\n", functionIndex);
-     fprintf(stderr,"in codeSnippet vtableOffset is %d\n", vtableOffset);
-     fflush(stderr);
-#endif
+    SAL_INFO("bridges.mips", "in codeSnippet functionIndex is " << functionIndex);
+    SAL_INFO("bridges.mips", "in codeSnippet vtableOffset is " << vtableOffset);
 
     if (! simpleRetType )
       functionIndex |= 0x80000000;
@@ -752,12 +725,10 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
 {
    (*slots) -= functionCount;
     Slot * s = *slots;
-#ifdef BRDEBUG
-   fprintf(stderr, "in addLocalFunctions functionOffset is %d\n",functionOffset);
-   fprintf(stderr, "in addLocalFunctions vtableOffset is %d\n",vtableOffset);
-   fprintf(stderr, "nMembers=%d\n",type->nMembers);
-   fflush(stderr);
-#endif
+
+   SAL_INFO("bridges.mips", "in addLocalFunctions functionOffset is " << functionOffset);
+   SAL_INFO("bridges.mips", "in addLocalFunctions vtableOffset is " << vtableOffset);
+   SAL_INFO("bridges.mips", "nMembers=" << type->nMembers);
 
   for (sal_Int32 i = 0; i < type->nMembers; ++i) {
     typelib_TypeDescription * member = 0;

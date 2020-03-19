@@ -78,7 +78,7 @@ static OUString toUNOname( char const * p )
 #ifdef DEBUG
     OUString ret( buf.makeStringAndClear() );
     OString c_ret( OUStringToOString( ret, RTL_TEXTENCODING_ASCII_US ) );
-    fprintf( stderr, "> toUNOname(): %s => %s\n", start, c_ret.getStr() );
+    SAL_INFO("bridges.aix", "> toUNOname(): " << start << " => " << c_ret.getStr());
     return ret;
 #else
     return buf.makeStringAndClear();
@@ -158,7 +158,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr )
                 // the symbol is prefixed with _ZTI
                 char const * rttiName = symName.getStr() +4;
 #ifdef DEBUG
-                fprintf( stderr,"generated rtti for %s\n", rttiName );
+                SAL_INFO("bridges.aix", "generated rtti for " << rttiName);
 #endif
                 if (pTypeDescr->pBaseTypeDescription)
                 {

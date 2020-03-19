@@ -103,16 +103,15 @@ void callVirtualMethod(
         memcpy( stack, pStack, nStackBytes );
     }
 
-#if OSL_DEBUG_LEVEL > 2
-        // Let's figure out what is really going on here
-        {
-                fprintf( stderr, "\nStack (%d): ", nStack );
-                for ( unsigned int i = 0; i < nStack; ++i )
-                        fprintf( stderr, "0x%lx, ", pStack[i] );
-                fprintf( stderr, "\n" );
-                fprintf( stderr, "pRegisterReturn is %p\n", pRegisterReturn);
-        }
-#endif
+    // Let's figure out what is really going on here
+    {
+        std::ostringstream oss;
+        oss << "Stack (" << nStack << "): ";
+        for ( unsigned int i = 0; i < nStack; ++i )
+            oss << std::hex << "0x" << pStack[i] << ", ";
+        SAL_INFO("bridges.m68k", oss);
+        SAL_INFO("bridges.m68k", "pRegisterReturn is " << pRegisterReturn);
+    }
 
     sal_uInt32 pMethod = *((sal_uInt32*)pThis);
     pMethod += 4 * nVtableIndex;
@@ -222,17 +221,13 @@ static void cpp_call(
             {
             case typelib_TypeClass_HYPER:
             case typelib_TypeClass_UNSIGNED_HYPER:
-#if OSL_DEBUG_LEVEL > 2
-                fprintf(stderr, "hyper is %lx\n", pCppArgs[nPos]);
-#endif
+                SAL_INFO("bridges.m68k", "hyper is " << std::hex << pCppArgs[nPos]);
                 INSERT_INT64( pCppArgs[nPos], pStack );
                 break;
             case typelib_TypeClass_LONG:
             case typelib_TypeClass_UNSIGNED_LONG:
             case typelib_TypeClass_ENUM:
-#if OSL_DEBUG_LEVEL > 2
-                fprintf(stderr, "long is %x\n", pCppArgs[nPos]);
-#endif
+                SAL_INFO("bridges.m68k", "long is " << std::hex << pCppArgs[nPos]);
                 INSERT_INT32( pCppArgs[nPos], pStack );
                 break;
             case typelib_TypeClass_SHORT:

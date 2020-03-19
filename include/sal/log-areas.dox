@@ -40,12 +40,28 @@ certain functionality.
 
 @li @c basic
 @li @c basic.sbx
+@li @c basic.qa
 
 @section bridges
 
 @li @c bridges
+@li @c bridges.aix
+@li @c bridges.alpha
+@li @c bridges.arm
+@li @c bridges.hppa
+@li @c bridges.ia64
 @li @c bridges.ios
+@li @c bridges.m68k
+@li @c bridges.mips
+@li @c bridges.mips64
 @li @c bridges.osx
+@li @c bridges.powerpc
+@li @c bridges.powerpc64
+@li @c bridges.s390
+@li @c bridges.s390x
+@li @c bridges.sparc
+@li @c bridges.sparc64
+@li @c bridges.x8664
 
 @section canvas
 

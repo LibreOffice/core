@@ -118,9 +118,7 @@ namespace
         */
     unsigned int nREG = 0;
 
-#ifdef BRDEBUG
-    fprintf(stderr, "cpp2uno_call:begin\n");
-#endif
+    SAL_INFO("bridges.mips64", "cpp2uno_call:begin.");
 
     // return
     typelib_TypeDescription * pReturnTypeDescr = 0;
@@ -140,16 +138,12 @@ namespace
         pUnoReturn = ( bridges::cpp_uno::shared::relatesToInterfaceType( pReturnTypeDescr )
             ? alloca( pReturnTypeDescr->nSize )
             : pCppReturn); // direct way
-#ifdef BRDEBUG
-        fprintf(stderr, "cpp2uno_call:complexreturn\n");
-#endif
+        SAL_INFO("bridges.mips64", "cpp2uno_call:complexreturn.");
       }
       else
       {
         pUnoReturn = pRegisterReturn; // direct way for simple types
-#ifdef BRDEBUG
-        fprintf(stderr, "cpp2uno_call:simplereturn\n");
-#endif
+        SAL_INFO("bridges.mips64", "cpp2uno_call:simplereturn.");
       }
     }
 
@@ -168,9 +162,7 @@ namespace
 
     sal_Int32 nTempIndices   = 0;
 
-#ifdef BRDEBUG
-    fprintf(stderr, "cpp2uno_call:nParams=%d\n", nParams);
-#endif
+    SAL_INFO("bridges.mips64", "cpp2uno_call:nParams=" << nParams);
     for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
     {
       const typelib_MethodParameter & rParam = pParams[nPos];
@@ -180,23 +172,19 @@ namespace
 
       if (!rParam.bOut && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr )) // value
       {
-#ifdef BRDEBUG
-        fprintf(stderr, "cpp2uno_call:Param %u, type %u\n", nPos, pParamTypeDescr->eTypeClass);
-#endif
+        SAL_INFO("bridges.mips64", "cpp2uno_call:Param "
+                << nPos << ", type " << pParamTypeDescr->eTypeClass);
+
         switch (pParamTypeDescr->eTypeClass)
         {
           case typelib_TypeClass_FLOAT:
           case typelib_TypeClass_DOUBLE:
             if (nREG < MAX_FP_REGS) {
-#ifdef BRDEBUG
-              fprintf(stderr, "cpp2uno_call:fpr=%p\n", fpreg[nREG]);
-#endif
+              SAL_INFO("bridges.mips64", "cpp2uno_call:fpr=" << fpreg[nREG]);
               pCppArgs[nPos] = &(fpreg[nREG]);
               pUnoArgs[nPos] = &(fpreg[nREG]);
             } else {
-#ifdef BRDEBUG
-              fprintf(stderr, "cpp2uno_call:fpr=%p\n", ovrflw[nREG - MAX_FP_REGS]);
-#endif
+              SAL_INFO("bridges.mips64", "cpp2uno_call:fpr=" << ovrflw[nREG - MAX_FP_REGS]);
               pCppArgs[nPos] = &(ovrflw[nREG - MAX_FP_REGS]);
               pUnoArgs[nPos] = &(ovrflw[nREG - MAX_FP_REGS]);
             }
@@ -206,15 +194,11 @@ namespace
 
           default:
             if (nREG < MAX_GP_REGS) {
-#ifdef BRDEBUG
-              fprintf(stderr, "cpp2uno_call:gpr=%p\n", gpreg[nREG]);
-#endif
+              SAL_INFO("bridges.mips64", "cpp2uno_call:gpr=" << gpreg[nREG]);
               pCppArgs[nPos] = &(gpreg[nREG]);
               pUnoArgs[nPos] = &(gpreg[nREG]);
             } else {
-#ifdef BRDEBUG
-              fprintf(stderr, "cpp2uno_call:gpr=%p\n", ovrflw[nREG - MAX_GP_REGS]);
-#endif
+              SAL_INFO("bridges.mips64", "cpp2uno_call:gpr=" << ovrflw[nREG - MAX_GP_REGS]);
               pCppArgs[nPos] = &(ovrflw[nREG - MAX_GP_REGS]);
               pUnoArgs[nPos] = &(ovrflw[nREG - MAX_GP_REGS]);
             }
@@ -227,9 +211,7 @@ namespace
       }
       else // ptr to complex value | ref
       {
-#ifdef BRDEBUG
-        fprintf(stderr,"cpp2uno_call:ptr|ref\n");
-#endif
+        SAL_INFO("bridges.mips64", "cpp2uno_call:ptr|ref.");
         void *pCppStack;
         if (nREG < MAX_GP_REGS) {
           pCppArgs[nPos] = pCppStack = gpreg[nREG];
@@ -237,9 +219,7 @@ namespace
           pCppArgs[nPos] = pCppStack = ovrflw[nREG - MAX_GP_REGS];
         }
         nREG++;
-#ifdef BRDEBUG
-        fprintf(stderr, "cpp2uno_call:pCppStack=%p\n", pCppStack);
-#endif
+        SAL_INFO("bridges.mips64", "cpp2uno_call:pCppStack=" << pCppStack);
 
         if (! rParam.bIn) // is pure out
         {
@@ -258,25 +238,25 @@ namespace
           pTempIndices[nTempIndices] = nPos; // has to be reconverted
           // will be released at reconversion
           ppTempParamTypeDescr[nTempIndices++] = pParamTypeDescr;
-#ifdef BRDEBUG
-          fprintf(stderr, "cpp2uno_call:related to interface,%p,%d,pUnoargs[%d]=%p\n",
-                          pCppStack, pParamTypeDescr->nSize, nPos, pUnoArgs[nPos]);
-#endif
+
+          SAL_INFO("bridges.mips64", "cpp2uno_call:related to interface,"
+                  << pCppStack << ","
+                  << pParamTypeDescr->nSizeb<< ",pUnoargs[" << nPos << "]="
+                  << pUnoArgs[nPos]);
         }
         else // direct way
         {
           pUnoArgs[nPos] = pCppStack;
-#ifdef BRDEBUG
-          fprintf(stderr, "cpp2uno_call:direct,pUnoArgs[%d]=%p\n", nPos, pUnoArgs[nPos]);
-#endif
+          SAL_INFO("bridges.mips64", "cpp2uno_call:direct,pUnoArgs[" << nPos
+                  << "]=" << pUnoArgs[nPos]);
           // no longer needed
           TYPELIB_DANGER_RELEASE( pParamTypeDescr );
         }
       }
     }
-#ifdef BRDEBUG
-    fprintf(stderr, "cpp2uno_call2,%p,unoargs=%p\n", pThis->getUnoI()->pDispatcher, pUnoArgs);
-#endif
+
+    SAL_INFO("bridges.mips64", "cpp2uno_call2," << pThis->getUnoI()->pDispatcher
+            << ",unoargs=" << pUnoArgs);
 
     // ExceptionHolder
     uno_Any aUnoExc; // Any will be constructed by callee
@@ -284,9 +264,7 @@ namespace
 
     // invoke uno dispatch call
     (*pThis->getUnoI()->pDispatcher)( pThis->getUnoI(), pMemberTypeDescr, pUnoReturn, pUnoArgs, &pUnoExc );
-#ifdef BRDEBUG
-    fprintf(stderr, "cpp2uno_call2,after dispatch\n");
-#endif
+    SAL_INFO("bridges.mips64", "cpp2uno_call2,after dispatch.");
 
     // in case an exception occurred...
     if (pUnoExc)
@@ -365,11 +343,10 @@ namespace
   {
     static_assert( sizeof(sal_Int64)==sizeof(void *), "### unexpected!" );
 
-#ifdef BRDEBUG
-    fprintf(stderr, "in cpp_vtable_call nFunctionIndex is %d\n", nFunctionIndex);
-    fprintf(stderr, "in cpp_vtable_call nVtableOffset is %d\n", nVtableOffset);
-    fprintf(stderr, "in cpp_vtable_call gp=%p, fp=%p, ov=%p\n", gpreg, fpreg, ovrflw);
-#endif
+    SAL_INFO("bridges.mips64", "in cpp_vtable_call nFunctionIndex is " << nFunctionIndex);
+    SAL_INFO("bridges.mips64", "in cpp_vtable_call nVtableOffset is " << nVtableOffset);
+    SAL_INFO("bridges.mips64", "in cpp_vtable_call gp=" << gpreg
+            << ", fp=" << fpreg << ", ov=" << ovrflw);
 
     // gpreg:  [ret *], this, [other gpr params]
     // fpreg:  [fpr params]
@@ -384,17 +361,16 @@ namespace
     {
       pThis = gpreg[0];
     }
-#ifdef BRDEBUG
-    fprintf(stderr, "cpp_vtable_call, pThis=%p, nFunctionIndex=%d, nVtableOffset=%d\n",
-                pThis, nFunctionIndex, nVtableOffset);
-#endif
+
+    SAL_INFO("bridges.mips64", "cpp_vtable_call, pThis=" << pThis
+            << ", nFunctionIndex=" << nFunctionIndex
+            << ", nVtableOffset=" << nVtableOffset);
 
     pThis = static_cast< char * >(pThis) - nVtableOffset;
     bridges::cpp_uno::shared::CppInterfaceProxy * pCppI =
         bridges::cpp_uno::shared::CppInterfaceProxy::castInterfaceToProxy( pThis );
-#ifdef BRDEBUG
-    fprintf(stderr, "cpp_vtable_call, pCppI=%p\n", pCppI);
-#endif
+
+    SAL_INFO("bridges.mips64", "cpp_vtable_call, pCppI=" << pCppI);
 
     typelib_InterfaceTypeDescription * pTypeDescr = pCppI->getTypeDescr();
 
@@ -418,18 +394,18 @@ namespace
 
     TypeDescription aMemberDescr( pTypeDescr->ppAllMembers[nMemberPos] );
 
-#ifdef BRDEBUG
-    OString cstr( OUStringToOString( aMemberDescr.get()->pTypeName, RTL_TEXTENCODING_ASCII_US ) );
-    fprintf(stderr, "calling %s, nFunctionIndex=%d\n", cstr.getStr(), nFunctionIndex );
-#endif
+    SAL_INFO("bridges.mips64", "calling "
+            << OUStringToOString(
+                aMemberDescr.get()->pTypeName,
+                RTL_TEXTENCODING_ASCII_US ).getStr()
+            << ", nFunctionIndex=" << nFunctionIndex);
+
     typelib_TypeClass eRet;
     switch (aMemberDescr.get()->eTypeClass)
     {
       case typelib_TypeClass_INTERFACE_ATTRIBUTE:
         {
-#ifdef BRDEBUG
-    fprintf(stderr, "cpp_vtable_call interface attribute\n");
-#endif
+          SAL_INFO("bridges.mips64", "cpp_vtable_call interface attribute.");
           typelib_TypeDescriptionReference *pAttrTypeRef =
               reinterpret_cast<typelib_InterfaceAttributeTypeDescription *>( aMemberDescr.get() )->pAttributeTypeRef;
 
@@ -457,31 +433,23 @@ namespace
         }
       case typelib_TypeClass_INTERFACE_METHOD:
         {
-#ifdef BRDEBUG
-    fprintf(stderr, "cpp_vtable_call interface method\n");
-#endif
+          SAL_INFO("bridges.mips64", "cpp_vtable_call interface method.");
           // is METHOD
           switch (nFunctionIndex)
           {
             case 1: // acquire()
-#ifdef BRDEBUG
-    fprintf(stderr, "cpp_vtable_call method acquire\n");
-#endif
+              SAL_INFO("bridges.mips64", "cpp_vtable_call method acquire.");
               pCppI->acquireProxy(); // non virtual call!
               eRet = typelib_TypeClass_VOID;
               break;
             case 2: // release()
-#ifdef BRDEBUG
-    fprintf(stderr, "cpp_vtable_call method release\n");
-#endif
+              SAL_INFO("bridges.mips64", "cpp_vtable_call method release.");
               pCppI->releaseProxy(); // non virtual call!
               eRet = typelib_TypeClass_VOID;
               break;
             case 0: // queryInterface() opt
               {
-#ifdef BRDEBUG
-    fprintf(stderr, "cpp_vtable_call method query interface opt\n");
-#endif
+                SAL_INFO("bridges.mips64", "cpp_vtable_call method query interface opt.");
                 typelib_TypeDescription * pTD = 0;
                 TYPELIB_DANGER_GET( &pTD, reinterpret_cast< Type * >( gpreg[2] )->getTypeLibType() );
                 if (pTD)
@@ -509,9 +477,7 @@ namespace
                 }
               } // else perform queryInterface()
             default:
-#ifdef BRDEBUG
-    fprintf(stderr, "cpp_vtable_call method query interface\n");
-#endif
+              SAL_INFO("bridges.mips64", "cpp_vtable_call method query interface.");
               typelib_InterfaceMethodTypeDescription *pMethodTD =
                   reinterpret_cast<typelib_InterfaceMethodTypeDescription *>( aMemberDescr.get() );
 
@@ -525,9 +491,7 @@ namespace
         }
       default:
         {
-#ifdef BRDEBUG
-    fprintf(stderr, "cpp_vtable_call no member\n");
-#endif
+          SAL_INFO("bridges.mips64", "cpp_vtable_call no member.");
           throw RuntimeException( "no member description found!", (XInterface *)pThis );
         }
     }
@@ -543,11 +507,8 @@ namespace
       sal_Int32 functionIndex, sal_Int32 vtableOffset,
       bool bHasHiddenParam )
   {
-#ifdef BRDEBUG
-     fprintf(stderr,"in codeSnippet functionIndex is %d\n", functionIndex);
-     fprintf(stderr,"in codeSnippet vtableOffset is %d\n", vtableOffset);
-     fflush(stderr);
-#endif
+     SAL_INFO("bridges.mips64", "in codeSnippet functionIndex is " << functionIndex);
+     SAL_INFO("bridges.mips64", "in codeSnippet vtableOffset is " << vtableOffset);
 
     if ( bHasHiddenParam )
       functionIndex |= 0x80000000;
@@ -650,12 +611,9 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
    (*slots) -= functionCount;
     Slot * s = *slots;
 
-#ifdef BRDEBUG
-   fprintf(stderr, "in addLocalFunctions functionOffset is %d\n", functionOffset);
-   fprintf(stderr, "in addLocalFunctions vtableOffset is %d\n", vtableOffset);
-   fprintf(stderr, "nMembers=%d\n", type->nMembers);
-   fflush(stderr);
-#endif
+   SAL_INFO("bridges.mips64", "in addLocalFunctions functionOffset is " << functionOffset);
+   SAL_INFO("bridges.mips64", "in addLocalFunctions vtableOffset is " << vtableOffset);
+   SAL_INFO("bridges.mips64", "nMembers=" << type->nMembers);
 
   for (sal_Int32 i = 0; i < type->nMembers; ++i) {
     typelib_TypeDescription * member = 0;

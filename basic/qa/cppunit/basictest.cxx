@@ -42,7 +42,8 @@ MacroSnippet::MacroSnippet()
 void MacroSnippet::LoadSourceFromFile( const OUString& sMacroFileURL )
 {
     OUString sSource;
-    fprintf(stderr,"loadSource opening macro file %s\n", OUStringToOString( sMacroFileURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+    SAL_INFO("basic.qa", "loadSource opening macro file "
+            << OUStringToOString( sMacroFileURL, RTL_TEXTENCODING_UTF8 ).getStr())
 
     osl::File aFile(sMacroFileURL);
     if(aFile.open(osl_File_OpenFlag_Read) == osl::FileBase::E_None)
@@ -112,9 +113,14 @@ const ErrCode& MacroSnippet::getError() const { return maErrCode; }
 
 IMPL_LINK( MacroSnippet, BasicErrorHdl, StarBASIC *, /*pBasic*/, bool)
 {
-    fprintf(stderr,"(%d:%d)\n",
-            StarBASIC::GetLine(), StarBASIC::GetCol1());
-    fprintf(stderr,"Basic error: %s\n", OUStringToOString( StarBASIC::GetErrorText(), RTL_TEXTENCODING_UTF8 ).getStr() );
+    SAL_INFO("basic.qa", "("
+            << StarBASIC::GetLine()
+            << ":"
+            << StarBASIC::GetCol1()
+            << ")");
+    SAL_INFO("basic.qa", "basic error: "
+            << OUStringToOString(
+                StarBASIC::GetErrorText(), RTL_TEXTENCODING_UTF8 ).getStr())
     mbError = true;
     maErrCode = StarBASIC::GetErrorCode();
     return false;

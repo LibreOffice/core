@@ -156,9 +156,7 @@ namespace
     sal_uInt64 pMethod = *((sal_uInt64 *)pAdjustedThisPtr);
     pMethod += 8 * nVtableIndex;
     void *mfunc = (void *) *((sal_uInt64 *)pMethod);
-#ifdef BRDEBUG
-    fprintf(stderr, "calling function %p\n", mfunc);
-#endif
+    SAL_INFO("bridges.mips64", "calling function " << mfunc);
 
     // Load parameters to stack, if necessary
     sal_uInt64* pCallStack = NULL;
@@ -243,9 +241,8 @@ namespace
             break;
         }
     default:
-#ifdef BRDEBUG
-        fprintf(stderr,"unhandled return type %u\n", pReturnTypeRef->eTypeClass);
-#endif
+        SAL_INFO("bridges.mips64", "unhandled return type "
+                << pReturnTypeRef->eTypeClass);
         break;
     }
   }
@@ -266,9 +263,7 @@ namespace
     double pFPR[MAX_FP_REGS];
     sal_uInt32 nREG = 0;
 
-#ifdef BRDEBUG
-  fprintf(stderr, "in cpp_call\n");
-#endif
+    SAL_INFO("bridges.mips64", "in cpp_call.");
 
     // return
     typelib_TypeDescription * pReturnTypeDescr = 0;
@@ -470,9 +465,7 @@ void unoInterfaceProxyDispatch(
     = static_cast< bridges::cpp_uno::shared::UnoInterfaceProxy *> (pUnoI);
   //typelib_InterfaceTypeDescription * pTypeDescr = pThis->pTypeDescr;
 
-#ifdef BRDEBUG
-  fprintf(stderr, "in dispatch\n");
-#endif
+  SAL_INFO("bridges.mips64", "in dispatch.");
 
   switch (pMemberDescr->eTypeClass)
   {

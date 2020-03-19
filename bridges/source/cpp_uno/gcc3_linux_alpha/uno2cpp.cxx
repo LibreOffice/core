@@ -47,9 +47,11 @@ void MapReturn(long r0, typelib_TypeClass eTypeClass, sal_uInt64* pRegisterRetur
     register float fret asm("$f0");
     register double dret asm("$f0");
 
-#if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr,"Mapping Return with %lx %ld %f\n", r0, r0, dret);
-#endif
+    SAL_INFO("bridges.alpha", "Mapping Return with %lx %ld %f\n"
+            << std::hex << r0
+            << std::dec << r0
+            << dret);
+
     switch (eTypeClass)
     {
     case typelib_TypeClass_HYPER:
@@ -79,9 +81,9 @@ void MapReturn(long r0, typelib_TypeClass eTypeClass, sal_uInt64* pRegisterRetur
     default:
             break;
     }
-#if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr, "end of MapReturn with %x\n", pRegisterReturn ? *pRegisterReturn : 0);
-#endif
+
+    SAL_INFO("bridges.alpha", "end of MapReturn with %x\n"
+            << std::hex << pRegisterReturn ? *pRegisterReturn : 0);
 }
 
 #define INSERT_FLOAT( pSV, nr, pFPR, pDS ) \
@@ -140,23 +142,29 @@ void callVirtualMethod(
     if ( nGPR > axp::MAX_GPR_REGS )
         nGPR = axp::MAX_GPR_REGS;
 
-#if OSL_DEBUG_LEVEL > 2
-        // Let's figure out what is really going on here
-        {
-            fprintf( stderr, "= nStack is %d\n", nStack );
-            fprintf( stderr, "= callVirtualMethod() =\nGPR's (%d): ", nGPR );
-            for ( unsigned int i = 0; i < nGPR; ++i )
-                fprintf( stderr, "0x%lx, ", pGPR[i] );
-            fprintf( stderr, "\nFPR's (%d): ", nFPR );
-            for ( unsigned int i = 0; i < nFPR; ++i )
-                fprintf( stderr, "0x%lx (%f), ", pFPR[i], pFPR[i] );
-            fprintf( stderr, "\nStack (%d): ", nStack );
-            for ( unsigned int i = 0; i < nStack; ++i )
-                fprintf( stderr, "0x%lx, ", pStack[i] );
-            fprintf( stderr, "\n" );
-            fprintf( stderr, "pRegisterReturn is %p\n", pRegisterReturn);
-        }
-#endif
+    // Let's figure out what is really going on here
+    {
+        SAL_INFO("bridges.alpha", "callVirtualMethod()");
+
+        std::ostringstream oss;
+        oss << "GPR's (" << nGPR << "): ";
+        for ( unsigned int i = 0; i < nGPR; ++i )
+            oss << std::hex << "0x" << pGPR[i];
+        SAL_INFO("bridges.alpha", oss);
+
+        std::ostringstream oss;
+        oss << "FPR's (" << nFPR << "): ";
+        for ( unsigned int i = 0; i < nFPR; ++i )
+            oss << std::hex << "0x" << pFPR[i]
+                << std::dec << " (" << pFPR[i] << ")";
+        SAL_INFO("bridges.alpha", oss);
+
+        SAL_INFO("bridges.alpha", "nStack (" << nStack << "): ");
+        for ( unsigned int i = 0; i < nStack; ++i )
+            oss << std::hex << "0x" << pStack[i];
+        SAL_INFO("bridges.alpha", oss);
+        SAL_INFO("bridges.alpha", "pRegisterReturn is " << pRegisterReturn);
+    }
 
     // Load parameters to stack, if necessary
     // Stack, if used, must be 8-bytes aligned
@@ -408,10 +416,7 @@ void unoInterfaceProxyDispatch(
     uno_Interface * pUnoI, const typelib_TypeDescription * pMemberDescr,
     void * pReturn, void * pArgs[], uno_Any ** ppException )
 {
-#if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr, "unoInterfaceProxyDispatch\n");
-#endif
-
+    SAL_INFO("bridges.alpha", "unoInterfaceProxyDispatch");
 
     // is my surrogate
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis

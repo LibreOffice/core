@@ -478,10 +478,9 @@ void unoInterfaceProxyDispatch(
     uno_Interface * pUnoI, const typelib_TypeDescription * pMemberDescr,
     void * pReturn, void * pArgs[], uno_Any ** ppException )
 {
-#if defined BRIDGES_DEBUG
-    OString cstr( OUStringToOString( pMemberDescr->pTypeName, RTL_TEXTENCODING_ASCII_US ) );
-    fprintf( stderr, "received dispatch( %s )\n", cstr.getStr() );
-#endif
+    SAL_INFO("bridges.sparc", "received dispatch( "
+            << OUStringToOString( pMemberDescr->pTypeName, RTL_TEXTENCODING_ASCII_US ).getStr()
+            << " ).");
 
     // is my surrogate
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis

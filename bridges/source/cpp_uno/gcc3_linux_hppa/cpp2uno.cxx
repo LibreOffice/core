@@ -54,9 +54,8 @@ namespace
         void ** startovrflw = ovrflw;
         int nregs = 0; //number of words passed in registers
 
-#if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr, "cpp2uno_call\n");
-#endif
+        SAL_INFO("bridges.hppa", "cpp2uno_call.");
+
         // return
         typelib_TypeDescription * pReturnTypeDescr = 0;
         if (pReturnTypeRef)
@@ -70,16 +69,12 @@ namespace
         {
             if (hppa::isRegisterReturn(pReturnTypeRef))
             {
-#if OSL_DEBUG_LEVEL > 2
-        fprintf(stderr, "simple return\n");
-#endif
+                SAL_INFO("bridges.hppa", "simple return.");
                 pUnoReturn = pRegisterReturn; // direct way for simple types
             }
             else
             {
-#if OSL_DEBUG_LEVEL > 2
-        fprintf(stderr, "complex return via r8\n");
-#endif
+                SAL_INFO("bridges.hppa", "complex return via r8.");
                 pCppReturn = (void *)r8;
 
                 pUnoReturn = (bridges::cpp_uno::shared::relatesToInterfaceType( pReturnTypeDescr )
@@ -284,16 +279,13 @@ namespace
         uno_Any aUnoExc; // Any will be constructed by callee
         uno_Any * pUnoExc = &aUnoExc;
 
-#if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr, "before dispatch\n");
-#endif
+        SAL_INFO("bridges.hppa", "before dispatch.");
+
         // invoke uno dispatch call
         (*pThis->getUnoI()->pDispatcher)(
           pThis->getUnoI(), pMemberTypeDescr, pUnoReturn, pUnoArgs, &pUnoExc );
 
-#if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr, "after dispatch\n");
-#endif
+        SAL_INFO("bridges.hppa", "after dispatch.");
 
         // in case an exception occurred...
         if (pUnoExc)
@@ -371,19 +363,27 @@ namespace
         sal_Int64 * pRegisterReturn /* space for register return */ )
 
     {
-    void ** ovrflw = (void**)(sp);
-#if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr, "cpp_mediate with\n");
-    fprintf(stderr, "%x %x\n", nFunctionIndex, nVtableOffset);
-    fprintf(stderr, "and %x %x\n", (long)(ovrflw[0]), (long)(ovrflw[-1]));
-    fprintf(stderr, "and %x %x\n", (long)(ovrflw[-2]), (long)(ovrflw[-3]));
-    fprintf(stderr, "and %x %x\n", (long)(ovrflw[-4]), (long)(ovrflw[-5]));
-    fprintf(stderr, "and %x %x\n", (long)(ovrflw[-6]), (long)(ovrflw[-7]));
-    fprintf(stderr, "and %x %x\n", (long)(ovrflw[-8]), (long)(ovrflw[-9]));
-    fprintf(stderr, "and %x %x\n", (long)(ovrflw[-10]), (long)(ovrflw[-11]));
-    fprintf(stderr, "and %x %x\n", (long)(ovrflw[-12]), (long)(ovrflw[-13]));
-    fprintf(stderr, "and %x %x\n", (long)(ovrflw[-14]), (long)(ovrflw[-15]));
-#endif
+        void ** ovrflw = (void**)(sp);
+
+        SAL_INFO("bridges.hppa", "cpp_mediate with:");
+        SAL_INFO("bridges.hppa", std::hex << nFunctionIndex << " " << nVtableOffset);
+        SAL_INFO("bridges.hppa", std::hex
+                << "and " << (long)(ovrflw[0]) << " " << (long)(ovrflw[-1]));
+        SAL_INFO("bridges.hppa", std::hex
+                << "and " << (long)(ovrflw[-2]) << " " << (long)(ovrflw[-3]));
+        SAL_INFO("bridges.hppa", std::hex
+                << "and " << (long)(ovrflw[-4]) << " " << (long)(ovrflw[-5]));
+        SAL_INFO("bridges.hppa", std::hex
+                << "and " << (long)(ovrflw[-6]) << " " << (long)(ovrflw[-7]));
+        SAL_INFO("bridges.hppa", std::hex
+                << "and " << (long)(ovrflw[-8]) << " " << (long)(ovrflw[-9]));
+        SAL_INFO("bridges.hppa", std::hex
+                << "and " << (long)(ovrflw[-10]) << " " << (long)(ovrflw[-11]));
+        SAL_INFO("bridges.hppa", std::hex
+                << "and " << (long)(ovrflw[-12]) << " " << (long)(ovrflw[-13]));
+        SAL_INFO("bridges.hppa", std::hex
+                << "and " << (long)(ovrflw[-14]) << " " << (long)(ovrflw[-15]));
+
         static_assert(sizeof(sal_Int32)==sizeof(void *), "### unexpected!");
 
         // gpreg:  [ret *], this, [other gpr params]
@@ -395,16 +395,12 @@ namespace
         {
         nFunctionIndex &= 0x7fffffff;
         pThis = gpreg[1];
-#if OSL_DEBUG_LEVEL > 2
-        fprintf(stderr, "pThis is gpreg[1]\n");
-#endif
+        SAL_INFO("bridges.hppa", "pThis is gpreg[1].");
         }
         else
         {
         pThis = gpreg[0];
-#if OSL_DEBUG_LEVEL > 2
-            fprintf(stderr, "pThis is gpreg[0]\n");
-#endif
+        SAL_INFO("bridges.hppa", "pThis is gpreg[0].");
         }
 
         pThis = static_cast< char * >(pThis) - nVtableOffset;
@@ -563,16 +559,17 @@ sal_Int64 cpp_vtable_call( sal_uInt32 in0, sal_uInt32 in1, sal_uInt32 in2, sal_u
     register double d2 asm("fr6"); dpreg[2] = d2;
     register double d3 asm("fr7"); dpreg[3] = d3;
 
-
-#if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr, "got to cpp_vtable_call with %x %x\n", functionIndex, vtableOffset);
+    SAL_INFO("bridges.hppa", "got to cpp_vtable_call with "
+            << std::hex << functionIndex << " " << vtableOffset);
     for (int i = 0; i < hppa::MAX_GPR_REGS; ++i)
-    fprintf(stderr, "reg %d is %d %x\n", i, gpreg[i], gpreg[i]);
+        SAL_INFO("bridges.hppa", "reg " << i << " is " << gpreg[i] << " "
+                << std::hex << gpreg[i]);
     for (int i = 0; i < hppa::MAX_SSE_REGS; ++i)
-    fprintf(stderr, "float reg %d is %f %x\n", i, fpreg[i], ((long*)fpreg)[i]);
+        SAL_INFO("bridges.hppa", "float reg " << i << " is " << fpreg[i] << " "
+                << std::hex << (long*) fpreg[i]);
     for (int i = 0; i < 4; ++i)
-    fprintf(stderr, "double reg %d is %f %llx\n", i, dpreg[i], ((long long*)dpreg)[i]);
-#endif
+        SAL_INFO("bridges.hppa", "double reg " << i << " is " << dpreg[i] << " "
+                << std::hex << (long long*) dpreg[i]);
 
     sal_Int64 nRegReturn;
 

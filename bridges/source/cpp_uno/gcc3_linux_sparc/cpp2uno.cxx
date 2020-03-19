@@ -262,10 +262,9 @@ static typelib_TypeClass cpp_mediate(
 
     TypeDescription aMemberDescr( pTypeDescr->ppAllMembers[nMemberPos] );
 
-#if defined BRIDGES_DEBUG
-    OString cstr( OUStringToOString( aMemberDescr.get()->pTypeName, RTL_TEXTENCODING_ASCII_US ) );
-    fprintf( stderr, "calling %s, nFunctionIndex=%d\n", cstr.getStr(), nFunctionIndex );
-#endif
+    SAL_INFO("bridges.sparc", "calling "
+            << OUStringToOString( aMemberDescr.get()->pTypeName, RTL_TEXTENCODING_ASCII_US )
+            << ", nFunctionIndex=" << nFunctionIndex);
 
     typelib_TypeClass eRet;
     switch (aMemberDescr.get()->eTypeClass)

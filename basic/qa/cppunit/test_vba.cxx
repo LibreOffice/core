@@ -159,9 +159,10 @@ void VBATest::testMiscVBAFunctions()
         myMacro.LoadSourceFromFile( sMacroURL );
         SbxVariableRef pReturn = myMacro.Run();
         CPPUNIT_ASSERT_MESSAGE("No return variable huh?", pReturn.is());
-        fprintf(stderr, "macro result for %s\n", macroSource[i]);
-        fprintf(stderr, "macro returned:\n%s\n",
-                OUStringToOString(pReturn->GetOUString(), RTL_TEXTENCODING_UTF8).getStr());
+        SAL_INFO("basic.qa", "macro result for " << macroSource[i]);
+        SAL_INFO("basic.qa", "macro returned: "
+                << OUStringToOString(
+                    pReturn->GetOUString(), RTL_TEXTENCODING_UTF8).getStr());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Result not as expected", OUString("OK"),
                                      pReturn->GetOUString());
     }
@@ -236,9 +237,10 @@ void VBATest::testMiscOLEStuff()
         myMacro.LoadSourceFromFile( sMacroURL );
         SbxVariableRef pReturn = myMacro.Run( aArgs );
         CPPUNIT_ASSERT_MESSAGE("No return variable huh?", pReturn.is());
-        fprintf(stderr, "macro result for %s\n", macroSource[i]);
-        fprintf(stderr, "macro returned:\n%s\n",
-                OUStringToOString(pReturn->GetOUString(), RTL_TEXTENCODING_UTF8).getStr());
+        SAL_INFO("basic.qa", "macro result for " << macroSource[i]);
+        SAL_INFO("basic.qa", "macro returned: "
+                << OUStringToOString(
+                    pReturn->GetOUString(), RTL_TEXTENCODING_UTF8).getStr());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Result not as expected", OUString("OK"),
                                      pReturn->GetOUString());
     }
