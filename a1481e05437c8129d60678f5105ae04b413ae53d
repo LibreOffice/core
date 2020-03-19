@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c486d9c1_729c93e2",
+        "filename": "writerfilter/source/dmapper/SettingsTable.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-03-19T11:20:51Z",
+      "side": 0,
+      "message": "Seeing that these two are still written elsewhere, this makes sense to me.",
+      "revId": "a1481e05437c8129d60678f5105ae04b413ae53d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
