@@ -200,7 +200,8 @@ Reference< XIdlClass > IdlReflectionServiceImpl::forName( const OUString & rType
         typelib_typedescription_getByName( &pTD, rTypeName.pData );
         if (pTD)
         {
-            if ((xRet = constructClass( pTD )).is())
+            xRet = constructClass( pTD );
+            if (xRet.is())
                 _aElements.setValue( rTypeName, makeAny( xRet ) ); // update
             typelib_typedescription_release( pTD );
         }
@@ -287,7 +288,8 @@ Reference< XIdlClass > IdlReflectionServiceImpl::forType( typelib_TypeDescriptio
     }
     else
     {
-        if ((xRet = constructClass( pTypeDescr )).is())
+        xRet = constructClass( pTypeDescr );
+        if (xRet.is())
             _aElements.setValue( aName, makeAny( xRet ) ); // update
     }
 

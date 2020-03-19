@@ -507,7 +507,8 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
                 "value is not interface",
                 Reference< XInterface >(), aDestinationClass, FailReason::NO_SUCH_INTERFACE, 0 );
         }
-        if (! (aRet = (*ifc)->queryInterface(aDestType )).hasValue())
+        aRet = (*ifc)->queryInterface(aDestType );
+        if (! aRet.hasValue())
         {
             throw CannotConvertException(
                 "value does not implement " + aDestType.getTypeName(),

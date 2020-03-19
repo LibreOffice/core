@@ -17,18 +17,20 @@ int foo(int);
 void main()
 {
     int x = 1;
-    foo(x = 2); // expected-error {{buried assignment, very hard to read [loplugin:buriedassign]}}
+    foo(x
+        = 2); // expected-error {{buried assignment, rather put on own line [loplugin:buriedassign]}}
     int y = x = 1; // no warning expected
     (void)y;
     int z = foo(
-        x = 1); // expected-error {{buried assignment, very hard to read [loplugin:buriedassign]}}
+        x
+        = 1); // expected-error {{buried assignment, rather put on own line [loplugin:buriedassign]}}
     (void)z;
     switch (x = 1)
-    { // expected-error@-1 {{buried assignment, very hard to read [loplugin:buriedassign]}}
+    { // expected-error@-1 {{buried assignment, rather put on own line [loplugin:buriedassign]}}
     }
     std::map<int, int> map1;
     map1[x = 1]
-        = 1; // expected-error@-1 {{buried assignment, very hard to read [loplugin:buriedassign]}}
+        = 1; // expected-error@-1 {{buried assignment, rather put on own line [loplugin:buriedassign]}}
 }
 }
 
@@ -51,16 +53,18 @@ MyInt foo(MyInt);
 void main()
 {
     MyInt x = 1;
-    foo(x = 2); // expected-error {{buried assignment, very hard to read [loplugin:buriedassign]}}
+    foo(x
+        = 2); // expected-error {{buried assignment, rather put on own line [loplugin:buriedassign]}}
     MyInt y = x = 1; // no warning expected
     (void)y;
     MyInt z = foo(
-        x = 1); // expected-error {{buried assignment, very hard to read [loplugin:buriedassign]}}
+        x
+        = 1); // expected-error {{buried assignment, rather put on own line [loplugin:buriedassign]}}
     (void)z;
     z = x; // no warning expected
     std::map<MyInt, int> map1;
     map1[x = 1]
-        = 1; // expected-error@-1 {{buried assignment, very hard to read [loplugin:buriedassign]}}
+        = 1; // expected-error@-1 {{buried assignment, rather put on own line [loplugin:buriedassign]}}
 }
 }
 
@@ -73,7 +77,7 @@ void main(OUString sUserAutoCorrFile, OUString sExt)
         sRet = sUserAutoCorrFile; // no warning expected
     if (sUserAutoCorrFile == "yyy")
         (sRet = sUserAutoCorrFile)
-            += sExt; // expected-error@-1 {{buried assignment, very hard to read [loplugin:buriedassign]}}
+            += sExt; // expected-error@-1 {{buried assignment, rather put on own line [loplugin:buriedassign]}}
 }
 }
 

@@ -172,9 +172,10 @@ bool isRepresentableInteger(double fAbsValue)
         // XXX loplugin:fpcomparison complains about floating-point comparison
         // for static_cast<double>(nInt) == fAbsValue, though we actually want
         // this here.
-        double fInt;
-        return (nInt <= kMaxInt &&
-                (!((fInt = static_cast< double >(nInt)) < fAbsValue) && !(fInt > fAbsValue)));
+        if (nInt > kMaxInt)
+            return false;
+        double fInt = static_cast< double >(nInt);
+        return !(fInt < fAbsValue) && !(fInt > fAbsValue);
     }
     return false;
 }
@@ -447,7 +448,8 @@ void doubleToString(typename T::String ** pResult,
     // Round the number
     if(nDigits >= 0)
     {
-        if ((fValue += nRoundVal[std::min<sal_Int32>(nDigits, 15)] ) >= 10)
+        fValue += nRoundVal[std::min<sal_Int32>(nDigits, 15)];
+        if (fValue >= 10)
         {
             fValue = 1.0;
             nExp++;
@@ -1213,7 +1215,11 @@ bool SAL_CALL rtl_math_approxEqual(double a, double b) SAL_THROW_EXTERN_C()
     if (!std::isfinite(d))
         return false;   // Nan or Inf involved
 
-    if (d > ((a = fabs(a)) * e44) || d > ((b = fabs(b)) * e44))
+    a = fabs(a);
+    if (d > (a * e44))
+        return false;
+    b = fabs(b);
+    if (d > (b * e44))
         return false;
 
     if (isRepresentableInteger(d) && isRepresentableInteger(a) && isRepresentableInteger(b))

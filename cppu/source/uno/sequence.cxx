@@ -547,8 +547,8 @@ static bool icopyConstructFromElements(
             void ** pDestElements = reinterpret_cast<void **>(pSeq->elements);
             for ( sal_Int32 nPos = 0; nPos < nStopIndex; ++nPos )
             {
-                _acquire( pDestElements[nPos] =
-                          static_cast<void **>(pSourceElements)[nPos], acquire );
+                pDestElements[nPos] = static_cast<void **>(pSourceElements)[nPos];
+                _acquire( pDestElements[nPos], acquire );
             }
         }
         break;

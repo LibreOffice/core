@@ -391,8 +391,8 @@ sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
 
     if (! (pProfile->m_Flags & osl_Profile_SYSTEM))
     {
-        osl_TProfileSection* pSec;
-        if (((pSec = findEntry(pProfile, pszSection, pszEntry, &NoEntry)) != nullptr) &&
+        osl_TProfileSection* pSec = findEntry(pProfile, pszSection, pszEntry, &NoEntry);
+        if ((pSec != nullptr) &&
             (NoEntry < pSec->m_NoEntries) &&
             ((pStr = strchr(pProfile->m_Lines[pSec->m_Entries[NoEntry].m_Line],
                             '=')) != nullptr))
@@ -535,7 +535,8 @@ sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
             Line[1 + strlen(pszSection)] = ']';
             Line[2 + strlen(pszSection)] = '\0';
 
-            if (((pStr = addLine(pProfile, Line)) == nullptr) ||
+            pStr = addLine(pProfile, Line);
+            if ((pStr == nullptr) ||
                 (! addSection(pProfile, pProfile->m_NoLines - 1, &pStr[1], strlen(pszSection))))
             {
                 bRet=releaseProfile(pProfile);
@@ -563,7 +564,8 @@ sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
             else
                 i = pSec->m_Line + 1;
 
-            if (((pStr = insertLine(pProfile, Line, i)) == nullptr) ||
+            pStr = insertLine(pProfile, Line, i);
+            if ((pStr == nullptr) ||
                 (! addEntry(pProfile, pSec, i, pStr, strlen(pszEntry))))
             {
                 bRet=releaseProfile(pProfile);
@@ -675,8 +677,8 @@ sal_Bool SAL_CALL osl_removeProfileEntry(oslProfile Profile,
 
     if (! (pProfile->m_Flags & osl_Profile_SYSTEM))
     {
-        osl_TProfileSection* pSec;
-        if (((pSec = findEntry(pProfile, pszSection, pszEntry, &NoEntry)) != nullptr) &&
+        osl_TProfileSection* pSec = findEntry(pProfile, pszSection, pszEntry, &NoEntry);
+        if ((pSec != nullptr) &&
             (NoEntry < pSec->m_NoEntries))
         {
             removeLine(pProfile, pSec->m_Entries[NoEntry].m_Line);
