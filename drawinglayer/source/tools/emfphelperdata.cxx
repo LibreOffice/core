@@ -835,10 +835,11 @@ namespace emfplushelper
                             // seems like SvgRadialGradientPrimitive2D needs doubled, inverted radius
                             aBlendPoint = 2. * ( 1. - brush->blendPositions [i] );
                         }
-                        aColor.setGreen( aStartColor.getGreen() * (1. - brush->blendFactors[i]) + aEndColor.getGreen() * brush->blendFactors[i] );
-                        aColor.setBlue ( aStartColor.getBlue()  * (1. - brush->blendFactors[i]) + aEndColor.getBlue()  * brush->blendFactors[i] );
-                        aColor.setRed  ( aStartColor.getRed()   * (1. - brush->blendFactors[i]) + aEndColor.getRed()   * brush->blendFactors[i] );
-                        aVector.emplace_back(aBlendPoint, aColor, 1. );
+                        aColor.setGreen( aStartColor.getGreen() + brush->blendFactors[i] * ( aEndColor.getGreen() - aStartColor.getGreen() ) );
+                        aColor.setBlue ( aStartColor.getBlue()  + brush->blendFactors[i] * ( aEndColor.getBlue() - aStartColor.getBlue() ) );
+                        aColor.setRed  ( aStartColor.getRed()   + brush->blendFactors[i] * ( aEndColor.getRed() - aStartColor.getRed() ) );
+                        const double aTransparency = brush->solidColor.GetTransparency() + brush->blendFactors[i] * ( brush->secondColor.GetTransparency() - brush->solidColor.GetTransparency() );
+                        aVector.emplace_back(aBlendPoint, aColor, (255.0 - aTransparency) / 255.0);
                     }
                 }
                 else if (brush->colorblendPositions)
@@ -860,7 +861,7 @@ namespace emfplushelper
                             aBlendPoint = 2. * ( 1. - brush->colorblendPositions [i] );
                         }
                         aColor = brush->colorblendColors[i].getBColor();
-                        aVector.emplace_back(aBlendPoint, aColor, 1. );
+                        aVector.emplace_back(aBlendPoint, aColor, (255 - brush->colorblendColors[i].GetTransparency()) / 255.0 );
                     }
                 }
                 else // ok, no extra points: just start and end
