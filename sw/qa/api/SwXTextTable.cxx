@@ -12,7 +12,7 @@
 #include <unotest/macros_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
-
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -36,6 +36,7 @@ struct SwXTextTable final : public test::BootstrapFixture,
                             public apitest::XComponent
 {
     virtual void setUp() override;
+    void tearDown() override;
 
     Reference<XInterface> init() override;
     void triggerDesktopTerminate() override;
@@ -45,6 +46,9 @@ struct SwXTextTable final : public test::BootstrapFixture,
     CPPUNIT_TEST(testRemoveEventListener);
     CPPUNIT_TEST(testDisposedByDesktopTerminate);
     CPPUNIT_TEST_SUITE_END();
+
+private:
+    css::uno::Reference<css::lang::XComponent> component_;
 };
 
 void SwXTextTable::setUp()
@@ -54,14 +58,28 @@ void SwXTextTable::setUp()
         frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
 }
 
+void SwXTextTable::tearDown()
+{
+    if (component_.is())
+    {
+        try
+        {
+            component_->dispose();
+        }
+        catch (css::lang::DisposedException&) // thrown by testDisposedByDesktopTerminate
+        {
+        }
+    }
+}
+
 void SwXTextTable::triggerDesktopTerminate() { mxDesktop->terminate(); }
 
 Reference<XInterface> SwXTextTable::init()
 {
-    auto xComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
-    CPPUNIT_ASSERT(xComponent.is());
-    Reference<text::XTextDocument> xTextDocument(xComponent, UNO_QUERY_THROW);
-    Reference<lang::XMultiServiceFactory> xMSF(xComponent, UNO_QUERY_THROW);
+    component_ = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    CPPUNIT_ASSERT(component_.is());
+    Reference<text::XTextDocument> xTextDocument(component_, UNO_QUERY_THROW);
+    Reference<lang::XMultiServiceFactory> xMSF(component_, UNO_QUERY_THROW);
     Reference<text::XText> xText = xTextDocument->getText();
     Reference<text::XTextCursor> xCursor = xText->createTextCursor();
     Reference<text::XTextTable> xTable(xMSF->createInstance("com.sun.star.text.TextTable"),
