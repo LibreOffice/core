@@ -295,7 +295,10 @@ namespace comphelper
         css::uno::Sequence< typename M::key_type > ret( static_cast<sal_Int32>(map.size()) );
         typename M::key_type* pArray = ret.getArray();
         for (const auto& i : map)
-            *pArray++ = i.first;
+        {
+            *pArray = i.first;
+            pArray++;
+        }
         return ret;
     }
 
@@ -305,7 +308,10 @@ namespace comphelper
         css::uno::Sequence< typename M::mapped_type > ret( static_cast<sal_Int32>(map.size()) );
         typename M::mapped_type* pArray = ret.getArray();
         for (const auto& i : map)
-            *pArray++ = i.second;
+        {
+            *pArray = i.second;
+            pArray++;
+        }
         return ret;
     }
 

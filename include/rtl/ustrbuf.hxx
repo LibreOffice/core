@@ -345,7 +345,8 @@ public:
     template<typename T>
     OUStringBuffer & operator =(OUStringNumber<T> && n)
     {
-        return *this = OUStringBuffer( std::move( n ));
+        *this = OUStringBuffer( std::move( n ) );
+        return *this;
     }
 #endif
 

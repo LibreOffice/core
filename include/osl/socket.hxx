@@ -242,7 +242,8 @@ namespace osl
 
     inline Socket&  Socket::operator= (const Socket& sock)
     {
-        return (*this) = sock.getHandle();
+        *this = sock.getHandle();
+        return *this;
     }
 
 

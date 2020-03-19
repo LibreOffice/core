@@ -241,9 +241,15 @@ void ThreadPool::waitUntilDone(const std::shared_ptr<ThreadTaskTag>& rTag, bool 
         if( maWorkers.empty() )
         { // no threads at all -> execute the work in-line
             std::unique_ptr<ThreadTask> pTask;
-            while (!rTag->isDone() &&
-                   ( pTask = popWorkLocked(aGuard, false) ) )
+            for (;;)
+            {
+                if (rTag->isDone())
+                    break;
+                pTask = popWorkLocked(aGuard, false);
+                if (!pTask)
+                    break;
                 pTask->exec();
+            }
         }
     }
 

@@ -99,7 +99,7 @@ void
                 break;
 
             case 'V':
-                for (n = 0; (c = optarg[n]) != '\0'; n++)
+                for (n = 0; c != '\0'; n++, c = optarg[n])
                     switch (c)
                     {
                         case 'i':
@@ -128,7 +128,7 @@ void
                 break;
 
             case 'X':
-                for (n = 0; (c = optarg[n]) != '\0'; n++)
+                for (n = 0; c != '\0'; n++, c = optarg[n])
                     switch (c)
                     {
                         case 'a':

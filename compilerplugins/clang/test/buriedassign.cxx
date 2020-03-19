@@ -52,8 +52,8 @@ void main()
 {
     MyInt x = 1;
     foo(x = 2); // expected-error {{buried assignment, very hard to read [loplugin:buriedassign]}}
-    MyInt y = x = 1; // no warning expected
-    (void)y;
+    MyInt y2 = x = 1; // no warning expected
+    (void)y2;
     MyInt z = foo(
         x = 1); // expected-error {{buried assignment, very hard to read [loplugin:buriedassign]}}
     (void)z;
