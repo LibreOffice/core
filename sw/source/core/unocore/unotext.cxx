@@ -1483,8 +1483,8 @@ SwXText::insertTextContentWithProperties(
 uno::Reference< text::XTextRange > SAL_CALL
 SwXText::appendTextContent(
     const uno::Reference< text::XTextContent >& xTextContent,
-    const uno::Sequence< beans::PropertyValue >&
-        rCharacterAndParagraphProperties)
+    const uno::Sequence< beans::PropertyValue >& rCharacterAndParagraphProperties
+    )
 {
     // Right now this doesn't need a guard, as it's just calling the insert
     // version, that has it already.
