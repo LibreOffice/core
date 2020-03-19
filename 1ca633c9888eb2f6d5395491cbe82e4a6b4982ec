@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baba2d7b_cd8b4272",
+        "filename": "comphelper/source/misc/threadpool.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-19T13:48:24Z",
+      "side": 1,
+      "message": "I\u0027d keep the head as\n\n  while (!rTag-\u003eisDone()) {\n\nfor (IMO) better readability",
+      "range": {
+        "startLine": 244,
+        "startChar": 12,
+        "endLine": 247,
+        "endChar": 26
+      },
+      "revId": "1ca633c9888eb2f6d5395491cbe82e4a6b4982ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c3db57e_12fc67ec",
+        "filename": "compilerplugins/clang/test/buriedassign.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-19T13:48:24Z",
+      "side": 1,
+      "message": "what prompts this change?",
+      "range": {
+        "startLine": 55,
+        "startChar": 11,
+        "endLine": 55,
+        "endChar": 12
+      },
+      "revId": "1ca633c9888eb2f6d5395491cbe82e4a6b4982ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ff9e645_d05daf64",
+        "filename": "include/comphelper/sequence.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-19T13:48:24Z",
+      "side": 1,
+      "message": "I guess I\u0027d not flag cases like these (probably on the grounds that it is not the assignment that is buried here; and this looks like a rather clear and common idiom)",
+      "revId": "1ca633c9888eb2f6d5395491cbe82e4a6b4982ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6afaf274_37d60751",
+        "filename": "soltools/cpp/_unix.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-19T13:48:24Z",
+      "side": 1,
+      "message": "This drops\n\n  c \u003d optarg[0]\n\nfrom the start of the first iteration through the loop.  I\u0027d use something like\n\n  for (n \u003d 0;; n++) {\n      c \u003d optarg[n];\n      if (c \u003d\u003d \u0027\\0\u0027) {\n          break;\n      }\n      ...",
+      "revId": "1ca633c9888eb2f6d5395491cbe82e4a6b4982ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af7371e9_01b6aa35",
+        "filename": "soltools/cpp/_unix.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-19T13:48:24Z",
+      "side": 1,
+      "message": "same as above",
+      "revId": "1ca633c9888eb2f6d5395491cbe82e4a6b4982ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
