@@ -777,6 +777,9 @@ void DocxExport::WriteNumbering()
             FSNS( XML_xmlns, XML_o ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(vmlOffice)), RTL_TEXTENCODING_UTF8).getStr(),
             FSNS( XML_xmlns, XML_r ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(officeRel)), RTL_TEXTENCODING_UTF8).getStr(),
             FSNS( XML_xmlns, XML_v ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(vml)), RTL_TEXTENCODING_UTF8).getStr(),
+            FSNS( XML_xmlns, XML_mc ), m_pFilter->getNamespaceURL(OOX_NS(mce)).toUtf8(),
+            FSNS( XML_xmlns, XML_w14 ), m_pFilter->getNamespaceURL(OOX_NS(w14)).toUtf8(),
+            FSNS( XML_mc, XML_Ignorable ), "w14",
             FSEND );
 
     BulletDefinitions();
