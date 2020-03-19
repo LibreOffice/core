@@ -288,11 +288,7 @@ static void impl_AddBool( sax_fastparser::FastAttributeList *pAttrList, sal_Int3
 
 static void impl_AddColor( sax_fastparser::FastAttributeList *pAttrList, sal_Int32 nElement, sal_uInt32 nColor )
 {
-#if OSL_DEBUG_LEVEL > 0
-    if ( nColor & 0xFF000000 )
-        fprintf( stderr, "TODO: this is not a RGB value!\n" );
-#endif
-
+    SAL_WARN_IF(nColor & 0xFF000000, "oox.vml", "TODO: this is not a RGB value!");
     if ( !pAttrList || ( nColor & 0xFF000000 ) )
         return;
 
@@ -972,26 +968,29 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                 }
                 break;
             default:
-#if OSL_DEBUG_LEVEL > 0
                 const size_t opt_nProp_size(opt.nProp.size());
                 const sal_uInt8 opt_nProp_empty(0);
-                fprintf( stderr, "TODO VMLExport::Commit(), unimplemented id: %d, value: %" SAL_PRIuUINT32 ", data: [%zu, %p]\n",
-                        nId,
-                        opt.nPropValue,
-                        opt_nProp_size,
-                        0 == opt_nProp_size ? &opt_nProp_empty : opt.nProp.data());
+                SAL_WARN("oox.vml", "TODO VMLExport::Commit(), unimplemented id: "
+                        << nId
+                        << ", value: " << opt.nPropValue
+                        << ", data: [" << opt_nProp_size << ", "
+                        << (0 == opt_nProp_size ?
+                            &opt_nProp_empty : opt.nProp.data()) << "].");
                 if ( opt.nProp.size() )
                 {
                     const sal_uInt8 *pIt = opt.nProp.data();
-                    fprintf( stderr, "    ( " );
+
+                    std::ostringstream oss;
+                    oss << "( ";
                     for ( int nCount = opt.nProp.size(); nCount; --nCount )
                     {
-                        fprintf( stderr, "%02x ", *pIt );
+                        oss << std::setfill('0') << std::setw(2) << std::hex
+                            << *pIt
+                            << " ";
                         ++pIt;
                     }
-                    fprintf( stderr, ")\n" );
+                    SAL_INFO("oox.vml", oss.str() << ")");
                 }
-#endif
                 break;
         }
     }

@@ -1323,10 +1323,7 @@ void PowerPointExport::ImplWritePPTXLayout(sal_Int32 nOffset, sal_uInt32 nMaster
     Reference< drawing::XDrawPages > xDrawPages = xDPS->getDrawPages();
     Reference< drawing::XDrawPage > xSlide = xDrawPages->insertNewByIndex(xDrawPages->getCount());
 
-#ifdef DEBUG
-    if (xSlide.is())
-        printf("new page created\n");
-#endif
+    SAL_INFO_IF(xSlide.is(), "sd.filter", "new page created.");
 
     Reference< beans::XPropertySet > xPropSet(xSlide, uno::UNO_QUERY);
     xPropSet->setPropertyValue("Layout", makeAny(short(aLayoutInfo[ nOffset ].nType)));

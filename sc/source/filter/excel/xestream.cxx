@@ -580,21 +580,22 @@ void XclExpBiff8Encrypter::EncryptBytes( SvStream& rStrm, vector<sal_uInt8>& aBy
     sal_uInt16 nBlockOffset = GetOffsetInBlock(nStrmPos);
     sal_uInt32 nBlockPos = GetBlockPos(nStrmPos);
 
-#if DEBUG_XL_ENCRYPTION
-    fprintf(stdout, "XclExpBiff8Encrypter::EncryptBytes: stream pos = %ld  offset in block = %d  block pos = %ld\n",
-            nStrmPos, nBlockOffset, nBlockPos);
-#endif
+    SAL_INFO("sc.filter.xlcrypt", "XclExpBiff8Encrypter::EncryptBytes: stream "
+            << "pos = " << nStrmPos
+            << "  offset in block = " << nBlockOffset
+            << "  block pos = " << nBlockPos);
 
     sal_uInt16 nSize = static_cast< sal_uInt16 >( aBytes.size() );
     if (nSize == 0)
         return;
 
-#if DEBUG_XL_ENCRYPTION
-    fprintf(stdout, "RAW: ");
+    std::ostringstream oss;
+    oss << std::setprecision(2)
+        << std::hex
+        << std::uppercase;
     for (sal_uInt16 i = 0; i < nSize; ++i)
-        fprintf(stdout, "%2.2X ", aBytes[i]);
-    fprintf(stdout, "\n");
-#endif
+        oss << std::setw(2) << aBytes[i] << " ";
+    SAL_INFO("sc.filter.xlcrypt", "RAW: " << oss.str());
 
     if (mnOldPos != nStrmPos)
     {

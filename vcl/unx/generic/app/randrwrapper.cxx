@@ -22,6 +22,8 @@
 #include <X11/Xlib.h>
 #include <X11/extensions/Xrandr.h>
 
+#include <sal/log.hxx>
+
 namespace
 {
 
@@ -119,9 +121,7 @@ void SalDisplay::DeInitRandR()
 {
     #ifdef USE_RANDR
     RandRWrapper::releaseWrapper();
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "SalDisplay::DeInitRandR()\n" );
-#endif
+    SAL_INFO("vcl.unx.app", "SalDisplay::DeInitRandR().");
     #endif
 }
 
@@ -159,9 +159,9 @@ void SalDisplay::processRandREvent( XEvent* pEvent )
 
                     pWrapper->XRRFreeScreenConfigInfo( pConfig );
 
-                    #if OSL_DEBUG_LEVEL > 1
-                    fprintf( stderr, "screen %d changed to size %dx%d\n", (int)nId, (int)pTargetSize->width, (int)pTargetSize->height );
-                    #endif
+                    SAL_INFO("vcl.unx.app", "screen " << nId
+                            << " changed to size " << (int)pTargetSize->width
+                            << "x" << (int)pTargetSize->height);
                 }
             }
             if( bNotify )

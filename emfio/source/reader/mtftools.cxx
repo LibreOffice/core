@@ -2199,7 +2199,7 @@ namespace emfio
 
     void MtfTools::PassEMFPlusHeaderInfo()
     {
-        EMFP_DEBUG(printf ("\t\t\tadd EMF_PLUS header info\n"));
+        SAL_INFO("emfio", "add EMF_PLUS header info.");
 
         SvMemoryStream mem;
         sal_Int32 nLeft, nRight, nTop, nBottom;
@@ -2232,7 +2232,10 @@ namespace emfio
 
     void MtfTools::PassEMFPlus( void const * pBuffer, sal_uInt32 nLength )
     {
-        EMFP_DEBUG(printf ("\t\t\tadd EMF_PLUS comment length %04x\n",(unsigned int) nLength));
+        SAL_INFO("emfio", "add EMF_PLUS comment length "
+                << std::setfill('0') << std::setw(4)
+                << std::hex
+                << (unsigned int) nLength);
         mpGDIMetaFile->AddAction( new MetaCommentAction( "EMF_PLUS", 0, static_cast<const sal_uInt8*>(pBuffer), nLength ) );
     }
 }

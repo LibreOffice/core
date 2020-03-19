@@ -25,6 +25,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapSimpleColorQuantizationFilter.hxx>
 
+#include <sal/log.hxx>
 #include <unx/x11/xlimits.hxx>
 
 #include "bmp.hxx"
@@ -365,9 +366,7 @@ PixmapHolder::PixmapHolder( Display* pDisplay )
      */
     if( ! XMatchVisualInfo( m_pDisplay, DefaultScreen( m_pDisplay ), 24, TrueColor, &m_aInfo ) )
     {
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "PixmapHolder reverting to default visual\n" );
-#endif
+        SAL_INFO("vcl.unx.dtrans", "PixmapHolder reverting to default visual.");
         Visual* pVisual     = DefaultVisual( m_pDisplay, DefaultScreen( m_pDisplay ) );
         m_aInfo.screen      = DefaultScreen( m_pDisplay );
         m_aInfo.visual      = pVisual;
@@ -379,16 +378,26 @@ PixmapHolder::PixmapHolder( Display* pDisplay )
         m_aInfo.depth       = DefaultDepth( m_pDisplay, m_aInfo.screen );
     }
     m_aColormap         = DefaultColormap( m_pDisplay, m_aInfo.screen );
-#if OSL_DEBUG_LEVEL > 1
     static const char* pClasses[] =
         { "StaticGray", "GrayScale", "StaticColor", "PseudoColor", "TrueColor", "DirectColor" };
-    fprintf( stderr, "PixmapHolder visual: id = 0x%lx, class = %s (%d), depth=%d; color map = 0x%lx\n",
-             m_aInfo.visualid,
-             (m_aInfo.c_class >= 0 && unsigned(m_aInfo.c_class) < SAL_N_ELEMENTS(pClasses)) ? pClasses[m_aInfo.c_class] : "<unknown>",
-             m_aInfo.c_class,
-             m_aInfo.depth,
-             m_aColormap  );
-#endif
+    SAL_INFO("vcl.unx.dtrans", "PixmapHolder visual: id = "
+        << std::showbase << std::hex
+        << m_aInfo.visualid
+        << ", class = "
+        << ((m_aInfo.c_class >= 0 &&
+                unsigned(m_aInfo.c_class) <
+                SAL_N_ELEMENTS(pClasses)) ?
+            pClasses[m_aInfo.c_class] :
+            "<unknown>")
+        << " ("
+        << std::dec
+        << m_aInfo.c_class
+        << "), depth="
+        << m_aInfo.depth
+        << "; color map = "
+        << std::showbase << std::hex
+        << m_aColormap);
+
     if( m_aInfo.c_class == TrueColor )
     {
         int nRedShift2(0);

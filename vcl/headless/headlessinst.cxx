@@ -31,9 +31,14 @@ public:
                                   const std::vector< OUString >& rButtons ) override
     {
         (void)rButtons;
-        ::fprintf(stdout, "LibreOffice - dialog '%s': '%s'",
-                            OUStringToOString(rTitle, RTL_TEXTENCODING_ASCII_US).getStr(),
-                            OUStringToOString(rMessage, RTL_TEXTENCODING_ASCII_US).getStr());
+        SAL_INFO("vcl.headless",
+                "LibreOffice - dialog '"
+                << OUStringToOString(
+                    rTitle, RTL_TEXTENCODING_ASCII_US).getStr()
+                << "': '"
+                << OUStringToOString(
+                    rMessage, RTL_TEXTENCODING_ASCII_US).getStr()
+                << "'");
         return 0;
     }
 };
@@ -56,10 +61,13 @@ void SalAbort( const OUString& rErrorText, bool bDumpCore )
     OUString aError( rErrorText );
     if( aError.isEmpty() )
         aError = "Unknown application error";
-    ::fprintf( stderr, "%s\n", OUStringToOString(rErrorText, osl_getThreadTextEncoding()).getStr() );
 
-    ::fprintf( stderr, "SalAbort: '%s'",
-                        OUStringToOString(aError, RTL_TEXTENCODING_ASCII_US).getStr());
+    SAL_WARN("vcl.headless", OUStringToOString(
+                rErrorText, osl_getThreadTextEncoding()).getStr());
+    SAL_INFO("vcl.headless", "SalAbort: '"
+            << OUStringToOString(aError, RTL_TEXTENCODING_ASCII_US).getStr()
+            << "'.");
+
     if( bDumpCore )
         abort();
     else

@@ -319,9 +319,7 @@ void DocxExport::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
 
 void DocxExport::WriteHyperlinkData( const ::sw::mark::IFieldmark& /*rFieldmark*/ )
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "TODO DocxExport::WriteHyperlinkData()\n" );
-#endif
+    SAL_INFO("sw.filter", "TODO DocxExport::WriteHyperlinkData().");
 }
 
 void DocxExport::DoComboBox(const OUString& rName,

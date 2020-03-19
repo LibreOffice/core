@@ -519,17 +519,17 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
 
         if( std::find( glyphlist.begin(), glyphlist.end(), index ) != glyphlist.end() )
         {
-#if OSL_DEBUG_LEVEL > 1
-            fprintf(stderr, "Endless loop found in a compound glyph.\n");
-            fprintf(stderr, "%d -> ", index);
-            fprintf(stderr," [");
+            SAL_INFO("vcl.fonts", "Endless loop found in a compound glyph.");
+
+            std::ostringstream oss;
+            oss << index << " -> [";
             for( const auto& rGlyph : glyphlist )
             {
-                fprintf( stderr,"%d ", (int) rGlyph );
+                oss << (int) rGlyph << " ";
             }
-            fprintf(stderr,"]\n");
+            oss << "]";
+            SAL_INFO("vcl.fonts", oss.str());
         /**/
-#endif
         }
 
         glyphlist.push_back( index );
@@ -537,10 +537,8 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
         if ((np = GetTTGlyphOutline(ttf, index, &nextComponent, nullptr, &glyphlist)) == 0)
         {
             /* XXX that probably indicates a corrupted font */
-#if OSL_DEBUG_LEVEL > 1
-            fprintf(stderr, "An empty compound!\n");
+            SAL_WARN("vcl.fonts", "An empty compound!");
             /* assert(!"An empty compound"); */
-#endif
         }
 
         if( ! glyphlist.empty() )
@@ -904,9 +902,7 @@ static void GetNames(TrueTypeFont *t)
 
     if (nTableSize < 6)
     {
-#if OSL_DEBUG_LEVEL > 1
-        fprintf(stderr, "O_name table too small\n");
-#endif
+        SAL_WARN("vcl.fonts", "O_name table too small.");
         return;
     }
 
@@ -1331,10 +1327,10 @@ static void FindCmap(TrueTypeFont *ttf)
             case 6: ttf->mapper = getGlyph6; break;
             case 12: ttf->mapper= getGlyph12; break;
             default:
-#if OSL_DEBUG_LEVEL > 1
                 /*- if the cmap table is really broken */
-                printf("%s: %d is not a recognized cmap format.\n", ttf->fname, GetUInt16(ttf->cmap, 0));
-#endif
+                SAL_WARN("vcl.fonts", ttf->fname << ": "
+                        << GetUInt16(ttf->cmap, 0)
+                        << " is not a recognized cmap format..");
                 ttf->cmapType = CMAP_NOT_USABLE;
                 ttf->cmap = nullptr;
                 ttf->mapper = nullptr;
@@ -1593,10 +1589,10 @@ static SFErrCodes doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
 
         if( t->tables[i] < t->ptr )
         {
-#if OSL_DEBUG_LEVEL > 1
-            if( t->tables[i] )
-                fprintf( stderr, "font file %s has bad table offset %" SAL_PRI_PTRDIFFT "d (tagnum=%d)\n", t->fname, (sal_uInt8*)t->tables[i]-t->ptr, i );
-#endif
+            SAL_WARN_IF(t->tables[i], "vcl.fonts", "font file " << t->fname
+                    << " has bad table offset "
+                    << (sal_uInt8*)t->tables[i]-t->ptr
+                    << "d (tagnum=" << i << ").");
             t->tlens[i] = 0;
             t->tables[i] = nullptr;
         }
@@ -1606,9 +1602,8 @@ static SFErrCodes doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
             if( nMaxLen < 0 )
                 nMaxLen = 0;
             t->tlens[i] = nMaxLen;
-#if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "font file %s has too big table (tagnum=%d)\n", t->fname, i );
-#endif
+            SAL_WARN("vcl.fonts", "font file " << t->fname
+                    << " has too big table (tagnum=" << i << ").");
         }
     }
 
@@ -1991,11 +1986,9 @@ SFErrCodes CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
     AddTable(ttcr, cvt ); AddTable(ttcr, prep); AddTable(ttcr, fpgm);
     AddTable(ttcr, post); AddTable(ttcr, os2);
 
-    if ((res = StreamToFile(ttcr, fname)) != SFErrCodes::Ok) {
-#if OSL_DEBUG_LEVEL > 1
-        fprintf(stderr, "StreamToFile: error code: %d.\n", int(res));
-#endif
-    }
+    res = StreamToFile(ttcr, fname);
+    SAL_WARN_IF(res != SFErrCodes::Ok, "vcl.fonts", "StreamToFile: error code: "
+            << (int) res << ".");
 
     TrueTypeCreatorDispose(ttcr);
     free(gID);
@@ -2503,9 +2496,7 @@ int GetTTNameRecords(TrueTypeFont const *ttf, NameRecord **nr)
 
     if (nTableSize < 6)
     {
-#if OSL_DEBUG_LEVEL > 1
-        fprintf(stderr, "O_name table too small\n");
-#endif
+        SAL_WARN("vcl.fonts", "O_name table too small.");
         return 0;
     }
 

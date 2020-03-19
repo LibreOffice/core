@@ -325,9 +325,7 @@ GetAlternateKeyCode( const sal_uInt16 nKeyCode )
     return aAlternate;
 }
 
-#if OSL_DEBUG_LEVEL > 0
 static bool dumpframes = false;
-#endif
 
 bool GtkSalFrame::doKeyCallback( guint state,
                                  guint keyval,
@@ -345,7 +343,6 @@ bool GtkSalFrame::doKeyCallback( guint state,
 
     vcl::DeletionListener aDel( this );
 
-#if OSL_DEBUG_LEVEL > 0
     const char* pKeyDebug = getenv("VCL_GTK3_PAINTDEBUG");
 
     if (pKeyDebug && *pKeyDebug == '1')
@@ -355,25 +352,24 @@ bool GtkSalFrame::doKeyCallback( guint state,
             // shift-zero forces a re-draw and event is swallowed
             if (keyval == GDK_KEY_0)
             {
-                fprintf( stderr, "force widget_queue_draw\n");
+                SAL_INFO("vcl.gtk3", "force widget_queue_draw.");
                 gtk_widget_queue_draw(GTK_WIDGET(m_pFixedContainer));
                 return false;
             }
             else if (keyval == GDK_KEY_1)
             {
-                fprintf( stderr, "force repaint all\n");
+                SAL_INFO("vcl.gtk3", "force repaint all.");
                 TriggerPaintEvent();
                 return false;
             }
             else if (keyval == GDK_KEY_2)
             {
                 dumpframes = !dumpframes;
-                fprintf(stderr, "toggle dump frames to %d\n", dumpframes);
+                SAL_INFO("vcl.gtk3", "toggle dump frames to " << dumpframes);
                 return false;
             }
         }
     }
-#endif
 
     /*
      *  #i42122# translate all keys with Ctrl and/or Alt to group 0 else
@@ -2863,7 +2859,6 @@ cairo_t* GtkSalFrame::getCairoContext() const
 void GtkSalFrame::damaged(sal_Int32 nExtentsX, sal_Int32 nExtentsY,
                           sal_Int32 nExtentsWidth, sal_Int32 nExtentsHeight) const
 {
-#if OSL_DEBUG_LEVEL > 0
     if (dumpframes)
     {
         static int frame;
@@ -2872,7 +2867,6 @@ void GtkSalFrame::damaged(sal_Int32 nExtentsX, sal_Int32 nExtentsY,
         cairo_surface_write_to_png(cairo_get_target(cr), tmp.getStr());
         cairo_destroy(cr);
     }
-#endif
 
     gtk_widget_queue_draw_area(GTK_WIDGET(m_pFixedContainer),
                                nExtentsX, nExtentsY,
@@ -3288,14 +3282,16 @@ gboolean GtkSalFrame::signalWindowState( GtkWidget*, GdkEvent* pEvent, gpointer 
 
     pThis->m_nState = pEvent->window_state.new_window_state;
 
-    #if OSL_DEBUG_LEVEL > 1
-    if( (pEvent->window_state.changed_mask & GDK_WINDOW_STATE_FULLSCREEN) )
-    {
-        fprintf( stderr, "window %p %s full screen state\n",
-            pThis,
-            (pEvent->window_state.new_window_state & GDK_WINDOW_STATE_FULLSCREEN) ? "enters" : "leaves");
-    }
-    #endif
+    SAL_INFO_IF((pEvent->window_state.changed_mask &
+                GDK_WINDOW_STATE_FULLSCREEN),
+            "vcl.gtk3", "window "
+            << pThis
+            << " "
+            << ((pEvent->window_state.new_window_state &
+                    GDK_WINDOW_STATE_FULLSCREEN) ?
+                "enters" :
+                "leaves")
+            << " full screen state.");
 
     return false;
 }

@@ -283,34 +283,37 @@ ScDPValue::Type ScDPItemData::GetCellType() const
 
 void ScDPItemData::Dump(const char* msg) const
 {
-    printf("--- (%s)\n", msg);
+    SAL_INFO("sc.core", "--- (" << msg << ")");
     switch (meType)
     {
         case Empty:
-            printf("empty\n");
+            SAL_INFO("sc.core", "empty.");
         break;
         case Error:
-            printf("error: %s\n",
-                   OUStringToOString(OUString(mpString), RTL_TEXTENCODING_UTF8).getStr());
+            SAL_INFO("sc.core", "error: "
+                   << OUStringToOString(
+                       OUString(mpString), RTL_TEXTENCODING_UTF8).getStr());
         break;
         case GroupValue:
-            printf("group value: group type = %d  value = %d\n",
-                   maGroupValue.mnGroupType, maGroupValue.mnValue);
+            SAL_INFO("sc.core", "group value: group type = "
+                    << maGroupValue.mnGroupType
+                    << "  value = " << maGroupValue.mnValue);
         break;
         case String:
-            printf("string: %s\n",
-                   OUStringToOString(OUString(mpString), RTL_TEXTENCODING_UTF8).getStr());
+            SAL_INFO("string: "
+                    << OUStringToOString(
+                        OUString(mpString), RTL_TEXTENCODING_UTF8).getStr());
         break;
         case Value:
-            printf("value: %g\n", mfValue);
+            SAL_INFO("sc.core", "value: " << std::scientific << mfValue);
         break;
         case RangeStart:
-            printf("range start: %g\n", mfValue);
+            SAL_INFO("sc.core", "range start: " << std::scientific << mfValue);
         break;
         default:
-            printf("unknown type\n");
+            SAL_INFO("sc.core", "unknown type.");
     }
-    printf("---\n");
+    SAL_INFO("sc.core", "---");
 }
 #endif
 

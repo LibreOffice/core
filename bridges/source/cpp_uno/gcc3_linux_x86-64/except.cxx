@@ -43,9 +43,7 @@ namespace CPPU_CURRENT_NAMESPACE
 
 static OUString toUNOname( char const * p )
 {
-#if OSL_DEBUG_LEVEL > 1
     char const * start = p;
-#endif
 
     // example: N3com3sun4star4lang24IllegalArgumentExceptionE
 
@@ -68,14 +66,10 @@ static OUString toUNOname( char const * p )
             buf.append( '.' );
     }
 
-#if OSL_DEBUG_LEVEL > 1
     OUString ret( buf.makeStringAndClear() );
-    OString c_ret( OUStringToOString( ret, RTL_TEXTENCODING_ASCII_US ) );
-    fprintf( stderr, "> toUNOname(): %s => %s\n", start, c_ret.getStr() );
+    SAL_INFO("bridges.x8664", "toUNOname(): " << start << " => "
+            << OUStringToOString( ret, RTL_TEXTENCODING_ASCII_US ).getStr());
     return ret;
-#else
-    return buf.makeStringAndClear();
-#endif
 }
 
 extern "C" {
@@ -96,13 +90,11 @@ static void _GLIBCXX_CDTOR_CALLABI deleteException( void * pExc )
 
 void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
 {
-#if OSL_DEBUG_LEVEL > 1
-    OString cstr(
-        OUStringToOString(
-            OUString::unacquired( &pUnoExc->pType->pTypeName ),
-            RTL_TEXTENCODING_ASCII_US ) );
-    fprintf( stderr, "> uno exception occurred: %s\n", cstr.getStr() );
-#endif
+    SAL_INFO("bridges.x8664", "uno exception occurred: "
+            << OUStringToOString(
+                OUString::unacquired( &pUnoExc->pType->pTypeName ),
+                RTL_TEXTENCODING_ASCII_US ).getStr());
+
     void * pCppExc;
     type_info * rtti;
 
@@ -154,10 +146,10 @@ void fillUnoException(uno_Any * pUnoExc, uno_Mapping * pCpp2Uno)
 
     typelib_TypeDescription * pExcTypeDescr = nullptr;
     OUString unoName( toUNOname( exceptionType->name() ) );
-#if OSL_DEBUG_LEVEL > 1
-    OString cstr_unoName( OUStringToOString( unoName, RTL_TEXTENCODING_ASCII_US ) );
-    fprintf( stderr, "> c++ exception occurred: %s\n", cstr_unoName.getStr() );
-#endif
+
+    SAL_INFO("bridges.x8664", "c++ exception occurred: "
+            << OUStringToOString( unoName, RTL_TEXTENCODING_ASCII_US ).getStr());
+
     typelib_typedescription_getByName( &pExcTypeDescr, unoName.pData );
     if (pExcTypeDescr == nullptr)
     {

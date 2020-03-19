@@ -107,13 +107,9 @@ public:
     css::uno::Reference< css::beans::XPropertySet >
                         makePropertySet() const;
 
-#if OSL_DEBUG_LEVEL > 0
-#ifdef DBG_UTIL
   static void dump( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet);
-#endif
   static void dumpCode( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet);
   static void dumpData( const css::uno::Reference<css::beans::XPropertySet>& rXPropSet);
-#endif
 private:
     const PropertyNameVector* mpPropNames;
 

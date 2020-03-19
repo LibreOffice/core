@@ -9,6 +9,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <svgrectnode.hxx>
 #include <svgsvgnode.hxx>
@@ -47,9 +48,16 @@ void SvgDrawVisitor::visit(svgio::svgreader::SvgNode const& rNode)
             {
                 basegfx::B2DHomMatrix rMatrix = *rGNode.getTransform();
 
-                printf("G [%f %f %f - %f %f %f - %f %f %f]\n", rMatrix.get(0, 0), rMatrix.get(0, 1),
-                       rMatrix.get(0, 2), rMatrix.get(1, 0), rMatrix.get(1, 1), rMatrix.get(1, 2),
-                       rMatrix.get(2, 0), rMatrix.get(2, 1), rMatrix.get(2, 2));
+                SAL_INFO("svgio", "G ["
+                    << rMatrix.get(0, 0) << " "
+                    << rMatrix.get(0, 1) << " "
+                    << rMatrix.get(0, 2) << " - "
+                    << rMatrix.get(1, 0) << " "
+                    << rMatrix.get(1, 1) << " "
+                    << rMatrix.get(1, 2) << " - "
+                    << rMatrix.get(2, 0) << " "
+                    << rMatrix.get(2, 1) << " "
+                    << rMatrix.get(2, 2) << "]");
             }
         }
         break;

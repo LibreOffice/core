@@ -24,6 +24,7 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/pathoptions.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <swtypes.hxx>
 #include <glosbib.hxx>
@@ -202,14 +203,17 @@ IMPL_LINK_NOARG( SwGlossaryGroupDlg, SelectHdl, weld::TreeView&, void )
         if (nPos != -1)
         {
             GlosBibUserData* pFoundData = reinterpret_cast<GlosBibUserData*>(m_xGroupTLB->get_id(nPos).toInt64());
-            fprintf(stderr, "comparing %s and %s\n",
-                    OUStringToOString(pFoundData->sGroupName, RTL_TEXTENCODING_UTF8).getStr(),
-                    OUStringToOString(sEntry, RTL_TEXTENCODING_UTF8).getStr());
+            SAL_INFO("sw.ui", "comparing "
+                    << OUStringToOString(
+                        pFoundData->sGroupName, RTL_TEXTENCODING_UTF8).getStr()
+                    << " and "
+                    << OUStringToOString(
+                        sEntry, RTL_TEXTENCODING_UTF8).getStr());
             bExists = pFoundData->sGroupName == sEntry;
         }
 
         m_xRenamePB->set_sensitive(!bExists && !sName.isEmpty());
-        fprintf(stderr, "one rename %d\n", !bExists && !sName.isEmpty());
+        SAL_INFO("sw.ui", "one rename " << (!bExists && !sName.isEmpty()));
         m_xDelPB->set_sensitive(IsDeleteAllowed(sEntry));
     }
 }
@@ -384,7 +388,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, ModifyHdl, weld::Entry&, void)
     m_xDelPB->set_sensitive(bEnableDel);
     m_xNewPB->set_sensitive(bEnableNew);
     m_xRenamePB->set_sensitive(bEnableNew && nEntry != -1);
-    fprintf(stderr, "two rename %d\n", bEnableNew && nEntry != -1);
+    SAL_INFO("sw.ui", "two rename " << (bEnableNew && nEntry != -1));
 }
 
 bool SwGlossaryGroupDlg::IsDeleteAllowed(const OUString &rGroup)

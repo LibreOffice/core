@@ -20,6 +20,7 @@
 #include <filter/msfilter/mscodec.hxx>
 
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <algorithm>
 #include <string.h>
 #include <tools/solar.h>
@@ -279,25 +280,21 @@ MSCodec_Std97::~MSCodec_Std97()
     rtl_digest_destroy(m_hDigest);
 }
 
-#if DEBUG_MSO_ENCRYPTION_STD97
 static void lcl_PrintDigest(const sal_uInt8* pDigest, const char* msg)
 {
-    printf("digest: (%s)\n", msg);
+    SAL_INFO("filter.ms", "digest: (" << msg << ").");
+
+    std::ostringstream oss;
     for (int i = 0; i < 16; ++i)
-        printf("%2.2x ", pDigest[i]);
-    printf("\n");
+        oss << std::setw(2) << std::setprecision(2) << std::hex
+            << pDigest[i]
+            << " ";
+    SAL_INFO("filter.ms", oss.str());
 }
-#else
-static void lcl_PrintDigest(const sal_uInt8* /*pDigest*/, const char* /*msg*/)
-{
-}
-#endif
 
 bool MSCodec97::InitCodec( const uno::Sequence< beans::NamedValue >& aData )
 {
-#if DEBUG_MSO_ENCRYPTION_STD97
-    fprintf(stdout, "MSCodec_Std97::InitCodec: --begin\n");fflush(stdout);
-#endif
+    SAL_INFO("filter.ms", "MSCodec_Std97::InitCodec: --begin.");
     bool bResult = false;
 
     ::comphelper::SequenceAsHashMap aHashData( aData );
@@ -339,9 +336,7 @@ void MSCodec_Std97::InitKey (
     const sal_uInt16 pPassData[16],
     const sal_uInt8  pDocId[16])
 {
-#if DEBUG_MSO_ENCRYPTION_STD97
-    fprintf(stdout, "MSCodec_Std97::InitKey: --begin\n");fflush(stdout);
-#endif
+    SAL_INFO("filter.ms", "MSCodec_Std97::InitKey: --begin.");
     uno::Sequence< sal_Int8 > aKey = ::comphelper::DocPasswordHelper::GenerateStd97Key(pPassData, pDocId);
     // Fill raw digest of above updates into DigestValue.
 
@@ -394,11 +389,9 @@ bool MSCodec97::VerifyKey(const sal_uInt8* pSaltData, const sal_uInt8* pSaltDige
 {
     // both the salt data and salt digest (hash) come from the document being imported.
 
-#if DEBUG_MSO_ENCRYPTION_STD97
-    fprintf(stdout, "MSCodec97::VerifyKey: \n");
+    SAL_INFO("filter.ms", "MSCodec97::VerifyKey:");
     lcl_PrintDigest(pSaltData, "salt data");
     lcl_PrintDigest(pSaltDigest, "salt hash");
-#endif
     bool result = false;
 
     if (InitCipher(0))

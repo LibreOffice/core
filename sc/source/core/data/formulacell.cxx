@@ -123,25 +123,29 @@ static struct DebugCalculation
     /** Print chain in encountered dependency order. */
     void print() const
     {
+        std::ostringstream oss;
         for (auto const& it : mvPos)
         {
             OUString aStr( it.maPos.Format( ScRefFlags::VALID | ScRefFlags::TAB_3D, it.mpDoc) +
                     " [" + OUString::number( it.mnRecursion) + "," + OUString::number( it.mnGroup) + "]");
-            fprintf( stderr, "%s -> ", aStr.toUtf8().getStr());
+            oss << aStr.toUtf8().getStr() << " -> ";
         }
-        fprintf( stderr, "%s", "END\n");
+        SAL_INFO("sc.core", oss.str());
+        SAL_INFO("sc.core", "END");
     }
 
     /** Print chain results. */
     void printResults() const
     {
+        std::ostringstream oss;
         for (auto const& it : mvResults)
         {
             OUString aStr( it.maPos.Format( ScRefFlags::VALID | ScRefFlags::TAB_3D, it.mpDoc));
             aStr += " (" + it.maResult + ")";
-            fprintf( stderr, "%s, ", aStr.toUtf8().getStr());
+            oss << aStr.toUtf8().getStr() << ", ";
         }
-        fprintf( stderr, "%s", "END\n");
+        SAL_INFO("sc.core", oss.str());
+        SAL_INFO("sc.core", "END");
     }
 
     void storeResult( const svl::SharedString& rStr )

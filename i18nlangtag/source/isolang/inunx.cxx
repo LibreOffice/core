@@ -98,10 +98,9 @@ static void getPlatformSystemLanguageImpl( LanguageType& rSystemLanguage,
                 nLang = LanguageTag( *procLocale ).makeFallback().getLanguageType();
                 OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
                 rSystemLanguage = nLang;
-#ifdef DEBUG
-                if ( rSystemLanguage == LANGUAGE_DONTKNOW )
-                    fprintf( stderr, "intnunx.cxx:  failed to convert osl_getProcessLocale() language to system language.\n" );
-#endif
+                SAL_WARN_IF(rSystemLanguage == LANGUAGE_DONTKNOW,
+                        "i18nlangtag",
+                        "intnunx.cxx:  failed to convert osl_getProcessLocale() language to system language.");
             }
 #else   /* MACOSX */
             OString aUnxLang( pGetLangFromEnv() );

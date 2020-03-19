@@ -24,6 +24,7 @@
 #include <globals.hxx>
 #include <command.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <memory>
 
@@ -95,9 +96,8 @@ static OUString tempFileHelper(OUString const & fname)
     }
     else
     {
-        OString aStr = "invalid filename: " +
-            OUStringToOString(fname, RTL_TEXTENCODING_UTF8);
-        fprintf(stderr, "%s\n", aStr.getStr());
+        SAL_WARN("idl", "invalid filename: "
+                << OUStringToOString(fname, RTL_TEXTENCODING_UTF8).getStr());
     }
     return aTmpFile;
 }
@@ -134,9 +134,9 @@ int main ( int argc, char ** argv)
             if( !pDataBase->WriteSfx( aOutStm ) )
             {
                 nExit = -1;
-                OString aStr = "cannot write slotmap file: " +
-                    OUStringToOString(aCommand.aSlotMapFile, RTL_TEXTENCODING_UTF8);
-                fprintf(stderr, "%s\n", aStr.getStr());
+                SAL_WARN("idl", "cannot write slotmap file: "
+                        << OUStringToOString(
+                            aCommand.aSlotMapFile, RTL_TEXTENCODING_UTF8).getStr());
             }
         }
         if (nExit == 0 && !aCommand.m_DepFile.isEmpty())
@@ -147,9 +147,9 @@ int main ( int argc, char ** argv)
             if( aOutStm.GetError() != ERRCODE_NONE )
             {
                 nExit = -1;
-                fprintf( stderr, "cannot write dependency file: %s\n",
-                        OUStringToOString( aCommand.m_DepFile,
-                            RTL_TEXTENCODING_UTF8 ).getStr() );
+                SAL_WARN("idl", "cannot write dependency file: "
+                        << OUStringToOString(
+                            aCommand.m_DepFile, RTL_TEXTENCODING_UTF8 ).getStr());
             }
         }
     }
@@ -181,11 +181,10 @@ int main ( int argc, char ** argv)
         if( bErr )
         {
             nExit = -1;
-            OString aStr = "cannot move file from: " +
-                OUStringToOString(aErrFile2, RTL_TEXTENCODING_UTF8) +
-                "\n              to file: " +
-                OUStringToOString(aErrFile, RTL_TEXTENCODING_UTF8);
-            fprintf( stderr, "%s\n", aStr.getStr() );
+            SAL_WARN("idl", "cannot move file from: "
+                    << OUStringToOString(aErrFile2, RTL_TEXTENCODING_UTF8).getStr()
+                    << " to file: "
+                    << OUStringToOString(aErrFile, RTL_TEXTENCODING_UTF8).getStr());
         }
         else
         {
@@ -208,7 +207,7 @@ int main ( int argc, char ** argv)
     }
 
     if( nExit != 0 )
-        fprintf( stderr, "svidl terminated with errors\n" );
+        SAL_WARN("idl", "svidl terminated with errors.");
     return nExit;
 }
 

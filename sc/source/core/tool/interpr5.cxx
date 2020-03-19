@@ -833,19 +833,25 @@ static int lcl_LUP_decompose( ScMatrix* mA, const SCSIZE n,
                             fNum * mA->GetDouble( j, k) ) / fDen, j, i);
         }
     }
-#ifdef DEBUG_SC_LUP_DECOMPOSITION
-    fprintf( stderr, "\n%s\n", "lcl_LUP_decompose(): LU");
+
+    SAL_INFO("sc.core.lup", "lcl_LUP_decompose(): LU");
     for (SCSIZE i=0; i < n; ++i)
     {
+        std::ostringstream oss;
+        oss << std::setprecision(2)
+            << std::scientific;
         for (SCSIZE j=0; j < n; ++j)
-            fprintf( stderr, "%8.2g  ", mA->GetDouble( j, i));
-        fprintf( stderr, "\n%s\n", "");
+            oss << std::setw(8)
+                << mA->GetDouble(j, i) << " ";
+        SAL_INFO("sc.core.lup", oss.str());
     }
-    fprintf( stderr, "\n%s\n", "lcl_LUP_decompose(): P");
+
+    SAL_INFO("sc.core.lup", "lcl_LUP_decompose(): P");
+    std::ostringstream oss;
     for (SCSIZE j=0; j < n; ++j)
-        fprintf( stderr, "%5u ", (unsigned)P[j]);
-    fprintf( stderr, "\n%s\n", "");
-#endif
+        oss << std::setw(5)
+            << (unsigned)P[j] << " ";
+    SAL_INFO("sc.core.lup", oss.str());
 
     bool bSingular=false;
     for (SCSIZE i=0; i<n && !bSingular; i++)
@@ -892,12 +898,15 @@ static void lcl_LUP_solve( const ScMatrix* mLU, const SCSIZE n,
             fSum -= mLU->GetDouble( j, i) * X[j];       // X[j] === x[j]
         X[i] = fSum / mLU->GetDouble( i, i);            // X[i] === x[i]
     }
-#ifdef DEBUG_SC_LUP_DECOMPOSITION
-    fprintf( stderr, "\n%s\n", "lcl_LUP_solve():");
+
+    SAL_INFO("sc.core.lup", "lcl_LUP_solve():");
+    std::ostringstream oss;
+    oss << std::scientific
+        << std::setprecision(2);
     for (SCSIZE i=0; i < n; ++i)
-        fprintf( stderr, "%8.2g  ", X[i]);
-    fprintf( stderr, "%s\n", "");
-#endif
+        oss << std::setw(8)
+            << X[i] << " ";
+    SAL_INFO("sc.core.lup", oss.str());
 }
 
 void ScInterpreter::ScMatDet()
@@ -1011,7 +1020,6 @@ void ScInterpreter::ScMatInv()
                         for (SCSIZE i=0; i < nR; ++i)
                             xY->PutDouble( X[i], j, i);
                     }
-#ifdef DEBUG_SC_LUP_DECOMPOSITION
                     /* Possible checks for ill-condition:
                      * 1. Scale matrix, invert scaled matrix. If there are
                      *    elements of the inverted matrix that are several
@@ -1035,20 +1043,24 @@ void ScInterpreter::ScMatInv()
                     {
                         ScMatrix* pR = xR.get();
                         lcl_MFastMult( pMat, xY.get(), pR, nR, nR, nR);
-                        fprintf( stderr, "\n%s\n", "ScMatInv(): mult-identity");
+                        SAL_INFO("sc.core.lup", "ScMatInv(): mult-identity");
                         for (SCSIZE i=0; i < nR; ++i)
                         {
+                            std::ostringstream oss;
+                            oss << std::scientific
+                                << std::setprecision(2);
+
                             for (SCSIZE j=0; j < nR; ++j)
                             {
                                 double fTmp = pR->GetDouble( j, i);
-                                fprintf( stderr, "%8.2g  ", fTmp);
+                                oss << std::setw(8) << fTmp << " ";
                                 if (fabs( fTmp - (i == j)) > fInvEpsilon)
                                     SetError( FormulaError::IllegalArgument);
                             }
-                        fprintf( stderr, "\n%s\n", "");
+                            SAL_INFO("sc.core.lup", oss.str());
                         }
                     }
-#endif
+
                     if (nGlobalError != FormulaError::NONE)
                         PushError( nGlobalError);
                     else

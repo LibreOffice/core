@@ -23,6 +23,7 @@
 #include <com/sun/star/datatransfer/clipboard/RenderingCapabilities.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
+#include <sal/log.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
@@ -46,9 +47,8 @@ X11Clipboard::X11Clipboard( SelectionManager& rManager, Atom aSelection ) :
         m_xSelectionManager( &rManager ),
         m_aSelection( aSelection )
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "creating instance of X11Clipboard (this=%p)\n", this );
-#endif
+    SAL_INFO("vcl.unx.dtrans", "creating instance of X11Clipboard (this="
+            << this << ").");
 }
 
 css::uno::Reference<css::datatransfer::clipboard::XClipboard>
@@ -71,9 +71,14 @@ X11Clipboard::~X11Clipboard()
 {
     MutexGuard aGuard( *Mutex::getGlobalMutex() );
 
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "shutting down instance of X11Clipboard (this=%p, Selection=\"%s\")\n", this, OUStringToOString( m_xSelectionManager->getString( m_aSelection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
-#endif
+    SAL_INFO("vcl.unx.dtrans", "shutting down instance of X11Clipboard (this="
+            << this
+            << ", Selection=\""
+            << OUStringToOString(
+                m_xSelectionManager->getString( m_aSelection ),
+                RTL_TEXTENCODING_ISO_8859_1 ).getStr()
+            << "\").");
+
     if( m_aSelection != None )
         m_xSelectionManager->deregisterHandler( m_aSelection );
     else
@@ -86,10 +91,11 @@ X11Clipboard::~X11Clipboard()
 void X11Clipboard::fireChangedContentsEvent()
 {
     ClearableMutexGuard aGuard( m_xSelectionManager->getMutex() );
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "X11Clipboard::fireChangedContentsEvent for %s (%" SAL_PRI_SIZET "u listeners)\n",
-             OUStringToOString( m_xSelectionManager->getString( m_aSelection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(), m_aListeners.size() );
-#endif
+    SAL_INFO("vcl.unx.dtrans", "X11Clipboard::fireChangedContentsEvent for "
+            << OUStringToOString(
+                m_xSelectionManager->getString( m_aSelection ),
+                RTL_TEXTENCODING_ISO_8859_1 ).getStr()
+            << " (" << m_aListeners.size() << " listeners).");
     ::std::vector< Reference< XClipboardListener > > listeners( m_aListeners );
     aGuard.clear();
 
