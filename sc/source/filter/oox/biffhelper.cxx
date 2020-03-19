@@ -31,40 +31,51 @@ const sal_Int32 BIFF_RK_100FLAG             = 0x00000001;
 const sal_Int32 BIFF_RK_INTFLAG             = 0x00000002;
 const sal_Int32 BIFF_RK_VALUEMASK           = 0xFFFFFFFC;
 
-union DecodedDouble
-{
-    double              mfValue;
-    sal_math_Double     maStruct;
+//union DecodedDouble
+//{
+  //  double              mfValue;
+    //sal_math_Double     maStruct;
 
-    explicit     DecodedDouble() {}
-    explicit     DecodedDouble( double fValue ) : mfValue( fValue ) {}
-};
+    //explicit     DecodedDouble() {}
+    //explicit     DecodedDouble( double fValue ) : mfValue( fValue ) {}
+//};
 
-} // namespace
+}
+ //double mfvalue;
+ sal_math_Double  maStruct;
+ // namespace
 
 // conversion -----------------------------------------------------------------
 
-/*static*/ double BiffHelper::calcDoubleFromRk( sal_Int32 nRkValue )
+static double BiffHelper::calcDoubleFromRk( sal_Int32 nRkValue )
 {
-    DecodedDouble aDecDbl( 0.0 );
+    //DecodedDouble aDecDbl( 0.0 );
+    //aDecDbl( 0.0 );
     if( getFlag( nRkValue, BIFF_RK_INTFLAG ) )
     {
         sal_Int32 nTemp = nRkValue >> 2;
         setFlag< sal_Int32 >( nTemp, 0xE0000000, nRkValue < 0 );
-        aDecDbl.mfValue = nTemp;
+        //aDecDbl.mfvalue = nTemp;
+        //aDecDbl.maStruct.value = nTemp;
+        maStruct.value = nTemp;
     }
     else
     {
-        aDecDbl.maStruct.w32_parts.msw = static_cast< sal_uInt32 >( nRkValue & BIFF_RK_VALUEMASK );
+        //aDecDbl.maStruct.w32_parts.msw = static_cast< sal_uInt32 >( nRkValue & BIFF_RK_VALUEMASK );
+        maStruct.w32_parts.msw = static_cast< sal_uInt32 >( nRkValue & BIFF_RK_VALUEMASK );
     }
 
     if( getFlag( nRkValue, BIFF_RK_100FLAG ) )
-        aDecDbl.mfValue /= 100.0;
+       // aDecDbl.mfValue /= 100.0;
+        //aDecDbl.maStruct.value /= 100.0;
+        maStruct.value /= 100.0;
 
-    return aDecDbl.mfValue;
+   // return aDecDbl.mfValue;
+      //return aDecDbl.maStruct.value;
+      return maStruct.value;
 }
 
-/*static*/ double BiffHelper::calcDoubleFromError( sal_uInt8 nErrorCode )
+static double BiffHelper::calcDoubleFromError( sal_uInt8 nErrorCode )
 {
     sal_uInt16 nApiError = 0x7FFF;
     switch( nErrorCode )
@@ -78,15 +89,21 @@ union DecodedDouble
         case BIFF_ERR_NA:       nApiError = 0x7FFF; break;
         default:    OSL_FAIL( "BiffHelper::calcDoubleFromError - unknown error code" );
     }
-    DecodedDouble aDecDbl;
-    ::rtl::math::setNan( &aDecDbl.mfValue );
-    aDecDbl.maStruct.nan_parts.fraction_lo = nApiError;
-    return aDecDbl.mfValue;
+    //DecodedDouble aDecDbl;
+    //::rtl::math::setNan( &aDecDbl.mfValue );
+    //::rtl::math::setNan( &aDecDbl.maStruct.value );
+    ::rtl::math::setNan( &maStruct.value );
+
+    // aDecDbl.maStruct.nan_parts.fraction_lo = nApiError;
+    maStruct.nan_parts.fraction_lo = nApiError;
+    //return aDecDbl.mfValue;
+    //return aDecDbl.maStruct.value;
+    return  maStruct.value;
 }
 
 // BIFF12 import --------------------------------------------------------------
 
-/*static*/ OUString BiffHelper::readString( SequenceInputStream& rStrm, bool b32BitLen )
+static OUString BiffHelper::readString( SequenceInputStream& rStrm, bool b32BitLen )
 {
     OUString aString;
     if( !rStrm.isEof() )
