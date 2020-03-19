@@ -47,8 +47,8 @@ namespace sfx2
         /** returns the content window, which is to be used as parent window for any content to be displayed
             in the docking window.
         */
-        vcl::Window&       GetContentWindow()          { return *m_aContentWindow.get(); }
-        const vcl::Window& GetContentWindow() const    { return *m_aContentWindow.get(); }
+        vcl::Window&       GetContentWindow()          { return *m_aContentWindow; }
+        const vcl::Window& GetContentWindow() const    { return *m_aContentWindow; }
 
         /** Return the border that is painted around the inner window as
             decoration.

@@ -1159,7 +1159,7 @@ long ScTextWndGroup::GetPixelHeightForLines(long nLines)
 
 ScrollBar& ScTextWndGroup::GetScrollBar()
 {
-    return *maScrollBar.get();
+    return *maScrollBar;
 }
 
 const OUString& ScTextWndGroup::GetTextString() const

@@ -127,7 +127,7 @@ public:
 
     PopupMenu& GetMenu()
     {
-        return *m_xPopupMenu.get();
+        return *m_xPopupMenu;
     }
 
     void Execute( const tools::Rectangle& rPopupPos, vcl::Window* pWin );

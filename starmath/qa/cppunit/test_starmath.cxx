@@ -162,7 +162,7 @@ void Test::testSmTmpDeviceRestoreFont()
     vcl::Font aNewFont;
 
     {
-        SmTmpDevice aTmpDev(*pPrinter.get(), bUseMap100th_mm);
+        SmTmpDevice aTmpDev(*pPrinter, bUseMap100th_mm);
 
         aNewFont = pPrinter->GetFont();
         aNewFont.SetFamilyName(aFontName);

@@ -295,7 +295,7 @@ void OStartMarker::zoom(const Fraction& _aZoom)
 {
     setZoomFactor(_aZoom,*this);
     m_aVRuler->SetZoom(_aZoom);
-    setZoomFactor(_aZoom, *m_aText.get());
+    setZoomFactor(_aZoom, *m_aText);
     Resize();
     Invalidate();
 }
