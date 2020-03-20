@@ -6376,6 +6376,10 @@ static OString impl_LevelNFC(sal_uInt16 nNumberingType, const SfxItemSet* pOutSe
             aType = "custom";
             rFormat = "001, 002, 003, ...";
             break;
+        case style::NumberingType::ARABIC_ZERO4:
+            aType = "custom";
+            rFormat = "0001, 0002, 0003, ...";
+            break;
 /*
         Fallback the rest to decimal.
         case style::NumberingType::NATIVE_NUMBERING:
