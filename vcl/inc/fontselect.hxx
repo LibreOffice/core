@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_INC_FONTSELECT_HXX
 #define INCLUDED_VCL_INC_FONTSELECT_HXX
 
+#include <config_options.h>
 #include <i18nlangtag/lang.h>
 #include <vcl/vclenum.hxx>
 
@@ -33,7 +34,7 @@ class LogicalFontInstance;
 class PhysicalFontFace;
 class Size;
 
-class VCL_DLLPUBLIC FontSelectPattern : public FontAttributes
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) FontSelectPattern : public FontAttributes
 {
 public:
     FontSelectPattern(const vcl::Font&, const OUString& rSearchName,

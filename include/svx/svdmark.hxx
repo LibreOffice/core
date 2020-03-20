@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_SVDMARK_HXX
 #define INCLUDED_SVX_SVDMARK_HXX
 
+#include <config_options.h>
 #include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/sdrobjectuser.hxx>
@@ -224,7 +225,7 @@ public:
 
 namespace sdr
 {
-    class SVXCORE_DLLPUBLIC ViewSelection
+    class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) ViewSelection
     {
         SdrMarkList                 maMarkedObjectList;
         SdrMarkList                 maEdgesOfMarkedNodes;

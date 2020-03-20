@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_UNOPROV_HXX
 #define INCLUDED_SVX_UNOPROV_HXX
 
+#include <config_options.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <svl/itemprop.hxx>
 #include <svx/svxdllapi.h>
@@ -113,7 +114,7 @@ namespace comphelper { class PropertySetInfo; }
 class SvxPropertySetInfoPool
 {
 public:
-    SVXCORE_DLLPUBLIC static rtl::Reference<comphelper::PropertySetInfo> const & getOrCreate( sal_Int32 nServiceId ) throw();
+    UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) static rtl::Reference<comphelper::PropertySetInfo> const & getOrCreate( sal_Int32 nServiceId ) throw();
 
 private:
     static rtl::Reference<comphelper::PropertySetInfo> mxInfos[SVXUNO_SERVICEID_LASTID+1];

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_TABCTRL_HXX
 #define INCLUDED_VCL_TABCTRL_HXX
 
+#include <config_options.h>
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
 #include <vcl/toolbox.hxx>
@@ -188,7 +189,7 @@ public:
 
 class NotebookBar;
 
-class VCL_DLLPUBLIC NotebookbarTabControlBase : public TabControl,
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) NotebookbarTabControlBase : public TabControl,
                                             public NotebookbarContextControl
 {
 public:

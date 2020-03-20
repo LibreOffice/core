@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_SDR_ANIMATION_OBJECTANIMATOR_HXX
 #define INCLUDED_SVX_SDR_ANIMATION_OBJECTANIMATOR_HXX
 
+#include <config_options.h>
 #include <svx/sdr/animation/scheduler.hxx>
 
 
@@ -32,7 +33,7 @@ namespace sdr
         public:
             // basic constructor and destructor
             primitiveAnimator();
-            SVXCORE_DLLPUBLIC virtual ~primitiveAnimator() override;
+            UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) virtual ~primitiveAnimator() override;
         };
     } // end of namespace animation
 } // end of namespace sdr

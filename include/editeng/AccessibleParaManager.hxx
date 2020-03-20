@@ -20,6 +20,7 @@
 #ifndef INCLUDED_EDITENG_ACCESSIBLEPARAMANAGER_HXX
 #define INCLUDED_EDITENG_ACCESSIBLEPARAMANAGER_HXX
 
+#include <config_options.h>
 #include <vector>
 #include <utility>
 #include <tools/gen.hxx>
@@ -85,7 +86,7 @@ namespace accessibility
         To facilitate automatic deletion of paragraphs no longer used,
         this class uses the WeakCppRef helper to hold the objects weakly.
      */
-    class EDITENG_DLLPUBLIC AccessibleParaManager
+    class UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) AccessibleParaManager
     {
     public:
         typedef WeakCppRef < css::accessibility::XAccessible, AccessibleEditableTextPara > WeakPara;

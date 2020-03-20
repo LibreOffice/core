@@ -19,10 +19,11 @@
 #ifndef INCLUDED_SVX_SDTFCHIM_HXX
 #define INCLUDED_SVX_SDTFCHIM_HXX
 
+#include <config_options.h>
 #include <svl/eitem.hxx>
 #include <svx/svxdllapi.h>
 
-class SVXCORE_DLLPUBLIC SdrTextFixedCellHeightItem final : public SfxBoolItem
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SdrTextFixedCellHeightItem final : public SfxBoolItem
 {
 public:
 

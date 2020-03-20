@@ -11,6 +11,7 @@
 #ifndef INCLUDED_VCL_IDIALOGRENDERABLE_HXX
 #define INCLUDED_VCL_IDIALOGRENDERABLE_HXX
 
+#include <config_options.h>
 #include <vcl/dllapi.h>
 
 #include <rtl/ustring.hxx>
@@ -26,7 +27,7 @@ typedef std::pair<const OString, const OString> LOKPayloadItem;
 
 typedef sal_uInt32 LOKWindowId;
 
-class VCL_DLLPUBLIC ILibreOfficeKitNotifier
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) ILibreOfficeKitNotifier
 {
 public:
     virtual ~ILibreOfficeKitNotifier();

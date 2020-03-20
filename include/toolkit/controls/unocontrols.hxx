@@ -20,6 +20,7 @@
 #ifndef INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLS_HXX
 #define INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLS_HXX
 
+#include <config_options.h>
 #include <toolkit/dllapi.h>
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/awt/XTextListener.hpp>
@@ -105,7 +106,7 @@ typedef ::cppu::ImplHelper4  <   css::awt::XTextComponent
                              ,   css::awt::XLayoutConstrains
                              ,   css::awt::XTextLayoutConstrains
                              >   UnoEditControl_Base;
-class TOOLKIT_DLLPUBLIC UnoEditControl    :public UnoControlBase
+class UNLESS_MERGELIBS(TOOLKIT_DLLPUBLIC) UnoEditControl    :public UnoControlBase
                                             ,public UnoEditControl_Base
 {
 private:

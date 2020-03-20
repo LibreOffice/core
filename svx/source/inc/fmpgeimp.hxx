@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_FMPGEIMP_HXX
 #define INCLUDED_SVX_SOURCE_INC_FMPGEIMP_HXX
 
+#include <config_options.h>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/form/XForm.hpp>
@@ -112,7 +113,7 @@ public:
 
     /** returns an object mapping from control models to drawing shapes.
     */
-    SVXCORE_DLLPUBLIC css::uno::Reference< css::container::XMap > getControlToShapeMap();
+    UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) css::uno::Reference< css::container::XMap > getControlToShapeMap();
 
 private:
     /** validates whether <member>xCurrentForm</member> is still valid and to be used

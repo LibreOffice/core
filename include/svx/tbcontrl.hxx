@@ -130,6 +130,7 @@
 
 // ITEMID_... defines in the *.cxx
 
+#include <config_options.h>
 #include <svl/style.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <svx/svxdllapi.h>
@@ -245,7 +246,7 @@ public:
     void EnsurePaletteManager();
 };
 
-class SVXCORE_DLLPUBLIC SvxCurrencyToolBoxControl final : public svt::PopupWindowController
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SvxCurrencyToolBoxControl final : public svt::PopupWindowController
 {
 private:
     OUString     m_aFormatString;

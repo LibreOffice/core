@@ -19,6 +19,7 @@
 #ifndef INCLUDED_AVMEDIA_MEDIACONTROLBASE_HXX
 #define INCLUDED_AVMEDIA_MEDIACONTROLBASE_HXX
 
+#include <config_options.h>
 #include <vcl/weld.hxx>
 
 #include <avmedia/avmediadllapi.h>
@@ -54,7 +55,7 @@ enum MediaControlStyle
     MEDIACONTROLSTYLE_MULTILINE = 1
 };
 
-class AVMEDIA_DLLPUBLIC MediaControlBase
+class UNLESS_MERGELIBS(AVMEDIA_DLLPUBLIC) MediaControlBase
 {
 public:
     MediaControlBase();

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_FMTFIELD_HXX
 #define INCLUDED_VCL_FMTFIELD_HXX
 
+#include <config_options.h>
 #include <vcl/spinfld.hxx>
 #include <memory>
 
@@ -51,7 +52,7 @@ private:
         ~StaticFormatter();
 
         operator SvNumberFormatter* () { return GetFormatter(); }
-        VCL_DLLPUBLIC static SvNumberFormatter* GetFormatter();
+        UNLESS_MERGELIBS(VCL_DLLPUBLIC) static SvNumberFormatter* GetFormatter();
     };
 
 protected:
@@ -263,7 +264,7 @@ private:
     Link<sal_Int64*, TriState> m_aInputHdl;
 };
 
-class VCL_DLLPUBLIC DoubleNumericField final : public FormattedField
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) DoubleNumericField final : public FormattedField
 {
 public:
     DoubleNumericField(vcl::Window* pParent, WinBits nStyle);
@@ -280,7 +281,7 @@ private:
 };
 
 
-class VCL_DLLPUBLIC DoubleCurrencyField final : public FormattedField
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) DoubleCurrencyField final : public FormattedField
 {
 public:
     DoubleCurrencyField(vcl::Window* pParent, WinBits nStyle);

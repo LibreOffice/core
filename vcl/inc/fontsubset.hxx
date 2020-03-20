@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_INC_FONTSUBSET_HXX
 #define INCLUDED_VCL_INC_FONTSUBSET_HXX
 
+#include <config_options.h>
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -45,7 +46,7 @@ namespace o3tl {
     template<> struct typed_flags<FontType> : is_typed_flags<FontType, (1<<8)-1> {};
 }
 
-class VCL_DLLPUBLIC FontSubsetInfo final
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) FontSubsetInfo final
 {
 public:
     explicit    FontSubsetInfo();

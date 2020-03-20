@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_OPENFILEDROPTARGETLISTENER_HXX
 #define INCLUDED_SVTOOLS_OPENFILEDROPTARGETLISTENER_HXX
 
+#include <config_options.h>
 #include <svtools/svtdllapi.h>
 
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
@@ -37,7 +38,7 @@ namespace com { namespace sun { namespace star { namespace uno {
 
 /** DropTargetListener that takes care of opening a file when it is dropped in the frame.
 */
-class SVT_DLLPUBLIC OpenFileDropTargetListener final : public cppu::WeakImplHelper< css::datatransfer::dnd::XDropTargetListener >
+class UNLESS_MERGELIBS(SVT_DLLPUBLIC) OpenFileDropTargetListener final : public cppu::WeakImplHelper< css::datatransfer::dnd::XDropTargetListener >
 {
     private:
         /// uno service manager to create necessary services

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_UCBHELPER_INTERACTIONREQUEST_HXX
 #define INCLUDED_UCBHELPER_INTERACTIONREQUEST_HXX
 
+#include <config_options.h>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
@@ -221,7 +222,7 @@ public:
   * along with an interaction request to indicate the possibility to approve
   * the request.
   */
-class UCBHELPER_DLLPUBLIC InteractionApprove final : public InteractionContinuation,
+class UNLESS_MERGELIBS(UCBHELPER_DLLPUBLIC) InteractionApprove final : public InteractionContinuation,
                            public css::lang::XTypeProvider,
                            public css::task::XInteractionApprove
 {
@@ -254,7 +255,7 @@ public:
   * along with an interaction request to indicate the possibility to disapprove
   * the request.
   */
-class UCBHELPER_DLLPUBLIC InteractionDisapprove final : public InteractionContinuation,
+class UNLESS_MERGELIBS(UCBHELPER_DLLPUBLIC) InteractionDisapprove final : public InteractionContinuation,
                               public css::lang::XTypeProvider,
                               public css::task::XInteractionDisapprove
 {
@@ -287,7 +288,7 @@ public:
   * passed along with an authentication interaction request to enable the
   * interaction handler to supply the missing authentication data.
   */
-class UCBHELPER_DLLPUBLIC InteractionSupplyAuthentication final :
+class UNLESS_MERGELIBS(UCBHELPER_DLLPUBLIC) InteractionSupplyAuthentication final :
                   public InteractionContinuation,
                   public css::lang::XTypeProvider,
                   public css::ucb::XInteractionSupplyAuthentication2

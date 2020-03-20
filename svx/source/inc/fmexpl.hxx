@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_FMEXPL_HXX
 #define INCLUDED_SVX_SOURCE_INC_FMEXPL_HXX
 
+#include <config_options.h>
 #include <svl/lstner.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <vcl/window.hxx>
@@ -532,7 +533,7 @@ namespace svxform
     };
 
 
-    class SVXCORE_DLLPUBLIC NavigatorFrameManager : public SfxChildWindow
+    class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) NavigatorFrameManager : public SfxChildWindow
     {
     public:
         SVX_DLLPRIVATE NavigatorFrameManager( vcl::Window *pParent, sal_uInt16 nId, SfxBindings *pBindings,

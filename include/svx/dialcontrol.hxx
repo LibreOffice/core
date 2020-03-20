@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_DIALCONTROL_HXX
 #define INCLUDED_SVX_DIALCONTROL_HXX
 
+#include <config_options.h>
 #include <memory>
 #include <vcl/customweld.hxx>
 #include <vcl/virdev.hxx>
@@ -127,7 +128,7 @@ public:
             Hide();
     }
 private:
-    struct DialControl_Impl
+    struct SAL_DLLPRIVATE DialControl_Impl
     {
         ScopedVclPtr<DialControlBmp> mxBmpEnabled;
         ScopedVclPtr<DialControlBmp> mxBmpDisabled;

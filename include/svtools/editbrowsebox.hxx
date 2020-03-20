@@ -21,6 +21,7 @@
 #define INCLUDED_SVTOOLS_EDITBROWSEBOX_HXX
 #define SVTOOLS_IN_EDITBROWSEBOX_HXX
 
+#include <config_options.h>
 #include <memory>
 #include <svtools/svtdllapi.h>
 #include <tools/ref.hxx>
@@ -118,7 +119,7 @@ namespace svt
 
     //= IEditImplementation
 
-    class SVT_DLLPUBLIC IEditImplementation
+    class UNLESS_MERGELIBS(SVT_DLLPUBLIC) IEditImplementation
     {
     public:
         virtual ~IEditImplementation() = 0;
@@ -188,7 +189,7 @@ namespace svt
 
     /** a multi line edit which can be used in a cell of an EditBrowseBox
     */
-    class SVT_DLLPUBLIC MultiLineTextCell final : public VclMultiLineEdit
+    class UNLESS_MERGELIBS(SVT_DLLPUBLIC) MultiLineTextCell final : public VclMultiLineEdit
     {
     public:
         MultiLineTextCell( vcl::Window* _pParent, WinBits _nStyle )
@@ -212,7 +213,7 @@ namespace svt
     typedef GenericEditImplementation< Edit >             EditImplementation;
 
     typedef GenericEditImplementation< MultiLineTextCell >  MultiLineEditImplementation_Base;
-    class SVT_DLLPUBLIC MultiLineEditImplementation final : public MultiLineEditImplementation_Base
+    class UNLESS_MERGELIBS(SVT_DLLPUBLIC) MultiLineEditImplementation final : public MultiLineEditImplementation_Base
     {
     public:
         MultiLineEditImplementation( MultiLineTextCell& _rEdit ) : MultiLineEditImplementation_Base( _rEdit )
@@ -252,7 +253,7 @@ namespace svt
 
     //= SpinCellController
 
-    class SVT_DLLPUBLIC SpinCellController final : public CellController
+    class UNLESS_MERGELIBS(SVT_DLLPUBLIC) SpinCellController final : public CellController
     {
     public:
         SpinCellController(SpinField* pSpinField);

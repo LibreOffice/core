@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_EVENT_HXX
 #define INCLUDED_VCL_EVENT_HXX
 
+#include <config_options.h>
 #include <vcl/dllapi.h>
 #include <tools/gen.hxx>
 #include <vcl/keycod.hxx>
@@ -292,7 +293,7 @@ enum class MouseNotifyEvent
     INPUTENABLE      = 10
 };
 
-class VCL_DLLPUBLIC NotifyEvent
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) NotifyEvent
 {
 private:
     VclPtr<vcl::Window>     mpWindow;

@@ -24,13 +24,14 @@
 #error "don't use this in new code"
 #endif
 
+#include <config_options.h>
 #include <vcl/dllapi.h>
 #include <vcl/toolkit/imgctrl.hxx>
 #include <vcl/timer.hxx>
 
 #include <vector>
 
-class VCL_DLLPUBLIC Throbber final : public ImageControl
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) Throbber final : public ImageControl
 {
 public:
     enum class ImageSet
