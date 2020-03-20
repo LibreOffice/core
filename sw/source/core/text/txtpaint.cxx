@@ -75,8 +75,12 @@ void SwSaveClip::ChgClip_( const SwRect &rRect, const SwTextFrame* pFrame,
         // Having underscores in our line, we enlarged the repaint area
         // (see frmform.cxx) because for some fonts it could be too small.
         // Consequently, we have to enlarge the clipping rectangle as well.
+        // This is the case with small fixed line height, too.
         if ( bEnlargeRect && ! bVertical )
+        {
             aRect.AdjustBottom(40 );
+            aRect.AdjustTop( -40 );
+        }
 
         // If the ClipRect is identical, nothing will happen
         if( pOut->IsClipRegion() ) // no && because of Mac

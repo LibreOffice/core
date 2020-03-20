@@ -42,7 +42,7 @@ public:
 
     ~SwSaveClip();
     void ChgClip( const SwRect &rRect, const SwTextFrame* pFrame = nullptr,
-                         bool bEnlargeRect = false)
+                         bool bEnlargeRect = true)
              { if( pOut ) ChgClip_( rRect, pFrame, bEnlargeRect ); }
     bool IsOn()  const { return bOn; }
     bool IsChg() const { return bChg; }
