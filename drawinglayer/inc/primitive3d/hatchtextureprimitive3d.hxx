@@ -17,12 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_HATCHTEXTUREPRIMITIVE3D_HXX
-#define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_HATCHTEXTUREPRIMITIVE3D_HXX
+#pragma once
 
 #include <drawinglayer/drawinglayerdllapi.h>
 
-#include <drawinglayer/primitive3d/textureprimitive3d.hxx>
+#include <primitive3d/textureprimitive3d.hxx>
 #include <drawinglayer/attribute/fillhatchattribute.hxx>
 
 
@@ -75,7 +74,5 @@ namespace drawinglayer
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
-
-#endif //INCLUDED_DRAWINGLAYER_PRIMITIVE3D_HATCHTEXTUREPRIMITIVE3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,11 +20,11 @@
 #include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <drawinglayer/texture/texture.hxx>
+#include <texture/texture.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
-#include <drawinglayer/primitive2d/graphicprimitivehelper2d.hxx>
+#include <primitive2d/graphicprimitivehelper2d.hxx>
 
 
 using namespace com::sun::star;

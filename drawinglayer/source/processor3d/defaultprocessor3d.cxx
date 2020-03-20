@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <drawinglayer/processor3d/defaultprocessor3d.hxx>
-#include <drawinglayer/primitive3d/textureprimitive3d.hxx>
-#include <drawinglayer/texture/texture.hxx>
-#include <drawinglayer/texture/texture3d.hxx>
-#include <drawinglayer/primitive3d/hatchtextureprimitive3d.hxx>
+#include <processor3d/defaultprocessor3d.hxx>
+#include <primitive3d/textureprimitive3d.hxx>
+#include <texture/texture.hxx>
+#include <texture/texture3d.hxx>
+#include <primitive3d/hatchtextureprimitive3d.hxx>
 #include <drawinglayer/primitive3d/modifiedcolorprimitive3d.hxx>
 #include <drawinglayer/primitive3d/polygonprimitive3d.hxx>
 #include <basegfx/polygon/b3dpolygontools.hxx>

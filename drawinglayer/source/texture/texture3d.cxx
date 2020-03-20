@@ -21,10 +21,10 @@
 
 #include <algorithm>
 
-#include <drawinglayer/texture/texture3d.hxx>
+#include <texture/texture3d.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/BitmapTools.hxx>
-#include <drawinglayer/primitive3d/hatchtextureprimitive3d.hxx>
+#include <primitive3d/hatchtextureprimitive3d.hxx>
 #include <sal/log.hxx>
 
 namespace drawinglayer::texture

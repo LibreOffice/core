@@ -21,7 +21,7 @@
 
 #include <algorithm>
 
-#include <drawinglayer/texture/texture.hxx>
+#include <texture/texture.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/utils/gradienttools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
