@@ -417,6 +417,9 @@ public:
     /// Allows starting or ending a graphic move or resize action.
     void SetGraphicMm100Position(bool bStart, const Point& rPosition);
 
+    SvxSearchItem*          GetSearchItem() { return mpSearchItem.get(); }
+    void                    SetSearchItem(std::unique_ptr<SvxSearchItem> pItem);
+
     class Implementation;
 
 protected:
@@ -546,6 +549,8 @@ private:
     /** Create the rulers.
     */
     void SetupRulers();
+
+    std::unique_ptr<SvxSearchItem> mpSearchItem;
 };
 
 SdrView* ViewShell::GetDrawView() const

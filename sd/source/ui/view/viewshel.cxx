@@ -87,6 +87,7 @@
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
 #include <svl/poolitem.hxx>
+#include <svl/srchitem.hxx>
 #include <strings.hxx>
 #include <sdmod.hxx>
 #include <AccessibleDocumentViewBase.hxx>
@@ -137,12 +138,16 @@ SfxViewFrame* ViewShell::GetViewFrame() const
 ViewShell::ViewShell( vcl::Window* pParentWindow, ViewShellBase& rViewShellBase)
 :   SfxShell(&rViewShellBase)
 ,   mpParentWindow(pParentWindow)
+,   mpSearchItem(new SvxSearchItem(SID_SEARCH_ITEM))
 {
+    mpSearchItem->SetAppFlag(SvxSearchApp::DRAW);
     construct();
 }
 
 ViewShell::~ViewShell()
 {
+    mpSearchItem.reset();
+
     // Keep the content window from accessing in its destructor the
     // WindowUpdater.
     if (mpContentWindow)
@@ -1573,6 +1578,11 @@ weld::Window* ViewShell::GetFrameWeld() const
 sd::Window* ViewShell::GetContentWindow() const
 {
     return mpContentWindow.get();
+}
+
+void ViewShell::SetSearchItem(std::unique_ptr<SvxSearchItem> pItem)
+{
+    mpSearchItem = std::move(pItem);
 }
 
 } // end of namespace sd
