@@ -8637,6 +8637,7 @@ private:
     gint m_nImageCol;
     gint m_nExpanderImageCol;
     gint m_nIdCol;
+    int m_nPendingVAdjustment;
     gulong m_nChangedSignalId;
     gulong m_nRowActivatedSignalId;
     gulong m_nTestExpandRowSignalId;
@@ -9207,6 +9208,24 @@ private:
         return nExpanderSize + (nHorizontalSeparator/ 2);
     }
 
+    void real_vadjustment_set_value(int value)
+    {
+        disable_notify_events();
+        gtk_adjustment_set_value(m_pVAdjustment, value);
+        enable_notify_events();
+    }
+
+    static gboolean setAdjustmentCallback(GtkWidget*, GdkFrameClock*, gpointer widget)
+    {
+        GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
+        if (pThis->m_nPendingVAdjustment != -1)
+        {
+            pThis->real_vadjustment_set_value(pThis->m_nPendingVAdjustment);
+            pThis->m_nPendingVAdjustment = -1;
+        }
+        return false;
+    }
+
 public:
     GtkInstanceTreeView(GtkTreeView* pTreeView, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pTreeView), pBuilder, bTakeOwnership)
@@ -9217,6 +9236,7 @@ public:
         , m_nTextCol(-1)
         , m_nImageCol(-1)
         , m_nExpanderImageCol(-1)
+        , m_nPendingVAdjustment(-1)
         , m_nChangedSignalId(g_signal_connect(gtk_tree_view_get_selection(pTreeView), "changed",
                              G_CALLBACK(signalChanged), this))
         , m_nRowActivatedSignalId(g_signal_connect(pTreeView, "row-activated", G_CALLBACK(signalRowActivated), this))
@@ -10783,13 +10803,47 @@ public:
 
     virtual int vadjustment_get_value() const override
     {
+        if (m_nPendingVAdjustment != -1)
+            return m_nPendingVAdjustment;
         return gtk_adjustment_get_value(m_pVAdjustment);
     }
 
     virtual void vadjustment_set_value(int value) override
     {
         disable_notify_events();
-        gtk_adjustment_set_value(m_pVAdjustment, value);
+
+        if (value == 0)
+        {
+            gtk_adjustment_set_value(m_pVAdjustment, 0);
+            m_nPendingVAdjustment = -1;
+        }
+        else
+        {
+            /* This rube goldberg device is to remove flicker from setting the
+               scroll position of a GtkTreeView directly after clearing it and
+               filling it. As a specific example the writer navigator with ~100
+               tables, scroll to the end, right click on an entry near the end
+               and rename it, the tree is cleared and refilled and an attempt
+               made to set the scroll position of the freshly refilled tree to
+               the same point as before the clear.
+            */
+
+            // This forces the tree to recalculate now its preferrred size
+            // after being cleared
+            GtkRequisition size;
+            gtk_widget_get_preferred_size(GTK_WIDGET(m_pTreeView), nullptr, &size);
+
+            m_nPendingVAdjustment = value;
+
+            // The value set here just has to be different to the final value
+            // set later so that isn't a no-op
+            gtk_adjustment_set_value(m_pVAdjustment, value - 0.0001);
+
+            // This will set the desired m_nPendingVAdjustment value right
+            // before the tree gets drawn
+            gtk_widget_add_tick_callback(GTK_WIDGET(m_pTreeView), setAdjustmentCallback, this, nullptr);
+        }
+
         enable_notify_events();
     }
 
