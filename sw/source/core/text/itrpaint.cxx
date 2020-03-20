@@ -224,7 +224,8 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
     if( m_pCurr->IsClipping() )
     {
-        rClip.ChgClip( aLineRect, m_pFrame );
+        const SwTextFrame& rFrame = *GetInfo().GetTextFrame();
+        rClip.ChgClip( aLineRect, m_pFrame, false, rFrame.GetTopMargin(), rFrame.GetBottomMargin() );
         bClip = false;
     }
 
