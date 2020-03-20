@@ -41,7 +41,9 @@ SwSaveClip::~SwSaveClip()
 }
 
 void SwSaveClip::ChgClip_( const SwRect &rRect, const SwTextFrame* pFrame,
-                           bool bEnlargeRect )
+                           bool bEnlargeRect,
+                           sal_Int32 nEnlargeTop,
+                           sal_Int32 nEnlargeBottom )
 {
     SwRect aOldRect( rRect );
     const bool bVertical = pFrame && pFrame->IsVertical();
@@ -77,6 +79,13 @@ void SwSaveClip::ChgClip_( const SwRect &rRect, const SwTextFrame* pFrame,
         // Consequently, we have to enlarge the clipping rectangle as well.
         if ( bEnlargeRect && ! bVertical )
             aRect.AdjustBottom(40 );
+
+        // enlarge clip for paragraph margins at small fixed line height
+        if ( nEnlargeTop > 0 )
+            aRect.AdjustTop( -nEnlargeTop );
+
+        if ( nEnlargeBottom > 0 )
+            aRect.AdjustBottom( nEnlargeBottom );
 
         // If the ClipRect is identical, nothing will happen
         if( pOut->IsClipRegion() ) // no && because of Mac
