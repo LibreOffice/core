@@ -40,7 +40,6 @@
 #include <comphelper/processfactory.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
-#include <cstdio>
 #include <numeric>
 #include <com/sun/star/awt/CharSet.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
@@ -51,15 +50,13 @@
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
-#include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/document/XStorageBasedDocument.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/ColorMode.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
-#include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
@@ -73,7 +70,6 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/BreakIterator.hpp>
@@ -104,12 +100,8 @@
 #include <unotools/fontdefs.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/GraphicObject.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/strbuf.hxx>
-#include <sfx2/app.hxx>
-#include <svl/languageoptions.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <filter/msfilter/util.hxx>
 #include <editeng/outlobj.hxx>
@@ -117,7 +109,6 @@
 #include <editeng/unonames.hxx>
 #include <editeng/unoprnms.hxx>
 #include <editeng/flditem.hxx>
-#include <svx/sdtfsitm.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/unoapi.hxx>

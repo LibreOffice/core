@@ -17,13 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <comphelper/anytostring.hxx>
-#include <cppuhelper/exc_hlp.hxx>
-
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <osl/diagnose.h>
-#include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <oox/helper/attributelist.hxx>
@@ -40,7 +35,7 @@
 #include <oox/vml/vmldrawing.hxx>
 #include <oox/vml/vmldrawingfragment.hxx>
 #include <drawingml/clrschemecontext.hxx>
-#include <drawingml/textliststyle.hxx>
+#include <drawingml/fillproperties.hxx>
 #include <oox/ppt/pptimport.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>

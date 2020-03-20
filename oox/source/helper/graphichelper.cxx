@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <oox/helper/graphichelper.hxx>
 
 #include <com/sun/star/awt/Point.hpp>
@@ -26,14 +25,11 @@
 #include <com/sun/star/awt/XUnitConversion.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/graphic/GraphicObject.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <comphelper/seqstream.hxx>
-#include <vcl/wmf.hxx>
 #include <vcl/wmfexternal.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>

@@ -11,7 +11,6 @@
 
 #include <oox/ppt/pptshapegroupcontext.hxx>
 #include <oox/token/namespaces.hxx>
-#include <oox/token/tokens.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 
 using namespace ::oox::core;

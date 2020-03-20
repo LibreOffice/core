@@ -19,7 +19,6 @@
 
 #include <oox/ppt/slidetransition.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/animations/TransitionSubType.hpp>
 #include <com/sun/star/animations/XTransitionFilter.hpp>
@@ -27,7 +26,6 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 
-#include <oox/helper/helper.hxx>
 #include <oox/helper/propertymap.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
@@ -35,7 +33,6 @@
 #include <oox/ppt/pptfilterhelpers.hxx>
 
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
 

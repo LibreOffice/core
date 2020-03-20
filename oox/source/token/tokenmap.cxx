@@ -20,7 +20,6 @@
 #include <oox/token/tokenmap.hxx>
 
 #include <string.h>
-#include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <oox/token/tokens.hxx>
 

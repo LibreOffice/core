@@ -27,7 +27,6 @@
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/scopeguard.hxx>
-#include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svtools/sfxecode.hxx>

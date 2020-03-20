@@ -30,7 +30,6 @@
 #include <com/sun/star/animations/XAnimationNode.hpp>
 
 #include <oox/drawingml/shape.hxx>
-#include <oox/helper/attributelist.hxx>
 #include <oox/helper/addtosequence.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>

@@ -19,7 +19,6 @@
 
 #include <oox/ppt/timenodelistcontext.hxx>
 
-#include <cppuhelper/exc_hlp.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
 
@@ -28,7 +27,6 @@
 #include <com/sun/star/animations/AnimationColorSpace.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <com/sun/star/animations/ValuePair.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/presentation/EffectCommands.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 

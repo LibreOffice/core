@@ -30,7 +30,6 @@
 #include <oox/ole/axcontrol.hxx>
 #include <oox/helper/propertymap.hxx>
 #include <oox/helper/propertyset.hxx>
-#include <oox/ole/olestorage.hxx>
 
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

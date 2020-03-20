@@ -17,17 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
-#include <oox/core/fragmenthandler.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
-#include <oox/token/tokens.hxx>
 #include <oox/ppt/pptfilterhelpers.hxx>
 
-#include "conditioncontext.hxx"
 #include "commonbehaviorcontext.hxx"
 #include "commontimenodecontext.hxx"
 #include "timetargetelementcontext.hxx"
