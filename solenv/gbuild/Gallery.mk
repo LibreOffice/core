@@ -11,7 +11,7 @@
 
 # Handles creation of image galleries.
 
-gb_Gallery_TRANSLATE := $(SRCDIR)/solenv/bin/desktop-translate.pl
+gb_Gallery_TRANSLATE := $(SRCDIR)/solenv/bin/desktop-translate.py
 gb_Gallery_INSTDIR := $(LIBO_SHARE_FOLDER)/gallery
 
 define gb_Gallery__command
@@ -34,7 +34,8 @@ endef
 
 define gb_Gallery__command_str
 cp -f $(GALLERY_STRFILE) $@ && \
-$(PERL) $(gb_Gallery_TRANSLATE) \
+$(call gb_ExternalExecutable_get_command,python) \
+		$(gb_Gallery_TRANSLATE) \
 		--ext "str" --key "name" \
 		-d $(GALLERY_WORKDIR) \
 		$(GALLERY_ULFFILE)
@@ -65,7 +66,8 @@ $(call gb_Gallery_get_workdir,%).ulf : \
 		$(foreach lang,$(gb_TRANS_LANGS),\
 			$(gb_POLOCATION)/$(lang)/extras/source/gallery/share.po))
 
-$(call gb_Gallery_get_workdir,%).str : $(gb_Gallery_TRANSLATE)
+$(call gb_Gallery_get_workdir,%).str : $(gb_Gallery_TRANSLATE) \
+		$(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_Output_announce,$*,$(true),STR,1)
 	$(call gb_Trace_StartRange,$*,STR)
 	$(call gb_Gallery__command_str,$@,$*)
