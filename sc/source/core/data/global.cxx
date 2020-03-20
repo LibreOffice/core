@@ -68,7 +68,6 @@
 #include <docsh.hxx>
 
 tools::SvRef<ScDocShell>  ScGlobal::xDrawClipDocShellRef;
-SvxSearchItem*  ScGlobal::pSearchItem = nullptr;
 ScAutoFormat*   ScGlobal::pAutoFormat = nullptr;
 std::atomic<LegacyFuncCollection*> ScGlobal::pLegacyFuncCollection(nullptr);
 std::atomic<ScUnoAddInCollection*> ScGlobal::pAddInCollection(nullptr);
@@ -208,28 +207,6 @@ bool ScGlobal::CheckWidthInvalidate( bool& bNumFormatChanged,
         || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_LINEBREAK )
         || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_MARGIN )
         );
-}
-
-const SvxSearchItem& ScGlobal::GetSearchItem()
-{
-    assert(!bThreadedGroupCalcInProgress);
-    if (!pSearchItem)
-    {
-        pSearchItem = new SvxSearchItem( SID_SEARCH_ITEM );
-        pSearchItem->SetAppFlag( SvxSearchApp::CALC );
-    }
-    return *pSearchItem;
-}
-
-void ScGlobal::SetSearchItem( const SvxSearchItem& rNew )
-{
-    assert(!bThreadedGroupCalcInProgress);
-    // FIXME: An assignment operator would be nice here
-    delete pSearchItem;
-    pSearchItem = static_cast<SvxSearchItem*>(rNew.Clone());
-
-    pSearchItem->SetWhich( SID_SEARCH_ITEM );
-    pSearchItem->SetAppFlag( SvxSearchApp::CALC );
 }
 
 void ScGlobal::ClearAutoFormat()
@@ -541,7 +518,6 @@ void ScGlobal::Clear()
     theAddInAsyncTbl.clear();
     ExitExternalFunc();
     ClearAutoFormat();
-    DELETEZ(pSearchItem);
     delete pLegacyFuncCollection.load(); pLegacyFuncCollection = nullptr;
     delete pAddInCollection.load(); pAddInCollection = nullptr;
     DELETEZ(pUserList);

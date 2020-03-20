@@ -232,6 +232,28 @@ void ScTabViewShell::InsertURLField( const OUString& rName, const OUString& rURL
     pHdl->DataChanged();
 }
 
+const SvxSearchItem& ScTabViewShell::GetSearchItem()
+{
+    assert(!ScGlobal::bThreadedGroupCalcInProgress);
+    if (!pSearchItem)
+    {
+        pSearchItem = new SvxSearchItem( SID_SEARCH_ITEM );
+        pSearchItem->SetAppFlag( SvxSearchApp::CALC );
+    }
+    return *pSearchItem;
+}
+
+void ScTabViewShell::SetSearchItem( const SvxSearchItem& rNew )
+{
+    assert(!ScGlobal::bThreadedGroupCalcInProgress);
+    // FIXME: An assignment operator would be nice here
+    delete pSearchItem;
+    pSearchItem = static_cast<SvxSearchItem*>(rNew.Clone());
+
+    pSearchItem->SetWhich( SID_SEARCH_ITEM );
+    pSearchItem->SetAppFlag( SvxSearchApp::CALC );
+}
+
 void ScTabViewShell::ExecSearch( SfxRequest& rReq )
 {
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
@@ -248,7 +270,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                     OSL_ENSURE( dynamic_cast<const SvxSearchItem*>( pItem) !=  nullptr, "wrong Item" );
                     const SvxSearchItem* pSearchItem = static_cast<const SvxSearchItem*>(pItem);
 
-                    ScGlobal::SetSearchItem( *pSearchItem );
+                    SetSearchItem( *pSearchItem );
                     bool bSuccess = SearchAndReplace( pSearchItem, true, rReq.IsAPI() );
                     SfxChildWindow* pChildWindow = SfxViewFrame::Current()->GetChildWindow(
                             SvxSearchDialogWrapper::GetChildWindowId());
@@ -280,7 +302,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
             {
                 // remember search item
                 OSL_ENSURE( dynamic_cast<const SvxSearchItem*>( pItem) !=  nullptr, "wrong Item" );
-                ScGlobal::SetSearchItem( *static_cast<const SvxSearchItem*>(pItem ));
+                SetSearchItem( *static_cast<const SvxSearchItem*>(pItem ));
             }
             else
             {
@@ -296,7 +318,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                 {
                     // get search item
 
-                    SvxSearchItem aSearchItem = ScGlobal::GetSearchItem();
+                    SvxSearchItem aSearchItem = GetSearchItem();
 
                     // fill search item
 
@@ -349,9 +371,9 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
             break;
         case FID_REPEAT_SEARCH:
             {
-                // once more with ScGlobal::GetSearchItem()
+                // once more with GetSearchItem()
 
-                SvxSearchItem aSearchItem = ScGlobal::GetSearchItem();
+                SvxSearchItem aSearchItem = GetSearchItem();
                 aSearchItem.SetWhich(SID_SEARCH_ITEM);
                 GetViewData().GetDispatcher().ExecuteList( FID_SEARCH_NOW,
                         rReq.IsAPI() ? SfxCallMode::API|SfxCallMode::SYNCHRON :
