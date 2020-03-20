@@ -30,10 +30,11 @@ def read_icons(fname):
     if not os.path.exists(full_path):
         print("Skipping non-existent {}\n".format(full_path))
         return images
-    for line in open(full_path):
-        m = re.search(r'xlink:href="\.uno:(\S+)"\s+', line)
-        if m:
-            images.append(m.group(1).lower())
+    with open(full_path) as fp:
+        for line in fp:
+            m = re.search(r'xlink:href="\.uno:(\S+)"\s+', line)
+            if m:
+                images.append(m.group(1).lower())
     return images
 
 # filter out already seen icons & do prefixing
@@ -79,10 +80,10 @@ def process_file(fname, prefix):
         global_list.append(icon)
         global_hash[icon] = 1
 
-def chew_controlfile(fname):
+def chew_controlfile(ifile):
     global global_list, global_hash
     filelist = []
-    for line in open(fname):
+    for line in ifile:
         line = line.strip()
         if line.startswith('#'):
             continue
@@ -126,10 +127,13 @@ base_path = sys.argv[2]
 # output
 if len(sys.argv) > 3:
     output = open(sys.argv[3], 'w')
+    close_output = True
 else:
     output = sys.stdout
+    close_output = False
 
-chew_controlfile(control)
+with open(control) as controlfile:
+    chew_controlfile(controlfile)
 
 for icon in global_list:
     if not icon.startswith('sc_'):
@@ -138,5 +142,8 @@ for icon in global_list:
 for icon in global_list:
     if icon.startswith('sc_'):
         output.write(icon + "\n")
+
+if close_output:
+    output.close()
 
 # dnl vim:set shiftwidth=4 softtabstop=4 expandtab:
