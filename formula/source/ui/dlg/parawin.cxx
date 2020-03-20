@@ -31,6 +31,10 @@
 namespace formula
 {
 
+// Formula token argument count is sal_uInt8, max 255, edit offset 254.
+constexpr sal_uInt16 kMaxArgCount = 255;
+constexpr sal_uInt16 kMaxArgOffset = kMaxArgCount - 1;
+
 ParaWin::ParaWin(weld::Container* pParent,IControlReferenceHandler* _pDlg)
     : pFuncDesc(nullptr)
     , pMyParent(_pDlg)
@@ -98,12 +102,13 @@ ParaWin::ParaWin(weld::Container* pParent,IControlReferenceHandler* _pDlg)
 
 void ParaWin::UpdateArgDesc( sal_uInt16 nArg )
 {
-    if (nArg==NOT_FOUND) return;
+    if (nArg == NOT_FOUND)
+        return;
 
-    if ( nArgs > 4 )
+    if (nMaxArgs > 4)
         nArg = sal::static_int_cast<sal_uInt16>( nArg + GetSliderPos() );
 
-    if ( (nArgs > 0) && (nArg<nArgs) )
+    if ((nMaxArgs > 0) && (nArg<nMaxArgs))
     {
         OUString  aArgDesc;
         OUString  aArgName;
@@ -157,9 +162,12 @@ void ParaWin::UpdateArgDesc( sal_uInt16 nArg )
 void ParaWin::UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 i )
 {
     sal_uInt16 nArg = nOffset + i;
+    if (nArg > kMaxArgOffset)
+        return;
+
     if ( nArgs < VAR_ARGS)
     {
-        if(nArg<nArgs)
+        if (nArg < nMaxArgs)
         {
             sal_uInt16 nRealArg = aVisibleArgMapping[nArg];
             SetArgNameFont  (i,(pFuncDesc->isParameterOptional(nRealArg))
@@ -209,7 +217,7 @@ void ParaWin::UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 i )
         else
             SetArgName( i, pFuncDesc->getParameterName(nRealArg) );
     }
-    if (nArg<nArgs)
+    if (nArg < nMaxArgs)
         aArgInput[i].SetArgVal(aParaArray[nArg]);
 }
 
@@ -226,7 +234,7 @@ ParaWin::~ParaWin()
 
 void ParaWin::SetActiveLine(sal_uInt16 no)
 {
-    if(no<nArgs)
+    if (no < nMaxArgs)
     {
         long nOffset = GetSliderPos();
         nActiveLine=no;
@@ -244,7 +252,7 @@ void ParaWin::SetActiveLine(sal_uInt16 no)
 
 RefEdit* ParaWin::GetActiveEdit()
 {
-    if(nArgs>0 && nEdFocus!=NOT_FOUND)
+    if (nMaxArgs > 0 && nEdFocus != NOT_FOUND)
     {
         return aArgInput[nEdFocus].GetArgEdPtr();
     }
@@ -270,7 +278,7 @@ OUString ParaWin::GetArgument(sal_uInt16 no)
 OUString  ParaWin::GetActiveArgName() const
 {
     OUString aStr;
-    if(nArgs>0 && nEdFocus!=NOT_FOUND)
+    if (nMaxArgs > 0 && nEdFocus != NOT_FOUND)
     {
         aStr=aArgInput[nEdFocus].GetArgName();
     }
@@ -297,7 +305,7 @@ void ParaWin::SetFunctionDesc(const IFunctionDescription* pFDesc)
     SetArgumentDesc( OUString() );
     SetArgumentText( OUString() );
     SetEditDesc( OUString() );
-    nArgs = 0;
+    nMaxArgs = nArgs = 0;
     if ( pFuncDesc!=nullptr)
     {
         if ( !pFuncDesc->getDescription().isEmpty() )
@@ -309,6 +317,7 @@ void ParaWin::SetFunctionDesc(const IFunctionDescription* pFDesc)
             SetEditDesc(aDefaultString);
         }
         nArgs = pFuncDesc->getSuppressedArgumentCount();
+        nMaxArgs = std::min( nArgs, kMaxArgCount);
         pFuncDesc->fillVisibleArgumentMapping(aVisibleArgMapping);
         m_xSlider->set_vpolicy(VclPolicyType::NEVER);
         m_xSlider->set_size_request(-1, -1);
@@ -390,30 +399,30 @@ void ParaWin::SetArgumentOffset(sal_uInt16 nOffset)
     aParaArray.clear();
     m_xSlider->vadjustment_set_value(0);
 
-    aParaArray.resize(nArgs);
+    aParaArray.resize(nMaxArgs);
 
-    if ( nArgs > 0 )
+    if (nMaxArgs > 0)
     {
-        for ( int i=0; i<4 && i<nArgs; i++ )
+        for ( int i=0; i<4 && i<nMaxArgs; i++ )
         {
             aArgInput[i].SetArgVal(OUString());
             aArgInput[i].GetArgEdPtr()->Init(
-                (i==0)               ? nullptr : aArgInput[i-1].GetArgEdPtr(),
-                (i==3 || i==nArgs-1) ? nullptr : aArgInput[i+1].GetArgEdPtr(),
-                                       *m_xSlider, *this, nArgs );
+                (i==0)                  ? nullptr : aArgInput[i-1].GetArgEdPtr(),
+                (i==3 || i==nMaxArgs-1) ? nullptr : aArgInput[i+1].GetArgEdPtr(),
+                                          *m_xSlider, *this, nMaxArgs );
         }
     }
 
     UpdateParas();
 
-    if ( nArgs < 5 )
+    if (nMaxArgs < 5)
     {
         m_xSlider->set_vpolicy(VclPolicyType::NEVER);
         m_xSlider->set_size_request(-1, -1);
     }
     else
     {
-        m_xSlider->vadjustment_configure(nOffset, 0, nArgs, 1, 4, 4);
+        m_xSlider->vadjustment_configure(nOffset, 0, nMaxArgs, 1, 4, 4);
         m_xSlider->set_vpolicy(VclPolicyType::ALWAYS);
         Size aPrefSize(m_xGrid->get_preferred_size());
         m_xSlider->set_size_request(aPrefSize.Width(), aPrefSize.Height());
@@ -425,16 +434,16 @@ void ParaWin::UpdateParas()
     sal_uInt16 i;
     sal_uInt16 nOffset = GetSliderPos();
 
-    if ( nArgs > 0 )
+    if ( nMaxArgs > 0 )
     {
-        for ( i=0; (i<nArgs) && (i<4); i++ )
+        for ( i=0; (i<nMaxArgs) && (i<4); i++ )
         {
             UpdateArgInput( nOffset, i );
             aArgInput[i].Show();
         }
     }
 
-    for ( i=nArgs; i<4; i++ )
+    for ( i=nMaxArgs; i<4; i++ )
         aArgInput[i].Hide();
 }
 
