@@ -2204,7 +2204,7 @@ void SwRefPageGetFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* 
     }
 
     // forward to text fields, they "expand" the text
-    NotifyClients( pOld, pNew );
+    GetNotifier().Broadcast(sw::LegacyModifyHint(pOld, pNew));
 }
 
 bool SwRefPageGetFieldType::MakeSetList(SetGetExpFields& rTmpLst,
@@ -2307,7 +2307,7 @@ void SwRefPageGetFieldType::UpdateField( SwTextField const * pTextField,
         }
     }
     // start formatting
-    const_cast<SwFormatField&>(pTextField->GetFormatField()).ModifyNotification( nullptr, nullptr );
+    const_cast<SwFormatField&>(pTextField->GetFormatField()).ForceLayout(sw::LegacyModifyHint(nullptr, nullptr));
 }
 
 // queries for relative page numbering

@@ -164,8 +164,14 @@ SwModify::~SwModify()
         static_cast<SwClient*>(m_pWriterListeners)->CheckRegistration( &aDyObject );
 }
 
+class SwFieldType;
+#include <fldbas.hxx>
+
 void SwModify::NotifyClients( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
 {
+    auto pType = dynamic_cast<SwFieldType*>(this);
+    if(pType)
+        assert(!pType);
     DBG_TESTSOLARMUTEX();
     if ( IsInCache() || IsInSwFntCache() )
     {

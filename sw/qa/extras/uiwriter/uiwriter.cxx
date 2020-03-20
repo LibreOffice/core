@@ -2998,7 +2998,7 @@ void SwUiWriterTest::testTdf77342()
     aFormat = pOldRef25->GetFormat();
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
     pOldRef25->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(3)), aAny);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(4)), aAny);
     //old footnote 4
     pCursor->Move(fnMoveForward);
     SwTextNode* pTextNd15 = pCursor->GetNode().GetTextNode();
@@ -3099,17 +3099,17 @@ void SwUiWriterTest::testTdf63553()
     //sequence field 1
     pCursor->Move(fnMoveForward);
     SwSetExpField* pSeqF1 = static_cast<SwSetExpField*> (SwCursorShell::GetFieldAtCursor(pCursor, true));
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pSeqF1->GetSeqNumber());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(65535), pSeqF1->GetSeqNumber());
     CPPUNIT_ASSERT_EQUAL(OUString("Number range Illustration"), pSeqF1->GetFieldName());
     //sequence field 2
     pCursor->Move(fnMoveForward);
     SwSetExpField* pSeqF2 = static_cast<SwSetExpField*> (SwCursorShell::GetFieldAtCursor(pCursor, true));
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pSeqF2->GetSeqNumber());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(65535), pSeqF2->GetSeqNumber());
     CPPUNIT_ASSERT_EQUAL(OUString("Number range Illustration"), pSeqF2->GetFieldName());
     //sequence field 3
     pCursor->Move(fnMoveForward);
     SwSetExpField* pSeqF3 = static_cast<SwSetExpField*> (SwCursorShell::GetFieldAtCursor(pCursor, true));
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pSeqF3->GetSeqNumber());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(65535), pSeqF3->GetSeqNumber());
     CPPUNIT_ASSERT_EQUAL(OUString("Number range Illustration"), pSeqF3->GetFieldName());
     //moving cursor to the end of the document
     pWrtShell->EndOfSection();
@@ -3141,17 +3141,17 @@ void SwUiWriterTest::testTdf63553()
     //old sequence field 1
     pCursor->Move(fnMoveForward);
     SwSetExpField* pSeq1 = static_cast<SwSetExpField*> (SwCursorShell::GetFieldAtCursor(pCursor, true));
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pSeq1->GetSeqNumber());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(65535), pSeq1->GetSeqNumber());
     CPPUNIT_ASSERT_EQUAL(OUString("Number range Illustration"), pSeq1->GetFieldName());
     //old sequence field 2
     pCursor->Move(fnMoveForward);
     SwSetExpField* pSeq2 = static_cast<SwSetExpField*> (SwCursorShell::GetFieldAtCursor(pCursor, true));
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pSeq2->GetSeqNumber());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(65535), pSeq2->GetSeqNumber());
     CPPUNIT_ASSERT_EQUAL(OUString("Number range Illustration"), pSeq2->GetFieldName());
     //old sequence field 3
     pCursor->Move(fnMoveForward);
     SwSetExpField* pSeq3 = static_cast<SwSetExpField*> (SwCursorShell::GetFieldAtCursor(pCursor, true));
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pSeq3->GetSeqNumber());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(65535), pSeq3->GetSeqNumber());
     CPPUNIT_ASSERT_EQUAL(OUString("Number range Illustration"), pSeq3->GetFieldName());
     //new reference field 1
     pCursor->Move(fnMoveForward);
@@ -3159,7 +3159,7 @@ void SwUiWriterTest::testTdf63553()
     aFormat = pNewRef11->GetFormat();
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
     pNewRef11->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(4)), aAny);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(1)), aAny);
     //new reference field 2
     pCursor->Move(fnMoveForward);
     SwField* pNewRef12 = SwCursorShell::GetFieldAtCursor(pCursor, true);
@@ -3170,12 +3170,12 @@ void SwUiWriterTest::testTdf63553()
     //new sequence field 1
     pCursor->Move(fnMoveForward);
     SwSetExpField* pNewSeq1 = static_cast<SwSetExpField*> (SwCursorShell::GetFieldAtCursor(pCursor, true));
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pNewSeq1->GetSeqNumber());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pNewSeq1->GetSeqNumber());
     CPPUNIT_ASSERT_EQUAL(OUString("Number range Illustration"), pNewSeq1->GetFieldName());
     //new sequence field 2
     pCursor->Move(fnMoveForward);
     SwSetExpField* pNewSeq2 = static_cast<SwSetExpField*> (SwCursorShell::GetFieldAtCursor(pCursor, true));
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), pNewSeq2->GetSeqNumber());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pNewSeq2->GetSeqNumber());
     CPPUNIT_ASSERT_EQUAL(OUString("Number range Illustration"), pNewSeq2->GetFieldName());
     //moving the cursor to the starting of document
     pWrtShell->StartOfSection();
@@ -3189,7 +3189,7 @@ void SwUiWriterTest::testTdf63553()
     aFormat = pNewRef21->GetFormat();
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
     pNewRef21->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(6)), aAny);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(1)), aAny);
     //new reference field 2
     pCursor->Move(fnMoveForward);
     SwField* pNewRef22 = SwCursorShell::GetFieldAtCursor(pCursor, true);
@@ -3200,12 +3200,12 @@ void SwUiWriterTest::testTdf63553()
     //new sequence field 1
     pCursor->Move(fnMoveForward);
     SwSetExpField* pNewSeq11 = static_cast<SwSetExpField*> (SwCursorShell::GetFieldAtCursor(pCursor, true));
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(5), pNewSeq11->GetSeqNumber());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pNewSeq11->GetSeqNumber());
     CPPUNIT_ASSERT_EQUAL(OUString("Number range Illustration"), pNewSeq11->GetFieldName());
     //new sequence field 2
     pCursor->Move(fnMoveForward);
     SwSetExpField* pNewSeq12 = static_cast<SwSetExpField*> (SwCursorShell::GetFieldAtCursor(pCursor, true));
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(6), pNewSeq12->GetSeqNumber());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pNewSeq12->GetSeqNumber());
     CPPUNIT_ASSERT_EQUAL(OUString("Number range Illustration"), pNewSeq12->GetFieldName());
     //old reference field 1
     pCursor->Move(fnMoveForward);
@@ -3231,17 +3231,17 @@ void SwUiWriterTest::testTdf63553()
     //old sequence field 1
     pCursor->Move(fnMoveForward);
     SwSetExpField* pOldSeq11 = static_cast<SwSetExpField*> (SwCursorShell::GetFieldAtCursor(pCursor, true));
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pOldSeq11->GetSeqNumber());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(65535), pOldSeq11->GetSeqNumber());
     CPPUNIT_ASSERT_EQUAL(OUString("Number range Illustration"), pOldSeq11->GetFieldName());
     //old sequence field 2
     pCursor->Move(fnMoveForward);
     SwSetExpField* pOldSeq12 = static_cast<SwSetExpField*> (SwCursorShell::GetFieldAtCursor(pCursor, true));
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pOldSeq12->GetSeqNumber());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(65535), pOldSeq12->GetSeqNumber());
     CPPUNIT_ASSERT_EQUAL(OUString("Number range Illustration"), pOldSeq12->GetFieldName());
     //old sequence field 3
     pCursor->Move(fnMoveForward);
     SwSetExpField* pOldSeq13 = static_cast<SwSetExpField*> (SwCursorShell::GetFieldAtCursor(pCursor, true));
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pOldSeq13->GetSeqNumber());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(65535), pOldSeq13->GetSeqNumber());
     CPPUNIT_ASSERT_EQUAL(OUString("Number range Illustration"), pOldSeq13->GetFieldName());
     //old reference field 4
     pCursor->Move(fnMoveForward);
@@ -3249,7 +3249,7 @@ void SwUiWriterTest::testTdf63553()
     aFormat = pOldRef24->GetFormat();
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
     pOldRef24->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(4)), aAny);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(1)), aAny);
     //old reference field 5
     pCursor->Move(fnMoveForward);
     SwField* pOldRef25 = SwCursorShell::GetFieldAtCursor(pCursor, true);
@@ -3260,12 +3260,12 @@ void SwUiWriterTest::testTdf63553()
     //old sequence field 4
     pCursor->Move(fnMoveForward);
     SwSetExpField* pOldSeq14 = static_cast<SwSetExpField*> (SwCursorShell::GetFieldAtCursor(pCursor, true));
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pOldSeq14->GetSeqNumber());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pOldSeq14->GetSeqNumber());
     CPPUNIT_ASSERT_EQUAL(OUString("Number range Illustration"), pOldSeq14->GetFieldName());
     //old sequence field 5
     pCursor->Move(fnMoveForward);
     SwSetExpField* pOldSeq15 = static_cast<SwSetExpField*> (SwCursorShell::GetFieldAtCursor(pCursor, true));
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), pOldSeq15->GetSeqNumber());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pOldSeq15->GetSeqNumber());
     CPPUNIT_ASSERT_EQUAL(OUString("Number range Illustration"), pOldSeq15->GetFieldName());
 }
 
