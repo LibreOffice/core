@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "77a21bd9_5de98e49",
+        "filename": "vcl/unx/gtk3/gtk3gtkinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 10820,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-03-20T18:16:47Z",
+      "side": 1,
+      "message": "surely better to fix the navigator not to indulge in such silliness?",
+      "revId": "358553bf6a542d79f11b4b1aff7ba1c398eaa574",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
