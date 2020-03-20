@@ -202,6 +202,8 @@ void SfxPickListImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
         break;
 
         case SfxEventHintId::OpenDoc:
+            // Speed-up: do not add doc into the "Recent Documents" list on load. It will be added there during close/save.
+            break;
         case SfxEventHintId::SaveDocDone:
         case SfxEventHintId::SaveAsDocDone:
         case SfxEventHintId::SaveToDocDone:
