@@ -168,6 +168,9 @@ private:
     bool    mbInSwitch;
     OUString   maName;
     OUString   maScope;
+
+    SvxSearchItem*          pSearchItem;
+
 private:
     void    Construct( TriState nForceDesignMode );
 
@@ -399,6 +402,9 @@ public:
     void InitFormEditData();
     void ClearFormEditData();
     ScFormEditData* GetFormEditData() { return mpFormEditData.get(); }
+
+    const SvxSearchItem&    GetSearchItem();
+    void                    SetSearchItem( const SvxSearchItem& rNew );
 };
 
 #endif
