@@ -58,4 +58,13 @@ $(eval $(call gb_CppunitTest_use_rdb,sw_xhtmlexport,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_xhtmlexport))
 
+$(eval $(call gb_CppunitTest_use_packages,sw_xhtmlexport, \
+    filter_xhtml \
+    filter_xslt \
+))
+
+$(eval $(call gb_CppunitTest_use_uiconfigs,sw_xhtmlexport, \
+    svx \
+))
+
 # vim: set noet sw=4 ts=4:
