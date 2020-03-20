@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3d346943_3a151ad6",
+        "filename": "oox/source/ppt/pptshapecontext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2020-03-20T13:18:11Z",
+      "side": 0,
+      "message": "Interesting detail: if there is a using declaration in the file, IWYU considers that enough reason to keep a header in that provides that namespace. Even if nothing is actually used from that namespace or the particular header. So these were removed manually.",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 40
+      },
+      "revId": "3b250f0c009476cfe7d35ebd1d8220ceac440791",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
