@@ -917,7 +917,8 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
 
                         sFormula.clear();
                         // trigger formatting
-                        const_cast<SwFormatField*>(pFormatField)->ModifyNotification( nullptr, nullptr );
+                        // FIXME
+                        const_cast<SwFormatField*>(pFormatField)->ForceLayout(sw::LegacyModifyHint(nullptr, nullptr));
                     }
                     break;
 
