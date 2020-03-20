@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <drawinglayer/primitive3d/polygontubeprimitive3d.hxx>
+#include <primitive3d/polygontubeprimitive3d.hxx>
 #include <drawinglayer/attribute/materialattribute3d.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>

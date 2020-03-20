@@ -40,7 +40,7 @@
 #include <tools/stream.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
-#include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
+#include <primitive2d/pointarrayprimitive2d.hxx>
 #include <vcl/graphictools.hxx>
 #include <vcl/metaact.hxx>
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
@@ -54,7 +54,7 @@
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
-#include <drawinglayer/primitive2d/epsprimitive2d.hxx>
+#include <primitive2d/epsprimitive2d.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 
 // for PDFExtOutDevData Graphic support
