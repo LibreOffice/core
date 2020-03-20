@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7474569f_e680cf60",
+        "filename": "avmedia/source/vlc/inc/wrapper/Common.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-03-20T21:05:00Z",
+      "side": 1,
+      "message": "Why adding this extra empty line?",
+      "revId": "7dd5d7e18a64790fa55760bfc83c1e541f3f9f9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84d883fc_e2464843",
+        "filename": "avmedia/source/vlc/vlcmanager.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-03-20T21:05:00Z",
+      "side": 1,
+      "message": "Let\u0027s also remove this empty line.",
+      "revId": "7dd5d7e18a64790fa55760bfc83c1e541f3f9f9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50daf0b9_f79f1d47",
+        "filename": "avmedia/source/vlc/vlcplayer.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-03-20T21:05:00Z",
+      "side": 1,
+      "message": "Ensure one empty line before and after the `#pragma once` line please, for consistency.",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 12
+      },
+      "revId": "7dd5d7e18a64790fa55760bfc83c1e541f3f9f9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
