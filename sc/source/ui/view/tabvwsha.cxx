@@ -219,7 +219,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case SID_SEARCH_ITEM:
             {
-                SvxSearchItem aItem(ScGlobal::GetSearchItem()); // make a copy.
+                SvxSearchItem aItem(GetSearchItem()); // make a copy.
                 // Search on current selection if a range is marked.
                 aItem.SetSelection(rMark.IsMarked());
                 rSet.Put(aItem);

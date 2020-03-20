@@ -2013,11 +2013,13 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
             {
                 pDocSh->PostPaint( nCol,nRow,nTab, nCol,nRow,nTab, PaintPartFlags::Grid );
 
+                ScTabViewShell* pViewShell = GetViewData().GetViewShell();
+
                 // jump to next cell if we replaced everything in the cell
                 // where the cursor was positioned (but avoid switching tabs)
-                if ( nCol == nOldCol && nRow == nOldRow && nTab == nOldTab )
+                if ( nCol == nOldCol && nRow == nOldRow && nTab == nOldTab && pViewShell )
                 {
-                    SvxSearchItem aSearchItem = ScGlobal::GetSearchItem();
+                    SvxSearchItem aSearchItem = pViewShell->GetSearchItem();
                     aSearchItem.SetCommand(SvxSearchCmd::FIND);
                     aSearchItem.SetWhich(SID_SEARCH_ITEM);
 

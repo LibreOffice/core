@@ -466,7 +466,6 @@ struct ScImportParam
 };
 
 class ScDocShell;
-class SvxSearchItem;
 class ScAutoFormat;
 class LegacyFuncCollection;
 class ScUnoAddInCollection;
@@ -501,7 +500,6 @@ namespace utl {
 
 class ScGlobal
 {
-    static SvxSearchItem*   pSearchItem;
     static ScAutoFormat*    pAutoFormat;
     static std::atomic<LegacyFuncCollection*> pLegacyFuncCollection;
     static std::atomic<ScUnoAddInCollection*> pAddInCollection;
@@ -555,8 +553,6 @@ public:
 
     static const OUString&      GetClipDocName();
     static void                 SetClipDocName( const OUString& rNew );
-    SC_DLLPUBLIC static const SvxSearchItem&    GetSearchItem();
-    SC_DLLPUBLIC static void                    SetSearchItem( const SvxSearchItem& rNew );
     SC_DLLPUBLIC static ScAutoFormat*       GetAutoFormat();
     SC_DLLPUBLIC static ScAutoFormat*       GetOrCreateAutoFormat();
     static void                 ClearAutoFormat(); //BugId 54209

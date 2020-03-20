@@ -1645,7 +1645,8 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     bInPrepareClose(false),
     bInDispose(false),
     nCurRefDlgId(0),
-    mbInSwitch(false)
+    mbInSwitch(false),
+    pSearchItem(nullptr)
 {
     const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
 
@@ -1787,6 +1788,8 @@ ScTabViewShell::~ScTabViewShell()
 
     pFormShell.reset();
     pAccessibilityBroadcaster.reset();
+
+    DELETEZ(pSearchItem);
 }
 
 void ScTabViewShell::SetDialogDPObject( std::unique_ptr<ScDPObject> pObj )

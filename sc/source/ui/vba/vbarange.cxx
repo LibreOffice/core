@@ -3037,7 +3037,11 @@ ScVbaRange::Replace( const OUString& What, const OUString& Replacement, const un
     OUString sWhat = VBAToRegexp( What);
     // #TODO #FIXME SearchFormat & ReplacesFormat are not processed
     // What do we do about MatchByte.. we don't seem to support that
-    const SvxSearchItem& globalSearchOptions = ScGlobal::GetSearchItem();
+    ScTabViewShell* pViewShell = static_cast<ScTabViewShell*>(SfxViewShell::Current());
+    if (!pViewShell)
+        return true;
+
+    const SvxSearchItem& globalSearchOptions = pViewShell->GetSearchItem();
     SvxSearchItem newOptions( globalSearchOptions );
 
     uno::Reference< util::XReplaceable > xReplace( mxRange, uno::UNO_QUERY );
@@ -3089,7 +3093,7 @@ ScVbaRange::Replace( const OUString& What, const OUString& Replacement, const un
             xDescriptor->setPropertyValue( SC_UNO_SRCHCASE, uno::makeAny( bMatchCase ) );
         }
 
-        ScGlobal::SetSearchItem( newOptions );
+        pViewShell->SetSearchItem( newOptions );
         // ignore MatchByte for the moment, it's not supported in
         // OOo.org afaik
 
@@ -3144,7 +3148,10 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
 
     OUString sSearch = VBAToRegexp( sWhat );
 
-    const SvxSearchItem& globalSearchOptions = ScGlobal::GetSearchItem();
+    ScTabViewShell* pViewShell = static_cast<ScTabViewShell*>(SfxViewShell::Current());
+    if (!pViewShell)
+        return uno::Reference< excel::XRange >();
+    const SvxSearchItem& globalSearchOptions = pViewShell->GetSearchItem();
     SvxSearchItem newOptions( globalSearchOptions );
 
     uno::Reference< util::XSearchable > xSearch( mxRange, uno::UNO_QUERY );
@@ -3254,7 +3261,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
         // SearchFormat
         // ignore
 
-        ScGlobal::SetSearchItem( newOptions );
+        pViewShell->SetSearchItem( newOptions );
 
         uno::Reference< uno::XInterface > xInterface = xStartCell.is() ? xSearch->findNext( xStartCell, xDescriptor) : xSearch->findFirst( xDescriptor );
         uno::Reference< table::XCellRange > xCellRange( xInterface, uno::UNO_QUERY );
