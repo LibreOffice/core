@@ -20,6 +20,7 @@
 #ifndef INCLUDED_XMLOFF_XMLSHAPESTYLECONTEXT_HXX
 #define INCLUDED_XMLOFF_XMLSHAPESTYLECONTEXT_HXX
 
+#include <config_options.h>
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <xmloff/prstylei.hxx>
@@ -29,7 +30,7 @@ class SvXMLImport;
 
 // style:style context
 
-class XMLOFF_DLLPUBLIC XMLShapeStyleContext: public XMLPropStyleContext
+class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLShapeStyleContext: public XMLPropStyleContext
 {
     OUString     m_sControlDataStyleName;
     bool         m_bIsNumRuleAlreadyConverted;

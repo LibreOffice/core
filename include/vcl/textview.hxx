@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_TEXTVIEW_HXX
 #define INCLUDED_VCL_TEXTVIEW_HXX
 
+#include <config_options.h>
 #include <tools/gen.hxx>
 #include <tools/lineend.hxx>
 #include <tools/stream.hxx>
@@ -48,7 +49,7 @@ namespace i18nutil {
 struct ImpTextView;
 class ExtTextEngine;
 
-class VCL_DLLPUBLIC TETextDataObject final : public css::datatransfer::XTransferable,
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) TETextDataObject final : public css::datatransfer::XTransferable,
                         public ::cppu::OWeakObject
 
 {

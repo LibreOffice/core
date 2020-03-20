@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_TABBAR_HXX
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_TABBAR_HXX
 
+#include <config_options.h>
 #include <sfx2//dllapi.h>
 #include <sfx2/sidebar/ResourceManager.hxx>
 
@@ -41,7 +42,7 @@ class SidebarController;
 
 /** The tab bar is the container for the individual tabs.
 */
-class SFX2_DLLPUBLIC TabBar final
+class UNLESS_MERGELIBS(SFX2_DLLPUBLIC) TabBar final
     : public vcl::Window
 {
 public:

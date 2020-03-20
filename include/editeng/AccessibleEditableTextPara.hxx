@@ -20,6 +20,7 @@
 #ifndef INCLUDED_EDITENG_ACCESSIBLEEDITABLETEXTPARA_HXX
 #define INCLUDED_EDITENG_ACCESSIBLEEDITABLETEXTPARA_HXX
 
+#include <config_options.h>
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include <cppuhelper/compbase.hxx>
@@ -61,7 +62,7 @@ namespace accessibility
 
     /** This class implements the actual text paragraphs for the EditEngine/Outliner UAA
      */
-    class EDITENG_DLLPUBLIC AccessibleEditableTextPara final : public ::cppu::BaseMutex, public AccessibleTextParaInterfaceBase, private ::comphelper::OCommonAccessibleText
+    class UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) AccessibleEditableTextPara final : public ::cppu::BaseMutex, public AccessibleTextParaInterfaceBase, private ::comphelper::OCommonAccessibleText
     {
 
         // override OCommonAccessibleText methods

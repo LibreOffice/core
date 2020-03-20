@@ -10,6 +10,7 @@
 #ifndef INCLUDED_BASEGFX_SYSTEMDEPENDENTDATA_HXX
 #define INCLUDED_BASEGFX_SYSTEMDEPENDENTDATA_HXX
 
+#include <config_options.h>
 #include <sal/types.h>
 #include <basegfx/basegfxdllapi.h>
 #include <memory>
@@ -25,7 +26,7 @@ namespace basegfx
 
 namespace basegfx
 {
-    class BASEGFX_DLLPUBLIC SystemDependentDataManager
+    class UNLESS_MERGELIBS(BASEGFX_DLLPUBLIC) SystemDependentDataManager
     {
     private:
         // noncopyable
@@ -49,7 +50,7 @@ namespace basegfx
 
 namespace basegfx
 {
-    class BASEGFX_DLLPUBLIC MinimalSystemDependentDataManager final : public SystemDependentDataManager
+    class UNLESS_MERGELIBS(BASEGFX_DLLPUBLIC) MinimalSystemDependentDataManager final : public SystemDependentDataManager
     {
     private:
         // example of a minimal SystemDependentDataManager. It *needs to hold*
@@ -125,7 +126,7 @@ namespace basegfx
 
 namespace basegfx
 {
-    class BASEGFX_DLLPUBLIC SystemDependentDataHolder
+    class UNLESS_MERGELIBS(BASEGFX_DLLPUBLIC) SystemDependentDataHolder
     {
     private:
         // Possibility to hold System-Dependent B2DPolygon-Representations

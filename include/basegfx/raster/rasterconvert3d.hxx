@@ -20,6 +20,7 @@
 #ifndef INCLUDED_BASEGFX_RASTER_RASTERCONVERT3D_HXX
 #define INCLUDED_BASEGFX_RASTER_RASTERCONVERT3D_HXX
 
+#include <config_options.h>
 #include <sal/types.h>
 #include <vector>
 
@@ -408,7 +409,7 @@ namespace basegfx
 
 namespace basegfx
 {
-    class BASEGFX_DLLPUBLIC RasterConverter3D : public InterpolatorProvider3D
+    class UNLESS_MERGELIBS(BASEGFX_DLLPUBLIC) RasterConverter3D : public InterpolatorProvider3D
     {
     private:
         // the line entries for an area conversion run

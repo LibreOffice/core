@@ -10,6 +10,7 @@
 #ifndef INCLUDED_SVTOOLS_PLACEEDITDIALOG_HXX
 #define INCLUDED_SVTOOLS_PLACEEDITDIALOG_HXX
 
+#include <config_options.h>
 #include <svtools/svtdllapi.h>
 #include <vcl/weld.hxx>
 
@@ -19,7 +20,7 @@
 class Place;
 class DetailsContainer;
 
-class SVT_DLLPUBLIC PlaceEditDialog final : public weld::GenericDialogController
+class UNLESS_MERGELIBS(SVT_DLLPUBLIC) PlaceEditDialog final : public weld::GenericDialogController
 {
 private:
     std::shared_ptr< DetailsContainer > m_xCurrentDetails;

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_CTRLTOOL_HXX
 #define INCLUDED_SVTOOLS_CTRLTOOL_HXX
 
+#include <config_options.h>
 #include <svtools/svtdllapi.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -194,7 +195,7 @@ private:
     FontList&               operator =( const FontList& ) = delete;
 };
 
-class SVT_DLLPUBLIC FontSizeNames
+class UNLESS_MERGELIBS(SVT_DLLPUBLIC) FontSizeNames
 {
 private:
     const struct ImplFSNameItem*    mpArray;

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_ENHANCEDCUSTOMSHAPEFUNCTIONPARSER_HXX
 #define INCLUDED_SVX_ENHANCEDCUSTOMSHAPEFUNCTIONPARSER_HXX
 
+#include <config_options.h>
 #include <sal/config.h>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameter.hpp>
 #include <memory>
@@ -232,7 +233,7 @@ public:
         @return the generated function object.
        */
 
-    SVXCORE_DLLPUBLIC static std::shared_ptr<ExpressionNode> const & parseFunction( const OUString& rFunction, const EnhancedCustomShape2d& rCustoShape );
+    UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) static std::shared_ptr<ExpressionNode> const & parseFunction( const OUString& rFunction, const EnhancedCustomShape2d& rCustoShape );
 
     // this is a singleton
     FunctionParser() = delete;

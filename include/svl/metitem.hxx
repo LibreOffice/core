@@ -19,10 +19,11 @@
 #ifndef INCLUDED_SVL_METITEM_HXX
 #define INCLUDED_SVL_METITEM_HXX
 
+#include <config_options.h>
 #include <svl/svldllapi.h>
 #include <svl/intitem.hxx>
 
-class SVL_DLLPUBLIC SfxMetricItem: public SfxInt32Item
+class UNLESS_MERGELIBS(SVL_DLLPUBLIC) SfxMetricItem: public SfxInt32Item
 {
 public:
     explicit                 SfxMetricItem( sal_uInt16 nWhich, sal_uInt32 nValue );

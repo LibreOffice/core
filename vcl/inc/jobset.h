@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_INC_JOBSET_H
 #define INCLUDED_VCL_INC_JOBSET_H
 
+#include <config_options.h>
 #include <rtl/ustring.hxx>
 #include <i18nutil/paper.hxx>
 #include <vcl/dllapi.h>
@@ -31,7 +32,7 @@
 #define JOBSETUP_SYSTEM_UNIX        3
 #define JOBSETUP_SYSTEM_MAC         4
 
-class VCL_DLLPUBLIC ImplJobSetup
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) ImplJobSetup
 {
 private:
     sal_uInt16      mnSystem;           //< System - JOBSETUP_SYSTEM_xxxx

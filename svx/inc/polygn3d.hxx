@@ -19,10 +19,11 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <svx/obj3d.hxx>
 #include <svx/svxdllapi.h>
 
-class SVXCORE_DLLPUBLIC E3dPolygonObj final : public E3dCompoundObject
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) E3dPolygonObj final : public E3dCompoundObject
 {
     // parameters
     basegfx::B3DPolyPolygon aPolyPoly3D;

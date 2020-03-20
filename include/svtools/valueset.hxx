@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_VALUESET_HXX
 #define INCLUDED_SVTOOLS_VALUESET_HXX
 
+#include <config_options.h>
 #include <svtools/svtdllapi.h>
 
 #include <vcl/ctrl.hxx>
@@ -192,7 +193,7 @@ typedef std::vector<std::unique_ptr<SvtValueSetItem>> SvtValueItemList;
 #define VALUESET_ITEM_NOTFOUND  (size_t(-1))
 
 
-class SVT_DLLPUBLIC ValueSet : public Control
+class UNLESS_MERGELIBS(SVT_DLLPUBLIC) ValueSet : public Control
 {
 private:
     ValueItemList   mItemList;

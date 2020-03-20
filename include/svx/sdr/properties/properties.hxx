@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_SDR_PROPERTIES_PROPERTIES_HXX
 #define INCLUDED_SVX_SDR_PROPERTIES_PROPERTIES_HXX
 
+#include <config_options.h>
 #include <sal/config.h>
 
 #include <memory>
@@ -76,7 +77,7 @@ namespace sdr
 {
     namespace properties
     {
-        class SVXCORE_DLLPUBLIC BaseProperties
+        class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) BaseProperties
         {
         private:
             // the owner of this Properties. Set from constructor and not

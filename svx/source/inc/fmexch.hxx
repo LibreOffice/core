@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_FMEXCH_HXX
 #define INCLUDED_SVX_SOURCE_INC_FMEXCH_HXX
 
+#include <config_options.h>
 #include <sal/config.h>
 
 #include <set>
@@ -44,7 +45,7 @@ namespace svxform
 
     //= OLocalExchange
 
-    class SVXCORE_DLLPUBLIC OLocalExchange : public TransferableHelper
+    class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) OLocalExchange : public TransferableHelper
     {
     private:
         Link<OLocalExchange&,void>  m_aClipboardListener;
@@ -89,7 +90,7 @@ namespace svxform
     //= OLocalExchangeHelper
 
     /// a helper for navigator windows (SvTreeListBox'es) which allow DnD within themself
-    class SVXCORE_DLLPUBLIC OLocalExchangeHelper
+    class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) OLocalExchangeHelper
     {
     protected:
         VclPtr<vcl::Window>            m_pDragSource;

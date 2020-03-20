@@ -20,6 +20,7 @@
 #ifndef INCLUDED_UNOTOOLS_OPTIONS_HXX
 #define INCLUDED_UNOTOOLS_OPTIONS_HXX
 
+#include <config_options.h>
 #include <sal/config.h>
 #include <unotools/unotoolsdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
@@ -91,7 +92,7 @@ namespace detail {
 // shared between unotools, svl and svt)
 // It also provides an implementation for a Configuration Listener and inherits a broadcaster implementation
 
-class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC Options
+class SAL_WARN_UNUSED UNLESS_MERGELIBS(UNOTOOLS_DLLPUBLIC) Options
     : public utl::ConfigurationBroadcaster, public utl::ConfigurationListener
 {
 public:

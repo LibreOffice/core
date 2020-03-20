@@ -20,6 +20,7 @@
 #ifndef INCLUDED_XMLOFF_GRADIENTSTYLE_HXX
 #define INCLUDED_XMLOFF_GRADIENTSTYLE_HXX
 
+#include <config_options.h>
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <rtl/ustring.hxx>
@@ -33,7 +34,7 @@ namespace com { namespace sun { namespace star {
 } } }
 
 
-class XMLOFF_DLLPUBLIC XMLGradientStyleImport
+class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLGradientStyleImport
 {
     SvXMLImport& rImport;
 
@@ -48,7 +49,7 @@ public:
 };
 
 
-class XMLOFF_DLLPUBLIC XMLGradientStyleExport
+class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLGradientStyleExport
 {
     SvXMLExport& rExport;
 

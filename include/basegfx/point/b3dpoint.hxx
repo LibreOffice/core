@@ -20,6 +20,7 @@
 #ifndef INCLUDED_BASEGFX_POINT_B3DPOINT_HXX
 #define INCLUDED_BASEGFX_POINT_B3DPOINT_HXX
 
+#include <config_options.h>
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <basegfx/basegfxdllapi.h>
 
@@ -35,7 +36,7 @@ namespace basegfx
 
         @see B3DTuple
     */
-    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC B3DPoint : public ::basegfx::B3DTuple
+    class SAL_WARN_UNUSED UNLESS_MERGELIBS(BASEGFX_DLLPUBLIC) B3DPoint : public ::basegfx::B3DTuple
     {
     public:
         /** Create a 3D Point

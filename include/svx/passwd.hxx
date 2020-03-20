@@ -19,10 +19,11 @@
 #ifndef INCLUDED_SVX_PASSWD_HXX
 #define INCLUDED_SVX_PASSWD_HXX
 
+#include <config_options.h>
 #include <sfx2/basedlgs.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC SvxPasswordDialog final : public SfxDialogController
+class UNLESS_MERGELIBS(SVX_DLLPUBLIC) SvxPasswordDialog final : public SfxDialogController
 {
 private:
     OUString m_aOldPasswdErrStr;

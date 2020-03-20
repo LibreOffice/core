@@ -20,6 +20,7 @@
 #ifndef INCLUDED_BASIC_SBMOD_HXX
 #define INCLUDED_BASIC_SBMOD_HXX
 
+#include <config_options.h>
 #include <basic/sbdef.hxx>
 #include <basic/sbxobj.hxx>
 #include <basic/sbxdef.hxx>
@@ -138,7 +139,7 @@ typedef tools::SvRef<SbModule> SbModuleRef;
 typedef std::vector<SbModuleRef> SbModules;
 
 // Object class for instances of class modules
-class BASIC_DLLPUBLIC SbClassModuleObject : public SbModule
+class UNLESS_MERGELIBS(BASIC_DLLPUBLIC) SbClassModuleObject : public SbModule
 {
     SbModule*   mpClassModule;
     bool        mbInitializeEventDone;

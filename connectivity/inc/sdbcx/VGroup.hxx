@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <com/sun/star/sdbcx/XUsersSupplier.hpp>
 #include <com/sun/star/sdbcx/XAuthorizable.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -42,7 +43,7 @@ namespace connectivity
                                                    css::container::XNamed,
                                                    css::lang::XServiceInfo> OGroup_BASE;
 
-        class OOO_DLLPUBLIC_DBTOOLS OGroup :
+        class UNLESS_MERGELIBS(OOO_DLLPUBLIC_DBTOOLS) OGroup :
                         public cppu::BaseMutex,
                         public OGroup_BASE,
                         public IRefreshableUsers,

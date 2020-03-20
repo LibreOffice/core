@@ -10,6 +10,7 @@
 #ifndef INCLUDED_SVTOOLS_FILECHANGEDCHECKER_HXX
 #define INCLUDED_SVTOOLS_FILECHANGEDCHECKER_HXX
 
+#include <config_options.h>
 #include <svtools/svtdllapi.h>
 
 #include <osl/time.h>
@@ -25,7 +26,7 @@ class Timer;
     Instances of this class setup a vcl timer to occasionally wake up
     check whether file modification time has changed.
  */
-class SVT_DLLPUBLIC FileChangedChecker
+class UNLESS_MERGELIBS(SVT_DLLPUBLIC) FileChangedChecker
 {
 private:
     Idle                    mIdle;

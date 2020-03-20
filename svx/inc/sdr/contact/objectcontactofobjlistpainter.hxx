@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/svdpage.hxx>
@@ -29,7 +30,7 @@ class SdrObject;
 
 namespace sdr { namespace contact {
 
-class SVXCORE_DLLPUBLIC ObjectContactPainter : public ObjectContact
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) ObjectContactPainter : public ObjectContact
 {
 protected:
     // Hierarchy access methods

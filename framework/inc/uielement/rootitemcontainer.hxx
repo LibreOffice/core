@@ -20,6 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_ROOTITEMCONTAINER_HXX
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_ROOTITEMCONTAINER_HXX
 
+#include <config_options.h>
 #include <helper/shareablemutex.hxx>
 
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -45,7 +46,7 @@ typedef ::cppu::WeakImplHelper<
             css::lang::XSingleComponentFactory,
             css::lang::XUnoTunnel > RootItemContainer_BASE;
 
-class RootItemContainer final : private cppu::BaseMutex,
+class UNLESS_MERGELIBS(FWI_DLLPUBLIC) RootItemContainer final : private cppu::BaseMutex,
                             public ::cppu::OBroadcastHelper                         ,
                             public ::cppu::OPropertySetHelper                       ,
                             public RootItemContainer_BASE
@@ -53,9 +54,9 @@ class RootItemContainer final : private cppu::BaseMutex,
     friend class ConstItemContainer;
 
     public:
-        FWI_DLLPUBLIC RootItemContainer();
-        FWI_DLLPUBLIC RootItemContainer( const css::uno::Reference< css::container::XIndexAccess >& rItemAccessContainer );
-        virtual FWI_DLLPUBLIC ~RootItemContainer() override;
+        RootItemContainer();
+        RootItemContainer( const css::uno::Reference< css::container::XIndexAccess >& rItemAccessContainer );
+        virtual ~RootItemContainer() override;
 
         // XInterface
         virtual void SAL_CALL acquire() throw () override
@@ -68,7 +69,7 @@ class RootItemContainer final : private cppu::BaseMutex,
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
         // XUnoTunnel
-        static FWI_DLLPUBLIC const css::uno::Sequence< sal_Int8 >&   getUnoTunnelId() throw();
+        static const css::uno::Sequence< sal_Int8 >&   getUnoTunnelId() throw();
         sal_Int64                                                   SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier ) override;
 
         // XIndexContainer

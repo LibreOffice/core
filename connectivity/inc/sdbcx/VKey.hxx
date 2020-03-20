@@ -19,7 +19,7 @@
 
 #pragma once
 
-
+#include <config_options.h>
 #include <comphelper/IdPropArrayHelper.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <sdbcx/VTypeDef.hxx>
@@ -57,7 +57,7 @@ namespace connectivity
         typedef ::cppu::ImplHelper1< css::sdbcx::XDataDescriptorFactory > OKey_BASE;
         class OCollection;
 
-        class OOO_DLLPUBLIC_DBTOOLS OKey :
+        class UNLESS_MERGELIBS(OOO_DLLPUBLIC_DBTOOLS) OKey :
                                 public cppu::BaseMutex,
                                 public ODescriptor_BASE,
                                 public IRefreshableColumns,

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVL_STYLE_HXX
 #define INCLUDED_SVL_STYLE_HXX
 
+#include <config_options.h>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
@@ -340,7 +341,7 @@ public:
                         { return pStyleSh; }
 };
 
-class SVL_DLLPUBLIC SfxStyleSheetModifiedHint final : public SfxStyleSheetHint
+class UNLESS_MERGELIBS(SVL_DLLPUBLIC) SfxStyleSheetModifiedHint final : public SfxStyleSheetHint
 {
     OUString            aName;
 

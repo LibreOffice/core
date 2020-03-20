@@ -20,6 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_CONTAINER_HXX
 #define INCLUDED_COMPHELPER_CONTAINER_HXX
 
+#include <config_options.h>
 #include <vector>
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/comphelperdllapi.h>
@@ -33,7 +34,7 @@ namespace comphelper
 
 /** an iterator that iterates through all elements, starting from an XIndexAccess (pre-order)
 */
-class COMPHELPER_DLLPUBLIC IndexAccessIterator
+class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) IndexAccessIterator
 {
 protected:
     css::uno::Reference< css::uno::XInterface>    m_xStartingPoint;

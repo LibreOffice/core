@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_CALENDAR_HXX
 #define INCLUDED_SVTOOLS_CALENDAR_HXX
 
+#include <config_options.h>
 #include <svtools/svtdllapi.h>
 
 #include <vcl/calendar.hxx>
@@ -71,7 +72,7 @@ method in CalendarField and create an own calendar there ourselves.
 *************************************************************************/
 
 
-class SVT_DLLPUBLIC CalendarField final : public DateField
+class UNLESS_MERGELIBS(SVT_DLLPUBLIC) CalendarField final : public DateField
 {
 private:
     VclPtr<ImplCFieldFloatWin> mpFloatWin;

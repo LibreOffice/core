@@ -19,6 +19,7 @@
 #ifndef INCLUDED_UNOTOOLS_FONTCFG_HXX
 #define INCLUDED_UNOTOOLS_FONTCFG_HXX
 
+#include <config_options.h>
 #include <unotools/unotoolsdllapi.h>
 #include <tools/solar.h>
 #include <tools/fontenum.hxx>
@@ -94,7 +95,7 @@ namespace o3tl
 namespace utl
 {
 
-class UNOTOOLS_DLLPUBLIC DefaultFontConfiguration
+class UNLESS_MERGELIBS(UNOTOOLS_DLLPUBLIC) DefaultFontConfiguration
 {
     css::uno::Reference< css::lang::XMultiServiceFactory >
             m_xConfigProvider;
@@ -134,7 +135,7 @@ struct UNOTOOLS_DLLPUBLIC FontNameAttr
     ImplFontAttrs                       Type;
 };
 
-class UNOTOOLS_DLLPUBLIC FontSubstConfiguration
+class UNLESS_MERGELIBS(UNOTOOLS_DLLPUBLIC) FontSubstConfiguration
 {
 private:
     css::uno::Reference< css::lang::XMultiServiceFactory >

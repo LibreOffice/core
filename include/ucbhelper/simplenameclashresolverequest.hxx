@@ -20,6 +20,7 @@
 #ifndef INCLUDED_UCBHELPER_SIMPLENAMECLASHRESOLVEREQUEST_HXX
 #define INCLUDED_UCBHELPER_SIMPLENAMECLASHRESOLVEREQUEST_HXX
 
+#include <config_options.h>
 #include <rtl/ref.hxx>
 #include <ucbhelper/interactionrequest.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
@@ -39,7 +40,7 @@ class InteractionSupplyName;
   * @see InteractionAbort
   * @see InteractioneplaceExistingData
   */
-class UCBHELPER_DLLPUBLIC SimpleNameClashResolveRequest final : public ucbhelper::InteractionRequest
+class UNLESS_MERGELIBS(UCBHELPER_DLLPUBLIC) SimpleNameClashResolveRequest final : public ucbhelper::InteractionRequest
 {
     rtl::Reference< InteractionSupplyName > m_xNameSupplier;
 
