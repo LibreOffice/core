@@ -48,7 +48,6 @@ struct SwXTextField final : public test::BootstrapFixture,
     CPPUNIT_TEST_SUITE(SwXTextField);
     CPPUNIT_TEST(testAddEventListener);
     CPPUNIT_TEST(testRemoveEventListener);
-    //CPPUNIT_TEST(testDisposedByDesktopTerminate);
     CPPUNIT_TEST_SUITE_END();
 
 private:
