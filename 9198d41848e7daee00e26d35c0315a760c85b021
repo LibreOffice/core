@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "81254b64_c57b6749",
+        "filename": "xmloff/source/chart/SchXMLExport.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2324,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-03-20T10:07:18Z",
+      "side": 1,
+      "message": "Please, write a LO-ext attribute only, if it\u0027s really necessary to avoid of possible compatibility issues. So check also the value of ShiftedCategoryPosition, and write only when the chart uses the new setting.",
+      "range": {
+        "startLine": 2320,
+        "startChar": 0,
+        "endLine": 2324,
+        "endChar": 9
+      },
+      "revId": "9198d41848e7daee00e26d35c0315a760c85b021",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
