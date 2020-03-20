@@ -73,6 +73,7 @@
 #include <svx/svxdlg.hxx>
 #include <vcl/toolbox.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <comphelper/lok.hxx>
 
 #include <cstdlib>
 #include <memory>
@@ -150,8 +151,11 @@ struct SearchDlg_Impl
 
 static void ListToStrArr_Impl( sal_uInt16 nId, std::vector<OUString>& rStrLst, weld::ComboBox& rCBox )
 {
+    SfxShell* pShell = comphelper::LibreOfficeKit::isActive()
+                                ? static_cast<SfxShell*>(SfxViewShell::Current())
+                                : static_cast<SfxShell*>(SfxGetpApp());
     const SfxStringListItem* pSrchItem =
-        static_cast<const SfxStringListItem*>(SfxGetpApp()->GetItem( nId ));
+        static_cast<const SfxStringListItem*>(pShell->GetItem( nId ));
 
     if (pSrchItem)
     {
@@ -168,7 +172,10 @@ static void ListToStrArr_Impl( sal_uInt16 nId, std::vector<OUString>& rStrLst, w
 static void StrArrToList_Impl( sal_uInt16 nId, const std::vector<OUString>& rStrLst )
 {
     DBG_ASSERT( !rStrLst.empty(), "check in advance");
-    SfxGetpApp()->PutItem( SfxStringListItem( nId, &rStrLst ) );
+    SfxShell* pShell = comphelper::LibreOfficeKit::isActive()
+                                ? static_cast<SfxShell*>(SfxViewShell::Current())
+                                : static_cast<SfxShell*>(SfxGetpApp());
+    pShell->PutItem( SfxStringListItem( nId, &rStrLst ) );
 }
 
 SearchAttrItemList::SearchAttrItemList( const SearchAttrItemList& rList ) :

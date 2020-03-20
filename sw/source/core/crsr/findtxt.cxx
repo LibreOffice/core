@@ -532,7 +532,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
             if (comphelper::LibreOfficeKit::isActive())
             {
                 // Writer and editeng selections are not supported in parallel.
-                SvxSearchItem* pSearchItem = SwView::GetSearchItem();
+                SvxSearchItem* pSearchItem = pDocShell->GetView()->GetSearchItem();
                 // If we just finished search in shape text, don't attempt to do that again.
                 if (!bEndedTextEdit && !(pSearchItem && pSearchItem->GetCommand() == SvxSearchCmd::FIND_ALL))
                 {

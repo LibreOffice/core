@@ -125,18 +125,7 @@ using namespace ::com::sun::star::scanner;
 
 #define SWVIEWFLAGS SfxViewShellFlags::HAS_PRINTOPTIONS
 
-// Statics. OMG.
-
 bool bDocSzUpdated = true;
-
-SvxSearchItem*  SwView::m_pSrchItem   = nullptr;
-
-bool            SwView::m_bExtra      = false;
-bool            SwView::m_bFound      = false;
-bool            SwView::m_bJustOpened = false;
-
-SearchAttrItemList*     SwView::m_pSrchList   = nullptr;
-SearchAttrItemList*     SwView::m_pReplList   = nullptr;
 
 SfxDispatcher &SwView::GetDispatcher()
 {
@@ -715,6 +704,12 @@ void SwView::CheckReadonlySelection()
 
 SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     : SfxViewShell( _pFrame, SWVIEWFLAGS ),
+    m_pSrchItem(nullptr),
+    m_bExtra(false),
+    m_bFound(false),
+    m_bJustOpened(false),
+    m_pSrchList(nullptr),
+    m_pReplList(nullptr),
     m_nNewPage(USHRT_MAX),
     m_nOldPageNum(0),
     m_pNumRuleNodeFromDoc(nullptr),

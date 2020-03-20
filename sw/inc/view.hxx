@@ -149,17 +149,17 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     friend class SwClipboardChangeListener;
 
     // search & replace
-    static SvxSearchItem           *m_pSrchItem;
+    SvxSearchItem           *m_pSrchItem;
 
     static sal_uInt16       m_nMoveType; // for buttons below the scrollbar (viewmdi)
     static sal_Int32        m_nActMark; // current jump mark for unknown mark
 
-    static bool             m_bExtra;
-    static bool             m_bFound;
-    static bool             m_bJustOpened;
+    bool                    m_bExtra;
+    bool                    m_bFound;
+    bool                    m_bJustOpened;
 
-    static SearchAttrItemList* m_pSrchList;
-    static SearchAttrItemList* m_pReplList;
+    SearchAttrItemList*     m_pSrchList;
+    SearchAttrItemList*     m_pReplList;
 
     Timer               m_aTimer;         // for delayed ChgLnks during an action
     OUString            m_sSwViewData,
@@ -629,7 +629,7 @@ public:
     SAL_DLLPRIVATE virtual bool  HasPrintOptionsPage() const override;
     SAL_DLLPRIVATE virtual VclPtr<SfxTabPage> CreatePrintOptionsPage(TabPageParent pParent,
                                                     const SfxItemSet& rSet) override;
-    static SvxSearchItem* GetSearchItem() { return m_pSrchItem; }
+    SvxSearchItem* GetSearchItem() { return m_pSrchItem; }
     /// See SfxViewShell::getPart().
     int getPart() const override;
     /// See SfxViewShell::dumpAsXml().
