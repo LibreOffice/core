@@ -4519,9 +4519,7 @@ public:
 
     virtual void vadjustment_set_value(int nValue) override
     {
-        ScrollBar* pVertScrollBar = m_xTreeView->GetVScroll();
-        auto nDelta = pVertScrollBar->GetThumbPos() - nValue;
-        m_xTreeView->ScrollOutputArea(nDelta);
+        m_xTreeView->ScrollToAbsPos(nValue);
     }
 
     virtual ~SalInstanceTreeView() override
