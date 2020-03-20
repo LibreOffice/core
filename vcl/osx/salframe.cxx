@@ -83,7 +83,8 @@ AquaSalFrame::AquaSalFrame( SalFrame* pParent, SalFrameStyleFlags salFrameStyle 
     mePointerStyle( PointerStyle::Arrow ),
     mnTrackingRectTag( 0 ),
     mrClippingPath( nullptr ),
-    mnICOptions( InputContextFlags::NONE )
+    mnICOptions( InputContextFlags::NONE ),
+    mnBlinkCursorDelay ( 500 )
 {
     mpParent = dynamic_cast<AquaSalFrame*>(pParent);
 
@@ -91,6 +92,19 @@ AquaSalFrame::AquaSalFrame( SalFrame* pParent, SalFrameStyleFlags salFrameStyle 
 
     SalData* pSalData = GetSalData();
     pSalData->mpInstance->insertFrame( this );
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if (userDefaults != nil)
+    {
+        id setting = [userDefaults objectForKey: @"NSTextInsertionPointBlinkPeriodOn"];
+        if (setting)
+            mnBlinkCursorDelay = [setting intValue];
+        else
+        {
+            setting = [userDefaults objectForKey: @"NSTextInsertionPointBlinkPeriodOff"];
+            if (setting)
+                mnBlinkCursorDelay = [setting intValue];
+        }
+    }
 }
 
 AquaSalFrame::~AquaSalFrame()
@@ -1306,7 +1320,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     aStyleSettings.SetTabTextColor(aControlTextColor);
     aStyleSettings.SetTabHighlightTextColor(aSelectedControlTextColor);
 
-    aStyleSettings.SetCursorBlinkTime( 500 );
+    aStyleSettings.SetCursorBlinkTime( mnBlinkCursorDelay );
 
     // no mnemonics on macOS
     aStyleSettings.SetOptions( aStyleSettings.GetOptions() | StyleSettingsOptions::NoMnemonics );
