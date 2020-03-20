@@ -167,6 +167,24 @@
     },
     {
       "key": {
+        "uuid": "2adad367_0137a469",
+        "filename": "include/comphelper/sequence.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-03-20T09:01:08Z",
+      "side": 1,
+      "message": "TBH, I don\u0027t think the plugin should have flagged this at all, since it is not supposed to be looking for buried increment. Was probably an accident during a transient state of development.",
+      "parentUuid": "afff9701_2738f201",
+      "revId": "1ca633c9888eb2f6d5395491cbe82e4a6b4982ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6afaf274_37d60751",
         "filename": "soltools/cpp/_unix.c",
         "patchSetId": 1
