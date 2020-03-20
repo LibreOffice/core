@@ -202,6 +202,32 @@ void SfxPickListImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
         break;
 
         case SfxEventHintId::OpenDoc:
+        {
+            // run AddDocumentToPickList() in separate thread in order to speed-up opening of the document
+            class Thread : public osl::Thread
+            {
+            public:
+                explicit Thread(SfxPickListImpl* pSfxPickListImpl, SfxObjectShell* pDocSh)
+                    : osl::Thread()
+                    , mpSfxPickListImpl(pSfxPickListImpl)
+                    , mpDocSh(pDocSh)
+                {
+                }
+
+            private:
+                virtual void SAL_CALL run()
+                {
+                    if (mpSfxPickListImpl && mpDocSh)
+                        mpSfxPickListImpl->AddDocumentToPickList(mpDocSh);
+                }
+
+                SfxPickListImpl* mpSfxPickListImpl;
+                SfxObjectShell* mpDocSh;
+            } runMeNow(this, pDocSh);
+            runMeNow.create();
+
+            break;
+        }
         case SfxEventHintId::SaveDocDone:
         case SfxEventHintId::SaveAsDocDone:
         case SfxEventHintId::SaveToDocDone:
