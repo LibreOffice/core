@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "adcd54b2_17bacabf",
+        "filename": "sc/uiconfig/scalc/ui/conditionalentry.ui",
+        "patchSetId": 7
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2020-03-20T08:09:32Z",
+      "side": 1,
+      "message": "“does not contain” instead of “not contains” here as well, no?",
+      "revId": "15599b230c384071262773363b85e73225b37449",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
