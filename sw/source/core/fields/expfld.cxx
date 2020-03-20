@@ -274,7 +274,8 @@ std::unique_ptr<SwFieldType> SwGetExpFieldType::Copy() const
 void SwGetExpFieldType::Modify( const SfxPoolItem*, const SfxPoolItem* pNew )
 {
     if( pNew && RES_DOCPOS_UPDATE == pNew->Which() )
-        NotifyClients( nullptr, pNew );
+        GetNotifier().Broadcast(sw::LegacyModifyHint(nullptr, pNew));
+
     // do not expand anything else
 }
 
@@ -571,7 +572,7 @@ sal_uLong SwSetExpFieldType::GetSeqFormat() const
 
 void SwSetExpFieldType::SetSeqRefNo( SwSetExpField& rField )
 {
-    if( !HasWriterListeners() || !(nsSwGetSetExpType::GSE_SEQ & m_nType) )
+    if(!(nsSwGetSetExpType::GSE_SEQ & m_nType))
         return;
 
     std::vector<sal_uInt16> aArr;
@@ -579,6 +580,8 @@ void SwSetExpFieldType::SetSeqRefNo( SwSetExpField& rField )
     // check if number is already used and if a new one needs to be created
     std::vector<SwFormatField*> vFields;
     GatherFields(vFields);
+    if(vFields.empty())
+        return;
     for(SwFormatField* pF: vFields)
         if(pF->GetField() != &rField)
             InsertSort(aArr, static_cast<SwSetExpField*>(pF->GetField())->GetSeqNumber());

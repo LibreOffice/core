@@ -2013,7 +2013,7 @@ static bool lcl_IsHyperlinked(const SwForm& rForm, sal_uInt16 nTOXLvl)
     return bRes;
 }
 
-void AttributeOutputBase::GenerateBookmarksForSequenceField(const SwTextNode& rNode, SwWW8AttrIter& rAttrIter)
+void AttributeOutputBase::GenerateBookmarksForSequenceField(const SwTextNode& rNode, SwWW8AttrIter& /*rAttrIter*/)
 {
     if(GetExport().GetExportFormat() == MSWordExportBase::ExportFormat::RTF) // Not implemented for RTF
         return;
@@ -2030,149 +2030,149 @@ void AttributeOutputBase::GenerateBookmarksForSequenceField(const SwTextNode& rN
                 // Need to have bookmarks only for sequence fields
                 if (pField && pField->GetTyp()->Which() == SwFieldIds::SetExp && pField->GetSubType() == nsSwGetSetExpType::GSE_SEQ)
                 {
-                    const sal_uInt16 nSeqFieldNumber = static_cast<const SwSetExpField*>(pField)->GetSeqNumber();
-                    const OUString sObjectName = static_cast<const SwSetExpFieldType*>(pField->GetTyp())->GetName();
+                    //const sal_uInt16 nSeqFieldNumber = static_cast<const SwSetExpField*>(pField)->GetSeqNumber();
+                    //const OUString sObjectName = static_cast<const SwSetExpFieldType*>(pField->GetTyp())->GetName();
                     const SwFieldTypes* pFieldTypes = GetExport().m_pDoc->getIDocumentFieldsAccess().GetFieldTypes();
-                    bool bHaveFullBkm = false;
-                    bool bHaveLabelAndNumberBkm = false;
-                    bool bHaveCaptionOnlyBkm = false;
-                    bool bHaveNumberOnlyBkm = false;
-                    bool bRunSplittedAtSep = false;
+                    //bool bHaveFullBkm = false;
+                    //bool bHaveLabelAndNumberBkm = false;
+                    //bool bHaveCaptionOnlyBkm = false;
+                    //bool bHaveNumberOnlyBkm = false;
+                    //bool bRunSplittedAtSep = false;
                     for( auto const & pFieldType : *pFieldTypes )
                     {
                         if( SwFieldIds::GetRef == pFieldType->Which() )
                         {
-                            SwIterator<SwFormatField,SwFieldType> aIter( *pFieldType );
-                            for( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
-                            {
-                                SwGetRefField* pRefField = static_cast<SwGetRefField*>(pFormatField->GetField());
-                                // If we have a reference to the current sequence field
-                                if(pRefField->GetSeqNo() == nSeqFieldNumber && pRefField->GetSetRefName() == sObjectName)
-                                {
-                                    // Need to create a separate run for separator character
-                                    SwWW8AttrIter aLocalAttrIter( GetExport(), rNode ); // We need a local iterator having the right number of runs
-                                    const OUString& aText = rNode.GetText();
-                                    const sal_Int32 nCategoryStart = aText.indexOf(pRefField->GetSetRefName());
-                                    const sal_Int32 nPosBeforeSeparator = std::max(nCategoryStart, pHt->GetStart());
-                                    bool bCategoryFirst = nCategoryStart < pHt->GetStart();
-                                    sal_Int32 nSeparatorPos = 0;
-                                    if (bCategoryFirst)
-                                    {
-                                        nSeparatorPos = aLocalAttrIter.WhereNext();
-                                        while (nSeparatorPos <= nPosBeforeSeparator)
-                                        {
-                                            aLocalAttrIter.NextPos();
-                                            nSeparatorPos = aLocalAttrIter.WhereNext();
-                                        }
-                                    }
-                                    else
-                                    {
-                                        nSeparatorPos = nCategoryStart + pRefField->GetSetRefName().getLength();
-                                    }
-                                    sal_Int32 nRefTextPos = 0;
-                                    if(nSeparatorPos < aText.getLength())
-                                    {
-                                        nRefTextPos = SwGetExpField::GetReferenceTextPos(pHt->GetFormatField(), *GetExport().m_pDoc, nSeparatorPos);
-                                        if(nRefTextPos != nSeparatorPos)
-                                        {
-                                            if(!bRunSplittedAtSep)
-                                            {
-                                                if(!bCategoryFirst)
-                                                    rAttrIter.SplitRun(nSeparatorPos);
-                                                rAttrIter.SplitRun(nRefTextPos);
-                                                bRunSplittedAtSep = true;
-                                            }
-                                            if(!bCategoryFirst)
-                                                aLocalAttrIter.SplitRun(nSeparatorPos);
-                                            aLocalAttrIter.SplitRun(nRefTextPos);
-                                        }
-                                        else if (bCategoryFirst)
-                                        {
-                                            if(!bRunSplittedAtSep)
-                                            {
-                                                rAttrIter.SplitRun(nSeparatorPos);
-                                                bRunSplittedAtSep = true;
-                                            }
-                                            aLocalAttrIter.SplitRun(nSeparatorPos);
-                                        }
-                                    }
-                                    // Generate bookmarks on the right position
-                                    OUString sName("Ref_" + pRefField->GetSetRefName() + OUString::number(pRefField->GetSeqNo()));
-                                    switch (pRefField->GetFormat())
-                                    {
-                                        case REF_PAGE:
-                                        case REF_PAGE_PGDESC:
-                                        case REF_CONTENT:
-                                        case REF_UPDOWN:
-                                            if(!bHaveFullBkm)
-                                            {
-                                                sal_Int32 nLastAttrStart = 0;
-                                                sal_Int32 nActAttr = aLocalAttrIter.WhereNext();
-                                                while (nActAttr < rNode.GetText().getLength())
-                                                {
-                                                    nLastAttrStart = nActAttr;
-                                                    aLocalAttrIter.NextPos();
-                                                    nActAttr = aLocalAttrIter.WhereNext();
-                                                }
-                                                WriteBookmarkInActParagraph( sName + "_full", std::min(nCategoryStart, pHt->GetStart()), nLastAttrStart );
-                                                bHaveFullBkm = true;
-                                            }
-                                            break;
-                                        case REF_ONLYNUMBER:
-                                        {
-                                            if(!bHaveLabelAndNumberBkm)
-                                            {
-                                                sName += "_label_and_number";
-                                                if(bCategoryFirst)
-                                                    WriteBookmarkInActParagraph( sName, std::min(nCategoryStart, pHt->GetStart()), std::max(nCategoryStart, pHt->GetStart()) );
-                                                else
-                                                {
-                                                    // Find the last run which contains category text
-                                                    SwWW8AttrIter aLocalAttrIter2( GetExport(), rNode );
-                                                    sal_Int32 nCatLastRun = 0;
-                                                    sal_Int32 nNextAttr = aLocalAttrIter2.WhereNext();
-                                                    while (nNextAttr < nSeparatorPos)
-                                                    {
-                                                        nCatLastRun = nNextAttr;
-                                                        aLocalAttrIter2.NextPos();
-                                                        nNextAttr = aLocalAttrIter2.WhereNext();
-                                                    }
-                                                    WriteBookmarkInActParagraph( sName, pHt->GetStart(), nCatLastRun );
-                                                }
-                                                bHaveLabelAndNumberBkm = true;
-                                            }
-                                            break;
-                                        }
-                                        case REF_ONLYCAPTION:
-                                        {
-                                            if(!bHaveCaptionOnlyBkm)
-                                            {
-                                                // Find last run
-                                                sal_Int32 nLastAttrStart = 0;
-                                                sal_Int32 nActAttr = aLocalAttrIter.WhereNext();
-                                                while (nActAttr < rNode.GetText().getLength())
-                                                {
-                                                    nLastAttrStart = nActAttr;
-                                                    aLocalAttrIter.NextPos();
-                                                    nActAttr = aLocalAttrIter.WhereNext();
-                                                }
-                                                WriteBookmarkInActParagraph( sName + "_caption_only", nRefTextPos, nLastAttrStart );
-                                                bHaveCaptionOnlyBkm = true;
-                                            }
-                                            break;
-                                        }
-                                        case REF_ONLYSEQNO:
-                                        {
-                                            if(!bHaveNumberOnlyBkm)
-                                            {
-                                                WriteBookmarkInActParagraph( sName + "_number_only", pHt->GetStart(), pHt->GetStart() );
-                                                bHaveNumberOnlyBkm = true;
-                                            }
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
+//                            SwIterator<SwFormatField,SwFieldType> aIter( *pFieldType );
+//                            for( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
+//                            {
+//                                SwGetRefField* pRefField = static_cast<SwGetRefField*>(pFormatField->GetField());
+//                                // If we have a reference to the current sequence field
+//                                if(pRefField->GetSeqNo() == nSeqFieldNumber && pRefField->GetSetRefName() == sObjectName)
+//                                {
+//                                    // Need to create a separate run for separator character
+//                                    SwWW8AttrIter aLocalAttrIter( GetExport(), rNode ); // We need a local iterator having the right number of runs
+//                                    const OUString& aText = rNode.GetText();
+//                                    const sal_Int32 nCategoryStart = aText.indexOf(pRefField->GetSetRefName());
+//                                    const sal_Int32 nPosBeforeSeparator = std::max(nCategoryStart, pHt->GetStart());
+//                                    bool bCategoryFirst = nCategoryStart < pHt->GetStart();
+//                                    sal_Int32 nSeparatorPos = 0;
+//                                    if (bCategoryFirst)
+//                                    {
+//                                        nSeparatorPos = aLocalAttrIter.WhereNext();
+//                                        while (nSeparatorPos <= nPosBeforeSeparator)
+//                                        {
+//                                            aLocalAttrIter.NextPos();
+//                                            nSeparatorPos = aLocalAttrIter.WhereNext();
+//                                        }
+//                                    }
+//                                    else
+//                                    {
+//                                        nSeparatorPos = nCategoryStart + pRefField->GetSetRefName().getLength();
+//                                    }
+//                                    sal_Int32 nRefTextPos = 0;
+//                                    if(nSeparatorPos < aText.getLength())
+//                                    {
+//                                        nRefTextPos = SwGetExpField::GetReferenceTextPos(pHt->GetFormatField(), *GetExport().m_pDoc, nSeparatorPos);
+//                                        if(nRefTextPos != nSeparatorPos)
+//                                        {
+//                                            if(!bRunSplittedAtSep)
+//                                            {
+//                                                if(!bCategoryFirst)
+//                                                    rAttrIter.SplitRun(nSeparatorPos);
+//                                                rAttrIter.SplitRun(nRefTextPos);
+//                                                bRunSplittedAtSep = true;
+//                                            }
+//                                            if(!bCategoryFirst)
+//                                                aLocalAttrIter.SplitRun(nSeparatorPos);
+//                                            aLocalAttrIter.SplitRun(nRefTextPos);
+//                                        }
+//                                        else if (bCategoryFirst)
+//                                        {
+//                                            if(!bRunSplittedAtSep)
+//                                            {
+//                                                rAttrIter.SplitRun(nSeparatorPos);
+//                                                bRunSplittedAtSep = true;
+//                                            }
+//                                            aLocalAttrIter.SplitRun(nSeparatorPos);
+//                                        }
+//                                    }
+//                                    // Generate bookmarks on the right position
+//                                    OUString sName("Ref_" + pRefField->GetSetRefName() + OUString::number(pRefField->GetSeqNo()));
+//                                    switch (pRefField->GetFormat())
+//                                    {
+//                                        case REF_PAGE:
+//                                        case REF_PAGE_PGDESC:
+//                                        case REF_CONTENT:
+//                                        case REF_UPDOWN:
+//                                            if(!bHaveFullBkm)
+//                                            {
+//                                                sal_Int32 nLastAttrStart = 0;
+//                                                sal_Int32 nActAttr = aLocalAttrIter.WhereNext();
+//                                                while (nActAttr < rNode.GetText().getLength())
+//                                                {
+//                                                    nLastAttrStart = nActAttr;
+//                                                    aLocalAttrIter.NextPos();
+//                                                    nActAttr = aLocalAttrIter.WhereNext();
+//                                                }
+//                                                WriteBookmarkInActParagraph( sName + "_full", std::min(nCategoryStart, pHt->GetStart()), nLastAttrStart );
+//                                                bHaveFullBkm = true;
+//                                            }
+//                                            break;
+//                                        case REF_ONLYNUMBER:
+//                                        {
+//                                            if(!bHaveLabelAndNumberBkm)
+//                                            {
+//                                                sName += "_label_and_number";
+//                                                if(bCategoryFirst)
+//                                                    WriteBookmarkInActParagraph( sName, std::min(nCategoryStart, pHt->GetStart()), std::max(nCategoryStart, pHt->GetStart()) );
+//                                                else
+//                                                {
+//                                                    // Find the last run which contains category text
+//                                                    SwWW8AttrIter aLocalAttrIter2( GetExport(), rNode );
+//                                                    sal_Int32 nCatLastRun = 0;
+//                                                    sal_Int32 nNextAttr = aLocalAttrIter2.WhereNext();
+//                                                    while (nNextAttr < nSeparatorPos)
+//                                                    {
+//                                                        nCatLastRun = nNextAttr;
+//                                                        aLocalAttrIter2.NextPos();
+//                                                        nNextAttr = aLocalAttrIter2.WhereNext();
+//                                                    }
+//                                                    WriteBookmarkInActParagraph( sName, pHt->GetStart(), nCatLastRun );
+//                                                }
+//                                                bHaveLabelAndNumberBkm = true;
+//                                            }
+//                                            break;
+//                                        }
+//                                        case REF_ONLYCAPTION:
+//                                        {
+//                                            if(!bHaveCaptionOnlyBkm)
+//                                            {
+//                                                // Find last run
+//                                                sal_Int32 nLastAttrStart = 0;
+//                                                sal_Int32 nActAttr = aLocalAttrIter.WhereNext();
+//                                                while (nActAttr < rNode.GetText().getLength())
+//                                                {
+//                                                    nLastAttrStart = nActAttr;
+//                                                    aLocalAttrIter.NextPos();
+//                                                    nActAttr = aLocalAttrIter.WhereNext();
+//                                                }
+//                                                WriteBookmarkInActParagraph( sName + "_caption_only", nRefTextPos, nLastAttrStart );
+//                                                bHaveCaptionOnlyBkm = true;
+//                                            }
+//                                            break;
+//                                        }
+//                                        case REF_ONLYSEQNO:
+//                                        {
+//                                            if(!bHaveNumberOnlyBkm)
+//                                            {
+//                                                WriteBookmarkInActParagraph( sName + "_number_only", pHt->GetStart(), pHt->GetStart() );
+//                                                bHaveNumberOnlyBkm = true;
+//                                            }
+//                                            break;
+//                                        }
+//                                    }
+//                                }
+//                            }
                         }
                     }
                     return;

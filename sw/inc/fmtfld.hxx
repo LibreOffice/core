@@ -22,6 +22,7 @@
 
 #include <cppuhelper/weakref.hxx>
 #include <svl/poolitem.hxx>
+#include <svl/listener.hxx>
 #include <svl/SfxBroadcaster.hxx>
 
 #include "swdllapi.h"
@@ -78,8 +79,9 @@ namespace sw {
 // ATT_FLD
 class SW_DLLPUBLIC SwFormatField final
     : public SfxPoolItem
-    , public sw::BroadcastingModify
+    , public sw::BroadcasterMixin
     , public SfxBroadcaster
+    , public SvtListener
 {
     friend void InitCore();
     SwFormatField( sal_uInt16 nWhich ); // for default-Attribute
@@ -89,9 +91,11 @@ class SW_DLLPUBLIC SwFormatField final
     std::unique_ptr<SwField> mpField;
     SwTextField* mpTextField; // the TextAttribute
 
-    virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint ) override;
 
 public:
+    virtual void Notify(const SfxHint& rHint) override;
+    virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint );
+    void ForceLayout(const sw::LegacyModifyHint& );
 
     /// Single argument constructors shall be explicit.
     explicit SwFormatField( const SwField &rField );
@@ -104,7 +108,7 @@ public:
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SwFormatField*  Clone( SfxItemPool* pPool = nullptr ) const override;
 
-    virtual bool GetInfo( SfxPoolItem& rInfo ) const override;
+    virtual bool GetInfo( SfxPoolItem& rInfo ) const;
 
     void InvalidateField();
 

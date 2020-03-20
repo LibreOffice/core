@@ -156,43 +156,52 @@ void SwFieldType::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
+void SwFieldType::UpdateFields() const
+{
+    const_cast<SwFieldType*>(this)->GetNotifier().Broadcast(sw::LegacyModifyHint(nullptr, nullptr));
+}
+
 SwFormatField* SwFieldType::FindFormatForField(const SwField* pField) const {
     SwFormatField* pFormat = nullptr;
-    CallSwClientNotify(sw::FindFormatForFieldHint(pField, pFormat));
+    auto aHint = sw::FindFormatForFieldHint(pField, pFormat);
+    const_cast<SwFieldType*>(this)->GetNotifier().Broadcast(aHint);
     return pFormat;
 }
 
 SwFormatField* SwFieldType::FindFormatForPostItId(sal_uInt32 nPostItId) const {
     SwFormatField* pFormat = nullptr;
-    CallSwClientNotify(sw::FindFormatForPostItIdHint(nPostItId, pFormat));
+    auto aHint = sw::FindFormatForPostItIdHint(nPostItId, pFormat);
+    const_cast<SwFieldType*>(this)->GetNotifier().Broadcast(aHint);
     return pFormat;
 }
 
 void SwFieldType::CollectPostIts(std::vector<SwFormatField*>& rvFormatFields, IDocumentRedlineAccess const& rIDRA, const bool bHideRedlines)
 {
-    CallSwClientNotify(sw::CollectPostItsHint(rvFormatFields, rIDRA, bHideRedlines));
+    GetNotifier().Broadcast(sw::CollectPostItsHint(rvFormatFields, rIDRA, bHideRedlines));
 }
 
 bool SwFieldType::HasHiddenInformationNotes()
 {
     bool bHasHiddenInformationNotes = false;
-    CallSwClientNotify(sw::HasHiddenInformationNotesHint(bHasHiddenInformationNotes));
+    auto aHint = sw::HasHiddenInformationNotesHint(bHasHiddenInformationNotes);
+    GetNotifier().Broadcast(aHint);
     return bHasHiddenInformationNotes;
 }
 
 void SwFieldType::GatherNodeIndex(std::vector<sal_uLong>& rvNodeIndex)
 {
-    CallSwClientNotify(sw::GatherNodeIndexHint(rvNodeIndex));
+    GetNotifier().Broadcast(sw::GatherNodeIndexHint(rvNodeIndex));
 }
 
 void SwFieldType::GatherRefFields(std::vector<SwGetRefField*>& rvRFields, const sal_uInt16 nTyp)
 {
-    CallSwClientNotify(sw::GatherRefFieldsHint(rvRFields, nTyp));
+    GetNotifier().Broadcast(sw::GatherRefFieldsHint(rvRFields, nTyp));
 }
 
 void SwFieldType::GatherFields(std::vector<SwFormatField*>& rvFields, bool bCollectOnlyInDocNodes) const
 {
-    CallSwClientNotify(sw::GatherFieldsHint(rvFields, bCollectOnlyInDocNodes));
+    auto aHint = sw::GatherFieldsHint(rvFields, bCollectOnlyInDocNodes);
+    const_cast<SwFieldType*>(this)->GetNotifier().Broadcast(aHint);
 }
 
 void SwFieldTypes::dumpAsXml(xmlTextWriterPtr pWriter) const
@@ -204,6 +213,10 @@ void SwFieldTypes::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
+void SwFieldType::RegisterFormatField(SwFormatField& rField) {
+    rField.StartListening(GetNotifier());
+    m_vpFields.push_back(&rField);
+}
 // Base class for all fields.
 // A field (multiple can exist) references a field type (can exists only once)
 SwField::SwField(

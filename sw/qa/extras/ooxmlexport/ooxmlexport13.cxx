@@ -577,40 +577,28 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTextInput, "textinput.odt")
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
-    CPPUNIT_ASSERT(xFields->hasMoreElements());
-    int nElements = 0;
-
-    do
+    const std::unordered_map<OUString, OUString> vContentByHint{
+        { OUString::fromUtf8("hint content"), OUString::fromUtf8("content with hint") },
+        { OUString::fromUtf8("hint empty"),   OUString::fromUtf8("") },
+        { OUString::fromUtf8(""),             OUString::fromUtf8("content without hint") },
+    };
+    size_t nCount = 0;
+    while(xFields->hasMoreElements())
     {
         uno::Any aField = xFields->nextElement();
+        ++nCount;
         uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
         CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.textfield.Input"));
         uno::Reference<beans::XPropertySet> xPropertySet(aField, uno::UNO_QUERY);
         uno::Reference<text::XTextContent> xText(aField, uno::UNO_QUERY);
-
-        // why is the enumeration not in the same order then the fields in the document?
-        // it seems to be stable and the navigation in the GUI is actually correct.
-        OUString sContent, sHint;
-        switch (nElements)
-        {
-        case 1:
-            sContent = "content with hint";
-            sHint = "hint content";
-            break;
-        case 2:
-            sHint = "hint empty";
-            break;
-        case 3:
-            sContent = "content without hint";
-            break;
-        }
-        CPPUNIT_ASSERT_EQUAL(uno::makeAny(sContent), xPropertySet->getPropertyValue("Content"));
-        CPPUNIT_ASSERT_EQUAL(sContent, xText->getAnchor()->getString());
-        CPPUNIT_ASSERT_EQUAL(uno::makeAny(sHint), xPropertySet->getPropertyValue("Hint"));
-        nElements++;
+        const auto sHint = xPropertySet->getPropertyValue("Hint").get<OUString>();
+        const auto sContent = xPropertySet->getPropertyValue("Content").get<OUString>();
+        if(sHint.isEmpty() && sContent.isEmpty())
+            continue;
+        CPPUNIT_ASSERT(vContentByHint.find(sHint) != vContentByHint.end());
+        CPPUNIT_ASSERT_EQUAL(vContentByHint.at(sHint), sContent);
     }
-    while (xFields->hasMoreElements());
-    CPPUNIT_ASSERT_EQUAL(4, nElements);
+    CPPUNIT_ASSERT_EQUAL(nCount, vContentByHint.size() + 1); // off by one for double-empty special case
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf123460, "tdf123460.docx")

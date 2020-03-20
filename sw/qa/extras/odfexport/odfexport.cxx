@@ -7,7 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <algorithm>
+#include <iterator>
 #include <memory>
+#include <set>
 #include <swmodeltestbase.hxx>
 #include <config_features.h>
 
@@ -495,19 +498,18 @@ DECLARE_ODFEXPORT_TEST(testSenderInitials, "sender-initials.fodt")
     }
 }
 
-#ifndef _WIN32
 DECLARE_ODFEXPORT_TEST(testResolvedComment, "resolved-comment.odt")
 {
-    // TODO find out why does this break testFdo58949 on Windows.
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
     uno::Reference<beans::XPropertySet> xPropertySet(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPropertySet, "Resolved"));
+    const bool bFirstResolved = getProperty<bool>(xPropertySet, "Resolved");
     xPropertySet.set(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xPropertySet, "Resolved"));
+    const bool bSecondResolved = getProperty<bool>(xPropertySet, "Resolved");
+    // exactly one of the two comments should be resolved
+    CPPUNIT_ASSERT(bFirstResolved != bSecondResolved);
 }
-#endif
 
 DECLARE_ODFEXPORT_TEST(testTdf92379, "tdf92379.fodt")
 {
@@ -2103,11 +2105,20 @@ DECLARE_ODFEXPORT_TEST(testReferenceLanguage, "referencelanguage.odt")
 {
     // Test loext:reference-language attribute of reference fields
     // (used from LibreOffice 6.1, and proposed for next ODF)
-    const char* aFieldTexts[] = { "A 2", "Az Isten", "Az 50-esek",
-        "A 2018-asok", "Az egyebek", "A fejezetek",
-        reinterpret_cast<char const *>(u8"Az „Őseinket...”"), "a 2",
-        "Az v", "az 1", "Az e", "az 1",
-        "Az (5)", "az 1", "A 2", "az 1" };
+    // There is no promise on order of fields, so we have to count the anchor texts to meet expectations.
+    auto vTextsToFind = std::unordered_map<OUString, sal_Int32>{
+        {OUString::fromUtf8("A 2"),2},
+        {OUString::fromUtf8("A Isten"), 1},
+        {OUString::fromUtf8("Az 50-esek"), 1},
+        {OUString::fromUtf8("A 2018-asok"), 1},
+        {OUString::fromUtf8("Az egyebek"), 1},
+        {OUString::fromUtf8("A fejezetek"), 1},
+        {OUString::fromUtf8(reinterpret_cast<char const *>(u8"Az „Őseinket...”")), 1},
+        {OUString::fromUtf8("a 2"), 1},
+        {OUString::fromUtf8("Az v"), 1},
+        {OUString::fromUtf8("az 1"), 4},
+        {OUString::fromUtf8("Az e"), 1},
+        {OUString::fromUtf8("Az (5)"), 1}};
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     // update "A (4)" to "Az (5)"
     uno::Reference<util::XRefreshable>(xTextFieldsSupplier->getTextFields(), uno::UNO_QUERY_THROW)->refresh();
@@ -2117,19 +2128,22 @@ DECLARE_ODFEXPORT_TEST(testReferenceLanguage, "referencelanguage.odt")
 
     uno::Any aHu = uno::makeAny(OUString("Hu"));
     uno::Any ahu = uno::makeAny(OUString("hu"));
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aFieldTexts); i++)
+    while(xFields->hasMoreElements())
     {
         uno::Any aField = xFields->nextElement();
         uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
-        if (xServiceInfo->supportsService("com.sun.star.text.textfield.GetReference"))
+        // if this fails somehow, we still count notice the counts to be off:
+        if(xServiceInfo->supportsService("com.sun.star.text.textfield.GetReference"))
         {
             uno::Reference<beans::XPropertySet> xPropertySet(aField, uno::UNO_QUERY);
             uno::Any aLang = xPropertySet->getPropertyValue("ReferenceFieldLanguage");
             CPPUNIT_ASSERT_EQUAL(true, aLang == aHu || aLang == ahu);
             uno::Reference<text::XTextContent> xField(aField, uno::UNO_QUERY);
-            CPPUNIT_ASSERT_EQUAL(OUString::fromUtf8(aFieldTexts[i]), xField->getAnchor()->getString());
+            const auto sAnchorText = xField->getAnchor()->getString();
+            vTextsToFind[sAnchorText]--;
         }
     }
+    CPPUNIT_ASSERT(std::all_of(vTextsToFind.begin(), vTextsToFind.end(), [](auto& pE) { return pE.second == 0; }));
 }
 
 DECLARE_ODFEXPORT_TEST(testRubyPosition, "ruby-position.odt")
@@ -2207,9 +2221,23 @@ DECLARE_ODFEXPORT_TEST(testChapterNumberingNewLine, "chapter-number-new-line.odt
 DECLARE_ODFEXPORT_TEST(testSpellOutNumberingTypes, "spellout-numberingtypes.odt")
 {
     // ordinal indicator, ordinal and cardinal number numbering styles (from LibreOffice 6.1)
-    static const char* const aFieldTexts[] = { "1st", "Erste", "Eins",  "1.", "Premier", "Un", "1ᵉʳ", "First", "One" };
+    std::set<OUString> vFieldTexts{
+        OUString::fromUtf8("1st"),
+        OUString::fromUtf8("Erste"),
+        OUString::fromUtf8("Eins"),
+        OUString::fromUtf8("1."),
+        OUString::fromUtf8("Premier"),
+        OUString::fromUtf8("Un"),
+        OUString::fromUtf8("1ᵉʳ"),
+        OUString::fromUtf8("First"),
+        OUString::fromUtf8("One")
+    };
     // fallback for old platforms without std::codecvt and std::regex supports
-    static const char* const aFieldTextFallbacks[] = { "Ordinal-number 1", "Ordinal 1", "1" };
+    std::set<OUString> vFieldTextFallbacks{
+        OUString::fromUtf8("Ordinal-number 1"),
+        OUString::fromUtf8("Ordinal 1"),
+        OUString::fromUtf8("1")
+    };
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     // update text field content
     uno::Reference<util::XRefreshable>(xTextFieldsSupplier->getTextFields(), uno::UNO_QUERY_THROW)->refresh();
@@ -2217,17 +2245,22 @@ DECLARE_ODFEXPORT_TEST(testSpellOutNumberingTypes, "spellout-numberingtypes.odt"
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aFieldTexts); i++)
+    std::set<OUString> vTextsFound;
+    while(xFields->hasMoreElements())
     {
         uno::Any aField = xFields->nextElement();
         uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
         if (xServiceInfo->supportsService("com.sun.star.text.textfield.PageNumber"))
         {
             uno::Reference<text::XTextContent> xField(aField, uno::UNO_QUERY);
-            CPPUNIT_ASSERT_EQUAL(true, OUString::fromUtf8(aFieldTexts[i]).equals(xField->getAnchor()->getString()) ||
-                           OUString::fromUtf8(aFieldTextFallbacks[i%3]).equals(xField->getAnchor()->getString()));
+            vTextsFound.insert(xField->getAnchor()->getString());
         }
     }
+    const bool bOnlyExpectedText = std::none_of(vTextsFound.begin(), vTextsFound.end(),
+            [&vFieldTexts](auto& rT) { return vFieldTexts.find(rT) == vFieldTexts.end(); });
+    const bool bOnlyExpectedTextFallback = std::none_of(vTextsFound.begin(), vTextsFound.end(),
+            [&vFieldTextFallbacks](auto& rT) { return vFieldTextFallbacks.find(rT) == vFieldTextFallbacks.end(); });
+    CPPUNIT_ASSERT(bOnlyExpectedText || bOnlyExpectedTextFallback);
 }
 
 // MAILMERGE Add conditional to expand / collapse bookmarks
