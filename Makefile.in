@@ -12,7 +12,7 @@ gb_Top_MODULE_CHECK_TARGETS := slowcheck unitcheck subsequentcheck perfcheck uic
 .PHONY : check-if-root bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host test-install distclean distro-pack-install docs download etags fetch get-submodules id install install-gdb-printers install-strip tags debugrun help showmodules translations packageinfo internal.clean $(gb_Top_MODULE_CHECK_TARGETS)
 
 MAKECMDGOALS?=build
-build_goal:=$(if $(filter build build-nocheck slowcheck uicheck,$(MAKECMDGOALS)),build)\
+build_goal:=$(if $(filter build build-nocheck uicheck,$(MAKECMDGOALS)),build)\
  $(if $(filter check,$(MAKECMDGOALS)),unitcheck slowcheck subsequentcheck $(if $(filter Linux, $(shell uname)), uicheck))\
  $(filter build-l10n-only build-non-l10n-only debugrun help showmodules translations $(gb_Top_MODULE_CHECK_TARGETS) check packageinfo gbuildtojson,$(MAKECMDGOALS))
 
