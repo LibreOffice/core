@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c9b20d7a_919bbcae",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-03-20T05:21:09Z",
+      "side": 1,
+      "message": "Just for the record, I reviewed the other compatSettings, and they seem pretty weak. I didn\u0027t see anything actionable.\n\n-compatSetting::doNotFlipMirrorIndents. we only grabbag mirrorIndents anyway and don’t do anything with them in SW.\n\n-compatSetting::enableOpenTypeFeatures, which mostly deals with kerning. That has pretty minimal effect. We already set kern off by default, and if it is specified it will be used without checking some kill switch. I can’t imagine we need to honor a kill switch anymore.\n\n-compatSetting::differentiateMultirowTableHeaders, does the styling apply to the headers too, or are they all a solid color? No existing bug reports. High visibility, but VERY document dependent on whether it actually looks good or not I imagine. Low fix value and high risk.\n\n-compatSetting::allowTextAfterFloatingTableBreak -  I mentioned in a floating table bug report.\n\n-compatSetting::allowHyphenationAtTrackBottom, an odd one that sounds like an extreme case of “one client really wants this old way, but lets just fix it for everyone else”.  It is tied to…\n\n-compatSetting::useWord2013TrackBottomHyphenation, sets up a three or four scenario (together with the previous flag) dealing with a hyphenated last word on a page.",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 41
+      },
+      "revId": "32b4bc35182a9311f1c73488ffd59e402d9831ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
