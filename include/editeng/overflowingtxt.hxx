@@ -20,6 +20,7 @@
 #ifndef INCLUDED_EDITENG_OVERFLOWINGTXT_HXX
 #define INCLUDED_EDITENG_OVERFLOWINGTXT_HXX
 
+#include <config_options.h>
 #include <editeng/editengdllapi.h>
 #include <editeng/editdata.hxx>
 
@@ -98,7 +99,7 @@ private:
  * (respectively after Overflow and Underflow).
  *
  */
-class EDITENG_DLLPUBLIC OFlowChainedText
+class UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) OFlowChainedText
 {
 public:
     OFlowChainedText(Outliner const *, bool );
@@ -119,7 +120,7 @@ private:
 };
 
 // UFlowChainedText is a simpler class than OFlowChainedText: it almost only joins para-objects
-class EDITENG_DLLPUBLIC UFlowChainedText
+class UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) UFlowChainedText
 {
 public:
     UFlowChainedText(Outliner const *, bool);

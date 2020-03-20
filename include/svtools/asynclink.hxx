@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_ASYNCLINK_HXX
 #define INCLUDED_SVTOOLS_ASYNCLINK_HXX
 
+#include <config_options.h>
 #include <svtools/svtdllapi.h>
 #include <tools/link.hxx>
 #include <vcl/idle.hxx>
@@ -31,7 +32,7 @@ struct ImplSVEvent;
 
 namespace svtools {
 
-class SVT_DLLPUBLIC AsynchronLink
+class UNLESS_MERGELIBS(SVT_DLLPUBLIC) AsynchronLink
 {
     Link<void*,void> _aLink;
     ImplSVEvent*     _nEventId;

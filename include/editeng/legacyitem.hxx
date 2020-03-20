@@ -19,6 +19,7 @@
 #ifndef INCLUDED_EDITENG_LEGACYITEM_HXX
 #define INCLUDED_EDITENG_LEGACYITEM_HXX
 
+#include <config_options.h>
 #include <editeng/editengdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -66,44 +67,44 @@ namespace legacy
 {
     namespace SvxFont
     {
-        sal_uInt16 EDITENG_DLLPUBLIC GetVersion(sal_uInt16 nFileFormatVersion);
-        void EDITENG_DLLPUBLIC Create(SvxFontItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
-        EDITENG_DLLPUBLIC SvStream& Store(const SvxFontItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        sal_uInt16 UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) GetVersion(sal_uInt16 nFileFormatVersion);
+        void UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) Create(SvxFontItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) SvStream& Store(const SvxFontItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
     }
 
     namespace SvxFontHeight
     {
-        sal_uInt16 EDITENG_DLLPUBLIC GetVersion(sal_uInt16 nFileFormatVersion);
-        void EDITENG_DLLPUBLIC Create(SvxFontHeightItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
-        EDITENG_DLLPUBLIC SvStream& Store(const SvxFontHeightItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        sal_uInt16 UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) GetVersion(sal_uInt16 nFileFormatVersion);
+        void UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) Create(SvxFontHeightItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) SvStream& Store(const SvxFontHeightItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
     }
 
     namespace SvxWeight
     {
-        sal_uInt16 EDITENG_DLLPUBLIC GetVersion(sal_uInt16 nFileFormatVersion);
-        void EDITENG_DLLPUBLIC Create(SvxWeightItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
-        EDITENG_DLLPUBLIC SvStream& Store(const SvxWeightItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        sal_uInt16 UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) GetVersion(sal_uInt16 nFileFormatVersion);
+        void UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) Create(SvxWeightItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) SvStream& Store(const SvxWeightItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
     }
 
     namespace SvxPosture
     {
-        sal_uInt16 EDITENG_DLLPUBLIC GetVersion(sal_uInt16 nFileFormatVersion);
-        void EDITENG_DLLPUBLIC Create(SvxPostureItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
-        EDITENG_DLLPUBLIC SvStream& Store(const SvxPostureItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        sal_uInt16 UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) GetVersion(sal_uInt16 nFileFormatVersion);
+        void UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) Create(SvxPostureItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) SvStream& Store(const SvxPostureItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
     }
 
     namespace SvxTextLine // SvxUnderlineItem, SvxOverlineItem -> SvxTextLineItem
     {
-        sal_uInt16 EDITENG_DLLPUBLIC GetVersion(sal_uInt16 nFileFormatVersion);
-        void EDITENG_DLLPUBLIC Create(SvxTextLineItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
-        EDITENG_DLLPUBLIC SvStream& Store(const SvxTextLineItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        sal_uInt16 UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) GetVersion(sal_uInt16 nFileFormatVersion);
+        void UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) Create(SvxTextLineItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) SvStream& Store(const SvxTextLineItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
     }
 
     namespace SvxCrossedOut
     {
-        sal_uInt16 EDITENG_DLLPUBLIC GetVersion(sal_uInt16 nFileFormatVersion);
-        void EDITENG_DLLPUBLIC Create(SvxCrossedOutItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
-        EDITENG_DLLPUBLIC SvStream& Store(const SvxCrossedOutItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        sal_uInt16 UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) GetVersion(sal_uInt16 nFileFormatVersion);
+        void UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) Create(SvxCrossedOutItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) SvStream& Store(const SvxCrossedOutItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
     }
 
     // SvxContourItem -> SfxBoolItem
@@ -111,51 +112,51 @@ namespace legacy
 
     namespace SvxColor
     {
-        sal_uInt16 EDITENG_DLLPUBLIC GetVersion(sal_uInt16 nFileFormatVersion);
-        void EDITENG_DLLPUBLIC Create(SvxColorItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
-        EDITENG_DLLPUBLIC SvStream& Store(const SvxColorItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        sal_uInt16 UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) GetVersion(sal_uInt16 nFileFormatVersion);
+        void UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) Create(SvxColorItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) SvStream& Store(const SvxColorItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
     }
 
     namespace SvxBox
     {
-        sal_uInt16 EDITENG_DLLPUBLIC GetVersion(sal_uInt16 nFileFormatVersion);
-        void EDITENG_DLLPUBLIC Create(SvxBoxItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
-        EDITENG_DLLPUBLIC SvStream& Store(const SvxBoxItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        sal_uInt16 UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) GetVersion(sal_uInt16 nFileFormatVersion);
+        void UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) Create(SvxBoxItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) SvStream& Store(const SvxBoxItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
     }
 
     namespace SvxLine
     {
-        sal_uInt16 EDITENG_DLLPUBLIC GetVersion(sal_uInt16 nFileFormatVersion);
-        void EDITENG_DLLPUBLIC Create(SvxLineItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
-        EDITENG_DLLPUBLIC SvStream& Store(const SvxLineItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        sal_uInt16 UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) GetVersion(sal_uInt16 nFileFormatVersion);
+        void UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) Create(SvxLineItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) SvStream& Store(const SvxLineItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
     }
 
     namespace SvxBrush
     {
-        sal_uInt16 EDITENG_DLLPUBLIC GetVersion(sal_uInt16 nFileFormatVersion);
-        void EDITENG_DLLPUBLIC Create(SvxBrushItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
-        EDITENG_DLLPUBLIC SvStream& Store(const SvxBrushItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        sal_uInt16 UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) GetVersion(sal_uInt16 nFileFormatVersion);
+        void UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) Create(SvxBrushItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) SvStream& Store(const SvxBrushItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
     }
 
     namespace SvxAdjust
     {
-        sal_uInt16 EDITENG_DLLPUBLIC GetVersion(sal_uInt16 nFileFormatVersion);
-        void EDITENG_DLLPUBLIC Create(SvxAdjustItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
-        EDITENG_DLLPUBLIC SvStream& Store(const SvxAdjustItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        sal_uInt16 UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) GetVersion(sal_uInt16 nFileFormatVersion);
+        void UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) Create(SvxAdjustItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) SvStream& Store(const SvxAdjustItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
     }
 
     namespace SvxHorJustify
     {
-        sal_uInt16 EDITENG_DLLPUBLIC GetVersion(sal_uInt16 nFileFormatVersion);
-        void EDITENG_DLLPUBLIC Create(SvxHorJustifyItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
-        EDITENG_DLLPUBLIC SvStream& Store(const SvxHorJustifyItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        sal_uInt16 UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) GetVersion(sal_uInt16 nFileFormatVersion);
+        void UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) Create(SvxHorJustifyItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) SvStream& Store(const SvxHorJustifyItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
     }
 
     namespace SvxVerJustify
     {
-        sal_uInt16 EDITENG_DLLPUBLIC GetVersion(sal_uInt16 nFileFormatVersion);
-        void EDITENG_DLLPUBLIC Create(SvxVerJustifyItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
-        EDITENG_DLLPUBLIC SvStream& Store(const SvxVerJustifyItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        sal_uInt16 UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) GetVersion(sal_uInt16 nFileFormatVersion);
+        void UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) Create(SvxVerJustifyItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
+        UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) SvStream& Store(const SvxVerJustifyItem& rItem, SvStream& rStrm, sal_uInt16 nItemVersion);
     }
 
     namespace SvxFrameDirection

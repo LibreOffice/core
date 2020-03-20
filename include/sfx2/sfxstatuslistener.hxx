@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SFX2_SFXSTATUSLISTENER_HXX
 #define INCLUDED_SFX2_SFXSTATUSLISTENER_HXX
 
+#include <config_options.h>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <svl/poolitem.hxx>
@@ -32,7 +33,7 @@ namespace com::sun::star::frame { class XDispatch; }
 namespace com::sun::star::frame { class XDispatchProvider; }
 namespace com::sun::star::frame { struct FeatureStateEvent; }
 
-class SFX2_DLLPUBLIC SfxStatusListener : public cppu::WeakImplHelper<
+class UNLESS_MERGELIBS(SFX2_DLLPUBLIC) SfxStatusListener : public cppu::WeakImplHelper<
                           css::frame::XStatusListener,
                           css::lang::XComponent>
 {

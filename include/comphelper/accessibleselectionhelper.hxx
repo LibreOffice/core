@@ -20,6 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_ACCESSIBLESELECTIONHELPER_HXX
 #define INCLUDED_COMPHELPER_ACCESSIBLESELECTIONHELPER_HXX
 
+#include <config_options.h>
 #include <comphelper/uno3.hxx>
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -98,7 +99,7 @@ namespace comphelper
     /** a helper class for implementing an AccessibleSelection which at the same time
         supports an XAccessibleSelection interface.
     */
-    class COMPHELPER_DLLPUBLIC OAccessibleSelectionHelper : public OAccessibleComponentHelper,
+    class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OAccessibleSelectionHelper : public OAccessibleComponentHelper,
                                        public OCommonAccessibleSelection,
                                        public OAccessibleSelectionHelper_Base
     {

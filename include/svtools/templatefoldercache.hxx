@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_TEMPLATEFOLDERCACHE_HXX
 #define INCLUDED_SVTOOLS_TEMPLATEFOLDERCACHE_HXX
 
+#include <config_options.h>
 #include <svtools/svtdllapi.h>
 #include <o3tl/deleter.hxx>
 #include <memory>
@@ -56,7 +57,7 @@ namespace svt
         // do anything which relies on a up-to-date template configuration
     </listing>
     */
-    class SVT_DLLPUBLIC TemplateFolderCache
+    class UNLESS_MERGELIBS(SVT_DLLPUBLIC) TemplateFolderCache
     {
     private:
         std::unique_ptr<TemplateFolderCacheImpl, o3tl::default_delete<TemplateFolderCacheImpl>> m_pImpl;

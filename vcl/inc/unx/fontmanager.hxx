@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_INC_FONTMANAGER_HXX
 #define INCLUDED_VCL_INC_FONTMANAGER_HXX
 
+#include <config_options.h>
 #include <tools/fontenum.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/glyphitem.hxx>
@@ -103,7 +104,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     struct PrintFont;
     friend struct PrintFont;
 
-    struct PrintFont
+    struct VCL_DLLPRIVATE PrintFont
     {
         // font attributes
         OUString          m_aFamilyName;

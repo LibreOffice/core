@@ -20,6 +20,7 @@
 #ifndef INCLUDED_BASEGFX_COLOR_BCOLORMODIFIER_HXX
 #define INCLUDED_BASEGFX_COLOR_BCOLORMODIFIER_HXX
 
+#include <config_options.h>
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/color/bcolor.hxx>
 
@@ -56,7 +57,7 @@ namespace basegfx
         All usages should handle instances of BColorModifier encapsulated
         into these shared pointers.
     */
-    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier
+    class SAL_WARN_UNUSED UNLESS_MERGELIBS(BASEGFX_DLLPUBLIC) BColorModifier
     {
     private:
         BColorModifier(const BColorModifier&) = delete;
@@ -84,7 +85,7 @@ namespace basegfx
 
     /** convert color to gray
     */
-    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_gray final : public BColorModifier
+    class SAL_WARN_UNUSED UNLESS_MERGELIBS(BASEGFX_DLLPUBLIC) BColorModifier_gray final : public BColorModifier
     {
     public:
         BColorModifier_gray()
@@ -105,7 +106,7 @@ namespace basegfx
 
         returns a color where red green and blue are inverted using 1.0 - n
     */
-    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_invert final : public BColorModifier
+    class SAL_WARN_UNUSED UNLESS_MERGELIBS(BASEGFX_DLLPUBLIC) BColorModifier_invert final : public BColorModifier
     {
     public:
         BColorModifier_invert()
@@ -153,7 +154,7 @@ namespace basegfx
         given color, replacing everything. Useful e.g. for unified shadow
         creation
     */
-    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_replace final : public BColorModifier
+    class SAL_WARN_UNUSED UNLESS_MERGELIBS(BASEGFX_DLLPUBLIC) BColorModifier_replace final : public BColorModifier
     {
     private:
         ::basegfx::BColor           maBColor;
@@ -212,7 +213,7 @@ namespace basegfx
         returns black when the luminance of the given color is less than
         the given threshold value in the range [0.0 .. 1.0], else white
     */
-    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_black_and_white final : public BColorModifier
+    class SAL_WARN_UNUSED UNLESS_MERGELIBS(BASEGFX_DLLPUBLIC) BColorModifier_black_and_white final : public BColorModifier
     {
     private:
         double                      mfValue;
@@ -240,7 +241,7 @@ namespace basegfx
 
         col(r,g,b) = clamp(pow(col(r,g,b), 1.0 / gamma), 0.0, 1.0)
     */
-    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_gamma final : public BColorModifier
+    class SAL_WARN_UNUSED UNLESS_MERGELIBS(BASEGFX_DLLPUBLIC) BColorModifier_gamma final : public BColorModifier
     {
     private:
         double                      mfValue;
@@ -268,7 +269,7 @@ namespace basegfx
         - be able to cover a bigger change range utilizing the combination
         - allow execution by a small, common, precalculated table
     */
-    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_RGBLuminanceContrast final : public BColorModifier
+    class SAL_WARN_UNUSED UNLESS_MERGELIBS(BASEGFX_DLLPUBLIC) BColorModifier_RGBLuminanceContrast final : public BColorModifier
     {
     private:
         double                      mfRed;
@@ -307,7 +308,7 @@ namespace basegfx
         All references to BColorModifier members use shared pointers, thus instances of
         BColorModifierStack can be copied by the default mechanisms if needed.
     */
-    class BASEGFX_DLLPUBLIC BColorModifierStack final
+    class UNLESS_MERGELIBS(BASEGFX_DLLPUBLIC) BColorModifierStack final
     {
         ::std::vector< BColorModifierSharedPtr >        maBColorModifiers;
 

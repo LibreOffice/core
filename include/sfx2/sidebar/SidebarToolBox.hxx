@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SFX2_SIDEBAR_SIDEBARTOOLBOX_HXX
 #define INCLUDED_SFX2_SIDEBAR_SIDEBARTOOLBOX_HXX
 
+#include <config_options.h>
 #include <sfx2/dllapi.h>
 #include <vcl/toolbox.hxx>
 #include <map>
@@ -32,7 +33,7 @@ namespace sfx2 { namespace sidebar {
        background window.
     2. Create and handle tool bar controller for its items.
 */
-class SFX2_DLLPUBLIC SidebarToolBox : public ToolBox
+class UNLESS_MERGELIBS(SFX2_DLLPUBLIC) SidebarToolBox : public ToolBox
 {
 public:
     SidebarToolBox(vcl::Window* pParentWindow);

@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <framework/fwedllapi.h>
 
 #include <cppuhelper/weakref.hxx>
@@ -77,7 +78,7 @@ public:
     }
 };
 
-class FWE_DLLPUBLIC MenuConfiguration final
+class UNLESS_MERGELIBS(FWE_DLLPUBLIC) MenuConfiguration final
 {
 public:
         MenuConfiguration(

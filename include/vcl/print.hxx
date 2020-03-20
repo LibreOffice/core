@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_PRINT_HXX
 #define INCLUDED_VCL_PRINT_HXX
 
+#include <config_options.h>
 #include <rtl/ustring.hxx>
 #include <i18nutil/paper.hxx>
 
@@ -59,7 +60,7 @@ enum class PrinterSupport
 };
 
 
-class VCL_DLLPUBLIC QueueInfo
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) QueueInfo
 {
     friend class               Printer;
 
@@ -105,7 +106,7 @@ enum class PrinterBitmapMode
 };
 
 
-class VCL_DLLPUBLIC PrinterOptions
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) PrinterOptions
 {
 private:
 

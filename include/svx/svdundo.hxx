@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_SVDUNDO_HXX
 #define INCLUDED_SVX_SVDUNDO_HXX
 
+#include <config_options.h>
 #include <sal/config.h>
 
 #include <memory>
@@ -654,7 +655,7 @@ protected:
     SdrUndoPageMasterPage(SdrPage& rChangedPage);
 
 public:
-    SVXCORE_DLLPUBLIC virtual ~SdrUndoPageMasterPage() override;
+    UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) virtual ~SdrUndoPageMasterPage() override;
 };
 
 /**

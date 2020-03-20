@@ -24,12 +24,13 @@
 #error "don't use this in new code"
 #endif
 
+#include <config_options.h>
 #include <vcl/dllapi.h>
 #include <vcl/toolkit/dialog.hxx>
 
 class FixedLine;
 
-class VCL_DLLPUBLIC TabDialog final : public Dialog
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) TabDialog final : public Dialog
 {
 private:
     VclPtr<FixedLine>   mpFixedLine;

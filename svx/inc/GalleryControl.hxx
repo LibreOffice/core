@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SVX_INC_GALLERYCONTROL_HXX
 #define INCLUDED_SVX_INC_GALLERYCONTROL_HXX
 
+#include <config_options.h>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <svx/svxdllapi.h>
 
@@ -33,7 +34,7 @@ class Splitter;
 namespace svx { namespace sidebar {
 
 
-class SVXCORE_DLLPUBLIC GalleryControl final : public PanelLayout
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) GalleryControl final : public PanelLayout
 {
 public:
     GalleryControl( vcl::Window* pParentWindow );

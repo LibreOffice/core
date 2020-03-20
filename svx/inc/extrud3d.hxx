@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <svl/intitem.hxx>
 #include <svl/itemset.hxx>
 #include <svx/obj3d.hxx>
@@ -34,7 +35,7 @@ class E3dDefaultAttributes;
 |*
 \************************************************************************/
 
-class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC E3dExtrudeObj final : public E3dCompoundObject
+class SAL_WARN_UNUSED UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) E3dExtrudeObj final : public E3dCompoundObject
 {
 private:
     // to allow sdr::properties::E3dExtrudeProperties access to SetGeometryValid()

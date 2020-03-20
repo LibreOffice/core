@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SVX_SDPRCITM_HXX
 #define INCLUDED_SVX_SDPRCITM_HXX
 
+#include <config_options.h>
 #include <svl/intitem.hxx>
 #include <svx/svxdllapi.h>
 
@@ -41,7 +42,7 @@ public:
 // Integer percents of +/-
 
 
-class SVXCORE_DLLPUBLIC SdrSignedPercentItem : public SfxInt16Item
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SdrSignedPercentItem : public SfxInt16Item
 {
 public:
     SdrSignedPercentItem( sal_uInt16 nId, sal_Int16 nVal ) : SfxInt16Item( nId,nVal ) {}

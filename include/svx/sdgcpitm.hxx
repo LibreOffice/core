@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_SDGCPITM_HXX
 #define INCLUDED_SVX_SDGCPITM_HXX
 
+#include <config_options.h>
 #include <svx/grfcrop.hxx>
 #include <svx/svddef.hxx>
 
@@ -27,7 +28,7 @@
 // SdrGrafCropItem -
 
 
-class SVXCORE_DLLPUBLIC SdrGrafCropItem : public SvxGrfCrop
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SdrGrafCropItem : public SvxGrfCrop
 {
 public:
 

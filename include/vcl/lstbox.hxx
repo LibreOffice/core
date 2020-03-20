@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_LSTBOX_HXX
 #define INCLUDED_VCL_LSTBOX_HXX
 
+#include <config_options.h>
 #include <sal/types.h>
 #include <o3tl/typed_flags_set.hxx>
 #include <vcl/dllapi.h>
@@ -277,7 +278,7 @@ public:
     virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 };
 
-class VCL_DLLPUBLIC MultiListBox final : public ListBox
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MultiListBox final : public ListBox
 {
 public:
     explicit        MultiListBox( vcl::Window* pParent, WinBits nStyle );

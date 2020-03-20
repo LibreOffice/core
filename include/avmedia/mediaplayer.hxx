@@ -20,6 +20,7 @@
 #ifndef INCLUDED_AVMEDIA_MEDIAPLAYER_HXX
 #define INCLUDED_AVMEDIA_MEDIAPLAYER_HXX
 
+#include <config_options.h>
 #include <sfx2/dockwin.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <avmedia/avmediadllapi.h>
@@ -39,7 +40,7 @@ public:
 
 class MediaWindow;
 
-class AVMEDIA_DLLPUBLIC MediaFloater final : public SfxDockingWindow
+class UNLESS_MERGELIBS(AVMEDIA_DLLPUBLIC) MediaFloater final : public SfxDockingWindow
 {
 public:
 

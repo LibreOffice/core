@@ -20,6 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_STREAMSECTION_HXX
 #define INCLUDED_COMPHELPER_STREAMSECTION_HXX
 
+#include <config_options.h>
 #include <com/sun/star/uno/Reference.h>
 #include <comphelper/comphelperdllapi.h>
 
@@ -35,7 +36,7 @@ namespace comphelper
     use the same mechanism.
 */
 
-class COMPHELPER_DLLPUBLIC OStreamSection
+class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OStreamSection
 {
     css::uno::Reference< css::io::XMarkableStream >       m_xMarkStream;
     css::uno::Reference< css::io::XDataInputStream >      m_xInStream;

@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SFX2_DINFDLG_HXX
 #define INCLUDED_SFX2_DINFDLG_HXX
 
+#include <config_options.h>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 
@@ -50,7 +51,7 @@ class SvtCalendarBox;
 
 // class SfxDocumentInfoItem ---------------------------------------------
 
-class SFX2_DLLPUBLIC SfxDocumentInfoItem final : public SfxStringItem
+class UNLESS_MERGELIBS(SFX2_DLLPUBLIC) SfxDocumentInfoItem final : public SfxStringItem
 {
 private:
     sal_Int32                    m_AutoloadDelay;

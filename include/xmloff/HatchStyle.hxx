@@ -20,6 +20,7 @@
 #ifndef INCLUDED_XMLOFF_HATCHSTYLE_HXX
 #define INCLUDED_XMLOFF_HATCHSTYLE_HXX
 
+#include <config_options.h>
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <rtl/ustring.hxx>
@@ -33,7 +34,7 @@ namespace com { namespace sun { namespace star {
 } } }
 
 
-class XMLOFF_DLLPUBLIC XMLHatchStyleImport
+class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLHatchStyleImport
 {
     SvXMLImport& rImport;
 
@@ -47,7 +48,7 @@ public:
         OUString& rStrName );
 };
 
-class XMLOFF_DLLPUBLIC XMLHatchStyleExport
+class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLHatchStyleExport
 {
     SvXMLExport& rExport;
 

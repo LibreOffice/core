@@ -19,6 +19,7 @@
 #ifndef INCLUDED_COMPHELPER_SEQSTREAM_HXX
 #define INCLUDED_COMPHELPER_SEQSTREAM_HXX
 
+#include <config_options.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -69,7 +70,7 @@ class SAL_DLLPUBLIC_TEMPLATE OSequenceOutputStream_Base
     : public ::cppu::WeakImplHelper< css::io::XOutputStream >
 {};
 
-class COMPHELPER_DLLPUBLIC OSequenceOutputStream final : public OSequenceOutputStream_Base
+class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OSequenceOutputStream final : public OSequenceOutputStream_Base
 {
 private:
     void finalizeOutput();

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_BASEGFX_POLYGON_B2DTRAPEZOID_HXX
 #define INCLUDED_BASEGFX_POLYGON_B2DTRAPEZOID_HXX
 
+#include <config_options.h>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <vector>
 #include <basegfx/basegfxdllapi.h>
@@ -31,7 +32,7 @@ namespace basegfx { class B2DPoint; }
 namespace basegfx
 {
     // class to hold a single trapezoid
-    class BASEGFX_DLLPUBLIC B2DTrapezoid
+    class UNLESS_MERGELIBS(BASEGFX_DLLPUBLIC) B2DTrapezoid
     {
     private:
         // Geometry data. YValues are down-oriented, this means bottom should

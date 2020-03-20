@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_ACCEL_HXX
 #define INCLUDED_VCL_ACCEL_HXX
 
+#include <config_options.h>
 #include <tools/link.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/dllapi.h>
@@ -29,7 +30,7 @@ class ImplAccelData;
 class ImplAccelEntry;
 class CommandEvent;
 
-class VCL_DLLPUBLIC Accelerator
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) Accelerator
 {
     friend class ImplAccelManager;
 

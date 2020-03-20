@@ -20,6 +20,7 @@
 #ifndef INCLUDED_INCLUDE_VCL_SVTACCESSIBLEFACTORY_HXX
 #define INCLUDED_INCLUDE_VCL_SVTACCESSIBLEFACTORY_HXX
 
+#include <config_options.h>
 #include <vcl/dllapi.h>
 
 namespace vcl { class IAccessibleFactory; }
@@ -38,7 +39,7 @@ namespace vcl
 
         This class is not thread-safe.
     */
-    class VCL_DLLPUBLIC AccessibleFactoryAccess
+    class UNLESS_MERGELIBS(VCL_DLLPUBLIC) AccessibleFactoryAccess
     {
     private:
         bool    m_bInitialized;

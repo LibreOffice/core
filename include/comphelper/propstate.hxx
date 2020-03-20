@@ -20,6 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_PROPSTATE_HXX
 #define INCLUDED_COMPHELPER_PROPSTATE_HXX
 
+#include <config_options.h>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/uno/Sequence.h>
 
@@ -42,7 +43,7 @@ namespace comphelper
     //= OPropertyStateHelper
 
     /// helper class for implementing property states
-    class COMPHELPER_DLLPUBLIC OPropertyStateHelper :public ::cppu::OPropertySetHelper2
+    class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OPropertyStateHelper :public ::cppu::OPropertySetHelper2
                                                     ,public css::beans::XPropertyState
     {
     public:
@@ -78,7 +79,7 @@ namespace comphelper
 
     //= OPropertyStateHelper
 
-    class COMPHELPER_DLLPUBLIC OStatefulPropertySet  :public ::cppu::OWeakObject
+    class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OStatefulPropertySet  :public ::cppu::OWeakObject
                                 ,public css::lang::XTypeProvider
                                 ,public OMutexAndBroadcastHelper    // order matters: before OPropertyStateHelper/OPropertySetHelper
                                 ,public OPropertyStateHelper

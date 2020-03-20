@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SVL_AEITEM_HXX
 #define INCLUDED_SVL_AEITEM_HXX
 
+#include <config_options.h>
 #include <svl/svldllapi.h>
 #include <svl/eitem.hxx>
 
@@ -26,7 +27,7 @@
 #include <memory>
 #include <vector>
 
-class SVL_DLLPUBLIC SfxAllEnumItem final : public SfxPoolItem
+class UNLESS_MERGELIBS(SVL_DLLPUBLIC) SfxAllEnumItem final : public SfxPoolItem
 {
     std::vector<OUString>   m_Values;
 

@@ -19,6 +19,7 @@
 #ifndef INCLUDED_UNOTOOLS_ZIPPACKAGEHELPER_HXX
 #define INCLUDED_UNOTOOLS_ZIPPACKAGEHELPER_HXX
 
+#include <config_options.h>
 #include <unotools/unotoolsdllapi.h>
 
 #include <com/sun/star/uno/XInterface.hpp>
@@ -29,7 +30,7 @@ namespace com { namespace sun { namespace star { namespace uno { class XComponen
 
 namespace utl {
 
-class UNOTOOLS_DLLPUBLIC ZipPackageHelper
+class UNLESS_MERGELIBS(UNOTOOLS_DLLPUBLIC) ZipPackageHelper
 {
 public:
     ZipPackageHelper( const css::uno::Reference< css::uno::XComponentContext >& rxContext,

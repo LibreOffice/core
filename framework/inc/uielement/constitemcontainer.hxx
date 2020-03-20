@@ -20,6 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_CONSTITEMCONTAINER_HXX
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_CONSTITEMCONTAINER_HXX
 
+#include <config_options.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
@@ -38,7 +39,7 @@ namespace framework
 
 class RootItemContainer;
 class ItemContainer;
-class FWI_DLLPUBLIC ConstItemContainer final : public ::cppu::WeakImplHelper<
+class UNLESS_MERGELIBS(FWI_DLLPUBLIC) ConstItemContainer final : public ::cppu::WeakImplHelper<
                                                     css::container::XIndexAccess,
                                                     css::lang::XUnoTunnel       ,
                                                     css::beans::XFastPropertySet,

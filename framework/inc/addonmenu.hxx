@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include <rtl/ustring.hxx>
 #include <vcl/vclptr.hxx>
 
@@ -37,7 +38,7 @@ class PopupMenu;
 namespace framework
 {
 
-class FWE_DLLPUBLIC AddonMenuManager
+class UNLESS_MERGELIBS(FWE_DLLPUBLIC) AddonMenuManager
 {
     public:
         static bool       HasAddonMenuElements();

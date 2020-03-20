@@ -20,6 +20,7 @@
 #ifndef INCLUDED_BASIC_SBX_HXX
 #define INCLUDED_BASIC_SBX_HXX
 
+#include <config_options.h>
 #include <tools/ref.hxx>
 #include <svl/hint.hxx>
 
@@ -47,7 +48,7 @@ struct SbxParamInfo
 
 typedef std::vector<std::unique_ptr<SbxParamInfo>> SbxParams;
 
-class BASIC_DLLPUBLIC SbxInfo : public SvRefBase
+class UNLESS_MERGELIBS(BASIC_DLLPUBLIC) SbxInfo : public SvRefBase
 {
     friend class SbxVariable;
     friend class SbMethod;

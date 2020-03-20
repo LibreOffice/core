@@ -20,6 +20,7 @@
 #ifndef INCLUDED_BASEGFX_UTILS_GRADIENTTOOLS_HXX
 #define INCLUDED_BASEGFX_UTILS_GRADIENTTOOLS_HXX
 
+#include <config_options.h>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -35,7 +36,7 @@ namespace basegfx
         1.2-compatible gradients. Use the createXXXODFGradientInfo()
         methods below for initializing from ODF attributes.
      */
-    class BASEGFX_DLLPUBLIC ODFGradientInfo
+    class UNLESS_MERGELIBS(BASEGFX_DLLPUBLIC) ODFGradientInfo
     {
     private:
         /** transformation mapping from [0,1]^2 texture coordinate

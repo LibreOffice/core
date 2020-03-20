@@ -20,6 +20,7 @@
 #ifndef INCLUDED_TOOLKIT_AWT_VCLXWINDOWS_HXX
 #define INCLUDED_TOOLKIT_AWT_VCLXWINDOWS_HXX
 
+#include <config_options.h>
 #include <toolkit/dllapi.h>
 
 #include <com/sun/star/awt/XTextComponent.hpp>
@@ -623,7 +624,7 @@ public:
 
 //  class VCLXEdit
 
-class TOOLKIT_DLLPUBLIC VCLXEdit :  public css::awt::XTextComponent,
+class UNLESS_MERGELIBS(TOOLKIT_DLLPUBLIC) VCLXEdit :  public css::awt::XTextComponent,
                     public css::awt::XTextEditField,
                     public css::awt::XTextLayoutConstrains,
                     public VCLXWindow
@@ -831,7 +832,7 @@ public:
 
 //  class VCLXSpinField
 
-class TOOLKIT_DLLPUBLIC VCLXSpinField : public css::awt::XSpinField,
+class UNLESS_MERGELIBS(TOOLKIT_DLLPUBLIC) VCLXSpinField : public css::awt::XSpinField,
                         public VCLXEdit
 {
 private:
@@ -897,7 +898,7 @@ public:
 
 //  class VCLXDateField
 
-class TOOLKIT_DLLPUBLIC VCLXDateField : public css::awt::XDateField,
+class UNLESS_MERGELIBS(TOOLKIT_DLLPUBLIC) VCLXDateField : public css::awt::XDateField,
                         public VCLXFormattedSpinField
 {
 protected:

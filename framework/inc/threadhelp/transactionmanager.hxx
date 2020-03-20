@@ -20,6 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_INC_THREADHELP_TRANSACTIONMANAGER_HXX
 #define INCLUDED_FRAMEWORK_INC_THREADHELP_TRANSACTIONMANAGER_HXX
 
+#include <config_options.h>
 #include <threadhelp/gate.hxx>
 
 #include <osl/mutex.hxx>
@@ -91,7 +92,7 @@ enum EExceptionMode
 
     @devstatus      draft
 *//*-*************************************************************************************************************/
-class FWI_DLLPUBLIC TransactionManager
+class UNLESS_MERGELIBS(FWI_DLLPUBLIC) TransactionManager
 {
 
     //  public methods

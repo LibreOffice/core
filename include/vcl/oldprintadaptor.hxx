@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_OLDPRINTADAPTOR_HXX
 #define INCLUDED_VCL_OLDPRINTADAPTOR_HXX
 
+#include <config_options.h>
 #include <memory>
 #include <vcl/print.hxx>
 
@@ -31,7 +32,7 @@ namespace weld
 namespace vcl
 {
     struct ImplOldStyleAdaptorData;
-    class VCL_DLLPUBLIC OldStylePrintAdaptor final : public PrinterController
+    class UNLESS_MERGELIBS(VCL_DLLPUBLIC) OldStylePrintAdaptor final : public PrinterController
     {
         std::unique_ptr<ImplOldStyleAdaptorData>  mpData;
     public:

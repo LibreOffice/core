@@ -20,10 +20,11 @@
 #ifndef INCLUDED_VCL_INTROWIN_HXX
 #define INCLUDED_VCL_INTROWIN_HXX
 
+#include <config_options.h>
 #include <vcl/dllapi.h>
 #include <vcl/wrkwin.hxx>
 
-class VCL_DLLPUBLIC IntroWindow : public WorkWindow
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) IntroWindow : public WorkWindow
 {
 private:
     SAL_DLLPRIVATE void ImplInitIntroWindowData();

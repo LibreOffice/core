@@ -19,6 +19,7 @@
 #ifndef INCLUDED_COMPHELPER_EVTLISTENERHLP_HXX
 #define INCLUDED_COMPHELPER_EVTLISTENERHLP_HXX
 
+#include <config_options.h>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <cppuhelper/weakref.hxx>
@@ -33,7 +34,7 @@ namespace comphelper
     // is helper class to avoid a cycle in refcount between the XEventListener
     // and the member XComponent
 
-    class COMPHELPER_DLLPUBLIC OEventListenerHelper final : public ::cppu::WeakImplHelper< css::lang::XEventListener >
+    class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OEventListenerHelper final : public ::cppu::WeakImplHelper< css::lang::XEventListener >
     {
         css::uno::WeakReference< css::lang::XEventListener> m_xListener;
     public:

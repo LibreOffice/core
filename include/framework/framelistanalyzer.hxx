@@ -20,6 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_FRAMELISTANALYZER_HXX
 #define INCLUDED_FRAMEWORK_FRAMELISTANALYZER_HXX
 
+#include <config_options.h>
 #include <framework/fwedllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -57,7 +58,7 @@ namespace framework{
     to switch into the backing mode, close the current active frame only or
     exit the whole application explicitly or implicitly.
  */
-class FWE_DLLPUBLIC FrameListAnalyzer final
+class UNLESS_MERGELIBS(FWE_DLLPUBLIC) FrameListAnalyzer final
 {
 
     // types

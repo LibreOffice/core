@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_IMAGERESOURCEACCESS_HXX
 #define INCLUDED_SVTOOLS_IMAGERESOURCEACCESS_HXX
 
+#include <config_options.h>
 #include <svtools/svtdllapi.h>
 
 #include <com/sun/star/uno/Reference.hxx>
@@ -39,7 +40,7 @@ namespace GraphicAccess
 */
 
 /** determines whether the given URL denotes an image within a resource */
-SVT_DLLPUBLIC bool isSupportedURL(OUString const & rURL);
+UNLESS_MERGELIBS(SVT_DLLPUBLIC) bool isSupportedURL(OUString const & rURL);
 
 /** for a given URL of an image within a resource, this method retrieves an
     SvStream for this image.
@@ -50,14 +51,14 @@ SVT_DLLPUBLIC bool isSupportedURL(OUString const & rURL);
     the image must be copied), so you are strongly encouraged to only use it
     when you know that the image is small enough.
 */
-SVT_DLLPUBLIC std::unique_ptr<SvStream> getImageStream(
+UNLESS_MERGELIBS(SVT_DLLPUBLIC) std::unique_ptr<SvStream> getImageStream(
             css::uno::Reference<css::uno::XComponentContext> const & rxContext,
             OUString const & rImageResourceURL);
 
 /** for a given URL of an image within a resource, this method retrieves
     a css::io::XInputStream for this image.
 */
-SVT_DLLPUBLIC css::uno::Reference<css::io::XInputStream> getImageXStream(
+UNLESS_MERGELIBS(SVT_DLLPUBLIC) css::uno::Reference<css::io::XInputStream> getImageXStream(
             css::uno::Reference<css::uno::XComponentContext> const & rxContext,
             OUString const & rImageResourceURL);
 

@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_FMSHIMP_HXX
 #define INCLUDED_SVX_SOURCE_INC_FMSHIMP_HXX
 
+#include <config_options.h>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/container/ContainerEvent.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
@@ -144,7 +145,7 @@ struct SdrViewEvent;
 class FmFormShell;
 class FmFormView;
 class FmFormObj;
-class SVXCORE_DLLPUBLIC FmXFormShell final : public FmXFormShell_BASE
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) FmXFormShell final : public FmXFormShell_BASE
                                     ,public FmXFormShell_CFGBASE
                                     ,public svx::IControllerFeatureInvalidation
 {

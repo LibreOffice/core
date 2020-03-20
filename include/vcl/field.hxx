@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_FIELD_HXX
 #define INCLUDED_VCL_FIELD_HXX
 
+#include <config_options.h>
 #include <memory>
 #include <vcl/dllapi.h>
 #include <config_options.h>
@@ -86,7 +87,7 @@ public:
 
 #define PATTERN_FORMAT_EMPTYLITERALS    (sal_uInt16(0x0001))
 
-class VCL_DLLPUBLIC PatternFormatter : public FormatterBase
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) PatternFormatter : public FormatterBase
 {
 private:
     OString                m_aEditMask;
@@ -306,7 +307,7 @@ public:
     bool             IsEnforceValidValue( ) const { return mbEnforceValidValue; }
 };
 
-class VCL_DLLPUBLIC TimeFormatter : public FormatterBase
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) TimeFormatter : public FormatterBase
 {
 private:
     tools::Time             maLastTime;
@@ -378,7 +379,7 @@ public:
 };
 
 
-class VCL_DLLPUBLIC PatternField final : public SpinField, public PatternFormatter
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) PatternField final : public SpinField, public PatternFormatter
 {
 public:
     explicit                PatternField( vcl::Window* pParent, WinBits nWinStyle );
@@ -390,7 +391,7 @@ public:
 };
 
 
-class VCL_DLLPUBLIC NumericField : public SpinField, public NumericFormatter
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) NumericField : public SpinField, public NumericFormatter
 {
 public:
     explicit                NumericField( vcl::Window* pParent, WinBits nWinStyle );
@@ -445,7 +446,7 @@ public:
     virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 };
 
-class VCL_DLLPUBLIC DateField : public SpinField, public DateFormatter
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) DateField : public SpinField, public DateFormatter
 {
 private:
     Date                    maFirst;

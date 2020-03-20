@@ -20,6 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_INC_CLASSES_CONVERTER_HXX
 #define INCLUDED_FRAMEWORK_INC_CLASSES_CONVERTER_HXX
 
+#include <config_options.h>
 #include <vector>
 
 #include <com/sun/star/uno/Sequence.hxx>
@@ -30,7 +31,7 @@
 
 namespace framework{
 
-class FWI_DLLPUBLIC Converter
+class UNLESS_MERGELIBS(FWI_DLLPUBLIC) Converter
 {
     public:
         // Seq<beans.NamedValue> <=> Seq<beans.PropertyValue>

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_STILLREADWRITEINTERACTION_HXX
 #define INCLUDED_COMPHELPER_STILLREADWRITEINTERACTION_HXX
 
+#include <config_options.h>
 #include <ucbhelper/interceptedinteraction.hxx>
 
 #include <comphelper/comphelperdllapi.h>
@@ -29,7 +30,7 @@ namespace com::sun::star::task { class XInteractionRequest; }
 
 
 namespace comphelper{
-class COMPHELPER_DLLPUBLIC StillReadWriteInteraction final : public ::ucbhelper::InterceptedInteraction
+class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) StillReadWriteInteraction final : public ::ucbhelper::InterceptedInteraction
 {
 private:
     static const sal_Int32 HANDLE_INTERACTIVEIOEXCEPTION       = 0;

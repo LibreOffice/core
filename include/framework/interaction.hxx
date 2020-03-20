@@ -20,6 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_INTERACTION_HXX
 #define INCLUDED_FRAMEWORK_INTERACTION_HXX
 
+#include <config_options.h>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -52,7 +53,7 @@ namespace framework{
     @threadsafe     no (used on once position only!)
 *//*-*************************************************************************************************************/
 class RequestFilterSelect_Impl;
-class FWE_DLLPUBLIC RequestFilterSelect
+class UNLESS_MERGELIBS(FWE_DLLPUBLIC) RequestFilterSelect
 {
     rtl::Reference<RequestFilterSelect_Impl> mxImpl;
 

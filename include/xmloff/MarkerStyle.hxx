@@ -20,6 +20,7 @@
 #ifndef INCLUDED_XMLOFF_MARKERSTYLE_HXX
 #define INCLUDED_XMLOFF_MARKERSTYLE_HXX
 
+#include <config_options.h>
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <rtl/ustring.hxx>
@@ -33,7 +34,7 @@ namespace com { namespace sun { namespace star {
 } } }
 
 
-class XMLOFF_DLLPUBLIC XMLMarkerStyleImport
+class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLMarkerStyleImport
 {
     SvXMLImport& rImport;
 
@@ -47,7 +48,7 @@ public:
         OUString& rStrName );
 };
 
-class XMLOFF_DLLPUBLIC XMLMarkerStyleExport
+class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLMarkerStyleExport
 {
     SvXMLExport& rExport;
 

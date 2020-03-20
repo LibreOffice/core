@@ -24,11 +24,12 @@
 #error "don't use this in new code"
 #endif
 
+#include <config_options.h>
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
 #include <vcl/timer.hxx>
 
-class VCL_DLLPUBLIC SpinButton final : public Control
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) SpinButton final : public Control
 {
 private:
     AutoTimer       maRepeatTimer;

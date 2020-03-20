@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_ADDRESSTEMPLATE_HXX
 #define INCLUDED_SVTOOLS_ADDRESSTEMPLATE_HXX
 
+#include <config_options.h>
 #include <memory>
 #include <svtools/svtdllapi.h>
 #include <vcl/weld.hxx>
@@ -37,7 +38,7 @@ namespace svt
 {
     // = AddressBookSourceDialog
     struct AddressBookSourceDialogData;
-    class SVT_DLLPUBLIC AddressBookSourceDialog final : public weld::GenericDialogController
+    class UNLESS_MERGELIBS(SVT_DLLPUBLIC) AddressBookSourceDialog final : public weld::GenericDialogController
     {
     public:
         AddressBookSourceDialog(weld::Window* _pParent,

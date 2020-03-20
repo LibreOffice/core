@@ -20,6 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_INC_SERVICES_DISPATCHHELPER_HXX
 #define INCLUDED_FRAMEWORK_INC_SERVICES_DISPATCHHELPER_HXX
 
+#include <config_options.h>
 #include <com/sun/star/frame/XDispatchHelper.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -52,7 +53,7 @@ namespace framework
                     - dispatching of the URL
                 All these steps are done inside one method call here.
 */
-class FWE_DLLPUBLIC DispatchHelper final
+class UNLESS_MERGELIBS(FWE_DLLPUBLIC) DispatchHelper final
     : public ::cppu::WeakImplHelper<css::lang::XServiceInfo, css::frame::XDispatchHelper,
                                     css::frame::XDispatchResultListener>
 {

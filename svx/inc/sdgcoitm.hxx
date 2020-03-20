@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <svx/sdprcitm.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svxdllapi.h>
@@ -27,7 +28,7 @@
 // SdrGrafRedItem -
 
 
-class SVXCORE_DLLPUBLIC SdrGrafRedItem : public SdrSignedPercentItem
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SdrGrafRedItem : public SdrSignedPercentItem
 {
 public:
 
@@ -41,7 +42,7 @@ public:
 // SdrGrafGreenItem -
 
 
-class SVXCORE_DLLPUBLIC SdrGrafGreenItem : public SdrSignedPercentItem
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SdrGrafGreenItem : public SdrSignedPercentItem
 {
 public:
 
@@ -55,7 +56,7 @@ public:
 // SdrGrafBlueItem -
 
 
-class SVXCORE_DLLPUBLIC SdrGrafBlueItem : public SdrSignedPercentItem
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SdrGrafBlueItem : public SdrSignedPercentItem
 {
 public:
 

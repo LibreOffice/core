@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_DOCKWIN_HXX
 #define INCLUDED_VCL_DOCKWIN_HXX
 
+#include <config_options.h>
 #include <vcl/dllapi.h>
 #include <o3tl/deleter.hxx>
 #include <vcl/builder.hxx>
@@ -164,7 +165,7 @@ public:
     Size            GetSizePixel() const;
 };
 
-class VCL_DLLPUBLIC DockingManager
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) DockingManager
 {
     std::vector<std::unique_ptr<ImplDockingWindowWrapper, o3tl::default_delete<ImplDockingWindowWrapper>>> mvDockingWindows;
 

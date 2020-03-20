@@ -20,6 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_INC_XML_SAXNAMESPACEFILTER_HXX
 #define INCLUDED_FRAMEWORK_INC_XML_SAXNAMESPACEFILTER_HXX
 
+#include <config_options.h>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <xml/xmlnamespaces.hxx>
 #include <rtl/ustring.hxx>
@@ -34,7 +35,7 @@ namespace framework
 // workaround for incremental linking bugs in MSVC2015
 class SAL_DLLPUBLIC_TEMPLATE SaxNamespaceFilter_Base : public cppu::WeakImplHelper< css::xml::sax::XDocumentHandler > {};
 
-class FWE_DLLPUBLIC SaxNamespaceFilter final : public SaxNamespaceFilter_Base
+class UNLESS_MERGELIBS(FWE_DLLPUBLIC) SaxNamespaceFilter final : public SaxNamespaceFilter_Base
 {
     public:
         SaxNamespaceFilter( css::uno::Reference< css::xml::sax::XDocumentHandler > const & rSax1DocumentHandler );

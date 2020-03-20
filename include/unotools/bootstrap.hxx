@@ -113,7 +113,7 @@ namespace utl
 
     public:
         // singleton impl-class
-        class Impl;
+        class UNOTOOLS_DLLPRIVATE Impl;
         static const Impl& data(); // the data related to the bootstrap.ini file
     };
 }

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_XMLOFF_IMAGESTYLE_HXX
 #define INCLUDED_XMLOFF_IMAGESTYLE_HXX
 
+#include <config_options.h>
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <rtl/ustring.hxx>
@@ -34,8 +35,8 @@ class SvXMLImport;
 namespace XMLImageStyle
 {
 
-XMLOFF_DLLPUBLIC void exportXML(OUString const & rStrName, css::uno::Any const & rValue, SvXMLExport& rExport);
-XMLOFF_DLLPUBLIC bool importXML(css::uno::Reference<css::xml::sax::XAttributeList> const & xAttrList,
+UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) void exportXML(OUString const & rStrName, css::uno::Any const & rValue, SvXMLExport& rExport);
+UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) bool importXML(css::uno::Reference<css::xml::sax::XAttributeList> const & xAttrList,
                                 css::uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport);
 
 }

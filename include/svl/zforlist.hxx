@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SVL_ZFORLIST_HXX
 #define INCLUDED_SVL_ZFORLIST_HXX
 
+#include <config_options.h>
 #include <svl/svldllapi.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
@@ -306,7 +307,7 @@ typedef ::std::set< LanguageType > NfInstalledLocales;
 
 /** Language/country dependent currency entries
  */
-class SVL_DLLPUBLIC NfCurrencyEntry
+class UNLESS_MERGELIBS(SVL_DLLPUBLIC) NfCurrencyEntry
 {
     OUString        aSymbol;            /// currency symbol
     OUString        aBankSymbol;        /// currency abbreviation

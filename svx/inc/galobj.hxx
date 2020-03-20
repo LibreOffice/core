@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_INC_GALOBJ_HXX
 #define INCLUDED_SVX_INC_GALOBJ_HXX
 
+#include <config_options.h>
 #include <tools/urlobj.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/gdimtf.hxx>
@@ -40,7 +41,7 @@ enum GalSoundType
     SOUND_ANIMAL = 7
 };
 
-class SVXCORE_DLLPUBLIC SgaObject
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SgaObject
 {
     friend class GalleryTheme;
 

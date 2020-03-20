@@ -20,12 +20,13 @@
 #ifndef INCLUDED_EDITENG_EDITUND2_HXX
 #define INCLUDED_EDITENG_EDITUND2_HXX
 
+#include <config_options.h>
 #include <editeng/editengdllapi.h>
 #include <svl/undo.hxx>
 
 class EditEngine;
 
-class EDITENG_DLLPUBLIC EditUndoManager : public SfxUndoManager
+class UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) EditUndoManager : public SfxUndoManager
 {
     using SfxUndoManager::Undo;
     using SfxUndoManager::Redo;

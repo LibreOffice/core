@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_DEFLT3D_HXX
 #define INCLUDED_SVX_DEFLT3D_HXX
 
+#include <config_options.h>
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 #include <svx/svxdllapi.h>
@@ -30,7 +31,7 @@
 |*
 \************************************************************************/
 
-class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC E3dDefaultAttributes
+class SAL_WARN_UNUSED UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) E3dDefaultAttributes
 {
 private:
     // Cube object

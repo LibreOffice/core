@@ -20,6 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_CONFIGIMPORTER_HXX
 #define INCLUDED_FRAMEWORK_CONFIGIMPORTER_HXX
 
+#include <config_options.h>
 #include <framework/fwedllapi.h>
 #include <vector>
 
@@ -31,7 +32,7 @@ namespace com::sun::star::uno { template <typename > class Reference; }
 
 namespace framework
 {
-    class FWE_DLLPUBLIC UIConfigurationImporterOOo1x
+    class UNLESS_MERGELIBS(FWE_DLLPUBLIC) UIConfigurationImporterOOo1x
     {
         public:
             static bool ImportCustomToolbars(

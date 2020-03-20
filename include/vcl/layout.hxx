@@ -10,6 +10,7 @@
 #ifndef INCLUDED_VCL_LAYOUT_HXX
 #define INCLUDED_VCL_LAYOUT_HXX
 
+#include <config_options.h>
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
 #include <vcl/help.hxx>
@@ -306,7 +307,7 @@ private:
     }
 };
 
-class VCL_DLLPUBLIC VclGrid final : public VclContainer
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) VclGrid final : public VclContainer
 {
 private:
     bool m_bRowHomogeneous;
@@ -361,7 +362,7 @@ public:
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
 };
 
-class VCL_DLLPUBLIC VclBin : public VclContainer
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) VclBin : public VclContainer
 {
 public:
     VclBin(vcl::Window *pParent, WinBits nStyle = WB_HIDE | WB_CLIPCHILDREN)
@@ -443,7 +444,7 @@ private:
     virtual OUString getDefaultAccessibleName() const override;
 };
 
-class VCL_DLLPUBLIC VclAlignment final : public VclBin
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) VclAlignment final : public VclBin
 {
 public:
     VclAlignment(vcl::Window *pParent)

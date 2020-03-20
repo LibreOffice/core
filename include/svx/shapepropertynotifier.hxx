@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_SHAPEPROPERTYNOTIFIER_HXX
 #define INCLUDED_SVX_SHAPEPROPERTYNOTIFIER_HXX
 
+#include <config_options.h>
 #include <svx/svxdllapi.h>
 #include <svx/shapeproperty.hxx>
 #include <rtl/ustring.hxx>
@@ -45,7 +46,7 @@ namespace svx
 
     /** a provider for a property value
     */
-    class SVXCORE_DLLPUBLIC IPropertyValueProvider
+    class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) IPropertyValueProvider
     {
     public:
         /** returns the name of the property which this provider is responsible for

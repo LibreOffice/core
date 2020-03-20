@@ -20,6 +20,7 @@
 #ifndef INCLUDED_TOOLKIT_AWT_VCLXMENU_HXX
 #define INCLUDED_TOOLKIT_AWT_VCLXMENU_HXX
 
+#include <config_options.h>
 #include <toolkit/dllapi.h>
 #include <toolkit/helper/listenermultiplexer.hxx>
 
@@ -142,7 +143,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
-class TOOLKIT_DLLPUBLIC VCLXMenuBar final : public VCLXMenu
+class UNLESS_MERGELIBS(TOOLKIT_DLLPUBLIC) VCLXMenuBar final : public VCLXMenu
 {
 public:
     VCLXMenuBar();

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_PROPERTYBAG_HXX
 #define INCLUDED_COMPHELPER_PROPERTYBAG_HXX
 
+#include <config_options.h>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/propertycontainerhelper.hxx>
 
@@ -39,7 +40,7 @@ namespace comphelper
         This class can, for instance, be used for components which need to implement
         the com.sun.star.beans.PropertyBag service.
     */
-    class COMPHELPER_DLLPUBLIC PropertyBag final : protected OPropertyContainerHelper
+    class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) PropertyBag final : protected OPropertyContainerHelper
     {
     private:
         ::std::unique_ptr< PropertyBag_Impl > m_pImpl;

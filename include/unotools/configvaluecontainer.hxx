@@ -19,6 +19,7 @@
 #ifndef INCLUDED_UNOTOOLS_CONFIGVALUECONTAINER_HXX
 #define INCLUDED_UNOTOOLS_CONFIGVALUECONTAINER_HXX
 
+#include <config_options.h>
 #include <unotools/unotoolsdllapi.h>
 #include <com/sun/star/uno/Type.hxx>
 #include <memory>
@@ -54,7 +55,7 @@ namespace utl
         before your base class' dtor is called, so accessing the memory during such a theoretical auto-commit would
         yield undefined behaviour.</p>
     */
-    class UNOTOOLS_DLLPUBLIC OConfigurationValueContainer
+    class UNLESS_MERGELIBS(UNOTOOLS_DLLPUBLIC) OConfigurationValueContainer
     {
     private:
         std::unique_ptr<OConfigurationValueContainerImpl> m_pImpl;

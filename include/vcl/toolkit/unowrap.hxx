@@ -24,6 +24,7 @@
 #error "don't use this in new code"
 #endif
 
+#include <config_options.h>
 #include <com/sun/star/uno/Reference.h>
 #include <vcl/dllapi.h>
 #include <vcl/vclptr.hxx>
@@ -50,7 +51,7 @@ namespace accessibility {
     class XAccessible;
 }}}}
 
-class VCL_DLLPUBLIC UnoWrapperBase
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) UnoWrapperBase
 {
 public:
     virtual void                Destroy() = 0;

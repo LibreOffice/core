@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_PRINTOPTIONS_HXX
 #define INCLUDED_SVTOOLS_PRINTOPTIONS_HXX
 
+#include <config_options.h>
 #include <svtools/svtdllapi.h>
 #include <sal/types.h>
 #include <unotools/options.hxx>
@@ -30,7 +31,7 @@ class SvtPrintOptions_Impl;
 class PrinterOptions;
 
 
-class SVT_DLLPUBLIC SvtBasePrintOptions: public utl::detail::Options
+class UNLESS_MERGELIBS(SVT_DLLPUBLIC) SvtBasePrintOptions: public utl::detail::Options
 {
 
     SvtPrintOptions_Impl* m_pDataContainer;
@@ -79,7 +80,7 @@ public:
 };
 
 
-class SVT_DLLPUBLIC SvtPrinterOptions final : public SvtBasePrintOptions
+class UNLESS_MERGELIBS(SVT_DLLPUBLIC) SvtPrinterOptions final : public SvtBasePrintOptions
 {
 private:
 
@@ -93,7 +94,7 @@ public:
 };
 
 
-class SVT_DLLPUBLIC SvtPrintFileOptions final : public SvtBasePrintOptions
+class UNLESS_MERGELIBS(SVT_DLLPUBLIC) SvtPrintFileOptions final : public SvtBasePrintOptions
 {
 private:
 

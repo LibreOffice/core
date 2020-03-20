@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_POPUPMENUCONTROLLERBASE_HXX
 #define INCLUDED_SVTOOLS_POPUPMENUCONTROLLERBASE_HXX
 
+#include <config_options.h>
 #include <svtools/svtdllapi.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -50,7 +51,7 @@ namespace svt
                         css::frame::XDispatchProvider      ,
                         css::frame::XDispatch > PopupMenuControllerBaseType;
 
-    class SVT_DLLPUBLIC PopupMenuControllerBase : protected ::cppu::BaseMutex,   // Struct for right initialization of mutex member! Must be first of baseclasses.
+    class UNLESS_MERGELIBS(SVT_DLLPUBLIC) PopupMenuControllerBase : protected ::cppu::BaseMutex,   // Struct for right initialization of mutex member! Must be first of baseclasses.
                                                   public PopupMenuControllerBaseType
     {
         public:

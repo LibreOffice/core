@@ -20,6 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SDBCX_VCOLLECTION_HXX
 #define INCLUDED_CONNECTIVITY_SDBCX_VCOLLECTION_HXX
 
+#include <config_options.h>
 #include <cppuhelper/implbase10.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -59,7 +60,7 @@ namespace connectivity
 
         typedef css::uno::Reference< css::beans::XPropertySet > ObjectType;
 
-        class OOO_DLLPUBLIC_DBTOOLS SAL_NO_VTABLE IObjectCollection
+        class UNLESS_MERGELIBS(OOO_DLLPUBLIC_DBTOOLS) SAL_NO_VTABLE IObjectCollection
         {
         public:
             virtual ~IObjectCollection();

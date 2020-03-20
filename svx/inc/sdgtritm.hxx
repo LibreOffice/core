@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <svx/sdprcitm.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svxdllapi.h>
@@ -27,7 +28,7 @@
 // SdrGrafTransparenceItem -
 
 
-class SVXCORE_DLLPUBLIC SdrGrafTransparenceItem : public SdrPercentItem
+class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SdrGrafTransparenceItem : public SdrPercentItem
 {
 public:
 

@@ -23,6 +23,7 @@
 #error "don't use this in new code"
 #endif
 
+#include <config_options.h>
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
 #include <vcl/toolkit/imgctrl.hxx>
@@ -44,7 +45,7 @@ class HyperLabel;
 class RoadmapImpl;
 class RoadmapItem;
 
-class VCL_DLLPUBLIC ORoadmap final : public Control, public RoadmapTypes
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) ORoadmap final : public Control, public RoadmapTypes
 {
 public:
     ORoadmap( vcl::Window* _pParent, WinBits _nWinStyle );

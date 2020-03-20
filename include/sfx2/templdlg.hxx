@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SFX2_TEMPLDLG_HXX
 #define INCLUDED_SFX2_TEMPLDLG_HXX
 
+#include <config_options.h>
 #include <memory>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
@@ -27,7 +28,7 @@
 class SfxBindings;
 class SfxTemplateDialog_Impl;
 
-class SFX2_DLLPUBLIC SfxTemplatePanelControl final : public vcl::Window
+class UNLESS_MERGELIBS(SFX2_DLLPUBLIC) SfxTemplatePanelControl final : public vcl::Window
 {
 public:
     SfxTemplatePanelControl(SfxBindings* pBindings, vcl::Window* pParentWindow);

@@ -19,6 +19,7 @@
 #ifndef INCLUDED_FRAMEWORK_ADDONSOPTIONS_HXX
 #define INCLUDED_FRAMEWORK_ADDONSOPTIONS_HXX
 
+#include <config_options.h>
 #include <sal/types.h>
 #include <vcl/image.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -106,7 +107,7 @@ class AddonsOptions_Impl;
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class FWE_DLLPUBLIC AddonsOptions
+class UNLESS_MERGELIBS(FWE_DLLPUBLIC) AddonsOptions
 {
     public:
          AddonsOptions();

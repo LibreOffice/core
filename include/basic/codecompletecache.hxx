@@ -20,6 +20,7 @@
 #ifndef INCLUDED_BASIC_CODECOMPLETECACHE_HXX
 #define INCLUDED_BASIC_CODECOMPLETECACHE_HXX
 
+#include <config_options.h>
 #include <basic/basicdllapi.h>
 #include <rtl/ustring.hxx>
 #include <svtools/miscopt.hxx>
@@ -67,7 +68,7 @@ public:
     static void SetAutoCorrectOn( bool b );
 };
 
-class BASIC_DLLPUBLIC CodeCompleteDataCache final
+class UNLESS_MERGELIBS(BASIC_DLLPUBLIC) CodeCompleteDataCache final
 {
 /*
  * cache to store data for

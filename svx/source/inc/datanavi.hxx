@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_DATANAVI_HXX
 #define INCLUDED_SVX_SOURCE_INC_DATANAVI_HXX
 
+#include <config_options.h>
 #include <vcl/builder.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/menubtn.hxx>
@@ -368,7 +369,7 @@ namespace svxform
                                                   const SfxPoolItem* pState ) override;
     };
 
-    class SVXCORE_DLLPUBLIC DataNavigatorManager : public SfxChildWindow
+    class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) DataNavigatorManager : public SfxChildWindow
     {
     public:
         SVX_DLLPRIVATE DataNavigatorManager( vcl::Window* pParent, sal_uInt16 nId,

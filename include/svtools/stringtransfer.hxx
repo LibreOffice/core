@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_STRINGTRANSFER_HXX
 #define INCLUDED_SVTOOLS_STRINGTRANSFER_HXX
 
+#include <config_options.h>
 #include <svtools/svtdllapi.h>
 #include <vcl/transfer.hxx>
 
@@ -30,7 +31,7 @@ namespace svt
 
     //= OStringTransferable
 
-    class SVT_DLLPUBLIC OStringTransferable final : public TransferableHelper
+    class UNLESS_MERGELIBS(SVT_DLLPUBLIC) OStringTransferable final : public TransferableHelper
     {
     public:
         OStringTransferable(const OUString& _rContent);
