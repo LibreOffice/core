@@ -44,7 +44,6 @@ struct SwXTextTable final : public test::BootstrapFixture,
     CPPUNIT_TEST_SUITE(SwXTextTable);
     CPPUNIT_TEST(testAddEventListener);
     CPPUNIT_TEST(testRemoveEventListener);
-    CPPUNIT_TEST(testDisposedByDesktopTerminate);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -62,13 +61,7 @@ void SwXTextTable::tearDown()
 {
     if (component_.is())
     {
-        try
-        {
-            component_->dispose();
-        }
-        catch (css::lang::DisposedException&) // thrown by testDisposedByDesktopTerminate
-        {
-        }
+        component_->dispose();
     }
 }
 
