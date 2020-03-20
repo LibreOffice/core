@@ -22,6 +22,30 @@
       "revId": "3b250f0c009476cfe7d35ebd1d8220ceac440791",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e126066_4ab15cd4",
+        "filename": "oox/source/ppt/pptshapecontext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-03-20T15:38:13Z",
+      "side": 0,
+      "message": "That looks correct from IWYU. If you write \"using namespace foo::bar\", then foo::bar has to be a declared namespace. IWYU needs to keep the header, otherwise the build would break after the suggestion. You can try to remove unused using declarations with other tools like clang-tidy, see \u003chttps://clang.llvm.org/extra/clang-tidy/checks/misc-unused-using-decls.html\u003e.",
+      "parentUuid": "3d346943_3a151ad6",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 40
+      },
+      "revId": "3b250f0c009476cfe7d35ebd1d8220ceac440791",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
