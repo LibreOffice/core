@@ -404,7 +404,7 @@ void DocumentFieldsManager::UpdateFields( bool bCloseDB )
         case SwFieldIds::Dde:
         {
             SwMsgPoolItem aUpdateDDE( RES_UPDATEDDETBL );
-            pFieldType->ModifyNotification( nullptr, &aUpdateDDE );
+            pFieldType->GetNotifier().Broadcast(sw::LegacyModifyHint( nullptr, &aUpdateDDE ));
             break;
         }
         case SwFieldIds::GetExp:
@@ -414,7 +414,7 @@ void DocumentFieldsManager::UpdateFields( bool bCloseDB )
             // Expression fields are treated separately
             break;
         default:
-            pFieldType->ModifyNotification ( nullptr, nullptr );
+            pFieldType->GetNotifier().Broadcast(sw::LegacyModifyHint( nullptr, nullptr ));
         }
     }
 
@@ -562,7 +562,7 @@ bool DocumentFieldsManager::UpdateField(SwTextField * pDstTextField, SwField & r
                     if (bUpdateFields)
                         UpdateTableFields( &aTableUpdate );
                     else
-                        pNewField->GetTyp()->ModifyNotification(nullptr, &aTableUpdate);
+                        pNewField->GetTyp()->GetNotifier().Broadcast(sw::LegacyModifyHint(nullptr, &aTableUpdate));
 
                     if (! bUpdateFields)
                         bTableSelBreak = true;
@@ -618,7 +618,7 @@ void DocumentFieldsManager::UpdateRefFields()
 {
     for( auto const & pFieldType : *mpFieldTypes )
         if( SwFieldIds::GetRef == pFieldType->Which() )
-            pFieldType->ModifyNotification( nullptr, nullptr );
+            pFieldType->GetNotifier().Broadcast(sw::LegacyModifyHint( nullptr, nullptr ));
 }
 
 void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
@@ -1342,16 +1342,17 @@ void DocumentFieldsManager::UpdatePageFields( SfxPoolItem* pMsgHint )
     for( SwFieldTypes::size_type i = 0; i < INIT_FLDTYPES; ++i )
     {
         SwFieldType* pFieldType = (*mpFieldTypes)[ i ].get();
+        auto rNotifier = pFieldType->GetNotifier();
         switch( pFieldType->Which() )
         {
         case SwFieldIds::PageNumber:
         case SwFieldIds::Chapter:
         case SwFieldIds::GetExp:
         case SwFieldIds::RefPageGet:
-            pFieldType->ModifyNotification( nullptr, pMsgHint );
+            rNotifier.Broadcast(sw::LegacyModifyHint( nullptr, pMsgHint ));
             break;
         case SwFieldIds::DocStat:
-            pFieldType->ModifyNotification( nullptr, nullptr );
+            rNotifier.Broadcast(sw::LegacyModifyHint( nullptr, nullptr ));
             break;
         default: break;
         }

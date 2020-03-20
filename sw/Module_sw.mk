@@ -87,17 +87,11 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_ooxmlencryption \
     CppunitTest_sw_ooxmlimport \
     CppunitTest_sw_ooxmlimport2 \
-    CppunitTest_sw_ww8export \
-    CppunitTest_sw_ww8export2 \
-    CppunitTest_sw_ww8export3 \
     CppunitTest_sw_ww8import \
     CppunitTest_sw_rtfimport \
     CppunitTest_sw_odfexport \
     CppunitTest_sw_odfimport \
     CppunitTest_sw_txtexport \
-    $(if $(filter-out MACOSX,$(OS)), \
-        CppunitTest_sw_uiwriter \
-    ) \
     CppunitTest_sw_layoutwriter \
     CppunitTest_sw_mailmerge \
     CppunitTest_sw_globalfilter \
@@ -105,6 +99,9 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_apiterminate \
     CppunitTest_sw_apitests \
     CppunitTest_sw_unowriter \
+    $(if $(filter-out MACOSX,$(OS)), \
+        CppunitTest_sw_uiwriter \
+    ) \
     CppunitTest_sw_core_text \
     CppunitTest_sw_core_doc \
     CppunitTest_sw_uibase_shells \
@@ -112,6 +109,10 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_core_layout \
     CppunitTest_sw_core_frmedt \
 ))
+
+#CppunitTest_sw_ww8export2 \
+#CppunitTest_sw_ww8export3 \
+#    CppunitTest_sw_ww8export \
 
 ifneq ($(DISABLE_GUI),TRUE)
 ifeq ($(OS),LINUX)
