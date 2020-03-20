@@ -42,7 +42,8 @@ private:
         ::std::vector<sal_uInt16>   aVisibleArgMapping;
         const IFunctionDescription* pFuncDesc;
         IControlReferenceHandler*   pMyParent;
-        sal_uInt16          nArgs;      // unsuppressed arguments
+        sal_uInt16       nArgs;     // unsuppressed arguments, may be >= VAR_ARGS to indicate repeating parameters
+        sal_uInt16       nMaxArgs;  // max arguments, limited to supported number of arguments
         vcl::Font        aFntBold;
         vcl::Font        aFntLight;
 
