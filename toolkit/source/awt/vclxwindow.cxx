@@ -2441,29 +2441,15 @@ sal_Bool SAL_CALL VCLXWindow::isInPopupMode(  )
 void SAL_CALL VCLXWindow::setOutputSize( const css::awt::Size& aSize )
 {
     SolarMutexGuard aGuard;
-    VclPtr<vcl::Window> pWindow;
-    if( (pWindow = GetWindow()) != nullptr )
-    {
-        DockingWindow *pDockingWindow = dynamic_cast< DockingWindow* >(pWindow.get());
-        if( pDockingWindow )
-            pDockingWindow->SetOutputSizePixel( VCLSize( aSize ) );
-        else
-            pWindow->SetOutputSizePixel( VCLSize( aSize ) );
-    }
+    if( VclPtr<vcl::Window> pWindow = GetWindow() )
+        pWindow->SetOutputSizePixel( VCLSize( aSize ) );
 }
 
 css::awt::Size SAL_CALL VCLXWindow::getOutputSize(  )
 {
     SolarMutexGuard aGuard;
-    VclPtr<vcl::Window> pWindow;
-    if( (pWindow = GetWindow()) != nullptr )
-    {
-        DockingWindow *pDockingWindow = dynamic_cast< DockingWindow* >(pWindow.get());
-        if( pDockingWindow )
-            return AWTSize( pDockingWindow->GetOutputSizePixel() );
-        else
-            return AWTSize( pWindow->GetOutputSizePixel() );
-    }
+    if( VclPtr<vcl::Window> pWindow = GetWindow() )
+        return AWTSize( pWindow->GetOutputSizePixel() );
     else
         return css::awt::Size();
 }
