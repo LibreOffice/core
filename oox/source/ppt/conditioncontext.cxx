@@ -19,8 +19,6 @@
 
 #include "conditioncontext.hxx"
 
-#include <cppuhelper/exc_hlp.hxx>
-
 #include <com/sun/star/animations/AnimationEndSync.hpp>
 #include <com/sun/star/animations/EventTrigger.hpp>
 

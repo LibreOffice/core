@@ -19,8 +19,6 @@
 
 #include <memory>
 #include <com/sun/star/xml/sax/FastToken.hpp>
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
-#include <com/sun/star/container/XNamed.hpp>
 
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/core/fragmenthandler2.hxx>
@@ -30,11 +28,8 @@
 #include <oox/ppt/pptshapecontext.hxx>
 #include <oox/ppt/pptshapegroupcontext.hxx>
 #include <oox/drawingml/graphicshapecontext.hxx>
-#include <drawingml/lineproperties.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
-#include <drawingml/customshapegeometry.hxx>
 #include <drawingml/shapepropertiescontext.hxx>
-#include <drawingml/textbodycontext.hxx>
 #include <oox/drawingml/connectorshapecontext.hxx>
 #include <drawingml/fillproperties.hxx>
 #include "extdrawingfragmenthandler.hxx"
@@ -45,7 +40,6 @@ using namespace oox::core;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::xml::sax;
 

@@ -21,7 +21,6 @@
 
 #include "timetargetelementcontext.hxx"
 
-#include <cppuhelper/exc_hlp.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 

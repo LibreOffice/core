@@ -49,14 +49,12 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <rtl/tencinfo.h>
 #include <osl/diagnose.h>
-#include <sal/log.hxx>
 #include <vcl/font.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/binaryinputstream.hxx>
-#include <oox/helper/containerhelper.hxx>
 #include <oox/helper/graphichelper.hxx>
 #include <oox/helper/propertymap.hxx>
 #include <oox/ole/axbinarywriter.hxx>

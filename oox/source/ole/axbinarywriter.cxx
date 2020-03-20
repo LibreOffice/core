@@ -8,8 +8,6 @@
  */
 #include <oox/ole/axbinarywriter.hxx>
 
-#include <oox/ole/olehelper.hxx>
-
 namespace oox::ole {
 
 namespace {

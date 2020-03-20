@@ -17,14 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cppuhelper/exc_hlp.hxx>
-
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
-#include <com/sun/star/container/XNamed.hpp>
-
 #include "headerfootercontext.hxx"
 #include <oox/ppt/layoutfragmenthandler.hxx>
-#include <oox/drawingml/shapegroupcontext.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
@@ -35,7 +29,6 @@ using namespace ::oox::core;
 using namespace ::oox::drawingml;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
-using namespace ::com::sun::star::container;
 
 namespace oox::ppt {
 

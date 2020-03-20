@@ -10,7 +10,6 @@
 #include <sal/config.h>
 
 #include <cassert>
-#include <cmath>
 #include <random>
 
 #include <oox/ole/vbaexport.hxx>
@@ -25,7 +24,6 @@
 
 #include <ooo/vba/excel/XWorkbook.hpp>
 
-#include <oox/helper/binaryoutputstream.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/token/properties.hxx>
 

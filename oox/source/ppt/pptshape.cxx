@@ -22,18 +22,14 @@
 #include <drawingml/textbody.hxx>
 #include <drawingml/table/tableproperties.hxx>
 
-#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <sal/log.hxx>
 #include <oox/ppt/slidepersist.hxx>
 #include <oox/token/tokens.hxx>
-#include <unotools/fltrcfg.hxx>
 
 using namespace ::oox::core;
 using namespace ::oox::drawingml;

@@ -20,7 +20,6 @@
 #include <oox/vml/vmltextbox.hxx>
 
 #include <rtl/ustrbuf.hxx>
-#include <svx/unopage.hxx>
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
