@@ -1224,13 +1224,13 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
                 aParagraph->getProperties().setLevel(nLevel);
                 if (nLevel >= nStartBulletsAtLevel)
                 {
-                    if (!aParagraph->getProperties().getParaLeftMargin().has_value())
+                    if (aParagraph->getProperties().getParaLeftMargin().get_ptr() == nullptr)
                     {
                         sal_Int32 nLeftMargin = 285750 * (nLevel - nStartBulletsAtLevel + 1) / EMU_PER_HMM;
                         aParagraph->getProperties().getParaLeftMargin() = nLeftMargin;
                     }
 
-                    if (!aParagraph->getProperties().getFirstLineIndentation().has_value())
+                    if (aParagraph->getProperties().getFirstLineIndentation().get_ptr() == nullptr)
                         aParagraph->getProperties().getFirstLineIndentation() = -285750 / EMU_PER_HMM;
 
                     // It is not possible to change the bullet style for text.
