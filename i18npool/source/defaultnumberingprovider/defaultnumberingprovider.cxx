@@ -945,6 +945,10 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                result += lcl_formatArabicZero(number, 3);
                break;
 
+          case ARABIC_ZERO4:
+               result += lcl_formatArabicZero(number, 4);
+               break;
+
           default:
                OSL_ASSERT(false);
                throw IllegalArgumentException();
