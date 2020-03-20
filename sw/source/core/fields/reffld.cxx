@@ -1158,7 +1158,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark
     case REF_SEQUENCEFLD:
         {
             SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetFieldType( SwFieldIds::SetExp, rRefMark, false );
-            if( pFieldType && pFieldType->HasWriterListeners() &&
+            if( pFieldType &&
                 nsSwGetSetExpType::GSE_SEQ & static_cast<SwSetExpFieldType*>(pFieldType)->GetType() )
             {
                 std::vector<SwFormatField*> vFields;
