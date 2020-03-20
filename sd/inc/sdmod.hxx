@@ -33,7 +33,6 @@
 #include <memory>
 
 class SdOptions;
-class SvxSearchItem;
 class EditFieldInfo;
 class SdTransferable;
 class SvNumberFormatter;
@@ -94,9 +93,6 @@ public:
     bool                    GetWaterCan() const { return bWaterCan; }
     void                    SetWaterCan( bool bWC ) { bWaterCan = bWC; }
 
-    SvxSearchItem*          GetSearchItem() { return pSearchItem.get(); }
-    void                    SetSearchItem(std::unique_ptr<SvxSearchItem> pItem);
-
     /** Return the virtual device that can be used for printer independent
         layout.
         @return
@@ -123,7 +119,6 @@ private:
 
     SdOptions*              pImpressOptions;
     SdOptions*              pDrawOptions;
-    std::unique_ptr<SvxSearchItem>      pSearchItem;
     std::unique_ptr<SvNumberFormatter>  pNumberFormatter;
     tools::SvRef<SotStorage>            xOptionStorage;
     bool                    bWaterCan;

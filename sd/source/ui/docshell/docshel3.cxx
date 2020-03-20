@@ -159,7 +159,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
             {
                 const SvxSearchItem & rSearchItem = pReqArgs->Get(SID_SEARCH_ITEM);
 
-                SD_MOD()->SetSearchItem(std::unique_ptr<SvxSearchItem>(static_cast<SvxSearchItem*>(rSearchItem.Clone())));
+                GetViewShell()->SetSearchItem(std::unique_ptr<SvxSearchItem>(static_cast<SvxSearchItem*>(rSearchItem.Clone())));
             }
 
             rReq.Done();
@@ -222,7 +222,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
                 {
                     const SvxSearchItem& rSearchItem = pReqArgs->Get(SID_SEARCH_ITEM);
 
-                    SD_MOD()->SetSearchItem(std::unique_ptr<SvxSearchItem>(static_cast<SvxSearchItem*>( rSearchItem.Clone() )));
+                    GetViewShell()->SetSearchItem(std::unique_ptr<SvxSearchItem>(static_cast<SvxSearchItem*>( rSearchItem.Clone() )));
                     xFuSearch->SearchAndReplace(&rSearchItem);
                 }
             }

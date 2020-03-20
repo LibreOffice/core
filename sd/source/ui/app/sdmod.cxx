@@ -37,7 +37,6 @@
 #include <svtools/ehdl.hxx>
 
 #include <svx/svxids.hrc>
-#include <svl/srchitem.hxx>
 #include <svx/svxerr.hxx>
 
 #include <svx/xmlsecctrl.hxx>
@@ -76,8 +75,6 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
     mpColorConfig(new svtools::ColorConfig)
 {
     SetName( "StarDraw" );  // Do not translate!
-    pSearchItem.reset( new SvxSearchItem(SID_SEARCH_ITEM) );
-    pSearchItem->SetAppFlag(SvxSearchApp::DRAW);
     StartListening( *SfxGetpApp() );
     SvxErrorHandler::ensure();
     mpErrorHdl.reset( new SfxErrorHandler(RID_SD_ERRHDL, ErrCodeArea::Sd, ErrCodeArea::Sd, GetResLocale()) );
@@ -98,7 +95,6 @@ OUString SdResId(const char* pId)
 // Dtor
 SdModule::~SdModule()
 {
-    pSearchItem.reset();
     pNumberFormatter.reset();
 
     if (mbEventListenerAdded)
@@ -108,11 +104,6 @@ SdModule::~SdModule()
 
     mpErrorHdl.reset();
     mpVirtualRefDevice.disposeAndClear();
-}
-
-void SdModule::SetSearchItem(std::unique_ptr<SvxSearchItem> pItem)
-{
-    pSearchItem = std::move(pItem);
 }
 
 /// get notifications
