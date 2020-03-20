@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffb0fe8c_e5bd2ebe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-03-20T06:44:36Z",
+      "side": 1,
+      "message": "This would be required as well.",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 57
+      },
+      "revId": "c6c64eab302ec418ce65c4bfd672be1b094a44ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
