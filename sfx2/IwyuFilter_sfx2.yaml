@@ -74,8 +74,6 @@ blacklist:
     - sfx2/frame.hxx
     - sfx2/msg.hxx
     - sorgitm.hxx
-    # Needed for STATIC_LINKING to work
-    - config_options.h
     sfx2/source/appl/newhelp.cxx:
     # Actually used
     - com/sun/star/i18n/XBreakIterator.hpp

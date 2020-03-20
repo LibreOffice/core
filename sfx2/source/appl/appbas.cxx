@@ -18,7 +18,6 @@
  */
 
 #include <config_features.h>
-#include <config_options.h>
 
 #include <sal/config.h>
 
