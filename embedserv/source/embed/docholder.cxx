@@ -284,7 +284,7 @@ HRESULT DocumentHolder::InPlaceActivate(
 
             xWin.set(
                 xToolkit->createSystemChild(
-                    uno::Any(sal_Int32(hWndxWinParent)),
+                    uno::Any(sal_Int64(hWndxWinParent)),
                     aProcessIdent,
                     lang::SystemDependent::SYSTEM_WIN32),
                 uno::UNO_QUERY);
@@ -1209,7 +1209,7 @@ css::uno::Reference< css::awt::XWindow> SAL_CALL DocumentHolder::getContainerWin
 
         xWin.set(
             xToolkit->createSystemChild(
-                uno::Any(sal_Int32(hWnd)),
+                uno::Any(sal_Int64(hWnd)),
                 aProcessIdent,
                 lang::SystemDependent::SYSTEM_WIN32),
             uno::UNO_QUERY);
