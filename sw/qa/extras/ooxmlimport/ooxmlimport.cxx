@@ -8,6 +8,7 @@
  */
 
 #include <memory>
+#include <set>
 #include <config_features.h>
 
 #ifdef MACOSX
@@ -215,42 +216,24 @@ DECLARE_OOXMLIMPORT_TEST(testTdf129237, "tdf129237.docx")
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
-
-    if( !xFields->hasMoreElements() ) {
-        CPPUNIT_ASSERT(false);
-        return;
+    std::unordered_map<OUString, sal_Int32> vExpectedCommandText{
+        {OUString::fromUtf8("DocInformation:Title (fixed)"), 4}
+    };
+    std::unordered_map<OUString, sal_Int32> vExpectedText{
+        {OUString::fromUtf8("MoM is supreme"), 1},
+        {OUString::fromUtf8("title new"), 1},
+        {OUString::fromUtf8("Title New"), 1},
+        {OUString::fromUtf8("MY PATNA IS BEST IN THE WORLD"), 1},
+    };
+    while(xFields->hasMoreElements()) {
+        auto xField = uno::Reference<text::XTextField>(xFields->nextElement(), uno::UNO_QUERY);
+        vExpectedCommandText[xField->getPresentation(true).trim()]--;
+        vExpectedText[xField->getPresentation(false).trim()]--;
     }
-
-    uno::Reference<text::XTextField> xEnumerationAccess1(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("DocInformation:Title (fixed)"), xEnumerationAccess1->getPresentation(true).trim());
-    CPPUNIT_ASSERT_EQUAL(OUString("title new"), xEnumerationAccess1->getPresentation(false).trim());
-
-    if( !xFields->hasMoreElements() ) {
-        CPPUNIT_ASSERT(false);
-        return;
-    }
-
-    uno::Reference<text::XTextField> xEnumerationAccess2(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("DocInformation:Title (fixed)"), xEnumerationAccess2->getPresentation(true).trim());
-    CPPUNIT_ASSERT_EQUAL(OUString("MoM is supreme"), xEnumerationAccess2->getPresentation(false).trim());
-
-    if( !xFields->hasMoreElements() ) {
-        CPPUNIT_ASSERT(false);
-        return;
-    }
-
-    uno::Reference<text::XTextField> xEnumerationAccess3(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("DocInformation:Title (fixed)"), xEnumerationAccess3->getPresentation(true).trim());
-    CPPUNIT_ASSERT_EQUAL(OUString("MY PATNA IS BEST IN THE WORLD"), xEnumerationAccess3->getPresentation(false).trim());
-
-    if( !xFields->hasMoreElements() ) {
-        CPPUNIT_ASSERT(false);
-        return;
-    }
-
-    uno::Reference<text::XTextField> xEnumerationAccess4(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("DocInformation:Title (fixed)"), xEnumerationAccess4->getPresentation(true).trim());
-    CPPUNIT_ASSERT_EQUAL(OUString("Title New"), xEnumerationAccess4->getPresentation(false).trim());
+    CPPUNIT_ASSERT(std::all_of(vExpectedCommandText.begin(), vExpectedCommandText.end(),
+        [](auto& rE) { return rE.second == 0; } ));
+    CPPUNIT_ASSERT(std::all_of(vExpectedText.begin(), vExpectedText.end(),
+        [](auto& rE) { return rE.second == 0; } ));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf128076, "tdf128076.docx")

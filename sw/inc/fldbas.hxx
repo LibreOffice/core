@@ -249,6 +249,7 @@ class SW_DLLPUBLIC SwFieldType : public SwModify, public sw::BroadcasterMixin
     static void GetFieldName_();  ///< Sets up FieldNames; fldmgr.cxx!
 
 protected:
+    std::vector<SwFormatField*> m_vpFields;
     /// Single argument ctors shall be explicit.
     explicit SwFieldType( SwFieldIds nWhichId );
 
@@ -268,10 +269,13 @@ public:
     virtual std::unique_ptr<SwFieldType> Copy() const = 0;
     virtual void QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const;
     virtual void PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich );
+    virtual void Modify(SfxPoolItem const*const pOldValue, SfxPoolItem const*const pNewValue ) {
+        GetNotifier().Broadcast(sw::LegacyModifyHint(pOldValue, pNewValue));
+    }
 
     SwFieldIds              Which() const { return m_nWhich; }
 
-    inline  void            UpdateFields() const;
+    void UpdateFields() const;
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
     SwFormatField* FindFormatForField(const SwField*) const;
     SwFormatField* FindFormatForPostItId(sal_uInt32 nPostItId) const;
@@ -280,12 +284,15 @@ public:
     void GatherNodeIndex(std::vector<sal_uLong>& rvNodeIndex);
     void GatherRefFields(std::vector<SwGetRefField*>& rvRFields, const sal_uInt16 nTyp);
     void GatherFields(std::vector<SwFormatField*>& rvFormatFields, bool bCollectOnlyInDocNodes=true) const;
+    void RegisterFormatField(SwFormatField& rField);
+    void DeregisterFormatField(SwFormatField& rField)
+    {
+        auto ppField = std::find(m_vpFields.begin(), m_vpFields.end(), &rField);
+        if(ppField != m_vpFields.end())
+            m_vpFields.erase(std::find(m_vpFields.begin(), m_vpFields.end(), &rField));
+    }
 };
 
-inline void SwFieldType::UpdateFields() const
-{
-    const_cast<SwFieldType*>(this)->ModifyNotification( nullptr, nullptr );
-}
 
 /** Base class of all fields.
  Type of field is queried via Which.
