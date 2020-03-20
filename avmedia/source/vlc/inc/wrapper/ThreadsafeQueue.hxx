@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_AVMEDIA_SOURCE_VLC_INC_WRAPPER_THREADSAFEQUEUE_HXX
-#define INCLUDED_AVMEDIA_SOURCE_VLC_INC_WRAPPER_THREADSAFEQUEUE_HXX
+#pragma once
 #include <queue>
 #include <iostream>
 #include <osl/mutex.hxx>
@@ -79,5 +78,4 @@ void ThreadsafeQueue<T>::pop( T& data )
 }
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
