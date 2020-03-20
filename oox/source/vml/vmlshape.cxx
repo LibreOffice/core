@@ -24,13 +24,11 @@
 
 #include <o3tl/safeint.hxx>
 #include <oox/vml/vmlshape.hxx>
-#include <vcl/wmf.hxx>
 #include <vcl/wmfexternal.hxx>
-#include <vcl/virdev.hxx>
 
-#include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/awt/XControlModel.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
@@ -44,19 +42,13 @@
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
-#include <com/sun/star/text/XTextContent.hpp>
-#include <com/sun/star/text/XTextDocument.hpp>
-#include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
-#include <rtl/math.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
-#include <svx/svdtrans.hxx>
 #include <oox/drawingml/shapepropertymap.hxx>
 #include <oox/helper/graphichelper.hxx>
 #include <oox/helper/propertyset.hxx>
@@ -72,14 +64,12 @@
 #include <oox/helper/containerhelper.hxx>
 #include <svx/EnhancedCustomShapeTypeNames.hxx>
 #include <svx/unoapi.hxx>
-#include <svx/svdoashp.hxx>
 #include <svx/sdtagitm.hxx>
-#include <svx/xfillit0.hxx>
+#include <svx/svdobj.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <vcl/svapp.hxx>
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Any;

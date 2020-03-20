@@ -10,8 +10,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 
+#include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/attributelist.hxx>
-#include <oox/ppt/pptimport.hxx>
 #include <oox/ppt/presPropsfragmenthandler.hxx>
 #include <oox/token/namespaces.hxx>
 

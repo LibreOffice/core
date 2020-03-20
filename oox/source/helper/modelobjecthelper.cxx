@@ -28,7 +28,6 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <oox/helper/containerhelper.hxx>
-#include <oox/helper/helper.hxx>
 #include <osl/diagnose.h>
 
 namespace oox {

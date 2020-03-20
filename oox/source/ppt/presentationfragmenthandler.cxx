@@ -19,12 +19,11 @@
 
 #include <comphelper/anytostring.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <cppuhelper/exc_hlp.hxx>
-#include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <tools/multisel.hxx>
 #include <tools/diagnose_ex.h>
 
+#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -32,8 +31,6 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
-#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 

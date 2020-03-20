@@ -18,12 +18,10 @@
  */
 
 #include <oox/helper/propertymap.hxx>
-#include <oox/helper/helper.hxx>
 
 #if OSL_DEBUG_LEVEL > 0
 # include <cstdio>
 # include <com/sun/star/style/LineSpacing.hpp>
-# include <com/sun/star/style/LineSpacingMode.hpp>
 # include <com/sun/star/text/WritingMode.hpp>
 using ::com::sun::star::style::LineSpacing;
 using ::com::sun::star::text::WritingMode;

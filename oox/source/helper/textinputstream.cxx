@@ -20,7 +20,6 @@
 #include <oox/helper/textinputstream.hxx>
 
 #include <com/sun/star/io/NotConnectedException.hpp>
-#include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/TextInputStream.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <osl/diagnose.h>

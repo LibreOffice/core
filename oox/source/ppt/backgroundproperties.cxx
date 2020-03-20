@@ -19,10 +19,8 @@
 
 #include <oox/ppt/backgroundproperties.hxx>
 #include <drawingml/misccontexts.hxx>
-#include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/core/contexthandler2.hxx>
 #include <oox/token/namespaces.hxx>
-#include <oox/token/tokens.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;

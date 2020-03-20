@@ -19,7 +19,6 @@
 
 #include <oox/ppt/timenode.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -37,7 +36,6 @@
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <oox/helper/helper.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/ppt/pptfilterhelpers.hxx>
 #include <oox/token/tokens.hxx>

@@ -19,7 +19,6 @@
 
 #include <oox/helper/storagebase.hxx>
 
-#include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>

@@ -27,7 +27,6 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <oox/ppt/pptfilterhelpers.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <tools/color.hxx>
 
 namespace {

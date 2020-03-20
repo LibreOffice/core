@@ -19,19 +19,14 @@
 
 #include "animvariantcontext.hxx"
 
-#include <cppuhelper/exc_hlp.hxx>
-
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/drawing/FillStyle.hpp>
 #include <rtl/ustring.hxx>
 
 #include <oox/helper/attributelist.hxx>
-#include <oox/core/fragmenthandler.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <drawingml/colorchoicecontext.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
-#include <oox/ppt/pptfilterhelpers.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;

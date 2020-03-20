@@ -70,3 +70,90 @@ blacklist:
     oox/source/drawingml/diagram/diagram.cxx:
     # Actually used
     - com/sun/star/xml/dom/XDocument.hpp
+    oox/source/helper/binarystreambase.cxx:
+    # Actually used
+    - com/sun/star/io/XSeekable.hpp
+    oox/source/helper/binaryinputstream.cxx:
+    # Actually used
+    - com/sun/star/io/XInputStream.hpp
+    - vector
+    oox/source/helper/binaryoutputstream.cxx:
+    # Actually used
+    - com/sun/star/io/XOutputStream.hpp
+    oox/source/helper/progressbar.cxx:
+    # Actually used
+    - com/sun/star/task/XStatusIndicator.hpp
+    oox/source/helper/modelobjecthelper.cxx:
+    # Actually used
+    - com/sun/star/awt/Gradient.hpp
+    - com/sun/star/drawing/LineDash.hpp
+    - com/sun/star/drawing/Hatch.hpp
+    - com/sun/star/drawing/PolyPolygonBezierCoords.hpp
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    - com/sun/star/graphic/XGraphic.hpp
+    oox/source/helper/propertyset.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    oox/source/helper/storagebase.cxx:
+    # Actually used
+    - com/sun/star/io/XStream.hpp
+    oox/source/helper/zipstorage.cxx:
+    # Actually used
+    - com/sun/star/embed/XStorage.hpp
+    - com/sun/star/uno/XComponentContext.hpp
+    oox/source/helper/propertymap.cxx:
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp
+    oox/source/mathml/importutils.cxx:
+    # Actually used
+    - com/sun/star/xml/sax/XFastAttributeList.hpp
+    oox/source/ole/oleobjecthelper.cxx:
+    # Actually used
+    - com/sun/star/awt/Size.hpp
+    - com/sun/star/lang/XMultiServiceFactory.hpp
+    oox/source/ole/vbamodule.cxx:
+    # Actually used
+    - com/sun/star/container/XNameContainer.hpp
+    oox/source/ole/olestorage.cxx:
+    # Actually used
+     - com/sun/star/uno/XComponentContext.hpp
+    oox/source/ole/olehelper.cxx:
+    # Actually used
+     - com/sun/star/frame/XModel.hpp
+     - com/sun/star/awt/Size.hpp
+     - com/sun/star/uno/XComponentContext.hpp
+    oox/source/ole/vbaproject.cxx:
+    # Actually used
+     - com/sun/star/frame/XModel.hpp
+     - com/sun/star/uno/XComponentContext.hpp
+    oox/source/ole/vbacontrol.cxx:
+    # Actually used
+     - com/sun/star/uno/XComponentContext.hpp
+    oox/source/ppt/comments.cxx:
+    # Needed for rtl::math::round
+     - rtl/math.hxx
+    oox/source/ppt/pptimport.cxx:
+    # Actually used
+    - comphelper/scopeguard.hxx
+    oox/source/ppt/slidetransition.cxx:
+    # Actually used
+    - com/sun/star/animations/XTransitionFilter.hpp
+    oox/source/shape/ShapeContextHandler.cxx:
+    # Actually used
+    - com/sun/star/xml/dom/XDocument.hpp
+    oox/source/token/propertynames.cxx:
+    # Auto-generated C array of property names
+    - propertynames.inc
+    oox/source/token/relationship.cxx:
+    # Auto-generated C array of relationship names
+    - relationship.inc
+    oox/source/token/namespacemap.cxx:
+    # Auto-generated C array of transitional and strict namespace names
+    - namespacenames.inc
+    - namespaces-strictnames.inc
+    oox/source/token/tokenmap.cxx:
+    # Auto-generated C array of token names
+    - tokennames.inc
+    oox/source/vml/vmlinputstream.cxx:
+    # Needed for direct member access
+    - com/sun/star/io/XTextInputStream2.hpp
