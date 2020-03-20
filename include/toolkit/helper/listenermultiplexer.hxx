@@ -20,6 +20,7 @@
 #ifndef INCLUDED_TOOLKIT_HELPER_LISTENERMULTIPLEXER_HXX
 #define INCLUDED_TOOLKIT_HELPER_LISTENERMULTIPLEXER_HXX
 
+#include <config_options.h>
 #include <toolkit/dllapi.h>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
@@ -51,7 +52,7 @@
 //  class ListenerMultiplexerBase
 
 
-class TOOLKIT_DLLPUBLIC ListenerMultiplexerBase : public MutexHelper,
+class UNLESS_MERGELIBS(TOOLKIT_DLLPUBLIC) ListenerMultiplexerBase : public MutexHelper,
                                 public ::comphelper::OInterfaceContainerHelper2,
                                 public css::uno::XInterface
 {

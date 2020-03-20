@@ -20,6 +20,7 @@
 #ifndef INCLUDED_UNOTOOLS_DESKTOPTERMINATIONOBSERVER_HXX
 #define INCLUDED_UNOTOOLS_DESKTOPTERMINATIONOBSERVER_HXX
 
+#include <config_options.h>
 #include <unotools/unotoolsdllapi.h>
 
 namespace utl
@@ -49,11 +50,11 @@ namespace utl
         /** registers a listener which should be notified when the desktop terminates
             (which means the application is shutting down)
         */
-        UNOTOOLS_DLLPUBLIC void    registerTerminationListener( ITerminationListener* _pListener );
+        UNLESS_MERGELIBS(UNOTOOLS_DLLPUBLIC) void registerTerminationListener( ITerminationListener* _pListener );
 
         /** revokes a termination listener
         */
-        UNOTOOLS_DLLPUBLIC void    revokeTerminationListener( ITerminationListener const * _pListener );
+        UNLESS_MERGELIBS(UNOTOOLS_DLLPUBLIC) void revokeTerminationListener( ITerminationListener const * _pListener );
     }
 
 } // namespace utl

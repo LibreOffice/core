@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_SQLPARSERCLIENT_HXX
 #define INCLUDED_SVX_SOURCE_INC_SQLPARSERCLIENT_HXX
 
+#include <config_options.h>
 #include <svx/ParseContext.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -43,7 +44,7 @@ namespace svxform
 {
     //= OSQLParserClient
 
-    class SVXCORE_DLLPUBLIC OSQLParserClient : public ::svxform::OParseContextClient
+    class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) OSQLParserClient : public ::svxform::OParseContextClient
     {
     protected:
         mutable std::shared_ptr< ::connectivity::OSQLParser > m_pParser;

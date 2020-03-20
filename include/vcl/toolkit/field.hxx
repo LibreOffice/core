@@ -24,10 +24,11 @@
 #error "don't use this in new code"
 #endif
 
+#include <config_options.h>
 #include <vcl/field.hxx>
 #include <config_options.h>
 
-class VCL_DLLPUBLIC CurrencyFormatter : public NumericFormatter
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) CurrencyFormatter : public NumericFormatter
 {
 protected:
                             CurrencyFormatter(Edit* pEdit);
@@ -61,7 +62,7 @@ public:
     virtual void            dispose() override;
 };
 
-class VCL_DLLPUBLIC NumericBox : public ComboBox, public NumericFormatter
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) NumericBox : public ComboBox, public NumericFormatter
 {
     SAL_DLLPRIVATE void     ImplNumericReformat( const OUString& rStr, sal_Int64& rValue, OUString& rOutStr );
 public:
@@ -80,7 +81,7 @@ public:
     virtual void            dispose() override;
 };
 
-class VCL_DLLPUBLIC PatternBox final : public ComboBox, public PatternFormatter
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) PatternBox final : public ComboBox, public PatternFormatter
 {
 public:
                             PatternBox( vcl::Window* pParent, WinBits nWinStyle );
@@ -94,7 +95,7 @@ public:
     virtual void            dispose() override;
 };
 
-class VCL_DLLPUBLIC CurrencyBox final : public ComboBox, public CurrencyFormatter
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) CurrencyBox final : public ComboBox, public CurrencyFormatter
 {
 public:
     explicit                CurrencyBox( vcl::Window* pParent, WinBits nWinStyle );
@@ -110,7 +111,7 @@ public:
     virtual void            dispose() override;
 };
 
-class VCL_DLLPUBLIC DateBox final : public ComboBox, public DateFormatter
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) DateBox final : public ComboBox, public DateFormatter
 {
 public:
     explicit                DateBox( vcl::Window* pParent, WinBits nWinStyle );
@@ -125,7 +126,7 @@ public:
     virtual void            dispose() override;
 };
 
-class VCL_DLLPUBLIC TimeBox final : public ComboBox, public TimeFormatter
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) TimeBox final : public ComboBox, public TimeFormatter
 {
 public:
     explicit                TimeBox( vcl::Window* pParent, WinBits nWinStyle );

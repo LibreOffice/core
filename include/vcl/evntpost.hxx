@@ -19,6 +19,7 @@
 #ifndef INCLUDED_VCL_EVNTPOST_HXX
 #define INCLUDED_VCL_EVNTPOST_HXX
 
+#include <config_options.h>
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
 
@@ -26,7 +27,7 @@ struct ImplSVEvent;
 
 namespace vcl
 {
-    class VCL_DLLPUBLIC EventPoster
+    class UNLESS_MERGELIBS(VCL_DLLPUBLIC) EventPoster
     {
         ImplSVEvent *             m_nId;
         Link<LinkParamNone*,void> m_aLink;

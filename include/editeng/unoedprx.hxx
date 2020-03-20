@@ -20,6 +20,7 @@
 #ifndef INCLUDED_EDITENG_UNOEDPRX_HXX
 #define INCLUDED_EDITENG_UNOEDPRX_HXX
 
+#include <config_options.h>
 #include <memory>
 #include <svl/SfxBroadcaster.hxx>
 #include <editeng/unoedsrc.hxx>
@@ -133,7 +134,7 @@ private:
     SvxAccessibleTextAdapter*   mpTextForwarder;
 };
 
-class EDITENG_DLLPUBLIC SvxEditSourceAdapter final : public SvxEditSource
+class UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) SvxEditSourceAdapter final : public SvxEditSource
 {
 public:
     SvxEditSourceAdapter();

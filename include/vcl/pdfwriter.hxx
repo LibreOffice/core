@@ -19,6 +19,7 @@
 #ifndef INCLUDED_VCL_PDFWRITER_HXX
 #define INCLUDED_VCL_PDFWRITER_HXX
 
+#include <config_options.h>
 #include <sal/types.h>
 
 #include <tools/gen.hxx>
@@ -212,7 +213,7 @@ public:
         Error_Signature_Failed,
     };
 
-    struct VCL_DLLPUBLIC AnyWidget
+    struct UNLESS_MERGELIBS(VCL_DLLPUBLIC) AnyWidget
     {
         WidgetType          Type;       // primitive RTTI
     public:

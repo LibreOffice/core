@@ -20,6 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_PARAMWRAPPER_HXX
 #define INCLUDED_CONNECTIVITY_PARAMWRAPPER_HXX
 
+#include <config_options.h>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/FValue.hxx>
 
@@ -50,7 +51,7 @@ namespace param
     /** wraps a parameter column as got from an SQLQueryComposer, so that it has an additional
         property "Value", which is forwarded to an XParameters interface
     */
-    class OOO_DLLPUBLIC_DBTOOLS ParameterWrapper final : public ::cppu::OWeakObject
+    class UNLESS_MERGELIBS(OOO_DLLPUBLIC_DBTOOLS) ParameterWrapper final : public ::cppu::OWeakObject
                             ,public css::lang::XTypeProvider
                             ,public ::comphelper::OMutexAndBroadcastHelper
                             ,public ::cppu::OPropertySetHelper

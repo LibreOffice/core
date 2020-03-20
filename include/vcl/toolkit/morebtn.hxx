@@ -24,6 +24,7 @@
 #error "don't use this in new code"
 #endif
 
+#include <config_options.h>
 #include <vcl/dllapi.h>
 #include <vcl/button.hxx>
 #include <memory>
@@ -31,7 +32,7 @@
 struct ImplMoreButtonData;
 
 
-class VCL_DLLPUBLIC MoreButton final : public PushButton
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MoreButton final : public PushButton
 {
     std::unique_ptr<ImplMoreButtonData> mpMBData;
     bool                mbState;

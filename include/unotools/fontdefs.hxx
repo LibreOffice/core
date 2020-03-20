@@ -23,6 +23,7 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <config_options.h>
 
 enum class SubsFontFlags
 {
@@ -40,7 +41,7 @@ UNOTOOLS_DLLPUBLIC OUString GetSubsFontName( const OUString& rName, SubsFontFlag
 UNOTOOLS_DLLPUBLIC void AddTokenFontName( OUString& rName, const OUString& rNewToken );
 
 
-class UNOTOOLS_DLLPUBLIC ConvertChar
+class UNLESS_MERGELIBS(UNOTOOLS_DLLPUBLIC) ConvertChar
 {
 public:
     const sal_Unicode*  mpCvtTab;

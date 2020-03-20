@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_GENERICTOOLBOXCONTROLLER_HXX
 #define INCLUDED_SVTOOLS_GENERICTOOLBOXCONTROLLER_HXX
 
+#include <config_options.h>
 #include <svtools/svtdllapi.h>
 #include <svtools/toolboxcontroller.hxx>
 #include <vcl/toolbox.hxx>
@@ -32,7 +33,7 @@ namespace weld
 namespace svt
 {
 
-class SVT_DLLPUBLIC GenericToolboxController final : public svt::ToolboxController
+class UNLESS_MERGELIBS(SVT_DLLPUBLIC) GenericToolboxController final : public svt::ToolboxController
 {
 public:
     GenericToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,

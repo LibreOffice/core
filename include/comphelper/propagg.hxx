@@ -20,6 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_PROPAGG_HXX
 #define INCLUDED_COMPHELPER_PROPAGG_HXX
 
+#include <config_options.h>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/XPropertiesChangeListener.hpp>
@@ -194,7 +195,7 @@ namespace internal
  * supports at least XPropertySet and XMultiPropertySet
  *
  */
-class COMPHELPER_DLLPUBLIC OPropertySetAggregationHelper    :public OPropertyStateHelper
+class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OPropertySetAggregationHelper    :public OPropertyStateHelper
                                     ,public css::beans::XPropertiesChangeListener
                                     ,public css::beans::XVetoableChangeListener
 {

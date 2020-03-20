@@ -24,10 +24,11 @@
 #error "don't use this in new code"
 #endif
 
+#include <config_options.h>
 #include <vcl/dllapi.h>
 #include <vcl/fixed.hxx>
 
-class VCL_DLLPUBLIC FixedHyperlink final : public FixedText
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) FixedHyperlink final : public FixedText
 {
 private:
     long                m_nTextLen;

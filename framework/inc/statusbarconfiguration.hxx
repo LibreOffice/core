@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <config_options.h>
 #include <framework/fwedllapi.h>
 
 namespace com::sun::star::container { class XIndexAccess; }
@@ -30,7 +31,7 @@ namespace com::sun::star::uno { template <typename > class Reference; }
 namespace framework
 {
 
-class FWE_DLLPUBLIC StatusBarConfiguration
+class UNLESS_MERGELIBS(FWE_DLLPUBLIC) StatusBarConfiguration
 {
     public:
         static bool LoadStatusBar(

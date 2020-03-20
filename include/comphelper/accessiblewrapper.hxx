@@ -20,6 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_ACCESSIBLEWRAPPER_HXX
 #define INCLUDED_COMPHELPER_ACCESSIBLEWRAPPER_HXX
 
+#include <config_options.h>
 #include <sal/config.h>
 
 #include <map>
@@ -323,7 +324,7 @@ namespace comphelper
                                   >   OWrappedAccessibleChildrenManager_Base;
     /** manages wrapping XAccessible's to XAccessible's
     */
-    class COMPHELPER_DLLPUBLIC OWrappedAccessibleChildrenManager : public OWrappedAccessibleChildrenManager_Base
+    class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OWrappedAccessibleChildrenManager : public OWrappedAccessibleChildrenManager_Base
     {
     protected:
         css::uno::Reference< css::uno::XComponentContext >

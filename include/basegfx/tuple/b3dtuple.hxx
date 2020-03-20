@@ -20,6 +20,7 @@
 #ifndef INCLUDED_BASEGFX_TUPLE_B3DTUPLE_HXX
 #define INCLUDED_BASEGFX_TUPLE_B3DTUPLE_HXX
 
+#include <config_options.h>
 #include <sal/types.h>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/basegfxdllapi.h>
@@ -36,7 +37,7 @@ namespace basegfx
         @derive Use this class to implement Points or Vectors
         which are based on three double values
     */
-    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC B3DTuple
+    class SAL_WARN_UNUSED UNLESS_MERGELIBS(BASEGFX_DLLPUBLIC) B3DTuple
     {
     protected:
         double                                      mfX;

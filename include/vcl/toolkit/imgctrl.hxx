@@ -24,10 +24,11 @@
 #error "don't use this in new code"
 #endif
 
+#include <config_options.h>
 #include <vcl/dllapi.h>
 #include <vcl/fixed.hxx>
 
-class VCL_DLLPUBLIC ImageControl : public FixedImage
+class UNLESS_MERGELIBS(VCL_DLLPUBLIC) ImageControl : public FixedImage
 {
 private:
     ::sal_Int16     mnScaleMode;

@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SVX_FMTOOLS_HXX
 #define INCLUDED_SVX_FMTOOLS_HXX
 
+#include <config_options.h>
 #include <svx/svxdllapi.h>
 
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
@@ -74,7 +75,7 @@ private:
 public:
     // Construction/Destruction
     CursorWrapper(const css::uno::Reference< css::sdbc::XRowSet>& _rxCursor, bool bUseCloned = false);
-    SVXCORE_DLLPUBLIC CursorWrapper(const css::uno::Reference< css::sdbc::XResultSet>& _rxCursor, bool bUseCloned = false);
+    UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) CursorWrapper(const css::uno::Reference< css::sdbc::XResultSet>& _rxCursor, bool bUseCloned = false);
         // if bUseCloned == sal_True, the cursor is first doubled over the XCloneable interface (which it must implement)
         // and then used
 

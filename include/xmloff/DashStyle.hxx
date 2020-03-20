@@ -20,6 +20,7 @@
 #ifndef INCLUDED_XMLOFF_DASHSTYLE_HXX
 #define INCLUDED_XMLOFF_DASHSTYLE_HXX
 
+#include <config_options.h>
 #include <rtl/ustring.hxx>
 #include <xmloff/dllapi.h>
 
@@ -32,7 +33,7 @@ namespace com { namespace sun { namespace star {
 } } }
 
 
-class XMLOFF_DLLPUBLIC XMLDashStyleImport
+class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLDashStyleImport
 {
     SvXMLImport& rImport;
 
@@ -47,7 +48,7 @@ public:
 };
 
 
-class XMLOFF_DLLPUBLIC XMLDashStyleExport
+class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLDashStyleExport
 {
     SvXMLExport& rExport;
 
