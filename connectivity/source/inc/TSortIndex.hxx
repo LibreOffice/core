@@ -89,17 +89,19 @@ namespace connectivity
 
     };
 
+    // MSVC hack to avoid multiply defined std::vector-related symbols:
+    class OKeySet_Base: public ORefVector<sal_Int32> {};
+
     /**
         The class OKeySet is a refcountable vector which also has a state.
         This state gives information about if the keyset is fixed.
     */
-    class OOO_DLLPUBLIC_DBTOOLS OKeySet : public ORefVector<sal_Int32>
+    class OOO_DLLPUBLIC_DBTOOLS OKeySet : public OKeySet_Base
     {
         bool m_bFrozen;
     public:
         OKeySet()
-            : ORefVector<sal_Int32>()
-            , m_bFrozen(false){}
+            : m_bFrozen(false){}
 
         bool    isFrozen() const   { return m_bFrozen; }
         void    setFrozen()        { m_bFrozen = true; }
