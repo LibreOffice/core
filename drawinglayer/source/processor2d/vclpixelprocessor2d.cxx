@@ -33,7 +33,7 @@
 #include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
-#include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
+#include <primitive2d/pointarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
@@ -41,13 +41,13 @@
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include "helperwrongspellrenderer.hxx"
-#include <drawinglayer/primitive2d/fillhatchprimitive2d.hxx>
+#include <primitive2d/fillhatchprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <vcl/hatch.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/awt/XControl.hpp>
 #include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
-#include <drawinglayer/primitive2d/epsprimitive2d.hxx>
+#include <primitive2d/epsprimitive2d.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 
 #include <vcl/dibtools.hxx>

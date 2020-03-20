@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <drawinglayer/processor3d/shadow3dextractor.hxx>
-#include <drawinglayer/primitive3d/shadowprimitive3d.hxx>
+#include <processor3d/shadow3dextractor.hxx>
+#include <primitive3d/shadowprimitive3d.hxx>
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive3d/transformprimitive3d.hxx>

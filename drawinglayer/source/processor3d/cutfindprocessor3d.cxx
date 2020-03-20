@@ -20,12 +20,12 @@
 #include <drawinglayer/processor3d/cutfindprocessor3d.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
 #include <drawinglayer/primitive3d/transformprimitive3d.hxx>
-#include <drawinglayer/primitive3d/hatchtextureprimitive3d.hxx>
+#include <primitive3d/hatchtextureprimitive3d.hxx>
 #include <drawinglayer/primitive3d/polypolygonprimitive3d.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <basegfx/polygon/b3dpolygontools.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
-#include <drawinglayer/primitive3d/hiddengeometryprimitive3d.hxx>
+#include <primitive3d/hiddengeometryprimitive3d.hxx>
 
 
 namespace drawinglayer::processor3d

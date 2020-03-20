@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <drawinglayer/primitive2d/fillhatchprimitive2d.hxx>
-#include <drawinglayer/texture/texture.hxx>
+#include <primitive2d/fillhatchprimitive2d.hxx>
+#include <texture/texture.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

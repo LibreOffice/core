@@ -37,12 +37,12 @@
 #include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
-#include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
+#include <primitive2d/pointarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <drawinglayer/primitive2d/textenumsprimitive2d.hxx>
-#include <drawinglayer/primitive2d/epsprimitive2d.hxx>
+#include <primitive2d/epsprimitive2d.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
