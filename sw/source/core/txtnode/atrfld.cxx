@@ -58,7 +58,7 @@ SwFormatField::SwFormatField( const SwField &rField )
     , mpField( rField.CopyField() )
     , mpTextField( nullptr )
 {
-    rField.GetTyp()->Add(this);
+    rField.GetTyp()->RegisterFormatField(*this);
     if ( mpField->GetTyp()->Which() == SwFieldIds::Input )
     {
         // input field in-place editing
@@ -97,7 +97,7 @@ SwFormatField::SwFormatField( const SwFormatField& rAttr )
 {
     if ( rAttr.mpField )
     {
-        rAttr.mpField->GetTyp()->Add(this);
+        rAttr.mpField->GetTyp()->RegisterFormatField(*this);
         mpField = rAttr.mpField->CopyField();
         if ( mpField->GetTyp()->Which() == SwFieldIds::Input )
         {
@@ -161,7 +161,7 @@ SwFormatField::~SwFormatField()
         if( bDel )
         {
             // unregister before deleting
-            pType->Remove( this );
+            pType->DeregisterFormatField( *this );
             delete pType;
         }
     }
@@ -169,7 +169,7 @@ SwFormatField::~SwFormatField()
 
 void SwFormatField::RegisterToFieldType( SwFieldType& rType )
 {
-    rType.Add(this);
+    rType.RegisterFormatField(*this);
 }
 
 void SwFormatField::SetField(std::unique_ptr<SwField> _pField)
@@ -215,14 +215,21 @@ SwFormatField* SwFormatField::Clone( SfxItemPool* ) const
 
 void SwFormatField::InvalidateField()
 {
-    SwPtrMsgPoolItem const item(RES_REMOVE_UNO_OBJECT,
-            &static_cast<SwModify&>(*this)); // cast to base class (void*)
-    NotifyClients(&item, &item);
+    //FIXME
+    //SwPtrMsgPoolItem const item(RES_REMOVE_UNO_OBJECT, *this); // cast to base class (void*)
+    //NotifyClients(&item, &item);
 }
 
-void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
+void SwFormatField::ForceLayout(const sw::LegacyModifyHint& rHint)
 {
-    SwClient::SwClientNotify(rModify, rHint);
+    if( !mpTextField )
+        return;
+    UpdateTextNode(rHint.m_pOld, rHint.m_pNew);
+}
+
+void SwFormatField::SwClientNotify( const SwModify& /*rModify*/, const SfxHint& rHint )
+{
+    //SwClient::SwClientNotify(rModify, rHint);
     if (const auto pFieldHint = dynamic_cast<const SwFieldHint*>( &rHint ))
     {
         if( !mpTextField )
@@ -242,9 +249,7 @@ void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
         pDoc->getIDocumentContentOperations().InsertString( *pPaM, aEntry );
     } else if (const auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>( &rHint ))
     {
-        if( !mpTextField )
-            return;
-        UpdateTextNode(pLegacyHint->m_pOld, pLegacyHint->m_pNew);
+        ForceLayout(*pLegacyHint);
     } else if (const auto pFindForFieldHint = dynamic_cast<const sw::FindFormatForFieldHint*>( &rHint ))
     {
         if(pFindForFieldHint->m_rpFormat == nullptr && pFindForFieldHint->m_pField == GetField())
@@ -293,7 +298,8 @@ void SwFormatField::UpdateTextNode(const SfxPoolItem* pOld, const SfxPoolItem* p
     {   // invalidate cached UNO object
         m_wXTextField = nullptr;
         // ??? why does this Modify method not already do this?
-        NotifyClients(pOld, pNew);
+        // FIXME
+        //NotifyClients(pOld, pNew);
         return;
     }
 
@@ -531,7 +537,7 @@ void SwTextField::CopyTextField( SwTextField *pDest ) const
         }
 
         OSL_ENSURE( pFieldType, "unknown FieldType" );
-        pFieldType->Add( &rDestFormatField ); // register at the field type
+        pFieldType->RegisterFormatField( rDestFormatField ); // register at the field type
         rDestFormatField.GetField()->ChgTyp( pFieldType );
     }
 

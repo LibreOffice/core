@@ -1116,8 +1116,9 @@ public:
                 : nServiceId)
         , m_pProps(pFormat ? nullptr : new SwFieldProperties_Impl)
     {
-        if(m_pFormatField)
-            StartListening(m_pFormatField->GetNotifier());
+        // FIXME
+        //if(m_pFormatField)
+        //    StartListening(m_pFormatField->GetNotifier());
     }
 
     virtual ~Impl() override
@@ -1135,7 +1136,8 @@ public:
         if(m_pFormatField)
         {
             EndListeningAll();
-            StartListening(m_pFormatField->GetNotifier());
+            // FIXME
+            //StartListening(m_pFormatField->GetNotifier());
         }
     }
     SwFormatField* GetFormatField()
@@ -2571,7 +2573,8 @@ void SAL_CALL SwXTextField::update()
             default: break;
         }
         // Text formatting has to be triggered.
-        m_pImpl->GetFormatField()->ModifyNotification(nullptr, nullptr);
+        // FIXME
+        //m_pImpl->GetFormatField()->ModifyNotification(nullptr, nullptr);
     }
     else
         m_pImpl->m_bCallUpdate = true;
