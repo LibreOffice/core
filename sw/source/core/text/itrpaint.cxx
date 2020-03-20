@@ -240,7 +240,13 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
     if( m_pCurr->IsClipping() )
     {
-        rClip.ChgClip( aLineRect, m_pFrame );
+        const SwTextFrame& rFrame = *GetInfo().GetTextFrame();
+        // tdf#117448 at small fixed line height, enlarge clipping area in table cells
+        // to show previously clipped text content on the area of paragraph margins
+        if ( rFrame.IsInTab() )
+            rClip.ChgClip( aLineRect, m_pFrame, false, rFrame.GetTopMargin(), rFrame.GetBottomMargin() );
+        else
+            rClip.ChgClip( aLineRect, m_pFrame );
         bClip = false;
     }
 

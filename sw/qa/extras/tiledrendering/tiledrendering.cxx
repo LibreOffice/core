@@ -119,6 +119,7 @@ public:
     void testVisCursorInvalidation();
     void testDeselectCustomShape();
     void testSemiTransparent();
+    void testClipText();
     void testAnchorTypes();
     void testLanguageStatus();
 
@@ -180,6 +181,7 @@ public:
     CPPUNIT_TEST(testVisCursorInvalidation);
     CPPUNIT_TEST(testDeselectCustomShape);
     CPPUNIT_TEST(testSemiTransparent);
+    CPPUNIT_TEST(testClipText);
     CPPUNIT_TEST(testAnchorTypes);
     CPPUNIT_TEST(testLanguageStatus);
     CPPUNIT_TEST_SUITE_END();
@@ -2419,6 +2421,36 @@ void SwTiledRenderingTest::testSemiTransparent()
     CPPUNIT_ASSERT_GREATEREQUAL(190, static_cast<int>(aColor.R));
     CPPUNIT_ASSERT_GREATEREQUAL(190, static_cast<int>(aColor.G));
     CPPUNIT_ASSERT_GREATEREQUAL(190, static_cast<int>(aColor.B));
+}
+
+void SwTiledRenderingTest::testClipText()
+{
+    // Load a document where the top left tile contains table text with
+    // too small line height, but with top and bottom paragraph margins,
+    // avoiding of clipping top and bottom parts of the characters.
+    SwXTextDocument* pXTextDocument = createDoc("tdf117448.fodt");
+
+    // Render a larger area, and then get the top and bottom of the text in that tile
+    size_t nCanvasWidth = 1024;
+    size_t nCanvasHeight = 512;
+    size_t nTileSize = 256;
+    std::vector<unsigned char> aPixmap(nCanvasWidth * nCanvasHeight * 4, 0);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
+    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+    pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nCanvasWidth, nCanvasHeight),
+                                                    Fraction(1.0), Point(), aPixmap.data());
+    pXTextDocument->paintTile(*pDevice, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0,
+                              /*nTilePosY=*/0, /*nTileWidth=*/15360, /*nTileHeight=*/7680);
+    pDevice->EnableMapMode(false);
+    Bitmap aBitmap = pDevice->GetBitmap(Point(0, 0), Size(nTileSize, nTileSize));
+    Bitmap::ScopedReadAccess pAccess(aBitmap);
+
+    // check top of the letter "T", it's not a white pixel
+    Color aTopTextColor(pAccess->GetPixel(98, 100));
+    CPPUNIT_ASSERT_LESS(255, static_cast<int>(aTopTextColor.R));
+    // check bottom of the letter "g", it's not a white pixel
+    Color aBottomTextColor(pAccess->GetPixel(112, 228));
+    CPPUNIT_ASSERT_LESS(255, static_cast<int>(aBottomTextColor.R));
 }
 
 void SwTiledRenderingTest::testAnchorTypes()
