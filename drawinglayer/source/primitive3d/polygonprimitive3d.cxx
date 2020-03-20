@@ -20,7 +20,7 @@
 #include <drawinglayer/primitive3d/polygonprimitive3d.hxx>
 #include <basegfx/polygon/b3dpolygontools.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>
-#include <drawinglayer/primitive3d/polygontubeprimitive3d.hxx>
+#include <primitive3d/polygontubeprimitive3d.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
 
 

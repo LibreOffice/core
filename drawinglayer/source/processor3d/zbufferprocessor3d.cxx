@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <drawinglayer/processor3d/zbufferprocessor3d.hxx>
+#include <processor3d/zbufferprocessor3d.hxx>
 #include <basegfx/raster/bzpixelraster.hxx>
 #include <basegfx/raster/rasterconvert3d.hxx>
 #include <drawinglayer/attribute/materialattribute3d.hxx>
-#include <drawinglayer/texture/texture.hxx>
+#include <texture/texture.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <basegfx/polygon/b3dpolygontools.hxx>

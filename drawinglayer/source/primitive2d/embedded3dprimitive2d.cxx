@@ -25,7 +25,7 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
-#include <drawinglayer/processor3d/shadow3dextractor.hxx>
+#include <processor3d/shadow3dextractor.hxx>
 
 
 using namespace com::sun::star;

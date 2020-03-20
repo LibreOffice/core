@@ -24,7 +24,7 @@
 #include <drawinglayer/primitive3d/sdrextrudeprimitive3d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <drawinglayer/primitive3d/sdrdecompositiontools3d.hxx>
+#include <primitive3d/sdrdecompositiontools3d.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
 #include <drawinglayer/attribute/sdrfillattribute.hxx>

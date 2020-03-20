@@ -21,7 +21,7 @@
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <drawinglayer/primitive3d/sdrdecompositiontools3d.hxx>
+#include <primitive3d/sdrdecompositiontools3d.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
