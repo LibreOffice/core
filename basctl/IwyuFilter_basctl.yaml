@@ -2,8 +2,6 @@
 assumeFilename: basctl/source/basicide/baside2b.cxx
 blacklist:
     basctl/source/basicide/basidesh.cxx:
-    # Needed for STATIC_LINKING
-    - config_options.h
     # Needed for TypedWhichId defines is basslots.hxx
     - sfx2/dinfdlg.hxx
     - sfx2/minfitem.hxx

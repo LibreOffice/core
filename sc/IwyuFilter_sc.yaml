@@ -775,8 +775,6 @@ blacklist:
     # Needed for direct member access
     - ooo/vba/XSinkCaller.hpp
     sc/source/ui/app/typemap.cxx:
-    # Needed for STATIC_LINKING to be there for scslots.hxx
-    - config_options.h
     # Needed for MID* macros
     - mid.h
     - editeng/memberids.h
