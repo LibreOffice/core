@@ -95,6 +95,8 @@ public:
 
     bool                            mbGeometryDidChange;
 
+    int                             mnBlinkCursorDelay;
+
 public:
     /** Constructor
 
