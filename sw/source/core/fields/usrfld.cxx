@@ -27,6 +27,7 @@
 #include <unotools/charclass.hxx>
 
 #include <calc.hxx>
+#include <fmtfld.hxx>
 #include <usrfld.hxx>
 #include <doc.hxx>
 #include <IDocumentFieldsAccess.hxx>
@@ -217,7 +218,8 @@ void SwUserFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     if( !pOld && !pNew )
         m_bValidValue = false;
 
-    NotifyClients( pOld, pNew );
+    for(auto pFormatField: m_vpFields)
+        pFormatField->SwClientNotify(*this, sw::LegacyModifyHint(pOld, pNew));
 
     // update input fields that might be connected to the user field
     if ( !IsModifyLocked() )

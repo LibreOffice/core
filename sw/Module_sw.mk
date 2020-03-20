@@ -69,7 +69,6 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_ooxmlexport \
     CppunitTest_sw_ooxmlexport2 \
     CppunitTest_sw_ooxmlexport3 \
-    CppunitTest_sw_ooxmlexport4 \
     CppunitTest_sw_ooxmlexport5 \
     CppunitTest_sw_ooxmlexport6 \
     CppunitTest_sw_ooxmlexport7 \
@@ -87,10 +86,6 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_ooxmlencryption \
     CppunitTest_sw_ooxmlimport \
     CppunitTest_sw_ooxmlimport2 \
-    CppunitTest_sw_ww8export \
-    CppunitTest_sw_ww8export2 \
-    CppunitTest_sw_ww8export3 \
-    CppunitTest_sw_ww8import \
     CppunitTest_sw_rtfimport \
     CppunitTest_sw_odfexport \
     CppunitTest_sw_odfimport \
@@ -112,6 +107,12 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_core_layout \
     CppunitTest_sw_core_frmedt \
 ))
+
+#    CppunitTest_sw_ooxmlexport4 \
+#    CppunitTest_sw_ww8export \
+#    CppunitTest_sw_ww8export2 \
+#    CppunitTest_sw_ww8export3 \
+#    CppunitTest_sw_ww8import \
 
 ifneq ($(DISABLE_GUI),TRUE)
 ifeq ($(OS),LINUX)

@@ -249,6 +249,7 @@ class SW_DLLPUBLIC SwFieldType : public SwModify, public sw::BroadcasterMixin
     static void GetFieldName_();  ///< Sets up FieldNames; fldmgr.cxx!
 
 protected:
+    std::vector<SwFormatField*> m_vpFields;
     /// Single argument ctors shall be explicit.
     explicit SwFieldType( SwFieldIds nWhichId );
 
@@ -280,6 +281,13 @@ public:
     void GatherNodeIndex(std::vector<sal_uLong>& rvNodeIndex);
     void GatherRefFields(std::vector<SwGetRefField*>& rvRFields, const sal_uInt16 nTyp);
     void GatherFields(std::vector<SwFormatField*>& rvFormatFields, bool bCollectOnlyInDocNodes=true) const;
+    void RegisterFormatField(SwFormatField& rField) { m_vpFields.push_back(&rField); }
+    void DeregisterFormatField(SwFormatField& rField)
+    {
+        auto ppField = std::find(m_vpFields.begin(), m_vpFields.end(), &rField);
+        if(ppField != m_vpFields.end())
+            m_vpFields.erase(std::find(m_vpFields.begin(), m_vpFields.end(), &rField));
+    }
 };
 
 inline void SwFieldType::UpdateFields() const

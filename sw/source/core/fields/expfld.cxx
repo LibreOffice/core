@@ -274,7 +274,9 @@ std::unique_ptr<SwFieldType> SwGetExpFieldType::Copy() const
 void SwGetExpFieldType::Modify( const SfxPoolItem*, const SfxPoolItem* pNew )
 {
     if( pNew && RES_DOCPOS_UPDATE == pNew->Which() )
-        NotifyClients( nullptr, pNew );
+        for(auto pFormatField: m_vpFields)
+            pFormatField->SwClientNotify(*this, sw::LegacyModifyHint(nullptr, pNew));
+
     // do not expand anything else
 }
 

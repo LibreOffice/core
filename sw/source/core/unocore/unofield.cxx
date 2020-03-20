@@ -2571,7 +2571,7 @@ void SAL_CALL SwXTextField::update()
             default: break;
         }
         // Text formatting has to be triggered.
-        m_pImpl->GetFormatField()->ModifyNotification(nullptr, nullptr);
+        m_pImpl->GetFormatField()->ForceLayout(sw::LegacyModifyHint(nullptr, nullptr));
     }
     else
         m_pImpl->m_bCallUpdate = true;

@@ -1095,7 +1095,9 @@ void SwGetRefFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew
         }
     }
     // forward to text fields, they "expand" the text
-    NotifyClients( pOld, pNew );
+    //NotifyClients( pOld, pNew );
+    for(auto pFormatField: m_vpFields)
+        pFormatField->SwClientNotify(*this, sw::LegacyModifyHint(pOld, pNew));
 }
 
 namespace sw {
@@ -1158,7 +1160,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark
     case REF_SEQUENCEFLD:
         {
             SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetFieldType( SwFieldIds::SetExp, rRefMark, false );
-            if( pFieldType && pFieldType->HasWriterListeners() &&
+            if( pFieldType &&
                 nsSwGetSetExpType::GSE_SEQ & static_cast<SwSetExpFieldType*>(pFieldType)->GetType() )
             {
                 std::vector<SwFormatField*> vFields;
