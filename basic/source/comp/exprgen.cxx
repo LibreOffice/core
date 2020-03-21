@@ -72,16 +72,14 @@ void SbiExprNode::Gen( SbiCodeGen& rGen, RecursiveMode eRecMode )
         case SbxEMPTY:
             rGen.Gen( SbiOpcode::EMPTY_ );
             break;
-        case SbxLONG:
-        case SbxINTEGER:
-            nStringId = rGen.GetParser()->aGblStrings.Add(nVal, eType);
-            rGen.Gen( SbiOpcode::CONST_, nStringId );
-            break;
         case SbxSTRING:
             nStringId = rGen.GetParser()->aGblStrings.Add( aStrVal );
             rGen.Gen( SbiOpcode::SCONST_, nStringId );
             break;
         default:
+            // tdf#131296 - generate SbiOpcode::NUMBER_ instead of SbiOpcode::CONST_
+            // for SbxINTEGER and SbxLONG including their numeric value and its data type,
+            // which will be restored in SbiRuntime::StepLOADNC.
             nStringId = rGen.GetParser()->aGblStrings.Add( nVal, eType );
             rGen.Gen( SbiOpcode::NUMBER_, nStringId );
             break;
