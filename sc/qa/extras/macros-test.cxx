@@ -37,6 +37,8 @@ public:
     void testPasswordProtectedStarBasic();
     void testRowColumn();
     void testPasswordProtectedUnicodeString();
+    void testTdf131296_legacy();
+    void testTdf131296_new();
 
     CPPUNIT_TEST_SUITE(ScMacrosTest);
     CPPUNIT_TEST(testStarBasic);
@@ -45,6 +47,8 @@ public:
     CPPUNIT_TEST(testPasswordProtectedStarBasic);
     CPPUNIT_TEST(testRowColumn);
     CPPUNIT_TEST(testPasswordProtectedUnicodeString);
+    CPPUNIT_TEST(testTdf131296_legacy);
+    CPPUNIT_TEST(testTdf131296_new);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -447,6 +451,85 @@ void ScMacrosTest::testPasswordProtectedUnicodeString()
         OUString aReturnValue;
         aRet >>= aReturnValue;
         CPPUNIT_ASSERT_EQUAL(sCorrectString, aReturnValue);
+    }
+
+    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
+    xCloseable->close(true);
+}
+
+void ScMacrosTest::testTdf131296_legacy()
+{
+    // For legacy password-protected library images, we must correctly get the constants' values,
+    // and also - for Integer - the type.
+    const std::vector<std::pair<OUString, OUString>> aTests({
+        { "TestIntConst", "Integer: 123" },
+        { "TestLongConst", "Double: 123" },
+        { "TestSingleConst", "Double: 123" },
+        { "TestDoubleConst", "Double: 123" },
+    });
+
+    OUString aFileName;
+    createFileURL("tdf131296_legacy.ods", aFileName);
+    auto xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    CPPUNIT_ASSERT(xComponent);
+
+    {
+        Any aRet;
+        Sequence<sal_Int16> aOutParamIndex;
+        Sequence<Any> aOutParam;
+        Sequence<uno::Any> aParams;
+
+        for (auto& [sTestName, sExpected] : aTests)
+        {
+            SfxObjectShell::CallXScript(xComponent,
+                                        "vnd.sun.Star.script:Protected.Module1." + sTestName
+                                            + "?language=Basic&location=document",
+                                        aParams, aRet, aOutParamIndex, aOutParam);
+
+            OUString aReturnValue;
+            aRet >>= aReturnValue;
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sTestName.toUtf8().getStr(), sExpected, aReturnValue);
+        }
+    }
+
+    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
+    xCloseable->close(true);
+}
+
+void ScMacrosTest::testTdf131296_new()
+{
+    // For new password-protected library images, we must correctly get both the constants' values
+    // and their types.
+    const std::vector<std::pair<OUString, OUString>> aTests({
+        { "TestIntConst", "Integer: 123" },
+        { "TestLongConst", "Long: 123" },
+        { "TestSingleConst", "Single: 123" },
+        { "TestDoubleConst", "Double: 123" },
+        { "TestCurrencyConst", "Currency: 123.0000" },
+    });
+
+    OUString aFileName;
+    createFileURL("tdf131296_new.ods", aFileName);
+    auto xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    CPPUNIT_ASSERT(xComponent);
+
+    {
+        Any aRet;
+        Sequence<sal_Int16> aOutParamIndex;
+        Sequence<Any> aOutParam;
+        Sequence<uno::Any> aParams;
+
+        for (auto& [sTestName, sExpected] : aTests)
+        {
+            SfxObjectShell::CallXScript(xComponent,
+                                        "vnd.sun.Star.script:Protected.Module1." + sTestName
+                                            + "?language=Basic&location=document",
+                                        aParams, aRet, aOutParamIndex, aOutParam);
+
+            OUString aReturnValue;
+            aRet >>= aReturnValue;
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sTestName.toUtf8().getStr(), sExpected, aReturnValue);
+        }
     }
 
     css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
