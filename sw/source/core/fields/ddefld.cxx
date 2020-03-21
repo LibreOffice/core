@@ -107,38 +107,35 @@ public:
 
         // Search for fields. If no valid found, disconnect.
         SwMsgPoolItem aUpdateDDE( RES_UPDATEDDETBL );
-        bool bCallModify = false;
         rFieldType.LockModify();
 
-        SwIterator<SwClient,SwFieldType> aIter(rFieldType);
-        for(SwClient* pLast = aIter.First(); pLast; pLast = aIter.Next())
+        std::vector<SwFormatField*> vFields;
+        rFieldType.GatherFields(vFields, false);
+        if(vFields.size())
+        {
+            if(pESh)
+                pESh->StartAllAction();
+            else if(pSh)
+                pSh->StartAction();
+        }
+
+        for(auto pFormatField: vFields)
         {
             // a DDE table or a DDE field attribute in the text
-            if( dynamic_cast<const SwFormatField *>(pLast) == nullptr ||
-                static_cast<SwFormatField*>(pLast)->GetTextField() )
-            {
-                if( !bCallModify )
-                {
-                    if( pESh )
-                        pESh->StartAllAction();
-                    else if( pSh )
-                        pSh->StartAction();
-                }
-                static_cast<SwFormatField*>(pLast)->UpdateTextNode( nullptr, &aUpdateDDE );
-                bCallModify = true;
-            }
+            if(pFormatField->GetTextField())
+                pFormatField->UpdateTextNode( nullptr, &aUpdateDDE );
         }
 
         rFieldType.UnlockModify();
 
-        if( bCallModify )
+        if(vFields.size())
         {
-            if( pESh )
+            if(pESh)
                 pESh->EndAllAction();
-            else if( pSh )
+            else if(pSh)
                 pSh->EndAction();
 
-            if( pSh )
+            if(pSh)
                 pSh->GetDoc()->getIDocumentState().SetModified();
         }
     }
