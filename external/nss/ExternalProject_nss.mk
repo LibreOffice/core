@@ -38,6 +38,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): \
 			COMMA=$(COMMA) \
 			PATH=$$(cygpath $(call gb_UnpackedTarball_get_dir,nss)):$$(cygpath $(call gb_UnpackedTarball_get_dir,gyp)):$$PATH \
 			MAKE=$(MAKE) \
+			NINJA=$(NINJA) \
 			NSINSTALL='$(SRCDIR)/external/nss/nsinstall.py' \
 			LIB="$(ILIB)" \
 			RC="rc.exe $(SOLARINC)" \
@@ -51,7 +52,9 @@ $(call gb_ExternalProject_get_state_target,nss,build): \
 	for f in $(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/*.dll.lib; do mv "$$f" "$${f%.dll.lib}".lib; done
 	$(call gb_Trace_EndRange,nss,EXTERNAL)
 
-else ifneq (,$(filter FREEBSD LINUX NETBSD OPENBSD SOLARIS,$(OS))) # non-WNT gyp-based
+# non-WNT gyp-based
+# update nss_needs_ninja in configure.ac if the list changes
+else ifneq (,$(filter FREEBSD LINUX NETBSD OPENBSD SOLARIS,$(OS)))
 
 # The nss build system uses 'python', so make it find our internal python if necessary.
 nss_PYTHON := $(call gb_UnpackedTarball_get_dir,nss)/python
@@ -69,6 +72,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecuta
 	$(call gb_ExternalProject_run,build,\
 			COMMA=$(COMMA) \
 			PATH=$(call gb_UnpackedTarball_get_dir,nss):$(call gb_UnpackedTarball_get_dir,gyp):$$PATH \
+			NINJA=$(NINJA) \
 			./build.sh -v --disable-tests --enable-libpkix \
 				$(if $(ENABLE_DBGUTIL),,--opt) \
 		&& rm -f $(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/*.a \
