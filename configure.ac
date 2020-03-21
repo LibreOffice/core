@@ -586,6 +586,7 @@ test_fontconfig=yes
 test_cairo=no
 test_gdb_index=no
 test_split_debug=no
+nss_needs_ninja=no
 
 # Default values, as such probably valid just for Linux, set
 # differently below just for Mac OSX, but at least better than
@@ -609,6 +610,7 @@ solaris*)
     build_gstreamer_1_0=yes
     test_freetype=yes
     build_skia=yes
+    nss_needs_ninja=yes
     _os=SunOS
 
     dnl ===========================================================
@@ -638,6 +640,7 @@ linux-gnu*|k*bsd*-gnu*)
     build_skia=yes
     test_gdb_index=yes
     test_split_debug=yes
+    nss_needs_ninja=yes
     if test "$enable_fuzzers" != yes; then
         test_freetype=yes
         test_fontconfig=yes
@@ -675,6 +678,7 @@ cygwin*|interix*)
     test_freetype=no
     test_fontconfig=no
     build_skia=yes
+    nss_needs_ninja=yes
     _os=WINNT
 
     DLLPOST=".dll"
@@ -730,6 +734,7 @@ freebsd*)
     test_gtk3_kde5=yes
     test_freetype=yes
     build_skia=yes
+    nss_needs_ninja=yes
     AC_MSG_CHECKING([the FreeBSD operating system release])
     if test -n "$with_os_version"; then
         OSVERSION="$with_os_version"
@@ -758,6 +763,7 @@ freebsd*)
     test_gtk3_kde5=yes
     test_freetype=yes
     build_skia=yes
+    nss_needs_ninja=yes
     PTHREAD_LIBS="-pthread -lpthread"
     _os=NetBSD
     ;;
@@ -771,6 +777,7 @@ aix*)
 
 openbsd*)
     test_freetype=yes
+    nss_needs_ninja=yes
     PTHREAD_CFLAGS="-D_THREAD_SAFE"
     PTHREAD_LIBS="-pthread"
     _os=OpenBSD
@@ -782,6 +789,7 @@ dragonfly*)
     test_gtk3_kde5=yes
     test_freetype=yes
     build_skia=yes
+    nss_needs_ninja=yes
     PTHREAD_LIBS="-pthread"
     _os=DragonFly
     ;;
@@ -9675,6 +9683,47 @@ elif test $_os != iOS ; then
     with_tls=openssl
 fi
 AC_SUBST(ENABLE_NSS)
+
+dnl ===================================================================
+dnl Search for ninja
+dnl ===================================================================
+AC_MSG_CHECKING([for ninja])
+
+# try to use our own ninja if it is available and NINJA was not already defined
+if test -z "$NINJA"; then
+    if test -n "$LODE_HOME" -a -x "$LODE_HOME/opt/bin/ninja" ; then
+        NINJA="$LODE_HOME/opt/bin/ninja"
+    elif test -x "/opt/lo/bin/ninja"; then
+        NINJA="/opt/lo/bin/ninja"
+    fi
+fi
+
+for a in "$NINJA" ninja ninja-build; do
+    if test -n "$a"; then
+        $a --version > /dev/null 2>/dev/null
+        if test $? -eq 0;  then
+            if test "$build_os" = "cygwin"; then
+                # nss requires the Windows version of ninja
+                if test -n "$($a -t list | grep 'msvc')" ; then
+                    NINJA="$(cygpath -m "$(which "$(cygpath -u $a)")")"
+                fi
+            else
+                NINJA=`which $a`
+            fi
+        fi
+        if test -n "$NINJA"; then
+            break
+        fi
+    fi
+done
+if test -n "$NINJA"; then
+    AC_MSG_RESULT($NINJA)
+else
+    AC_MSG_RESULT(not found)
+fi
+if test -z "$NINJA" -a "$nss_needs_ninja" = "yes" -a -n "$ENABLE_NSS" -a -z "$SYSTEM_NSS"; then
+    AC_MSG_ERROR([Not found. NSS build requires Ninja (https://ninja-build.org/).])
+fi
 
 dnl ===================================================================
 dnl Check for TLS/SSL and cryptographic implementation to use

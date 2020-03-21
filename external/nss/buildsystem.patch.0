@@ -60,6 +60,17 @@
      fi
  
      run_verbose run_scanbuild ${GYP} -f ninja "${gyp_params[@]}" "$cwd/nss.gyp"
+@@ -261,7 +261,9 @@ if [ "$rebuild_gyp" = 1 ]; then
+ fi
+ 
+ # ninja.
+-if hash ninja-build 2>/dev/null; then
++if test -n "$NINJA"; then
++    ninja="$NINJA"
++elif hash ninja-build 2>/dev/null; then
+     ninja=ninja-build
+ elif hash ninja 2>/dev/null; then
+     ninja=ninja
 @@ -263,4 +263,4 @@
      echo "Building NSS requires an installation of ninja: https://ninja-build.org/" 1>&2
      exit 3
