@@ -66,10 +66,11 @@ short SbiStringPool::Add( double n, SbxDataType t )
     char buf[ 40 ];
     switch( t )
     {
-        case SbxINTEGER: snprintf( buf, sizeof(buf), "%d", static_cast<short>(n) ); break;
-        case SbxLONG:    snprintf( buf, sizeof(buf), "%ld", static_cast<long>(n) ); break;
-        case SbxSINGLE:  snprintf( buf, sizeof(buf), "%.6g", static_cast<float>(n) ); break;
-        case SbxDOUBLE:  snprintf( buf, sizeof(buf), "%.16g", n ); break;
+        // tdf#131296 - store numeric value including its data type
+        case SbxINTEGER: snprintf( buf, sizeof(buf), "%d %d", static_cast<short>(n), static_cast<short>(t) ); break;
+        case SbxLONG:    snprintf( buf, sizeof(buf), "%ld %d", static_cast<long>(n), static_cast<short>(t) ); break;
+        case SbxSINGLE:  snprintf( buf, sizeof(buf), "%.6g %d", static_cast<float>(n), static_cast<short>(t) ); break;
+        case SbxDOUBLE:  snprintf( buf, sizeof(buf), "%.16g %d", n, static_cast<short>(t) ); break;
         default: break;
     }
     return Add( OUString::createFromAscii( buf ) );

@@ -2773,10 +2773,18 @@ void SbiRuntime::StepERROR()
 
 void SbiRuntime::StepLOADNC( sal_uInt32 nOp1 )
 {
-    SbxVariable* p = new SbxVariable( SbxDOUBLE );
-
     // #57844 use localized function
     OUString aStr = pImg->GetString( static_cast<short>( nOp1 ) );
+
+    // tdf#131296 - retrieve numeric value including its data type put in SbiExprNode::Gen
+    SbxDataType eType = SbxDOUBLE;
+    sal_Int32 iSpace = aStr.indexOf(' ');
+    if ( iSpace >= 0 )
+    {
+        eType = static_cast<SbxDataType>( aStr.copy( iSpace + 1 ).toInt32() );
+    }
+    SbxVariable* p = new SbxVariable( eType );
+
     // also allow , !!!
     sal_Int32 iComma = aStr.indexOf(',');
     if( iComma >= 0 )
@@ -2785,7 +2793,22 @@ void SbiRuntime::StepLOADNC( sal_uInt32 nOp1 )
     }
     double n = ::rtl::math::stringToDouble( aStr, '.', ',' );
 
-    p->PutDouble( n );
+    // tdf#131296 - add retrieved value including its data type to the variable
+    switch ( eType )
+    {
+        case SbxINTEGER:
+            p->PutInteger( static_cast<sal_Int16>( n ) );
+            break;
+        case SbxLONG:
+            p->PutLong( static_cast<sal_Int32>( n ) );
+            break;
+        case SbxSINGLE:
+            p->PutSingle( static_cast<float>( n ) );
+            break;
+        default:
+            p->PutDouble( n );
+        break;
+    }
     PushVar( p );
 }
 
@@ -2803,18 +2826,8 @@ void SbiRuntime::StepLOADSC( sal_uInt32 nOp1 )
 void SbiRuntime::StepLOADI( sal_uInt32 nOp1 )
 {
     SbxVariable* p = new SbxVariable;
-
-    OUString aStr = pImg->GetString(static_cast<short>(nOp1));
-    double n = ::rtl::math::stringToDouble(aStr, '.', ',');
-    if (n >= SbxMININT && n <= SbxMAXINT)
-    {
-        p->PutInteger(static_cast<sal_Int16>(n));
-    }
-    else
-    {
-        p->PutLong(static_cast<sal_Int32>(n));
-    }
-    PushVar(p);
+    p->PutInteger( static_cast<sal_Int16>( nOp1 ) );
+    PushVar( p );
 }
 
 // store a named argument in Argv (+Arg-no. from 1!)
