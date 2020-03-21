@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.22.2 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkGrid" id="GalleryGeneralPage">
@@ -131,16 +131,30 @@
         <property name="hexpand">True</property>
         <property name="column_spacing">12</property>
         <child>
-          <object class="GtkImage" id="image">
+          <object class="GtkBox" id="imagecontainer">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <accessibility>
-              <relation type="label-for" target="name"/>
-            </accessibility>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="image-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes" context="gallerygeneralpage|image-atkobject">Theme Name</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkImage" id="image">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <accessibility>
+                  <relation type="label-for" target="name"/>
+                </accessibility>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="image-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="gallerygeneralpage|image-atkobject">Theme Name</property>
+                  </object>
+                </child>
               </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
             </child>
           </object>
           <packing>
@@ -152,6 +166,7 @@
           <object class="GtkEntry" id="name">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="valign">center</property>
             <property name="hexpand">True</property>
             <property name="activates_default">True</property>
             <accessibility>
@@ -176,7 +191,7 @@
       <widget name="label2"/>
       <widget name="label3"/>
       <widget name="label4"/>
-      <widget name="image"/>
+      <widget name="imagecontainer"/>
     </widgets>
   </object>
 </interface>
