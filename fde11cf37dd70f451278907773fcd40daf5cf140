@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2ce72d08_87071ccb",
+        "filename": "offapi/com/sun/star/text/ViewSettings.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-21T20:35:13Z",
+      "side": 1,
+      "message": "This addition does not look useful.  What does it mean for a ViewSettings instance to have both a HideWhitespace and a ShowWhitespace property?  (Ideally, they would have inverse values of each other, but in which case one is redundant.  And in practice, you would need code to decide how to handle inconsistent cases.)",
+      "revId": "fde11cf37dd70f451278907773fcd40daf5cf140",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ff7977e_b22ee81f",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 15338,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-21T20:35:13Z",
+      "side": 1,
+      "message": "Again: if you need to change this file, you are most likely doing something wrong.  (In this case, the new property would need to be added to the end of offapi/com/sun/star/text/ViewSettings.idl, for compatibility reasons, and should not be added manually here.  But see the comment in offapi/com/sun/star/text/ViewSettings.idl that this property should likely not be added anyway.)",
+      "revId": "fde11cf37dd70f451278907773fcd40daf5cf140",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
