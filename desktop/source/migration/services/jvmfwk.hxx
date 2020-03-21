@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_SOURCE_MIGRATION_SERVICES_JVMFWK_HXX
-#define INCLUDED_DESKTOP_SOURCE_MIGRATION_SERVICES_JVMFWK_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -32,7 +31,5 @@ OUString jvmfwk_getImplementationName();
 css::uno::Sequence< OUString > jvmfwk_getSupportedServiceNames();
 
 } //end blind namespace
-
-#endif // INCLUDED_DESKTOP_SOURCE_MIGRATION_SERVICES_JVMFWK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
