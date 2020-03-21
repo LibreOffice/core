@@ -87,7 +87,7 @@ sal_Int32 getColumnTypeByModelName(const OUString& aModelName)
         sal_Int32 nPrefixPos = aModelName.indexOf(aModelPrefix);
 #ifdef DBG_UTIL
         sal_Int32 nCompatiblePrefixPos = aModelName.indexOf(aCompatibleModelPrefix);
-        DBG_ASSERT( (nPrefixPos != -1) ||   (nCompatiblePrefixPos != -1), "::getColumnTypeByModelName() : wrong servivce !");
+        DBG_ASSERT( (nPrefixPos != -1) ||   (nCompatiblePrefixPos != -1), "::getColumnTypeByModelName() : wrong service!");
 #endif
 
         OUString aColumnType = (nPrefixPos != -1)
