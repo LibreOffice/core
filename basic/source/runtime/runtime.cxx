@@ -2773,19 +2773,48 @@ void SbiRuntime::StepERROR()
 
 void SbiRuntime::StepLOADNC( sal_uInt32 nOp1 )
 {
-    SbxVariable* p = new SbxVariable( SbxDOUBLE );
-
     // #57844 use localized function
     OUString aStr = pImg->GetString( static_cast<short>( nOp1 ) );
+
     // also allow , !!!
     sal_Int32 iComma = aStr.indexOf(',');
     if( iComma >= 0 )
     {
         aStr = aStr.replaceAt(iComma, 1, ".");
     }
-    double n = ::rtl::math::stringToDouble( aStr, '.', ',' );
+    sal_Int32 nParseEnd = 0;
+    rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
+    double n = ::rtl::math::stringToDouble( aStr, '.', ',', &eStatus, &nParseEnd );
 
-    p->PutDouble( n );
+    // tdf#131296 - retrieve numeric value including its data type put in SbiExprNode::Gen
+    SbxDataType eType = SbxDOUBLE;
+    if ( nParseEnd < aStr.getLength() )
+    {
+        switch ( aStr.copy( nParseEnd ).toChar() )
+        {
+            case 'I': eType = SbxINTEGER; break;
+            case 'L': eType = SbxLONG; break;
+            case 'S': eType = SbxSINGLE; break;
+        }
+    }
+    SbxVariable* p = new SbxVariable( eType );
+
+    // tdf#131296 - add retrieved value including its data type to the variable
+    switch ( eType )
+    {
+        case SbxINTEGER:
+            p->PutInteger( static_cast<sal_Int16>( n ) );
+            break;
+        case SbxLONG:
+            p->PutLong( static_cast<sal_Int32>( n ) );
+            break;
+        case SbxSINGLE:
+            p->PutSingle( static_cast<float>( n ) );
+            break;
+        default:
+            p->PutDouble( n );
+            break;
+    }
     PushVar( p );
 }
 
@@ -2803,18 +2832,8 @@ void SbiRuntime::StepLOADSC( sal_uInt32 nOp1 )
 void SbiRuntime::StepLOADI( sal_uInt32 nOp1 )
 {
     SbxVariable* p = new SbxVariable;
-
-    OUString aStr = pImg->GetString(static_cast<short>(nOp1));
-    double n = ::rtl::math::stringToDouble(aStr, '.', ',');
-    if (n >= SbxMININT && n <= SbxMAXINT)
-    {
-        p->PutInteger(static_cast<sal_Int16>(n));
-    }
-    else
-    {
-        p->PutLong(static_cast<sal_Int32>(n));
-    }
-    PushVar(p);
+    p->PutInteger( static_cast<sal_Int16>( nOp1 ) );
+    PushVar( p );
 }
 
 // store a named argument in Argv (+Arg-no. from 1!)

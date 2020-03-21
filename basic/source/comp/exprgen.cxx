@@ -72,11 +72,6 @@ void SbiExprNode::Gen( SbiCodeGen& rGen, RecursiveMode eRecMode )
         case SbxEMPTY:
             rGen.Gen( SbiOpcode::EMPTY_ );
             break;
-        case SbxLONG:
-        case SbxINTEGER:
-            nStringId = rGen.GetParser()->aGblStrings.Add(nVal, eType);
-            rGen.Gen( SbiOpcode::CONST_, nStringId );
-            break;
         case SbxSTRING:
             nStringId = rGen.GetParser()->aGblStrings.Add( aStrVal );
             rGen.Gen( SbiOpcode::SCONST_, nStringId );
