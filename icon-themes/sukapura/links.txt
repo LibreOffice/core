@@ -2257,7 +2257,6 @@ sfx2/res/exec_action.png cmd/sc_optionstreedialog.png
 sfx2/res/doccl.png cmd/sc_newdoc.png
 sfx2/res/search.png cmd/sc_recsearch.png
 sfx2/res/select.png cmd/sc_ok.png
-sfx2/res/signet.png cmd/sc_signature.png
 sfx2/res/symphony/sidebar-3d-large.png cmd/lc_cube.png
 sfx2/res/symphony/sidebar-3d-small.png cmd/sc_cube.png
 sfx2/res/symphony/sidebar-animation-large.png cmd/lc_diaeffect.png
@@ -2380,7 +2379,7 @@ svx/res/persp3d.png cmd/sc_extrusiondirectionfloater.png
 svx/res/perspective_16.png cmd/sc_extrusiondirectionfloater.png
 svx/res/reloads.png cmd/sc_reload.png
 svx/res/rotate3d.png cmd/sc_convertinto3dlathe.png
-svx/res/signet_11x16.png xmlsecurity/res/certificate_16.png
+svx/res/signet_11x16.png xmlsecurity/res/signet_11x16.png
 svx/res/symphony/AdjustColorBlue_16x16.png cmd/sc_grafblue.png
 svx/res/symphony/AdjustColorGamma_16x16.png cmd/sc_grafgamma.png
 svx/res/symphony/AdjustColorGreen_16x16.png cmd/sc_grafgreen.png
@@ -2489,7 +2488,6 @@ cmd/sc_wrapmenu.png cmd/sc_wrapon.png
 # xmlsecurity
 # ==============================================
 xmlsecurity/res/key_12.png dbaccess/res/pkey.png
-xmlsecurity/res/signet_11x16.png xmlsecurity/res/notcertificate_16.png
 
 cmd/32/columnoperations.png cmd/32/entirecolumn.png
 cmd/32/rowoperations.png cmd/32/entirerow.png
