@@ -7794,6 +7794,13 @@ public:
         return gtk_toolbar_set_icon_size(m_pToolbar, VclToGtk(eType));
     }
 
+    virtual sal_uInt16 get_modifier_state() const override
+    {
+        GdkKeymap* pKeymap = gdk_keymap_get_default();
+        guint nState = gdk_keymap_get_modifier_state(pKeymap);
+        return GtkSalFrame::GetKeyModCode(nState);
+    }
+
     virtual ~GtkInstanceToolbar() override
     {
         for (auto& a : m_aMap)

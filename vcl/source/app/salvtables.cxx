@@ -1007,6 +1007,11 @@ public:
         }
     }
 
+    virtual sal_uInt16 get_modifier_state() const override
+    {
+        return m_xToolBox->GetModifier();
+    }
+
     virtual ~SalInstanceToolbar() override
     {
         m_xToolBox->SetDropdownClickHdl(Link<ToolBox*, void>());
