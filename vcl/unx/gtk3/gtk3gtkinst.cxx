@@ -10835,7 +10835,7 @@ public:
                the same point as before the clear.
             */
 
-            // This forces the tree to recalculate now its preferrred size
+            // This forces the tree to recalculate now its preferred size
             // after being cleared
             GtkRequisition size;
             gtk_widget_get_preferred_size(GTK_WIDGET(m_pTreeView), nullptr, &size);
