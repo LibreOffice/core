@@ -658,6 +658,8 @@ bool SwView::AreOnlyFormsSelected() const
         {
             // Except controls, are still normal draw objects selected?
             SdrObject *pSdrObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
+            if (!pSdrObj)
+                continue;
 
             if (!HasOnlyObj(pSdrObj, SdrInventor::FmForm))
             {
