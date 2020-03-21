@@ -2773,8 +2773,6 @@ void SbiRuntime::StepERROR()
 
 void SbiRuntime::StepLOADNC( sal_uInt32 nOp1 )
 {
-    SbxVariable* p = new SbxVariable( SbxDOUBLE );
-
     // #57844 use localized function
     OUString aStr = pImg->GetString( static_cast<short>( nOp1 ) );
     // also allow , !!!
@@ -2783,8 +2781,24 @@ void SbiRuntime::StepLOADNC( sal_uInt32 nOp1 )
     {
         aStr = aStr.replaceAt(iComma, 1, ".");
     }
-    double n = ::rtl::math::stringToDouble( aStr, '.', ',' );
+    sal_Int32 nParseEnd = 0;
+    rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
+    double n = ::rtl::math::stringToDouble( aStr, '.', ',', &eStatus, &nParseEnd );
 
+    // tdf#131296 - retrieve data type put in SbiExprNode::Gen
+    SbxDataType eType = SbxDOUBLE;
+    if ( nParseEnd < aStr.getLength() )
+    {
+        switch ( aStr[nParseEnd] )
+        {
+            // See GetSuffixType in basic/source/comp/scanner.cxx for type characters
+            case '%': eType = SbxINTEGER; break;
+            case '&': eType = SbxLONG; break;
+            case '!': eType = SbxSINGLE; break;
+            case '@': eType = SbxCURRENCY; break;
+        }
+    }
+    SbxVariable* p = new SbxVariable( eType );
     p->PutDouble( n );
     PushVar( p );
 }
@@ -2799,22 +2813,13 @@ void SbiRuntime::StepLOADSC( sal_uInt32 nOp1 )
 }
 
 // Immediate Load (+value)
+// The opcode is not generated in SbiExprNode::Gen anymore; used for legacy images
 
 void SbiRuntime::StepLOADI( sal_uInt32 nOp1 )
 {
     SbxVariable* p = new SbxVariable;
-
-    OUString aStr = pImg->GetString(static_cast<short>(nOp1));
-    double n = ::rtl::math::stringToDouble(aStr, '.', ',');
-    if (n >= SbxMININT && n <= SbxMAXINT)
-    {
-        p->PutInteger(static_cast<sal_Int16>(n));
-    }
-    else
-    {
-        p->PutLong(static_cast<sal_Int32>(n));
-    }
-    PushVar(p);
+    p->PutInteger( static_cast<sal_Int16>( nOp1 ) );
+    PushVar( p );
 }
 
 // store a named argument in Argv (+Arg-no. from 1!)
