@@ -16,6 +16,24 @@
       "revId": "15599b230c384071262773363b85e73225b37449",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3970828e_ed186c0a",
+        "filename": "sc/uiconfig/scalc/ui/conditionalentry.ui",
+        "patchSetId": 7
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1002310
+      },
+      "writtenOn": "2020-03-21T07:13:31Z",
+      "side": 1,
+      "message": "You are right",
+      "parentUuid": "adcd54b2_17bacabf",
+      "revId": "15599b230c384071262773363b85e73225b37449",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
