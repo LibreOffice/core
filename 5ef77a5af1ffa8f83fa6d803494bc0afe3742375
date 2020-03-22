@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f4d321a6_07bf9caf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-22T10:43:29Z",
+      "side": 1,
+      "message": "[...]\n\u003e An uncaught exception of type com.sun.star.sdbc.SQLException\n\u003e - invalid file access class: java.lang.ClassNotFoundException: com.sun.star.sdbcx.comp.hsqldb.StorageFileAccess\n[...]\n\nmakes it look plausible that there should indeed be a dependency on Jar_sdbc_hsqldb.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 44
+      },
+      "revId": "5ef77a5af1ffa8f83fa6d803494bc0afe3742375",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
