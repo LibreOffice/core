@@ -1,0 +1,10 @@
+[wrap-file]
+directory = mdds-1.6.0
+
+source_url = https://gitlab.com/mdds/mdds/-/archive/1.6.0/mdds-1.6.0.tar.gz
+source_filename = mdds-1.6.0.tar.gz
+source_hash = 77d5f9e758c8dd3b980b6c34aeb4a64297a5d0b49d394a7d48b02238a01003e0
+
+patch_url = https://wrapdb.mesonbuild.com/v1/projects/mdds/1.6.0/1/get_zip
+patch_filename = mdds-1.6.0-1-wrap.zip
+patch_hash = ae180db0bdd564319f13e178c171effe25ff18997432641997ad6eff5d0322c4

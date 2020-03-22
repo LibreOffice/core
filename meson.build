@@ -158,9 +158,9 @@ mythes_dep = dependency('mythes')
 libexttextcat_dep = dependency('libexttextcat')
 
 # The version in Ubuntu eoan is too old.
-#mdds_dep = dependency('mdds-1.5')
-mdds_dep = declare_dependency(include_directories: 'mdds')
-broken_mdds_dep = declare_dependency(include_directories: '.')
+mdds_dep = dependency('mdds-1.6',
+                      version: '>=1.6.0',
+                      fallback: ['mdds', 'mdds_dep'])
 
 # FIXME. Java does not provide .pc files.
 # Presumably this data can be obtained via other methods.
