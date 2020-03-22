@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7b0458ac_790118ad",
+        "filename": "sw/source/uibase/wrtsh/wrtsh2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-03-22T07:17:17Z",
+      "side": 1,
+      "message": "shouldn\u0027t this be \u003d\u003d Dying ?\nAnd would be nice to keep the comment",
+      "revId": "fda6be971a2565c9d59a1a64aeee389224b9d1fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
