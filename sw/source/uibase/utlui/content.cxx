@@ -1773,7 +1773,6 @@ void SwContentTree::Display( bool bActive )
             nEntryRelPos = GetModel()->GetAbsPos(pOldSelEntry) - GetModel()->GetAbsPos(pParentEntry);
         }
     }
-    SetUpdateMode( false );
     SvTreeListBox::Clear();
     if (!bActive)
         m_eState = State::HIDDEN;
@@ -1849,7 +1848,6 @@ void SwContentTree::Display( bool bActive )
             }
             if(pSelEntry)
             {
-                MakeVisible(pSelEntry);
                 Select(pSelEntry);
             }
             else
@@ -1912,16 +1910,17 @@ void SwContentTree::Display( bool bActive )
                 SetCurEntry(pParent);
         }
     }
-    ScrollBar* pVScroll = GetVScroll();
-    if(GetEntryCount() == nOldEntryCount &&
-        nOldScrollPos && pVScroll && pVScroll->IsVisible()
-        && pVScroll->GetThumbPos() != nOldScrollPos)
-    {
-        sal_Int32 nDelta = pVScroll->GetThumbPos() - nOldScrollPos;
-        ScrollOutputArea( static_cast<short>(nDelta) );
-    }
     if (!m_bIsInPromoteDemote)
-        SetUpdateMode( true );
+    {
+        ScrollBar* pVScroll = GetVScroll();
+        if(GetEntryCount() == nOldEntryCount &&
+                nOldScrollPos && pVScroll && pVScroll->IsVisible()
+                && pVScroll->GetThumbPos() != nOldScrollPos)
+        {
+            sal_Int32 nDelta = pVScroll->GetThumbPos() - nOldScrollPos;
+            ScrollOutputArea( static_cast<short>(nDelta) );
+        }
+    }
 }
 
 void SwContentTree::Clear()
@@ -2725,8 +2724,6 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
                 }
             }
         }
-        // SetUpdateMode is set false in the Display function
-        SetUpdateMode(true);
     }
     m_bIsInPromoteDemote = false;
 }
