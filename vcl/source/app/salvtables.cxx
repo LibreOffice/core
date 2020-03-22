@@ -3475,6 +3475,7 @@ SalInstanceTreeView::SalInstanceTreeView(SvTabListBox* pTreeView, SalInstanceBui
     , m_nSortColumn(-1)
 {
     m_xTreeView->SetNodeDefaultImages();
+    m_xTreeView->SetForceMakeVisible(true);
     m_xTreeView->SetSelectHdl(LINK(this, SalInstanceTreeView, SelectHdl));
     m_xTreeView->SetDeselectHdl(LINK(this, SalInstanceTreeView, DeSelectHdl));
     m_xTreeView->SetDoubleClickHdl(LINK(this, SalInstanceTreeView, DoubleClickHdl));
