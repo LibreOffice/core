@@ -33,8 +33,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::security ;
 
-using ::com::sun::star::security::XCertificateExtension ;
-
 namespace {
     // Helper functions from nss/lib/certdb/genname.c
     int GetNamesLength(CERTGeneralName *names)

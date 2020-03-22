@@ -24,7 +24,6 @@
 
 const char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleDocumentPageView";
 
-using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Sequence;
 
 SwAccessiblePreview::SwAccessiblePreview(std::shared_ptr<SwAccessibleMap> const& pMap)

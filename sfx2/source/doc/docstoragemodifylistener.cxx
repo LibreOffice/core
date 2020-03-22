@@ -25,7 +25,6 @@ namespace sfx2
 {
 
 
-    using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::lang::EventObject;
 
 

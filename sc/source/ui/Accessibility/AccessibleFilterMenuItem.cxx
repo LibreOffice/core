@@ -32,7 +32,6 @@ using namespace ::com::sun::star::accessibility::AccessibleStateType;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::lang::IndexOutOfBoundsException;
-using ::com::sun::star::uno::RuntimeException;
 
 ScAccessibleFilterMenuItem::ScAccessibleFilterMenuItem(
     const Reference<XAccessible>& rxParent, ScMenuFloatingWindow* pWin, const OUString& rName, size_t nMenuPos) :

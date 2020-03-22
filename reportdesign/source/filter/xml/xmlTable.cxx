@@ -48,7 +48,6 @@ namespace rptxml
     using namespace ::com::sun::star;
     using ::com::sun::star::uno::Reference;
     using namespace ::com::sun::star::xml::sax;
-    using ::com::sun::star::xml::sax::XAttributeList;
 
     static sal_Int16 lcl_getForceNewPageOption(const OUString& _sValue)
     {

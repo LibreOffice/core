@@ -30,7 +30,6 @@ using namespace css::uno;
 using css::container::NoSuchElementException;
 using css::container::XNameReplace;
 using css::lang::IllegalArgumentException;
-using css::lang::WrappedTargetException;
 using css::beans::PropertyValue;
 
 

@@ -122,10 +122,6 @@
 
 using namespace ::editeng;
 using namespace ::com::sun::star;
-using ::drawinglayer::primitive2d::BorderLinePrimitive2D;
-using ::drawinglayer::primitive2d::BorderLine;
-using std::pair;
-using std::make_pair;
 
 namespace {
 

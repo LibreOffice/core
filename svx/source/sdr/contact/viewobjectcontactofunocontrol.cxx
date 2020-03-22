@@ -109,7 +109,6 @@ namespace sdr::contact {
     using ::com::sun::star::awt::XControl;
     using ::com::sun::star::awt::XControlModel;
     using ::com::sun::star::awt::XControlContainer;
-    using ::com::sun::star::awt::XWindow;
     using ::com::sun::star::awt::XWindow2;
     using ::com::sun::star::awt::XWindowListener;
     using ::com::sun::star::awt::PosSize::POSSIZE;

@@ -43,9 +43,7 @@
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::WeakReference;
-using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Exception;
-using ::com::sun::star::presentation::XSlideShowView;
 
 using namespace ::com::sun::star;
 

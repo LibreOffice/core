@@ -88,7 +88,6 @@ using namespace ::dbtools;
 
     using namespace ::com::sun::star;
     using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -116,7 +115,6 @@ using namespace ::dbtools;
     using ::com::sun::star::form::XFormComponent;
     using ::com::sun::star::form::XForm;
     using ::com::sun::star::lang::IndexOutOfBoundsException;
-    using ::com::sun::star::lang::WrappedTargetException;
     using ::com::sun::star::container::XContainer;
     using ::com::sun::star::container::ContainerEvent;
     using ::com::sun::star::lang::EventObject;

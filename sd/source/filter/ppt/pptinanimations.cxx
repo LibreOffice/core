@@ -69,7 +69,6 @@
 #include <algorithm>
 #include <memory>
 
-using ::std::map;
 using ::com::sun::star::beans::NamedValue;
 using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::container::XEnumeration;

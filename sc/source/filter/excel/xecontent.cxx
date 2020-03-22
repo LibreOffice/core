@@ -55,7 +55,6 @@
 using namespace ::oox;
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::table::CellRangeAddress;
 using ::com::sun::star::sheet::XAreaLinks;

@@ -21,9 +21,7 @@
 
 #include <comphelper/sequence.hxx>
 
-using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Sequence;
-using ::std::set;
 
 ScAccessibleStateSet::ScAccessibleStateSet()
 {

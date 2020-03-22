@@ -84,7 +84,6 @@ using ::com::sun::star::container::XIndexAccess;
 using ::com::sun::star::container::XNameAccess;
 using ::com::sun::star::container::XNamed;
 
-using ::com::sun::star::beans::PropertyVetoException;
 using ::com::sun::star::beans::UnknownPropertyException;
 using ::com::sun::star::beans::XPropertyChangeListener;
 using ::com::sun::star::beans::XPropertySet;
@@ -94,7 +93,6 @@ using ::com::sun::star::beans::XVetoableChangeListener;
 using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::lang::IndexOutOfBoundsException;
 using ::com::sun::star::lang::NullPointerException;
-using ::com::sun::star::lang::WrappedTargetException;
 
 using ::com::sun::star::table::CellAddress;
 using ::com::sun::star::table::CellRangeAddress;

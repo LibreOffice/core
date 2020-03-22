@@ -32,7 +32,6 @@
 #include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
 
-using ::com::sun::star::sheet::GeneralFunction;
 using ::com::sun::star::sheet::DataPilotFieldOrientation;
 
 namespace ScDPSortMode = ::com::sun::star::sheet::DataPilotFieldSortMode;

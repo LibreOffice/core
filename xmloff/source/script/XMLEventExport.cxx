@@ -34,7 +34,6 @@
 
 using namespace ::com::sun::star::uno;
 
-using std::map;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::document::XEventsSupplier;
 using ::com::sun::star::container::XNameReplace;

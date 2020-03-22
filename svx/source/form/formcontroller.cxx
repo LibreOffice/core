@@ -122,7 +122,6 @@ namespace svxform
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::beans::PropertyValue;
-    using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::lang::IndexOutOfBoundsException;
     using ::com::sun::star::sdb::XInteractionSupplyParameters;
     using ::com::sun::star::awt::XTextComponent;
@@ -149,7 +148,6 @@ namespace svxform
     using ::com::sun::star::form::runtime::XFilterControllerListener;
     using ::com::sun::star::awt::XControlContainer;
     using ::com::sun::star::container::XIdentifierReplace;
-    using ::com::sun::star::lang::WrappedTargetException;
     using ::com::sun::star::form::XFormControllerListener;
     using ::com::sun::star::awt::XWindow;
     using ::com::sun::star::sdbc::XResultSet;

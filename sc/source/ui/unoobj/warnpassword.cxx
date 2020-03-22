@@ -26,7 +26,6 @@
 #include <svx/svxerr.hxx>
 #include <rtl/ref.hxx>
 
-using ::com::sun::star::uno::makeAny;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::XInterface;

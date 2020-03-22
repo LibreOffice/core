@@ -74,7 +74,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::animations;
 
-using ::com::sun::star::uno::makeAny;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::drawing::XShape;
 

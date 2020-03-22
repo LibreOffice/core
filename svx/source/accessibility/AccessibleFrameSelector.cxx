@@ -32,13 +32,9 @@
 namespace svx::a11y {
 
 using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::RuntimeException;
-using ::com::sun::star::uno::XInterface;
-using ::com::sun::star::lang::Locale;
-using ::com::sun::star::lang::EventObject;
 
 using namespace ::com::sun::star::accessibility;
 

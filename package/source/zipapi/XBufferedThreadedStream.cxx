@@ -13,7 +13,6 @@
 #include <sal/log.hxx>
 
 using namespace css::uno;
-using com::sun::star::packages::zip::ZipIOException;
 
 namespace {
 

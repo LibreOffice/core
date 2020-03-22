@@ -54,7 +54,6 @@
 using ::sd::framework::FrameworkHelper;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::frame::XFrame;
-using ::com::sun::star::uno::Sequence;
 
 namespace {
 

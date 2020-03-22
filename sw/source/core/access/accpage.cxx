@@ -30,7 +30,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-using uno::RuntimeException;
 using uno::Sequence;
 
 const char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessiblePageView";

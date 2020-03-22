@@ -46,7 +46,6 @@ using namespace ::xmloff::token;
 
 using ::com::sun::star::text::XTextCursor;
 using ::com::sun::star::text::XTextRange;
-using ::com::sun::star::text::XText;
 using ::com::sun::star::text::XWordCursor;
 using ::com::sun::star::lang::XUnoTunnel;
 using ::com::sun::star::beans::XPropertySet;

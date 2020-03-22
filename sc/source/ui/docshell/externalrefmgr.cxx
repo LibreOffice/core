@@ -68,7 +68,6 @@
 using ::std::unique_ptr;
 using ::com::sun::star::uno::Any;
 using ::std::vector;
-using ::std::find;
 using ::std::find_if;
 using ::std::for_each;
 using ::std::distance;

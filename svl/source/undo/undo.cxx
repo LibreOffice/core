@@ -34,8 +34,6 @@
 #include <limits.h>
 #include <algorithm>
 
-using ::com::sun::star::uno::Exception;
-
 
 SfxRepeatTarget::~SfxRepeatTarget()
 {

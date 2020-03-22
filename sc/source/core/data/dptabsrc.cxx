@@ -59,7 +59,6 @@
 
 using namespace com::sun::star;
 using ::std::vector;
-using ::std::set;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::sheet::DataPilotFieldAutoShowInfo;

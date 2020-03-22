@@ -21,7 +21,6 @@
 
 namespace oox::xls {
 
-using ::oox::core::FilterBase;
 using ::oox::core::FragmentHandler2;
 
 WorkbookFragmentBase::WorkbookFragmentBase(

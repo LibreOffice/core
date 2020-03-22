@@ -26,7 +26,6 @@
 
 #include "KeynoteImportFilter.hxx"
 
-using writerperfect::DocumentHandler;
 using writerperfect::WPXSvInputStream;
 
 namespace beans = com::sun::star::beans;

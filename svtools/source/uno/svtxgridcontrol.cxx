@@ -36,7 +36,6 @@
 
 #include <vcl/svapp.hxx>
 
-using css::uno::RuntimeException;
 using css::uno::Reference;
 using css::uno::Exception;
 using css::uno::UNO_QUERY;

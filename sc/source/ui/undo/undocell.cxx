@@ -41,8 +41,6 @@
 #include <chgtrack.hxx>
 #include <stringutil.hxx>
 
-using std::shared_ptr;
-
 namespace HelperNotifyChanges
 {
     static void NotifyIfChangesListeners(const ScDocShell& rDocShell, const ScAddress &rPos,

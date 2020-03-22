@@ -29,8 +29,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-using ::com::sun::star::uno::Sequence;
-
 FragmentHandler2::FragmentHandler2( XmlFilterBase& rFilter, const OUString& rFragmentPath, bool bEnableTrimSpace ) :
     FragmentHandler( rFilter, rFragmentPath ),
     ContextHandler2Helper( bEnableTrimSpace )

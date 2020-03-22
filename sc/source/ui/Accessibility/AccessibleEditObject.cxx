@@ -51,7 +51,6 @@
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 
 using ::com::sun::star::lang::IndexOutOfBoundsException;
-using ::com::sun::star::uno::RuntimeException;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 

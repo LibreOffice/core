@@ -52,16 +52,13 @@ namespace ucb::ucp::ext
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::ucb::XContentIdentifier;
-    using ::com::sun::star::ucb::XContent;
     using ::com::sun::star::ucb::XCommandEnvironment;
     using ::com::sun::star::ucb::Command;
-    using ::com::sun::star::ucb::CommandAbortedException;
     using ::com::sun::star::beans::Property;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::beans::PropertyValue;
@@ -69,7 +66,6 @@ namespace ucb::ucp::ext
     using ::com::sun::star::ucb::XDynamicResultSet;
     using ::com::sun::star::ucb::UnsupportedCommandException;
     using ::com::sun::star::sdbc::XRow;
-    using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::beans::PropertyChangeEvent;
     using ::com::sun::star::lang::IllegalAccessException;
     using ::com::sun::star::ucb::CommandInfo;

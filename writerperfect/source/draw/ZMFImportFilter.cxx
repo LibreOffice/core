@@ -13,7 +13,6 @@
 
 #include "ZMFImportFilter.hxx"
 
-using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
