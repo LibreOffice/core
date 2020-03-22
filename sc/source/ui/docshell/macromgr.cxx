@@ -29,7 +29,6 @@
 #include <com/sun/star/script/XLibraryContainer.hpp>
 
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Reference;
 using ::std::vector;
 using ::std::pair;

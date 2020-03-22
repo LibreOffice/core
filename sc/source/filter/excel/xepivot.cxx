@@ -53,7 +53,6 @@ using ::com::sun::star::sheet::DataPilotFieldOrientation_ROW;
 using ::com::sun::star::sheet::DataPilotFieldOrientation_COLUMN;
 using ::com::sun::star::sheet::DataPilotFieldOrientation_PAGE;
 using ::com::sun::star::sheet::DataPilotFieldOrientation_DATA;
-using ::com::sun::star::sheet::GeneralFunction;
 using ::com::sun::star::sheet::DataPilotFieldSortInfo;
 using ::com::sun::star::sheet::DataPilotFieldAutoShowInfo;
 using ::com::sun::star::sheet::DataPilotFieldLayoutInfo;

@@ -64,7 +64,6 @@ using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::lang::EventObject;
 using ::com::sun::star::awt::XWindowListener2;
 using ::com::sun::star::awt::XDockableWindowListener;

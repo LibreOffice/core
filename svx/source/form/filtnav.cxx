@@ -81,7 +81,6 @@ namespace svxform
     using ::com::sun::star::form::runtime::XFilterControllerListener;
     using ::com::sun::star::form::runtime::FilterEvent;
     using ::com::sun::star::lang::EventObject;
-    using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::form::XForm;
     using ::com::sun::star::container::XChild;
     using ::com::sun::star::awt::XControl;

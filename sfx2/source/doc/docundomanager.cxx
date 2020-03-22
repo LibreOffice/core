@@ -42,7 +42,6 @@ namespace sfx2
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::document::XUndoAction;
-    using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::lang::NotInitializedException;
     using ::com::sun::star::document::XUndoManagerListener;
     using ::com::sun::star::document::XUndoManager;

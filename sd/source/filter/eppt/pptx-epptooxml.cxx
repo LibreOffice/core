@@ -82,7 +82,6 @@ using namespace ::com::sun::star::util;
 using namespace ::ppt;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::XPropertySetInfo;
-using ::com::sun::star::container::XIndexAccess;
 using ::sax_fastparser::FSHelperPtr;
 using namespace oox::drawingml;
 using namespace oox::core;

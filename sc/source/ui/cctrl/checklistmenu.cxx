@@ -42,7 +42,6 @@ using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::accessibility::XAccessible;
 using ::com::sun::star::accessibility::XAccessibleContext;
-using ::std::vector;
 
 ScMenuFloatingWindow::MenuItemData::MenuItemData() :
     mbEnabled(true), mbSeparator(false),

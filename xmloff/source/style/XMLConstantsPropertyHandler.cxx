@@ -25,8 +25,6 @@
 
 using namespace ::com::sun::star::uno;
 
-using ::xmloff::token::XMLTokenEnum;
-
 XMLConstantsPropertyHandler::~XMLConstantsPropertyHandler()
 {
 }

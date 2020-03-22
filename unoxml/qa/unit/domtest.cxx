@@ -35,7 +35,6 @@ using namespace ::comphelper;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using css::xml::dom::XDocumentBuilder;
-using css::xml::dom::DocumentBuilder;
 
 namespace
 {

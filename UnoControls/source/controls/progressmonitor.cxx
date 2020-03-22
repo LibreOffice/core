@@ -37,7 +37,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::awt;
 
 using ::std::vector;
-using ::std::find;
 
 #define FIXEDTEXT_SERVICENAME                   "com.sun.star.awt.UnoControlFixedText"
 #define FIXEDTEXT_MODELNAME                     "com.sun.star.awt.UnoControlFixedTextModel"

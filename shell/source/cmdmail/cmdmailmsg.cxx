@@ -19,8 +19,6 @@
 
 #include "cmdmailmsg.hxx"
 
-using com::sun::star::lang::IllegalArgumentException;
-using com::sun::star::lang::WrappedTargetException;
 using com::sun::star::container::NoSuchElementException;
 using com::sun::star::container::XNameAccess;
 using osl::MutexGuard;

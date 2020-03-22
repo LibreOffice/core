@@ -47,13 +47,9 @@ namespace {
     using css::uno::Reference;
     using css::uno::XInterface;
     using css::uno::UNO_QUERY;
-    using css::uno::Exception;
-    using css::uno::RuntimeException;
     using css::uno::Any;
     using css::uno::Sequence;
-    using css::lang::XServiceInfo;
     using css::ui::dialogs::XWizard;
-    using css::lang::XInitialization;
     using css::beans::XPropertySetInfo;
     using css::uno::XComponentContext;
     using css::beans::Property;

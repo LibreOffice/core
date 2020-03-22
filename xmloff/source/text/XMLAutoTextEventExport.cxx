@@ -41,8 +41,6 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-using ::std::set;
-using ::com::sun::star::container::XNameAccess;
 using ::com::sun::star::container::XNameReplace;
 using ::com::sun::star::document::XEventsSupplier;
 using ::com::sun::star::lang::XMultiServiceFactory;

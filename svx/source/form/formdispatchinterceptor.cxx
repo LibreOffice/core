@@ -23,7 +23,6 @@ namespace svxform
 {
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::frame::XDispatchProviderInterception;
     using ::com::sun::star::frame::XDispatchProviderInterceptor;

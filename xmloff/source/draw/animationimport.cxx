@@ -86,7 +86,6 @@ using ::com::sun::star::text::XTextCursor;
 using ::com::sun::star::text::XTextRangeCompare;
 using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::container::XEnumeration;
-using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::lang::XInitialization;
 
 static OUString

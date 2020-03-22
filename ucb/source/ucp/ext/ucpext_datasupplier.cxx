@@ -51,7 +51,6 @@ namespace ucb::ucp::ext
     using ::com::sun::star::ucb::XContentIdentifier;
     using ::com::sun::star::sdbc::XRow;
     using ::com::sun::star::ucb::IllegalIdentifierException;
-    using ::com::sun::star::ucb::ResultSetException;
     using ::com::sun::star::deployment::PackageInformationProvider;
     using ::com::sun::star::deployment::XPackageInformationProvider;
     using ::com::sun::star::sdbc::XResultSet;

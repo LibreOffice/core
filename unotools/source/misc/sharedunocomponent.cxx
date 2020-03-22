@@ -35,8 +35,6 @@ namespace utl
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::uno::RuntimeException;
-    using ::com::sun::star::lang::XComponent;
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::util::XCloseable;
     using ::com::sun::star::util::XCloseListener;

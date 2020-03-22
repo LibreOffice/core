@@ -46,11 +46,9 @@ using com::sun::star::uno::Reference;
 using com::sun::star::uno::Exception;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::makeAny;
-using com::sun::star::uno::UNO_QUERY;
 using namespace com::sun::star;
 using com::sun::star::util::Duration;
 using com::sun::star::xml::sax::XAttributeList;
-using com::sun::star::beans::XPropertySet;
 using com::sun::star::xforms::XDataTypeRepository;
 using namespace xmloff::token;
 

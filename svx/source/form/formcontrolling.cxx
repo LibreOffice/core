@@ -52,7 +52,6 @@ namespace svx
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::beans::NamedValue;
-    using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::sdbc::SQLException;

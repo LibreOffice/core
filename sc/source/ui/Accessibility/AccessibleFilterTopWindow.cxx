@@ -27,7 +27,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using ::com::sun::star::lang::IndexOutOfBoundsException;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::RuntimeException;
 
 ScAccessibleFilterTopWindow::ScAccessibleFilterTopWindow(
     const Reference<XAccessible>& rxParent, ScCheckListMenuWindow* pWin, const OUString& rName) :

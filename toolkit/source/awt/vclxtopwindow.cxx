@@ -40,7 +40,6 @@
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 
-using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Type;
 using ::com::sun::star::uno::Any;

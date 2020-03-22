@@ -37,13 +37,9 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Type;
 using ::com::sun::star::uno::XInterface;
-using ::com::sun::star::uno::RuntimeException;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::document::XEventsSupplier;
 using ::com::sun::star::container::XNameReplace;
 using ::com::sun::star::lang::XMultiServiceFactory;
-using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_AUTO_TEXT_EVENTS;
 
 XMLAutoTextEventImport::XMLAutoTextEventImport(

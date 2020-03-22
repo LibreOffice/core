@@ -39,8 +39,6 @@ namespace view = com::sun::star::view;
 
 using vcl::unx::GtkPrintWrapper;
 
-using uno::UNO_QUERY;
-
 namespace {
 
 class GtkPrintDialog

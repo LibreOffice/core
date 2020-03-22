@@ -51,13 +51,9 @@ using ::com::sun::star::text::WritingMode;
 #include <oox/token/propertynames.hxx>
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::lang::IllegalArgumentException;
-using ::com::sun::star::lang::WrappedTargetException;
 using ::com::sun::star::beans::Property;
 using ::com::sun::star::beans::PropertyValue;
-using ::com::sun::star::beans::PropertyVetoException;
 using ::com::sun::star::beans::UnknownPropertyException;
 using ::com::sun::star::beans::XPropertyChangeListener;
 using ::com::sun::star::beans::XPropertySet;

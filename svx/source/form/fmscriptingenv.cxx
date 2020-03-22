@@ -67,7 +67,6 @@ namespace svxform
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::awt::XControl;
     using ::com::sun::star::beans::XPropertySet;
 

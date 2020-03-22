@@ -34,7 +34,6 @@ using namespace com::sun::star;
 using namespace xmloff::token;
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::xml::sax::XAttributeList;
 
 ScXMLFilterContext::ConnStackItem::ConnStackItem(bool bOr) : mbOr(bOr), mnCondCount(0) {}
 
