@@ -1719,7 +1719,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
 
     if (LANGUAGE_DONTKNOW != eCurLanguage)
     {
-        sal_uLong n;
+        sal_Int32 n;
         ServiceInfo_Impl* pInfo;
 
         int nRow = 0;
@@ -1736,7 +1736,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
 
         Sequence< OUString > aNames( rLinguData.GetSortedImplNames( eCurLanguage, TYPE_SPELL ) );
         const OUString *pName = aNames.getConstArray();
-        sal_uLong nNames = static_cast<sal_uLong>(aNames.getLength());
+        sal_Int32 nNames = aNames.getLength();
         sal_Int32 nLocalIndex = 0;  // index relative to parent
         for (n = 0;  n < nNames;  ++n)
         {
@@ -1785,7 +1785,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
 
         aNames = rLinguData.GetSortedImplNames( eCurLanguage, TYPE_GRAMMAR );
         pName = aNames.getConstArray();
-        nNames = static_cast<sal_uLong>(aNames.getLength());
+        nNames = aNames.getLength();
         nLocalIndex = 0;
         for (n = 0;  n < nNames;  ++n)
         {
@@ -1835,7 +1835,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
 
         aNames = rLinguData.GetSortedImplNames( eCurLanguage, TYPE_HYPH );
         pName = aNames.getConstArray();
-        nNames = static_cast<sal_uLong>(aNames.getLength());
+        nNames = aNames.getLength();
         nLocalIndex = 0;
         for (n = 0;  n < nNames;  ++n)
         {
@@ -1884,7 +1884,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
 
         aNames = rLinguData.GetSortedImplNames( eCurLanguage, TYPE_THES );
         pName = aNames.getConstArray();
-        nNames = static_cast<sal_uLong>(aNames.getLength());
+        nNames = aNames.getLength();
         nLocalIndex = 0;
         for (n = 0;  n < nNames;  ++n)
         {
