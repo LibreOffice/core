@@ -1136,6 +1136,18 @@ DECLARE_OOXMLEXPORT_TEST(testLineWidthRounding, "tdf126363_LineWidthRounding.doc
     assertXPath(pXml, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln", "w", "57150");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf108505, "tdf108505.docx")
+{
+    uno::Reference<text::XTextRange> xParagraph = getParagraph(3);
+    uno::Reference<text::XTextRange> xText
+        = getRun(xParagraph, 1, "Wrong font when alone on the line");
+
+    // Without the fix in place this would have become Times New Roman
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("Trebuchet MS"),
+        getProperty<OUString>(xText, "CharFontName"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
