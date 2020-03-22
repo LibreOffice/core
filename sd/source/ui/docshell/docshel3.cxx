@@ -362,6 +362,8 @@ void DrawDocShell::Execute( SfxRequest& rReq )
         break;
         case SID_SPELLCHECK_IGNORE_ALL:
         {
+            if (!mpViewShell)
+                return;
             SdrView* pSdrView = mpViewShell->GetDrawView();
             if (!pSdrView)
                 return;
@@ -383,6 +385,8 @@ void DrawDocShell::Execute( SfxRequest& rReq )
         break;
         case SID_SPELLCHECK_APPLY_SUGGESTION:
         {
+            if (!mpViewShell)
+                return;
             SdrView* pSdrView = mpViewShell->GetDrawView();
             if (!pSdrView)
                 return;
