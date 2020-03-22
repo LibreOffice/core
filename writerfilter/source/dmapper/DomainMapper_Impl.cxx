@@ -4754,7 +4754,7 @@ void DomainMapper_Impl::CloseFieldCommand()
             OUString const sFirstParam(vArguments.empty() ? OUString() : vArguments.front());
 
             // apply font size to the form control
-            if ( m_pLastCharacterContext.get() && m_pLastCharacterContext->isSet(PROP_CHAR_HEIGHT) )
+            if (m_pLastCharacterContext.get() && (m_pLastCharacterContext->isSet(PROP_CHAR_HEIGHT) || m_pLastCharacterContext->isSet(PROP_CHAR_FONT_NAME )))
             {
                 uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
                 if (xTextAppend.is())
@@ -4765,9 +4765,14 @@ void DomainMapper_Impl::CloseFieldCommand()
                     {
                         xCrsr->gotoEnd(false);
                         uno::Reference< beans::XPropertySet > xProp( xCrsr, uno::UNO_QUERY );
-                        xProp->setPropertyValue(getPropertyName(PROP_CHAR_HEIGHT), m_pLastCharacterContext->getProperty(PROP_CHAR_HEIGHT)->second);
-                        if ( m_pLastCharacterContext->isSet(PROP_CHAR_HEIGHT_COMPLEX) )
-                            xProp->setPropertyValue(getPropertyName(PROP_CHAR_HEIGHT_COMPLEX), m_pLastCharacterContext->getProperty(PROP_CHAR_HEIGHT_COMPLEX)->second);
+                        if (m_pLastCharacterContext->isSet(PROP_CHAR_HEIGHT))
+                        {
+                            xProp->setPropertyValue(getPropertyName(PROP_CHAR_HEIGHT), m_pLastCharacterContext->getProperty(PROP_CHAR_HEIGHT)->second);
+                            if (m_pLastCharacterContext->isSet(PROP_CHAR_HEIGHT_COMPLEX))
+                                xProp->setPropertyValue(getPropertyName(PROP_CHAR_HEIGHT_COMPLEX), m_pLastCharacterContext->getProperty(PROP_CHAR_HEIGHT_COMPLEX)->second);
+                        }
+                        if (m_pLastCharacterContext->isSet(PROP_CHAR_FONT_NAME))
+                            xProp->setPropertyValue(getPropertyName(PROP_CHAR_FONT_NAME), m_pLastCharacterContext->getProperty(PROP_CHAR_FONT_NAME)->second);
                     }
                 }
             }

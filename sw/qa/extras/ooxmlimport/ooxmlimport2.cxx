@@ -577,6 +577,18 @@ DECLARE_OOXMLIMPORT_TEST(testTdf129912, "tdf129912.docx")
     }
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf108505, "tdf108505.docx")
+{
+    uno::Reference<text::XTextRange> xParagraph = getParagraph(3);
+    uno::Reference<text::XTextRange> xText
+        = getRun(xParagraph, 1, "Wrong font when alone on the line");
+
+    // Without the fix in place this would have become Times New Roman
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("Trebuchet MS"),
+        getProperty<OUString>(getRun(getParagraphOfText(1, xText), 1), "CharFontName"));
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
