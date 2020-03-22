@@ -2345,7 +2345,7 @@ cmd/sc_wrapmenu.png cmd/sc_wrapon.png
 # xmlsecurity
 # ==============================================
 xmlsecurity/res/key_12.png dbaccess/res/pkey.png
-xmlsecurity/res/signet_11x16.png xmlsecurity/res/notcertificate_16.png
+xmlsecurity/res/signet_11x16.png xmlsecurity/res/certificate_16.png
 
 cmd/32/columnoperations.png cmd/32/entirecolumn.png
 cmd/32/rowoperations.png cmd/32/entirerow.png
