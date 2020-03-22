@@ -130,9 +130,9 @@ SwDrawTextShell::SwDrawTextShell(SwView &rV) :
     SwWrtShell &rSh = GetShell();
     SetPool(rSh.GetAttrPool().GetSecondaryPool());
 
+    // Initialize and show cursor to start editing.
     Init();
 
-    rSh.NoEdit();
     SetName("ObjectText");
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::DrawText));
 }
