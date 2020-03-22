@@ -36,6 +36,9 @@
 #include <svx/chrtitem.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xflgrit.hxx>
+#include <svx/xflftrit.hxx>
+#include <svx/xfltrit.hxx>
+#include <comphelper/lok.hxx>
 
 using namespace com::sun::star::drawing;
 
@@ -314,6 +317,40 @@ void SwDrawShell::ExecDrawAttrArgs(SfxRequest const & rReq)
             pView->GetModel()->SetChanged();
 }
 
+static void lcl_unifyFillTransparencyItems(SfxItemSet& rSet)
+{
+    // Transparent fill options are None, Solid, Linear, Axial, Radial, Elliptical, Quadratic, Square.
+    // But this is represented across two items namely XFillTransparenceItem (for None and Solid)
+    // and XFillFloatTransparenceItem (for the rest). To simplify the representation in LOKit case let's
+    // use XFillFloatTransparenceItem to carry the information of XFillTransparenceItem when gradients
+    // are disabled. When gradient transparency is disabled, all fields of XFillFloatTransparenceItem are invalid
+    // and not used. So convert XFillTransparenceItem's constant transparency percentage as an intensity
+    // and assign this to the XFillFloatTransparenceItem's start-intensity and end-intensity fields.
+    // Now the LOK clients need only listen to statechange messages of XFillFloatTransparenceItem
+    // to get fill-transparency settings instead of listening to two separate items.
+
+    XFillFloatTransparenceItem* pFillFloatTranspItem =
+        const_cast<XFillFloatTransparenceItem*>
+        (rSet.GetItem<XFillFloatTransparenceItem>(XATTR_FILLFLOATTRANSPARENCE));
+    if (!pFillFloatTranspItem || pFillFloatTranspItem->IsEnabled())
+        return;
+
+    const XFillTransparenceItem* pFillTranspItem =
+        rSet.GetItem<XFillTransparenceItem>(XATTR_FILLTRANSPARENCE);
+
+    if (!pFillTranspItem)
+        return;
+
+    XGradient aTmpGradient = pFillFloatTranspItem->GetGradientValue();
+    sal_uInt16 nTranspPercent = pFillTranspItem->GetValue();
+    // Encode transparancy percentage as intensity
+    sal_uInt16 nIntensity = 100 - std::min<sal_uInt16>
+        (std::max<sal_uInt16>(nTranspPercent, 0), 100);
+    aTmpGradient.SetStartIntens(nIntensity);
+    aTmpGradient.SetEndIntens(nIntensity);
+    pFillFloatTranspItem->SetGradientValue(aTmpGradient);
+}
+
 void SwDrawShell::GetDrawAttrState(SfxItemSet& rSet)
 {
     SdrView* pSdrView = GetShell().GetDrawView();
@@ -323,7 +360,11 @@ void SwDrawShell::GetDrawAttrState(SfxItemSet& rSet)
         bool bDisable = Disable( rSet );
 
         if( !bDisable )
+        {
             pSdrView->GetAttributes( rSet );
+            if (comphelper::LibreOfficeKit::isActive())
+                lcl_unifyFillTransparencyItems(rSet);
+        }
     }
     else
         rSet.Put(pSdrView->GetDefaultAttr());
