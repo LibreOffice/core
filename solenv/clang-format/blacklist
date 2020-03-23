@@ -5911,6 +5911,7 @@ include/drawinglayer/primitive3d/baseprimitive3d.hxx
 include/drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx
 include/drawinglayer/primitive3d/groupprimitive3d.hxx
 include/drawinglayer/primitive3d/modifiedcolorprimitive3d.hxx
+include/drawinglayer/primitive3d/polygonprimitive3d.hxx
 include/drawinglayer/primitive3d/polypolygonprimitive3d.hxx
 include/drawinglayer/primitive3d/sdrcubeprimitive3d.hxx
 include/drawinglayer/primitive3d/sdrextrudelathetools3d.hxx
