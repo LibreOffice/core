@@ -527,14 +527,6 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                             SAL_INFO("oox.drawingml.gradient", "first or last segment is widest and is uniformly coloured");
                             nBorder = std::next(aWidestSegmentStart)->first - aWidestSegmentStart->first;
 
-                            // If it's the last segment that is uniformly coloured, rotate the gradient 180
-                            // degrees and swap start and end colours
-                            if (std::next(aWidestSegmentStart) == std::prev(aGradientStops.end()))
-                            {
-                                bSwap = true;
-                                nShapeRotation = 180*60000 - nShapeRotation;
-                            }
-
                             aGradientStops.erase( aWidestSegmentStart++ );
 
                             // Look for which is widest now
