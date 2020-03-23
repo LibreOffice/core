@@ -1103,6 +1103,19 @@ DECLARE_OOXMLEXPORT_TEST(testVerticalBorders, "calendar3.docx")
     assertXPathChildren(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[3]/w:tcPr/w:tcBorders", 2);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testGradientAngle, "tdf128648_GradientSegments.docx")
+{
+    // tdf#128648: Do not do an extra rotation of gradient.
+
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+    // This is the correct angle.
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic"
+        "/a:graphicData/wps:wsp/wps:spPr/a:gradFill/a:lin [@ang='4860000']", 1);
+}
+
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
