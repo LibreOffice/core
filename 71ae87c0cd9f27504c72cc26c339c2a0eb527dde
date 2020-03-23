@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fcbbdd01_33e59ee1",
+        "filename": "canvas/inc/base/canvascustomspritebase.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-03-23T14:17:41Z",
+      "side": 0,
+      "message": "Let\u0027s not touch lines unrelated to our change?",
+      "revId": "71ae87c0cd9f27504c72cc26c339c2a0eb527dde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bebb7028_ec4276f8",
+        "filename": "canvas/source/cairo/cairo_cachedbitmap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-03-23T14:17:41Z",
+      "side": 0,
+      "message": "Let\u0027s not touch lines unrelated to our change?",
+      "revId": "71ae87c0cd9f27504c72cc26c339c2a0eb527dde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1edbf3e9_0e62ebc6",
+        "filename": "canvas/source/cairo/cairo_canvas.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-03-23T14:17:41Z",
+      "side": 0,
+      "message": "Let\u0027s not touch lines unrelated to our change?",
+      "revId": "71ae87c0cd9f27504c72cc26c339c2a0eb527dde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb1ece31_03eaea1a",
+        "filename": "canvas/source/cairo/cairo_canvasbitmap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-03-23T14:17:41Z",
+      "side": 0,
+      "message": "Let\u0027s not touch lines unrelated to our change?",
+      "revId": "71ae87c0cd9f27504c72cc26c339c2a0eb527dde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3de6df54_d3c0e534",
+        "filename": "canvas/source/cairo/cairo_canvascustomsprite.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-03-23T14:17:41Z",
+      "side": 0,
+      "message": "Let\u0027s not touch lines unrelated to our change?",
+      "revId": "71ae87c0cd9f27504c72cc26c339c2a0eb527dde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aaca5e0d_08eb8df8",
+        "filename": "canvas/source/cairo/cairo_canvasfont.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-03-23T14:17:41Z",
+      "side": 0,
+      "message": "Let\u0027s not touch lines unrelated to our change?",
+      "revId": "71ae87c0cd9f27504c72cc26c339c2a0eb527dde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "efb3504f_97309894",
+        "filename": "canvas/source/cairo/cairo_canvashelper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-03-23T14:17:41Z",
+      "side": 0,
+      "message": "Let\u0027s not touch lines unrelated to our change?",
+      "revId": "71ae87c0cd9f27504c72cc26c339c2a0eb527dde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

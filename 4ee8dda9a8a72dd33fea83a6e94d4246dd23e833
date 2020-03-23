@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "687120fe_c738be40",
+        "filename": "canvas/inc/base/canvascustomspritebase.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-03-23T14:17:41Z",
+      "side": 1,
+      "message": "And let\u0027s get rid of this extra empty line please.",
+      "revId": "4ee8dda9a8a72dd33fea83a6e94d4246dd23e833",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c645548_fcefa822",
+        "filename": "canvas/source/cairo/cairo_cachedbitmap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-03-23T14:17:41Z",
+      "side": 1,
+      "message": "And let\u0027s get rid of this extra empty lines, please.",
+      "revId": "4ee8dda9a8a72dd33fea83a6e94d4246dd23e833",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41c2ad1c_e626b1a5",
+        "filename": "canvas/source/cairo/cairo_canvas.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-03-23T14:17:41Z",
+      "side": 1,
+      "message": "And let\u0027s get rid of this extra empty lines, please.",
+      "revId": "4ee8dda9a8a72dd33fea83a6e94d4246dd23e833",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75f4ff86_6dc56b76",
+        "filename": "canvas/source/cairo/cairo_canvasbitmap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-03-23T14:17:41Z",
+      "side": 1,
+      "message": "And let\u0027s get rid of this extra empty line please.",
+      "revId": "4ee8dda9a8a72dd33fea83a6e94d4246dd23e833",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac3f4456_a82bca9e",
+        "filename": "canvas/source/cairo/cairo_canvascustomsprite.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-03-23T14:17:41Z",
+      "side": 1,
+      "message": "And let\u0027s get rid of this extra empty line please.",
+      "revId": "4ee8dda9a8a72dd33fea83a6e94d4246dd23e833",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b904b6e4_fac0d094",
+        "filename": "canvas/source/cairo/cairo_canvasfont.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-03-23T14:17:41Z",
+      "side": 1,
+      "message": "And let\u0027s get rid of this extra empty line please.",
+      "revId": "4ee8dda9a8a72dd33fea83a6e94d4246dd23e833",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8fac1753_67b29f53",
+        "filename": "canvas/source/cairo/cairo_canvashelper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-03-23T14:17:41Z",
+      "side": 1,
+      "message": "And let\u0027s get rid of this extra empty line please.",
+      "revId": "4ee8dda9a8a72dd33fea83a6e94d4246dd23e833",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
