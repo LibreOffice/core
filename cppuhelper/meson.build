@@ -103,5 +103,9 @@ services_rdb = custom_target('services_rdb',
   command: [find_program('genservices.py'),
             '@OUTPUT@',
             '@INPUT@',
-            ]
+            ],
+  install: true,
+  install_dir: get_option('bindir') / 'services',
 )
+
+subdir('hackdir')

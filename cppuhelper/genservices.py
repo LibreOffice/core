@@ -155,7 +155,7 @@ tmp_xml = 'servicelist.xml'
 tree.write(tmp_xml, xml_declaration=True)
 
 rc = subprocess.call(['xsltproc',
-                      '-v',
+                      #'-v',
                       '--nonet',
                       '-o',
                       output_name,
