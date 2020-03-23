@@ -807,6 +807,16 @@ void PosSizePropertyPanel::executeSize()
     }
 }
 
+boost::property_tree::ptree PosSizePropertyPanel::DumpAsPropertyTree()
+{
+    if (meDlgUnit != GetCurrentUnit(SfxItemState::DEFAULT, nullptr))
+    {
+        mpBindings->Update( SID_ATTR_METRIC );
+    }
+
+    return PanelLayout::DumpAsPropertyTree();
+}
+
 void PosSizePropertyPanel::MetricState( SfxItemState eState, const SfxPoolItem* pState )
 {
     bool bPosXBlank = false;
