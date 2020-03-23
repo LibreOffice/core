@@ -75,6 +75,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecuta
 			NINJA=$(NINJA) \
 			./build.sh -v --disable-tests --enable-libpkix \
 				$(if $(ENABLE_DBGUTIL),,--opt) \
+				$(if $(COM_IS_CLANG),$(if $(filter -fsanitize=%,$(CC)),--no-zdefs)) \
 		&& rm -f $(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/*.a \
 	,nss)
 	$(call gb_Trace_EndRange,nss,EXTERNAL)
