@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "489568af_08e022d4",
+        "filename": "canvas/inc/base/canvascustomspritebase.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1002314
+      },
+      "writtenOn": "2020-03-23T15:54:38Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "fcbbdd01_33e59ee1",
+      "revId": "71ae87c0cd9f27504c72cc26c339c2a0eb527dde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bebb7028_ec4276f8",
         "filename": "canvas/source/cairo/cairo_cachedbitmap.hxx",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "71ae87c0cd9f27504c72cc26c339c2a0eb527dde",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "debc7f20_799154c7",
+        "filename": "canvas/source/cairo/cairo_cachedbitmap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1002314
+      },
+      "writtenOn": "2020-03-23T15:54:38Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "bebb7028_ec4276f8",
+      "revId": "71ae87c0cd9f27504c72cc26c339c2a0eb527dde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "1396211f_542eb866",
+        "filename": "canvas/source/cairo/cairo_canvas.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1002314
+      },
+      "writtenOn": "2020-03-23T15:54:38Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "1edbf3e9_0e62ebc6",
+      "revId": "71ae87c0cd9f27504c72cc26c339c2a0eb527dde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bb1ece31_03eaea1a",
         "filename": "canvas/source/cairo/cairo_canvasbitmap.hxx",
         "patchSetId": 1
@@ -67,6 +121,24 @@
       "revId": "71ae87c0cd9f27504c72cc26c339c2a0eb527dde",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f92dd03_cd3120b9",
+        "filename": "canvas/source/cairo/cairo_canvasbitmap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1002314
+      },
+      "writtenOn": "2020-03-23T15:54:38Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "bb1ece31_03eaea1a",
+      "revId": "71ae87c0cd9f27504c72cc26c339c2a0eb527dde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "52c1c7c1_d2a2846e",
+        "filename": "canvas/source/cairo/cairo_canvascustomsprite.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1002314
+      },
+      "writtenOn": "2020-03-23T15:54:38Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "3de6df54_d3c0e534",
+      "revId": "71ae87c0cd9f27504c72cc26c339c2a0eb527dde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aaca5e0d_08eb8df8",
         "filename": "canvas/source/cairo/cairo_canvasfont.hxx",
         "patchSetId": 1
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "038b004a_e1d9833b",
+        "filename": "canvas/source/cairo/cairo_canvasfont.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1002314
+      },
+      "writtenOn": "2020-03-23T15:54:38Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "aaca5e0d_08eb8df8",
+      "revId": "71ae87c0cd9f27504c72cc26c339c2a0eb527dde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "efb3504f_97309894",
         "filename": "canvas/source/cairo/cairo_canvashelper.hxx",
         "patchSetId": 1
@@ -118,6 +226,24 @@
       "revId": "71ae87c0cd9f27504c72cc26c339c2a0eb527dde",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6cc998a_fd0655aa",
+        "filename": "canvas/source/cairo/cairo_canvashelper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1002314
+      },
+      "writtenOn": "2020-03-23T15:54:38Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "efb3504f_97309894",
+      "revId": "71ae87c0cd9f27504c72cc26c339c2a0eb527dde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
