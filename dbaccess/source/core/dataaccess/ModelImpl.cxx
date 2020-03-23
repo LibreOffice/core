@@ -40,6 +40,8 @@
 #include <com/sun/star/script/DocumentScriptLibraryContainer.hpp>
 #include <com/sun/star/script/DocumentDialogLibraryContainer.hpp>
 #include <com/sun/star/util/NumberFormatsSupplier.hpp>
+#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
+#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 
 #include <comphelper/interaction.hxx>
 #include <comphelper/seqstream.hxx>
@@ -49,7 +51,9 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/digest.h>
-#include <sfx2/signaturestate.hxx>
+#include <comphelper/documentinfo.hxx>
+#include <comphelper/storagehelper.hxx>
+#include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
@@ -60,6 +64,7 @@
 
 #include <algorithm>
 
+using namespace css;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
@@ -369,6 +374,7 @@ ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XComponentContext >& _r
             ,m_aEmbeddedMacros()
             ,m_bModificationLock( false )
             ,m_bDocumentInitialized( false )
+            ,m_nScriptingSignatureState(SignatureState::UNKNOWN)
             ,m_aContext( _rxContext )
             ,m_nLoginTimeout(0)
             ,m_bReadOnly(false)
@@ -1289,13 +1295,54 @@ Reference< XEmbeddedScripts > ODatabaseModelImpl::getEmbeddedDocumentScripts() c
 SignatureState ODatabaseModelImpl::getScriptingSignatureState()
 {
     // no support for signatures at the moment
-    return SignatureState::NOSIGNATURES;
+    return m_nScriptingSignatureState;
 }
 
-bool ODatabaseModelImpl::hasTrustedScriptingSignature( bool /*bAllowUIToAddAuthor*/ )
+bool ODatabaseModelImpl::hasTrustedScriptingSignature(bool /*bAllowUIToAddAuthor*/)
 {
-    // no support for signatures at the moment
-    return false;
+    bool bResult = false;
+
+    try
+    {
+        // Don't use m_xDocumentStorage, that somehow has an incomplete storage representation
+        // which leads to signatures not being found
+        Reference<XStorage> xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
+            ZIP_STORAGE_FORMAT_STRING, m_sDocFileLocation, ElementModes::READ);
+        OUString aVersion;
+        try
+        {
+            uno::Reference<beans::XPropertySet> xPropSet(xStorage, uno::UNO_QUERY_THROW);
+            xPropSet->getPropertyValue("Version") >>= aVersion;
+        }
+        catch (uno::Exception&)
+        {
+        }
+
+        uno::Reference<security::XDocumentDigitalSignatures> xSigner(
+            security::DocumentDigitalSignatures::createWithVersion(
+                comphelper::getProcessComponentContext(), aVersion));
+        uno::Sequence<security::DocumentSignatureInformation> aInfo
+            = xSigner->verifyScriptingContentSignatures(xStorage,
+                                                        uno::Reference<io::XInputStream>());
+
+        if (!aInfo.hasElements())
+            return false;
+
+        m_nScriptingSignatureState = DocumentSignatures::getSignatureState(aInfo);
+        if (m_nScriptingSignatureState == SignatureState::OK
+            || m_nScriptingSignatureState == SignatureState::NOTVALIDATED)
+        {
+            bResult = std::any_of(aInfo.begin(), aInfo.end(),
+                                  [&xSigner](const security::DocumentSignatureInformation& rInfo) {
+                                      return xSigner->isAuthorTrusted(rInfo.Signer);
+                                  });
+        }
+    }
+    catch (uno::Exception&)
+    {
+    }
+
+    return bResult;
 }
 
 void ODatabaseModelImpl::storageIsModified()
