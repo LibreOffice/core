@@ -266,7 +266,7 @@ void TakeThread::execute()
         const sal_Int32 nPos = mpBrowser->bTakeAll ? i : aSelectedRows[i];
         const INetURLObject aURL( mpBrowser->aFoundList[ nPos ]);
 
-        mrTakenList.push_back( static_cast<sal_uLong>(nPos) );
+        mrTakenList.push_back( nPos );
 
         {
             SolarMutexGuard aGuard;
@@ -451,10 +451,10 @@ GalleryIdDialog::~GalleryIdDialog()
 IMPL_LINK_NOARG(GalleryIdDialog, ClickOkHdl, weld::Button&, void)
 {
     Gallery*    pGal = m_pThm->GetParent();
-    const sal_uLong nId = GetId();
+    const sal_uInt32 nId = GetId();
     bool        bDifferentThemeExists = false;
 
-    for( sal_uLong i = 0, nCount = pGal->GetThemeCount(); i < nCount && !bDifferentThemeExists; i++ )
+    for( size_t i = 0, nCount = pGal->GetThemeCount(); i < nCount && !bDifferentThemeExists; i++ )
     {
         const GalleryThemeEntry* pInfo = pGal->GetThemeInfo( i );
 
