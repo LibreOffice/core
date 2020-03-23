@@ -75,6 +75,23 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testBtlrTableRowSpan)
     assertXPathContent(pXmlDoc, "//textarray[1]/text", "USA");
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTableFlyOverlapSpacing)
+{
+    // Load a document that has an image on the right of a table.  The table wraps around the image.
+    load(DATA_DIRECTORY, "table-fly-overlap-spacing.docx");
+    SwTwips nFlyTop = parseDump("//body/txt/anchored/fly/infos/bounds", "top").toInt32();
+    SwTwips nFlyHeight = parseDump("//body/txt/anchored/fly/infos/bounds", "height").toInt32();
+    SwTwips nFlyBottom = nFlyTop + nFlyHeight;
+    SwTwips nTableFrameTop = parseDump("//tab/infos/bounds", "top").toInt32();
+    SwTwips nTablePrintTop = parseDump("//tab/infos/prtBounds", "top").toInt32();
+    SwTwips nTableTop = nTableFrameTop + nTablePrintTop;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater or equal than: 3993
+    // - Actual  : 3993
+    // i.e. the table was below the image, not on the left of the image.
+    CPPUNIT_ASSERT_LESS(nFlyBottom, nTableTop);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
