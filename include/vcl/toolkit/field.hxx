@@ -26,7 +26,6 @@
 
 #include <config_options.h>
 #include <vcl/field.hxx>
-#include <config_options.h>
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) CurrencyFormatter : public NumericFormatter
 {
