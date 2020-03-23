@@ -23,7 +23,6 @@
 #include <config_options.h>
 #include <memory>
 #include <vcl/dllapi.h>
-#include <config_options.h>
 #include <tools/link.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
