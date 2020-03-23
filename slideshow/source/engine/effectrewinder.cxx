@@ -410,7 +410,7 @@ void EffectRewinder::asynchronousRewind (
         // Process initial events and skip any animations that are started
         // when the slide is shown.
         mbNonUserTriggeredMainSequenceEffectSeen = false;
-        mrEventQueue.forceEmpty();
+
         if (mbNonUserTriggeredMainSequenceEffectSeen)
         {
             mrUserEventQueue.callSkipEffectEventHandler();
