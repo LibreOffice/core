@@ -82,7 +82,7 @@ SvtBroadcaster::SvtBroadcaster( const SvtBroadcaster &rBC ) :
     mbNormalized(true), mbDestNormalized(true)
 {
     assert(!rBC.mbAboutToDie && "copying an object marked with PrepareForDestruction()?");
-    assert(!rBC.mbDisposing && "copying an object that is in it's destructor?");
+    assert(!rBC.mbDisposing && "copying an object that is in its destructor?");
 
     rBC.Normalize(); // so that insert into ourself is in-order, and therefore we do not need to Normalize()
     maListeners.reserve(rBC.maListeners.size());

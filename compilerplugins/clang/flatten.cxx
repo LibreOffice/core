@@ -249,8 +249,8 @@ bool Flatten::VisitIfStmt(IfStmt const * ifStmt)
     }
     if (thenThrowExpr)
     {
-        // if the "if" statement is not the last statement in it's block, and it contains
-        // var decls in it's else block, we cannot de-indent the else block without
+        // if the "if" statement is not the last statement in its block, and it contains
+        // var decls in its else block, we cannot de-indent the else block without
         // extending the lifetime of some variables, which may be problematic
         if (ifStmt != lastStmtInCompoundStmt && containsVarDecl(ifStmt->getElse()))
             return true;

@@ -1299,10 +1299,10 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
                     // a sdr::contact::ViewContact supplier by supporting
                     // a GetViewContact() - call. For ObjectContact we can use
                     // the already existing ObjectContact from the involved
-                    // DrawingLayer. For tis, the helper classes
+                    // DrawingLayer. For this, the helper classes
                     //     ViewObjectContactOfSwNoTextFrame
                     //     ViewContactOfSwNoTextFrame
-                    // are created which support the VOC-mechanism in it's minimal
+                    // are created which support the VOC-mechanism in its minimal
                     // form. This allows automatic and view-dependent (multiple edit
                     // windows, print, etc.) re-use of the created primitives.
                     // Also: Will be very useful when completely changing the Writer

@@ -43,7 +43,7 @@ namespace drawinglayer
             will provide the text tools::PolyPolygon outlines as filled polygons, correctly
             transformed.
 
-            To get better text quality, it is suggested to handle tis primitive directly
+            To get better text quality, it is suggested to handle this primitive directly
             in a renderer. In that case, e.g. hintings on the system can be supported.
 
             @param maTextTransform
