@@ -3534,9 +3534,11 @@ public:
         if (pFixedWidths)
             set_column_fixed_widths(*pFixedWidths);
 
+        Image aDummy;
         for (int i = 0; i < nSourceCount; ++i)
         {
             aVclIter.iter = new SvTreeListEntry;
+            aVclIter.iter->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
             m_xTreeView->Insert(aVclIter.iter, nullptr, TREELIST_APPEND);
             func(aVclIter, i);
 
