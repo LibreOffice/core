@@ -374,7 +374,7 @@ namespace
             unsigned long nTargetWidth = 0,
             unsigned long nTargetHeight = 0) const
         {
-            if(bDisableDownScale || 0 == nTargetWidth || 0 == nTargetHeight || isTrivial())
+            if (bDisableDownScale || 0 == nTargetWidth || 0 == nTargetHeight || !pSurface || isTrivial())
             {
                 // caller asks for original or disabled or trivial (smaller then a minimal square size)
                 // also excludes zero cases for width/height after this point if need to prescale
