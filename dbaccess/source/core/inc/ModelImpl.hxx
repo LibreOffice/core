@@ -158,6 +158,8 @@ private:
     */
     OUString                                     m_sDocumentURL;
 
+    SignatureState m_nScriptingSignatureState;
+
 public:
     OWeakConnectionArray                                                        m_aConnections;
     const css::uno::Reference< css::uno::XComponentContext >  m_aContext;
