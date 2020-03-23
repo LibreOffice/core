@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "84a8b869_4eff5616",
+        "filename": "basic/source/comp/symtbl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-03-23T15:09:15Z",
+      "side": 1,
+      "message": "I have no opinion about the first two questions. I think tese constants (SbxINTEGER, SbxDOUBLE etc.), should remain the same,\nbut we can even handle it by adding a character. In addition, I will remove the type for double.",
+      "parentUuid": "05e74124_49252610",
+      "range": {
+        "startLine": 70,
+        "startChar": 85,
+        "endLine": 70,
+        "endChar": 106
+      },
+      "revId": "471bd2783c0387b66a1801d49b52432543617a1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1d12b450_61697110",
         "filename": "basic/source/runtime/runtime.cxx",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "471bd2783c0387b66a1801d49b52432543617a1d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f97e388_359f3693",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2781,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-03-23T15:09:15Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1d12b450_61697110",
+      "range": {
+        "startLine": 2781,
+        "startChar": 4,
+        "endLine": 2781,
+        "endChar": 41
+      },
+      "revId": "471bd2783c0387b66a1801d49b52432543617a1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
