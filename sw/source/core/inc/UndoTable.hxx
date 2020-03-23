@@ -72,14 +72,14 @@ public:
 
 class SwUndoTextToTable : public SwUndo, public SwUndRng
 {
-    OUString sTableNm;
-    SwInsertTableOptions aInsTableOpts;
+    OUString m_sTableName;
+    SwInsertTableOptions m_aInsertTableOpts;
     std::vector<sal_uLong> mvDelBoxes;
-    std::unique_ptr<SwTableAutoFormat> pAutoFormat;
-    SwHistory* pHistory;
-    sal_Unicode cSeparator;
-    sal_uInt16 nAdjust;
-    bool bSplitEnd : 1;
+    std::unique_ptr<SwTableAutoFormat> m_pAutoFormat;
+    SwHistory* m_pHistory;
+    sal_Unicode m_cSeparator;
+    sal_uInt16 m_nAdjust;
+    bool m_bSplitEnd : 1;
 
 public:
     SwUndoTextToTable( const SwPaM&, const SwInsertTableOptions&, sal_Unicode,
