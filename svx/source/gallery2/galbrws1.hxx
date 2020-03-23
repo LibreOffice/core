@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_GALLERY2_GALBRWS1_HXX
-#define INCLUDED_SVX_SOURCE_GALLERY2_GALBRWS1_HXX
+#pragma once
 
 #include <svl/lstner.hxx>
 #include <vector>
@@ -86,7 +85,5 @@ public:
     OUString                GetSelectedTheme() const { return mxThemes->get_selected_text(); }
     void                    GrabFocus();
 };
-
-#endif // INCLUDED_SVX_SOURCE_GALLERY2_GALBRWS1_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
