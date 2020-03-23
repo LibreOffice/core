@@ -157,7 +157,7 @@ lcl_PaintTransparentFormControls(SwViewShell const & rShell, SwRect const& rRect
 // and deactivation and mpPrePostOutDev to remember the OutDev from the BeginDrawLayers
 // call. That way, all places where paint take place can be handled the same way, even
 // when calling other paint methods. This is the case at the places where SW paints
-// buffered into VDevs to avoid flicker. Tis is in general problematic and should be
+// buffered into VDevs to avoid flicker. It is in general problematic and should be
 // solved once using the BufferedOutput functionality of the DrawView.
 
 void SwViewShell::PrePaint()

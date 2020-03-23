@@ -45,7 +45,7 @@ namespace drawinglayer
             to construct any processor with a given ViewInformation2D. To be able
             to handle primitives which need to change the current transformation
             (as e.g. TransformPrimitive2D) it is allowed for the processor implementation
-            to change tis local value using updateViewInformation.
+            to change its local value using updateViewInformation.
 
             The basic processing method is process(..) which gets handed over the
             sequence of primitives to process. For convenience of the C++ implementations,

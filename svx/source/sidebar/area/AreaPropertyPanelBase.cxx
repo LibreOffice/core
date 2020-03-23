@@ -512,7 +512,7 @@ void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
 
                 const XFillGradientItem aXFillGradientItem(mxLbFillAttr->get_active_text(), aGradient);
 
-                    // #i122676# Change FillStyle and Gradinet in one call
+                    // #i122676# Change FillStyle and Gradient in one call
                 XFillStyleItem aXFillStyleItem(drawing::FillStyle_GRADIENT);
                 setFillStyleAndGradient(bFillStyleChange ? &aXFillStyleItem : nullptr, aXFillGradientItem);
             }

@@ -147,7 +147,7 @@ ImplPrimitive2DIDBlock(OverlayStaticRectanglePrimitive, PRIMITIVE2D_ID_OVERLAYRE
             // calculate back from internal bitmap's extreme coordinates (the edges)
             // to logical coordinates. Only use a unified scaling value (getDiscreteUnit(),
             // the prepared one which expresses how many logic units form a discrete unit)
-            // for this step. This primitive is to be displayed always unscaled (in it's pixel size)
+            // for this step. This primitive is to be displayed always unscaled (in its pixel size)
             // and unrotated, more like a marker
             const double fLeft((0.0 - getCenterX()) * getDiscreteUnit());
             const double fTop((0.0 - getCenterY()) * getDiscreteUnit());
