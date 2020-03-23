@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SFX2_SIGNATURESTATE_HXX
 #define INCLUDED_SFX2_SIGNATURESTATE_HXX
 
+#include <sfx2/dllapi.h>
+
+#include <com/sun/star/security/DocumentSignatureInformation.hpp>
+
 enum class SignatureState
 {
     // FIXME: Do these values have to be these, and given at all, or is this just cargo cult?
@@ -37,6 +41,13 @@ enum class SignatureState
     /// Certificate could not be validated and the document is only partially signed.
     NOTVALIDATED_PARTIAL_OK = 6
 };
+
+namespace DocumentSignatures
+{
+/** Get document signature state */
+SFX2_DLLPUBLIC SignatureState
+getSignatureState(const css::uno::Sequence<css::security::DocumentSignatureInformation>& aInfos);
+}
 
 #endif // INCLUDED_SFX2_SIGNATURESTATE_HXX
 
