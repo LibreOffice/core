@@ -1,0 +1,22 @@
+[Bootstrap]
+BRAND_BASE_DIR=${ORIGIN}/..
+BRAND_INI_DIR=${ORIGIN}
+BRAND_SHARE_SUBDIR=share
+BRAND_SHARE_RESOURCE_SUBDIR=program/resource
+CONFIGURATION_LAYERS=xcsxcu:${BRAND_BASE_DIR}/share/registry res:${BRAND_BASE_DIR}/share/registry bundledext:${${BRAND_BASE_DIR}/program/lounorc:BUNDLED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini sharedext:${${BRAND_BASE_DIR}/program/lounorc:SHARED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini userext:${${BRAND_BASE_DIR}/program/lounorc:UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini user:!${$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}/user/registrymodifications.xcu
+LO_JAVA_DIR=${BRAND_BASE_DIR}/program/classes
+LO_LIB_DIR=${BRAND_BASE_DIR}/program
+BAK_EXTENSIONS=${$ORIGIN/lounorc:TMP_EXTENSIONS}
+BUNDLED_EXTENSIONS=${$ORIGIN/lounorc:BUNDLED_EXTENSIONS}
+BUNDLED_EXTENSIONS_USER=${$ORIGIN/lounorc:BUNDLED_EXTENSIONS_USER}
+SHARED_EXTENSIONS_USER=${$ORIGIN/lounorc:SHARED_EXTENSIONS_USER}
+UNO_SHARED_PACKAGES_CACHE=${$ORIGIN/lounorc:UNO_SHARED_PACKAGES_CACHE}
+TMP_EXTENSIONS=${$ORIGIN/lounorc:TMP_EXTENSIONS}
+UNO_USER_PACKAGES_CACHE=${$ORIGIN/lounorc:UNO_USER_PACKAGES_CACHE}
+URE_BIN_DIR=${BRAND_BASE_DIR}/program
+URE_MORE_JAVA_CLASSPATH_URLS=
+URE_OVERRIDE_JAVA_JFW_SHARED_DATA=${BRAND_BASE_DIR}/share/config/javasettings_${_OS}_${_ARCH}.xml
+URE_OVERRIDE_JAVA_JFW_USER_DATA=${${BRAND_BASE_DIR}/program/bootstraprc:UserInstallation}/user/config/javasettings_${_OS}_${_ARCH}.xml
+URE_MORE_JAVA_TYPES=${BRAND_BASE_DIR}/program/classes/unoil.jar ${BRAND_BASE_DIR}/program/classes/ScriptFramework.jar ${${$ORIGIN/lounorc:PKG_UserUnoFile}:UNO_JAVA_CLASSPATH} ${${$ORIGIN/lounorc:PKG_SharedUnoFile}:UNO_JAVA_CLASSPATH} ${${$ORIGIN/lounorc:PKG_BundledUnoFile}:UNO_JAVA_CLASSPATH}
+URE_MORE_SERVICES=${${$ORIGIN/lounorc:PKG_UserUnoFile}:UNO_SERVICES} ${${$ORIGIN/lounorc:PKG_SharedUnoFile}:UNO_SERVICES} ${${$ORIGIN/lounorc:PKG_BundledUnoFile}:UNO_SERVICES} <$ORIGIN/services>*
+URE_MORE_TYPES=<$ORIGIN/types>* ${${$ORIGIN/lounorc:PKG_UserUnoFile}:UNO_TYPES} ${${$ORIGIN/lounorc:PKG_SharedUnoFile}:UNO_TYPES} ${${$ORIGIN/lounorc:PKG_BundledUnoFile}:UNO_TYPES}
