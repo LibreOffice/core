@@ -110,6 +110,35 @@ CPPUNIT_TEST_FIXTURE(I18npoolDefaultnumberingproviderTest, testArabicZero4)
     CPPUNIT_ASSERT_EQUAL(OUString("1000"), aActual);
 }
 
+CPPUNIT_TEST_FIXTURE(I18npoolDefaultnumberingproviderTest, testArabicZero5)
+{
+    uno::Reference<uno::XComponentContext> xComponentContext
+        = comphelper::getComponentContext(getMultiServiceFactory());
+
+    // 1000 -> "01000"
+    uno::Reference<text::XNumberingFormatter> xFormatter(
+        text::DefaultNumberingProvider::create(xComponentContext), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProperties = {
+        comphelper::makePropertyValue("NumberingType",
+                                      static_cast<sal_uInt16>(style::NumberingType::ARABIC_ZERO5)),
+        comphelper::makePropertyValue("Value", static_cast<sal_Int32>(1000)),
+    };
+    lang::Locale aLocale;
+    OUString aActual = xFormatter->makeNumberingString(aProperties, aLocale);
+    // Without the accompanying fix in place, this test would have failed with a
+    // lang.IllegalArgumentException, support for ARABIC_ZERO5 was missing.
+    CPPUNIT_ASSERT_EQUAL(OUString("01000"), aActual);
+
+    // 10000 -> "10000"
+    aProperties = {
+        comphelper::makePropertyValue("NumberingType",
+                                      static_cast<sal_uInt16>(style::NumberingType::ARABIC_ZERO5)),
+        comphelper::makePropertyValue("Value", static_cast<sal_Int32>(10000)),
+    };
+    aActual = xFormatter->makeNumberingString(aProperties, aLocale);
+    CPPUNIT_ASSERT_EQUAL(OUString("10000"), aActual);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

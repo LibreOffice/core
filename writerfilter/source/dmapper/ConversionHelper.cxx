@@ -626,6 +626,10 @@ sal_Int16 ConvertCustomNumberFormat(const OUString& rFormat)
     {
         nRet = style::NumberingType::ARABIC_ZERO4;
     }
+    else if (rFormat == "00001, 00002, 00003, ...")
+    {
+        nRet = style::NumberingType::ARABIC_ZERO5;
+    }
 
     return nRet;
 }
