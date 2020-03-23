@@ -9703,9 +9703,9 @@ for a in "$NINJA" ninja ninja-build; do
         $a --version > /dev/null 2>/dev/null
         if test $? -eq 0;  then
             if test "$build_os" = "cygwin"; then
-                # nss requires the Windows version of ninja
+                # nss requires the Windows version of ninja (but uses its Unix path)
                 if test -n "$($a -t list | grep 'msvc')" ; then
-                    NINJA="$(cygpath -m "$(which "$(cygpath -u $a)")")"
+                    NINJA=`which $a`
                 fi
             else
                 NINJA=`which $a`
@@ -9724,6 +9724,7 @@ fi
 if test -z "$NINJA" -a "$nss_needs_ninja" = "yes" -a -n "$ENABLE_NSS" -a -z "$SYSTEM_NSS"; then
     AC_MSG_ERROR([Not found. NSS build requires Ninja (https://ninja-build.org/).])
 fi
+AC_SUBST(NINJA)
 
 dnl ===================================================================
 dnl Check for TLS/SSL and cryptographic implementation to use
