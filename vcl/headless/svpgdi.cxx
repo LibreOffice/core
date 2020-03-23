@@ -1183,7 +1183,7 @@ static basegfx::B2DPoint impPixelSnap(
 // Remove bClosePath: Checked that the already used mechanism for Win using
 // Gdiplus already relies on rPolygon.isClosed(), so should be safe to replace
 // this.
-// For PixelSnap we need the ObjectToDevice transformation here now. Tis is a
+// For PixelSnap we need the ObjectToDevice transformation here now. This is a
 // special case relative to the also executed LineDraw-Offset of (0.5, 0.5) in
 // DeviceCoordinates: The LineDraw-Offset is applied *after* the snap, so we
 // need the ObjectToDevice transformation *without* that offset here to do the
