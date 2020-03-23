@@ -10144,6 +10144,14 @@ public:
         disable_notify_events();
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreeIter Iter;
+        if (gtk_tree_model_iter_parent(pModel, &Iter, const_cast<GtkTreeIter*>(&rGtkIter.iter)))
+        {
+            GtkTreePath* path = gtk_tree_model_get_path(pModel, &Iter);
+            if (!gtk_tree_view_row_expanded(m_pTreeView, path))
+                gtk_tree_view_expand_to_path(m_pTreeView, path);
+            gtk_tree_path_free(path);
+        }
         GtkTreePath* path = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
         gtk_tree_view_scroll_to_cell(m_pTreeView, path, nullptr, false, 0, 0);
         gtk_tree_view_set_cursor(m_pTreeView, path, nullptr, false);
