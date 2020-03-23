@@ -9724,6 +9724,7 @@ fi
 if test -z "$NINJA" -a "$nss_needs_ninja" = "yes" -a -n "$ENABLE_NSS" -a -z "$SYSTEM_NSS"; then
     AC_MSG_ERROR([Not found. NSS build requires Ninja (https://ninja-build.org/).])
 fi
+AC_SUBST(NINJA)
 
 dnl ===================================================================
 dnl Check for TLS/SSL and cryptographic implementation to use
