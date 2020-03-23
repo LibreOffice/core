@@ -513,6 +513,13 @@ published constants NumberingType
         @since LibreOffice 7.0
      */
     const short ARABIC_ZERO4 = 66;
+
+    /** Numbering is in Arabic numbers, padded with zero to have a length of at least five, as
+        "00001, 00002, ..., 10000, 10001, ...".
+
+        @since LibreOffice 7.0
+     */
+    const short ARABIC_ZERO5 = 67;
 };
 
 
