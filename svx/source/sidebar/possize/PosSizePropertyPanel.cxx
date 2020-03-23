@@ -39,6 +39,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
 #include <svx/transfrmhelper.hxx>
+#include <boost/property_tree/json_parser.hpp>
 
 #include <svtools/unitconv.hxx>
 
@@ -805,6 +806,16 @@ void PosSizePropertyPanel::executeSize()
             GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM,
                 SfxCallMode::RECORD, { &aHeightItem, &aPointItem });
     }
+}
+
+boost::property_tree::ptree PosSizePropertyPanel::DumpAsPropertyTree()
+{
+    if (meDlgUnit != GetCurrentUnit(SfxItemState::DEFAULT, nullptr))
+    {
+        mpBindings->Update( SID_ATTR_METRIC );
+    }
+
+    return PanelLayout::DumpAsPropertyTree();
 }
 
 void PosSizePropertyPanel::MetricState( SfxItemState eState, const SfxPoolItem* pState )
