@@ -1773,7 +1773,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     std::optional<PropertyMap::Property> pHidden;
                     if ( !m_aAnchoredObjectAnchors.empty() && (pHidden = pParaContext->getProperty(PROP_CHAR_HIDDEN)) )
                     {
-                        bool bIsHidden;
+                        bool bIsHidden = {}; // -Werror=maybe-uninitialized
                         pHidden->second >>= bIsHidden;
                         if (bIsHidden)
                         {
