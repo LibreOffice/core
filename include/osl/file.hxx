@@ -206,7 +206,7 @@ public:
         return static_cast< RC >( osl_getFileURLFromSystemPath( ustrSystemPath.pData, &ustrFileURL.pData ) );
     }
 
-    /** Searche a full qualified system path or a file URL.
+    /** Search a full qualified system path or a file URL.
 
         @param[in] ustrFileName
         A system dependent path, a file URL, a file or relative directory
