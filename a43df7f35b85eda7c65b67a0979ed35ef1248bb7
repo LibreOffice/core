@@ -22,6 +22,30 @@
       "revId": "a43df7f35b85eda7c65b67a0979ed35ef1248bb7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f3f2de8_a6a20bcc",
+        "filename": "basic/source/comp/symtbl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-03-23T21:13:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b58b8a9b_cb29b96a",
+      "range": {
+        "startLine": 69,
+        "startChar": 30,
+        "endLine": 69,
+        "endChar": 37
+      },
+      "revId": "a43df7f35b85eda7c65b67a0979ed35ef1248bb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
