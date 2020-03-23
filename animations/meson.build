@@ -5,4 +5,6 @@ animcore_lib = shared_library('animcorelo',
   cpp_args: ['-DLIBO_INTERNAL_ONLY'],
   link_with: [comphelper_lib, cppuhelper_lib, cppu_lib, sal_lib],
   install: true,
+  install_dir: get_option('libdir'),
+  gnu_symbol_visibility: 'hidden',
 )

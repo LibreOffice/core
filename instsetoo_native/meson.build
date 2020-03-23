@@ -22,3 +22,38 @@ configure_file(input: 'bootstraprc.in',
   install: true,
   install_dir: get_option('bindir')
 )
+
+configure_file(input: 'lounorc.in',
+  output: 'lounorc',
+  configuration: cdata,
+  install: true,
+  install_dir: get_option('bindir')
+)
+
+configure_file(input: 'versionrc.in',
+  output: 'versionrc',
+  configuration: cdata,
+  install: true,
+  install_dir: get_option('bindir')
+)
+
+configure_file(input: 'unorc.in',
+  output: 'unorc',
+  configuration: cdata,
+  install: true,
+  install_dir: get_option('bindir')
+)
+
+configure_file(input: 'setuprc.in',
+  output: 'setuprc',
+  configuration: cdata,
+  install: true,
+  install_dir: get_option('bindir')
+)
+
+configure_file(input: 'redirectrc.in',
+  output: 'redirectrc',
+  configuration: cdata,
+  install: true,
+  install_dir: get_option('bindir')
+)
