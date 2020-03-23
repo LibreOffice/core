@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05e74124_49252610",
+        "filename": "basic/source/comp/symtbl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-23T11:47:06Z",
+      "side": 1,
+      "message": "Are the constants like SbxINTEGER guaranteed to keep values across versions? these values would be written directly to BLOBs (in case of pre-compiled password-protected libraries). Possibly using alphabetic characters like \"I\"/\"L\"/\"S\" right after the number, without space, would be safer? (and double likely doesn\u0027t need additional type character, being the default?)",
+      "range": {
+        "startLine": 70,
+        "startChar": 85,
+        "endLine": 70,
+        "endChar": 106
+      },
+      "revId": "471bd2783c0387b66a1801d49b52432543617a1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d12b450_61697110",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2781,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-23T11:47:06Z",
+      "side": 1,
+      "message": "Don\u0027t search for the space separately. rtl::math::stringToDouble takes optional variable that gets the next-after-number position in string; you may reat the first value, then check if the position returned is not larger than string, and simply read from there.",
+      "range": {
+        "startLine": 2781,
+        "startChar": 4,
+        "endLine": 2781,
+        "endChar": 41
+      },
+      "revId": "471bd2783c0387b66a1801d49b52432543617a1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
