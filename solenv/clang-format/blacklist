@@ -3623,7 +3623,6 @@ desktop/win32/source/loader.hxx
 desktop/win32/source/unoinfo.cxx
 drawinglayer/inc/converters.hxx
 drawinglayer/inc/emfplushelper.hxx
-drawinglayer/inc/wmfemfhelper.hxx
 drawinglayer/inc/primitive2d/cropprimitive2d.hxx
 drawinglayer/inc/primitive2d/epsprimitive2d.hxx
 drawinglayer/inc/primitive2d/fillhatchprimitive2d.hxx
@@ -3646,6 +3645,7 @@ drawinglayer/inc/processor3d/shadow3dextractor.hxx
 drawinglayer/inc/processor3d/zbufferprocessor3d.hxx
 drawinglayer/inc/texture/texture.hxx
 drawinglayer/inc/texture/texture3d.hxx
+drawinglayer/inc/wmfemfhelper.hxx
 drawinglayer/qa/unit/border.cxx
 drawinglayer/source/animation/animationtiming.cxx
 drawinglayer/source/attribute/fillgradientattribute.cxx
@@ -16795,13 +16795,13 @@ vcl/inc/textrender.hxx
 vcl/inc/toolbox.h
 vcl/inc/unx/XIM.h
 vcl/inc/unx/cairotextrender.hxx
-vcl/inc/unx/freetypetextrender.hxx
 vcl/inc/unx/cpdmgr.hxx
 vcl/inc/unx/cupsmgr.hxx
 vcl/inc/unx/desktops.hxx
 vcl/inc/unx/fc_fontoptions.hxx
 vcl/inc/unx/fontmanager.hxx
 vcl/inc/unx/freetype_glyphcache.hxx
+vcl/inc/unx/freetypetextrender.hxx
 vcl/inc/unx/gendisp.hxx
 vcl/inc/unx/geninst.h
 vcl/inc/unx/genprn.h
@@ -17474,8 +17474,8 @@ vcl/unx/generic/fontmanager/helper.cxx
 vcl/unx/generic/gdi/cairo_xlib_cairo.cxx
 vcl/unx/generic/gdi/cairo_xlib_cairo.hxx
 vcl/unx/generic/gdi/cairotextrender.cxx
-vcl/unx/generic/gdi/freetypetextrender.cxx
 vcl/unx/generic/gdi/font.cxx
+vcl/unx/generic/gdi/freetypetextrender.cxx
 vcl/unx/generic/gdi/gdiimpl.cxx
 vcl/unx/generic/gdi/gdiimpl.hxx
 vcl/unx/generic/gdi/nativewindowhandleprovider.cxx
