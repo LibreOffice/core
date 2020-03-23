@@ -654,7 +654,7 @@ define gb_UIConfig__gla11y_command
 $(call gb_ExternalExecutale__check_registration,python)
 $(call gb_Helper_abbreviate_dirs,\
 	FILES=$(call var2file,$(shell $(gb_MKTEMP)),100,$(UIFILES)) && \
-	$(gb_UIConfig_LXML_PATH) $(gb_Helper_set_ld_path) \
+	$(gb_UIConfig_LXML_PATH) $(if $(SYSTEM_LIBXML)$(SYSTEM_LIBXSLT),,$(gb_Helper_set_ld_path)) \
 	$(call gb_ExternalExecutable_get_command,python) \
 	$(gb_UIConfig_gla11y_SCRIPT) $(gb_UIConfig_gla11y_PARAMETERS) -o $@ -L $$FILES
 )

@@ -8951,8 +8951,12 @@ if test "$with_lxml" != no; then
                     ;;
                 *)
                     if test "$cross_compiling" != yes -a "x$ac_cv_header_Python_h" = "xyes"; then
-                        BUILD_TYPE="$BUILD_TYPE LXML"
-                        AC_MSG_RESULT([no, using internal lxml])
+                        if test -n ${SYSTEM_LIBXSLT} -o -n ${SYSTEM_LIBXML}; then
+                            AC_MSG_RESULT([no, and no system libxml/libxslt, gla11y will only report widget classes and ids])
+                        else
+                            BUILD_TYPE="$BUILD_TYPE LXML"
+                            AC_MSG_RESULT([no, using internal lxml])
+                        fi
                     else
                         AC_MSG_RESULT([no, and system does not provide python development headers, gla11y will only report widget classes and ids])
                     fi
