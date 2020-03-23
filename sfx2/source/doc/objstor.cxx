@@ -1582,7 +1582,7 @@ bool SfxObjectShell::SaveTo_Impl
                         uno::Sequence< security::DocumentSignatureInformation > aInfos =
                             xDDSigns->verifyScriptingContentSignatures( xTarget,
                                                                         uno::Reference< io::XInputStream >() );
-                        SignatureState nState = ImplCheckSignaturesInformation( aInfos );
+                        SignatureState nState = DocumentSignatures::getSignatureState(aInfos);
                         if ( nState == SignatureState::OK || nState == SignatureState::NOTVALIDATED
                             || nState == SignatureState::PARTIAL_OK)
                         {

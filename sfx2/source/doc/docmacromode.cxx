@@ -26,6 +26,7 @@
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
 #include <com/sun/star/task/DocumentMacroConfirmationRequest.hpp>
+#include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
@@ -42,7 +43,7 @@
 namespace sfx2
 {
 
-
+    using namespace css;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::task::XInteractionHandler;
     using ::com::sun::star::uno::Any;
@@ -413,7 +414,6 @@ namespace sfx2
         }
         return bAllow;
     }
-
 
 } // namespace sfx2
 
