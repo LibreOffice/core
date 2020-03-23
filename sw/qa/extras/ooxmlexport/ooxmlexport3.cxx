@@ -1106,13 +1106,25 @@ DECLARE_OOXMLEXPORT_TEST(testVerticalBorders, "calendar3.docx")
 DECLARE_OOXMLEXPORT_TEST(testArrowFlipXY, "tdf100751_arrowBothFlip.docx")
 {
     // tdf#100751: Both x and y flip should happen.
-
     xmlDocPtr pXmlDocument = parseExport("word/document.xml");
     if (!pXmlDocument)
         return;
 
     OUString arrowStyle = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:group/v:shape[2]", "style");
     CPPUNIT_ASSERT(arrowStyle.indexOf(u"flip:xy") != sal_Int32(-1));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testGradientAngle, "tdf128648_GradientSegments.docx")
+{
+    // tdf#128648: Do not do an extra rotation of gradient.
+
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+
+    // This is the correct angle.
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic"
+        "/a:graphicData/wps:wsp/wps:spPr/a:gradFill/a:lin [@ang='4860000']", 1);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
