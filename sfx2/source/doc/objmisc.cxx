@@ -1810,7 +1810,7 @@ bool SfxObjectShell_Impl::hasTrustedScriptingSignature( bool bAllowUIToAddAuthor
             if ( aInfo.hasElements() )
             {
                 if ( nScriptingSignatureState == SignatureState::UNKNOWN )
-                    nScriptingSignatureState = SfxObjectShell::ImplCheckSignaturesInformation( aInfo );
+                    nScriptingSignatureState = DocumentSignatures::getSignatureState(aInfo);
 
                 if ( nScriptingSignatureState == SignatureState::OK
                   || nScriptingSignatureState == SignatureState::NOTVALIDATED )

@@ -1501,44 +1501,6 @@ void SfxObjectShell::StateView_Impl(SfxItemSet& /*rSet*/)
 {
 }
 
-SignatureState SfxObjectShell::ImplCheckSignaturesInformation( const uno::Sequence< security::DocumentSignatureInformation >& aInfos )
-{
-    bool bCertValid = true;
-    SignatureState nResult = SignatureState::NOSIGNATURES;
-    bool bCompleteSignature = true;
-    if( aInfos.hasElements() )
-    {
-        nResult = SignatureState::OK;
-        for ( const auto& rInfo : aInfos )
-        {
-            if ( bCertValid )
-            {
-                sal_Int32 nCertStat = rInfo.CertificateStatus;
-                bCertValid = nCertStat == security::CertificateValidity::VALID;
-            }
-
-            if ( !rInfo.SignatureIsValid )
-            {
-                nResult = SignatureState::BROKEN;
-                break; // we know enough
-            }
-            bCompleteSignature &= !rInfo.PartialDocumentSignature;
-        }
-    }
-
-    if (nResult == SignatureState::OK && !bCertValid && !bCompleteSignature)
-        nResult = SignatureState::NOTVALIDATED_PARTIAL_OK;
-    else if (nResult == SignatureState::OK && !bCertValid)
-        nResult = SignatureState::NOTVALIDATED;
-    else if ( nResult == SignatureState::OK && bCertValid && !bCompleteSignature)
-        nResult = SignatureState::PARTIAL_OK;
-
-    // this code must not check whether the document is modified
-    // it should only check the provided info
-
-    return nResult;
-}
-
 /// Does this ZIP storage have a signature stream?
 static bool HasSignatureStream(const uno::Reference<embed::XStorage>& xStorage)
 {
@@ -1636,7 +1598,7 @@ SignatureState SfxObjectShell::ImplGetSignatureState( bool bScriptingContent )
         *pState = SignatureState::NOSIGNATURES;
 
         uno::Sequence< security::DocumentSignatureInformation > aInfos = GetDocumentSignatureInformation( bScriptingContent );
-        *pState = ImplCheckSignaturesInformation( aInfos );
+        *pState = DocumentSignatures::getSignatureState(aInfos);
     }
 
     if ( *pState == SignatureState::OK || *pState == SignatureState::NOTVALIDATED
