@@ -2806,8 +2806,13 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
                                 aRectFnSet.GetLeft(aRect) + aRectFnSet.GetLeft(getFramePrintArea()),
                                 aRectFnSet.GetLeft(aRect) + aRectFnSet.GetLeft(getFramePrintArea())
                                     + aRectFnSet.GetWidth(getFramePrintArea()));
-                            basegfx::B1DRange aFlyRange(aRectFnSet.GetLeft(aFlyRect),
-                                                        aRectFnSet.GetRight(aFlyRect));
+
+                            // Ignore spacing when determining the left/right edge of the fly, like
+                            // Word does.
+                            const SwRect aFlyRectWithoutSpaces = pFly->GetObjRect();
+                            basegfx::B1DRange aFlyRange(aRectFnSet.GetLeft(aFlyRectWithoutSpaces),
+                                                        aRectFnSet.GetRight(aFlyRectWithoutSpaces));
+
                             // If it does, shift the table down. Do this only in the compat case,
                             // normally an SwFlyPortion is created instead that increases the height
                             // of the first table row.
