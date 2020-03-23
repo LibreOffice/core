@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7d281470_d06dd2bc",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2793,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-23T13:19:13Z",
+      "side": 1,
+      "message": "Simply\n\n    aStr[nParseEnd]",
+      "range": {
+        "startLine": 2793,
+        "startChar": 17,
+        "endLine": 2793,
+        "endChar": 48
+      },
+      "revId": "596cb5c9c9b0d24caf6d56f53765133dca555938",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae51762e_9b46a5dd",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2815,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-23T13:19:13Z",
+      "side": 1,
+      "message": "What if we just use PutDouble for all cases? I suppose that the principal thing is creating correct type at line 2800?",
+      "range": {
+        "startLine": 2815,
+        "startChar": 12,
+        "endLine": 2815,
+        "endChar": 30
+      },
+      "revId": "596cb5c9c9b0d24caf6d56f53765133dca555938",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
