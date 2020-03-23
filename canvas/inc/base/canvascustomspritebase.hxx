@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_BASE_CANVASCUSTOMSPRITEBASE_HXX
-#define INCLUDED_CANVAS_BASE_CANVASCUSTOMSPRITEBASE_HXX
+#pragma once
 
 #include <com/sun/star/rendering/XCanvas.hpp>
 
@@ -258,7 +257,5 @@ namespace canvas
         SpriteHelper maSpriteHelper;
     };
 }
-
-#endif // INCLUDED_CANVAS_BASE_CANVASCUSTOMSPRITEBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

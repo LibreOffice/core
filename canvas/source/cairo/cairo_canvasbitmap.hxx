@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_CANVASBITMAP_HXX
-#define INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_CANVASBITMAP_HXX
+#pragma once
 
 #include <cppuhelper/compbase.hxx>
 
@@ -123,7 +122,5 @@ namespace cairocanvas
         const bool                mbHasAlpha;
     };
 }
-
-#endif // INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_CANVASBITMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
