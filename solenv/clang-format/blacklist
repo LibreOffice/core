@@ -3634,7 +3634,6 @@ drawinglayer/inc/primitive2d/textstrikeoutprimitive2d.hxx
 drawinglayer/inc/primitive2d/wallpaperprimitive2d.hxx
 drawinglayer/inc/primitive3d/hatchtextureprimitive3d.hxx
 drawinglayer/inc/primitive3d/hiddengeometryprimitive3d.hxx
-drawinglayer/inc/primitive3d/polygonprimitive3d.hxx
 drawinglayer/inc/primitive3d/polygontubeprimitive3d.hxx
 drawinglayer/inc/primitive3d/sdrdecompositiontools3d.hxx
 drawinglayer/inc/primitive3d/shadowprimitive3d.hxx
@@ -5766,7 +5765,6 @@ include/cppcanvas/canvas.hxx
 include/cppcanvas/canvasgraphic.hxx
 include/cppcanvas/color.hxx
 include/cppcanvas/customsprite.hxx
-include/cppcanvas/font.hxx
 include/cppcanvas/polypolygon.hxx
 include/cppcanvas/renderer.hxx
 include/cppcanvas/sprite.hxx
@@ -7088,7 +7086,6 @@ include/test/sheet/cellproperties.hxx
 include/test/sheet/databaserange.hxx
 include/test/sheet/datapilotfield.hxx
 include/test/sheet/datapilotitem.hxx
-include/test/sheet/tableautoformatfield.hxx
 include/test/sheet/xarealink.hxx
 include/test/sheet/xarealinks.hxx
 include/test/sheet/xcelladdressable.hxx
@@ -8840,7 +8837,6 @@ reportdesign/source/filter/xml/xmlReportElement.cxx
 reportdesign/source/filter/xml/xmlReportElement.hxx
 reportdesign/source/filter/xml/xmlReportElementBase.cxx
 reportdesign/source/filter/xml/xmlReportElementBase.hxx
-reportdesign/source/filter/xml/xmlRow.cxx
 reportdesign/source/filter/xml/xmlSection.cxx
 reportdesign/source/filter/xml/xmlSection.hxx
 reportdesign/source/filter/xml/xmlStyleImport.cxx
@@ -15772,7 +15768,6 @@ test/source/sheet/cellproperties.cxx
 test/source/sheet/databaserange.cxx
 test/source/sheet/datapilotfield.cxx
 test/source/sheet/datapilotitem.cxx
-test/source/sheet/tableautoformatfield.cxx
 test/source/sheet/xarealink.cxx
 test/source/sheet/xarealinks.cxx
 test/source/sheet/xcelladdressable.cxx
@@ -16717,7 +16712,6 @@ vcl/inc/opengl/gdiimpl.hxx
 vcl/inc/opengl/program.hxx
 vcl/inc/opengl/salbmp.hxx
 vcl/inc/opengl/texture.hxx
-vcl/inc/opengl/watchdog.hxx
 vcl/inc/opengl/win/WinDeviceInfo.hxx
 vcl/inc/opengl/win/gdiimpl.hxx
 vcl/inc/opengl/x11/X11DeviceInfo.hxx
@@ -17006,7 +17000,6 @@ vcl/opengl/salbmp.cxx
 vcl/opengl/scale.cxx
 vcl/opengl/texture.cxx
 vcl/opengl/win/WinDeviceInfo.cxx
-vcl/opengl/win/blocklist_parser.cxx
 vcl/opengl/win/gdiimpl.cxx
 vcl/opengl/x11/X11DeviceInfo.cxx
 vcl/opengl/x11/cairotextrender.cxx
@@ -18124,8 +18117,6 @@ xmloff/source/script/XMLScriptContextFactory.cxx
 xmloff/source/script/XMLScriptExportHandler.cxx
 xmloff/source/script/XMLStarBasicContextFactory.cxx
 xmloff/source/script/XMLStarBasicExportHandler.cxx
-xmloff/source/script/xmlbasici.cxx
-xmloff/source/script/xmlbasici.hxx
 xmloff/source/script/xmlscripti.cxx
 xmloff/source/style/AttributeContainerHandler.cxx
 xmloff/source/style/DashStyle.cxx
@@ -18499,8 +18490,6 @@ xmlscript/source/xmldlg_imexp/xmldlg_impmodels.cxx
 xmlscript/source/xmldlg_imexp/xmldlg_import.cxx
 xmlscript/source/xmlflat_imexp/xmlbas_export.cxx
 xmlscript/source/xmlflat_imexp/xmlbas_export.hxx
-xmlscript/source/xmlflat_imexp/xmlbas_import.cxx
-xmlscript/source/xmlflat_imexp/xmlbas_import.hxx
 xmlscript/source/xmllib_imexp/imp_share.hxx
 xmlscript/source/xmllib_imexp/xmllib_export.cxx
 xmlscript/source/xmllib_imexp/xmllib_import.cxx
@@ -18555,7 +18544,6 @@ xmlsecurity/source/gpg/CipherContext.cxx
 xmlsecurity/source/gpg/CipherContext.hxx
 xmlsecurity/source/gpg/DigestContext.cxx
 xmlsecurity/source/gpg/DigestContext.hxx
-xmlsecurity/source/gpg/GpgComponentFactory.cxx
 xmlsecurity/source/gpg/SEInitializer.cxx
 xmlsecurity/source/gpg/SecurityEnvironment.cxx
 xmlsecurity/source/gpg/SecurityEnvironment.hxx
