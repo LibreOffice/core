@@ -221,10 +221,10 @@ private:
     /// Look for the moved lines
     class CompareSequence
     {
-        CompareData &rData1, &rData2;
-        const MovedData &rMoved1, &rMoved2;
-        std::unique_ptr<long[]> pMemory;
-        long *pFDiag, *pBDiag;
+        CompareData &m_rData1, &m_rData2;
+        const MovedData &m_rMoved1, &m_rMoved2;
+        std::unique_ptr<long[]> m_pMemory;
+        long *m_pFDiag, *m_pBDiag;
 
         void Compare( sal_uLong nStt1, sal_uLong nEnd1, sal_uLong nStt2, sal_uLong nEnd2 );
         sal_uLong CheckDiag( sal_uLong nStt1, sal_uLong nEnd1,
@@ -293,17 +293,17 @@ public:
 class CharArrayComparator : public ArrayComparator
 {
 private:
-    const SwTextNode *pTextNd1, *pTextNd2;
+    const SwTextNode *m_pTextNode1, *m_pTextNode2;
 
 public:
     CharArrayComparator( const SwTextNode *pNode1, const SwTextNode *pNode2 )
-        : pTextNd1( pNode1 ), pTextNd2( pNode2 )
+        : m_pTextNode1( pNode1 ), m_pTextNode2( pNode2 )
     {
     }
 
     virtual bool Compare( int nIdx1, int nIdx2 ) const override;
-    virtual int GetLen1() const override { return pTextNd1->GetText().getLength(); }
-    virtual int GetLen2() const override { return pTextNd2->GetText().getLength(); }
+    virtual int GetLen1() const override { return m_pTextNode1->GetText().getLength(); }
+    virtual int GetLen2() const override { return m_pTextNode2->GetText().getLength(); }
 };
 
 /// Options set in Tools->Options->Writer->Comparison
@@ -323,15 +323,15 @@ namespace {
 class CommonSubseq
 {
 private:
-    std::unique_ptr<int[]> pData;
+    std::unique_ptr<int[]> m_pData;
 
 protected:
-    ArrayComparator &rCmp;
+    ArrayComparator &m_rComparator;
 
     CommonSubseq( ArrayComparator &rComparator, int nMaxSize )
-        : rCmp( rComparator )
+        : m_rComparator( rComparator )
     {
-        pData.reset( new int[ nMaxSize ] );
+        m_pData.reset( new int[ nMaxSize ] );
     }
 
     int FindLCS( int *pLcs1, int *pLcs2, int nStt1,
@@ -378,8 +378,8 @@ public:
 
     int Find( int *pSubseq1, int *pSubseq2 )
     {
-        return FindFastCS( pSubseq1, pSubseq2, 0, rCmp.GetLen1(),
-                                                0, rCmp.GetLen2() );
+        return FindFastCS( pSubseq1, pSubseq2, 0, m_rComparator.GetLen1(),
+                                                0, m_rComparator.GetLen2() );
     }
 };
 
@@ -782,12 +782,12 @@ Compare::MovedData::MovedData( CompareData& rData, const char* pDiscard )
 Compare::CompareSequence::CompareSequence(
                             CompareData& rD1, CompareData& rD2,
                             const MovedData& rMD1, const MovedData& rMD2 )
-    : rData1( rD1 ), rData2( rD2 ), rMoved1( rMD1 ), rMoved2( rMD2 )
+    : m_rData1( rD1 ), m_rData2( rD2 ), m_rMoved1( rMD1 ), m_rMoved2( rMD2 )
 {
     sal_uLong nSize = rMD1.GetCount() + rMD2.GetCount() + 3;
-    pMemory.reset( new long[ nSize * 2 ] );
-    pFDiag = pMemory.get() + ( rMD2.GetCount() + 1 );
-    pBDiag = pMemory.get() + ( nSize + rMD2.GetCount() + 1 );
+    m_pMemory.reset( new long[ nSize * 2 ] );
+    m_pFDiag = m_pMemory.get() + ( rMD2.GetCount() + 1 );
+    m_pBDiag = m_pMemory.get() + ( nSize + rMD2.GetCount() + 1 );
 
     Compare( 0, rMD1.GetCount(), 0, rMD2.GetCount() );
 }
@@ -797,7 +797,7 @@ void Compare::CompareSequence::Compare( sal_uLong nStt1, sal_uLong nEnd1,
 {
     /* Slide down the bottom initial diagonal. */
     while( nStt1 < nEnd1 && nStt2 < nEnd2 &&
-        rMoved1.GetIndex( nStt1 ) == rMoved2.GetIndex( nStt2 ))
+        m_rMoved1.GetIndex( nStt1 ) == m_rMoved2.GetIndex( nStt2 ))
     {
         ++nStt1;
         ++nStt2;
@@ -805,7 +805,7 @@ void Compare::CompareSequence::Compare( sal_uLong nStt1, sal_uLong nEnd1,
 
     /* Slide up the top initial diagonal. */
     while( nEnd1 > nStt1 && nEnd2 > nStt2 &&
-        rMoved1.GetIndex( nEnd1 - 1 ) == rMoved2.GetIndex( nEnd2 - 1 ))
+        m_rMoved1.GetIndex( nEnd1 - 1 ) == m_rMoved2.GetIndex( nEnd2 - 1 ))
     {
         --nEnd1;
         --nEnd2;
@@ -814,11 +814,11 @@ void Compare::CompareSequence::Compare( sal_uLong nStt1, sal_uLong nEnd1,
     /* Handle simple cases. */
     if( nStt1 == nEnd1 )
         while( nStt2 < nEnd2 )
-            rData2.SetChanged( rMoved2.GetLineNum( nStt2++ ));
+            m_rData2.SetChanged( m_rMoved2.GetLineNum( nStt2++ ));
 
     else if (nStt2 == nEnd2)
         while (nStt1 < nEnd1)
-            rData1.SetChanged( rMoved1.GetLineNum( nStt1++ ));
+            m_rData1.SetChanged( m_rMoved1.GetLineNum( nStt1++ ));
 
     else
     {
@@ -827,7 +827,7 @@ void Compare::CompareSequence::Compare( sal_uLong nStt1, sal_uLong nEnd1,
         /* Find a point of correspondence in the middle of the files.  */
 
         d = CheckDiag( nStt1, nEnd1, nStt2, nEnd2, &c );
-        b = pBDiag[ d ];
+        b = m_pBDiag[ d ];
 
         if( 1 != c )
         {
@@ -857,8 +857,8 @@ sal_uLong Compare::CompareSequence::CheckDiag( sal_uLong nStt1, sal_uLong nEnd1,
     long odd = (fmid - bmid) & 1;   /* True if southeast corner is on an odd
                      diagonal with respect to the northwest. */
 
-    pFDiag[fmid] = nStt1;
-    pBDiag[bmid] = nEnd1;
+    m_pFDiag[fmid] = nStt1;
+    m_pBDiag[bmid] = nEnd1;
 
     for (c = 1;; ++c)
     {
@@ -866,16 +866,16 @@ sal_uLong Compare::CompareSequence::CheckDiag( sal_uLong nStt1, sal_uLong nEnd1,
 
         /* Extend the top-down search by an edit step in each diagonal. */
         if (fmin > dmin)
-            pFDiag[--fmin - 1] = -1;
+            m_pFDiag[--fmin - 1] = -1;
         else
             ++fmin;
         if (fmax < dmax)
-            pFDiag[++fmax + 1] = -1;
+            m_pFDiag[++fmax + 1] = -1;
         else
             --fmax;
         for (d = fmax; d >= fmin; d -= 2)
         {
-            long x, y, tlo = pFDiag[d - 1], thi = pFDiag[d + 1];
+            long x, y, tlo = m_pFDiag[d - 1], thi = m_pFDiag[d + 1];
 
             if (tlo >= thi)
                 x = tlo + 1;
@@ -883,13 +883,13 @@ sal_uLong Compare::CompareSequence::CheckDiag( sal_uLong nStt1, sal_uLong nEnd1,
                 x = thi;
             y = x - d;
             while( o3tl::make_unsigned(x) < nEnd1 && o3tl::make_unsigned(y) < nEnd2 &&
-                rMoved1.GetIndex( x ) == rMoved2.GetIndex( y ))
+                m_rMoved1.GetIndex( x ) == m_rMoved2.GetIndex( y ))
             {
                 ++x;
                 ++y;
             }
-            pFDiag[d] = x;
-            if( odd && bmin <= d && d <= bmax && pBDiag[d] <= pFDiag[d] )
+            m_pFDiag[d] = x;
+            if( odd && bmin <= d && d <= bmax && m_pBDiag[d] <= m_pFDiag[d] )
             {
                 *pCost = 2 * c - 1;
                 return d;
@@ -898,16 +898,16 @@ sal_uLong Compare::CompareSequence::CheckDiag( sal_uLong nStt1, sal_uLong nEnd1,
 
         /* Similar extend the bottom-up search. */
         if (bmin > dmin)
-            pBDiag[--bmin - 1] = INT_MAX;
+            m_pBDiag[--bmin - 1] = INT_MAX;
         else
             ++bmin;
         if (bmax < dmax)
-            pBDiag[++bmax + 1] = INT_MAX;
+            m_pBDiag[++bmax + 1] = INT_MAX;
         else
             --bmax;
         for (d = bmax; d >= bmin; d -= 2)
         {
-            long x, y, tlo = pBDiag[d - 1], thi = pBDiag[d + 1];
+            long x, y, tlo = m_pBDiag[d - 1], thi = m_pBDiag[d + 1];
 
             if (tlo < thi)
                 x = tlo;
@@ -915,13 +915,13 @@ sal_uLong Compare::CompareSequence::CheckDiag( sal_uLong nStt1, sal_uLong nEnd1,
                 x = thi - 1;
             y = x - d;
             while( o3tl::make_unsigned(x) > nStt1 && o3tl::make_unsigned(y) > nStt2 &&
-                rMoved1.GetIndex( x - 1 ) == rMoved2.GetIndex( y - 1 ))
+                m_rMoved1.GetIndex( x - 1 ) == m_rMoved2.GetIndex( y - 1 ))
             {
                 --x;
                 --y;
             }
-            pBDiag[d] = x;
-            if (!odd && fmin <= d && d <= fmax && pBDiag[d] <= pFDiag[d])
+            m_pBDiag[d] = x;
+            if (!odd && fmin <= d && d <= fmax && m_pBDiag[d] <= m_pFDiag[d])
             {
                 *pCost = 2 * c;
                 return d;
@@ -2237,8 +2237,8 @@ bool CharArrayComparator::Compare( int nIdx1, int nIdx2 ) const
     }
 
     return ( !CmpOptions.bUseRsid
-            || pTextNd1->CompareRsid(  *pTextNd2, nIdx1 + 1, nIdx2 + 1 ) )
-            && pTextNd1->GetText()[ nIdx1 ] == pTextNd2->GetText()[ nIdx2 ];
+            || m_pTextNode1->CompareRsid(  *m_pTextNode2, nIdx1 + 1, nIdx2 + 1 ) )
+            && m_pTextNode1->GetText()[ nIdx1 ] == m_pTextNode2->GetText()[ nIdx2 ];
 }
 
 WordArrayComparator::WordArrayComparator( const SwTextNode *pNode1,
@@ -2321,14 +2321,14 @@ void WordArrayComparator::CalcPositions( int *pPos, const SwTextNode *pTextNd,
 int CommonSubseq::FindLCS( int *pLcs1, int *pLcs2, int nStt1, int nEnd1,
                                                     int nStt2, int nEnd2 )
 {
-    int nLen1 = nEnd1 ? nEnd1 - nStt1 : rCmp.GetLen1();
-    int nLen2 = nEnd2 ? nEnd2 - nStt2 : rCmp.GetLen2();
+    int nLen1 = nEnd1 ? nEnd1 - nStt1 : m_rComparator.GetLen1();
+    int nLen2 = nEnd2 ? nEnd2 - nStt2 : m_rComparator.GetLen2();
 
     assert( nLen1 >= 0 );
     assert( nLen2 >= 0 );
 
     std::unique_ptr<int*[]> pLcs( new int*[ nLen1 + 1 ] );
-    pLcs[ 0 ] = pData.get();
+    pLcs[ 0 ] = m_pData.get();
 
     for( int i = 1; i < nLen1 + 1; i++ )
         pLcs[ i ] = pLcs[ i - 1 ] + nLen2 + 1;
@@ -2344,7 +2344,7 @@ int CommonSubseq::FindLCS( int *pLcs1, int *pLcs2, int nStt1, int nEnd1,
     {
         for( int j = 1; j <= nLen2; j++ )
         {
-            if( rCmp.Compare( nStt1 + i - 1, nStt2 + j - 1 ) )
+            if( m_rComparator.Compare( nStt1 + i - 1, nStt2 + j - 1 ) )
                 pLcs[i][j] = pLcs[i - 1][j - 1] + 1;
             else
                 pLcs[i][j] = std::max( pLcs[i][j - 1], pLcs[i - 1][j] );
@@ -2444,14 +2444,14 @@ LgstCommonSubseq::LgstCommonSubseq( ArrayComparator &rComparator )
 void LgstCommonSubseq::FindL( int *pL, int nStt1, int nEnd1,
                                         int nStt2, int nEnd2  )
 {
-    int nLen1 = nEnd1 ? nEnd1 - nStt1 : rCmp.GetLen1();
-    int nLen2 = nEnd2 ? nEnd2 - nStt2 : rCmp.GetLen2();
+    int nLen1 = nEnd1 ? nEnd1 - nStt1 : m_rComparator.GetLen1();
+    int nLen2 = nEnd2 ? nEnd2 - nStt2 : m_rComparator.GetLen2();
 
     int *currL = pBuff1.get();
     int *prevL = pBuff2.get();
 
     // Avoid memory corruption
-    if( nLen2 > rCmp.GetLen2() )
+    if( nLen2 > m_rComparator.GetLen2() )
     {
         assert( false );
         return;
@@ -2465,7 +2465,7 @@ void LgstCommonSubseq::FindL( int *pL, int nStt1, int nEnd1,
     {
         for( int j = 1; j <= nLen2; j++ )
         {
-            if( rCmp.Compare( nStt1 + i - 1, nStt2 + j - 1 ) )
+            if( m_rComparator.Compare( nStt1 + i - 1, nStt2 + j - 1 ) )
                 currL[j] = prevL[j - 1] + 1;
             else
                 currL[j] = std::max( currL[j - 1], prevL[j] );
@@ -2525,11 +2525,11 @@ int LgstCommonSubseq::Find( int *pSubseq1, int *pSubseq2 )
 {
     int nStt = 0;
     int nCutEnd = 0;
-    int nEnd1 = rCmp.GetLen1();
-    int nEnd2 = rCmp.GetLen2();
+    int nEnd1 = m_rComparator.GetLen1();
+    int nEnd2 = m_rComparator.GetLen2();
 
     // Check for corresponding lines in the beginning of the sequences
-    while( nStt < nEnd1 && nStt < nEnd2 && rCmp.Compare( nStt, nStt ) )
+    while( nStt < nEnd1 && nStt < nEnd2 && m_rComparator.Compare( nStt, nStt ) )
     {
         pSubseq1[ nStt ] = nStt;
         pSubseq2[ nStt ] = nStt;
@@ -2541,7 +2541,7 @@ int LgstCommonSubseq::Find( int *pSubseq1, int *pSubseq2 )
 
     // Check for corresponding lines in the end of the sequences
     while( nStt < nEnd1 && nStt < nEnd2
-                        && rCmp.Compare( nEnd1 - 1, nEnd2 - 1 ) )
+                        && m_rComparator.Compare( nEnd1 - 1, nEnd2 - 1 ) )
     {
         nCutEnd++;
         nEnd1--;
@@ -2566,7 +2566,7 @@ int FastCommonSubseq::FindFastCS( int *pSeq1, int *pSeq2, int nStt1,
     int nCutEnd = 0;
 
     // Check for corresponding lines in the beginning of the sequences
-    while( nStt1 < nEnd1 && nStt2 < nEnd2 && rCmp.Compare( nStt1, nStt2 ) )
+    while( nStt1 < nEnd1 && nStt2 < nEnd2 && m_rComparator.Compare( nStt1, nStt2 ) )
     {
         pSeq1[ nCutBeg ] = nStt1++;
         pSeq2[ nCutBeg ] = nStt2++;
@@ -2578,7 +2578,7 @@ int FastCommonSubseq::FindFastCS( int *pSeq1, int *pSeq2, int nStt1,
 
     // Check for corresponding lines in the end of the sequences
     while( nStt1 < nEnd1 && nStt2 < nEnd2
-                        && rCmp.Compare( nEnd1 - 1, nEnd2 - 1 ) )
+                        && m_rComparator.Compare( nEnd1 - 1, nEnd2 - 1 ) )
     {
         nCutEnd++;
         nEnd1--;
@@ -2624,13 +2624,13 @@ int FastCommonSubseq::FindFastCS( int *pSeq1, int *pSeq2, int nStt1,
         // Search to the left and to the right of the middle of the first sequence
         for( int i = nMid1 - nRad; i <= nMid1 + nRad; i++ )
         {
-            if( rCmp.Compare( nStt1 + i, nStt2 + nMid2 - nRad ) )
+            if( m_rComparator.Compare( nStt1 + i, nStt2 + nMid2 - nRad ) )
             {
                 nPos1 = nStt1 + i;
                 nPos2 = nStt2 + nMid2 - nRad;
                 break;
             }
-            if( rCmp.Compare( nStt1 + i, nStt2 + nMid2 + nRad ) )
+            if( m_rComparator.Compare( nStt1 + i, nStt2 + nMid2 + nRad ) )
             {
                 nPos1 = nStt1 + i;
                 nPos2 = nStt2 + nMid2 - nRad;
@@ -2640,13 +2640,13 @@ int FastCommonSubseq::FindFastCS( int *pSeq1, int *pSeq2, int nStt1,
         // Search to the left and to the right of the middle of the second sequence
         for( int i = nMid2 - nRad; i <= nMid2 + nRad; i++ )
         {
-            if( rCmp.Compare( nStt2 + nMid2 - nRad, nStt2 + i ) )
+            if( m_rComparator.Compare( nStt2 + nMid2 - nRad, nStt2 + i ) )
             {
                 nPos2 = nStt2 + i;
                 nPos1 = nStt1 + nMid1 - nRad;
                 break;
             }
-            if( rCmp.Compare( nStt2 + nMid2 - nRad, nStt2 + i ) )
+            if( m_rComparator.Compare( nStt2 + nMid2 - nRad, nStt2 + i ) )
             {
                 nPos2 = nStt2 + i;
                 nPos1 = nStt1 + nMid1 - nRad;

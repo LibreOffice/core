@@ -694,22 +694,22 @@ SwUndoTextToTable::SwUndoTextToTable( const SwPaM& rRg,
                                 const SwInsertTableOptions& rInsTableOpts,
                                 sal_Unicode cCh, sal_uInt16 nAdj,
                                 const SwTableAutoFormat* pAFormat )
-    : SwUndo( SwUndoId::TEXTTOTABLE, rRg.GetDoc() ), SwUndRng( rRg ), aInsTableOpts( rInsTableOpts ),
-      pHistory( nullptr ), cSeparator( cCh ), nAdjust( nAdj )
+    : SwUndo( SwUndoId::TEXTTOTABLE, rRg.GetDoc() ), SwUndRng( rRg ), m_aInsertTableOpts( rInsTableOpts ),
+      m_pHistory( nullptr ), m_cSeparator( cCh ), m_nAdjust( nAdj )
 {
     if( pAFormat )
-        pAutoFormat.reset( new SwTableAutoFormat( *pAFormat ) );
+        m_pAutoFormat.reset( new SwTableAutoFormat( *pAFormat ) );
 
     const SwPosition* pEnd = rRg.End();
     SwNodes& rNds = rRg.GetDoc()->GetNodes();
-    bSplitEnd = pEnd->nContent.GetIndex() && ( pEnd->nContent.GetIndex()
+    m_bSplitEnd = pEnd->nContent.GetIndex() && ( pEnd->nContent.GetIndex()
                         != pEnd->nNode.GetNode().GetContentNode()->Len() ||
                 pEnd->nNode.GetIndex() >= rNds.GetEndOfContent().GetIndex()-1 );
 }
 
 SwUndoTextToTable::~SwUndoTextToTable()
 {
-    pAutoFormat.reset();
+    m_pAutoFormat.reset();
 }
 
 void SwUndoTextToTable::UndoImpl(::sw::UndoRedoContext & rContext)
@@ -725,12 +725,12 @@ void SwUndoTextToTable::UndoImpl(::sw::UndoRedoContext & rContext)
 
     RemoveIdxFromSection( rDoc, nTableNd );
 
-    sTableNm = pTNd->GetTable().GetFrameFormat()->GetName();
+    m_sTableName = pTNd->GetTable().GetFrameFormat()->GetName();
 
-    if( pHistory )
+    if( m_pHistory )
     {
-        pHistory->TmpRollback( &rDoc, 0 );
-        pHistory->SetTmpEnd( pHistory->Count() );
+        m_pHistory->TmpRollback( &rDoc, 0 );
+        m_pHistory->SetTmpEnd( m_pHistory->Count() );
     }
 
     if( !mvDelBoxes.empty() )
@@ -749,7 +749,7 @@ void SwUndoTextToTable::UndoImpl(::sw::UndoRedoContext & rContext)
     }
 
     SwNodeIndex aEndIdx( *pTNd->EndOfSectionNode() );
-    rDoc.TableToText( pTNd, 0x0b == cSeparator ? 0x09 : cSeparator );
+    rDoc.TableToText( pTNd, 0x0b == m_cSeparator ? 0x09 : m_cSeparator );
 
     // join again at start?
     SwPaM aPam(rDoc.GetNodes().GetEndOfContent());
@@ -770,7 +770,7 @@ void SwUndoTextToTable::UndoImpl(::sw::UndoRedoContext & rContext)
     }
 
     // join again at end?
-    if( bSplitEnd )
+    if( m_bSplitEnd )
     {
         SwNodeIndex& rIdx = pPos->nNode;
         rIdx = m_nEndNode;
@@ -798,8 +798,8 @@ void SwUndoTextToTable::RedoImpl(::sw::UndoRedoContext & rContext)
     SetPaM(rPam);
 
     SwTable const*const pTable = rContext.GetDoc().TextToTable(
-                aInsTableOpts, rPam, cSeparator, nAdjust, pAutoFormat.get() );
-    static_cast<SwFrameFormat*>(pTable->GetFrameFormat())->SetName( sTableNm );
+                m_aInsertTableOpts, rPam, m_cSeparator, m_nAdjust, m_pAutoFormat.get() );
+    static_cast<SwFrameFormat*>(pTable->GetFrameFormat())->SetName( m_sTableName );
 }
 
 void SwUndoTextToTable::RepeatImpl(::sw::RepeatContext & rContext)
@@ -807,9 +807,9 @@ void SwUndoTextToTable::RepeatImpl(::sw::RepeatContext & rContext)
     // no Table In Table
     if (!rContext.GetRepeatPaM().GetNode().FindTableNode())
     {
-        rContext.GetDoc().TextToTable( aInsTableOpts, rContext.GetRepeatPaM(),
-                                        cSeparator, nAdjust,
-                                        pAutoFormat.get() );
+        rContext.GetDoc().TextToTable( m_aInsertTableOpts, rContext.GetRepeatPaM(),
+                                        m_cSeparator, m_nAdjust,
+                                        m_pAutoFormat.get() );
     }
 }
 
@@ -820,9 +820,9 @@ void SwUndoTextToTable::AddFillBox( const SwTableBox& rBox )
 
 SwHistory& SwUndoTextToTable::GetHistory()
 {
-    if( !pHistory )
-        pHistory = new SwHistory;
-    return *pHistory;
+    if( !m_pHistory )
+        m_pHistory = new SwHistory;
+    return *m_pHistory;
 }
 
 SwUndoTableHeadline::SwUndoTableHeadline( const SwTable& rTable, sal_uInt16 nOldHdl,
