@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c5043160_55edfde1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-23T13:21:54Z",
+      "side": 1,
+      "message": "...in which case o3tl::doAccess or o3tl::forceAccess (both o3tl/any.hxx) might be better choices than \u003e\u003e\u003d for accessing the Any\u0027s value",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 5
+      },
+      "revId": "339c9c2f66c04592f333601aa70c6da3f7cac20e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
