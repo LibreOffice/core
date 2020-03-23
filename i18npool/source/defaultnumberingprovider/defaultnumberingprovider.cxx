@@ -949,6 +949,10 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                result += lcl_formatArabicZero(number, 4);
                break;
 
+          case ARABIC_ZERO5:
+               result += lcl_formatArabicZero(number, 5);
+               break;
+
           default:
                OSL_ASSERT(false);
                throw IllegalArgumentException();
@@ -1050,6 +1054,7 @@ static const Supported_NumberingType aSupportedTypes[] =
         {style::NumberingType::ARABIC_ZERO, "01, 02, 03, ...", LANG_ALL},
         {style::NumberingType::ARABIC_ZERO3, "001, 002, 003, ...", LANG_ALL},
         {style::NumberingType::ARABIC_ZERO4, "0001, 0002, 0003, ...", LANG_ALL},
+        {style::NumberingType::ARABIC_ZERO5, "00001, 00002, 00003, ...", LANG_ALL},
 };
 static const sal_Int32 nSupported_NumberingTypes = SAL_N_ELEMENTS(aSupportedTypes);
 
