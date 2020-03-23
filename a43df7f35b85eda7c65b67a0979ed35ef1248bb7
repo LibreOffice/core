@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b58b8a9b_cb29b96a",
+        "filename": "basic/source/comp/symtbl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-23T15:39:42Z",
+      "side": 1,
+      "message": "this has changed since - should be something like \"type character\". By the way, possibly we could use the same type character as in BASIC itself? what do you think?",
+      "range": {
+        "startLine": 69,
+        "startChar": 30,
+        "endLine": 69,
+        "endChar": 37
+      },
+      "revId": "a43df7f35b85eda7c65b67a0979ed35ef1248bb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
