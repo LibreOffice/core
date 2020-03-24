@@ -102,7 +102,7 @@ public:
     virtual sal_IntPtr      GetFontId() const override { return mpFreetypeFontInfo->GetFontId(); }
 };
 
-class FreetypeFontInstance : public LogicalFontInstance
+class VCL_DLLPUBLIC FreetypeFontInstance : public LogicalFontInstance
 {
     friend rtl::Reference<LogicalFontInstance> FreetypeFontFace::CreateFontInstance(const FontSelectPattern&) const;
 
