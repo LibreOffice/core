@@ -864,7 +864,7 @@ void DataBrowserModel::updateFromModel()
                             if( aRole == aRoleForDataLabelNumberFormat )
                             {
                                 nSequenceNumberFormatKey = ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(
-                                    Reference< beans::XPropertySet >( xSeries, uno::UNO_QUERY ));
+                                    Reference< beans::XPropertySet >( xSeries, uno::UNO_QUERY ), xSeries, -1, xDiagram );
                             }
                             else if( aRole == "values-x" )
                                 nSequenceNumberFormatKey = nXAxisNumberFormat;

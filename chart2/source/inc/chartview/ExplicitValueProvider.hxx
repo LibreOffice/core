@@ -82,7 +82,10 @@ public:
             , const css::uno::Reference< css::chart2::XChartDocument>& xChartDoc);
 
     static sal_Int32 getExplicitNumberFormatKeyForDataLabel(
-            const css::uno::Reference< css::beans::XPropertySet >& xSeriesOrPointProp );
+            const css::uno::Reference< css::beans::XPropertySet >& xSeriesOrPointProp
+            , const css::uno::Reference< css::chart2::XDataSeries >& xSeries
+            , sal_Int32 nPointIndex /*-1 for whole series*/
+            , const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
 
     static sal_Int32 getExplicitPercentageNumberFormatKeyForDataLabel(
             const css::uno::Reference< css::beans::XPropertySet >& xSeriesOrPointProp
