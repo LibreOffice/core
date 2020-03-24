@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ce338fce_631aa2f2",
+        "filename": "icon-themes/colibre/links.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 1496,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2020-03-24T00:53:47Z",
+      "side": 0,
+      "message": "These removals don’t appear strictly related to the bug in question; please submit them as a separate patch. Remember to keep it atomic ;)",
+      "revId": "7ae9c9572ccac55c0926b8a9779bb63c4236291c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
