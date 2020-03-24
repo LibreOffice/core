@@ -105,6 +105,9 @@ OUString NumberFormatterWrapper::getFormattedString( sal_Int32 nNumberFormatKey,
         m_aNullDate >>= aNewNullDate;
         m_pNumberFormatter->ChangeNullDate(aNewNullDate.Day,aNewNullDate.Month,aNewNullDate.Year);
     }
+    // tdf#130969: use UNLIMITED_PRECISION in case of GENERAL Number Format
+    if( m_pNumberFormatter->GetStandardPrec() != SvNumberFormatter::UNLIMITED_PRECISION )
+        m_pNumberFormatter->ChangeStandardPrec(SvNumberFormatter::UNLIMITED_PRECISION);
     m_pNumberFormatter->GetOutputString(fValue, nNumberFormatKey, aText, &pTextColor);
     if ( m_aNullDate.hasValue() )
     {
