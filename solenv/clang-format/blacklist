@@ -11151,8 +11151,6 @@ sd/source/ui/accessibility/AccessibleSlideSorterObject.cxx
 sd/source/ui/accessibility/AccessibleSlideSorterView.cxx
 sd/source/ui/accessibility/AccessibleViewForwarder.cxx
 sd/source/ui/accessibility/SdShapeTypes.cxx
-sd/source/ui/animations/CategoryListBox.cxx
-sd/source/ui/animations/CategoryListBox.hxx
 sd/source/ui/animations/CustomAnimationDialog.cxx
 sd/source/ui/animations/CustomAnimationDialog.hxx
 sd/source/ui/animations/CustomAnimationList.cxx

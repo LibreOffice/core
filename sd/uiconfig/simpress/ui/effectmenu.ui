@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.2 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkMenu" id="menu">
@@ -11,6 +11,8 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="effectmenu|onclick">Start On _Click</property>
         <property name="use_underline">True</property>
+        <property name="active">True</property>
+        <property name="draw_as_radio">True</property>
       </object>
     </child>
     <child>
@@ -19,6 +21,8 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="effectmenu|withprev">Start _With Previous</property>
         <property name="use_underline">True</property>
+        <property name="draw_as_radio">True</property>
+        <property name="group">onclick</property>
       </object>
     </child>
     <child>
@@ -26,6 +30,9 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="effectmenu|afterprev">Start _After Previous</property>
+        <property name="use_underline">True</property>
+        <property name="draw_as_radio">True</property>
+        <property name="group">onclick</property>
       </object>
     </child>
     <child>
@@ -55,6 +62,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes" context="effectmenu|remove">_Remove</property>
+        <property name="use_underline">True</property>
       </object>
     </child>
   </object>

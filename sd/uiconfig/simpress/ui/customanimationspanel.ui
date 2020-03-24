@@ -1,72 +1,173 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.22.2 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
-    <property name="upper">999.99000000000001</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="upper">100000</property>
+    <property name="step_increment">0.5</property>
+    <property name="page_increment">5</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment2">
+    <property name="upper">100000</property>
+    <property name="step_increment">0.5</property>
+    <property name="page_increment">5</property>
   </object>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">sfx2/res/symphony/sidebar-property-small.png</property>
+    <property name="icon_name">sfx2/res/symphony/sidebar-property-small.png</property>
   </object>
   <object class="GtkImage" id="image_add">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">svtools/res/list_add.png</property>
+    <property name="icon_name">svtools/res/list_add.png</property>
     <property name="icon_size">2</property>
   </object>
   <object class="GtkImage" id="image_down">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/sc_movedown.png</property>
+    <property name="icon_name">cmd/sc_movedown.png</property>
     <property name="icon_size">2</property>
   </object>
   <object class="GtkImage" id="image_play">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">sd/res/playblue_16.png</property>
+    <property name="icon_name">sd/res/playblue_16.png</property>
   </object>
   <object class="GtkImage" id="image_remove">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">extensions/res/buttonminus.png</property>
+    <property name="icon_name">extensions/res/buttonminus.png</property>
     <property name="icon_size">2</property>
   </object>
   <object class="GtkImage" id="image_up">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/sc_moveup.png</property>
+    <property name="icon_name">cmd/sc_moveup.png</property>
     <property name="icon_size">2</property>
+  </object>
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name expander -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="liststore2">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name weight1 -->
+      <column type="gint"/>
+      <!-- column-name sensitive1 -->
+      <column type="gboolean"/>
+      <!-- column-name extraindent1 -->
+      <column type="gint"/>
+      <!-- column-name align1 -->
+      <column type="gdouble"/>
+    </columns>
   </object>
   <object class="GtkBox" id="CustomAnimationsPanel">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="vexpand">True</property>
+    <property name="border_width">6</property>
     <property name="orientation">vertical</property>
-    <property name="spacing">12</property>
     <child>
       <object class="GtkBox" id="box1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">6</property>
-        <property name="margin_right">6</property>
-        <property name="margin_top">6</property>
-        <property name="margin_bottom">3</property>
         <property name="vexpand">True</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">3</property>
+        <property name="spacing">12</property>
         <child>
-          <object class="sdlo-CustomAnimationList" id="custom_animation_list">
-            <property name="width_request">260</property>
+          <object class="GtkBox">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="vexpand">True</property>
-            <child internal-child="selection">
-              <object class="GtkTreeSelection" id="Animation ListBox-selection1"/>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkTreeView" id="custom_animation_list">
+                    <property name="width_request">260</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="model">liststore1</property>
+                    <property name="headers_visible">False</property>
+                    <property name="reorderable">True</property>
+                    <property name="search_column">1</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkCellRendererPixbuf" id="cellrenderertext4"/>
+                          <attributes>
+                            <attribute name="pixbuf">0</attribute>
+                          </attributes>
+                        </child>
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderertext2"/>
+                          <attributes>
+                            <attribute name="text">1</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="custom_animation_label_parent">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkViewport">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkLabel" id="custom_animation_label">
+                        <property name="width_request">260</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="no_show_all">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <property name="label" translatable="yes" context="customanimationspanel|STR_CUSTOMANIMATION_LIST_HELPTEXT">First select the slide element and then click 'Add...' to add an animation effect.</property>
+                        <property name="justify">center</property>
+                        <property name="wrap">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
             </child>
           </object>
           <packing>
@@ -80,7 +181,6 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">center</property>
-            <property name="margin_top">3</property>
             <property name="spacing">12</property>
             <child>
               <object class="GtkButton" id="add_effect">
@@ -149,7 +249,6 @@
           <object class="GtkGrid" id="grid2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_bottom">3</property>
             <property name="row_spacing">6</property>
             <property name="column_spacing">6</property>
             <child>
@@ -199,11 +298,40 @@
               </packing>
             </child>
             <child>
-              <object class="sdlo-CategoryListBox" id="effect_list">
+              <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="no_show_all">True</property>
                 <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkTreeView" id="effect_list">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="model">liststore2</property>
+                    <property name="headers_visible">False</property>
+                    <property name="search_column">0</property>
+                    <property name="show_expanders">False</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="Macro Library List-selection11"/>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn21">
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderertext22"/>
+                          <attributes>
+                            <attribute name="xalign">5</attribute>
+                            <attribute name="text">0</attribute>
+                            <attribute name="weight">2</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -265,7 +393,7 @@
                     <property name="halign">end</property>
                     <property name="label" translatable="yes" context="customanimationspanel|effect_duration">D_uration:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">anim_duration:0.00sec</property>
+                    <property name="mnemonic_widget">anim_duration</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -295,16 +423,7 @@
                     <property name="hexpand">True</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="sdlo-PropertyControl" id="effect_property_list">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="hexpand">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
+                      <placeholder/>
                     </child>
                   </object>
                   <packing>
@@ -327,10 +446,12 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="VclComboBoxNumeric" id="anim_duration:0.00sec">
+                  <object class="GtkSpinButton" id="anim_duration">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
+                    <property name="adjustment">adjustment2</property>
+                    <property name="digits">2</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -344,7 +465,7 @@
                     <property name="halign">end</property>
                     <property name="label" translatable="yes" context="customanimationspanel|delay_label">_Delay:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">delay_value:0.0sec</property>
+                    <property name="mnemonic_widget">delay_value</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -352,7 +473,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="delay_value:0.0sec">
+                  <object class="GtkSpinButton" id="delay_value">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
@@ -398,13 +519,11 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
+            <property name="spacing">6</property>
             <child>
               <object class="GtkSeparator" id="separator1">
-                <property name="height_request">2</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_top">3</property>
-                <property name="margin_bottom">3</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -416,9 +535,6 @@
               <object class="GtkBox" id="box4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">6</property>
-                <property name="margin_right">6</property>
-                <property name="margin_top">3</property>
                 <property name="spacing">18</property>
                 <child>
                   <object class="GtkCheckButton" id="auto_preview">
@@ -426,7 +542,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="margin_left">6</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -445,6 +560,7 @@
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes" context="customanimationspanel|play|tooltip_text">Preview Effect</property>
                     <property name="image">image_play</property>
+                    <property name="use_underline">True</property>
                     <property name="image_position">right</property>
                     <property name="always_show_image">True</property>
                   </object>
