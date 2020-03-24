@@ -63,7 +63,7 @@ short SbiStringPool::Add( const OUString& rVal )
 
 short SbiStringPool::Add( double n, SbxDataType t )
 {
-    char buf[ 40 ];
+    char buf[40]{};
     switch( t )
     {
         // tdf#131296 - store numeric value including its type character
@@ -73,7 +73,7 @@ short SbiStringPool::Add( double n, SbxDataType t )
         case SbxSINGLE:  snprintf( buf, sizeof(buf), "%.6g!", static_cast<float>(n) ); break;
         case SbxDOUBLE:  snprintf( buf, sizeof(buf), "%.16g", n ); break; // default processing in SbiRuntime::StepLOADNC - no type character
         case SbxCURRENCY: snprintf(buf, sizeof(buf), "%.16g@", n); break;
-        default: break;
+        default: assert(false); break; // should not happen
     }
     return Add( OUString::createFromAscii( buf ) );
 }
