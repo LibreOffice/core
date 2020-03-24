@@ -52,9 +52,6 @@
     <glade-widget-class title="Animation ListBox" name="sdlo-CustomAnimationList"
                         generic-name="Animation ListBox" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
-    <glade-widget-class title="Page List Control" name="sduilo-SdPageListControl"
-                        generic-name="Page List Control" parent="GtkTreeView"
-                        icon-name="widget-gtk-treeview"/>
 
     <glade-widget-class title="PropertyControl" name="sdlo-PropertyControl"
                         generic-name="PropertyControl" parent="GtkComboBoxText"
