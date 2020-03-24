@@ -2551,6 +2551,22 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf124796)
         "15");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf130969)
+{
+    SwDoc* pDoc = createDoc("tdf130969.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // This failed, if the minimum value of Y axis is not 0.35781
+    assertXPathContent(
+        pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[5]/text", "0.35781");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf129054)
 {
     SwDoc* pDoc = createDoc("tdf129054.docx");
