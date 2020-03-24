@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc161681_1648bd00",
+        "filename": "vcl/inc/unx/freetype_glyphcache.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-24T15:09:19Z",
+      "side": 1,
+      "message": "SAL_DLLPUBLIC_RTTI suffices if all that\u0027s needed is to export RTTI symbols for Clang sanitizer builds",
+      "range": {
+        "startLine": 105,
+        "startChar": 6,
+        "endLine": 105,
+        "endChar": 19
+      },
+      "revId": "26cb055854a6c12380fa1d8abf107d26a827952f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
