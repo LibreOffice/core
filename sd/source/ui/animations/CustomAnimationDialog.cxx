@@ -36,10 +36,8 @@
 #include <memory>
 
 #include <i18nutil/unicode.hxx>
-#include <vcl/menubtn.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/field.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/menu.hxx>
@@ -87,94 +85,16 @@ using ::com::sun::star::beans::XPropertySet;
 
 namespace sd {
 
-namespace {
-
-class PresetPropertyBox  : public PropertySubControl
+SdPropertySubControl::SdPropertySubControl(weld::Container* pParent)
+    : mxBuilder(Application::CreateBuilder(pParent, "modules/simpress/ui/customanimationfragment.ui"))
+    , mxContainer(mxBuilder->weld_container("EffectFragment"))
+    , mpParent(pParent)
 {
-public:
-    PresetPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const OUString& aPresetId, const Link<LinkParamNone*,void>& rModifyHdl );
-    virtual ~PresetPropertyBox() override;
-
-    virtual Any getValue() override;
-    virtual void setValue( const Any& rValue, const OUString& rPresetId ) override;
-    virtual Control* getControl() override;
-
-private:
-    std::map< sal_uInt16, OUString > maPropertyValues;
-    VclPtr<ListBox> mpControl;
-    DECL_LINK(OnSelect, ListBox&, void);
-    Link<LinkParamNone*,void> maModifyLink;
-};
-
-}
-
-PresetPropertyBox::PresetPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const OUString& aPresetId, const Link<LinkParamNone*,void>& rModifyHdl )
-: PropertySubControl( nControlType ), maModifyLink(rModifyHdl)
-{
-    mpControl = VclPtr<ListBox>::Create( pParent, WB_BORDER|WB_TABSTOP|WB_DROPDOWN );
-    mpControl->set_hexpand(true);
-    mpControl->SetDropDownLineCount( 10 );
-    mpControl->SetSelectHdl( LINK(this, PresetPropertyBox, OnSelect) );
-    mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_PRESETPROPERTYBOX );
-
-    setValue( rValue, aPresetId );
-}
-
-IMPL_LINK_NOARG(PresetPropertyBox, OnSelect, ListBox&, void)
-{
-    maModifyLink.Call(nullptr);
-}
-
-void PresetPropertyBox::setValue( const Any& rValue, const OUString& rPresetId )
-{
-    if( !mpControl )
-        return;
-
-    mpControl->Clear();
-
-    const CustomAnimationPresets& rPresets = CustomAnimationPresets::getCustomAnimationPresets();
-    CustomAnimationPresetPtr pDescriptor = rPresets.getEffectDescriptor( rPresetId );
-    if( pDescriptor.get() )
-    {
-
-        OUString aPropertyValue;
-        rValue >>= aPropertyValue;
-
-        std::vector<OUString> aSubTypes( pDescriptor->getSubTypes() );
-
-        mpControl->Enable( !aSubTypes.empty() );
-
-        for( const auto& aSubType : aSubTypes )
-        {
-            sal_Int32 nPos = mpControl->InsertEntry( rPresets.getUINameForProperty( aSubType ) );
-            if( aSubType == aPropertyValue )
-                mpControl->SelectEntryPos( nPos );
-            maPropertyValues[nPos] = aSubType;
-        }
-    }
-    else
-    {
-        mpControl->Enable( false );
-    }
-}
-
-PresetPropertyBox::~PresetPropertyBox()
-{
-    mpControl.disposeAndClear();
-}
-
-Any PresetPropertyBox::getValue()
-{
-    return makeAny( maPropertyValues[mpControl->GetSelectedEntryPos()] );
-}
-
-Control* PresetPropertyBox::getControl()
-{
-    return mpControl;
 }
 
 SdPropertySubControl::~SdPropertySubControl()
 {
+    mpParent->move(mxContainer.get(), nullptr);
 }
 
 namespace {
@@ -221,6 +141,7 @@ void SdPresetPropertyBox::setValue( const Any& rValue, const OUString& rPresetId
 
     mxControl->freeze();
     mxControl->clear();
+    maPropertyValues.clear();
     int nPos = -1;
 
     const CustomAnimationPresets& rPresets = CustomAnimationPresets::getCustomAnimationPresets();
@@ -262,72 +183,7 @@ Any SdPresetPropertyBox::getValue()
 
 namespace {
 
-class ColorPropertyBox  : public PropertySubControl
-{
-public:
-    ColorPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl );
-    virtual ~ColorPropertyBox() override;
-
-    virtual Any getValue() override;
-    virtual void setValue( const Any& rValue, const OUString& rPresetId  ) override;
-    virtual Control* getControl() override;
-
-private:
-    VclPtr<SvxColorListBox> mpControl;
-    DECL_LINK(OnSelect, SvxColorListBox&, void);
-    Link<LinkParamNone*,void> maModifyLink;
-};
-
-}
-
-ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl )
-: PropertySubControl( nControlType ), maModifyLink(rModifyHdl)
-{
-    mpControl = VclPtr<SvxColorListBox>::Create(pParent);
-    mpControl->set_hexpand(true);
-    mpControl->SetSelectHdl( LINK(this, ColorPropertyBox, OnSelect) );
-    mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_COLORPROPERTYBOX );
-
-    sal_Int32 nColor = 0;
-    rValue >>= nColor;
-    mpControl->SelectEntry(Color(nColor));
-}
-
-IMPL_LINK_NOARG(ColorPropertyBox, OnSelect, SvxColorListBox&, void)
-{
-    maModifyLink.Call(nullptr);
-}
-
-ColorPropertyBox::~ColorPropertyBox()
-{
-    mpControl.disposeAndClear();
-}
-
-void ColorPropertyBox::setValue( const Any& rValue, const OUString& )
-{
-    if( mpControl )
-    {
-        sal_Int32 nColor = 0;
-        rValue >>= nColor;
-
-        mpControl->SetNoSelection();
-        mpControl->SelectEntry(Color(nColor));
-    }
-}
-
-Any ColorPropertyBox::getValue()
-{
-    return makeAny( sal_Int32(mpControl->GetSelectEntryColor().GetRGBColor()) );
-}
-
-Control* ColorPropertyBox::getControl()
-{
-    return mpControl;
-}
-
-namespace {
-
-class SdColorPropertyBox  : public SdPropertySubControl
+class SdColorPropertyBox : public SdPropertySubControl
 {
 public:
     SdColorPropertyBox(weld::Label* pLabel, weld::Container* pParent, weld::Window* pTopLevel, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl);
