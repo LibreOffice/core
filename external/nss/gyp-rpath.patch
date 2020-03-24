@@ -1,0 +1,12 @@
+--- pylib/gyp/generator/ninja.py
++++ pylib/gyp/generator/ninja.py
+@@ -1241,6 +1241,8 @@
+         else:
+           ldflags.append('-Wl,-rpath=%s' % self.target_rpath)
+         ldflags.append('-Wl,-rpath-link=%s' % rpath)
++      elif not is_executable:
++        ldflags.append('-Wl,-rpath=\$$ORIGIN')
+     self.WriteVariableList(ninja_file, 'ldflags',
+                            map(self.ExpandSpecial, ldflags))
+ 
+

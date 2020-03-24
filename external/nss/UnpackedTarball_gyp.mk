@@ -11,8 +11,11 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,gyp))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,gyp,$(GYP_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,gyp,0))
+
 $(eval $(call gb_UnpackedTarball_add_patches,gyp,\
 	external/nss/gyp-buildsystem.patch.0 \
+	external/nss/gyp-rpath.patch \
 ))
 
 ifeq ($(OS),WNT)
