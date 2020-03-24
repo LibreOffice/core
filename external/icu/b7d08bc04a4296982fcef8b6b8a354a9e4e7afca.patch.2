@@ -1,0 +1,37 @@
+From b7d08bc04a4296982fcef8b6b8a354a9e4e7afca Mon Sep 17 00:00:00 2001
+From: Frank Tang <ftang@chromium.org>
+Date: Sat, 1 Feb 2020 02:39:04 +0000
+Subject: [PATCH] ICU-20958 Prevent SEGV_MAPERR in append
+
+See #971
+---
+ icu4c/source/common/unistr.cpp          |  6 ++-
+ icu4c/source/test/intltest/ustrtest.cpp | 62 +++++++++++++++++++++++++
+ icu4c/source/test/intltest/ustrtest.h   |  1 +
+ 3 files changed, 68 insertions(+), 1 deletion(-)
+
+diff --git a/icu4c/source/common/unistr.cpp b/icu4c/source/common/unistr.cpp
+index 901bb3358ba..077b4d6ef20 100644
+--- a/icu4c/source/common/unistr.cpp
++++ b/icu4c/source/common/unistr.cpp
+@@ -31,6 +31,7 @@
+ #include "ustr_imp.h"
+ #include "umutex.h"
+ #include "uassert.h"
++#include <o3tl/safeint.hxx>
+ 
+ #if 0
+ 
+@@ -1563,7 +1563,11 @@ UnicodeString::doAppend(const UChar *srcChars, int32_t srcStart, int32_t srcLeng
+   }
+ 
+   int32_t oldLength = length();
+-  int32_t newLength = oldLength + srcLength;
++  int32_t newLength;
++  if (o3tl::checked_add(oldLength, srcLength, newLength)) {
++    setToBogus();
++    return *this;
++  }
+   // optimize append() onto a large-enough, owned string
+   if((newLength <= getCapacity() && isBufferWritable()) ||
+       cloneArrayIfNeeded(newLength, getGrowCapacity(newLength))) {
