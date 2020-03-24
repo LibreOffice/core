@@ -23,6 +23,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	external/icu/icu4c-scriptrun.patch \
 	external/icu/icu4c-changeset-39671.patch.1 \
 	external/icu/icu4c-changeset-40324.patch.1 \
+	external/icu/b7d08bc04a4296982fcef8b6b8a354a9e4e7afca.patch.2 \
 ))
 
 # vim: set noet sw=4 ts=4:
