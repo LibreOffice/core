@@ -36,6 +36,9 @@
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
+#include <comphelper/lok.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/objsh.hxx>
 
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -805,6 +808,13 @@ void SAL_CALL ControllerCommandDispatch::modified( const lang::EventObject& aEve
 
     if( bUpdateCommandAvailability )
         updateCommandAvailability();
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        if (SfxViewShell* pViewShell = SfxViewShell::Current())
+            if (SfxObjectShell* pObjSh = pViewShell->GetObjectShell())
+                pObjSh->SetModified();
+    }
 
     CommandDispatch::modified( aEvent );
 }
