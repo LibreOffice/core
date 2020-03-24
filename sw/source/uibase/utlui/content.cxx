@@ -1935,10 +1935,7 @@ void SwContentTree::Display( bool bActive )
             }
 
             if (xSelEntry)
-            {
-                m_xTreeView->set_cursor(*xSelEntry);
-                Select();
-            }
+                m_xTreeView->select(*xSelEntry);
         }
         // root content navigation view
         else
