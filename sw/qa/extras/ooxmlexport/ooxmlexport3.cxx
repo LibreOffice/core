@@ -1117,7 +1117,6 @@ DECLARE_OOXMLEXPORT_TEST(testArrowFlipXY, "tdf100751_arrowBothFlip.docx")
 DECLARE_OOXMLEXPORT_TEST(testGradientAngle, "tdf128648_GradientSegments.docx")
 {
     // tdf#128648: Do not do an extra rotation of gradient.
-
     xmlDocPtr pXmlDocument = parseExport("word/document.xml");
     if (!pXmlDocument)
         return;
@@ -1125,6 +1124,18 @@ DECLARE_OOXMLEXPORT_TEST(testGradientAngle, "tdf128648_GradientSegments.docx")
     // This is the correct angle.
     assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic"
         "/a:graphicData/wps:wsp/wps:spPr/a:gradFill/a:lin [@ang='4860000']", 1);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testArrowPosition, "tdf104565_ArrowPosition.docx")
+{
+    // tdf#104565: Test correct position.
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+
+    // This is the correct Y coordinate.
+    assertXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
+        "/wp:positionV/wp:posOffset", "516255");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
