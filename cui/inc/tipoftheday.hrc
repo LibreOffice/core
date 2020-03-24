@@ -137,7 +137,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Mix portrait and landscape orientations in a Calc spreadsheet by applying different page styles on sheets."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Click on the special character icon in the toolbar to get quick access to favorite and recent characters to insert."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Choose “Hierarchical View” in the Styles sidebar to see the relation between styles."), "", "tipoftheday_w.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "You can use styles to make the tables in your document consistent. Choose one from the predefined per Styles (F11) or  via Table ▸ AutoFormat."), "", "tipoftheday_w.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "You can use styles to make the tables in your document consistent. Choose one from the predefined per Styles (F11) or via Table ▸ AutoFormat."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Configure use of the %MOD1 key to open hyperlinks? Tools ▸ Options ▸ %PRODUCTNAME ▸ Security ▸ Options ▸ “%MOD1+click required to open hyperlinks”."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "You would like to view the calculation of individual elements of a formula, select the respective elements and press F9."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "You can protect cells with Format ▸ Cells ▸ Protection. To prevent insert, delete, rename, move/copy of sheets use Tools ▸ Protect Sheet."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/scalc/guide/cell_protect.html", "tipoftheday_c.png"}, //local help missing
