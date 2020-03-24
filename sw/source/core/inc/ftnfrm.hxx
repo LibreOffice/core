@@ -53,7 +53,7 @@ public:
     const SwFootnoteFrame* FindFootNote() const;
 
     static inline SwFootnoteFrame* AppendChained(SwFrame* pThis, bool bDefaultFormat);
-    static inline SwFootnoteFrame* PrepedChained(SwFrame* pThis, bool bDefaultFormat);
+    static inline SwFootnoteFrame* PrependChained(SwFrame* pThis, bool bDefaultFormat);
 
     virtual SwTwips ShrinkFrame( SwTwips, bool bTst = false, bool bInfo = false ) override;
     virtual SwTwips GrowFrame  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
@@ -71,7 +71,7 @@ inline SwFootnoteFrame* SwFootnoteContFrame::AppendChained(SwFrame* pThis, bool 
     return AddChained(true, pThis, bDefaultFormat);
 }
 
-inline SwFootnoteFrame* SwFootnoteContFrame::PrepedChained(SwFrame* pThis, bool bDefaultFormat)
+inline SwFootnoteFrame* SwFootnoteContFrame::PrependChained(SwFrame* pThis, bool bDefaultFormat)
 {
     return AddChained(false, pThis, bDefaultFormat);
 }
