@@ -3708,25 +3708,14 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     if (nView < 0)
         return;
 
-    // Set/unset mobile phone view for LOK
     if (gImpl && (aCommand == ".uno:LOKSetMobile" || aCommand == ".uno:LOKSetMobilePhone"))
     {
-        comphelper::LibreOfficeKit::setMobilePhone(nView, true);
-        return;
-    }
-    else if (gImpl && (aCommand == ".uno:LOKUnSetMobile" || aCommand == ".uno:LOKUnSetMobilePhone"))
-    {
-        comphelper::LibreOfficeKit::setMobilePhone(nView, false);
+        comphelper::LibreOfficeKit::setMobilePhone(nView);
         return;
     }
     else if (gImpl && aCommand == ".uno:LOKSetTablet")
     {
-        comphelper::LibreOfficeKit::setTablet(nView, true);
-        return;
-    }
-    else if (gImpl && aCommand == ".uno:LOKUnSetTablet")
-    {
-        comphelper::LibreOfficeKit::setTablet(nView, false);
+        comphelper::LibreOfficeKit::setTablet(nView);
         return;
     }
     else if (gImpl && aCommand == ".uno:ToggleOrientation")
