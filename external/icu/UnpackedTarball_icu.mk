@@ -40,6 +40,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	external/icu/c++20-comparison.patch \
 	external/icu/ubsan.patch \
 	external/icu/Wdeprecated-copy-dtor.patch \
+	external/icu/b7d08bc04a4296982fcef8b6b8a354a9e4e7afca.patch.2 \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_file,icu,source/data/brkitr/khmerdict.dict,external/icu/khmerdict.dict))
