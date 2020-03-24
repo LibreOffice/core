@@ -4527,7 +4527,8 @@ public:
 
     virtual void vadjustment_set_value(int nValue) override
     {
-        m_xTreeView->ScrollToAbsPos(nValue);
+        if (nValue)
+            m_xTreeView->ScrollOutputArea(static_cast<short>(-nValue));
     }
 
     virtual ~SalInstanceTreeView() override
