@@ -83,6 +83,7 @@ namespace emfplushelper
             case EmfPlusRecordTypeSetCompositingQuality: return "EmfPlusRecordTypeSetCompositingQuality";
             case EmfPlusRecordTypeSave: return "EmfPlusRecordTypeSave";
             case EmfPlusRecordTypeRestore: return "EmfPlusRecordTypeRestore";
+            case EmfPlusRecordTypeBeginContainer: return "EmfPlusRecordTypeBeginContainer";
             case EmfPlusRecordTypeBeginContainerNoParams: return "EmfPlusRecordTypeBeginContainerNoParams";
             case EmfPlusRecordTypeEndContainer: return "EmfPlusRecordTypeEndContainer";
             case EmfPlusRecordTypeSetWorldTransform: return "EmfPlusRecordTypeSetWorldTransform";
@@ -121,10 +122,15 @@ namespace emfplushelper
                 return 1.0f;
             }
             case UnitTypePoint:
+<<<<<<< HEAD   (036f38 tdf#133348 remove from list before calling SetActiveSidebarW)
             {
                 SAL_INFO("drawinglayer", "EMF+\t Converting Points to Pixels.");
                 return 1.333333f;
             }
+=======
+                return Application::GetDefaultDevice()->GetDPIX() / 72.0;
+
+>>>>>>> CHANGE (adc7d3 tdf#131542 EMF+ Implement BeginContainer record)
             case UnitTypeInch:
             {
                 SAL_INFO("drawinglayer", "EMF+\t TODO Test Converting Inches to Pixels, if it is working correctly.");
@@ -136,10 +142,15 @@ namespace emfplushelper
                 return 3.779528f;
             }
             case UnitTypeDocument:
+<<<<<<< HEAD   (036f38 tdf#133348 remove from list before calling SetActiveSidebarW)
             {
                 SAL_INFO("drawinglayer", "EMF+\t TODO Test Converting Documents to Pixels, if it is working correctly.");
                 return 0.32f;
             }
+=======
+                return Application::GetDefaultDevice()->GetDPIX() / 300.0;
+
+>>>>>>> CHANGE (adc7d3 tdf#131542 EMF+ Implement BeginContainer record)
             case UnitTypeWorld:
             case UnitTypeDisplay:
             default:
@@ -1587,6 +1598,34 @@ namespace emfplushelper
                         SAL_INFO("drawinglayer", "EMF+ Restore stack index: " << stackIndex);
 
                         GraphicStatePop(mGSStack, stackIndex, mrPropertyHolders.Current());
+                        break;
+                    }
+                    case EmfPlusRecordTypeBeginContainer:
+                    {
+                        float dx, dy, dw, dh;
+                        ReadRectangle(rMS, dx, dy, dw, dh);
+                        SAL_INFO("drawinglayer", "EMF+\t Dest RectData: " << dx << "," << dy << " " << dw << "x" << dh);
+
+                        float sx, sy, sw, sh;
+                        ReadRectangle(rMS, sx, sy, sw, sh);
+                        SAL_INFO("drawinglayer", "EMF+\t Source RectData: " << sx << "," << sy << " " << sw << "x" << sh);
+
+                        sal_uInt32 stackIndex;
+                        rMS.ReadUInt32(stackIndex);
+                        SAL_INFO("drawinglayer", "EMF+\t Begin Container stack index: " << stackIndex << ", PageUnit: " << flags);
+
+                        if ((flags == UnitTypeDisplay) || (flags == UnitTypeWorld))
+                        {
+                            SAL_WARN("drawinglayer", "EMF+\t file error. UnitTypeDisplay and UnitTypeWorld are not supported by BeginContainer in EMF+ specification.");
+                            break;
+                        }
+                        const float aPageScale = getUnitToPixelMultiplier(static_cast<UnitType>(flags));
+                        GraphicStatePush(mGSContainerStack, stackIndex);
+                        const basegfx::B2DHomMatrix transform = basegfx::utils::createScaleTranslateB2DHomMatrix(
+                            aPageScale * ( dw / sw ), aPageScale * ( dh / sh ),
+                            aPageScale * ( dx - sx ), aPageScale * ( dy - sy) );
+                        maWorldTransform *= transform;
+                        mappingChanged();
                         break;
                     }
                     case EmfPlusRecordTypeBeginContainerNoParams:
