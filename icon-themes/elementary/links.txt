@@ -404,7 +404,7 @@ cmd/32/bg/underlinedouble.png cmd/32/hu/underlinedouble.png
 cmd/32/bg/underlinesimple.png cmd/32/hu/underline.png
 cmd/32/ca/underlinesimple.png cmd/32/ca/underline.png
 cmd/32/es/bold.png cmd/32/ca/bold.png
-cmd/32/es/italic.png cmd/32/ca/italic.png
+cmd/32/es/italic.png cmd/32/de/italic.png
 cmd/32/es/numberformatdecdecimals.png cmd/32/de/numberformatdecdecimals.png
 cmd/32/es/numberformatdecimal.png cmd/32/de/numberformatdecimal.png
 cmd/32/es/numberformatincdecimals.png cmd/32/de/numberformatincdecimals.png
@@ -419,7 +419,6 @@ cmd/32/fa/bulletsandnumberingdialog.png cmd/32/ar/bulletsandnumberingdialog.png
 cmd/32/fa/defaultbullet.png cmd/32/ar/defaultbullet.png
 cmd/32/fa/defaultnumbering.png cmd/32/ar/defaultnumbering.png
 cmd/32/fa/insertneutralparagraph.png cmd/32/ar/insertneutralparagraph.png
-cmd/32/fa/linenumberdialog.png cmd/32/ar/linenumbedialog.png
 cmd/32/fa/linenumberdialog.png cmd/32/ar/linenumberingdialog.png
 cmd/32/fa/linenumberingdialog.png cmd/32/ar/linenumberingdialog.png
 cmd/32/fa/numberingstart.png cmd/32/ar/numberingstart.png
@@ -551,7 +550,7 @@ cmd/bg/sc_underlinesimple.png cmd/hu/sc_underline.png
 cmd/ca/lc_underlinesimple.png cmd/ca/lc_underline.png
 cmd/ca/sc_underlinesimple.png cmd/ca/sc_underline.png
 cmd/es/lc_bold.png cmd/ca/lc_bold.png
-cmd/es/lc_italic.png cmd/ca/lc_italic.png
+cmd/es/lc_italic.png cmd/de/lc_italic.png
 cmd/es/lc_numberformatdecdecimals.png cmd/de/lc_numberformatdecdecimals.png
 cmd/es/lc_numberformatdecimal.png cmd/de/lc_numberformatdecimal.png
 cmd/es/lc_numberformatincdecimals.png cmd/de/lc_numberformatincdecimals.png
@@ -560,7 +559,7 @@ cmd/es/lc_underline.png cmd/ca/lc_underline.png
 cmd/es/lc_underlinedouble.png cmd/ca/lc_underlinedouble.png
 cmd/es/lc_underlinesimple.png cmd/ca/lc_underline.png
 cmd/es/sc_bold.png cmd/ca/sc_bold.png
-cmd/es/sc_italic.png cmd/ca/sc_italic.png
+cmd/es/sc_italic.png cmd/de/sc_italic.png
 cmd/es/sc_numberformatdecdecimals.png cmd/de/sc_numberformatdecdecimals.png
 cmd/es/sc_numberformatdecimal.png cmd/de/sc_numberformatdecimal.png
 cmd/es/sc_numberformatincdecimals.png cmd/de/sc_numberformatincdecimals.png
