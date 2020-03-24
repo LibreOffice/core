@@ -444,7 +444,6 @@
 #define STR_CUSTOMANIMATION_BROWSE_SOUND                NC_("STR_CUSTOMANIMATION_BROWSE_SOUND", "Other sound...")
 #define STR_CUSTOMANIMATION_SAMPLE                      NC_("STR_CUSTOMANIMATION_SAMPLE", "Sample")
 #define STR_CUSTOMANIMATION_TRIGGER                     NC_("STR_CUSTOMANIMATION_TRIGGER", "Trigger")
-#define STR_CUSTOMANIMATION_LIST_HELPTEXT               NC_("STR_CUSTOMANIMATION_LIST_HELPTEXT", "First select the slide element and then click 'Add...' to add an animation effect.")
 #define STR_CUSTOMANIMATION_USERPATH                    NC_("STR_CUSTOMANIMATION_USERPATH", "User paths")
 #define STR_CUSTOMANIMATION_ENTRANCE                    NC_("STR_CUSTOMANIMATION_ENTRANCE", "Entrance: %1")
 #define STR_CUSTOMANIMATION_EMPHASIS                    NC_("STR_CUSTOMANIMATION_EMPHASIS", "Emphasis: %1")
