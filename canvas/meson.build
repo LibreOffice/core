@@ -69,3 +69,23 @@ cairocanvas_lib = shared_library('cairocanvaslo',
   dependencies: [cairo_dep],
   install: true,
 )
+
+canvasfactory_lib = shared_library('canvasfactorylo',
+  'source/factory/cf_service.cxx',
+  udk_fake_h, off_fake_h,
+  cpp_args: ['-DLIBO_INTERNAL_ONLY'],
+  include_directories: [main_inc, udkh_inc, offapi_inc],
+  link_with: [cppu_lib, cppuhelper_lib, sal_lib, utl_lib, vcl_lib],
+  dependencies: [],
+  install: true,
+)
+
+simplecanvas_lib = shared_library('simplecanvaslo',
+  'source/simplecanvas/simplecanvasimpl.cxx',
+  udk_fake_h, off_fake_h,
+  cpp_args: ['-DLIBO_INTERNAL_ONLY'],
+  include_directories: [main_inc, udkh_inc, offapi_inc],
+  link_with: [basegfx_lib, canvastools_lib, comphelper_lib, cppu_lib, cppuhelper_lib, sal_lib],
+  dependencies: [],
+  install: true,
+)

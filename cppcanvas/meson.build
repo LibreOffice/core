@@ -27,3 +27,12 @@ cppcanvas_lib = shared_library('cppcanvaslo',
   link_with: [basegfx_lib, canvastools_lib, vcl_lib, svt_lib, tl_lib, cppu_lib, cppuhelper_lib, i18nlangtag_lib, sal_lib],
   install: true,
 )
+
+mtfrenderer_lib = shared_library('mtfrendererlo',
+  udk_fake_h, off_fake_h,
+  cpp_args: ['-DCPPCANVAS_DLLIMPLEMENTATION',
+             '-DLIBO_INTERNAL_ONLY'],
+  include_directories: [main_inc, udkh_inc, offapi_inc, 'source/inc'],
+  link_with: [sal_lib, cppu_lib, cppuhelper_lib, comphelper_lib, cppcanvas_lib, basegfx_lib],
+  install: true,
+)

@@ -133,6 +133,7 @@ cairo_dep = dependency('cairo')
 orcus_dep = dependency('liborcus-0.14')
 clucene_dep = dependency('libclucene-core')
 libxslt_dep = dependency('libxslt')
+libexslt_dep = dependency('libexslt')
 qrcodegen_dep = declare_dependency(compile_args: ['-I/usr/include/qrcodegen'],
   dependencies: cpp.find_library('qrcodegencpp'))
 revenge_dep = dependency('librevenge-0.0')
