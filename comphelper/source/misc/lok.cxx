@@ -103,9 +103,11 @@ bool isActive()
     return g_bActive;
 }
 
-void setMobilePhone(int nViewId, bool bIsMobilePhone)
+void setMobilePhone(int nViewId)
 {
-    g_vIsViewMobilePhone[nViewId] = bIsMobilePhone;
+    assert(!isMobilePhone(nViewId));
+    assert(!isTablet(nViewId));
+    g_vIsViewMobilePhone[nViewId] = true;
 }
 
 bool isMobilePhone(int nViewId)
@@ -116,9 +118,11 @@ bool isMobilePhone(int nViewId)
         return false;
 }
 
-void setTablet(int nViewId, bool bIsTablet)
+void setTablet(int nViewId)
 {
-    g_vIsViewTablet[nViewId] = bIsTablet;
+    assert(!isMobilePhone(nViewId));
+    assert(!isTablet(nViewId));
+    g_vIsViewTablet[nViewId] = true;
 }
 
 bool isTablet(int nViewId)
