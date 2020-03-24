@@ -163,6 +163,13 @@ PresetPropertyBox::~PresetPropertyBox()
     mpControl.disposeAndClear();
 }
 
+SdPropertySubControl::SdPropertySubControl(weld::Container* pParent)
+    : mxBuilder(Application::CreateBuilder(pParent, "modules/simpress/ui/customanimationfragment.ui"))
+    , mxContainer(mxBuilder->weld_container("EffectFragment"))
+    , mpParent(pParent)
+{
+}
+
 Any PresetPropertyBox::getValue()
 {
     return makeAny( maPropertyValues[mpControl->GetSelectedEntryPos()] );
@@ -175,6 +182,7 @@ Control* PresetPropertyBox::getControl()
 
 SdPropertySubControl::~SdPropertySubControl()
 {
+    mpParent->move(mxContainer.get(), nullptr);
 }
 
 namespace {
@@ -221,6 +229,7 @@ void SdPresetPropertyBox::setValue( const Any& rValue, const OUString& rPresetId
 
     mxControl->freeze();
     mxControl->clear();
+    maPropertyValues.clear();
     int nPos = -1;
 
     const CustomAnimationPresets& rPresets = CustomAnimationPresets::getCustomAnimationPresets();
