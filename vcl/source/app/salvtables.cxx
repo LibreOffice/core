@@ -4554,13 +4554,23 @@ public:
 
     virtual int vadjustment_get_value() const override
     {
-        ScrollBar* pVertScrollBar = m_xTreeView->GetVScroll();
-        return pVertScrollBar->GetThumbPos();
+        int nValue = -1;
+        const SvTreeListEntry* pEntry = m_xTreeView->GetFirstEntryInView();
+        if (pEntry)
+            nValue = m_xTreeView->GetAbsPos(pEntry);
+        return nValue;
     }
 
     virtual void vadjustment_set_value(int nValue) override
     {
+        if (nValue == -1)
+            return;
+        bool bUpdate = m_xTreeView->IsUpdateMode();
+        if (bUpdate)
+            m_xTreeView->SetUpdateMode(false);
         m_xTreeView->ScrollToAbsPos(nValue);
+        if (bUpdate)
+            m_xTreeView->SetUpdateMode(true);
     }
 
     virtual ~SalInstanceTreeView() override
