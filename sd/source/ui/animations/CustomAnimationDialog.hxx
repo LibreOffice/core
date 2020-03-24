@@ -116,12 +116,7 @@ private:
 class SdPropertySubControl
 {
 public:
-    explicit SdPropertySubControl(weld::Container* pParent)
-        : mxBuilder(Application::CreateBuilder(pParent, "modules/simpress/ui/customanimationfragment.ui"))
-        , mxContainer(mxBuilder->weld_container("EffectFragment"))
-    {
-    }
-
+    explicit SdPropertySubControl(weld::Container* pParent);
     virtual ~SdPropertySubControl();
 
     virtual             css::uno::Any getValue() = 0;
@@ -139,6 +134,7 @@ public:
 protected:
     std::unique_ptr<weld::Builder> mxBuilder;
     std::unique_ptr<weld::Container> mxContainer;
+    weld::Container* mpParent;
 };
 
 class PropertyControl : public ListBox

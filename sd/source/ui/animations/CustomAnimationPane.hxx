@@ -20,13 +20,9 @@
 #ifndef INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONPANE_HXX
 #define INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONPANE_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include "CustomAnimationDialog.hxx"
 #include "CustomAnimationList.hxx"
-#include "CategoryListBox.hxx"
 #include "motionpathtag.hxx"
 #include <misc/scopelock.hxx>
 
@@ -110,52 +106,53 @@ private:
     static css::uno::Any getProperty1Value( sal_Int32 nType, const CustomAnimationEffectPtr& pEffect );
     static bool setProperty1Value( sal_Int32 nType, const CustomAnimationEffectPtr& pEffect, const css::uno::Any& rValue );
     void UpdateLook();
-    sal_uInt32 fillAnimationLB( bool bHasText );
+    sal_Int32 fillAnimationLB( bool bHasText );
     PathKind getCreatePathKind() const;
     void createPath( PathKind eKind, std::vector< ::com::sun::star::uno::Any >& rTargets, double fDuration );
 
-    DECL_LINK( implControlListBoxHdl, ListBox&, void );
-    DECL_LINK( implClickHdl, Button*, void );
+    DECL_LINK( implControlListBoxHdl, weld::ComboBox&, void );
+    DECL_LINK( implClickHdl, weld::Button&, void );
     DECL_LINK( implPropertyHdl, LinkParamNone*, void );
     DECL_LINK( EventMultiplexerListener, tools::EventMultiplexerEvent&, void );
     DECL_LINK( lateInitCallback, Timer *, void );
-    DECL_LINK( DurationModifiedHdl, Edit&, void );
-    DECL_LINK( DelayModifiedHdl, Edit&, void );
-    DECL_LINK( DelayLoseFocusHdl, Control&, void );
-    DECL_LINK( UpdateAnimationLB, ListBox&, void );
-    DECL_LINK( AnimationSelectHdl, ListBox&, void );
-    void implControlHdl(Control const *);
+    DECL_LINK( DurationModifiedHdl, weld::MetricSpinButton&, void );
+    DECL_LINK( DelayModifiedHdl, weld::MetricSpinButton&, void );
+    DECL_LINK( DelayLoseFocusHdl, weld::Widget&, void );
+    DECL_LINK( UpdateAnimationLB, weld::ComboBox&, void );
+    DECL_LINK( AnimationSelectHdl, weld::TreeView&, void );
+    void implControlHdl(const weld::Widget* pControl);
 
 private:
     ViewShellBase& mrBase;
 
     // UI Elements
-    VclPtr<FixedText>   mpFTAnimation;
-    VclPtr<CustomAnimationList> mpCustomAnimationList;
-    VclPtr<PushButton>  mpPBAddEffect;
-    VclPtr<PushButton>  mpPBRemoveEffect;
-    VclPtr<PushButton>  mpPBMoveUp;
-    VclPtr<PushButton>  mpPBMoveDown;
-    VclPtr<FixedText>   mpFTCategory;
-    VclPtr<ListBox>     mpLBCategory;
-    VclPtr<FixedText>   mpFTEffect;
-    VclPtr<CategoryListBox> mpLBAnimation;
-    VclPtr<FixedText>   mpFTStart;
-    VclPtr<ListBox>     mpLBStart;
-    VclPtr<FixedText>   mpFTProperty;
-    VclPtr<PropertyControl> mpLBProperty;
-    VclPtr<vcl::Window> mpPlaceholderBox;
-    VclPtr<PushButton>  mpPBPropertyMore;
-    VclPtr<FixedText>   mpFTDuration;
-    VclPtr<MetricBox>   mpCBXDuration;
-    VclPtr<FixedText>   mpFTStartDelay;
-    VclPtr<MetricField> mpMFStartDelay;
-    VclPtr<CheckBox>    mpCBAutoPreview;
-    VclPtr<PushButton>  mpPBPlay;
+    std::unique_ptr<weld::Label> mxFTAnimation;
+    std::unique_ptr<CustomAnimationList> mxCustomAnimationList;
+    std::unique_ptr<weld::Button> mxPBAddEffect;
+    std::unique_ptr<weld::Button> mxPBRemoveEffect;
+    std::unique_ptr<weld::Button> mxPBMoveUp;
+    std::unique_ptr<weld::Button> mxPBMoveDown;
+    std::unique_ptr<weld::Label> mxFTCategory;
+    std::unique_ptr<weld::ComboBox> mxLBCategory;
+    std::unique_ptr<weld::Label> mxFTEffect;
+    std::unique_ptr<weld::TreeView> mxLBAnimation;
+    std::unique_ptr<weld::Label> mxFTStart;
+    std::unique_ptr<weld::ComboBox> mxLBStart;
+    std::unique_ptr<weld::Label> mxFTProperty;
+    std::unique_ptr<SdPropertySubControl> mxLBSubControl;
+    std::unique_ptr<weld::Container> mxPlaceholderBox;
+    std::unique_ptr<weld::Button> mxPBPropertyMore;
+    std::unique_ptr<weld::Label> mxFTDuration;
+    std::unique_ptr<weld::MetricSpinButton> mxCBXDuration;
+    std::unique_ptr<weld::Label> mxFTStartDelay;
+    std::unique_ptr<weld::MetricSpinButton> mxMFStartDelay;
+    std::unique_ptr<weld::CheckButton> mxCBAutoPreview;
+    std::unique_ptr<weld::Button> mxPBPlay;
 
     OUString    maStrModify;
     OUString    maStrProperty;
 
+    sal_Int32   mnLastSelectedAnimation;
     sal_Int32   mnPropertyType;
     static sal_Int32 const gnMotionPathPos = 3;
     sal_Int32   mnCurvePathPos;

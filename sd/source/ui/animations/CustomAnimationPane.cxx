@@ -46,10 +46,6 @@
 #include "motionpathtag.hxx"
 #include <CustomAnimationPreset.hxx>
 #include <createcustomanimationpanel.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/fixed.hxx>
-
-#include <vcl/button.hxx>
 
 #include <comphelper/lok.hxx>
 #include <comphelper/sequence.hxx>
@@ -123,81 +119,68 @@ void fillRepeatComboBox(weld::ComboBox& rBox)
 
 CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
                                           const css::uno::Reference<css::frame::XFrame>& rxFrame )
-:   PanelLayout( pParent, "CustomAnimationsPanel", "modules/simpress/ui/customanimationspanel.ui", rxFrame ),
-    mrBase( rBase ),
-    mnPropertyType( nPropertyTypeNone ),
-    mnCurvePathPos( LISTBOX_ENTRY_NOTFOUND ),
-    mnPolygonPathPos( LISTBOX_ENTRY_NOTFOUND ),
-    mnFreeformPathPos( LISTBOX_ENTRY_NOTFOUND ),
-    maLateInitTimer()
+    : PanelLayout(pParent, "CustomAnimationsPanel", "modules/simpress/ui/customanimationspanel.ui", rxFrame, true)
+    , mrBase(rBase)
+    // load resources
+    , mxFTAnimation(m_xBuilder->weld_label("effectlabel"))
+    , mxCustomAnimationList(new CustomAnimationList(m_xBuilder->weld_tree_view("custom_animation_list"),
+                                                    m_xBuilder->weld_label("custom_animation_label"),
+                                                    m_xBuilder->weld_widget("custom_animation_label_parent")))
+    , mxPBAddEffect(m_xBuilder->weld_button("add_effect"))
+    , mxPBRemoveEffect(m_xBuilder->weld_button("remove_effect"))
+    , mxPBMoveUp(m_xBuilder->weld_button("move_up"))
+    , mxPBMoveDown(m_xBuilder->weld_button("move_down"))
+    , mxFTCategory(m_xBuilder->weld_label("categorylabel"))
+    , mxLBCategory(m_xBuilder->weld_combo_box("categorylb"))
+    , mxFTEffect(m_xBuilder->weld_label("effect_label"))
+    , mxLBAnimation(m_xBuilder->weld_tree_view("effect_list"))
+    , mxFTStart(m_xBuilder->weld_label("start_effect"))
+    , mxLBStart(m_xBuilder->weld_combo_box("start_effect_list"))
+    , mxFTProperty(m_xBuilder->weld_label("effect_property"))
+    , mxPlaceholderBox(m_xBuilder->weld_container("placeholder"))
+    , mxPBPropertyMore(m_xBuilder->weld_button("more_properties"))
+    , mxFTDuration(m_xBuilder->weld_label("effect_duration"))
+    , mxCBXDuration(m_xBuilder->weld_metric_spin_button("anim_duration", FieldUnit::SECOND))
+    , mxFTStartDelay(m_xBuilder->weld_label("delay_label"))
+    , mxMFStartDelay(m_xBuilder->weld_metric_spin_button("delay_value", FieldUnit::SECOND))
+    , mxCBAutoPreview(m_xBuilder->weld_check_button("auto_preview"))
+    , mxPBPlay(m_xBuilder->weld_button("play"))
+    , mnLastSelectedAnimation(-1)
+    , mnPropertyType(nPropertyTypeNone)
+    , mnCurvePathPos(-1)
+    , mnPolygonPathPos(-1)
+    , mnFreeformPathPos(-1)
+    , maLateInitTimer()
 {
     initialize();
 }
 
 void CustomAnimationPane::initialize()
 {
-    // load resources
-    get(mpPBAddEffect, "add_effect");
-    get(mpPBRemoveEffect, "remove_effect");
+    mxLBAnimation->connect_changed(LINK(this, CustomAnimationPane, AnimationSelectHdl));
+    mxCustomAnimationList->setController( dynamic_cast<ICustomAnimationListController*> ( this ) );
+    mxCustomAnimationList->set_size_request(mxCustomAnimationList->get_approximate_digit_width() * 15,
+                                            mxCustomAnimationList->get_height_rows(8));
 
-    get(mpFTEffect, "effect_label");
+    mxLBAnimation->set_size_request(mxLBAnimation->get_approximate_digit_width() * 15,
+                                    mxLBAnimation->get_height_rows(8));
 
-    get(mpFTStart, "start_effect");
-    get(mpLBStart, "start_effect_list");
-    get(mpFTProperty, "effect_property");
-    get(mpPlaceholderBox, "placeholder");
-    get(mpLBProperty, "effect_property_list");
-    get(mpPBPropertyMore, "more_properties");
+    maStrProperty = mxFTProperty->get_label();
 
-    get(mpFTDuration, "effect_duration");
-    get(mpCBXDuration, "anim_duration");
-    get(mpFTCategory, "categorylabel");
-    get(mpLBCategory, "categorylb");
-    get(mpFTAnimation, "effectlabel");
-    get(mpLBAnimation, "effect_list");
-    get(mpFTStartDelay, "delay_label");
-    get(mpMFStartDelay, "delay_value");
+    mxPBAddEffect->connect_clicked( LINK( this, CustomAnimationPane, implClickHdl ) );
+    mxPBRemoveEffect->connect_clicked( LINK( this, CustomAnimationPane, implClickHdl ) );
+    mxLBStart->connect_changed( LINK( this, CustomAnimationPane, implControlListBoxHdl ) );
+    mxCBXDuration->connect_value_changed(LINK( this, CustomAnimationPane, DurationModifiedHdl));
+    mxPBPropertyMore->connect_clicked( LINK( this, CustomAnimationPane, implClickHdl ) );
+    mxPBMoveUp->connect_clicked( LINK( this, CustomAnimationPane, implClickHdl ) );
+    mxPBMoveDown->connect_clicked( LINK( this, CustomAnimationPane, implClickHdl ) );
+    mxPBPlay->connect_clicked( LINK( this, CustomAnimationPane, implClickHdl ) );
+    mxCBAutoPreview->connect_clicked( LINK( this, CustomAnimationPane, implClickHdl ) );
+    mxLBCategory->connect_changed( LINK(this, CustomAnimationPane, UpdateAnimationLB) );
+    mxMFStartDelay->connect_value_changed( LINK(this, CustomAnimationPane, DelayModifiedHdl) );
+    mxMFStartDelay->connect_focus_out(LINK( this, CustomAnimationPane, DelayLoseFocusHdl));
 
-    mpLBAnimation->SetSelectHdl(LINK(this, CustomAnimationPane, AnimationSelectHdl));
-    get(mpCustomAnimationList, "custom_animation_list");
-    mpCustomAnimationList->setController( dynamic_cast<ICustomAnimationListController*> ( this ) );
-    mpCustomAnimationList->set_width_request(mpCustomAnimationList->approximate_digit_width() * 15);
-    mpCustomAnimationList->set_height_request(mpCustomAnimationList->GetTextHeight() * 8);
-
-    mpLBAnimation->set_width_request(mpLBAnimation->approximate_digit_width() * 15);
-    mpLBAnimation->set_height_request(mpLBAnimation->GetTextHeight() * 8);
-
-    get(mpPBMoveUp, "move_up");
-    get(mpPBMoveDown, "move_down");
-    get(mpPBPlay, "play");
-    get(mpCBAutoPreview,"auto_preview");
-
-    maStrProperty = mpFTProperty->GetText();
-
-    //fillDurationMetricComboBox
-    mpCBXDuration->InsertValue(50, FieldUnit::CUSTOM);
-    mpCBXDuration->InsertValue(100, FieldUnit::CUSTOM);
-    mpCBXDuration->InsertValue(200, FieldUnit::CUSTOM);
-    mpCBXDuration->InsertValue(300, FieldUnit::CUSTOM);
-    mpCBXDuration->InsertValue(500, FieldUnit::CUSTOM);
-    mpCBXDuration->AdaptDropDownLineCountToMaximum();
-
-
-    mpPBAddEffect->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
-    mpPBRemoveEffect->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
-    mpLBStart->SetSelectHdl( LINK( this, CustomAnimationPane, implControlListBoxHdl ) );
-    mpCBXDuration->SetModifyHdl(LINK( this, CustomAnimationPane, DurationModifiedHdl));
-    mpPBPropertyMore->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
-    mpPBMoveUp->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
-    mpPBMoveDown->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
-    mpPBPlay->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
-    mpCBAutoPreview->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
-    mpLBCategory->SetSelectHdl( LINK(this, CustomAnimationPane, UpdateAnimationLB) );
-    mpMFStartDelay->SetModifyHdl( LINK(this, CustomAnimationPane, DelayModifiedHdl) );
-    mpMFStartDelay->SetLoseFocusHdl(LINK( this, CustomAnimationPane, DelayLoseFocusHdl));
-
-
-    maStrModify = mpFTEffect->GetText();
+    maStrModify = mxFTEffect->get_label();
 
     // get current controller and initialize listeners
     try
@@ -237,28 +220,28 @@ void CustomAnimationPane::dispose()
     for (auto const& tag : aTags)
         tag->Dispose();
 
-    mpPBAddEffect.clear();
-    mpPBRemoveEffect.clear();
-    mpFTEffect.clear();
-    mpFTStart.clear();
-    mpLBStart.clear();
-    mpFTProperty.clear();
-    mpPlaceholderBox.clear();
-    mpLBProperty.clear();
-    mpPBPropertyMore.clear();
-    mpFTDuration.clear();
-    mpCBXDuration.clear();
-    mpFTStartDelay.clear();
-    mpMFStartDelay.clear();
-    mpCustomAnimationList.clear();
-    mpPBMoveUp.clear();
-    mpPBMoveDown.clear();
-    mpPBPlay.clear();
-    mpCBAutoPreview.clear();
-    mpFTCategory.clear();
-    mpLBCategory.clear();
-    mpFTAnimation.clear();
-    mpLBAnimation.clear();
+    mxPBAddEffect.reset();
+    mxPBRemoveEffect.reset();
+    mxFTEffect.reset();
+    mxFTStart.reset();
+    mxLBStart.reset();
+    mxLBSubControl.reset();
+    mxFTProperty.reset();
+    mxPlaceholderBox.reset();
+    mxPBPropertyMore.reset();
+    mxFTDuration.reset();
+    mxCBXDuration.reset();
+    mxFTStartDelay.reset();
+    mxMFStartDelay.reset();
+    mxCustomAnimationList.reset();
+    mxPBMoveUp.reset();
+    mxPBMoveDown.reset();
+    mxPBPlay.reset();
+    mxCBAutoPreview.reset();
+    mxFTCategory.reset();
+    mxLBCategory.reset();
+    mxFTAnimation.reset();
+    mxLBAnimation.reset();
 
     PanelLayout::dispose();
 }
@@ -284,8 +267,8 @@ void CustomAnimationPane::StateChanged( StateChangedType nStateChange )
 
 void CustomAnimationPane::KeyInput( const KeyEvent& rKEvt )
 {
-    if( mpCustomAnimationList )
-        mpCustomAnimationList->KeyInput( rKEvt );
+    if (mxCustomAnimationList)
+        mxCustomAnimationList->KeyInputHdl(rKEvt);
 }
 
 void CustomAnimationPane::addListener()
@@ -340,8 +323,8 @@ IMPL_LINK(CustomAnimationPane,EventMultiplexerListener,
             onChangeCurrentPage();
             break;
         case EventMultiplexerEventId::EndTextEdit:
-            if( mpMainSequence.get() && rEvent.mpUserData )
-                mpCustomAnimationList->update( mpMainSequence );
+            if (mpMainSequence.get() && rEvent.mpUserData)
+                mxCustomAnimationList->update( mpMainSequence );
             break;
         default: break;
     }
@@ -470,70 +453,74 @@ OUString getPropertyName( sal_Int32 nPropertyType )
 
 void CustomAnimationPane::updateControls()
 {
-    mpFTDuration->Enable( mxView.is() );
-    mpCBXDuration->Enable( mxView.is() );
-    mpCustomAnimationList->Enable( mxView.is() );
+    mxFTDuration->set_sensitive(mxView.is());
+    mxCBXDuration->set_sensitive(mxView.is());
+    mxCustomAnimationList->set_sensitive(mxView.is());
     if (comphelper::LibreOfficeKit::isActive())
     {
-        mpPBPlay->Hide();
-        mpCBAutoPreview->Check(false);
-        mpCBAutoPreview->Hide();
+        mxPBPlay->hide();
+        mxCBAutoPreview->set_active(false);
+        mxCBAutoPreview->hide();
     }
     else
     {
-        mpPBPlay->Enable( mxView.is() );
-        mpCBAutoPreview->Enable( mxView.is() );
+        mxPBPlay->set_sensitive(mxView.is());
+        mxCBAutoPreview->set_sensitive(mxView.is());
     }
 
-    if( !mxView.is() )
+    if (!mxView.is())
     {
-        mpPBAddEffect->Enable( false );
-        mpPBRemoveEffect->Enable( false );
-        mpFTStart->Enable( false );
-        mpLBStart->Enable( false );
-        mpPBPropertyMore->Enable( false );
-        mpLBProperty->Enable( false );
-        mpFTProperty->Enable( false );
-        mpFTCategory->Disable();
-        mpLBCategory->Disable();
-        mpFTAnimation->Disable();
-        mpLBAnimation->Disable();
-        mpFTStartDelay->Disable();
-        mpMFStartDelay->Disable();
-        mpLBAnimation->Clear();
-        mpCustomAnimationList->clear();
+        mxPBAddEffect->set_sensitive(false);
+        mxPBRemoveEffect->set_sensitive(false);
+        mxFTStart->set_sensitive(false);
+        mxLBStart->set_sensitive(false);
+        mxPBPropertyMore->set_sensitive(false);
+        mxPlaceholderBox->set_sensitive(false);
+        mxFTProperty->set_sensitive(false);
+        mxFTCategory->set_sensitive(false);
+        mxLBCategory->set_sensitive(false);
+        mxFTAnimation->set_sensitive(false);
+        mxLBAnimation->set_sensitive(false);
+        mxFTStartDelay->set_sensitive(false);
+        mxMFStartDelay->set_sensitive(false);
+        mxLBAnimation->clear();
+        mnLastSelectedAnimation = -1;
+        mxCustomAnimationList->clear();
         return;
     }
 
     const int nSelectionCount = maListSelection.size();
 
-    mpPBAddEffect->Enable( maViewSelection.hasValue() );
-    mpPBRemoveEffect->Enable(nSelectionCount != 0);
+    mxPBAddEffect->set_sensitive( maViewSelection.hasValue() );
+    mxPBRemoveEffect->set_sensitive(nSelectionCount != 0);
     bool bIsSelected = (nSelectionCount == 1);
 
     if(bIsSelected)
     {
-        mpFTAnimation->Enable();
-        mpLBAnimation->Enable();
+        mxFTAnimation->set_sensitive(true);
+        mxLBAnimation->set_sensitive(true);
     }
     else
     {
-        mpFTAnimation->Disable();
-        mpLBAnimation->Disable();
-        mpLBAnimation->Clear();
+        mxFTAnimation->set_sensitive(false);
+        mxLBAnimation->set_sensitive(false);
+        mxLBAnimation->clear();
+        mnLastSelectedAnimation = -1;
     }
 
-    mpLBCategory->Enable(bIsSelected);
-    mpFTCategory->Enable(bIsSelected);
+    mxLBCategory->set_sensitive(bIsSelected);
+    mxFTCategory->set_sensitive(bIsSelected);
 
-    mpFTStart->Enable(nSelectionCount > 0);
-    mpLBStart->Enable(nSelectionCount > 0);
-    mpLBProperty->Enable(nSelectionCount > 0);
-    mpPBPropertyMore->Enable(nSelectionCount > 0);
-    mpFTStartDelay->Enable(nSelectionCount > 0);
-    mpMFStartDelay->Enable(nSelectionCount > 0);
+    mxFTStart->set_sensitive(nSelectionCount > 0);
+    mxLBStart->set_sensitive(nSelectionCount > 0);
+    mxPlaceholderBox->set_sensitive(nSelectionCount > 0);
+    mxPBPropertyMore->set_sensitive(nSelectionCount > 0);
+    mxFTStartDelay->set_sensitive(nSelectionCount > 0);
+    mxMFStartDelay->set_sensitive(nSelectionCount > 0);
 
-    mpFTProperty->SetText( maStrProperty );
+    mxFTProperty->set_label(maStrProperty);
+
+    sal_Int32 nOldPropertyType = mnPropertyType;
 
     mnPropertyType = nPropertyTypeNone;
 
@@ -548,59 +535,50 @@ void CustomAnimationPane::updateControls()
         if( !aUIName.isEmpty() )
         {
             aTemp += " " + aUIName;
-            mpFTEffect->SetText( aTemp );
+            mxFTEffect->set_label( aTemp );
         }
 
+        Any aValue;
         CustomAnimationPresetPtr pDescriptor = CustomAnimationPresets::getCustomAnimationPresets().getEffectDescriptor( pEffect->getPresetId() );
-        if( pDescriptor.get() )
+        if (pDescriptor.get())
         {
-            PropertySubControl* pSubControl = nullptr;
-
-            Any aValue;
-
             std::vector<OUString> aProperties( pDescriptor->getProperties() );
             if( !aProperties.empty() )
             {
                 mnPropertyType = getPropertyType( aProperties.front() );
 
-                mpFTProperty->SetText( getPropertyName( mnPropertyType )  );
+                mxFTProperty->set_label( getPropertyName( mnPropertyType )  );
 
                 aValue = getProperty1Value( mnPropertyType, pEffect );
             }
+        }
 
-            if( aValue.hasValue() )
-            {
-                pSubControl = mpLBProperty->getSubControl();
-                if( !pSubControl || (pSubControl->getControlType() != mnPropertyType) )
-                {
-                    auto pNewControl = PropertySubControl::create( mnPropertyType, mpPlaceholderBox, aValue, pEffect->getPresetId(), LINK( this, CustomAnimationPane, implPropertyHdl ) );
-                    pSubControl = pNewControl.get();
-                    mpLBProperty->setSubControl( std::move(pNewControl) );
-                }
-                else
-                {
-                    pSubControl->setValue( aValue, pEffect->getPresetId() );
-                }
-            }
-            else
-            {
-                mpLBProperty->setSubControl( nullptr );
-            }
+        sal_Int32 nNewPropertyType = mnPropertyType;
+        // if there is no value, then the control will be disabled, just show a disabled Direction box in that
+        // case to have something to fill the space
+        if (!aValue.hasValue())
+            nNewPropertyType = nPropertyTypeDirection;
 
-            bool bEnable = (pSubControl != nullptr) && (pSubControl->getControl()->IsEnabled());
-            mpLBProperty->Enable( bEnable );
-            mpFTProperty->Enable( bEnable );
+        if (!mxLBSubControl || nOldPropertyType != nNewPropertyType)
+        {
+            mxLBSubControl = SdPropertySubControl::create(nNewPropertyType, mxFTProperty.get(), mxPlaceholderBox.get(), GetFrameWeld(), aValue, pEffect->getPresetId(), LINK(this, CustomAnimationPane, implPropertyHdl));
         }
         else
         {
-            mpLBProperty->setSubControl( nullptr );
-            mpFTProperty->Enable( false );
-            mpLBProperty->Enable( false );
-            mpPBPropertyMore->Enable( false );
-            mpFTStartDelay->Enable( false );
-            mpMFStartDelay->Enable( false );
+            mxLBSubControl->setValue(aValue, pEffect->getPresetId());
         }
-        sal_uInt32 nCategoryPos = LISTBOX_ENTRY_NOTFOUND;
+
+        bool bEnable = aValue.hasValue();
+        mxPlaceholderBox->set_sensitive( bEnable );
+        mxFTProperty->set_sensitive( bEnable );
+
+        if (!pDescriptor.get())
+        {
+            mxPBPropertyMore->set_sensitive( false );
+            mxFTStartDelay->set_sensitive( false );
+            mxMFStartDelay->set_sensitive( false );
+        }
+        sal_Int32 nCategoryPos = -1;
         switch(pEffect->getPresetClass())
         {
             case EffectPresetClass::ENTRANCE: nCategoryPos = 0; break;
@@ -619,19 +597,22 @@ void CustomAnimationPane::updateControls()
             default:
             break;
         }
-        mpLBCategory->SelectEntryPos(nCategoryPos);
+        mxLBCategory->set_active(nCategoryPos);
+
         fillAnimationLB( pEffect->hasText() );
+
         OUString rsPresetId = pEffect->getPresetId();
-        sal_Int32 nAnimationPos = mpLBAnimation->GetEntryCount();
+        sal_Int32 nAnimationPos = mxLBAnimation->n_children();
         while( nAnimationPos-- )
         {
-            void* pEntryData = mpLBAnimation->GetEntryData( nAnimationPos );
-            if( pEntryData )
+            auto nEntryData = mxLBAnimation->get_id(nAnimationPos).toInt64();
+            if (nEntryData)
             {
-                CustomAnimationPresetPtr& pPtr = *static_cast< CustomAnimationPresetPtr* >(pEntryData);
+                CustomAnimationPresetPtr& pPtr = *reinterpret_cast<CustomAnimationPresetPtr*>(nEntryData);
                 if( pPtr.get() && pPtr->getPresetId() == rsPresetId )
                 {
-                    mpLBAnimation->SelectEntryPos( nAnimationPos );
+                    mxLBAnimation->select( nAnimationPos );
+                    mnLastSelectedAnimation = nAnimationPos;
                     break;
                 }
             }
@@ -641,11 +622,20 @@ void CustomAnimationPane::updateControls()
         if (nAnimationPos < 0 && nCategoryPos == 3)
         {
             if (rsPresetId == "libo-motionpath-curve")
-                mpLBAnimation->SelectEntryPos(mnCurvePathPos);
+            {
+                mxLBAnimation->select(mnCurvePathPos);
+                mnLastSelectedAnimation = mnCurvePathPos;
+            }
             else if (rsPresetId == "libo-motionpath-polygon")
-                mpLBAnimation->SelectEntryPos(mnPolygonPathPos);
+            {
+                mxLBAnimation->select(mnPolygonPathPos);
+                mnLastSelectedAnimation = mnPolygonPathPos;
+            }
             else if (rsPresetId == "libo-motionpath-freeform-line")
-                mpLBAnimation->SelectEntryPos(mnFreeformPathPos);
+            {
+                mxLBAnimation->select(mnFreeformPathPos);
+                mnLastSelectedAnimation = mnFreeformPathPos;
+            }
         }
 
         sal_uInt16 nPos = 0xffff;
@@ -658,38 +648,39 @@ void CustomAnimationPane::updateControls()
         case EffectNodeType::AFTER_PREVIOUS:    nPos = 2; break;
         }
 
-        mpLBStart->SelectEntryPos( nPos );
+        mxLBStart->set_active( nPos );
 
         double fDuration = pEffect->getDuration();
         const bool bHasSpeed = fDuration > 0.001;
 
-        mpFTDuration->Enable(bHasSpeed);
-        mpCBXDuration->Enable(bHasSpeed);
+        mxFTDuration->set_sensitive(bHasSpeed);
+        mxCBXDuration->set_sensitive(bHasSpeed);
 
         if( bHasSpeed )
         {
-            mpCBXDuration->SetValue( fDuration*100.0 );
+            mxCBXDuration->set_value(fDuration*100.0, FieldUnit::NONE);
         }
 
-        mpPBPropertyMore->Enable();
+        mxPBPropertyMore->set_sensitive(true);
 
-        mpFTStartDelay->Enable();
-        mpMFStartDelay->Enable();
+        mxFTStartDelay->set_sensitive(true);
+        mxMFStartDelay->set_sensitive(true);
         double fBegin = pEffect->getBegin();
-        mpMFStartDelay->SetValue(fBegin*10.0);
+        mxMFStartDelay->set_value(fBegin*10.0, FieldUnit::NONE);
     }
     else
     {
-        mpLBProperty->setSubControl( nullptr );
-        mpFTProperty->Enable( false );
-        mpLBProperty->Enable( false );
-        mpFTStartDelay->Enable( false );
-        mpMFStartDelay->Enable( false );
-        mpPBPropertyMore->Enable( false );
-        mpFTDuration->Enable(false);
-        mpCBXDuration->Enable(false);
-        mpCBXDuration->SetNoSelection();
-        mpFTEffect->SetText( maStrModify );
+        // use an empty direction box to fill the space
+        mxLBSubControl = SdPropertySubControl::create(nPropertyTypeDirection, mxFTProperty.get(), mxPlaceholderBox.get(), GetFrameWeld(), uno::Any(), OUString(), LINK(this, CustomAnimationPane, implPropertyHdl));
+        mxPlaceholderBox->set_sensitive(false);
+        mxFTProperty->set_sensitive(false);
+        mxFTStartDelay->set_sensitive(false);
+        mxMFStartDelay->set_sensitive(false);
+        mxPBPropertyMore->set_sensitive(false);
+        mxFTDuration->set_sensitive(false);
+        mxCBXDuration->set_sensitive(false);
+        mxCBXDuration->set_text(OUString());
+        mxFTEffect->set_label(maStrModify);
     }
 
     bool bEnableUp = true;
@@ -715,7 +706,7 @@ void CustomAnimationPane::updateControls()
             {
                 ++aIter;
             }
-            while( (aIter != mpMainSequence->getEnd()) && !(mpCustomAnimationList->isExpanded(*aIter) ) );
+            while( (aIter != mpMainSequence->getEnd()) && !(mxCustomAnimationList->isExpanded(*aIter) ) );
 
             if( aIter == mpMainSequence->getEnd() )
                 bEnableDown = false;
@@ -748,11 +739,11 @@ void CustomAnimationPane::updateControls()
         }
     }
 
-    mpPBMoveUp->Enable(mxView.is() &&  bEnableUp);
-    mpPBMoveDown->Enable(mxView.is() && bEnableDown);
+    mxPBMoveUp->set_sensitive(mxView.is() &&  bEnableUp);
+    mxPBMoveDown->set_sensitive(mxView.is() && bEnableDown);
 
     SdOptions* pOptions = SD_MOD()->GetSdOptions(DocumentType::Impress);
-    mpCBAutoPreview->Check( pOptions->IsPreviewChangedEffects() );
+    mxCBAutoPreview->set_active(pOptions->IsPreviewChangedEffects());
 
     updateMotionPathTags();
 }
@@ -845,7 +836,7 @@ void CustomAnimationPane::onSelectionChanged()
     {
         Reference< XSelectionSupplier >  xSel( mxView, UNO_QUERY_THROW );
         maViewSelection = xSel->getSelection();
-        mpCustomAnimationList->onSelectionChanged( maViewSelection );
+        mxCustomAnimationList->onSelectionChanged( maViewSelection );
         updateControls();
     }
     catch( Exception& )
@@ -889,12 +880,6 @@ void CustomAnimationPane::UpdateLook()
         ::sfx2::sidebar::Theme::GetWallpaper(
             ::sfx2::sidebar::Theme::Paint_PanelBackground));
     SetBackground(aBackground);
-    if (mpFTStart != nullptr)
-        mpFTStart->SetBackground(aBackground);
-    if (mpFTProperty != nullptr)
-        mpFTProperty->SetBackground(aBackground);
-    if (mpFTDuration != nullptr)
-        mpFTDuration->SetBackground(aBackground);
 }
 
 static void addValue( const std::unique_ptr<STLPropertySet>& pSet, sal_Int32 nHandle, const Any& rValue )
@@ -1663,7 +1648,7 @@ void CustomAnimationPane::onChangeCurrentPage()
             if( pPage )
             {
                 mpMainSequence = pPage->getMainSequence();
-                mpCustomAnimationList->update( mpMainSequence );
+                mxCustomAnimationList->update( mpMainSequence );
             }
             updateControls();
         }
@@ -1797,44 +1782,44 @@ void CustomAnimationPane::onAdd()
     }
 
     CustomAnimationPresetPtr pDescriptor;
-    mpFTCategory->Enable();
-    mpFTAnimation->Enable();
+    mxFTCategory->set_sensitive(true);
+    mxFTAnimation->set_sensitive(true);
 
     bool bCategoryReset = false;
 
-    if (!mpLBCategory->IsEnabled() ||
-            mpLBCategory->GetSelectedEntryPos()  == LISTBOX_ENTRY_NOTFOUND)
+    if (!mxLBCategory->get_sensitive() || mxLBCategory->get_active() == -1)
     {
-        mpLBCategory->Enable();
-        mpLBCategory->SelectEntryPos(0);
+        mxLBCategory->set_sensitive(true);
+        mxLBCategory->set_active(0);
         bCategoryReset = true;
     }
 
-    if (bCategoryReset || !mpLBAnimation->IsEnabled() ||
-            mpLBAnimation->GetSelectedEntryPos()  == LISTBOX_ENTRY_NOTFOUND)
+    if (bCategoryReset || !mxLBAnimation->get_sensitive() ||
+        mxLBAnimation->get_selected_index() == -1)
     {
-        mpLBAnimation->Enable();
+        mxLBAnimation->set_sensitive(true);
 
-        sal_uInt32 nFirstEffect = fillAnimationLB( bHasText );
-        if(nFirstEffect == LISTBOX_ENTRY_NOTFOUND)
+        sal_Int32 nFirstEffect = fillAnimationLB(bHasText);
+        if (nFirstEffect == -1)
             return;
 
-        mpLBAnimation->SelectEntryPos(nFirstEffect);
+        mxLBAnimation->select(nFirstEffect);
+        mnLastSelectedAnimation = nFirstEffect;
     }
 
-    void* pEntryData = mpLBAnimation->GetSelectedEntryData();
-    if( pEntryData )
-        pDescriptor = *static_cast< CustomAnimationPresetPtr* >( pEntryData );
+    auto nEntryData = mxLBAnimation->get_selected_id().toInt64();
+    if (nEntryData)
+        pDescriptor = *reinterpret_cast<CustomAnimationPresetPtr*>(nEntryData);
 
     const double fDuration = pDescriptor->getDuration();
-    mpCBXDuration->SetValue( fDuration*100.0 );
+    mxCBXDuration->set_value(fDuration*100.0, FieldUnit::NONE);
     bool bHasSpeed = pDescriptor->getDuration() > 0.001;
-    mpCBXDuration->Enable( bHasSpeed );
-    mpFTDuration->Enable( bHasSpeed );
+    mxCBXDuration->set_sensitive( bHasSpeed );
+    mxFTDuration->set_sensitive( bHasSpeed );
 
     if( pDescriptor.get() )
     {
-        mpCustomAnimationList->SelectAll( false );
+        mxCustomAnimationList->unselect_all();
 
         // gather shapes from the selection
         bool bFirst = true;
@@ -1858,7 +1843,7 @@ void CustomAnimationPane::onAdd()
                 pCreated->setNodeType( EffectNodeType::WITH_PREVIOUS );
 
             if( pCreated.get() )
-                mpCustomAnimationList->select( pCreated );
+                mxCustomAnimationList->select( pCreated );
         }
     }
 
@@ -1902,11 +1887,8 @@ void CustomAnimationPane::remove( CustomAnimationEffectPtr const & pEffect )
 
 void CustomAnimationPane::onChangeStart()
 {
-    if( mpLBStart->GetSelectedEntryCount() != 1 )
-        return;
-
     sal_Int16 nNodeType;
-    switch( mpLBStart->GetSelectedEntryPos() )
+    switch( mxLBStart->get_active() )
     {
     case 0: nNodeType = EffectNodeType::ON_CLICK; break;
     case 1: nNodeType = EffectNodeType::WITH_PREVIOUS; break;
@@ -1971,10 +1953,9 @@ double CustomAnimationPane::getDuration() const
 {
     double fDuration = 0;
 
-    if(!(mpCBXDuration->GetText()).isEmpty())
-    {
-        fDuration = static_cast<double>(mpCBXDuration->GetValue())/100.0;
-    }
+    if (!mxCBXDuration->get_text().isEmpty())
+        fDuration = mxCBXDuration->get_value(FieldUnit::NONE) / 100.0;
+
     return fDuration;
 }
 
@@ -1982,10 +1963,10 @@ PathKind CustomAnimationPane::getCreatePathKind() const
 {
     PathKind eKind = PathKind::NONE;
 
-    if( ( mpLBAnimation->GetSelectedEntryCount() == 1 ) &&
-        ( mpLBCategory->GetSelectedEntryPos() == gnMotionPathPos ) )
+    if (mxLBAnimation->count_selected_rows() == 1 &&
+        mxLBCategory->get_active() == gnMotionPathPos)
     {
-        const sal_Int32 nPos = mpLBAnimation->GetSelectedEntryPos();
+        const sal_Int32 nPos = mxLBAnimation->get_selected_index();
         if( nPos == mnCurvePathPos )
         {
             eKind = PathKind::CURVE;
@@ -2039,14 +2020,14 @@ void CustomAnimationPane::createPath( PathKind eKind, std::vector< Any >& rTarge
 /// this link is called when the property box is modified by the user
 IMPL_LINK_NOARG(CustomAnimationPane, implPropertyHdl, LinkParamNone*, void)
 {
-    if( !mpLBProperty->getSubControl() )
+    if (!mxLBSubControl)
         return;
 
     addUndo();
 
     MainSequenceRebuildGuard aGuard( mpMainSequence );
 
-    const Any aValue( mpLBProperty->getSubControl()->getValue() );
+    const Any aValue(mxLBSubControl->getValue());
 
     bool bNeedUpdate = false;
 
@@ -2067,14 +2048,14 @@ IMPL_LINK_NOARG(CustomAnimationPane, implPropertyHdl, LinkParamNone*, void)
     onPreview( false );
 }
 
-IMPL_LINK_NOARG(CustomAnimationPane, DelayModifiedHdl, Edit&, void)
+IMPL_LINK_NOARG(CustomAnimationPane, DelayModifiedHdl, weld::MetricSpinButton&, void)
 {
     addUndo();
 }
 
-IMPL_LINK_NOARG(CustomAnimationPane, DelayLoseFocusHdl, Control&, void)
+IMPL_LINK_NOARG(CustomAnimationPane, DelayLoseFocusHdl, weld::Widget&, void)
 {
-    double fBegin = mpMFStartDelay->GetValue();
+    double fBegin = mxMFStartDelay->get_value(FieldUnit::NONE);
 
     //sequence rebuild only when the control loses focus
     MainSequenceRebuildGuard aGuard( mpMainSequence );
@@ -2090,18 +2071,27 @@ IMPL_LINK_NOARG(CustomAnimationPane, DelayLoseFocusHdl, Control&, void)
     mrBase.GetDocShell()->SetModified();
 }
 
-IMPL_LINK_NOARG(CustomAnimationPane, AnimationSelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(CustomAnimationPane, AnimationSelectHdl, weld::TreeView&, void)
 {
+    int nSelected = mxLBAnimation->get_selected_index();
+
+    // tdf#99137, the selected entry may also be a subcategory title, so not an effect
+    // just skip it and move to the next one in this case
+    if (mxLBAnimation->get_text_emphasis(nSelected, 0))
+    {
+        if (nSelected == 0 || nSelected > mnLastSelectedAnimation)
+            mxLBAnimation->select(++nSelected);
+        else
+            mxLBAnimation->select(--nSelected);
+    }
+
+    mnLastSelectedAnimation = nSelected;
+
     if( maListSelection.size() != 1 )
         return;
 
-    CustomAnimationPresetPtr* pPreset = static_cast< CustomAnimationPresetPtr* >(mpLBAnimation->GetSelectedEntryData());
+    CustomAnimationPresetPtr* pPreset = reinterpret_cast<CustomAnimationPresetPtr*>(mxLBAnimation->get_id(nSelected).toInt64());
     PathKind ePathKind = getCreatePathKind();
-
-    // tdf#99137, the selected entry may also be a subcategory title, so not an effect
-    // just leave in this case
-    if ( !pPreset && ( ePathKind == PathKind::NONE ) )
-        return;
 
     if ( ePathKind != PathKind::NONE )
     {
@@ -2153,30 +2143,41 @@ IMPL_LINK_NOARG(CustomAnimationPane, AnimationSelectHdl, ListBox&, void)
     onPreview(false);
 }
 
-IMPL_LINK_NOARG(CustomAnimationPane, UpdateAnimationLB, ListBox&, void)
+IMPL_LINK_NOARG(CustomAnimationPane, UpdateAnimationLB, weld::ComboBox&, void)
 {
     //FIXME: first effect only? what if there is more?
     CustomAnimationEffectPtr pEffect = maListSelection.front();
     fillAnimationLB( pEffect->hasText() );
 }
 
-IMPL_LINK_NOARG(CustomAnimationPane, DurationModifiedHdl, Edit&, void)
+IMPL_LINK_NOARG(CustomAnimationPane, DurationModifiedHdl, weld::MetricSpinButton&, void)
 {
-    if(!(mpCBXDuration->GetText()).isEmpty() )
+    if (!mxCBXDuration->get_text().isEmpty())
     {
-        double duration_value = static_cast<double>(mpCBXDuration->GetValue());
+        double duration_value = static_cast<double>(mxCBXDuration->get_value(FieldUnit::NONE));
         if(duration_value <= 0.0)
         {
-            mpCBXDuration->SetValue(1);
+            mxCBXDuration->set_value(1, FieldUnit::NONE);
         }
         onChangeSpeed();
     }
 }
 
-sal_uInt32 CustomAnimationPane::fillAnimationLB( bool bHasText )
+namespace
+{
+    void InsertCategory(weld::TreeView& rLBAnimation, const OUString& rMotionPathLabel)
+    {
+        int nRow = rLBAnimation.n_children();
+        rLBAnimation.append_text(rMotionPathLabel);
+        rLBAnimation.set_text_emphasis(nRow, true, 0);
+        rLBAnimation.set_text_align(nRow, 0.5, 0);
+    }
+}
+
+sal_Int32 CustomAnimationPane::fillAnimationLB( bool bHasText )
 {
     PresetCategoryList rCategoryList;
-    sal_uInt16 nPosition = mpLBCategory->GetSelectedEntryPos();
+    sal_uInt16 nPosition = mxLBCategory->get_active();
     const CustomAnimationPresets& rPresets (CustomAnimationPresets::getCustomAnimationPresets());
     switch(nPosition)
     {
@@ -2187,24 +2188,37 @@ sal_uInt32 CustomAnimationPane::fillAnimationLB( bool bHasText )
         case 4:rCategoryList = rPresets.getMiscPresets();break;
     }
 
-    sal_uInt32 nFirstEffect = LISTBOX_ENTRY_NOTFOUND;
+    sal_Int32 nFirstEffect = -1;
 
-    mpLBAnimation->Clear();
+    int nOldEntryCount = mxLBAnimation->n_children();
+    int nOldScrollPos = mxLBAnimation->vadjustment_get_value();
 
-    if(nPosition == gnMotionPathPos)
+    mxLBAnimation->freeze();
+    mxLBAnimation->clear();
+    mnLastSelectedAnimation = -1;
+
+    if (nPosition == gnMotionPathPos)
     {
         OUString sMotionPathLabel( SdResId( STR_CUSTOMANIMATION_USERPATH ) );
-        mpLBAnimation->InsertCategory( sMotionPathLabel );
-        mnCurvePathPos = mpLBAnimation->InsertEntry( SvxResId(STR_ObjNameSingulCOMBLINE) );
-        mnPolygonPathPos = mpLBAnimation->InsertEntry( SvxResId(STR_ObjNameSingulPOLY) );
-        mnFreeformPathPos = mpLBAnimation->InsertEntry( SvxResId(STR_ObjNameSingulFREELINE) );
+        InsertCategory(*mxLBAnimation, sMotionPathLabel);
+        mnCurvePathPos = mxLBAnimation->n_children();
+        mxLBAnimation->append_text( SvxResId(STR_ObjNameSingulCOMBLINE) );
+        mxLBAnimation->set_text_emphasis(mnCurvePathPos, false, 0);
+        mnPolygonPathPos = mnCurvePathPos + 1;
+        mxLBAnimation->append_text( SvxResId(STR_ObjNameSingulPOLY) );
+        mxLBAnimation->set_text_emphasis(mnPolygonPathPos, false, 0);
+        mnFreeformPathPos = mnPolygonPathPos + 1;
+        mxLBAnimation->append_text( SvxResId(STR_ObjNameSingulFREELINE) );
+        mxLBAnimation->set_text_emphasis(mnFreeformPathPos, false, 0);
     }
 
     for (PresetCategoryPtr& pCategory : rCategoryList)
     {
         if( pCategory.get() )
         {
-            mpLBAnimation->InsertCategory( pCategory->maLabel );
+            InsertCategory(*mxLBAnimation, pCategory->maLabel);
+
+            int nPos = mxLBAnimation->n_children();
 
             std::vector< CustomAnimationPresetPtr > aSortedVector(pCategory->maEffects.size());
             std::copy( pCategory->maEffects.begin(), pCategory->maEffects.end(), aSortedVector.begin() );
@@ -2214,49 +2228,59 @@ sal_uInt32 CustomAnimationPane::fillAnimationLB( bool bHasText )
                 // ( !isTextOnly || ( isTextOnly && bHasText ) ) <=> !isTextOnly || bHasText
                 if( pDescriptor.get() && ( !pDescriptor->isTextOnly() || bHasText ) )
                 {
-                    sal_Int32 nPos = mpLBAnimation->InsertEntry( pDescriptor->getLabel() );
-                    mpLBAnimation->SetEntryData(nPos, new CustomAnimationPresetPtr(pDescriptor));
+                    auto pCustomPtr = new CustomAnimationPresetPtr(pDescriptor);
+                    OUString sId = OUString::number(reinterpret_cast<sal_Int64>(pCustomPtr));
+                    mxLBAnimation->append(sId, pDescriptor->getLabel());
+                    mxLBAnimation->set_text_emphasis(nPos, false, 0);
 
-                    if( nFirstEffect == LISTBOX_ENTRY_NOTFOUND )
+                    if (nFirstEffect == -1)
                         nFirstEffect = nPos;
+
+                    ++nPos;
                 }
             }
         }
     }
+
+    mxLBAnimation->thaw();
+
+    if (mxLBAnimation->n_children() == nOldEntryCount)
+        mxLBAnimation->vadjustment_set_value(nOldScrollPos);
+
     return nFirstEffect;
 }
 
-
-IMPL_LINK( CustomAnimationPane, implClickHdl, Button*, pBtn, void )
+IMPL_LINK(CustomAnimationPane, implClickHdl, weld::Button&, rBtn, void)
 {
-    implControlHdl(pBtn);
+    implControlHdl(&rBtn);
 }
-IMPL_LINK( CustomAnimationPane, implControlListBoxHdl, ListBox&, rListBox, void )
+
+IMPL_LINK( CustomAnimationPane, implControlListBoxHdl, weld::ComboBox&, rListBox, void )
 {
     implControlHdl(&rListBox);
 }
 
 /// this link is called when one of the controls is modified
-void CustomAnimationPane::implControlHdl(Control const * pControl )
+void CustomAnimationPane::implControlHdl(const weld::Widget* pControl)
 {
-    if( pControl == mpPBAddEffect )
+    if (pControl == mxPBAddEffect.get())
         onAdd();
-    else if( pControl == mpPBRemoveEffect )
+    else if (pControl == mxPBRemoveEffect.get())
         onRemove();
-    else if( pControl == mpLBStart )
+    else if (pControl == mxLBStart.get())
         onChangeStart();
-    else if( pControl == mpPBPropertyMore )
+    else if (pControl == mxPBPropertyMore.get())
         showOptions();
-    else if( pControl == mpPBMoveUp )
+    else if (pControl == mxPBMoveUp.get())
         moveSelection( true );
-    else if( pControl == mpPBMoveDown )
+    else if (pControl == mxPBMoveDown.get())
         moveSelection( false );
-    else if( pControl == mpPBPlay )
+    else if (pControl == mxPBPlay.get())
         onPreview( true );
-    else if( pControl == mpCBAutoPreview )
+    else if (pControl == mxCBAutoPreview.get())
     {
         SdOptions* pOptions = SD_MOD()->GetSdOptions(DocumentType::Impress);
-        pOptions->SetPreviewChangedEffects( mpCBAutoPreview->IsChecked() );
+        pOptions->SetPreviewChangedEffects(mxCBAutoPreview->get_active());
     }
 }
 
@@ -2299,9 +2323,8 @@ void CustomAnimationPane::moveSelection( bool bUp )
                 if( aInsertPos != rEffectSequence.begin() )
                 {
                     --aInsertPos;
-                    while( (aInsertPos != rEffectSequence.begin()) && !mpCustomAnimationList->isExpanded(*aInsertPos))
+                    while( (aInsertPos != rEffectSequence.begin()) && !mxCustomAnimationList->isExpanded(*aInsertPos))
                         --aInsertPos;
-
                     rEffectSequence.insert( aInsertPos, pEffect );
                 }
                 else
@@ -2332,12 +2355,11 @@ void CustomAnimationPane::moveSelection( bool bUp )
                     ++aInsertPos;
                     // Advance over rolled-up (un-expanded) items, unless we just moved it there.
                     while( (aInsertPos != rEffectSequence.end())
-                        && !mpCustomAnimationList->isExpanded(*aInsertPos)
+                        && !mxCustomAnimationList->isExpanded(*aInsertPos)
                         && (std::find(maListSelection.begin(), maListSelection.end(), *aInsertPos)
                                 == maListSelection.end())
                     )
                         ++aInsertPos;
-
                     rEffectSequence.insert( aInsertPos, pEffect );
                 }
                 else
@@ -2359,7 +2381,7 @@ void CustomAnimationPane::moveSelection( bool bUp )
 
 void CustomAnimationPane::onPreview( bool bForcePreview )
 {
-    if( !bForcePreview && !mpCBAutoPreview->IsChecked() )
+    if (!bForcePreview && !mxCBAutoPreview->get_active())
         return;
 
     // No preview in LOK.
@@ -2416,7 +2438,7 @@ void CustomAnimationPane::preview( const Reference< XAnimationNode >& xAnimation
 // ICustomAnimationListController
 void CustomAnimationPane::onSelect()
 {
-    maListSelection = mpCustomAnimationList->getSelection();
+    maListSelection = mxCustomAnimationList->getSelection();
     updateControls();
 
     // mark shapes from selected effects
@@ -2466,19 +2488,15 @@ void CustomAnimationPane::onDragNDropComplete(std::vector< CustomAnimationEffect
             // Update model with new location (function triggers a rebuild)
             // target may be null, which will insert at the end.
             mpMainSequence->moveToBeforeEffect( pEffect, pEffectInsertBefore );
-
             // Done moving effect and its hidden sub-effects when *next* effect is visible.
-            if (aIter != aEnd && mpCustomAnimationList->isVisible(*aIter))
+            if (aIter != aEnd && mxCustomAnimationList->isVisible(*aIter))
                 break;
         }
-
     }
-
 
     updateControls();
     mrBase.GetDocShell()->SetModified();
 }
-
 
 void CustomAnimationPane::updatePathFromMotionPathTag( const rtl::Reference< MotionPathTag >& xTag )
 {
