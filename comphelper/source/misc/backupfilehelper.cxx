@@ -578,10 +578,10 @@ namespace
             // create content from current extension configuration
             uno::Sequence< uno::Sequence< uno::Reference< deployment::XPackage > > > xAllPackages;
             uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-            uno::Reference< deployment::XExtensionManager > m_xExtensionManager = deployment::ExtensionManager::get(xContext);
-
             try
             {
+                uno::Reference< deployment::XExtensionManager > m_xExtensionManager = deployment::ExtensionManager::get(xContext);
+
                 xAllPackages = m_xExtensionManager->getAllExtensions(uno::Reference< task::XAbortChannel >(),
                     uno::Reference< ucb::XCommandEnvironment >());
             }
@@ -602,6 +602,10 @@ namespace
                 css::uno::Any anyEx = cppu::getCaughtException();
                 throw css::lang::WrappedTargetRuntimeException( e.Message,
                                 e.Context, anyEx );
+            }
+            catch (const uno::RuntimeException &)
+            {
+                return;
             }
 
             for (sal_Int32 i = 0; i < xAllPackages.getLength(); ++i)
