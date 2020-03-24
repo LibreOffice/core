@@ -482,11 +482,7 @@ bool SbiScanner::NextSym()
                 GenError( ERRCODE_BASIC_BAD_CHAR_IN_NUMBER );
             }
         }
-        if(nCol < aLine.getLength() && aLine[nCol] == '&')
-        {
-            ++nLineIdx;
-            ++nCol;
-        }
+
         // tdf#62326 - If the value of the hex string lies within the range of 0x8000 (SbxMAXINT + 1)
         // and 0xFFFF (SbxMAXUINT) inclusive, cast the value to 16 bit in order to get
         // signed integers, e.g., SbxMININT through SbxMAXINT
@@ -495,6 +491,18 @@ bool SbiScanner::NextSym()
         eScanType = ( ls >= SbxMININT && ls <= SbxMAXINT ) ? SbxINTEGER : SbxLONG;
         if( bOverflow )
             GenError( ERRCODE_BASIC_MATH_OVERFLOW );
+
+        // tdf#130476 - take into account trailing data type characters
+        if( nCol < aLine.getLength() )
+        {
+            SbxDataType t(GetSuffixType(aLine[nCol]));
+            if( t != SbxVARIANT )
+            {
+                eScanType = t;
+                ++nLineIdx;
+                ++nCol;
+            }
+       }
     }
 
     // Strings:
