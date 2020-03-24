@@ -9545,7 +9545,7 @@ AC_MSG_CHECKING([which boost to use])
 if test "$with_system_boost" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_BOOST=TRUE
-    AX_BOOST_BASE(1.47)
+    AX_BOOST_BASE([1.66],,[AC_MSG_ERROR([no suitable Boost found])])
     AX_BOOST_DATE_TIME
     AX_BOOST_FILESYSTEM
     AX_BOOST_IOSTREAMS
