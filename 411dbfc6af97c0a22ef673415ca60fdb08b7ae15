@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e7d041b7_eae940b7",
+        "filename": "vcl/source/app/salvtables.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4531,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-03-24T12:03:47Z",
+      "side": 1,
+      "message": "I think scroll output area scrolls nValue from its current position rather than set the absolute position of scrolling ?",
+      "revId": "411dbfc6af97c0a22ef673415ca60fdb08b7ae15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
