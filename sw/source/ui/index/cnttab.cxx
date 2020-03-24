@@ -22,6 +22,7 @@
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <svl/style.hxx>
+#include <vcl/button.hxx>
 #include <vcl/weld.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/pathoptions.hxx>

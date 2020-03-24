@@ -19,7 +19,6 @@
 
 #include <svx/SvxColorValueSet.hxx>
 #include <svx/xtable.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <osl/diagnose.h>
@@ -35,8 +34,6 @@ ColorValueSet::ColorValueSet(std::unique_ptr<weld::ScrolledWindow> pWindow)
 {
     SetEdgeBlending(true);
 }
-
-VCL_BUILDER_FACTORY_CONSTRUCTOR(SvxColorValueSet, WB_TABSTOP)
 
 sal_uInt32 SvxColorValueSet::getMaxRowCount()
 {
