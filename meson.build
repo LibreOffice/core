@@ -157,6 +157,7 @@ hunspell_dep = dependency('hunspell')
 hyphen_dep = cpp.find_library('hyphen')
 mythes_dep = dependency('mythes')
 libexttextcat_dep = dependency('libexttextcat')
+numbertext_dep = dependency('libnumbertext')
 
 # The version in Ubuntu eoan is too old.
 mdds_dep = dependency('mdds-1.6',
