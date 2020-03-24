@@ -29,6 +29,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	external/icu/icu4c-changeset-39671.patch.1 \
 	external/icu/icu4c-changeset-40324.patch.1 \
 	external/icu/icu4c-59-icu13329-xlocale.patch.1 \
+	external/icu/b7d08bc04a4296982fcef8b6b8a354a9e4e7afca.patch.2 \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_file,icu,source/data/brkitr/khmerdict.dict,external/icu/khmerdict.dict))

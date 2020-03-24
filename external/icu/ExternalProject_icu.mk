@@ -13,7 +13,10 @@ $(eval $(call gb_ExternalProject_register_targets,icu,\
 	build \
 ))
 
-icu_CPPFLAGS:="-DHAVE_GCC_ATOMICS=$(if $(filter TRUE,$(GCC_HAVE_BUILTIN_ATOMIC)),1,0)"
+# -I to find o3tl headers
+icu_CPPFLAGS:=" \
+	-DHAVE_GCC_ATOMICS=$(if $(filter TRUE,$(GCC_HAVE_BUILTIN_ATOMIC)),1,0) \
+	-I$(SRCDIR)/include"
 
 ifeq ($(OS),WNT)
 
