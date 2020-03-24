@@ -36,10 +36,8 @@
 #include <memory>
 
 #include <i18nutil/unicode.hxx>
-#include <vcl/menubtn.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/field.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/menu.hxx>

@@ -1,4 +1,3 @@
-sd/uiconfig/simpress/ui/customanimationspanel.ui://sdlo-PropertyControl[@id='effect_property_list'] no-labelled-by
 sd/uiconfig/simpress/ui/customanimationfragment.ui://GtkSpinButton[@id='fontsize'] no-labelled-by
 sd/uiconfig/simpress/ui/customanimationfragment.ui://GtkSpinButton[@id='rotate'] no-labelled-by
 sd/uiconfig/simpress/ui/customanimationfragment.ui://GtkSpinButton[@id='transparent'] no-labelled-by
