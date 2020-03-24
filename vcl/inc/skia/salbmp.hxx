@@ -73,6 +73,8 @@ private:
     // Reset the cached images allocated in GetSkImage()/GetAlphaSkImage(),
     // and also the SkBitmap allocated in GetAsSkBitmap().
     void ResetCachedData();
+    // Sets the data only as SkImage (will be converted as needed).
+    void ResetToSkImage(sk_sp<SkImage> image);
     // Call to ensure mBuffer has data (will convert from mImage if necessary).
     void EnsureBitmapData();
     void EnsureBitmapData() const { return const_cast<SkiaSalBitmap*>(this)->EnsureBitmapData(); }
@@ -117,6 +119,11 @@ private:
     SkBitmap mBitmap; // cached mBuffer, if needed
     sk_sp<SkImage> mImage; // possibly GPU-backed
     sk_sp<SkImage> mAlphaImage; // cached contents as alpha image, possibly GPU-backed
+    // Actual scaling triggered by scale() is done on-demand. This is the size of the pixel
+    // data in mBuffer, if it differs from mSize, then there is a scaling operation pending.
+    Size mPixelsSize;
+    SkFilterQuality mScaleQuality = kHigh_SkFilterQuality; // quality for on-demand scaling
+    bool mDisableScale = false; // used to block our scale()
 #ifdef DBG_UTIL
     int mWriteAccessCount = 0; // number of write AcquireAccess() that have not been released
 #endif
