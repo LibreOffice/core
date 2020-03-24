@@ -39,6 +39,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	external/icu/gcc9.patch \
 	external/icu/char8_t.patch \
 	external/icu/CVE-2018-18928.patch.2 \
+	external/icu/b7d08bc04a4296982fcef8b6b8a354a9e4e7afca.patch.2 \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_file,icu,source/data/brkitr/khmerdict.dict,external/icu/khmerdict.dict))
