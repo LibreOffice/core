@@ -62,7 +62,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "To remove several hyperlinks at once, select the text with the hyperlinks, then right-click and use “Remove Hyperlink”."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To zoom a selection to fit the entire window in Draw, use the / (divide key) on the number pad."), "", "tipoftheday_d.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Click a column field (row) PivotTable and press F12 to group data. Choices adapt to content: Date (month, quarter, year), number (classes)"), "", "tipoftheday_c.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "You can restarts the slide show after a pause specified at Slide Show ▸ Slide Show Settings ▸ Loop and repeat."), "", "tipoftheday_i.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "You can restart the slide show after a pause specified at Slide Show ▸ Slide Show Settings ▸ Loop and repeat."), "", "tipoftheday_i.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To distribute some text in multi-columns select the text and apply Format ▸ Columns."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Use View ▸ Value Highlighting to display cell contents in colors: Text/black, Formulas/green, Numbers/blue, Protected cells/grey background."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/scalc/01/03080000.html", "tipoftheday_c.png"}, //local help missing
      { NC_("RID_CUI_TIPOFTHEDAY", "Create different master pages in a presentation template: View ▸ Master Slide and Slide ▸ New Master (or per toolbar or right click in slide pane)."), "", "tipoftheday_i.png"},
