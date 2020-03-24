@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cacf50ad_e0ceb0e7",
+        "filename": "xmloff/source/chart/SchXMLExport.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 2327,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-03-24T09:27:42Z",
+      "side": 1,
+      "message": "so reading OFFICE-3936 i guess this should export chart:major-origin (i mean, loext:major-origin) with some kind of 0.5 offset?",
+      "revId": "fd980f3831b0f8c3be0fd37e40a0b53394175619",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
