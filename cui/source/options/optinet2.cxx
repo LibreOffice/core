@@ -191,61 +191,40 @@ std::unique_ptr<SfxTabPage> SvxProxyTabPage::Create(weld::Container* pPage, weld
 
 void SvxProxyTabPage::ReadConfigData_Impl()
 {
-    try {
-        Reference< container::XNameAccess > xNameAccess(m_xConfigurationUpdateAccess, UNO_QUERY_THROW);
+    sal_Int32 nIntValue = 0;
 
-        sal_Int32 nIntValue = 0;
-        OUString  aStringValue;
-
-        if( xNameAccess->getByName(g_aProxyModePN) >>= nIntValue )
-        {
-            m_xProxyModeLB->set_active(nIntValue);
-        }
-
-        if( xNameAccess->getByName(g_aHttpProxyPN) >>= aStringValue )
-        {
-            m_xHttpProxyED->set_text( aStringValue );
-        }
-
-        if( xNameAccess->getByName(g_aHttpPortPN) >>= nIntValue )
-        {
-            m_xHttpPortED->set_text( OUString::number( nIntValue ));
-        }
-
-        if( xNameAccess->getByName(g_aHttpsProxyPN) >>= aStringValue )
-        {
-            m_xHttpsProxyED->set_text( aStringValue );
-        }
-
-        if( xNameAccess->getByName(g_aHttpsPortPN) >>= nIntValue )
-        {
-            m_xHttpsPortED->set_text( OUString::number( nIntValue ));
-        }
-
-        if( xNameAccess->getByName(g_aFtpProxyPN) >>= aStringValue )
-        {
-            m_xFtpProxyED->set_text( aStringValue );
-        }
-
-        if( xNameAccess->getByName(g_aFtpPortPN) >>= nIntValue )
-        {
-            m_xFtpPortED->set_text( OUString::number( nIntValue ));
-        }
-
-        if( xNameAccess->getByName(g_aNoProxyDescPN) >>= aStringValue )
-        {
-            m_xNoProxyForED->set_text( aStringValue );
-        }
+    std::optional<sal_Int32> x(officecfg::Inet::Settings::ooInetProxyType::get());
+    if (x)
+    {
+        nIntValue = *x;
+        m_xProxyModeLB->set_active(nIntValue);
     }
-    catch (const container::NoSuchElementException&) {
-        SAL_WARN("cui.options", "SvxProxyTabPage::ReadConfigData_Impl: NoSuchElementException caught" );
+
+    m_xHttpProxyED->set_text( officecfg::Inet::Settings::ooInetHTTPProxyName::get() );
+    x = officecfg::Inet::Settings::ooInetHTTPProxyPort::get();
+    if (x)
+    {
+        nIntValue = *x;
+        m_xHttpPortED->set_text( OUString::number( nIntValue ));
     }
-    catch (const css::lang::WrappedTargetException &) {
-        SAL_WARN("cui.options", "SvxProxyTabPage::ReadConfigData_Impl: WrappedTargetException caught" );
+
+    m_xHttpsProxyED->set_text( officecfg::Inet::Settings::ooInetHTTPSProxyName::get() );
+    x = officecfg::Inet::Settings::ooInetHTTPSProxyPort::get();
+    if (x)
+    {
+        nIntValue = *x;
+        m_xHttpsPortED->set_text( OUString::number( nIntValue ));
     }
-    catch (const RuntimeException &) {
-        SAL_WARN("cui.options", "SvxProxyTabPage::ReadConfigData_Impl: RuntimeException caught" );
+
+    m_xFtpProxyED->set_text( officecfg::Inet::Settings::ooInetFTPProxyName::get() );
+    x = officecfg::Inet::Settings::ooInetFTPProxyPort::get();
+    if (x)
+    {
+        nIntValue = *x;
+        m_xFtpPortED->set_text( OUString::number( nIntValue ));
     }
+
+    m_xNoProxyForED->set_text( officecfg::Inet::Settings::ooInetNoProxy::get() );
 }
 
 void SvxProxyTabPage::ReadConfigDefaults_Impl()
