@@ -442,7 +442,9 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
                                     .GetInvisibleHellId();
 
             nRotation = pObj->GetRotateAngle();
-            lclMovePositionWithRotation(aPos, rSize, nRotation);
+            // Do not do this with lines.
+            if (pObj->GetObjIdentifier() != OBJ_LINE)
+                lclMovePositionWithRotation(aPos, rSize, nRotation);
         }
         attrList->add(XML_behindDoc, bOpaque ? "0" : "1");
         // Extend distance with the effect extent if the shape is not rotated, which is the opposite
