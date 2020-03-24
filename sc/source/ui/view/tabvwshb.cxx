@@ -337,6 +337,8 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
         case SID_INSERT_DIAGRAM:
             pFuInsertChart.reset(new FuInsertChart(*this, pWin, pView, pDrModel, rReq));
+            if (comphelper::LibreOfficeKit::isActive())
+                pDocSh->SetModified();
             break;
 
         case SID_INSERT_OBJECT:
