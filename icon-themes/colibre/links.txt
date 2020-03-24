@@ -401,6 +401,11 @@ cmd/sc_notevisible.png cmd/sc_shownote.png
 cmd/sc_showallnotes.png cmd/sc_showannotations.png
 cmd/sc_showchanges.png cmd/sc_addwatch.png
 
+# Locale language support
+cmd/32/es/italic.png cmd/32/de/italic.png
+cmd/es/lc_italic.png cmd/de/lc_italic.png
+cmd/es/sc_italic.png cmd/de/sc_italic.png
+
 # Template Menu
 cmd/32/templatemenu.png cmd/32/adddirect.png
 cmd/lc_templatemenu.png cmd/lc_adddirect.png
