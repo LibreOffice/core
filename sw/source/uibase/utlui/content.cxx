@@ -1115,6 +1115,18 @@ namespace
         while (rContentTree.iter_next_sibling(*xChild));
         return true;
     }
+
+    void ExpandOrCollapseAll(weld::TreeView& rContentTree, weld::TreeIter& rEntry)
+    {
+        bool bExpand = !IsAllExpanded(rContentTree, rEntry);
+        bExpand ? rContentTree.expand_row(rEntry) : rContentTree.collapse_row(rEntry);
+        int nRefDepth = rContentTree.get_iter_depth(rEntry);
+        while (rContentTree.iter_next(rEntry) && rContentTree.get_iter_depth(rEntry) > nRefDepth)
+        {
+            if (rContentTree.iter_has_child(rEntry))
+                bExpand ? rContentTree.expand_row(rEntry) : rContentTree.collapse_row(rEntry);
+        }
+    }
 }
 
 // Handler for Dragging and ContextMenu
@@ -3072,7 +3084,13 @@ IMPL_LINK(SwContentTree, KeyInputHdl, const KeyEvent&, rEvent, bool)
     bool bConsumed = true;
 
     const vcl::KeyCode aCode = rEvent.GetKeyCode();
-    if (aCode.GetCode() == KEY_RETURN)
+    if (aCode.GetCode() == KEY_MULTIPLY && aCode.IsMod1())
+    {
+        std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
+        if (m_xTreeView->get_selected(xEntry.get()))
+            ExpandOrCollapseAll(*m_xTreeView, *xEntry);
+    }
+    else if (aCode.GetCode() == KEY_RETURN)
     {
         std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
         if (m_xTreeView->get_selected(xEntry.get()))
@@ -3380,7 +3398,7 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
                 break;
             }
         case 800:
-            KeyInputHdl(KeyEvent(0, KEY_MOD1|KEY_MULTIPLY));
+            ExpandOrCollapseAll(*m_xTreeView, *xFirst);
             break;
         case 801:
             ExecCommand("chapterup", true);
