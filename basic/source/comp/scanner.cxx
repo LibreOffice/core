@@ -433,6 +433,11 @@ bool SbiScanner::NextSym()
                 ++nLineIdx;
                 ++nCol;
             }
+            // tdf#130476 - don't allow String trailing data type character with numbers
+            if ( t == SbxSTRING )
+            {
+                GenError( ERRCODE_BASIC_SYNTAX );
+            }
        }
     }
 
@@ -482,17 +487,49 @@ bool SbiScanner::NextSym()
                 GenError( ERRCODE_BASIC_BAD_CHAR_IN_NUMBER );
             }
         }
-        if(nCol < aLine.getLength() && aLine[nCol] == '&')
+
+        // tdf#130476 - take into account trailing data type characters
+        if( nCol < aLine.getLength() )
         {
-            ++nLineIdx;
-            ++nCol;
+            SbxDataType t(GetSuffixType(aLine[nCol]));
+            if( t != SbxVARIANT )
+            {
+                eScanType = t;
+                ++nLineIdx;
+                ++nCol;
+            }
+            // tdf#130476 - don't allow String trailing data type character with numbers
+            if ( t == SbxSTRING )
+            {
+                GenError( ERRCODE_BASIC_SYNTAX );
+            }
         }
-        // tdf#62326 - If the value of the hex string lies within the range of 0x8000 (SbxMAXINT + 1)
-        // and 0xFFFF (SbxMAXUINT) inclusive, cast the value to 16 bit in order to get
-        // signed integers, e.g., SbxMININT through SbxMAXINT
-        sal_Int32 ls = (lu > SbxMAXINT && lu <= SbxMAXUINT) ? static_cast<sal_Int16>(lu) : static_cast<sal_Int32>(lu);
-        nVal = static_cast<double>(ls);
-        eScanType = ( ls >= SbxMININT && ls <= SbxMAXINT ) ? SbxINTEGER : SbxLONG;
+
+        // tdf#130476 - take into account trailing data type characters
+        switch ( eScanType )
+        {
+            case SbxINTEGER:
+                nVal = static_cast<double>( static_cast<sal_Int16>(lu) );
+                if ( lu > SbxMAXUINT )
+                {
+                    bOverflow = true;
+                }
+                break;
+            case SbxLONG: nVal = static_cast<double>( static_cast<sal_Int32>(lu) ); break;
+            case SbxVARIANT:
+            {
+                // tdf#62326 - If the value of the hex string without explicit type character lies within
+                // the range of 0x8000 (SbxMAXINT + 1) and 0xFFFF (SbxMAXUINT) inclusive, cast the value
+                // to 16 bit in order to get signed integers, e.g., SbxMININT through SbxMAXINT
+                sal_Int32 ls = (lu > SbxMAXINT && lu <= SbxMAXUINT) ? static_cast<sal_Int16>(lu) : static_cast<sal_Int32>(lu);
+                eScanType = ( ls >= SbxMININT && ls <= SbxMAXINT ) ? SbxINTEGER : SbxLONG;
+                nVal = static_cast<double>(ls);
+                break;
+            }
+            default:
+                nVal = static_cast<double>(lu);
+                break;
+        }
         if( bOverflow )
             GenError( ERRCODE_BASIC_MATH_OVERFLOW );
     }
