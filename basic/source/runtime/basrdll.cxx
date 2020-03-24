@@ -66,6 +66,9 @@ BasicDLL::~BasicDLL()
 {
     osl::MutexGuard aGuard(BasicDLLImpl::getMutex());
     const bool bLastRef = m_xImpl->GetRefCount() == 1;
+    if (bLastRef) {
+        BasicDLLImpl::BASIC_DLL->xSbxAppData->m_aGlobErr.clear();
+    }
     m_xImpl.clear();
     // only reset BASIC_DLL after the object had been destroyed
     if (bLastRef)
