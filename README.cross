@@ -152,6 +152,8 @@ from Linux:
 --enable-dbgutil
 --enable-werror
 --with-distro=LibreOfficeAndroid
+--with-android-sdk=/path/to/android/sdk
+--with-android-ndk=/path/to/android/sdk/ndk/version
 
 And here is an (quite old) autogen.input for Android on X86:
 
