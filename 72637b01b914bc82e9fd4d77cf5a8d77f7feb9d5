@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d7f51f3b_b99d2fd7",
+        "filename": "basic/source/comp/scanner.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-24T15:43:40Z",
+      "side": 1,
+      "message": "Possibly it makes sense to remove the check from here, and move down, where the type is known. Because it doesn\u0027t make sense to limit the value to 32 bits in case when e.g. double type is explicitly set?\n\nOTOH MS VBA limits the value to 32-bit integer even for double... so maybe keep this, and only add the check to explicit Integer below, where a 32-bit value might be too big.",
+      "range": {
+        "startLine": 476,
+        "startChar": 20,
+        "endLine": 476,
+        "endChar": 30
+      },
+      "revId": "72637b01b914bc82e9fd4d77cf5a8d77f7feb9d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8843a263_3c2f320e",
+        "filename": "basic/source/comp/scanner.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-24T15:43:40Z",
+      "side": 1,
+      "message": "This comment only relates to the VARIANT case? \"If the value of the hex string *without explicit type character* lies ...\"",
+      "range": {
+        "startLine": 498,
+        "startChar": 8,
+        "endLine": 500,
+        "endChar": 61
+      },
+      "revId": "72637b01b914bc82e9fd4d77cf5a8d77f7feb9d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
