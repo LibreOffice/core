@@ -115,6 +115,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/selectionmenu \
 	svx/uiconfig/ui/sidebararea \
 	svx/uiconfig/ui/sidebarempty \
+	svx/uiconfig/ui/sidebarglow \
 	svx/uiconfig/ui/sidebarshadow \
 	svx/uiconfig/ui/sidebargallery \
 	svx/uiconfig/ui/sidebargraphic \

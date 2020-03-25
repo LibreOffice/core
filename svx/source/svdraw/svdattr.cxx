@@ -344,6 +344,10 @@ SdrItemPool::SdrItemPool(
     mpLocalItemInfos[SDRATTR_TABLE_BORDER_TLBR - SDRATTR_START ]._nSID = SID_ATTR_BORDER_DIAG_TLBR;
     mpLocalItemInfos[SDRATTR_TABLE_BORDER_BLTR - SDRATTR_START ]._nSID = SID_ATTR_BORDER_DIAG_BLTR;
 
+    mpLocalItemInfos[SDRATTR_GLOW - SDRATTR_START]._nSID = SID_ATTR_GLOW;
+    mpLocalItemInfos[SDRATTR_GLOW_RAD - SDRATTR_START]._nSID = SID_ATTR_GLOW_RADIUS;
+    mpLocalItemInfos[SDRATTR_GLOW_COLOR - SDRATTR_START]._nSID = SID_ATTR_GLOW_COLOR;
+
     // it's my own creation level, set Defaults and ItemInfos
     SetDefaults(mpLocalPoolDefaults);
     SetItemInfos(mpLocalItemInfos.get());
