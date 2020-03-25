@@ -8136,21 +8136,12 @@ no|disable)
         AC_MSG_RESULT([system])
         enable_python=system
     else
-        # Unset variables set by the above AM_PATH_PYTHON so that
-        # we actually do check anew.
-        unset PYTHON am_cv_pathless_PYTHON ac_cv_path_PYTHON am_cv_python_version am_cv_python_platform am_cv_python_pythondir am_cv_python_pyexecdir
-        AM_PATH_PYTHON([3.3],, [:])
-        if test "$PYTHON" = ":"; then
-            if test -z "$PYTHON_FOR_BUILD"; then
-                AC_MSG_RESULT([fully internal])
-            else
-                AC_MSG_RESULT([internal])
-            fi
-            enable_python=internal
+        if test -z "$PYTHON_FOR_BUILD"; then
+            AC_MSG_RESULT([fully internal])
         else
-            AC_MSG_RESULT([system])
-            enable_python=system
+            AC_MSG_RESULT([internal])
         fi
+        enable_python=internal
     fi
     ;;
 internal)
