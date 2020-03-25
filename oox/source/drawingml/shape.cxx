@@ -942,11 +942,14 @@ Reference< XShape > const & Shape::createAndInsert(
             xSet->setPropertyValue("CLSID", uno::makeAny(name.GetHexName()));
             uno::Reference<embed::XEmbeddedObject> const xObj(
                 xSet->getPropertyValue("EmbeddedObject"), uno::UNO_QUERY);
-            uno::Reference<uno::XInterface> const xMathModel(xObj->getComponent());
-            oox::FormulaImportBase *const pMagic(
-                    dynamic_cast<oox::FormulaImportBase*>(xMathModel.get()));
-            assert(pMagic);
-            pMagic->readFormulaOoxml(*pMathXml);
+            if (xObj.is())
+            {
+                uno::Reference<uno::XInterface> const xMathModel(xObj->getComponent());
+                oox::FormulaImportBase *const pMagic(
+                        dynamic_cast<oox::FormulaImportBase*>(xMathModel.get()));
+                assert(pMagic);
+                pMagic->readFormulaOoxml(*pMathXml);
+            }
         }
 
         const GraphicHelper& rGraphicHelper = rFilterBase.getGraphicHelper();
