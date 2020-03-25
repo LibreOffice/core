@@ -78,7 +78,7 @@ public:
     sal_Int32 getExplicitNumberFormatKeyForAxis(
             const css::uno::Reference< css::chart2::XAxis >& xAxis );
 
-    sal_Int32 getExplicitNumberFormatKeyForSeries(
+    static sal_Int32 getExplicitNumberFormatKeyForSeries(
             const css::uno::Reference< css::chart2::XDataSeries >& xSeries );
 
     /** Returns the size of the page in logic coordinates.  This value is used
