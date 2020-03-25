@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "916351eb_775e0aec",
+        "filename": "basic/qa/cppunit/test_scanner.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 809,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-25T17:02:09Z",
+      "side": 1,
+      "message": "Please don\u0027t use these constants. Just use the literals where they are tested; this makes it clear in the place, without the need for this block.",
+      "range": {
+        "startLine": 789,
+        "startChar": 4,
+        "endLine": 809,
+        "endChar": 41
+      },
+      "revId": "9be82e98f9be5bf2a3988b45076bc61fdeaecdbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
