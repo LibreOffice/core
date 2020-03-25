@@ -2390,7 +2390,9 @@ bool SalDisplay::XIfEventWithTimeout( XEvent* o_pEvent, XPointer i_pPredicateDat
 SalVisual::SalVisual():
     eRGBMode_(SalRGB::RGB), nRedShift_(0), nGreenShift_(0), nBlueShift_(0), nRedBits_(0), nGreenBits_(0),
     nBlueBits_(0)
-{}
+{
+    visual = nullptr;
+}
 
 SalVisual::SalVisual( const XVisualInfo* pXVI )
 {

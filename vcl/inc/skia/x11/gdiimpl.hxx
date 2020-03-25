@@ -38,9 +38,9 @@ private:
     virtual void performFlush() override;
     virtual bool avoidRecreateByResize() const override;
     static std::unique_ptr<sk_app::WindowContext>
-    createWindowContext(Display* display, Drawable drawable, const SalVisual* visual, int width,
-                        int height, SkiaHelper::RenderMethod renderMethod);
-    friend std::unique_ptr<sk_app::WindowContext> createVulkanWindowContext();
+    createWindowContext(Display* display, Drawable drawable, const XVisualInfo* visual, int width,
+                        int height, SkiaHelper::RenderMethod renderMethod, bool temporary);
+    friend std::unique_ptr<sk_app::WindowContext> createVulkanWindowContext(bool);
 };
 
 #endif // INCLUDED_VCL_INC_SKIA_X11_GDIIMPL_HXX

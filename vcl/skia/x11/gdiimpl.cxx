@@ -23,6 +23,8 @@
 #include <skia/utils.hxx>
 #include <skia/zone.hxx>
 
+#include <X11/Xutil.h>
+
 X11SkiaSalGraphicsImpl::X11SkiaSalGraphicsImpl(X11SalGraphics& rParent)
     : SkiaSalGraphicsImpl(rParent, rParent.GetGeometryProvider())
     , mX11Parent(rParent)
@@ -43,7 +45,7 @@ void X11SkiaSalGraphicsImpl::createWindowContext()
     assert(mX11Parent.GetDrawable() != None);
     mWindowContext = createWindowContext(mX11Parent.GetXDisplay(), mX11Parent.GetDrawable(),
                                          &mX11Parent.GetVisual(), GetWidth(), GetHeight(),
-                                         SkiaHelper::renderMethodToUse());
+                                         SkiaHelper::renderMethodToUse(), false);
     if (mWindowContext && SkiaHelper::renderMethodToUse() == SkiaHelper::RenderVulkan)
         mIsGPU = true;
     else
@@ -52,8 +54,8 @@ void X11SkiaSalGraphicsImpl::createWindowContext()
 
 std::unique_ptr<sk_app::WindowContext>
 X11SkiaSalGraphicsImpl::createWindowContext(Display* display, Drawable drawable,
-                                            const SalVisual* visual, int width, int height,
-                                            SkiaHelper::RenderMethod renderMethod)
+                                            const XVisualInfo* visual, int width, int height,
+                                            SkiaHelper::RenderMethod renderMethod, bool temporary)
 {
     SkiaZone zone;
     sk_app::DisplayParams displayParams;
@@ -63,15 +65,24 @@ X11SkiaSalGraphicsImpl::createWindowContext(Display* display, Drawable drawable,
     winInfo.fDisplay = display;
     winInfo.fWindow = drawable;
     winInfo.fFBConfig = nullptr; // not used
-    winInfo.fVisualInfo = const_cast<SalVisual*>(visual);
+    winInfo.fVisualInfo = const_cast<XVisualInfo*>(visual);
+    assert(winInfo.fVisualInfo->visual != nullptr); // make sure it's not an uninitialized SalVisual
     winInfo.fWidth = width;
     winInfo.fHeight = height;
 #ifdef DBG_UTIL
     // Our patched Skia has VulkanWindowContext that shares GrContext, which requires
     // that the X11 visual is always the same. Ensure it is so.
     static VisualID checkVisualID = -1U;
-    assert(checkVisualID == -1U || winInfo.fVisualInfo->visualid == checkVisualID);
-    checkVisualID = winInfo.fVisualInfo->visualid;
+    // Exception is for the temporary case during startup, when SkiaHelper's
+    // checkDeviceBlacklisted() needs a WindowContext and may be called before SalVisual
+    // is ready.
+    if (!temporary)
+    {
+        assert(checkVisualID == -1U || winInfo.fVisualInfo->visualid == checkVisualID);
+        checkVisualID = winInfo.fVisualInfo->visualid;
+    }
+#else
+    (void)temporary;
 #endif
     switch (renderMethod)
     {
@@ -122,12 +133,30 @@ void X11SkiaSalGraphicsImpl::performFlush()
     mWindowContext->swapBuffers();
 }
 
-std::unique_ptr<sk_app::WindowContext> createVulkanWindowContext()
+std::unique_ptr<sk_app::WindowContext> createVulkanWindowContext(bool temporary)
 {
     SalDisplay* salDisplay = vcl_sal::getSalDisplay(GetGenericUnixSalData());
-    return X11SkiaSalGraphicsImpl::createWindowContext(
-        salDisplay->GetDisplay(), None, &salDisplay->GetVisual(salDisplay->GetDefaultXScreen()), 1,
-        1, SkiaHelper::RenderVulkan);
+    const XVisualInfo* visual;
+    XVisualInfo* visuals = nullptr;
+    if (!temporary)
+        visual = &salDisplay->GetVisual(salDisplay->GetDefaultXScreen());
+    else
+    {
+        // SalVisual from salDisplay may not be setup yet at this point, get
+        // info for the default visual.
+        XVisualInfo search;
+        search.visualid = XVisualIDFromVisual(
+            DefaultVisual(salDisplay->GetDisplay(), salDisplay->GetDefaultXScreen().getXScreen()));
+        int count;
+        visuals = XGetVisualInfo(salDisplay->GetDisplay(), VisualIDMask, &search, &count);
+        assert(count == 1);
+        visual = visuals;
+    }
+    std::unique_ptr<sk_app::WindowContext> ret = X11SkiaSalGraphicsImpl::createWindowContext(
+        salDisplay->GetDisplay(), None, visual, 1, 1, SkiaHelper::RenderVulkan, temporary);
+    if (temporary)
+        XFree(visuals);
+    return ret;
 }
 
 void X11SkiaSalGraphicsImpl::prepareSkia() { SkiaHelper::prepareSkia(createVulkanWindowContext); }

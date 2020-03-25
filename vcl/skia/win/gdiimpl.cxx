@@ -349,7 +349,7 @@ SkiaControlCacheType& SkiaControlsCache::get()
 
 namespace
 {
-std::unique_ptr<sk_app::WindowContext> createVulkanWindowContext()
+std::unique_ptr<sk_app::WindowContext> createVulkanWindowContext(bool /*temporary*/)
 {
     SkiaZone zone;
     sk_app::DisplayParams displayParams;

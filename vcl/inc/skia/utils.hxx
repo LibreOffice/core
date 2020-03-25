@@ -46,7 +46,7 @@ inline sk_sp<SkSurface> createSkSurface(const Size& size, SkColorType type = kN3
 // Must be called in any VCL backend before any Skia functionality is used.
 // If not set, Skia will be disabled.
 VCL_DLLPUBLIC void
-    prepareSkia(std::unique_ptr<sk_app::WindowContext> (*createVulkanWindowContext)());
+    prepareSkia(std::unique_ptr<sk_app::WindowContext> (*createVulkanWindowContext)(bool));
 
 #ifdef DBG_UTIL
 void prefillSurface(sk_sp<SkSurface>& surface);
