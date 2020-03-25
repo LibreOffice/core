@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba60ed30_8662547c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2020-03-25T07:57:49Z",
+      "side": 1,
+      "message": "Do you know whether this is this a general Qt problem?\nI did not get that warning with the following small sample program.\n\n(If it\u0027s reasonably easy to find out whether it\u0027s actually a Qt bug, I think it\u0027d be nice to have it reported upstream, maybe in addition to this fix.)\n\n#include \u003cQApplication\u003e\n#include \u003cQClipboard\u003e\n#include \u003cQMimeData\u003e\n\nint main(int argc, char *argv[])\n{\n    QApplication a(argc, argv);\n    QClipboard* pClipBoard \u003d QApplication::clipboard();\n\n    QMimeData* pMimeData \u003d new QMimeData;\n    pClipBoard-\u003eclear();\n    pClipBoard-\u003esetMimeData(pMimeData);\n\n    // return a.exec();\n    return 0;\n}",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 21
+      },
+      "revId": "69461f40de2354173fe63466f83284426153dddc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
