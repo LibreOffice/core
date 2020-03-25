@@ -22,7 +22,7 @@
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
 
-static const OString sGlobal("::");
+static const char sGlobal[]="::";
 
 static OString convertName(const OString& name)
 {
@@ -56,7 +56,7 @@ AstDeclaration::AstDeclaration(NodeType type, const OString& name, AstScope* pSc
         {
             m_scopedName = pDecl->getScopedName();
             if (!m_scopedName.isEmpty())
-                m_scopedName += sGlobal;
+                m_scopedName += OString(sGlobal);
             m_scopedName += m_localName;
         }
     } else
