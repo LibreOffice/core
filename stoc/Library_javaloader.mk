@@ -14,12 +14,17 @@ $(eval $(call gb_Library_use_external,javaloader,boost_headers))
 $(eval $(call gb_Library_use_udk_api,javaloader))
 
 $(eval $(call gb_Library_use_libraries,javaloader,\
+    comphelper \
     cppu \
     cppuhelper \
     jvmaccess \
     sal \
     salhelper \
     tl \
+))
+
+$(eval $(call gb_Library_use_custom_headers,javaloader,\
+    officecfg/registry \
 ))
 
 $(eval $(call gb_Library_set_componentfile,javaloader,stoc/source/javaloader/javaloader))

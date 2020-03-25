@@ -42,6 +42,9 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/configuration.hxx>
+
+#include <officecfg/Office/Common.hxx>
 
 #include <com/sun/star/loader/XImplementationLoader.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -284,7 +287,6 @@ JavaComponentLoader::JavaComponentLoader(const css::uno::Reference<XComponentCon
     m_xComponentContext(xCtx)
 
 {
-
 }
 
 // XServiceInfo
@@ -320,6 +322,19 @@ css::uno::Reference<XInterface> SAL_CALL JavaComponentLoader::activate(
     const OUString & rImplName, const OUString & blabla, const OUString & rLibName,
     const css::uno::Reference<XRegistryKey> & xKey)
 {
+    if (rImplName.isEmpty() && blabla.isEmpty() && rLibName.isEmpty())
+    {
+        (void)getJavaLoader();
+        return css::uno::Reference<XInterface>();
+    }
+    else
+    {
+        // JVM is used, let's preload it during next LO start up
+        std::shared_ptr< comphelper::ConfigurationChanges > batch(comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Misc::PreLoadJVM::set(true, batch);
+        batch->commit();
+    }
+
     const css::uno::Reference<XImplementationLoader> & loader = getJavaLoader();
     if (!loader.is())
         throw CannotActivateFactoryException("Could not create Java implementation loader");
