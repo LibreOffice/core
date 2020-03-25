@@ -43,14 +43,10 @@ class SVT_DLLPUBLIC SvtTabAppearanceCfg final : public utl::ConfigItem
     DragMode        nDragMode           ;
     SnapType        nSnapMode           ;
     MouseMiddleButtonAction nMiddleMouse;
-#if defined( UNX )
     short           nAAMinPixelHeight   ;
-#endif
+    bool            bFontAntialiasing       ;
 
     bool            bMenuMouseFollow        ;
-#if defined( UNX )
-    bool            bFontAntialiasing       ;
-#endif
 
     static bool  bInitialized ;
 
@@ -75,13 +71,11 @@ public:
 
     bool        IsMenuMouseFollow() const{return bMenuMouseFollow;}
 
-#if defined( UNX )
     void        SetFontAntiAliasing( bool bSet )    { bFontAntialiasing = bSet; SetModified(); }
     bool        IsFontAntiAliasing() const { return bFontAntialiasing; }
 
     sal_uInt16  GetFontAntialiasingMinPixelHeight( ) const { return nAAMinPixelHeight; }
     void        SetFontAntialiasingMinPixelHeight( sal_uInt16 _nMinHeight ) { nAAMinPixelHeight = _nMinHeight; SetModified(); }
-#endif
 
     static bool IsInitialized()  { return bInitialized; }
     static void SetInitialized() { bInitialized = true; }
