@@ -13,6 +13,8 @@ $(eval $(call gb_Library_use_external,javaloader,boost_headers))
 
 $(eval $(call gb_Library_use_udk_api,javaloader))
 
+$(eval $(call gb_Library_use_sdk_api,javaloader))
+
 $(eval $(call gb_Library_use_libraries,javaloader,\
     cppu \
     cppuhelper \

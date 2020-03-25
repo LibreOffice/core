@@ -46,6 +46,10 @@
 #include <com/sun/star/loader/XImplementationLoader.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <jvmaccess/unovirtualmachine.hxx>
@@ -284,7 +288,6 @@ JavaComponentLoader::JavaComponentLoader(const css::uno::Reference<XComponentCon
     m_xComponentContext(xCtx)
 
 {
-
 }
 
 // XServiceInfo
@@ -315,11 +318,72 @@ sal_Bool SAL_CALL JavaComponentLoader::writeRegistryInfo(
     return loader->writeRegistryInfo(xKey, blabla, rLibName);
 }
 
+void switchOnJVMPreloading(const css::uno::Reference< css::uno::XComponentContext >& rxContext)
+{
+    // Short implementation:
+    //       std::shared_ptr< comphelper::ConfigurationChanges > batch(comphelper::ConfigurationChanges::create());
+    //       officecfg::Office::Common::Misc::PreLoadJVM::set(true, batch);
+    //       batch->commit();
+    //
+    // But stoc, as part of URE, should better not depend on comphelper.
+    // stoc code is not guaranteed to be run only in scenarios where the configuration is available.
+    // therefore short implementation is expanded into following code:
+
+    css::beans::PropertyValue aParam;
+    aParam.Name = "nodepath";
+    aParam.Value <<= OUString("org.openoffice.Office.Common/Misc");
+
+    css::uno::Sequence< css::uno::Any > lParams(1);
+    lParams[0] <<= aParam;
+
+    try
+    {
+        // get config provider
+        css::uno::Reference< css::lang::XMultiServiceFactory > theConfigProvider(
+            rxContext->getValueByName("/singletons/com.sun.star.configuration.theDefaultProvider"),
+            css::uno::UNO_QUERY);
+        if (!theConfigProvider.is())
+            return;
+
+        // open config
+        css::uno::Reference<css::uno::XInterface> xConfig = theConfigProvider->createInstanceWithArguments(
+            "com.sun.star.configuration.ConfigurationUpdateAccess",
+            lParams);
+        if (!xConfig.is())
+            return;
+
+        // set PreLoadJVM = true
+        css::uno::Reference< css::beans::XPropertySet > xPropertySet(xConfig, UNO_QUERY);
+        xPropertySet->setPropertyValue("PreLoadJVM", makeAny( true ) );
+
+        // save config
+        css::uno::Reference< css::util::XChangesBatch > xFlush(xConfig, css::uno::UNO_QUERY);
+        if (xFlush.is())
+        {
+            xFlush->commitChanges();
+        }
+    }
+    catch (const css::uno::Exception&)
+    {
+        TOOLS_INFO_EXCEPTION("stoc", "switchOnJVMPreloading");
+    }
+}
 
 css::uno::Reference<XInterface> SAL_CALL JavaComponentLoader::activate(
     const OUString & rImplName, const OUString & blabla, const OUString & rLibName,
     const css::uno::Reference<XRegistryKey> & xKey)
 {
+    if (rImplName.isEmpty() && blabla.isEmpty() && rLibName.isEmpty())
+    {
+        (void)getJavaLoader();
+        return css::uno::Reference<XInterface>();
+    }
+    else
+    {
+        // JVM is used, let's preload it during next LO start up
+        switchOnJVMPreloading(m_xComponentContext);
+    }
+
     const css::uno::Reference<XImplementationLoader> & loader = getJavaLoader();
     if (!loader.is())
         throw CannotActivateFactoryException("Could not create Java implementation loader");
