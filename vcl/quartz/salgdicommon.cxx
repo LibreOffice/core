@@ -975,7 +975,12 @@ bool AquaSalGraphics::drawPolyLine(
         CGContextSetAlpha( mrContext, 1.0 - fTransparency );
         CGContextSetLineJoin( mrContext, aCGLineJoin );
         CGContextSetLineCap( mrContext, aCGLineCap );
-        CGContextSetLineWidth( mrContext, aLineWidth.getX() );
+
+        // aLineWidth.getX() can be negative here. That causes a warning that shows up in the debugger.
+        if (aLineWidth.getX() > 0)
+        {
+            CGContextSetLineWidth( mrContext, aLineWidth.getX() );
+        }
         CGContextSetMiterLimit(mrContext, fCGMiterLimit);
         SAL_INFO( "vcl.cg", "CGContextDrawPath(" << mrContext << ",kCGPathStroke)" );
         CGContextDrawPath( mrContext, kCGPathStroke );
