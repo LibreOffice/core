@@ -17,7 +17,7 @@ class CommandWithParametersTest(UITestCase):
         self.xUITest.executeCommandWithParameters(".uno:Color",
             mkPropertyValues({"Color": 16776960}))
         xWriterEdit = self.xUITest.getTopFocusWindow().getChild("writer_edit")
-        type_text(xWriterEdit, "Libreoffice")
+        type_text(xWriterEdit, "LibreOffice")
 
         self.ui_test.close_doc()
 
