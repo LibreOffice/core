@@ -69,6 +69,8 @@ namespace pcr
 
         virtual void setModified() { m_bModified = true; }
 
+        virtual void editChanged();
+
         // XPropertyControl
         /// @throws css::uno::RuntimeException
         ::sal_Int16 getControlType() const { return m_nControlType; }
