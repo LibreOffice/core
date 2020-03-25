@@ -420,6 +420,8 @@ namespace
 // 3. ph with nSecondSubType and the same oSubTypeIndex
 // 4. ph with nSecondSubType
 // 5. ph with the same oSubTypeIndex
+// It appears 3 and 1 has the same highest prority.
+
 oox::drawingml::ShapePtr PPTShape::findPlaceholder( sal_Int32 nFirstSubType, sal_Int32 nSecondSubType,
     const OptValue< sal_Int32 >& oSubTypeIndex, std::vector< oox::drawingml::ShapePtr >& rShapes, bool bMasterOnly )
 {
@@ -469,7 +471,7 @@ oox::drawingml::ShapePtr PPTShape::findPlaceholder( sal_Int32 nFirstSubType, sal
                     aChoiceShapePtr3 = aChoiceShapePtr4;
             }
         }
-        if (aShapePtr.get())
+        if (aShapePtr.get() || aChoiceShapePtr2.get())
             break;
         ++aRevIter;
     }

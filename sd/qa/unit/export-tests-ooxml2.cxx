@@ -183,6 +183,7 @@ public:
     void testTdf127379();
     void testTdf98603();
     void testShapeGlowEffect();
+    void testTdf131554();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -284,6 +285,7 @@ public:
     CPPUNIT_TEST(testTdf127379);
     CPPUNIT_TEST(testTdf98603);
     CPPUNIT_TEST(testShapeGlowEffect);
+    CPPUNIT_TEST(testTdf131554);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2649,6 +2651,15 @@ void SdOOXMLExportTest2::testShapeGlowEffect()
     Color nColor;
     xShape->getPropertyValue("GlowEffectColor") >>= nColor;
     CPPUNIT_ASSERT_EQUAL(Color(0xFFC000), nColor);
+}
+
+void SdOOXMLExportTest2::testTdf131554()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf131554.pptx"), PPTX);
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
+    uno::Reference<drawing::XShape> xShape(getShapeFromPage(1, 0, xDocShRef), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5622), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(13251), xShape->getPosition().Y);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
