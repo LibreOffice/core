@@ -193,7 +193,7 @@ typedef std::vector<std::unique_ptr<SvtValueSetItem>> SvtValueItemList;
 #define VALUESET_ITEM_NOTFOUND  (size_t(-1))
 
 
-class UNLESS_MERGELIBS(SVT_DLLPUBLIC) ValueSet : public Control
+class SVT_DLLPUBLIC ValueSet : public Control
 {
 private:
     ValueItemList   mItemList;
