@@ -871,6 +871,7 @@ void NeonSession::Init()
                          std::max( nReadTimeoutMin,
                                    std::min( nReadTimeout, nReadTimeoutMax ) ) );
 
+    ne_set_session_flag(m_pHttpSession, NE_SESSFLAG_SHAREPOINT, 1);
 }
 
 bool NeonSession::CanUse( const OUString & inUri,

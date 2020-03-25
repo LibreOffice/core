@@ -1,12 +1,12 @@
 diff -aru src.origin/ne_locks.c src/ne_locks.c
---- src.origin/ne_locks.c	2007-02-05 11:09:27.000000000 +0100
-+++ src/ne_locks.c	2015-07-29 10:33:55.724753920 +0200
+--- src.origin/ne_locks.c        2007-02-05 11:09:27.000000000 +0100
++++ src/ne_locks.c        2015-07-29 10:33:55.724753920 +0200
 @@ -137,7 +137,7 @@
- 	ne_buffer_czappend(req, "If:");
- 	for (item = lrc->submit; item != NULL; item = item->next) {
- 	    char *uri = ne_uri_unparse(&item->lock->uri);
--	    ne_buffer_concat(req, " <", uri, "> (<",
-+	    ne_buffer_concat(req, " (<",
- 			     item->lock->token, ">)", NULL);
- 	    ne_free(uri);
- 	}
+             }
+             else {
+                 char *uri = ne_uri_unparse(&item->lock->uri);
+-                ne_buffer_concat(req, " <", uri, "> (<",
++                ne_buffer_concat(req, " (<",
+                                  item->lock->token, ">)", NULL);
+                 ne_free(uri);
+             }
