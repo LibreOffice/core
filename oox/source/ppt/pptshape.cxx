@@ -473,7 +473,7 @@ oox::drawingml::ShapePtr PPTShape::findPlaceholder( sal_Int32 nFirstSubType, sal
                     aChoiceShapePtr3 = aChoiceShapePtr4;
             }
         }
-        if (aShapePtr.get())
+        if (aShapePtr.get() || aChoiceShapePtr1.get() || aChoiceShapePtr2.get() || aChoiceShapePtr3.get())
             break;
         ++aRevIter;
     }
