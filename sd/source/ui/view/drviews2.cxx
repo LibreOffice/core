@@ -3440,8 +3440,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
-       case SID_PHOTOALBUM:
-       {
+        case SID_PHOTOALBUM:
+        {
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
             vcl::Window* pWin = GetActiveWindow();
             ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSdPhotoAlbumDialog(
@@ -3456,7 +3456,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_INSERT_QRCODE:
         case SID_EDIT_QRCODE:
-       {
+        {
             VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
             const uno::Reference<frame::XModel> xModel = GetViewShellBase().GetController()->getModel();
             ScopedVclPtr<AbstractQrCodeGenDialog> pDlg(pFact->CreateQrCodeGenDialog(
@@ -3466,6 +3466,15 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             rReq.Ignore ();
         }
         break;
+
+        case SID_ATTR_GLOW:
+        case SID_ATTR_GLOW_COLOR:
+        case SID_ATTR_GLOW_RADIUS:
+            if (const SfxItemSet* pNewArgs = rReq.GetArgs())
+                mpDrawView->SetAttributes(*pNewArgs);
+            rReq.Done();
+            Cancel();
+            break;
 
         default:
         {
