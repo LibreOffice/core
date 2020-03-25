@@ -5824,6 +5824,13 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="PreloadJVM" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if the JVM should be preloaded during LO start up.</desc>
+          <label>PreloadJVM</label>
+        </info>
+        <value>false</value>
+      </prop>
       <prop oor:name="FilePickerPlacesUrls" oor:type="oor:string-list" oor:nillable="false">
         <info>
           <desc>List of URLs of the places the user bookmarked in the file picker dialog.</desc>
