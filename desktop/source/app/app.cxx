@@ -77,6 +77,8 @@
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/frame/XDesktopInternal.hpp>
+#include <com/sun/star/loader/XImplementationLoader.hpp>
+#include <com/sun/star/registry/XRegistryKey.hpp>
 
 #include <desktop/exithelper.h>
 #include <sal/log.hxx>
@@ -123,6 +125,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/window.hxx>
 #include "langselect.hxx"
+#include <salhelper/thread.hxx>
 
 #if defined MACOSX
 #include <errno.h>
@@ -1247,6 +1250,44 @@ int Desktop::Main()
 
     // Startup screen
     OpenSplashScreen();
+
+    if (officecfg::Office::Common::Misc::PreLoadJVM::get())
+    {
+        // pre-load JVM
+        class JVMloadThread : public osl::Thread {
+        public:
+            explicit JVMloadThread() : osl::Thread()
+            {
+            }
+
+        private:
+            virtual void SAL_CALL run() override final
+            {
+                Reference< XMultiServiceFactory > xSMgr = comphelper::getProcessServiceFactory();
+
+                Reference< css::loader::XImplementationLoader > xJavaComponentLoader(
+                    xSMgr->createInstance("com.sun.star.comp.stoc.JavaComponentLoader"),
+                    css::uno::UNO_QUERY_THROW);
+
+                if (xJavaComponentLoader.is())
+                {
+                    const OUString aImplName;
+                    const OUString blabla;
+                    const OUString aLibName;
+                    const css::uno::Reference< ::com::sun::star::registry::XRegistryKey > xRegistryKey;
+
+                    xJavaComponentLoader->activate(aImplName, blabla, aLibName, xRegistryKey);
+                }
+            }
+        } runMeNow;
+        runMeNow.create();
+
+        // reset PreLoadJVM flag
+        std::shared_ptr< comphelper::ConfigurationChanges > batch(comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Misc::PreLoadJVM::set(false, batch);
+        batch->commit();
+    }
+
 
     SetSplashScreenProgress(10);
 
