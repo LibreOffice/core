@@ -58,6 +58,9 @@ Image Tools::GetImage (
 
         else if (rsURL.startsWith("private:graphicrepository/", &sPath))
             return Image(rsURL);
+
+        else
+            return Image(rsURL);
     }
     return Image();
 }
