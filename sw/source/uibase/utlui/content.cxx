@@ -31,6 +31,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weldutils.hxx>
 #include <sot/formats.hxx>
 #include <uiitems.hxx>
 #include <fmtinfmt.hxx>
@@ -1755,20 +1756,7 @@ namespace
 
 size_t SwContentTree::GetAbsPos(const weld::TreeIter& rIter)
 {
-    size_t nAbsPos = 0;
-
-    std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator(&rIter));
-    if (!m_xTreeView->get_iter_first(*xEntry))
-        xEntry.reset();
-
-    while (xEntry && m_xTreeView->iter_compare(*xEntry, rIter) != 0)
-    {
-        if (!m_xTreeView->iter_next(*xEntry))
-            xEntry.reset();
-        nAbsPos++;
-    }
-
-    return nAbsPos;
+    return weld::GetAbsPos(*m_xTreeView, rIter);
 }
 
 size_t SwContentTree::GetEntryCount() const

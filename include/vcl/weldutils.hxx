@@ -152,6 +152,8 @@ public:
         m_aPaintListeners.removeInterface(rListener);
     }
 };
+
+VCL_DLLPUBLIC size_t GetAbsPos(const weld::TreeView& rTreeView, const weld::TreeIter& rIter);
 }
 
 #endif

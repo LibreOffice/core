@@ -51,6 +51,7 @@
 #include <vcl/settings.hxx>
 #include <slider.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/weldutils.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <iconview.hxx>
 #include <svdata.hxx>
@@ -421,6 +422,24 @@ namespace weld
     {
         int nHeight = nRows == -1 ? -1 : m_xTreeView->get_height_rows(nRows);
         m_xTreeView->set_size_request(m_xTreeView->get_size_request().Width(), nHeight);
+    }
+
+    size_t GetAbsPos(const weld::TreeView& rTreeView, const weld::TreeIter& rIter)
+    {
+        size_t nAbsPos = 0;
+
+        std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator(&rIter));
+        if (!rTreeView.get_iter_first(*xEntry))
+            xEntry.reset();
+
+        while (xEntry && rTreeView.iter_compare(*xEntry, rIter) != 0)
+        {
+            if (!rTreeView.iter_next(*xEntry))
+                xEntry.reset();
+            nAbsPos++;
+        }
+
+        return nAbsPos;
     }
 }
 
