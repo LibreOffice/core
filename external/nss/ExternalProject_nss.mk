@@ -23,9 +23,7 @@ $(eval $(call gb_ExternalProject_use_autoconf,nss,build))
 nss_PYTHON := $(call gb_UnpackedTarball_get_dir,nss)/python
 nss_SETUP_PYTHON := $(call gb_UnpackedTarball_get_dir,nss)/setup-python
 
-$(call gb_ExternalProject_get_state_target,nss,build): \
-    $(call gb_ExternalExecutable_get_dependencies,python) \
-    $(call gb_UnpackedTarball_get_target,gyp) | $(dir $(call gb_ExternalProject_get_target,gyp)).dir
+$(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecutable_get_dependencies,python) $(call gb_UnpackedTarball_get_target,gyp)
 	$(call gb_Trace_StartRange,nss,EXTERNAL)
 	cp $(SRCDIR)/external/nss/python-cygwin-template $(nss_PYTHON)
 	pythondir=$$($(call gb_ExternalExecutable_get_command,python) -c 'import sys; import os; sys.stdout.write(os.path.dirname(sys.executable))') \
