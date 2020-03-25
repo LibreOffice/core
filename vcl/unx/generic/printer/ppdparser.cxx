@@ -961,13 +961,13 @@ void PPDParser::parse( ::std::vector< OString >& rLines )
     // ppd_group_t structure. Groups can be specified in the PPD file; if an
     // option is not associated with a group, it is put in a "General" or
     // "Extra" group depending on the option.
-    static const OString aDefaultPPDGroupName("General");
+    static const char aDefaultPPDGroupName[]="General";
 
     std::vector< OString >::iterator line = rLines.begin();
     PPDParser::hash_type::const_iterator keyit;
 
     // name of the PPD group that is currently being processed
-    OString aCurrentGroup = aDefaultPPDGroupName;
+    OString aCurrentGroup = OString(aDefaultPPDGroupName);
 
     while( line != rLines.end() )
     {

@@ -358,10 +358,10 @@ void InputStream::updateBuffer()
             // read the element text (add the leading opening bracket manually)
             OString aElement = "<" + readToElementEnd();
             // check for CDATA part, starting with '<![CDATA['
-            if( aElement.match( gaOpeningCData ) )
+            if( aElement.match( gaOpeningCData)) )
             {
                 // search the end tag ']]>'
-                while( ((aElement.getLength() < gaClosingCData.getLength()) || !aElement.endsWith( gaClosingCData )) && !mxTextStrm->isEOF() )
+                while( ((aElement.getLength() < gaClosingCData.getLength())) || !aElement.endsWith( gaClosingCData )) && !mxTextStrm->isEOF() )
                     aElement += readToElementEnd();
                 // copy the entire CDATA part
                 aBuffer.append( aElement );
