@@ -11342,7 +11342,7 @@ if test "$enable_report_builder" != "no" -a "$with_java" != "no"; then
         fi
 
         if test -z $FLUTE_JAR; then
-            if test -f/usr/share/java/flute-1.3.0.jar; then
+            if test -f /usr/share/java/flute-1.3.0.jar; then
                 FLUTE_JAR=/usr/share/java/flute-1.3.0.jar
             elif test -f /usr/share/java/flute.jar; then
                 FLUTE_JAR=/usr/share/java/flute.jar
