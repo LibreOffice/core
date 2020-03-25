@@ -34,6 +34,7 @@
 #include <desktop/crashreport.hxx>
 #include <bitmapwriteaccess.hxx>
 #include <watchdog.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
 
 #if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID && !defined HAIKU
 #include <opengl/x11/X11DeviceInfo.hxx>
@@ -904,6 +905,10 @@ PreDefaultWinNoOpenGLZone::~PreDefaultWinNoOpenGLZone()
 
 bool OpenGLHelper::isVCLOpenGLEnabled()
 {
+    // Skia always takes precedence if enabled
+    if( SkiaHelper::isVCLSkiaEnabled())
+        return false;
+
     /**
      * The !bSet part should only be called once! Changing the results in the same
      * run will mix OpenGL and normal rendering.
