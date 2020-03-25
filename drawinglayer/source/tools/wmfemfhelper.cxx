@@ -2433,7 +2433,7 @@ namespace wmfemfhelper
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaLineColorAction* pA = static_cast<const MetaLineColorAction*>(pAction);
-                    // tdf#89901 do as OutDev does: COL_TRANSPARENT deacvtivates line draw
+                    // tdf#89901 do as OutDev does: COL_TRANSPARENT deactivates line draw
                     const bool bActive(pA->IsSetting() && COL_TRANSPARENT != pA->GetColor());
 
                     rPropertyHolders.Current().setLineColorActive(bActive);
@@ -2446,7 +2446,7 @@ namespace wmfemfhelper
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaFillColorAction* pA = static_cast<const MetaFillColorAction*>(pAction);
-                    // tdf#89901 do as OutDev does: COL_TRANSPARENT deacvtivates polygon fill
+                    // tdf#89901 do as OutDev does: COL_TRANSPARENT deactivates polygon fill
                     const bool bActive(pA->IsSetting() && COL_TRANSPARENT != pA->GetColor());
 
                     rPropertyHolders.Current().setFillColorActive(bActive);
