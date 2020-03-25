@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "647c6620_9d15a4e6",
+        "filename": "cui/source/options/optinet2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-03-25T12:08:53Z",
+      "side": 1,
+      "message": "I had several build pbs and had tested this.\nYou\u0027re right indeed.",
+      "parentUuid": "49314526_e3de52cf",
+      "range": {
+        "startLine": 194,
+        "startChar": 4,
+        "endLine": 194,
+        "endChar": 7
+      },
+      "revId": "ef64098dc52492789935de84dcad003f61b9bfe3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c1eddfc8_72b44384",
         "filename": "cui/source/options/optinet2.cxx",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "08166a0b_7b57e719",
+        "filename": "cui/source/options/optinet2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-03-25T12:08:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1eddfc8_72b44384",
+      "range": {
+        "startLine": 196,
+        "startChar": 4,
+        "endLine": 196,
+        "endChar": 22
+      },
+      "revId": "ef64098dc52492789935de84dcad003f61b9bfe3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "518a19a6_c141081d",
         "filename": "cui/source/options/optinet2.cxx",
         "patchSetId": 2
@@ -59,6 +107,24 @@
       "writtenOn": "2020-03-25T08:20:37Z",
       "side": 1,
       "message": "the simplified access functions can still throw certain UNO exceptions, but it arguably does make sense to not swallow them here but just let them pass through, as any such exception would indicate a deployment error where the relevant configuration data is not as it should be",
+      "revId": "ef64098dc52492789935de84dcad003f61b9bfe3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2e599f4b_8cfe9578",
+        "filename": "cui/source/options/optinet2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-03-25T12:08:53Z",
+      "side": 1,
+      "message": "Ok so no pb here.",
+      "parentUuid": "518a19a6_c141081d",
       "revId": "ef64098dc52492789935de84dcad003f61b9bfe3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
