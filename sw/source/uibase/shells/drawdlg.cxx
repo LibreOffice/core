@@ -343,7 +343,7 @@ static void lcl_unifyFillTransparencyItems(SfxItemSet& rSet)
 
     XGradient aTmpGradient = pFillFloatTranspItem->GetGradientValue();
     sal_uInt16 nTranspPercent = pFillTranspItem->GetValue();
-    // Encode transparancy percentage as intensity
+    // Encode transparency percentage as intensity
     sal_uInt16 nIntensity = 100 - std::min<sal_uInt16>
         (std::max<sal_uInt16>(nTranspPercent, 0), 100);
     aTmpGradient.SetStartIntens(nIntensity);
