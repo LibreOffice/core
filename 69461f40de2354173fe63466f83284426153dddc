@@ -22,6 +22,30 @@
       "revId": "69461f40de2354173fe63466f83284426153dddc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb7cea7d_582e0fbd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-03-25T08:52:48Z",
+      "side": 1,
+      "message": "No. \"Directly\" is the wrong word. For debugging I added logging to the Qt5Clipboard code to all the (three) places and the change handler, which manipulate the clipboard (clear and setMimeData). After the failures, the change handler reported no Qt5MimeData in the clipboard. I couldn\u0027t find a minimal reproducer. It might also be D\u0027n\u0027D related.\n\nNow thinking about this again, I never checked, if the clipboard calls were eventually done from Qt5Clipboard::handleChanged. But that would quite probably result in a recursion - or not, since the clear wont recurse into lostOwnership - hmmm...\n\nI just know that omitting the clear before the 2nd setMimeData fixes / works around the bug.\n\nSince all this goes through setContents, there is potentially a lot of stuff going on in between.\n\nBTW: this is all triggered by the fire_drop function.\n\nI would be happy to have some other fix, as I don\u0027t really trust in it and think it might just paper over the real bug I couldn\u0027t identify.",
+      "parentUuid": "ba60ed30_8662547c",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 21
+      },
+      "revId": "69461f40de2354173fe63466f83284426153dddc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
