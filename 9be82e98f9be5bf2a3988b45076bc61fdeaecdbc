@@ -22,6 +22,30 @@
       "revId": "9be82e98f9be5bf2a3988b45076bc61fdeaecdbc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91e4225a_588e8fa1",
+        "filename": "basic/qa/cppunit/test_scanner.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 809,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-03-25T17:30:41Z",
+      "side": 1,
+      "message": "I thought about it, but I wanted to keep it like everywhere in the file. I will change it. How about the literals for tdf#62323, tdf#62326? Should I move them too?",
+      "parentUuid": "916351eb_775e0aec",
+      "range": {
+        "startLine": 789,
+        "startChar": 4,
+        "endLine": 809,
+        "endChar": 41
+      },
+      "revId": "9be82e98f9be5bf2a3988b45076bc61fdeaecdbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
