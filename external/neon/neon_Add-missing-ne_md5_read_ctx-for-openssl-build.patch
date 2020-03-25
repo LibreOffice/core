@@ -1,0 +1,36 @@
+From 27ddc006e81cf57cb3af8becf5c83d7ff40a9ec2 Mon Sep 17 00:00:00 2001
+From: Jan-Marek Glogowski <glogow@fbihome.de>
+Date: Wed, 25 Mar 2020 22:56:56 +0100
+Subject: [PATCH] Add missing ne_md5_read_ctx for openssl build
+
+---
+ src/ne_openssl.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git src/ne_openssl.c.orig src/ne_openssl.c
+index 462e0ee..230f720 100644
+--- src/ne_openssl.c.orig
++++ src/ne_openssl.c
+@@ -1328,6 +1328,19 @@ void ne_md5_process_bytes(const void *buffer, size_t len,
+     EVP_DigestUpdate(ctx->ctx, buffer, len);
+ }
+ 
++void *ne_md5_read_ctx(const struct ne_md5_ctx *ctx, void *resbuf)
++{
++    EVP_MD_CTX *ssl_ctx = EVP_MD_CTX_new();
++
++    if (ssl_ctx) {
++        if (EVP_MD_CTX_copy(ssl_ctx, ctx->ctx))
++            EVP_DigestFinal(ssl_ctx, resbuf, NULL);
++        EVP_MD_CTX_free(ssl_ctx);
++    }
++
++    return resbuf;
++}
++
+ void *ne_md5_finish_ctx(struct ne_md5_ctx *ctx, void *resbuf)
+ {
+     EVP_DigestFinal(ctx->ctx, resbuf, NULL);
+-- 
+2.20.1
+

@@ -23,13 +23,10 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,neon,0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,neon,\
 	external/neon/neon.patch \
-	external/neon/neon_ne_set_request_flag.patch \
 	external/neon/neon_with_gnutls.patch \
-	external/neon/ubsan.patch \
 	external/neon/neon_fix_lock_token_on_if.patch \
-	external/neon/neon_fix_lock_timeout_windows.patch \
-	external/neon/neon_fix_sspi_session_timeout.patch \
-	external/neon/neon_uri_parse_allow_others.patch \
+	external/neon/neon_fix_ignored_type_qualifiers.patch \
+	external/neon/neon_Add-missing-ne_md5_read_ctx-for-openssl-build.patch \
 	$(if $(filter WNT,$(OS)),external/neon/neon_fix_no_OPENSSL_Applink.patch) \
 ))
 
