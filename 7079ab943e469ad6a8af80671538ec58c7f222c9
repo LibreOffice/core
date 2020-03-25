@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c21b2b80_dde33e2d",
+        "filename": "oox/source/ppt/pptshape.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-03-25T16:13:33Z",
+      "side": 1,
+      "message": "this contradicts the big comment in line 420-426: now the first 4 items have equal priority, previously they all had different priorities\n\ni have no idea how this is supposed to work but please adapt the comment to be consistent with the code",
+      "revId": "7079ab943e469ad6a8af80671538ec58c7f222c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
