@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "49314526_e3de52cf",
+        "filename": "cui/source/options/optinet2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-25T08:20:37Z",
+      "side": 1,
+      "message": "why change this from sal_Int32 to int?",
+      "range": {
+        "startLine": 194,
+        "startChar": 4,
+        "endLine": 194,
+        "endChar": 7
+      },
+      "revId": "ef64098dc52492789935de84dcad003f61b9bfe3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1eddfc8_72b44384",
+        "filename": "cui/source/options/optinet2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-25T08:20:37Z",
+      "side": 1,
+      "message": "what that ooInetProxyType::get returns should be a std::optional\u003csal_Int32\u003e; why implicitly cast that to std::optional\u003cint\u003e?",
+      "range": {
+        "startLine": 196,
+        "startChar": 4,
+        "endLine": 196,
+        "endChar": 22
+      },
+      "revId": "ef64098dc52492789935de84dcad003f61b9bfe3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "518a19a6_c141081d",
+        "filename": "cui/source/options/optinet2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-25T08:20:37Z",
+      "side": 1,
+      "message": "the simplified access functions can still throw certain UNO exceptions, but it arguably does make sense to not swallow them here but just let them pass through, as any such exception would indicate a deployment error where the relevant configuration data is not as it should be",
+      "revId": "ef64098dc52492789935de84dcad003f61b9bfe3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
