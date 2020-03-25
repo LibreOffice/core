@@ -66,7 +66,7 @@ end if
 set found_ooos_all to ""
 -- command might return an error if spotlight is disabled completely
 try
-	set found_ooos_all to (do shell script "mdfind \"kMDItemContentType == 'com.apple.application-bundle' && kMDItemDisplayName == '[PRODUCTNAME]*' && kMDItemDisplayName != '[FULLAPPPRODUCTNAME].app'\"")
+	set found_ooos_all to (do shell script "mdfind \"kMDItemContentType == 'com.apple.application-bundle' && kMDItemDisplayName == '[PRODUCTNAME]*' && kMDItemDisplayName != '*[FULLAPPPRODUCTNAME]*'\"")
 end try
 set found_ooos_all to found_ooos_all & "
 " & chooseMyOwn
@@ -112,7 +112,7 @@ else if (get second item of found_ooos as string) is chooseMyOwn then
   -- set choice to found installation
   -- set the choice to (get first paragraph of found_ooos)
   set the choice to (get first item of found_ooos)
-else 
+else
   set the choice to (choose from list found_ooos default items (get first item of found_ooos) with prompt listPrompt OK button name listOKLabel cancel button name listCancelLabel)
   if choice is false then
 	  -- do nothing, the user cancelled the installation
@@ -122,7 +122,7 @@ else
 	  -- the user would not be able to select the .app
 	  set the choice to POSIX path of (choose file with prompt chooseManual of type "com.apple.application-bundle" without showing package contents and invisibles)
   end if
-end if	
+end if
 
 -- now only check whether the path is really from [PRODUCTNAME]
 try
@@ -152,7 +152,7 @@ try
 		tell application choice to quit
 	end if
 	do shell script tarCommand
-	
+
 on error errMSG number errNUM
 	display dialog IdentifyQ buttons {IdentifyYES, IdentifyNO} with icon 2
 	if (button returned of result) is IdentifyYES then
