@@ -787,44 +787,7 @@ void NeonSession::Init()
     }
 
     // Add hooks (i.e. for adding additional headers to the request)
-
-#if 0
-    /* Hook called when a request is created. */
-    //typedef void (*ne_create_request_fn)(ne_request *req, void *userdata,
-    //                 const char *method, const char *path);
-
-    ne_hook_create_request( m_pHttpSession, create_req_hook_fn, this );
-#endif
-
-    /* Hook called before the request is sent.  'header' is the raw HTTP
-     * header before the trailing CRLF is added: add in more here. */
-    //typedef void (*ne_pre_send_fn)(ne_request *req, void *userdata,
-    //               ne_buffer *header);
-
     ne_hook_pre_send( m_pHttpSession, NeonSession_PreSendRequest, this );
-#if 0
-    /* Hook called after the request is sent. May return:
-     *  NE_OK     everything is okay
-     *  NE_RETRY  try sending the request again.
-     * anything else signifies an error, and the request is failed. The
-     * return code is passed back the _dispatch caller, so the session error
-     * must also be set appropriately (ne_set_error).
-     */
-    //typedef int (*ne_post_send_fn)(ne_request *req, void *userdata,
-    //               const ne_status *status);
-
-    ne_hook_post_send( m_pHttpSession, post_send_req_hook_fn, this );
-
-    /* Hook called when the request is destroyed. */
-    //typedef void (*ne_destroy_req_fn)(ne_request *req, void *userdata);
-
-    ne_hook_destroy_request( m_pHttpSession, destroy_req_hook_fn, this );
-
-    /* Hook called when the session is destroyed. */
-    //typedef void (*ne_destroy_sess_fn)(void *userdata);
-
-    ne_hook_destroy_session( m_pHttpSession, destroy_sess_hook_fn, this );
-#endif
 
     if ( !m_aProxyName.isEmpty() )
     {
@@ -843,13 +806,9 @@ void NeonSession::Init()
     ne_redirect_register( m_pHttpSession );
 
     // authentication callbacks.
-#if 1
     ne_add_server_auth( m_pHttpSession, NE_AUTH_ALL, NeonSession_NeonAuth, this );
     ne_add_proxy_auth ( m_pHttpSession, NE_AUTH_ALL, NeonSession_NeonAuth, this );
-#else
-    ne_set_server_auth( m_pHttpSession, NeonSession_NeonAuth, this );
-    ne_set_proxy_auth ( m_pHttpSession, NeonSession_NeonAuth, this );
-#endif
+
     // set timeout to connect
     // if connect_timeout is not set, neon returns NE_CONNECT when the TCP socket default
     // timeout elapses
