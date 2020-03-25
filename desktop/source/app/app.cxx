@@ -83,6 +83,7 @@
 #include <com/sun/star/office/Quickstart.hpp>
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
+#include <com/sun/star/loader/XImplementationLoader.hpp>
 
 #include <desktop/exithelper.h>
 #include <sal/log.hxx>
@@ -129,6 +130,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/window.hxx>
 #include "langselect.hxx"
+#include <salhelper/thread.hxx>
 
 #if defined MACOSX
 #include <errno.h>
@@ -1217,6 +1219,38 @@ void Desktop::AppEvent( const ApplicationEvent& rAppEvent )
     HandleAppEvent( rAppEvent );
 }
 
+namespace {
+
+class JVMloadThread : public salhelper::Thread {
+public:
+    JVMloadThread() : salhelper::Thread("Preload JVM thread")
+    {
+    }
+
+private:
+    virtual void execute() override final
+    {
+        Reference< XMultiServiceFactory > xSMgr = comphelper::getProcessServiceFactory();
+
+        Reference< css::loader::XImplementationLoader > xJavaComponentLoader(
+            xSMgr->createInstance("com.sun.star.comp.stoc.JavaComponentLoader"),
+            css::uno::UNO_QUERY_THROW);
+
+        if (xJavaComponentLoader.is())
+        {
+            const css::uno::Reference< ::com::sun::star::registry::XRegistryKey > xRegistryKey;
+            try
+            {
+                xJavaComponentLoader->activate("", "", "", xRegistryKey);
+            }
+            catch (...)
+            {
+                SAL_WARN("desktop.app", "Cannot activate factory during JVM preloading");
+            }
+        }
+    }
+};
+
 struct ExecuteGlobals
 {
     Reference < css::document::XDocumentEventListener > xGlobalBroadcaster;
@@ -1224,6 +1258,7 @@ struct ExecuteGlobals
     bool bUseSystemFileDialog;
     std::unique_ptr<SvtLanguageOptions> pLanguageOptions;
     std::unique_ptr<SvtPathOptions> pPathOptions;
+    rtl::Reference< JVMloadThread > xJVMloadThread;
 
     ExecuteGlobals()
     : bRestartRequested( false )
@@ -1253,6 +1288,15 @@ int Desktop::Main()
 
     // Detect desktop environment - need to do this as early as possible
     css::uno::setCurrentContext( new DesktopContext( css::uno::getCurrentContext() ) );
+
+    if (officecfg::Office::Common::Misc::PreloadJVM::get() && pExecGlobals)
+    {
+        SAL_INFO("desktop.app", "Preload JVM");
+
+        // pre-load JVM
+        pExecGlobals->xJVMloadThread = new JVMloadThread();
+        pExecGlobals->xJVMloadThread->launch();
+    }
 
     CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
 
@@ -1662,6 +1706,12 @@ int Desktop::doShutdown()
 
     if (m_aUpdateThread.joinable())
         m_aUpdateThread.join();
+
+    if (pExecGlobals->xJVMloadThread.is())
+    {
+        pExecGlobals->xJVMloadThread->join();
+        pExecGlobals->xJVMloadThread.clear();
+    }
 
     pExecGlobals->bRestartRequested = pExecGlobals->bRestartRequested ||
         OfficeRestartManager::get(comphelper::getProcessComponentContext())->
