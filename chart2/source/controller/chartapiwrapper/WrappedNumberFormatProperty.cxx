@@ -64,7 +64,7 @@ Any WrappedNumberFormatProperty::getPropertyValue( const Reference< beans::XProp
         sal_Int32 nKey = 0;
         Reference< chart2::XDataSeries > xSeries( xInnerPropertySet, uno::UNO_QUERY );
         if( xSeries.is() )
-            nKey = m_spChart2ModelContact->getExplicitNumberFormatKeyForSeries( xSeries );
+            nKey = Chart2ModelContact::getExplicitNumberFormatKeyForSeries( xSeries );
         else
         {
             Reference< chart2::XAxis > xAxis( xInnerPropertySet, uno::UNO_QUERY );

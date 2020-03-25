@@ -276,8 +276,10 @@ class chartDataLabels(UITestCase):
     def handle_number_dlg(dialog):
         categoryformat = dialog.getChild("categorylb")
         formatted = dialog.getChild("formatted")
+        sourceformat = dialog.getChild("sourceformat")
 
         # Select currency
+        sourceformat.executeAction("CLICK", tuple());
         categoryformat.getChild("4").executeAction("SELECT", tuple());
 
         self.assertEqual(get_state_as_dict(categoryformat)["SelectEntryText"], "Currency")
