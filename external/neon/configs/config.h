@@ -1,4 +1,4 @@
-/* Contents kept in sync with config.h.in from neon 0.29.5 */
+/* Contents kept in sync with config.h.in from neon 0.31.1 */
 
 /* Define if building universal (internal helper macro) */
 /* #undef AC_APPLE_UNIVERSAL_BUILD */
@@ -370,7 +370,7 @@
 #define NEON_IS_LIBRARY 1
 
 /* Define to be the neon version string */
-#define NEON_VERSION "0.29.5"
+#define NEON_VERSION "0.31.1"
 
 /* Define to enable debugging */
 /* #undef NE_DEBUGGING */
@@ -432,10 +432,10 @@
 #define NE_VERSION_MAJOR (0)
 
 /* Define to be neon library minor version */
-#define NE_VERSION_MINOR (29)
+#define NE_VERSION_MINOR (31)
 
 /* Define to be neon library patch version */
-#define NE_VERSION_PATCH (5)
+#define NE_VERSION_PATCH (1)
 
 /* Define to the address where bug reports for this package should be sent. */
 #define PACKAGE_BUGREPORT "neon@webdav.org"
@@ -444,13 +444,13 @@
 #define PACKAGE_NAME "neon"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "neon 0.29.5"
+#define PACKAGE_STRING "neon 0.31.1"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "neon"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "0.29.5"
+#define PACKAGE_VERSION "0.31.1"
 
 /* The size of `int', as computed by sizeof. */
 #define SIZEOF_INT 4
