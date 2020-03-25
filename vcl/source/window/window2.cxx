@@ -1346,8 +1346,8 @@ void Window::queue_resize(StateChangedType eReason)
     if (VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier())
     {
         Size aSize = GetSizePixel();
-        if (aSize.getWidth() > 0 && aSize.getHeight() > 0 &&
-            !pParent->IsInInitShow())
+        if (aSize.getWidth() > 0 && aSize.getHeight() > 0 && GetParentDialog()
+            && !pParent->IsInInitShow())
             LogicInvalidate(nullptr);
     }
 }
