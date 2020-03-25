@@ -203,6 +203,7 @@ public:
     void testTdf116266();
     void testTdf126324();
     void testTdf128684();
+    void testTdf119187();
 
     bool checkPattern(sd::DrawDocShellRef const & rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
     void testPatternImport();
@@ -324,6 +325,7 @@ public:
     CPPUNIT_TEST(testTdf106638);
     CPPUNIT_TEST(testTdf128684);
     CPPUNIT_TEST(testTdf113198);
+    CPPUNIT_TEST(testTdf119187);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -3084,6 +3086,31 @@ void SdImportTest::testTdf113198()
     sal_Int16 nParaAdjust = -1;
     xShape->getPropertyValue("ParaAdjust") >>= nParaAdjust;
     CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(nParaAdjust));
+}
+
+void SdImportTest::testTdf119187()
+{
+    std::vector< sd::DrawDocShellRef > xDocShRef;
+    // load document
+    xDocShRef.push_back(loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf119187.pptx"), PPTX));
+    // load resaved document
+    xDocShRef.push_back(saveAndReload( xDocShRef.at(0).get(), PPTX ));
+
+    // check documents
+    for (const sd::DrawDocShellRef& xDoc : xDocShRef)
+    {
+        // get shape properties
+        const SdrPage* pPage = GetPage(1, xDoc);
+        CPPUNIT_ASSERT(pPage);
+        SdrObject* pObj = pPage->GetObj(0);
+        CPPUNIT_ASSERT(pObj);
+        const sdr::properties::BaseProperties & rProperties = pObj->GetProperties();
+
+        // chcek text vertical alignment
+        const SdrTextVertAdjustItem& rSdrTextVertAdjustItem = rProperties.GetItem(SDRATTR_TEXT_VERTADJUST);
+        const SdrTextVertAdjust eTVA = rSdrTextVertAdjustItem.GetValue();
+        CPPUNIT_ASSERT_EQUAL(SDRTEXTVERTADJUST_TOP, eTVA);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);
