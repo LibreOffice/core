@@ -32,7 +32,7 @@ void lclRandomGenerateValues(sal_uInt8* aArray, sal_uInt32 aSize)
     rtl_random_destroyPool(aRandomPool);
 }
 
-static const OUString lclCspName = "Microsoft Enhanced RSA and AES Cryptographic Provider";
+static const char lclCspName[] = "Microsoft Enhanced RSA and AES Cryptographic Provider";
 constexpr const sal_uInt32 AES128Size = 16;
 
 } // end anonymous namespace
@@ -213,7 +213,7 @@ void Standard2007Engine::writeEncryptionInfo(BinaryXOutputStream& rStream)
 {
     rStream.WriteUInt32(msfilter::VERSION_INFO_2007_FORMAT);
 
-    sal_uInt32 cspNameSize = (lclCspName.getLength() * 2) + 2;
+    sal_uInt32 cspNameSize = (strlen(lclCspName) * 2) + 2;
 
     sal_uInt32 encryptionHeaderSize = static_cast<sal_uInt32>(sizeof(msfilter::EncryptionStandardHeader));
 
@@ -222,7 +222,7 @@ void Standard2007Engine::writeEncryptionInfo(BinaryXOutputStream& rStream)
     rStream.WriteUInt32(headerSize);
 
     rStream.writeMemory(&mInfo.header, encryptionHeaderSize);
-    rStream.writeUnicodeArray(lclCspName);
+    rStream.writeUnicodeArray(OUString(lclCspName));
     rStream.WriteUInt16(0);
 
     rStream.writeMemory(&mInfo.verifier, sizeof(msfilter::EncryptionVerifierAES));
