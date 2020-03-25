@@ -1,0 +1,22 @@
+--- src/ne_string.h.orig	2020-03-25 08:08:46.211866617 +0100
++++ src/ne_string.h	2020-03-25 08:09:00.035751027 +0100
+@@ -173,7 +173,7 @@
+  * char. */
+ #define ne_tolower(c) (ne_tolower_array()[(unsigned char)c])
+ 
+-const unsigned char *const ne_tolower_array(void);
++const unsigned char* ne_tolower_array(void);
+ 
+ /* Convert an ASCII hexadecimal character in the ranges '0'..'9'
+  * 'a'..'f' 'A'..'F' to its numeric equivalent. */
+--- src/ne_string.c.orig	2020-03-25 08:11:48.338339243 +0100
++++ src/ne_string.c	2020-03-25 08:12:06.442186960 +0100
+@@ -572,7 +572,7 @@
+ 
+ #define TOLOWER(ch) ascii_tolower[ch]
+ 
+-const unsigned char *const ne_tolower_array(void)
++const unsigned char* ne_tolower_array(void)
+ {
+     return ascii_tolower;
+ }
