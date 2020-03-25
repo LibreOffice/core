@@ -859,6 +859,18 @@ javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, bool *exist)
             *exist = true;
             JFW_TRACE2("Java runtime library exist: " << sRuntimeLib);
 
+            // Check version
+            rtl::Reference<VendorBase> aVendorInfo = getJREInfoByPath(sLocation);
+            if (!aVendorInfo.is())
+            {
+                *exist = false;
+                JFW_TRACE2("JRE or supported vendor not accessible at location: " << sLocation);
+            }
+            else if(pInfo->sVersion!=aVendorInfo->getVersion())
+            {
+                *exist = false;
+                JFW_TRACE2("Mismatch between version number in libreoffice settings and installed JRE:  " << pInfo->sVersion <<" != " << aVendorInfo->getVersion());
+            }
         }
         else if (::osl::File::E_NOENT == rc_itemRt)
         {
