@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1cdd6c33_625282d4",
+        "filename": "vcl/source/app/salvtables.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4533,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-03-25T13:39:26Z",
+      "side": 1,
+      "message": "I\u0027ve no objection to this version if it works, But what difference does it make to not have this change in vcl vs having the change. What I felt I saw with ScrollOutputArea was a \"flicker\" of the scrollbar, due to some Update calls in that code path, vs no flicker with ScrollToAbsPos but both gave the same final position of the scrollbar.",
+      "revId": "9796d72cfcdf2cca4a6144f8d488d3d4b2f06fe2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
