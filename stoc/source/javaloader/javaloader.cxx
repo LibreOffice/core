@@ -304,11 +304,17 @@ sal_Bool SAL_CALL JavaComponentLoader::writeRegistryInfo(
     return loader->writeRegistryInfo(xKey, blabla, rLibName);
 }
 
-
 css::uno::Reference<XInterface> SAL_CALL JavaComponentLoader::activate(
     const OUString & rImplName, const OUString & blabla, const OUString & rLibName,
     const css::uno::Reference<XRegistryKey> & xKey)
 {
+    if (rImplName.isEmpty() && blabla.isEmpty() && rLibName.isEmpty())
+    {
+        // preload JVM was requested
+        (void)getJavaLoader();
+        return css::uno::Reference<XInterface>();
+    }
+
     const css::uno::Reference<XImplementationLoader> & loader = getJavaLoader();
     if (!loader.is())
         throw CannotActivateFactoryException("Could not create Java implementation loader");
