@@ -1335,7 +1335,13 @@ void Window::queue_resize(StateChangedType eReason)
 
     if (VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier())
     {
+<<<<<<< HEAD   (ee2f51 tdf#130334: Firebird deal with array fields)
         if (!pParent->IsInInitShow())
+=======
+        Size aSize = GetSizePixel();
+        if (aSize.getWidth() > 0 && aSize.getHeight() > 0 && GetParentDialog()
+            && !pParent->IsInInitShow())
+>>>>>>> CHANGE (4af18e tdf#131280 Fix endless invalidation loop on documents with f)
             LogicInvalidate(nullptr);
     }
 }
