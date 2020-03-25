@@ -36,7 +36,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecuta
 			COMMA=$(COMMA) \
 			PATH=$$(cygpath $(call gb_UnpackedTarball_get_dir,nss)):$$(cygpath $(call gb_UnpackedTarball_get_dir,gyp)):$$PATH \
 			MAKE=$(MAKE) \
-			NINJA=$(NINJA) \
+			NINJA='$(subst ','\'',$(NINJA))' \
 			NSINSTALL='$(SRCDIR)/external/nss/nsinstall.py' \
 			LIB="$(ILIB)" \
 			RC="rc.exe $(SOLARINC)" \
@@ -70,7 +70,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecuta
 	$(call gb_ExternalProject_run,build,\
 			COMMA=$(COMMA) \
 			PATH=$(call gb_UnpackedTarball_get_dir,nss):$(call gb_UnpackedTarball_get_dir,gyp):$$PATH \
-			NINJA=$(NINJA) \
+			NINJA='$(subst ','\'',$(NINJA))' \
 			./build.sh -v --disable-tests --enable-libpkix \
 				$(if $(ENABLE_DBGUTIL),,--opt) \
 				$(if $(COM_IS_CLANG),$(if $(filter -fsanitize=%,$(CC)),--no-zdefs)) \
