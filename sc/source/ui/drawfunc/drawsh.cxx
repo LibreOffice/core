@@ -389,6 +389,14 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
             }
             break;
 
+        case SID_ATTR_GLOW:
+        case SID_ATTR_GLOW_COLOR:
+        case SID_ATTR_GLOW_RADIUS:
+            if (const SfxItemSet* pNewArgs = rReq.GetArgs())
+                pView->SetAttrToMarked(*pNewArgs, false);
+            rReq.Done();
+            break;
+
         default:
             break;
     }

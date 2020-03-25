@@ -76,6 +76,8 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/lrspitem.hxx>
+#include <svx/sdmetitm.hxx>
+#include <svx/sdooitm.hxx>
 #include <svx/xlnstit.hxx>
 #include <svx/xlnedit.hxx>
 #include <svx/xfillit0.hxx>
