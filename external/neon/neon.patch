@@ -208,7 +208,7 @@
 +
 +
 +/*
-  * Wrapper arround initializeSecurityContext.  Supplies several
+  * Wrapper around initializeSecurityContext.  Supplies several
   * default parameters as well as logging in case of errors.
   */
 @@ -483,7 +522,7 @@
