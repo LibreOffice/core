@@ -63,9 +63,14 @@ namespace pcr
         }
     }
 
-    IMPL_LINK_NOARG( CommonBehaviourControlHelper, EditModifiedHdl, weld::Entry&, void )
+    void CommonBehaviourControlHelper::editChanged()
     {
         setModified();
+    }
+
+    IMPL_LINK_NOARG( CommonBehaviourControlHelper, EditModifiedHdl, weld::Entry&, void )
+    {
+        editChanged();
     }
 
     IMPL_LINK_NOARG( CommonBehaviourControlHelper, ModifiedHdl, weld::ComboBox&, void )

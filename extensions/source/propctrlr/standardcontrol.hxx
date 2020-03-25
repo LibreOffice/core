@@ -359,6 +359,8 @@ namespace pcr
         virtual css::uno::Type SAL_CALL getValueType() override;
         virtual weld::Widget* getWidget() override { return getTypedControlWindow(); }
 
+        virtual void editChanged() override;
+
         virtual void SetModifyHandler() override
         {
             m_xEntry->connect_focus_in( LINK( this, CommonBehaviourControlHelper, GetFocusHdl ) );

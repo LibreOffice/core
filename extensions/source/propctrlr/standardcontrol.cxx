@@ -735,6 +735,13 @@ namespace pcr
         setModified();
     }
 
+    void OMultilineEditControl::editChanged()
+    {
+        m_xTextView->set_text(m_xEntry->get_text());
+        CheckEntryTextViewMisMatch();
+        setModified();
+    }
+
     IMPL_LINK_NOARG(OMultilineEditControl, ButtonHandler, weld::Button&, void)
     {
         m_xButton->set_active(false);
