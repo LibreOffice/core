@@ -69,6 +69,8 @@ static bool isVulkanBlacklisted(const VkPhysicalDeviceProperties& props)
                                             deviceIdStr);
 }
 
+static sk_app::VulkanWindowContext::SharedGrContext getTemporaryGrContext();
+
 static void checkDeviceBlacklisted(bool blockDisable = false)
 {
     static bool done = false;
@@ -80,9 +82,23 @@ static void checkDeviceBlacklisted(bool blockDisable = false)
         {
             case RenderVulkan:
             {
-                GrContext* grContext = SkiaHelper::getSharedGrContext();
+                // First try if a GrContext already exists.
+                sk_app::VulkanWindowContext::SharedGrContext grContext
+                    = sk_app::VulkanWindowContext::getSharedGrContext();
+                if (!grContext.getGrContext())
+                {
+                    // This function is called from isVclSkiaEnabled(), which
+                    // may be called when deciding which X11 visual to use,
+                    // and that visual is normally needed when creating
+                    // Skia's VulkanWindowContext, which is needed for the GrContext.
+                    // Avoid the loop by creating a temporary GrContext
+                    // that will use the default X11 visual (that shouldn't matter
+                    // for just finding out information about Vulkan) and destroying
+                    // the temporary context will clean up again.
+                    grContext = getTemporaryGrContext();
+                }
                 bool blacklisted = true; // assume the worst
-                if (grContext) // Vulkan was initialized properly
+                if (grContext.getGrContext()) // Vulkan was initialized properly
                 {
                     blacklisted = isVulkanBlacklisted(
                         sk_app::VulkanWindowContext::getPhysDeviceProperties());
@@ -230,8 +246,8 @@ void disableRenderMethod(RenderMethod method)
 
 static sk_app::VulkanWindowContext::SharedGrContext* sharedGrContext;
 
-static std::unique_ptr<sk_app::WindowContext> (*createVulkanWindowContextFunction)() = nullptr;
-static void setCreateVulkanWindowContext(std::unique_ptr<sk_app::WindowContext> (*function)())
+static std::unique_ptr<sk_app::WindowContext> (*createVulkanWindowContextFunction)(bool) = nullptr;
+static void setCreateVulkanWindowContext(std::unique_ptr<sk_app::WindowContext> (*function)(bool))
 {
     createVulkanWindowContextFunction = function;
 }
@@ -259,7 +275,7 @@ GrContext* getSharedGrContext()
     done = true;
     if (createVulkanWindowContextFunction == nullptr)
         return nullptr; // not initialized properly (e.g. used from a VCL backend with no Skia support)
-    std::unique_ptr<sk_app::WindowContext> tmpContext = createVulkanWindowContextFunction();
+    std::unique_ptr<sk_app::WindowContext> tmpContext = createVulkanWindowContextFunction(false);
     // Set up using the shared context created by the call above, if successful.
     context = sk_app::VulkanWindowContext::getSharedGrContext();
     grContext = context.getGrContext();
@@ -270,6 +286,15 @@ GrContext* getSharedGrContext()
     }
     disableRenderMethod(RenderVulkan);
     return nullptr;
+}
+
+static sk_app::VulkanWindowContext::SharedGrContext getTemporaryGrContext()
+{
+    if (createVulkanWindowContextFunction == nullptr)
+        return sk_app::VulkanWindowContext::SharedGrContext();
+    std::unique_ptr<sk_app::WindowContext> tmpContext = createVulkanWindowContextFunction(true);
+    // Set up using the shared context created by the call above, if successful.
+    return sk_app::VulkanWindowContext::getSharedGrContext();
 }
 
 sk_sp<SkSurface> createSkSurface(int width, int height, SkColorType type)
@@ -315,7 +340,7 @@ void cleanup()
 // Skia should not be used from VCL backends that do not actually support it, as there will be setup missing.
 // The code here (that is in the vcl lib) needs a function for creating Vulkan context that is
 // usually available only in the backend libs.
-void prepareSkia(std::unique_ptr<sk_app::WindowContext> (*createVulkanWindowContext)())
+void prepareSkia(std::unique_ptr<sk_app::WindowContext> (*createVulkanWindowContext)(bool))
 {
     setCreateVulkanWindowContext(createVulkanWindowContext);
     skiaSupportedByBackend = true;
