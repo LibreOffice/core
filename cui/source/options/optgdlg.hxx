@@ -127,9 +127,7 @@ private:
     std::unique_ptr<weld::ComboBox> m_xMousePosLB;
     std::unique_ptr<weld::ComboBox> m_xMouseMiddleLB;
 
-#if defined( UNX )
     DECL_LINK(OnAntialiasingToggled, weld::ToggleButton&, void);
-#endif
     DECL_LINK(OnForceOpenGLToggled, weld::ToggleButton&, void);
     DECL_LINK(OnForceSkiaToggled, weld::ToggleButton&, void);
     DECL_LINK(OnForceSkiaRasterToggled, weld::ToggleButton&, void);

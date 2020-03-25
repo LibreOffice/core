@@ -802,15 +802,7 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
         m_xMenuIconBox->hide();
     }
 
-#if defined( UNX )
     m_xFontAntiAliasing->connect_toggled( LINK( this, OfaViewTabPage, OnAntialiasingToggled ) );
-#else
-    // on this platform, we do not have the anti aliasing options
-    m_xFontAntiAliasing->hide();
-    m_xAAPointLimitLabel->hide();
-    m_xAAPointLimit->hide();
-
-#endif
 
     m_xForceOpenGL->connect_toggled(LINK(this, OfaViewTabPage, OnForceOpenGLToggled));
     m_xForceSkia->connect_toggled(LINK(this, OfaViewTabPage, OnForceSkiaToggled));
@@ -860,7 +852,6 @@ OfaViewTabPage::~OfaViewTabPage()
 {
 }
 
-#if defined( UNX )
 IMPL_LINK_NOARG( OfaViewTabPage, OnAntialiasingToggled, weld::ToggleButton&, void )
 {
     bool bAAEnabled = m_xFontAntiAliasing->get_active();
@@ -868,7 +859,6 @@ IMPL_LINK_NOARG( OfaViewTabPage, OnAntialiasingToggled, weld::ToggleButton&, voi
     m_xAAPointLimitLabel->set_sensitive(bAAEnabled);
     m_xAAPointLimit->set_sensitive(bAAEnabled);
 }
-#endif
 
 IMPL_LINK_NOARG(OfaViewTabPage, OnForceOpenGLToggled, weld::ToggleButton&, void)
 {
@@ -994,7 +984,6 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
         bAppearanceChanged = true;
     }
 
-#if defined( UNX )
     if (m_xFontAntiAliasing->get_state_changed_from_saved())
     {
         pAppearanceCfg->SetFontAntiAliasing(m_xFontAntiAliasing->get_active());
@@ -1006,7 +995,6 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
         pAppearanceCfg->SetFontAntialiasingMinPixelHeight(m_xAAPointLimit->get_value(FieldUnit::PIXEL));
         bAppearanceChanged = true;
     }
-#endif
 
     if (m_xFontShowCB->get_state_changed_from_saved())
     {
@@ -1180,10 +1168,8 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
     m_xMouseMiddleLB->set_active(static_cast<short>(pAppearanceCfg->GetMiddleMouseButton()));
     m_xMouseMiddleLB->save_value();
 
-#if defined( UNX )
     m_xFontAntiAliasing->set_active( pAppearanceCfg->IsFontAntiAliasing() );
     m_xAAPointLimit->set_value(pAppearanceCfg->GetFontAntialiasingMinPixelHeight(), FieldUnit::PIXEL);
-#endif
 
     // WorkingSet
     SvtFontOptions aFontOpt;
@@ -1231,10 +1217,8 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
     m_xForceSkia->set_active(mpSkiaConfig->forceSkia());
     m_xForceSkiaRaster->set_active(mpSkiaConfig->forceSkiaRaster());
 
-#if defined( UNX )
     m_xFontAntiAliasing->save_state();
     m_xAAPointLimit->save_value();
-#endif
     m_xFontShowCB->save_state();
 
     m_xUseOpenGL->save_state();
@@ -1243,9 +1227,7 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
     m_xForceSkia->save_state();
     m_xForceSkiaRaster->save_state();
 
-#if defined( UNX )
     OnAntialiasingToggled(*m_xFontAntiAliasing);
-#endif
 }
 
 void OfaViewTabPage::UpdateOGLStatus()
