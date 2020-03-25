@@ -36,6 +36,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
     external/nss/macos-dlopen.patch.0 \
 	external/nss/buildsystem.patch.0 \
 	external/nss/fix-cc-detect-with-ccache.patch.0 \
+	external/nss/nss-online.patch.0 \
 ))
 
 ifeq ($(OS),WNT)

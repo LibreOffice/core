@@ -164,6 +164,8 @@
 #include "lokinteractionhandler.hxx"
 #include "lokclipboard.hxx"
 #include <officecfg/Office/Impress.hxx>
+#include <comphelper/hash.hxx>
+#include <comphelper/storagehelper.hxx>
 
 using namespace css;
 using namespace vcl;
@@ -5686,6 +5688,12 @@ static void preloadData()
     // force load language singleton
     SvtLanguageTable::HasLanguageType(LANGUAGE_SYSTEM);
     (void)LanguageTag::isValidBcp47("foo", nullptr);
+
+    std::cerr << "Preload nss\n";
+    {
+        comphelper::Hash aHash(comphelper::HashType::SHA256);
+        comphelper::OStorageHelper::CreatePackageEncryptionData("x");
+    }
 
     std::cerr << "Preload fonts\n";
 
