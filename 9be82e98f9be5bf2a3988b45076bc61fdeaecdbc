@@ -46,6 +46,30 @@
       "revId": "9be82e98f9be5bf2a3988b45076bc61fdeaecdbc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93f4b54c_1ebc3227",
+        "filename": "basic/qa/cppunit/test_scanner.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 809,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-25T19:30:03Z",
+      "side": 1,
+      "message": "Moving them would be fine, but in a separate clean-up patch.",
+      "parentUuid": "91e4225a_588e8fa1",
+      "range": {
+        "startLine": 789,
+        "startChar": 4,
+        "endLine": 809,
+        "endChar": 41
+      },
+      "revId": "9be82e98f9be5bf2a3988b45076bc61fdeaecdbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
