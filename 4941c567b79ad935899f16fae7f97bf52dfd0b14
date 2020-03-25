@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8ef83f6a_d21a82d0",
+        "filename": "sw/source/uibase/ribbar/workctrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-03-25T07:19:52Z",
+      "side": 1,
+      "message": "should probably do a freeze/unfreeze around the widget manipulations to speed up display",
+      "revId": "4941c567b79ad935899f16fae7f97bf52dfd0b14",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
