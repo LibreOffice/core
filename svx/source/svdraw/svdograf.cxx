@@ -135,7 +135,11 @@ void SdrGrafObj::onGraphicChanged()
 
     const VectorGraphicDataPtr& rVectorGraphicDataPtr = mpGraphicObject->GetGraphic().getVectorGraphicData();
 
-    if (!rVectorGraphicDataPtr.get())
+    if (!rVectorGraphicDataPtr)
+        return;
+
+    // Skip for PDF as it is only a bitmap primitive in a sequence.
+    if (rVectorGraphicDataPtr->getVectorGraphicDataType() == VectorGraphicDataType::Pdf)
         return;
 
     const drawinglayer::primitive2d::Primitive2DContainer aSequence(rVectorGraphicDataPtr->getPrimitive2DSequence());
