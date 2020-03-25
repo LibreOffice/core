@@ -1,8 +1,4 @@
-<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientTransform="matrix(.70710679 .70710677 -.70710677 .70710679 -56.5 6.283203)" gradientUnits="userSpaceOnUse" x1="10.5" x2="10.5" y1="11" y2="7"><stop offset="0" stop-color="#0040dd"/><stop offset="1" stop-color="#0a84ff"/></linearGradient>
+<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientTransform="matrix(.70710679 .70710677 -.70710677 .70710679 -56.5 6.283203)" gradientUnits="userSpaceOnUse" x1="50.667725" x2="48.161015" y1="-44.123241" y2="-47"><stop offset="0" stop-color="#0040dd"/><stop offset="1" stop-color="#0a84ff"/></linearGradient>
 
-/&amp;amp;amp;amp;gt;<path d="m1 9c-.554 0-1 .446-1 1v4c0 .554.446 1 1 1h8c.554 0 1-.446 1-1v-4c0-.554-.446-1-1-1z" fill="#69696e"/><path d="m1 10h8v4h-8z" fill="#98989d"/><image fill-rule="evenodd" height="16" preserveAspectRatio="none" width="16" x="-10" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA50lEQVR42mNgoDbYGMOwGIj/Y8GL
-iTJgdQTD//+PJ2NgkDhRBiwOBhpw0Q8Dg8SJMmCWL9CA0+YYGCROlAH9rkADTmhiYJA4UQa02AEN
-OK4GxnttuP/PYmDAiRcwMGzCMKDKHGHABKCin1sbcGKQPIYB+QagMNAC40aggs9lIjgxSJ5B0St7
-GxD/x4YLgQo+ZeHGIHkGeff0/ysPXsCKk4AK/teJ4MQgeQZZp8T/CT0rsOIoLeP/wUBFuHA4KBAl
-baP+BzctxItBanBGm5hF8P/kSRvxYpAanAaImPhtA+L/BPA2BloBAO6YVAXhash8AAAAAElFTkSu
-QmCC" y="18"/><path d="m11 2c0-.554-.446-1-1-1h-5c-.554 0-1 .446-1 1v8c0 .554.446 1 1 1h5c.554 0 1-.446 1-1z" fill="#f5c200"/><path d="m10 2v8h-5v-8z" fill="#ffd60a"/><path d="m15 12c.554 0 1-.446 1-1v-4c0-.554-.446-1-1-1h-7c-.554 0-1 .446-1 1v4c0 .554.446 1 1 1z" fill="#0040dd"/><path d="m15 11h-7v-4h7z" fill="url(#a)"/></svg>
+
+/&amp;amp;amp;amp;amp;gt;<path d="m1 9c-.554 0-1 .446-1 1v4c0 .554.446 1 1 1h8c.554 0 1-.446 1-1v-4c0-.554-.446-1-1-1z" fill="#69696e"/><path d="m1 10h8v4h-8z" fill="#98989d"/><path d="m11 2c0-.554-.446-1-1-1h-5c-.554 0-1 .446-1 1v8c0 .554.446 1 1 1h5c.554 0 1-.446 1-1z" fill="#f5c200"/><path d="m10 2v8h-5v-8z" fill="#ffd60a"/><path d="m15 12c.554 0 1-.446 1-1v-4c0-.554-.446-1-1-1h-7c-.554 0-1 .446-1 1v4c0 .554.446 1 1 1z" fill="#0040dd"/><path d="m15 11h-7v-4h7z" fill="url(#a)"/></svg>

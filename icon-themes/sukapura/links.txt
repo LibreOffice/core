@@ -2183,8 +2183,6 @@ sc/res/sc26047.png cmd/sc_dbviewfunctions.png
 sc/res/sc26048.png cmd/sc_autosum.png
 sc/res/sc26050.png cmd/sc_cancel.png
 sc/res/sc26051.png cmd/sc_ok.png
-sc/res/sf01.png cmd/sc_inserttable.png
-sc/res/sf02.png cmd/sc_adddirect.png
 sc/res/table.png cmd/sc_inserttable.png
 sc/res/text.png cmd/sc_text.png
 sc/res/time.png cmd/sc_timefield.png
@@ -2213,7 +2211,6 @@ sd/res/ole.png cmd/sc_insertobject.png
 sd/res/page.png cmd/sc_adddirect.png
 sd/res/pipette.png cmd/sc_bmpmask.png
 sd/res/playblue_16.png cmd/sc_runbasic.png
-sd/res/sf01.png cmd/sc_insertdraw.png
 sd/res/stopplayingblue_16.png cmd/sc_basicstop.png
 sd/res/time_16.png cmd/sc_timefield.png
 sd/res/waiticon.png cmd/sc_mediapause.png
@@ -2433,12 +2430,9 @@ sw/res/sc20249.png cmd/sc_navigator.png
 sw/res/sc20556.png cmd/sc_dbviewfunctions.png
 sw/res/sc20557.png cmd/sc_cancel.png
 sw/res/sc20558.png cmd/sc_ok.png
-sw/res/sf01.png cmd/sc_controlcodes.png
-sw/res/sf02.png cmd/sc_charfontname.png
-sw/res/sf03.png cmd/sc_insertframe.png
-sw/res/sf04.png cmd/sc_showsinglepage.png
-sw/res/sf05.png cmd/sc_defaultbullet.png
-sw/res/sf06.png cmd/sc_inserttable.png
+sw/res/sf02.png cmd/sc_designerdialog.png
+sw/res/sf04.png sc/res/sf02.png
+sw/res/sf06.png cmd/sc_autoformat.png
 sw/res/sidebar/pageproppanel/last_custom_common.png svx/res/symphony/last_custom_common.png
 sw/res/sidebar/pageproppanel/last_custom_common_grey.png svx/res/symphony/last_custom_common_grey.png
 sw/res/sidebar/pageproppanel/portraitcopy_24x24.png cmd/lc_orientation.png
@@ -2465,7 +2459,7 @@ sw/res/sx03.png cmd/sc_dbviewqueries.png
 
 # res
 sw/res/page_break.png cmd/sc_insertpagebreak.png
-sw/res/styfamnu.png cmd/sc_defaultbullet.png
+sw/res/styfamnu.png sw/res/sf05.png
 
 # split cells duplicates
 sw/res/zetlhor2.png svx/res/zetlhor2.png
@@ -2552,15 +2546,15 @@ cmd/sc_rowheight.png cmd/sc_setminimalrowheight.png
 # ==============================================
 cmd/32/exportasgraphic.png cmd/32/insertgraphic.png
 cmd/32/margins.png cmd/32/pagemargin.png
-cmd/32/namegroup.png cmd/32/definename.png
+cmd/32/namegroup.png cmd/32/renameobject.png
 
 cmd/lc_exportasgraphic.png cmd/lc_insertgraphic.png
 cmd/lc_margins.png cmd/lc_pagemargin.png
-cmd/lc_namegroup.png cmd/lc_definename.png
+cmd/lc_namegroup.png cmd/lc_renameobject.png
 
 cmd/sc_exportasgraphic.png cmd/sc_insertgraphic.png
 cmd/sc_margins.png cmd/sc_pagemargin.png
-cmd/sc_namegroup.png cmd/sc_definename.png
+cmd/sc_namegroup.png cmd/sc_renameobject.png
 
 # calc toolbar draw
 # ===============================================
