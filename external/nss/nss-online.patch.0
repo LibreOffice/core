@@ -1,0 +1,11 @@
+--- nss/lib/softoken/softoken.h.orig	2020-03-25 18:51:38.786887278 +0100
++++ nss/lib/softoken/softoken.h	2020-03-25 18:51:47.450997085 +0100
+@@ -145,7 +145,7 @@
+ /*
+ ** macros to check for forked child process after C_Initialize
+ */
+-#if defined(XP_UNIX) && !defined(NO_FORK_CHECK)
++#if 0
+ 
+ #ifdef DEBUG
+ 
