@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c4815a08_a66ff809",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3231,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-03-25T21:43:43Z",
+      "side": 1,
+      "message": "As p is accessed unconditionally hereafter this should rather be an assert() instead of SAL_WARN_IF()",
+      "revId": "f6c28de2dc4c18a626181d35e64597c994993a44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
