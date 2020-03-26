@@ -14,14 +14,13 @@ gb_JavaClassSet_JAVACDEBUG:= -g
 $(eval $(call gb_Jar_Jar,OOoRunner))
 
 $(eval $(call gb_Jar_add_manifest_classpath,OOoRunner,\
-	ridl.jar \
+	libreoffice.jar \
 ))
 
 $(eval $(call gb_Jar_set_manifest,OOoRunner,$(SRCDIR)/qadevOOo/runner/manifest))
 
 $(eval $(call gb_Jar_use_jars,OOoRunner,\
-	ridl \
-	juh \
+	libreoffice \
 	java_uno \
 ))
 

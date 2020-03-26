@@ -41,8 +41,7 @@
   <!-- ==================== classpath setting ============================ -->
   <target name="init" depends="checksdk,initsdk,initnosdk">
     <path id="scriptclasspath">
-      <pathelement location="${opp}/classes/ridl.jar"/>
-      <pathelement location="${opp}/classes/juh.jar"/>
+      <pathelement location="${opp}/classes/libreoffice.jar"/>
       <pathelement location="${opp}/classes/ScriptFramework.jar"/>
     </path>
   </target>
