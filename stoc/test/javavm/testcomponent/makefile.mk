@@ -28,7 +28,7 @@ TARGET  = JavaTestComponent
 
 # Files --------------------------------------------------------
 
-JARFILES = ridl.jar jurt.jar unoil.jar
+JARFILES = libreoffice.jar
 
 CUSTOMMANIFESTFILE= manifest
 

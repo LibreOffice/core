@@ -22,7 +22,7 @@ TARGET := workbench_com_sun_star_comp_urlresolver
 
 PACKAGE := com$/sun$/star$/comp$/urlresolver
 JAVAFILES := UrlResolver_Test.java
-JARFILES := ridl.jar juh.jar
+JARFILES := libreoffice.jar
 
 .INCLUDE: settings.mk
 

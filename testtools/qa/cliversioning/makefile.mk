@@ -28,7 +28,7 @@ PACKAGE = cliversioning
 
 #----- compile .java files -----------------------------------------
 
-JARFILES = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
+JARFILES = libreoffice.jar java_uno.jar OOoRunner.jar
 JAVAFILES = VersionTestCase.java
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
@@ -49,19 +49,19 @@ ALLTAR : \
 echo :
     @echo .
     @echo ###########################   N O T E  ######################################
-    @echo . 
+    @echo .
     @echo To run the test you have to provide the path to the  office location. It must
     @echo contain the ure (d:\myOffice\LibreOffice\URE).
     @echo Also an office must be installed with full system integration.
     @echo Example:
     @echo dmake run office="d:\myOffice"
     @echo .
-    @echo To build a test library with a particular name run. The names must start with "version". 
+    @echo To build a test library with a particular name run. The names must start with "version".
     @echo For example:
-    @echo "dmake name=version_10_10_10.dll"	
+    @echo "dmake name=version_10_10_10.dll"
     @echo ###########################   N O T E  ######################################
     @echo .
-    @echo .	
+    @echo .
 
 # --- Parameters for the test --------------------------------------
 

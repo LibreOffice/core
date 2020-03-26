@@ -24,7 +24,7 @@ PACKAGE = com$/sun$/star$/comp$/jvmaccess$/workbench
 
 .INCLUDE: settings.mk
 
-JARFILES = ridl.jar jurt.jar
+JARFILES = libreoffice.jar
 JAVACLASSFILES = $(CLASSDIR)$/$(PACKAGE)$/TestComponent.class
 JARCLASSDIRS = $(PACKAGE)
 JARTARGET = jvmaccesstestcomponent.jar

@@ -33,7 +33,7 @@ PACKAGE = complex/dbaccess
 
 #----- compile .java files -----------------------------------------
 
-JARFILES        = OOoRunner.jar ridl.jar test.jar juh.jar unoil.jar ConnectivityTools.jar
+JARFILES        = OOoRunner.jar libreoffice.jar test.jar ConnectivityTools.jar
 EXTRAJARFILES   = $(OOO_JUNIT_JAR)
 
 #----- create a jar from compiled files ----------------------------

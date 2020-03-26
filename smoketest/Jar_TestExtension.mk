@@ -13,13 +13,11 @@ $(eval $(call gb_Jar_Jar,TestExtension))
 $(eval $(call gb_Jar_set_manifest,TestExtension,$(SRCDIR)/smoketest/com/sun/star/comp/smoketest/MANIFEST.MF))
 
 $(eval $(call gb_Jar_add_manifest_classpath,TestExtension,\
-	juh.jar \
-	ridl.jar \
+	libreoffice.jar \
 ))
 
 $(eval $(call gb_Jar_use_jars,TestExtension,\
-	juh \
-	ridl \
+	libreoffice \
 ))
 
 $(eval $(call gb_Jar_set_packageroot,TestExtension,com))

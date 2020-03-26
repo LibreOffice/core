@@ -25,7 +25,7 @@ PACKAGE = oooapplet
 
 #----- compile .java files -----------------------------------------
 
-JARFILES = officebean.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar 
+JARFILES = officebean.jar libreoffice.jar java_uno.jar
 JAVAFILES       = OOoViewer.java
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
@@ -47,7 +47,7 @@ ALLTAR : \
     RUNINSTRUCTIONS
 
 
-COPY_FILES: example.html 
+COPY_FILES: example.html
     $(GNUCOPY) -p $< $(CLASSDIR)
 # --- Targets ------------------------------------------------------
 
@@ -65,15 +65,15 @@ run: RUN
 
 
 
-RUNINSTRUCTIONS : 
+RUNINSTRUCTIONS :
     @echo .
     @echo ###########################   N O T E  ######################################
-    @echo . 
+    @echo .
     @echo "Add to the java runtime settings for applets in the control panel these lines:"
     @echo "-Djava.security.policy=$(PWD)$/bean.policy"
     @echo "To run the test you have to provide the office location."
     @echo Example:
     @echo dmake run office="d:\\myOffice"
     @echo .
-  
+
 

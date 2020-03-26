@@ -36,9 +36,8 @@ c++)
     printf '%s' "$sd_prog/../Frameworks"
     ;;
 java)
-    printf '0%s\0%s\0%s' \
-        "$sd_prog/../Resources/java/ridl.jar" \
-        "$sd_prog/../Resources/java/juh.jar" \
+    printf '0%s\0%s' \
+        "$sd_prog/../Resources/java/libreoffice.jar" \
         "$sd_prog"
     ;;
 *)

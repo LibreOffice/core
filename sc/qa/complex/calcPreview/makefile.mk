@@ -31,7 +31,7 @@ JAVATESTFILES = \
     ViewForwarder.java
 
 JAVAFILES = $(JAVATESTFILES)
-JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar jurt.jar
+JARFILES = OOoRunner.jar libreoffice.jar test.jar
 EXTRAJARFILES = $(OOO_JUNIT_JAR)
 .END
 
@@ -50,65 +50,65 @@ ALLTAR : javatest
 # TARGET  = ViewForward
 # PRJNAME = $(TARGET)
 # PACKAGE = complex$/calcPreview
-# 
+#
 # # --- Settings -----------------------------------------------------
 # .INCLUDE: settings.mk
-# 
-# 
+#
+#
 # #----- compile .java files -----------------------------------------
-# 
-# JARFILES = mysql.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar mysql.jar
+#
+# JARFILES = mysql.jar libreoffice.jar java_uno.jar OOoRunner.jar mysql.jar
 # JAVAFILES       = ViewForwarder.java
 # JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
-# 
+#
 # #----- make a jar from compiled files ------------------------------
-# 
+#
 # MAXLINELENGTH = 100000
-# 
+#
 # JARCLASSDIRS    = $(PACKAGE)
 # JARTARGET       = $(TARGET).jar
 # JARCOMPRESS 	= TRUE
-# 
+#
 # # --- Parameters for the test --------------------------------------
-# 
+#
 # # start an office if the parameter is set for the makefile
 # .IF "$(OFFICE)" == ""
 # CT_APPEXECCOMMAND =
 # .ELSE
 # CT_APPEXECCOMMAND = -AppExecutionCommand "$(OFFICE)$/soffice --accept=socket,host=localhost,port=8100;urp;"
 # .ENDIF
-# 
+#
 # # test base is java complex
 # CT_TESTBASE = -TestBase java_complex
-# 
-# # set test document path 
+#
+# # set test document path
 # CT_TESTDOCS = -tdoc $(PWD)$/test_documents
-# 
+#
 # # test looks something like the.full.package.TestName
 # CT_TEST     = -o $(PACKAGE:s\$/\.\).$(JAVAFILES:b)
-# 
+#
 # # start the runner application
 # CT_APP      = org.openoffice.Runner
-# 
+#
 # # set the timeout to a bigger value
 # CT_TIMEOUT = -TimeOut 120000
-# 
+#
 # # --- Targets ------------------------------------------------------
-# 
+#
 # .IF "$(depend)" == ""
 # $(CLASSDIR)$/$(PACKAGE)$/$(JAVAFILES:b).props : ALLTAR
 # .ELSE
 # $(CLASSDIR)$/$(PACKAGE)$/$(JAVAFILES:b).props : ALLDEP
 # .ENDIF
-# 
+#
 # .INCLUDE :  target.mk
-# 
-# 
+#
+#
 # RUN:
 #     +java -cp "$(CLASSPATH)" $(CT_APP) $(CT_APPEXECCOMMAND) $(CT_TESTDOCS) $(CT_TESTBASE) $(CT_WORKDIR) $(CT_TIMEOUT) $(CT_TEST)
-# 
+#
 # run: RUN
-# 
+#
 # tst:
 # 	+@echo $(CT_TESTDOCS)
-# 
+#

@@ -159,8 +159,8 @@ Files marked as [private] are private to the URE installation.  To avoid
 stability issues, applications that use the URE should not access the
 functionality of these files.
 
-Files marked as [GAC] are installed in the Global Assembly Cache on Windows. The 
-file path reflects the path as seen in the Explorer with the Assembly 
+Files marked as [GAC] are installed in the Global Assembly Cache on Windows. The
+file path reflects the path as seen in the Explorer with the Assembly
 Cache Viewer Tool (Shfusion.dll) installed. The actual paths are different.
 
 
@@ -186,12 +186,12 @@ functionality that these libraries offer, see the "C++ Reference" section of the
 SDK HTML documentation.  The corresponding C++ header files are not in the URE,
 but rather in the SDK.
 
-- unoloader.jar, juh.jar, and ridl.jar are the public Java UNO runtime
-Java[tm] Archives (JARs) that client code can call (jurt.jar is still provided
-for backwards compatibility, but is basically empty and has been merged into
-ridl.jar).  For details on the
-functionality that these files offer, see the "Java UNO Runtime Reference"
-section of the SDK HTML documentation.
+- libreoffice.jar and unoloader.jar are the public Java UNO runtime
+Java[tm] Archives (JARs) that client code can call.
+juh.jar, jurt.jar, ridl.jar, unoil.jar are still provided for backwards compatibility,
+but are basically empty and have been merged into libreoffice.jar.
+For details on the functionality that these files offer, see the
+"Java UNO Runtime Reference" section of the SDK HTML documentation.
 
 - types.rdb and services.rdb are preconfigured UNO type and service registries.
 For more details, see the "Deploying a URE" section of this README.

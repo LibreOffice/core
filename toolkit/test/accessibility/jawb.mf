@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
 Main-Class: AccessibilityWorkBench
-Class-Path: classes.jar ridl.jar juh.jar java_uno.jar xt.jar xml-apis.jar
+Class-Path: classes.jar libreoffice.jar java_uno.jar xt.jar xml-apis.jar

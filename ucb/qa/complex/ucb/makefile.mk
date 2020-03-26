@@ -29,9 +29,9 @@ PACKAGE = complex/ucb
 JAVATESTFILES = \
     UCB.java
 
-JAVAFILES = $(JAVATESTFILES) 
+JAVAFILES = $(JAVATESTFILES)
 
-JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar jurt.jar
+JARFILES = OOoRunner.jar libreoffice.jar test.jar
 EXTRAJARFILES = $(OOO_JUNIT_JAR)
 
 # Sample how to debug

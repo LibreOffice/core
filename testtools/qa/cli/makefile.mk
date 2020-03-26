@@ -25,7 +25,7 @@ PACKAGE = cli
 
 #----- compile .java files -----------------------------------------
 
-JARFILES = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
+JARFILES = libreoffice.jar java_uno.jar OOoRunner.jar
 JAVAFILES       = CLITest.java
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
@@ -42,7 +42,7 @@ ALLTAR:
 EXETARGET = $(BIN)$/cli_bridgetest_inprocess.exe
 EXEARG_WIN= $(BIN)$/cli_bridgetest_inprocess.ini
 
-EXEARG= $(strip $(subst,$/,/ $(EXEARG_WIN))) 
+EXEARG= $(strip $(subst,$/,/ $(EXEARG_WIN)))
 
 .IF "$(depend)" == ""
 ALL: ALLTAR
@@ -67,7 +67,7 @@ CT_NOOFFICE = -NoOffice
 # --- Targets ------------------------------------------------------
 
 RUN:
-.IF "$(OS)"=="WNT" 
-    java -cp $(CLASSPATH) -Dcli_test=$(EXETARGET) -Dcli_test_arg=$(EXEARG) $(CT_APP) $(CT_NOOFFICE) $(CT_TESTBASE) $(CT_TEST) 	
+.IF "$(OS)"=="WNT"
+    java -cp $(CLASSPATH) -Dcli_test=$(EXETARGET) -Dcli_test_arg=$(EXEARG) $(CT_APP) $(CT_NOOFFICE) $(CT_TESTBASE) $(CT_TEST)
 .ENDIF
 run: RUN
