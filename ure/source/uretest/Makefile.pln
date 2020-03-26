@@ -143,7 +143,7 @@ out.pln/class/javamain/test/java/javamain/JavaMain.class: JavaMain.java \
 	rm -rf out.pln/class/javamain
 	mkdir out.pln/class/javamain
 	javac -classpath \
-            $(URE_HOME)/program/classes/ridl.jar:out.pln/tester.jar \
+            $(URE_HOME)/program/classes/libreoffice.jar:out.pln/tester.jar \
             -sourcepath . -d out.pln/class/javamain $<
 
 
@@ -176,7 +176,7 @@ out.pln/class/tester/test/java/tester/Tester.class: Tester.java \
 	rm -rf out.pln/class/tester
 	mkdir out.pln/class/tester
 	javac -classpath \
-            $(URE_HOME)/program/classes/ridl.jar:out.pln/types.jar \
+            $(URE_HOME)/program/classes/libreoffice.jar:out.pln/types.jar \
             -sourcepath . -d out.pln/class/tester $<
 
 
@@ -194,7 +194,7 @@ out.pln/class/javatest/test/java/javatest/JavaTest.class: JavaTest.java \
 	rm -rf out.pln/class/javatest
 	mkdir out.pln/class/javatest
 	javac -classpath \
-            $(URE_HOME)/program/classes/ridl.jar:out.pln/types.jar \
+            $(URE_HOME)/program/classes/libreoffice.jar:out.pln/types.jar \
             -sourcepath . -d out.pln/class/javatest $<
 
 
@@ -212,7 +212,7 @@ out.pln/class/javanative/test/java/javanative/JavaNative.class: \
 	rm -rf out.pln/class/javanative
 	mkdir out.pln/class/javanative
 	javac -classpath \
-            $(URE_HOME)/program/classes/juh.jar:$(URE_HOME)/program/classes/ridl.jar:out.pln/tester.jar \
+            $(URE_HOME)/program/classes/libreoffice.jar:out.pln/tester.jar \
             -sourcepath . -d out.pln/class/javanative $<
 
 
@@ -230,7 +230,7 @@ out.pln/class/javaclient/test/java/javaclient/JavaClient.class: \
 	rm -rf out.pln/class/javaclient
 	mkdir out.pln/class/javaclient
 	javac -classpath \
-            $(URE_HOME)/program/classes/juh.jar:$(URE_HOME)/program/classes/ridl.jar:out.pln/types.jar \
+            $(URE_HOME)/program/classes/libreoffice.jar:out.pln/types.jar \
             -sourcepath . -d out.pln/class/javaclient $<
 
 

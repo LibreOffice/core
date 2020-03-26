@@ -12,7 +12,7 @@ $(eval $(call gb_JunitTest_JunitTest,bean_complex))
 
 $(eval $(call gb_JunitTest_use_jars,bean_complex,\
 	OOoRunner \
-	ridl \
+	libreoffice \
 	test \
 	officebean \
 ))

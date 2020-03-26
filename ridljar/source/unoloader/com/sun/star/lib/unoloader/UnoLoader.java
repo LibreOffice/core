@@ -38,7 +38,7 @@ public final class UnoLoader {
      * Executes a UNO JAR.
      *
      * @param base a base URL relative to which the URE JARs
-     * (<code>ridl.jar</code>, etc.) can be found; must
+     * (<code>libreoffice.jar</code>, etc.) can be found; must
      * not be <code>null</code>.
      *
      * @param jar the URL of a UNO JAR that specifies a Main-Class; must not be
