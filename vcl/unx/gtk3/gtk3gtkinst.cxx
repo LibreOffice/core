@@ -8631,6 +8631,8 @@ private:
     std::map<int, int> m_aSensitiveMap;
     // map from text column to indent column
     std::map<int, int> m_aIndentMap;
+    // map from text column to text align column
+    std::map<int, int> m_aAlignMap;
     // currently expanding parent that logically, but not currently physically,
     // contain placeholders
     o3tl::sorted_vector<GtkTreePath*, CompareGtkTreePath> m_aExpandingPlaceHolderParents;
@@ -8839,6 +8841,19 @@ private:
         GtkTreeIter iter;
         if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
             set(iter, col, bInt);
+    }
+
+    void set(const GtkTreeIter& iter, int col, double fValue)
+    {
+        gtk_tree_store_set(m_pTreeStore, const_cast<GtkTreeIter*>(&iter), col, fValue, -1);
+    }
+
+    void set(int pos, int col, double fValue)
+    {
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreeIter iter;
+        if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
+            set(iter, col, fValue);
     }
 
     static gboolean signalTestExpandRow(GtkTreeView*, GtkTreeIter* iter, GtkTreePath*, gpointer widget)
@@ -9274,6 +9289,7 @@ public:
                     m_aWeightMap[nIndex] = -1;
                     m_aSensitiveMap[nIndex] = -1;
                     m_aIndentMap[nIndex] = -1;
+                    m_aAlignMap[nIndex] = -1;
                     g_signal_connect(G_OBJECT(pCellRenderer), "editing-started", G_CALLBACK(signalCellEditingStarted), this);
                     g_signal_connect(G_OBJECT(pCellRenderer), "editing-canceled", G_CALLBACK(signalCellEditingCanceled), this);
                     g_signal_connect(G_OBJECT(pCellRenderer), "edited", G_CALLBACK(signalCellEdited), this);
@@ -9310,6 +9326,8 @@ public:
         for (auto& a : m_aSensitiveMap)
             a.second = nIndex++;
         for (auto& a : m_aIndentMap)
+            a.second = nIndex++;
+        for (auto& a : m_aAlignMap)
             a.second = nIndex++;
 
         ensure_drag_begin_end();
@@ -9860,6 +9878,19 @@ public:
     {
         col = get_model_col(col);
         return get_int(pos, m_aWeightMap.find(col)->second) == PANGO_WEIGHT_BOLD;
+    }
+
+    virtual void set_text_align(const weld::TreeIter& rIter, double fAlign, int col) override
+    {
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        col = get_model_col(col);
+        set(rGtkIter.iter, m_aAlignMap[col], fAlign);
+    }
+
+    virtual void set_text_align(int pos, double fAlign, int col) override
+    {
+        col = get_model_col(col);
+        set(pos, m_aAlignMap[col], fAlign);
     }
 
     using GtkInstanceWidget::set_sensitive;
