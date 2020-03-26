@@ -2265,7 +2265,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 if( !m_aInBuffer.isEmpty() && ( !bNormalChar || bIsDocReadOnly ))
                     FlushInBuffer();
 
-                if (rSh.HasReadonlySel() && rKeyCode.GetFunction() == KeyFuncType::PASTE)
+                if (rSh.HasReadonlySel()
+                    && (   rKeyCode.GetFunction() == KeyFuncType::PASTE
+                        || rKeyCode.GetFunction() == KeyFuncType::CUT))
                 {
                     auto xInfo(std::make_shared<weld::GenericDialogController>(GetFrameWeld(), "modules/swriter/ui/inforeadonlydialog.ui", "InfoReadonlyDialog"));
                     weld::DialogController::runAsync(xInfo, [](int) {});
