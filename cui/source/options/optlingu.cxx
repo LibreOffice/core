@@ -1769,6 +1769,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
                 m_xModulesCLB->set_id(nRow, sId);
                 m_xModulesCLB->set_toggle(nRow, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
                 m_xModulesCLB->set_text(nRow, aTxt, 1);
+                m_xModulesCLB->set_text_emphasis(nRow, false, 1);
                 ++nRow;
             }
         }
@@ -1819,6 +1820,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
                 m_xModulesCLB->set_id(nRow, sId);
                 m_xModulesCLB->set_toggle(nRow, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
                 m_xModulesCLB->set_text(nRow, aTxt, 1);
+                m_xModulesCLB->set_text_emphasis(nRow, false, 1);
                 ++nRow;
             }
         }
@@ -1868,6 +1870,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
                 m_xModulesCLB->set_id(nRow, sId);
                 m_xModulesCLB->set_toggle(nRow, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
                 m_xModulesCLB->set_text(nRow, aTxt, 1);
+                m_xModulesCLB->set_text_emphasis(nRow, false, 1);
                 ++nRow;
             }
         }
@@ -1917,6 +1920,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
                 m_xModulesCLB->set_id(nRow, sId);
                 m_xModulesCLB->set_toggle(nRow, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
                 m_xModulesCLB->set_text(nRow, aTxt, 1);
+                m_xModulesCLB->set_text_emphasis(nRow, false, 1);
                 ++nRow;
             }
         }
