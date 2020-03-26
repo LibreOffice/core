@@ -28,7 +28,7 @@
 
     <path id="office.class.path">
         <filelist dir="${OFFICE_HOME}/program/classes"
-            files="ridl.jar,juh.jar"/>
+            files="libreoffice.jar"/>
     </path>
 
     <fileset id="bootstrap.glue.code" dir="${OO_SDK_HOME}/classes">

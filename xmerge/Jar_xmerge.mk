@@ -13,8 +13,7 @@ $(eval $(call gb_Jar_Jar,xmerge))
 $(eval $(call gb_Jar_set_manifest,xmerge,$(SRCDIR)/xmerge/source/xmerge/xmerge.mf))
 
 $(eval $(call gb_Jar_use_jars,xmerge,\
-	ridl \
-	juh \
+	libreoffice \
 ))
 
 $(eval $(call gb_Jar_set_packageroot,xmerge,org))
