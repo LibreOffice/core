@@ -46,7 +46,7 @@ JAVAFILES = $(JAVATESTFILES) \
     _XServiceInfo.java \
     _XTypeProvider.java
 
-JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar
+JARFILES = OOoRunner.jar libreoffice.jar test.jar
 EXTRAJARFILES = $(OOO_JUNIT_JAR)
 
 # Sample how to debug

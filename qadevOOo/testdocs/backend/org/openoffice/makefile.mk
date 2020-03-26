@@ -26,7 +26,7 @@ PACKAGE = test
 
 #----- compile .java files -----------------------------------------
 
-JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
+JARFILES        = libreoffice.jar java_uno.jar OOoRunner.jar
 JAVAFILES       = JavaSystemBackend.java
 JAVACLASSFILES  = $(CLASSDIR)$/$(PACKAGE)$/JavaSystemBackend.class
 

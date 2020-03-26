@@ -26,7 +26,7 @@ PACKAGE = com$/sun$/star$/cmp
 
 #----- compile .java files -----------------------------------------
 
-JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar
+JARFILES        = libreoffice.jar java_uno.jar
 JAVAFILES       = MyPersistObject.java
 JAVACLASSFILES  = $(CLASSDIR)$/$(PACKAGE)$/MyPersistObject.class
 

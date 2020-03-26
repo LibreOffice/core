@@ -25,7 +25,7 @@ PACKAGE = test
 
 #----- compile .java files -----------------------------------------
 
-JARFILES = officebean.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar 
+JARFILES = officebean.jar libreoffice.jar java_uno.jar
 JAVAFILES       = Test.java
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
@@ -56,12 +56,12 @@ rund:
 
 
 
-RUNINSTRUCTIONS : 
+RUNINSTRUCTIONS :
     @echo .
     @echo ###########################   N O T E  ######################################
-    @echo . 
+    @echo .
     @echo "To run the test you have to provide the office location."
     @echo Example:
     @echo dmake run office="d:/myOffice"
     @echo .
-  
+

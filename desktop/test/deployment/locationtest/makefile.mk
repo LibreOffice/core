@@ -25,7 +25,7 @@ TARGET  = com_sun_star_comp_smoketest
 
 .INCLUDE : settings.mk
 
-JARFILES = ridl.jar jurt.jar unoil.jar juh.jar
+JARFILES = libreoffice.jar
 
 JARTARGET = LocationTest.jar
 JARCOMPRESS 	= TRUE
@@ -66,7 +66,7 @@ $(MISC)$/$(TARGET)_resort : manifest.xml $(JARTARGETN) $(MISC)$/$(ZIP1TARGET).cr
     $(COPY)  manifest.xml $(MISC)$/$(TARGET)$/META-INF$/manifest.xml
     $(COPY)  $(JARTARGETN) $(MISC)$/$(TARGET)$/$(JARTARGET)
     $(COPY)  $(BIN)$/LocationTest.rdb $(MISC)$/$(TARGET)$/LocationTest.rdb
-    $(COPY)  description.xml $(MISC)$/$(TARGET)$/description.xml	
+    $(COPY)  description.xml $(MISC)$/$(TARGET)$/description.xml
     $(TOUCH) $@
 
 .IF "$(ZIP1TARGETN)"!=""

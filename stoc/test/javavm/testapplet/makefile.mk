@@ -28,13 +28,13 @@ TARGET  = TestApplet
 
 # Files --------------------------------------------------------
 
-JARFILES = ridl.jar jurt.jar unoil.jar
+JARFILES = libreoffice.jar
 
-JAVAFILES= $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES))) 
+JAVAFILES= $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES)))
 
 
 JAVACLASSFILES= \
-    $(CLASSDIR)$/$(PACKAGE)$/TestApplet.class 	
+    $(CLASSDIR)$/$(PACKAGE)$/TestApplet.class
 
 JARCLASSDIRS= .
 

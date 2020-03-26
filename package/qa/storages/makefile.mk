@@ -29,7 +29,7 @@ PACKAGE = complex$/storages
 
 #----- compile .java files -----------------------------------------
 
-JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
+JARFILES        = libreoffice.jar java_uno.jar OOoRunner.jar
 
 JAVAFILES       =\
                 StorageUnitTest.java\

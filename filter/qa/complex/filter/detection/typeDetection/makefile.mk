@@ -26,7 +26,7 @@ PACKAGE = complex$/filter$/detection$/typeDetection
 
 #----- compile .java files -----------------------------------------
 
-JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
+JARFILES        = libreoffice.jar java_uno.jar OOoRunner.jar
 JAVAFILES       = TypeDetection.java Helper.java
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
@@ -87,7 +87,7 @@ $(CLASSDIR)$/$(PACKAGE)$/serviceName.csv : serviceName.csv
     jar uf $(CLASSDIR)$/$(JARTARGET) -C $(CLASSDIR) $(PACKAGE)$/serviceName.csv
 
 $(CLASSDIR)$/$(PACKAGE)$/files.csv : files.csv
-    cp files.csv $(CLASSDIR)$/$(PACKAGE)$/files.csv  
+    cp files.csv $(CLASSDIR)$/$(PACKAGE)$/files.csv
     jar uf $(CLASSDIR)$/$(JARTARGET) -C $(CLASSDIR) $(PACKAGE)$/files.csv
 
 $(CLASSDIR)$/$(PACKAGE)$/TypeDetection.props : TypeDetection.props
@@ -97,8 +97,8 @@ $(CLASSDIR)$/$(PACKAGE)$/TypeDetection.props : TypeDetection.props
 # --- chmod --------------------------------------------------------
 
 CHMOD :
-    chmod 444 $(CLASSDIR)$/$(PACKAGE)$/*.csv 
-    chmod 666 $(CLASSDIR)$/$(PACKAGE)$/*.props 
+    chmod 444 $(CLASSDIR)$/$(PACKAGE)$/*.csv
+    chmod 666 $(CLASSDIR)$/$(PACKAGE)$/*.props
 
 RUN: run
 

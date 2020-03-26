@@ -28,10 +28,7 @@ JAVAFILES = $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSF
 CLASSDIR !:= $(CLASSDIR)$/test
 
 JARFILES = OOoRunner.jar \
-           ridl.jar \
-           unoil.jar \
-           juh.jar \
-           jurt.jar
+           libreoffice.jar
 
 JAVACLASSFILES = $(CLASSDIR)$/$(PACKAGE)$/GlobalTransfer_Test.class
 

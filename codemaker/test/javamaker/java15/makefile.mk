@@ -23,7 +23,7 @@ TARGET := test_codemaker_javamaker_java15
 PACKAGE := test$/codemaker$/javamaker$/java15
 JAVATESTFILES := Test.java
 IDLTESTFILES := types.idl
-JARFILES := ridl.jar
+JARFILES := libreoffice.jar
 
 JAVAMAKER = $(BIN)$/javamaker$(EXECPOST)
 

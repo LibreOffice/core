@@ -25,7 +25,7 @@ TARGET  = com_sun_star_comp_smoketest
 
 .INCLUDE : settings.mk
 
-JARFILES = ridl.jar jurt.jar unoil.jar juh.jar
+JARFILES = libreoffice.jar
 
 
 JARTARGET = TestExtension.jar
@@ -70,7 +70,7 @@ $(MISC)$/$(TARGET)_resort : manifest.xml $(JARTARGETN) $(MISC)$/$(ZIP1TARGET).cr
     $(GNUCOPY) -u manifest.xml $(MISC)$/$(TARGET)$/META-INF$/manifest.xml
     $(GNUCOPY) -u $(JARTARGETN) $(MISC)$/$(TARGET)$/$(JARTARGET)
     $(GNUCOPY) -u $(BIN)$/TestExtension.rdb $(MISC)$/$(TARGET)$/TestExtension.rdb
-    $(GNUCOPY) -u description.xml $(MISC)$/$(TARGET)$/description.xml	
+    $(GNUCOPY) -u description.xml $(MISC)$/$(TARGET)$/description.xml
     $(TOUCH) $@
 
 .IF "$(ZIP1TARGETN)"!=""
