@@ -107,12 +107,13 @@ bool SvxThesaurusDialog::UpdateAlternativesBox_Impl()
         OUString sHeading = OUString::number(i + 1) + ". " + rMeaningTxt;
         m_xAlternativesCT->append_text(sHeading);
         m_xAlternativesCT->set_text_emphasis(nRow, true, 0);
-
         ++nRow;
+
         for (sal_Int32 k = 0;  k < nSynonyms; ++k)
         {
             // GetThesaurusReplaceText will strip the leading spaces
             m_xAlternativesCT->append_text("   " + pSynonyms[k]);
+            m_xAlternativesCT->set_text_emphasis(nRow, false, 0);
             ++nRow;
         }
     }
