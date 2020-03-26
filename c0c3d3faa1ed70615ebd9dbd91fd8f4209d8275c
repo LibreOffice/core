@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b3b98579_7f1ee3d1",
+        "filename": "desktop/source/app/app.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1283,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-03-26T10:01:36Z",
+      "side": 1,
+      "message": "this also isn\u0027t joined so similar problems as the other patch - but this might be less problematic because it calls low level uno stuff that might be better prepared to check for invalid lifecycle stages and throw exceptions instead of crashing.\n\ni\u0027m not sure if getProcessServiceFactoray may return null during shutdown.",
+      "revId": "c0c3d3faa1ed70615ebd9dbd91fd8f4209d8275c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
