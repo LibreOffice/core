@@ -1180,7 +1180,7 @@ bool SectionPropertyMap::FloatingTableConversion( const DomainMapper_Impl& rDM_I
     // here represents this limit.
     const sal_Int32 nMagicNumber = 469;
 
-    // If the table's with is smaller than the text area width, text might
+    // If the table's width is smaller than the text area width, text might
     // be next to the table and so it should behave as a floating table.
     if ( (nTableWidth + nMagicNumber) < nTextAreaWidth )
         return true;

@@ -1767,7 +1767,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
     m_nPercentWidth(0),
     m_bOk(true),
     m_bClaimLineFormat(false),
-    m_eOri(text::HoriOrientation::NONE),
+    m_eOri(text::HoriOrientation::LEFT),
     m_bIsBiDi(false),
     m_nCurrentRow(0),
     m_nCurrentBandRow(0),
@@ -1792,8 +1792,6 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
     m_pIo->m_xPlcxMan->GetPap()->Save( aSave );
 
     WW8PLCFx_Cp_FKP* pPap = m_pIo->m_xPlcxMan->GetPapPLCF();
-
-    m_eOri = text::HoriOrientation::LEFT;
 
     WW8TabBandDesc* pNewBand = new WW8TabBandDesc;
 
@@ -2499,7 +2497,7 @@ void WW8TabDesc::CreateSwTable()
     if( m_nMaxRight - m_nMinLeft > MINLAY * m_nDefaultSwCols )
     {
         SwFormatFrameSize aFrameSize(SwFrameSize::Fixed, m_nSwWidth);
-        // Don't set relative width if the table has been converted into a floating frame
+        // Don't set relative width if the table is in a floating frame
         if ( m_nPercentWidth && (!m_pIo->m_xSFlyPara || !m_pIo->m_xSFlyPara->pFlyFormat) )
             aFrameSize.SetWidthPercent(m_nPercentWidth);
         m_pTable->GetFrameFormat()->SetFormatAttr(aFrameSize);
@@ -2530,9 +2528,9 @@ void WW8TabDesc::CreateSwTable()
                 m_pIo->m_xSFlyPara->pFlyFormat->SetFormatAttr(aHori);
             }
         }
-        else
+        else   // Not directly in a floating frame.
         {
-            //If bApo is set, then this table is being placed in a floating
+            //Historical note: If InLocalApo(), then this table is being placed in a floating
             //frame, and the frame matches the left and right *lines* of the
             //table, so the space to the left of the table isn't to be used
             //inside the frame, in word the dialog involved greys out the
