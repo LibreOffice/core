@@ -1002,17 +1002,18 @@ void ScETSForecastCalculation::GetETSPredictionIntervals( const ScMatrixRef& rTM
         // fill array with forecasts, with RandDev() added to xScenRange
         if ( bAdditive )
         {
+            double nPIdx = !bEDS ? mpPerIdx[mnCount - mnSmplInPrd] : 0.0;
             // calculation based on additive model
             xScenRange[ 0 ] = mpBase[ mnCount - 1 ] + mpTrend[ mnCount - 1 ] +
-                              mpPerIdx[ mnCount - mnSmplInPrd ] +
+                              nPIdx +
                               RandDev();
             aPredictions[ 0 ][ k ] = xScenRange[ 0 ];
-            xScenBase[ 0 ] = mfAlpha * ( xScenRange[ 0 ] - mpPerIdx[ mnCount - mnSmplInPrd ] ) +
+            xScenBase[ 0 ] = mfAlpha * ( xScenRange[ 0 ] - nPIdx ) +
                              ( 1 - mfAlpha ) * ( mpBase[ mnCount - 1 ] + mpTrend[ mnCount - 1 ] );
             xScenTrend[ 0 ] = mfGamma * ( xScenBase[ 0 ] - mpBase[ mnCount - 1 ] ) +
                               ( 1 - mfGamma ) * mpTrend[ mnCount - 1 ];
             xScenPerIdx[ 0 ] = mfBeta * ( xScenRange[ 0 ] - xScenBase[ 0 ] ) +
-                               ( 1 - mfBeta ) * mpPerIdx[ mnCount - mnSmplInPrd ];
+                               ( 1 - mfBeta ) * nPIdx;
             for ( SCSIZE i = 1; i < nSize; i++ )
             {
                 double fPerIdx;
