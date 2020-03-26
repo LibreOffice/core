@@ -7622,8 +7622,8 @@ dnl Checks for javac
 dnl ===================================================================
 if test "$ENABLE_JAVA" != ""; then
     javacompiler="javac"
-    : ${JAVA_SOURCE_VER=8}
-    : ${JAVA_TARGET_VER=8}
+    : ${JAVA_SOURCE_VER=9}
+    : ${JAVA_TARGET_VER=9}
     if test -z "$with_jdk_home"; then
         AC_PATH_PROG(JAVACOMPILER, $javacompiler)
     else
