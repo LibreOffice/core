@@ -917,19 +917,33 @@ bool ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
     bool bIsLeft = ( nX == nVisX1 );
     bool bIsTop  = ( nY == nVisY1 ) || bVisRowChanged;
 
-    CellInfo* pInfo = &pRowInfo[nArrY].pCellInfo[nX+1];
-    if ( pInfo->bHOverlapped && pInfo->bVOverlapped )
+    bool bHOver;
+    bool bVOver;
+    bool bHidden;
+
+    if (!mpDoc->ColHidden(nX, nTab) && nX >= nX1 && nX <= nX2
+            && !mpDoc->RowHidden(nY, nTab) && nY >= nY1 && nY <= nY2)
+    {
+        CellInfo* pInfo = &pRowInfo[nArrY].pCellInfo[nX+1];
+        bHOver = pInfo->bHOverlapped;
+        bVOver = pInfo->bVOverlapped;
+    }
+    else
+    {
+        ScMF nOverlap2 = mpDoc->GetAttr(nX, nY, nTab, ATTR_MERGE_FLAG)->GetValue();
+        bHOver = bool(nOverlap2 & ScMF::Hor);
+        bVOver = bool(nOverlap2 & ScMF::Ver);
+    }
+
+    if ( bHOver && bVOver )
         bDoMerge = bIsLeft && bIsTop;
-    else if ( pInfo->bHOverlapped )
+    else if ( bHOver )
         bDoMerge = bIsLeft;
-    else if ( pInfo->bVOverlapped )
+    else if ( bVOver )
         bDoMerge = bIsTop;
 
     rOverX = nX;
     rOverY = nY;
-    bool bHOver = pInfo->bHOverlapped;
-    bool bVOver = pInfo->bVOverlapped;
-    bool bHidden;
 
     while (bHOver)              // nY constant
     {
