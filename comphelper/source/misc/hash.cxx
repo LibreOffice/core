@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/hash.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/alloc.h>
@@ -73,7 +76,10 @@ struct HashImpl
     {
 
 #if USE_TLS_NSS
-        NSS_NoDB_Init(nullptr);
+        auto const e = NSS_NoDB_Init(nullptr);
+        if (e != SECSuccess) {
+            throw css::uno::RuntimeException("NSS_NoDB_Init failed with " + OUString::number(e));
+        }
         mpContext = HASH_Create(getNSSType());
         HASH_Begin(mpContext);
 #elif USE_TLS_OPENSSL
