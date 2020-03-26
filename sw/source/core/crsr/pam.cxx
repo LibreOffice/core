@@ -789,7 +789,9 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
                         {
                             break; // after selection
                         }
-                        if (pHint->Which() == RES_TXTATR_FIELD)
+                        if (pHint->Which() == RES_TXTATR_FIELD
+                            // placeholders don't work if you can't delete them
+                            && pHint->GetFormatField().GetField()->GetTyp()->Which() != SwFieldIds::JumpEdit)
                         {
                             return true;
                         }
