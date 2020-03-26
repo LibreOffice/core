@@ -110,6 +110,8 @@ public:
     BitmapChecksum GetChecksum() const;
 
     sal_Int32 getPageIndex() const { return mnPageIndex; }
+
+    bool isPrimitiveSequenceCreated() const { return mbSequenceCreated; }
 };
 
 typedef std::shared_ptr< VectorGraphicData > VectorGraphicDataPtr;
