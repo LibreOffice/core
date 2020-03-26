@@ -47,7 +47,7 @@ void IconView::Resize()
     SvTreeListBox::Resize();
 }
 
-tools::Rectangle IconView::GetFocusRect( SvTreeListEntry*, long nEntryPos )
+tools::Rectangle IconView::GetFocusRect(const SvTreeListEntry*, long nEntryPos)
 {
     Size aSize;
     aSize.setHeight( nEntryHeight );

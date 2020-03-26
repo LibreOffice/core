@@ -71,7 +71,7 @@ namespace dbaui
 
     protected:
         virtual void        PreparePaint(vcl::RenderContext& rRenderContext, SvTreeListEntry& rEntry) override;
-        virtual tools::Rectangle   GetFocusRect( SvTreeListEntry* _pEntry, long _nLine ) override;
+        virtual tools::Rectangle   GetFocusRect(const SvTreeListEntry* _pEntry, long _nLine) override;
         virtual void        ModelHasCleared() override;
 
         // IMnemonicEntryList
