@@ -1283,9 +1283,9 @@ void SkiaSalGraphicsImpl::drawGenericLayout(const GenericSalLayout& layout, Colo
     preDraw();
     SAL_INFO("vcl.skia.trace",
              "drawtextblob(" << this << "): "
-                             << tools::Rectangle(textBlob->bounds().x(), textBlob->bounds().y(),
-                                                 textBlob->bounds().width(),
-                                                 textBlob->bounds().height())
+                             << tools::Rectangle(
+                                    Point(textBlob->bounds().x(), textBlob->bounds().y()),
+                                    Size(textBlob->bounds().width(), textBlob->bounds().height()))
                              << ":" << textColor);
     SkPaint paint;
     paint.setColor(toSkColor(textColor));
