@@ -336,7 +336,7 @@ sal_Int32 VtableFactory::createVtables(
                 code = addLocalFunctions(
                     &slots, code,
 #ifdef USE_DOUBLE_MMAP
-                    sal_uIntPtr(block.exec) - sal_uIntPtr(block.start),
+                    reinterpret_cast<sal_uIntPtr>(block.exec) - reinterpret_cast<sal_uIntPtr>(block.start),
 #endif
                     type2,
                     baseOffset.getFunctionOffset(type2->aBase.pTypeName),

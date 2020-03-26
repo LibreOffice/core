@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <sal/types.h>
+
 namespace N
 {
 enum E
@@ -15,6 +19,13 @@ enum E
 };
 
 using T = unsigned int;
+}
+
+void FunctionalCast(void* p)
+{
+    // expected-error@+1 {{Function-style cast from 'void *' to 'sal_IntPtr' (aka 'long') (performs: reinterpret_cast) (PointerToIntegral) [loplugin:cstylecast]}}
+    auto n = sal_IntPtr(p);
+    (void(n)); // no warning expected (outer parens to disambiguate expr vs. decl)
 }
 
 static const int C

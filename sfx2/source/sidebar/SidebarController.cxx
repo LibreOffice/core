@@ -941,7 +941,7 @@ Reference<ui::XUIElement> SidebarController::CreateUIElement (
         aCreationArguments.put("ParentWindow", makeAny(rxWindow));
         SfxDockingWindow* pSfxDockingWindow = dynamic_cast<SfxDockingWindow*>(mpParentWindow.get());
         if (pSfxDockingWindow != nullptr)
-            aCreationArguments.put("SfxBindings", makeAny(sal_uInt64(&pSfxDockingWindow->GetBindings())));
+            aCreationArguments.put("SfxBindings", makeAny(reinterpret_cast<sal_uInt64>(&pSfxDockingWindow->GetBindings())));
         aCreationArguments.put("Theme", Theme::GetPropertySet());
         aCreationArguments.put("Sidebar", makeAny(Reference<ui::XSidebar>(static_cast<ui::XSidebar*>(this))));
         if (bWantsCanvas)

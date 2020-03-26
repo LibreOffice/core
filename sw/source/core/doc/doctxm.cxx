@@ -282,10 +282,10 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
             case TOX_PRV:
                 if ( (aAbsNew < aAbsIdx && aAbsNew > aPrevPos) ||
                      (aAbsIdx == aAbsNew &&
-                      (sal_uLong(&rCurTOXMark) > sal_uLong(pTOXMark) &&
-                       (!pNew || aPrevPos < aAbsIdx || sal_uLong(pNew) < sal_uLong(pTOXMark) ) )) ||
+                      (reinterpret_cast<sal_uLong>(&rCurTOXMark) > reinterpret_cast<sal_uLong>(pTOXMark) &&
+                       (!pNew || aPrevPos < aAbsIdx || reinterpret_cast<sal_uLong>(pNew) < reinterpret_cast<sal_uLong>(pTOXMark) ) )) ||
                      (aPrevPos == aAbsNew && aAbsIdx != aAbsNew &&
-                      sal_uLong(pTOXMark) > sal_uLong(pNew)) )
+                      reinterpret_cast<sal_uLong>(pTOXMark) > reinterpret_cast<sal_uLong>(pNew)) )
                 {
                     pNew = pTOXMark;
                     aPrevPos = aAbsNew;
@@ -304,10 +304,10 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
             case TOX_NXT:
                 if ( (aAbsNew > aAbsIdx && aAbsNew < aNextPos) ||
                      (aAbsIdx == aAbsNew &&
-                      (sal_uLong(&rCurTOXMark) < sal_uLong(pTOXMark) &&
-                       (!pNew || aNextPos > aAbsIdx || sal_uLong(pNew) > sal_uLong(pTOXMark)) )) ||
+                      (reinterpret_cast<sal_uLong>(&rCurTOXMark) < reinterpret_cast<sal_uLong>(pTOXMark) &&
+                       (!pNew || aNextPos > aAbsIdx || reinterpret_cast<sal_uLong>(pNew) > reinterpret_cast<sal_uLong>(pTOXMark)) )) ||
                      (aNextPos == aAbsNew && aAbsIdx != aAbsNew &&
-                      sal_uLong(pTOXMark) < sal_uLong(pNew)) )
+                      reinterpret_cast<sal_uLong>(pTOXMark) < reinterpret_cast<sal_uLong>(pNew)) )
                 {
                     pNew = pTOXMark;
                     aNextPos = aAbsNew;

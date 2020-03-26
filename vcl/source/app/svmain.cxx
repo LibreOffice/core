@@ -453,7 +453,7 @@ void DeInitVCL()
             aBuf.append( "\" type = \"" );
             aBuf.append( typeid(*pWin).name() );
             aBuf.append( "\", ptr = 0x" );
-            aBuf.append( sal_Int64( pWin ), 16 );
+            aBuf.append( reinterpret_cast<sal_Int64>( pWin ), 16 );
             aBuf.append( "\n" );
         }
     }

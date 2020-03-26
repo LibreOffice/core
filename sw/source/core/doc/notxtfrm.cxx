@@ -1285,7 +1285,7 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
                             "pOut should not be a virtual device" );
 
                     pGrfNd->StartGraphicAnimation(pOut, aAlignedGrfArea.Pos(),
-                                        aAlignedGrfArea.SSize(), sal_IntPtr(this),
+                                        aAlignedGrfArea.SSize(), reinterpret_cast<sal_IntPtr>(this),
                                         pVout );
                 }
                 else
@@ -1536,7 +1536,7 @@ void SwNoTextFrame::StopAnimation( OutputDevice* pOut ) const
 
     if( pGrfNd && pGrfNd->IsAnimated() )
     {
-        const_cast< SwGrfNode* >(pGrfNd)->StopGraphicAnimation( pOut, sal_IntPtr(this) );
+        const_cast< SwGrfNode* >(pGrfNd)->StopGraphicAnimation( pOut, reinterpret_cast<sal_IntPtr>(this) );
     }
 }
 

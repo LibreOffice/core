@@ -899,7 +899,7 @@ static auto verifyNestedFieldmark(OUString const& rTestName,
         + u"baz" + OUStringChar(CH_TXT_ATR_FIELDEND)), outerString);
 
     // must return innermost mark
-    CPPUNIT_ASSERT_EQUAL(sal_uIntPtr(pInner), sal_uIntPtr(rIDMA.getFieldmarkFor(innerPos)));
+    CPPUNIT_ASSERT_EQUAL(reinterpret_cast<sal_uIntPtr>(pInner), reinterpret_cast<sal_uIntPtr>(rIDMA.getFieldmarkFor(innerPos)));
 }
 
 void Test::testNestedFieldmark()
