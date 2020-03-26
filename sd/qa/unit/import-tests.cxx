@@ -1321,11 +1321,13 @@ void SdImportTest::testPDFImportShared()
 
             const GraphicObject& rGraphicObject = pSdrGrafObj->GetGraphicObject().GetGraphic();
             const Graphic& rGraphic = rGraphicObject.GetGraphic();
+            CPPUNIT_ASSERT_MESSAGE("After loading, the PDF shouldn't have the primitive sequence created yet",
+                                   !rGraphic.getVectorGraphicData()->isPrimitiveSequenceCreated());
             aGraphics.push_back(rGraphic);
         }
     }
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected more than one page.", size_t(3), aGraphics.size());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected more than one page.", size_t(9), aGraphics.size());
 
     Graphic const & rFirstGraphic = aGraphics[0];
 
