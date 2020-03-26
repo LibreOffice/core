@@ -174,12 +174,14 @@ bool SvLBoxButtonData::IsRadio() const {
 
 SvLBoxString::SvLBoxString(const OUString& rStr)
     : mbEmphasized(false)
+    , mfAlign(0.0)
     , maText(rStr)
 {
 }
 
 SvLBoxString::SvLBoxString()
     : mbEmphasized(false)
+    , mfAlign(0.0)
 {
 }
 
@@ -206,7 +208,15 @@ void SvLBoxString::Paint(
         aSize.setWidth( rDev.GetEntryWidth() );
     }
     else
+    {
+        if (mfAlign < 0.5 )
+            nStyle |= DrawTextFlags::Left;
+        else if (mfAlign == 0.5)
+            nStyle |= DrawTextFlags::Center;
+        else if (mfAlign > 0.5)
+            nStyle |= DrawTextFlags::Right;
         aSize.setWidth(GetWidth(&rDev, &rEntry));
+    }
     aSize.setHeight(GetHeight(&rDev, &rEntry));
 
     if (mbEmphasized)
