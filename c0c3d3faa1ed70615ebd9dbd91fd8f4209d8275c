@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "83198f54_07118d0d",
+        "filename": "desktop/source/app/app.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1282,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-03-26T13:34:03Z",
+      "side": 1,
+      "message": "please use salhelper::Thread and declare it as rtl::Reference\u003c...\u003e\n\nalso i didnt\u0027 notice at first, this is in desktop module in some Main function - probably it\u0027s possible to tweak it so that join() can be called during shutdown to prevent crashes in the thread",
+      "revId": "c0c3d3faa1ed70615ebd9dbd91fd8f4209d8275c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b3b98579_7f1ee3d1",
         "filename": "desktop/source/app/app.cxx",
         "patchSetId": 1
