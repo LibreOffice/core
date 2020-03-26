@@ -14,6 +14,7 @@ $(eval $(call gb_Module_add_targets,ridljar,\
     CustomTarget_javamaker \
     Jar_ridl \
     Jar_unoloader \
+    Jar_libreoffice \
 ))
 
 $(eval $(call gb_Module_add_check_targets,ridljar,\
