@@ -18,8 +18,7 @@ $(eval $(call gb_Jar_set_packageroot,XMergeBridge,*.class))
 
 $(eval $(call gb_Jar_use_jars,XMergeBridge,\
 	xmerge \
-	ridl \
-	juh \
+	libreoffice \
 ))
 
 $(eval $(call gb_Jar_add_sourcefiles,XMergeBridge,\

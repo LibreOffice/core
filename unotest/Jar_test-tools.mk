@@ -11,13 +11,11 @@
 $(eval $(call gb_Jar_Jar,test-tools))
 
 $(eval $(call gb_Jar_add_manifest_classpath,test-tools,\
-	juh.jar \
-	ridl.jar \
+	libreoffice.jar \
 ))
 
 $(eval $(call gb_Jar_use_jars,test-tools,\
-	juh \
-	ridl \
+	libreoffice \
 ))
 
 $(eval $(call gb_Jar_set_packageroot,test-tools,org))

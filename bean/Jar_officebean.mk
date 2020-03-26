@@ -11,8 +11,7 @@
 $(eval $(call gb_Jar_Jar,officebean))
 
 $(eval $(call gb_Jar_use_jars,officebean,\
-	ridl \
-	juh \
+	libreoffice \
 ))
 
 $(eval $(call gb_Jar_set_packageroot,officebean,com))

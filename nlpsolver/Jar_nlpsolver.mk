@@ -20,8 +20,7 @@
 $(eval $(call gb_Jar_Jar,nlpsolver))
 
 $(eval $(call gb_Jar_use_jars,nlpsolver,\
-	ridl \
-	juh \
+	libreoffice \
 	java_uno \
 	EvolutionarySolver \
 ))
