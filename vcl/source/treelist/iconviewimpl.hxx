@@ -34,7 +34,7 @@ public:
 
     void KeyUp( bool bPageUp ) override;
 
-    Point GetEntryPosition( SvTreeListEntry* pEntry ) const override;
+    Point GetEntryPosition(const SvTreeListEntry* pEntry) const override;
 
     SvTreeListEntry* GetClickedEntry( const Point& rPoint ) const override;
 
@@ -52,7 +52,7 @@ public:
     void InvalidateEntry( long nId ) const override;
 
 protected:
-    long GetEntryLine( SvTreeListEntry* pEntry ) const override;
+    long GetEntryLine(const SvTreeListEntry* pEntry) const override;
 
     void CursorUp() override;
     void CursorDown() override;

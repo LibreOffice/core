@@ -485,7 +485,7 @@ public:
         @param pEntry
             The entry.
         @return  The bounding rectangle of an entry. */
-    tools::Rectangle           GetBoundingRect( SvTreeListEntry* pEntry );
+    tools::Rectangle    GetBoundingRect(const SvTreeListEntry* pEntry);
 
     SvTreeFlags         GetTreeFlags() const {return nTreeFlags;}
 
@@ -650,7 +650,7 @@ public:
     // Place the expander checkitem at the optimal indent for hierarchical lists
     void            SetOptimalImageIndent() { SetIndent(12); }
     void            SetSpaceBetweenEntries( short nSpace );
-    Point           GetEntryPosition( SvTreeListEntry* ) const;
+    Point           GetEntryPosition(const SvTreeListEntry*) const;
     void            MakeVisible( SvTreeListEntry* pEntry );
     void            MakeVisible( SvTreeListEntry* pEntry, bool bMoveToTop );
 
@@ -665,9 +665,9 @@ public:
 
     SvTreeListEntry*    GetEntry( const Point& rPos, bool bHit = false ) const;
 
-    virtual tools::Rectangle GetFocusRect( SvTreeListEntry*, long nLine );
+    virtual tools::Rectangle GetFocusRect(const SvTreeListEntry*, long nLine );
     // Respects indentation
-    virtual sal_IntPtr GetTabPos( SvTreeListEntry*, SvLBoxTab* );
+    virtual sal_IntPtr GetTabPos(const SvTreeListEntry*, SvLBoxTab*);
     void            InvalidateEntry( SvTreeListEntry* );
     SvLBoxItem*     GetItem( SvTreeListEntry*, long nX, SvLBoxTab** ppTab);
     SvLBoxItem*     GetItem( SvTreeListEntry*, long nX );

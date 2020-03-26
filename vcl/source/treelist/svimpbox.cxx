@@ -1437,7 +1437,7 @@ bool SvImpLBox::IsEntryInView( SvTreeListEntry* pEntry ) const
 }
 
 
-long SvImpLBox::GetEntryLine( SvTreeListEntry* pEntry ) const
+long SvImpLBox::GetEntryLine(const SvTreeListEntry* pEntry) const
 {
     if(!m_pStartEntry )
         return -1; // invisible position
@@ -3292,8 +3292,8 @@ void SvImpLBox::ShowFocusRect( const SvTreeListEntry* pEntry )
 {
     if( pEntry )
     {
-        long nY = GetEntryLine( const_cast<SvTreeListEntry*>(pEntry) );
-        tools::Rectangle aRect = m_pView->GetFocusRect( const_cast<SvTreeListEntry*>(pEntry), nY );
+        long nY = GetEntryLine(pEntry);
+        tools::Rectangle aRect = m_pView->GetFocusRect(pEntry, nY);
         vcl::Region aOldClip( m_pView->GetClipRegion());
         vcl::Region aClipRegion( GetClipRegionRect() );
         m_pView->SetClipRegion( aClipRegion );

@@ -2374,7 +2374,7 @@ Image const & SvTreeListBox::GetExpandedNodeBmp( ) const
     return pImpl->GetExpandedNodeBmp( );
 }
 
-Point SvTreeListBox::GetEntryPosition( SvTreeListEntry* pEntry ) const
+Point SvTreeListBox::GetEntryPosition(const SvTreeListEntry* pEntry) const
 {
     return pImpl->GetEntryPosition( pEntry );
 }
@@ -2890,7 +2890,7 @@ void SvTreeListBox::PreparePaint(vcl::RenderContext& /*rRenderContext*/, SvTreeL
 {
 }
 
-tools::Rectangle SvTreeListBox::GetFocusRect( SvTreeListEntry* pEntry, long nLine )
+tools::Rectangle SvTreeListBox::GetFocusRect(const SvTreeListEntry* pEntry, long nLine )
 {
     pImpl->UpdateContextBmpWidthMax( pEntry );
 
@@ -2925,7 +2925,7 @@ tools::Rectangle SvTreeListBox::GetFocusRect( SvTreeListEntry* pEntry, long nLin
     {
         if( pTab && nCurTab < pEntry->ItemCount() )
         {
-            SvLBoxItem& rItem = pEntry->GetItem( nCurTab );
+            const SvLBoxItem& rItem = pEntry->GetItem( nCurTab );
             aSize.setWidth(rItem.GetWidth(this, pEntry));
             if( !aSize.Width() )
                 aSize.setWidth( 15 );
@@ -2986,7 +2986,7 @@ tools::Rectangle SvTreeListBox::GetFocusRect( SvTreeListEntry* pEntry, long nLin
     return aRect;
 }
 
-sal_IntPtr SvTreeListBox::GetTabPos( SvTreeListEntry* pEntry, SvLBoxTab* pTab)
+sal_IntPtr SvTreeListBox::GetTabPos(const SvTreeListEntry* pEntry, SvLBoxTab* pTab)
 {
     assert(pTab);
     sal_IntPtr nPos = pTab->GetPos();
@@ -3586,7 +3586,7 @@ void SvTreeListBox::FillAccessibleEntryStateSet( SvTreeListEntry* pEntry, ::utl:
     }
 }
 
-tools::Rectangle SvTreeListBox::GetBoundingRect( SvTreeListEntry* pEntry )
+tools::Rectangle SvTreeListBox::GetBoundingRect(const SvTreeListEntry* pEntry)
 {
     Point aPos = GetEntryPosition( pEntry );
     tools::Rectangle aRect = GetFocusRect( pEntry, aPos.Y() );

@@ -218,7 +218,7 @@ protected:
     long                    m_nNextVerVisSize;
     long                    m_nNodeBmpTabDistance; // typical smaller than 0
 
-    virtual long        GetEntryLine( SvTreeListEntry* pEntry ) const;
+    virtual long        GetEntryLine(const SvTreeListEntry* pEntry) const;
     virtual void        CursorDown();
     virtual void        CursorUp();
     virtual void        PageDown( sal_uInt16 nDelta );
@@ -285,7 +285,7 @@ public:
     virtual SvTreeListEntry*    GetClickedEntry( const Point& ) const;
     SvTreeListEntry*    GetCurEntry() const { return m_pCursor; }
     void                SetCurEntry( SvTreeListEntry* );
-    virtual Point       GetEntryPosition( SvTreeListEntry* ) const;
+    virtual Point       GetEntryPosition(const SvTreeListEntry*) const;
     void                MakeVisible( SvTreeListEntry* pEntry, bool bMoveToTop = false );
     void                ScrollToAbsPos( long nPos );
 
@@ -386,9 +386,9 @@ inline const Image& SvImpLBox::GetDefaultEntryColBmp( )
     return implGetImageLocation( ImageType::EntryDefCollapsed );
 }
 
-inline Point SvImpLBox::GetEntryPosition( SvTreeListEntry* pEntry ) const
+inline Point SvImpLBox::GetEntryPosition(const SvTreeListEntry* pEntry) const
 {
-    return Point( 0, GetEntryLine( pEntry ) );
+    return Point(0, GetEntryLine(pEntry));
 }
 
 inline bool SvImpLBox::IsLineVisible( long nY ) const
