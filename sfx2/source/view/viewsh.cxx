@@ -62,6 +62,7 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
+#include <officecfg/Office/Common.hxx>
 #include <officecfg/Setup.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/flatpak.hxx>
@@ -1783,6 +1784,8 @@ bool SfxViewShell::isEditDocLocked()
     Reference<XModel> xModel = GetCurrentDocument();
     if (!xModel.is())
         return false;
+    if (!officecfg::Office::Common::Misc::AllowEditReadonlyDocs::get())
+        return true;
     comphelper::NamedValueCollection aArgs(xModel->getArgs());
     return aArgs.getOrDefault("LockEditDoc", false);
 }
