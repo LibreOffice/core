@@ -10,7 +10,7 @@
 $(eval $(call gb_Jar_Jar,unoil))
 
 $(eval $(call gb_Jar_add_manifest_classpath,unoil, \
-    ridl.jar \
+    libreoffice.jar \
 ))
 
 # vim:set noet sw=4 ts=4:

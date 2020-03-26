@@ -16,22 +16,12 @@ $(eval $(call gb_JunitTest_set_defs,juh,\
 
 $(eval $(call gb_JunitTest_use_jars,juh,\
     OOoRunner \
-    ridl \
+    libreoffice \
 ))
 
 $(eval $(call gb_JunitTest_use_jar_classset,juh,ridljar))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,juh,\
-    javaunohelper/com/sun/star/comp/helper/Bootstrap \
-    javaunohelper/com/sun/star/comp/helper/BootstrapException \
-    javaunohelper/com/sun/star/comp/helper/ComponentContext \
-    javaunohelper/com/sun/star/comp/helper/ComponentContextEntry \
-    javaunohelper/com/sun/star/lib/uno/helper/ComponentBase \
-    javaunohelper/com/sun/star/lib/uno/helper/InterfaceContainer \
-    javaunohelper/com/sun/star/lib/uno/helper/MultiTypeInterfaceContainer \
-    javaunohelper/com/sun/star/lib/uno/helper/PropertySet \
-    javaunohelper/com/sun/star/lib/uno/helper/WeakAdapter \
-    javaunohelper/com/sun/star/lib/uno/helper/WeakBase \
     javaunohelper/test/com/sun/star/comp/helper/ComponentContext_Test \
     javaunohelper/test/com/sun/star/lib/uno/helper/AWeakBase \
     javaunohelper/test/com/sun/star/lib/uno/helper/ComponentBase_Test \

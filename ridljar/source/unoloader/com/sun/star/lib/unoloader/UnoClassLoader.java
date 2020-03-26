@@ -49,8 +49,8 @@ public final class UnoClassLoader extends URLClassLoader {
      * Instantiates the root UNO class loader.
      *
      * @param base a base URL relative to which the URE JARs
-     * (<code>java_uno.jar</code>, <code>juh.jar</code>,
-     * <code>ridl.jar</code>) can be found; must not be <code>null</code>.
+     * (<code>java_uno.jar</code> and <code>libreoffice.jar</code>)
+     * can be found; must not be <code>null</code>.
      *
      * @param classPath an array of URLs that form the class path of this class
      * loader; may be <code>null</code>, which is the same as an empty array.
@@ -191,11 +191,10 @@ public final class UnoClassLoader extends URLClassLoader {
     private static URL[] createUrls(URL base, URL[] classPath)
         throws MalformedURLException
     {
-        final int JARS = 3;
+        final int JARS = 2;
         URL[] urls = new URL[JARS + (classPath == null ? 0 : classPath.length)];
         urls[0] = new URL(base, "java_uno.jar"); //TODO get rid of it here
-        urls[1] = new URL(base, "juh.jar");
-        urls[2] = new URL(base, "ridl.jar");
+        urls[1] = new URL(base, "libreoffice.jar");
         if (classPath != null) {
             System.arraycopy(classPath, 0, urls, JARS, classPath.length);
         }

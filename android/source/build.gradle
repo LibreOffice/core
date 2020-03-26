@@ -27,8 +27,7 @@ buildscript {
 dependencies {
     implementation fileTree(dir: "${liboInstdir}/${liboUREJavaFolder}", include: [
             "java_uno.jar",
-            "juh.jar",
-            "ridl.jar",
+            "libreoffice.jar",
             "unoloader.jar"
     ])
     implementation(name:'owncloud_android_lib', ext:'aar')
