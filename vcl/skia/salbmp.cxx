@@ -62,7 +62,7 @@ SkiaSalBitmap::SkiaSalBitmap(const sk_sp<SkImage>& image)
 #ifdef DBG_UTIL
     mWriteAccessCount = 0;
 #endif
-    SAL_INFO("vcl.skia", "bitmapfromimage(" << this << ")");
+    SAL_INFO("vcl.skia.trace", "bitmapfromimage(" << this << ")");
 }
 
 bool SkiaSalBitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal)
@@ -84,7 +84,7 @@ bool SkiaSalBitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const Bitmap
         mPalette = BitmapPalette();
         return false;
     }
-    SAL_INFO("vcl.skia", "create(" << this << ")");
+    SAL_INFO("vcl.skia.trace", "create(" << this << ")");
     return true;
 }
 
@@ -160,7 +160,7 @@ bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount)
         mBitmap.reset();
         mBuffer.reset();
     }
-    SAL_INFO("vcl.skia", "create(" << this << "): (" << &src << ")");
+    SAL_INFO("vcl.skia.trace", "create(" << this << "): (" << &src << ")");
     return true;
 }
 
@@ -172,7 +172,7 @@ bool SkiaSalBitmap::Create(const css::uno::Reference<css::rendering::XBitmapCanv
 
 void SkiaSalBitmap::Destroy()
 {
-    SAL_INFO("vcl.skia", "destroy(" << this << ")");
+    SAL_INFO("vcl.skia.trace", "destroy(" << this << ")");
 #ifdef DBG_UTIL
     assert(mWriteAccessCount == 0);
 #endif
@@ -294,8 +294,8 @@ bool SkiaSalBitmap::Scale(const double& rScaleX, const double& rScaleY, BmpScale
     if (mSize == newSize)
         return true;
 
-    SAL_INFO("vcl.skia", "scale(" << this << "): " << mSize << "->" << newSize << ":"
-                                  << static_cast<int>(nScaleFlag));
+    SAL_INFO("vcl.skia.trace", "scale(" << this << "): " << mSize << "->" << newSize << ":"
+                                        << static_cast<int>(nScaleFlag));
 
     SkPaint paint;
     switch (nScaleFlag)
@@ -437,7 +437,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
     paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
     surface->getCanvas()->drawBitmap(GetAsSkBitmap(), 0, 0, &paint);
     const_cast<sk_sp<SkImage>&>(mImage) = surface->makeImageSnapshot();
-    SAL_INFO("vcl.skia", "getskimage(" << this << ")");
+    SAL_INFO("vcl.skia.trace", "getskimage(" << this << ")");
     return mImage;
 }
 
@@ -505,7 +505,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
     paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
     surface->getCanvas()->drawBitmap(alphaBitmap, 0, 0, &paint);
     const_cast<sk_sp<SkImage>&>(mAlphaImage) = surface->makeImageSnapshot();
-    SAL_INFO("vcl.skia", "getalphaskbitmap(" << this << ")");
+    SAL_INFO("vcl.skia.trace", "getalphaskbitmap(" << this << ")");
     return mAlphaImage;
 }
 
@@ -577,7 +577,7 @@ void SkiaSalBitmap::EnsureBitmapData()
         }
     }
     verify();
-    SAL_INFO("vcl.skia", "ensurebitmapdata(" << this << ")");
+    SAL_INFO("vcl.skia.trace", "ensurebitmapdata(" << this << ")");
 }
 
 void SkiaSalBitmap::EnsureBitmapUniqueData()

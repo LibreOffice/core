@@ -137,7 +137,7 @@ void SkiaPackedSurfaceAtlasManager::CreateNewSurface()
     std::unique_ptr<PackedSurface> pPackedSurface(
         new PackedSurface(mnSurfaceWidth, mnSurfaceHeight));
     maPackedSurfaces.push_back(std::move(pPackedSurface));
-    SAL_INFO("vcl.skia",
+    SAL_INFO("vcl.skia.trace",
              "SkiaPackedSurfaceAtlas adding surface, count: " << maPackedSurfaces.size());
 }
 
@@ -166,7 +166,7 @@ SkiaPackedSurfaceAtlasManager::ReduceSurfaceNumber(int nMaxNumberOfSurfaces)
         // Remove oldest created surface
         aSurfaces.push_back(maPackedSurfaces[0]->mpSurface);
         maPackedSurfaces.erase(maPackedSurfaces.begin());
-        SAL_INFO("vcl.skia",
+        SAL_INFO("vcl.skia.trace",
                  "PackedSurfaceAtlas removing surface, count: " << maPackedSurfaces.size());
     }
     return aSurfaces;

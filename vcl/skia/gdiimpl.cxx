@@ -326,10 +326,10 @@ void SkiaSalGraphicsImpl::postDraw()
             mXorExtents.outset(2, 2);
             mXorExtents.intersect(SkRect::MakeXYWH(0, 0, mSurface->width(), mSurface->height()));
         }
-        SAL_INFO("vcl.skia", "applyxor("
-                                 << this << "): "
-                                 << tools::Rectangle(mXorExtents.left(), mXorExtents.top(),
-                                                     mXorExtents.right(), mXorExtents.bottom()));
+        SAL_INFO("vcl.skia.trace",
+                 "applyxor(" << this << "): "
+                             << tools::Rectangle(mXorExtents.left(), mXorExtents.top(),
+                                                 mXorExtents.right(), mXorExtents.bottom()));
         // Copy the surface contents to another pixmap.
         SkBitmap surfaceBitmap;
         // Use unpremultiplied alpha format, so that we do not have to do the conversions to get
@@ -398,7 +398,7 @@ void SkiaSalGraphicsImpl::checkSurface()
     if (!mSurface)
     {
         recreateSurface();
-        SAL_INFO("vcl.skia",
+        SAL_INFO("vcl.skia.trace",
                  "create(" << this << "): " << Size(mSurface->width(), mSurface->height()));
     }
     else if (GetWidth() != mSurface->width() || GetHeight() != mSurface->height())
@@ -407,9 +407,10 @@ void SkiaSalGraphicsImpl::checkSurface()
         {
             Size oldSize(mSurface->width(), mSurface->height());
             recreateSurface();
-            SAL_INFO("vcl.skia", "recreate(" << this << "): old " << oldSize << " new "
-                                             << Size(mSurface->width(), mSurface->height())
-                                             << " requested " << Size(GetWidth(), GetHeight()));
+            SAL_INFO("vcl.skia.trace", "recreate(" << this << "): old " << oldSize << " new "
+                                                   << Size(mSurface->width(), mSurface->height())
+                                                   << " requested "
+                                                   << Size(GetWidth(), GetHeight()));
         }
     }
 }
@@ -421,7 +422,7 @@ bool SkiaSalGraphicsImpl::setClipRegion(const vcl::Region& region)
     SkiaZone zone;
     mClipRegion = region;
     checkSurface();
-    SAL_INFO("vcl.skia", "setclipregion(" << this << "): " << region);
+    SAL_INFO("vcl.skia.trace", "setclipregion(" << this << "): " << region);
     SkCanvas* canvas = mSurface->getCanvas();
     // SkCanvas::clipRegion() can only further reduce the clip region,
     // but we need to set the given region, which may extend it.
@@ -541,7 +542,7 @@ void SkiaSalGraphicsImpl::drawPixel(long nX, long nY, Color nColor)
     if (nColor == SALCOLOR_NONE)
         return;
     preDraw();
-    SAL_INFO("vcl.skia", "drawpixel(" << this << "): " << Point(nX, nY) << ":" << nColor);
+    SAL_INFO("vcl.skia.trace", "drawpixel(" << this << "): " << Point(nX, nY) << ":" << nColor);
     SkPaint paint;
     paint.setColor(toSkColor(nColor));
     // Apparently drawPixel() is actually expected to set the pixel and not draw it.
@@ -557,8 +558,8 @@ void SkiaSalGraphicsImpl::drawLine(long nX1, long nY1, long nX2, long nY2)
     if (mLineColor == SALCOLOR_NONE)
         return;
     preDraw();
-    SAL_INFO("vcl.skia", "drawline(" << this << "): " << Point(nX1, nY1) << "->" << Point(nX2, nY2)
-                                     << ":" << mLineColor);
+    SAL_INFO("vcl.skia.trace", "drawline(" << this << "): " << Point(nX1, nY1) << "->"
+                                           << Point(nX2, nY2) << ":" << mLineColor);
     SkPaint paint;
     paint.setColor(toSkColor(mLineColor));
     paint.setAntiAlias(mParent.getAntiAliasB2DDraw());
@@ -576,9 +577,9 @@ void SkiaSalGraphicsImpl::privateDrawAlphaRect(long nX, long nY, long nWidth, lo
                                                double fTransparency, bool blockAA)
 {
     preDraw();
-    SAL_INFO("vcl.skia", "privatedrawrect(" << this << "): " << Point(nX, nY) << "/"
-                                            << Size(nWidth, nHeight) << ":" << mLineColor << ":"
-                                            << mFillColor << ":" << fTransparency);
+    SAL_INFO("vcl.skia.trace", "privatedrawrect(" << this << "): " << Point(nX, nY) << "/"
+                                                  << Size(nWidth, nHeight) << ":" << mLineColor
+                                                  << ":" << mFillColor << ":" << fTransparency);
     SkCanvas* canvas = getDrawCanvas();
     SkPaint paint;
     paint.setAntiAlias(!blockAA && mParent.getAntiAliasB2DDraw());
@@ -666,8 +667,8 @@ bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectTo
     SkPath aPath;
     basegfx::B2DPolyPolygon aPolyPolygon(rPolyPolygon);
     aPolyPolygon.transform(rObjectToDevice);
-    SAL_INFO("vcl.skia", "drawpolypolygon(" << this << "): " << aPolyPolygon << ":" << mLineColor
-                                            << ":" << mFillColor);
+    SAL_INFO("vcl.skia.trace", "drawpolypolygon(" << this << "): " << aPolyPolygon << ":"
+                                                  << mLineColor << ":" << mFillColor);
     addPolyPolygonToPath(aPolyPolygon, aPath);
     aPath.setFillType(SkPathFillType::kEvenOdd);
 
@@ -719,7 +720,7 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
     }
 
     preDraw();
-    SAL_INFO("vcl.skia", "drawpolyline(" << this << "): " << rPolyLine << ":" << mLineColor);
+    SAL_INFO("vcl.skia.trace", "drawpolyline(" << this << "): " << rPolyLine << ":" << mLineColor);
 
     // tdf#124848 get correct LineWidth in discrete coordinates,
     // take hairline case into account
@@ -851,9 +852,9 @@ void SkiaSalGraphicsImpl::copyArea(long nDestX, long nDestY, long nSrcX, long nS
     if (nDestX == nSrcX && nDestY == nSrcY)
         return;
     preDraw();
-    SAL_INFO("vcl.skia", "copyarea(" << this << "): " << Point(nSrcX, nSrcY) << "->"
-                                     << Point(nDestX, nDestY) << "/"
-                                     << Size(nSrcWidth, nSrcHeight));
+    SAL_INFO("vcl.skia.trace", "copyarea(" << this << "): " << Point(nSrcX, nSrcY) << "->"
+                                           << Point(nDestX, nDestY) << "/"
+                                           << Size(nSrcWidth, nSrcHeight));
     // Do not use makeImageSnapshot(rect), as that one may make a needless data copy.
     sk_sp<SkImage> image = mSurface->makeImageSnapshot();
     SkPaint paint;
@@ -877,7 +878,7 @@ void SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcG
     }
     else
         src = this;
-    SAL_INFO("vcl.skia", "copybits(" << this << "): (" << src << "):" << rPosAry);
+    SAL_INFO("vcl.skia.trace", "copybits(" << this << "): (" << src << "):" << rPosAry);
     // Do not use makeImageSnapshot(rect), as that one may make a needless data copy.
     sk_sp<SkImage> image = src->mSurface->makeImageSnapshot();
     SkPaint paint;
@@ -986,7 +987,7 @@ void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const SalBitmap& r
 void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const sk_sp<SkImage>& rImage,
                                    Color nMaskColor)
 {
-    SAL_INFO("vcl.skia", "drawmask(" << this << "): " << rPosAry << ":" << nMaskColor);
+    SAL_INFO("vcl.skia.trace", "drawmask(" << this << "): " << rPosAry << ":" << nMaskColor);
     sk_sp<SkSurface> tmpSurface = SkiaHelper::createSkSurface(rImage->width(), rImage->height());
     assert(tmpSurface);
     SkCanvas* canvas = tmpSurface->getCanvas();
@@ -1005,7 +1006,7 @@ std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(long nX, long nY, long
 {
     SkiaZone zone;
     checkSurface();
-    SAL_INFO("vcl.skia",
+    SAL_INFO("vcl.skia.trace",
              "getbitmap(" << this << "): " << Point(nX, nY) << "/" << Size(nWidth, nHeight));
     mSurface->getCanvas()->flush();
     // TODO makeImageSnapshot(rect) may copy the data, which may be a waste if this is used
@@ -1019,7 +1020,7 @@ Color SkiaSalGraphicsImpl::getPixel(long nX, long nY)
 {
     SkiaZone zone;
     checkSurface();
-    SAL_INFO("vcl.skia", "getpixel(" << this << "): " << Point(nX, nY));
+    SAL_INFO("vcl.skia.trace", "getpixel(" << this << "): " << Point(nX, nY));
     mSurface->getCanvas()->flush();
     // This is presumably slow, but getPixel() should be generally used only by unit tests.
     SkBitmap bitmap;
@@ -1033,7 +1034,7 @@ Color SkiaSalGraphicsImpl::getPixel(long nX, long nY)
 void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFlags)
 {
     preDraw();
-    SAL_INFO("vcl.skia", "invert(" << this << "): " << rPoly << ":" << int(eFlags));
+    SAL_INFO("vcl.skia.trace", "invert(" << this << "): " << rPoly << ":" << int(eFlags));
     // TrackFrame just inverts a dashed path around the polygon
     if (eFlags == SalInvert::TrackFrame)
     {
@@ -1153,7 +1154,7 @@ void SkiaSalGraphicsImpl::drawImage(const SalTwoRect& rPosAry, const sk_sp<SkIma
     aPaint.setBlendMode(eBlendMode);
 
     preDraw();
-    SAL_INFO("vcl.skia", "drawimage(" << this << "): " << rPosAry << ":" << int(eBlendMode));
+    SAL_INFO("vcl.skia.trace", "drawimage(" << this << "): " << rPosAry << ":" << int(eBlendMode));
     getDrawCanvas()->drawImageRect(aImage, aSourceRect, aDestinationRect, &aPaint);
     if (mXorMode) // limit xor area update
         mXorExtents = aDestinationRect;
@@ -1172,7 +1173,7 @@ void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SkBitmap& 
     aPaint.setBlendMode(eBlendMode);
 
     preDraw();
-    SAL_INFO("vcl.skia", "drawbitmap(" << this << "): " << rPosAry << ":" << int(eBlendMode));
+    SAL_INFO("vcl.skia.trace", "drawbitmap(" << this << "): " << rPosAry << ":" << int(eBlendMode));
     getDrawCanvas()->drawBitmapRect(aBitmap, aSourceRect, aDestinationRect, &aPaint);
     if (mXorMode) // limit xor area update
         mXorExtents = aDestinationRect;
@@ -1222,7 +1223,7 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
     aMatrix.set(SkMatrix::kMTransY, rNull.getY());
 
     preDraw();
-    SAL_INFO("vcl.skia",
+    SAL_INFO("vcl.skia.trace",
              "drawtransformedbitmap(" << this << "): " << rNull << ":" << rX << ":" << rY);
     {
         SkAutoCanvasRestore autoRestore(getDrawCanvas(), true);
@@ -1280,8 +1281,8 @@ void SkiaSalGraphicsImpl::drawGenericLayout(const GenericSalLayout& layout, Colo
         = SkTextBlob::MakeFromRSXform(glyphIds.data(), glyphIds.size() * sizeof(SkGlyphID),
                                       glyphForms.data(), font, SkTextEncoding::kGlyphID);
     preDraw();
-    SAL_INFO("vcl.skia", "drawtextblob("
-                             << this << "): "
+    SAL_INFO("vcl.skia.trace",
+             "drawtextblob(" << this << "): "
                              << tools::Rectangle(textBlob->bounds().x(), textBlob->bounds().y(),
                                                  textBlob->bounds().width(),
                                                  textBlob->bounds().height())
