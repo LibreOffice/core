@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <o3tl/safeint.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/svdograf.hxx>
 
@@ -30,16 +29,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/pdfread.hxx>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::graphic;
-using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::ucb;
-using namespace ::sfx2;
-
-SdPdfFilter::SdPdfFilter(SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell)
+SdPdfFilter::SdPdfFilter(SfxMedium& rMedium, sd::DrawDocShell& rDocShell)
     : SdFilter(rMedium, rDocShell)
 {
 }
@@ -48,14 +38,11 @@ SdPdfFilter::~SdPdfFilter() {}
 
 bool SdPdfFilter::Import()
 {
-    //FIXME: Replace with parsing the PDF elements to allow editing.
-    //FIXME: For now we import as images for simplicity.
-
     const OUString aFileName(
         mrMedium.GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::NONE));
 
     // Rendering resolution.
-    const double dResolutionDPI = 96.;
+    const double dResolutionDPI = 96.0;
 
     std::vector<std::pair<Graphic, Size>> aGraphics;
     if (vcl::ImportPDFUnloaded(aFileName, aGraphics, dResolutionDPI) == 0)
@@ -78,25 +65,20 @@ bool SdPdfFilter::Import()
 
         // Create the page and insert the Graphic.
         SdPage* pPage = mrDocument.GetSdPage(nPageNumber, PageKind::Standard);
-        Size aGrfSize(OutputDevice::LogicToLogic(aSize, rGraphic.GetPrefMapMode(),
-                                                 MapMode(MapUnit::Map100thMM)));
+        Size aGraphicSize(OutputDevice::LogicToLogic(aSize, rGraphic.GetPrefMapMode(),
+                                                     MapMode(MapUnit::Map100thMM)));
 
         // Resize to original size based on 72 dpi to preserve page size.
-        aGrfSize = Size(aGrfSize.Width() * 72. / dResolutionDPI,
-                        aGrfSize.Height() * 72. / dResolutionDPI);
+        aGraphicSize = Size(aGraphicSize.Width() * 72.0 / dResolutionDPI,
+                            aGraphicSize.Height() * 72.0 / dResolutionDPI);
 
         // Make the page size match the rendered image.
-        pPage->SetSize(aGrfSize);
-        Point aPos(0, 0);
+        pPage->SetSize(aGraphicSize);
+        Point aPosition(0, 0);
 
         SdrGrafObj* pSdrGrafObj = new SdrGrafObj(pPage->getSdrModelFromSdrPage(), rGraphic,
-                                                 tools::Rectangle(aPos, aGrfSize));
+                                                 tools::Rectangle(aPosition, aGraphicSize));
         pPage->InsertObject(pSdrGrafObj);
-
-        // we know that the initial bitmap we provided was just a placeholder,
-        // we need to swap it out, so that on the next swap in, we render the
-        // correct one
-        // const_cast<GraphicObject&>(pSdrGrafObj->GetGraphicObject()).SwapOut();
     }
 
     return true;
