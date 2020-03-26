@@ -19,6 +19,7 @@
 
 #include <vcl/lazydelete.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/printer.hxx>
 #include <sfx2/progress.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/prntitem.hxx>
@@ -3841,7 +3842,7 @@ bool SwFlyFrame::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
             {
                 if ( !pAnch->isFrameAreaPositionValid() )
                     pAnch = nullptr;
-                else if ( reinterpret_cast<sal_IntPtr>(pSh->GetOut()) == reinterpret_cast<sal_IntPtr>(pSh->getIDocumentDeviceAccess().getPrinter( false )))
+                else if ( pSh->GetOut() == pSh->getIDocumentDeviceAccess().getPrinter( false ))
                 {
                     //HACK: we have to omit some of the objects for printing,
                     //otherwise they would be printed twice.
