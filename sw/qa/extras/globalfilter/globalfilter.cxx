@@ -864,7 +864,7 @@ static auto verifyNestedFieldmark(OUString const& rTestName,
         node1.GetNode().GetTextNode()->GetText().indexOf(CH_TXT_ATR_FIELDSTART));
     CPPUNIT_ASSERT_EQUAL_MESSAGE(rTestName.toUtf8().getStr(),
             sal_Int32(1), innerPos.nContent.GetIndex());
-    ::sw::mark::IFieldmark const*const pInner(rIDMA.getFieldmarkAt(innerPos));
+    ::sw::mark::IFieldmark *const pInner(rIDMA.getFieldmarkAt(innerPos));
     CPPUNIT_ASSERT_MESSAGE(rTestName.toUtf8().getStr(), pInner);
     OUString const innerString(SwPaM(pInner->GetMarkPos(), pInner->GetOtherMarkPos()).GetText());
     CPPUNIT_ASSERT_EQUAL_MESSAGE(rTestName.toUtf8().getStr(), OUString(
@@ -899,7 +899,7 @@ static auto verifyNestedFieldmark(OUString const& rTestName,
         + u"baz" + OUStringChar(CH_TXT_ATR_FIELDEND)), outerString);
 
     // must return innermost mark
-    CPPUNIT_ASSERT_EQUAL(reinterpret_cast<sal_uIntPtr>(pInner), reinterpret_cast<sal_uIntPtr>(rIDMA.getFieldmarkFor(innerPos)));
+    CPPUNIT_ASSERT_EQUAL(pInner, rIDMA.getFieldmarkFor(innerPos));
 }
 
 void Test::testNestedFieldmark()
