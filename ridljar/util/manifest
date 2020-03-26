@@ -35,3 +35,12 @@ Sealed: true
 
 Name: com/sun/star/lib/uno/protocols/urp/
 Sealed: true
+
+Name: com/sun/star/comp/helper
+Sealed: true
+
+Name: com/sun/star/lib/uno/adapter
+Sealed: true
+
+Name: com/sun/star/lib/uno/helper
+Sealed: true
