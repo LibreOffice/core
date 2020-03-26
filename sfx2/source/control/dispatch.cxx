@@ -219,11 +219,8 @@ void SfxDispatcher::Call_Impl(SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
     if ( GetFrame() )
     {
         // Recording may start
-        css::uno::Reference< css::frame::XFrame > xFrame =
-                GetFrame()->GetFrame().GetFrameInterface();
-
         css::uno::Reference< css::beans::XPropertySet > xSet(
-                xFrame,
+                GetFrame()->GetFrame().GetFrameInterface(),
                 css::uno::UNO_QUERY);
 
         if ( xSet.is() )
