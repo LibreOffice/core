@@ -729,6 +729,7 @@ $(eval $(call gb_Helper_register_jars_for_install,URE,ure, \
 	java_uno \
 	juh \
 	jurt \
+	libreoffice \
 	ridl \
 	unoloader \
 ))

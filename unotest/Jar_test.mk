@@ -11,13 +11,11 @@
 $(eval $(call gb_Jar_Jar,test))
 
 $(eval $(call gb_Jar_add_manifest_classpath,test,\
-	$(call gb_Helper_make_url,$(call gb_Jar_get_target,juh)) \
-	$(call gb_Helper_make_url,$(call gb_Jar_get_target,ridl)) \
+	libreoffice.jar \
 ))
 
 $(eval $(call gb_Jar_use_jars,test,\
-	juh \
-	ridl \
+	libreoffice \
 	OOoRunner \
 ))
 

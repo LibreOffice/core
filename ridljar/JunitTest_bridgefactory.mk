@@ -13,7 +13,7 @@ $(eval $(call gb_Jar_use_customtargets,ridl_bridgefactory, \
     ridljar/javamaker \
 ))
 
-$(eval $(call gb_JunitTest_use_jar_classset,ridl_bridgefactory,ridl))
+$(eval $(call gb_JunitTest_use_jar_classset,ridl_bridgefactory,libreoffice))
 
 $(eval $(call gb_JunitTest_add_classpath,ridl_bridgefactory,$(call gb_CustomTarget_get_workdir,ridljar/javamaker)))
 
