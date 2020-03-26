@@ -2423,6 +2423,15 @@ void WW8TabDesc::CreateSwTable()
 
     m_xTmpPos.reset(new SwPosition(*m_pIo->m_pPaM->GetPoint()));
 
+    // Because SW cannot handle multi-page floating frames,
+    // _any unnecessary_ floating tables have been converted to inline.
+    if ( m_pIo->m_xSFlyPara && !m_pIo->m_xSFlyPara->pFlyFormat )
+    {
+        // Get the table orientation from the fly
+        if ( m_pIo->m_xSFlyPara->eHAlign == text::HoriOrientation::CENTER )
+            m_eOri = m_pIo->m_xSFlyPara->eHAlign;
+    }
+
     // The table is small: The number of columns is the lowest count of
     // columns of the origin, because inserting is faster than deleting.
     // The number of rows is the count of bands because (identically)
