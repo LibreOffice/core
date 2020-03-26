@@ -59,6 +59,7 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
+#include <officecfg/Office/Common.hxx>
 #include <officecfg/Setup.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/flatpak.hxx>
@@ -1752,6 +1753,13 @@ void SfxViewShell::SetController( SfxBaseController* pController )
         pImpl->xClipboardListener->DisconnectViewShell();
 
     pImpl->xClipboardListener = new SfxClipboardChangeListener( this, GetClipboardNotifier() );
+}
+
+bool SfxViewShell::isEditDocLocked()
+{
+    if (!officecfg::Office::Common::Misc::AllowEditReadonlyDocs::get())
+        return true;
+    return false;
 }
 
 Reference < XController > SfxViewShell::GetController()

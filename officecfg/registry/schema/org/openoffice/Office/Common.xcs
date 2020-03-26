@@ -5637,6 +5637,12 @@
           <desc>Contains the Personas installed through extensions</desc>
         </info>
       </set>
+      <prop oor:name="AllowEditReadonlyDocs" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Allow the user to edit read-only docs (via menu or Infobar)</desc>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
     <group oor:name="Forms">
       <info>
