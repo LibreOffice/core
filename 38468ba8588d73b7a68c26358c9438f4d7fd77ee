@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b483ce0_a6bdbfea",
+        "filename": "basic/qa/cppunit/test_scanner.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 929,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-26T09:40:20Z",
+      "side": 1,
+      "message": "These decimal tests look odd in the \"testHexOctal\". I now think we might had misunderstood esch other, if you asked me if we need additional test *for the decimals* (this detail was missing in the question), and I took that as asking if we need additional test for *octals* (which I happened to think about at that time).\n\nWell, I hoped that there is a similar test dedicated to *decimals* that could be amended just like you do here with hex/octals with type characters. If so, I would not add a new test, but extend existing decimals-oriented test. If not, I\u0027d introduce a \"testDecimal\" near the \"testHexOctal\", and put the decimals there, to keep distinction.",
+      "range": {
+        "startLine": 929,
+        "startChar": 26,
+        "endLine": 929,
+        "endChar": 30
+      },
+      "revId": "38468ba8588d73b7a68c26358c9438f4d7fd77ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31f37ca3_7e0242d3",
+        "filename": "basic/qa/cppunit/test_scanner.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 969,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-26T09:40:20Z",
+      "side": 1,
+      "message": "Interesting if this test makes sense, and does the result of this match expectations (IIRC, the result is empty string? shouldn\u0027t it be a string with number instead?)\n\nAnd what VBA does for this?",
+      "range": {
+        "startLine": 969,
+        "startChar": 4,
+        "endLine": 969,
+        "endChar": 34
+      },
+      "revId": "38468ba8588d73b7a68c26358c9438f4d7fd77ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
