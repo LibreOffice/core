@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dba836d5_05c821b4",
+        "filename": "vcl/source/app/salvtables.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 4535,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-03-26T12:07:56Z",
+      "side": 1,
+      "message": "here in this gen case freeze/thaw is just SetUpdateMode(false/true) so you could do...\n\nbool bUpdate \u003d IsUpdateMode();\nif (bUpdate)\n    SetUpdateMode(false)\nscroll thing\nif (bUpdate)\n    SetUpdateMode(true)",
+      "revId": "2212c408c048219971d5a4b533fc47cb0d28974c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
