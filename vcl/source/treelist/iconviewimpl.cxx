@@ -207,7 +207,7 @@ void IconViewImpl::KeyUp( bool bPageUp )
     EndScroll();
 }
 
-long IconViewImpl::GetEntryLine( SvTreeListEntry* pEntry ) const
+long IconViewImpl::GetEntryLine(const SvTreeListEntry* pEntry) const
 {
     if(!m_pStartEntry )
         return -1; // invisible position
@@ -219,7 +219,7 @@ long IconViewImpl::GetEntryLine( SvTreeListEntry* pEntry ) const
     return nFirstVisPos;
 }
 
-Point IconViewImpl::GetEntryPosition( SvTreeListEntry* pEntry ) const
+Point IconViewImpl::GetEntryPosition(const SvTreeListEntry* pEntry) const
 {
     const int pos = m_pView->GetAbsPos( pEntry );
 
