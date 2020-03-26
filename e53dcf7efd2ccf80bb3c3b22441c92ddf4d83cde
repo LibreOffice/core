@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "198d626f_cb1dffed",
+        "filename": "sfx2/source/appl/sfxpicklist.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-03-26T09:57:36Z",
+      "side": 1,
+      "message": "presumably this must lock some kind of mutex like SolarMutex to call that?",
+      "revId": "e53dcf7efd2ccf80bb3c3b22441c92ddf4d83cde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4eb11676_aada7b9c",
+        "filename": "sfx2/source/appl/sfxpicklist.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-03-26T09:57:36Z",
+      "side": 1,
+      "message": "the thread is just started but not joined - this can cause crashes at shutdown if the thread is still running then and accessing something that has been deleted.\n\nin particular the mpDocSh isn\u0027t even a global so it can be deleted even before the application shuts down.",
+      "revId": "e53dcf7efd2ccf80bb3c3b22441c92ddf4d83cde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
