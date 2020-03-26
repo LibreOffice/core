@@ -10,8 +10,10 @@
 $(eval $(call gb_Module_Module,ridljar))
 
 ifneq ($(ENABLE_JAVA),)
+
 $(eval $(call gb_Module_add_targets,ridljar,\
     CustomTarget_javamaker \
+    Jar_libreoffice \
     Jar_ridl \
     Jar_unoloader \
 ))

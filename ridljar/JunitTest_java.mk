@@ -13,7 +13,7 @@ $(eval $(call gb_Jar_use_customtargets,ridl_java, \
     ridljar/javamaker \
 ))
 
-$(eval $(call gb_JunitTest_use_jar_classset,ridl_java,ridl))
+$(eval $(call gb_JunitTest_use_jar_classset,ridl_java,libreoffice))
 
 $(eval $(call gb_JunitTest_add_classpath,ridl_java,$(call gb_CustomTarget_get_workdir,ridljar/javamaker)))
 

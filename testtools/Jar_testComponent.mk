@@ -10,8 +10,11 @@
 $(eval $(call gb_Jar_Jar,testComponent))
 
 $(eval $(call gb_Jar_use_jars,testComponent,\
-    ridl \
-    juh \
+    libreoffice \
+))
+
+$(eval $(call gb_Jar_use_api,testComponent,\
+    udkapi \
 ))
 
 $(eval $(call gb_Jar_use_customtargets,testComponent,\

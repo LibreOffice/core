@@ -20,7 +20,8 @@ $(eval $(call gb_ExternalProject_use_jars,languagetool,\
 	unoil \
 ))
 
-$(call gb_ExternalProject_get_state_target,languagetool,build) :
+$(call gb_ExternalProject_get_state_target,languagetool,build) : \
+        $(call gb_Jar_get_target,libreoffice)
 	cd "$(call gb_UnpackedTarball_get_dir,languagetool)" && \
 	$(ICECREAM_RUN) "$(ANT)" \
 		$(if $(verbose),-v,-q) \

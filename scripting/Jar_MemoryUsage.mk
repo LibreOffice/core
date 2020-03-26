@@ -10,8 +10,7 @@
 $(eval $(call gb_Jar_Jar,MemoryUsage))
 
 $(eval $(call gb_Jar_use_jars,MemoryUsage,\
-	juh \
-	ridl \
+	libreoffice \
 ))
 
 $(eval $(call gb_Jar_add_sourcefiles,MemoryUsage,\

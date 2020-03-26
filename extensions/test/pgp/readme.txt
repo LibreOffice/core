@@ -17,7 +17,7 @@ Please note the semicolons!
 
 
  For the program to run make sure that the office has access
- to classes.zip, ridl.jar, pgp.jar and swingall.jar.
+ to classes.zip, libreoffice.jar, pgp.jar and swingall.jar.
 
  Therefore do the necessary entries in
  Office/user/config/javarc
