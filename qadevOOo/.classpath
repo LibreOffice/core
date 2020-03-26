@@ -9,8 +9,7 @@
 	<classpathentry kind="lib" path="testdocs/qadevlibs/JobExecutor.jar"/>
 	<classpathentry kind="lib" path="testdocs/qadevlibs/MyPersistObjectImpl.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="../instdir/program/classes/juh.jar"/>
-	<classpathentry kind="lib" path="../instdir/program/classes/ridl.jar"/>
+	<classpathentry kind="lib" path="../instdir/program/classes/libreoffice.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="../workdir/qadevooo-bin"/>
 </classpath>

@@ -29,7 +29,7 @@ $(call gb_CustomTarget_get_workdir,odk/docs/java/ref)/%.html : \
 	touch $@
 
 $(call gb_CustomTarget_get_workdir,odk/docs/java/ref)/javadoc_log.txt : \
-		$(call gb_Jar_get_target,ridl)
+		$(call gb_Jar_get_target,libreoffice)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JDC,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		$(JAVADOC) -source $(JAVA_SOURCE_VER) -J-Xmx120m -use -splitindex \
@@ -38,7 +38,7 @@ $(call gb_CustomTarget_get_workdir,odk/docs/java/ref)/javadoc_log.txt : \
 		-tag attention:a:"Attention:" \
 		-d $(dir $@) \
 		-sourcepath "$(SRCDIR)/ridljar/source/unoloader$(gb_CLASSPATHSEP)$(SRCDIR)/ridljar$(gb_CLASSPATHSEP)$(SRCDIR)/jurt$(gb_CLASSPATHSEP)$(SRCDIR)/javaunohelper" \
-		-classpath $(call gb_Jar_get_target,ridl) \
+		-classpath $(call gb_Jar_get_target,libreoffice) \
 		-linkoffline ../../common/reg $(SRCDIR)/odk/docs/java-uno \
 		-linkoffline http://java.sun.com/j2se/1.5/docs/api $(SRCDIR)/odk/docs/java \
 		$(odk_JAVAPACKAGES) \

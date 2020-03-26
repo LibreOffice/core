@@ -21,8 +21,7 @@ $(eval $(call gb_Jar_set_manifest,smoketest,$(SRCDIR)/smoketest/org/libreoffice/
 $(eval $(call gb_Jar_set_packageroot,smoketest,org))
 
 $(eval $(call gb_Jar_use_jars,smoketest, \
-    juh \
-    ridl \
+    libreoffice \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -6,6 +6,9 @@ Sealed: true
 Name: com/sun/star/comp/connections/
 Sealed: true
 
+Name: com/sun/star/comp/helper
+Sealed: true
+
 Name: com/sun/star/comp/loader/
 Sealed: true
 
@@ -24,6 +27,9 @@ Sealed: true
 Name: com/sun/star/lib/uno/
 Sealed: true
 
+Name: com/sun/star/lib/uno/adapter
+Sealed: true
+
 Name: com/sun/star/lib/uno/bridges/java_remote/
 Sealed: true
 
@@ -31,6 +37,9 @@ Name: com/sun/star/lib/uno/environments/java/
 Sealed: true
 
 Name: com/sun/star/lib/uno/environments/remote/
+Sealed: true
+
+Name: com/sun/star/lib/uno/helper
 Sealed: true
 
 Name: com/sun/star/lib/uno/protocols/urp/

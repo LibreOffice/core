@@ -10,8 +10,7 @@
 $(eval $(call gb_Jar_Jar,Highlight))
 
 $(eval $(call gb_Jar_use_jars,Highlight,\
-	juh \
-	ridl \
+	libreoffice \
 ))
 
 $(eval $(call gb_Jar_add_sourcefiles,Highlight,\

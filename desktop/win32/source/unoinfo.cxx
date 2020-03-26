@@ -75,9 +75,7 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
         }
         wchar_t path[MAX_PATH];
         wchar_t * pathEnd = getBrandPath(path);
-        writePath(path, pathEnd, MY_STRING(L"classes\\ridl.jar"));
-        writeNull();
-        writePath(path, pathEnd, MY_STRING(L"classes\\juh.jar"));
+        writePath(path, pathEnd, MY_STRING(L"classes\\libreoffice.jar"));
         writeNull();
         writePath(path, pathEnd, MY_STRING(L""));
     } else {
