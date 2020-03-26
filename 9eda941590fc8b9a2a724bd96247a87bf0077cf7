@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9425db93_e6337807",
+        "filename": "sfx2/source/sidebar/Tools.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-03-26T06:23:05Z",
+      "side": 1,
+      "message": "This branch is the same as the \"else\" branch and can be removed.",
+      "range": {
+        "startLine": 59,
+        "startChar": 8,
+        "endLine": 60,
+        "endChar": 32
+      },
+      "revId": "9eda941590fc8b9a2a724bd96247a87bf0077cf7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
