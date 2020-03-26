@@ -971,6 +971,12 @@ void SwFltAnchorListener::Notify(const SfxHint& rHint)
         if(pFrameFormat)
             m_pFltAnchor->SetFrameFormat(pFrameFormat);
     }
+    else if (auto pDrawFrameFormatHint = dynamic_cast<const sw::DrawFrameFormatHint*>(&rHint))
+    {
+        if (pDrawFrameFormatHint->m_eId != sw::DrawFrameFormatHintId::DYING)
+            return;
+        m_pFltAnchor->SetFrameFormat(nullptr);
+    }
 }
 
 // methods of SwFltRedline follow
