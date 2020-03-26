@@ -5,7 +5,7 @@
      # Setup params to pass to and attempt to launch reg.exe.
      cmd = ['reg.exe', 'query', r'HKLM\Software\Microsoft\DirectX', '/s']
 -    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE,universal_newlines=True)
++    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE,universal_newlines=True,errors='replace')
      for line in p.communicate()[0].splitlines():
        if 'InstallPath' in line:
          dxsdk_dir = line.split('    ')[3] + "\\"
@@ -32,7 +32,7 @@
      args.extend(('&&', 'set'))
      popen = subprocess.Popen(
 -        args, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-+        args, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,universal_newlines=True)
++        args, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,universal_newlines=True,errors='replace')
      variables, _ = popen.communicate()
      if popen.returncode != 0:
        raise Exception('"%s" failed with error %d' % (args, popen.returncode))
@@ -41,7 +41,7 @@
      args.extend(('&&',
        'for', '%i', 'in', '(cl.exe)', 'do', '@echo', 'LOC:%~$PATH:i'))
 -    popen = subprocess.Popen(args, shell=True, stdout=subprocess.PIPE)
-+    popen = subprocess.Popen(args, shell=True, stdout=subprocess.PIPE,universal_newlines=True)
++    popen = subprocess.Popen(args, shell=True, stdout=subprocess.PIPE,universal_newlines=True,errors='replace')
      output, _ = popen.communicate()
      cl_paths[arch] = _ExtractCLPath(output)
    return cl_paths
@@ -66,7 +66,7 @@
      # non-Windows don't do that there.
      link = subprocess.Popen(args, shell=sys.platform == 'win32', env=env,
 -                            stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-+                            stdout=subprocess.PIPE, stderr=subprocess.STDOUT,universal_newlines=True)
++                            stdout=subprocess.PIPE, stderr=subprocess.STDOUT,universal_newlines=True,errors='replace')
      out, _ = link.communicate()
      for line in out.splitlines():
        if (not line.startswith('   Creating library ') and
@@ -86,7 +86,7 @@
      env = self._GetEnv(arch)
      popen = subprocess.Popen(args, shell=True, env=env,
 -                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-+                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT,universal_newlines=True)
++                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT,universal_newlines=True,errors='replace')
      out, _ = popen.communicate()
      for line in out.splitlines():
        if line and 'manifest authoring warning 81010002' not in line:
@@ -95,7 +95,7 @@
      env = self._GetEnv(arch)
      popen = subprocess.Popen(args, shell=True, env=env,
 -                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-+                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT,universal_newlines=True)
++                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT,universal_newlines=True,errors='replace')
      out, _ = popen.communicate()
      # Filter junk out of stdout, and write filtered versions. Output we want
      # to filter is pairs of lines that look like this:
@@ -104,7 +104,7 @@
      env = self._GetEnv(arch)
      popen = subprocess.Popen(args, shell=True, env=env,
 -                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-+                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT,universal_newlines=True)
++                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT,universal_newlines=True,errors='replace')
      out, _ = popen.communicate()
      for line in out.splitlines():
        if (not line.startswith('Copyright (C) Microsoft Corporation') and
@@ -113,7 +113,7 @@
      env = self._GetEnv(arch)
      popen = subprocess.Popen(args, shell=True, env=env,
 -                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-+                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT,universal_newlines=True)
++                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT,universal_newlines=True,errors='replace')
      out, _ = popen.communicate()
      for line in out.splitlines():
        if (not line.startswith('Microsoft (R) Windows (R) Resource Compiler') and
