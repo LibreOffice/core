@@ -784,6 +784,13 @@ DECLARE_OOXMLEXPORT_TEST(testImageCommentAtChar, "image-comment-at-char.docx")
                          getProperty<OUString>(getRun(xPara, 5), "TextPortionType"));
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf131594, "tdf131594.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    // lnNumType should not be exported if w:countBy="0"
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:lnNumType", 0);
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121663, "tdf121663.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
