@@ -3551,9 +3551,10 @@ void ToolBox::Resize()
                         aBounds.Union( rItem.maRect );
                     }
 
-                    long nOptimalWidth = aBounds.GetWidth();
-                    long nDiff = aSize.Width() - nOptimalWidth;
-                    nDiff /= aExpandables.size();
+                    auto nOptimalWidth = aBounds.GetWidth();
+                    auto nDiff = aSize.Width() - nOptimalWidth;
+                    decltype(nDiff) nExpandablesSize = aExpandables.size();
+                    nDiff /= nExpandablesSize;
 
                     //share out the diff from optimal to real across
                     //expandable entries
