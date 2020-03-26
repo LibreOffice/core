@@ -8262,9 +8262,9 @@ private:
         if (bContinue && !sText.isEmpty())
         {
             OString sFinalText(OUStringToOString(sText, RTL_TEXTENCODING_UTF8));
-            g_signal_handlers_block_by_func(pEntry, gpointer(signalInsertText), this);
+            g_signal_handlers_block_by_func(pEntry, reinterpret_cast<gpointer>(signalInsertText), this);
             gtk_editable_insert_text(GTK_EDITABLE(pEntry), sFinalText.getStr(), sFinalText.getLength(), position);
-            g_signal_handlers_unblock_by_func(pEntry, gpointer(signalInsertText), this);
+            g_signal_handlers_unblock_by_func(pEntry, reinterpret_cast<gpointer>(signalInsertText), this);
         }
         g_signal_stop_emission_by_name(pEntry, "insert-text");
     }
@@ -12286,9 +12286,9 @@ private:
             if (bContinue && !sText.isEmpty())
             {
                 OString sFinalText(OUStringToOString(sText, RTL_TEXTENCODING_UTF8));
-                g_signal_handlers_block_by_func(pEntry, gpointer(signalEntryInsertText), this);
+                g_signal_handlers_block_by_func(pEntry, reinterpret_cast<gpointer>(signalEntryInsertText), this);
                 gtk_editable_insert_text(GTK_EDITABLE(pEntry), sFinalText.getStr(), sFinalText.getLength(), position);
-                g_signal_handlers_unblock_by_func(pEntry, gpointer(signalEntryInsertText), this);
+                g_signal_handlers_unblock_by_func(pEntry, reinterpret_cast<gpointer>(signalEntryInsertText), this);
             }
             g_signal_stop_emission_by_name(pEntry, "insert-text");
         }

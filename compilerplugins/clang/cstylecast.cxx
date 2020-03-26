@@ -17,7 +17,9 @@
 #include "plugin.hxx"
 
 //
-// We don't like using C-style casts in C++ code
+// We don't like using C-style casts in C++ code.  Similarly, warn about function-style casts (which
+// are semantically equivalent to C-style casts) that are not semantically equivalent to static_cast
+// and should rather be written as const_cast or reinterpret_cast.
 //
 
 namespace {
@@ -187,6 +189,8 @@ public:
 
     bool VisitCStyleCastExpr(const CStyleCastExpr * expr);
 
+    bool VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const * expr);
+
 private:
     bool isConstCast(QualType from, QualType to);
 
@@ -198,6 +202,8 @@ private:
         SourceLocation loc, SourceLocation * macroEnd = nullptr) const;
 
     bool rewriteArithmeticCast(CStyleCastExpr const * expr, char const ** replacement);
+
+    void reportCast(ExplicitCastExpr const * expr, char const * performsHint);
 
     unsigned int externCContexts_ = 0;
     std::set<SourceLocation> rewritten_;
@@ -258,32 +264,35 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
             perf = "const_cast";
         }
     }
-    std::string incompFrom;
-    std::string incompTo;
-    if( expr->getCastKind() == CK_BitCast ) {
-        if (resolvePointers(expr->getSubExprAsWritten()->getType())
-            ->isIncompleteType())
+    reportCast(expr, perf);
+    return true;
+}
+
+bool CStyleCast::VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const * expr) {
+    if (ignoreLocation(expr)) {
+        return true;
+    }
+    char const * perf = nullptr;
+    switch (expr->getCastKind()) {
+    case CK_ConstructorConversion:
+    case CK_Dependent: //TODO: really filter out all of these?
+    case CK_IntegralCast:
+    case CK_IntegralToBoolean:
+    case CK_ToVoid:
+        return true;
+    case CK_NoOp:
+        if (isConstCast(
+                expr->getSubExprAsWritten()->getType(),
+                expr->getTypeAsWritten()))
         {
-            incompFrom = "incomplete ";
+            perf = "const_cast";
+            break;
         }
-        if (resolvePointers(expr->getType())->isIncompleteType()) {
-            incompTo = "incomplete ";
-        }
+        return true; //TODO: really filter out all of these?
+    default:
+        break;
     }
-    if (perf == nullptr) {
-        perf = recommendedFix(expr->getCastKind());
-    }
-    std::string performs;
-    if (perf != nullptr) {
-        performs = std::string(" (performs: ") + perf + ")";
-    }
-    report(
-        DiagnosticsEngine::Warning, "C-style cast from %0%1 to %2%3%4 (%5)",
-        expr->getSourceRange().getBegin())
-      << incompFrom << expr->getSubExprAsWritten()->getType()
-      << incompTo << expr->getTypeAsWritten() << performs
-      << expr->getCastKindName()
-      << expr->getSourceRange();
+    reportCast(expr, perf);
     return true;
 }
 
@@ -659,6 +668,36 @@ bool CStyleCast::rewriteArithmeticCast(CStyleCastExpr const * expr, char const *
         }
     }
     return true;
+}
+
+void CStyleCast::reportCast(ExplicitCastExpr const * expr, char const * performsHint) {
+    std::string incompFrom;
+    std::string incompTo;
+    if( expr->getCastKind() == CK_BitCast ) {
+        if (resolvePointers(expr->getSubExprAsWritten()->getType())
+            ->isIncompleteType())
+        {
+            incompFrom = "incomplete ";
+        }
+        if (resolvePointers(expr->getType())->isIncompleteType()) {
+            incompTo = "incomplete ";
+        }
+    }
+    if (performsHint == nullptr) {
+        performsHint = recommendedFix(expr->getCastKind());
+    }
+    std::string performs;
+    if (performsHint != nullptr) {
+        performs = std::string(" (performs: ") + performsHint + ")";
+    }
+    report(
+        DiagnosticsEngine::Warning, "%select{C|Function}0-style cast from %1%2 to %3%4%5 (%6)",
+        expr->getSourceRange().getBegin())
+      << isa<CXXFunctionalCastExpr>(expr)
+      << incompFrom << expr->getSubExprAsWritten()->getType()
+      << incompTo << expr->getTypeAsWritten() << performs
+      << expr->getCastKindName()
+      << expr->getSourceRange();
 }
 
 loplugin::Plugin::Registration< CStyleCast > X("cstylecast", true);

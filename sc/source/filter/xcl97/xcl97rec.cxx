@@ -921,7 +921,7 @@ void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
     OUString        aStorageName( "MBD" );
     char        aBuf[ sizeof(sal_uInt32) * 2 + 1 ];
     // FIXME Eeek! Is this just a way to get a unique id?
-    sal_uInt32          nPictureId = sal_uInt32(sal_uIntPtr(this) >> 2);
+    sal_uInt32          nPictureId = sal_uInt32(reinterpret_cast<sal_uIntPtr>(this) >> 2);
     sprintf( aBuf, "%08X", static_cast< unsigned int >( nPictureId ) );
     aStorageName += OUString::createFromAscii(aBuf);
     tools::SvRef<SotStorage>    xOleStg = pRootStorage->OpenSotStorage( aStorageName );

@@ -3841,7 +3841,7 @@ bool SwFlyFrame::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
             {
                 if ( !pAnch->isFrameAreaPositionValid() )
                     pAnch = nullptr;
-                else if ( sal_IntPtr(pSh->GetOut()) == sal_IntPtr(pSh->getIDocumentDeviceAccess().getPrinter( false )))
+                else if ( reinterpret_cast<sal_IntPtr>(pSh->GetOut()) == reinterpret_cast<sal_IntPtr>(pSh->getIDocumentDeviceAccess().getPrinter( false )))
                 {
                     //HACK: we have to omit some of the objects for printing,
                     //otherwise they would be printed twice.

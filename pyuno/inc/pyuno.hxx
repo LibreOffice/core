@@ -148,7 +148,7 @@ public:
 
     struct Hash
     {
-        sal_IntPtr operator () ( const PyRef &r) const { return sal_IntPtr( r.get() ); }
+        sal_IntPtr operator () ( const PyRef &r) const { return reinterpret_cast<sal_IntPtr>( r.get() ); }
     };
 };
 

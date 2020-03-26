@@ -71,7 +71,7 @@ namespace pdfi
                         return sum ^ size_t(rEntry.first.hashCode()) ^ size_t(rEntry.second.hashCode());
                     });
                 nRet ^= size_t(Contents.hashCode());
-                nRet ^= size_t(ContainedElement);
+                nRet ^= reinterpret_cast<size_t>(ContainedElement);
                 for( size_t n = 0; n < SubStyles.size(); ++n )
                      nRet ^= size_t(SubStyles[n]);
                 return nRet;
