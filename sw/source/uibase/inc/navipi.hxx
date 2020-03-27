@@ -136,6 +136,9 @@ public:
                                      const SfxItemState eState,
                                      const SfxPoolItem* pState) override;
 
+    virtual void GetControlState(const sal_uInt16 /*nSId*/,
+                                 boost::property_tree::ptree& /*rState*/) override {};
+
     virtual void    StateChanged(StateChangedType nStateChange) override;
 
     static OUString CreateDropFileName( TransferableDataHelper& rData );
