@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e252cd08_43f5242b",
+        "filename": "vcl/skia/win/gdiimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-03-27T14:32:03Z",
+      "side": 1,
+      "message": "I\u0027m pretty sure we only build with UNICODE on these days, so may as well only use the W variant of Windows functions. \nPity we can\u0027t easily add a clang-plugin to check that",
+      "revId": "b1ef5dae8ebac859656541d3281082387652be5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
