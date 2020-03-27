@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2323ba31_cba7eadb",
+        "filename": "basic/qa/cppunit/test_scanner.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-27T15:20:20Z",
+      "side": 0,
+      "message": "I liked these comments better. I don\u0027t think we need these repeated \"tdf#\" - the test is generic enough, and that it was added in that tdf# is not so relevant.",
+      "range": {
+        "startLine": 922,
+        "startChar": 7,
+        "endLine": 922,
+        "endChar": 14
+      },
+      "revId": "8d196867f03687c99824102524013bb14f7dbbab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
