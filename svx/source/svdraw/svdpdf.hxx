@@ -30,6 +30,7 @@
 
 #include <tools/fract.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/graph.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/xdash.hxx>
 
@@ -155,10 +156,10 @@ class ImpSdrPdfImport final
         double ma, mb, mc, md, me, mf;
     };
 
-    ::std::vector<SdrObject*> maTmpList;
+    Graphic const& mrGraphic;
+    std::vector<SdrObject*> maTmpList;
     ScopedVclPtr<VirtualDevice> mpVD;
     tools::Rectangle maScaleRect;
-    const std::shared_ptr<std::vector<sal_Int8>> mpPdfData;
     size_t mnMapScalingOfs; // from here on, not edited with MapScaling
     std::unique_ptr<SfxItemSet> mpLineAttr;
     std::unique_ptr<SfxItemSet> mpFillAttr;
@@ -230,7 +231,8 @@ class ImpSdrPdfImport final
 
 public:
     ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools::Rectangle& rRect,
-                    const std::shared_ptr<std::vector<sal_Int8>>& pPdfData);
+                    Graphic const& rGraphic);
+
     ~ImpSdrPdfImport();
 
     int GetPageCount() const { return mnPageCount; }

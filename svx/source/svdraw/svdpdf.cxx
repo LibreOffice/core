@@ -27,6 +27,7 @@
 #include <fpdf_text.h>
 
 #include <vcl/graph.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 
 #include <math.h>
 #include <editeng/eeitem.hxx>
@@ -107,11 +108,11 @@ struct FPDFBitmapDeleter
 using namespace com::sun::star;
 
 ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools::Rectangle& rRect,
-                                 const std::shared_ptr<std::vector<sal_Int8>>& pPdfData)
-    : maTmpList()
+                                 Graphic const& rGraphic)
+    : mrGraphic(rGraphic)
+    , maTmpList()
     , mpVD(VclPtr<VirtualDevice>::Create())
     , maScaleRect(rRect)
-    , mpPdfData(pPdfData)
     , mnMapScalingOfs(0)
     , mpModel(&rModel)
     , mnLayer(nLay)
@@ -155,8 +156,10 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
     FPDF_InitLibraryWithConfig(&aConfig);
 
     // Load the buffer using pdfium.
-    mpPdfDocument = FPDF_LoadMemDocument(mpPdfData->data(), mpPdfData->size(),
-                                         /*password=*/nullptr);
+    auto const& rVectorGraphicData = mrGraphic.getVectorGraphicData();
+    mpPdfDocument = FPDF_LoadMemDocument(
+        rVectorGraphicData->getVectorGraphicDataArray().getConstArray(),
+        rVectorGraphicData->getVectorGraphicDataArrayLength(), /*password=*/nullptr);
     if (!mpPdfDocument)
     {
         //TODO: Handle failure to load.
