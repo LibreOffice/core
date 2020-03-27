@@ -950,7 +950,7 @@ void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
 IMPL_LINK_NOARG( SwGlobalTree, DoubleClickHdl, weld::TreeView&, bool)
 {
     int nEntry = m_xTreeView->get_cursor_index();
-    SwGlblDocContent* pCont = nEntry != -1 ? reinterpret_cast<SwGlblDocContent*>(m_xTreeView->get_id(nEntry).toInt64()) : nullptr;
+    SwGlblDocContent* pCont = reinterpret_cast<SwGlblDocContent*>(m_xTreeView->get_id(nEntry).toInt64());
     if (pCont->GetType() == GLBLDOC_SECTION)
         OpenDoc(pCont);
     else
