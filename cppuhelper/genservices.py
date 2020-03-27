@@ -125,6 +125,21 @@ components = [
 #    'ucb/source/ucp/gio/ucpgio',
 ]
 
+def check_identicality(c):
+    import pathlib
+    p = pathlib.Path('/mnt/scratch/libreofficemeson/workdir/ComponentTarget')
+    l = list(p.glob('**/' + os.path.split(c)[1]))
+    assert(len(l) == 1)
+    truth = l[0]
+    truthcomponent = ET.parse(truth)
+    truthcomponent.write('temppi.xml', xml_declaration=True)
+    d1 = open(c).read()
+    d2 = open('temppi.xml').read()
+    if d1 != d2:
+        print(c)
+        print(d1)
+        sys.exit(1)
+
 # This is terrible and hacky and should be replaced with
 # introspection or something similar.
 def determine_libname(source_root, component_base):
@@ -156,6 +171,7 @@ with tempfile.TemporaryDirectory() as tmpdir:
         cbase = os.path.basename(c)
         iname = os.path.join('..', c + '.component')
         oname = os.path.join(tmpdir, cbase + '.component')
+        assert 'xmlns' in open(iname).read()
         assert(not os.path.exists(oname))
         n = ET.SubElement(root, 'filename')
         n.text = oname
@@ -167,9 +183,13 @@ with tempfile.TemporaryDirectory() as tmpdir:
         croot.attrib['uri'] = 'vnd.sun.star.expand:$LO_LIB_DIR/' + libname
         new_root = ET.Element('components')
         new_root.append(component.getroot())
-        new_root.attrib['xmlns'] = 'http://openoffice.org/2010/uno-components'
+#        new_root.attrib['xmlns'] = 'http://openoffice.org/2010/uno-components'
         tree = ET.ElementTree(new_root)
         tree.write(oname, xml_declaration=True)
+        hack = open(oname).read()
+        hack = hack.replace('ns0:', '').replace(':ns0', '')
+        open(oname, 'w').write(hack)
+        #check_identicality(oname)
 
     tree = ET.ElementTree(root)
     tmp_xml = os.path.join(tmpdir, 'servicelist.xml')
