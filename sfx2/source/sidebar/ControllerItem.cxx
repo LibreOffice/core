@@ -67,6 +67,13 @@ void ControllerItem::StateChanged (
     mrItemUpdateReceiver.NotifyItemUpdate(nSID, eState, pState, IsEnabled(eState));
 }
 
+void ControllerItem::GetControlState (
+    sal_uInt16 nSID,
+    boost::property_tree::ptree& rState)
+{
+    mrItemUpdateReceiver.GetControlState(nSID, rState);
+}
+
 bool ControllerItem::IsEnabled (SfxItemState eState)
 {
     if (eState == SfxItemState::DISABLED)
