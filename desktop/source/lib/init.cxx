@@ -2672,7 +2672,11 @@ static void doc_iniUnoCommands ()
         OUString(".uno:Orientation"),
         OUString(".uno:ObjectAlignLeft"),
         OUString(".uno:ObjectAlignRight"),
-        OUString(".uno:AlignCenter")
+        OUString(".uno:AlignCenter"),
+        OUString(".uno:TransformPosX"),
+        OUString(".uno:TransformPosY"),
+        OUString(".uno:TransformWidth"),
+        OUString(".uno:TransformHeight")
     };
 
     util::URL aCommandURL;
