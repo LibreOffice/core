@@ -35,9 +35,9 @@
 
 
 SwTextCharFormat::SwTextCharFormat( SwFormatCharFormat& rAttr,
-                    sal_Int32 nStt, sal_Int32 nEnde )
+                    sal_Int32 nStt, sal_Int32 nEnd )
     : SwTextAttr( rAttr, nStt )
-    , SwTextAttrEnd( rAttr, nStt, nEnde )
+    , SwTextAttrEnd( rAttr, nStt, nEnd )
     , m_pTextNode( nullptr )
     , m_nSortNumber( 0 )
 {
