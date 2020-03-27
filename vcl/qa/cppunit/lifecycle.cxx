@@ -13,10 +13,10 @@
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/combobox.hxx>
-#include <vcl/field.hxx>
+#include <vcl/toolkit/dialog.hxx>
+#include <vcl/toolkit/field.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/tabctrl.hxx>
-#include <vcl/toolkit/dialog.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/scheduler.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
