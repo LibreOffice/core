@@ -109,7 +109,7 @@ const char* const URLTypeNames[URLType_COUNT] =
     "double"
 };
 
-static void InterceptLOKStateChangeEvent( const SfxViewFrame* pViewFrame, const css::frame::FeatureStateEvent& aEvent, const SfxPoolItem* pState );
+static void InterceptLOKStateChangeEvent( sal_uInt16 nSID, SfxViewFrame* pViewFrame, const css::frame::FeatureStateEvent& aEvent, const SfxPoolItem* pState );
 
 void SfxStatusDispatcher::ReleaseAll()
 {
@@ -957,7 +957,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
 
     if (pDispatcher && pDispatcher->GetFrame())
     {
-        InterceptLOKStateChangeEvent(pDispatcher->GetFrame(), aEvent, pState);
+        InterceptLOKStateChangeEvent(nSID, pDispatcher->GetFrame(), aEvent, pState);
     }
 
     const css::uno::Sequence<OUString> aContainedTypes = pDispatch->GetListeners().getContainedTypes();
@@ -973,7 +973,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     StateChanged( nSID, eState, pState, nullptr );
 }
 
-static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const css::frame::FeatureStateEvent& aEvent, const SfxPoolItem* pState)
+static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFrame, const css::frame::FeatureStateEvent& aEvent, const SfxPoolItem* pState)
 {
     if (!comphelper::LibreOfficeKit::isActive())
         return;
@@ -1137,6 +1137,27 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
         if (aEvent.IsEnabled && (aEvent.State >>= aInt32))
         {
             aBuffer.append(OUString::number(aInt32));
+        }
+    }
+    else if (aEvent.FeatureURL.Path == "TransformPosX" ||
+             aEvent.FeatureURL.Path == "TransformPosY" ||
+             aEvent.FeatureURL.Path == "TransformWidth" ||
+             aEvent.FeatureURL.Path == "TransformHeight")
+    {
+        if (aEvent.IsEnabled && comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView()))
+        {
+            boost::property_tree::ptree aTree;
+            boost::property_tree::ptree aState;
+            OUString aStr(aEvent.FeatureURL.Complete);
+
+            aTree.put("commandName", aStr.toUtf8().getStr());
+            pViewFrame->GetBindings().QueryControlState(nSID, aState);
+            aTree.add_child("state", aState);
+
+            aBuffer.setLength(0);
+            std::stringstream aStream;
+            boost::property_tree::write_json(aStream, aTree);
+            aBuffer.appendAscii(aStream.str().c_str());
         }
     }
     else if (aEvent.FeatureURL.Path == "StatusDocPos" ||
