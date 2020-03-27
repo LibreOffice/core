@@ -228,6 +228,7 @@ public:
     void testTdf97598XLSX();
     void testTdf110440XLSX();
     void testTdf130959();
+    void testTdf131380();
     void testTdf111974XLSM();
     void testTdf83672XLSX();
 
@@ -373,6 +374,7 @@ public:
     CPPUNIT_TEST(testTdf97598XLSX);
     CPPUNIT_TEST(testTdf110440XLSX);
     CPPUNIT_TEST(testTdf130959);
+    CPPUNIT_TEST(testTdf131380);
     CPPUNIT_TEST(testTdf111974XLSM);
     CPPUNIT_TEST(testTdf83672XLSX);
 
@@ -3547,6 +3549,22 @@ void ScFiltersTest::testTdf130959()
     // Would crash without the fix on loading
     ScDocShellRef xDocSh = loadDoc("tdf130959.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    rDoc.CalcAll(); // perform hard re-calculation.
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf131380()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf131380.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
+
+    // Would crash without the fix on recalculating
+    ScDocument& rDoc = xDocSh->GetDocument();
+    rDoc.CalcAll(); // perform hard re-calculation.
+
     xDocSh->DoClose();
 }
 
@@ -3555,6 +3573,10 @@ void ScFiltersTest::testTdf111974XLSM()
     // Would crash without the fix on loading
     ScDocShellRef xDocSh = loadDoc("tdf111974.", FORMAT_XLSM);
     CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    rDoc.CalcAll(); // perform hard re-calculation.
+
     xDocSh->DoClose();
 }
 
