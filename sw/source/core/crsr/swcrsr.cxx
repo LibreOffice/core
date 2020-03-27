@@ -927,7 +927,7 @@ static bool lcl_MakeSelBkwrd( const SwNode& rSttNd, const SwNode& rEndNd,
 // this method "searches" for all use cases because in SwFindParas is always the
 // correct parameters and respective search method
 sal_uLong SwCursor::FindAll( SwFindParas& rParas,
-                            SwDocPositions nStart, SwDocPositions nEnde,
+                            SwDocPositions nStart, SwDocPositions nEnd,
                             FindRanges eFndRngs, bool& bCancel )
 {
     bCancel = false;
@@ -935,7 +935,7 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
 
     // create region without adding it to the ring
     SwPaM aRegion( *GetPoint() );
-    SwMoveFnCollection const & fnMove = MakeFindRange( nStart, nEnde, &aRegion );
+    SwMoveFnCollection const & fnMove = MakeFindRange( nStart, nEnd, &aRegion );
 
     sal_uLong nFound = 0;
     const bool bMvBkwrd = &fnMove == &fnMoveBackward;
