@@ -1103,7 +1103,7 @@ namespace
             return false;
 
         std::unique_ptr<weld::TreeIter> xChild(rContentTree.make_iterator(&rEntry));
-        rContentTree.iter_children(*xChild);
+        (void)rContentTree.iter_children(*xChild);
 
         do
         {
@@ -1408,7 +1408,7 @@ void SwContentTree::remove(const weld::TreeIter& rIter)
     if (m_xTreeView->iter_has_child(rIter))
     {
         std::unique_ptr<weld::TreeIter> xChild = m_xTreeView->make_iterator(&rIter);
-        m_xTreeView->iter_children(*xChild);
+        (void)m_xTreeView->iter_children(*xChild);
         remove(*xChild);
     }
     m_xTreeView->remove(rIter);
@@ -1892,7 +1892,7 @@ void SwContentTree::Display( bool bActive )
             for (const auto& rNode : aNodesToExpand)
                 m_xTreeView->expand_row(*rNode);
 
-            m_xTreeView->get_iter_first(*xEntry);
+            (void)m_xTreeView->get_iter_first(*xEntry);
             for (ContentTypeId nCntType : o3tl::enumrange<ContentTypeId>())
             {
                 sal_Int32 nExpandOptions = (State::HIDDEN == m_eState)
@@ -1923,7 +1923,7 @@ void SwContentTree::Display( bool bActive )
                     }
                 }
 
-                m_xTreeView->iter_next_sibling(*xEntry);
+                (void)m_xTreeView->iter_next_sibling(*xEntry);
             }
 
             if (!xSelEntry)
@@ -2369,7 +2369,7 @@ bool SwContentTree::HasContentChanged()
                     else
                     {
                         std::unique_ptr<weld::TreeIter> xChild(m_xTreeView->make_iterator(xEntry.get()));
-                        m_xTreeView->iter_children(*xChild);
+                        (void)m_xTreeView->iter_children(*xChild);
                         for (size_t j = 0; j < nChildCount; ++j)
                         {
                             const SwContent* pCnt = pArrType->GetMember(j);
@@ -2379,7 +2379,7 @@ bool SwContentTree::HasContentChanged()
                             if( sEntryText != pCnt->GetName() &&
                                 !(sEntryText == m_sSpace && pCnt->GetName().isEmpty()))
                                 bRemoveChildren = true;
-                            m_xTreeView->iter_next(*xChild);
+                            (void)m_xTreeView->iter_next(*xChild);
                         }
                     }
                     if (bRemoveChildren)
