@@ -141,6 +141,8 @@ public:
      */
     SfxItemState     QueryState( sal_uInt16 nSID, std::unique_ptr<SfxPoolItem> &rpState );
 
+    void             QueryControlState ( sal_uInt16 nSID, boost::property_tree::ptree& rState );
+
     const SfxPoolItem*  ExecuteSynchron( sal_uInt16 nSlot,
                                  const SfxPoolItem **pArgs = nullptr);
     bool             Execute( sal_uInt16 nSlot,
