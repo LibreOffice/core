@@ -827,15 +827,6 @@ namespace
     const OUString source8("&O123000000000000000000000");
     const OUString source9("&H1.23");
 
-    // tdf#62323, tdf#62326 - conversion of Hex literals to basic signed Integers
-    const OUString source10("&H0");
-    const OUString source11("&H8000");
-    const OUString source12("&H80000000");
-    const OUString source13("&HFFFF");
-    const OUString source14("&HFFFFFFFF");
-    const OUString source15("&H7FFF");
-    const OUString source16("&H7FFFFFFF");
-
     sal_Int32 errors;
     std::vector<Symbol> symbols;
 
@@ -919,56 +910,56 @@ namespace
     CPPUNIT_ASSERT_EQUAL(SbxDOUBLE, symbols[1].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[2].text);
 
-    // &H0 = 0
-    symbols = getSymbols(source10);
+    // tdf#62323, tdf#62326 - conversion of Hex literals to basic signed Integers
+    symbols = getSymbols("&H0");
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, symbols[0].number, 1E-12);
     CPPUNIT_ASSERT_EQUAL(OUString(), symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxINTEGER, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
 
-    // &H8000 = -32768
-    symbols = getSymbols(source11);
+    // tdf#62323, tdf#62326 - conversion of Hex literals to basic signed Integers
+    symbols = getSymbols("&H8000");
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(SbxMININT, symbols[0].number, 1E-12);
     CPPUNIT_ASSERT_EQUAL(OUString(), symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxINTEGER, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
 
-    // &H80000000 = -2147483648
-    symbols = getSymbols(source12);
+    // tdf#62323, tdf#62326 - conversion of Hex literals to basic signed Integers
+    symbols = getSymbols("&H80000000");
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(SbxMINLNG, symbols[0].number, 1E-12);
     CPPUNIT_ASSERT_EQUAL(OUString(), symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxLONG, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
 
-    // &HFFFF = -1
-    symbols = getSymbols(source13);
+    // tdf#62323, tdf#62326 - conversion of Hex literals to basic signed Integers
+    symbols = getSymbols("&HFFFF");
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, symbols[0].number, 1E-12);
     CPPUNIT_ASSERT_EQUAL(OUString(), symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxINTEGER, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
 
-    // &HFFFFFFFF = -1
-    symbols = getSymbols(source14);
+    // tdf#62323, tdf#62326 - conversion of Hex literals to basic signed Integers
+    symbols = getSymbols("&HFFFFFFFF");
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(-1.0, symbols[0].number, 1E-12);
     CPPUNIT_ASSERT_EQUAL(OUString(), symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxINTEGER, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
 
-    // &H7FFF = 32767
-    symbols = getSymbols(source15);
+    // tdf#62323, tdf#62326 - conversion of Hex literals to basic signed Integers
+    symbols = getSymbols("&H7FFF");
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(SbxMAXINT, symbols[0].number, 1E-12);
     CPPUNIT_ASSERT_EQUAL(OUString(), symbols[0].text);
     CPPUNIT_ASSERT_EQUAL(SbxINTEGER, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
 
-    // &H7FFFFFFF = 2147483647
-    symbols = getSymbols(source16);
+    // tdf#62323, tdf#62326 - conversion of Hex literals to basic signed Integers
+    symbols = getSymbols("&H7FFFFFFF");
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(SbxMAXLNG, symbols[0].number, 1E-12);
     CPPUNIT_ASSERT_EQUAL(OUString(), symbols[0].text);
