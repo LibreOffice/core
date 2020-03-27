@@ -1165,8 +1165,7 @@ IMPL_LINK_NOARG(CustomAnimationList, CollapseHdl, const weld::TreeIter&, bool)
 
 bool CustomAnimationList::isExpanded( const CustomAnimationEffectPtr& pEffect ) const
 {
-    // TODO, odd true if not found thing ?
-    bool bExpanded = false;
+    bool bExpanded = true; // we assume expanded by default
 
     std::unique_ptr<weld::TreeIter> xEntry = mxTreeView->make_iterator();
     if (mxTreeView->get_iter_first(*xEntry))
@@ -1177,11 +1176,12 @@ bool CustomAnimationList::isExpanded( const CustomAnimationEffectPtr& pEffect ) 
                 reinterpret_cast<CustomAnimationListEntryItem*>(mxTreeView->get_id(*xEntry).toInt64());
             if (pEntry->getEffect() == pEffect)
             {
-                std::unique_ptr<weld::TreeIter> xParentEntry = mxTreeView->make_iterator(xEntry.get());
-                if (mxTreeView->iter_parent(*xParentEntry))
-                    bExpanded = mxTreeView->get_row_expanded(*xParentEntry);
-                else
-                    bExpanded = true;
+                if (mxTreeView->get_iter_depth(*xEntry)) // no parent, keep expanded default of true
+                {
+                    std::unique_ptr<weld::TreeIter> xParentEntry = mxTreeView->make_iterator(xEntry.get());
+                    if (mxTreeView->iter_parent(*xParentEntry))
+                        bExpanded = mxTreeView->get_row_expanded(*xParentEntry);
+                }
                 break;
             }
         } while (mxTreeView->iter_next(*xEntry));
