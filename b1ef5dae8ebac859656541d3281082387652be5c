@@ -34,6 +34,24 @@
       "revId": "b1ef5dae8ebac859656541d3281082387652be5c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8b98932_1b0afbae",
+        "filename": "vcl/skia/win/gdiimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2020-03-27T14:56:05Z",
+      "side": 1,
+      "message": "Then you\u0027re pretty wrong :). If we built with UNICODE, than using LOGFONT+GetObjectW() would have worked. And we build Skia ourselves, so it (does not) use the same that we do (not).",
+      "parentUuid": "f45b8783_622ce06d",
+      "revId": "b1ef5dae8ebac859656541d3281082387652be5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
