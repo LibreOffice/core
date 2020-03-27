@@ -595,6 +595,7 @@ void SwSpellPopup::InitItemCommands(const css::uno::Sequence< OUString >& aSugge
         }
 
         PopupMenu *pMenu = m_xPopupMenu->GetPopupMenu(m_nLangSelectionMenuId);
+        m_xPopupMenu->SetItemCommand(m_nLangSelectionMenuId, ".uno:SetSelectionLanguageMenu");
         if(pMenu)
         {
             for (const auto& item : m_aLangTable_Text)
@@ -609,6 +610,7 @@ void SwSpellPopup::InitItemCommands(const css::uno::Sequence< OUString >& aSugge
         }
 
         pMenu = m_xPopupMenu->GetPopupMenu(m_nLangParaMenuId);
+        m_xPopupMenu->SetItemCommand(m_nLangParaMenuId, ".uno:SetParagraphLanguageMenu");
         if(pMenu)
         {
             for (const auto& item : m_aLangTable_Paragraph)
