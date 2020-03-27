@@ -274,14 +274,14 @@ bool TextSearch::searchForward( const OUString &rStr )
 }
 
 bool TextSearch::SearchBackward( const OUString & rStr, sal_Int32* pStart,
-                                sal_Int32* pEnde, SearchResult* pRes )
+                                sal_Int32* pEnd, SearchResult* pRes )
 {
     bool bRet = false;
     try
     {
         if( xTextSearch.is() )
         {
-            SearchResult aRet( xTextSearch->searchBackward( rStr, *pStart, *pEnde ));
+            SearchResult aRet( xTextSearch->searchBackward( rStr, *pStart, *pEnd ));
             if( aRet.subRegExpressions )
             {
                 bRet = true;
@@ -289,7 +289,7 @@ bool TextSearch::SearchBackward( const OUString & rStr, sal_Int32* pStart,
                 // and the endposition is always exclusive.
                 // The caller of this function will have in startPos the
                 // lower pos. and end
-                *pEnde = aRet.startOffset[ 0 ];
+                *pEnd = aRet.startOffset[ 0 ];
                 *pStart = aRet.endOffset[ 0 ];
                 if( pRes )
                     *pRes = aRet;
