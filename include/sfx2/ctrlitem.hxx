@@ -64,6 +64,8 @@ public:
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                       const SfxPoolItem* pState );
 
+    virtual void        GetControlState( sal_uInt16 nSID, boost::property_tree::ptree& );
+
     MapUnit             GetCoreMetric() const;
 
     static SfxItemState GetItemState( const SfxPoolItem* pState );
