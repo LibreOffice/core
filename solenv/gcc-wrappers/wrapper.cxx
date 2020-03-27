@@ -83,7 +83,8 @@ void setupccenv() {
 }
 
 string processccargs(vector<string> rawargs) {
-    string args;
+    // suppress the msvc banner
+    string args=" -nologo";
     // TODO: should these options be enabled globally?
     args.append(" -EHsc");
     const char *const pDebugRuntime(getenv("MSVC_USE_DEBUG_RUNTIME"));
@@ -99,15 +100,9 @@ string processccargs(vector<string> rawargs) {
     // note: always use -debug so a PDB file is created
     string linkargs(" -link -debug");
 
-    bool hasv = false;
-
     for(vector<string>::iterator i = rawargs.begin(); i != rawargs.end(); ++i) {
         args.append(" ");
-        string a = *i;
-        // When building nss, there are strange trailing \'s (because of windows->cygwin?).
-        while( a.size() > 0 && a[a.size() - 1 ] == '\\')
-            a.resize(a.size() - 1 );
-        if(a == "-o") {
+        if(*i == "-o") {
             // TODO: handle more than just exe output
             ++i;
             size_t dot=(*i).find_last_of(".");
@@ -133,44 +128,40 @@ string processccargs(vector<string> rawargs) {
                 exit(1);
             }
         }
-        else if(a == "-g" || !a.compare(0,5,"-ggdb")) {
+        else if(*i == "-g" || !(*i).compare(0,5,"-ggdb")) {
             args.append("-Zi");
             args.append(" -FS");
         }
-        else if(!a.compare(0,2,"-D")) {
+        else if(!(*i).compare(0,2,"-D")) {
             // need to re-escape strings for preprocessor
-            for(size_t pos=a.find("\""); pos!=string::npos; pos=a.find("\"",pos)) {
-                a.replace(pos,0,"\\");
+            for(size_t pos=(*i).find("\""); pos!=string::npos; pos=(*i).find("\"",pos)) {
+                (*i).replace(pos,0,"\\");
                 pos+=2;
             }
-            args.append(a);
+            args.append(*i);
         }
-        else if(!a.compare(0,2,"-L")) {
-            linkargs.append(" -LIBPATH:"+a.substr(2));
+        else if(!(*i).compare(0,2,"-L")) {
+            linkargs.append(" -LIBPATH:"+(*i).substr(2));
         }
-        else if(!a.compare(0,2,"-l") && a.compare(0,5,"-link")) {
-            linkargs.append(" "+a.substr(2)+".lib");
+        else if(!(*i).compare(0,2,"-l") && (*i).compare(0,5,"-link")) {
+            linkargs.append(" "+(*i).substr(2)+".lib");
         }
-        else if(!a.compare(0,5,"-def:") || !a.compare(0,5,"/def:")) {
+        else if(!(*i).compare(0,5,"-def:") || !(*i).compare(0,5,"/def:")) {
             // why are we invoked with /def:? cl.exe should handle plain
             // "foo.def" by itself
-            linkargs.append(" " + a);
+            linkargs.append(" " + *i);
         }
-        else if(!a.compare(0,12,"-fvisibility") || a == "-fPIC") {
+        else if(!(*i).compare(0,12,"-fvisibility") || *i == "-fPIC") {
             //TODO: drop other gcc-specific options
         }
-        else if(!a.compare(0,4,"-Wl,")) {
+        else if(!(*i).compare(0,4,"-Wl,")) {
             //TODO: drop other gcc-specific options
         }
-        else if(a == "-Werror")
+        else if(*i == "-Werror")
             args.append("-WX");
-        else if(a == "-v")
-            hasv = true;
         else
-            args.append(a);
+            args.append(*i);
     }
-    if(!hasv) // suppress the msvc banner
-        args.append(" -nologo");
     args.append(linkargs);
     return args;
 }

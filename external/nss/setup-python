@@ -1,3 +1,0 @@
-#! /bin/sh
-# need to run using our python wrapper to set up python env. vars, for python calls from ninja
-python -c "import sys; import subprocess; args=sys.argv; args.pop(0); args.pop(0); sys.exit(subprocess.call(args))" -- "$@"
