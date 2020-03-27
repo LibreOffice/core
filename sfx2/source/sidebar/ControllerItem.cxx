@@ -50,6 +50,31 @@ void ControllerItem::StateChanged (
     mrItemUpdateReceiver.NotifyItemUpdate(nSID, eState, pState);
 }
 
+void ControllerItem::GetControlState (
+    sal_uInt16 nSID,
+    boost::property_tree::ptree& rState)
+{
+    mrItemUpdateReceiver.GetControlState(nSID, rState);
+}
+
+bool ControllerItem::IsEnabled (SfxItemState eState)
+{
+    if (eState == SfxItemState::DISABLED)
+        return false;
+    else if ( ! SvtCommandOptions().HasEntries(SvtCommandOptions::CMDOPTION_DISABLED))
+    {
+        // There are no disabled commands.
+        return true;
+    }
+    else
+    {
+        // We were not given a command name at construction and can
+        // not check the state now.  Assume the best and return true.
+        return true;
+    }
+>>>>>>> a5207e5b3230... lok: introduce QueryControlState function
+}
+
 void ControllerItem::RequestUpdate()
 {
     std::unique_ptr<SfxPoolItem> pState;
