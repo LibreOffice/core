@@ -1224,6 +1224,33 @@ sal_Bool ExtensionManager::synchronize(
         bModified |= static_cast<bool>(getBundledRepository()->synchronize(xAbortChannel, xCmdEnv));
         progressBundled.update("\n\n");
 
+        //Always determine the active extension.
+        //TODO: Is this still necessary?  (It used to be necessary for the
+        // first-start optimization:  The setup created the registration data
+        // for the bundled extensions (share/prereg/bundled) which was copied to
+        // the user installation when a user started OOo for the first time
+        // after running setup.  All bundled extensions were registered at that
+        // moment.  However, extensions with the same identifier could be in the
+        // shared or user repository, in which case the respective bundled
+        // extensions had to be revoked.)
+        try
+        {
+            const uno::Sequence<uno::Sequence<Reference<css::deployment::XPackage> > >
+                seqSeqExt = getAllExtensions(xAbortChannel, xCmdEnv);
+            for (sal_Int32 i = 0; i < seqSeqExt.getLength(); i++)
+            {
+                uno::Sequence<Reference<css::deployment::XPackage> > const & seqExt =
+                    seqSeqExt[i];
+                activateExtension(seqExt, isUserDisabled(seqExt), true,
+                                  xAbortChannel, xCmdEnv);
+            }
+        }
+        catch (...)
+        {
+            //We catch the exception, so we can write the lastmodified file
+            //so we will no repeat this every time OOo starts.
+            OSL_FAIL("Extensions Manager: synchronize");
+        }
         OUString lastSyncBundled("$BUNDLED_EXTENSIONS_USER/lastsynchronized");
         writeLastModified(lastSyncBundled, xCmdEnv, m_xContext);
         OUString lastSyncShared("$SHARED_EXTENSIONS_USER/lastsynchronized");
