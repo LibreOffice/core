@@ -88,6 +88,24 @@
       "revId": "b1ef5dae8ebac859656541d3281082387652be5c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46ce39ab_a7eabe66",
+        "filename": "vcl/skia/win/gdiimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2020-03-27T17:37:21Z",
+      "side": 1,
+      "message": "LO even fails to build if I add the UNICODE defines, so Noel\u0027s claim that we only build with UNICODE on is clearly wrong (which is what I was referring to, if it wasn\u0027t obvious from the repeated use of \"pretty\").\nAnd if we\u0027re to talk about nice statements, then please cut the passive-aggressive \"nice\", thank you.",
+      "parentUuid": "72c9f9f8_949a8f5b",
+      "revId": "b1ef5dae8ebac859656541d3281082387652be5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
