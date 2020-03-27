@@ -780,14 +780,14 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
                                 SwSectionFormat& rSectionFormat,
                                 SwSectionData const& rSectionData,
                                 SwTOXBase const*const pTOXBase,
-                                SwNodeIndex const*const pEnde,
+                                SwNodeIndex const*const pEnd,
                                 bool const bInsAtStart, bool const bCreateFrames)
 {
     SwNodeIndex aInsPos( rNdIdx );
-    if( !pEnde ) // No Area, thus create a new Section before/after it
+    if( !pEnd ) // No Area, thus create a new Section before/after it
     {
         // #i26762#
-        OSL_ENSURE(!pEnde || rNdIdx <= *pEnde,
+        OSL_ENSURE(!pEnd || rNdIdx <= *pEnd,
                "Section start and end in wrong order!");
 
         if( bInsAtStart )
@@ -818,11 +818,11 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
 
     SwSectionNode *const pSectNd =
             new SwSectionNode(aInsPos, rSectionFormat, pTOXBase);
-    if( pEnde )
+    if( pEnd )
     {
         // Special case for the Reader/Writer
-        if( &pEnde->GetNode() != &GetEndOfContent() )
-            aInsPos = pEnde->GetIndex()+1;
+        if( &pEnd->GetNode() != &GetEndOfContent() )
+            aInsPos = pEnd->GetIndex()+1;
         // #i58710: We created a RTF document with a section break inside a table cell
         // We are not able to handle a section start inside a table and the section end outside.
         const SwNode* pLastNode = pSectNd->StartOfSectionNode()->EndOfSectionNode();

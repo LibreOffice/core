@@ -294,7 +294,7 @@ public:
                                 SwSectionFormat& rSectionFormat,
                                 SwSectionData const&,
                                 SwTOXBase const*const pTOXBase,
-                                SwNodeIndex const*const pEnde,
+                                SwNodeIndex const*const pEnd,
                                 bool const bInsAtStart = true,
                                 bool const bCreateFrames = true);
 
