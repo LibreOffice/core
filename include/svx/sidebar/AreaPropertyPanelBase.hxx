@@ -72,6 +72,10 @@ public:
         const SfxPoolItem* pState,
         const bool bIsEnabled) override;
 
+    virtual void GetControlState(
+        const sal_uInt16 /*nSId*/,
+        boost::property_tree::ptree& /*rState*/) override {};
+
     const static sal_Int32 DEFAULT_CENTERX;
     const static sal_Int32 DEFAULT_CENTERY;
     const static sal_Int32 DEFAULT_ANGLE;

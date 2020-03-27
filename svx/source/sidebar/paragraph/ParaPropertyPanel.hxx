@@ -64,6 +64,10 @@ public:
         const SfxPoolItem* pState,
         const bool bIsEnabled) override;
 
+    virtual void GetControlState(
+        const sal_uInt16 /*nSId*/,
+        boost::property_tree::ptree& /*rState*/) override {};
+
     static FieldUnit GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState );
 
     ParaPropertyPanel (

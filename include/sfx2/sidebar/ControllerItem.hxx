@@ -46,6 +46,9 @@ public:
             const SfxItemState eState,
             const SfxPoolItem* pState,
             const bool bIsEnabled) = 0;
+        virtual void GetControlState(
+            const sal_uInt16 nSId,
+            boost::property_tree::ptree& rState) = 0;
         virtual ~ItemUpdateReceiverInterface();
     };
 
@@ -77,6 +80,7 @@ public:
 protected:
 
     virtual void StateChanged (sal_uInt16 nSId, SfxItemState eState, const SfxPoolItem* pState) override;
+    virtual void GetControlState (sal_uInt16 nSId, boost::property_tree::ptree& rState) override;
 
 private:
     ItemUpdateReceiverInterface& mrItemUpdateReceiver;
