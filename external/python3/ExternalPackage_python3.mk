@@ -725,7 +725,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/multiprocessing/forkserver.py \
 	Lib/multiprocessing/heap.py \
 	Lib/multiprocessing/managers.py \
-	Lib/multiprocessing/pool.py \
 	Lib/multiprocessing/popen_fork.py \
 	Lib/multiprocessing/popen_forkserver.py \
 	Lib/multiprocessing/popen_spawn_posix.py \
