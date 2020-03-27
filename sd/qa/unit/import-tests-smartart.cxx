@@ -17,6 +17,8 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
+#include <svx/svdpage.hxx>
+#include <svx/svdogrp.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 
@@ -105,6 +107,7 @@ public:
     void testRecursion();
     void testDataFollow();
     void testOrgChart2();
+    void testTdf131553();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -149,6 +152,7 @@ public:
     CPPUNIT_TEST(testRecursion);
     CPPUNIT_TEST(testDataFollow);
     CPPUNIT_TEST(testOrgChart2);
+    CPPUNIT_TEST(testTdf131553);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1450,6 +1454,21 @@ void SdImportTestSmartArt::testOrgChart2()
     CPPUNIT_ASSERT_GREATEREQUAL(xShapeC2->getPosition().Y + xShapeC2->getSize().Height, xShapeD1->getPosition().Y);
 
     CPPUNIT_ASSERT_GREATEREQUAL(xShapeD1->getPosition().X + xShapeD1->getSize().Width, xShapeC4->getPosition().X);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testTdf131553()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf131553.pptx"), PPTX);
+    uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+
+    const SdrPage *pPage = GetPage(1, xDocShRef);
+    const SdrObjGroup *pObjGroup = dynamic_cast<SdrObjGroup *>(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pObjGroup);
+    const SdrObject *pObj = pObjGroup->GetSubList()->GetObj(1);
+    CPPUNIT_ASSERT_MESSAGE("no object", pObj != nullptr);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_OLE2), pObj->GetObjIdentifier());
 
     xDocShRef->DoClose();
 }
