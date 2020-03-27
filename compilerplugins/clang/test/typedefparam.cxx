@@ -62,7 +62,7 @@ namespace test4
 {
 struct Struct1
 {
-    virtual sal_uIntPtr foo1();
+    virtual sal_IntPtr foo1();
     // expected-note@-1 {{super-class method here [loplugin:typedefparam]}}
     virtual void foo2(sal_uIntPtr);
     // expected-note@-1 {{super-class method here [loplugin:typedefparam]}}

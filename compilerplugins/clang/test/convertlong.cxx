@@ -11,7 +11,7 @@
 
 int main()
 {
-    sal_uIntPtr x = 1;
+    sal_uInt32 x = 1;
     sal_uInt32 y = x;
     y = x;
     (void)y;
@@ -33,7 +33,7 @@ void main2()
     int tmp2 = (sal_uLong)1;
     tmp2 = (long)1;
 
-    sal_uIntPtr tmp3 = x + y;
+    sal_uLong tmp3 = x + y;
     // expected-error-re@-1 {{rather replace type of decl 'sal_uIntPtr' (aka 'unsigned {{.+}}') with 'int' [loplugin:convertlong]}}
     (void)tmp3;
 }
