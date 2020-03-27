@@ -47,6 +47,10 @@ namespace sw { namespace sidebar {
             const SfxPoolItem* pState,
             const bool bIsEnabled) override;
 
+        virtual void GetControlState(
+            const sal_uInt16 /*nSId*/,
+            boost::property_tree::ptree& /*rState*/) override {};
+
         virtual ~WrapPropertyPanel() override;
         virtual void dispose() override;
 

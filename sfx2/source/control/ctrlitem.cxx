@@ -234,6 +234,13 @@ void SfxControllerItem::StateChanged
 {
 }
 
+void SfxControllerItem::GetControlState
+(
+    sal_uInt16,
+    boost::property_tree::ptree&
+)
+{
+}
 
 void SfxStatusForwarder::StateChanged
 (
