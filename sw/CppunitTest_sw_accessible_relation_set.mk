@@ -58,4 +58,7 @@ $(eval $(call gb_CppunitTest_use_rdb,sw_accessible_relation_set,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_accessible_relation_set))
 
+# we need to explicitly depend on Library_acc because it's dynamically loaded
+$(call gb_CppunitTest_get_target,sw_accessible_relation_set) : $(call gb_Library_get_target,acc)
+
 # vim: set noet sw=4 ts=4:

@@ -54,6 +54,10 @@ $(eval $(call gb_CppunitTest_use_libraries,dbaccess_RowSetClones, \
     xo \
 ))
 
+$(eval $(call gb_CppunitTest_use_jars,dbaccess_RowSetClones, \
+    sdbc_hsqldb \
+))
+
 $(eval $(call gb_CppunitTest_use_api,dbaccess_RowSetClones,\
     offapi \
     oovbaapi \

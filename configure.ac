@@ -9,7 +9,7 @@ dnl in order to create a configure script.
 # several non-alphanumeric characters, those are split off and used only for the
 # ABOUTBOXPRODUCTVERSIONSUFFIX in openoffice.lst. Why that is necessary, no idea.
 
-AC_INIT([LibreOffice],[6.4.3.0.0+],[],[],[http://documentfoundation.org/])
+AC_INIT([LibreOffice],[6.4.4.0.0+],[],[],[http://documentfoundation.org/])
 
 dnl libnumbertext needs autoconf 2.68, but that can pick up autoconf268 just fine if it is installed
 dnl whereas aclocal (as run by autogen.sh) insists on using autoconf and fails hard
@@ -8745,8 +8745,12 @@ if test "$with_lxml" != no; then
                     ;;
                 *)
                     if test "$cross_compiling" != yes -a "x$ac_cv_header_Python_h" = "xyes"; then
-                        BUILD_TYPE="$BUILD_TYPE LXML"
-                        AC_MSG_RESULT([no, using internal lxml])
+                        if test -n ${SYSTEM_LIBXSLT} -o -n ${SYSTEM_LIBXML}; then
+                            AC_MSG_RESULT([no, and no system libxml/libxslt, gla11y will only report widget classes and ids])
+                        else
+                            BUILD_TYPE="$BUILD_TYPE LXML"
+                            AC_MSG_RESULT([no, using internal lxml])
+                        fi
                     else
                         AC_MSG_RESULT([no, and system does not provide python development headers, gla11y will only report widget classes and ids])
                     fi
@@ -8787,7 +8791,7 @@ internal)
     SYSTEM_PYTHON=
     PYTHON_VERSION_MAJOR=3
     PYTHON_VERSION_MINOR=7
-    PYTHON_VERSION=${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.6
+    PYTHON_VERSION=${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.7
     if ! grep -q -i python.*${PYTHON_VERSION} ${SRC_ROOT}/download.lst; then
         AC_MSG_ERROR([PYTHON_VERSION ${PYTHON_VERSION} but no matching file in download.lst])
     fi

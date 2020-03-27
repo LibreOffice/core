@@ -1142,12 +1142,13 @@ void DocxExport::WriteSettings()
 
                     // we have document protection from input DOCX file
                     // and in the case of change tracking protection, we didn't modify it
-
-                    sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
-                    if (!bIsProtectionTrackChanges || bHasDummyRedlineProtectionKey)
+                    hasProtectionProperties = !bIsProtectionTrackChanges || bHasDummyRedlineProtectionKey;
+                    if ( hasProtectionProperties )
+                    {
+                        sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
                         pFS->singleElementNS(XML_w, XML_documentProtection, xAttributeList);
+                    }
 
-                    hasProtectionProperties = true;
                 }
             }
             else if (rProp.Name == "HyphenationZone")
@@ -1161,10 +1162,10 @@ void DocxExport::WriteSettings()
         }
     }
 
-    // Protect form
-    // Section-specific write protection
     if (! hasProtectionProperties)
     {
+        // Protect form - highest priority
+        // Section-specific write protection
         if (m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_FORM) ||
             m_pSections->DocumentIsProtected())
         {
@@ -1174,16 +1175,15 @@ void DocxExport::WriteSettings()
                 FSNS(XML_w, XML_edit), "forms",
                 FSNS(XML_w, XML_enforcement), "true");
         }
-    }
+        // Protect Change Tracking - next priority
+        else if ( bHasRedlineProtectionKey && !bHasDummyRedlineProtectionKey )
+        {
+            // we have change tracking protection from Writer or from input ODT file
 
-    // Protect Change Tracking
-    if ( bHasRedlineProtectionKey && !bHasDummyRedlineProtectionKey )
-    {
-        // we have change tracking protection from Writer or from input ODT file
-
-        pFS->singleElementNS(XML_w, XML_documentProtection,
-            FSNS(XML_w, XML_edit), "trackedChanges",
-            FSNS(XML_w, XML_enforcement), "1");
+            pFS->singleElementNS(XML_w, XML_documentProtection,
+                FSNS(XML_w, XML_edit), "trackedChanges",
+                FSNS(XML_w, XML_enforcement), "1");
+        }
     }
 
     // finish settings.xml
