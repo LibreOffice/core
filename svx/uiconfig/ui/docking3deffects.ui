@@ -1712,7 +1712,7 @@
                 </child>
                 <child>
                   <object class="GtkToggleButton" id="texblend">
-                    <property name="visible">True</property>
+                    <property name="visible">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes" context="docking3deffects|texblend|tooltip_text">Texture, Shadow and Color</property>
