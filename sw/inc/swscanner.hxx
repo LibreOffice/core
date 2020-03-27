@@ -49,12 +49,12 @@ class SwScanner
 public:
     SwScanner(const std::function<LanguageType(sal_Int32, sal_Int32, bool)>& pGetLangOfChar,
               const OUString& rText, const LanguageType* pLang, const ModelToViewHelper& rConvMap,
-              sal_uInt16 nWordType, sal_Int32 nStart, sal_Int32 nEnde, bool bClip = false);
+              sal_uInt16 nWordType, sal_Int32 nStart, sal_Int32 nEnd, bool bClip = false);
     SwScanner( const SwTextNode& rNd, const OUString& rText,
                const LanguageType* pLang,
                const ModelToViewHelper& rConvMap,
                sal_uInt16 nWordType,
-               sal_Int32 nStart, sal_Int32 nEnde, bool bClip = false );
+               sal_Int32 nStart, sal_Int32 nEnd, bool bClip = false );
 
     // This next word function tries to find the language for the next word
     // It should currently _not_ be used for spell checking, and works only for
