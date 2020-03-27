@@ -70,6 +70,24 @@
       "revId": "b1ef5dae8ebac859656541d3281082387652be5c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72c9f9f8_949a8f5b",
+        "filename": "vcl/skia/win/gdiimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-27T15:49:22Z",
+      "side": 1,
+      "message": "\u003e Then you\u0027re pretty wrong :)\n\nI like it when people make such nice statements. Of course, using specific variants making it explicit is a mistake compared to using macros depending on some define buried in build machinery, and all that TCHAR mess.",
+      "parentUuid": "7e80b9d4_2dab63d7",
+      "revId": "b1ef5dae8ebac859656541d3281082387652be5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
