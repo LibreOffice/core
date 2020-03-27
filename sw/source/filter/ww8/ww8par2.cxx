@@ -2425,6 +2425,7 @@ void WW8TabDesc::CreateSwTable()
 
     // Because SW cannot handle multi-page floating frames,
     // _any unnecessary_ floating tables have been converted to inline.
+    long nLeft = 0;
     if ( m_pIo->m_xSFlyPara && !m_pIo->m_xSFlyPara->pFlyFormat )
     {
         // Get the table orientation from the fly
@@ -2436,6 +2437,17 @@ void WW8TabDesc::CreateSwTable()
             m_eOri = text::HoriOrientation::LEFT_AND_WIDTH;
         else if ( m_pIo->m_xSFlyPara->eHAlign != text::HoriOrientation::NONE )
             m_eOri = m_pIo->m_xSFlyPara->eHAlign;
+        if ( m_eOri == text::HoriOrientation::LEFT_AND_WIDTH )
+        {
+            nLeft = m_pIo->m_xSFlyPara->nXPos;
+            if ( m_pIo->m_xSFlyPara->eHRel == text::RelOrientation::PAGE_FRAME )
+            {
+                if ( !m_bIsBiDi )
+                    nLeft -= m_pIo->m_aSectionManager.GetPageLeft();
+                else
+                    nLeft += m_pIo->m_aSectionManager.GetPageRight();
+            }
+        }
     }
 
     // The table is small: The number of columns is the lowest count of
@@ -2527,13 +2539,12 @@ void WW8TabDesc::CreateSwTable()
             //ability to set the margin.
             SvxLRSpaceItem aL( RES_LR_SPACE );
 
-            long nLeft = 0;
             if (!m_bIsBiDi)
-                nLeft = GetMinLeft();
+                nLeft += GetMinLeft();
             else
             {
                 const short nTableWidth = m_nPreferredWidth ? m_nPreferredWidth : m_nSwWidth;
-                nLeft = m_pIo->m_aSectionManager.GetTextAreaWidth();
+                nLeft += m_pIo->m_aSectionManager.GetTextAreaWidth();
                 nLeft = nLeft - nTableWidth - GetMinLeft();
             }
             aL.SetLeft(nLeft);
