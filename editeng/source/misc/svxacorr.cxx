@@ -1558,7 +1558,7 @@ OUString SvxAutoCorrect::GetPrevAutoCorrWord(SvxAutoCorrDoc const& rDoc, const O
     if( !nPos )
         return sRet;
 
-    sal_Int32 nEnde = nPos;
+    sal_Int32 nEnd = nPos;
 
     // it must be followed by a blank or tab!
     if( ( nPos < rTxt.getLength() &&
@@ -1576,20 +1576,20 @@ OUString SvxAutoCorrect::GetPrevAutoCorrWord(SvxAutoCorrDoc const& rDoc, const O
         --nCapLttrPos;          // Beginning of pargraph and no Blank!
 
     while( lcl_IsInAsciiArr( sImplSttSkipChars, rTxt[ nCapLttrPos ]) )
-        if( ++nCapLttrPos >= nEnde )
+        if( ++nCapLttrPos >= nEnd )
             return sRet;
 
-    if( 3 > nEnde - nCapLttrPos )
+    if( 3 > nEnd - nCapLttrPos )
         return sRet;
 
     const LanguageType eLang = GetDocLanguage( rDoc, nCapLttrPos );
 
     CharClass& rCC = GetCharClass(eLang);
 
-    if( lcl_IsSymbolChar( rCC, rTxt, nCapLttrPos, nEnde ))
+    if( lcl_IsSymbolChar( rCC, rTxt, nCapLttrPos, nEnd ))
         return sRet;
 
-    sRet = rTxt.copy( nCapLttrPos, nEnde - nCapLttrPos );
+    sRet = rTxt.copy( nCapLttrPos, nEnd - nCapLttrPos );
     return sRet;
 }
 
