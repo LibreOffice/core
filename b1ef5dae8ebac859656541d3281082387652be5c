@@ -16,6 +16,24 @@
       "revId": "b1ef5dae8ebac859656541d3281082387652be5c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f45b8783_622ce06d",
+        "filename": "vcl/skia/win/gdiimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-27T14:41:48Z",
+      "side": 1,
+      "message": "I don\u0027t know if we build with UNICODE; and I made an effort to not depend on that define, explicitly using W variants ~everywhere. But in this case, the LOGFONT struct is passed to a library function that doesn\u0027t take an explicit A or W variant, so matching the variant expected by the library is fine here.",
+      "parentUuid": "e252cd08_43f5242b",
+      "revId": "b1ef5dae8ebac859656541d3281082387652be5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
