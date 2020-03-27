@@ -84,6 +84,10 @@ public:
         SfxBindings* pBindings,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
 
+    virtual void GetControlState(
+        const sal_uInt16 nSId,
+        boost::property_tree::ptree& rState) override;
+
 private:
     //Position
     VclPtr<FixedText>        mpFtPosX;

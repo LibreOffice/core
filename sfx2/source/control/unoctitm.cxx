@@ -49,6 +49,7 @@
 #include <uno/current_context.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/uitest/logger.hxx>
+#include <boost/property_tree/json_parser.hpp>
 
 #include <sfx2/app.hxx>
 #include <sfx2/unoctitm.hxx>

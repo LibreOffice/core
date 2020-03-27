@@ -67,6 +67,13 @@ void ControllerItem::StateChanged (
     mrItemUpdateReceiver.NotifyItemUpdate(nSID, eState, pState);
 }
 
+void ControllerItem::GetControlState (
+    sal_uInt16 nSID,
+    boost::property_tree::ptree& rState)
+{
+    mrItemUpdateReceiver.GetControlState(nSID, rState);
+}
+
 void ControllerItem::RequestUpdate()
 {
     std::unique_ptr<SfxPoolItem> pState;
