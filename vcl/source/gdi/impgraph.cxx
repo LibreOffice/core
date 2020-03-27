@@ -1706,8 +1706,6 @@ sal_Int32 ImpGraphic::getPageNumber() const
     return -1;
 }
 
-static std::map<BitmapChecksum, std::shared_ptr<std::vector<sal_Int8>>> sPdfDataCache;
-
 void ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
 {
     if (rIStm.GetError())
