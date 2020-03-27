@@ -1265,7 +1265,7 @@ void MSWordSections::CheckForFacinPg( const WW8Export& rWrt ) const
     // 2 values getting set
     //      Dop.fFacingPages            == Header and Footer different
     //      Dop.fSwapBordersFacingPgs   == mirrored borders
-    sal_uInt16 nEnde = 0;
+    sal_uInt16 nEnd = 0;
     for( const WW8_SepInfo& rSepInfo : aSects )
     {
         if( !rSepInfo.pSectionFormat )
@@ -1279,7 +1279,7 @@ void MSWordSections::CheckForFacinPg( const WW8Export& rWrt ) const
                 pPd = pPd->GetFollow();
 
             // left-/right chain of pagedescs ?
-            else if( !( 1 & nEnde ) &&
+            else if( !( 1 & nEnd ) &&
                 pPd->GetFollow() && pPd != pPd->GetFollow() &&
                 pPd->GetFollow()->GetFollow() == pPd &&
                 (( UseOnPage::Left == ( UseOnPage::All & pPd->ReadUseOn() ) &&
@@ -1288,24 +1288,24 @@ void MSWordSections::CheckForFacinPg( const WW8Export& rWrt ) const
                    UseOnPage::Left == ( UseOnPage::All & pPd->GetFollow()->ReadUseOn() )) ))
             {
                 rWrt.pDop->fFacingPages = rWrt.pDop->fMirrorMargins = true;
-                nEnde |= 1;
+                nEnd |= 1;
             }
 
-            if( !( 1 & nEnde ) &&
+            if( !( 1 & nEnd ) &&
                 ( !pPd->IsHeaderShared() || !pPd->IsFooterShared() ))
             {
                 rWrt.pDop->fFacingPages = true;
-                nEnde |= 1;
+                nEnd |= 1;
             }
-            if( !( 2 & nEnde ) &&
+            if( !( 2 & nEnd ) &&
                 UseOnPage::Mirror == ( UseOnPage::Mirror & pPd->ReadUseOn() ))
             {
                 rWrt.pDop->fSwapBordersFacingPgs =
                     rWrt.pDop->fMirrorMargins = true;
-                nEnde |= 2;
+                nEnd |= 2;
             }
 
-            if( 3 == nEnde )
+            if( 3 == nEnd )
                 break;      // We do not need to go any further
         }
     }
