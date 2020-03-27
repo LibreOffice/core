@@ -13,8 +13,8 @@ namespace test1
 {
 class Foo
 {
-    void bar(sal_uIntPtr x); // expected-note {{declaration site here [loplugin:typedefparam]}}
-    sal_uIntPtr bar(); // expected-note {{declaration site here [loplugin:typedefparam]}}
+    void bar(sal_uLong x); // expected-note {{declaration site here [loplugin:typedefparam]}}
+    sal_uLong bar(); // expected-note {{declaration site here [loplugin:typedefparam]}}
 };
 
 void Foo::bar(sal_uLong)
@@ -62,9 +62,9 @@ namespace test4
 {
 struct Struct1
 {
-    virtual sal_uIntPtr foo1();
+    virtual sal_uLong foo1();
     // expected-note@-1 {{super-class method here [loplugin:typedefparam]}}
-    virtual void foo2(sal_uIntPtr);
+    virtual void foo2(sal_uLong);
     // expected-note@-1 {{super-class method here [loplugin:typedefparam]}}
     virtual ~Struct1();
 };
