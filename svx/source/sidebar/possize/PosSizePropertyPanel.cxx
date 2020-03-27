@@ -761,8 +761,29 @@ void PosSizePropertyPanel::NotifyItemUpdate(
     mxCbxScale->set_active(static_cast<bool>(sUserData.toInt32()));
 }
 
-void PosSizePropertyPanel::GetControlState(const sal_uInt16 /*nSID*/, boost::property_tree::ptree& /*rState*/)
+void PosSizePropertyPanel::GetControlState(const sal_uInt16 nSID, boost::property_tree::ptree& rState)
 {
+    VclPtr<vcl::Window> pControl;
+    switch (nSID)
+    {
+        case SID_ATTR_TRANSFORM_POS_X:
+            pControl = mpMtrPosX;
+            break;
+        case SID_ATTR_TRANSFORM_POS_Y:
+            pControl = mpMtrPosY;
+            break;
+        case SID_ATTR_TRANSFORM_WIDTH:
+            pControl = mpMtrWidth;
+            break;
+        case SID_ATTR_TRANSFORM_HEIGHT:
+            pControl = mpMtrHeight;
+            break;
+    }
+
+    if (pControl && !pControl->GetText().isEmpty())
+    {
+        rState.put(pControl->get_id().toUtf8().getStr(),pControl->GetText().toUtf8().getStr());
+    }
 }
 
 void PosSizePropertyPanel::executeSize()
