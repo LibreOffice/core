@@ -33,6 +33,9 @@ public:
     virtual void NotifyItemUpdate(const sal_uInt16 nSId, const SfxItemState eState,
                                   const SfxPoolItem* pState) override;
 
+    virtual void GetControlState(const sal_uInt16 /*nSId*/,
+                                 boost::property_tree::ptree& /*rState*/) override{};
+
 private:
     sfx2::sidebar::ControllerItem maGlowController;
     sfx2::sidebar::ControllerItem maGlowColorController;
