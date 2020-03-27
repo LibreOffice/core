@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6fc54096_f628bbef",
+        "filename": "sc/source/filter/oox/biffhelper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-27T15:27:06Z",
+      "side": 1,
+      "message": "Why is this static variable needed that makes the code thread-unsafe?",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 33
+      },
+      "revId": "c6bb0bba67cb93148d3bdf5e0d799b4e0087b497",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "19858a00_41194c23",
+        "filename": "sc/source/filter/oox/biffhelper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-27T15:27:06Z",
+      "side": 0,
+      "message": "Removing this and following empty lines is unrelated (and controversial) change. Please don\u0027t unless you create a separate dedicated \"cleanup\" change.",
+      "revId": "900e29250fba8aff807b99e684fdd4f73f866132",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c954ed2_b521d956",
+        "filename": "sc/source/filter/oox/biffhelper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-27T15:27:06Z",
+      "side": 0,
+      "message": "This comment removal is also unrelated to the change. When dealing with anonymous namespaces, I like to be able to see what this closing brace relates to, so it is not a universal perception that these must go.",
+      "range": {
+        "startLine": 43,
+        "startChar": 1,
+        "endLine": 43,
+        "endChar": 14
+      },
+      "revId": "900e29250fba8aff807b99e684fdd4f73f866132",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1a18678_29cea876",
+        "filename": "sc/source/filter/oox/biffhelper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-27T15:27:06Z",
+      "side": 0,
+      "message": "Also all these changes, too. Please just create a change that makes it clear that *in order to simplify use of sal_math_Double*, these and these changes were made, and *nothing more*. Thanks!",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 11
+      },
+      "revId": "900e29250fba8aff807b99e684fdd4f73f866132",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
