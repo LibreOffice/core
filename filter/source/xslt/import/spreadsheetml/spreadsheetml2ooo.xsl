@@ -8863,7 +8863,7 @@
         </xsl:choose>
     </xsl:template>
     <xsl:template name="min-of-three">
-        <i!-- return lowest of three for sorting -->
+        <!-- return lowest of three for sorting -->
         <xsl:param name="first-num"/>
         <xsl:param name="second-num"/>
         <xsl:param name="third-num"/>
