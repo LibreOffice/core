@@ -97,6 +97,7 @@ public:
     void                    SetCachedState(bool bAlways);
     void                    Invalidate( bool bWithSlot );
     void                    SetVisibleState( bool bShow );
+    void                    GetState( boost::property_tree::ptree& );
 
     SfxControllerItem*      ChangeItemLink( SfxControllerItem* pNewBinding );
     SfxControllerItem*      GetItemLink() const;
