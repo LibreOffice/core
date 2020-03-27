@@ -73,7 +73,7 @@ public class FieldFormatter implements XItemListener
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], sFieldNames, 91, 27, IFieldFormatStep, Short.valueOf(curtabindex++), 90
+                    UIConsts.INTEGERS[8], sFieldNames, 91, 27, IFieldFormatStep, Short.valueOf(curtabindex++), 67
                 });
 
         try
