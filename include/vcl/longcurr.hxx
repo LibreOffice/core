@@ -23,10 +23,10 @@
 #include <config_options.h>
 #include <vcl/dllapi.h>
 #include <tools/bigint.hxx>
+#include <vcl/combobox.hxx>
 #include <vcl/field.hxx>
 
 class LocaleDataWrapper;
-
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) LongCurrencyFormatter : public FormatterBase
 {
