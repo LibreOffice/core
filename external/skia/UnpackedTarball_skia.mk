@@ -29,7 +29,7 @@ skia_patches := \
     clang11-flax-vector-conversion.patch.0 \
     clang-attributes-warning.patch.1 \
     fontconfig-get-typeface.patch.0 \
-    windows-hfont-typeface.patch.0 \
+    windows-do-not-modify-logfont.patch.0 \
     windows-text-gamma.patch.0 \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))

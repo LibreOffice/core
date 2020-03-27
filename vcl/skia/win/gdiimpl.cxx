@@ -118,29 +118,35 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
     const WinFontInstance* pWinFont = static_cast<const WinFontInstance*>(&rLayout.GetFont());
     const HFONT hLayoutFont = pWinFont->GetHFONT();
     LOGFONT logFont;
-    if (::GetObjectW(hLayoutFont, sizeof(logFont), &logFont) == 0)
+// Bring back GetObject that got #undef-ed in include/postwin.hxx .
+// The GetObjectA/W() functions are type-unsafe, so they should match the LOGFONTA/W,
+// otherwise the font name will be incorrect and Skia will choose an incorrect font.
+#ifdef UNICODE
+#define GetObject GetObjectW
+#else
+#define GetObject GetObjectA
+#endif
+    if (GetObject(hLayoutFont, sizeof(logFont), &logFont) == 0)
     {
         assert(false);
         return false;
     }
-    // Wrap the font in Skia's SkTypeFace subclass that's been patched
-    // to use it.
-    sk_sp<SkTypeface> typeface(SkCreateTypefaceFromLOGFONT(logFont, hLayoutFont));
+    sk_sp<SkTypeface> typeface(SkCreateTypefaceFromLOGFONT(logFont));
     // lfHeight actually depends on DPI, so it's not really font height as such,
     // but for LOGFONT-based typefaces Skia simply sets lfHeight back to this value
     // directly.
-    // This is probably not necessary since we pass also the HFONT itself, but better
-    // forward that information too, in case SkFont uses it somehow.
     double fontHeight = logFont.lfHeight;
     if (fontHeight < 0)
         fontHeight = -fontHeight;
     SkFont font(typeface, fontHeight, fHScale, 0);
     // Skia needs to be explicitly told what kind of antialiasing should be used,
     // get it from system settings. This does not actually matter for the text
-    // rendering itself, since it will use the font passed to Skia in the code above
-    // (and that one uses DEFAULT_QUALITY, so Windows will select the appropriate AA setting),
-    // but Skia internally chooses the format to which the glyphs will be rendered
-    // based on this setting (subpixel AA requires colors, others do not).
+    // rendering itself, since Skia has been patched to simply use the setting
+    // from the LOGFONT, which gets set by VCL's ImplGetLogFontFromFontSelect()
+    // and that one normally uses DEFAULT_QUALITY, so Windows will select
+    // the appropriate AA setting. But Skia internally chooses the format to which
+    // the glyphs will be rendered based on this setting (subpixel AA requires colors,
+    // others do not).
     BOOL set;
     if (SystemParametersInfo(SPI_GETFONTSMOOTHING, 0, &set, 0) && set)
     {
