@@ -10858,37 +10858,29 @@ public:
     {
         disable_notify_events();
 
-        if (value == 0)
-        {
-            gtk_adjustment_set_value(m_pVAdjustment, 0);
-            m_nPendingVAdjustment = -1;
-        }
-        else
-        {
-            /* This rube goldberg device is to remove flicker from setting the
-               scroll position of a GtkTreeView directly after clearing it and
-               filling it. As a specific example the writer navigator with ~100
-               tables, scroll to the end, right click on an entry near the end
-               and rename it, the tree is cleared and refilled and an attempt
-               made to set the scroll position of the freshly refilled tree to
-               the same point as before the clear.
-            */
+        /* This rube goldberg device is to remove flicker from setting the
+           scroll position of a GtkTreeView directly after clearing it and
+           filling it. As a specific example the writer navigator with ~100
+           tables, scroll to the end, right click on an entry near the end
+           and rename it, the tree is cleared and refilled and an attempt
+           made to set the scroll position of the freshly refilled tree to
+           the same point as before the clear.
+        */
 
-            // This forces the tree to recalculate now its preferred size
-            // after being cleared
-            GtkRequisition size;
-            gtk_widget_get_preferred_size(GTK_WIDGET(m_pTreeView), nullptr, &size);
+        // This forces the tree to recalculate now its preferred size
+        // after being cleared
+        GtkRequisition size;
+        gtk_widget_get_preferred_size(GTK_WIDGET(m_pTreeView), nullptr, &size);
 
-            m_nPendingVAdjustment = value;
+        m_nPendingVAdjustment = value;
 
-            // The value set here just has to be different to the final value
-            // set later so that isn't a no-op
-            gtk_adjustment_set_value(m_pVAdjustment, value - 0.0001);
+        // The value set here just has to be different to the final value
+        // set later so that isn't a no-op
+        gtk_adjustment_set_value(m_pVAdjustment, value - 0.0001);
 
-            // This will set the desired m_nPendingVAdjustment value right
-            // before the tree gets drawn
-            gtk_widget_add_tick_callback(GTK_WIDGET(m_pTreeView), setAdjustmentCallback, this, nullptr);
-        }
+        // This will set the desired m_nPendingVAdjustment value right
+        // before the tree gets drawn
+        gtk_widget_add_tick_callback(GTK_WIDGET(m_pTreeView), setAdjustmentCallback, this, nullptr);
 
         enable_notify_events();
     }
