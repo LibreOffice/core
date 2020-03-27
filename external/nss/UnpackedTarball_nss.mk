@@ -34,15 +34,14 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
 		external/nss/nss-android.patch.1) \
 	external/nss/nss.bzmozilla1238154.patch \
     external/nss/macos-dlopen.patch.0 \
-	external/nss/buildsystem.patch.0 \
-	external/nss/fix-cc-detect-with-ccache.patch.0 \
-	external/nss/nss-online.patch.0 \
 ))
 
-ifeq ($(OS),WNT)
+ifeq ($(COM_IS_CLANG),TRUE)
+ifneq ($(filter -fsanitize=%,$(CC)),)
 $(eval $(call gb_UnpackedTarball_add_patches,nss,\
-	external/nss/buildsystem-windows.patch.0 \
+	external/nss/asan.patch.1 \
 ))
+endif
 endif
 
 # vim: set noet sw=4 ts=4:

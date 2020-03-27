@@ -16,69 +16,25 @@ $(eval $(call gb_ExternalProject_register_targets,nss,\
 ))
 
 ifeq ($(OS),WNT)
-
-$(eval $(call gb_ExternalProject_use_autoconf,nss,build))
-
-# The nss build system uses 'python', even recursively, so make it find our internal python if necessary.
-nss_PYTHON := $(call gb_UnpackedTarball_get_dir,nss)/python
-nss_SETUP_PYTHON := $(call gb_UnpackedTarball_get_dir,nss)/setup-python
-
-$(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecutable_get_dependencies,python) $(call gb_UnpackedTarball_get_target,gyp)
+$(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_Trace_StartRange,nss,EXTERNAL)
-	cp $(SRCDIR)/external/nss/python-cygwin-template $(nss_PYTHON)
-	pythondir=$$($(call gb_ExternalExecutable_get_command,python) -c 'import sys; import os; sys.stdout.write(os.path.dirname(sys.executable))') \
-		&& echo PATH=\"$$pythondir:\$$PATH\" >>$(nss_PYTHON)
-	echo '$(call gb_ExternalExecutable_get_command,python)' \"$$\{args[@]\}\" >>$(nss_PYTHON)
-	chmod +x $(nss_PYTHON)
-	cp $(SRCDIR)/external/nss/setup-python $(nss_SETUP_PYTHON)
-	chmod +x $(nss_SETUP_PYTHON)
 	$(call gb_ExternalProject_run,build,\
-			COMMA=$(COMMA) \
-			PATH=$$(cygpath $(call gb_UnpackedTarball_get_dir,nss)):$$(cygpath $(call gb_UnpackedTarball_get_dir,gyp)):$$PATH \
-			MAKE=$(MAKE) \
-			NINJA='$(subst ','\'',$(NINJA))' \
-			NSINSTALL='$(SRCDIR)/external/nss/nsinstall.py' \
-			LIB="$(ILIB)" \
-			RC="rc.exe $(SOLARINC)" \
-			CL="-arch:SSE" \
-			./build.sh -v --disable-tests --enable-libpkix \
-				$(if $(filter X86_64,$(CPUNAME)),--target=x64,--target=ia32) \
-				$(if $(ENABLE_DBGUTIL),,--opt) \
-				$(if $(gb_Module_CURRENTMODULE_SYMBOLS_ENABLED),--symbols) \
-		&& rm -f $(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/*.a \
-	,nss)
-	for f in $(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/*.dll.lib; do mv "$$f" "$${f%.dll.lib}".lib; done
-	$(call gb_Trace_EndRange,nss,EXTERNAL)
-
-# non-WNT gyp-based
-# update nss_needs_ninja in configure.ac if the list changes
-else ifneq (,$(filter FREEBSD LINUX NETBSD OPENBSD SOLARIS,$(OS)))
-
-# The nss build system uses 'python', so make it find our internal python if necessary.
-nss_PYTHON := $(call gb_UnpackedTarball_get_dir,nss)/python
-nss_SETUP_PYTHON := $(call gb_UnpackedTarball_get_dir,nss)/setup-python
-
-$(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecutable_get_dependencies,python) $(call gb_UnpackedTarball_get_target,gyp)
-	$(call gb_Trace_StartRange,nss,EXTERNAL)
-	echo "#! /bin/sh" > $(nss_PYTHON)
-	pythondir=$$($(call gb_ExternalExecutable_get_command,python) -c 'import sys; import os; sys.stdout.write(os.path.dirname(sys.executable))') \
-		&& echo PATH=\"$$pythondir:\$$PATH\" >>$(nss_PYTHON)
-	echo '$(call gb_ExternalExecutable_get_command,python)' \"$$\@\" $(if $(ICECREAM_RUN), | sed 's/$(ICECREAM_RUN)//') >> $(nss_PYTHON)
-	chmod +x $(nss_PYTHON)
-	cp $(SRCDIR)/external/nss/setup-python $(nss_SETUP_PYTHON)
-	chmod +x $(nss_SETUP_PYTHON)
-	$(call gb_ExternalProject_run,build,\
-			COMMA=$(COMMA) \
-			PATH=$(call gb_UnpackedTarball_get_dir,nss):$(call gb_UnpackedTarball_get_dir,gyp):$$PATH \
-			NINJA='$(subst ','\'',$(NINJA))' \
-			./build.sh -v --disable-tests --enable-libpkix \
-				$(if $(ENABLE_DBGUTIL),,--opt) \
-				$(if $(COM_IS_CLANG),$(if $(filter -fsanitize=%,$(CC)),--no-zdefs)) \
-		&& rm -f $(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/*.a \
+		$(if $(MSVC_USE_DEBUG_RUNTIME),USE_DEBUG_RTL=1,BUILD_OPT=1) \
+		$(if $(gb_Module_CURRENTMODULE_SYMBOLS_ENABLED), \
+			MOZ_DEBUG_SYMBOLS=1 \
+			MOZ_DEBUG_FLAGS=" " \
+			OPT_CODE_SIZE=0) \
+		MOZ_MSVCVERSION=9 OS_TARGET=WIN95 \
+		$(if $(filter X86_64,$(CPUNAME)),USE_64=1) \
+		LIB="$(ILIB)" \
+		XCFLAGS="-arch:SSE $(SOLARINC)" \
+		$(MAKE) -j1 nss_build_all RC="rc.exe $(SOLARINC)" \
+			NSINSTALL='$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py' \
+			NSS_DISABLE_GTESTS=1 \
 	,nss)
 	$(call gb_Trace_EndRange,nss,EXTERNAL)
 
-else # platforms which need(?) the old build system (feel free to port to the new system)
+else # OS!=WNT
 # make sure to specify NSPR_CONFIGURE_OPTS as env (before make command), so nss can append it's own defaults
 # OTOH specify e.g. CC and NSINSTALL as arguments (after make command), so they will overrule nss makefile values
 $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecutable_get_dependencies,python)
