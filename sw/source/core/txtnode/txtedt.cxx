@@ -696,18 +696,18 @@ OUString SwTextFrame::GetCurWord(SwPosition const& rPos) const
 
 SwScanner::SwScanner( const SwTextNode& rNd, const OUString& rText,
     const LanguageType* pLang, const ModelToViewHelper& rConvMap,
-    sal_uInt16 nType, sal_Int32 nStart, sal_Int32 nEnde, bool bClp )
+    sal_uInt16 nType, sal_Int32 nStart, sal_Int32 nEnd, bool bClp )
     : SwScanner(
         [&rNd](sal_Int32 const nBegin, sal_uInt16 const nScript, bool const bNoChar)
             { return rNd.GetLang(nBegin, bNoChar ? 0 : 1, nScript); }
-        , rText, pLang, rConvMap, nType, nStart, nEnde, bClp)
+        , rText, pLang, rConvMap, nType, nStart, nEnd, bClp)
 {
 }
 
 SwScanner::SwScanner(std::function<LanguageType(sal_Int32, sal_Int32, bool)> const& pGetLangOfChar,
                      const OUString& rText, const LanguageType* pLang,
                      const ModelToViewHelper& rConvMap, sal_uInt16 nType, sal_Int32 nStart,
-                     sal_Int32 nEnde, bool bClp)
+                     sal_Int32 nEnd, bool bClp)
     : m_pGetLangOfChar(pGetLangOfChar)
     , m_aPreDashReplacementText(rText)
     , m_pLanguage(pLang)
@@ -718,7 +718,7 @@ SwScanner::SwScanner(std::function<LanguageType(sal_Int32, sal_Int32, bool)> con
     , m_bClip(bClp)
 {
     m_nStartPos = m_nBegin = nStart;
-    m_nEndPos = nEnde;
+    m_nEndPos = nEnd;
 
     //MSWord f.e has special emdash and endash behaviour in that they break
     //words for the purposes of word counting, while a hyphen etc. doesn't.
