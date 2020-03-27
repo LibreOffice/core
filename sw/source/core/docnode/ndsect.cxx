@@ -899,10 +899,10 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
     }
 
     // Set the right StartNode for all in this Area
-    sal_uLong nEnde = pSectNd->EndOfSectionIndex();
+    sal_uLong nEnd = pSectNd->EndOfSectionIndex();
     sal_uLong nStart = pSectNd->GetIndex()+1;
     sal_uLong nSkipIdx = ULONG_MAX;
-    for( sal_uLong n = nStart; n < nEnde; ++n )
+    for( sal_uLong n = nStart; n < nEnd; ++n )
     {
         SwNode* pNd = (*this)[n];
 
@@ -935,7 +935,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
             static_cast<SwContentNode*>(pNd)->DelFrames(nullptr);
     }
 
-    sw_DeleteFootnote( pSectNd, nStart, nEnde );
+    sw_DeleteFootnote( pSectNd, nStart, nEnd );
 
     if( bInsFrame )
     {
@@ -1315,8 +1315,8 @@ void SwSectionNode::NodesArrChgd()
                                   : pDoc->GetDfltFrameFormat() );
 
     // Set the right StartNode for all in this Area
-    sal_uLong nStart = GetIndex()+1, nEnde = EndOfSectionIndex();
-    for( sal_uLong n = nStart; n < nEnde; ++n )
+    sal_uLong nStart = GetIndex()+1, nEnd = EndOfSectionIndex();
+    for( sal_uLong n = nStart; n < nEnd; ++n )
         // Make up the Format's nesting
         if( nullptr != ( pSectNd = rNds[ n ]->GetSectionNode() ) )
         {
