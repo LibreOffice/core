@@ -45,6 +45,7 @@
 #include <sal/log.hxx>
 #include <memory>
 #include <vector>
+#include <vcl/graph.hxx>
 
 using ::std::vector;
 using namespace com::sun::star;
@@ -2043,7 +2044,21 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
         SdrGrafObj*  pGraf = dynamic_cast<SdrGrafObj*>( pObj );
         if (pGraf != nullptr)
         {
-            if (pGraf->HasGDIMetaFile() || pGraf->isEmbeddedVectorGraphicData())
+            Graphic aGraphic = pGraf->GetGraphic();
+            auto const & pVectorGraphicData = aGraphic.getVectorGraphicData();
+
+            if (pVectorGraphicData && pVectorGraphicData->getVectorGraphicDataType() == VectorGraphicDataType::Pdf)
+            {
+#if HAVE_FEATURE_PDFIUM
+                aLogicRect = pGraf->GetLogicRect();
+                ImpSdrPdfImport aFilter(*mpModel, pObj->GetLayer(), aLogicRect, aGraphic);
+                if (pGraf->getEmbeddedPageNumber() < aFilter.GetPageCount())
+                {
+                    nInsAnz = aFilter.DoImport(*pOL, nInsPos, aGraphic.getPageNumber(), pProgrInfo);
+                }
+#endif // HAVE_FEATURE_PDFIUM
+            }
+            else if (pGraf->HasGDIMetaFile() || pGraf->isEmbeddedVectorGraphicData() )
             {
                 GDIMetaFile aMetaFile(GetMetaFile(pGraf));
                 if (aMetaFile.GetActionSize())
