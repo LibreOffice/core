@@ -981,6 +981,12 @@ void ScETSForecastCalculation::GetETSPredictionIntervals( const ScMatrixRef& rTM
     if ( fmod( fMaxTarget, mfStepSize ) != 0.0 )
         nSize++;
 
+    if (nSize == 0)
+    {
+        mnErrorValue = FormulaError::IllegalArgument;
+        return;
+    }
+
     std::unique_ptr< double[] > xScenRange( new double[nSize]);
     std::unique_ptr< double[] > xScenBase( new double[nSize]);
     std::unique_ptr< double[] > xScenTrend( new double[nSize]);
@@ -1110,6 +1116,12 @@ void ScETSForecastCalculation::GetEDSPredictionIntervals( const ScMatrixRef& rTM
     if ( fmod( fMaxTarget, mfStepSize ) != 0.0 )
         nSize++;
 
+    if (nSize == 0)
+    {
+        mnErrorValue = FormulaError::IllegalArgument;
+        return;
+    }
+
     double z = ScInterpreter::gaussinv( ( 1.0 + fPILevel ) / 2.0 );
     double o = 1 - fPILevel;
     std::vector< double > c( nSize );
@@ -1180,7 +1192,7 @@ void ScInterpreter::ScForecast_Ets( ScETSType eETSType )
         nAggregation = 1;
     if ( nAggregation < 1 || nAggregation > 7 )
     {
-        PushIllegalParameter();
+        PushIllegalArgument();
         return;
     }
 
@@ -1194,7 +1206,7 @@ void ScInterpreter::ScForecast_Ets( ScETSType eETSType )
             bDataCompletion = nTemp;
         else
         {
-            PushIllegalParameter();
+            PushIllegalArgument();
             return;
         }
     }
@@ -1221,16 +1233,16 @@ void ScInterpreter::ScForecast_Ets( ScETSType eETSType )
     double fPILevel = 0.0;
     if ( nParamCount < 3 && !( nParamCount == 2 && eETSType == etsSeason ) )
     {
-        PushIllegalArgument();
+        PushParameterExpected();
         return;
     }
 
     if ( eETSType == etsPIAdd || eETSType == etsPIMult )
     {
-        fPILevel = GetDoubleWithDefault( 0.95 );
+        fPILevel = (nParamCount < 4 ? 0.95 : GetDoubleWithDefault( 0.95 ));
         if ( fPILevel < 0 || fPILevel > 1 )
         {
-            PushIllegalParameter();
+            PushIllegalArgument();
             return;
         }
     }
@@ -1248,7 +1260,7 @@ void ScInterpreter::ScForecast_Ets( ScETSType eETSType )
                 if ( static_cast< int >( pTypeMat->GetDouble( j, i ) ) < 1 ||
                      static_cast< int >( pTypeMat->GetDouble( j, i ) ) > 9 )
                 {
-                    PushIllegalParameter();
+                    PushIllegalArgument();
                     return;
                 }
             }
@@ -1303,7 +1315,10 @@ void ScInterpreter::ScForecast_Ets( ScETSType eETSType )
                 pTMat->GetDimensions( nC, nR );
                 ScMatrixRef pFcMat = GetNewMat( nC, nR );
                 aETSCalc.GetForecastRange( pTMat, pFcMat );
-                PushMatrix( pFcMat );
+                if (aETSCalc.GetError() != FormulaError::NONE)
+                    PushError( aETSCalc.GetError());    // explicitly push error, PushMatrix() does not
+                else
+                    PushMatrix( pFcMat );
             }
             break;
         case etsPIAdd :
@@ -1315,13 +1330,15 @@ void ScInterpreter::ScForecast_Ets( ScETSType eETSType )
                 if ( nSmplInPrd == 0 )
                 {
                     aETSCalc.GetEDSPredictionIntervals( pTMat, pPIMat, fPILevel );
-                    PushMatrix( pPIMat );
                 }
                 else
                 {
                     aETSCalc.GetETSPredictionIntervals( pTMat, pPIMat, fPILevel );
-                    PushMatrix( pPIMat );
                 }
+                if (aETSCalc.GetError() != FormulaError::NONE)
+                    PushError( aETSCalc.GetError());    // explicitly push error, PushMatrix() does not
+                else
+                    PushMatrix( pPIMat );
             }
             break;
         case etsStatAdd  :
@@ -1331,13 +1348,17 @@ void ScInterpreter::ScForecast_Ets( ScETSType eETSType )
                 pTypeMat->GetDimensions( nC, nR );
                 ScMatrixRef pStatMat = GetNewMat( nC, nR );
                 aETSCalc.GetStatisticValue( pTypeMat, pStatMat );
-                PushMatrix( pStatMat );
+                if (aETSCalc.GetError() != FormulaError::NONE)
+                    PushError( aETSCalc.GetError());    // explicitly push error, PushMatrix() does not
+                else
+                    PushMatrix( pStatMat );
             }
             break;
         case etsSeason :
             {
                 double rVal;
                 aETSCalc.GetSamplesInPeriod( rVal );
+                SetError( aETSCalc.GetError() );
                 PushDouble( rVal );
             }
             break;
