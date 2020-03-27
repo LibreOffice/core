@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c31f85b2_5025490b",
+        "filename": "oox/source/vml/vmlshape.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-03-27T15:11:43Z",
+      "side": 1,
+      "message": "According to the other code parts in this file, simply\n\n        if (maTypeModel.maFlip.startsWith(\"x\"))\n        {\n            bFlipX \u003d true;\n        }\n        if (maTypeModel.maFlip.endsWith(\"y\"))\n        {",
+      "range": {
+        "startLine": 673,
+        "startChar": 1,
+        "endLine": 686,
+        "endChar": 13
+      },
+      "revId": "4eb1b4627062f3736b49ba7564072d981491b037",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58b0c285_9cf7366b",
+        "filename": "oox/source/vml/vmlshape.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 856,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-03-27T15:11:43Z",
+      "side": 1,
+      "message": "if (bFlipX)\n   aPropVec.push_back(comphelper::makePropertyValue(\"MirroredX\", true));\nif (bFlipY)\n   aPropVec.push_back(comphelper::makePropertyValue(\"MirroredY\", true));",
+      "range": {
+        "startLine": 840,
+        "startChar": 0,
+        "endLine": 856,
+        "endChar": 9
+      },
+      "revId": "4eb1b4627062f3736b49ba7564072d981491b037",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
