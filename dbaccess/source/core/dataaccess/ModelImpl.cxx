@@ -393,6 +393,7 @@ ODatabaseModelImpl::ODatabaseModelImpl(
             ,m_aEmbeddedMacros()
             ,m_bModificationLock( false )
             ,m_bDocumentInitialized( false )
+            ,m_nScriptingSignatureState(SignatureState::UNKNOWN)
             ,m_aContext( _rxContext )
             ,m_sName(_rRegistrationName)
             ,m_nLoginTimeout(0)
