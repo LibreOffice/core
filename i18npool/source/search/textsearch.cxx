@@ -685,15 +685,15 @@ SearchResult TextSearch::NSrchFrwrd( const OUString& searchStr, sal_Int32 startP
     OUString sSearchKey = bUsePrimarySrchStr ? sSrchStr : sSrchStr2;
 
     sal_Int32 nSuchIdx = searchStr.getLength();
-    sal_Int32 nEnde = endPos;
+    sal_Int32 nEnd = endPos;
     if( !nSuchIdx || !sSearchKey.getLength() || sSearchKey.getLength() > nSuchIdx )
         return aRet;
 
 
-    if( nEnde < sSearchKey.getLength() )  // position inside the search region ?
+    if( nEnd < sSearchKey.getLength() )   // position inside the search region ?
         return aRet;
 
-    nEnde -= sSearchKey.getLength();
+    nEnd -= sSearchKey.getLength();
 
     if (bUsePrimarySrchStr)
       MakeForwardTab();                   // create the jumptable
@@ -701,7 +701,7 @@ SearchResult TextSearch::NSrchFrwrd( const OUString& searchStr, sal_Int32 startP
       MakeForwardTab2();
 
     for (sal_Int32 nCmpIdx = startPos; // start position for the search
-            nCmpIdx <= nEnde;
+            nCmpIdx <= nEnd;
             nCmpIdx += GetDiff( searchStr[nCmpIdx + sSearchKey.getLength()-1]))
     {
         // if the match would be the completed cells, skip it.
@@ -755,7 +755,7 @@ SearchResult TextSearch::NSrchBkwrd( const OUString& searchStr, sal_Int32 startP
     OUString sSearchKey = bUsePrimarySrchStr ? sSrchStr : sSrchStr2;
 
     sal_Int32 nSuchIdx = searchStr.getLength();
-    sal_Int32 nEnde = endPos;
+    sal_Int32 nEnd = endPos;
     if( nSuchIdx == 0 || sSearchKey.isEmpty() || sSearchKey.getLength() > nSuchIdx)
         return aRet;
 
@@ -764,14 +764,14 @@ SearchResult TextSearch::NSrchBkwrd( const OUString& searchStr, sal_Int32 startP
     else
         MakeBackwardTab2();
 
-    if( nEnde == nSuchIdx )                 // end position for the search
-        nEnde = sSearchKey.getLength();
+    if( nEnd == nSuchIdx )                  // end position for the search
+        nEnd = sSearchKey.getLength();
     else
-        nEnde += sSearchKey.getLength();
+        nEnd += sSearchKey.getLength();
 
     sal_Int32 nCmpIdx = startPos;          // start position for the search
 
-    while (nCmpIdx >= nEnde)
+    while (nCmpIdx >= nEnd)
     {
         // if the match would be the completed cells, skip it.
         if ( (!checkCTLStart || isCellStart( searchStr, nCmpIdx -
