@@ -381,8 +381,11 @@ namespace dbaui
         // the selected index
         std::unique_ptr<weld::TreeIter> xSelected(m_xIndexList->make_iterator());
         // the selected index
-        m_xIndexList->get_selected(xSelected.get());
+        if (!m_xIndexList->get_selected(xSelected.get()))
+            xSelected.reset();
         OSL_ENSURE(xSelected, "DbaIndexDialog::OnResetIndex: invalid call!");
+        if (!xSelected)
+            return;
 
         Indexes::iterator aResetPos = m_xIndexes->begin() + m_xIndexList->get_id(*xSelected).toUInt32();
 
