@@ -180,8 +180,8 @@ endef
 # DO NOT SORT ALPHABETICALLY: the libraries must be listed in dependency order,
 # otherwise cyclic dependencies ruin everything.
 # do not serialize on a partial build as that may fail due to missing deps.
-# the default goal is all (see Module.mk)
-ifeq (,$(filter-out all build check unitcheck slowcheck screenshot subsequentcheck uicheck,$(MAKECMDGOALS)))
+# the default goal is build (see Module.mk)
+ifeq (,$(filter-out build check unitcheck slowcheck screenshot subsequentcheck uicheck,$(MAKECMDGOALS)))
 $(eval $(call repositorymodule_serialize,\
 	scfilt \
 	$(call gb_Helper_optional,SCRIPTING,vbaobj) \
