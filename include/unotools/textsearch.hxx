@@ -183,7 +183,7 @@ public:
     /* search in the (selected) text the search string:
         rScrTxt - the text, in which we search
         pStart  - start position for the search
-        pEnde   - end position for the search
+        pEnd    - end position for the search
 
         RETURN values   ==  true: something is found
                         - pStart start pos of the found text,
@@ -192,7 +192,7 @@ public:
                              positions. Is only filled with more positions
                              if the regular expression handles groups.
 
-                        == false: nothing found, pStart,pEnde unchanged.
+                        == false: nothing found, pStart, pEnd unchanged.
 
         Definitions: start pos always inclusive, end pos always exclusive!
                      The position must always in the right direction!
