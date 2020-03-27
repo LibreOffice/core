@@ -1679,6 +1679,7 @@ public:
     {
         m_xSpinButton->connect_focus_out(rLink);
     }
+    OString get_buildable_name() { return m_xSpinButton->get_buildable_name(); }
     void set_help_id(const OString& rName) { m_xSpinButton->set_help_id(rName); }
     void set_position(int nCursorPos) { m_xSpinButton->set_position(nCursorPos); }
     weld::SpinButton& get_widget() { return *m_xSpinButton; }
