@@ -4121,14 +4121,14 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam)
         }
 
         // if the end is not a content node, delete it as well
-        sal_uInt32 nEnde = pEnd->nNode.GetIndex();
+        sal_uInt32 nEnd = pEnd->nNode.GetIndex();
         if( pCNd == nullptr )
-            nEnde++;
+            nEnd++;
 
-        if( aSttIdx != nEnde )
+        if( aSttIdx != nEnd )
         {
             // delete the Nodes into the NodesArary
-            m_rDoc.GetNodes().Delete( aSttIdx, nEnde - aSttIdx.GetIndex() );
+            m_rDoc.GetNodes().Delete( aSttIdx, nEnd - aSttIdx.GetIndex() );
         }
 
         // If the Node that contained the Cursor has been deleted,
