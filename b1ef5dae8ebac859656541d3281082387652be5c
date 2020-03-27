@@ -52,6 +52,24 @@
       "revId": "b1ef5dae8ebac859656541d3281082387652be5c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e80b9d4_2dab63d7",
+        "filename": "vcl/skia/win/gdiimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2020-03-27T15:11:19Z",
+      "side": 1,
+      "message": "There\u0027s no mention of UNICODE / _UNICODE anywhere in solenv, so presumably we need to add it to the default Windows defines?",
+      "parentUuid": "b8b98932_1b0afbae",
+      "revId": "b1ef5dae8ebac859656541d3281082387652be5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
