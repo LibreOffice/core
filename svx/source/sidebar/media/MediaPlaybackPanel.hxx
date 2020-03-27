@@ -71,6 +71,11 @@ private:
                                     const SfxItemState eState,
                                     const SfxPoolItem* pState,
                                     const bool bIsEnabled) override;
+
+    virtual void GetControlState(
+        const sal_uInt16 /*nSId*/,
+        boost::property_tree::ptree& /*rState*/) override {};
+
     DECL_LINK(PlayToolBoxSelectHdl, ToolBox*, void);
     DECL_LINK(VolumeSlideHdl, Slider*, void);
     DECL_LINK(SeekHdl, Slider*, void);

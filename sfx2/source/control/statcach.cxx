@@ -326,6 +326,19 @@ void SfxStateCache::SetState
     SetState_Impl( eState, pState, bMaybeDirty );
 }
 
+void SfxStateCache::GetState
+(
+    boost::property_tree::ptree& rState
+)
+{
+    if ( !mxDispatch.is() && pController )
+    {
+        for ( SfxControllerItem *pCtrl = pController;
+              pCtrl;
+              pCtrl = pCtrl->GetItemLink() )
+        pCtrl->GetControlState( nId, rState );
+    }
+}
 
 void SfxStateCache::SetVisibleState( bool bShow )
 {
