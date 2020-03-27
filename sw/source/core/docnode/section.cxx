@@ -695,9 +695,9 @@ void SwSectionFormat::DelFrames()
             pLast = aIter.Next();
         }
 
-        sal_uLong nEnde = pSectNd->EndOfSectionIndex();
+        sal_uLong nEnd = pSectNd->EndOfSectionIndex();
         sal_uLong nStart = pSectNd->GetIndex()+1;
-        sw_DeleteFootnote( pSectNd, nStart, nEnde );
+        sw_DeleteFootnote( pSectNd, nStart, nEnd );
     }
     if( pIdx )
     {
