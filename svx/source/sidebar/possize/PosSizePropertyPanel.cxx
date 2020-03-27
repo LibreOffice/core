@@ -817,8 +817,29 @@ void PosSizePropertyPanel::NotifyItemUpdate(
     mpCbxScale->Check( static_cast<bool>(sUserData.toInt32()) );
 }
 
-void PosSizePropertyPanel::GetControlState(const sal_uInt16 /*nSID*/, boost::property_tree::ptree& /*rState*/)
+void PosSizePropertyPanel::GetControlState(const sal_uInt16 nSID, boost::property_tree::ptree& rState)
 {
+    weld::MetricSpinButton* pControl = nullptr;
+    switch (nSID)
+    {
+        case SID_ATTR_TRANSFORM_POS_X:
+            pControl = mxMtrPosX.get();
+            break;
+        case SID_ATTR_TRANSFORM_POS_Y:
+            pControl = mxMtrPosY.get();
+            break;
+        case SID_ATTR_TRANSFORM_WIDTH:
+            pControl = mxMtrWidth.get();
+            break;
+        case SID_ATTR_TRANSFORM_HEIGHT:
+            pControl = mxMtrHeight.get();
+            break;
+    }
+
+    if (pControl && !pControl->get_text().isEmpty())
+    {
+        rState.put(pControl->get_buildable_name().getStr(), pControl->get_text().toUtf8().getStr());
+    }
 }
 
 void PosSizePropertyPanel::executeSize()
