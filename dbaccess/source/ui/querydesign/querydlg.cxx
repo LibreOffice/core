@@ -120,7 +120,7 @@ DlgQryJoin::DlgQryJoin(const OQueryTableView* pParent,
     {
         for (sal_Int32 i = 0; i < m_xLB_JoinType->get_count();)
         {
-            const sal_IntPtr nJoinTyp = m_xLB_JoinType->get_id(i).toInt32();
+            const sal_Int32 nJoinTyp = m_xLB_JoinType->get_id(i).toInt32();
             if ( !bSupportFullJoin && nJoinTyp == ID_FULL_JOIN )
                 m_xLB_JoinType->remove(i);
             else if ( !bSupportOuterJoin && (nJoinTyp == ID_LEFT_JOIN || nJoinTyp == ID_RIGHT_JOIN) )
@@ -153,7 +153,7 @@ IMPL_LINK_NOARG( DlgQryJoin, LBChangeHdl, weld::ComboBox&, void )
     const EJoinType eOldJoinType = eJoinType;
     const char* pResId = nullptr;
     const sal_Int32 nPos = m_xLB_JoinType->get_active();
-    const sal_IntPtr nJoinType = m_xLB_JoinType->get_id(nPos).toInt32();
+    const sal_Int32 nJoinType = m_xLB_JoinType->get_id(nPos).toInt32();
     bool bAddHint = true;
     switch ( nJoinType )
     {
@@ -277,7 +277,7 @@ void DlgQryJoin::setJoinType(EJoinType _eNewJoinType)
     eJoinType = _eNewJoinType;
     m_xCBNatural->set_sensitive(eJoinType != CROSS_JOIN);
 
-    sal_IntPtr nJoinType = 0;
+    sal_Int32 nJoinType = 0;
     switch ( eJoinType )
     {
         default:

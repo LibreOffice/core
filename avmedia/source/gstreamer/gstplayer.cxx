@@ -838,7 +838,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
             return xRet;
         }
 
-        sal_IntPtr pIntPtr = 0;
+        sal_Int32 pIntPtr = 0;
         rArguments[ 2 ] >>= pIntPtr;
         SystemChildWindow *pParentWindow = reinterpret_cast< SystemChildWindow* >( pIntPtr );
         if (!pParentWindow)

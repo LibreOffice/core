@@ -160,7 +160,7 @@ namespace
         if (arguments.getLength() <= 2)
             return -1;
 
-        sal_IntPtr pIntPtr = 0;
+        sal_Int32 pIntPtr = 0;
 
         arguments[ 2 ] >>= pIntPtr;
 
