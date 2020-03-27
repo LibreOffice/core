@@ -57,6 +57,10 @@ public:
         const SfxItemState eState,
         const SfxPoolItem* pState) override;
 
+    virtual void GetControlState(
+        const sal_uInt16 /*nSId*/,
+        boost::property_tree::ptree& /*rState*/) override {};
+
     // constructor/destructor
     ChartAxisPanel(
         vcl::Window* pParent,

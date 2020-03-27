@@ -70,6 +70,11 @@ public:
         const sal_uInt16 nSID,
         const SfxItemState eState,
         const SfxPoolItem* pState) override;
+
+    virtual void GetControlState(
+        const sal_uInt16 /*nSId*/,
+        boost::property_tree::ptree& /*rState*/) override {};
+
     virtual void HandleContextChange(
         const vcl::EnumContext& rContext) override;
     virtual boost::property_tree::ptree DumpAsPropertyTree() override;
