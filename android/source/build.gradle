@@ -66,12 +66,10 @@ android {
             // make android studio happy...
             jniDebuggable true
             // would work just fine with external, but setting emulator up is a little more work
-            manifestPlaceholders = [installLocation: "auto", extractNativeLibs: "false"]
+            manifestPlaceholders = [installLocation: "auto"]
         }
         release {
-            // need to extract native libs (allow to compress them in apk), since otherwise would
-            // exceed maximum size for playstore
-            manifestPlaceholders = [installLocation: "preferExternal", extractNativeLibs: "true"]
+            manifestPlaceholders = [installLocation: "preferExternal"]
         }
     }
 
