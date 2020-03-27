@@ -114,19 +114,19 @@ public:
     // note: DO NOT call it FindText because windows.h
     sal_uLong Find_Text( const i18nutil::SearchOptions2& rSearchOpt,
                 bool bSearchInNotes,
-                SwDocPositions nStart, SwDocPositions nEnde,
+                SwDocPositions nStart, SwDocPositions nEnd,
                 bool& bCancel,
                 FindRanges,
                 bool bReplace = false,
                 SwRootFrame const*const pLayout = nullptr);
     sal_uLong FindFormat( const SwTextFormatColl& rFormatColl,
-                SwDocPositions nStart, SwDocPositions nEnde,
+                SwDocPositions nStart, SwDocPositions nEnd,
                 bool& bCancel,
                 FindRanges,
                 const SwTextFormatColl* pReplFormat,
                 SwRootFrame const*const pLayout = nullptr);
     sal_uLong FindAttrs( const SfxItemSet& rSet, bool bNoCollections,
-                SwDocPositions nStart, SwDocPositions nEnde,
+                SwDocPositions nStart, SwDocPositions nEnd,
                 bool& bCancel,
                 FindRanges,
                 const i18nutil::SearchOptions2* pSearchOpt,
