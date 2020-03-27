@@ -817,6 +817,9 @@ void PosSizePropertyPanel::NotifyItemUpdate(
     mpCbxScale->Check( static_cast<bool>(sUserData.toInt32()) );
 }
 
+void PosSizePropertyPanel::GetControlState(const sal_uInt16 /*nSID*/, boost::property_tree::ptree& /*rState*/)
+{
+}
 
 void PosSizePropertyPanel::executeSize()
 {

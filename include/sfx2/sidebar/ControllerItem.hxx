@@ -45,6 +45,9 @@ public:
             const sal_uInt16 nSId,
             const SfxItemState eState,
             const SfxPoolItem* pState) = 0;
+        virtual void GetControlState(
+            const sal_uInt16 nSId,
+            boost::property_tree::ptree& rState) = 0;
         virtual ~ItemUpdateReceiverInterface();
     };
 
@@ -70,6 +73,7 @@ public:
 private:
 
     virtual void StateChanged (sal_uInt16 nSId, SfxItemState eState, const SfxPoolItem* pState) override;
+    virtual void GetControlState (sal_uInt16 nSId, boost::property_tree::ptree& rState) override;
 
     ItemUpdateReceiverInterface& mrItemUpdateReceiver;
     css::uno::Reference<css::lang::XComponent> mxFrameActionListener;

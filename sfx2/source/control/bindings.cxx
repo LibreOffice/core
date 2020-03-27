@@ -1624,6 +1624,33 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, std::unique_ptr<SfxPoolI
     return eState;
 }
 
+void SfxBindings::QueryControlState( sal_uInt16 nSlot, boost::property_tree::ptree& rState )
+{
+    if ( SfxGetpApp()->IsDowning() )
+        return;
+
+    if ( pDispatcher )
+        pDispatcher->Flush();
+
+    if ( pImpl->pSubBindings )
+        pImpl->pSubBindings->QueryControlState( nSlot, rState );
+
+    SfxStateCache* pCache = GetStateCache( nSlot );
+    if ( pCache )
+    {
+        if ( pImpl->bMsgDirty )
+        {
+            UpdateSlotServer_Impl();
+            pCache = GetStateCache( nSlot );
+        }
+
+        if (pCache && pCache->GetItemLink() )
+        {
+            pCache->GetState(rState);
+        }
+    }
+}
+
 void SfxBindings::SetSubBindings_Impl( SfxBindings *pSub )
 {
     if ( pImpl->pSubBindings )
