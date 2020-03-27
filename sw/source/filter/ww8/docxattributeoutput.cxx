@@ -4861,6 +4861,14 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
         OUString aFileName;
         pGrfNode->GetFileFilterNms( &aFileName, nullptr );
 
+        sal_Int32 const nFragment(aFileName.indexOf('#'));
+        sal_Int32 const nForbidden(aFileName.matchIgnoreAsciiCase("%5C"));
+        if (nForbidden != -1 && (nFragment == -1 || nForbidden < nFragment))
+        {
+            SAL_WARN("sw.ww8", "DocxAttributeOutput::FlyFrameGraphic: ignoring image with invalid link URL");
+            return;
+        }
+
         // TODO Convert the file name to relative for better interoperability
 
         aRelId = m_rExport.AddRelation(
