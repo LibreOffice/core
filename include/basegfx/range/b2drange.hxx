@@ -291,7 +291,7 @@ namespace basegfx
             This means that the range will grow evtl. when a shear and/or rotation
             is part of the transformation.
         */
-        B2DRange& operator*=( const ::basegfx::B2DHomMatrix& rMat );
+        BASEGFX_DLLPUBLIC B2DRange& operator*=( const ::basegfx::B2DHomMatrix& rMat );
 
         /** Get a range filled with (0.0, 0.0, 1.0, 1.0) */
         static const B2DRange& getUnitB2DRange();
