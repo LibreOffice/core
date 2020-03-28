@@ -28,7 +28,7 @@ enum class BrowseMode
     Modules = 0x01, // expected-error {{read Modules [loplugin:unusedenumconstants]}}
     Top = 0x02, // expected-error {{write Top [loplugin:unusedenumconstants]}}
     Bottom = 0x04, // expected-error {{read Bottom [loplugin:unusedenumconstants]}}
-    Left = 0x04, // expected-error {{write Left [loplugin:unusedenumconstants]}}
+    Left = 0x08, // expected-error {{write Left [loplugin:unusedenumconstants]}}
 };
 namespace o3tl
 {
