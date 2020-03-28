@@ -52,7 +52,7 @@ enum class ConfigItemMode
 
 namespace o3tl
 {
-    template<> struct typed_flags<ConfigItemMode> : is_typed_flags<ConfigItemMode, 0x07> {};
+    template<> struct typed_flags<ConfigItemMode> : is_typed_flags<ConfigItemMode, 0x06> {};
 }
 
 namespace utl
