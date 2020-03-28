@@ -52,7 +52,7 @@ enum class EEControlBits
 };
 namespace o3tl
 {
-    template<> struct typed_flags<EEControlBits> : is_typed_flags<EEControlBits, 0x037efff9> {};
+    template<> struct typed_flags<EEControlBits> : is_typed_flags<EEControlBits, 0x037afff9> {};
 }
 
 enum class EVControlBits
