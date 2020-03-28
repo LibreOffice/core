@@ -662,14 +662,14 @@ void AreaChart::createShapes()
                 {
                     std::map< sal_Int32, double >& rLogicYSumMap = aLogicYSumMapByX[nIndex];
                     sal_Int32 nAttachedAxisIndex = pSeries->getAttachedAxisIndex();
-                    if( rLogicYSumMap.find(nAttachedAxisIndex)==rLogicYSumMap.end() )
-                        rLogicYSumMap[nAttachedAxisIndex]=0.0;
+                    std::map< sal_Int32, double >::iterator aYSumIt;
+                    std::tie(aYSumIt, std::ignore) = rLogicYSumMap.try_emplace(nAttachedAxisIndex, 0.0);
 
                     m_pPosHelper = &getPlottingPositionHelper(nAttachedAxisIndex);
 
                     double fAdd = pSeries->getYValue( nIndex );
                     if( !std::isnan(fAdd) && !std::isinf(fAdd) )
-                        rLogicYSumMap[nAttachedAxisIndex] += fabs( fAdd );
+                        aYSumIt->second += fabs( fAdd );
                 }
             }
         }
@@ -747,8 +747,7 @@ void AreaChart::createShapes()
                     }
 
                     std::map< sal_Int32, double >& rLogicYForNextSeriesMap = aLogicYForNextSeriesMapByX[nIndex];
-                    if( rLogicYForNextSeriesMap.find(nAttachedAxisIndex) == rLogicYForNextSeriesMap.end() )
-                        rLogicYForNextSeriesMap[nAttachedAxisIndex] = 0.0;
+                    rLogicYForNextSeriesMap.try_emplace(nAttachedAxisIndex, 0.0);
 
                     double fPreviousYValue = rLogicYForNextSeriesMap[nAttachedAxisIndex];
                     fLogicY += rLogicYForNextSeriesMap[nAttachedAxisIndex];

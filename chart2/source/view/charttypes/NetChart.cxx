@@ -367,8 +367,7 @@ void NetChart::createShapes()
                         pSeries->doSortByXValues();
 
                     sal_Int32 nAttachedAxisIndex = pSeries->getAttachedAxisIndex();
-                    if( aLogicYSumMap.find(nAttachedAxisIndex)==aLogicYSumMap.end() )
-                        aLogicYSumMap[nAttachedAxisIndex]=0.0;
+                    aLogicYSumMap.try_emplace(nAttachedAxisIndex, 0.0);
 
                     m_pPosHelper = &getPlottingPositionHelper(nAttachedAxisIndex);
 
@@ -448,8 +447,7 @@ void NetChart::createShapes()
                         continue;
                     }
 
-                    if( aLogicYForNextSeriesMap.find(nAttachedAxisIndex) == aLogicYForNextSeriesMap.end() )
-                        aLogicYForNextSeriesMap[nAttachedAxisIndex] = 0.0;
+                    aLogicYForNextSeriesMap.try_emplace(nAttachedAxisIndex, 0.0);
 
                     double fLogicValueForLabeDisplay = fLogicY;
 

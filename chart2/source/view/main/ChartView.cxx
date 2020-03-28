@@ -182,15 +182,14 @@ void AxisUsage::addCoordinateSystem( VCoordinateSystem* pCooSys, sal_Int32 nDime
     aCoordinateSystems[pCooSys] = aFullAxisIndex;
 
     //set maximum scale index
-    std::map< sal_Int32, sal_Int32 >::const_iterator aIter = aMaxIndexPerDimension.find(nDimensionIndex);
-    if( aIter != aMaxIndexPerDimension.end() )
+    std::map< sal_Int32, sal_Int32 >::iterator aCurrentMaxIndexIter;
+    bool bNewDimension;
+    std::tie(aCurrentMaxIndexIter, bNewDimension) = aMaxIndexPerDimension.try_emplace(nDimensionIndex, nAxisIndex);
+
+    if( !bNewDimension )
     {
-        sal_Int32 nCurrentMaxIndex = aIter->second;
-        if( nCurrentMaxIndex < nAxisIndex )
-            aMaxIndexPerDimension[nDimensionIndex]=nAxisIndex;
+         aCurrentMaxIndexIter->second = std::max(aCurrentMaxIndexIter->second, nAxisIndex);
     }
-    else
-        aMaxIndexPerDimension[nDimensionIndex]=nAxisIndex;
 }
 
 std::vector< VCoordinateSystem* > AxisUsage::getCoordinateSystems( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex )

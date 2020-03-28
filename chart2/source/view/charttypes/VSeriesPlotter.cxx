@@ -2054,11 +2054,11 @@ private:
             for (auto const& series : rSeries)
             {
                 double fYMin = series.second.first, fYMax = series.second.second;
-                TotalStoreType::iterator itr = aStore.find(fX);
-                if (itr == aStore.end())
-                    // New min-max pair for give X value.
-                    aStore.emplace(fX, std::pair<double,double>(fYMin,fYMax));
-                else
+                TotalStoreType::iterator itr;
+                bool bNewXValue;
+                // New min-max pair for new X value.
+                std::tie(itr, bNewXValue) = aStore.try_emplace(fX, MinMaxType(fYMin,fYMax));
+                if (!bNewXValue)
                 {
                     MinMaxType& r = itr->second;
                     if (fYMin < r.first)
@@ -2073,18 +2073,8 @@ private:
 
     SeriesMinMaxType* getByXValue(double fX)
     {
-        GroupMinMaxType::iterator it = m_SeriesGroup.find(fX);
-        if (it == m_SeriesGroup.end())
-        {
-            std::pair<GroupMinMaxType::iterator,bool> r =
-                m_SeriesGroup.insert(std::make_pair(fX, std::make_unique<SeriesMinMaxType>()));
-
-            if (!r.second)
-                // insertion failed.
-                return nullptr;
-
-            it = r.first;
-        }
+        GroupMinMaxType::iterator it;
+        std::tie(it, std::ignore) = m_SeriesGroup.try_emplace(fX, std::make_unique<SeriesMinMaxType>());
 
         return it->second.get();
     }

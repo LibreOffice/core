@@ -467,8 +467,7 @@ void addMissingRoles(DialogModel::tRolesWithRanges& rResult, const uno::Sequence
 {
     for(sal_Int32 i = 0, n = rRoles.getLength(); i < n; ++i)
     {
-        if(rResult.find(rRoles[i]) == rResult.end())
-            rResult.emplace(rRoles[i], OUString());
+        rResult.try_emplace(rRoles[i]);
     }
 }
 

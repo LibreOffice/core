@@ -262,11 +262,7 @@ OUString addBitmapUniqueNameToTable(
 
 void setPropertyValueAny( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const uno::Any & rAny )
 {
-    tPropertyValueMap::iterator aIt( rOutMap.find( key ));
-    if( aIt == rOutMap.end())
-        rOutMap.emplace( key, rAny );
-    else
-        (*aIt).second = rAny;
+    rOutMap[key] = rAny;
 }
 
 template<>

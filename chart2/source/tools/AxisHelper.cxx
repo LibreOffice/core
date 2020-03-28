@@ -278,11 +278,11 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                             if( xSeq.is() )
                             {
                                 sal_Int32 nKey = xSeq->getNumberFormatKeyByIndex( -1 );
+                                tNumberformatFrequency::iterator it;
                                 // initialize the value
-                                if( aKeyMap.find( nKey ) == aKeyMap.end())
-                                    aKeyMap[ nKey ] = 0;
+                                std::tie(it, std::ignore) = aKeyMap.try_emplace(nKey, 0);
                                 // increase frequency
-                                aKeyMap[ nKey ] = (aKeyMap[ nKey ] + 1);
+                                it->second += 1;
                             }
                         }
                     }

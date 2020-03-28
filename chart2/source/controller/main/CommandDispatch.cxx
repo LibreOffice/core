@@ -75,14 +75,9 @@ void SAL_CALL CommandDispatch::dispatch( const util::URL& /* URL */, const Seque
 
 void SAL_CALL CommandDispatch::addStatusListener( const Reference< frame::XStatusListener >& Control, const util::URL& URL )
 {
-    tListenerMap::iterator aIt( m_aListeners.find( URL.Complete ));
-    if( aIt == m_aListeners.end())
-    {
-        aIt = m_aListeners.insert(
-            m_aListeners.begin(),
-            tListenerMap::value_type( URL.Complete, new ::comphelper::OInterfaceContainerHelper2( m_aMutex )));
-    }
-    OSL_ASSERT( aIt != m_aListeners.end());
+    tListenerMap::iterator aIt;
+    std::tie(aIt, std::ignore) =
+            m_aListeners.try_emplace(URL.Complete, new ::comphelper::OInterfaceContainerHelper2(m_aMutex));
 
     aIt->second->addInterface( Control );
     fireStatusEvent( URL.Complete, Control );
