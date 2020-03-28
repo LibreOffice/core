@@ -215,7 +215,7 @@ enum class Job
 
 }
 
-template<> struct o3tl::typed_flags<Job>: o3tl::is_typed_flags<Job, 0xFFF> {};
+template<> struct o3tl::typed_flags<Job>: o3tl::is_typed_flags<Job, 0xEFF> {};
 
 namespace {
 
