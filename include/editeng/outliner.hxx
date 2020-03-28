@@ -545,10 +545,6 @@ enum class OutlinerMode {
     OutlineObject  = 0x0003,
     OutlineView    = 0x0004
 };
-namespace o3tl
-{
-    template<> struct typed_flags<OutlinerMode> : is_typed_flags<OutlinerMode, 0x000f> {};
-}
 
 class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
 {
