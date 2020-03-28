@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e56a9833_efa9c655",
+        "filename": "sc/source/filter/oox/biffhelper.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-28T15:11:55Z",
+      "side": 1,
+      "message": "And this one was uninitialized previously. We need to avoid any changes in behaviour when doing cleanup patches.",
+      "range": {
+        "startLine": 70,
+        "startChar": 32,
+        "endLine": 70,
+        "endChar": 34
+      },
+      "revId": "9ec9c7bb7db5d24aa19f20747c283b5e8b008bdc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
