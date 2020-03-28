@@ -86,19 +86,28 @@ public:
     /// Multiply this * other.
     void Concatinate(const Matrix& other)
     {
-        ma = ma * other.ma + mb * other.mc;
-        mb = ma * other.mb + mb * other.md;
-        mc = mc * other.ma + md * other.mc;
-        md = mc * other.mb + md * other.md;
-        me = me * other.ma + mf * other.mc + other.me;
-        mf = me * other.mb + mf * other.md + other.mf;
+        double newA = ma * other.ma + mb * other.mc;
+        double newB = ma * other.mb + mb * other.md;
+        double newC = mc * other.ma + md * other.mc;
+        double newD = mc * other.mb + md * other.md;
+        double newE = me * other.ma + mf * other.mc + other.me;
+        double newF = me * other.mb + mf * other.md + other.mf;
+
+        ma = newA;
+        mb = newB;
+        mc = newC;
+        md = newD;
+        me = newE;
+        mf = newF;
     }
 
     /// Transform the point (x, y) by this Matrix.
     template <typename T> void Transform(T& x, T& y)
     {
-        x = ma * x + mc * y + me;
-        y = mb * x + md * y + mf;
+        T newX = v00 * x + v01 * y + v02;
+        T newY = v10 * x + v11 * y + v12;
+        x = newX;
+        y = newY;
     }
 
     /// Transform the rectangle (left, right, top, bottom) by this Matrix.
