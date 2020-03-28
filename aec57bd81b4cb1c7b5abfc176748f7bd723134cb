@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05b7b4e3_b8b2ea77",
+        "filename": "sc/source/filter/oox/biffhelper.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-28T13:11:53Z",
+      "side": 1,
+      "message": "This empty line likely appeared when you reverted the changes in this area :-)",
+      "revId": "aec57bd81b4cb1c7b5abfc176748f7bd723134cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "caf2d2c6_9da431b1",
+        "filename": "sc/source/filter/oox/biffhelper.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-28T13:11:53Z",
+      "side": 1,
+      "message": "likely this should be zero-initialized, like previously: in case of !getFlag( nRkValue, BIFF_RK_INTFLAG ) you would be initializing it only partially.\n\nYou may simply do that using\n\n    sal_math_Double  aMathDouble{};",
+      "range": {
+        "startLine": 41,
+        "startChar": 21,
+        "endLine": 41,
+        "endChar": 32
+      },
+      "revId": "aec57bd81b4cb1c7b5abfc176748f7bd723134cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d697cec_1db458ee",
+        "filename": "sc/source/filter/oox/biffhelper.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-28T13:11:53Z",
+      "side": 1,
+      "message": "It would be clearer if you put this variable at the same place where DecodedDouble aDecDbl previously was (after the switch block).",
+      "range": {
+        "startLine": 59,
+        "startChar": 4,
+        "endLine": 59,
+        "endChar": 33
+      },
+      "revId": "aec57bd81b4cb1c7b5abfc176748f7bd723134cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
