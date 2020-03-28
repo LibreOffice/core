@@ -60,7 +60,7 @@ enum class BorderWindowHitTest {
     Help           = 0x4000,
 };
 namespace o3tl {
-    template<> struct typed_flags<BorderWindowHitTest> : is_typed_flags<BorderWindowHitTest, 0xffff> {};
+    template<> struct typed_flags<BorderWindowHitTest> : is_typed_flags<BorderWindowHitTest, 0x7fff> {};
 };
 
 enum class BorderWindowTitleType {
