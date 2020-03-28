@@ -452,31 +452,9 @@ bool SgaObjectSvDraw::CreateThumb( const FmFormModel& rModel )
 
                 aView.ShowSdrPage(const_cast< FmFormPage* >(pPage));
                 aView.MarkAllObj();
-                aThumbBmp = aView.GetMarkedObjBitmapEx();
-
-                const Size aDiscreteSize(aThumbBmp.GetSizePixel());
-
-                if(aDiscreteSize.Width() && aDiscreteSize.Height())
-                {
-                    sal_uInt32 nTargetSizeX(S_THUMB);
-                    sal_uInt32 nTargetSizeY(S_THUMB);
-
-                    if(aDiscreteSize.Width() > aDiscreteSize.Height())
-                    {
-                        nTargetSizeY = (aDiscreteSize.Height() * nTargetSizeX) / aDiscreteSize.Width();
-                    }
-                    else
-                    {
-                        nTargetSizeX = (aDiscreteSize.Width() * nTargetSizeY) / aDiscreteSize.Height();
-                    }
-
-                    if(!!aThumbBmp)
-                    {
-                        aThumbBmp.Scale(Size(nTargetSizeX, nTargetSizeY), BmpScaleFlag::BestQuality);
-                        aThumbBmp.Convert(BmpConversion::N8BitColors);
-                        bRet = true;
-                    }
-                }
+                aThumbBmp = aView.GetMarkedObjBitmapEx(true);
+                aGraphic = Graphic(aThumbBmp);
+                bRet = SgaObject::CreateThumb(aGraphic);
             }
         }
     }
