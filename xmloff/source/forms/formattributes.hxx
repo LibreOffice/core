@@ -131,7 +131,7 @@ enum class SCAFlags {
     ImagePosition         = 0x080000
 };
 namespace o3tl {
-    template<> struct typed_flags<SCAFlags> : is_typed_flags<SCAFlags, 0x0fffff> {};
+    template<> struct typed_flags<SCAFlags> : is_typed_flags<SCAFlags, 0x0fffbf> {};
 }
 
 
