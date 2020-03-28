@@ -116,6 +116,9 @@ private:
     //edit charts button for online's mobile view
     VclPtr<PushButton>       mpBtnEditChart;
 
+    // Arrange with respect to text
+    VclPtr<ToolBox>          mArrang;
+
     // Internal variables
     basegfx::B2DRange                       maRect;
     basegfx::B2DRange                       maWorkArea;
