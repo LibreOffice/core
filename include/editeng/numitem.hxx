@@ -233,7 +233,7 @@ enum class SvxNumRuleFlags
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SvxNumRuleFlags> : is_typed_flags<SvxNumRuleFlags, 0x03dd> {};
+    template<> struct typed_flags<SvxNumRuleFlags> : is_typed_flags<SvxNumRuleFlags, 0x039d> {};
 }
 
 enum class SvxNumRuleType
