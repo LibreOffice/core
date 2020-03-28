@@ -70,11 +70,11 @@ enum class SfxStyleSearchBits {
     ReadOnly    = 0x2000, ///< readonly styles (search mask)
     Used        = 0x4000, ///< used styles (search mask)
     UserDefined = 0x8000, ///< user defined styles (search mask)
-    AllVisible  = 0xFDFF, ///< all styles
-    All         = 0xFFFF, ///< all styles
+    AllVisible  = 0xe07f, ///< all visible styles
+    All         = 0xe27f, ///< all styles
 };
 namespace o3tl {
-    template<> struct typed_flags<SfxStyleSearchBits> : is_typed_flags<SfxStyleSearchBits, 0xffff> {};
+    template<> struct typed_flags<SfxStyleSearchBits> : is_typed_flags<SfxStyleSearchBits, 0xe27f> {};
 }
 
 
