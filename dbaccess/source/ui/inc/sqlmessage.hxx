@@ -63,7 +63,7 @@ enum class MessBoxStyle {
 }
 
 namespace o3tl {
-    template<> struct typed_flags<dbaui::MessBoxStyle> : is_typed_flags<dbaui::MessBoxStyle, 0x0fff> {};
+    template<> struct typed_flags<dbaui::MessBoxStyle> : is_typed_flags<dbaui::MessBoxStyle, 0x03ff> {};
 }
 
 
