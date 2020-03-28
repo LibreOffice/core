@@ -68,7 +68,7 @@ enum class SelectionEngineFlags {
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SelectionEngineFlags> : is_typed_flags<SelectionEngineFlags, 0x01ff> {};
+    template<> struct typed_flags<SelectionEngineFlags> : is_typed_flags<SelectionEngineFlags, 0x01ef> {};
 }
 
 class VCL_DLLPUBLIC SelectionEngine
