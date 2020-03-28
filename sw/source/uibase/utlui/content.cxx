@@ -86,6 +86,9 @@
 #include <AnnotationWin.hxx>
 #include <memory>
 
+#include <fmtcntnt.hxx>
+#include <docstat.hxx>
+
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1
 
@@ -3288,6 +3291,32 @@ IMPL_LINK(SwContentTree, QueryTooltipHdl, const weld::TreeIter&, rEntry, OUStrin
             case ContentTypeId::GRAPHIC:
                 assert(dynamic_cast<SwGraphicContent*>(static_cast<SwTypeNumber*>(pUserData)));
                 sEntry = static_cast<SwGraphicContent*>(pUserData)->GetLink();
+            break;
+            case ContentTypeId::REGION:
+            {
+                assert(dynamic_cast<SwRegionContent*>(static_cast<SwTypeNumber*>(pUserData)));
+                sEntry = static_cast<SwRegionContent*>(pUserData)->GetName();
+                const SwSectionFormats& rFormats = GetWrtShell()->GetDoc()->GetSections();
+                for (SwSectionFormats::size_type n = rFormats.size(); n;)
+                {
+                    const SwNodeIndex* pIdx = nullptr;
+                    const SwSectionFormat* pFormat = rFormats[--n];
+                    const SwSection* pSect;
+                    if (nullptr != (pSect = pFormat->GetSection()) &&
+                        pSect->GetSectionName() == sEntry &&
+                        nullptr != (pIdx = pFormat->GetContent().GetContentIdx()) &&
+                        pIdx->GetNode().GetNodes().IsDocNodes())
+                    {
+                        SwDocStat aDocStat;
+                        SwPaM aPaM(*pIdx, *pIdx->GetNode().EndOfSectionNode());
+                        SwDoc::CountWords(aPaM, aDocStat);
+                        sEntry = SwResId(STR_REGION_DEFNAME) + ": " + sEntry + "\n" +
+                                 SwResId(FLD_STAT_WORD) + ": " + OUString::number(aDocStat.nWord) + "\n" +
+                                 SwResId(FLD_STAT_CHAR) + ": " + OUString::number(aDocStat.nChar);
+                        break;
+                    }
+                }
+            }
             break;
             default: break;
         }
