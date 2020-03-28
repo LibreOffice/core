@@ -45,6 +45,30 @@
       "revId": "21605e1ecff3f250596584c388d3af4f4fd78f24",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "addabc73_a300c3c0",
+        "filename": "sc/source/filter/oox/biffhelper.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-28T08:40:44Z",
+      "side": 1,
+      "message": "Also note that \"m\" prefix is for \"member\", i.e. it marks a field in a struct/class. Using this as a variable in functions, just name it \"aYourNameHere\" (like \"aMathDouble\").",
+      "parentUuid": "9b73a835_c40019d8",
+      "range": {
+        "startLine": 35,
+        "startChar": 20,
+        "endLine": 35,
+        "endChar": 22
+      },
+      "revId": "21605e1ecff3f250596584c388d3af4f4fd78f24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
