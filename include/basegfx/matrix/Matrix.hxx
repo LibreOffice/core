@@ -53,6 +53,29 @@ public:
         return *this;
     }
 
+    double get(sal_uInt16 nRow, sal_uInt16 nColumn) const
+    {
+        if (nRow == 0)
+        {
+            if (nColumn == 0)
+                return v00;
+            else if (nColumn == 1)
+                return v01;
+            else if (nColumn == 2)
+                return v02;
+        }
+        else if (nRow == 1)
+        {
+            if (nColumn == 0)
+                return v10;
+            else if (nColumn == 1)
+                return v11;
+            else if (nColumn == 2)
+                return v12;
+        }
+        return 0.0;
+    }
+
     double a() const { return ma; }
     double b() const { return mb; }
     double c() const { return mc; }
@@ -120,7 +143,27 @@ public:
     }
 
 private:
-    double ma, mb, mc, md, me, mf;
+    union {
+        struct
+        {
+            double ma;
+            double mb;
+            double mc;
+            double md;
+            double me;
+            double mf;
+        };
+
+        struct
+        {
+            double v00;
+            double v10;
+            double v01;
+            double v11;
+            double v02;
+            double v12;
+        };
+    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
