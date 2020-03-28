@@ -1642,18 +1642,12 @@ cmd/sc_rehearsetimings.png cmd/sc_diatime.png
 # Arrange
 cmd/32/arrangeframemenu.png cmd/32/bringtofront.png
 cmd/32/arrangemenu.png cmd/32/bringtofront.png
-cmd/32/setobjecttobackground.png cmd/32/sendtoback.png
-cmd/32/setobjecttoforeground.png cmd/32/bringtofront.png
 
 cmd/lc_arrangeframemenu.png cmd/lc_bringtofront.png
 cmd/lc_arrangemenu.png cmd/lc_bringtofront.png
-cmd/lc_setobjecttobackground.png cmd/lc_sendtoback.png
-cmd/lc_setobjecttoforeground.png cmd/lc_bringtofront.png
 
 cmd/sc_arrangeframemenu.png cmd/sc_bringtofront.png
 cmd/sc_arrangemenu.png cmd/sc_bringtofront.png
-cmd/sc_setobjecttobackground.png cmd/sc_sendtoback.png
-cmd/sc_setobjecttoforeground.png cmd/sc_bringtofront.png
 
 # Reload
 cmd/32/draw.png cmd/32/reload.png
