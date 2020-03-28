@@ -466,7 +466,7 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
     if ( rMergeDesc.rDescriptor.has(svx::DataAccessDescriptorProperty::Connection) )
         rMergeDesc.rDescriptor[svx::DataAccessDescriptorProperty::Connection] >>= xConnection;
 
-    if(aData.sDataSource.isEmpty() || aData.sCommand.isEmpty() || !xResSet.is())
+    if((aData.sDataSource.isEmpty() || aData.sCommand.isEmpty()) && !xResSet.is())
     {
         return false;
     }
