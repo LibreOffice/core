@@ -101,6 +101,7 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     get( mpFtFlip,    "fliplabel" );
     get( mpFlipTbx,   "selectrotationtype" );
     get( mpBtnEditChart,   "btnEditChart" );
+    get( mpTBxArrange,     "shaperespectedtotext");
     Initialize();
 
     mpBindings->Update( SID_ATTR_METRIC );
@@ -131,6 +132,7 @@ void PosSizePropertyPanel::dispose()
     mpFtFlip.clear();
     mpFlipTbx.clear();
     mpBtnEditChart.clear();
+    mpTBxArrange.clear();
 
     maTransfPosXControl.dispose();
     maTransfPosYControl.dispose();
@@ -268,12 +270,14 @@ void PosSizePropertyPanel::HandleContextChange(
     bool bShowAngle = false;
     bool bShowFlip = false;
     bool bShowEditChart = false;
+    bool bShowArrangeShape = false;
 
     switch (maContext.GetCombinedContext_DI())
     {
         case CombinedEnumContext(Application::WriterVariants, Context::Draw):
             bShowAngle = true;
             bShowFlip = true;
+            bShowArrangeShape = true;
             break;
 
         case CombinedEnumContext(Application::WriterVariants, Context::Graphic):
@@ -332,6 +336,9 @@ void PosSizePropertyPanel::HandleContextChange(
 
     // Edit Chart
     mpBtnEditChart->Show(bShowEditChart);
+
+    // Arrange with respect to text
+    mpTBxArrange->Show(bShowArrangeShape);
 
     if (mxSidebar.is())
         mxSidebar->requestLayout();
