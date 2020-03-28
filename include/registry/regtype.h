@@ -45,7 +45,7 @@ enum class RegAccessMode
 };
 namespace o3tl
 {
-    template<> struct typed_flags<RegAccessMode> : is_typed_flags<RegAccessMode, 0x07> {};
+    template<> struct typed_flags<RegAccessMode> : is_typed_flags<RegAccessMode, 0x03> {};
 }
 
 /** defines the type of a key value.
