@@ -1218,6 +1218,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     bool bRemoveToggleExpandEntry = true;
     bool bRemoveChapterEntries = true;
     bool bRemoveSendOutlineEntry = true;
+    bool bRemoveCaptionEntry = true;
 
     // Edit only if the shown content is coming from the current view.
     if ((State::ACTIVE == m_eState || m_pActiveShell == pActiveView->GetWrtShellPtr())
@@ -1263,6 +1264,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                 bRemoveSelectEntry = false;
                 bRemoveEditEntry = false;
                 bRemoveUnprotectEntry = false;
+                bRemoveCaptionEntry = false;
                 bool bFull = false;
                 OUString sTableName = reinterpret_cast<SwContent*>(m_xTreeView->get_id(*xEntry).toInt64())->GetName();
                 bool bProt = m_pActiveShell->HasTableAnyProtection( &sTableName, &bFull );
@@ -1366,6 +1368,10 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
 
     if (bRemoveEditEntry)
         xPop->remove(OString::number(403));
+
+    if (bRemoveCaptionEntry)
+        xPop->remove(OString::number(406));
+
 
     if (bRemoveToggleExpandEntry &&
         bRemoveSelectEntry &&
@@ -3358,6 +3364,14 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
             const SwTOXBase* pBase = reinterpret_cast<SwTOXBaseContent*>(m_xTreeView->get_id(*xFirst).toInt64())
                                                                 ->GetTOXBase();
             m_pActiveShell->SetTOXBaseReadonly(*pBase, !SwEditShell::IsTOXBaseReadonly(*pBase));
+        }
+        break;
+        case 406:
+        {
+            m_pActiveShell->EnterStdMode();
+            SwContent* pCnt = reinterpret_cast<SwContent*>(m_xTreeView->get_id(*xFirst).toInt64());
+            m_pActiveShell->GotoTable(pCnt->GetName());
+            m_pActiveShell->GetView().GetViewFrame()->GetDispatcher()->Execute(FN_INSERT_CAPTION);
         }
         break;
         case 4:
