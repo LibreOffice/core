@@ -50,7 +50,7 @@ namespace basegfx
         }
     }
 
-    B2DRange& B2DRange::operator*=( const ::basegfx::B2DHomMatrix& rMat )
+    BASEGFX_DLLPUBLIC B2DRange& B2DRange::operator*=( const ::basegfx::B2DHomMatrix& rMat )
     {
         transform(rMat);
         return *this;
