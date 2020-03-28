@@ -25,7 +25,7 @@ enum class BrowseMode
     Modules = 0x01,
     Top = 0x02,
     Bottom = 0x04,
-    Left = 0x04,
+    Left = 0x08,
 };
 namespace o3tl
 {
