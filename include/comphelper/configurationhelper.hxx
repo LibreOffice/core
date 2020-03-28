@@ -52,7 +52,7 @@ namespace comphelper
 
 namespace o3tl
 {
-    template<> struct typed_flags<comphelper::EConfigurationModes> : is_typed_flags<comphelper::EConfigurationModes, 0x7> {};
+    template<> struct typed_flags<comphelper::EConfigurationModes> : is_typed_flags<comphelper::EConfigurationModes, 0x3> {};
 }
 
 namespace comphelper
