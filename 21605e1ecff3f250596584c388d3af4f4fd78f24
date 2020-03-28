@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "34dcce0b_edca855d",
+        "filename": "sc/source/filter/oox/biffhelper.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-28T08:38:21Z",
+      "side": 1,
+      "message": "Why do we need to add this header? the patch does not add usage of any definitions that were not used previously.",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 25
+      },
+      "revId": "21605e1ecff3f250596584c388d3af4f4fd78f24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
