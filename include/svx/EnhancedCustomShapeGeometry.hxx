@@ -60,7 +60,7 @@ enum class SvxMSDffHandleFlags
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SvxMSDffHandleFlags> : is_typed_flags<SvxMSDffHandleFlags, 0x3fff> {};
+    template<> struct typed_flags<SvxMSDffHandleFlags> : is_typed_flags<SvxMSDffHandleFlags, 0x3fbf> {};
 }
 
 struct SvxMSDffHandle
