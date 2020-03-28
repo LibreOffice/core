@@ -94,7 +94,7 @@ enum class SfxShellFeature
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SfxShellFeature> : is_typed_flags<SfxShellFeature, 0x3ffd> {};
+    template<> struct typed_flags<SfxShellFeature> : is_typed_flags<SfxShellFeature, 0x37fd> {};
 }
 
 /* Flags that are being used in the slot definitions for the disable-features */
