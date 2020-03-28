@@ -47,6 +47,33 @@ namespace basegfx
         B2DHomMatrix(B2DHomMatrix&& rMat);
         ~B2DHomMatrix();
 
+        /** Convenience creator for declaration of the matrix that is commonly
+            used by web standards (SVG, CSS, HTML).
+
+           Values a,b,c,d,e,f represent the following values in the matrix:
+              [a,c,e]      [a,c,e]
+              [b,d,f]  or  [b,d,f]
+                           [0,0,1]
+
+        */
+        static B2DHomMatrix abcdef(double da, double db, double dc, double dd, double de, double df)
+        {
+            return B2DHomMatrix(da, dc, de, db, dd, df);
+        }
+
+        // Convenience accessor for value at 0,0 position in the matrix
+        double a() { return get(0,0); }
+        // Convenience accessor for value at 1,0 position in the matrix
+        double b() { return get(1,0); }
+        // Convenience accessor for value at 0,1 position in the matrix
+        double c() { return get(0,1); }
+        // Convenience accessor for value at 1,1 position in the matrix
+        double d() { return get(1,1); }
+        // Convenience accessor for value at 0,2 position in the matrix
+        double e() { return get(0,2); }
+        // Convenience accessor for value at 1,2 position in the matrix
+        double f() { return get(1,2); }
+
         /** constructor to allow setting all needed values for a 3x2 matrix at once. The
             parameter f_0x1 e.g. is the same as using set(0, 1, f)
          */
