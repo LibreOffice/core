@@ -23,8 +23,10 @@
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/matrix/Matrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
+#include <basegfx/range/b2drange.hxx>
 
 namespace basegfx
 {
@@ -444,6 +446,129 @@ public:
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("decompose: error test J1", F_PI, fDRot, 1E-12);
     }
 
+    void testMatrix()
+    {
+        {
+            B2DHomMatrix aB2DMatrix(00, 01, 02, 10, 11, 12);
+            Matrix aMatrix(00, 10, 01, 11, 02, 12);
+
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aB2DMatrix.get(0, 0), aMatrix.a(), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aB2DMatrix.get(1, 0), aMatrix.b(), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aB2DMatrix.get(0, 1), aMatrix.c(), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aB2DMatrix.get(1, 1), aMatrix.d(), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aB2DMatrix.get(0, 2), aMatrix.e(), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aB2DMatrix.get(1, 2), aMatrix.f(), 1E-12);
+
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aB2DMatrix.get(0, 0), aMatrix.get(0, 0), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aB2DMatrix.get(1, 0), aMatrix.get(1, 0), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aB2DMatrix.get(0, 1), aMatrix.get(0, 1), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aB2DMatrix.get(1, 1), aMatrix.get(1, 1), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aB2DMatrix.get(0, 2), aMatrix.get(0, 2), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aB2DMatrix.get(1, 2), aMatrix.get(1, 2), 1E-12);
+        }
+
+        {
+            B2DHomMatrix aB2DMatrix = B2DHomMatrix::abcdef(00, 10, 01, 11, 02, 12);
+            Matrix aMatrix(00, 10, 01, 11, 02, 12);
+
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aB2DMatrix.get(0, 0), aMatrix.a(), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aB2DMatrix.get(1, 0), aMatrix.b(), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aB2DMatrix.get(0, 1), aMatrix.c(), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aB2DMatrix.get(1, 1), aMatrix.d(), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aB2DMatrix.get(0, 2), aMatrix.e(), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aB2DMatrix.get(1, 2), aMatrix.f(), 1E-12);
+
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aB2DMatrix.get(0, 0), aMatrix.get(0, 0), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aB2DMatrix.get(1, 0), aMatrix.get(1, 0), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aB2DMatrix.get(0, 1), aMatrix.get(0, 1), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aB2DMatrix.get(1, 1), aMatrix.get(1, 1), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aB2DMatrix.get(0, 2), aMatrix.get(0, 2), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aB2DMatrix.get(1, 2), aMatrix.get(1, 2), 1E-12);
+
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aB2DMatrix.a(), aMatrix.a(), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aB2DMatrix.b(), aMatrix.b(), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aB2DMatrix.c(), aMatrix.c(), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aB2DMatrix.d(), aMatrix.d(), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aB2DMatrix.e(), aMatrix.e(), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aB2DMatrix.f(), aMatrix.f(), 1E-12);
+        }
+
+        {
+            B2DHomMatrix aB2DMatrix(00, 01, 02, 10, 11, 12); //column first
+            Matrix aMatrix(00, 10, 01, 11, 02, 12); // row first
+
+            Matrix aNewMatrix(1, 2, 3, 4, 5, 6);
+
+            B2DHomMatrix aNewB2DMatrix(1, 3, 5, 2, 4, 6);
+
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aNewMatrix.get(0, 0), aNewB2DMatrix.get(0, 0), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aNewMatrix.get(1, 0), aNewB2DMatrix.get(1, 0), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aNewMatrix.get(0, 1), aNewB2DMatrix.get(0, 1), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aNewMatrix.get(1, 1), aNewB2DMatrix.get(1, 1), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aNewMatrix.get(0, 2), aNewB2DMatrix.get(0, 2), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(aNewMatrix.get(1, 2), aNewB2DMatrix.get(1, 2), 1E-12);
+
+            aMatrix.Concatinate(aNewMatrix);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(30, aMatrix.get(0, 0), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(40, aMatrix.get(1, 0), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(34, aMatrix.get(0, 1), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(46, aMatrix.get(1, 1), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(43, aMatrix.get(0, 2), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(58, aMatrix.get(1, 2), 1E-12);
+
+            aB2DMatrix *= aNewB2DMatrix;
+
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(30, aB2DMatrix.get(0, 0), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(40, aB2DMatrix.get(1, 0), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(34, aB2DMatrix.get(0, 1), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(46, aB2DMatrix.get(1, 1), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(43, aB2DMatrix.get(0, 2), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(58, aB2DMatrix.get(1, 2), 1E-12);
+        }
+
+        {
+            Matrix aNewMatrix(1, 2, 3, 4, 5, 6);
+            B2DHomMatrix aNewB2DMatrix(1, 3, 5, 2, 4, 6);
+
+            double x = 1;
+            double y = 2;
+            aNewMatrix.Transform(x, y);
+
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(12, x, 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(16, y, 1E-12);
+
+            B2DPoint aPoint(1, 2);
+            aPoint *= aNewB2DMatrix;
+
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(12, aPoint.getX(), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(16, aPoint.getY(), 1E-12);
+        }
+
+        {
+            Matrix aNewMatrix(1, 2, 3, 4, 5, 6);
+            B2DHomMatrix aNewB2DMatrix(1, 3, 5, 2, 4, 6);
+
+            double left = 2;
+            double right = 4;
+            double top = 1;
+            double bottom = 3;
+            aNewMatrix.Transform(left, right, top, bottom);
+
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(10, left, 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(18, right, 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(14, top, 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(26, bottom, 1E-12);
+
+            B2DRange aRange(2, 1, 4, 3);
+            aRange *= aNewB2DMatrix;
+
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(10, aRange.getMinX(), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(18, aRange.getMaxX(), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(14, aRange.getMinY(), 1E-12);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(26, aRange.getMaxY(), 1E-12);
+        }
+    }
+
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
@@ -457,6 +582,7 @@ public:
     CPPUNIT_TEST(shear);
     CPPUNIT_TEST(multiply);
     CPPUNIT_TEST(decompose);
+    CPPUNIT_TEST(testMatrix);
     CPPUNIT_TEST_SUITE_END();
 
 }; // class b2dhommatrix
