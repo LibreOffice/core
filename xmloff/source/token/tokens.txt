@@ -1791,6 +1791,7 @@ text-indent
 text-input
 text-justify
 text-outline
+text-only
 text-position
 text-rotation-angle
 text-rotation-scale
@@ -2790,6 +2791,7 @@ node-type
 preset-id
 preset-sub-type
 preset-class
+preset-property
 custom
 entrance
 exit
