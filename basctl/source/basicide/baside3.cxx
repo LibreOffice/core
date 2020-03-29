@@ -880,22 +880,17 @@ bool implImportDialog(weld::Window* pWin, const OUString& rCurPath, const Script
 
             OUString aXmlDlgName;
             Reference< beans::XPropertySet > xDialogModelPropSet( xDialogModel, UNO_QUERY );
-            if( xDialogModelPropSet.is() )
+            assert(xDialogModelPropSet.is());
+            try
             {
-                try
-                {
-                    Any aXmlDialogNameAny = xDialogModelPropSet->getPropertyValue( DLGED_PROP_NAME );
-                    OUString aOUXmlDialogName;
-                    aXmlDialogNameAny >>= aOUXmlDialogName;
-                    aXmlDlgName = aOUXmlDialogName;
-                }
-                catch(const beans::UnknownPropertyException& )
-                {}
+                Any aXmlDialogNameAny = xDialogModelPropSet->getPropertyValue( DLGED_PROP_NAME );
+                aXmlDialogNameAny >>= aXmlDlgName;
             }
-            bool bValidName = !aXmlDlgName.isEmpty();
-            OSL_ASSERT( bValidName );
-            if( !bValidName )
-                return bDone;
+            catch(const beans::UnknownPropertyException& )
+            {
+                TOOLS_WARN_EXCEPTION("basctl", "");
+            }
+            assert( !aXmlDlgName.isEmpty() );
 
             bool bDialogAlreadyExists = rDocument.hasDialog( aLibName, aXmlDlgName );
 
@@ -934,11 +929,7 @@ bool implImportDialog(weld::Window* pWin, const OUString& rCurPath, const Script
             }
 
             Shell* pShell = GetShell();
-            if (!pShell)
-            {
-                OSL_ASSERT(pShell);
-                return bDone;
-            }
+            assert(pShell);
 
             // Resource?
             css::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
