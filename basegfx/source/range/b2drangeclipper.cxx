@@ -725,7 +725,7 @@ namespace basegfx
                 if( nCurrPolyIdx == -1 )
                     nCurrPolyIdx=first->getTargetPolygonIndex();
 
-                OSL_ASSERT(nCurrPolyIdx != -1);
+                assert(nCurrPolyIdx != -1);
 
                 // second encounter of my rect -> second edge
                 // encountered, done
