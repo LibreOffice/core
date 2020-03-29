@@ -3320,7 +3320,7 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
         case 13:
             nSelectedPopupEntry -= 10;
             if(m_nOutlineTracking != nSelectedPopupEntry)
-                m_nOutlineTracking = nSelectedPopupEntry;
+               SetOutlineTracking(static_cast<sal_uInt8>(nSelectedPopupEntry));
         break;
         //Outlinelevel
         case 101:
@@ -3515,6 +3515,12 @@ void SwContentTree::SetOutlineLevel(sal_uInt8 nSet)
         rpContentT->Init();
     }
     Display(State::ACTIVE == m_eState);
+}
+
+void SwContentTree::SetOutlineTracking(sal_uInt8 nSet)
+{
+    m_nOutlineTracking = nSet;
+    m_pConfig->SetOutlineTracking(m_nOutlineTracking);
 }
 
 // Mode Change: Show dropped Doc

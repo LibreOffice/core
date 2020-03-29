@@ -585,6 +585,7 @@ SwNavigationPI::SwNavigationPI(vcl::Window* pParent,
 
     m_aStatusArr[3] = SwResId(STR_ACTIVE_VIEW);
 
+    m_xContentTree->SetOutlineTracking(static_cast<sal_uInt8>(m_pConfig->GetOutlineTracking()));
     m_xContentTree->set_selection_mode(SelectionMode::Single);
     m_xContentTree->ShowTree();
     m_xContent3ToolBox->set_item_active("listbox", true);

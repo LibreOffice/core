@@ -106,8 +106,7 @@ class SwContentTree final : public SfxListener
     ContentTypeId       m_nRootType;
     ContentTypeId       m_nLastSelType;
     sal_uInt8           m_nOutlineLevel;
-
-    sal_uInt32          m_nOutlineTracking = 1;
+    sal_uInt8           m_nOutlineTracking = 1; // 1 default, 2 focus, 3 off
 
     enum class State { ACTIVE, CONSTANT, HIDDEN } m_eState;
 
@@ -209,6 +208,8 @@ public:
 
     sal_uInt8       GetOutlineLevel()const {return m_nOutlineLevel;}
     void            SetOutlineLevel(sal_uInt8 nSet);
+
+    void            SetOutlineTracking(sal_uInt8 nSet);
 
     /** Execute commands of the Navigator */
     void            ExecCommand(const OString& rCmd, bool bModifier);
