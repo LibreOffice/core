@@ -22,6 +22,30 @@
       "revId": "f24d677b709b522102c640b58efe67bef148ed10",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "692cdc28_d93c6d86",
+        "filename": "svx/source/gallery2/galobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1002021
+      },
+      "writtenOn": "2020-03-29T08:52:37Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "daacd795_92a9f00d",
+      "range": {
+        "startLine": 455,
+        "startChar": 54,
+        "endLine": 455,
+        "endChar": 55
+      },
+      "revId": "f24d677b709b522102c640b58efe67bef148ed10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
