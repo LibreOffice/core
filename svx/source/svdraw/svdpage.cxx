@@ -767,7 +767,7 @@ SdrObject* SdrObjList::GetObj(size_t nNum) const
 {
     if (nNum >= maList.size())
     {
-        OSL_ASSERT(nNum<maList.size());
+        assert(nNum<maList.size());
         return nullptr;
     }
     else
