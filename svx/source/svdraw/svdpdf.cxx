@@ -768,11 +768,11 @@ void ImpSdrPdfImport::ImportForm(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
                                  int /*nPageObjectIndex*/)
 {
     // Get the form matrix to perform correct translation/scaling of the form sub-objects.
-    const Matrix aOldMatrix = mCurMatrix;
+    const basegfx::B2DHomMatrix aOldMatrix = maCurrentMatrix;
 
     double a, b, c, d, e, f;
-    FPDFFormObj_GetMatrix(pPageObject, &a, &b, &c, &d, &e, &f);
-    mCurMatrix = Matrix(a, b, c, d, e, f);
+    FPDFTextObj_GetMatrix(pPageObject, &a, &b, &c, &d, &e, &f);
+    maCurrentMatrix = basegfx::B2DHomMatrix::abcdef(a, b, c, d, e, f);
 
     const int nCount = FPDFFormObj_CountObjects(pPageObject);
     for (int nIndex = 0; nIndex < nCount; ++nIndex)
@@ -782,7 +782,7 @@ void ImpSdrPdfImport::ImportForm(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
     }
 
     // Restore the old one.
-    mCurMatrix = aOldMatrix;
+    maCurrentMatrix = aOldMatrix;
 }
 
 void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTextPage,
@@ -802,10 +802,12 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
 
     double a, b, c, d, e, f;
     FPDFTextObj_GetMatrix(pPageObject, &a, &b, &c, &d, &e, &f);
-    Matrix aTextMatrix(mCurMatrix);
 
-    aTextMatrix.Transform(left, right, top, bottom);
-    const tools::Rectangle aRect = PointsToLogic(left, right, top, bottom);
+    basegfx::B2DHomMatrix aTextMatrix(maCurrentMatrix);
+    basegfx::B2DRange aTextRect(left, top, right, bottom);
+    aTextRect *= aTextMatrix;
+    const tools::Rectangle aRect = PointsToLogic(aTextRect.getMinX(), aTextRect.getMaxX(),
+                                                 aTextRect.getMinY(), aTextRect.getMaxY());
 
     const int nChars = FPDFTextObj_GetText(pPageObject, pTextPage, nullptr, 0);
     std::unique_ptr<sal_Unicode[]> pText(new sal_Unicode[nChars]);
@@ -1037,8 +1039,8 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectI
 {
     double a, b, c, d, e, f;
     FPDFPath_GetMatrix(pPageObject, &a, &b, &c, &d, &e, &f);
-    Matrix aPathMatrix(a, b, c, d, e, f);
-    aPathMatrix.Concatinate(mCurMatrix);
+    auto aPathMatrix = basegfx::B2DHomMatrix::abcdef(a, b, c, d, e, f);
+    aPathMatrix *= maCurrentMatrix;
 
     basegfx::B2DPolyPolygon aPolyPoly;
     basegfx::B2DPolygon aPoly;
@@ -1057,26 +1059,26 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectI
                 continue;
             }
 
-            double x = fx;
-            double y = fy;
-            aPathMatrix.Transform(x, y);
+            basegfx::B2DPoint aB2DPoint(fx, fy);
+            aB2DPoint *= aPathMatrix;
+
             const bool bClose = FPDFPathSegment_GetClose(pPathSegment);
             if (bClose)
                 aPoly.setClosed(bClose); // TODO: Review
 
-            Point aPoint = PointsToLogic(x, y);
-            x = aPoint.X();
-            y = aPoint.Y();
+            Point aPoint = PointsToLogic(aB2DPoint.getX(), aB2DPoint.getY());
+            aB2DPoint.setX(aPoint.X());
+            aB2DPoint.setY(aPoint.Y());
 
             const int nSegmentType = FPDFPathSegment_GetType(pPathSegment);
             switch (nSegmentType)
             {
                 case FPDF_SEGMENT_LINETO:
-                    aPoly.append(basegfx::B2DPoint(x, y));
+                    aPoly.append(aB2DPoint);
                     break;
 
                 case FPDF_SEGMENT_BEZIERTO:
-                    aBezier.emplace_back(x, y);
+                    aBezier.emplace_back(aB2DPoint.getX(), aB2DPoint.getY());
                     if (aBezier.size() == 3)
                     {
                         aPoly.appendBezierSegment(aBezier[0], aBezier[1], aBezier[2]);
@@ -1092,7 +1094,7 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectI
                         aPoly.clear();
                     }
 
-                    aPoly.append(basegfx::B2DPoint(x, y));
+                    aPoly.append(aB2DPoint);
                     break;
 
                 case FPDF_SEGMENT_UNKNOWN:
