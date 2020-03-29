@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2f53f4cc_331ff6ba",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2750,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-03-29T08:16:44Z",
+      "side": 0,
+      "message": "Since it will be converted to SbxVariable anyway and avoids a casting of SbxVariableRef to SbxVariable,",
+      "parentUuid": "6c64082e_4b57e967",
+      "range": {
+        "startLine": 2750,
+        "startChar": 15,
+        "endLine": 2750,
+        "endChar": 18
+      },
+      "revId": "e2a6efe230888b000329b79d7797a5e07a3e48f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "72f8a07f_7a0b765e",
         "filename": "basic/source/runtime/runtime.cxx",
         "patchSetId": 6

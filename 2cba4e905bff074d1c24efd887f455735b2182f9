@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "06c100bb_093e86ec",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-03-29T08:16:44Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a35fe807_fa753fdf",
+      "range": {
+        "startLine": 627,
+        "startChar": 4,
+        "endLine": 629,
+        "endChar": 27
+      },
+      "revId": "2cba4e905bff074d1c24efd887f455735b2182f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "551a6fb5_36d1ffe5",
         "filename": "basic/source/runtime/runtime.cxx",
         "patchSetId": 5
@@ -82,6 +106,30 @@
       "writtenOn": "2020-03-19T11:23:06Z",
       "side": 1,
       "message": "So any error will be \"missing\"?",
+      "range": {
+        "startLine": 635,
+        "startChar": 118,
+        "endLine": 635,
+        "endChar": 126
+      },
+      "revId": "2cba4e905bff074d1c24efd887f455735b2182f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b356469c_071e7877",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-03-29T08:16:44Z",
+      "side": 1,
+      "message": "I will remove the SbxERROR type",
+      "parentUuid": "551a6fb5_36d1ffe5",
       "range": {
         "startLine": 635,
         "startChar": 118,

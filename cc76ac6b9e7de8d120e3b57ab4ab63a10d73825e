@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5c259b09_5b798c65",
+        "filename": "basic/qa/vba_tests/ismissing.vb",
+        "patchSetId": 9
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-03-29T08:16:44Z",
+      "side": 0,
+      "message": "Don\u0027t know why it is missing. Maybe I have dropped a line to much. I will readd it",
+      "parentUuid": "a614109d_308847bf",
+      "range": {
+        "startLine": 120,
+        "startChar": 4,
+        "endLine": 120,
+        "endChar": 68
+      },
+      "revId": "cc76ac6b9e7de8d120e3b57ab4ab63a10d73825e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8c331e89_117eba14",
         "filename": "basic/qa/vba_tests/ismissing.vb",
         "patchSetId": 9
@@ -45,6 +69,30 @@
       "revId": "cc76ac6b9e7de8d120e3b57ab4ab63a10d73825e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "657ba23f_fb1c6bd6",
+        "filename": "basic/qa/vba_tests/ismissing.vb",
+        "patchSetId": 9
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-03-29T08:16:44Z",
+      "side": 0,
+      "message": "Yes, but the scanner does not initialize the missing parameter as an array, so the check on IsEmpty throws an error. Same on line 132.",
+      "parentUuid": "8c331e89_117eba14",
+      "range": {
+        "startLine": 123,
+        "startChar": 4,
+        "endLine": 123,
+        "endChar": 6
+      },
+      "revId": "cc76ac6b9e7de8d120e3b57ab4ab63a10d73825e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "4ffd8130_fe9d6117",
+        "filename": "basic/qa/vba_tests/ismissing.vb",
+        "patchSetId": 9
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-03-29T08:16:44Z",
+      "side": 0,
+      "message": "Same as above",
+      "parentUuid": "5a06065e_1d51487c",
+      "range": {
+        "startLine": 132,
+        "startChar": 4,
+        "endLine": 132,
+        "endChar": 6
+      },
+      "revId": "cc76ac6b9e7de8d120e3b57ab4ab63a10d73825e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2c353d39_a4d9160e",
         "filename": "basic/qa/vba_tests/optional_paramters.vb",
         "patchSetId": 9
@@ -82,6 +154,30 @@
       "writtenOn": "2020-03-25T16:54:57Z",
       "side": 0,
       "message": "Should this be uncommented ?",
+      "range": {
+        "startLine": 120,
+        "startChar": 4,
+        "endLine": 120,
+        "endChar": 6
+      },
+      "revId": "cc76ac6b9e7de8d120e3b57ab4ab63a10d73825e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc557df1_b0e9d365",
+        "filename": "basic/qa/vba_tests/optional_paramters.vb",
+        "patchSetId": 9
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-03-29T08:16:44Z",
+      "side": 0,
+      "message": "Same as for is_missing.vb",
+      "parentUuid": "2c353d39_a4d9160e",
       "range": {
         "startLine": 120,
         "startChar": 4,
