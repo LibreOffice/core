@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9907545f_f2cd147b",
+        "filename": "include/editeng/outliner.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-03-29T07:02:54Z",
+      "side": 1,
+      "message": "this one should not be a typed_flags at all, it is not a bitmask, so the right fix is just to remove this",
+      "revId": "291e568d1765e433f422e9e29a3926e8f3bf1dd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
