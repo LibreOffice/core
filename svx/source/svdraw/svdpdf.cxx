@@ -757,11 +757,12 @@ void ImpSdrPdfImport::ImportForm(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
                                  int /*nPageObjectIndex*/)
 {
     // Get the form matrix to perform correct translation/scaling of the form sub-objects.
-    const Matrix aOldMatrix = mCurMatrix;
+    const basegfx::B2DHomMatrix aOldMatrix = maCurrentMatrix;
 
     FS_MATRIX matrix;
     FPDFFormObj_GetMatrix(pPageObject, &matrix);
-    mCurMatrix = Matrix(matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f);
+    maCurrentMatrix
+        = basegfx::B2DHomMatrix::abcdef(matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f);
 
     const int nCount = FPDFFormObj_CountObjects(pPageObject);
     for (int nIndex = 0; nIndex < nCount; ++nIndex)
@@ -771,7 +772,7 @@ void ImpSdrPdfImport::ImportForm(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
     }
 
     // Restore the old one.
-    mCurMatrix = aOldMatrix;
+    maCurrentMatrix = aOldMatrix;
 }
 
 void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTextPage,
@@ -791,10 +792,11 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
 
     FS_MATRIX matrix;
     FPDFTextObj_GetMatrix(pPageObject, &matrix);
-    Matrix aTextMatrix(mCurMatrix);
-
-    aTextMatrix.Transform(left, right, top, bottom);
-    const tools::Rectangle aRect = PointsToLogic(left, right, top, bottom);
+    basegfx::B2DHomMatrix aTextMatrix(maCurrentMatrix);
+    basegfx::B2DRange aTextRect(left, top, right, bottom);
+    aTextRect *= aTextMatrix;
+    const tools::Rectangle aRect = PointsToLogic(aTextRect.getMinX(), aTextRect.getMaxX(),
+                                                 aTextRect.getMinY(), aTextRect.getMaxY());
 
     const int nChars = FPDFTextObj_GetText(pPageObject, pTextPage, nullptr, 0);
     std::unique_ptr<sal_Unicode[]> pText(new sal_Unicode[nChars]);
@@ -1027,8 +1029,10 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectI
 {
     FS_MATRIX matrix;
     FPDFPath_GetMatrix(pPageObject, &matrix);
-    Matrix aPathMatrix(matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f);
-    aPathMatrix.Concatinate(mCurMatrix);
+
+    auto aPathMatrix
+        = basegfx::B2DHomMatrix::abcdef(matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f);
+    aPathMatrix *= maCurrentMatrix;
 
     basegfx::B2DPolyPolygon aPolyPoly;
     basegfx::B2DPolygon aPoly;
@@ -1047,26 +1051,26 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectI
                 continue;
             }
 
-            double x = fx;
-            double y = fy;
-            aPathMatrix.Transform(x, y);
+            basegfx::B2DPoint aB2DPoint(fx, fy);
+            aB2DPoint *= aPathMatrix;
+
             const bool bClose = FPDFPathSegment_GetClose(pPathSegment);
             if (bClose)
                 aPoly.setClosed(bClose); // TODO: Review
 
-            Point aPoint = PointsToLogic(x, y);
-            x = aPoint.X();
-            y = aPoint.Y();
+            Point aPoint = PointsToLogic(aB2DPoint.getX(), aB2DPoint.getY());
+            aB2DPoint.setX(aPoint.X());
+            aB2DPoint.setY(aPoint.Y());
 
             const int nSegmentType = FPDFPathSegment_GetType(pPathSegment);
             switch (nSegmentType)
             {
                 case FPDF_SEGMENT_LINETO:
-                    aPoly.append(basegfx::B2DPoint(x, y));
+                    aPoly.append(aB2DPoint);
                     break;
 
                 case FPDF_SEGMENT_BEZIERTO:
-                    aBezier.emplace_back(x, y);
+                    aBezier.emplace_back(aB2DPoint.getX(), aB2DPoint.getY());
                     if (aBezier.size() == 3)
                     {
                         aPoly.appendBezierSegment(aBezier[0], aBezier[1], aBezier[2]);
@@ -1082,7 +1086,7 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectI
                         aPoly.clear();
                     }
 
-                    aPoly.append(basegfx::B2DPoint(x, y));
+                    aPoly.append(aB2DPoint);
                     break;
 
                 case FPDF_SEGMENT_UNKNOWN:
