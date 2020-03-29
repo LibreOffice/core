@@ -40,7 +40,7 @@ enum class MessBoxStyle
 };
 namespace o3tl
 {
-template <> struct typed_flags<MessBoxStyle> : is_typed_flags<MessBoxStyle, 0x3fff>
+template <> struct typed_flags<MessBoxStyle> : is_typed_flags<MessBoxStyle, 0x33ff>
 {
 };
 }
