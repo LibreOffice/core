@@ -1457,11 +1457,10 @@ IMPL_LINK_NOARG(SvxLineTabPage, MenuCreateHdl_Impl, weld::ToggleButton&, void)
             pInvisibleSquare->SetMergedItem(XFillTransparenceItem(100));
             pInvisibleSquare->SetMergedItem(XLineTransparenceItem(100));
 
-            for(size_t i=0;; ++i)
+            for(size_t i=0; i < m_pSymbolList->GetObjCount(); ++i)
             {
                 SdrObject *pObj=m_pSymbolList->GetObj(i);
-                if(pObj==nullptr)
-                    break;
+                assert(pObj);
 
                 // directly clone to target SdrModel
                 pObj = pObj->CloneSdrObject(*pModel);
