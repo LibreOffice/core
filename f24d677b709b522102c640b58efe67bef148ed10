@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "daacd795_92a9f00d",
+        "filename": "svx/source/gallery2/galobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-03-29T08:08:00Z",
+      "side": 1,
+      "message": "OK the issue that it doesn\u0027t work with GIFs is that it needs to call aView.GetMarkedObjBitmapEx(true);",
+      "range": {
+        "startLine": 455,
+        "startChar": 54,
+        "endLine": 455,
+        "endChar": 55
+      },
+      "revId": "f24d677b709b522102c640b58efe67bef148ed10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
