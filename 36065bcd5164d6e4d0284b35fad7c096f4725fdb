@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4e43e7a0_ebd283ea",
+        "filename": "include/svl/style.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-03-29T07:18:04Z",
+      "side": 1,
+      "message": "This doesn\u0027t seem right, I get AllVisible\u003d0xe07f, All\u003d0xe27f",
+      "revId": "36065bcd5164d6e4d0284b35fad7c096f4725fdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
