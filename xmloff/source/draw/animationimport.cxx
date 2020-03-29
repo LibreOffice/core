@@ -1142,6 +1142,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
                 // push all unknown attributes within the presentation namespace as user data
                 if (nNamespace == NAMESPACE_TOKEN(XML_NAMESPACE_PRESENTATION)
                     || nNamespace == NAMESPACE_TOKEN(XML_NAMESPACE_PRESENTATION_SO52)
+                    || nNamespace == NAMESPACE_TOKEN(XML_NAMESPACE_PRESENTATION_OASIS)
                     || nNamespace == NAMESPACE_TOKEN(XML_NAMESPACE_PRESENTATION_OOO))
                 {
                     aUserData.emplace_back( SvXMLImport::getNameFromToken(aIter.getToken()), makeAny( rValue ) );
