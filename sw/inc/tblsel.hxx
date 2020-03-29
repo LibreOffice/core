@@ -66,7 +66,7 @@ enum class SwTableSearchType : sal_uInt16
     NoUnionCorrect = 0x10, // Do not correct collected Union.
 };
 namespace o3tl {
-    template<> struct typed_flags<SwTableSearchType> : is_typed_flags<SwTableSearchType, 0x1f> {};
+    template<> struct typed_flags<SwTableSearchType> : is_typed_flags<SwTableSearchType, 0x1b> {};
 }
 
 SW_DLLPUBLIC void GetTableSel( const SwCursorShell& rShell, SwSelBoxes& rBoxes,
