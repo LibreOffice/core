@@ -76,7 +76,7 @@ enum class ViewOptCoreFlags2 {
     Printing          = 0x0020,
 };
 namespace o3tl {
-    template<> struct typed_flags<ViewOptCoreFlags2> : is_typed_flags<ViewOptCoreFlags2, 0x007f> {};
+    template<> struct typed_flags<ViewOptCoreFlags2> : is_typed_flags<ViewOptCoreFlags2, 0x003f> {};
 };
 
 enum class ViewOptFlags2 {
