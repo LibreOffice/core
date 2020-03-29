@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fe04cdbd_600e4278",
+        "filename": "sw/uiconfig/swriter/ui/navigatorcontextmenu.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-03-29T17:37:35Z",
+      "side": 1,
+      "message": "\"Caption...\" seems a little ambiguous? Not sure what the right text would be, but surely \"New Caption...\" or \"Create Caption..\"",
+      "revId": "646274d4138adb1b43b546a5a7c0778a1d5c4849",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
