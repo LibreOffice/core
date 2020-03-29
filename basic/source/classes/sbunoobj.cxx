@@ -756,7 +756,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
 
             typelib_TypeDescription * pTD = nullptr;
             aType.getDescription( &pTD );
-            OSL_ASSERT( pTD && pTD->eTypeClass == typelib_TypeClass_SEQUENCE );
+            assert( pTD && pTD->eTypeClass == typelib_TypeClass_SEQUENCE );
             Type aElementType( reinterpret_cast<typelib_IndirectTypeDescription *>(pTD)->pType );
             ::typelib_typedescription_release( pTD );
 
@@ -1320,7 +1320,7 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property const * pUn
                     OUString aClassName = xIdlTargetClass->getName();
                     typelib_TypeDescription * pSeqTD = nullptr;
                     typelib_typedescription_getByName( &pSeqTD, aClassName.pData );
-                    OSL_ASSERT( pSeqTD );
+                    assert( pSeqTD );
                     Type aElemType( reinterpret_cast<typelib_IndirectTypeDescription *>(pSeqTD)->pType );
 
                     // convert all array member and register them
@@ -1361,7 +1361,7 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property const * pUn
                     {
                         OUString aTypeName = aCurType.getTypeName();
                         typelib_typedescription_getByName( &pSeqTD, aTypeName.pData );
-                        OSL_ASSERT( pSeqTD );
+                        assert( pSeqTD );
                         if( pSeqTD->eTypeClass == typelib_TypeClass_SEQUENCE )
                         {
                             aCurType = Type( reinterpret_cast<typelib_IndirectTypeDescription *>(pSeqTD)->pType );
@@ -4565,7 +4565,7 @@ bool SbModule::createCOMWrapperForIface( Any& o_rRetAny, SbClassModuleObject* pP
                     }
                     while( pParentBasic == nullptr && pCurObject != nullptr );
 
-                    OSL_ASSERT( pParentBasic != nullptr );
+                    assert( pParentBasic != nullptr );
                     registerComponentToBeDisposedForBasic( xComponent, pParentBasic );
                 }
 

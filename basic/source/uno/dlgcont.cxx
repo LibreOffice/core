@@ -33,7 +33,7 @@
 #include <dlgcont.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
-
+#include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
@@ -201,9 +201,10 @@ void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< e
         }
         catch (const Exception& )
         {
+            TOOLS_WARN_EXCEPTION("basic", "");
             // if we cannot get the version then the
             // Oasis2OOoTransformer will not be used
-            OSL_ASSERT(false);
+            assert(false);
         }
     }
 
