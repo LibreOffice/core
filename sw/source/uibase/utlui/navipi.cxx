@@ -1102,6 +1102,7 @@ SwNavigationChild::SwNavigationChild( vcl::Window* pParent,
         }
     }
     pNavi->m_xContentTree->SetOutlineLevel( static_cast< sal_uInt8 >( pNaviConfig->GetOutlineLevel() ) );
+    pNavi->m_xContentTree->SetOutlineTracking(static_cast<sal_uInt8>(pNaviConfig->GetOutlineTracking()));
     pNavi->SetRegionDropMode( pNaviConfig->GetRegionMode() );
 
     if (SfxNavigator* pNav = dynamic_cast<SfxNavigator*>(pParent))

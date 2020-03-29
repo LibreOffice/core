@@ -906,6 +906,7 @@ SwContentTree::SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNaviga
         m_aContextStrings[i] = SwResId(STR_CONTEXT_ARY[i]);
     }
     m_nActiveBlock = m_pConfig->GetActiveBlock();
+    m_nOutlineTracking = m_pConfig->GetOutlineTracking();
     m_aUpdTimer.SetInvokeHandler(LINK(this, SwContentTree, TimerUpdate));
     m_aUpdTimer.SetTimeout(1000);
 }
@@ -3320,7 +3321,7 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
         case 13:
             nSelectedPopupEntry -= 10;
             if(m_nOutlineTracking != nSelectedPopupEntry)
-                m_nOutlineTracking = nSelectedPopupEntry;
+               SetOutlineTracking(static_cast<sal_uInt8>(nSelectedPopupEntry));
         break;
         //Outlinelevel
         case 101:
@@ -3335,7 +3336,7 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
         case 110:
             nSelectedPopupEntry -= 100;
             if(m_nOutlineLevel != nSelectedPopupEntry )
-                SetOutlineLevel(static_cast<sal_Int8>(nSelectedPopupEntry));
+                SetOutlineLevel(static_cast<sal_uInt8>(nSelectedPopupEntry));
         break;
         case 201:
         case 202:
@@ -3515,6 +3516,12 @@ void SwContentTree::SetOutlineLevel(sal_uInt8 nSet)
         rpContentT->Init();
     }
     Display(State::ACTIVE == m_eState);
+}
+
+void SwContentTree::SetOutlineTracking(sal_uInt8 nSet)
+{
+    m_nOutlineTracking = nSet;
+    m_pConfig->SetOutlineTracking(m_nOutlineTracking);
 }
 
 // Mode Change: Show dropped Doc

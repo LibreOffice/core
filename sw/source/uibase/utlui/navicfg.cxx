@@ -37,7 +37,8 @@ Sequence<OUString> SwNavigationConfig::GetPropertyNames()
         OUString("InsertMode"),
         OUString("ActiveBlock"),
         OUString("ShowListBox"),
-        OUString("GlobalDocMode")};
+        OUString("GlobalDocMode"),
+        OUString("OutlineTracking")};
 }
 
 SwNavigationConfig::SwNavigationConfig() :
@@ -48,7 +49,8 @@ SwNavigationConfig::SwNavigationConfig() :
     nRegionMode(RegionMode::NONE),
     nActiveBlock(0),
     bIsSmall(false),
-    bIsGlobalActive(true)
+    bIsGlobalActive(true),
+    nOutlineTracking(1)
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
@@ -91,6 +93,7 @@ SwNavigationConfig::SwNavigationConfig() :
                     case 4: pValues[nProp] >>= nActiveBlock;    break;
                     case 5: bIsSmall        = *o3tl::doAccess<bool>(pValues[nProp]);  break;
                     case 6: bIsGlobalActive = *o3tl::doAccess<bool>(pValues[nProp]);  break;
+                    case 7: pValues[nProp] >>= nOutlineTracking; break;
                 }
             }
         }
@@ -118,6 +121,7 @@ void SwNavigationConfig::ImplCommit()
             case 4: pValues[nProp] <<= nActiveBlock;    break;
             case 5: pValues[nProp] <<= bIsSmall; break;
             case 6: pValues[nProp] <<= bIsGlobalActive; break;
+            case 7: pValues[nProp] <<= nOutlineTracking; break;
         }
     }
     PutProperties(aNames, aValues);

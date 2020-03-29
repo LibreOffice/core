@@ -5633,6 +5633,12 @@
         </info>
         <value>0</value>
       </prop>
+      <prop oor:name="OutlineTracking" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Specifies outline tracking mode.</desc>
+        </info>
+        <value>1</value>
+      </prop>
     </group>
     <group oor:name="Envelope">
       <info>
