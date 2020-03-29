@@ -34,7 +34,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/xdash.hxx>
 
-#include <basegfx/matrix/Matrix.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 // Prevent workdir/UnpackedTarball/pdfium/public/fpdfview.h from including windows.h in a way that
 // it will define e.g. Yield as a macro:
@@ -92,7 +92,7 @@ class ImpSdrPdfImport final
     double mdPageWidthPts;
     double mdPageHeightPts;
     /// The current transformation matrix, typically used with Form objects.
-    Matrix mCurMatrix;
+    basegfx::B2DHomMatrix maCurrentMatrix;
 
     /// Correct the vertical coordinate to start at the top.
     /// PDF coordinate system has origin at the bottom right.
