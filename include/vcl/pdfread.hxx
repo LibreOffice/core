@@ -39,13 +39,10 @@ VCL_DLLPUBLIC size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vecto
 
 VCL_DLLPUBLIC bool ImportPDF(SvStream& rStream, Graphic& rGraphic);
 
-/// Import PDF as Graphic images (1 per page), all unloaded.
-/// Since Graphic is unloaded, we need to return the page size (in pixels) separately.
-/// Does not set rPdfData if no conversion is done.
+/// Import PDF as Graphic images (1 per page), but not loaded yet.
 /// Returns the number of pages read.
 VCL_DLLPUBLIC size_t ImportPDFUnloaded(const OUString& rURL,
-                                       std::vector<std::pair<Graphic, Size>>& rGraphics,
-                                       const double fResolutionDPI = 96.);
+                                       std::vector<std::pair<Graphic, Size>>& rGraphics);
 }
 
 #endif // INCLUDED_VCL_SOURCE_FILTER_IPDF_PDFREAD_HXX
