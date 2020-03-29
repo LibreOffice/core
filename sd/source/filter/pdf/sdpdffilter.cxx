@@ -41,11 +41,8 @@ bool SdPdfFilter::Import()
     const OUString aFileName(
         mrMedium.GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::NONE));
 
-    // Rendering resolution.
-    const double dResolutionDPI = 96.0;
-
     std::vector<std::pair<Graphic, Size>> aGraphics;
-    if (vcl::ImportPDFUnloaded(aFileName, aGraphics, dResolutionDPI) == 0)
+    if (vcl::ImportPDFUnloaded(aFileName, aGraphics) == 0)
         return false;
 
     // Add as many pages as we need up-front.
@@ -58,26 +55,20 @@ bool SdPdfFilter::Import()
     for (const std::pair<Graphic, Size>& aPair : aGraphics)
     {
         const Graphic& rGraphic = aPair.first;
-        const Size& aSize = aPair.second;
+        const Size& aSizeHMM = aPair.second;
 
         const sal_Int32 nPageNumber = rGraphic.getPageNumber();
         assert(nPageNumber >= 0 && o3tl::make_unsigned(nPageNumber) < aGraphics.size());
 
         // Create the page and insert the Graphic.
         SdPage* pPage = mrDocument.GetSdPage(nPageNumber, PageKind::Standard);
-        Size aGraphicSize(OutputDevice::LogicToLogic(aSize, rGraphic.GetPrefMapMode(),
-                                                     MapMode(MapUnit::Map100thMM)));
-
-        // Resize to original size based on 72 dpi to preserve page size.
-        aGraphicSize = Size(aGraphicSize.Width() * 72.0 / dResolutionDPI,
-                            aGraphicSize.Height() * 72.0 / dResolutionDPI);
 
         // Make the page size match the rendered image.
-        pPage->SetSize(aGraphicSize);
+        pPage->SetSize(aSizeHMM);
         Point aPosition(0, 0);
 
         SdrGrafObj* pSdrGrafObj = new SdrGrafObj(pPage->getSdrModelFromSdrPage(), rGraphic,
-                                                 tools::Rectangle(aPosition, aGraphicSize));
+                                                 tools::Rectangle(aPosition, aSizeHMM));
         pPage->InsertObject(pSdrGrafObj);
     }
 

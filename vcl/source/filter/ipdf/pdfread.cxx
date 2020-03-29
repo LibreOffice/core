@@ -234,8 +234,7 @@ bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
     return true;
 }
 
-size_t ImportPDFUnloaded(const OUString& rURL, std::vector<std::pair<Graphic, Size>>& rGraphics,
-                         const double fResolutionDPI)
+size_t ImportPDFUnloaded(const OUString& rURL, std::vector<std::pair<Graphic, Size>>& rGraphics)
 {
 #if HAVE_FEATURE_PDFIUM
     std::unique_ptr<SvStream> xStream(
@@ -279,9 +278,13 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<std::pair<Graphic, Si
         if (FPDF_GetPageSizeByIndex(pPdfDocument, nPageIndex, &fPageWidth, &fPageHeight) == 0)
             continue;
 
-        // Returned unit is points, convert that to pixel.
-        const size_t nPageWidth = pointToPixel(fPageWidth, fResolutionDPI);
-        const size_t nPageHeight = pointToPixel(fPageHeight, fResolutionDPI);
+        // Returned unit is points, convert that to 100th mm (hmm).
+        // 1 pt = 20 twips, 1 twip = 1.7638888888888889 hmm
+        // TODO: use some conversion class for that
+        constexpr double pointToHMMconversionRatio = 20.0 * 1.7638888888888889;
+
+        long nPageWidth = fPageWidth * pointToHMMconversionRatio;
+        long nPageHeight = fPageHeight * pointToHMMconversionRatio;
 
         auto aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(
             aPdfDataArray, OUString(), VectorGraphicDataType::Pdf, nPageIndex);
