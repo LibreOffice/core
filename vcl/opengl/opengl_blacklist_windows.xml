@@ -47,6 +47,10 @@
         <entry os="10" vendor="intel" compare="between_inclusive_start" minVersion="26.20.100.6861" maxVersion="26.20.100.7584"><!-- tdf#125516 -->
             <device id="all"/>
         </entry>
+        <!-- tdf#131221 -->
+        <entry os="10" vendor="intel">
+            <device id="0x5917"/>
+        </entry>
         <entry os="all" vendor="amd" compare="less" version="15.200.1062.1004"> <!-- 150.200 -->
             <device id="all"/>
         </entry>
