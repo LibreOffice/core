@@ -508,7 +508,7 @@ public:
             CPPUNIT_ASSERT_DOUBLES_EQUAL(aNewMatrix.get(0, 2), aNewB2DMatrix.get(0, 2), 1E-12);
             CPPUNIT_ASSERT_DOUBLES_EQUAL(aNewMatrix.get(1, 2), aNewB2DMatrix.get(1, 2), 1E-12);
 
-            aMatrix.Concatinate(aNewMatrix);
+            aMatrix.Concatenate(aNewMatrix);
             CPPUNIT_ASSERT_DOUBLES_EQUAL(30, aMatrix.get(0, 0), 1E-12);
             CPPUNIT_ASSERT_DOUBLES_EQUAL(40, aMatrix.get(1, 0), 1E-12);
             CPPUNIT_ASSERT_DOUBLES_EQUAL(34, aMatrix.get(0, 1), 1E-12);

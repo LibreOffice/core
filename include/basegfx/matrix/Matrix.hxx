@@ -84,7 +84,7 @@ public:
     double f() const { return mf; }
 
     /// Multiply this * other.
-    void Concatinate(const Matrix& other)
+    void Concatenate(const Matrix& other)
     {
         double newA = ma * other.ma + mb * other.mc;
         double newB = ma * other.mb + mb * other.md;

@@ -1028,7 +1028,7 @@ void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectI
     FS_MATRIX matrix;
     FPDFPath_GetMatrix(pPageObject, &matrix);
     Matrix aPathMatrix(matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f);
-    aPathMatrix.Concatinate(mCurMatrix);
+    aPathMatrix.Concatenate(mCurMatrix);
 
     basegfx::B2DPolyPolygon aPolyPoly;
     basegfx::B2DPolygon aPoly;
