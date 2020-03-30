@@ -1640,6 +1640,27 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
 
 }
 
+namespace
+{
+    bool lcl_getColorFromStr(const SfxItemSet *pArgs, Color &rColor)
+    {
+        const SfxPoolItem* pColorStringItem = nullptr;
+
+        if (pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pColorStringItem) && pColorStringItem)
+        {
+            OUString sColor;
+            sColor = static_cast<const SfxStringItem*>(pColorStringItem)->GetValue();
+
+            if (sColor == "transparent")
+                rColor = COL_TRANSPARENT;
+            else
+                rColor = Color(sColor.toInt32(16));
+            return true;
+        }
+        return false;
+    }
+}
+
 void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
 {
     ScTabViewShell*     pTabViewShell = GetViewData()->GetViewShell();
@@ -1783,16 +1804,9 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             case SID_ATTR_CHAR_COLOR:
             case SID_SCATTR_PROTECTION :
             {
-                const SfxPoolItem* pColorStringItem = nullptr;
-                if ( SfxItemState::SET == pNewAttrs->GetItemState( SID_ATTR_COLOR_STR, false, &pColorStringItem ) )
+                Color aColor;
+                if (lcl_getColorFromStr(pNewAttrs, aColor))
                 {
-                    Color aColor;
-                    OUString sColor = static_cast<const SfxStringItem*>(pColorStringItem)->GetValue();
-                    if ( sColor == "transparent" )
-                        aColor = COL_TRANSPARENT;
-                    else
-                        aColor = Color( sColor.toInt32( 16 ) );
-
                     SvxColorItem aColorItem(pTabViewShell->GetSelectionPattern()->
                                                 GetItem( ATTR_FONT_COLOR ) );
                     aColorItem.SetValue(aColor);
@@ -1868,18 +1882,20 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             case SID_FRAME_LINECOLOR:
                 {
                     ::editeng::SvxBorderLine*  pDefLine = pTabViewShell->GetDefaultFrameLine();
-                    const Color&    rColor = pNewAttrs->Get( SID_FRAME_LINECOLOR ).GetValue();
+
+                    Color aColor;
+                    if (!lcl_getColorFromStr(pNewAttrs, aColor))
+                        aColor = pNewAttrs->Get( SID_FRAME_LINECOLOR ).GetValue();
 
                     // Update default line
                     if ( pDefLine )
                     {
-                        pDefLine->SetColor( rColor );
+                        pDefLine->SetColor( aColor );
                         pTabViewShell->SetSelectionFrameLines( pDefLine, true );
                     }
                     else
                     {
-                        ::editeng::SvxBorderLine aDefLine( &rColor, 20,
-                                SvxBorderLineStyle::SOLID );
+                        ::editeng::SvxBorderLine aDefLine( &aColor, 20, SvxBorderLineStyle::SOLID );
                         pTabViewShell->SetDefaultFrameLine( &aDefLine );
                         pTabViewShell->SetSelectionFrameLines( &aDefLine, false );
                     }
@@ -1991,27 +2007,16 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             // ATTR_BACKGROUND (=SID_ATTR_BRUSH) has to be set to two IDs:
             case SID_BACKGROUND_COLOR:
                 {
-                    const SfxPoolItem* pColorStringItem = nullptr;
                     Color aColor;
 
-                    if ( SfxItemState::SET == pNewAttrs->GetItemState( SID_ATTR_COLOR_STR, false, &pColorStringItem ) )
-                    {
-                        OUString sColor = static_cast<const SfxStringItem*>(pColorStringItem)->GetValue();
-                        if ( sColor == "transparent" )
-                            aColor = COL_TRANSPARENT;
-                        else
-                            aColor = Color( sColor.toInt32( 16 ) );
-                    }
-                    else
+                    if (!lcl_getColorFromStr(pNewAttrs, aColor))
                     {
                         const SvxColorItem&  rNewColorItem = pNewAttrs->Get( SID_BACKGROUND_COLOR );
                         aColor = rNewColorItem.GetValue();
                     }
 
-                    SvxBrushItem        aBrushItem(
-                                            pTabViewShell->GetSelectionPattern()->
-                                                GetItem( ATTR_BACKGROUND ) );
-
+                    SvxBrushItem aBrushItem(
+                        pTabViewShell->GetSelectionPattern()->GetItem( ATTR_BACKGROUND ) );
                     aBrushItem.SetColor( aColor );
 
                     pTabViewShell->ApplyAttr( aBrushItem, false );
