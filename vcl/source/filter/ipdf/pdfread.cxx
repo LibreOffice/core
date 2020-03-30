@@ -305,7 +305,6 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<std::pair<Graphic, Si
 #else
     (void)rURL;
     (void)rGraphics;
-    (void)fResolutionDPI;
     return 0;
 #endif // HAVE_FEATURE_PDFIUM
 }
