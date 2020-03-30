@@ -2622,7 +2622,7 @@ void ScExternalRefManager::maybeLinkExternalFile( sal_uInt16 nFileId, bool bDefe
     }
     ScExternalRefLink* pLink = new ScExternalRefLink(mpDoc, nFileId);
     OSL_ENSURE(pFileName, "ScExternalRefManager::maybeLinkExternalFile: file name pointer is NULL");
-    pLinkMgr->InsertFileLink(*pLink, OBJECT_CLIENT_FILE, *pFileName,
+    pLinkMgr->InsertFileLink(*pLink, sfx2::SvBaseLinkObjectType::ClientFile, *pFileName,
             (aFilter.isEmpty() && bDeferFilterDetection ? nullptr : &aFilter));
 
     pLink->SetDoReferesh(false);

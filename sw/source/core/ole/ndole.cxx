@@ -614,7 +614,7 @@ void SwOLENode::CheckFileLink_Impl()
                     // this is a file link so the model link manager should handle it
                     mpObjectLink = new SwEmbedObjectLink( this );
                     maLinkURL = aLinkURL;
-                    GetDoc()->getIDocumentLinksAdministration().GetLinkManager().InsertFileLink( *mpObjectLink, OBJECT_CLIENT_OLE, aLinkURL );
+                    GetDoc()->getIDocumentLinksAdministration().GetLinkManager().InsertFileLink( *mpObjectLink, sfx2::SvBaseLinkObjectType::ClientOle, aLinkURL );
                     mpObjectLink->Connect();
                 }
             }

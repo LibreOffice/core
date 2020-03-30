@@ -257,7 +257,7 @@ void SdrTextObj::ImpRegisterLink()
     sfx2::LinkManager* pLinkManager(getSdrModelFromSdrObject().GetLinkManager());
     if (pLinkManager!=nullptr && pData!=nullptr && pData->pLink==nullptr) { // don't register twice
         pData->pLink = new ImpSdrObjTextLink(this);
-        pLinkManager->InsertFileLink(*pData->pLink,OBJECT_CLIENT_FILE,pData->aFileName,
+        pLinkManager->InsertFileLink(*pData->pLink,sfx2::SvBaseLinkObjectType::ClientFile,pData->aFileName,
                                      !pData->aFilterName.isEmpty() ?
                                       &pData->aFilterName : nullptr);
     }

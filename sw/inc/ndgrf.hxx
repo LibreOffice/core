@@ -162,12 +162,12 @@ inline const SwGrfNode   *SwNode::GetGrfNode() const
 
 inline bool SwGrfNode::IsLinkedFile() const
 {
-    return mxLink.is() && OBJECT_CLIENT_GRF == mxLink->GetObjType();
+    return mxLink.is() && sfx2::SvBaseLinkObjectType::ClientGraphic == mxLink->GetObjType();
 }
 
 inline bool SwGrfNode::IsLinkedDDE() const
 {
-    return mxLink.is() && OBJECT_CLIENT_DDE == mxLink->GetObjType();
+    return mxLink.is() && sfx2::SvBaseLinkObjectType::ClientDde == mxLink->GetObjType();
 }
 
 #endif

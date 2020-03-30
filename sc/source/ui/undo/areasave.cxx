@@ -68,7 +68,7 @@ void ScAreaLinkSaver::InsertNewLink( ScDocument* pDoc )
         pLink->SetInCreate( true );
         pLink->SetDestArea( aDestArea );
         OUString aTmp1(aFilterName), aTmp2(aSourceArea);
-        pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aFileName, &aTmp1, &aTmp2 );
+        pLinkManager->InsertFileLink( *pLink, sfx2::SvBaseLinkObjectType::ClientFile, aFileName, &aTmp1, &aTmp2 );
         pLink->Update();
         pLink->SetInCreate( false );
     }

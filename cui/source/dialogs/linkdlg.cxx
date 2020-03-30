@@ -41,8 +41,6 @@
 #include <dialmgr.hxx>
 
 
-#define FILEOBJECT ( OBJECT_CLIENT_FILE & ~OBJECT_CLIENT_SO )
-
 using namespace sfx2;
 using namespace ::com::sun::star;
 
@@ -149,8 +147,8 @@ void SvBaseLinksDlg::LinksSelectHdl(weld::TreeView* pSvTabListBox)
         // possibly deselect old entries in case of multi-selection
         int nSelEntry = pSvTabListBox->get_selected_index();
         SvBaseLink* pLink = reinterpret_cast<SvBaseLink*>(pSvTabListBox->get_id(nSelEntry).toInt64());
-        sal_uInt16 nObjectType = pLink->GetObjType();
-        if((OBJECT_CLIENT_FILE & nObjectType) != OBJECT_CLIENT_FILE)
+        SvBaseLinkObjectType nObjectType = pLink->GetObjType();
+        if(!isClientFileType(nObjectType))
         {
             pSvTabListBox->unselect_all();
             pSvTabListBox->select(nSelEntry);
@@ -164,7 +162,7 @@ void SvBaseLinksDlg::LinksSelectHdl(weld::TreeView* pSvTabListBox)
                 DBG_ASSERT(pLink, "Where is the Link?");
                 if (!pLink)
                     continue;
-                if( (OBJECT_CLIENT_FILE & pLink->GetObjType()) != OBJECT_CLIENT_FILE )
+                if( !isClientFileType(pLink->GetObjType()) )
                     pSvTabListBox->unselect(nEntry);
             }
         }
@@ -186,12 +184,12 @@ void SvBaseLinksDlg::LinksSelectHdl(weld::TreeView* pSvTabListBox)
         OUString sType, sLink;
         OUString *pLinkNm = &sLink, *pFilter = nullptr;
 
-        if( FILEOBJECT & pLink->GetObjType() )
+        if( isClientType(pLink->GetObjType()) )
         {
             m_xRbAutomatic->set_sensitive(false);
             m_xRbManual->set_active(true);
             m_xRbManual->set_sensitive(false);
-            if( OBJECT_CLIENT_GRF == pLink->GetObjType() )
+            if( SvBaseLinkObjectType::ClientGraphic == pLink->GetObjType() )
             {
                 pLinkNm = nullptr;
                 pFilter = &sLink;
@@ -228,7 +226,7 @@ IMPL_LINK_NOARG( SvBaseLinksDlg, AutomaticClickHdl, weld::Button&, void )
 {
     int nPos;
     SvBaseLink* pLink = GetSelEntry( &nPos );
-    if( pLink && !( FILEOBJECT & pLink->GetObjType() ) &&
+    if( pLink && !isClientType( pLink->GetObjType() ) &&
         SfxLinkUpdateMode::ALWAYS != pLink->GetUpdateMode() )
         SetType( *pLink, nPos, SfxLinkUpdateMode::ALWAYS );
 }
@@ -237,7 +235,7 @@ IMPL_LINK_NOARG( SvBaseLinksDlg, ManualClickHdl, weld::Button&, void )
 {
     int nPos;
     SvBaseLink* pLink = GetSelEntry( &nPos );
-    if( pLink && !( FILEOBJECT & pLink->GetObjType() ) &&
+    if( pLink && !isClientType( pLink->GetObjType() ) &&
         SfxLinkUpdateMode::ONCALL != pLink->GetUpdateMode())
         SetType( *pLink, nPos, SfxLinkUpdateMode::ONCALL );
 }
@@ -371,7 +369,7 @@ IMPL_LINK_NOARG( SvBaseLinksDlg, BreakLinkClickHdl, weld::Button&, void )
             m_xTbLinks->remove(nPos);
 
             // close object, if it's still existing
-            bool bNewLnkMgr = OBJECT_CLIENT_FILE == xLink->GetObjType();
+            bool bNewLnkMgr = SvBaseLinkObjectType::ClientFile == xLink->GetObjType();
 
             // tell the link that it will be resolved!
             xLink->Closed();
@@ -578,7 +576,7 @@ void SvBaseLinksDlg::InsertEntry(const SvBaseLink& rLink, int nPos, bool bSelect
     m_xTbLinks->insert(nPos);
     m_xTbLinks->set_text(nPos, aTxt, 0);
     m_xTbLinks->set_id(nPos, OUString::number(reinterpret_cast<sal_Int64>(&rLink)));
-    if( OBJECT_CLIENT_GRF == rLink.GetObjType() )
+    if( SvBaseLinkObjectType::ClientGraphic == rLink.GetObjType() )
         m_xTbLinks->set_text(nPos, sFilter, 1);
     else
         m_xTbLinks->set_text(nPos, sLinkNm, 1);
