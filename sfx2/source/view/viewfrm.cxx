@@ -278,6 +278,11 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             if( !pSh || !pSh->HasName() || !(pSh->Get_Impl()->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT ))
                 break;
 
+
+            SfxViewShell* pViewSh = GetViewShell();
+            if (pViewSh && pViewSh->isEditDocLocked())
+                break;
+
             // Only change read-only UI and remove info bar when we succeed
             struct ReadOnlyUIGuard
             {
@@ -863,6 +868,7 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
                 const SfxShell *pFSh;
                 if ( !pSh->HasName() ||
                      !( pSh->Get_Impl()->nLoadedFlags &  SfxLoadedFlags::MAINDOCUMENT ) ||
+                     (GetViewShell() && GetViewShell()->isEditDocLocked()) ||
                      ( pSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED &&
                        ( !(pVSh = pSh->GetViewShell())  ||
                          !(pFSh = pVSh->GetFormShell()) ||
@@ -1300,11 +1306,18 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                             pInfoBar->addButton(xSignButton);
                         }
 
-                        VclPtrInstance<PushButton> xBtn(&GetWindow());
-                        xBtn->SetText(SfxResId(STR_READONLY_EDIT));
-                        xBtn->SetSizePixel(xBtn->GetOptimalSize());
-                        xBtn->SetClickHdl(LINK(this, SfxViewFrame, SwitchReadOnlyHandler));
-                        pInfoBar->addButton(xBtn);
+                        bool showEditDocumentButton = true;
+                        if (m_xObjSh->GetViewShell() && m_xObjSh->GetViewShell()->isEditDocLocked())
+                            showEditDocumentButton = false;
+
+                        if (showEditDocumentButton)
+                        {
+                            VclPtrInstance<PushButton> xBtn(&GetWindow());
+                            xBtn->SetText(SfxResId(STR_READONLY_EDIT));
+                            xBtn->SetSizePixel(xBtn->GetOptimalSize());
+                            xBtn->SetClickHdl(LINK(this, SfxViewFrame, SwitchReadOnlyHandler));
+                            pInfoBar->addButton(xBtn);
+                        }
                     }
                 }
 
