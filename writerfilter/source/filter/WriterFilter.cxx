@@ -44,6 +44,7 @@
 #include <rtl/ref.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
+#include <comphelper/scopeguard.hxx>
 
 using namespace ::com::sun::star;
 
@@ -157,6 +158,9 @@ sal_Bool WriterFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescri
     {
         uno::Reference<beans::XPropertySet> const xDocProps(m_xDstDoc, uno::UNO_QUERY);
         xDocProps->setPropertyValue("UndocumentedWriterfilterHack", uno::makeAny(true));
+        comphelper::ScopeGuard g([xDocProps] {
+            xDocProps->setPropertyValue("UndocumentedWriterfilterHack", uno::makeAny(false));
+        });
         utl::MediaDescriptor aMediaDesc(rDescriptor);
         bool bRepairStorage = aMediaDesc.getUnpackedValueOrDefault("RepairPackage", false);
         bool bSkipImages
@@ -283,7 +287,6 @@ sal_Bool WriterFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescri
         pStream.clear();
 
         // note: pStream.clear calls RemoveLastParagraph()
-        xDocProps->setPropertyValue("UndocumentedWriterfilterHack", uno::makeAny(false));
 
         return true;
     }

@@ -35,6 +35,7 @@
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <comphelper/scopeguard.hxx>
 
 #include <dmapper/DomainMapperFactory.hxx>
 #include <rtftok/RTFDocument.hxx>
@@ -102,6 +103,13 @@ sal_Bool RtfFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescripto
         xDocProps.set(m_xDstDoc, uno::UNO_QUERY);
         xDocProps->setPropertyValue("UndocumentedWriterfilterHack", uno::makeAny(true));
     }
+    comphelper::ScopeGuard g([xDocProps] {
+        if (xDocProps.is()) // not in cppunittest?
+        {
+            // note: pStream.clear calls RemoveLastParagraph()
+            xDocProps->setPropertyValue("UndocumentedWriterfilterHack", uno::makeAny(false));
+        }
+    });
 
     try
     {
@@ -164,12 +172,6 @@ sal_Bool RtfFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescripto
     catch (const uno::Exception&)
     {
         TOOLS_INFO_EXCEPTION("writerfilter", "Exception caught");
-    }
-
-    if (m_xDstDoc.is()) // not in cppunittest?
-    {
-        // note: pStream.clear calls RemoveLastParagraph()
-        xDocProps->setPropertyValue("UndocumentedWriterfilterHack", uno::makeAny(false));
     }
 
     if (xStatusIndicator.is())
