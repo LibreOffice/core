@@ -50,6 +50,7 @@
 #include <config_features.h>
 
 #include <lib/init.hxx>
+#include <svx/svxids.hrc>
 
 using namespace com::sun::star;
 using namespace desktop;
@@ -171,6 +172,7 @@ public:
     void testDialogPaste();
     void testCalcSaveAs();
     void testDialogInput();
+    void testControlState();
     void testABI();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
@@ -227,6 +229,7 @@ public:
     CPPUNIT_TEST(testDialogPaste);
     CPPUNIT_TEST(testCalcSaveAs);
     CPPUNIT_TEST(testDialogInput);
+    CPPUNIT_TEST(testControlState);
     CPPUNIT_TEST(testABI);
     CPPUNIT_TEST_SUITE_END();
 
@@ -2770,6 +2773,26 @@ void DesktopLOKTest::testSpellcheckerMultiView()
 
     // We should survive the destroyed view.
     CPPUNIT_ASSERT_EQUAL(1, pDocument->m_pDocumentClass->getViewsCount(pDocument));
+}
+
+void DesktopLOKTest::testControlState()
+{
+    loadDoc("blank_text.odt");
+    comphelper::dispatchCommand(".uno:BasicShapes.hexagon", uno::Sequence<beans::PropertyValue>());
+    Scheduler::ProcessEventsToIdle();
+
+    boost::property_tree::ptree aState;
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    pViewShell->GetViewFrame()->GetBindings().Update();
+    Scheduler::ProcessEventsToIdle();
+
+    pViewShell->GetViewFrame()->GetBindings().QueryControlState(SID_ATTR_TRANSFORM_WIDTH, aState);
+    {
+        std::ostringstream oss;
+        boost::property_tree::write_json(oss, aState);
+        std::cerr << "DEBUG aState: " << oss.str() << std::endl;
+    }
+    CPPUNIT_ASSERT(!aState.empty());
 }
 
 namespace {
