@@ -1860,7 +1860,7 @@ dbaccess/res/one_right.png cmd/sc_nextrecord.png
 dbaccess/res/jo01.png dbaccess/res/pkey.png
 res/queries_32.png dbaccess/res/queries_32.png
 
-dbaccess/res/reports_16.png dbaccess/res/report_16.png
+dbaccess/res/report_16.png cmd/sc_dbviewreports.png
 res/reports_32.png dbaccess/res/reports_32.png
 
 dbaccess/res/sc036.png cmd/sc_dbreportedit.png
