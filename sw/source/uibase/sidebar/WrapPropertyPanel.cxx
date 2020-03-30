@@ -44,6 +44,7 @@ const char UNO_WRAPRIGHT[] = ".uno:WrapRight";
 const char UNO_WRAPON[] = ".uno:WrapOn";
 const char UNO_WRAPTHROUGH[] = ".uno:WrapThrough";
 const char UNO_WRAPIDEAL[] = ".uno:WrapIdeal";
+const char UNO_WRAPTHROUGHTRANSPTGL[] = ".uno:WrapThroughTransparencyToggle";
 
 namespace sw { namespace sidebar {
 
@@ -85,6 +86,7 @@ WrapPropertyPanel::WrapPropertyPanel(
     , maSwWrapRightControl(FN_FRAME_WRAP_RIGHT, *pBindings, *this)
     , maSwWrapParallelControl(FN_FRAME_WRAP_LEFT, *pBindings, *this)
     , maSwWrapThroughControl(FN_FRAME_WRAPTHRU, *pBindings, *this)
+    , maSwWrapThroughTranspTglControl(FN_FRAME_WRAPTHRU_TOGGLE, *pBindings, *this)
     , maSwWrapIdealControl(FN_FRAME_WRAP_IDEAL, *pBindings, *this)
     , maSwEnableContourControl(FN_FRAME_WRAP_CONTOUR, *pBindings, *this)
     , maSwLRSpacingControl(SID_ATTR_LRSPACE, *pBindings, *this)
@@ -95,6 +97,7 @@ WrapPropertyPanel::WrapPropertyPanel(
     get(mpRBWrapRight, "buttonafter");
     get(mpRBWrapParallel, "buttonparallel");
     get(mpRBWrapThrough, "buttonthrough");
+    get(mpRBWrapThroughTranspTgl, "buttonthroughtransptgl");
     get(mpRBIdealWrap, "buttonoptimal");
     get(mpEnableContour, "enablecontour");
     get(mpEditContour, "editcontour");
@@ -118,6 +121,7 @@ void WrapPropertyPanel::dispose()
     mpRBWrapRight.clear();
     mpRBWrapParallel.clear();
     mpRBWrapThrough.clear();
+    mpRBWrapThroughTranspTgl.clear();
     mpRBIdealWrap.clear();
     mpEnableContour.clear();
     mpEditContour.clear();
@@ -129,6 +133,7 @@ void WrapPropertyPanel::dispose()
     maSwWrapRightControl.dispose();
     maSwWrapParallelControl.dispose();
     maSwWrapThroughControl.dispose();
+    maSwWrapThroughTranspTglControl.dispose();
     maSwWrapIdealControl.dispose();
     maSwEnableContourControl.dispose();
     maSwLRSpacingControl.dispose();
@@ -145,6 +150,7 @@ void WrapPropertyPanel::Initialize()
     mpRBWrapRight->SetClickHdl(aLink);
     mpRBWrapParallel->SetClickHdl(aLink);
     mpRBWrapThrough->SetClickHdl(aLink);
+    mpRBWrapThroughTranspTgl->SetClickHdl(aLink);
     mpRBIdealWrap->SetClickHdl(aLink);
 
     Link<Button*,void> EditContourLink = LINK(this, WrapPropertyPanel, EditContourHdl);
@@ -173,6 +179,7 @@ void WrapPropertyPanel::Initialize()
     }
     mpRBWrapParallel->SetModeRadioImage(vcl::CommandInfoProvider::GetImageForCommand(UNO_WRAPON, mxFrame));
     mpRBWrapThrough->SetModeRadioImage(vcl::CommandInfoProvider::GetImageForCommand(UNO_WRAPTHROUGH, mxFrame));
+    mpRBWrapThroughTranspTgl->SetModeRadioImage(vcl::CommandInfoProvider::GetImageForCommand(UNO_WRAPTHROUGHTRANSPTGL, mxFrame));
     mpRBIdealWrap->SetModeRadioImage(vcl::CommandInfoProvider::GetImageForCommand(UNO_WRAPIDEAL, mxFrame));
 
     aCustomEntry = mpCustomEntry->GetText();
@@ -182,6 +189,7 @@ void WrapPropertyPanel::Initialize()
     mpBindings->Update( FN_FRAME_WRAP_RIGHT );
     mpBindings->Update( FN_FRAME_WRAP_LEFT );
     mpBindings->Update( FN_FRAME_WRAPTHRU );
+    mpBindings->Update( FN_FRAME_WRAPTHRU_TOGGLE );
     mpBindings->Update( FN_FRAME_WRAP_IDEAL );
     mpBindings->Update( FN_FRAME_WRAP_CONTOUR );
     mpBindings->Update( SID_ATTR_LRSPACE );
@@ -257,6 +265,10 @@ IMPL_LINK_NOARG(WrapPropertyPanel, WrapTypeHdl, Button*, void)
     {
         nSlot = FN_FRAME_WRAPTHRU;
     }
+    else if( mpRBWrapThroughTranspTgl->IsChecked() )
+    {
+        nSlot = FN_FRAME_WRAPTHRU_TOGGLE;
+    }
     else if( mpRBIdealWrap->IsChecked() )
     {
         nSlot = FN_FRAME_WRAP_IDEAL;
@@ -300,6 +312,7 @@ void WrapPropertyPanel::NotifyItemUpdate(
         mpRBWrapRight->Enable();
         mpRBWrapParallel->Enable();
         mpRBWrapThrough->Enable();
+        mpRBWrapThroughTranspTgl->Enable();
         mpRBIdealWrap->Enable();
         mpEnableContour->Enable();
 
@@ -314,6 +327,9 @@ void WrapPropertyPanel::NotifyItemUpdate(
             break;
         case FN_FRAME_WRAPTHRU:
             mpRBWrapThrough->Check( pBoolItem->GetValue() );
+            break;
+        case FN_FRAME_WRAPTHRU_TOGGLE:
+            mpRBWrapThroughTranspTgl->Check( pBoolItem->GetValue() );
             break;
         case FN_FRAME_WRAP_IDEAL:
             mpRBIdealWrap->Check( pBoolItem->GetValue() );

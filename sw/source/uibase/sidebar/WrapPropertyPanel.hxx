@@ -63,6 +63,7 @@ namespace sw { namespace sidebar {
         VclPtr<RadioButton> mpRBWrapRight;
         VclPtr<RadioButton> mpRBWrapParallel;
         VclPtr<RadioButton> mpRBWrapThrough;
+        VclPtr<RadioButton> mpRBWrapThroughTranspTgl;
         VclPtr<RadioButton> mpRBIdealWrap;
         VclPtr<Button>      mpEditContour;
         VclPtr<CheckBox> mpEnableContour;
@@ -84,6 +85,7 @@ namespace sw { namespace sidebar {
         ::sfx2::sidebar::ControllerItem maSwWrapRightControl;
         ::sfx2::sidebar::ControllerItem maSwWrapParallelControl;
         ::sfx2::sidebar::ControllerItem maSwWrapThroughControl;
+        ::sfx2::sidebar::ControllerItem maSwWrapThroughTranspTglControl;
         ::sfx2::sidebar::ControllerItem maSwWrapIdealControl;
         ::sfx2::sidebar::ControllerItem maSwEnableContourControl;
         ::sfx2::sidebar::ControllerItem maSwLRSpacingControl;
