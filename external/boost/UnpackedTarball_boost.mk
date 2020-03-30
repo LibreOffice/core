@@ -37,6 +37,8 @@ boost_patches += gcc9.patch.0
 
 boost_patches += msvc2017.patch.0
 
+# boost/format/alt_sstream_impl.hpp part covered by <https://github.com/boostorg/format/pull/70>
+# "Removed deprecated std::allocator<void>":
 boost_patches += c++20-allocator.patch.0
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
