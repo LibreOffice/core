@@ -5483,7 +5483,7 @@ SfxVoidItem ArrowsToolbox SID_DRAWTBX_ARROWS
 ]
 
 SvxColorItem FrameLineColor SID_FRAME_LINECOLOR
-
+(SfxStringItem Color SID_ATTR_COLOR_STR, SvxColorItem FrameLineColor SID_FRAME_LINECOLOR)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
