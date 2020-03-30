@@ -171,7 +171,6 @@ bool EffectRewinder::rewind (
 
     // Abort (and skip over the rest of) any currently active animation.
     mrUserEventQueue.callSkipEffectEventHandler();
-    mrEventQueue.forceEmpty();
 
     const int nSkipCount (mnMainSequenceEffectCount - 1);
     if (nSkipCount < 0)
