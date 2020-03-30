@@ -765,13 +765,7 @@ size_t SdrObjList::GetObjCount() const
 
 SdrObject* SdrObjList::GetObj(size_t nNum) const
 {
-    if (nNum >= maList.size())
-    {
-        assert(nNum<maList.size());
-        return nullptr;
-    }
-    else
-        return maList[nNum];
+    return maList[nNum];
 }
 
 
