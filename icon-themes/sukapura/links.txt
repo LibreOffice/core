@@ -1857,7 +1857,6 @@ dbaccess/res/db.png cmd/sc_changedatabasefield.png
 dbaccess/res/exerror.png cmd/sc_cancel.png
 dbaccess/res/exinfo.png cmd/sc_helpindex.png
 dbaccess/res/form_16.png cmd/sc_dbviewforms.png
-dbaccess/res/forms_16.png cmd/sc_dbviewforms.png
 dbaccess/res/forms_32.png cmd/32/dbviewforms.png
 dbaccess/res/jo01.png dbaccess/res/pkey.png
 dbaccess/res/lc036.png cmd/lc_dbnewreport.png
