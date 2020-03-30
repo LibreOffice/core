@@ -106,14 +106,12 @@ ViewContact* ViewContactOfSdrObj::GetParentContact() const
 void ViewContactOfSdrObj::ActionChanged()
 {
     // look for own changes
-    if(dynamic_cast<const SdrTextObj*>( &GetSdrObject() ) != nullptr)
+    if (SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(&GetSdrObject()))
     {
-        SdrTextObj& rTextObj = static_cast<SdrTextObj&>(GetSdrObject());
-
-        if(rTextObj.GetTextAniKind() != meRememberedAnimationKind)
+        if (pTextObj->GetTextAniKind() != meRememberedAnimationKind)
         {
             // #i38135# now remember new type
-            meRememberedAnimationKind = rTextObj.GetTextAniKind();
+            meRememberedAnimationKind = pTextObj->GetTextAniKind();
         }
     }
 
