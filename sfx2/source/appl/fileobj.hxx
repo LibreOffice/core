@@ -27,6 +27,8 @@ class Graphic;
 struct ImplSVEvent;
 namespace sfx2 { class FileDialogHelper; }
 
+enum class SvFileObjectType;
+
 class SvFileObject : public sfx2::SvLinkSource
 {
     OUString                    sFileNm;
@@ -37,7 +39,7 @@ class SvFileObject : public sfx2::SvLinkSource
     ImplSVEvent*                nPostUserEventId;
     tools::SvRef<SfxMedium>     mxDelMed;
 
-    sal_uInt8 nType;
+    SvFileObjectType nType;
 
     bool bLoadAgain : 1;
     bool bSynchron : 1;
