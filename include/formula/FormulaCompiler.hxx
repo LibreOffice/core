@@ -221,6 +221,7 @@ public:
     OpCode GetEnglishOpCode( const OUString& rName ) const;
 
     FormulaError GetErrorConstant( const OUString& rName ) const;
+    void AppendErrorConstant( OUStringBuffer& rBuffer, FormulaError nError ) const;
 
     void EnableJumpCommandReorder( bool bEnable );
     void EnableStopOnError( bool bEnable );
@@ -304,8 +305,6 @@ protected:
     virtual void CreateStringFromMatrix( OUStringBuffer& rBuffer, const FormulaToken* pToken ) const;
     virtual void CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaToken* pToken ) const;
     virtual void LocalizeString( OUString& rName ) const;   // modify rName - input: exact name
-
-    void AppendErrorConstant( OUStringBuffer& rBuffer, FormulaError nError ) const;
 
     bool   GetToken();
     OpCode NextToken();
