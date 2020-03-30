@@ -19,7 +19,6 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_TABLEDESIGN_FIELDDESCGENWIN_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_TABLEDESIGN_FIELDDESCGENWIN_HXX
 
-#include <vcl/idle.hxx>
 #include <vcl/tabpage.hxx>
 #include <IClipBoardTest.hxx>
 
@@ -34,10 +33,6 @@ namespace dbaui
     {
 
         VclPtr<OTableFieldControl>  m_pFieldControl;
-        Idle  maLayoutIdle;
-
-        DECL_LINK(ImplHandleLayoutTimerHdl, Timer*, void);
-
     protected:
         virtual void Resize() override;
 
@@ -45,8 +40,6 @@ namespace dbaui
         OFieldDescGenWin( vcl::Window* pParent, OTableDesignHelpBar* pHelpBar );
         virtual ~OFieldDescGenWin() override;
         virtual void dispose() override;
-
-        virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
 
         virtual void GetFocus() override;
         virtual void LoseFocus() override;

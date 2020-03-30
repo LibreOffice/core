@@ -111,6 +111,7 @@ namespace dbaui
         void append_text(const OUString &rText) { m_xComboBox->append_text(rText); }
         void remove_text(const OUString &rText) { m_xComboBox->remove_text(rText); }
         int find_text(const OUString &rText) const { return m_xComboBox->find_text(rText); }
+        void set_size_request(int nWidth, int nHeight) { m_xComboBox->set_size_request(nWidth, nHeight); }
 
         short GetPos() const { return m_nPos; }
         const OUString& GetHelp() const { return m_strHelpText; }
