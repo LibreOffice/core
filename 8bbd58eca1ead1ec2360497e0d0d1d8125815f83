@@ -16,6 +16,24 @@
       "revId": "8bbd58eca1ead1ec2360497e0d0d1d8125815f83",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6763484e_4e333cf9",
+        "filename": "svx/source/svdraw/svdpage.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-03-30T07:23:42Z",
+      "side": 1,
+      "message": "this whole method should be simplified to \n\n    return maList[nNum]\n\nsince std::vector already has assert in it for out of valid range values",
+      "parentUuid": "25c939d0_4fd5d877",
+      "revId": "8bbd58eca1ead1ec2360497e0d0d1d8125815f83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
