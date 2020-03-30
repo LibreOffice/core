@@ -28,34 +28,9 @@
                         generic-name="SearchResultsBox" parent="GtkComboBoxText"
                         icon-name="widget-gtk-comboboxtext"/>
 
-    <glade-widget-class title="VclComboBoxNumeric" name="VclComboBoxNumeric"
-                        generic-name="ComboBoxNumeric" parent="GtkComboBoxText"
-                        icon-name="widget-gtk-comboboxtext">
-      <properties>
-        <property save="True" query="False" id="adjustment" name="Adjustment">
-          <parameter-spec>
-            <type>GParamObject</type>
-            <value-type>GtkAdjustment</value-type>
-          </parameter-spec>
-          <tooltip>List of widgets in this group</tooltip>
-        </property>
-      </properties>
-    </glade-widget-class>
-
-    <glade-widget-class title="SvxColorValueSet" name="svxcorelo-SvxColorValueSet"
-                        generic-name="Set of Value Options" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
-
     <glade-widget-class title="Content List Box" name="sfxlo-ContentListBox"
                         generic-name="Content List Box" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
-    <glade-widget-class title="Animation ListBox" name="sdlo-CustomAnimationList"
-                        generic-name="Animation ListBox" parent="GtkTreeView"
-                        icon-name="widget-gtk-treeview"/>
-
-    <glade-widget-class title="PropertyControl" name="sdlo-PropertyControl"
-                        generic-name="PropertyControl" parent="GtkComboBoxText"
-                        icon-name="widget-gtk-comboboxtext"/>
 
     <glade-widget-class title="Sidebar ToolBox" name="sfxlo-SidebarToolBox"
                         generic-name="Sidebar ToolBox" parent="GtkToolbar"
@@ -104,9 +79,6 @@
     <glade-widget-class title="Managed Menu Button" name="svtlo-ManagedMenuButton"
                         generic-name="ManagedMenuButton" parent="GtkButton"
                         icon-name="widget-gtk-button"/>
-    <glade-widget-class title="Category ListBox" name="sdlo-CategoryListBox"
-                        generic-name="Category ListBox" parent="GtkTreeView"
-                        icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="NotebookBar Toolbar Addons" name="NotebookBarAddonsToolMergePoint"
                         generic-name="ShowText" parent="GtkToolButton"
                         icon-name="widget-gtk-toolbutton"/>

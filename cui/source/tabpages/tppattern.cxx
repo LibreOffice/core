@@ -23,6 +23,7 @@
 #include <svx/colorbox.hxx>
 #include <svx/dialmgr.hxx>
 #include <vcl/BitmapTools.hxx>
+#include <vcl/lstbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svx/strings.hrc>

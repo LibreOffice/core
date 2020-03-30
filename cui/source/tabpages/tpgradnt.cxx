@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <tools/urlobj.hxx>
+#include <vcl/lstbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/dialoghelper.hxx>

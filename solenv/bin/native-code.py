@@ -506,10 +506,8 @@ constructor_map = {
 
 custom_widgets = [
     'BookmarksBox',
-    'CategoryListBox',
     'ContentListBox',
     'ContextVBox',
-    'CustomAnimationList',
     'DataTreeListBox',
     'DropdownBox',
     'EmojiView',
@@ -517,12 +515,10 @@ custom_widgets = [
     'ManagedMenuButton',
     'PriorityHBox',
     'PriorityMergedHBox',
-    'PropertyControl',
     'RecentDocsView',
     'SearchBox',
     'SearchResultsBox',
     'SidebarToolBox',
-    'SvxColorValueSet',
     'TemplateDefaultView',
     ]
 
