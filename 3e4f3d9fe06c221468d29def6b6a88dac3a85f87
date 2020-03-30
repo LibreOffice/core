@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d654d539_a146e13d",
+        "filename": "vcl/skia/gdiimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1076,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-03-30T18:43:43Z",
+      "side": 1,
+      "message": "suggestion: make it a 2x2 pattern in that case",
+      "revId": "3e4f3d9fe06c221468d29def6b6a88dac3a85f87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
