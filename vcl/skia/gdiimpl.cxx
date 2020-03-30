@@ -1067,35 +1067,21 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
         aPaint.setStyle(SkPaint::kFill_Style);
         aPaint.setBlendMode(SkBlendMode::kDifference);
 
-        // N50 inverts in 4x4 checker pattern
+        // N50 inverts in checker pattern
         if (eFlags == SalInvert::N50)
         {
-            // This creates 4x4 checker pattern bitmap
+            // This creates 2x2 checker pattern bitmap
             // TODO Use SkiaHelper::createSkSurface() and cache the image
             SkBitmap aBitmap;
-            aBitmap.allocN32Pixels(4, 4);
+            aBitmap.allocN32Pixels(2, 2);
             const SkPMColor white = SkPreMultiplyARGB(0xFF, 0xFF, 0xFF, 0xFF);
             const SkPMColor black = SkPreMultiplyARGB(0xFF, 0x00, 0x00, 0x00);
             SkPMColor* scanline;
             scanline = aBitmap.getAddr32(0, 0);
             *scanline++ = white;
-            *scanline++ = white;
-            *scanline++ = black;
             *scanline++ = black;
             scanline = aBitmap.getAddr32(0, 1);
-            *scanline++ = white;
-            *scanline++ = white;
             *scanline++ = black;
-            *scanline++ = black;
-            scanline = aBitmap.getAddr32(0, 2);
-            *scanline++ = black;
-            *scanline++ = black;
-            *scanline++ = white;
-            *scanline++ = white;
-            scanline = aBitmap.getAddr32(0, 3);
-            *scanline++ = black;
-            *scanline++ = black;
-            *scanline++ = white;
             *scanline++ = white;
             aBitmap.setImmutable();
             // The bitmap is repeated in both directions the checker pattern is as big

@@ -302,11 +302,11 @@ TestResult OutputDeviceTestCommon::checkChecker(Bitmap& rBitmap, sal_Int32 nStar
     TestResult aReturnValue = TestResult::Passed;
 
     int choice = 0;
-    for (sal_Int32 y = nStartY; y <= nEndY; y+=2)
+    for (sal_Int32 y = nStartY; y <= nEndY; ++y)
     {
-        for (sal_Int32 x = nStartX; x <= nEndX; x+=2)
+        for (sal_Int32 x = nStartX; x <= nEndX; ++x)
         {
-            TestResult eResult = checkFilled(rBitmap, tools::Rectangle(Point(x, y), Size(2, 2)), rExpected[choice % 2]);
+            TestResult eResult = checkFilled(rBitmap, tools::Rectangle(Point(x, y), Size(1, 1)), rExpected[choice % 2]);
             checkResult(eResult, aReturnValue);
             choice++;
         }
@@ -324,13 +324,13 @@ TestResult OutputDeviceTestCommon::checkInvertN50Rectangle(Bitmap& aBitmap)
     eResult = checkRectangles(aBitmap, aExpected);
     checkResult(eResult, aReturnValue);
 
-    eResult = checkChecker(aBitmap, 2, 8, 2, 8, { COL_LIGHTCYAN, COL_LIGHTRED });
+    eResult = checkChecker(aBitmap, 2, 9, 2, 9, { COL_LIGHTCYAN, COL_LIGHTRED });
     checkResult(eResult, aReturnValue);
-    eResult = checkChecker(aBitmap, 2, 8, 10, 16, { COL_YELLOW, COL_LIGHTBLUE });
+    eResult = checkChecker(aBitmap, 2, 9, 10, 17, { COL_YELLOW, COL_LIGHTBLUE });
     checkResult(eResult, aReturnValue);
-    eResult = checkChecker(aBitmap, 10, 16, 2, 8, { COL_LIGHTMAGENTA, COL_LIGHTGREEN });
+    eResult = checkChecker(aBitmap, 10, 17, 2, 9, { COL_LIGHTMAGENTA, COL_LIGHTGREEN });
     checkResult(eResult, aReturnValue);
-    eResult = checkChecker(aBitmap, 10, 16, 10, 16, { COL_BLACK, COL_WHITE });
+    eResult = checkChecker(aBitmap, 10, 17, 10, 17, { COL_BLACK, COL_WHITE });
     checkResult(eResult, aReturnValue);
 
     return aReturnValue;
