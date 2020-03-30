@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-14 10:26:10 using:
+ Generated on 2020-03-27 21:07:57 using:
  ./bin/update_pch svx svx --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -26,22 +26,20 @@
 #include <cassert>
 #include <climits>
 #include <cstddef>
-#include <cstring>
 #include <deque>
 #include <functional>
 #include <iomanip>
 #include <limits.h>
 #include <map>
 #include <memory>
+#include <optional>
 #include <ostream>
 #include <set>
 #include <stddef.h>
-#include <string>
 #include <type_traits>
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
@@ -57,7 +55,7 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/ref.hxx>
-#include <rtl/strbuf.hxx>
+#include <rtl/string.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/textenc.h>
 #include <rtl/ustrbuf.hxx>
@@ -72,7 +70,6 @@
 #include <vcl/BitmapFilter.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/GraphicObject.hxx>
-#include <vcl/IContext.hxx>
 #include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmapex.hxx>
@@ -82,7 +79,6 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/dockwin.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/event.hxx>
@@ -90,12 +86,10 @@
 #include <vcl/font.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/help.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
 #include <vcl/imap.hxx>
 #include <vcl/imapobj.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
@@ -138,13 +132,12 @@
 #include <com/sun/star/awt/GradientStyle.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -152,8 +145,8 @@
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/form/XForm.hpp>
+#include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -167,18 +160,20 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/sdbc/XResultSet.hpp>
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/text/DefaultNumberingProvider.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
-#include <com/sun/star/text/XNumberingFormatter.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
-#include <com/sun/star/ui/XContextChangeEventListener.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
@@ -201,10 +196,8 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
-#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/proparrhlp.hxx>
-#include <comphelper/property.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
@@ -212,7 +205,6 @@
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/weak.hxx>
-#include <connectivity/dbtoolsdllapi.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -245,8 +237,6 @@
 #include <editeng/flditem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/frmdir.hxx>
-#include <editeng/itemtype.hxx>
-#include <editeng/kernitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/numdef.hxx>
 #include <editeng/numitem.hxx>
@@ -260,13 +250,13 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/unoedhlp.hxx>
+#include <editeng/unoedsrc.hxx>
 #include <editeng/wghtitem.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/deleter.hxx>
-#include <optional>
 #include <o3tl/safeint.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
@@ -283,19 +273,15 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/dockwin.hxx>
-#include <sfx2/lokhelper.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/sidebar/ControlFactory.hxx>
-#include <sfx2/sidebar/SidebarToolBox.hxx>
-#include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/stbitem.hxx>
+#include <sfx2/tabdlg.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/weldutils.hxx>
-#include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/cenumitm.hxx>
@@ -360,13 +346,10 @@
 #include <unotools/viewoptions.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
-#include <DescriptionGenerator.hxx>
 #include <cell.hxx>
-#include <celltypes.hxx>
 #include <charmapacc.hxx>
 #include <fmprop.hxx>
 #include <fmservs.hxx>
-#include <fmshimp.hxx>
 #include <helpids.h>
 #include <labelitemwindow.hxx>
 #include <svx/AccessibleControlShape.hxx>
@@ -386,18 +369,17 @@
 #include <svx/drawitem.hxx>
 #include <svx/e3ditem.hxx>
 #include <svx/fmmodel.hxx>
-#include <svx/fmpage.hxx>
 #include <svx/fmshell.hxx>
 #include <svx/fmtools.hxx>
 #include <svx/framebordertype.hxx>
 #include <svx/galmisc.hxx>
 #include <svx/itemwin.hxx>
 #include <svx/itextprovider.hxx>
-#include <svx/linectrl.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/rotmodit.hxx>
 #include <svx/rulritem.hxx>
+#include <svx/sdmetitm.hxx>
 #include <svx/sdooitm.hxx>
 #include <svx/sdprcitm.hxx>
 #include <svx/sdrpaintwindow.hxx>
@@ -422,16 +404,12 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdtext.hxx>
 #include <svx/svdtrans.hxx>
-#include <svx/svdtypes.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svx3ditems.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/svxdllapi.h>
-#include <svx/tbxcolor.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unomid.hxx>
-#include <svx/unopage.hxx>
-#include <svx/unoprov.hxx>
 #include <svx/unoshtxt.hxx>
 #include <svx/view3d.hxx>
 #include <svx/viewpt3d.hxx>
@@ -446,13 +424,9 @@
 #include <svx/xit.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>
-#include <svx/xlndsit.hxx>
-#include <svx/xlnedit.hxx>
-#include <svx/xlnstit.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xtable.hxx>
-#include <svx/zoomslideritem.hxx>
 #endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -324,8 +324,6 @@ include/svl/ondemand.hxx:55
     OnDemandLocaleDataWrapper aSysLocale class SvtSysLocale
 include/svtools/editsyntaxhighlighter.hxx:32
     MultiLineEditSyntaxHighlight m_aColorConfig svtools::ColorConfig
-include/svx/colorwindow.hxx:67
-    SvxColorWindow maSelectedLink Link<const NamedColor &, void>
 include/svx/graphctl.hxx:52
     GraphCtrl xVD ScopedVclPtrInstance<class VirtualDevice>
 include/svx/sdr/overlay/overlayanimatedbitmapex.hxx:51
