@@ -792,9 +792,6 @@
         </prop>
       </node>
       <node oor:name=".uno:InsertObjectStarMath" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Formula...</value>
-        </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
           <value xml:lang="en-US">Insert Formula</value>
         </prop>
@@ -1014,7 +1011,7 @@
       </node>
       <node oor:name=".uno:StartOfDocumentSel" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Select to Document Begin</value>
+          <value xml:lang="en-US">Select to Document Beginning</value>
         </prop>
       </node>
       <node oor:name=".uno:EndOfDocumentSel" oor:op="replace">
@@ -1114,12 +1111,12 @@
       </node>
       <node oor:name=".uno:WordRightSel" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Select to Word Right</value>
+          <value xml:lang="en-US">Select to Word End</value>
         </prop>
       </node>
       <node oor:name=".uno:WordLeftSel" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Select to Begin of Word</value>
+          <value xml:lang="en-US">Select to Word Beginning</value>
         </prop>
       </node>
       <node oor:name=".uno:GotoNextSentenceSel" oor:op="replace">
@@ -2271,11 +2268,6 @@
         </prop>
       </node>
       <node oor:name=".uno:WrapThroughTransparent" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">In ~Background</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:WrapThroughTransparencyToggle" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">In ~Background</value>
         </prop>
