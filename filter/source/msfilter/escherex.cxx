@@ -887,6 +887,11 @@ bool EscherPropertyContainer::GetLineArrow( const bool bLineStart,
                 OUString        aArrowStartName = *o3tl::doAccess<OUString>(aAny);
                 sal_uInt16      nWhich = bLineStart ? sal_uInt16(XATTR_LINESTART) : sal_uInt16(XATTR_LINEEND);
 
+                // remove extra space separated number
+                sal_Int32 aLastSpacePos = aArrowStartName.lastIndexOf(' ');
+                if (aLastSpacePos > -1 && aArrowStartName.lastIndexOf(' ', aLastSpacePos) > -1)
+                    aArrowStartName = aArrowStartName.copy(0, aLastSpacePos);
+
                 OUString aApiName = SvxUnogetApiNameForItem(nWhich, aArrowStartName);
                 bool bIsMapped = true;
                 if ( !aApiName.isEmpty() )
