@@ -562,10 +562,12 @@ namespace sw::mark
         }
 #endif
         if (   (!rPaM.GetPoint()->nNode.GetNode().IsTextNode()
-                    // huh, SwXTextRange puts one on table node?
-                && !rPaM.GetPoint()->nNode.GetNode().IsTableNode())
+                && (eType != MarkType::UNO_BOOKMARK
+                // SwXTextRange can be on table node or plain start node (FLY_AT_FLY)
+                    || !rPaM.GetPoint()->nNode.GetNode().IsStartNode()))
             || (!rPaM.GetMark()->nNode.GetNode().IsTextNode()
-                && !rPaM.GetMark()->nNode.GetNode().IsTableNode()))
+                && (eType != MarkType::UNO_BOOKMARK
+                    || !rPaM.GetMark()->nNode.GetNode().IsStartNode())))
         {
             SAL_WARN("sw.core", "MarkManager::makeMark(..)"
                 " - refusing to create mark on non-textnode");
