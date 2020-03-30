@@ -1011,7 +1011,8 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
                         (mxAddRec && mxAddRec->IsVolatile()) ) );
         }
         rWorksheet->writeEscaped( XclXmlUtils::ToOUString(
-                    rStrm.GetRoot().GetCompileFormulaContext(), mrScFmlaCell.aPos, mrScFmlaCell.GetCode()));
+                    rStrm.GetRoot().GetCompileFormulaContext(), mrScFmlaCell.aPos, mrScFmlaCell.GetCode(),
+                    mrScFmlaCell.GetErrCode()));
         rWorksheet->endElement( XML_f );
     }
 
