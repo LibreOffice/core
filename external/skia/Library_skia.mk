@@ -22,6 +22,11 @@ $(eval $(call gb_Library_add_defs,skia,\
 ))
 
 ifeq ($(OS),WNT)
+# Skia can be built with or without UNICODE set, in LO sources we explicitly use the *W unicode
+# variants, so build Skia with UNICODE to make it also use the *W variants.
+$(eval $(call gb_Library_add_defs,skia,\
+    -DUNICODE -D_UNICODE \
+))
 ifneq ($(gb_ENABLE_PCH),)
 $(eval $(call gb_Library_add_cxxflags,skia, \
     -FIsrc/utils/win/SkDWriteNTDDI_VERSION.h \

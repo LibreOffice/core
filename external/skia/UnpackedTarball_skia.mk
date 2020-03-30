@@ -31,6 +31,7 @@ skia_patches := \
     fontconfig-get-typeface.patch.0 \
     windows-do-not-modify-logfont.patch.0 \
     windows-text-gamma.patch.0 \
+    windows-force-unicode-api.patch.0 \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 
