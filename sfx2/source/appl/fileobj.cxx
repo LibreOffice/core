@@ -111,7 +111,7 @@ bool SvFileObject::Connect( sfx2::SvBaseLink* pLink )
     // Test if not another link of the same connection already exists
     sfx2::LinkManager::GetDisplayNames( pLink, nullptr, &sFileNm, nullptr, &sFilter );
 
-    if( OBJECT_CLIENT_GRF == pLink->GetObjType() )
+    if( sfx2::SvBaseLinkObjectType::ClientGraphic == pLink->GetObjType() )
     {
         SfxObjectShellRef pShell = pLink->GetLinkManager()->GetPersist();
         if( pShell.is() )
@@ -126,16 +126,16 @@ bool SvFileObject::Connect( sfx2::SvBaseLink* pLink )
 
     switch( pLink->GetObjType() )
     {
-    case OBJECT_CLIENT_GRF:
+    case sfx2::SvBaseLinkObjectType::ClientGraphic:
         nType = SvFileObjectType::Graphic;
         bSynchron = pLink->IsSynchron();
         break;
 
-    case OBJECT_CLIENT_FILE:
+    case sfx2::SvBaseLinkObjectType::ClientFile:
         nType = SvFileObjectType::Text;
         break;
 
-    case OBJECT_CLIENT_OLE:
+    case sfx2::SvBaseLinkObjectType::ClientOle:
         nType = SvFileObjectType::Object;
         // TODO/LATER: introduce own type to be used for exchanging
         break;
@@ -263,7 +263,7 @@ void SvFileObject::Edit(weld::Window* pParent, sfx2::SvBaseLink* pLink, const Li
 
     switch( pLink->GetObjType() )
     {
-        case OBJECT_CLIENT_GRF:
+        case sfx2::SvBaseLinkObjectType::ClientGraphic:
         {
             nType = SvFileObjectType::Graphic;       // If not set already
 
@@ -286,7 +286,7 @@ void SvFileObject::Edit(weld::Window* pParent, sfx2::SvBaseLink* pLink, const Li
         }
         break;
 
-        case OBJECT_CLIENT_OLE:
+        case sfx2::SvBaseLinkObjectType::ClientOle:
         {
             nType = SvFileObjectType::Object; // if not set already
 
@@ -297,7 +297,7 @@ void SvFileObject::Edit(weld::Window* pParent, sfx2::SvBaseLink* pLink, const Li
         }
         break;
 
-        case OBJECT_CLIENT_FILE:
+        case sfx2::SvBaseLinkObjectType::ClientFile:
         {
             nType = SvFileObjectType::Text; // if not set already
 

@@ -172,7 +172,7 @@ bool LinkManager::Insert( SvBaseLink* pLink )
 }
 
 bool LinkManager::InsertLink( SvBaseLink * pLink,
-                                sal_uInt16 nObjType,
+                                SvBaseLinkObjectType nObjType,
                                 SfxLinkUpdateMode nUpdateMode,
                                 const OUString* pName )
 {
@@ -189,25 +189,25 @@ void LinkManager::InsertDDELink( SvBaseLink * pLink,
                                     const OUString& rTopic,
                                     const OUString& rItem )
 {
-    if( !( OBJECT_CLIENT_SO & pLink->GetObjType() ) )
+    if( !isClientType( pLink->GetObjType() ) )
         return;
 
     OUString sCmd;
     ::sfx2::MakeLnkName( sCmd, &rServer, rTopic, rItem );
 
-    pLink->SetObjType( OBJECT_CLIENT_DDE );
+    pLink->SetObjType( SvBaseLinkObjectType::ClientDde );
     pLink->SetName( sCmd );
     Insert( pLink );
 }
 
 void LinkManager::InsertDDELink( SvBaseLink * pLink )
 {
-    DBG_ASSERT( OBJECT_CLIENT_SO & pLink->GetObjType(), "no OBJECT_CLIENT_SO" );
-    if( !( OBJECT_CLIENT_SO & pLink->GetObjType() ) )
+    DBG_ASSERT( isClientType(pLink->GetObjType()), "no OBJECT_CLIENT_SO" );
+    if( !isClientType( pLink->GetObjType() ) )
         return;
 
-    if( pLink->GetObjType() == OBJECT_CLIENT_SO )
-        pLink->SetObjType( OBJECT_CLIENT_DDE );
+    if( pLink->GetObjType() == SvBaseLinkObjectType::ClientSo )
+        pLink->SetObjType( SvBaseLinkObjectType::ClientDde );
 
     Insert( pLink );
 }
@@ -225,9 +225,9 @@ bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
     {
         switch( pLink->GetObjType() )
         {
-            case OBJECT_CLIENT_FILE:
-            case OBJECT_CLIENT_GRF:
-            case OBJECT_CLIENT_OLE:
+            case SvBaseLinkObjectType::ClientFile:
+            case SvBaseLinkObjectType::ClientGraphic:
+            case SvBaseLinkObjectType::ClientOle:
                 {
                     sal_Int32 nPos = 0;
                     OUString sFile( sLNm.getToken( 0, ::sfx2::cTokenSeparator, nPos ) );
@@ -242,16 +242,16 @@ bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
 
                     if( pType )
                     {
-                        sal_uInt16 nObjType = pLink->GetObjType();
+                        SvBaseLinkObjectType nObjType = pLink->GetObjType();
                         *pType = SfxResId(
-                                    ( OBJECT_CLIENT_FILE == nObjType || OBJECT_CLIENT_OLE == nObjType )
+                                    ( SvBaseLinkObjectType::ClientFile == nObjType || SvBaseLinkObjectType::ClientOle == nObjType )
                                             ? RID_SVXSTR_FILELINK
                                             : RID_SVXSTR_GRAFIKLINK);
                     }
                     bRet = true;
                 }
                 break;
-            case OBJECT_CLIENT_DDE:
+            case SvBaseLinkObjectType::ClientDde:
                 {
                     sal_Int32 nTmp = 0;
                     OUString sServer( sLNm.getToken( 0, cTokenSeparator, nTmp ) );
@@ -309,7 +309,7 @@ void LinkManager::UpdateAllLinks(
 
         // Graphic-Links not to update yet
         if( !pLink->IsVisible() ||
-            ( !bUpdateGrfLinks && OBJECT_CLIENT_GRF == pLink->GetObjType() ))
+            ( !bUpdateGrfLinks && SvBaseLinkObjectType::ClientGraphic == pLink->GetObjType() ))
             continue;
 
         if( bAskUpdate )
@@ -347,13 +347,13 @@ SvLinkSourceRef LinkManager::CreateObj( SvBaseLink const * pLink )
 {
     switch( pLink->GetObjType() )
     {
-        case OBJECT_CLIENT_FILE:
-        case OBJECT_CLIENT_GRF:
-        case OBJECT_CLIENT_OLE:
+        case SvBaseLinkObjectType::ClientFile:
+        case SvBaseLinkObjectType::ClientGraphic:
+        case SvBaseLinkObjectType::ClientOle:
             return new SvFileObject;
-        case OBJECT_INTERN:
+        case SvBaseLinkObjectType::Internal:
             return new SvxInternalLink;
-        case OBJECT_CLIENT_DDE:
+        case SvBaseLinkObjectType::ClientDde:
             return new SvDDEObject;
         default:
             return SvLinkSourceRef();
@@ -449,10 +449,10 @@ void LinkManager::LinkServerShell(const OUString& rPath, SfxObjectShell& rServer
 }
 
 void LinkManager::InsertFileLink(
-    sfx2::SvBaseLink& rLink, sal_uInt16 nFileType, const OUString& rFileNm,
+    sfx2::SvBaseLink& rLink, SvBaseLinkObjectType nFileType, const OUString& rFileNm,
     const OUString* pFilterNm, const OUString* pRange)
 {
-    if (!(OBJECT_CLIENT_SO & rLink.GetObjType()))
+    if (!isClientType(rLink.GetObjType()))
         return;
 
     OUStringBuffer aBuf(64);
@@ -482,7 +482,7 @@ void LinkManager::CancelTransfers()
     for( size_t n = rLnks.size(); n; )
     {
         const sfx2::SvBaseLink& rLnk = *rLnks[--n];
-        if (OBJECT_CLIENT_FILE == (OBJECT_CLIENT_FILE & rLnk.GetObjType())
+        if (isClientFileType(rLnk.GetObjType())
             && nullptr != (pFileObj = static_cast<SvFileObject*>(rLnk.GetObj())))
             pFileObj->CancelTransfers();
     }

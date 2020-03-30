@@ -934,7 +934,7 @@ void SdrOle2Obj::CheckFileLink_Impl()
                     {
                         mpImpl->mpObjectLink = new SdrEmbedObjectLink( this );
                         mpImpl->maLinkURL = aLinkURL;
-                        pLinkManager->InsertFileLink( *mpImpl->mpObjectLink, OBJECT_CLIENT_OLE, aLinkURL );
+                        pLinkManager->InsertFileLink( *mpImpl->mpObjectLink, sfx2::SvBaseLinkObjectType::ClientOle, aLinkURL );
                         mpImpl->mpObjectLink->Connect();
                     }
                 }
