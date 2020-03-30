@@ -53,6 +53,7 @@
 #include <config_mpl.h>
 
 #include <lib/init.hxx>
+#include <svx/svxids.hrc>
 
 using namespace com::sun::star;
 using namespace desktop;
@@ -149,6 +150,7 @@ public:
     void testShowHideDialog();
     void testDialogInput();
     void testCalcSaveAs();
+    void testControlState();
     void testABI();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
@@ -207,6 +209,7 @@ public:
     CPPUNIT_TEST(testShowHideDialog);
     CPPUNIT_TEST(testDialogInput);
     CPPUNIT_TEST(testCalcSaveAs);
+    CPPUNIT_TEST(testControlState);
     CPPUNIT_TEST(testABI);
     CPPUNIT_TEST_SUITE_END();
 
@@ -2730,6 +2733,19 @@ void DesktopLOKTest::testCalcSaveAs()
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(OString("X"), aView.m_aCellFormula);
+}
+
+void DesktopLOKTest::testControlState()
+{
+    LibLODocument_Impl* pDocument = loadDoc("search.ods");
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:StarShapes", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+
+    boost::property_tree::ptree aState;
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    pViewShell->GetViewFrame()->GetBindings().Update();
+    pViewShell->GetViewFrame()->GetBindings().QueryControlState(SID_ATTR_TRANSFORM_WIDTH, aState);
+    CPPUNIT_ASSERT(!aState.empty());
 }
 
 namespace {
