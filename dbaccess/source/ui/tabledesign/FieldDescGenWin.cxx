@@ -33,10 +33,6 @@ OFieldDescGenWin::OFieldDescGenWin( vcl::Window* pParent, OTableDesignHelpBar* p
     m_pFieldControl = VclPtr<OTableFieldControl>::Create(this,pHelp);
     m_pFieldControl->SetHelpId(HID_TAB_DESIGN_FIELDCONTROL);
     m_pFieldControl->Show();
-
-    maLayoutIdle.SetPriority(TaskPriority::RESIZE);
-    maLayoutIdle.SetInvokeHandler( LINK( this, OFieldDescGenWin, ImplHandleLayoutTimerHdl ) );
-    maLayoutIdle.SetDebugName( "OFieldDescGenWin maLayoutIdle" );
 }
 
 OFieldDescGenWin::~OFieldDescGenWin()
@@ -46,7 +42,6 @@ OFieldDescGenWin::~OFieldDescGenWin()
 
 void OFieldDescGenWin::dispose()
 {
-    maLayoutIdle.Stop();
     m_pFieldControl.disposeAndClear();
     TabPage::dispose();
 }
@@ -58,27 +53,10 @@ void OFieldDescGenWin::Init()
     m_pFieldControl->Init();
 }
 
-void OFieldDescGenWin::queue_resize(StateChangedType eReason)
-{
-    TabPage::queue_resize(eReason);
-    if (!m_pFieldControl)
-        return;
-    if (maLayoutIdle.IsActive())
-        return;
-    maLayoutIdle.Start();
-}
-
-IMPL_LINK_NOARG(OFieldDescGenWin, ImplHandleLayoutTimerHdl, Timer*, void)
-{
-    if (!m_pFieldControl)
-        return;
-    m_pFieldControl->SetPosSizePixel(Point(0,0),GetSizePixel());
-    m_pFieldControl->Resize();
-}
-
 void OFieldDescGenWin::Resize()
 {
-    queue_resize();
+    m_pFieldControl->SetPosSizePixel(Point(0,0),GetSizePixel());
+    m_pFieldControl->Resize();
 }
 
 void OFieldDescGenWin::SetReadOnly( bool bReadOnly )
