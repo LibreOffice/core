@@ -2082,7 +2082,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             SAL_WARN("vcl.builder", "making metric box for type: " << name
                 << " unit: " << sUnit
                 << " name: " << id
-                << " use a VclComboBoxNumeric instead");
+                << " use a GtkSpinButton instead");
             VclPtrInstance<MetricBox> xBox(pParent, nBits);
             xBox->EnableAutoSize(true);
             xBox->SetUnit(eUnit);
@@ -2103,31 +2103,6 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             xListBox->EnableAutoSize(true);
             xWindow = xListBox;
         }
-    }
-    else if (name == "VclComboBoxNumeric")
-    {
-        OUString sPattern = BuilderUtils::extractCustomProperty(rMap);
-        OUString sAdjustment = extractAdjustment(rMap);
-        extractModel(id, rMap);
-
-        WinBits nBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
-
-        bool bDropdown = BuilderUtils::extractDropdown(rMap);
-
-        if (bDropdown)
-            nBits |= WB_DROPDOWN;
-
-        connectNumericFormatterAdjustment(id, sAdjustment);
-        OUString sUnit = extractUnit(sPattern);
-        FieldUnit eUnit = detectMetricUnit(sUnit);
-        SAL_INFO("vcl.builder", "making metric box for " << name << " " << sUnit);
-        VclPtrInstance<MetricBox> xBox(pParent, nBits);
-        xBox->EnableAutoSize(true);
-        xBox->SetUnit(eUnit);
-        xBox->SetDecimalDigits(extractDecimalDigits(sPattern));
-        if (eUnit == FieldUnit::CUSTOM)
-            xBox->SetCustomUnitText(sUnit);
-        xWindow = xBox;
     }
     else if (name == "VclOptionalBox")
     {
