@@ -325,6 +325,7 @@ ORowSetValue OPreparedResultSet::getRowSetValue(sal_Int32 nColumnIndex)
         case MYSQL_TYPE_LONGLONG:
             return getLong(nColumnIndex);
         case MYSQL_TYPE_FLOAT:
+            return getFloat(nColumnIndex);
         case MYSQL_TYPE_DOUBLE:
             return getDouble(nColumnIndex);
         case MYSQL_TYPE_TIMESTAMP:
