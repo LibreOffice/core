@@ -22,6 +22,7 @@
 #include <FieldControls.hxx>
 #include <tools/diagnose_ex.h>
 #include <TableDesignHelpBar.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vector>
 #include <FieldDescriptions.hxx>
@@ -76,6 +77,7 @@ namespace
 // class OFieldDescControl
 OFieldDescControl::OFieldDescControl(weld::Container* pPage, vcl::Window* pParent, OTableDesignHelpBar* pHelpBar)
     :TabPage(pPage ? Application::GetDefDialogParent() : pParent, WB_3DLOOK | WB_DIALOGCONTROL)
+    ,m_pPage(pPage)
     ,m_xBuilder(pPage ? Application::CreateBuilder(pPage, "dbaccess/ui/fielddescpage.ui")
                       : Application::CreateInterimBuilder(this, "dbaccess/ui/fielddescpage.ui"))
     ,m_xContainer(m_xBuilder->weld_container("FieldDescPage"))
@@ -90,6 +92,32 @@ OFieldDescControl::OFieldDescControl(weld::Container* pPage, vcl::Window* pParen
     ,m_bAdded(false)
     ,pActFieldDescr(nullptr)
 {
+    m_aLayoutIdle.SetPriority(TaskPriority::RESIZE);
+    m_aLayoutIdle.SetInvokeHandler( LINK( this, OFieldDescControl, ImplHandleLayoutTimerHdl ) );
+    m_aLayoutIdle.SetDebugName( "OFieldDescControl m_aLayoutIdle" );
+}
+
+void OFieldDescControl::queue_resize(StateChangedType eReason)
+{
+    TabPage::queue_resize(eReason);
+    if (m_pPage)
+        return;
+    if (m_aLayoutIdle.IsActive())
+        return;
+    m_aLayoutIdle.Start();
+}
+
+void OFieldDescControl::Resize()
+{
+    TabPage::Resize();
+    if (m_pPage)
+        return;
+    queue_resize();
+}
+
+IMPL_LINK_NOARG(OFieldDescControl, ImplHandleLayoutTimerHdl, Timer*, void)
+{
+    VclContainer::setLayoutAllocation(*GetWindow(GetWindowType::FirstChild), Point(0, 0), GetSizePixel());
 }
 
 OFieldDescControl::~OFieldDescControl()
@@ -99,6 +127,8 @@ OFieldDescControl::~OFieldDescControl()
 
 void OFieldDescControl::dispose()
 {
+    m_aLayoutIdle.Stop();
+
     if ( m_bAdded )
         ::dbaui::notifySystemWindow(this,this,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
 
@@ -488,6 +518,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
                 m_xType->append_text(elem.second->aUIName);
         }
         m_xType->set_active(0);
+        m_xType->set_size_request(42, -1); // let the other widgets determine the over all width
         InitializeControl(m_xType.get(),HID_TAB_ENT_TYPE, true);
         m_xType->show();
         break;
