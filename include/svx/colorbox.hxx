@@ -11,64 +11,10 @@
 #define INCLUDED_SVX_COLORBOX_HXX
 
 #include <memory>
-#include <vcl/menubtn.hxx>
 #include <vcl/weld.hxx>
 #include <svx/colorwindow.hxx>
 
-class SvxColorListBox;
 class ColorListBox;
-
-class SvxListBoxColorWrapper
-{
-public:
-    SvxListBoxColorWrapper(SvxColorListBox* pControl);
-    void operator()(const OUString& rCommand, const NamedColor& rColor);
-    void dispose();
-private:
-    VclPtr<SvxColorListBox> mxControl;
-};
-
-class SVXCORE_DLLPUBLIC SvxColorListBox : public MenuButton
-{
-private:
-    friend class SvxListBoxColorWrapper;
-    VclPtr<SvxColorWindow> m_xColorWindow;
-    Link<SvxColorListBox&, void> m_aSelectedLink;
-    SvxListBoxColorWrapper m_aColorWrapper;
-    Color m_aAutoDisplayColor;
-    NamedColor m_aSelectedColor;
-    sal_uInt16 m_nSlotId;
-    std::shared_ptr<PaletteManager> m_xPaletteManager;
-    ColorStatus m_aColorStatus;
-
-    DECL_LINK(MenuActivateHdl, MenuButton *, void);
-    void Selected(const NamedColor& rNamedColor);
-    void createColorWindow();
-    void LockWidthRequest();
-    VclPtr<SvxColorWindow> const & getColorWindow() const;
-public:
-    SvxColorListBox(vcl::Window* pParent, WinBits nStyle = 0);
-    virtual ~SvxColorListBox() override;
-    virtual void dispose() override;
-
-    void SetSelectHdl(const Link<SvxColorListBox&, void>& rLink)
-    {
-        m_aSelectedLink = rLink;
-    }
-
-    Color const & GetSelectEntryColor() const { return m_aSelectedColor.first; }
-
-    void SelectEntry(const Color& rColor);
-
-    void SetNoSelection() { getColorWindow()->SetNoSelection(); }
-
-    void ShowPreview(const NamedColor &rColor);
-    void EnsurePaletteManager();
-
-    DECL_LINK(WindowEventListener, VclWindowEvent&, void);
-
-    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
-};
 
 class ListBoxColorWrapper
 {
