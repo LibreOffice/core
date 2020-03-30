@@ -1014,7 +1014,7 @@
       </node>
       <node oor:name=".uno:StartOfDocumentSel" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Select to Document Begin</value>
+          <value xml:lang="en-US">Select to Document Beginning</value>
         </prop>
       </node>
       <node oor:name=".uno:EndOfDocumentSel" oor:op="replace">
@@ -1114,12 +1114,12 @@
       </node>
       <node oor:name=".uno:WordRightSel" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Select to Word Right</value>
+          <value xml:lang="en-US">Select to Word End</value>
         </prop>
       </node>
       <node oor:name=".uno:WordLeftSel" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Select to Begin of Word</value>
+          <value xml:lang="en-US">Select to Word Beginning</value>
         </prop>
       </node>
       <node oor:name=".uno:GotoNextSentenceSel" oor:op="replace">
@@ -2275,14 +2275,14 @@
           <value xml:lang="en-US">In ~Background</value>
         </prop>
       </node>
-      <node oor:name=".uno:WrapThroughTransparencyToggle" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">In ~Background</value>
-        </prop>
-      </node>
       <node oor:name=".uno:GoToStartOfPrevColumn" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">To Begin of Previous Column</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:WrapThroughTransparencyToggle" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">In ~Background</value>
         </prop>
       </node>
       <node oor:name=".uno:GoToEndOfPrevColumn" oor:op="replace">
