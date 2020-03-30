@@ -94,9 +94,36 @@ OFieldDescControl::OFieldDescControl(weld::Container* pPage, vcl::Window* pParen
         m_xVclContentArea = VclPtr<VclVBox>::Create(this);
         m_xVclContentArea->Show();
         m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea, "dbaccess/ui/fielddescpage.ui"));
+
+        m_aLayoutIdle.SetPriority(TaskPriority::RESIZE);
+        m_aLayoutIdle.SetInvokeHandler( LINK( this, OFieldDescControl, ImplHandleLayoutTimerHdl ) );
+        m_aLayoutIdle.SetDebugName( "OFieldDescControl m_aLayoutIdle" );
     }
 
     m_xContainer = m_xBuilder->weld_container("FieldDescPage");
+}
+
+void OFieldDescControl::queue_resize(StateChangedType eReason)
+{
+    TabPage::queue_resize(eReason);
+    if (!m_xVclContentArea)
+        return;
+    if (m_aLayoutIdle.IsActive())
+        return;
+    m_aLayoutIdle.Start();
+}
+
+void OFieldDescControl::Resize()
+{
+    TabPage::Resize();
+    if (!m_xVclContentArea)
+        return;
+    queue_resize();
+}
+
+IMPL_LINK_NOARG(OFieldDescControl, ImplHandleLayoutTimerHdl, Timer*, void)
+{
+    m_xVclContentArea->SetPosSizePixel(Point(0,0), GetSizePixel());
 }
 
 OFieldDescControl::~OFieldDescControl()
@@ -106,6 +133,8 @@ OFieldDescControl::~OFieldDescControl()
 
 void OFieldDescControl::dispose()
 {
+    m_aLayoutIdle.Stop();
+
     if ( m_bAdded )
         ::dbaui::notifySystemWindow(this,this,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
 
