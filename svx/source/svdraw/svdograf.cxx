@@ -468,7 +468,7 @@ void SdrGrafObj::ImpRegisterLink()
         {
             pGraphicLink = new SdrGraphicLink( *this );
             pLinkManager->InsertFileLink(
-                *pGraphicLink, OBJECT_CLIENT_GRF, aFileName, (aFilterName.isEmpty() ? nullptr : &aFilterName));
+                *pGraphicLink, sfx2::SvBaseLinkObjectType::ClientGraphic, aFileName, (aFilterName.isEmpty() ? nullptr : &aFilterName));
             pGraphicLink->Connect();
         }
     }

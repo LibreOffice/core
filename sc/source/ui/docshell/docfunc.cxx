@@ -5542,7 +5542,7 @@ void ScDocFunc::InsertAreaLink( const OUString& rFile, const OUString& rFilter,
     ScAreaLink* pLink = new ScAreaLink( &rDocShell, rFile, aFilterName,
                                         aNewOptions, rSource, rDestRange, nRefresh );
     OUString aTmp = aFilterName;
-    pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, rFile, &aTmp, &rSource );
+    pLinkManager->InsertFileLink( *pLink, sfx2::SvBaseLinkObjectType::ClientFile, rFile, &aTmp, &rSource );
 
     //  Undo for an empty link
 

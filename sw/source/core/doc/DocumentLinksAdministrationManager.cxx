@@ -67,7 +67,7 @@ namespace
         for (const auto& rLinkIter : rLinks)
         {
             ::sfx2::SvBaseLink& rLnk = *rLinkIter;
-            if ((OBJECT_CLIENT_GRF == rLnk.GetObjType() || OBJECT_CLIENT_FILE == rLnk.GetObjType())
+            if ((sfx2::SvBaseLinkObjectType::ClientGraphic == rLnk.GetObjType() || sfx2::SvBaseLinkObjectType::ClientFile == rLnk.GetObjType())
                 && dynamic_cast<const SwBaseLink*>(&rLnk) != nullptr)
             {
                     tools::SvRef<sfx2::SvBaseLink> xLink(&rLnk);

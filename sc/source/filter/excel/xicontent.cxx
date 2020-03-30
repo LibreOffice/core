@@ -1017,7 +1017,7 @@ void XclImpWebQuery::Apply( ScDocument& rDoc, const OUString& rFilterName )
     {
         ScAreaLink* pLink = new ScAreaLink( rDoc.GetDocumentShell(),
             maURL, rFilterName, EMPTY_OUSTRING, maTables, maDestRange, mnRefresh * 60UL );
-        rDoc.GetLinkManager()->InsertFileLink( *pLink, OBJECT_CLIENT_FILE,
+        rDoc.GetLinkManager()->InsertFileLink( *pLink, sfx2::SvBaseLinkObjectType::ClientFile,
             maURL, &rFilterName, &maTables );
     }
 }

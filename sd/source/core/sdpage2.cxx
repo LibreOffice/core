@@ -306,7 +306,7 @@ void SdPage::ConnectLink()
         // No links to document owned pages!
         mpPageLink = new SdPageLink(this, maFileName, maBookmarkName);
         OUString aFilterName(SdResId(STR_IMPRESS));
-        pLinkManager->InsertFileLink(*mpPageLink, OBJECT_CLIENT_FILE,
+        pLinkManager->InsertFileLink(*mpPageLink, sfx2::SvBaseLinkObjectType::ClientFile,
                                      maFileName, &aFilterName, &maBookmarkName);
         mpPageLink->Connect();
     }

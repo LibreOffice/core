@@ -326,7 +326,7 @@ void ScInterpreter::ScWebservice()
         if (!pLink)
         {
             pLink = new ScWebServiceLink(pDok, aURI);
-            mpLinkManager->InsertFileLink(*pLink, OBJECT_CLIENT_FILE, aURI);
+            mpLinkManager->InsertFileLink(*pLink, sfx2::SvBaseLinkObjectType::ClientFile, aURI);
             if ( mpLinkManager->GetLinks().size() == 1 )                    // the first one?
             {
                 SfxBindings* pBindings = pDok->GetViewBindings();

@@ -60,7 +60,7 @@ class SFX2_DLLPUBLIC LinkManager
 
     SfxObjectShell *pPersist; // LinkMgr must be release before SfxObjectShell
 protected:
-    bool        InsertLink( SvBaseLink* pLink, sal_uInt16 nObjType, SfxLinkUpdateMode nUpdateType,
+    bool        InsertLink( SvBaseLink* pLink, SvBaseLinkObjectType nObjType, SfxLinkUpdateMode nUpdateType,
                             const OUString* pName );
 public:
 
@@ -102,7 +102,7 @@ public:
 
     // Connect the links to a pseudo-object and add to the list
     void InsertFileLink( sfx2::SvBaseLink&,
-                        sal_uInt16 nFileType,
+                        SvBaseLinkObjectType nFileType,
                         const OUString& rFileNm,
                         const OUString* pFilterNm = nullptr,
                         const OUString* pRange = nullptr );

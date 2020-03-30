@@ -162,13 +162,13 @@ bool SwGrfNode::ReRead(
             OUString sCmd( sURLLink );
             if( !rFltName.isEmpty() )
             {
-                sal_uInt16 nNewType;
+                sfx2::SvBaseLinkObjectType nNewType;
                 if( rFltName == "DDE" )
-                    nNewType = OBJECT_CLIENT_DDE;
+                    nNewType = sfx2::SvBaseLinkObjectType::ClientDde;
                 else
                 {
                     sfx2::MakeLnkName( sCmd, nullptr, sURLLink, OUString(), &rFltName );
-                    nNewType = OBJECT_CLIENT_GRF;
+                    nNewType = sfx2::SvBaseLinkObjectType::ClientGraphic;
                 }
 
                 if( nNewType != mxLink->GetObjType() )
@@ -485,11 +485,11 @@ bool SwGrfNode::GetFileFilterNms( OUString* pFileNm, OUString* pFilterNm ) const
     bool bRet = false;
     if( mxLink.is() && mxLink->GetLinkManager() )
     {
-        sal_uInt16 nType = mxLink->GetObjType();
-        if( OBJECT_CLIENT_GRF == nType )
+        sfx2::SvBaseLinkObjectType nType = mxLink->GetObjType();
+        if( sfx2::SvBaseLinkObjectType::ClientGraphic == nType )
             bRet = sfx2::LinkManager::GetDisplayNames(
                     mxLink.get(), nullptr, pFileNm, nullptr, pFilterNm );
-        else if( OBJECT_CLIENT_DDE == nType && pFileNm && pFilterNm )
+        else if( sfx2::SvBaseLinkObjectType::ClientDde == nType && pFileNm && pFilterNm )
         {
             OUString sApp;
             OUString sTopic;
@@ -576,7 +576,7 @@ void SwGrfNode::InsertLink( const OUString& rGrfName, const OUString& rFltName )
             mxLink->SetContentType( SotClipboardFormatId::SVXB );
 
             rIDLA.GetLinkManager().InsertFileLink( *mxLink,
-                                            OBJECT_CLIENT_GRF, rGrfName,
+                                            sfx2::SvBaseLinkObjectType::ClientGraphic, rGrfName,
                                 (!bSync && !rFltName.isEmpty() ? &rFltName : nullptr) );
         }
     }
