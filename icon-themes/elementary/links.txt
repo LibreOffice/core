@@ -1843,7 +1843,7 @@ dbaccess/res/db.png cmd/sc_viewdatasourcebrowser.png
 dbaccess/res/exerror.png cmd/sc_cancel.png
 dbaccess/res/exinfo.png cmd/sc_helpindex.png
 
-dbaccess/res/forms_16.png dbaccess/res/form_16.png
+dbaccess/res/forms_16.png res/dialogfolder_16.png
 res/forms_32.png dbaccess/res/forms_32.png
 
 dbaccess/res/lc036.png cmd/lc_dbnewreport.png
