@@ -300,6 +300,10 @@ gb_PythonTest_PRECOMMAND := $(gb_PythonTest_PRECOMMAND):$(INSTROOT)/$(LIBO_LIB_F
 endif
 gb_PythonTest_PRECOMMAND := $(gb_PythonTest_PRECOMMAND):$(WORKDIR)/UnpackedTarball/cppunit/src/cppunit/.libs
 
+# UITest class
+
+gb_UITest_DEPS := $(call gb_GeneratedPackage_get_target,python3)
+
 # Module class
 
 define gb_Module_DEBUGRUNCOMMAND
