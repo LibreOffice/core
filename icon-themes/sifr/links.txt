@@ -1824,6 +1824,7 @@ res/lx03150.png cmd/32/showsinglepage.png
 res/lx03164.png cmd/lc_open.png
 res/lx03165.png cmd/lc_save.png
 res/lx03167.png cmd/lc_openremote.png
+res/lx03188.png cmd/32/dbviewtables.png
 res/lx03189.png cmd/lc_open.png
 res/lx03256.png cmd/lc_insertplugin.png
 res/mainapp_16_8.png cmd/sc_adddirect.png
@@ -1868,10 +1869,9 @@ res/sc10869.png cmd/sc_graftransparence.png
 res/script.png cmd/sc_insertscript.png
 res/sx03150.png cmd/sc_showsinglepage.png
 res/sx03164.png res/harddisk_16.png
-res/sx03187.png cmd/sc_inserttable.png
+res/sx03188.png cmd/sc_dbviewtables.png
 res/sx03189.png cmd/sc_open.png
-res/sx03201.png cmd/sc_copy.png
-res/sx03202.png cmd/sc_copy.png
+res/sx03202.png cmd/sc_dbviewqueries.png
 res/sx03202.png cmd/sc_viewdatasourcebrowser.png
 res/sx03248.png res/odm_16_8.png
 res/sx03256.png cmd/sc_insertplugin.png
