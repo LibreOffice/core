@@ -281,6 +281,7 @@ public:
     void testTdf116789();
     void testTdf117225();
     void testOleSaveWhileEdit();
+    void testTablesMoveBackwards();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -423,6 +424,7 @@ public:
     CPPUNIT_TEST(testTdf116789);
     CPPUNIT_TEST(testTdf117225);
     CPPUNIT_TEST(testOleSaveWhileEdit);
+    CPPUNIT_TEST(testTablesMoveBackwards);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -5119,6 +5121,30 @@ void SwUiWriterTest::testOleSaveWhileEdit()
     mxComponent->dispose();
     mxComponent.clear();
     comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwUiWriterTest::testTablesMoveBackwards()
+{
+    // Load a document with 1 pages: empty content on first page, then 21 tables on the second page.
+    load(DATA_DIRECTORY, "tables-move-backwards.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDocShell* pDocShell = pTextDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+
+    // Delete the content on the first page.
+    pWrtShell->SttEndDoc(/*bStart=*/true);
+    pWrtShell->EndPg(/*bSelect=*/true);
+    pWrtShell->DelLeft();
+
+    // Calc the layout and check the number of pages.
+    pWrtShell->CalcLayout();
+    xmlDocPtr pLayout = parseLayoutDump();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. there was an unexpected 2nd page, as only 20 out of 21 tables were moved to the first
+    // page.
+    assertXPath(pLayout, "//page", 1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
