@@ -106,6 +106,24 @@
       "revId": "b1ef5dae8ebac859656541d3281082387652be5c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebb3226a_e5a24b64",
+        "filename": "vcl/skia/win/gdiimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-30T06:58:18Z",
+      "side": 1,
+      "message": "I\u0027m sorry.",
+      "parentUuid": "46ce39ab_a7eabe66",
+      "revId": "b1ef5dae8ebac859656541d3281082387652be5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
