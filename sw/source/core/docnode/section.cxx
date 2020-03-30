@@ -1141,7 +1141,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 
         ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
         if( pLnk != &rUpdLnk &&
-            OBJECT_CLIENT_FILE == pLnk->GetObjType() &&
+            sfx2::SvBaseLinkObjectType::ClientFile == pLnk->GetObjType() &&
             dynamic_cast< const SwBaseLink *>( pLnk ) !=  nullptr &&
             ( pBLink = static_cast<SwBaseLink*>(pLnk) )->IsInRange( rSectNd.GetIndex(),
                                                 rSectNd.EndOfSectionIndex() ) )
@@ -1526,7 +1526,7 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
             const OUString sFltr(sCmd.getToken( 0, sfx2::cTokenSeparator, nIndex ));
             const OUString sRange(sCmd.getToken( 0, sfx2::cTokenSeparator, nIndex ));
             pFormat->GetDoc()->getIDocumentLinksAdministration().GetLinkManager().InsertFileLink( *pLnk,
-                                static_cast<sal_uInt16>(m_Data.GetType()),
+                                static_cast<sfx2::SvBaseLinkObjectType>(m_Data.GetType()),
                                 sFile,
                                 ( !sFltr.isEmpty() ? &sFltr : nullptr ),
                                 ( !sRange.isEmpty() ? &sRange : nullptr ) );

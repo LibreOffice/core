@@ -46,8 +46,8 @@ typedef std::vector<SwSection*> SwSections;
 enum class SectionType { Content,
                     ToxHeader,
                     ToxContent,
-                    DdeLink    = OBJECT_CLIENT_DDE,
-                    FileLink   = OBJECT_CLIENT_FILE
+                    DdeLink    = sfx2::SvBaseLinkObjectType::ClientDde,
+                    FileLink   = sfx2::SvBaseLinkObjectType::ClientFile
                     };
 
 enum class LinkCreateType

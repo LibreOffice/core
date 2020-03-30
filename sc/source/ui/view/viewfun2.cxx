@@ -2703,7 +2703,7 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
         {
             ScTableLink* pLink = new ScTableLink( pDocSh, aFileName, aFilterName, aOptions, nRefresh );
             pLink->SetInCreate( true );
-            pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aFileName, &aFilterName );
+            pLinkManager->InsertFileLink( *pLink, sfx2::SvBaseLinkObjectType::ClientFile, aFileName, &aFilterName );
             pLink->Update();
             pLink->SetInCreate( false );
 
