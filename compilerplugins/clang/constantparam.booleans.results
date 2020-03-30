@@ -1186,10 +1186,6 @@ include/svx/algitem.hxx:39
     void SvxOrientationItem::SvxOrientationItem(int,_Bool,const unsigned short)
     const unsigned short nId
     0
-include/svx/colorbox.hxx:50
-    void SvxColorListBox::SvxColorListBox(class vcl::Window *,long)
-    long nStyle
-    0
 include/svx/ctredlin.hxx:210
     void SvxTPFilter::SelectedAuthorPos(int)
     int nPos

@@ -21,7 +21,6 @@
 #define INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONDIALOG_HXX
 
 #include <vcl/svapp.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/weld.hxx>
 
 namespace sd {
@@ -89,30 +88,6 @@ const sal_Int32 nPropertyTypeTransparency = 19;
 const sal_Int32 nPropertyTypeFontStyle = 20;
 const sal_Int32 nPropertyTypeScale = 21;
 
-class PropertySubControl
-{
-public:
-    explicit PropertySubControl( sal_Int32 nType ) : mnType( nType ) {}
-    virtual ~PropertySubControl();
-
-    virtual             css::uno::Any getValue() = 0;
-    virtual             void setValue( const css::uno::Any& rValue, const OUString& rPresetId ) = 0;
-
-    virtual Control*    getControl() = 0;
-
-    static std::unique_ptr<PropertySubControl>
-                        create( sal_Int32 nType,
-                                vcl::Window* pParent,
-                                const css::uno::Any& rValue,
-                                const OUString& rPresetId,
-                                const Link<LinkParamNone*,void>& rModifyHdl );
-
-    sal_Int32 getControlType() const { return mnType; }
-
-private:
-    sal_Int32 mnType;
-};
-
 class SdPropertySubControl
 {
 public:
@@ -135,22 +110,6 @@ protected:
     std::unique_ptr<weld::Builder> mxBuilder;
     std::unique_ptr<weld::Container> mxContainer;
     weld::Container* mpParent;
-};
-
-class PropertyControl : public ListBox
-{
-public:
-    explicit PropertyControl( vcl::Window* pParent );
-    virtual ~PropertyControl() override;
-    virtual void dispose() override;
-
-    void setSubControl( std::unique_ptr<PropertySubControl> pSubControl );
-    PropertySubControl* getSubControl() const { return mpSubControl.get(); }
-
-    virtual void Resize() override;
-
-private:
-    std::unique_ptr<PropertySubControl> mpSubControl;
 };
 
 class CustomAnimationDurationTabPage;
