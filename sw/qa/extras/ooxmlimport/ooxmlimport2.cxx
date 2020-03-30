@@ -112,6 +112,15 @@ DECLARE_OOXMLIMPORT_TEST(testTdf97038, "tdf97038.docx")
     CPPUNIT_ASSERT(getProperty<bool>(getShapeByName("Kep2"), "IsFollowingTextFlow"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf114212, "tdf114212.docx")
+{
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1427
+    // - Actual  : 387
+    OUString aTop = parseDump("//fly[1]/infos/bounds", "top");
+    CPPUNIT_ASSERT_EQUAL(OUString("1427"), aTop);
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf109524, "tdf109524.docx")
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
