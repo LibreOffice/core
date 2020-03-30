@@ -65,7 +65,7 @@ namespace drawinglayer::attribute
         {
             return (getShadow() == rCandidate.getShadow()
                 && getText() == rCandidate.getText()
-                && maGlow.isDefault());
+                && getGlow() == rCandidate.getGlow());
         }
 
 } // end of namespace
