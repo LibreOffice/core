@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "121117dd_d62b23f6",
+        "filename": "oox/source/ppt/pptshape.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-03-30T10:45:13Z",
+      "side": 1,
+      "message": "\"have\"",
+      "range": {
+        "startLine": 427,
+        "startChar": 22,
+        "endLine": 427,
+        "endChar": 25
+      },
+      "revId": "85ef5469a3632a72bc192e91c6d73d6642040ebf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
