@@ -2117,13 +2117,6 @@ res/sx03228.png res/sx03217.png
 res/lx03165.png cmd/lc_save.png
 res/lx03189.png cmd/lc_open.png
 res/sc05501.png cmd/sc_open.png
-res/lx03245.png res/odb_32_8.png
-res/lx03246.png res/odg_32_8.png
-res/lx03247.png res/odf_32_8.png
-res/lx03248.png res/odm_32_8.png
-res/lx03249.png res/odp_32_8.png
-res/lx03250.png res/ods_32_8.png
-res/lx03251.png res/odt_32_8.png
 res/lx03256.png cmd/lc_insertplugin.png
 
 res/mainapp_16.png cmd/sc_showsinglepage.png
