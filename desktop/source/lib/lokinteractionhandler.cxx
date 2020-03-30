@@ -42,6 +42,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/viewsh.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace com::sun::star;
 
@@ -275,6 +276,9 @@ bool LOKInteractionHandler::handlePasswordRequest(const uno::Sequence<uno::Refer
         m_pLOKit->hasOptionalFeature(bIsRequestPasswordToModify ? LOK_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY
                                                                 : LOK_FEATURE_DOCUMENT_PASSWORD))
     {
+        // release SolarMutex, so the callback handler, which may run in another thread,
+        // can acquire it in 'lo_setDocumentPassword'
+        SolarMutexReleaser aReleaser;
         m_pLOKit->mpCallback(bIsRequestPasswordToModify ? LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY
                                                         : LOK_CALLBACK_DOCUMENT_PASSWORD,
                 sUrl.getStr(),
