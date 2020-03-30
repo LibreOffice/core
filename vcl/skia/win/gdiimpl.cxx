@@ -117,16 +117,8 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
     assert(dynamic_cast<const WinFontInstance*>(&rLayout.GetFont()));
     const WinFontInstance* pWinFont = static_cast<const WinFontInstance*>(&rLayout.GetFont());
     const HFONT hLayoutFont = pWinFont->GetHFONT();
-    LOGFONT logFont;
-// Bring back GetObject that got #undef-ed in include/postwin.hxx .
-// The GetObjectA/W() functions are type-unsafe, so they should match the LOGFONTA/W,
-// otherwise the font name will be incorrect and Skia will choose an incorrect font.
-#ifdef UNICODE
-#define GetObject GetObjectW
-#else
-#define GetObject GetObjectA
-#endif
-    if (GetObject(hLayoutFont, sizeof(logFont), &logFont) == 0)
+    LOGFONTW logFont;
+    if (GetObjectW(hLayoutFont, sizeof(logFont), &logFont) == 0)
     {
         assert(false);
         return false;
