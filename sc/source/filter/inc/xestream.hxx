@@ -27,6 +27,7 @@
 #include <oox/core/xmlfilterbase.hxx>
 #include <sax/fshelper.hxx>
 #include <tools/stream.hxx>
+#include <formula/errorcodes.hxx>
 #include "ftools.hxx"
 
 #include <filter/msfilter/mscodec.hxx>
@@ -262,7 +263,8 @@ public:
 
     static OUString ToOUString( const char* s );
     static OUString ToOUString( const ScfUInt16Vec& rBuffer, sal_Int32 nStart = 0, sal_Int32 nLength = -1 );
-    static OUString ToOUString( sc::CompileFormulaContext& rCtx, const ScAddress& rAddress, const ScTokenArray* pTokenArray );
+    static OUString ToOUString( sc::CompileFormulaContext& rCtx, const ScAddress& rAddress,
+            const ScTokenArray* pTokenArray, FormulaError nErrCode = FormulaError::NONE );
     static OUString ToOUString( const XclExpString& s );
 
     template <class T>
