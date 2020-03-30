@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ac5275b7_08d58202",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Writer.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 5636,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-30T09:50:08Z",
+      "side": 1,
+      "message": "what\u0027s the meaning of the various int values?",
+      "range": {
+        "startLine": 5636,
+        "startChar": 49,
+        "endLine": 5636,
+        "endChar": 55
+      },
+      "revId": "19dc81547811a5a3bbe0eaf102a7f44df948787c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
