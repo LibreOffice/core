@@ -702,8 +702,7 @@ SwFlyNotify::~SwFlyNotify()
         // #i54138# - suppress restart of the layout process
         // on changed frame height.
         // Note: It doesn't seem to be necessary and can cause layout loops.
-        // Also suppress on initial positioning - required to trigger text wrapping (tdf#119748).
-        if ( bPosChgd && maFrame.Pos().X() != FAR_AWAY )
+        if ( bPosChgd )
         {
             // indicate a restart of the layout process
             pFly->SetRestartLayoutProcess( true );
@@ -712,21 +711,21 @@ SwFlyNotify::~SwFlyNotify()
         {
             // lock position
             pFly->LockPosition();
+        }
 
-            if ( !pFly->ConsiderForTextWrap() )
-            {
-                // indicate that object has to be considered for text wrap
-                pFly->SetConsiderForTextWrap( true );
-                // invalidate 'background' in order to allow its 'background'
-                // to wrap around it.
-                pFly->NotifyBackground( pFly->GetPageFrame(),
-                                        pFly->GetObjRectWithSpaces(),
-                                        PrepareHint::FlyFrameArrive );
-                // invalidate position of anchor frame in order to force
-                // a re-format of the anchor frame, which also causes a
-                // re-format of the invalid previous frames of the anchor frame.
-                pFly->AnchorFrame()->InvalidatePos();
-            }
+        if ( !pFly->ConsiderForTextWrap() )
+        {
+            // indicate that object has to be considered for text wrap
+            pFly->SetConsiderForTextWrap( true );
+            // invalidate 'background' in order to allow its 'background'
+            // to wrap around it.
+            pFly->NotifyBackground( pFly->GetPageFrame(),
+                                    pFly->GetObjRectWithSpaces(),
+                                    PrepareHint::FlyFrameArrive );
+            // invalidate position of anchor frame in order to force
+            // a re-format of the anchor frame, which also causes a
+            // re-format of the invalid previous frames of the anchor frame.
+            pFly->AnchorFrame()->InvalidatePos();
         }
     }
 }

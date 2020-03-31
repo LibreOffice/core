@@ -2279,6 +2279,16 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf114163)
     // This failed, if the legend first label is not "Data3". The legend position is right.
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf131707)
+{
+    createDoc("tdf131707_flyWrap.doc");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "//body/tab/row[3]/cell[2]/txt/infos/bounds", "top", "2185");
+    // the image should be inside of the cell boundary - so the same top or higher
+    assertXPath(pXmlDoc, "//body/tab/row[3]/cell[2]/txt/anchored/fly/infos/bounds", "top", "2185");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf125335)
 {
     SwDoc* pDoc = createDoc("tdf125335.odt");
