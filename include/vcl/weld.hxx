@@ -900,6 +900,8 @@ public:
     virtual bool iter_next(TreeIter& rIter) const = 0;
     // set iter to point to previous node, sibling first then depth
     virtual bool iter_previous(TreeIter& rIter) const = 0;
+    // set iter to point to next node, depth first but only if expanded, then sibling
+    virtual bool iter_next_visible(TreeIter& rIter) const = 0;
     virtual bool iter_children(TreeIter& rIter) const = 0;
     bool iter_nth_sibling(TreeIter& rIter, int nChild) const
     {
