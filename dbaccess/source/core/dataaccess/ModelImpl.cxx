@@ -42,6 +42,7 @@
 #include <com/sun/star/util/NumberFormatsSupplier.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
+#include <com/sun/star/task/DocumentMacroConfirmationRequest.hpp>
 
 #include <comphelper/interaction.hxx>
 #include <comphelper/seqstream.hxx>
@@ -55,6 +56,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
+#include <sfx2/docfile.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
@@ -1298,7 +1300,7 @@ SignatureState ODatabaseModelImpl::getScriptingSignatureState()
     return m_nScriptingSignatureState;
 }
 
-bool ODatabaseModelImpl::hasTrustedScriptingSignature(bool /*bAllowUIToAddAuthor*/)
+bool ODatabaseModelImpl::hasTrustedScriptingSignature(bool bAllowUIToAddAuthor)
 {
     bool bResult = false;
 
@@ -1336,6 +1338,22 @@ bool ODatabaseModelImpl::hasTrustedScriptingSignature(bool /*bAllowUIToAddAuthor
                                   [&xSigner](const security::DocumentSignatureInformation& rInfo) {
                                       return xSigner->isAuthorTrusted(rInfo.Signer);
                                   });
+        }
+
+        if (!bResult && bAllowUIToAddAuthor)
+        {
+            Reference<XInteractionHandler> xInteraction;
+            xInteraction = m_aMediaDescriptor.getOrDefault("InteractionHandler", xInteraction);
+            if (xInteraction.is())
+            {
+                task::DocumentMacroConfirmationRequest aRequest;
+                aRequest.DocumentURL = m_sDocFileLocation;
+                aRequest.DocumentStorage = xStorage;
+                aRequest.DocumentSignatureInformation = aInfo;
+                aRequest.DocumentVersion = aVersion;
+                aRequest.Classification = task::InteractionClassification_QUERY;
+                bResult = SfxMedium::CallApproveHandler(xInteraction, uno::makeAny(aRequest), true);
+            }
         }
     }
     catch (uno::Exception&)
