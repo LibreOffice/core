@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "7d9bb3fe_388643d3",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 795,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-03-31T13:06:44Z",
+      "side": 0,
+      "message": "This is a more complex issue than might look at first glance - see tdf#108458. I would suggest to just leave these two problematic commands out of the patch.",
+      "parentUuid": "bcc19aea_f333b3bd",
+      "revId": "14a0727889699128f02ac0a79bdce0103c89bc01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3499168f_cb99a493",
         "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
         "patchSetId": 2
