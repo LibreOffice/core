@@ -60,6 +60,7 @@ struct ComboBoxTextItem
     }
 };
 
+/// Creates a hierarchy of vcl::Windows (widgets) from a .ui file for dialogs, sidebar, etc.
 class VCL_DLLPUBLIC VclBuilder
 {
 public:
