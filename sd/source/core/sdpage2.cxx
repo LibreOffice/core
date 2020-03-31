@@ -367,9 +367,11 @@ void SdPage::lateInit(const SdPage& rSrcPage)
 
     // use shape list directly to preserve constness of rSrcPage
     const std::list< SdrObject* >& rShapeList = rSrcPage.maPresentationShapeList.getList();
+    const size_t nObjCount = GetObjCount();
     for( SdrObject* pObj : rShapeList )
     {
-        InsertPresObj(GetObj(pObj->GetOrdNum()), rSrcPage.GetPresObjKind(pObj));
+        size_t nOrdNum = pObj->GetOrdNum();
+        InsertPresObj(nOrdNum < nObjCount ? GetObj(nOrdNum) : nullptr, rSrcPage.GetPresObjKind(pObj));
     }
 
     // header footer
