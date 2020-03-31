@@ -1186,7 +1186,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
 
                                 uno::Sequence<css::ucb::Lock> aLocks;
                                 // getting the property, send a PROPFIND to the server over the net
-                                if (aContentToLock.getPropertyValue("DAV:lockdiscovery") >>= aLocks)
+                                if ((aContentToLock.getPropertyValue("DAV:lockdiscovery") >>= aLocks) && aLocks.hasElements())
                                 {
                                     // got at least a lock, show the owner of the first lock returned
                                     css::ucb::Lock aLock = aLocks[0];
