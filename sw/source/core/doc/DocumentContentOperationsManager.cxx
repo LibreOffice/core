@@ -382,6 +382,12 @@ namespace
                                 lcl_SetCpyPos( *pREnd, *pStt, *pCpyStt,
                                                 *pDelPam->GetPoint(), nDelCount );
                             }
+
+                            if (pDelPam->GetNext() && *pDelPam->GetNext()->End() == *pDelPam->Start())
+                            {
+                                *pDelPam->GetNext()->End() = *pDelPam->End();
+                                pDelPam.reset(pDelPam->GetNext());
+                            }
                         }
                     }
                 }
