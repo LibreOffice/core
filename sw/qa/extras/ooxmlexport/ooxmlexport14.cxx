@@ -720,6 +720,33 @@ DECLARE_OOXMLEXPORT_TEST(testHyphenationAuto, "hyphenation.odt")
     assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:pPrDefault/w:pPr/w:suppressAutoHyphens", "val", "true");
 }
 
+DECLARE_OOXMLIMPORT_TEST(Tdf130907,"tdf130907.docx")
+{
+    auto xPara1 = getParagraph(2);
+    CPPUNIT_ASSERT(xPara1.is());
+    auto xFormula1Props = getParagraphAnchoredObject(0, xPara1);
+    CPPUNIT_ASSERT(xFormula1Props.is());
+    sal_Int16 nHOri1;
+    xFormula1Props->getPropertyValue("HoriOrient") >>= nHOri1;
+    CPPUNIT_ASSERT(nHOri1==3);
+
+    auto xPara2 = getParagraph(3);
+    CPPUNIT_ASSERT(xPara2.is());
+    auto xFormula2Props = getParagraphAnchoredObject(0, xPara2);
+    CPPUNIT_ASSERT(xFormula2Props.is());
+    sal_Int16 nHOri2;
+    xFormula2Props->getPropertyValue("HoriOrient") >>= nHOri2;
+    CPPUNIT_ASSERT(nHOri2==2);
+
+    auto xPara3 = getParagraph(5);
+    CPPUNIT_ASSERT(xPara3.is());
+    auto xFormula3Props = getParagraphAnchoredObject(0, xPara3);
+    CPPUNIT_ASSERT(xFormula3Props.is());
+    sal_Int16 nHOri3;
+    xFormula3Props->getPropertyValue("HoriOrient") >>= nHOri3;
+    CPPUNIT_ASSERT(nHOri3==1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
