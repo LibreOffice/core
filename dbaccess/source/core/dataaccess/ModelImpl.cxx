@@ -1278,7 +1278,6 @@ Reference< XEmbeddedScripts > ODatabaseModelImpl::getEmbeddedDocumentScripts() c
 
 SignatureState ODatabaseModelImpl::getScriptingSignatureState()
 {
-    // no support for signatures at the moment
     return m_nScriptingSignatureState;
 }
 
