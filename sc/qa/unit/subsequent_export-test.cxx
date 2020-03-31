@@ -233,6 +233,7 @@ public:
     void testRotatedImageODS();
     void testTdf128976();
     void testTdf120502();
+    void testTdf131372();
     void testTdf83779();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
@@ -367,6 +368,7 @@ public:
     CPPUNIT_TEST(testRotatedImageODS);
     CPPUNIT_TEST(testTdf128976);
     CPPUNIT_TEST(testTdf120502);
+    CPPUNIT_TEST(testTdf131372);
     CPPUNIT_TEST(testTdf83779);
 
     CPPUNIT_TEST_SUITE_END();
@@ -4721,6 +4723,22 @@ void ScExportTest::testTdf120502()
 
     // This was 1025 when nMaxCol+1 was 1024
     assertXPath(pSheet1, "/x:worksheet/x:cols/x:col", "max", OUString::number(nMaxCol + 1));
+}
+
+void ScExportTest::testTdf131372()
+{
+    ScDocShellRef xShell = loadDoc("tdf131372.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell);
+
+    auto pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+
+    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pSheet);
+
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row/x:c[1]/x:f", "NA()");
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row/x:c[2]/x:f", "#N/A");
+
+    xShell->DoClose();
 }
 
 void ScExportTest::testTdf83779()
