@@ -66,6 +66,8 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
   mId(0),
   mnDefine(0),
   mnToken(oox::XML_TOKEN_COUNT),
+  mnMathJcVal(0),
+  mbIsMathPara(false),
   mpStream(nullptr),
   mnTableDepth(0),
   inPositionV(false),
@@ -87,6 +89,8 @@ OOXMLFastContextHandler::OOXMLFastContextHandler(OOXMLFastContextHandler * pCont
   mId(0),
   mnDefine(0),
   mnToken(oox::XML_TOKEN_COUNT),
+  mnMathJcVal(pContext->mnMathJcVal),
+  mbIsMathPara(pContext->mbIsMathPara),
   mpStream(pContext->mpStream),
   mpParserState(pContext->mpParserState),
   mnTableDepth(pContext->mnTableDepth),
@@ -161,6 +165,19 @@ void SAL_CALL OOXMLFastContextHandler::startFastElement
     {
         mbPreserveSpace = Attribs->getValue(oox::NMSP_xml | oox::XML_space) == "preserve";
         mbPreserveSpaceSet = true;
+    }
+    if (Element == (NMSP_officeMath | XML_oMathPara))
+    {
+        mnMathJcVal = eMathParaJc::CENTER;
+        mbIsMathPara = true;
+    }
+    if (Element == (NMSP_officeMath | XML_jc) && mpParent && mpParent->mpParent )
+    {
+        mbIsMathPara = true;
+        auto aAttrLst = Attribs->getFastAttributes();
+        if (aAttrLst[0].Value == "center") mpParent->mpParent->mnMathJcVal = eMathParaJc::CENTER;
+        if (aAttrLst[0].Value == "left") mpParent->mpParent->mnMathJcVal = eMathParaJc::LEFT;
+        if (aAttrLst[0].Value == "right") mpParent->mpParent->mnMathJcVal = eMathParaJc::RIGHT;
     }
 
     if (oox::getNamespace(Element) == NMSP_mce)
@@ -2143,7 +2160,28 @@ void OOXMLFastContextHandlerMath::process()
     {
         OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
         OOXMLValue::Pointer_t pVal( new OOXMLStarMathValue( ref ));
-        pProps->add(NS_ooxml::LN_starmath, pVal, OOXMLProperty::ATTRIBUTE);
+        if (mbIsMathPara)
+        {
+            switch (mnMathJcVal)
+            {
+                case eMathParaJc::CENTER:
+                    pProps->add(NS_ooxml::LN_Value_math_ST_Jc_centerGroup, pVal,
+                                OOXMLProperty::ATTRIBUTE);
+                    break;
+                case eMathParaJc::LEFT:
+                    pProps->add(NS_ooxml::LN_Value_math_ST_Jc_left, pVal,
+                                OOXMLProperty::ATTRIBUTE);
+                    break;
+                case eMathParaJc::RIGHT:
+                    pProps->add(NS_ooxml::LN_Value_math_ST_Jc_right, pVal,
+                                OOXMLProperty::ATTRIBUTE);
+                    break;
+                default:
+                    break;
+            }
+        }
+        else
+            pProps->add(NS_ooxml::LN_starmath, pVal, OOXMLProperty::ATTRIBUTE);
         mpStream->props( pProps.get() );
     }
 }

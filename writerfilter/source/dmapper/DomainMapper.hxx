@@ -129,6 +129,14 @@ public:
 
     void HandleRedline( Sprm& rSprm );
 
+    enum eMathParaJc
+    {
+        INLINE,
+        CENTER,
+        LEFT,
+        RIGHT
+    };
+
 private:
     // Stream
     virtual void lcl_startSectionGroup() override;
