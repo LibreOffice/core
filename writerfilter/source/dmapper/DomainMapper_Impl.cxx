@@ -2176,7 +2176,7 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::share
 
 }
 
-void DomainMapper_Impl::appendStarMath( const Value& val )
+void DomainMapper_Impl::appendStarMath( const Value& val , sal_uInt8 nAlign)
 {
     uno::Reference< embed::XEmbeddedObject > formula;
     val.getAny() >>= formula;
@@ -2219,9 +2219,42 @@ void DomainMapper_Impl::appendStarMath( const Value& val )
                 uno::makeAny( sal_Int32(size.Height())));
             // mimic the treatment of graphics here... it seems anchoring as character
             // gives a better ( visually ) result
-            xStarMathProperties->setPropertyValue(getPropertyName( PROP_ANCHOR_TYPE ),
-                uno::makeAny( text::TextContentAnchorType_AS_CHARACTER ) );
-            appendTextContent( xStarMath, uno::Sequence< beans::PropertyValue >() );
+            appendTextContent(xStarMath, uno::Sequence<beans::PropertyValue>());
+            if (nAlign != DomainMapper::eMathParaJc::INLINE)
+            {
+                xStarMathProperties->setPropertyValue(
+                    getPropertyName(PROP_ANCHOR_TYPE),
+                    uno::makeAny(text::TextContentAnchorType_AT_PARAGRAPH));
+                switch (nAlign)
+                {
+                    case DomainMapper::eMathParaJc::CENTER:
+                        xStarMathProperties->setPropertyValue(
+                            getPropertyName(PROP_HORI_ORIENT),
+                            uno::makeAny(text::HoriOrientation::CENTER));
+                        break;
+                    case DomainMapper::eMathParaJc::LEFT:
+                        xStarMathProperties->setPropertyValue(
+                            getPropertyName(PROP_HORI_ORIENT),
+                            uno::makeAny(text::HoriOrientation::LEFT));
+                        break;
+                    case DomainMapper::eMathParaJc::RIGHT:
+                        xStarMathProperties->setPropertyValue(
+                            getPropertyName(PROP_HORI_ORIENT),
+                            uno::makeAny(text::HoriOrientation::RIGHT));
+                        break;
+                    default:
+                        break;
+                }
+                xStarMathProperties->setPropertyValue(
+                    "Surround",
+                    uno::makeAny(text::WrapTextMode_NONE));
+            }
+            else
+            {
+                xStarMathProperties->setPropertyValue(
+                    getPropertyName(PROP_ANCHOR_TYPE),
+                    uno::makeAny(text::TextContentAnchorType_AS_CHARACTER));
+            }
         }
         catch( const uno::Exception& )
         {
