@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cebec8ec_e14b3569",
+        "filename": "sw/source/filter/ww8/docxexport.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1251,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-03-31T15:33:40Z",
+      "side": 1,
+      "message": "I was thinking of re-writing this as a separate commit, but then that just seemed silly, so I did it right away. This is much clearer I think.",
+      "range": {
+        "startLine": 1251,
+        "startChar": 20,
+        "endLine": 1251,
+        "endChar": 37
+      },
+      "revId": "9bd4eb7ebfe0d1f8d06aab7c7567016e3bf4a660",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
