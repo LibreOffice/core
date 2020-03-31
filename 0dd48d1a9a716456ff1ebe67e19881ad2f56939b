@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4405fb34_10b79a01",
+        "filename": "sw/source/filter/ww8/docxsdrexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1134,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-31T13:58:44Z",
+      "side": 1,
+      "message": "comphelper::FlagRestorationGuard seems to fit here, with one line of code for the four?",
+      "range": {
+        "startLine": 1134,
+        "startChar": 6,
+        "endLine": 1134,
+        "endChar": 28
+      },
+      "revId": "0dd48d1a9a716456ff1ebe67e19881ad2f56939b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
