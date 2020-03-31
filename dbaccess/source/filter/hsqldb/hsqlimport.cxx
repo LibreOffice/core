@@ -19,8 +19,6 @@
 
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/embed/XTransactedObject.hpp>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/util/Date.hpp>

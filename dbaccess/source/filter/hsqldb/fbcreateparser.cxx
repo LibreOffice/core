@@ -23,8 +23,6 @@
 
 #include <com/sun/star/sdbc/DataType.hpp>
 
-#include <connectivity/dbexception.hxx>
-#include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
 
 using namespace css::sdbc;

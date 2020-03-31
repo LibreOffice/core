@@ -20,9 +20,6 @@
 #include "hsqlbinarynode.hxx"
 #include "rowinputbinary.hxx"
 
-#include <cppuhelper/implbase.hxx>
-#include <vector>
-
 namespace dbahsql
 {
 using ColumnTypeVector = std::vector<ColumnDefinition>;

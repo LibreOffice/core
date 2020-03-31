@@ -18,17 +18,12 @@
  */
 
 #include "xmlDatabaseDescription.hxx"
-#include "xmlLogin.hxx"
 #include "xmlfilter.hxx"
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlnmspe.hxx>
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include "xmlEnums.hxx"
 #include "xmlFileBasedDatabase.hxx"
 #include "xmlServerDatabase.hxx"
-#include <stringconstants.hxx>
-#include <tools/diagnose_ex.h>
 
 namespace dbaxml
 {

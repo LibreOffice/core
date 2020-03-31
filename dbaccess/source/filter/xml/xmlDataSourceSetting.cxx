@@ -23,17 +23,12 @@
 #include <map>
 
 #include "xmlDataSourceSetting.hxx"
-#include "xmlDataSource.hxx"
 #include <sax/tools/converter.hxx>
 #include "xmlfilter.hxx"
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlnmspe.hxx>
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include "xmlEnums.hxx"
-#include <stringconstants.hxx>
 #include <osl/diagnose.h>
-#include <rtl/strbuf.hxx>
 
 namespace dbaxml
 {

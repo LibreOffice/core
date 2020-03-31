@@ -66,3 +66,19 @@ blacklist:
     dbaccess/source/core/misc/DatabaseDataProvider.cxx:
     # Needed for UnoType macro to work
     - com/sun/star/task/XInteractionHandler.hpp
+    dbaccess/source/filter/hsqldb/parseschema.cxx:
+    # Actually used
+    - com/sun/star/embed/XStorage.hpp
+    dbaccess/source/filter/hsqldb/hsqlimport.cxx:
+    # Actually used
+    - com/sun/star/embed/XStorage.hpp
+    - com/sun/star/sdbc/XConnection.hpp
+    dbaccess/source/filter/hsqldb/rowinputbinary.cxx:
+    # Needed boost wrapper header
+    - boost/date_time/posix_time/posix_time.hpp
+    dbaccess/source/shared/flt_reghelper.cxx:
+    # Needed for weird included cxx file
+    - comphelper/sequence.hxx
+    dbaccess/source/shared/dbu_reghelper.cxx:
+    # Needed for weird included cxx file
+    - comphelper/sequence.hxx

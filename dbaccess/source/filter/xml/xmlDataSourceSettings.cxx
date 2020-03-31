@@ -21,14 +21,8 @@
 #include "xmlDataSourceSetting.hxx"
 #include "xmlfilter.hxx"
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlnmspe.hxx>
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include "xmlEnums.hxx"
-#include <stringconstants.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
-
-#include <vector>
 
 namespace dbaxml
 {

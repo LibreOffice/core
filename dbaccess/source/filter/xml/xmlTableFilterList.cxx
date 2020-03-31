@@ -22,9 +22,7 @@
 #include "xmlEnums.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
-#include <stringconstants.hxx>
 #include <strings.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/sequence.hxx>

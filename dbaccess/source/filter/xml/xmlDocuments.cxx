@@ -20,14 +20,12 @@
 #include "xmlDocuments.hxx"
 #include "xmlfilter.hxx"
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include "xmlQuery.hxx"
 #include "xmlTable.hxx"
 #include "xmlComponent.hxx"
 #include "xmlHierarchyCollection.hxx"
 #include "xmlEnums.hxx"
-#include <stringconstants.hxx>
 
 namespace dbaxml
 {

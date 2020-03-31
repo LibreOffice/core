@@ -19,16 +19,11 @@
 
 #include "xmlHierarchyCollection.hxx"
 #include "xmlComponent.hxx"
-#include "xmlQuery.hxx"
 #include "xmlColumn.hxx"
 #include "xmlfilter.hxx"
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlnmspe.hxx>
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include "xmlEnums.hxx"
-#include <stringconstants.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <osl/diagnose.h>

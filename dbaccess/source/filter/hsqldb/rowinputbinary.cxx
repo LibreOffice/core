@@ -20,7 +20,6 @@
 #include "rowinputbinary.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
-#include <com/sun/star/io/XConnectable.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>

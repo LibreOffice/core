@@ -19,17 +19,13 @@
 
 #include "xmlConnectionData.hxx"
 #include "xmlLogin.hxx"
-#include "xmlTableFilterList.hxx"
 #include "xmlfilter.hxx"
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmlnmspe.hxx>
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include "xmlEnums.hxx"
 #include "xmlDatabaseDescription.hxx"
 #include "xmlConnectionResource.hxx"
-#include <stringconstants.hxx>
-#include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 
 namespace dbaxml
 {

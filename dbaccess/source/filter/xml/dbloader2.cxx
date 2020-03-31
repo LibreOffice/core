@@ -19,14 +19,11 @@
 
 #include <flt_reghelper.hxx>
 #include "xmlservices.hxx"
-#include <stringconstants.hxx>
 #include <strings.hxx>
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
-#include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -36,10 +33,8 @@
 #include <com/sun/star/frame/XLoadEventListener.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
@@ -60,13 +55,9 @@
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <osl/file.hxx>
 #include <sfx2/docfile.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
 #include <tools/diagnose_ex.h>
-#include <ucbhelper/commandenvironment.hxx>
-#include <ucbhelper/content.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::ucbhelper;
