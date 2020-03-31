@@ -254,7 +254,7 @@ namespace emfplushelper
         static bool readXForm(SvStream& rIn, basegfx::B2DHomMatrix& rTarget);
         static ::basegfx::B2DPolyPolygon combineClip(::basegfx::B2DPolyPolygon const & leftPolygon, int combineMode, ::basegfx::B2DPolyPolygon const & rightPolygon);
 
-        static float getUnitToPixelMultiplier(const UnitType aUnitType);
+        static float getUnitToPixelMultiplier(const UnitType aUnitType, const sal_uInt32 aDPI);
     };
 }
 

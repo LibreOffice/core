@@ -213,8 +213,6 @@ namespace emfplushelper
         SAL_INFO("drawinglayer", "EMF+\t\tUnit: " << UnitTypeToString(penUnit));
         SAL_INFO("drawinglayer", "EMF+\t\tWidth: " << std::dec << penWidth);
 
-        penWidth = penWidth * EmfPlusHelperData::getUnitToPixelMultiplier(static_cast<UnitType>(penUnit));
-
         // If a zero width is specified, a minimum value must be used, which is determined by the units
         if (penWidth == 0.0)
         { //TODO Check if these values is correct
