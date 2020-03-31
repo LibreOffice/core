@@ -233,7 +233,7 @@ namespace emfplushelper
     {
     }
 
-    float EmfPlusHelperData::getUnitToPixelMultiplier(const UnitType aUnitType)
+    float EmfPlusHelperData::getUnitToPixelMultiplier(const UnitType aUnitType, const sal_uInt32 aDPI)
     {
         switch (aUnitType)
         {
@@ -241,16 +241,16 @@ namespace emfplushelper
                 return 1.0f;
 
             case UnitTypePoint:
-                return Application::GetDefaultDevice()->GetDPIX() / 72.0;
+                return aDPI / 72.0;
 
             case UnitTypeInch:
-                return Application::GetDefaultDevice()->GetDPIX();
+                return aDPI;
 
             case UnitTypeMillimeter:
-                return Application::GetDefaultDevice()->GetDPIX() / 25.4;
+                return aDPI / 25.4;
 
             case UnitTypeDocument:
-                return Application::GetDefaultDevice()->GetDPIX() / 300.0;
+                return aDPI / 300.0;
 
             case UnitTypeWorld:
             case UnitTypeDisplay:
@@ -285,6 +285,7 @@ namespace emfplushelper
                 EMFPPen *pen = new EMFPPen();
                 maEMFPObjects[index].reset(pen);
                 pen->Read(rObjectStream, *this);
+                pen->penWidth = pen->penWidth * getUnitToPixelMultiplier(static_cast<UnitType>(pen->penUnit), mnHDPI);
                 break;
             }
             case EmfPlusObjectTypePath:
@@ -328,6 +329,9 @@ namespace emfplushelper
                 font->sizeUnit = 0;
                 font->fontFlags = 0;
                 font->Read(rObjectStream);
+                // tdf#113624 Convert unit to Pixels
+                font->emSize = font->emSize * getUnitToPixelMultiplier(static_cast<UnitType>(font->sizeUnit), mnHDPI);
+
                 break;
             }
             case EmfPlusObjectTypeStringFormat:
@@ -1700,9 +1704,8 @@ namespace emfplushelper
                         }
                         else
                         {
-                            const float aPageScaleMul = mfPageScale * getUnitToPixelMultiplier(static_cast<UnitType>(flags));
-                            mnMmX *= aPageScaleMul;
-                            mnMmY *= aPageScaleMul;
+                            mnMmX *= mfPageScale * getUnitToPixelMultiplier(static_cast<UnitType>(flags), mnHDPI);
+                            mnMmY *= mfPageScale * getUnitToPixelMultiplier(static_cast<UnitType>(flags), mnVDPI);
                             mappingChanged();
                         }
                         break;
@@ -1799,11 +1802,12 @@ namespace emfplushelper
                             SAL_WARN("drawinglayer", "EMF+\t file error. UnitTypeDisplay and UnitTypeWorld are not supported by BeginContainer in EMF+ specification.");
                             break;
                         }
-                        const float aPageScale = getUnitToPixelMultiplier(static_cast<UnitType>(flags));
+                        const float aPageScaleX = getUnitToPixelMultiplier(static_cast<UnitType>(flags), mnHDPI);
+                        const float aPageScaleY = getUnitToPixelMultiplier(static_cast<UnitType>(flags), mnVDPI);
                         GraphicStatePush(mGSContainerStack, stackIndex);
                         const basegfx::B2DHomMatrix transform = basegfx::utils::createScaleTranslateB2DHomMatrix(
-                            aPageScale * ( dw / sw ), aPageScale * ( dh / sh ),
-                            aPageScale * ( dx - sx ), aPageScale * ( dy - sy) );
+                            aPageScaleX * ( dw / sw ), aPageScaleY * ( dh / sh ),
+                            aPageScaleX * ( dx - sx ), aPageScaleY * ( dy - sy) );
                         maWorldTransform *= transform;
                         mappingChanged();
                         break;
