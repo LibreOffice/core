@@ -29,6 +29,7 @@
 #include <rtl/ref.hxx>
 #include "OOXMLParserState.hxx"
 #include "OOXMLPropertySet.hxx"
+#include <queue>
 
 namespace writerfilter {
 namespace ooxml
@@ -195,6 +196,16 @@ protected:
     Id mnDefine;
     Token_t mnToken;
 
+    // the formula insertion mode: inline/newline(left, center, right)
+    sal_Int8 mnMathJcVal;
+    bool mbIsMathPara;
+    enum eMathParaJc
+    {
+        INLINE, //The equation is anchored as inline to the text
+        CENTER, //The equation is center aligned
+        LEFT,   //The equation is left aligned
+        RIGHT  //The equation is right aligned
+    };
     // the stream to send the stream events to.
     Stream * mpStream;
 
