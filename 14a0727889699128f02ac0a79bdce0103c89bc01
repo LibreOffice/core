@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bcc19aea_f333b3bd",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 795,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-03-31T11:39:34Z",
+      "side": 0,
+      "message": "Oh! Since we have 2 \"formula\" under insert section, I thought their function is same this is why I deleted it. I\u0027m not very familiar with naming labels on this platform and don\u0027t want to create any inconsistencies is there any suggestion that you can give about it?",
+      "parentUuid": "1ec24f82_4166bf1b",
+      "revId": "14a0727889699128f02ac0a79bdce0103c89bc01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3499168f_cb99a493",
         "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2020-03-31T11:12:03Z",
       "side": 0,
       "message": "Same here.",
+      "revId": "14a0727889699128f02ac0a79bdce0103c89bc01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "991269e6_8778056b",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 2278,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-03-31T11:39:34Z",
+      "side": 0,
+      "message": "same consideration goes for here as well.",
+      "parentUuid": "3499168f_cb99a493",
       "revId": "14a0727889699128f02ac0a79bdce0103c89bc01",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
