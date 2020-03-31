@@ -8127,6 +8127,11 @@
           <ref name="CT_OMath"/>
         </element>
       </define>
+      <define name="oMathParaPr">
+        <element name="oMathParaPr">
+          <ref name="CT_OMathParaPr"/>
+        </element>
+      </define>
     </grammar>
     <resource name="ST_Integer255" resource="Integer"/>
     <resource name="CT_Integer255" resource="Value">
@@ -19178,6 +19183,8 @@
     </resource>
     <resource name="CT_OMath" resource="Math"/>
     <resource name="CT_OMathPara" resource="Stream"/>
+    <resource name="CT_OMathParaPr" resource="Properties"/>
+    <resource name="CT_OMathJc" resource="Value"/>
   </namespace>
 </model>
 <!-- vim: shiftwidth=2 softtabstop=2 expandtab:

@@ -388,6 +388,24 @@ void Entity::startElement( Event const *pEvent )
     const OUString& aNamespace = pEvent->msNamespace;
     const OUString& aElementName = pEvent->msElementName;
 
+    if (nElementToken == ((23 << 16) | 3649))//oMathParaPr
+    {
+        int i = 0;
+    }
+    if (nElementToken == ((23 << 16) | 3648))//oMathPara
+    {
+        int i = 0;
+    }
+    if (nElementToken == ((23 << 16) | 2916))//oMathPara Jc
+    {
+        int i = 0;
+    }
+    if (nElementToken == ((15 << 16) | 2916))//oMathPara Jc
+    {
+        int i = 0;
+    }
+
+
     // Use un-wrapped pointers to avoid significant acquire/release overhead
     XFastContextHandler *pParentContext = nullptr;
     if( !maContextStack.empty() )

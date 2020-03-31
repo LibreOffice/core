@@ -731,8 +731,19 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             m_pImpl->ImportGraphic( val.getProperties(), IMPORT_AS_DETECTED_INLINE );
         }
         break;
+        case NS_ooxml::LN_Value_math_ST_Jc_centerGroup:
+        case NS_ooxml::LN_Value_math_ST_Jc_center:
+            m_pImpl->appendStarMath(val, 0);//3->center
+            break;
+        case NS_ooxml::LN_Value_math_ST_Jc_left:
+            m_pImpl->appendStarMath(val, 1);//3->left
+            break;
+        case NS_ooxml::LN_Value_math_ST_Jc_right:
+
+            m_pImpl->appendStarMath(val, 2);//3->right
+            break;
         case NS_ooxml::LN_starmath:
-            m_pImpl->appendStarMath( val );
+            m_pImpl->appendStarMath( val, 3 ); //3->inline
             break;
         case NS_ooxml::LN_CT_FramePr_dropCap:
         case NS_ooxml::LN_CT_FramePr_lines:
