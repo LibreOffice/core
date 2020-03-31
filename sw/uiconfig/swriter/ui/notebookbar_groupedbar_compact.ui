@@ -1701,10 +1701,10 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuGrid-HideWhitespace">
+      <object class="GtkMenuItem" id="MenuGrid-ShowWhitespace">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:HideWhitespace</property>
+        <property name="action_name">.uno:ShowWhitespace</property>
       </object>
     </child>
   </object>
@@ -3377,10 +3377,10 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuView-HideWhitespace">
+      <object class="GtkMenuItem" id="MenuView-ShowWhitespace">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:HideWhitespace</property>
+        <property name="action_name">.uno:ShowWhitespace</property>
       </object>
     </child>
     <child>

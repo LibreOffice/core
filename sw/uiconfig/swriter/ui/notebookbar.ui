@@ -2077,10 +2077,10 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuView-HideWhitespace">
+      <object class="GtkMenuItem" id="MenuView-ShowWhitespace">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:HideWhitespace</property>
+        <property name="action_name">.uno:ShowWhitespace</property>
       </object>
     </child>
     <child>
@@ -9304,10 +9304,10 @@
                                 <property name="toolbar_style">both-horiz</property>
                                 <property name="show_arrow">False</property>
                                 <child>
-                                  <object class="GtkToolButton" id="View-HideWhitespace3">
+                                  <object class="GtkToolButton" id="View-ShowWhitespace3">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:HideWhitespace</property>
+                                    <property name="action_name">.uno:ShowWhitespace</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
