@@ -1293,19 +1293,11 @@ bool ODatabaseModelImpl::hasTrustedScriptingSignature(bool bAllowUIToAddAuthor)
         // which leads to signatures not being found
         Reference<XStorage> xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
             ZIP_STORAGE_FORMAT_STRING, m_sDocFileLocation, ElementModes::READ);
-        OUString aVersion;
-        try
-        {
-            uno::Reference<beans::XPropertySet> xPropSet(xStorage, uno::UNO_QUERY_THROW);
-            xPropSet->getPropertyValue("Version") >>= aVersion;
-        }
-        catch (uno::Exception&)
-        {
-        }
 
+        OUString aODFVersion(comphelper::OStorageHelper::GetODFVersionFromStorage(getOrCreateRootStorage()));
         uno::Reference<security::XDocumentDigitalSignatures> xSigner(
             security::DocumentDigitalSignatures::createWithVersion(
-                comphelper::getProcessComponentContext(), aVersion));
+                comphelper::getProcessComponentContext(), aODFVersion));
         uno::Sequence<security::DocumentSignatureInformation> aInfo
             = xSigner->verifyScriptingContentSignatures(xStorage,
                                                         uno::Reference<io::XInputStream>());
@@ -1333,7 +1325,7 @@ bool ODatabaseModelImpl::hasTrustedScriptingSignature(bool bAllowUIToAddAuthor)
                 aRequest.DocumentURL = m_sDocFileLocation;
                 aRequest.DocumentStorage = xStorage;
                 aRequest.DocumentSignatureInformation = aInfo;
-                aRequest.DocumentVersion = aVersion;
+                aRequest.DocumentVersion = aODFVersion;
                 aRequest.Classification = task::InteractionClassification_QUERY;
                 bResult = SfxMedium::CallApproveHandler(xInteraction, uno::makeAny(aRequest), true);
             }
