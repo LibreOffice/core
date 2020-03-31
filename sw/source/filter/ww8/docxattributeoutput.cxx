@@ -1031,7 +1031,7 @@ void DocxAttributeOutput::StartParagraphProperties()
     m_pSerializer->startElementNS(XML_w, XML_pPr);
 
     // and output the section break now (if it appeared)
-    if ( m_pSectionInfo && (!m_setFootnote))
+    if (m_pSectionInfo && !m_setFootnote && m_rExport.m_nTextTyp == TXT_MAINTEXT)
     {
         m_rExport.SectionProperties( *m_pSectionInfo );
         m_pSectionInfo.reset();
