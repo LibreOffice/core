@@ -1370,6 +1370,17 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrame *pLa
                 // page, in which case it looses its next.
                 pNext = pLow->GetNext();
 
+                if (pNext && pNext->IsTabFrame())
+                {
+                    auto pTab = static_cast<SwTabFrame*>(pNext);
+                    if (pTab->IsFollow())
+                    {
+                        // The next frame is a follow of the previous frame, SwTabFrame::Join() will
+                        // delete this one as part of formatting, so forget about it.
+                        pNext = nullptr;
+                    }
+                }
+
                 bTabChanged |= FormatLayoutTab( static_cast<SwTabFrame*>(pLow), bAddRect );
                 --m_nTabLevel;
             }
