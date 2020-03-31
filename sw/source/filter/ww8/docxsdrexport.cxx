@@ -1110,6 +1110,10 @@ void DocxSdrExport::writeOnlyTextOfFrame(ww8::Frame const* pParentFrame)
 
     m_pImpl->setBodyPrAttrList(sax_fastparser::FastSerializerHelper::createAttrList());
     ::comphelper::FlagRestorationGuard const g(m_pImpl->m_bFlyFrameGraphic, true);
+    auto const nTextTyp(m_pImpl->getExport().m_nTextTyp);
+    m_pImpl->getExport().m_nTextTyp = TXT_TXTBOX;
+    ::comphelper::ScopeGuard const sg(
+        [this, nTextTyp]() { m_pImpl->getExport().m_nTextTyp = nTextTyp; });
     m_pImpl->getExport().WriteText();
 }
 
@@ -1365,6 +1369,10 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
 
         {
             ::comphelper::FlagRestorationGuard const g(m_pImpl->m_bFlyFrameGraphic, true);
+            auto const nTextTyp(m_pImpl->getExport().m_nTextTyp);
+            m_pImpl->getExport().m_nTextTyp = TXT_TXTBOX;
+            ::comphelper::ScopeGuard const sg(
+                [this, nTextTyp]() { m_pImpl->getExport().m_nTextTyp = nTextTyp; });
             m_pImpl->getExport().WriteText();
             if (m_pImpl->getParagraphSdtOpen())
             {
@@ -1514,6 +1522,10 @@ void DocxSdrExport::writeVMLTextFrame(ww8::Frame const* pParentFrame, bool bText
     pFS->startElementNS(XML_w, XML_txbxContent);
     {
         ::comphelper::FlagRestorationGuard const g(m_pImpl->m_bFlyFrameGraphic, true);
+        auto const nTextTyp(m_pImpl->getExport().m_nTextTyp);
+        m_pImpl->getExport().m_nTextTyp = TXT_TXTBOX;
+        ::comphelper::ScopeGuard const sg(
+            [this, nTextTyp]() { m_pImpl->getExport().m_nTextTyp = nTextTyp; });
         m_pImpl->getExport().WriteText();
         if (m_pImpl->getParagraphSdtOpen())
         {
