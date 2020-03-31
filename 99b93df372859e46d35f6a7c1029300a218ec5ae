@@ -51,6 +51,24 @@
       "revId": "99b93df372859e46d35f6a7c1029300a218ec5ae",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44586e05_d22e7527",
+        "filename": "include/comphelper/flagguard.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-03-31T14:50:42Z",
+      "side": 1,
+      "message": "#include \u003cutility\u003e\n\n  i_valRef \u003d std::forward\u003cT1\u003e(i_temporaryValue);",
+      "parentUuid": "32924534_5aee0a93",
+      "revId": "99b93df372859e46d35f6a7c1029300a218ec5ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
