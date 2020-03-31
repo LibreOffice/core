@@ -948,8 +948,6 @@ private:
     // store hardcoded value which was set during import.
     sal_Int32 m_nParaBeforeSpacing,m_nParaAfterSpacing;
 
-    bool m_setFootnote;
-
     /// RelId <-> Graphic* cache, so that in case of alternate content, the same graphic only gets written once.
     std::stack< std::map<const Graphic*, OString> > m_aRelIdCache;
     /// RelId <-> BitmapChecksum cache, similar to m_aRelIdCache, but used for non-Writer graphics, handled in oox.

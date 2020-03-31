@@ -1031,7 +1031,7 @@ void DocxAttributeOutput::StartParagraphProperties()
     m_pSerializer->startElementNS(XML_w, XML_pPr);
 
     // and output the section break now (if it appeared)
-    if (m_pSectionInfo && !m_setFootnote && m_rExport.m_nTextTyp == TXT_MAINTEXT)
+    if (m_pSectionInfo && m_rExport.m_nTextTyp == TXT_MAINTEXT)
     {
         m_rExport.SectionProperties( *m_pSectionInfo );
         m_pSectionInfo.reset();
@@ -7712,7 +7712,6 @@ static void WriteFootnoteSeparatorHeight(
 
 void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
 {
-    m_setFootnote = true;
     const FootnotesVector& rVector = bFootnotes? m_pFootnotesList->getVector(): m_pEndnotesList->getVector();
 
     sal_Int32 nBody = bFootnotes? XML_footnotes: XML_endnotes;
@@ -9333,8 +9332,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
       m_bParaBeforeAutoSpacing(false),
       m_bParaAfterAutoSpacing(false),
       m_nParaBeforeSpacing(0),
-      m_nParaAfterSpacing(0),
-      m_setFootnote(false)
+      m_nParaAfterSpacing(0)
     , m_nParagraphSdtPrToken(0)
     , m_nRunSdtPrToken(0)
     , m_nStateOfFlyFrame( FLY_NOT_PROCESSED )
