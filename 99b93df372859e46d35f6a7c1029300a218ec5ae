@@ -33,6 +33,24 @@
       "revId": "99b93df372859e46d35f6a7c1029300a218ec5ae",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32924534_5aee0a93",
+        "filename": "include/comphelper/flagguard.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-03-31T14:48:23Z",
+      "side": 1,
+      "message": "\u003e wouldn\u0027t it make more sense to have T1 as parameter of a ctor template?\n\nThanks!\n\n\u003e and while at it, change the ctor parameter to T1\u0026\u0026 and std::forward it\n\nstd::forward it? how?",
+      "parentUuid": "10e981c4_2201d750",
+      "revId": "99b93df372859e46d35f6a7c1029300a218ec5ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
