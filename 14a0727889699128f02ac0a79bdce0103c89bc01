@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ec24f82_4166bf1b",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 795,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-03-31T11:12:03Z",
+      "side": 0,
+      "message": "Removing the label completely isn\u0027t a solution. We want to improve labels (where possible), not to leave commands without labels.",
+      "revId": "14a0727889699128f02ac0a79bdce0103c89bc01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3499168f_cb99a493",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 2278,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-03-31T11:12:03Z",
+      "side": 0,
+      "message": "Same here.",
+      "revId": "14a0727889699128f02ac0a79bdce0103c89bc01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
