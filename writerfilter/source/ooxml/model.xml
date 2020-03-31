@@ -8127,6 +8127,11 @@
           <ref name="CT_OMath"/>
         </element>
       </define>
+      <define name="oMathParaPr">
+        <element name="oMathParaPr">
+          <ref name="CT_OMathParaPr"/>
+        </element>
+      </define>
     </grammar>
     <resource name="ST_Integer255" resource="Integer"/>
     <resource name="CT_Integer255" resource="Value">
@@ -8232,7 +8237,7 @@
     <resource name="CT_Style" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_Style_val" action="setValue"/>
     </resource>
-    <resource name="ST_Jc" resource="List">
+    <resource name="ST_Jc" resource="String">
       <value tokenid="ooxml:Value_math_ST_Jc_start">left</value>
       <value tokenid="ooxml:Value_math_ST_Jc_end">right</value>
       <value tokenid="ooxml:Value_math_ST_Jc_left">left</value>
@@ -19184,6 +19189,8 @@
     </resource>
     <resource name="CT_OMath" resource="Math"/>
     <resource name="CT_OMathPara" resource="Stream"/>
+    <resource name="CT_OMathParaPr" resource="Properties"/>
+    <resource name="CT_OMathJc" resource="Value"/>
   </namespace>
 </model>
 <!-- vim: shiftwidth=2 softtabstop=2 expandtab:
