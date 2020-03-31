@@ -72,7 +72,9 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
   mbLayoutInCell(true),
   m_xContext(context),
   m_bDiscardChildren(false),
-  m_bTookChoice(false)
+  m_bTookChoice(false),
+  mvnMathParaJc(),
+  mbIsMathPara(false)
 {
     if (mpParserState.get() == nullptr)
         mpParserState = new OOXMLParserState();
@@ -93,7 +95,9 @@ OOXMLFastContextHandler::OOXMLFastContextHandler(OOXMLFastContextHandler * pCont
   mbLayoutInCell(pContext->mbLayoutInCell),
   m_xContext(pContext->m_xContext),
   m_bDiscardChildren(pContext->m_bDiscardChildren),
-  m_bTookChoice(pContext->m_bTookChoice)
+  m_bTookChoice(pContext->m_bTookChoice),
+  mvnMathParaJc(pContext->mvnMathParaJc),
+  mbIsMathPara(pContext->mbIsMathPara)
 {
     if (mpParserState.get() == nullptr)
         mpParserState = new OOXMLParserState();
@@ -158,6 +162,22 @@ void SAL_CALL OOXMLFastContextHandler::startFastElement
     {
         mbPreserveSpace = Attribs->getValue(oox::NMSP_xml | oox::XML_space) == "preserve";
         mbPreserveSpaceSet = true;
+    }
+    //mnMathParaJc = eMathParaJc::INLINE;
+
+    if (Element == (NMSP_officeMath | XML_oMathPara))
+    {
+        mvnMathParaJc.push(eMathParaJc::CENTER);
+        mbIsMathPara = true;
+    }
+
+    if (oox::getBaseToken( Element) == XML_jc)
+    {
+        mbIsMathPara = true;
+        auto aAttrLst = Attribs->getFastAttributes();
+        if (aAttrLst[0].Value == "center") mvnMathParaJc.push(eMathParaJc::CENTER);
+        if (aAttrLst[0].Value == "left") mvnMathParaJc.push(eMathParaJc::LEFT);
+        if (aAttrLst[0].Value == "right") mvnMathParaJc.push( eMathParaJc::RIGHT);
     }
 
     if (oox::getNamespace(Element) == NMSP_mce)
@@ -2160,7 +2180,30 @@ void OOXMLFastContextHandlerMath::process()
     {
         OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
         OOXMLValue::Pointer_t pVal( new OOXMLStarMathValue( ref ));
-        pProps->add(NS_ooxml::LN_starmath, pVal, OOXMLProperty::ATTRIBUTE);
+        if (mbIsMathPara)
+        {
+            sal_uInt8 nJcVal = mvnMathParaJc.front();
+            mvnMathParaJc.pop();
+            switch (nJcVal)
+            {
+                case eMathParaJc::CENTER:
+                    pProps->add(NS_ooxml::LN_Value_math_ST_Jc_centerGroup, pVal,
+                                OOXMLProperty::ATTRIBUTE);
+                    break;
+                case eMathParaJc::LEFT:
+                    pProps->add(NS_ooxml::LN_Value_math_ST_Jc_left, pVal, OOXMLProperty::ATTRIBUTE);
+                    break;
+                case eMathParaJc::RIGHT:
+                    pProps->add(NS_ooxml::LN_Value_math_ST_Jc_right, pVal,
+                                OOXMLProperty::ATTRIBUTE);
+                    break;
+                default:
+
+                    break;
+            }
+        }
+        else
+            pProps->add(NS_ooxml::LN_starmath, pVal, OOXMLProperty::ATTRIBUTE);
         mpStream->props( pProps.get() );
     }
 }
