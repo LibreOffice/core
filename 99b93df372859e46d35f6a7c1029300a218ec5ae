@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1c1a2f9f_65d27df0",
+        "filename": "include/comphelper/flagguard.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-03-31T14:30:43Z",
+      "side": 1,
+      "message": "missing originalValue declaration?",
+      "revId": "99b93df372859e46d35f6a7c1029300a218ec5ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
