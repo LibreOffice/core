@@ -19,9 +19,6 @@ $(eval $(call gb_Package_add_files,extras_gallsystem,$(LIBO_SHARE_FOLDER)/galler
 	sg36.sdg \
 	sg36.sdv \
 	sg36.thm \
-	bpmn.sdg \
-	bpmn.sdv \
-	bpmn.thm \
 ))
 
 # vim: set noet sw=4 ts=4:
