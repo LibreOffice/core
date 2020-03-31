@@ -9248,6 +9248,44 @@ private:
         return false;
     }
 
+    bool iter_next(weld::TreeIter& rIter, bool bOnlyExpanded) const
+    {
+        GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
+        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreeIter tmp;
+        GtkTreeIter iter = rGtkIter.iter;
+
+        bool ret = gtk_tree_model_iter_children(pModel, &tmp, &iter);
+        if (ret && bOnlyExpanded && !get_row_expanded(rGtkIter))
+            ret = false;
+        rGtkIter.iter = tmp;
+        if (ret)
+        {
+            //on-demand dummy entry doesn't count
+            if (get_text(rGtkIter, -1) == "<dummy>")
+                return iter_next(rGtkIter, bOnlyExpanded);
+            return true;
+        }
+
+        tmp = iter;
+        if (gtk_tree_model_iter_next(pModel, &tmp))
+        {
+            rGtkIter.iter = tmp;
+            return true;
+        }
+        // Move up level(s) until we find the level where the next node exists.
+        while (gtk_tree_model_iter_parent(pModel, &tmp, &iter))
+        {
+            iter = tmp;
+            if (gtk_tree_model_iter_next(pModel, &tmp))
+            {
+                rGtkIter.iter = tmp;
+                return true;
+            }
+        }
+        return false;
+    }
+
 public:
     GtkInstanceTreeView(GtkTreeView* pTreeView, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pTreeView), pBuilder, bTakeOwnership)
@@ -10213,38 +10251,7 @@ public:
 
     virtual bool iter_next(weld::TreeIter& rIter) const override
     {
-        GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
-        GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
-        GtkTreeIter tmp;
-        GtkTreeIter iter = rGtkIter.iter;
-
-        bool ret = gtk_tree_model_iter_children(pModel, &tmp, &iter);
-        rGtkIter.iter = tmp;
-        if (ret)
-        {
-            //on-demand dummy entry doesn't count
-            if (get_text(rGtkIter, -1) == "<dummy>")
-                return iter_next(rGtkIter);
-            return true;
-        }
-
-        tmp = iter;
-        if (gtk_tree_model_iter_next(pModel, &tmp))
-        {
-            rGtkIter.iter = tmp;
-            return true;
-        }
-        // Move up level(s) until we find the level where the next node exists.
-        while (gtk_tree_model_iter_parent(pModel, &tmp, &iter))
-        {
-            iter = tmp;
-            if (gtk_tree_model_iter_next(pModel, &tmp))
-            {
-                rGtkIter.iter = tmp;
-                return true;
-            }
-        }
-        return false;
+        return iter_next(rIter, false);
     }
 
     virtual bool iter_previous(weld::TreeIter& rIter) const override
@@ -10283,6 +10290,11 @@ public:
         }
 
         return false;
+    }
+
+    virtual bool iter_next_visible(weld::TreeIter& rIter) const override
+    {
+        return iter_next(rIter, true);
     }
 
     virtual bool iter_children(weld::TreeIter& rIter) const override
