@@ -22,8 +22,6 @@
 #include <comphelper/processfactory.hxx>
 #include <connectivity/dbexception.hxx>
 
-#include <sal/log.hxx>
-
 #include "utils.hxx"
 
 using namespace dbahsql;

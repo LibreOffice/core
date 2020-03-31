@@ -36,18 +36,14 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlscripti.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/txtimp.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/uno/XNamingService.hpp>
 #include "xmlDatabase.hxx"
 #include "xmlEnums.hxx"
-#include <stringconstants.hxx>
 #include <strings.hxx>
 #include <xmloff/DocumentSettingsContext.hxx>
 #include "xmlStyleImport.hxx"
@@ -64,8 +60,6 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <connectivity/DriversConfig.hxx>
-#include <dsntypes.hxx>
-#include <rtl/strbuf.hxx>
 #include <rtl/uri.hxx>
 
 using namespace ::com::sun::star;

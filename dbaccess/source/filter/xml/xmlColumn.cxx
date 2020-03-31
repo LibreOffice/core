@@ -20,16 +20,9 @@
 #include "xmlColumn.hxx"
 #include "xmlfilter.hxx"
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmluconv.hxx>
-#include <xmloff/xmlnmspe.hxx>
-#include <xmloff/nmspmap.hxx>
-#include <stringconstants.hxx>
 #include <strings.hxx>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/sdbcx/XAppend.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/container/XChild.hpp>
 #include "xmlStyleImport.hxx"
 #include <osl/diagnose.h>
 #include <sal/log.hxx>

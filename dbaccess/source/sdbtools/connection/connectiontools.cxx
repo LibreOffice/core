@@ -27,8 +27,6 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/statementcomposer.hxx>
 
-#include <algorithm>
-
 namespace sdbtools
 {
 
