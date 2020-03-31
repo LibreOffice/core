@@ -823,6 +823,33 @@ DECLARE_OOXMLEXPORT_TEST(testStrikeoutGroupShapeText, "tdf131776_StrikeoutGroupS
         "wps:wsp[6]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:strike", "val", "false");
 }
 
+DECLARE_OOXMLIMPORT_TEST(Tdf130907,"tdf130907.docx")
+{
+    uno::Reference<text::XTextRange> xPara1 = getParagraph(2);
+    CPPUNIT_ASSERT(xPara1.is());
+    uno::Reference<beans::XPropertySet> xFormula1Props = getParagraphAnchoredObject(0, xPara1);
+    CPPUNIT_ASSERT(xFormula1Props.is());
+    sal_Int16 nHOri1;
+    xFormula1Props->getPropertyValue("HoriOrient") >>= nHOri1;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The alignment of the equation is not left!",sal_Int16(3),nHOri1);
+
+    uno::Reference<text::XTextRange> xPara2 = getParagraph(3);
+    CPPUNIT_ASSERT(xPara2.is());
+    uno::Reference<beans::XPropertySet> xFormula2Props = getParagraphAnchoredObject(0, xPara2);
+    CPPUNIT_ASSERT(xFormula2Props.is());
+    sal_Int16 nHOri2;
+    xFormula2Props->getPropertyValue("HoriOrient") >>= nHOri2;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The alignment of the equation is not center!", sal_Int16(2), nHOri2);
+
+    uno::Reference<text::XTextRange> xPara3 = getParagraph(5);
+    CPPUNIT_ASSERT(xPara3.is());
+    uno::Reference<beans::XPropertySet> xFormula3Props = getParagraphAnchoredObject(0, xPara3);
+    CPPUNIT_ASSERT(xFormula3Props.is());
+    sal_Int16 nHOri3;
+    xFormula3Props->getPropertyValue("HoriOrient") >>= nHOri3;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The alignment of the equation is not right!", sal_Int16(1), nHOri3);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
