@@ -21,37 +21,40 @@
 #define INCLUDED_COMPHELPER_FLAGGUARD_HXX
 
 #include <comphelper/scopeguard.hxx>
-
+#include <utility>
 
 namespace comphelper
 {
 
-    //= FlagRestorationGuard
+    //= ValueRestorationGuard
 
-    // note: can't store the originalValue in a FlagRestorationGuard member,
+    // note: can't store the originalValue in a ValueRestorationGuard member,
     // because it will be used from base class dtor
-    struct FlagRestorationGuard_Impl
+    template <typename T> struct ValueRestorationGuard_Impl
     {
-        bool & rFlag;
-        bool const originalValue;
-        FlagRestorationGuard_Impl(bool & i_flagRef)
-            : rFlag(i_flagRef), originalValue(i_flagRef) {}
+        T& rVal;
+        T const originalValue;
+        ValueRestorationGuard_Impl(T& i_valRef)
+            : rVal(i_valRef), originalValue(i_valRef) {}
         void operator()()
         {
-            rFlag = originalValue;
+            rVal = originalValue;
         }
     };
 
-    class FlagRestorationGuard : public ScopeGuard<FlagRestorationGuard_Impl>
+    template <typename T>
+    class ValueRestorationGuard : public ScopeGuard<ValueRestorationGuard_Impl<T>>
     {
     public:
-        FlagRestorationGuard( bool& i_flagRef, bool i_temporaryValue )
-            : ScopeGuard(FlagRestorationGuard_Impl(i_flagRef))
+        template <typename T1>
+        ValueRestorationGuard(T& i_valRef, T1&& i_temporaryValue)
+            : ScopeGuard<ValueRestorationGuard_Impl<T>>(ValueRestorationGuard_Impl(i_valRef))
         {
-            i_flagRef = i_temporaryValue;
+            i_valRef = std::forward<T1>(i_temporaryValue);
         }
     };
 
+    typedef ValueRestorationGuard<bool> FlagRestorationGuard;
 
     //= FlagGuard
 
