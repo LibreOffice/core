@@ -14,6 +14,9 @@
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 
 #include <sal/log.hxx>
+#include <o3tl/unreachable.hxx>
+
+#include <vcl/skia/SkiaHelper.hxx>
 
 /**
  * Called from a signal handler or watchdog thread if we get
@@ -52,8 +55,22 @@ void SkiaZone::checkDebug(int nUnchanged, const CrashWatchdogTimingsValues& aTim
 
 const CrashWatchdogTimingsValues& SkiaZone::getCrashWatchdogTimingsValues()
 {
-    static const CrashWatchdogTimingsValues values = { 6, 20 }; /* 1.5s,  5s */
-    return values;
+    switch (SkiaHelper::renderMethodToUse())
+    {
+        case SkiaHelper::RenderVulkan:
+        {
+            static const CrashWatchdogTimingsValues vulkanValues = { 6, 20 }; /* 1.5s,  5s */
+            return vulkanValues;
+        }
+        case SkiaHelper::RenderRaster:
+        {
+            // CPU-based operations with large images may take a noticeably long time,
+            // so use large values. CPU-based rendering shouldn't use any unstable drivers anyway.
+            static const CrashWatchdogTimingsValues rasterValues = { 600, 2000 }; /* 150s,  500s */
+            return rasterValues;
+        }
+    }
+    O3TL_UNREACHABLE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
