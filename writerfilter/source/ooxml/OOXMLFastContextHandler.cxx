@@ -72,7 +72,8 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
   mbLayoutInCell(true),
   m_xContext(context),
   m_bDiscardChildren(false),
-  m_bTookChoice(false)
+  m_bTookChoice(false),
+  mnMathParaJc(eMathParaJc::INLINE)
 {
     if (mpParserState.get() == nullptr)
         mpParserState = new OOXMLParserState();
@@ -93,7 +94,8 @@ OOXMLFastContextHandler::OOXMLFastContextHandler(OOXMLFastContextHandler * pCont
   mbLayoutInCell(pContext->mbLayoutInCell),
   m_xContext(pContext->m_xContext),
   m_bDiscardChildren(pContext->m_bDiscardChildren),
-  m_bTookChoice(pContext->m_bTookChoice)
+  m_bTookChoice(pContext->m_bTookChoice),
+  mnMathParaJc(pContext->mnMathParaJc)
 {
     if (mpParserState.get() == nullptr)
         mpParserState = new OOXMLParserState();
@@ -158,6 +160,12 @@ void SAL_CALL OOXMLFastContextHandler::startFastElement
     {
         mbPreserveSpace = Attribs->getValue(oox::NMSP_xml | oox::XML_space) == "preserve";
         mbPreserveSpaceSet = true;
+    }
+    if (Element == (NMSP_officeMath | XML_oMathPara))
+        mnMathParaJc = eMathParaJc::CENTER;
+    if (Element == (NMSP_officeMath | XML_jc))
+    {
+        int x = 0;
     }
 
     if (oox::getNamespace(Element) == NMSP_mce)
@@ -2160,7 +2168,24 @@ void OOXMLFastContextHandlerMath::process()
     {
         OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
         OOXMLValue::Pointer_t pVal( new OOXMLStarMathValue( ref ));
-        pProps->add(NS_ooxml::LN_starmath, pVal, OOXMLProperty::ATTRIBUTE);
+        switch (mnMathParaJc)
+        {
+            case eMathParaJc::CENTER:
+                pProps->add(NS_ooxml::LN_Value_math_ST_Jc_centerGroup, pVal,
+                            OOXMLProperty::ATTRIBUTE);
+                break;
+            case eMathParaJc::LEFT:
+                pProps->add(NS_ooxml::LN_Value_math_ST_Jc_left, pVal,
+                            OOXMLProperty::ATTRIBUTE);
+                break;
+            case eMathParaJc::RIGHT:
+                pProps->add(NS_ooxml::LN_Value_math_ST_Jc_right, pVal,
+                            OOXMLProperty::ATTRIBUTE);
+                break;
+            default:
+                pProps->add(NS_ooxml::LN_starmath, pVal, OOXMLProperty::ATTRIBUTE);
+                break;
+        }
         mpStream->props( pProps.get() );
     }
 }

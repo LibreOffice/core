@@ -195,6 +195,15 @@ protected:
     Id mnDefine;
     Token_t mnToken;
 
+    // the formula insertion mode: inline/newline(left, center, right)
+    sal_Int8 mnMathParaJc;
+    enum eMathParaJc
+    {
+        CENTER, //The equation is center aligned
+        LEFT,   //The equation is left aligned
+        RIGHT,  //The equation is right aligned
+        INLINE  //The equation is anchored as inline to the text
+    };
     // the stream to send the stream events to.
     Stream * mpStream;
 
