@@ -2417,6 +2417,7 @@ static void doc_iniUnoCommands ()
         OUString(".uno:NumberFormatCurrency"),
         OUString(".uno:NumberFormatPercent"),
         OUString(".uno:NumberFormatDate"),
+        OUString(".uno:FrameLineColor"),
         OUString(".uno:SortAscending"),
         OUString(".uno:SortDescending"),
         OUString(".uno:TrackChanges"),
