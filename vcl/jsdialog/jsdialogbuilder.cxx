@@ -7,22 +7,43 @@
 
 using namespace weld;
 
-void JSDialogSender::notifyDialogState()
+JSDialogNotifyIdle::JSDialogNotifyIdle(VclPtr<vcl::Window> aWindow)
+    : Idle("JSDialog notify")
+    , m_aWindow(aWindow)
+    , m_LastNotificationMessage()
 {
-    if (!m_aOwnedToplevel)
-        return;
+    SetPriority(TaskPriority::POST_PAINT);
+}
 
-    const vcl::ILibreOfficeKitNotifier* pNotifier = m_aOwnedToplevel->GetLOKNotifier();
-    if (pNotifier)
+void JSDialogNotifyIdle::Invoke()
+{
+    try
     {
-        std::stringstream aStream;
-        boost::property_tree::ptree aTree = m_aOwnedToplevel->DumpAsPropertyTree();
-        aTree.put("id", m_aOwnedToplevel->GetLOKWindowId());
-        boost::property_tree::write_json(aStream, aTree);
-        const std::string message = aStream.str();
-        pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
+        if (!m_aWindow)
+            return;
+
+        const vcl::ILibreOfficeKitNotifier* pNotifier = m_aWindow->GetLOKNotifier();
+        if (pNotifier)
+        {
+            std::stringstream aStream;
+            boost::property_tree::ptree aTree = m_aWindow->DumpAsPropertyTree();
+            aTree.put("id", m_aWindow->GetLOKWindowId());
+            boost::property_tree::write_json(aStream, aTree);
+            const std::string message = aStream.str();
+            if (message != m_LastNotificationMessage)
+            {
+                m_LastNotificationMessage = message;
+                pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
+            }
+        }
+    }
+    catch (boost::property_tree::json_parser::json_parser_error& rError)
+    {
+        SAL_WARN("vcl.jsdialog", rError.message());
     }
 }
+
+void JSDialogSender::notifyDialogState() { mpIdleNotify->Start(); }
 
 JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIRoot,
                                      const OUString& rUIFile)
