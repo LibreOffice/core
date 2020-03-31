@@ -13,13 +13,24 @@
 
 typedef std::map<OString, weld::Widget*> WidgetMap;
 
-class JSDialogSender
+class JSDialogNotifyIdle : public Idle
 {
-    VclPtr<vcl::Window> m_aOwnedToplevel;
+    VclPtr<vcl::Window> m_aWindow;
+    std::string m_LastNotificationMessage;
+
+public:
+    JSDialogNotifyIdle(VclPtr<vcl::Window> aWindow);
+
+    void Invoke() override;
+};
+
+class VCL_DLLPUBLIC JSDialogSender
+{
+    std::unique_ptr<JSDialogNotifyIdle> mpIdleNotify;
 
 public:
     JSDialogSender(VclPtr<vcl::Window> aOwnedToplevel)
-        : m_aOwnedToplevel(aOwnedToplevel)
+        : mpIdleNotify(new JSDialogNotifyIdle(aOwnedToplevel))
     {
     }
 
