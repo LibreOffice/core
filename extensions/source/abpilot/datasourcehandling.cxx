@@ -280,9 +280,10 @@ namespace abp
     }
 
 
-    ODataSource ODataSourceContext::createNewDBase( const OUString& _rName)
+    // tdf117101: Spreadsheet by default
+    ODataSource ODataSourceContext::createNewOther( const OUString& _rName)
     {
-        return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:dbase:" );
+        return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:calc:" );
     }
 
     struct ODataSourceImpl
