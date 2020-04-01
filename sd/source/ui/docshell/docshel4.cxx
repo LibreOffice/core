@@ -247,7 +247,7 @@ bool DrawDocShell::InitNew( const css::uno::Reference< css::embed::XStorage >& x
     if (bRet)
     {
         if( !mbSdDataObj )
-            mpDoc->NewOrLoadCompleted(NEW_DOC);  // otherwise calling
+            mpDoc->NewOrLoadCompleted(DocCreationMode::New);  // otherwise calling
                                                 // NewOrLoadCompleted(NEW_LOADED) in
                                                 // SdDrawDocument::AllocModel()
     }
@@ -350,7 +350,7 @@ bool DrawDocShell::LoadFrom( SfxMedium& rMedium )
     if( mpViewShell )
         pWait.reset(new weld::WaitObject(mpViewShell->GetFrameWeld()));
 
-    mpDoc->NewOrLoadCompleted( NEW_DOC );
+    mpDoc->NewOrLoadCompleted( DocCreationMode::New );
     mpDoc->CreateFirstPages();
     mpDoc->StopWorkStartupDelay();
 
