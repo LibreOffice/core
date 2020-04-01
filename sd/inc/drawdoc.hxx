@@ -99,10 +99,10 @@ struct StyleReplaceData
     OUString        aNewName;
 };
 
-enum DocCreationMode
+enum class DocCreationMode
 {
-    NEW_DOC,
-    DOC_LOADED
+    New,
+    Loaded
 };
 
 namespace sd

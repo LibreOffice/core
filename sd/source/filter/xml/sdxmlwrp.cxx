@@ -472,7 +472,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
     SdDrawDocument* pDoc = mrDocShell.GetDoc();
     bool const bWasUndo(pDoc->IsUndoEnabled());
     pDoc->EnableUndo(false);
-    pDoc->NewOrLoadCompleted( NEW_DOC );
+    pDoc->NewOrLoadCompleted( DocCreationMode::New );
     pDoc->CreateFirstPages();
     pDoc->StopWorkStartupDelay();
 

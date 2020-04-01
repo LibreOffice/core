@@ -618,7 +618,7 @@ SdDrawDocument* SdDrawDocument::AllocSdDrawDocument() const
 
         lcl_copyUserDefinedProperties(GetDocSh(), pNewDocSh);
 
-        pNewModel->NewOrLoadCompleted( DOC_LOADED );  // loaded from source document
+        pNewModel->NewOrLoadCompleted( DocCreationMode::Loaded );  // loaded from source document
     }
     else if( mbAllocDocSh )
     {
@@ -683,7 +683,7 @@ void SdDrawDocument::NbcSetChanged(bool bFlag)
 // it won't load any more.
 void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
 {
-    if (eMode == NEW_DOC)
+    if (eMode == DocCreationMode::New)
     {
         // New document:
         // create slideshow and default templates,
@@ -693,7 +693,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
 
         static_cast< SdStyleSheetPool* >( mxStyleSheetPool.get() )->CreatePseudosIfNecessary();
     }
-    else if (eMode == DOC_LOADED)
+    else if (eMode == DocCreationMode::Loaded)
     {
             // Document has finished loading
 
@@ -770,7 +770,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         mpInternalOutliner->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(GetStyleSheetPool()));
     }
 
-    if ( eMode == DOC_LOADED )
+    if ( eMode == DocCreationMode::Loaded )
     {
         // Make presentation objects listeners of the appropriate styles
         SdStyleSheetPool* pSPool = static_cast<SdStyleSheetPool*>( GetStyleSheetPool() );
