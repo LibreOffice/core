@@ -16,6 +16,24 @@
       "revId": "2212c408c048219971d5a4b533fc47cb0d28974c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4bb8cf23_53d161ca",
+        "filename": "vcl/source/app/salvtables.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 4535,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-04-01T20:39:40Z",
+      "side": 1,
+      "message": "I like this update mode check better than just making SetUpdateMode(false/true) as I did in patch set 6. I have taken your advice in patch set 7.",
+      "parentUuid": "dba836d5_05c821b4",
+      "revId": "2212c408c048219971d5a4b533fc47cb0d28974c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
