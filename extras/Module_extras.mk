@@ -60,7 +60,6 @@ ifneq ($(WITH_GALLERY_BUILD),)
 $(eval $(call gb_Module_add_targets,extras,\
 	Gallery_arrows \
 	Gallery_backgrounds \
-	Gallery_computers \
 	Gallery_diagrams \
 	Gallery_education \
 	Gallery_environment \
