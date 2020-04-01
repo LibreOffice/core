@@ -33,370 +33,383 @@
 
 namespace drawinglayer::primitive2d
 {
-        // PolyPolygonHairlinePrimitive2D class
-
-        /** PolyPolygonHairlinePrimitive2D class
-
-            This primitive defines a multi-PolygonHairlinePrimitive2D and is
-            just for convenience. The definition is not different from the single
-                defined PolygonHairlinePrimitive2Ds.
-         */
-        class DRAWINGLAYER_DLLPUBLIC PolyPolygonHairlinePrimitive2D final : public BufferedDecompositionPrimitive2D
-        {
-        private:
-            /// the hairline geometry
-            basegfx::B2DPolyPolygon                 maPolyPolygon;
-
-            /// the hairline color
-            basegfx::BColor                         maBColor;
-
-            /// local decomposition.
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
-
-        public:
-            /// constructor
-            PolyPolygonHairlinePrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::BColor& rBColor);
-
-            /// data read access
-            const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
-            const basegfx::BColor& getBColor() const { return maBColor; }
-
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
-
-            /// get range
-            virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
-
-            /// provide unique ID
-            virtual sal_uInt32 getPrimitive2DID() const override;
-        };
-
-        // PolyPolygonMarkerPrimitive2D class
-
-        /** PolyPolygonMarkerPrimitive2D class
-
-            This primitive defines a multi-PolygonMarkerPrimitive2D and is
-            just for convenience. The definition is not different from the single
-            defined PolygonMarkerPrimitive2Ds.
-         */
-        class DRAWINGLAYER_DLLPUBLIC PolyPolygonMarkerPrimitive2D final : public BufferedDecompositionPrimitive2D
-        {
-        private:
-            /// the marker hairline geometry
-            basegfx::B2DPolyPolygon                 maPolyPolygon;
-
-            /// the two colors
-            basegfx::BColor                         maRGBColorA;
-            basegfx::BColor                         maRGBColorB;
-
-            /// the dash distance in 'pixels'
-            double                                  mfDiscreteDashLength;
-
-            /// local decomposition.
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
-
-        public:
-            /// constructor
-            PolyPolygonMarkerPrimitive2D(
-                const basegfx::B2DPolyPolygon& rPolyPolygon,
-                const basegfx::BColor& rRGBColorA,
-                const basegfx::BColor& rRGBColorB,
-                double fDiscreteDashLength);
-
-            // data read access
-            const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
-            const basegfx::BColor& getRGBColorA() const { return maRGBColorA; }
-            const basegfx::BColor& getRGBColorB() const { return maRGBColorB; }
-            double getDiscreteDashLength() const { return mfDiscreteDashLength; }
-
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
-
-            /// get range
-            virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
-
-            /// provide unique ID
-            virtual sal_uInt32 getPrimitive2DID() const override;
-        };
-
-        // PolyPolygonStrokePrimitive2D class
-
-        /** PolyPolygonStrokePrimitive2D class
-
-            This primitive defines a multi-PolygonStrokePrimitive2D and is
-            just for convenience. The definition is not different from the single
-            defined PolygonStrokePrimitive2Ds.
-         */
-        class DRAWINGLAYER_DLLPUBLIC PolyPolygonStrokePrimitive2D final : public BufferedDecompositionPrimitive2D
-        {
-        private:
-            /// the line geometry
-            basegfx::B2DPolyPolygon                 maPolyPolygon;
-
-            /// the line attributes like width, join and color
-            attribute::LineAttribute                maLineAttribute;
-
-            /// the line stroking (if used)
-            attribute::StrokeAttribute              maStrokeAttribute;
-
-            /// local decomposition.
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
-
-        public:
-            /// constructor
-            PolyPolygonStrokePrimitive2D(
-                const basegfx::B2DPolyPolygon& rPolyPolygon,
-                const attribute::LineAttribute& rLineAttribute,
-                const attribute::StrokeAttribute& rStrokeAttribute);
-
-            PolyPolygonStrokePrimitive2D(
-                const basegfx::B2DPolyPolygon& rPolyPolygon,
-                const attribute::LineAttribute& rLineAttribute);
-
-            /// data read access
-            const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
-            const attribute::LineAttribute& getLineAttribute() const { return maLineAttribute; }
-            const attribute::StrokeAttribute& getStrokeAttribute() const { return maStrokeAttribute; }
-
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
-
-            /// get range
-            virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
-
-            /// provide unique ID
-            virtual sal_uInt32 getPrimitive2DID() const override;
-        };
-
-        // PolyPolygonColorPrimitive2D class
-
-        /** PolyPolygonColorPrimitive2D class
-
-            This primitive defines a tools::PolyPolygon filled with a single color.
-            This is one of the non-decomposable primitives, so a renderer
-            should process it.
-         */
-        class DRAWINGLAYER_DLLPUBLIC PolyPolygonColorPrimitive2D final : public BasePrimitive2D
-        {
-        private:
-            /// the tools::PolyPolygon geometry
-            basegfx::B2DPolyPolygon                 maPolyPolygon;
-
-            /// the polygon fill color
-            basegfx::BColor                         maBColor;
-
-        public:
-            /// constructor
-            PolyPolygonColorPrimitive2D(
-                const basegfx::B2DPolyPolygon& rPolyPolygon,
-                const basegfx::BColor& rBColor);
-
-            /// data read access
-            const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
-            const basegfx::BColor& getBColor() const { return maBColor; }
-
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
-
-            /// get range
-            virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
-
-            /// provide unique ID
-            virtual sal_uInt32 getPrimitive2DID() const override;
-        };
-
-        // PolyPolygonGradientPrimitive2D class
-
-        /** PolyPolygonColorPrimitive2D class
-
-            This primitive defines a tools::PolyPolygon filled with a gradient. The
-            decomosition will create a MaskPrimitive2D containing a
-            FillGradientPrimitive2D.
-         */
-        class DRAWINGLAYER_DLLPUBLIC PolyPolygonGradientPrimitive2D final : public BufferedDecompositionPrimitive2D
-        {
-        private:
-            /// the tools::PolyPolygon geometry
-            basegfx::B2DPolyPolygon                     maPolyPolygon;
-
-            /// the definition range
-            basegfx::B2DRange                           maDefinitionRange;
-
-            /// the gradient definition
-            attribute::FillGradientAttribute            maFillGradient;
-
-            /// local decomposition.
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
-
-        public:
-            /// constructors. The one without definition range will use output range as definition range
-            PolyPolygonGradientPrimitive2D(
-                const basegfx::B2DPolyPolygon& rPolyPolygon,
-                const attribute::FillGradientAttribute& rFillGradient);
-            PolyPolygonGradientPrimitive2D(
-                const basegfx::B2DPolyPolygon& rPolyPolygon,
-                const basegfx::B2DRange& rDefinitionRange,
-                const attribute::FillGradientAttribute& rFillGradient);
-
-            /// data read access
-            const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
-            const basegfx::B2DRange& getDefinitionRange() const { return maDefinitionRange; }
-            const attribute::FillGradientAttribute& getFillGradient() const { return maFillGradient; }
-
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
-
-            /// provide unique ID
-            virtual sal_uInt32 getPrimitive2DID() const override;
-        };
-
-        // PolyPolygonHatchPrimitive2D class
-
-        /** PolyPolygonHatchPrimitive2D class
-
-            This primitive defines a tools::PolyPolygon filled with a hatch. The
-            decomosition will create a MaskPrimitive2D containing a
-            FillHatchPrimitive2D.
-         */
-        class DRAWINGLAYER_DLLPUBLIC PolyPolygonHatchPrimitive2D final : public BufferedDecompositionPrimitive2D
-        {
-        private:
-            /// the tools::PolyPolygon geometry
-            basegfx::B2DPolyPolygon                     maPolyPolygon;
-
-            /// the definition range
-            basegfx::B2DRange                           maDefinitionRange;
-
-            /// the hatch background color (if used)
-            basegfx::BColor                             maBackgroundColor;
-
-            /// the hatch definition
-            attribute::FillHatchAttribute               maFillHatch;
-
-            /// local decomposition.
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
-
-        public:
-            /// constructors. The one without definition range will use output range as definition range
-            PolyPolygonHatchPrimitive2D(
-                const basegfx::B2DPolyPolygon& rPolyPolygon,
-                const basegfx::BColor& rBackgroundColor,
-                const attribute::FillHatchAttribute& rFillHatch);
-            PolyPolygonHatchPrimitive2D(
-                const basegfx::B2DPolyPolygon& rPolyPolygon,
-                const basegfx::B2DRange& rDefinitionRange,
-                const basegfx::BColor& rBackgroundColor,
-                const attribute::FillHatchAttribute& rFillHatch);
-
-            /// data read access
-            const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
-            const basegfx::B2DRange& getDefinitionRange() const { return maDefinitionRange; }
-            const basegfx::BColor& getBackgroundColor() const { return maBackgroundColor; }
-            const attribute::FillHatchAttribute& getFillHatch() const { return maFillHatch; }
-
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
-
-            /// provide unique ID
-            virtual sal_uInt32 getPrimitive2DID() const override;
-        };
-
-        // PolyPolygonGraphicPrimitive2D class
-
-        /** PolyPolygonGraphicPrimitive2D class
-
-            This primitive defines a tools::PolyPolygon filled with bitmap data
-            (including transparence). The decomosition will create a MaskPrimitive2D
-            containing a FillGraphicPrimitive2D.
-         */
-        class DRAWINGLAYER_DLLPUBLIC PolyPolygonGraphicPrimitive2D final : public BufferedDecompositionPrimitive2D
-        {
-        private:
-            /// the tools::PolyPolygon geometry
-            basegfx::B2DPolyPolygon                     maPolyPolygon;
-
-            /// the definition range
-            basegfx::B2DRange                           maDefinitionRange;
-
-            /// the bitmap fill definition (may include tiling)
-            attribute::FillGraphicAttribute             maFillGraphic;
-
-            /// local decomposition.
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
-
-        public:
-            PolyPolygonGraphicPrimitive2D(
-                const basegfx::B2DPolyPolygon& rPolyPolygon,
-                const basegfx::B2DRange& rDefinitionRange,
-                const attribute::FillGraphicAttribute& rFillGraphic);
-
-            /// data read access
-            const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
-            const basegfx::B2DRange& getDefinitionRange() const { return maDefinitionRange; }
-            const attribute::FillGraphicAttribute& getFillGraphic() const { return maFillGraphic; }
-
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
-
-            /// provide unique ID
-            virtual sal_uInt32 getPrimitive2DID() const override;
-        };
-
-        // PolyPolygonSelectionPrimitive2D class
-
-        /** PolyPolygonSelectionPrimitive2D class
-
-            This primitive defines a tools::PolyPolygon which gets filled with a defined color
-            and a defined transparence, but also gets extended ('grown') by the given
-            discrete size (thus being a view-dependent primitive)
-         */
-        class DRAWINGLAYER_DLLPUBLIC PolyPolygonSelectionPrimitive2D final : public DiscreteMetricDependentPrimitive2D
-        {
-        private:
-            /// the tools::PolyPolygon geometry
-            basegfx::B2DPolyPolygon                 maPolyPolygon;
-
-            /// the color
-            basegfx::BColor                         maColor;
-
-            /// the transparence [0.0 .. 1.0]
-            double                                  mfTransparence;
-
-            /// the discrete grow size ('pixels'), only positive values allowed
-            double                                  mfDiscreteGrow;
-
-            /// draw polygons filled when fill is set
-            bool                                    mbFill : 1;
-
-            /// local decomposition.
-            virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
-
-        public:
-            /// constructor
-            PolyPolygonSelectionPrimitive2D(
-                const basegfx::B2DPolyPolygon& rPolyPolygon,
-                const basegfx::BColor& rColor,
-                double fTransparence,
-                double fDiscreteGrow,
-                bool bFill);
-
-            /// data read access
-            const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
-            const basegfx::BColor& getColor() const { return maColor; }
-            double getTransparence() const { return mfTransparence; }
-            double getDiscreteGrow() const { return mfDiscreteGrow; }
-            bool getFill() const { return mbFill; }
-
-            /// compare operator
-            virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
-
-            /// get range
-            virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
-
-            /// provide unique ID
-            virtual sal_uInt32 getPrimitive2DID() const override;
-        };
+// PolyPolygonHairlinePrimitive2D class
+
+/** PolyPolygonHairlinePrimitive2D class
+
+    This primitive defines a multi-PolygonHairlinePrimitive2D and is
+    just for convenience. The definition is not different from the single
+        defined PolygonHairlinePrimitive2Ds.
+ */
+class DRAWINGLAYER_DLLPUBLIC PolyPolygonHairlinePrimitive2D final
+    : public BufferedDecompositionPrimitive2D
+{
+private:
+    /// the hairline geometry
+    basegfx::B2DPolyPolygon maPolyPolygon;
+
+    /// the hairline color
+    basegfx::BColor maBColor;
+
+    /// local decomposition.
+    virtual void
+    create2DDecomposition(Primitive2DContainer& rContainer,
+                          const geometry::ViewInformation2D& rViewInformation) const override;
+
+public:
+    /// constructor
+    PolyPolygonHairlinePrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon,
+                                   const basegfx::BColor& rBColor);
+
+    /// data read access
+    const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
+    const basegfx::BColor& getBColor() const { return maBColor; }
+
+    /// compare operator
+    virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
+
+    /// get range
+    virtual basegfx::B2DRange
+    getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
+
+    /// provide unique ID
+    virtual sal_uInt32 getPrimitive2DID() const override;
+};
+
+// PolyPolygonMarkerPrimitive2D class
+
+/** PolyPolygonMarkerPrimitive2D class
+
+    This primitive defines a multi-PolygonMarkerPrimitive2D and is
+    just for convenience. The definition is not different from the single
+    defined PolygonMarkerPrimitive2Ds.
+ */
+class DRAWINGLAYER_DLLPUBLIC PolyPolygonMarkerPrimitive2D final
+    : public BufferedDecompositionPrimitive2D
+{
+private:
+    /// the marker hairline geometry
+    basegfx::B2DPolyPolygon maPolyPolygon;
+
+    /// the two colors
+    basegfx::BColor maRGBColorA;
+    basegfx::BColor maRGBColorB;
+
+    /// the dash distance in 'pixels'
+    double mfDiscreteDashLength;
+
+    /// local decomposition.
+    virtual void
+    create2DDecomposition(Primitive2DContainer& rContainer,
+                          const geometry::ViewInformation2D& rViewInformation) const override;
+
+public:
+    /// constructor
+    PolyPolygonMarkerPrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon,
+                                 const basegfx::BColor& rRGBColorA,
+                                 const basegfx::BColor& rRGBColorB, double fDiscreteDashLength);
+
+    // data read access
+    const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
+    const basegfx::BColor& getRGBColorA() const { return maRGBColorA; }
+    const basegfx::BColor& getRGBColorB() const { return maRGBColorB; }
+    double getDiscreteDashLength() const { return mfDiscreteDashLength; }
+
+    /// compare operator
+    virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
+
+    /// get range
+    virtual basegfx::B2DRange
+    getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
+
+    /// provide unique ID
+    virtual sal_uInt32 getPrimitive2DID() const override;
+};
+
+// PolyPolygonStrokePrimitive2D class
+
+/** PolyPolygonStrokePrimitive2D class
+
+    This primitive defines a multi-PolygonStrokePrimitive2D and is
+    just for convenience. The definition is not different from the single
+    defined PolygonStrokePrimitive2Ds.
+ */
+class DRAWINGLAYER_DLLPUBLIC PolyPolygonStrokePrimitive2D final
+    : public BufferedDecompositionPrimitive2D
+{
+private:
+    /// the line geometry
+    basegfx::B2DPolyPolygon maPolyPolygon;
+
+    /// the line attributes like width, join and color
+    attribute::LineAttribute maLineAttribute;
+
+    /// the line stroking (if used)
+    attribute::StrokeAttribute maStrokeAttribute;
+
+    /// local decomposition.
+    virtual void
+    create2DDecomposition(Primitive2DContainer& rContainer,
+                          const geometry::ViewInformation2D& rViewInformation) const override;
+
+public:
+    /// constructor
+    PolyPolygonStrokePrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon,
+                                 const attribute::LineAttribute& rLineAttribute,
+                                 const attribute::StrokeAttribute& rStrokeAttribute);
+
+    PolyPolygonStrokePrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon,
+                                 const attribute::LineAttribute& rLineAttribute);
+
+    /// data read access
+    const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
+    const attribute::LineAttribute& getLineAttribute() const { return maLineAttribute; }
+    const attribute::StrokeAttribute& getStrokeAttribute() const { return maStrokeAttribute; }
+
+    /// compare operator
+    virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
+
+    /// get range
+    virtual basegfx::B2DRange
+    getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
+
+    /// provide unique ID
+    virtual sal_uInt32 getPrimitive2DID() const override;
+};
+
+// PolyPolygonColorPrimitive2D class
+
+/** PolyPolygonColorPrimitive2D class
+
+    This primitive defines a tools::PolyPolygon filled with a single color.
+    This is one of the non-decomposable primitives, so a renderer
+    should process it.
+ */
+class DRAWINGLAYER_DLLPUBLIC PolyPolygonColorPrimitive2D final : public BasePrimitive2D
+{
+private:
+    /// the tools::PolyPolygon geometry
+    basegfx::B2DPolyPolygon maPolyPolygon;
+
+    /// the polygon fill color
+    basegfx::BColor maBColor;
+
+public:
+    /// constructor
+    PolyPolygonColorPrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon,
+                                const basegfx::BColor& rBColor);
+
+    /// data read access
+    const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
+    const basegfx::BColor& getBColor() const { return maBColor; }
+
+    /// compare operator
+    virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
+
+    /// get range
+    virtual basegfx::B2DRange
+    getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
+
+    /// provide unique ID
+    virtual sal_uInt32 getPrimitive2DID() const override;
+};
+
+// PolyPolygonGradientPrimitive2D class
+
+/** PolyPolygonColorPrimitive2D class
+
+    This primitive defines a tools::PolyPolygon filled with a gradient. The
+    decomosition will create a MaskPrimitive2D containing a
+    FillGradientPrimitive2D.
+ */
+class DRAWINGLAYER_DLLPUBLIC PolyPolygonGradientPrimitive2D final
+    : public BufferedDecompositionPrimitive2D
+{
+private:
+    /// the tools::PolyPolygon geometry
+    basegfx::B2DPolyPolygon maPolyPolygon;
+
+    /// the definition range
+    basegfx::B2DRange maDefinitionRange;
+
+    /// the gradient definition
+    attribute::FillGradientAttribute maFillGradient;
+
+    /// local decomposition.
+    virtual void
+    create2DDecomposition(Primitive2DContainer& rContainer,
+                          const geometry::ViewInformation2D& rViewInformation) const override;
+
+public:
+    /// constructors. The one without definition range will use output range as definition range
+    PolyPolygonGradientPrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon,
+                                   const attribute::FillGradientAttribute& rFillGradient);
+    PolyPolygonGradientPrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon,
+                                   const basegfx::B2DRange& rDefinitionRange,
+                                   const attribute::FillGradientAttribute& rFillGradient);
+
+    /// data read access
+    const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
+    const basegfx::B2DRange& getDefinitionRange() const { return maDefinitionRange; }
+    const attribute::FillGradientAttribute& getFillGradient() const { return maFillGradient; }
+
+    /// compare operator
+    virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
+
+    /// provide unique ID
+    virtual sal_uInt32 getPrimitive2DID() const override;
+};
+
+// PolyPolygonHatchPrimitive2D class
+
+/** PolyPolygonHatchPrimitive2D class
+
+    This primitive defines a tools::PolyPolygon filled with a hatch. The
+    decomosition will create a MaskPrimitive2D containing a
+    FillHatchPrimitive2D.
+ */
+class DRAWINGLAYER_DLLPUBLIC PolyPolygonHatchPrimitive2D final
+    : public BufferedDecompositionPrimitive2D
+{
+private:
+    /// the tools::PolyPolygon geometry
+    basegfx::B2DPolyPolygon maPolyPolygon;
+
+    /// the definition range
+    basegfx::B2DRange maDefinitionRange;
+
+    /// the hatch background color (if used)
+    basegfx::BColor maBackgroundColor;
+
+    /// the hatch definition
+    attribute::FillHatchAttribute maFillHatch;
+
+    /// local decomposition.
+    virtual void
+    create2DDecomposition(Primitive2DContainer& rContainer,
+                          const geometry::ViewInformation2D& rViewInformation) const override;
+
+public:
+    /// constructors. The one without definition range will use output range as definition range
+    PolyPolygonHatchPrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon,
+                                const basegfx::BColor& rBackgroundColor,
+                                const attribute::FillHatchAttribute& rFillHatch);
+    PolyPolygonHatchPrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon,
+                                const basegfx::B2DRange& rDefinitionRange,
+                                const basegfx::BColor& rBackgroundColor,
+                                const attribute::FillHatchAttribute& rFillHatch);
+
+    /// data read access
+    const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
+    const basegfx::B2DRange& getDefinitionRange() const { return maDefinitionRange; }
+    const basegfx::BColor& getBackgroundColor() const { return maBackgroundColor; }
+    const attribute::FillHatchAttribute& getFillHatch() const { return maFillHatch; }
+
+    /// compare operator
+    virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
+
+    /// provide unique ID
+    virtual sal_uInt32 getPrimitive2DID() const override;
+};
+
+// PolyPolygonGraphicPrimitive2D class
+
+/** PolyPolygonGraphicPrimitive2D class
+
+    This primitive defines a tools::PolyPolygon filled with bitmap data
+    (including transparence). The decomosition will create a MaskPrimitive2D
+    containing a FillGraphicPrimitive2D.
+ */
+class DRAWINGLAYER_DLLPUBLIC PolyPolygonGraphicPrimitive2D final
+    : public BufferedDecompositionPrimitive2D
+{
+private:
+    /// the tools::PolyPolygon geometry
+    basegfx::B2DPolyPolygon maPolyPolygon;
+
+    /// the definition range
+    basegfx::B2DRange maDefinitionRange;
+
+    /// the bitmap fill definition (may include tiling)
+    attribute::FillGraphicAttribute maFillGraphic;
+
+    /// local decomposition.
+    virtual void
+    create2DDecomposition(Primitive2DContainer& rContainer,
+                          const geometry::ViewInformation2D& rViewInformation) const override;
+
+public:
+    PolyPolygonGraphicPrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon,
+                                  const basegfx::B2DRange& rDefinitionRange,
+                                  const attribute::FillGraphicAttribute& rFillGraphic);
+
+    /// data read access
+    const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
+    const basegfx::B2DRange& getDefinitionRange() const { return maDefinitionRange; }
+    const attribute::FillGraphicAttribute& getFillGraphic() const { return maFillGraphic; }
+
+    /// compare operator
+    virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
+
+    /// provide unique ID
+    virtual sal_uInt32 getPrimitive2DID() const override;
+};
+
+// PolyPolygonSelectionPrimitive2D class
+
+/** PolyPolygonSelectionPrimitive2D class
+
+    This primitive defines a tools::PolyPolygon which gets filled with a defined color
+    and a defined transparence, but also gets extended ('grown') by the given
+    discrete size (thus being a view-dependent primitive)
+ */
+class DRAWINGLAYER_DLLPUBLIC PolyPolygonSelectionPrimitive2D final
+    : public DiscreteMetricDependentPrimitive2D
+{
+private:
+    /// the tools::PolyPolygon geometry
+    basegfx::B2DPolyPolygon maPolyPolygon;
+
+    /// the color
+    basegfx::BColor maColor;
+
+    /// the transparence [0.0 .. 1.0]
+    double mfTransparence;
+
+    /// the discrete grow size ('pixels'), only positive values allowed
+    double mfDiscreteGrow;
+
+    /// draw polygons filled when fill is set
+    bool mbFill : 1;
+
+    /// local decomposition.
+    virtual void
+    create2DDecomposition(Primitive2DContainer& rContainer,
+                          const geometry::ViewInformation2D& rViewInformation) const override;
+
+public:
+    /// constructor
+    PolyPolygonSelectionPrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon,
+                                    const basegfx::BColor& rColor, double fTransparence,
+                                    double fDiscreteGrow, bool bFill);
+
+    /// data read access
+    const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
+    const basegfx::BColor& getColor() const { return maColor; }
+    double getTransparence() const { return mfTransparence; }
+    double getDiscreteGrow() const { return mfDiscreteGrow; }
+    bool getFill() const { return mbFill; }
+
+    /// compare operator
+    virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
+
+    /// get range
+    virtual basegfx::B2DRange
+    getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
+
+    /// provide unique ID
+    virtual sal_uInt32 getPrimitive2DID() const override;
+};
 } // end of namespace primitive2d::drawinglayer
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
