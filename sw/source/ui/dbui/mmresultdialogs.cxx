@@ -898,9 +898,9 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
         {
             //Make sure we don't pick e.g. the flat xml filter
             //for this format
-            pSfxFlt = SwIoSystem::GetFilterOfFormat(
-                FILTER_XML,
-                SwDocShell::Factory().GetFilterContainer() );
+            pSfxFlt = pFilterContainer->GetFilter4FilterName(
+                "writer8",
+                SfxFilterFlags::EXPORT);
         }
         break;
         case MM_DOCTYPE_PDF:
