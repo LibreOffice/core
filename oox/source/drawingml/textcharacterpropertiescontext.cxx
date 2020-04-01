@@ -162,6 +162,12 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
                 mrTextCharacterProperties.maAsianThemeFont.setAttributes(rAttribs.getString(W_TOKEN(eastAsiaTheme), OUString()));
             }
             break;
+        case W_TOKEN( spacing ):
+        {
+            auto attrib = rAttribs.getInteger(W_TOKEN( val ), 0);
+            mrTextCharacterProperties.moSpacing = attrib;
+            break;
+        }
         case W_TOKEN( b ):
             mrTextCharacterProperties.moBold = rAttribs.getBool(W_TOKEN( val ), true);
             break;
