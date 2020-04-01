@@ -64,4 +64,11 @@ $(eval $(call gb_CppunitTest_use_custom_headers,xmlsecurity_signing,\
     officecfg/registry \
 ))
 
+ifeq ($(OS),WNT)
+# Initializing DocumentSignatureManager will require gpgme-w32spawn.exe in workdir/LinkTarget/Executable
+$(eval $(call gb_CppunitTest_use_packages,xmlsecurity_signing,\
+    $(call gb_Helper_optional,GPGMEPP,gpgmepp)\
+))
+endif
+
 # vim: set noet sw=4 ts=4:
