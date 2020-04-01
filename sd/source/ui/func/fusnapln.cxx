@@ -172,9 +172,9 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
         switch ( static_cast<SnapKind>(static_cast<const SfxUInt16Item&>(
                  pArgs->Get(ATTR_SNAPLINE_KIND)).GetValue()) )
         {
-            case SK_HORIZONTAL  : eKind = SdrHelpLineKind::Horizontal;   break;
-            case SK_VERTICAL    : eKind = SdrHelpLineKind::Vertical;     break;
-            default             : eKind = SdrHelpLineKind::Point;        break;
+            case SnapKind::Horizontal  : eKind = SdrHelpLineKind::Horizontal;   break;
+            case SnapKind::Vertical    : eKind = SdrHelpLineKind::Vertical;     break;
+            default                    : eKind = SdrHelpLineKind::Point;        break;
         }
         pPV->InsertHelpLine(SdrHelpLine(eKind, aHlpPos));
     }
