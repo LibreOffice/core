@@ -991,12 +991,10 @@ OUString SecurityEnvironment_MSCryptImpl::getSecurityEnvironmentInformation()
 
 xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() {
 
-    xmlSecKeysMngrPtr pKeysMngr = nullptr ;
-
     /*-
      * The following lines is based on the of xmlsec-mscrypto crypto engine
      */
-    pKeysMngr = xmlsecurity::MSCryptoAppliedKeysMngrCreate() ;
+    xmlSecKeysMngrPtr pKeysMngr = xmlsecurity::MSCryptoAppliedKeysMngrCreate() ;
     if( pKeysMngr == nullptr )
         throw uno::RuntimeException() ;
 
