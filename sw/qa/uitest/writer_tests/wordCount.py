@@ -125,7 +125,7 @@ class writerWordCount(UITestCase):
 
         self.ui_test.close_doc()
 
-    def test_word_count_interpunction_counted_tdf56975(self):
+    def test_word_count_interpunction_counted_tdf56975_a(self):
 
         self.ui_test.create_doc_in_start_center("writer")
         xWriterDoc = self.xUITest.getTopFocusWindow()
@@ -159,7 +159,7 @@ class writerWordCount(UITestCase):
 
         self.ui_test.close_doc()
 
-    def test_word_count_interpunction_counted_tdf56975(self):
+    def test_word_count_interpunction_counted_tdf56975_b(self):
 
         self.ui_test.create_doc_in_start_center("writer")
         xWriterDoc = self.xUITest.getTopFocusWindow()
