@@ -1144,6 +1144,60 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDocxTablePosition, "floating-table-posit
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblpPr", "tblpY", "4611");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testUnderlineGroupShapeText, "tdf123351_UnderlineGroupSapeText.docx")
+{
+    // tdf#123351: Check if correct underline is used.
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor"
+        "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:u", "val", "single");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor"
+        "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[2]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:u", "val", "double");
+
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor"
+        "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:u", "val", "thick");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor"
+        "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[2]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:u", "val", "dotted");
+
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/wp:anchor"
+        "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:u", "val", "dottedHeavy");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/wp:anchor"
+        "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[2]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:u", "val", "dash");
+
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent[4]/mc:Choice/w:drawing/wp:anchor"
+        "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:u", "val", "dashedHeavy");
+
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent[5]/mc:Choice/w:drawing/wp:anchor"
+        "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:txbx/w:txbxContent/w:p/w:r[1]/w:rPr/w:u", "val", "dashLongHeavy");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent[5]/mc:Choice/w:drawing/wp:anchor"
+        "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[2]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:u", "val", "dotDash");
+
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent[6]/mc:Choice/w:drawing/wp:anchor"
+        "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:u", "val", "dashDotHeavy");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent[6]/mc:Choice/w:drawing/wp:anchor"
+        "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[2]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:u", "val", "dotDotDash");
+
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent[7]/mc:Choice/w:drawing/wp:anchor"
+        "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:u", "val", "dashDotDotHeavy");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent[7]/mc:Choice/w:drawing/wp:anchor"
+        "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[2]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:u", "val", "wave");
+
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent[8]/mc:Choice/w:drawing/wp:anchor"
+        "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:u", "val", "wavyHeavy");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent[8]/mc:Choice/w:drawing/wp:anchor"
+        "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[2]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:u", "val", "wavyDouble");
+
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[32]/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor"
+        "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:u", "val", "none");
+
+    // TODO: Import of "words".
+    // This must fail when import of "words" is implemented. This is a temporary solution, we read "words" as "single".
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[32]/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor"
+        "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[2]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:u", "val", "single");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -162,6 +162,46 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
                 mrTextCharacterProperties.maAsianThemeFont.setAttributes(rAttribs.getString(W_TOKEN(eastAsiaTheme), OUString()));
             }
             break;
+        case W_TOKEN( u ):
+        {
+            // If you add here, check if it is in drawingmltypes.cxx 113.
+            auto attrib = rAttribs.getString(W_TOKEN( val ), OUString());
+            if (attrib == "single" || attrib == "words") // TODO: implement words properly. Now it is a single line.
+                mrTextCharacterProperties.moUnderline = XML_sng;
+            else if (attrib == "wavyHeavy")
+                mrTextCharacterProperties.moUnderline = XML_wavyHeavy;
+            else if (attrib == "wavyDouble")
+                mrTextCharacterProperties.moUnderline = XML_wavyDbl;
+            else if (attrib == "wave")
+                mrTextCharacterProperties.moUnderline = XML_wavy;
+            else if (attrib == "thick")
+                mrTextCharacterProperties.moUnderline = XML_heavy;
+            else if (attrib == "dottedHeavy")
+                mrTextCharacterProperties.moUnderline = XML_dottedHeavy;
+            else if (attrib == "dotted")
+                mrTextCharacterProperties.moUnderline = XML_dotted;
+            else if (attrib == "dashDotDotHeavy")
+                mrTextCharacterProperties.moUnderline = XML_dotDotDashHeavy;
+            else if (attrib == "dotDotDash")
+                mrTextCharacterProperties.moUnderline = XML_dotDotDash;
+            else if (attrib == "dashDotHeavy")
+                mrTextCharacterProperties.moUnderline = XML_dotDashHeavy;
+            else if (attrib == "dotDash")
+                mrTextCharacterProperties.moUnderline = XML_dotDash;
+            else if (attrib == "double")
+                mrTextCharacterProperties.moUnderline = XML_dbl;
+            else if (attrib == "dashLongHeavy")
+                mrTextCharacterProperties.moUnderline = XML_dashLongHeavy;
+            else if (attrib == "dashLong")
+                mrTextCharacterProperties.moUnderline = XML_dashLong;
+            else if (attrib == "dashedHeavy")
+                mrTextCharacterProperties.moUnderline = XML_dashHeavy;
+            else if (attrib == "dash")
+                mrTextCharacterProperties.moUnderline = XML_dash;
+            else if (attrib == "none")
+                mrTextCharacterProperties.moUnderline = XML_none;
+            break;
+        }
         case W_TOKEN( b ):
             mrTextCharacterProperties.moBold = rAttribs.getBool(W_TOKEN( val ), true);
             break;
