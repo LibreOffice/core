@@ -63,6 +63,7 @@ $(eval $(call gb_Library_use_libraries,vcl,\
     cppu \
     cppuhelper \
     $(call gb_Helper_optional,BREAKPAD,crashreport) \
+    drawinglayercore \
     i18nlangtag \
     i18nutil \
     $(if $(ENABLE_JAVA),jvmaccess) \

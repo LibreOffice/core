@@ -818,4 +818,9 @@ void OutputDevice::ImplDisposeCanvas()
     }
 }
 
+bool OutputDevice::drawPrimitive2D(drawinglayer::primitive2d::Primitive2DContainer & rPrimitive2D)
+{
+    return false;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
