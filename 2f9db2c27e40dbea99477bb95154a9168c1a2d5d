@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c513bc98_3f9525ce",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1167,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-04-01T15:02:59Z",
+      "side": 1,
+      "message": "Without your fix, assertXPath() calls return with 2 matches, not 0, see line \"Actual: 2\" in command line testing with\n\nmake CPPUNIT_TEST_NAME\u003dtestUnderlineGroupShapeText CppunitTest_sw_ooxmlexport4\n\nBecause of this questionable result, it\u0027s better to remove the last argument:\n\n\"/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:u [@w:val\u003d\u0027single\u0027]\");\n\nor simply:\n\n\"/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:u\", \"val\", \"single\");",
+      "range": {
+        "startLine": 1154,
+        "startChar": 4,
+        "endLine": 1167,
+        "endChar": 115
+      },
+      "revId": "2f9db2c27e40dbea99477bb95154a9168c1a2d5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
