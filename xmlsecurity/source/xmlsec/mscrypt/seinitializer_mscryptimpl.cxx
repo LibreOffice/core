@@ -17,12 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+#include <xmlsec-wrapper.h>
 
 #include "seinitializer_mscryptimpl.hxx"
 
 #include "securityenvironment_mscryptimpl.hxx"
 
-#include <xmlsec-wrapper.h>
 #include <xmlsec/mscng/app.h>
 #include <com/sun/star/xml/crypto/SecurityEnvironment.hpp>
 #include <com/sun/star/xml/crypto/XMLSecurityContext.hpp>
