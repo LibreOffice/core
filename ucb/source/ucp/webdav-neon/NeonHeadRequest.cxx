@@ -53,8 +53,8 @@ void process_headers( ne_request * req,
 #endif
     while ( ( cursor = ne_response_header_iterate( req, cursor,
                                                    &name, &value ) ) != nullptr ) {
-        OUString aHeaderName( OUString::createFromAscii( name ) );
-        OUString aHeaderValue( OUString::createFromAscii( value ) );
+        OUString aHeaderName(name, strlen(name), RTL_TEXTENCODING_ASCII_US);
+        OUString aHeaderValue(value, strlen(value), RTL_TEXTENCODING_ASCII_US);
 
         SAL_INFO( "ucb.ucp.webdav", "HEAD - received header: " << aHeaderName << ":" << aHeaderValue);
 
