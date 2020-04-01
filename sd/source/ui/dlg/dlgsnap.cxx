@@ -119,9 +119,9 @@ void SdSnapLineDlg::GetAttr(SfxItemSet& rOutAttrs)
 {
     SnapKind eKind;
 
-    if (m_xRbHorz->get_active())      eKind = SK_HORIZONTAL;
-    else if (m_xRbVert->get_active()) eKind = SK_VERTICAL;
-    else                              eKind = SK_POINT;
+    if (m_xRbHorz->get_active())      eKind = SnapKind::Horizontal;
+    else if (m_xRbVert->get_active()) eKind = SnapKind::Vertical;
+    else                              eKind = SnapKind::Point;
 
     nXValue = sal_Int32(GetCoreValue(*m_xMtrFldX, MapUnit::Map100thMM) * aUIScale);
     nYValue = sal_Int32(GetCoreValue(*m_xMtrFldY, MapUnit::Map100thMM) * aUIScale);

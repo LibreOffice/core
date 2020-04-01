@@ -21,7 +21,8 @@
 #define INCLUDED_SD_INC_SDENUMDEF_HXX
 
 #define RET_SNAP_DELETE 111
-enum SnapKind { SK_HORIZONTAL, SK_VERTICAL, SK_POINT };
+
+enum class SnapKind { Horizontal, Vertical, Point };
 
 #endif
 
