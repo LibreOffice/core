@@ -292,7 +292,7 @@ void SdVectorizeDlg::LoadSettings()
 {
     tools::SvRef<SotStorageStream>  xIStm( SD_MOD()->GetOptionStream(
                                SD_OPTION_VECTORIZE ,
-                               SD_OPTION_LOAD ) );
+                               SdOptionStreamMode::Load ) );
     sal_uInt16              nLayers;
     sal_uInt16              nReduce;
     sal_uInt16              nFillHoles;
@@ -323,7 +323,7 @@ void SdVectorizeDlg::SaveSettings() const
 {
     tools::SvRef<SotStorageStream> xOStm( SD_MOD()->GetOptionStream(
                               SD_OPTION_VECTORIZE  ,
-                              SD_OPTION_STORE ) );
+                              SdOptionStreamMode::Store ) );
 
     if( xOStm.is() )
     {

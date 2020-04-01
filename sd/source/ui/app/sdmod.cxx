@@ -193,7 +193,7 @@ tools::SvRef<SotStorageStream> SdModule::GetOptionStream( const OUString& rOptio
 
         aStmName += rOptionName;
 
-        if( SD_OPTION_STORE == eMode || xOptionStorage->IsContained( aStmName ) )
+        if( SdOptionStreamMode::Store == eMode || xOptionStorage->IsContained( aStmName ) )
             xStm = xOptionStorage->OpenSotStream( aStmName );
     }
 
