@@ -165,7 +165,7 @@ ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SotStorage& rStorag
     , mbDocumentFound(false)
     , mnFilterOptions(0)
     , mpDoc(pDocument)
-    , mePresChange(PRESCHANGE_MANUAL)
+    , mePresChange(PresChange::Manual)
     , mnBackgroundObjectsLayerID(0)
 {
     if ( !m_bOk )
@@ -902,7 +902,7 @@ bool ImplSdPPTImport::Import()
         {
             for ( sal_uInt16 nPage = 0; nPage < nPageCnt; nPage++ )
             {
-                mePresChange = PRESCHANGE_SEMIAUTO;
+                mePresChange = PresChange::SemiAuto;
                 SetPageNum( nPage );
                 SdPage* pPage = static_cast<SdPage*>(MakeBlancPage( false ));
                 PptSlidePersistEntry* pMasterPersist = nullptr;
@@ -1779,7 +1779,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const bool bNewAnimations
 
                                 if ( nBuildFlags & 0x400 )                      // slidechange by time
                                 {   // time to show (in Ticks)
-                                    pPage->SetPresChange( PRESCHANGE_AUTO );
+                                    pPage->SetPresChange( PresChange::Auto );
                                     pPage->SetTime( nSlideTime / 1000.0 );
                                 }
                                 else

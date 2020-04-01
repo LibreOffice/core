@@ -20,15 +20,13 @@
 #ifndef INCLUDED_SD_INC_DIADEF_H
 #define INCLUDED_SD_INC_DIADEF_H
 
-enum PresChange
+enum class PresChange
 {
-    PRESCHANGE_MANUAL = 0,
-    PRESCHANGE_AUTO = 1,
-    PRESCHANGE_SEMIAUTO = 2
+    Manual = 0,
+    Auto = 1,
+    SemiAuto = 2,
+    LAST = SemiAuto
 };
-
-// has to be adjusted
-#define PRESCHANGE_COUNT 3
 
 #endif // INCLUDED_SD_INC_DIADEF_H
 

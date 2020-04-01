@@ -509,7 +509,7 @@ void EffectMigration::SetAnimationEffect( SvxShape* pShape, AnimationEffect eEff
                 CustomAnimationEffectPtr pEffect = std::make_shared<CustomAnimationEffect>( xNode );
                 pEffect->setTarget( makeAny( xShape ) );
                 SdPage* pPage = dynamic_cast< SdPage* >( pObj->getSdrPageFromSdrObject() );
-                const bool bManual = (pPage == nullptr) || (pPage->GetPresChange() == PRESCHANGE_MANUAL);
+                const bool bManual = (pPage == nullptr) || (pPage->GetPresChange() == PresChange::Manual);
                 if( !bManual )
                     pEffect->setNodeType( EffectNodeType::AFTER_PREVIOUS );
 
@@ -668,7 +668,7 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
                     pMainSequence->append( pShapeEffect );
 
                     SdPage* pPage = dynamic_cast< SdPage* >( pObj->getSdrPageFromSdrObject() );
-                    if( pPage && pPage->GetPresChange() != PRESCHANGE_MANUAL )
+                    if( pPage && pPage->GetPresChange() != PresChange::Manual )
                         pShapeEffect->setNodeType( EffectNodeType::AFTER_PREVIOUS );
                 }
             }
@@ -677,7 +677,7 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
         if( pShapeEffect.get() )
         {
             SdPage* pPage = dynamic_cast< SdPage* >( pObj->getSdrPageFromSdrObject() );
-            const bool bManual = (pPage == nullptr) || (pPage->GetPresChange() == PRESCHANGE_MANUAL);
+            const bool bManual = (pPage == nullptr) || (pPage->GetPresChange() == PresChange::Manual);
 
             // now create effects for each paragraph
             pGroup =

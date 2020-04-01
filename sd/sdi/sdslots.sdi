@@ -63,9 +63,9 @@ module StarDraw
 
         enum PresChange
         {
-            PRESCHANGE_MANUAL,
-            PRESCHANGE_AUTO,
-            PRESCHANGE_SEMIAUTO
+            PresChange::Manual,
+            PresChange::Auto,
+            PresChange::SemiAuto
         };
 
             // Items
