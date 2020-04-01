@@ -461,7 +461,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
                 pWin ? pWin->GetFrameWeld() : nullptr,
                 false,
                 *pStyleSheet,
-                PO_TITLE,
+                PresentationObjects::Title,
                 pStyleSheetPool);
             break;
         }
