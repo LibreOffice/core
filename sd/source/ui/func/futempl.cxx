@@ -287,7 +287,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
         case SID_STYLE_NEW:
         case SID_STYLE_EDIT:
         {
-            PresentationObjects ePO = PO_OUTLINE_1;
+            PresentationObjects ePO = PresentationObjects::Outline_1;
 
             if( pStyleSheet )
             {
@@ -309,27 +309,27 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                     if (aName == SdResId(STR_PSEUDOSHEET_TITLE))
                     {
-                        ePO    = PO_TITLE;
+                        ePO    = PresentationObjects::Title;
                     }
                     else if (aName == SdResId(STR_PSEUDOSHEET_SUBTITLE))
                     {
-                        ePO    = PO_SUBTITLE;
+                        ePO    = PresentationObjects::Subtitle;
                     }
                     else if (aName ==
                              SdResId(STR_PSEUDOSHEET_BACKGROUND))
                     {
                         bBackground = true;
-                        ePO    = PO_BACKGROUND;
+                        ePO    = PresentationObjects::Background;
                     }
                     else if (aName ==
                              SdResId(STR_PSEUDOSHEET_BACKGROUNDOBJECTS))
                     {
-                        ePO    = PO_BACKGROUNDOBJECTS;
+                        ePO    = PresentationObjects::BackgroundObjects;
                     }
                     else if (aName ==
                              SdResId(STR_PSEUDOSHEET_NOTES))
                     {
-                        ePO    = PO_NOTES;
+                        ePO    = PresentationObjects::Notes;
                     }
                     else if(aName.indexOf(SdResId(STR_PSEUDOSHEET_OUTLINE)) != -1)
                     {
@@ -339,15 +339,15 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         sal_uInt16 nLevel = static_cast<sal_uInt16>(aNumStr.toInt32());
                         switch (nLevel)
                         {
-                            case 1: ePO = PO_OUTLINE_1; break;
-                            case 2: ePO = PO_OUTLINE_2; break;
-                            case 3: ePO = PO_OUTLINE_3; break;
-                            case 4: ePO = PO_OUTLINE_4; break;
-                            case 5: ePO = PO_OUTLINE_5; break;
-                            case 6: ePO = PO_OUTLINE_6; break;
-                            case 7: ePO = PO_OUTLINE_7; break;
-                            case 8: ePO = PO_OUTLINE_8; break;
-                            case 9: ePO = PO_OUTLINE_9; break;
+                            case 1: ePO = PresentationObjects::Outline_1; break;
+                            case 2: ePO = PresentationObjects::Outline_2; break;
+                            case 3: ePO = PresentationObjects::Outline_3; break;
+                            case 4: ePO = PresentationObjects::Outline_4; break;
+                            case 5: ePO = PresentationObjects::Outline_5; break;
+                            case 6: ePO = PresentationObjects::Outline_6; break;
+                            case 7: ePO = PresentationObjects::Outline_7; break;
+                            case 8: ePO = PresentationObjects::Outline_8; break;
+                            case 9: ePO = PresentationObjects::Outline_9; break;
                         }
                     }
                     else
@@ -402,7 +402,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                             aTempSet.ClearInvalidItems();
 
                             // EE_PARA_NUMBULLET item is only valid in first outline template
-                            if( (ePO >= PO_OUTLINE_2) && (ePO <= PO_OUTLINE_9) )
+                            if( (ePO >= PresentationObjects::Outline_2) && (ePO <= PresentationObjects::Outline_9) )
                             {
                                 if (aTempSet.GetItemState(EE_PARA_NUMBULLET) == SfxItemState::SET)
                                 {

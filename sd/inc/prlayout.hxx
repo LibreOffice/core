@@ -26,22 +26,22 @@
 #ifndef INCLUDED_SD_INC_PRLAYOUT_HXX
 #define INCLUDED_SD_INC_PRLAYOUT_HXX
 
-enum PresentationObjects
+enum class PresentationObjects
 {
-    PO_TITLE,
-    PO_BACKGROUND,
-    PO_BACKGROUNDOBJECTS,
-    PO_OUTLINE_1,
-    PO_OUTLINE_2,
-    PO_OUTLINE_3,
-    PO_OUTLINE_4,
-    PO_OUTLINE_5,
-    PO_OUTLINE_6,
-    PO_OUTLINE_7,
-    PO_OUTLINE_8,
-    PO_OUTLINE_9,
-    PO_NOTES,
-    PO_SUBTITLE
+    Title,
+    Background,
+    BackgroundObjects,
+    Outline_1,
+    Outline_2,
+    Outline_3,
+    Outline_4,
+    Outline_5,
+    Outline_6,
+    Outline_7,
+    Outline_8,
+    Outline_9,
+    Notes,
+    Subtitle
 };
 
 #endif // INCLUDED_SD_INC_PRLAYOUT_HXX

@@ -37,7 +37,7 @@
 #include <svl/intitem.hxx>
 #include <svx/flagsdef.hxx>
 
-#define IS_OUTLINE(x) (x >= PO_OUTLINE_1 && x <= PO_OUTLINE_9)
+#define IS_OUTLINE(x) (x >= PresentationObjects::Outline_1 && x <= PresentationObjects::Outline_9)
 
 /**
  * Constructor of Tab dialog: appends pages to the dialog
@@ -171,36 +171,36 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg(SfxObjectShell const * pDocSh,
 
     switch( ePO )
     {
-        case PO_TITLE:
+        case PresentationObjects::Title:
             aTitle = SdResId(STR_PSEUDOSHEET_TITLE);
         break;
 
-        case PO_SUBTITLE:
+        case PresentationObjects::Subtitle:
             aTitle = SdResId(STR_PSEUDOSHEET_SUBTITLE);
         break;
 
-        case PO_BACKGROUND:
+        case PresentationObjects::Background:
             aTitle = SdResId(STR_PSEUDOSHEET_BACKGROUND);
         break;
 
-        case PO_BACKGROUNDOBJECTS:
+        case PresentationObjects::BackgroundObjects:
             aTitle = SdResId(STR_PSEUDOSHEET_BACKGROUNDOBJECTS);
         break;
 
-        case PO_OUTLINE_1:
-        case PO_OUTLINE_2:
-        case PO_OUTLINE_3:
-        case PO_OUTLINE_4:
-        case PO_OUTLINE_5:
-        case PO_OUTLINE_6:
-        case PO_OUTLINE_7:
-        case PO_OUTLINE_8:
-        case PO_OUTLINE_9:
+        case PresentationObjects::Outline_1:
+        case PresentationObjects::Outline_2:
+        case PresentationObjects::Outline_3:
+        case PresentationObjects::Outline_4:
+        case PresentationObjects::Outline_5:
+        case PresentationObjects::Outline_6:
+        case PresentationObjects::Outline_7:
+        case PresentationObjects::Outline_8:
+        case PresentationObjects::Outline_9:
             aTitle = SdResId(STR_PSEUDOSHEET_OUTLINE) + " " +
-                OUString::number( ePO - PO_OUTLINE_1 + 1 );
+                OUString::number( static_cast<int>(ePO) - static_cast<int>(PresentationObjects::Outline_1) + 1 );
         break;
 
-        case PO_NOTES:
+        case PresentationObjects::Notes:
             aTitle = SdResId(STR_PSEUDOSHEET_NOTES);
         break;
     }
@@ -289,15 +289,15 @@ sal_uInt16 SdPresLayoutTemplateDlg::GetOutlineLevel() const
 {
     switch( ePO )
     {
-    case PO_OUTLINE_1: return 0;
-    case PO_OUTLINE_2: return 1;
-    case PO_OUTLINE_3: return 2;
-    case PO_OUTLINE_4: return 3;
-    case PO_OUTLINE_5: return 4;
-    case PO_OUTLINE_6: return 5;
-    case PO_OUTLINE_7: return 6;
-    case PO_OUTLINE_8: return 7;
-    case PO_OUTLINE_9: return 8;
+    case PresentationObjects::Outline_1: return 0;
+    case PresentationObjects::Outline_2: return 1;
+    case PresentationObjects::Outline_3: return 2;
+    case PresentationObjects::Outline_4: return 3;
+    case PresentationObjects::Outline_5: return 4;
+    case PresentationObjects::Outline_6: return 5;
+    case PresentationObjects::Outline_7: return 6;
+    case PresentationObjects::Outline_8: return 7;
+    case PresentationObjects::Outline_9: return 8;
     default:
         SAL_WARN( "sd", "Wrong Po! [CL]");
     }

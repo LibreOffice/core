@@ -116,12 +116,12 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
 
     if( bPage )
     {
-        ePO = PO_TITLE;
+        ePO = PresentationObjects::Title;
         aStyleName += STR_LAYOUT_TITLE;
     }
     else
     {
-        ePO = static_cast<PresentationObjects>( PO_OUTLINE_1 + nDepth - 1 );
+        ePO = static_cast<PresentationObjects>( static_cast<int>(PresentationObjects::Outline_1) + nDepth - 1 );
         aStyleName += STR_LAYOUT_OUTLINE " "
             + OUString::number(nDepth);
     }
