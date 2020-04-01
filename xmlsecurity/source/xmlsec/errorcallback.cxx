@@ -17,9 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <xmlsec/errorcallback.hxx>
-
+#include <sal/config.h>
 #include <xmlsec-wrapper.h>
+
+#include <xmlsec/errorcallback.hxx>
 
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>

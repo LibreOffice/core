@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <xmlsec-wrapper.h>
 
 #include <xmlelementwrapper_xmlsecimpl.hxx>
 #include <xmlsec/xmlstreamio.hxx>
@@ -25,7 +26,6 @@
 
 #include "securityenvironment_nssimpl.hxx"
 
-#include <xmlsec-wrapper.h>
 #include <com/sun/star/xml/crypto/XXMLSignature.hpp>
 #include <memory>
 

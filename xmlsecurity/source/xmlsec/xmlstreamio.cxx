@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+#include <xmlsec-wrapper.h>
 
 /*
  * Implementation of the I/O interfaces based on stream and URI binding
@@ -28,8 +30,6 @@
 #include <comphelper/scopeguard.hxx>
 
 #include <com/sun/star/xml/crypto/XUriBinding.hpp>
-
-#include <xmlsec-wrapper.h>
 
 static bool g_bInputCallbacksEnabled = false;
 static bool g_bInputCallbacksRegistered = false;

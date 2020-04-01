@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 #include <sal/log.hxx>
+#include <xmlsec-wrapper.h>
 #include <cppuhelper/supportsservice.hxx>
 #include <gpg/xmlsignature_gpgimpl.hxx>
 
@@ -41,7 +42,6 @@
 #include <xmlsec/errorcallback.hxx>
 
 #include "SecurityEnvironment.hxx"
-#include <xmlsec-wrapper.h>
 
 using namespace css::uno;
 using namespace css::lang;
