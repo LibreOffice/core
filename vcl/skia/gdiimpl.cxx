@@ -324,44 +324,50 @@ void SkiaSalGraphicsImpl::postDraw()
         {
             // Make slightly larger, just in case (rounding, antialiasing,...).
             mXorExtents.outset(2, 2);
-            mXorExtents.intersect(SkRect::MakeXYWH(0, 0, mSurface->width(), mSurface->height()));
+            if (!mXorExtents.intersect(
+                    SkRect::MakeXYWH(0, 0, mSurface->width(), mSurface->height())))
+                mXorExtents.setEmpty();
         }
         SAL_INFO("vcl.skia.trace",
                  "applyxor(" << this << "): "
                              << tools::Rectangle(mXorExtents.left(), mXorExtents.top(),
                                                  mXorExtents.right(), mXorExtents.bottom()));
-        // Copy the surface contents to another pixmap.
-        SkBitmap surfaceBitmap;
-        // Use unpremultiplied alpha format, so that we do not have to do the conversions to get
-        // the RGB and back (Skia will do it when converting, but it'll be presumably faster at it).
-        if (!surfaceBitmap.tryAllocPixels(
-                mSurface->imageInfo().makeAlphaType(kUnpremul_SkAlphaType)))
-            abort();
-        SkPaint paint;
-        paint.setBlendMode(SkBlendMode::kSrc); // copy as is
-        SkCanvas canvas(surfaceBitmap);
-        canvas.drawImageRect(mSurface->makeImageSnapshot(), mXorExtents, mXorExtents, &paint);
-        // xor to surfaceBitmap
-        assert(surfaceBitmap.info().alphaType() == kUnpremul_SkAlphaType);
-        assert(mXorBitmap.info().alphaType() == kUnpremul_SkAlphaType);
-        assert(surfaceBitmap.bytesPerPixel() == 4);
-        assert(mXorBitmap.bytesPerPixel() == 4);
-        for (int y = mXorExtents.top(); y < mXorExtents.bottom(); ++y)
+        if (!mXorExtents.isEmpty()) // the intersection above may be empty
         {
-            uint8_t* data = static_cast<uint8_t*>(surfaceBitmap.getAddr(mXorExtents.x(), y));
-            const uint8_t* xordata = static_cast<uint8_t*>(mXorBitmap.getAddr(mXorExtents.x(), y));
-            for (int x = 0; x < mXorExtents.width(); ++x)
+            // Copy the surface contents to another pixmap.
+            SkBitmap surfaceBitmap;
+            // Use unpremultiplied alpha format, so that we do not have to do the conversions to get
+            // the RGB and back (Skia will do it when converting, but it'll be presumably faster at it).
+            if (!surfaceBitmap.tryAllocPixels(
+                    mSurface->imageInfo().makeAlphaType(kUnpremul_SkAlphaType)))
+                abort();
+            SkPaint paint;
+            paint.setBlendMode(SkBlendMode::kSrc); // copy as is
+            SkCanvas canvas(surfaceBitmap);
+            canvas.drawImageRect(mSurface->makeImageSnapshot(), mXorExtents, mXorExtents, &paint);
+            // xor to surfaceBitmap
+            assert(surfaceBitmap.info().alphaType() == kUnpremul_SkAlphaType);
+            assert(mXorBitmap.info().alphaType() == kUnpremul_SkAlphaType);
+            assert(surfaceBitmap.bytesPerPixel() == 4);
+            assert(mXorBitmap.bytesPerPixel() == 4);
+            for (int y = mXorExtents.top(); y < mXorExtents.bottom(); ++y)
             {
-                *data++ ^= *xordata++;
-                *data++ ^= *xordata++;
-                *data++ ^= *xordata++;
-                // alpha is not xor-ed
-                data++;
-                xordata++;
+                uint8_t* data = static_cast<uint8_t*>(surfaceBitmap.getAddr(mXorExtents.x(), y));
+                const uint8_t* xordata
+                    = static_cast<uint8_t*>(mXorBitmap.getAddr(mXorExtents.x(), y));
+                for (int x = 0; x < mXorExtents.width(); ++x)
+                {
+                    *data++ ^= *xordata++;
+                    *data++ ^= *xordata++;
+                    *data++ ^= *xordata++;
+                    // alpha is not xor-ed
+                    data++;
+                    xordata++;
+                }
             }
+            surfaceBitmap.notifyPixelsChanged();
+            mSurface->getCanvas()->drawBitmapRect(surfaceBitmap, mXorExtents, mXorExtents, &paint);
         }
-        surfaceBitmap.notifyPixelsChanged();
-        mSurface->getCanvas()->drawBitmapRect(surfaceBitmap, mXorExtents, mXorExtents, &paint);
         mXorCanvas.reset();
         mXorBitmap.reset();
         mXorExtents.setEmpty();
