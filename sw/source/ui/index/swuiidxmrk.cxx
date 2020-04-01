@@ -121,7 +121,20 @@ SwIndexMarkPane::SwIndexMarkPane(const std::shared_ptr<weld::Dialog>& rDialog, w
         m_xPhoneticED2->show();
     }
 
-    m_xDialog->set_title(SwResId(m_bNewMark ? STR_IDXMRK_INSERT : STR_IDXMRK_EDIT));
+    // tdf#129726 there are two help pages for this dialog, one for each mode,
+    // where a widget/dialog appears in both, use -insert/-edit to disambiguate
+    if (m_bNewMark)
+    {
+        m_xDialog->set_title(SwResId(STR_IDXMRK_INSERT));
+        m_xDialog->set_help_id(m_xDialog->get_help_id() + "-insert");
+        m_xTypeDCB->set_help_id(m_xTypeDCB->get_help_id() + "-insert");
+    }
+    else
+    {
+        m_xDialog->set_title(SwResId(STR_IDXMRK_EDIT));
+        m_xDialog->set_help_id(m_xDialog->get_help_id() + "-edit");
+        m_xTypeDCB->set_help_id(m_xTypeDCB->get_help_id() + "-edit");
+    }
 
     m_xDelBT->connect_clicked(LINK(this,SwIndexMarkPane,        DelHdl));
     m_xPrevBT->connect_clicked(LINK(this,SwIndexMarkPane,       PrevHdl));
