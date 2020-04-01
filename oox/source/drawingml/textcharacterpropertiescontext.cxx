@@ -165,7 +165,7 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
         case W_TOKEN( u ):
         {
             // If you add here, check if it is in drawingmltypes.cxx 113.
-            auto attrib = rAttribs.getString(W_TOKEN( val ), OUString());
+            auto attrib = rAttribs.getString(W_TOKEN(val), OUString());
             if (attrib == "single" || attrib == "words") // TODO: implement words properly. Now it is a single line.
                 mrTextCharacterProperties.moUnderline = XML_sng;
             else if (attrib == "wavyHeavy")
@@ -200,6 +200,12 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
                 mrTextCharacterProperties.moUnderline = XML_dash;
             else if (attrib == "none")
                 mrTextCharacterProperties.moUnderline = XML_none;
+            break;
+        }
+        case W_TOKEN( spacing ):
+        {
+            auto attrib = rAttribs.getInteger(W_TOKEN( val ), 0);
+            mrTextCharacterProperties.moSpacing = attrib;
             break;
         }
         case W_TOKEN( b ):
