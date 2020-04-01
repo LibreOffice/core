@@ -2777,8 +2777,8 @@ void DesktopLOKTest::testSpellcheckerMultiView()
 
 void DesktopLOKTest::testControlState()
 {
-    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:BasicShapes.hexagon", nullptr, false);
+    LibLODocument_Impl* pDocument = loadDoc("search.ods");
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:StarShapes", nullptr, false);
     Scheduler::ProcessEventsToIdle();
 
     boost::property_tree::ptree aState;

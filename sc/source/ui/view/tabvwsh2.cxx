@@ -359,6 +359,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
                 if(pObj)
                 {
+                    SAL_WARN("DEBUG_MESSAGE", "Executing InsertObjectAtView!");
                     // insert into page
                     pView->InsertObjectAtView(pObj.release(), *pPageView);
 
