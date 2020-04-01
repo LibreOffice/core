@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cbcf360b_e92c6b04",
+        "filename": "sfx2/source/control/recentdocsview.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-01T17:50:53Z",
+      "side": 1,
+      "message": "See documentation of TOOLS_WARN_EXCEPTION (include/tools/diagnose_ex.h): \"This must be called as the FIRST thing in a catch block.\"",
+      "revId": "d98da969e79e2d3f41cee23736409ac6ee0427ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
