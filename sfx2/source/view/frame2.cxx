@@ -85,6 +85,9 @@ void SfxFrameWindow_Impl::dispose()
 void SfxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
+    // tdf#131613 the printers changing has no effect on window layout
+    if (rDCEvt.GetType() == DataChangedEventType::PRINTER)
+        return;
     SfxWorkWindow *pWorkWin = pFrame->GetWorkWindow_Impl();
     if ( pWorkWin )
         pWorkWin->DataChanged_Impl();
