@@ -292,7 +292,7 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
     {
         comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = getEmbeddedObjectContainer();
         rEmbeddedObjectContainer.setUserAllowsLinkUpdate(false);
-        bRet = SdXMLFilter( rMedium, *this, SDXMLMODE_Normal, SotStorage::GetVersion( rMedium.GetStorage() ) ).Import( nError );
+        bRet = SdXMLFilter( rMedium, *this, SdXMLFilterMode::Normal, SotStorage::GetVersion( rMedium.GetStorage() ) ).Import( nError );
     }
 
     if( bRet )
@@ -356,7 +356,7 @@ bool DrawDocShell::LoadFrom( SfxMedium& rMedium )
 
     // TODO/LATER: nobody is interested in the error code?!
     ErrCode nError = ERRCODE_NONE;
-    bool bRet = SdXMLFilter( rMedium, *this, SDXMLMODE_Organizer, SotStorage::GetVersion( rMedium.GetStorage() ) ).Import( nError );
+    bool bRet = SdXMLFilter( rMedium, *this, SdXMLFilterMode::Organizer, SotStorage::GetVersion( rMedium.GetStorage() ) ).Import( nError );
 
     // tell SFX to change viewshell when in preview mode
     if( IsPreview() )
@@ -470,7 +470,7 @@ bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
         mpDoc->CreateFirstPages();
         mpDoc->StopWorkStartupDelay();
         ErrCode nError = ERRCODE_NONE;
-        bRet = SdXMLFilter( rMedium, *this, SDXMLMODE_Normal, SOFFICE_FILEFORMAT_60 ).Import( nError );
+        bRet = SdXMLFilter( rMedium, *this, SdXMLFilterMode::Normal, SOFFICE_FILEFORMAT_60 ).Import( nError );
     }
     else if (aFilterName == "CGM - Computer Graphics Metafile")
     {
@@ -528,7 +528,7 @@ bool DrawDocShell::Save()
     bool bRet = SfxObjectShell::Save();
 
     if( bRet )
-        bRet = SdXMLFilter( *GetMedium(), *this, SDXMLMODE_Normal, SotStorage::GetVersion( GetMedium()->GetStorage() ) ).Export();
+        bRet = SdXMLFilter( *GetMedium(), *this, SdXMLFilterMode::Normal, SotStorage::GetVersion( GetMedium()->GetStorage() ) ).Export();
 
     return bRet;
 }
@@ -572,7 +572,7 @@ bool DrawDocShell::SaveAs( SfxMedium& rMedium )
     bool bRet = SfxObjectShell::SaveAs( rMedium );
 
     if( bRet )
-        bRet = SdXMLFilter( rMedium, *this, SDXMLMODE_Normal, SotStorage::GetVersion( rMedium.GetStorage() ) ).Export();
+        bRet = SdXMLFilter( rMedium, *this, SdXMLFilterMode::Normal, SotStorage::GetVersion( rMedium.GetStorage() ) ).Export();
 
     if( GetError() == ERRCODE_NONE )
         SetError(ERRCODE_NONE);
@@ -614,7 +614,7 @@ bool DrawDocShell::ConvertTo( SfxMedium& rMedium )
         else if( aTypeName.indexOf( "StarOffice_XML_Impress" ) >= 0 ||
                  aTypeName.indexOf( "StarOffice_XML_Draw" ) >= 0 )
         {
-            xFilter = std::make_unique<SdXMLFilter>(rMedium, *this, SDXMLMODE_Normal, SOFFICE_FILEFORMAT_60);
+            xFilter = std::make_unique<SdXMLFilter>(rMedium, *this, SdXMLFilterMode::Normal, SOFFICE_FILEFORMAT_60);
         }
         else
         {
