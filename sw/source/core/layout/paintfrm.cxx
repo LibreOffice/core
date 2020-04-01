@@ -853,8 +853,8 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects, S
 
 void SwLineRects::LockLines( bool bLock )
 {
-    for (iterator it = aLineRects.begin(); it != aLineRects.end(); ++it)
-       (*it).Lock( bLock );
+    for (SwLineRect& rLRect : aLineRects)
+       rLRect.Lock( bLock );
 }
 
 static void lcl_DrawDashedRect( OutputDevice * pOut, SwLineRect const & rLRect )
@@ -1033,7 +1033,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                                  ((nLi < rLk.Left() && nLi+21 > rLk.Left()) ||
                                   (nLk < rLi.Left() && nLk+21 > rLi.Left())))
                             {
-                                aLineRects.erase(aLineRects.begin() + k);
+                                aLineRects.erase(aLineRects.begin() + i);
                                 // don't continue with inner loop any more:
                                 // the array may shrink!
                                 --i;
@@ -1048,7 +1048,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                                  ((nLi < rLk.Top() && nLi+21 > rLk.Top()) ||
                                   (nLk < rLi.Top() && nLk+21 > rLi.Top())))
                             {
-                                aLineRects.erase(aLineRects.begin() + k);
+                                aLineRects.erase(aLineRects.begin() + i);
                                 // don't continue with inner loop any more:
                                 // the array may shrink!
                                 --i;
