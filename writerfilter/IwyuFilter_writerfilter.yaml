@@ -60,3 +60,7 @@ blacklist:
     writerfilter/source/rtftok/rtftokenizer.cxx:
     # Actually used
     - com/sun/star/task/XStatusIndicator.hpp
+    writerfilter/source/filter/RtfFilter.cxx:
+    - comphelper/scopeguard.hxx
+    writerfilter/source/filter/WriterFilter.cxx:
+    - comphelper/scopeguard.hxx
