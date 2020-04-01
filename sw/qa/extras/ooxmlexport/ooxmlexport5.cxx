@@ -1243,6 +1243,18 @@ DECLARE_OOXMLEXPORT_TEST(testNonBMPChar, "nonbmpchar.docx")
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange1->getString());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testSpaceingGroupShapeText, "tdf131775_SpacingGroupShapeText.docx")
+{
+    // tdf#131775: Check if correct spaceing.
+
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
+        "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:spacing", "val", "71");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
