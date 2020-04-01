@@ -1261,6 +1261,7 @@ static double toSin(int degree10th) { return SkScalarSin(toRadian(degree10th)); 
 void SkiaSalGraphicsImpl::drawGenericLayout(const GenericSalLayout& layout, Color textColor,
                                             const SkFont& font, GlyphOrientation glyphOrientation)
 {
+    SkiaZone zone;
     std::vector<SkGlyphID> glyphIds;
     std::vector<SkRSXform> glyphForms;
     glyphIds.reserve(256);
