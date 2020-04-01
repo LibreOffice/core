@@ -1587,7 +1587,7 @@ bool HtmlExport::CreateHtmlForPresPages()
             bool bEndless = false;
             if( !mbAutoSlide )
             {
-                if( pPage->GetPresChange() != PRESCHANGE_MANUAL )
+                if( pPage->GetPresChange() != PresChange::Manual )
                 {
                     fSecs = pPage->GetTime();
                     bEndless = mpDoc->getPresentationSettings().mbEndless;

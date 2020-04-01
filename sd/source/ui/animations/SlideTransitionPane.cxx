@@ -97,7 +97,7 @@ struct TransitionEffect
     {
         mfDuration = 2.0;
         mfTime = 0.0;
-        mePresChange = PRESCHANGE_MANUAL;
+        mePresChange = PresChange::Manual;
         mbSoundOn = false;
         mbLoopSound = false;
         mbStopSound = false;
@@ -646,8 +646,8 @@ void SlideTransitionPane::updateControls()
     }
     else
     {
-        mxRB_ADVANCE_ON_MOUSE->set_active( aEffect.mePresChange == PRESCHANGE_MANUAL );
-        mxRB_ADVANCE_AUTO->set_active( aEffect.mePresChange == PRESCHANGE_AUTO );
+        mxRB_ADVANCE_ON_MOUSE->set_active( aEffect.mePresChange == PresChange::Manual );
+        mxRB_ADVANCE_AUTO->set_active( aEffect.mePresChange == PresChange::Auto );
         mxMF_ADVANCE_AUTO_AFTER->set_value(aEffect.mfTime * 100.0, FieldUnit::SECOND);
     }
 
@@ -830,10 +830,10 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
         (mxRB_ADVANCE_ON_MOUSE->get_active() || mxRB_ADVANCE_AUTO->get_active()))
     {
         if( mxRB_ADVANCE_ON_MOUSE->get_active())
-            aResult.mePresChange = PRESCHANGE_MANUAL;
+            aResult.mePresChange = PresChange::Manual;
         else
         {
-            aResult.mePresChange = PRESCHANGE_AUTO;
+            aResult.mePresChange = PresChange::Auto;
             if( mxMF_ADVANCE_AUTO_AFTER->get_sensitive())
             {
                 aResult.mfTime = static_cast<double>(mxMF_ADVANCE_AUTO_AFTER->get_value(FieldUnit::SECOND) ) / 100.0 ;
