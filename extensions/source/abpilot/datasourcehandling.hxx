@@ -80,8 +80,8 @@ namespace abp
         /// creates a new macOS address book data source
         ODataSource createNewMacab( const OUString& _rName );
 
-        /// creates a new dBase data source
-        ODataSource createNewDBase( const OUString& _rName );
+        /// creates a new Other data source; tdf117101: Spreadsheet by default
+        ODataSource createNewOther( const OUString& _rName );
     };
 
     struct ODataSourceImpl;
