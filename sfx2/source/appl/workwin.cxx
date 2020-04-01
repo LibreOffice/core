@@ -2448,19 +2448,6 @@ void SfxWorkWindow::SetActiveChild_Impl( vcl::Window *pChild )
 
 void SfxWorkWindow::DataChanged_Impl()
 {
-    sal_uInt16 n;
-    sal_uInt16 nCount = aChildWins.size();
-    for (n=0; n<nCount; n++)
-    {
-        SfxChildWin_Impl*pCW = aChildWins[n].get();
-        if (pCW && pCW->pWin)
-        {
-            // TODO does this really have any meaning ?
-            if (pCW->pWin->GetWindow())
-                pCW->pWin->GetWindow()->UpdateSettings(Application::GetSettings());
-        }
-    }
-
     ArrangeChildren_Impl();
 }
 
