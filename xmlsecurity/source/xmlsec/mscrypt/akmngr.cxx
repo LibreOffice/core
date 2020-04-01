@@ -16,6 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+#include <sal/config.h>
+#include <xmlsec-wrapper.h>
+
 #include "akmngr.hxx"
 
 #include <xmlsec/xmlsec.h>

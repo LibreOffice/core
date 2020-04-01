@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 #include <rtl/uuid.h>
+#include <xmlsec-wrapper.h>
 
 #include <com/sun/star/xml/crypto/SecurityOperationStatus.hpp>
 #include <com/sun/star/xml/crypto/XXMLSignature.hpp>
@@ -30,8 +31,6 @@
 #include <xmlsec/xmlstreamio.hxx>
 #include <xmlsec/errorcallback.hxx>
 #include <cppuhelper/supportsservice.hxx>
-
-#include <xmlsec-wrapper.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno ;
