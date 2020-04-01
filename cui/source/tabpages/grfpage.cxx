@@ -35,6 +35,9 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/unitconv.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 
 #define CM_1_TO_TWIP        567
 #define TWIP_TO_INCH        1440
@@ -698,27 +701,58 @@ void SvxCropExample::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
 void SvxCropExample::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
 {
-    rRenderContext.Push(PushFlags::MAPMODE | PushFlags::RASTEROP);
+    rRenderContext.Push(PushFlags::MAPMODE);
     rRenderContext.SetMapMode(m_aMapMode);
 
-    Size aWinSize(rRenderContext.PixelToLogic(GetOutputSizePixel()));
+    // Win BG
+    const Size aWinSize(rRenderContext.PixelToLogic(GetOutputSizePixel()));
     rRenderContext.SetLineColor();
     rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetWindowColor());
     rRenderContext.DrawRect(::tools::Rectangle(Point(), aWinSize));
 
-    rRenderContext.SetLineColor(COL_WHITE);
-    ::tools::Rectangle aRect(Point((aWinSize.Width() - m_aFrameSize.Width())/2,
-                          (aWinSize.Height() - m_aFrameSize.Height())/2),
-                          m_aFrameSize);
+    // use AA, the Graphic may be a metafile/svg and would then look ugly
+    rRenderContext.SetAntialiasing(AntialiasingFlags::EnableB2dDraw);
+
+    // draw Graphic
+    ::tools::Rectangle aRect(
+        Point((aWinSize.Width() - m_aFrameSize.Width())/2, (aWinSize.Height() - m_aFrameSize.Height())/2),
+        m_aFrameSize);
     m_aGrf.Draw(&rRenderContext, aRect.TopLeft(), aRect.GetSize());
 
-    rRenderContext.SetFillColor(COL_TRANSPARENT);
-    rRenderContext.SetRasterOp(RasterOp::Invert);
-    aRect.AdjustLeft(m_aTopLeft.Y() );
-    aRect.AdjustTop(m_aTopLeft.X() );
+    // Remove one more case that uses XOR paint (RasterOp::Invert).
+    // Get colors and logic DashLength from settings, use equal to
+    // PolygonMarkerPrimitive2D, may be changed to that primitive later.
+    // Use this to guarantee good visibility - that was the purpose of
+    // the former used XOR paint.
+    const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
+    const Color aColA(aSvtOptionsDrawinglayer.GetStripeColorA().getBColor());
+    const Color aColB(aSvtOptionsDrawinglayer.GetStripeColorB().getBColor());
+    const double fStripeLength(aSvtOptionsDrawinglayer.GetStripeLength());
+    const basegfx::B2DVector aDashVector(rRenderContext.GetInverseViewTransformation() * basegfx::B2DVector(fStripeLength, 0.0));
+    const double fLogicDashLength(aDashVector.getX());
+
+    // apply current crop settings
+    aRect.AdjustLeft(m_aTopLeft.Y());
+    aRect.AdjustTop(m_aTopLeft.X());
     aRect.AdjustRight(-m_aBottomRight.Y());
     aRect.AdjustBottom(-m_aBottomRight.X());
-    rRenderContext.DrawRect(aRect);
+
+    // apply dash with direct paint callbacks
+    basegfx::utils::applyLineDashing(
+        basegfx::utils::createPolygonFromRect(
+            basegfx::B2DRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom())),
+        std::vector< double >(2, fLogicDashLength),
+        [&aColA,&rRenderContext](const basegfx::B2DPolygon& rSnippet)
+        {
+            rRenderContext.SetLineColor(aColA);
+            rRenderContext.DrawPolyLine(rSnippet);
+        },
+        [&aColB,&rRenderContext](const basegfx::B2DPolygon& rSnippet)
+        {
+            rRenderContext.SetLineColor(aColB);
+            rRenderContext.DrawPolyLine(rSnippet);
+        },
+        2.0 * fLogicDashLength);
 
     rRenderContext.Pop();
 }
