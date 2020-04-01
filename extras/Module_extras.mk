@@ -18,7 +18,6 @@ $(eval $(call gb_Module_add_targets,extras,\
 	CustomTarget_tplpersonal \
 	CustomTarget_tplpresnt \
 	CustomTarget_tpl_styles \
-	Gallery_bullets \
 	Package_autocorr \
 	Package_autotextuser \
 	Package_cfgsrvnolang \
@@ -27,6 +26,7 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_databasebiblio \
 	Package_fonts \
 	Package_resource_fonts \
+	Package_gallbullets \
 	Package_gallhtmlexpo \
 	Package_gallmytheme \
 	Package_gallroot \
