@@ -598,7 +598,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
             xInfoSet->setPropertyValue( "StreamRelPath", Any( aName ) );
     }
 
-    if (SDXMLMODE_Organizer == meFilterMode)
+    if (SdXMLFilterMode::Organizer == meFilterMode)
         xInfoSet->setPropertyValue("OrganizerMode", uno::makeAny(true));
 
     if( ERRCODE_NONE == nRet )
@@ -630,7 +630,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
             pServices->mpMeta,
             aEmptyArgs, aName, false );
 
-        if( meFilterMode != SDXMLMODE_Organizer )
+        if( meFilterMode != SdXMLFilterMode::Organizer )
         {
             nWarn2 = ReadThroughComponent(
                 xStorage, xModelComp, "settings.xml", nullptr, rxContext,
@@ -643,7 +643,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
             pServices->mpStyles,
             aFilterArgs, aName, true );
 
-        if( !nRet && (meFilterMode != SDXMLMODE_Organizer) )
+        if( !nRet && (meFilterMode != SdXMLFilterMode::Organizer) )
             nRet = ReadThroughComponent(
                xStorage, xModelComp, "content.xml", "Content.xml", rxContext,
                pServices->mpContent,
