@@ -65,7 +65,8 @@ constexpr bool isClientType(SvBaseLinkObjectType t)
 }
 constexpr bool isClientFileType(SvBaseLinkObjectType t)
 {
-    return static_cast<int>(t) & static_cast<int>(SvBaseLinkObjectType::ClientFile);
+    auto check = static_cast<int>(SvBaseLinkObjectType::ClientFile);
+    return (static_cast<int>(t) & check) == check;
 }
 
 struct BaseLink_Impl;

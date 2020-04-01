@@ -184,7 +184,7 @@ void SvBaseLinksDlg::LinksSelectHdl(weld::TreeView* pSvTabListBox)
         OUString sType, sLink;
         OUString *pLinkNm = &sLink, *pFilter = nullptr;
 
-        if( isClientType(pLink->GetObjType()) )
+        if( isClientFileType(pLink->GetObjType()) )
         {
             m_xRbAutomatic->set_sensitive(false);
             m_xRbManual->set_active(true);
@@ -226,7 +226,7 @@ IMPL_LINK_NOARG( SvBaseLinksDlg, AutomaticClickHdl, weld::Button&, void )
 {
     int nPos;
     SvBaseLink* pLink = GetSelEntry( &nPos );
-    if( pLink && !isClientType( pLink->GetObjType() ) &&
+    if( pLink && !isClientFileType( pLink->GetObjType() ) &&
         SfxLinkUpdateMode::ALWAYS != pLink->GetUpdateMode() )
         SetType( *pLink, nPos, SfxLinkUpdateMode::ALWAYS );
 }
@@ -235,7 +235,7 @@ IMPL_LINK_NOARG( SvBaseLinksDlg, ManualClickHdl, weld::Button&, void )
 {
     int nPos;
     SvBaseLink* pLink = GetSelEntry( &nPos );
-    if( pLink && !isClientType( pLink->GetObjType() ) &&
+    if( pLink && !isClientFileType( pLink->GetObjType() ) &&
         SfxLinkUpdateMode::ONCALL != pLink->GetUpdateMode())
         SetType( *pLink, nPos, SfxLinkUpdateMode::ONCALL );
 }
