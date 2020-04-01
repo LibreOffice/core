@@ -22,7 +22,7 @@
 # l10ntools/source/localize.cxx
 #
 
-import os, sys, argparse
+import os, sys, argparse, io
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-p', dest='productname', default='LibreOffice')
@@ -50,7 +50,7 @@ else:
 templates = {}
 
 # open input file
-source = open(o.ifile)
+source = io.open(o.ifile, encoding='utf-8')
 
 template = None
 
@@ -99,7 +99,7 @@ for template in templates:
     # open the template file - ignore sections for which no
     # templates exist
     try:
-        template_file = open(outfilename)
+        template_file = io.open(outfilename, encoding='utf-8')
     except Exception:
         # string files processed one by one
         if o.ext == 'str':
@@ -109,7 +109,7 @@ for template in templates:
 
     # open output file
     tmpfilename = '{}.tmp'.format(outfilename)
-    outfile = open(tmpfilename, 'w')
+    outfile = io.open(tmpfilename, 'w', encoding='utf-8')
 
     # emit the template to the output file
     for line in template_file:
@@ -125,9 +125,9 @@ for template in templates:
                 # print "value is $value\n";
                 if value:
                     if o.ext == "desktop" or o.ext == "str":
-                        outfile.write("""{}[{}]={}\n""".format(outkey, locale, value))
+                        outfile.write(u"""{}[{}]={}\n""".format(outkey, locale, value))
                     else:
-                        outfile.write("""\t[{}]{}={}\n""".format(locale, outkey, value))
+                        outfile.write(u"""\t[{}]{}={}\n""".format(locale, outkey, value))
 
     template_file.close()
 
