@@ -86,7 +86,7 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage(weld::Container* pPage, SwMailMerge
 {
     std::shared_ptr<const SfxFilter> pSfxFlt =
             SwDocShell::Factory().GetFilterContainer()->
-            GetFilter4FilterName("writer8");
+            GetFilter4FilterName("writer8", SfxFilterFlags::EXPORT);
 
     //save the current document into a temporary file
     {
