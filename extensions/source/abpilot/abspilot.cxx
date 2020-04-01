@@ -343,7 +343,7 @@ namespace abp
                 break;
 
             case AST_OTHER:
-                m_aNewDataSource = aContext.createNewDBase( m_aSettings.sDataSourceName );
+                m_aNewDataSource = aContext.createNewOther( m_aSettings.sDataSourceName );
                 break;
 
             case AST_INVALID:
