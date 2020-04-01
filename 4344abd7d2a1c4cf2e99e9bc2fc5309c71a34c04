@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "18abca5f_1482ee21",
+        "filename": "sd/source/core/sdpage2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-04-01T16:30:01Z",
+      "side": 1,
+      "message": "looks good, it matches the previous behaviour. I was trying to improve the code, making it just copy the maPresentationShapeList from the source page, which would seem to be a much more natural thing to do, but that caused a unit test failure",
+      "revId": "4344abd7d2a1c4cf2e99e9bc2fc5309c71a34c04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
