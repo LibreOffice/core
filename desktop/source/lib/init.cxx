@@ -93,6 +93,8 @@
 
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>
+#include <com/sun/star/i18n/Calendar2.hpp>
+#include <com/sun/star/i18n/LocaleCalendar2.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
@@ -5721,6 +5723,14 @@ static void preloadData()
         xSpellChecker->isValid("forcefed", it, aNone);
     }
     std::cerr << "\n";
+
+    // Hack to load and cache the module liblocaledata_others.so which is not loaded normally
+    // (when loading dictionaries of just non-Asian locales). Creating a XCalendar4 of one Asian locale
+    // will cheaply load this missing "others" locale library. Appending an Asian locale in
+    // LOK_WHITELIST_LANGUAGES env-var also works but at the cost of loading that dictionary.
+    css::uno::Reference< css::i18n::XCalendar4 > xCal = css::i18n::LocaleCalendar2::create(comphelper::getProcessComponentContext());
+    css::lang::Locale aAsianLocale = {"hi", "IN", ""};
+    xCal->loadDefaultCalendar(aAsianLocale);
 
     // preload all available thesauri
     css::uno::Reference<linguistic2::XThesaurus> xThesaurus(xLngSvcMgr->getThesaurus());
