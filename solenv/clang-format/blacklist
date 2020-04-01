@@ -3701,7 +3701,6 @@ drawinglayer/source/primitive2d/pagepreviewprimitive2d.cxx
 drawinglayer/source/primitive2d/patternfillprimitive2d.cxx
 drawinglayer/source/primitive2d/pointarrayprimitive2d.cxx
 drawinglayer/source/primitive2d/polygonprimitive2d.cxx
-drawinglayer/source/primitive2d/polypolygonprimitive2d.cxx
 drawinglayer/source/primitive2d/primitivetools2d.cxx
 drawinglayer/source/primitive2d/sceneprimitive2d.cxx
 drawinglayer/source/primitive2d/sdrdecompositiontools2d.cxx
@@ -5888,7 +5887,6 @@ include/drawinglayer/primitive2d/pagehierarchyprimitive2d.hxx
 include/drawinglayer/primitive2d/pagepreviewprimitive2d.hxx
 include/drawinglayer/primitive2d/patternfillprimitive2d.hxx
 include/drawinglayer/primitive2d/polygonprimitive2d.hxx
-include/drawinglayer/primitive2d/polypolygonprimitive2d.hxx
 include/drawinglayer/primitive2d/primitivetools2d.hxx
 include/drawinglayer/primitive2d/sceneprimitive2d.hxx
 include/drawinglayer/primitive2d/sdrdecompositiontools2d.hxx
