@@ -111,7 +111,6 @@ class SwContentTree final : public SfxListener
 
     enum class State { ACTIVE, CONSTANT, HIDDEN } m_eState;
 
-    bool                m_bDocChgdInDragging  :1;
     bool                m_bIsRoot             :1;
     bool                m_bIsIdleClear        :1;
     bool                m_bIsLastReadOnly     :1;

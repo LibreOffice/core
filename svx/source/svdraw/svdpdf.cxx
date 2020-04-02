@@ -109,8 +109,7 @@ using namespace com::sun::star;
 
 ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools::Rectangle& rRect,
                                  Graphic const& rGraphic)
-    : mrGraphic(rGraphic)
-    , maTmpList()
+    : maTmpList()
     , mpVD(VclPtr<VirtualDevice>::Create())
     , maScaleRect(rRect)
     , mnMapScalingOfs(0)
@@ -156,7 +155,7 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
     FPDF_InitLibraryWithConfig(&aConfig);
 
     // Load the buffer using pdfium.
-    auto const& rVectorGraphicData = mrGraphic.getVectorGraphicData();
+    auto const& rVectorGraphicData = rGraphic.getVectorGraphicData();
     mpPdfDocument = FPDF_LoadMemDocument(
         rVectorGraphicData->getVectorGraphicDataArray().getConstArray(),
         rVectorGraphicData->getVectorGraphicDataArrayLength(), /*password=*/nullptr);

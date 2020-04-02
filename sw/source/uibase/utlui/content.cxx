@@ -872,7 +872,6 @@ SwContentTree::SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNaviga
     , m_nLastSelType(ContentTypeId::UNKNOWN)
     , m_nOutlineLevel(MAXLEVEL)
     , m_eState(State::ACTIVE)
-    , m_bDocChgdInDragging(false)
     , m_bIsRoot(false)
     , m_bIsIdleClear(false)
     , m_bIsLastReadOnly(false)
@@ -2456,8 +2455,6 @@ void SwContentTree::SetHiddenShell(SwWrtShell* pSh)
 
 void SwContentTree::SetActiveShell(SwWrtShell* pSh)
 {
-    if (IsInDrag())
-        m_bDocChgdInDragging = true;
     bool bClear = m_pActiveShell != pSh;
     if (State::ACTIVE == m_eState && bClear)
     {
