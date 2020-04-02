@@ -8,7 +8,8 @@
  </office:styles>
  <office:automatic-styles>
   <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Standard">
-   <style:paragraph-properties fo:margin-top="6.01pt" fo:margin-bottom="6.01pt" loext:contextual-spacing="false" fo:line-height="6.01pt"/>
+   <style:paragraph-properties fo:margin-top="8pt" fo:margin-bottom="8pt" loext:contextual-spacing="false" fo:line-height="2pt"/>
+   <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Liberation Serif" fo:font-size="12pt"/>
   </style:style>
  </office:automatic-styles>
  <office:master-styles>
