@@ -747,44 +747,44 @@ oslProcess SAL_CALL osl_getProcess(oslProcessIdentifier Ident)
 
 void SAL_CALL osl_freeProcessHandle(oslProcess Process)
 {
-    if (Process != nullptr)
+    if (Process == nullptr)
+        return;
+
+    oslProcessImpl *pChild, *pPrev = nullptr;
+
+    OSL_ASSERT(ChildListMutex != nullptr);
+
+    if ( ChildListMutex == nullptr )
     {
-        oslProcessImpl *pChild, *pPrev = nullptr;
-
-        OSL_ASSERT(ChildListMutex != nullptr);
-
-        if ( ChildListMutex == nullptr )
-        {
-            return;
-        }
-
-        osl_acquireMutex(ChildListMutex);
-
-        pChild = ChildList;
-
-        /* remove process from child list */
-        while (pChild != nullptr)
-        {
-            if (pChild == static_cast<oslProcessImpl*>(Process))
-            {
-                if (pPrev != nullptr)
-                    pPrev->m_pnext = pChild->m_pnext;
-                else
-                    ChildList = pChild->m_pnext;
-
-                break;
-            }
-
-            pPrev  = pChild;
-            pChild = pChild->m_pnext;
-        }
-
-        osl_releaseMutex(ChildListMutex);
-
-        osl_destroyCondition(static_cast<oslProcessImpl*>(Process)->m_terminated);
-
-        free(Process);
+        return;
     }
+
+    osl_acquireMutex(ChildListMutex);
+
+    pChild = ChildList;
+
+    /* remove process from child list */
+    while (pChild != nullptr)
+    {
+        if (pChild == static_cast<oslProcessImpl*>(Process))
+        {
+            if (pPrev != nullptr)
+                pPrev->m_pnext = pChild->m_pnext;
+            else
+                ChildList = pChild->m_pnext;
+
+            break;
+        }
+
+        pPrev  = pChild;
+        pChild = pChild->m_pnext;
+    }
+
+    osl_releaseMutex(ChildListMutex);
+
+    osl_destroyCondition(static_cast<oslProcessImpl*>(Process)->m_terminated);
+
+    free(Process);
 }
 
 #if defined(LINUX)

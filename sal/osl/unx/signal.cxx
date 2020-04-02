@@ -334,42 +334,42 @@ void callSystemHandler(int signal, siginfo_t * info, void * context)
             break;
     }
 
-    if (i < NoSignals)
+    if (i >= NoSignals)
+        return;
+
+    if ((Signals[i].Handler == SIG_DFL) ||
+        (Signals[i].Handler == SIG_IGN) ||
+         (Signals[i].Handler == SIG_ERR))
     {
-        if ((Signals[i].Handler == SIG_DFL) ||
-            (Signals[i].Handler == SIG_IGN) ||
-             (Signals[i].Handler == SIG_ERR))
+        switch (Signals[i].Action)
         {
-            switch (Signals[i].Action)
-            {
-                case ACT_EXIT:      /* terminate */
-                    /* prevent dumping core on exit() */
-                    _exit(255);
-                    break;
+            case ACT_EXIT:      /* terminate */
+                /* prevent dumping core on exit() */
+                _exit(255);
+                break;
 
-                case ACT_ABORT:     /* terminate with core dump */
-                    struct sigaction act;
-                    act.sa_handler = SIG_DFL;
-                    act.sa_flags   = 0;
-                    sigemptyset(&(act.sa_mask));
-                    sigaction(SIGABRT, &act, nullptr);
-                    printStack( signal );
-                    abort();
-                    break;
+            case ACT_ABORT:     /* terminate with core dump */
+                struct sigaction act;
+                act.sa_handler = SIG_DFL;
+                act.sa_flags   = 0;
+                sigemptyset(&(act.sa_mask));
+                sigaction(SIGABRT, &act, nullptr);
+                printStack( signal );
+                abort();
+                break;
 
-                case ACT_IGNORE:    /* ignore */
-                    break;
+            case ACT_IGNORE:    /* ignore */
+                break;
 
-                default:            /* should never happen */
-                    OSL_ASSERT(false);
-            }
+            default:            /* should never happen */
+                OSL_ASSERT(false);
         }
-        else if (Signals[i].siginfo) {
-            (*reinterpret_cast<Handler2>(Signals[i].Handler))(
-                signal, info, context);
-        } else {
-            (*Signals[i].Handler)(signal);
-        }
+    }
+    else if (Signals[i].siginfo) {
+        (*reinterpret_cast<Handler2>(Signals[i].Handler))(
+            signal, info, context);
+    } else {
+        (*Signals[i].Handler)(signal);
     }
 }
 

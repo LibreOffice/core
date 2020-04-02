@@ -35,21 +35,21 @@ const sal_Unicode FPH_CHAR_COLON          = ':';
 void osl_systemPathRemoveSeparator(rtl_String* pstrPath)
 {
     OSL_PRECOND(nullptr != pstrPath, "osl_systemPathRemoveSeparator: Invalid parameter");
-    if (pstrPath != nullptr)
-    {
-        // maybe there are more than one separator at end
-        // so we run in a loop
-        while ((pstrPath->length > 1) && (pstrPath->buffer[pstrPath->length - 1] == FPH_CHAR_PATH_SEPARATOR))
-        {
-            pstrPath->length--;
-            pstrPath->buffer[pstrPath->length] = '\0';
-        }
+    if (pstrPath == nullptr)
+        return;
 
-        SAL_WARN_IF( !((0 == pstrPath->length) || (1 == pstrPath->length) ||
-                     (pstrPath->length > 1 && pstrPath->buffer[pstrPath->length - 1] != FPH_CHAR_PATH_SEPARATOR)),
-                     "sal.osl",
-                     "osl_systemPathRemoveSeparator: Post condition failed");
+    // maybe there are more than one separator at end
+    // so we run in a loop
+    while ((pstrPath->length > 1) && (pstrPath->buffer[pstrPath->length - 1] == FPH_CHAR_PATH_SEPARATOR))
+    {
+        pstrPath->length--;
+        pstrPath->buffer[pstrPath->length] = '\0';
     }
+
+    SAL_WARN_IF( !((0 == pstrPath->length) || (1 == pstrPath->length) ||
+                 (pstrPath->length > 1 && pstrPath->buffer[pstrPath->length - 1] != FPH_CHAR_PATH_SEPARATOR)),
+                 "sal.osl",
+                 "osl_systemPathRemoveSeparator: Post condition failed");
 }
 
 namespace {

@@ -1290,41 +1290,41 @@ static char* insertLine(osl_TProfileImpl* pProfile, const char* Line, sal_uInt32
 
 static void removeLine(osl_TProfileImpl* pProfile, sal_uInt32 LineNo)
 {
-    if (LineNo < pProfile->m_NoLines)
+    if (LineNo >= pProfile->m_NoLines)
+        return;
+
+    free(pProfile->m_Lines[LineNo]);
+    pProfile->m_Lines[LineNo]=nullptr;
+    if (pProfile->m_NoLines - LineNo > 1)
     {
-        free(pProfile->m_Lines[LineNo]);
-        pProfile->m_Lines[LineNo]=nullptr;
-        if (pProfile->m_NoLines - LineNo > 1)
+        sal_uInt32 i, n;
+
+        memmove(&pProfile->m_Lines[LineNo], &pProfile->m_Lines[LineNo + 1],
+                (pProfile->m_NoLines - LineNo - 1) * sizeof(char *));
+
+        memset(&pProfile->m_Lines[pProfile->m_NoLines - 1],
+            0,
+            (pProfile->m_MaxLines - pProfile->m_NoLines) * sizeof(char*));
+
+        /* adjust line references */
+        for (i = 0; i < pProfile->m_NoSections; i++)
         {
-            sal_uInt32 i, n;
+            osl_TProfileSection* pSec = &pProfile->m_Sections[i];
 
-            memmove(&pProfile->m_Lines[LineNo], &pProfile->m_Lines[LineNo + 1],
-                    (pProfile->m_NoLines - LineNo - 1) * sizeof(char *));
+            if (pSec->m_Line > LineNo)
+                pSec->m_Line--;
 
-            memset(&pProfile->m_Lines[pProfile->m_NoLines - 1],
-                0,
-                (pProfile->m_MaxLines - pProfile->m_NoLines) * sizeof(char*));
-
-            /* adjust line references */
-            for (i = 0; i < pProfile->m_NoSections; i++)
-            {
-                osl_TProfileSection* pSec = &pProfile->m_Sections[i];
-
-                if (pSec->m_Line > LineNo)
-                    pSec->m_Line--;
-
-                for (n = 0; n < pSec->m_NoEntries; n++)
-                    if (pSec->m_Entries[n].m_Line > LineNo)
-                        pSec->m_Entries[n].m_Line--;
-            }
+            for (n = 0; n < pSec->m_NoEntries; n++)
+                if (pSec->m_Entries[n].m_Line > LineNo)
+                    pSec->m_Entries[n].m_Line--;
         }
-        else
-        {
-            pProfile->m_Lines[LineNo] = nullptr;
-        }
-
-        pProfile->m_NoLines--;
     }
+    else
+    {
+        pProfile->m_Lines[LineNo] = nullptr;
+    }
+
+    pProfile->m_NoLines--;
 }
 
 static void setEntry(osl_TProfileImpl* pProfile, osl_TProfileSection* pSection,
@@ -1381,20 +1381,20 @@ static bool addEntry(osl_TProfileImpl* pProfile,
 
 static void removeEntry(osl_TProfileSection *pSection, sal_uInt32 NoEntry)
 {
-    if (NoEntry < pSection->m_NoEntries)
-    {
-        if (pSection->m_NoEntries - NoEntry > 1)
-        {
-            memmove(&pSection->m_Entries[NoEntry],
-                    &pSection->m_Entries[NoEntry + 1],
-                    (pSection->m_NoEntries - NoEntry - 1) * sizeof(osl_TProfileEntry));
-            pSection->m_Entries[pSection->m_NoEntries - 1].m_Line=0;
-            pSection->m_Entries[pSection->m_NoEntries - 1].m_Offset=0;
-            pSection->m_Entries[pSection->m_NoEntries - 1].m_Len=0;
-        }
+    if (NoEntry >= pSection->m_NoEntries)
+        return;
 
-        pSection->m_NoEntries--;
+    if (pSection->m_NoEntries - NoEntry > 1)
+    {
+        memmove(&pSection->m_Entries[NoEntry],
+                &pSection->m_Entries[NoEntry + 1],
+                (pSection->m_NoEntries - NoEntry - 1) * sizeof(osl_TProfileEntry));
+        pSection->m_Entries[pSection->m_NoEntries - 1].m_Line=0;
+        pSection->m_Entries[pSection->m_NoEntries - 1].m_Offset=0;
+        pSection->m_Entries[pSection->m_NoEntries - 1].m_Len=0;
     }
+
+    pSection->m_NoEntries--;
 
 }
 
@@ -1450,27 +1450,27 @@ static void removeSection(osl_TProfileImpl* pProfile, osl_TProfileSection *pSect
 {
     sal_uInt32 Section;
 
-    if ((Section = pSection - pProfile->m_Sections) < pProfile->m_NoSections)
+    if ((Section = pSection - pProfile->m_Sections) >= pProfile->m_NoSections)
+        return;
+
+    free (pSection->m_Entries);
+    pSection->m_Entries=nullptr;
+    if (pProfile->m_NoSections - Section > 1)
     {
-        free (pSection->m_Entries);
-        pSection->m_Entries=nullptr;
-        if (pProfile->m_NoSections - Section > 1)
-        {
-            memmove(&pProfile->m_Sections[Section], &pProfile->m_Sections[Section + 1],
-                    (pProfile->m_NoSections - Section - 1) * sizeof(osl_TProfileSection));
+        memmove(&pProfile->m_Sections[Section], &pProfile->m_Sections[Section + 1],
+                (pProfile->m_NoSections - Section - 1) * sizeof(osl_TProfileSection));
 
-            memset(&pProfile->m_Sections[pProfile->m_NoSections - 1],
-                   0,
-                   (pProfile->m_MaxSections - pProfile->m_NoSections) * sizeof(osl_TProfileSection));
-            pProfile->m_Sections[pProfile->m_NoSections - 1].m_Entries = nullptr;
-        }
-        else
-        {
-            pSection->m_Entries = nullptr;
-        }
-
-        pProfile->m_NoSections--;
+        memset(&pProfile->m_Sections[pProfile->m_NoSections - 1],
+               0,
+               (pProfile->m_MaxSections - pProfile->m_NoSections) * sizeof(osl_TProfileSection));
+        pProfile->m_Sections[pProfile->m_NoSections - 1].m_Entries = nullptr;
     }
+    else
+    {
+        pSection->m_Entries = nullptr;
+    }
+
+    pProfile->m_NoSections--;
 }
 
 static osl_TProfileSection* findEntry(osl_TProfileImpl* pProfile,

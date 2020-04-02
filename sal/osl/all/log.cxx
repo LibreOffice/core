@@ -228,23 +228,23 @@ void maybeOutputTimestamp(std::ostringstream &s) {
                  static_cast<unsigned>(dateTime.NanoSeconds / 1000000));
         s << ts << '.' << milliSecs << ':';
     }
-    if (outputRelativeTimer)
+    if (!outputRelativeTimer)
+        return;
+
+    TimeValue now;
+    osl_getSystemTime(&now);
+    int seconds = now.Seconds - aStartTime.aTime.Seconds;
+    int milliSeconds;
+    if (now.Nanosec < aStartTime.aTime.Nanosec)
     {
-        TimeValue now;
-        osl_getSystemTime(&now);
-        int seconds = now.Seconds - aStartTime.aTime.Seconds;
-        int milliSeconds;
-        if (now.Nanosec < aStartTime.aTime.Nanosec)
-        {
-            seconds--;
-            milliSeconds = 1000 - (aStartTime.aTime.Nanosec - now.Nanosec) / 1000000;
-        }
-        else
-            milliSeconds = (now.Nanosec - aStartTime.aTime.Nanosec) / 1000000;
-        char relativeTimestamp[100];
-        snprintf(relativeTimestamp, sizeof(relativeTimestamp), "%d.%03d", seconds, milliSeconds);
-        s << relativeTimestamp << ':';
+        seconds--;
+        milliSeconds = 1000 - (aStartTime.aTime.Nanosec - now.Nanosec) / 1000000;
     }
+    else
+        milliSeconds = (now.Nanosec - aStartTime.aTime.Nanosec) / 1000000;
+    char relativeTimestamp[100];
+    snprintf(relativeTimestamp, sizeof(relativeTimestamp), "%d.%03d", seconds, milliSeconds);
+    s << relativeTimestamp << ':';
 }
 
 #endif
@@ -344,20 +344,21 @@ void sal_detail_logFormat(
     sal_detail_LogLevel level, char const * area, char const * where,
     char const * format, ...)
 {
-    if (sal_detail_log_report(level, area)) {
-        std::va_list args;
-        va_start(args, format);
-        char buf[1024];
-        int const len = sizeof buf - RTL_CONSTASCII_LENGTH("...");
-        int n = vsnprintf(buf, len, format, args);
-        if (n < 0) {
-            std::strcpy(buf, "???");
-        } else if (n >= len) {
-            std::strcpy(buf + len - 1, "...");
-        }
-        sal_detail_log(level, area, where, buf, 0);
-        va_end(args);
+    if (!sal_detail_log_report(level, area))
+        return;
+
+    std::va_list args;
+    va_start(args, format);
+    char buf[1024];
+    int const len = sizeof buf - RTL_CONSTASCII_LENGTH("...");
+    int n = vsnprintf(buf, len, format, args);
+    if (n < 0) {
+        std::strcpy(buf, "???");
+    } else if (n >= len) {
+        std::strcpy(buf + len - 1, "...");
     }
+    sal_detail_log(level, area, where, buf, 0);
+    va_end(args);
 }
 
 sal_Bool sal_detail_log_report(sal_detail_LogLevel level, char const * area) {
