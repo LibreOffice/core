@@ -787,16 +787,6 @@ SvTreeListEntry* SvTreeList::NextSelected( const SvListView* pView, SvTreeListEn
     return pEntry;
 }
 
-SvTreeListEntry* SvTreeList::PrevSelected( const SvListView* pView, SvTreeListEntry* pEntry) const
-{
-    DBG_ASSERT(pView&&pEntry,"PrevSel:View/Entry?");
-    pEntry = Prev( pEntry );
-    while( pEntry && !pView->IsSelected(pEntry) )
-        pEntry = Prev( pEntry );
-
-    return pEntry;
-}
-
 SvTreeListEntry* SvTreeList::LastSelected( const SvListView* pView ) const
 {
     DBG_ASSERT(pView,"LastSel:No View");

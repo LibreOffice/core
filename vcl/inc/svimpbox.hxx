@@ -125,18 +125,14 @@ private:
                         m_aNodeAndEntryImages;
 
     ImpLBSelEng         m_aFctSet;
-    Idle                m_aAsyncBeginDragIdle;
-    Point               m_aAsyncBeginDragPos;
 
     long                m_nNodeBmpWidth;
     long                m_nMostRight;
     short               m_nHorSBarHeight, m_nVerSBarWidth;
 
     bool                m_bUpdateMode : 1;
-    bool                m_bAsyncBeginDrag : 1;
     bool                m_bSubLstOpRet : 1;   // open/close sublist with return/enter, defaulted with false
     bool                m_bSubLstOpLR : 1;    // open/close sublist with cursor left/right, defaulted with false
-    bool                m_bSubLstOpDblClick : 1; // open/close sublist with mouse double click, defaulted with true
     bool                m_bContextMenuHandling : 1;
     bool                mbForceMakeVisible;
 
@@ -148,8 +144,6 @@ private:
     std::vector< short > m_aContextBmpWidthVector;
 
     DECL_LINK(EditTimerCall, Timer *, void);
-
-    DECL_LINK( BeginDragHdl, Timer*, void );
 
     void                InvalidateEntriesFrom( long nY ) const;
     bool                IsLineVisible( long nY ) const;
@@ -322,7 +316,6 @@ public:
     bool                RequestHelp( const HelpEvent& rHEvt );
     void                EndSelection();
     bool                IsNodeButton( const Point& rPosPixel, SvTreeListEntry* pEntry ) const;
-    void                EnableAsyncDrag( bool b ) { m_bAsyncBeginDrag = b; }
     void                SetUpdateMode( bool bMode );
     bool                GetUpdateMode() const { return m_bUpdateMode; }
     tools::Rectangle    GetClipRegionRect() const;

@@ -356,7 +356,6 @@ public:
 
     bool            CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTarget );
     bool            MoveSelectionCopyFallbackPossible( SvTreeListBox* pSource, SvTreeListEntry* pTarget, bool bAllowCopyFallback );
-    void            RemoveSelection();
     /**
      * Removes the entry along with all of its descendants
      */
@@ -373,7 +372,6 @@ public:
     void            FillEntryPath( SvTreeListEntry* pEntry, ::std::deque< sal_Int32 >& _rPath ) const;
 
     using Window::GetParent;
-    const SvTreeListEntry* GetParent( const SvTreeListEntry* pEntry ) const;
     SvTreeListEntry* GetParent( SvTreeListEntry* pEntry ) const;
     SvTreeListEntry*    GetRootLevelParent(SvTreeListEntry* pEntry ) const;
 
@@ -610,7 +608,6 @@ public:
 
     void            SetSublistOpenWithReturn();      // open/close sublist with return/enter
     void            SetSublistOpenWithLeftRight();   // open/close sublist with cursor left/right
-    void            SetSublistDontOpenWithDoubleClick( bool bDontOpen ); // set mouse double click open/close sublist behavior
 
     void            EnableInplaceEditing( bool bEnable );
     // Edits the Entry's first StringItem, 0 == Cursor
@@ -701,11 +698,9 @@ public:
 
     void            EndSelection();
     ScrollBar*      GetVScroll();
-    void            EnableAsyncDrag( bool b );
 
     SvTreeListEntry*    GetFirstEntryInView() const;
     SvTreeListEntry*    GetNextEntryInView(SvTreeListEntry*) const;
-    SvTreeListEntry*    GetPrevEntryInView(SvTreeListEntry*) const;
     SvTreeListEntry*    GetLastEntryInView() const;
     void            ScrollToAbsPos( long nPos );
 

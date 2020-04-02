@@ -667,25 +667,6 @@ bool SvTreeListBox::MoveSelectionCopyFallbackPossible( SvTreeListBox* pSource, S
     return bSuccess;
 }
 
-void SvTreeListBox::RemoveSelection()
-{
-    std::vector<const SvTreeListEntry*> aList;
-    // cache selection, as the implementation deselects everything on the first
-    // remove
-    SvTreeListEntry* pEntry = FirstSelected();
-    while ( pEntry )
-    {
-        aList.push_back( pEntry );
-        if ( pEntry->HasChildren() )
-            // remove deletes all children automatically
-            SelectChildren(pEntry, false);
-        pEntry = NextSelected( pEntry );
-    }
-
-    for (auto const& elem : aList)
-        pModel->Remove(elem);
-}
-
 void SvTreeListBox::RemoveEntry(SvTreeListEntry const * pEntry)
 {
     pModel->Remove(pEntry);
@@ -782,11 +763,6 @@ void SvTreeListBox::FillEntryPath( SvTreeListEntry* pEntry, ::std::deque< sal_In
         else
             break;
     }
-}
-
-const SvTreeListEntry* SvTreeListBox::GetParent( const SvTreeListEntry* pEntry ) const
-{
-    return pModel->GetParent(pEntry);
 }
 
 SvTreeListEntry* SvTreeListBox::GetParent( SvTreeListEntry* pEntry ) const
@@ -1409,11 +1385,6 @@ void SvTreeListBox::SetSublistOpenWithReturn()
 void SvTreeListBox::SetSublistOpenWithLeftRight()
 {
     pImpl->m_bSubLstOpLR = true;
-}
-
-void SvTreeListBox::SetSublistDontOpenWithDoubleClick(bool bDontOpen)
-{
-    pImpl->m_bSubLstOpDblClick = !bDontOpen;
 }
 
 void SvTreeListBox::Resize()
@@ -3408,11 +3379,6 @@ ScrollBar *SvTreeListBox::GetVScroll()
     return pImpl->m_aVerSBar.get();
 }
 
-void SvTreeListBox::EnableAsyncDrag( bool b )
-{
-    pImpl->EnableAsyncDrag( b );
-}
-
 SvTreeListEntry* SvTreeListBox::GetFirstEntryInView() const
 {
     return GetEntry( Point() );
@@ -3429,19 +3395,6 @@ SvTreeListEntry* SvTreeListBox::GetNextEntryInView(SvTreeListEntry* pEntry ) con
             return nullptr;
     }
     return pNext;
-}
-
-SvTreeListEntry* SvTreeListBox::GetPrevEntryInView(SvTreeListEntry* pEntry ) const
-{
-    SvTreeListEntry* pPrev = PrevVisible( pEntry );
-    if( pPrev )
-    {
-        Point aPos( GetEntryPosition(pPrev) );
-        const Size& rSize = pImpl->GetOutputSize();
-        if( aPos.Y() < 0 || aPos.Y() >= rSize.Height() )
-            return nullptr;
-    }
-    return pPrev;
 }
 
 SvTreeListEntry* SvTreeListBox::GetLastEntryInView() const
