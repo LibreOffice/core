@@ -220,34 +220,34 @@ void SAL_CALL CallbackDocumentHandler::startFastElement( sal_Int32 nElement , co
 
 void SAL_CALL CallbackDocumentHandler::startUnknownElement( const OUString& /*Namespace*/, const OUString& Name, const Reference< XFastAttributeList >& Attribs  )
 {
-    if ( m_xDocumentHandler.is() )
+    if ( !m_xDocumentHandler.is() )
+        return;
+
+    rtl::Reference < comphelper::AttributeList > rAttrList = new comphelper::AttributeList;
+    m_aNamespaceHandler->addNSDeclAttributes( rAttrList );
+
+    const Sequence< xml::FastAttribute > fastAttribs = Attribs->getFastAttributes();
+    for (const auto& rAttr : fastAttribs)
     {
-        rtl::Reference < comphelper::AttributeList > rAttrList = new comphelper::AttributeList;
-        m_aNamespaceHandler->addNSDeclAttributes( rAttrList );
+        const OUString& rAttrValue = rAttr.Value;
+        sal_Int32 nToken = rAttr.Token;
+        const OUString& rAttrNamespacePrefix = CallbackDocumentHandler::getNamespacePrefixFromToken( nToken );
+        OUString sAttrName = CallbackDocumentHandler::getNameFromToken( nToken );
+        if ( !rAttrNamespacePrefix.isEmpty() )
+            sAttrName = rAttrNamespacePrefix + aNamespaceSeparator + sAttrName;
 
-        const Sequence< xml::FastAttribute > fastAttribs = Attribs->getFastAttributes();
-        for (const auto& rAttr : fastAttribs)
-        {
-            const OUString& rAttrValue = rAttr.Value;
-            sal_Int32 nToken = rAttr.Token;
-            const OUString& rAttrNamespacePrefix = CallbackDocumentHandler::getNamespacePrefixFromToken( nToken );
-            OUString sAttrName = CallbackDocumentHandler::getNameFromToken( nToken );
-            if ( !rAttrNamespacePrefix.isEmpty() )
-                sAttrName = rAttrNamespacePrefix + aNamespaceSeparator + sAttrName;
-
-            rAttrList->AddAttribute( sAttrName, "CDATA", rAttrValue );
-        }
-
-        const Sequence< xml::Attribute > unknownAttribs = Attribs->getUnknownAttributes();
-        for (const auto& rAttr : unknownAttribs)
-        {
-            const OUString& rAttrValue = rAttr.Value;
-            const OUString& rAttrName = rAttr.Name;
-
-            rAttrList->AddAttribute( rAttrName, "CDATA", rAttrValue );
-        }
-        m_xDocumentHandler->startElement( Name, rAttrList.get() );
+        rAttrList->AddAttribute( sAttrName, "CDATA", rAttrValue );
     }
+
+    const Sequence< xml::Attribute > unknownAttribs = Attribs->getUnknownAttributes();
+    for (const auto& rAttr : unknownAttribs)
+    {
+        const OUString& rAttrValue = rAttr.Value;
+        const OUString& rAttrName = rAttr.Name;
+
+        rAttrList->AddAttribute( rAttrName, "CDATA", rAttrValue );
+    }
+    m_xDocumentHandler->startElement( Name, rAttrList.get() );
 }
 
 void SAL_CALL CallbackDocumentHandler::endFastElement( sal_Int32 nElement )
@@ -291,29 +291,29 @@ SaxLegacyFastParser::SaxLegacyFastParser( ) : m_aNamespaceHandler( new Namespace
 
 void SAL_CALL SaxLegacyFastParser::initialize(Sequence< Any > const& rArguments )
 {
-    if (rArguments.hasElements())
+    if (!rArguments.hasElements())
+        return;
+
+    Reference< XFastTokenHandler > xTokenHandler;
+    OUString str;
+    if ( ( rArguments[0] >>= xTokenHandler ) && xTokenHandler.is() )
     {
-        Reference< XFastTokenHandler > xTokenHandler;
-        OUString str;
-        if ( ( rArguments[0] >>= xTokenHandler ) && xTokenHandler.is() )
+        m_xTokenHandler.set( xTokenHandler );
+    }
+    else if ( ( rArguments[0] >>= str ) && "registerNamespaces" == str )
+    {
+        css::beans::Pair< OUString, sal_Int32 > rPair;
+        for (sal_Int32 i = 1; i < rArguments.getLength(); i++ )
         {
-            m_xTokenHandler.set( xTokenHandler );
+            rArguments[i] >>= rPair;
+            m_xParser->registerNamespace( rPair.First, rPair.Second );
         }
-        else if ( ( rArguments[0] >>= str ) && "registerNamespaces" == str )
-        {
-            css::beans::Pair< OUString, sal_Int32 > rPair;
-            for (sal_Int32 i = 1; i < rArguments.getLength(); i++ )
-            {
-                rArguments[i] >>= rPair;
-                m_xParser->registerNamespace( rPair.First, rPair.Second );
-            }
-        }
-        else
-        {
-            uno::Reference<lang::XInitialization> const xInit(m_xParser,
-                            uno::UNO_QUERY_THROW);
-            xInit->initialize( rArguments );
-        }
+    }
+    else
+    {
+        uno::Reference<lang::XInitialization> const xInit(m_xParser,
+                        uno::UNO_QUERY_THROW);
+        xInit->initialize( rArguments );
     }
 }
 

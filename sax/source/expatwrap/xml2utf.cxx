@@ -117,43 +117,42 @@ sal_Int32 XMLFile2UTFConverter::readAndConvert( Sequence<sal_Int8> &seq , sal_In
 void XMLFile2UTFConverter::removeEncoding( Sequence<sal_Int8> &seq )
 {
     const sal_Int8 *pSource = seq.getArray();
-    if (seq.getLength() >= 5 && !strncmp(reinterpret_cast<const char *>(pSource), "<?xml", 5))
+    if (!(seq.getLength() >= 5 && !strncmp(reinterpret_cast<const char *>(pSource), "<?xml", 5)))
+        return;
+
+    // scan for encoding
+    OString str( reinterpret_cast<char const *>(pSource), seq.getLength() );
+
+    // cut sequence to first line break
+    // find first line break;
+    int nMax = str.indexOf( 10 );
+    if( nMax >= 0 )
     {
+        str = str.copy( 0 , nMax );
+    }
 
-        // scan for encoding
-        OString str( reinterpret_cast<char const *>(pSource), seq.getLength() );
+    int nFound = str.indexOf( " encoding" );
+    if( nFound < 0 )        return;
 
-        // cut sequence to first line break
-        // find first line break;
-        int nMax = str.indexOf( 10 );
-        if( nMax >= 0 )
-        {
-            str = str.copy( 0 , nMax );
-        }
+    int nStop;
+    int nStart = str.indexOf( "\"" , nFound );
+    if( nStart < 0 || str.indexOf( "'" , nFound ) < nStart )
+    {
+        nStart = str.indexOf( "'" , nFound );
+        nStop  = str.indexOf( "'" , nStart +1 );
+    }
+    else
+    {
+        nStop  = str.indexOf( "\"" , nStart +1);
+    }
 
-        int nFound = str.indexOf( " encoding" );
-        if( nFound >= 0 ) {
-            int nStop;
-            int nStart = str.indexOf( "\"" , nFound );
-            if( nStart < 0 || str.indexOf( "'" , nFound ) < nStart )
-            {
-                nStart = str.indexOf( "'" , nFound );
-                nStop  = str.indexOf( "'" , nStart +1 );
-            }
-            else
-            {
-                nStop  = str.indexOf( "\"" , nStart +1);
-            }
-
-            if( nStart >= 0 && nStop >= 0 && nStart+1 < nStop )
-            {
-                // remove encoding tag from file
-                memmove(        &( seq.getArray()[nFound] ) ,
-                                &( seq.getArray()[nStop+1]) ,
-                                seq.getLength() - nStop -1);
-                seq.realloc( seq.getLength() - ( nStop+1 - nFound ) );
-            }
-        }
+    if( nStart >= 0 && nStop >= 0 && nStart+1 < nStop )
+    {
+        // remove encoding tag from file
+        memmove(        &( seq.getArray()[nFound] ) ,
+                        &( seq.getArray()[nStop+1]) ,
+                        seq.getLength() - nStop -1);
+        seq.realloc( seq.getLength() - ( nStop+1 - nFound ) );
     }
 }
 
