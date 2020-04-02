@@ -1,8 +1,8 @@
-avmedia/source/vlc/wrapper/Types.hxx:38
+avmedia/source/vlc/wrapper/Types.hxx:37
     libvlc_event_t type int
-avmedia/source/vlc/wrapper/Types.hxx:52
+avmedia/source/vlc/wrapper/Types.hxx:51
     libvlc_track_description_t i_id int
-avmedia/source/vlc/wrapper/Types.hxx:54
+avmedia/source/vlc/wrapper/Types.hxx:53
     libvlc_track_description_t p_next struct libvlc_track_description_t *
 basegfx/source/polygon/b2dtrapezoid.cxx:205
     basegfx::trapezoidhelper::(anonymous namespace)::PointBlockAllocator maFirstStackBlock class basegfx::B2DPoint [32]
@@ -172,7 +172,7 @@ dbaccess/source/core/api/RowSetBase.hxx:85
     dbaccess::ORowSetBase m_aEmptyValue connectivity::ORowSetValue
 dbaccess/source/core/api/RowSetBase.hxx:96
     dbaccess::ORowSetBase m_aErrors ::connectivity::SQLError
-dbaccess/source/core/dataaccess/documentcontainer.cxx:67
+dbaccess/source/core/dataaccess/documentcontainer.cxx:66
     dbaccess::(anonymous namespace)::LocalNameApproval m_aErrors ::connectivity::SQLError
 dbaccess/source/core/inc/ContentHelper.hxx:105
     dbaccess::OContentHelper m_aErrorHelper const ::connectivity::SQLError
@@ -186,6 +186,8 @@ dbaccess/source/ui/inc/directsql.hxx:67
     dbaui::DirectSQLDialog m_aColorConfig const svtools::ColorConfig
 dbaccess/source/ui/inc/WCopyTable.hxx:259
     dbaui::OCopyTableWizard m_aLocale css::lang::Locale
+drawinglayer/inc/processor3d/defaultprocessor3d.hxx:89
+    drawinglayer::processor3d::DefaultProcessor3D maDrawinglayerOpt const class SvtOptionsDrawinglayer
 drawinglayer/source/processor2d/vclprocessor2d.hxx:82
     drawinglayer::processor2d::VclProcessor2D maDrawinglayerOpt const class SvtOptionsDrawinglayer
 editeng/source/editeng/impedit.hxx:447
@@ -258,7 +260,7 @@ i18npool/inc/textconversion.hxx:80
     i18npool::(anonymous) address sal_Int16
 i18npool/inc/textconversion.hxx:81
     i18npool::(anonymous) count sal_Int16
-include/basic/codecompletecache.hxx:46
+include/basic/codecompletecache.hxx:47
     CodeCompleteOptions aMiscOptions class SvtMiscOptions
 include/basic/sbstar.hxx:50
     StarBASIC aErrorHdl Link<class StarBASIC *, _Bool>
@@ -278,8 +280,6 @@ include/connectivity/sdbcx/VTable.hxx:79
     connectivity::sdbcx::OTable m_xIndexes rtl::Reference<OCollection>
 include/connectivity/sqlparse.hxx:109
     connectivity::OSQLParser_Data aErrors ::connectivity::SQLError
-include/drawinglayer/processor3d/defaultprocessor3d.hxx:90
-    drawinglayer::processor3d::DefaultProcessor3D maDrawinglayerOpt const class SvtOptionsDrawinglayer
 include/editeng/brushitem.hxx:51
     SvxBrushItem maSecOptions class SvtSecurityOptions
 include/filter/msfilter/svdfppt.hxx:706
@@ -291,39 +291,39 @@ include/filter/msfilter/svdfppt.hxx:878
 include/filter/msfilter/svdfppt.hxx:879
     ImplPPTParaPropSet nDontKnow2bit06 sal_uInt16
 include/oox/core/contexthandler2.hxx:217
-    oox::core::ContextHandler2Helper mnRootStackSize const size_t
+    oox::core::ContextHandler2Helper mnRootStackSize size_t
 include/oox/ole/axbinarywriter.hxx:151
     oox::ole::AxBinaryPropertyWriter maStreamProps oox::ole::AxBinaryPropertyWriter::ComplexPropVector
 include/registry/refltype.hxx:65
-    RTUik m_Data1 const sal_uInt32
+    RTUik m_Data1 sal_uInt32
 include/registry/refltype.hxx:66
-    RTUik m_Data2 const sal_uInt16
+    RTUik m_Data2 sal_uInt16
 include/registry/refltype.hxx:67
-    RTUik m_Data3 const sal_uInt16
+    RTUik m_Data3 sal_uInt16
 include/registry/refltype.hxx:68
-    RTUik m_Data4 const sal_uInt32
+    RTUik m_Data4 sal_uInt32
 include/registry/refltype.hxx:69
-    RTUik m_Data5 const sal_uInt32
+    RTUik m_Data5 sal_uInt32
 include/sfx2/msg.hxx:95
     SfxTypeAttrib nAID sal_uInt16
 include/sfx2/msg.hxx:96
     SfxTypeAttrib pName const char *
 include/sfx2/msg.hxx:105
-    SfxType createSfxPoolItemFunc const std::function<SfxPoolItem *(void)>
+    SfxType createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:106
     SfxType pType const std::type_info *
 include/sfx2/msg.hxx:107
-    SfxType nAttribs const sal_uInt16
+    SfxType nAttribs sal_uInt16
 include/sfx2/msg.hxx:108
     SfxType aAttrib struct SfxTypeAttrib [1]
 include/sfx2/msg.hxx:118
     SfxType0 pType const std::type_info *
 include/sfx2/sidebar/ResourceManager.hxx:110
-    sfx2::sidebar::ResourceManager maMiscOptions const class SvtMiscOptions
+    sfx2::sidebar::ResourceManager maMiscOptions class SvtMiscOptions
 include/svl/ondemand.hxx:55
     OnDemandLocaleDataWrapper aSysLocale class SvtSysLocale
 include/svtools/editsyntaxhighlighter.hxx:32
-    MultiLineEditSyntaxHighlight m_aColorConfig const svtools::ColorConfig
+    MultiLineEditSyntaxHighlight m_aColorConfig svtools::ColorConfig
 include/svx/colorwindow.hxx:67
     SvxColorWindow maSelectedLink Link<const NamedColor &, void>
 include/svx/graphctl.hxx:52
@@ -331,17 +331,17 @@ include/svx/graphctl.hxx:52
 include/svx/sdr/overlay/overlayanimatedbitmapex.hxx:51
     sdr::overlay::OverlayAnimatedBitmapEx mbOverlayState _Bool
 include/svx/sdr/overlay/overlaymanager.hxx:72
-    sdr::overlay::OverlayManager maDrawinglayerOpt const class SvtOptionsDrawinglayer
-include/svx/svdmark.hxx:140
-    SdrMarkList maPointName class rtl::OUString
+    sdr::overlay::OverlayManager maDrawinglayerOpt class SvtOptionsDrawinglayer
 include/svx/svdmark.hxx:141
+    SdrMarkList maPointName class rtl::OUString
+include/svx/svdmark.hxx:142
     SdrMarkList maGluePointName class rtl::OUString
 include/svx/svdoedge.hxx:160
     SdrEdgeObj mbBoundRectCalculationRunning _Bool
 include/svx/svdpntv.hxx:160
-    SdrPaintView maDrawinglayerOpt const class SvtOptionsDrawinglayer
+    SdrPaintView maDrawinglayerOpt class SvtOptionsDrawinglayer
 include/unoidl/unoidl.hxx:443
-    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /home/noel/libo2/include/unoidl/unoidl.hxx:443:5)
+    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /media/disk2/libo4/include/unoidl/unoidl.hxx:443:5)
 include/unoidl/unoidl.hxx:444
     unoidl::ConstantValue::(anonymous) booleanValue _Bool
 include/unoidl/unoidl.hxx:445
@@ -383,11 +383,11 @@ lingucomponent/source/languageguessing/simpleguesser.cxx:80
 linguistic/source/dlistimp.hxx:55
     DicList aOpt class LinguOptions
 oox/qa/token/tokenmap-test.cxx:34
-    oox::TokenmapTest tokenMap const class oox::TokenMap
+    oox::TokenmapTest tokenMap class oox::TokenMap
 oox/qa/unit/vba_compression.cxx:70
-    TestVbaCompression m_directories const test::Directories
-oox/source/drawingml/chart/objectformatter.cxx:715
-    oox::drawingml::chart::ObjectFormatterData maFromLocale const struct com::sun::star::lang::Locale
+    TestVbaCompression m_directories test::Directories
+oox/source/drawingml/chart/objectformatter.cxx:716
+    oox::drawingml::chart::ObjectFormatterData maFromLocale struct com::sun::star::lang::Locale
 registry/source/reflwrit.cxx:140
     writeDouble(sal_uInt8 *, double)::(anonymous union)::(anonymous) b1 sal_uInt32
 registry/source/reflwrit.cxx:141
@@ -395,7 +395,7 @@ registry/source/reflwrit.cxx:141
 registry/source/reflwrit.cxx:181
     (anonymous namespace)::CPInfo::(anonymous) aUik struct RTUik *
 reportdesign/source/ui/inc/ColorListener.hxx:35
-    rptui::OColorListener m_aColorConfig const svtools::ColorConfig
+    rptui::OColorListener m_aColorConfig svtools::ColorConfig
 sal/osl/unx/process.cxx:827
     (anonymous namespace)::osl_procStat signal char [24]
 sal/osl/unx/process.cxx:828
@@ -417,13 +417,13 @@ sal/rtl/uuid.cxx:67
 sc/inc/attarray.hxx:68
     ScMergePatternState pItemSet std::unique_ptr<SfxItemSet>
 sc/inc/compiler.hxx:129
-    ScRawToken::(anonymous union)::(anonymous) eItem const class ScTableRefToken::Item
+    ScRawToken::(anonymous union)::(anonymous) eItem class ScTableRefToken::Item
 sc/inc/compiler.hxx:130
-    ScRawToken::(anonymous) table const struct (anonymous struct at /home/noel/libo2/sc/inc/compiler.hxx:127:9)
+    ScRawToken::(anonymous) table struct (anonymous struct at /media/disk2/libo4/sc/inc/compiler.hxx:127:9)
 sc/inc/compiler.hxx:135
-    ScRawToken::(anonymous) pMat class ScMatrix *const
+    ScRawToken::(anonymous) pMat class ScMatrix *
 sc/inc/formulagroup.hxx:39
-    sc::FormulaGroupEntry::(anonymous) mpCells class ScFormulaCell **const
+    sc::FormulaGroupEntry::(anonymous) mpCells class ScFormulaCell **
 sc/inc/reordermap.hxx:21
     sc::ColRowReorderMapType maData sc::ColRowReorderMapType::DataType
 sc/source/core/inc/adiasync.hxx:42
@@ -435,7 +435,7 @@ sc/source/filter/excel/xltoolbar.cxx:28
 sc/source/filter/excel/xltoolbar.cxx:29
     (anonymous namespace)::MSOExcelCommandConvertor tcidToOOcmd IdToString
 sc/source/filter/inc/commentsbuffer.hxx:42
-    oox::xls::CommentModel maAnchor const css::awt::Rectangle
+    oox::xls::CommentModel maAnchor css::awt::Rectangle
 sc/source/filter/inc/htmlexp.hxx:118
     ScHTMLExport pFileNameMap ScHTMLExport::FileNameMapPtr
 sc/source/filter/inc/htmlpars.hxx:56
@@ -443,7 +443,7 @@ sc/source/filter/inc/htmlpars.hxx:56
 sc/source/filter/inc/namebuff.hxx:81
     RangeNameBufferWK3::Entry nAbsInd sal_uInt16
 sc/source/filter/inc/qproform.hxx:55
-    QProToSc mnAddToken const struct TokenId
+    QProToSc mnAddToken struct TokenId
 sc/source/filter/inc/stylesbuffer.hxx:676
     oox::xls::Dxf mxAlignment std::shared_ptr<Alignment>
 sc/source/filter/inc/stylesbuffer.hxx:678
@@ -486,7 +486,7 @@ sc/source/ui/vba/vbaformatconditions.hxx:40
     ScVbaFormatConditions mxParentRangePropertySet css::uno::Reference<css::beans::XPropertySet>
 sc/source/ui/vba/vbaworksheet.hxx:50
     ScVbaWorksheet mxButtons ::rtl::Reference<ScVbaSheetObjectsBase> [2]
-sd/inc/Outliner.hxx:277
+sd/inc/Outliner.hxx:281
     SdOutliner mpFirstObj class SdrObject *
 sd/inc/sdmod.hxx:119
     SdModule gImplImpressPropertySetInfoCache SdExtPropertySetInfoCache
@@ -513,17 +513,17 @@ sd/source/ui/slideshow/showwindow.hxx:99
 sd/source/ui/slidesorter/cache/SlsPageCacheManager.cxx:141
     sd::slidesorter::cache::PageCacheManager::RecentlyUsedPageCaches maMap std::map<key_type, mapped_type>
 sd/source/ui/slidesorter/inc/controller/SlsAnimator.hxx:97
-    sd::slidesorter::controller::Animator maElapsedTime const ::canvas::tools::ElapsedTime
+    sd::slidesorter::controller::Animator maElapsedTime ::canvas::tools::ElapsedTime
 sdext/source/pdfimport/inc/pdfihelper.hxx:101
     pdfi::GraphicsContext BlendMode sal_Int8
 sdext/source/pdfimport/tree/style.hxx:43
-    pdfi::StyleContainer::Style Contents const class rtl::OUString
+    pdfi::StyleContainer::Style Contents class rtl::OUString
 sfx2/source/appl/lnkbase2.cxx:99
     sfx2::(anonymous namespace)::ImplDdeItem pLink class sfx2::SvBaseLink *
 slideshow/source/engine/slideshowimpl.cxx:132
-    (anonymous namespace)::FrameSynchronization maTimer const canvas::tools::ElapsedTime
+    (anonymous namespace)::FrameSynchronization maTimer canvas::tools::ElapsedTime
 sot/source/sdstor/ucbstorage.cxx:403
-    UCBStorageStream_Impl m_aKey const class rtl::OString
+    UCBStorageStream_Impl m_aKey class rtl::OString
 starmath/source/view.cxx:862
     SmViewShell_Impl aOpts class SvtMiscOptions
 store/source/storbios.cxx:59
@@ -537,21 +537,21 @@ svl/source/crypto/cryptosign.cxx:304
 svl/source/misc/strmadpt.cxx:51
     SvDataPipe_Impl::Page m_aBuffer sal_Int8 [1]
 svl/source/uno/pathservice.cxx:37
-    (anonymous namespace)::PathService m_aOptions const class SvtPathOptions
+    (anonymous namespace)::PathService m_aOptions class SvtPathOptions
 svtools/source/control/tabbar.cxx:200
-    ImplTabBarItem maHelpId const class rtl::OString
+    ImplTabBarItem maHelpId class rtl::OString
 svtools/source/dialogs/insdlg.cxx:46
-    (anonymous namespace)::OleObjectDescriptor cbSize const sal_uInt32
+    (anonymous namespace)::OleObjectDescriptor cbSize sal_uInt32
 svtools/source/dialogs/insdlg.cxx:47
-    (anonymous namespace)::OleObjectDescriptor clsid const ClsId
+    (anonymous namespace)::OleObjectDescriptor clsid ClsId
 svtools/source/dialogs/insdlg.cxx:48
-    (anonymous namespace)::OleObjectDescriptor dwDrawAspect const sal_uInt32
+    (anonymous namespace)::OleObjectDescriptor dwDrawAspect sal_uInt32
 svtools/source/dialogs/insdlg.cxx:49
-    (anonymous namespace)::OleObjectDescriptor sizel const class Size
+    (anonymous namespace)::OleObjectDescriptor sizel class Size
 svtools/source/dialogs/insdlg.cxx:50
-    (anonymous namespace)::OleObjectDescriptor pointl const class Point
+    (anonymous namespace)::OleObjectDescriptor pointl class Point
 svtools/source/dialogs/insdlg.cxx:51
-    (anonymous namespace)::OleObjectDescriptor dwStatus const sal_uInt32
+    (anonymous namespace)::OleObjectDescriptor dwStatus sal_uInt32
 svtools/source/dialogs/insdlg.cxx:52
     (anonymous namespace)::OleObjectDescriptor dwFullUserTypeName sal_uInt32
 svtools/source/dialogs/insdlg.cxx:53
@@ -562,32 +562,32 @@ svtools/source/table/gridtablerenderer.cxx:72
     svt::table::(anonymous namespace)::CachedSortIndicator m_sortDescending class BitmapEx
 svx/inc/sdr/overlay/overlayrectangle.hxx:43
     sdr::overlay::OverlayRectangle mbOverlayState _Bool
-svx/source/inc/datanavi.hxx:213
-    svxform::XFormsPage m_aMethodString const class svxform::MethodString
 svx/source/inc/datanavi.hxx:214
-    svxform::XFormsPage m_aReplaceString const class svxform::ReplaceString
-svx/source/inc/datanavi.hxx:524
-    svxform::AddSubmissionDialog m_aMethodString const class svxform::MethodString
+    svxform::XFormsPage m_aMethodString class svxform::MethodString
+svx/source/inc/datanavi.hxx:215
+    svxform::XFormsPage m_aReplaceString class svxform::ReplaceString
 svx/source/inc/datanavi.hxx:525
-    svxform::AddSubmissionDialog m_aReplaceString const class svxform::ReplaceString
+    svxform::AddSubmissionDialog m_aMethodString class svxform::MethodString
+svx/source/inc/datanavi.hxx:526
+    svxform::AddSubmissionDialog m_aReplaceString class svxform::ReplaceString
 svx/source/inc/gridcell.hxx:527
     DbPatternField m_pValueFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
 svx/source/inc/gridcell.hxx:528
     DbPatternField m_pPaintFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
-svx/source/svdraw/svdpdf.hxx:171
-    ImpSdrPdfImport maDash const class XDash
+svx/source/svdraw/svdpdf.hxx:70
+    ImpSdrPdfImport maDash class XDash
 sw/inc/acmplwrd.hxx:42
-    SwAutoCompleteWord m_LookupTree const editeng::Trie
+    SwAutoCompleteWord m_LookupTree editeng::Trie
 sw/inc/breakit.hxx:38
     SwBreakIt m_xLanguageTag std::unique_ptr<LanguageTag>
 sw/inc/calc.hxx:197
-    SwCalc m_aSysLocale const class SvtSysLocale
+    SwCalc m_aSysLocale class SvtSysLocale
 sw/inc/dpage.hxx:35
     SwDPage pGridLst std::unique_ptr<SdrPageGridFrameList>
 sw/inc/hints.hxx:230
-    SwAttrSetChg m_bDelSet const _Bool
+    SwAttrSetChg m_bDelSet _Bool
 sw/inc/shellio.hxx:153
-    SwReader mpStg const tools::SvRef<SotStorage>
+    SwReader mpStg tools::SvRef<SotStorage>
 sw/inc/swevent.hxx:71
     SwCallMouseEvent::(anonymous union)::(anonymous) pFormat const class SwFrameFormat *
 sw/source/core/access/accfrmobjmap.hxx:100
@@ -621,9 +621,9 @@ sw/source/filter/inc/rtf.hxx:32
 sw/source/filter/writer/writer.cxx:68
     Writer_Impl pFileNameMap std::unique_ptr<std::map<OUString, OUString> >
 sw/source/ui/dbui/dbinsdlg.cxx:99
-    DB_Column::(anonymous) pText class rtl::OUString *const
+    DB_Column::(anonymous) pText class rtl::OUString *
 sw/source/ui/dbui/dbinsdlg.cxx:101
-    DB_Column::(anonymous) nFormat const sal_uInt32
+    DB_Column::(anonymous) nFormat sal_uInt32
 sw/source/uibase/dbui/mmconfigitem.cxx:111
     SwMailMergeConfigItem_Impl m_aFemaleGreetingLines std::vector<OUString>
 sw/source/uibase/dbui/mmconfigitem.cxx:113
@@ -631,7 +631,7 @@ sw/source/uibase/dbui/mmconfigitem.cxx:113
 sw/source/uibase/dbui/mmconfigitem.cxx:115
     SwMailMergeConfigItem_Impl m_aNeutralGreetingLines std::vector<OUString>
 sw/source/uibase/inc/fldmgr.hxx:79
-    SwInsertField_Data m_aDBDataSource const css::uno::Any
+    SwInsertField_Data m_aDBDataSource css::uno::Any
 toolkit/source/awt/vclxtoolkit.cxx:434
     (anonymous namespace)::VCLXToolkit mxSelection css::uno::Reference<css::datatransfer::clipboard::XClipboard>
 ucb/source/ucp/gio/gio_mount.hxx:74
@@ -645,7 +645,7 @@ ucb/source/ucp/gio/gio_mount.hxx:79
 ucb/source/ucp/gio/gio_mount.hxx:80
     OOoMountOperationClass _gtk_reserved4 void (*)(void)
 ucb/source/ucp/hierarchy/hierarchydatasupplier.cxx:76
-    hierarchy_ucp::DataSupplier_Impl m_aIterator const class HierarchyEntry::iterator
+    hierarchy_ucp::DataSupplier_Impl m_aIterator class HierarchyEntry::iterator
 ucb/source/ucp/package/pkgprovider.hxx:51
     package_ucp::ContentProvider m_pPackages std::unique_ptr<Packages>
 ucbhelper/source/client/proxydecider.cxx:130
@@ -699,21 +699,21 @@ unoidl/source/unoidl-read.cxx:146
 unoidl/source/unoidl-read.cxx:147
     (anonymous namespace)::Entity interfaceDependencies std::set<OUString>
 unoidl/source/unoidlprovider.cxx:86
-    unoidl::detail::(anonymous namespace)::Memory16 byte const unsigned char [2]
+    unoidl::detail::(anonymous namespace)::Memory16 byte unsigned char [2]
 unoidl/source/unoidlprovider.cxx:96
-    unoidl::detail::(anonymous namespace)::Memory32 byte const unsigned char [4]
+    unoidl::detail::(anonymous namespace)::Memory32 byte unsigned char [4]
 unoidl/source/unoidlprovider.cxx:127
-    unoidl::detail::(anonymous namespace)::Memory64 byte const unsigned char [8]
+    unoidl::detail::(anonymous namespace)::Memory64 byte unsigned char [8]
 unoidl/source/unoidlprovider.cxx:455
-    unoidl::detail::MapEntry name const struct unoidl::detail::(anonymous namespace)::Memory32
+    unoidl::detail::MapEntry name struct unoidl::detail::(anonymous namespace)::Memory32
 unoidl/source/unoidlprovider.cxx:456
-    unoidl::detail::MapEntry data const struct unoidl::detail::(anonymous namespace)::Memory32
+    unoidl::detail::MapEntry data struct unoidl::detail::(anonymous namespace)::Memory32
 unotools/source/config/pathoptions.cxx:84
-    SvtPathOptions_Impl m_aEmptyString const class rtl::OUString
+    SvtPathOptions_Impl m_aEmptyString class rtl::OUString
 unotools/source/config/saveopt.cxx:82
     (anonymous namespace)::SvtSaveOptions_Impl bROUserAutoSave _Bool
 vcl/inc/BitmapFastScaleFilter.hxx:31
-    BitmapFastScaleFilter maSize const class Size
+    BitmapFastScaleFilter maSize class Size
 vcl/inc/ppdparser.hxx:130
     psp::PPDParser::PPDConstraint m_pKey1 const class psp::PPDKey *
 vcl/inc/printerinfomanager.hxx:75
@@ -721,17 +721,37 @@ vcl/inc/printerinfomanager.hxx:75
 vcl/inc/salwtype.hxx:157
     SalWheelMouseEvent mbDeltaIsPixel _Bool
 vcl/inc/salwtype.hxx:204
-    SalSurroundingTextSelectionChangeEvent mnStart const sal_uLong
+    SalSurroundingTextSelectionChangeEvent mnStart sal_uLong
 vcl/inc/salwtype.hxx:205
-    SalSurroundingTextSelectionChangeEvent mnEnd const sal_uLong
+    SalSurroundingTextSelectionChangeEvent mnEnd sal_uLong
 vcl/inc/salwtype.hxx:211
     SalQueryCharPositionEvent mnCharPos sal_uLong
 vcl/inc/svdata.hxx:316
     ImplSVNWFData mbMenuBarDockingAreaCommonBG _Bool
 vcl/inc/toolbox.h:108
     vcl::ToolBoxLayoutData m_aLineItemIds std::vector<sal_uInt16>
-vcl/inc/unx/saldisp.hxx:282
-    SalDisplay m_aInvalidScreenData const struct SalDisplay::ScreenData
+vcl/inc/unx/saldisp.hxx:281
+    SalDisplay m_aInvalidScreenData struct SalDisplay::ScreenData
+vcl/inc/widgetdraw/WidgetDefinition.hxx:226
+    vcl::WidgetDefinitionStyle maDefaultButtonTextColor class Color
+vcl/inc/widgetdraw/WidgetDefinition.hxx:230
+    vcl::WidgetDefinitionStyle maFlatButtonTextColor class Color
+vcl/inc/widgetdraw/WidgetDefinition.hxx:231
+    vcl::WidgetDefinitionStyle maDefaultButtonRolloverTextColor class Color
+vcl/inc/widgetdraw/WidgetDefinition.hxx:233
+    vcl::WidgetDefinitionStyle maDefaultActionButtonRolloverTextColor class Color
+vcl/inc/widgetdraw/WidgetDefinition.hxx:235
+    vcl::WidgetDefinitionStyle maFlatButtonRolloverTextColor class Color
+vcl/inc/widgetdraw/WidgetDefinition.hxx:236
+    vcl::WidgetDefinitionStyle maDefaultButtonPressedRolloverTextColor class Color
+vcl/inc/widgetdraw/WidgetDefinition.hxx:237
+    vcl::WidgetDefinitionStyle maButtonPressedRolloverTextColor class Color
+vcl/inc/widgetdraw/WidgetDefinition.hxx:238
+    vcl::WidgetDefinitionStyle maDefaultActionButtonPressedRolloverTextColor class Color
+vcl/inc/widgetdraw/WidgetDefinition.hxx:239
+    vcl::WidgetDefinitionStyle maActionButtonPressedRolloverTextColor class Color
+vcl/inc/widgetdraw/WidgetDefinition.hxx:240
+    vcl::WidgetDefinitionStyle maFlatButtonPressedRolloverTextColor class Color
 vcl/inc/WidgetThemeLibrary.hxx:21
     vcl::WidgetDrawStyle maFaceColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:22
@@ -745,150 +765,170 @@ vcl/inc/WidgetThemeLibrary.hxx:25
 vcl/inc/WidgetThemeLibrary.hxx:26
     vcl::WidgetDrawStyle maDarkShadowColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:27
-    vcl::WidgetDrawStyle maButtonTextColor uint32_t
+    vcl::WidgetDrawStyle maDefaultButtonTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:28
-    vcl::WidgetDrawStyle maDefaultActionButtonTextColor uint32_t
+    vcl::WidgetDrawStyle maButtonTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:29
-    vcl::WidgetDrawStyle maActionButtonTextColor uint32_t
+    vcl::WidgetDrawStyle maDefaultActionButtonTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:30
-    vcl::WidgetDrawStyle maActionButtonRolloverTextColor uint32_t
+    vcl::WidgetDrawStyle maActionButtonTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:31
-    vcl::WidgetDrawStyle maButtonRolloverTextColor uint32_t
+    vcl::WidgetDrawStyle maFlatButtonTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:32
-    vcl::WidgetDrawStyle maRadioCheckTextColor uint32_t
+    vcl::WidgetDrawStyle maDefaultButtonRolloverTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:33
-    vcl::WidgetDrawStyle maGroupTextColor uint32_t
+    vcl::WidgetDrawStyle maButtonRolloverTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:34
-    vcl::WidgetDrawStyle maLabelTextColor uint32_t
+    vcl::WidgetDrawStyle maDefaultActionButtonRolloverTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:35
-    vcl::WidgetDrawStyle maWindowColor uint32_t
+    vcl::WidgetDrawStyle maActionButtonRolloverTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:36
-    vcl::WidgetDrawStyle maWindowTextColor uint32_t
+    vcl::WidgetDrawStyle maFlatButtonRolloverTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:37
-    vcl::WidgetDrawStyle maDialogColor uint32_t
+    vcl::WidgetDrawStyle maDefaultButtonPressedRolloverTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:38
-    vcl::WidgetDrawStyle maDialogTextColor uint32_t
+    vcl::WidgetDrawStyle maButtonPressedRolloverTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:39
-    vcl::WidgetDrawStyle maWorkspaceColor uint32_t
+    vcl::WidgetDrawStyle maDefaultActionButtonPressedRolloverTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:40
-    vcl::WidgetDrawStyle maMonoColor uint32_t
+    vcl::WidgetDrawStyle maActionButtonPressedRolloverTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:41
-    vcl::WidgetDrawStyle maFieldColor uint32_t
+    vcl::WidgetDrawStyle maFlatButtonPressedRolloverTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:42
-    vcl::WidgetDrawStyle maFieldTextColor uint32_t
+    vcl::WidgetDrawStyle maRadioCheckTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:43
-    vcl::WidgetDrawStyle maFieldRolloverTextColor uint32_t
+    vcl::WidgetDrawStyle maGroupTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:44
-    vcl::WidgetDrawStyle maActiveColor uint32_t
+    vcl::WidgetDrawStyle maLabelTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:45
-    vcl::WidgetDrawStyle maActiveTextColor uint32_t
+    vcl::WidgetDrawStyle maWindowColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:46
-    vcl::WidgetDrawStyle maActiveBorderColor uint32_t
+    vcl::WidgetDrawStyle maWindowTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:47
-    vcl::WidgetDrawStyle maDeactiveColor uint32_t
+    vcl::WidgetDrawStyle maDialogColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:48
-    vcl::WidgetDrawStyle maDeactiveTextColor uint32_t
+    vcl::WidgetDrawStyle maDialogTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:49
-    vcl::WidgetDrawStyle maDeactiveBorderColor uint32_t
+    vcl::WidgetDrawStyle maWorkspaceColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:50
-    vcl::WidgetDrawStyle maMenuColor uint32_t
+    vcl::WidgetDrawStyle maMonoColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:51
-    vcl::WidgetDrawStyle maMenuBarColor uint32_t
+    vcl::WidgetDrawStyle maFieldColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:52
-    vcl::WidgetDrawStyle maMenuBarRolloverColor uint32_t
+    vcl::WidgetDrawStyle maFieldTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:53
-    vcl::WidgetDrawStyle maMenuBorderColor uint32_t
+    vcl::WidgetDrawStyle maFieldRolloverTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:54
-    vcl::WidgetDrawStyle maMenuTextColor uint32_t
+    vcl::WidgetDrawStyle maActiveColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:55
-    vcl::WidgetDrawStyle maMenuBarTextColor uint32_t
+    vcl::WidgetDrawStyle maActiveTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:56
-    vcl::WidgetDrawStyle maMenuBarRolloverTextColor uint32_t
+    vcl::WidgetDrawStyle maActiveBorderColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:57
-    vcl::WidgetDrawStyle maMenuBarHighlightTextColor uint32_t
+    vcl::WidgetDrawStyle maDeactiveColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:58
-    vcl::WidgetDrawStyle maMenuHighlightColor uint32_t
+    vcl::WidgetDrawStyle maDeactiveTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:59
-    vcl::WidgetDrawStyle maMenuHighlightTextColor uint32_t
+    vcl::WidgetDrawStyle maDeactiveBorderColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:60
-    vcl::WidgetDrawStyle maHighlightColor uint32_t
+    vcl::WidgetDrawStyle maMenuColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:61
-    vcl::WidgetDrawStyle maHighlightTextColor uint32_t
+    vcl::WidgetDrawStyle maMenuBarColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:62
-    vcl::WidgetDrawStyle maActiveTabColor uint32_t
+    vcl::WidgetDrawStyle maMenuBarRolloverColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:63
-    vcl::WidgetDrawStyle maInactiveTabColor uint32_t
+    vcl::WidgetDrawStyle maMenuBorderColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:64
-    vcl::WidgetDrawStyle maTabTextColor uint32_t
+    vcl::WidgetDrawStyle maMenuTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:65
-    vcl::WidgetDrawStyle maTabRolloverTextColor uint32_t
+    vcl::WidgetDrawStyle maMenuBarTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:66
-    vcl::WidgetDrawStyle maTabHighlightTextColor uint32_t
+    vcl::WidgetDrawStyle maMenuBarRolloverTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:67
-    vcl::WidgetDrawStyle maDisableColor uint32_t
+    vcl::WidgetDrawStyle maMenuBarHighlightTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:68
-    vcl::WidgetDrawStyle maHelpColor uint32_t
+    vcl::WidgetDrawStyle maMenuHighlightColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:69
-    vcl::WidgetDrawStyle maHelpTextColor uint32_t
+    vcl::WidgetDrawStyle maMenuHighlightTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:70
-    vcl::WidgetDrawStyle maLinkColor uint32_t
+    vcl::WidgetDrawStyle maHighlightColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:71
-    vcl::WidgetDrawStyle maVisitedLinkColor uint32_t
+    vcl::WidgetDrawStyle maHighlightTextColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:72
-    vcl::WidgetDrawStyle maToolTextColor uint32_t
+    vcl::WidgetDrawStyle maActiveTabColor uint32_t
 vcl/inc/WidgetThemeLibrary.hxx:73
+    vcl::WidgetDrawStyle maInactiveTabColor uint32_t
+vcl/inc/WidgetThemeLibrary.hxx:74
+    vcl::WidgetDrawStyle maTabTextColor uint32_t
+vcl/inc/WidgetThemeLibrary.hxx:75
+    vcl::WidgetDrawStyle maTabRolloverTextColor uint32_t
+vcl/inc/WidgetThemeLibrary.hxx:76
+    vcl::WidgetDrawStyle maTabHighlightTextColor uint32_t
+vcl/inc/WidgetThemeLibrary.hxx:77
+    vcl::WidgetDrawStyle maDisableColor uint32_t
+vcl/inc/WidgetThemeLibrary.hxx:78
+    vcl::WidgetDrawStyle maHelpColor uint32_t
+vcl/inc/WidgetThemeLibrary.hxx:79
+    vcl::WidgetDrawStyle maHelpTextColor uint32_t
+vcl/inc/WidgetThemeLibrary.hxx:80
+    vcl::WidgetDrawStyle maLinkColor uint32_t
+vcl/inc/WidgetThemeLibrary.hxx:81
+    vcl::WidgetDrawStyle maVisitedLinkColor uint32_t
+vcl/inc/WidgetThemeLibrary.hxx:82
+    vcl::WidgetDrawStyle maToolTextColor uint32_t
+vcl/inc/WidgetThemeLibrary.hxx:83
     vcl::WidgetDrawStyle maFontColor uint32_t
-vcl/inc/WidgetThemeLibrary.hxx:111
-    vcl::WidgetThemeLibrary_t isNativeControlSupported _Bool (*)(enum ControlType, enum ControlPart)
-vcl/inc/WidgetThemeLibrary.hxx:112
-    vcl::WidgetThemeLibrary_t getRegion _Bool (*)(enum ControlType, enum ControlPart, enum ControlState, const vcl::rectangle_t &, vcl::rectangle_t &, vcl::rectangle_t &)
-vcl/inc/WidgetThemeLibrary.hxx:116
-    vcl::WidgetThemeLibrary_t drawPushButton _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
-vcl/inc/WidgetThemeLibrary.hxx:117
-    vcl::WidgetThemeLibrary_t drawRadiobutton _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
-vcl/inc/WidgetThemeLibrary.hxx:118
-    vcl::WidgetThemeLibrary_t drawCheckbox _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
-vcl/inc/WidgetThemeLibrary.hxx:119
-    vcl::WidgetThemeLibrary_t drawCombobox _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
-vcl/inc/WidgetThemeLibrary.hxx:120
-    vcl::WidgetThemeLibrary_t drawEditbox _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:121
-    vcl::WidgetThemeLibrary_t drawScrollbar _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t isNativeControlSupported _Bool (*)(enum ControlType, enum ControlPart)
 vcl/inc/WidgetThemeLibrary.hxx:122
-    vcl::WidgetThemeLibrary_t drawSpinButtons _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
-vcl/inc/WidgetThemeLibrary.hxx:123
-    vcl::WidgetThemeLibrary_t drawSpinbox _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
-vcl/inc/WidgetThemeLibrary.hxx:124
-    vcl::WidgetThemeLibrary_t drawTabItem _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
-vcl/inc/WidgetThemeLibrary.hxx:125
-    vcl::WidgetThemeLibrary_t drawTabPane _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t getRegion _Bool (*)(enum ControlType, enum ControlPart, enum ControlState, const vcl::rectangle_t &, vcl::rectangle_t &, vcl::rectangle_t &)
 vcl/inc/WidgetThemeLibrary.hxx:126
-    vcl::WidgetThemeLibrary_t drawTabHeader _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t drawPushButton _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:127
-    vcl::WidgetThemeLibrary_t drawTabBody _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t drawRadiobutton _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:128
-    vcl::WidgetThemeLibrary_t drawSlider _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t drawCheckbox _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:129
-    vcl::WidgetThemeLibrary_t drawFixedline _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t drawCombobox _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:130
-    vcl::WidgetThemeLibrary_t drawToolbar _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t drawEditbox _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:131
-    vcl::WidgetThemeLibrary_t drawProgress _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t drawScrollbar _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:132
-    vcl::WidgetThemeLibrary_t drawWindowsBackground _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t drawSpinButtons _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+vcl/inc/WidgetThemeLibrary.hxx:133
+    vcl::WidgetThemeLibrary_t drawSpinbox _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:134
-    vcl::WidgetThemeLibrary_t drawListbox _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t drawTabItem _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:135
-    vcl::WidgetThemeLibrary_t drawFrame _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t drawTabPane _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:136
-    vcl::WidgetThemeLibrary_t drawListNode _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t drawTabHeader _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:137
-    vcl::WidgetThemeLibrary_t drawListNet _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t drawTabBody _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:138
-    vcl::WidgetThemeLibrary_t drawListHeader _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+    vcl::WidgetThemeLibrary_t drawSlider _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+vcl/inc/WidgetThemeLibrary.hxx:139
+    vcl::WidgetThemeLibrary_t drawFixedline _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
 vcl/inc/WidgetThemeLibrary.hxx:140
+    vcl::WidgetThemeLibrary_t drawToolbar _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+vcl/inc/WidgetThemeLibrary.hxx:141
+    vcl::WidgetThemeLibrary_t drawProgress _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+vcl/inc/WidgetThemeLibrary.hxx:142
+    vcl::WidgetThemeLibrary_t drawWindowsBackground _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+vcl/inc/WidgetThemeLibrary.hxx:144
+    vcl::WidgetThemeLibrary_t drawListbox _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+vcl/inc/WidgetThemeLibrary.hxx:145
+    vcl::WidgetThemeLibrary_t drawFrame _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+vcl/inc/WidgetThemeLibrary.hxx:146
+    vcl::WidgetThemeLibrary_t drawListNode _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+vcl/inc/WidgetThemeLibrary.hxx:147
+    vcl::WidgetThemeLibrary_t drawListNet _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+vcl/inc/WidgetThemeLibrary.hxx:148
+    vcl::WidgetThemeLibrary_t drawListHeader _Bool (*)(const struct vcl::ControlDrawParameters &, long, long)
+vcl/inc/WidgetThemeLibrary.hxx:150
     vcl::WidgetThemeLibrary_t updateSettings _Bool (*)(struct vcl::WidgetDrawStyle &)
-vcl/source/app/settings.cxx:187
+vcl/source/app/settings.cxx:196
     ImplStyleData maDialogStyle struct DialogStyle
 vcl/source/control/roadmapwizard.cxx:62
     vcl::RoadmapWizardImpl aStateDescriptors vcl::(anonymous namespace)::StateDescriptions
@@ -903,7 +943,7 @@ vcl/source/filter/jpeg/Exif.hxx:55
 vcl/source/filter/jpeg/Exif.hxx:56
     Exif::ExifIFD offset sal_uInt8 [4]
 vcl/source/filter/jpeg/Exif.hxx:60
-    Exif::TiffHeader byteOrder const sal_uInt16
+    Exif::TiffHeader byteOrder sal_uInt16
 vcl/source/filter/jpeg/transupp.h:132
     (anonymous) slow_hflip boolean
 vcl/source/filter/jpeg/transupp.h:144
@@ -915,11 +955,11 @@ vcl/source/filter/jpeg/transupp.h:148
 vcl/source/filter/jpeg/transupp.h:150
     (anonymous) crop_yoffset_set JCROP_CODE
 vcl/source/fontsubset/sft.cxx:1049
-    vcl::(anonymous namespace)::subHeader2 firstCode const sal_uInt16
+    vcl::(anonymous namespace)::subHeader2 firstCode sal_uInt16
 vcl/source/fontsubset/sft.cxx:1050
-    vcl::(anonymous namespace)::subHeader2 entryCount const sal_uInt16
+    vcl::(anonymous namespace)::subHeader2 entryCount sal_uInt16
 vcl/source/fontsubset/sft.cxx:1051
-    vcl::(anonymous namespace)::subHeader2 idDelta const sal_uInt16
+    vcl::(anonymous namespace)::subHeader2 idDelta sal_uInt16
 vcl/source/gdi/dibtools.cxx:53
     (anonymous namespace)::CIEXYZ aXyzX FXPT2DOT30
 vcl/source/gdi/dibtools.cxx:54
@@ -957,13 +997,13 @@ vcl/source/gdi/dibtools.cxx:120
 vcl/source/gdi/pdfwriter_impl.hxx:258
     vcl::pdf::TransparencyEmit m_pSoftMaskStream std::unique_ptr<SvMemoryStream>
 vcl/source/treelist/headbar.cxx:40
-    ImplHeadItem maHelpId const class rtl::OString
+    ImplHeadItem maHelpId class rtl::OString
 vcl/source/treelist/headbar.cxx:41
-    ImplHeadItem maImage const class Image
+    ImplHeadItem maImage class Image
 vcl/source/window/menuitemlist.hxx:56
-    MenuItemData aAccessibleName const class rtl::OUString
+    MenuItemData aAccessibleName class rtl::OUString
 vcl/unx/gtk3/a11y/atkwrapper.hxx:47
-    AtkObjectWrapper aParent const AtkObject
+    AtkObjectWrapper aParent AtkObject
 vcl/unx/gtk3/a11y/atkwrapper.hxx:75
     AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
 vcl/unx/gtk3/gtk3glomenu.cxx:14
@@ -973,26 +1013,26 @@ vcl/unx/gtk3/gtk3gtkinst.cxx:1611
 writerfilter/inc/ooxml/QNameToString.hxx:38
     writerfilter::QNameToString mMap writerfilter::QNameToString::Map
 writerfilter/source/ooxml/OOXMLFactory.hxx:58
-    writerfilter::ooxml::AttributeInfo m_nToken const writerfilter::Token_t
+    writerfilter::ooxml::AttributeInfo m_nToken writerfilter::Token_t
 writerfilter/source/ooxml/OOXMLFactory.hxx:59
-    writerfilter::ooxml::AttributeInfo m_nResource const enum writerfilter::ooxml::ResourceType
+    writerfilter::ooxml::AttributeInfo m_nResource enum writerfilter::ooxml::ResourceType
 writerfilter/source/ooxml/OOXMLFactory.hxx:60
-    writerfilter::ooxml::AttributeInfo m_nRef const Id
+    writerfilter::ooxml::AttributeInfo m_nRef Id
 xmloff/inc/MultiPropertySetHelper.hxx:78
-    MultiPropertySetHelper aEmptyAny const css::uno::Any
+    MultiPropertySetHelper aEmptyAny css::uno::Any
 xmloff/source/chart/SchXMLChartContext.cxx:444
-    (anonymous namespace)::NewDonutSeries msStyleName const class rtl::OUString
+    (anonymous namespace)::NewDonutSeries msStyleName class rtl::OUString
 xmloff/source/chart/SchXMLChartContext.hxx:52
-    SeriesDefaultsAndStyles maErrorIndicatorDefault const css::uno::Any
+    SeriesDefaultsAndStyles maErrorIndicatorDefault css::uno::Any
 xmloff/source/chart/SchXMLChartContext.hxx:53
-    SeriesDefaultsAndStyles maErrorCategoryDefault const css::uno::Any
+    SeriesDefaultsAndStyles maErrorCategoryDefault css::uno::Any
 xmloff/source/chart/SchXMLChartContext.hxx:54
-    SeriesDefaultsAndStyles maConstantErrorLowDefault const css::uno::Any
+    SeriesDefaultsAndStyles maConstantErrorLowDefault css::uno::Any
 xmloff/source/chart/SchXMLChartContext.hxx:55
-    SeriesDefaultsAndStyles maConstantErrorHighDefault const css::uno::Any
+    SeriesDefaultsAndStyles maConstantErrorHighDefault css::uno::Any
 xmloff/source/chart/SchXMLChartContext.hxx:56
-    SeriesDefaultsAndStyles maPercentageErrorDefault const css::uno::Any
+    SeriesDefaultsAndStyles maPercentageErrorDefault css::uno::Any
 xmloff/source/chart/SchXMLChartContext.hxx:57
-    SeriesDefaultsAndStyles maErrorMarginDefault const css::uno::Any
+    SeriesDefaultsAndStyles maErrorMarginDefault css::uno::Any
 xmloff/source/core/xmlexp.cxx:264
-    SvXMLExport_Impl maSaveOptions const class SvtSaveOptions
+    SvXMLExport_Impl maSaveOptions class SvtSaveOptions

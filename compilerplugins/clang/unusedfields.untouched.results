@@ -1,14 +1,14 @@
-avmedia/source/vlc/wrapper/Types.hxx:39
+avmedia/source/vlc/wrapper/Types.hxx:38
     libvlc_event_t p_obj void *
-avmedia/source/vlc/wrapper/Types.hxx:44
+avmedia/source/vlc/wrapper/Types.hxx:43
     libvlc_event_t::(anonymous union)::(anonymous) dummy1 const char *
-avmedia/source/vlc/wrapper/Types.hxx:45
+avmedia/source/vlc/wrapper/Types.hxx:44
     libvlc_event_t::(anonymous union)::(anonymous) dummy2 const char *
+avmedia/source/vlc/wrapper/Types.hxx:45
+    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:42:7)
 avmedia/source/vlc/wrapper/Types.hxx:46
-    libvlc_event_t::(anonymous) padding struct (anonymous struct at /home/noel/libo2/avmedia/source/vlc/wrapper/Types.hxx:43:7)
-avmedia/source/vlc/wrapper/Types.hxx:47
-    libvlc_event_t u union (anonymous union at /home/noel/libo2/avmedia/source/vlc/wrapper/Types.hxx:41:5)
-avmedia/source/vlc/wrapper/Types.hxx:53
+    libvlc_event_t u union (anonymous union at /media/disk2/libo4/avmedia/source/vlc/wrapper/Types.hxx:40:5)
+avmedia/source/vlc/wrapper/Types.hxx:52
     libvlc_track_description_t psz_name char *
 basctl/source/inc/dlged.hxx:122
     basctl::DlgEditor pObjFac std::unique_ptr<DlgEdFactory, o3tl::default_delete<DlgEdFactory> >
@@ -40,6 +40,8 @@ dbaccess/source/core/inc/databasecontext.hxx:85
     dbaccess::ODatabaseContext m_aBasicDLL class BasicDLL
 dbaccess/source/sdbtools/inc/connectiondependent.hxx:115
     sdbtools::ConnectionDependentComponent::EntryGuard m_aMutexGuard ::osl::MutexGuard
+desktop/qa/desktop_lib/test_desktop_lib.cxx:2771
+      class AllSettings &
 emfio/source/emfuno/xemfparser.cxx:50
     emfio::emfreader::(anonymous namespace)::XEmfParser context_ uno::Reference<uno::XComponentContext>
 extensions/source/scanner/scanner.hxx:43
@@ -50,7 +52,7 @@ include/basegfx/DrawCommands.hxx:142
     gfx::DrawPath mpFillGradient std::shared_ptr<GradientInfo>
 include/drawinglayer/primitive2d/textlayoutdevice.hxx:57
     drawinglayer::primitive2d::TextLayouterDevice maSolarGuard class SolarMutexGuard
-include/editeng/unotext.hxx:606
+include/editeng/unotext.hxx:605
     SvxUnoTextRangeEnumeration mxParentText css::uno::Reference<css::text::XText>
 include/LibreOfficeKit/LibreOfficeKitGtk.h:33
     _LOKDocView aDrawingArea GtkDrawingArea
@@ -61,9 +63,9 @@ include/oox/vml/vmlshapecontext.hxx:116
 include/registry/registry.hxx:34
     Registry_Api acquire void (*)(RegHandle)
 include/sfx2/msg.hxx:117
-    SfxType0 createSfxPoolItemFunc const std::function<SfxPoolItem *(void)>
+    SfxType0 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:119
-    SfxType0 nAttribs const sal_uInt16
+    SfxType0 nAttribs sal_uInt16
 include/sfx2/msg.hxx:132
     SfxType1 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:132
@@ -77,9 +79,9 @@ include/sfx2/msg.hxx:133
 include/sfx2/msg.hxx:133
     SfxType2 pType const std::type_info *
 include/sfx2/msg.hxx:133
-    SfxType2 nAttribs sal_uInt16
-include/sfx2/msg.hxx:133
     SfxType2 aAttrib struct SfxTypeAttrib [2]
+include/sfx2/msg.hxx:133
+    SfxType2 nAttribs sal_uInt16
 include/sfx2/msg.hxx:134
     SfxType3 pType const std::type_info *
 include/sfx2/msg.hxx:134
@@ -89,11 +91,11 @@ include/sfx2/msg.hxx:134
 include/sfx2/msg.hxx:134
     SfxType3 aAttrib struct SfxTypeAttrib [3]
 include/sfx2/msg.hxx:135
+    SfxType4 aAttrib struct SfxTypeAttrib [4]
+include/sfx2/msg.hxx:135
     SfxType4 nAttribs sal_uInt16
 include/sfx2/msg.hxx:135
     SfxType4 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:135
-    SfxType4 aAttrib struct SfxTypeAttrib [4]
 include/sfx2/msg.hxx:135
     SfxType4 pType const std::type_info *
 include/sfx2/msg.hxx:136
@@ -173,9 +175,9 @@ include/sfx2/msg.hxx:146
 include/sfx2/msg.hxx:146
     SfxType17 aAttrib struct SfxTypeAttrib [17]
 include/sfx2/msg.hxx:146
-    SfxType17 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:146
     SfxType17 nAttribs sal_uInt16
+include/sfx2/msg.hxx:146
+    SfxType17 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:147
     SfxType23 nAttribs sal_uInt16
 include/sfx2/msg.hxx:147
@@ -201,7 +203,7 @@ include/vcl/commandevent.hxx:315
 include/vcl/filter/PngImageReader.hxx:31
     vcl::PngImageReader mxStatusIndicator css::uno::Reference<css::task::XStatusIndicator>
 include/vcl/font/Feature.hxx:102
-    vcl::font::Feature m_eType const enum vcl::font::FeatureType
+    vcl::font::Feature m_eType enum vcl::font::FeatureType
 include/vcl/NotebookBarAddonsMerger.hxx:37
     NotebookBarAddonsItem aImage class Image
 include/vcl/NotebookBarAddonsMerger.hxx:44
@@ -252,8 +254,6 @@ pyuno/source/module/pyuno_impl.hxx:223
     pyuno::(anonymous) ob_base PyObject
 pyuno/source/module/pyuno_impl.hxx:323
     pyuno::stRuntimeImpl ob_base PyObject
-reportdesign/source/filter/xml/xmlExport.cxx:1241
-      sal_Int32
 reportdesign/source/ui/inc/ReportWindow.hxx:54
     rptui::OReportWindow m_pObjFac std::unique_ptr<DlgEdFactory, o3tl::default_delete<DlgEdFactory> >
 sal/qa/osl/condition/osl_Condition.cxx:72
@@ -307,15 +307,15 @@ sal/qa/osl/security/osl_Security.cxx:154
 sal/qa/osl/security/osl_Security.cxx:188
     osl_Security::getConfigDir bRes1 _Bool
 sc/source/core/data/document.cxx:1241
-    (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aSwitch const sc::AutoCalcSwitch
+    (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aSwitch sc::AutoCalcSwitch
 sc/source/core/data/document.cxx:1242
-    (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aBulk const class ScBulkBroadcast
+    (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aBulk class ScBulkBroadcast
 sc/source/filter/html/htmlpars.cxx:3009
     (anonymous namespace)::CSSHandler::MemStr mp const char *
 sc/source/filter/html/htmlpars.cxx:3010
     (anonymous namespace)::CSSHandler::MemStr mn size_t
 sc/source/filter/inc/sheetdatacontext.hxx:52
-    oox::xls::SheetDataContext aReleaser const class SolarMutexReleaser
+    oox::xls::SheetDataContext aReleaser class SolarMutexReleaser
 sc/source/ui/inc/docsh.hxx:459
     ScDocShellModificator mpProtector std::unique_ptr<ScRefreshTimerProtector>
 sc/source/ui/inc/PivotLayoutTreeListBase.hxx:48
@@ -323,11 +323,11 @@ sc/source/ui/inc/PivotLayoutTreeListBase.hxx:48
 sd/source/ui/inc/sdtreelb.hxx:72
     SdPageObjsTLV m_xDropTargetHelper std::unique_ptr<SdPageObjsTLVDropTarget>
 sd/source/ui/remotecontrol/ZeroconfService.hxx:32
-    sd::ZeroconfService port const uint
+    sd::ZeroconfService port uint
 sd/source/ui/slidesorter/view/SlsLayouter.cxx:62
     sd::slidesorter::view::Layouter::Implementation mpTheme std::shared_ptr<view::Theme>
-sd/source/ui/view/DocumentRenderer.cxx:1339
-    sd::DocumentRenderer::Implementation mxObjectShell const SfxObjectShellRef
+sd/source/ui/view/DocumentRenderer.cxx:1340
+    sd::DocumentRenderer::Implementation mxObjectShell SfxObjectShellRef
 sd/source/ui/view/viewshel.cxx:1161
     sd::(anonymous namespace)::KeepSlideSorterInSyncWithPageChanges m_aDrawLock sd::slidesorter::view::class SlideSorterView::DrawLock
 sd/source/ui/view/viewshel.cxx:1162
@@ -347,7 +347,7 @@ sfx2/inc/autoredactdialog.hxx:101
 sfx2/source/dialog/basedlgs.cxx:45
     SfxModelessDialog_Impl aMoveIdle class Idle
 sfx2/source/doc/doctempl.cxx:102
-    DocTempl::(anonymous namespace)::DocTempl_EntryData_Impl mxObjShell const class SfxObjectShellLock
+    DocTempl::(anonymous namespace)::DocTempl_EntryData_Impl mxObjShell class SfxObjectShellLock
 sfx2/source/inc/sfxpicklist.hxx:33
     SfxPickList mxImpl std::unique_ptr<SfxPickListImpl>
 slideshow/source/engine/opengl/TransitionImpl.cxx:1989
@@ -359,15 +359,15 @@ slideshow/source/engine/opengl/TransitionImpl.cxx:1989
 starmath/inc/smmod.hxx:69
     SmModule mpLocSymbolData std::unique_ptr<SmLocalizedSymbolData>
 starmath/inc/view.hxx:216
-    SmViewShell maGraphicController const class SmGraphicController
+    SmViewShell maGraphicController class SmGraphicController
 starmath/source/accessibility.hxx:268
     SmEditSource rEditAcc class SmEditAccessible &
 svl/source/crypto/cryptosign.cxx:124
-    (anonymous namespace)::Extension extnID const SECItem
+    (anonymous namespace)::Extension extnID SECItem
 svl/source/crypto/cryptosign.cxx:125
-    (anonymous namespace)::Extension critical const SECItem
+    (anonymous namespace)::Extension critical SECItem
 svl/source/crypto/cryptosign.cxx:126
-    (anonymous namespace)::Extension extnValue const SECItem
+    (anonymous namespace)::Extension extnValue SECItem
 svl/source/crypto/cryptosign.cxx:284
     (anonymous namespace)::PKIStatusInfo statusString SECItem
 svl/source/crypto/cryptosign.cxx:285
@@ -376,24 +376,26 @@ svx/source/dialog/contimp.hxx:75
     SvxSuperContourDlg aContourItem class SvxContourDlgItem
 svx/source/dialog/weldeditview.cxx:312
     (anonymous namespace)::WeldEditSource m_rEditAcc class WeldEditAccessible &
-svx/source/tbxctrls/layctrl.cxx:433
+svx/source/tbxctrls/layctrl.cxx:434
     (anonymous namespace)::ColumnsWindow mxControl rtl::Reference<SvxColumnsToolBoxControl>
 sw/source/core/crsr/crbm.cxx:64
-    (anonymous namespace)::CursorStateHelper m_aSaveState const class SwCursorSaveState
+    (anonymous namespace)::CursorStateHelper m_aSaveState class SwCursorSaveState
 sw/source/core/frmedt/fetab.cxx:75
     (anonymous namespace)::TableWait m_pWait const std::unique_ptr<SwWait>
 sw/source/core/layout/dbg_lay.cxx:170
-    SwImplEnterLeave nAction const enum DbgAction
+    SwImplEnterLeave nAction enum DbgAction
 sw/source/uibase/inc/condedit.hxx:43
     ConditionEdit m_aDropTargetHelper class ConditionEditDropTarget
+sw/source/uibase/inc/conttree.hxx:288
+    SwGlobalTree m_aDropTargetHelper class SwGlobalTreeDropTarget
 sw/source/uibase/inc/swuicnttab.hxx:239
     SwTokenWindow m_aAdjustPositionsIdle class Idle
 sw/source/uibase/inc/uivwimp.hxx:93
-    SwView_Impl xTmpSelDocSh const class SfxObjectShellLock
+    SwView_Impl xTmpSelDocSh class SfxObjectShellLock
 sw/source/uibase/inc/unodispatch.hxx:45
-    SwXDispatchProviderInterceptor::DispatchMutexLock_Impl aGuard const class SolarMutexGuard
+    SwXDispatchProviderInterceptor::DispatchMutexLock_Impl aGuard class SolarMutexGuard
 toolkit/source/awt/stylesettings.cxx:94
-    toolkit::(anonymous namespace)::StyleMethodGuard m_aGuard const class SolarMutexGuard
+    toolkit::(anonymous namespace)::StyleMethodGuard m_aGuard class SolarMutexGuard
 unoidl/source/unoidlprovider.cxx:672
     unoidl::detail::(anonymous namespace)::UnoidlCursor reference1_ rtl::Reference<UnoidlProvider>
 unoidl/source/unoidlprovider.cxx:673
@@ -403,14 +405,14 @@ vcl/inc/opengl/gdiimpl.hxx:52
 vcl/inc/opengl/gdiimpl.hxx:53
     TextureCombo mpMask std::unique_ptr<OpenGLTexture>
 vcl/inc/opengl/zone.hxx:33
-    OpenGLVCLContextZone aZone const class OpenGLZone
+    OpenGLVCLContextZone aZone class OpenGLZone
 vcl/inc/qt5/Qt5AccessibleEventListener.hxx:34
     Qt5AccessibleEventListener m_xAccessible css::uno::Reference<css::accessibility::XAccessible>
-vcl/inc/qt5/Qt5Graphics.hxx:54
-    Qt5Graphics m_focusedButton std::unique_ptr<QPushButton>
-vcl/inc/qt5/Qt5Graphics.hxx:55
-    Qt5Graphics m_image std::unique_ptr<QImage>
 vcl/inc/qt5/Qt5Graphics.hxx:56
+    Qt5Graphics m_focusedButton std::unique_ptr<QPushButton>
+vcl/inc/qt5/Qt5Graphics.hxx:57
+    Qt5Graphics m_image std::unique_ptr<QImage>
+vcl/inc/qt5/Qt5Graphics.hxx:58
     Qt5Graphics m_lastPopupRect class QRect
 vcl/inc/salprn.hxx:45
     SalPrinterQueueInfo mpPortName std::unique_ptr<OUString>
@@ -418,15 +420,15 @@ vcl/inc/skia/packedsurfaceatlas.hxx:37
     SkiaPackedSurface mSurface sk_sp<class SkSurface>
 vcl/inc/skia/packedsurfaceatlas.hxx:38
     SkiaPackedSurface mRect tools::Rectangle
-vcl/inc/WidgetThemeLibrary.hxx:90
+vcl/inc/WidgetThemeLibrary.hxx:100
     vcl::ControlDrawParameters nSize uint32_t
-vcl/inc/WidgetThemeLibrary.hxx:91
+vcl/inc/WidgetThemeLibrary.hxx:101
     vcl::ControlDrawParameters pCairo vcl::ControlDrawParameters::cairo_t *
-vcl/inc/WidgetThemeLibrary.hxx:92
+vcl/inc/WidgetThemeLibrary.hxx:102
     vcl::ControlDrawParameters ePart enum ControlPart
-vcl/inc/WidgetThemeLibrary.hxx:93
+vcl/inc/WidgetThemeLibrary.hxx:103
     vcl::ControlDrawParameters eState enum ControlState
-vcl/inc/WidgetThemeLibrary.hxx:109
+vcl/inc/WidgetThemeLibrary.hxx:119
     vcl::WidgetThemeLibrary_t nSize uint32_t
 vcl/source/gdi/jobset.cxx:37
     (anonymous namespace)::ImplOldJobSetupData cDeviceName char [32]
@@ -450,7 +452,3 @@ writerfilter/source/ooxml/OOXMLStreamImpl.hxx:43
     writerfilter::ooxml::OOXMLStreamImpl mxFastParser css::uno::Reference<css::xml::sax::XFastParser>
 xmloff/source/chart/transporttypes.hxx:149
     CustomLabelField sRuns std::vector<OUString>
-xmloff/source/draw/sdxmlimp_impl.hxx:159
-    SdXMLImport mpDrawPageAttrTokenMap std::unique_ptr<SvXMLTokenMap>
-xmloff/source/draw/sdxmlimp_impl.hxx:160
-    SdXMLImport mpDrawPageElemTokenMap std::unique_ptr<SvXMLTokenMap>

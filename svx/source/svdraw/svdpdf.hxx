@@ -54,7 +54,6 @@ class SvdProgressInfo;
 // Helper Class to import PDF
 class ImpSdrPdfImport final
 {
-    Graphic const& mrGraphic;
     std::vector<SdrObject*> maTmpList;
     ScopedVclPtr<VirtualDevice> mpVD;
     tools::Rectangle maScaleRect;
