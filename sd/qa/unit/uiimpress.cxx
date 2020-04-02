@@ -15,12 +15,14 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/intitem.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svdoashp.hxx>
+#include <svx/svdotable.hxx>
 #include <svl/stritem.hxx>
 #include <undo/undomanager.hxx>
 #include <vcl/scheduler.hxx>
@@ -224,6 +226,43 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf129346)
     dispatchCommand(mxComponent, ".uno:Undo", {});
     Scheduler::ProcessEventsToIdle();
     checkCurrentPageNumber(1);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127481)
+{
+    mxComponent = loadFromDesktop("private:factory/simpress",
+                                  "com.sun.star.presentation.PresentationDocument");
+
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pActualPage->GetObjCount());
+
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        { { "Rows", uno::makeAny(sal_Int32(1)) }, { "Columns", uno::makeAny(sal_Int32(1)) } }));
+
+    dispatchCommand(mxComponent, ".uno:InsertTable", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pActualPage->GetObjCount());
+
+    dispatchCommand(mxComponent, ".uno:DuplicatePage", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    checkCurrentPageNumber(2);
+
+    pActualPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pActualPage->GetObjCount());
+
+    auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pActualPage->GetObj(2));
+    CPPUNIT_ASSERT(pTableObject);
+
+    //without the fix, it would crash here
+    pViewShell->GetView()->SdrBeginTextEdit(pTableObject);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pActualPage->GetObjCount());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
