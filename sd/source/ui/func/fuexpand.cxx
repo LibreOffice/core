@@ -100,7 +100,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
     SdrLayerIDSet aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
     sal_uInt16 nActualPageNum = pActualPage->GetPageNum();
     SdPage* pActualNotesPage = static_cast<SdPage*>(mpDoc->GetPage(nActualPageNum + 1));
-    SdrTextObj* pActualOutline = static_cast<SdrTextObj*>(pActualPage->GetPresObj(PRESOBJ_OUTLINE));
+    SdrTextObj* pActualOutline = static_cast<SdrTextObj*>(pActualPage->GetPresObj(PresObjKind::Outline));
 
     if (pActualOutline)
     {
@@ -178,8 +178,8 @@ void FuExpandPage::DoExecute( SfxRequest& )
                 pNotesPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
 
                 // create title text objects
-                SdrTextObj* pTextObj = static_cast<SdrTextObj*>(pPage->GetPresObj(PRESOBJ_TITLE));
-                SAL_WARN_IF(!pTextObj, "sd.core", "worrying lack of PRESOBJ_TITLE object");
+                SdrTextObj* pTextObj = static_cast<SdrTextObj*>(pPage->GetPresObj(PresObjKind::Title));
+                SAL_WARN_IF(!pTextObj, "sd.core", "worrying lack of PresObjKind::Title object");
                 if (!pTextObj)
                     continue;
 
@@ -203,13 +203,13 @@ void FuExpandPage::DoExecute( SfxRequest& )
 
                 pTextObj->SetEmptyPresObj(false);
 
-                SfxStyleSheet* pSheet = pPage->GetStyleSheetForPresObj(PRESOBJ_TITLE);
+                SfxStyleSheet* pSheet = pPage->GetStyleSheetForPresObj(PresObjKind::Title);
                 pTextObj->NbcSetStyleSheet(pSheet, false);
 
                 SdrTextObj* pOutlineObj = nullptr;
                 sal_Int32 nChildCount = aOutliner.GetChildCount(pPara);
                 if (nChildCount > 0)
-                    pOutlineObj = static_cast<SdrTextObj*>( pPage->GetPresObj(PRESOBJ_OUTLINE) );
+                    pOutlineObj = static_cast<SdrTextObj*>( pPage->GetPresObj(PresObjKind::Outline) );
                 if (pOutlineObj)
                 {
                     // create structuring text objects

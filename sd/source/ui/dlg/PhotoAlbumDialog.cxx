@@ -738,12 +738,12 @@ void SdPhotoAlbumDialog::createCaption(const awt::Size& aPageSize )
 
     // try to get existing PresObj
     const ::tools::Rectangle rRect(CapPos,CapSize);
-    SdrObject* pSdrObj = pSlide->GetPresObj(PRESOBJ_TITLE);
+    SdrObject* pSdrObj = pSlide->GetPresObj(PresObjKind::Title);
 
     if(!pSdrObj)
     {
         // if not exists, create. Beware: It is already inserted to the SdPage
-        pSdrObj = pSlide->CreatePresObj(PRESOBJ_TITLE,false,rRect);
+        pSdrObj = pSlide->CreatePresObj(PresObjKind::Title,false,rRect);
     }
     else
     {

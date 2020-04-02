@@ -551,7 +551,7 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
     if( !pPage )
         return;
 
-    SdrTextObj* pObj = static_cast<SdrTextObj*>(pPage->GetPresObj( PRESOBJ_DATETIME ));
+    SdrTextObj* pObj = static_cast<SdrTextObj*>(pPage->GetPresObj( PresObjKind::DateTime ));
     if( !pObj )
         return;
 
@@ -730,12 +730,12 @@ void PresLayoutPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools:
     // paint presentation objects from masterpage
     if (nullptr != mpMaster)
     {
-        SdrTextObj* pMasterTitle = static_cast<SdrTextObj*>(mpMaster->GetPresObj(PRESOBJ_TITLE));
-        SdrTextObj* pMasterOutline = static_cast<SdrTextObj*>(mpMaster->GetPresObj(mpMaster->GetPageKind() == PageKind::Notes ? PRESOBJ_NOTES : PRESOBJ_OUTLINE));
-        SdrTextObj* pHeader = static_cast<SdrTextObj*>(mpMaster->GetPresObj(PRESOBJ_HEADER));
-        SdrTextObj* pFooter = static_cast<SdrTextObj*>(mpMaster->GetPresObj(PRESOBJ_FOOTER));
-        SdrTextObj* pDate = static_cast<SdrTextObj*>(mpMaster->GetPresObj(PRESOBJ_DATETIME));
-        SdrTextObj* pNumber = static_cast<SdrTextObj*>(mpMaster->GetPresObj(PRESOBJ_SLIDENUMBER));
+        SdrTextObj* pMasterTitle = static_cast<SdrTextObj*>(mpMaster->GetPresObj(PresObjKind::Title));
+        SdrTextObj* pMasterOutline = static_cast<SdrTextObj*>(mpMaster->GetPresObj(mpMaster->GetPageKind() == PageKind::Notes ? PresObjKind::Notes : PresObjKind::Outline));
+        SdrTextObj* pHeader = static_cast<SdrTextObj*>(mpMaster->GetPresObj(PresObjKind::Header));
+        SdrTextObj* pFooter = static_cast<SdrTextObj*>(mpMaster->GetPresObj(PresObjKind::Footer));
+        SdrTextObj* pDate = static_cast<SdrTextObj*>(mpMaster->GetPresObj(PresObjKind::DateTime));
+        SdrTextObj* pNumber = static_cast<SdrTextObj*>(mpMaster->GetPresObj(PresObjKind::SlideNumber));
 
         if (pMasterTitle)
             Paint(rRenderContext, pMasterTitle, true, true);

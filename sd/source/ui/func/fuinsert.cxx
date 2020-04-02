@@ -161,7 +161,7 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
             sal_Int8    nAction = DND_ACTION_COPY;
             SdrObject* pPickObj;
 
-            if( ( ( pPickObj = mpView->GetSelectedSingleObject( mpView->GetPage() ) ) && mbReplaceExistingImage ) || (pPickObj = mpView->GetEmptyPresentationObject( PRESOBJ_GRAPHIC ) ) )
+            if( ( ( pPickObj = mpView->GetSelectedSingleObject( mpView->GetPage() ) ) && mbReplaceExistingImage ) || (pPickObj = mpView->GetEmptyPresentationObject( PresObjKind::Graphic ) ) )
             {
                 nAction = DND_ACTION_LINK;
             } else {
@@ -287,7 +287,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
          nSlotId == SID_INSERT_DIAGRAM ||
          nSlotId == SID_INSERT_MATH )
     {
-        PresObjKind ePresObjKind = (nSlotId == SID_INSERT_DIAGRAM) ? PRESOBJ_CHART : PRESOBJ_OBJECT;
+        PresObjKind ePresObjKind = (nSlotId == SID_INSERT_DIAGRAM) ? PresObjKind::Chart : PresObjKind::Object;
 
         SdrObject* pPickObj = mpView->GetEmptyPresentationObject( ePresObjKind );
 

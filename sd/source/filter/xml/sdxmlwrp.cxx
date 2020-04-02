@@ -404,7 +404,7 @@ ErrCode ReadThroughComponent(
 
 }
 
-//PRESOBJ_OUTLINEs in master pages are the preview of the outline styles
+//PresObjKind::Outlines in master pages are the preview of the outline styles
 //numbering format. Since fdo#78151 toggling bullets on and off changes
 //the style they are a preview of, previously toggling bullets on and off
 //would only affect the preview paragraph itself without an effect on the
@@ -419,7 +419,7 @@ static void fixupOutlinePlaceholderNumberingDepths(SdDrawDocument* pDoc)
     for (sal_uInt16 i = 0; i < pDoc->GetMasterSdPageCount(PageKind::Standard); ++i)
     {
         SdPage *pMasterPage = pDoc->GetMasterSdPage(i, PageKind::Standard);
-        SdrObject* pMasterOutline = pMasterPage->GetPresObj(PRESOBJ_OUTLINE);
+        SdrObject* pMasterOutline = pMasterPage->GetPresObj(PresObjKind::Outline);
         if (!pMasterOutline)
             continue;
         OutlinerParaObject* pOutlParaObj = pMasterOutline->GetOutlinerParaObject();

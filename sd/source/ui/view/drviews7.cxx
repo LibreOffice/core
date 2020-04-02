@@ -368,7 +368,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
             if( pPage && (pPage->GetPageKind() == PageKind::Standard) && !pPage->IsMasterPage() )
             {
-                SdrObject* pObj = pPage->GetPresObj(PRESOBJ_OUTLINE);
+                SdrObject* pObj = pPage->GetPresObj(PresObjKind::Outline);
 
                 if (pObj!=nullptr )
                 {
@@ -407,7 +407,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
             if( pPage && (pPage->GetPageKind() == PageKind::Standard) && !pPage->IsMasterPage() )
             {
-                SdrObject* pObj = pPage->GetPresObj(PRESOBJ_TITLE);
+                SdrObject* pObj = pPage->GetPresObj(PresObjKind::Title);
 
                 if(pObj && !pObj->IsEmptyPresObj())
                 {
@@ -1505,7 +1505,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
 
     //fdo#78151 enable show next level/hide last level if editing a master page
-    //PRESOBJ_OUTLINE object and the current selection allow that to happen
+    //PresObjKind::Outline object and the current selection allow that to happen
     {
         bool bDisableShowNextLevel = true;
         bool bDisableHideLastLevel = true;

@@ -805,11 +805,11 @@ void HtmlExport::SetDocColors( SdPage* pPage )
     if( mpDoc->GetDocumentType() == DocumentType::Impress )
     {
         // default text color from the outline template of the first page
-        pSheet = pPage->GetStyleSheetForPresObj(PRESOBJ_OUTLINE);
+        pSheet = pPage->GetStyleSheetForPresObj(PresObjKind::Outline);
         if(pSheet == nullptr)
-            pSheet = pPage->GetStyleSheetForPresObj(PRESOBJ_TEXT);
+            pSheet = pPage->GetStyleSheetForPresObj(PresObjKind::Text);
         if(pSheet == nullptr)
-            pSheet = pPage->GetStyleSheetForPresObj(PRESOBJ_TITLE);
+            pSheet = pPage->GetStyleSheetForPresObj(PresObjKind::Title);
     }
 
     if(pSheet == nullptr)
@@ -1173,7 +1173,7 @@ bool HtmlExport::WriteHtml( const OUString& rFileName, bool bAddExtension, const
  */
 OUString HtmlExport::CreateTextForTitle( SdrOutliner* pOutliner, SdPage* pPage, const Color& rBackgroundColor )
 {
-    SdrTextObj* pTO = static_cast<SdrTextObj*>(pPage->GetPresObj(PRESOBJ_TITLE));
+    SdrTextObj* pTO = static_cast<SdrTextObj*>(pPage->GetPresObj(PresObjKind::Title));
     if(!pTO)
         pTO = GetLayoutTextObject(pPage);
 
@@ -1204,7 +1204,7 @@ OUString HtmlExport::CreateTextForPage(SdrOutliner* pOutliner, SdPage const * pP
 
         switch (eKind)
         {
-            case PRESOBJ_NONE:
+            case PresObjKind::NONE:
             {
                 if (pObject->GetObjIdentifier() == OBJ_GRUP)
                 {
@@ -1226,15 +1226,15 @@ OUString HtmlExport::CreateTextForPage(SdrOutliner* pOutliner, SdPage const * pP
             }
             break;
 
-            case PRESOBJ_TABLE:
+            case PresObjKind::Table:
             {
                 SdrTableObj* pTableObject = static_cast<SdrTableObj*>(pObject);
                 WriteTable(aStr, pTableObject, pOutliner, rBackgroundColor);
             }
             break;
 
-            case PRESOBJ_TEXT:
-            case PRESOBJ_OUTLINE:
+            case PresObjKind::Text:
+            case PresObjKind::Outline:
             {
                 SdrTextObj* pTextObject = static_cast<SdrTextObj*>(pObject);
                 if (pTextObject->IsEmptyPresObj())
@@ -1367,7 +1367,7 @@ OUString HtmlExport::CreateTextForNotesPage( SdrOutliner* pOutliner,
 {
     OUStringBuffer aStr;
 
-    SdrTextObj* pTO = static_cast<SdrTextObj*>(pPage->GetPresObj(PRESOBJ_NOTES));
+    SdrTextObj* pTO = static_cast<SdrTextObj*>(pPage->GetPresObj(PresObjKind::Notes));
 
     if (pTO && !pTO->IsEmptyPresObj())
     {
@@ -2193,7 +2193,7 @@ OUString const & HtmlExport::getDocumentTitle()
             // if there is a non-empty title object, use their first passage
             // as page title
             SdPage* pSdPage = mpDoc->GetSdPage(0, PageKind::Standard);
-            SdrObject* pTitleObj = pSdPage->GetPresObj(PRESOBJ_TITLE);
+            SdrObject* pTitleObj = pSdPage->GetPresObj(PresObjKind::Title);
             if (pTitleObj && !pTitleObj->IsEmptyPresObj())
             {
                 OutlinerParaObject* pParaObject = pTitleObj->GetOutlinerParaObject();

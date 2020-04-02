@@ -716,7 +716,7 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
         SdPage* pNotesPge = pDoc->GetSdPage((pCurrPge->GetPageNum()-1)>>1, PageKind::Notes);
         if (pNotesPge)
         {
-            SdrObject* pNotesObj = pNotesPge->GetPresObj(PRESOBJ_NOTES);
+            SdrObject* pNotesObj = pNotesPge->GetPresObj(PresObjKind::Notes);
             if (pNotesObj)
             {
                 OutlinerParaObject* pPara = pNotesObj->GetOutlinerParaObject();

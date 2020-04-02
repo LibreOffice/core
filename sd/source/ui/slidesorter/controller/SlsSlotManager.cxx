@@ -565,7 +565,7 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
             while (aSelectedPages.HasMoreElements())
             {
                 SdPage* pPage = aSelectedPages.GetNextElement()->GetPage();
-                SdrObject* pObj = pPage->GetPresObj(PRESOBJ_OUTLINE);
+                SdrObject* pObj = pPage->GetPresObj(PresObjKind::Outline);
                 if (pObj!=nullptr )
                 {
                     if( !pObj->IsEmptyPresObj() )
@@ -606,7 +606,7 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
             while (aSelectedPages.HasMoreElements())
             {
                 SdPage* pPage = aSelectedPages.GetNextElement()->GetPage();
-                SdrObject* pObj = pPage->GetPresObj(PRESOBJ_TITLE);
+                SdrObject* pObj = pPage->GetPresObj(PresObjKind::Title);
 
                 if (pObj!=nullptr && !pObj->IsEmptyPresObj())
                     bDisable = false;
