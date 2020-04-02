@@ -50,7 +50,7 @@ else:
 templates = {}
 
 # open input file
-source = open(o.ifile)
+source = open(o.ifile, encoding = 'UTF-8' )
 
 template = None
 
@@ -99,7 +99,7 @@ for template in templates:
     # open the template file - ignore sections for which no
     # templates exist
     try:
-        template_file = open(outfilename)
+        template_file = open(outfilename, encoding = 'UTF-8')
     except Exception:
         # string files processed one by one
         if o.ext == 'str':
@@ -109,7 +109,7 @@ for template in templates:
 
     # open output file
     tmpfilename = '{}.tmp'.format(outfilename)
-    outfile = open(tmpfilename, 'w')
+    outfile = open(tmpfilename, 'w', encoding = 'UTF-8')
 
     # emit the template to the output file
     for line in template_file:
