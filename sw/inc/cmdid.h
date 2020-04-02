@@ -721,6 +721,9 @@
 
 #define FN_SELECT_SENTENCE          (FN_SELECTION + 94)   /* select paragraph*/
 
+#define FN_TO_NEXT_PAGE             (FN_SELECTION + 95)
+#define FN_TO_PREV_PAGE             (FN_SELECTION + 96)
+
 // QUERY-Block
 #define FN_TXTATR_INET              (FN_QUERY +29)      /* INet-Attribute */
 
