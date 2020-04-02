@@ -74,6 +74,8 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     mxFlipDispatch(new ToolbarUnoDispatcher(*mxFlipTbx, *m_xBuilder, rxFrame)),
     mxArrangeTbx(m_xBuilder->weld_toolbar("arrangetoolbar")),
     mxArrangeDispatch(new ToolbarUnoDispatcher(*mxArrangeTbx, *m_xBuilder, rxFrame)),
+    mxArrangeTbx2(m_xBuilder->weld_toolbar("arrangetoolbar2")),
+    mxArrangeDispatch2(new ToolbarUnoDispatcher(*mxArrangeTbx2, *m_xBuilder, rxFrame)),
     mxBtnEditChart(m_xBuilder->weld_button("btnEditChart")),
     maRect(),
     mpView(nullptr),
@@ -137,7 +139,9 @@ void PosSizePropertyPanel::dispose()
     mxFlipDispatch.reset();
     mxFlipTbx.reset();
     mxArrangeDispatch.reset();
+    mxArrangeDispatch2.reset();
     mxArrangeTbx.reset();
+    mxArrangeTbx2.reset();
     mxBtnEditChart.reset();
 
     maTransfPosXControl.dispose();
@@ -268,12 +272,14 @@ void PosSizePropertyPanel::HandleContextChange(
     bool bShowAngle = false;
     bool bShowFlip = false;
     bool bShowEditChart = false;
+    bool bShowArrangeTbx2 = false;
 
     switch (maContext.GetCombinedContext_DI())
     {
         case CombinedEnumContext(Application::WriterVariants, Context::Draw):
             bShowAngle = true;
             bShowFlip = true;
+            bShowArrangeTbx2 = true;
             break;
 
         case CombinedEnumContext(Application::WriterVariants, Context::Graphic):
@@ -332,6 +338,9 @@ void PosSizePropertyPanel::HandleContextChange(
 
     // Edit Chart
     mxBtnEditChart->set_visible(bShowEditChart);
+
+    // Arrange tool bar 2
+    mxArrangeTbx2->set_visible(bShowArrangeTbx2);
 
     if (mxSidebar.is())
         mxSidebar->requestLayout();
