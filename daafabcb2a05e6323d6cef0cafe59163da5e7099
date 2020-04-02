@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "22693551_15052e83",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-04-02T10:33:43Z",
+      "side": 1,
+      "message": "Please don\u0027t repeat bug title as commit message header. It should be the essence of what is done, not why it\u0027s done.",
+      "range": {
+        "startLine": 7,
+        "startChar": 13,
+        "endLine": 7,
+        "endChar": 54
+      },
+      "revId": "daafabcb2a05e6323d6cef0cafe59163da5e7099",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
