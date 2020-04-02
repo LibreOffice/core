@@ -32,6 +32,7 @@
 #include <SkImage.h>
 #include <SkPixelRef.h>
 #include <SkSurface.h>
+#include <SkSwizzle.h>
 
 #include <skia/utils.hxx>
 #include <skia/zone.hxx>
@@ -387,19 +388,16 @@ SkBitmap SkiaSalBitmap::GetAsSkBitmap() const
         else if (mBitCount == 24)
         {
             // Convert 24bpp RGB/BGR to 32bpp RGBA/BGRA.
-            std::unique_ptr<sal_uInt8[]> data(
-                new sal_uInt8[mPixelsSize.Height() * mPixelsSize.Width() * 4]);
-            sal_uInt8* dest = data.get();
+            std::unique_ptr<uint32_t[]> data(
+                new uint32_t[mPixelsSize.Height() * mPixelsSize.Width()]);
+            uint32_t* dest = data.get();
             for (long y = 0; y < mPixelsSize.Height(); ++y)
             {
                 const sal_uInt8* src = mBuffer.get() + mScanlineSize * y;
-                for (long x = 0; x < mPixelsSize.Width(); ++x)
-                {
-                    *dest++ = *src++;
-                    *dest++ = *src++;
-                    *dest++ = *src++;
-                    *dest++ = 0xff;
-                }
+                // This also works as BGR to BGRA (the function extends 3 bytes to 4
+                // by adding 0xFF alpha, so position of B and R doesn't matter).
+                SkExtendRGBToRGBA(dest, src, mPixelsSize.Width());
+                dest += mPixelsSize.Width();
             }
             if (!bitmap.installPixels(
                     SkImageInfo::MakeS32(mPixelsSize.Width(), mPixelsSize.Height(),
@@ -645,6 +643,17 @@ void SkiaSalBitmap::EnsureBitmapData()
                 *dest++ = *src++;
                 ++src; // skip alpha
             }
+        }
+    }
+    else if (mBitCount == 8 && mPalette.IsGreyPalette())
+    {
+        for (long y = 0; y < mSize.Height(); ++y)
+        {
+            const uint8_t* src = static_cast<uint8_t*>(mBitmap.getAddr(0, y));
+            sal_uInt8* dest = mBuffer.get() + mScanlineSize * y;
+            // no actual data conversion, use one color channel as the gray value
+            for (long x = 0; x < mSize.Width(); ++x)
+                dest[x] = src[x * 4];
         }
     }
     else
