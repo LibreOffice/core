@@ -57,6 +57,24 @@ class SvxLineItem;
 class SvxRotateModeItem;
 class SfxStringItem;
 class SvxSizeItem;
+class SvxJustifyMethodItem;
+class SvxMarginItem;
+class SvxPaperBinItem;
+class ScHyphenateCell;
+class SfxUInt32Item;
+class ScIndentItem;
+class ScShrinkToFitCell;
+class ScMergeAttr;
+class ScMergeFlagAttr;
+class ScProtectionAttr;
+class SvxBoxInfoItem;
+class ScPatternAttr;
+class SvxPageItem;
+class ScViewObjectModeItem;
+class SfxUInt16Item;
+class ScPageHFItem;
+class ScPageScaleToItem;
+class SvxSetItem;
 
 //  EditEngine is not allowed to define its own ITEMID's
 #define INCLUDED_EDITENG_EEITEMID_HXX
@@ -82,109 +100,109 @@ class SvxSizeItem;
 
 // Item-IDs for attributes:
 
-#define ATTR_STARTINDEX         100     // begin of attributes
+constexpr sal_uInt16 ATTR_STARTINDEX(100);     // begin of attributes
 
-#define ATTR_PATTERN_START      100     // begin of cell-attribute-pattern
+constexpr sal_uInt16 ATTR_PATTERN_START(100);     // begin of cell-attribute-pattern
 
-#define ATTR_FONT               TypedWhichId<SvxFontItem>(100)     // begin of cell-attributes
-#define ATTR_FONT_HEIGHT        TypedWhichId<SvxFontHeightItem>(101)
-#define ATTR_FONT_WEIGHT        TypedWhichId<SvxWeightItem>(102)
-#define ATTR_FONT_POSTURE       TypedWhichId<SvxPostureItem>(103)
-#define ATTR_FONT_UNDERLINE     TypedWhichId<SvxUnderlineItem>(104)
-#define ATTR_FONT_OVERLINE      TypedWhichId<SvxOverlineItem>(105)
-#define ATTR_FONT_CROSSEDOUT    TypedWhichId<SvxCrossedOutItem>(106)
-#define ATTR_FONT_CONTOUR       TypedWhichId<SvxContourItem>(107)
-#define ATTR_FONT_SHADOWED      TypedWhichId<SvxShadowedItem>(108)
-#define ATTR_FONT_COLOR         TypedWhichId<SvxColorItem>(109)
-#define ATTR_FONT_LANGUAGE      TypedWhichId<SvxLanguageItem>(110)
-#define ATTR_CJK_FONT           TypedWhichId<SvxFontItem>(111)
-#define ATTR_CJK_FONT_HEIGHT    TypedWhichId<SvxFontHeightItem>(112)
-#define ATTR_CJK_FONT_WEIGHT    TypedWhichId<SvxWeightItem>(113)
-#define ATTR_CJK_FONT_POSTURE   TypedWhichId<SvxPostureItem>(114)
-#define ATTR_CJK_FONT_LANGUAGE  TypedWhichId<SvxLanguageItem>(115)
-#define ATTR_CTL_FONT           TypedWhichId<SvxFontItem>(116)
-#define ATTR_CTL_FONT_HEIGHT    TypedWhichId<SvxFontHeightItem>(117)
-#define ATTR_CTL_FONT_WEIGHT    TypedWhichId<SvxWeightItem>(118)
-#define ATTR_CTL_FONT_POSTURE   TypedWhichId<SvxPostureItem>(119)
-#define ATTR_CTL_FONT_LANGUAGE  TypedWhichId<SvxLanguageItem>(120)
-#define ATTR_FONT_EMPHASISMARK  TypedWhichId<SvxEmphasisMarkItem>(121)
-#define ATTR_USERDEF            TypedWhichId<SvXMLAttrContainerItem>(122)    // not saved in binary files
-#define ATTR_FONT_WORDLINE      TypedWhichId<SvxWordLineModeItem>(123)
-#define ATTR_FONT_RELIEF        TypedWhichId<SvxCharReliefItem>(124)
-#define ATTR_HYPHENATE          TypedWhichId<ScHyphenateCell>(125)
-#define ATTR_SCRIPTSPACE        TypedWhichId<SvxScriptSpaceItem>(126)
-#define ATTR_HANGPUNCTUATION    TypedWhichId<SvxHangingPunctuationItem>(127)
-#define ATTR_FORBIDDEN_RULES    TypedWhichId<SvxForbiddenRuleItem>(128)
-#define ATTR_HOR_JUSTIFY        TypedWhichId<SvxHorJustifyItem>(129)
-#define ATTR_HOR_JUSTIFY_METHOD TypedWhichId<SvxJustifyMethodItem>(130)
-#define ATTR_INDENT             TypedWhichId<ScIndentItem>(131)
-#define ATTR_VER_JUSTIFY        TypedWhichId<SvxVerJustifyItem>(132)
-#define ATTR_VER_JUSTIFY_METHOD TypedWhichId<SvxJustifyMethodItem>(133)
-#define ATTR_STACKED            TypedWhichId<ScVerticalStackCell>(134)
-#define ATTR_ROTATE_VALUE       TypedWhichId<ScRotateValueItem>(135)
-#define ATTR_ROTATE_MODE        TypedWhichId<SvxRotateModeItem>(136)
-#define ATTR_VERTICAL_ASIAN     TypedWhichId<SfxBoolItem>(137)
-#define ATTR_WRITINGDIR         TypedWhichId<SvxFrameDirectionItem>(138)
-#define ATTR_LINEBREAK          TypedWhichId<ScLineBreakCell>(139)
-#define ATTR_SHRINKTOFIT        TypedWhichId<ScShrinkToFitCell>(140)
-#define ATTR_BORDER_TLBR        TypedWhichId<SvxLineItem>(141)
-#define ATTR_BORDER_BLTR        TypedWhichId<SvxLineItem>(142)
-#define ATTR_MARGIN             TypedWhichId<SvxMarginItem>(143)
-#define ATTR_MERGE              TypedWhichId<ScMergeAttr>(144)
-#define ATTR_MERGE_FLAG         TypedWhichId<ScMergeFlagAttr>(145)
-#define ATTR_VALUE_FORMAT       TypedWhichId<SfxUInt32Item>(146)
-#define ATTR_LANGUAGE_FORMAT    TypedWhichId<SvxLanguageItem>(147)
-#define ATTR_BACKGROUND         TypedWhichId<SvxBrushItem>(148)
-#define ATTR_PROTECTION         TypedWhichId<ScProtectionAttr>(149)
-#define ATTR_BORDER             TypedWhichId<SvxBoxItem>(150)
-#define ATTR_BORDER_INNER       TypedWhichId<SvxBoxInfoItem>(151)     // inside, because of template-EditDialog
-#define ATTR_SHADOW             TypedWhichId<SvxShadowItem>(152)
-#define ATTR_VALIDDATA          TypedWhichId<SfxUInt32Item>(153)
-#define ATTR_CONDITIONAL        TypedWhichId<ScCondFormatItem>(154)
-#define ATTR_HYPERLINK          TypedWhichId<SfxStringItem>(155)
+constexpr TypedWhichId<SvxFontItem> ATTR_FONT (100);     // begin of cell-attributes
+constexpr TypedWhichId<SvxFontHeightItem> ATTR_FONT_HEIGHT (101);
+constexpr TypedWhichId<SvxWeightItem> ATTR_FONT_WEIGHT (102);
+constexpr TypedWhichId<SvxPostureItem> ATTR_FONT_POSTURE (103);
+constexpr TypedWhichId<SvxUnderlineItem> ATTR_FONT_UNDERLINE (104);
+constexpr TypedWhichId<SvxOverlineItem> ATTR_FONT_OVERLINE (105);
+constexpr TypedWhichId<SvxCrossedOutItem> ATTR_FONT_CROSSEDOUT (106);
+constexpr TypedWhichId<SvxContourItem> ATTR_FONT_CONTOUR (107);
+constexpr TypedWhichId<SvxShadowedItem> ATTR_FONT_SHADOWED (108);
+constexpr TypedWhichId<SvxColorItem> ATTR_FONT_COLOR (109);
+constexpr TypedWhichId<SvxLanguageItem> ATTR_FONT_LANGUAGE (110);
+constexpr TypedWhichId<SvxFontItem> ATTR_CJK_FONT (111);
+constexpr TypedWhichId<SvxFontHeightItem> ATTR_CJK_FONT_HEIGHT (112);
+constexpr TypedWhichId<SvxWeightItem> ATTR_CJK_FONT_WEIGHT (113);
+constexpr TypedWhichId<SvxPostureItem> ATTR_CJK_FONT_POSTURE (114);
+constexpr TypedWhichId<SvxLanguageItem> ATTR_CJK_FONT_LANGUAGE (115);
+constexpr TypedWhichId<SvxFontItem> ATTR_CTL_FONT (116);
+constexpr TypedWhichId<SvxFontHeightItem> ATTR_CTL_FONT_HEIGHT (117);
+constexpr TypedWhichId<SvxWeightItem> ATTR_CTL_FONT_WEIGHT (118);
+constexpr TypedWhichId<SvxPostureItem> ATTR_CTL_FONT_POSTURE (119);
+constexpr TypedWhichId<SvxLanguageItem> ATTR_CTL_FONT_LANGUAGE (120);
+constexpr TypedWhichId<SvxEmphasisMarkItem> ATTR_FONT_EMPHASISMARK (121);
+constexpr TypedWhichId<SvXMLAttrContainerItem> ATTR_USERDEF (122);    // not saved in binary files
+constexpr TypedWhichId<SvxWordLineModeItem> ATTR_FONT_WORDLINE (123);
+constexpr TypedWhichId<SvxCharReliefItem> ATTR_FONT_RELIEF (124);
+constexpr TypedWhichId<ScHyphenateCell> ATTR_HYPHENATE (125);
+constexpr TypedWhichId<SvxScriptSpaceItem> ATTR_SCRIPTSPACE (126);
+constexpr TypedWhichId<SvxHangingPunctuationItem> ATTR_HANGPUNCTUATION (127);
+constexpr TypedWhichId<SvxForbiddenRuleItem> ATTR_FORBIDDEN_RULES (128);
+constexpr TypedWhichId<SvxHorJustifyItem> ATTR_HOR_JUSTIFY (129);
+constexpr TypedWhichId<SvxJustifyMethodItem> ATTR_HOR_JUSTIFY_METHOD (130);
+constexpr TypedWhichId<ScIndentItem> ATTR_INDENT (131);
+constexpr TypedWhichId<SvxVerJustifyItem> ATTR_VER_JUSTIFY (132);
+constexpr TypedWhichId<SvxJustifyMethodItem> ATTR_VER_JUSTIFY_METHOD (133);
+constexpr TypedWhichId<ScVerticalStackCell> ATTR_STACKED (134);
+constexpr TypedWhichId<ScRotateValueItem> ATTR_ROTATE_VALUE (135);
+constexpr TypedWhichId<SvxRotateModeItem> ATTR_ROTATE_MODE (136);
+constexpr TypedWhichId<SfxBoolItem> ATTR_VERTICAL_ASIAN (137);
+constexpr TypedWhichId<SvxFrameDirectionItem> ATTR_WRITINGDIR (138);
+constexpr TypedWhichId<ScLineBreakCell> ATTR_LINEBREAK (139);
+constexpr TypedWhichId<ScShrinkToFitCell> ATTR_SHRINKTOFIT (140);
+constexpr TypedWhichId<SvxLineItem> ATTR_BORDER_TLBR (141);
+constexpr TypedWhichId<SvxLineItem> ATTR_BORDER_BLTR (142);
+constexpr TypedWhichId<SvxMarginItem> ATTR_MARGIN (143);
+constexpr TypedWhichId<ScMergeAttr> ATTR_MERGE (144);
+constexpr TypedWhichId<ScMergeFlagAttr> ATTR_MERGE_FLAG (145);
+constexpr TypedWhichId<SfxUInt32Item> ATTR_VALUE_FORMAT (146);
+constexpr TypedWhichId<SvxLanguageItem> ATTR_LANGUAGE_FORMAT (147);
+constexpr TypedWhichId<SvxBrushItem> ATTR_BACKGROUND (148);
+constexpr TypedWhichId<ScProtectionAttr> ATTR_PROTECTION (149);
+constexpr TypedWhichId<SvxBoxItem> ATTR_BORDER (150);
+constexpr TypedWhichId<SvxBoxInfoItem> ATTR_BORDER_INNER (151);     // inside, because of template-EditDialog
+constexpr TypedWhichId<SvxShadowItem> ATTR_SHADOW (152);
+constexpr TypedWhichId<SfxUInt32Item> ATTR_VALIDDATA (153);
+constexpr TypedWhichId<ScCondFormatItem> ATTR_CONDITIONAL (154);
+constexpr TypedWhichId<SfxStringItem> ATTR_HYPERLINK (155);
 
-#define ATTR_PATTERN_END        155     // end cell-attribute-pattern
+constexpr sal_uInt16 ATTR_PATTERN_END(155);     // end cell-attribute-pattern
 
-#define ATTR_PATTERN            TypedWhichId<ScPatternAttr>(156)
+constexpr TypedWhichId<ScPatternAttr> ATTR_PATTERN (156);
                                         // page attributes
-#define ATTR_LRSPACE            TypedWhichId<SvxLRSpaceItem>(157)    // editor: PageDesc-TabPage
-#define ATTR_ULSPACE            TypedWhichId<SvxULSpaceItem>(158)
-#define ATTR_PAGE               TypedWhichId<SvxPageItem>(159)
-#define ATTR_PAGE_PAPERBIN      TypedWhichId<SvxPaperBinItem>(160)
-#define ATTR_PAGE_SIZE          TypedWhichId<SvxSizeItem>(161)
-#define ATTR_PAGE_HORCENTER     TypedWhichId<SfxBoolItem>(162)
-#define ATTR_PAGE_VERCENTER     TypedWhichId<SfxBoolItem>(163)
+constexpr TypedWhichId<SvxLRSpaceItem> ATTR_LRSPACE (157);    // editor: PageDesc-TabPage
+constexpr TypedWhichId<SvxULSpaceItem> ATTR_ULSPACE (158);
+constexpr TypedWhichId<SvxPageItem> ATTR_PAGE (159);
+constexpr TypedWhichId<SvxPaperBinItem> ATTR_PAGE_PAPERBIN (160);
+constexpr TypedWhichId<SvxSizeItem> ATTR_PAGE_SIZE (161);
+constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_HORCENTER (162);
+constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_VERCENTER (163);
 
-#define ATTR_PAGE_ON            TypedWhichId<SfxBoolItem>(164)     // editor: header/footer-page
-#define ATTR_PAGE_DYNAMIC       TypedWhichId<SfxBoolItem>(165)
-#define ATTR_PAGE_SHARED        TypedWhichId<SfxBoolItem>(166)
+constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_ON (164);     // editor: header/footer-page
+constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_DYNAMIC (165);
+constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_SHARED (166);
 
-#define ATTR_PAGE_NOTES         TypedWhichId<SfxBoolItem>(167)     // editor: table
-#define ATTR_PAGE_GRID          TypedWhichId<SfxBoolItem>(168)
-#define ATTR_PAGE_HEADERS       TypedWhichId<SfxBoolItem>(169)
-#define ATTR_PAGE_CHARTS        TypedWhichId<ScViewObjectModeItem>(170)
-#define ATTR_PAGE_OBJECTS       TypedWhichId<ScViewObjectModeItem>(171)
-#define ATTR_PAGE_DRAWINGS      TypedWhichId<ScViewObjectModeItem>(172)
-#define ATTR_PAGE_TOPDOWN       TypedWhichId<SfxBoolItem>(173)
-#define ATTR_PAGE_SCALE         TypedWhichId<SfxUInt16Item>(174)
-#define ATTR_PAGE_SCALETOPAGES  TypedWhichId<SfxUInt16Item>(175)
-#define ATTR_PAGE_FIRSTPAGENO   TypedWhichId<SfxUInt16Item>(176)
+constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_NOTES (167);     // editor: table
+constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_GRID (168);
+constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_HEADERS (169);
+constexpr TypedWhichId<ScViewObjectModeItem> ATTR_PAGE_CHARTS (170);
+constexpr TypedWhichId<ScViewObjectModeItem> ATTR_PAGE_OBJECTS (171);
+constexpr TypedWhichId<ScViewObjectModeItem> ATTR_PAGE_DRAWINGS (172);
+constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_TOPDOWN (173);
+constexpr TypedWhichId<SfxUInt16Item> ATTR_PAGE_SCALE (174);
+constexpr TypedWhichId<SfxUInt16Item> ATTR_PAGE_SCALETOPAGES (175);
+constexpr TypedWhichId<SfxUInt16Item> ATTR_PAGE_FIRSTPAGENO (176);
 
-#define ATTR_PAGE_HEADERLEFT    TypedWhichId<ScPageHFItem>(177)     // contents of header/
-#define ATTR_PAGE_FOOTERLEFT    TypedWhichId<ScPageHFItem>(178)     // footer (left)
-#define ATTR_PAGE_HEADERRIGHT   TypedWhichId<ScPageHFItem>(179)     // contents of header/
-#define ATTR_PAGE_FOOTERRIGHT   TypedWhichId<ScPageHFItem>(180)     // footer (right)
-#define ATTR_PAGE_HEADERSET     TypedWhichId<SvxSetItem>(181)     // the corresponding sets
-#define ATTR_PAGE_FOOTERSET     TypedWhichId<SvxSetItem>(182)
+constexpr TypedWhichId<ScPageHFItem> ATTR_PAGE_HEADERLEFT (177);     // contents of header/
+constexpr TypedWhichId<ScPageHFItem> ATTR_PAGE_FOOTERLEFT (178);     // footer (left)
+constexpr TypedWhichId<ScPageHFItem> ATTR_PAGE_HEADERRIGHT (179);     // contents of header/
+constexpr TypedWhichId<ScPageHFItem> ATTR_PAGE_FOOTERRIGHT (180);     // footer (right)
+constexpr TypedWhichId<SvxSetItem> ATTR_PAGE_HEADERSET (181);     // the corresponding sets
+constexpr TypedWhichId<SvxSetItem> ATTR_PAGE_FOOTERSET (182);
 
-#define ATTR_PAGE_FORMULAS      TypedWhichId<SfxBoolItem>(183)
-#define ATTR_PAGE_NULLVALS      TypedWhichId<SfxBoolItem>(184)
+constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_FORMULAS (183);
+constexpr TypedWhichId<SfxBoolItem> ATTR_PAGE_NULLVALS (184);
 
-#define ATTR_PAGE_SCALETO       TypedWhichId<ScPageScaleToItem>(185)     // #i8868# scale printout to width/height
+constexpr TypedWhichId<ScPageScaleToItem> ATTR_PAGE_SCALETO (185);     // #i8868# scale printout to width/height
 
-#define ATTR_HIDDEN             TypedWhichId<SfxBoolItem>(186)
+constexpr TypedWhichId<SfxBoolItem> ATTR_HIDDEN (186);
 
-#define ATTR_ENDINDEX           ATTR_HIDDEN        // end of pool-range
+constexpr sal_uInt16 ATTR_ENDINDEX(ATTR_HIDDEN);        // end of pool-range
 
 // Dummy Slot-IDs for dialogs
 

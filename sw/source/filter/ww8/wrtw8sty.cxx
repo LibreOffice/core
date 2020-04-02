@@ -449,7 +449,7 @@ void MSWordStyles::SetStyleDefaults( const SwFormat& rFormat, bool bPap )
 {
     const SwModify* pOldMod = m_rExport.m_pOutFormatNode;
     m_rExport.m_pOutFormatNode = &rFormat;
-    bool aFlags[ static_cast< sal_uInt16 >(RES_FRMATR_END) - RES_CHRATR_BEGIN ];
+    bool aFlags[ RES_FRMATR_END - RES_CHRATR_BEGIN ];
     sal_uInt16 nStt, nEnd, n;
     if( bPap )
     {

@@ -1613,7 +1613,7 @@ void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > const & xAl
                         pCursor->GetMark()->nContent.GetIndex() );
                     const sal_uInt16 nWhich = pTextAttr
                         ? pTextAttr->Which()
-                        : static_cast<sal_uInt16>(RES_TXTATR_END);
+                        : RES_TXTATR_END;
                     switch (nWhich)
                     {
                         case RES_TXTATR_FIELD:
