@@ -58,6 +58,9 @@ class SvxWeightItem;
 class SvxWordLineModeItem;
 class SvxBulletItem;
 class SvxNumBulletItem;
+class SvxJustifyMethodItem;
+class SvxVerJustifyItem;
+class SfxVoidItem;
 
 /*
  * NOTE: Changes in this file will probably require
@@ -65,79 +68,79 @@ class SvxNumBulletItem;
  *        as well.
 */
 
-#define EE_ITEMS_START              (OWN_ATTR_VALUE_END+1)
+constexpr sal_uInt16 EE_ITEMS_START(OWN_ATTR_VALUE_END + 1);
 
 // Paragraph attributes:
-#define EE_PARA_START               (EE_ITEMS_START+0)
-#define EE_PARA_WRITINGDIR          TypedWhichId<SvxFrameDirectionItem>(EE_PARA_START+0)
-#define EE_PARA_XMLATTRIBS          TypedWhichId<SvXMLAttrContainerItem>(EE_PARA_START+1)
-#define EE_PARA_HANGINGPUNCTUATION  TypedWhichId<SvxHangingPunctuationItem>(EE_PARA_START+2)
-#define EE_PARA_FORBIDDENRULES      TypedWhichId<SvxForbiddenRuleItem>(EE_PARA_START+3)
-#define EE_PARA_ASIANCJKSPACING     TypedWhichId<SvxScriptSpaceItem>(EE_PARA_START+4)
-#define EE_PARA_NUMBULLET           TypedWhichId<SvxNumBulletItem>(EE_PARA_START+5)
-#define EE_PARA_HYPHENATE           TypedWhichId<SfxBoolItem>(EE_PARA_START+6)
-#define EE_PARA_HYPHENATE_NO_CAPS   TypedWhichId<SfxBoolItem>(EE_PARA_START+7)
-#define EE_PARA_BULLETSTATE         TypedWhichId<SfxBoolItem>(EE_PARA_START+8)
-#define EE_PARA_OUTLLRSPACE         TypedWhichId<SvxLRSpaceItem>(EE_PARA_START+9)
-#define EE_PARA_OUTLLEVEL           TypedWhichId<SfxInt16Item>(EE_PARA_START+10)
-#define EE_PARA_BULLET              TypedWhichId<SvxBulletItem>(EE_PARA_START+11)
-#define EE_PARA_LRSPACE             TypedWhichId<SvxLRSpaceItem>(EE_PARA_START+12)
-#define EE_PARA_ULSPACE             TypedWhichId<SvxULSpaceItem>(EE_PARA_START+13)
-#define EE_PARA_SBL                 TypedWhichId<SvxLineSpacingItem>(EE_PARA_START+14)
-#define EE_PARA_JUST                TypedWhichId<SvxAdjustItem>(EE_PARA_START+15)
-#define EE_PARA_TABS                TypedWhichId<SvxTabStopItem>(EE_PARA_START+16)
-#define EE_PARA_JUST_METHOD         TypedWhichId<SvxJustifyMethodItem>(EE_PARA_START+17)
-#define EE_PARA_VER_JUST            TypedWhichId<SvxVerJustifyItem>(EE_PARA_START+18)
-#define EE_PARA_END                 (EE_PARA_START+18)
+constexpr sal_uInt16                              EE_PARA_START              (EE_ITEMS_START + 0);
+constexpr TypedWhichId<SvxFrameDirectionItem>     EE_PARA_WRITINGDIR         (EE_PARA_START+0);
+constexpr TypedWhichId<SvXMLAttrContainerItem>    EE_PARA_XMLATTRIBS         (EE_PARA_START+1);
+constexpr TypedWhichId<SvxHangingPunctuationItem> EE_PARA_HANGINGPUNCTUATION (EE_PARA_START+2);
+constexpr TypedWhichId<SvxForbiddenRuleItem>      EE_PARA_FORBIDDENRULES     (EE_PARA_START+3);
+constexpr TypedWhichId<SvxScriptSpaceItem>        EE_PARA_ASIANCJKSPACING    (EE_PARA_START+4);
+constexpr TypedWhichId<SvxNumBulletItem>          EE_PARA_NUMBULLET          (EE_PARA_START+5);
+constexpr TypedWhichId<SfxBoolItem>               EE_PARA_HYPHENATE          (EE_PARA_START+6);
+constexpr TypedWhichId<SfxBoolItem>               EE_PARA_HYPHENATE_NO_CAPS  (EE_PARA_START+7);
+constexpr TypedWhichId<SfxBoolItem>               EE_PARA_BULLETSTATE        (EE_PARA_START+8);
+constexpr TypedWhichId<SvxLRSpaceItem>            EE_PARA_OUTLLRSPACE        (EE_PARA_START+9);
+constexpr TypedWhichId<SfxInt16Item>              EE_PARA_OUTLLEVEL          (EE_PARA_START+10);
+constexpr TypedWhichId<SvxBulletItem>             EE_PARA_BULLET             (EE_PARA_START+11);
+constexpr TypedWhichId<SvxLRSpaceItem>            EE_PARA_LRSPACE            (EE_PARA_START+12);
+constexpr TypedWhichId<SvxULSpaceItem>            EE_PARA_ULSPACE            (EE_PARA_START+13);
+constexpr TypedWhichId<SvxLineSpacingItem>        EE_PARA_SBL                (EE_PARA_START+14);
+constexpr TypedWhichId<SvxAdjustItem>             EE_PARA_JUST               (EE_PARA_START+15);
+constexpr TypedWhichId<SvxTabStopItem>            EE_PARA_TABS               (EE_PARA_START+16);
+constexpr TypedWhichId<SvxJustifyMethodItem>      EE_PARA_JUST_METHOD        (EE_PARA_START+17);
+constexpr TypedWhichId<SvxVerJustifyItem>         EE_PARA_VER_JUST           (EE_PARA_START+18);
+constexpr sal_uInt16                              EE_PARA_END                (EE_PARA_START + 18);
 
 // Character attributes:
-#define EE_CHAR_START               (EE_PARA_END+1)
-#define EE_CHAR_COLOR               TypedWhichId<SvxColorItem>(EE_CHAR_START+0)
-#define EE_CHAR_FONTINFO            TypedWhichId<SvxFontItem>(EE_CHAR_START+1)
-#define EE_CHAR_FONTHEIGHT          TypedWhichId<SvxFontHeightItem>(EE_CHAR_START+2)
-#define EE_CHAR_FONTWIDTH           TypedWhichId<SvxCharScaleWidthItem>(EE_CHAR_START+3)
-#define EE_CHAR_WEIGHT              TypedWhichId<SvxWeightItem>(EE_CHAR_START+4)
-#define EE_CHAR_UNDERLINE           TypedWhichId<SvxUnderlineItem>(EE_CHAR_START+5)
-#define EE_CHAR_STRIKEOUT           TypedWhichId<SvxCrossedOutItem>(EE_CHAR_START+6)
-#define EE_CHAR_ITALIC              TypedWhichId<SvxPostureItem>(EE_CHAR_START+7)
-#define EE_CHAR_OUTLINE             TypedWhichId<SvxContourItem>(EE_CHAR_START+8)
-#define EE_CHAR_SHADOW              TypedWhichId<SvxShadowedItem>(EE_CHAR_START+9)
-#define EE_CHAR_ESCAPEMENT          TypedWhichId<SvxEscapementItem>(EE_CHAR_START+10)
-#define EE_CHAR_PAIRKERNING         TypedWhichId<SvxAutoKernItem>(EE_CHAR_START+11)
-#define EE_CHAR_KERNING             TypedWhichId<SvxKerningItem>(EE_CHAR_START+12)
-#define EE_CHAR_WLM                 TypedWhichId<SvxWordLineModeItem>(EE_CHAR_START+13)
-#define EE_CHAR_LANGUAGE            TypedWhichId<SvxLanguageItem>(EE_CHAR_START+14)
-#define EE_CHAR_LANGUAGE_CJK        TypedWhichId<SvxLanguageItem>(EE_CHAR_START+15)
-#define EE_CHAR_LANGUAGE_CTL        TypedWhichId<SvxLanguageItem>(EE_CHAR_START+16)
-#define EE_CHAR_FONTINFO_CJK        TypedWhichId<SvxFontItem>(EE_CHAR_START+17)
-#define EE_CHAR_FONTINFO_CTL        TypedWhichId<SvxFontItem>(EE_CHAR_START+18)
-#define EE_CHAR_FONTHEIGHT_CJK      TypedWhichId<SvxFontHeightItem>(EE_CHAR_START+19)
-#define EE_CHAR_FONTHEIGHT_CTL      TypedWhichId<SvxFontHeightItem>(EE_CHAR_START+20)
-#define EE_CHAR_WEIGHT_CJK          TypedWhichId<SvxWeightItem>(EE_CHAR_START+21)
-#define EE_CHAR_WEIGHT_CTL          TypedWhichId<SvxWeightItem>(EE_CHAR_START+22)
-#define EE_CHAR_ITALIC_CJK          TypedWhichId<SvxPostureItem>(EE_CHAR_START+23)
-#define EE_CHAR_ITALIC_CTL          TypedWhichId<SvxPostureItem>(EE_CHAR_START+24)
-#define EE_CHAR_EMPHASISMARK        TypedWhichId<SvxEmphasisMarkItem>(EE_CHAR_START+25)
-#define EE_CHAR_RELIEF              TypedWhichId<SvxCharReliefItem>(EE_CHAR_START+26)
-#define EE_CHAR_RUBI_DUMMY          TypedWhichId<SfxVoidItem>(EE_CHAR_START+27)
-#define EE_CHAR_XMLATTRIBS          TypedWhichId<SvXMLAttrContainerItem>(EE_CHAR_START+28)
-#define EE_CHAR_OVERLINE            TypedWhichId<SvxOverlineItem>(EE_CHAR_START+29)
-#define EE_CHAR_CASEMAP             TypedWhichId<SvxCaseMapItem>(EE_CHAR_START+30)
-#define EE_CHAR_GRABBAG             TypedWhichId<SfxGrabBagItem>(EE_CHAR_START+31)
-#define EE_CHAR_BKGCOLOR            TypedWhichId<SvxBackgroundColorItem>(EE_CHAR_START+32)
+constexpr sal_uInt16                           EE_CHAR_START          (EE_PARA_END + 1);
+constexpr TypedWhichId<SvxColorItem>           EE_CHAR_COLOR          (EE_CHAR_START+0);
+constexpr TypedWhichId<SvxFontItem>            EE_CHAR_FONTINFO       (EE_CHAR_START+1);
+constexpr TypedWhichId<SvxFontHeightItem>      EE_CHAR_FONTHEIGHT     (EE_CHAR_START+2);
+constexpr TypedWhichId<SvxCharScaleWidthItem>  EE_CHAR_FONTWIDTH      (EE_CHAR_START+3);
+constexpr TypedWhichId<SvxWeightItem>          EE_CHAR_WEIGHT         (EE_CHAR_START+4);
+constexpr TypedWhichId<SvxUnderlineItem>       EE_CHAR_UNDERLINE      (EE_CHAR_START+5);
+constexpr TypedWhichId<SvxCrossedOutItem>      EE_CHAR_STRIKEOUT      (EE_CHAR_START+6);
+constexpr TypedWhichId<SvxPostureItem>         EE_CHAR_ITALIC         (EE_CHAR_START+7);
+constexpr TypedWhichId<SvxContourItem>         EE_CHAR_OUTLINE        (EE_CHAR_START+8);
+constexpr TypedWhichId<SvxShadowedItem>        EE_CHAR_SHADOW         (EE_CHAR_START+9);
+constexpr TypedWhichId<SvxEscapementItem>      EE_CHAR_ESCAPEMENT     (EE_CHAR_START+10);
+constexpr TypedWhichId<SvxAutoKernItem>        EE_CHAR_PAIRKERNING    (EE_CHAR_START+11);
+constexpr TypedWhichId<SvxKerningItem>         EE_CHAR_KERNING        (EE_CHAR_START+12);
+constexpr TypedWhichId<SvxWordLineModeItem>    EE_CHAR_WLM            (EE_CHAR_START+13);
+constexpr TypedWhichId<SvxLanguageItem>        EE_CHAR_LANGUAGE       (EE_CHAR_START+14);
+constexpr TypedWhichId<SvxLanguageItem>        EE_CHAR_LANGUAGE_CJK   (EE_CHAR_START+15);
+constexpr TypedWhichId<SvxLanguageItem>        EE_CHAR_LANGUAGE_CTL   (EE_CHAR_START+16);
+constexpr TypedWhichId<SvxFontItem>            EE_CHAR_FONTINFO_CJK   (EE_CHAR_START+17);
+constexpr TypedWhichId<SvxFontItem>            EE_CHAR_FONTINFO_CTL   (EE_CHAR_START+18);
+constexpr TypedWhichId<SvxFontHeightItem>      EE_CHAR_FONTHEIGHT_CJK (EE_CHAR_START+19);
+constexpr TypedWhichId<SvxFontHeightItem>      EE_CHAR_FONTHEIGHT_CTL (EE_CHAR_START+20);
+constexpr TypedWhichId<SvxWeightItem>          EE_CHAR_WEIGHT_CJK     (EE_CHAR_START+21);
+constexpr TypedWhichId<SvxWeightItem>          EE_CHAR_WEIGHT_CTL     (EE_CHAR_START+22);
+constexpr TypedWhichId<SvxPostureItem>         EE_CHAR_ITALIC_CJK     (EE_CHAR_START+23);
+constexpr TypedWhichId<SvxPostureItem>         EE_CHAR_ITALIC_CTL     (EE_CHAR_START+24);
+constexpr TypedWhichId<SvxEmphasisMarkItem>    EE_CHAR_EMPHASISMARK   (EE_CHAR_START+25);
+constexpr TypedWhichId<SvxCharReliefItem>      EE_CHAR_RELIEF         (EE_CHAR_START+26);
+constexpr TypedWhichId<SfxVoidItem>            EE_CHAR_RUBI_DUMMY     (EE_CHAR_START+27);
+constexpr TypedWhichId<SvXMLAttrContainerItem> EE_CHAR_XMLATTRIBS     (EE_CHAR_START+28);
+constexpr TypedWhichId<SvxOverlineItem>        EE_CHAR_OVERLINE       (EE_CHAR_START+29);
+constexpr TypedWhichId<SvxCaseMapItem>         EE_CHAR_CASEMAP        (EE_CHAR_START+30);
+constexpr TypedWhichId<SfxGrabBagItem>         EE_CHAR_GRABBAG        (EE_CHAR_START+31);
+constexpr TypedWhichId<SvxBackgroundColorItem> EE_CHAR_BKGCOLOR       (EE_CHAR_START+32);
 
-#define EE_CHAR_END                 (EE_CHAR_START+32)
+constexpr sal_uInt16                           EE_CHAR_END            (EE_CHAR_START + 32);
 
-#define EE_FEATURE_START            (EE_CHAR_END+1)
-#define EE_FEATURE_TAB              (EE_FEATURE_START+0)
-#define EE_FEATURE_LINEBR           (EE_FEATURE_TAB+1)
-#define EE_FEATURE_NOTCONV          (EE_FEATURE_LINEBR+1)
-#define EE_FEATURE_FIELD            (EE_FEATURE_NOTCONV+1)
-#define EE_FEATURE_END              (EE_FEATURE_FIELD+0)
+constexpr sal_uInt16 EE_FEATURE_START   (EE_CHAR_END + 1);
+constexpr sal_uInt16 EE_FEATURE_TAB     (EE_FEATURE_START + 0);
+constexpr sal_uInt16 EE_FEATURE_LINEBR  (EE_FEATURE_TAB + 1);
+constexpr sal_uInt16 EE_FEATURE_NOTCONV (EE_FEATURE_LINEBR + 1);
+constexpr sal_uInt16 EE_FEATURE_FIELD   (EE_FEATURE_NOTCONV + 1);
+constexpr sal_uInt16 EE_FEATURE_END     (EE_FEATURE_FIELD + 0);
 
-#define EE_ITEMS_END                (EE_FEATURE_END)
+constexpr sal_uInt16 EE_ITEMS_END       (EE_FEATURE_END);
 
-#define EDITITEMCOUNT ( EE_ITEMS_END - EE_ITEMS_START + 1 )
+constexpr sal_uInt16 EDITITEMCOUNT (EE_ITEMS_END - EE_ITEMS_START + 1);
 
 #endif // _ INCLUDED_EDITENG_EEITEM_HXX
 

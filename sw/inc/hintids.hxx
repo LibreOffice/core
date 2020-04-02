@@ -130,6 +130,40 @@ class SwTableBoxNumFormat;
 class SwTextGridItem;
 class SwTransparencyGrf;
 class SwFormatRuby;
+class SwInsText;
+class SwDelChr;
+class SwDelText;
+class SwRefMarkFieldUpdate;
+class SwTableFormulaUpdate;
+class SwAutoFormatGetDocNode;
+class SwCondCollCondChg;
+class SwVirtPageNumInfo;
+class SwFindNearestNode;
+class SwStringMsgPoolItem;
+class SwFltAnchor;
+class SwFltTOX;
+class SwFltRedline;
+class SwFltRDFMark;
+class SwCharFormat;
+class SwConditionTextFormatColl;
+class SwDrawFrameFormat;
+class SwFlyFrameFormat;
+class SwFormatField;
+class SwFormatFootnote;
+class SwFormatRefMark;
+class SwGrfFormatColl;
+class SwTextFormatColl;
+class SwTOXMark;
+class CntUInt16Item;
+class SwFormatFillOrder;
+class SwFormatHeader;
+class SwFormatFooter;
+class SwFormatContent;
+class SvxMacroItem;
+class SwTableBoxFormula;
+class SwTableBoxValue;
+class SwFrameFormat;
+class SfxVoidItem;
 
 // For SwTextHints without end index the following char is added:
 
@@ -152,63 +186,62 @@ class SwFormatRuby;
  * Enums for the hints
  */
 
-#define HINT_BEGIN  1
+constexpr sal_uInt16 HINT_BEGIN = 1;
 
-#define POOLATTR_BEGIN      HINT_BEGIN
-#define POOLATTR_END        RES_UNKNOWNATR_END
+constexpr sal_uInt16 POOLATTR_BEGIN(HINT_BEGIN);
 
 // Ranges for the IDs of the format-attributes.
 // Which-values for character-format attributes.
-#define RES_CHRATR_BEGIN  HINT_BEGIN
-#define     RES_CHRATR_CASEMAP                     TypedWhichId<SvxCaseMapItem>(RES_CHRATR_BEGIN)  //  1
-#define     RES_CHRATR_CHARSETCOLOR                TypedWhichId<SvxColorItem>(2)
-#define     RES_CHRATR_COLOR                       TypedWhichId<SvxColorItem>(3)
-#define     RES_CHRATR_CONTOUR                     TypedWhichId<SvxContourItem>(4)
-#define     RES_CHRATR_CROSSEDOUT                  TypedWhichId<SvxCrossedOutItem>(5)
-#define     RES_CHRATR_ESCAPEMENT                  TypedWhichId<SvxEscapementItem>(6)
-#define     RES_CHRATR_FONT                        TypedWhichId<SvxFontItem>(7)
-#define     RES_CHRATR_FONTSIZE                    TypedWhichId<SvxFontHeightItem>(8)
-#define     RES_CHRATR_KERNING                     TypedWhichId<SvxKerningItem>(9)
-#define     RES_CHRATR_LANGUAGE                    TypedWhichId<SvxLanguageItem>(10)
-#define     RES_CHRATR_POSTURE                     TypedWhichId<SvxPostureItem>(11)
-#define     RES_CHRATR_UNUSED1                     TypedWhichId<SfxVoidItem>(12)
-#define     RES_CHRATR_SHADOWED                    TypedWhichId<SvxShadowedItem>(13)
-#define     RES_CHRATR_UNDERLINE                   TypedWhichId<SvxUnderlineItem>(14)
-#define     RES_CHRATR_WEIGHT                      TypedWhichId<SvxWeightItem>(15)
-#define     RES_CHRATR_WORDLINEMODE                TypedWhichId<SvxWordLineModeItem>(16)
-#define     RES_CHRATR_AUTOKERN                    TypedWhichId<SvxAutoKernItem>(17)
-#define     RES_CHRATR_BLINK                       TypedWhichId<SvxBlinkItem>(18)
-#define     RES_CHRATR_NOHYPHEN                    TypedWhichId<SvxNoHyphenItem>(19)
-#define     RES_CHRATR_UNUSED2                     TypedWhichId<SfxVoidItem>(20)
-#define     RES_CHRATR_BACKGROUND                  TypedWhichId<SvxBrushItem>(21)
-#define     RES_CHRATR_CJK_FONT                    TypedWhichId<SvxFontItem>(22)
-#define     RES_CHRATR_CJK_FONTSIZE                TypedWhichId<SvxFontHeightItem>(23)
-#define     RES_CHRATR_CJK_LANGUAGE                TypedWhichId<SvxLanguageItem>(24)
-#define     RES_CHRATR_CJK_POSTURE                 TypedWhichId<SvxPostureItem>(25)
-#define     RES_CHRATR_CJK_WEIGHT                  TypedWhichId<SvxWeightItem>(26)
-#define     RES_CHRATR_CTL_FONT                    TypedWhichId<SvxFontItem>(27)
-#define     RES_CHRATR_CTL_FONTSIZE                TypedWhichId<SvxFontHeightItem>(28)
-#define     RES_CHRATR_CTL_LANGUAGE                TypedWhichId<SvxLanguageItem>(29)
-#define     RES_CHRATR_CTL_POSTURE                 TypedWhichId<SvxPostureItem>(30)
-#define     RES_CHRATR_CTL_WEIGHT                  TypedWhichId<SvxWeightItem>(31)
-#define     RES_CHRATR_ROTATE                      TypedWhichId<SvxCharRotateItem>(32)
-#define     RES_CHRATR_EMPHASIS_MARK               TypedWhichId<SvxEmphasisMarkItem>(33)
-#define     RES_CHRATR_TWO_LINES                   TypedWhichId<SvxTwoLinesItem>(34)
-#define     RES_CHRATR_SCALEW                      TypedWhichId<SvxCharScaleWidthItem>(35)
-#define     RES_CHRATR_RELIEF                      TypedWhichId<SvxCharReliefItem>(36)
-#define     RES_CHRATR_HIDDEN                      TypedWhichId<SvxCharHiddenItem>(37)
-#define     RES_CHRATR_OVERLINE                    TypedWhichId<SvxOverlineItem>(38)
-#define     RES_CHRATR_RSID                        TypedWhichId<SvxRsidItem>(39)
-#define     RES_CHRATR_BOX                         TypedWhichId<SvxBoxItem>(40)
-#define     RES_CHRATR_SHADOW                      TypedWhichId<SvxShadowItem>(41)
-#define     RES_CHRATR_HIGHLIGHT                   TypedWhichId<SvxBrushItem>(42)
-#define     RES_CHRATR_GRABBAG                     TypedWhichId<SfxGrabBagItem>(43)
-#define     RES_CHRATR_BIDIRTL                     TypedWhichId<SfxInt16Item>(44)
-#define     RES_CHRATR_IDCTHINT                    TypedWhichId<SfxInt16Item>(45)
-#define RES_CHRATR_END  (46)
+constexpr sal_uInt16 RES_CHRATR_BEGIN(HINT_BEGIN);
+constexpr TypedWhichId<SvxCaseMapItem> RES_CHRATR_CASEMAP (RES_CHRATR_BEGIN); // 1
+constexpr TypedWhichId<SvxColorItem> RES_CHRATR_CHARSETCOLOR (2);
+constexpr TypedWhichId<SvxColorItem> RES_CHRATR_COLOR (3);
+constexpr TypedWhichId<SvxContourItem> RES_CHRATR_CONTOUR (4);
+constexpr TypedWhichId<SvxCrossedOutItem> RES_CHRATR_CROSSEDOUT (5);
+constexpr TypedWhichId<SvxEscapementItem> RES_CHRATR_ESCAPEMENT (6);
+constexpr TypedWhichId<SvxFontItem> RES_CHRATR_FONT (7);
+constexpr TypedWhichId<SvxFontHeightItem> RES_CHRATR_FONTSIZE (8);
+constexpr TypedWhichId<SvxKerningItem> RES_CHRATR_KERNING (9);
+constexpr TypedWhichId<SvxLanguageItem> RES_CHRATR_LANGUAGE (10);
+constexpr TypedWhichId<SvxPostureItem> RES_CHRATR_POSTURE (11);
+constexpr TypedWhichId<SfxVoidItem> RES_CHRATR_UNUSED1 (12);
+constexpr TypedWhichId<SvxShadowedItem> RES_CHRATR_SHADOWED (13);
+constexpr TypedWhichId<SvxUnderlineItem> RES_CHRATR_UNDERLINE (14);
+constexpr TypedWhichId<SvxWeightItem> RES_CHRATR_WEIGHT (15);
+constexpr TypedWhichId<SvxWordLineModeItem> RES_CHRATR_WORDLINEMODE (16);
+constexpr TypedWhichId<SvxAutoKernItem> RES_CHRATR_AUTOKERN (17);
+constexpr TypedWhichId<SvxBlinkItem> RES_CHRATR_BLINK (18);
+constexpr TypedWhichId<SvxNoHyphenItem> RES_CHRATR_NOHYPHEN (19);
+constexpr TypedWhichId<SfxVoidItem> RES_CHRATR_UNUSED2 (20);
+constexpr TypedWhichId<SvxBrushItem> RES_CHRATR_BACKGROUND (21);
+constexpr TypedWhichId<SvxFontItem> RES_CHRATR_CJK_FONT (22);
+constexpr TypedWhichId<SvxFontHeightItem> RES_CHRATR_CJK_FONTSIZE (23);
+constexpr TypedWhichId<SvxLanguageItem> RES_CHRATR_CJK_LANGUAGE (24);
+constexpr TypedWhichId<SvxPostureItem> RES_CHRATR_CJK_POSTURE (25);
+constexpr TypedWhichId<SvxWeightItem> RES_CHRATR_CJK_WEIGHT (26);
+constexpr TypedWhichId<SvxFontItem> RES_CHRATR_CTL_FONT (27);
+constexpr TypedWhichId<SvxFontHeightItem> RES_CHRATR_CTL_FONTSIZE (28);
+constexpr TypedWhichId<SvxLanguageItem> RES_CHRATR_CTL_LANGUAGE (29);
+constexpr TypedWhichId<SvxPostureItem> RES_CHRATR_CTL_POSTURE (30);
+constexpr TypedWhichId<SvxWeightItem> RES_CHRATR_CTL_WEIGHT (31);
+constexpr TypedWhichId<SvxCharRotateItem> RES_CHRATR_ROTATE (32);
+constexpr TypedWhichId<SvxEmphasisMarkItem> RES_CHRATR_EMPHASIS_MARK (33);
+constexpr TypedWhichId<SvxTwoLinesItem> RES_CHRATR_TWO_LINES (34);
+constexpr TypedWhichId<SvxCharScaleWidthItem> RES_CHRATR_SCALEW (35);
+constexpr TypedWhichId<SvxCharReliefItem> RES_CHRATR_RELIEF (36);
+constexpr TypedWhichId<SvxCharHiddenItem> RES_CHRATR_HIDDEN (37);
+constexpr TypedWhichId<SvxOverlineItem> RES_CHRATR_OVERLINE (38);
+constexpr TypedWhichId<SvxRsidItem> RES_CHRATR_RSID (39);
+constexpr TypedWhichId<SvxBoxItem> RES_CHRATR_BOX (40);
+constexpr TypedWhichId<SvxShadowItem> RES_CHRATR_SHADOW (41);
+constexpr TypedWhichId<SvxBrushItem> RES_CHRATR_HIGHLIGHT (42);
+constexpr TypedWhichId<SfxGrabBagItem> RES_CHRATR_GRABBAG (43);
+constexpr TypedWhichId<SfxInt16Item> RES_CHRATR_BIDIRTL (44);
+constexpr TypedWhichId<SfxInt16Item> RES_CHRATR_IDCTHINT (45);
+constexpr sal_uInt16 RES_CHRATR_END(46);
 
 // this Attribute used only in a TextNodes SwpAttr-Array
-#define RES_TXTATR_BEGIN RES_CHRATR_END
+constexpr sal_uInt16 RES_TXTATR_BEGIN(RES_CHRATR_END);
 
 /** text attributes with start and end.
    #i105453#:
@@ -226,208 +259,210 @@ class SwFormatRuby;
    - INETFMT should precede CJK_RUBY (for UNO API it does not matter...)
    - META and METAFIELD must precede CJK_RUBY and INETFMT
  */
-#define RES_TXTATR_WITHEND_BEGIN RES_TXTATR_BEGIN
-#define     RES_TXTATR_REFMARK            TypedWhichId<SwFormatRefMark>(RES_TXTATR_WITHEND_BEGIN) // 46
-#define     RES_TXTATR_TOXMARK            TypedWhichId<SwTOXMark>(47)
-#define     RES_TXTATR_META               TypedWhichId<SwFormatMeta>(48)
-#define     RES_TXTATR_METAFIELD          TypedWhichId<SwFormatMeta>(49)
-#define     RES_TXTATR_AUTOFMT            TypedWhichId<SwFormatAutoFormat>(50)
-#define     RES_TXTATR_INETFMT            TypedWhichId<SwFormatINetFormat>(51)
-#define     RES_TXTATR_CHARFMT            TypedWhichId<SwFormatCharFormat>(52)
-#define     RES_TXTATR_CJK_RUBY           TypedWhichId<SwFormatRuby>(53)
-#define     RES_TXTATR_UNKNOWN_CONTAINER  TypedWhichId<SvXMLAttrContainerItem>(54)
-#define     RES_TXTATR_INPUTFIELD         TypedWhichId<SwFormatField>(55)
-#define RES_TXTATR_WITHEND_END 56
+constexpr sal_uInt16 RES_TXTATR_WITHEND_BEGIN(RES_TXTATR_BEGIN);
+constexpr TypedWhichId<SwFormatRefMark> RES_TXTATR_REFMARK (RES_TXTATR_WITHEND_BEGIN); // 46
+constexpr TypedWhichId<SwTOXMark> RES_TXTATR_TOXMARK (47);
+constexpr TypedWhichId<SwFormatMeta> RES_TXTATR_META (48);
+constexpr TypedWhichId<SwFormatMeta> RES_TXTATR_METAFIELD (49);
+constexpr TypedWhichId<SwFormatAutoFormat> RES_TXTATR_AUTOFMT (50);
+constexpr TypedWhichId<SwFormatINetFormat> RES_TXTATR_INETFMT (51);
+constexpr TypedWhichId<SwFormatCharFormat> RES_TXTATR_CHARFMT (52);
+constexpr TypedWhichId<SwFormatRuby> RES_TXTATR_CJK_RUBY (53);
+constexpr TypedWhichId<SvXMLAttrContainerItem> RES_TXTATR_UNKNOWN_CONTAINER (54);
+constexpr TypedWhichId<SwFormatField> RES_TXTATR_INPUTFIELD (55);
+constexpr sal_uInt16 RES_TXTATR_WITHEND_END(56);
 
 // all TextAttributes without an end
-#define RES_TXTATR_NOEND_BEGIN RES_TXTATR_WITHEND_END
-#define     RES_TXTATR_FIELD              TypedWhichId<SwFormatField>(RES_TXTATR_NOEND_BEGIN) // 56
-#define     RES_TXTATR_FLYCNT             TypedWhichId<SwFormatFlyCnt>(57)
-#define     RES_TXTATR_FTN                TypedWhichId<SwFormatFootnote>(58)
-#define     RES_TXTATR_ANNOTATION         TypedWhichId<SwFormatField>(59)
-#define     RES_TXTATR_DUMMY3             TypedWhichId<SfxBoolItem>(60)
-#define     RES_TXTATR_DUMMY1             TypedWhichId<SfxBoolItem>(61)
-#define     RES_TXTATR_DUMMY2             TypedWhichId<SfxBoolItem>(62)
-#define RES_TXTATR_NOEND_END 63
-#define RES_TXTATR_END RES_TXTATR_NOEND_END
+constexpr sal_uInt16 RES_TXTATR_NOEND_BEGIN(RES_TXTATR_WITHEND_END);
+constexpr TypedWhichId<SwFormatField> RES_TXTATR_FIELD (RES_TXTATR_NOEND_BEGIN); // 56
+constexpr TypedWhichId<SwFormatFlyCnt> RES_TXTATR_FLYCNT (57);
+constexpr TypedWhichId<SwFormatFootnote> RES_TXTATR_FTN (58);
+constexpr TypedWhichId<SwFormatField> RES_TXTATR_ANNOTATION (59);
+constexpr TypedWhichId<SfxBoolItem> RES_TXTATR_DUMMY3 (60);
+constexpr TypedWhichId<SfxBoolItem> RES_TXTATR_DUMMY1 (61);
+constexpr TypedWhichId<SfxBoolItem> RES_TXTATR_DUMMY2 (62);
+constexpr sal_uInt16 RES_TXTATR_NOEND_END(63);
+constexpr sal_uInt16 RES_TXTATR_END(RES_TXTATR_NOEND_END);
 
-#define RES_PARATR_BEGIN RES_TXTATR_END
-#define    RES_PARATR_LINESPACING                  TypedWhichId<SvxLineSpacingItem>(RES_PARATR_BEGIN) // 63
-#define    RES_PARATR_ADJUST                       TypedWhichId<SvxAdjustItem>(64)
-#define    RES_PARATR_SPLIT                        TypedWhichId<SvxFormatSplitItem>(65)
-#define    RES_PARATR_ORPHANS                      TypedWhichId<SvxOrphansItem>(66)
-#define    RES_PARATR_WIDOWS                       TypedWhichId<SvxWidowsItem>(67)
-#define    RES_PARATR_TABSTOP                      TypedWhichId<SvxTabStopItem>(68)
-#define    RES_PARATR_HYPHENZONE                   TypedWhichId<SvxHyphenZoneItem>(69)
-#define    RES_PARATR_DROP                         TypedWhichId<SwFormatDrop>(70)
-#define    RES_PARATR_REGISTER                     TypedWhichId<SwRegisterItem>(71)
-#define    RES_PARATR_NUMRULE                      TypedWhichId<SwNumRuleItem>(72)
-#define    RES_PARATR_SCRIPTSPACE                  TypedWhichId<SvxScriptSpaceItem>(73)
-#define    RES_PARATR_HANGINGPUNCTUATION           TypedWhichId<SvxHangingPunctuationItem>(74)
-#define    RES_PARATR_FORBIDDEN_RULES              TypedWhichId<SvxForbiddenRuleItem>(75)
-#define    RES_PARATR_VERTALIGN                    TypedWhichId<SvxParaVertAlignItem>(76)
-#define    RES_PARATR_SNAPTOGRID                   TypedWhichId<SvxParaGridItem>(77)
-#define    RES_PARATR_CONNECT_BORDER               TypedWhichId<SwParaConnectBorderItem>(78)
-#define    RES_PARATR_OUTLINELEVEL                 TypedWhichId<SfxUInt16Item>(79)
-#define    RES_PARATR_RSID                         TypedWhichId<SvxRsidItem>(80)
-#define    RES_PARATR_GRABBAG                      TypedWhichId<SfxGrabBagItem>(81)
-#define RES_PARATR_END (82)
+constexpr sal_uInt16 RES_PARATR_BEGIN(RES_TXTATR_END);
+constexpr TypedWhichId<SvxLineSpacingItem> RES_PARATR_LINESPACING (RES_PARATR_BEGIN); // 63
+constexpr TypedWhichId<SvxAdjustItem> RES_PARATR_ADJUST (64);
+constexpr TypedWhichId<SvxFormatSplitItem> RES_PARATR_SPLIT (65);
+constexpr TypedWhichId<SvxOrphansItem> RES_PARATR_ORPHANS (66);
+constexpr TypedWhichId<SvxWidowsItem> RES_PARATR_WIDOWS (67);
+constexpr TypedWhichId<SvxTabStopItem> RES_PARATR_TABSTOP (68);
+constexpr TypedWhichId<SvxHyphenZoneItem> RES_PARATR_HYPHENZONE (69);
+constexpr TypedWhichId<SwFormatDrop> RES_PARATR_DROP (70);
+constexpr TypedWhichId<SwRegisterItem> RES_PARATR_REGISTER (71);
+constexpr TypedWhichId<SwNumRuleItem> RES_PARATR_NUMRULE (72);
+constexpr TypedWhichId<SvxScriptSpaceItem> RES_PARATR_SCRIPTSPACE (73);
+constexpr TypedWhichId<SvxHangingPunctuationItem> RES_PARATR_HANGINGPUNCTUATION (74);
+constexpr TypedWhichId<SvxForbiddenRuleItem> RES_PARATR_FORBIDDEN_RULES (75);
+constexpr TypedWhichId<SvxParaVertAlignItem> RES_PARATR_VERTALIGN (76);
+constexpr TypedWhichId<SvxParaGridItem> RES_PARATR_SNAPTOGRID (77);
+constexpr TypedWhichId<SwParaConnectBorderItem> RES_PARATR_CONNECT_BORDER (78);
+constexpr TypedWhichId<SfxUInt16Item> RES_PARATR_OUTLINELEVEL (79);
+constexpr TypedWhichId<SvxRsidItem> RES_PARATR_RSID (80);
+constexpr TypedWhichId<SfxGrabBagItem> RES_PARATR_GRABBAG (81);
+constexpr sal_uInt16 RES_PARATR_END(82);
 
 // list attributes for paragraphs.
 // intentionally these list attributes are not contained in paragraph styles
-#define RES_PARATR_LIST_BEGIN RES_PARATR_END
-#define     RES_PARATR_LIST_ID                     TypedWhichId<SfxStringItem>(RES_PARATR_LIST_BEGIN) // 82
-#define     RES_PARATR_LIST_LEVEL                  TypedWhichId<SfxInt16Item>(83)
-#define     RES_PARATR_LIST_ISRESTART              TypedWhichId<SfxBoolItem>(84)
-#define     RES_PARATR_LIST_RESTARTVALUE           TypedWhichId<SfxInt16Item>(85)
-#define     RES_PARATR_LIST_ISCOUNTED              TypedWhichId<SfxBoolItem>(86)
-#define     RES_PARATR_LIST_AUTOFMT                TypedWhichId<SwFormatAutoFormat>(87)//TypedWhichId<SfxSetItem>(87)
-#define RES_PARATR_LIST_END (88)
+constexpr sal_uInt16 RES_PARATR_LIST_BEGIN(RES_PARATR_END);
+constexpr TypedWhichId<SfxStringItem> RES_PARATR_LIST_ID (RES_PARATR_LIST_BEGIN); // 82
+constexpr TypedWhichId<SfxInt16Item> RES_PARATR_LIST_LEVEL (83);
+constexpr TypedWhichId<SfxBoolItem> RES_PARATR_LIST_ISRESTART (84);
+constexpr TypedWhichId<SfxInt16Item> RES_PARATR_LIST_RESTARTVALUE (85);
+constexpr TypedWhichId<SfxBoolItem> RES_PARATR_LIST_ISCOUNTED (86);
+constexpr TypedWhichId<SwFormatAutoFormat> RES_PARATR_LIST_AUTOFMT (87);//TypedWhichId<SfxSetItem>(87)
+constexpr sal_uInt16 RES_PARATR_LIST_END(88);
 
-#define RES_FRMATR_BEGIN RES_PARATR_LIST_END
-#define     RES_FILL_ORDER                         TypedWhichId<SwFormatFillOrder>(RES_FRMATR_BEGIN)
-#define     RES_FRM_SIZE                           TypedWhichId<SwFormatFrameSize>(89)
-#define     RES_PAPER_BIN                          TypedWhichId<SvxPaperBinItem>(90)
-#define     RES_LR_SPACE                           TypedWhichId<SvxLRSpaceItem>(91)
-#define     RES_UL_SPACE                           TypedWhichId<SvxULSpaceItem>(92)
-#define     RES_PAGEDESC                           TypedWhichId<SwFormatPageDesc>(93)
-#define     RES_BREAK                              TypedWhichId<SvxFormatBreakItem>(94)
-#define     RES_CNTNT                              TypedWhichId<SwFormatContent>(95)
-#define     RES_HEADER                             TypedWhichId<SwFormatHeader>(96)
-#define     RES_FOOTER                             TypedWhichId<SwFormatFooter>(97)
-#define     RES_PRINT                              TypedWhichId<SvxPrintItem>(98)
-#define     RES_OPAQUE                             TypedWhichId<SvxOpaqueItem>(99)
-#define     RES_PROTECT                            TypedWhichId<SvxProtectItem>(100)
-#define     RES_SURROUND                           TypedWhichId<SwFormatSurround>(101)
-#define     RES_VERT_ORIENT                        TypedWhichId<SwFormatVertOrient>(102)
-#define     RES_HORI_ORIENT                        TypedWhichId<SwFormatHoriOrient>(103)
-#define     RES_ANCHOR                             TypedWhichId<SwFormatAnchor>(104)
-#define     RES_BACKGROUND                         TypedWhichId<SvxBrushItem>(105)
-#define     RES_BOX                                TypedWhichId<SvxBoxItem>(106)
-#define     RES_SHADOW                             TypedWhichId<SvxShadowItem>(107)
-#define     RES_FRMMACRO                           TypedWhichId<SvxMacroItem>(108)
-#define     RES_COL                                TypedWhichId<SwFormatCol>(109)
-#define     RES_KEEP                               TypedWhichId<SvxFormatKeepItem>(110)
-#define     RES_URL                                TypedWhichId<SwFormatURL>(111)
-#define     RES_EDIT_IN_READONLY                   TypedWhichId<SwFormatEditInReadonly>(112)
-#define     RES_LAYOUT_SPLIT                       TypedWhichId<SwFormatLayoutSplit>(113)
-#define     RES_CHAIN                              TypedWhichId<SwFormatChain>(114)
-#define     RES_TEXTGRID                           TypedWhichId<SwTextGridItem>(115)
-#define     RES_LINENUMBER                         TypedWhichId<SwFormatLineNumber>(116)
-#define     RES_FTN_AT_TXTEND                      TypedWhichId<SwFormatFootnoteAtTextEnd>(117)
-#define     RES_END_AT_TXTEND                      TypedWhichId<SwFormatEndAtTextEnd>(118)
-#define     RES_COLUMNBALANCE                      TypedWhichId<SwFormatNoBalancedColumns>(119)
-#define     RES_FRAMEDIR                           TypedWhichId<SvxFrameDirectionItem>(120)
-#define     RES_HEADER_FOOTER_EAT_SPACING          TypedWhichId<SwHeaderAndFooterEatSpacingItem>(121)
-#define     RES_ROW_SPLIT                          TypedWhichId<SwFormatRowSplit>(122)
-#define     RES_FOLLOW_TEXT_FLOW                   TypedWhichId<SwFormatFollowTextFlow>(123)
-#define     RES_COLLAPSING_BORDERS                 TypedWhichId<SfxBoolItem>(124)
-#define     RES_WRAP_INFLUENCE_ON_OBJPOS           TypedWhichId<SwFormatWrapInfluenceOnObjPos>(125)
-#define     RES_AUTO_STYLE                         TypedWhichId<SwFormatAutoFormat>(126)
-#define     RES_FRMATR_STYLE_NAME                  TypedWhichId<SfxStringItem>(127)
-#define     RES_FRMATR_CONDITIONAL_STYLE_NAME      TypedWhichId<SfxStringItem>(128)
-#define     RES_FRMATR_GRABBAG                     TypedWhichId<SfxGrabBagItem>(129)
-#define     RES_TEXT_VERT_ADJUST                   TypedWhichId<SdrTextVertAdjustItem>(130)
-#define RES_FRMATR_END 131
+constexpr sal_uInt16 RES_FRMATR_BEGIN(RES_PARATR_LIST_END);
+constexpr TypedWhichId<SwFormatFillOrder> RES_FILL_ORDER (RES_FRMATR_BEGIN);
+constexpr TypedWhichId<SwFormatFrameSize> RES_FRM_SIZE (89);
+constexpr TypedWhichId<SvxPaperBinItem> RES_PAPER_BIN (90);
+constexpr TypedWhichId<SvxLRSpaceItem> RES_LR_SPACE (91);
+constexpr TypedWhichId<SvxULSpaceItem> RES_UL_SPACE (92);
+constexpr TypedWhichId<SwFormatPageDesc> RES_PAGEDESC (93);
+constexpr TypedWhichId<SvxFormatBreakItem> RES_BREAK (94);
+constexpr TypedWhichId<SwFormatContent> RES_CNTNT (95);
+constexpr TypedWhichId<SwFormatHeader> RES_HEADER (96);
+constexpr TypedWhichId<SwFormatFooter> RES_FOOTER (97);
+constexpr TypedWhichId<SvxPrintItem> RES_PRINT (98);
+constexpr TypedWhichId<SvxOpaqueItem> RES_OPAQUE (99);
+constexpr TypedWhichId<SvxProtectItem> RES_PROTECT (100);
+constexpr TypedWhichId<SwFormatSurround> RES_SURROUND (101);
+constexpr TypedWhichId<SwFormatVertOrient> RES_VERT_ORIENT (102);
+constexpr TypedWhichId<SwFormatHoriOrient> RES_HORI_ORIENT (103);
+constexpr TypedWhichId<SwFormatAnchor> RES_ANCHOR (104);
+constexpr TypedWhichId<SvxBrushItem> RES_BACKGROUND (105);
+constexpr TypedWhichId<SvxBoxItem> RES_BOX (106);
+constexpr TypedWhichId<SvxShadowItem> RES_SHADOW (107);
+constexpr TypedWhichId<SvxMacroItem> RES_FRMMACRO (108);
+constexpr TypedWhichId<SwFormatCol> RES_COL (109);
+constexpr TypedWhichId<SvxFormatKeepItem> RES_KEEP (110);
+constexpr TypedWhichId<SwFormatURL> RES_URL (111);
+constexpr TypedWhichId<SwFormatEditInReadonly> RES_EDIT_IN_READONLY (112);
+constexpr TypedWhichId<SwFormatLayoutSplit> RES_LAYOUT_SPLIT (113);
+constexpr TypedWhichId<SwFormatChain> RES_CHAIN (114);
+constexpr TypedWhichId<SwTextGridItem> RES_TEXTGRID (115);
+constexpr TypedWhichId<SwFormatLineNumber> RES_LINENUMBER (116);
+constexpr TypedWhichId<SwFormatFootnoteAtTextEnd> RES_FTN_AT_TXTEND (117);
+constexpr TypedWhichId<SwFormatEndAtTextEnd> RES_END_AT_TXTEND (118);
+constexpr TypedWhichId<SwFormatNoBalancedColumns> RES_COLUMNBALANCE (119);
+constexpr TypedWhichId<SvxFrameDirectionItem> RES_FRAMEDIR (120);
+constexpr TypedWhichId<SwHeaderAndFooterEatSpacingItem> RES_HEADER_FOOTER_EAT_SPACING (121);
+constexpr TypedWhichId<SwFormatRowSplit> RES_ROW_SPLIT (122);
+constexpr TypedWhichId<SwFormatFollowTextFlow> RES_FOLLOW_TEXT_FLOW (123);
+constexpr TypedWhichId<SfxBoolItem> RES_COLLAPSING_BORDERS (124);
+constexpr TypedWhichId<SwFormatWrapInfluenceOnObjPos> RES_WRAP_INFLUENCE_ON_OBJPOS (125);
+constexpr TypedWhichId<SwFormatAutoFormat> RES_AUTO_STYLE (126);
+constexpr TypedWhichId<SfxStringItem> RES_FRMATR_STYLE_NAME (127);
+constexpr TypedWhichId<SfxStringItem> RES_FRMATR_CONDITIONAL_STYLE_NAME (128);
+constexpr TypedWhichId<SfxGrabBagItem> RES_FRMATR_GRABBAG (129);
+constexpr TypedWhichId<SdrTextVertAdjustItem> RES_TEXT_VERT_ADJUST (130);
+constexpr sal_uInt16 RES_FRMATR_END(131);
 
-#define RES_GRFATR_BEGIN RES_FRMATR_END
-#define     RES_GRFATR_MIRRORGRF    TypedWhichId<SwMirrorGrf>(RES_GRFATR_BEGIN) // 131
-#define     RES_GRFATR_CROPGRF      TypedWhichId<SwCropGrf>(132)
+constexpr sal_uInt16 RES_GRFATR_BEGIN(RES_FRMATR_END);
+constexpr TypedWhichId<SwMirrorGrf> RES_GRFATR_MIRRORGRF (RES_GRFATR_BEGIN); // 131
+constexpr TypedWhichId<SwCropGrf> RES_GRFATR_CROPGRF (132);
 
-#define     RES_GRFATR_ROTATION     TypedWhichId<SwRotationGrf>(133)
-#define     RES_GRFATR_LUMINANCE    TypedWhichId<SwLuminanceGrf>(134)
-#define     RES_GRFATR_CONTRAST     TypedWhichId<SwContrastGrf>(135)
-#define     RES_GRFATR_CHANNELR     TypedWhichId<SwChannelRGrf>(136)
-#define     RES_GRFATR_CHANNELG     TypedWhichId<SwChannelGGrf>(137)
-#define     RES_GRFATR_CHANNELB     TypedWhichId<SwChannelBGrf>(138)
-#define     RES_GRFATR_GAMMA        TypedWhichId<SwGammaGrf>(139)
-#define     RES_GRFATR_INVERT       TypedWhichId<SwInvertGrf>(140)
-#define     RES_GRFATR_TRANSPARENCY TypedWhichId<SwTransparencyGrf>(141)
-#define     RES_GRFATR_DRAWMODE     TypedWhichId<SwDrawModeGrf>(142)
+constexpr TypedWhichId<SwRotationGrf> RES_GRFATR_ROTATION (133);
+constexpr TypedWhichId<SwLuminanceGrf> RES_GRFATR_LUMINANCE (134);
+constexpr TypedWhichId<SwContrastGrf> RES_GRFATR_CONTRAST (135);
+constexpr TypedWhichId<SwChannelRGrf> RES_GRFATR_CHANNELR (136);
+constexpr TypedWhichId<SwChannelGGrf> RES_GRFATR_CHANNELG (137);
+constexpr TypedWhichId<SwChannelBGrf> RES_GRFATR_CHANNELB (138);
+constexpr TypedWhichId<SwGammaGrf> RES_GRFATR_GAMMA (139);
+constexpr TypedWhichId<SwInvertGrf> RES_GRFATR_INVERT (140);
+constexpr TypedWhichId<SwTransparencyGrf> RES_GRFATR_TRANSPARENCY (141);
+constexpr TypedWhichId<SwDrawModeGrf> RES_GRFATR_DRAWMODE (142);
 
-#define     RES_GRFATR_DUMMY1       TypedWhichId<SfxBoolItem>(143)
-#define     RES_GRFATR_DUMMY2       TypedWhichId<SfxBoolItem>(144)
-#define     RES_GRFATR_DUMMY3       TypedWhichId<SfxBoolItem>(145)
-#define     RES_GRFATR_DUMMY4       TypedWhichId<SfxBoolItem>(146)
-#define     RES_GRFATR_DUMMY5       TypedWhichId<SfxBoolItem>(147)
-#define RES_GRFATR_END (148)
+constexpr TypedWhichId<SfxBoolItem> RES_GRFATR_DUMMY1 (143);
+constexpr TypedWhichId<SfxBoolItem> RES_GRFATR_DUMMY2 (144);
+constexpr TypedWhichId<SfxBoolItem> RES_GRFATR_DUMMY3 (145);
+constexpr TypedWhichId<SfxBoolItem> RES_GRFATR_DUMMY4 (146);
+constexpr TypedWhichId<SfxBoolItem> RES_GRFATR_DUMMY5 (147);
+constexpr sal_uInt16 RES_GRFATR_END(148);
 
-#define RES_BOXATR_BEGIN RES_GRFATR_END
-#define     RES_BOXATR_FORMAT       TypedWhichId<SwTableBoxNumFormat>(RES_BOXATR_BEGIN) // 148
-#define     RES_BOXATR_FORMULA      TypedWhichId<SwTableBoxFormula>(149)
-#define     RES_BOXATR_VALUE        TypedWhichId<SwTableBoxValue>(150)
-#define RES_BOXATR_END (151)
+constexpr sal_uInt16 RES_BOXATR_BEGIN(RES_GRFATR_END);
+constexpr TypedWhichId<SwTableBoxNumFormat> RES_BOXATR_FORMAT (RES_BOXATR_BEGIN); // 148
+constexpr TypedWhichId<SwTableBoxFormula> RES_BOXATR_FORMULA (149);
+constexpr TypedWhichId<SwTableBoxValue> RES_BOXATR_VALUE (150);
+constexpr sal_uInt16 RES_BOXATR_END(151);
 
-#define RES_UNKNOWNATR_BEGIN RES_BOXATR_END
-#define     RES_UNKNOWNATR_CONTAINER TypedWhichId<SvXMLAttrContainerItem>(RES_UNKNOWNATR_BEGIN)// 151
-#define RES_UNKNOWNATR_END (152)
+constexpr sal_uInt16 RES_UNKNOWNATR_BEGIN(RES_BOXATR_END);
+constexpr TypedWhichId<SvXMLAttrContainerItem> RES_UNKNOWNATR_CONTAINER (RES_UNKNOWNATR_BEGIN);// 151
+constexpr sal_uInt16 RES_UNKNOWNATR_END(152);
+
+constexpr sal_uInt16 POOLATTR_END(RES_UNKNOWNATR_END);
 
 // Format IDs
-#define RES_FMT_BEGIN RES_UNKNOWNATR_END
-#define     RES_CHRFMT                TypedWhichId<SwCharFormat>(RES_FMT_BEGIN)  // 152
-#define     RES_FRMFMT                TypedWhichId<SwFrameFormat>(153)
-#define     RES_FLYFRMFMT             TypedWhichId<SwFlyFrameFormat>(154)
-#define     RES_TXTFMTCOLL            TypedWhichId<SwTextFormatColl>(155)
-#define     RES_GRFFMTCOLL            TypedWhichId<SwGrfFormatColl>(156)
-#define     RES_DRAWFRMFMT            TypedWhichId<SwDrawFrameFormat>(157)
-#define     RES_CONDTXTFMTCOLL        TypedWhichId<SwConditionTextFormatColl>(158)
-#define RES_FMT_END 159
+constexpr sal_uInt16 RES_FMT_BEGIN(RES_UNKNOWNATR_END);
+constexpr TypedWhichId<SwCharFormat> RES_CHRFMT (RES_FMT_BEGIN);  // 152
+constexpr TypedWhichId<SwFrameFormat> RES_FRMFMT (153);
+constexpr TypedWhichId<SwFlyFrameFormat> RES_FLYFRMFMT (154);
+constexpr TypedWhichId<SwTextFormatColl> RES_TXTFMTCOLL (155);
+constexpr TypedWhichId<SwGrfFormatColl> RES_GRFFMTCOLL (156);
+constexpr TypedWhichId<SwDrawFrameFormat> RES_DRAWFRMFMT (157);
+constexpr TypedWhichId<SwConditionTextFormatColl> RES_CONDTXTFMTCOLL (158);
+constexpr sal_uInt16 RES_FMT_END(159);
 
 // ID's for Messages in the Formats
-#define RES_MSG_BEGIN RES_FMT_END
-#define     RES_OBJECTDYING           TypedWhichId<SwPtrMsgPoolItem>(RES_MSG_BEGIN)                // 159
-#define     RES_FMT_CHG               TypedWhichId<SwFormatChg>(160)
-#define     RES_ATTRSET_CHG           TypedWhichId<SwAttrSetChg>(161)
-#define     RES_INS_TXT               TypedWhichId<SwInsText>(162)
-#define     RES_DEL_CHR               TypedWhichId<SwDelChr>(163)
-#define     RES_DEL_TXT               TypedWhichId<SwDelText>(164)
-#define     RES_UPDATE_ATTR           TypedWhichId<SwUpdateAttr>(165)
-#define     RES_REFMARKFLD_UPDATE     TypedWhichId<SwRefMarkFieldUpdate>(166)
-#define     RES_DOCPOS_UPDATE         TypedWhichId<SwDocPosUpdate>(167)
-#define     RES_TABLEFML_UPDATE       TypedWhichId<SwTableFormulaUpdate>(168)
-#define     RES_UPDATEDDETBL          TypedWhichId<SwMsgPoolItem>(169)
-#define     RES_TBLHEADLINECHG        TypedWhichId<SwMsgPoolItem>(170)
-#define     RES_AUTOFMT_DOCNODE       TypedWhichId<SwAutoFormatGetDocNode>(171)
-#define     RES_SECTION_HIDDEN        TypedWhichId<SwMsgPoolItem>(172)
-#define     RES_SECTION_NOT_HIDDEN    TypedWhichId<SwMsgPoolItem>(173)
-#define     RES_GRAPHIC_ARRIVED       TypedWhichId<SwMsgPoolItem>(174)
-#define     RES_GRAPHIC_PIECE_ARRIVED TypedWhichId<SwMsgPoolItem>(175)
-#define     RES_HIDDENPARA_PRINT      TypedWhichId<SwMsgPoolItem>(176)
-#define     RES_CONDCOLL_CONDCHG      TypedWhichId<SwCondCollCondChg>(177)
-#define     RES_VIRTPAGENUM_INFO      TypedWhichId<SwVirtPageNumInfo>(178)
-#define     RES_REMOVE_UNO_OBJECT     TypedWhichId<SwPtrMsgPoolItem>(179)
-#define     RES_GRF_REREAD_AND_INCACHE   TypedWhichId<SwMsgPoolItem>(180)
+constexpr sal_uInt16 RES_MSG_BEGIN(RES_FMT_END);
+constexpr TypedWhichId<SwPtrMsgPoolItem> RES_OBJECTDYING (RES_MSG_BEGIN);                // 159
+constexpr TypedWhichId<SwFormatChg> RES_FMT_CHG (160);
+constexpr TypedWhichId<SwAttrSetChg> RES_ATTRSET_CHG (161);
+constexpr TypedWhichId<SwInsText> RES_INS_TXT (162);
+constexpr TypedWhichId<SwDelChr> RES_DEL_CHR (163);
+constexpr TypedWhichId<SwDelText> RES_DEL_TXT (164);
+constexpr TypedWhichId<SwUpdateAttr> RES_UPDATE_ATTR (165);
+constexpr TypedWhichId<SwRefMarkFieldUpdate> RES_REFMARKFLD_UPDATE (166);
+constexpr TypedWhichId<SwDocPosUpdate> RES_DOCPOS_UPDATE (167);
+constexpr TypedWhichId<SwTableFormulaUpdate> RES_TABLEFML_UPDATE (168);
+constexpr TypedWhichId<SwMsgPoolItem> RES_UPDATEDDETBL (169);
+constexpr TypedWhichId<SwMsgPoolItem> RES_TBLHEADLINECHG (170);
+constexpr TypedWhichId<SwAutoFormatGetDocNode> RES_AUTOFMT_DOCNODE (171);
+constexpr TypedWhichId<SwMsgPoolItem> RES_SECTION_HIDDEN (172);
+constexpr TypedWhichId<SwMsgPoolItem> RES_SECTION_NOT_HIDDEN (173);
+constexpr TypedWhichId<SwMsgPoolItem> RES_GRAPHIC_ARRIVED (174);
+constexpr TypedWhichId<SwMsgPoolItem> RES_GRAPHIC_PIECE_ARRIVED (175);
+constexpr TypedWhichId<SwMsgPoolItem> RES_HIDDENPARA_PRINT (176);
+constexpr TypedWhichId<SwCondCollCondChg> RES_CONDCOLL_CONDCHG (177);
+constexpr TypedWhichId<SwVirtPageNumInfo> RES_VIRTPAGENUM_INFO (178);
+constexpr TypedWhichId<SwPtrMsgPoolItem> RES_REMOVE_UNO_OBJECT (179);
+constexpr TypedWhichId<SwMsgPoolItem> RES_GRF_REREAD_AND_INCACHE (180);
 // empty
-#define     RES_FINDNEARESTNODE       TypedWhichId<SwFindNearestNode>(182)
-#define     RES_CONTENT_VISIBLE       TypedWhichId<SwPtrMsgPoolItem>(183)
-#define     RES_GRAPHIC_SWAPIN        TypedWhichId<SwMsgPoolItem>(184)
-#define     RES_NAME_CHANGED          TypedWhichId<SwStringMsgPoolItem>(185)
-#define     RES_TITLE_CHANGED         TypedWhichId<SwStringMsgPoolItem>(186)
-#define     RES_DESCRIPTION_CHANGED   TypedWhichId<SwStringMsgPoolItem>(187)
-#define     RES_LINKED_GRAPHIC_STREAM_ARRIVED TypedWhichId<SwMsgPoolItem>(187)
-#define RES_MSG_END (188)
+constexpr TypedWhichId<SwFindNearestNode> RES_FINDNEARESTNODE (182);
+constexpr TypedWhichId<SwPtrMsgPoolItem> RES_CONTENT_VISIBLE (183);
+constexpr TypedWhichId<SwMsgPoolItem> RES_GRAPHIC_SWAPIN (184);
+constexpr TypedWhichId<SwStringMsgPoolItem> RES_NAME_CHANGED (185);
+constexpr TypedWhichId<SwStringMsgPoolItem> RES_TITLE_CHANGED (186);
+constexpr TypedWhichId<SwStringMsgPoolItem> RES_DESCRIPTION_CHANGED (187);
+constexpr TypedWhichId<SwMsgPoolItem> RES_LINKED_GRAPHIC_STREAM_ARRIVED (187);
+constexpr sal_uInt16 RES_MSG_END(188);
 
 // An ID for the RTF-reader. The stylesheets are treated like attributes,
 // i.e. there is a StyleSheet-attribute. To avoid collision with other
 // Which()-values, the value is listed here. (The help system too defines
 // new attributes!)
-#define     RES_FLTRATTR_BEGIN RES_MSG_END
-#define     RES_FLTR_BOOKMARK       TypedWhichId<SfxStringItem>(RES_FLTRATTR_BEGIN)
-#define     RES_FLTR_ANCHOR         TypedWhichId<SwFltAnchor>(189)
-#define     RES_FLTR_NUMRULE        TypedWhichId<SfxStringItem>(190)
-#define     RES_FLTR_TOX            TypedWhichId<SwFltTOX>(191)
-#define     RES_FLTR_REDLINE        TypedWhichId<SwFltRedline>(192)
-#define     RES_FLTR_ANNOTATIONMARK TypedWhichId<CntUInt16Item>(193)
-#define     RES_FLTR_RDFMARK        TypedWhichId<SwFltRDFMark>(194)
-#define     RES_FLTRATTR_END 195
+constexpr sal_uInt16     RES_FLTRATTR_BEGIN(RES_MSG_END);
+constexpr TypedWhichId<SfxStringItem> RES_FLTR_BOOKMARK (RES_FLTRATTR_BEGIN);
+constexpr TypedWhichId<SwFltAnchor> RES_FLTR_ANCHOR (189);
+constexpr TypedWhichId<SfxStringItem> RES_FLTR_NUMRULE (190);
+constexpr TypedWhichId<SwFltTOX> RES_FLTR_TOX (191);
+constexpr TypedWhichId<SwFltRedline> RES_FLTR_REDLINE (192);
+constexpr TypedWhichId<CntUInt16Item> RES_FLTR_ANNOTATIONMARK (193);
+constexpr TypedWhichId<SwFltRDFMark> RES_FLTR_RDFMARK (194);
+constexpr sal_uInt16     RES_FLTRATTR_END(195);
 
-#define RES_TBX_DUMMY RES_FLTRATTR_END + 1
+constexpr sal_uInt16 RES_TBX_DUMMY(RES_FLTRATTR_END + 1);
 
-#define HINT_END RES_TBX_DUMMY
+constexpr sal_uInt16 HINT_END(RES_TBX_DUMMY);
 
 // Error recognition!!
-#define INVALID_HINT HINT_END
-#define RES_WHICHHINT_END HINT_END
+constexpr sal_uInt16 INVALID_HINT(HINT_END);
+constexpr sal_uInt16 RES_WHICHHINT_END(HINT_END);
 
 inline bool isATR(const sal_uInt16 nWhich)
 {

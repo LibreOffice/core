@@ -84,65 +84,65 @@ class XSecondaryFillColorItem;
 #define COL_DEFAULT_SHAPE_FILLING ::Color(0x729fcf)         // light blue 2
 #define COL_DEFAULT_SHAPE_STROKE  ::Color(0x3465a4)         // dark blue 1
 
-constexpr auto XATTR_START = 1000;
+constexpr sal_uInt16 XATTR_START = 1000;
 
-constexpr auto XATTR_LINE_FIRST = XATTR_START; /* V3: 1000  V2: 1000 */
-#define XATTR_LINESTYLE         TypedWhichId<XLineStyleItem>(XATTR_LINE_FIRST)
-#define XATTR_LINEDASH          TypedWhichId<XLineDashItem>(XATTR_LINE_FIRST + 1)          /* V3: 1001  V2: 1001 */
-#define XATTR_LINEWIDTH         TypedWhichId<XLineWidthItem>(XATTR_LINE_FIRST + 2)          /* V3: 1002  V2: 1002 */
-#define XATTR_LINECOLOR         TypedWhichId<XLineColorItem>(XATTR_LINE_FIRST + 3)          /* V3: 1003  V2: 1003 */
-#define XATTR_LINESTART         TypedWhichId<XLineStartItem>(XATTR_LINE_FIRST + 4)          /* V3: 1004  V2: 1004 */
-#define XATTR_LINEEND           TypedWhichId<XLineEndItem>(XATTR_LINE_FIRST + 5)          /* V3: 1005  V2: 1005 */
-#define XATTR_LINESTARTWIDTH    TypedWhichId<XLineStartWidthItem>(XATTR_LINE_FIRST + 6)          /* V3: 1006  V2: 1006 */
-#define XATTR_LINEENDWIDTH      TypedWhichId<XLineEndWidthItem>(XATTR_LINE_FIRST + 7)          /* V3: 1007  V2: 1007 */
-#define XATTR_LINESTARTCENTER   TypedWhichId<XLineStartCenterItem>(XATTR_LINE_FIRST + 8)          /* V3: 1008  V2: 1008 */
-#define XATTR_LINEENDCENTER     TypedWhichId<XLineEndCenterItem>(XATTR_LINE_FIRST + 9)          /* V3: 1009  V2: 1009 */
-#define XATTR_LINETRANSPARENCE  TypedWhichId<XLineTransparenceItem>(XATTR_LINE_FIRST + 10)         /* V3: 1010  V2: 1010 */
-#define XATTR_LINEJOINT         TypedWhichId<XLineJointItem>(XATTR_LINE_FIRST + 11)         /* V3: 1011  V2: 1011 */
-#define XATTR_LINECAP           TypedWhichId<XLineCapItem>(XATTR_LINE_FIRST + 12)         /* V3: 1012 */
-#define XATTR_LINE_LAST         XATTR_LINECAP
-#define XATTRSET_LINE           TypedWhichId<XLineAttrSetItem>(XATTR_LINE_LAST + 1)           /* V3: 1017  V2: 1017 */
+constexpr sal_uInt16                          XATTR_LINE_FIRST       (XATTR_START);           /* V3: 1000  V2: 1000 */
+constexpr TypedWhichId<XLineStyleItem>        XATTR_LINESTYLE        (XATTR_LINE_FIRST);
+constexpr TypedWhichId<XLineDashItem>         XATTR_LINEDASH         (XATTR_LINE_FIRST + 1);  /* V3: 1001  V2: 1001 */
+constexpr TypedWhichId<XLineWidthItem>        XATTR_LINEWIDTH        (XATTR_LINE_FIRST + 2);  /* V3: 1002  V2: 1002 */
+constexpr TypedWhichId<XLineColorItem>        XATTR_LINECOLOR        (XATTR_LINE_FIRST + 3);  /* V3: 1003  V2: 1003 */
+constexpr TypedWhichId<XLineStartItem>        XATTR_LINESTART        (XATTR_LINE_FIRST + 4);  /* V3: 1004  V2: 1004 */
+constexpr TypedWhichId<XLineEndItem>          XATTR_LINEEND          (XATTR_LINE_FIRST + 5);  /* V3: 1005  V2: 1005 */
+constexpr TypedWhichId<XLineStartWidthItem>   XATTR_LINESTARTWIDTH   (XATTR_LINE_FIRST + 6);  /* V3: 1006  V2: 1006 */
+constexpr TypedWhichId<XLineEndWidthItem>     XATTR_LINEENDWIDTH     (XATTR_LINE_FIRST + 7);  /* V3: 1007  V2: 1007 */
+constexpr TypedWhichId<XLineStartCenterItem>  XATTR_LINESTARTCENTER  (XATTR_LINE_FIRST + 8);  /* V3: 1008  V2: 1008 */
+constexpr TypedWhichId<XLineEndCenterItem>    XATTR_LINEENDCENTER    (XATTR_LINE_FIRST + 9);  /* V3: 1009  V2: 1009 */
+constexpr TypedWhichId<XLineTransparenceItem> XATTR_LINETRANSPARENCE (XATTR_LINE_FIRST + 10); /* V3: 1010  V2: 1010 */
+constexpr TypedWhichId<XLineJointItem>        XATTR_LINEJOINT        (XATTR_LINE_FIRST + 11); /* V3: 1011  V2: 1011 */
+constexpr TypedWhichId<XLineCapItem>          XATTR_LINECAP          (XATTR_LINE_FIRST + 12); /* V3: 1012 */
+constexpr sal_uInt16                          XATTR_LINE_LAST        (XATTR_LINECAP);
+constexpr TypedWhichId<XLineAttrSetItem>      XATTRSET_LINE          (XATTR_LINE_LAST + 1);   /* V3: 1017  V2: 1017 */
 
-constexpr sal_uInt16 XATTR_FILL_FIRST = XATTRSET_LINE + 1; /* V3: 1018  V2: 1018 */
-#define XATTR_FILLSTYLE             TypedWhichId<XFillStyleItem>(XATTR_FILL_FIRST)
-#define XATTR_FILLCOLOR             TypedWhichId<XFillColorItem>(XATTR_FILL_FIRST + 1)      /* V3: 1019  V2: 1019 */
-#define XATTR_FILLGRADIENT          TypedWhichId<XFillGradientItem>(XATTR_FILL_FIRST + 2)      /* V3: 1020  V2: 1020 */
-#define XATTR_FILLHATCH             TypedWhichId<XFillHatchItem>(XATTR_FILL_FIRST + 3)      /* V3: 1021  V2: 1021 */
-#define XATTR_FILLBITMAP            TypedWhichId<XFillBitmapItem>(XATTR_FILL_FIRST + 4)      /* V3: 1022  V2: 1022 */
-#define XATTR_FILLTRANSPARENCE      TypedWhichId<XFillTransparenceItem>(XATTR_FILL_FIRST + 5)      /* V3: 1023  V2: 1023 */
-#define XATTR_GRADIENTSTEPCOUNT     TypedWhichId<XGradientStepCountItem>(XATTR_FILL_FIRST + 6)      /* V3: 1024  V2: 1024 */
-#define XATTR_FILLBMP_TILE          TypedWhichId<XFillBmpTileItem>(XATTR_FILL_FIRST + 7)      /* V3: 1025  V2: 1025 */
-#define XATTR_FILLBMP_POS           TypedWhichId<XFillBmpPosItem>(XATTR_FILL_FIRST + 8)      /* V3: 1026  V2: 1026 */
-#define XATTR_FILLBMP_SIZEX         TypedWhichId<SfxMetricItem>(XATTR_FILL_FIRST + 9)      /* V3: 1027  V2: 1027 */
-#define XATTR_FILLBMP_SIZEY         TypedWhichId<XFillBmpSizeYItem>(XATTR_FILL_FIRST + 10)     /* V3: 1028  V2: 1028 */
-#define XATTR_FILLFLOATTRANSPARENCE TypedWhichId<XFillFloatTransparenceItem>(XATTR_FILL_FIRST + 11)     /* V3: 1029  V2: 1029 */
-#define XATTR_SECONDARYFILLCOLOR    TypedWhichId<XSecondaryFillColorItem>(XATTR_FILL_FIRST + 12)     /* V3: 1030 */
-#define XATTR_FILLBMP_SIZELOG       TypedWhichId<XFillBmpSizeLogItem>(XATTR_FILL_FIRST + 13)     /* V3: 1031 */
-#define XATTR_FILLBMP_TILEOFFSETX   TypedWhichId<XFillBmpTileOffsetXItem>(XATTR_FILL_FIRST + 14)     /* V3: 1032 */
-#define XATTR_FILLBMP_TILEOFFSETY   TypedWhichId<XFillBmpTileOffsetYItem>(XATTR_FILL_FIRST + 15)     /* V3: 1033 */
-#define XATTR_FILLBMP_STRETCH       TypedWhichId<XFillBmpStretchItem>(XATTR_FILL_FIRST + 16)     /* V3: 1034 */
-#define XATTR_FILLBMP_POSOFFSETX    TypedWhichId<XFillBmpPosOffsetXItem>(XATTR_FILL_FIRST + 17)     /* V3: 1041 */
-#define XATTR_FILLBMP_POSOFFSETY    TypedWhichId<XFillBmpPosOffsetYItem>(XATTR_FILL_FIRST + 18)     /* V3: 1042 */
-#define XATTR_FILLBACKGROUND        TypedWhichId<XFillBackgroundItem>(XATTR_FILL_FIRST + 19)     /* V3: 1043 */
-constexpr sal_uInt16 XATTR_FILL_LAST = XATTR_FILLBACKGROUND;
-#define XATTRSET_FILL               TypedWhichId<XFillAttrSetItem>(XATTR_FILL_LAST + 1)           /* V3: 1047  V2: 1030 */
+constexpr sal_uInt16                               XATTR_FILL_FIRST            (XATTRSET_LINE + 1);     /* V3: 1018  V2: 1018 */
+constexpr TypedWhichId<XFillStyleItem>             XATTR_FILLSTYLE             (XATTR_FILL_FIRST);
+constexpr TypedWhichId<XFillColorItem>             XATTR_FILLCOLOR             (XATTR_FILL_FIRST + 1);  /* V3: 1019  V2: 1019 */
+constexpr TypedWhichId<XFillGradientItem>          XATTR_FILLGRADIENT          (XATTR_FILL_FIRST + 2);  /* V3: 1020  V2: 1020 */
+constexpr TypedWhichId<XFillHatchItem>             XATTR_FILLHATCH             (XATTR_FILL_FIRST + 3);  /* V3: 1021  V2: 1021 */
+constexpr TypedWhichId<XFillBitmapItem>            XATTR_FILLBITMAP            (XATTR_FILL_FIRST + 4);  /* V3: 1022  V2: 1022 */
+constexpr TypedWhichId<XFillTransparenceItem>      XATTR_FILLTRANSPARENCE      (XATTR_FILL_FIRST + 5);  /* V3: 1023  V2: 1023 */
+constexpr TypedWhichId<XGradientStepCountItem>     XATTR_GRADIENTSTEPCOUNT     (XATTR_FILL_FIRST + 6);  /* V3: 1024  V2: 1024 */
+constexpr TypedWhichId<XFillBmpTileItem>           XATTR_FILLBMP_TILE          (XATTR_FILL_FIRST + 7);  /* V3: 1025  V2: 1025 */
+constexpr TypedWhichId<XFillBmpPosItem>            XATTR_FILLBMP_POS           (XATTR_FILL_FIRST + 8);  /* V3: 1026  V2: 1026 */
+constexpr TypedWhichId<SfxMetricItem>              XATTR_FILLBMP_SIZEX         (XATTR_FILL_FIRST + 9);  /* V3: 1027  V2: 1027 */
+constexpr TypedWhichId<XFillBmpSizeYItem>          XATTR_FILLBMP_SIZEY         (XATTR_FILL_FIRST + 10); /* V3: 1028  V2: 1028 */
+constexpr TypedWhichId<XFillFloatTransparenceItem> XATTR_FILLFLOATTRANSPARENCE (XATTR_FILL_FIRST + 11); /* V3: 1029  V2: 1029 */
+constexpr TypedWhichId<XSecondaryFillColorItem>    XATTR_SECONDARYFILLCOLOR    (XATTR_FILL_FIRST + 12); /* V3: 1030 */
+constexpr TypedWhichId<XFillBmpSizeLogItem>        XATTR_FILLBMP_SIZELOG       (XATTR_FILL_FIRST + 13); /* V3: 1031 */
+constexpr TypedWhichId<XFillBmpTileOffsetXItem>    XATTR_FILLBMP_TILEOFFSETX   (XATTR_FILL_FIRST + 14); /* V3: 1032 */
+constexpr TypedWhichId<XFillBmpTileOffsetYItem>    XATTR_FILLBMP_TILEOFFSETY   (XATTR_FILL_FIRST + 15); /* V3: 1033 */
+constexpr TypedWhichId<XFillBmpStretchItem>        XATTR_FILLBMP_STRETCH       (XATTR_FILL_FIRST + 16); /* V3: 1034 */
+constexpr TypedWhichId<XFillBmpPosOffsetXItem>     XATTR_FILLBMP_POSOFFSETX    (XATTR_FILL_FIRST + 17); /* V3: 1041 */
+constexpr TypedWhichId<XFillBmpPosOffsetYItem>     XATTR_FILLBMP_POSOFFSETY    (XATTR_FILL_FIRST + 18); /* V3: 1042 */
+constexpr TypedWhichId<XFillBackgroundItem>        XATTR_FILLBACKGROUND        (XATTR_FILL_FIRST + 19); /* V3: 1043 */
+constexpr sal_uInt16                               XATTR_FILL_LAST             (XATTR_FILLBACKGROUND);
+constexpr TypedWhichId<XFillAttrSetItem>           XATTRSET_FILL               (XATTR_FILL_LAST + 1);   /* V3: 1047  V2: 1030 */
 
-constexpr auto XATTR_TEXT_FIRST = XATTRSET_FILL + 1;
-#define XATTR_FORMTXTSTYLE      TypedWhichId<XFormTextStyleItem>(XATTR_TEXT_FIRST)                /* V3: 1048  V2: 1031 */
-#define XATTR_FORMTXTADJUST     TypedWhichId<XFormTextAdjustItem>(XATTR_TEXT_FIRST + 1)          /* V3: 1049  V2: 1032 */
-#define XATTR_FORMTXTDISTANCE   TypedWhichId<XFormTextDistanceItem>(XATTR_TEXT_FIRST + 2)          /* V3: 1050  V2: 1033 */
-#define XATTR_FORMTXTSTART      TypedWhichId<XFormTextStartItem>(XATTR_TEXT_FIRST + 3)          /* V3: 1051  V2: 1034 */
-#define XATTR_FORMTXTMIRROR     TypedWhichId<XFormTextMirrorItem>(XATTR_TEXT_FIRST + 4)          /* V3: 1052  V2: 1035 */
-#define XATTR_FORMTXTOUTLINE    TypedWhichId<XFormTextOutlineItem>(XATTR_TEXT_FIRST + 5)          /* V3: 1053  V2: 1036 */
-#define XATTR_FORMTXTSHADOW     TypedWhichId<XFormTextShadowItem>(XATTR_TEXT_FIRST + 6)          /* V3: 1054  V2: 1037 */
-#define XATTR_FORMTXTSHDWCOLOR  TypedWhichId<XFormTextShadowColorItem>(XATTR_TEXT_FIRST + 7)          /* V3: 1055  V2: 1038 */
-#define XATTR_FORMTXTSHDWXVAL   TypedWhichId<XFormTextShadowXValItem>(XATTR_TEXT_FIRST + 8)          /* V3: 1056  V2: 1039 */
-#define XATTR_FORMTXTSHDWYVAL   TypedWhichId<XFormTextShadowYValItem>(XATTR_TEXT_FIRST + 9)          /* V3: 1057  V2: 1040 */
-#define XATTR_FORMTXTHIDEFORM   TypedWhichId<XFormTextHideFormItem>(XATTR_TEXT_FIRST + 10)         /* V3: 1059  V2: 1042 */
-#define XATTR_FORMTXTSHDWTRANSP TypedWhichId<XFormTextShadowTranspItem>(XATTR_TEXT_FIRST + 11)         /* V3: 1060  V2: 1043 */
-#define XATTR_TEXT_LAST         XATTR_FORMTXTSHDWTRANSP
+constexpr sal_uInt16                              XATTR_TEXT_FIRST        (XATTRSET_FILL + 1);
+constexpr TypedWhichId<XFormTextStyleItem>        XATTR_FORMTXTSTYLE      (XATTR_TEXT_FIRST);      /* V3: 1048  V2: 1031 */
+constexpr TypedWhichId<XFormTextAdjustItem>       XATTR_FORMTXTADJUST     (XATTR_TEXT_FIRST + 1);  /* V3: 1049  V2: 1032 */
+constexpr TypedWhichId<XFormTextDistanceItem>     XATTR_FORMTXTDISTANCE   (XATTR_TEXT_FIRST + 2);  /* V3: 1050  V2: 1033 */
+constexpr TypedWhichId<XFormTextStartItem>        XATTR_FORMTXTSTART      (XATTR_TEXT_FIRST + 3);  /* V3: 1051  V2: 1034 */
+constexpr TypedWhichId<XFormTextMirrorItem>       XATTR_FORMTXTMIRROR     (XATTR_TEXT_FIRST + 4);  /* V3: 1052  V2: 1035 */
+constexpr TypedWhichId<XFormTextOutlineItem>      XATTR_FORMTXTOUTLINE    (XATTR_TEXT_FIRST + 5);  /* V3: 1053  V2: 1036 */
+constexpr TypedWhichId<XFormTextShadowItem>       XATTR_FORMTXTSHADOW     (XATTR_TEXT_FIRST + 6);  /* V3: 1054  V2: 1037 */
+constexpr TypedWhichId<XFormTextShadowColorItem>  XATTR_FORMTXTSHDWCOLOR  (XATTR_TEXT_FIRST + 7);  /* V3: 1055  V2: 1038 */
+constexpr TypedWhichId<XFormTextShadowXValItem>   XATTR_FORMTXTSHDWXVAL   (XATTR_TEXT_FIRST + 8);  /* V3: 1056  V2: 1039 */
+constexpr TypedWhichId<XFormTextShadowYValItem>   XATTR_FORMTXTSHDWYVAL   (XATTR_TEXT_FIRST + 9);  /* V3: 1057  V2: 1040 */
+constexpr TypedWhichId<XFormTextHideFormItem>     XATTR_FORMTXTHIDEFORM   (XATTR_TEXT_FIRST + 10); /* V3: 1059  V2: 1042 */
+constexpr TypedWhichId<XFormTextShadowTranspItem> XATTR_FORMTXTSHDWTRANSP (XATTR_TEXT_FIRST + 11); /* V3: 1060  V2: 1043 */
+constexpr sal_uInt16                              XATTR_TEXT_LAST         (XATTR_FORMTXTSHDWTRANSP);
 
-#define XATTR_END               XATTR_TEXT_LAST
+constexpr sal_uInt16 XATTR_END = XATTR_TEXT_LAST;
 
 #endif
 

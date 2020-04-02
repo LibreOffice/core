@@ -356,7 +356,7 @@ SwFltStackEntry* SwFltControlStack::SetAttr(const SwPosition& rPos,
 
     OSL_ENSURE(!nAttrId ||
         (POOLATTR_BEGIN <= nAttrId && POOLATTR_END > nAttrId) ||
-        (RES_FLTRATTR_BEGIN <= nAttrId && o3tl::make_unsigned(RES_FLTRATTR_END) > nAttrId),
+        (RES_FLTRATTR_BEGIN <= nAttrId && RES_FLTRATTR_END > nAttrId),
         "Wrong id for attribute");
 
     auto aI = m_Entries.begin();
