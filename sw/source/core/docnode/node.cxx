@@ -1370,6 +1370,7 @@ void SwContentNode::DelFrames(SwRootFrame const*const pLayout)
                             *static_cast<SwTextNode*>(this), 0, Len());
                     // pointer should have been updated to a different node
                     assert(this != pMerged->pParaPropsNode);
+                    assert(pMerged->listener.IsListeningTo(pMerged->pParaPropsNode));
                     assert(GetIndex() <= pMerged->pLastNode->GetIndex());
                     if (this == pMerged->pLastNode)
                     {
@@ -1390,6 +1391,7 @@ void SwContentNode::DelFrames(SwRootFrame const*const pLayout)
                             }
                         }
                         assert(pMerged->pFirstNode->GetIndex() <= pMerged->pLastNode->GetIndex());
+                        assert(pMerged->listener.IsListeningTo(pMerged->pLastNode));
                     }
                     // avoid re-parenting mess (ModifyChangedHint)
                     pMerged->listener.EndListening(this);
