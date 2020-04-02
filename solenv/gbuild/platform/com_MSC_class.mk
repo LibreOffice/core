@@ -79,8 +79,9 @@ endef
 
 # PrecompiledHeader class
 
-gb_PrecompiledHeader_get_enableflags = -Yu$(1).hxx \
-	-FI$(1).hxx \
+gb_PrecompiledHeader_get_enableflags = \
+	-Yu$(SRCDIR)/$(3).hxx \
+	-FI$(SRCDIR)/$(3).hxx \
 	-Fp$(call gb_PrecompiledHeader_get_target,$(1),$(2)) \
 	$(gb_PCHWARNINGS)
 
