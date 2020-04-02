@@ -53,21 +53,6 @@ class SwOutlineContent : public SwContent
     bool        IsMoveable() const {return bIsMoveable;};
 };
 
-class SwRegionContent : public SwContent
-{
-
-    sal_uInt8   nRegionLevel;
-
-    public:
-        SwRegionContent(    const SwContentType* pCnt,
-                            const OUString& rName,
-                            sal_uInt8 nLevel,
-                            long nYPos) :
-            SwContent(pCnt, rName, nYPos),
-                        nRegionLevel(nLevel){}
-    sal_uInt8   GetRegionLevel() const {return nRegionLevel;}
-};
-
 class SwURLFieldContent : public SwContent
 {
     OUString sURL;
