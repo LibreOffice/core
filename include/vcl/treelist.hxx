@@ -281,7 +281,7 @@ public:
 
     bool                IsExpanded( SvTreeListEntry* pEntry ) const;
     bool                IsAllExpanded( SvTreeListEntry* pEntry) const;
-    bool                IsSelected( SvTreeListEntry* pEntry ) const;
+    bool                IsSelected(const SvTreeListEntry* pEntry) const;
     void                SetEntryFocus( SvTreeListEntry* pEntry, bool bFocus );
     const SvViewDataEntry*         GetViewData( const SvTreeListEntry* pEntry ) const;
     SvViewDataEntry*         GetViewData( SvTreeListEntry* pEntry );
