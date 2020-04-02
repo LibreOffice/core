@@ -22,6 +22,14 @@ interface BaseTextEditView
     [
         ExecMethod = Execute ;
     ]
+    FN_TO_PREV_PAGE
+    [
+        ExecMethod = Execute ;
+    ]
+    FN_TO_NEXT_PAGE
+    [
+        ExecMethod = Execute ;
+    ]
     FN_PAGEUP // status(final|play)
     [
         ExecMethod = Execute ;
