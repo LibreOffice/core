@@ -784,11 +784,6 @@ void SvTreeListBox::FillEntryPath( SvTreeListEntry* pEntry, ::std::deque< sal_In
     }
 }
 
-const SvTreeListEntry* SvTreeListBox::GetParent( const SvTreeListEntry* pEntry ) const
-{
-    return pModel->GetParent(pEntry);
-}
-
 SvTreeListEntry* SvTreeListBox::GetParent( SvTreeListEntry* pEntry ) const
 {
     return pModel->GetParent(pEntry);
@@ -1409,11 +1404,6 @@ void SvTreeListBox::SetSublistOpenWithReturn()
 void SvTreeListBox::SetSublistOpenWithLeftRight()
 {
     pImpl->m_bSubLstOpLR = true;
-}
-
-void SvTreeListBox::SetSublistDontOpenWithDoubleClick(bool bDontOpen)
-{
-    pImpl->m_bSubLstOpDblClick = !bDontOpen;
 }
 
 void SvTreeListBox::Resize()
@@ -3408,11 +3398,6 @@ ScrollBar *SvTreeListBox::GetVScroll()
     return pImpl->m_aVerSBar.get();
 }
 
-void SvTreeListBox::EnableAsyncDrag( bool b )
-{
-    pImpl->EnableAsyncDrag( b );
-}
-
 SvTreeListEntry* SvTreeListBox::GetFirstEntryInView() const
 {
     return GetEntry( Point() );
@@ -3429,19 +3414,6 @@ SvTreeListEntry* SvTreeListBox::GetNextEntryInView(SvTreeListEntry* pEntry ) con
             return nullptr;
     }
     return pNext;
-}
-
-SvTreeListEntry* SvTreeListBox::GetPrevEntryInView(SvTreeListEntry* pEntry ) const
-{
-    SvTreeListEntry* pPrev = PrevVisible( pEntry );
-    if( pPrev )
-    {
-        Point aPos( GetEntryPosition(pPrev) );
-        const Size& rSize = pImpl->GetOutputSize();
-        if( aPos.Y() < 0 || aPos.Y() >= rSize.Height() )
-            return nullptr;
-    }
-    return pPrev;
 }
 
 SvTreeListEntry* SvTreeListBox::GetLastEntryInView() const

@@ -88,9 +88,6 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinS
     m_nNodeBmpTabDistance = NODE_BMP_TABDIST_NOTVALID;
     m_nNodeBmpWidth       = 0;
 
-    m_bAsyncBeginDrag     = false;
-    m_aAsyncBeginDragIdle.SetPriority( TaskPriority::HIGHEST );
-    m_aAsyncBeginDragIdle.SetInvokeHandler( LINK(this,SvImpLBox,BeginDragHdl));
     // button animation in listbox
     m_pActiveButton = nullptr;
     m_pActiveEntry = nullptr;
@@ -110,7 +107,6 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinS
     m_nFlags |= LBoxFlags::Filling;
 
     m_bSubLstOpRet = m_bSubLstOpLR = m_bContextMenuHandling = false;
-    m_bSubLstOpDblClick = true;
 }
 
 SvImpLBox::~SvImpLBox()
@@ -2039,13 +2035,10 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
             }
             if( pEntry->HasChildren() || pEntry->HasChildrenOnDemand() )
             {
-                if( m_bSubLstOpDblClick )
-                {
-                    if( m_pView->IsExpanded(pEntry) )
-                        m_pView->Collapse( pEntry );
-                    else
-                        m_pView->Expand( pEntry );
-                }
+                if( m_pView->IsExpanded(pEntry) )
+                    m_pView->Collapse( pEntry );
+                else
+                    m_pView->Expand( pEntry );
                 if( pEntry == m_pCursor )  // only if Entryitem was clicked
                                           // (Nodebutton is not an Entryitem!)
                     m_pView->Select( m_pCursor );
@@ -2848,22 +2841,9 @@ void SvImpLBox::SetDragDropMode( DragDropMode eDDMode )
 void SvImpLBox::BeginDrag()
 {
     m_nFlags &= ~LBoxFlags::Filling;
-    if( !m_bAsyncBeginDrag )
-    {
-        BeginScroll();
-        m_pView->StartDrag( 0, m_aSelEng.GetMousePosPixel() );
-        EndScroll();
-    }
-    else
-    {
-        m_aAsyncBeginDragPos = m_aSelEng.GetMousePosPixel();
-        m_aAsyncBeginDragIdle.Start();
-    }
-}
-
-IMPL_LINK_NOARG(SvImpLBox, BeginDragHdl, Timer *, void)
-{
-    m_pView->StartDrag( 0, m_aAsyncBeginDragPos );
+    BeginScroll();
+    m_pView->StartDrag( 0, m_aSelEng.GetMousePosPixel() );
+    EndScroll();
 }
 
 void SvImpLBox::PaintDDCursor(SvTreeListEntry* pEntry, bool bShow)
