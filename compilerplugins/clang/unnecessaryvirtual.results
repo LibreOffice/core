@@ -90,39 +90,39 @@ canvas/inc/base/canvasbase.hxx:416
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::drawBitmapModulated(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
 canvas/inc/base/canvasbase.hxx:432
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XGraphicDevice> canvas::CanvasBase::getDevice()
-canvas/inc/base/canvascustomspritebase.hxx:94
+canvas/inc/base/canvascustomspritebase.hxx:93
     void canvas::CanvasCustomSpriteBase::disposeThis()
-canvas/inc/base/canvascustomspritebase.hxx:105
+canvas/inc/base/canvascustomspritebase.hxx:104
     void canvas::CanvasCustomSpriteBase::clear()
-canvas/inc/base/canvascustomspritebase.hxx:116
+canvas/inc/base/canvascustomspritebase.hxx:115
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasCustomSpriteBase::drawBitmap(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
-canvas/inc/base/canvascustomspritebase.hxx:142
+canvas/inc/base/canvascustomspritebase.hxx:141
     void canvas::CanvasCustomSpriteBase::setAlpha(double,)
-canvas/inc/base/canvascustomspritebase.hxx:151
+canvas/inc/base/canvascustomspritebase.hxx:150
     void canvas::CanvasCustomSpriteBase::move(const struct com::sun::star::geometry::RealPoint2D &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
-canvas/inc/base/canvascustomspritebase.hxx:164
+canvas/inc/base/canvascustomspritebase.hxx:163
     void canvas::CanvasCustomSpriteBase::transform(const struct com::sun::star::geometry::AffineMatrix2D &,)
-canvas/inc/base/canvascustomspritebase.hxx:175
+canvas/inc/base/canvascustomspritebase.hxx:174
     void canvas::CanvasCustomSpriteBase::clip(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,)
-canvas/inc/base/canvascustomspritebase.hxx:184
+canvas/inc/base/canvascustomspritebase.hxx:183
     void canvas::CanvasCustomSpriteBase::setPriority(double,)
-canvas/inc/base/canvascustomspritebase.hxx:191
+canvas/inc/base/canvascustomspritebase.hxx:190
     void canvas::CanvasCustomSpriteBase::show()
-canvas/inc/base/canvascustomspritebase.hxx:198
+canvas/inc/base/canvascustomspritebase.hxx:197
     void canvas::CanvasCustomSpriteBase::hide()
-canvas/inc/base/canvascustomspritebase.hxx:207
+canvas/inc/base/canvascustomspritebase.hxx:206
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XCanvas> canvas::CanvasCustomSpriteBase::getContentCanvas()
-canvas/inc/base/canvascustomspritebase.hxx:215
+canvas/inc/base/canvascustomspritebase.hxx:214
     _Bool canvas::CanvasCustomSpriteBase::isAreaUpdateOpaque(const class basegfx::B2DRange &,)const
-canvas/inc/base/canvascustomspritebase.hxx:222
+canvas/inc/base/canvascustomspritebase.hxx:221
     _Bool canvas::CanvasCustomSpriteBase::isContentChanged()const
-canvas/inc/base/canvascustomspritebase.hxx:229
+canvas/inc/base/canvascustomspritebase.hxx:228
     class basegfx::B2DPoint canvas::CanvasCustomSpriteBase::getPosPixel()const
-canvas/inc/base/canvascustomspritebase.hxx:236
+canvas/inc/base/canvascustomspritebase.hxx:235
     class basegfx::B2DVector canvas::CanvasCustomSpriteBase::getSizePixel()const
-canvas/inc/base/canvascustomspritebase.hxx:243
+canvas/inc/base/canvascustomspritebase.hxx:242
     class basegfx::B2DRange canvas::CanvasCustomSpriteBase::getUpdateArea()const
-canvas/inc/base/canvascustomspritebase.hxx:250
+canvas/inc/base/canvascustomspritebase.hxx:249
     double canvas::CanvasCustomSpriteBase::getPriority()const
 canvas/inc/base/disambiguationhelper.hxx:70
     void canvas::DisambiguationHelper::disposing()
@@ -216,19 +216,19 @@ chart2/source/inc/WeakListenerAdapter.hxx:57
     void chart::WeakListenerAdapter::disposing(const struct com::sun::star::lang::EventObject &,)
 extensions/source/dbpilots/unoautopilot.hxx:98
     class cppu::IPropertyArrayHelper * dbp::OUnoAutoPilot::createArrayHelper()const
-extensions/source/propctrlr/commoncontrol.hxx:131
+extensions/source/propctrlr/commoncontrol.hxx:130
     short pcr::CommonBehaviourControl::getControlType()
-extensions/source/propctrlr/commoncontrol.hxx:133
+extensions/source/propctrlr/commoncontrol.hxx:132
     class com::sun::star::uno::Reference<class com::sun::star::inspection::XPropertyControlContext> pcr::CommonBehaviourControl::getControlContext()
-extensions/source/propctrlr/commoncontrol.hxx:135
+extensions/source/propctrlr/commoncontrol.hxx:134
     void pcr::CommonBehaviourControl::setControlContext(const class com::sun::star::uno::Reference<class com::sun::star::inspection::XPropertyControlContext> &,)
-extensions/source/propctrlr/commoncontrol.hxx:137
+extensions/source/propctrlr/commoncontrol.hxx:136
     class com::sun::star::uno::Reference<class com::sun::star::awt::XWindow> pcr::CommonBehaviourControl::getControlWindow()
-extensions/source/propctrlr/commoncontrol.hxx:139
+extensions/source/propctrlr/commoncontrol.hxx:138
     unsigned char pcr::CommonBehaviourControl::isModified()
-extensions/source/propctrlr/commoncontrol.hxx:141
+extensions/source/propctrlr/commoncontrol.hxx:140
     void pcr::CommonBehaviourControl::notifyModifiedValue()
-extensions/source/propctrlr/commoncontrol.hxx:156
+extensions/source/propctrlr/commoncontrol.hxx:155
     void pcr::CommonBehaviourControl::disposing()
 forms/source/xforms/datatypes.hxx:233
     class cppu::IPropertyArrayHelper * xforms::ODerivedDataType::createArrayHelper()const
@@ -262,7 +262,7 @@ include/comphelper/solarmutex.hxx:59
     _Bool comphelper::SolarMutex::tryToAcquire()
 include/comphelper/unique_disposing_ptr.hxx:169
     void comphelper::unique_disposing_solar_mutex_reset_ptr::reset(type-parameter-0-0 *,)
-include/comphelper/weakeventlistener.hxx:119
+include/comphelper/weakeventlistener.hxx:120
     void comphelper::OWeakListenerAdapter::disposing(const struct com::sun::star::lang::EventObject &,)
 include/svl/svdde.hxx:237
     class DdeData * DdeTopic::Get(enum SotClipboardFormatId,)
@@ -276,8 +276,6 @@ include/svl/svdde.hxx:244
     _Bool DdeTopic::StartAdviseLoop()
 include/svl/svdde.hxx:300
     void DdeService::~DdeService()
-include/svtools/valueset.hxx:291
-    void ValueSet::Select()
 include/vbahelper/vbacollectionimpl.hxx:290
     int ScVbaCollectionBase::getCount()
 include/vbahelper/vbacollectionimpl.hxx:295
@@ -302,12 +300,18 @@ include/vbahelper/vbareturntypes.hxx:41
     type-parameter-0-0 ooo::vba::DefaultReturnHelper::getValue()
 include/vcl/customweld.hxx:42
     class rtl::OUString weld::CustomWidgetController::GetHelpText()const
-include/vcl/field.hxx:213
-    void MetricFormatter::SetValue(long,enum FieldUnit,)
-include/vcl/field.hxx:230
-    long MetricFormatter::GetValueFromStringUnit(const class rtl::OUString &,enum FieldUnit,)const
-include/vcl/treelistbox.hxx:460
-    class SvTreeListEntry * SvTreeListBox::CloneEntry(class SvTreeListEntry *,)
+include/vcl/lstbox.hxx:135
+    void ListBox::DoubleClick()
+include/vcl/treelistbox.hxx:458
+    _Bool SvTreeListBox::NotifyAcceptDrop(class SvTreeListEntry *,)
+include/vcl/treelistbox.hxx:470
+    enum TriState SvTreeListBox::NotifyCopying(class SvTreeListEntry *,class SvTreeListEntry *,class SvTreeListEntry *&,unsigned long &,)
+include/vcl/treelistbox.hxx:493
+    class rtl::OUString SvTreeListBox::GetEntryAltText(class SvTreeListEntry *,)const
+include/vcl/treelistbox.hxx:494
+    class rtl::OUString SvTreeListBox::GetEntryLongDescription(class SvTreeListEntry *,)const
+include/vcl/treelistbox.hxx:669
+    long SvTreeListBox::GetTabPos(const class SvTreeListEntry *,class SvLBoxTab *,)
 include/vcl/weld.hxx:103
     void weld::Widget::set_visible(_Bool,)
 sc/source/core/opencl/formulagroupcl.cxx:1061
@@ -412,6 +416,8 @@ vcl/inc/salframe.hxx:145
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
 vcl/inc/salframe.hxx:194
     void SalFrame::Flush(const class tools::Rectangle &,)
+vcl/inc/salframe.hxx:264
+    void SalFrame::BeginSheet(class SalFrame *,)const
 vcl/inc/salinst.hxx:92
     _Bool SalInstance::SVMainHook(int *,)
 vcl/inc/salinst.hxx:202
@@ -426,43 +432,43 @@ vcl/inc/salobj.hxx:49
     void SalObject::Enable(_Bool,)
 vcl/inc/salprn.hxx:116
     enum SalPrinterError SalPrinter::GetErrorCode()
-vcl/inc/skia/gdiimpl.hxx:213
+vcl/inc/skia/gdiimpl.hxx:222
     void SkiaSalGraphicsImpl::createSurface()
 vcl/inc/unx/gtk/gtkdata.hxx:121
     int GtkSalDisplay::CaptureMouse(class SalFrame *,)
 vcl/inc/unx/saldata.hxx:50
     void X11SalData::Init()
-vcl/inc/unx/saldisp.hxx:182
+vcl/inc/unx/saldisp.hxx:181
     void SalXLib::~SalXLib()
-vcl/inc/unx/saldisp.hxx:183
+vcl/inc/unx/saldisp.hxx:182
     void SalXLib::Init()
-vcl/inc/unx/saldisp.hxx:185
+vcl/inc/unx/saldisp.hxx:184
     _Bool SalXLib::Yield(_Bool,_Bool,)
-vcl/inc/unx/saldisp.hxx:186
+vcl/inc/unx/saldisp.hxx:185
     void SalXLib::Wakeup()
-vcl/inc/unx/saldisp.hxx:189
+vcl/inc/unx/saldisp.hxx:188
     void SalXLib::Insert(int,void *,int (*)(int, void *),int (*)(int, void *),int (*)(int, void *),)
-vcl/inc/unx/saldisp.hxx:193
+vcl/inc/unx/saldisp.hxx:192
     void SalXLib::Remove(int,)
-vcl/inc/unx/saldisp.hxx:195
+vcl/inc/unx/saldisp.hxx:194
     void SalXLib::StartTimer(unsigned long,)
-vcl/inc/unx/saldisp.hxx:196
+vcl/inc/unx/saldisp.hxx:195
     void SalXLib::StopTimer()
-vcl/inc/unx/saldisp.hxx:198
+vcl/inc/unx/saldisp.hxx:197
     _Bool SalXLib::CheckTimeout(_Bool,)
-vcl/inc/unx/saldisp.hxx:406
+vcl/inc/unx/saldisp.hxx:405
     void SalX11Display::Yield()
 vcl/inc/unx/salframe.h:207
     void X11SalFrame::updateGraphics(_Bool,)
 vcl/inc/unx/salinst.h:44
     class SalX11Display * X11SalInstance::CreateDisplay()const
-workdir/../vcl/inc/qt5/Qt5Frame.hxx:161
+workdir/../vcl/inc/qt5/Qt5Frame.hxx:160
     void Qt5Frame::registerDragSource(class Qt5DragSource *,)
-workdir/../vcl/inc/qt5/Qt5Frame.hxx:162
+workdir/../vcl/inc/qt5/Qt5Frame.hxx:161
     void Qt5Frame::deregisterDragSource(const class Qt5DragSource *,)
-workdir/../vcl/inc/qt5/Qt5Frame.hxx:163
+workdir/../vcl/inc/qt5/Qt5Frame.hxx:162
     void Qt5Frame::registerDropTarget(class Qt5DropTarget *,)
-workdir/../vcl/inc/qt5/Qt5Frame.hxx:164
+workdir/../vcl/inc/qt5/Qt5Frame.hxx:163
     void Qt5Frame::deregisterDropTarget(const class Qt5DropTarget *,)
 writerfilter/source/ooxml/OOXMLFactory.hxx:67
     void writerfilter::ooxml::OOXMLFactory_ns::startAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
