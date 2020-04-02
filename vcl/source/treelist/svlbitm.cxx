@@ -244,7 +244,12 @@ void SvLBoxString::Paint(
 std::unique_ptr<SvLBoxItem> SvLBoxString::Clone(SvLBoxItem const * pSource) const
 {
     std::unique_ptr<SvLBoxString> pNew(new SvLBoxString);
-    pNew->maText = static_cast<SvLBoxString const *>(pSource)->maText;
+
+    const SvLBoxString* pOther = static_cast<const SvLBoxString*>(pSource);
+    pNew->maText = pOther->maText;
+    pNew->mbEmphasized = pOther->mbEmphasized;
+    pNew->mfAlign = pOther->mfAlign;
+
     return std::unique_ptr<SvLBoxItem>(pNew.release());
 }
 
