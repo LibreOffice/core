@@ -1915,40 +1915,40 @@ bool GeometryHandler::impl_isDefaultFunction_nothrow( const uno::Reference< repo
 
 void GeometryHandler::loadDefaultFunctions()
 {
-    if ( m_aDefaultFunctions.empty() )
-    {
-        m_aCounterFunction.m_bPreEvaluated = false;
-        m_aCounterFunction.m_sName = RptResId(RID_STR_F_COUNTER);
-        m_aCounterFunction.m_sFormula = "rpt:[%FunctionName] + 1";
-        m_aCounterFunction.m_sSearchString = "rpt:\\[[:alpha:]+([:space:]*[:alnum:]*)*\\][:space:]*\\+[:space:]*[:digit:]*";
-        m_aCounterFunction.m_sInitialFormula.IsPresent = true;
-        m_aCounterFunction.m_sInitialFormula.Value = "rpt:1";
+    if ( !m_aDefaultFunctions.empty() )
+        return;
 
-        DefaultFunction aDefault;
+    m_aCounterFunction.m_bPreEvaluated = false;
+    m_aCounterFunction.m_sName = RptResId(RID_STR_F_COUNTER);
+    m_aCounterFunction.m_sFormula = "rpt:[%FunctionName] + 1";
+    m_aCounterFunction.m_sSearchString = "rpt:\\[[:alpha:]+([:space:]*[:alnum:]*)*\\][:space:]*\\+[:space:]*[:digit:]*";
+    m_aCounterFunction.m_sInitialFormula.IsPresent = true;
+    m_aCounterFunction.m_sInitialFormula.Value = "rpt:1";
 
-        aDefault.m_bPreEvaluated = true;
+    DefaultFunction aDefault;
 
-        aDefault.m_sName = RptResId(RID_STR_F_ACCUMULATION);
-        aDefault.m_sFormula = "rpt:[%Column] + [%FunctionName]";
-        aDefault.m_sSearchString = "rpt:\\[[:alpha:]+([:space:]*[:alnum:]*)*\\][:space:]*\\+[:space:]*\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]";
-        aDefault.m_sInitialFormula.IsPresent = true;
-        aDefault.m_sInitialFormula.Value = "rpt:[%Column]";
-        m_aDefaultFunctions.push_back(aDefault);
+    aDefault.m_bPreEvaluated = true;
 
-        aDefault.m_sName = RptResId(RID_STR_F_MINIMUM);
-        aDefault.m_sFormula = "rpt:IF([%Column] < [%FunctionName];[%Column];[%FunctionName])";
-        aDefault.m_sSearchString = "rpt:IF\\((\\[[:alpha:]+([:space:]*[:alnum:]*)*\\])[:space:]*<[:space:]*(\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]);[:space:]*\\1[:space:]*;[:space:]*\\3[:space:]*\\)";
-        aDefault.m_sInitialFormula.IsPresent = true;
-        aDefault.m_sInitialFormula.Value = "rpt:[%Column]";
-        m_aDefaultFunctions.push_back(aDefault);
+    aDefault.m_sName = RptResId(RID_STR_F_ACCUMULATION);
+    aDefault.m_sFormula = "rpt:[%Column] + [%FunctionName]";
+    aDefault.m_sSearchString = "rpt:\\[[:alpha:]+([:space:]*[:alnum:]*)*\\][:space:]*\\+[:space:]*\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]";
+    aDefault.m_sInitialFormula.IsPresent = true;
+    aDefault.m_sInitialFormula.Value = "rpt:[%Column]";
+    m_aDefaultFunctions.push_back(aDefault);
 
-        aDefault.m_sName = RptResId(RID_STR_F_MAXIMUM);
-        aDefault.m_sFormula = "rpt:IF([%Column] > [%FunctionName];[%Column];[%FunctionName])";
-        aDefault.m_sSearchString = "rpt:IF\\((\\[[:alpha:]+([:space:]*[:alnum:]*)*\\])[:space:]*>[:space:]*(\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]);[:space:]*\\1[:space:]*;[:space:]*\\3[:space:]*\\)";
-        aDefault.m_sInitialFormula.IsPresent = true;
-        aDefault.m_sInitialFormula.Value = "rpt:[%Column]";
-        m_aDefaultFunctions.push_back(aDefault);
-    }
+    aDefault.m_sName = RptResId(RID_STR_F_MINIMUM);
+    aDefault.m_sFormula = "rpt:IF([%Column] < [%FunctionName];[%Column];[%FunctionName])";
+    aDefault.m_sSearchString = "rpt:IF\\((\\[[:alpha:]+([:space:]*[:alnum:]*)*\\])[:space:]*<[:space:]*(\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]);[:space:]*\\1[:space:]*;[:space:]*\\3[:space:]*\\)";
+    aDefault.m_sInitialFormula.IsPresent = true;
+    aDefault.m_sInitialFormula.Value = "rpt:[%Column]";
+    m_aDefaultFunctions.push_back(aDefault);
+
+    aDefault.m_sName = RptResId(RID_STR_F_MAXIMUM);
+    aDefault.m_sFormula = "rpt:IF([%Column] > [%FunctionName];[%Column];[%FunctionName])";
+    aDefault.m_sSearchString = "rpt:IF\\((\\[[:alpha:]+([:space:]*[:alnum:]*)*\\])[:space:]*>[:space:]*(\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]);[:space:]*\\1[:space:]*;[:space:]*\\3[:space:]*\\)";
+    aDefault.m_sInitialFormula.IsPresent = true;
+    aDefault.m_sInitialFormula.Value = "rpt:[%Column]";
+    m_aDefaultFunctions.push_back(aDefault);
 }
 
 void GeometryHandler::createDefaultFunction(::osl::ResettableMutexGuard& _aGuard ,const OUString& _sFunction,const OUString& _sDataField)
@@ -1999,22 +1999,22 @@ void GeometryHandler::createDefaultFunction(::osl::ResettableMutexGuard& _aGuard
 
 void GeometryHandler::removeFunction()
 {
-    if ( m_xFunction.is() )
+    if ( !m_xFunction.is() )
+        return;
+
+    const OUString sQuotedFunctionName(lcl_getQuotedFunctionName(m_xFunction));
+    ::std::pair<TFunctions::iterator,TFunctions::iterator> aFind = m_aFunctionNames.equal_range(sQuotedFunctionName);
+    while ( aFind.first != aFind.second )
     {
-        const OUString sQuotedFunctionName(lcl_getQuotedFunctionName(m_xFunction));
-        ::std::pair<TFunctions::iterator,TFunctions::iterator> aFind = m_aFunctionNames.equal_range(sQuotedFunctionName);
-        while ( aFind.first != aFind.second )
+        if ( aFind.first->second.first == m_xFunction )
         {
-            if ( aFind.first->second.first == m_xFunction )
-            {
-                uno::Reference< report::XFunctions> xFunctions = aFind.first->second.second->getFunctions();
-                xFunctions->removeByIndex(xFunctions->getCount() - 1 ); /// TODO: insert new method in XFunctions: removeFunction(xfunction)
-                m_aFunctionNames.erase(aFind.first);
-                m_bNewFunction = false;
-                break;
-            }
-            ++(aFind.first);
+            uno::Reference< report::XFunctions> xFunctions = aFind.first->second.second->getFunctions();
+            xFunctions->removeByIndex(xFunctions->getCount() - 1 ); /// TODO: insert new method in XFunctions: removeFunction(xfunction)
+            m_aFunctionNames.erase(aFind.first);
+            m_bNewFunction = false;
+            break;
         }
+        ++(aFind.first);
     }
 }
 
@@ -2207,34 +2207,34 @@ void SAL_CALL GeometryHandler::disposing(const lang::EventObject& )
 void SAL_CALL GeometryHandler::propertyChange(const beans::PropertyChangeEvent& /*evt*/)
 {
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
-    if ( !m_bIn )
-    {
-        const sal_uInt32 nOldDataFieldType = m_nDataFieldType;
-        const OUString sOldFunctionName = m_sDefaultFunction;
-        const OUString sOldScope = m_sScope;
-        m_sDefaultFunction.clear();
-        m_sScope.clear();
-        m_nDataFieldType = impl_getDataFieldType_throw();
-        if ( UNDEF_DATA == m_nDataFieldType )
-            m_nDataFieldType = nOldDataFieldType;
-        uno::Any aDataField = m_xReportComponent->getPropertyValue( PROPERTY_DATAFIELD );
-        lcl_convertFormulaTo(aDataField,aDataField);
-        OUString sDataField;
-        aDataField >>= sDataField;
-        switch(m_nDataFieldType)
-        {
-            case FUNCTION:
-                isDefaultFunction(sDataField,sDataField,uno::Reference< report::XFunctionsSupplier>(),true);
-                break;
-            case COUNTER:
-                impl_isCounterFunction_throw(sDataField,m_sScope);
-                break;
-            default:
-                ;
-        }
+    if ( m_bIn )
+        return;
 
-        resetOwnProperties(aGuard,sOldFunctionName,sOldScope,nOldDataFieldType);
+    const sal_uInt32 nOldDataFieldType = m_nDataFieldType;
+    const OUString sOldFunctionName = m_sDefaultFunction;
+    const OUString sOldScope = m_sScope;
+    m_sDefaultFunction.clear();
+    m_sScope.clear();
+    m_nDataFieldType = impl_getDataFieldType_throw();
+    if ( UNDEF_DATA == m_nDataFieldType )
+        m_nDataFieldType = nOldDataFieldType;
+    uno::Any aDataField = m_xReportComponent->getPropertyValue( PROPERTY_DATAFIELD );
+    lcl_convertFormulaTo(aDataField,aDataField);
+    OUString sDataField;
+    aDataField >>= sDataField;
+    switch(m_nDataFieldType)
+    {
+        case FUNCTION:
+            isDefaultFunction(sDataField,sDataField,uno::Reference< report::XFunctionsSupplier>(),true);
+            break;
+        case COUNTER:
+            impl_isCounterFunction_throw(sDataField,m_sScope);
+            break;
+        default:
+            ;
     }
+
+    resetOwnProperties(aGuard,sOldFunctionName,sOldScope,nOldDataFieldType);
 }
 
 } // namespace rptui

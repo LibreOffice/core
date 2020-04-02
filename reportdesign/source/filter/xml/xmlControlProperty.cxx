@@ -140,18 +140,18 @@ void OXMLControlProperty::endFastElement(sal_Int32 )
 {
     if ( m_pContainer )
         m_pContainer->addValue(m_aCharBuffer.makeStringAndClear());
-    if ( !m_aSetting.Name.isEmpty() && m_xControl.is() )
+    if ( !(!m_aSetting.Name.isEmpty() && m_xControl.is()) )
+        return;
+
+    if ( m_bIsList && !m_aSequence.hasElements() )
+        m_aSetting.Value <<= m_aSequence;
+    try
     {
-        if ( m_bIsList && !m_aSequence.hasElements() )
-            m_aSetting.Value <<= m_aSequence;
-        try
-        {
-            m_xControl->setPropertyValue(m_aSetting.Name,m_aSetting.Value);
-        }
-        catch(const Exception&)
-        {
-            OSL_FAIL("Unknown property found!");
-        }
+        m_xControl->setPropertyValue(m_aSetting.Name,m_aSetting.Value);
+    }
+    catch(const Exception&)
+    {
+        OSL_FAIL("Unknown property found!");
     }
 }
 

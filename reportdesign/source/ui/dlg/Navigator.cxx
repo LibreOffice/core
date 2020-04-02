@@ -563,35 +563,35 @@ void NavigatorTree::traverseDetail(const uno::Reference< report::XSection>& xSec
 void NavigatorTree::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
 {
     uno::Reference< report::XReportDefinition> xReport(_rEvent.Source,uno::UNO_QUERY);
-    if ( xReport.is() )
+    if ( !xReport.is() )
+        return;
+
+    bool bEnabled = false;
+    _rEvent.NewValue >>= bEnabled;
+    if ( !bEnabled )
+        return;
+
+    std::unique_ptr<weld::TreeIter> xParent = m_xTreeView->make_iterator();
+    bool bParent = find(xReport, *xParent);
+    if (!bParent)
+        xParent.reset();
+    if ( _rEvent.PropertyName == PROPERTY_REPORTHEADERON )
     {
-        bool bEnabled = false;
-        _rEvent.NewValue >>= bEnabled;
-        if ( bEnabled )
-        {
-            std::unique_ptr<weld::TreeIter> xParent = m_xTreeView->make_iterator();
-            bool bParent = find(xReport, *xParent);
-            if (!bParent)
-                xParent.reset();
-            if ( _rEvent.PropertyName == PROPERTY_REPORTHEADERON )
-            {
-                sal_uLong nPos = xReport->getReportHeaderOn() ? 2 : 1;
-                traverseSection(xReport->getReportHeader(),xParent.get(),RID_SVXBMP_REPORTHEADERFOOTER,nPos);
-            }
-            else if ( _rEvent.PropertyName == PROPERTY_PAGEHEADERON )
-            {
-                traverseSection(xReport->getPageHeader(),xParent.get(), RID_SVXBMP_PAGEHEADERFOOTER,1);
-            }
-            else if ( _rEvent.PropertyName == PROPERTY_PAGEFOOTERON )
-                traverseSection(xReport->getPageFooter(),xParent.get(), RID_SVXBMP_PAGEHEADERFOOTER);
-            else if ( _rEvent.PropertyName == PROPERTY_REPORTFOOTERON )
-            {
-                int nPos = -1;
-                if (xReport->getPageFooterOn() && xParent)
-                    nPos = m_xTreeView->iter_n_children(*xParent) - 1;
-                traverseSection(xReport->getReportFooter(),xParent.get(),RID_SVXBMP_REPORTHEADERFOOTER,nPos);
-            }
-        }
+        sal_uLong nPos = xReport->getReportHeaderOn() ? 2 : 1;
+        traverseSection(xReport->getReportHeader(),xParent.get(),RID_SVXBMP_REPORTHEADERFOOTER,nPos);
+    }
+    else if ( _rEvent.PropertyName == PROPERTY_PAGEHEADERON )
+    {
+        traverseSection(xReport->getPageHeader(),xParent.get(), RID_SVXBMP_PAGEHEADERFOOTER,1);
+    }
+    else if ( _rEvent.PropertyName == PROPERTY_PAGEFOOTERON )
+        traverseSection(xReport->getPageFooter(),xParent.get(), RID_SVXBMP_PAGEHEADERFOOTER);
+    else if ( _rEvent.PropertyName == PROPERTY_REPORTFOOTERON )
+    {
+        int nPos = -1;
+        if (xReport->getPageFooterOn() && xParent)
+            nPos = m_xTreeView->iter_n_children(*xParent) - 1;
+        traverseSection(xReport->getReportFooter(),xParent.get(),RID_SVXBMP_REPORTHEADERFOOTER,nPos);
     }
 }
 

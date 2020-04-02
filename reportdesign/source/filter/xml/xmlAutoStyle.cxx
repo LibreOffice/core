@@ -36,32 +36,32 @@ void OXMLAutoStylePoolP::exportStyleAttributes(
             ) const
 {
     SvXMLAutoStylePoolP::exportStyleAttributes( rAttrList, nFamily, rProperties, rPropExp, rUnitConverter, rNamespaceMap );
-    if ( nFamily == XmlStyleFamily::TABLE_CELL )
+    if ( nFamily != XmlStyleFamily::TABLE_CELL )
+        return;
+
+    rtl::Reference< XMLPropertySetMapper > aPropMapper = rORptExport.GetCellStylePropertyMapper();
+    for (const auto& rProp : rProperties)
     {
-        rtl::Reference< XMLPropertySetMapper > aPropMapper = rORptExport.GetCellStylePropertyMapper();
-        for (const auto& rProp : rProperties)
+        sal_Int16 nContextID = aPropMapper->GetEntryContextId(rProp.mnIndex);
+        switch (nContextID)
         {
-            sal_Int16 nContextID = aPropMapper->GetEntryContextId(rProp.mnIndex);
-            switch (nContextID)
+            case CTF_RPT_NUMBERFORMAT :
             {
-                case CTF_RPT_NUMBERFORMAT :
+                OUString sAttrValue;
+                if ( rProp.maValue >>= sAttrValue )
                 {
-                    OUString sAttrValue;
-                    if ( rProp.maValue >>= sAttrValue )
+                    if ( !sAttrValue.isEmpty() )
                     {
-                        if ( !sAttrValue.isEmpty() )
-                        {
-                            rORptExport.AddAttribute(
-                                aPropMapper->GetEntryNameSpace(rProp.mnIndex),
-                                aPropMapper->GetEntryXMLName(rProp.mnIndex),
-                                sAttrValue );
-                        }
+                        rORptExport.AddAttribute(
+                            aPropMapper->GetEntryNameSpace(rProp.mnIndex),
+                            aPropMapper->GetEntryXMLName(rProp.mnIndex),
+                            sAttrValue );
                     }
-                    break;
                 }
-                default:
-                    break;
+                break;
             }
+            default:
+                break;
         }
     }
 }

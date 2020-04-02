@@ -230,24 +230,24 @@ void SAL_CALL DataProviderHandler::setPropertyValue(const OUString & PropertyNam
 void DataProviderHandler::impl_updateChartTitle_throw(const uno::Any& _aValue)
 {
     uno::Reference<chart2::XTitled> xTitled(m_xChartModel,uno::UNO_QUERY);
-    if ( xTitled.is() )
+    if ( !xTitled.is() )
+        return;
+
+    uno::Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
+    if ( !xTitle.is() )
     {
-        uno::Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
-        if ( !xTitle.is() )
-        {
-            xTitle.set(m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.chart2.Title",m_xContext),uno::UNO_QUERY);
-            xTitled->setTitleObject(xTitle);
-        }
-        if ( xTitle.is() )
-        {
-            uno::Reference< chart2::XFormattedString2> xFormatted = chart2::FormattedString::create(m_xContext);
-            OUString sStr;
-            _aValue >>= sStr;
-            xFormatted->setString(sStr);
-            uno::Sequence< uno::Reference< chart2::XFormattedString> > aArgs(1);
-            aArgs[0] = xFormatted;
-            xTitle->setText(aArgs);
-        }
+        xTitle.set(m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.chart2.Title",m_xContext),uno::UNO_QUERY);
+        xTitled->setTitleObject(xTitle);
+    }
+    if ( xTitle.is() )
+    {
+        uno::Reference< chart2::XFormattedString2> xFormatted = chart2::FormattedString::create(m_xContext);
+        OUString sStr;
+        _aValue >>= sStr;
+        xFormatted->setString(sStr);
+        uno::Sequence< uno::Reference< chart2::XFormattedString> > aArgs(1);
+        aArgs[0] = xFormatted;
+        xTitle->setText(aArgs);
     }
 }
 

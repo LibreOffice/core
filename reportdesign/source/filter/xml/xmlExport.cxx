@@ -350,66 +350,66 @@ void ORptExport::exportFunction(const uno::Reference< XFunction>& _xFunction)
 void ORptExport::exportMasterDetailFields(const Reference<XReportComponent>& _xReportComponet)
 {
     const uno::Sequence< OUString> aMasterFields = _xReportComponet->getMasterFields();
-    if ( aMasterFields.hasElements() )
+    if ( !aMasterFields.hasElements() )
+        return;
+
+    SvXMLElementExport aElement(*this,XML_NAMESPACE_REPORT, XML_MASTER_DETAIL_FIELDS, true, true);
+    const uno::Sequence< OUString> aDetailFields = _xReportComponet->getDetailFields();
+
+    OSL_ENSURE(aDetailFields.getLength() == aMasterFields.getLength(),"not equal length for master and detail fields!");
+
+    const OUString* pDetailFieldsIter = aDetailFields.getConstArray();
+    for(const OUString& rMasterField : aMasterFields)
     {
-        SvXMLElementExport aElement(*this,XML_NAMESPACE_REPORT, XML_MASTER_DETAIL_FIELDS, true, true);
-        const uno::Sequence< OUString> aDetailFields = _xReportComponet->getDetailFields();
-
-        OSL_ENSURE(aDetailFields.getLength() == aMasterFields.getLength(),"not equal length for master and detail fields!");
-
-        const OUString* pDetailFieldsIter = aDetailFields.getConstArray();
-        for(const OUString& rMasterField : aMasterFields)
-        {
-            AddAttribute( XML_NAMESPACE_REPORT, XML_MASTER , rMasterField );
-            if ( !pDetailFieldsIter->isEmpty() )
-                AddAttribute( XML_NAMESPACE_REPORT, XML_DETAIL , *pDetailFieldsIter );
-            SvXMLElementExport aPair(*this,XML_NAMESPACE_REPORT, XML_MASTER_DETAIL_FIELD, true, true);
-            ++pDetailFieldsIter;
-        }
+        AddAttribute( XML_NAMESPACE_REPORT, XML_MASTER , rMasterField );
+        if ( !pDetailFieldsIter->isEmpty() )
+            AddAttribute( XML_NAMESPACE_REPORT, XML_DETAIL , *pDetailFieldsIter );
+        SvXMLElementExport aPair(*this,XML_NAMESPACE_REPORT, XML_MASTER_DETAIL_FIELD, true, true);
+        ++pDetailFieldsIter;
     }
 }
 
 void ORptExport::exportReport(const Reference<XReportDefinition>& _xReportDefinition)
 {
-    if ( _xReportDefinition.is() )
+    if ( !_xReportDefinition.is() )
+        return;
+
+    exportFunctions(_xReportDefinition->getFunctions().get());
+    exportGroupsExpressionAsFunction(_xReportDefinition->getGroups());
+
+    if ( _xReportDefinition->getReportHeaderOn() )
     {
-        exportFunctions(_xReportDefinition->getFunctions().get());
-        exportGroupsExpressionAsFunction(_xReportDefinition->getGroups());
+        SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_REPORT_HEADER, true, true);
+        exportSection(_xReportDefinition->getReportHeader());
+    }
+    if ( _xReportDefinition->getPageHeaderOn() )
+    {
+        OUStringBuffer sValue;
+        sal_Int16 nRet = _xReportDefinition->getPageHeaderOption();
+        const SvXMLEnumMapEntry<sal_Int16>* aXML_EnumMap = OXMLHelper::GetReportPrintOptions();
+        if ( SvXMLUnitConverter::convertEnum( sValue, nRet,aXML_EnumMap ) )
+            AddAttribute(XML_NAMESPACE_REPORT, XML_PAGE_PRINT_OPTION,sValue.makeStringAndClear());
 
-        if ( _xReportDefinition->getReportHeaderOn() )
-        {
-            SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_REPORT_HEADER, true, true);
-            exportSection(_xReportDefinition->getReportHeader());
-        }
-        if ( _xReportDefinition->getPageHeaderOn() )
-        {
-            OUStringBuffer sValue;
-            sal_Int16 nRet = _xReportDefinition->getPageHeaderOption();
-            const SvXMLEnumMapEntry<sal_Int16>* aXML_EnumMap = OXMLHelper::GetReportPrintOptions();
-            if ( SvXMLUnitConverter::convertEnum( sValue, nRet,aXML_EnumMap ) )
-                AddAttribute(XML_NAMESPACE_REPORT, XML_PAGE_PRINT_OPTION,sValue.makeStringAndClear());
+        SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_PAGE_HEADER, true, true);
+        exportSection(_xReportDefinition->getPageHeader(),true);
+    }
 
-            SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_PAGE_HEADER, true, true);
-            exportSection(_xReportDefinition->getPageHeader(),true);
-        }
+    exportGroup(_xReportDefinition,0);
 
-        exportGroup(_xReportDefinition,0);
-
-        if ( _xReportDefinition->getPageFooterOn() )
-        {
-            OUStringBuffer sValue;
-            sal_Int16 nRet = _xReportDefinition->getPageFooterOption();
-            const SvXMLEnumMapEntry<sal_Int16>* aXML_EnumMap = OXMLHelper::GetReportPrintOptions();
-            if ( SvXMLUnitConverter::convertEnum( sValue, nRet,aXML_EnumMap ) )
-                AddAttribute(XML_NAMESPACE_REPORT, XML_PAGE_PRINT_OPTION,sValue.makeStringAndClear());
-            SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_PAGE_FOOTER, true, true);
-            exportSection(_xReportDefinition->getPageFooter(),true);
-        }
-        if ( _xReportDefinition->getReportFooterOn() )
-        {
-            SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_REPORT_FOOTER, true, true);
-            exportSection(_xReportDefinition->getReportFooter());
-        }
+    if ( _xReportDefinition->getPageFooterOn() )
+    {
+        OUStringBuffer sValue;
+        sal_Int16 nRet = _xReportDefinition->getPageFooterOption();
+        const SvXMLEnumMapEntry<sal_Int16>* aXML_EnumMap = OXMLHelper::GetReportPrintOptions();
+        if ( SvXMLUnitConverter::convertEnum( sValue, nRet,aXML_EnumMap ) )
+            AddAttribute(XML_NAMESPACE_REPORT, XML_PAGE_PRINT_OPTION,sValue.makeStringAndClear());
+        SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_PAGE_FOOTER, true, true);
+        exportSection(_xReportDefinition->getPageFooter(),true);
+    }
+    if ( _xReportDefinition->getReportFooterOn() )
+    {
+        SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_REPORT_FOOTER, true, true);
+        exportSection(_xReportDefinition->getReportFooter());
     }
 }
 
@@ -1047,89 +1047,89 @@ void ORptExport::exportStyleName(XPropertySet* _xProp,SvXMLAttributeList& _rAtt,
 
 void ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDefinition,sal_Int32 _nPos,bool _bExportAutoStyle)
 {
-    if ( _xReportDefinition.is() )
+    if ( !_xReportDefinition.is() )
+        return;
+
+    Reference< XGroups > xGroups = _xReportDefinition->getGroups();
+    if ( !xGroups.is() )
+        return;
+
+    sal_Int32 nCount = xGroups->getCount();
+    if ( _nPos >= 0 && _nPos < nCount )
     {
-        Reference< XGroups > xGroups = _xReportDefinition->getGroups();
-        if ( xGroups.is() )
+        Reference<XGroup> xGroup(xGroups->getByIndex(_nPos),uno::UNO_QUERY);
+        OSL_ENSURE(xGroup.is(),"No Group prepare for GPF");
+        if ( _bExportAutoStyle )
         {
-            sal_Int32 nCount = xGroups->getCount();
-            if ( _nPos >= 0 && _nPos < nCount )
+            if ( xGroup->getHeaderOn() )
+                exportSectionAutoStyle(xGroup->getHeader());
+            exportGroup(_xReportDefinition,_nPos+1,_bExportAutoStyle);
+            if ( xGroup->getFooterOn() )
+                exportSectionAutoStyle(xGroup->getFooter());
+        }
+        else
+        {
+            if ( xGroup->getSortAscending() )
+                AddAttribute(XML_NAMESPACE_REPORT, XML_SORT_ASCENDING, XML_TRUE );
+
+            if ( xGroup->getStartNewColumn() )
+                AddAttribute(XML_NAMESPACE_REPORT, XML_START_NEW_COLUMN, XML_TRUE);
+            if ( xGroup->getResetPageNumber() )
+                AddAttribute(XML_NAMESPACE_REPORT, XML_RESET_PAGE_NUMBER, XML_TRUE );
+
+            const OUString sField = xGroup->getExpression();
+            OUString sExpression  = sField;
+            if ( !sExpression.isEmpty() )
             {
-                Reference<XGroup> xGroup(xGroups->getByIndex(_nPos),uno::UNO_QUERY);
-                OSL_ENSURE(xGroup.is(),"No Group prepare for GPF");
-                if ( _bExportAutoStyle )
+                sal_Int32 nIndex = sExpression.indexOf('"');
+                while ( nIndex > -1 )
                 {
-                    if ( xGroup->getHeaderOn() )
-                        exportSectionAutoStyle(xGroup->getHeader());
-                    exportGroup(_xReportDefinition,_nPos+1,_bExportAutoStyle);
-                    if ( xGroup->getFooterOn() )
-                        exportSectionAutoStyle(xGroup->getFooter());
+                    sExpression = sExpression.replaceAt(nIndex, 1, "\"\"");
+                    nIndex = sExpression.indexOf('"',nIndex+2);
                 }
-                else
-                {
-                    if ( xGroup->getSortAscending() )
-                        AddAttribute(XML_NAMESPACE_REPORT, XML_SORT_ASCENDING, XML_TRUE );
 
-                    if ( xGroup->getStartNewColumn() )
-                        AddAttribute(XML_NAMESPACE_REPORT, XML_START_NEW_COLUMN, XML_TRUE);
-                    if ( xGroup->getResetPageNumber() )
-                        AddAttribute(XML_NAMESPACE_REPORT, XML_RESET_PAGE_NUMBER, XML_TRUE );
-
-                    const OUString sField = xGroup->getExpression();
-                    OUString sExpression  = sField;
-                    if ( !sExpression.isEmpty() )
-                    {
-                        sal_Int32 nIndex = sExpression.indexOf('"');
-                        while ( nIndex > -1 )
-                        {
-                            sExpression = sExpression.replaceAt(nIndex, 1, "\"\"");
-                            nIndex = sExpression.indexOf('"',nIndex+2);
-                        }
-
-                        TGroupFunctionMap::const_iterator aGroupFind = m_aGroupFunctionMap.find(xGroup);
-                        if ( aGroupFind != m_aGroupFunctionMap.end() )
-                            sExpression = aGroupFind->second->getName();
-                        sExpression = "rpt:HASCHANGED(\"" + sExpression + "\")";
-                    }
-                    AddAttribute(XML_NAMESPACE_REPORT, XML_SORT_EXPRESSION, sField);
-                    AddAttribute(XML_NAMESPACE_REPORT, XML_GROUP_EXPRESSION,sExpression);
-                    sal_Int16 nRet = xGroup->getKeepTogether();
-                    OUStringBuffer sValue;
-                    const SvXMLEnumMapEntry<sal_Int16>* aXML_KeepTogetherEnumMap = OXMLHelper::GetKeepTogetherOptions();
-                    if ( SvXMLUnitConverter::convertEnum( sValue, nRet, aXML_KeepTogetherEnumMap ) )
-                        AddAttribute(XML_NAMESPACE_REPORT, XML_KEEP_TOGETHER,sValue.makeStringAndClear());
-
-                    SvXMLElementExport aGroup(*this,XML_NAMESPACE_REPORT, XML_GROUP, true, true);
-                    exportFunctions(xGroup->getFunctions().get());
-                    if ( xGroup->getHeaderOn() )
-                    {
-                        Reference<XSection> xSection = xGroup->getHeader();
-                        if ( xSection->getRepeatSection() )
-                            AddAttribute(XML_NAMESPACE_REPORT, XML_REPEAT_SECTION,XML_TRUE );
-                        SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_GROUP_HEADER, true, true);
-                        exportSection(xSection);
-                    }
-                    exportGroup(_xReportDefinition,_nPos+1,_bExportAutoStyle);
-                    if ( xGroup->getFooterOn() )
-                    {
-                        Reference<XSection> xSection = xGroup->getFooter();
-                        if ( xSection->getRepeatSection() )
-                            AddAttribute(XML_NAMESPACE_REPORT, XML_REPEAT_SECTION,XML_TRUE );
-                        SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_GROUP_FOOTER, true, true);
-                        exportSection(xSection);
-                    }
-                }
+                TGroupFunctionMap::const_iterator aGroupFind = m_aGroupFunctionMap.find(xGroup);
+                if ( aGroupFind != m_aGroupFunctionMap.end() )
+                    sExpression = aGroupFind->second->getName();
+                sExpression = "rpt:HASCHANGED(\"" + sExpression + "\")";
             }
-            else if ( _bExportAutoStyle )
+            AddAttribute(XML_NAMESPACE_REPORT, XML_SORT_EXPRESSION, sField);
+            AddAttribute(XML_NAMESPACE_REPORT, XML_GROUP_EXPRESSION,sExpression);
+            sal_Int16 nRet = xGroup->getKeepTogether();
+            OUStringBuffer sValue;
+            const SvXMLEnumMapEntry<sal_Int16>* aXML_KeepTogetherEnumMap = OXMLHelper::GetKeepTogetherOptions();
+            if ( SvXMLUnitConverter::convertEnum( sValue, nRet, aXML_KeepTogetherEnumMap ) )
+                AddAttribute(XML_NAMESPACE_REPORT, XML_KEEP_TOGETHER,sValue.makeStringAndClear());
+
+            SvXMLElementExport aGroup(*this,XML_NAMESPACE_REPORT, XML_GROUP, true, true);
+            exportFunctions(xGroup->getFunctions().get());
+            if ( xGroup->getHeaderOn() )
             {
-                exportSectionAutoStyle(_xReportDefinition->getDetail());
+                Reference<XSection> xSection = xGroup->getHeader();
+                if ( xSection->getRepeatSection() )
+                    AddAttribute(XML_NAMESPACE_REPORT, XML_REPEAT_SECTION,XML_TRUE );
+                SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_GROUP_HEADER, true, true);
+                exportSection(xSection);
             }
-            else
+            exportGroup(_xReportDefinition,_nPos+1,_bExportAutoStyle);
+            if ( xGroup->getFooterOn() )
             {
-                SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_DETAIL, true, true);
-                exportSection(_xReportDefinition->getDetail());
+                Reference<XSection> xSection = xGroup->getFooter();
+                if ( xSection->getRepeatSection() )
+                    AddAttribute(XML_NAMESPACE_REPORT, XML_REPEAT_SECTION,XML_TRUE );
+                SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_GROUP_FOOTER, true, true);
+                exportSection(xSection);
             }
         }
+    }
+    else if ( _bExportAutoStyle )
+    {
+        exportSectionAutoStyle(_xReportDefinition->getDetail());
+    }
+    else
+    {
+        SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_DETAIL, true, true);
+        exportSection(_xReportDefinition->getDetail());
     }
 }
 
@@ -1273,34 +1273,34 @@ void ORptExport::SetBodyAttributes()
 
 void ORptExport::exportReportAttributes(const Reference<XReportDefinition>& _xReport)
 {
-    if ( _xReport.is() )
-    {
-        OUStringBuffer sValue;
-        const SvXMLEnumMapEntry<sal_Int32>* aXML_CommnadTypeEnumMap = OXMLHelper::GetCommandTypeOptions();
-        if ( SvXMLUnitConverter::convertEnum( sValue, _xReport->getCommandType(), aXML_CommnadTypeEnumMap ) )
-            AddAttribute(XML_NAMESPACE_REPORT, XML_COMMAND_TYPE,sValue.makeStringAndClear());
+    if ( !_xReport.is() )
+        return;
 
-        OUString sComamnd = _xReport->getCommand();
-        if ( !sComamnd.isEmpty() )
-            AddAttribute(XML_NAMESPACE_REPORT, XML_COMMAND, sComamnd);
+    OUStringBuffer sValue;
+    const SvXMLEnumMapEntry<sal_Int32>* aXML_CommnadTypeEnumMap = OXMLHelper::GetCommandTypeOptions();
+    if ( SvXMLUnitConverter::convertEnum( sValue, _xReport->getCommandType(), aXML_CommnadTypeEnumMap ) )
+        AddAttribute(XML_NAMESPACE_REPORT, XML_COMMAND_TYPE,sValue.makeStringAndClear());
 
-        OUString sFilter( _xReport->getFilter() );
-        if ( !sFilter.isEmpty() )
-            AddAttribute( XML_NAMESPACE_REPORT, XML_FILTER, sFilter );
+    OUString sComamnd = _xReport->getCommand();
+    if ( !sComamnd.isEmpty() )
+        AddAttribute(XML_NAMESPACE_REPORT, XML_COMMAND, sComamnd);
 
-        AddAttribute(XML_NAMESPACE_OFFICE, XML_MIMETYPE,_xReport->getMimeType());
+    OUString sFilter( _xReport->getFilter() );
+    if ( !sFilter.isEmpty() )
+        AddAttribute( XML_NAMESPACE_REPORT, XML_FILTER, sFilter );
 
-        bool bEscapeProcessing( _xReport->getEscapeProcessing() );
-        if ( !bEscapeProcessing )
-            AddAttribute( XML_NAMESPACE_REPORT, XML_ESCAPE_PROCESSING, ::xmloff::token::GetXMLToken( XML_FALSE ) );
+    AddAttribute(XML_NAMESPACE_OFFICE, XML_MIMETYPE,_xReport->getMimeType());
 
-        OUString sName = _xReport->getCaption();
-        if ( !sName.isEmpty() )
-            AddAttribute(XML_NAMESPACE_OFFICE, XML_CAPTION,sName);
-        sName = _xReport->getName();
-        if ( !sName.isEmpty() )
-            AddAttribute(XML_NAMESPACE_DRAW, XML_NAME,sName);
-    }
+    bool bEscapeProcessing( _xReport->getEscapeProcessing() );
+    if ( !bEscapeProcessing )
+        AddAttribute( XML_NAMESPACE_REPORT, XML_ESCAPE_PROCESSING, ::xmloff::token::GetXMLToken( XML_FALSE ) );
+
+    OUString sName = _xReport->getCaption();
+    if ( !sName.isEmpty() )
+        AddAttribute(XML_NAMESPACE_OFFICE, XML_CAPTION,sName);
+    sName = _xReport->getName();
+    if ( !sName.isEmpty() )
+        AddAttribute(XML_NAMESPACE_DRAW, XML_NAME,sName);
 }
 
 void ORptExport::ExportContent_()
@@ -1320,24 +1320,24 @@ void ORptExport::collectComponentStyles()
 
     m_bAllreadyFilled = true;
     Reference<XReportDefinition> xProp(getReportDefinition());
-    if ( xProp.is() )
-    {
-        uno::Reference< report::XSection> xParent(xProp->getParent(),uno::UNO_QUERY);
-        if ( xParent.is() )
-            exportAutoStyle(xProp.get());
+    if ( !xProp.is() )
+        return;
 
-        if ( xProp->getReportHeaderOn() )
-            exportSectionAutoStyle(xProp->getReportHeader());
-        if ( xProp->getPageHeaderOn() )
-            exportSectionAutoStyle(xProp->getPageHeader());
+    uno::Reference< report::XSection> xParent(xProp->getParent(),uno::UNO_QUERY);
+    if ( xParent.is() )
+        exportAutoStyle(xProp.get());
 
-        exportGroup(xProp,0,true);
+    if ( xProp->getReportHeaderOn() )
+        exportSectionAutoStyle(xProp->getReportHeader());
+    if ( xProp->getPageHeaderOn() )
+        exportSectionAutoStyle(xProp->getPageHeader());
 
-        if ( xProp->getPageFooterOn() )
-            exportSectionAutoStyle(xProp->getPageFooter());
-        if ( xProp->getReportFooterOn() )
-            exportSectionAutoStyle(xProp->getReportFooter());
-    }
+    exportGroup(xProp,0,true);
+
+    if ( xProp->getPageFooterOn() )
+        exportSectionAutoStyle(xProp->getPageFooter());
+    if ( xProp->getReportFooterOn() )
+        exportSectionAutoStyle(xProp->getReportFooter());
 }
 
 void ORptExport::ExportAutoStyles_()
@@ -1480,93 +1480,93 @@ void ORptExport::exportShapes(const Reference< XSection>& _xSection,bool _bAddPa
 
 void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xGroups)
 {
-    if ( _xGroups.is() )
+    if ( !_xGroups.is() )
+        return;
+
+    uno::Reference< XFunctions> xFunctions = _xGroups->getReportDefinition()->getFunctions();
+    const sal_Int32 nCount = _xGroups->getCount();
+    for (sal_Int32 i = 0; i < nCount; ++i)
     {
-        uno::Reference< XFunctions> xFunctions = _xGroups->getReportDefinition()->getFunctions();
-        const sal_Int32 nCount = _xGroups->getCount();
-        for (sal_Int32 i = 0; i < nCount; ++i)
+        uno::Reference< XGroup> xGroup(_xGroups->getByIndex(i),uno::UNO_QUERY_THROW);
+        const ::sal_Int16 nGroupOn = xGroup->getGroupOn();
+        if ( nGroupOn != report::GroupOn::DEFAULT )
         {
-            uno::Reference< XGroup> xGroup(_xGroups->getByIndex(i),uno::UNO_QUERY_THROW);
-            const ::sal_Int16 nGroupOn = xGroup->getGroupOn();
-            if ( nGroupOn != report::GroupOn::DEFAULT )
+            uno::Reference< XFunction> xFunction = xFunctions->createFunction();
+            OUString sFunction,sPrefix,sPostfix;
+            OUString sExpression = xGroup->getExpression();
+            OUString sFunctionName;
+            OUString sInitialFormula;
+            switch(nGroupOn)
             {
-                uno::Reference< XFunction> xFunction = xFunctions->createFunction();
-                OUString sFunction,sPrefix,sPostfix;
-                OUString sExpression = xGroup->getExpression();
-                OUString sFunctionName;
-                OUString sInitialFormula;
-                switch(nGroupOn)
-                {
-                    case report::GroupOn::PREFIX_CHARACTERS:
-                        sFunction = "LEFT";
-                        sPrefix = ";" + OUString::number(xGroup->getGroupInterval());
-                        break;
-                    case report::GroupOn::YEAR:
-                        sFunction = "YEAR";
-                        break;
-                    case report::GroupOn::QUARTAL:
-                        sFunction   = "INT((MONTH";
-                        sPostfix    = "-1)/3)+1";
-                        sFunctionName = "QUARTAL_" + sExpression;
-                        break;
-                    case report::GroupOn::MONTH:
-                        sFunction = "MONTH";
-                        break;
-                    case report::GroupOn::WEEK:
-                        sFunction = "WEEK";
-                        break;
-                    case report::GroupOn::DAY:
-                        sFunction = "DAY";
-                        break;
-                    case report::GroupOn::HOUR:
-                        sFunction = "HOUR";
-                        break;
-                    case report::GroupOn::MINUTE:
-                        sFunction = "MINUTE";
-                        break;
-                    case report::GroupOn::INTERVAL:
-                        {
-                            sFunction = "INT";
-                            uno::Reference< XFunction> xCountFunction = xFunctions->createFunction();
-                            xCountFunction->setInitialFormula(beans::Optional< OUString>(true,OUString("rpt:0")));
-                            OUString sCountName = sFunction + "_count_" + sExpression;
-                            xCountFunction->setName(sCountName);
-                            xCountFunction->setFormula( "rpt:[" + sCountName + "] + 1" );
-                            exportFunction(xCountFunction);
-                            sExpression = sCountName;
-                            // The reference to sCountName in the formula of sFunctionName refers to the *old* value
-                            // so we need to expand the formula of sCountName
-                            sPrefix = " + 1) / " + OUString::number(xGroup->getGroupInterval());
-                            sFunctionName = sFunction + "_" + sExpression;
-                            sFunction += "(";
-                            sInitialFormula = "rpt:0";
-                        }
-                        break;
-                    default:
-                        ;
-                }
-                if ( sFunctionName.isEmpty() )
-                    sFunctionName = sFunction + "_" + sExpression;
-                if ( !sFunction.isEmpty() )
-                {
-                    const sal_Unicode pReplaceChars[] = { '(',')',';',',','+','-','[',']','/','*'};
-                    for(sal_Unicode ch : pReplaceChars)
-                        sFunctionName = sFunctionName.replace(ch,'_');
+                case report::GroupOn::PREFIX_CHARACTERS:
+                    sFunction = "LEFT";
+                    sPrefix = ";" + OUString::number(xGroup->getGroupInterval());
+                    break;
+                case report::GroupOn::YEAR:
+                    sFunction = "YEAR";
+                    break;
+                case report::GroupOn::QUARTAL:
+                    sFunction   = "INT((MONTH";
+                    sPostfix    = "-1)/3)+1";
+                    sFunctionName = "QUARTAL_" + sExpression;
+                    break;
+                case report::GroupOn::MONTH:
+                    sFunction = "MONTH";
+                    break;
+                case report::GroupOn::WEEK:
+                    sFunction = "WEEK";
+                    break;
+                case report::GroupOn::DAY:
+                    sFunction = "DAY";
+                    break;
+                case report::GroupOn::HOUR:
+                    sFunction = "HOUR";
+                    break;
+                case report::GroupOn::MINUTE:
+                    sFunction = "MINUTE";
+                    break;
+                case report::GroupOn::INTERVAL:
+                    {
+                        sFunction = "INT";
+                        uno::Reference< XFunction> xCountFunction = xFunctions->createFunction();
+                        xCountFunction->setInitialFormula(beans::Optional< OUString>(true,OUString("rpt:0")));
+                        OUString sCountName = sFunction + "_count_" + sExpression;
+                        xCountFunction->setName(sCountName);
+                        xCountFunction->setFormula( "rpt:[" + sCountName + "] + 1" );
+                        exportFunction(xCountFunction);
+                        sExpression = sCountName;
+                        // The reference to sCountName in the formula of sFunctionName refers to the *old* value
+                        // so we need to expand the formula of sCountName
+                        sPrefix = " + 1) / " + OUString::number(xGroup->getGroupInterval());
+                        sFunctionName = sFunction + "_" + sExpression;
+                        sFunction += "(";
+                        sInitialFormula = "rpt:0";
+                    }
+                    break;
+                default:
+                    ;
+            }
+            if ( sFunctionName.isEmpty() )
+                sFunctionName = sFunction + "_" + sExpression;
+            if ( !sFunction.isEmpty() )
+            {
+                const sal_Unicode pReplaceChars[] = { '(',')',';',',','+','-','[',']','/','*'};
+                for(sal_Unicode ch : pReplaceChars)
+                    sFunctionName = sFunctionName.replace(ch,'_');
 
-                    xFunction->setName(sFunctionName);
-                    if ( !sInitialFormula.isEmpty() )
-                        xFunction->setInitialFormula(beans::Optional< OUString>(true, sInitialFormula));
-                    sFunction = "rpt:" + sFunction + "([" + sExpression + "]";
+                xFunction->setName(sFunctionName);
+                if ( !sInitialFormula.isEmpty() )
+                    xFunction->setInitialFormula(beans::Optional< OUString>(true, sInitialFormula));
+                sFunction = "rpt:" + sFunction + "([" + sExpression + "]";
 
-                    if ( !sPrefix.isEmpty() )
-                        sFunction += sPrefix;
-                    sFunction += ")";
-                    if ( !sPostfix.isEmpty() )
-                        sFunction += sPostfix;
-                    xFunction->setFormula(sFunction);
-                    exportFunction(xFunction);
-                    m_aGroupFunctionMap.emplace(xGroup,xFunction);
-                }
+                if ( !sPrefix.isEmpty() )
+                    sFunction += sPrefix;
+                sFunction += ")";
+                if ( !sPostfix.isEmpty() )
+                    sFunction += sPostfix;
+                xFunction->setFormula(sFunction);
+                exportFunction(xFunction);
+                m_aGroupFunctionMap.emplace(xGroup,xFunction);
             }
         }
     }

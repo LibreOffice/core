@@ -119,31 +119,31 @@ OUndoContainerAction::~OUndoContainerAction()
 {
     // if we own the object...
     Reference< XComponent > xComp( m_xOwnElement, UNO_QUERY );
-    if ( xComp.is() )
-    {
-        // and the object does not have a parent
-        Reference< XChild >  xChild( m_xOwnElement, UNO_QUERY );
-        if ( xChild.is() && !xChild->getParent().is() )
-        {
-            OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
-            rEnv.RemoveElement( m_xOwnElement );
+    if ( !xComp.is() )
+        return;
+
+    // and the object does not have a parent
+    Reference< XChild >  xChild( m_xOwnElement, UNO_QUERY );
+    if ( !(xChild.is() && !xChild->getParent().is()) )
+        return;
+
+    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
+    rEnv.RemoveElement( m_xOwnElement );
 
 #if OSL_DEBUG_LEVEL > 0
-            SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xChild );
-            SdrObject* pObject = pShape ? pShape->GetSdrObject() : nullptr;
-            OSL_ENSURE( pObject == nullptr || (pShape->HasSdrObjectOwnership() && !pObject->IsInserted()),
-                "OUndoContainerAction::~OUndoContainerAction: inconsistency in the shape/object ownership!" );
+    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xChild );
+    SdrObject* pObject = pShape ? pShape->GetSdrObject() : nullptr;
+    OSL_ENSURE( pObject == nullptr || (pShape->HasSdrObjectOwnership() && !pObject->IsInserted()),
+        "OUndoContainerAction::~OUndoContainerAction: inconsistency in the shape/object ownership!" );
 #endif
-            // -> dispose it
-            try
-            {
-                comphelper::disposeComponent( xComp );
-            }
-            catch ( const uno::Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION("reportdesign");
-            }
-        }
+    // -> dispose it
+    try
+    {
+        comphelper::disposeComponent( xComp );
+    }
+    catch ( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("reportdesign");
     }
 }
 
@@ -187,57 +187,57 @@ void OUndoContainerAction::implReRemove( )
 
 void OUndoContainerAction::Undo()
 {
-    if ( m_xElement.is() )
-    {
-        // prevents that an undo action will be created for elementInserted
-        try
-        {
-            switch ( m_eAction )
-            {
-            case Inserted:
-                implReRemove();
-                break;
+    if ( !m_xElement.is() )
+        return;
 
-            case Removed:
-                implReInsert();
-                break;
-            default:
-                OSL_FAIL("Illegal case value");
-                break;
-            }
-        }
-        catch( const Exception& )
+    // prevents that an undo action will be created for elementInserted
+    try
+    {
+        switch ( m_eAction )
         {
-            TOOLS_WARN_EXCEPTION( "reportdesign", "OUndoContainerAction::Undo" );
+        case Inserted:
+            implReRemove();
+            break;
+
+        case Removed:
+            implReInsert();
+            break;
+        default:
+            OSL_FAIL("Illegal case value");
+            break;
         }
+    }
+    catch( const Exception& )
+    {
+        TOOLS_WARN_EXCEPTION( "reportdesign", "OUndoContainerAction::Undo" );
     }
 }
 
 
 void OUndoContainerAction::Redo()
 {
-    if ( m_xElement.is() )
-    {
-        try
-        {
-            switch ( m_eAction )
-            {
-            case Inserted:
-                implReInsert();
-                break;
+    if ( !m_xElement.is() )
+        return;
 
-            case Removed:
-                implReRemove();
-                break;
-            default:
-                OSL_FAIL("Illegal case value");
-                break;
-            }
-        }
-        catch( const Exception& )
+    try
+    {
+        switch ( m_eAction )
         {
-            TOOLS_WARN_EXCEPTION( "reportdesign", "OUndoContainerAction::Redo" );
+        case Inserted:
+            implReInsert();
+            break;
+
+        case Removed:
+            implReRemove();
+            break;
+        default:
+            OSL_FAIL("Illegal case value");
+            break;
         }
+    }
+    catch( const Exception& )
+    {
+        TOOLS_WARN_EXCEPTION( "reportdesign", "OUndoContainerAction::Redo" );
     }
 }
 

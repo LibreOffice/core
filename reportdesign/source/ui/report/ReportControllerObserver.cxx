@@ -83,35 +83,35 @@ public:
     {
             VclEventId nEvent = _rEvt.GetId();
 
-            if (nEvent == VclEventId::ApplicationDataChanged )
-            {
-                DataChangedEvent* pData = static_cast<DataChangedEvent*>(static_cast<VclWindowEvent&>(_rEvt).GetData());
-                if ( pData && ((( pData->GetType() == DataChangedEventType::SETTINGS  )   ||
-                                ( pData->GetType() == DataChangedEventType::DISPLAY   ))  &&
-                               ( pData->GetFlags() & AllSettingsFlags::STYLE     )))
-                {
-                    OEnvLock aLock(*this);
+            if (nEvent != VclEventId::ApplicationDataChanged )
+                return;
 
-                    // send all Section Objects a 'tingle'
-                    // maybe they need a change in format, color, etc
-                    for (const uno::Reference<container::XChild>& xChild : m_pImpl->m_aSections)
+            DataChangedEvent* pData = static_cast<DataChangedEvent*>(static_cast<VclWindowEvent&>(_rEvt).GetData());
+            if ( !(pData && ((( pData->GetType() == DataChangedEventType::SETTINGS  )   ||
+                            ( pData->GetType() == DataChangedEventType::DISPLAY   ))  &&
+                           ( pData->GetFlags() & AllSettingsFlags::STYLE     ))))
+                return;
+
+            OEnvLock aLock(*this);
+
+            // send all Section Objects a 'tingle'
+            // maybe they need a change in format, color, etc
+            for (const uno::Reference<container::XChild>& xChild : m_pImpl->m_aSections)
+            {
+                if (xChild.is())
+                {
+                    uno::Reference<report::XSection> xSection(xChild, uno::UNO_QUERY);
+                    if (xSection.is())
                     {
-                        if (xChild.is())
+                        const sal_Int32 nCount = xSection->getCount();
+                        for (sal_Int32 i = 0; i < nCount; ++i)
                         {
-                            uno::Reference<report::XSection> xSection(xChild, uno::UNO_QUERY);
-                            if (xSection.is())
+                            const uno::Any aObj = xSection->getByIndex(i);
+                            uno::Reference < report::XReportComponent > xReportComponent(aObj, uno::UNO_QUERY);
+                            if (xReportComponent.is())
                             {
-                                const sal_Int32 nCount = xSection->getCount();
-                                for (sal_Int32 i = 0; i < nCount; ++i)
-                                {
-                                    const uno::Any aObj = xSection->getByIndex(i);
-                                    uno::Reference < report::XReportComponent > xReportComponent(aObj, uno::UNO_QUERY);
-                                    if (xReportComponent.is())
-                                    {
-                                        m_aFormattedFieldBeautifier.handle(xReportComponent);
-                                        m_aFixedTextColor.handle(xReportComponent);
-                                    }
-                                }
+                                m_aFormattedFieldBeautifier.handle(xReportComponent);
+                                m_aFixedTextColor.handle(xReportComponent);
                             }
                         }
                     }
