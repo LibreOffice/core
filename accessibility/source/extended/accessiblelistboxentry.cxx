@@ -444,7 +444,7 @@ namespace accessibility
         SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
         if( getAccessibleRole() == AccessibleRole::TREE_ITEM )
         {
-            return m_pTreeListBox->GetEntryLongDescription( pEntry );
+            return OUString();
         }
         //want to count the real column number in the list box.
         sal_uInt16 iRealItemCount = 0;
@@ -476,17 +476,7 @@ namespace accessibility
 
         EnsureIsAlive();
 
-        OUString sRet(implGetText());
-
-        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
-
-        OUString altText = m_pTreeListBox->GetEntryAltText( pEntry );
-        if (!altText.isEmpty())
-        {
-            sRet += " " + altText;
-        }
-
-        return sRet;
+        return implGetText();
     }
 
     Reference< XAccessibleRelationSet > SAL_CALL AccessibleListBoxEntry::getAccessibleRelationSet(  )
