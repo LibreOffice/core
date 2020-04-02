@@ -26,7 +26,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
-#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonHairlinePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 
 namespace

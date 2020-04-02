@@ -26,7 +26,13 @@
 #include <vcl/gradient.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
-#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonHairlinePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonMarkerPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonGradientPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonHatchPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonGraphicPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>

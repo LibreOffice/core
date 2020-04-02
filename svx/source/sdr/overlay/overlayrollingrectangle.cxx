@@ -22,8 +22,8 @@
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
-
+#include <drawinglayer/primitive2d/PolyPolygonMarkerPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonSelectionPrimitive2D.hxx>
 
 namespace sdr::overlay
 {

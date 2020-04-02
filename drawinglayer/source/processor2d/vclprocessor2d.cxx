@@ -28,7 +28,14 @@
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
-#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonHairlinePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonMarkerPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonGradientPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonHatchPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonGraphicPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonSelectionPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include "vclhelperbufferdevice.hxx"

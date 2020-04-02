@@ -26,7 +26,7 @@
 #include <svx/dialmgr.hxx>
 
 #include <drawinglayer/attribute/fillhatchattribute.hxx>
-#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonHatchPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>

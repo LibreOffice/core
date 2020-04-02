@@ -20,7 +20,7 @@
 #include <drawinglayer/primitive2d/mediaprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>

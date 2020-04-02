@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-03-20 13:37:39 using:
+ Generated on 2020-04-02 22:28:40 using:
  ./bin/update_pch drawinglayer drawinglayer --cutoff=4 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -138,6 +138,13 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
 #include <drawinglayer/primitive2d/CommonTypes.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonGradientPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonGraphicPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonHairlinePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonHatchPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonMarkerPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
 #include <drawinglayer/primitive2d/Tools.hxx>
@@ -155,7 +162,7 @@
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
-#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/primitivetools2d.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>

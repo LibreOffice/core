@@ -19,7 +19,8 @@
 
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
-#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonMarkerPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonSelectionPrimitive2D.hxx>
 
 
 namespace sdr::overlay

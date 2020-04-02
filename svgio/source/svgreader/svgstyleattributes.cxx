@@ -23,7 +23,8 @@
 
 #include <svgstyleattributes.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
-#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
 #include <svgnode.hxx>
 #include <svgdocument.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
