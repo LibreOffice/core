@@ -2225,12 +2225,10 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
                     }
                 }
                 if (bFnd) {
-                    tools::Rectangle aMouseRect2(rPt,rPt);
                     aMouseRect.AdjustLeft( -nBoundHitTol );
                     aMouseRect.AdjustTop( -nBoundHitTol );
                     aMouseRect.AdjustRight(nBoundHitTol );
                     aMouseRect.AdjustBottom(nBoundHitTol );
-                    aObjBound.IsOver(aMouseRect2);
                 }
 
             }
