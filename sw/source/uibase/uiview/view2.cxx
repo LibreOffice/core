@@ -564,6 +564,29 @@ void SwView::Execute(SfxRequest &rReq)
             rTmpWin.SetUseInputLanguage( false );
         }
         break;
+        case FN_TO_PREV_PAGE:
+        case FN_TO_NEXT_PAGE:
+        {
+            m_pWrtShell->LockPaint();
+            if (FN_TO_PREV_PAGE == nSlot)
+                m_pWrtShell->SttPrvPg(false);
+            else
+                m_pWrtShell->SttNxtPg(false);
+            sal_uInt16 nActPage = m_pWrtShell->GetPhyPageNum();
+            if( USHRT_MAX != nActPage )
+            {
+                const Point aPt( m_aVisArea.Left(),
+                                 m_pWrtShell->GetPagePos( nActPage ).Y() );
+                Point aAlPt( AlignToPixel( aPt ) );
+                // If there is a difference, has been truncated --> then add one pixel,
+                // so that no residue of the previous page is visible.
+                if( aPt.Y() != aAlPt.Y() )
+                    aAlPt.AdjustY(3 * GetEditWin().PixelToLogic( Size( 0, 1 ) ).Height() );
+                SetVisArea( aAlPt );
+            }
+            m_pWrtShell->UnlockPaint();
+            break;
+        }
         case FN_REDLINE_ON:
         {
             if( pArgs &&
