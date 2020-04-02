@@ -166,38 +166,38 @@ sal_Int32 OReportWindow::GetTotalWidth() const
 void OReportWindow::Resize()
 {
     Window::Resize();
-    if ( !m_aViewsWindow->empty() )
-    {
-        const Size aTotalOutputSize = GetOutputSizePixel();
-        Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH)*m_pView->getController().getZoomValue(),100);
+    if ( m_aViewsWindow->empty() )
+        return;
 
-        const Point aOffset = LogicToPixel(Point(SECTION_OFFSET, 0), MapMode(MapUnit::MapAppFont));
-        Point aStartPoint(static_cast<long>(aStartWidth) + aOffset.X(),0);
-        uno::Reference<report::XReportDefinition> xReportDefinition = getReportView()->getController().getReportDefinition();
-        const sal_Int32 nPaperWidth = getStyleProperty<awt::Size>(xReportDefinition,PROPERTY_PAPERSIZE).Width;
-        sal_Int32 nLeftMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_LEFTMARGIN);
-        sal_Int32 nRightMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_RIGHTMARGIN);
-        Size aPageSize  = m_aViewsWindow->LogicToPixel(Size(nPaperWidth ,0));
-        nLeftMargin     = m_aViewsWindow->LogicToPixel(Size(nLeftMargin,0)).Width();
-        nRightMargin    = m_aViewsWindow->LogicToPixel(Size(nRightMargin,0)).Width();
+    const Size aTotalOutputSize = GetOutputSizePixel();
+    Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH)*m_pView->getController().getZoomValue(),100);
 
-        aPageSize.setHeight( m_aHRuler->GetSizePixel().Height() );
+    const Point aOffset = LogicToPixel(Point(SECTION_OFFSET, 0), MapMode(MapUnit::MapAppFont));
+    Point aStartPoint(static_cast<long>(aStartWidth) + aOffset.X(),0);
+    uno::Reference<report::XReportDefinition> xReportDefinition = getReportView()->getController().getReportDefinition();
+    const sal_Int32 nPaperWidth = getStyleProperty<awt::Size>(xReportDefinition,PROPERTY_PAPERSIZE).Width;
+    sal_Int32 nLeftMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_LEFTMARGIN);
+    sal_Int32 nRightMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_RIGHTMARGIN);
+    Size aPageSize  = m_aViewsWindow->LogicToPixel(Size(nPaperWidth ,0));
+    nLeftMargin     = m_aViewsWindow->LogicToPixel(Size(nLeftMargin,0)).Width();
+    nRightMargin    = m_aViewsWindow->LogicToPixel(Size(nRightMargin,0)).Width();
 
-        const long nTermp(m_aViewsWindow->getTotalHeight() + aPageSize.Height());
-        long nSectionsHeight = ::std::max<long>(nTermp,aTotalOutputSize.Height());
+    aPageSize.setHeight( m_aHRuler->GetSizePixel().Height() );
 
-        m_aHRuler->SetPosSizePixel(aStartPoint,aPageSize);
-        m_aHRuler->SetNullOffset(nLeftMargin);
-        m_aHRuler->SetMargin1(0);
-        m_aHRuler->SetMargin2(aPageSize.Width() - nLeftMargin - nRightMargin);
+    const long nTermp(m_aViewsWindow->getTotalHeight() + aPageSize.Height());
+    long nSectionsHeight = ::std::max<long>(nTermp,aTotalOutputSize.Height());
 
-        aStartPoint.AdjustY(aPageSize.Height() );
-        nSectionsHeight -= aStartPoint.Y();
+    m_aHRuler->SetPosSizePixel(aStartPoint,aPageSize);
+    m_aHRuler->SetNullOffset(nLeftMargin);
+    m_aHRuler->SetMargin1(0);
+    m_aHRuler->SetMargin2(aPageSize.Width() - nLeftMargin - nRightMargin);
 
-        aStartPoint.setX( aOffset.X() );
+    aStartPoint.AdjustY(aPageSize.Height() );
+    nSectionsHeight -= aStartPoint.Y();
 
-        m_aViewsWindow->SetPosSizePixel(aStartPoint,Size(aTotalOutputSize.Width(),nSectionsHeight));
-    }
+    aStartPoint.setX( aOffset.X() );
+
+    m_aViewsWindow->SetPosSizePixel(aStartPoint,Size(aTotalOutputSize.Width(),nSectionsHeight));
 }
 
 Point OReportWindow::getThumbPos() const

@@ -88,44 +88,44 @@ void SAL_CALL OStatusbarController::initialize( const Sequence< Any >& _rArgumen
     ::osl::MutexGuard aGuard(m_aMutex);
 
     VclPtr< StatusBar > pStatusBar = static_cast<StatusBar*>(VCLUnoHelper::GetWindow(m_xParentWindow).get());
-    if ( pStatusBar )
+    if ( !pStatusBar )
+        return;
+
+    const sal_uInt16 nCount = pStatusBar->GetItemCount();
+    for (sal_uInt16 nPos = 0; nPos < nCount; ++nPos)
     {
-        const sal_uInt16 nCount = pStatusBar->GetItemCount();
-        for (sal_uInt16 nPos = 0; nPos < nCount; ++nPos)
+        const sal_uInt16 nItemId = pStatusBar->GetItemId(nPos);
+        if ( pStatusBar->GetItemCommand(nItemId) == m_aCommandURL )
         {
-            const sal_uInt16 nItemId = pStatusBar->GetItemId(nPos);
-            if ( pStatusBar->GetItemCommand(nItemId) == m_aCommandURL )
-            {
-                m_nId = nItemId;
-                break;
-            }
+            m_nId = nItemId;
+            break;
         }
-
-        SfxStatusBarControl *pController = nullptr;
-        if ( m_aCommandURL == ".uno:ZoomSlider" )
-        {
-            m_nSlotId = SID_ATTR_ZOOMSLIDER;
-            pController = new SvxZoomSliderControl(m_nSlotId,m_nId,*pStatusBar);
-        }
-        else if ( m_aCommandURL == ".uno:Zoom" )
-        {
-            m_nSlotId = SID_ATTR_ZOOM;
-            pController = new SvxZoomStatusBarControl(m_nSlotId,m_nId,*pStatusBar);
-        }
-
-        if ( pController )
-        {
-            m_rController.set( pController );
-            if ( m_rController.is() )
-            {
-                m_rController->initialize(_rArguments);
-                m_rController->update();
-            }
-        }
-
-        addStatusListener(m_aCommandURL);
-        update();
     }
+
+    SfxStatusBarControl *pController = nullptr;
+    if ( m_aCommandURL == ".uno:ZoomSlider" )
+    {
+        m_nSlotId = SID_ATTR_ZOOMSLIDER;
+        pController = new SvxZoomSliderControl(m_nSlotId,m_nId,*pStatusBar);
+    }
+    else if ( m_aCommandURL == ".uno:Zoom" )
+    {
+        m_nSlotId = SID_ATTR_ZOOM;
+        pController = new SvxZoomStatusBarControl(m_nSlotId,m_nId,*pStatusBar);
+    }
+
+    if ( pController )
+    {
+        m_rController.set( pController );
+        if ( m_rController.is() )
+        {
+            m_rController->initialize(_rArguments);
+            m_rController->update();
+        }
+    }
+
+    addStatusListener(m_aCommandURL);
+    update();
 }
 // XStatusListener
 void SAL_CALL OStatusbarController::statusChanged( const FeatureStateEvent& _aEvent)
@@ -133,27 +133,27 @@ void SAL_CALL OStatusbarController::statusChanged( const FeatureStateEvent& _aEv
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    if ( m_rController.is() )
+    if ( !m_rController.is() )
+        return;
+
+    if ( m_aCommandURL == ".uno:ZoomSlider" )
     {
-        if ( m_aCommandURL == ".uno:ZoomSlider" )
+        Sequence< PropertyValue > aSeq;
+        if ( (_aEvent.State >>= aSeq) && aSeq.getLength() == 2 )
         {
-            Sequence< PropertyValue > aSeq;
-            if ( (_aEvent.State >>= aSeq) && aSeq.getLength() == 2 )
-            {
-                SvxZoomSliderItem aZoomSlider(100,20,400);
-                aZoomSlider.PutValue(_aEvent.State, 0);
-                static_cast<SvxZoomSliderControl*>(m_rController.get())->StateChanged(m_nSlotId,SfxItemState::DEFAULT,&aZoomSlider);
-            }
+            SvxZoomSliderItem aZoomSlider(100,20,400);
+            aZoomSlider.PutValue(_aEvent.State, 0);
+            static_cast<SvxZoomSliderControl*>(m_rController.get())->StateChanged(m_nSlotId,SfxItemState::DEFAULT,&aZoomSlider);
         }
-        else if ( m_aCommandURL == ".uno:Zoom" )
+    }
+    else if ( m_aCommandURL == ".uno:Zoom" )
+    {
+        Sequence< PropertyValue > aSeq;
+        if ( (_aEvent.State >>= aSeq) && aSeq.getLength() == 3 )
         {
-            Sequence< PropertyValue > aSeq;
-            if ( (_aEvent.State >>= aSeq) && aSeq.getLength() == 3 )
-            {
-                SvxZoomItem aZoom;
-                aZoom.PutValue(_aEvent.State, 0 );
-                static_cast<SvxZoomStatusBarControl*>(m_rController.get())->StateChanged(m_nSlotId,SfxItemState::DEFAULT,&aZoom);
-            }
+            SvxZoomItem aZoom;
+            aZoom.PutValue(_aEvent.State, 0 );
+            static_cast<SvxZoomStatusBarControl*>(m_rController.get())->StateChanged(m_nSlotId,SfxItemState::DEFAULT,&aZoom);
         }
     }
 }

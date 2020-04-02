@@ -161,39 +161,39 @@ void OSectionView::ObjectRemovedInAliveMode( const SdrObject* _pObject )
 
 void OSectionView::SetMarkedToLayer( SdrLayerID _nLayerNo )
 {
-    if (AreObjectsMarked())
-    {
-        //  #i11702# use SdrUndoObjectLayerChange for undo
-        //  STR_UNDO_SELATTR is "Attributes" - should use a different text later
-        BegUndo( );
+    if (!AreObjectsMarked())
+        return;
 
-        const SdrMarkList& rMark = GetMarkedObjectList();
-        const size_t nCount = rMark.GetMarkCount();
-        for (size_t i = 0; i<nCount; ++i)
+    //  #i11702# use SdrUndoObjectLayerChange for undo
+    //  STR_UNDO_SELATTR is "Attributes" - should use a different text later
+    BegUndo( );
+
+    const SdrMarkList& rMark = GetMarkedObjectList();
+    const size_t nCount = rMark.GetMarkCount();
+    for (size_t i = 0; i<nCount; ++i)
+    {
+        SdrObject* pObj = rMark.GetMark(i)->GetMarkedSdrObj();
+        if ( dynamic_cast< const OCustomShape *>( pObj ) !=  nullptr )
         {
-            SdrObject* pObj = rMark.GetMark(i)->GetMarkedSdrObj();
-            if ( dynamic_cast< const OCustomShape *>( pObj ) !=  nullptr )
+            AddUndo( std::make_unique<SdrUndoObjectLayerChange>( *pObj, pObj->GetLayer(), _nLayerNo) );
+            pObj->SetLayer( _nLayerNo );
+            OObjectBase& rBaseObj = dynamic_cast<OObjectBase&>(*pObj);
+            try
             {
-                AddUndo( std::make_unique<SdrUndoObjectLayerChange>( *pObj, pObj->GetLayer(), _nLayerNo) );
-                pObj->SetLayer( _nLayerNo );
-                OObjectBase& rBaseObj = dynamic_cast<OObjectBase&>(*pObj);
-                try
-                {
-                    rBaseObj.getReportComponent()->setPropertyValue(PROPERTY_OPAQUE,uno::makeAny(_nLayerNo == RPT_LAYER_FRONT));
-                }
-                catch(const uno::Exception&)
-                {
-                    DBG_UNHANDLED_EXCEPTION("reportdesign");
-                }
+                rBaseObj.getReportComponent()->setPropertyValue(PROPERTY_OPAQUE,uno::makeAny(_nLayerNo == RPT_LAYER_FRONT));
+            }
+            catch(const uno::Exception&)
+            {
+                DBG_UNHANDLED_EXCEPTION("reportdesign");
             }
         }
-
-        EndUndo();
-
-        // check mark list now instead of later in a timer
-        CheckMarked();
-        MarkListHasChanged();
     }
+
+    EndUndo();
+
+    // check mark list now instead of later in a timer
+    CheckMarked();
+    MarkListHasChanged();
 }
 
 bool OSectionView::OnlyShapesMarked() const

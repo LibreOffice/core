@@ -502,24 +502,24 @@ void PropBrw::Update( OSectionView* pNewView )
 
 void PropBrw::Update( const uno::Reference< uno::XInterface>& _xReportComponent)
 {
-    if ( m_xLastSection != _xReportComponent )
-    {
-        m_xLastSection = _xReportComponent;
-        try
-        {
-            if ( m_pView )
-            {
-                EndListening( *(m_pView->GetModel()) );
-                m_pView = nullptr;
-            }
+    if ( m_xLastSection == _xReportComponent )
+        return;
 
-            uno::Reference< uno::XInterface> xTemp(CreateComponentPair(_xReportComponent,_xReportComponent));
-            implSetNewObject( uno::Sequence< uno::Reference< uno::XInterface> >(&xTemp,1) );
-        }
-        catch ( Exception& )
+    m_xLastSection = _xReportComponent;
+    try
+    {
+        if ( m_pView )
         {
-            OSL_FAIL( "PropBrw::Update: Exception occurred!" );
+            EndListening( *(m_pView->GetModel()) );
+            m_pView = nullptr;
         }
+
+        uno::Reference< uno::XInterface> xTemp(CreateComponentPair(_xReportComponent,_xReportComponent));
+        implSetNewObject( uno::Sequence< uno::Reference< uno::XInterface> >(&xTemp,1) );
+    }
+    catch ( Exception& )
+    {
+        OSL_FAIL( "PropBrw::Update: Exception occurred!" );
     }
 }
 
