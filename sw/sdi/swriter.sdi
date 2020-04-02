@@ -4643,6 +4643,40 @@ SfxVoidItem PageDownSel FN_PAGEDOWN_SEL
     GroupId = SfxGroupId::Navigator;
 ]
 
+SfxVoidItem GoToPrevPage FN_TO_PREV_PAGE
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Navigator;
+]
+
+SfxVoidItem GoToNextPage FN_TO_NEXT_PAGE
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Navigator;
+]
+
 SfxUInt16Item PageOffsetDialog FN_CHANGE_PAGENUM
 (SfxUInt16Item nOffset FN_CHANGE_PAGENUM)
 [
