@@ -3798,19 +3798,12 @@ Reference< uno::XInterface > SchXMLExport_Styles_createInstance(const Reference<
 }
 
 // Oasis format
-Sequence< OUString > SchXMLExport_Oasis_Styles_getSupportedServiceNames() throw()
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_comp_Chart_XMLOasisStylesExporter_get_implementation(
+    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
 {
-    return Sequence< OUString > { "com.sun.star.comp.Chart.XMLOasisStylesExporter" };
-}
-
-OUString SchXMLExport_Oasis_Styles_getImplementationName() throw()
-{
-    return "SchXMLExport.Oasis.Styles";
-}
-
-Reference< uno::XInterface > SchXMLExport_Oasis_Styles_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr)
-{
-    return static_cast<cppu::OWeakObject*>(new SchXMLExport( comphelper::getComponentContext(rSMgr), SchXMLExport_Oasis_Styles_getImplementationName(), SvXMLExportFlags::STYLES | SvXMLExportFlags::OASIS ));
+    return cppu::acquire(new SchXMLExport(pCtx, "SchXMLExport.Oasis.Styles",
+                                          SvXMLExportFlags::STYLES | SvXMLExportFlags::OASIS));
 }
 
 Sequence< OUString > SchXMLExport_Content_getSupportedServiceNames() throw()
