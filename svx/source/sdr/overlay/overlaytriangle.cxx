@@ -19,7 +19,7 @@
 
 #include <sdr/overlay/overlaytriangle.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 
 
 namespace sdr::overlay

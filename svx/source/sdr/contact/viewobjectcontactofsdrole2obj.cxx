@@ -24,7 +24,7 @@
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
-#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonHatchPrimitive2D.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>

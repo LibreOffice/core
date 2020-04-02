@@ -27,7 +27,7 @@
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/gridprimitive2d.hxx>
 #include <drawinglayer/primitive2d/helplineprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

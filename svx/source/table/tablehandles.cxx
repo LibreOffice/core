@@ -30,7 +30,7 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/svdmrkv.hxx>
 #include <svx/svdpagv.hxx>
-#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonHairlinePrimitive2D.hxx>
 #include <sdr/overlay/overlayrectangle.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 
