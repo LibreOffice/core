@@ -64,13 +64,13 @@ while ($_ = $ARGV[0], /^-/) {
 }
 
 
-while (<>) {
-    unless (open INFILE,$ARGV) {
-        print STDOUT "Can't open input file $ARGV: $!\n";
+while ($arg = shift) {
+    unless (open INFILE,$arg) {
+        print STDOUT "Can't open input file $arg: $!\n";
         exit 1;
     }
 
-    $srcfile = substr($ARGV, rindex($ARGV, "/") + 1);
+    $srcfile = substr($arg, rindex($arg, "/") + 1);
 
     unless (open OUTFILE,"> $destdir/$prefix$srcfile") {
         print STDOUT "Can't open output file $destdir/$prefix$srcfile: $!\n";
