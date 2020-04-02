@@ -139,7 +139,6 @@ $(share_WORKDIR)/%/openoffice.org.xml: $(share_WORKDIR)/documents.ulf $(MIMEDESK
 	$(PERL) $(share_SRCDIR)/share/create_mime_xml.pl $< > $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
 
-
 $(share_WORKDIR)/%/openoffice.keys:  \
 	$(share_SRCDIR)/mimetypes/openoffice.mime $(MIMEKEYS) $(share_SRCDIR)/share/brand.pl \
 	$(share_TRANSLATE)  $(share_WORKDIR)/documents.ulf \
@@ -148,7 +147,7 @@ $(share_WORKDIR)/%/openoffice.keys:  \
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
 	$(PERL) $(share_SRCDIR)/share/brand.pl -p $* -u $(UNIXFILENAME.$*) \
-		--iconprefix $(UNIXFILENAME.$*)- $^ $(share_WORKDIR)/$*
+		--iconprefix $(UNIXFILENAME.$*)- $(MIMEKEYS) $(share_WORKDIR)/$*
 	$(call gb_ExternalExecutable_get_command,python) $(share_TRANSLATE) \
 		-p $* -d $(share_WORKDIR)/$* \
 		--ext "keys" --key "description" $(share_WORKDIR)/documents.ulf
@@ -244,7 +243,7 @@ $(share_WORKDIR)/%/build.flag: $(share_SRCDIR)/share/brand.pl $(LAUNCHERS) \
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
 	$(PERL) $(share_SRCDIR)/share/brand.pl -p '$${PRODUCTNAME} $${PRODUCTVERSION}' -u $(UNIXFILENAME.$*) \
 		$(brand_URIPARAM) \
-		--iconprefix '$${UNIXBASISROOTNAME}-' $^ $(share_WORKDIR)/$*
+		--iconprefix '$${UNIXBASISROOTNAME}-' $(LAUNCHERS) $(share_WORKDIR)/$*
 	$(call gb_ExternalExecutable_get_command,python) $(share_TRANSLATE) -p $(PRODUCTNAME.$*)$(PRODUCTVERSION) -d $(share_WORKDIR)/$* \
 		--ext "desktop" --key "Comment" $(share_WORKDIR)/launcher_comment.ulf
 	$(call gb_ExternalExecutable_get_command,python) $(share_TRANSLATE) -p $(PRODUCTNAME.$*)$(PRODUCTVERSION) -d $(share_WORKDIR)/$* \
