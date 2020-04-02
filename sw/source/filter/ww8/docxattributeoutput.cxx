@@ -4091,11 +4091,13 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
             // LO uses a higher compatibility than 2010's 14.
             sal_Int32 nMode = lcl_getWordCompatibilityMode( *m_rExport.m_pDoc );
 
+            const SwFrameFormat* pFrameFormat = pTableTextNodeInfoInner->getTableBox()->GetFrameFormat();
             if ((0 < nMode && nMode <= 14) && m_tableReference->m_nTableDepth == 0)
+                nIndent += pFrameFormat->GetBox().GetDistance( SvxBoxItemLine::LEFT );
+            else
             {
-                const SwTableBox*    pTabBox = pTableTextNodeInfoInner->getTableBox();
-                const SwFrameFormat* pFrameFormat = pTabBox->GetFrameFormat();
-                nIndent += sal_Int32( pFrameFormat->GetBox().GetDistance( SvxBoxItemLine::LEFT ) );
+                // adjust for SW considering table to start mid-border instead of nested/2013's left-side-of-border.
+                nIndent -= pFrameFormat->GetBox().CalcLineWidth( SvxBoxItemLine::LEFT ) / 2;
             }
 
             break;

@@ -1192,7 +1192,8 @@ DECLARE_OOXMLEXPORT_TEST(testTableMarginAdjustment, "table.fodt")
     // (old) Word: margin 0 means paragraph in table starts at 0
 
     auto const xTable(getParagraphOrTable(1));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTable, "LeftMargin"));
+    // shifted very slightly to account for half of the thin border width, so 4, not 0.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), getProperty<sal_Int32>(xTable, "LeftMargin"));
 
     // Now that compatibilityMode is set to 2013's 15 (new), expect the new values,
     // since LO is exporting in the NEW way now instead of the OLD way.
@@ -1202,6 +1203,24 @@ DECLARE_OOXMLEXPORT_TEST(testTableMarginAdjustment, "table.fodt")
 
     assertXPath(pXmlDoc, "//w:tbl[1]/w:tblPr[1]/w:tblInd[1]", "type", "dxa");
     assertXPath(pXmlDoc, "//w:tbl[1]/w:tblPr[1]/w:tblInd[1]", "w", "0");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf119760_tableInTablePosition, "tdf119760_tableInTablePosition.docx")
+{
+    if ( mbExported )
+    {
+        xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+        assertXPath(pXmlDoc, "//w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl[1]/w:tblPr[1]/w:tblInd[1]", "type", "dxa");
+        assertXPath(pXmlDoc, "//w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl[1]//w:tblPr[1]/w:tblInd[1]", "w", "0");
+    }
+
+    uno::Reference< text::XTextTablesSupplier > xTablesSupplier( mxComponent, uno::UNO_QUERY );
+    uno::Reference< container::XIndexAccess > xTables( xTablesSupplier->getTextTables(), uno::UNO_QUERY );
+    uno::Reference< text::XTextTable > xTable( xTables->getByIndex(0), uno::UNO_QUERY );
+    // For compatibilityMode 15: margin 0 means table border starts at 0,
+    // shifted to account for half of the thick border width, so 106, not 0.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(106), getProperty<sal_Int32>(xTable, "LeftMargin"));
 }
 
 DECLARE_OOXMLEXPORT_TEST( testTableCellMargin, "table-cell-margin.docx" )
@@ -1268,10 +1287,11 @@ DECLARE_OOXMLEXPORT_TEST( testTablePosition14, "table-position-14.docx" )
     }
 }
 
-// tdf#106742 for DOCX with compatibility level > 14 (MS Word since ver.2013), we should NOT use cell margins when calculating table left border position
+// tdf#106742 for DOCX with compatibility level > 14 (MS Word since ver.2013),
+// we should NOT use cell margins when calculating table left border position. But we do need to use border width.
 DECLARE_OOXMLEXPORT_TEST( testTablePosition15, "table-position-15.docx" )
 {
-    sal_Int32 const aXCoordsFromOffice[] = { 2751, -899, 1, 106 };
+    sal_Int32 const aXCoordsFromOffice[] = { 2751, -899, 1, 212 };
 
     uno::Reference< text::XTextTablesSupplier > xTablesSupplier( mxComponent, uno::UNO_QUERY );
     uno::Reference< frame::XModel >             xModel( mxComponent, uno::UNO_QUERY );
