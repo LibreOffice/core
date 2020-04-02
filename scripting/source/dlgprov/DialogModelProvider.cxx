@@ -42,33 +42,33 @@ DialogModelProvider::DialogModelProvider(Reference< XComponentContext > const & 
 // lang::XInitialization:
 void SAL_CALL DialogModelProvider::initialize(const css::uno::Sequence< uno::Any > & aArguments)
 {
-    if ( aArguments.getLength() == 1 )
+    if ( aArguments.getLength() != 1 )
+        return;
+
+    OUString sURL;
+    if ( !( aArguments[ 0 ] >>= sURL ))
+        throw css::lang::IllegalArgumentException();
+     // Try any other URL with SimpleFileAccess
+    Reference< ucb::XSimpleFileAccess3 > xSFI = ucb::SimpleFileAccess::create(m_xContext);
+
+    try
     {
-        OUString sURL;
-        if ( !( aArguments[ 0 ] >>= sURL ))
-            throw css::lang::IllegalArgumentException();
-         // Try any other URL with SimpleFileAccess
-        Reference< ucb::XSimpleFileAccess3 > xSFI = ucb::SimpleFileAccess::create(m_xContext);
-
-        try
+        Reference< io::XInputStream > xInput = xSFI->openFileRead( sURL );
+        Reference< resource::XStringResourceManager > xStringResourceManager;
+        if ( xInput.is() )
         {
-            Reference< io::XInputStream > xInput = xSFI->openFileRead( sURL );
-            Reference< resource::XStringResourceManager > xStringResourceManager;
-            if ( xInput.is() )
-            {
-                xStringResourceManager = dlgprov::lcl_getStringResourceManager(m_xContext,sURL);
-                Any aDialogSourceURLAny;
-                aDialogSourceURLAny <<= sURL;
+            xStringResourceManager = dlgprov::lcl_getStringResourceManager(m_xContext,sURL);
+            Any aDialogSourceURLAny;
+            aDialogSourceURLAny <<= sURL;
 
-                Reference< frame::XModel > xModel;
-                m_xDialogModel.set( dlgprov::lcl_createDialogModel( m_xContext, xInput , xModel, xStringResourceManager, aDialogSourceURLAny  ), UNO_SET_THROW);
-                m_xDialogModelProp.set(m_xDialogModel, UNO_QUERY_THROW);
-            }
+            Reference< frame::XModel > xModel;
+            m_xDialogModel.set( dlgprov::lcl_createDialogModel( m_xContext, xInput , xModel, xStringResourceManager, aDialogSourceURLAny  ), UNO_SET_THROW);
+            m_xDialogModelProp.set(m_xDialogModel, UNO_QUERY_THROW);
         }
-        catch( Exception& )
-        {}
-        //m_sURL = sURL;
     }
+    catch( Exception& )
+    {}
+    //m_sURL = sURL;
 }
 
 // container::XElementAccess:

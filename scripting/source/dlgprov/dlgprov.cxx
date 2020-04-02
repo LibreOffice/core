@@ -473,36 +473,36 @@ namespace dlgprov
         const Reference< XIntrospectionAccess >& rxIntrospectionAccess,
         bool bDialogProviderMode )
     {
-        if ( rxControl.is() )
+        if ( !rxControl.is() )
+            return;
+
+        Reference< XControlContainer > xControlContainer( rxControl, UNO_QUERY );
+
+        if ( !xControlContainer.is() )
+            return;
+
+        Sequence< Reference< XControl > > aControls = xControlContainer->getControls();
+        const Reference< XControl >* pControls = aControls.getConstArray();
+        sal_Int32 nControlCount = aControls.getLength();
+
+        Sequence< Reference< XInterface > > aObjects( nControlCount + 1 );
+        Reference< XInterface >* pObjects = aObjects.getArray();
+        for ( sal_Int32 i = 0; i < nControlCount; ++i )
         {
-            Reference< XControlContainer > xControlContainer( rxControl, UNO_QUERY );
-
-            if ( xControlContainer.is() )
-            {
-                Sequence< Reference< XControl > > aControls = xControlContainer->getControls();
-                const Reference< XControl >* pControls = aControls.getConstArray();
-                sal_Int32 nControlCount = aControls.getLength();
-
-                Sequence< Reference< XInterface > > aObjects( nControlCount + 1 );
-                Reference< XInterface >* pObjects = aObjects.getArray();
-                for ( sal_Int32 i = 0; i < nControlCount; ++i )
-                {
-                    pObjects[i].set( pControls[i], UNO_QUERY );
-                }
-
-                // also add the dialog control itself to the sequence
-                pObjects[nControlCount].set( rxControl, UNO_QUERY );
-
-                Reference<XScriptEventsAttacher> xScriptEventsAttacher
-                    = new DialogEventsAttacherImpl(
-                        m_xContext, m_xModel, rxControl, rxHandler, rxIntrospectionAccess,
-                        bDialogProviderMode,
-                        (m_BasicInfo ? m_BasicInfo->mxBasicRTLListener : nullptr), msDialogLibName);
-
-                Any aHelper;
-                xScriptEventsAttacher->attachEvents( aObjects, Reference< XScriptListener >(), aHelper );
-            }
+            pObjects[i].set( pControls[i], UNO_QUERY );
         }
+
+        // also add the dialog control itself to the sequence
+        pObjects[nControlCount].set( rxControl, UNO_QUERY );
+
+        Reference<XScriptEventsAttacher> xScriptEventsAttacher
+            = new DialogEventsAttacherImpl(
+                m_xContext, m_xModel, rxControl, rxHandler, rxIntrospectionAccess,
+                bDialogProviderMode,
+                (m_BasicInfo ? m_BasicInfo->mxBasicRTLListener : nullptr), msDialogLibName);
+
+        Any aHelper;
+        xScriptEventsAttacher->attachEvents( aObjects, Reference< XScriptListener >(), aHelper );
     }
 
     Reference< XIntrospectionAccess > DialogProviderImpl::inspectHandler( const Reference< XInterface >& rxHandler )
