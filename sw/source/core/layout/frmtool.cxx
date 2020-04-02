@@ -1356,6 +1356,38 @@ void AppendAllObjs(const SwFrameFormats* pTable, const SwFrame* pSib)
     }
 }
 
+namespace sw {
+
+void RecreateStartTextFrames(SwTextNode & rNode)
+{
+    std::vector<SwTextFrame*> frames;
+    SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(rNode);
+    for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+    {
+        if (pFrame->getRootFrame()->IsHideRedlines())
+        {
+            frames.push_back(pFrame);
+        }
+    }
+    auto eMode(sw::FrameMode::Existing);
+    for (SwTextFrame * pFrame : frames)
+    {
+        // SplitNode could have moved the original frame to the start node
+        // & created a new one on end, or could have created new frame on
+        // start node... grab start node's frame and recreate MergedPara.
+        SwTextNode & rFirstNode(pFrame->GetMergedPara()
+            ? *pFrame->GetMergedPara()->pFirstNode
+            : rNode);
+        assert(rFirstNode.GetIndex() <= rNode.GetIndex());
+        pFrame->SetMergedPara(sw::CheckParaRedlineMerge(
+                    *pFrame, rFirstNode, eMode));
+        eMode = sw::FrameMode::New; // Existing is not idempotent!
+        // note: this may or may not delete frames on the end node
+    }
+}
+
+} // namespace sw
+
 /** local method to set 'working' position for newly inserted frames
 
     OD 12.08.2003 #i17969#

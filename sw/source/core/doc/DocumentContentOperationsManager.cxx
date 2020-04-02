@@ -44,6 +44,7 @@
 #include <redline.hxx>
 #include <txtfrm.hxx>
 #include <rootfrm.hxx>
+#include <frmtool.hxx>
 #include <unocrsr.hxx>
 #include <mvsave.hxx>
 #include <ndtxt.hxx>
@@ -3407,21 +3408,42 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
     assert(!pCopiedPaM || pCopiedPaM->second.nNode <= rInsPos);
 
     SwDoc* pDest = rInsPos.GetNode().GetDoc();
-    SwNodeIndex aSavePos( rInsPos, -1 );
-    bool bEndIsEqualEndPos = rInsPos == rRg.aEnd;
+    SwNodeIndex aSavePos( rInsPos );
 
     if (rRg.aStart != rRg.aEnd)
     {
+        bool bEndIsEqualEndPos = rInsPos == rRg.aEnd;
+        --aSavePos;
         SaveRedlEndPosForRestore aRedlRest( rInsPos, 0 );
 
         // insert behind the already copied start node
-        m_rDoc.GetNodes().CopyNodes( rRg, rInsPos, bMakeNewFrames, true );
+        m_rDoc.GetNodes().CopyNodes( rRg, rInsPos, false, true );
         aRedlRest.Restore();
+        if (bMakeNewFrames) // tdf#130685 only after aRedlRest
+        {   // recreate from previous node (could be merged now)
+            if (SwTextNode *const pNode = aSavePos.GetNode().GetTextNode())
+            {
+                sw::RecreateStartTextFrames(*pNode);
+            }
+        }
+        bool const isAtStartOfSection(aSavePos.GetNode().IsStartNode());
+        ++aSavePos;
+        if (bMakeNewFrames)
+        {
+            // it's possible that CheckParaRedlineMerge() deleted frames
+            // on rInsPos so have to include it, but it must not be included
+            // if it was the first node in the document so that MakeFrames()
+            // will find the existing (wasn't deleted) frame on it
+            SwNodeIndex const end(rInsPos,
+                    (rInsPos.GetNode().IsEndNode() || isAtStartOfSection)
+                    ? 0 : +1);
+            ::MakeFrames(pDest, aSavePos, end);
+        }
+        if (bEndIsEqualEndPos)
+        {
+            const_cast<SwNodeIndex&>(rRg.aEnd) = aSavePos;
+        }
     }
-
-    ++aSavePos;
-    if( bEndIsEqualEndPos )
-        const_cast<SwNodeIndex&>(rRg.aEnd) = aSavePos;
 
 #if OSL_DEBUG_LEVEL > 0
     {
