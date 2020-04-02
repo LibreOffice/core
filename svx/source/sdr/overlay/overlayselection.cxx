@@ -20,7 +20,8 @@
 #include <svx/sdr/overlay/overlayselection.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonHairlinePrimitive2D.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>

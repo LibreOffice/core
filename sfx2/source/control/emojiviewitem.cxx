@@ -10,7 +10,7 @@
 #include <emojiviewitem.hxx>
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonSelectionPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <com/sun/star/lang/Locale.hpp>
