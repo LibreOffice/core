@@ -19,7 +19,7 @@ $(eval $(call gb_Package_add_files,extras_palettes,$(LIBO_SHARE_FOLDER)/palette,
 	libreoffice.soc \
 	material.soc \
 	modern.sog \
-	mso-highlight.soc \
+	compatibility.soc \
 	standard.sob \
 	standard.soc \
 	standard.sod \
