@@ -7,7 +7,7 @@ connectivity/source/inc/dbase/dindexnode.hxx:122
 cui/source/inc/cfg.hxx:233
     SvxConfigEntry nId
     sal_uInt16
-dbaccess/source/ui/inc/tabletree.hxx:149
+dbaccess/source/ui/inc/tabletree.hxx:146
     dbaui::TableTreeListBox m_nTextColumn
     int
 desktop/source/app/main.c:29
@@ -46,7 +46,7 @@ include/vcl/toolkit/dialog.hxx:52
 jvmfwk/plugins/sunmajor/pluginlib/sunjavaplugin.cxx:191
     (anonymous) g_bInGetJavaVM
     sig_atomic_t
-libreofficekit/source/gtk/tilebuffer.hxx:229
+libreofficekit/source/gtk/tilebuffer.hxx:227
     LOEvent m_nSetGraphicSelectionType
     int
 sal/rtl/cipher.cxx:113
@@ -70,7 +70,7 @@ sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1087
 sc/source/ui/vba/vbahyperlink.hxx:83
     ScVbaHyperlink mnType
     long
-sd/qa/unit/tiledrendering/tiledrendering.cxx:959
+sd/qa/unit/tiledrendering/tiledrendering.cxx:967
     (anonymous namespace)::ViewCallback m_nPart
     int
 soltools/cpp/_tokens.c:35
@@ -82,10 +82,10 @@ soltools/cpp/_tokens.c:36
 soltools/cpp/cpp.h:121
     includelist always
     char
-svx/source/inc/cell.hxx:204
+svx/source/inc/cell.hxx:205
     sdr::table::Cell mnCellContentType
     css::table::CellContentType
-svx/source/table/tablertfimporter.cxx:57
+svx/source/table/tablertfimporter.cxx:55
     sdr::table::(anonymous namespace)::RTFCellDefault mnRowSpan
     sal_Int32
 sw/source/filter/ww8/docxexport.hxx:99

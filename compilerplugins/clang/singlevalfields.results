@@ -55,7 +55,7 @@ canvas/inc/rendering/irendermodule.hxx:37
 chart2/source/controller/dialogs/DataBrowser.cxx:209
     chart::impl::SeriesHeader m_aUpdateDataTimer
     UpdateDataTimer
-chart2/source/controller/inc/ChartController.hxx:382
+chart2/source/controller/inc/ChartController.hxx:378
     chart::ChartController m_aLifeTimeManager
     0
 chart2/source/controller/inc/TitleDialogData.hxx:34
@@ -109,7 +109,7 @@ connectivity/source/inc/writer/WTable.hxx:65
 cppu/source/uno/copy.hxx:39
     cppu::(anonymous namespace)::SequencePrefix nRefCount
     1
-cui/source/inc/acccfg.hxx:97
+cui/source/inc/acccfg.hxx:99
     SfxAcceleratorConfigPage m_aUpdateDataTimer
     UpdateDataTimer
 cui/source/inc/cfg.hxx:375
@@ -121,13 +121,13 @@ cui/source/inc/linkdlg.hxx:46
 cui/source/inc/thesdlg.hxx:32
     SvxThesaurusDialog m_aModifyIdle
     cui SvxThesaurusDialog LookUp Modify
-cui/source/options/optgdlg.cxx:1277
+cui/source/options/optgdlg.cxx:1259
     LanguageConfig_Impl aLanguageOptions
     0
 cui/source/options/optjava.hxx:60
     SvxJavaOptionsPage m_aResetIdle
     cui options SvxJavaOptionsPage Reset
-dbaccess/source/ui/inc/directsql.hxx:64
+dbaccess/source/ui/inc/directsql.hxx:66
     dbaui::DirectSQLDialog m_aHighlighter
     1
 desktop/source/app/app.cxx:491
@@ -166,7 +166,7 @@ editeng/source/editeng/impedit.hxx:470
 emfio/source/reader/emfreader.cxx:1495
     emfio::EmfReader::ReadEnhWMF bDoSaveForVisualControl
     0
-extensions/source/bibliography/bibcont.hxx:69
+extensions/source/bibliography/bibcont.hxx:68
     BibBookContainer aIdle
     extensions BibBookContainer Split Idle
 filter/source/msfilter/msdffimp.cxx:2690
@@ -175,7 +175,7 @@ filter/source/msfilter/msdffimp.cxx:2690
 filter/source/msfilter/viscache.hxx:30
     Impl_OlePres nFormat
     3
-framework/source/services/autorecovery.cxx:397
+framework/source/services/autorecovery.cxx:398
     (anonymous namespace)::AutoRecovery m_aTimer
     Auto save timer
 framework/source/uiconfiguration/imagemanagerimpl.hxx:173
@@ -223,7 +223,7 @@ include/filter/msfilter/dffpropset.hxx:34
 include/filter/msfilter/dffpropset.hxx:35
     DffPropFlags bBlip
     1
-include/i18nutil/casefolding.hxx:57
+include/i18nutil/casefolding.hxx:58
     i18nutil::Mapping nmap
     0
 include/o3tl/cow_wrapper.hxx:204
@@ -238,6 +238,12 @@ include/oox/core/contexthandler2.hxx:217
 include/oox/dump/dumperbase.hxx:1680
     oox::dump::RecordObjectBase mbBinaryOnly
     0
+include/oox/ole/axcontrol.hxx:427
+    oox::ole::ComCtlModelBase mbCommonPart
+    1
+include/oox/ole/axcontrol.hxx:428
+    oox::ole::ComCtlModelBase mbComplexPart
+    1
 include/sfx2/msg.hxx:187
     SfxSlot nGroupId
     0
@@ -256,7 +262,7 @@ include/sfx2/msg.hxx:201
 include/sfx2/templatedlg.hxx:123
     SfxTemplateManagerDlg m_aUpdateDataTimer
     UpdateDataTimer
-include/svtools/filechangedchecker.hxx:31
+include/svtools/filechangedchecker.hxx:32
     FileChangedChecker mIdle
     SVTools FileChangedChecker Idle
 include/svtools/svparser.hxx:55
@@ -277,25 +283,25 @@ include/svx/ctredlin.hxx:91
 include/svx/ctredlin.hxx:92
     SvxRedlinTable aDaTiLast
     0
-include/svx/deflt3d.hxx:39
+include/svx/deflt3d.hxx:40
     E3dDefaultAttributes bDefaultCubePosIsCenter
     0
-include/svx/deflt3d.hxx:46
+include/svx/deflt3d.hxx:47
     E3dDefaultAttributes bDefaultLatheSmoothed
     1
-include/svx/deflt3d.hxx:47
+include/svx/deflt3d.hxx:48
     E3dDefaultAttributes bDefaultLatheSmoothFrontBack
     0
-include/svx/deflt3d.hxx:49
+include/svx/deflt3d.hxx:50
     E3dDefaultAttributes bDefaultLatheCloseFront
     1
-include/svx/deflt3d.hxx:50
+include/svx/deflt3d.hxx:51
     E3dDefaultAttributes bDefaultLatheCloseBack
     1
-include/svx/deflt3d.hxx:53
+include/svx/deflt3d.hxx:54
     E3dDefaultAttributes bDefaultExtrudeSmoothed
     1
-include/svx/deflt3d.hxx:54
+include/svx/deflt3d.hxx:55
     E3dDefaultAttributes bDefaultExtrudeSmoothFrontBack
     0
 include/svx/fontwork.hxx:77
@@ -313,24 +319,18 @@ include/svx/svdcrtv.hxx:50
 include/svx/svdcrtv.hxx:51
     SdrCreateView nFreeHandMinDistPix
     10
-include/svx/svdmark.hxx:143
+include/svx/svdmark.hxx:144
     SdrMarkList mbPointNameOk
     0
-include/svx/svdmark.hxx:144
+include/svx/svdmark.hxx:145
     SdrMarkList mbGluePointNameOk
     0
 include/svx/svdmrkv.hxx:110
     SdrMarkView mnFrameHandlesLimit
     50
-include/vcl/field.hxx:185
-    NumericFormatter mbShowTrailingZeros
-    1
 include/vcl/opengl/OpenGLContext.hxx:48
     OpenGLCapabilitySwitch mbLimitedShaderRegisters
     0
-include/vcl/quickselectionengine.hxx:79
-    vcl::QuickSelectionEngine bEnabled
-    1
 include/vcl/settings.hxx:145
     DialogStyle content_area_border
     2
@@ -535,6 +535,9 @@ sc/source/ui/inc/viewfunc.hxx:376
 sc/source/ui/inc/viewfunc.hxx:377
     /media/disk2/libo4/sc/source/ui/view/viewfun7.cxx bPasteIsMove
     0
+sccomp/source/solver/SwarmSolver.cxx:124
+    (anonymous namespace)::SwarmSolver mfResultValue
+    0
 sd/inc/sdpptwrp.hxx:44
     SdPPTFilter pBas
     0
@@ -670,7 +673,7 @@ svx/source/sdr/contact/viewcontactofsdrpage.cxx:103
 svx/source/sidebar/media/MediaPlaybackPanel.hxx:62
     svx::sidebar::MediaPlaybackPanel maIdle
     MediaPlaybackPanel
-svx/source/unodraw/recoveryui.cxx:68
+svx/source/unodraw/recoveryui.cxx:63
     (anonymous namespace)::RecoveryUI m_pParentWindow
     0
 sw/inc/authfld.hxx:151
@@ -719,11 +722,11 @@ sw/inc/view.hxx:192
     SwView m_pVScrollbar
     0
 sw/inc/view.hxx:698
-    /media/disk2/libo4/sw/source/uibase/uiview/viewport.cxx bDocSzUpdated
-    0
-sw/inc/view.hxx:698
     /media/disk2/libo4/sw/source/uibase/uiview/view.cxx bDocSzUpdated
     1
+sw/inc/view.hxx:698
+    /media/disk2/libo4/sw/source/uibase/uiview/viewport.cxx bDocSzUpdated
+    0
 sw/inc/viewopt.hxx:189
     SwViewOption m_bTest10
     0
@@ -871,13 +874,13 @@ sw/source/filter/ww8/ww8par5.cxx:1607
 sw/source/filter/ww8/ww8par5.cxx:1609
     SwWW8ImplReader::Read_F_DocInfo aName54
     SNUBBEL BUBBEL
-sw/source/filter/ww8/ww8par.hxx:664
+sw/source/filter/ww8/ww8par.hxx:666
     WW8FormulaControl mfUnknown
     0
-sw/source/filter/ww8/ww8par.hxx:671
+sw/source/filter/ww8/ww8par.hxx:673
     WW8FormulaControl mhpsCheckBox
     20
-sw/source/filter/ww8/ww8par.hxx:1028
+sw/source/filter/ww8/ww8par.hxx:1030
     WW8TabBandDesc bCantSplit90
     0
 sw/source/filter/ww8/ww8scan.hxx:1158
@@ -934,10 +937,13 @@ sw/source/uibase/inc/unotools.hxx:45
 unotools/source/config/saveopt.cxx:82
     (anonymous namespace)::SvtSaveOptions_Impl bROUserAutoSave
     0
-vcl/headless/svpgdi.cxx:471
+vcl/headless/svpgdi.cxx:352
+    (anonymous namespace)::SurfaceHelper::isTrivial nMinimalSquareSizeToBuffer
+    4096
+vcl/headless/svpgdi.cxx:597
     (anonymous) nMinimalSquareSizeToBuffer
     4096
-vcl/headless/svpgdi.cxx:1493
+vcl/headless/svpgdi.cxx:1632
     SvpSalGraphics::drawPolyLine bDoDirectCairoStroke
     1
 vcl/inc/canvasbitmap.hxx:55
@@ -949,6 +955,9 @@ vcl/inc/graphic/Manager.hxx:41
 vcl/inc/impfontcache.hxx:77
     ImplFontCache m_aBoundRectCache
     3000
+vcl/inc/listbox.hxx:203
+    ImplListBoxWindow meProminentType
+    0
 vcl/inc/qt5/Qt5Instance.hxx:64
     Qt5Instance m_aUpdateStyleTimer
     vcl::qt5 m_aUpdateStyleTimer
@@ -961,7 +970,7 @@ vcl/inc/salprn.hxx:44
 vcl/inc/salwtype.hxx:157
     SalWheelMouseEvent mbDeltaIsPixel
     0
-vcl/inc/svdata.hxx:278
+vcl/inc/svdata.hxx:316
     ImplSVNWFData mbMenuBarDockingAreaCommonBG
     0
 vcl/source/bitmap/BitmapTools.cxx:1050
@@ -1002,6 +1011,9 @@ vcl/source/filter/jpeg/transupp.h:147
     0
 vcl/source/filter/jpeg/transupp.h:149
     (anonymous) crop_yoffset
+    0
+vcl/source/filter/png/pngread.cxx:113
+    vcl::PNGReaderImpl mnPreviewShift
     0
 vcl/source/font/font.cxx:540
     (anonymous namespace)::WeightSearchEntry weight
@@ -1051,16 +1063,16 @@ vcl/source/gdi/dibtools.cxx:120
 vcl/source/gdi/pdfwriter_impl.hxx:735
     vcl::PDFWriterImpl m_DocDigest
     0
-vcl/source/outdev/bitmap.cxx:1217
+vcl/source/outdev/bitmap.cxx:1221
     OutputDevice::DrawTransformedBitmapEx bAllowPreferDirectPaint
     1
 vcl/unx/gtk3/a11y/gtk3atkutil.cxx:700
     ooo_atk_util_ensure_event_listener bInited
     1
-vcl/unx/gtk3/gtk3gtkinst.cxx:13155
+vcl/unx/gtk3/gtk3gtkinst.cxx:13513
     (anonymous namespace)::ensure_intercept_drawing_area_accessibility bDone
     1
-vcl/unx/gtk3/gtk3gtkinst.cxx:13183
+vcl/unx/gtk3/gtk3gtkinst.cxx:13541
     (anonymous namespace)::ensure_disable_ctrl_page_up_down_bindings bDone
     1
 workdir/LexTarget/l10ntools/source/xrmlex.cxx:706
@@ -1069,16 +1081,16 @@ workdir/LexTarget/l10ntools/source/xrmlex.cxx:706
 writerfilter/source/dmapper/DomainMapper_Impl.hxx:148
     writerfilter::dmapper::FieldParagraph m_bRemove
     0
-writerfilter/source/dmapper/SettingsTable.cxx:264
+writerfilter/source/dmapper/SettingsTable.cxx:267
     writerfilter::dmapper::SettingsTable_Impl m_pThemeFontLangProps
     3
-writerfilter/source/rtftok/rtfdocumentimpl.hxx:872
+writerfilter/source/rtftok/rtfdocumentimpl.hxx:881
     writerfilter::rtftok::RTFDocumentImpl m_nNestedTRLeft
     0
-writerfilter/source/rtftok/rtfdocumentimpl.hxx:873
+writerfilter/source/rtftok/rtfdocumentimpl.hxx:882
     writerfilter::rtftok::RTFDocumentImpl m_nTopLevelTRLeft
     0
-writerfilter/source/rtftok/rtfdocumentimpl.hxx:876
+writerfilter/source/rtftok/rtfdocumentimpl.hxx:885
     writerfilter::rtftok::RTFDocumentImpl m_nNestedCurrentCellX
     0
 writerfilter/source/rtftok/rtftokenizer.hxx:72
