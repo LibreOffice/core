@@ -142,6 +142,8 @@ bool IsMarkHidden(SwRootFrame const& rLayout, ::sw::mark::IMark const& rMark);
 bool IsMarkHintHidden(SwRootFrame const& rLayout,
         SwTextNode const& rNode, SwTextAttrEnd const& rHint);
 
+void RecreateStartTextFrames(SwTextNode & rNode);
+
 } // namespace sw
 
 /// Represents the visualization of a paragraph. Typical upper is an
