@@ -485,29 +485,6 @@ const SvXMLTokenMap& SdXMLImport::GetMasterPageElemTokenMap()
     return *mpMasterPageElemTokenMap;
 }
 
-const SvXMLTokenMap& SdXMLImport::GetMasterPageAttrTokenMap()
-{
-    if(!mpMasterPageAttrTokenMap)
-    {
-        static const SvXMLTokenMapEntry aMasterPageAttrTokenMap[] =
-        {
-            { XML_NAMESPACE_STYLE,  XML_NAME,                       XML_TOK_MASTERPAGE_NAME },
-            { XML_NAMESPACE_STYLE,  XML_DISPLAY_NAME,               XML_TOK_MASTERPAGE_DISPLAY_NAME },
-            { XML_NAMESPACE_STYLE,  XML_PAGE_LAYOUT_NAME,           XML_TOK_MASTERPAGE_PAGE_MASTER_NAME },
-            { XML_NAMESPACE_DRAW,   XML_STYLE_NAME,                 XML_TOK_MASTERPAGE_STYLE_NAME       },
-            { XML_NAMESPACE_PRESENTATION,   XML_PRESENTATION_PAGE_LAYOUT_NAME,  XML_TOK_MASTERPAGE_PAGE_LAYOUT_NAME },
-            { XML_NAMESPACE_PRESENTATION,   XML_USE_HEADER_NAME,                XML_TOK_MASTERPAGE_USE_HEADER_NAME  },
-            { XML_NAMESPACE_PRESENTATION,   XML_USE_FOOTER_NAME,                XML_TOK_MASTERPAGE_USE_FOOTER_NAME  },
-            { XML_NAMESPACE_PRESENTATION,   XML_USE_DATE_TIME_NAME,             XML_TOK_MASTERPAGE_USE_DATE_TIME_NAME   },
-            XML_TOKEN_MAP_END
-        };
-
-        mpMasterPageAttrTokenMap = std::make_unique<SvXMLTokenMap>(aMasterPageAttrTokenMap);
-    }
-
-    return *mpMasterPageAttrTokenMap;
-}
-
 const SvXMLTokenMap& SdXMLImport::GetPageMasterAttrTokenMap()
 {
     if(!mpPageMasterAttrTokenMap)

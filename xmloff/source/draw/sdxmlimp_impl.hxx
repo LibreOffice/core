@@ -153,7 +153,6 @@ class SdXMLImport: public SvXMLImport
     std::unique_ptr<SvXMLTokenMap>              mpBodyElemTokenMap;
     std::unique_ptr<SvXMLTokenMap>              mpStylesElemTokenMap;
     std::unique_ptr<SvXMLTokenMap>              mpMasterPageElemTokenMap;
-    std::unique_ptr<SvXMLTokenMap>              mpMasterPageAttrTokenMap;
     std::unique_ptr<SvXMLTokenMap>              mpPageMasterAttrTokenMap;
     std::unique_ptr<SvXMLTokenMap>              mpPageMasterStyleAttrTokenMap;
     std::unique_ptr<SvXMLTokenMap>              mpPresentationPlaceholderAttrTokenMap;
@@ -209,7 +208,6 @@ public:
     const SvXMLTokenMap& GetBodyElemTokenMap();
     const SvXMLTokenMap& GetStylesElemTokenMap();
     const SvXMLTokenMap& GetMasterPageElemTokenMap();
-    const SvXMLTokenMap& GetMasterPageAttrTokenMap();
     const SvXMLTokenMap& GetPageMasterAttrTokenMap();
     const SvXMLTokenMap& GetPageMasterStyleAttrTokenMap();
     const SvXMLTokenMap& GetPresentationPlaceholderAttrTokenMap();

@@ -89,7 +89,6 @@ class VCL_DLLPUBLIC SvTreeList final
 
     SvTreeListEntry*        FirstSelected( const SvListView*) const;
     SvTreeListEntry*        NextSelected( const SvListView*,SvTreeListEntry* pEntry ) const;
-    SvTreeListEntry*        PrevSelected( const SvListView*,SvTreeListEntry* pEntry ) const;
     SvTreeListEntry*        LastSelected( const SvListView*) const;
 
     sal_uLong           GetChildSelectionCount( const SvListView*,SvTreeListEntry* pParent ) const;
@@ -260,9 +259,6 @@ public:
     SvTreeListEntry*        NextSelected( SvTreeListEntry* pEntry ) const
     { return pModel->NextSelected(this,pEntry); }
 
-    SvTreeListEntry*        PrevSelected( SvTreeListEntry* pEntry ) const
-    { return pModel->PrevSelected(this,pEntry); }
-
     SvTreeListEntry*        LastSelected() const
     { return pModel->LastSelected(this); }
     SvTreeListEntry*        GetEntryAtAbsPos( sal_uLong nAbsPos ) const
@@ -279,9 +275,6 @@ public:
 
     sal_uLong           GetVisibleChildCount(SvTreeListEntry* pParent ) const
     { return pModel->GetVisibleChildCount(this,pParent); }
-
-    sal_uLong           GetChildSelectionCount( SvTreeListEntry* pParent ) const
-    { return pModel->GetChildSelectionCount(this,pParent); }
 
     bool               IsEntryVisible( SvTreeListEntry* pEntry ) const
     { return pModel->IsEntryVisible(this,pEntry); }
