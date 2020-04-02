@@ -683,19 +683,19 @@ void SAL_CALL rtl_bootstrap_args_close(rtlBootstrapHandle handle) SAL_THROW_EXTE
     OSL_ASSERT(p_bootstrap_map->find(that->_iniName)->second == that);
     --that->_nRefCount;
 
-    if (that->_nRefCount == 0)
+    if (that->_nRefCount != 0)
+        return;
+
+    std::size_t const nLeaking = 8; // only hold up to 8 files statically
+    if (p_bootstrap_map->size() > nLeaking)
     {
-        std::size_t const nLeaking = 8; // only hold up to 8 files statically
-        if (p_bootstrap_map->size() > nLeaking)
-        {
-            ::std::size_t erased = p_bootstrap_map->erase( that->_iniName );
-            if (erased != 1) {
-                OSL_ASSERT( false );
-            }
-            delete that;
+        ::std::size_t erased = p_bootstrap_map->erase( that->_iniName );
+        if (erased != 1) {
+            OSL_ASSERT( false );
         }
-        bootstrap_map::release();
+        delete that;
     }
+    bootstrap_map::release();
 }
 
 sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(
@@ -725,18 +725,18 @@ void SAL_CALL rtl_bootstrap_get_iniName_from_handle (
     rtl_uString     ** ppIniName
 )
 {
-    if(ppIniName)
+    if(!ppIniName)
+        return;
+
+    if(handle)
     {
-        if(handle)
-        {
-            Bootstrap_Impl * pImpl = static_cast<Bootstrap_Impl*>(handle);
-            rtl_uString_assign(ppIniName, pImpl->_iniName.pData);
-        }
-        else
-        {
-            const OUString & iniName = getIniFileName_Impl();
-            rtl_uString_assign(ppIniName, iniName.pData);
-        }
+        Bootstrap_Impl * pImpl = static_cast<Bootstrap_Impl*>(handle);
+        rtl_uString_assign(ppIniName, pImpl->_iniName.pData);
+    }
+    else
+    {
+        const OUString & iniName = getIniFileName_Impl();
+        rtl_uString_assign(ppIniName, iniName.pData);
     }
 }
 

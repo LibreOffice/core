@@ -103,27 +103,27 @@ void SAL_CALL rtl_uStringbuffer_ensureCapacity
     assert(This);
     assert(capacity && *capacity >= 0);
     assert(minimumCapacity >= 0);
+    if (minimumCapacity <= *capacity)
+        return;
+
+    rtl_uString * pTmp = *This;
+    rtl_uString * pNew = nullptr;
+    auto nLength = (*This)->length;
+    *capacity = (nLength + 1) * 2;
     if (minimumCapacity > *capacity)
-    {
-        rtl_uString * pTmp = *This;
-        rtl_uString * pNew = nullptr;
-        auto nLength = (*This)->length;
-        *capacity = (nLength + 1) * 2;
-        if (minimumCapacity > *capacity)
-            /* still lower, set to the minimum capacity */
-            *capacity = minimumCapacity;
+        /* still lower, set to the minimum capacity */
+        *capacity = minimumCapacity;
 
-        // use raw alloc to avoid overwriting the buffer twice
-        pNew = rtl_uString_ImplAlloc( *capacity );
-        pNew->length = nLength;
-        *This = pNew;
+    // use raw alloc to avoid overwriting the buffer twice
+    pNew = rtl_uString_ImplAlloc( *capacity );
+    pNew->length = nLength;
+    *This = pNew;
 
-        memcpy( (*This)->buffer, pTmp->buffer, nLength * sizeof(sal_Unicode) );
-        memset( (*This)->buffer + nLength, 0, (*capacity - nLength) * sizeof(sal_Unicode) );
+    memcpy( (*This)->buffer, pTmp->buffer, nLength * sizeof(sal_Unicode) );
+    memset( (*This)->buffer + nLength, 0, (*capacity - nLength) * sizeof(sal_Unicode) );
 
-        RTL_LOG_STRING_NEW( pTmp ); // with accurate contents
-        rtl_uString_release( pTmp );
-    }
+    RTL_LOG_STRING_NEW( pTmp ); // with accurate contents
+    rtl_uString_release( pTmp );
 }
 
 void SAL_CALL rtl_uStringbuffer_insert( rtl_uString ** This,
@@ -139,34 +139,34 @@ void SAL_CALL rtl_uStringbuffer_insert( rtl_uString ** This,
     sal_Int32 nOldLen;
     sal_Unicode * pBuf;
     sal_Int32 n;
-    if( len != 0 )
+    if( len == 0 )
+        return;
+
+    if (*capacity < (*This)->length + len)
+        rtl_uStringbuffer_ensureCapacity( This, capacity, (*This)->length + len );
+
+    nOldLen = (*This)->length;
+    pBuf = (*This)->buffer;
+
+    /* copy the tail */
+    n = (nOldLen - offset);
+    if( n == 1 )
+        /* optimized for 1 character */
+        pBuf[offset + len] = pBuf[offset];
+    else if( n > 1 )
+        memmove( pBuf + offset + len, pBuf + offset, n * sizeof(sal_Unicode) );
+
+    /* insert the new characters */
+    if( str != nullptr )
     {
-        if (*capacity < (*This)->length + len)
-            rtl_uStringbuffer_ensureCapacity( This, capacity, (*This)->length + len );
-
-        nOldLen = (*This)->length;
-        pBuf = (*This)->buffer;
-
-        /* copy the tail */
-        n = (nOldLen - offset);
-        if( n == 1 )
-                            /* optimized for 1 character */
-            pBuf[offset + len] = pBuf[offset];
-        else if( n > 1 )
-            memmove( pBuf + offset + len, pBuf + offset, n * sizeof(sal_Unicode) );
-
-        /* insert the new characters */
-        if( str != nullptr )
-        {
-            if( len == 1 )
-                /* optimized for 1 character */
-                pBuf[offset] = *str;
-            else
-                memcpy( pBuf + offset, str, len * sizeof(sal_Unicode) );
-        }
-        (*This)->length = nOldLen + len;
-        pBuf[ nOldLen + len ] = 0;
+        if( len == 1 )
+            /* optimized for 1 character */
+            pBuf[offset] = *str;
+        else
+            memcpy( pBuf + offset, str, len * sizeof(sal_Unicode) );
     }
+    (*This)->length = nOldLen + len;
+    pBuf[ nOldLen + len ] = 0;
 }
 
 void rtl_uStringbuffer_insertUtf32(
@@ -202,34 +202,34 @@ void SAL_CALL rtl_uStringbuffer_insert_ascii(   /*inout*/rtl_uString ** This,
     sal_Int32 nOldLen;
     sal_Unicode * pBuf;
     sal_Int32 n;
-    if( len != 0 )
+    if( len == 0 )
+        return;
+
+    if (*capacity < (*This)->length + len)
+        rtl_uStringbuffer_ensureCapacity( This, capacity, (*This)->length + len );
+
+    nOldLen = (*This)->length;
+    pBuf = (*This)->buffer;
+
+    /* copy the tail */
+    n = (nOldLen - offset);
+    if( n == 1 )
+        /* optimized for 1 character */
+        pBuf[offset + len] = pBuf[offset];
+    else if( n > 1 )
+        memmove( pBuf + offset + len, pBuf + offset, n * sizeof(sal_Unicode) );
+
+    /* insert the new characters */
+    for( n = 0; n < len; n++ )
     {
-        if (*capacity < (*This)->length + len)
-            rtl_uStringbuffer_ensureCapacity( This, capacity, (*This)->length + len );
+        /* Check ASCII range */
+        OSL_ENSURE( (*str & 0x80) == 0, "Found ASCII char > 127");
 
-        nOldLen = (*This)->length;
-        pBuf = (*This)->buffer;
-
-        /* copy the tail */
-        n = (nOldLen - offset);
-        if( n == 1 )
-            /* optimized for 1 character */
-            pBuf[offset + len] = pBuf[offset];
-        else if( n > 1 )
-            memmove( pBuf + offset + len, pBuf + offset, n * sizeof(sal_Unicode) );
-
-        /* insert the new characters */
-        for( n = 0; n < len; n++ )
-        {
-            /* Check ASCII range */
-            OSL_ENSURE( (*str & 0x80) == 0, "Found ASCII char > 127");
-
-            pBuf[offset + n] = static_cast<sal_Unicode>(*(str++));
-        }
-
-        (*This)->length = nOldLen + len;
-        pBuf[ nOldLen + len ] = 0;
+        pBuf[offset + n] = static_cast<sal_Unicode>(*(str++));
     }
+
+    (*This)->length = nOldLen + len;
+    pBuf[ nOldLen + len ] = 0;
 }
 
 /*************************************************************************

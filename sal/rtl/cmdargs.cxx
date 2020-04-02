@@ -48,31 +48,31 @@ ArgHolder argHolder;
 void init()
 {
     osl::MutexGuard guard( osl::Mutex::getGlobalMutex() );
-    if (!g_ppCommandArgs)
-    {
-        sal_Int32 i, n = osl_getCommandArgCount();
+    if (g_ppCommandArgs)
+        return;
 
-        g_ppCommandArgs =
-            static_cast<rtl_uString**>(rtl_allocateZeroMemory (n * sizeof(rtl_uString*)));
-        for (i = 0; i < n; i++)
+    sal_Int32 i, n = osl_getCommandArgCount();
+
+    g_ppCommandArgs =
+        static_cast<rtl_uString**>(rtl_allocateZeroMemory (n * sizeof(rtl_uString*)));
+    for (i = 0; i < n; i++)
+    {
+        rtl_uString * pArg = nullptr;
+        osl_getCommandArg (i, &pArg);
+        if ((pArg->buffer[0] == '-' || pArg->buffer[0] == '/') &&
+             pArg->buffer[1] == 'e' &&
+             pArg->buffer[2] == 'n' &&
+             pArg->buffer[3] == 'v' &&
+             pArg->buffer[4] == ':' &&
+            rtl_ustr_indexOfChar (&(pArg->buffer[5]), '=') >= 0 )
         {
-            rtl_uString * pArg = nullptr;
-            osl_getCommandArg (i, &pArg);
-            if ((pArg->buffer[0] == '-' || pArg->buffer[0] == '/') &&
-                 pArg->buffer[1] == 'e' &&
-                 pArg->buffer[2] == 'n' &&
-                 pArg->buffer[3] == 'v' &&
-                 pArg->buffer[4] == ':' &&
-                rtl_ustr_indexOfChar (&(pArg->buffer[5]), '=') >= 0 )
-            {
-                // ignore.
-                rtl_uString_release (pArg);
-            }
-            else
-            {
-                // assign.
-                g_ppCommandArgs[g_nCommandArgCount++] = pArg;
-            }
+            // ignore.
+            rtl_uString_release (pArg);
+        }
+        else
+        {
+            // assign.
+            g_ppCommandArgs[g_nCommandArgCount++] = pArg;
         }
     }
 }

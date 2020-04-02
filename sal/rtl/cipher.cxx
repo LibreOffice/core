@@ -1139,20 +1139,20 @@ rtlCipherError SAL_CALL rtl_cipher_decodeBF(
 void SAL_CALL rtl_cipher_destroyBF(rtlCipher Cipher) SAL_THROW_EXTERN_C()
 {
     CipherBF_Impl *pImpl = static_cast<CipherBF_Impl*>(Cipher);
-    if (pImpl)
+    if (!pImpl)
+        return;
+
+    if (pImpl->m_cipher.m_algorithm == rtl_Cipher_AlgorithmBF)
     {
-        if (pImpl->m_cipher.m_algorithm == rtl_Cipher_AlgorithmBF)
-        {
 #if defined LIBO_CIPHER_OPENSSL_BACKEND
-            if (pImpl->m_context.m_context != nullptr) {
-                EVP_CIPHER_CTX_free(pImpl->m_context.m_context);
-            }
-#endif
-            rtl_freeZeroMemory(pImpl, sizeof(CipherBF_Impl));
+        if (pImpl->m_context.m_context != nullptr) {
+            EVP_CIPHER_CTX_free(pImpl->m_context.m_context);
         }
-        else
-            free(pImpl);
+#endif
+        rtl_freeZeroMemory(pImpl, sizeof(CipherBF_Impl));
     }
+    else
+        free(pImpl);
 }
 
 #if !defined LIBO_CIPHER_OPENSSL_BACKEND
@@ -1414,20 +1414,20 @@ rtlCipherError SAL_CALL rtl_cipher_decodeARCFOUR(
 void SAL_CALL rtl_cipher_destroyARCFOUR(rtlCipher Cipher) SAL_THROW_EXTERN_C()
 {
     CipherARCFOUR_Impl *pImpl = static_cast<CipherARCFOUR_Impl*>(Cipher);
-    if (pImpl)
+    if (!pImpl)
+        return;
+
+    if (pImpl->m_cipher.m_algorithm == rtl_Cipher_AlgorithmARCFOUR)
     {
-        if (pImpl->m_cipher.m_algorithm == rtl_Cipher_AlgorithmARCFOUR)
-        {
 #if defined LIBO_CIPHER_OPENSSL_BACKEND
-            if (pImpl->m_context.m_context != nullptr) {
-                EVP_CIPHER_CTX_free(pImpl->m_context.m_context);
-            }
-#endif
-            rtl_freeZeroMemory(pImpl, sizeof(CipherARCFOUR_Impl));
+        if (pImpl->m_context.m_context != nullptr) {
+            EVP_CIPHER_CTX_free(pImpl->m_context.m_context);
         }
-        else
-            free(pImpl);
+#endif
+        rtl_freeZeroMemory(pImpl, sizeof(CipherARCFOUR_Impl));
     }
+    else
+        free(pImpl);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
