@@ -1700,7 +1700,7 @@ private:
                 if (!pTextObj)
                 {
                     bSubTitle = true;
-                    pTextObj = dynamic_cast<SdrTextObj*>(pPage->GetPresObj(PRESOBJ_TEXT));  // is there a subtitle?
+                    pTextObj = dynamic_cast<SdrTextObj*>(pPage->GetPresObj(PresObjKind::Text));  // is there a subtitle?
                 }
 
                 sal_Int32 nParaCount1 = pOutliner->GetParagraphCount();

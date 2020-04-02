@@ -412,81 +412,81 @@ SdrObject * SdGenericDrawPage::CreateSdrObject_( const Reference< drawing::XShap
 
     aType = aType.copy( aPrefix.getLength() );
 
-    PresObjKind eObjKind = PRESOBJ_NONE;
+    PresObjKind eObjKind = PresObjKind::NONE;
 
     if( aType == "TitleTextShape" )
     {
-        eObjKind = PRESOBJ_TITLE;
+        eObjKind = PresObjKind::Title;
     }
     else if( aType == "OutlinerShape" )
     {
-        eObjKind = PRESOBJ_OUTLINE;
+        eObjKind = PresObjKind::Outline;
     }
     else if( aType == "SubtitleShape" )
     {
-        eObjKind = PRESOBJ_TEXT;
+        eObjKind = PresObjKind::Text;
     }
     else if( aType == "OLE2Shape" )
     {
-        eObjKind = PRESOBJ_OBJECT;
+        eObjKind = PresObjKind::Object;
     }
     else if( aType == "ChartShape" )
     {
-        eObjKind = PRESOBJ_CHART;
+        eObjKind = PresObjKind::Chart;
     }
     else if( aType == "CalcShape" )
     {
-        eObjKind = PRESOBJ_CALC;
+        eObjKind = PresObjKind::Calc;
     }
     else if( aType == "TableShape" )
     {
-        eObjKind = PRESOBJ_TABLE;
+        eObjKind = PresObjKind::Table;
     }
     else if( aType == "GraphicObjectShape" )
     {
-        eObjKind = PRESOBJ_GRAPHIC;
+        eObjKind = PresObjKind::Graphic;
     }
     else if( aType == "OrgChartShape" )
     {
-        eObjKind = PRESOBJ_ORGCHART;
+        eObjKind = PresObjKind::OrgChart;
     }
     else if( aType == "PageShape" )
     {
         if( GetPage()->GetPageKind() == PageKind::Notes && GetPage()->IsMasterPage() )
-            eObjKind = PRESOBJ_TITLE;
+            eObjKind = PresObjKind::Title;
         else
-            eObjKind = PRESOBJ_PAGE;
+            eObjKind = PresObjKind::Page;
     }
     else if( aType == "NotesShape" )
     {
-        eObjKind = PRESOBJ_NOTES;
+        eObjKind = PresObjKind::Notes;
     }
     else if( aType == "HandoutShape" )
     {
-        eObjKind = PRESOBJ_HANDOUT;
+        eObjKind = PresObjKind::Handout;
     }
     else if( aType == "FooterShape" )
     {
-        eObjKind = PRESOBJ_FOOTER;
+        eObjKind = PresObjKind::Footer;
     }
     else if( aType == "HeaderShape" )
     {
-        eObjKind = PRESOBJ_HEADER;
+        eObjKind = PresObjKind::Header;
     }
     else if( aType == "SlideNumberShape" )
     {
-        eObjKind = PRESOBJ_SLIDENUMBER;
+        eObjKind = PresObjKind::SlideNumber;
     }
     else if( aType == "DateTimeShape" )
     {
-        eObjKind = PRESOBJ_DATETIME;
+        eObjKind = PresObjKind::DateTime;
     }
     else if( aType == "MediaShape" )
     {
-        eObjKind = PRESOBJ_MEDIA;
+        eObjKind = PresObjKind::Media;
     }
 
-    ::tools::Rectangle aRect( eObjKind == PRESOBJ_TITLE ? GetPage()->GetTitleRect() : GetPage()->GetLayoutRect()  );
+    ::tools::Rectangle aRect( eObjKind == PresObjKind::Title ? GetPage()->GetTitleRect() : GetPage()->GetLayoutRect()  );
 
     const awt::Point aPos( aRect.Left(), aRect.Top() );
     xShape->setPosition( aPos );
@@ -495,7 +495,7 @@ SdrObject * SdGenericDrawPage::CreateSdrObject_( const Reference< drawing::XShap
     xShape->setSize( aSize );
 
     SdrObject *pPresObj = nullptr;
-    if( (eObjKind == PRESOBJ_TABLE) || (eObjKind == PRESOBJ_MEDIA) )
+    if( (eObjKind == PresObjKind::Table) || (eObjKind == PresObjKind::Media) )
     {
         pPresObj = SvxFmDrawPage::CreateSdrObject_( xShape );
         if( pPresObj )
@@ -1387,12 +1387,12 @@ Reference< drawing::XShape >  SdGenericDrawPage::CreateShape(SdrObject *pObj) co
                 {
                     pShape->SetShapeType("com.sun.star.presentation.TitleTextShape");
                 }
-                eKind = PRESOBJ_NONE;
+                eKind = PresObjKind::NONE;
                 break;
             case OBJ_OUTLINETEXT:
                 pShape = new SvxShapeText( pObj );
                 pShape->SetShapeType("com.sun.star.presentation.OutlinerShape");
-                eKind = PRESOBJ_NONE;
+                eKind = PresObjKind::NONE;
                 break;
             }
         }
@@ -1402,66 +1402,65 @@ Reference< drawing::XShape >  SdGenericDrawPage::CreateShape(SdrObject *pObj) co
         if(!xShape.is())
             xShape = SvxFmDrawPage::CreateShape( pObj );
 
-        if( eKind != PRESOBJ_NONE )
+        if( eKind != PresObjKind::NONE )
         {
             OUString aShapeType("com.sun.star.presentation.");
 
             switch( eKind )
             {
-            case PRESOBJ_TITLE:
+            case PresObjKind::Title:
                 aShapeType += "TitleTextShape";
                 break;
-            case PRESOBJ_OUTLINE:
+            case PresObjKind::Outline:
                 aShapeType += "OutlinerShape";
                 break;
-            case PRESOBJ_TEXT:
+            case PresObjKind::Text:
                 aShapeType += "SubtitleShape";
                 break;
-            case PRESOBJ_GRAPHIC:
+            case PresObjKind::Graphic:
                 aShapeType += "GraphicObjectShape";
                 break;
-            case PRESOBJ_OBJECT:
+            case PresObjKind::Object:
                 aShapeType += "OLE2Shape";
                 break;
-            case PRESOBJ_CHART:
+            case PresObjKind::Chart:
                 aShapeType += "ChartShape";
                 break;
-            case PRESOBJ_ORGCHART:
+            case PresObjKind::OrgChart:
                 aShapeType += "OrgChartShape";
                 break;
-            case PRESOBJ_CALC:
+            case PresObjKind::Calc:
                 aShapeType += "CalcShape";
                 break;
-            case PRESOBJ_TABLE:
+            case PresObjKind::Table:
                 aShapeType += "TableShape";
                 break;
-            case PRESOBJ_MEDIA:
+            case PresObjKind::Media:
                 aShapeType += "MediaShape";
                 break;
-            case PRESOBJ_PAGE:
+            case PresObjKind::Page:
                 aShapeType += "PageShape";
                 break;
-            case PRESOBJ_HANDOUT:
+            case PresObjKind::Handout:
                 aShapeType += "HandoutShape";
                 break;
-            case PRESOBJ_NOTES:
+            case PresObjKind::Notes:
                 aShapeType += "NotesShape";
                 break;
-            case PRESOBJ_FOOTER:
+            case PresObjKind::Footer:
                 aShapeType += "FooterShape";
                 break;
-            case PRESOBJ_HEADER:
+            case PresObjKind::Header:
                 aShapeType += "HeaderShape";
                 break;
-            case PRESOBJ_SLIDENUMBER:
+            case PresObjKind::SlideNumber:
                 aShapeType += "SlideNumberShape";
                 break;
-            case PRESOBJ_DATETIME:
+            case PresObjKind::DateTime:
                 aShapeType += "DateTimeShape";
                 break;
             // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
-            case PRESOBJ_NONE:
-            case PRESOBJ_MAX:
+            case PresObjKind::NONE:
                 break;
             }
 

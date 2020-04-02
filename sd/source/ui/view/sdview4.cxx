@@ -134,7 +134,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         if (pPage && pPage->IsPresObj(pPickObj))
         {
             // Insert new PresObj into the list
-            pPage->InsertPresObj( pNewGrafObj, PRESOBJ_GRAPHIC );
+            pPage->InsertPresObj( pNewGrafObj, PresObjKind::Graphic );
             pNewGrafObj->SetUserCall(pPickObj->GetUserCall());
         }
 
@@ -309,7 +309,7 @@ SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rM
 
     SdrMediaObj*    pNewMediaObj = nullptr;
     SdrPageView*    pPV = GetSdrPageView();
-    SdrObject*      pPickObj = GetEmptyPresentationObject( PRESOBJ_MEDIA );
+    SdrObject*      pPickObj = GetEmptyPresentationObject( PresObjKind::Media );
 
     if(pPV && dynamic_cast<const ::sd::slidesorter::view::SlideSorterView* >(this) )
     {
@@ -347,7 +347,7 @@ SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rM
             bIsPres = pPage && pPage->IsPresObj(pPickObj);
             if( bIsPres )
             {
-                pPage->InsertPresObj( pNewMediaObj, PRESOBJ_MEDIA );
+                pPage->InsertPresObj( pNewMediaObj, PresObjKind::Media );
             }
         }
 

@@ -58,10 +58,10 @@ MasterLayoutDialog::MasterLayoutDialog(weld::Window* pParent, SdDrawDocument* pD
             break;
     }
 
-    mbOldHeader = mpCurrentPage->GetPresObj( PRESOBJ_HEADER ) != nullptr;
-    mbOldDate = mpCurrentPage->GetPresObj( PRESOBJ_DATETIME ) != nullptr;
-    mbOldFooter = mpCurrentPage->GetPresObj( PRESOBJ_FOOTER ) != nullptr;
-    mbOldPageNumber = mpCurrentPage->GetPresObj( PRESOBJ_SLIDENUMBER ) != nullptr;
+    mbOldHeader = mpCurrentPage->GetPresObj( PresObjKind::Header ) != nullptr;
+    mbOldDate = mpCurrentPage->GetPresObj( PresObjKind::DateTime ) != nullptr;
+    mbOldFooter = mpCurrentPage->GetPresObj( PresObjKind::Footer ) != nullptr;
+    mbOldPageNumber = mpCurrentPage->GetPresObj( PresObjKind::SlideNumber ) != nullptr;
 
     mxCBHeader->set_active( mbOldHeader );
     mxCBDate->set_active( mbOldDate );
@@ -87,33 +87,33 @@ void MasterLayoutDialog::applyChanges()
     if( (mpCurrentPage->GetPageKind() != PageKind::Standard) && (mbOldHeader != mxCBHeader->get_active() ) )
     {
         if( mbOldHeader )
-            remove( PRESOBJ_HEADER );
+            remove( PresObjKind::Header );
         else
-            create( PRESOBJ_HEADER );
+            create( PresObjKind::Header );
     }
 
     if( mbOldFooter != mxCBFooter->get_active() )
     {
         if( mbOldFooter )
-            remove( PRESOBJ_FOOTER );
+            remove( PresObjKind::Footer );
         else
-            create( PRESOBJ_FOOTER );
+            create( PresObjKind::Footer );
     }
 
     if( mbOldDate != mxCBDate->get_active() )
     {
         if( mbOldDate )
-            remove( PRESOBJ_DATETIME );
+            remove( PresObjKind::DateTime );
         else
-            create( PRESOBJ_DATETIME );
+            create( PresObjKind::DateTime );
     }
 
     if( mbOldPageNumber != mxCBPageNumber->get_active() )
     {
         if( mbOldPageNumber )
-            remove( PRESOBJ_SLIDENUMBER );
+            remove( PresObjKind::SlideNumber );
         else
-            create( PRESOBJ_SLIDENUMBER );
+            create( PresObjKind::SlideNumber );
     }
 
     mpDoc->EndUndo();

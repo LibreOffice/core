@@ -100,7 +100,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
         if (nSelectedPages <= 1 || pActualPage->IsSelected())
         {
             SdPage* pActualNotesPage = mpDoc->GetSdPage(i, PageKind::Notes);
-            SdrTextObj* pTextObj = static_cast<SdrTextObj*>( pActualPage->GetPresObj(PRESOBJ_TITLE) );
+            SdrTextObj* pTextObj = static_cast<SdrTextObj*>( pActualPage->GetPresObj(PresObjKind::Title) );
 
             if (pTextObj && !pTextObj->IsEmptyPresObj())
             {
@@ -168,7 +168,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
 
                     pOutl->SetDefTab( mpDoc->GetDefaultTabulator() );
                     pOutl->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(mpDoc->GetStyleSheetPool()));
-                    pStyle = pSummaryPage->GetStyleSheetForPresObj( PRESOBJ_OUTLINE );
+                    pStyle = pSummaryPage->GetStyleSheetForPresObj( PresObjKind::Outline );
                     pOutl->SetStyleSheet( 0, pStyle );
                 }
 
@@ -187,7 +187,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
     if (!pSummaryPage)
         return;
 
-    SdrTextObj* pTextObj = static_cast<SdrTextObj*>( pSummaryPage->GetPresObj(PRESOBJ_OUTLINE) );
+    SdrTextObj* pTextObj = static_cast<SdrTextObj*>( pSummaryPage->GetPresObj(PresObjKind::Outline) );
 
     if (!pTextObj)
         return;

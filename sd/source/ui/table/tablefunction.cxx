@@ -121,7 +121,7 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
 
         ::tools::Rectangle aRect;
 
-        SdrObject* pPickObj = mpView->GetEmptyPresentationObject( PRESOBJ_TABLE );
+        SdrObject* pPickObj = mpView->GetEmptyPresentationObject( PresObjKind::Table );
         if( pPickObj )
         {
             aRect = pPickObj->GetLogicRect();
@@ -194,7 +194,7 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
             if(pPage && pPage->IsPresObj(pPickObj))
             {
                 pObj->SetUserCall( pPickObj->GetUserCall() );
-                pPage->InsertPresObj( pObj, PRESOBJ_TABLE );
+                pPage->InsertPresObj( pObj, PresObjKind::Table );
             }
         }
 

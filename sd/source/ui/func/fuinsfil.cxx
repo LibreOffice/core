@@ -619,7 +619,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
                                     SdResId(STR_UNDO_INSERT_FILE), OUString(), 0, nViewShellId );
 
         sal_Int32 nSourcePos = 0;
-        SfxStyleSheet* pStyleSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_OUTLINE );
+        SfxStyleSheet* pStyleSheet = pPage->GetStyleSheetForPresObj( PresObjKind::Outline );
         Paragraph* pSourcePara = pOutliner->GetParagraph( 0 );
         while (pSourcePara)
         {

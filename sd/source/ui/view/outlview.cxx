@@ -646,7 +646,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner::DepthChangeHdlParam, aParam
         {
             SdPage*pPage = mrDoc.GetSdPage( static_cast<sal_uInt16>(nPos), PageKind::Standard);
 
-            if(pPage && pPage->GetPresObj(PRESOBJ_TEXT))
+            if(pPage && pPage->GetPresObj(PresObjKind::Text))
                 pOutliner->SetDepth( pPara, 0 );
         }
 
@@ -673,19 +673,19 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner::DepthChangeHdlParam, aParam
     SfxStyleSheet* pStyleSheet = nullptr;
     sal_Int32 nPara = pOutliner->GetAbsPos( pPara );
     sal_Int16 nDepth = pOutliner->GetDepth( nPara );
-    bool bSubTitle = pPage->GetPresObj(PRESOBJ_TEXT) != nullptr;
+    bool bSubTitle = pPage->GetPresObj(PresObjKind::Text) != nullptr;
 
     if( ::Outliner::HasParaFlag(pPara, ParaFlag::ISPAGE) )
     {
-        pStyleSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE );
+        pStyleSheet = pPage->GetStyleSheetForPresObj( PresObjKind::Title );
     }
     else if( bSubTitle )
     {
-        pStyleSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TEXT );
+        pStyleSheet = pPage->GetStyleSheetForPresObj( PresObjKind::Text );
     }
     else
     {
-        pStyleSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_OUTLINE );
+        pStyleSheet = pPage->GetStyleSheetForPresObj( PresObjKind::Outline );
 
         if( nDepth > 0 )
         {
@@ -908,7 +908,7 @@ SdrTextObj* OutlineView::CreateTitleTextObject(SdPage* pPage)
     {
         // we already have a layout with a title but the title
         // object was deleted, create a new one
-        pPage->InsertAutoLayoutShape( nullptr, PRESOBJ_TITLE, false, pPage->GetTitleRect(), true );
+        pPage->InsertAutoLayoutShape( nullptr, PresObjKind::Title, false, pPage->GetTitleRect(), true );
     }
 
     return GetTitleTextObject(pPage);
@@ -943,7 +943,7 @@ SdrTextObj* OutlineView::CreateOutlineTextObject(SdPage* pPage)
         // we already have a layout with a text but the text
         // object was deleted, create a new one
         pPage->InsertAutoLayoutShape( nullptr,
-                                      PRESOBJ_OUTLINE,
+                                      PresObjKind::Outline,
                                       false, pPage->GetLayoutRect(), true );
     }
 
@@ -1038,7 +1038,7 @@ void OutlineView::FillOutliner()
             mrOutliner.SetParaAttribs( mrOutliner.GetAbsPos(pPara),
                                        mrOutliner.GetEmptyItemSet() );
 
-            mrOutliner.SetStyleSheet( mrOutliner.GetAbsPos( pPara ), pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE ) );
+            mrOutliner.SetStyleSheet( mrOutliner.GetAbsPos( pPara ), pPage->GetStyleSheetForPresObj( PresObjKind::Title ) );
         }
 
         mrOutliner.SetParaFlag( pPara, ParaFlag::ISPAGE );
@@ -1052,7 +1052,7 @@ void OutlineView::FillOutliner()
             pTitleToSelect = pPara;
 
         // take text from subtitle or outline
-        pTO = static_cast<SdrTextObj*>(pPage->GetPresObj(PRESOBJ_TEXT));
+        pTO = static_cast<SdrTextObj*>(pPage->GetPresObj(PresObjKind::Text));
         const bool bSubTitle = pTO != nullptr;
 
         if (!pTO) // if no subtile found, try outline
@@ -1665,7 +1665,7 @@ void OutlineView::OnEndPasteOrDrop( PasteOrDropInfos* pInfo )
 
             if( pPage )
             {
-                SfxStyleSheet* pStyle = pPage->GetStyleSheetForPresObj( bPage ? PRESOBJ_TITLE : PRESOBJ_OUTLINE );
+                SfxStyleSheet* pStyle = pPage->GetStyleSheetForPresObj( bPage ? PresObjKind::Title : PresObjKind::Outline );
 
                 if( !bPage )
                 {

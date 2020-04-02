@@ -252,8 +252,8 @@ void UndoObjectUserCall::Redo()
 
 UndoObjectPresentationKind::UndoObjectPresentationKind(SdrObject& rObject)
 :   SdrUndoObj(rObject)
-,   meOldKind(PRESOBJ_NONE)
-,   meNewKind(PRESOBJ_NONE)
+,   meOldKind(PresObjKind::NONE)
+,   meNewKind(PresObjKind::NONE)
 ,   mxPage( static_cast<SdPage*>(rObject.getSdrPageFromSdrObject()) )
 ,   mxSdrObject( &rObject )
 {
@@ -269,9 +269,9 @@ void UndoObjectPresentationKind::Undo()
     {
         SdPage* pPage = mxPage.get();
         meNewKind =  pPage->GetPresObjKind( mxSdrObject.get() );
-        if( meNewKind != PRESOBJ_NONE )
+        if( meNewKind != PresObjKind::NONE )
             pPage->RemovePresObj( mxSdrObject.get() );
-        if( meOldKind != PRESOBJ_NONE )
+        if( meOldKind != PresObjKind::NONE )
             pPage->InsertPresObj( mxSdrObject.get(), meOldKind );
     }
 }
@@ -281,9 +281,9 @@ void UndoObjectPresentationKind::Redo()
     if( mxPage.is() && mxSdrObject.is() )
     {
         SdPage* pPage = mxPage.get();
-        if( meOldKind != PRESOBJ_NONE )
+        if( meOldKind != PresObjKind::NONE )
             pPage->RemovePresObj( mxSdrObject.get() );
-        if( meNewKind != PRESOBJ_NONE )
+        if( meNewKind != PresObjKind::NONE )
             pPage->InsertPresObj( mxSdrObject.get(), meNewKind );
     }
 }

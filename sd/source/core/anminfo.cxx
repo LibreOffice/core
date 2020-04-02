@@ -28,7 +28,7 @@ using namespace ::com::sun::star;
 
 SdAnimationInfo::SdAnimationInfo(SdrObject& rObject)
                : SdrObjUserData(SdrInventor::StarDrawUserData, SD_ANIMATIONINFO_ID),
-                 mePresObjKind              (PRESOBJ_NONE),
+                 mePresObjKind              (PresObjKind::NONE),
                  meEffect                   (presentation::AnimationEffect_NONE),
                  meTextEffect               (presentation::AnimationEffect_NONE),
                  meSpeed                    (presentation::AnimationSpeed_SLOW),
@@ -52,7 +52,7 @@ SdAnimationInfo::SdAnimationInfo(SdrObject& rObject)
 
 SdAnimationInfo::SdAnimationInfo(const SdAnimationInfo& rAnmInfo, SdrObject& rObject)
                : SdrObjUserData             (rAnmInfo),
-                 mePresObjKind               (PRESOBJ_NONE),
+                 mePresObjKind               (PresObjKind::NONE),
                  meEffect                   (rAnmInfo.meEffect),
                  meTextEffect               (rAnmInfo.meTextEffect),
                  meSpeed                    (rAnmInfo.meSpeed),

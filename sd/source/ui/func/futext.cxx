@@ -1180,10 +1180,10 @@ void FuText::DeleteDefaultText()
 
     PresObjKind ePresObjKind = pPage->GetPresObjKind(mxTextObj.get());
 
-    if ( !((ePresObjKind == PRESOBJ_TITLE   ||
-          ePresObjKind == PRESOBJ_OUTLINE ||
-          ePresObjKind == PRESOBJ_NOTES   ||
-          ePresObjKind == PRESOBJ_TEXT) &&
+    if ( !((ePresObjKind == PresObjKind::Title   ||
+          ePresObjKind == PresObjKind::Outline ||
+          ePresObjKind == PresObjKind::Notes   ||
+          ePresObjKind == PresObjKind::Text) &&
           !pPage->IsMasterPage()) )
         return;
 
@@ -1199,7 +1199,7 @@ void FuText::DeleteDefaultText()
         pOutliner->EnableUndo(true);
 
     if (pSheet &&
-        (ePresObjKind == PRESOBJ_NOTES || ePresObjKind == PRESOBJ_TEXT))
+        (ePresObjKind == PresObjKind::Notes || ePresObjKind == PresObjKind::Text))
         pOutliner->SetStyleSheet(0, pSheet);
 
     mxTextObj->SetEmptyPresObj(true);

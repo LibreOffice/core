@@ -224,7 +224,7 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
             // We do net get PresObjKind via GetPresObjKind() since there are
             // only PresObjListe considered. But we want to consider all "Title
             // objects" here (paste from clipboard etc.)
-            SfxStyleSheet* pSheet = GetStyleSheetForPresObj(PRESOBJ_TITLE);
+            SfxStyleSheet* pSheet = GetStyleSheetForPresObj(PresObjKind::Title);
 
             if (pSheet)
                 pObj->SetStyleSheet(pSheet, true);
@@ -247,7 +247,7 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
 
 void SdPage::EndListenOutlineText()
 {
-    SdrObject* pOutlineTextObj = GetPresObj(PRESOBJ_OUTLINE);
+    SdrObject* pOutlineTextObj = GetPresObj(PresObjKind::Outline);
 
     if (!pOutlineTextObj)
         return;
@@ -436,7 +436,7 @@ SdrPage* SdPage::CloneSdrPage(SdrModel& rTargetModel) const
 SfxStyleSheet* SdPage::GetTextStyleSheetForObject( SdrObject* pObj ) const
 {
     const PresObjKind eKind = GetPresObjKind(pObj);
-    if( eKind != PRESOBJ_NONE )
+    if( eKind != PresObjKind::NONE )
     {
         return GetStyleSheetForPresObj(eKind);
     }
