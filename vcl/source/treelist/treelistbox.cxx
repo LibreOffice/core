@@ -1076,8 +1076,7 @@ sal_Int8 SvTreeListBox::AcceptDrop( const AcceptDropEvent& rEvt )
                     && DND_ACTION_MOVE == rEvt.mnAction
                     && (pEntry->nEntryFlags & SvTLEntryFlags::DISABLE_DROP)))
             {
-                if( NotifyAcceptDrop( pEntry ))
-                    nRet = rEvt.mnAction;
+                nRet = rEvt.mnAction;
             }
         }
 
@@ -1238,11 +1237,6 @@ DragDropMode SvTreeListBox::NotifyStartDrag( TransferDataContainer&, SvTreeListE
     return DragDropMode(0xffff);
 }
 
-bool SvTreeListBox::NotifyAcceptDrop( SvTreeListEntry* )
-{
-    return true;
-}
-
 // Handler and methods for Drag - finished handler.
 // The with get GetDragFinishedHdl() get link can set on the
 // TransferDataContainer. This link is a callback for the DragFinished
@@ -1322,16 +1316,6 @@ void SvTreeListBox::InitTreeView()
     InitSettings();
     ImplInitStyle();
     SetTabs();
-}
-
-OUString SvTreeListBox::GetEntryAltText( SvTreeListEntry* ) const
-{
-    return OUString();
-}
-
-OUString SvTreeListBox::GetEntryLongDescription( SvTreeListEntry* ) const
-{
-    return OUString();
 }
 
 OUString SvTreeListBox::SearchEntryTextWithHeadTitle( SvTreeListEntry* pEntry )

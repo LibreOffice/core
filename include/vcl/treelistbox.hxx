@@ -454,7 +454,6 @@ public:
     virtual DragDropMode     NotifyStartDrag( TransferDataContainer& rData,
                                          SvTreeListEntry* );
     virtual void             DragFinished( sal_Int8 nDropAction );
-    virtual bool             NotifyAcceptDrop( SvTreeListEntry* );
 
     SvTreeListEntry*         CloneEntry( SvTreeListEntry* pSource );
 
@@ -489,8 +488,6 @@ public:
     SvTreeFlags         GetTreeFlags() const {return nTreeFlags;}
 
     static OUString     SearchEntryTextWithHeadTitle(SvTreeListEntry* pEntry);
-    virtual OUString    GetEntryAltText(SvTreeListEntry* pEntry) const;
-    virtual OUString    GetEntryLongDescription(SvTreeListEntry* pEntry) const;
 
     void set_min_width_in_chars(sal_Int32 nChars);
 
