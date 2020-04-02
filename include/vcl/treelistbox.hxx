@@ -465,7 +465,7 @@ public:
         sal_uLong&        rNewChildPos); // The TargetParent's position in Childlist
 
     // Return value: TRISTATE_TRUE == Ok, TRISTATE_FALSE == Cancel, TRISTATE_INDET == Ok and Make visible moved entry
-    virtual TriState    NotifyCopying(
+    TriState    NotifyCopying(
         SvTreeListEntry*  pTarget,       // D'n'D DropPosition in GetModel()
         SvTreeListEntry*  pEntry,        // Entry to be copied from GetSourceListBox()->GetModel()
         SvTreeListEntry*& rpNewParent,   // New TargetParent
@@ -662,7 +662,7 @@ public:
 
     virtual tools::Rectangle GetFocusRect(const SvTreeListEntry*, long nLine );
     // Respects indentation
-    virtual sal_IntPtr GetTabPos(const SvTreeListEntry*, SvLBoxTab*);
+    sal_IntPtr      GetTabPos(const SvTreeListEntry*, SvLBoxTab*);
     void            InvalidateEntry( SvTreeListEntry* );
     SvLBoxItem*     GetItem( SvTreeListEntry*, long nX, SvLBoxTab** ppTab);
     SvLBoxItem*     GetItem( SvTreeListEntry*, long nX );

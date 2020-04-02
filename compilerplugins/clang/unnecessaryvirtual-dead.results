@@ -14,6 +14,8 @@ slideshow/source/engine/animationfactory.cxx:437
     void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch()
 vcl/inc/salframe.hxx:145
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
+vcl/inc/salframe.hxx:264
+    void SalFrame::BeginSheet(class SalFrame *,)const
 vcl/inc/salinst.hxx:202
     void SalInstance::releaseMainThread()
 vcl/inc/salmenu.hxx:81
