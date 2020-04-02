@@ -276,7 +276,8 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
         }
         // unfortunately DelFrames() must be done before StartListening too,
         // otherwise footnotes cannot be deleted by SwTextFootnote::DelFrames!
-        for (auto iter = ++nodes.begin(); iter != nodes.end(); ++iter)
+        auto const end(--nodes.rend());
+        for (auto iter = nodes.rbegin(); iter != end; ++iter)
         {
             (**iter).DelFrames(rFrame.getRootFrame());
         }
