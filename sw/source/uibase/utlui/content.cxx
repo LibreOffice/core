@@ -369,8 +369,7 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                         pParentFormat = pParentFormat->GetParent();
                     }
 
-                    std::unique_ptr<SwContent> pCnt(new SwRegionContent(this, rSectionName,
-                            nLevel,
+                    std::unique_ptr<SwContent> pCnt(new SwContent(this, rSectionName,
                             pFormat->FindLayoutRect( false, &aNullPt ).Top()));
 
                     SwPtrMsgPoolItem aAskItem( RES_CONTENT_VISIBLE, nullptr );
@@ -675,8 +674,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                         pParentFormat = pParentFormat->GetParent();
                     }
 
-                    std::unique_ptr<SwContent> pCnt(new SwRegionContent(this, sSectionName,
-                            nLevel,
+                    std::unique_ptr<SwContent> pCnt(new SwContent(this, sSectionName,
                             pFormat->FindLayoutRect( false, &aNullPt ).Top()));
                     if( !pFormat->GetInfo( aAskItem ) &&
                         !aAskItem.pObject )     // not visible
