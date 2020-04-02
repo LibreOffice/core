@@ -726,22 +726,22 @@ namespace sax_fastparser {
     void FastSaxSerializer::ForMerge::merge( Int8Sequence &rTop, const Int8Sequence &rMerge, bool bAppend )
     {
         sal_Int32 nMergeLen = rMerge.getLength();
-        if ( nMergeLen > 0 )
-        {
-            sal_Int32 nTopLen = rTop.getLength();
+        if ( nMergeLen <= 0 )
+            return;
 
-            rTop.realloc( nTopLen + nMergeLen );
-            if ( bAppend )
-            {
-                // append the rMerge to the rTop
-                memcpy( rTop.getArray() + nTopLen, rMerge.getConstArray(), nMergeLen );
-            }
-            else
-            {
-                // prepend the rMerge to the rTop
-                memmove( rTop.getArray() + nMergeLen, rTop.getConstArray(), nTopLen );
-                memcpy( rTop.getArray(), rMerge.getConstArray(), nMergeLen );
-            }
+        sal_Int32 nTopLen = rTop.getLength();
+
+        rTop.realloc( nTopLen + nMergeLen );
+        if ( bAppend )
+        {
+            // append the rMerge to the rTop
+            memcpy( rTop.getArray() + nTopLen, rMerge.getConstArray(), nMergeLen );
+        }
+        else
+        {
+            // prepend the rMerge to the rTop
+            memmove( rTop.getArray() + nMergeLen, rTop.getConstArray(), nTopLen );
+            memcpy( rTop.getArray(), rMerge.getConstArray(), nMergeLen );
         }
     }
 

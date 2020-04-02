@@ -943,26 +943,26 @@ void FastSaxParserImpl::deleteUsedEvents()
 void FastSaxParserImpl::produce( bool bForceFlush )
 {
     Entity& rEntity = getEntity();
-    if (bForceFlush ||
-        rEntity.mnProducedEventsSize >= Entity::mnEventListSize)
-    {
-        osl::ResettableMutexGuard aGuard(rEntity.maEventProtector);
+    if (!(bForceFlush ||
+        rEntity.mnProducedEventsSize >= Entity::mnEventListSize))
+        return;
 
-        while (rEntity.maPendingEvents.size() >= Entity::mnEventHighWater)
-        { // pause parsing for a bit
-            aGuard.clear(); // unlock
-            rEntity.maProduceResume.wait();
-            rEntity.maProduceResume.reset();
-            aGuard.reset(); // lock
-        }
+    osl::ResettableMutexGuard aGuard(rEntity.maEventProtector);
 
-        rEntity.maPendingEvents.push(std::move(rEntity.mxProducedEvents));
-        assert(rEntity.mxProducedEvents.get() == nullptr);
-
+    while (rEntity.maPendingEvents.size() >= Entity::mnEventHighWater)
+    { // pause parsing for a bit
         aGuard.clear(); // unlock
-
-        rEntity.maConsumeResume.set();
+        rEntity.maProduceResume.wait();
+        rEntity.maProduceResume.reset();
+        aGuard.reset(); // lock
     }
+
+    rEntity.maPendingEvents.push(std::move(rEntity.mxProducedEvents));
+    assert(rEntity.mxProducedEvents.get() == nullptr);
+
+    aGuard.clear(); // unlock
+
+    rEntity.maConsumeResume.set();
 }
 
 bool FastSaxParserImpl::consume(EventList& rEventList)
@@ -1348,23 +1348,22 @@ FastSaxParser::~FastSaxParser()
 void SAL_CALL
 FastSaxParser::initialize(css::uno::Sequence< css::uno::Any > const& rArguments)
 {
-    if (rArguments.hasElements())
-    {
-        OUString str;
-        if ( rArguments[0] >>= str )
-        {
-            if ( str == "IgnoreMissingNSDecl" )
-                mpImpl->m_bIgnoreMissingNSDecl = true;
-            else if ( str == "DoSmeplease" )
-                ; //just ignore as this is already immune to billion laughs
-            else if ( str == "DisableThreadedParser" )
-                mpImpl->m_bDisableThreadedParser = true;
-            else
-                throw IllegalArgumentException();
-        }
-        else
-            throw IllegalArgumentException();
-    }
+    if (!rArguments.hasElements())
+        return;
+
+    OUString str;
+    if ( !(rArguments[0] >>= str) )
+        throw IllegalArgumentException();
+
+    if ( str == "IgnoreMissingNSDecl" )
+        mpImpl->m_bIgnoreMissingNSDecl = true;
+    else if ( str == "DoSmeplease" )
+        ; //just ignore as this is already immune to billion laughs
+    else if ( str == "DisableThreadedParser" )
+        mpImpl->m_bDisableThreadedParser = true;
+    else
+        throw IllegalArgumentException();
+
 }
 
 void FastSaxParser::parseStream( const xml::sax::InputSource& aInputSource )
