@@ -317,18 +317,18 @@ void SAL_CALL ExportDocumentHandler::initialize( const uno::Sequence< uno::Any >
                     ,sCommand);
 
     uno::Reference< chart::XComplexDescriptionAccess > xDataProvider(m_xDatabaseDataProvider,uno::UNO_QUERY);
-    if ( xDataProvider.is() )
+    if ( !xDataProvider.is() )
+        return;
+
+    m_aColumns.realloc(1);
+    const uno::Sequence< OUString > aColumnNames = xDataProvider->getColumnDescriptions();
+    for(const auto& rColumnName : aColumnNames)
     {
-        m_aColumns.realloc(1);
-        const uno::Sequence< OUString > aColumnNames = xDataProvider->getColumnDescriptions();
-        for(const auto& rColumnName : aColumnNames)
+        if ( !rColumnName.isEmpty() )
         {
-            if ( !rColumnName.isEmpty() )
-            {
-                sal_Int32 nCount = m_aColumns.getLength();
-                m_aColumns.realloc(nCount+1);
-                m_aColumns[nCount] = rColumnName;
-            }
+            sal_Int32 nCount = m_aColumns.getLength();
+            m_aColumns.realloc(nCount+1);
+            m_aColumns[nCount] = rColumnName;
         }
     }
 }

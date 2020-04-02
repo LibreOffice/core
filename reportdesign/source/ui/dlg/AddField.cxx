@@ -99,21 +99,21 @@ OAddFieldWindow::OAddFieldWindow(weld::Window* pParent, const uno::Reference< be
     m_xListBox->connect_changed(LINK( this, OAddFieldWindow, OnSelectHdl ) );
     m_xListBox->set_size_request(m_xListBox->get_approximate_digit_width() * 45, m_xListBox->get_height_rows(8));
 
-    if (m_xRowSet.is())
+    if (!m_xRowSet.is())
+        return;
+
+    try
     {
-        try
-        {
-            // be notified when the settings of report definition change
-            m_pChangeListener = new ::comphelper::OPropertyChangeMultiplexer( this, m_xRowSet );
-            m_pChangeListener->addProperty( PROPERTY_COMMAND );
-            m_pChangeListener->addProperty( PROPERTY_COMMANDTYPE );
-            m_pChangeListener->addProperty( PROPERTY_ESCAPEPROCESSING );
-            m_pChangeListener->addProperty( PROPERTY_FILTER );
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("reportdesign");
-        }
+        // be notified when the settings of report definition change
+        m_pChangeListener = new ::comphelper::OPropertyChangeMultiplexer( this, m_xRowSet );
+        m_pChangeListener->addProperty( PROPERTY_COMMAND );
+        m_pChangeListener->addProperty( PROPERTY_COMMANDTYPE );
+        m_pChangeListener->addProperty( PROPERTY_ESCAPEPROCESSING );
+        m_pChangeListener->addProperty( PROPERTY_FILTER );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("reportdesign");
     }
 }
 
@@ -261,48 +261,48 @@ uno::Reference< sdbc::XConnection> OAddFieldWindow::getConnection() const
 
 void OAddFieldWindow::fillDescriptor(const weld::TreeIter& rSelected, svx::ODataAccessDescriptor& rDescriptor)
 {
-    if (m_xColumns.is())
+    if (!m_xColumns.is())
+        return;
+
+    uno::Reference<container::XChild> xChild(getConnection(),uno::UNO_QUERY);
+    if ( xChild.is( ) )
     {
-        uno::Reference<container::XChild> xChild(getConnection(),uno::UNO_QUERY);
-        if ( xChild.is( ) )
+        uno::Reference<sdb::XDocumentDataSource> xDocument( xChild->getParent(), uno::UNO_QUERY );
+        if ( xDocument.is() )
         {
-            uno::Reference<sdb::XDocumentDataSource> xDocument( xChild->getParent(), uno::UNO_QUERY );
-            if ( xDocument.is() )
-            {
-                uno::Reference<frame::XModel> xModel(xDocument->getDatabaseDocument(),uno::UNO_QUERY);
-                if ( xModel.is() )
-                    rDescriptor[ DataAccessDescriptorProperty::DatabaseLocation ] <<= xModel->getURL();
-            }
+            uno::Reference<frame::XModel> xModel(xDocument->getDatabaseDocument(),uno::UNO_QUERY);
+            if ( xModel.is() )
+                rDescriptor[ DataAccessDescriptorProperty::DatabaseLocation ] <<= xModel->getURL();
         }
-
-        rDescriptor[ svx::DataAccessDescriptorProperty::Command ]            <<= GetCommand();
-        rDescriptor[ svx::DataAccessDescriptorProperty::CommandType ]        <<= GetCommandType();
-        rDescriptor[ svx::DataAccessDescriptorProperty::EscapeProcessing ]   <<= m_bEscapeProcessing;
-        rDescriptor[ svx::DataAccessDescriptorProperty::Connection ]         <<= getConnection();
-
-        ColumnInfo* pInfo = reinterpret_cast<ColumnInfo*>(m_xListBox->get_id(rSelected).toInt64());
-        rDescriptor[ svx::DataAccessDescriptorProperty::ColumnName ]         <<= pInfo->sColumnName;
-        if ( m_xColumns->hasByName( pInfo->sColumnName ) )
-            rDescriptor[ svx::DataAccessDescriptorProperty::ColumnObject ] = m_xColumns->getByName(pInfo->sColumnName);
     }
+
+    rDescriptor[ svx::DataAccessDescriptorProperty::Command ]            <<= GetCommand();
+    rDescriptor[ svx::DataAccessDescriptorProperty::CommandType ]        <<= GetCommandType();
+    rDescriptor[ svx::DataAccessDescriptorProperty::EscapeProcessing ]   <<= m_bEscapeProcessing;
+    rDescriptor[ svx::DataAccessDescriptorProperty::Connection ]         <<= getConnection();
+
+    ColumnInfo* pInfo = reinterpret_cast<ColumnInfo*>(m_xListBox->get_id(rSelected).toInt64());
+    rDescriptor[ svx::DataAccessDescriptorProperty::ColumnName ]         <<= pInfo->sColumnName;
+    if ( m_xColumns->hasByName( pInfo->sColumnName ) )
+        rDescriptor[ svx::DataAccessDescriptorProperty::ColumnObject ] = m_xColumns->getByName(pInfo->sColumnName);
 }
 
 void OAddFieldWindow::_elementInserted( const container::ContainerEvent& _rEvent )
 {
     OUString sName;
-    if ( (_rEvent.Accessor >>= sName) && m_xColumns->hasByName(sName) )
-    {
-        uno::Reference< beans::XPropertySet> xColumn(m_xColumns->getByName(sName),UNO_QUERY_THROW);
-        OUString sLabel;
-        if ( xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_LABEL) )
-            xColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
-        m_aListBoxData.emplace_back(new ColumnInfo(sName, sLabel));
-        OUString sId(OUString::number(reinterpret_cast<sal_Int64>(m_aListBoxData.back().get())));
-        if (!sLabel.isEmpty())
-            m_xListBox->append(sId, sLabel);
-        else
-            m_xListBox->append(sId, sName);
-    }
+    if ( !((_rEvent.Accessor >>= sName) && m_xColumns->hasByName(sName)) )
+        return;
+
+    uno::Reference< beans::XPropertySet> xColumn(m_xColumns->getByName(sName),UNO_QUERY_THROW);
+    OUString sLabel;
+    if ( xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_LABEL) )
+        xColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
+    m_aListBoxData.emplace_back(new ColumnInfo(sName, sLabel));
+    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(m_aListBoxData.back().get())));
+    if (!sLabel.isEmpty())
+        m_xListBox->append(sId, sLabel);
+    else
+        m_xListBox->append(sId, sName);
 }
 
 void OAddFieldWindow::_elementRemoved( const container::ContainerEvent& /*_rEvent*/ )

@@ -111,41 +111,40 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLSubDocument::creat
 
 void OXMLSubDocument::endFastElement(sal_Int32 )
 {
-    if ( m_bContainsShape )
+    if ( !m_bContainsShape )
+        return;
+
+    m_xReportComponent.set(m_pContainer->getSection()->getByIndex(m_nCurrentCount),uno::UNO_QUERY);
+    if ( !m_xReportComponent.is() )
+        return;
+
+    if ( !m_aMasterFields.empty() )
+        m_xReportComponent->setMasterFields(Sequence< OUString>(&*m_aMasterFields.begin(),m_aMasterFields.size()));
+    if ( !m_aDetailFields.empty() )
+        m_xReportComponent->setDetailFields(Sequence< OUString>(&*m_aDetailFields.begin(),m_aDetailFields.size()));
+
+    m_xReportComponent->setName(m_xFake->getName());
+    m_xReportComponent->setPrintRepeatedValues(m_xFake->getPrintRepeatedValues());
+    uno::Reference< report::XReportControlModel >   xFakeModel(m_xFake,uno::UNO_QUERY);
+    uno::Reference< report::XReportControlModel >   xComponentModel(m_xReportComponent,uno::UNO_QUERY);
+    if ( !(xComponentModel.is() && xFakeModel.is()) )
+        return;
+
+    xComponentModel->setPrintWhenGroupChange(xFakeModel->getPrintWhenGroupChange());
+    const sal_Int32 nCount = xFakeModel->getCount();
+    try
     {
-        m_xReportComponent.set(m_pContainer->getSection()->getByIndex(m_nCurrentCount),uno::UNO_QUERY);
-        if ( m_xReportComponent.is() )
+        for (sal_Int32 i = 0; i < nCount ; ++i)
         {
-            if ( !m_aMasterFields.empty() )
-                m_xReportComponent->setMasterFields(Sequence< OUString>(&*m_aMasterFields.begin(),m_aMasterFields.size()));
-            if ( !m_aDetailFields.empty() )
-                m_xReportComponent->setDetailFields(Sequence< OUString>(&*m_aDetailFields.begin(),m_aDetailFields.size()));
-
-            m_xReportComponent->setName(m_xFake->getName());
-            m_xReportComponent->setPrintRepeatedValues(m_xFake->getPrintRepeatedValues());
-            uno::Reference< report::XReportControlModel >   xFakeModel(m_xFake,uno::UNO_QUERY);
-            uno::Reference< report::XReportControlModel >   xComponentModel(m_xReportComponent,uno::UNO_QUERY);
-            if ( xComponentModel.is() && xFakeModel.is() )
-            {
-                xComponentModel->setPrintWhenGroupChange(xFakeModel->getPrintWhenGroupChange());
-                const sal_Int32 nCount = xFakeModel->getCount();
-                try
-                {
-                    for (sal_Int32 i = 0; i < nCount ; ++i)
-                    {
-                        uno::Reference< report::XFormatCondition > xCond(xFakeModel->getByIndex(i),uno::UNO_QUERY);
-                        uno::Reference< report::XFormatCondition > xNewCond = xComponentModel->createFormatCondition();
-                        ::comphelper::copyProperties(xCond.get(),xNewCond.get());
-                        xComponentModel->insertByIndex(xComponentModel->getCount(),uno::makeAny(xNewCond));
-                    }
-                }
-                catch(uno::Exception&)
-                {
-                    OSL_FAIL("Can not access format condition!");
-                }
-
-            }
+            uno::Reference< report::XFormatCondition > xCond(xFakeModel->getByIndex(i),uno::UNO_QUERY);
+            uno::Reference< report::XFormatCondition > xNewCond = xComponentModel->createFormatCondition();
+            ::comphelper::copyProperties(xCond.get(),xNewCond.get());
+            xComponentModel->insertByIndex(xComponentModel->getCount(),uno::makeAny(xNewCond));
         }
+    }
+    catch(uno::Exception&)
+    {
+        OSL_FAIL("Can not access format condition!");
     }
 }
 

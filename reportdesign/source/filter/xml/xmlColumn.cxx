@@ -112,50 +112,50 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLRowColumn::createF
 
 void OXMLRowColumn::fillStyle(const OUString& _sStyleName)
 {
-    if ( !_sStyleName.isEmpty() )
+    if ( _sStyleName.isEmpty() )
+        return;
+
+    const SvXMLStylesContext* pAutoStyles = GetOwnImport().GetAutoStyles();
+    if ( !pAutoStyles )
+        return;
+
+    PropertySetInfo* pInfo = new PropertySetInfo();
+    static PropertyMapEntry const pMap[] =
     {
-        const SvXMLStylesContext* pAutoStyles = GetOwnImport().GetAutoStyles();
-        if ( pAutoStyles )
+        {OUString(PROPERTY_WIDTH),    PROPERTY_ID_WIDTH,        ::cppu::UnoType<sal_Int32>::get()       ,PropertyAttribute::BOUND,0},
+        {OUString(PROPERTY_HEIGHT),   PROPERTY_ID_HEIGHT,       ::cppu::UnoType<sal_Int32>::get()       ,PropertyAttribute::BOUND,0 },
+        {OUString(PROPERTY_MINHEIGHT), PROPERTY_ID_MINHEIGHT,    ::cppu::UnoType<sal_Int32>::get()       ,PropertyAttribute::BOUND,0 },
+        {OUString(), 0, css::uno::Type(), 0, 0 }
+    };
+    pInfo->add(pMap);
+    Reference<XPropertySet> xProp = GenericPropertySet_CreateInstance(pInfo);
+    XMLPropStyleContext* pAutoStyle = const_cast<XMLPropStyleContext*>(dynamic_cast< const XMLPropStyleContext*>(pAutoStyles->FindStyleChildContext(XmlStyleFamily::TABLE_COLUMN,_sStyleName)));
+    if ( pAutoStyle )
+    {
+        pAutoStyle->FillPropertySet(xProp);
+        sal_Int32 nWidth = 0;
+        xProp->getPropertyValue(PROPERTY_WIDTH) >>= nWidth;
+        m_pContainer->addWidth(nWidth);
+    }
+    else
+    {
+        pAutoStyle = const_cast<XMLPropStyleContext*>(dynamic_cast< const XMLPropStyleContext* >(pAutoStyles->FindStyleChildContext(XmlStyleFamily::TABLE_ROW,_sStyleName)));
+        if ( pAutoStyle )
         {
-            PropertySetInfo* pInfo = new PropertySetInfo();
-            static PropertyMapEntry const pMap[] =
+            pAutoStyle->FillPropertySet(xProp);
+            sal_Int32 nHeight = 0;
+            sal_Int32 nMinHeight = 0;
+            xProp->getPropertyValue(PROPERTY_HEIGHT) >>= nHeight;
+            xProp->getPropertyValue(PROPERTY_MINHEIGHT) >>= nMinHeight;
+            if (nHeight == 0 && nMinHeight > 0)
             {
-                {OUString(PROPERTY_WIDTH),    PROPERTY_ID_WIDTH,        ::cppu::UnoType<sal_Int32>::get()       ,PropertyAttribute::BOUND,0},
-                {OUString(PROPERTY_HEIGHT),   PROPERTY_ID_HEIGHT,       ::cppu::UnoType<sal_Int32>::get()       ,PropertyAttribute::BOUND,0 },
-                {OUString(PROPERTY_MINHEIGHT), PROPERTY_ID_MINHEIGHT,    ::cppu::UnoType<sal_Int32>::get()       ,PropertyAttribute::BOUND,0 },
-                {OUString(), 0, css::uno::Type(), 0, 0 }
-            };
-            pInfo->add(pMap);
-            Reference<XPropertySet> xProp = GenericPropertySet_CreateInstance(pInfo);
-            XMLPropStyleContext* pAutoStyle = const_cast<XMLPropStyleContext*>(dynamic_cast< const XMLPropStyleContext*>(pAutoStyles->FindStyleChildContext(XmlStyleFamily::TABLE_COLUMN,_sStyleName)));
-            if ( pAutoStyle )
-            {
-                pAutoStyle->FillPropertySet(xProp);
-                sal_Int32 nWidth = 0;
-                xProp->getPropertyValue(PROPERTY_WIDTH) >>= nWidth;
-                m_pContainer->addWidth(nWidth);
+                m_pContainer->addHeight(nMinHeight);
+                m_pContainer->addAutoHeight(true);
             }
             else
             {
-                pAutoStyle = const_cast<XMLPropStyleContext*>(dynamic_cast< const XMLPropStyleContext* >(pAutoStyles->FindStyleChildContext(XmlStyleFamily::TABLE_ROW,_sStyleName)));
-                if ( pAutoStyle )
-                {
-                    pAutoStyle->FillPropertySet(xProp);
-                    sal_Int32 nHeight = 0;
-                    sal_Int32 nMinHeight = 0;
-                    xProp->getPropertyValue(PROPERTY_HEIGHT) >>= nHeight;
-                    xProp->getPropertyValue(PROPERTY_MINHEIGHT) >>= nMinHeight;
-                    if (nHeight == 0 && nMinHeight > 0)
-                    {
-                        m_pContainer->addHeight(nMinHeight);
-                        m_pContainer->addAutoHeight(true);
-                    }
-                    else
-                    {
-                        m_pContainer->addHeight(nHeight);
-                        m_pContainer->addAutoHeight(false);
-                    }
-                }
+                m_pContainer->addHeight(nHeight);
+                m_pContainer->addAutoHeight(false);
             }
         }
     }

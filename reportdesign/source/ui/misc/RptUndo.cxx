@@ -69,42 +69,42 @@ namespace
 
     void lcl_insertElements(const uno::Reference< report::XSection >& _xSection,const ::std::vector< uno::Reference< drawing::XShape> >& _aControls)
     {
-        if ( _xSection.is() )
+        if ( !_xSection.is() )
+            return;
+
+        ::std::vector< uno::Reference< drawing::XShape> >::const_reverse_iterator aIter = _aControls.rbegin();
+        ::std::vector< uno::Reference< drawing::XShape> >::const_reverse_iterator aEnd = _aControls.rend();
+        for (; aIter != aEnd; ++aIter)
         {
-            ::std::vector< uno::Reference< drawing::XShape> >::const_reverse_iterator aIter = _aControls.rbegin();
-            ::std::vector< uno::Reference< drawing::XShape> >::const_reverse_iterator aEnd = _aControls.rend();
-            for (; aIter != aEnd; ++aIter)
+            try
             {
-                try
-                {
-                    const awt::Point aPos = (*aIter)->getPosition();
-                    const awt::Size aSize = (*aIter)->getSize();
-                    _xSection->add(*aIter);
-                    (*aIter)->setPosition( aPos );
-                    (*aIter)->setSize( aSize );
-                }
-                catch(const uno::Exception&)
-                {
-                    OSL_FAIL("lcl_insertElements:Exception caught!");
-                }
+                const awt::Point aPos = (*aIter)->getPosition();
+                const awt::Size aSize = (*aIter)->getSize();
+                _xSection->add(*aIter);
+                (*aIter)->setPosition( aPos );
+                (*aIter)->setSize( aSize );
+            }
+            catch(const uno::Exception&)
+            {
+                OSL_FAIL("lcl_insertElements:Exception caught!");
             }
         }
     }
 
     void lcl_setValues(const uno::Reference< report::XSection >& _xSection,const ::std::vector< ::std::pair< OUString ,uno::Any> >& _aValues)
     {
-        if ( _xSection.is() )
+        if ( !_xSection.is() )
+            return;
+
+        for (const auto& [rPropName, rValue] : _aValues)
         {
-            for (const auto& [rPropName, rValue] : _aValues)
+            try
             {
-                try
-                {
-                    _xSection->setPropertyValue(rPropName, rValue);
-                }
-                catch(const uno::Exception&)
-                {
-                    OSL_FAIL("lcl_setValues:Exception caught!");
-                }
+                _xSection->setPropertyValue(rPropName, rValue);
+            }
+            catch(const uno::Exception&)
+            {
+                OSL_FAIL("lcl_setValues:Exception caught!");
             }
         }
     }
@@ -124,27 +124,27 @@ OSectionUndo::OSectionUndo(OReportModel& _rMod
 
 OSectionUndo::~OSectionUndo()
 {
-    if ( !m_bInserted )
+    if ( m_bInserted )
+        return;
+
+    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
+    for (uno::Reference<drawing::XShape>& xShape : m_aControls)
     {
-        OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
-        for (uno::Reference<drawing::XShape>& xShape : m_aControls)
-        {
-            rEnv.RemoveElement(xShape);
+        rEnv.RemoveElement(xShape);
 
 #if OSL_DEBUG_LEVEL > 0
-            SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
-            SdrObject* pObject = pShape ? pShape->GetSdrObject() : nullptr;
-            OSL_ENSURE( pShape && pShape->HasSdrObjectOwnership() && pObject && !pObject->IsInserted(),
-                "OSectionUndo::~OSectionUndo: inconsistency in the shape/object ownership!" );
+        SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
+        SdrObject* pObject = pShape ? pShape->GetSdrObject() : nullptr;
+        OSL_ENSURE( pShape && pShape->HasSdrObjectOwnership() && pObject && !pObject->IsInserted(),
+            "OSectionUndo::~OSectionUndo: inconsistency in the shape/object ownership!" );
 #endif
-            try
-            {
-                comphelper::disposeComponent(xShape);
-            }
-            catch(const uno::Exception &)
-            {
-                OSL_FAIL("Exception caught!");
-            }
+        try
+        {
+            comphelper::disposeComponent(xShape);
+        }
+        catch(const uno::Exception &)
+        {
+            OSL_FAIL("Exception caught!");
         }
     }
 }

@@ -108,49 +108,49 @@ void SAL_CALL ImportDocumentHandler::endDocument()
 {
     m_xDelegatee->endDocument();
     uno::Reference< chart2::data::XDataReceiver > xReceiver(m_xModel,uno::UNO_QUERY_THROW);
-    if ( m_bImportedChart )
+    if ( !m_bImportedChart )
+        return;
+
+    // this fills the chart again
+    ::comphelper::NamedValueCollection aArgs;
+    aArgs.put( "CellRangeRepresentation", OUString("all") );
+    aArgs.put( "FirstCellAsLabel", uno::makeAny( true ) );
+    aArgs.put( "DataRowSource", uno::makeAny( chart::ChartDataRowSource_COLUMNS ) );
+
+    bool bHasCategories = false;
+
+    uno::Reference< chart2::data::XDataSource > xDataSource(m_xModel, uno::UNO_QUERY);
+    if( xDataSource.is())
     {
-        // this fills the chart again
-        ::comphelper::NamedValueCollection aArgs;
-        aArgs.put( "CellRangeRepresentation", OUString("all") );
-        aArgs.put( "FirstCellAsLabel", uno::makeAny( true ) );
-        aArgs.put( "DataRowSource", uno::makeAny( chart::ChartDataRowSource_COLUMNS ) );
-
-        bool bHasCategories = false;
-
-        uno::Reference< chart2::data::XDataSource > xDataSource(m_xModel, uno::UNO_QUERY);
-        if( xDataSource.is())
+        const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences(xDataSource->getDataSequences());
+        for( const auto& rSequence : aSequences )
         {
-            const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences(xDataSource->getDataSequences());
-            for( const auto& rSequence : aSequences )
+            if( rSequence.is() )
             {
-                if( rSequence.is() )
+                uno::Reference< beans::XPropertySet > xSeqProp( rSequence->getValues(), uno::UNO_QUERY );
+                OUString aRole;
+                if  (   xSeqProp.is()
+                    &&  ( xSeqProp->getPropertyValue( "Role" ) >>= aRole )
+                    &&  aRole == "categories"
+                    )
                 {
-                    uno::Reference< beans::XPropertySet > xSeqProp( rSequence->getValues(), uno::UNO_QUERY );
-                    OUString aRole;
-                    if  (   xSeqProp.is()
-                        &&  ( xSeqProp->getPropertyValue( "Role" ) >>= aRole )
-                        &&  aRole == "categories"
-                        )
-                    {
-                        bHasCategories = true;
-                        break;
-                    }
+                    bHasCategories = true;
+                    break;
                 }
             }
         }
-        aArgs.put( "HasCategories", uno::makeAny( bHasCategories ) );
-
-        uno::Reference< chart::XComplexDescriptionAccess > xDataProvider(m_xModel->getDataProvider(),uno::UNO_QUERY);
-        if ( xDataProvider.is() )
-        {
-            const uno::Sequence< OUString > aColumnNames = xDataProvider->getColumnDescriptions();
-            aArgs.put( "ColumnDescriptions", uno::makeAny( aColumnNames ) );
-        }
-
-        xReceiver->attachDataProvider( m_xDatabaseDataProvider.get() );
-        xReceiver->setArguments( aArgs.getPropertyValues() );
     }
+    aArgs.put( "HasCategories", uno::makeAny( bHasCategories ) );
+
+    uno::Reference< chart::XComplexDescriptionAccess > xDataProvider(m_xModel->getDataProvider(),uno::UNO_QUERY);
+    if ( xDataProvider.is() )
+    {
+        const uno::Sequence< OUString > aColumnNames = xDataProvider->getColumnDescriptions();
+        aArgs.put( "ColumnDescriptions", uno::makeAny( aColumnNames ) );
+    }
+
+    xReceiver->attachDataProvider( m_xDatabaseDataProvider.get() );
+    xReceiver->setArguments( aArgs.getPropertyValues() );
 }
 
 void SAL_CALL ImportDocumentHandler::startElement(const OUString & _sName, const uno::Reference< xml::sax::XAttributeList > & _xAttrList)
