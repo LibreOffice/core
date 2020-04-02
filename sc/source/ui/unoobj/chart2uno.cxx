@@ -42,6 +42,7 @@
 #include <tokenarray.hxx>
 #include <scmatrix.hxx>
 #include <brdcst.hxx>
+#include <mtvelements.hxx>
 
 #include <formula/opcode.hxx>
 #include <o3tl/safeint.hxx>
@@ -2454,6 +2455,8 @@ void ScChart2DataSequence::BuildDataCache()
             {
                 for (SCCOL nCol = aRange.aStart.Col(); nCol <= aRange.aEnd.Col(); ++nCol)
                 {
+                    sc::ColumnBlockPosition hint;
+                    m_pDocument->InitColumnBlockPosition( hint, nTab, nCol );
                     for (SCROW nRow = aRange.aStart.Row(); nRow <= aRange.aEnd.Row(); ++nRow)
                     {
                         bool bColHidden = m_pDocument->ColHidden(nCol, nTab, nullptr, &nLastCol);
@@ -2473,7 +2476,7 @@ void ScChart2DataSequence::BuildDataCache()
                         ScAddress aAdr(nCol, nRow, nTab);
                         aItem.maString = m_pDocument->GetString(aAdr);
 
-                        ScRefCellValue aCell(*m_pDocument, aAdr);
+                        ScRefCellValue aCell(*m_pDocument, aAdr, hint);
                         switch (aCell.meType)
                         {
                             case CELLTYPE_VALUE:
