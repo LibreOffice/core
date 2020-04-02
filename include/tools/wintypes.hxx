@@ -266,10 +266,6 @@ enum class StandardButtonType
     Count        = 14,
 };
 
-// prominent place for ListBox window types
-
-enum class ProminentEntry { TOP, MIDDLE };
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

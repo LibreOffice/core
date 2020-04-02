@@ -200,7 +200,6 @@ private:
     sal_Int32       mnTop;           ///< output from line on
     long            mnLeft;          ///< output from column on
     long            mnTextHeight;    ///< text height
-    ProminentEntry  meProminentType; ///< where is the "prominent" entry
 
     sal_uInt16      mnSelectModifier;   ///< Modifiers
 

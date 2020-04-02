@@ -349,7 +349,7 @@ namespace
 
         bool isTrivial() const
         {
-            static unsigned long nMinimalSquareSizeToBuffer(64*64);
+            constexpr unsigned long nMinimalSquareSizeToBuffer(64*64);
             const unsigned long nSourceWidth(cairo_image_surface_get_width(pSurface));
             const unsigned long nSourceHeight(cairo_image_surface_get_height(pSurface));
 
