@@ -237,7 +237,8 @@ endef
 $(foreach launcher,$(LAUNCHERLIST),$(eval $(call sysui_Desktop_rule,$(launcher))))
 
 $(share_WORKDIR)/%/build.flag: $(share_SRCDIR)/share/brand.pl $(LAUNCHERS) \
-		$(share_TRANSLATE) $(addprefix $(share_WORKDIR)/,$(ULFS))
+		$(share_TRANSLATE) $(addprefix $(share_WORKDIR)/,$(ULFS)) \
+		$(call gb_ExternalExecutable_get_dependencies,python)
 	mkdir -p $(dir $@)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
