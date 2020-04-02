@@ -795,15 +795,30 @@ OUString XclXmlUtils::ToOUString( const ScfUInt16Vec& rBuf, sal_Int32 nStart, sa
 }
 
 OUString XclXmlUtils::ToOUString(
-    sc::CompileFormulaContext& rCtx, const ScAddress& rAddress, const ScTokenArray* pTokenArray )
+    sc::CompileFormulaContext& rCtx, const ScAddress& rAddress, const ScTokenArray* pTokenArray,
+    FormulaError nErrCode )
 {
     ScCompiler aCompiler( rCtx, rAddress, const_cast<ScTokenArray&>(*pTokenArray));
 
     /* TODO: isn't this the same as passed in rCtx and thus superfluous? */
     aCompiler.SetGrammar(FormulaGrammar::GRAM_OOXML);
 
-    OUStringBuffer aBuffer( pTokenArray->GetLen() * 5 );
-    aCompiler.CreateStringFromTokenArray( aBuffer );
+    sal_Int32 nLen = pTokenArray->GetLen();
+    OUStringBuffer aBuffer( nLen ? (nLen * 5) : 8 );
+    if (nLen)
+        aCompiler.CreateStringFromTokenArray( aBuffer );
+    else
+    {
+        if (nErrCode != FormulaError::NONE)
+            aCompiler.AppendErrorConstant( aBuffer, nErrCode);
+        else
+        {
+            // No code SHOULD be an "error cell", assert caller thought of that
+            // and it really is.
+            assert(!"No code and no error.");
+        }
+    }
+
     return aBuffer.makeStringAndClear();
 }
 

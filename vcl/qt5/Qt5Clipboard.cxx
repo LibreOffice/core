@@ -30,11 +30,16 @@ Qt5Clipboard::Qt5Clipboard(const OUString& aModeString, const QClipboard::Mode a
     , m_aClipboardName(aModeString)
     , m_aClipboardMode(aMode)
     , m_bOwnClipboardChange(false)
+    , m_bDoClear(false)
 {
     assert(isSupported(m_aClipboardMode));
     // DirectConnection guarantees the changed slot runs in the same thread as the QClipboard
     connect(QApplication::clipboard(), &QClipboard::changed, this, &Qt5Clipboard::handleChanged,
             Qt::DirectConnection);
+
+    // explicitly queue an event, so we can eventually ignore it
+    connect(this, &Qt5Clipboard::clearClipboard, this, &Qt5Clipboard::handleClearClipboard,
+            Qt::QueuedConnection);
 }
 
 css::uno::Reference<css::uno::XInterface> Qt5Clipboard::create(const OUString& aModeString)
@@ -98,6 +103,13 @@ css::uno::Reference<css::datatransfer::XTransferable> Qt5Clipboard::getContents(
     return m_aContents;
 }
 
+void Qt5Clipboard::handleClearClipboard()
+{
+    if (!m_bDoClear)
+        return;
+    QApplication::clipboard()->clear(m_aClipboardMode);
+}
+
 void Qt5Clipboard::setContents(
     const css::uno::Reference<css::datatransfer::XTransferable>& xTrans,
     const css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner>& xClipboardOwner)
@@ -110,15 +122,18 @@ void Qt5Clipboard::setContents(
     m_aContents = xTrans;
     m_aOwner = xClipboardOwner;
 
-    m_bOwnClipboardChange = true;
-    if (m_aContents.is())
+    m_bDoClear = !m_aContents.is();
+    if (!m_bDoClear)
+    {
+        m_bOwnClipboardChange = true;
         QApplication::clipboard()->setMimeData(new Qt5MimeData(m_aContents), m_aClipboardMode);
+        m_bOwnClipboardChange = false;
+    }
     else
     {
         assert(!m_aOwner.is());
-        QApplication::clipboard()->clear(m_aClipboardMode);
+        Q_EMIT clearClipboard();
     }
-    m_bOwnClipboardChange = false;
 
     aGuard.clear();
 

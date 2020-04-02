@@ -1020,7 +1020,7 @@ void DocxAttributeOutput::StartParagraphProperties()
     m_pSerializer->startElementNS(XML_w, XML_pPr);
 
     // and output the section break now (if it appeared)
-    if ( m_pSectionInfo && (!m_setFootnote))
+    if (m_pSectionInfo && !m_setFootnote && m_rExport.m_nTextTyp == TXT_MAINTEXT)
     {
         m_rExport.SectionProperties( *m_pSectionInfo );
         m_pSectionInfo.reset();
@@ -4832,6 +4832,16 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
         // linked image, just create the relation
         OUString aFileName;
         pGrfNode->GetFileFilterNms( &aFileName, nullptr );
+
+        sal_Int32 const nFragment(aFileName.indexOf('#'));
+        sal_Int32 const nForbiddenU(aFileName.indexOf("%5C"));
+        sal_Int32 const nForbiddenL(aFileName.indexOf("%5c"));
+        if (   (nForbiddenU != -1 && (nFragment == -1 || nForbiddenU < nFragment))
+            || (nForbiddenL != -1 && (nFragment == -1 || nForbiddenL < nFragment)))
+        {
+            SAL_WARN("sw.ww8", "DocxAttributeOutput::FlyFrameGraphic: ignoring image with invalid link URL");
+            return;
+        }
 
         // TODO Convert the file name to relative for better interoperability
 

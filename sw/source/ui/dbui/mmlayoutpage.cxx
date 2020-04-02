@@ -33,6 +33,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/docfilt.hxx>
+#include <sfx2/fcontnr.hxx>
 #include <svtools/unitconv.hxx>
 #include <com/sun/star/text/XParagraphCursor.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
@@ -91,9 +92,10 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage(weld::Container* pPage, SwMailMerge
     , m_xDownPB(m_xBuilder->weld_button("down"))
     , m_xZoomLB(m_xBuilder->weld_combo_box("zoom"))
 {
-    std::shared_ptr<const SfxFilter> pSfxFlt = SwIoSystem::GetFilterOfFormat(
-            FILTER_XML,
-            SwDocShell::Factory().GetFilterContainer() );
+    std::shared_ptr<const SfxFilter> pSfxFlt =
+            SwDocShell::Factory().GetFilterContainer()->
+            GetFilter4FilterName("writer8");
+
     //save the current document into a temporary file
     {
         //temp file needs its own block

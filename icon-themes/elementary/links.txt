@@ -969,24 +969,12 @@ cmd/sc_open_h.png cmd/sc_open.png
 cmd/sc_newrecord.png cmd/sc_open.png
 
 # Wizard
-cmd/32/dbnewqueryautopilot.png cmd/32/usewizards.png
-cmd/32/dbnewtableautopilot.png cmd/32/usewizards.png
-cmd/32/dbnewreportautopilot.png cmd/32/usewizards.png
-cmd/32/dbnewformautopilot.png cmd/32/usewizards.png
 cmd/32/commontaskbarvisible.png cmd/32/usewizards.png
 cmd/32/newarrangement.png cmd/32/usewizards.png
 
-cmd/lc_dbnewqueryautopilot.png cmd/lc_usewizards.png
-cmd/lc_dbnewtableautopilot.png cmd/lc_usewizards.png
-cmd/lc_dbnewreportautopilot.png cmd/lc_usewizards.png
-cmd/lc_dbnewformautopilot.png cmd/lc_usewizards.png
 cmd/lc_commontaskbarvisible.png cmd/lc_usewizards.png
 cmd/lc_newarrangement.png cmd/lc_usewizards.png
 
-cmd/sc_dbnewqueryautopilot.png cmd/sc_usewizards.png
-cmd/sc_dbnewtableautopilot.png cmd/sc_usewizards.png
-cmd/sc_dbnewreportautopilot.png cmd/sc_usewizards.png
-cmd/sc_dbnewformautopilot.png cmd/sc_usewizards.png
 cmd/sc_commontaskbarvisible.png cmd/sc_usewizards.png
 cmd/sc_newarrangement.png cmd/sc_usewizards.png
 
@@ -1843,7 +1831,7 @@ dbaccess/res/db.png cmd/sc_viewdatasourcebrowser.png
 dbaccess/res/exerror.png cmd/sc_cancel.png
 dbaccess/res/exinfo.png cmd/sc_helpindex.png
 
-dbaccess/res/forms_16.png dbaccess/res/form_16.png
+dbaccess/res/forms_16.png res/dialogfolder_16.png
 res/forms_32.png dbaccess/res/forms_32.png
 
 dbaccess/res/lc036.png cmd/lc_dbnewreport.png
@@ -1860,7 +1848,7 @@ dbaccess/res/one_right.png cmd/sc_nextrecord.png
 dbaccess/res/jo01.png dbaccess/res/pkey.png
 res/queries_32.png dbaccess/res/queries_32.png
 
-dbaccess/res/reports_16.png dbaccess/res/report_16.png
+dbaccess/res/report_16.png cmd/sc_dbviewreports.png
 res/reports_32.png dbaccess/res/reports_32.png
 
 dbaccess/res/sc036.png cmd/sc_dbreportedit.png

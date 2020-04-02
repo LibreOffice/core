@@ -416,6 +416,9 @@ void TextObjectBar::Execute( SfxRequest &rReq )
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
         {
             mpView->SdrEndTextEdit();
+            // tdf#131571: SdrEndTextEdit invalidates pTextEditOutlinerView, the pointer retrieved for pOLV
+            // so reinitialize pOLV
+            pOLV=mpView->GetTextEditOutlinerView();
             SfxItemSet aAttr( mpView->GetDoc().GetPool(), svl::Items<SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION>{} );
             aAttr.Put( SvxWritingModeItem(
                 nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ?

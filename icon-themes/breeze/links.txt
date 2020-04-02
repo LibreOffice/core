@@ -425,9 +425,9 @@ cmd/sc_showannotations.png cmd/sc_showallnotes.png
 cmd/sc_showchanges.png cmd/sc_addwatch.png
 
 # Animation
-cmd/32/customanimation.png cmd/32/animationobjects.png
-cmd/lc_customanimation.png cmd/lc_animationobjects.png
-cmd/sc_customanimation.png cmd/sc_animationobjects.png
+cmd/32/customanimation.png cmd/32/diaeffect.png
+cmd/lc_customanimation.png cmd/lc_diaeffect.png
+cmd/sc_customanimation.png cmd/sc_diaeffect.png
 
 # Locale
 cmd/32/underlinesimple.png cmd/32/underline.png
@@ -1339,21 +1339,21 @@ cmd/32/basicshapes.png cmd/32/basicshapes.diamond.png
 cmd/32/basicshapes.ellipse.png cmd/32/ellipse.png
 cmd/32/basicshapes.rectangle.png cmd/32/rect.png
 cmd/32/ellipsetoolbox.png cmd/32/ellipse.png
-cmd/32/linetoolbox.png cmd/32/freeline.png
+cmd/32/linetoolbox.png cmd/32/freeline_unfilled.png
 cmd/32/rectangletoolbox.png cmd/32/rect.png
 
 cmd/lc_basicshapes.png cmd/lc_basicshapes.diamond.png
 cmd/lc_basicshapes.ellipse.png cmd/lc_ellipse.png
 cmd/lc_basicshapes.rectangle.png cmd/lc_rect.png
 cmd/lc_ellipsetoolbox.png cmd/lc_ellipse.png
-cmd/lc_linetoolbox.png cmd/lc_freeline.png
+cmd/lc_linetoolbox.png cmd/lc_freeline_unfilled.png
 cmd/lc_rectangletoolbox.png cmd/lc_rect.png
 
 cmd/sc_basicshapes.png cmd/sc_basicshapes.diamond.png
 cmd/sc_basicshapes.ellipse.png cmd/sc_ellipse.png
 cmd/sc_basicshapes.rectangle.png cmd/sc_rect.png
 cmd/sc_ellipsetoolbox.png cmd/sc_ellipse.png
-cmd/sc_linetoolbox.png cmd/sc_freeline.png
+cmd/sc_linetoolbox.png cmd/sc_freeline_unfilled.png
 cmd/sc_rectangletoolbox.png cmd/sc_rect.png
 
 # Format
@@ -1680,17 +1680,12 @@ cmd/sc_rehearsetimings.png cmd/sc_timefield.png
 # Arrange
 cmd/32/arrangemenu.png cmd/32/bringtofront.png
 cmd/32/arrangeframemenu.png cmd/32/bringtofront.png
-cmd/32/setobjecttobackground.png cmd/32/sendtoback.png
-cmd/32/setobjecttoforeground.png cmd/32/bringtofront.png
+
 cmd/lc_arrangemenu.png cmd/lc_bringtofront.png
 cmd/lc_arrangeframemenu.png cmd/lc_bringtofront.png
-cmd/lc_setobjecttoforeground.png cmd/lc_bringtofront.png
-cmd/lc_setobjecttobackground.png cmd/lc_sendtoback.png
 
 cmd/sc_arrangemenu.png cmd/sc_bringtofront.png
 cmd/sc_arrangeframemenu.png cmd/sc_bringtofront.png
-cmd/sc_setobjecttobackground.png cmd/sc_sendtoback.png
-cmd/sc_setobjecttoforeground.png cmd/sc_bringtofront.png
 
 # Bibliography
 cmd/32/insertauthoritiesentry.png cmd/32/bibliographycomponent.png
@@ -2077,15 +2072,17 @@ res/lx03130.png res/lx03123.png
 res/lx03137.png res/lx03125.png
 res/lx03140.png res/lx03125.png
 res/lx03145.png res/lx03144.png
+res/lx03150.png cmd/32/showsinglepage.png
 res/lx03152.png res/lx03125.png
 res/lx03153.png res/lx03125.png
 res/lx03154.png res/lx03125.png
 res/lx03155.png res/lx03125.png
+res/lx03156.png res/odt_32_8.png
 res/lx03158.png res/lx03125.png
 res/lx03160.png res/lx03125.png
 res/lx03219.png res/lx03125.png
-res/lx03162.png res/lx03156.png
-res/lx03163.png res/lx03156.png
+res/lx03162.png res/odt_32_8.png
+res/lx03163.png res/odt_32_8.png
 res/lx03188.png cmd/32/dbviewtables.png
 res/lx03218.png res/lx03217.png
 res/lx03220.png res/lx03217.png
@@ -2124,9 +2121,8 @@ res/lx03256.png cmd/lc_insertplugin.png
 
 res/mainapp_16.png cmd/sc_showsinglepage.png
 res/mainapp_16_8.png cmd/sc_showsinglepage.png
-
-res/mainapp.png res/newdoc.png
-res/mainapp_32.png res/newdoc.png
+res/mainapp_32.png res/mainapp_32_8.png
+res/mainapp.png res/mainapp_32_8.png
 res/printeradmin_16_8.png res/printeradmin_16.png
 res/printeradmin_32_8.png res/printeradmin_32.png
 res/reload.png cmd/sc_reload.png
@@ -2300,8 +2296,8 @@ sfx2/res/styfam3.png cmd/sc_linestyle.png
 sfx2/res/styfam4.png cmd/sc_showsinglepage.png
 sfx2/res/symphony/sidebar-3d-large.png cmd/lc_cube.png
 sfx2/res/symphony/sidebar-3d-small.png cmd/sc_cube.png
-sfx2/res/symphony/sidebar-animation-large.png cmd/lc_animationobjects.png
-sfx2/res/symphony/sidebar-animation-small.png cmd/sc_animationobjects.png
+sfx2/res/symphony/sidebar-animation-large.png cmd/lc_diaeffect.png
+sfx2/res/symphony/sidebar-animation-small.png cmd/sc_diaeffect.png
 sfx2/res/symphony/sidebar-colors-large.png cmd/lc_bmpmask.png
 sfx2/res/symphony/sidebar-colors-small.png cmd/sc_bmpmask.png
 sfx2/res/symphony/sidebar-eyedropper-large.png cmd/lc_bmpmask.png

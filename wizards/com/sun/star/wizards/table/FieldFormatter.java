@@ -73,7 +73,7 @@ public class FieldFormatter implements XItemListener
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], sFieldNames, 91, 27, IFieldFormatStep, Short.valueOf(curtabindex++), 90
+                    UIConsts.INTEGERS[8], sFieldNames, 91, 27, IFieldFormatStep, Short.valueOf(curtabindex++), 67
                 });
 
         try
@@ -209,7 +209,7 @@ public class FieldFormatter implements XItemListener
                     }, // PropertyNames.PROPERTY_HELPURL
                     new Object[]
                     {
-                        85, 158, 49, IFieldFormatStep, Short.valueOf(curtabindex++), 166, 50
+                        82, 158, 52, IFieldFormatStep, Short.valueOf(curtabindex++), 166, 50
                     });  //, "HID:WIZARDS_HID_DLGTABLE_COLMODIFIER"
             curTableDescriptor = _curTableDescriptor;
             Helper.setUnoPropertyValue(oColumnDescriptorModel, PropertyNames.ACTIVE_CONNECTION, _curTableDescriptor.DBConnection);

@@ -41,6 +41,8 @@ class Qt5Clipboard final
     // has to be set, if LO changes the QClipboard itself, so it won't instantly lose
     // ownership by it's self-triggered QClipboard::changed handler
     bool m_bOwnClipboardChange;
+    // true, if LO really wants to give up clipboard ownership
+    bool m_bDoClear;
 
     // if not empty, this holds the setContents provided XTransferable or a Qt5ClipboardTransferable
     css::uno::Reference<css::datatransfer::XTransferable> m_aContents;
@@ -55,6 +57,10 @@ class Qt5Clipboard final
 
 private Q_SLOTS:
     void handleChanged(QClipboard::Mode mode);
+    void handleClearClipboard();
+
+signals:
+    void clearClipboard();
 
 public:
     // factory function to construct only valid Qt5Clipboard objects by name
