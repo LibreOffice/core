@@ -1210,7 +1210,7 @@ void DocxExport::WriteSettings()
 
                 if (rAttributeList.hasElements())
                 {
-                    sax_fastparser::FastAttributeList* pAttributeList = sax_fastparser::FastSerializerHelper::createAttrList();
+                    rtl::Reference<sax_fastparser::FastAttributeList> xAttributeList = sax_fastparser::FastSerializerHelper::createAttrList();
                     bool bIsProtectionTrackChanges = false;
                     // if grabbag protection is not enforced, allow Writer protection to override
                     bool bEnforced = false;
@@ -1234,7 +1234,7 @@ void DocxExport::WriteSettings()
                         if (sal_Int32 nToken = DocxStringGetToken(aTokens, rAttribute.Name))
                         {
                             OUString sValue = rAttribute.Value.get<OUString>();
-                            pAttributeList->add(FSNS(XML_w, nToken), sValue.toUtf8());
+                            xAttributeList->add(FSNS(XML_w, nToken), sValue.toUtf8());
                             if ( nToken == XML_edit && sValue == "trackedChanges" )
                                 bIsProtectionTrackChanges = true;
                             else if ( nToken == XML_edit && sValue == "readOnly" )
@@ -1264,8 +1264,8 @@ void DocxExport::WriteSettings()
 
                     if ( bUseGrabBagProtection )
                     {
-                        sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
-                        pFS->singleElementNS(XML_w, XML_documentProtection, xAttributeList);
+                        sax_fastparser::XFastAttributeListRef xFastAttributeList(xAttributeList.get());
+                        pFS->singleElementNS(XML_w, XML_documentProtection, xFastAttributeList);
                     }
 
                 }
