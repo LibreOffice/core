@@ -205,7 +205,7 @@ weld::Entry* ScFillSeriesDlg::CheckValues()
                     m_nSelectHeight - 1 : m_nSelectWidth - 1 ;
         if ( aStartStr.isEmpty() )
             fStartVal = fEndVal - fIncrement * nStepAmount;
-        if ( aIncStr.isEmpty() )
+        if ( aIncStr.isEmpty() && nStepAmount != 0 )
             fIncrement = (fEndVal - fStartVal) / nStepAmount;
     }
     else
