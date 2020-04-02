@@ -2689,23 +2689,23 @@ void ScaAnyConverter::init( const uno::Reference< beans::XPropertySet >& xPropSe
 {
     // try to get default number format
     bHasValidFormat = false;
-    if( xFormatter.is() )
+    if( !xFormatter.is() )
+        return;
+
+    // get XFormatsSupplier from outer XPropertySet
+    uno::Reference< util::XNumberFormatsSupplier > xFormatsSupp( xPropSet, uno::UNO_QUERY );
+    if( !xFormatsSupp.is() )
+        return;
+
+    // get XNumberFormatTypes from XNumberFormatsSupplier to get standard index
+    uno::Reference< util::XNumberFormats > xFormats( xFormatsSupp->getNumberFormats() );
+    uno::Reference< util::XNumberFormatTypes > xFormatTypes( xFormats, uno::UNO_QUERY );
+    if( xFormatTypes.is() )
     {
-        // get XFormatsSupplier from outer XPropertySet
-        uno::Reference< util::XNumberFormatsSupplier > xFormatsSupp( xPropSet, uno::UNO_QUERY );
-        if( xFormatsSupp.is() )
-        {
-            // get XNumberFormatTypes from XNumberFormatsSupplier to get standard index
-            uno::Reference< util::XNumberFormats > xFormats( xFormatsSupp->getNumberFormats() );
-            uno::Reference< util::XNumberFormatTypes > xFormatTypes( xFormats, uno::UNO_QUERY );
-            if( xFormatTypes.is() )
-            {
-                lang::Locale eLocale;
-                nDefaultFormat = xFormatTypes->getStandardIndex( eLocale );
-                xFormatter->attachNumberFormatsSupplier( xFormatsSupp );
-                bHasValidFormat = true;
-            }
-        }
+        lang::Locale eLocale;
+        nDefaultFormat = xFormatTypes->getStandardIndex( eLocale );
+        xFormatter->attachNumberFormatsSupplier( xFormatsSupp );
+        bHasValidFormat = true;
     }
 }
 
