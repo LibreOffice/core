@@ -849,90 +849,90 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet )
     {
         xScriptProvider =  xSPS->getScriptProvider();
     }
-    if ( xScriptProvider.is() && mpShell )
+    if ( !(xScriptProvider.is() && mpShell) )
+        return;
+
+    BasicManager* pBasicManager = mpShell->GetBasicManager();
+    OUString sProject;
+    OUString sScriptCode( evt.ScriptCode );
+    // dialogs pass their own library, presence of Dot determines that
+    if ( sScriptCode.indexOf( '.' ) == -1 )
     {
-        BasicManager* pBasicManager = mpShell->GetBasicManager();
-        OUString sProject;
-        OUString sScriptCode( evt.ScriptCode );
-        // dialogs pass their own library, presence of Dot determines that
-        if ( sScriptCode.indexOf( '.' ) == -1 )
-        {
-            //'Project' is a better default but I want to force failures
-            //OUString sMacroLoc("Project");
-            sProject = "Standard";
+        //'Project' is a better default but I want to force failures
+        //OUString sMacroLoc("Project");
+        sProject = "Standard";
 
-            if (!pBasicManager->GetName().isEmpty())
-            {
-                sProject =  pBasicManager->GetName();
-            }
+        if (!pBasicManager->GetName().isEmpty())
+        {
+            sProject =  pBasicManager->GetName();
         }
-        else
-        {
-            sal_Int32 nIndex = sScriptCode.indexOf( '.' );
-            sProject = sScriptCode.copy( 0, nIndex );
-            sScriptCode = sScriptCode.copy( nIndex + 1 );
-        }
-        OUString sMacroLoc = sProject + "." + sScriptCode + ".";
+    }
+    else
+    {
+        sal_Int32 nIndex = sScriptCode.indexOf( '.' );
+        sProject = sScriptCode.copy( 0, nIndex );
+        sScriptCode = sScriptCode.copy( nIndex + 1 );
+    }
+    OUString sMacroLoc = sProject + "." + sScriptCode + ".";
 
-        for (const auto& rTxInfo : eventInfo_it->second)
+    for (const auto& rTxInfo : eventInfo_it->second)
+    {
+        // If the document is closed, we should not execute macro.
+        if (m_bDocClosed)
         {
-            // If the document is closed, we should not execute macro.
-            if (m_bDocClosed)
+            break;
+        }
+
+        OUString sTemp = sName.concat( rTxInfo.sVBAName );
+        // see if we have a match for the handlerextension
+        // where ScriptCode is methodname_handlerextension
+        OUString sToResolve = sMacroLoc.concat( sTemp );
+
+        ooo::vba::MacroResolvedInfo aMacroResolvedInfo = ooo::vba::resolveVBAMacro( mpShell, sToResolve );
+        if ( aMacroResolvedInfo.mbFound )
+        {
+
+            if (! rTxInfo.ApproveRule(evt, rTxInfo.pPara) )
             {
-                break;
+                continue;
             }
 
-            OUString sTemp = sName.concat( rTxInfo.sVBAName );
-            // see if we have a match for the handlerextension
-            // where ScriptCode is methodname_handlerextension
-            OUString sToResolve = sMacroLoc.concat( sTemp );
-
-            ooo::vba::MacroResolvedInfo aMacroResolvedInfo = ooo::vba::resolveVBAMacro( mpShell, sToResolve );
-            if ( aMacroResolvedInfo.mbFound )
+            // !! translate arguments & emulate events where necessary
+            Sequence< Any > aArguments;
+            if  ( rTxInfo.toVBA )
             {
+                aArguments = rTxInfo.toVBA( evt.Arguments );
+            }
+            else
+            {
+                aArguments = evt.Arguments;
+            }
+            if ( aArguments.hasElements() )
+            {
+                // call basic event handlers for event
 
-                if (! rTxInfo.ApproveRule(evt, rTxInfo.pPara) )
+                // create script url
+                OUString url = aMacroResolvedInfo.msResolvedMacro;
+                try
                 {
-                    continue;
-                }
-
-                // !! translate arguments & emulate events where necessary
-                Sequence< Any > aArguments;
-                if  ( rTxInfo.toVBA )
-                {
-                    aArguments = rTxInfo.toVBA( evt.Arguments );
-                }
-                else
-                {
-                    aArguments = evt.Arguments;
-                }
-                if ( aArguments.hasElements() )
-                {
-                    // call basic event handlers for event
-
-                    // create script url
-                    OUString url = aMacroResolvedInfo.msResolvedMacro;
-                    try
+                    uno::Any aDummyCaller = uno::makeAny( OUString("Error") );
+                    if ( pRet )
                     {
-                        uno::Any aDummyCaller = uno::makeAny( OUString("Error") );
-                        if ( pRet )
-                        {
-                            ooo::vba::executeMacro( mpShell, url, aArguments, *pRet, aDummyCaller );
-                        }
-                        else
-                        {
-                            uno::Any aRet;
-                            ooo::vba::executeMacro( mpShell, url, aArguments, aRet, aDummyCaller );
-                        }
+                        ooo::vba::executeMacro( mpShell, url, aArguments, *pRet, aDummyCaller );
                     }
-                    catch ( const uno::Exception& )
+                    else
                     {
-                        TOOLS_WARN_EXCEPTION("scripting", "event script raised" );
+                        uno::Any aRet;
+                        ooo::vba::executeMacro( mpShell, url, aArguments, aRet, aDummyCaller );
                     }
-               }
+                }
+                catch ( const uno::Exception& )
+                {
+                    TOOLS_WARN_EXCEPTION("scripting", "event script raised" );
+                }
            }
        }
-    }
+   }
 }
 
 namespace {

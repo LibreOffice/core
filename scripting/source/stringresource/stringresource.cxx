@@ -349,22 +349,22 @@ void StringResourceImpl::setDefaultLocale( const Locale& locale )
 void StringResourceImpl::implSetString( const OUString& ResourceID,
     const OUString& Str, LocaleItem* pLocaleItem )
 {
-    if( pLocaleItem != nullptr && loadLocale( pLocaleItem ) )
-    {
-        IdToStringMap& rHashMap = pLocaleItem->m_aIdToStringMap;
+    if( !(pLocaleItem != nullptr && loadLocale( pLocaleItem )) )
+        return;
 
-        IdToStringMap::iterator it = rHashMap.find( ResourceID );
-        bool bNew = ( it == rHashMap.end() );
-        if( bNew )
-        {
-            IdToIndexMap& rIndexMap = pLocaleItem->m_aIdToIndexMap;
-            rIndexMap[ ResourceID ] = pLocaleItem->m_nNextIndex++;
-            implScanIdForNumber( ResourceID );
-        }
-        rHashMap[ ResourceID ] = Str;
-        pLocaleItem->m_bModified = true;
-        implModified();
+    IdToStringMap& rHashMap = pLocaleItem->m_aIdToStringMap;
+
+    IdToStringMap::iterator it = rHashMap.find( ResourceID );
+    bool bNew = ( it == rHashMap.end() );
+    if( bNew )
+    {
+        IdToIndexMap& rIndexMap = pLocaleItem->m_aIdToIndexMap;
+        rIndexMap[ ResourceID ] = pLocaleItem->m_nNextIndex++;
+        implScanIdForNumber( ResourceID );
     }
+    rHashMap[ ResourceID ] = Str;
+    pLocaleItem->m_bModified = true;
+    implModified();
 }
 
 void StringResourceImpl::setString( const OUString& ResourceID, const OUString& Str )
@@ -479,59 +479,59 @@ void StringResourceImpl::removeLocale( const Locale& locale )
     implCheckReadOnly( "StringResourceImpl::removeLocale(): Read only" );
 
     LocaleItem* pRemoveItem = getItemForLocale( locale, true );
-    if( pRemoveItem )
+    if( !pRemoveItem )
+        return;
+
+    // Last locale?
+    sal_Int32 nLocaleCount = m_aLocaleItemVector.size();
+    if( nLocaleCount > 1 )
     {
-        // Last locale?
-        sal_Int32 nLocaleCount = m_aLocaleItemVector.size();
-        if( nLocaleCount > 1 )
+        if( m_pCurrentLocaleItem == pRemoveItem ||
+            m_pDefaultLocaleItem  == pRemoveItem )
         {
-            if( m_pCurrentLocaleItem == pRemoveItem ||
-                m_pDefaultLocaleItem  == pRemoveItem )
+            LocaleItem* pFallbackItem = nullptr;
+            for( const auto& pLocaleItem : m_aLocaleItemVector )
             {
-                LocaleItem* pFallbackItem = nullptr;
-                for( const auto& pLocaleItem : m_aLocaleItemVector )
+                if( pLocaleItem.get() != pRemoveItem )
                 {
-                    if( pLocaleItem.get() != pRemoveItem )
-                    {
-                        pFallbackItem = pLocaleItem.get();
-                        break;
-                    }
-                }
-                if( m_pCurrentLocaleItem == pRemoveItem )
-                {
-                    setCurrentLocale( pFallbackItem->m_locale, false/*FindClosestMatch*/ );
-                }
-                if( m_pDefaultLocaleItem == pRemoveItem )
-                {
-                    setDefaultLocale( pFallbackItem->m_locale );
+                    pFallbackItem = pLocaleItem.get();
+                    break;
                 }
             }
-        }
-        auto it = std::find_if(m_aLocaleItemVector.begin(), m_aLocaleItemVector.end(),
-            [&pRemoveItem](const std::unique_ptr<LocaleItem>& rxItem) { return rxItem.get() == pRemoveItem; });
-        if (it != m_aLocaleItemVector.end())
-        {
-            // Remember locale item to delete file while storing
-            m_aDeletedLocaleItemVector.push_back( std::move(*it) );
-
-            // Last locale?
-            if( nLocaleCount == 1 )
+            if( m_pCurrentLocaleItem == pRemoveItem )
             {
-                m_nNextUniqueNumericId = 0;
-                if( m_pDefaultLocaleItem )
-                {
-                    m_aChangedDefaultLocaleVector.push_back(
-                            std::make_unique<LocaleItem>( m_pDefaultLocaleItem->m_locale ) );
-                }
-                m_pCurrentLocaleItem = nullptr;
-                m_pDefaultLocaleItem = nullptr;
+                setCurrentLocale( pFallbackItem->m_locale, false/*FindClosestMatch*/ );
             }
-
-            m_aLocaleItemVector.erase( it );
-
-            implModified();
+            if( m_pDefaultLocaleItem == pRemoveItem )
+            {
+                setDefaultLocale( pFallbackItem->m_locale );
+            }
         }
     }
+    auto it = std::find_if(m_aLocaleItemVector.begin(), m_aLocaleItemVector.end(),
+        [&pRemoveItem](const std::unique_ptr<LocaleItem>& rxItem) { return rxItem.get() == pRemoveItem; });
+    if (it == m_aLocaleItemVector.end())
+        return;
+
+    // Remember locale item to delete file while storing
+    m_aDeletedLocaleItemVector.push_back( std::move(*it) );
+
+    // Last locale?
+    if( nLocaleCount == 1 )
+    {
+        m_nNextUniqueNumericId = 0;
+        if( m_pDefaultLocaleItem )
+        {
+            m_aChangedDefaultLocaleVector.push_back(
+                    std::make_unique<LocaleItem>( m_pDefaultLocaleItem->m_locale ) );
+        }
+        m_pCurrentLocaleItem = nullptr;
+        m_pDefaultLocaleItem = nullptr;
+    }
+
+    m_aLocaleItemVector.erase( it );
+
+    implModified();
 }
 
 void StringResourceImpl::implScanIdForNumber( const OUString& ResourceID )
@@ -945,20 +945,20 @@ void StringResourcePersistenceImpl::implStoreAtStorage
     }
 
     // Default locale
-    if( m_pDefaultLocaleItem != nullptr && (bStoreAll || m_bDefaultModified) )
-    {
-        OUString aStreamName = implGetFileNameForLocaleItem( m_pDefaultLocaleItem, aNameBase ) + ".default";
+    if( !(m_pDefaultLocaleItem != nullptr && (bStoreAll || m_bDefaultModified)) )
+        return;
 
-        Reference< io::XStream > xElementStream =
-                Storage->openStreamElement( aStreamName, ElementModes::READWRITE );
+    OUString aStreamName = implGetFileNameForLocaleItem( m_pDefaultLocaleItem, aNameBase ) + ".default";
 
-        // Only create stream without content
-        Reference< io::XOutputStream > xOutputStream = xElementStream->getOutputStream();
-        xOutputStream->closeOutput();
+    Reference< io::XStream > xElementStream =
+            Storage->openStreamElement( aStreamName, ElementModes::READWRITE );
 
-        if( bUsedForStore )
-            m_bDefaultModified = false;
-    }
+    // Only create stream without content
+    Reference< io::XOutputStream > xOutputStream = xElementStream->getOutputStream();
+    xOutputStream->closeOutput();
+
+    if( bUsedForStore )
+        m_bDefaultModified = false;
 }
 
 void StringResourcePersistenceImpl::storeToURL( const OUString& URL,
@@ -1061,23 +1061,23 @@ void StringResourcePersistenceImpl::implStoreAtLocation
         implKillChangedDefaultFiles( Location, aNameBase, xFileAccess );
 
     // Default locale
-    if( m_pDefaultLocaleItem != nullptr && (bStoreAll || bKillAll || m_bDefaultModified) )
+    if( !(m_pDefaultLocaleItem != nullptr && (bStoreAll || bKillAll || m_bDefaultModified)) )
+        return;
+
+    OUString aCompleteFileName =
+        implGetPathForLocaleItem( m_pDefaultLocaleItem, aNameBase, Location, true );
+    if( xFileAccess->exists( aCompleteFileName ) )
+        xFileAccess->kill( aCompleteFileName );
+
+    if( !bKillAll )
     {
-        OUString aCompleteFileName =
-            implGetPathForLocaleItem( m_pDefaultLocaleItem, aNameBase, Location, true );
-        if( xFileAccess->exists( aCompleteFileName ) )
-            xFileAccess->kill( aCompleteFileName );
+        // Create Output stream
+        Reference< io::XOutputStream > xOutputStream = xFileAccess->openFileWrite( aCompleteFileName );
+        if( xOutputStream.is() )
+            xOutputStream->closeOutput();
 
-        if( !bKillAll )
-        {
-            // Create Output stream
-            Reference< io::XOutputStream > xOutputStream = xFileAccess->openFileWrite( aCompleteFileName );
-            if( xOutputStream.is() )
-                xOutputStream->closeOutput();
-
-            if( bUsedForStore )
-                m_bDefaultModified = false;
-        }
+        if( bUsedForStore )
+            m_bDefaultModified = false;
     }
 }
 
@@ -1765,19 +1765,19 @@ static void CheckContinueInNextLine( const Reference< io::XTextInputStream2 >& x
     OUString& aLine, bool& bEscapePending, const sal_Unicode*& pBuf,
     sal_Int32& nLen, sal_Int32& i )
 {
-    if( i == nLen && bEscapePending )
+    if( !(i == nLen && bEscapePending) )
+        return;
+
+    bEscapePending = false;
+
+    if( !xTextInputStream->isEOF() )
     {
-        bEscapePending = false;
+        aLine = xTextInputStream->readLine();
+        nLen = aLine.getLength();
+        pBuf = aLine.getStr();
+        i = 0;
 
-        if( !xTextInputStream->isEOF() )
-        {
-            aLine = xTextInputStream->readLine();
-            nLen = aLine.getLength();
-            pBuf = aLine.getStr();
-            i = 0;
-
-            skipWhites( pBuf, nLen, i );
-        }
+        skipWhites( pBuf, nLen, i );
     }
 }
 

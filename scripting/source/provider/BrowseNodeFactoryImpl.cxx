@@ -368,21 +368,21 @@ public:
         OSL_ENSURE( m_xAggProxy.is(),
             "DefaultBrowseNode::DefaultBrowseNode: Wrapped BrowseNode cannot be aggregated!" );
 
-        if ( m_xAggProxy.is() )
+        if ( !m_xAggProxy.is() )
+            return;
+
+        osl_atomic_increment( &m_refCount );
+
+        /* i35609 - Fix crash on Solaris. The setDelegator call needs
+           to be in its own block to ensure that all temporary Reference
+           instances that are acquired during the call are released
+           before m_refCount is decremented again */
         {
-            osl_atomic_increment( &m_refCount );
-
-            /* i35609 - Fix crash on Solaris. The setDelegator call needs
-               to be in its own block to ensure that all temporary Reference
-               instances that are acquired during the call are released
-               before m_refCount is decremented again */
-            {
-                m_xAggProxy->setDelegator(
-                    static_cast< cppu::OWeakObject * >( this ) );
-            }
-
-            osl_atomic_decrement( &m_refCount );
+            m_xAggProxy->setDelegator(
+                static_cast< cppu::OWeakObject * >( this ) );
         }
+
+        osl_atomic_decrement( &m_refCount );
     }
 
     virtual ~DefaultBrowseNode() override

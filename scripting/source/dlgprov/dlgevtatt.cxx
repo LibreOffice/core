@@ -118,37 +118,37 @@ namespace dlgprov
             args[0] <<= xModel;
             mxListener.set( xSMgr->createInstanceWithArgumentsAndContext( "ooo.vba.EventListener", args, m_xContext ), UNO_QUERY );
         }
-        if ( rxControl.is() )
+        if ( !rxControl.is() )
+            return;
+
+        try
         {
-            try
-            {
-                Reference< XPropertySet > xProps( rxControl->getModel(), UNO_QUERY_THROW );
-                xProps->getPropertyValue("Name") >>= msDialogCodeName;
-                xProps.set( mxListener, UNO_QUERY_THROW );
-                xProps->setPropertyValue("Model", args[ 0 ] );
-            }
-            catch( const Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION("scripting");
-            }
+            Reference< XPropertySet > xProps( rxControl->getModel(), UNO_QUERY_THROW );
+            xProps->getPropertyValue("Name") >>= msDialogCodeName;
+            xProps.set( mxListener, UNO_QUERY_THROW );
+            xProps->setPropertyValue("Model", args[ 0 ] );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION("scripting");
         }
 
     }
 
     void DialogVBAScriptListenerImpl::firing_impl( const script::ScriptEvent& aScriptEvent, uno::Any* )
     {
-        if ( aScriptEvent.ScriptType == "VBAInterop" && mxListener.is() )
+        if ( !(aScriptEvent.ScriptType == "VBAInterop" && mxListener.is()) )
+            return;
+
+        ScriptEvent aScriptEventCopy( aScriptEvent );
+        aScriptEventCopy.ScriptCode = msDialogLibName.concat( "." ).concat( msDialogCodeName );
+        try
         {
-            ScriptEvent aScriptEventCopy( aScriptEvent );
-            aScriptEventCopy.ScriptCode = msDialogLibName.concat( "." ).concat( msDialogCodeName );
-            try
-            {
-                mxListener->firing( aScriptEventCopy );
-            }
-            catch( const Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION("scripting");
-            }
+            mxListener->firing( aScriptEventCopy );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION("scripting");
         }
     }
 
@@ -215,61 +215,61 @@ namespace dlgprov
 
     void DialogEventsAttacherImpl::attachEventsToControl( const Reference< XControl>& xControl, const Reference< XScriptEventsSupplier >& xEventsSupplier, const Any& Helper )
     {
-        if ( xEventsSupplier.is() )
+        if ( !xEventsSupplier.is() )
+            return;
+
+        Reference< container::XNameContainer > xEventCont = xEventsSupplier->getEvents();
+
+        Reference< XControlModel > xControlModel = xControl->getModel();
+        if ( !xEventCont.is() )
+            return;
+
+        const Sequence< OUString > aNames = xEventCont->getElementNames();
+
+        for ( const OUString& rName : aNames )
         {
-            Reference< container::XNameContainer > xEventCont = xEventsSupplier->getEvents();
+            ScriptEventDescriptor aDesc;
 
-            Reference< XControlModel > xControlModel = xControl->getModel();
-            if ( xEventCont.is() )
+            Any aElement = xEventCont->getByName( rName );
+            aElement >>= aDesc;
+            OUString sKey = aDesc.ScriptType;
+            if ( aDesc.ScriptType == "Script" || aDesc.ScriptType == "UNO" )
             {
-                const Sequence< OUString > aNames = xEventCont->getElementNames();
+                sal_Int32 nIndex = aDesc.ScriptCode.indexOf( ':' );
+                sKey = aDesc.ScriptCode.copy( 0, nIndex );
+            }
+            Reference< XAllListener > xAllListener =
+                new DialogAllListenerImpl( getScriptListenerForKey( sKey ), aDesc.ScriptType, aDesc.ScriptCode );
 
-                for ( const OUString& rName : aNames )
+            // try first to attach event to the ControlModel
+            bool bSuccess = false;
+            try
+            {
+                Reference< XEventListener > xListener_ = m_xEventAttacher->attachSingleEventListener(
+                    xControlModel, xAllListener, Helper, aDesc.ListenerType,
+                    aDesc.AddListenerParam, aDesc.EventMethod );
+
+                if ( xListener_.is() )
+                    bSuccess = true;
+            }
+            catch ( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION("scripting");
+            }
+
+            try
+            {
+                // if we had no success, try to attach to the control
+                if ( !bSuccess )
                 {
-                    ScriptEventDescriptor aDesc;
-
-                    Any aElement = xEventCont->getByName( rName );
-                    aElement >>= aDesc;
-                    OUString sKey = aDesc.ScriptType;
-                    if ( aDesc.ScriptType == "Script" || aDesc.ScriptType == "UNO" )
-                    {
-                        sal_Int32 nIndex = aDesc.ScriptCode.indexOf( ':' );
-                        sKey = aDesc.ScriptCode.copy( 0, nIndex );
-                    }
-                    Reference< XAllListener > xAllListener =
-                        new DialogAllListenerImpl( getScriptListenerForKey( sKey ), aDesc.ScriptType, aDesc.ScriptCode );
-
-                    // try first to attach event to the ControlModel
-                    bool bSuccess = false;
-                    try
-                    {
-                        Reference< XEventListener > xListener_ = m_xEventAttacher->attachSingleEventListener(
-                            xControlModel, xAllListener, Helper, aDesc.ListenerType,
-                            aDesc.AddListenerParam, aDesc.EventMethod );
-
-                        if ( xListener_.is() )
-                            bSuccess = true;
-                    }
-                    catch ( const Exception& )
-                    {
-                        DBG_UNHANDLED_EXCEPTION("scripting");
-                    }
-
-                    try
-                    {
-                        // if we had no success, try to attach to the control
-                        if ( !bSuccess )
-                        {
-                            m_xEventAttacher->attachSingleEventListener(
-                                xControl, xAllListener, Helper, aDesc.ListenerType,
-                                aDesc.AddListenerParam, aDesc.EventMethod );
-                        }
-                    }
-                    catch ( const Exception& )
-                    {
-                        DBG_UNHANDLED_EXCEPTION("scripting");
-                    }
+                    m_xEventAttacher->attachSingleEventListener(
+                        xControl, xAllListener, Helper, aDesc.ListenerType,
+                        aDesc.AddListenerParam, aDesc.EventMethod );
                 }
+            }
+            catch ( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION("scripting");
             }
         }
     }
@@ -507,21 +507,21 @@ namespace dlgprov
         OUString sScriptURL;
         OUString sScriptCode( aScriptEvent.ScriptCode );
 
-        if ( aScriptEvent.ScriptType == "StarBasic" )
+        if ( aScriptEvent.ScriptType != "StarBasic" )
+            return;
+
+        // StarBasic script: convert ScriptCode to scriptURL
+        sal_Int32 nIndex = sScriptCode.indexOf( ':' );
+        if ( nIndex >= 0 && nIndex < sScriptCode.getLength() )
         {
-            // StarBasic script: convert ScriptCode to scriptURL
-            sal_Int32 nIndex = sScriptCode.indexOf( ':' );
-            if ( nIndex >= 0 && nIndex < sScriptCode.getLength() )
-            {
-                sScriptURL = "vnd.sun.star.script:" +
-                    sScriptCode.copy( nIndex + 1 ) +
-                    "?language=Basic&location=" +
-                    sScriptCode.copy( 0, nIndex );
-            }
-            ScriptEvent aSFScriptEvent( aScriptEvent );
-            aSFScriptEvent.ScriptCode = sScriptURL;
-            DialogSFScriptListenerImpl::firing_impl( aSFScriptEvent, pRet );
+            sScriptURL = "vnd.sun.star.script:" +
+                sScriptCode.copy( nIndex + 1 ) +
+                "?language=Basic&location=" +
+                sScriptCode.copy( 0, nIndex );
         }
+        ScriptEvent aSFScriptEvent( aScriptEvent );
+        aSFScriptEvent.ScriptCode = sScriptURL;
+        DialogSFScriptListenerImpl::firing_impl( aSFScriptEvent, pRet );
     }
 
     void DialogUnoScriptListenerImpl::firing_impl( const ScriptEvent& aScriptEvent, Any* pRet )

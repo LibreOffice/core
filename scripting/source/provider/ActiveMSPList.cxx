@@ -234,21 +234,21 @@ ActiveMSPList::addActiveMSP( const Reference< uno::XInterface >& xComponent,
     ::osl::MutexGuard guard( m_mutex );
     Reference< XInterface > xNormalized( xComponent, UNO_QUERY );
     ScriptComponent_map::const_iterator pos = m_mScriptComponents.find( xNormalized );
-    if ( pos == m_mScriptComponents.end() )
-    {
-        m_mScriptComponents[ xNormalized ] = msp;
+    if ( pos != m_mScriptComponents.end() )
+        return;
 
-        // add self as listener for component disposal
-        // should probably throw from this method!!, reexamine
-        try
-        {
-            Reference< lang::XComponent > xBroadcaster( xComponent, UNO_QUERY_THROW );
-            xBroadcaster->addEventListener( this );
-        }
-        catch ( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("scripting");
-        }
+    m_mScriptComponents[ xNormalized ] = msp;
+
+    // add self as listener for component disposal
+    // should probably throw from this method!!, reexamine
+    try
+    {
+        Reference< lang::XComponent > xBroadcaster( xComponent, UNO_QUERY_THROW );
+        xBroadcaster->addEventListener( this );
+    }
+    catch ( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("scripting");
     }
 }
 

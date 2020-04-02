@@ -267,33 +267,33 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
         pDlg->Execute();
     }
 
-    if ( xListener.is() )
+    if ( !xListener.is() )
+        return;
+
+    // always call dispatchFinished(), because we didn't load a document but
+    // executed a macro instead!
+    css::frame::DispatchResultEvent aEvent;
+
+    aEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
+    aEvent.Result = invokeResult;
+    if ( bSuccess )
     {
-        // always call dispatchFinished(), because we didn't load a document but
-        // executed a macro instead!
-        css::frame::DispatchResultEvent aEvent;
+        aEvent.State = css::frame::DispatchResultState::SUCCESS;
+    }
+    else
+    {
+        aEvent.State = css::frame::DispatchResultState::FAILURE;
+    }
 
-        aEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
-        aEvent.Result = invokeResult;
-        if ( bSuccess )
-        {
-            aEvent.State = css::frame::DispatchResultState::SUCCESS;
-        }
-        else
-        {
-            aEvent.State = css::frame::DispatchResultState::FAILURE;
-        }
-
-        try
-        {
-            xListener->dispatchFinished( aEvent ) ;
-        }
-        catch(const RuntimeException &)
-        {
-            TOOLS_WARN_EXCEPTION("scripting",
-                "ScriptProtocolHandler::dispatchWithNotification: caught RuntimeException"
-                "while dispatchFinished" );
-        }
+    try
+    {
+        xListener->dispatchFinished( aEvent ) ;
+    }
+    catch(const RuntimeException &)
+    {
+        TOOLS_WARN_EXCEPTION("scripting",
+            "ScriptProtocolHandler::dispatchWithNotification: caught RuntimeException"
+            "while dispatchFinished" );
     }
 }
 
