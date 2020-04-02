@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ab7eef9f_28ab71f2",
+        "filename": "sw/source/core/layout/frmtool.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-04-02T06:15:23Z",
+      "side": 1,
+      "message": "I missed taking out this comment...",
+      "range": {
+        "startLine": 705,
+        "startChar": 0,
+        "endLine": 705,
+        "endChar": 1
+      },
+      "revId": "dae6b3f6e026c257032cece90ff2d99307b10031",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
