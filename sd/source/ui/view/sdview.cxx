@@ -183,7 +183,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
         if(!bDoCreateGeometry && !(( pObject->GetObjInventor() == SdrInventor::Default ) && ( pObject->GetObjIdentifier() == OBJ_PAGE )) )
             return xRetval;
 
-        PresObjKind eKind(PRESOBJ_NONE);
+        PresObjKind eKind(PresObjKind::NONE);
         const bool bSubContentProcessing(rDisplayInfo.GetSubContentActive());
         const bool bIsMasterPageObject(pObject->getSdrPageFromSdrObject()->IsMasterPage());
         const bool bIsPrinting(rOriginal.GetObjectContact().isOutputToPrinter());
@@ -202,7 +202,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
             {
                 if( !bSubContentProcessing || !pObject->IsNotVisibleAsMaster() )
                 {
-                    eKind = pObjectsSdPage ? pObjectsSdPage->GetPresObjKind(pObject) : PRESOBJ_NONE;
+                    eKind = pObjectsSdPage ? pObjectsSdPage->GetPresObjKind(pObject) : PresObjKind::NONE;
                     bCreateOutline = true;
                 }
             }
@@ -212,7 +212,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
                 {
                     eKind = pObjectsSdPage->GetPresObjKind(pObject);
 
-                    if((eKind == PRESOBJ_FOOTER) || (eKind == PRESOBJ_HEADER) || (eKind == PRESOBJ_DATETIME) || (eKind == PRESOBJ_SLIDENUMBER) )
+                    if((eKind == PresObjKind::Footer) || (eKind == PresObjKind::Header) || (eKind == PresObjKind::DateTime) || (eKind == PresObjKind::SlideNumber) )
                     {
                         if( !bSubContentProcessing )
                         {
@@ -278,7 +278,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
 
                         switch( eKind )
                         {
-                            case PRESOBJ_TITLE:
+                            case PresObjKind::Title:
                             {
                                 if(pObjectsSdPage && pObjectsSdPage->GetPageKind() == PageKind::Standard)
                                 {
@@ -288,37 +288,37 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
 
                                 break;
                             }
-                            case PRESOBJ_OUTLINE:
+                            case PresObjKind::Outline:
                             {
                                 static OUString aOutlineAreaStr(SdResId(STR_PLACEHOLDER_DESCRIPTION_OUTLINE));
                                 aObjectString = aOutlineAreaStr;
                                 break;
                             }
-                            case PRESOBJ_FOOTER:
+                            case PresObjKind::Footer:
                             {
                                 static OUString aFooterAreaStr(SdResId(STR_PLACEHOLDER_DESCRIPTION_FOOTER));
                                 aObjectString = aFooterAreaStr;
                                 break;
                             }
-                            case PRESOBJ_HEADER:
+                            case PresObjKind::Header:
                             {
                                 static OUString aHeaderAreaStr(SdResId(STR_PLACEHOLDER_DESCRIPTION_HEADER));
                                 aObjectString = aHeaderAreaStr;
                                 break;
                             }
-                            case PRESOBJ_DATETIME:
+                            case PresObjKind::DateTime:
                             {
                                 static OUString aDateTimeStr(SdResId(STR_PLACEHOLDER_DESCRIPTION_DATETIME));
                                 aObjectString = aDateTimeStr;
                                 break;
                             }
-                            case PRESOBJ_NOTES:
+                            case PresObjKind::Notes:
                             {
                                 static OUString aDateTimeStr(SdResId(STR_PLACEHOLDER_DESCRIPTION_NOTES));
                                 aObjectString = aDateTimeStr;
                                 break;
                             }
-                            case PRESOBJ_SLIDENUMBER:
+                            case PresObjKind::SlideNumber:
                             {
                                 if(pObjectsSdPage && pObjectsSdPage->GetPageKind() == PageKind::Standard)
                                 {
@@ -540,7 +540,7 @@ bool View::IsPresObjSelected(bool bOnPage, bool bOnMasterPage, bool bCheckPresOb
                     {
                         PresObjKind eKind = pPage->GetPresObjKind(pObj);
 
-                        if((eKind != PRESOBJ_FOOTER) && (eKind != PRESOBJ_HEADER) && (eKind != PRESOBJ_DATETIME) && (eKind != PRESOBJ_SLIDENUMBER) )
+                        if((eKind != PresObjKind::Footer) && (eKind != PresObjKind::Header) && (eKind != PresObjKind::DateTime) && (eKind != PresObjKind::SlideNumber) )
                             bSelected = true;
                     }
                     else
@@ -714,12 +714,12 @@ bool View::SdrBeginTextEdit(
     {
         const SdrTextObj* pTextObj = pOutl->GetTextObj();
         const SdPage* pSdPage = pTextObj ? static_cast<const SdPage*>(pTextObj->getSdrPageFromSdrObject()) : nullptr;
-        const PresObjKind eKind = pSdPage ? pSdPage->GetPresObjKind(const_cast<SdrTextObj*>(pTextObj)) : PRESOBJ_NONE;
+        const PresObjKind eKind = pSdPage ? pSdPage->GetPresObjKind(const_cast<SdrTextObj*>(pTextObj)) : PresObjKind::NONE;
         switch (eKind)
         {
-            case PRESOBJ_TITLE:
-            case PRESOBJ_OUTLINE:
-            case PRESOBJ_TEXT:
+            case PresObjKind::Title:
+            case PresObjKind::Outline:
+            case PresObjKind::Text:
                 maMasterViewFilter.Start(pOutl);
                 break;
             default:
@@ -1169,11 +1169,11 @@ void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfo )
     const PresObjKind eKind = pPage->GetPresObjKind(pTextObj);
 
     // outline kinds are taken care of in Outliner::ImplSetLevelDependentStyleSheet
-    if( eKind == PRESOBJ_OUTLINE )
+    if( eKind == PresObjKind::Outline )
         return;
 
     SfxStyleSheet* pStyleSheet = nullptr;
-    if( eKind != PRESOBJ_NONE )
+    if( eKind != PresObjKind::NONE )
         pStyleSheet = pPage->GetStyleSheetForPresObj(eKind);
     else
          pStyleSheet = pTextObj->GetStyleSheet();

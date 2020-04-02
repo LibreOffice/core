@@ -945,7 +945,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
 
             if (pPage->IsSelected())
             {
-                SdrObject* pObj = pPage->GetPresObj(PRESOBJ_OUTLINE);
+                SdrObject* pObj = pPage->GetPresObj(PresObjKind::Outline);
 
                 if (pObj!=nullptr )
                 {
@@ -990,7 +990,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
 
             if (pPage->IsSelected())
             {
-                SdrObject* pObj = pPage->GetPresObj(PRESOBJ_TITLE);
+                SdrObject* pObj = pPage->GetPresObj(PresObjKind::Title);
 
                 if (pObj && !pObj->IsEmptyPresObj())
                 {
@@ -1650,7 +1650,7 @@ void OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
     bool bNewObject = false;
 
     OutlinerMode eOutlinerMode = OutlinerMode::TitleObject;
-    pTO = static_cast<SdrTextObj*>(pPage->GetPresObj( PRESOBJ_TEXT ));
+    pTO = static_cast<SdrTextObj*>(pPage->GetPresObj( PresObjKind::Text ));
     if( !pTO )
     {
         eOutlinerMode = OutlinerMode::OutlineObject;
@@ -1750,8 +1750,8 @@ ErrCode OutlineViewShell::ReadRtf(SvStream& rInput)
     bRet = rOutl.Read( rInput, OUString(), EETextFormat::Rtf, GetDocSh()->GetHeaderAttributes() );
 
     SdPage* pPage = GetDoc()->GetSdPage( GetDoc()->GetSdPageCount(PageKind::Standard) - 1, PageKind::Standard );
-    SfxStyleSheet* pTitleSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE );
-    SfxStyleSheet* pOutlSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_OUTLINE );
+    SfxStyleSheet* pTitleSheet = pPage->GetStyleSheetForPresObj( PresObjKind::Title );
+    SfxStyleSheet* pOutlSheet = pPage->GetStyleSheetForPresObj( PresObjKind::Outline );
 
     sal_Int32 nParaCount = rOutl.GetParagraphCount();
     if ( nParaCount > 0 )

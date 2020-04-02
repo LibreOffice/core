@@ -834,7 +834,7 @@ bool SdXShape::IsPresObj() const
     {
         SdPage* pPage = dynamic_cast<SdPage* >(pObj->getSdrPageFromSdrObject());
         if(pPage)
-            return pPage->GetPresObjKind(pObj) != PRESOBJ_NONE;
+            return pPage->GetPresObjKind(pObj) != PresObjKind::NONE;
     }
     return false;
 }

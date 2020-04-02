@@ -273,7 +273,7 @@ void View::DoPaste (::sd::Window* pWindow)
 
         if( pOutliner)
         {
-            if( pObj && pPage && pPage->GetPresObjKind(pObj) == PRESOBJ_TITLE )
+            if( pObj && pPage && pPage->GetPresObjKind(pObj) == PresObjKind::Title )
             {
                 // remove all hard linebreaks from the title
                 if (pOutliner->GetParagraphCount() > 1)

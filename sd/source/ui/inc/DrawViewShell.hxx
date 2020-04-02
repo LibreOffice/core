@@ -141,7 +141,7 @@ public:
     OUString        GetSelectionText( bool bCompleteWords );
     bool            HasSelection( bool bText ) const;
 
-    //If we are editing a PRESOBJ_OUTLINE return the Outliner and fill rSel
+    //If we are editing a PresObjKind::Outline return the Outliner and fill rSel
     //with the current selection
     ::Outliner*     GetOutlinerForMasterPageOutlineTextObj(ESelection &rSel);
 

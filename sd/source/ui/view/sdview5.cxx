@@ -29,13 +29,13 @@ static bool implIsMultiPresObj( PresObjKind eKind )
 {
     switch( eKind )
     {
-    case PRESOBJ_OUTLINE:
-    case PRESOBJ_GRAPHIC:
-    case PRESOBJ_OBJECT:
-    case PRESOBJ_CHART:
-    case PRESOBJ_ORGCHART:
-    case PRESOBJ_TABLE:
-    case PRESOBJ_MEDIA:
+    case PresObjKind::Outline:
+    case PresObjKind::Graphic:
+    case PresObjKind::Object:
+    case PresObjKind::Chart:
+    case PresObjKind::OrgChart:
+    case PresObjKind::Table:
+    case PresObjKind::Media:
         return true;
     default:
         return false;

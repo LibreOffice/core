@@ -157,8 +157,8 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
                 sal_uInt16 eObjKind = pEditObject->GetObjIdentifier();
                 PresObjKind ePresObjKind = rPage.GetPresObjKind(pEditObject);
 
-                if ( ePresObjKind == PRESOBJ_TITLE ||
-                     ePresObjKind == PRESOBJ_NOTES )
+                if ( ePresObjKind == PresObjKind::Title ||
+                     ePresObjKind == PresObjKind::Notes )
                 {
                     // Presentation object (except outline)
                     SfxStyleSheet* pSheet = rPage.GetStyleSheetForPresObj( ePresObjKind );
@@ -320,8 +320,8 @@ void DrawView::SetMasterAttributes( SdrObject* pObject, const SdPage& rPage, Sfx
         }
 
         if (!bSlide &&
-            (ePresObjKind == PRESOBJ_TITLE ||
-             ePresObjKind == PRESOBJ_NOTES))
+            (ePresObjKind == PresObjKind::Title ||
+             ePresObjKind == PresObjKind::Notes))
         {
             // Presentation object (except outline)
             SfxStyleSheet* pSheet = rPage.GetStyleSheetForPresObj( ePresObjKind );
@@ -574,16 +574,16 @@ void DrawView::DeleteMarked()
                     PresObjKind ePresObjKind(pPage->GetPresObjKind(pObj));
                     switch( ePresObjKind )
                     {
-                    case PRESOBJ_NONE:
+                    case PresObjKind::NONE:
                         continue; // ignore it
-                    case PRESOBJ_GRAPHIC:
-                    case PRESOBJ_OBJECT:
-                    case PRESOBJ_CHART:
-                    case PRESOBJ_ORGCHART:
-                    case PRESOBJ_TABLE:
-                    case PRESOBJ_CALC:
-                    case PRESOBJ_MEDIA:
-                        ePresObjKind = PRESOBJ_OUTLINE;
+                    case PresObjKind::Graphic:
+                    case PresObjKind::Object:
+                    case PresObjKind::Chart:
+                    case PresObjKind::OrgChart:
+                    case PresObjKind::Table:
+                    case PresObjKind::Calc:
+                    case PresObjKind::Media:
+                        ePresObjKind = PresObjKind::Outline;
                         break;
                     default:
                         break;

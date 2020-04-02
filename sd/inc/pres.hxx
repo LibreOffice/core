@@ -19,28 +19,27 @@
 #ifndef INCLUDED_SD_INC_PRES_HXX
 #define INCLUDED_SD_INC_PRES_HXX
 
-enum PresObjKind
+enum class PresObjKind
 {
-    PRESOBJ_NONE = 0,
-    PRESOBJ_TITLE,
-    PRESOBJ_OUTLINE,
-    PRESOBJ_TEXT,
-    PRESOBJ_GRAPHIC,
-    PRESOBJ_OBJECT,
-    PRESOBJ_CHART,
-    PRESOBJ_ORGCHART,
-    PRESOBJ_TABLE,
-    PRESOBJ_PAGE,
-    PRESOBJ_HANDOUT,
-    PRESOBJ_NOTES,
-    PRESOBJ_HEADER,
-    PRESOBJ_FOOTER,
-    PRESOBJ_DATETIME,
-    PRESOBJ_SLIDENUMBER,
-    PRESOBJ_CALC,
-    PRESOBJ_MEDIA,
-
-    PRESOBJ_MAX
+    NONE = 0,
+    Title,
+    Outline,
+    Text,
+    Graphic,
+    Object,
+    Chart,
+    OrgChart,
+    Table,
+    Page,
+    Handout,
+    Notes,
+    Header,
+    Footer,
+    DateTime,
+    SlideNumber,
+    Calc,
+    Media,
+    LAST = Media
 };
 
 enum class PageKind
