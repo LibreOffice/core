@@ -595,8 +595,6 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         // - nested tables: the goal is to have left-most border starting at table_indent pos
 
         // Only top level table position depends on border width of Column A.
-        // TODO: Position based on last row (at least in MSOffice 2016), but first row in Office 2003.
-        //       Export code is also based on first cell, so using first row here...
         if ( !m_aCellProperties.empty() && !m_aCellProperties[0].empty() )
         {
             // aLeftBorder already contains tblBorder; overwrite if cell is different.
@@ -623,11 +621,18 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 
         if (((nMode < 0) || (0 < nMode && nMode <= 14)) && rInfo.nNestLevel == 1)
         {
-            m_aTableProperties->Insert( PROP_LEFT_MARGIN, uno::makeAny( nLeftMargin - nGapHalf - rInfo.nLeftBorderDistance ) );
+            const sal_Int32 nAdjustedMargin = nLeftMargin - nGapHalf - rInfo.nLeftBorderDistance;
+            m_aTableProperties->Insert( PROP_LEFT_MARGIN, uno::makeAny( nAdjustedMargin ) );
         }
         else
         {
-            m_aTableProperties->Insert( PROP_LEFT_MARGIN, uno::makeAny( nLeftMargin - nGapHalf ) );
+            // Writer starts a table in the middle of the border.
+            // Word starts a table at the left edge of the border,
+            // so emulate that by adding the half the width. (also see docxattributeoutput)
+            if ( rInfo.nNestLevel > 1 && nLeftMargin < 0 )
+                nLeftMargin = 0;
+            const sal_Int32 nAdjustedMargin = nLeftMargin - nGapHalf + (aLeftBorder.LineWidth / 2);
+            m_aTableProperties->Insert( PROP_LEFT_MARGIN, uno::makeAny( nAdjustedMargin ) );
         }
 
         sal_Int32 nTableWidth = 0;

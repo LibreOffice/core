@@ -495,8 +495,9 @@ DECLARE_OOXMLIMPORT_TEST(testN779627, "n779627.docx")
     uno::Any aValue = xTableProperties->getPropertyValue("LeftMargin");
     sal_Int32 nLeftMargin;
     aValue >>= nLeftMargin;
+    // only border width considered.
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Left margin shouldn't take tableCellMar into account in nested tables",
-            sal_Int32(0), nLeftMargin);
+            sal_Int32(9), nLeftMargin);
 
     /*
      * Another problem tested with this document is the unnecessary loading of the shapes
