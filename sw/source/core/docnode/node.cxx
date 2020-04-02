@@ -1386,6 +1386,7 @@ void SwContentNode::DelFrames(SwRootFrame const*const pLayout)
                                 break;
                             }
                         }
+                        assert(pMerged->listener.IsListeningTo(pMerged->pParaPropsNode));
                     }
                     assert(GetIndex() <= pMerged->pLastNode->GetIndex());
                     if (this == pMerged->pLastNode)
@@ -1407,6 +1408,7 @@ void SwContentNode::DelFrames(SwRootFrame const*const pLayout)
                             }
                         }
                         assert(pMerged->pFirstNode->GetIndex() <= pMerged->pLastNode->GetIndex());
+                        assert(pMerged->listener.IsListeningTo(pMerged->pLastNode));
                     }
                     // avoid re-parenting mess (ModifyChangedHint)
                     pMerged->listener.EndListening(this);
