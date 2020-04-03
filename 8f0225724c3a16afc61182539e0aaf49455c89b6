@@ -52,6 +52,24 @@
       "revId": "8f0225724c3a16afc61182539e0aaf49455c89b6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3cd4f7c_feb71086",
+        "filename": "sfx2/source/control/recentdocsview.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-04-03T16:21:45Z",
+      "side": 1,
+      "message": "Yes, converting to a sequence of bytes using comphelper::Base64::decode is the correct procedure; what is the problem and what is the task?",
+      "parentUuid": "9f683b08_76602a5d",
+      "revId": "8f0225724c3a16afc61182539e0aaf49455c89b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
