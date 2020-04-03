@@ -16,6 +16,24 @@
       "revId": "8f0225724c3a16afc61182539e0aaf49455c89b6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d775f9a7_dafb1ebf",
+        "filename": "sfx2/source/control/recentdocsview.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-04-03T15:32:35Z",
+      "side": 1,
+      "message": "That is not a URL, it\u0027s a Base64-encoded PNG binary",
+      "parentUuid": "cac766fb_6462e19f",
+      "revId": "8f0225724c3a16afc61182539e0aaf49455c89b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
