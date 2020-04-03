@@ -5037,7 +5037,6 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
     size_t nPageDescOffset = m_rDoc.GetPageDescCnt();
 
     SwNodeIndex aSttNdIdx( m_rDoc.GetNodes() );
-    SwRelNumRuleSpaces aRelNumRule(m_rDoc, m_bNewDoc);
 
     RedlineFlags eMode = RedlineFlags::ShowInsert | RedlineFlags::ShowDelete;
 

@@ -879,7 +879,7 @@ void SdImportTest::testStrictOOXML()
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
-    uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
+    getShapeFromPage( 0, 0, xDocShRef );
 
     xDocShRef->DoClose();
 }
@@ -2592,7 +2592,6 @@ void SdImportTest::testTdf114488()
     uno::Reference<graphic::XGraphic> xGraphic;
     xShape->getPropertyValue("Graphic") >>= xGraphic;
     CPPUNIT_ASSERT(xGraphic.is());
-    Graphic aGraphic(xGraphic);
     OUString sMimeType(comphelper::GraphicMimeTypeHelper::GetMimeTypeForXGraphic(xGraphic));
     CPPUNIT_ASSERT_EQUAL(OUString("image/x-wmf"), sMimeType);
 

@@ -1047,9 +1047,6 @@ void DrawXmlFinalizer::visit( PageElement& elem, const std::list< std::unique_pt
 
     StyleContainer::Style aMPStyle( "style:master-page", aPageProps);
 
-    StyleContainer::Style aHeaderStyle( "style:header", PropertyMap() );
-    StyleContainer::Style aFooterStyle( "style:footer", PropertyMap() );
-
     elem.StyleId = m_rStyleContainer.impl_getStyleId( aMPStyle,false );
 
     // create styles for children

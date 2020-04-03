@@ -469,7 +469,7 @@ DECLARE_RTFEXPORT_TEST(testFdo76633, "fdo76633.rtf")
     CPPUNIT_ASSERT(xShape->supportsService("com.sun.star.text.TextGraphicObject"));
     try
     {
-        uno::Reference<drawing::XShape> xShape2 = getShape(2);
+        getShape(2);
         CPPUNIT_FAIL("exception expected");
     }
     catch (lang::IndexOutOfBoundsException const&)

@@ -50,7 +50,6 @@ ErrCode SwDOCXReader::Read(SwDoc& rDoc, const OUString& /* rBaseURL */, SwPaM& r
         return ERR_SWG_READ_ERROR;
 
     // We want to work in an empty paragraph.
-    auto pSttNdIdx = std::make_shared<SwNodeIndex>(rDoc.GetNodes());
     const SwPosition* pPos = rPam.GetPoint();
     rDoc.getIDocumentContentOperations().SplitNode(*pPos, false);
     rDoc.SetTextFormatColl(rPam, rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, false));

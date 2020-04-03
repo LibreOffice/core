@@ -515,7 +515,6 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                     bLeft = xCursor->isLast() && nCount > 1;
                     bRight= !xCursor->isLast();
                     // ask for confirmation
-                    Reference< frame::XController > xCtrl = mxImpl->pController;
                     Reference< form::XConfirmDeleteListener >  xConfirm(m_xDatMan->GetFormController(),UNO_QUERY);
                     if (xConfirm.is())
                     {

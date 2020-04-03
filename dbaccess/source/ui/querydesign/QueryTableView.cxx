@@ -133,7 +133,6 @@ namespace
         OQueryTableConnectionData* pNewConnData = new OQueryTableConnectionData( _rSource.GetData(), _rDest.GetData() );
         TTableConnectionData::value_type aNewConnData(pNewConnData);
 
-        Reference<XIndexAccess> xReferencedKeys( _rDest.GetData()->getKeys());
         OUString sRelatedColumn;
 
         // iterate through all foreignkey columns to create the connections

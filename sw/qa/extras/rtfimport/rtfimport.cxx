@@ -1170,7 +1170,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo49893_3)
     // No artifacts (black lines in left top corner) as shape #3 are expected
     try
     {
-        uno::Reference<drawing::XShape> xShape2 = getShape(3);
+        getShape(3);
         CPPUNIT_FAIL("exception expected: no shape #3 in document");
     }
     catch (lang::IndexOutOfBoundsException const&)
