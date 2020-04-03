@@ -45,7 +45,7 @@ public:
     virtual const SystemEnvData*    GetSystemData() const override;
 };
 
-class SvpSalSystem final : public SalGenericSystem
+class SvpSalSystem : public SalGenericSystem
 {
 public:
     SvpSalSystem() {}
