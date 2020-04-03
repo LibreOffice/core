@@ -28,6 +28,7 @@
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <oox/drawingml/color.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XFastAttributeList; } }
@@ -39,6 +40,8 @@ namespace sax_fastparser {
 
 namespace oox {
 
+    /* Get the color tokens from their string representatives. */
+    sal_Int32 getColorTokenFromString(const OUString& sColorName);
 
 /** Static helpers for conversion of strings to attribute values of various
     different data types.
@@ -90,6 +93,9 @@ public:
 
     /** Returns the token identifier of the value of the specified attribute. */
     OptValue< sal_Int32 > getToken( sal_Int32 nAttrToken ) const;
+
+    /** Returns the Color object. */
+    oox::drawingml::Color getColor(sal_Int32 nAttrToken) const;
 
     /** Returns the string value of the specified attribute. */
     OptValue< OUString > getString( sal_Int32 nAttrToken ) const;
