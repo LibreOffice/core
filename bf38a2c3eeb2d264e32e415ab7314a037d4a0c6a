@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d307ffa4_450752af",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2016,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-04-03T15:02:58Z",
+      "side": 1,
+      "message": "If this wasn\u0027t a dialog then I\u0027d cringe on the assumption that GetFrame() would always return a non-nullptr..",
+      "range": {
+        "startLine": 2016,
+        "startChar": 66,
+        "endLine": 2016,
+        "endChar": 78
+      },
+      "revId": "bf38a2c3eeb2d264e32e415ab7314a037d4a0c6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "186af53d_de3d5d69",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2018,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-04-03T15:02:58Z",
+      "side": 1,
+      "message": "Also, I\u0027d rather ask (pStyle-\u003eGetFamily() \u003d\u003d SfxStyleFamily::Page) first before obtaining all the frame and module things; probably just as an else branch to the if (pStyle ...) branch so it gets only executed when necessary.",
+      "revId": "bf38a2c3eeb2d264e32e415ab7314a037d4a0c6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
