@@ -21,6 +21,7 @@
 #include "readwrite_helper.hxx"
 #include "file_url.hxx"
 #include "unixerrnostring.hxx"
+#include "uunxapi.hxx"
 
 #include <osl/diagnose.h>
 #include <osl/profile.h>
@@ -947,7 +948,10 @@ static osl_TFile* openFileImpl(const char* pszFilename, oslProfileOption Profile
             SAL_INFO("sal.file", "open(" << pszFilename << ",O_RDONLY): " << UnixErrnoString(e));
         }
         else
+        {
             SAL_INFO("sal.file", "open(" << pszFilename << ",O_RDONLY) => " << pFile->m_Handle);
+            osl::registerPathForFd(pFile->m_Handle, pszFilename);
+        }
 
         /* mfe: argghh!!! do not check if the file could be opened */
         /*      default mode expects it that way!!!                 */
@@ -963,7 +967,10 @@ static osl_TFile* openFileImpl(const char* pszFilename, oslProfileOption Profile
             return nullptr;
         }
         else
+        {
             SAL_INFO("sal.file", "open(" << pszFilename << ",...) => " << pFile->m_Handle);
+            osl::registerPathForFd(pFile->m_Handle, pszFilename);
+        }
     }
 
     /* set close-on-exec flag */
@@ -1007,7 +1014,8 @@ static osl_TStamp closeFileImpl(osl_TFile* pFile, oslProfileOption Flags)
         }
 
         close(pFile->m_Handle);
-        SAL_INFO("sal.file", "close(" << pFile->m_Handle << ")");
+        SAL_INFO("sal.file", "close(" << osl::fdAndPath(pFile->m_Handle) << ")");
+        osl::unregisterPathForFd(pFile->m_Handle);
         pFile->m_Handle = -1;
     }
 
