@@ -505,8 +505,42 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
         assert(mSize == mPixelsSize); // data has already been scaled if needed
         return mAlphaImage;
     }
+    if (mImage)
+    {
+        SkiaZone zone;
+        sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(mSize, kAlpha_8_SkColorType);
+        assert(surface);
+        SkPaint paint;
+        paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
+        // Move the R channel value to the alpha channel. This seems to be the only
+        // way to reinterpret data in SkImage as an alpha SkImage without accessing the pixels.
+        // NOTE: The matrix is 4x5 organized as columns (i.e. each line is a column, not a row).
+        constexpr SkColorMatrix redToAlpha(0, 0, 0, 0, 0, // R column
+                                           0, 0, 0, 0, 0, // G column
+                                           0, 0, 0, 0, 0, // B column
+                                           1, 0, 0, 0, 0); // A column
+        paint.setColorFilter(SkColorFilters::Matrix(redToAlpha));
+        bool scaling = mImage->width() != mSize.Width() || mImage->height() != mSize.Height();
+        if (scaling)
+        {
+            assert(!mBuffer); // This code should be only called if only mImage holds data.
+            paint.setFilterQuality(mScaleQuality);
+        }
+        surface->getCanvas()->drawImageRect(mImage,
+                                            SkRect::MakeWH(mImage->width(), mImage->height()),
+                                            SkRect::MakeWH(mSize.Width(), mSize.Height()), &paint);
+        if (scaling)
+            SAL_INFO("vcl.skia.trace", "getalphaskimage(" << this << "): image scaled "
+                                                          << Size(mImage->width(), mImage->height())
+                                                          << "->" << mSize << ":"
+                                                          << static_cast<int>(mScaleQuality));
+        else
+            SAL_INFO("vcl.skia.trace", "getalphaskbitmap(" << this << ") from image");
+        SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
+        thisPtr->mAlphaImage = surface->makeImageSnapshot();
+        return mAlphaImage;
+    }
     SkiaZone zone;
-    // TODO can we convert directly mImage -> mAlphaImage?
     EnsureBitmapData();
     assert(mSize == mPixelsSize); // data has already been scaled if needed
     SkBitmap alphaBitmap;
@@ -522,40 +556,28 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
                 [](void* addr, void*) { delete[] static_cast<sal_uInt8*>(addr); }, nullptr))
             abort();
         alphaBitmap.setImmutable();
+        sk_sp<SkImage> image = SkiaHelper::createSkImage(alphaBitmap);
+        assert(image);
+        const_cast<sk_sp<SkImage>&>(mAlphaImage) = image;
     }
     else
     {
-        SkBitmap originalBitmap = GetAsSkBitmap();
-        // To make things more interesting, some LO code creates masks as 24bpp,
-        // so we first need to convert to 8bit to be able to convert that to 8bit alpha.
-        SkBitmap* convertedBitmap = nullptr;
-        const SkBitmap* bitmap8 = &originalBitmap;
-        if (originalBitmap.colorType() != kGray_8_SkColorType)
-        {
-            convertedBitmap = new SkBitmap;
-            if (!convertedBitmap->tryAllocPixels(SkImageInfo::Make(
-                    mSize.Width(), mSize.Height(), kGray_8_SkColorType, kOpaque_SkAlphaType)))
-                abort();
-            SkCanvas canvas(*convertedBitmap);
-            SkPaint paint;
-            paint.setBlendMode(SkBlendMode::kSrc); // copy and convert depth
-            canvas.drawBitmap(originalBitmap, 0, 0, &paint);
-            convertedBitmap->setImmutable();
-            bitmap8 = convertedBitmap;
-        }
-        // Skia uses a bitmap as an alpha channel only if it's set as kAlpha_8_SkColorType.
-        // So create such SkBitmap and make it share bitmap8's data.
-        alphaBitmap.setInfo(
-            bitmap8->info().makeColorType(kAlpha_8_SkColorType).makeAlphaType(kPremul_SkAlphaType),
-            bitmap8->rowBytes());
-        alphaBitmap.setPixelRef(sk_ref_sp(bitmap8->pixelRef()), bitmap8->pixelRefOrigin().x(),
-                                bitmap8->pixelRefOrigin().y());
-        delete convertedBitmap;
-        alphaBitmap.setImmutable();
+        sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(mSize, kAlpha_8_SkColorType);
+        assert(surface);
+        SkPaint paint;
+        paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
+        // Move the R channel value to the alpha channel. This seems to be the only
+        // way to reinterpret data in SkImage as an alpha SkImage without accessing the pixels.
+        // NOTE: The matrix is 4x5 organized as columns (i.e. each line is a column, not a row).
+        constexpr SkColorMatrix redToAlpha(0, 0, 0, 0, 0, // R column
+                                           0, 0, 0, 0, 0, // G column
+                                           0, 0, 0, 0, 0, // B column
+                                           1, 0, 0, 0, 0); // A column
+        paint.setColorFilter(SkColorFilters::Matrix(redToAlpha));
+        surface->getCanvas()->drawBitmap(GetAsSkBitmap(), 0, 0, &paint);
+        SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
+        thisPtr->mAlphaImage = surface->makeImageSnapshot();
     }
-    sk_sp<SkImage> image = SkiaHelper::createSkImage(alphaBitmap);
-    assert(image);
-    const_cast<sk_sp<SkImage>&>(mAlphaImage) = image;
     SAL_INFO("vcl.skia.trace", "getalphaskbitmap(" << this << ")");
     return mAlphaImage;
 }
