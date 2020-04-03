@@ -62,6 +62,29 @@ sal_Unicode lclGetXChar( const sal_Unicode*& rpcStr, const sal_Unicode* pcEnd )
 
 } // namespace
 
+#define STRING_TO_TOKEN(color) if (sColorName == #color) return XML_##color
+sal_Int32 getColorTokenFromString(const OUString& sColorName)
+{
+    STRING_TO_TOKEN(black);
+    STRING_TO_TOKEN(blue);
+    STRING_TO_TOKEN(cyan);
+    STRING_TO_TOKEN(darkBlue);
+    STRING_TO_TOKEN(darkCyan);
+    STRING_TO_TOKEN(darkGreen);
+    STRING_TO_TOKEN(darkMagenta);
+    STRING_TO_TOKEN(darkRed);
+    STRING_TO_TOKEN(darkYellow);
+    STRING_TO_TOKEN(darkGray);
+    STRING_TO_TOKEN(green);
+    STRING_TO_TOKEN(lightGray);
+    STRING_TO_TOKEN(magenta);
+    STRING_TO_TOKEN(none);
+    STRING_TO_TOKEN(red);
+    STRING_TO_TOKEN(white);
+    STRING_TO_TOKEN(yellow);
+    return XML_none;
+}
+
 sal_Int32 AttributeConversion::decodeToken( const OUString& rValue )
 {
     return TokenMap::getTokenFromUnicode( rValue );
@@ -123,6 +146,14 @@ sax_fastparser::FastAttributeList *AttributeList::getAttribList() const
 bool AttributeList::hasAttribute( sal_Int32 nAttrToken ) const
 {
     return mxAttribs->hasAttribute( nAttrToken );
+}
+
+oox::drawingml::Color AttributeList::getColor(sal_Int32 nAttrToken) const
+{
+    OUString sColorVal = mxAttribs->getValue(nAttrToken);
+    oox::drawingml::Color aColor;
+    aColor.setPrstClr(getColorTokenFromString(sColorVal));
+    return aColor;
 }
 
 // optional return values -----------------------------------------------------
