@@ -130,7 +130,7 @@ public:
     virtual void    dispose() override;
 
     void            UpdateListBox();
-    void            MoveOutline(SwOutlineNodes::size_type nSource, SwOutlineNodes::size_type nTarget, bool bWithCilds);
+    void            MoveOutline(SwOutlineNodes::size_type nSource, SwOutlineNodes::size_type nTarget);
 
     virtual void    NotifyItemUpdate(const sal_uInt16 nSId,
                                      const SfxItemState eState,

@@ -2189,7 +2189,7 @@ sal_uLong SvTreeListBox::SelectChildren( SvTreeListEntry* pParent, bool bSelect 
     return nRet;
 }
 
-void SvTreeListBox::SelectAll( bool bSelect, bool )
+void SvTreeListBox::SelectAll( bool bSelect )
 {
     pImpl->SelAllDestrAnch(
         bSelect,

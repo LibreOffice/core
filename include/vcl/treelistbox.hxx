@@ -674,7 +674,7 @@ public:
     virtual bool    Collapse( SvTreeListEntry* pParent );
     virtual bool    Select( SvTreeListEntry* pEntry, bool bSelect=true );
     sal_uLong       SelectChildren( SvTreeListEntry* pParent, bool bSelect );
-    void            SelectAll( bool bSelect, bool bPaint = true );
+    void            SelectAll( bool bSelect );
 
     void SetCurEntry( SvTreeListEntry* _pEntry );
     SvTreeListEntry* GetCurEntry() const;
