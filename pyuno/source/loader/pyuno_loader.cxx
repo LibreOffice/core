@@ -180,62 +180,62 @@ namespace {
 struct PythonInit
 {
 PythonInit() {
-    if (! Py_IsInitialized()) // may be inited by getComponentContext() already
-    {
-        OUString pythonPath;
-        OUString pythonHome;
-        OUString path( "$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("pythonloader.uno" ));
-        rtl::Bootstrap::expandMacros(path); //TODO: detect failure
-        rtl::Bootstrap bootstrap(path);
+    if ( Py_IsInitialized()) // may be inited by getComponentContext() already
+        return;
 
-        // look for pythonhome
-        bootstrap.getFrom( "PYUNO_LOADER_PYTHONHOME", pythonHome );
-        bootstrap.getFrom( "PYUNO_LOADER_PYTHONPATH", pythonPath );
+    OUString pythonPath;
+    OUString pythonHome;
+    OUString path( "$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("pythonloader.uno" ));
+    rtl::Bootstrap::expandMacros(path); //TODO: detect failure
+    rtl::Bootstrap bootstrap(path);
 
-        // pythonhome+pythonpath must be set before Py_Initialize(), otherwise there appear warning on the console
-        // sadly, there is no api for setting the pythonpath, we have to use the environment variable
-        if( !pythonHome.isEmpty() )
-            setPythonHome( pythonHome );
+    // look for pythonhome
+    bootstrap.getFrom( "PYUNO_LOADER_PYTHONHOME", pythonHome );
+    bootstrap.getFrom( "PYUNO_LOADER_PYTHONPATH", pythonPath );
 
-        if( !pythonPath.isEmpty() )
-            prependPythonPath( pythonPath );
+    // pythonhome+pythonpath must be set before Py_Initialize(), otherwise there appear warning on the console
+    // sadly, there is no api for setting the pythonpath, we have to use the environment variable
+    if( !pythonHome.isEmpty() )
+        setPythonHome( pythonHome );
+
+    if( !pythonPath.isEmpty() )
+        prependPythonPath( pythonPath );
 
 #ifdef _WIN32
-        //extend PATH under windows to include the branddir/program so ssl libs will be found
-        //for use by terminal mailmerge dependency _ssl.pyd
-        OUString sEnvName("PATH");
-        OUString sPath;
-        osl_getEnvironment(sEnvName.pData, &sPath.pData);
-        OUString sBrandLocation("$BRAND_BASE_DIR/program");
-        rtl::Bootstrap::expandMacros(sBrandLocation);
-        osl::FileBase::getSystemPathFromFileURL(sBrandLocation, sBrandLocation);
-        sPath = OUStringBuffer(sPath).
-            append(static_cast<sal_Unicode>(SAL_PATHSEPARATOR)).
-            append(sBrandLocation).makeStringAndClear();
-        osl_setEnvironment(sEnvName.pData, sPath.pData);
+    //extend PATH under windows to include the branddir/program so ssl libs will be found
+    //for use by terminal mailmerge dependency _ssl.pyd
+    OUString sEnvName("PATH");
+    OUString sPath;
+    osl_getEnvironment(sEnvName.pData, &sPath.pData);
+    OUString sBrandLocation("$BRAND_BASE_DIR/program");
+    rtl::Bootstrap::expandMacros(sBrandLocation);
+    osl::FileBase::getSystemPathFromFileURL(sBrandLocation, sBrandLocation);
+    sPath = OUStringBuffer(sPath).
+        append(static_cast<sal_Unicode>(SAL_PATHSEPARATOR)).
+        append(sBrandLocation).makeStringAndClear();
+    osl_setEnvironment(sEnvName.pData, sPath.pData);
 #endif
 
 #if PY_MAJOR_VERSION >= 3
-        PyImport_AppendInittab( "pyuno", PyInit_pyuno );
+    PyImport_AppendInittab( "pyuno", PyInit_pyuno );
 #else
-        PyImport_AppendInittab( (char*)"pyuno", initpyuno );
+    PyImport_AppendInittab( (char*)"pyuno", initpyuno );
 #endif
 
 #if HAVE_FEATURE_READONLY_INSTALLSET
-        Py_DontWriteBytecodeFlag = 1;
+    Py_DontWriteBytecodeFlag = 1;
 #endif
 
-        // initialize python
-        Py_Initialize();
-        PyEval_InitThreads();
+    // initialize python
+    Py_Initialize();
+    PyEval_InitThreads();
 
-        PyThreadState *tstate = PyThreadState_Get();
-        PyEval_ReleaseThread( tstate );
-        // This tstate is never used again, so delete it here.
-        // This prevents an assertion in PyThreadState_Swap on the
-        // PyThreadAttach below.
-        PyThreadState_Delete(tstate);
-    }
+    PyThreadState *tstate = PyThreadState_Get();
+    PyEval_ReleaseThread( tstate );
+    // This tstate is never used again, so delete it here.
+    // This prevents an assertion in PyThreadState_Swap on the
+    // PyThreadAttach below.
+    PyThreadState_Delete(tstate);
 }
 };
 

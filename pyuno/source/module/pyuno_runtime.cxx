@@ -217,39 +217,39 @@ static void readLoggingConfig( sal_Int32 *pLevel, FILE **ppFile )
                      OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
-    if( *pLevel > LogLevel::NONE )
-    {
+    if( *pLevel <= LogLevel::NONE )
+        return;
+
+    *ppFile = stdout;
+    if( !bootstrapHandle.getFrom( "PYUNO_LOGTARGET", str ) )
+        return;
+
+    if ( str == "stdout" )
         *ppFile = stdout;
-        if( bootstrapHandle.getFrom( "PYUNO_LOGTARGET", str ) )
+    else if ( str == "stderr" )
+        *ppFile = stderr;
+    else
+    {
+        oslProcessInfo data;
+        data.Size = sizeof( data );
+        osl_getProcessInfo(
+            nullptr , osl_Process_IDENTIFIER , &data );
+        osl_getSystemPathFromFileURL( str.pData, &str.pData);
+        OString o = OUStringToOString( str, osl_getThreadTextEncoding() );
+        o += ".";
+        o += OString::number( data.Ident );
+
+        *ppFile = fopen( o.getStr() , "w" );
+        if ( *ppFile )
         {
-            if ( str == "stdout" )
-                *ppFile = stdout;
-            else if ( str == "stderr" )
-                *ppFile = stderr;
-            else
-            {
-                oslProcessInfo data;
-                data.Size = sizeof( data );
-                osl_getProcessInfo(
-                    nullptr , osl_Process_IDENTIFIER , &data );
-                osl_getSystemPathFromFileURL( str.pData, &str.pData);
-                OString o = OUStringToOString( str, osl_getThreadTextEncoding() );
-                o += ".";
-                o += OString::number( data.Ident );
+            // do not buffer (useful if e.g. analyzing a crash)
+            setvbuf( *ppFile, nullptr, _IONBF, 0 );
+        }
+        else
+        {
+            fprintf( stderr, "couldn't create file %s\n",
+                     OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
 
-                *ppFile = fopen( o.getStr() , "w" );
-                if ( *ppFile )
-                {
-                    // do not buffer (useful if e.g. analyzing a crash)
-                    setvbuf( *ppFile, nullptr, _IONBF, 0 );
-                }
-                else
-                {
-                    fprintf( stderr, "couldn't create file %s\n",
-                             OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
-
-                }
-            }
         }
     }
 }
