@@ -126,6 +126,36 @@ bool AttributeList::hasAttribute( sal_Int32 nAttrToken ) const
 }
 
 // optional return values -----------------------------------------------------
+#define STRING_TO_TOKEN(color) if (sColorName == #color) return XML_##color
+sal_Int32 AttributeList::getTokenFromString(const OUString& sColorName) const
+{
+    STRING_TO_TOKEN(black);
+    STRING_TO_TOKEN(blue);
+    STRING_TO_TOKEN(cyan);
+    STRING_TO_TOKEN(darkBlue);
+    STRING_TO_TOKEN(darkCyan);
+    STRING_TO_TOKEN(darkGreen);
+    STRING_TO_TOKEN(darkMagenta);
+    STRING_TO_TOKEN(darkRed);
+    STRING_TO_TOKEN(darkYellow);
+    STRING_TO_TOKEN(darkGray);
+    STRING_TO_TOKEN(green);
+    STRING_TO_TOKEN(lightGray);
+    STRING_TO_TOKEN(magenta);
+    STRING_TO_TOKEN(none);
+    STRING_TO_TOKEN(red);
+    STRING_TO_TOKEN(white);
+    STRING_TO_TOKEN(yellow);
+    return XML_none;
+}
+
+oox::drawingml::Color AttributeList::getColor(sal_Int32 nAttrToken) const
+{
+    OUString sColorVal = mxAttribs->getValue(nAttrToken);
+    oox::drawingml::Color aColor;
+    aColor.setPrstClr(getTokenFromString(sColorVal));
+    return aColor;
+}
 
 OptValue< sal_Int32 > AttributeList::getToken( sal_Int32 nAttrToken ) const
 {

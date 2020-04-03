@@ -101,8 +101,8 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
         case A_TOKEN( effectLst ):  // CT_EffectList 5.1.10.26
         break;
 
-        case A_TOKEN( highlight ):  // CT_Color
-            return new ColorContext( *this, mrTextCharacterProperties.maHighlightColor );
+        case W_TOKEN( highlight ):  // CT_Color
+            mrTextCharacterProperties.maHighlightColor = rAttribs.getColor(W_TOKEN(val));
 
         // EG_TextUnderlineLine
         case A_TOKEN( uLnTx ):      // CT_TextUnderlineLineFollowText
