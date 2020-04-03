@@ -26,6 +26,7 @@
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/utils/gradienttools.hxx>
 #include <vector>
+#include <functional>
 
 
 namespace drawinglayer
@@ -317,8 +318,6 @@ namespace drawinglayer
             double                          mfOffsetX;
             double                          mfOffsetY;
 
-            sal_Int32 iterateTiles(::std::vector< basegfx::B2DHomMatrix >* pMatrices) const;
-
         public:
             GeoTexSvxTiled(
                 const basegfx::B2DRange& rRange,
@@ -328,6 +327,9 @@ namespace drawinglayer
 
             // compare operator
             virtual bool operator==(const GeoTexSvx& rGeoTexSvx) const override;
+
+            // Iterate over created tiles with callback provided.
+            void iterateTiles(std::function<void(double fPosX, double fPosY)> aFunc) const;
 
             void appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices) const;
             sal_uInt32 getNumberOfTiles() const;
