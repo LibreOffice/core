@@ -151,7 +151,9 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124815)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf83901)
 {
-    ScModelObj* pModelObj = createDoc("empty.ods");
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
