@@ -34,6 +34,24 @@
       "revId": "8f0225724c3a16afc61182539e0aaf49455c89b6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f683b08_76602a5d",
+        "filename": "sfx2/source/control/recentdocsview.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-04-03T15:55:47Z",
+      "side": 1,
+      "message": "else if (rProp.Name \u003d\u003d \"Thumbnail\" \u0026\u0026 officecfg::Office::Common::History::RecentDocsThumbnail::get())\n            {\n                OUString aBase64;\n                a \u003e\u003e\u003d aBase64;\nSAL_DEBUG(aBase64); \u003c\u003d returns the upper\n                if (!aBase64.isEmpty())\n                {\n                    Sequence\u003csal_Int8\u003e aDecoded;\n                    comphelper::Base64::decode(aDecoded, aBase64);",
+      "parentUuid": "d775f9a7_dafb1ebf",
+      "revId": "8f0225724c3a16afc61182539e0aaf49455c89b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
