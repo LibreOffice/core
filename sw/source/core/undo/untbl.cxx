@@ -748,7 +748,6 @@ void SwUndoTextToTable::UndoImpl(::sw::UndoRedoContext & rContext)
         }
     }
 
-    SwNodeIndex aEndIdx( *pTNd->EndOfSectionNode() );
     rDoc.TableToText( pTNd, 0x0b == m_cSeparator ? 0x09 : m_cSeparator );
 
     // join again at start?
@@ -1864,7 +1863,6 @@ void SwUndoTableMerge::UndoImpl(::sw::UndoRedoContext & rContext)
     aMsgHint.m_eFlags = TBL_BOXPTR;
     rDoc.getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
 
-    FndBox_ aTmpBox( nullptr, nullptr );
     // ? TL_CHART2: notification or locking of controller required ?
 
     // 1. restore deleted boxes:

@@ -671,8 +671,6 @@ void XMLTextFrameContext_Impl::Create()
         // URL
         OSL_ENSURE( !sHRef.isEmpty() || xBase64Stream.is(),
                     "neither URL nor base64 image data given" );
-        rtl::Reference < XMLTextImportHelper > xTxtImport =
-            GetImport().GetTextImport();
         uno::Reference<graphic::XGraphic> xGraphic;
         if (!sHRef.isEmpty())
         {
@@ -1269,7 +1267,6 @@ void XMLTextFrameContext_Impl::SetHyperlink( const OUString& rHRef,
     if( !xPropSet.is() )
         return;
 
-    rtl::Reference< XMLTextImportHelper > xTxtImp = GetImport().GetTextImport();
     Reference < XPropertySetInfo > xPropSetInfo =
         xPropSet->getPropertySetInfo();
     if( !xPropSetInfo.is() ||

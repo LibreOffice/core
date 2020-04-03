@@ -1345,8 +1345,7 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
 
     OUString aText = maFormula->first;
 
-    std::unique_ptr<ScExternalRefManager::ApiGuard> pExtRefGuard (
-            new ScExternalRefManager::ApiGuard(pDoc));
+    ScExternalRefManager::ApiGuard aExtRefGuard(pDoc);
 
     if ( !aText.isEmpty() )
     {

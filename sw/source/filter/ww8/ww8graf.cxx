@@ -3023,8 +3023,6 @@ SwFlyFrameFormat* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
 
             MoveInsideFly(pRetFrameFormat);
 
-            SwNodeIndex aStart(m_pPaM->GetPoint()->nNode);
-
             m_xWWZOrder->InsideEscher(pF->nSpId);
 
             // read in the text

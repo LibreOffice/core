@@ -911,8 +911,6 @@ uno::Reference< awt::XWindow > SAL_CALL NavElementToolBoxControl::createItemWind
         }
     }
 
-    uno::Reference< util::XURLTransformer > xURLTransformer = getURLTransformer();
-
     return xItemWindow;
 }
 

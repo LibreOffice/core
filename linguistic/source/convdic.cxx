@@ -26,6 +26,7 @@
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -84,8 +85,6 @@ static void ReadThroughDic( const OUString &rMainURL, ConvDicXMLImport &rImport 
     if (!xIn.is())
         return;
 
-    SvStreamPtr pStream( utl::UcbStreamHelper::CreateStream( xIn ) );
-
     // prepare ParserInputSource
     xml::sax::InputSource aParserInput;
     aParserInput.aInputStream = xIn;
@@ -97,12 +96,15 @@ static void ReadThroughDic( const OUString &rMainURL, ConvDicXMLImport &rImport 
     }
     catch( xml::sax::SAXParseException& )
     {
+        TOOLS_WARN_EXCEPTION("linguistic", "");
     }
     catch( xml::sax::SAXException& )
     {
+        TOOLS_WARN_EXCEPTION("linguistic", "");
     }
     catch( io::IOException& )
     {
+        TOOLS_WARN_EXCEPTION("linguistic", "");
     }
 }
 

@@ -1062,7 +1062,6 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                     {
                         pLevel->Insert(
                             PROP_ADJUST, uno::makeAny( nValue ) );
-                        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                     }
                 }
             }

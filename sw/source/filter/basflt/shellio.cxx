@@ -148,8 +148,6 @@ ErrCode SwReader::Read( const Reader& rOptions )
     }
     mxDoc->GetIDocumentUndoRedo().DoUndo(false);
 
-    SwNodeIndex aSplitIdx( mxDoc->GetNodes() );
-
     RedlineFlags eOld = mxDoc->getIDocumentRedlineAccess().GetRedlineFlags();
     RedlineFlags ePostReadRedlineFlags( RedlineFlags::Ignore );
 

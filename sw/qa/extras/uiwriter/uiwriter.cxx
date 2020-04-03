@@ -5010,7 +5010,6 @@ void SwUiWriterTest::testRemoveBookmarkTextAndAddNew()
         {
             // Get helper objects
             uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
-            uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
 
             // Create cursor from bookmark
             uno::Reference<text::XTextContent> xTextContent(xBookmarksSupplier->getBookmarks()->getByName("testBookmark"), uno::UNO_QUERY);
@@ -5077,7 +5076,6 @@ void SwUiWriterTest::testRemoveBookmarkTextAndAddNewAfterReload()
     {
         // Get helper objects
         uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
-        uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
 
         // Create cursor from bookmark
         uno::Reference<text::XTextContent> xTextContent(xBookmarksSupplier->getBookmarks()->getByName("test"), uno::UNO_QUERY);

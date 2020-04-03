@@ -656,8 +656,6 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
             }
             else
             {
-                CustomAnimationPresetPtr pShapePreset( rPresets.getEffectDescriptor( "ooo-entrance-appear" ) );
-
                 Reference< XAnimationNode > xNode( pPreset->create( "" ) );
                 DBG_ASSERT( xNode.is(), "EffectMigration::SetTextAnimationEffect(), could not create preset!" );
                 if( xNode.is() )
@@ -1281,7 +1279,7 @@ void EffectMigration::SetAnimationPath( SvxShape* pShape, SdrPathObj const * pPa
         {
             std::shared_ptr< sd::MainSequence > pMainSequence( pPage->getMainSequence() );
             if( pMainSequence.get() )
-                CustomAnimationEffectPtr pCreated( pMainSequence->append( *pPathObj, makeAny( xShape ), -1.0, "" ) );
+                pMainSequence->append( *pPathObj, makeAny( xShape ), -1.0, "" );
         }
     }
 }

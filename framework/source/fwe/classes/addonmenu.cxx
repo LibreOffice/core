@@ -198,7 +198,6 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
     sal_uInt32                              i                   = 0;
     sal_uInt32                              nElements           = 0;
     sal_uInt32                              nCount              = aAddonMenuDefinition.getLength();
-    AddonsOptions                           aAddonsOptions;
 
     OUString aTitle;
     OUString aURL;

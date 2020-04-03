@@ -2582,7 +2582,6 @@ bool SwTable::SetColWidth( SwTableBox& rCurrentBox, TableChgWidthHeightType eTyp
     const SvxLRSpaceItem& rLR = GetFrameFormat()->GetLRSpace();
 
     std::unique_ptr<FndBox_> xFndBox;                // for insertion/deletion
-    SwTableSortBoxes aTmpLst;       // for Undo
     bool bBigger,
         bRet = false,
         bLeft = TableChgWidthHeightType::ColLeft == extractPosition( eType ) ||
@@ -3025,7 +3024,6 @@ bool SwTable::SetRowHeight( SwTableBox& rCurrentBox, TableChgWidthHeightType eTy
         pBaseLine = pBaseLine->GetUpper()->GetUpper();
 
     std::unique_ptr<FndBox_> xFndBox;                // for insertion/deletion
-    SwTableSortBoxes aTmpLst;       // for Undo
     bool bBigger,
         bRet = false,
         bTop = TableChgWidthHeightType::CellTop == extractPosition( eType );

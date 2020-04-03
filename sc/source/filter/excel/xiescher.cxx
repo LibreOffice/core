@@ -1887,7 +1887,6 @@ void XclImpControlHelper::ApplySheetLinkProps() const
     Reference< XControlModel > xCtrlModel = XclControlHelper::GetControlModel( mxShape );
     if( !xCtrlModel.is() )
         return;
-    ScfPropertySet aPropSet( xCtrlModel );
 
    // sheet links
     if( SfxObjectShell* pDocShell = mrRoot.GetDocShell() )

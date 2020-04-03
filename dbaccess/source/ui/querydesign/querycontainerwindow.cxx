@@ -62,8 +62,9 @@ namespace dbaui
     void OQueryContainerWindow::dispose()
     {
         {
-            std::unique_ptr<OQueryViewSwitch> aTemp(m_pViewSwitch);
+            OQueryViewSwitch* pTemp = m_pViewSwitch;
             m_pViewSwitch = nullptr;
+            delete pTemp;
         }
         if ( m_pBeamer )
             ::dbaui::notifySystemWindow(this,m_pBeamer,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));

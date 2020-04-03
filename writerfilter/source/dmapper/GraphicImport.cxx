@@ -1049,7 +1049,6 @@ void GraphicImport::ProcessShapeOptions(Value const & rValue)
 void GraphicImport::lcl_sprm(Sprm& rSprm)
 {
     sal_uInt32 nSprmId = rSprm.getId();
-    Value::Pointer_t pValue = rSprm.getValue();
 
     switch(nSprmId)
     {

@@ -703,7 +703,6 @@ DECLARE_WW8EXPORT_TEST(testN325936, "n325936.doc")
      * xray ThisComponent.DrawPage(0).BackColorTransparency
      */
 
-    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
     sal_Int32 nValue = getProperty< sal_Int32 >(getShape(1), "BackColorTransparency");
     CPPUNIT_ASSERT_EQUAL(sal_Int32(100), nValue);
 }

@@ -254,8 +254,6 @@ SvxFieldData* SdFieldPopup::GetField()
 
             if( pDocSh )
             {
-                SvxExtFileField aFileField( *pFileField );
-
                 OUString aName;
                 if( pDocSh->HasName() )
                     aName = pDocSh->GetMedium()->GetName();
