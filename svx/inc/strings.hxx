@@ -17,6 +17,7 @@
 #define RID_GALLERYSTR_THEME_DUMMY5                 "Dummy 5"
 #define RID_GALLERYSTR_THEME_FONTWORK               "private://gallery/hidden/fontwork"
 #define RID_GALLERYSTR_THEME_FONTWORK_VERTICAL      "private://gallery/hidden/fontworkvertical"
+#define RID_GALLERYSTR_THEME_BULLETS                "private://gallery/hidden/bullets"
 
 // Reference-strings for standardcolor-table
 #define RID_SVXSTR_COLOR_BLACK_DEF                  "Black"
