@@ -15,4 +15,7 @@ $(eval $(call gb_Package_add_files,extras_gallmytheme,$(LIBO_SHARE_PRESETS_FOLDE
 	bpmn.sdg \
 	bpmn.sdv \
 	bpmn.thm \
+	flowchart.sdg \
+	flowchart.sdv \
+	flowchart.thm \
 ))
