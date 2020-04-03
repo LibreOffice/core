@@ -169,352 +169,352 @@ bool ZipPackage::isLocalFile() const
 
 void ZipPackage::parseManifest()
 {
-    if ( m_nFormat == embed::StorageFormats::PACKAGE )
+    if ( m_nFormat != embed::StorageFormats::PACKAGE )
+        return;
+
+    bool bManifestParsed = false;
+    const OUString sMeta ("META-INF");
+    if ( m_xRootFolder->hasByName( sMeta ) )
     {
-        bool bManifestParsed = false;
-        const OUString sMeta ("META-INF");
-        if ( m_xRootFolder->hasByName( sMeta ) )
-        {
-            const OUString sManifest ("manifest.xml");
+        const OUString sManifest ("manifest.xml");
 
-            try {
-                uno::Reference< XUnoTunnel > xTunnel;
-                Any aAny = m_xRootFolder->getByName( sMeta );
+        try {
+            uno::Reference< XUnoTunnel > xTunnel;
+            Any aAny = m_xRootFolder->getByName( sMeta );
+            aAny >>= xTunnel;
+            uno::Reference< XNameContainer > xMetaInfFolder( xTunnel, UNO_QUERY );
+            if ( xMetaInfFolder.is() && xMetaInfFolder->hasByName( sManifest ) )
+            {
+                aAny = xMetaInfFolder->getByName( sManifest );
                 aAny >>= xTunnel;
-                uno::Reference< XNameContainer > xMetaInfFolder( xTunnel, UNO_QUERY );
-                if ( xMetaInfFolder.is() && xMetaInfFolder->hasByName( sManifest ) )
+                uno::Reference < XActiveDataSink > xSink ( xTunnel, UNO_QUERY );
+                if ( xSink.is() )
                 {
-                    aAny = xMetaInfFolder->getByName( sManifest );
-                    aAny >>= xTunnel;
-                    uno::Reference < XActiveDataSink > xSink ( xTunnel, UNO_QUERY );
-                    if ( xSink.is() )
+                    uno::Reference < XManifestReader > xReader = ManifestReader::create( m_xContext );
+
+                    const OUString sPropFullPath ("FullPath");
+                    const OUString sPropVersion ("Version");
+                    const OUString sPropMediaType ("MediaType");
+                    const OUString sPropInitialisationVector ("InitialisationVector");
+                    const OUString sPropSalt ("Salt");
+                    const OUString sPropIterationCount ("IterationCount");
+                    const OUString sPropSize ("Size");
+                    const OUString sPropDigest ("Digest");
+                    const OUString sPropDerivedKeySize ("DerivedKeySize");
+                    const OUString sPropDigestAlgorithm ("DigestAlgorithm");
+                    const OUString sPropEncryptionAlgorithm ("EncryptionAlgorithm");
+                    const OUString sPropStartKeyAlgorithm ("StartKeyAlgorithm");
+                    const OUString sKeyInfo ("KeyInfo");
+
+                    const uno::Sequence < uno::Sequence < PropertyValue > > aManifestSequence = xReader->readManifestSequence ( xSink->getInputStream() );
+                    ZipPackageStream *pStream = nullptr;
+                    ZipPackageFolder *pFolder = nullptr;
+                    const Any *pKeyInfo = nullptr;
+
+                    for ( const uno::Sequence<PropertyValue>& rSequence : aManifestSequence )
                     {
-                        uno::Reference < XManifestReader > xReader = ManifestReader::create( m_xContext );
-
-                        const OUString sPropFullPath ("FullPath");
-                        const OUString sPropVersion ("Version");
-                        const OUString sPropMediaType ("MediaType");
-                        const OUString sPropInitialisationVector ("InitialisationVector");
-                        const OUString sPropSalt ("Salt");
-                        const OUString sPropIterationCount ("IterationCount");
-                        const OUString sPropSize ("Size");
-                        const OUString sPropDigest ("Digest");
-                        const OUString sPropDerivedKeySize ("DerivedKeySize");
-                        const OUString sPropDigestAlgorithm ("DigestAlgorithm");
-                        const OUString sPropEncryptionAlgorithm ("EncryptionAlgorithm");
-                        const OUString sPropStartKeyAlgorithm ("StartKeyAlgorithm");
-                        const OUString sKeyInfo ("KeyInfo");
-
-                        const uno::Sequence < uno::Sequence < PropertyValue > > aManifestSequence = xReader->readManifestSequence ( xSink->getInputStream() );
-                        ZipPackageStream *pStream = nullptr;
-                        ZipPackageFolder *pFolder = nullptr;
-                        const Any *pKeyInfo = nullptr;
-
-                        for ( const uno::Sequence<PropertyValue>& rSequence : aManifestSequence )
+                        OUString sPath, sMediaType, sVersion;
+                        const Any *pSalt = nullptr, *pVector = nullptr, *pCount = nullptr, *pSize = nullptr, *pDigest = nullptr, *pDigestAlg = nullptr, *pEncryptionAlg = nullptr, *pStartKeyAlg = nullptr, *pDerivedKeySize = nullptr;
+                        for ( const PropertyValue& rValue : rSequence )
                         {
-                            OUString sPath, sMediaType, sVersion;
-                            const Any *pSalt = nullptr, *pVector = nullptr, *pCount = nullptr, *pSize = nullptr, *pDigest = nullptr, *pDigestAlg = nullptr, *pEncryptionAlg = nullptr, *pStartKeyAlg = nullptr, *pDerivedKeySize = nullptr;
-                            for ( const PropertyValue& rValue : rSequence )
-                            {
-                                if ( rValue.Name == sPropFullPath )
-                                    rValue.Value >>= sPath;
-                                else if ( rValue.Name == sPropVersion )
-                                    rValue.Value >>= sVersion;
-                                else if ( rValue.Name == sPropMediaType )
-                                    rValue.Value >>= sMediaType;
-                                else if ( rValue.Name == sPropSalt )
-                                    pSalt = &( rValue.Value );
-                                else if ( rValue.Name == sPropInitialisationVector )
-                                    pVector = &( rValue.Value );
-                                else if ( rValue.Name == sPropIterationCount )
-                                    pCount = &( rValue.Value );
-                                else if ( rValue.Name == sPropSize )
-                                    pSize = &( rValue.Value );
-                                else if ( rValue.Name == sPropDigest )
-                                    pDigest = &( rValue.Value );
-                                else if ( rValue.Name == sPropDigestAlgorithm )
-                                    pDigestAlg = &( rValue.Value );
-                                else if ( rValue.Name == sPropEncryptionAlgorithm )
-                                    pEncryptionAlg = &( rValue.Value );
-                                else if ( rValue.Name == sPropStartKeyAlgorithm )
-                                    pStartKeyAlg = &( rValue.Value );
-                                else if ( rValue.Name == sPropDerivedKeySize )
-                                    pDerivedKeySize = &( rValue.Value );
-                                else if ( rValue.Name == sKeyInfo )
-                                    pKeyInfo = &( rValue.Value );
-                            }
+                            if ( rValue.Name == sPropFullPath )
+                                rValue.Value >>= sPath;
+                            else if ( rValue.Name == sPropVersion )
+                                rValue.Value >>= sVersion;
+                            else if ( rValue.Name == sPropMediaType )
+                                rValue.Value >>= sMediaType;
+                            else if ( rValue.Name == sPropSalt )
+                                pSalt = &( rValue.Value );
+                            else if ( rValue.Name == sPropInitialisationVector )
+                                pVector = &( rValue.Value );
+                            else if ( rValue.Name == sPropIterationCount )
+                                pCount = &( rValue.Value );
+                            else if ( rValue.Name == sPropSize )
+                                pSize = &( rValue.Value );
+                            else if ( rValue.Name == sPropDigest )
+                                pDigest = &( rValue.Value );
+                            else if ( rValue.Name == sPropDigestAlgorithm )
+                                pDigestAlg = &( rValue.Value );
+                            else if ( rValue.Name == sPropEncryptionAlgorithm )
+                                pEncryptionAlg = &( rValue.Value );
+                            else if ( rValue.Name == sPropStartKeyAlgorithm )
+                                pStartKeyAlg = &( rValue.Value );
+                            else if ( rValue.Name == sPropDerivedKeySize )
+                                pDerivedKeySize = &( rValue.Value );
+                            else if ( rValue.Name == sKeyInfo )
+                                pKeyInfo = &( rValue.Value );
+                        }
 
-                            if ( !sPath.isEmpty() && hasByHierarchicalName ( sPath ) )
+                        if ( !sPath.isEmpty() && hasByHierarchicalName ( sPath ) )
+                        {
+                            aAny = getByHierarchicalName( sPath );
+                            uno::Reference < XUnoTunnel > xUnoTunnel;
+                            aAny >>= xUnoTunnel;
+                            sal_Int64 nTest=0;
+                            if ( (nTest = xUnoTunnel->getSomething( ZipPackageFolder::getUnoTunnelId() )) != 0 )
                             {
-                                aAny = getByHierarchicalName( sPath );
-                                uno::Reference < XUnoTunnel > xUnoTunnel;
-                                aAny >>= xUnoTunnel;
-                                sal_Int64 nTest=0;
-                                if ( (nTest = xUnoTunnel->getSomething( ZipPackageFolder::getUnoTunnelId() )) != 0 )
+                                pFolder = reinterpret_cast < ZipPackageFolder* > ( nTest );
+                                pFolder->SetMediaType ( sMediaType );
+                                pFolder->SetVersion ( sVersion );
+                            }
+                            else
+                            {
+                                pStream = reinterpret_cast < ZipPackageStream* > ( xUnoTunnel->getSomething( ZipPackageStream::getUnoTunnelId() ));
+                                pStream->SetMediaType ( sMediaType );
+                                pStream->SetFromManifest( true );
+
+                                if ( pKeyInfo && pVector && pSize && pDigest && pDigestAlg && pEncryptionAlg )
                                 {
-                                    pFolder = reinterpret_cast < ZipPackageFolder* > ( nTest );
-                                    pFolder->SetMediaType ( sMediaType );
-                                    pFolder->SetVersion ( sVersion );
+                                    uno::Sequence < sal_Int8 > aSequence;
+                                    sal_Int64 nSize = 0;
+                                    sal_Int32 nDigestAlg = 0, nEncryptionAlg = 0;
+
+                                    pStream->SetToBeEncrypted ( true );
+
+                                    *pVector >>= aSequence;
+                                    pStream->setInitialisationVector ( aSequence );
+
+                                    *pSize >>= nSize;
+                                    pStream->setSize ( nSize );
+
+                                    *pDigest >>= aSequence;
+                                    pStream->setDigest ( aSequence );
+
+                                    *pDigestAlg >>= nDigestAlg;
+                                    pStream->SetImportedChecksumAlgorithm( nDigestAlg );
+
+                                    *pEncryptionAlg >>= nEncryptionAlg;
+                                    pStream->SetImportedEncryptionAlgorithm( nEncryptionAlg );
+
+                                    *pKeyInfo >>= m_aGpgProps;
+
+                                    pStream->SetToBeCompressed ( true );
+                                    pStream->SetToBeEncrypted ( true );
+                                    pStream->SetIsEncrypted ( true );
+                                    pStream->setIterationCount(0);
+
+                                    // clamp to default SHA256 start key magic value,
+                                    // c.f. ZipPackageStream::GetEncryptionKey()
+                                    // trying to get key value from properties
+                                    const sal_Int32 nStartKeyAlg = xml::crypto::DigestID::SHA256;
+                                    pStream->SetImportedStartKeyAlgorithm( nStartKeyAlg );
+
+                                    if ( !m_bHasEncryptedEntries && pStream->getName() == "content.xml" )
+                                    {
+                                        m_bHasEncryptedEntries = true;
+                                        m_nChecksumDigestID = nDigestAlg;
+                                        m_nCommonEncryptionID = nEncryptionAlg;
+                                        m_nStartKeyGenerationID = nStartKeyAlg;
+                                    }
+                                }
+                                else if ( pSalt && pVector && pCount && pSize && pDigest && pDigestAlg && pEncryptionAlg )
+                                {
+                                    uno::Sequence < sal_Int8 > aSequence;
+                                    sal_Int64 nSize = 0;
+                                    sal_Int32 nCount = 0, nDigestAlg = 0, nEncryptionAlg = 0;
+                                    sal_Int32 nDerivedKeySize = 16, nStartKeyAlg = xml::crypto::DigestID::SHA1;
+
+                                    pStream->SetToBeEncrypted ( true );
+
+                                    *pSalt >>= aSequence;
+                                    pStream->setSalt ( aSequence );
+
+                                    *pVector >>= aSequence;
+                                    pStream->setInitialisationVector ( aSequence );
+
+                                    *pCount >>= nCount;
+                                    pStream->setIterationCount ( nCount );
+
+                                    *pSize >>= nSize;
+                                    pStream->setSize ( nSize );
+
+                                    *pDigest >>= aSequence;
+                                    pStream->setDigest ( aSequence );
+
+                                    *pDigestAlg >>= nDigestAlg;
+                                    pStream->SetImportedChecksumAlgorithm( nDigestAlg );
+
+                                    *pEncryptionAlg >>= nEncryptionAlg;
+                                    pStream->SetImportedEncryptionAlgorithm( nEncryptionAlg );
+
+                                    if ( pDerivedKeySize )
+                                        *pDerivedKeySize >>= nDerivedKeySize;
+                                    pStream->SetImportedDerivedKeySize( nDerivedKeySize );
+
+                                    if ( pStartKeyAlg )
+                                        *pStartKeyAlg >>= nStartKeyAlg;
+                                    pStream->SetImportedStartKeyAlgorithm( nStartKeyAlg );
+
+                                    pStream->SetToBeCompressed ( true );
+                                    pStream->SetToBeEncrypted ( true );
+                                    pStream->SetIsEncrypted ( true );
+                                    if ( !m_bHasEncryptedEntries && pStream->getName() == "content.xml" )
+                                    {
+                                        m_bHasEncryptedEntries = true;
+                                        m_nStartKeyGenerationID = nStartKeyAlg;
+                                        m_nChecksumDigestID = nDigestAlg;
+                                        m_nCommonEncryptionID = nEncryptionAlg;
+                                    }
                                 }
                                 else
-                                {
-                                    pStream = reinterpret_cast < ZipPackageStream* > ( xUnoTunnel->getSomething( ZipPackageStream::getUnoTunnelId() ));
-                                    pStream->SetMediaType ( sMediaType );
-                                    pStream->SetFromManifest( true );
-
-                                    if ( pKeyInfo && pVector && pSize && pDigest && pDigestAlg && pEncryptionAlg )
-                                    {
-                                        uno::Sequence < sal_Int8 > aSequence;
-                                        sal_Int64 nSize = 0;
-                                        sal_Int32 nDigestAlg = 0, nEncryptionAlg = 0;
-
-                                        pStream->SetToBeEncrypted ( true );
-
-                                        *pVector >>= aSequence;
-                                        pStream->setInitialisationVector ( aSequence );
-
-                                        *pSize >>= nSize;
-                                        pStream->setSize ( nSize );
-
-                                        *pDigest >>= aSequence;
-                                        pStream->setDigest ( aSequence );
-
-                                        *pDigestAlg >>= nDigestAlg;
-                                        pStream->SetImportedChecksumAlgorithm( nDigestAlg );
-
-                                        *pEncryptionAlg >>= nEncryptionAlg;
-                                        pStream->SetImportedEncryptionAlgorithm( nEncryptionAlg );
-
-                                        *pKeyInfo >>= m_aGpgProps;
-
-                                        pStream->SetToBeCompressed ( true );
-                                        pStream->SetToBeEncrypted ( true );
-                                        pStream->SetIsEncrypted ( true );
-                                        pStream->setIterationCount(0);
-
-                                        // clamp to default SHA256 start key magic value,
-                                        // c.f. ZipPackageStream::GetEncryptionKey()
-                                        // trying to get key value from properties
-                                        const sal_Int32 nStartKeyAlg = xml::crypto::DigestID::SHA256;
-                                        pStream->SetImportedStartKeyAlgorithm( nStartKeyAlg );
-
-                                        if ( !m_bHasEncryptedEntries && pStream->getName() == "content.xml" )
-                                        {
-                                            m_bHasEncryptedEntries = true;
-                                            m_nChecksumDigestID = nDigestAlg;
-                                            m_nCommonEncryptionID = nEncryptionAlg;
-                                            m_nStartKeyGenerationID = nStartKeyAlg;
-                                        }
-                                    }
-                                    else if ( pSalt && pVector && pCount && pSize && pDigest && pDigestAlg && pEncryptionAlg )
-                                    {
-                                        uno::Sequence < sal_Int8 > aSequence;
-                                        sal_Int64 nSize = 0;
-                                        sal_Int32 nCount = 0, nDigestAlg = 0, nEncryptionAlg = 0;
-                                        sal_Int32 nDerivedKeySize = 16, nStartKeyAlg = xml::crypto::DigestID::SHA1;
-
-                                        pStream->SetToBeEncrypted ( true );
-
-                                        *pSalt >>= aSequence;
-                                        pStream->setSalt ( aSequence );
-
-                                        *pVector >>= aSequence;
-                                        pStream->setInitialisationVector ( aSequence );
-
-                                        *pCount >>= nCount;
-                                        pStream->setIterationCount ( nCount );
-
-                                        *pSize >>= nSize;
-                                        pStream->setSize ( nSize );
-
-                                        *pDigest >>= aSequence;
-                                        pStream->setDigest ( aSequence );
-
-                                        *pDigestAlg >>= nDigestAlg;
-                                        pStream->SetImportedChecksumAlgorithm( nDigestAlg );
-
-                                        *pEncryptionAlg >>= nEncryptionAlg;
-                                        pStream->SetImportedEncryptionAlgorithm( nEncryptionAlg );
-
-                                        if ( pDerivedKeySize )
-                                            *pDerivedKeySize >>= nDerivedKeySize;
-                                        pStream->SetImportedDerivedKeySize( nDerivedKeySize );
-
-                                        if ( pStartKeyAlg )
-                                            *pStartKeyAlg >>= nStartKeyAlg;
-                                        pStream->SetImportedStartKeyAlgorithm( nStartKeyAlg );
-
-                                        pStream->SetToBeCompressed ( true );
-                                        pStream->SetToBeEncrypted ( true );
-                                        pStream->SetIsEncrypted ( true );
-                                        if ( !m_bHasEncryptedEntries && pStream->getName() == "content.xml" )
-                                        {
-                                            m_bHasEncryptedEntries = true;
-                                            m_nStartKeyGenerationID = nStartKeyAlg;
-                                            m_nChecksumDigestID = nDigestAlg;
-                                            m_nCommonEncryptionID = nEncryptionAlg;
-                                        }
-                                    }
-                                    else
-                                        m_bHasNonEncryptedEntries = true;
-                                }
-                            }
-                        }
-
-                        bManifestParsed = true;
-                    }
-
-                    // now hide the manifest.xml file from user
-                    xMetaInfFolder->removeByName( sManifest );
-                }
-            }
-            catch( Exception& )
-            {
-                if ( !m_bForceRecovery )
-                    throw;
-            }
-        }
-
-        if ( !bManifestParsed && !m_bForceRecovery )
-            throw ZipIOException(
-                THROW_WHERE "Could not parse manifest.xml" );
-
-        const OUString sMimetype ("mimetype");
-        if ( m_xRootFolder->hasByName( sMimetype ) )
-        {
-            // get mediatype from the "mimetype" stream
-            OUString aPackageMediatype;
-            uno::Reference< lang::XUnoTunnel > xMimeTypeTunnel;
-            m_xRootFolder->getByName( sMimetype ) >>= xMimeTypeTunnel;
-            uno::Reference < io::XActiveDataSink > xMimeSink( xMimeTypeTunnel, UNO_QUERY );
-            if ( xMimeSink.is() )
-            {
-                uno::Reference< io::XInputStream > xMimeInStream = xMimeSink->getInputStream();
-                if ( xMimeInStream.is() )
-                {
-                    // Mediatypes longer than 1024 symbols should not appear here
-                    uno::Sequence< sal_Int8 > aData( 1024 );
-                    sal_Int32 nRead = xMimeInStream->readBytes( aData, 1024 );
-                    if ( nRead > aData.getLength() )
-                        nRead = aData.getLength();
-
-                    if ( nRead )
-                        aPackageMediatype = OUString( reinterpret_cast<char const *>(aData.getConstArray()), nRead, RTL_TEXTENCODING_ASCII_US );
-                }
-            }
-
-            if ( !bManifestParsed )
-            {
-                // the manifest.xml could not be successfully parsed, this is an inconsistent package
-                if ( aPackageMediatype.startsWith("application/vnd.") )
-                {
-                    // accept only types that look similar to own mediatypes
-                    m_xRootFolder->SetMediaType( aPackageMediatype );
-                    m_bMediaTypeFallbackUsed = true;
-                }
-            }
-            else if ( !m_bForceRecovery )
-            {
-                // the mimetype stream should contain the information from manifest.xml
-                if ( m_xRootFolder->GetMediaType() != aPackageMediatype )
-                    throw ZipIOException(
-                        THROW_WHERE
-                        "mimetype conflicts with manifest.xml, \""
-                        + m_xRootFolder->GetMediaType() + "\" vs. \""
-                        + aPackageMediatype + "\"" );
-            }
-
-            m_xRootFolder->removeByName( sMimetype );
-        }
-
-        m_bInconsistent = m_xRootFolder->LookForUnexpectedODF12Streams( OUString() );
-
-        bool bODF12AndNewer = ( m_xRootFolder->GetVersion().compareTo( ODFVER_012_TEXT ) >= 0 );
-        if ( !m_bForceRecovery && bODF12AndNewer )
-        {
-            if ( m_bInconsistent )
-            {
-                // this is an ODF1.2 document that contains streams not referred in the manifest.xml;
-                // in case of ODF1.2 documents without version in manifest.xml the property IsInconsistent
-                // should be checked later
-                throw ZipIOException(
-                    THROW_WHERE "there are streams not referred in manifest.xml" );
-            }
-            // all the streams should be encrypted with the same StartKey in ODF1.2
-            // TODO/LATER: in future the exception should be thrown
-            // throw ZipIOException( THROW_WHERE "More than one Start Key Generation algorithm is specified!" );
-        }
-
-        // in case it is a correct ODF1.2 document, the version must be set
-        // and the META-INF folder is reserved for package format
-        if ( bODF12AndNewer )
-            m_xRootFolder->removeByName( sMeta );
-    }
-}
-
-void ZipPackage::parseContentType()
-{
-    if ( m_nFormat == embed::StorageFormats::OFOPXML )
-    {
-        const OUString aContentTypes("[Content_Types].xml");
-        try {
-            // the content type must exist in OFOPXML format!
-            if ( !m_xRootFolder->hasByName( aContentTypes ) )
-                throw io::IOException(THROW_WHERE "Wrong format!" );
-
-            uno::Reference< lang::XUnoTunnel > xTunnel;
-            uno::Any aAny = m_xRootFolder->getByName( aContentTypes );
-            aAny >>= xTunnel;
-            uno::Reference < io::XActiveDataSink > xSink( xTunnel, UNO_QUERY );
-            if ( xSink.is() )
-            {
-                uno::Reference< io::XInputStream > xInStream = xSink->getInputStream();
-                if ( xInStream.is() )
-                {
-                    // here aContentTypeInfo[0] - Defaults, and aContentTypeInfo[1] - Overrides
-                    const uno::Sequence< uno::Sequence< beans::StringPair > > aContentTypeInfo =
-                        ::comphelper::OFOPXMLHelper::ReadContentTypeSequence( xInStream, m_xContext );
-
-                    if ( aContentTypeInfo.getLength() != 2 )
-                        throw io::IOException(THROW_WHERE );
-
-                    // set the implicit types first
-                    for ( const auto& rPair : aContentTypeInfo[0] )
-                        m_xRootFolder->setChildStreamsTypeByExtension( rPair );
-
-                    // now set the explicit types
-                    for ( const auto& rPair : aContentTypeInfo[1] )
-                    {
-                        OUString aPath;
-                        if ( rPair.First.toChar() == '/' )
-                            aPath = rPair.First.copy( 1 );
-                        else
-                            aPath = rPair.First;
-
-                        if ( !aPath.isEmpty() && hasByHierarchicalName( aPath ) )
-                        {
-                            uno::Any aIterAny = getByHierarchicalName( aPath );
-                            uno::Reference < lang::XUnoTunnel > xIterTunnel;
-                            aIterAny >>= xIterTunnel;
-                            sal_Int64 nTest = xIterTunnel->getSomething( ZipPackageStream::getUnoTunnelId() );
-                            if ( nTest != 0 )
-                            {
-                                // this is a package stream, in OFOPXML format only streams can have mediatype
-                                ZipPackageStream *pStream = reinterpret_cast < ZipPackageStream* > ( nTest );
-                                pStream->SetMediaType( rPair.Second );
+                                    m_bHasNonEncryptedEntries = true;
                             }
                         }
                     }
-                }
-            }
 
-            m_xRootFolder->removeByName( aContentTypes );
+                    bManifestParsed = true;
+                }
+
+                // now hide the manifest.xml file from user
+                xMetaInfFolder->removeByName( sManifest );
+            }
         }
-        catch( uno::Exception& )
+        catch( Exception& )
         {
             if ( !m_bForceRecovery )
                 throw;
         }
+    }
+
+    if ( !bManifestParsed && !m_bForceRecovery )
+        throw ZipIOException(
+            THROW_WHERE "Could not parse manifest.xml" );
+
+    const OUString sMimetype ("mimetype");
+    if ( m_xRootFolder->hasByName( sMimetype ) )
+    {
+        // get mediatype from the "mimetype" stream
+        OUString aPackageMediatype;
+        uno::Reference< lang::XUnoTunnel > xMimeTypeTunnel;
+        m_xRootFolder->getByName( sMimetype ) >>= xMimeTypeTunnel;
+        uno::Reference < io::XActiveDataSink > xMimeSink( xMimeTypeTunnel, UNO_QUERY );
+        if ( xMimeSink.is() )
+        {
+            uno::Reference< io::XInputStream > xMimeInStream = xMimeSink->getInputStream();
+            if ( xMimeInStream.is() )
+            {
+                // Mediatypes longer than 1024 symbols should not appear here
+                uno::Sequence< sal_Int8 > aData( 1024 );
+                sal_Int32 nRead = xMimeInStream->readBytes( aData, 1024 );
+                if ( nRead > aData.getLength() )
+                    nRead = aData.getLength();
+
+                if ( nRead )
+                    aPackageMediatype = OUString( reinterpret_cast<char const *>(aData.getConstArray()), nRead, RTL_TEXTENCODING_ASCII_US );
+            }
+        }
+
+        if ( !bManifestParsed )
+        {
+            // the manifest.xml could not be successfully parsed, this is an inconsistent package
+            if ( aPackageMediatype.startsWith("application/vnd.") )
+            {
+                // accept only types that look similar to own mediatypes
+                m_xRootFolder->SetMediaType( aPackageMediatype );
+                m_bMediaTypeFallbackUsed = true;
+            }
+        }
+        else if ( !m_bForceRecovery )
+        {
+            // the mimetype stream should contain the information from manifest.xml
+            if ( m_xRootFolder->GetMediaType() != aPackageMediatype )
+                throw ZipIOException(
+                    THROW_WHERE
+                    "mimetype conflicts with manifest.xml, \""
+                    + m_xRootFolder->GetMediaType() + "\" vs. \""
+                    + aPackageMediatype + "\"" );
+        }
+
+        m_xRootFolder->removeByName( sMimetype );
+    }
+
+    m_bInconsistent = m_xRootFolder->LookForUnexpectedODF12Streams( OUString() );
+
+    bool bODF12AndNewer = ( m_xRootFolder->GetVersion().compareTo( ODFVER_012_TEXT ) >= 0 );
+    if ( !m_bForceRecovery && bODF12AndNewer )
+    {
+        if ( m_bInconsistent )
+        {
+            // this is an ODF1.2 document that contains streams not referred in the manifest.xml;
+            // in case of ODF1.2 documents without version in manifest.xml the property IsInconsistent
+            // should be checked later
+            throw ZipIOException(
+                THROW_WHERE "there are streams not referred in manifest.xml" );
+        }
+        // all the streams should be encrypted with the same StartKey in ODF1.2
+        // TODO/LATER: in future the exception should be thrown
+        // throw ZipIOException( THROW_WHERE "More than one Start Key Generation algorithm is specified!" );
+    }
+
+    // in case it is a correct ODF1.2 document, the version must be set
+    // and the META-INF folder is reserved for package format
+    if ( bODF12AndNewer )
+        m_xRootFolder->removeByName( sMeta );
+}
+
+void ZipPackage::parseContentType()
+{
+    if ( m_nFormat != embed::StorageFormats::OFOPXML )
+        return;
+
+    const OUString aContentTypes("[Content_Types].xml");
+    try {
+        // the content type must exist in OFOPXML format!
+        if ( !m_xRootFolder->hasByName( aContentTypes ) )
+            throw io::IOException(THROW_WHERE "Wrong format!" );
+
+        uno::Reference< lang::XUnoTunnel > xTunnel;
+        uno::Any aAny = m_xRootFolder->getByName( aContentTypes );
+        aAny >>= xTunnel;
+        uno::Reference < io::XActiveDataSink > xSink( xTunnel, UNO_QUERY );
+        if ( xSink.is() )
+        {
+            uno::Reference< io::XInputStream > xInStream = xSink->getInputStream();
+            if ( xInStream.is() )
+            {
+                // here aContentTypeInfo[0] - Defaults, and aContentTypeInfo[1] - Overrides
+                const uno::Sequence< uno::Sequence< beans::StringPair > > aContentTypeInfo =
+                    ::comphelper::OFOPXMLHelper::ReadContentTypeSequence( xInStream, m_xContext );
+
+                if ( aContentTypeInfo.getLength() != 2 )
+                    throw io::IOException(THROW_WHERE );
+
+                // set the implicit types first
+                for ( const auto& rPair : aContentTypeInfo[0] )
+                    m_xRootFolder->setChildStreamsTypeByExtension( rPair );
+
+                // now set the explicit types
+                for ( const auto& rPair : aContentTypeInfo[1] )
+                {
+                    OUString aPath;
+                    if ( rPair.First.toChar() == '/' )
+                        aPath = rPair.First.copy( 1 );
+                    else
+                        aPath = rPair.First;
+
+                    if ( !aPath.isEmpty() && hasByHierarchicalName( aPath ) )
+                    {
+                        uno::Any aIterAny = getByHierarchicalName( aPath );
+                        uno::Reference < lang::XUnoTunnel > xIterTunnel;
+                        aIterAny >>= xIterTunnel;
+                        sal_Int64 nTest = xIterTunnel->getSomething( ZipPackageStream::getUnoTunnelId() );
+                        if ( nTest != 0 )
+                        {
+                            // this is a package stream, in OFOPXML format only streams can have mediatype
+                            ZipPackageStream *pStream = reinterpret_cast < ZipPackageStream* > ( nTest );
+                            pStream->SetMediaType( rPair.Second );
+                        }
+                    }
+                }
+            }
+        }
+
+        m_xRootFolder->removeByName( aContentTypes );
+    }
+    catch( uno::Exception& )
+    {
+        if ( !m_bForceRecovery )
+            throw;
     }
 }
 
@@ -601,205 +601,205 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
 {
     beans::NamedValue aNamedValue;
 
-    if ( aArguments.hasElements() )
+    if ( !aArguments.hasElements() )
+        return;
+
+    bool bHaveZipFile = true;
+
+    for( const auto& rArgument : aArguments )
     {
-        bool bHaveZipFile = true;
-
-        for( const auto& rArgument : aArguments )
+        OUString aParamUrl;
+        if ( rArgument >>= aParamUrl )
         {
-            OUString aParamUrl;
-            if ( rArgument >>= aParamUrl )
-            {
-                m_eMode = e_IMode_URL;
-                try
-                {
-                    sal_Int32 nParam = aParamUrl.indexOf( '?' );
-                    if ( nParam >= 0 )
-                    {
-                        m_aURL = aParamUrl.copy( 0, nParam );
-                        OUString aParam = aParamUrl.copy( nParam + 1 );
-
-                        sal_Int32 nIndex = 0;
-                        do
-                        {
-                            OUString aCommand = aParam.getToken( 0, '&', nIndex );
-                            if ( aCommand == "repairpackage" )
-                            {
-                                m_bForceRecovery = true;
-                                break;
-                            }
-                            else if ( aCommand == "purezip" )
-                            {
-                                m_nFormat = embed::StorageFormats::ZIP;
-                                m_xRootFolder->setPackageFormat_Impl( m_nFormat );
-                                break;
-                            }
-                            else if ( aCommand == "ofopxml" )
-                            {
-                                m_nFormat = embed::StorageFormats::OFOPXML;
-                                m_xRootFolder->setPackageFormat_Impl( m_nFormat );
-                                break;
-                            }
-                        }
-                        while ( nIndex >= 0 );
-                    }
-                    else
-                        m_aURL = aParamUrl;
-
-                    Content aContent(
-                        m_aURL, uno::Reference< XCommandEnvironment >(),
-                        m_xContext );
-                    Any aAny = aContent.getPropertyValue("Size");
-                    sal_uInt64 aSize = 0;
-                    // kind of optimization: treat empty files as nonexistent files
-                    // and write to such files directly. Note that "Size" property is optional.
-                    bool bHasSizeProperty = aAny >>= aSize;
-                    if( !bHasSizeProperty || aSize )
-                    {
-                        uno::Reference < XActiveDataSink > xSink = new ZipPackageSink;
-                        if ( aContent.openStream ( xSink ) )
-                            m_xContentStream = xSink->getInputStream();
-                    }
-                    else
-                        bHaveZipFile = false;
-                }
-                catch ( css::uno::Exception& )
-                {
-                    // Exception derived from uno::Exception thrown. This probably
-                    // means the file doesn't exist...we'll create it at
-                    // commitChanges time
-                    bHaveZipFile = false;
-                }
-            }
-            else if ( rArgument >>= m_xStream )
-            {
-                // a writable stream can implement both XStream & XInputStream
-                m_eMode = e_IMode_XStream;
-                m_xContentStream = m_xStream->getInputStream();
-            }
-            else if ( rArgument >>= m_xContentStream )
-            {
-                m_eMode = e_IMode_XInputStream;
-            }
-            else if ( rArgument >>= aNamedValue )
-            {
-                if ( aNamedValue.Name == "RepairPackage" )
-                    aNamedValue.Value >>= m_bForceRecovery;
-                else if ( aNamedValue.Name == "PackageFormat" )
-                {
-                    // setting this argument to true means Package format
-                    // setting it to false means plain Zip format
-
-                    bool bPackFormat = true;
-                    aNamedValue.Value >>= bPackFormat;
-                    if ( !bPackFormat )
-                        m_nFormat = embed::StorageFormats::ZIP;
-
-                    m_xRootFolder->setPackageFormat_Impl( m_nFormat );
-                }
-                else if ( aNamedValue.Name == "StorageFormat" )
-                {
-                    OUString aFormatName;
-                    sal_Int32 nFormatID = 0;
-                    if ( aNamedValue.Value >>= aFormatName )
-                    {
-                        if ( aFormatName == PACKAGE_STORAGE_FORMAT_STRING )
-                            m_nFormat = embed::StorageFormats::PACKAGE;
-                        else if ( aFormatName == ZIP_STORAGE_FORMAT_STRING )
-                            m_nFormat = embed::StorageFormats::ZIP;
-                        else if ( aFormatName == OFOPXML_STORAGE_FORMAT_STRING )
-                            m_nFormat = embed::StorageFormats::OFOPXML;
-                        else
-                            throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
-                    }
-                    else if ( aNamedValue.Value >>= nFormatID )
-                    {
-                        if (nFormatID != embed::StorageFormats::PACKAGE
-                            && nFormatID != embed::StorageFormats::ZIP
-                            && nFormatID != embed::StorageFormats::OFOPXML)
-                            throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
-
-                        m_nFormat = nFormatID;
-                    }
-                    else
-                        throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
-
-                    m_xRootFolder->setPackageFormat_Impl( m_nFormat );
-                }
-                else if ( aNamedValue.Name == "AllowRemoveOnInsert" )
-                {
-                    aNamedValue.Value >>= m_bAllowRemoveOnInsert;
-                    m_xRootFolder->setRemoveOnInsertMode_Impl( m_bAllowRemoveOnInsert );
-                }
-                else if (aNamedValue.Name == "NoFileSync")
-                    aNamedValue.Value >>= m_bDisableFileSync;
-
-                // for now the progress handler is not used, probably it will never be
-                // if ( aNamedValue.Name == "ProgressHandler" )
-            }
-            else
-            {
-                // The URL is not acceptable
-                throw css::uno::Exception (THROW_WHERE "Bad arguments.",
-                    static_cast < ::cppu::OWeakObject * > ( this ) );
-            }
-        }
-
-        try
-        {
-            if ( m_xContentStream.is() )
-            {
-                // the stream must be seekable, if it is not it will be wrapped
-                m_xContentStream = ::comphelper::OSeekableInputWrapper::CheckSeekableCanWrap( m_xContentStream, m_xContext );
-                m_xContentSeek.set( m_xContentStream, UNO_QUERY_THROW );
-                if ( !m_xContentSeek->getLength() )
-                    bHaveZipFile = false;
-            }
-            else
-                bHaveZipFile = false;
-        }
-        catch ( css::uno::Exception& )
-        {
-            // Exception derived from uno::Exception thrown. This probably
-            // means the file doesn't exist...we'll create it at
-            // commitChanges time
-            bHaveZipFile = false;
-        }
-        if ( bHaveZipFile )
-        {
-            bool bBadZipFile = false;
-            OUString message;
+            m_eMode = e_IMode_URL;
             try
             {
-                m_pZipFile = std::make_unique<ZipFile>(m_aMutexHolder, m_xContentStream, m_xContext, true, m_bForceRecovery);
-                getZipFileContents();
-            }
-            catch ( IOException & e )
-            {
-                bBadZipFile = true;
-                message = "IOException: " + e.Message;
-            }
-            catch ( ZipException & e )
-            {
-                bBadZipFile = true;
-                message = "ZipException: " + e.Message;
-            }
-            catch ( Exception & )
-            {
-                m_pZipFile.reset();
-                throw;
-            }
+                sal_Int32 nParam = aParamUrl.indexOf( '?' );
+                if ( nParam >= 0 )
+                {
+                    m_aURL = aParamUrl.copy( 0, nParam );
+                    OUString aParam = aParamUrl.copy( nParam + 1 );
 
-            if ( bBadZipFile )
-            {
-                // clean up the memory, and tell the UCB about the error
-                m_pZipFile.reset();
+                    sal_Int32 nIndex = 0;
+                    do
+                    {
+                        OUString aCommand = aParam.getToken( 0, '&', nIndex );
+                        if ( aCommand == "repairpackage" )
+                        {
+                            m_bForceRecovery = true;
+                            break;
+                        }
+                        else if ( aCommand == "purezip" )
+                        {
+                            m_nFormat = embed::StorageFormats::ZIP;
+                            m_xRootFolder->setPackageFormat_Impl( m_nFormat );
+                            break;
+                        }
+                        else if ( aCommand == "ofopxml" )
+                        {
+                            m_nFormat = embed::StorageFormats::OFOPXML;
+                            m_xRootFolder->setPackageFormat_Impl( m_nFormat );
+                            break;
+                        }
+                    }
+                    while ( nIndex >= 0 );
+                }
+                else
+                    m_aURL = aParamUrl;
 
-                throw css::packages::zip::ZipIOException (
-                    THROW_WHERE "Bad Zip File, " + message,
-                    static_cast < ::cppu::OWeakObject * > ( this ) );
+                Content aContent(
+                    m_aURL, uno::Reference< XCommandEnvironment >(),
+                    m_xContext );
+                Any aAny = aContent.getPropertyValue("Size");
+                sal_uInt64 aSize = 0;
+                // kind of optimization: treat empty files as nonexistent files
+                // and write to such files directly. Note that "Size" property is optional.
+                bool bHasSizeProperty = aAny >>= aSize;
+                if( !bHasSizeProperty || aSize )
+                {
+                    uno::Reference < XActiveDataSink > xSink = new ZipPackageSink;
+                    if ( aContent.openStream ( xSink ) )
+                        m_xContentStream = xSink->getInputStream();
+                }
+                else
+                    bHaveZipFile = false;
+            }
+            catch ( css::uno::Exception& )
+            {
+                // Exception derived from uno::Exception thrown. This probably
+                // means the file doesn't exist...we'll create it at
+                // commitChanges time
+                bHaveZipFile = false;
             }
         }
+        else if ( rArgument >>= m_xStream )
+        {
+            // a writable stream can implement both XStream & XInputStream
+            m_eMode = e_IMode_XStream;
+            m_xContentStream = m_xStream->getInputStream();
+        }
+        else if ( rArgument >>= m_xContentStream )
+        {
+            m_eMode = e_IMode_XInputStream;
+        }
+        else if ( rArgument >>= aNamedValue )
+        {
+            if ( aNamedValue.Name == "RepairPackage" )
+                aNamedValue.Value >>= m_bForceRecovery;
+            else if ( aNamedValue.Name == "PackageFormat" )
+            {
+                // setting this argument to true means Package format
+                // setting it to false means plain Zip format
+
+                bool bPackFormat = true;
+                aNamedValue.Value >>= bPackFormat;
+                if ( !bPackFormat )
+                    m_nFormat = embed::StorageFormats::ZIP;
+
+                m_xRootFolder->setPackageFormat_Impl( m_nFormat );
+            }
+            else if ( aNamedValue.Name == "StorageFormat" )
+            {
+                OUString aFormatName;
+                sal_Int32 nFormatID = 0;
+                if ( aNamedValue.Value >>= aFormatName )
+                {
+                    if ( aFormatName == PACKAGE_STORAGE_FORMAT_STRING )
+                        m_nFormat = embed::StorageFormats::PACKAGE;
+                    else if ( aFormatName == ZIP_STORAGE_FORMAT_STRING )
+                        m_nFormat = embed::StorageFormats::ZIP;
+                    else if ( aFormatName == OFOPXML_STORAGE_FORMAT_STRING )
+                        m_nFormat = embed::StorageFormats::OFOPXML;
+                    else
+                        throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
+                }
+                else if ( aNamedValue.Value >>= nFormatID )
+                {
+                    if (nFormatID != embed::StorageFormats::PACKAGE
+                        && nFormatID != embed::StorageFormats::ZIP
+                        && nFormatID != embed::StorageFormats::OFOPXML)
+                        throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
+
+                    m_nFormat = nFormatID;
+                }
+                else
+                    throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
+
+                m_xRootFolder->setPackageFormat_Impl( m_nFormat );
+            }
+            else if ( aNamedValue.Name == "AllowRemoveOnInsert" )
+            {
+                aNamedValue.Value >>= m_bAllowRemoveOnInsert;
+                m_xRootFolder->setRemoveOnInsertMode_Impl( m_bAllowRemoveOnInsert );
+            }
+            else if (aNamedValue.Name == "NoFileSync")
+                aNamedValue.Value >>= m_bDisableFileSync;
+
+            // for now the progress handler is not used, probably it will never be
+            // if ( aNamedValue.Name == "ProgressHandler" )
+        }
+        else
+        {
+            // The URL is not acceptable
+            throw css::uno::Exception (THROW_WHERE "Bad arguments.",
+                static_cast < ::cppu::OWeakObject * > ( this ) );
+        }
+    }
+
+    try
+    {
+        if ( m_xContentStream.is() )
+        {
+            // the stream must be seekable, if it is not it will be wrapped
+            m_xContentStream = ::comphelper::OSeekableInputWrapper::CheckSeekableCanWrap( m_xContentStream, m_xContext );
+            m_xContentSeek.set( m_xContentStream, UNO_QUERY_THROW );
+            if ( !m_xContentSeek->getLength() )
+                bHaveZipFile = false;
+        }
+        else
+            bHaveZipFile = false;
+    }
+    catch ( css::uno::Exception& )
+    {
+        // Exception derived from uno::Exception thrown. This probably
+        // means the file doesn't exist...we'll create it at
+        // commitChanges time
+        bHaveZipFile = false;
+    }
+    if ( !bHaveZipFile )
+        return;
+
+    bool bBadZipFile = false;
+    OUString message;
+    try
+    {
+        m_pZipFile = std::make_unique<ZipFile>(m_aMutexHolder, m_xContentStream, m_xContext, true, m_bForceRecovery);
+        getZipFileContents();
+    }
+    catch ( IOException & e )
+    {
+        bBadZipFile = true;
+        message = "IOException: " + e.Message;
+    }
+    catch ( ZipException & e )
+    {
+        bBadZipFile = true;
+        message = "ZipException: " + e.Message;
+    }
+    catch ( Exception & )
+    {
+        m_pZipFile.reset();
+        throw;
+    }
+
+    if ( bBadZipFile )
+    {
+        // clean up the memory, and tell the UCB about the error
+        m_pZipFile.reset();
+
+        throw css::packages::zip::ZipIOException (
+            THROW_WHERE "Bad Zip File, " + message,
+            static_cast < ::cppu::OWeakObject * > ( this ) );
     }
 }
 

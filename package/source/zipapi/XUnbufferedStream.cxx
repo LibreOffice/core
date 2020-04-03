@@ -92,23 +92,23 @@ XUnbufferedStream::XUnbufferedStream(
         mnBlockSize = ( rData->m_nEncAlg == xml::crypto::CipherID::AES_CBC_W3C_PADDING ? 16 : 1 );
     }
 
-    if ( bHaveEncryptData && mbWrappedRaw && bIsEncrypted )
-    {
-        // if we have the data needed to decrypt it, but didn't want it decrypted (or
-        // we couldn't decrypt it due to wrong password), then we prepend this
-        // data to the stream
+    if ( !(bHaveEncryptData && mbWrappedRaw && bIsEncrypted) )
+        return;
 
-        // Make a buffer big enough to hold both the header and the data itself
-        maHeader.realloc  ( n_ConstHeaderSize +
-                            rData->m_aInitVector.getLength() +
-                            rData->m_aSalt.getLength() +
-                            rData->m_aDigest.getLength() +
-                            aMediaType.getLength() * sizeof( sal_Unicode ) );
-        sal_Int8 * pHeader = maHeader.getArray();
-        ZipFile::StaticFillHeader( rData, rEntry.nSize, aMediaType, pHeader );
-        mnHeaderToRead = static_cast < sal_Int16 > ( maHeader.getLength() );
-        mnZipSize += mnHeaderToRead;
-    }
+    // if we have the data needed to decrypt it, but didn't want it decrypted (or
+    // we couldn't decrypt it due to wrong password), then we prepend this
+    // data to the stream
+
+    // Make a buffer big enough to hold both the header and the data itself
+    maHeader.realloc  ( n_ConstHeaderSize +
+                        rData->m_aInitVector.getLength() +
+                        rData->m_aSalt.getLength() +
+                        rData->m_aDigest.getLength() +
+                        aMediaType.getLength() * sizeof( sal_Unicode ) );
+    sal_Int8 * pHeader = maHeader.getArray();
+    ZipFile::StaticFillHeader( rData, rEntry.nSize, aMediaType, pHeader );
+    mnHeaderToRead = static_cast < sal_Int16 > ( maHeader.getLength() );
+    mnZipSize += mnHeaderToRead;
 }
 
 // allows to read package raw stream

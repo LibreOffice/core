@@ -496,24 +496,24 @@ bool OStorage_Impl::HasChildren()
 
 void OStorage_Impl::GetStorageProperties()
 {
-    if ( m_nStorageType == embed::StorageFormats::PACKAGE )
+    if ( m_nStorageType != embed::StorageFormats::PACKAGE )
+        return;
+
+    uno::Reference< beans::XPropertySet > xProps( m_xPackageFolder, uno::UNO_QUERY_THROW );
+
+    if ( !m_bControlMediaType )
     {
-        uno::Reference< beans::XPropertySet > xProps( m_xPackageFolder, uno::UNO_QUERY_THROW );
+        uno::Reference< beans::XPropertySet > xPackageProps( m_xPackage, uno::UNO_QUERY_THROW );
+        xPackageProps->getPropertyValue( MEDIATYPE_FALLBACK_USED_PROPERTY ) >>= m_bMTFallbackUsed;
 
-        if ( !m_bControlMediaType )
-        {
-            uno::Reference< beans::XPropertySet > xPackageProps( m_xPackage, uno::UNO_QUERY_THROW );
-            xPackageProps->getPropertyValue( MEDIATYPE_FALLBACK_USED_PROPERTY ) >>= m_bMTFallbackUsed;
+        xProps->getPropertyValue( "MediaType" ) >>= m_aMediaType;
+        m_bControlMediaType = true;
+    }
 
-            xProps->getPropertyValue( "MediaType" ) >>= m_aMediaType;
-            m_bControlMediaType = true;
-        }
-
-        if ( !m_bControlVersion )
-        {
-            xProps->getPropertyValue( "Version" ) >>= m_aVersion;
-            m_bControlVersion = true;
-        }
+    if ( !m_bControlVersion )
+    {
+        xProps->getPropertyValue( "Version" ) >>= m_aVersion;
+        m_bControlVersion = true;
     }
 
     // the properties of OFOPXML will be handled directly
@@ -1477,20 +1477,20 @@ void OStorage_Impl::OpenSubStream( SotElement_Impl* pElement )
 
     ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 
-    if (!pElement->m_xStream)
-    {
-        SAL_WARN_IF( pElement->m_bIsInserted, "package.xstor", "Inserted element must be created already!" );
+    if (pElement->m_xStream)
+        return;
 
-        uno::Reference< lang::XUnoTunnel > xTunnel;
-        m_xPackageFolder->getByName( pElement->m_aOriginalName ) >>= xTunnel;
-        if ( !xTunnel.is() )
-            throw container::NoSuchElementException( THROW_WHERE );
+    SAL_WARN_IF( pElement->m_bIsInserted, "package.xstor", "Inserted element must be created already!" );
 
-        uno::Reference< packages::XDataSinkEncrSupport > xPackageSubStream( xTunnel, uno::UNO_QUERY_THROW );
+    uno::Reference< lang::XUnoTunnel > xTunnel;
+    m_xPackageFolder->getByName( pElement->m_aOriginalName ) >>= xTunnel;
+    if ( !xTunnel.is() )
+        throw container::NoSuchElementException( THROW_WHERE );
 
-        // the stream can never be inserted here, because inserted stream element holds the stream till commit or destruction
-        pElement->m_xStream.reset(new OWriteStream_Impl(this, xPackageSubStream, m_xPackage, m_xContext, false, m_nStorageType, false, GetRelInfoStreamForName(pElement->m_aOriginalName)));
-    }
+    uno::Reference< packages::XDataSinkEncrSupport > xPackageSubStream( xTunnel, uno::UNO_QUERY_THROW );
+
+    // the stream can never be inserted here, because inserted stream element holds the stream till commit or destruction
+    pElement->m_xStream.reset(new OWriteStream_Impl(this, xPackageSubStream, m_xPackage, m_xContext, false, m_nStorageType, false, GetRelInfoStreamForName(pElement->m_aOriginalName)));
 }
 
 uno::Sequence< OUString > OStorage_Impl::GetElementNames()
@@ -1603,25 +1603,25 @@ void OStorage_Impl::CreateRelStorage()
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         return;
 
-    if ( !m_xRelStorage.is() )
+    if ( m_xRelStorage.is() )
+        return;
+
+    if ( !m_pRelStorElement )
     {
-        if ( !m_pRelStorElement )
-        {
-            m_pRelStorElement = new SotElement_Impl( "_rels", true, true );
-            m_pRelStorElement->m_xStorage = CreateNewStorageImpl(embed::ElementModes::WRITE);
-            if (m_pRelStorElement->m_xStorage)
-                m_pRelStorElement->m_xStorage->m_pParent = nullptr; // the relation storage is completely controlled by parent
-        }
-
-        if (!m_pRelStorElement->m_xStorage)
-            OpenSubStorage( m_pRelStorElement, embed::ElementModes::WRITE );
-
-        if (!m_pRelStorElement->m_xStorage)
-            throw uno::RuntimeException( THROW_WHERE );
-
-        OStorage* pResultStorage = new OStorage(m_pRelStorElement->m_xStorage.get(), false);
-        m_xRelStorage.set( static_cast<embed::XStorage*>(pResultStorage) );
+        m_pRelStorElement = new SotElement_Impl( "_rels", true, true );
+        m_pRelStorElement->m_xStorage = CreateNewStorageImpl(embed::ElementModes::WRITE);
+        if (m_pRelStorElement->m_xStorage)
+            m_pRelStorElement->m_xStorage->m_pParent = nullptr; // the relation storage is completely controlled by parent
     }
+
+    if (!m_pRelStorElement->m_xStorage)
+        OpenSubStorage( m_pRelStorElement, embed::ElementModes::WRITE );
+
+    if (!m_pRelStorElement->m_xStorage)
+        throw uno::RuntimeException( THROW_WHERE );
+
+    OStorage* pResultStorage = new OStorage(m_pRelStorElement->m_xStorage.get(), false);
+    m_xRelStorage.set( static_cast<embed::XStorage*>(pResultStorage) );
 }
 
 void OStorage_Impl::CommitStreamRelInfo( const OUString &rName, SotElement_Impl const * pStreamElement )
@@ -1674,92 +1674,92 @@ void OStorage_Impl::CommitRelInfo( const uno::Reference< container::XNameContain
     if ( !xNewPackageFolder.is() )
         throw uno::RuntimeException( THROW_WHERE );
 
-    if ( m_nStorageType == embed::StorageFormats::OFOPXML )
+    if ( m_nStorageType != embed::StorageFormats::OFOPXML )
+        return;
+
+    if ( m_nRelInfoStatus == RELINFO_BROKEN || m_nRelInfoStatus == RELINFO_CHANGED_BROKEN )
+        throw io::IOException( THROW_WHERE );
+
+    if (m_nRelInfoStatus == RELINFO_CHANGED)
     {
-        if ( m_nRelInfoStatus == RELINFO_BROKEN || m_nRelInfoStatus == RELINFO_CHANGED_BROKEN )
-            throw io::IOException( THROW_WHERE );
-
-        if (m_nRelInfoStatus == RELINFO_CHANGED)
-        {
-            if (m_aRelInfo.hasElements())
-            {
-                CreateRelStorage();
-
-                uno::Reference<io::XStream> xRelsStream = m_xRelStorage->openStreamElement(
-                    ".rels", embed::ElementModes::TRUNCATE | embed::ElementModes::READWRITE);
-
-                uno::Reference<io::XOutputStream> xOutStream = xRelsStream->getOutputStream();
-                if (!xOutStream.is())
-                    throw uno::RuntimeException(THROW_WHERE);
-
-                ::comphelper::OFOPXMLHelper::WriteRelationsInfoSequence(xOutStream, m_aRelInfo,
-                                                                        m_xContext);
-
-                // set the mediatype
-                uno::Reference<beans::XPropertySet> xPropSet(xRelsStream, uno::UNO_QUERY_THROW);
-                xPropSet->setPropertyValue(
-                    "MediaType", uno::makeAny(OUString(
-                                     "application/vnd.openxmlformats-package.relationships+xml")));
-
-                m_nRelInfoStatus = RELINFO_READ;
-            }
-            else if (m_xRelStorage.is())
-                RemoveStreamRelInfo(OUString()); // remove own rel info
-        }
-        else if (m_nRelInfoStatus == RELINFO_CHANGED_STREAM_READ
-                 || m_nRelInfoStatus == RELINFO_CHANGED_STREAM)
+        if (m_aRelInfo.hasElements())
         {
             CreateRelStorage();
 
             uno::Reference<io::XStream> xRelsStream = m_xRelStorage->openStreamElement(
                 ".rels", embed::ElementModes::TRUNCATE | embed::ElementModes::READWRITE);
 
-            uno::Reference<io::XOutputStream> xOutputStream = xRelsStream->getOutputStream();
-            if (!xOutputStream.is())
+            uno::Reference<io::XOutputStream> xOutStream = xRelsStream->getOutputStream();
+            if (!xOutStream.is())
                 throw uno::RuntimeException(THROW_WHERE);
 
-            uno::Reference<io::XSeekable> xSeek(m_xNewRelInfoStream, uno::UNO_QUERY_THROW);
-            xSeek->seek(0);
-            ::comphelper::OStorageHelper::CopyInputToOutput(m_xNewRelInfoStream, xOutputStream);
+            ::comphelper::OFOPXMLHelper::WriteRelationsInfoSequence(xOutStream, m_aRelInfo,
+                                                                    m_xContext);
 
             // set the mediatype
             uno::Reference<beans::XPropertySet> xPropSet(xRelsStream, uno::UNO_QUERY_THROW);
             xPropSet->setPropertyValue(
-                "MediaType",
-                uno::makeAny(OUString("application/vnd.openxmlformats-package.relationships+xml")));
+                "MediaType", uno::makeAny(OUString(
+                                 "application/vnd.openxmlformats-package.relationships+xml")));
 
-            m_xNewRelInfoStream.clear();
-            if (m_nRelInfoStatus == RELINFO_CHANGED_STREAM)
-            {
-                m_aRelInfo = uno::Sequence<uno::Sequence<beans::StringPair>>();
-                m_nRelInfoStatus = RELINFO_NO_INIT;
-            }
-            else
-                m_nRelInfoStatus = RELINFO_READ;
+            m_nRelInfoStatus = RELINFO_READ;
         }
-
-        if ( m_xRelStorage.is() )
-        {
-            if ( m_xRelStorage->hasElements() )
-            {
-                uno::Reference< embed::XTransactedObject > xTrans( m_xRelStorage, uno::UNO_QUERY_THROW );
-                xTrans->commit();
-            }
-
-            if ( xNewPackageFolder.is() && xNewPackageFolder->hasByName( aRelsStorName ) )
-                xNewPackageFolder->removeByName( aRelsStorName );
-
-            if ( !m_xRelStorage->hasElements() )
-            {
-                // the empty relations storage should not be created
-                delete m_pRelStorElement;
-                m_pRelStorElement = nullptr;
-                m_xRelStorage.clear();
-            }
-            else if ( m_pRelStorElement && m_pRelStorElement->m_xStorage && xNewPackageFolder.is() )
-                m_pRelStorElement->m_xStorage->InsertIntoPackageFolder( aRelsStorName, xNewPackageFolder );
-        }
+        else if (m_xRelStorage.is())
+            RemoveStreamRelInfo(OUString()); // remove own rel info
     }
+    else if (m_nRelInfoStatus == RELINFO_CHANGED_STREAM_READ
+             || m_nRelInfoStatus == RELINFO_CHANGED_STREAM)
+    {
+        CreateRelStorage();
+
+        uno::Reference<io::XStream> xRelsStream = m_xRelStorage->openStreamElement(
+            ".rels", embed::ElementModes::TRUNCATE | embed::ElementModes::READWRITE);
+
+        uno::Reference<io::XOutputStream> xOutputStream = xRelsStream->getOutputStream();
+        if (!xOutputStream.is())
+            throw uno::RuntimeException(THROW_WHERE);
+
+        uno::Reference<io::XSeekable> xSeek(m_xNewRelInfoStream, uno::UNO_QUERY_THROW);
+        xSeek->seek(0);
+        ::comphelper::OStorageHelper::CopyInputToOutput(m_xNewRelInfoStream, xOutputStream);
+
+        // set the mediatype
+        uno::Reference<beans::XPropertySet> xPropSet(xRelsStream, uno::UNO_QUERY_THROW);
+        xPropSet->setPropertyValue(
+            "MediaType",
+            uno::makeAny(OUString("application/vnd.openxmlformats-package.relationships+xml")));
+
+        m_xNewRelInfoStream.clear();
+        if (m_nRelInfoStatus == RELINFO_CHANGED_STREAM)
+        {
+            m_aRelInfo = uno::Sequence<uno::Sequence<beans::StringPair>>();
+            m_nRelInfoStatus = RELINFO_NO_INIT;
+        }
+        else
+            m_nRelInfoStatus = RELINFO_READ;
+    }
+
+    if ( !m_xRelStorage.is() )
+        return;
+
+    if ( m_xRelStorage->hasElements() )
+    {
+        uno::Reference< embed::XTransactedObject > xTrans( m_xRelStorage, uno::UNO_QUERY_THROW );
+        xTrans->commit();
+    }
+
+    if ( xNewPackageFolder.is() && xNewPackageFolder->hasByName( aRelsStorName ) )
+        xNewPackageFolder->removeByName( aRelsStorName );
+
+    if ( !m_xRelStorage->hasElements() )
+    {
+        // the empty relations storage should not be created
+        delete m_pRelStorElement;
+        m_pRelStorElement = nullptr;
+        m_xRelStorage.clear();
+    }
+    else if ( m_pRelStorElement && m_pRelStorElement->m_xStorage && xNewPackageFolder.is() )
+        m_pRelStorElement->m_xStorage->InsertIntoPackageFolder( aRelsStorName, xNewPackageFolder );
 }
 
 // OStorage implementation
@@ -1963,29 +1963,29 @@ void OStorage::BroadcastTransaction( sal_Int8 nMessage )
     ::cppu::OInterfaceContainerHelper* pContainer =
             m_pData->m_aListenersContainer.getContainer(
                 cppu::UnoType<embed::XTransactionListener>::get());
-    if ( pContainer )
-    {
-           ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );
-           while ( pIterator.hasMoreElements( ) )
-           {
-            OSL_ENSURE( nMessage >= 1 && nMessage <= 4, "Wrong internal notification code is used!" );
+    if ( !pContainer )
+           return;
 
-            switch( nMessage )
-            {
-                case STOR_MESS_PRECOMMIT:
-                       static_cast<embed::XTransactionListener*>( pIterator.next( ) )->preCommit( aSource );
-                    break;
-                case STOR_MESS_COMMITTED:
-                       static_cast<embed::XTransactionListener*>( pIterator.next( ) )->commited( aSource );
-                    break;
-                case STOR_MESS_PREREVERT:
-                       static_cast<embed::XTransactionListener*>( pIterator.next( ) )->preRevert( aSource );
-                    break;
-                case STOR_MESS_REVERTED:
-                       static_cast<embed::XTransactionListener*>( pIterator.next( ) )->reverted( aSource );
-                    break;
-            }
-           }
+    ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );
+    while ( pIterator.hasMoreElements( ) )
+    {
+        OSL_ENSURE( nMessage >= 1 && nMessage <= 4, "Wrong internal notification code is used!" );
+
+        switch( nMessage )
+        {
+            case STOR_MESS_PRECOMMIT:
+                   static_cast<embed::XTransactionListener*>( pIterator.next( ) )->preCommit( aSource );
+                break;
+            case STOR_MESS_COMMITTED:
+                   static_cast<embed::XTransactionListener*>( pIterator.next( ) )->commited( aSource );
+                break;
+            case STOR_MESS_PREREVERT:
+                   static_cast<embed::XTransactionListener*>( pIterator.next( ) )->preRevert( aSource );
+                break;
+            case STOR_MESS_REVERTED:
+                   static_cast<embed::XTransactionListener*>( pIterator.next( ) )->reverted( aSource );
+                break;
+        }
     }
 }
 
@@ -4039,48 +4039,48 @@ void SAL_CALL OStorage::removeEncryption()
         throw uno::RuntimeException( THROW_WHERE ); // the interface must be visible only for package storage
 
     SAL_WARN_IF( !m_pData->m_bIsRoot, "package.xstor", "removeEncryption() method is not available for nonroot storages!" );
-    if ( m_pData->m_bIsRoot )
+    if ( !m_pData->m_bIsRoot )
+        return;
+
+    try {
+        m_pImpl->ReadContents();
+    }
+    catch ( const uno::RuntimeException& )
     {
-        try {
-            m_pImpl->ReadContents();
-        }
-        catch ( const uno::RuntimeException& )
-        {
-            TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:");
-            throw;
-        }
-        catch ( const uno::Exception& )
-        {
-            uno::Any aCaught( ::cppu::getCaughtException() );
-            SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
+        TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:");
+        throw;
+    }
+    catch ( const uno::Exception& )
+    {
+        uno::Any aCaught( ::cppu::getCaughtException() );
+        SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
 
-            throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
-                                                static_cast< OWeakObject* >( this ),
-                                                aCaught );
-        }
+        throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
+                                            static_cast< OWeakObject* >( this ),
+                                            aCaught );
+    }
 
-        // TODO: check if the password is valid
-        // update all streams that was encrypted with old password
+    // TODO: check if the password is valid
+    // update all streams that was encrypted with old password
 
-        uno::Reference< beans::XPropertySet > xPackPropSet( m_pImpl->m_xPackage, uno::UNO_QUERY_THROW );
-        try
-        {
-            xPackPropSet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY,
-                                            uno::makeAny( uno::Sequence< beans::NamedValue >() ) );
+    uno::Reference< beans::XPropertySet > xPackPropSet( m_pImpl->m_xPackage, uno::UNO_QUERY_THROW );
+    try
+    {
+        xPackPropSet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY,
+                                        uno::makeAny( uno::Sequence< beans::NamedValue >() ) );
 
-            m_pImpl->m_bHasCommonEncryptionData = false;
-            m_pImpl->m_aCommonEncryptionData.clear();
-        }
-        catch( const uno::RuntimeException& )
-        {
-            TOOLS_WARN_EXCEPTION( "package.xstor", "The call must not fail, it is pretty simple!" );
-            throw;
-        }
-        catch( const uno::Exception& )
-        {
-            TOOLS_WARN_EXCEPTION( "package.xstor", "The call must not fail, it is pretty simple!" );
-            throw io::IOException( THROW_WHERE );
-        }
+        m_pImpl->m_bHasCommonEncryptionData = false;
+        m_pImpl->m_aCommonEncryptionData.clear();
+    }
+    catch( const uno::RuntimeException& )
+    {
+        TOOLS_WARN_EXCEPTION( "package.xstor", "The call must not fail, it is pretty simple!" );
+        throw;
+    }
+    catch( const uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION( "package.xstor", "The call must not fail, it is pretty simple!" );
+        throw io::IOException( THROW_WHERE );
     }
 }
 
@@ -4103,42 +4103,42 @@ void SAL_CALL OStorage::setEncryptionData( const uno::Sequence< beans::NamedValu
         throw uno::RuntimeException( THROW_WHERE "Unexpected empty encryption data!" );
 
     SAL_WARN_IF( !m_pData->m_bIsRoot, "package.xstor", "setEncryptionData() method is not available for nonroot storages!" );
-    if ( m_pData->m_bIsRoot )
+    if ( !m_pData->m_bIsRoot )
+        return;
+
+    try {
+        m_pImpl->ReadContents();
+    }
+    catch ( const uno::RuntimeException& )
     {
-        try {
-            m_pImpl->ReadContents();
-        }
-        catch ( const uno::RuntimeException& )
-        {
-            TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:");
-            throw;
-        }
-        catch ( const uno::Exception& )
-        {
-            uno::Any aCaught( ::cppu::getCaughtException() );
-            SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
+        TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:");
+        throw;
+    }
+    catch ( const uno::Exception& )
+    {
+        uno::Any aCaught( ::cppu::getCaughtException() );
+        SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
 
-            throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
-                                static_cast< OWeakObject* >( this ),
-                                aCaught );
-        }
+        throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
+                            static_cast< OWeakObject* >( this ),
+                            aCaught );
+    }
 
-        uno::Reference< beans::XPropertySet > xPackPropSet( m_pImpl->m_xPackage, uno::UNO_QUERY_THROW );
-        try
-        {
-            ::comphelper::SequenceAsHashMap aEncryptionMap( aEncryptionData );
-            xPackPropSet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY,
-                                            uno::makeAny( aEncryptionMap.getAsConstNamedValueList() ) );
+    uno::Reference< beans::XPropertySet > xPackPropSet( m_pImpl->m_xPackage, uno::UNO_QUERY_THROW );
+    try
+    {
+        ::comphelper::SequenceAsHashMap aEncryptionMap( aEncryptionData );
+        xPackPropSet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY,
+                                        uno::makeAny( aEncryptionMap.getAsConstNamedValueList() ) );
 
-            m_pImpl->m_bHasCommonEncryptionData = true;
-            m_pImpl->m_aCommonEncryptionData = aEncryptionMap;
-        }
-        catch( const uno::Exception& )
-        {
-            TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:" );
+        m_pImpl->m_bHasCommonEncryptionData = true;
+        m_pImpl->m_aCommonEncryptionData = aEncryptionMap;
+    }
+    catch( const uno::Exception& )
+    {
+        TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:" );
 
-            throw io::IOException( THROW_WHERE );
-        }
+        throw io::IOException( THROW_WHERE );
     }
 }
 
@@ -4168,46 +4168,46 @@ void SAL_CALL OStorage::setEncryptionAlgorithms( const uno::Sequence< beans::Nam
         throw uno::RuntimeException( THROW_WHERE "Unexpected empty encryption algorithms list!" );
 
     SAL_WARN_IF( !m_pData->m_bIsRoot, "package.xstor", "setEncryptionAlgorithms() method is not available for nonroot storages!" );
-    if ( m_pData->m_bIsRoot )
+    if ( !m_pData->m_bIsRoot )
+        return;
+
+    try {
+        m_pImpl->ReadContents();
+    }
+    catch ( const uno::RuntimeException& )
     {
-        try {
-            m_pImpl->ReadContents();
-        }
-        catch ( const uno::RuntimeException& )
-        {
-            TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:");
-            throw;
-        }
-        catch ( const uno::Exception& )
-        {
-            uno::Any aCaught( ::cppu::getCaughtException() );
-            SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
+        TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:");
+        throw;
+    }
+    catch ( const uno::Exception& )
+    {
+        uno::Any aCaught( ::cppu::getCaughtException() );
+        SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
 
-            throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
-                                                static_cast< OWeakObject* >( this ),
-                                                aCaught );
-        }
+        throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
+                                            static_cast< OWeakObject* >( this ),
+                                            aCaught );
+    }
 
-        uno::Reference< beans::XPropertySet > xPackPropSet( m_pImpl->m_xPackage, uno::UNO_QUERY_THROW );
-        try
-        {
-            xPackPropSet->setPropertyValue( ENCRYPTION_ALGORITHMS_PROPERTY,
-                                            uno::makeAny( aAlgorithms ) );
-        }
-        catch ( const uno::RuntimeException& )
-        {
-            TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:");
-            throw;
-        }
-        catch( const uno::Exception& )
-        {
-            uno::Any aCaught( ::cppu::getCaughtException() );
-            SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
+    uno::Reference< beans::XPropertySet > xPackPropSet( m_pImpl->m_xPackage, uno::UNO_QUERY_THROW );
+    try
+    {
+        xPackPropSet->setPropertyValue( ENCRYPTION_ALGORITHMS_PROPERTY,
+                                        uno::makeAny( aAlgorithms ) );
+    }
+    catch ( const uno::RuntimeException& )
+    {
+        TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow:");
+        throw;
+    }
+    catch( const uno::Exception& )
+    {
+        uno::Any aCaught( ::cppu::getCaughtException() );
+        SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
 
-            throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
-                                                static_cast< OWeakObject* >( this ),
-                                                aCaught );
-        }
+        throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
+                                            static_cast< OWeakObject* >( this ),
+                                            aCaught );
     }
 }
 
@@ -4228,46 +4228,46 @@ void SAL_CALL OStorage::setGpgProperties( const uno::Sequence< uno::Sequence< be
         throw uno::RuntimeException( THROW_WHERE "Unexpected empty encryption algorithms list!" );
 
     SAL_WARN_IF( !m_pData->m_bIsRoot, "package.xstor", "setGpgProperties() method is not available for nonroot storages!" );
-    if ( m_pData->m_bIsRoot )
+    if ( !m_pData->m_bIsRoot )
+        return;
+
+    try {
+        m_pImpl->ReadContents();
+    }
+    catch ( const uno::RuntimeException& aRuntimeException )
     {
-        try {
-            m_pImpl->ReadContents();
-        }
-        catch ( const uno::RuntimeException& aRuntimeException )
-        {
-            SAL_INFO("package.xstor", "Rethrow: " << aRuntimeException.Message);
-            throw;
-        }
-        catch ( const uno::Exception& )
-        {
-            uno::Any aCaught( ::cppu::getCaughtException() );
-            SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
+        SAL_INFO("package.xstor", "Rethrow: " << aRuntimeException.Message);
+        throw;
+    }
+    catch ( const uno::Exception& )
+    {
+        uno::Any aCaught( ::cppu::getCaughtException() );
+        SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
 
-            throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
-                                                static_cast< OWeakObject* >( this ),
-                                                aCaught );
-        }
+        throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
+                                            static_cast< OWeakObject* >( this ),
+                                            aCaught );
+    }
 
-        uno::Reference< beans::XPropertySet > xPackPropSet( m_pImpl->m_xPackage, uno::UNO_QUERY_THROW );
-        try
-        {
-            xPackPropSet->setPropertyValue( ENCRYPTION_GPG_PROPERTIES,
-                                            uno::makeAny( aProps ) );
-        }
-        catch ( const uno::RuntimeException& aRuntimeException )
-        {
-            SAL_INFO("package.xstor", "Rethrow: " << aRuntimeException.Message);
-            throw;
-        }
-        catch( const uno::Exception& )
-        {
-            uno::Any aCaught( ::cppu::getCaughtException() );
-            SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
+    uno::Reference< beans::XPropertySet > xPackPropSet( m_pImpl->m_xPackage, uno::UNO_QUERY_THROW );
+    try
+    {
+        xPackPropSet->setPropertyValue( ENCRYPTION_GPG_PROPERTIES,
+                                        uno::makeAny( aProps ) );
+    }
+    catch ( const uno::RuntimeException& aRuntimeException )
+    {
+        SAL_INFO("package.xstor", "Rethrow: " << aRuntimeException.Message);
+        throw;
+    }
+    catch( const uno::Exception& )
+    {
+        uno::Any aCaught( ::cppu::getCaughtException() );
+        SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
 
-            throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
-                                                static_cast< OWeakObject* >( this ),
-                                                aCaught );
-        }
+        throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
+                                            static_cast< OWeakObject* >( this ),
+                                            aCaught );
     }
 }
 
