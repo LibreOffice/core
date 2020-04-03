@@ -33,6 +33,8 @@
 #include <SkPixelRef.h>
 #include <SkSurface.h>
 #include <SkSwizzle.h>
+#include <SkColorFilter.h>
+#include <SkColorMatrix.h>
 
 #include <skia/utils.hxx>
 #include <skia/zone.hxx>
@@ -347,9 +349,35 @@ bool SkiaSalBitmap::ConvertToGreyscale()
 #ifdef DBG_UTIL
     assert(mWriteAccessCount == 0);
 #endif
-    // Skia can convert color SkBitmap to a greyscale one (draw using SkCanvas),
-    // but it uses different coefficients for the color->grey conversion than VCL.
-    // So just let VCL do it.
+    // Normally this would need to convert contents of mBuffer for all possible formats,
+    // so just let the VCL algorithm do it.
+    // The exception is when this bitmap contains only SkImage, which most probably
+    // comes from SkiaSalGraphicsImpl::GetBitmap(). That is often used by the horrible
+    // separate-alpha-outdev hack, and followed by a later call to GetAlphaSkBitmap().
+    // Avoid the costly SkImage->buffer->SkImage conversion.
+    if (!mBuffer && mImage)
+    {
+        if (mBitCount == 8 && mPalette == Bitmap::GetGreyPalette(256))
+            return true;
+        sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(mPixelsSize);
+        SkPaint paint;
+        paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
+        // VCL uses different coefficients for conversion to gray than Skia, so use the VCL
+        // values from Bitmap::ImplMakeGreyscales(). Do not use kGray_8_SkColorType,
+        // Skia would use its gray conversion formula.
+        // NOTE: The matrix is 4x5 organized as columns (i.e. each line is a column, not a row).
+        constexpr SkColorMatrix toGray(77 / 256.0, 151 / 256.0, 28 / 256.0, 0, 0, // R column
+                                       77 / 256.0, 151 / 256.0, 28 / 256.0, 0, 0, // G column
+                                       77 / 256.0, 151 / 256.0, 28 / 256.0, 0, 0, // B column
+                                       0, 0, 0, 1, 0); // don't modify alpha
+        paint.setColorFilter(SkColorFilters::Matrix(toGray));
+        surface->getCanvas()->drawImage(mImage, 0, 0, &paint);
+        mBitCount = 8;
+        mPalette = Bitmap::GetGreyPalette(256);
+        ResetToSkImage(surface->makeImageSnapshot());
+        SAL_INFO("vcl.skia.trace", "converttogreyscale(" << this << ")");
+        return true;
+    }
     return false;
 }
 
