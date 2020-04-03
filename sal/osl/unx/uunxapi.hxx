@@ -28,6 +28,7 @@
 #include <rtl/ustring.h>
 
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 
 int access_u(const rtl_uString* pustrPath, int mode);
 
@@ -96,6 +97,7 @@ namespace osl
         return mkdir_u(aPath.pData, aMode);
     }
 
+    // The following are for debugging output only, don't bother getting upset about performance etc.
     inline OString openFlagsToString(int flags)
     {
         OString result;
@@ -215,6 +217,34 @@ namespace osl
         }
         return result;
     }
+
+#if defined SAL_LOG_INFO
+    void registerPathForFd(int fd, const char *path);
+
+    void unregisterPathForFd(int fd);
+
+    OUString fdAndPath(int fd);
+
+    void dumpFdToPathMap();
+#else
+    inline void registerPathForFd(int, const char *)
+    {
+    }
+
+    inline void unregisterPathForFd(int)
+    {
+    }
+
+    inline OUString fdAndPath(int)
+    {
+        return "";
+    }
+
+    inline void dumpFdToPathMap()
+    {
+    }
+#endif
+
 
 } // end namespace osl
 
