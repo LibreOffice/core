@@ -82,7 +82,12 @@ void Manager::reduceGraphicMemory()
 
     std::scoped_lock<std::recursive_mutex> aGuard(maMutex);
 
-    for (ImpGraphic* pEachImpGraphic : m_pImpGraphicList)
+    // make a copy of m_pImpGraphicList because if we swap out a svg, the svg
+    // filter may create more temp Graphics which are auto-added to
+    // m_pImpGraphicList invalidating a loop over m_pImpGraphicList, e.g.
+    // reexport of tdf118346-1.odg
+    o3tl::sorted_vector<ImpGraphic*> aImpGraphicList = m_pImpGraphicList;
+    for (ImpGraphic* pEachImpGraphic : aImpGraphicList)
     {
         if (mnUsedSize < mnMemoryLimit * 0.7)
             return;
