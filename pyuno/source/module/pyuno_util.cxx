@@ -112,33 +112,33 @@ void log( RuntimeCargo * cargo, sal_Int32 level, const OUString &logString )
 
 void log( RuntimeCargo * cargo, sal_Int32 level, const char *str )
 {
-    if( isLog( cargo, level ) )
-    {
-        static const char *strLevel[] = { "NONE", "CALL", "ARGS" };
+    if( !isLog( cargo, level ) )
+        return;
 
-        TimeValue systemTime;
-        TimeValue localTime;
-        oslDateTime localDateTime;
+    static const char *strLevel[] = { "NONE", "CALL", "ARGS" };
 
-        osl_getSystemTime( &systemTime );
-        osl_getLocalTimeFromSystemTime( &systemTime, &localTime );
-        osl_getDateTimeFromTimeValue( &localTime, &localDateTime );
+    TimeValue systemTime;
+    TimeValue localTime;
+    oslDateTime localDateTime;
 
-        fprintf( cargo->logFile,
-                 "%4i-%02i-%02i %02i:%02i:%02i,%03lu [%s,tid %ld]: %s\n",
-                 localDateTime.Year,
-                 localDateTime.Month,
-                 localDateTime.Day,
-                 localDateTime.Hours,
-                 localDateTime.Minutes,
-                 localDateTime.Seconds,
-                 sal::static_int_cast< unsigned long >(
-                     localDateTime.NanoSeconds/1000000),
-                 strLevel[level],
-                 sal::static_int_cast< long >(
-                     static_cast<sal_Int32>(osl::Thread::getCurrentIdentifier())),
-                 str );
-    }
+    osl_getSystemTime( &systemTime );
+    osl_getLocalTimeFromSystemTime( &systemTime, &localTime );
+    osl_getDateTimeFromTimeValue( &localTime, &localDateTime );
+
+    fprintf( cargo->logFile,
+             "%4i-%02i-%02i %02i:%02i:%02i,%03lu [%s,tid %ld]: %s\n",
+             localDateTime.Year,
+             localDateTime.Month,
+             localDateTime.Day,
+             localDateTime.Hours,
+             localDateTime.Minutes,
+             localDateTime.Seconds,
+             sal::static_int_cast< unsigned long >(
+                 localDateTime.NanoSeconds/1000000),
+             strLevel[level],
+             sal::static_int_cast< long >(
+                 static_cast<sal_Int32>(osl::Thread::getCurrentIdentifier())),
+             str );
 }
 
 namespace {
