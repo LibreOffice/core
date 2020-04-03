@@ -545,6 +545,11 @@ void SfxViewShell::SetPrinter_Impl( VclPtr<SfxPrinter>& pNewPrinter )
     if ( (aTempPrtName != aDocPrtName) || (pDocPrinter->IsDefPrinter() != pNewPrinter->IsDefPrinter()) )
     {
         nChangedFlags |= SfxPrinterChangeFlags::PRINTER|SfxPrinterChangeFlags::JOBSETUP;
+        if ( ! (pNewPrinter->GetOptions() == pDocPrinter->GetOptions()) )
+        {
+            nChangedFlags |= SfxPrinterChangeFlags::OPTIONS;
+        }
+
         pDocPrinter = pNewPrinter;
     }
     else
