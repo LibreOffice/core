@@ -347,17 +347,27 @@ oslFileError FileHandle_Impl::readAt(
     }
 
     ssize_t nBytes = ::pread(m_fd, pBuffer, nBytesRequested, nOffset);
-    if ((nBytes == -1) && (errno == EOVERFLOW))
+    int saved_errno = errno;
+    if ((nBytes == -1) && (saved_errno == EOVERFLOW))
     {
         /* Some 'pread()'s fail with EOVERFLOW when reading at (or past)
          * end-of-file, different from 'lseek() + read()' behaviour.
          * Returning '0 bytes read' and 'osl_File_E_None' instead.
          */
+        SAL_INFO("sal.file", "pread(" << m_fd << "," << pBuffer << "," << nBytesRequested << "," << nOffset << "): " << UnixErrnoString(saved_errno));
         nBytes = 0;
+    }
+    else if (nBytes == -1)
+    {
+        SAL_INFO("sal.file", "pread(" << m_fd << "," << pBuffer << "," << nBytesRequested << "," << nOffset << "): " << UnixErrnoString(saved_errno));
+    }
+    else
+    {
+        SAL_INFO("sal.file", "pread(" << m_fd << "," << pBuffer << "," << nBytesRequested << "," << nOffset << ") => " << nBytes);
     }
 
     if (nBytes == -1)
-        return oslTranslateFileError(errno);
+        return oslTranslateFileError(saved_errno);
 
     *pBytesRead = nBytes;
 
@@ -379,8 +389,16 @@ oslFileError FileHandle_Impl::writeAt(
         return osl_File_E_BADF;
 
     ssize_t nBytes = ::pwrite(m_fd, pBuffer, nBytesToWrite, nOffset);
+    int saved_errno = errno;
     if (nBytes == -1)
-        return oslTranslateFileError(errno);
+    {
+        SAL_INFO("sal.file", "pwrite(" << m_fd << "," << pBuffer << "," << nBytesToWrite << "," << nOffset << "): " << UnixErrnoString(saved_errno));
+        return oslTranslateFileError(saved_errno);
+    }
+    else
+    {
+        SAL_INFO("sal.file", "pwrite(" << m_fd << "," << pBuffer << "," << nBytesToWrite << "," << nOffset << ") => " << nBytes);
+    }
 
     m_size = std::max(m_size, sal::static_int_cast< sal_uInt64 >(nOffset + nBytes));
 
@@ -399,8 +417,16 @@ oslFileError FileHandle_Impl::readFileAt(
     {
         // not seekable (pipe)
         ssize_t nBytes = ::read(m_fd, pBuffer, nBytesRequested);
+        int saved_errno = errno;
         if (nBytes == -1)
-            return oslTranslateFileError(errno);
+        {
+            SAL_INFO("sal.file", "read(" << m_fd << "," << pBuffer << "," << nBytesRequested << "): " << UnixErrnoString(saved_errno));
+            return oslTranslateFileError(saved_errno);
+        }
+        else
+        {
+            SAL_INFO("sal.file", "read(" << m_fd << "," << pBuffer << "," << nBytesRequested << ") => " << nBytes);
+        }
 
         *pBytesRead = nBytes;
 
@@ -480,8 +506,16 @@ oslFileError FileHandle_Impl::writeFileAt(
     {
         // not seekable (pipe)
         ssize_t nBytes = ::write(m_fd, pBuffer, nBytesToWrite);
+        int saved_errno = errno;
         if (nBytes == -1)
-            return oslTranslateFileError(errno);
+        {
+            SAL_INFO("sal.file", "write(" << m_fd << "," << pBuffer << "," << nBytesToWrite << "): " << UnixErrnoString(saved_errno));
+            return oslTranslateFileError(saved_errno);
+        }
+        else
+        {
+            SAL_INFO("sal.file", "write(" << m_fd << "," << pBuffer << "," << nBytesToWrite << ") => " <<nBytes);
+        }
 
         *pBytesWritten = nBytes;
 
