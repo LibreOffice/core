@@ -1088,8 +1088,6 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
         // legendEntry
         Reference<chart2::XCoordinateSystemContainer> xCooSysContainer(mxNewDiagram, UNO_QUERY_THROW);
         const Sequence<Reference<chart2::XCoordinateSystem>> xCooSysSequence(xCooSysContainer->getCoordinateSystems());
-        if (!xCooSysSequence.hasElements())
-            return;
 
         sal_Int32 nIndex = 0;
         bool bShowLegendEntry;
