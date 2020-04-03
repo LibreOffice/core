@@ -1551,6 +1551,45 @@ DECLARE_OOXMLIMPORT_TEST(testTdf108995, "xml_space.docx")
                          paragraph->getString());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testGroupShapeTextHighlight, "tdf131841_HighlightColorGroupedShape.docx")
+{
+    // tdf#131841 Highligh color of text in grouped shapes was not imported.
+
+    // These are the possible highlight colors in MSO Word. Check that we import them properly.
+    const std::vector<sal_uInt32> xColors {
+        0xFFFF00UL, // yellow
+        0x00FF00UL, // green
+        0x00FFFFUL, // cyan
+        0xFF00FFUL, // magenta
+        0x0000FFUL, // blue
+        0xFF0000UL, // red
+        0x00008BUL, // dark blue
+        0x008B8BUL, // dark cyan
+        0x006400UL, // dark green
+        0x800080UL, // dark magenta
+        0x8B0000UL, // dark red
+        0x808000UL, // dark yellow
+        0xA9A9A9UL, // dark grey
+        0xD3D3D3UL, // light grey
+        0x000000UL  // black
+    };
+
+    // The grouped shape, consists of 15 rectangles.
+    uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
+
+    // Iterate through all of the rectangles and check the colors of the texts.
+    // They should correspond to the list above.
+    for (size_t idx = 0; idx < xColors.size(); ++idx)
+    {
+        uno::Reference<text::XTextRange> xTextRange(xGroupShape->getByIndex(idx), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> firstParagraph = getParagraphOfText(1, xTextRange->getText());
+        uno::Reference<text::XTextRange> firstRun = getRun(firstParagraph, 1);
+        uno::Reference<beans::XPropertySet> props(firstRun, uno::UNO_QUERY_THROW);
+
+        CPPUNIT_ASSERT_EQUAL(xColors[idx], props->getPropertyValue("CharBackColor").get<sal_uInt32>());
+    }
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
