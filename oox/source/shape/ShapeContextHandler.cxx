@@ -326,21 +326,21 @@ void SAL_CALL ShapeContextHandler::endFastElement(::sal_Int32 Element)
         xContextHandler->endFastElement(Element);
     // In case a textbox is sent, and later we get additional properties for
     // the textbox, then the wps context is not cleared, so do that here.
-    if (Element == (NMSP_wps | XML_wsp))
+    if (Element != (NMSP_wps | XML_wsp))
+        return;
+
+    uno::Reference<lang::XServiceInfo> xServiceInfo(mxSavedShape, uno::UNO_QUERY);
+    bool bTextFrame = xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.text.TextFrame");
+    bool bTextBox = false;
+    if (!bTextFrame)
     {
-        uno::Reference<lang::XServiceInfo> xServiceInfo(mxSavedShape, uno::UNO_QUERY);
-        bool bTextFrame = xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.text.TextFrame");
-        bool bTextBox = false;
-        if (!bTextFrame)
-        {
-            uno::Reference<beans::XPropertySet> xPropertySet(mxSavedShape, uno::UNO_QUERY);
-            if (xPropertySet.is())
-                xPropertySet->getPropertyValue("TextBox") >>= bTextBox;
-        }
-        if (bTextFrame || bTextBox)
-            mxWpsContext.clear();
-        mxSavedShape.clear();
+        uno::Reference<beans::XPropertySet> xPropertySet(mxSavedShape, uno::UNO_QUERY);
+        if (xPropertySet.is())
+            xPropertySet->getPropertyValue("TextBox") >>= bTextBox;
     }
+    if (bTextFrame || bTextBox)
+        mxWpsContext.clear();
+    mxSavedShape.clear();
 }
 
 void SAL_CALL ShapeContextHandler::endUnknownElement

@@ -324,21 +324,21 @@ VbaFormControl::~VbaFormControl()
 
 void VbaFormControl::importModelOrStorage( BinaryInputStream& rInStrm, StorageBase& rStrg, const AxClassTable& rClassTable )
 {
-    if( mxSiteModel.get() )
+    if( !mxSiteModel.get() )
+        return;
+
+    if( mxSiteModel->isContainer() )
     {
-        if( mxSiteModel->isContainer() )
-        {
-            StorageRef xSubStrg = rStrg.openSubStorage( mxSiteModel->getSubStorageName(), false );
-            OSL_ENSURE( xSubStrg.get(), "VbaFormControl::importModelOrStorage - cannot find storage for embedded control" );
-            if( xSubStrg.get() )
-                importStorage( *xSubStrg, rClassTable );
-        }
-        else if( !rInStrm.isEof() )
-        {
-            sal_Int64 nNextStrmPos = rInStrm.tell() + mxSiteModel->getStreamLength();
-            importControlModel( rInStrm, rClassTable );
-            rInStrm.seek( nNextStrmPos );
-        }
+        StorageRef xSubStrg = rStrg.openSubStorage( mxSiteModel->getSubStorageName(), false );
+        OSL_ENSURE( xSubStrg.get(), "VbaFormControl::importModelOrStorage - cannot find storage for embedded control" );
+        if( xSubStrg.get() )
+            importStorage( *xSubStrg, rClassTable );
+    }
+    else if( !rInStrm.isEof() )
+    {
+        sal_Int64 nNextStrmPos = rInStrm.tell() + mxSiteModel->getStreamLength();
+        importControlModel( rInStrm, rClassTable );
+        rInStrm.seek( nNextStrmPos );
     }
 }
 
@@ -350,7 +350,10 @@ OUString VbaFormControl::getControlName() const
 void VbaFormControl::createAndConvert( sal_Int32 nCtrlIndex,
         const Reference< XNameContainer >& rxParentNC, const ControlConverter& rConv ) const
 {
-    if( rxParentNC.is() && mxSiteModel.get() && mxCtrlModel.get() ) try
+    if( !(rxParentNC.is() && mxSiteModel.get() && mxCtrlModel.get()) )
+        return;
+
+    try
     {
         // create the control model
         OUString aServiceName = mxCtrlModel->getServiceName();
@@ -385,97 +388,97 @@ void VbaFormControl::importStorage( StorageBase& rStrg, const AxClassTable& rCla
     createControlModel( rClassTable );
     AxContainerModelBase* pContainerModel = dynamic_cast< AxContainerModelBase* >( mxCtrlModel.get() );
     OSL_ENSURE( pContainerModel, "VbaFormControl::importStorage - missing container control model" );
-    if( pContainerModel )
+    if( !pContainerModel )
+        return;
+
+    /*  Open the 'f' stream containing the model of this control and a list
+        of site models for all child controls. */
+    BinaryXInputStream aFStrm( rStrg.openInputStream( "f" ), true );
+    OSL_ENSURE( !aFStrm.isEof(), "VbaFormControl::importStorage - missing 'f' stream" );
+
+    /*  Read the properties of this container control and the class table
+        (into the maClassTable vector) containing a list of GUIDs for
+        exotic embedded controls. */
+    if( !(!aFStrm.isEof() && pContainerModel->importBinaryModel( aFStrm ) && pContainerModel->importClassTable( aFStrm, maClassTable )) )
+        return;
+
+    /*  Read the site models of all embedded controls (this fills the
+        maControls vector). Ignore failure of importSiteModels() but
+        try to import as much controls as possible. */
+    importEmbeddedSiteModels( aFStrm );
+    /*  Open the 'o' stream containing models of embedded simple
+        controls. Stream may be empty or missing, if this control
+        contains no controls or only container controls. */
+    BinaryXInputStream aOStrm( rStrg.openInputStream( "o" ), true );
+
+    /*  Iterate over all embedded controls, import model from 'o'
+        stream (for embedded simple controls) or from the substorage
+        (for embedded container controls). */
+    maControls.forEachMem( &VbaFormControl::importModelOrStorage,
+        ::std::ref( aOStrm ), ::std::ref( rStrg ), ::std::cref( maClassTable ) );
+
+    // Special handling for multi-page which has non-standard
+    // containment and additionally needs to re-order Page children
+    if ( pContainerModel->getControlType() == API_CONTROL_MULTIPAGE )
     {
-        /*  Open the 'f' stream containing the model of this control and a list
-            of site models for all child controls. */
-        BinaryXInputStream aFStrm( rStrg.openInputStream( "f" ), true );
-        OSL_ENSURE( !aFStrm.isEof(), "VbaFormControl::importStorage - missing 'f' stream" );
-
-        /*  Read the properties of this container control and the class table
-            (into the maClassTable vector) containing a list of GUIDs for
-            exotic embedded controls. */
-        if( !aFStrm.isEof() && pContainerModel->importBinaryModel( aFStrm ) && pContainerModel->importClassTable( aFStrm, maClassTable ) )
+        AxMultiPageModel* pMultiPage = dynamic_cast< AxMultiPageModel* >( pContainerModel );
+        assert(pMultiPage);
         {
-            /*  Read the site models of all embedded controls (this fills the
-                maControls vector). Ignore failure of importSiteModels() but
-                try to import as much controls as possible. */
-            importEmbeddedSiteModels( aFStrm );
-            /*  Open the 'o' stream containing models of embedded simple
-                controls. Stream may be empty or missing, if this control
-                contains no controls or only container controls. */
-            BinaryXInputStream aOStrm( rStrg.openInputStream( "o" ), true );
+            BinaryXInputStream aXStrm( rStrg.openInputStream( "x" ), true );
+            pMultiPage->importPageAndMultiPageProperties( aXStrm, maControls.size() );
+        }
+        typedef std::unordered_map< sal_uInt32, std::shared_ptr< VbaFormControl > > IdToPageMap;
+        IdToPageMap idToPage;
+        AxArrayString sCaptions;
 
-            /*  Iterate over all embedded controls, import model from 'o'
-                stream (for embedded simple controls) or from the substorage
-                (for embedded container controls). */
-            maControls.forEachMem( &VbaFormControl::importModelOrStorage,
-                ::std::ref( aOStrm ), ::std::ref( rStrg ), ::std::cref( maClassTable ) );
-
-            // Special handling for multi-page which has non-standard
-            // containment and additionally needs to re-order Page children
-            if ( pContainerModel->getControlType() == API_CONTROL_MULTIPAGE )
+        for (auto const& control : maControls)
+        {
+            auto& elem = control->mxCtrlModel;
+            if (!elem)
             {
-                AxMultiPageModel* pMultiPage = dynamic_cast< AxMultiPageModel* >( pContainerModel );
-                assert(pMultiPage);
-                {
-                    BinaryXInputStream aXStrm( rStrg.openInputStream( "x" ), true );
-                    pMultiPage->importPageAndMultiPageProperties( aXStrm, maControls.size() );
-                }
-                typedef std::unordered_map< sal_uInt32, std::shared_ptr< VbaFormControl > > IdToPageMap;
-                IdToPageMap idToPage;
-                AxArrayString sCaptions;
-
-                for (auto const& control : maControls)
-                {
-                    auto& elem = control->mxCtrlModel;
-                    if (!elem)
-                    {
-                        SAL_WARN("oox", "empty control model");
-                        continue;
-                    }
-                    if (elem->getControlType() == API_CONTROL_PAGE)
-                    {
-                        VbaSiteModelRef xPageSiteRef = control->mxSiteModel;
-                        if ( xPageSiteRef.get() )
-                            idToPage[ xPageSiteRef->getId() ] = control;
-                    }
-                    else
-                    {
-                        AxTabStripModel* pTabStrip = static_cast<AxTabStripModel*>(elem.get());
-                        sCaptions = pTabStrip->maItems;
-                        pMultiPage->mnActiveTab = pTabStrip->mnListIndex;
-                        pMultiPage->mnTabStyle = pTabStrip->mnTabStyle;
-                    }
-                }
-                // apply caption/titles to pages
-
-                maControls.clear();
-                // need to sort the controls according to the order of the ids
-                if ( sCaptions.size() == idToPage.size() )
-                {
-                    AxArrayString::iterator itCaption = sCaptions.begin();
-                    for ( const auto& rCtrlId : pMultiPage->mnIDs )
-                    {
-                        IdToPageMap::iterator iter = idToPage.find( rCtrlId );
-                        if ( iter != idToPage.end() )
-                        {
-                            AxPageModel* pPage = static_cast<AxPageModel*> ( iter->second->mxCtrlModel.get() );
-
-                            pPage->importProperty( XML_Caption, *itCaption );
-                            maControls.push_back( iter->second );
-                        }
-                        ++itCaption;
-                    }
-                }
+                SAL_WARN("oox", "empty control model");
+                continue;
             }
-            /*  Reorder the controls (sorts all option buttons of an option
-                group together), and move all children of all embedded frames
-                (group boxes) to this control (UNO group boxes cannot contain
-                other controls). */
-            finalizeEmbeddedControls();
+            if (elem->getControlType() == API_CONTROL_PAGE)
+            {
+                VbaSiteModelRef xPageSiteRef = control->mxSiteModel;
+                if ( xPageSiteRef.get() )
+                    idToPage[ xPageSiteRef->getId() ] = control;
+            }
+            else
+            {
+                AxTabStripModel* pTabStrip = static_cast<AxTabStripModel*>(elem.get());
+                sCaptions = pTabStrip->maItems;
+                pMultiPage->mnActiveTab = pTabStrip->mnListIndex;
+                pMultiPage->mnTabStyle = pTabStrip->mnTabStyle;
+            }
+        }
+        // apply caption/titles to pages
+
+        maControls.clear();
+        // need to sort the controls according to the order of the ids
+        if ( sCaptions.size() == idToPage.size() )
+        {
+            AxArrayString::iterator itCaption = sCaptions.begin();
+            for ( const auto& rCtrlId : pMultiPage->mnIDs )
+            {
+                IdToPageMap::iterator iter = idToPage.find( rCtrlId );
+                if ( iter != idToPage.end() )
+                {
+                    AxPageModel* pPage = static_cast<AxPageModel*> ( iter->second->mxCtrlModel.get() );
+
+                    pPage->importProperty( XML_Caption, *itCaption );
+                    maControls.push_back( iter->second );
+                }
+                ++itCaption;
+            }
         }
     }
+    /*  Reorder the controls (sorts all option buttons of an option
+        group together), and move all children of all embedded frames
+        (group boxes) to this control (UNO group boxes cannot contain
+        other controls). */
+    finalizeEmbeddedControls();
 }
 
 bool VbaFormControl::convertProperties( const Reference< XControlModel >& rxCtrlModel,
@@ -692,24 +695,24 @@ void VbaFormControl::moveRelative( const AxPairData& rDistance )
 
 void VbaFormControl::moveEmbeddedToAbsoluteParent()
 {
-    if( mxSiteModel.get() && !maControls.empty() )
+    if( !(mxSiteModel.get() && !maControls.empty()) )
+        return;
+
+    // distance to move is equal to position of this control in its parent
+    AxPairData aDistance = mxSiteModel->getPosition();
+
+    /*  For group boxes: add half of the font height to Y position (VBA
+        positions relative to frame border line, not to 'top' of frame). */
+    const AxFontDataModel* pFontModel = dynamic_cast< const AxFontDataModel* >( mxCtrlModel.get() );
+    if( pFontModel && (pFontModel->getControlType() == API_CONTROL_GROUPBOX) )
     {
-        // distance to move is equal to position of this control in its parent
-        AxPairData aDistance = mxSiteModel->getPosition();
-
-        /*  For group boxes: add half of the font height to Y position (VBA
-            positions relative to frame border line, not to 'top' of frame). */
-        const AxFontDataModel* pFontModel = dynamic_cast< const AxFontDataModel* >( mxCtrlModel.get() );
-        if( pFontModel && (pFontModel->getControlType() == API_CONTROL_GROUPBOX) )
-        {
-            // convert points to 1/100 mm (1 pt = 1/72 inch = 2.54/72 cm = 2540/72 1/100 mm)
-            sal_Int32 nFontHeight = static_cast< sal_Int32 >( pFontModel->getFontHeight() * 2540 / 72 );
-            aDistance.second += nFontHeight / 2;
-        }
-
-        // move the embedded controls
-        maControls.forEachMem( &VbaFormControl::moveRelative, ::std::cref( aDistance ) );
+        // convert points to 1/100 mm (1 pt = 1/72 inch = 2.54/72 cm = 2540/72 1/100 mm)
+        sal_Int32 nFontHeight = static_cast< sal_Int32 >( pFontModel->getFontHeight() * 2540 / 72 );
+        aDistance.second += nFontHeight / 2;
     }
+
+    // move the embedded controls
+    maControls.forEachMem( &VbaFormControl::moveRelative, ::std::cref( aDistance ) );
 }
 
 bool VbaFormControl::compareByTabIndex( const VbaFormControlRef& rxLeft, const VbaFormControlRef& rxRight )

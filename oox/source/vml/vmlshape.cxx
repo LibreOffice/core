@@ -286,20 +286,20 @@ ShapeBase::ShapeBase( Drawing& rDrawing ) :
 
 void ShapeBase::finalizeFragmentImport()
 {
-    if( maShapeModel.maType.getLength() > 1 )
-    {
-        OUString aType = maShapeModel.maType;
-        if (aType[ 0 ] == '#')
-            aType = aType.copy(1);
-        if( const ShapeType* pShapeType = mrDrawing.getShapes().getShapeTypeById( aType ) )
-            maTypeModel.assignUsed( pShapeType->getTypeModel() );
-        else {
-            // Temporary fix, shapetype not found if referenced from different substream
-            // FIXME: extend scope of ShapeContainer to store all shapetypes from the document
-            const OUString sShapeTypePrefix = "shapetype_";
-            if (aType.startsWith(sShapeTypePrefix)) {
-                maTypeModel.moShapeType = aType.copy(sShapeTypePrefix.getLength()).toInt32();
-            }
+    if( maShapeModel.maType.getLength() <= 1 )
+        return;
+
+    OUString aType = maShapeModel.maType;
+    if (aType[ 0 ] == '#')
+        aType = aType.copy(1);
+    if( const ShapeType* pShapeType = mrDrawing.getShapes().getShapeTypeById( aType ) )
+        maTypeModel.assignUsed( pShapeType->getTypeModel() );
+    else {
+        // Temporary fix, shapetype not found if referenced from different substream
+        // FIXME: extend scope of ShapeContainer to store all shapetypes from the document
+        const OUString sShapeTypePrefix = "shapetype_";
+        if (aType.startsWith(sShapeTypePrefix)) {
+            maTypeModel.moShapeType = aType.copy(sShapeTypePrefix.getLength()).toInt32();
         }
     }
 }
@@ -462,19 +462,19 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
 
 void ShapeBase::convertFormatting( const Reference< XShape >& rxShape ) const
 {
-    if( rxShape.is() )
-    {
-        /*  Calculate shape rectangle. Applications may do something special
-            according to some imported shape client data (e.g. Excel cell anchor). */
-        awt::Rectangle aShapeRect = calcShapeRectangle( nullptr );
+    if( !rxShape.is() )
+        return;
 
-        // convert the shape, if the calculated rectangle is not empty
-        if( (aShapeRect.Width > 0) || (aShapeRect.Height > 0) )
-        {
-            rxShape->setPosition( awt::Point( aShapeRect.X, aShapeRect.Y ) );
-            rxShape->setSize( awt::Size( aShapeRect.Width, aShapeRect.Height ) );
-            convertShapeProperties( rxShape );
-        }
+    /*  Calculate shape rectangle. Applications may do something special
+        according to some imported shape client data (e.g. Excel cell anchor). */
+    awt::Rectangle aShapeRect = calcShapeRectangle( nullptr );
+
+    // convert the shape, if the calculated rectangle is not empty
+    if( (aShapeRect.Width > 0) || (aShapeRect.Height > 0) )
+    {
+        rxShape->setPosition( awt::Point( aShapeRect.X, aShapeRect.Y ) );
+        rxShape->setSize( awt::Size( aShapeRect.Width, aShapeRect.Height ) );
+        convertShapeProperties( rxShape );
     }
 }
 

@@ -761,21 +761,23 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
 
 void ChartExport::InitRangeSegmentationProperties( const Reference< chart2::XChartDocument > & xChartDoc )
 {
-    if( xChartDoc.is())
-        try
+    if( !xChartDoc.is())
+        return;
+
+    try
+    {
+        Reference< chart2::data::XDataProvider > xDataProvider( xChartDoc->getDataProvider() );
+        OSL_ENSURE( xDataProvider.is(), "No DataProvider" );
+        if( xDataProvider.is())
         {
-            Reference< chart2::data::XDataProvider > xDataProvider( xChartDoc->getDataProvider() );
-            OSL_ENSURE( xDataProvider.is(), "No DataProvider" );
-            if( xDataProvider.is())
-            {
-                mbHasCategoryLabels = lcl_hasCategoryLabels( xChartDoc );
-                mbIsCategoryPositionShifted = lcl_isCategoryAxisShifted( xChartDoc );
-            }
+            mbHasCategoryLabels = lcl_hasCategoryLabels( xChartDoc );
+            mbIsCategoryPositionShifted = lcl_isCategoryAxisShifted( xChartDoc );
         }
-        catch( const uno::Exception & )
-        {
-            DBG_UNHANDLED_EXCEPTION("oox");
-        }
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("oox");
+    }
 }
 
 void ChartExport::ExportContent()
@@ -873,30 +875,30 @@ void ChartExport::exportExternalData( const Reference< css::chart::XChartDocumen
             SAL_WARN("oox", "Required property not found in ChartDocument");
         }
     }
-    if(!externalDataPath.isEmpty())
-    {
-        // Here adding external data entry to relationship.
-        OUString relationPath = externalDataPath;
-        // Converting absolute path to relative path.
-        if( externalDataPath[ 0 ] != '.' && externalDataPath[ 1 ] != '.')
-        {
-            sal_Int32 nSepPos = externalDataPath.indexOf( '/', 0 );
-            if( nSepPos > 0)
-            {
-                relationPath = relationPath.copy( nSepPos,  ::std::max< sal_Int32 >( externalDataPath.getLength(), 0 ) -  nSepPos );
-                relationPath = ".." + relationPath;
-            }
-        }
-        FSHelperPtr pFS = GetFS();
-        OUString type = oox::getRelationship(Relationship::PACKAGE);
-        if (relationPath.endsWith(".bin"))
-            type = oox::getRelationship(Relationship::OLEOBJECT);
+    if(externalDataPath.isEmpty())
+        return;
 
-        OUString sRelId = GetFB()->addRelation(pFS->getOutputStream(),
-                        type,
-                        relationPath);
-        pFS->singleElementNS(XML_c, XML_externalData, FSNS(XML_r, XML_id), sRelId.toUtf8());
+    // Here adding external data entry to relationship.
+    OUString relationPath = externalDataPath;
+    // Converting absolute path to relative path.
+    if( externalDataPath[ 0 ] != '.' && externalDataPath[ 1 ] != '.')
+    {
+        sal_Int32 nSepPos = externalDataPath.indexOf( '/', 0 );
+        if( nSepPos > 0)
+        {
+            relationPath = relationPath.copy( nSepPos,  ::std::max< sal_Int32 >( externalDataPath.getLength(), 0 ) -  nSepPos );
+            relationPath = ".." + relationPath;
+        }
     }
+    FSHelperPtr pFS = GetFS();
+    OUString type = oox::getRelationship(Relationship::PACKAGE);
+    if (relationPath.endsWith(".bin"))
+        type = oox::getRelationship(Relationship::OLEOBJECT);
+
+    OUString sRelId = GetFB()->addRelation(pFS->getOutputStream(),
+                    type,
+                    relationPath);
+    pFS->singleElementNS(XML_c, XML_externalData, FSNS(XML_r, XML_id), sRelId.toUtf8());
 }
 
 void ChartExport::exportChart( const Reference< css::chart::XChartDocument >& xChartDoc )
@@ -1581,70 +1583,69 @@ void ChartExport::exportHatch( const Reference< XPropertySet >& xPropSet )
 
 void ChartExport::exportBitmapFill( const Reference< XPropertySet >& xPropSet )
 {
-    if( xPropSet.is() )
-     {
-        OUString sFillBitmapName;
-        xPropSet->getPropertyValue("FillBitmapName") >>= sFillBitmapName;
+    if( !xPropSet.is() )
+        return;
 
-        uno::Reference< lang::XMultiServiceFactory > xFact( getModel(), uno::UNO_QUERY );
-        try
+    OUString sFillBitmapName;
+    xPropSet->getPropertyValue("FillBitmapName") >>= sFillBitmapName;
+
+    uno::Reference< lang::XMultiServiceFactory > xFact( getModel(), uno::UNO_QUERY );
+    try
+    {
+        uno::Reference< container::XNameAccess > xBitmapTable( xFact->createInstance("com.sun.star.drawing.BitmapTable"), uno::UNO_QUERY );
+        uno::Any rValue = xBitmapTable->getByName( sFillBitmapName );
+        if (rValue.has<uno::Reference<awt::XBitmap>>())
         {
-            uno::Reference< container::XNameAccess > xBitmapTable( xFact->createInstance("com.sun.star.drawing.BitmapTable"), uno::UNO_QUERY );
-            uno::Any rValue = xBitmapTable->getByName( sFillBitmapName );
-            if (rValue.has<uno::Reference<awt::XBitmap>>())
+            uno::Reference<awt::XBitmap> xBitmap = rValue.get<uno::Reference<awt::XBitmap>>();
+            uno::Reference<graphic::XGraphic> xGraphic(xBitmap, uno::UNO_QUERY);
+            if (xGraphic.is())
             {
-                uno::Reference<awt::XBitmap> xBitmap = rValue.get<uno::Reference<awt::XBitmap>>();
-                uno::Reference<graphic::XGraphic> xGraphic(xBitmap, uno::UNO_QUERY);
-                if (xGraphic.is())
-                {
-                    WriteXGraphicBlipFill(xPropSet, xGraphic, XML_a, true, true);
-                }
+                WriteXGraphicBlipFill(xPropSet, xGraphic, XML_a, true, true);
             }
         }
-        catch (const uno::Exception &)
-        {
-            TOOLS_WARN_EXCEPTION("oox", "ChartExport::exportBitmapFill");
-        }
+    }
+    catch (const uno::Exception &)
+    {
+        TOOLS_WARN_EXCEPTION("oox", "ChartExport::exportBitmapFill");
     }
 }
 
 void ChartExport::exportGradientFill( const Reference< XPropertySet >& xPropSet )
 {
-    if( xPropSet.is() )
-     {
-        OUString sFillGradientName;
-        xPropSet->getPropertyValue("FillGradientName") >>= sFillGradientName;
+    if( !xPropSet.is() )
+        return;
 
-        awt::Gradient aGradient;
-        awt::Gradient aTransparenceGradient;
-        uno::Reference< lang::XMultiServiceFactory > xFact( getModel(), uno::UNO_QUERY );
-        try
+    OUString sFillGradientName;
+    xPropSet->getPropertyValue("FillGradientName") >>= sFillGradientName;
+
+    awt::Gradient aGradient;
+    awt::Gradient aTransparenceGradient;
+    uno::Reference< lang::XMultiServiceFactory > xFact( getModel(), uno::UNO_QUERY );
+    try
+    {
+        uno::Reference< container::XNameAccess > xGradient( xFact->createInstance("com.sun.star.drawing.GradientTable"), uno::UNO_QUERY );
+        uno::Any rGradientValue = xGradient->getByName( sFillGradientName );
+        if( rGradientValue >>= aGradient )
         {
-            uno::Reference< container::XNameAccess > xGradient( xFact->createInstance("com.sun.star.drawing.GradientTable"), uno::UNO_QUERY );
-            uno::Any rGradientValue = xGradient->getByName( sFillGradientName );
-            if( rGradientValue >>= aGradient )
+            mpFS->startElementNS(XML_a, XML_gradFill);
+            OUString sFillTransparenceGradientName;
+            if( (xPropSet->getPropertyValue("FillTransparenceGradientName") >>= sFillTransparenceGradientName) && !sFillTransparenceGradientName.isEmpty())
             {
-                mpFS->startElementNS(XML_a, XML_gradFill);
-                OUString sFillTransparenceGradientName;
-                if( (xPropSet->getPropertyValue("FillTransparenceGradientName") >>= sFillTransparenceGradientName) && !sFillTransparenceGradientName.isEmpty())
-                {
-                    uno::Reference< container::XNameAccess > xTransparenceGradient(xFact->createInstance("com.sun.star.drawing.TransparencyGradientTable"), uno::UNO_QUERY);
-                    uno::Any rTransparenceValue = xTransparenceGradient->getByName(sFillTransparenceGradientName);
-                    rTransparenceValue >>= aTransparenceGradient;
-                    WriteGradientFill(aGradient, aTransparenceGradient);
-                }
-                else
-                {
-                    WriteGradientFill(aGradient, aTransparenceGradient, xPropSet);
-                }
-                mpFS->endElementNS(XML_a, XML_gradFill);
+                uno::Reference< container::XNameAccess > xTransparenceGradient(xFact->createInstance("com.sun.star.drawing.TransparencyGradientTable"), uno::UNO_QUERY);
+                uno::Any rTransparenceValue = xTransparenceGradient->getByName(sFillTransparenceGradientName);
+                rTransparenceValue >>= aTransparenceGradient;
+                WriteGradientFill(aGradient, aTransparenceGradient);
             }
+            else
+            {
+                WriteGradientFill(aGradient, aTransparenceGradient, xPropSet);
+            }
+            mpFS->endElementNS(XML_a, XML_gradFill);
         }
-        catch (const uno::Exception &)
-        {
-            TOOLS_INFO_EXCEPTION("oox", "ChartExport::exportGradientFill");
-        }
-
+    }
+    catch (const uno::Exception &)
+    {
+        TOOLS_INFO_EXCEPTION("oox", "ChartExport::exportGradientFill");
     }
 }
 
@@ -1664,19 +1665,19 @@ void ChartExport::exportDataTable( )
     if (GetProperty( aPropSet, "DataTableOutline"))
         mAny >>= bShowOutline;
 
-    if (bShowVBorder || bShowHBorder || bShowOutline)
-    {
-        pFS->startElement(FSNS(XML_c, XML_dTable));
-        if (bShowHBorder)
-            pFS->singleElement( FSNS( XML_c, XML_showHorzBorder ),
-                            XML_val, "1" );
-        if (bShowVBorder)
-            pFS->singleElement(FSNS(XML_c, XML_showVertBorder), XML_val, "1");
-        if (bShowOutline)
-            pFS->singleElement(FSNS(XML_c, XML_showOutline), XML_val, "1");
+    if (!(bShowVBorder || bShowHBorder || bShowOutline))
+        return;
 
-        pFS->endElement(  FSNS( XML_c, XML_dTable));
-    }
+    pFS->startElement(FSNS(XML_c, XML_dTable));
+    if (bShowHBorder)
+        pFS->singleElement( FSNS( XML_c, XML_showHorzBorder ),
+                        XML_val, "1" );
+    if (bShowVBorder)
+        pFS->singleElement(FSNS(XML_c, XML_showVertBorder), XML_val, "1");
+    if (bShowOutline)
+        pFS->singleElement(FSNS(XML_c, XML_showOutline), XML_val, "1");
+
+    pFS->endElement(  FSNS( XML_c, XML_dTable));
 
 }
 void ChartExport::exportAreaChart( const Reference< chart2::XChartType >& xChartType )
@@ -2063,37 +2064,37 @@ void ChartExport::exportUpDownBars( const Reference< chart2::XChartType >& xChar
     FSHelperPtr pFS = GetFS();
     // export the chart property
     Reference< css::chart::XStatisticDisplay > xChartPropProvider( mxDiagram, uno::UNO_QUERY );
-    if(xChartPropProvider.is())
-    {
-        //  updownbar
-        pFS->startElement(FSNS(XML_c, XML_upDownBars));
-        // TODO: gapWidth
-        pFS->singleElement(FSNS(XML_c, XML_gapWidth), XML_val, OString::number(150));
+    if(!xChartPropProvider.is())
+        return;
 
-        Reference< beans::XPropertySet > xChartPropSet = xChartPropProvider->getUpBar();
-        if( xChartPropSet.is() )
+    //  updownbar
+    pFS->startElement(FSNS(XML_c, XML_upDownBars));
+    // TODO: gapWidth
+    pFS->singleElement(FSNS(XML_c, XML_gapWidth), XML_val, OString::number(150));
+
+    Reference< beans::XPropertySet > xChartPropSet = xChartPropProvider->getUpBar();
+    if( xChartPropSet.is() )
+    {
+        pFS->startElement(FSNS(XML_c, XML_upBars));
+        // For Linechart with UpDownBars, spPr is not getting imported
+        // so no need to call the exportShapeProps() for LineChart
+        if(xChartType->getChartType() == "com.sun.star.chart2.CandleStickChartType")
         {
-            pFS->startElement(FSNS(XML_c, XML_upBars));
-            // For Linechart with UpDownBars, spPr is not getting imported
-            // so no need to call the exportShapeProps() for LineChart
-            if(xChartType->getChartType() == "com.sun.star.chart2.CandleStickChartType")
-            {
-                exportShapeProps(xChartPropSet);
-            }
-            pFS->endElement( FSNS( XML_c, XML_upBars ) );
+            exportShapeProps(xChartPropSet);
         }
-        xChartPropSet = xChartPropProvider->getDownBar();
-        if( xChartPropSet.is() )
-        {
-            pFS->startElement(FSNS(XML_c, XML_downBars));
-            if(xChartType->getChartType() == "com.sun.star.chart2.CandleStickChartType")
-            {
-                exportShapeProps(xChartPropSet);
-            }
-            pFS->endElement( FSNS( XML_c, XML_downBars ) );
-        }
-        pFS->endElement( FSNS( XML_c, XML_upDownBars ) );
+        pFS->endElement( FSNS( XML_c, XML_upBars ) );
     }
+    xChartPropSet = xChartPropProvider->getDownBar();
+    if( xChartPropSet.is() )
+    {
+        pFS->startElement(FSNS(XML_c, XML_downBars));
+        if(xChartType->getChartType() == "com.sun.star.chart2.CandleStickChartType")
+        {
+            exportShapeProps(xChartPropSet);
+        }
+        pFS->endElement( FSNS( XML_c, XML_downBars ) );
+    }
+    pFS->endElement( FSNS( XML_c, XML_upDownBars ) );
 }
 
 void ChartExport::exportSurfaceChart( const Reference< chart2::XChartType >& xChartType )
@@ -3554,56 +3555,56 @@ void ChartExport::exportDataPoints(
     }
 
     // Export Data Point Property in Charts even if the VaryColors is false
-    if( !bVaryColorsByPoint )
+    if( bVaryColorsByPoint )
+        return;
+
+    ::std::set< sal_Int32 > aAttrPointSet;
+    ::std::copy( pPoints, pPoints + aDataPointSeq.getLength(),
+                ::std::inserter( aAttrPointSet, aAttrPointSet.begin()));
+    const ::std::set< sal_Int32 >::const_iterator aEndIt( aAttrPointSet.end());
+    for( nElement = 0; nElement < nSeriesLength; ++nElement )
     {
-        ::std::set< sal_Int32 > aAttrPointSet;
-        ::std::copy( pPoints, pPoints + aDataPointSeq.getLength(),
-                    ::std::inserter( aAttrPointSet, aAttrPointSet.begin()));
-        const ::std::set< sal_Int32 >::const_iterator aEndIt( aAttrPointSet.end());
-        for( nElement = 0; nElement < nSeriesLength; ++nElement )
+        uno::Reference< beans::XPropertySet > xPropSet;
+        if( aAttrPointSet.find( nElement ) != aEndIt )
         {
-            uno::Reference< beans::XPropertySet > xPropSet;
-            if( aAttrPointSet.find( nElement ) != aEndIt )
+            try
             {
-                try
-                {
-                    xPropSet = SchXMLSeriesHelper::createOldAPIDataPointPropertySet(
-                            xSeries, nElement, getModel() );
-                }
-                catch( const uno::Exception & )
-                {
-                    DBG_UNHANDLED_EXCEPTION( "oox", "Exception caught during Export of data point" );
-                }
+                xPropSet = SchXMLSeriesHelper::createOldAPIDataPointPropertySet(
+                        xSeries, nElement, getModel() );
+            }
+            catch( const uno::Exception & )
+            {
+                DBG_UNHANDLED_EXCEPTION( "oox", "Exception caught during Export of data point" );
+            }
+        }
+
+        if( xPropSet.is() )
+        {
+            FSHelperPtr pFS = GetFS();
+            pFS->startElement(FSNS(XML_c, XML_dPt));
+            pFS->singleElement(FSNS(XML_c, XML_idx), XML_val, OString::number(nElement));
+
+            switch( eChartType )
+            {
+                case chart::TYPEID_BUBBLE:
+                case chart::TYPEID_HORBAR:
+                case chart::TYPEID_BAR:
+                    pFS->singleElement(FSNS(XML_c, XML_invertIfNegative), XML_val, "0");
+                    exportShapeProps(xPropSet);
+                    break;
+
+                case chart::TYPEID_LINE:
+                case chart::TYPEID_SCATTER:
+                case chart::TYPEID_RADARLINE:
+                    exportMarker(xPropSet);
+                    break;
+
+                default:
+                    exportShapeProps(xPropSet);
+                    break;
             }
 
-            if( xPropSet.is() )
-            {
-                FSHelperPtr pFS = GetFS();
-                pFS->startElement(FSNS(XML_c, XML_dPt));
-                pFS->singleElement(FSNS(XML_c, XML_idx), XML_val, OString::number(nElement));
-
-                switch( eChartType )
-                {
-                    case chart::TYPEID_BUBBLE:
-                    case chart::TYPEID_HORBAR:
-                    case chart::TYPEID_BAR:
-                        pFS->singleElement(FSNS(XML_c, XML_invertIfNegative), XML_val, "0");
-                        exportShapeProps(xPropSet);
-                        break;
-
-                    case chart::TYPEID_LINE:
-                    case chart::TYPEID_SCATTER:
-                    case chart::TYPEID_RADARLINE:
-                        exportMarker(xPropSet);
-                        break;
-
-                    default:
-                        exportShapeProps(xPropSet);
-                        break;
-                }
-
-                pFS->endElement( FSNS( XML_c, XML_dPt ) );
-            }
+            pFS->endElement( FSNS( XML_c, XML_dPt ) );
         }
     }
 }
@@ -3680,126 +3681,126 @@ void ChartExport::exportTrendlines( const Reference< chart2::XDataSeries >& xSer
 {
     FSHelperPtr pFS = GetFS();
     Reference< chart2::XRegressionCurveContainer > xRegressionCurveContainer( xSeries, UNO_QUERY );
-    if( xRegressionCurveContainer.is() )
+    if( !xRegressionCurveContainer.is() )
+        return;
+
+    const Sequence< Reference< chart2::XRegressionCurve > > aRegCurveSeq = xRegressionCurveContainer->getRegressionCurves();
+    for( const Reference< chart2::XRegressionCurve >& xRegCurve : aRegCurveSeq )
     {
-        const Sequence< Reference< chart2::XRegressionCurve > > aRegCurveSeq = xRegressionCurveContainer->getRegressionCurves();
-        for( const Reference< chart2::XRegressionCurve >& xRegCurve : aRegCurveSeq )
+        if (!xRegCurve.is())
+            continue;
+
+        Reference< XPropertySet > xProperties( xRegCurve , uno::UNO_QUERY );
+
+        OUString aService;
+        Reference< lang::XServiceName > xServiceName( xProperties, UNO_QUERY );
+        if( !xServiceName.is() )
+            continue;
+
+        aService = xServiceName->getServiceName();
+
+        if(aService != "com.sun.star.chart2.LinearRegressionCurve" &&
+                aService != "com.sun.star.chart2.ExponentialRegressionCurve" &&
+                aService != "com.sun.star.chart2.LogarithmicRegressionCurve" &&
+                aService != "com.sun.star.chart2.PotentialRegressionCurve" &&
+                aService != "com.sun.star.chart2.PolynomialRegressionCurve" &&
+                aService != "com.sun.star.chart2.MovingAverageRegressionCurve")
+            continue;
+
+        pFS->startElement(FSNS(XML_c, XML_trendline));
+
+        OUString aName;
+        xProperties->getPropertyValue("CurveName") >>= aName;
+        if(!aName.isEmpty())
         {
-            if (!xRegCurve.is())
-                continue;
-
-            Reference< XPropertySet > xProperties( xRegCurve , uno::UNO_QUERY );
-
-            OUString aService;
-            Reference< lang::XServiceName > xServiceName( xProperties, UNO_QUERY );
-            if( !xServiceName.is() )
-                continue;
-
-            aService = xServiceName->getServiceName();
-
-            if(aService != "com.sun.star.chart2.LinearRegressionCurve" &&
-                    aService != "com.sun.star.chart2.ExponentialRegressionCurve" &&
-                    aService != "com.sun.star.chart2.LogarithmicRegressionCurve" &&
-                    aService != "com.sun.star.chart2.PotentialRegressionCurve" &&
-                    aService != "com.sun.star.chart2.PolynomialRegressionCurve" &&
-                    aService != "com.sun.star.chart2.MovingAverageRegressionCurve")
-                continue;
-
-            pFS->startElement(FSNS(XML_c, XML_trendline));
-
-            OUString aName;
-            xProperties->getPropertyValue("CurveName") >>= aName;
-            if(!aName.isEmpty())
-            {
-                pFS->startElement(FSNS(XML_c, XML_name));
-                pFS->writeEscaped(aName);
-                pFS->endElement( FSNS( XML_c, XML_name) );
-            }
-
-            exportShapeProps( xProperties );
-
-            if( aService == "com.sun.star.chart2.LinearRegressionCurve" )
-            {
-                pFS->singleElement(FSNS(XML_c, XML_trendlineType), XML_val, "linear");
-            }
-            else if( aService == "com.sun.star.chart2.ExponentialRegressionCurve" )
-            {
-                pFS->singleElement(FSNS(XML_c, XML_trendlineType), XML_val, "exp");
-            }
-            else if( aService == "com.sun.star.chart2.LogarithmicRegressionCurve" )
-            {
-                pFS->singleElement(FSNS(XML_c, XML_trendlineType), XML_val, "log");
-            }
-            else if( aService == "com.sun.star.chart2.PotentialRegressionCurve" )
-            {
-                pFS->singleElement(FSNS(XML_c, XML_trendlineType), XML_val, "power");
-            }
-            else if( aService == "com.sun.star.chart2.PolynomialRegressionCurve" )
-            {
-                pFS->singleElement(FSNS(XML_c, XML_trendlineType), XML_val, "poly");
-
-                sal_Int32 aDegree = 2;
-                xProperties->getPropertyValue( "PolynomialDegree") >>= aDegree;
-                pFS->singleElement(FSNS(XML_c, XML_order), XML_val, OString::number(aDegree));
-            }
-            else if( aService == "com.sun.star.chart2.MovingAverageRegressionCurve" )
-            {
-                pFS->singleElement(FSNS(XML_c, XML_trendlineType), XML_val, "movingAvg");
-
-                sal_Int32 aPeriod = 2;
-                xProperties->getPropertyValue( "MovingAveragePeriod") >>= aPeriod;
-
-                pFS->singleElement(FSNS(XML_c, XML_period), XML_val, OString::number(aPeriod));
-            }
-            else
-            {
-                // should never happen
-                // This would produce invalid OOXML files so we check earlier for the type
-                assert(false);
-            }
-
-            double fExtrapolateForward = 0.0;
-            double fExtrapolateBackward = 0.0;
-
-            xProperties->getPropertyValue("ExtrapolateForward") >>= fExtrapolateForward;
-            xProperties->getPropertyValue("ExtrapolateBackward") >>= fExtrapolateBackward;
-
-            pFS->singleElement( FSNS( XML_c, XML_forward ),
-                    XML_val, OString::number(fExtrapolateForward) );
-
-            pFS->singleElement( FSNS( XML_c, XML_backward ),
-                    XML_val, OString::number(fExtrapolateBackward) );
-
-            bool bForceIntercept = false;
-            xProperties->getPropertyValue("ForceIntercept") >>= bForceIntercept;
-
-            if (bForceIntercept)
-            {
-                double fInterceptValue = 0.0;
-                xProperties->getPropertyValue("InterceptValue") >>= fInterceptValue;
-
-                pFS->singleElement( FSNS( XML_c, XML_intercept ),
-                    XML_val, OString::number(fInterceptValue) );
-            }
-
-            // Equation properties
-            Reference< XPropertySet > xEquationProperties( xRegCurve->getEquationProperties() );
-
-            // Show Equation
-            bool bShowEquation = false;
-            xEquationProperties->getPropertyValue("ShowEquation") >>= bShowEquation;
-
-            // Show R^2
-            bool bShowCorrelationCoefficient = false;
-            xEquationProperties->getPropertyValue("ShowCorrelationCoefficient") >>= bShowCorrelationCoefficient;
-
-            pFS->singleElement( FSNS( XML_c, XML_dispRSqr ),
-                    XML_val, ToPsz10(bShowCorrelationCoefficient) );
-
-            pFS->singleElement(FSNS(XML_c, XML_dispEq), XML_val, ToPsz10(bShowEquation));
-
-            pFS->endElement( FSNS( XML_c, XML_trendline ) );
+            pFS->startElement(FSNS(XML_c, XML_name));
+            pFS->writeEscaped(aName);
+            pFS->endElement( FSNS( XML_c, XML_name) );
         }
+
+        exportShapeProps( xProperties );
+
+        if( aService == "com.sun.star.chart2.LinearRegressionCurve" )
+        {
+            pFS->singleElement(FSNS(XML_c, XML_trendlineType), XML_val, "linear");
+        }
+        else if( aService == "com.sun.star.chart2.ExponentialRegressionCurve" )
+        {
+            pFS->singleElement(FSNS(XML_c, XML_trendlineType), XML_val, "exp");
+        }
+        else if( aService == "com.sun.star.chart2.LogarithmicRegressionCurve" )
+        {
+            pFS->singleElement(FSNS(XML_c, XML_trendlineType), XML_val, "log");
+        }
+        else if( aService == "com.sun.star.chart2.PotentialRegressionCurve" )
+        {
+            pFS->singleElement(FSNS(XML_c, XML_trendlineType), XML_val, "power");
+        }
+        else if( aService == "com.sun.star.chart2.PolynomialRegressionCurve" )
+        {
+            pFS->singleElement(FSNS(XML_c, XML_trendlineType), XML_val, "poly");
+
+            sal_Int32 aDegree = 2;
+            xProperties->getPropertyValue( "PolynomialDegree") >>= aDegree;
+            pFS->singleElement(FSNS(XML_c, XML_order), XML_val, OString::number(aDegree));
+        }
+        else if( aService == "com.sun.star.chart2.MovingAverageRegressionCurve" )
+        {
+            pFS->singleElement(FSNS(XML_c, XML_trendlineType), XML_val, "movingAvg");
+
+            sal_Int32 aPeriod = 2;
+            xProperties->getPropertyValue( "MovingAveragePeriod") >>= aPeriod;
+
+            pFS->singleElement(FSNS(XML_c, XML_period), XML_val, OString::number(aPeriod));
+        }
+        else
+        {
+            // should never happen
+            // This would produce invalid OOXML files so we check earlier for the type
+            assert(false);
+        }
+
+        double fExtrapolateForward = 0.0;
+        double fExtrapolateBackward = 0.0;
+
+        xProperties->getPropertyValue("ExtrapolateForward") >>= fExtrapolateForward;
+        xProperties->getPropertyValue("ExtrapolateBackward") >>= fExtrapolateBackward;
+
+        pFS->singleElement( FSNS( XML_c, XML_forward ),
+                XML_val, OString::number(fExtrapolateForward) );
+
+        pFS->singleElement( FSNS( XML_c, XML_backward ),
+                XML_val, OString::number(fExtrapolateBackward) );
+
+        bool bForceIntercept = false;
+        xProperties->getPropertyValue("ForceIntercept") >>= bForceIntercept;
+
+        if (bForceIntercept)
+        {
+            double fInterceptValue = 0.0;
+            xProperties->getPropertyValue("InterceptValue") >>= fInterceptValue;
+
+            pFS->singleElement( FSNS( XML_c, XML_intercept ),
+                XML_val, OString::number(fInterceptValue) );
+        }
+
+        // Equation properties
+        Reference< XPropertySet > xEquationProperties( xRegCurve->getEquationProperties() );
+
+        // Show Equation
+        bool bShowEquation = false;
+        xEquationProperties->getPropertyValue("ShowEquation") >>= bShowEquation;
+
+        // Show R^2
+        bool bShowCorrelationCoefficient = false;
+        xEquationProperties->getPropertyValue("ShowCorrelationCoefficient") >>= bShowCorrelationCoefficient;
+
+        pFS->singleElement( FSNS( XML_c, XML_dispRSqr ),
+                XML_val, ToPsz10(bShowCorrelationCoefficient) );
+
+        pFS->singleElement(FSNS(XML_c, XML_dispEq), XML_val, ToPsz10(bShowEquation));
+
+        pFS->endElement( FSNS( XML_c, XML_trendline ) );
     }
 }
 

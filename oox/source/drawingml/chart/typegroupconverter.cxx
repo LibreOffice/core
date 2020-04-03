@@ -468,50 +468,50 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
 void TypeGroupConverter::convertMarker( PropertySet& rPropSet, sal_Int32 nOoxSymbol, sal_Int32 nOoxSize,
        const ModelRef< Shape >& xShapeProps ) const
 {
-    if( !isSeriesFrameFormat() )
+    if( isSeriesFrameFormat() )
+        return;
+
+    namespace cssc = ::com::sun::star::chart2;
+
+    // symbol style
+    cssc::Symbol aSymbol;
+    aSymbol.Style = cssc::SymbolStyle_STANDARD;
+    switch( nOoxSymbol ) // compare with XclChPropSetHelper::WriteMarkerProperties in xlchart.cxx
     {
-        namespace cssc = ::com::sun::star::chart2;
-
-        // symbol style
-        cssc::Symbol aSymbol;
-        aSymbol.Style = cssc::SymbolStyle_STANDARD;
-        switch( nOoxSymbol ) // compare with XclChPropSetHelper::WriteMarkerProperties in xlchart.cxx
-        {
-            case XML_auto:      aSymbol.Style = cssc::SymbolStyle_AUTO; break;
-            case XML_none:      aSymbol.Style = cssc::SymbolStyle_NONE; break;
-            case XML_square:    aSymbol.StandardSymbol = 0;             break;  // square
-            case XML_diamond:   aSymbol.StandardSymbol = 1;             break;  // diamond
-            case XML_triangle:  aSymbol.StandardSymbol = 3;             break;  // arrow up
-            case XML_x:         aSymbol.StandardSymbol = 10;            break;  // X, legacy bow tie
-            case XML_star:      aSymbol.StandardSymbol = 12;            break;  // asterisk, legacy sand glass
-            case XML_dot:       aSymbol.StandardSymbol = 4;             break;  // arrow right
-            case XML_dash:      aSymbol.StandardSymbol = 13;            break;  // horizontal bar, legacy arrow down
-            case XML_circle:    aSymbol.StandardSymbol = 8;             break;  // circle, legacy arrow right
-            case XML_plus:      aSymbol.StandardSymbol = 11;            break;  // plus, legacy arrow left
-        }
-
-        // symbol size (points in OOXML, 1/100 mm in Chart2)
-        sal_Int32 nSize = static_cast< sal_Int32 >( nOoxSize * (2540.0 / 72.0) + 0.5 );
-        aSymbol.Size.Width = aSymbol.Size.Height = nSize;
-
-        if(xShapeProps.is())
-        {
-            Color aFillColor = xShapeProps->getFillProperties().maFillColor;
-            aSymbol.FillColor = sal_Int32(aFillColor.getColor(getFilter().getGraphicHelper()));
-            // tdf#124817: if there is no fill color, use line color of the symbol
-            if( aSymbol.FillColor < 0 )
-            {
-                Color aLineColor = xShapeProps->getLineProperties().maLineFill.maFillColor;
-                aSymbol.BorderColor = sal_Int32(aLineColor.getColor(getFilter().getGraphicHelper()));
-                rPropSet.setProperty(PROP_Color, aSymbol.BorderColor);
-            }
-            else
-                rPropSet.setProperty(PROP_Color, aSymbol.FillColor);
-        }
-
-        // set the property
-        rPropSet.setProperty( PROP_Symbol, aSymbol );
+        case XML_auto:      aSymbol.Style = cssc::SymbolStyle_AUTO; break;
+        case XML_none:      aSymbol.Style = cssc::SymbolStyle_NONE; break;
+        case XML_square:    aSymbol.StandardSymbol = 0;             break;  // square
+        case XML_diamond:   aSymbol.StandardSymbol = 1;             break;  // diamond
+        case XML_triangle:  aSymbol.StandardSymbol = 3;             break;  // arrow up
+        case XML_x:         aSymbol.StandardSymbol = 10;            break;  // X, legacy bow tie
+        case XML_star:      aSymbol.StandardSymbol = 12;            break;  // asterisk, legacy sand glass
+        case XML_dot:       aSymbol.StandardSymbol = 4;             break;  // arrow right
+        case XML_dash:      aSymbol.StandardSymbol = 13;            break;  // horizontal bar, legacy arrow down
+        case XML_circle:    aSymbol.StandardSymbol = 8;             break;  // circle, legacy arrow right
+        case XML_plus:      aSymbol.StandardSymbol = 11;            break;  // plus, legacy arrow left
     }
+
+    // symbol size (points in OOXML, 1/100 mm in Chart2)
+    sal_Int32 nSize = static_cast< sal_Int32 >( nOoxSize * (2540.0 / 72.0) + 0.5 );
+    aSymbol.Size.Width = aSymbol.Size.Height = nSize;
+
+    if(xShapeProps.is())
+    {
+        Color aFillColor = xShapeProps->getFillProperties().maFillColor;
+        aSymbol.FillColor = sal_Int32(aFillColor.getColor(getFilter().getGraphicHelper()));
+        // tdf#124817: if there is no fill color, use line color of the symbol
+        if( aSymbol.FillColor < 0 )
+        {
+            Color aLineColor = xShapeProps->getLineProperties().maLineFill.maFillColor;
+            aSymbol.BorderColor = sal_Int32(aLineColor.getColor(getFilter().getGraphicHelper()));
+            rPropSet.setProperty(PROP_Color, aSymbol.BorderColor);
+        }
+        else
+            rPropSet.setProperty(PROP_Color, aSymbol.FillColor);
+    }
+
+    // set the property
+    rPropSet.setProperty( PROP_Symbol, aSymbol );
 }
 
 void TypeGroupConverter::convertLineSmooth( PropertySet& rPropSet, bool bOoxSmooth ) const
@@ -526,23 +526,23 @@ void TypeGroupConverter::convertLineSmooth( PropertySet& rPropSet, bool bOoxSmoo
 
 void TypeGroupConverter::convertBarGeometry( PropertySet& rPropSet, sal_Int32 nOoxShape ) const
 {
-    if( mb3dChart && (maTypeInfo.meTypeCategory == TYPECATEGORY_BAR) )
-    {
-        namespace cssc = ::com::sun::star::chart2;
+    if( !(mb3dChart && (maTypeInfo.meTypeCategory == TYPECATEGORY_BAR)) )
+        return;
 
-        sal_Int32 nGeom3d = cssc::DataPointGeometry3D::CUBOID;
-        switch( nOoxShape )
-        {
-            case XML_box:           nGeom3d = cssc::DataPointGeometry3D::CUBOID;    break;
-            case XML_cone:          nGeom3d = cssc::DataPointGeometry3D::CONE;      break;
-            case XML_coneToMax:     nGeom3d = cssc::DataPointGeometry3D::CONE;      break;
-            case XML_cylinder:      nGeom3d = cssc::DataPointGeometry3D::CYLINDER;  break;
-            case XML_pyramid:       nGeom3d = cssc::DataPointGeometry3D::PYRAMID;   break;
-            case XML_pyramidToMax:  nGeom3d = cssc::DataPointGeometry3D::PYRAMID;   break;
-            default:                OSL_FAIL( "TypeGroupConverter::convertBarGeometry - unknown 3D bar shape type" );
-        }
-        rPropSet.setProperty( PROP_Geometry3D, nGeom3d );
+    namespace cssc = ::com::sun::star::chart2;
+
+    sal_Int32 nGeom3d = cssc::DataPointGeometry3D::CUBOID;
+    switch( nOoxShape )
+    {
+        case XML_box:           nGeom3d = cssc::DataPointGeometry3D::CUBOID;    break;
+        case XML_cone:          nGeom3d = cssc::DataPointGeometry3D::CONE;      break;
+        case XML_coneToMax:     nGeom3d = cssc::DataPointGeometry3D::CONE;      break;
+        case XML_cylinder:      nGeom3d = cssc::DataPointGeometry3D::CYLINDER;  break;
+        case XML_pyramid:       nGeom3d = cssc::DataPointGeometry3D::PYRAMID;   break;
+        case XML_pyramidToMax:  nGeom3d = cssc::DataPointGeometry3D::PYRAMID;   break;
+        default:                OSL_FAIL( "TypeGroupConverter::convertBarGeometry - unknown 3D bar shape type" );
     }
+    rPropSet.setProperty( PROP_Geometry3D, nGeom3d );
 }
 
 void TypeGroupConverter::convertPieRotation( PropertySet& rPropSet, sal_Int32 nOoxAngle ) const
@@ -569,33 +569,33 @@ void TypeGroupConverter::convertPieExplosion( PropertySet& rPropSet, sal_Int32 n
 
 void TypeGroupConverter::insertDataSeries( const Reference< XChartType >& rxChartType, const Reference< XDataSeries >& rxSeries, sal_Int32 nAxesSetIdx )
 {
-    if( rxSeries.is() )
+    if( !rxSeries.is() )
+        return;
+
+    PropertySet aSeriesProp( rxSeries );
+
+    // series stacking mode
+    namespace cssc = ::com::sun::star::chart2;
+    cssc::StackingDirection eStacking = cssc::StackingDirection_NO_STACKING;
+    // stacked overrides deep-3d
+    if( isStacked() || isPercent() )
+        eStacking = cssc::StackingDirection_Y_STACKING;
+    else if( isDeep3dChart() )
+        eStacking = cssc::StackingDirection_Z_STACKING;
+    aSeriesProp.setProperty( PROP_StackingDirection, eStacking );
+
+    // additional series properties
+    aSeriesProp.setProperty( PROP_AttachedAxisIndex, nAxesSetIdx );
+
+    // insert series into container
+    try
     {
-        PropertySet aSeriesProp( rxSeries );
-
-        // series stacking mode
-        namespace cssc = ::com::sun::star::chart2;
-        cssc::StackingDirection eStacking = cssc::StackingDirection_NO_STACKING;
-        // stacked overrides deep-3d
-        if( isStacked() || isPercent() )
-            eStacking = cssc::StackingDirection_Y_STACKING;
-        else if( isDeep3dChart() )
-            eStacking = cssc::StackingDirection_Z_STACKING;
-        aSeriesProp.setProperty( PROP_StackingDirection, eStacking );
-
-        // additional series properties
-        aSeriesProp.setProperty( PROP_AttachedAxisIndex, nAxesSetIdx );
-
-        // insert series into container
-        try
-        {
-            Reference< XDataSeriesContainer > xSeriesCont( rxChartType, UNO_QUERY_THROW );
-            xSeriesCont->addDataSeries( rxSeries );
-        }
-        catch( Exception& )
-        {
-            OSL_FAIL( "TypeGroupConverter::insertDataSeries - cannot add data series" );
-        }
+        Reference< XDataSeriesContainer > xSeriesCont( rxChartType, UNO_QUERY_THROW );
+        xSeriesCont->addDataSeries( rxSeries );
+    }
+    catch( Exception& )
+    {
+        OSL_FAIL( "TypeGroupConverter::insertDataSeries - cannot add data series" );
     }
 }
 

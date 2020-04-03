@@ -1780,27 +1780,27 @@ void Shape::putPropertiesToGrabBag( const Sequence< PropertyValue >& aProperties
     Reference< XPropertySet > xSet( mxShape, UNO_QUERY );
     Reference< XPropertySetInfo > xSetInfo( xSet->getPropertySetInfo() );
     const OUString aGrabBagPropName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
-    if( mxShape.is() && xSet.is() && xSetInfo.is() && xSetInfo->hasPropertyByName( aGrabBagPropName ) )
-    {
-        // get existing grab bag
-        Sequence< PropertyValue > aGrabBag;
-        xSet->getPropertyValue( aGrabBagPropName ) >>= aGrabBag;
+    if( !(mxShape.is() && xSet.is() && xSetInfo.is() && xSetInfo->hasPropertyByName( aGrabBagPropName )) )
+        return;
 
-        std::vector<PropertyValue> aVec;
-        aVec.reserve(aProperties.getLength());
+    // get existing grab bag
+    Sequence< PropertyValue > aGrabBag;
+    xSet->getPropertyValue( aGrabBagPropName ) >>= aGrabBag;
 
-        // put the new items
-        std::transform(aProperties.begin(), aProperties.end(), std::back_inserter(aVec),
-            [](const PropertyValue& rProp) {
-                PropertyValue aProp;
-                aProp.Name = rProp.Name;
-                aProp.Value = rProp.Value;
-                return aProp;
-            });
+    std::vector<PropertyValue> aVec;
+    aVec.reserve(aProperties.getLength());
 
-        // put it back to the shape
-        xSet->setPropertyValue( aGrabBagPropName, Any( comphelper::concatSequences(aGrabBag, aVec) ) );
-    }
+    // put the new items
+    std::transform(aProperties.begin(), aProperties.end(), std::back_inserter(aVec),
+        [](const PropertyValue& rProp) {
+            PropertyValue aProp;
+            aProp.Name = rProp.Name;
+            aProp.Value = rProp.Value;
+            return aProp;
+        });
+
+    // put it back to the shape
+    xSet->setPropertyValue( aGrabBagPropName, Any( comphelper::concatSequences(aGrabBag, aVec) ) );
 }
 
 FillProperties Shape::getActualFillProperties(const Theme* pTheme, const FillProperties* pParentShapeFillProps) const

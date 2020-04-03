@@ -358,7 +358,10 @@ void ControlConverter::bindToSources( const Reference< XControlModel >& rxCtrlMo
     }
 
     // list entry source
-    if( !rRowSource.isEmpty() ) try
+    if( rRowSource.isEmpty() )
+        return;
+
+    try
     {
         // first check if the XListEntrySink interface is supported
         Reference< XListEntrySink > xEntrySink( rxCtrlModel, UNO_QUERY_THROW );

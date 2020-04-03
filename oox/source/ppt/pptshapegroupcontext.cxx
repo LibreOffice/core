@@ -142,24 +142,24 @@ ContextHandlerRef PPTShapeGroupContext::onCreateContext( sal_Int32 aElementToken
 
 void PPTShapeGroupContext::importExtDrawings( )
 {
-    if( pGraphicShape )
-    {
-        for (auto const& extDrawing : pGraphicShape->getExtDrawings())
-        {
-            OUString aFragmentPath = getFragmentPathFromRelId(extDrawing);
-            getFilter().importFragment( new ExtDrawingFragmentHandler( getFilter(), aFragmentPath,
-                                                                       mpSlidePersistPtr,
-                                                                       meShapeLocation,
-                                                                       mpGroupShapePtr,
-                                                                       pGraphicShape ) );
-            pGraphicShape->keepDiagramDrawing(getFilter(), aFragmentPath);
+    if( !pGraphicShape )
+        return;
 
-            // Apply font color imported from color fragment
-            if( pGraphicShape->getFontRefColorForNodes().isUsed() )
-                applyFontRefColor(mpGroupShapePtr, pGraphicShape->getFontRefColorForNodes());
-        }
-        pGraphicShape = oox::drawingml::ShapePtr( nullptr );
+    for (auto const& extDrawing : pGraphicShape->getExtDrawings())
+    {
+        OUString aFragmentPath = getFragmentPathFromRelId(extDrawing);
+        getFilter().importFragment( new ExtDrawingFragmentHandler( getFilter(), aFragmentPath,
+                                                                   mpSlidePersistPtr,
+                                                                   meShapeLocation,
+                                                                   mpGroupShapePtr,
+                                                                   pGraphicShape ) );
+        pGraphicShape->keepDiagramDrawing(getFilter(), aFragmentPath);
+
+        // Apply font color imported from color fragment
+        if( pGraphicShape->getFontRefColorForNodes().isUsed() )
+            applyFontRefColor(mpGroupShapePtr, pGraphicShape->getFontRefColorForNodes());
     }
+    pGraphicShape = oox::drawingml::ShapePtr( nullptr );
 }
 
 void PPTShapeGroupContext::applyFontRefColor(const oox::drawingml::ShapePtr& pShape, const oox::drawingml::Color& rFontRefColor)

@@ -75,29 +75,30 @@ PowerPointImport::~PowerPointImport()
 /// Visits the relations from pRelations which are of type rType.
 static void visitRelations(PowerPointImport& rImport, const core::RelationsRef& pRelations, const OUString& rType, std::vector<OUString>& rImageFragments)
 {
-    if (core::RelationsRef pRelationsOfType = pRelations->getRelationsFromTypeFromOfficeDoc(rType))
-    {
-        for (const auto& rRelation : *pRelationsOfType)
-        {
-            OUString aFragment = pRelationsOfType->getFragmentPathFromRelation(rRelation.second);
-            if (core::RelationsRef pFragmentRelations = rImport.importRelations(aFragment))
-            {
-                // See if the fragment has images.
-                if (core::RelationsRef pImages = pFragmentRelations->getRelationsFromTypeFromOfficeDoc("image"))
-                {
-                    for (const auto& rImage : *pImages)
-                    {
-                        OUString aPath = pImages->getFragmentPathFromRelation(rImage.second);
-                        // Safe subset: e.g. WMF may have an external header from the
-                        // referencing fragment.
-                        if (aPath.endsWith(".jpg") || aPath.endsWith(".jpeg"))
-                            rImageFragments.push_back(aPath);
-                    }
-                }
+    core::RelationsRef pRelationsOfType = pRelations->getRelationsFromTypeFromOfficeDoc(rType);
+    if (!pRelationsOfType)
+        return;
 
-                // See if the fragment has a slide layout, and recurse.
-                visitRelations(rImport, pFragmentRelations, "slideLayout", rImageFragments);
+    for (const auto& rRelation : *pRelationsOfType)
+    {
+        OUString aFragment = pRelationsOfType->getFragmentPathFromRelation(rRelation.second);
+        if (core::RelationsRef pFragmentRelations = rImport.importRelations(aFragment))
+        {
+            // See if the fragment has images.
+            if (core::RelationsRef pImages = pFragmentRelations->getRelationsFromTypeFromOfficeDoc("image"))
+            {
+                for (const auto& rImage : *pImages)
+                {
+                    OUString aPath = pImages->getFragmentPathFromRelation(rImage.second);
+                    // Safe subset: e.g. WMF may have an external header from the
+                    // referencing fragment.
+                    if (aPath.endsWith(".jpg") || aPath.endsWith(".jpeg"))
+                        rImageFragments.push_back(aPath);
+                }
             }
+
+            // See if the fragment has a slide layout, and recurse.
+            visitRelations(rImport, pFragmentRelations, "slideLayout", rImageFragments);
         }
     }
 }

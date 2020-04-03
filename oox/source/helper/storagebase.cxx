@@ -190,27 +190,27 @@ void StorageBase::copyToStorage( StorageBase& rDestStrg, const OUString& rElemen
 {
     OSL_ENSURE( rDestStrg.isStorage() && !rDestStrg.isReadOnly(), "StorageBase::copyToStorage - invalid destination" );
     OSL_ENSURE( !rElementName.isEmpty(), "StorageBase::copyToStorage - invalid element name" );
-    if( rDestStrg.isStorage() && !rDestStrg.isReadOnly() && !rElementName.isEmpty() )
+    if( !(rDestStrg.isStorage() && !rDestStrg.isReadOnly() && !rElementName.isEmpty()) )
+        return;
+
+    StorageRef xSubStrg = openSubStorage( rElementName, false );
+    if( xSubStrg.get() )
     {
-        StorageRef xSubStrg = openSubStorage( rElementName, false );
-        if( xSubStrg.get() )
+        StorageRef xDestSubStrg = rDestStrg.openSubStorage( rElementName, true );
+        if( xDestSubStrg.get() )
+            xSubStrg->copyStorageToStorage( *xDestSubStrg );
+    }
+    else
+    {
+        Reference< XInputStream > xInStrm = openInputStream( rElementName );
+        if( xInStrm.is() )
         {
-            StorageRef xDestSubStrg = rDestStrg.openSubStorage( rElementName, true );
-            if( xDestSubStrg.get() )
-                xSubStrg->copyStorageToStorage( *xDestSubStrg );
-        }
-        else
-        {
-            Reference< XInputStream > xInStrm = openInputStream( rElementName );
-            if( xInStrm.is() )
+            Reference< XOutputStream > xOutStrm = rDestStrg.openOutputStream( rElementName );
+            if( xOutStrm.is() )
             {
-                Reference< XOutputStream > xOutStrm = rDestStrg.openOutputStream( rElementName );
-                if( xOutStrm.is() )
-                {
-                    BinaryXInputStream aInStrm( xInStrm, true );
-                    BinaryXOutputStream aOutStrm( xOutStrm, true );
-                    aInStrm.copyToStream( aOutStrm );
-                }
+                BinaryXInputStream aInStrm( xInStrm, true );
+                BinaryXOutputStream aOutStrm( xOutStrm, true );
+                aInStrm.copyToStream( aOutStrm );
             }
         }
     }

@@ -82,19 +82,19 @@ void BinaryXOutputStream::writeData( const StreamDataSequence& rData, size_t /*n
 
 void BinaryXOutputStream::writeMemory( const void* pMem, sal_Int32 nBytes, size_t nAtomSize )
 {
-    if( mxOutStrm.is() && (nBytes > 0) )
+    if( !(mxOutStrm.is() && (nBytes > 0)) )
+        return;
+
+    sal_Int32 nBufferSize = getLimitedValue< sal_Int32, sal_Int32 >( nBytes, 0, (OUTPUTSTREAM_BUFFERSIZE / nAtomSize) * nAtomSize );
+    const sal_uInt8* pnMem = static_cast< const sal_uInt8* >( pMem );
+    while( nBytes > 0 )
     {
-        sal_Int32 nBufferSize = getLimitedValue< sal_Int32, sal_Int32 >( nBytes, 0, (OUTPUTSTREAM_BUFFERSIZE / nAtomSize) * nAtomSize );
-        const sal_uInt8* pnMem = static_cast< const sal_uInt8* >( pMem );
-        while( nBytes > 0 )
-        {
-            sal_Int32 nWriteSize = getLimitedValue< sal_Int32, sal_Int32 >( nBytes, 0, nBufferSize );
-            maBuffer.realloc( nWriteSize );
-            memcpy( maBuffer.getArray(), pnMem, static_cast< size_t >( nWriteSize ) );
-            writeData( maBuffer, nAtomSize );
-            pnMem += nWriteSize;
-            nBytes -= nWriteSize;
-        }
+        sal_Int32 nWriteSize = getLimitedValue< sal_Int32, sal_Int32 >( nBytes, 0, nBufferSize );
+        maBuffer.realloc( nWriteSize );
+        memcpy( maBuffer.getArray(), pnMem, static_cast< size_t >( nWriteSize ) );
+        writeData( maBuffer, nAtomSize );
+        pnMem += nWriteSize;
+        nBytes -= nWriteSize;
     }
 }
 

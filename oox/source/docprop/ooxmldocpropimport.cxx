@@ -136,27 +136,27 @@ void SAL_CALL DocumentPropertiesImport::importProperties(
     if( !aCustomStreams.hasElements() )
         aCustomStreams = lclGetRelatedStreams( rxSource, CREATE_OFFICEDOC_RELATION_TYPE_STRICT( "custom-properties" ) );
 
-    if( aCoreStreams.hasElements() || aExtStreams.hasElements() || aCustomStreams.hasElements() )
-    {
-        if( aCoreStreams.getLength() > 1 )
-            throw IOException( "Unexpected core properties stream!" );
+    if( !(aCoreStreams.hasElements() || aExtStreams.hasElements() || aCustomStreams.hasElements()) )
+        return;
 
-        ::oox::core::FastParser aParser;
-        aParser.registerNamespace( NMSP_packageMetaCorePr );
-        aParser.registerNamespace( NMSP_dc );
-        aParser.registerNamespace( NMSP_dcTerms );
-        aParser.registerNamespace( NMSP_officeExtPr );
-        aParser.registerNamespace( NMSP_officeCustomPr );
-        aParser.registerNamespace( NMSP_officeDocPropsVT );
-        aParser.setDocumentHandler( new OOXMLDocPropHandler( mxContext, rxDocumentProperties ) );
+    if( aCoreStreams.getLength() > 1 )
+        throw IOException( "Unexpected core properties stream!" );
 
-        if( aCoreStreams.hasElements() )
-            aParser.parseStream( aCoreStreams[ 0 ], true );
-        for( const auto& rExtStream : std::as_const(aExtStreams) )
-            aParser.parseStream( rExtStream, true );
-        for( const auto& rCustomStream : std::as_const(aCustomStreams) )
-            aParser.parseStream( rCustomStream, true );
-    }
+    ::oox::core::FastParser aParser;
+    aParser.registerNamespace( NMSP_packageMetaCorePr );
+    aParser.registerNamespace( NMSP_dc );
+    aParser.registerNamespace( NMSP_dcTerms );
+    aParser.registerNamespace( NMSP_officeExtPr );
+    aParser.registerNamespace( NMSP_officeCustomPr );
+    aParser.registerNamespace( NMSP_officeDocPropsVT );
+    aParser.setDocumentHandler( new OOXMLDocPropHandler( mxContext, rxDocumentProperties ) );
+
+    if( aCoreStreams.hasElements() )
+        aParser.parseStream( aCoreStreams[ 0 ], true );
+    for( const auto& rExtStream : std::as_const(aExtStreams) )
+        aParser.parseStream( rExtStream, true );
+    for( const auto& rCustomStream : std::as_const(aCustomStreams) )
+        aParser.parseStream( rCustomStream, true );
 }
 
 } // namespace oox::docprop
