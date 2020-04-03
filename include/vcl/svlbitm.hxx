@@ -105,6 +105,7 @@ class VCL_DLLPUBLIC SvLBoxString : public SvLBoxItem
 {
 private:
     bool mbEmphasized;
+    bool mbCustom;
     double mfAlign;
 protected:
     OUString maText;
@@ -125,6 +126,8 @@ public:
 
     void Emphasize(bool bEmphasize) { mbEmphasized = bEmphasize; }
     bool IsEmphasized() const { return mbEmphasized; }
+
+    void SetCustomRender() { mbCustom = true; }
 
     const OUString& GetText() const
     {
