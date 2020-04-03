@@ -791,25 +791,31 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
         pViewData->GetDispatcher().Execute(SID_FILTER, SfxCallMode::SLOT|SfxCallMode::RECORD);
         return;
     }
-    if (eMode != AutoFilterMode::Top10
-            && eMode != AutoFilterMode::Empty
-            && eMode != AutoFilterMode::NonEmpty)
+
+    ScQueryParam aParam;
+    pDBData->GetQueryParam(aParam);
+
+    if (eMode == AutoFilterMode::Normal)
     {
-        // do not recreate auto-filter rules if there is no any changes from the user
+        // Do not recreate autofilter rules if there are no changes from the user
         ScCheckListMenuWindow::ResultType aResult;
         mpAutoFilterPopup->getResult(aResult);
 
         if (aResult == aSaveAutoFilterResult)
         {
-            SAL_INFO("sc.ui", "nothing to do when autofilter entries are the same");
+            SAL_INFO("sc.ui", "Apply autofilter to data when entries are the same");
+            // Apply autofilter to data
+            ScQueryEntry* pEntry = aParam.FindEntryByField(rPos.Col(), true);
+            pEntry->bDoQuery = true;
+            pEntry->nField = rPos.Col();
+            pEntry->eConnect = SC_AND;
+            pEntry->eOp = SC_EQUAL;
+            pViewData->GetView()->Query(aParam, nullptr, true);
             return;
         }
     }
 
-    ScQueryParam aParam;
-    pDBData->GetQueryParam(aParam);
-
-    // Remove old entries.
+    // Remove old entries in auto-filter rules
     aParam.RemoveAllEntriesByField(rPos.Col());
 
     if( !(eMode == AutoFilterMode::Normal && mpAutoFilterPopup->isAllSelected() ) )
@@ -840,19 +846,6 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
                 ScQueryEntry::QueryItemsType& rItems = pEntry->GetQueryItems();
                 rItems.clear();
                 std::for_each(aResult.begin(), aResult.end(), AddItemToEntry(rItems, rPool));
-
-                if (mpAutoFilterPopup->isAllSelected())
-                {
-                    // get all strings from the column
-                    std::vector<ScTypedStrData> aAllStrings; // case sensitive
-                    pDoc->GetDataEntries(rPos.Col(), rPos.Row(), rPos.Tab(), aAllStrings, true);
-
-                    if (rItems.size() == aAllStrings.size() || aAllStrings.empty())
-                    {
-                        // all selected => Remove filter entries
-                        aParam.RemoveAllEntriesByField(rPos.Col());
-                    }
-                }
             }
             break;
             case AutoFilterMode::Top10:
