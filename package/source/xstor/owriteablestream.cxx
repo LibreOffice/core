@@ -306,29 +306,29 @@ OWriteStream_Impl::~OWriteStream_Impl()
 
 void OWriteStream_Impl::CleanCacheStream()
 {
-    if ( m_xCacheStream.is() )
+    if ( !m_xCacheStream.is() )
+        return;
+
+    try
     {
-        try
-        {
-            uno::Reference< io::XInputStream > xInputCache = m_xCacheStream->getInputStream();
-            if ( xInputCache.is() )
-                xInputCache->closeInput();
-        }
-        catch( const uno::Exception& )
-        {}
-
-        try
-        {
-            uno::Reference< io::XOutputStream > xOutputCache = m_xCacheStream->getOutputStream();
-            if ( xOutputCache.is() )
-                xOutputCache->closeOutput();
-        }
-        catch( const uno::Exception& )
-        {}
-
-        m_xCacheStream.clear();
-        m_xCacheSeek.clear();
+        uno::Reference< io::XInputStream > xInputCache = m_xCacheStream->getInputStream();
+        if ( xInputCache.is() )
+            xInputCache->closeInput();
     }
+    catch( const uno::Exception& )
+    {}
+
+    try
+    {
+        uno::Reference< io::XOutputStream > xOutputCache = m_xCacheStream->getOutputStream();
+        if ( xOutputCache.is() )
+            xOutputCache->closeOutput();
+    }
+    catch( const uno::Exception& )
+    {}
+
+    m_xCacheStream.clear();
+    m_xCacheSeek.clear();
 }
 
 void OWriteStream_Impl::InsertIntoPackageFolder( const OUString& aName,
@@ -475,19 +475,19 @@ void OWriteStream_Impl::DisposeWrappers()
     }
     m_pParent = nullptr;
 
-    if ( !m_aInputStreamsVector.empty() )
-    {
-        for ( auto& pStream : m_aInputStreamsVector )
-        {
-            if ( pStream )
-            {
-                pStream->InternalDispose();
-                pStream = nullptr;
-            }
-        }
+    if ( m_aInputStreamsVector.empty() )
+        return;
 
-        m_aInputStreamsVector.clear();
+    for ( auto& pStream : m_aInputStreamsVector )
+    {
+        if ( pStream )
+        {
+            pStream->InternalDispose();
+            pStream = nullptr;
+        }
     }
+
+    m_aInputStreamsVector.clear();
 }
 
 OUString const & OWriteStream_Impl::GetFilledTempFileIfNo( const uno::Reference< io::XInputStream >& xStream )
@@ -897,25 +897,25 @@ void OWriteStream_Impl::Revert()
     m_bHasCachedEncryptionData = false;
     m_aEncryptionData.clear();
 
-    if ( m_nStorageType == embed::StorageFormats::OFOPXML )
+    if ( m_nStorageType != embed::StorageFormats::OFOPXML )
+        return;
+
+    // currently the relations storage is changed only on commit
+    m_xNewRelInfoStream.clear();
+    m_aNewRelInfo = uno::Sequence< uno::Sequence< beans::StringPair > >();
+    if ( m_xOrigRelInfoStream.is() )
     {
-        // currently the relations storage is changed only on commit
-        m_xNewRelInfoStream.clear();
-        m_aNewRelInfo = uno::Sequence< uno::Sequence< beans::StringPair > >();
-        if ( m_xOrigRelInfoStream.is() )
-        {
-            // the original stream is still here, that means that it was not parsed
-            m_aOrigRelInfo = uno::Sequence< uno::Sequence< beans::StringPair > >();
-            m_nRelInfoStatus = RELINFO_NO_INIT;
-        }
+        // the original stream is still here, that means that it was not parsed
+        m_aOrigRelInfo = uno::Sequence< uno::Sequence< beans::StringPair > >();
+        m_nRelInfoStatus = RELINFO_NO_INIT;
+    }
+    else
+    {
+        // the original stream was already parsed
+        if ( !m_bOrigRelInfoBroken )
+            m_nRelInfoStatus = RELINFO_READ;
         else
-        {
-            // the original stream was already parsed
-            if ( !m_bOrigRelInfoBroken )
-                m_nRelInfoStatus = RELINFO_READ;
-            else
-                m_nRelInfoStatus = RELINFO_BROKEN;
-        }
+            m_nRelInfoStatus = RELINFO_BROKEN;
     }
 }
 
@@ -1501,95 +1501,95 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
     // at this point of time the old stream must be already cleaned
     OSL_ENSURE( m_nStorageType == embed::StorageFormats::OFOPXML, "The method should be used only with OFOPXML format!" );
 
-    if ( m_nStorageType == embed::StorageFormats::OFOPXML )
+    if ( m_nStorageType != embed::StorageFormats::OFOPXML )
+        return;
+
+    OSL_ENSURE( !aOrigStreamName.isEmpty() && !aNewStreamName.isEmpty() && xRelStorage.is(),
+                "Wrong relation persistence information is provided!" );
+
+    if ( !xRelStorage.is() || aOrigStreamName.isEmpty() || aNewStreamName.isEmpty() )
+        throw uno::RuntimeException();
+
+    if ( m_nRelInfoStatus == RELINFO_BROKEN || m_nRelInfoStatus == RELINFO_CHANGED_BROKEN )
+        throw io::IOException(); // TODO:
+
+    OUString aOrigRelStreamName = aOrigStreamName + ".rels";
+    OUString aNewRelStreamName = aNewStreamName + ".rels";
+
+    bool bRenamed = aOrigRelStreamName != aNewRelStreamName;
+    if ( m_nRelInfoStatus == RELINFO_CHANGED
+      || m_nRelInfoStatus == RELINFO_CHANGED_STREAM_READ
+      || m_nRelInfoStatus == RELINFO_CHANGED_STREAM )
     {
-        OSL_ENSURE( !aOrigStreamName.isEmpty() && !aNewStreamName.isEmpty() && xRelStorage.is(),
-                    "Wrong relation persistence information is provided!" );
+        if ( bRenamed && xRelStorage->hasByName( aOrigRelStreamName ) )
+            xRelStorage->removeElement( aOrigRelStreamName );
 
-        if ( !xRelStorage.is() || aOrigStreamName.isEmpty() || aNewStreamName.isEmpty() )
-            throw uno::RuntimeException();
-
-        if ( m_nRelInfoStatus == RELINFO_BROKEN || m_nRelInfoStatus == RELINFO_CHANGED_BROKEN )
-            throw io::IOException(); // TODO:
-
-        OUString aOrigRelStreamName = aOrigStreamName + ".rels";
-        OUString aNewRelStreamName = aNewStreamName + ".rels";
-
-        bool bRenamed = aOrigRelStreamName != aNewRelStreamName;
-        if ( m_nRelInfoStatus == RELINFO_CHANGED
-          || m_nRelInfoStatus == RELINFO_CHANGED_STREAM_READ
-          || m_nRelInfoStatus == RELINFO_CHANGED_STREAM )
+        if ( m_nRelInfoStatus == RELINFO_CHANGED )
         {
-            if ( bRenamed && xRelStorage->hasByName( aOrigRelStreamName ) )
-                xRelStorage->removeElement( aOrigRelStreamName );
-
-            if ( m_nRelInfoStatus == RELINFO_CHANGED )
-            {
-                if ( m_aNewRelInfo.hasElements() )
-                {
-                    uno::Reference< io::XStream > xRelsStream =
-                        xRelStorage->openStreamElement( aNewRelStreamName,
-                                                          embed::ElementModes::TRUNCATE | embed::ElementModes::READWRITE );
-
-                    uno::Reference< io::XOutputStream > xOutStream = xRelsStream->getOutputStream();
-                    if ( !xOutStream.is() )
-                        throw uno::RuntimeException();
-
-                    ::comphelper::OFOPXMLHelper::WriteRelationsInfoSequence( xOutStream, m_aNewRelInfo, m_xContext );
-
-                    // set the mediatype
-                    uno::Reference< beans::XPropertySet > xPropSet( xRelsStream, uno::UNO_QUERY_THROW );
-                    xPropSet->setPropertyValue(
-                        "MediaType",
-                        uno::makeAny( OUString("application/vnd.openxmlformats-package.relationships+xml" ) ) );
-
-                    m_nRelInfoStatus = RELINFO_READ;
-                }
-            }
-            else if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM_READ
-                      || m_nRelInfoStatus == RELINFO_CHANGED_STREAM )
+            if ( m_aNewRelInfo.hasElements() )
             {
                 uno::Reference< io::XStream > xRelsStream =
                     xRelStorage->openStreamElement( aNewRelStreamName,
-                                                        embed::ElementModes::TRUNCATE | embed::ElementModes::READWRITE );
+                                                      embed::ElementModes::TRUNCATE | embed::ElementModes::READWRITE );
 
-                uno::Reference< io::XOutputStream > xOutputStream = xRelsStream->getOutputStream();
-                if ( !xOutputStream.is() )
+                uno::Reference< io::XOutputStream > xOutStream = xRelsStream->getOutputStream();
+                if ( !xOutStream.is() )
                     throw uno::RuntimeException();
 
-                uno::Reference< io::XSeekable > xSeek( m_xNewRelInfoStream, uno::UNO_QUERY_THROW );
-                xSeek->seek( 0 );
-                ::comphelper::OStorageHelper::CopyInputToOutput( m_xNewRelInfoStream, xOutputStream );
-                xSeek->seek( 0 );
+                ::comphelper::OFOPXMLHelper::WriteRelationsInfoSequence( xOutStream, m_aNewRelInfo, m_xContext );
 
                 // set the mediatype
                 uno::Reference< beans::XPropertySet > xPropSet( xRelsStream, uno::UNO_QUERY_THROW );
-                xPropSet->setPropertyValue("MediaType",
+                xPropSet->setPropertyValue(
+                    "MediaType",
                     uno::makeAny( OUString("application/vnd.openxmlformats-package.relationships+xml" ) ) );
 
-                if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM )
-                    m_nRelInfoStatus = RELINFO_NO_INIT;
-                else
-                {
-                    // the information is already parsed and the stream is stored, no need in temporary stream any more
-                    m_xNewRelInfoStream.clear();
-                    m_nRelInfoStatus = RELINFO_READ;
-                }
+                m_nRelInfoStatus = RELINFO_READ;
             }
-
-            // the original stream makes no sense after this step
-            m_xOrigRelInfoStream = m_xNewRelInfoStream;
-            m_aOrigRelInfo = m_aNewRelInfo;
-            m_bOrigRelInfoBroken = false;
-            m_aNewRelInfo = uno::Sequence< uno::Sequence< beans::StringPair > >();
-            m_xNewRelInfoStream.clear();
         }
-        else
+        else if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM_READ
+                  || m_nRelInfoStatus == RELINFO_CHANGED_STREAM )
         {
-            // the stream is not changed but it might be renamed
-            if ( bRenamed && xRelStorage->hasByName( aOrigRelStreamName ) )
-                xRelStorage->renameElement( aOrigRelStreamName, aNewRelStreamName );
+            uno::Reference< io::XStream > xRelsStream =
+                xRelStorage->openStreamElement( aNewRelStreamName,
+                                                    embed::ElementModes::TRUNCATE | embed::ElementModes::READWRITE );
+
+            uno::Reference< io::XOutputStream > xOutputStream = xRelsStream->getOutputStream();
+            if ( !xOutputStream.is() )
+                throw uno::RuntimeException();
+
+            uno::Reference< io::XSeekable > xSeek( m_xNewRelInfoStream, uno::UNO_QUERY_THROW );
+            xSeek->seek( 0 );
+            ::comphelper::OStorageHelper::CopyInputToOutput( m_xNewRelInfoStream, xOutputStream );
+            xSeek->seek( 0 );
+
+            // set the mediatype
+            uno::Reference< beans::XPropertySet > xPropSet( xRelsStream, uno::UNO_QUERY_THROW );
+            xPropSet->setPropertyValue("MediaType",
+                uno::makeAny( OUString("application/vnd.openxmlformats-package.relationships+xml" ) ) );
+
+            if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM )
+                m_nRelInfoStatus = RELINFO_NO_INIT;
+            else
+            {
+                // the information is already parsed and the stream is stored, no need in temporary stream any more
+                m_xNewRelInfoStream.clear();
+                m_nRelInfoStatus = RELINFO_READ;
+            }
         }
+
+        // the original stream makes no sense after this step
+        m_xOrigRelInfoStream = m_xNewRelInfoStream;
+        m_aOrigRelInfo = m_aNewRelInfo;
+        m_bOrigRelInfoBroken = false;
+        m_aNewRelInfo = uno::Sequence< uno::Sequence< beans::StringPair > >();
+        m_xNewRelInfoStream.clear();
+    }
+    else
+    {
+        // the stream is not changed but it might be renamed
+        if ( bRenamed && xRelStorage->hasByName( aOrigRelStreamName ) )
+            xRelStorage->renameElement( aOrigRelStreamName, aNewRelStreamName );
     }
 }
 
@@ -1673,20 +1673,20 @@ void OWriteStream::CheckInitOnDemand()
         throw lang::DisposedException();
     }
 
-    if ( m_bInitOnDemand )
-    {
-        SAL_INFO( "package.xstor", "package (mv76033) OWriteStream::CheckInitOnDemand, initializing" );
-        uno::Reference< io::XStream > xStream = m_pImpl->GetTempFileAsStream();
-        if ( xStream.is() )
-        {
-            m_xInStream.set( xStream->getInputStream(), uno::UNO_SET_THROW );
-            m_xOutStream.set( xStream->getOutputStream(), uno::UNO_SET_THROW );
-            m_xSeekable.set( xStream, uno::UNO_QUERY_THROW );
-            m_xSeekable->seek( m_nInitPosition );
+    if ( !m_bInitOnDemand )
+        return;
 
-            m_nInitPosition = 0;
-            m_bInitOnDemand = false;
-        }
+    SAL_INFO( "package.xstor", "package (mv76033) OWriteStream::CheckInitOnDemand, initializing" );
+    uno::Reference< io::XStream > xStream = m_pImpl->GetTempFileAsStream();
+    if ( xStream.is() )
+    {
+        m_xInStream.set( xStream->getInputStream(), uno::UNO_SET_THROW );
+        m_xOutStream.set( xStream->getOutputStream(), uno::UNO_SET_THROW );
+        m_xSeekable.set( xStream, uno::UNO_QUERY_THROW );
+        m_xSeekable->seek( m_nInitPosition );
+
+        m_nInitPosition = 0;
+        m_bInitOnDemand = false;
     }
 }
 
@@ -2178,18 +2178,18 @@ void OWriteStream::CloseOutput_Impl()
     m_xOutStream->closeOutput();
     m_xOutStream.clear();
 
-    if ( !m_bInitOnDemand )
-    {
-        // after the stream is disposed it can be committed
-        // so transport correct size property
-        if ( !m_xSeekable.is() )
-            throw uno::RuntimeException();
+    if ( m_bInitOnDemand )
+        return;
 
-        for ( auto& rProp : m_pImpl->m_aProps )
-        {
-            if ( rProp.Name == "Size" )
-                rProp.Value <<= m_xSeekable->getLength();
-        }
+    // after the stream is disposed it can be committed
+    // so transport correct size property
+    if ( !m_xSeekable.is() )
+        throw uno::RuntimeException();
+
+    for ( auto& rProp : m_pImpl->m_aProps )
+    {
+        if ( rProp.Name == "Size" )
+            rProp.Value <<= m_xSeekable->getLength();
     }
 }
 
@@ -3021,29 +3021,29 @@ void OWriteStream::BroadcastTransaction( sal_Int8 nMessage )
     ::cppu::OInterfaceContainerHelper* pContainer =
             m_pData->m_aListenersContainer.getContainer(
                 cppu::UnoType<embed::XTransactionListener>::get());
-    if ( pContainer )
-    {
-           ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );
-           while ( pIterator.hasMoreElements( ) )
-           {
-            OSL_ENSURE( nMessage >= 1 && nMessage <= 4, "Wrong internal notification code is used!" );
+    if ( !pContainer )
+           return;
 
-            switch( nMessage )
-            {
-                case STOR_MESS_PRECOMMIT:
-                       static_cast<embed::XTransactionListener*>( pIterator.next( ) )->preCommit( aSource );
-                    break;
-                case STOR_MESS_COMMITTED:
-                       static_cast<embed::XTransactionListener*>( pIterator.next( ) )->commited( aSource );
-                    break;
-                case STOR_MESS_PREREVERT:
-                       static_cast<embed::XTransactionListener*>( pIterator.next( ) )->preRevert( aSource );
-                    break;
-                case STOR_MESS_REVERTED:
-                       static_cast< embed::XTransactionListener*>( pIterator.next( ) )->reverted( aSource );
-                    break;
-            }
-           }
+    ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );
+    while ( pIterator.hasMoreElements( ) )
+    {
+        OSL_ENSURE( nMessage >= 1 && nMessage <= 4, "Wrong internal notification code is used!" );
+
+        switch( nMessage )
+        {
+            case STOR_MESS_PRECOMMIT:
+                   static_cast<embed::XTransactionListener*>( pIterator.next( ) )->preCommit( aSource );
+                break;
+            case STOR_MESS_COMMITTED:
+                   static_cast<embed::XTransactionListener*>( pIterator.next( ) )->commited( aSource );
+                break;
+            case STOR_MESS_PREREVERT:
+                   static_cast<embed::XTransactionListener*>( pIterator.next( ) )->preRevert( aSource );
+                break;
+            case STOR_MESS_REVERTED:
+                   static_cast< embed::XTransactionListener*>( pIterator.next( ) )->reverted( aSource );
+                break;
+        }
     }
 }
 void SAL_CALL OWriteStream::commit()

@@ -99,20 +99,20 @@ void ZipOutputEntryBase::closeEntry()
     deflaterReset();
     m_aCRC.reset();
 
-    if (m_bEncryptCurrentEntry)
+    if (!m_bEncryptCurrentEntry)
+        return;
+
+    m_xCipherContext.clear();
+
+    uno::Sequence< sal_Int8 > aDigestSeq;
+    if ( m_xDigestContext.is() )
     {
-        m_xCipherContext.clear();
-
-        uno::Sequence< sal_Int8 > aDigestSeq;
-        if ( m_xDigestContext.is() )
-        {
-            aDigestSeq = m_xDigestContext->finalizeDigestAndDispose();
-            m_xDigestContext.clear();
-        }
-
-        if ( m_pCurrentStream )
-            m_pCurrentStream->setDigest( aDigestSeq );
+        aDigestSeq = m_xDigestContext->finalizeDigestAndDispose();
+        m_xDigestContext.clear();
     }
+
+    if ( m_pCurrentStream )
+        m_pCurrentStream->setDigest( aDigestSeq );
 }
 
 void ZipOutputEntryBase::processDeflated( const uno::Sequence< sal_Int8 >& deflateBuffer, sal_Int32 nLength )
@@ -148,19 +148,19 @@ void ZipOutputEntryBase::processDeflated( const uno::Sequence< sal_Int8 >& defla
         }
     }
 
-    if ( isDeflaterFinished() && m_bEncryptCurrentEntry && m_xDigestContext.is() && m_xCipherContext.is() )
-    {
-        // FIXME64: sequence not 64bit safe.
-        uno::Sequence< sal_Int8 > aEncryptionBuffer = m_xCipherContext->finalizeCipherContextAndDispose();
-        if ( aEncryptionBuffer.hasElements() )
-        {
-            m_xOutStream->writeBytes( aEncryptionBuffer );
+    if ( !(isDeflaterFinished() && m_bEncryptCurrentEntry && m_xDigestContext.is() && m_xCipherContext.is()) )
+        return;
 
-            // the sizes as well as checksum for encrypted streams are calculated here
-            m_pCurrentEntry->nCompressedSize += aEncryptionBuffer.getLength();
-            m_pCurrentEntry->nSize = m_pCurrentEntry->nCompressedSize;
-            m_aCRC.update( aEncryptionBuffer );
-        }
+    // FIXME64: sequence not 64bit safe.
+    uno::Sequence< sal_Int8 > aEncryptionBuffer = m_xCipherContext->finalizeCipherContextAndDispose();
+    if ( aEncryptionBuffer.hasElements() )
+    {
+        m_xOutStream->writeBytes( aEncryptionBuffer );
+
+        // the sizes as well as checksum for encrypted streams are calculated here
+        m_pCurrentEntry->nCompressedSize += aEncryptionBuffer.getLength();
+        m_pCurrentEntry->nSize = m_pCurrentEntry->nCompressedSize;
+        m_aCRC.update( aEncryptionBuffer );
     }
 }
 
