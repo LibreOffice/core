@@ -62,32 +62,6 @@ class WriterInsertTableDialog(UITestCase):
 
         self.ui_test.close_doc()
 
-    def test_tdf87199(self):
-
-        self.insert_table("Test4", 2, 1)
-
-        document = self.ui_test.get_component()
-        tables = document.getTextTables()
-        self.insertTextIntoCell(tables[0], "A1", "test" )
-        self.insertTextIntoCell(tables[0], "A2", "test" )
-
-        cursor = tables[0].getCellByName( "A1" ).createTextCursor()
-
-        self.xUITest.executeCommand(".uno:EntireColumn")
-
-        self.xUITest.executeCommand(".uno:MergeCells")
-
-        tables = document.getTextTables()
-        self.assertEqual(len(tables[0].getRows()), 1)
-        self.assertEqual(len(tables[0].getColumns()), 1)
-
-        self.xUITest.executeCommand(".uno:Undo")
-
-        self.assertEqual(len(tables[0].getRows()), 2)
-        self.assertEqual(len(tables[0].getColumns()), 1)
-
-        self.ui_test.close_doc()
-
     def test_cancel_button_insert_table_dialog(self):
         self.ui_test.create_doc_in_start_center("writer")
         self.ui_test.execute_dialog_through_command(".uno:InsertTable")
