@@ -184,9 +184,9 @@ int access_u(const rtl_uString* pustrPath, int mode)
     int result = access(fn.getStr(), mode);
     int saved_errno = errno;
     if (result == -1)
-        SAL_INFO("sal.file", "access(" << fn.getStr() << ",0" << std::oct << mode << std::dec << "): " << UnixErrnoString(saved_errno));
+        SAL_INFO("sal.file", "access(" << fn.getStr() << "," << osl::accessModeToString(mode) << "): " << UnixErrnoString(saved_errno));
     else
-        SAL_INFO("sal.file", "access(" << fn.getStr() << ",0" << std::oct << mode << std::dec << "): OK");
+        SAL_INFO("sal.file", "access(" << fn.getStr() << "," << osl::accessModeToString(mode) << "): OK");
 
     done_accessing_file_path(fn.getStr(), state);
 
@@ -328,9 +328,9 @@ int open_c(const char *cpPath, int oflag, int mode)
     int result = open(cpPath, oflag, mode);
     int saved_errno = errno;
     if (result == -1)
-        SAL_INFO("sal.file", "open(" << cpPath << ",0" << std::oct << oflag << ",0" << mode << std::dec << "): " << UnixErrnoString(saved_errno));
+        SAL_INFO("sal.file", "open(" << cpPath << "," << osl::openFlagsToString(oflag) << "," << osl::openModeToString(mode) << "): " << UnixErrnoString(saved_errno));
     else
-        SAL_INFO("sal.file", "open(" << cpPath << ",0" << std::oct << oflag << ",0" << mode << std::dec << ") => " << result);
+        SAL_INFO("sal.file", "open(" << cpPath << "," << osl::openFlagsToString(oflag) << "," << osl::openModeToString(mode) << ") => " << result);
 
 #if HAVE_FEATURE_MACOSX_SANDBOX
     if (isSandboxed && result != -1 && (oflag & O_CREAT) && (oflag & O_EXCL))
