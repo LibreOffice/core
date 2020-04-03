@@ -118,7 +118,7 @@ void TableStyleSheetEntry::AddTblStylePr( TblStyleType nType, const PropertyMapP
             PropertyIds nInsideProp = ( i < 2 ) ? META_PROP_HORIZONTAL_BORDER : META_PROP_VERTICAL_BORDER;
             std::optional<PropertyMap::Property> pInside = pProps->getProperty(nInsideProp);
 
-            if ( pChecked && pProps )
+            if ( pChecked && pInside )
             {
                 // In this case, remove the inside border
                 pProps->Erase( nInsideProp );
