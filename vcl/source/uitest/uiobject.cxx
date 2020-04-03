@@ -21,6 +21,8 @@
 #include <vcl/vclmedit.hxx>
 
 #include <comphelper/string.hxx>
+#include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
 
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
@@ -936,7 +938,11 @@ ListBoxUIObject::~ListBoxUIObject()
 void ListBoxUIObject::execute(const OUString& rAction,
         const StringMap& rParameters)
 {
-    if (!mxListBox->IsEnabled() || !mxListBox->IsReallyVisible())
+    if (!mxListBox->IsEnabled())
+        return;
+
+    bool isMobilePhone = comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView());
+    if (!isMobilePhone && !mxListBox->IsReallyVisible())
         return;
 
     if (rAction == "SELECT")
