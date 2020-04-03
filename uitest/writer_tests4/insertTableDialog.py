@@ -6,6 +6,7 @@
 
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
+from uitest.uihelper.common import get_state_as_dict
 
 class WriterInsertTableDialog(UITestCase):
 
@@ -28,6 +29,10 @@ class WriterInsertTableDialog(UITestCase):
         xRowSpin = xDialog.getChild("rowspin")
         xRowSpin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
         xRowSpin.executeAction("TYPE", mkPropertyValues({"TEXT": str(rows)}))
+
+        self.assertEqual(get_state_as_dict(xNameEdit)["Text"], name)
+        self.assertEqual(get_state_as_dict(xColSpin)["Text"], str(cols))
+        self.assertEqual(get_state_as_dict(xRowSpin)["Text"], str(rows))
 
         xOkBtn = xDialog.getChild("ok")
         xOkBtn.executeAction("CLICK", tuple())
@@ -83,12 +88,16 @@ class WriterInsertTableDialog(UITestCase):
 
         self.ui_test.close_doc()
 
-    def test_cancel_button_insert_line_break_dialog(self):
+    def test_cancel_button_insert_table_dialog(self):
         self.ui_test.create_doc_in_start_center("writer")
         self.ui_test.execute_dialog_through_command(".uno:InsertTable")
         Dialog = self.xUITest.getTopFocusWindow()
         CancelBtn = Dialog.getChild("cancel")
         self.ui_test.close_dialog_through_button(CancelBtn)
+
+        document = self.ui_test.get_component()
+        tables = document.getTextTables()
+        self.assertEqual(len(tables), 0)
 
         self.ui_test.close_doc()
 
