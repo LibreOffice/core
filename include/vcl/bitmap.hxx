@@ -74,7 +74,8 @@ enum class BmpConversion
     N24Bit,
     N32Bit,
     N8BitTrans,
-    Ghosted
+    Ghosted,
+    N8BitNoConversion // make 8bit without color conversion (e.g. take the red channel)
 };
 
 enum class BmpCombine

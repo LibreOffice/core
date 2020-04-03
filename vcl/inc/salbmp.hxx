@@ -81,6 +81,10 @@ public:
     {
         return false;
     }
+    virtual bool            InterpretAs8Bit()
+    {
+        return false;
+    }
 
     void GetChecksum(BitmapChecksum& rChecksum) const
     {
