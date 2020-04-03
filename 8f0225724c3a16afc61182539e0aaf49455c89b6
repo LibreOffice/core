@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cac766fb_6462e19f",
+        "filename": "sfx2/source/control/recentdocsview.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-04-03T15:28:07Z",
+      "side": 1,
+      "message": "Previous aBase64 string looked like \"debug:154328:154328: iVBORw0KGgoAAAANSUhEUgAAAMYAAAEACAYAAADoXQlAAAACn0lEQVR4nO3ToQ0AIADAMAT/vwxYknkQ7QUzm+sYwGW+DoAfGQOCMSAYA4IxIBgDgjEgGAOCMSAYA4IxIBgDgjEgGAOCMSAYA4IxIBgDgjEgGAOCMSAYA4IxIBgDgjEgGAOCMSAYA4IxIBgDgjEgGAOCMSAYA4IxIBgDgjEgGAOCMSAYA4IxI...\". Somehow I need to convert this.",
+      "revId": "8f0225724c3a16afc61182539e0aaf49455c89b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
