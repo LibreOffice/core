@@ -45,6 +45,8 @@ public:
     static ::Color      getDmlPresetColor( sal_Int32 nToken, ::Color nDefaultRgb );
     /** Returns the RGB value for the passed VML color token, or nDefaultRgb on error. */
     static ::Color      getVmlPresetColor( sal_Int32 nToken, ::Color nDefaultRgb );
+    /** Returns the RGB value for the passed VML color token, or nDefaultRgb on error. */
+    static ::Color      getHighlightColor(sal_Int32 nToken, ::Color nDefaultRgb);
 
     /** Sets the color to unused state. */
     void                setUnused();
@@ -57,6 +59,8 @@ public:
     void                setHslClr( sal_Int32 nHue, sal_Int32 nSat, sal_Int32 nLum );
     /** Sets a predefined color from the a:prstClr element. */
     void                setPrstClr( sal_Int32 nToken );
+    /** Sets a predefined color from the w:highlight element. */
+    void                setHighlight(sal_Int32 nToken);
     /** Sets a scheme color from the a:schemeClr element. */
     void                setSchemeClr( sal_Int32 nToken );
     /** Sets the scheme name from the a:schemeClr element for interoperability purposes */

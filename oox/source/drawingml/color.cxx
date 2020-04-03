@@ -39,13 +39,15 @@ struct PresetColorsPool
 
     ColorVector         maDmlColors;        /// Predefined colors in DrawingML, indexed by XML token.
     ColorVector         maVmlColors;        /// Predefined colors in VML, indexed by XML token.
+    ColorVector         maHighlightColors;  /// Predefined colors in DrawingML for highlight, indexed by XML token.
 
     explicit            PresetColorsPool();
 };
 
 PresetColorsPool::PresetColorsPool() :
     maDmlColors( static_cast< size_t >( XML_TOKEN_COUNT ), API_RGB_TRANSPARENT ),
-    maVmlColors( static_cast< size_t >( XML_TOKEN_COUNT ), API_RGB_TRANSPARENT )
+    maVmlColors( static_cast< size_t >( XML_TOKEN_COUNT ), API_RGB_TRANSPARENT ),
+    maHighlightColors( static_cast<size_t>(XML_TOKEN_COUNT), API_RGB_TRANSPARENT )
 {
     // predefined colors in DrawingML (map XML token identifiers to RGB values)
     static const std::pair<sal_Int32, ::Color> spnDmlColors[] =
@@ -138,6 +140,22 @@ PresetColorsPool::PresetColorsPool() :
     };
     for(auto const& nEntry : spnVmlColors)
         maVmlColors[ static_cast< size_t >(nEntry.first) ] = nEntry.second;
+
+    // predefined highlight colors in DML (map XML token identifiers to RGB values)
+    static const std::pair<sal_Int32, ::Color> spnHighlightColors[] =
+    {
+        // tdf#131841 Predefined color for OOXML highlight.
+        {XML_black,             ::Color(0x000000)},    {XML_blue,              ::Color(0x0000FF)},
+        {XML_cyan,              ::Color(0x00FFFF)},    {XML_darkBlue,          ::Color(0x00008B)},
+        {XML_darkCyan,          ::Color(0x008B8B)},    {XML_darkGray,          ::Color(0xA9A9A9)},
+        {XML_darkGreen,         ::Color(0x006400)},    {XML_darkMagenta,       ::Color(0x800080)},
+        {XML_darkRed,           ::Color(0x8B0000)},    {XML_darkYellow,        ::Color(0x808000)},
+        {XML_green,             ::Color(0x00FF00)},    {XML_lightGray,         ::Color(0xD3D3D3)},
+        {XML_magenta,           ::Color(0xFF00FF)},    {XML_red,               ::Color(0xFF0000)},
+        {XML_white,             ::Color(0xFFFFFF)},    {XML_yellow,            ::Color(0xFFFF00)}
+    };
+    for (auto const& nEntry : spnHighlightColors)
+        maHighlightColors[static_cast<size_t>(nEntry.first)] = nEntry.second;
 }
 
 struct StaticPresetColorsPool : public ::rtl::Static< PresetColorsPool, StaticPresetColorsPool > {};
@@ -220,6 +238,15 @@ Color::Color() :
     return (sal_Int32(nRgbValue) >= 0) ? nRgbValue : nDefaultRgb;
 }
 
+::Color Color::getHighlightColor(sal_Int32 nToken, ::Color nDefaultRgb)
+{
+    /*  Do not pass nDefaultRgb to ContainerHelper::getVectorElement(), to be
+        able to catch the existing vector entries without corresponding XML
+        token identifier. */
+    ::Color nRgbValue = ContainerHelper::getVectorElement( StaticPresetColorsPool::get().maHighlightColors, nToken, API_RGB_TRANSPARENT );
+    return (sal_Int32(nRgbValue) >= 0) ? nRgbValue : nDefaultRgb;
+}
+
 void Color::setUnused()
 {
     meMode = COLOR_UNUSED;
@@ -264,6 +291,14 @@ void Color::setPrstClr( sal_Int32 nToken )
     ::Color nRgbValue = getDmlPresetColor( nToken, API_RGB_TRANSPARENT );
     OSL_ENSURE( sal_Int32(nRgbValue) >= 0, "Color::setPrstClr - invalid preset color token" );
     if( sal_Int32(nRgbValue) >= 0 )
+        setSrgbClr( nRgbValue );
+}
+
+void Color::setHighlight(sal_Int32 nToken)
+{
+    ::Color nRgbValue = getHighlightColor(nToken, API_RGB_TRANSPARENT);
+    OSL_ENSURE( sal_Int32(nRgbValue) >= 0, "Color::setPrstClr - invalid preset color token" );
+    if ( sal_Int32(nRgbValue) >= 0 )
         setSrgbClr( nRgbValue );
 }
 
