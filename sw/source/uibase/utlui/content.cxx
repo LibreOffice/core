@@ -369,7 +369,8 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                         pParentFormat = pParentFormat->GetParent();
                     }
 
-                    std::unique_ptr<SwContent> pCnt(new SwContent(this, rSectionName,
+                    std::unique_ptr<SwContent> pCnt(new SwRegionContent(this, rSectionName,
+                            nLevel,
                             pFormat->FindLayoutRect( false, &aNullPt ).Top()));
 
                     SwPtrMsgPoolItem aAskItem( RES_CONTENT_VISIBLE, nullptr );
@@ -674,7 +675,8 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                         pParentFormat = pParentFormat->GetParent();
                     }
 
-                    std::unique_ptr<SwContent> pCnt(new SwContent(this, sSectionName,
+                    std::unique_ptr<SwContent> pCnt(new SwRegionContent(this, sSectionName,
+                            nLevel,
                             pFormat->FindLayoutRect( false, &aNullPt ).Top()));
                     if( !pFormat->GetInfo( aAskItem ) &&
                         !aAskItem.pObject )     // not visible
@@ -1482,6 +1484,7 @@ bool SwContentTree::RequestingChildren(const weld::TreeIter& rParent)
         }
         else
         {
+            bool bRegion = pCntType->GetType() == ContentTypeId::REGION;
             for(size_t i = 0; i < nCount; ++i)
             {
                 const SwContent* pCnt = pCntType->GetMember(i);
@@ -1493,6 +1496,8 @@ bool SwContentTree::RequestingChildren(const weld::TreeIter& rParent)
                     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pCnt)));
                     insert(&rParent, sEntry, sId, nullptr, false, xChild.get());
                     m_xTreeView->set_sensitive(*xChild, !pCnt->IsInvisible());
+                    if (bRegion)
+                        m_xTreeView->set_extra_row_indent(*xChild, static_cast<const SwRegionContent*>(pCnt)->GetRegionLevel());
                     bChild = true;
                 }
             }
@@ -1954,6 +1959,8 @@ void SwContentTree::Display( bool bActive )
 
             if (!bChOnDemand)
             {
+                bool bRegion = rpRootContentT->GetType() == ContentTypeId::REGION;
+
                 std::unique_ptr<weld::TreeIter> xChild = m_xTreeView->make_iterator();
                 for (size_t i = 0; i < rpRootContentT->GetMemberCount(); ++i)
                 {
@@ -1966,6 +1973,8 @@ void SwContentTree::Display( bool bActive )
                         OUString sSubId(OUString::number(reinterpret_cast<sal_Int64>(pCnt)));
                         insert(xEntry.get(), sEntry, sSubId, nullptr, false, xChild.get());
                         m_xTreeView->set_sensitive(*xChild, !pCnt->IsInvisible());
+                        if (bRegion)
+                            m_xTreeView->set_extra_row_indent(*xChild, static_cast<const SwRegionContent*>(pCnt)->GetRegionLevel());
                     }
                 }
             }
