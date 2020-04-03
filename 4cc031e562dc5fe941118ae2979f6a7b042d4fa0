@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "01abd487_5dd7e19e",
+        "filename": "ridljar/Jar_libreoffice.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-04-03T14:38:10Z",
+      "side": 1,
+      "message": "this will put the \"com\" dir into the jar but the \"module-info\" is outside that\n\nuse gb_Jar_add_packagefile to add top-level files",
+      "revId": "4cc031e562dc5fe941118ae2979f6a7b042d4fa0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d9f3dde_5afecd44",
+        "filename": "ridljar/Jar_libreoffice.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-04-03T14:38:10Z",
+      "side": 1,
+      "message": "if this is intended for use by extensions, then officebean doesn\u0027t belong in here, if there\u0027s a risk that an extension could start to depend on it",
+      "revId": "4cc031e562dc5fe941118ae2979f6a7b042d4fa0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79075752_53337de9",
+        "filename": "ridljar/source/libreoffice/module-info.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-04-03T14:38:10Z",
+      "side": 1,
+      "message": "the examples from the linked documentation all have reverse-dns module names so \"org.libreoffice\"?",
+      "revId": "4cc031e562dc5fe941118ae2979f6a7b042d4fa0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
