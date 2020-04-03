@@ -36,7 +36,7 @@ class CertificateViewerDetailsTP;
 class CertificateViewerCertPathTP;
 class CertificateChooser;
 
-class CertificateViewer : public weld::GenericDialogController
+class CertificateViewer final : public weld::GenericDialogController
 {
 private:
     friend class CertificateViewerGeneralTP;

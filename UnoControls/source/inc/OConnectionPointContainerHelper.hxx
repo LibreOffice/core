@@ -27,7 +27,7 @@ namespace com::sun::star::lang { class XConnectionPoint; }
 
 namespace unocontrols {
 
-class OConnectionPointContainerHelper   :   public  css::lang::XConnectionPointContainer
+class OConnectionPointContainerHelper final :   public  css::lang::XConnectionPointContainer
                                         ,   public  ::cppu::OWeakObject
 {
 public:

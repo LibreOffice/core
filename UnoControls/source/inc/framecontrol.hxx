@@ -31,7 +31,7 @@ namespace unocontrols { class OConnectionPointContainerHelper; }
 
 namespace unocontrols {
 
-class FrameControl  : public css::awt::XControlModel
+class FrameControl final : public css::awt::XControlModel
                     , public css::lang::XConnectionPointContainer
                     , public BaseControl                                // This order is necessary for right initialization of m_aMutex!
                     , public ::cppu::OBroadcastHelper
@@ -130,7 +130,8 @@ public:
 
     static OUString impl_getStaticImplementationName();
 
-protected:
+private:
+
     using OPropertySetHelper::getFastPropertyValue;
 
     //  OPropertySetHelper
@@ -161,8 +162,6 @@ protected:
     virtual css::awt::WindowDescriptor impl_getWindowDescriptor(
         const css::uno::Reference< css::awt::XWindowPeer >& xParentPeer
     ) override;
-
-private:
 
     void impl_createFrame(  const css::uno::Reference< css::awt::XWindowPeer >&       xPeer           ,
                             const OUString&                                         sURL            ,

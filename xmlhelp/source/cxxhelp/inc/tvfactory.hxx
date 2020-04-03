@@ -31,7 +31,7 @@
 
 namespace treeview {
 
-class TVFactory: public cppu::WeakImplHelper <
+class TVFactory final : public cppu::WeakImplHelper <
     css::lang::XServiceInfo,
     css::lang::XMultiServiceFactory >
     {
