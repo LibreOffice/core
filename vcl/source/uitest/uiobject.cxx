@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sfx2/lokhelper.hxx>
 #include <vcl/uitest/uiobject.hxx>
 
 #include <vcl/event.hxx>
@@ -21,6 +22,7 @@
 #include <vcl/vclmedit.hxx>
 
 #include <comphelper/string.hxx>
+#include <comphelper/lok.hxx>
 
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
@@ -936,7 +938,11 @@ ListBoxUIObject::~ListBoxUIObject()
 void ListBoxUIObject::execute(const OUString& rAction,
         const StringMap& rParameters)
 {
-    if (!mxListBox->IsEnabled() || !mxListBox->IsReallyVisible())
+    if (!mxListBox->IsEnabled())
+        return;
+
+    bool isMobilePhone = comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView());
+    if (!isMobilePhone && !mxListBox->IsReallyVisible())
         return;
 
     if (rAction == "SELECT")
