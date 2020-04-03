@@ -460,12 +460,9 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
         return mImage;
     }
     SkiaZone zone;
-    sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(mSize);
-    assert(surface);
-    SkPaint paint;
-    paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
-    surface->getCanvas()->drawBitmap(GetAsSkBitmap(), 0, 0, &paint);
-    const_cast<sk_sp<SkImage>&>(mImage) = surface->makeImageSnapshot();
+    sk_sp<SkImage> image = SkiaHelper::createSkImage(GetAsSkBitmap());
+    assert(image);
+    const_cast<sk_sp<SkImage>&>(mImage) = image;
     SAL_INFO("vcl.skia.trace", "getskimage(" << this << ")");
     return mImage;
 }
@@ -528,16 +525,9 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
         delete convertedBitmap;
         alphaBitmap.setImmutable();
     }
-    sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(mSize, kAlpha_8_SkColorType);
-    assert(surface);
-    // https://bugs.chromium.org/p/skia/issues/detail?id=9692
-    // Raster kAlpha_8_SkColorType surfaces need empty contents for SkBlendMode::kSrc.
-    if (!surface->getCanvas()->getGrContext())
-        surface->getCanvas()->clear(SkColorSetARGB(0x00, 0x00, 0x00, 0x00));
-    SkPaint paint;
-    paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
-    surface->getCanvas()->drawBitmap(alphaBitmap, 0, 0, &paint);
-    const_cast<sk_sp<SkImage>&>(mAlphaImage) = surface->makeImageSnapshot();
+    sk_sp<SkImage> image = SkiaHelper::createSkImage(alphaBitmap);
+    assert(image);
+    const_cast<sk_sp<SkImage>&>(mAlphaImage) = image;
     SAL_INFO("vcl.skia.trace", "getalphaskbitmap(" << this << ")");
     return mAlphaImage;
 }

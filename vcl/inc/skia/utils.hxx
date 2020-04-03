@@ -43,6 +43,9 @@ inline sk_sp<SkSurface> createSkSurface(const Size& size, SkColorType type = kN3
     return createSkSurface(size.Width(), size.Height(), type);
 }
 
+// Create SkImage, GPU-backed if possible.
+VCL_DLLPUBLIC sk_sp<SkImage> createSkImage(const SkBitmap& bitmap);
+
 // Must be called in any VCL backend before any Skia functionality is used.
 // If not set, Skia will be disabled.
 VCL_DLLPUBLIC void

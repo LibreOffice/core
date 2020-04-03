@@ -333,6 +333,35 @@ sk_sp<SkSurface> createSkSurface(int width, int height, SkColorType type)
     return surface;
 }
 
+sk_sp<SkImage> createSkImage(const SkBitmap& bitmap)
+{
+    SkiaZone zone;
+    assert(bitmap.colorType() == kN32_SkColorType || bitmap.colorType() == kAlpha_8_SkColorType);
+    switch (SkiaHelper::renderMethodToUse())
+    {
+        case SkiaHelper::RenderVulkan:
+        {
+            if (GrContext* grContext = getSharedGrContext())
+            {
+                sk_sp<SkSurface> surface = SkSurface::MakeRenderTarget(
+                    grContext, SkBudgeted::kNo, bitmap.info().makeAlphaType(kPremul_SkAlphaType));
+                assert(surface);
+                SkPaint paint;
+                paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
+                surface->getCanvas()->drawBitmap(bitmap, 0, 0, &paint);
+                return surface->makeImageSnapshot();
+            }
+            break;
+        }
+        default:
+            break;
+    }
+    // Create raster image as a fallback.
+    sk_sp<SkImage> image = SkImage::MakeFromBitmap(bitmap);
+    assert(image);
+    return image;
+}
+
 void cleanup()
 {
     delete sharedGrContext;
