@@ -22,6 +22,7 @@
 #include <vcl/uitest/logger.hxx>
 
 #include <comphelper/string.hxx>
+#include <comphelper/lok.hxx>
 
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
@@ -995,7 +996,11 @@ ListBoxUIObject::~ListBoxUIObject()
 void ListBoxUIObject::execute(const OUString& rAction,
         const StringMap& rParameters)
 {
-    if (!mxListBox->IsEnabled() || !mxListBox->IsReallyVisible())
+    if (!mxListBox->IsEnabled())
+        return;
+
+    bool isTiledRendering = comphelper::LibreOfficeKit::isActive();
+    if (!isTiledRendering && !mxListBox->IsReallyVisible())
         return;
 
     if (rAction == "SELECT")
