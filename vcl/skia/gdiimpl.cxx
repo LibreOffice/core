@@ -944,7 +944,7 @@ bool SkiaSalGraphicsImpl::blendAlphaBitmap(const SalTwoRect& rPosAry,
     // This was originally implemented for the OpenGL drawing method and it is poorly documented.
     // The source and mask bitmaps are the usual data and alpha bitmaps, and 'alpha'
     // is the "alpha" layer of the VirtualDevice (the alpha in VirtualDevice is also stored
-    // as a separate bitmap). Now I understand it correctly these two alpha masks first need
+    // as a separate bitmap). Now if I understand it correctly these two alpha masks first need
     // to be combined into the actual alpha mask to be used. The formula for TYPE_BLEND
     // in opengl's combinedTextureFragmentShader.glsl is
     // "result_alpha = 1.0 - (1.0 - floor(alpha)) * mask".
