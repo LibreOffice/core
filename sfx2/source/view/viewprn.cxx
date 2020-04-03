@@ -501,7 +501,7 @@ void SfxViewShell::SetPrinter_Impl( VclPtr<SfxPrinter>& pNewPrinter )
             ( bOriChg ? aNewPgSz.Height() : aNewPgSz.Width() ) ) &&
             bSizeToDoc;
 
-    // Message and Flags for page format, summaries changes
+    // Message and Flags for page format changes
     OUString aMsg;
     SfxPrinterChangeFlags nNewOpt = SfxPrinterChangeFlags::NONE;
     if( bOriChg && bPgSzChg )
@@ -520,7 +520,7 @@ void SfxViewShell::SetPrinter_Impl( VclPtr<SfxPrinter>& pNewPrinter )
         nNewOpt = SfxPrinterChangeFlags::CHG_SIZE;
     }
 
-    // Summaries in this variable what has been changed.
+    // Summarize in this variable what has been changed.
     SfxPrinterChangeFlags nChangedFlags = SfxPrinterChangeFlags::NONE;
 
     // Ask if possible, if page format should be taken over from printer.
