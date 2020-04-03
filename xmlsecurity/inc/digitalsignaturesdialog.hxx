@@ -45,7 +45,7 @@ namespace xml { namespace dom {
 
 class HeaderBar;
 
-class DigitalSignaturesDialog : public weld::GenericDialogController
+class DigitalSignaturesDialog final : public weld::GenericDialogController
 {
 private:
     DocumentSignatureManager maSignatureManager;

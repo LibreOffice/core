@@ -349,7 +349,7 @@ public:
     SystemWindow* getSystemWindow();
 };
 
-class SalInstanceLabel : public SalInstanceWidget, public virtual weld::Label
+class SalInstanceLabel final : public SalInstanceWidget, public virtual weld::Label
 {
 private:
     // Control instead of FixedText so we can also use this for
@@ -497,7 +497,7 @@ public:
     virtual weld::Container* weld_content_area() override;
 };
 
-class WeldTextFilter : public TextFilter
+class WeldTextFilter final : public TextFilter
 {
 private:
     Link<OUString&, bool>& m_rInsertTextHdl;
@@ -567,7 +567,7 @@ public:
     virtual ~SalInstanceEntry() override;
 };
 
-class SalInstanceSpinButton : public SalInstanceEntry, public virtual weld::SpinButton
+class SalInstanceSpinButton final : public SalInstanceEntry, public virtual weld::SpinButton
 {
 private:
     VclPtr<FormattedField> m_xButton;

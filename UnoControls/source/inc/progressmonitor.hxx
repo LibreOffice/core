@@ -51,7 +51,7 @@ struct IMPL_TextlistItem
     OUString sText;          /// Right site of textline in dialog
 };
 
-class ProgressMonitor   : public css::awt::XLayoutConstrains
+class ProgressMonitor final : public css::awt::XLayoutConstrains
                         , public css::awt::XButton
                         , public css::awt::XProgressMonitor
                         , public BaseContainerControl
@@ -212,12 +212,11 @@ public:
 
     static OUString impl_getStaticImplementationName();
 
-protected:
+private:
     virtual void impl_paint( sal_Int32 nX ,
                              sal_Int32 nY ,
                              const css::uno::Reference< css::awt::XGraphics >& xGraphics ) override;
 
-private:
     using BaseControl::impl_recalcLayout;
 
     void impl_recalcLayout();
@@ -230,7 +229,6 @@ private:
 
 // debug methods
 
-private:
     static bool impl_debug_checkParameter( const OUString& sTopic, const OUString& sText );    // addText, updateText
     static bool impl_debug_checkParameter( const OUString& rTopic );                           // removeText
 

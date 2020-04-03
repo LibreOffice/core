@@ -42,7 +42,7 @@ class ProgressBar;
 #define STATUSINDICATOR_DEFAULT_WIDTH           300
 #define STATUSINDICATOR_DEFAULT_HEIGHT          25
 
-class StatusIndicator   : public css::awt::XLayoutConstrains
+class StatusIndicator final : public css::awt::XLayoutConstrains
                         , public css::task::XStatusIndicator
                         , public BaseContainerControl
 {
@@ -154,7 +154,7 @@ public:
 
     static OUString impl_getStaticImplementationName();
 
-protected:
+private:
     virtual css::awt::WindowDescriptor impl_getWindowDescriptor(
         const css::uno::Reference< css::awt::XWindowPeer >& xParentPeer
     ) override;
@@ -167,7 +167,6 @@ protected:
 
     virtual void impl_recalcLayout( const css::awt::WindowEvent& aEvent ) override;
 
-private:
     css::uno::Reference< css::awt::XFixedText >   m_xText;
     rtl::Reference<ProgressBar>                   m_xProgressBar;
 

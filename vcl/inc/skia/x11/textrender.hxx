@@ -25,7 +25,7 @@
 #include <SkFontMgr.h>
 #include <SkFontMgr_fontconfig.h>
 
-class VCL_DLLPUBLIC SkiaTextRender : public FreeTypeTextRenderImpl
+class VCL_DLLPUBLIC SkiaTextRender final : public FreeTypeTextRenderImpl
 {
 public:
     virtual void DrawTextLayout(const GenericSalLayout&, const SalGraphics&) override;

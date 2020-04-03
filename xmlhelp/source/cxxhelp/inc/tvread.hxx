@@ -135,7 +135,7 @@ namespace treeview {
 
     }; // end class TVBase
 
-    class TVRead
+    class TVRead final
         : public TVBase
     {
         friend class TVChildTarget;

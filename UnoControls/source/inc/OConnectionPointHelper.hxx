@@ -28,7 +28,7 @@ namespace unocontrols { class OConnectionPointContainerHelper; }
 
 namespace unocontrols {
 
-class OConnectionPointHelper    :   public  css::lang::XConnectionPoint
+class OConnectionPointHelper final :   public  css::lang::XConnectionPoint
                                 ,   public  ::cppu::OWeakObject
 {
 public:

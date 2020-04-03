@@ -15,7 +15,7 @@
 #include <atomic>
 #include <vector>
 
-class WatchdogThread : private salhelper::Thread
+class WatchdogThread final : private salhelper::Thread
 {
     WatchdogThread();
     virtual void execute() override;

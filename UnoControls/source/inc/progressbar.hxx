@@ -39,7 +39,7 @@ namespace unocontrols {
 #define PROGRESSBAR_LINECOLOR_BRIGHT        sal_Int32(Color( 0x00, 0xFF, 0xFF, 0xFF )) // white
 #define PROGRESSBAR_LINECOLOR_SHADOW        sal_Int32(Color( 0x00, 0x00, 0x00, 0x00 )) // black
 
-class ProgressBar   : public css::awt::XControlModel
+class ProgressBar final : public css::awt::XControlModel
                     , public css::awt::XProgressBar
                     , public BaseControl
 {
@@ -118,7 +118,7 @@ public:
 
     static OUString impl_getStaticImplementationName();
 
-protected:
+private:
     virtual void impl_paint(
         sal_Int32 nX ,
         sal_Int32 nY ,
@@ -127,7 +127,6 @@ protected:
 
     void impl_recalcRange();
 
-private:
     bool            m_bHorizontal;   // orientation for steps            [true=horizontal/false=vertical]
     css::awt::Size  m_aBlockSize;   // width and height of a block      [>=0,0]
     Color           m_nForegroundColor;   //                                  (alpha,r,g,b)

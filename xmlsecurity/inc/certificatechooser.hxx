@@ -48,7 +48,7 @@ enum class UserAction
     Encrypt
 };
 
-class CertificateChooser : public weld::GenericDialogController
+class CertificateChooser final : public weld::GenericDialogController
 {
 private:
     std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > mxSecurityContexts;
