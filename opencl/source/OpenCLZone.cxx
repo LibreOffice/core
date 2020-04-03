@@ -25,21 +25,21 @@ void OpenCLZone::hardDisable()
 {
     // protect ourselves from double calling etc.
     static bool bDisabled = false;
-    if (!bDisabled)
-    {
-        bDisabled = true;
+    if (bDisabled)
+        return;
 
-        std::shared_ptr<comphelper::ConfigurationChanges> xChanges(comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Misc::UseOpenCL::set(false, xChanges);
-        xChanges->commit();
+    bDisabled = true;
 
-        // Force synchronous config write
-        auto xConfProvider = css::configuration::theDefaultProvider::get(comphelper::getProcessComponentContext());
-        css::uno::Reference<css::util::XFlushable> xFlushable(xConfProvider, css::uno::UNO_QUERY_THROW);
-        xFlushable->flush();
+    std::shared_ptr<comphelper::ConfigurationChanges> xChanges(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Misc::UseOpenCL::set(false, xChanges);
+    xChanges->commit();
 
-        releaseOpenCLEnv(&openclwrapper::gpuEnv);
-    }
+    // Force synchronous config write
+    auto xConfProvider = css::configuration::theDefaultProvider::get(comphelper::getProcessComponentContext());
+    css::uno::Reference<css::util::XFlushable> xFlushable(xConfProvider, css::uno::UNO_QUERY_THROW);
+    xFlushable->flush();
+
+    releaseOpenCLEnv(&openclwrapper::gpuEnv);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
