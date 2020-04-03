@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "b47a21e5_e3bcc812",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 795,
+      "author": {
+        "id": 1002380
+      },
+      "writtenOn": "2020-04-03T12:47:54Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "7d9bb3fe_388643d3",
+      "revId": "14a0727889699128f02ac0a79bdce0103c89bc01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3499168f_cb99a493",
         "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
         "patchSetId": 2
