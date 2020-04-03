@@ -2868,6 +2868,16 @@ void SvTreeListBox::PreparePaint(vcl::RenderContext& /*rRenderContext*/, SvTreeL
 {
 }
 
+void SvTreeListBox::DrawCustomEntry(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, const SvTreeListEntry& rEntry)
+{
+    aCustomRenderHdl.Call(std::tuple<vcl::RenderContext&, const tools::Rectangle&, const SvTreeListEntry&>(rRenderContext, rRect, rEntry));
+}
+
+Size SvTreeListBox::MeasureCustomEntry(vcl::RenderContext& rRenderContext, const SvTreeListEntry& rEntry)
+{
+    return aCustomMeasureHdl.Call(std::pair<vcl::RenderContext&, const SvTreeListEntry&>(rRenderContext, rEntry));
+}
+
 tools::Rectangle SvTreeListBox::GetFocusRect(const SvTreeListEntry* pEntry, long nLine )
 {
     pImpl->UpdateContextBmpWidthMax( pEntry );

@@ -177,6 +177,9 @@ namespace o3tl
 
 struct SvTreeListBoxImpl;
 
+typedef std::pair<vcl::RenderContext&, const SvTreeListEntry&> svtree_measure_args;
+typedef std::tuple<vcl::RenderContext&, const tools::Rectangle&, const SvTreeListEntry&> svtree_render_args;
+
 class VCL_DLLPUBLIC SvTreeListBox
                 :public Control
                 ,public SvListView
@@ -186,6 +189,7 @@ class VCL_DLLPUBLIC SvTreeListBox
                 ,public vcl::ISearchableStringList
 {
     friend class SvImpLBox;
+    friend class SvLBoxString;
     friend class IconViewImpl;
     friend class TreeControlPeer;
     friend class SalInstanceIconView;
@@ -201,6 +205,8 @@ class VCL_DLLPUBLIC SvTreeListBox
     Link<SvTreeListBox*,void>  aDeselectHdl;
     Link<const CommandEvent&, bool> aPopupMenuHdl;
     Link<const HelpEvent&, bool> aTooltipHdl;
+    Link<svtree_render_args, void> aCustomRenderHdl;
+    Link<svtree_measure_args, Size> aCustomMeasureHdl;
 
     Image           aPrevInsertedExpBmp;
     Image           aPrevInsertedColBmp;
@@ -268,6 +274,9 @@ private:
     // after a checkbox entry is inserted, use this to get its width to support
     // autowidth for the 1st checkbox column
     VCL_DLLPRIVATE void CheckBoxInserted(SvTreeListEntry* pEntry);
+
+    VCL_DLLPRIVATE void DrawCustomEntry(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, const SvTreeListEntry& rEntry);
+    VCL_DLLPRIVATE Size MeasureCustomEntry(vcl::RenderContext& rRenderContext, const SvTreeListEntry& rEntry);
 
 protected:
 
@@ -434,6 +443,8 @@ public:
     void            SetExpandedHdl(const Link<SvTreeListBox*,void>& rNewHdl){aExpandedHdl=rNewHdl;}
     void SetPopupMenuHdl(const Link<const CommandEvent&, bool>& rLink) { aPopupMenuHdl = rLink; }
     void SetTooltipHdl(const Link<const HelpEvent&, bool>& rLink) { aTooltipHdl = rLink; }
+    void SetCustomRenderHdl(const Link<svtree_render_args, void>& rLink) { aCustomRenderHdl = rLink; }
+    void SetCustomMeasureHdl(const Link<svtree_measure_args, Size>& rLink) { aCustomMeasureHdl = rLink; }
 
     virtual void    ExpandedHdl();
     virtual bool    ExpandingHdl();

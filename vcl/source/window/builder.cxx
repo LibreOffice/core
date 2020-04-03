@@ -441,6 +441,25 @@ namespace weld
 
         return nAbsPos;
     }
+
+    bool IsEntryVisible(const weld::TreeView& rTreeView, const weld::TreeIter& rIter)
+    {
+        // short circuit for the common case
+        if (rTreeView.get_iter_depth(rIter) == 0)
+            return true;
+
+        std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator(&rIter));
+        bool bRetVal = false;
+        do
+        {
+            if (rTreeView.get_iter_depth(*xEntry) == 0)
+            {
+                bRetVal = true;
+                break;
+            }
+        }  while (rTreeView.iter_parent(*xEntry) && rTreeView.get_row_expanded(*xEntry));
+        return bRetVal;
+    }
 }
 
 VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUString& sUIFile,
