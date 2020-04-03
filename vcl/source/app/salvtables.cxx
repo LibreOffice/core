@@ -3263,6 +3263,8 @@ private:
     // currently expanding parent that logically, but not currently physically,
     // contain placeholders
     o3tl::sorted_vector<SvTreeListEntry*> m_aExpandingPlaceHolderParents;
+    // which columns should be custom rendered
+    o3tl::sorted_vector<int> m_aCustomRenders;
     bool m_bDisableCheckBoxAutoWidth;
     int m_nSortColumn;
 
@@ -3283,6 +3285,8 @@ private:
     DECL_LINK(CompareHdl, const SvSortData&, sal_Int32);
     DECL_LINK(PopupMenuHdl, const CommandEvent&, bool);
     DECL_LINK(TooltipHdl, const HelpEvent&, bool);
+    DECL_LINK(CustomRenderHdl, svtree_render_args, void);
+    DECL_LINK(CustomMeasureHdl, svtree_measure_args, Size);
 
     bool IsDummyEntry(SvTreeListEntry* pEntry) const
     {
@@ -3309,6 +3313,14 @@ private:
             pEntry->SetTextColor(rColor);
     }
 
+    void AddStringItem(SvTreeListEntry* pEntry, const OUString& rStr, int nCol)
+    {
+        auto xCell = std::make_unique<SvLBoxString>(rStr);
+        if (m_aCustomRenders.count(nCol))
+            xCell->SetCustomRender();
+        pEntry->AddItem(std::move(xCell));
+    }
+
 public:
     SalInstanceTreeView(SvTabListBox* pTreeView, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
         : SalInstanceContainer(pTreeView, pBuilder, bTakeOwnership)
@@ -3325,6 +3337,8 @@ public:
         m_xTreeView->SetDoubleClickHdl(LINK(this, SalInstanceTreeView, DoubleClickHdl));
         m_xTreeView->SetExpandingHdl(LINK(this, SalInstanceTreeView, ExpandingHdl));
         m_xTreeView->SetPopupMenuHdl(LINK(this, SalInstanceTreeView, PopupMenuHdl));
+        m_xTreeView->SetCustomRenderHdl(LINK(this, SalInstanceTreeView, CustomRenderHdl));
+        m_xTreeView->SetCustomMeasureHdl(LINK(this, SalInstanceTreeView, CustomMeasureHdl));
         const long aTabPositions[] = { 0 };
         m_xTreeView->SetTabs(SAL_N_ELEMENTS(aTabPositions), aTabPositions);
         LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get());
@@ -3452,6 +3466,11 @@ public:
         }
     }
 
+    virtual void set_column_custom_renderer(int nColumn) override
+    {
+        m_aCustomRenders.insert(nColumn);
+    }
+
     virtual void show() override
     {
         if (LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get()))
@@ -3496,7 +3515,7 @@ public:
             pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
         }
         if (pStr)
-            pEntry->AddItem(std::make_unique<SvLBoxString>(*pStr));
+            AddStringItem(pEntry, *pStr, 0);
         pEntry->SetUserData(pUserData);
         m_xTreeView->Insert(pEntry, iter, nInsertPos);
 
@@ -3744,11 +3763,11 @@ public:
 
         // blank out missing entries
         for (int i = pEntry->ItemCount(); i < col; ++i)
-            pEntry->AddItem(std::make_unique<SvLBoxString>(""));
+            AddStringItem(pEntry, "", i - 1);
 
         if (static_cast<size_t>(col) == pEntry->ItemCount())
         {
-            pEntry->AddItem(std::make_unique<SvLBoxString>(rText));
+            AddStringItem(pEntry, rText, col - 1);
             SvViewDataEntry* pViewData = m_xTreeView->GetViewDataEntry(pEntry);
             m_xTreeView->InitViewData(pViewData, pEntry);
         }
@@ -3833,7 +3852,7 @@ public:
 
         // blank out missing entries
         for (int i = pEntry->ItemCount(); i < col; ++i)
-            pEntry->AddItem(std::make_unique<SvLBoxString>(""));
+            AddStringItem(pEntry, "", i - 1);
 
         if (static_cast<size_t>(col) == pEntry->ItemCount())
         {
@@ -3989,7 +4008,7 @@ public:
 
         // blank out missing entries
         for (int i = pEntry->ItemCount(); i < col; ++i)
-            pEntry->AddItem(std::make_unique<SvLBoxString>(""));
+            AddStringItem(pEntry, "", i - 1);
 
         if (static_cast<size_t>(col) == pEntry->ItemCount())
         {
@@ -4598,6 +4617,8 @@ public:
         m_xTreeView->SetDeselectHdl(Link<SvTreeListBox*, void>());
         m_xTreeView->SetScrolledHdl(Link<SvTreeListBox*, void>());
         m_xTreeView->SetTooltipHdl(Link<const HelpEvent&, bool>());
+        m_xTreeView->SetCustomRenderHdl(Link<svtree_render_args, void>());
+        m_xTreeView->SetCustomMeasureHdl(Link<svtree_measure_args, Size>());
     }
 };
 
@@ -4619,6 +4640,27 @@ IMPL_LINK(SalInstanceTreeView, TooltipHdl, const HelpEvent&, rHEvt, bool)
         Help::ShowQuickHelp(m_xTreeView, aScreenRect, aTooltip);
     }
     return true;
+}
+
+IMPL_LINK(SalInstanceTreeView, CustomRenderHdl, svtree_render_args, payload, void)
+{
+    vcl::RenderContext& rRenderDevice = std::get<0>(payload);
+    const tools::Rectangle& rRect = std::get<1>(payload);
+    const SvTreeListEntry& rEntry = std::get<2>(payload);
+    const OUString* pId = static_cast<const OUString*>(rEntry.GetUserData());
+    if (!pId)
+        return;
+    signal_custom_render(rRenderDevice, rRect, m_xTreeView->IsSelected(&rEntry), *pId);
+}
+
+IMPL_LINK(SalInstanceTreeView, CustomMeasureHdl, svtree_measure_args, payload, Size)
+{
+    vcl::RenderContext& rRenderDevice = payload.first;
+    const SvTreeListEntry& rEntry = payload.second;
+    const OUString* pId = static_cast<const OUString*>(rEntry.GetUserData());
+    if (!pId)
+        return Size();
+    return signal_custom_get_size(rRenderDevice, *pId);
 }
 
 IMPL_LINK(SalInstanceTreeView, CompareHdl, const SvSortData&, rSortData, sal_Int32)

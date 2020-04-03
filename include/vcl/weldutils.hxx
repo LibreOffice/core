@@ -153,7 +153,11 @@ public:
     }
 };
 
+// get the row the iterator is on
 VCL_DLLPUBLIC size_t GetAbsPos(const weld::TreeView& rTreeView, const weld::TreeIter& rIter);
+
+// an entry is visible if all parents are expanded
+VCL_DLLPUBLIC bool IsEntryVisible(const weld::TreeView& rTreeView, const weld::TreeIter& rIter);
 }
 
 #endif

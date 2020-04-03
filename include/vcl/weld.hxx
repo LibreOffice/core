@@ -729,6 +729,12 @@ protected:
     Link<bool&, bool> m_aDragBeginHdl;
     std::function<int(const weld::TreeIter&, const weld::TreeIter&)> m_aCustomSort;
 
+public:
+    typedef std::pair<vcl::RenderContext&, const OUString&> get_size_args;
+    typedef std::tuple<vcl::RenderContext&, const tools::Rectangle&, bool, const OUString&>
+        render_args;
+
+protected:
     std::vector<int> m_aRadioIndexes;
 
     void signal_changed() { m_aChangeHdl.Call(*this); }
@@ -757,6 +763,21 @@ protected:
 
     Link<const TreeIter&, OUString> m_aQueryTooltipHdl;
     OUString signal_query_tooltip(const TreeIter& rIter) { return m_aQueryTooltipHdl.Call(rIter); }
+
+    Link<render_args, void> m_aRenderHdl;
+    void signal_custom_render(vcl::RenderContext& rDevice, const tools::Rectangle& rRect,
+                              bool bSelected, const OUString& rId)
+    {
+        m_aRenderHdl.Call(
+            std::tuple<vcl::RenderContext&, const tools::Rectangle, bool, const OUString&>(
+                rDevice, rRect, bSelected, rId));
+    }
+
+    Link<get_size_args, Size> m_aGetSizeHdl;
+    Size signal_custom_get_size(vcl::RenderContext& rDevice, const OUString& rId)
+    {
+        return m_aGetSizeHdl.Call(std::pair<vcl::RenderContext&, const OUString&>(rDevice, rId));
+    }
 
 public:
     virtual void connect_query_tooltip(const Link<const TreeIter&, OUString>& rLink)
@@ -1067,6 +1088,11 @@ public:
     void save_value() { m_sSavedValue = get_selected_text(); }
     OUString const& get_saved_value() const { return m_sSavedValue; }
     bool get_value_changed_from_saved() const { return m_sSavedValue != get_selected_text(); }
+
+    // for custom rendering a cell
+    virtual void set_column_custom_renderer(int nColumn) = 0;
+    void connect_custom_get_size(const Link<get_size_args, Size>& rLink) { m_aGetSizeHdl = rLink; }
+    void connect_custom_render(const Link<render_args, void>& rLink) { m_aRenderHdl = rLink; }
 
     // for dnd
     virtual bool get_dest_row_at_pos(const Point& rPos, weld::TreeIter* pResult) = 0;
