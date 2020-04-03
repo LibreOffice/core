@@ -119,7 +119,15 @@ PresetColorsPool::PresetColorsPool() :
         {XML_tomato,            ::Color(0xFF6347)},    {XML_turquoise,         ::Color(0x40E0D0)},
         {XML_violet,            ::Color(0xEE82EE)},    {XML_wheat,             ::Color(0xF5DEB3)},
         {XML_white,             ::Color(0xFFFFFF)},    {XML_whiteSmoke,        ::Color(0xF5F5F5)},
-        {XML_yellow,            ::Color(0xFFFF00)},    {XML_yellowGreen,       ::Color(0x9ACD32)}
+        {XML_yellow,            ::Color(0xFFFF00)},    {XML_yellowGreen,       ::Color(0x9ACD32)},
+        {XML_darkYellow,        ::Color(0xCCCC00)},
+
+        // tdf#131841 Adding highlight colors with their corresponding token names.
+        // These entries are aliases for the "dk" solution.
+        {XML_darkBlue,          ::Color(0x00008B)},    {XML_darkCyan,          ::Color(0x008B8B)},
+        {XML_darkGreen,         ::Color(0x006400)},    {XML_darkMagenta,       ::Color(0x8B008B)},
+        {XML_darkRed,           ::Color(0x8B0000)},    {XML_darkGray,          ::Color(0xA9A9A9)},
+        {XML_lightGray,         ::Color(0xD3D3D3)}
     };
     for(auto const& nEntry : spnDmlColors)
         maDmlColors[ static_cast< size_t >(nEntry.first) ] = nEntry.second;
