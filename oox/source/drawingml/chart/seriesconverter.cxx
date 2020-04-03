@@ -134,49 +134,50 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
         rPropSet.setProperty( PROP_Label, aPointLabel );
     }
 
-    if( !rDataLabel.mbDeleted )
+    if( rDataLabel.mbDeleted )
+        return;
+
+    // data label number format (percentage format wins over value format)
+    rFormatter.convertNumberFormat( rPropSet, rDataLabel.maNumberFormat, false, bShowPercent );
+
+    // data label text formatting (frame formatting not supported by Chart2)
+    if( bDataSeriesLabel || (rDataLabel.mxTextProp.is() && !rDataLabel.mxTextProp->getParagraphs().empty()) )
+        convertTextProperty(rPropSet, rFormatter, rDataLabel.mxTextProp);
+
+    // data label separator (do not overwrite series separator, if no explicit point separator is present)
+    // Set the data label separator to "new line" if the value is shown as percentage with a category name,
+    // just like in MS-Office. In any other case the default separator will be a semicolon.
+    if( bShowPercent && !bShowValue && ( bDataSeriesLabel || rDataLabel.moaSeparator.has() ) )
+        rPropSet.setProperty( PROP_LabelSeparator, rDataLabel.moaSeparator.get( "\n" ) );
+    else if( bDataSeriesLabel || rDataLabel.moaSeparator.has() )
+        rPropSet.setProperty( PROP_LabelSeparator, rDataLabel.moaSeparator.get( "; " ) );
+
+    // data label placement (do not overwrite series placement, if no explicit point placement is present)
+    if( !(bDataSeriesLabel || rDataLabel.monLabelPos.has()) )
+        return;
+
+    namespace csscd = ::com::sun::star::chart::DataLabelPlacement;
+    sal_Int32 nPlacement = -1;
+    switch( rDataLabel.monLabelPos.get( XML_TOKEN_INVALID ) )
     {
-        // data label number format (percentage format wins over value format)
-        rFormatter.convertNumberFormat( rPropSet, rDataLabel.maNumberFormat, false, bShowPercent );
-
-        // data label text formatting (frame formatting not supported by Chart2)
-        if( bDataSeriesLabel || (rDataLabel.mxTextProp.is() && !rDataLabel.mxTextProp->getParagraphs().empty()) )
-            convertTextProperty(rPropSet, rFormatter, rDataLabel.mxTextProp);
-
-        // data label separator (do not overwrite series separator, if no explicit point separator is present)
-        // Set the data label separator to "new line" if the value is shown as percentage with a category name,
-        // just like in MS-Office. In any other case the default separator will be a semicolon.
-        if( bShowPercent && !bShowValue && ( bDataSeriesLabel || rDataLabel.moaSeparator.has() ) )
-            rPropSet.setProperty( PROP_LabelSeparator, rDataLabel.moaSeparator.get( "\n" ) );
-        else if( bDataSeriesLabel || rDataLabel.moaSeparator.has() )
-            rPropSet.setProperty( PROP_LabelSeparator, rDataLabel.moaSeparator.get( "; " ) );
-
-        // data label placement (do not overwrite series placement, if no explicit point placement is present)
-        if( bDataSeriesLabel || rDataLabel.monLabelPos.has() )
-        {
-            namespace csscd = ::com::sun::star::chart::DataLabelPlacement;
-            sal_Int32 nPlacement = -1;
-            switch( rDataLabel.monLabelPos.get( XML_TOKEN_INVALID ) )
-            {
-                case XML_outEnd:    nPlacement = csscd::OUTSIDE;        break;
-                case XML_inEnd:     nPlacement = csscd::INSIDE;         break;
-                case XML_ctr:       nPlacement = csscd::CENTER;         break;
-                case XML_inBase:    nPlacement = csscd::NEAR_ORIGIN;    break;
-                case XML_t:         nPlacement = csscd::TOP;            break;
-                case XML_b:         nPlacement = csscd::BOTTOM;         break;
-                case XML_l:         nPlacement = csscd::LEFT;           break;
-                case XML_r:         nPlacement = csscd::RIGHT;          break;
-                case XML_bestFit:   nPlacement = csscd::AVOID_OVERLAP;  break;
-            }
-
-            if( !bDataSeriesLabel && nPlacement == -1 )
-                return;
-            else if( nPlacement == -1 )
-                nPlacement = rTypeInfo.mnDefLabelPos;
-
-            rPropSet.setProperty( PROP_LabelPlacement, nPlacement );
-        }
+        case XML_outEnd:    nPlacement = csscd::OUTSIDE;        break;
+        case XML_inEnd:     nPlacement = csscd::INSIDE;         break;
+        case XML_ctr:       nPlacement = csscd::CENTER;         break;
+        case XML_inBase:    nPlacement = csscd::NEAR_ORIGIN;    break;
+        case XML_t:         nPlacement = csscd::TOP;            break;
+        case XML_b:         nPlacement = csscd::BOTTOM;         break;
+        case XML_l:         nPlacement = csscd::LEFT;           break;
+        case XML_r:         nPlacement = csscd::RIGHT;          break;
+        case XML_bestFit:   nPlacement = csscd::AVOID_OVERLAP;  break;
     }
+
+    if( !bDataSeriesLabel && nPlacement == -1 )
+        return;
+
+    if( nPlacement == -1 )
+        nPlacement = rTypeInfo.mnDefLabelPos;
+
+    rPropSet.setProperty( PROP_LabelPlacement, nPlacement );
 }
 
 void importBorderProperties( PropertySet& rPropSet, Shape& rShape, const GraphicHelper& rGraphicHelper )
@@ -356,7 +357,10 @@ void ErrorBarConverter::convertFromModel( const Reference< XDataSeries >& rxData
 {
     bool bShowPos = (mrModel.mnTypeId == XML_plus) || (mrModel.mnTypeId == XML_both);
     bool bShowNeg = (mrModel.mnTypeId == XML_minus) || (mrModel.mnTypeId == XML_both);
-    if( bShowPos || bShowNeg ) try
+    if( !(bShowPos || bShowNeg) )
+        return;
+
+    try
     {
         Reference< XPropertySet > xErrorBar( createInstance( "com.sun.star.chart2.ErrorBar" ), UNO_QUERY_THROW );
         PropertySet aBarProp( xErrorBar );

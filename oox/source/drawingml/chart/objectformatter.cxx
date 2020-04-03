@@ -728,21 +728,21 @@ DetailFormatterBase::DetailFormatterBase( ObjectFormatterData& rData, const Auto
     mrData( rData ),
     mnPhClr( 0xffffffff )
 {
-    if( pAutoFormatEntry )
+    if( !pAutoFormatEntry )
+        return;
+
+    if( pAutoFormatEntry->mpPattern )
     {
-        if( pAutoFormatEntry->mpPattern )
-        {
-            // prepare multi-color pattern
-            for( const AutoFormatPatternEntry* pPatternEntry = pAutoFormatEntry->mpPattern; pPatternEntry->mnColorToken != XML_TOKEN_INVALID; ++pPatternEntry )
-                maColorPattern.push_back( getSchemeColor( pPatternEntry->mnColorToken, pPatternEntry->mnModToken, pPatternEntry->mnModValue ) );
-        }
-        else if( pAutoFormatEntry->mnColorToken != XML_TOKEN_INVALID )
-        {
-            // prepare color or single-color pattern (color fading)
-            mnPhClr = getSchemeColor( pAutoFormatEntry->mnColorToken, pAutoFormatEntry->mnModToken, pAutoFormatEntry->mnModValue );
-            if( pAutoFormatEntry->mbFadedColor )
-                maColorPattern.push_back( mnPhClr );
-        }
+        // prepare multi-color pattern
+        for( const AutoFormatPatternEntry* pPatternEntry = pAutoFormatEntry->mpPattern; pPatternEntry->mnColorToken != XML_TOKEN_INVALID; ++pPatternEntry )
+            maColorPattern.push_back( getSchemeColor( pPatternEntry->mnColorToken, pPatternEntry->mnModToken, pPatternEntry->mnModValue ) );
+    }
+    else if( pAutoFormatEntry->mnColorToken != XML_TOKEN_INVALID )
+    {
+        // prepare color or single-color pattern (color fading)
+        mnPhClr = getSchemeColor( pAutoFormatEntry->mnColorToken, pAutoFormatEntry->mnModToken, pAutoFormatEntry->mnModValue );
+        if( pAutoFormatEntry->mbFadedColor )
+            maColorPattern.push_back( mnPhClr );
     }
 }
 
@@ -817,25 +817,25 @@ DetailFormatterBase::DetailFormatterBase( ObjectFormatterData& rData, const Auto
 LineFormatter::LineFormatter( ObjectFormatterData& rData, const AutoFormatEntry* pAutoFormatEntry, const ObjectType eObjType ) :
    DetailFormatterBase(rData, pAutoFormatEntry)
 {
-    if( pAutoFormatEntry )
+    if( !pAutoFormatEntry )
+        return;
+
+    mxAutoLine = std::make_shared<LineProperties>();
+    mxAutoLine->maLineFill.moFillType = XML_noFill;
+    if( const Theme* pTheme = mrData.mrFilter.getCurrentTheme() )
+        if( const LineProperties* pLineProps = pTheme->getLineStyle( pAutoFormatEntry->mnThemedIdx ) )
+            *mxAutoLine = *pLineProps;
+    // set automatic border property for chartarea, because of tdf#81437 and tdf#82217
+    if ( eObjType == OBJECTTYPE_CHARTSPACE )
     {
-        mxAutoLine = std::make_shared<LineProperties>();
-        mxAutoLine->maLineFill.moFillType = XML_noFill;
-        if( const Theme* pTheme = mrData.mrFilter.getCurrentTheme() )
-            if( const LineProperties* pLineProps = pTheme->getLineStyle( pAutoFormatEntry->mnThemedIdx ) )
-                *mxAutoLine = *pLineProps;
-        // set automatic border property for chartarea, because of tdf#81437 and tdf#82217
-        if ( eObjType == OBJECTTYPE_CHARTSPACE )
-        {
-            mxAutoLine->maLineFill.moFillType = oox::GraphicHelper::getDefaultChartAreaLineStyle();
-            mxAutoLine->moLineWidth = oox::GraphicHelper::getDefaultChartAreaLineWidth();
-            // this value is what MSO 2016 use as a default color for chartspace border
-            mxAutoLine->maLineFill.maFillColor.setSrgbClr( 0xD9D9D9 );
-        }
-        // change line width according to chart auto style
-        if( mxAutoLine->moLineWidth.has() )
-            mxAutoLine->moLineWidth = mxAutoLine->moLineWidth.get() * pAutoFormatEntry->mnRelLineWidth / 100;
+        mxAutoLine->maLineFill.moFillType = oox::GraphicHelper::getDefaultChartAreaLineStyle();
+        mxAutoLine->moLineWidth = oox::GraphicHelper::getDefaultChartAreaLineWidth();
+        // this value is what MSO 2016 use as a default color for chartspace border
+        mxAutoLine->maLineFill.maFillColor.setSrgbClr( 0xD9D9D9 );
     }
+    // change line width according to chart auto style
+    if( mxAutoLine->moLineWidth.has() )
+        mxAutoLine->moLineWidth = mxAutoLine->moLineWidth.get() * pAutoFormatEntry->mnRelLineWidth / 100;
 }
 
 void LineFormatter::convertFormatting( ShapePropertyMap& rPropMap, const ModelRef< Shape >& rxShapeProp, sal_Int32 nSeriesIdx )
@@ -851,19 +851,19 @@ void LineFormatter::convertFormatting( ShapePropertyMap& rPropMap, const ModelRe
 FillFormatter::FillFormatter( ObjectFormatterData& rData, const AutoFormatEntry* pAutoFormatEntry, const ObjectType eObjType ) :
     DetailFormatterBase( rData, pAutoFormatEntry )
 {
-    if( pAutoFormatEntry )
-    {
-        mxAutoFill = std::make_shared<FillProperties>();
-        if( eObjType != OBJECTTYPE_CHARTSPACE )
-            mxAutoFill->moFillType = XML_noFill;
-        if( const Theme* pTheme = mrData.mrFilter.getCurrentTheme() )
-            if( const FillProperties* pFillProps = pTheme->getFillStyle( pAutoFormatEntry->mnThemedIdx ) )
-                *mxAutoFill = *pFillProps;
+    if( !pAutoFormatEntry )
+        return;
 
-        if (eObjType == OBJECTTYPE_CHARTSPACE)
-        {
-            mxAutoFill->moFillType = rData.mrFilter.getGraphicHelper().getDefaultChartAreaFillStyle();
-        }
+    mxAutoFill = std::make_shared<FillProperties>();
+    if( eObjType != OBJECTTYPE_CHARTSPACE )
+        mxAutoFill->moFillType = XML_noFill;
+    if( const Theme* pTheme = mrData.mrFilter.getCurrentTheme() )
+        if( const FillProperties* pFillProps = pTheme->getFillStyle( pAutoFormatEntry->mnThemedIdx ) )
+            *mxAutoFill = *pFillProps;
+
+    if (eObjType == OBJECTTYPE_CHARTSPACE)
+    {
+        mxAutoFill->moFillType = rData.mrFilter.getGraphicHelper().getDefaultChartAreaFillStyle();
     }
 }
 
@@ -892,26 +892,26 @@ const TextCharacterProperties* lclGetTextProperties( const ModelRef< TextBody >&
 TextFormatter::TextFormatter( ObjectFormatterData& rData, const AutoTextEntry* pAutoTextEntry, const ModelRef< TextBody >& rxGlobalTextProp ) :
     DetailFormatterBase( rData, pAutoTextEntry )
 {
-    if( pAutoTextEntry )
-    {
-        mxAutoText = std::make_shared<TextCharacterProperties>();
-        if( const Theme* pTheme = mrData.mrFilter.getCurrentTheme() )
-            if( const TextCharacterProperties* pTextProps = pTheme->getFontStyle( pAutoTextEntry->mnThemedFont ) )
-                *mxAutoText = *pTextProps;
-        ::Color nTextColor = getPhColor( -1 );
-        if( sal_Int32(nTextColor) >= 0 ) {
-            mxAutoText->maFillProperties.maFillColor.setSrgbClr( nTextColor );
-            mxAutoText->maFillProperties.moFillType.set(XML_solidFill);
-        }
-        mxAutoText->moHeight = pAutoTextEntry->mnDefFontSize;
-        mxAutoText->moBold = pAutoTextEntry->mbBold;
+    if( !pAutoTextEntry )
+        return;
 
-        if( const TextCharacterProperties* pTextProps = lclGetTextProperties( rxGlobalTextProp ) )
-        {
-            mxAutoText->assignUsed( *pTextProps );
-            if( pTextProps->moHeight.has() )
-                mxAutoText->moHeight = pTextProps->moHeight.get() * pAutoTextEntry->mnRelFontSize / 100;
-        }
+    mxAutoText = std::make_shared<TextCharacterProperties>();
+    if( const Theme* pTheme = mrData.mrFilter.getCurrentTheme() )
+        if( const TextCharacterProperties* pTextProps = pTheme->getFontStyle( pAutoTextEntry->mnThemedFont ) )
+            *mxAutoText = *pTextProps;
+    ::Color nTextColor = getPhColor( -1 );
+    if( sal_Int32(nTextColor) >= 0 ) {
+        mxAutoText->maFillProperties.maFillColor.setSrgbClr( nTextColor );
+        mxAutoText->maFillProperties.moFillType.set(XML_solidFill);
+    }
+    mxAutoText->moHeight = pAutoTextEntry->mnDefFontSize;
+    mxAutoText->moBold = pAutoTextEntry->mbBold;
+
+    if( const TextCharacterProperties* pTextProps = lclGetTextProperties( rxGlobalTextProp ) )
+    {
+        mxAutoText->assignUsed( *pTextProps );
+        if( pTextProps->moHeight.has() )
+            mxAutoText->moHeight = pTextProps->moHeight.get() * pAutoTextEntry->mnRelFontSize / 100;
     }
 }
 
@@ -1050,77 +1050,77 @@ void ObjectFormatter::convertTextFormatting( PropertySet& rPropSet, const TextCh
 
 void ObjectFormatter::convertTextRotation( PropertySet& rPropSet, const ModelRef< TextBody >& rxTextProp, bool bSupportsStacked, sal_Int32 nDefaultRotation )
 {
-    if( rxTextProp.is() )
-    {
-        bool bStacked = false;
-        if( bSupportsStacked )
-        {
-            sal_Int32 nVert = rxTextProp->getTextProperties().moVert.get( XML_horz );
-            bStacked = (nVert == XML_wordArtVert) || (nVert == XML_wordArtVertRtl);
-            rPropSet.setProperty( PROP_StackCharacters, bStacked );
-        }
+    if( !rxTextProp.is() )
+        return;
 
-        /*  Chart2 expects rotation angle as double value in range of [0,360).
-            OOXML counts clockwise, Chart2 counts counterclockwise. */
-        double fAngle = static_cast< double >( bStacked ? 0 : rxTextProp->getTextProperties().moRotation.get( nDefaultRotation ) );
-        // MS Office UI allows values only in range of [-90,90].
-        if ( fAngle < -5400000.0 || fAngle > 5400000.0 )
-        {
-            fAngle = 0.0;
-        }
-        fAngle = getDoubleIntervalValue< double >( -fAngle / 60000.0, 0.0, 360.0 );
-        rPropSet.setProperty( PROP_TextRotation, fAngle );
+    bool bStacked = false;
+    if( bSupportsStacked )
+    {
+        sal_Int32 nVert = rxTextProp->getTextProperties().moVert.get( XML_horz );
+        bStacked = (nVert == XML_wordArtVert) || (nVert == XML_wordArtVertRtl);
+        rPropSet.setProperty( PROP_StackCharacters, bStacked );
     }
+
+    /*  Chart2 expects rotation angle as double value in range of [0,360).
+        OOXML counts clockwise, Chart2 counts counterclockwise. */
+    double fAngle = static_cast< double >( bStacked ? 0 : rxTextProp->getTextProperties().moRotation.get( nDefaultRotation ) );
+    // MS Office UI allows values only in range of [-90,90].
+    if ( fAngle < -5400000.0 || fAngle > 5400000.0 )
+    {
+        fAngle = 0.0;
+    }
+    fAngle = getDoubleIntervalValue< double >( -fAngle / 60000.0, 0.0, 360.0 );
+    rPropSet.setProperty( PROP_TextRotation, fAngle );
 }
 
 void ObjectFormatter::convertTextWrap( PropertySet& rPropSet, const ModelRef< TextBody >& rxTextProp )
 {
-    if( rxTextProp.is() )
+    if( !rxTextProp.is() )
+        return;
+
+    PropertyMap& aPropMap = rxTextProp->getTextProperties().maPropertyMap;
+    if( aPropMap.hasProperty(PROP_TextWordWrap) )
     {
-        PropertyMap& aPropMap = rxTextProp->getTextProperties().maPropertyMap;
-        if( aPropMap.hasProperty(PROP_TextWordWrap) )
+        Any aValue = aPropMap.getProperty( PROP_TextWordWrap );
+        if( aValue.hasValue() )
         {
-            Any aValue = aPropMap.getProperty( PROP_TextWordWrap );
-            if( aValue.hasValue() )
-            {
-                bool bValue = false;
-                aValue >>= bValue;
-                rPropSet.setProperty( PROP_TextWordWrap, bValue );
-            }
+            bool bValue = false;
+            aValue >>= bValue;
+            rPropSet.setProperty( PROP_TextWordWrap, bValue );
         }
     }
 }
 
 void ObjectFormatter::convertNumberFormat( PropertySet& rPropSet, const NumberFormat& rNumberFormat, bool bAxis, bool bShowPercent )
 {
-    if( mxData->mxNumFmts.is() )
-    {
-        const bool bGeneral = rNumberFormat.maFormatCode.equalsIgnoreAsciiCase("general");
-        const bool bPercent = !bAxis && bShowPercent && !rNumberFormat.mbSourceLinked;
-        sal_Int32 nPropId = bPercent ? PROP_PercentageNumberFormat : PROP_NumberFormat;
-        OUString sFormatCode(rNumberFormat.maFormatCode);
-        if (bPercent && bGeneral)
-            sFormatCode = "0%";
-        try
-        {
-            sal_Int32 nIndex = bGeneral && !bPercent ?
-                mxData->mxNumTypes->getStandardIndex( mxData->maFromLocale ) :
-                mxData->mxNumFmts->addNewConverted( sFormatCode, mxData->maEnUsLocale, mxData->maFromLocale );
-            if( nIndex >= 0 )
-                rPropSet.setProperty( nPropId, nIndex );
-        }
-        catch( Exception& )
-        {
-            OSL_FAIL( OStringBuffer( "ObjectFormatter::convertNumberFormat - cannot create number format '" ).
-                append( OUStringToOString( rNumberFormat.maFormatCode, osl_getThreadTextEncoding() ) ).append( '\'' ).getStr() );
-        }
+    if( !mxData->mxNumFmts.is() )
+        return;
 
-        // Setting "LinkNumberFormatToSource" does not really work, at least not for axis :-/
-        if (!bAxis)
-            rPropSet.setProperty(PROP_LinkNumberFormatToSource, makeAny(rNumberFormat.mbSourceLinked));
-        else
-            rPropSet.setProperty(PROP_LinkNumberFormatToSource, makeAny(rNumberFormat.maFormatCode.isEmpty()));
+    const bool bGeneral = rNumberFormat.maFormatCode.equalsIgnoreAsciiCase("general");
+    const bool bPercent = !bAxis && bShowPercent && !rNumberFormat.mbSourceLinked;
+    sal_Int32 nPropId = bPercent ? PROP_PercentageNumberFormat : PROP_NumberFormat;
+    OUString sFormatCode(rNumberFormat.maFormatCode);
+    if (bPercent && bGeneral)
+        sFormatCode = "0%";
+    try
+    {
+        sal_Int32 nIndex = bGeneral && !bPercent ?
+            mxData->mxNumTypes->getStandardIndex( mxData->maFromLocale ) :
+            mxData->mxNumFmts->addNewConverted( sFormatCode, mxData->maEnUsLocale, mxData->maFromLocale );
+        if( nIndex >= 0 )
+            rPropSet.setProperty( nPropId, nIndex );
     }
+    catch( Exception& )
+    {
+        OSL_FAIL( OStringBuffer( "ObjectFormatter::convertNumberFormat - cannot create number format '" ).
+            append( OUStringToOString( rNumberFormat.maFormatCode, osl_getThreadTextEncoding() ) ).append( '\'' ).getStr() );
+    }
+
+    // Setting "LinkNumberFormatToSource" does not really work, at least not for axis :-/
+    if (!bAxis)
+        rPropSet.setProperty(PROP_LinkNumberFormatToSource, makeAny(rNumberFormat.mbSourceLinked));
+    else
+        rPropSet.setProperty(PROP_LinkNumberFormatToSource, makeAny(rNumberFormat.maFormatCode.isEmpty()));
 }
 
 void ObjectFormatter::convertAutomaticFill( PropertySet& rPropSet, ObjectType eObjType, sal_Int32 nSeriesIdx )

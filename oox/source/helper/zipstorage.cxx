@@ -43,7 +43,10 @@ ZipStorage::ZipStorage( const Reference< XComponentContext >& rxContext, const R
 {
     OSL_ENSURE( rxContext.is(), "ZipStorage::ZipStorage - missing component context" );
     // create base storage object
-    if( rxContext.is() ) try
+    if( !rxContext.is() )
+        return;
+
+    try
     {
         /*  #i105325# ::comphelper::OStorageHelper::GetStorageFromInputStream()
             cannot be used here as it will open a storage with format type

@@ -114,7 +114,10 @@ void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
         aTypeGroups.push_back( std::make_shared<TypeGroupConverter>( *this, *typeGroup ) );
 
     OSL_ENSURE( !aTypeGroups.empty(), "AxesSetConverter::convertFromModel - no type groups in axes set" );
-    if( !aTypeGroups.empty() ) try
+    if( aTypeGroups.empty() )
+        return;
+
+    try
     {
         // first type group needed for coordinate system and axis conversion
         TypeGroupConverter& rFirstTypeGroup = *aTypeGroups.front();
@@ -452,7 +455,10 @@ void PlotAreaConverter::convertPositionFromModel()
     LayoutModel& rLayout = mrModel.mxLayout.getOrCreate();
     LayoutConverter aLayoutConv( *this, rLayout );
     awt::Rectangle aDiagramRect;
-    if( aLayoutConv.calcAbsRectangle( aDiagramRect ) ) try
+    if( !aLayoutConv.calcAbsRectangle( aDiagramRect ) )
+        return;
+
+    try
     {
         namespace cssc = ::com::sun::star::chart;
         Reference< cssc::XChartDocument > xChart1Doc( getChartDocument(), UNO_QUERY_THROW );

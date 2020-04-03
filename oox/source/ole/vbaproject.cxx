@@ -397,7 +397,11 @@ void VbaProject::readVbaModules( StorageBase& rVbaPrjStrg )
             }
         }
     }
-    if( !maModules.empty() ) try
+
+    if( maModules.empty() )
+        return;
+
+    try
     {
         /*  Set library container to VBA compatibility mode. This will create
             the VBA Globals object and store it in the Basic manager of the
@@ -511,7 +515,10 @@ void VbaProject::importModulesAndForms( StorageBase& rVbaPrjStrg, const GraphicH
 
 void VbaProject::attachMacros()
 {
-    if( !maMacroAttachers.empty() && mxContext.is() ) try
+    if( !(!maMacroAttachers.empty() && mxContext.is()) )
+        return;
+
+    try
     {
         comphelper::DocumentInfo::notifyMacroEventRead(mxDocModel);
 
@@ -531,7 +538,10 @@ void VbaProject::attachMacros()
 
 void VbaProject::copyStorage( StorageBase& rVbaPrjStrg )
 {
-    if( mxContext.is() ) try
+    if( !mxContext.is() )
+        return;
+
+    try
     {
         Reference< XStorageBasedDocument > xStorageBasedDoc( mxDocModel, UNO_QUERY_THROW );
         Reference< XStorage > xDocStorage( xStorageBasedDoc->getDocumentStorage(), UNO_SET_THROW );

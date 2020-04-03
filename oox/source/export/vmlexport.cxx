@@ -94,20 +94,20 @@ void VMLExport::OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance )
 {
     EscherEx::OpenContainer( nEscherContainer, nRecInstance );
 
-    if ( nEscherContainer == ESCHER_SpContainer )
-    {
-        // opening a shape container
-        SAL_WARN_IF(m_nShapeType != ESCHER_ShpInst_Nil, "oox.vml", "opening shape inside of a shape!");
-        m_nShapeType = ESCHER_ShpInst_Nil;
-        m_pShapeAttrList = FastSerializerHelper::createAttrList();
+    if ( nEscherContainer != ESCHER_SpContainer )
+        return;
 
-        m_ShapeStyle.setLength(0);
-        m_ShapeStyle.ensureCapacity(200);
+    // opening a shape container
+    SAL_WARN_IF(m_nShapeType != ESCHER_ShpInst_Nil, "oox.vml", "opening shape inside of a shape!");
+    m_nShapeType = ESCHER_ShpInst_Nil;
+    m_pShapeAttrList = FastSerializerHelper::createAttrList();
 
-        // postpone the output so that we are able to write even the elements
-        // that we learn inside Commit()
-        m_pSerializer->mark(Tag_Container);
-    }
+    m_ShapeStyle.setLength(0);
+    m_ShapeStyle.ensureCapacity(200);
+
+    // postpone the output so that we are able to write even the elements
+    // that we learn inside Commit()
+    m_pSerializer->mark(Tag_Container);
 }
 
 void VMLExport::CloseContainer()
@@ -1383,31 +1383,31 @@ sal_Int32 VMLExport::StartShape()
 
 void VMLExport::EndShape( sal_Int32 nShapeElement )
 {
-    if ( nShapeElement >= 0 )
+    if ( nShapeElement < 0 )
+        return;
+
+    if (m_pTextExport && lcl_isTextBox(m_pSdrObject))
     {
-        if (m_pTextExport && lcl_isTextBox(m_pSdrObject))
+        uno::Reference<beans::XPropertySet> xPropertySet(const_cast<SdrObject*>(m_pSdrObject)->getUnoShape(), uno::UNO_QUERY);
+        comphelper::SequenceAsHashMap aCustomShapeProperties(xPropertySet->getPropertyValue("CustomShapeGeometry"));
+        sax_fastparser::FastAttributeList* pTextboxAttrList = FastSerializerHelper::createAttrList();
+        if (aCustomShapeProperties.find("TextPreRotateAngle") != aCustomShapeProperties.end())
         {
-            uno::Reference<beans::XPropertySet> xPropertySet(const_cast<SdrObject*>(m_pSdrObject)->getUnoShape(), uno::UNO_QUERY);
-            comphelper::SequenceAsHashMap aCustomShapeProperties(xPropertySet->getPropertyValue("CustomShapeGeometry"));
-            sax_fastparser::FastAttributeList* pTextboxAttrList = FastSerializerHelper::createAttrList();
-            if (aCustomShapeProperties.find("TextPreRotateAngle") != aCustomShapeProperties.end())
-            {
-                sal_Int32 nTextRotateAngle = aCustomShapeProperties["TextPreRotateAngle"].get<sal_Int32>();
-                if (nTextRotateAngle == -270)
-                    pTextboxAttrList->add(XML_style, "mso-layout-flow-alt:bottom-to-top");
-            }
-            sax_fastparser::XFastAttributeListRef xTextboxAttrList(pTextboxAttrList);
-            pTextboxAttrList = nullptr;
-            m_pSerializer->startElementNS(XML_v, XML_textbox, xTextboxAttrList);
-
-            m_pTextExport->WriteVMLTextBox(uno::Reference<drawing::XShape>(xPropertySet, uno::UNO_QUERY_THROW));
-
-            m_pSerializer->endElementNS(XML_v, XML_textbox);
+            sal_Int32 nTextRotateAngle = aCustomShapeProperties["TextPreRotateAngle"].get<sal_Int32>();
+            if (nTextRotateAngle == -270)
+                pTextboxAttrList->add(XML_style, "mso-layout-flow-alt:bottom-to-top");
         }
+        sax_fastparser::XFastAttributeListRef xTextboxAttrList(pTextboxAttrList);
+        pTextboxAttrList = nullptr;
+        m_pSerializer->startElementNS(XML_v, XML_textbox, xTextboxAttrList);
 
-        // end of the shape
-        m_pSerializer->endElementNS( XML_v, nShapeElement );
+        m_pTextExport->WriteVMLTextBox(uno::Reference<drawing::XShape>(xPropertySet, uno::UNO_QUERY_THROW));
+
+        m_pSerializer->endElementNS(XML_v, XML_textbox);
     }
+
+    // end of the shape
+    m_pSerializer->endElementNS( XML_v, nShapeElement );
 }
 
 OString const & VMLExport::AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri, sal_Int16 eVOri, sal_Int16 eHRel, sal_Int16 eVRel, const bool bOOxmlExport )

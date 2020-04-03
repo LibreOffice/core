@@ -329,54 +329,54 @@ OleFormCtrlExportHelper::OleFormCtrlExportHelper(  const Reference< XComponentCo
 {
     // try to get the guid
     Reference< css::beans::XPropertySet > xProps( xCntrlModel, UNO_QUERY );
-    if ( xProps.is() )
-    {
-        sal_Int16 nClassId = 0;
-        PropertySet aPropSet( mxControlModel );
-        if ( aPropSet.getProperty( nClassId, PROP_ClassId ) )
-        {
-            /* pseudo ripped from legacy msocximex:
-              "There is a truly horrible thing with EditControls and FormattedField
-              Controls, they both pretend to have an EDITBOX ClassId for compatibility
-              reasons, at some stage in the future hopefully there will be a proper
-              FormulaField ClassId rather than this piggybacking two controls onto the
-              same ClassId, cmc." - when fixed the fake FORMULAFIELD id entry
-              and definition above can be removed/replaced
-            */
-            if ( nClassId == FormComponentType::TEXTFIELD)
-            {
-                Reference< XServiceInfo > xInfo( xCntrlModel,
-                    UNO_QUERY);
-                if (xInfo->
-                    supportsService( "com.sun.star.form.component.FormattedField" ) )
-                    nClassId = FORMULAFIELD;
-            }
-            else if ( nClassId == FormComponentType::COMMANDBUTTON )
-            {
-                bool bToggle = false;
-                if ( aPropSet.getProperty( bToggle, PROP_Toggle ) && bToggle )
-                    nClassId = TOGGLEBUTTON;
-            }
-            else if ( nClassId == FormComponentType::CONTROL )
-            {
-                Reference< XServiceInfo > xInfo( xCntrlModel,
-                    UNO_QUERY);
-                if (xInfo->supportsService("com.sun.star.form.component.ImageControl" ) )
-                    nClassId = FormComponentType::IMAGECONTROL;
-            }
+    if ( !xProps.is() )
+        return;
 
-            GUIDCNamePairMap& cntrlMap = classIdToGUIDCNamePairMap::get();
-            GUIDCNamePairMap::iterator it = cntrlMap.find( nClassId );
-            if ( it != cntrlMap.end() )
-            {
-                aPropSet.getProperty(maName, PROP_Name );
-                maTypeName = OUString::createFromAscii( it->second.sName );
-                maFullName = "Microsoft Forms 2.0 " + maTypeName;
-                mpControl.reset(new EmbeddedControl( maName ));
-                maGUID = OUString::createFromAscii( it->second.sGUID );
-                mpModel = mpControl->createModelFromGuid( maGUID );
-            }
-        }
+    sal_Int16 nClassId = 0;
+    PropertySet aPropSet( mxControlModel );
+    if ( !aPropSet.getProperty( nClassId, PROP_ClassId ) )
+        return;
+
+    /* pseudo ripped from legacy msocximex:
+      "There is a truly horrible thing with EditControls and FormattedField
+      Controls, they both pretend to have an EDITBOX ClassId for compatibility
+      reasons, at some stage in the future hopefully there will be a proper
+      FormulaField ClassId rather than this piggybacking two controls onto the
+      same ClassId, cmc." - when fixed the fake FORMULAFIELD id entry
+      and definition above can be removed/replaced
+    */
+    if ( nClassId == FormComponentType::TEXTFIELD)
+    {
+        Reference< XServiceInfo > xInfo( xCntrlModel,
+            UNO_QUERY);
+        if (xInfo->
+            supportsService( "com.sun.star.form.component.FormattedField" ) )
+            nClassId = FORMULAFIELD;
+    }
+    else if ( nClassId == FormComponentType::COMMANDBUTTON )
+    {
+        bool bToggle = false;
+        if ( aPropSet.getProperty( bToggle, PROP_Toggle ) && bToggle )
+            nClassId = TOGGLEBUTTON;
+    }
+    else if ( nClassId == FormComponentType::CONTROL )
+    {
+        Reference< XServiceInfo > xInfo( xCntrlModel,
+            UNO_QUERY);
+        if (xInfo->supportsService("com.sun.star.form.component.ImageControl" ) )
+            nClassId = FormComponentType::IMAGECONTROL;
+    }
+
+    GUIDCNamePairMap& cntrlMap = classIdToGUIDCNamePairMap::get();
+    GUIDCNamePairMap::iterator it = cntrlMap.find( nClassId );
+    if ( it != cntrlMap.end() )
+    {
+        aPropSet.getProperty(maName, PROP_Name );
+        maTypeName = OUString::createFromAscii( it->second.sName );
+        maFullName = "Microsoft Forms 2.0 " + maTypeName;
+        mpControl.reset(new EmbeddedControl( maName ));
+        maGUID = OUString::createFromAscii( it->second.sGUID );
+        mpModel = mpControl->createModelFromGuid( maGUID );
     }
 }
 

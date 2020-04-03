@@ -69,26 +69,26 @@ void OOXMLDocPropHandler::InitNew()
 
 void OOXMLDocPropHandler::AddCustomProperty( const uno::Any& aAny )
 {
-    if ( !m_aCustomPropertyName.isEmpty() )
-    {
-        const uno::Reference< beans::XPropertyContainer > xUserProps =
-            m_xDocProp->getUserDefinedProperties();
-        if ( !xUserProps.is() )
-            throw uno::RuntimeException();
+    if ( m_aCustomPropertyName.isEmpty() )
+        return;
 
-        try
-        {
-            xUserProps->addProperty( m_aCustomPropertyName,
-                    beans::PropertyAttribute::REMOVABLE, aAny );
-        }
-        catch( beans::PropertyExistException& )
-        {
-            // conflicts with core and extended properties are possible
-        }
-        catch( uno::Exception& )
-        {
-            OSL_FAIL( "Can not add custom property!" );
-        }
+    const uno::Reference< beans::XPropertyContainer > xUserProps =
+        m_xDocProp->getUserDefinedProperties();
+    if ( !xUserProps.is() )
+        throw uno::RuntimeException();
+
+    try
+    {
+        xUserProps->addProperty( m_aCustomPropertyName,
+                beans::PropertyAttribute::REMOVABLE, aAny );
+    }
+    catch( beans::PropertyExistException& )
+    {
+        // conflicts with core and extended properties are possible
+    }
+    catch( uno::Exception& )
+    {
+        OSL_FAIL( "Can not add custom property!" );
     }
 }
 
@@ -245,24 +245,24 @@ void OOXMLDocPropHandler::UpdateDocStatistic( const OUString& aChars )
         break;
     }
 
-    if ( !aName.isEmpty() )
-    {
-        sal_Int32 nInd = 0;
-        for ( auto pProp = aSet.getConstArray(); nInd < aSet.getLength(); ++nInd )
-            if ( pProp[nInd].Name == aName )
-                break;
+    if ( aName.isEmpty() )
+        return;
 
-        if (nInd == aSet.getLength())
-            aSet.realloc( nInd + 1 );
+    sal_Int32 nInd = 0;
+    for ( auto pProp = aSet.getConstArray(); nInd < aSet.getLength(); ++nInd )
+        if ( pProp[nInd].Name == aName )
+            break;
 
-        beans::NamedValue aProp;
-        aProp.Name = aName;
-        aProp.Value <<= aChars.toInt32();
+    if (nInd == aSet.getLength())
+        aSet.realloc( nInd + 1 );
 
-        aSet[nInd] = aProp;
+    beans::NamedValue aProp;
+    aProp.Name = aName;
+    aProp.Value <<= aChars.toInt32();
 
-        m_xDocProp->setDocumentStatistics( aSet );
-    }
+    aSet[nInd] = aProp;
+
+    m_xDocProp->setDocumentStatistics( aSet );
 }
 
 // com.sun.star.xml.sax.XFastDocumentHandler
@@ -338,41 +338,41 @@ void SAL_CALL OOXMLDocPropHandler::startUnknownElement( const OUString& aNamespa
 
 void SAL_CALL OOXMLDocPropHandler::endFastElement( ::sal_Int32 )
 {
-    if ( m_nInBlock )
-    {
-        m_nInBlock--;
+    if ( !m_nInBlock )
+        return;
 
-        if ( !m_nInBlock )
-            m_nState = 0;
-        else if ( m_nInBlock == 1 )
+    m_nInBlock--;
+
+    if ( !m_nInBlock )
+        m_nState = 0;
+    else if ( m_nInBlock == 1 )
+    {
+        m_nBlock = 0;
+        m_aCustomPropertyName.clear();
+    }
+    else if ( m_nInBlock == 2 )
+    {
+        if (   m_nState == CUSTPR_TOKEN(Properties)
+            && m_nBlock == CUSTPR_TOKEN(property))
         {
-            m_nBlock = 0;
-            m_aCustomPropertyName.clear();
-        }
-        else if ( m_nInBlock == 2 )
-        {
-            if (   m_nState == CUSTPR_TOKEN(Properties)
-                && m_nBlock == CUSTPR_TOKEN(property))
+            switch (m_nType)
             {
-                switch (m_nType)
-                {
-                    case VT_TOKEN(bstr):
-                    case VT_TOKEN(lpstr):
-                    case VT_TOKEN(lpwstr):
-                        if (!m_aCustomPropertyName.isEmpty() &&
-                            INSERTED != m_CustomStringPropertyState)
-                        {
-                            // the property has string type, so it is valid
-                            // even with an empty value - characters() has
-                            // not been called in that case
-                            AddCustomProperty(uno::makeAny(OUString()));
-                        }
-                    break;
-                }
+                case VT_TOKEN(bstr):
+                case VT_TOKEN(lpstr):
+                case VT_TOKEN(lpwstr):
+                    if (!m_aCustomPropertyName.isEmpty() &&
+                        INSERTED != m_CustomStringPropertyState)
+                    {
+                        // the property has string type, so it is valid
+                        // even with an empty value - characters() has
+                        // not been called in that case
+                        AddCustomProperty(uno::makeAny(OUString()));
+                    }
+                break;
             }
-            m_CustomStringPropertyState = NONE;
-            m_nType = 0;
         }
+        m_CustomStringPropertyState = NONE;
+        m_nType = 0;
     }
 }
 

@@ -1346,17 +1346,17 @@ void SharedConfigData::createShortList( const OUString& rData )
 {
     OUStringVector aDataVec;
     StringHelper::convertStringToStringList( aDataVec, rData, false );
-    if( aDataVec.size() >= 3 )
+    if( aDataVec.size() < 3 )
+        return;
+
+    sal_Int64 nStartKey;
+    if( StringHelper::convertStringToInt( nStartKey, aDataVec[ 1 ] ) )
     {
-        sal_Int64 nStartKey;
-        if( StringHelper::convertStringToInt( nStartKey, aDataVec[ 1 ] ) )
+        std::shared_ptr< MultiList > xList = createNameList< MultiList >( aDataVec[ 0 ] );
+        if( xList.get() )
         {
-            std::shared_ptr< MultiList > xList = createNameList< MultiList >( aDataVec[ 0 ] );
-            if( xList.get() )
-            {
-                aDataVec.erase( aDataVec.begin(), aDataVec.begin() + 2 );
-                xList->setNamesFromVec( nStartKey, aDataVec );
-            }
+            aDataVec.erase( aDataVec.begin(), aDataVec.begin() + 2 );
+            xList->setNamesFromVec( nStartKey, aDataVec );
         }
     }
 }
@@ -1365,22 +1365,22 @@ void SharedConfigData::createUnitConverter( const OUString& rData )
 {
     OUStringVector aDataVec;
     StringHelper::convertStringToStringList( aDataVec, rData, false );
-    if( aDataVec.size() >= 2 )
+    if( aDataVec.size() < 2 )
+        return;
+
+    OUString aFactor = aDataVec[ 1 ];
+    bool bRecip = aFactor.startsWith("/");
+    if( bRecip )
+        aFactor = aFactor.copy( 1 );
+    double fFactor;
+    if( StringHelper::convertStringToDouble( fFactor, aFactor ) && (fFactor != 0.0) )
     {
-        OUString aFactor = aDataVec[ 1 ];
-        bool bRecip = aFactor.startsWith("/");
-        if( bRecip )
-            aFactor = aFactor.copy( 1 );
-        double fFactor;
-        if( StringHelper::convertStringToDouble( fFactor, aFactor ) && (fFactor != 0.0) )
+        std::shared_ptr< UnitConverter > xList = createNameList< UnitConverter >( aDataVec[ 0 ] );
+        if( xList.get() )
         {
-            std::shared_ptr< UnitConverter > xList = createNameList< UnitConverter >( aDataVec[ 0 ] );
-            if( xList.get() )
-            {
-                xList->setFactor( bRecip ? (1.0 / fFactor) : fFactor );
-                if( aDataVec.size() >= 3 )
-                    xList->setUnitName( aDataVec[ 2 ] );
-            }
+            xList->setFactor( bRecip ? (1.0 / fFactor) : fFactor );
+            if( aDataVec.size() >= 3 )
+                xList->setUnitName( aDataVec[ 2 ] );
         }
     }
 }

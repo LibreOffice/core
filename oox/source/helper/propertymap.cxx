@@ -249,18 +249,18 @@ void PropertyMap::fillSequences( Sequence< OUString >& rNames, Sequence< Any >& 
 {
     rNames.realloc( static_cast< sal_Int32 >( maProperties.size() ) );
     rValues.realloc( static_cast< sal_Int32 >( maProperties.size() ) );
-    if( !maProperties.empty() )
+    if( maProperties.empty() )
+        return;
+
+    OUString* pNames = rNames.getArray();
+    Any* pValues = rValues.getArray();
+    for (auto const& prop : maProperties)
     {
-        OUString* pNames = rNames.getArray();
-        Any* pValues = rValues.getArray();
-        for (auto const& prop : maProperties)
-        {
-            OSL_ENSURE( (0 <= prop.first) && (prop.first < PROP_COUNT), "PropertyMap::fillSequences - invalid property identifier" );
-            *pNames = (*mpPropNames)[ prop.first ];
-            *pValues = prop.second;
-            ++pNames;
-            ++pValues;
-        }
+        OSL_ENSURE( (0 <= prop.first) && (prop.first < PROP_COUNT), "PropertyMap::fillSequences - invalid property identifier" );
+        *pNames = (*mpPropNames)[ prop.first ];
+        *pValues = prop.second;
+        ++pNames;
+        ++pValues;
     }
 }
 

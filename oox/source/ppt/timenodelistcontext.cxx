@@ -267,73 +267,73 @@ namespace oox::ppt {
 
         virtual void onEndElement() override
             {
-                if( isCurrentElement( PPT_TOKEN( cmd ) ) )
-                {
-                    try {
-                        // see sd/source/filter/ppt/pptinanimations.cxx
-                        // in AnimationImporter::importCommandContainer()
-                        // REFACTOR?
-                        // a good chunk of this code has been copied verbatim *sigh*
-                        sal_Int16 nCommand = EffectCommands::CUSTOM;
-                        NamedValue aParamValue;
+                if( !isCurrentElement( PPT_TOKEN( cmd ) ) )
+                    return;
 
-                        switch( maType )
-                        {
-                        case XML_verb:
-                            aParamValue.Name = "Verb";
-                            // TODO make sure msCommand has what we want
-                            aParamValue.Value <<= msCommand.toInt32();
-                            nCommand = EffectCommands::VERB;
-                            break;
-                        case XML_evt:
-                        case XML_call:
-                            if ( msCommand == "onstopaudio" )
-                            {
-                                nCommand = EffectCommands::STOPAUDIO;
-                            }
-                            else if ( msCommand == "play" )
-                            {
-                                nCommand = EffectCommands::PLAY;
-                            }
-                            else if( msCommand == "playFrom" )
-                            {
-                                const OUString aMediaTime( msCommand.copy( 9, msCommand.getLength() - 10 ) );
-                                rtl_math_ConversionStatus eStatus;
-                                double fMediaTime = ::rtl::math::stringToDouble( aMediaTime, u'.', u',', &eStatus );
-                                if( eStatus == rtl_math_ConversionStatus_Ok )
-                                {
-                                    aParamValue.Name = "MediaTime";
-                                    aParamValue.Value <<= fMediaTime;
-                                }
-                                nCommand = EffectCommands::PLAY;
-                            }
-                            else if ( msCommand == "togglePause" )
-                            {
-                                nCommand = EffectCommands::TOGGLEPAUSE;
-                            }
-                            else if ( msCommand == "stop" )
-                            {
-                                nCommand = EffectCommands::STOP;
-                            }
-                            break;
-                        }
-                        mpNode->getNodeProperties()[ NP_COMMAND ] <<= nCommand;
-                        if( nCommand == EffectCommands::CUSTOM )
-                        {
-                            SAL_WARN("oox.ppt", "OOX: CmdTimeNodeContext::endFastElement(), unknown command!");
-                            aParamValue.Name = "UserDefined";
-                            aParamValue.Value <<= msCommand;
-                        }
-                        if( aParamValue.Value.hasValue() )
-                        {
-                            Sequence< NamedValue > aParamSeq( &aParamValue, 1 );
-                            mpNode->getNodeProperties()[ NP_PARAMETER ] <<= aParamSeq;
-                        }
-                    }
-                    catch( RuntimeException& )
+                try {
+                    // see sd/source/filter/ppt/pptinanimations.cxx
+                    // in AnimationImporter::importCommandContainer()
+                    // REFACTOR?
+                    // a good chunk of this code has been copied verbatim *sigh*
+                    sal_Int16 nCommand = EffectCommands::CUSTOM;
+                    NamedValue aParamValue;
+
+                    switch( maType )
                     {
-                        SAL_WARN("oox.ppt", "OOX: Exception in CmdTimeNodeContext::endFastElement()" );
+                    case XML_verb:
+                        aParamValue.Name = "Verb";
+                        // TODO make sure msCommand has what we want
+                        aParamValue.Value <<= msCommand.toInt32();
+                        nCommand = EffectCommands::VERB;
+                        break;
+                    case XML_evt:
+                    case XML_call:
+                        if ( msCommand == "onstopaudio" )
+                        {
+                            nCommand = EffectCommands::STOPAUDIO;
+                        }
+                        else if ( msCommand == "play" )
+                        {
+                            nCommand = EffectCommands::PLAY;
+                        }
+                        else if( msCommand == "playFrom" )
+                        {
+                            const OUString aMediaTime( msCommand.copy( 9, msCommand.getLength() - 10 ) );
+                            rtl_math_ConversionStatus eStatus;
+                            double fMediaTime = ::rtl::math::stringToDouble( aMediaTime, u'.', u',', &eStatus );
+                            if( eStatus == rtl_math_ConversionStatus_Ok )
+                            {
+                                aParamValue.Name = "MediaTime";
+                                aParamValue.Value <<= fMediaTime;
+                            }
+                            nCommand = EffectCommands::PLAY;
+                        }
+                        else if ( msCommand == "togglePause" )
+                        {
+                            nCommand = EffectCommands::TOGGLEPAUSE;
+                        }
+                        else if ( msCommand == "stop" )
+                        {
+                            nCommand = EffectCommands::STOP;
+                        }
+                        break;
                     }
+                    mpNode->getNodeProperties()[ NP_COMMAND ] <<= nCommand;
+                    if( nCommand == EffectCommands::CUSTOM )
+                    {
+                        SAL_WARN("oox.ppt", "OOX: CmdTimeNodeContext::endFastElement(), unknown command!");
+                        aParamValue.Name = "UserDefined";
+                        aParamValue.Value <<= msCommand;
+                    }
+                    if( aParamValue.Value.hasValue() )
+                    {
+                        Sequence< NamedValue > aParamSeq( &aParamValue, 1 );
+                        mpNode->getNodeProperties()[ NP_PARAMETER ] <<= aParamSeq;
+                    }
+                }
+                catch( RuntimeException& )
+                {
+                    SAL_WARN("oox.ppt", "OOX: Exception in CmdTimeNodeContext::endFastElement()" );
                 }
             }
 
@@ -444,19 +444,19 @@ namespace oox::ppt {
         virtual void onEndElement() override
             {
                 //xParentNode
-                if( isCurrentElement( mnElement ) )
-                {
-                    NodePropertyMap & rProps(mpNode->getNodeProperties());
-                    rProps[ NP_DIRECTION ] <<= mnDir == XML_cw;
-                    rProps[ NP_COLORINTERPOLATION ] <<= mnColorSpace == XML_hsl ? AnimationColorSpace::HSL : AnimationColorSpace::RGB;
-                    const GraphicHelper& rGraphicHelper = getFilter().getGraphicHelper();
-                    if( maToClr.isUsed() )
-                        mpNode->setTo( makeAny( maToClr.getColor( rGraphicHelper ) ) );
-                    if( maFromClr.isUsed() )
-                        mpNode->setFrom( makeAny( maFromClr.getColor( rGraphicHelper ) ) );
-                    if( mbHasByColor )
-                        mpNode->setBy( m_byColor.get() );
-                }
+                if( !isCurrentElement( mnElement ) )
+                    return;
+
+                NodePropertyMap & rProps(mpNode->getNodeProperties());
+                rProps[ NP_DIRECTION ] <<= mnDir == XML_cw;
+                rProps[ NP_COLORINTERPOLATION ] <<= mnColorSpace == XML_hsl ? AnimationColorSpace::HSL : AnimationColorSpace::RGB;
+                const GraphicHelper& rGraphicHelper = getFilter().getGraphicHelper();
+                if( maToClr.isUsed() )
+                    mpNode->setTo( makeAny( maToClr.getColor( rGraphicHelper ) ) );
+                if( maFromClr.isUsed() )
+                    mpNode->setFrom( makeAny( maFromClr.getColor( rGraphicHelper ) ) );
+                if( mbHasByColor )
+                    mpNode->setBy( m_byColor.get() );
             }
 
             virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override
@@ -582,35 +582,35 @@ namespace oox::ppt {
                 }
 
                 int nKeyTimes = maTavList.size();
-                if( nKeyTimes > 0)
+                if( nKeyTimes <= 0)
+                    return;
+
+                int i=0;
+                Sequence< double > aKeyTimes( nKeyTimes );
+                Sequence< Any > aValues( nKeyTimes );
+
+                NodePropertyMap & aProps( mpNode->getNodeProperties() );
+                for (auto const& tav : maTavList)
                 {
-                    int i=0;
-                    Sequence< double > aKeyTimes( nKeyTimes );
-                    Sequence< Any > aValues( nKeyTimes );
+                    // TODO what to do if it is Timing_INFINITE ?
+                    Any aTime = GetTimeAnimateValueTime( tav.msTime );
+                    aTime >>= aKeyTimes[i];
+                    aValues[i] = tav.maValue;
+                    convertAnimationValueWithTimeNode(mpNode, aValues[i]);
 
-                    NodePropertyMap & aProps( mpNode->getNodeProperties() );
-                    for (auto const& tav : maTavList)
+                    // Examine pptx documents and find that only the first tav
+                    // has the formula set. The formula can be used for the whole.
+                    if (!tav.msFormula.isEmpty())
                     {
-                        // TODO what to do if it is Timing_INFINITE ?
-                        Any aTime = GetTimeAnimateValueTime( tav.msTime );
-                        aTime >>= aKeyTimes[i];
-                        aValues[i] = tav.maValue;
-                        convertAnimationValueWithTimeNode(mpNode, aValues[i]);
-
-                        // Examine pptx documents and find that only the first tav
-                        // has the formula set. The formula can be used for the whole.
-                        if (!tav.msFormula.isEmpty())
-                        {
-                            OUString sFormula = tav.msFormula;
-                            (void)convertMeasure(sFormula);
-                            aProps[NP_FORMULA] <<= sFormula;
-                        }
-
-                        ++i;
+                        OUString sFormula = tav.msFormula;
+                        (void)convertMeasure(sFormula);
+                        aProps[NP_FORMULA] <<= sFormula;
                     }
-                    aProps[ NP_VALUES ] <<= aValues;
-                    aProps[ NP_KEYTIMES ] <<= aKeyTimes;
+
+                    ++i;
                 }
+                aProps[ NP_VALUES ] <<= aValues;
+                aProps[ NP_KEYTIMES ] <<= aKeyTimes;
             }
 
         virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& /*rAttribs*/ ) override
@@ -655,20 +655,20 @@ namespace oox::ppt {
 
         virtual void onEndElement() override
             {
-                if( isCurrentElement( mnElement ) )
+                if( !isCurrentElement( mnElement ) )
+                    return;
+
+                if( maTo.hasValue() )
                 {
-                    if( maTo.hasValue() )
-                    {
-                        mpNode->setTo( maTo );
-                    }
-                    if( maBy.hasValue() )
-                    {
-                        mpNode->setBy( maBy );
-                    }
-                    if( maFrom.hasValue() )
-                    {
-                        mpNode->setFrom( maFrom );
-                    }
+                    mpNode->setTo( maTo );
+                }
+                if( maBy.hasValue() )
+                {
+                    mpNode->setBy( maBy );
+                }
+                if( maFrom.hasValue() )
+                {
+                    mpNode->setFrom( maFrom );
                 }
             }
 

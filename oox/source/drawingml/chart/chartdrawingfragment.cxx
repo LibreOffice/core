@@ -201,31 +201,31 @@ void ChartDrawingFragment::onCharacters( const OUString& rChars )
 
 void ChartDrawingFragment::onEndElement()
 {
-    if( isCurrentElement( CDR_TOKEN( absSizeAnchor ), CDR_TOKEN( relSizeAnchor ) ) )
+    if( !isCurrentElement( CDR_TOKEN( absSizeAnchor ), CDR_TOKEN( relSizeAnchor ) ) )
+        return;
+
+    if( mxDrawPage.is() && mxShape.get() && mxAnchor.get() )
     {
-        if( mxDrawPage.is() && mxShape.get() && mxAnchor.get() )
+        EmuRectangle aShapeRectEmu = mxAnchor->calcAnchorRectEmu( maChartRectEmu );
+        if( (aShapeRectEmu.X >= 0) && (aShapeRectEmu.Y >= 0) && (aShapeRectEmu.Width >= 0) && (aShapeRectEmu.Height >= 0) )
         {
-            EmuRectangle aShapeRectEmu = mxAnchor->calcAnchorRectEmu( maChartRectEmu );
-            if( (aShapeRectEmu.X >= 0) && (aShapeRectEmu.Y >= 0) && (aShapeRectEmu.Width >= 0) && (aShapeRectEmu.Height >= 0) )
-            {
-                // TODO: DrawingML implementation expects 32-bit coordinates for EMU rectangles (change that to EmuRectangle)
-                awt::Rectangle aShapeRectEmu32(
-                    getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.X, 0, SAL_MAX_INT32 ),
-                    getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Y, 0, SAL_MAX_INT32 ),
-                    getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Width, 0, SAL_MAX_INT32 ),
-                    getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Height, 0, SAL_MAX_INT32 ) );
+            // TODO: DrawingML implementation expects 32-bit coordinates for EMU rectangles (change that to EmuRectangle)
+            awt::Rectangle aShapeRectEmu32(
+                getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.X, 0, SAL_MAX_INT32 ),
+                getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Y, 0, SAL_MAX_INT32 ),
+                getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Width, 0, SAL_MAX_INT32 ),
+                getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Height, 0, SAL_MAX_INT32 ) );
 
-                // Set the position and size before calling addShape().
-                mxShape->setPosition(awt::Point(aShapeRectEmu32.X, aShapeRectEmu32.Y));
-                mxShape->setSize(awt::Size(aShapeRectEmu32.Width, aShapeRectEmu32.Height));
+            // Set the position and size before calling addShape().
+            mxShape->setPosition(awt::Point(aShapeRectEmu32.X, aShapeRectEmu32.Y));
+            mxShape->setSize(awt::Size(aShapeRectEmu32.Width, aShapeRectEmu32.Height));
 
-                basegfx::B2DHomMatrix aMatrix;
-                mxShape->addShape( getFilter(), getFilter().getCurrentTheme(), mxDrawPage, aMatrix, mxShape->getFillProperties() );
-            }
+            basegfx::B2DHomMatrix aMatrix;
+            mxShape->addShape( getFilter(), getFilter().getCurrentTheme(), mxDrawPage, aMatrix, mxShape->getFillProperties() );
         }
-        mxShape.reset();
-        mxAnchor.reset();
     }
+    mxShape.reset();
+    mxAnchor.reset();
 }
 
 } // namespace oox::drawingml::chart

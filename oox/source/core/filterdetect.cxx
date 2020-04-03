@@ -142,25 +142,25 @@ void SAL_CALL FilterDetectDocHandler::characters( const OUString& /*aChars*/ )
 void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
 {
     OUString aType = rAttribs.getString( XML_Type, OUString() );
-    if ( aType == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" // OOXML Transitional
-            || aType == "http://purl.oclc.org/ooxml/officeDocument/relationships/officeDocument" ) //OOXML strict
+    if ( !(aType == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" // OOXML Transitional
+            || aType == "http://purl.oclc.org/ooxml/officeDocument/relationships/officeDocument") ) //OOXML strict
+        return;
+
+    Reference<XUriReferenceFactory> xFactory = UriReferenceFactory::create( mxContext );
+    try
     {
-        Reference<XUriReferenceFactory> xFactory = UriReferenceFactory::create( mxContext );
-        try
-        {
-             // use '/' to representent the root of the zip package ( and provide a 'file' scheme to
-             // keep the XUriReference implementation happy )
-             Reference< XUriReference > xBase = xFactory->parse( "file:///" );
+         // use '/' to representent the root of the zip package ( and provide a 'file' scheme to
+         // keep the XUriReference implementation happy )
+         Reference< XUriReference > xBase = xFactory->parse( "file:///" );
 
-             Reference< XUriReference > xPart = xFactory->parse(  rAttribs.getString( XML_Target, OUString() ) );
-             Reference< XUriReference > xAbs = xFactory->makeAbsolute(  xBase, xPart, true, RelativeUriExcessParentSegments_RETAIN );
+         Reference< XUriReference > xPart = xFactory->parse(  rAttribs.getString( XML_Target, OUString() ) );
+         Reference< XUriReference > xAbs = xFactory->makeAbsolute(  xBase, xPart, true, RelativeUriExcessParentSegments_RETAIN );
 
-             if ( xAbs.is() )
-                 maTargetPath = xAbs->getPath();
-        }
-        catch( const Exception& )
-        {
-        }
+         if ( xAbs.is() )
+             maTargetPath = xAbs->getPath();
+    }
+    catch( const Exception& )
+    {
     }
 }
 

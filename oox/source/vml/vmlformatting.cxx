@@ -546,34 +546,34 @@ sal_Int64 lclGetEmu( const GraphicHelper& rGraphicHelper, const OptValue< OUStri
 
 void lclGetDmlLineDash( OptValue< sal_Int32 >& oroPresetDash, LineProperties::DashStopVector& orCustomDash, const OptValue< OUString >& roDashStyle )
 {
-    if( roDashStyle.has() )
-    {
-        const OUString& rDashStyle = roDashStyle.get();
-        switch( AttributeConversion::decodeToken( rDashStyle ) )
-        {
-            case XML_solid:             oroPresetDash = XML_solid;          return;
-            case XML_shortdot:          oroPresetDash = XML_sysDot;         return;
-            case XML_shortdash:         oroPresetDash = XML_sysDash;        return;
-            case XML_shortdashdot:      oroPresetDash = XML_sysDashDot;     return;
-            case XML_shortdashdotdot:   oroPresetDash = XML_sysDashDotDot;  return;
-            case XML_dot:               oroPresetDash = XML_dot;            return;
-            case XML_dash:              oroPresetDash = XML_dash;           return;
-            case XML_dashdot:           oroPresetDash = XML_dashDot;        return;
-            case XML_longdash:          oroPresetDash = XML_lgDash;         return;
-            case XML_longdashdot:       oroPresetDash = XML_lgDashDot;      return;
-            case XML_longdashdotdot:    oroPresetDash = XML_lgDashDotDot;   return;
+    if( !roDashStyle.has() )
+        return;
 
-            // try to convert user-defined dash style
-            default:
-            {
-                ::std::vector< sal_Int32 > aValues;
-                sal_Int32 nIndex = 0;
-                while( nIndex >= 0 )
-                    aValues.push_back( rDashStyle.getToken( 0, ' ', nIndex ).toInt32() );
-                size_t nPairs = aValues.size() / 2; // ignore last value if size is odd
-                for( size_t nPairIdx = 0; nPairIdx < nPairs; ++nPairIdx )
-                    orCustomDash.emplace_back( aValues[ 2 * nPairIdx ], aValues[ 2 * nPairIdx + 1 ] );
-            }
+    const OUString& rDashStyle = roDashStyle.get();
+    switch( AttributeConversion::decodeToken( rDashStyle ) )
+    {
+        case XML_solid:             oroPresetDash = XML_solid;          return;
+        case XML_shortdot:          oroPresetDash = XML_sysDot;         return;
+        case XML_shortdash:         oroPresetDash = XML_sysDash;        return;
+        case XML_shortdashdot:      oroPresetDash = XML_sysDashDot;     return;
+        case XML_shortdashdotdot:   oroPresetDash = XML_sysDashDotDot;  return;
+        case XML_dot:               oroPresetDash = XML_dot;            return;
+        case XML_dash:              oroPresetDash = XML_dash;           return;
+        case XML_dashdot:           oroPresetDash = XML_dashDot;        return;
+        case XML_longdash:          oroPresetDash = XML_lgDash;         return;
+        case XML_longdashdot:       oroPresetDash = XML_lgDashDot;      return;
+        case XML_longdashdotdot:    oroPresetDash = XML_lgDashDotDot;   return;
+
+        // try to convert user-defined dash style
+        default:
+        {
+            ::std::vector< sal_Int32 > aValues;
+            sal_Int32 nIndex = 0;
+            while( nIndex >= 0 )
+                aValues.push_back( rDashStyle.getToken( 0, ' ', nIndex ).toInt32() );
+            size_t nPairs = aValues.size() / 2; // ignore last value if size is odd
+            for( size_t nPairIdx = 0; nPairIdx < nPairs; ++nPairIdx )
+                orCustomDash.emplace_back( aValues[ 2 * nPairIdx ], aValues[ 2 * nPairIdx + 1 ] );
         }
     }
 }
@@ -963,21 +963,21 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
             }
         }
     }
-    if (!moTrim.has() || !moTrim.get())
-    {
-        OUString sText = moString.get();
-        ScopedVclPtrInstance<VirtualDevice> pDevice;
-        vcl::Font aFont = pDevice->GetFont();
-        aFont.SetFamilyName(sFont);
-        aFont.SetFontSize(Size(0, 96));
-        pDevice->SetFont(aFont);
+    if (moTrim.has() && moTrim.get())
+        return;
 
-        auto nTextWidth = pDevice->GetTextWidth(sText);
-        if (nTextWidth)
-        {
-            sal_Int32 nNewHeight = (static_cast<double>(pDevice->GetTextHeight()) / nTextWidth) * xShape->getSize().Width;
-            xShape->setSize(awt::Size(xShape->getSize().Width, nNewHeight));
-        }
+    OUString sText = moString.get();
+    ScopedVclPtrInstance<VirtualDevice> pDevice;
+    vcl::Font aFont = pDevice->GetFont();
+    aFont.SetFamilyName(sFont);
+    aFont.SetFontSize(Size(0, 96));
+    pDevice->SetFont(aFont);
+
+    auto nTextWidth = pDevice->GetTextWidth(sText);
+    if (nTextWidth)
+    {
+        sal_Int32 nNewHeight = (static_cast<double>(pDevice->GetTextHeight()) / nTextWidth) * xShape->getSize().Width;
+        xShape->setSize(awt::Size(xShape->getSize().Width, nNewHeight));
     }
 }
 

@@ -53,29 +53,29 @@ namespace oox::ppt {
 
     void SoundActionContext::onEndElement()
     {
-        if ( isCurrentElement( PPT_TOKEN( sndAc ) ) )
-        {
-            if( mbHasStartSound )
-            {
-                OUString url;
+        if ( !isCurrentElement( PPT_TOKEN( sndAc ) ) )
+            return;
+
+        if( !mbHasStartSound )
+            return;
+
+        OUString url;
 #if HAVE_FEATURE_AVMEDIA
-                if ( !msSndName.isEmpty() )
-                {
-                    Reference<css::io::XInputStream>
-                        xInputStream = getFilter().openInputStream(msSndName);
-                    if (xInputStream.is())
-                    {
-                        ::avmedia::EmbedMedia(getFilter().getModel(), msSndName, url, xInputStream);
-                        xInputStream->closeInput();
-                    }
-                }
-#endif
-                if ( !url.isEmpty() )
-                {
-                    maSlideProperties.setProperty( PROP_Sound, url);
-                    maSlideProperties.setProperty( PROP_SoundOn, true);
-                }
+        if ( !msSndName.isEmpty() )
+        {
+            Reference<css::io::XInputStream>
+                xInputStream = getFilter().openInputStream(msSndName);
+            if (xInputStream.is())
+            {
+                ::avmedia::EmbedMedia(getFilter().getModel(), msSndName, url, xInputStream);
+                xInputStream->closeInput();
             }
+        }
+#endif
+        if ( !url.isEmpty() )
+        {
+            maSlideProperties.setProperty( PROP_Sound, url);
+            maSlideProperties.setProperty( PROP_SoundOn, true);
         }
     }
 
