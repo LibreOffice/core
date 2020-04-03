@@ -351,9 +351,6 @@ bool SkiaSalBitmap::ConvertToGreyscale()
 #endif
     // Normally this would need to convert contents of mBuffer for all possible formats,
     // so just let the VCL algorithm do it.
-    // The exception is when this bitmap contains only SkImage, which most probably
-    // comes from SkiaSalGraphicsImpl::GetBitmap(). That is often used by the horrible
-    // separate-alpha-outdev hack, and followed by a later call to GetAlphaSkBitmap().
     // Avoid the costly SkImage->buffer->SkImage conversion.
     if (!mBuffer && mImage)
     {
@@ -376,6 +373,33 @@ bool SkiaSalBitmap::ConvertToGreyscale()
         mPalette = Bitmap::GetGreyPalette(256);
         ResetToSkImage(surface->makeImageSnapshot());
         SAL_INFO("vcl.skia.trace", "converttogreyscale(" << this << ")");
+        return true;
+    }
+    return false;
+}
+
+bool SkiaSalBitmap::InterpretAs8Bit()
+{
+#ifdef DBG_UTIL
+    assert(mWriteAccessCount == 0);
+#endif
+    if (mBitCount == 8 && mPalette == Bitmap::GetGreyPalette(256))
+        return true;
+    // This is usually used by AlphaMask, the point is just to treat
+    // the content as an alpha channel. This is often used
+    // by the horrible separate-alpha-outdev hack, where the bitmap comes
+    // from SkiaSalGraphicsImpl::GetBitmap(), so only mImage is set,
+    // and that is followed by a later call to GetAlphaSkBitmap().
+    // Avoid the costly SkImage->buffer->SkImage conversion and simply
+    // just treat the SkImage as being for 8bit bitmap. EnsureBitmapData()
+    // will do the conversion if needed, but the normal case will be
+    // GetAlphaSkImage() creating kAlpha_8_SkColorType SkImage from it.
+    if (!mBuffer && mImage)
+    {
+        mBitCount = 8;
+        mPalette = Bitmap::GetGreyPalette(256);
+        ResetToSkImage(mImage); // keep mImage, it will be interpreted as 8bit if needed
+        SAL_INFO("vcl.skia.trace", "interpretas8bit(" << this << ")");
         return true;
     }
     return false;

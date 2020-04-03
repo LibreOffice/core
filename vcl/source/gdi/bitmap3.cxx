@@ -230,10 +230,20 @@ bool Bitmap::Convert( BmpConversion eConversion )
     if (mxSalBmp)
     {
         // avoid large chunk of obsolete and hopefully rarely used conversions.
-        if (eConversion == BmpConversion::N8BitGreys)
+        if (eConversion == BmpConversion::N8BitNoConversion)
         {
             std::shared_ptr<SalBitmap> xImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
             // frequently used conversion for creating alpha masks
+            if (xImpBmp->Create(*mxSalBmp) && xImpBmp->InterpretAs8Bit())
+            {
+                ImplSetSalBitmap(xImpBmp);
+                SAL_INFO( "vcl.opengl", "Ref count: " << mxSalBmp.use_count() );
+                return true;
+            }
+        }
+        if (eConversion == BmpConversion::N8BitGreys)
+        {
+            std::shared_ptr<SalBitmap> xImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
             if (xImpBmp->Create(*mxSalBmp) && xImpBmp->ConvertToGreyscale())
             {
                 ImplSetSalBitmap(xImpBmp);
@@ -280,6 +290,7 @@ bool Bitmap::Convert( BmpConversion eConversion )
         break;
 
         case BmpConversion::N8BitGreys:
+        case BmpConversion::N8BitNoConversion:
             bRet = ImplMakeGreyscales( 256 );
         break;
 

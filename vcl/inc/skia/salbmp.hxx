@@ -57,6 +57,7 @@ public:
                        BmpScaleFlag nScaleFlag) override;
     virtual bool Replace(const Color& rSearchColor, const Color& rReplaceColor,
                          sal_uInt8 nTol) override;
+    virtual bool InterpretAs8Bit() override;
     virtual bool ConvertToGreyscale() override;
 
     // Returns the contents as SkImage (possibly GPU-backed).

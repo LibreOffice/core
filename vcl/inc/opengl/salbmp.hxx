@@ -80,6 +80,7 @@ public:
     bool            Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag ) override;
     bool            Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uInt8 nTol ) override;
     bool            ConvertToGreyscale() override;
+    bool            InterpretAs8Bit() override;
 
 public:
 

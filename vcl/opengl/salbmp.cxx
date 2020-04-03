@@ -768,4 +768,11 @@ bool OpenGLSalBitmap::ConvertToGreyscale()
     return true;
 }
 
+// This is needed to just make the bitmap usable as an alpha channel.
+// Converting to 8bit grey will do.
+bool OpenGLSalBitmap::InterpretAs8Bit()
+{
+    return ConvertToGreyscale();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
