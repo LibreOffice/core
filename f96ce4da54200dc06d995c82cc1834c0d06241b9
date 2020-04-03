@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3d7c7450_c0f229b9",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-04-03T02:26:07Z",
+      "side": 1,
+      "message": "looks like all this could be removed",
+      "range": {
+        "startLine": 364,
+        "startChar": 20,
+        "endLine": 370,
+        "endChar": 21
+      },
+      "revId": "f96ce4da54200dc06d995c82cc1834c0d06241b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d701020_f4371d9d",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-04-03T02:26:07Z",
+      "side": 1,
+      "message": "and this",
+      "range": {
+        "startLine": 669,
+        "startChar": 20,
+        "endLine": 675,
+        "endChar": 21
+      },
+      "revId": "f96ce4da54200dc06d995c82cc1834c0d06241b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
