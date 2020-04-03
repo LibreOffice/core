@@ -179,9 +179,9 @@ StorageElementFactory::createStorage( const OUString & rUri,
     }
     else if ( osl_atomic_increment( &aIt->second->m_refCount ) > 1 )
     {
-        rtl::Reference< Storage > xElement( aIt->second );
+        uno::Reference< embed::XStorage > xElement( aIt->second );
         osl_atomic_decrement( &aIt->second->m_refCount );
-        return aIt->second;
+        return xElement;
     }
     else
     {

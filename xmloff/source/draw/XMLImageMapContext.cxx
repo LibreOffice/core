@@ -438,9 +438,6 @@ void XMLImageMapPolygonContext::ProcessAttribute(
 
 void XMLImageMapPolygonContext::Prepare(Reference<XPropertySet> & rPropertySet)
 {
-    // process view box
-    SdXMLImExViewBox aViewBox(sViewBoxString, GetImport().GetMM100UnitConverter());
-
     // get polygon sequence
     basegfx::B2DPolygon aPolygon;
 

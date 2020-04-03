@@ -275,7 +275,6 @@ void BackendDb::writeVectorOfPair(
         OSL_ASSERT(!sNameSpace.isEmpty());
         const OUString sPrefix(getNSPrefix() + ":");
         const Reference<css::xml::dom::XDocument> doc = getDocument();
-        const Reference<css::xml::dom::XNode> root = doc->getFirstChild();
 
         const Reference<css::xml::dom::XElement> vectorNode(
             doc->createElementNS(sNameSpace, sPrefix + sVectorTagName));

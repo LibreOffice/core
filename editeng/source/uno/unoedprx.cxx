@@ -463,7 +463,6 @@ OUString SvxAccessibleTextAdapter::GetText( const ESelection& rSel ) const
         sStr = sStr.copy(0, sStr.getLength() - (aEndIndex.GetFieldLen() - aEndIndex.GetFieldOffset()) );
     }
 
-    EBulletInfo aBulletInfo1 = GetBulletInfo( aStartIndex.GetParagraph() );
     EBulletInfo aBulletInfo2 = GetBulletInfo( aEndIndex.GetParagraph() );
 
     if( aEndIndex.InBullet() )

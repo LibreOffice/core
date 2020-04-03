@@ -211,8 +211,6 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame const * pViewFrame,
 
     m_xShortNameEdit->connect_insert_text(LINK(this, SwGlossaryDlg, TextFilterHdl));
 
-    SvtLinguConfig aLocalLinguConfig;
-
     m_xEditBtn->connect_toggled(LINK(this, SwGlossaryDlg, EnableHdl));
     m_xEditBtn->connect_selected(LINK(this, SwGlossaryDlg, MenuHdl));
     m_xPathBtn->connect_clicked(LINK(this, SwGlossaryDlg, PathHdl));

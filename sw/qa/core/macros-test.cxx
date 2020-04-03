@@ -263,10 +263,9 @@ void SwMacrosTest::testControlShapeGrouping()
     CPPUNIT_ASSERT(xDPGrouper.is());
     uno::Reference<drawing::XShapeGroup> xGroup(xDPGrouper->group(xShapes));
     CPPUNIT_ASSERT(xGroup.is());
-    uno::Reference<container::XIndexAccess> xGroupIC(xGroup, UNO_QUERY);
-    CPPUNIT_ASSERT(xGroup.is());
 
 #if 0
+    uno::Reference<container::XIndexAccess> xGroupIC(xGroup, UNO_QUERY);
     CPPUNIT_ASSERT(xDateShape->getControl().is());
     CPPUNIT_ASSERT_EQUAL(xDateShape->getControl(), xDateControlModel);
     CPPUNIT_ASSERT(xTimeShape->getControl().is());

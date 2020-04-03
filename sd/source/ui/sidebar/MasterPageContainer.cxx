@@ -795,10 +795,6 @@ Reference<frame::XModel> MasterPageContainer::Implementation::GetModel()
 
     if ( ! mxModel.is())
     {
-        // Get the desktop a s service factory.
-        uno::Reference<frame::XDesktop2> xDesktop  = frame::Desktop::create(
-            ::comphelper::getProcessComponentContext() );
-
         // Create a new model.
         mxModel.set(
             ::comphelper::getProcessServiceFactory()->createInstance(

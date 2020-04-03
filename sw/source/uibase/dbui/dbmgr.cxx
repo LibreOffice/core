@@ -480,7 +480,6 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
         // calls from the calculator may have added a connection with an invalid commandtype
         //"real" data base connections added here have to re-use the already available
         //DSData and set the correct CommandType
-        SwDBData aTempData(aData);
         aData.nCommandType = -1;
         pTemp = FindDSData(aData, false);
         if(pTemp)

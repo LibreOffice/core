@@ -504,8 +504,6 @@ void XMLAnimationsEffectContext::endFastElement(sal_Int32 )
 
     try
     {
-        rtl::Reference< XMLShapeImportHelper > xShapeImport( GetImport().GetShapeImport() );
-
         if( !maShapeId.isEmpty() )
         {
             Reference< XPropertySet > xSet;

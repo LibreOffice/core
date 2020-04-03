@@ -108,7 +108,6 @@ DECLARE_OOXMLEXPORT_TEST(defaultTabStopNotInStyles, "empty.odt")
 // The default tab stop was mistakenly exported to a style.
 // xray ThisComponent.StyleFamilies(1)(0).ParaTabStop
     uno::Reference< container::XNameAccess > paragraphStyles = getStyles( "ParagraphStyles" );
-    uno::Reference< beans::XPropertySet > properties( paragraphStyles->getByName( "Standard" ), uno::UNO_QUERY );
     uno::Sequence< style::TabStop > stops = getProperty< uno::Sequence< style::TabStop > >(
         paragraphStyles->getByName( "Standard" ), "ParaTabStops" );
 // There actually be one tab stop, but it will be the default.
@@ -560,8 +559,6 @@ DECLARE_OOXMLEXPORT_TEST(testMathLiteral, "math-literal.docx")
 DECLARE_OOXMLEXPORT_TEST(testFdo48557, "fdo48557.odt")
 {
     // Inner margins of the textframe wasn't exported.
-    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(150), getProperty<sal_Int32>(xFrame, "TextLeftDistance"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(150), getProperty<sal_Int32>(xFrame, "TextRightDistance"));
@@ -736,7 +733,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo64238_a, "fdo64238_a.docx")
     sal_Int32 numOfRuns = 0;
     while (xRunEnum->hasMoreElements())
     {
-        uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
+        xRunEnum->nextElement();
         numOfRuns++;
     }
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), numOfRuns);
@@ -756,7 +753,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo64238_b, "fdo64238_b.docx")
     sal_Int32 numOfRuns = 0;
     while (xRunEnum->hasMoreElements())
     {
-        uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
+        xRunEnum->nextElement();
         numOfRuns++;
     }
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), numOfRuns);

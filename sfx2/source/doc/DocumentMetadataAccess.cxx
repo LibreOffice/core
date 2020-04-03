@@ -773,10 +773,6 @@ retry:
         i_rImpl.m_xRepository->getGraph(xManifest));
     i_rImpl.m_xManifest.set(xManifestGraph.is() ? xManifestGraph :
         i_rImpl.m_xRepository->createGraph(xManifest), uno::UNO_SET_THROW);
-    const uno::Reference<container::XEnumeration> xEnum(
-        i_rImpl.m_xManifest->getStatements(nullptr,
-            getURI<rdf::URIs::RDF_TYPE>(i_rImpl.m_xContext),
-            getURI<rdf::URIs::PKG_DOCUMENT>(i_rImpl.m_xContext).get()));
 
     // document statement
     i_rImpl.m_xManifest->addStatement(i_rImpl.m_xBaseURI.get(),
