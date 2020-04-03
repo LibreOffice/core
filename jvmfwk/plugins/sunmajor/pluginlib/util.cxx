@@ -1266,7 +1266,7 @@ void addJavaInfosDirScan(
                             OUString usDir3(usDir2 + arNames[k]);
 
                             DirectoryItem item3;
-                            if(DirectoryItem::get(usDir3, item) == File::E_None)
+                            if(DirectoryItem::get(usDir3, item3) == File::E_None)
                             {
                                 //remove trailing '/'
                                 sal_Int32 islash = usDir3.lastIndexOf('/');

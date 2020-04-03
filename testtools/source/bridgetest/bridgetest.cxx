@@ -927,7 +927,6 @@ static bool raiseException( const Reference< XBridgeTest > & xLBT )
         {
             try
             {
-                TestData aRet, aRet2;
                 xLBT->raiseException(
                     5, STRING_TEST_CONSTANT,
                     xLBT->getInterface() );

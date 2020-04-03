@@ -324,7 +324,6 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 name = StrTitle::getTitle( ucbContent );
             }
 
-            ::ucbhelper::Content ucbContent( url, xCmdEnv, m_xComponentContext );
             if (subType.equalsIgnoreAsciiCase( "vnd.sun.star.configuration-data"))
             {
                 return new PackageImpl(
