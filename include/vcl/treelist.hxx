@@ -236,8 +236,8 @@ public:
     SvTreeListEntry*        FirstVisible() const
     { return pModel->FirstVisible(); }
 
-    SvTreeListEntry*        NextVisible( SvTreeListEntry* pEntry, sal_uInt16* pDepth=nullptr ) const
-    { return pModel->NextVisible(this,pEntry,pDepth); }
+    SvTreeListEntry*        NextVisible( SvTreeListEntry* pEntry ) const
+    { return pModel->NextVisible(this,pEntry); }
 
     SvTreeListEntry*        PrevVisible( SvTreeListEntry* pEntry ) const
     { return pModel->PrevVisible(this,pEntry); }

@@ -26,21 +26,16 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <drawdoc.hxx>
 
-static char const DATA_DIRECTORY[] = "/sw/qa/uibase/shells/data/";
-
 /// Covers sw/source/uibase/shells/ fixes.
 class SwUibaseShellsTest : public SwModelTestBase
 {
 public:
-    SwDoc* createDoc(const char* pName = nullptr);
+    SwDoc* createDoc();
 };
 
-SwDoc* SwUibaseShellsTest::createDoc(const char* pName)
+SwDoc* SwUibaseShellsTest::createDoc()
 {
-    if (!pName)
-        loadURL("private:factory/swriter", nullptr);
-    else
-        load(DATA_DIRECTORY, pName);
+    loadURL("private:factory/swriter", nullptr);
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);

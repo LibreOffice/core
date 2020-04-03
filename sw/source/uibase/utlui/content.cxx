@@ -3028,7 +3028,7 @@ void SwContentTree::MoveOutline(SwOutlineNodes::size_type nTargetPos)
                 nTargetPos = nPrevTargetPosOrOffset;
             }
         }
-        GetParentWindow()->MoveOutline(nSourcePos, nTargetPos, true);
+        GetParentWindow()->MoveOutline(nSourcePos, nTargetPos);
     }
 
     pShell->EndUndo();

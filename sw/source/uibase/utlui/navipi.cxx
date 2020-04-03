@@ -86,8 +86,7 @@ OUString SwNavigationPI::CleanEntry(const OUString& rEntry)
 
 // Execution of the drag operation with and without the children.
 
-void SwNavigationPI::MoveOutline(SwOutlineNodes::size_type nSource, SwOutlineNodes::size_type nTarget,
-                                                    bool bWithChildren)
+void SwNavigationPI::MoveOutline(SwOutlineNodes::size_type nSource, SwOutlineNodes::size_type nTarget)
 {
     SwView *pView = GetCreateView();
     SwWrtShell &rSh = pView->GetWrtShell();
@@ -98,18 +97,16 @@ void SwNavigationPI::MoveOutline(SwOutlineNodes::size_type nSource, SwOutlineNod
 
         SwOutlineNodes::difference_type nMove = nTarget-nSource; //( nDir<0 ) ? 1 : 0 ;
         rSh.GotoOutline(nSource);
-        if (bWithChildren)
-            rSh.MakeOutlineSel(nSource, nSource, true);
+        rSh.MakeOutlineSel(nSource, nSource, true);
         // While moving, the selected children does not counting.
         const SwOutlineNodes::size_type nLastOutlinePos = rSh.GetOutlinePos(MAXLEVEL);
-        if(bWithChildren && nMove > 1 &&
-                nLastOutlinePos < nTarget)
+        if(nMove > 1 && nLastOutlinePos < nTarget)
         {
             if(!rSh.IsCursorPtAtEnd())
                 rSh.SwapPam();
             nMove -= nLastOutlinePos - nSource;
         }
-        if(!bWithChildren || nMove < 1 || nLastOutlinePos < nTarget )
+        if( nMove < 1 || nLastOutlinePos < nTarget )
             rSh.MoveOutlinePara( nMove );
         rSh.ClearMark();
         rSh.GotoOutline( nSource + nMove);
