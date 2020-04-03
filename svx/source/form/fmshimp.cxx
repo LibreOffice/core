@@ -2631,7 +2631,6 @@ void SAL_CALL FmXFormShell::selectionChanged(const lang::EventObject& rEvent)
     EnableTrackProperties_Lock(false);
 
     bool bMarkChanged = m_pShell->GetFormView()->checkUnMarkAll(rEvent.Source);
-    Reference< XForm > xNewForm( GetForm( rEvent.Source ) );
 
     InterfaceBag aNewSelection;
     aNewSelection.insert( Reference<XInterface>( xSelObj, UNO_QUERY ) );

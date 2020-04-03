@@ -276,7 +276,6 @@ namespace frm
 
         if ( _rPropertyName == PROPERTY_BACKGROUNDCOLOR )
         {
-            Wallpaper aTest = pNavBar->GetBackground();
             if ( bVoid )
             {
                 pNavBar->SetBackground( pNavBar->GetSettings().GetStyleSettings().GetFaceColor() );
