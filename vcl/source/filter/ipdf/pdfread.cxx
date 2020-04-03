@@ -117,11 +117,10 @@ bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream)
     return rOutStream.good();
 }
 #else
-bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream, sal_uInt64 nPos,
-                         sal_uInt64 nSize)
+bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream)
 {
-    rInStream.Seek(nPos);
-    rOutStream.WriteStream(rInStream, nSize);
+    rInStream.Seek(STREAM_SEEK_TO_BEGIN);
+    rOutStream.WriteStream(rInStream, STREAM_SEEK_TO_END);
     return rOutStream.good();
 }
 #endif // HAVE_FEATURE_PDFIUM
