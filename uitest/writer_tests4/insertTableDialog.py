@@ -44,41 +44,6 @@ class WriterInsertTableDialog(UITestCase):
         tableText = table.getCellByName( cellName )
         tableText.setString( text )
 
-    def test_tdf80663(self):
-
-        self.insert_table("Test1", 2, 2)
-
-        document = self.ui_test.get_component()
-
-        tables = document.getTextTables()
-        self.xUITest.executeCommand(".uno:DeleteRows")
-
-        self.assertEqual(len(tables[0].getRows()), 1)
-        self.assertEqual(len(tables[0].getColumns()), 2)
-
-        self.xUITest.executeCommand(".uno:Undo")
-
-        self.assertEqual(len(tables[0].getRows()), 2)
-        self.assertEqual(len(tables[0].getColumns()), 2)
-
-        self.ui_test.close_doc()
-
-    def test_tdf96067(self):
-
-        self.insert_table("Test2", 3, 3)
-
-        self.xUITest.executeCommand(".uno:SelectTable")
-        self.xUITest.executeCommand(".uno:InsertRowsBefore")
-
-        document = self.ui_test.get_component()
-        tables = document.getTextTables()
-        self.assertEqual(len(tables[0].getRows()), 6)
-        self.assertEqual(len(tables[0].getColumns()), 3)
-
-        self.xUITest.executeCommand(".uno:Undo")
-
-        self.ui_test.close_doc()
-
     def test_tdf104158(self):
 
         self.insert_table("Test3", 2, 2)
