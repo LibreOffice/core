@@ -129,10 +129,11 @@ void BitmapFilterTest::testPerformance()
 
     int nIterations = 10;
     auto start = std::chrono::high_resolution_clock::now();
+    Bitmap aResult;
     for (int i = 0; i < nIterations; i++)
     {
         BitmapFilterStackBlur aBlurFilter(250, false); // don't extend the image
-        aBlurFilter.filter(aBigBitmap);
+        aResult = aBlurFilter.filter(aBigBitmap);
     }
     auto end = std::chrono::high_resolution_clock::now();
     auto elapsed = (end - start) / nIterations;
@@ -142,7 +143,7 @@ void BitmapFilterTest::testPerformance()
         std::unique_ptr<SvFileStream> pStream(
             new SvFileStream("~/BlurBigPerformance.png", StreamMode::WRITE | StreamMode::TRUNC));
         GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
-        rFilter.compressAsPNG(aBigBitmap, *pStream);
+        rFilter.compressAsPNG(aResult, *pStream);
 
         pStream.reset(new SvFileStream("~/BlurBigPerformance.txt", StreamMode::WRITE));
         pStream->WriteOString("Blur average time: ");

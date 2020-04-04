@@ -11,6 +11,9 @@
 #include <vcl/BitmapFilterStackBlur.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <bitmapwriteaccess.hxx>
+#include <sal/log.hxx>
+
+#include <comphelper/threadpool.hxx>
 
 namespace
 {
@@ -48,9 +51,30 @@ static const sal_Int16 constShiftTable[255]
 class BlurSharedData
 {
 public:
+    BitmapReadAccess* mpReadAccess;
+    BitmapWriteAccess* mpWriteAccess;
     long mnRadius;
     long mnComponentWidth;
     long mnDiv;
+    long mnColorChannels;
+
+    BlurSharedData(BitmapReadAccess* pReadAccess, BitmapWriteAccess* pWriteAccess, long aRadius,
+                   long nComponentWidth, long nColorChannels)
+        : mpReadAccess(pReadAccess)
+        , mpWriteAccess(pWriteAccess)
+        , mnRadius(aRadius)
+        , mnComponentWidth(nComponentWidth)
+        , mnDiv(aRadius + aRadius + 1)
+        , mnColorChannels(nColorChannels)
+    {
+    }
+};
+
+class BlurArrays
+{
+public:
+    BlurSharedData maShared;
+
     std::vector<sal_uInt8> maStackBuffer;
     std::vector<long> maPositionTable;
     std::vector<long> maWeightTable;
@@ -59,31 +83,54 @@ public:
     std::vector<long> mnInSumVector;
     std::vector<long> mnOutSumVector;
 
-    BlurSharedData(long aRadius, long nComponentWidth, long nColorChannels)
-        : mnRadius(aRadius)
-        , mnComponentWidth(nComponentWidth)
-        , mnDiv(aRadius + aRadius + 1)
-        , maStackBuffer(mnDiv * mnComponentWidth)
-        , maPositionTable(mnDiv)
-        , maWeightTable(mnDiv)
-        , mnSumVector(nColorChannels)
-        , mnInSumVector(nColorChannels)
-        , mnOutSumVector(nColorChannels)
+    BlurArrays(BlurSharedData const& rShared)
+        : maShared(rShared)
+        , maStackBuffer(maShared.mnDiv * maShared.mnComponentWidth)
+        , maPositionTable(maShared.mnDiv)
+        , maWeightTable(maShared.mnDiv)
+        , mnSumVector(maShared.mnColorChannels)
+        , mnInSumVector(maShared.mnColorChannels)
+        , mnOutSumVector(maShared.mnColorChannels)
     {
     }
 
-    void calculateWeightAndPositions(long nLastIndex)
+    void initializeWeightAndPositions(long nLastIndex)
     {
-        for (long i = 0; i < mnDiv; i++)
+        for (long i = 0; i < maShared.mnDiv; i++)
         {
-            maPositionTable[i] = std::min(nLastIndex, std::max(0L, i - mnRadius));
-            maWeightTable[i] = mnRadius + 1 - std::abs(i - mnRadius);
+            maPositionTable[i] = std::min(nLastIndex, std::max(0L, i - maShared.mnRadius));
+            maWeightTable[i] = maShared.mnRadius + 1 - std::abs(i - maShared.mnRadius);
         }
     }
 
-    long getMultiplyValue() { return static_cast<long>(constMultiplyTable[mnRadius]); }
+    long getMultiplyValue() { return static_cast<long>(constMultiplyTable[maShared.mnRadius]); }
 
-    long getShiftValue() { return static_cast<long>(constShiftTable[mnRadius]); }
+    long getShiftValue() { return static_cast<long>(constShiftTable[maShared.mnRadius]); }
+};
+
+typedef void (*BlurRangeFn)(BlurSharedData const& rShared, long nStartY, long nEndY);
+
+constexpr long constBlurThreadStrip = 16;
+
+class BlurTask : public comphelper::ThreadTask
+{
+    BlurRangeFn mpBlurFunction;
+    BlurSharedData& mrShared;
+    long mnStartY;
+    long mnEndY;
+
+public:
+    explicit BlurTask(const std::shared_ptr<comphelper::ThreadTaskTag>& pTag,
+                      BlurRangeFn pBlurFunction, BlurSharedData& rShared, long nStartY, long nEndY)
+        : comphelper::ThreadTask(pTag)
+        , mpBlurFunction(pBlurFunction)
+        , mrShared(rShared)
+        , mnStartY(nStartY)
+        , mnEndY(nEndY)
+    {
+    }
+
+    virtual void doWork() override { mpBlurFunction(mrShared, mnStartY, mnEndY); }
 };
 
 struct SumFunction24
@@ -171,19 +218,21 @@ struct SumFunction8
 };
 
 template <typename SumFunction>
-void stackBlurHorizontal(BitmapReadAccess* pReadAccess, BitmapWriteAccess* pWriteAccess,
-                         BlurSharedData& rShared)
+void stackBlurHorizontal(BlurSharedData const& rShared, long nStart, long nEnd)
 {
-    long nWidth = pReadAccess->Width();
-    long nHeight = pReadAccess->Height();
+    BitmapReadAccess* pReadAccess = rShared.mpReadAccess;
+    BitmapWriteAccess* pWriteAccess = rShared.mpWriteAccess;
 
-    sal_uInt8* pStack = rShared.maStackBuffer.data();
+    BlurArrays aArrays(rShared);
+
+    sal_uInt8* pStack = aArrays.maStackBuffer.data();
     sal_uInt8* pStackPtr;
 
+    long nWidth = pReadAccess->Width();
     long nLastIndexX = nWidth - 1;
 
-    long nMultiplyValue = rShared.getMultiplyValue();
-    long nShiftValue = rShared.getShiftValue();
+    long nMultiplyValue = aArrays.getMultiplyValue();
+    long nShiftValue = aArrays.getShiftValue();
 
     long nRadius = rShared.mnRadius;
     long nComponentWidth = rShared.mnComponentWidth;
@@ -197,15 +246,16 @@ void stackBlurHorizontal(BitmapReadAccess* pReadAccess, BitmapWriteAccess* pWrit
     long nStackIndexStart;
     long nWeight;
 
-    long* nSum = rShared.mnSumVector.data();
-    long* nInSum = rShared.mnInSumVector.data();
-    long* nOutSum = rShared.mnOutSumVector.data();
+    aArrays.initializeWeightAndPositions(nLastIndexX);
 
-    rShared.calculateWeightAndPositions(nLastIndexX);
-    long* pPositionPointer = rShared.maPositionTable.data();
-    long* pWeightPointer = rShared.maWeightTable.data();
+    long* nSum = aArrays.mnSumVector.data();
+    long* nInSum = aArrays.mnInSumVector.data();
+    long* nOutSum = aArrays.mnOutSumVector.data();
 
-    for (long y = 0; y < nHeight; y++)
+    long* pPositionPointer = aArrays.maPositionTable.data();
+    long* pWeightPointer = aArrays.maWeightTable.data();
+
+    for (long y = nStart; y <= nEnd; y++)
     {
         SumFunction::set(nSum, 0L);
         SumFunction::set(nInSum, 0L);
@@ -282,19 +332,21 @@ void stackBlurHorizontal(BitmapReadAccess* pReadAccess, BitmapWriteAccess* pWrit
 }
 
 template <typename SumFunction>
-void stackBlurVertical(BitmapReadAccess* pReadAccess, BitmapWriteAccess* pWriteAccess,
-                       BlurSharedData& rShared)
+void stackBlurVertical(BlurSharedData const& rShared, long nStart, long nEnd)
 {
-    long nWidth = pReadAccess->Width();
-    long nHeight = pReadAccess->Height();
+    BitmapReadAccess* pReadAccess = rShared.mpReadAccess;
+    BitmapWriteAccess* pWriteAccess = rShared.mpWriteAccess;
 
-    sal_uInt8* pStack = rShared.maStackBuffer.data();
+    BlurArrays aArrays(rShared);
+
+    sal_uInt8* pStack = aArrays.maStackBuffer.data();
     sal_uInt8* pStackPtr;
 
+    long nHeight = pReadAccess->Height();
     long nLastIndexY = nHeight - 1;
 
-    long nMultiplyValue = rShared.getMultiplyValue();
-    long nShiftValue = rShared.getShiftValue();
+    long nMultiplyValue = aArrays.getMultiplyValue();
+    long nShiftValue = aArrays.getShiftValue();
 
     long nRadius = rShared.mnRadius;
     long nComponentWidth = rShared.mnComponentWidth;
@@ -308,15 +360,15 @@ void stackBlurVertical(BitmapReadAccess* pReadAccess, BitmapWriteAccess* pWriteA
     long nStackIndexStart;
     long nWeight;
 
-    long* nSum = rShared.mnSumVector.data();
-    long* nInSum = rShared.mnInSumVector.data();
-    long* nOutSum = rShared.mnOutSumVector.data();
+    aArrays.initializeWeightAndPositions(nLastIndexY);
 
-    rShared.calculateWeightAndPositions(nLastIndexY);
-    long* pPositionPointer = rShared.maPositionTable.data();
-    long* pWeightPointer = rShared.maWeightTable.data();
+    long* nSum = aArrays.mnSumVector.data();
+    long* nInSum = aArrays.mnInSumVector.data();
+    long* nOutSum = aArrays.mnOutSumVector.data();
+    long* pPositionPointer = aArrays.maPositionTable.data();
+    long* pWeightPointer = aArrays.maWeightTable.data();
 
-    for (long x = 0; x < nWidth; x++)
+    for (long x = nStart; x <= nEnd; x++)
     {
         SumFunction::set(nSum, 0L);
         SumFunction::set(nInSum, 0L);
@@ -373,9 +425,7 @@ void stackBlurVertical(BitmapReadAccess* pReadAccess, BitmapWriteAccess* pWriteA
             }
 
             SumFunction::assignPtr(pStackPtr, pSourcePointer);
-
             SumFunction::add(nInSum, pSourcePointer);
-
             SumFunction::add(nSum, nInSum);
 
             nStackIndex++;
@@ -387,54 +437,136 @@ void stackBlurVertical(BitmapReadAccess* pReadAccess, BitmapWriteAccess* pWriteA
             pStackPtr = &pStack[nStackIndex * nComponentWidth];
 
             SumFunction::add(nOutSum, pStackPtr);
-
             SumFunction::sub(nInSum, pStackPtr);
+        }
+    }
+}
+
+void runStackBlur(Bitmap& rBitmap, const long nRadius, const long nComponentWidth,
+                  const long nColorChannels, BlurRangeFn pBlurHorizontalFn,
+                  BlurRangeFn pBlurVerticalFn, const bool bParallel)
+{
+    if (bParallel)
+    {
+        try
+        {
+            comphelper::ThreadPool& rShared = comphelper::ThreadPool::getSharedOptimalPool();
+            std::shared_ptr<comphelper::ThreadTaskTag> pTag
+                = comphelper::ThreadPool::createThreadTaskTag();
+
+            {
+                Bitmap::ScopedReadAccess pReadAccess(rBitmap);
+                BitmapScopedWriteAccess pWriteAccess(rBitmap);
+
+                BlurSharedData aSharedData(pReadAccess.get(), pWriteAccess.get(), nRadius,
+                                           nComponentWidth, nColorChannels);
+
+                const Size aSize = rBitmap.GetSizePixel();
+                long nEnd = aSize.Height() - 1;
+
+                long nStripStart = 0;
+                long nStripEnd = nStripStart + constBlurThreadStrip - 1;
+
+                while (nStripEnd < nEnd)
+                {
+                    std::unique_ptr<BlurTask> pTask(
+                        new BlurTask(pTag, pBlurHorizontalFn, aSharedData, nStripStart, nStripEnd));
+                    rShared.pushTask(std::move(pTask));
+                    nStripStart += constBlurThreadStrip;
+                    nStripEnd += constBlurThreadStrip;
+                }
+                if (nStripStart <= nEnd)
+                {
+                    std::unique_ptr<BlurTask> pTask(
+                        new BlurTask(pTag, pBlurHorizontalFn, aSharedData, nStripStart, nEnd));
+                    rShared.pushTask(std::move(pTask));
+                }
+                rShared.waitUntilDone(pTag);
+            }
+            {
+                Bitmap::ScopedReadAccess pReadAccess(rBitmap);
+                BitmapScopedWriteAccess pWriteAccess(rBitmap);
+
+                BlurSharedData aSharedData(pReadAccess.get(), pWriteAccess.get(), nRadius,
+                                           nComponentWidth, nColorChannels);
+
+                const Size aSize = rBitmap.GetSizePixel();
+                long nEnd = aSize.Width() - 1;
+
+                long nStripStart = 0;
+                long nStripEnd = nStripStart + constBlurThreadStrip - 1;
+
+                while (nStripEnd < nEnd)
+                {
+                    std::unique_ptr<BlurTask> pTask(
+                        new BlurTask(pTag, pBlurVerticalFn, aSharedData, nStripStart, nStripEnd));
+                    rShared.pushTask(std::move(pTask));
+                    nStripStart += constBlurThreadStrip;
+                    nStripEnd += constBlurThreadStrip;
+                }
+                if (nStripStart <= nEnd)
+                {
+                    std::unique_ptr<BlurTask> pTask(
+                        new BlurTask(pTag, pBlurVerticalFn, aSharedData, nStripStart, nEnd));
+                    rShared.pushTask(std::move(pTask));
+                }
+                rShared.waitUntilDone(pTag);
+            }
+        }
+        catch (...)
+        {
+            SAL_WARN("vcl.gdi", "threaded bitmap blurring failed");
+        }
+    }
+    else
+    {
+        {
+            Bitmap::ScopedReadAccess pReadAccess(rBitmap);
+            BitmapScopedWriteAccess pWriteAccess(rBitmap);
+            BlurSharedData aSharedData(pReadAccess.get(), pWriteAccess.get(), nRadius,
+                                       nComponentWidth, nColorChannels);
+            long nFirstIndex = 0;
+            long nLastIndex = pReadAccess->Height() - 1;
+            pBlurHorizontalFn(aSharedData, nFirstIndex, nLastIndex);
+        }
+        {
+            Bitmap::ScopedReadAccess pReadAccess(rBitmap);
+            BitmapScopedWriteAccess pWriteAccess(rBitmap);
+            BlurSharedData aSharedData(pReadAccess.get(), pWriteAccess.get(), nRadius,
+                                       nComponentWidth, nColorChannels);
+            long nFirstIndex = 0;
+            long nLastIndex = pReadAccess->Width() - 1;
+            pBlurVerticalFn(aSharedData, nFirstIndex, nLastIndex);
         }
     }
 }
 
 void stackBlur24(Bitmap& rBitmap, sal_Int32 nRadius, sal_Int32 nComponentWidth)
 {
+    const bool bParallel = true;
     // Limit radius
     nRadius = std::clamp<sal_Int32>(nRadius, 2, 254);
     const long nColorChannels = 3; // 3 color channel
-    BlurSharedData aData(nRadius, nComponentWidth, nColorChannels);
 
-    {
-        Bitmap::ScopedReadAccess pReadAccess(rBitmap);
-        BitmapScopedWriteAccess pWriteAccess(rBitmap);
+    BlurRangeFn pBlurHorizontalFn = stackBlurHorizontal<SumFunction24>;
+    BlurRangeFn pBlurVerticalFn = stackBlurVertical<SumFunction24>;
 
-        stackBlurHorizontal<SumFunction24>(pReadAccess.get(), pWriteAccess.get(), aData);
-    }
-
-    {
-        Bitmap::ScopedReadAccess pReadAccess(rBitmap);
-        BitmapScopedWriteAccess pWriteAccess(rBitmap);
-
-        stackBlurVertical<SumFunction24>(pReadAccess.get(), pWriteAccess.get(), aData);
-    }
+    runStackBlur(rBitmap, nRadius, nComponentWidth, nColorChannels, pBlurHorizontalFn,
+                 pBlurVerticalFn, bParallel);
 }
 
 void stackBlur8(Bitmap& rBitmap, sal_Int32 nRadius, sal_Int32 nComponentWidth)
 {
+    const bool bParallel = true;
     // Limit radius
     nRadius = std::clamp<sal_Int32>(nRadius, 2, 254);
     const long nColorChannels = 1; // 1 color channel
-    BlurSharedData aData(nRadius, nComponentWidth, nColorChannels);
 
-    {
-        Bitmap::ScopedReadAccess pReadAccess(rBitmap);
-        BitmapScopedWriteAccess pWriteAccess(rBitmap);
+    BlurRangeFn pBlurHorizontalFn = stackBlurHorizontal<SumFunction8>;
+    BlurRangeFn pBlurVerticalFn = stackBlurVertical<SumFunction8>;
 
-        stackBlurHorizontal<SumFunction8>(pReadAccess.get(), pWriteAccess.get(), aData);
-    }
-
-    {
-        Bitmap::ScopedReadAccess pReadAccess(rBitmap);
-        BitmapScopedWriteAccess pWriteAccess(rBitmap);
-
-        stackBlurVertical<SumFunction8>(pReadAccess.get(), pWriteAccess.get(), aData);
-    }
+    runStackBlur(rBitmap, nRadius, nComponentWidth, nColorChannels, pBlurHorizontalFn,
+                 pBlurVerticalFn, bParallel);
 }
 
 void centerExtendBitmap(Bitmap& rBitmap, sal_Int32 nExtendSize, Color aColor)
