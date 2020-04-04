@@ -71,6 +71,7 @@
   <block-list:block block-list:abbreviated-name="anothe" block-list:name="another"/>
   <block-list:block block-list:abbreviated-name="anual" block-list:name="annual"/>
   <block-list:block block-list:abbreviated-name="anythnig" block-list:name="anything"/>
+  <block-list:block block-list:abbreviated-name="apparnetly" block-list:name="apparently"/>
   <block-list:block block-list:abbreviated-name="apparant" block-list:name="apparent"/>
   <block-list:block block-list:abbreviated-name="apparrent" block-list:name="apparent"/>
   <block-list:block block-list:abbreviated-name="appearence" block-list:name="appearance"/>
@@ -131,6 +132,8 @@
   <block-list:block block-list:abbreviated-name="beutiful" block-list:name="beautiful"/>
   <block-list:block block-list:abbreviated-name="blase" block-list:name="blasé"/>
   <block-list:block block-list:abbreviated-name="boxs" block-list:name="boxes"/>
+  <block-list:block block-list:abbreviated-name="braek" block-list:name="break"/>
+  <block-list:block block-list:abbreviated-name="braeks" block-list:name="breaks"/>
   <block-list:block block-list:abbreviated-name="breackage" block-list:name="breakage"/>
   <block-list:block block-list:abbreviated-name="breackages" block-list:name="breakages"/>
   <block-list:block block-list:abbreviated-name="brodcast" block-list:name="broadcast"/>
@@ -220,6 +223,7 @@
   <block-list:block block-list:abbreviated-name="cpoy" block-list:name="copy"/>
   <block-list:block block-list:abbreviated-name="creme" block-list:name="crème"/>
   <block-list:block block-list:abbreviated-name="ctaegory" block-list:name="category"/>
+  <block-list:block block-list:abbreviated-name="cummulative" block-list:name="cumulative"/>
   <block-list:block block-list:abbreviated-name="cusotmer" block-list:name="customer"/>
   <block-list:block block-list:abbreviated-name="cusotmers" block-list:name="customers"/>
   <block-list:block block-list:abbreviated-name="cutsomer" block-list:name="customer"/>
@@ -293,6 +297,7 @@
   <block-list:block block-list:abbreviated-name="dont" block-list:name="don’t"/>
   <block-list:block block-list:abbreviated-name="driveing" block-list:name="driving"/>
   <block-list:block block-list:abbreviated-name="drnik" block-list:name="drink"/>
+  <block-list:block block-list:abbreviated-name="editting" block-list:name="editing"/>
   <block-list:block block-list:abbreviated-name="efel" block-list:name="feel"/>
   <block-list:block block-list:abbreviated-name="effecient" block-list:name="efficient"/>
   <block-list:block block-list:abbreviated-name="efort" block-list:name="effort"/>
@@ -412,6 +417,7 @@
   <block-list:block block-list:abbreviated-name="impossable" block-list:name="impossible"/>
   <block-list:block block-list:abbreviated-name="improvemnt" block-list:name="improvement"/>
   <block-list:block block-list:abbreviated-name="improvment" block-list:name="improvement"/>
+  <block-list:block block-list:abbreviated-name="imprved" block-list:name="improved"/>
   <block-list:block block-list:abbreviated-name="includ" block-list:name="include"/>
   <block-list:block block-list:abbreviated-name="indecate" block-list:name="indicate"/>
   <block-list:block block-list:abbreviated-name="indenpendence" block-list:name="independence"/>
@@ -519,6 +525,8 @@
   <block-list:block block-list:abbreviated-name="obediant" block-list:name="obedient"/>
   <block-list:block block-list:abbreviated-name="ocasion" block-list:name="occasion"/>
   <block-list:block block-list:abbreviated-name="occassion" block-list:name="occasion"/>
+  <block-list:block block-list:abbreviated-name="occorrence" block-list:name="occurrence"/>
+  <block-list:block block-list:abbreviated-name="occorrences" block-list:name="occurrences"/>
   <block-list:block block-list:abbreviated-name="occured" block-list:name="occurred"/>
   <block-list:block block-list:abbreviated-name="occurence" block-list:name="occurrence"/>
   <block-list:block block-list:abbreviated-name="occurrance" block-list:name="occurrence"/>
@@ -707,6 +715,7 @@
   <block-list:block block-list:abbreviated-name="suppossed" block-list:name="supposed"/>
   <block-list:block block-list:abbreviated-name="suprised" block-list:name="surprised"/>
   <block-list:block block-list:abbreviated-name="swiming" block-list:name="swimming"/>
+  <block-list:block block-list:abbreviated-name="togahter" block-list:name="together"/>
   <block-list:block block-list:abbreviated-name="tahn" block-list:name="than"/>
   <block-list:block block-list:abbreviated-name="taht" block-list:name="that"/>
   <block-list:block block-list:abbreviated-name="talekd" block-list:name="talked"/>
@@ -788,6 +797,7 @@
   <block-list:block block-list:abbreviated-name="untilll" block-list:name="until"/>
   <block-list:block block-list:abbreviated-name="useing" block-list:name="using"/>
   <block-list:block block-list:abbreviated-name="usualyl" block-list:name="usually"/>
+  <block-list:block block-list:abbreviated-name="uszed" block-list:name="used"/>
   <block-list:block block-list:abbreviated-name="veyr" block-list:name="very"/>
   <block-list:block block-list:abbreviated-name="virtualyl" block-list:name="virtually"/>
   <block-list:block block-list:abbreviated-name="vrey" block-list:name="very"/>
@@ -840,6 +850,7 @@
   <block-list:block block-list:abbreviated-name="yera" block-list:name="year"/>
   <block-list:block block-list:abbreviated-name="yeras" block-list:name="years"/>
   <block-list:block block-list:abbreviated-name="yersa" block-list:name="years"/>
+  <block-list:block block-list:abbreviated-name="yeserday" block-list:name="yesterday"/>
   <block-list:block block-list:abbreviated-name="yoiu" block-list:name="you"/>
   <block-list:block block-list:abbreviated-name="youare" block-list:name="you are"/>
   <block-list:block block-list:abbreviated-name="ytou" block-list:name="you"/>
