@@ -53,12 +53,7 @@ namespace com::sun::star::uno { template <typename > class Reference; }
                    the global interpreter lock is held
 */
 
-extern "C" LO_DLLPUBLIC_PYUNO
-#if PY_MAJOR_VERSION >= 3
-    PyObject* PyInit_pyuno();
-#else
-   void initpyuno();
-#endif
+extern "C" LO_DLLPUBLIC_PYUNO PyObject* PyInit_pyuno();
 
 namespace pyuno
 {
