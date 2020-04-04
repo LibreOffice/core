@@ -2434,6 +2434,8 @@ OUString SvxSearchDialogWrapper::GetSearchLabel()
             pViewFrame->GetFrame().GetFrameInterface(), css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
     xPropSet->getPropertyValue("LayoutManager") >>= xLayoutManager;
+    if (!xLayoutManager.is())
+        return OUString();
     css::uno::Reference< css::ui::XUIElement > xUIElement =
         xLayoutManager->getElement("private:resource/toolbar/findbar");
     if (!xUIElement.is())
