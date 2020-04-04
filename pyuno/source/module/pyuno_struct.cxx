@@ -68,7 +68,7 @@ static PyObject *PyUNOStruct_str( PyObject *self )
         buf = OUStringToOString( s, RTL_TEXTENCODING_ASCII_US );
     }
 
-    return PyStr_FromString( buf.getStr());
+    return PyUnicode_FromString( buf.getStr());
 }
 
 static PyObject *PyUNOStruct_repr( PyObject *self )
