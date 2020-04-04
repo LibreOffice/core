@@ -71,7 +71,7 @@ void OApplicationIconControl::dispose()
         SvxIconChoiceCtrlEntry* pEntry = GetEntry( i );
         if ( pEntry )
         {
-            std::unique_ptr<ElementType> aType(static_cast<ElementType*>(pEntry->GetUserData()));
+            delete static_cast<ElementType*>(pEntry->GetUserData());
             pEntry->SetUserData(nullptr);
         }
     }

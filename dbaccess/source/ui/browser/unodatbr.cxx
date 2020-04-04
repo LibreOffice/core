@@ -2164,8 +2164,8 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvTreeListEntry*, _pParent, bool)
 
                 if (xWarnings.is())
                 {
-                    SQLExceptionInfo aWarnings(xWarnings->getWarnings());
 #if 0
+                    SQLExceptionInfo aWarnings(xWarnings->getWarnings());
 // Obviously this if test is always false. So to avoid a Clang warning
 // "use of logical '&&' with constant operand" I put this in #if
 // 0. Yeah, I know it is fairly likely nobody will ever read this
@@ -2962,14 +2962,6 @@ void SbaTableQueryBrowser::unloadAndCleanup( bool _bDisposeConnection )
     try
     {
         // get the active connection. We need to dispose it.
-        Reference< XPropertySet > xRowSetProps(getRowSet(),UNO_QUERY);
-#if OSL_DEBUG_LEVEL > 0
-        {
-            Reference< XComponent > xComp(
-                xRowSetProps->getPropertyValue(PROPERTY_ACTIVE_CONNECTION),
-                css::uno::UNO_QUERY);
-        }
-#endif
 
         // unload the form
         Reference< XLoadable > xLoadable = getLoadable();
