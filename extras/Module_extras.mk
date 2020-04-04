@@ -61,7 +61,6 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Gallery_arrows \
 	Gallery_backgrounds \
 	Gallery_diagrams \
-	Gallery_symbols \
 	Gallery_sound \
 ))
 endif
