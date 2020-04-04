@@ -43,7 +43,6 @@ GALLERY_FILELIST(diagrams)
 GALLERY_FILELIST(people)
 GALLERY_FILELIST(sounds)
 GALLERY_FILELIST(symbols)
-GALLERY_FILELIST(transportation)
 GALLERY_FILELIST(txtshapes)
 
 #endif
