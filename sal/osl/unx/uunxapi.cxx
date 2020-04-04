@@ -919,7 +919,7 @@ namespace osl
     void unregisterPathForFd(int fd)
     {
         fdToPathMap.erase(fd);
-#if 1
+#if 0
         // Experimentation...
         if (fdToPathMap.size() < 5)
             dumpFdToPathMap();
