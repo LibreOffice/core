@@ -149,19 +149,19 @@ Any PyEnum2Enum( PyObject *obj )
     Any ret;
     PyRef typeName( PyObject_GetAttrString( obj,"typeName" ), SAL_NO_ACQUIRE);
     PyRef value( PyObject_GetAttrString( obj, "value" ), SAL_NO_ACQUIRE);
-    if( !PyStr_Check( typeName.get() ) || ! PyStr_Check( value.get() ) )
+    if( !PyUnicode_Check( typeName.get() ) || ! PyUnicode_Check( value.get() ) )
     {
         throw RuntimeException(
             "attributes typeName and/or value of uno.Enum are not strings" );
     }
 
-    OUString strTypeName( OUString::createFromAscii( PyStr_AsString( typeName.get() ) ) );
-    char const *stringValue = PyStr_AsString( value.get() );
+    OUString strTypeName( OUString::createFromAscii( PyUnicode_AsUTF8( typeName.get() ) ) );
+    char const *stringValue = PyUnicode_AsUTF8( value.get() );
 
     TypeDescription desc( strTypeName );
     if( !desc.is() )
     {
-        throw RuntimeException( "enum " + OUString::createFromAscii( PyStr_AsString(typeName.get()) ) + " is unknown" );
+        throw RuntimeException( "enum " + OUString::createFromAscii( PyUnicode_AsUTF8(typeName.get()) ) + " is unknown" );
     }
 
     if(desc.get()->eTypeClass != typelib_TypeClass_ENUM )
@@ -186,7 +186,7 @@ Any PyEnum2Enum( PyObject *obj )
     {
         throw RuntimeException( "value " + OUString::createFromAscii( stringValue ) +
             "is unknown in enum " +
-            OUString::createFromAscii( PyStr_AsString( typeName.get() ) ) );
+            OUString::createFromAscii( PyUnicode_AsUTF8( typeName.get() ) ) );
     }
     ret = Any( &pEnumDesc->pEnumValues[i], desc.get()->pWeakRef );
 
@@ -197,7 +197,7 @@ Any PyEnum2Enum( PyObject *obj )
 Type PyType2Type( PyObject * o )
 {
     PyRef pyName( PyObject_GetAttrString( o, "typeName" ), SAL_NO_ACQUIRE);
-    if( !PyStr_Check( pyName.get() ) )
+    if( !PyUnicode_Check( pyName.get() ) )
     {
         throw RuntimeException(
             "type object does not have typeName property" );
@@ -206,7 +206,7 @@ Type PyType2Type( PyObject * o )
     PyRef pyTC( PyObject_GetAttrString( o, "typeClass" ), SAL_NO_ACQUIRE );
     Any enumValue = PyEnum2Enum( pyTC.get() );
 
-    OUString name( OUString::createFromAscii( PyStr_AsString( pyName.get() ) ) );
+    OUString name( OUString::createFromAscii( PyUnicode_AsUTF8( pyName.get() ) ) );
     TypeDescription desc( name );
     if( ! desc.is() )
     {
@@ -242,8 +242,8 @@ static PyObject* callCtor( const Runtime &r , const char * clazz, const PyRef & 
 PyObject *PyUNO_Enum_new( const char *enumBase, const char *enumValue, const Runtime &r )
 {
     PyRef args( PyTuple_New( 2 ), SAL_NO_ACQUIRE, NOT_NULL );
-    PyTuple_SetItem( args.get() , 0 , PyStr_FromString( enumBase ) );
-    PyTuple_SetItem( args.get() , 1 , PyStr_FromString( enumValue ) );
+    PyTuple_SetItem( args.get() , 0 , PyUnicode_FromString( enumBase ) );
+    PyTuple_SetItem( args.get() , 1 , PyUnicode_FromString( enumValue ) );
 
     return callCtor( r, "Enum" , args );
 }
@@ -254,7 +254,7 @@ PyObject* PyUNO_Type_new (const char *typeName , TypeClass t , const Runtime &r 
     // retrieve type object
     PyRef args(PyTuple_New( 2 ), SAL_NO_ACQUIRE, NOT_NULL);
 
-    PyTuple_SetItem( args.get() , 0 , PyStr_FromString( typeName ) );
+    PyTuple_SetItem( args.get() , 0 , PyUnicode_FromString( typeName ) );
     PyObject *typeClass = PyUNO_Enum_new( "com.sun.star.uno.TypeClass" , typeClassToString(t), r );
     if( ! typeClass )
         return nullptr;
@@ -280,7 +280,7 @@ PyObject *PyUNO_ByteSequence_new(
     const css::uno::Sequence< sal_Int8 > &byteSequence, const Runtime &r )
 {
     PyRef str(
-        PyStrBytes_FromStringAndSize( reinterpret_cast<char const *>(byteSequence.getConstArray()), byteSequence.getLength()),
+        PyBytes_FromStringAndSize( reinterpret_cast<char const *>(byteSequence.getConstArray()), byteSequence.getLength()),
         SAL_NO_ACQUIRE );
     PyRef args( PyTuple_New( 1 ), SAL_NO_ACQUIRE, NOT_NULL );
     PyTuple_SetItem( args.get() , 0 , str.getAcquired() );

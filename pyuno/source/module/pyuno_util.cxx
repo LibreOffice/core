@@ -51,7 +51,7 @@ PyRef ustring2PyUnicode( const OUString & str )
 PyRef ustring2PyString( const OUString &str )
 {
     OString o = OUStringToOString( str, osl_getThreadTextEncoding() );
-    return PyRef( PyStr_FromString( o.getStr() ), SAL_NO_ACQUIRE );
+    return PyRef( PyUnicode_FromString( o.getStr() ), SAL_NO_ACQUIRE );
 }
 
 OUString pyString2ustring( PyObject *pystr )

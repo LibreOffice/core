@@ -156,7 +156,7 @@ void fillStruct(
         {
             const OUString OUMemberName (pCompType->ppMemberNames[i]);
             PyObject *pyMemberName =
-                PyStr_FromString(OUStringToOString(OUMemberName,
+                PyUnicode_FromString(OUStringToOString(OUMemberName,
                         RTL_TEXTENCODING_UTF8).getStr());
             if ( PyObject *element = PyDict_GetItem(kwinitializer, pyMemberName ) )
             {
@@ -390,7 +390,7 @@ PyObject * extractOneStringArg( PyObject *args, char const *funcName )
         return nullptr;
     }
     PyObject *obj = PyTuple_GetItem( args, 0 );
-    if (!PyStr_Check(obj) && !PyUnicode_Check(obj))
+    if (!PyUnicode_Check(obj))
     {
         OString buf = funcName + OStringLiteral(": expecting one string argument");
         PyErr_SetString( PyExc_TypeError, buf.getStr());
@@ -412,11 +412,11 @@ static PyObject *createUnoStructHelper(
             PyObject *structName = PyTuple_GetItem(args, 0);
             PyObject *initializer = PyTuple_GetItem(args, 1);
 
-            if (PyStr_Check(structName))
+            if (PyUnicode_Check(structName))
             {
                 if( PyTuple_Check( initializer ) && PyDict_Check ( keywordArgs ) )
                 {
-                    OUString typeName( OUString::createFromAscii(PyStr_AsString(structName)));
+                    OUString typeName( OUString::createFromAscii(PyUnicode_AsUTF8(structName)));
                     RuntimeCargo *c = runtime.getImpl()->cargo;
                     Reference<XIdlClass> idl_class = c->xCoreReflection->forName (typeName);
                     if (idl_class.is ())
@@ -445,7 +445,7 @@ static PyObject *createUnoStructHelper(
                     {
                         OStringBuffer buf;
                         buf.append( "UNO struct " );
-                        buf.append( PyStr_AsString(structName) );
+                        buf.append( PyUnicode_AsUTF8(structName) );
                         buf.append( " is unknown" );
                         PyErr_SetString (PyExc_RuntimeError, buf.getStr());
                     }
@@ -742,9 +742,9 @@ static PyObject * invoke(SAL_UNUSED_PARAMETER PyObject *, PyObject *args)
     {
         PyObject *object = PyTuple_GetItem(args, 0);
         PyObject *item1 = PyTuple_GetItem(args, 1);
-        if (PyStr_Check(item1))
+        if (PyUnicode_Check(item1))
         {
-            const char *name = PyStr_AsString(item1);
+            const char *name = PyUnicode_AsUTF8(item1);
             PyObject *item2 = PyTuple_GetItem(args, 2);
             if(PyTuple_Check(item2))
             {
@@ -754,7 +754,7 @@ static PyObject * invoke(SAL_UNUSED_PARAMETER PyObject *, PyObject *args)
             {
                 OStringBuffer buf;
                 buf.append("uno.invoke expects a tuple as 3rd argument, got ");
-                buf.append(PyStr_AsString(PyObject_Str(item2)));
+                buf.append(PyUnicode_AsUTF8(PyObject_Str(item2)));
                 PyErr_SetString(
                     PyExc_RuntimeError, buf.makeStringAndClear().getStr());
             }
@@ -763,7 +763,7 @@ static PyObject * invoke(SAL_UNUSED_PARAMETER PyObject *, PyObject *args)
         {
             OStringBuffer buf;
             buf.append("uno.invoke expected a string as 2nd argument, got ");
-            buf.append(PyStr_AsString(PyObject_Str(item1)));
+            buf.append(PyUnicode_AsUTF8(PyObject_Str(item1)));
             PyErr_SetString(
                 PyExc_RuntimeError, buf.makeStringAndClear().getStr());
         }
@@ -816,7 +816,7 @@ static PyObject *setCurrentContext(
                 OStringBuffer buf;
                 buf.append( "uno.setCurrentContext expects an XComponentContext implementation, got " );
                 buf.append(
-                    PyStr_AsString(PyObject_Str(PyTuple_GetItem(args, 0))));
+                    PyUnicode_AsUTF8(PyObject_Str(PyTuple_GetItem(args, 0))));
                 PyErr_SetString(
                     PyExc_RuntimeError, buf.makeStringAndClear().getStr() );
             }
