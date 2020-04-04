@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b8d55e3f_1609ea72",
+        "filename": "chart2/source/controller/main/CommandDispatch.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-04-04T18:08:45Z",
+      "side": 1,
+      "message": "but now you\u0027re doing an unnecessary allocation of a non-trivial object?\n\nif you want to make this more efficient, the best option IMO is lower_bound, followed by emplace_hint",
+      "revId": "a12d6c1fdaf18a5467861b19cab218da33350be9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52f2cc3d_026ce862",
+        "filename": "chart2/source/view/charttypes/NetChart.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-04-04T18:08:45Z",
+      "side": 1,
+      "message": "personally, I think you should do this particular pattern in a separate patch, and do it across the whole codebase\n  git grep -A1 \u0027find.*end\u0027 | grep -B1 \u0027] \u003d\u0027\nwill find find most of the places",
+      "revId": "a12d6c1fdaf18a5467861b19cab218da33350be9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6254fc5d_b69b36c4",
+        "filename": "chart2/source/view/charttypes/VSeriesPlotter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2060,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-04-04T18:08:45Z",
+      "side": 1,
+      "message": "since you need both parts of the result, you could do\n   auto [itr, bNewXValue] \u003d \nhere",
+      "revId": "a12d6c1fdaf18a5467861b19cab218da33350be9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b790e02_db2a481c",
+        "filename": "chart2/source/view/charttypes/VSeriesPlotter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2077,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-04-04T18:08:45Z",
+      "side": 1,
+      "message": "this also allocates even if the entry exists",
+      "revId": "a12d6c1fdaf18a5467861b19cab218da33350be9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6baeb030_c5874935",
+        "filename": "chart2/source/view/main/ChartView.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-04-04T18:08:45Z",
+      "side": 1,
+      "message": "can use\n  auto [\nhere",
+      "revId": "a12d6c1fdaf18a5467861b19cab218da33350be9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
