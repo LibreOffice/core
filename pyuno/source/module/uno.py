@@ -24,14 +24,6 @@ import warnings
 # since on Windows sal3.dll no longer calls WSAStartup
 import socket
 
-# Some Python 2/3 compatibility code copied from the six library
-PY2 = sys.version_info[0] == 2
-
-if PY2:
-    six_string_types = basestring,
-else:
-    six_string_types = str,
-
 # All functions and variables starting with a underscore (_) must be
 # considered private and can be changed at any time. Don't use them.
 _component_context = pyuno.getComponentContext()
@@ -216,10 +208,10 @@ class Bool(object):
         message = "The Bool class is deprecated. Use Python's True and False directly instead."
         warnings.warn(message, DeprecationWarning)
 
-        if isinstance(value, six_string_types) and value == "true":
+        if isinstance(value, str) and value == "true":
             return True
 
-        if isinstance(value, six_string_types) and value == "false":
+        if isinstance(value, str) and value == "false":
             return False
 
         if value:
@@ -241,10 +233,7 @@ class Char:
     """
 
     def __init__(self, value):
-        if PY2:
-            assert isinstance(value, unicode), "Expected unicode object, got %s instead." % type(value)
-        else:
-            assert isinstance(value, str), "Expected str object, got %s instead." % type(value)
+        assert isinstance(value, str), "Expected str object, got %s instead." % type(value)
 
         assert len(value) == 1, "Char value must have length of 1."
 
@@ -254,7 +243,7 @@ class Char:
         return "<Char instance %s>" % (self.value,)
 
     def __eq__(self, that):
-        if isinstance(that, six_string_types):
+        if isinstance(that, str):
             if len(that) > 1:
                 return False
 
@@ -427,8 +416,7 @@ def _uno_import(name, *optargs, **kwargs):
                 uno_import_exc = ImportError("%s (or '%s.%s' is unknown)" %
                                              (py_import_exc, name, class_name))
 
-                if sys.version_info[0] >= 3:
-                    uno_import_exc = uno_import_exc.with_traceback(py_import_exc.__traceback__)
+                uno_import_exc = uno_import_exc.with_traceback(py_import_exc.__traceback__)
 
                 uno_import_exc._uno_import_failed = True
                 raise uno_import_exc

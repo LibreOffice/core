@@ -35,28 +35,18 @@ class Test124953(unittest.TestCase):
         self.assertEqual(LONG_TYPE, long_type)
 
     def test_Char(self):
-        if sys.version_info[0] == 3:
-            char_a = uno.Char("a")
-            char_a2 = uno.Char("a")
-            char_b = uno.Char("b")
-        else:
-            char_a = uno.Char(u"a")
-            char_a2 = uno.Char(u"a")
-            char_b = uno.Char(u"b")
+        char_a = uno.Char("a")
+        char_a2 = uno.Char("a")
+        char_b = uno.Char("b")
         self.assertEqual(char_a, char_a)
         self.assertEqual(char_a, char_a2)
         self.assertFalse((char_a != char_a2))
         self.assertNotEqual(char_a, char_b)
 
     def test_ByteSequence(self):
-        if sys.version_info[0] == 3:
-            b1 = uno.ByteSequence(bytes("abcdefg", encoding="utf8"))
-            b2 = uno.ByteSequence(bytes("abcdefg", encoding="utf8"))
-            b3 = uno.ByteSequence(bytes("1234567", encoding="utf8"))
-        else:
-            b1 = uno.ByteSequence("abcdefg")
-            b2 = uno.ByteSequence("abcdefg")
-            b3 = uno.ByteSequence("1234567")
+        b1 = uno.ByteSequence(bytes("abcdefg", encoding="utf8"))
+        b2 = uno.ByteSequence(bytes("abcdefg", encoding="utf8"))
+        b3 = uno.ByteSequence(bytes("1234567", encoding="utf8"))
         self.assertEqual(b1, b1)
         self.assertEqual(b1, b2)
         self.assertFalse(b1 != b2)

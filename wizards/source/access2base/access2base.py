@@ -36,8 +36,6 @@ Specific documentation about Access2Base and Python:
     http://www.access2base.com/access2base.html#%5B%5BAccess2Base%20and%20Python%5D%5D
 """
 
-from __future__ import unicode_literals
-
 import uno
 XSCRIPTCONTEXT = uno
 

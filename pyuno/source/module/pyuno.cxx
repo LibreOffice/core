@@ -317,14 +317,9 @@ static sal_Int32 lcl_PyNumber_AsSal_Int32( PyObject *pObj )
 
     // Convert Python number to platform long, then check actual value against
     // bounds of sal_Int32
-#if PY_VERSION_HEX >= 0x03020000
     int nOverflow;
     long nResult = PyLong_AsLongAndOverflow( pObj, &nOverflow );
     if ( nOverflow || nResult > SAL_MAX_INT32 || nResult < SAL_MIN_INT32) {
-#else
-    long nResult = PyLong_AsLong( pObj );
-    if ( nResult > SAL_MAX_INT32 || nResult < SAL_MIN_INT32) {
-#endif
         PyErr_SetString( PyExc_IndexError, "Python int too large to convert to UNO long" );
         return -1;
     }
@@ -336,14 +331,8 @@ static int lcl_PySlice_GetIndicesEx( PyObject *pObject, sal_Int32 nLen, sal_Int3
 {
     Py_ssize_t nStart_ssize, nStop_ssize, nStep_ssize, nSliceLength_ssize;
 
-    int nResult =
-#if PY_VERSION_HEX >= 0x030200f0
-        PySlice_GetIndicesEx(pObject,
+    int nResult = PySlice_GetIndicesEx(pObject,
         nLen, &nStart_ssize, &nStop_ssize, &nStep_ssize, &nSliceLength_ssize );
-#else
-        PySlice_GetIndicesEx(reinterpret_cast<PySliceObject*>(pObject),
-        nLen, &nStart_ssize, &nStop_ssize, &nStep_ssize, &nSliceLength_ssize );
-#endif
     if (nResult == -1)
         return -1;
 
@@ -1554,9 +1543,6 @@ static PyNumberMethods PyUNONumberMethods[] =
     nullptr,                                         /* nb_add */
     nullptr,                                         /* nb_subtract */
     nullptr,                                         /* nb_multiply */
-#if PY_MAJOR_VERSION < 3
-    nullptr,                                         /* nb_divide */
-#endif
     nullptr,                                         /* nb_remainder */
     nullptr,                                         /* nb_divmod */
     nullptr,                                         /* nb_power */
@@ -1570,22 +1556,12 @@ static PyNumberMethods PyUNONumberMethods[] =
     nullptr,                                         /* nb_and */
     nullptr,                                         /* nb_xor */
     nullptr,                                         /* nb_or */
-#if PY_MAJOR_VERSION < 3
-    nullptr,                                         /* nb_coerce */
-#endif
     nullptr,                                         /* nb_int */
     nullptr,                                         /* nb_reserved */
     nullptr,                                         /* nb_float */
-#if PY_MAJOR_VERSION < 3
-    nullptr,                                         /* nb_oct */
-    nullptr,                                         /* nb_hex */
-#endif
     nullptr,                                         /* nb_inplace_add */
     nullptr,                                         /* nb_inplace_subtract */
     nullptr,                                         /* nb_inplace_multiply */
-#if PY_MAJOR_VERSION < 3
-    nullptr,                                         /* nb_inplace_divide */
-#endif
     nullptr,                                         /* nb_inplace_remainder */
     nullptr,                                         /* nb_inplace_power */
     nullptr,                                         /* nb_inplace_lshift */

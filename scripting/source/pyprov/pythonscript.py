@@ -27,12 +27,6 @@ import ast
 import platform
 from com.sun.star.uri.RelativeUriExcessParentSegments import RETAIN
 
-try:
-    unicode
-except NameError:
-    # Python 3 compatibility
-    unicode = str
-
 class LogLevel:
     NONE = 0   # production level
     ERROR = 1  # for script developers
@@ -967,7 +961,7 @@ class PythonScriptProvider( unohelper.Base, XBrowseNode, XScriptProvider, XNameC
         inv = None
         storageType = ""
 
-        if isinstance(args[0],unicode ):
+        if isinstance(args[0], str):
             storageType = args[0]
             if storageType.startswith( "vnd.sun.star.tdoc" ):
                 doc = getModelFromDocUrl(ctx, storageType)

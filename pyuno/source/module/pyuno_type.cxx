@@ -134,11 +134,7 @@ sal_Unicode PyChar2Unicode( PyObject *obj )
             "attribute value of uno.Char is not a unicode string" );
     }
 
-#if PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 3
     if( PyUnicode_GetLength( value.get() ) < 1 )
-#else
-    if( PyUnicode_GetSize( value.get() ) < 1 )
-#endif
     {
         throw RuntimeException(
             "uno.Char contains an empty unicode string");
