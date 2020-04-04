@@ -88,6 +88,24 @@
       "revId": "8f0225724c3a16afc61182539e0aaf49455c89b6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb40bcf1_abb25ff8",
+        "filename": "sfx2/source/control/recentdocsview.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-04-04T09:15:24Z",
+      "side": 1,
+      "message": "done, this approach is doomed anyway because of the threaded access to the virtualdevice",
+      "parentUuid": "ecaf8ab0_cffdcdaf",
+      "revId": "8f0225724c3a16afc61182539e0aaf49455c89b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
