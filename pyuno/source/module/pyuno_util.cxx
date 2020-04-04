@@ -63,24 +63,14 @@ OUString pyString2ustring( PyObject *pystr )
     ret = OUString(
         reinterpret_cast<sal_Unicode const *>(PyUnicode_AS_UNICODE( pystr )) );
 #else
-#if PY_MAJOR_VERSION >= 3
     Py_ssize_t size(0);
     char const *pUtf8(PyUnicode_AsUTF8AndSize(pystr, &size));
     ret = OUString(pUtf8, size, RTL_TEXTENCODING_UTF8);
-#else
-    PyObject* pUtf8 = PyUnicode_AsUTF8String(pystr);
-    ret = OUString(PyStr_AsString(pUtf8), PyString_Size(pUtf8), RTL_TEXTENCODING_UTF8);
-    Py_DECREF(pUtf8);
-#endif
 #endif
     }
     else
     {
-#if PY_MAJOR_VERSION >= 3
         char *name = PyBytes_AsString(pystr); // hmmm... is this a good idea?
-#else
-        char *name = PyString_AsString(pystr);
-#endif
         ret = OUString( name, strlen(name), osl_getThreadTextEncoding() );
     }
     return ret;

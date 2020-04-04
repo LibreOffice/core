@@ -26,15 +26,6 @@
 
 #include <Python.h>
 
-#if PY_VERSION_HEX < 0x03020000
-typedef long Py_hash_t;
-#endif
-
-//Must define PyVarObject_HEAD_INIT for Python 2.5 or older
-#ifndef PyVarObject_HEAD_INIT
-#define PyVarObject_HEAD_INIT(type, size)  PyObject_HEAD_INIT(type) size,
-#endif
-
 //Python 3.0 and newer don't have these flags
 #ifndef Py_TPFLAGS_HAVE_ITER
 #  define Py_TPFLAGS_HAVE_ITER 0
@@ -71,7 +62,6 @@ namespace com::sun::star::script { class XTypeConverter; }
 
 // In Python 3, the PyString_* functions have been replaced by PyBytes_*
 // and PyUnicode_* functions.
-#if PY_MAJOR_VERSION >= 3
 
 // compatibility wrappers for Python "str" type (PyUnicode in 3, PyString in 2)
 inline PyObject* PyStr_FromString(const char *string)
@@ -110,41 +100,6 @@ inline PyObject* PyStrBytes_FromStringAndSize(const char *string, Py_ssize_t len
 {
     return PyBytes_FromStringAndSize(string, len);
 }
-#else
-inline char * PyStr_AsString(PyObject *object)
-{
-    return PyString_AsString(object);
-}
-
-inline PyObject* PyStr_FromString(const char *string)
-{
-    return PyString_FromString(string);
-}
-
-inline bool PyStr_Check(PyObject *object)
-{
-    return PyString_Check(object);
-}
-inline bool PyStrBytes_Check(PyObject *object)
-{
-    return PyString_Check(object);
-}
-
-inline char* PyStrBytes_AsString(PyObject *object)
-{
-    return PyString_AsString(object);
-}
-
-inline Py_ssize_t PyStrBytes_Size(PyObject *object)
-{
-    return PyString_Size(object);
-}
-
-inline PyObject* PyStrBytes_FromStringAndSize(const char *string, Py_ssize_t len)
-{
-    return PyString_FromStringAndSize(string, len);
-}
-#endif /* PY_MAJOR_VERSION >= 3 */
 
 namespace pyuno
 {

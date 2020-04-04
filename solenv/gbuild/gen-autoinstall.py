@@ -9,8 +9,6 @@
 
 # generate AutoInstall files from gbuild data for further scp2 processing
 
-from __future__ import print_function
-
 import sys
 
 module = sys.argv[1]
