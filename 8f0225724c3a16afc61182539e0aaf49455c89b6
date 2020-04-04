@@ -70,6 +70,24 @@
       "revId": "8f0225724c3a16afc61182539e0aaf49455c89b6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ecaf8ab0_cffdcdaf",
+        "filename": "sfx2/source/control/recentdocsview.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-04-04T08:01:51Z",
+      "side": 1,
+      "message": "Using aURL instead of aBase results in \"warn:legacy.osl:3778:3791:comphelper/source/misc/base64.cxx:142: some bytes left in base64 decoding!\" and I don\u0027t know how to make the byte array from the string.\n\nStrange code anyway - what if the prop has .Name\u003d\u003dURL before .Name\u003d\u003dThumbnail?",
+      "parentUuid": "f3cd4f7c_feb71086",
+      "revId": "8f0225724c3a16afc61182539e0aaf49455c89b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
