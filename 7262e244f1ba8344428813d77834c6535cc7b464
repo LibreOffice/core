@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7724eefa_433e8e00",
+        "filename": "vcl/source/uitest/uiobject.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2020-04-04T12:49:55Z",
+      "side": 1,
+      "message": "circular dependency\nsfx2 is higher in the module hierarchy than vcl",
+      "range": {
+        "startLine": 25,
+        "startChar": 1,
+        "endLine": 25,
+        "endChar": 8
+      },
+      "revId": "7262e244f1ba8344428813d77834c6535cc7b464",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
