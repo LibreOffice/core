@@ -2995,9 +2995,8 @@ static void lcl_Regist( SwPageFrame *pPage, const SwFrame *pAnch )
     SwSortedObjs *pObjs = const_cast<SwSortedObjs*>(pAnch->GetDrawObjs());
     for (SwAnchoredObject* pObj : *pObjs)
     {
-        if ( dynamic_cast<const SwFlyFrame*>( pObj) !=  nullptr )
+        if (SwFlyFrame* pFly = dynamic_cast<SwFlyFrame*>(pObj))
         {
-            SwFlyFrame *pFly = static_cast<SwFlyFrame*>(pObj);
             // register (not if already known)
             // #i28701# - use new method <GetPageFrame()>
             SwPageFrame *pPg = pFly->IsFlyFreeFrame()
