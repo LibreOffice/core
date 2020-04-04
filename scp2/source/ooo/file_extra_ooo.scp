@@ -41,7 +41,6 @@ End
 GALLERY_FILELIST(arrows)
 GALLERY_FILELIST(diagrams)
 GALLERY_FILELIST(sounds)
-GALLERY_FILELIST(symbols)
 
 #endif
 
