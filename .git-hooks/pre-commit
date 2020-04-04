@@ -73,7 +73,7 @@ sub check_whitespaces($)
             {
                 bad_line("DOS lineends", $_ , $src_limited);
             }
-            if (/\s*	/)
+            if (/\s*	/ and not($filename =~ /.py$/))
             {
                 bad_line("indent with Tab", $_, $src_limited);
             }
