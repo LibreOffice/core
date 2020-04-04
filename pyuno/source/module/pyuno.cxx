@@ -461,7 +461,7 @@ PyObject *PyUNO_str( PyObject * self )
         buf = "pyuno object " + OUStringToOString(s,RTL_TEXTENCODING_ASCII_US);
     }
 
-    return PyStr_FromString( buf.getStr() );
+    return PyUnicode_FromString( buf.getStr() );
 }
 
 static PyObject* PyUNO_dir (PyObject* self)
@@ -592,7 +592,7 @@ static PyObject* lcl_getitem_XCellRange( PyUNO const * me, PyObject* pKey )
     Any aRet;
 
     // Single string key is sugar for getCellRangeByName()
-    if ( PyStr_Check( pKey ) ) {
+    if ( PyUnicode_Check( pKey ) ) {
 
         aParams.realloc (1);
         aParams[0] <<= pyString2ustring( pKey );
@@ -822,7 +822,7 @@ static PyObject* PyUNO_getitem( PyObject *self, PyObject *pKey )
         }
 
         // XNameAccess access by key
-        if ( PyStr_Check( pKey ) )
+        if ( PyUnicode_Check( pKey ) )
         {
             PyObject* pRet = lcl_getitem_string( me, pKey, runtime );
             if ( pRet != nullptr )
@@ -1157,7 +1157,7 @@ static int PyUNO_setitem( PyObject *self, PyObject *pKey, PyObject *pValue )
         {
             return lcl_setitem_slice( me, pKey, pValue );
         }
-        else if ( PyStr_Check( pKey ) )
+        else if ( PyUnicode_Check( pKey ) )
         {
             return lcl_setitem_string( me, pKey, pValue );
         }
@@ -1297,7 +1297,7 @@ static int PyUNO_contains( PyObject *self, PyObject *pKey )
         // useful for objects which implement both XIndexAccess and XNameAccess
 
         // For XNameAccess
-        if ( PyStr_Check( pKey ) )
+        if ( PyUnicode_Check( pKey ) )
         {
             OUString sKey;
             aValue >>= sKey;
