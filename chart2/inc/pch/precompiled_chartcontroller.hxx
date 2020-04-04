@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-17 12:25:36 using:
+ Generated on 2020-04-04 19:56:06 using:
  ./bin/update_pch chart2 chartcontroller --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -37,6 +37,7 @@
 #include <map>
 #include <memory>
 #include <new>
+#include <optional>
 #include <ostream>
 #include <set>
 #include <stddef.h>
@@ -102,9 +103,7 @@
 #include <vcl/customweld.hxx>
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/dndhelp.hxx>
 #include <vcl/dockwin.hxx>
-#include <vcl/edit.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/fntstyle.hxx>
@@ -116,7 +115,6 @@
 #include <vcl/image.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/metaactiontypes.hxx>
@@ -130,7 +128,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/task.hxx>
-#include <vcl/textfilter.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/vclenum.hxx>
@@ -160,6 +157,7 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/utils/common.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
@@ -314,7 +312,6 @@
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/deleter.hxx>
 #include <o3tl/enumarray.hxx>
-#include <optional>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/strong_int.hxx>

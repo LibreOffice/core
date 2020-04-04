@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-16 15:31:14 using:
+ Generated on 2020-04-04 19:58:59 using:
  ./bin/update_pch reportdesign rptui --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -40,6 +40,7 @@
 #include <math.h>
 #include <memory>
 #include <new>
+#include <optional>
 #include <ostream>
 #include <set>
 #include <sstream>
@@ -122,7 +123,6 @@
 #include <vcl/edit.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/event.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
@@ -134,7 +134,6 @@
 #include <vcl/image.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/metaactiontypes.hxx>
@@ -179,6 +178,7 @@
 #include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/utils/common.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
@@ -339,7 +339,6 @@
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/deleter.hxx>
 #include <o3tl/enumarray.hxx>
-#include <optional>
 #include <o3tl/safeint.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
