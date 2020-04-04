@@ -158,7 +158,7 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet& rSet )
             aString += aURL.getBase();
 
         sal_Int32 nPos = SearchGradientList( rSet.Get(XATTR_FILLGRADIENT).GetName() );
-        if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+        if ( nPos != -1)
         {
             sal_uInt16 nId = m_xGradientLB->GetItemId( static_cast<size_t>( nPos ) );
             m_xGradientLB->SelectItem( nId );
@@ -328,7 +328,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl, weld::Button&, void)
     while( !bValidGradientName )
     {
         aName  = aNewName + " " + OUString::number( j++ );
-        bValidGradientName = (SearchGradientList(aName) == LISTBOX_ENTRY_NOTFOUND);
+        bValidGradientName = (SearchGradientList(aName) == -1);
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -339,7 +339,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl, weld::Button&, void)
     {
         pDlg->GetName( aName );
 
-        bValidGradientName = (SearchGradientList(aName) == LISTBOX_ENTRY_NOTFOUND);
+        bValidGradientName = (SearchGradientList(aName) == -1);
 
         if (bValidGradientName)
         {
@@ -464,7 +464,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void
         {
             pDlg->GetName( aName );
             sal_Int32 nGradientPos = SearchGradientList(aName);
-            bool bValidGradientName = (nGradientPos == static_cast<sal_Int32>(nPos) ) || (nGradientPos == LISTBOX_ENTRY_NOTFOUND);
+            bool bValidGradientName = (nGradientPos == static_cast<sal_Int32>(nPos) ) || (nGradientPos == -1);
 
             if( bValidGradientName )
             {
@@ -614,7 +614,7 @@ sal_Int32 SvxGradientTabPage::SearchGradientList(const OUString& rGradientName)
 {
     long nCount = m_pGradientList->Count();
     bool bValidGradientName = true;
-    sal_Int32 nPos = LISTBOX_ENTRY_NOTFOUND;
+    sal_Int32 nPos = -1;
 
     for(long i = 0;i < nCount && bValidGradientName;i++)
     {

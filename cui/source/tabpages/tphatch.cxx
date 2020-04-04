@@ -159,7 +159,7 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
             aString += aURL.getBase();
 
         sal_Int32 nPos = SearchHatchList( rSet.Get(XATTR_FILLHATCH).GetName() );
-        if( nPos != LISTBOX_ENTRY_NOTFOUND )
+        if( nPos != -1)
         {
             sal_uInt16 nId = m_xHatchLB->GetItemId( static_cast<size_t>( nPos ) );
             m_xHatchLB->SelectItem( nId );
@@ -203,7 +203,7 @@ sal_Int32 SvxHatchTabPage::SearchHatchList(const OUString& rHatchName)
 {
     long nCount = m_pHatchingList->Count();
     bool bValidHatchName = true;
-    sal_Int32 nPos = LISTBOX_ENTRY_NOTFOUND;
+    sal_Int32 nPos = -1;
 
     for(long i = 0;i < nCount && bValidHatchName;i++)
     {
@@ -409,7 +409,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, weld::Button&, void)
     while( !bValidHatchName )
     {
         aName  = aNewName + " " + OUString::number( j++ );
-        bValidHatchName = (SearchHatchList(aName) == LISTBOX_ENTRY_NOTFOUND);
+        bValidHatchName = (SearchHatchList(aName) == -1);
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -420,7 +420,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, weld::Button&, void)
     {
         pDlg->GetName( aName );
 
-        bValidHatchName = (SearchHatchList(aName) == LISTBOX_ENTRY_NOTFOUND);
+        bValidHatchName = (SearchHatchList(aName) == -1);
         if( bValidHatchName )
         {
             nError = 0;
@@ -532,7 +532,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void )
         {
             pDlg->GetName( aName );
             sal_Int32 nHatchPos = SearchHatchList( aName );
-            bool bValidHatchName = (nHatchPos == static_cast<sal_Int32>(nPos) ) || (nHatchPos == LISTBOX_ENTRY_NOTFOUND);
+            bool bValidHatchName = (nHatchPos == static_cast<sal_Int32>(nPos) ) || (nHatchPos == -1);
 
             if(bValidHatchName)
             {

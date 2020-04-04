@@ -160,7 +160,7 @@ void SvxPatternTabPage::ActivatePage( const SfxItemSet& rSet )
         if ( aItem.isPattern() )
         {
             sal_Int32 nPos = SearchPatternList( aItem.GetName() );
-            if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+            if ( nPos != -1)
             {
                 sal_uInt16 nId = m_xPatternLB->GetItemId( static_cast<size_t>( nPos ) );
                 m_xPatternLB->SelectItem( nId );
@@ -329,7 +329,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickAddHdl_Impl, weld::Button&, void)
     while( !bValidPatternName )
     {
         aName = aNewName + " " + OUString::number( j++ );
-        bValidPatternName = (SearchPatternList(aName) == LISTBOX_ENTRY_NOTFOUND);
+        bValidPatternName = (SearchPatternList(aName) == -1);
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -340,7 +340,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickAddHdl_Impl, weld::Button&, void)
     {
         pDlg->GetName( aName );
 
-        bValidPatternName = (SearchPatternList(aName) == LISTBOX_ENTRY_NOTFOUND);
+        bValidPatternName = (SearchPatternList(aName) == -1);
 
         if( bValidPatternName ) {
             nError = 0;
@@ -443,7 +443,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void)
         {
             pDlg->GetName( aName );
             sal_Int32 nPatternPos = SearchPatternList(aName);
-            bool bValidPatternName = (nPatternPos == static_cast<sal_Int32>(nPos) ) || (nPatternPos == LISTBOX_ENTRY_NOTFOUND);
+            bool bValidPatternName = (nPatternPos == static_cast<sal_Int32>(nPos) ) || (nPatternPos == -1);
 
             if( bValidPatternName )
             {
@@ -538,7 +538,7 @@ sal_Int32 SvxPatternTabPage::SearchPatternList(const OUString& rPatternName)
 {
     long nCount = m_pPatternList->Count();
     bool bValidPatternName = true;
-    sal_Int32 nPos = LISTBOX_ENTRY_NOTFOUND;
+    sal_Int32 nPos = -1;
 
     for(long i = 0;i < nCount && bValidPatternName;i++)
     {
