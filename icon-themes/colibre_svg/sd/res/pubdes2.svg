@@ -1,0 +1,50 @@
+<svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+  <path
+     style="fill:#ffffff;stroke-width:3.2"
+     d="M 21,22 V 80 L 83,80 83,22 Z"
+     />
+  <path
+     style="fill:#808080;stroke-width:3.2"
+     d="m 18,19 v 64 h 68 v 0 -64 z m 3,3 H 83 V 80 H 21 Z"
+     />
+  <path
+     style="fill:#4d82b8;stroke-width:3"
+     d="m 16,6.998267 h 72 v 6 H 16 Z"
+     />
+  <path
+     style="fill:#eac282;stroke-width:3.2"
+     d="m 26,32 h 53 v 6 H 26 Z"
+     />
+  <path
+     style="fill:#808080;stroke-width:3"
+     d="m 25,44 h 3 v 3 h -3 z"
+     />
+  <path
+     style="fill:#808080;stroke-width:3.2"
+     d="m 25,54 h 3 v 3 h -3 z"
+     />
+  <path
+     style="fill:#808080;stroke-width:3.2"
+     d="m 25,63 h 3 v 3 h -3 z"
+     />
+  <path
+     style="fill:#808080;stroke-width:3.2"
+     d="m 32,44 h 36 v 3 H 32 Z"
+     />
+  <path
+     style="fill:#808080;stroke-width:3.2"
+     d="m 32,63 h 16 v 3 H 32 Z"
+     />
+  <path
+     style="fill:#808080;stroke-width:3.2"
+     d="m 32,54 h 19 v 3 H 32 Z"
+     />
+  <path
+     style="fill:#ffffff;stroke-width:3.125"
+     d="m 4,19 v 61 h 7 V 19 Z"
+     />
+  <path
+     style="fill:#4d82b8;stroke-width:3.125"
+     d="M 1,7 V 83 H 14 V 7 Z m 3,12 h 7 V 80 H 4 Z"
+     />
+</svg>
