@@ -560,7 +560,6 @@ void OAppDetailPageHelper::createTablesPage(const Reference< XConnection>& _xCon
         pTreeView->SetHelpId(HID_APP_TABLE_TREE);
         m_pLists[E_TABLE] = pTreeView;
 
-        ImageProvider aImageProvider( _xConnection );
         createTree( pTreeView,
             ImageProvider::getDefaultImage( DatabaseObject::TABLE )
         );
