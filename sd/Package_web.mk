@@ -28,17 +28,10 @@ $(eval $(call gb_Package_add_files,sd_web,$(LIBO_SHARE_FOLDER)/config/webcast,\
 ))
 
 $(eval $(call gb_Package_add_files,sd_web,$(LIBO_SHARE_FOLDER)/config/wizard/web/buttons,\
-	buttons/glas-blue.zip \
-	buttons/glas-green.zip \
-	buttons/glas-red.zip \
-	buttons/round-gorilla.zip \
+	buttons/elementary.zip \
+	buttons/sukapura.zip \
 	buttons/round-white.zip \
 	buttons/simple.zip \
-	buttons/square-blue.zip \
-	buttons/square-gray.zip \
-	buttons/square-green.zip \
-	buttons/square-red.zip \
-	buttons/square-yellow.zip \
 ))
 
 # vim: set noet sw=4 ts=4:
