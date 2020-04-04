@@ -58,12 +58,7 @@
                    the global interpreter lock is held
 */
 
-extern "C" LO_DLLPUBLIC_PYUNO
-#if PY_MAJOR_VERSION >= 3
-    PyObject* SAL_CALL PyInit_pyuno();
-#else
-   void SAL_CALL initpyuno();
-#endif
+extern "C" LO_DLLPUBLIC_PYUNO PyObject* PyInit_pyuno();
 
 namespace pyuno
 {

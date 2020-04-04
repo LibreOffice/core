@@ -27,8 +27,6 @@ compile, which it identifies.
 Usage: ./bin/update_pch_bisect ./vcl/inc/pch/precompiled_vcl.hxx "make vcl.build" --find-required --verbose
 """
 
-from __future__ import print_function
-
 import sys
 import re
 import os
