@@ -182,7 +182,6 @@
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
-                            <property name="spacing">12</property>
                             <child>
                               <object class="GtkScrolledWindow">
                                 <property name="visible">True</property>
@@ -223,20 +222,6 @@
                                 <property name="position">0</property>
                               </packing>
                             </child>
-                            <child>
-                              <object class="GtkButton" id="delDesingButton">
-                                <property name="label" translatable="yes" context="publishingdialog|delDesingButton">Delete Selected Design</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <property name="valign">start</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
                           </object>
                         </child>
                       </object>
@@ -247,13 +232,41 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="descLabel">
+                      <object class="GtkBox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes" context="publishingdialog|descLabel">Select an existing design or create a new one</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">designsTreeview</property>
+                        <property name="spacing">12</property>
+                        <child>
+                          <object class="GtkLabel" id="descLabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes" context="publishingdialog|descLabel">Select an existing design or create a new one</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">designsTreeview</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="delDesingButton">
+                            <property name="label" translatable="yes" context="publishingdialog|delDesingButton">Delete Selected Design</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="halign">end</property>
+                            <property name="valign">center</property>
+                            <property name="hexpand">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -366,7 +379,7 @@
                                     <property name="label" translatable="yes" context="publishingdialog|indexTxtLabel">_URL for listeners:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">indexEntry</property>
-                                    <property name="xalign">0.50</property>
+                                    <property name="xalign">0.5</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -458,7 +471,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="publishingdialog|webCastLabel">Webcast</property>
-                    <property name="xalign">0.50</property>
+                    <property name="xalign">0.5</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -548,7 +561,7 @@
                                         <property name="label" translatable="yes" context="publishingdialog|durationTxtLabel">_Slide view time:</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">durationSpinbutton</property>
-                                        <property name="xalign">0.50</property>
+                                        <property name="xalign">0.5</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -1438,6 +1451,7 @@
                       <object class="GtkScrolledWindow" id="buttonsDrawingareawin">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="vexpand">True</property>
                         <property name="hscrollbar_policy">never</property>
                         <property name="vscrollbar_policy">never</property>
                         <property name="shadow_type">in</property>
@@ -1472,7 +1486,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="publishingdialog|buttonStyleLabel">Select Button Style</property>
-                <property name="xalign">0.50</property>
+                <property name="xalign">0.5</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -1638,6 +1652,7 @@
                               <object class="GtkScrolledWindow">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="hexpand">True</property>
                                 <property name="hscrollbar_policy">never</property>
                                 <property name="vscrollbar_policy">never</property>
                                 <property name="shadow_type">in</property>
