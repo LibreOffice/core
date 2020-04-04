@@ -199,14 +199,7 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 						#it's a bytesequence, get raw bytes
 						textbody = textbody.value
 					if sys.version_info >= (3,0):
-						if sys.version_info <= (3,1):
-							#http://stackoverflow.com/questions/9403265/how-do-i-use-python-3-2-email-module-to-send-unicode-messages-encoded-in-utf-8-w
-							#see http://bugs.python.org/16564, etc. basically it now *seems* to be all ok
-							#in python 3.3.2 onwards, but a little busted in 3.3.0
-
-							textbody = textbody.decode('iso8859-1')
-						else:
-							textbody = textbody.decode('utf-8')
+						textbody = textbody.decode('utf-8')
 						c = Charset('utf-8')
 						c.body_encoding = QP
 						textmsg.set_payload(textbody, c)
