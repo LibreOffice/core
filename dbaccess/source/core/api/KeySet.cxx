@@ -451,10 +451,6 @@ void OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrigi
     OUString sParam(" = ?");
 
     // use keys and indexes for exact positioning
-    // first the keys
-    Reference<XNameAccess> xKeyColumns = getKeyColumns();
-
-    // second the indexes
     Reference<XIndexesSupplier> xIndexSup(_xTable,UNO_QUERY);
     Reference<XIndexAccess> xIndexes;
     if ( xIndexSup.is() )
@@ -843,8 +839,6 @@ void OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivity::OSQLTa
     static const char aAnd[] = " AND ";
 
     // use keys and indexes for exact positioning
-    Reference<XNameAccess> xKeyColumns = getKeyColumns();
-    // second the indexes
     Reference<XIndexesSupplier> xIndexSup(_xTable,UNO_QUERY);
     Reference<XIndexAccess> xIndexes;
     if ( xIndexSup.is() )

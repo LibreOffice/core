@@ -379,7 +379,6 @@ uno::Sequence < OUString > getWriterChartColumnDescriptions( Reference< lang::XC
     xChartDoc.set( xPropertySet->getPropertyValue( "Model" ), uno::UNO_QUERY );
     CPPUNIT_ASSERT( xChartDoc.is() );
     CPPUNIT_ASSERT( xChartDoc->getDataProvider().is() );
-    uno::Reference<beans::XPropertySet> xProp(xChartDoc->getDataProvider(), uno::UNO_QUERY );
     uno::Reference< chart2::XAnyDescriptionAccess > xAnyDescriptionAccess ( xChartDoc->getDataProvider(), uno::UNO_QUERY_THROW );
     uno::Sequence< OUString > seriesList = xAnyDescriptionAccess->getColumnDescriptions();
     return seriesList;

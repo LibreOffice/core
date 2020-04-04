@@ -32,7 +32,6 @@ public:
 void HsqlBinaryImportTest::setUp()
 {
     DBTestBase::setUp();
-    SvtMiscOptions aMiscOptions;
     osl_setEnvironment(OUString{ "DBACCESS_HSQL_MIGRATION" }.pData, OUString{ "1" }.pData);
 }
 
