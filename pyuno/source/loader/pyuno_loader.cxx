@@ -121,7 +121,6 @@ static void setPythonHome ( const OUString & pythonHome )
     OUString systemPythonHome;
     osl_getSystemPathFromFileURL( pythonHome.pData, &(systemPythonHome.pData) );
     OString o = OUStringToOString( systemPythonHome, osl_getThreadTextEncoding() );
-#if PY_MAJOR_VERSION >= 3
     // static because Py_SetPythonHome just copies the "wide" pointer
     static wchar_t wide[PATH_MAX + 1];
     size_t len = mbstowcs(wide, o.pData->buffer, PATH_MAX + 1);
@@ -136,10 +135,6 @@ static void setPythonHome ( const OUString & pythonHome )
         return;
     }
     Py_SetPythonHome(wide);
-#else
-    rtl_string_acquire(o.pData); // increase reference count
-    Py_SetPythonHome(o.pData->buffer);
-#endif
 }
 
 static void prependPythonPath( const OUString & pythonPathBootstrap )
@@ -216,11 +211,7 @@ PythonInit() {
     osl_setEnvironment(sEnvName.pData, sPath.pData);
 #endif
 
-#if PY_MAJOR_VERSION >= 3
     PyImport_AppendInittab( "pyuno", PyInit_pyuno );
-#else
-    PyImport_AppendInittab( (char*)"pyuno", initpyuno );
-#endif
 
 #if HAVE_FEATURE_READONLY_INSTALLSET
     Py_DontWriteBytecodeFlag = 1;

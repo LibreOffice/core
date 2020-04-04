@@ -6,16 +6,9 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
-from __future__ import unicode_literals
 import sys, os, uno, unohelper
 import re, random, traceback, itertools
 import threading, time as __time__
-
-try:
-    unicode
-    next = lambda l: l.next() # python 2
-except:
-    unicode, long = str, int # support python 3
 
 __lng__ = {}
 
@@ -327,7 +320,7 @@ def __string__(s, decimal = None): # convert decimal sign, localized BOOL and SE
             s = s.replace(".", ",")
         return re.sub(__DECODE_STRING_REGEX__, __decodestring__, \
             s.replace('set', __locname__('SET')).replace('True', __locname__('TRUE')).replace('False', __locname__('FALSE')))
-    if type(s) in [str, unicode]:
+    if type(s) in [str]:
         return s
     elif type(s) == bool:
         return __locname__(str(s).upper())
@@ -1323,9 +1316,9 @@ def __fontstyle__(w):
     return __Slant_NONE__
 
 def __color__(c):
-    if type(c) in [int, float, long]:
+    if type(c) in [int, float]:
         return c
-    if type(c) == unicode:
+    if type(c) == str:
         if c == u'any':
             rc, rv, rgray = __NORMCOLORS__[int(random.random()*7)], random.random(), random.random() ** 0.5
             ratio = 1.0*abs(rc[2])/(abs(rc[2]) + abs(rc[4]))
@@ -1610,12 +1603,12 @@ def __groupend__(name = ""):
     __removeshape__(__ACTUAL__)
 
 def __int__(x): # handle eg. int("10cm")
-    if type(x) == str or type(x) == unicode:
+    if type(x) == str:
         x = __float__(x)
     return int(x)
 
 def __float__(x): # handle eg. float("10,5cm")
-    if type(x) == str or type(x) == unicode:
+    if type(x) == str:
         for i in __comp__[_.lng]:
             x = re.sub(u"(?iu)" + i[0], i[1], x)
         x = eval(x)

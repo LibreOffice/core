@@ -642,41 +642,8 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
     {
 
     }
-    // In Python 3, there is no PyInt type.
-#if PY_MAJOR_VERSION < 3
-    else if (PyInt_Check (o))
-    {
-        if( o == Py_True )
-        {
-            a <<= true;
-        }
-        else if ( o == Py_False )
-        {
-            a <<= false;
-        }
-        else
-        {
-            sal_Int32 l = (sal_Int32) PyLong_AsLong( o );
-            if( l < 128 && l >= -128 )
-            {
-                sal_Int8 b = (sal_Int8 ) l;
-                a <<= b;
-            }
-            else if( l <= 0x7fff && l >= -0x8000 )
-            {
-                sal_Int16 s = (sal_Int16) l;
-                a <<= s;
-            }
-            else
-            {
-                a <<= l;
-            }
-        }
-    }
-#endif /* PY_MAJOR_VERSION < 3 */
     else if (PyLong_Check (o))
     {
-#if PY_MAJOR_VERSION >= 3
         // Convert the Python 3 booleans that are actually of type PyLong.
         if(o == Py_True)
         {
@@ -688,7 +655,6 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
         }
         else
         {
-#endif /* PY_MAJOR_VERSION >= 3 */
         sal_Int64 l = static_cast<sal_Int64>(PyLong_AsLong (o));
         if( l < 128 && l >= -128 )
         {
@@ -710,9 +676,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
         {
             a <<= l;
         }
-#if PY_MAJOR_VERSION >= 3
         }
-#endif
     }
     else if (PyFloat_Check (o))
     {

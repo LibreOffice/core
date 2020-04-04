@@ -8788,8 +8788,7 @@ AC_SUBST(LIBXML_LIBS)
 AC_SUBST(XMLLINT)
 
 # =====================================================================
-# Checking for a Python interpreter with version >= 2.7.
-# Build and runtime requires Python 3 compatible version (>= 2.7).
+# Checking for a Python interpreter with version >= 3.3.
 # Optionally user can pass an option to configure, i. e.
 # ./configure PYTHON=/usr/bin/python
 # =====================================================================
@@ -8798,7 +8797,7 @@ if test "$build_os" != "cygwin" -a "$enable_python" != fully-internal; then
         PYTHON_FOR_BUILD=$PYTHON
     else
         # This allows a lack of system python with no error, we use internal one in that case.
-        AM_PATH_PYTHON([2.7],, [:])
+        AM_PATH_PYTHON([3.3],, [:])
         # Clean PYTHON_VERSION checked below if cross-compiling
         PYTHON_VERSION=""
         if test "$PYTHON" != ":"; then
@@ -8863,7 +8862,7 @@ fully-internal)
 system)
     AC_MSG_RESULT([system])
     if test "$_os" = Darwin; then
-        AC_MSG_ERROR([--enable-python=system doesn't work on macOS: /System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7/unicodeobject.h is known to contain uses of "register", which is removed from C++17])
+        AC_MSG_ERROR([--enable-python=system doesn't work on macOS because the version provided is obsolete])
     fi
     ;;
 *)
@@ -8981,11 +8980,10 @@ system)
 #include <Python.h>
 
 int main(int argc, char **argv) {
-   if ((PY_MAJOR_VERSION == 2 && PY_MINOR_VERSION >= 7) ||
-       (PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 3)) return 0;
+   if ((PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 3)) return 0;
    else return 1;
 }
-       ]])],[AC_MSG_RESULT([ok])],[AC_MSG_ERROR([Python >= 3.3 is needed when building with Python 3, or Python >= 2.7 when building with Python 2])],[AC_MSG_RESULT([skipped; cross-compiling])])
+       ]])],[AC_MSG_RESULT([ok])],[AC_MSG_ERROR([Python >= 3.3 is needed when building with Python 3])],[AC_MSG_RESULT([skipped; cross-compiling])])
     CFLAGS=$save_CFLAGS
     AC_LANG_POP(C)
 
