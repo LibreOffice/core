@@ -76,19 +76,9 @@ static void * load(void const * address, char const * symbol) {
     return func;
 }
 
-#if PY_MAJOR_VERSION >= 3
-
 SAL_DLLPUBLIC_EXPORT PyObject * PyInit_pyuno(void) {
     return
         ((PyObject * (*)(void)) load((void *) &PyInit_pyuno, "PyInit_pyuno"))();
 }
-
-#else
-
-SAL_DLLPUBLIC_EXPORT void initpyuno(void) {
-    ((void (*)(void)) load((void *) &initpyuno, "initpyuno"))();
-}
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
