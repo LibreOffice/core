@@ -211,6 +211,9 @@ private:
     std::unique_ptr<weld::Builder> m_xBuilder1;
     std::unique_ptr<weld::Builder> m_xBuilder2;
 
+    weld::Container* m_pParent;
+    weld::Container* m_pColorParent;
+
     std::unique_ptr<weld::Container> m_xContainer1;
     std::unique_ptr<weld::Container> m_xContainer2;
     std::unique_ptr<weld::Image> m_spSymbol;
@@ -238,6 +241,8 @@ SeriesHeader::SeriesHeader(weld::Container* pParent, weld::Container* pColorPare
     : m_aUpdateDataTimer("UpdateDataTimer")
     , m_xBuilder1(Application::CreateBuilder(pParent, "modules/schart/ui/columnfragment.ui"))
     , m_xBuilder2(Application::CreateBuilder(pColorParent, "modules/schart/ui/imagefragment.ui"))
+    , m_pParent(pParent)
+    , m_pColorParent(pColorParent)
     , m_xContainer1(m_xBuilder1->weld_container("container"))
     , m_xContainer2(m_xBuilder2->weld_container("container"))
     , m_spSymbol(m_xBuilder1->weld_image("image"))
@@ -260,9 +265,8 @@ SeriesHeader::SeriesHeader(weld::Container* pParent, weld::Container* pColorPare
 SeriesHeader::~SeriesHeader()
 {
     m_aUpdateDataTimer.Stop();
-    m_xDevice.clear();
-    m_xBuilder2.reset();
-    m_xBuilder1.reset();
+    m_pParent->move(m_xContainer1.get(), nullptr);
+    m_pColorParent->move(m_xContainer2.get(), nullptr);
 }
 
 void SeriesHeader::notifyChanges()
@@ -514,6 +518,7 @@ DataBrowser::~DataBrowser()
 
 void DataBrowser::dispose()
 {
+    m_aSeriesHeaders.clear();
     m_aNumberEditField.disposeAndClear();
     m_aTextEditField.disposeAndClear();
     ::svt::EditBrowseBox::dispose();
