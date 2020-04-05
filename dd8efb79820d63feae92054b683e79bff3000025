@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "47982a45_af30ba25",
+        "filename": "chart2/source/controller/main/ChartController_Insert.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-04-05T13:44:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c90ae20d_82fa7015",
+      "range": {
+        "startLine": 519,
+        "startChar": 0,
+        "endLine": 525,
+        "endChar": 5
+      },
+      "revId": "dd8efb79820d63feae92054b683e79bff3000025",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "45f503b6_86f76315",
         "filename": "chart2/source/controller/main/ChartController_Properties.cxx",
         "patchSetId": 5
@@ -63,6 +87,24 @@
       "revId": "dd8efb79820d63feae92054b683e79bff3000025",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2fa06ffe_f8c5a22b",
+        "filename": "chart2/source/controller/main/ChartController_Properties.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-04-05T13:44:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "45f503b6_86f76315",
+      "revId": "dd8efb79820d63feae92054b683e79bff3000025",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -83,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "bfc53692_5aa3b413",
+        "filename": "chart2/source/controller/main/ChartController_Properties.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-04-05T13:44:37Z",
+      "side": 1,
+      "message": "Unlike the \"FormatTrendLine\" condition here the else part is used, if we remove this code we won\u0027t be able to Format Trend Line option, right ?",
+      "parentUuid": "86a02ddc_23376a4e",
+      "revId": "dd8efb79820d63feae92054b683e79bff3000025",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "652ec11a_a55c03b5",
         "filename": "chart2/source/controller/main/ChartController_Window.cxx",
         "patchSetId": 5
@@ -97,6 +157,24 @@
       "revId": "dd8efb79820d63feae92054b683e79bff3000025",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "578f1565_2969b1b2",
+        "filename": "chart2/source/controller/main/ChartController_Window.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1042,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-04-05T13:44:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "652ec11a_a55c03b5",
+      "revId": "dd8efb79820d63feae92054b683e79bff3000025",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -147,6 +225,30 @@
     },
     {
       "key": {
+        "uuid": "833ee1cb_3a636260",
+        "filename": "chart2/source/inc/RegressionCurveHelper.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-04-05T13:44:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1357ff54_e69f7a5f",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 0
+      },
+      "revId": "dd8efb79820d63feae92054b683e79bff3000025",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "47da3061_c5bd1cd5",
         "filename": "chart2/source/tools/RegressionCurveHelper.cxx",
         "patchSetId": 5
@@ -191,6 +293,30 @@
       "revId": "dd8efb79820d63feae92054b683e79bff3000025",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53de5753_dcd92c6e",
+        "filename": "chart2/source/tools/RegressionCurveHelper.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-04-05T13:44:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "114eed30_be26186b",
+      "range": {
+        "startLine": 491,
+        "startChar": 0,
+        "endLine": 515,
+        "endChar": 1
+      },
+      "revId": "dd8efb79820d63feae92054b683e79bff3000025",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
