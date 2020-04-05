@@ -57,6 +57,7 @@
  * @file
  * Shadow object,now only used by paragraph object.
  ************************************************************************/
+#include <xfilter/ixfattrlist.hxx>
 #include <xfilter/xfshadow.hxx>
 
 XFShadow::XFShadow()

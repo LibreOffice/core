@@ -60,10 +60,11 @@
 
 #ifndef INCLUDED_LOTUSWORDPRO_INC_LWPFRIB_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_LWPFRIB_HXX
+#include <map>
 #include <memory>
+#include <config_lgpl.h>
 #include "lwpobjid.hxx"
 #include "lwpobjstrm.hxx"
-#include "lwpbasetype.hxx"
 #include "lwpoverride.hxx"
 #include "lwpfoundry.hxx"
 #include "xfilter/xfcolor.hxx"

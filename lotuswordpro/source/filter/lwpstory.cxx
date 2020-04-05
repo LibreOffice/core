@@ -62,6 +62,7 @@
 
 #include <lwpglobalmgr.hxx>
 #include "lwpstory.hxx"
+#include <xfilter/xftextstyle.hxx>
 #include <xfilter/xfstylemanager.hxx>
 #include "lwppara.hxx"
 #include <lwpobjfactory.hxx>

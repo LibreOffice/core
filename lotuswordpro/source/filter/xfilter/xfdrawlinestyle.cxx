@@ -57,6 +57,7 @@
  * @file
  * Line style of Drawing object.
  ************************************************************************/
+#include <xfilter/ixfattrlist.hxx>
 #include <xfilter/xfdrawlinestyle.hxx>
 
 XFDrawLineStyle::XFDrawLineStyle()

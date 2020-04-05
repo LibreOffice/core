@@ -58,6 +58,7 @@
  * Polygon object.
  */
 #include <xfilter/xfdrawpolygon.hxx>
+#include <xfilter/ixfattrlist.hxx>
 #include <rtl/ustrbuf.hxx>
 
 XFDrawPolygon::XFDrawPolygon()

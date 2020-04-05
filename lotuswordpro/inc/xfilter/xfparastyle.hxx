@@ -67,7 +67,6 @@
 #include <rtl/ref.hxx>
 
 #include <xfilter/xffont.hxx>
-#include <xfilter/xfglobal.hxx>
 #include <xfilter/xfstyle.hxx>
 #include <xfilter/xfcolor.hxx>
 #include <xfilter/xfmargins.hxx>

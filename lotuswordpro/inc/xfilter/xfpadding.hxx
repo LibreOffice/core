@@ -60,7 +60,8 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFPADDING_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFPADDING_HXX
 
-#include <xfilter/xfglobal.hxx>
+#include <xfilter/ixfstream.hxx>
+#include <xfilter/ixfattrlist.hxx>
 
 #define XFPADDING_FLAG_LEFT     0X00000001
 #define XFPADDING_FLAG_RIGHT    0X00000002

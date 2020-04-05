@@ -55,6 +55,7 @@
  ************************************************************************/
 
 #include <xfilter/xftextcontent.hxx>
+#include <xfilter/ixfattrlist.hxx>
 #include <xfilter/ixfstream.hxx>
 
 XFTextContent::XFTextContent(const OUString& text):m_strText(text)

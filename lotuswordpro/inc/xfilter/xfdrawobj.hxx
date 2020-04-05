@@ -60,8 +60,8 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWOBJ_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWOBJ_HXX
 
+#include <xfilter/xfglobal.hxx>
 #include <xfilter/xfframe.hxx>
-#include <xfilter/xfrect.hxx>
 
 #define     XFDRAWOBJECT_FLAG_ROTATE    0X00000001
 #define     XFDRAWOBJECT_FLAG_TRANSLATE 0X00000002

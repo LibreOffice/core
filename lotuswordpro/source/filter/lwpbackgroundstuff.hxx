@@ -62,6 +62,8 @@
 #include <lwpcolor.hxx>
 #include "lwpstyledef.hxx"
 
+#include <memory>
+
 class XFBGImage;
 class LwpBackgroundStuff
 {

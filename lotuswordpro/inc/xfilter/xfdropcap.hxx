@@ -60,8 +60,8 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDROPCAP_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDROPCAP_HXX
 
-#include <xfilter/xfglobal.hxx>
-
+#include <xfilter/ixfattrlist.hxx>
+#include <xfilter/ixfstream.hxx>
 class XFDropcap
 {
 public:

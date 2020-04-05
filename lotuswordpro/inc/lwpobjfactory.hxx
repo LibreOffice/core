@@ -63,9 +63,10 @@
 
 #include <sal/config.h>
 
+#include <config_lgpl.h>
+
 #include <rtl/ref.hxx>
 
-#include "lwpheader.hxx"
 #include "lwpobjid.hxx"
 #include "lwpobj.hxx"
 #include "lwpobjhdr.hxx"

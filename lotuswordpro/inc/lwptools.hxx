@@ -61,7 +61,8 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_LWPTOOLS_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_LWPTOOLS_HXX
 
-#include "lwpheader.hxx"
+#include <config_lgpl.h>
+
 #include "lwpobjstrm.hxx"
 #include "localtime.hxx"
 #include "xfilter/xfdatestyle.hxx"

@@ -61,20 +61,18 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_LWPFOUNDRY_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_LWPFOUNDRY_HXX
 
-#include "lwpheader.hxx"
+#include <config_lgpl.h>
 #include "lwpobjid.hxx"
 #include "lwpobjstrm.hxx"
-#include "lwpcolor.hxx"
-#include "lwpbasetype.hxx"
 #include "lwpfont.hxx"
 #include "lwpdropcapmgr.hxx"
+#include "xfilter/ixfstyle.hxx"
 #include <unordered_map>
 
 class LwpDocument;
 class LwpBookMark;
 
 #include <memory>
-#include <vector>
 
 class LwpVersionManager
 {

@@ -57,7 +57,6 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFTEXTCONTENT_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFTEXTCONTENT_HXX
 
-#include <xfilter/xfglobal.hxx>
 #include <xfilter/xfcontent.hxx>
 
 class IXFStream;

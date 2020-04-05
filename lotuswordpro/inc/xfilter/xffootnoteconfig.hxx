@@ -60,6 +60,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFOOTNOTECONFIG_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFOOTNOTECONFIG_HXX
 
+#include <xfilter/ixfattrlist.hxx>
 #include <xfilter/xfstyle.hxx>
 
 class XFFootnoteConfig : public XFStyle

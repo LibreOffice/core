@@ -60,9 +60,8 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFPAGECOUNT_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFPAGECOUNT_HXX
 
-#include <xfilter/xfglobal.hxx>
+#include <xfilter/ixfattrlist.hxx>
 #include <xfilter/xfcontent.hxx>
-#include <xfilter/xfnumfmt.hxx>
 
 /**
  * @brief

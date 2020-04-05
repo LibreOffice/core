@@ -61,8 +61,8 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_LWPIDXMGR_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_LWPIDXMGR_HXX
 
-#include <rtl/ustring.hxx>
-#include "lwpobjhdr.hxx"
+#include <config_lgpl.h>
+#include "lwpobjid.hxx"
 #include "lwpobjstrm.hxx"
 
 /**

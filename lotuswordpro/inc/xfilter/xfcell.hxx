@@ -63,7 +63,6 @@
 
 #include <xfilter/xfcontent.hxx>
 #include <xfilter/xfcontentcontainer.hxx>
-#include <vector>
 
 class XFTable;
 class XFRow;

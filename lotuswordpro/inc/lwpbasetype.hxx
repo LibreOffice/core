@@ -63,7 +63,7 @@
 #define INCLUDED_LOTUSWORDPRO_INC_LWPBASETYPE_HXX
 
 #include "lwpobjstrm.hxx"
-#include "lwpheader.hxx"
+#include <config_lgpl.h>
 
 /**
  * @brief   used for lwpfont for font description

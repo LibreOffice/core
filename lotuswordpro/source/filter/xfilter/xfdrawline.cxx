@@ -58,6 +58,7 @@
  * Line object.
  ************************************************************************/
 #include <xfilter/xfdrawline.hxx>
+#include <xfilter/ixfattrlist.hxx>
 
 XFDrawLine::XFDrawLine()
 {

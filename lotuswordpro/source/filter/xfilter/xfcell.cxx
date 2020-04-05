@@ -61,9 +61,11 @@
 
 #include <stdexcept>
 
+#include <xfilter/ixfattrlist.hxx>
 #include <xfilter/xfparagraph.hxx>
 #include <xfilter/xftable.hxx>
 #include <xfilter/xfrow.hxx>
+#include <xfilter/xfutil.hxx>
 
 XFCell::XFCell()
     : m_pOwnerRow(nullptr)

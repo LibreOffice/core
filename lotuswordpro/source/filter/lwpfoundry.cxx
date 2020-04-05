@@ -69,6 +69,7 @@
 #include "lwpsection.hxx"
 #include "lwpcharacterstyle.hxx"
 #include <lwpglobalmgr.hxx>
+#include <lwpobjtags.hxx>
 #include <xfilter/xfstylemanager.hxx>
 #include "lwplayout.hxx"
 

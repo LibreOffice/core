@@ -58,6 +58,7 @@
  * Columns styles for section, or paragraph.
  ************************************************************************/
 #include <xfilter/xfcolumns.hxx>
+#include <xfilter/ixfattrlist.hxx>
 
 void    XFColumn::SetRelWidth(sal_Int32 width)
 {

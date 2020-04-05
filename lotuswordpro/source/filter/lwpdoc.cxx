@@ -66,6 +66,7 @@
 #include "lwplayout.hxx"
 #include "lwppagelayout.hxx"
 #include "lwpverdocument.hxx"
+#include <xfilter/xftextstyle.hxx>
 #include <xfilter/xfstylemanager.hxx>
 #include <osl/thread.h>
 #include <o3tl/sorted_vector.hxx>

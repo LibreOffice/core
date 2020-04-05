@@ -61,6 +61,7 @@
 #include <xfilter/xfrow.hxx>
 #include <xfilter/xfcolstyle.hxx>
 #include <xfilter/xfstylemanager.hxx>
+#include <xfilter/xfglobal.hxx>
 #include <cassert>
 
 XFTable::XFTable()

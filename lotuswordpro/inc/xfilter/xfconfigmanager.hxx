@@ -64,7 +64,6 @@
 #include <xfilter/xflinenumberconfig.hxx>
 #include <xfilter/xffootnoteconfig.hxx>
 #include <xfilter/xfendnoteconfig.hxx>
-#include <xfilter/xfdefs.hxx>
 #include <memory>
 
 /**

@@ -58,6 +58,7 @@
  * Area style of Drawing object.
  ************************************************************************/
 #include "xfdrawareastyle.hxx"
+#include <xfilter/ixfattrlist.hxx>
 
 XFDrawAreaStyle::XFDrawAreaStyle()
     : m_eAreaStyle(enumXFAreaSolid)

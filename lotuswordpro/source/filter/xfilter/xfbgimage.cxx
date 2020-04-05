@@ -58,6 +58,8 @@
  * Background image.
  ************************************************************************/
 #include <xfilter/xfbgimage.hxx>
+#include <xfilter/ixfattrlist.hxx>
+#include <xfilter/xfutil.hxx>
 #include "xfbase64.hxx"
 
 XFBGImage::XFBGImage()

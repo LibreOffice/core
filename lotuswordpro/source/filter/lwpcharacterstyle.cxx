@@ -68,6 +68,7 @@
 #include "lwpcharborderoverride.hxx"
 #include <xfilter/xfparastyle.hxx>
 #include <xfilter/xffont.hxx>
+#include <xfilter/xftextstyle.hxx>
 
 
 /*class LwpTextStyle*/

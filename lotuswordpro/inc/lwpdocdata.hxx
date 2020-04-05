@@ -55,12 +55,11 @@
  ************************************************************************/
 #ifndef INCLUDED_LOTUSWORDPRO_INC_LWPDOCDATA_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_LWPDOCDATA_HXX
+#include <config_lgpl.h>
 #include "lwpobj.hxx"
 #include "lwpatomholder.hxx"
 #include "localtime.hxx"
 #include "lwpcolor.hxx"
-#include "xfilter/xfcolor.hxx"
-#include <map>
 
 struct LwpDocOptions
 {

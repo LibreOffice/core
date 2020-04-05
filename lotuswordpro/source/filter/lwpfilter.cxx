@@ -59,6 +59,7 @@
  ************************************************************************/
 #include "lwpfilter.hxx"
 #include "lwpresource.hxx"
+#include <xfilter/xfglobal.hxx>
 #include <xfilter/xfsaxstream.hxx>
 #include "lwp9reader.hxx"
 #include <lwpsvstream.hxx>
@@ -84,8 +85,6 @@ using namespace ::cppu;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::registry;
-using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star;
 

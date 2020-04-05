@@ -60,6 +60,10 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFHYPERLINK_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFHYPERLINK_HXX
 
+#include <xfilter/ixfstream.hxx>
+#include <xfilter/ixfattrlist.hxx>
+#include <xfilter/xfcontent.hxx>
+
 class XFHyperlink : public XFContent
 {
 public:

@@ -63,7 +63,6 @@
 
 #include <xfilter/xfdefs.hxx>
 #include <rtl/ustring.hxx>
-#include <string>
 
 OUString   GetTableColName(sal_Int32 col);
 

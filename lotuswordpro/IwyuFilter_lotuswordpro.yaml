@@ -1,0 +1,69 @@
+---
+assumeFilename: lotuswordpro/source/filter/lwplayout.cxx
+blacklist:
+    lotuswordpro/inc/lwpheader.hxx:
+    # pass-through header; keep it for now
+    - config_lgpl.h
+    - math.h
+    - memory
+    - map
+    - vector
+    - assert.h
+    - string
+    - sal/types.h
+    - rtl/ustring.hxx
+    - memory.h
+    lotuswordpro/inc/lwpatomholder.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpbasetype.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpcolor.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpbookmarkmgr.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpfont.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpidxmgr.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpfoundry.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpchangemgr.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpfrib.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpdocdata.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpobj.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpobjfactory.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpglobalmgr.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpsvstream.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpobjstrm.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpobjid.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwpobjhdr.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/inc/lwptools.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h

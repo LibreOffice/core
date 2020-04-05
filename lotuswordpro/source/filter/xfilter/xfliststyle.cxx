@@ -58,6 +58,8 @@
  * Styles for ordered list and unordered list.
  ************************************************************************/
 #include <xfilter/xfliststyle.hxx>
+#include <xfilter/xfglobal.hxx>
+#include <xfilter/xfutil.hxx>
 
 XFListLevel::XFListLevel()
     : m_nLevel(0)

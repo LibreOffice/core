@@ -58,6 +58,8 @@
  * Section object.
  ************************************************************************/
 #include <xfilter/xfsection.hxx>
+#include <xfilter/xfglobal.hxx>
+#include <xfilter/ixfattrlist.hxx>
 
 XFSection::XFSection()
 {

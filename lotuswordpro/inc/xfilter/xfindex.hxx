@@ -64,7 +64,6 @@
 
 #include <xfilter/xfcontent.hxx>
 #include <xfilter/xfcontentcontainer.hxx>
-#include <xfilter/xftabstop.hxx>
 #include <rtl/ref.hxx>
 
 class XFIndex;

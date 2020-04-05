@@ -61,8 +61,9 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_LWPOBJHDR_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_LWPOBJHDR_HXX
 
+#include <config_lgpl.h>
 #include "lwpobjid.hxx"
-#include "lwpobjtags.hxx"
+
 /**
  * @brief   Base class of all Lwp VO objects
 */

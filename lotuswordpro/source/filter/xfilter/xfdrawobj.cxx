@@ -58,6 +58,7 @@
  * Interface for all Drawing object.
  ************************************************************************/
 #include <xfilter/xfdrawobj.hxx>
+#include <xfilter/ixfattrlist.hxx>
 
 XFDrawObject::XFDrawObject()
 {

@@ -60,7 +60,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFLINEBREAK_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFLINEBREAK_HXX
 
-#include <xfilter/xfglobal.hxx>
+#include <xfilter/ixfattrlist.hxx>
 #include <xfilter/xfcontent.hxx>
 
 class XFLineBreak : public XFContent

@@ -61,7 +61,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFONTDECL_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFONTDECL_HXX
 
-#include <xfilter/xfglobal.hxx>
+#include <rtl/ustring.hxx>
 
 /**
  * @brief

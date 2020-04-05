@@ -60,7 +60,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFTABSTOP_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFTABSTOP_HXX
 
-#include <xfilter/xfglobal.hxx>
+#include <xfilter/ixfattrlist.hxx>
 #include <xfilter/xfcontent.hxx>
 
 class XFTabStop : public XFContent

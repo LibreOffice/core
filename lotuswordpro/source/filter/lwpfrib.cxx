@@ -68,6 +68,7 @@
 #include <xfilter/xfsection.hxx>
 #include <xfilter/xfsectionstyle.hxx>
 #include <xfilter/xftextspan.hxx>
+#include <xfilter/xftextstyle.hxx>
 #include <xfilter/xftextcontent.hxx>
 #include "lwpfribheader.hxx"
 #include "lwpfribtext.hxx"

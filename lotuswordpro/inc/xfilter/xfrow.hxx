@@ -60,6 +60,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFROW_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFROW_HXX
 
+#include <xfilter/xfcell.hxx>
 #include <xfilter/xfcontent.hxx>
 #include <rtl/ref.hxx>
 #include <map>
