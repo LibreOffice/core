@@ -265,11 +265,8 @@ SeriesHeader::SeriesHeader(weld::Container* pParent, weld::Container* pColorPare
 SeriesHeader::~SeriesHeader()
 {
     m_aUpdateDataTimer.Stop();
-    m_xDevice.clear();
     m_pParent->move(m_xContainer1.get(), nullptr);
     m_pColorParent->move(m_xContainer2.get(), nullptr);
-    m_xBuilder2.reset();
-    m_xBuilder1.reset();
 }
 
 void SeriesHeader::notifyChanges()
@@ -521,6 +518,7 @@ DataBrowser::~DataBrowser()
 
 void DataBrowser::dispose()
 {
+    m_aSeriesHeaders.clear();
     m_aNumberEditField.disposeAndClear();
     m_aTextEditField.disposeAndClear();
     ::svt::EditBrowseBox::dispose();
