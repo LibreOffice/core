@@ -2468,7 +2468,7 @@ void CustomAnimationPane::onDragNDropComplete(std::vector< CustomAnimationEffect
             mpMainSequence->moveToBeforeEffect( pEffect, pEffectInsertBefore );
 
             // Done moving effect and its hidden sub-effects when *next* effect is visible.
-            if ( mpCustomAnimationList->isVisible( *aIter ) )
+            if (aIter != aEnd && mpCustomAnimationList->isVisible(*aIter))
                 break;
         }
 
