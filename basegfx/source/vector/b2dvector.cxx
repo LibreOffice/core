@@ -119,8 +119,7 @@ namespace basegfx
     {
         const double fValA(rVecA.getX() * rVecB.getY());
         const double fValB(rVecA.getY() * rVecB.getX());
-
-        return fTools::equal(fValA, fValB);
+        return fTools::equal(fValA, fValB, 0.00000001);
     }
 
     B2VectorOrientation getOrientation( const B2DVector& rVecA, const B2DVector& rVecB )
