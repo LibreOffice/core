@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6752c2b8_ac8da7cb",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 8865,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-04-05T11:04:15Z",
+      "side": 1,
+      "message": "a better message might be \"the system version of python on macOS is unsupported because it is too old, use --enable\u003dpython\u003dinternal\"",
+      "revId": "766b9954b93f84430ddfec917b0f2b70a72b2764",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
