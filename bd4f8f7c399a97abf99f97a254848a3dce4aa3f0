@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c75bb6d6_6885bef7",
+        "filename": "chart2/source/controller/chartapiwrapper/WrappedStatisticProperties.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 910,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-04-05T14:03:48Z",
+      "side": 1,
+      "message": "What is the way to call m_aSelection ? \nI understand that it is declared private but it gives no error when called in ChartController_Insert.cxx and other files in ..controller/main.\nI am missing the correct syntax here",
+      "range": {
+        "startLine": 910,
+        "startChar": 86,
+        "endLine": 910,
+        "endChar": 115
+      },
+      "revId": "bd4f8f7c399a97abf99f97a254848a3dce4aa3f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37bfa553_83889318",
+        "filename": "chart2/source/controller/itemsetwrapper/StatisticsItemConverter.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-04-05T14:03:48Z",
+      "side": 1,
+      "message": "and here.",
+      "range": {
+        "startLine": 123,
+        "startChar": 0,
+        "endLine": 123,
+        "endChar": 116
+      },
+      "revId": "bd4f8f7c399a97abf99f97a254848a3dce4aa3f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
