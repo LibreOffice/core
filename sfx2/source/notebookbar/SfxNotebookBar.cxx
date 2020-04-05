@@ -332,7 +332,7 @@ bool SfxNotebookBar::StateMethod(SfxBindings& rBindings, const OUString& rUIFile
 {
     SfxFrame& rFrame = rBindings.GetDispatcher_Impl()->GetFrame()->GetFrame();
     return StateMethod(rFrame.GetSystemWindow(), rFrame.GetFrameInterface(), rUIFile,
-                       bReloadNotebookbar || rBindings.GetDispatcher_Impl()->IsUpdated_Impl());
+                       bReloadNotebookbar);
 }
 
 bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
