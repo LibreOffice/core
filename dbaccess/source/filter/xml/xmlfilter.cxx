@@ -279,7 +279,6 @@ bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 
     if ( bRet )
     {
-        uno::Reference<XComponent> xCom(GetModel(),UNO_QUERY);
 
         tools::SvRef<SfxMedium> pMedium;
         if (!xStorage.is())

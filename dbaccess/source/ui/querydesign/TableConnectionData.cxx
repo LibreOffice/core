@@ -133,7 +133,6 @@ OConnectionLineDataVec::size_type OTableConnectionData::normalizeLines()
     {
         if(m_vConnLineData[i]->GetSourceFieldName().isEmpty() && m_vConnLineData[i]->GetDestFieldName().isEmpty())
         {
-            OConnectionLineDataRef pData = m_vConnLineData[i];
             m_vConnLineData.erase(m_vConnLineData.begin()+i);
             --nCount;
             if (i < nRet)
