@@ -2489,8 +2489,13 @@ namespace
 
 void GtkSalFrame::GrabFocus()
 {
-    gtk_widget_set_can_focus(GTK_WIDGET(m_pFixedContainer), true);
-    gtk_widget_grab_focus(GTK_WIDGET(m_pFixedContainer));
+    GtkWidget* pGrabWidget;
+    if (GTK_IS_EVENT_BOX(m_pWindow))
+        pGrabWidget = GTK_WIDGET(m_pWindow);
+    else
+        pGrabWidget = GTK_WIDGET(m_pFixedContainer);
+    gtk_widget_set_can_focus(pGrabWidget, true);
+    gtk_widget_grab_focus(pGrabWidget);
 }
 
 gboolean GtkSalFrame::signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer frame)
@@ -3056,7 +3061,12 @@ gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer f
     // in the meantime do not propagate focus get/lose if floats are open
     if( m_nFloats == 0 )
     {
-        bool bHasFocus = gtk_widget_has_focus(GTK_WIDGET(pThis->m_pFixedContainer));
+        GtkWidget* pGrabWidget;
+        if (GTK_IS_EVENT_BOX(pThis->m_pWindow))
+            pGrabWidget = GTK_WIDGET(pThis->m_pWindow);
+        else
+            pGrabWidget = GTK_WIDGET(pThis->m_pFixedContainer);
+        bool bHasFocus = gtk_widget_has_focus(pGrabWidget);
         pThis->CallCallbackExc(bHasFocus ? SalEvent::GetFocus : SalEvent::LoseFocus, nullptr);
     }
 
