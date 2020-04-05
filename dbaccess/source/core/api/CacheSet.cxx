@@ -317,9 +317,6 @@ void OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connectivity::OSQ
     OUStringBuffer aSql("DELETE FROM " + m_aComposedTableName + " WHERE ");
 
     // use keys and indexes for exact positioning
-    // first the keys
-    const Reference<XNameAccess> xPrimaryKeyColumns = getPrimaryKeyColumns_throw(xSet);
-    // second the indexes
     Reference<XIndexesSupplier> xIndexSup(_xTable,UNO_QUERY);
     Reference<XIndexAccess> xIndexes;
     if(xIndexSup.is())
