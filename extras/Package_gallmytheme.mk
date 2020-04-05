@@ -12,6 +12,9 @@ $(eval $(call gb_Package_Package,extras_gallmytheme,$(SRCDIR)/extras/source/gall
 $(eval $(call gb_Package_add_files,extras_gallmytheme,$(LIBO_SHARE_PRESETS_FOLDER)/gallery,\
 	sg30.sdv \
 	sg30.thm \
+	arrows.sdg \
+	arrows.sdv \
+	arrows.thm \
 	bpmn.sdg \
 	bpmn.sdv \
 	bpmn.thm \
