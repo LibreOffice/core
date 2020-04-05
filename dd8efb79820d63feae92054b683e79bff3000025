@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d7e54d4a_b11ddeed",
+        "filename": "chart2/source/controller/main/ChartController_Insert.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-04-05T11:28:09Z",
+      "side": 1,
+      "message": "I have replaced the GetFirstCurveNotMeanValueLine with the GetCurrentSelectedCurve but, \nthis block is never executed and may be deleted.\nWhat do you think ?",
+      "range": {
+        "startLine": 519,
+        "startChar": 0,
+        "endLine": 525,
+        "endChar": 5
+      },
+      "revId": "dd8efb79820d63feae92054b683e79bff3000025",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c7328d0_a12fe761",
+        "filename": "chart2/source/inc/RegressionCurveHelper.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-04-05T11:28:09Z",
+      "side": 1,
+      "message": "Can be deleted now.",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 0
+      },
+      "revId": "dd8efb79820d63feae92054b683e79bff3000025",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47da3061_c5bd1cd5",
+        "filename": "chart2/source/tools/RegressionCurveHelper.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-04-05T11:28:09Z",
+      "side": 1,
+      "message": "We won\u0027t need this method anymore and it is safe to remove",
+      "range": {
+        "startLine": 491,
+        "startChar": 0,
+        "endLine": 515,
+        "endChar": 1
+      },
+      "revId": "dd8efb79820d63feae92054b683e79bff3000025",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
