@@ -60,7 +60,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFMARGINS_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFMARGINS_HXX
 
-#include <xfilter/xfglobal.hxx>
+#include <xfilter/ixfstream.hxx>
 
 #define     XFMARGINS_FLAG_LEFT     0x00000001
 #define     XFMARGINS_FLAG_RIGHT    0x00000002

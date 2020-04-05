@@ -64,6 +64,7 @@
 #include <xfilter/xfborders.hxx>
 #include "xftabstyle.hxx"
 #include <xfilter/xfbgimage.hxx>
+#include <xfilter/xfutil.hxx>
 
 XFParaStyle::XFParaStyle()
     : m_eAlignType(enumXFAlignNone)

@@ -57,6 +57,8 @@
  * @file
  * Float frame whose anchor is page.
  ************************************************************************/
+#include <xfilter/ixfattrlist.hxx>
+#include <xfilter/ixfstream.hxx>
 #include <xfilter/xffloatframe.hxx>
 
 XFFloatFrame::XFFloatFrame(sal_Int32 start, sal_Int32 end, bool all)

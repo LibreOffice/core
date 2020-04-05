@@ -53,6 +53,7 @@
  *
  *
  ************************************************************************/
+#include <xfilter/ixfattrlist.hxx>
 #include <xfilter/xftextboxstyle.hxx>
 #include <xfilter/xfcolumns.hxx>
 #include <xfilter/xfborders.hxx>

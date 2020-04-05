@@ -73,6 +73,7 @@
 #include "lwpfribbreaks.hxx"
 #include "lwpfribframe.hxx"
 #include "lwpfribtable.hxx"
+#include <xfilter/xftextstyle.hxx>
 #include <xfilter/xfstylemanager.hxx>
 #include "lwphyperlinkmgr.hxx"
 #include <xfilter/xfhyperlink.hxx>

@@ -57,6 +57,7 @@
  * @file
  * Section style,whose family is "section"
  ************************************************************************/
+#include <xfilter/ixfattrlist.hxx>
 #include <xfilter/xfsectionstyle.hxx>
 #include <xfilter/xfcolumns.hxx>
 

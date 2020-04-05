@@ -64,14 +64,12 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_LWPFONT_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_LWPFONT_HXX
 
-#include "lwpheader.hxx"
+#include <config_lgpl.h>
+#include <rtl/ref.hxx>
 #include "lwpobjstrm.hxx"
 #include "lwpatomholder.hxx"
 #include "lwpcolor.hxx"
-#include "lwpbasetype.hxx"
-#include "lwpobj.hxx"
 #include "xfilter/xffont.hxx"
-#include "xfilter/xftextstyle.hxx"
 #include <memory>
 
 class LwpFontTableEntry

@@ -60,8 +60,8 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDATE_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDATE_HXX
 
-#include <xfilter/xfglobal.hxx>
 #include <xfilter/xfcontent.hxx>
+#include <xfilter/ixfstream.hxx>
 
 /**
  * @descr   Date object.

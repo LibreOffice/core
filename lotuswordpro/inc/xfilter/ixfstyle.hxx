@@ -60,7 +60,9 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_IXFSTYLE_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_IXFSTYLE_HXX
 
-#include <xfilter/xfglobal.hxx>
+#include <xfilter/ixfstream.hxx>
+#include <xfilter/xfdefs.hxx>
+
 /**
  * @descr
  * Interface for all style object.

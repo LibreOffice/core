@@ -56,7 +56,9 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_LWPSVSTREAM_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_LWPSVSTREAM_HXX
 
-#include "lwpheader.hxx"
+#include <config_lgpl.h>
+
+#include <sal/types.h>
 
 class SvStream;
 

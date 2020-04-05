@@ -61,8 +61,8 @@
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFENDNOTE_HXX
 
 #include <xfilter/xfglobal.hxx>
-#include <xfilter/xfcontent.hxx>
 #include <xfilter/xfcontentcontainer.hxx>
+#include <xfilter/ixfattrlist.hxx>
 
 /**
  * @brief

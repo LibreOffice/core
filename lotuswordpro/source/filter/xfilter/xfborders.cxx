@@ -58,6 +58,8 @@
  * Border object,now only used by paragraph object.
  ************************************************************************/
 #include <xfilter/xfborders.hxx>
+#include <xfilter/xfglobal.hxx>
+#include <xfilter/ixfattrlist.hxx>
 
 XFBorder::XFBorder()
 {

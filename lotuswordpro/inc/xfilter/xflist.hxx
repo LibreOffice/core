@@ -60,7 +60,6 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFLIST_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFLIST_HXX
 
-#include "xflistitem.hxx"
 #include <xfilter/xfcontentcontainer.hxx>
 
 class XFListItem;

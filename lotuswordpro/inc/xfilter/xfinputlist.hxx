@@ -60,7 +60,9 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFINPUTLIST_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFINPUTLIST_HXX
 
+#include <xfilter/ixfattrlist.hxx>
 #include <xfilter/xfcontent.hxx>
+#include <vector>
 
 /**
  * @brief

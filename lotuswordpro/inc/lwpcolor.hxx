@@ -62,7 +62,7 @@
 #define INCLUDED_LOTUSWORDPRO_INC_LWPCOLOR_HXX
 
 #include "lwpobjstrm.hxx"
-#include "lwpheader.hxx"
+#include <config_lgpl.h>
 /**
  * @brief   lwpcolor class
  *      (red, green, blue, extra)

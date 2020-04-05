@@ -60,6 +60,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFPLACEHOLDER_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFPLACEHOLDER_HXX
 
+#include <xfilter/ixfattrlist.hxx>
 #include <xfilter/xfcontent.hxx>
 
 /**

@@ -57,6 +57,7 @@
  * @file
  * Represents index source, index body and index entry.
  ************************************************************************/
+#include <xfilter/ixfattrlist.hxx>
 #include <xfilter/xfindex.hxx>
 #include <xfilter/xfparagraph.hxx>
 

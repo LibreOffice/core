@@ -60,8 +60,9 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFOOTER_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFOOTER_HXX
 
+#include <xfilter/ixfattrlist.hxx>
+#include <xfilter/ixfstream.hxx>
 #include <xfilter/xfcontentcontainer.hxx>
-#include <vector>
 
 /**
  * @descr   Foot object. It's just a container.

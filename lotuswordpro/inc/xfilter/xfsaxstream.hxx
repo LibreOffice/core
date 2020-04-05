@@ -63,12 +63,7 @@
 #include <xfilter/ixfstream.hxx>
 #include <memory>
 
-#include <cppuhelper/factory.hxx>
-#include <com/sun/star/document/XFilter.hpp>
-#include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
 
 class XFSaxAttrList;
 class IXFAttrList;

@@ -60,9 +60,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFSECTIONSTYLE_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFSECTIONSTYLE_HXX
 
-#include <xfilter/xfglobal.hxx>
 #include <xfilter/xfstyle.hxx>
-#include <xfilter/xfbgimage.hxx>
 #include <xfilter/xfcolor.hxx>
 #include <memory>
 

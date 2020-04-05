@@ -63,11 +63,8 @@
 
 #include <map>
 #include <vector>
+#include <config_lgpl.h>
 #include "lwpfrib.hxx"
-#include "lwpobjstrm.hxx"
-#include "lwpbasetype.hxx"
-#include "lwpoverride.hxx"
-#include "lwpfoundry.hxx"
 #include "xfilter/xfchange.hxx"
 #include "xfilter/xfcontentcontainer.hxx"
 

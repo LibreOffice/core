@@ -58,6 +58,7 @@
  * Polyline.
  ************************************************************************/
 #include <xfilter/xfdrawpolyline.hxx>
+#include <xfilter/ixfattrlist.hxx>
 #include <rtl/ustrbuf.hxx>
 
 XFDrawPolyline::XFDrawPolyline()

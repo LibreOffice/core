@@ -60,6 +60,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFLINENUMBERCONFIG_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFLINENUMBERCONFIG_HXX
 
+#include <xfilter/ixfattrlist.hxx>
 #include <xfilter/xfstyle.hxx>
 
 class XFLineNumberConfig : public XFStyle

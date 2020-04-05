@@ -60,8 +60,8 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFANNOTATION_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFANNOTATION_HXX
 
-#include <xfilter/xfglobal.hxx>
-#include <xfilter/xfcontent.hxx>
+#include <xfilter/ixfattrlist.hxx>
+#include <xfilter/ixfstream.hxx>
 #include <xfilter/xfcontentcontainer.hxx>
 
 class XFAnnotation : public XFContentContainer

@@ -58,6 +58,7 @@
  * Image object.
  ************************************************************************/
 #include <xfilter/xfimage.hxx>
+#include <xfilter/ixfattrlist.hxx>
 #include "xfbase64.hxx"
 
 XFImage::XFImage() : m_bUseLink(false)

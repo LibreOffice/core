@@ -68,7 +68,7 @@
 
 #include <salhelper/simplereferenceobject.hxx>
 
-#include "lwpheader.hxx"
+#include <config_lgpl.h>
 
 #include "lwpobjhdr.hxx"
 #include "lwpobjstrm.hxx"

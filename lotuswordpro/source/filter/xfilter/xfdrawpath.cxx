@@ -58,6 +58,7 @@
  * Draw path object.
  ************************************************************************/
 #include <xfilter/xfdrawpath.hxx>
+#include <xfilter/ixfattrlist.hxx>
 #include <rtl/ustrbuf.hxx>
 
 XFSvgPathEntry::XFSvgPathEntry()

@@ -60,7 +60,9 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFLINEHEIGHT_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFLINEHEIGHT_HXX
 
-#include <string.h>
+#include <xfilter/ixfstream.hxx>
+#include <xfilter/ixfattrlist.hxx>
+#include <xfilter/xfdefs.hxx>
 
 class XFLineHeight
 {

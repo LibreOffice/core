@@ -57,6 +57,7 @@
  * @file
  * Number style for table cell.
  ************************************************************************/
+#include <xfilter/ixfattrlist.hxx>
 #include <xfilter/xfnumberstyle.hxx>
 
 XFNumberStyle::XFNumberStyle()

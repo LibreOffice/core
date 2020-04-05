@@ -61,7 +61,6 @@
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDRAWPOLYGON_HXX
 
 #include <xfilter/xfdrawpolyline.hxx>
-#include <vector>
 
 /**
  * @brief

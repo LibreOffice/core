@@ -58,6 +58,7 @@
  * Tab style for paragraph.include tab offset and tab char properties.
  ************************************************************************/
 #include "xftabstyle.hxx"
+#include <xfilter/ixfattrlist.hxx>
 
 XFTabStyle::XFTabStyle()
     : m_eType(enumXFTabNone)

@@ -61,8 +61,11 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_LWPBOOKMARKMGR_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_LWPBOOKMARKMGR_HXX
 
-#include "lwpfilehdr.hxx"
+#include <config_lgpl.h>
+
 #include <map>
+
+#include <rtl/ref.hxx>
 
 #include "xfilter/xfbookmark.hxx"
 

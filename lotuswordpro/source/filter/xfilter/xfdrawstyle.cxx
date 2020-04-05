@@ -59,6 +59,7 @@
  ************************************************************************/
 #include <xfilter/xfdrawstyle.hxx>
 #include <xfilter/xfdrawlinestyle.hxx>
+#include <xfilter/xfglobal.hxx>
 #include "xfdrawareastyle.hxx"
 #include <xfilter/xfstylemanager.hxx>
 #include "xffontworkstyle.hxx"

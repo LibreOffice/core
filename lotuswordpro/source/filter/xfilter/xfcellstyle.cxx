@@ -61,6 +61,7 @@
 #include <xfilter/xfborders.hxx>
 #include <xfilter/xffont.hxx>
 #include <xfilter/xfbgimage.hxx>
+#include <xfilter/xfutil.hxx>
 
 XFCellStyle::XFCellStyle()
     : m_eHoriAlign(enumXFAlignNone)

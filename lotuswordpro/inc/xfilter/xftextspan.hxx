@@ -66,7 +66,6 @@
 
 #include <rtl/ref.hxx>
 
-#include <xfilter/xfglobal.hxx>
 #include <xfilter/xfcontent.hxx>
 
 class IXFStream;

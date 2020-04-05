@@ -59,6 +59,7 @@
  ************************************************************************/
 
 #include <xfilter/xftimestyle.hxx>
+#include <xfilter/ixfattrlist.hxx>
 
 XFTimePart::XFTimePart()
 {

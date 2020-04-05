@@ -61,7 +61,8 @@
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFMASTERPAGE_HXX
 
 #include <xfilter/xfstyle.hxx>
-#include <xfilter/xfcontentcontainer.hxx>
+#include <xfilter/xfheader.hxx>
+#include <xfilter/xffooter.hxx>
 
 class XFFooter;
 class XFHeader;

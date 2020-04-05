@@ -55,6 +55,7 @@
  ************************************************************************/
 #include <lwpglobalmgr.hxx>
 #include <lwpfont.hxx>
+#include <lwpbasetype.hxx>
 #include <xfilter/xfstylemanager.hxx>
 #include <xfilter/xffontfactory.hxx>
 #include <xfilter/xftextstyle.hxx>

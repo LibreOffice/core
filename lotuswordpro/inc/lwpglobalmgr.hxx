@@ -63,7 +63,7 @@
 
 #include <memory>
 #include <map>
-#include "lwpheader.hxx"
+#include <config_lgpl.h>
 #include "lwpsvstream.hxx"
 #include "lwpobjfactory.hxx"
 #include "lwpbookmarkmgr.hxx"

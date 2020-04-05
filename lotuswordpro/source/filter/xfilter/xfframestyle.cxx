@@ -62,6 +62,7 @@
 #include <xfilter/xfborders.hxx>
 #include <xfilter/xfshadow.hxx>
 #include <xfilter/xfbgimage.hxx>
+#include <xfilter/xfutil.hxx>
 
 XFFrameStyle::XFFrameStyle()
     : m_eWrap(enumXFWrapNone)

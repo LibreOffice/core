@@ -75,6 +75,7 @@
 #include <xfilter/xftimestyle.hxx>
 #include <xfilter/xfdate.hxx>
 #include <xfilter/xfannotation.hxx>
+#include <xfilter/xfpagecount.hxx>
 
 LwpFribText::LwpFribText( LwpPara *pPara, bool bNoUnicode )
     : LwpFrib(pPara), m_bNoUnicode(bNoUnicode)

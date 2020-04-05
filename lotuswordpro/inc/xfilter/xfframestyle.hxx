@@ -61,7 +61,6 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFRAMESTYLE_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFRAMESTYLE_HXX
 
-#include <xfilter/xfglobal.hxx>
 #include <xfilter/xfstyle.hxx>
 #include <xfilter/xfmargins.hxx>
 #include <xfilter/xfcolor.hxx>

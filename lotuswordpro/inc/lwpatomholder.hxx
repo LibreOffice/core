@@ -56,7 +56,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_LWPATOMHOLDER_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_LWPATOMHOLDER_HXX
 
-#include "lwpheader.hxx"
+#include <config_lgpl.h>
 #include "lwpdefs.hxx"
 #include "lwpobjstrm.hxx"
 /**

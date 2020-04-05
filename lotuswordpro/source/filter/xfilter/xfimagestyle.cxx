@@ -59,7 +59,9 @@
  ************************************************************************/
 #include <xfilter/xfimagestyle.hxx>
 #include <xfilter/xfborders.hxx>
+#include <xfilter/xfglobal.hxx>
 #include <xfilter/xfshadow.hxx>
+#include <xfilter/xfutil.hxx>
 
 XFImageStyle::XFImageStyle()
     : m_nBrightness(0)

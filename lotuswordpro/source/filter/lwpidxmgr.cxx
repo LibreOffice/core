@@ -67,6 +67,7 @@
 **********************************************************************************************************************/
 
 #include <lwpidxmgr.hxx>
+#include <lwpobjhdr.hxx>
 #include <lwptools.hxx>
 #include <memory>
 

@@ -61,7 +61,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFOFFICEMETA_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFOFFICEMETA_HXX
 
-#include <xfilter/xfglobal.hxx>
+#include <xfilter/ixfstream.hxx>
 
 class XFOfficeMeta final
 {

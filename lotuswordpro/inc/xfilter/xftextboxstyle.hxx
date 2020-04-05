@@ -56,11 +56,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFTEXTBOXSTYLE_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFTEXTBOXSTYLE_HXX
 
-#include <xfilter/xfglobal.hxx>
 #include <xfilter/xfstyle.hxx>
-#include <xfilter/xfmargins.hxx>
-#include <xfilter/xfcolor.hxx>
-#include <xfilter/xfpadding.hxx>
 
 /**
 * @brief

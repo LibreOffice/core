@@ -60,11 +60,9 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDATESTYLE_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFDATESTYLE_HXX
 
-#include <xfilter/xfglobal.hxx>
 #include <xfilter/xfstyle.hxx>
 #include <xfilter/xftimestyle.hxx>
 #include <xfilter/xfstylecont.hxx>
-#include <vector>
 
 class XFDatePart : public XFTimePart
 {

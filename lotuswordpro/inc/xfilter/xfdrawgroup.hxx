@@ -63,6 +63,7 @@
 #include <xfilter/xfdrawobj.hxx>
 #include <xfilter/xfframe.hxx>
 #include <xfilter/xfcontentcontainer.hxx>
+#include <xfilter/ixfattrlist.hxx>
 
 /**
  * @brief

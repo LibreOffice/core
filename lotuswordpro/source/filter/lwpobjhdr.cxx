@@ -59,6 +59,7 @@
  ************************************************************************/
 
 #include <lwpobjhdr.hxx>
+#include <lwpobjtags.hxx>
 #include <lwpdefs.hxx>
 #include <lwpfilehdr.hxx>
 

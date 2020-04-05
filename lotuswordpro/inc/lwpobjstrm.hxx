@@ -62,8 +62,13 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_LWPOBJSTRM_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_LWPOBJSTRM_HXX
 
-#include "lwpheader.hxx"
+#include <config_lgpl.h>
+
+#include <rtl/ustring.hxx>
+#include <vector>
+
 #include "lwpsvstream.hxx"
+
 /**
  * @brief   stream class for LwpObject body data
  *          provide stream like interface to read object data

@@ -67,6 +67,7 @@
 #include <xfilter/xfheaderstyle.hxx>
 #include <xfilter/xffooterstyle.hxx>
 #include <xfilter/xfbgimage.hxx>
+#include <xfilter/xfutil.hxx>
 
 XFPageMaster::XFPageMaster() : m_fPageWidth(0), m_fPageHeight(0), m_eUsage(enumXFPageUsageNone),
 m_eTextDir(enumXFTextDirNone),

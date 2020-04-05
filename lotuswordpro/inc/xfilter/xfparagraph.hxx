@@ -60,9 +60,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFPARAGRAPH_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFPARAGRAPH_HXX
 
-#include <xfilter/xfglobal.hxx>
 #include <xfilter/xfcontentcontainer.hxx>
-#include <vector>
 
 class IXFStream;
 
