@@ -21,4 +21,7 @@ $(eval $(call gb_Package_add_files,extras_gallmytheme,$(LIBO_SHARE_PRESETS_FOLDE
 	flowchart.sdg \
 	flowchart.sdv \
 	flowchart.thm \
+	icons.sdg \
+	icons.sdv \
+	icons.thm \
 ))
