@@ -162,7 +162,10 @@ namespace accessibility
         VclPtr<SvtIconChoiceCtrl> pCtrl = getCtrl();
         SvxIconChoiceCtrlEntry* pEntry = pCtrl->GetEntry(i);
         if ( !pEntry )
-            throw RuntimeException();
+            throw RuntimeException("getAccessibleChild: Entry "
+                                   + OUString::number(i) + " not found",
+                static_cast<css::lang::XTypeProvider*>(
+                    static_cast<VCLXAccessibleComponent_BASE*>(this)));
 
         return new AccessibleIconChoiceCtrlEntry( *pCtrl, i, this );
     }
