@@ -60,6 +60,23 @@
     },
     {
       "key": {
+        "uuid": "6e672c2c_83db56b9",
+        "filename": "ridljar/Jar_libreoffice.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-06T09:41:50Z",
+      "side": 1,
+      "message": "What is the reason to add these three jars to the classpath?\n\n* If the intend is to make libreoffice.jar a wrapper for them, like ridl.jar is already a wrapper for jurt.jar and unoil.jar since \u003chttps://git.libreoffice.org/core/+/ae855bf48163ff64d94cfc34aff8e37abdb5518d%5E!/\u003e \"tdf#117331 Merge jurt and unoil into ridl\", then this should probably be mentioned in the commit message.\n\n* But wrapping unoloader.jar is probably again no good idea, just like it was found to be no good idea at \u003chttps://gerrit.libreoffice.org/c/core/+/84946/13#message-2327d487c4951924632153439515a03e1458dcad\u003e for the ridl.jar wrapper.",
+      "revId": "35d06132fc0834711a8668ec559480fda592d4d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "da9d304b_5f333848",
         "filename": "ridljar/Module_ridljar.mk",
         "patchSetId": 5
