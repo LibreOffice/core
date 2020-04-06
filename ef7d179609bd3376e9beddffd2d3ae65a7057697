@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da35e53a_5fb0f2ad",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2076,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-04-06T19:16:23Z",
+      "side": 1,
+      "message": "This still unnecessarily does the frame/module thing in most (non-Calc) cases. What I meant earlier is something like this (untested)\n\n    if (pStyle \u0026\u0026 pStyle-\u003eIsUserDefined())\n    {\n        if (pStyle-\u003eHasParentSupport() || !pStyle-\u003eIsUsed())\n        {\n            bEnableDelete \u003d true;\n        }\n        else if (pStyle-\u003eGetFamily() \u003d\u003d SfxStyleFamily::Page)\n        {\n            // Hack to allow Calc page styles to be deleted,\n            // remove when IsUsed() is fixed for Calc page styles.\n            SfxViewFrame* pFrame \u003d GetObjectShell()-\u003eGetFrame();\n            if (pFrame)\n            {\n                uno::Reference\u003cframe::XFrame \u003e xFrame \u003d pFrame-\u003eGetFrame().GetFrameInterface();\n                if (vcl::CommandInfoProvider::GetModuleIdentifier(xFrame) \u003d\u003d \"com.sun.star.sheet.SpreadsheetDocument\")\n                    bEnableDelete \u003d true;\n            }\n        }\n    }\n\n\nNote also that this change doesn\u0027t match current master where https://gerrit.libreoffice.org/c/core/+/90547 was already merged.",
+      "revId": "ef7d179609bd3376e9beddffd2d3ae65a7057697",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
