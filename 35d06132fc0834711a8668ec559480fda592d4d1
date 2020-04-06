@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "44aea064_a371637a",
+        "filename": "configure.ac",
+        "patchSetId": 5
+      },
+      "lineNbr": 7626,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-04-06T08:51:07Z",
+      "side": 1,
+      "message": "My plan is to leave the baseline at java 8, just compile this single jar with java 9.\nThis is not the final state.\n\nI don\u0027t think bumping the general baseline to java 9 at this stage is a good idea.",
+      "parentUuid": "59c04db9_03721ca4",
+      "revId": "35d06132fc0834711a8668ec559480fda592d4d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "80230a24_f8dde82a",
         "filename": "ridljar/Jar_libreoffice.mk",
         "patchSetId": 5
