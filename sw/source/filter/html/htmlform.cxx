@@ -533,7 +533,6 @@ void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
 
     // unregister and delete self
     clear();
-    uno::Reference< awt::XImageConsumer >  xTmp = static_cast<awt::XImageConsumer*>(this);
     xThis = nullptr;
 }
 
@@ -562,7 +561,6 @@ void SwHTMLImageWatcher::complete( sal_Int32 Status,
     {
         // unregister and delete self
         clear();
-        uno::Reference< awt::XImageConsumer > xTmp = static_cast<awt::XImageConsumer*>(this);
         xThis = nullptr;
     }
 }

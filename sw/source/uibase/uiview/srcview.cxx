@@ -807,7 +807,6 @@ void SwSrcView::Load(SwDocShell* pDocShell)
         utl::TempFile aTempFile;
         aTempFile.EnableKillingFile();
         const OUString sFileURL( aTempFile.GetURL() );
-        SvtSaveOptions aOpt;
 
         {
             SfxMedium aMedium( sFileURL,StreamMode::READWRITE );

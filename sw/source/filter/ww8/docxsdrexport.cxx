@@ -1119,7 +1119,6 @@ void DocxSdrExport::writeOnlyTextOfFrame(ww8::Frame const* pParentFrame)
 {
     const SwFrameFormat& rFrameFormat = pParentFrame->GetFrameFormat();
     const SwNodeIndex* pNodeIndex = rFrameFormat.GetContent().GetContentIdx();
-    sax_fastparser::FSHelperPtr pFS = m_pImpl->getSerializer();
 
     sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex() + 1 : 0;
     sal_uLong nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;

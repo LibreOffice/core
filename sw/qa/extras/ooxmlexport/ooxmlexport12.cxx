@@ -807,7 +807,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf120224_textControlCrossRef, "tdf120224_textContr
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(),
                                                             uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xBookmarksByName = xBookmarksSupplier->getBookmarks();
     // TextFields should not be turned into real bookmarks.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xBookmarksByIdx->getCount());
 
@@ -830,7 +829,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf117504_numberingIndent, "tdf117504_numberingInde
 DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark.docx")
 {
     uno::Reference<drawing::XShape> xShape = getShape(1);
-    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
 
     sal_Int32 nHeight = xShape->getSize().Height;
 
