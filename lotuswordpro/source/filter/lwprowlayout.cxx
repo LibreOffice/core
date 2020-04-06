@@ -240,8 +240,8 @@ void LwpRowLayout::ConvertRow(rtl::Reference<XFTable> const & pXFTable,sal_uInt8
                 m_ConnCellList[nMarkConnCell]->GetColID());
 
             //set all cell in this merge cell to cellsmap
-            for (sal_uInt16 nRowLoop = crowid;nRowLoop<nRowMark ;nRowLoop++)
-                for (sal_uInt8 nColLoop = i;nColLoop<nColID+1;nColLoop++)
+            for (sal_uInt16 nRowLoop = crowid; nRowLoop < nRowMark; nRowLoop++)
+                for (sal_uInt16 nColLoop = i; nColLoop < nColID+1; nColLoop++)
                     pTableLayout->SetCellsMap(nRowLoop,nColLoop, xXFCell.get());
 
             i += m_ConnCellList[nMarkConnCell]->GetNumcols();
