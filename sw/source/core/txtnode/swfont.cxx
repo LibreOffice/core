@@ -443,9 +443,10 @@ void SwFont::SetVertical(sal_uInt16 nDir, const bool bVertFormat, const bool bVe
     if( nDir != m_aSub[SwFontScript::Latin].GetOrientation() )
     {
         m_bFontChg = true;
-        m_aSub[SwFontScript::Latin].SetVertical( nDir, bVertFormat );
-        m_aSub[SwFontScript::CJK].SetVertical( nDir, bVertFormat );
-        m_aSub[SwFontScript::CTL].SetVertical( nDir, bVertFormat );
+        bool bVertical = bVertFormat && !bVertLayoutLRBT;
+        m_aSub[SwFontScript::Latin].SetVertical(nDir, bVertical);
+        m_aSub[SwFontScript::CJK].SetVertical(nDir, bVertical);
+        m_aSub[SwFontScript::CTL].SetVertical(nDir, bVertical);
     }
 }
 
