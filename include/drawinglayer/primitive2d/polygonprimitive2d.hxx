@@ -30,12 +30,8 @@
 #include <basegfx/color/bcolor.hxx>
 
 
-// PolygonHairlinePrimitive2D class
-
-namespace drawinglayer
+namespace drawinglayer::primitive2d
 {
-    namespace primitive2d
-    {
         /** PolygonHairlinePrimitive2D class
 
             This primitive defines a Hairline. Since hairlines are view-dependent,
@@ -72,16 +68,7 @@ namespace drawinglayer
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
-
-// PolygonMarkerPrimitive2D class
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         /** PolygonMarkerPrimitive2D class
 
             This primitive defines a two-colored marker hairline which is
@@ -136,16 +123,7 @@ namespace drawinglayer
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
-
-// PolygonStrokePrimitive2D class
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         /** PolygonStrokePrimitive2D class
 
             This primitive defines a line with line width, line join, line color
@@ -194,16 +172,7 @@ namespace drawinglayer
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
-
-// PolygonWavePrimitive2D class
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         /** PolygonWavePrimitive2D class
 
             This primitive defines a waveline based on a PolygonStrokePrimitive2D
@@ -248,16 +217,7 @@ namespace drawinglayer
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
-
-// PolygonStrokeArrowPrimitive2D class
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         /** PolygonStrokeArrowPrimitive2D class
 
             This primitive defines a PolygonStrokePrimitive2D,
@@ -303,8 +263,7 @@ namespace drawinglayer
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+} // end of namespace primitive2d::drawinglayer
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
