@@ -2,6 +2,74 @@
   "comments": [
     {
       "key": {
+        "uuid": "8ccebbf2_cc96476d",
+        "filename": "sfx2/inc/recentdocsview.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-06T10:23:05Z",
+      "side": 1,
+      "message": "Why is this class definition in an include file when it is only used in sfx2/source/control/recentdocsview.cxx?",
+      "revId": "8f0225724c3a16afc61182539e0aaf49455c89b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8e43bcc_b3fc66f5",
+        "filename": "sfx2/source/control/recentdocsview.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-06T10:23:05Z",
+      "side": 1,
+      "message": "What is this include needed for?",
+      "revId": "8f0225724c3a16afc61182539e0aaf49455c89b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0f32da9_3a91c269",
+        "filename": "sfx2/source/control/recentdocsview.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-06T10:23:05Z",
+      "side": 1,
+      "message": "What is this include needed for?",
+      "revId": "8f0225724c3a16afc61182539e0aaf49455c89b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5306fd04_46d4ae85",
+        "filename": "sfx2/source/control/recentdocsview.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-06T10:23:05Z",
+      "side": 1,
+      "message": "What is this include needed for?",
+      "revId": "8f0225724c3a16afc61182539e0aaf49455c89b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cac766fb_6462e19f",
         "filename": "sfx2/source/control/recentdocsview.cxx",
         "patchSetId": 9
@@ -106,6 +174,46 @@
       "revId": "8f0225724c3a16afc61182539e0aaf49455c89b6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f382812f_2d0ed544",
+        "filename": "sfx2/source/control/recentdocsview.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-06T10:23:05Z",
+      "side": 1,
+      "message": "Why do these three variables need to get a larger scope?",
+      "revId": "8f0225724c3a16afc61182539e0aaf49455c89b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0bb7514_58896edf",
+        "filename": "sfx2/source/control/recentdocsview.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-06T10:23:05Z",
+      "side": 1,
+      "message": "Where is the corresponding join?",
+      "range": {
+        "startLine": 282,
+        "startChar": 25,
+        "endLine": 282,
+        "endChar": 31
+      },
+      "revId": "8f0225724c3a16afc61182539e0aaf49455c89b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
