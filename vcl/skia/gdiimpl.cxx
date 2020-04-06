@@ -852,6 +852,20 @@ bool SkiaSalGraphicsImpl::drawPolyPolygonBezier(sal_uInt32, const sal_uInt32*,
     return false;
 }
 
+static void copyArea(SkCanvas* canvas, sk_sp<SkSurface> surface, long nDestX, long nDestY,
+                     long nSrcX, long nSrcY, long nSrcWidth, long nSrcHeight)
+{
+    // Using SkSurface::draw() should be more efficient than SkSurface::makeImageSnapshot(),
+    // because it may detect copying to itself and avoid some needless copies.
+    // It cannot do a subrectangle though, so clip.
+    canvas->save();
+    canvas->clipRect(SkRect::MakeXYWH(nDestX, nDestY, nSrcWidth, nSrcHeight));
+    SkPaint paint;
+    paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
+    surface->draw(canvas, nDestX - nSrcX, nDestY - nSrcY, &paint);
+    canvas->restore();
+}
+
 void SkiaSalGraphicsImpl::copyArea(long nDestX, long nDestY, long nSrcX, long nSrcY, long nSrcWidth,
                                    long nSrcHeight, bool /*bWindowInvalidate*/)
 {
@@ -861,12 +875,7 @@ void SkiaSalGraphicsImpl::copyArea(long nDestX, long nDestY, long nSrcX, long nS
     SAL_INFO("vcl.skia.trace", "copyarea(" << this << "): " << Point(nSrcX, nSrcY) << "->"
                                            << Point(nDestX, nDestY) << "/"
                                            << Size(nSrcWidth, nSrcHeight));
-    // Do not use makeImageSnapshot(rect), as that one may make a needless data copy.
-    sk_sp<SkImage> image = mSurface->makeImageSnapshot();
-    SkPaint paint;
-    paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
-    getDrawCanvas()->drawImageRect(image, SkIRect::MakeXYWH(nSrcX, nSrcY, nSrcWidth, nSrcHeight),
-                                   SkRect::MakeXYWH(nDestX, nDestY, nSrcWidth, nSrcHeight), &paint);
+    ::copyArea(getDrawCanvas(), mSurface, nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight);
     if (mXorMode) // limit xor area update
         mXorExtents = SkRect::MakeXYWH(nDestX, nDestY, nSrcWidth, nSrcHeight);
     postDraw();
@@ -884,17 +893,26 @@ void SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcG
     }
     else
         src = this;
-    SAL_INFO("vcl.skia.trace", "copybits(" << this << "): (" << src << "):" << rPosAry);
-    // Do not use makeImageSnapshot(rect), as that one may make a needless data copy.
-    sk_sp<SkImage> image = src->mSurface->makeImageSnapshot();
-    SkPaint paint;
-    paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
-    getDrawCanvas()->drawImageRect(
-        image,
-        SkIRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight),
-        SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
-                         rPosAry.mnDestHeight),
-        &paint);
+    if (rPosAry.mnSrcWidth == rPosAry.mnDestWidth && rPosAry.mnSrcHeight == rPosAry.mnDestHeight)
+    {
+        SAL_INFO("vcl.skia.trace", "copybits(" << this << "): copy area:" << rPosAry);
+        ::copyArea(getDrawCanvas(), src->mSurface, rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnSrcX,
+                   rPosAry.mnSrcY, rPosAry.mnDestWidth, rPosAry.mnDestHeight);
+    }
+    else
+    {
+        SAL_INFO("vcl.skia.trace", "copybits(" << this << "): (" << src << "):" << rPosAry);
+        // Do not use makeImageSnapshot(rect), as that one may make a needless data copy.
+        sk_sp<SkImage> image = src->mSurface->makeImageSnapshot();
+        SkPaint paint;
+        paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
+        getDrawCanvas()->drawImageRect(image,
+                                       SkIRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY,
+                                                         rPosAry.mnSrcWidth, rPosAry.mnSrcHeight),
+                                       SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY,
+                                                        rPosAry.mnDestWidth, rPosAry.mnDestHeight),
+                                       &paint);
+    }
     if (mXorMode) // limit xor area update
         mXorExtents = SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
                                        rPosAry.mnDestHeight);
