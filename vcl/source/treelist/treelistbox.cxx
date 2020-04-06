@@ -2772,7 +2772,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
         rRenderContext.Push();
         rRenderContext.SetLineColor(rSettings.GetDeactiveColor());
         rRenderContext.SetFillColor(rSettings.GetDeactiveColor());
-        rRenderContext.DrawRect(tools::Rectangle(Point(0, nLine + nTempEntryHeight - 2), Size(nWidth, 2)));
+        rRenderContext.DrawRect(tools::Rectangle(Point(0, nLine), Size(nWidth, 2)));
         rRenderContext.Pop();
     }
 
