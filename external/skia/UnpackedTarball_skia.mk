@@ -20,8 +20,6 @@ skia_patches := \
     fix-alpha-difference-copy.patch.1 \
     libvulkan-name.patch.1 \
     share-grcontext.patch.1 \
-    c++20-comparison.patch.0 \
-    Wdeprecated-copy.patch.0 \
     Wdeprecated-copy-dtor.patch.0 \
     fix-msvc.patch.1 \
     fix-gcc-x86.patch.1	\
@@ -32,6 +30,7 @@ skia_patches := \
     windows-do-not-modify-logfont.patch.0 \
     windows-text-gamma.patch.0 \
     windows-force-unicode-api.patch.0 \
+    operator-eq-bool.patch.0 \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 
