@@ -278,6 +278,8 @@ private:
     VCL_DLLPRIVATE void DrawCustomEntry(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, const SvTreeListEntry& rEntry);
     VCL_DLLPRIVATE Size MeasureCustomEntry(vcl::RenderContext& rRenderContext, const SvTreeListEntry& rEntry);
 
+    void UnsetDropTarget();
+
 protected:
 
     bool            CheckDragAndDropMode( SvTreeListBox const * pSource, sal_Int8 );

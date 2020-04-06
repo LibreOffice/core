@@ -1225,11 +1225,19 @@ nAction
     }
 #endif
 
-    ImplShowTargetEmphasis( pTargetEntry, false );
+    UnsetDropTarget();
     g_pDDSource = nullptr;
     g_pDDTarget = nullptr;
-    pTargetEntry = nullptr;
     nDragDropMode = nOldDragMode;
+}
+
+void SvTreeListBox::UnsetDropTarget()
+{
+    if (pTargetEntry)
+    {
+        ImplShowTargetEmphasis(pTargetEntry, false);
+        pTargetEntry = nullptr;
+    }
 }
 
 DragDropMode SvTreeListBox::NotifyStartDrag( TransferDataContainer&, SvTreeListEntry* )

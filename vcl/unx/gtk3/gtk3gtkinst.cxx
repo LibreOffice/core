@@ -10970,6 +10970,11 @@ public:
         return ret;
     }
 
+    virtual void unset_drag_dest_row() override
+    {
+        gtk_tree_view_set_drag_dest_row(m_pTreeView, nullptr, GTK_TREE_VIEW_DROP_BEFORE);
+    }
+
     virtual tools::Rectangle get_row_area(const weld::TreeIter& rIter) const override
     {
         tools::Rectangle aRet;
