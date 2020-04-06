@@ -33,6 +33,7 @@
 
 class SkiaFlushIdle;
 class GenericSalLayout;
+class SkFont;
 
 class VCL_DLLPUBLIC SkiaSalGraphicsImpl : public SalGraphicsImpl
 {
