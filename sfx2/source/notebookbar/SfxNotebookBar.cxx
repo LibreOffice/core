@@ -415,10 +415,6 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
 
 void SfxNotebookBar::RemoveListeners(SystemWindow const * pSysWindow)
 {
-    Reference<XContextChangeEventMultiplexer> xMultiplexer
-                        = ContextChangeEventMultiplexer::get(
-                                ::comphelper::getProcessComponentContext());
-
     if (auto pNotebookBar = pSysWindow->GetNotebookBar())
     {
         pNotebookBar->StopListeningAllControllers();
@@ -485,9 +481,6 @@ void SfxNotebookBar::ShowMenubar(SfxViewFrame const * pViewFrame, bool bShow)
         return;
 
     m_bLock = true;
-
-    uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
-    const Reference<frame::XModuleManager> xModuleManager = frame::ModuleManager::create(xContext);
 
     Reference<frame::XFrame> xFrame = pViewFrame->GetFrame().GetFrameInterface();
     if (xFrame.is())
