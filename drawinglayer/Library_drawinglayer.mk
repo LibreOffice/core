@@ -102,7 +102,14 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/primitive2d/patternfillprimitive2d \
     drawinglayer/source/primitive2d/pointarrayprimitive2d \
     drawinglayer/source/primitive2d/polygonprimitive2d \
-    drawinglayer/source/primitive2d/polypolygonprimitive2d \
+    drawinglayer/source/primitive2d/PolyPolygonHairlinePrimitive2D \
+    drawinglayer/source/primitive2d/PolyPolygonMarkerPrimitive2D \
+    drawinglayer/source/primitive2d/PolyPolygonStrokePrimitive2D \
+    drawinglayer/source/primitive2d/PolyPolygonColorPrimitive2D \
+    drawinglayer/source/primitive2d/PolyPolygonGradientPrimitive2D \
+    drawinglayer/source/primitive2d/PolyPolygonHatchPrimitive2D \
+    drawinglayer/source/primitive2d/PolyPolygonGraphicPrimitive2D \
+    drawinglayer/source/primitive2d/PolyPolygonSelectionPrimitive2D \
     drawinglayer/source/primitive2d/primitivetools2d \
     drawinglayer/source/primitive2d/Primitive2DContainer \
     drawinglayer/source/primitive2d/sceneprimitive2d \
