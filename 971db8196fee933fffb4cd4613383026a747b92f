@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "379caec8_c6835656",
+        "filename": "xmloff/source/draw/XMLImageMapContext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2020-04-06T17:35:18Z",
+      "side": 0,
+      "message": "The viewBox defines the coordinate system for the point coordinates. It is true, that LibreOffice does not interpret it currently. But that is an error.",
+      "revId": "971db8196fee933fffb4cd4613383026a747b92f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
