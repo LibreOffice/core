@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "80230a24_f8dde82a",
+        "filename": "ridljar/Jar_libreoffice.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-04-06T08:38:52Z",
+      "side": 1,
+      "message": "Can\u0027t get this to work.\nWhen removing this block, module-info.class exists in workdir/JavaClassSet/Jar/libreoffice/ .\n\nHowever, adding these lines results in:\n\nmake[1]: Circular workdir/JavaClassSet/Jar/libreoffice/module-info.class \u003c- workdir/JavaClassSet/Jar/libreoffice/module-info.class dependency dropped.\n[LOC] top level modules: ridljar\ncp: cannot stat \u0027workdir/JavaClassSet/Jar/libreoffice/module-info.class\u0027: No such file or directory",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 2
+      },
+      "revId": "35d06132fc0834711a8668ec559480fda592d4d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
