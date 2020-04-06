@@ -371,11 +371,12 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69649, "fdo69649.docx")
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo73389,"fdo73389.docx")
 {
     // The width of the inner table was too large. The first fix still converted
-    // the "auto" table width to a fixed one. The recent fix uses variable width.
+    // the "auto" table width to a fixed one. The second fix used variable width.
+    // The recent fix uses fixed width again, according to the fixed width cells.
     xmlDocPtr pXmlDoc = parseExport();
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tblPr/w:tblW","type","pct");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tblPr/w:tblW","w","5000");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tblPr/w:tblW","type","dxa");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tbl/w:tblPr/w:tblW","w","1611");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf59274, "tdf59274.docx")
