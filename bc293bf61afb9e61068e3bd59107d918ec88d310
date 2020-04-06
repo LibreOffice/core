@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8db96aab_44478a7a",
+        "filename": "vcl/skia/salbmp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-04-06T18:40:18Z",
+      "side": 1,
+      "message": "that seems an odd choice? will be a little surprising to anyone using the API?",
+      "revId": "bc293bf61afb9e61068e3bd59107d918ec88d310",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
