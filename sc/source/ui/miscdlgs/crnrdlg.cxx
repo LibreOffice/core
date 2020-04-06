@@ -400,7 +400,7 @@ void ScColRowNameRangesDlg::UpdateNames()
             //@008 Add string to listbox
             OUString aInsStr = aString + strShow.makeStringAndClear();
             aRangeMap.emplace( aInsStr, aRange );
-            m_xLbRange->append(OUString::number(nEntryDataDelim), aInsStr);
+            m_xLbRange->append(OUString::number(nEntryDataCol), aInsStr);
         }
     }
     aString = strDelim + ScResId( STR_ROW ) + strDelim;
