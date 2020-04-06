@@ -318,6 +318,36 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130746)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130685)
+{
+    load(DATA_DIRECTORY, "tdf130685.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    // Without fix in place, this test would have failed with:
+    //- Expected: 2
+    //- Actual  : 4
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    //FIXME: See tdf#131147
+    //dispatchCommand(mxComponent, ".uno:Undo", {});
+    //CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130680)
 {
     load(DATA_DIRECTORY, "tdf130680.odt");
@@ -337,7 +367,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130680)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
     dispatchCommand(mxComponent, ".uno:Paste", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
-    //FIXME: See https://bugs.documentfoundation.org/show_bug.cgi?id=130680#c5
+    //FIXME: See tdf#131147
     //dispatchCommand(mxComponent, ".uno:Undo", {});
     //CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
     //dispatchCommand(mxComponent, ".uno:Undo", {});
