@@ -877,7 +877,6 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
                 {
                     if ( aBuGraSize.Width() && aBuGraSize.Height() )
                     {
-                        Graphic aGraphic(xGraphic);
                         nBulletId = pBuProv->GetId(xGraphic, aBuGraSize );
                         if ( nBulletId != 0xffff )
                             bExtendedBulletsUsed = true;
