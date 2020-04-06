@@ -3867,7 +3867,6 @@ static SotClipboardFormatId lcl_GetDropFormatId( const uno::Reference<datatransf
         if( aDataHelper.GetTransferableObjectDescriptor( SotClipboardFormatId::OBJECTDESCRIPTOR, aObjDesc ) &&
             aDataHelper.GetSotStorageStream( SotClipboardFormatId::EMBED_SOURCE, xStm ) )
         {
-            tools::SvRef<SotStorage> xStore( new SotStorage( *xStm ) );
             bDoRtf = ( ( aObjDesc.maClassName == SvGlobalName( SO3_SW_CLASSID ) ||
                          aObjDesc.maClassName == SvGlobalName( SO3_SWWEB_CLASSID ) )
                        && ( aDataHelper.HasFormat( SotClipboardFormatId::RTF ) || aDataHelper.HasFormat( SotClipboardFormatId::RICHTEXT ) ) );
