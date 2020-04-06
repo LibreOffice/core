@@ -24,11 +24,8 @@
 #include "unixerrnostring.hxx"
 #include <limits.h>
 #include <rtl/ustring.hxx>
-#include <osl/file.h>
 #include <osl/thread.h>
 #include <sal/log.hxx>
-
-#include <map>
 
 #ifdef ANDROID
 #include <osl/detail/android-bootstrap.h>
@@ -186,9 +183,9 @@ int osl::access(const OString& pstrPath, int mode)
     int result = ::access(fn.getStr(), mode);
     int saved_errno = errno;
     if (result == -1)
-        SAL_INFO("sal.file", "access(" << fn << "," << osl::accessModeToString(mode) << "): " << UnixErrnoString(saved_errno));
+        SAL_INFO("sal.file", "access(" << fn << ",0" << std::oct << mode << std::dec << "): " << UnixErrnoString(saved_errno));
     else
-        SAL_INFO("sal.file", "access(" << fn << "," << osl::accessModeToString(mode) << "): OK");
+        SAL_INFO("sal.file", "access(" << fn << ",0" << std::oct << mode << std::dec << "): OK");
 
     done_accessing_file_path(fn.getStr(), state);
 
@@ -363,12 +360,9 @@ int open_c(const char *cpPath, int oflag, int mode)
     int result = open(cpPath, oflag, mode);
     int saved_errno = errno;
     if (result == -1)
-        SAL_INFO("sal.file", "open(" << cpPath << "," << osl::openFlagsToString(oflag) << "," << osl::openModeToString(mode) << "): " << UnixErrnoString(saved_errno));
+        SAL_INFO("sal.file", "open(" << cpPath << ",0" << std::oct << oflag << ",0" << mode << std::dec << "): " << UnixErrnoString(saved_errno));
     else
-    {
-        SAL_INFO("sal.file", "open(" << cpPath << "," << osl::openFlagsToString(oflag) << "," << osl::openModeToString(mode) << ") => " << result);
-        osl::registerPathForFd(result, cpPath);
-    }
+        SAL_INFO("sal.file", "open(" << cpPath << ",0" << std::oct << oflag << ",0" << mode << std::dec << ") => " << result);
 
 #if HAVE_FEATURE_MACOSX_SANDBOX
     if (isSandboxed && result != -1 && (oflag & O_CREAT) && (oflag & O_EXCL))
@@ -437,9 +431,9 @@ int ftruncate_with_name(int fd, sal_uInt64 uSize, rtl_String* path)
     int result = ftruncate(fd, uSize);
     int saved_errno = errno;
     if (result < 0)
-        SAL_INFO("sal.file", "ftruncate(" << osl::fdAndPath(fd) << "," << uSize << "): " << UnixErrnoString(saved_errno));
+        SAL_INFO("sal.file", "ftruncate(" << fd << "," << uSize << "): " << UnixErrnoString(saved_errno));
     else
-        SAL_INFO("sal.file", "ftruncate(" << osl::fdAndPath(fd) << "," << uSize << "): OK");
+        SAL_INFO("sal.file", "ftruncate(" << fd << "," << uSize << "): OK");
 
     done_accessing_file_path(fn.getStr(), state);
 
@@ -897,51 +891,6 @@ std::string UnixErrnoString(int nErrno)
             char* str = strerror(nErrno);
             return std::to_string(nErrno) + " (" + std::string(str) + ")";
     }
-}
-
-namespace osl
-{
-#if defined SAL_LOG_INFO
-    static std::map<int, OUString> fdToPathMap;
-
-    void registerPathForFd(int fd, const char *path)
-    {
-        OUString systemPath(OUString::fromUtf8(OString(path)));
-        OUString abbreviatedPath;
-
-        oslFileError error = osl_abbreviateSystemPath(systemPath.pData, &abbreviatedPath.pData, 40, nullptr);
-        if (!error)
-            fdToPathMap[fd] = abbreviatedPath;
-        else
-            fdToPathMap[fd] = systemPath;
-    }
-
-    void unregisterPathForFd(int fd)
-    {
-        fdToPathMap.erase(fd);
-#if 0
-        // Experimentation...
-        if (fdToPathMap.size() < 5)
-            dumpFdToPathMap();
-#endif
-    }
-
-    OUString fdAndPath(int fd)
-    {
-        auto path = fdToPathMap.find(fd);
-        if (path != fdToPathMap.end())
-            return OUString::number(fd) + "<" + path->second + ">";
-        else
-            return OUString::number(fd);
-    }
-
-    void dumpFdToPathMap()
-    {
-        SAL_INFO("sal.file", "Fd to path map (" << fdToPathMap.size() << "):");
-        for (auto &i : fdToPathMap)
-            SAL_INFO("sal.file", "  " << i.first << ": " << i.second);
-    }
-#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
