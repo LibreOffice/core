@@ -60,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "a932dfc4_b486574d",
+        "filename": "ridljar/Jar_libreoffice.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-04-06T12:02:43Z",
+      "side": 1,
+      "message": "okay i realize now that i didn\u0027t notice that the Jar\u0027s workdir is actually the same as the JavaClassSet\u0027s workdir, i had thought the files get copied another time.\n\nso you get a file that wants to be copied to itself.\n\nthe solution turns out to be simple and non obvious: use \n\n$(eval $(call gb_Jar_add_packagedir,libreoffice,\\\n    module-info.class, \\\n))\n\nbecause there\u0027s nothing directory specific about it, it works for files as well.",
+      "parentUuid": "80230a24_f8dde82a",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 2
+      },
+      "revId": "35d06132fc0834711a8668ec559480fda592d4d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6e672c2c_83db56b9",
         "filename": "ridljar/Jar_libreoffice.mk",
         "patchSetId": 5
