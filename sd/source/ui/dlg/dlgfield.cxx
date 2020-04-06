@@ -101,7 +101,6 @@ SvxFieldData* SdModifyFieldDlg::GetField()
         }
         else if( dynamic_cast< const SvxExtFileField *>( m_pField ) !=  nullptr )
         {
-            const SvxExtFileField* pFileField = static_cast<const SvxExtFileField*>( m_pField );
             SvxFileType   eType;
             SvxFileFormat eFormat;
 
@@ -116,8 +115,6 @@ SvxFieldData* SdModifyFieldDlg::GetField()
 
             if( pDocSh )
             {
-                SvxExtFileField aFileField( *pFileField );
-
                 OUString aName;
                 if( pDocSh->HasName() )
                     aName = pDocSh->GetMedium()->GetName();
@@ -214,7 +211,6 @@ void SdModifyFieldDlg::FillFormatList()
     else if( dynamic_cast< const SvxExtFileField *>( m_pField ) !=  nullptr )
     {
         const SvxExtFileField* pFileField = static_cast<const SvxExtFileField*>( m_pField );
-        SvxExtFileField aFileField( *pFileField );
 
         m_xLbFormat->append_text( SdResId( STR_FILEFORMAT_NAME_EXT ) );
         m_xLbFormat->append_text( SdResId( STR_FILEFORMAT_FULLPATH ) );
@@ -247,7 +243,6 @@ void SdModifyFieldDlg::FillControls()
     if( dynamic_cast< const SvxDateField *>( m_pField ) !=  nullptr )
     {
         const SvxDateField* pDateField = static_cast<const SvxDateField*>(m_pField);
-        SvxDateField aDateField( *pDateField );
 
         if( pDateField->GetType() == SvxDateType::Fix )
             m_xRbtFix->set_active(true);
@@ -257,7 +252,6 @@ void SdModifyFieldDlg::FillControls()
     else if( dynamic_cast< const SvxExtTimeField *>( m_pField ) !=  nullptr )
     {
         const SvxExtTimeField* pTimeField = static_cast<const SvxExtTimeField*>(m_pField);
-        SvxExtTimeField aTimeField( *pTimeField );
 
         if( pTimeField->GetType() == SvxTimeType::Fix )
             m_xRbtFix->set_active(true);
@@ -267,7 +261,6 @@ void SdModifyFieldDlg::FillControls()
     else if( dynamic_cast< const SvxExtFileField *>( m_pField ) !=  nullptr )
     {
         const SvxExtFileField* pFileField = static_cast<const SvxExtFileField*>(m_pField);
-        SvxExtFileField aFileField( *pFileField );
 
         if( pFileField->GetType() == SvxFileType::Fix )
             m_xRbtFix->set_active(true);
@@ -277,7 +270,6 @@ void SdModifyFieldDlg::FillControls()
     else if( dynamic_cast< const SvxAuthorField *>( m_pField ) !=  nullptr )
     {
         const SvxAuthorField* pAuthorField = static_cast<const SvxAuthorField*>(m_pField);
-        SvxAuthorField aAuthorField( *pAuthorField );
 
         if( pAuthorField->GetType() == SvxAuthorType::Fix )
             m_xRbtFix->set_active(true);
