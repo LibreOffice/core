@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a09372bf_9f1e601c",
+        "filename": "sc/qa/uitest/calc_shortcuts/shortcuts.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2020-04-06T09:04:57Z",
+      "side": 1,
+      "message": "Please, remove the print",
+      "revId": "229dac5f2d044e511174558669f935e00f2569e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
