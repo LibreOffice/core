@@ -166,7 +166,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo80997, "fdo80997.docx")
 {
     // The problem was that the DOCX exporter not able to export text behind textbox, if textbox has a wrap property.
     uno::Reference< text::XTextRange > xParagraph = getParagraph( 1 );
-    uno::Reference< text::XTextRange > xText = getRun( xParagraph, 1, " text");
+    getRun( xParagraph, 1, " text");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo80902, "fdo80902.docx")

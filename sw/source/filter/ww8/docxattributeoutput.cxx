@@ -301,7 +301,6 @@ static bool lcl_isOnelinerSdt(const OUString& rName)
 // write a floating table directly to docx without the surrounding frame
 void DocxAttributeOutput::WriteFloatingTable(ww8::Frame const* pParentFrame)
 {
-    sax_fastparser::FSHelperPtr pFS = GetSerializer();
     const SwFrameFormat& rFrameFormat = pParentFrame->GetFrameFormat();
     m_aFloatingTablesOfParagraph.insert(&rFrameFormat);
     const SwNodeIndex* pNodeIndex = rFrameFormat.GetContent().GetContentIdx();
