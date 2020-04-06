@@ -107,6 +107,7 @@ public:
     void testCreateViewGraphicSelection();
     void testCreateViewTextCursor();
     void testTdf102223();
+    void testTdf118354();
     void testPostKeyEventInvalidation();
     void testTdf103083();
     void testTdf104405();
@@ -162,6 +163,7 @@ public:
     CPPUNIT_TEST(testCreateViewGraphicSelection);
     CPPUNIT_TEST(testCreateViewTextCursor);
     CPPUNIT_TEST(testTdf102223);
+    CPPUNIT_TEST(testTdf118354);
     CPPUNIT_TEST(testPostKeyEventInvalidation);
     CPPUNIT_TEST(testTdf103083);
     CPPUNIT_TEST(testTdf104405);
@@ -1538,6 +1540,34 @@ void SdTiledRenderingTest::testTdf102223()
     rEditView2.SetSelection(ESelection(0, 0, 0, 1)); // start para, start char, end para, end char.
     const SvxFontHeightItem& rItem2 = rEditView2.GetAttribs().Get(EE_CHAR_FONTHEIGHT);
     CPPUNIT_ASSERT_EQUAL(int(1411), static_cast<int>(rItem2.GetHeight()));
+}
+
+void SdTiledRenderingTest::testTdf118354()
+{
+    // Load the document.
+    SdXImpressDocument* pXImpressDocument = createDoc("tdf118354.odp");
+
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pActualPage->GetObjCount());
+
+    auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pActualPage->GetObj(0));
+    CPPUNIT_ASSERT(pTableObject);
+
+    // Without the fix, it would crash here
+    ::tools::Rectangle aRect = pTableObject->GetCurrentBoundRect();
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      convertMm100ToTwip(aRect.getX() + 2), convertMm100ToTwip(aRect.getY() + 2),
+                                      1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
+                                      convertMm100ToTwip(aRect.getX() + 2), convertMm100ToTwip(aRect.getY() + 2),
+                                      1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    SdrView* pView = pViewShell->GetView();
+    rtl::Reference<sdr::SelectionController> xSelectionController(pView->getSelectionController());
+    CPPUNIT_ASSERT(xSelectionController->hasSelectedCells());
 }
 
 void SdTiledRenderingTest::testPostKeyEventInvalidation()
