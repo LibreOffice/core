@@ -4023,7 +4023,6 @@ else
 
 define gb_ExternalExecutable__register_python
 $(call gb_ExternalExecutable_set_external,python,$(PYTHON_FOR_BUILD))
-$(call gb_ExternalExecutable_set_precommand,python,PYTHONPATH=$$$$PYTHONPATH$$$${PYTHONPATH:+$$$${PYPATH:+:}}$$$$PYPATH)
 
 endef
 

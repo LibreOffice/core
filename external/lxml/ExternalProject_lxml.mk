@@ -24,7 +24,7 @@ $(call gb_ExternalProject_get_state_target,lxml,build): \
     $(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_Trace_StartRange,lxml,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		PYPATH=$${PYPATH:+$$PYPATH:}$(call gb_UnpackedTarball_get_dir,lxml)/install && \
+		export PYTHONPATH=$${PYTHONPATH:+$$PYTHONPATH:}$(call gb_UnpackedTarball_get_dir,lxml)/install && \
 		$(if $(PYTHON_FOR_BUILD), \
 			unset MACOSX_DEPLOYMENT_TARGET && , \
 			CFLAGS="$$CFLAGS -I$(call gb_UnpackedTarball_get_dir,python3)" && \
