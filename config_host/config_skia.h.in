@@ -29,15 +29,13 @@ are the same.
 
 #define SK_SUPPORT_GPU 1
 
-#define SK_GL 1
-
 #define SK_VULKAN 1
 
 #define SK_CODEC_DECODES_PNG 1
 #define SK_ENCODE_PNG 1
 
+// These are just to avoid warnings (some headers use them even with GL disabled).
 #define SK_ASSUME_GL 1
-
 #define SK_ASSUME_GL_ES 0
 
 
