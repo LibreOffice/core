@@ -621,11 +621,10 @@ OUString ObjectIdentifier::createParticleForSeries(
     return aRet.makeStringAndClear();
 }
 
-OUString ObjectIdentifier::createParticleForLegend( ChartModel& rModel )
+OUString ObjectIdentifier::createParticleForLegend( ChartModel&  )
 {
     OUStringBuffer aRet;
 
-    Reference< XDiagram > xDiagram( rModel.getFirstDiagram() );
     //todo: if more than one diagram is implemented, find the correct diagram which is owner of the given legend
 
     aRet.append( ObjectIdentifier::createParticleForDiagram() );
@@ -637,11 +636,10 @@ OUString ObjectIdentifier::createParticleForLegend( ChartModel& rModel )
 }
 
 OUString ObjectIdentifier::createParticleForLegend(
-        const Reference< frame::XModel >& xChartModel )
+        const Reference< frame::XModel >& )
 {
     OUStringBuffer aRet;
 
-    Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
     //todo: if more than one diagram is implemented, find the correct diagram which is owner of the given legend
 
     aRet.append( ObjectIdentifier::createParticleForDiagram() );
