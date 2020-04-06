@@ -77,6 +77,24 @@
     },
     {
       "key": {
+        "uuid": "32383dcb_783300d9",
+        "filename": "ridljar/Jar_libreoffice.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-04-06T10:19:14Z",
+      "side": 1,
+      "message": "The idea is that \"org.libreoffice\" is a Java 9 module which can be included by extensions, and then they have everything they need for extension development. This would expose everything in the com.sun.star namespace.\n\nWe can\u0027t reuse ridl.jar for that as this must be compiled with Java 9.\n\nSure unoloader could be excluded here, but then we would need to add another Java module for that jar.\n\nThe idea was to have one meta jar which contains all the other jars you would normally need to select manually (and most users don\u0027t know which ones they need to select and which ones they don\u0027t need).\n\nSee http://document-foundation-mail-archive.969070.n3.nabble.com/Re-Libreoffice-commits-core-git-android-source-bean-Jar-officebean-mk-bean-JunitTest-bean-complex-mkk-td4273371.html for a related discussion.",
+      "parentUuid": "6e672c2c_83db56b9",
+      "revId": "35d06132fc0834711a8668ec559480fda592d4d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "da9d304b_5f333848",
         "filename": "ridljar/Module_ridljar.mk",
         "patchSetId": 5
