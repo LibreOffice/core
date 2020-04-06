@@ -55,9 +55,9 @@ namespace {
 
 class SwCompareLine
 {
-    const SwNode& rNode;
+    const SwNode& m_rNode;
 public:
-    explicit SwCompareLine( const SwNode& rNd ) : rNode( rNd ) {}
+    explicit SwCompareLine( const SwNode& rNd ) : m_rNode( rNd ) {}
 
     sal_uLong GetHashValue() const;
     bool Compare( const SwCompareLine& rLine ) const;
@@ -70,7 +70,7 @@ public:
     bool ChangesInLine( const SwCompareLine& rLine,
                             std::unique_ptr<SwPaM>& rpInsRing, std::unique_ptr<SwPaM>& rpDelRing ) const;
 
-    const SwNode& GetNode() const { return rNode; }
+    const SwNode& GetNode() const { return m_rNode; }
 
     const SwNode& GetEndNode() const;
 
@@ -258,25 +258,25 @@ public:
 class LineArrayComparator : public ArrayComparator
 {
 private:
-    int nLen1, nLen2;
-    const CompareData &rData1, &rData2;
-    int nFirst1, nFirst2;
+    int m_nLen1, m_nLen2;
+    const CompareData &m_rData1, &m_rData2;
+    int m_nFirst1, m_nFirst2;
 
 public:
     LineArrayComparator( const CompareData &rD1, const CompareData &rD2,
                             int nStt1, int nEnd1, int nStt2, int nEnd2 );
 
     virtual bool Compare( int nIdx1, int nIdx2 ) const override;
-    virtual int GetLen1() const override { return nLen1; }
-    virtual int GetLen2() const override { return nLen2; }
+    virtual int GetLen1() const override { return m_nLen1; }
+    virtual int GetLen2() const override { return m_nLen2; }
 };
 
 class WordArrayComparator : public ArrayComparator
 {
 private:
-    const SwTextNode *pTextNd1, *pTextNd2;
-    std::unique_ptr<int[]> pPos1, pPos2;
-    int nCnt1, nCnt2;       // number of words
+    const SwTextNode *m_pTextNode1, *m_pTextNode2;
+    std::unique_ptr<int[]> m_pPos1, m_pPos2;
+    int m_nCount1, m_nCount2;       // number of words
 
     static void CalcPositions( int *pPos, const SwTextNode *pTextNd, int &nCnt );
 
@@ -284,8 +284,8 @@ public:
     WordArrayComparator( const SwTextNode *pNode1, const SwTextNode *pNode2 );
 
     virtual bool Compare( int nIdx1, int nIdx2 ) const override;
-    virtual int GetLen1() const override { return nCnt1; }
-    virtual int GetLen2() const override { return nCnt2; }
+    virtual int GetLen1() const override { return m_nCount1; }
+    virtual int GetLen2() const override { return m_nCount2; }
     int GetCharSequence( const int *pWordLcs1, const int *pWordLcs2,
                         int *pSubseq1, int *pSubseq2, int nLcsLen );
 };
@@ -1009,16 +1009,16 @@ void Compare::ShiftBoundaries( CompareData& rData1, CompareData& rData2 )
 sal_uLong SwCompareLine::GetHashValue() const
 {
     sal_uLong nRet = 0;
-    switch( rNode.GetNodeType() )
+    switch( m_rNode.GetNodeType() )
     {
     case SwNodeType::Text:
-        nRet = GetTextNodeHashValue( *rNode.GetTextNode(), nRet );
+        nRet = GetTextNodeHashValue( *m_rNode.GetTextNode(), nRet );
         break;
 
     case SwNodeType::Table:
         {
-            const SwNode* pEndNd = rNode.EndOfSectionNode();
-            SwNodeIndex aIdx( rNode );
+            const SwNode* pEndNd = m_rNode.EndOfSectionNode();
+            SwNodeIndex aIdx( m_rNode );
             while( &aIdx.GetNode() != pEndNd )
             {
                 if( aIdx.GetNode().IsTextNode() )
@@ -1047,19 +1047,19 @@ sal_uLong SwCompareLine::GetHashValue() const
 
 const SwNode& SwCompareLine::GetEndNode() const
 {
-    const SwNode* pNd = &rNode;
-    switch( rNode.GetNodeType() )
+    const SwNode* pNd = &m_rNode;
+    switch( m_rNode.GetNodeType() )
     {
     case SwNodeType::Table:
-        pNd = rNode.EndOfSectionNode();
+        pNd = m_rNode.EndOfSectionNode();
         break;
 
     case SwNodeType::Section:
         {
-            const SwSectionNode& rSNd = static_cast<const SwSectionNode&>(rNode);
+            const SwSectionNode& rSNd = static_cast<const SwSectionNode&>(m_rNode);
             const SwSection& rSect = rSNd.GetSection();
             if( SectionType::Content != rSect.GetType() || rSect.IsProtect() )
-                pNd = rNode.EndOfSectionNode();
+                pNd = m_rNode.EndOfSectionNode();
         }
         break;
     default: break;
@@ -1069,7 +1069,7 @@ const SwNode& SwCompareLine::GetEndNode() const
 
 bool SwCompareLine::Compare( const SwCompareLine& rLine ) const
 {
-    return CompareNode( rNode, rLine.rNode );
+    return CompareNode( m_rNode, rLine.m_rNode );
 }
 
 namespace
@@ -1193,15 +1193,15 @@ bool SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
 OUString SwCompareLine::GetText() const
 {
     OUString sRet;
-    switch( rNode.GetNodeType() )
+    switch( m_rNode.GetNodeType() )
     {
     case SwNodeType::Text:
-        sRet = rNode.GetTextNode()->GetExpandText(nullptr);
+        sRet = m_rNode.GetTextNode()->GetExpandText(nullptr);
         break;
 
     case SwNodeType::Table:
         {
-            sRet = "Tabelle: " + SimpleTableToText(rNode);
+            sRet = "Tabelle: " + SimpleTableToText(m_rNode);
         }
         break;
 
@@ -1209,7 +1209,7 @@ OUString SwCompareLine::GetText() const
         {
             sRet = "Section - Node:";
 
-            const SwSectionNode& rSNd = static_cast<const SwSectionNode&>(rNode);
+            const SwSectionNode& rSNd = static_cast<const SwSectionNode&>(m_rNode);
             const SwSection& rSect = rSNd.GetSection();
             switch( rSect.GetType() )
             {
@@ -1275,10 +1275,10 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
     bool bRet = false;
 
     // Only compare textnodes
-    if( SwNodeType::Text == rNode.GetNodeType() &&
+    if( SwNodeType::Text == m_rNode.GetNodeType() &&
         SwNodeType::Text == rLine.GetNode().GetNodeType() )
     {
-        SwTextNode& rDstNd = *const_cast<SwTextNode*>(rNode.GetTextNode());
+        SwTextNode& rDstNd = *const_cast<SwTextNode*>(m_rNode.GetTextNode());
         const SwTextNode& rSrcNd = *rLine.GetNode().GetTextNode();
         SwDoc* pDstDoc = rDstNd.GetDoc();
 
@@ -2144,22 +2144,22 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
 LineArrayComparator::LineArrayComparator( const CompareData &rD1,
                                             const CompareData &rD2, int nStt1,
                                             int nEnd1, int nStt2, int nEnd2 )
-    : rData1( rD1 ), rData2( rD2 ), nFirst1( nStt1 ), nFirst2( nStt2 )
+    : m_rData1( rD1 ), m_rData2( rD2 ), m_nFirst1( nStt1 ), m_nFirst2( nStt2 )
 {
-    nLen1 = nEnd1 - nStt1;
-    nLen2 = nEnd2 - nStt2;
+    m_nLen1 = nEnd1 - nStt1;
+    m_nLen2 = nEnd2 - nStt2;
 }
 
 bool LineArrayComparator::Compare( int nIdx1, int nIdx2 ) const
 {
-    if( nIdx1 < 0 || nIdx2 < 0 || nIdx1 >= nLen1 || nIdx2 >= nLen2 )
+    if( nIdx1 < 0 || nIdx2 < 0 || nIdx1 >= m_nLen1 || nIdx2 >= m_nLen2 )
     {
         OSL_ENSURE( false, "Index out of range!" );
         return false;
     }
 
-    const SwTextNode *pTextNd1 = rData1.GetLine( nFirst1 + nIdx1 )->GetNode().GetTextNode();
-    const SwTextNode *pTextNd2 = rData2.GetLine( nFirst2 + nIdx2 )->GetNode().GetTextNode();
+    const SwTextNode *pTextNd1 = m_rData1.GetLine( m_nFirst1 + nIdx1 )->GetNode().GetTextNode();
+    const SwTextNode *pTextNd2 = m_rData2.GetLine( m_nFirst2 + nIdx2 )->GetNode().GetTextNode();
 
     if( !pTextNd1 || !pTextNd2
         || ( CmpOptions.bUseRsid && !pTextNd1->CompareParRsid( *pTextNd2 ) ) )
@@ -2243,28 +2243,28 @@ bool CharArrayComparator::Compare( int nIdx1, int nIdx2 ) const
 
 WordArrayComparator::WordArrayComparator( const SwTextNode *pNode1,
                                             const SwTextNode *pNode2 )
-    : pTextNd1( pNode1 ), pTextNd2( pNode2 )
+    : m_pTextNode1( pNode1 ), m_pTextNode2( pNode2 )
 {
-    pPos1.reset( new int[ pTextNd1->GetText().getLength() + 1 ] );
-    pPos2.reset( new int[ pTextNd2->GetText().getLength() + 1 ] );
+    m_pPos1.reset( new int[ m_pTextNode1->GetText().getLength() + 1 ] );
+    m_pPos2.reset( new int[ m_pTextNode2->GetText().getLength() + 1 ] );
 
-    CalcPositions( pPos1.get(), pTextNd1, nCnt1 );
-    CalcPositions( pPos2.get(), pTextNd2, nCnt2 );
+    CalcPositions( m_pPos1.get(), m_pTextNode1, m_nCount1 );
+    CalcPositions( m_pPos2.get(), m_pTextNode2, m_nCount2 );
 }
 
 bool WordArrayComparator::Compare( int nIdx1, int nIdx2 ) const
 {
-    int nLen = pPos1[ nIdx1 + 1 ] - pPos1[ nIdx1 ];
-    if( nLen != pPos2[ nIdx2 + 1 ] - pPos2[ nIdx2 ] )
+    int nLen = m_pPos1[ nIdx1 + 1 ] - m_pPos1[ nIdx1 ];
+    if( nLen != m_pPos2[ nIdx2 + 1 ] - m_pPos2[ nIdx2 ] )
     {
         return false;
     }
     for( int i = 0; i < nLen; i++)
     {
-        if( pTextNd1->GetText()[ pPos1[ nIdx1 ] + i ]
-            != pTextNd2->GetText()[ pPos2[ nIdx2 ] + i ]
-            || ( CmpOptions.bUseRsid && !pTextNd1->CompareRsid( *pTextNd2,
-                                pPos1[ nIdx1 ] + i, pPos2[ nIdx2 ] + i ) ) )
+        if( m_pTextNode1->GetText()[ m_pPos1[ nIdx1 ] + i ]
+            != m_pTextNode2->GetText()[ m_pPos2[ nIdx2 ] + i ]
+            || ( CmpOptions.bUseRsid && !m_pTextNode1->CompareRsid( *m_pTextNode2,
+                                m_pPos1[ nIdx1 ] + i, m_pPos2[ nIdx2 ] + i ) ) )
         {
             return false;
         }
@@ -2279,18 +2279,18 @@ int WordArrayComparator::GetCharSequence( const int *pWordLcs1,
     for( int i = 0; i < nLcsLen; i++ )
     {
         // Check for hash collisions
-        if( pPos1[ pWordLcs1[i] + 1 ] - pPos1[ pWordLcs1[i] ]
-            != pPos2[ pWordLcs2[i] + 1 ] - pPos2[ pWordLcs2[i] ] )
+        if( m_pPos1[ pWordLcs1[i] + 1 ] - m_pPos1[ pWordLcs1[i] ]
+            != m_pPos2[ pWordLcs2[i] + 1 ] - m_pPos2[ pWordLcs2[i] ] )
         {
             continue;
         }
-        for( int j = 0; j < pPos1[pWordLcs1[i]+1] - pPos1[pWordLcs1[i]]; j++)
+        for( int j = 0; j < m_pPos1[pWordLcs1[i]+1] - m_pPos1[pWordLcs1[i]]; j++)
         {
-            pSubseq1[ nLen ] = pPos1[ pWordLcs1[i] ] + j;
-            pSubseq2[ nLen ] = pPos2[ pWordLcs2[i] ] + j;
+            pSubseq1[ nLen ] = m_pPos1[ pWordLcs1[i] ] + j;
+            pSubseq2[ nLen ] = m_pPos2[ pWordLcs2[i] ] + j;
 
-            if( pTextNd1->GetText()[ pPos1[ pWordLcs1[i] ] + j ]
-             != pTextNd2->GetText()[ pPos2[ pWordLcs2[i] ] + j ] )
+            if( m_pTextNode1->GetText()[ m_pPos1[ pWordLcs1[i] ] + j ]
+             != m_pTextNode2->GetText()[ m_pPos2[ pWordLcs2[i] ] + j ] )
             {
                 nLen -= j;
                 break;
