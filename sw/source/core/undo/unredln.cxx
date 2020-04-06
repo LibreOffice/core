@@ -381,13 +381,13 @@ void SwUndoRejectRedline::RepeatImpl(::sw::RepeatContext & rContext)
 
 SwUndoCompDoc::SwUndoCompDoc( const SwPaM& rRg, bool bIns )
     : SwUndo( SwUndoId::COMPAREDOC, rRg.GetDoc() ), SwUndRng( rRg ),
-    bInsert( bIns )
+    m_bInsert( bIns )
 {
     SwDoc* pDoc = rRg.GetDoc();
     if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
     {
-        RedlineType eTyp = bInsert ? RedlineType::Insert : RedlineType::Delete;
-        pRedlData.reset( new SwRedlineData( eTyp, pDoc->getIDocumentRedlineAccess().GetRedlineAuthor() ) );
+        RedlineType eTyp = m_bInsert ? RedlineType::Insert : RedlineType::Delete;
+        m_pRedlineData.reset( new SwRedlineData( eTyp, pDoc->getIDocumentRedlineAccess().GetRedlineAuthor() ) );
         SetRedlineFlags( pDoc->getIDocumentRedlineAccess().GetRedlineFlags() );
     }
 }
@@ -395,28 +395,28 @@ SwUndoCompDoc::SwUndoCompDoc( const SwPaM& rRg, bool bIns )
 SwUndoCompDoc::SwUndoCompDoc( const SwRangeRedline& rRedl )
     : SwUndo( SwUndoId::COMPAREDOC, rRedl.GetDoc() ), SwUndRng( rRedl ),
     // for MergeDoc the corresponding inverse is needed
-    bInsert( RedlineType::Delete == rRedl.GetType() )
+    m_bInsert( RedlineType::Delete == rRedl.GetType() )
 {
     SwDoc* pDoc = rRedl.GetDoc();
     if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
     {
-        pRedlData.reset( new SwRedlineData( rRedl.GetRedlineData() ) );
+        m_pRedlineData.reset( new SwRedlineData( rRedl.GetRedlineData() ) );
         SetRedlineFlags( pDoc->getIDocumentRedlineAccess().GetRedlineFlags() );
     }
 
-    pRedlSaveData.reset( new SwRedlineSaveDatas );
-    if( !FillSaveData( rRedl, *pRedlSaveData, false ))
+    m_pRedlineSaveDatas.reset( new SwRedlineSaveDatas );
+    if( !FillSaveData( rRedl, *m_pRedlineSaveDatas, false ))
     {
-        pRedlSaveData.reset();
+        m_pRedlineSaveDatas.reset();
     }
 }
 
 SwUndoCompDoc::~SwUndoCompDoc()
 {
-    pRedlData.reset();
-    pUnDel.reset();
-    pUnDel2.reset();
-    pRedlSaveData.reset();
+    m_pRedlineData.reset();
+    m_pUndoDelete.reset();
+    m_pUndoDelete2.reset();
+    m_pRedlineSaveDatas.reset();
 }
 
 void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
@@ -424,7 +424,7 @@ void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
     SwDoc& rDoc = rContext.GetDoc();
     SwPaM& rPam(AddUndoRedoPaM(rContext));
 
-    if( !bInsert )
+    if( !m_bInsert )
     {
         // delete Redlines
         RedlineFlags eOld = rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
@@ -448,7 +448,7 @@ void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
         bool bJoinText, bJoinPrev;
         sw_GetJoinFlags(rPam, bJoinText, bJoinPrev);
 
-        pUnDel.reset( new SwUndoDelete(rPam, false) );
+        m_pUndoDelete.reset( new SwUndoDelete(rPam, false) );
 
         if( bJoinText )
             sw_JoinText(rPam, bJoinPrev);
@@ -465,7 +465,7 @@ void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
                 ++rPam.GetPoint()->nNode;
                 rPam.GetBound().nContent.Assign( nullptr, 0 );
                 rPam.GetBound( false ).nContent.Assign( nullptr, 0 );
-                pUnDel2.reset( new SwUndoDelete(rPam, true) );
+                m_pUndoDelete2.reset( new SwUndoDelete(rPam, true) );
             }
         }
         rPam.DeleteMark();
@@ -476,8 +476,8 @@ void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
         {
             rDoc.getIDocumentRedlineAccess().DeleteRedline(rPam, true, RedlineType::Any);
 
-            if( pRedlSaveData )
-                SetSaveData(rDoc, *pRedlSaveData);
+            if( m_pRedlineSaveDatas )
+                SetSaveData(rDoc, *m_pRedlineSaveDatas);
         }
         SetPaM(rPam, true);
     }
@@ -487,12 +487,12 @@ void SwUndoCompDoc::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc& rDoc = rContext.GetDoc();
 
-    if( bInsert )
+    if( m_bInsert )
     {
         SwPaM& rPam(AddUndoRedoPaM(rContext));
-        if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
+        if( m_pRedlineData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
         {
-            SwRangeRedline* pTmp = new SwRangeRedline(*pRedlData, rPam);
+            SwRangeRedline* pTmp = new SwRangeRedline(*m_pRedlineData, rPam);
             rDoc.getIDocumentRedlineAccess().GetRedlineTable().Insert( pTmp );
             pTmp->InvalidateRange(SwRangeRedline::Invalidation::Add);
         }
@@ -505,18 +505,18 @@ void SwUndoCompDoc::RedoImpl(::sw::UndoRedoContext & rContext)
     }
     else
     {
-        if( pUnDel2 )
+        if( m_pUndoDelete2 )
         {
-            pUnDel2->UndoImpl(rContext);
-            pUnDel2.reset();
+            m_pUndoDelete2->UndoImpl(rContext);
+            m_pUndoDelete2.reset();
         }
-        pUnDel->UndoImpl(rContext);
-        pUnDel.reset();
+        m_pUndoDelete->UndoImpl(rContext);
+        m_pUndoDelete.reset();
 
         // note: don't call SetPaM before executing Undo of members
         SwPaM& rPam(AddUndoRedoPaM(rContext));
 
-        SwRangeRedline* pTmp = new SwRangeRedline(*pRedlData, rPam);
+        SwRangeRedline* pTmp = new SwRangeRedline(*m_pRedlineData, rPam);
         rDoc.getIDocumentRedlineAccess().GetRedlineTable().Insert( pTmp );
         pTmp->InvalidateRange(SwRangeRedline::Invalidation::Add);
 

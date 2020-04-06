@@ -117,10 +117,10 @@ public:
 
 class SwUndoCompDoc : public SwUndo, public SwUndRng
 {
-    std::unique_ptr<SwRedlineData> pRedlData;
-    std::unique_ptr<SwUndoDelete> pUnDel, pUnDel2;
-    std::unique_ptr<SwRedlineSaveDatas> pRedlSaveData;
-    bool bInsert;
+    std::unique_ptr<SwRedlineData> m_pRedlineData;
+    std::unique_ptr<SwUndoDelete> m_pUndoDelete, m_pUndoDelete2;
+    std::unique_ptr<SwRedlineSaveDatas> m_pRedlineSaveDatas;
+    bool m_bInsert;
 
 public:
     SwUndoCompDoc( const SwPaM& rRg, bool bIns );
