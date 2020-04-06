@@ -461,7 +461,6 @@ bool SvXMLAutoStylePoolP_Impl::Add(
 
     XMLAutoStyleFamily &rFamily = **iter;
 
-    std::unique_ptr<XMLAutoStylePoolParent> pTmp(new XMLAutoStylePoolParent(rParentName));
     auto itPair = rFamily.m_ParentSet.insert(std::make_unique<XMLAutoStylePoolParent>(
                         rParentName));
     XMLAutoStylePoolParent& rParent = **itPair.first;

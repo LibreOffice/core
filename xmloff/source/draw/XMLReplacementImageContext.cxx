@@ -73,8 +73,6 @@ void XMLReplacementImageContext::EndElement()
 {
     OSL_ENSURE( !m_sHRef.isEmpty() || m_xBase64Stream.is(),
                 "neither URL nor base64 image data given" );
-    rtl::Reference < XMLTextImportHelper > xTxtImport =
-        GetImport().GetTextImport();
     uno::Reference<graphic::XGraphic> xGraphic;
 
     try
