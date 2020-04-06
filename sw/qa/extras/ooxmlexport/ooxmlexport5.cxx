@@ -226,6 +226,15 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testNumberedList,"NumberedList.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr[1]/w:tc[1]/w:p[3]/w:pPr[1]/w:numPr/w:numId","val", "0");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf131819, "NumberedList.docx")
+{
+    // keep width of fixed size cells in the nested table
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    // These were 4030 and 4249.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tblGrid/w:gridCol[1]", "w", "3841");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tblGrid/w:gridCol[2]", "w", "4049");
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO76597, "fdo76597.docx")
 {
     // check XML

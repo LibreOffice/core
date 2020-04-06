@@ -180,6 +180,12 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                                 pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, 0 );
                                 m_bTableSizeTypeInserted = true;
                             }
+                            else if (getTableDepth() > 1)
+                            {
+                                // tdf#131819 limiting the fix for nested tables temporarily
+                                // TODO revert the fix for tdf#104876 and reopen it
+                                m_bTableSizeTypeInserted = true;
+                            }
                         }
                     }
 #ifdef DBG_UTIL
