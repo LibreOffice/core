@@ -95,6 +95,24 @@
     },
     {
       "key": {
+        "uuid": "58f7b0d6_460d45c6",
+        "filename": "ridljar/Jar_libreoffice.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-06T10:45:09Z",
+      "side": 1,
+      "message": "unoloader.jar contains two Java classes:\n\n* com.sun.star.lib.unoloader.UnoClassLoader is documented as: \"This is an internal, unstable class of the Uno Runtime Environment; it should not be used by client code.\" (ridljar/source/unoloader/com/sun/star/lib/unoloader/UnoClassLoader.java)\n\n* When com.sun.star.lib.unoloader.UnoLoader is used by client code, that client code is meant to only reference unoloader.jar on its classpath, not the other URE/LO jars (see documentation at ridljar/source/unoloader/com/sun/star/lib/unoloader/UnoLoader.java; example code using UnoLoader is in ure/source/uretest/{Makefile,Makefile.pln,Runner.java}).  I didn\u0027t try it now, but I\u0027m pretty sure this code does not work if the client code has the other URE/LO jars on its classpath, as would be the case when the client code has that new libreoffice.jar on its classpath.  (Witness \u003chttps://gerrit.libreoffice.org/c/core/+/84946/13#message-2327d487c4951924632153439515a03e1458dcad\u003e, as already mentioned.)\n\nI\u0027m not sure it makes sense to provide unoloader.jar in a Java module?",
+      "parentUuid": "32383dcb_783300d9",
+      "revId": "35d06132fc0834711a8668ec559480fda592d4d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "da9d304b_5f333848",
         "filename": "ridljar/Module_ridljar.mk",
         "patchSetId": 5
