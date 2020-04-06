@@ -151,7 +151,7 @@ RtfExport writes:
   * column breaks (MSO OK, OOo OK)
   * special breaks (when the next page should be an odd or an even
     page; MSO OK, OOo KO)
-  * the write-protected property of sections is experted properly
+  * the write-protected property of sections is exported properly
     (MSO OK, OOo KO)
   * better page numbers (inherited type from page styles, restarts;
     MSO OK, OOo KO)
