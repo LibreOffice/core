@@ -15,7 +15,9 @@
 #include <skia/zone.hxx>
 #include <win/winlayout.hxx>
 
+#include <SkCanvas.h>
 #include <SkColorFilter.h>
+#include <SkPaint.h>
 #include <SkPixelRef.h>
 #include <SkTypeface_win.h>
 #include <SkFont.h>

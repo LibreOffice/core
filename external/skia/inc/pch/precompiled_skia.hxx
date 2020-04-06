@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-03-17 20:41:27 using:
+ Generated on 2020-04-06 12:31:09 using:
  ./bin/update_pch external/skia skia --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -69,7 +69,7 @@
 #include <rtl/alloc.h>
 #include <sal/log.hxx>
 #endif // PCH_LEVEL >= 2
-// PCH_LEVEL >= 3
+#if PCH_LEVEL >= 3
 #include <include/c/sk_canvas.h>
 #include <include/c/sk_colorspace.h>
 #include <include/c/sk_data.h>
@@ -325,6 +325,7 @@
 #include <src/core/SkClipOpPriv.h>
 #include <src/core/SkClipStack.h>
 #include <src/core/SkClipStackDevice.h>
+#include <src/core/SkColorFilterPriv.h>
 #include <src/core/SkColorFilter_Matrix.h>
 #include <src/core/SkColorSpacePriv.h>
 #include <src/core/SkColorSpaceXformSteps.h>
@@ -387,9 +388,6 @@
 #include <src/core/SkMipMap.h>
 #include <src/core/SkModeColorFilter.h>
 #include <src/core/SkNextID.h>
-#include <src/core/SkNormalFlatSource.h>
-#include <src/core/SkNormalMapSource.h>
-#include <src/core/SkNormalSource.h>
 #include <src/core/SkOSFile.h>
 #include <src/core/SkOpts.h>
 #include <src/core/SkPaintDefaults.h>
@@ -464,7 +462,6 @@
 #include <src/core/SkTypeface_remote.h>
 #include <src/core/SkUtils.h>
 #include <src/core/SkVM.h>
-#include <src/core/SkVMBlitter.h>
 #include <src/core/SkValidationUtils.h>
 #include <src/core/SkVertState.h>
 #include <src/core/SkVerticesPriv.h>
@@ -484,7 +481,6 @@
 #include <src/effects/SkTrimPE.h>
 #include <src/gpu/GrAHardwareBufferImageGenerator.h>
 #include <src/gpu/GrAHardwareBufferUtils.h>
-#include <src/gpu/GrAllocator.h>
 #include <src/gpu/GrAppliedClip.h>
 #include <src/gpu/GrAuditTrail.h>
 #include <src/gpu/GrAutoLocaleSetter.h>
@@ -492,6 +488,7 @@
 #include <src/gpu/GrBaseContextPriv.h>
 #include <src/gpu/GrBitmapTextureMaker.h>
 #include <src/gpu/GrBlend.h>
+#include <src/gpu/GrBlockAllocator.h>
 #include <src/gpu/GrBlurUtils.h>
 #include <src/gpu/GrBuffer.h>
 #include <src/gpu/GrBufferAllocPool.h>
@@ -531,7 +528,6 @@
 #include <src/gpu/GrImageTextureMaker.h>
 #include <src/gpu/GrManagedResource.h>
 #include <src/gpu/GrMemoryPool.h>
-#include <src/gpu/GrMesh.h>
 #include <src/gpu/GrNativeRect.h>
 #include <src/gpu/GrOnFlushResourceProvider.h>
 #include <src/gpu/GrOpFlushState.h>
@@ -574,6 +570,7 @@
 #include <src/gpu/GrShaderCaps.h>
 #include <src/gpu/GrShaderUtils.h>
 #include <src/gpu/GrShaderVar.h>
+#include <src/gpu/GrSimpleMesh.h>
 #include <src/gpu/GrSoftwarePathRenderer.h>
 #include <src/gpu/GrStencilAttachment.h>
 #include <src/gpu/GrStencilClip.h>
@@ -587,7 +584,7 @@
 #include <src/gpu/GrSurfaceProxyPriv.h>
 #include <src/gpu/GrSurfaceProxyView.h>
 #include <src/gpu/GrSwizzle.h>
-#include <src/gpu/GrTessellator.h>
+#include <src/gpu/GrTAllocator.h>
 #include <src/gpu/GrTestUtils.h>
 #include <src/gpu/GrTexture.h>
 #include <src/gpu/GrTextureAdjuster.h>
@@ -601,6 +598,7 @@
 #include <src/gpu/GrTextureResolveRenderTask.h>
 #include <src/gpu/GrTracing.h>
 #include <src/gpu/GrTransferFromRenderTask.h>
+#include <src/gpu/GrTriangulator.h>
 #include <src/gpu/GrUserStencilSettings.h>
 #include <src/gpu/GrVertexWriter.h>
 #include <src/gpu/GrWaitRenderTask.h>
@@ -609,6 +607,7 @@
 #include <src/gpu/GrYUVProvider.h>
 #include <src/gpu/SkGpuDevice.h>
 #include <src/gpu/SkGr.h>
+#include <src/gpu/ccpr/GrAutoMapVertexBuffer.h>
 #include <src/gpu/ccpr/GrCCAtlas.h>
 #include <src/gpu/ccpr/GrCCClipPath.h>
 #include <src/gpu/ccpr/GrCCClipProcessor.h>
@@ -645,7 +644,6 @@
 #include <src/gpu/effects/GrOvalEffect.h>
 #include <src/gpu/effects/GrPorterDuffXferProcessor.h>
 #include <src/gpu/effects/GrRRectEffect.h>
-#include <src/gpu/effects/GrSRGBEffect.h>
 #include <src/gpu/effects/GrShadowGeoProc.h>
 #include <src/gpu/effects/GrSkSLFP.h>
 #include <src/gpu/effects/GrTextureDomain.h>
@@ -660,7 +658,6 @@
 #include <src/gpu/effects/generated/GrClampFragmentProcessor.h>
 #include <src/gpu/effects/generated/GrColorMatrixFragmentProcessor.h>
 #include <src/gpu/effects/generated/GrComposeLerpEffect.h>
-#include <src/gpu/effects/generated/GrComposeLerpRedEffect.h>
 #include <src/gpu/effects/generated/GrConfigConversionEffect.h>
 #include <src/gpu/effects/generated/GrConstColorProcessor.h>
 #include <src/gpu/effects/generated/GrDeviceSpaceEffect.h>
@@ -713,7 +710,6 @@
 #include <src/gpu/glsl/GrGLSLProgramDataManager.h>
 #include <src/gpu/glsl/GrGLSLShaderBuilder.h>
 #include <src/gpu/glsl/GrGLSLUniformHandler.h>
-#include <src/gpu/glsl/GrGLSLUtil.h>
 #include <src/gpu/glsl/GrGLSLVarying.h>
 #include <src/gpu/glsl/GrGLSLVertexGeoBuilder.h>
 #include <src/gpu/glsl/GrGLSLXferProcessor.h>
@@ -765,14 +761,14 @@
 #include <src/gpu/ops/GrStencilAndCoverPathRenderer.h>
 #include <src/gpu/ops/GrStencilPathOp.h>
 #include <src/gpu/ops/GrStrokeRectOp.h>
-#include <src/gpu/ops/GrTessellatingPathRenderer.h>
 #include <src/gpu/ops/GrTextureOp.h>
+#include <src/gpu/ops/GrTriangulatingPathRenderer.h>
 #include <src/gpu/tessellate/GrDrawAtlasPathOp.h>
 #include <src/gpu/tessellate/GrFillPathShader.h>
-#include <src/gpu/tessellate/GrGpuTessellationPathRenderer.h>
 #include <src/gpu/tessellate/GrPathParser.h>
 #include <src/gpu/tessellate/GrStencilPathShader.h>
 #include <src/gpu/tessellate/GrTessellatePathOp.h>
+#include <src/gpu/tessellate/GrTessellationPathRenderer.h>
 #include <src/gpu/text/GrAtlasManager.h>
 #include <src/gpu/text/GrDistanceFieldAdjustTable.h>
 #include <src/gpu/text/GrSDFMaskFilter.h>
@@ -863,8 +859,6 @@
 #include <src/shaders/SkComposeShader.h>
 #include <src/shaders/SkEmptyShader.h>
 #include <src/shaders/SkImageShader.h>
-#include <src/shaders/SkLightingShader.h>
-#include <src/shaders/SkLights.h>
 #include <src/shaders/SkLocalMatrixShader.h>
 #include <src/shaders/SkPictureShader.h>
 #include <src/shaders/SkShaderBase.h>
@@ -967,7 +961,8 @@
 #include <tools/sk_app/GLWindowContext.h>
 #include <tools/sk_app/VulkanWindowContext.h>
 #include <vulkan/vulkan_core.h>
-// PCH_LEVEL >= 4
-// PCH_LEVEL >= 5
+#endif // PCH_LEVEL >= 3
+#if PCH_LEVEL >= 4
+#endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

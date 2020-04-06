@@ -11,6 +11,9 @@
 
 #include <skia/win/gdiimpl.hxx>
 
+#include <SkCanvas.h>
+#include <SkPaint.h>
+
 bool SkiaGlobalWinGlyphCache::AllocateTexture(WinGlyphDrawElement& rElement, CompatibleDC* dc)
 {
     assert(rElement.maTexture.get() == nullptr);
