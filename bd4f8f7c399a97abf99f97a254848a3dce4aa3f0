@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "36613728_2d44a649",
+        "filename": "chart2/source/controller/chartapiwrapper/WrappedStatisticProperties.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 910,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-04-06T07:13:36Z",
+      "side": 1,
+      "message": "Because CHartController also has a private m_aSelection member.",
+      "parentUuid": "c75bb6d6_6885bef7",
+      "range": {
+        "startLine": 910,
+        "startChar": 86,
+        "endLine": 910,
+        "endChar": 115
+      },
+      "revId": "bd4f8f7c399a97abf99f97a254848a3dce4aa3f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "37bfa553_83889318",
         "filename": "chart2/source/controller/itemsetwrapper/StatisticsItemConverter.cxx",
         "patchSetId": 6
@@ -42,6 +66,47 @@
         "endLine": 123,
         "endChar": 116
       },
+      "revId": "bd4f8f7c399a97abf99f97a254848a3dce4aa3f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d96a747_24827e4e",
+        "filename": "chart2/source/controller/itemsetwrapper/StatisticsItemConverter.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-04-06T07:13:36Z",
+      "side": 1,
+      "message": "You need to track down where this is called.... This takes the equation property of the first curve, always. Which is should not be possible anymore from the GUI.",
+      "parentUuid": "37bfa553_83889318",
+      "range": {
+        "startLine": 123,
+        "startChar": 0,
+        "endLine": 123,
+        "endChar": 116
+      },
+      "revId": "bd4f8f7c399a97abf99f97a254848a3dce4aa3f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45f6365f_87564d05",
+        "filename": "chart2/source/controller/itemsetwrapper/StatisticsItemConverter.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-04-06T07:13:36Z",
+      "side": 1,
+      "message": "same as above",
       "revId": "bd4f8f7c399a97abf99f97a254848a3dce4aa3f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true

@@ -143,6 +143,24 @@
     },
     {
       "key": {
+        "uuid": "af3dcbed_1da0b016",
+        "filename": "chart2/source/controller/main/ChartController_Properties.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-04-06T07:13:36Z",
+      "side": 1,
+      "message": "Under which circumstances is this called - we don\u0027t want to assume first trendline - practically never. SO you need to look what the circumstance is or you can\u0027t make the decision what to change.",
+      "parentUuid": "bfc53692_5aa3b413",
+      "revId": "dd8efb79820d63feae92054b683e79bff3000025",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "652ec11a_a55c03b5",
         "filename": "chart2/source/controller/main/ChartController_Window.cxx",
         "patchSetId": 5
@@ -246,6 +264,29 @@
       "revId": "dd8efb79820d63feae92054b683e79bff3000025",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "aa2840e8_7a182e69",
+        "filename": "chart2/source/tools/RegressionCurveHelper.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-04-06T07:13:36Z",
+      "side": 1,
+      "message": "To be honest I really don\u0027t see when you will need this call... from current changes I don\u0027t see a need for it, but depends on some of the reason why some calls were made.",
+      "range": {
+        "startLine": 480,
+        "startChar": 0,
+        "endLine": 489,
+        "endChar": 1
+      },
+      "revId": "dd8efb79820d63feae92054b683e79bff3000025",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     },
     {
       "key": {
