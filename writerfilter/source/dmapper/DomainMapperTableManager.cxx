@@ -178,8 +178,8 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                                 // Set the width type of table with 'Auto' and set the width value to 0 (as per grid values)
                                 pPropMap->setValue( TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::VARIABLE );
                                 pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, 0 );
-                                m_bTableSizeTypeInserted = true;
                             }
+                            m_bTableSizeTypeInserted = true;
                         }
                     }
 #ifdef DBG_UTIL
