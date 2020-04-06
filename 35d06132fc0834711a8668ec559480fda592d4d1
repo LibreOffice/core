@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "59c04db9_03721ca4",
+        "filename": "configure.ac",
+        "patchSetId": 5
+      },
+      "lineNbr": 7626,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-06T08:48:17Z",
+      "side": 1,
+      "message": "Has it been discussed whether we want these two changes, bumping the Java baseline to Java 9?  (And if we do, see \u003chttps://git.libreoffice.org/core/+/aafc10c9edb61e13ac557c7e43c8d4a31dce4f37%5E!/\u003e \"Bump Java baseline to Java 8\" that likely need to be adapted.)",
+      "revId": "35d06132fc0834711a8668ec559480fda592d4d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "80230a24_f8dde82a",
         "filename": "ridljar/Jar_libreoffice.mk",
         "patchSetId": 5
@@ -19,6 +36,23 @@
         "endLine": 24,
         "endChar": 2
       },
+      "revId": "35d06132fc0834711a8668ec559480fda592d4d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da9d304b_5f333848",
+        "filename": "ridljar/Module_ridljar.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-06T08:48:17Z",
+      "side": 1,
+      "message": "(I would keep this list sorted lexicographically)",
       "revId": "35d06132fc0834711a8668ec559480fda592d4d1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
