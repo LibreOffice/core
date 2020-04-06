@@ -30,6 +30,8 @@ bool isVCLSkiaEnabled() { return false; }
 #include <skia/utils.hxx>
 #include <config_folders.h>
 
+#include <SkCanvas.h>
+#include <SkPaint.h>
 #include <SkSurface.h>
 
 #ifdef DBG_UTIL

@@ -99,7 +99,7 @@ diff --git a/src/shaders/SkImageShader.cpp b/src/shaders/SkImageShader.cpp
 index b8fd426e13..5e6f2a9b28 100755
 --- a/src/shaders/SkImageShader.cpp
 +++ b/src/shaders/SkImageShader.cpp
-@@ -781,6 +781,8 @@ bool SkImageShader::onProgram(skvm::Builder* p,
+@@ -808,6 +808,8 @@ skvm::Color SkImageShader::onProgram(skv
  
          // See GrCubicEffect for details of these weights.
          // TODO: these maybe don't seem right looking at gm/bicubic and GrBicubicEffect.
@@ -107,7 +107,7 @@ index b8fd426e13..5e6f2a9b28 100755
 +#undef far
          auto near = [&](skvm::F32 t) {
              // 1/18 + 9/18t + 27/18t^2 - 21/18t^3 == t ( t ( -21/18t + 27/18) + 9/18) + 1/18
-             return p->mad(t,
+             return t * (t * (t * (-21/18.0f) + 27/18.0f) + 9/18.0f) + 1/18.0f;
 diff --git a/src/gpu/gl/GrGLGpu.cpp b/src/gpu/gl/GrGLGpu.cpp
 index 191b6a3ce5..26754acccd 100644
 --- a/src/gpu/gl/GrGLGpu.cpp
