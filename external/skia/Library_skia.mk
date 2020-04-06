@@ -39,7 +39,6 @@ $(eval $(call gb_Library_use_system_win32_libs,skia,\
     oleaut32 \
     user32 \
     usp10 \
-    opengl32 \
     gdi32 \
 ))
 else
@@ -60,7 +59,6 @@ ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,skia,\
     -lm \
     -ldl \
-    -lGL \
     -lX11-xcb \
     -lX11 \
 ))
@@ -530,36 +528,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/geometry/GrQuad \
     UnpackedTarball/skia/src/gpu/geometry/GrQuadUtils \
     UnpackedTarball/skia/src/gpu/geometry/GrShape \
-    UnpackedTarball/skia/src/gpu/gl/builders/GrGLProgramBuilder \
-    UnpackedTarball/skia/src/gpu/gl/builders/GrGLShaderStringBuilder \
-    UnpackedTarball/skia/src/gpu/gl/GrGLAssembleGLESInterfaceAutogen \
-    UnpackedTarball/skia/src/gpu/gl/GrGLAssembleGLInterfaceAutogen \
-    UnpackedTarball/skia/src/gpu/gl/GrGLAssembleHelpers \
-    UnpackedTarball/skia/src/gpu/gl/GrGLAssembleInterface \
-    UnpackedTarball/skia/src/gpu/gl/GrGLAssembleWebGLInterfaceAutogen \
-    UnpackedTarball/skia/src/gpu/gl/GrGLBuffer \
-    UnpackedTarball/skia/src/gpu/gl/GrGLCaps \
-    UnpackedTarball/skia/src/gpu/gl/GrGLContext \
-    UnpackedTarball/skia/src/gpu/gl/GrGLExtensions \
-    UnpackedTarball/skia/src/gpu/gl/GrGLGLSL \
-    UnpackedTarball/skia/src/gpu/gl/GrGLGpu \
-    UnpackedTarball/skia/src/gpu/gl/GrGLGpuProgramCache \
-    UnpackedTarball/skia/src/gpu/gl/GrGLInterfaceAutogen \
-    UnpackedTarball/skia/src/gpu/gl/GrGLPath \
-    UnpackedTarball/skia/src/gpu/gl/GrGLPathRendering \
-    UnpackedTarball/skia/src/gpu/gl/GrGLOpsRenderPass \
-    UnpackedTarball/skia/src/gpu/gl/GrGLProgram \
-    UnpackedTarball/skia/src/gpu/gl/GrGLProgramDataManager \
-    UnpackedTarball/skia/src/gpu/gl/GrGLRenderTarget \
-    UnpackedTarball/skia/src/gpu/gl/GrGLSemaphore \
-    UnpackedTarball/skia/src/gpu/gl/GrGLStencilAttachment \
-    UnpackedTarball/skia/src/gpu/gl/GrGLTexture \
-    UnpackedTarball/skia/src/gpu/gl/GrGLTextureRenderTarget \
-    UnpackedTarball/skia/src/gpu/gl/GrGLTypesPriv \
-    UnpackedTarball/skia/src/gpu/gl/GrGLUniformHandler \
-    UnpackedTarball/skia/src/gpu/gl/GrGLUtil \
-    UnpackedTarball/skia/src/gpu/gl/GrGLVaryingHandler \
-    UnpackedTarball/skia/src/gpu/gl/GrGLVertexArray \
     UnpackedTarball/skia/src/gpu/glsl/GrGLSLBlend \
     UnpackedTarball/skia/src/gpu/glsl/GrGLSL \
     UnpackedTarball/skia/src/gpu/glsl/GrGLSLFragmentProcessor \
@@ -797,13 +765,11 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/tools/gpu/vk/VkTestUtils \
-    UnpackedTarball/skia/tools/sk_app/GLWindowContext \
     UnpackedTarball/skia/tools/sk_app/VulkanWindowContext \
 ))
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/src/gpu/gl/win/GrGLMakeNativeInterface_win \
     UnpackedTarball/skia/src/ports/SkDebug_win \
     UnpackedTarball/skia/src/ports/SkFontHost_win \
     UnpackedTarball/skia/src/fonts/SkFontMgr_indirect \
@@ -819,17 +785,14 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/utils/win/SkDWriteGeometrySink \
     UnpackedTarball/skia/src/utils/win/SkHRESULT \
     UnpackedTarball/skia/src/utils/win/SkIStream \
-    UnpackedTarball/skia/src/utils/win/SkWGL_win \
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/tools/sk_app/win/GLWindowContext_win \
     UnpackedTarball/skia/tools/sk_app/win/RasterWindowContext_win \
     UnpackedTarball/skia/tools/sk_app/win/VulkanWindowContext_win \
 ))
 else
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/src/gpu/gl/glx/GrGLMakeNativeInterface_glx \
     UnpackedTarball/skia/src/ports/SkDebug_stdio \
     UnpackedTarball/skia/src/ports/SkFontConfigInterface \
     UnpackedTarball/skia/src/ports/SkFontConfigInterface_direct \
@@ -844,7 +807,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/tools/sk_app/unix/GLWindowContext_unix \
     UnpackedTarball/skia/tools/sk_app/unix/RasterWindowContext_unix \
     UnpackedTarball/skia/tools/sk_app/unix/VulkanWindowContext_unix \
 ))

@@ -31,6 +31,7 @@ skia_patches := \
     windows-text-gamma.patch.0 \
     windows-force-unicode-api.patch.0 \
     operator-eq-bool.patch.0 \
+    fix-without-gl.patch.0 \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 

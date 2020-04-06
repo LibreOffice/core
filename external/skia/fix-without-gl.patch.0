@@ -1,0 +1,47 @@
+diff --git a/include/gpu/GrBackendSurface.h b/include/gpu/GrBackendSurface.h
+index 378646ebc1..af3b9ce290 100644
+--- ./include/gpu/GrBackendSurface.h
++++ ./include/gpu/GrBackendSurface.h
+@@ -74,9 +74,11 @@ public:
+     GrBackendFormat(const GrBackendFormat&);
+     GrBackendFormat& operator=(const GrBackendFormat&);
+ 
++#ifdef SK_GL
+     static GrBackendFormat MakeGL(GrGLenum format, GrGLenum target) {
+         return GrBackendFormat(format, target);
+     }
++#endif
+ 
+     static GrBackendFormat MakeVk(VkFormat format) {
+         return GrBackendFormat(format, GrVkYcbcrConversionInfo());
+diff --git a/include/gpu/gl/GrGLInterface.h b/include/gpu/gl/GrGLInterface.h
+index 17655bdbed..ce0641f423 100644
+--- ./include/gpu/gl/GrGLInterface.h
++++ ./include/gpu/gl/GrGLInterface.h
+@@ -65,7 +65,9 @@ public:
+ 
+     GrGLExtensions fExtensions;
+ 
++#ifdef SK_GL
+     bool hasExtension(const char ext[]) const { return fExtensions.has(ext); }
++#endif
+ 
+     /**
+      * The function pointers are in a struct so that we can have a compiler generated assignment
+diff --git a/src/gpu/gl/GrGLContext.h b/src/gpu/gl/GrGLContext.h
+index 66bfe29331..034cd21838 100644
+--- ./src/gpu/gl/GrGLContext.h
++++ ./src/gpu/gl/GrGLContext.h
+@@ -45,10 +45,11 @@ public:
+     GrGLDriverVersion driverVersion() const { return fDriverVersion; }
+     const GrGLCaps* caps() const { return fGLCaps.get(); }
+     GrGLCaps* caps() { return fGLCaps.get(); }
++#ifdef SK_GL
+     bool hasExtension(const char* ext) const {
+         return fInterface->hasExtension(ext);
+     }
+-
++#endif
+     const GrGLExtensions& extensions() const { return fInterface->fExtensions; }
+ 
+ protected:
