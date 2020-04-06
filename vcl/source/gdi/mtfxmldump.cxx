@@ -1136,6 +1136,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                 rWriter.attribute("height", aFont.GetFontSize().Height());
                 rWriter.attribute("orientation", aFont.GetOrientation());
                 rWriter.attribute("weight", convertFontWeigthToString(aFont.GetWeight()));
+                rWriter.attribute("vertical", aFont.IsVertical() ? "true" : "false");
 
                 rWriter.endElement();
             }
