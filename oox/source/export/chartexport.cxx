@@ -1998,7 +1998,6 @@ void ChartExport::exportScatterChartSeries( const Reference< chart2::XChartType 
 
 void ChartExport::exportScatterChart( const Reference< chart2::XChartType >& xChartType )
 {
-    FSHelperPtr pFS = GetFS();
     std::vector<Sequence<Reference<chart2::XDataSeries> > > aSplitDataSeries = splitDataSeriesByAxis(xChartType);
     bool bExported = false;
     for (auto & splitDataSeries : aSplitDataSeries)
