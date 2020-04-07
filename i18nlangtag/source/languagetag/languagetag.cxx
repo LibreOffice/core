@@ -536,28 +536,28 @@ LanguageTag::LanguageTag( const OUString& rBcp47, const OUString& rLanguage,
         mbInitializedLangID( false),
         mbIsFallback( false)
 {
-    if (!mbSystemLocale && !mbInitializedBcp47)
+    if (mbSystemLocale || mbInitializedBcp47)
+        return;
+
+    if (rScript.isEmpty())
     {
-        if (rScript.isEmpty())
-        {
-            maBcp47 = rLanguage + "-" + rCountry;
-            mbInitializedBcp47 = true;
-            maLocale.Language = rLanguage;
-            maLocale.Country  = rCountry;
-            mbInitializedLocale = true;
-        }
+        maBcp47 = rLanguage + "-" + rCountry;
+        mbInitializedBcp47 = true;
+        maLocale.Language = rLanguage;
+        maLocale.Country  = rCountry;
+        mbInitializedLocale = true;
+    }
+    else
+    {
+        if (rCountry.isEmpty())
+            maBcp47 = rLanguage + "-" + rScript;
         else
-        {
-            if (rCountry.isEmpty())
-                maBcp47 = rLanguage + "-" + rScript;
-            else
-                maBcp47 = rLanguage + "-" + rScript + "-" + rCountry;
-            mbInitializedBcp47 = true;
-            maLocale.Language = I18NLANGTAG_QLT;
-            maLocale.Country  = rCountry;
-            maLocale.Variant  = maBcp47;
-            mbInitializedLocale = true;
-        }
+            maBcp47 = rLanguage + "-" + rScript + "-" + rCountry;
+        mbInitializedBcp47 = true;
+        maLocale.Language = I18NLANGTAG_QLT;
+        maLocale.Country  = rCountry;
+        maLocale.Variant  = maBcp47;
+        mbInitializedLocale = true;
     }
 }
 
@@ -1508,31 +1508,31 @@ void LanguageTag::convertFromRtlLocale()
     // Variant: [.codeset][@modifier]
     // Variant effectively contains anything that follows the territory, not
     // looking for '.' dot delimiter or '@' modifier content.
-    if (!maLocale.Variant.isEmpty())
-    {
-        OString aStr = OUStringToOString( maLocale.Language + "_" + maLocale.Country + maLocale.Variant,
-                RTL_TEXTENCODING_UTF8);
-        /* FIXME: let liblangtag parse this entirely with
-         * lt_tag_convert_from_locale() but that needs a patch to pass the
-         * string. */
+    if (maLocale.Variant.isEmpty())
+        return;
+
+    OString aStr = OUStringToOString( maLocale.Language + "_" + maLocale.Country + maLocale.Variant,
+            RTL_TEXTENCODING_UTF8);
+    /* FIXME: let liblangtag parse this entirely with
+     * lt_tag_convert_from_locale() but that needs a patch to pass the
+     * string. */
 #if 0
-        myLtError aError;
-        theDataRef::get().init();
-        mpImplLangtag = lt_tag_convert_from_locale( aStr.getStr(), &aError.p);
-        maBcp47 = OStringToOUString( lt_tag_get_string( mpImplLangtag), RTL_TEXTENCODING_UTF8);
-        mbInitializedBcp47 = true;
+    myLtError aError;
+    theDataRef::get().init();
+    mpImplLangtag = lt_tag_convert_from_locale( aStr.getStr(), &aError.p);
+    maBcp47 = OStringToOUString( lt_tag_get_string( mpImplLangtag), RTL_TEXTENCODING_UTF8);
+    mbInitializedBcp47 = true;
 #else
-        mnLangID = MsLangId::convertUnxByteStringToLanguage( aStr);
-        if (mnLangID == LANGUAGE_DONTKNOW)
-        {
-            SAL_WARN( "i18nlangtag", "LanguageTag(rtl_Locale) - unknown: " << aStr);
-            mnLangID = LANGUAGE_ENGLISH_US;     // we need _something_ here
-        }
-        mbInitializedLangID = true;
-#endif
-        maLocale = lang::Locale();
-        mbInitializedLocale = false;
+    mnLangID = MsLangId::convertUnxByteStringToLanguage( aStr);
+    if (mnLangID == LANGUAGE_DONTKNOW)
+    {
+        SAL_WARN( "i18nlangtag", "LanguageTag(rtl_Locale) - unknown: " << aStr);
+        mnLangID = LANGUAGE_ENGLISH_US;     // we need _something_ here
     }
+    mbInitializedLangID = true;
+#endif
+    maLocale = lang::Locale();
+    mbInitializedLocale = false;
 }
 
 
