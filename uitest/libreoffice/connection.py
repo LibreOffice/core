@@ -9,7 +9,6 @@ import subprocess
 import time
 import uuid
 import os
-import sys
 
 try:
     import pyuno
@@ -131,17 +130,10 @@ class OfficeConnection:
             else:
                 self.soffice.terminate()
 
-
-            try:
-                if sys.version_info >= (3,3):
-                    ret = self.soffice.wait(30) # will throw when timed out
-                else:
-                    ret = self.soffice.wait() # no timeout in python that old
-            finally:
-                self.xContext = None
-                self.socket = None
-                self.soffice = None
-
+            ret = self.soffice.wait()
+            self.xContext = None
+            self.socket = None
+            self.soffice = None
             if ret != 0:
                 raise Exception("Exit status indicates failure: " + str(ret))
 
