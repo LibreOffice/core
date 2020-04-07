@@ -34,6 +34,24 @@
       "revId": "bc293bf61afb9e61068e3bd59107d918ec88d310",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d08d83e7_16765d60",
+        "filename": "vcl/skia/salbmp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-04-07T08:51:12Z",
+      "side": 1,
+      "message": "its just that it\u0027s a little odd to get a worse result if I ask for a better result, but just a comment, feel free to ignore, probably doesn\u0027t affect much anyhow",
+      "parentUuid": "4de73c82_9b52a09b",
+      "revId": "bc293bf61afb9e61068e3bd59107d918ec88d310",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
