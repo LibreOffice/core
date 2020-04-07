@@ -89,7 +89,6 @@ public:
     void            RemoveEntryAt(sal_Int32  nPos);
 
     void            Clear();
-    void            EnableSelectAll();
     sal_Int32       GetEntryPos( const OUString& rStr ) const;
     Image           GetEntryImage( sal_Int32  nPos ) const;
     OUString        GetEntry( sal_Int32  nPos ) const;
@@ -121,6 +120,7 @@ public:
     void            SetDoubleClickHdl(const Link<ComboBox&,void>& rLink);
     const Link<ComboBox&,void>&   GetDoubleClickHdl() const;
     void            SetEntryActivateHdl(const Link<Edit&,bool>& rLink);
+    void            SetUserDrawHdl(const Link<UserDrawEvent*, void>& rLink);
 
     Size            CalcMinimumSize() const override;
     virtual Size    GetOptimalSize() const override;
@@ -128,10 +128,6 @@ public:
     Size            CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
     void            GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const;
 
-    void            SetMRUEntries( const OUString& rEntries );
-    OUString        GetMRUEntries() const;
-    void            SetMaxMRUCount( sal_Int32  n );
-    sal_Int32       GetMaxMRUCount() const;
     void            SetEntryData( sal_Int32  nPos, void* pNewData );
     void*           GetEntryData( sal_Int32  nPos ) const;
 

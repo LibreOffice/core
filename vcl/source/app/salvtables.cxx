@@ -5824,6 +5824,19 @@ public:
         ensure_event_listener();
     }
 
+    void call_signal_custom_render(UserDrawEvent* pEvent)
+    {
+        vcl::RenderContext* pRenderContext = pEvent->GetRenderContext();
+        auto nPos = pEvent->GetItemId();
+        signal_custom_render(*pRenderContext, pEvent->GetRect(), m_xComboBox->IsEntryPosSelected(nPos), get_id(nPos));
+        m_xComboBox->DrawEntry(*pEvent, false, false);  // draw separator
+    }
+
+    Size call_signal_custom_get_size(VirtualDevice& rOutput, const OUString& rId)
+    {
+        return signal_custom_get_size(rOutput, rId);
+    }
+
     virtual void HandleEventListener(VclWindowEvent& rEvent) override
     {
         if (rEvent.GetId() == VclEventId::DropdownPreOpen
@@ -5908,6 +5921,11 @@ public:
 
     virtual vcl::Font get_entry_font() override { assert(false); return vcl::Font(); }
 
+    virtual void set_custom_renderer() override
+    {
+        assert(false && "not implemented");
+    }
+
     virtual ~SalInstanceComboBoxWithoutEdit() override
     {
         m_xComboBox->SetSelectHdl(Link<ListBox&, void>());
@@ -5929,6 +5947,7 @@ private:
     DECL_LINK(ChangeHdl, Edit&, void);
     DECL_LINK(EntryActivateHdl, Edit&, bool);
     DECL_LINK(SelectHdl, ::ComboBox&, void);
+    DECL_LINK(UserDrawHdl, UserDrawEvent*, void);
     WeldTextFilter m_aTextFilter;
     bool m_bInSelect;
 public:
@@ -6038,6 +6057,14 @@ public:
         return pEdit->GetPointFont(*pEdit);
     }
 
+    virtual void set_custom_renderer() override
+    {
+        m_xComboBox->EnableUserDraw(true);
+        m_xComboBox->SetUserDrawHdl(LINK(this, SalInstanceComboBoxWithEdit, UserDrawHdl));
+        Size aRowSize(signal_custom_get_size(*m_xComboBox, OUString()));
+        m_xComboBox->SetUserItemSize(aRowSize);
+    }
+
     virtual ~SalInstanceComboBoxWithEdit() override
     {
         m_xComboBox->SetTextFilter(nullptr);
@@ -6065,6 +6092,11 @@ IMPL_LINK_NOARG(SalInstanceComboBoxWithEdit, SelectHdl, ::ComboBox&, void)
 IMPL_LINK_NOARG(SalInstanceComboBoxWithEdit, EntryActivateHdl, Edit&, bool)
 {
     return m_aEntryActivateHdl.Call(*this);
+}
+
+IMPL_LINK(SalInstanceComboBoxWithEdit, UserDrawHdl, UserDrawEvent*, pEvent, void)
+{
+    call_signal_custom_render(pEvent);
 }
 
 class SalInstanceEntryTreeView : public SalInstanceContainer, public virtual weld::EntryTreeView
@@ -6141,6 +6173,11 @@ public:
     }
 
     virtual bool changed_by_direct_pick() const override { return m_bTreeChange; }
+
+    virtual void set_custom_renderer() override
+    {
+        assert(false && "not implemented");
+    }
 
     virtual ~SalInstanceEntryTreeView() override
     {
