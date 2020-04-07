@@ -21,10 +21,7 @@
 #define INCLUDED_SVTOOLS_CTRLBOX_HXX
 
 #include <svtools/svtdllapi.h>
-
 #include <editeng/borderline.hxx>
-
-#include <vcl/combobox.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/weld.hxx>
 
@@ -33,6 +30,7 @@
 namespace weld { class CustomWeld; }
 
 class VirtualDevice;
+class BitmapEx;
 class BorderWidthImpl;
 class FontList;
 
@@ -327,30 +325,66 @@ private:
     void set_label_from_date();
 };
 
-class SVT_DLLPUBLIC FontNameBox : public ComboBox
+class SVT_DLLPUBLIC FontNameBox
 {
 private:
+    std::unique_ptr<weld::ComboBox> m_xComboBox;
     std::unique_ptr<ImplFontList> mpFontList;
-    bool            mbWYSIWYG;
+    int             mnMRUCount;
+    int             mnMaxMRUCount;
     OUString        maFontMRUEntriesFile;
+    Size            maUserItemSz;
 
     SVT_DLLPRIVATE void         ImplCalcUserItemSize();
     SVT_DLLPRIVATE void         ImplDestroyFontList();
 
-protected:
+    DECL_LINK(CustomRenderHdl, weld::ComboBox::render_args, void);
+    DECL_LINK(CustomGetSizeHdl, weld::ComboBox::get_size_args, Size);
+
     void            LoadMRUEntries( const OUString& aFontMRUEntriesFile );
     void            SaveMRUEntries( const OUString& aFontMRUEntriesFile ) const;
-public:
-                    FontNameBox( vcl::Window* pParent,
-                                 WinBits nWinStyle );
-    virtual         ~FontNameBox() override;
-    virtual void    dispose() override;
+    OUString        GetMRUEntries(sal_Unicode cSep = ';') const;
+    void            SetMRUEntries(const OUString& rEntries, sal_Unicode cSep = ';');
 
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt ) override;
+public:
+    FontNameBox(std::unique_ptr<weld::ComboBox> p);
+    ~FontNameBox();
 
     void            Fill( const FontList* pList );
 
-    void            EnableWYSIWYG( bool bEnable );
+    void            EnableWYSIWYG();
+
+    void            SetMaxMRUCount(sal_Int32 n) { mnMaxMRUCount = n; }
+    sal_Int32       GetMaxMRUCount() const { return mnMaxMRUCount; }
+
+    void            UpdateMRU();
+
+    void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_xComboBox->connect_changed(rLink); }
+    void connect_focus_in(const Link<weld::Widget&, void>& rLink) { m_xComboBox->connect_focus_in(rLink); }
+    void connect_focus_out(const Link<weld::Widget&, void>& rLink) { m_xComboBox->connect_focus_out(rLink); }
+    void connect_key_press(const Link<const KeyEvent&, bool>& rLink) { m_xComboBox->connect_key_press(rLink); }
+    int get_active() const { return m_xComboBox->get_active(); }
+    OUString get_active_text() const { return m_xComboBox->get_active_text(); }
+    void set_entry_text(const OUString& rText);
+    int get_count() const { return m_xComboBox->get_count(); }
+    OUString get_text(int nIndex) const { return m_xComboBox->get_text(nIndex); }
+    void set_sensitive(bool bSensitive) { m_xComboBox->set_sensitive(bSensitive); }
+    void save_value() { m_xComboBox->save_value(); }
+    OUString const& get_saved_value() const { return m_xComboBox->get_saved_value(); }
+    void select_entry_region(int nStartPos, int nEndPos) { m_xComboBox->select_entry_region(nStartPos, nEndPos); }
+    bool get_entry_selection_bounds(int& rStartPos, int& rEndPos) { return m_xComboBox->get_entry_selection_bounds(rStartPos, rEndPos); }
+    void clear() { m_xComboBox->clear(); }
+    void grab_focus() { m_xComboBox->grab_focus(); }
+    bool has_focus() const { return m_xComboBox->has_focus(); }
+    void connect_entry_activate(const Link<weld::ComboBox&, bool>& rLink) { m_xComboBox->connect_entry_activate(rLink); }
+    void connect_get_property_tree(const Link<boost::property_tree::ptree&, void>& rLink) { m_xComboBox->connect_get_property_tree(rLink); }
+
+    // font size is in points, not pixels, e.g. see Window::[G]etPointFont
+    vcl::Font get_font() { return m_xComboBox->get_font(); }
+    void set_entry_font(const vcl::Font& rFont) { m_xComboBox->set_entry_font(rFont); }
+    vcl::Font get_entry_font() { return m_xComboBox->get_entry_font(); }
+
+    void set_tooltip_text(const OUString& rTip) { m_xComboBox->set_tooltip_text(rTip); }
 
 private:
     void            InitFontMRUEntriesFile();
