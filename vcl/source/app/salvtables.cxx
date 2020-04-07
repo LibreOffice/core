@@ -5824,6 +5824,11 @@ public:
         ensure_event_listener();
     }
 
+    virtual void set_custom_renderer() override
+    {
+        // TODO
+    }
+
     virtual void HandleEventListener(VclWindowEvent& rEvent) override
     {
         if (rEvent.GetId() == VclEventId::DropdownPreOpen
@@ -6141,6 +6146,11 @@ public:
     }
 
     virtual bool changed_by_direct_pick() const override { return m_bTreeChange; }
+
+    virtual void set_custom_renderer() override
+    {
+        // TODO
+    }
 
     virtual ~SalInstanceEntryTreeView() override
     {
