@@ -61,6 +61,7 @@
 #include <FormShellManager.hxx>
 #include <DrawController.hxx>
 #include <memory>
+#include <comphelper/lok.hxx>
 
 namespace sd {
 
@@ -343,6 +344,12 @@ void DrawViewShell::WriteFrameViewData()
 
     Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
     ::tools::Rectangle aVisArea = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0), aVisSizePixel) );
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // aVisArea is nonsensical in the LOK case, use the slide size
+        aVisArea = ::tools::Rectangle(Point(), getCurrentPage()->GetSize());
+    }
+
     mpFrameView->SetVisArea(aVisArea);
 
     if( mePageKind == PageKind::Handout )
