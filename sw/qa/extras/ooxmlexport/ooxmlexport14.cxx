@@ -15,6 +15,7 @@
 
 #include <editsh.hxx>
 #include <frmatr.hxx>
+#include <vector>
 #include <tools/lineend.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <com/sun/star/table/ShadowFormat.hpp>
@@ -766,17 +767,24 @@ DECLARE_OOXMLEXPORT_TEST(testStrikeoutGroupShapeText, "tdf131776_StrikeoutGroupS
     if (!pXml)
         return;
 
-    // double strike
-    assertXPath(pXml, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wpg:wgp/"
-        "wps:wsp[1]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:dstrike");
-    assertXPathNoAttribute(pXml, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wpg:wgp/"
-        "wps:wsp[1]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:dstrike", "val");
+    const OString base_path {"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wpg:wgp/"};
+    const OString path_continue {"]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:"};
+    std::map<OString, std::map<bool, std::vector<OString>>> strike_types {
+        {"dstrike", {{true, {"1", "2"}}, {false, {"3"}}}},
+        {"strike",  {{true, {"4", "5"}}, {false, {"6"}}}},
+    };
+    for (auto strike_type : strike_types)
+    {
+        // check without value, true cases
+        for (auto idx : strike_type.second[true])
+        {
+            assertXPath(pXml, base_path + "wps:wsp[" + idx + path_continue + strike_type.first);
+            assertXPathNoAttribute(pXml, base_path + "wps:wsp[" + idx + path_continue + strike_type.first, "val");
+        }
 
-    // simple strike
-    assertXPath(pXml, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wpg:wgp/"
-        "wps:wsp[2]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:strike");
-    assertXPathNoAttribute(pXml, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wpg:wgp/"
-        "wps:wsp[2]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:strike", "val");
+        // check with value, only false case
+        assertXPath(pXml, base_path + "wps:wsp[" + strike_type.second[false][0] + path_continue + strike_type.first, "val", "false");
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
