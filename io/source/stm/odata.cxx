@@ -907,30 +907,29 @@ void OObjectOutputStream::writeObject( const Reference< XPersistObject > & xPObj
 
 void OObjectOutputStream::connectToMarkable()
 {
-    if( ! m_bValidMarkable ) {
-        if( ! m_bValidStream )
+    if(  m_bValidMarkable )
+        return;
+
+    if( ! m_bValidStream )
+        throw NotConnectedException();
+
+    // find the markable stream !
+    Reference< XInterface > rTry(m_output);
+    while( true ) {
+        if( ! rTry.is() )
         {
             throw NotConnectedException();
         }
-
-        // find the markable stream !
-        Reference< XInterface > rTry(m_output);
-        while( true ) {
-            if( ! rTry.is() )
-            {
-                throw NotConnectedException();
-            }
-            Reference < XMarkableStream > markable( rTry , UNO_QUERY );
-            if( markable.is() )
-            {
-                m_rMarkable = markable;
-                break;
-            }
-            Reference < XActiveDataSource > source( rTry , UNO_QUERY );
-            rTry = source;
+        Reference < XMarkableStream > markable( rTry , UNO_QUERY );
+        if( markable.is() )
+        {
+            m_rMarkable = markable;
+            break;
         }
-        m_bValidMarkable = true;
+        Reference < XActiveDataSource > source( rTry , UNO_QUERY );
+        rTry = source;
     }
+    m_bValidMarkable = true;
 }
 
 
@@ -1180,30 +1179,30 @@ Reference< XPersistObject >  OObjectInputStream::readObject()
 
 void OObjectInputStream::connectToMarkable()
 {
-    if( ! m_bValidMarkable ) {
-        if( ! m_bValidStream )
+    if(  m_bValidMarkable )        return;
+
+    if( ! m_bValidStream )
+    {
+        throw NotConnectedException( );
+    }
+
+    // find the markable stream !
+    Reference< XInterface > rTry(m_input);
+    while( true ) {
+        if( ! rTry.is() )
         {
             throw NotConnectedException( );
         }
-
-        // find the markable stream !
-        Reference< XInterface > rTry(m_input);
-        while( true ) {
-            if( ! rTry.is() )
-            {
-                throw NotConnectedException( );
-            }
-            Reference<  XMarkableStream > markable( rTry , UNO_QUERY );
-            if( markable.is() )
-            {
-                m_rMarkable = markable;
-                break;
-            }
-            Reference < XActiveDataSink > sink( rTry , UNO_QUERY );
-            rTry = sink;
+        Reference<  XMarkableStream > markable( rTry , UNO_QUERY );
+        if( markable.is() )
+        {
+            m_rMarkable = markable;
+            break;
         }
-        m_bValidMarkable = true;
+        Reference < XActiveDataSink > sink( rTry , UNO_QUERY );
+        rTry = sink;
     }
+    m_bValidMarkable = true;
 }
 
 sal_Int32 OObjectInputStream::createMark()
