@@ -394,27 +394,28 @@ bool Calendar_gregorian::setTimeZone( const OUString& rTimeZone )
 // By using eraArray, it can take care Japanese and Taiwan ROC calendar.
 void Calendar_gregorian::mapFromGregorian()
 {
-    if (eraArray) {
-        sal_Int16 e, y, m, d;
+    if (!eraArray)
+        return;
 
-        e = fieldValue[CalendarFieldIndex::ERA];
-        y = fieldValue[CalendarFieldIndex::YEAR];
-        m = fieldValue[CalendarFieldIndex::MONTH] + 1;
-        d = fieldValue[CalendarFieldIndex::DAY_OF_MONTH];
+    sal_Int16 e, y, m, d;
 
-        // since the year is reversed for first era, it is reversed again here for Era compare.
-        if (e == 0)
-            y = 1 - y;
+    e = fieldValue[CalendarFieldIndex::ERA];
+    y = fieldValue[CalendarFieldIndex::YEAR];
+    m = fieldValue[CalendarFieldIndex::MONTH] + 1;
+    d = fieldValue[CalendarFieldIndex::DAY_OF_MONTH];
 
-        for (e = 0; eraArray[e].year; e++)
-            if ((y != eraArray[e].year) ? y < eraArray[e].year :
-                    (m != eraArray[e].month) ? m < eraArray[e].month : d < eraArray[e].day)
-                break;
+    // since the year is reversed for first era, it is reversed again here for Era compare.
+    if (e == 0)
+        y = 1 - y;
 
-        fieldValue[CalendarFieldIndex::ERA] = e;
-        fieldValue[CalendarFieldIndex::YEAR] =
-            sal::static_int_cast<sal_Int16>( (e == 0) ? (eraArray[0].year - y) : (y - eraArray[e-1].year + 1) );
-    }
+    for (e = 0; eraArray[e].year; e++)
+        if ((y != eraArray[e].year) ? y < eraArray[e].year :
+                (m != eraArray[e].month) ? m < eraArray[e].month : d < eraArray[e].day)
+            break;
+
+    fieldValue[CalendarFieldIndex::ERA] = e;
+    fieldValue[CalendarFieldIndex::YEAR] =
+        sal::static_int_cast<sal_Int16>( (e == 0) ? (eraArray[0].year - y) : (y - eraArray[e-1].year + 1) );
 }
 
 #define FIELDS  ((1 << CalendarFieldIndex::ERA) | (1 << CalendarFieldIndex::YEAR))

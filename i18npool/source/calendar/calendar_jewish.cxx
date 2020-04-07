@@ -272,19 +272,20 @@ void Calendar_jewish::mapFromGregorian()
 // map field value from other calendar to gregorian calendar, it should be implemented.
 void Calendar_jewish::mapToGregorian()
 {
-    if (fieldSet & FIELDS) {
-        sal_Int16 y = fieldSetValue[CalendarFieldIndex::YEAR];
-        if (fieldSetValue[CalendarFieldIndex::ERA] == 0)
-            y = 1 - y;
-        HebrewDate Temp(fieldSetValue[CalendarFieldIndex::MONTH] + 1, fieldSetValue[CalendarFieldIndex::DAY_OF_MONTH], y);
-        GregorianDate gd(Temp.GetAbsoluteDate());
+    if (!(fieldSet & FIELDS))
+        return;
 
-        fieldSetValue[CalendarFieldIndex::ERA] = gd.GetYear() <= 0 ? 0 : 1;
-        fieldSetValue[CalendarFieldIndex::MONTH] = sal::static_int_cast<sal_Int16>( gd.GetMonth() - 1 );
-        fieldSetValue[CalendarFieldIndex::DAY_OF_MONTH] = static_cast<sal_Int16>(gd.GetDay());
-        fieldSetValue[CalendarFieldIndex::YEAR] = static_cast<sal_Int16>(gd.GetYear() <= 0 ? 1 - gd.GetYear() : gd.GetYear());
-        fieldSet |= FIELDS;
-    }
+    sal_Int16 y = fieldSetValue[CalendarFieldIndex::YEAR];
+    if (fieldSetValue[CalendarFieldIndex::ERA] == 0)
+        y = 1 - y;
+    HebrewDate Temp(fieldSetValue[CalendarFieldIndex::MONTH] + 1, fieldSetValue[CalendarFieldIndex::DAY_OF_MONTH], y);
+    GregorianDate gd(Temp.GetAbsoluteDate());
+
+    fieldSetValue[CalendarFieldIndex::ERA] = gd.GetYear() <= 0 ? 0 : 1;
+    fieldSetValue[CalendarFieldIndex::MONTH] = sal::static_int_cast<sal_Int16>( gd.GetMonth() - 1 );
+    fieldSetValue[CalendarFieldIndex::DAY_OF_MONTH] = static_cast<sal_Int16>(gd.GetDay());
+    fieldSetValue[CalendarFieldIndex::YEAR] = static_cast<sal_Int16>(gd.GetYear() <= 0 ? 1 - gd.GetYear() : gd.GetYear());
+    fieldSet |= FIELDS;
 }
 
 // Methods in XExtendedCalendar

@@ -1168,21 +1168,22 @@ static void makeCyrillicNumber(sal_Int64 value, OUStringBuffer& output, bool add
         }
     }
 
-    if (addTitlo) {
-        if (output.getLength() == 1) {
+    if (!addTitlo)
+        return;
+
+    if (output.getLength() == 1) {
+        output.append(cyrillicTitlo);
+    } else if (output.getLength() == 2) {
+        if (value > 800 && value < 900) {
             output.append(cyrillicTitlo);
-        } else if (output.getLength() == 2) {
-            if (value > 800 && value < 900) {
-                output.append(cyrillicTitlo);
-            } else {
-                output.insert(1, cyrillicTitlo);
-            }
-        } else if (output.getLength() > 2) {
-            if (output.indexOf(" ") == output.getLength() - 2) {
-                output.append(cyrillicTitlo);
-            } else {
-                output.insert(output.getLength() - 1, cyrillicTitlo);
-            }
+        } else {
+            output.insert(1, cyrillicTitlo);
+        }
+    } else if (output.getLength() > 2) {
+        if (output.indexOf(" ") == output.getLength() - 2) {
+            output.append(cyrillicTitlo);
+        } else {
+            output.insert(output.getLength() - 1, cyrillicTitlo);
         }
     }
 }
