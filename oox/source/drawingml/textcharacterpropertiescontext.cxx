@@ -262,6 +262,9 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
                 mrTextCharacterProperties.moBaseline = -25000;
             break;
         }
+        case W_TOKEN(lang):
+            mrTextCharacterProperties.moLang = rAttribs.getString(W_TOKEN(val), OUString());
+            break;
         case OOX_TOKEN(w14, glow):
         case OOX_TOKEN(w14, shadow):
         case OOX_TOKEN(w14, reflection):
