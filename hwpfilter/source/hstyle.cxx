@@ -67,24 +67,24 @@ char *HWPStyle::GetName(int n) const
 
 void HWPStyle::SetName(int n, char const *name)
 {
-    if (n >= 0 && n < nstyles)
+    if (!(n >= 0 && n < nstyles))
+        return;
+
+    if (name)
     {
-        if (name)
-        {
 #if defined __GNUC__ && (__GNUC__ == 8 || __GNUC__ == 9) && !defined __clang__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstringop-truncation"
 #endif
-            auto const p = DATA[n].name;
-            strncpy(p, name, MAXSTYLENAME);
-            p[MAXSTYLENAME] = '\0'; // just in case, even though the array is zero-initialized
+        auto const p = DATA[n].name;
+        strncpy(p, name, MAXSTYLENAME);
+        p[MAXSTYLENAME] = '\0'; // just in case, even though the array is zero-initialized
 #if defined __GNUC__ && (__GNUC__ == 8 || __GNUC__ == 9) && !defined __clang__
 #pragma GCC diagnostic pop
 #endif
-        }
-        else
-            DATA[n].name[0] = 0;
     }
+    else
+        DATA[n].name[0] = 0;
 }
 
 
