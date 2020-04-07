@@ -244,15 +244,12 @@ cmd/sc_zoom100percent.png cmd/sc_view100.png
 # Save
 cmd/32/savebasicas.png cmd/32/saveas.png
 cmd/32/savegraphic.png cmd/32/save.png
-cmd/32/recsave.png cmd/32/save.png
 
 cmd/lc_savebasicas.png cmd/lc_saveas.png
 cmd/lc_savegraphic.png cmd/lc_save.png
-cmd/lc_recsave.png cmd/lc_save.png
 
 cmd/sc_savebasicas.png cmd/sc_saveas.png
 cmd/sc_savegraphic.png cmd/sc_save.png
-cmd/sc_recsave.png cmd/sc_save.png
 
 # Text
 cmd/32/textfittosizetool.png cmd/32/text_marquee.png
@@ -938,35 +935,21 @@ cmd/sc_printpagepreview.png cmd/sc_printpreview.png
 cmd/sc_previewprintoptions.png cmd/sc_printpreview.png
 cmd/sc_sendfax.png cmd/sc_print.png
 
-# Delete
-cmd/32/deleterecord.png cmd/32/delete.png
-
-cmd/lc_deleterecord.png cmd/lc_delete.png
-
-cmd/sc_deleterecord.png cmd/sc_delete.png
-
 # Folder
 cmd/32/dbtableopen.png cmd/32/open.png
 cmd/32/dbreportopen.png cmd/32/open.png
 cmd/32/dbqueryopen.png cmd/32/open.png
 cmd/32/dbformopen.png cmd/32/open.png
-cmd/32/insertdoc.png cmd/32/open.png
-cmd/32/newrecord.png cmd/32/open.png
 
 cmd/lc_dbtableopen.png cmd/lc_open.png
 cmd/lc_dbreportopen.png cmd/lc_open.png
 cmd/lc_dbqueryopen.png cmd/lc_open.png
 cmd/lc_dbformopen.png cmd/lc_open.png
-cmd/lc_insertdoc.png cmd/lc_open.png
-cmd/lc_newrecord.png cmd/lc_open.png
 
 cmd/sc_dbtableopen.png cmd/sc_open.png
 cmd/sc_dbreportopen.png cmd/sc_open.png
 cmd/sc_dbqueryopen.png cmd/sc_open.png
 cmd/sc_dbformopen.png cmd/sc_open.png
-cmd/sc_insertdoc.png cmd/sc_open.png
-cmd/sc_open_h.png cmd/sc_open.png
-cmd/sc_newrecord.png cmd/sc_open.png
 
 # Wizard
 cmd/32/commontaskbarvisible.png cmd/32/usewizards.png
@@ -1017,11 +1000,6 @@ cmd/sc_numberliststyle.png cmd/sc_defaultnumbering.png
 cmd/32/leaveallgroups.png cmd/32/leavegroup.png
 cmd/lc_leaveallgroups.png cmd/lc_leavegroup.png
 cmd/sc_leaveallgroups.png cmd/sc_leavegroup.png
-
-# Undo
-cmd/32/recundo.png cmd/32/undo.png
-cmd/lc_recundo.png cmd/lc_undo.png
-cmd/sc_recundo.png cmd/sc_undo.png
 
 # Label
 cmd/32/addname.png cmd/32/label.png
@@ -1758,11 +1736,8 @@ cmd/sc_tableinsertmenu.png cmd/sc_insertrowsafter.png
 cmd/sc_tableselectmenu.png cmd/sc_selecttable.png
 
 # Help
-cmd/32/absoluterecord.png cmd/32/helpindex.png
 cmd/32/questionanswers.png cmd/32/browseview.png
-cmd/lc_absoluterecord.png cmd/lc_helpindex.png
 cmd/lc_questionanswers.png cmd/lc_browseview.png
-cmd/sc_absoluterecord.png cmd/sc_helpindex.png
 cmd/sc_questionanswers.png cmd/sc_browseview.png
 
 # text background colour Impress/Draw
@@ -1823,10 +1798,8 @@ cmd/sc_slidesetup.png cmd/sc_pagesetup.png
 
 # dbaccess
 # ==============================================
-dbaccess/res/linked_text_table.png cmd/sc_dataimport.png
+dbaccess/res/linked_text_table.png database/linked_text_table.png
 
-dbaccess/res/all_left.png cmd/sc_firstrecord.png
-dbaccess/res/all_right.png cmd/sc_lastrecord.png
 dbaccess/res/db.png cmd/sc_viewdatasourcebrowser.png
 dbaccess/res/exerror.png cmd/sc_cancel.png
 dbaccess/res/exinfo.png cmd/sc_helpindex.png
@@ -1835,16 +1808,12 @@ dbaccess/res/forms_16.png res/dialogfolder_16.png
 res/forms_32.png dbaccess/res/forms_32.png
 
 dbaccess/res/lc036.png cmd/lc_dbnewreport.png
-dbaccess/res/lc037.png cmd/lc_delete.png
-dbaccess/res/lc038.png cmd/lc_editdoc.png
-dbaccess/res/lc039.png cmd/lc_save.png
-dbaccess/res/lc040.png cmd/lc_reload.png
+dbaccess/res/lc037.png cmd/lc_dbreportdelete.png
+dbaccess/res/lc038.png cmd/lc_dbreportedit.png
 
 dbaccess/res/nu07.png cmd/sc_ok.png
 dbaccess/res/nu08.png cmd/sc_cancel.png
 
-dbaccess/res/one_left.png cmd/sc_prevrecord.png
-dbaccess/res/one_right.png cmd/sc_nextrecord.png
 dbaccess/res/jo01.png dbaccess/res/pkey.png
 res/queries_32.png dbaccess/res/queries_32.png
 
@@ -1852,10 +1821,8 @@ dbaccess/res/report_16.png cmd/sc_dbviewreports.png
 res/reports_32.png dbaccess/res/reports_32.png
 
 dbaccess/res/sc036.png cmd/sc_dbreportedit.png
-dbaccess/res/sc037.png cmd/sc_delete.png
-dbaccess/res/sc038.png cmd/sc_editdoc.png
-dbaccess/res/sc039.png cmd/sc_save.png
-dbaccess/res/sc040.png cmd/sc_reload.png
+dbaccess/res/sc037.png cmd/sc_dbreportdelete.png
+dbaccess/res/sc038.png cmd/sc_dbreportedit.png
 
 dbaccess/res/sortdown.png cmd/sc_sortascending.png
 dbaccess/res/sortup.png cmd/sc_sortdescending.png
@@ -2195,10 +2162,7 @@ svx/res/fontworkalignstretch_16.png cmd/sc_text_marquee.png
 svx/res/fw07.png cmd/sc_alignleft.png
 svx/res/fw08.png cmd/sc_alignhorizontalcenter.png
 svx/res/fw09.png cmd/sc_alignright.png
-svx/res/galdefs.png formula/res/fapclose.png
-svx/res/galnors.png formula/res/fapclose.png
 svx/res/galrdos.png formula/res/fapclose.png
-svx/res/graphic.png cmd/lc_graphic.png
 
 svx/res/id01.png cmd/sc_ok.png
 svx/res/id02.png cmd/sc_open.png
@@ -2267,6 +2231,10 @@ svx/res/symphony/spacing3.png cmd/sc_spacepara1.png
 # sw
 # ==============================================
 # res
+
+sw/res/all_left.png dbaccess/res/all_left.png
+sw/res/all_right.png dbaccess/res/all_right.png
+
 sw/res/lc20556.png cmd/lc_dbviewfunctions.png
 sw/res/lc20557.png cmd/lc_cancel.png
 sw/res/lc20558.png cmd/lc_ok.png
@@ -2280,6 +2248,9 @@ sw/res/nc20008.png cmd/sc_insertreferencefield.png
 sw/res/nc20009.png cmd/sc_insertindexesentry.png
 sw/res/nc20010.png cmd/sc_shownote.png
 sw/res/nc20011.png cmd/sc_insertdraw.png
+
+sw/res/one_left.png dbaccess/res/one_left.png
+sw/res/one_right.png dbaccess/res/one_right.png
 
 sw/res/re01.png cmd/lc_unsetcellsreadonly.png
 sw/res/re02.png cmd/lc_unsetcellsreadonly.png
@@ -2339,11 +2310,6 @@ sw/res/wr04.png cmd/32/wrapon.png
 sw/res/wr05.png cmd/32/wrapthrough.png
 sw/res/wr06.png cmd/32/wrapideal.png
 
-# res
-sw/res/all_left.png cmd/sc_firstrecord.png
-sw/res/all_right.png cmd/sc_lastrecord.png
-sw/res/one_left.png cmd/sc_prevrecord.png
-sw/res/one_right.png cmd/sc_nextrecord.png
 sw/res/page_break.png cmd/lc_insertpagebreak.png
 sw/res/styfamnu.png cmd/sc_defaultbullet.png
 
