@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1da16542_e4d99bb0",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableHandler.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 626,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-04-07T13:13:12Z",
+      "side": 1,
+      "message": "This is a bit of a hack.  You will not be perfectly correct on a table with a thick border, because the docx margin doesn\u0027t account for the left-border vs mid-border difference between how LO and MSO handle table starting-point.\n\nNote that this will now conflict with master since my change here landed this afternoon.",
+      "range": {
+        "startLine": 626,
+        "startChar": 98,
+        "endLine": 626,
+        "endChar": 103
+      },
+      "revId": "c786b2a8fe8686205fc6f9c685fb59d9bbf92905",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
