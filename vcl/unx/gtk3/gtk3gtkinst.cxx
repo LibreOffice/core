@@ -8444,6 +8444,7 @@ class GtkInstanceEntry : public GtkInstanceWidget, public virtual weld::Entry
 {
 private:
     GtkEntry* m_pEntry;
+    std::unique_ptr<vcl::Font> m_xFont;
     gulong m_nChangedSignalId;
     gulong m_nInsertTextSignalId;
     gulong m_nCursorPosSignalId;
@@ -8621,9 +8622,17 @@ public:
 
     virtual void set_font(const vcl::Font& rFont) override
     {
+        m_xFont.reset(new vcl::Font(rFont));
         PangoAttrList* pAttrList = create_attr_list(rFont);
         gtk_entry_set_attributes(m_pEntry, pAttrList);
         pango_attr_list_unref(pAttrList);
+    }
+
+    virtual vcl::Font get_font() override
+    {
+        if (m_xFont)
+            return *m_xFont;
+        return GtkInstanceWidget::get_font();
     }
 
     void fire_signal_changed()
@@ -12577,6 +12586,7 @@ private:
     GtkCellRenderer* m_pTextRenderer;
     GtkMenu* m_pMenu;
     GtkWidget* m_pToggleButton;
+    std::unique_ptr<vcl::Font> m_xFont;
     std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
     vcl::QuickSelectionEngine m_aQuickSelectionEngine;
     std::vector<int> m_aSeparatorRows;
@@ -13405,12 +13415,25 @@ public:
 
     virtual void set_entry_font(const vcl::Font& rFont) override
     {
+        m_xFont.reset(new vcl::Font(rFont));
         PangoAttrList* pAttrList = create_attr_list(rFont);
         GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pComboBox));
         assert(pChild && GTK_IS_ENTRY(pChild));
         GtkEntry* pEntry = GTK_ENTRY(pChild);
         gtk_entry_set_attributes(pEntry, pAttrList);
         pango_attr_list_unref(pAttrList);
+    }
+
+    virtual vcl::Font get_entry_font() override
+    {
+        if (m_xFont)
+            return *m_xFont;
+        GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pComboBox));
+        assert(pChild && GTK_IS_ENTRY(pChild));
+        GtkEntry* pEntry = GTK_ENTRY(pChild);
+        PangoContext* pContext = gtk_widget_get_pango_context(GTK_WIDGET(pEntry));
+        return pango_to_vcl(pango_context_get_font_description(pContext),
+                            Application::GetSettings().GetUILanguageTag().getLocale());
     }
 
     virtual void disable_notify_events() override
@@ -13714,6 +13737,11 @@ public:
     virtual void set_entry_font(const vcl::Font& rFont) override
     {
         m_xEntry->set_font(rFont);
+    }
+
+    virtual vcl::Font get_entry_font() override
+    {
+        return m_xEntry->get_font();
     }
 
     virtual void grab_focus() override { m_xEntry->grab_focus(); }
