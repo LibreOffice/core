@@ -230,6 +230,7 @@ private:
     OUString        msEffectName;
     CustomAnimationEffectPtr mpEffect;
 
+public:
     static const long nIconWidth = 19;
     static const long nItemMinHeight = 38;
 };
@@ -275,6 +276,8 @@ IMPL_STATIC_LINK(CustomAnimationList, CustomGetSizeHdl, weld::TreeView::get_size
     const OUString& rId = aPayload.second;
 
     CustomAnimationListEntryItem* pItem = reinterpret_cast<CustomAnimationListEntryItem*>(rId.toInt64());
+    if (!pItem)
+        return Size(CustomAnimationListEntryItem::nIconWidth, CustomAnimationListEntryItem::nItemMinHeight);
     return pItem->GetSize(rRenderContext);
 }
 
@@ -426,7 +429,6 @@ CustomAnimationList::CustomAnimationList(std::unique_ptr<weld::TreeView> xTreeVi
     mxEmptyLabel->set_stack_background();
 
     mxTreeView->set_selection_mode(SelectionMode::Multiple);
-    mxTreeView->set_column_custom_renderer(0);
     mxTreeView->connect_changed(LINK(this, CustomAnimationList, SelectHdl));
     mxTreeView->connect_key_press(LINK(this, CustomAnimationList, KeyInputHdl));
     mxTreeView->connect_popup_menu(LINK(this, CustomAnimationList, CommandHdl));
@@ -436,6 +438,7 @@ CustomAnimationList::CustomAnimationList(std::unique_ptr<weld::TreeView> xTreeVi
     mxTreeView->connect_drag_begin(LINK(this, CustomAnimationList, DragBeginHdl));
     mxTreeView->connect_custom_get_size(LINK(this, CustomAnimationList, CustomGetSizeHdl));
     mxTreeView->connect_custom_render(LINK(this, CustomAnimationList, CustomRenderHdl));
+    mxTreeView->set_column_custom_renderer(0);
 }
 
 CustomAnimationListDropTarget::CustomAnimationListDropTarget(CustomAnimationList& rTreeView)

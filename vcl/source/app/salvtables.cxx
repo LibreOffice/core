@@ -5824,6 +5824,24 @@ public:
         ensure_event_listener();
     }
 
+    void call_signal_custom_render(UserDrawEvent* pEvent)
+    {
+        vcl::RenderContext* pRenderContext = pEvent->GetRenderContext();
+        auto nPos = pEvent->GetItemId();
+        signal_custom_render(*pRenderContext, pEvent->GetRect(), pEvent->IsSelected(), get_id(nPos));
+        m_xComboBox->DrawEntry(*pEvent, false, false);  // draw separator
+    }
+
+    Size call_signal_custom_get_size(VirtualDevice& rOutput, const OUString& rId)
+    {
+        return signal_custom_get_size(rOutput, rId);
+    }
+
+    VclPtr<VirtualDevice> create_render_virtual_device() const override
+    {
+        return VclPtr<VirtualDevice>::Create();
+    }
+
     virtual void HandleEventListener(VclWindowEvent& rEvent) override
     {
         if (rEvent.GetId() == VclEventId::DropdownPreOpen
@@ -5908,6 +5926,33 @@ public:
 
     virtual vcl::Font get_entry_font() override { assert(false); return vcl::Font(); }
 
+    virtual void set_custom_renderer() override
+    {
+        assert(false && "not implemented");
+    }
+
+    virtual int get_max_mru_count() const override
+    {
+        assert(false && "not implemented");
+        return 0;
+    }
+
+    virtual void set_max_mru_count(int) override
+    {
+        assert(false && "not implemented");
+    }
+
+    virtual OUString get_mru_entries() const override
+    {
+        assert(false && "not implemented");
+        return OUString();
+    }
+
+    virtual void set_mru_entries(const OUString&) override
+    {
+        assert(false && "not implemented");
+    }
+
     virtual ~SalInstanceComboBoxWithoutEdit() override
     {
         m_xComboBox->SetSelectHdl(Link<ListBox&, void>());
@@ -5929,6 +5974,7 @@ private:
     DECL_LINK(ChangeHdl, Edit&, void);
     DECL_LINK(EntryActivateHdl, Edit&, bool);
     DECL_LINK(SelectHdl, ::ComboBox&, void);
+    DECL_LINK(UserDrawHdl, UserDrawEvent*, void);
     WeldTextFilter m_aTextFilter;
     bool m_bInSelect;
 public:
@@ -6038,6 +6084,43 @@ public:
         return pEdit->GetPointFont(*pEdit);
     }
 
+    virtual void set_custom_renderer() override
+    {
+        auto nOldEntryHeight = m_xComboBox->GetDropDownEntryHeight();
+        auto nDropDownLineCount = m_xComboBox->GetDropDownLineCount();
+
+        Size aRowSize(signal_custom_get_size(*m_xComboBox, OUString()));
+        m_xComboBox->EnableUserDraw(true);
+        m_xComboBox->SetUserItemSize(aRowSize);
+        m_xComboBox->SetUserDrawHdl(LINK(this, SalInstanceComboBoxWithEdit, UserDrawHdl));
+
+        // adjust the line count to fit approx the height it would have been before
+        // using a custom renderer
+        auto nNewEntryHeight = m_xComboBox->GetDropDownEntryHeight();
+        double fRatio = nOldEntryHeight / static_cast<double>(nNewEntryHeight);
+        m_xComboBox->SetDropDownLineCount(nDropDownLineCount * fRatio);
+    }
+
+    virtual int get_max_mru_count() const override
+    {
+        return m_xComboBox->GetMaxMRUCount();
+    }
+
+    virtual void set_max_mru_count(int nCount) override
+    {
+        return m_xComboBox->SetMaxMRUCount(nCount);
+    }
+
+    virtual OUString get_mru_entries() const override
+    {
+        return m_xComboBox->GetMRUEntries();
+    }
+
+    virtual void set_mru_entries(const OUString& rEntries) override
+    {
+        m_xComboBox->SetMRUEntries(rEntries);
+    }
+
     virtual ~SalInstanceComboBoxWithEdit() override
     {
         m_xComboBox->SetTextFilter(nullptr);
@@ -6065,6 +6148,11 @@ IMPL_LINK_NOARG(SalInstanceComboBoxWithEdit, SelectHdl, ::ComboBox&, void)
 IMPL_LINK_NOARG(SalInstanceComboBoxWithEdit, EntryActivateHdl, Edit&, bool)
 {
     return m_aEntryActivateHdl.Call(*this);
+}
+
+IMPL_LINK(SalInstanceComboBoxWithEdit, UserDrawHdl, UserDrawEvent*, pEvent, void)
+{
+    call_signal_custom_render(pEvent);
 }
 
 class SalInstanceEntryTreeView : public SalInstanceContainer, public virtual weld::EntryTreeView
@@ -6141,6 +6229,38 @@ public:
     }
 
     virtual bool changed_by_direct_pick() const override { return m_bTreeChange; }
+
+    virtual void set_custom_renderer() override
+    {
+        assert(false && "not implemented");
+    }
+
+    virtual int get_max_mru_count() const override
+    {
+        assert(false && "not implemented");
+        return 0;
+    }
+
+    virtual void set_max_mru_count(int) override
+    {
+        assert(false && "not implemented");
+    }
+
+    virtual OUString get_mru_entries() const override
+    {
+        assert(false && "not implemented");
+        return OUString();
+    }
+
+    virtual void set_mru_entries(const OUString&) override
+    {
+        assert(false && "not implemented");
+    }
+
+    VclPtr<VirtualDevice> create_render_virtual_device() const override
+    {
+        return VclPtr<VirtualDevice>::Create();
+    }
 
     virtual ~SalInstanceEntryTreeView() override
     {
