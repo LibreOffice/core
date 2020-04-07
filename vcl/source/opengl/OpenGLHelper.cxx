@@ -35,6 +35,7 @@
 #include <bitmapwriteaccess.hxx>
 #include <watchdog.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
+#include <vcl/glxtestprocess.hxx>
 
 #if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID && !defined HAIKU
 #include <opengl/x11/X11DeviceInfo.hxx>
@@ -903,11 +904,26 @@ PreDefaultWinNoOpenGLZone::~PreDefaultWinNoOpenGLZone()
     bTempOpenGLDisabled = false;
 }
 
+static void reapGlxTest()
+{
+    // Reap the glxtest child, or it'll stay around as a zombie,
+    // as X11OpenGLDeviceInfo::GetData() will not get called.
+    static bool bTestReaped = false;
+    if(!bTestReaped)
+    {
+        reap_glxtest_process();
+        bTestReaped = true;
+    }
+}
+
 bool OpenGLHelper::isVCLOpenGLEnabled()
 {
     // Skia always takes precedence if enabled
     if( SkiaHelper::isVCLSkiaEnabled())
+    {
+        reapGlxTest();
         return false;
+    }
 
     /**
      * The !bSet part should only be called once! Changing the results in the same
@@ -965,6 +981,8 @@ bool OpenGLHelper::isVCLOpenGLEnabled()
 
     if (bRet)
         WatchdogThread::start();
+    else
+        reapGlxTest();
 
     CrashReporter::addKeyValue("UseOpenGL", OUString::boolean(bRet), CrashReporter::Write);
 

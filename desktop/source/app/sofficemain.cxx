@@ -59,17 +59,8 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
     CrashReporter::installExceptionHandler();
 #endif
 
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && HAVE_FEATURE_UI && HAVE_FEATURE_OPENGL
-    /* Run test for OpenGL support in own process to avoid crash with broken
-     * OpenGL drivers. Start process as early as possible.
-     * In non-headless mode, the process will be reaped in X11OpenGLDeviceInfo::GetData
-     * (vcl/opengl/x11/X11DeviceInfo.cxx).  In headless mode, the process will be reaped late in
-     * Desktop::Main (desktop/source/app/app.cxx), in a code block that needs to be covered by the
-     * same #if condition as this code block.
-     */
     bool bSuccess = fire_glxtest_process();
     SAL_WARN_IF(!bSuccess, "desktop.opengl", "problems with glxtest");
-#endif
 
 #if defined ANDROID
     try {

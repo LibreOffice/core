@@ -27,9 +27,7 @@
 #include <vcl/svmain.hxx>
 
 SAL_IMPLEMENT_MAIN() {
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && HAVE_FEATURE_UI && !defined HAIKU
     fire_glxtest_process();
-#endif
     tools::extendApplicationEnvironment();
     vclmain::createApplication();
     return SVMain();
