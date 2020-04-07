@@ -278,13 +278,12 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<std::pair<Graphic, Si
         if (FPDF_GetPageSizeByIndex(pPdfDocument, nPageIndex, &fPageWidth, &fPageHeight) == 0)
             continue;
 
-        // Returned unit is points, convert that to 100th mm (hmm).
-        // 1 pt = 20 twips, 1 twip = 1.7638888888888889 hmm
-        // TODO: use some conversion class for that
-        constexpr double pointToHMMconversionRatio = 20.0 * 1.7638888888888889;
+        // Returned unit is points, convert that to twip
+        // 1 pt = 20 twips
+        constexpr double pointToTwipconversionRatio = 20;
 
-        long nPageWidth = fPageWidth * pointToHMMconversionRatio;
-        long nPageHeight = fPageHeight * pointToHMMconversionRatio;
+        long nPageWidth = convertTwipToMm100(fPageWidth * pointToTwipconversionRatio);
+        long nPageHeight = convertTwipToMm100(fPageHeight * pointToTwipconversionRatio);
 
         auto aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(
             aPdfDataArray, OUString(), VectorGraphicDataType::Pdf, nPageIndex);
