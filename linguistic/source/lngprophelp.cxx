@@ -108,29 +108,29 @@ void PropertyChgHelper::SetDefaultValues()
 void PropertyChgHelper::GetCurrentValues()
 {
     const auto& rPropNames = GetPropNames();
-    if (GetPropSet().is() && rPropNames.hasElements())
+    if (!(GetPropSet().is() && rPropNames.hasElements()))
+        return;
+
+    for (const OUString& rPropName : rPropNames)
     {
-        for (const OUString& rPropName : rPropNames)
+        bool *pbVal     = nullptr,
+             *pbResVal  = nullptr;
+
+        if ( rPropName == UPN_IS_IGNORE_CONTROL_CHARACTERS )
         {
-            bool *pbVal     = nullptr,
-                 *pbResVal  = nullptr;
+            pbVal    = &bIsIgnoreControlCharacters;
+            pbResVal = &bResIsIgnoreControlCharacters;
+        }
+        else if ( rPropName == UPN_IS_USE_DICTIONARY_LIST )
+        {
+            pbVal    = &bIsUseDictionaryList;
+            pbResVal = &bResIsUseDictionaryList;
+        }
 
-            if ( rPropName == UPN_IS_IGNORE_CONTROL_CHARACTERS )
-            {
-                pbVal    = &bIsIgnoreControlCharacters;
-                pbResVal = &bResIsIgnoreControlCharacters;
-            }
-            else if ( rPropName == UPN_IS_USE_DICTIONARY_LIST )
-            {
-                pbVal    = &bIsUseDictionaryList;
-                pbResVal = &bResIsUseDictionaryList;
-            }
-
-            if (pbVal && pbResVal)
-            {
-                GetPropSet()->getPropertyValue( rPropName ) >>= *pbVal;
-                *pbResVal = *pbVal;
-            }
+        if (pbVal && pbResVal)
+        {
+            GetPropSet()->getPropertyValue( rPropName ) >>= *pbVal;
+            *pbResVal = *pbVal;
         }
     }
 }
@@ -358,34 +358,34 @@ void PropertyHelper_Spell::GetCurrentValues()
     PropertyChgHelper::GetCurrentValues();
 
     const auto& rPropNames = GetPropNames();
-    if (GetPropSet().is() && rPropNames.hasElements())
+    if (!(GetPropSet().is() && rPropNames.hasElements()))
+        return;
+
+    for (const OUString& rPropName : rPropNames)
     {
-        for (const OUString& rPropName : rPropNames)
+        bool *pbVal     = nullptr,
+             *pbResVal  = nullptr;
+
+        if ( rPropName == UPN_IS_SPELL_UPPER_CASE )
         {
-            bool *pbVal     = nullptr,
-                 *pbResVal  = nullptr;
+            pbVal    = &bIsSpellUpperCase;
+            pbResVal = &bResIsSpellUpperCase;
+        }
+        else if ( rPropName == UPN_IS_SPELL_WITH_DIGITS )
+        {
+            pbVal    = &bIsSpellWithDigits;
+            pbResVal = &bResIsSpellWithDigits;
+        }
+        else if ( rPropName == UPN_IS_SPELL_CAPITALIZATION )
+        {
+            pbVal    = &bIsSpellCapitalization;
+            pbResVal = &bResIsSpellCapitalization;
+        }
 
-            if ( rPropName == UPN_IS_SPELL_UPPER_CASE )
-            {
-                pbVal    = &bIsSpellUpperCase;
-                pbResVal = &bResIsSpellUpperCase;
-            }
-            else if ( rPropName == UPN_IS_SPELL_WITH_DIGITS )
-            {
-                pbVal    = &bIsSpellWithDigits;
-                pbResVal = &bResIsSpellWithDigits;
-            }
-            else if ( rPropName == UPN_IS_SPELL_CAPITALIZATION )
-            {
-                pbVal    = &bIsSpellCapitalization;
-                pbResVal = &bResIsSpellCapitalization;
-            }
-
-            if (pbVal && pbResVal)
-            {
-                GetPropSet()->getPropertyValue( rPropName ) >>= *pbVal;
-                *pbResVal = *pbVal;
-            }
+        if (pbVal && pbResVal)
+        {
+            GetPropSet()->getPropertyValue( rPropName ) >>= *pbVal;
+            *pbResVal = *pbVal;
         }
     }
 }
@@ -531,46 +531,46 @@ void PropertyHelper_Hyphen::GetCurrentValues()
     PropertyChgHelper::GetCurrentValues();
 
     const auto& rPropNames = GetPropNames();
-    if (GetPropSet().is() && rPropNames.hasElements())
+    if (!(GetPropSet().is() && rPropNames.hasElements()))
+        return;
+
+    for (const OUString& rPropName : rPropNames)
     {
-        for (const OUString& rPropName : rPropNames)
+        sal_Int16  *pnVal    = nullptr,
+               *pnResVal = nullptr;
+        bool *pbVal = nullptr;
+        bool *pbResVal = nullptr;
+
+        if ( rPropName == UPN_HYPH_MIN_LEADING )
         {
-            sal_Int16  *pnVal    = nullptr,
-                   *pnResVal = nullptr;
-            bool *pbVal = nullptr;
-            bool *pbResVal = nullptr;
+            pnVal    = &nHyphMinLeading;
+            pnResVal = &nResHyphMinLeading;
+        }
+        else if ( rPropName == UPN_HYPH_MIN_TRAILING )
+        {
+            pnVal    = &nHyphMinTrailing;
+            pnResVal = &nResHyphMinTrailing;
+        }
+        else if ( rPropName == UPN_HYPH_MIN_WORD_LENGTH )
+        {
+            pnVal    = &nHyphMinWordLength;
+            pnResVal = &nResHyphMinWordLength;
+        }
+        else if ( rPropName == UPN_HYPH_NO_CAPS )
+        {
+            pbVal    = &bNoHyphenateCaps;
+            pbResVal = &bResNoHyphenateCaps;
+        }
 
-            if ( rPropName == UPN_HYPH_MIN_LEADING )
-            {
-                pnVal    = &nHyphMinLeading;
-                pnResVal = &nResHyphMinLeading;
-            }
-            else if ( rPropName == UPN_HYPH_MIN_TRAILING )
-            {
-                pnVal    = &nHyphMinTrailing;
-                pnResVal = &nResHyphMinTrailing;
-            }
-            else if ( rPropName == UPN_HYPH_MIN_WORD_LENGTH )
-            {
-                pnVal    = &nHyphMinWordLength;
-                pnResVal = &nResHyphMinWordLength;
-            }
-            else if ( rPropName == UPN_HYPH_NO_CAPS )
-            {
-                pbVal    = &bNoHyphenateCaps;
-                pbResVal = &bResNoHyphenateCaps;
-            }
-
-            if (pnVal && pnResVal)
-            {
-                GetPropSet()->getPropertyValue( rPropName ) >>= *pnVal;
-                *pnResVal = *pnVal;
-            }
-            else if (pbVal && pbResVal)
-            {
-                GetPropSet()->getPropertyValue( rPropName ) >>= *pbVal;
-                *pbResVal = *pbVal;
-            }
+        if (pnVal && pnResVal)
+        {
+            GetPropSet()->getPropertyValue( rPropName ) >>= *pnVal;
+            *pnResVal = *pnVal;
+        }
+        else if (pbVal && pbResVal)
+        {
+            GetPropSet()->getPropertyValue( rPropName ) >>= *pbVal;
+            *pbResVal = *pbVal;
         }
     }
 }

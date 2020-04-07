@@ -522,46 +522,46 @@ void SAL_CALL
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
-    if (!bDisposing)
+    if (bDisposing)
+        return;
+
+    bDisposing = true;
+    EventObject aEvtObj( static_cast<XDictionaryList *>(this) );
+
+    aEvtListeners.disposeAndClear( aEvtObj );
+    if (mxDicEvtLstnrHelper.is())
+        mxDicEvtLstnrHelper->DisposeAndClear( aEvtObj );
+
+    //! avoid creation of dictionaries if not already done
+    if ( !aDicList.empty() )
     {
-        bDisposing = true;
-        EventObject aEvtObj( static_cast<XDictionaryList *>(this) );
-
-        aEvtListeners.disposeAndClear( aEvtObj );
-        if (mxDicEvtLstnrHelper.is())
-            mxDicEvtLstnrHelper->DisposeAndClear( aEvtObj );
-
-        //! avoid creation of dictionaries if not already done
-        if ( !aDicList.empty() )
+        DictionaryVec_t& rDicList = GetOrCreateDicList();
+        size_t nCount = rDicList.size();
+        for (size_t i = 0;  i < nCount;  i++)
         {
-            DictionaryVec_t& rDicList = GetOrCreateDicList();
-            size_t nCount = rDicList.size();
-            for (size_t i = 0;  i < nCount;  i++)
+            uno::Reference< XDictionary > xDic( rDicList[i], UNO_QUERY );
+
+            // save (modified) dictionaries
+            uno::Reference< frame::XStorable >  xStor( xDic , UNO_QUERY );
+            if (xStor.is())
             {
-                uno::Reference< XDictionary > xDic( rDicList[i], UNO_QUERY );
-
-                // save (modified) dictionaries
-                uno::Reference< frame::XStorable >  xStor( xDic , UNO_QUERY );
-                if (xStor.is())
+                try
                 {
-                    try
-                    {
-                        if (!xStor->isReadonly() && xStor->hasLocation())
-                            xStor->store();
-                    }
-                    catch(Exception &)
-                    {
-                    }
+                    if (!xStor->isReadonly() && xStor->hasLocation())
+                        xStor->store();
                 }
-
-                // release references to (members of) this object hold by
-                // dictionaries
-                if (xDic.is())
-                    xDic->removeDictionaryEventListener( mxDicEvtLstnrHelper.get() );
+                catch(Exception &)
+                {
+                }
             }
+
+            // release references to (members of) this object hold by
+            // dictionaries
+            if (xDic.is())
+                xDic->removeDictionaryEventListener( mxDicEvtLstnrHelper.get() );
         }
-        mxDicEvtLstnrHelper.clear();
     }
+    mxDicEvtLstnrHelper.clear();
 }
 
 void SAL_CALL
@@ -639,25 +639,25 @@ void DicList::SaveDics()
 {
     // save dics only if they have already been used/created.
     //! don't create them just for the purpose of saving them !
-    if ( !aDicList.empty() )
+    if ( aDicList.empty() )
+        return;
+
+    // save (modified) dictionaries
+    DictionaryVec_t& rDicList = GetOrCreateDicList();
+    size_t nCount = rDicList.size();
+    for (size_t i = 0;  i < nCount;  i++)
     {
         // save (modified) dictionaries
-        DictionaryVec_t& rDicList = GetOrCreateDicList();
-        size_t nCount = rDicList.size();
-        for (size_t i = 0;  i < nCount;  i++)
+        uno::Reference< frame::XStorable >  xStor( rDicList[i], UNO_QUERY );
+        if (xStor.is())
         {
-            // save (modified) dictionaries
-            uno::Reference< frame::XStorable >  xStor( rDicList[i], UNO_QUERY );
-            if (xStor.is())
+            try
             {
-                try
-                {
-                    if (!xStor->isReadonly() && xStor->hasLocation())
-                        xStor->store();
-                }
-                catch(Exception &)
-                {
-                }
+                if (!xStor->isReadonly() && xStor->hasLocation())
+                    xStor->store();
+            }
+            catch(Exception &)
+            {
             }
         }
     }
@@ -745,21 +745,21 @@ static void AddInternal(
         const uno::Reference<XDictionary> &rDic,
         const OUString& rNew )
 {
-    if (rDic.is())
-    {
-        //! TL TODO: word iterator should be used to break up the text
-        OUString aDelim("!\"#$%&'()*+,-/:;<=>?[]\\_^`{|}~\t \n");
-        OSL_ENSURE(aDelim.indexOf(u'.') == -1,
-            "ensure no '.'");
+    if (!rDic.is())
+        return;
 
-        OUString      aToken;
-        sal_Int32 nPos = 0;
-        while (-1 != (nPos = lcl_GetToken( aToken, rNew, nPos, aDelim )))
+    //! TL TODO: word iterator should be used to break up the text
+    OUString aDelim("!\"#$%&'()*+,-/:;<=>?[]\\_^`{|}~\t \n");
+    OSL_ENSURE(aDelim.indexOf(u'.') == -1,
+        "ensure no '.'");
+
+    OUString      aToken;
+    sal_Int32 nPos = 0;
+    while (-1 != (nPos = lcl_GetToken( aToken, rNew, nPos, aDelim )))
+    {
+        if( !aToken.isEmpty()  &&  !IsNumeric( aToken ) )
         {
-            if( !aToken.isEmpty()  &&  !IsNumeric( aToken ) )
-            {
-                rDic->add( aToken, false, OUString() );
-            }
+            rDic->add( aToken, false, OUString() );
         }
     }
 }
