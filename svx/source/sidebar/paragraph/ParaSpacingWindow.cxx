@@ -81,15 +81,31 @@ void ParaULSpacingWindow::SetUnit(FieldUnit eUnit)
     m_xBelowSpacing->set_max(m_xBelowSpacing->normalize(MAX_DURCH), MapToFieldUnit(m_eUnit));
 }
 
-void ParaULSpacingWindow::SetValue(const SvxULSpaceItem* pItem)
+void ParaULSpacingWindow::SetValue(SfxItemState eState, const SvxULSpaceItem* pItem)
 {
-    sal_Int64 nVal = pItem->GetUpper();
-    nVal = m_xAboveSpacing->normalize(nVal);
-    m_xAboveSpacing->set_value(nVal, FieldUnit::MM_100TH);
+    if (pItem && eState >= SfxItemState::DEFAULT)
+    {
+        m_xAboveSpacing->set_sensitive(true);
+        m_xBelowSpacing->set_sensitive(true);
 
-    nVal = pItem->GetLower();
-    nVal = m_xBelowSpacing->normalize(nVal);
-    m_xBelowSpacing->set_value(nVal, FieldUnit::MM_100TH);
+        sal_Int64 nVal = pItem->GetUpper();
+        nVal = m_xAboveSpacing->normalize(nVal);
+        m_xAboveSpacing->set_value(nVal, FieldUnit::MM_100TH);
+
+        nVal = pItem->GetLower();
+        nVal = m_xBelowSpacing->normalize(nVal);
+        m_xBelowSpacing->set_value(nVal, FieldUnit::MM_100TH);
+    }
+    else if (eState == SfxItemState::DISABLED)
+    {
+        m_xAboveSpacing->set_sensitive(false);
+        m_xBelowSpacing->set_sensitive(false);
+    }
+    else
+    {
+        m_xAboveSpacing->set_text("");
+        m_xBelowSpacing->set_text("");
+    }
 }
 
 IMPL_LINK_NOARG(ParaULSpacingWindow, ModifySpacingHdl, weld::MetricSpinButton&, void)

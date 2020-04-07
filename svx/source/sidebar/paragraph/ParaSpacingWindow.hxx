@@ -34,7 +34,7 @@ public:
     virtual ~ParaULSpacingWindow() override;
     virtual void dispose() override;
 
-    void SetValue(const SvxULSpaceItem* pItem);
+    void SetValue(SfxItemState eState, const SvxULSpaceItem* pItem);
     void SetUnit(FieldUnit eUnit);
 
 protected:

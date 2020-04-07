@@ -61,23 +61,17 @@ void ParaULSpacingControl::StateChanged(sal_uInt16 nSID, SfxItemState eState,
 
     DBG_ASSERT( pWindow, "Control not found!" );
 
-    if(SfxItemState::DISABLED == eState)
-        pWindow->Disable();
-    else
-        pWindow->Enable();
-
-    rTbx.EnableItem(nId, SfxItemState::DISABLED != eState);
-
     if(nSID == SID_ATTR_METRIC && pState && eState >= SfxItemState::DEFAULT)
     {
         const SfxUInt16Item* pMetricItem = static_cast<const SfxUInt16Item*>(pState);
         pWindow->SetUnit(static_cast<FieldUnit>(pMetricItem->GetValue()));
     }
-    else if((nSID == SID_ATTR_PARA_ULSPACE
-        || nSID == SID_ATTR_PARA_ABOVESPACE
-        || nSID == SID_ATTR_PARA_BELOWSPACE )
-        && pState && eState >= SfxItemState::DEFAULT)
-        pWindow->SetValue(static_cast<const SvxULSpaceItem*>(pState));
+    else if(nSID == SID_ATTR_PARA_ULSPACE
+            || nSID == SID_ATTR_PARA_ABOVESPACE
+            || nSID == SID_ATTR_PARA_BELOWSPACE)
+    {
+        pWindow->SetValue(eState, static_cast<const SvxULSpaceItem*>(pState));
+    }
 }
 
 // ParaAboveSpacingControl
@@ -141,11 +135,6 @@ void ParaLRSpacingControl::StateChanged(sal_uInt16 nSID, SfxItemState eState,
     ParaLRSpacingWindow* pWindow = static_cast<ParaLRSpacingWindow*>(rTbx.GetItemWindow(nId));
 
     DBG_ASSERT( pWindow, "Control not found!" );
-
-    if(SfxItemState::DISABLED == eState)
-        pWindow->Disable();
-    else
-        pWindow->Enable();
 
     if(!m_xMultiplexer.is() && m_xFrame.is())
     {
