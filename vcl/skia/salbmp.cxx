@@ -304,7 +304,7 @@ bool SkiaSalBitmap::Scale(const double& rScaleX, const double& rScaleY, BmpScale
     // so delaying will mean the scaling can be done as a part of GetSkImage().
     // That means it can be GPU-accelerated, while done here directly it would need
     // to be either done by CPU, or with the CPU->GPU->CPU roundtrip required
-    // by GPU-accelereated scaling.
+    // by GPU-accelerated scaling.
     // Pending scaling is detected by 'mSize != mPixelsSize'.
     SkFilterQuality currentQuality;
     switch (nScaleFlag)
