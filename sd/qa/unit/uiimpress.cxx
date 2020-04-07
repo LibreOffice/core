@@ -13,6 +13,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/drawing/FillStyle.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -23,6 +24,7 @@
 #include <svx/svxids.hrc>
 #include <svx/svdoashp.hxx>
 #include <svx/svdotable.hxx>
+#include <svx/xfillit0.hxx>
 #include <svl/stritem.hxx>
 #include <undo/undomanager.hxx>
 #include <vcl/scheduler.hxx>
@@ -34,6 +36,9 @@
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
 #include <unomodel.hxx>
+#include <comphelper/propertysequence.hxx>
+#include <com/sun/star/frame/DispatchHelper.hpp>
+#include <svx/xflclit.hxx>
 
 using namespace ::com::sun::star;
 
@@ -265,6 +270,47 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127481)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pActualPage->GetObjCount());
 }
 
+void dispatchCommand(const uno::Reference<lang::XComponent>& xComponent, const OUString& rCommand,
+                     const uno::Sequence<beans::PropertyValue>& rPropertyValues)
+{
+    uno::Reference<frame::XController> xController
+        = uno::Reference<frame::XModel>(xComponent, uno::UNO_QUERY_THROW)->getCurrentController();
+    CPPUNIT_ASSERT(xController.is());
+    uno::Reference<frame::XDispatchProvider> xFrame(xController->getFrame(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFrame.is());
+
+    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    uno::Reference<frame::XDispatchHelper> xDispatchHelper(frame::DispatchHelper::create(xContext));
+    CPPUNIT_ASSERT(xDispatchHelper.is());
+
+    xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPageFillColor)
+{
+    // Load the document and create two new windows.
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc("sd/qa/unit/data/tdf126197.odp"));
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+
+    // Set FillPageColor
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
+        { "Color", uno::makeAny(OUString("ff0000")) },
+    }));
+
+    dispatchCommand(mxComponent, ".uno:FillPageColor", aPropertyValues);
+
+    SdPage* pPage = pViewShell->getCurrentPage();
+    const SfxItemSet& rPageAttr = pPage->getSdrPageProperties().GetItemSet();
+
+    const XFillStyleItem* pFillStyle = rPageAttr.GetItem(XATTR_FILLSTYLE);
+    drawing::FillStyle eXFS = pFillStyle->GetValue();
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, eXFS);
+
+    Color aColor = rPageAttr.GetItem(XATTR_FILLCOLOR)->GetColorValue();
+    CPPUNIT_ASSERT_EQUAL(OUString("ff0000"), aColor.AsRGBHexString());
+}
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
