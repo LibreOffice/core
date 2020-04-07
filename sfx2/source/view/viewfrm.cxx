@@ -308,8 +308,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             if( !pSh || !pSh->HasName() || !(pSh->Get_Impl()->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT ))
                 break;
 
-            SfxViewShell* pViewSh = GetViewShell();
-            if (pViewSh && pViewSh->isEditDocLocked())
+            if (pSh->isEditDocLocked())
                 break;
 
             // Only change read-only UI and remove info bar when we succeed
@@ -929,7 +928,7 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
                 const SfxShell *pFSh;
                 if ( !pSh->HasName() ||
                      !( pSh->Get_Impl()->nLoadedFlags &  SfxLoadedFlags::MAINDOCUMENT ) ||
-                     (GetViewShell() && GetViewShell()->isEditDocLocked()) ||
+                     (pSh->isEditDocLocked()) ||
                      ( pSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED &&
                        ( !(pVSh = pSh->GetViewShell())  ||
                          !(pFSh = pVSh->GetFormShell()) ||
@@ -1351,7 +1350,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                         }
 
                         bool showEditDocumentButton = true;
-                        if (m_xObjSh->GetViewShell() && m_xObjSh->GetViewShell()->isEditDocLocked())
+                        if (m_xObjSh->isEditDocLocked())
                             showEditDocumentButton = false;
 
                         if (showEditDocumentButton)

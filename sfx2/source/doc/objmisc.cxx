@@ -87,6 +87,8 @@
 #include <comphelper/interaction.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/documentconstants.hxx>
+#include <comphelper/namedvaluecollection.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/app.hxx>
@@ -1894,6 +1896,15 @@ bool SfxObjectShell::IsContinueImportOnFilterExceptions(const OUString& aErrMess
             mbContinueImportOnFilterExceptions = no;
     }
     return mbContinueImportOnFilterExceptions == yes;
+}
+
+bool SfxObjectShell::isEditDocLocked()
+{
+    Reference<XModel> xModel = GetModel();
+    if (!xModel.is())
+        return false;
+    comphelper::NamedValueCollection aArgs(xModel->getArgs());
+    return aArgs.getOrDefault("LockEditDoc", false);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
