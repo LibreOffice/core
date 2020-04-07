@@ -125,7 +125,6 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
     TagLogger::getInstance().attribute("sprm", rSprm.toString());
 #endif
 
-    Value::Pointer_t pValue = rSprm.getValue();
     switch ( rSprm.getId( ) )
     {
         case NS_ooxml::LN_CT_PPrBase:
