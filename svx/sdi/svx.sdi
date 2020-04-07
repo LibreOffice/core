@@ -2629,7 +2629,7 @@ XFillColorItem FillColor SID_ATTR_FILL_COLOR
 ]
 
 XFillColorItem FillPageColor SID_ATTR_PAGE_COLOR
-
+(SfxStringItem Color SID_ATTR_COLOR_STR)
 [
     /* flags: */
     AutoUpdate = TRUE,
