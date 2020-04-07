@@ -16,6 +16,24 @@
       "revId": "bc293bf61afb9e61068e3bd59107d918ec88d310",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4de73c82_9b52a09b",
+        "filename": "vcl/skia/salbmp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2020-04-07T08:49:29Z",
+      "side": 1,
+      "message": "Only the generic quality-level scaling flags are supported, so the only expectations one should have is that the resulting bitmap will have the requested size scaled using the requested quality. And if you scale using a mix of low and high quality, the result will be of low quality. What should be surprising there?",
+      "parentUuid": "8db96aab_44478a7a",
+      "revId": "bc293bf61afb9e61068e3bd59107d918ec88d310",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
