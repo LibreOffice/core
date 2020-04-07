@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba200b19_f62c515f",
+        "filename": "filter/source/msfilter/escherex.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 911,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-04-07T11:25:08Z",
+      "side": 1,
+      "message": "It\u0027s better to use library functions (see OUString in a Google search):\n\n                // remove extra space separated number\n                sal_Int32 aLastSpacePos \u003d aArrowStartName.lastIndexOf(\u0027 \u0027);\n                if (aLastSpacePos \u003e -1 \u0026\u0026 aArrowStartName.lastIndexOf(\u0027 \u0027, aLastSpacePos) \u003e -1 )\n                    aArrowStartName \u003d aArrowStartName.copy(0, aLastSpacePos);",
+      "range": {
+        "startLine": 889,
+        "startChar": 0,
+        "endLine": 911,
+        "endChar": 17
+      },
+      "revId": "6c9e771ffeef74ae6cec2dd2552f106aa20699da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04edf4b2_9e386086",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport3.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1139,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-04-07T11:25:08Z",
+      "side": 1,
+      "message": "Please, use the assertXPath( object, xPath, attribute, value) syntax to avoid of false test results.",
+      "range": {
+        "startLine": 1137,
+        "startChar": 0,
+        "endLine": 1139,
+        "endChar": 87
+      },
+      "revId": "6c9e771ffeef74ae6cec2dd2552f106aa20699da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
