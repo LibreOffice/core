@@ -56,6 +56,7 @@
 #include <vcl/window.hxx>
 #include <vcl/event.hxx>
 #include <vcl/keycodes.hxx>
+#include <svx/xflclit.hxx>
 
 
 
@@ -70,6 +71,7 @@ public:
     void testTdf99396();
     void testTdf99396TextEdit();
     void testFillGradient();
+    void testFillPageColor();
     void testTdf44774();
     void testTdf38225();
     void testTdf101242_ODF();
@@ -85,6 +87,7 @@ public:
     CPPUNIT_TEST(testTdf99396);
     CPPUNIT_TEST(testTdf99396TextEdit);
     CPPUNIT_TEST(testFillGradient);
+    CPPUNIT_TEST(testFillPageColor);
     CPPUNIT_TEST(testTdf44774);
     CPPUNIT_TEST(testTdf38225);
     CPPUNIT_TEST(testTdf101242_ODF);
@@ -366,6 +369,33 @@ void SdMiscTest::testFillGradient()
     CPPUNIT_ASSERT(xPropSet2->getPropertyValue("FillGradient") >>= aGradient2);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(Color(255, 0, 0)),aGradient2.StartColor);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(Color(0, 255, 0)),aGradient2.EndColor);
+}
+
+void SdMiscTest::testFillPageColor()
+{
+    ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false, DocumentType::Impress);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier = getDoc( xDocShRef );
+    uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
+    // Insert a new page.
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->insertNewByIndex(0), uno::UNO_QUERY_THROW );
+    uno::Reference<lang::XMultiServiceFactory> const xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY);
+
+    // Create a rectangle
+    uno::Reference<beans::XPropertySet> xPropSet(xDrawPage, uno::UNO_QUERY_THROW);
+    // Set FillStyle and FillGradient
+    XFillColorItem aColorItem(OUString(), Color(255, 0, 0));
+    xPropSet->setPropertyValue("FillPageStyle", uno::makeAny(drawing::FillStyle_SOLID));
+    xPropSet->setPropertyValue("FillPageColor", uno::makeAny(aColorItem));
+
+    // Retrieve the shape and check FillStyle and FillGradient
+    uno::Reference<container::XIndexAccess> xIndexAccess(xDrawPage, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet > xPropSet2(xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW);
+    drawing::FillStyle eFillStyle;
+    XFillColorItem aColorItem2;
+    CPPUNIT_ASSERT(xPropSet2->getPropertyValue("FillPageStyle") >>= eFillStyle);
+    CPPUNIT_ASSERT_EQUAL(int(drawing::FillStyle_GRADIENT), static_cast<int>(eFillStyle));
+    CPPUNIT_ASSERT(xPropSet2->getPropertyValue("FillPageColor") >>= aColorItem2);
+    CPPUNIT_ASSERT_EQUAL(Color(255, 0, 0),aColorItem2.GetColorValue());
 }
 
 void SdMiscTest::testTdf44774()
