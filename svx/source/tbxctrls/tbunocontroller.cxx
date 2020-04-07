@@ -180,7 +180,7 @@ SvxFontSizeBox_Base::SvxFontSizeBox_Base(std::unique_ptr<weld::ComboBox> xWidget
     , m_xWidget(new FontSizeBox(std::move(xWidget)))
 {
     m_xWidget->set_value(0);
-    m_xWidget->set_entry_text("");
+    m_xWidget->set_active_or_entry_text("");
     m_xWidget->disable_entry_completion();
 
     m_xWidget->connect_changed(LINK(this, SvxFontSizeBox_Base, SelectHdl));
@@ -246,7 +246,7 @@ void SvxFontSizeBox_Base::statusChanged_Impl( long nPoint, bool bErase )
     {
         // delete value in the display
         m_xWidget->set_value(-1L);
-        m_xWidget->set_entry_text("");
+        m_xWidget->set_active_or_entry_text("");
     }
     m_aCurText = m_xWidget->get_active_text();
 }
@@ -292,7 +292,7 @@ bool SvxFontSizeBox_Base::DoKeyInput(const KeyEvent& rKEvt)
             break;
 
         case KEY_ESCAPE:
-            m_xWidget->set_entry_text(m_aCurText);
+            m_xWidget->set_active_or_entry_text(m_aCurText);
             if (!m_rCtrl.IsInSidebar())
             {
                 ReleaseFocus_Impl();
@@ -312,7 +312,7 @@ bool SvxFontSizeBox_Impl::DoKeyInput(const KeyEvent& rKEvt)
 IMPL_LINK_NOARG(SvxFontSizeBox_Base, FocusOutHdl, weld::Widget&, void)
 {
     if (!m_xWidget->has_focus()) // a combobox can be comprised of different subwidget so double-check if none of those has focus
-        m_xWidget->set_entry_text(m_aCurText);
+        m_xWidget->set_active_or_entry_text(m_aCurText);
 }
 
 void SvxFontSizeBox_Impl::SetOptimalSize()

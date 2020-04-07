@@ -11237,7 +11237,7 @@ public:
     }
 };
 
-void ensure_device(CustomCellRendererSurface *cellsurface, weld::TreeView* pTreeView)
+void ensure_device(CustomCellRendererSurface *cellsurface, weld::Widget* pWidget)
 {
     if (!cellsurface->device)
     {
@@ -11245,108 +11245,10 @@ void ensure_device(CustomCellRendererSurface *cellsurface, weld::TreeView* pTree
         cellsurface->device->SetBackground(COL_TRANSPARENT);
         // expand the point size of the desired font to the equivalent pixel size
         if (vcl::Window* pDefaultDevice = dynamic_cast<vcl::Window*>(Application::GetDefaultDevice()))
-            pDefaultDevice->SetPointFont(*cellsurface->device, pTreeView->get_font());
+            pDefaultDevice->SetPointFont(*cellsurface->device, pWidget->get_font());
     }
 }
 
-}
-
-bool custom_cell_renderer_surface_get_preferred_size(GtkCellRenderer *cell,
-                                                     GtkOrientation orientation,
-                                                     gint *minimum_size,
-                                                     gint *natural_size)
-{
-    GValue value = G_VALUE_INIT;
-    g_value_init(&value, G_TYPE_STRING);
-    g_object_get_property(G_OBJECT(cell), "id", &value);
-
-    const char* pStr = g_value_get_string(&value);
-
-    if (!pStr)
-    {
-        // this happens if we're empty
-        return false;
-    }
-
-    OUString sId(pStr, strlen(pStr), RTL_TEXTENCODING_UTF8);
-
-    value = G_VALUE_INIT;
-    g_value_init(&value, G_TYPE_POINTER);
-    g_object_get_property(G_OBJECT(cell), "instance", &value);
-
-    CustomCellRendererSurface *cellsurface = CUSTOM_CELL_RENDERER_SURFACE(cell);
-
-    GtkInstanceTreeView* pTreeView = static_cast<GtkInstanceTreeView*>(g_value_get_pointer(&value));
-
-    ensure_device(cellsurface, pTreeView);
-
-    Size aSize = pTreeView->call_signal_custom_get_size(*cellsurface->device, sId);
-
-    if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-        if (minimum_size)
-            *minimum_size = aSize.Width();
-
-        if (natural_size)
-            *natural_size = aSize.Width();
-    }
-    else
-    {
-        if (minimum_size)
-            *minimum_size = aSize.Height();
-
-        if (natural_size)
-            *natural_size = aSize.Height();
-    }
-
-    return true;
-}
-
-void custom_cell_renderer_surface_render(GtkCellRenderer* cell,
-                                         cairo_t* cr,
-                                         GtkWidget* /*widget*/,
-                                         const GdkRectangle* /*background_area*/,
-                                         const GdkRectangle* cell_area,
-                                         GtkCellRendererState flags)
-{
-    GValue value = G_VALUE_INIT;
-    g_value_init(&value, G_TYPE_STRING);
-    g_object_get_property(G_OBJECT(cell), "id", &value);
-
-    const char* pStr = g_value_get_string(&value);
-    OUString sId(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
-
-    value = G_VALUE_INIT;
-    g_value_init(&value, G_TYPE_POINTER);
-    g_object_get_property(G_OBJECT(cell), "instance", &value);
-
-    CustomCellRendererSurface *cellsurface = CUSTOM_CELL_RENDERER_SURFACE(cell);
-
-    GtkInstanceTreeView* pTreeView = static_cast<GtkInstanceTreeView*>(g_value_get_pointer(&value));
-
-    ensure_device(cellsurface, pTreeView);
-
-    Size aSize(cell_area->width, cell_area->height);
-    // false to not bother setting the bg on resize as we'll do that
-    // ourself via cairo
-    cellsurface->device->SetOutputSizePixel(aSize, false);
-
-    cairo_surface_t* pSurface = get_underlying_cairo_surface(*cellsurface->device);
-
-    // fill surface as transparent so it can be blended with the potentially
-    // selected background
-    cairo_t* tempcr = cairo_create(pSurface);
-    cairo_set_source_rgba(tempcr, 0, 0, 0, 0);
-    cairo_set_operator(tempcr, CAIRO_OPERATOR_SOURCE);
-    cairo_paint(tempcr);
-    cairo_destroy(tempcr);
-    cairo_surface_flush(pSurface);
-
-    pTreeView->call_signal_custom_render(*cellsurface->device, tools::Rectangle(Point(0, 0), aSize), flags & GTK_CELL_RENDERER_SELECTED, sId);
-    cairo_surface_mark_dirty(pSurface);
-
-    cairo_set_source_surface(cr, pSurface, cell_area->x, cell_area->y);
-    cairo_paint(cr);
 }
 
 IMPL_LINK_NOARG(GtkInstanceTreeView, async_signal_changed, void*, void)
@@ -12619,6 +12521,14 @@ GtkBuilder* makeComboBoxBuilder()
     return gtk_builder_new_from_file(OUStringToOString(aPath, RTL_TEXTENCODING_UTF8).getStr());
 }
 
+struct GtkTreeRowReferenceDeleter
+{
+    void operator()(GtkTreeRowReference* p) const
+    {
+        gtk_tree_row_reference_free(p);
+    }
+};
+
 class GtkInstanceComboBox : public GtkInstanceContainer, public vcl::ISearchableStringList, public virtual weld::ComboBox
 {
 private:
@@ -12635,7 +12545,7 @@ private:
     std::unique_ptr<vcl::Font> m_xFont;
     std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
     vcl::QuickSelectionEngine m_aQuickSelectionEngine;
-    std::vector<int> m_aSeparatorRows;
+    std::vector<std::unique_ptr<GtkTreeRowReference, GtkTreeRowReferenceDeleter>> m_aSeparatorRows;
     bool m_bHoverSelection;
     bool m_bPopupActive;
     bool m_bAutoComplete;
@@ -12658,6 +12568,8 @@ private:
     guint m_nAutoCompleteIdleId;
     gint m_nNonCustomLineHeight;
     gint m_nPrePopupCursorPos;
+    int m_nMRUCount;
+    int m_nMaxMRUCount;
 
     static gboolean idleAutoComplete(gpointer widget)
     {
@@ -12685,6 +12597,10 @@ private:
 
         int nPos = -1;
 
+        int nZeroRow = 0;
+        if (m_nMRUCount)
+            nZeroRow += (m_nMRUCount + 1);
+
         if (!m_bAutoCompleteCaseSensitive)
         {
             // Try match case insensitive from current position
@@ -12692,7 +12608,7 @@ private:
             if (nPos == -1 && nStart != 0)
             {
                 // Try match case insensitive, but from start
-                nPos = starts_with(m_pTreeModel, aStartText, 0, 0, false);
+                nPos = starts_with(m_pTreeModel, aStartText, 0, nZeroRow, false);
             }
         }
 
@@ -12703,13 +12619,13 @@ private:
             if (nPos == -1 && nStart != 0)
             {
                 // Try match case sensitive, but from start
-                nPos = starts_with(m_pTreeModel, aStartText, 0, 0, true);
+                nPos = starts_with(m_pTreeModel, aStartText, 0, nZeroRow, true);
             }
         }
 
         if (nPos != -1)
         {
-            OUString aText = get_text(nPos);
+            OUString aText = get_text_including_mru(nPos);
             if (aText != aStartText)
                 set_active_text(aText);
             select_entry_region(aText.getLength(), aStartText.getLength());
@@ -12769,10 +12685,18 @@ private:
         pThis->signal_popup_toggled();
     }
 
-    int get_popup_height()
+    int get_popup_height(gint& rPopupWidth)
     {
-        int nMaxRows = Application::GetSettings().GetStyleSettings().GetListBoxMaximumLineCount();
-        int nRows = std::min(nMaxRows, get_count());
+        const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+
+        int nMaxRows = rSettings.GetListBoxMaximumLineCount();
+        bool bAddScrollWidth = false;
+        int nRows = get_count_including_mru();
+        if (nMaxRows < nRows)
+        {
+            nRows = nMaxRows;
+            bAddScrollWidth = true;
+        }
 
         GList* pColumns = gtk_tree_view_get_columns(m_pTreeView);
         gint nRowHeight = get_height_row(m_pTreeView, pColumns);
@@ -12794,6 +12718,9 @@ private:
                 nHeight = get_height_rows(nRowHeight, nSeparatorHeight, nCustomRows);
             }
         }
+
+        if (bAddScrollWidth)
+            rPopupWidth += rSettings.GetScrollBarSize();
 
         return nHeight;
     }
@@ -12817,8 +12744,10 @@ private:
             // so gdk_window_move_to_rect will work again the next time
             gtk_widget_unrealize(GTK_WIDGET(m_pMenuWindow));
 
+            gtk_widget_set_size_request(GTK_WIDGET(m_pMenuWindow), -1, -1);
+
             if (!m_bActivateCalled)
-                set_cursor(m_nPrePopupCursorPos);
+                tree_view_set_cursor(m_nPrePopupCursorPos);
 
             // undo show_menu tooltip blocking
             GtkWidget* pParent = gtk_widget_get_toplevel(m_pToggleButton);
@@ -12834,14 +12763,20 @@ private:
             GtkRequisition size;
             gtk_widget_get_preferred_size(GTK_WIDGET(m_pMenuWindow), nullptr, &size);
 
-            gint nPopupWidth = std::max(size.width, nComboWidth);
-            gint nPopupHeight = get_popup_height();
+            gint nPopupWidth = size.width;
+            gint nPopupHeight = get_popup_height(nPopupWidth);
+            nPopupWidth = std::max(nPopupWidth, nComboWidth);
 
             gtk_widget_set_size_request(GTK_WIDGET(m_pMenuWindow), nPopupWidth, nPopupHeight);
 
             m_nPrePopupCursorPos = get_active();
 
             m_bActivateCalled = false;
+
+            // if we are in mru mode always start with the cursor at the top of the menu
+            if (m_nMaxMRUCount)
+                tree_view_set_cursor(0);
+
             show_menu(pComboBox, m_pMenuWindow);
         }
     }
@@ -12913,6 +12848,7 @@ private:
             if (m_aEntryActivateHdl.Call(*this))
                 g_signal_stop_emission_by_name(m_pEntry, "activate");
         }
+        update_mru();
     }
 
     OUString get(int pos, int col) const
@@ -12939,14 +12875,22 @@ private:
         }
     }
 
-    int find(const OUString& rStr, int col) const
+    int find(const OUString& rStr, int col, bool bSearchMRUArea) const
     {
         GtkTreeIter iter;
         if (!gtk_tree_model_get_iter_first(m_pTreeModel, &iter))
             return -1;
 
-        OString aStr(OUStringToOString(rStr, RTL_TEXTENCODING_UTF8).getStr());
         int nRet = 0;
+
+        if (!bSearchMRUArea && m_nMRUCount)
+        {
+            if (!gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, m_nMRUCount + 1))
+                return -1;
+            nRet += (m_nMRUCount + 1);
+        }
+
+        OString aStr(OUStringToOString(rStr, RTL_TEXTENCODING_UTF8).getStr());
         do
         {
             gchar* pStr;
@@ -12961,22 +12905,38 @@ private:
         return -1;
     }
 
-    bool separator_function(int nIndex)
+    bool separator_function(GtkTreePath* path)
     {
-        return std::find(m_aSeparatorRows.begin(), m_aSeparatorRows.end(), nIndex) != m_aSeparatorRows.end();
+        bool bFound = false;
+        for (auto& a : m_aSeparatorRows)
+        {
+            GtkTreePath* seppath = gtk_tree_row_reference_get_path(a.get());
+            if (seppath)
+            {
+                bFound = gtk_tree_path_compare(path, seppath) == 0;
+                gtk_tree_path_free(seppath);
+            }
+            if (bFound)
+                break;
+        }
+        return bFound;
+    }
+
+    bool separator_function(int pos)
+    {
+        GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
+        bool bRet = separator_function(path);
+        gtk_tree_path_free(path);
+        return bRet;
     }
 
     static gboolean separatorFunction(GtkTreeModel* pTreeModel, GtkTreeIter* pIter, gpointer widget)
     {
         GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
         GtkTreePath* path = gtk_tree_model_get_path(pTreeModel, pIter);
-
-        gint depth;
-        gint* indices = gtk_tree_path_get_indices_with_depth(path, &depth);
-        int nIndex = indices[depth-1];
-
+        bool bRet = pThis->separator_function(path);
         gtk_tree_path_free(path);
-        return pThis->separator_function(nIndex);
+        return bRet;
     }
 
     // https://gitlab.gnome.org/GNOME/gtk/issues/310
@@ -13031,12 +12991,12 @@ private:
                 sal_uInt16 nKeyMod = aKeyCode.GetModifier();
                 if (!nKeyMod)
                 {
-                    int nCount = get_count();
-                    int nActive = get_active() + 1;
+                    int nCount = get_count_including_mru();
+                    int nActive = get_active_including_mru() + 1;
                     while (nActive < nCount && separator_function(nActive))
                         ++nActive;
                     if (nActive < nCount)
-                        set_active(nActive);
+                        set_active_including_mru(nActive);
                     bDone = true;
                 }
                 else if (nKeyMod == KEY_MOD2 && !m_bPopupActive)
@@ -13051,11 +13011,12 @@ private:
                 sal_uInt16 nKeyMod = aKeyCode.GetModifier();
                 if (!nKeyMod)
                 {
-                    int nActive = get_active() - 1;
-                    while (nActive >= 0 && separator_function(nActive))
+                    int nStartBound = m_bPopupActive ? 0 : (m_nMRUCount + 1);
+                    int nActive = get_active_including_mru() - 1;
+                    while (nActive >= nStartBound && separator_function(nActive))
                         --nActive;
-                    if (nActive >= 0)
-                        set_active(nActive);
+                    if (nActive >= nStartBound)
+                        set_active_including_mru(nActive);
                     bDone = true;
                 }
                 break;
@@ -13065,12 +13026,13 @@ private:
                 sal_uInt16 nKeyMod = aKeyCode.GetModifier();
                 if (!nKeyMod)
                 {
-                    int nCount = get_count();
-                    int nActive = 0;
+                    int nCount = get_count_including_mru();
+                    int nStartBound = m_bPopupActive ? 0 : (m_nMRUCount + 1);
+                    int nActive = nStartBound;
                     while (nActive < nCount && separator_function(nActive))
                         ++nActive;
                     if (nActive < nCount)
-                        set_active(nActive);
+                        set_active_including_mru(nActive);
                     bDone = true;
                 }
                 break;
@@ -13080,11 +13042,12 @@ private:
                 sal_uInt16 nKeyMod = aKeyCode.GetModifier();
                 if (!nKeyMod)
                 {
-                    int nActive = get_count() - 1;
-                    while (nActive >= 0 && separator_function(nActive))
+                    int nActive = get_count_including_mru() - 1;
+                    int nStartBound = m_bPopupActive ? 0 : (m_nMRUCount + 1);
+                    while (nActive >= nStartBound && separator_function(nActive))
                         --nActive;
-                    if (nActive >= 0)
-                        set_active(nActive);
+                    if (nActive >= nStartBound)
+                        set_active_including_mru(nActive);
                     bDone = true;
                 }
                 break;
@@ -13170,10 +13133,10 @@ private:
 
     vcl::StringEntryIdentifier typeahead_getEntry(int nPos, OUString& out_entryText) const
     {
-        int nEntryCount(get_count());
+        int nEntryCount(get_count_including_mru());
         if (nPos >= nEntryCount)
             nPos = 0;
-        out_entryText = get_text(nPos);
+        out_entryText = get_text_including_mru(nPos);
 
         // vcl::StringEntryIdentifier does not allow for 0 values, but our position is 0-based
         // => normalize
@@ -13186,7 +13149,7 @@ private:
         return reinterpret_cast<sal_Int64>(entry) - 1;
     }
 
-    void set_cursor(int pos)
+    void tree_view_set_cursor(int pos)
     {
         if (pos == -1)
         {
@@ -13228,15 +13191,15 @@ private:
         if (m_bPopupActive)
             return tree_view_get_cursor();
         else
-            return get_active();
+            return get_active_including_mru();
     }
 
     void set_selected_entry(int nSelect)
     {
         if (m_bPopupActive)
-            set_cursor(nSelect);
+            tree_view_set_cursor(nSelect);
         else
-            set_active(nSelect);
+            set_active_including_mru(nSelect);
     }
 
     virtual vcl::StringEntryIdentifier CurrentEntry(OUString& out_entryText) const override
@@ -13262,7 +13225,7 @@ private:
         }
 
         // normalize
-        int nCount = get_count();
+        int nCount = get_count_including_mru();
         if (nSelect >= nCount)
             nSelect = nCount ? nCount-1 : -1;
 
@@ -13355,10 +13318,175 @@ private:
         if (m_pEntry)
             gtk_entry_set_text(GTK_ENTRY(m_pEntry), OUStringToOString(get_text(nActive), RTL_TEXTENCODING_UTF8).getStr());
         else
-            set_cursor(nActive);
+            tree_view_set_cursor(nActive);
         enable_notify_events();
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pToggleButton), false);
         fire_signal_changed();
+        update_mru();
+    }
+
+    void do_clear()
+    {
+        disable_notify_events();
+        gtk_tree_view_set_row_separator_func(m_pTreeView, nullptr, nullptr, nullptr);
+        m_aSeparatorRows.clear();
+        gtk_list_store_clear(GTK_LIST_STORE(m_pTreeModel));
+        m_nMRUCount = 0;
+        enable_notify_events();
+    }
+
+    virtual int get_max_mru_count() const override
+    {
+        return m_nMaxMRUCount;
+    }
+
+    virtual void set_max_mru_count(int nMaxMRUCount) override
+    {
+        m_nMaxMRUCount = nMaxMRUCount;
+        update_mru();
+    }
+
+    void update_mru()
+    {
+        int nMRUCount = m_nMRUCount;
+
+        if (m_nMaxMRUCount)
+        {
+            OUString sActiveText = get_active_text();
+            OUString sActiveId = get_active_id();
+            insert_including_mru(0, sActiveText, &sActiveId, nullptr, nullptr);
+            ++m_nMRUCount;
+
+            for (int i = 1; i < m_nMRUCount - 1; ++i)
+            {
+                if (get_text_including_mru(i) == sActiveText)
+                {
+                    remove_including_mru(i);
+                    --m_nMRUCount;
+                    break;
+                }
+            }
+
+//TODO            set_active(0);
+        }
+
+        while (m_nMRUCount > m_nMaxMRUCount)
+        {
+            remove_including_mru(m_nMRUCount - 1);
+            --m_nMRUCount;
+        }
+
+        if (m_nMRUCount && !nMRUCount)
+            insert_separator_including_mru(m_nMRUCount, "separator");
+        else if (!m_nMRUCount && nMRUCount)
+            remove_including_mru(m_nMRUCount);  // remove separator
+    }
+
+    int get_count_including_mru() const
+    {
+        return gtk_tree_model_iter_n_children(m_pTreeModel, nullptr);
+    }
+
+    int get_active_including_mru() const
+    {
+        return tree_view_get_cursor();
+    }
+
+    void set_active_including_mru(int pos)
+    {
+        disable_notify_events();
+
+        tree_view_set_cursor(pos);
+
+        if (m_pEntry)
+        {
+            if (pos != -1)
+                gtk_entry_set_text(GTK_ENTRY(m_pEntry), OUStringToOString(get_text_including_mru(pos), RTL_TEXTENCODING_UTF8).getStr());
+            else
+                gtk_entry_set_text(GTK_ENTRY(m_pEntry), "");
+        }
+
+        m_bChangedByMenu = false;
+        enable_notify_events();
+    }
+
+    int find_text_including_mru(const OUString& rStr, bool bSearchMRU) const
+    {
+        return find(rStr, m_nTextCol, bSearchMRU);
+    }
+
+    int find_id_including_mru(const OUString& rId, bool bSearchMRU) const
+    {
+        return find(rId, m_nIdCol, bSearchMRU);
+    }
+
+    OUString get_text_including_mru(int pos) const
+    {
+        return get(pos, m_nTextCol);
+    }
+
+    OUString get_id_including_mru(int pos) const
+    {
+        return get(pos, m_nIdCol);
+    }
+
+    void set_id_including_mru(int pos, const OUString& rId)
+    {
+        set(pos, m_nIdCol, rId);
+    }
+
+    void remove_including_mru(int pos)
+    {
+        disable_notify_events();
+        GtkTreeIter iter;
+        gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos);
+        if (!m_aSeparatorRows.empty())
+        {
+            bool bFound = false;
+
+            GtkTreePath* pPath = gtk_tree_path_new_from_indices(pos, -1);
+
+            for (auto aIter = m_aSeparatorRows.begin(); aIter != m_aSeparatorRows.end(); ++aIter)
+            {
+                GtkTreePath* seppath = gtk_tree_row_reference_get_path(aIter->get());
+                if (seppath)
+                {
+                    if (gtk_tree_path_compare(pPath, seppath) == 0)
+                        bFound = true;
+                    gtk_tree_path_free(seppath);
+                }
+                if (bFound)
+                {
+                    m_aSeparatorRows.erase(aIter);
+                    break;
+                }
+            }
+
+            gtk_tree_path_free(pPath);
+        }
+        gtk_list_store_remove(GTK_LIST_STORE(m_pTreeModel), &iter);
+        enable_notify_events();
+    }
+
+    void insert_separator_including_mru(int pos, const OUString& rId)
+    {
+        disable_notify_events();
+        GtkTreeIter iter;
+        if (!gtk_tree_view_get_row_separator_func(m_pTreeView))
+            gtk_tree_view_set_row_separator_func(m_pTreeView, separatorFunction, this, nullptr);
+        insert_row(GTK_LIST_STORE(m_pTreeModel), iter, pos, &rId, "", nullptr, nullptr);
+        GtkTreePath* pPath = gtk_tree_path_new_from_indices(pos, -1);
+        m_aSeparatorRows.emplace_back(gtk_tree_row_reference_new(m_pTreeModel, pPath));
+        gtk_tree_path_free(pPath);
+        enable_notify_events();
+    }
+
+    void insert_including_mru(int pos, const OUString& rText, const OUString* pId, const OUString* pIconName, VirtualDevice* pImageSurface)
+    {
+        disable_notify_events();
+        GtkTreeIter iter;
+        insert_row(GTK_LIST_STORE(m_pTreeModel), iter, pos, pId, rText, pIconName, pImageSurface);
+        enable_notify_events();
     }
 
 public:
@@ -13390,6 +13518,8 @@ public:
         , m_nAutoCompleteIdleId(0)
         , m_nNonCustomLineHeight(-1)
         , m_nPrePopupCursorPos(-1)
+        , m_nMRUCount(0)
+        , m_nMaxMRUCount(0)
     {
         insertParent(GTK_WIDGET(m_pComboBox), GTK_WIDGET(getContainer()));
         gtk_widget_set_visible(GTK_WIDGET(m_pComboBox), false);
@@ -13489,7 +13619,19 @@ public:
 
     virtual int get_active() const override
     {
-        return tree_view_get_cursor();
+        int nActive = get_active_including_mru();
+        if (nActive == -1)
+            return -1;
+
+        if (m_nMRUCount)
+        {
+            if (nActive < m_nMRUCount)
+                nActive = find_text(get_text_including_mru(nActive));
+            else
+                nActive -= (m_nMRUCount + 1);
+        }
+
+        return nActive;
     }
 
     virtual OUString get_active_id() const override
@@ -13543,20 +13685,9 @@ public:
 
     virtual void set_active(int pos) override
     {
-        disable_notify_events();
-
-        set_cursor(pos);
-
-        if (m_pEntry)
-        {
-            if (pos != -1)
-                gtk_entry_set_text(GTK_ENTRY(m_pEntry), OUStringToOString(get_text(pos), RTL_TEXTENCODING_UTF8).getStr());
-            else
-                gtk_entry_set_text(GTK_ENTRY(m_pEntry), "");
-        }
-
-        m_bChangedByMenu = false;
-        enable_notify_events();
+        if (m_nMRUCount && pos != -1)
+            pos += (m_nMRUCount + 1);
+        set_active_including_mru(pos);
     }
 
     virtual OUString get_active_text() const override
@@ -13576,17 +13707,23 @@ public:
 
     virtual OUString get_text(int pos) const override
     {
-        return get(pos, m_nTextCol);
+        if (m_nMRUCount)
+            pos += (m_nMRUCount + 1);
+        return get_text_including_mru(pos);
     }
 
     virtual OUString get_id(int pos) const override
     {
-        return get(pos, m_nIdCol);
+        if (m_nMRUCount)
+            pos += (m_nMRUCount + 1);
+        return get_id_including_mru(pos);
     }
 
     virtual void set_id(int pos, const OUString& rId) override
     {
-        set(pos, m_nIdCol, rId);
+        if (m_nMRUCount)
+            pos += (m_nMRUCount + 1);
+        set_id_including_mru(pos, rId);
     }
 
     virtual void insert_vector(const std::vector<weld::ComboBoxEntry>& rItems, bool bKeepExisting) override
@@ -13605,56 +13742,53 @@ public:
 
     virtual void remove(int pos) override
     {
-        disable_notify_events();
-        GtkTreeIter iter;
-        gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos);
-        gtk_list_store_remove(GTK_LIST_STORE(m_pTreeModel), &iter);
-        m_aSeparatorRows.erase(std::remove(m_aSeparatorRows.begin(), m_aSeparatorRows.end(), pos), m_aSeparatorRows.end());
-        enable_notify_events();
+        if (m_nMRUCount)
+            pos += (m_nMRUCount + 1);
+        remove_including_mru(pos);
     }
 
     virtual void insert(int pos, const OUString& rText, const OUString* pId, const OUString* pIconName, VirtualDevice* pImageSurface) override
     {
-        disable_notify_events();
-        GtkTreeIter iter;
-        insert_row(GTK_LIST_STORE(m_pTreeModel), iter, pos, pId, rText, pIconName, pImageSurface);
-        enable_notify_events();
+        if (m_nMRUCount && pos != -1)
+            pos += (m_nMRUCount + 1);
+        insert_including_mru(pos, rText, pId, pIconName, pImageSurface);
     }
 
     virtual void insert_separator(int pos, const OUString& rId) override
     {
-        disable_notify_events();
-        GtkTreeIter iter;
         pos = pos == -1 ? get_count() : pos;
-        m_aSeparatorRows.push_back(pos);
-        if (!gtk_tree_view_get_row_separator_func(m_pTreeView))
-            gtk_tree_view_set_row_separator_func(m_pTreeView, separatorFunction, this, nullptr);
-        insert_row(GTK_LIST_STORE(m_pTreeModel), iter, pos, &rId, "", nullptr, nullptr);
-        enable_notify_events();
+        if (m_nMRUCount)
+            pos += (m_nMRUCount + 1);
+        insert_separator_including_mru(pos, rId);
     }
 
     virtual int get_count() const override
     {
-        return gtk_tree_model_iter_n_children(m_pTreeModel, nullptr);
+        int nCount = get_count_including_mru();
+        if (m_nMRUCount)
+            nCount -= (m_nMRUCount + 1);
+        return nCount;
     }
 
     virtual int find_text(const OUString& rStr) const override
     {
-        return find(rStr, m_nTextCol);
+        int nPos = find_text_including_mru(rStr, false);
+        if (m_nMRUCount)
+            nPos -= (m_nMRUCount + 1);
+        return nPos;
     }
 
     virtual int find_id(const OUString& rId) const override
     {
-        return find(rId, m_nIdCol);
+        int nPos = find_id_including_mru(rId, false);
+        if (m_nMRUCount)
+            nPos -= (m_nMRUCount + 1);
+        return nPos;
     }
 
     virtual void clear() override
     {
-        disable_notify_events();
-        gtk_list_store_clear(GTK_LIST_STORE(m_pTreeModel));
-        m_aSeparatorRows.clear();
-        gtk_combo_box_set_row_separator_func(m_pComboBox, nullptr, nullptr, nullptr);
-        enable_notify_events();
+        do_clear();
     }
 
     virtual void make_sorted() override
@@ -13860,8 +13994,88 @@ public:
         return m_bChangedByMenu;
     }
 
+    virtual void set_custom_renderer() override
+    {
+        GList* pColumns = gtk_tree_view_get_columns(m_pTreeView);
+        // keep the original height around for optimal popup height calculation
+        m_nNonCustomLineHeight = ::get_height_row(m_pTreeView, pColumns);
+        GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(pColumns->data);
+        gtk_cell_layout_clear(GTK_CELL_LAYOUT(pColumn));
+        GtkCellRenderer *pRenderer = custom_cell_renderer_surface_new();
+        GValue value = G_VALUE_INIT;
+        g_value_init(&value, G_TYPE_POINTER);
+        g_value_set_pointer(&value, static_cast<gpointer>(this));
+        g_object_set_property(G_OBJECT(pRenderer), "instance", &value);
+        gtk_tree_view_column_pack_start(pColumn, pRenderer, true);
+        gtk_tree_view_column_add_attribute(pColumn, pRenderer, "text", m_nTextCol);
+        gtk_tree_view_column_add_attribute(pColumn, pRenderer, "id", m_nIdCol);
+        g_list_free(pColumns);
+    }
+
+    void call_signal_custom_render(VirtualDevice& rOutput, const tools::Rectangle& rRect, bool bSelected, const OUString& rId)
+    {
+        signal_custom_render(rOutput, rRect, bSelected, rId);
+    }
+
+    Size call_signal_custom_get_size(VirtualDevice& rOutput, const OUString& rId)
+    {
+        return signal_custom_get_size(rOutput, rId);
+    }
+
+    VclPtr<VirtualDevice> create_render_virtual_device() const override
+    {
+        return create_virtual_device();
+    }
+
+    OUString get_mru_entries() const override
+    {
+        const sal_Unicode cSep = ';';
+
+        OUStringBuffer aEntries;
+        for (sal_Int32 n = 0; n < m_nMRUCount; n++)
+        {
+            aEntries.append(get_text_including_mru(n));
+            if (n < m_nMRUCount - 1)
+                aEntries.append(cSep);
+        }
+        return aEntries.makeStringAndClear();
+    }
+
+    virtual void set_mru_entries(const OUString& rEntries) override
+    {
+        const sal_Unicode cSep = ';';
+
+        // Remove old MRU entries
+        for (sal_Int32 n = m_nMRUCount; n;)
+            remove_including_mru(--n);
+
+        sal_Int32 nMRUCount = 0;
+        sal_Int32 nIndex = 0;
+        do
+        {
+            OUString aEntry = rEntries.getToken(0, cSep, nIndex);
+            // Accept only existing entries
+            int nPos = find_text(aEntry);
+            if (nPos != -1)
+            {
+                OUString sId = get_id(nPos);
+                insert_including_mru(0, aEntry, &sId, nullptr, nullptr);
+                ++nMRUCount;
+            }
+        }
+        while (nIndex >= 0);
+
+        if (nMRUCount && !m_nMRUCount)
+            insert_separator_including_mru(nMRUCount, "separator");
+        else if (!nMRUCount && m_nMRUCount)
+            remove_including_mru(m_nMRUCount);  // remove separator
+
+        m_nMRUCount = nMRUCount;
+    }
+
     virtual ~GtkInstanceComboBox() override
     {
+        do_clear();
         if (m_nAutoCompleteIdleId)
             g_source_remove(m_nAutoCompleteIdleId);
         if (m_pEntry)
@@ -13885,6 +14099,108 @@ public:
         g_object_unref(m_pComboBuilder);
     }
 };
+
+}
+
+bool custom_cell_renderer_surface_get_preferred_size(GtkCellRenderer *cell,
+                                                     GtkOrientation orientation,
+                                                     gint *minimum_size,
+                                                     gint *natural_size)
+{
+    GValue value = G_VALUE_INIT;
+    g_value_init(&value, G_TYPE_STRING);
+    g_object_get_property(G_OBJECT(cell), "id", &value);
+
+    const char* pStr = g_value_get_string(&value);
+
+    OUString sId(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+
+    value = G_VALUE_INIT;
+    g_value_init(&value, G_TYPE_POINTER);
+    g_object_get_property(G_OBJECT(cell), "instance", &value);
+
+    CustomCellRendererSurface *cellsurface = CUSTOM_CELL_RENDERER_SURFACE(cell);
+
+    GtkInstanceWidget* pWidget = static_cast<GtkInstanceWidget*>(g_value_get_pointer(&value));
+
+    ensure_device(cellsurface, pWidget);
+
+    Size aSize;
+    if (GtkInstanceTreeView* pTreeView = dynamic_cast<GtkInstanceTreeView*>(pWidget))
+        aSize = pTreeView->call_signal_custom_get_size(*cellsurface->device, sId);
+    else if (GtkInstanceComboBox* pComboBox = dynamic_cast<GtkInstanceComboBox*>(pWidget))
+        aSize = pComboBox->call_signal_custom_get_size(*cellsurface->device, sId);
+
+    if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+        if (minimum_size)
+            *minimum_size = aSize.Width();
+
+        if (natural_size)
+            *natural_size = aSize.Width();
+    }
+    else
+    {
+        if (minimum_size)
+            *minimum_size = aSize.Height();
+
+        if (natural_size)
+            *natural_size = aSize.Height();
+    }
+
+    return true;
+}
+
+void custom_cell_renderer_surface_render(GtkCellRenderer* cell,
+                                         cairo_t* cr,
+                                         GtkWidget* /*widget*/,
+                                         const GdkRectangle* /*background_area*/,
+                                         const GdkRectangle* cell_area,
+                                         GtkCellRendererState flags)
+{
+    GValue value = G_VALUE_INIT;
+    g_value_init(&value, G_TYPE_STRING);
+    g_object_get_property(G_OBJECT(cell), "id", &value);
+
+    const char* pStr = g_value_get_string(&value);
+    OUString sId(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+
+    value = G_VALUE_INIT;
+    g_value_init(&value, G_TYPE_POINTER);
+    g_object_get_property(G_OBJECT(cell), "instance", &value);
+
+    CustomCellRendererSurface *cellsurface = CUSTOM_CELL_RENDERER_SURFACE(cell);
+
+    GtkInstanceWidget* pWidget = static_cast<GtkInstanceWidget*>(g_value_get_pointer(&value));
+    ensure_device(cellsurface, pWidget);
+
+    Size aSize(cell_area->width, cell_area->height);
+    // false to not bother setting the bg on resize as we'll do that
+    // ourself via cairo
+    cellsurface->device->SetOutputSizePixel(aSize, false);
+
+    cairo_surface_t* pSurface = get_underlying_cairo_surface(*cellsurface->device);
+
+    // fill surface as transparent so it can be blended with the potentially
+    // selected background
+    cairo_t* tempcr = cairo_create(pSurface);
+    cairo_set_source_rgba(tempcr, 0, 0, 0, 0);
+    cairo_set_operator(tempcr, CAIRO_OPERATOR_SOURCE);
+    cairo_paint(tempcr);
+    cairo_destroy(tempcr);
+    cairo_surface_flush(pSurface);
+
+    if (GtkInstanceTreeView* pTreeView = dynamic_cast<GtkInstanceTreeView*>(pWidget))
+        pTreeView->call_signal_custom_render(*cellsurface->device, tools::Rectangle(Point(0, 0), aSize), flags & GTK_CELL_RENDERER_SELECTED, sId);
+    else if (GtkInstanceComboBox* pComboBox = dynamic_cast<GtkInstanceComboBox*>(pWidget))
+        pComboBox->call_signal_custom_render(*cellsurface->device, tools::Rectangle(Point(0, 0), aSize), flags & GTK_CELL_RENDERER_SELECTED, sId);
+    cairo_surface_mark_dirty(pSurface);
+
+    cairo_set_source_surface(cr, pSurface, cell_area->x, cell_area->y);
+    cairo_paint(cr);
+}
+
+namespace {
 
 class GtkInstanceEntryTreeView : public GtkInstanceContainer, public virtual weld::EntryTreeView
 {
@@ -14101,6 +14417,38 @@ public:
     virtual bool changed_by_direct_pick() const override
     {
         return m_bTreeChange;
+    }
+
+    virtual void set_custom_renderer() override
+    {
+        assert(false && "not implemented");
+    }
+
+    virtual int get_max_mru_count() const override
+    {
+        assert(false && "not implemented");
+        return 0;
+    }
+
+    virtual void set_max_mru_count(int) override
+    {
+        assert(false && "not implemented");
+    }
+
+    virtual OUString get_mru_entries() const override
+    {
+        assert(false && "not implemented");
+        return OUString();
+    }
+
+    virtual void set_mru_entries(const OUString&) override
+    {
+        assert(false && "not implemented");
+    }
+
+    VclPtr<VirtualDevice> create_render_virtual_device() const override
+    {
+        return create_virtual_device();
     }
 
     virtual ~GtkInstanceEntryTreeView() override

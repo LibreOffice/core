@@ -197,7 +197,9 @@ public:
                     // sc/source/core/tool/adiasync.cxx, would leak
                     // ScAddInAsync* keys if that set is not empty at exit
                 || name == "g_aWindowList"
-                    //vcl/unx/gtk/a11y/atkutil.cxx, asserted empty at exit
+                    //vcl/unx/gtk3/a11y/gtk3atkutil.cxx, asserted empty at exit
+                || name == "gFontPreviewVirDevs"
+                    //svtools/source/control/ctrlbox.cxx, empty at exit
                 || name == "aLogger" // FormulaLogger& FormulaLogger::get() in sc/source/core/tool/formulalogger.cxx
                 || name == "m_aUncommittedRegistrations" // sw/source/uibase/dbui/dbmgr.cxx
                 || (loplugin::DeclCheck(pVarDecl).Var("aAllListeners")
