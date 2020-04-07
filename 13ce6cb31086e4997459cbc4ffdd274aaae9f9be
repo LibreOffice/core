@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "55c8a1ab_3e098aed",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport5.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1162,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-04-07T10:20:34Z",
+      "side": 1,
+      "message": "Please, use the assert syntax of https://gerrit.libreoffice.org/c/core/+/91461 to avoid of false test results.",
+      "range": {
+        "startLine": 1161,
+        "startChar": 1,
+        "endLine": 1162,
+        "endChar": 119
+      },
+      "revId": "13ce6cb31086e4997459cbc4ffdd274aaae9f9be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
