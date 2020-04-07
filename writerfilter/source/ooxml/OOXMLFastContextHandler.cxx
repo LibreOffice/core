@@ -37,7 +37,6 @@
 #include <dmapper/PropertyIds.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <dmapper/PropertyIds.hxx>
 
 static const sal_Unicode uCR = 0xd;
 static const sal_Unicode uFtnEdnRef = 0x2;
