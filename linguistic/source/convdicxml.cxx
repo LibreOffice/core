@@ -228,21 +228,21 @@ void ConvDicXMLEntryTextContext_Impl::startFastElement(
     sal_Int32 /*Element*/,
     const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttrList )
 {
-    if ( rxAttrList.is() )
-    {
-        sax_fastparser::FastAttributeList *pAttribList =
-            sax_fastparser::FastAttributeList::castToFastAttributeList( rxAttrList );
+    if ( !rxAttrList.is() )
+        return;
 
-        for (auto &aIter : *pAttribList)
+    sax_fastparser::FastAttributeList *pAttribList =
+        sax_fastparser::FastAttributeList::castToFastAttributeList( rxAttrList );
+
+    for (auto &aIter : *pAttribList)
+    {
+        switch (aIter.getToken())
         {
-            switch (aIter.getToken())
-            {
-                case XML_NAMESPACE_TCD | XML_LEFT_TEXT:
-                    aLeftText = aIter.toString();
-                    break;
-                default:
-                    ;
-            }
+            case XML_NAMESPACE_TCD | XML_LEFT_TEXT:
+                aLeftText = aIter.toString();
+                break;
+            default:
+                ;
         }
     }
 }

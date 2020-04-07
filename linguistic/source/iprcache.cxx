@@ -149,19 +149,19 @@ void SAL_CALL FlushListener::processDictionaryListEvent(
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    if (rDicListEvent.Source == xDicList)
-    {
-        sal_Int16 nEvt = rDicListEvent.nCondensedEvent;
-        sal_Int16 const nFlushFlags =
-                DictionaryListEventFlags::ADD_NEG_ENTRY     |
-                DictionaryListEventFlags::DEL_POS_ENTRY     |
-                DictionaryListEventFlags::ACTIVATE_NEG_DIC  |
-                DictionaryListEventFlags::DEACTIVATE_POS_DIC;
-        bool bFlush = 0 != (nEvt & nFlushFlags);
+    if (rDicListEvent.Source != xDicList)
+        return;
 
-        if (bFlush)
-            mrSpellCache.Flush();
-    }
+    sal_Int16 nEvt = rDicListEvent.nCondensedEvent;
+    sal_Int16 const nFlushFlags =
+            DictionaryListEventFlags::ADD_NEG_ENTRY     |
+            DictionaryListEventFlags::DEL_POS_ENTRY     |
+            DictionaryListEventFlags::ACTIVATE_NEG_DIC  |
+            DictionaryListEventFlags::DEACTIVATE_POS_DIC;
+    bool bFlush = 0 != (nEvt & nFlushFlags);
+
+    if (bFlush)
+        mrSpellCache.Flush();
 }
 
 

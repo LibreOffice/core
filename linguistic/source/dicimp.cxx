@@ -764,31 +764,31 @@ void SAL_CALL DictionaryNeo::setActive( sal_Bool bActivate )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    if (bIsActive != bool(bActivate))
+    if (bIsActive == bool(bActivate))
+        return;
+
+    bIsActive = bActivate;
+    sal_Int16 nEvent = bIsActive ?
+            DictionaryEventFlags::ACTIVATE_DIC : DictionaryEventFlags::DEACTIVATE_DIC;
+
+    // remove entries from memory if dictionary is deactivated
+    if (!bIsActive)
     {
-        bIsActive = bActivate;
-        sal_Int16 nEvent = bIsActive ?
-                DictionaryEventFlags::ACTIVATE_DIC : DictionaryEventFlags::DEACTIVATE_DIC;
+        bool bIsEmpty = aEntries.empty();
 
-        // remove entries from memory if dictionary is deactivated
-        if (!bIsActive)
+        // save entries first if necessary
+        if (bIsModified && hasLocation() && !isReadonly())
         {
-            bool bIsEmpty = aEntries.empty();
+            store();
 
-            // save entries first if necessary
-            if (bIsModified && hasLocation() && !isReadonly())
-            {
-                store();
-
-                aEntries.clear();
-                bNeedEntries = !bIsEmpty;
-            }
-            DBG_ASSERT( !bIsModified || !hasLocation() || isReadonly(),
-                    "lng : dictionary is still modified" );
+            aEntries.clear();
+            bNeedEntries = !bIsEmpty;
         }
-
-        launchEvent(nEvent, nullptr);
+        DBG_ASSERT( !bIsModified || !hasLocation() || isReadonly(),
+                "lng : dictionary is still modified" );
     }
+
+    launchEvent(nEvent, nullptr);
 }
 
 sal_Bool SAL_CALL DictionaryNeo::isActive(  )

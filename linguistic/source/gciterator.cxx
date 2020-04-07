@@ -354,24 +354,24 @@ void GrammarCheckingIterator::AddEntry(
     // we may not need/have a xFlatParaIterator (e.g. if checkGrammarAtPos was called)
     // but we always need a xFlatPara...
     uno::Reference< text::XFlatParagraph > xPara( xFlatPara );
-    if (xPara.is())
-    {
-        FPEntry aNewFPEntry;
-        aNewFPEntry.m_xParaIterator = xFlatParaIterator;
-        aNewFPEntry.m_xPara         = xFlatPara;
-        aNewFPEntry.m_aDocId        = rDocId;
-        aNewFPEntry.m_nStartIndex   = nStartIndex;
-        aNewFPEntry.m_bAutomatic    = bAutomatic;
+    if (!xPara.is())
+        return;
 
-        // add new entry to the end of this queue
-        ::osl::Guard< ::osl::Mutex > aGuard( MyMutex::get() );
-        if (!m_thread)
-            m_thread = osl_createThread( lcl_workerfunc, this );
-        m_aFPEntriesQueue.push_back( aNewFPEntry );
+    FPEntry aNewFPEntry;
+    aNewFPEntry.m_xParaIterator = xFlatParaIterator;
+    aNewFPEntry.m_xPara         = xFlatPara;
+    aNewFPEntry.m_aDocId        = rDocId;
+    aNewFPEntry.m_nStartIndex   = nStartIndex;
+    aNewFPEntry.m_bAutomatic    = bAutomatic;
 
-        // wake up the thread in order to do grammar checking
-        m_aWakeUpThread.set();
-    }
+    // add new entry to the end of this queue
+    ::osl::Guard< ::osl::Mutex > aGuard( MyMutex::get() );
+    if (!m_thread)
+        m_thread = osl_createThread( lcl_workerfunc, this );
+    m_aFPEntriesQueue.push_back( aNewFPEntry );
+
+    // wake up the thread in order to do grammar checking
+    m_aWakeUpThread.set();
 }
 
 
@@ -922,25 +922,25 @@ sal_Bool SAL_CALL GrammarCheckingIterator::isProofreading(
 void SAL_CALL GrammarCheckingIterator::processLinguServiceEvent(
     const linguistic2::LinguServiceEvent& rLngSvcEvent )
 {
-    if (rLngSvcEvent.nEvent == linguistic2::LinguServiceEventFlags::PROOFREAD_AGAIN)
+    if (rLngSvcEvent.nEvent != linguistic2::LinguServiceEventFlags::PROOFREAD_AGAIN)
+        return;
+
+    try
     {
-        try
-        {
-             uno::Reference< uno::XInterface > xThis( static_cast< OWeakObject * >(this) );
-             linguistic2::LinguServiceEvent aEvent( xThis, linguistic2::LinguServiceEventFlags::PROOFREAD_AGAIN );
-             m_aNotifyListeners.notifyEach(
-                    &linguistic2::XLinguServiceEventListener::processLinguServiceEvent,
-                    aEvent);
-        }
-        catch (uno::RuntimeException &)
-        {
-             throw;
-        }
-        catch (const ::uno::Exception &)
-        {
-            // ignore
-            TOOLS_WARN_EXCEPTION("linguistic", "processLinguServiceEvent");
-        }
+         uno::Reference< uno::XInterface > xThis( static_cast< OWeakObject * >(this) );
+         linguistic2::LinguServiceEvent aEvent( xThis, linguistic2::LinguServiceEventFlags::PROOFREAD_AGAIN );
+         m_aNotifyListeners.notifyEach(
+                &linguistic2::XLinguServiceEventListener::processLinguServiceEvent,
+                aEvent);
+    }
+    catch (uno::RuntimeException &)
+    {
+         throw;
+    }
+    catch (const ::uno::Exception &)
+    {
+        // ignore
+        TOOLS_WARN_EXCEPTION("linguistic", "processLinguServiceEvent");
     }
 }
 
