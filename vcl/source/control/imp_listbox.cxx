@@ -1714,7 +1714,8 @@ void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 
     long nY = mpEntryList->GetAddedHeight(nPos, mnTop);
     tools::Rectangle aRect(Point(0, nY), Size(nWidth, pEntry->getHeightWithMargin()));
 
-    if (mpEntryList->IsEntryPosSelected(nPos))
+    bool bSelected = mpEntryList->IsEntryPosSelected(nPos);
+    if (bSelected)
     {
         rRenderContext.SetTextColor(!IsEnabled() ? rStyleSettings.GetDisableColor() : rStyleSettings.GetHighlightTextColor());
         rRenderContext.SetFillColor(rStyleSettings.GetHighlightColor());
@@ -1738,7 +1739,7 @@ void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 
             nPos = GetEntryList()->FindEntry(GetEntryList()->GetEntryText(nPos));
         nPos = nPos - GetEntryList()->GetMRUCount();
 
-        UserDrawEvent aUDEvt(this, &rRenderContext, aRect, nPos);
+        UserDrawEvent aUDEvt(this, &rRenderContext, aRect, nPos, bSelected);
         maUserDrawHdl.Call( &aUDEvt );
         mbInUserDraw = false;
     }
