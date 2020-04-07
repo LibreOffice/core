@@ -102,31 +102,31 @@ void LwpFribFootnote::RegisterNewStyle()
 void LwpFribFootnote::XFConvert(XFContentContainer* pCont)
 {
     LwpFootnote* pFootnote = GetFootnote();
-    if(pFootnote)
+    if(!pFootnote)
+        return;
+
+    rtl::Reference<XFContentContainer> xContent;
+    if(pFootnote->GetType() == FN_FOOTNOTE)
     {
-        rtl::Reference<XFContentContainer> xContent;
-        if(pFootnote->GetType() == FN_FOOTNOTE)
-        {
-            xContent.set(new XFFootNote);
-        }
-        else
-        {
-            xContent.set(new XFEndNote);
-        }
-        pFootnote->XFConvert(xContent.get());
-        if (m_ModFlag)
-        {
-            //set footnote number font style
-            rtl::Reference<XFTextSpan> xSpan(new XFTextSpan);
-            xSpan->SetStyleName(GetStyleName());
-            //add the xffootnote into the content container
-            xSpan->Add(xContent.get());
-            pCont->Add(xSpan.get());
-        }
-        else
-        {
-            pCont->Add(xContent.get());
-        }
+        xContent.set(new XFFootNote);
+    }
+    else
+    {
+        xContent.set(new XFEndNote);
+    }
+    pFootnote->XFConvert(xContent.get());
+    if (m_ModFlag)
+    {
+        //set footnote number font style
+        rtl::Reference<XFTextSpan> xSpan(new XFTextSpan);
+        xSpan->SetStyleName(GetStyleName());
+        //add the xffootnote into the content container
+        xSpan->Add(xContent.get());
+        pCont->Add(xSpan.get());
+    }
+    else
+    {
+        pCont->Add(xContent.get());
     }
 }
 

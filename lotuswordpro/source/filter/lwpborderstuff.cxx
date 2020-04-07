@@ -131,24 +131,24 @@ void    LwpBorderStuff::Read(LwpObjectStream *pStrm)
     m_nValid = pStrm->QuickReaduInt16();
     pStrm->SkipExtra();
 
-    if( LwpFileHeader::m_nFileRevision < 0x0010 )
+    if( LwpFileHeader::m_nFileRevision >= 0x0010 )
+        return;
+
+    if( m_nBorderGroupIDLeft&EXTERNAL_ID )
     {
-        if( m_nBorderGroupIDLeft&EXTERNAL_ID )
-        {
-            m_nBorderGroupIDLeft = BGRP_SOLID;
-        }
-        if( m_nBorderGroupIDRight&EXTERNAL_ID )
-        {
-            m_nBorderGroupIDRight = BGRP_SOLID;
-        }
-        if( m_nBorderGroupIDTop&EXTERNAL_ID )
-        {
-            m_nBorderGroupIDTop = BGRP_SOLID;
-        }
-        if( m_nBorderGroupIDBottom&EXTERNAL_ID )
-        {
-            m_nBorderGroupIDBottom = BGRP_SOLID;
-        }
+        m_nBorderGroupIDLeft = BGRP_SOLID;
+    }
+    if( m_nBorderGroupIDRight&EXTERNAL_ID )
+    {
+        m_nBorderGroupIDRight = BGRP_SOLID;
+    }
+    if( m_nBorderGroupIDTop&EXTERNAL_ID )
+    {
+        m_nBorderGroupIDTop = BGRP_SOLID;
+    }
+    if( m_nBorderGroupIDBottom&EXTERNAL_ID )
+    {
+        m_nBorderGroupIDBottom = BGRP_SOLID;
     }
 }
 

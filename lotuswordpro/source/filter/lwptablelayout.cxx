@@ -381,28 +381,28 @@ void  LwpSuperTableLayout::XFConvert(XFContentContainer* pCont)
  */
 void  LwpSuperTableLayout::XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart, sal_Int32 nEnd, bool bAll)
 {
-    if(m_pFrame)
-    {
-        rtl::Reference<XFFrame> xXFFrame;
-        if(nEnd < nStart)
-        {
-            xXFFrame.set(new XFFrame);
-        }
-        else
-        {
-            xXFFrame.set(new XFFloatFrame(nStart, nEnd, bAll));
-        }
+    if(!m_pFrame)
+        return;
 
-        m_pFrame->Parse(xXFFrame.get(), static_cast<sal_uInt16>(nStart));
-        //parse table, and add table to frame
-        LwpTableLayout * pTableLayout = GetTableLayout();
-        if (pTableLayout)
-        {
-            pTableLayout->XFConvert(xXFFrame.get());
-        }
-        //add frame to the container
-        pCont->Add(xXFFrame.get());
+    rtl::Reference<XFFrame> xXFFrame;
+    if(nEnd < nStart)
+    {
+        xXFFrame.set(new XFFrame);
     }
+    else
+    {
+        xXFFrame.set(new XFFloatFrame(nStart, nEnd, bAll));
+    }
+
+    m_pFrame->Parse(xXFFrame.get(), static_cast<sal_uInt16>(nStart));
+    //parse table, and add table to frame
+    LwpTableLayout * pTableLayout = GetTableLayout();
+    if (pTableLayout)
+    {
+        pTableLayout->XFConvert(xXFFrame.get());
+    }
+    //add frame to the container
+    pCont->Add(xXFFrame.get());
 
 }
 /**
@@ -1190,17 +1190,16 @@ void LwpTableLayout::PutCellVals(LwpFoundry* pFoundry, LwpObjectID aTableID)
                         sal_uInt16 nColID = pCellList->GetColumnID();
 
                         XFCell* pCell = GetCellsMap(nRowID,static_cast<sal_uInt8>(nColID));
-                        if (pCell)
-                        {
-                            pCellList->Convert(pCell, this);
-
-                            //process paragraph
-                            PostProcessParagraph(pCell, nRowID, nColID);
-                        }
-                        else
+                        if (!pCell)
                         {
                             throw std::runtime_error("Hidden cell would not be in cellsmap");
                         }
+
+                        pCellList->Convert(pCell, this);
+
+                        //process paragraph
+                        PostProcessParagraph(pCell, nRowID, nColID);
+
                     }
                     pCellList = dynamic_cast<LwpCellList*>(pCellList->GetNextID().obj().get());
                     if (aSeen.find(pCellList) != aSeen.end())
@@ -1227,63 +1226,63 @@ void LwpTableLayout::PostProcessParagraph(XFCell *pCell, sal_uInt16 nRowID, sal_
 {
     // if number right, set alignment to right
     LwpCellLayout * pCellLayout = GetCellByRowCol(nRowID, nColID);
-    if(pCellLayout)
+    if(!pCellLayout)
+        return;
+
+    rtl::Reference<XFContent> first(
+        pCell->FindFirstContent(enumXFContentPara));
+    XFParagraph * pXFPara = static_cast<XFParagraph*>(first.get());
+    if (!pXFPara)
+        return;
+    XFColor aNullColor;
+
+    OUString sNumfmt = pCellLayout->GetNumfmtName();
+    bool bColorMod = false;
+    XFNumberStyle* pNumStyle = nullptr;
+    XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
+    if (!sNumfmt.isEmpty())
     {
-        rtl::Reference<XFContent> first(
-            pCell->FindFirstContent(enumXFContentPara));
-        XFParagraph * pXFPara = static_cast<XFParagraph*>(first.get());
-        if (!pXFPara)
-            return;
-        XFColor aNullColor;
+        pNumStyle = static_cast<XFNumberStyle*>(pXFStyleManager->FindStyle(sNumfmt));
+        XFColor aColor = pNumStyle->GetColor();
+        if ( aColor != aNullColor )
+            bColorMod = true;//end
+    }
 
-        OUString sNumfmt = pCellLayout->GetNumfmtName();
-        bool bColorMod = false;
-        XFNumberStyle* pNumStyle = nullptr;
-        XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-        if (!sNumfmt.isEmpty())
+    XFParaStyle * pStyle = pXFStyleManager->FindParaStyle(pXFPara->GetStyleName());
+    if (!((pStyle && pStyle->GetNumberRight()) || bColorMod))
+        return;
+
+    std::unique_ptr<XFParaStyle> xOverStyle(new XFParaStyle);
+
+    if (pStyle)
+    {
+        *xOverStyle = *pStyle;
+
+        if (pStyle->GetNumberRight())
+            xOverStyle->SetAlignType(enumXFAlignEnd);
+    }
+
+    if (bColorMod)
+    {
+        rtl::Reference<XFFont> xFont = xOverStyle->GetFont();
+        if (xFont.is())
         {
-            pNumStyle = static_cast<XFNumberStyle*>(pXFStyleManager->FindStyle(sNumfmt));
-            XFColor aColor = pNumStyle->GetColor();
-            if ( aColor != aNullColor )
-                bColorMod = true;//end
-        }
-
-        XFParaStyle * pStyle = pXFStyleManager->FindParaStyle(pXFPara->GetStyleName());
-        if ((pStyle && pStyle->GetNumberRight()) || bColorMod)
-        {
-            std::unique_ptr<XFParaStyle> xOverStyle(new XFParaStyle);
-
-            if (pStyle)
+            XFColor aColor = xFont->GetColor();
+            if (aColor == aNullColor)
             {
-                *xOverStyle = *pStyle;
-
-                if (pStyle->GetNumberRight())
-                    xOverStyle->SetAlignType(enumXFAlignEnd);
+                rtl::Reference<XFFont> pNewFont(new XFFont);
+                aColor = pNumStyle->GetColor();
+                pNewFont->SetColor(aColor);
+                xOverStyle->SetFont(pNewFont);
             }
-
-            if (bColorMod)
-            {
-                rtl::Reference<XFFont> xFont = xOverStyle->GetFont();
-                if (xFont.is())
-                {
-                    XFColor aColor = xFont->GetColor();
-                    if (aColor == aNullColor)
-                    {
-                        rtl::Reference<XFFont> pNewFont(new XFFont);
-                        aColor = pNumStyle->GetColor();
-                        pNewFont->SetColor(aColor);
-                        xOverStyle->SetFont(pNewFont);
-                    }
-                }
-            }
-
-            xOverStyle->SetStyleName("");
-            OUString StyleName
-                = pXFStyleManager->AddStyle(std::move(xOverStyle)).m_pStyle->GetStyleName();
-
-            pXFPara->SetStyleName(StyleName);
         }
     }
+
+    xOverStyle->SetStyleName("");
+    OUString StyleName
+        = pXFStyleManager->AddStyle(std::move(xOverStyle)).m_pStyle->GetStyleName();
+
+    pXFPara->SetStyleName(StyleName);
 }
 
 /**

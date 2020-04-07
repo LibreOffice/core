@@ -258,52 +258,52 @@ void LwpPageLayout::ParseFootNoteSeparator(XFPageMaster * pm1)
 {
     //Get the footnoteoptions for the root document
     LwpDocument* pDocument = m_pFoundry ? m_pFoundry->GetDocument() : nullptr;
-    if (pDocument)
+    if (!pDocument)
+        return;
+
+    LwpObjectID* pFontnodeId = pDocument->GetValidFootnoteOpts();
+
+    LwpFootnoteOptions* pFootnoteOpts = pFontnodeId ? dynamic_cast<LwpFootnoteOptions*>(pFontnodeId->obj().get()) : nullptr;
+    if(!pFootnoteOpts)
+        return;
+
+    LwpFootnoteSeparatorOptions& rFootnoteSep = pFootnoteOpts->GetFootnoteSeparator();
+    //set length
+    sal_uInt32 nLengthPercent = 100;
+    double fWidth = 0;
+    if(rFootnoteSep.HasSeparator())
     {
-        LwpObjectID* pFontnodeId = pDocument->GetValidFootnoteOpts();
+        fWidth = rFootnoteSep.GetTopBorderWidth();
+    }
+    if(rFootnoteSep.HasCustomLength())
+    {
+        const double fMarginWidth = GetMarginWidth();
+        if (fMarginWidth == 0.0)
+            throw o3tl::divide_by_zero();
 
-        LwpFootnoteOptions* pFootnoteOpts = pFontnodeId ? dynamic_cast<LwpFootnoteOptions*>(pFontnodeId->obj().get()) : nullptr;
-        if(pFootnoteOpts)
-        {
-            LwpFootnoteSeparatorOptions& rFootnoteSep = pFootnoteOpts->GetFootnoteSeparator();
-            //set length
-            sal_uInt32 nLengthPercent = 100;
-            double fWidth = 0;
-            if(rFootnoteSep.HasSeparator())
-            {
-                fWidth = rFootnoteSep.GetTopBorderWidth();
-            }
-            if(rFootnoteSep.HasCustomLength())
-            {
-                const double fMarginWidth = GetMarginWidth();
-                if (fMarginWidth == 0.0)
-                    throw o3tl::divide_by_zero();
+        nLengthPercent =  static_cast<sal_uInt32>(100*LwpTools::ConvertFromUnitsToMetric(rFootnoteSep.GetLength()) / fMarginWidth);
+        if (nLengthPercent > 100)
+            nLengthPercent = 100;
+    }
+    double fAbove = LwpTools::ConvertFromUnitsToMetric(rFootnoteSep.GetAbove());
+    double fBelow = LwpTools::ConvertFromUnitsToMetric(rFootnoteSep.GetBelow());
+    LwpColor aColor = rFootnoteSep.GetTopBorderColor();
+    enumXFAlignType eAlignType = enumXFAlignStart;
+    if(rFootnoteSep.GetIndent() > 0)
+    {
+        const double fMarginWidth = GetMarginWidth();
+        if (fMarginWidth == 0.0)
+            throw o3tl::divide_by_zero();
 
-                nLengthPercent =  static_cast<sal_uInt32>(100*LwpTools::ConvertFromUnitsToMetric(rFootnoteSep.GetLength()) / fMarginWidth);
-                if (nLengthPercent > 100)
-                    nLengthPercent = 100;
-            }
-            double fAbove = LwpTools::ConvertFromUnitsToMetric(rFootnoteSep.GetAbove());
-            double fBelow = LwpTools::ConvertFromUnitsToMetric(rFootnoteSep.GetBelow());
-            LwpColor aColor = rFootnoteSep.GetTopBorderColor();
-            enumXFAlignType eAlignType = enumXFAlignStart;
-            if(rFootnoteSep.GetIndent() > 0)
-            {
-                const double fMarginWidth = GetMarginWidth();
-                if (fMarginWidth == 0.0)
-                    throw o3tl::divide_by_zero();
-
-                //SODC don't support indent
-                sal_uInt32 nIndentPercent =  static_cast<sal_uInt32>(100*LwpTools::ConvertFromUnitsToMetric(rFootnoteSep.GetIndent()) / fMarginWidth);
-                if (nIndentPercent + nLengthPercent >= 100)
-                    eAlignType = enumXFAlignEnd;
-            }
-            if(aColor.IsValidColor())
-            {
-                XFColor aXFColor(aColor.To24Color());
-                pm1->SetFootNoteSeparator(eAlignType,fWidth, nLengthPercent, fAbove, fBelow, aXFColor);
-            }
-        }
+        //SODC don't support indent
+        sal_uInt32 nIndentPercent =  static_cast<sal_uInt32>(100*LwpTools::ConvertFromUnitsToMetric(rFootnoteSep.GetIndent()) / fMarginWidth);
+        if (nIndentPercent + nLengthPercent >= 100)
+            eAlignType = enumXFAlignEnd;
+    }
+    if(aColor.IsValidColor())
+    {
+        XFColor aXFColor(aColor.To24Color());
+        pm1->SetFootNoteSeparator(eAlignType,fWidth, nLengthPercent, fAbove, fBelow, aXFColor);
     }
 }
 
@@ -469,18 +469,18 @@ bool LwpPageLayout::HasFillerPageText(LwpFoundry const * pFoundry)
 */
 void LwpPageLayout::ConvertFillerPageText(XFContentContainer* pCont)
 {
-    if(HasFillerPageText(m_pFoundry))
-    {
-        //get fillerpage story from division info
-        LwpDocument* pDoc = m_pFoundry->GetDocument();
-        LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*>(pDoc->GetDivInfoID().obj().get());
-        LwpStory* pStory = pDivInfo ? dynamic_cast<LwpStory*>(pDivInfo->GetFillerPageTextID().obj().get()) : nullptr;
+    if(!HasFillerPageText(m_pFoundry))
+        return;
 
-        //parse fillerpage story
-        if(pStory)
-        {
-            pStory->XFConvert(pCont);
-        }
+    //get fillerpage story from division info
+    LwpDocument* pDoc = m_pFoundry->GetDocument();
+    LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*>(pDoc->GetDivInfoID().obj().get());
+    LwpStory* pStory = pDivInfo ? dynamic_cast<LwpStory*>(pDivInfo->GetFillerPageTextID().obj().get()) : nullptr;
+
+    //parse fillerpage story
+    if(pStory)
+    {
+        pStory->XFConvert(pCont);
     }
 }
 /**

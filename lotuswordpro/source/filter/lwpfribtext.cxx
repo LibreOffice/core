@@ -83,23 +83,23 @@ LwpFribText::LwpFribText( LwpPara *pPara, bool bNoUnicode )
 
 void LwpFribText::Read(LwpObjectStream* pObjStrm, sal_uInt16 len)
 {
-    if( len>=1 )
+    if( len<1 )
+        return;
+
+    rtl_TextEncoding rEncode;
+    if(m_bNoUnicode)
     {
-        rtl_TextEncoding rEncode;
-        if(m_bNoUnicode)
-        {
-            rEncode = RTL_TEXTENCODING_ISO_8859_1;
-        }
-        else
-        {
-            if (m_pModifiers && m_pModifiers->CodePage)
-                rEncode = LwpCharSetMgr::GetInstance()->
-                                              GetTextCharEncoding(m_pModifiers->CodePage);
-            else
-                rEncode = LwpCharSetMgr::GetTextCharEncoding();
-        }
-        LwpTools::QuickReadUnicode(pObjStrm, m_Content, len, rEncode);
+        rEncode = RTL_TEXTENCODING_ISO_8859_1;
     }
+    else
+    {
+        if (m_pModifiers && m_pModifiers->CodePage)
+            rEncode = LwpCharSetMgr::GetInstance()->
+                                          GetTextCharEncoding(m_pModifiers->CodePage);
+        else
+            rEncode = LwpCharSetMgr::GetTextCharEncoding();
+    }
+    LwpTools::QuickReadUnicode(pObjStrm, m_Content, len, rEncode);
 }
 
 void LwpFribText::XFConvert(XFContentContainer* pXFPara,LwpStory* pStory)
