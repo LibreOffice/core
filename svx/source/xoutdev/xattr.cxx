@@ -1926,6 +1926,18 @@ void XFillColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
+boost::property_tree::ptree XFillColorItem::dumpAsJSON() const
+{
+    boost::property_tree::ptree aTree = SfxPoolItem::dumpAsJSON();
+
+    if (Which() == XATTR_FILLCOLOR)
+        aTree.put("commandName", ".uno:FillPageColor");
+
+    aTree.put("state", GetColorValue().AsRGBHexString());
+
+    return aTree;
+}
+
 XSecondaryFillColorItem::XSecondaryFillColorItem(const OUString& rName, const Color& rTheColor) :
     XColorItem(XATTR_SECONDARYFILLCOLOR, rName, rTheColor)
 {
