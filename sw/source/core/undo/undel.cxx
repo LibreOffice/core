@@ -970,7 +970,8 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 SwNodeIndex aMvIdx(rDoc.GetNodes(), nMoveIndex);
                 SwNodeRange aRg( aPos.nNode, 0, aPos.nNode, 1 );
                 pMovedNode = &aPos.nNode.GetNode();
-                rDoc.GetNodes().MoveNodes(aRg, rDoc.GetNodes(), aMvIdx);
+                // tdf#131684 without deleting frames
+                rDoc.GetNodes().MoveNodes(aRg, rDoc.GetNodes(), aMvIdx, false);
                 rDoc.GetNodes().Delete( aMvIdx);
             }
         }
