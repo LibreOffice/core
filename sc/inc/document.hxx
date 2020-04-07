@@ -900,7 +900,8 @@ public:
 
     bool            IsBlockEditable( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
                                      SCCOL nEndCol, SCROW nEndRow,
-                                     bool* pOnlyNotBecauseOfMatrix = nullptr ) const;
+                                     bool* pOnlyNotBecauseOfMatrix = nullptr,
+                                     bool bNoMatrixAtAll = false ) const;
     bool            IsSelectionEditable( const ScMarkData& rMark,
                                          bool* pOnlyNotBecauseOfMatrix = nullptr ) const;
     bool            HasSelectedBlockMatrixFragment( SCCOL nStartCol, SCROW nStartRow,

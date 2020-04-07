@@ -5323,7 +5323,8 @@ void ScDocument::UnlockTable(SCTAB nTab)
 
 bool ScDocument::IsBlockEditable( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
                                         SCCOL nEndCol, SCROW nEndRow,
-                                        bool* pOnlyNotBecauseOfMatrix /* = NULL */ ) const
+                                        bool* pOnlyNotBecauseOfMatrix /* = NULL */,
+                                        bool bNoMatrixAtAll ) const
 {
     // import into read-only document is possible
     if (!bImportingXML && !mbChangeReadOnlyEnabled && mpShell && mpShell->IsReadOnly())
@@ -5336,7 +5337,7 @@ bool ScDocument::IsBlockEditable( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
         if (maTabs[nTab])
             return maTabs[nTab]->IsBlockEditable( nStartCol, nStartRow, nEndCol,
-                nEndRow, pOnlyNotBecauseOfMatrix );
+                nEndRow, pOnlyNotBecauseOfMatrix, bNoMatrixAtAll );
 
     OSL_FAIL("wrong table number");
     if ( pOnlyNotBecauseOfMatrix )
