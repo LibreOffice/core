@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "194d9e68_baa69b23",
+        "filename": "offapi/com/sun/star/chart2/Axis.idl",
+        "patchSetId": 19
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-04-07T12:53:07Z",
+      "side": 1,
+      "message": "location relative to what? maybe add another half sentence",
+      "revId": "7a3acba0a125e89a543cae31cf101d6cd1c7311e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23f87b6a_e484fdb6",
+        "filename": "xmloff/source/chart/SchXMLAxisContext.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-04-07T12:53:07Z",
+      "side": 1,
+      "message": "comparing floats with \u003d\u003d is generally perilous, there\u0027s some rtl::math::approxEqual to do that",
+      "revId": "7a3acba0a125e89a543cae31cf101d6cd1c7311e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a24b754_19323743",
+        "filename": "xmloff/source/chart/SchXMLAxisContext.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-04-07T12:53:07Z",
+      "side": 1,
+      "message": "samehere",
+      "revId": "7a3acba0a125e89a543cae31cf101d6cd1c7311e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
