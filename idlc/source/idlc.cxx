@@ -148,53 +148,53 @@ static void predefineXInterface(AstModule* pRoot)
 
 static void initializePredefinedTypes(AstModule* pRoot)
 {
-    if ( pRoot )
-    {
-         AstBaseType* pPredefined = new AstBaseType(ET_long, "long", pRoot);
-         pRoot->addDeclaration(pPredefined);
+    if ( !pRoot )
+         return;
 
-         pPredefined = new AstBaseType(ET_ulong, "unsigned long", pRoot);
-         pRoot->addDeclaration(pPredefined);
+    AstBaseType* pPredefined = new AstBaseType(ET_long, "long", pRoot);
+    pRoot->addDeclaration(pPredefined);
 
-         pPredefined = new AstBaseType(ET_hyper, "hyper", pRoot);
-         pRoot->addDeclaration(pPredefined);
+    pPredefined = new AstBaseType(ET_ulong, "unsigned long", pRoot);
+    pRoot->addDeclaration(pPredefined);
 
-         pPredefined = new AstBaseType(ET_uhyper, "unsigned hyper", pRoot);
-         pRoot->addDeclaration(pPredefined);
+    pPredefined = new AstBaseType(ET_hyper, "hyper", pRoot);
+    pRoot->addDeclaration(pPredefined);
 
-         pPredefined = new AstBaseType(ET_short, "short", pRoot);
-         pRoot->addDeclaration(pPredefined);
+    pPredefined = new AstBaseType(ET_uhyper, "unsigned hyper", pRoot);
+    pRoot->addDeclaration(pPredefined);
 
-         pPredefined = new AstBaseType(ET_ushort, "unsigned short", pRoot);
-         pRoot->addDeclaration(pPredefined);
+    pPredefined = new AstBaseType(ET_short, "short", pRoot);
+    pRoot->addDeclaration(pPredefined);
 
-         pPredefined = new AstBaseType(ET_float, "float", pRoot);
-         pRoot->addDeclaration(pPredefined);
+    pPredefined = new AstBaseType(ET_ushort, "unsigned short", pRoot);
+    pRoot->addDeclaration(pPredefined);
 
-         pPredefined = new AstBaseType(ET_double, "double", pRoot);
-         pRoot->addDeclaration(pPredefined);
+    pPredefined = new AstBaseType(ET_float, "float", pRoot);
+    pRoot->addDeclaration(pPredefined);
 
-         pPredefined = new AstBaseType(ET_char, "char", pRoot);
-         pRoot->addDeclaration(pPredefined);
+    pPredefined = new AstBaseType(ET_double, "double", pRoot);
+    pRoot->addDeclaration(pPredefined);
 
-         pPredefined = new AstBaseType(ET_byte, "byte", pRoot);
-         pRoot->addDeclaration(pPredefined);
+    pPredefined = new AstBaseType(ET_char, "char", pRoot);
+    pRoot->addDeclaration(pPredefined);
 
-         pPredefined = new AstBaseType(ET_any, "any", pRoot);
-         pRoot->addDeclaration(pPredefined);
+    pPredefined = new AstBaseType(ET_byte, "byte", pRoot);
+    pRoot->addDeclaration(pPredefined);
 
-         pPredefined = new AstBaseType(ET_string, "string", pRoot);
-         pRoot->addDeclaration(pPredefined);
+    pPredefined = new AstBaseType(ET_any, "any", pRoot);
+    pRoot->addDeclaration(pPredefined);
 
-         pPredefined = new AstBaseType(ET_type, "type", pRoot);
-         pRoot->addDeclaration(pPredefined);
+    pPredefined = new AstBaseType(ET_string, "string", pRoot);
+    pRoot->addDeclaration(pPredefined);
 
-         pPredefined = new AstBaseType(ET_boolean, "boolean", pRoot);
-         pRoot->addDeclaration(pPredefined);
+    pPredefined = new AstBaseType(ET_type, "type", pRoot);
+    pRoot->addDeclaration(pPredefined);
 
-         pPredefined = new AstBaseType(ET_void, "void", pRoot);
-         pRoot->addDeclaration(pPredefined);
-    }
+    pPredefined = new AstBaseType(ET_boolean, "boolean", pRoot);
+    pRoot->addDeclaration(pPredefined);
+
+    pPredefined = new AstBaseType(ET_void, "void", pRoot);
+    pRoot->addDeclaration(pPredefined);
 }
 
 Idlc::Idlc(Options* pOptions)
