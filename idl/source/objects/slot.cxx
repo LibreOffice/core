@@ -386,28 +386,27 @@ void SvMetaSlot::WriteSlotStubs( const OString& rShellName,
     }
 
     aMethodName = GetStateMethod();
-    if (!aMethodName.isEmpty() &&
-        aMethodName != "NoState")
-    {
-        bool bIn = false;
-        for ( size_t n=0; n < rList.size(); n++ )
-        {
-            if (rList[n] == aMethodName)
-            {
-                bIn = true;
-                break;
-            }
-        }
+    if (aMethodName.isEmpty() || aMethodName == "NoState")
+        return;
 
-        if ( !bIn )
+    bool bIn = false;
+    for ( size_t n=0; n < rList.size(); n++ )
+    {
+        if (rList[n] == aMethodName)
         {
-            rList.push_back( aMethodName );
-            rOutStm.WriteCharPtr( "SFX_STATE_STUB(" )
-                   .WriteOString( rShellName )
-                   .WriteChar( ',' )
-                   .WriteOString( aMethodName )
-                   .WriteChar( ')' ) << endl;
+            bIn = true;
+            break;
         }
+    }
+
+    if ( !bIn )
+    {
+        rList.push_back( aMethodName );
+        rOutStm.WriteCharPtr( "SFX_STATE_STUB(" )
+               .WriteOString( rShellName )
+               .WriteChar( ',' )
+               .WriteOString( aMethodName )
+               .WriteChar( ')' ) << endl;
     }
 }
 

@@ -431,20 +431,20 @@ void SvIdlParser::ReadInterfaceOrShellMethod( SvMetaAttribute& rAttr )
     xT->SetRef(rAttr.GetType() );
     rAttr.aType = xT;
     rAttr.aType->SetType( MetaTypeType::Method );
-    if (!ReadIf(')'))
+    if (ReadIf(')'))
+        return;
+
+    while (true)
     {
-        while (true)
-        {
-            tools::SvRef<SvMetaAttribute> xParamAttr( new SvMetaAttribute() );
-            xParamAttr->aType = ReadKnownType();
-            xParamAttr->SetName( ReadIdentifier() );
-            ReadSlotId(xParamAttr->aSlotId);
-            rAttr.aType->GetAttrList().push_back( xParamAttr.get() );
-            if (!ReadIfDelimiter())
-                break;
-        }
-        Read(')');
+        tools::SvRef<SvMetaAttribute> xParamAttr( new SvMetaAttribute() );
+        xParamAttr->aType = ReadKnownType();
+        xParamAttr->SetName( ReadIdentifier() );
+        ReadSlotId(xParamAttr->aSlotId);
+        rAttr.aType->GetAttrList().push_back( xParamAttr.get() );
+        if (!ReadIfDelimiter())
+            break;
     }
+    Read(')');
 }
 
 void SvIdlParser::ReadSlotId(SvIdentifier& rSlotId)
