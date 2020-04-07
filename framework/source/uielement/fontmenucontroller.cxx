@@ -84,31 +84,30 @@ void FontMenuController::fillPopupMenu( const Sequence< OUString >& rFontNameSeq
     if ( pPopupMenu )
         pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
 
-    if ( pVCLPopupMenu )
+    if ( !pVCLPopupMenu )
+        return;
+
+    vector<OUString> aVector;
+    aVector.reserve(rFontNameSeq.getLength());
+    for ( sal_Int32 i = 0; i < rFontNameSeq.getLength(); i++ )
     {
-        vector<OUString> aVector;
-        aVector.reserve(rFontNameSeq.getLength());
-        for ( sal_Int32 i = 0; i < rFontNameSeq.getLength(); i++ )
-        {
-            aVector.push_back(MnemonicGenerator::EraseAllMnemonicChars(pFontNameArray[i]));
-        }
-        sort(aVector.begin(), aVector.end(), lcl_I18nCompareString );
+        aVector.push_back(MnemonicGenerator::EraseAllMnemonicChars(pFontNameArray[i]));
+    }
+    sort(aVector.begin(), aVector.end(), lcl_I18nCompareString );
 
-        const OUString aFontNameCommandPrefix( ".uno:CharFontName?CharFontName.FamilyName:string=" );
-        const sal_Int16 nCount = static_cast<sal_Int16>(aVector.size());
-        for ( sal_Int16 i = 0; i < nCount; i++ )
-        {
-            const OUString& rName = aVector[i];
-            m_xPopupMenu->insertItem( i+1, rName, css::awt::MenuItemStyle::RADIOCHECK | css::awt::MenuItemStyle::AUTOCHECK, i );
-            if ( rName == m_aFontFamilyName )
-                m_xPopupMenu->checkItem( i+1, true );
-            // use VCL popup menu pointer to set vital information that are not part of the awt implementation
-            OUStringBuffer aCommandBuffer( aFontNameCommandPrefix );
-            aCommandBuffer.append( INetURLObject::encode( rName, INetURLObject::PART_HTTP_QUERY, INetURLObject::EncodeMechanism::All ));
-            OUString aFontNameCommand = aCommandBuffer.makeStringAndClear();
-            pVCLPopupMenu->SetItemCommand( i+1, aFontNameCommand ); // Store font name into item command.
-        }
-
+    const OUString aFontNameCommandPrefix( ".uno:CharFontName?CharFontName.FamilyName:string=" );
+    const sal_Int16 nCount = static_cast<sal_Int16>(aVector.size());
+    for ( sal_Int16 i = 0; i < nCount; i++ )
+    {
+        const OUString& rName = aVector[i];
+        m_xPopupMenu->insertItem( i+1, rName, css::awt::MenuItemStyle::RADIOCHECK | css::awt::MenuItemStyle::AUTOCHECK, i );
+        if ( rName == m_aFontFamilyName )
+            m_xPopupMenu->checkItem( i+1, true );
+        // use VCL popup menu pointer to set vital information that are not part of the awt implementation
+        OUStringBuffer aCommandBuffer( aFontNameCommandPrefix );
+        aCommandBuffer.append( INetURLObject::encode( rName, INetURLObject::PART_HTTP_QUERY, INetURLObject::EncodeMechanism::All ));
+        OUString aFontNameCommand = aCommandBuffer.makeStringAndClear();
+        pVCLPopupMenu->SetItemCommand( i+1, aFontNameCommand ); // Store font name into item command.
     }
 }
 
@@ -151,36 +150,36 @@ void SAL_CALL FontMenuController::itemActivated( const css::awt::MenuEvent& )
 {
     osl::MutexGuard aLock( m_aMutex );
 
-    if ( m_xPopupMenu.is() )
+    if ( !m_xPopupMenu.is() )
+        return;
+
+    // find new font name and set check mark!
+    sal_uInt16        nChecked = 0;
+    sal_uInt16        nItemCount = m_xPopupMenu->getItemCount();
+    for( sal_uInt16 i = 0; i < nItemCount; i++ )
     {
-        // find new font name and set check mark!
-        sal_uInt16        nChecked = 0;
-        sal_uInt16        nItemCount = m_xPopupMenu->getItemCount();
-        for( sal_uInt16 i = 0; i < nItemCount; i++ )
+        sal_uInt16 nItemId = m_xPopupMenu->getItemId( i );
+
+        if ( m_xPopupMenu->isItemChecked( nItemId ) )
+            nChecked = nItemId;
+
+        OUString aText = m_xPopupMenu->getItemText( nItemId );
+
+        // TODO: must be replaced by implementation of VCL, when available
+        sal_Int32 nIndex = aText.indexOf( '~' );
+        if ( nIndex >= 0 )
+            aText = aText.replaceAt( nIndex, 1, "" );
+        // TODO: must be replaced by implementation of VCL, when available
+
+        if ( aText == m_aFontFamilyName )
         {
-            sal_uInt16 nItemId = m_xPopupMenu->getItemId( i );
-
-            if ( m_xPopupMenu->isItemChecked( nItemId ) )
-                nChecked = nItemId;
-
-            OUString aText = m_xPopupMenu->getItemText( nItemId );
-
-            // TODO: must be replaced by implementation of VCL, when available
-            sal_Int32 nIndex = aText.indexOf( '~' );
-            if ( nIndex >= 0 )
-                aText = aText.replaceAt( nIndex, 1, "" );
-            // TODO: must be replaced by implementation of VCL, when available
-
-            if ( aText == m_aFontFamilyName )
-            {
-                m_xPopupMenu->checkItem( nItemId, true );
-                return;
-            }
+            m_xPopupMenu->checkItem( nItemId, true );
+            return;
         }
-
-        if ( nChecked )
-            m_xPopupMenu->checkItem( nChecked, false );
     }
+
+    if ( nChecked )
+        m_xPopupMenu->checkItem( nChecked, false );
 }
 
 // XPopupMenuController

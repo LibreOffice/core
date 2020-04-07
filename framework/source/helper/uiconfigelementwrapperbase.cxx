@@ -111,32 +111,32 @@ void SAL_CALL UIConfigElementWrapperBase::initialize( const Sequence< Any >& aAr
 {
     SolarMutexGuard g;
 
-    if ( !m_bInitialized )
-    {
-        for ( sal_Int32 n = 0; n < aArguments.getLength(); n++ )
-        {
-            PropertyValue aPropValue;
-            if ( aArguments[n] >>= aPropValue )
-            {
-                if ( aPropValue.Name == UIELEMENT_PROPNAME_CONFIGSOURCE )
-                    setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_CONFIGSOURCE, aPropValue.Value );
-                else if ( aPropValue.Name == UIELEMENT_PROPNAME_FRAME )
-                    setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_FRAME, aPropValue.Value );
-                else if ( aPropValue.Name == UIELEMENT_PROPNAME_PERSISTENT )
-                    setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_PERSISTENT, aPropValue.Value );
-                else if ( aPropValue.Name == UIELEMENT_PROPNAME_RESOURCEURL )
-                    setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_RESOURCEURL, aPropValue.Value );
-                else if ( aPropValue.Name == UIELEMENT_PROPNAME_TYPE )
-                    setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_TYPE, aPropValue.Value );
-                else if ( aPropValue.Name == UIELEMENT_PROPNAME_CONFIGLISTENER )
-                    setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_CONFIGLISTENER, aPropValue.Value );
-                else if ( aPropValue.Name == UIELEMENT_PROPNAME_NOCLOSE )
-                    setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_NOCLOSE, aPropValue.Value );
-            }
-        }
+    if ( m_bInitialized )
+        return;
 
-        m_bInitialized = true;
+    for ( sal_Int32 n = 0; n < aArguments.getLength(); n++ )
+    {
+        PropertyValue aPropValue;
+        if ( aArguments[n] >>= aPropValue )
+        {
+            if ( aPropValue.Name == UIELEMENT_PROPNAME_CONFIGSOURCE )
+                setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_CONFIGSOURCE, aPropValue.Value );
+            else if ( aPropValue.Name == UIELEMENT_PROPNAME_FRAME )
+                setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_FRAME, aPropValue.Value );
+            else if ( aPropValue.Name == UIELEMENT_PROPNAME_PERSISTENT )
+                setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_PERSISTENT, aPropValue.Value );
+            else if ( aPropValue.Name == UIELEMENT_PROPNAME_RESOURCEURL )
+                setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_RESOURCEURL, aPropValue.Value );
+            else if ( aPropValue.Name == UIELEMENT_PROPNAME_TYPE )
+                setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_TYPE, aPropValue.Value );
+            else if ( aPropValue.Name == UIELEMENT_PROPNAME_CONFIGLISTENER )
+                setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_CONFIGLISTENER, aPropValue.Value );
+            else if ( aPropValue.Name == UIELEMENT_PROPNAME_NOCLOSE )
+                setFastPropertyValue_NoBroadcast( UIELEMENT_PROPHANDLE_NOCLOSE, aPropValue.Value );
+        }
     }
+
+    m_bInitialized = true;
 }
 
 // XUpdatable
@@ -413,35 +413,35 @@ void SAL_CALL UIConfigElementWrapperBase::setSettings( const Reference< XIndexAc
 {
     SolarMutexClearableGuard aLock;
 
-    if ( xSettings.is() )
+    if ( !xSettings.is() )
+        return;
+
+    // Create a copy of the data if the container is not const
+    Reference< XIndexReplace > xReplace( xSettings, UNO_QUERY );
+    if ( xReplace.is() )
+        m_xConfigData.set( static_cast< OWeakObject * >( new ConstItemContainer( xSettings ) ), UNO_QUERY );
+    else
+        m_xConfigData = xSettings;
+
+    if ( m_xConfigSource.is() && m_bPersistent )
     {
-        // Create a copy of the data if the container is not const
-        Reference< XIndexReplace > xReplace( xSettings, UNO_QUERY );
-        if ( xReplace.is() )
-            m_xConfigData.set( static_cast< OWeakObject * >( new ConstItemContainer( xSettings ) ), UNO_QUERY );
-        else
-            m_xConfigData = xSettings;
+        OUString aResourceURL( m_aResourceURL );
+        Reference< XUIConfigurationManager > xUICfgMgr( m_xConfigSource );
 
-        if ( m_xConfigSource.is() && m_bPersistent )
+        aLock.clear();
+
+        try
         {
-            OUString aResourceURL( m_aResourceURL );
-            Reference< XUIConfigurationManager > xUICfgMgr( m_xConfigSource );
-
-            aLock.clear();
-
-            try
-            {
-                xUICfgMgr->replaceSettings( aResourceURL, m_xConfigData );
-            }
-            catch( const NoSuchElementException& )
-            {
-            }
+            xUICfgMgr->replaceSettings( aResourceURL, m_xConfigData );
         }
-        else if ( !m_bPersistent )
+        catch( const NoSuchElementException& )
         {
-            // Transient menubar => Fill menubar with new data
-            impl_fillNewData();
         }
+    }
+    else if ( !m_bPersistent )
+    {
+        // Transient menubar => Fill menubar with new data
+        impl_fillNewData();
     }
 }
 void UIConfigElementWrapperBase::impl_fillNewData()

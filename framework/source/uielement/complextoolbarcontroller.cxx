@@ -128,80 +128,80 @@ void ComplexToolbarController::statusChanged( const FeatureStateEvent& Event )
     if ( m_bDisposed )
         return;
 
-    if ( m_xToolbar )
+    if ( !m_xToolbar )
+        return;
+
+    m_xToolbar->EnableItem( m_nID, Event.IsEnabled );
+
+    ToolBoxItemBits nItemBits = m_xToolbar->GetItemBits( m_nID );
+    nItemBits &= ~ToolBoxItemBits::CHECKABLE;
+    TriState eTri = TRISTATE_FALSE;
+
+    bool            bValue;
+    OUString        aStrValue;
+    ItemStatus      aItemState;
+    Visibility      aItemVisibility;
+    ControlCommand  aControlCommand;
+
+    if ( Event.State >>= bValue )
     {
-        m_xToolbar->EnableItem( m_nID, Event.IsEnabled );
+        // Boolean, treat it as checked/unchecked
+        if ( m_bMadeInvisible )
+            m_xToolbar->ShowItem( m_nID );
+        m_xToolbar->CheckItem( m_nID, bValue );
+        if ( bValue )
+            eTri = TRISTATE_TRUE;
+        nItemBits |= ToolBoxItemBits::CHECKABLE;
+    }
+    else if ( Event.State >>= aStrValue )
+    {
+        OUString aText( MnemonicGenerator::EraseAllMnemonicChars( aStrValue ) );
+        m_xToolbar->SetItemText( m_nID, aText );
+        m_xToolbar->SetQuickHelpText( m_nID, aText );
 
-        ToolBoxItemBits nItemBits = m_xToolbar->GetItemBits( m_nID );
-        nItemBits &= ~ToolBoxItemBits::CHECKABLE;
-        TriState eTri = TRISTATE_FALSE;
-
-        bool            bValue;
-        OUString        aStrValue;
-        ItemStatus      aItemState;
-        Visibility      aItemVisibility;
-        ControlCommand  aControlCommand;
-
-        if ( Event.State >>= bValue )
+        if ( m_bMadeInvisible )
+            m_xToolbar->ShowItem( m_nID );
+    }
+    else if ( Event.State >>= aItemState )
+    {
+        eTri = TRISTATE_INDET;
+        nItemBits |= ToolBoxItemBits::CHECKABLE;
+        if ( m_bMadeInvisible )
+            m_xToolbar->ShowItem( m_nID );
+    }
+    else if ( Event.State >>= aItemVisibility )
+    {
+        m_xToolbar->ShowItem( m_nID, aItemVisibility.bVisible );
+        m_bMadeInvisible = !aItemVisibility.bVisible;
+    }
+    else if ( Event.State >>= aControlCommand )
+    {
+        if (aControlCommand.Command == "SetQuickHelpText")
         {
-            // Boolean, treat it as checked/unchecked
-            if ( m_bMadeInvisible )
-                m_xToolbar->ShowItem( m_nID );
-            m_xToolbar->CheckItem( m_nID, bValue );
-            if ( bValue )
-                eTri = TRISTATE_TRUE;
-            nItemBits |= ToolBoxItemBits::CHECKABLE;
-        }
-        else if ( Event.State >>= aStrValue )
-        {
-            OUString aText( MnemonicGenerator::EraseAllMnemonicChars( aStrValue ) );
-            m_xToolbar->SetItemText( m_nID, aText );
-            m_xToolbar->SetQuickHelpText( m_nID, aText );
-
-            if ( m_bMadeInvisible )
-                m_xToolbar->ShowItem( m_nID );
-        }
-        else if ( Event.State >>= aItemState )
-        {
-            eTri = TRISTATE_INDET;
-            nItemBits |= ToolBoxItemBits::CHECKABLE;
-            if ( m_bMadeInvisible )
-                m_xToolbar->ShowItem( m_nID );
-        }
-        else if ( Event.State >>= aItemVisibility )
-        {
-            m_xToolbar->ShowItem( m_nID, aItemVisibility.bVisible );
-            m_bMadeInvisible = !aItemVisibility.bVisible;
-        }
-        else if ( Event.State >>= aControlCommand )
-        {
-            if (aControlCommand.Command == "SetQuickHelpText")
+            for (sal_Int32 i = 0; i < aControlCommand.Arguments.getLength(); i++)
             {
-                for (sal_Int32 i = 0; i < aControlCommand.Arguments.getLength(); i++)
+                if (aControlCommand.Arguments[i].Name == "HelpText")
                 {
-                    if (aControlCommand.Arguments[i].Name == "HelpText")
-                    {
-                        OUString aHelpText;
-                        aControlCommand.Arguments[i].Value >>= aHelpText;
-                        m_xToolbar->SetQuickHelpText(m_nID, aHelpText);
-                        break;
-                    }
+                    OUString aHelpText;
+                    aControlCommand.Arguments[i].Value >>= aHelpText;
+                    m_xToolbar->SetQuickHelpText(m_nID, aHelpText);
+                    break;
                 }
             }
-            else
-            {
-                executeControlCommand( aControlCommand );
-            }
-            if ( m_bMadeInvisible )
-                m_xToolbar->ShowItem( m_nID );
         }
-
-        else if ( m_bMadeInvisible )
+        else
+        {
+            executeControlCommand( aControlCommand );
+        }
+        if ( m_bMadeInvisible )
             m_xToolbar->ShowItem( m_nID );
-
-        m_xToolbar->SetItemState( m_nID, eTri );
-        m_xToolbar->SetItemBits( m_nID, nItemBits );
     }
+
+    else if ( m_bMadeInvisible )
+        m_xToolbar->ShowItem( m_nID );
+
+    m_xToolbar->SetItemState( m_nID, eTri );
+    m_xToolbar->SetItemBits( m_nID, nItemBits );
 }
 
 IMPL_STATIC_LINK( ComplexToolbarController, ExecuteHdl_Impl, void*, p, void )
@@ -251,25 +251,25 @@ void ComplexToolbarController::addNotifyInfo(
 {
     uno::Reference< frame::XControlNotificationListener > xControlNotify( xDispatch, uno::UNO_QUERY );
 
-    if ( xControlNotify.is() )
-    {
-        // Execute notification asynchronously
-        NotifyInfo* pNotifyInfo = new NotifyInfo;
+    if ( !xControlNotify.is() )
+        return;
 
-        pNotifyInfo->aEventName      = aEventName;
-        pNotifyInfo->xNotifyListener = xControlNotify;
-        pNotifyInfo->aSourceURL      = getInitializedURL();
+    // Execute notification asynchronously
+    NotifyInfo* pNotifyInfo = new NotifyInfo;
 
-        // Add frame as source to the information sequence
-        sal_Int32 nCount = rInfo.getLength();
-        uno::Sequence< beans::NamedValue > aInfoSeq( rInfo );
-        aInfoSeq.realloc( nCount+1 );
-        aInfoSeq[nCount].Name  = "Source";
-        aInfoSeq[nCount].Value <<= getFrameInterface();
-        pNotifyInfo->aInfoSeq  = aInfoSeq;
+    pNotifyInfo->aEventName      = aEventName;
+    pNotifyInfo->xNotifyListener = xControlNotify;
+    pNotifyInfo->aSourceURL      = getInitializedURL();
 
-        Application::PostUserEvent( LINK(nullptr, ComplexToolbarController, Notify_Impl), pNotifyInfo );
-    }
+    // Add frame as source to the information sequence
+    sal_Int32 nCount = rInfo.getLength();
+    uno::Sequence< beans::NamedValue > aInfoSeq( rInfo );
+    aInfoSeq.realloc( nCount+1 );
+    aInfoSeq[nCount].Name  = "Source";
+    aInfoSeq[nCount].Value <<= getFrameInterface();
+    pNotifyInfo->aInfoSeq  = aInfoSeq;
+
+    Application::PostUserEvent( LINK(nullptr, ComplexToolbarController, Notify_Impl), pNotifyInfo );
 }
 
 sal_Int32 ComplexToolbarController::getFontSizePixel( const vcl::Window* pWindow )

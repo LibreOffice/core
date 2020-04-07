@@ -76,58 +76,58 @@ void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArgument
     if ( m_bDisposed )
         throw DisposedException();
 
-    if ( !m_bInitialized )
+    if ( m_bInitialized )
+        return;
+
+    UIElementWrapperBase::initialize( aArguments );
+
+    for ( sal_Int32 n = 0; n < aArguments.getLength(); n++ )
     {
-        UIElementWrapperBase::initialize( aArguments );
-
-        for ( sal_Int32 n = 0; n < aArguments.getLength(); n++ )
+        PropertyValue aPropValue;
+        if ( aArguments[n] >>= aPropValue )
         {
-            PropertyValue aPropValue;
-            if ( aArguments[n] >>= aPropValue )
-            {
-                if ( aPropValue.Name == "ConfigurationData" )
-                    aPropValue.Value >>= m_aConfigData;
-            }
+            if ( aPropValue.Name == "ConfigurationData" )
+                aPropValue.Value >>= m_aConfigData;
         }
+    }
 
-        Reference< XFrame > xFrame( m_xWeakFrame );
-        if ( xFrame.is() && m_aConfigData.hasElements() )
+    Reference< XFrame > xFrame( m_xWeakFrame );
+    if ( !(xFrame.is() && m_aConfigData.hasElements()) )
+        return;
+
+    // Create VCL based toolbar which will be filled with settings data
+    VclPtr<ToolBox> pToolBar;
+    AddonsToolBarManager* pToolBarManager = nullptr;
+    {
+        SolarMutexGuard aSolarMutexGuard;
+        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+        if ( pWindow )
         {
-            // Create VCL based toolbar which will be filled with settings data
-            VclPtr<ToolBox> pToolBar;
-            AddonsToolBarManager* pToolBarManager = nullptr;
-            {
-                SolarMutexGuard aSolarMutexGuard;
-                VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
-                if ( pWindow )
-                {
-                    sal_uLong nStyles = WB_BORDER | WB_SCROLL | WB_MOVEABLE | WB_3DLOOK | WB_DOCKABLE | WB_SIZEABLE | WB_CLOSEABLE;
+            sal_uLong nStyles = WB_BORDER | WB_SCROLL | WB_MOVEABLE | WB_3DLOOK | WB_DOCKABLE | WB_SIZEABLE | WB_CLOSEABLE;
 
-                    pToolBar = VclPtr<ToolBox>::Create( pWindow, nStyles );
-                    pToolBar->SetLineSpacing(true);
-                    pToolBarManager = new AddonsToolBarManager( m_xContext, xFrame, m_aResourceURL, pToolBar );
-                    m_xToolBarManager.set( static_cast< OWeakObject *>( pToolBarManager ), UNO_QUERY );
-                }
-            }
-
-            try
-            {
-                if ( m_aConfigData.hasElements() && pToolBar && pToolBarManager )
-                {
-                    // Fill toolbar with container contents
-                    pToolBarManager->FillToolbar( m_aConfigData );
-                    pToolBar->SetOutStyle( SvtMiscOptions().GetToolboxStyle() );
-                    pToolBar->EnableCustomize();
-                    ::Size aActSize( pToolBar->GetSizePixel() );
-                    ::Size aSize( pToolBar->CalcWindowSizePixel() );
-                    aSize.setWidth( aActSize.Width() );
-                    pToolBar->SetSizePixel( aSize );
-                }
-            }
-            catch ( const NoSuchElementException& )
-            {
-            }
+            pToolBar = VclPtr<ToolBox>::Create( pWindow, nStyles );
+            pToolBar->SetLineSpacing(true);
+            pToolBarManager = new AddonsToolBarManager( m_xContext, xFrame, m_aResourceURL, pToolBar );
+            m_xToolBarManager.set( static_cast< OWeakObject *>( pToolBarManager ), UNO_QUERY );
         }
+    }
+
+    try
+    {
+        if ( m_aConfigData.hasElements() && pToolBar && pToolBarManager )
+        {
+            // Fill toolbar with container contents
+            pToolBarManager->FillToolbar( m_aConfigData );
+            pToolBar->SetOutStyle( SvtMiscOptions().GetToolboxStyle() );
+            pToolBar->EnableCustomize();
+            ::Size aActSize( pToolBar->GetSizePixel() );
+            ::Size aSize( pToolBar->CalcWindowSizePixel() );
+            aSize.setWidth( aActSize.Width() );
+            pToolBar->SetSizePixel( aSize );
+        }
+    }
+    catch ( const NoSuchElementException& )
+    {
     }
 }
 

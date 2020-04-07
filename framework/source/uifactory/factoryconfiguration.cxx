@@ -201,55 +201,55 @@ void ConfigurationAccess_ControllerFactory::readConfigurationData()
         m_bConfigAccessInitialized = true;
     }
 
-    if ( m_xConfigAccess.is() )
+    if ( !m_xConfigAccess.is() )
+        return;
+
+    // Read and update configuration data
+    updateConfigurationData();
+
+    uno::Reference< container::XContainer > xContainer( m_xConfigAccess, uno::UNO_QUERY );
+    // UNSAFE
+    aLock.clear();
+
+    if ( xContainer.is() )
     {
-        // Read and update configuration data
-        updateConfigurationData();
-
-        uno::Reference< container::XContainer > xContainer( m_xConfigAccess, uno::UNO_QUERY );
-        // UNSAFE
-        aLock.clear();
-
-        if ( xContainer.is() )
-        {
-            m_xConfigAccessListener = new WeakContainerListener(this);
-            xContainer->addContainerListener(m_xConfigAccessListener);
-        }
+        m_xConfigAccessListener = new WeakContainerListener(this);
+        xContainer->addContainerListener(m_xConfigAccessListener);
     }
 }
 
 void ConfigurationAccess_ControllerFactory::updateConfigurationData()
 {
     osl::MutexGuard g(m_mutex);
-    if ( m_xConfigAccess.is() )
+    if ( !m_xConfigAccess.is() )
+        return;
+
+    Sequence< OUString >   aPopupMenuControllers = m_xConfigAccess->getElementNames();
+
+    OUString aCommand;
+    OUString aModule;
+    OUString aService;
+    OUString aHashKey;
+    OUString aValue;
+
+    m_aMenuControllerMap.clear();
+    for ( sal_Int32 i = 0; i < aPopupMenuControllers.getLength(); i++ )
     {
-        Sequence< OUString >   aPopupMenuControllers = m_xConfigAccess->getElementNames();
-
-        OUString aCommand;
-        OUString aModule;
-        OUString aService;
-        OUString aHashKey;
-        OUString aValue;
-
-        m_aMenuControllerMap.clear();
-        for ( sal_Int32 i = 0; i < aPopupMenuControllers.getLength(); i++ )
+        try
         {
-            try
+            if ( impl_getElementProps( m_xConfigAccess->getByName( aPopupMenuControllers[i] ), aCommand, aModule, aService,aValue ))
             {
-                if ( impl_getElementProps( m_xConfigAccess->getByName( aPopupMenuControllers[i] ), aCommand, aModule, aService,aValue ))
-                {
-                    // Create hash key from command and module as they are together a primary key to
-                    // the UNO service that implements the popup menu controller.
-                    aHashKey = getHashKeyFromStrings( aCommand, aModule );
-                    m_aMenuControllerMap.emplace( aHashKey, ControllerInfo(aService,aValue) );
-                }
+                // Create hash key from command and module as they are together a primary key to
+                // the UNO service that implements the popup menu controller.
+                aHashKey = getHashKeyFromStrings( aCommand, aModule );
+                m_aMenuControllerMap.emplace( aHashKey, ControllerInfo(aService,aValue) );
             }
-            catch ( const NoSuchElementException& )
-            {
-            }
-            catch ( const WrappedTargetException& )
-            {
-            }
+        }
+        catch ( const NoSuchElementException& )
+        {
+        }
+        catch ( const WrappedTargetException& )
+        {
         }
     }
 }

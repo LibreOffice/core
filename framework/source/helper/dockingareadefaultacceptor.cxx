@@ -98,31 +98,31 @@ void SAL_CALL DockingAreaDefaultAcceptor::setDockingAreaSpace( const css::awt::R
 
     // Try to "lock" the frame for access to taskscontainer.
     css::uno::Reference< XFrame > xFrame( m_xOwner );
-    if ( xFrame.is() )
+    if ( !xFrame.is() )
+        return;
+
+    css::uno::Reference< css::awt::XWindow > xContainerWindow( xFrame->getContainerWindow() );
+    css::uno::Reference< css::awt::XWindow > xComponentWindow( xFrame->getComponentWindow() );
+
+    if ( !(xContainerWindow.is() && xComponentWindow.is()) )
+        return;
+
+    css::uno::Reference< css::awt::XDevice > xDevice( xContainerWindow, css::uno::UNO_QUERY );
+    // Convert relative size to output size.
+    css::awt::Rectangle  aRectangle  = xContainerWindow->getPosSize();
+    css::awt::DeviceInfo aInfo       = xDevice->getInfo();
+    css::awt::Size       aSize       (  aRectangle.Width  - aInfo.LeftInset - aInfo.RightInset  ,
+                                        aRectangle.Height - aInfo.TopInset  - aInfo.BottomInset );
+    css::awt::Size aMinSize( 0, 0 );// = xLayoutContrains->getMinimumSize();
+
+    // Check if request border space would decrease component window size below minimum size
+    sal_Int32 nWidth     = aSize.Width - BorderSpace.X - BorderSpace.Width;
+    sal_Int32 nHeight    = aSize.Height - BorderSpace.Y - BorderSpace.Height;
+
+    if (( nWidth > aMinSize.Width ) && ( nHeight > aMinSize.Height ))
     {
-        css::uno::Reference< css::awt::XWindow > xContainerWindow( xFrame->getContainerWindow() );
-        css::uno::Reference< css::awt::XWindow > xComponentWindow( xFrame->getComponentWindow() );
-
-        if ( xContainerWindow.is() && xComponentWindow.is() )
-        {
-            css::uno::Reference< css::awt::XDevice > xDevice( xContainerWindow, css::uno::UNO_QUERY );
-            // Convert relative size to output size.
-            css::awt::Rectangle  aRectangle  = xContainerWindow->getPosSize();
-            css::awt::DeviceInfo aInfo       = xDevice->getInfo();
-            css::awt::Size       aSize       (  aRectangle.Width  - aInfo.LeftInset - aInfo.RightInset  ,
-                                                aRectangle.Height - aInfo.TopInset  - aInfo.BottomInset );
-            css::awt::Size aMinSize( 0, 0 );// = xLayoutContrains->getMinimumSize();
-
-            // Check if request border space would decrease component window size below minimum size
-            sal_Int32 nWidth     = aSize.Width - BorderSpace.X - BorderSpace.Width;
-            sal_Int32 nHeight    = aSize.Height - BorderSpace.Y - BorderSpace.Height;
-
-            if (( nWidth > aMinSize.Width ) && ( nHeight > aMinSize.Height ))
-            {
-                // Resize our component window.
-                xComponentWindow->setPosSize( BorderSpace.X, BorderSpace.Y, nWidth, nHeight, css::awt::PosSize::POSSIZE );
-            }
-        }
+        // Resize our component window.
+        xComponentWindow->setPosSize( BorderSpace.X, BorderSpace.Y, nWidth, nHeight, css::awt::PosSize::POSSIZE );
     }
 }
 

@@ -119,19 +119,19 @@ void FillLangItems( std::set< OUString > &rLangItems,
       COMPLEX:  0x004
     */
     const sal_Int16 nMaxCount = 7;
-    if ( xDocumentLanguages.is() )
+    if ( !xDocumentLanguages.is() )
+        return;
+
+    Sequence< Locale > rLocales( xDocumentLanguages->getDocumentLanguages( static_cast<sal_Int16>(nScriptType), nMaxCount ));
+    if ( rLocales.hasElements() )
     {
-        Sequence< Locale > rLocales( xDocumentLanguages->getDocumentLanguages( static_cast<sal_Int16>(nScriptType), nMaxCount ));
-        if ( rLocales.hasElements() )
+        for ( sal_Int32 i = 0; i < rLocales.getLength(); ++i )
         {
-            for ( sal_Int32 i = 0; i < rLocales.getLength(); ++i )
-            {
-                if ( rLangItems.size() == static_cast< size_t >(nMaxCount) )
-                    break;
-                const Locale& rLocale=rLocales[i];
-                if( IsScriptTypeMatchingToLanguage( nScriptType, SvtLanguageTable::GetLanguageType( rLocale.Language )))
-                    rLangItems.insert( rLocale.Language );
-            }
+            if ( rLangItems.size() == static_cast< size_t >(nMaxCount) )
+                break;
+            const Locale& rLocale=rLocales[i];
+            if( IsScriptTypeMatchingToLanguage( nScriptType, SvtLanguageTable::GetLanguageType( rLocale.Language )))
+                rLangItems.insert( rLocale.Language );
         }
     }
 }

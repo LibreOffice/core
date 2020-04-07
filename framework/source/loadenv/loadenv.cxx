@@ -1674,22 +1674,22 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
 
     SolarMutexGuard aSolarGuard;
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xWindow);
-    if ( pWindow )
+    if ( !pWindow )
+        return;
+
+    bool const preview( m_lMediaDescriptor.getUnpackedValueOrDefault(
+            utl::MediaDescriptor::PROP_PREVIEW(), false) );
+
+    bool bForceFrontAndFocus(false);
+    if ( !preview )
     {
-        bool const preview( m_lMediaDescriptor.getUnpackedValueOrDefault(
-                utl::MediaDescriptor::PROP_PREVIEW(), false) );
-
-        bool bForceFrontAndFocus(false);
-        if ( !preview )
-        {
-            bForceFrontAndFocus = officecfg::Office::Common::View::NewDocumentHandling::ForceFocusAndToFront::get(xContext);
-        }
-
-        if( pWindow->IsVisible() && (bForceFrontAndFocus || bForceToFront) )
-            pWindow->ToTop( ToTopFlags::RestoreWhenMin | ToTopFlags::ForegroundTask );
-        else
-            pWindow->Show(true, (bForceFrontAndFocus || bForceToFront) ? ShowFlags::ForegroundTask : ShowFlags::NONE );
+        bForceFrontAndFocus = officecfg::Office::Common::View::NewDocumentHandling::ForceFocusAndToFront::get(xContext);
     }
+
+    if( pWindow->IsVisible() && (bForceFrontAndFocus || bForceToFront) )
+        pWindow->ToTop( ToTopFlags::RestoreWhenMin | ToTopFlags::ForegroundTask );
+    else
+        pWindow->Show(true, (bForceFrontAndFocus || bForceToFront) ? ShowFlags::ForegroundTask : ShowFlags::NONE );
 }
 
 void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::awt::XWindow >& xWindow)

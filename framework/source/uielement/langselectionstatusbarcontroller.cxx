@@ -202,72 +202,72 @@ void LangSelectionStatusbarController::LangMenu(
     css::awt::Rectangle aRect( aPos.X, aPos.Y, 0, 0 );
     sal_Int16 nId = xPopupMenu->execute( xParent, aRect, css::awt::PopupMenuDirection::EXECUTE_UP+16 );
     //click "More..."
-    if ( nId && m_xFrame.is() )
+    if ( !(nId && m_xFrame.is()) )
+        return;
+
+    OUStringBuffer aBuff;
+    //set selected language as current language for selection
+    const OUString aSelectedLang = aLangMap[nId];
+
+    if (MID_LANG_SEL_1 <= nId && nId <= MID_LANG_SEL_9)
     {
-        OUStringBuffer aBuff;
-        //set selected language as current language for selection
-        const OUString aSelectedLang = aLangMap[nId];
+        if (bWriter)
+            aBuff.append( ".uno:LanguageStatus?Language:string=Current_" );
+        else
+            aBuff.append( ".uno:LanguageStatus?Language:string=Default_" );
 
-        if (MID_LANG_SEL_1 <= nId && nId <= MID_LANG_SEL_9)
-        {
-            if (bWriter)
-                aBuff.append( ".uno:LanguageStatus?Language:string=Current_" );
-            else
-                aBuff.append( ".uno:LanguageStatus?Language:string=Default_" );
-
-            aBuff.append( aSelectedLang );
-        }
-        else if (nId == MID_LANG_SEL_NONE)
-        {
-            //set None as current language for selection
-            aBuff.append( ".uno:LanguageStatus?Language:string=Current_LANGUAGE_NONE" );
-        }
-        else if (nId == MID_LANG_SEL_RESET)
-        {
-            // reset language attributes for selection
-            aBuff.append( ".uno:LanguageStatus?Language:string=Current_RESET_LANGUAGES" );
-        }
-        else if (nId == MID_LANG_SEL_MORE)
-        {
-            //open the dialog "format/character" for current selection
-            aBuff.append( ".uno:FontDialog?Page:string=font" );
-        }
-        else if (nId == MID_LANG_DEF_NONE)
-        {
-             aBuff.append( ".uno:LanguageStatus?Language:string=Default_LANGUAGE_NONE" );
-        }
-        else if (nId == MID_LANG_DEF_RESET)
-        {
-             aBuff.append( ".uno:LanguageStatus?Language:string=Default_RESET_LANGUAGES" );
-        }
-        else if (nId == MID_LANG_DEF_MORE)
-        {
-            aBuff.append( ".uno:LanguageStatus?Language:string=*" );
-        }
-        else if (MID_LANG_PARA_1 <= nId && nId <= MID_LANG_PARA_9)
-        {
-            aBuff.append( ".uno:LanguageStatus?Language:string=Paragraph_" );
-            aBuff.append( aSelectedLang );
-        }
-        else if (nId == MID_LANG_PARA_NONE)
-        {
-            //set None as language for current paragraph
-            aBuff.append( ".uno:LanguageStatus?Language:string=Paragraph_LANGUAGE_NONE" );
-        }
-        else if (nId == MID_LANG_PARA_RESET)
-        {
-            // reset language attributes for paragraph
-            aBuff.append( ".uno:LanguageStatus?Language:string=Paragraph_RESET_LANGUAGES" );
-        }
-        else if (nId == MID_LANG_PARA_MORE)
-        {
-            //open the dialog "format/character" for current paragraph
-            aBuff.append( ".uno:FontDialogForParagraph" );
-        }
-
-        const Sequence< beans::PropertyValue > aDummyArgs;
-        execute( aBuff.makeStringAndClear(), aDummyArgs );
+        aBuff.append( aSelectedLang );
     }
+    else if (nId == MID_LANG_SEL_NONE)
+    {
+        //set None as current language for selection
+        aBuff.append( ".uno:LanguageStatus?Language:string=Current_LANGUAGE_NONE" );
+    }
+    else if (nId == MID_LANG_SEL_RESET)
+    {
+        // reset language attributes for selection
+        aBuff.append( ".uno:LanguageStatus?Language:string=Current_RESET_LANGUAGES" );
+    }
+    else if (nId == MID_LANG_SEL_MORE)
+    {
+        //open the dialog "format/character" for current selection
+        aBuff.append( ".uno:FontDialog?Page:string=font" );
+    }
+    else if (nId == MID_LANG_DEF_NONE)
+    {
+         aBuff.append( ".uno:LanguageStatus?Language:string=Default_LANGUAGE_NONE" );
+    }
+    else if (nId == MID_LANG_DEF_RESET)
+    {
+         aBuff.append( ".uno:LanguageStatus?Language:string=Default_RESET_LANGUAGES" );
+    }
+    else if (nId == MID_LANG_DEF_MORE)
+    {
+        aBuff.append( ".uno:LanguageStatus?Language:string=*" );
+    }
+    else if (MID_LANG_PARA_1 <= nId && nId <= MID_LANG_PARA_9)
+    {
+        aBuff.append( ".uno:LanguageStatus?Language:string=Paragraph_" );
+        aBuff.append( aSelectedLang );
+    }
+    else if (nId == MID_LANG_PARA_NONE)
+    {
+        //set None as language for current paragraph
+        aBuff.append( ".uno:LanguageStatus?Language:string=Paragraph_LANGUAGE_NONE" );
+    }
+    else if (nId == MID_LANG_PARA_RESET)
+    {
+        // reset language attributes for paragraph
+        aBuff.append( ".uno:LanguageStatus?Language:string=Paragraph_RESET_LANGUAGES" );
+    }
+    else if (nId == MID_LANG_PARA_MORE)
+    {
+        //open the dialog "format/character" for current paragraph
+        aBuff.append( ".uno:FontDialogForParagraph" );
+    }
+
+    const Sequence< beans::PropertyValue > aDummyArgs;
+    execute( aBuff.makeStringAndClear(), aDummyArgs );
 }
 
 void SAL_CALL LangSelectionStatusbarController::command(
@@ -306,40 +306,40 @@ void SAL_CALL LangSelectionStatusbarController::statusChanged( const FeatureStat
     m_bShowMenu = true;
     m_nScriptType = SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX;  //set the default value
 
-    if ( m_xStatusbarItem.is() )
+    if ( !m_xStatusbarItem.is() )
+        return;
+
+    OUString aStrValue;
+    Sequence< OUString > aSeq;
+
+    if ( Event.State >>= aStrValue )
     {
-        OUString aStrValue;
-        Sequence< OUString > aSeq;
-
-        if ( Event.State >>= aStrValue )
+        m_xStatusbarItem->setText( aStrValue );
+        m_aCurLang = aStrValue;
+    }
+    else if ( Event.State >>= aSeq )
+    {
+        if ( aSeq.getLength() == 4 )
         {
-            m_xStatusbarItem->setText( aStrValue );
-            m_aCurLang = aStrValue;
-        }
-        else if ( Event.State >>= aSeq )
-        {
-            if ( aSeq.getLength() == 4 )
+            OUString aStatusText = aSeq[0];
+            if (aStatusText == "*")
             {
-                OUString aStatusText = aSeq[0];
-                if (aStatusText == "*")
-                {
-                    aStatusText = FwkResId(STR_LANGSTATUS_MULTIPLE_LANGUAGES);
-                }
-                m_xStatusbarItem->setText( aStatusText );
-
-                // Retrieve all other values from the sequence and
-                // store it members!
-                m_aCurLang      = aSeq[0];
-                m_nScriptType   = static_cast< SvtScriptType >( aSeq[1].toInt32() );
-                m_aKeyboardLang = aSeq[2];
-                m_aGuessedTextLang  = aSeq[3];
+                aStatusText = FwkResId(STR_LANGSTATUS_MULTIPLE_LANGUAGES);
             }
+            m_xStatusbarItem->setText( aStatusText );
+
+            // Retrieve all other values from the sequence and
+            // store it members!
+            m_aCurLang      = aSeq[0];
+            m_nScriptType   = static_cast< SvtScriptType >( aSeq[1].toInt32() );
+            m_aKeyboardLang = aSeq[2];
+            m_aGuessedTextLang  = aSeq[3];
         }
-        else if ( !Event.State.hasValue() )
-        {
-            m_xStatusbarItem->setText( OUString() );
-            m_bShowMenu = false;    // no language -> no menu
-        }
+    }
+    else if ( !Event.State.hasValue() )
+    {
+        m_xStatusbarItem->setText( OUString() );
+        m_bShowMenu = false;    // no language -> no menu
     }
 }
 

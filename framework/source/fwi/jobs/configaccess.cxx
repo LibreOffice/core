@@ -91,45 +91,42 @@ void ConfigAccess::open( /*IN*/ EOpenMode eMode )
 
     // check if configuration is already open in the right mode.
     // By the way: Don't allow closing by using this method!
-    if (
-        (eMode  !=E_CLOSED) &&
-        (m_eMode!=eMode   )
-       )
+    if ( eMode == E_CLOSED || m_eMode == eMode )
+        return;
+
+    // We have to close the old access point without any question here.
+    // It will be open again using the new mode.
+    // can be called without checks! It does the checks by itself ...
+    // e.g. for already closed or not opened configuration.
+    // Flushing of all made changes will be done here too.
+    close();
+
+    // create the configuration provider, which provides sub access points
+    css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider = css::configuration::theDefaultProvider::get(m_xContext);
+    css::beans::PropertyValue aParam;
+    aParam.Name    = "nodepath";
+    aParam.Value <<= m_sRoot;
+
+    css::uno::Sequence< css::uno::Any > lParams(1);
+    lParams[0] <<= aParam;
+
+    // open it
+    try
     {
-        // We have to close the old access point without any question here.
-        // It will be open again using the new mode.
-        // can be called without checks! It does the checks by itself ...
-        // e.g. for already closed or not opened configuration.
-        // Flushing of all made changes will be done here too.
-        close();
-
-        // create the configuration provider, which provides sub access points
-        css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider = css::configuration::theDefaultProvider::get(m_xContext);
-        css::beans::PropertyValue aParam;
-        aParam.Name    = "nodepath";
-        aParam.Value <<= m_sRoot;
-
-        css::uno::Sequence< css::uno::Any > lParams(1);
-        lParams[0] <<= aParam;
-
-        // open it
-        try
-        {
-            if (eMode==E_READONLY)
-                m_xConfig = xConfigProvider->createInstanceWithArguments(SERVICENAME_CFGREADACCESS  , lParams);
-            else
-            if (eMode==E_READWRITE)
-                m_xConfig = xConfigProvider->createInstanceWithArguments(SERVICENAME_CFGUPDATEACCESS, lParams);
-        }
-        catch(const css::uno::Exception&)
-        {
-            TOOLS_INFO_EXCEPTION("fwk", "open config");
-        }
-
-        m_eMode = E_CLOSED;
-        if (m_xConfig.is())
-            m_eMode = eMode;
+        if (eMode==E_READONLY)
+            m_xConfig = xConfigProvider->createInstanceWithArguments(SERVICENAME_CFGREADACCESS  , lParams);
+        else
+        if (eMode==E_READWRITE)
+            m_xConfig = xConfigProvider->createInstanceWithArguments(SERVICENAME_CFGUPDATEACCESS, lParams);
     }
+    catch(const css::uno::Exception&)
+    {
+        TOOLS_INFO_EXCEPTION("fwk", "open config");
+    }
+
+    m_eMode = E_CLOSED;
+    if (m_xConfig.is())
+        m_eMode = eMode;
 }
 
 /**

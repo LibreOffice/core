@@ -525,22 +525,22 @@ void Job::impl_startListening()
     }
 
     // listening for model closing
-    if (m_xModel.is() && !m_bListenOnModel)
+    if (!(m_xModel.is() && !m_bListenOnModel))
+        return;
+
+    try
     {
-        try
+        css::uno::Reference< css::util::XCloseBroadcaster > xCloseable(m_xModel                                 , css::uno::UNO_QUERY);
+        css::uno::Reference< css::util::XCloseListener >    xThis     (static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+        if (xCloseable.is())
         {
-            css::uno::Reference< css::util::XCloseBroadcaster > xCloseable(m_xModel                                 , css::uno::UNO_QUERY);
-            css::uno::Reference< css::util::XCloseListener >    xThis     (static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
-            if (xCloseable.is())
-            {
-                xCloseable->addCloseListener(xThis);
-                m_bListenOnModel = true;
-            }
+            xCloseable->addCloseListener(xThis);
+            m_bListenOnModel = true;
         }
-        catch(const css::uno::Exception&)
-        {
-            m_bListenOnModel = false;
-        }
+    }
+    catch(const css::uno::Exception&)
+    {
+        m_bListenOnModel = false;
     }
 }
 
@@ -586,21 +586,21 @@ void Job::impl_stopListening()
     }
 
     // stop listening for model closing
-    if (m_xModel.is() && m_bListenOnModel)
+    if (!(m_xModel.is() && m_bListenOnModel))
+        return;
+
+    try
     {
-        try
+        css::uno::Reference< css::util::XCloseBroadcaster > xCloseable(m_xModel                                 , css::uno::UNO_QUERY);
+        css::uno::Reference< css::util::XCloseListener >    xThis     (static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+        if (xCloseable.is())
         {
-            css::uno::Reference< css::util::XCloseBroadcaster > xCloseable(m_xModel                                 , css::uno::UNO_QUERY);
-            css::uno::Reference< css::util::XCloseListener >    xThis     (static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
-            if (xCloseable.is())
-            {
-                xCloseable->removeCloseListener(xThis);
-                m_bListenOnModel = false;
-            }
+            xCloseable->removeCloseListener(xThis);
+            m_bListenOnModel = false;
         }
-        catch(const css::uno::Exception&)
-        {
-        }
+    }
+    catch(const css::uno::Exception&)
+    {
     }
 }
 

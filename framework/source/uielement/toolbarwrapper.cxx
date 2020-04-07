@@ -108,77 +108,77 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments )
     if ( m_bDisposed )
         throw DisposedException();
 
-    if ( !m_bInitialized )
+    if ( m_bInitialized )
+        return;
+
+    UIConfigElementWrapperBase::initialize( aArguments );
+
+    bool bPopupMode( false );
+    Reference< XWindow > xParentWindow;
+    for ( sal_Int32 i = 0; i < aArguments.getLength(); i++ )
     {
-        UIConfigElementWrapperBase::initialize( aArguments );
-
-        bool bPopupMode( false );
-        Reference< XWindow > xParentWindow;
-        for ( sal_Int32 i = 0; i < aArguments.getLength(); i++ )
+        PropertyValue aPropValue;
+        if ( aArguments[i] >>= aPropValue )
         {
-            PropertyValue aPropValue;
-            if ( aArguments[i] >>= aPropValue )
-            {
-                if ( aPropValue.Name == "PopupMode" )
-                    aPropValue.Value >>= bPopupMode;
-                else if ( aPropValue.Name == "ParentWindow" )
-                    xParentWindow.set( aPropValue.Value, UNO_QUERY );
-            }
+            if ( aPropValue.Name == "PopupMode" )
+                aPropValue.Value >>= bPopupMode;
+            else if ( aPropValue.Name == "ParentWindow" )
+                xParentWindow.set( aPropValue.Value, UNO_QUERY );
         }
+    }
 
-        Reference< XFrame > xFrame( m_xWeakFrame );
-        if ( xFrame.is() && m_xConfigSource.is() )
+    Reference< XFrame > xFrame( m_xWeakFrame );
+    if ( !(xFrame.is() && m_xConfigSource.is()) )
+        return;
+
+    // Create VCL based toolbar which will be filled with settings data
+    VclPtr<ToolBox> pToolBar;
+    ToolBarManager* pToolBarManager = nullptr;
+    {
+        SolarMutexGuard aSolarMutexGuard;
+        if ( !xParentWindow.is() )
+            xParentWindow.set( xFrame->getContainerWindow() );
+        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xParentWindow );
+        if ( pWindow )
         {
-            // Create VCL based toolbar which will be filled with settings data
-            VclPtr<ToolBox> pToolBar;
-            ToolBarManager* pToolBarManager = nullptr;
-            {
-                SolarMutexGuard aSolarMutexGuard;
-                if ( !xParentWindow.is() )
-                    xParentWindow.set( xFrame->getContainerWindow() );
-                VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xParentWindow );
-                if ( pWindow )
-                {
-                    sal_uLong nStyles = WB_BORDER | WB_SCROLL | WB_MOVEABLE | WB_3DLOOK | WB_DOCKABLE | WB_SIZEABLE | WB_CLOSEABLE;
+            sal_uLong nStyles = WB_BORDER | WB_SCROLL | WB_MOVEABLE | WB_3DLOOK | WB_DOCKABLE | WB_SIZEABLE | WB_CLOSEABLE;
 
-                    pToolBar = VclPtr<ToolBox>::Create( pWindow, nStyles );
-                    pToolBar->SetLineSpacing(true);
-                    pToolBarManager = new ToolBarManager( m_xContext, xFrame, m_aResourceURL, pToolBar );
-                    m_xToolBarManager.set( static_cast< OWeakObject *>( pToolBarManager ), UNO_QUERY );
-                    pToolBar->WillUsePopupMode( bPopupMode );
-                }
-            }
+            pToolBar = VclPtr<ToolBox>::Create( pWindow, nStyles );
+            pToolBar->SetLineSpacing(true);
+            pToolBarManager = new ToolBarManager( m_xContext, xFrame, m_aResourceURL, pToolBar );
+            m_xToolBarManager.set( static_cast< OWeakObject *>( pToolBarManager ), UNO_QUERY );
+            pToolBar->WillUsePopupMode( bPopupMode );
+        }
+    }
 
-            try
-            {
-                m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, false );
-                if ( m_xConfigData.is() && pToolBar && pToolBarManager )
-                {
-                    // Fill toolbar with container contents
-                    pToolBarManager->FillToolbar( m_xConfigData );
-                    pToolBar->SetOutStyle( SvtMiscOptions().GetToolboxStyle() );
-                    pToolBar->EnableCustomize();
-                    ::Size aActSize( pToolBar->GetSizePixel() );
-                    ::Size aSize( pToolBar->CalcWindowSizePixel() );
-                    aSize.setWidth( aActSize.Width() );
-                    pToolBar->SetOutputSizePixel( aSize );
-                }
-            }
-            catch ( const NoSuchElementException& )
-            {
-                // No settings in our configuration manager. This means we are
-                // a transient toolbar which has no persistent settings.
-                m_bPersistent = false;
-                if ( pToolBar && pToolBarManager )
-                {
-                    pToolBar->SetOutStyle( SvtMiscOptions().GetToolboxStyle() );
-                    pToolBar->EnableCustomize();
-                    ::Size aActSize( pToolBar->GetSizePixel() );
-                    ::Size aSize( pToolBar->CalcWindowSizePixel() );
-                    aSize.setWidth( aActSize.Width() );
-                    pToolBar->SetOutputSizePixel( aSize );
-                }
-            }
+    try
+    {
+        m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, false );
+        if ( m_xConfigData.is() && pToolBar && pToolBarManager )
+        {
+            // Fill toolbar with container contents
+            pToolBarManager->FillToolbar( m_xConfigData );
+            pToolBar->SetOutStyle( SvtMiscOptions().GetToolboxStyle() );
+            pToolBar->EnableCustomize();
+            ::Size aActSize( pToolBar->GetSizePixel() );
+            ::Size aSize( pToolBar->CalcWindowSizePixel() );
+            aSize.setWidth( aActSize.Width() );
+            pToolBar->SetOutputSizePixel( aSize );
+        }
+    }
+    catch ( const NoSuchElementException& )
+    {
+        // No settings in our configuration manager. This means we are
+        // a transient toolbar which has no persistent settings.
+        m_bPersistent = false;
+        if ( pToolBar && pToolBarManager )
+        {
+            pToolBar->SetOutStyle( SvtMiscOptions().GetToolboxStyle() );
+            pToolBar->EnableCustomize();
+            ::Size aActSize( pToolBar->GetSizePixel() );
+            ::Size aSize( pToolBar->CalcWindowSizePixel() );
+            aSize.setWidth( aActSize.Width() );
+            pToolBar->SetOutputSizePixel( aSize );
         }
     }
 }
@@ -210,26 +210,26 @@ void SAL_CALL ToolBarWrapper::updateSettings()
     if ( m_bDisposed )
         throw DisposedException();
 
-    if ( m_xToolBarManager.is() )
-    {
-        if ( m_xConfigSource.is() && m_bPersistent )
-        {
-            try
-            {
-                ToolBarManager* pToolBarManager = static_cast< ToolBarManager *>( m_xToolBarManager.get() );
+    if ( !m_xToolBarManager.is() )
+        return;
 
-                m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, false );
-                if ( m_xConfigData.is() )
-                    pToolBarManager->FillToolbar( m_xConfigData );
-            }
-            catch ( const NoSuchElementException& )
-            {
-            }
-        }
-        else if ( !m_bPersistent )
+    if ( m_xConfigSource.is() && m_bPersistent )
+    {
+        try
         {
-            // Transient toolbar: do nothing
+            ToolBarManager* pToolBarManager = static_cast< ToolBarManager *>( m_xToolBarManager.get() );
+
+            m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, false );
+            if ( m_xConfigData.is() )
+                pToolBarManager->FillToolbar( m_xConfigData );
         }
+        catch ( const NoSuchElementException& )
+        {
+        }
+    }
+    else if ( !m_bPersistent )
+    {
+        // Transient toolbar: do nothing
     }
 }
 
@@ -285,26 +285,26 @@ void SAL_CALL ToolBarWrapper::setFastPropertyValue_NoBroadcast( sal_Int32 nHandl
     aLock.reset();
 
     bool bNewNoClose( m_bNoClose );
-    if ( m_xToolBarManager.is() && !m_bDisposed && ( bNewNoClose != bNoClose ))
+    if ( !(m_xToolBarManager.is() && !m_bDisposed && ( bNewNoClose != bNoClose )))
+        return;
+
+    ToolBarManager* pToolBarManager = static_cast< ToolBarManager *>( m_xToolBarManager.get() );
+    if ( !pToolBarManager )
+        return;
+
+    ToolBox* pToolBox = pToolBarManager->GetToolBar();
+    if ( !pToolBox )
+        return;
+
+    if ( bNewNoClose )
     {
-        ToolBarManager* pToolBarManager = static_cast< ToolBarManager *>( m_xToolBarManager.get() );
-        if ( pToolBarManager )
-        {
-            ToolBox* pToolBox = pToolBarManager->GetToolBar();
-            if ( pToolBox )
-            {
-                if ( bNewNoClose )
-                {
-                    pToolBox->SetStyle( pToolBox->GetStyle() & ~WB_CLOSEABLE );
-                    pToolBox->SetFloatStyle( pToolBox->GetFloatStyle() & ~WB_CLOSEABLE );
-                }
-                else
-                {
-                    pToolBox->SetStyle( pToolBox->GetStyle() | WB_CLOSEABLE );
-                    pToolBox->SetFloatStyle( pToolBox->GetFloatStyle() | WB_CLOSEABLE );
-                }
-            }
-        }
+        pToolBox->SetStyle( pToolBox->GetStyle() & ~WB_CLOSEABLE );
+        pToolBox->SetFloatStyle( pToolBox->GetFloatStyle() & ~WB_CLOSEABLE );
+    }
+    else
+    {
+        pToolBox->SetStyle( pToolBox->GetStyle() | WB_CLOSEABLE );
+        pToolBox->SetFloatStyle( pToolBox->GetFloatStyle() | WB_CLOSEABLE );
     }
 }
 

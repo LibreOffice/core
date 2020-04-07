@@ -73,29 +73,29 @@ void FixedImageToolbarController::CheckAndUpdateImages()
     SvtMiscOptions aMiscOptions;
     const sal_Int16 eNewSymbolSize = aMiscOptions.GetCurrentSymbolsSize();
 
-    if (m_eSymbolSize != eNewSymbolSize)
-    {
-        m_eSymbolSize = eNewSymbolSize;
+    if (m_eSymbolSize == eNewSymbolSize)
+        return;
 
-        // Refresh images if requested
-        auto aSize(m_pFixedImageControl->GetOptimalSize());
-        if (m_eSymbolSize == SFX_SYMBOLS_SIZE_LARGE)
-        {
-            aSize.setWidth(26);
-            aSize.setHeight(26);
-        }
-        else if (m_eSymbolSize == SFX_SYMBOLS_SIZE_32)
-        {
-            aSize.setWidth(32);
-            aSize.setHeight(32);
-        }
-        else
-        {
-            aSize.setWidth(16);
-            aSize.setHeight(16);
-        }
-        m_pFixedImageControl->SetSizePixel(aSize);
+    m_eSymbolSize = eNewSymbolSize;
+
+    // Refresh images if requested
+    auto aSize(m_pFixedImageControl->GetOptimalSize());
+    if (m_eSymbolSize == SFX_SYMBOLS_SIZE_LARGE)
+    {
+        aSize.setWidth(26);
+        aSize.setHeight(26);
     }
+    else if (m_eSymbolSize == SFX_SYMBOLS_SIZE_32)
+    {
+        aSize.setWidth(32);
+        aSize.setHeight(32);
+    }
+    else
+    {
+        aSize.setWidth(16);
+        aSize.setHeight(16);
+    }
+    m_pFixedImageControl->SetSizePixel(aSize);
 }
 
 IMPL_LINK_NOARG(FixedImageToolbarController, MiscOptionsChanged, LinkParamNone*, void)

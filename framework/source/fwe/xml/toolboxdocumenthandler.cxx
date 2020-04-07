@@ -196,82 +196,22 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
     SolarMutexGuard g;
 
     ToolBoxHashMap::const_iterator pToolBoxEntry = m_aToolBoxMap.find( aName );
-    if ( pToolBoxEntry != m_aToolBoxMap.end() )
+    if ( pToolBoxEntry == m_aToolBoxMap.end() )
+        return;
+
+    switch ( pToolBoxEntry->second )
     {
-        switch ( pToolBoxEntry->second )
+        case TB_ELEMENT_TOOLBAR:
         {
-            case TB_ELEMENT_TOOLBAR:
+            if ( m_bToolBarStartFound )
             {
-                if ( m_bToolBarStartFound )
-                {
-                    OUString aErrorMessage = getErrorLineString() + "Element 'toolbar:toolbar' cannot be embedded into 'toolbar:toolbar'!";
-                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-                }
-                else
-                {
-                    // Check if we have a UI name set in our XML file
-                    OUString aUIName;
-                    for ( sal_Int16 n = 0; n < xAttribs->getLength(); n++ )
-                    {
-                        pToolBoxEntry = m_aToolBoxMap.find( xAttribs->getNameByIndex( n ) );
-                        if ( pToolBoxEntry != m_aToolBoxMap.end() )
-                        {
-                            switch ( pToolBoxEntry->second )
-                            {
-                                case TB_ATTRIBUTE_UINAME:
-                                    aUIName = xAttribs->getValueByIndex( n );
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                    }
-                    if ( !aUIName.isEmpty() )
-                    {
-                        // Try to set UI name as a container property
-                        Reference< XPropertySet > xPropSet( m_rItemContainer, UNO_QUERY );
-                        if ( xPropSet.is() )
-                        {
-                            try
-                            {
-                                xPropSet->setPropertyValue("UIName", makeAny( aUIName ) );
-                            }
-                            catch ( const UnknownPropertyException& )
-                            {
-                            }
-                        }
-
-                    }
-                }
-                m_bToolBarStartFound = true;
+                OUString aErrorMessage = getErrorLineString() + "Element 'toolbar:toolbar' cannot be embedded into 'toolbar:toolbar'!";
+                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
             }
-            break;
-
-            case TB_ELEMENT_TOOLBARITEM:
+            else
             {
-                if ( !m_bToolBarStartFound )
-                {
-                    OUString aErrorMessage = getErrorLineString() + "Element 'toolbar:toolbaritem' must be embedded into element 'toolbar:toolbar'!";
-                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-                }
-
-                if ( m_bToolBarSeparatorStartFound ||
-                     m_bToolBarBreakStartFound ||
-                     m_bToolBarSpaceStartFound ||
-                     m_bToolBarItemStartFound )
-                {
-                    OUString aErrorMessage = getErrorLineString() + "Element toolbar:toolbaritem is not a container!";
-                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-                }
-
-                bool bAttributeURL  = false;
-
-                m_bToolBarItemStartFound = true;
-                OUString        aLabel;
-                OUString        aCommandURL;
-                sal_uInt16      nItemBits( 0 );
-                bool            bVisible( true );
-
+                // Check if we have a UI name set in our XML file
+                OUString aUIName;
                 for ( sal_Int16 n = 0; n < xAttribs->getLength(); n++ )
                 {
                     pToolBoxEntry = m_aToolBoxMap.find( xAttribs->getNameByIndex( n ) );
@@ -279,190 +219,250 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
                     {
                         switch ( pToolBoxEntry->second )
                         {
-                            case TB_ATTRIBUTE_TEXT:
-                            {
-                                aLabel = xAttribs->getValueByIndex( n );
-                            }
-                            break;
-
-                            case TB_ATTRIBUTE_URL:
-                            {
-                                bAttributeURL   = true;
-                                aCommandURL     = xAttribs->getValueByIndex( n ).intern();
-                            }
-                            break;
-
-                            case TB_ATTRIBUTE_VISIBLE:
-                            {
-                                if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_BOOLEAN_TRUE )
-                                    bVisible = true;
-                                else if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_BOOLEAN_FALSE )
-                                    bVisible = false;
-                                else
-                                {
-                                    OUString aErrorMessage = getErrorLineString() + "Attribute toolbar:visible must have value 'true' or 'false'!";
-                                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-                                }
-                            }
-                            break;
-
-                            case TB_ATTRIBUTE_STYLE:
-                            {
-                                // read space separated item style list
-                                OUString aTemp = xAttribs->getValueByIndex( n );
-                                sal_Int32 nIndex = 0;
-
-                                do
-                                {
-                                    OUString aToken  = aTemp.getToken( 0, ' ', nIndex );
-                                    if ( !aToken.isEmpty() )
-                                    {
-                                        sal_Int32 nHashCode = aToken.hashCode();
-                                        if ( nHashCode == m_nHashCode_Style_Radio )
-                                            nItemBits |= css::ui::ItemStyle::RADIO_CHECK;
-                                        else if ( nHashCode == m_nHashCode_Style_Left )
-                                            nItemBits |= css::ui::ItemStyle::ALIGN_LEFT;
-                                        else if ( nHashCode == m_nHashCode_Style_AutoSize )
-                                            nItemBits |= css::ui::ItemStyle::AUTO_SIZE;
-                                        else if ( nHashCode == m_nHashCode_Style_Repeat )
-                                            nItemBits |= css::ui::ItemStyle::REPEAT;
-                                        else if ( nHashCode == m_nHashCode_Style_DropDownOnly )
-                                            nItemBits |= css::ui::ItemStyle::DROPDOWN_ONLY;
-                                        else if ( nHashCode == m_nHashCode_Style_DropDown )
-                                            nItemBits |= css::ui::ItemStyle::DROP_DOWN;
-                                        else if ( nHashCode == m_nHashCode_Style_Text )
-                                            nItemBits |= css::ui::ItemStyle::TEXT;
-                                        else if ( nHashCode == m_nHashCode_Style_Image )
-                                            nItemBits |= css::ui::ItemStyle::ICON;
-                                    }
-                                }
-                                while ( nIndex >= 0 );
-                            }
-                            break;
-
+                            case TB_ATTRIBUTE_UINAME:
+                                aUIName = xAttribs->getValueByIndex( n );
+                                break;
                             default:
-                            break;
+                                break;
                         }
                     }
-                } // for
-
-                if ( !bAttributeURL )
-                {
-                    OUString aErrorMessage = getErrorLineString() + "Required attribute toolbar:url must have a value!";
-                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
-
-                if ( !aCommandURL.isEmpty() )
+                if ( !aUIName.isEmpty() )
                 {
-                    //fix for fdo#39370
-                    /// check whether RTL interface or not
-                    if(AllSettings::GetLayoutRTL()){
-                        if (aCommandURL == ".uno:ParaLeftToRight")
-                            aCommandURL = ".uno:ParaRightToLeft";
-                        else if (aCommandURL == ".uno:ParaRightToLeft")
-                            aCommandURL = ".uno:ParaLeftToRight";
-                        else if (aCommandURL == ".uno:LeftPara")
-                            aCommandURL = ".uno:RightPara";
-                        else if (aCommandURL == ".uno:RightPara")
-                            aCommandURL = ".uno:LeftPara";
-                        else if (aCommandURL == ".uno:AlignLeft")
-                            aCommandURL = ".uno:AlignRight";
-                        else if (aCommandURL == ".uno:AlignRight")
-                            aCommandURL = ".uno:AlignLeft";
-                        else if (aCommandURL == ".uno:WrapLeft")
-                            aCommandURL = ".uno:WrapRight";
-                        else if (aCommandURL == ".uno:WrapRight")
-                            aCommandURL = ".uno:WrapLeft";
+                    // Try to set UI name as a container property
+                    Reference< XPropertySet > xPropSet( m_rItemContainer, UNO_QUERY );
+                    if ( xPropSet.is() )
+                    {
+                        try
+                        {
+                            xPropSet->setPropertyValue("UIName", makeAny( aUIName ) );
+                        }
+                        catch ( const UnknownPropertyException& )
+                        {
+                        }
                     }
 
-                    auto aToolbarItemProp( comphelper::InitPropertySequence( {
-                        { m_aCommandURL, css::uno::makeAny( aCommandURL ) },
-                        { m_aLabel, css::uno::makeAny( aLabel ) },
-                        { m_aType, css::uno::makeAny( css::ui::ItemType::DEFAULT ) },
-                        { m_aStyle, css::uno::makeAny( nItemBits ) },
-                        { m_aIsVisible, css::uno::makeAny( bVisible ) },
-                    } ) );
-
-                    m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), makeAny( aToolbarItemProp ) );
                 }
             }
-            break;
-
-            case TB_ELEMENT_TOOLBARSPACE:
-            {
-                if ( m_bToolBarSeparatorStartFound ||
-                     m_bToolBarBreakStartFound ||
-                     m_bToolBarSpaceStartFound ||
-                     m_bToolBarItemStartFound )
-                {
-                    OUString aErrorMessage = getErrorLineString() + "Element toolbar:toolbarspace is not a container!";
-                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-                }
-
-                m_bToolBarSpaceStartFound = true;
-
-                Sequence< PropertyValue > aToolbarItemProp( 2 );
-                aToolbarItemProp[0].Name = m_aCommandURL;
-                aToolbarItemProp[1].Name = m_aType;
-
-                aToolbarItemProp[0].Value <<= OUString();
-                aToolbarItemProp[1].Value <<= css::ui::ItemType::SEPARATOR_SPACE;
-
-                m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), makeAny( aToolbarItemProp ) );
-            }
-            break;
-
-            case TB_ELEMENT_TOOLBARBREAK:
-            {
-                if ( m_bToolBarSeparatorStartFound ||
-                     m_bToolBarBreakStartFound ||
-                     m_bToolBarSpaceStartFound ||
-                     m_bToolBarItemStartFound )
-                {
-                    OUString aErrorMessage = getErrorLineString() + "Element toolbar:toolbarbreak is not a container!";
-                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-                }
-
-                m_bToolBarBreakStartFound = true;
-
-                Sequence< PropertyValue > aToolbarItemProp( 2 );
-                aToolbarItemProp[0].Name = m_aCommandURL;
-                aToolbarItemProp[1].Name = m_aType;
-
-                aToolbarItemProp[0].Value <<= OUString();
-                aToolbarItemProp[1].Value <<= css::ui::ItemType::SEPARATOR_LINEBREAK;
-
-                m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), makeAny( aToolbarItemProp ) );
-            }
-            break;
-
-            case TB_ELEMENT_TOOLBARSEPARATOR:
-            {
-                if ( m_bToolBarSeparatorStartFound ||
-                     m_bToolBarBreakStartFound ||
-                     m_bToolBarSpaceStartFound ||
-                     m_bToolBarItemStartFound )
-                {
-                    OUString aErrorMessage = getErrorLineString() + "Element toolbar:toolbarseparator is not a container!";
-                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-                }
-
-                m_bToolBarSeparatorStartFound = true;
-
-                Sequence< PropertyValue > aToolbarItemProp( 2 );
-                aToolbarItemProp[0].Name = m_aCommandURL;
-                aToolbarItemProp[1].Name = m_aType;
-
-                aToolbarItemProp[0].Value <<= OUString();
-                aToolbarItemProp[1].Value <<= css::ui::ItemType::SEPARATOR_LINE;
-
-                m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), makeAny( aToolbarItemProp ) );
-            }
-            break;
-
-                  default:
-                      break;
+            m_bToolBarStartFound = true;
         }
+        break;
+
+        case TB_ELEMENT_TOOLBARITEM:
+        {
+            if ( !m_bToolBarStartFound )
+            {
+                OUString aErrorMessage = getErrorLineString() + "Element 'toolbar:toolbaritem' must be embedded into element 'toolbar:toolbar'!";
+                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+            }
+
+            if ( m_bToolBarSeparatorStartFound ||
+                 m_bToolBarBreakStartFound ||
+                 m_bToolBarSpaceStartFound ||
+                 m_bToolBarItemStartFound )
+            {
+                OUString aErrorMessage = getErrorLineString() + "Element toolbar:toolbaritem is not a container!";
+                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+            }
+
+            bool bAttributeURL  = false;
+
+            m_bToolBarItemStartFound = true;
+            OUString        aLabel;
+            OUString        aCommandURL;
+            sal_uInt16      nItemBits( 0 );
+            bool            bVisible( true );
+
+            for ( sal_Int16 n = 0; n < xAttribs->getLength(); n++ )
+            {
+                pToolBoxEntry = m_aToolBoxMap.find( xAttribs->getNameByIndex( n ) );
+                if ( pToolBoxEntry != m_aToolBoxMap.end() )
+                {
+                    switch ( pToolBoxEntry->second )
+                    {
+                        case TB_ATTRIBUTE_TEXT:
+                        {
+                            aLabel = xAttribs->getValueByIndex( n );
+                        }
+                        break;
+
+                        case TB_ATTRIBUTE_URL:
+                        {
+                            bAttributeURL   = true;
+                            aCommandURL     = xAttribs->getValueByIndex( n ).intern();
+                        }
+                        break;
+
+                        case TB_ATTRIBUTE_VISIBLE:
+                        {
+                            if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_BOOLEAN_TRUE )
+                                bVisible = true;
+                            else if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_BOOLEAN_FALSE )
+                                bVisible = false;
+                            else
+                            {
+                                OUString aErrorMessage = getErrorLineString() + "Attribute toolbar:visible must have value 'true' or 'false'!";
+                                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+                            }
+                        }
+                        break;
+
+                        case TB_ATTRIBUTE_STYLE:
+                        {
+                            // read space separated item style list
+                            OUString aTemp = xAttribs->getValueByIndex( n );
+                            sal_Int32 nIndex = 0;
+
+                            do
+                            {
+                                OUString aToken  = aTemp.getToken( 0, ' ', nIndex );
+                                if ( !aToken.isEmpty() )
+                                {
+                                    sal_Int32 nHashCode = aToken.hashCode();
+                                    if ( nHashCode == m_nHashCode_Style_Radio )
+                                        nItemBits |= css::ui::ItemStyle::RADIO_CHECK;
+                                    else if ( nHashCode == m_nHashCode_Style_Left )
+                                        nItemBits |= css::ui::ItemStyle::ALIGN_LEFT;
+                                    else if ( nHashCode == m_nHashCode_Style_AutoSize )
+                                        nItemBits |= css::ui::ItemStyle::AUTO_SIZE;
+                                    else if ( nHashCode == m_nHashCode_Style_Repeat )
+                                        nItemBits |= css::ui::ItemStyle::REPEAT;
+                                    else if ( nHashCode == m_nHashCode_Style_DropDownOnly )
+                                        nItemBits |= css::ui::ItemStyle::DROPDOWN_ONLY;
+                                    else if ( nHashCode == m_nHashCode_Style_DropDown )
+                                        nItemBits |= css::ui::ItemStyle::DROP_DOWN;
+                                    else if ( nHashCode == m_nHashCode_Style_Text )
+                                        nItemBits |= css::ui::ItemStyle::TEXT;
+                                    else if ( nHashCode == m_nHashCode_Style_Image )
+                                        nItemBits |= css::ui::ItemStyle::ICON;
+                                }
+                            }
+                            while ( nIndex >= 0 );
+                        }
+                        break;
+
+                        default:
+                        break;
+                    }
+                }
+            } // for
+
+            if ( !bAttributeURL )
+            {
+                OUString aErrorMessage = getErrorLineString() + "Required attribute toolbar:url must have a value!";
+                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+            }
+
+            if ( !aCommandURL.isEmpty() )
+            {
+                //fix for fdo#39370
+                /// check whether RTL interface or not
+                if(AllSettings::GetLayoutRTL()){
+                    if (aCommandURL == ".uno:ParaLeftToRight")
+                        aCommandURL = ".uno:ParaRightToLeft";
+                    else if (aCommandURL == ".uno:ParaRightToLeft")
+                        aCommandURL = ".uno:ParaLeftToRight";
+                    else if (aCommandURL == ".uno:LeftPara")
+                        aCommandURL = ".uno:RightPara";
+                    else if (aCommandURL == ".uno:RightPara")
+                        aCommandURL = ".uno:LeftPara";
+                    else if (aCommandURL == ".uno:AlignLeft")
+                        aCommandURL = ".uno:AlignRight";
+                    else if (aCommandURL == ".uno:AlignRight")
+                        aCommandURL = ".uno:AlignLeft";
+                    else if (aCommandURL == ".uno:WrapLeft")
+                        aCommandURL = ".uno:WrapRight";
+                    else if (aCommandURL == ".uno:WrapRight")
+                        aCommandURL = ".uno:WrapLeft";
+                }
+
+                auto aToolbarItemProp( comphelper::InitPropertySequence( {
+                    { m_aCommandURL, css::uno::makeAny( aCommandURL ) },
+                    { m_aLabel, css::uno::makeAny( aLabel ) },
+                    { m_aType, css::uno::makeAny( css::ui::ItemType::DEFAULT ) },
+                    { m_aStyle, css::uno::makeAny( nItemBits ) },
+                    { m_aIsVisible, css::uno::makeAny( bVisible ) },
+                } ) );
+
+                m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), makeAny( aToolbarItemProp ) );
+            }
+        }
+        break;
+
+        case TB_ELEMENT_TOOLBARSPACE:
+        {
+            if ( m_bToolBarSeparatorStartFound ||
+                 m_bToolBarBreakStartFound ||
+                 m_bToolBarSpaceStartFound ||
+                 m_bToolBarItemStartFound )
+            {
+                OUString aErrorMessage = getErrorLineString() + "Element toolbar:toolbarspace is not a container!";
+                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+            }
+
+            m_bToolBarSpaceStartFound = true;
+
+            Sequence< PropertyValue > aToolbarItemProp( 2 );
+            aToolbarItemProp[0].Name = m_aCommandURL;
+            aToolbarItemProp[1].Name = m_aType;
+
+            aToolbarItemProp[0].Value <<= OUString();
+            aToolbarItemProp[1].Value <<= css::ui::ItemType::SEPARATOR_SPACE;
+
+            m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), makeAny( aToolbarItemProp ) );
+        }
+        break;
+
+        case TB_ELEMENT_TOOLBARBREAK:
+        {
+            if ( m_bToolBarSeparatorStartFound ||
+                 m_bToolBarBreakStartFound ||
+                 m_bToolBarSpaceStartFound ||
+                 m_bToolBarItemStartFound )
+            {
+                OUString aErrorMessage = getErrorLineString() + "Element toolbar:toolbarbreak is not a container!";
+                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+            }
+
+            m_bToolBarBreakStartFound = true;
+
+            Sequence< PropertyValue > aToolbarItemProp( 2 );
+            aToolbarItemProp[0].Name = m_aCommandURL;
+            aToolbarItemProp[1].Name = m_aType;
+
+            aToolbarItemProp[0].Value <<= OUString();
+            aToolbarItemProp[1].Value <<= css::ui::ItemType::SEPARATOR_LINEBREAK;
+
+            m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), makeAny( aToolbarItemProp ) );
+        }
+        break;
+
+        case TB_ELEMENT_TOOLBARSEPARATOR:
+        {
+            if ( m_bToolBarSeparatorStartFound ||
+                 m_bToolBarBreakStartFound ||
+                 m_bToolBarSpaceStartFound ||
+                 m_bToolBarItemStartFound )
+            {
+                OUString aErrorMessage = getErrorLineString() + "Element toolbar:toolbarseparator is not a container!";
+                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+            }
+
+            m_bToolBarSeparatorStartFound = true;
+
+            Sequence< PropertyValue > aToolbarItemProp( 2 );
+            aToolbarItemProp[0].Name = m_aCommandURL;
+            aToolbarItemProp[1].Name = m_aType;
+
+            aToolbarItemProp[0].Value <<= OUString();
+            aToolbarItemProp[1].Value <<= css::ui::ItemType::SEPARATOR_LINE;
+
+            m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), makeAny( aToolbarItemProp ) );
+        }
+        break;
+
+              default:
+                  break;
     }
 }
 
@@ -471,73 +471,72 @@ void SAL_CALL OReadToolBoxDocumentHandler::endElement(const OUString& aName)
     SolarMutexGuard g;
 
     ToolBoxHashMap::const_iterator pToolBoxEntry = m_aToolBoxMap.find( aName );
-    if ( pToolBoxEntry != m_aToolBoxMap.end() )
+    if ( pToolBoxEntry == m_aToolBoxMap.end() )
+        return;
+
+    switch ( pToolBoxEntry->second )
     {
-        switch ( pToolBoxEntry->second )
+        case TB_ELEMENT_TOOLBAR:
         {
-            case TB_ELEMENT_TOOLBAR:
+            if ( !m_bToolBarStartFound )
             {
-                if ( !m_bToolBarStartFound )
-                {
-                    OUString aErrorMessage = getErrorLineString() + "End element 'toolbar' found, but no start element 'toolbar'";
-                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-                }
-
-                m_bToolBarStartFound = false;
+                OUString aErrorMessage = getErrorLineString() + "End element 'toolbar' found, but no start element 'toolbar'";
+                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
             }
-            break;
 
-            case TB_ELEMENT_TOOLBARITEM:
-            {
-                if ( !m_bToolBarItemStartFound )
-                {
-                    OUString aErrorMessage = getErrorLineString() + "End element 'toolbar:toolbaritem' found, but no start element 'toolbar:toolbaritem'";
-                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-                }
-
-                m_bToolBarItemStartFound = false;
-            }
-            break;
-
-            case TB_ELEMENT_TOOLBARBREAK:
-            {
-                if ( !m_bToolBarBreakStartFound )
-                {
-                    OUString aErrorMessage = getErrorLineString() + "End element 'toolbar:toolbarbreak' found, but no start element 'toolbar:toolbarbreak'";
-                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-                }
-
-                m_bToolBarBreakStartFound = false;
-            }
-            break;
-
-            case TB_ELEMENT_TOOLBARSPACE:
-            {
-                if ( !m_bToolBarSpaceStartFound )
-                {
-                    OUString aErrorMessage = getErrorLineString() + "End element 'toolbar:toolbarspace' found, but no start element 'toolbar:toolbarspace'";
-                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-                }
-
-                m_bToolBarSpaceStartFound = false;
-            }
-            break;
-
-            case TB_ELEMENT_TOOLBARSEPARATOR:
-            {
-                if ( !m_bToolBarSeparatorStartFound )
-                {
-                    OUString aErrorMessage = getErrorLineString() + "End element 'toolbar:toolbarseparator' found, but no start element 'toolbar:toolbarseparator'";
-                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-                }
-
-                m_bToolBarSeparatorStartFound = false;
-            }
-            break;
-
-                  default:
-                      break;
+            m_bToolBarStartFound = false;
         }
+        break;
+
+        case TB_ELEMENT_TOOLBARITEM:
+        {
+            if ( !m_bToolBarItemStartFound )
+            {
+                OUString aErrorMessage = getErrorLineString() + "End element 'toolbar:toolbaritem' found, but no start element 'toolbar:toolbaritem'";
+                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+            }
+
+            m_bToolBarItemStartFound = false;
+        }
+        break;
+
+        case TB_ELEMENT_TOOLBARBREAK:
+        {
+            if ( !m_bToolBarBreakStartFound )
+            {
+                OUString aErrorMessage = getErrorLineString() + "End element 'toolbar:toolbarbreak' found, but no start element 'toolbar:toolbarbreak'";
+                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+            }
+
+            m_bToolBarBreakStartFound = false;
+        }
+        break;
+
+        case TB_ELEMENT_TOOLBARSPACE:
+        {
+            if ( !m_bToolBarSpaceStartFound )
+            {
+                OUString aErrorMessage = getErrorLineString() + "End element 'toolbar:toolbarspace' found, but no start element 'toolbar:toolbarspace'";
+                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+            }
+
+            m_bToolBarSpaceStartFound = false;
+        }
+        break;
+
+        case TB_ELEMENT_TOOLBARSEPARATOR:
+        {
+            if ( !m_bToolBarSeparatorStartFound )
+            {
+                OUString aErrorMessage = getErrorLineString() + "End element 'toolbar:toolbarseparator' found, but no start element 'toolbar:toolbarseparator'";
+                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+            }
+
+            m_bToolBarSeparatorStartFound = false;
+        }
+        break;
+
+        default: break;
     }
 }
 

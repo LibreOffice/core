@@ -144,87 +144,87 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
     SolarMutexGuard g;
 
     ImageHashMap::const_iterator pImageEntry = m_aImageMap.find( aName );
-    if ( pImageEntry != m_aImageMap.end() )
+    if ( pImageEntry == m_aImageMap.end() )
+        return;
+
+    switch ( pImageEntry->second )
     {
-        switch ( pImageEntry->second )
+        case IMG_ELEMENT_IMAGECONTAINER:
         {
-            case IMG_ELEMENT_IMAGECONTAINER:
+            // image:imagecontainer element (container element for all further image elements)
+            if ( m_bImageContainerStartFound )
             {
-                // image:imagecontainer element (container element for all further image elements)
-                if ( m_bImageContainerStartFound )
-                {
-                    OUString aErrorMessage = getErrorLineString() + "Element 'image:imagecontainer' cannot be embedded into 'image:imagecontainer'!";
-                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-                }
-
-                m_bImageContainerStartFound = true;
+                OUString aErrorMessage = getErrorLineString() + "Element 'image:imagecontainer' cannot be embedded into 'image:imagecontainer'!";
+                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
             }
-            break;
 
-            case IMG_ELEMENT_IMAGES:
+            m_bImageContainerStartFound = true;
+        }
+        break;
+
+        case IMG_ELEMENT_IMAGES:
+        {
+            if ( !m_bImageContainerStartFound )
             {
-                if ( !m_bImageContainerStartFound )
-                {
-                    OUString aErrorMessage = getErrorLineString() + "Element 'image:images' must be embedded into element 'image:imagecontainer'!";
-                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-                }
-
-                if ( m_bImagesStartFound )
-                {
-                    OUString aErrorMessage = getErrorLineString() + "Element 'image:images' cannot be embedded into 'image:images'!";
-                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-                }
-
-                m_bImagesStartFound = true;
+                OUString aErrorMessage = getErrorLineString() + "Element 'image:images' must be embedded into element 'image:imagecontainer'!";
+                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
             }
-            break;
 
-            case IMG_ELEMENT_ENTRY:
+            if ( m_bImagesStartFound )
             {
-                // Check that image:entry is embedded into image:images!
-                if ( !m_bImagesStartFound )
-                {
-                    OUString aErrorMessage = getErrorLineString() + "Element 'image:entry' must be embedded into element 'image:images'!";
-                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-                }
+                OUString aErrorMessage = getErrorLineString() + "Element 'image:images' cannot be embedded into 'image:images'!";
+                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+            }
 
-                // Create new image item descriptor
-                ImageItemDescriptor aItem;
+            m_bImagesStartFound = true;
+        }
+        break;
 
-                // Read attributes for this image definition
-                for ( sal_Int16 n = 0; n < xAttribs->getLength(); n++ )
+        case IMG_ELEMENT_ENTRY:
+        {
+            // Check that image:entry is embedded into image:images!
+            if ( !m_bImagesStartFound )
+            {
+                OUString aErrorMessage = getErrorLineString() + "Element 'image:entry' must be embedded into element 'image:images'!";
+                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+            }
+
+            // Create new image item descriptor
+            ImageItemDescriptor aItem;
+
+            // Read attributes for this image definition
+            for ( sal_Int16 n = 0; n < xAttribs->getLength(); n++ )
+            {
+                pImageEntry = m_aImageMap.find( xAttribs->getNameByIndex( n ) );
+                if ( pImageEntry != m_aImageMap.end() )
                 {
-                    pImageEntry = m_aImageMap.find( xAttribs->getNameByIndex( n ) );
-                    if ( pImageEntry != m_aImageMap.end() )
+                    switch ( pImageEntry->second )
                     {
-                        switch ( pImageEntry->second )
+                        case IMG_ATTRIBUTE_COMMAND:
                         {
-                            case IMG_ATTRIBUTE_COMMAND:
-                            {
-                                aItem.aCommandURL  = xAttribs->getValueByIndex( n );
-                            }
-                            break;
-
-                            default:
-                                break;
+                            aItem.aCommandURL  = xAttribs->getValueByIndex( n );
                         }
+                        break;
+
+                        default:
+                            break;
                     }
                 }
-
-                // Check required attribute "command"
-                if ( aItem.aCommandURL.isEmpty() )
-                {
-                    OUString aErrorMessage = getErrorLineString() + "Required attribute 'image:command' must have a value!";
-                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-                }
-
-                m_rImageList.push_back( aItem );
             }
-            break;
 
-            default:
-            break;
+            // Check required attribute "command"
+            if ( aItem.aCommandURL.isEmpty() )
+            {
+                OUString aErrorMessage = getErrorLineString() + "Required attribute 'image:command' must have a value!";
+                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+            }
+
+            m_rImageList.push_back( aItem );
         }
+        break;
+
+        default:
+        break;
     }
 }
 
@@ -233,24 +233,24 @@ void SAL_CALL OReadImagesDocumentHandler::endElement(const OUString& aName)
     SolarMutexGuard g;
 
     ImageHashMap::const_iterator pImageEntry = m_aImageMap.find( aName );
-    if ( pImageEntry != m_aImageMap.end() )
+    if ( pImageEntry == m_aImageMap.end() )
+        return;
+
+    switch ( pImageEntry->second )
     {
-        switch ( pImageEntry->second )
+        case IMG_ELEMENT_IMAGECONTAINER:
         {
-            case IMG_ELEMENT_IMAGECONTAINER:
-            {
-                m_bImageContainerEndFound = true;
-            }
-            break;
-
-            case IMG_ELEMENT_IMAGES:
-            {
-                m_bImagesStartFound = false;
-            }
-            break;
-
-            default: break;
+            m_bImageContainerEndFound = true;
         }
+        break;
+
+        case IMG_ELEMENT_IMAGES:
+        {
+            m_bImagesStartFound = false;
+        }
+        break;
+
+        default: break;
     }
 }
 

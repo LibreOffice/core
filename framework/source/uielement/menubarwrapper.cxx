@@ -111,84 +111,84 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments )
     if ( m_bDisposed )
         throw DisposedException();
 
-    if ( !m_bInitialized )
+    if ( m_bInitialized )
+        return;
+
+    OUString aModuleIdentifier;
+    UIConfigElementWrapperBase::initialize( aArguments );
+
+    Reference< XFrame > xFrame( m_xWeakFrame );
+    if ( !(xFrame.is() && m_xConfigSource.is()) )
+        return;
+
+    // Create VCL menubar which will be filled with settings data
+    VclPtr<MenuBar> pVCLMenuBar;
+    VCLXMenuBar*    pAwtMenuBar = nullptr;
     {
-        OUString aModuleIdentifier;
-        UIConfigElementWrapperBase::initialize( aArguments );
+        SolarMutexGuard aSolarMutexGuard;
+        pVCLMenuBar = VclPtr<MenuBar>::Create();
+    }
 
-        Reference< XFrame > xFrame( m_xWeakFrame );
-        if ( xFrame.is() && m_xConfigSource.is() )
+    Reference< XModuleManager2 > xModuleManager = ModuleManager::create( m_xContext );
+
+    try
+    {
+        aModuleIdentifier = xModuleManager->identify( xFrame );
+    }
+    catch( const Exception& )
+    {
+    }
+
+    Reference< XURLTransformer > xTrans;
+    try
+    {
+        xTrans.set( URLTransformer::create(m_xContext) );
+        m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, false );
+        if ( m_xConfigData.is() )
         {
-            // Create VCL menubar which will be filled with settings data
-            VclPtr<MenuBar> pVCLMenuBar;
-            VCLXMenuBar*    pAwtMenuBar = nullptr;
-            {
-                SolarMutexGuard aSolarMutexGuard;
-                pVCLMenuBar = VclPtr<MenuBar>::Create();
-            }
-
-            Reference< XModuleManager2 > xModuleManager = ModuleManager::create( m_xContext );
-
-            try
-            {
-                aModuleIdentifier = xModuleManager->identify( xFrame );
-            }
-            catch( const Exception& )
-            {
-            }
-
-            Reference< XURLTransformer > xTrans;
-            try
-            {
-                xTrans.set( URLTransformer::create(m_xContext) );
-                m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, false );
-                if ( m_xConfigData.is() )
-                {
-                    // Fill menubar with container contents
-                    sal_uInt16 nId = 1;
-                    MenuBarManager::FillMenuWithConfiguration( nId, pVCLMenuBar, aModuleIdentifier, m_xConfigData, xTrans );
-                }
-            }
-            catch ( const NoSuchElementException& )
-            {
-            }
-
-            bool bMenuOnly( false );
-            for ( sal_Int32 n = 0; n < aArguments.getLength(); n++ )
-            {
-                PropertyValue aPropValue;
-                if ( aArguments[n] >>= aPropValue )
-                {
-                    if ( aPropValue.Name == "MenuOnly" )
-                        aPropValue.Value >>= bMenuOnly;
-                }
-            }
-
-            if ( !bMenuOnly )
-            {
-                // Initialize menubar manager with our vcl menu bar. There are some situations where we only want to get the menu without any
-                // interaction which is done by the menu bar manager. This must be requested by a special property called "MenuOnly". Be careful
-                // a menu bar created with this property is not fully supported. It must be attached to a real menu bar manager to have full
-                // support. This feature is currently used for "Inplace editing"!
-                Reference< XDispatchProvider > xDispatchProvider;
-
-                MenuBarManager* pMenuBarManager = new MenuBarManager( m_xContext,
-                                                                      xFrame,
-                                                                      xTrans,
-                                                                      xDispatchProvider,
-                                                                      aModuleIdentifier,
-                                                                      pVCLMenuBar,
-                                                                      false );
-
-                m_xMenuBarManager.set( static_cast< OWeakObject *>( pMenuBarManager ), UNO_QUERY );
-            }
-
-            // Initialize toolkit menu bar implementation to have awt::XMenuBar for data exchange.
-            // Don't use this toolkit menu bar or one of its functions. It is only used as a data container!
-            pAwtMenuBar = new VCLXMenuBar( pVCLMenuBar );
-            m_xMenuBar = pAwtMenuBar;
+            // Fill menubar with container contents
+            sal_uInt16 nId = 1;
+            MenuBarManager::FillMenuWithConfiguration( nId, pVCLMenuBar, aModuleIdentifier, m_xConfigData, xTrans );
         }
     }
+    catch ( const NoSuchElementException& )
+    {
+    }
+
+    bool bMenuOnly( false );
+    for ( sal_Int32 n = 0; n < aArguments.getLength(); n++ )
+    {
+        PropertyValue aPropValue;
+        if ( aArguments[n] >>= aPropValue )
+        {
+            if ( aPropValue.Name == "MenuOnly" )
+                aPropValue.Value >>= bMenuOnly;
+        }
+    }
+
+    if ( !bMenuOnly )
+    {
+        // Initialize menubar manager with our vcl menu bar. There are some situations where we only want to get the menu without any
+        // interaction which is done by the menu bar manager. This must be requested by a special property called "MenuOnly". Be careful
+        // a menu bar created with this property is not fully supported. It must be attached to a real menu bar manager to have full
+        // support. This feature is currently used for "Inplace editing"!
+        Reference< XDispatchProvider > xDispatchProvider;
+
+        MenuBarManager* pMenuBarManager = new MenuBarManager( m_xContext,
+                                                              xFrame,
+                                                              xTrans,
+                                                              xDispatchProvider,
+                                                              aModuleIdentifier,
+                                                              pVCLMenuBar,
+                                                              false );
+
+        m_xMenuBarManager.set( static_cast< OWeakObject *>( pMenuBarManager ), UNO_QUERY );
+    }
+
+    // Initialize toolkit menu bar implementation to have awt::XMenuBar for data exchange.
+    // Don't use this toolkit menu bar or one of its functions. It is only used as a data container!
+    pAwtMenuBar = new VCLXMenuBar( pVCLMenuBar );
+    m_xMenuBar = pAwtMenuBar;
 }
 
 // XUIElementSettings
@@ -199,26 +199,26 @@ void SAL_CALL MenuBarWrapper::updateSettings()
     if ( m_bDisposed )
         throw DisposedException();
 
-    if ( m_xMenuBarManager.is() )
-    {
-        if ( m_xConfigSource.is() && m_bPersistent )
-        {
-            try
-            {
-                MenuBarManager* pMenuBarManager = static_cast< MenuBarManager *>( m_xMenuBarManager.get() );
+    if ( !m_xMenuBarManager.is() )
+        return;
 
-                m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, false );
-                if ( m_xConfigData.is() )
-                    pMenuBarManager->SetItemContainer( m_xConfigData );
-            }
-            catch ( const NoSuchElementException& )
-            {
-            }
-        }
-        else if ( !m_bPersistent )
+    if ( m_xConfigSource.is() && m_bPersistent )
+    {
+        try
         {
-            // Transient menubar: do nothing
+            MenuBarManager* pMenuBarManager = static_cast< MenuBarManager *>( m_xMenuBarManager.get() );
+
+            m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, false );
+            if ( m_xConfigData.is() )
+                pMenuBarManager->SetItemContainer( m_xConfigData );
         }
+        catch ( const NoSuchElementException& )
+        {
+        }
+    }
+    else if ( !m_bPersistent )
+    {
+        // Transient menubar: do nothing
     }
 }
 void MenuBarWrapper::impl_fillNewData()

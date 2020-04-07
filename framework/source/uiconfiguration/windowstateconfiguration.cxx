@@ -369,40 +369,40 @@ void SAL_CALL ConfigurationAccess_WindowState::insertByName( const OUString& rRe
     }
 
     // Try to ask our configuration access
-    if ( m_xConfigAccess.is() )
+    if ( !m_xConfigAccess.is() )
+        return;
+
+    if ( m_xConfigAccess->hasByName( rResourceURL ) )
+        throw ElementExistException();
+
+    WindowStateInfo aWinStateInfo;
+    impl_fillStructFromSequence( aWinStateInfo, aPropSet );
+    m_aResourceURLToInfoCache.emplace( rResourceURL, aWinStateInfo );
+
+    // insert must be write-through => insert element into configuration
+    Reference< XNameContainer > xNameContainer( m_xConfigAccess, UNO_QUERY );
+    if ( !xNameContainer.is() )
+        return;
+
+    Reference< XSingleServiceFactory > xFactory( m_xConfigAccess, UNO_QUERY );
+    g.clear();
+
+    try
     {
-        if ( m_xConfigAccess->hasByName( rResourceURL ) )
-            throw ElementExistException();
-
-        WindowStateInfo aWinStateInfo;
-        impl_fillStructFromSequence( aWinStateInfo, aPropSet );
-        m_aResourceURLToInfoCache.emplace( rResourceURL, aWinStateInfo );
-
-        // insert must be write-through => insert element into configuration
-        Reference< XNameContainer > xNameContainer( m_xConfigAccess, UNO_QUERY );
-        if ( xNameContainer.is() )
+        Reference< XPropertySet > xPropSet( xFactory->createInstance(), UNO_QUERY );
+        if ( xPropSet.is() )
         {
-            Reference< XSingleServiceFactory > xFactory( m_xConfigAccess, UNO_QUERY );
-            g.clear();
-
-            try
-            {
-                Reference< XPropertySet > xPropSet( xFactory->createInstance(), UNO_QUERY );
-                if ( xPropSet.is() )
-                {
-                    Any a;
-                    impl_putPropertiesFromStruct( aWinStateInfo, xPropSet );
-                    a <<= xPropSet;
-                    xNameContainer->insertByName( rResourceURL, a );
-                    Reference< XChangesBatch > xFlush( xFactory, UNO_QUERY );
-                    if ( xFlush.is() )
-                        xFlush->commitChanges();
-                }
-            }
-            catch ( const Exception& )
-            {
-            }
+            Any a;
+            impl_putPropertiesFromStruct( aWinStateInfo, xPropSet );
+            a <<= xPropSet;
+            xNameContainer->insertByName( rResourceURL, a );
+            Reference< XChangesBatch > xFlush( xFactory, UNO_QUERY );
+            if ( xFlush.is() )
+                xFlush->commitChanges();
         }
+    }
+    catch ( const Exception& )
+    {
     }
 }
 
@@ -445,32 +445,32 @@ void SAL_CALL ConfigurationAccess_WindowState::replaceByName( const OUString& rR
 
     }
 
-    if ( m_bModified && pIter != m_aResourceURLToInfoCache.end() )
+    if ( !(m_bModified && pIter != m_aResourceURLToInfoCache.end()) )
+        return;
+
+    Reference< XNameContainer > xNameContainer( m_xConfigAccess, UNO_QUERY );
+    if ( !xNameContainer.is() )
+        return;
+
+    WindowStateInfo aWinStateInfo( pIter->second );
+    OUString        aResourceURL( pIter->first );
+    m_bModified = false;
+    g.clear();
+
+    try
     {
-        Reference< XNameContainer > xNameContainer( m_xConfigAccess, UNO_QUERY );
-        if ( xNameContainer.is() )
+        Reference< XPropertySet > xPropSet;
+        if ( xNameContainer->getByName( aResourceURL ) >>= xPropSet )
         {
-            WindowStateInfo aWinStateInfo( pIter->second );
-            OUString        aResourceURL( pIter->first );
-            m_bModified = false;
-            g.clear();
+            impl_putPropertiesFromStruct( aWinStateInfo, xPropSet );
 
-            try
-            {
-                Reference< XPropertySet > xPropSet;
-                if ( xNameContainer->getByName( aResourceURL ) >>= xPropSet )
-                {
-                    impl_putPropertiesFromStruct( aWinStateInfo, xPropSet );
-
-                    Reference< XChangesBatch > xFlush( m_xConfigAccess, UNO_QUERY );
-                    if ( xFlush.is() )
-                        xFlush->commitChanges();
-                }
-            }
-            catch ( const Exception& )
-            {
-            }
+            Reference< XChangesBatch > xFlush( m_xConfigAccess, UNO_QUERY );
+            if ( xFlush.is() )
+                xFlush->commitChanges();
         }
+    }
+    catch ( const Exception& )
+    {
     }
 
 }

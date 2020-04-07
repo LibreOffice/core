@@ -84,61 +84,61 @@ void ThesaurusMenuController::fillPopupMenu()
     VCLXMenu* pAwtMenu = comphelper::getUnoTunnelImplementation<VCLXMenu>( m_xPopupMenu );
     Menu* pVCLMenu = pAwtMenu->GetMenu();
     pVCLMenu->SetMenuFlags( MenuFlags::NoAutoMnemonics );
-    if ( !aSynonyms.empty() )
+    if ( aSynonyms.empty() )
+        return;
+
+    SvtLinguConfig aCfg;
+    Image aImage;
+    OUString aThesImplName( getThesImplName( aLocale ) );
+    OUString aSynonymsImageUrl( aCfg.GetSynonymsContextImage( aThesImplName ) );
+    if ( !aThesImplName.isEmpty() && !aSynonymsImageUrl.isEmpty() )
+        aImage = Image( aSynonymsImageUrl );
+
+    sal_uInt16 nId = 1;
+    for ( const auto& aSynonym : aSynonyms )
     {
-        SvtLinguConfig aCfg;
-        Image aImage;
-        OUString aThesImplName( getThesImplName( aLocale ) );
-        OUString aSynonymsImageUrl( aCfg.GetSynonymsContextImage( aThesImplName ) );
-        if ( !aThesImplName.isEmpty() && !aSynonymsImageUrl.isEmpty() )
-            aImage = Image( aSynonymsImageUrl );
+        OUString aItemText( linguistic::GetThesaurusReplaceText( aSynonym ) );
+        pVCLMenu->InsertItem( nId, aItemText );
+        pVCLMenu->SetItemCommand( nId, ".uno:ThesaurusFromContext?WordReplace:string=" + aItemText );
 
-        sal_uInt16 nId = 1;
-        for ( const auto& aSynonym : aSynonyms )
-        {
-            OUString aItemText( linguistic::GetThesaurusReplaceText( aSynonym ) );
-            pVCLMenu->InsertItem( nId, aItemText );
-            pVCLMenu->SetItemCommand( nId, ".uno:ThesaurusFromContext?WordReplace:string=" + aItemText );
-
-            if ( !aSynonymsImageUrl.isEmpty() )
-                pVCLMenu->SetItemImage( nId, aImage );
-            nId++;
-        }
-
-        pVCLMenu->InsertSeparator();
-        OUString aThesaurusDialogCmd( ".uno:ThesaurusDialog" );
-        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aThesaurusDialogCmd, m_aModuleName);
-        pVCLMenu->InsertItem( nId, vcl::CommandInfoProvider::GetPopupLabelForCommand(aProperties) );
-        pVCLMenu->SetItemCommand( nId, aThesaurusDialogCmd );
+        if ( !aSynonymsImageUrl.isEmpty() )
+            pVCLMenu->SetItemImage( nId, aImage );
+        nId++;
     }
+
+    pVCLMenu->InsertSeparator();
+    OUString aThesaurusDialogCmd( ".uno:ThesaurusDialog" );
+    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aThesaurusDialogCmd, m_aModuleName);
+    pVCLMenu->InsertItem( nId, vcl::CommandInfoProvider::GetPopupLabelForCommand(aProperties) );
+    pVCLMenu->SetItemCommand( nId, aThesaurusDialogCmd );
 }
 
 void ThesaurusMenuController::getMeanings( std::vector< OUString >& rSynonyms, const OUString& rWord,
                                            const css::lang::Locale& rLocale, size_t nMaxSynonms )
 {
     rSynonyms.clear();
-    if ( m_xThesaurus.is() && m_xThesaurus->hasLocale( rLocale ) && !rWord.isEmpty() && nMaxSynonms > 0 )
-    {
-        try
-        {
-            const css::uno::Sequence< css::uno::Reference< css::linguistic2::XMeaning > > aMeaningSeq(
-                m_xThesaurus->queryMeanings( rWord, rLocale, css::uno::Sequence< css::beans::PropertyValue >() ) );
+    if ( !(m_xThesaurus.is() && m_xThesaurus->hasLocale( rLocale ) && !rWord.isEmpty() && nMaxSynonms > 0) )
+        return;
 
-            for ( const auto& xMeaning : aMeaningSeq )
+    try
+    {
+        const css::uno::Sequence< css::uno::Reference< css::linguistic2::XMeaning > > aMeaningSeq(
+            m_xThesaurus->queryMeanings( rWord, rLocale, css::uno::Sequence< css::beans::PropertyValue >() ) );
+
+        for ( const auto& xMeaning : aMeaningSeq )
+        {
+            const css::uno::Sequence< OUString > aSynonymSeq( xMeaning->querySynonyms() );
+            for ( const auto& aSynonym : aSynonymSeq )
             {
-                const css::uno::Sequence< OUString > aSynonymSeq( xMeaning->querySynonyms() );
-                for ( const auto& aSynonym : aSynonymSeq )
-                {
-                    rSynonyms.push_back( aSynonym );
-                    if ( rSynonyms.size() == nMaxSynonms )
-                        return;
-                }
+                rSynonyms.push_back( aSynonym );
+                if ( rSynonyms.size() == nMaxSynonms )
+                    return;
             }
         }
-        catch ( const css::uno::Exception& )
-        {
-            SAL_WARN( "fwk.uielement", "Failed to get synonyms" );
-        }
+    }
+    catch ( const css::uno::Exception& )
+    {
+        SAL_WARN( "fwk.uielement", "Failed to get synonyms" );
     }
 }
 

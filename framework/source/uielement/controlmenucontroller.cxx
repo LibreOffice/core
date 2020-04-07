@@ -237,37 +237,37 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
         nMenuId = m_xResPopupMenu->GetItemId(sIdent);
     }
 
-    if (pPopupMenu)
+    if (!pPopupMenu)
+        return;
+
+    SolarMutexGuard aSolarMutexGuard;
+
+    PopupMenu* pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
+
+    if ( !Event.IsEnabled && pVCLPopupMenu->GetItemPos( nMenuId ) != MENU_ITEM_NOTFOUND )
+        pVCLPopupMenu->RemoveItem( pVCLPopupMenu->GetItemPos( nMenuId ));
+    else if ( Event.IsEnabled && pVCLPopupMenu->GetItemPos( nMenuId ) == MENU_ITEM_NOTFOUND )
     {
-        SolarMutexGuard aSolarMutexGuard;
-
-        PopupMenu* pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
-
-        if ( !Event.IsEnabled && pVCLPopupMenu->GetItemPos( nMenuId ) != MENU_ITEM_NOTFOUND )
-            pVCLPopupMenu->RemoveItem( pVCLPopupMenu->GetItemPos( nMenuId ));
-        else if ( Event.IsEnabled && pVCLPopupMenu->GetItemPos( nMenuId ) == MENU_ITEM_NOTFOUND )
+        sal_Int16 nSourcePos = m_xResPopupMenu->GetItemPos(nMenuId);
+        sal_Int16 nPrevInSource = nSourcePos;
+        sal_uInt16 nPrevInConversion = MENU_ITEM_NOTFOUND;
+        while (nPrevInSource>0)
         {
-            sal_Int16 nSourcePos = m_xResPopupMenu->GetItemPos(nMenuId);
-            sal_Int16 nPrevInSource = nSourcePos;
-            sal_uInt16 nPrevInConversion = MENU_ITEM_NOTFOUND;
-            while (nPrevInSource>0)
-            {
-                sal_Int16 nPrevId = m_xResPopupMenu->GetItemId(--nPrevInSource);
+            sal_Int16 nPrevId = m_xResPopupMenu->GetItemId(--nPrevInSource);
 
-                // do we have the source's predecessor in our conversion menu, too ?
-                nPrevInConversion = pVCLPopupMenu->GetItemPos( nPrevId );
-                if ( nPrevInConversion != MENU_ITEM_NOTFOUND )
-                    break;
-            }
-
-            if ( MENU_ITEM_NOTFOUND == nPrevInConversion )
-                // none of the items which precede the nSID-slot in the source menu are present in our conversion menu
-                nPrevInConversion = sal::static_int_cast< sal_uInt16 >(-1); // put the item at the first position
-
-            pVCLPopupMenu->InsertItem(nMenuId, m_xResPopupMenu->GetItemText(nMenuId), m_xResPopupMenu->GetItemBits(nMenuId), OString(), ++nPrevInConversion);
-            pVCLPopupMenu->SetItemImage(nMenuId, m_xResPopupMenu->GetItemImage(nMenuId));
-            pVCLPopupMenu->SetHelpId(nMenuId, m_xResPopupMenu->GetHelpId(nMenuId));
+            // do we have the source's predecessor in our conversion menu, too ?
+            nPrevInConversion = pVCLPopupMenu->GetItemPos( nPrevId );
+            if ( nPrevInConversion != MENU_ITEM_NOTFOUND )
+                break;
         }
+
+        if ( MENU_ITEM_NOTFOUND == nPrevInConversion )
+            // none of the items which precede the nSID-slot in the source menu are present in our conversion menu
+            nPrevInConversion = sal::static_int_cast< sal_uInt16 >(-1); // put the item at the first position
+
+        pVCLPopupMenu->InsertItem(nMenuId, m_xResPopupMenu->GetItemText(nMenuId), m_xResPopupMenu->GetItemBits(nMenuId), OString(), ++nPrevInConversion);
+        pVCLPopupMenu->SetItemImage(nMenuId, m_xResPopupMenu->GetItemImage(nMenuId));
+        pVCLPopupMenu->SetHelpId(nMenuId, m_xResPopupMenu->GetHelpId(nMenuId));
     }
 }
 
@@ -276,25 +276,25 @@ void SAL_CALL ControlMenuController::itemActivated( const css::awt::MenuEvent& )
 {
     osl::MutexGuard aLock( m_aMutex );
 
-    if ( m_xPopupMenu.is() )
+    if ( !m_xPopupMenu.is() )
+        return;
+
+    SolarMutexGuard aSolarMutexGuard;
+
+    // Check if some modes have changed so we have to update our menu images
+    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    bool bShowMenuImages    = rSettings.GetUseImagesInMenus();
+
+    if (bShowMenuImages != m_bShowMenuImages)
     {
-        SolarMutexGuard aSolarMutexGuard;
+        m_bShowMenuImages   = bShowMenuImages;
 
-        // Check if some modes have changed so we have to update our menu images
-        const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-        bool bShowMenuImages    = rSettings.GetUseImagesInMenus();
-
-        if (bShowMenuImages != m_bShowMenuImages)
+        VCLXPopupMenu* pPopupMenu = static_cast<VCLXPopupMenu *>(comphelper::getUnoTunnelImplementation<VCLXMenu>( m_xPopupMenu ));
+        if ( pPopupMenu )
         {
-            m_bShowMenuImages   = bShowMenuImages;
-
-            VCLXPopupMenu* pPopupMenu = static_cast<VCLXPopupMenu *>(comphelper::getUnoTunnelImplementation<VCLXMenu>( m_xPopupMenu ));
-            if ( pPopupMenu )
-            {
-                PopupMenu* pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
-                if (pVCLPopupMenu)
-                    updateImagesPopupMenu( pVCLPopupMenu );
-            }
+            PopupMenu* pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
+            if (pVCLPopupMenu)
+                updateImagesPopupMenu( pVCLPopupMenu );
         }
     }
 }
@@ -316,25 +316,25 @@ void SAL_CALL ControlMenuController::updatePopupMenu()
 
     throwIfDisposed();
 
-    if ( m_xFrame.is() && m_xPopupMenu.is() )
+    if ( !(m_xFrame.is() && m_xPopupMenu.is()) )
+        return;
+
+    css::util::URL aTargetURL;
+    Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
+    fillPopupMenu( m_xPopupMenu );
+    m_aURLToDispatchMap.free();
+
+    for (const char* aCommand : aCommands)
     {
-        css::util::URL aTargetURL;
-        Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-        fillPopupMenu( m_xPopupMenu );
-        m_aURLToDispatchMap.free();
+        aTargetURL.Complete = OUString::createFromAscii( aCommand );
+        m_xURLTransformer->parseStrict( aTargetURL );
 
-        for (const char* aCommand : aCommands)
+        Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
+        if ( xDispatch.is() )
         {
-            aTargetURL.Complete = OUString::createFromAscii( aCommand );
-            m_xURLTransformer->parseStrict( aTargetURL );
-
-            Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
-            if ( xDispatch.is() )
-            {
-                xDispatch->addStatusListener( static_cast< XStatusListener* >(this), aTargetURL );
-                xDispatch->removeStatusListener( static_cast< XStatusListener* >(this), aTargetURL );
-                m_aURLToDispatchMap.emplace( aTargetURL.Complete, xDispatch );
-            }
+            xDispatch->addStatusListener( static_cast< XStatusListener* >(this), aTargetURL );
+            xDispatch->removeStatusListener( static_cast< XStatusListener* >(this), aTargetURL );
+            m_aURLToDispatchMap.emplace( aTargetURL.Complete, xDispatch );
         }
     }
 }
