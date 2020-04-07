@@ -61,7 +61,6 @@
 #define IMGOUTERTEXTSPACE 5
 #define EXTRAFONTSIZE 5
 #define GAPTOEXTRAPREVIEW 10
-#define MAXPREVIEWWIDTH 120
 #define MINGAPWIDTH 2
 
 #define FONTNAMEBOXMRUENTRIESFILE "/user/config/fontnameboxmruentries"
@@ -329,30 +328,109 @@ void DrawLine( OutputDevice& rDev, const basegfx::B2DPoint& rP1, const basegfx::
 
 }
 
-FontNameBox::FontNameBox( vcl::Window* pParent, WinBits nWinStyle ) :
-    ComboBox( pParent, nWinStyle )
+FontNameBox::FontNameBox(std::unique_ptr<weld::ComboBox> p)
+    : m_xComboBox(std::move(p))
+    , mnPreviewsPerDevice(0)
+    , mnPreviewProgress(0)
+    , mnMRUCount(0)
+    , mnMaxMRUCount(0)
+    , mbWYSIWYG(false)
+    , maUpdateIdle("FontNameBox Preview Update")
 {
-    EnableSelectAll();
-    mbWYSIWYG = false;
     InitFontMRUEntriesFile();
+
+    maUpdateIdle.SetPriority(TaskPriority::LOWEST);
+    maUpdateIdle.SetInvokeHandler(LINK(this, FontNameBox, UpdateHdl));
 }
 
 FontNameBox::~FontNameBox()
-{
-    disposeOnce();
-}
-
-void FontNameBox::dispose()
 {
     if (mpFontList)
     {
         SaveMRUEntries (maFontMRUEntriesFile);
         ImplDestroyFontList();
     }
-    ComboBox::dispose();
 }
 
-void FontNameBox::SaveMRUEntries( const OUString& aFontMRUEntriesFile ) const
+void FontNameBox::UpdateMRU()
+{
+    int nMRUCount = mnMRUCount;
+
+    if (mnMaxMRUCount)
+    {
+        OUString sActiveText = m_xComboBox->get_active_text();
+        m_xComboBox->insert_text(0, sActiveText);
+        m_xComboBox->set_id(0, m_xComboBox->get_active_id());
+        ++mnMRUCount;
+
+        for (int i = 1; i < mnMRUCount - 1; ++i)
+        {
+            if (m_xComboBox->get_text(i) == sActiveText)
+            {
+                m_xComboBox->remove(i);
+                --mnMRUCount;
+                break;
+            }
+        }
+
+        m_xComboBox->set_active(0);
+    }
+
+    while (mnMRUCount > mnMaxMRUCount)
+    {
+        m_xComboBox->remove(mnMRUCount - 1);
+        --mnMRUCount;
+    }
+
+    if (mnMRUCount && !nMRUCount)
+        m_xComboBox->insert_separator(mnMRUCount, "separator");
+    else if (!mnMRUCount && nMRUCount)
+        m_xComboBox->remove_id("separator");
+}
+
+OUString FontNameBox::GetMRUEntries(sal_Unicode cSep) const
+{
+    OUStringBuffer aEntries;
+    for (sal_Int32 n = 0; n < mnMRUCount; n++)
+    {
+        aEntries.append(m_xComboBox->get_text(n));
+        if (n < mnMRUCount - 1)
+            aEntries.append(cSep);
+    }
+    return aEntries.makeStringAndClear();
+}
+
+void FontNameBox::SetMRUEntries(const OUString& rEntries, sal_Unicode cSep)
+{
+    // Remove old MRU entries
+    for (sal_Int32 n = mnMRUCount; n;)
+        m_xComboBox->remove(--n);
+
+    sal_Int32 nMRUCount = 0;
+    sal_Int32 nIndex = 0;
+    do
+    {
+        OUString aEntry = rEntries.getToken(0, cSep, nIndex);
+        // Accept only existing entries
+        int nPos = m_xComboBox->find_text(aEntry);
+        if (nPos != 0)
+        {
+            m_xComboBox->insert_text(nMRUCount, aEntry);
+            m_xComboBox->set_id(nMRUCount, m_xComboBox->get_id(nPos));
+            ++nMRUCount;
+        }
+    }
+    while (nIndex >= 0);
+
+    if (nMRUCount && !mnMRUCount)
+        m_xComboBox->insert_separator(nMRUCount, "separator");
+    else if (!nMRUCount && mnMRUCount)
+        m_xComboBox->remove_id("separator");
+
+    mnMRUCount = nMRUCount;
+}
+
+void FontNameBox::SaveMRUEntries(const OUString& aFontMRUEntriesFile) const
 {
     OString aEntries(OUStringToOString(GetMRUEntries(),
         RTL_TEXTENCODING_UTF8));
@@ -413,64 +491,91 @@ void FontNameBox::ImplDestroyFontList()
     mpFontList.reset();
 }
 
+static Size gUserItemSz;
+
 void FontNameBox::Fill( const FontList* pList )
 {
     // store old text and clear box
-    OUString aOldText = GetText();
+    OUString aOldText = m_xComboBox->get_active_text();
     OUString rEntries = GetMRUEntries();
     bool bLoadFromFile = rEntries.isEmpty();
-    Clear();
+    m_xComboBox->freeze();
+    m_xComboBox->clear();
+    fprintf(stderr, "CLEAR CACHE\n");
+    maRenderedPreviews.clear();
+    maVirDevs.clear();
 
     ImplDestroyFontList();
     mpFontList.reset(new ImplFontList);
 
     // insert fonts
-    sal_uInt16 nFontCount = pList->GetFontNameCount();
-    for ( sal_uInt16 i = 0; i < nFontCount; i++ )
+    size_t nFontCount = pList->GetFontNameCount();
+    for (size_t i = 0; i < nFontCount; ++i)
     {
-        const FontMetric& rFontMetric = pList->GetFontName( i );
-        sal_Int32 nIndex = InsertEntry( rFontMetric.GetFamilyName() );
-        if ( nIndex < static_cast<sal_Int32>(mpFontList->size()) ) {
-            ImplFontList::iterator it = mpFontList->begin();
-            ::std::advance( it, nIndex );
-            mpFontList->insert( it, rFontMetric );
-        } else {
-            mpFontList->push_back( rFontMetric );
-        }
+        const FontMetric& rFontMetric = pList->GetFontName(i);
+        m_xComboBox->append(OUString::number(i), rFontMetric.GetFamilyName());
+        mpFontList->push_back(rFontMetric);
     }
 
-    if ( bLoadFromFile )
-        LoadMRUEntries (maFontMRUEntriesFile);
+    if (bLoadFromFile)
+        LoadMRUEntries(maFontMRUEntriesFile);
     else
-        SetMRUEntries( rEntries );
+        SetMRUEntries(rEntries);
 
-    ImplCalcUserItemSize();
+    m_xComboBox->thaw();
+
+    if (mbWYSIWYG)
+    {
+        size_t nEntries = mpFontList->size();
+        maRenderedPreviews.resize(nEntries, false);
+
+        size_t nMaxDeviceHeight = SAL_MAX_INT16 / 2; // see limitXCreatePixmap
+        mnPreviewsPerDevice = nMaxDeviceHeight / gUserItemSz.Height();
+
+        for (size_t i = 0; i < nEntries; i+= mnPreviewsPerDevice)
+        {
+            maVirDevs.emplace_back(VclPtr<VirtualDevice>::Create());
+            VirtualDevice& rDevice = *maVirDevs.back();
+            rDevice.SetBackground(COL_TRANSPARENT);
+            rDevice.SetOutputSizePixel(Size(gUserItemSz.Width(), gUserItemSz.Height() * mnPreviewsPerDevice));
+            if (vcl::Window* pDefaultDevice = dynamic_cast<vcl::Window*>(Application::GetDefaultDevice()))
+                pDefaultDevice->SetPointFont(rDevice, m_xComboBox->get_font());
+        }
+
+        mnPreviewProgress = 0;
+        maUpdateIdle.Start();
+    }
 
     // restore text
     if (!aOldText.isEmpty())
-        SetText( aOldText );
+        m_xComboBox->set_entry_text(aOldText);
 }
 
-void FontNameBox::EnableWYSIWYG( bool bEnable )
+void FontNameBox::EnableWYSIWYG()
 {
-    if ( bEnable != mbWYSIWYG )
+    if (mbWYSIWYG)
+        return;
+
+    m_xComboBox->set_custom_renderer();
+    m_xComboBox->connect_custom_get_size(LINK(this, FontNameBox, CustomGetSizeHdl));
+    m_xComboBox->connect_custom_render(LINK(this, FontNameBox, CustomRenderHdl));
+
+    static bool bGlobalsInited;
+    if (!bGlobalsInited)
     {
-        mbWYSIWYG = bEnable;
-        EnableUserDraw( mbWYSIWYG );
-        ImplCalcUserItemSize();
+        gUserItemSz = Size(m_xComboBox->get_approximate_digit_width() * 52, m_xComboBox->get_text_height());
+        gUserItemSz.setHeight(gUserItemSz.Height() * 16);
+        gUserItemSz.setHeight(gUserItemSz.Height() / 10);
+        fprintf(stderr, "use item height of %ld\n", gUserItemSz.Height());
+        bGlobalsInited = true;
     }
+
+    mbWYSIWYG = true;
 }
 
-void FontNameBox::ImplCalcUserItemSize()
+IMPL_STATIC_LINK_NOARG(FontNameBox, CustomGetSizeHdl, weld::ComboBox::get_size_args, Size)
 {
-    Size aUserItemSz;
-    if ( mbWYSIWYG && mpFontList )
-    {
-        aUserItemSz = Size(MAXPREVIEWWIDTH, GetTextHeight() );
-        aUserItemSz.setHeight( aUserItemSz.Height() * 16 );
-        aUserItemSz.setHeight( aUserItemSz.Height() / 10 );
-    }
-    SetUserItemSize( aUserItemSz );
+    return gUserItemSz;
 }
 
 namespace
@@ -501,30 +606,47 @@ namespace
     }
 }
 
-void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
+IMPL_LINK_NOARG(FontNameBox, UpdateHdl, Timer*, void)
 {
-    assert( mpFontList );
+    CachePreview(mnPreviewProgress++, nullptr);
+    if (mnPreviewProgress < mpFontList->size())
+        maUpdateIdle.Start();
+}
 
-    FontMetric& rFontMetric = (*mpFontList)[ rUDEvt.GetItemId() ];
-    Point aTopLeft = rUDEvt.GetRect().TopLeft();
-    long nX = aTopLeft.X();
-    long nH = rUDEvt.GetRect().GetHeight();
+OutputDevice& FontNameBox::CachePreview(size_t nIndex, Point* pTopLeft)
+{
+    size_t nPage = nIndex / mnPreviewsPerDevice;
+    size_t nIndexInPage = nIndex - (nPage * mnPreviewsPerDevice);
 
-    if ( mbWYSIWYG )
+    auto& xVirDev = maVirDevs[nPage];
+
+    Point aTopLeft(0, gUserItemSz.Height() * nIndexInPage);
+
+    if (!maRenderedPreviews[nIndex])
     {
+        fprintf(stderr, "fill cache %d\n", nIndex);
+        xVirDev->Push(PushFlags::TEXTCOLOR);
+        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+        xVirDev->SetTextColor(rStyleSettings.GetDialogTextColor());
+
+        assert( mpFontList );
+
+        FontMetric& rFontMetric = (*mpFontList)[nIndex];
+        long nX = aTopLeft.X();
+        long nH = gUserItemSz.Height();
+
         nX += IMGOUTERTEXTSPACE;
 
         const bool bSymbolFont = isSymbolFont(rFontMetric);
-        vcl::RenderContext* pRenderContext = rUDEvt.GetRenderContext();
 
-        Color aTextColor = pRenderContext->GetTextColor();
-        vcl::Font aOldFont(pRenderContext->GetFont());
+        Color aTextColor = xVirDev->GetTextColor();
+        vcl::Font aOldFont(xVirDev->GetFont());
         Size aSize( aOldFont.GetFontSize() );
         aSize.AdjustHeight(EXTRAFONTSIZE );
         vcl::Font aFont( rFontMetric );
         aFont.SetFontSize( aSize );
-        pRenderContext->SetFont(aFont);
-        pRenderContext->SetTextColor(aTextColor);
+        xVirDev->SetFont(aFont);
+        xVirDev->SetTextColor(aTextColor);
 
         bool bUsingCorrectFont = true;
         tools::Rectangle aTextRect;
@@ -532,30 +654,32 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
         // Preview the font name
         const OUString& sFontName = rFontMetric.GetFamilyName();
 
+        fprintf(stderr, "render %s\n", sFontName.toUtf8().getStr());
+
         //If it shouldn't or can't draw its own name because it doesn't have the glyphs
-        if (!canRenderNameOfSelectedFont(*pRenderContext))
+        if (!canRenderNameOfSelectedFont(*xVirDev))
             bUsingCorrectFont = false;
         else
         {
             //Make sure it fits in the available height, shrinking the font if necessary
-            bUsingCorrectFont = shrinkFontToFit(sFontName, nH, aFont, *pRenderContext, aTextRect) != 0;
+            bUsingCorrectFont = shrinkFontToFit(sFontName, nH, aFont, *xVirDev, aTextRect) != 0;
         }
 
         if (!bUsingCorrectFont)
         {
-            pRenderContext->SetFont(aOldFont);
-            pRenderContext->GetTextBoundRect(aTextRect, sFontName);
+            xVirDev->SetFont(aOldFont);
+            xVirDev->GetTextBoundRect(aTextRect, sFontName);
         }
 
         long nTextHeight = aTextRect.GetHeight();
         long nDesiredGap = (nH-nTextHeight)/2;
         long nVertAdjust = nDesiredGap - aTextRect.Top();
         Point aPos( nX, aTopLeft.Y() + nVertAdjust );
-        pRenderContext->DrawText(aPos, sFontName);
+        xVirDev->DrawText(aPos, sFontName);
         long nTextX = aPos.X() + aTextRect.GetWidth() + GAPTOEXTRAPREVIEW;
 
         if (!bUsingCorrectFont)
-            pRenderContext->SetFont(aFont);
+            xVirDev->SetFont(aFont);
 
         OUString sSampleText;
 
@@ -564,7 +688,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
             const bool bNameBeginsWithLatinText = rFontMetric.GetFamilyName()[0] <= 'z';
 
             if (bNameBeginsWithLatinText || !bUsingCorrectFont)
-                sSampleText = makeShortRepresentativeTextForSelectedFont(*pRenderContext);
+                sSampleText = makeShortRepresentativeTextForSelectedFont(*xVirDev);
         }
 
         //If we're not a symbol font, but could neither render our own name and
@@ -612,7 +736,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
                 OUString sText = makeShortRepresentativeTextForScript(rScript);
                 if (!sText.isEmpty())
                 {
-                    bool bHasSampleTextGlyphs = (-1 == pRenderContext->HasGlyphs(aFont, sText));
+                    bool bHasSampleTextGlyphs = (-1 == xVirDev->HasGlyphs(aFont, sText));
                     if (bHasSampleTextGlyphs)
                     {
                         sSampleText = sText;
@@ -632,7 +756,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
                 OUString sText = makeShortMinimalTextForScript(rMinimalScript);
                 if (!sText.isEmpty())
                 {
-                    bool bHasSampleTextGlyphs = (-1 == pRenderContext->HasGlyphs(aFont, sText));
+                    bool bHasSampleTextGlyphs = (-1 == xVirDev->HasGlyphs(aFont, sText));
                     if (bHasSampleTextGlyphs)
                     {
                         sSampleText = sText;
@@ -646,23 +770,23 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
         //render something representative of what it would like to render then
         //make up some semi-random text that it *can* display
         if (bSymbolFont || (!bUsingCorrectFont && sSampleText.isEmpty()))
-            sSampleText = makeShortRepresentativeSymbolTextForSelectedFont(*pRenderContext);
+            sSampleText = makeShortRepresentativeSymbolTextForSelectedFont(*xVirDev);
 
         if (!sSampleText.isEmpty())
         {
-            const Size &rItemSize = rUDEvt.GetWindow()->GetOutputSize();
+            const Size &rItemSize = gUserItemSz;
 
             //leave a little border at the edge
             long nSpace = rItemSize.Width() - nTextX - IMGOUTERTEXTSPACE;
             if (nSpace >= 0)
             {
                 //Make sure it fits in the available height, and get how wide that would be
-                long nWidth = shrinkFontToFit(sSampleText, nH, aFont, *pRenderContext, aTextRect);
+                long nWidth = shrinkFontToFit(sSampleText, nH, aFont, *xVirDev, aTextRect);
                 //Chop letters off until it fits in the available width
-                while (nWidth > nSpace || nWidth > MAXPREVIEWWIDTH)
+                while (nWidth > nSpace || nWidth > gUserItemSz.Width())
                 {
                     sSampleText = sSampleText.copy(0, sSampleText.getLength()-1);
-                    nWidth = pRenderContext->GetTextBoundRect(aTextRect, sSampleText) ?
+                    nWidth = xVirDev->GetTextBoundRect(aTextRect, sSampleText) ?
                              aTextRect.GetWidth() : 0;
                 }
 
@@ -673,18 +797,42 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
                     nDesiredGap = (nH-nTextHeight)/2;
                     nVertAdjust = nDesiredGap - aTextRect.Top();
                     aPos = Point(nTextX + nSpace - nWidth, aTopLeft.Y() + nVertAdjust);
-                    pRenderContext->DrawText(aPos, sSampleText);
+                    xVirDev->DrawText(aPos, sSampleText);
                 }
             }
         }
 
-        pRenderContext->SetFont(aOldFont);
-        DrawEntry( rUDEvt, false, false);   // draw separator
+        xVirDev->SetFont(aOldFont);
+        xVirDev->Pop();
+        maRenderedPreviews[nIndex] = true;
     }
-    else
-    {
-        DrawEntry( rUDEvt, true, true );
-    }
+
+    if (pTopLeft)
+        *pTopLeft = aTopLeft;
+
+    return *xVirDev;
+}
+
+IMPL_LINK(FontNameBox, CustomRenderHdl, weld::ComboBox::render_args, aPayload, void)
+{
+    vcl::RenderContext& rRenderContext = std::get<0>(aPayload);
+    const ::tools::Rectangle& rRect = std::get<1>(aPayload);
+    bool bSelected = std::get<2>(aPayload);
+    const OUString& rId = std::get<3>(aPayload);
+
+    sal_uInt32 nIndex = rId.toUInt32();
+
+    Point aTopLeft;
+    OutputDevice& rDevice = CachePreview(nIndex, &aTopLeft);
+
+    rRenderContext.DrawOutDev(rRect.TopLeft(), rRect.GetSize(),
+                              aTopLeft, rRect.GetSize(),
+                              rDevice);
+}
+
+void FontNameBox::set_entry_text(const OUString& rText)
+{
+    m_xComboBox->set_entry_text(rText);
 }
 
 FontStyleBox::FontStyleBox(std::unique_ptr<weld::ComboBox> p)

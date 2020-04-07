@@ -275,6 +275,8 @@ IMPL_STATIC_LINK(CustomAnimationList, CustomGetSizeHdl, weld::TreeView::get_size
     const OUString& rId = aPayload.second;
 
     CustomAnimationListEntryItem* pItem = reinterpret_cast<CustomAnimationListEntryItem*>(rId.toInt64());
+    if (!pItem)
+        return nItemMinHeight;
     return pItem->GetSize(rRenderContext);
 }
 
