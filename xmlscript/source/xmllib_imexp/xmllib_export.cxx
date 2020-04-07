@@ -62,8 +62,7 @@ exportLibraryContainer(
     {
         LibDescriptor& rLib = pLibArray->mpLibs[i];
 
-        XMLElement* pLibElement = new XMLElement( XMLNS_LIBRARY_PREFIX ":library" );
-        Reference< xml::sax::XAttributeList > xLibElementAttribs = static_cast< xml::sax::XAttributeList* >( pLibElement );
+        rtl::Reference<XMLElement> pLibElement(new XMLElement( XMLNS_LIBRARY_PREFIX ":library" ));
 
         pLibElement->addAttribute( XMLNS_LIBRARY_PREFIX ":name", rLib.aName );
 
@@ -119,13 +118,12 @@ exportLibrary(
 
     for( const auto& rElementName : rLib.aElementNames )
     {
-        XMLElement* pElement = new XMLElement( XMLNS_LIBRARY_PREFIX ":element" );
-        Reference< xml::sax::XAttributeList > xElementAttribs = static_cast< xml::sax::XAttributeList* >( pElement );
+        rtl::Reference<XMLElement> pElement(new XMLElement( XMLNS_LIBRARY_PREFIX ":element" ));
 
         pElement->addAttribute( XMLNS_LIBRARY_PREFIX ":name",
                                     rElementName );
 
-        pLibElement->addSubElement( pElement );
+        pLibElement->addSubElement( pElement.get() );
     }
 
     pLibElement->dump( xOut.get() );
