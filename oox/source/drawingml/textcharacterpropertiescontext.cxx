@@ -211,10 +211,12 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
         case W_TOKEN( bCs ):
             break;
         case W_TOKEN( strike ):
-            mrTextCharacterProperties.moStrikeout = XML_sngStrike;
+            if (rAttribs.getBool(W_TOKEN(val), true))
+                mrTextCharacterProperties.moStrikeout = XML_sngStrike;
             break;
         case W_TOKEN( dstrike ):
-            mrTextCharacterProperties.moStrikeout = XML_dblStrike;
+            if (rAttribs.getBool(W_TOKEN(val), true))
+                mrTextCharacterProperties.moStrikeout = XML_dblStrike;
             break;
         case W_TOKEN( color ):
             if (rAttribs.getInteger(W_TOKEN(val)).has())
