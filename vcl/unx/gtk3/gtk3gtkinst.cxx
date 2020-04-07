@@ -11223,7 +11223,7 @@ public:
     }
 };
 
-void ensure_device(CustomCellRendererSurface *cellsurface, weld::TreeView* pTreeView)
+void ensure_device(CustomCellRendererSurface *cellsurface, weld::Widget* pWidget)
 {
     if (!cellsurface->device)
     {
@@ -11231,108 +11231,10 @@ void ensure_device(CustomCellRendererSurface *cellsurface, weld::TreeView* pTree
         cellsurface->device->SetBackground(COL_TRANSPARENT);
         // expand the point size of the desired font to the equivalent pixel size
         if (vcl::Window* pDefaultDevice = dynamic_cast<vcl::Window*>(Application::GetDefaultDevice()))
-            pDefaultDevice->SetPointFont(*cellsurface->device, pTreeView->get_font());
+            pDefaultDevice->SetPointFont(*cellsurface->device, pWidget->get_font());
     }
 }
 
-}
-
-bool custom_cell_renderer_surface_get_preferred_size(GtkCellRenderer *cell,
-                                                     GtkOrientation orientation,
-                                                     gint *minimum_size,
-                                                     gint *natural_size)
-{
-    GValue value = G_VALUE_INIT;
-    g_value_init(&value, G_TYPE_STRING);
-    g_object_get_property(G_OBJECT(cell), "id", &value);
-
-    const char* pStr = g_value_get_string(&value);
-
-    if (!pStr)
-    {
-        // this happens if we're empty
-        return false;
-    }
-
-    OUString sId(pStr, strlen(pStr), RTL_TEXTENCODING_UTF8);
-
-    value = G_VALUE_INIT;
-    g_value_init(&value, G_TYPE_POINTER);
-    g_object_get_property(G_OBJECT(cell), "instance", &value);
-
-    CustomCellRendererSurface *cellsurface = CUSTOM_CELL_RENDERER_SURFACE(cell);
-
-    GtkInstanceTreeView* pTreeView = static_cast<GtkInstanceTreeView*>(g_value_get_pointer(&value));
-
-    ensure_device(cellsurface, pTreeView);
-
-    Size aSize = pTreeView->call_signal_custom_get_size(*cellsurface->device, sId);
-
-    if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-        if (minimum_size)
-            *minimum_size = aSize.Width();
-
-        if (natural_size)
-            *natural_size = aSize.Width();
-    }
-    else
-    {
-        if (minimum_size)
-            *minimum_size = aSize.Height();
-
-        if (natural_size)
-            *natural_size = aSize.Height();
-    }
-
-    return true;
-}
-
-void custom_cell_renderer_surface_render(GtkCellRenderer* cell,
-                                         cairo_t* cr,
-                                         GtkWidget* /*widget*/,
-                                         const GdkRectangle* /*background_area*/,
-                                         const GdkRectangle* cell_area,
-                                         GtkCellRendererState flags)
-{
-    GValue value = G_VALUE_INIT;
-    g_value_init(&value, G_TYPE_STRING);
-    g_object_get_property(G_OBJECT(cell), "id", &value);
-
-    const char* pStr = g_value_get_string(&value);
-    OUString sId(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
-
-    value = G_VALUE_INIT;
-    g_value_init(&value, G_TYPE_POINTER);
-    g_object_get_property(G_OBJECT(cell), "instance", &value);
-
-    CustomCellRendererSurface *cellsurface = CUSTOM_CELL_RENDERER_SURFACE(cell);
-
-    GtkInstanceTreeView* pTreeView = static_cast<GtkInstanceTreeView*>(g_value_get_pointer(&value));
-
-    ensure_device(cellsurface, pTreeView);
-
-    Size aSize(cell_area->width, cell_area->height);
-    // false to not bother setting the bg on resize as we'll do that
-    // ourself via cairo
-    cellsurface->device->SetOutputSizePixel(aSize, false);
-
-    cairo_surface_t* pSurface = get_underlying_cairo_surface(*cellsurface->device);
-
-    // fill surface as transparent so it can be blended with the potentially
-    // selected background
-    cairo_t* tempcr = cairo_create(pSurface);
-    cairo_set_source_rgba(tempcr, 0, 0, 0, 0);
-    cairo_set_operator(tempcr, CAIRO_OPERATOR_SOURCE);
-    cairo_paint(tempcr);
-    cairo_destroy(tempcr);
-    cairo_surface_flush(pSurface);
-
-    pTreeView->call_signal_custom_render(*cellsurface->device, tools::Rectangle(Point(0, 0), aSize), flags & GTK_CELL_RENDERER_SELECTED, sId);
-    cairo_surface_mark_dirty(pSurface);
-
-    cairo_set_source_surface(cr, pSurface, cell_area->x, cell_area->y);
-    cairo_paint(cr);
 }
 
 IMPL_LINK_NOARG(GtkInstanceTreeView, async_signal_changed, void*, void)
@@ -13890,6 +13792,34 @@ public:
         return m_bChangedByMenu;
     }
 
+    virtual void set_custom_renderer() override
+    {
+        GList* pColumns = gtk_tree_view_get_columns(m_pTreeView);
+        // keep the original height around for optimal popup height calculation
+        m_nNonCustomLineHeight = ::get_height_row(m_pTreeView, pColumns);
+        GtkTreeViewColumn* pColumn = GTK_TREE_VIEW_COLUMN(pColumns->data);
+        gtk_cell_layout_clear(GTK_CELL_LAYOUT(pColumn));
+        GtkCellRenderer *pRenderer = custom_cell_renderer_surface_new();
+        GValue value = G_VALUE_INIT;
+        g_value_init(&value, G_TYPE_POINTER);
+        g_value_set_pointer(&value, static_cast<gpointer>(this));
+        g_object_set_property(G_OBJECT(pRenderer), "instance", &value);
+        gtk_tree_view_column_pack_start(pColumn, pRenderer, true);
+        gtk_tree_view_column_add_attribute(pColumn, pRenderer, "text", m_nTextCol);
+        gtk_tree_view_column_add_attribute(pColumn, pRenderer, "id", m_nIdCol);
+        g_list_free(pColumns);
+    }
+
+    void call_signal_custom_render(VirtualDevice& rOutput, const tools::Rectangle& rRect, bool bSelected, const OUString& rId)
+    {
+        signal_custom_render(rOutput, rRect, bSelected, rId);
+    }
+
+    Size call_signal_custom_get_size(VirtualDevice& rOutput, const OUString& rId)
+    {
+        return signal_custom_get_size(rOutput, rId);
+    }
+
     virtual ~GtkInstanceComboBox() override
     {
         if (m_nAutoCompleteIdleId)
@@ -13915,6 +13845,108 @@ public:
         g_object_unref(m_pComboBuilder);
     }
 };
+
+}
+
+bool custom_cell_renderer_surface_get_preferred_size(GtkCellRenderer *cell,
+                                                     GtkOrientation orientation,
+                                                     gint *minimum_size,
+                                                     gint *natural_size)
+{
+    GValue value = G_VALUE_INIT;
+    g_value_init(&value, G_TYPE_STRING);
+    g_object_get_property(G_OBJECT(cell), "id", &value);
+
+    const char* pStr = g_value_get_string(&value);
+
+    OUString sId(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+
+    value = G_VALUE_INIT;
+    g_value_init(&value, G_TYPE_POINTER);
+    g_object_get_property(G_OBJECT(cell), "instance", &value);
+
+    CustomCellRendererSurface *cellsurface = CUSTOM_CELL_RENDERER_SURFACE(cell);
+
+    GtkInstanceWidget* pWidget = static_cast<GtkInstanceWidget*>(g_value_get_pointer(&value));
+
+    ensure_device(cellsurface, pWidget);
+
+    Size aSize;
+    if (GtkInstanceTreeView* pTreeView = dynamic_cast<GtkInstanceTreeView*>(pWidget))
+        aSize = pTreeView->call_signal_custom_get_size(*cellsurface->device, sId);
+    else if (GtkInstanceComboBox* pComboBox = dynamic_cast<GtkInstanceComboBox*>(pWidget))
+        aSize = pComboBox->call_signal_custom_get_size(*cellsurface->device, sId);
+
+    if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+        if (minimum_size)
+            *minimum_size = aSize.Width();
+
+        if (natural_size)
+            *natural_size = aSize.Width();
+    }
+    else
+    {
+        if (minimum_size)
+            *minimum_size = aSize.Height();
+
+        if (natural_size)
+            *natural_size = aSize.Height();
+    }
+
+    return true;
+}
+
+void custom_cell_renderer_surface_render(GtkCellRenderer* cell,
+                                         cairo_t* cr,
+                                         GtkWidget* /*widget*/,
+                                         const GdkRectangle* /*background_area*/,
+                                         const GdkRectangle* cell_area,
+                                         GtkCellRendererState flags)
+{
+    GValue value = G_VALUE_INIT;
+    g_value_init(&value, G_TYPE_STRING);
+    g_object_get_property(G_OBJECT(cell), "id", &value);
+
+    const char* pStr = g_value_get_string(&value);
+    OUString sId(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+
+    value = G_VALUE_INIT;
+    g_value_init(&value, G_TYPE_POINTER);
+    g_object_get_property(G_OBJECT(cell), "instance", &value);
+
+    CustomCellRendererSurface *cellsurface = CUSTOM_CELL_RENDERER_SURFACE(cell);
+
+    GtkInstanceWidget* pWidget = static_cast<GtkInstanceWidget*>(g_value_get_pointer(&value));
+    ensure_device(cellsurface, pWidget);
+
+    Size aSize(cell_area->width, cell_area->height);
+    // false to not bother setting the bg on resize as we'll do that
+    // ourself via cairo
+    cellsurface->device->SetOutputSizePixel(aSize, false);
+
+    cairo_surface_t* pSurface = get_underlying_cairo_surface(*cellsurface->device);
+
+    // fill surface as transparent so it can be blended with the potentially
+    // selected background
+    cairo_t* tempcr = cairo_create(pSurface);
+    cairo_set_source_rgba(tempcr, 0, 0, 0, 0);
+    cairo_set_operator(tempcr, CAIRO_OPERATOR_SOURCE);
+    cairo_paint(tempcr);
+    cairo_destroy(tempcr);
+    cairo_surface_flush(pSurface);
+
+    if (GtkInstanceTreeView* pTreeView = dynamic_cast<GtkInstanceTreeView*>(pWidget))
+        pTreeView->call_signal_custom_render(*cellsurface->device, tools::Rectangle(Point(0, 0), aSize), flags & GTK_CELL_RENDERER_SELECTED, sId);
+    else if (GtkInstanceComboBox* pComboBox = dynamic_cast<GtkInstanceComboBox*>(pWidget))
+        pComboBox->call_signal_custom_render(*cellsurface->device, tools::Rectangle(Point(0, 0), aSize), flags & GTK_CELL_RENDERER_SELECTED, sId);
+    cairo_surface_mark_dirty(pSurface);
+
+    cairo_set_source_surface(cr, pSurface, cell_area->x, cell_area->y);
+    cairo_paint(cr);
+}
+
+namespace {
 
 class GtkInstanceEntryTreeView : public GtkInstanceContainer, public virtual weld::EntryTreeView
 {
@@ -14131,6 +14163,11 @@ public:
     virtual bool changed_by_direct_pick() const override
     {
         return m_bTreeChange;
+    }
+
+    virtual void set_custom_renderer() override
+    {
+        // TODO
     }
 
     virtual ~GtkInstanceEntryTreeView() override
