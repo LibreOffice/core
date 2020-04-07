@@ -104,22 +104,22 @@ void IndexerPreProcessor::processDocument
         xmlFreeDoc(resCaption);
     }
 
-    if( m_xsltStylesheetPtrContent )
+    if( !m_xsltStylesheetPtrContent )
+        return;
+
+    xmlDocPtr resContent = xsltApplyStylesheet( m_xsltStylesheetPtrContent, doc, nullptr );
+    xmlNodePtr pResNodeContent = resContent->xmlChildrenNode;
+    if( pResNodeContent )
     {
-        xmlDocPtr resContent = xsltApplyStylesheet( m_xsltStylesheetPtrContent, doc, nullptr );
-        xmlNodePtr pResNodeContent = resContent->xmlChildrenNode;
-        if( pResNodeContent )
+        fs::path fsContentPureTextFile_docURL = m_fsContentFilesDirName / aStdStr_EncodedDocPathURL;
+        FILE* pFile_docURL = fopen_impl( fsContentPureTextFile_docURL, "w" );
+        if( pFile_docURL )
         {
-            fs::path fsContentPureTextFile_docURL = m_fsContentFilesDirName / aStdStr_EncodedDocPathURL;
-            FILE* pFile_docURL = fopen_impl( fsContentPureTextFile_docURL, "w" );
-            if( pFile_docURL )
-            {
-                fprintf( pFile_docURL, "%s\n", pResNodeContent->content );
-                fclose( pFile_docURL );
-            }
+            fprintf( pFile_docURL, "%s\n", pResNodeContent->content );
+            fclose( pFile_docURL );
         }
-        xmlFreeDoc(resContent);
     }
+    xmlFreeDoc(resContent);
 }
 
 namespace {
@@ -462,25 +462,25 @@ void HelpLinker::link()
 
     helpKeyword.dump_DBHelp( keyWordFileName_DBHelp);
 
-    if( !bExtensionMode )
+    if( bExtensionMode )
+        return;
+
+    // New index
+    for (auto const& additionalFile : additionalFiles)
     {
-        // New index
-        for (auto const& additionalFile : additionalFiles)
-        {
-            const std::string &additionalFileName = additionalFile.second;
-            const std::string &additionalFileKey = additionalFile.first;
+        const std::string &additionalFileName = additionalFile.second;
+        const std::string &additionalFileKey = additionalFile.first;
 
-            fs::path fsAdditionalFileName( additionalFileName, fs::native );
-            HCDBG({
-                    std::string aNativeStr = fsAdditionalFileName.native_file_string();
-                    const char* pStr = aNativeStr.c_str();
-                    std::cerr << pStr << std::endl;
-            });
+        fs::path fsAdditionalFileName( additionalFileName, fs::native );
+        HCDBG({
+                std::string aNativeStr = fsAdditionalFileName.native_file_string();
+                const char* pStr = aNativeStr.c_str();
+                std::cerr << pStr << std::endl;
+        });
 
-            fs::path fsTargetName( indexDirParentName / additionalFileKey );
+        fs::path fsTargetName( indexDirParentName / additionalFileKey );
 
-            fs::copy( fsAdditionalFileName, fsTargetName );
-        }
+        fs::copy( fsAdditionalFileName, fsTargetName );
     }
 }
 
