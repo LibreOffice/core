@@ -736,25 +736,25 @@ void SAL_CALL Hyphenator::initialize( const Sequence< Any >& rArguments )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    if (!pPropHelper)
-    {
-        sal_Int32 nLen = rArguments.getLength();
-        if (2 == nLen)
-        {
-            Reference< XLinguProperties >   xPropSet;
-            rArguments.getConstArray()[0] >>= xPropSet;
-            // rArguments.getConstArray()[1] >>= xDicList;
+    if (pPropHelper)
+        return;
 
-            //! Pointer allows for access of the non-UNO functions.
-            //! And the reference to the UNO-functions while increasing
-            //! the ref-count and will implicitly free the memory
-            //! when the object is no longer used.
-            pPropHelper.reset( new PropertyHelper_Hyphenation( static_cast<XHyphenator *>(this), xPropSet ) );
-            pPropHelper->AddAsPropListener();   //! after a reference is established
-        }
-        else {
-            OSL_FAIL( "wrong number of arguments in sequence" );
-        }
+    sal_Int32 nLen = rArguments.getLength();
+    if (2 == nLen)
+    {
+        Reference< XLinguProperties >   xPropSet;
+        rArguments.getConstArray()[0] >>= xPropSet;
+        // rArguments.getConstArray()[1] >>= xDicList;
+
+        //! Pointer allows for access of the non-UNO functions.
+        //! And the reference to the UNO-functions while increasing
+        //! the ref-count and will implicitly free the memory
+        //! when the object is no longer used.
+        pPropHelper.reset( new PropertyHelper_Hyphenation( static_cast<XHyphenator *>(this), xPropSet ) );
+        pPropHelper->AddAsPropListener();   //! after a reference is established
+    }
+    else {
+        OSL_FAIL( "wrong number of arguments in sequence" );
     }
 }
 

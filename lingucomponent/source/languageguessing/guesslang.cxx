@@ -117,54 +117,54 @@ LangGuess_Impl::LangGuess_Impl() :
 
 void LangGuess_Impl::EnsureInitialized()
 {
-    if (!m_bInitialized)
-    {
-        // set this to true at the very start to prevent loops because of
-        // implicitly called functions below
-        m_bInitialized = true;
+    if (m_bInitialized)
+        return;
 
-        // set default fingerprint path to where those get installed
-        OUString aPhysPath;
-        OUString aURL( SvtPathOptions().GetFingerprintPath() );
-        osl::FileBase::getSystemPathFromFileURL( aURL, aPhysPath );
+    // set this to true at the very start to prevent loops because of
+    // implicitly called functions below
+    m_bInitialized = true;
+
+    // set default fingerprint path to where those get installed
+    OUString aPhysPath;
+    OUString aURL( SvtPathOptions().GetFingerprintPath() );
+    osl::FileBase::getSystemPathFromFileURL( aURL, aPhysPath );
 #ifdef _WIN32
-        aPhysPath += "\\";
+    aPhysPath += "\\";
 #else
-        aPhysPath += "/";
+    aPhysPath += "/";
 #endif
 
-        SetFingerPrintsDB( aPhysPath );
+    SetFingerPrintsDB( aPhysPath );
 
 #if !defined(EXTTEXTCAT_VERSION_MAJOR)
 
-        // disable currently not functional languages...
-        struct LangCountry
-        {
-            const char *pLang;
-            const char *pCountry;
-        };
-        LangCountry aDisable[] =
-        {
-            // not functional in modified libtextcat, but fixed in >= libexttextcat 3.1.0
-            // which is the first with EXTTEXTCAT_VERSION_MAJOR defined
-            {"sco", ""}, {"zh", "CN"}, {"zh", "TW"}, {"ja", ""}, {"ko", ""},
-            {"ka", ""}, {"hi", ""}, {"mr", ""}, {"ne", ""}, {"sa", ""},
-            {"ta", ""}, {"th", ""}, {"qu", ""}, {"yi", ""}
-        };
-        sal_Int32 nNum = SAL_N_ELEMENTS(aDisable);
-        Sequence< Locale > aDisableSeq( nNum );
-        Locale *pDisableSeq = aDisableSeq.getArray();
-        for (sal_Int32 i = 0;  i < nNum;  ++i)
-        {
-            Locale aLocale;
-            aLocale.Language = OUString::createFromAscii( aDisable[i].pLang );
-            aLocale.Country  = OUString::createFromAscii( aDisable[i].pCountry );
-            pDisableSeq[i] = aLocale;
-        }
-        disableLanguages( aDisableSeq );
-        DBG_ASSERT( nNum == getDisabledLanguages().getLength(), "size mismatch" );
-#endif
+    // disable currently not functional languages...
+    struct LangCountry
+    {
+        const char *pLang;
+        const char *pCountry;
+    };
+    LangCountry aDisable[] =
+    {
+        // not functional in modified libtextcat, but fixed in >= libexttextcat 3.1.0
+        // which is the first with EXTTEXTCAT_VERSION_MAJOR defined
+        {"sco", ""}, {"zh", "CN"}, {"zh", "TW"}, {"ja", ""}, {"ko", ""},
+        {"ka", ""}, {"hi", ""}, {"mr", ""}, {"ne", ""}, {"sa", ""},
+        {"ta", ""}, {"th", ""}, {"qu", ""}, {"yi", ""}
+    };
+    sal_Int32 nNum = SAL_N_ELEMENTS(aDisable);
+    Sequence< Locale > aDisableSeq( nNum );
+    Locale *pDisableSeq = aDisableSeq.getArray();
+    for (sal_Int32 i = 0;  i < nNum;  ++i)
+    {
+        Locale aLocale;
+        aLocale.Language = OUString::createFromAscii( aDisable[i].pLang );
+        aLocale.Country  = OUString::createFromAscii( aDisable[i].pCountry );
+        pDisableSeq[i] = aLocale;
     }
+    disableLanguages( aDisableSeq );
+    DBG_ASSERT( nNum == getDisabledLanguages().getLength(), "size mismatch" );
+#endif
 }
 
 Locale SAL_CALL LangGuess_Impl::guessPrimaryLanguage(

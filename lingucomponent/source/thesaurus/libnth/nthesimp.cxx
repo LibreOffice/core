@@ -470,24 +470,24 @@ void SAL_CALL Thesaurus::initialize( const Sequence< Any >& rArguments )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    if (!pPropHelper)
-    {
-        sal_Int32 nLen = rArguments.getLength();
-        if (1 == nLen)
-        {
-            Reference< XLinguProperties >   xPropSet;
-            rArguments.getConstArray()[0] >>= xPropSet;
+    if (pPropHelper)
+        return;
 
-            //! Pointer allows for access of the non-UNO functions.
-            //! And the reference to the UNO-functions while increasing
-            //! the ref-count and will implicitly free the memory
-            //! when the object is no longer used.
-            pPropHelper = new PropertyHelper_Thesaurus( static_cast<XThesaurus *>(this), xPropSet );
-            pPropHelper->AddAsPropListener();   //! after a reference is established
-        }
-        else
-            OSL_FAIL( "wrong number of arguments in sequence" );
+    sal_Int32 nLen = rArguments.getLength();
+    if (1 == nLen)
+    {
+        Reference< XLinguProperties >   xPropSet;
+        rArguments.getConstArray()[0] >>= xPropSet;
+
+        //! Pointer allows for access of the non-UNO functions.
+        //! And the reference to the UNO-functions while increasing
+        //! the ref-count and will implicitly free the memory
+        //! when the object is no longer used.
+        pPropHelper = new PropertyHelper_Thesaurus( static_cast<XThesaurus *>(this), xPropSet );
+        pPropHelper->AddAsPropListener();   //! after a reference is established
     }
+    else
+        OSL_FAIL( "wrong number of arguments in sequence" );
 }
 
 OUString Thesaurus::makeLowerCase(const OUString& aTerm, CharClass const * pCC)

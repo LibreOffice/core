@@ -58,46 +58,45 @@ Guess::Guess(const char * guess_str)
     , country_str(DEFAULT_COUNTRY)
 {
     //if the guess is not like "UNKNOWN" or "SHORT", go into the brackets
-    if(strcmp(guess_str + 1, TEXTCAT_RESULT_UNKNOWN_STR) != 0
-       &&
-       strcmp(guess_str + 1, TEXTCAT_RESULT_SHORT_STR) != 0)
-    {
-        // From how this ctor is called from SimpleGuesser::GuessLanguage and
-        // SimpleGuesser::GetManagedLanguages in
-        // lingucomponent/source/languageguessing/simpleguesser.cxx, guess_str must start with "[":
-        assert(guess_str[0] == GUESS_SEPARATOR_OPEN);
-        auto const start = guess_str + 1;
-        // Only look at the prefix of guess_str, delimited by the next "]" or "[" or end-of-string;
-        // split it into at most three segments separated by "-" (where excess occurrences of "-"
-        // would become part of the third segment), like "en-US-utf8"; the first segment denotes the
-        // language; if there are three segments, the second denotes the country and the third the
-        // encoding; otherwise, the second segment, if any (e.g., in "haw-utf8"), denotes the
-        // encoding:
-        char const * dash1 = nullptr;
-        char const * dash2 = nullptr;
-        auto p = start;
-        for (;; ++p) {
-            auto const c = *p;
-            if (c == '\0' || c == GUESS_SEPARATOR_OPEN || c == GUESS_SEPARATOR_CLOSE) {
+    if(strcmp(guess_str + 1, TEXTCAT_RESULT_UNKNOWN_STR) == 0
+       || strcmp(guess_str + 1, TEXTCAT_RESULT_SHORT_STR) == 0)
+        return;
+
+    // From how this ctor is called from SimpleGuesser::GuessLanguage and
+    // SimpleGuesser::GetManagedLanguages in
+    // lingucomponent/source/languageguessing/simpleguesser.cxx, guess_str must start with "[":
+    assert(guess_str[0] == GUESS_SEPARATOR_OPEN);
+    auto const start = guess_str + 1;
+    // Only look at the prefix of guess_str, delimited by the next "]" or "[" or end-of-string;
+    // split it into at most three segments separated by "-" (where excess occurrences of "-"
+    // would become part of the third segment), like "en-US-utf8"; the first segment denotes the
+    // language; if there are three segments, the second denotes the country and the third the
+    // encoding; otherwise, the second segment, if any (e.g., in "haw-utf8"), denotes the
+    // encoding:
+    char const * dash1 = nullptr;
+    char const * dash2 = nullptr;
+    auto p = start;
+    for (;; ++p) {
+        auto const c = *p;
+        if (c == '\0' || c == GUESS_SEPARATOR_OPEN || c == GUESS_SEPARATOR_CLOSE) {
+            break;
+        }
+        if (c == GUESS_SEPARATOR_SEP) {
+            if (dash1 == nullptr) {
+                dash1 = p;
+            } else {
+                dash2 = p;
+                // The encoding is ignored, so we can stop as soon as we found the second "-":
                 break;
             }
-            if (c == GUESS_SEPARATOR_SEP) {
-                if (dash1 == nullptr) {
-                    dash1 = p;
-                } else {
-                    dash2 = p;
-                    // The encoding is ignored, so we can stop as soon as we found the second "-":
-                    break;
-                }
-            }
         }
-        auto const langLen = (dash1 == nullptr ? p : dash1) - start;
-        if (langLen != 0) { // if not we use the default value
-            language_str.assign(start, langLen);
-        }
-        if (dash2 != nullptr) {
-            country_str.assign(dash1 + 1, dash2 - (dash1 + 1));
-        }
+    }
+    auto const langLen = (dash1 == nullptr ? p : dash1) - start;
+    if (langLen != 0) { // if not we use the default value
+        language_str.assign(start, langLen);
+    }
+    if (dash2 != nullptr) {
+        country_str.assign(dash1 + 1, dash2 - (dash1 + 1));
     }
 }
 
