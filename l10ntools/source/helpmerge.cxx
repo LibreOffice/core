@@ -194,67 +194,67 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
     XMLElement*   pXMLElement = nullptr;
     MergeEntrys   *pEntrys    = nullptr;
 
-    if( !sCur.equalsIgnoreAsciiCase("en-US") ){
-        pXMLElement = (*aLangHM)[ "en-US" ];
-        if( pXMLElement == nullptr )
+    if( sCur.equalsIgnoreAsciiCase("en-US") )
+        return;
+
+    pXMLElement = (*aLangHM)[ "en-US" ];
+    if( pXMLElement == nullptr )
+    {
+        printf("Error: Can't find en-US entry\n");
+    }
+    if( pXMLElement == nullptr )
+        return;
+
+    OString sNewText;
+    OString sNewdata;
+    OString sSourceText(
+    pXMLElement->ToOString().
+        replaceAll(
+            "\n",
+            OString()).
+        replaceAll(
+            "\t",
+            OString()));
+    // re-add spaces to the beginning of translated string,
+    // important for indentation of Basic code examples
+    sal_Int32 nPreSpaces = 0;
+    sal_Int32 nLen = sSourceText.getLength();
+    while ( (nPreSpaces < nLen) && (sSourceText[nPreSpaces] == ' ') )
+        nPreSpaces++;
+    if( sCur == "qtz" )
+    {
+        sNewText = MergeEntrys::GetQTZText(*pResData, sSourceText);
+        sNewdata = sNewText;
+    }
+    else if( pMergeDataFile )
+    {
+        pEntrys = pMergeDataFile->GetMergeEntrys( pResData );
+        if( pEntrys != nullptr)
         {
-            printf("Error: Can't find en-US entry\n");
+            pEntrys->GetText( sNewText, sCur, true );
+            if (helper::isWellFormedXML(XMLUtil::QuotHTML(sNewText)))
+            {
+                sNewdata = sSourceText.copy(0,nPreSpaces) + sNewText;
+            }
         }
+    }
+    if (!sNewdata.isEmpty())
+    {
         if( pXMLElement != nullptr )
         {
-            OString sNewText;
-            OString sNewdata;
-            OString sSourceText(
-            pXMLElement->ToOString().
-                replaceAll(
-                    "\n",
-                    OString()).
-                replaceAll(
-                    "\t",
-                    OString()));
-            // re-add spaces to the beginning of translated string,
-            // important for indentation of Basic code examples
-            sal_Int32 nPreSpaces = 0;
-            sal_Int32 nLen = sSourceText.getLength();
-            while ( (nPreSpaces < nLen) && (sSourceText[nPreSpaces] == ' ') )
-                nPreSpaces++;
-            if( sCur == "qtz" )
-            {
-                sNewText = MergeEntrys::GetQTZText(*pResData, sSourceText);
-                sNewdata = sNewText;
-            }
-            else if( pMergeDataFile )
-            {
-                pEntrys = pMergeDataFile->GetMergeEntrys( pResData );
-                if( pEntrys != nullptr)
-                {
-                    pEntrys->GetText( sNewText, sCur, true );
-                    if (helper::isWellFormedXML(XMLUtil::QuotHTML(sNewText)))
-                    {
-                        sNewdata = sSourceText.copy(0,nPreSpaces) + sNewText;
-                    }
-                }
-            }
-            if (!sNewdata.isEmpty())
-            {
-                if( pXMLElement != nullptr )
-                {
-                    XMLData *data = new XMLData( sNewdata , nullptr ); // Add new one
-                    pXMLElement->RemoveAndDeleteAllChildren();
-                    pXMLElement->AddChild( data );
-                    aLangHM->erase( sCur );
-                }
-            }
-            else
-            {
-                SAL_WARN(
-                    "l10ntools",
-                    "Can't find GID=" << pResData->sGId << " TYP=" << pResData->sResTyp);
-            }
-            pXMLElement->ChangeLanguageTag(sCur);
+            XMLData *data = new XMLData( sNewdata , nullptr ); // Add new one
+            pXMLElement->RemoveAndDeleteAllChildren();
+            pXMLElement->AddChild( data );
+            aLangHM->erase( sCur );
         }
-
     }
+    else
+    {
+        SAL_WARN(
+            "l10ntools",
+            "Can't find GID=" << pResData->sGId << " TYP=" << pResData->sResTyp);
+    }
+    pXMLElement->ChangeLanguageTag(sCur);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

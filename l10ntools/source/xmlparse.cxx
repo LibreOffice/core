@@ -79,26 +79,26 @@ XMLParentNode::~XMLParentNode()
 XMLParentNode::XMLParentNode( const XMLParentNode& rObj)
 : XMLChildNode( rObj )
 {
-    if( rObj.m_pChildList )
+    if( !rObj.m_pChildList )
+        return;
+
+    m_pChildList.reset( new XMLChildNodeList );
+    for ( size_t i = 0; i < rObj.m_pChildList->size(); i++ )
     {
-        m_pChildList.reset( new XMLChildNodeList );
-        for ( size_t i = 0; i < rObj.m_pChildList->size(); i++ )
+        XMLChildNode* pNode = (*rObj.m_pChildList)[ i ];
+        if( pNode != nullptr)
         {
-            XMLChildNode* pNode = (*rObj.m_pChildList)[ i ];
-            if( pNode != nullptr)
+            switch(pNode->GetNodeType())
             {
-                switch(pNode->GetNodeType())
-                {
-                    case XMLNodeType::ELEMENT:
-                        AddChild( new XMLElement( *static_cast<XMLElement* >(pNode) ) ); break;
-                    case XMLNodeType::DATA:
-                        AddChild( new XMLData   ( *static_cast<XMLData* >   (pNode) ) ); break;
-                    case XMLNodeType::COMMENT:
-                        AddChild( new XMLComment( *static_cast<XMLComment* >(pNode) ) ); break;
-                    case XMLNodeType::DEFAULT:
-                        AddChild( new XMLDefault( *static_cast<XMLDefault* >(pNode) ) ); break;
-                    default:    fprintf(stdout,"XMLParentNode::XMLParentNode( const XMLParentNode& rObj) strange obj");
-                }
+                case XMLNodeType::ELEMENT:
+                    AddChild( new XMLElement( *static_cast<XMLElement* >(pNode) ) ); break;
+                case XMLNodeType::DATA:
+                    AddChild( new XMLData   ( *static_cast<XMLData* >   (pNode) ) ); break;
+                case XMLNodeType::COMMENT:
+                    AddChild( new XMLComment( *static_cast<XMLComment* >(pNode) ) ); break;
+                case XMLNodeType::DEFAULT:
+                    AddChild( new XMLDefault( *static_cast<XMLDefault* >(pNode) ) ); break;
+                default:    fprintf(stdout,"XMLParentNode::XMLParentNode( const XMLParentNode& rObj) strange obj");
             }
         }
     }
@@ -613,21 +613,21 @@ void XMLElement::ChangeLanguageTag( const OString &rValue )
     }
     XMLChildNodeList* pCList = GetChildList();
 
-    if( pCList )
+    if( !pCList )
+        return;
+
+    for ( size_t i = 0; i < pCList->size(); i++ )
     {
-        for ( size_t i = 0; i < pCList->size(); i++ )
+        XMLChildNode* pNode = (*pCList)[ i ];
+        if( pNode && pNode->GetNodeType() == XMLNodeType::ELEMENT )
         {
-            XMLChildNode* pNode = (*pCList)[ i ];
-            if( pNode && pNode->GetNodeType() == XMLNodeType::ELEMENT )
-            {
-                XMLElement* pElem = static_cast< XMLElement* >(pNode);
-                pElem->ChangeLanguageTag( rValue );
-                pElem  = nullptr;
-                pNode  = nullptr;
-            }
+            XMLElement* pElem = static_cast< XMLElement* >(pNode);
+            pElem->ChangeLanguageTag( rValue );
+            pElem  = nullptr;
+            pNode  = nullptr;
         }
-        pCList = nullptr;
     }
+    pCList = nullptr;
 }
 
 XMLElement::~XMLElement()
