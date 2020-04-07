@@ -5948,6 +5948,8 @@ public:
 
     virtual void set_entry_font(const vcl::Font&) override { assert(false); }
 
+    virtual vcl::Font get_entry_font() override { assert(false); return vcl::Font(); }
+
     virtual ~SalInstanceComboBoxWithoutEdit() override
     {
         m_xComboBox->SetSelectHdl(Link<ListBox&, void>());
@@ -6071,6 +6073,13 @@ public:
         pEdit->Invalidate();
     }
 
+    virtual vcl::Font get_entry_font() override
+    {
+        Edit* pEdit = m_xComboBox->GetSubEdit();
+        assert(pEdit);
+        return pEdit->GetPointFont(*pEdit);
+    }
+
     virtual ~SalInstanceComboBoxWithEdit() override
     {
         m_xComboBox->SetTextFilter(nullptr);
@@ -6147,6 +6156,12 @@ public:
         Edit& rEntry = m_pEntry->getEntry();
         rEntry.SetPointFont(rEntry, rFont);
         rEntry.Invalidate();
+    }
+
+    virtual vcl::Font get_entry_font() override
+    {
+        Edit& rEntry = m_pEntry->getEntry();
+        return rEntry.GetPointFont(rEntry);
     }
 
     virtual void set_entry_placeholder_text(const OUString& rText) override
