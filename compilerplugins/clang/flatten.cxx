@@ -650,6 +650,11 @@ std::string Flatten::getSourceAsString(SourceRange range)
     char const *p1 = SM.getCharacterData( startLoc );
     char const *p2 = SM.getCharacterData( endLoc );
     p2 += Lexer::MeasureTokenLength( endLoc, SM, compiler.getLangOpts());
+    if (p2 < p1) {
+        // workaround clang weirdness, but don't return empty string
+        // in case it happens during code replacement
+        return "clang returned bad pointers";
+    }
     return std::string( p1, p2 - p1);
 }
 

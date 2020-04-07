@@ -68,21 +68,22 @@ Calendar_hijri::Calendar_hijri()
 // map field value from hijri calendar to gregorian calendar
 void Calendar_hijri::mapToGregorian()
 {
-    if (fieldSet & FIELDS) {
-        sal_Int32 day = static_cast<sal_Int32>(fieldSetValue[CalendarFieldIndex::DAY_OF_MONTH]);
-        sal_Int32 month = static_cast<sal_Int32>(fieldSetValue[CalendarFieldIndex::MONTH]) + 1;
-        sal_Int32 year = static_cast<sal_Int32>(fieldSetValue[CalendarFieldIndex::YEAR]);
-        if (fieldSetValue[CalendarFieldIndex::ERA] == 0)
-            year *= -1;
+    if (!(fieldSet & FIELDS))
+        return;
 
-        ToGregorian(&day, &month, &year);
+    sal_Int32 day = static_cast<sal_Int32>(fieldSetValue[CalendarFieldIndex::DAY_OF_MONTH]);
+    sal_Int32 month = static_cast<sal_Int32>(fieldSetValue[CalendarFieldIndex::MONTH]) + 1;
+    sal_Int32 year = static_cast<sal_Int32>(fieldSetValue[CalendarFieldIndex::YEAR]);
+    if (fieldSetValue[CalendarFieldIndex::ERA] == 0)
+        year *= -1;
 
-        fieldSetValue[CalendarFieldIndex::ERA] = year <= 0 ? 0 : 1;
-        fieldSetValue[CalendarFieldIndex::MONTH] = sal::static_int_cast<sal_Int16>(month - 1);
-        fieldSetValue[CalendarFieldIndex::DAY_OF_MONTH] = static_cast<sal_Int16>(day);
-        fieldSetValue[CalendarFieldIndex::YEAR] = static_cast<sal_Int16>(abs(year));
-        fieldSet |= FIELDS;
-    }
+    ToGregorian(&day, &month, &year);
+
+    fieldSetValue[CalendarFieldIndex::ERA] = year <= 0 ? 0 : 1;
+    fieldSetValue[CalendarFieldIndex::MONTH] = sal::static_int_cast<sal_Int16>(month - 1);
+    fieldSetValue[CalendarFieldIndex::DAY_OF_MONTH] = static_cast<sal_Int16>(day);
+    fieldSetValue[CalendarFieldIndex::YEAR] = static_cast<sal_Int16>(abs(year));
+    fieldSet |= FIELDS;
 }
 
 // map field value from gregorian calendar to hijri calendar
