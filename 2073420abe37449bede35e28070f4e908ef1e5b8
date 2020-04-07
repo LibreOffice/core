@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "acfa07c4_ad520da9",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport3.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1125,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-04-07T09:51:51Z",
+      "side": 1,
+      "message": "It\u0027s worth to show the bad value, too, for example:\n\n// This was 817880.",
+      "range": {
+        "startLine": 1125,
+        "startChar": 7,
+        "endLine": 1125,
+        "endChar": 40
+      },
+      "revId": "2073420abe37449bede35e28070f4e908ef1e5b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a982de7f_c5ec7377",
+        "filename": "sw/source/filter/ww8/docxsdrexport.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-04-07T09:51:51Z",
+      "side": 1,
+      "message": "this is part of the conditional block",
+      "range": {
+        "startLine": 444,
+        "startChar": 12,
+        "endLine": 444,
+        "endChar": 47
+      },
+      "revId": "2073420abe37449bede35e28070f4e908ef1e5b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
