@@ -347,29 +347,30 @@ CfgExport::~CfgExport()
 
 void CfgExport::WorkOnResourceEnd()
 {
-    if ( bLocalize ) {
-    if ( !pStackData->sText["en-US"].isEmpty() )
-        {
-            OString sXComment = pStackData->sText[OString("x-comment")];
-            OString sLocalId = pStackData->sIdentifier;
-            OString sGroupId;
-            if ( aStack.size() == 1 ) {
-                sGroupId = sLocalId;
-                sLocalId = "";
-            }
-            else {
-                sGroupId = aStack.GetAccessPath( aStack.size() - 2 );
-            }
+    if ( !bLocalize )
+        return;
 
+    if ( pStackData->sText["en-US"].isEmpty() )
+        return;
 
-            OString sText = pStackData->sText[ "en-US" ];
-            sText = helper::UnQuotHTML( sText );
-
-            common::writePoEntry(
-                "Cfgex", pOutputStream, sPath, pStackData->sResTyp,
-                sGroupId, sLocalId, sXComment, sText);
-        }
+    OString sXComment = pStackData->sText[OString("x-comment")];
+    OString sLocalId = pStackData->sIdentifier;
+    OString sGroupId;
+    if ( aStack.size() == 1 ) {
+        sGroupId = sLocalId;
+        sLocalId = "";
     }
+    else {
+        sGroupId = aStack.GetAccessPath( aStack.size() - 2 );
+    }
+
+
+    OString sText = pStackData->sText[ "en-US" ];
+    sText = helper::UnQuotHTML( sText );
+
+    common::writePoEntry(
+        "Cfgex", pOutputStream, sPath, pStackData->sResTyp,
+        sGroupId, sLocalId, sXComment, sText);
 }
 
 void CfgExport::WorkOnText(
@@ -418,27 +419,27 @@ CfgMerge::~CfgMerge()
 
 void CfgMerge::WorkOnText(OString &, const OString& rLangIndex)
 {
+    if ( !(pMergeDataFile && bLocalize) )
+        return;
 
-    if ( pMergeDataFile && bLocalize ) {
-        if ( !pResData ) {
-            OString sLocalId = pStackData->sIdentifier;
-            OString sGroupId;
-            if ( aStack.size() == 1 ) {
-                sGroupId = sLocalId;
-                sLocalId.clear();
-            }
-            else {
-                sGroupId = aStack.GetAccessPath( aStack.size() - 2 );
-            }
-
-            pResData.reset( new ResData( sGroupId, sFilename ) );
-            pResData->sId = sLocalId;
-            pResData->sResTyp = pStackData->sResTyp;
+    if ( !pResData ) {
+        OString sLocalId = pStackData->sIdentifier;
+        OString sGroupId;
+        if ( aStack.size() == 1 ) {
+            sGroupId = sLocalId;
+            sLocalId.clear();
+        }
+        else {
+            sGroupId = aStack.GetAccessPath( aStack.size() - 2 );
         }
 
-        if (rLangIndex.equalsIgnoreAsciiCase("en-US"))
-            bEnglish = true;
+        pResData.reset( new ResData( sGroupId, sFilename ) );
+        pResData->sId = sLocalId;
+        pResData->sResTyp = pStackData->sResTyp;
     }
+
+    if (rLangIndex.equalsIgnoreAsciiCase("en-US"))
+        bEnglish = true;
 }
 
 void CfgMerge::Output(const OString& rOutput)

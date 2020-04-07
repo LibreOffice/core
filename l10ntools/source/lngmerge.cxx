@@ -57,27 +57,27 @@ LngParser::LngParser(const OString &rLngFile)
     : sSource( rLngFile )
 {
     std::ifstream aStream(sSource.getStr());
-    if (aStream.is_open())
+    if (!aStream.is_open())
+        return;
+
+    bool bFirstLine = true;
+    std::string s;
+    std::getline(aStream, s);
+    while (!aStream.eof())
     {
-        bool bFirstLine = true;
-        std::string s;
-        std::getline(aStream, s);
-        while (!aStream.eof())
+        OString sLine(s.data(), s.length());
+
+        if( bFirstLine )
         {
-            OString sLine(s.data(), s.length());
-
-            if( bFirstLine )
-            {
-                // Always remove UTF8 BOM from the first line
-                lcl_RemoveUTF8ByteOrderMarker( sLine );
-                bFirstLine = false;
-            }
-
-            mvLines.push_back( sLine );
-            std::getline(aStream, s);
+            // Always remove UTF8 BOM from the first line
+            lcl_RemoveUTF8ByteOrderMarker( sLine );
+            bFirstLine = false;
         }
-        mvLines.push_back( OString() );
+
+        mvLines.push_back( sLine );
+        std::getline(aStream, s);
     }
+    mvLines.push_back( OString() );
 }
 
 LngParser::~LngParser()
