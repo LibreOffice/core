@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dd7b6eda_42a6c4cb",
+        "filename": "avmedia/source/gstreamer/gstplayer.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 841,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-04-07T12:03:12Z",
+      "side": 1,
+      "message": "this is wrong - by the reinterpret_cast to a pointer 2 lines below this is actually an intended use-case for sal_IntPtr",
+      "revId": "ed43a8560807419c73b8d1d22f1620ba59081366",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81fd01da_b7ada3ef",
+        "filename": "avmedia/source/vlc/vlcplayer.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-04-07T12:03:12Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "ed43a8560807419c73b8d1d22f1620ba59081366",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6054c94_6fab655b",
+        "filename": "dbaccess/source/ui/querydesign/querydlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-04-07T12:03:12Z",
+      "side": 1,
+      "message": "the changes in this file look good",
+      "revId": "ed43a8560807419c73b8d1d22f1620ba59081366",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
