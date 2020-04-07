@@ -49,6 +49,7 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+    virtual boost::property_tree::ptree dumpAsJSON() const override;
 };
 
 #endif
