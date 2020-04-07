@@ -156,15 +156,31 @@ bool checkInvalidSourceOrDestination(SalTwoRect const& rPosAry)
 class SkiaFlushIdle : public Idle
 {
     SkiaSalGraphicsImpl* mpGraphics;
+#ifndef NDEBUG
+    char* debugname;
+#endif
 
 public:
     explicit SkiaFlushIdle(SkiaSalGraphicsImpl* pGraphics)
-        : Idle("skia idle swap")
+        : Idle(get_debug_name(pGraphics))
         , mpGraphics(pGraphics)
     {
         // We don't want to be swapping before we've painted.
         SetPriority(TaskPriority::POST_PAINT);
     }
+#ifndef NDEBUG
+    virtual ~SkiaFlushIdle() { free(debugname); }
+    const char* get_debug_name(SkiaSalGraphicsImpl* pGraphics)
+    {
+        // Idle keeps just a pointer, so we need to store the string
+        debugname = strdup(
+            OString("skia idle 0x" + OString::number(reinterpret_cast<sal_uIntPtr>(pGraphics), 16))
+                .getStr());
+        return debugname;
+    }
+#else
+    const char* get_debug_name(SkiaSalGraphicsImpl*) { return "skia idle"; }
+#endif
 
     virtual void Invoke() override
     {
@@ -895,13 +911,24 @@ void SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcG
         src = this;
     if (rPosAry.mnSrcWidth == rPosAry.mnDestWidth && rPosAry.mnSrcHeight == rPosAry.mnDestHeight)
     {
-        SAL_INFO("vcl.skia.trace", "copybits(" << this << "): copy area:" << rPosAry);
+        auto srcDebug = [&]() -> std::string {
+            if (src == this)
+                return "(self)";
+            else
+            {
+                std::ostringstream stream;
+                stream << "(" << src << ")";
+                return stream.str();
+            }
+        };
+        SAL_INFO("vcl.skia.trace",
+                 "copybits(" << this << "): " << srcDebug() << " copy area: " << rPosAry);
         ::copyArea(getDrawCanvas(), src->mSurface, rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnSrcX,
                    rPosAry.mnSrcY, rPosAry.mnDestWidth, rPosAry.mnDestHeight);
     }
     else
     {
-        SAL_INFO("vcl.skia.trace", "copybits(" << this << "): (" << src << "):" << rPosAry);
+        SAL_INFO("vcl.skia.trace", "copybits(" << this << "): (" << src << "): " << rPosAry);
         // Do not use makeImageSnapshot(rect), as that one may make a needless data copy.
         sk_sp<SkImage> image = src->mSurface->makeImageSnapshot();
         SkPaint paint;

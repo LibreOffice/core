@@ -269,7 +269,7 @@ protected:
     { // O - offscreen, G - GPU-based, R - raster
         return stream << static_cast<const void*>(graphics) << " "
                       << Size(graphics->GetWidth(), graphics->GetHeight())
-                      << (graphics->isOffscreen() ? "O" : "") << (graphics->isGPU() ? "G" : "R");
+                      << (graphics->isGPU() ? "G" : "R") << (graphics->isOffscreen() ? "O" : "");
     }
 
     SalGraphics& mParent;
