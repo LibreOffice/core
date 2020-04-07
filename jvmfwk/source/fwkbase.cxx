@@ -94,23 +94,23 @@ VendorSettings::VendorSettings()
         SAL_WARN( "jfw", sMsg );
         throw FrameworkException(JFW_E_CONFIGURATION, sMsg);
     }
-    if (!sSettingsPath.isEmpty())
-    {
-        m_xmlDocVendorSettings = xmlParseFile(sSettingsPath.getStr());
-        if (m_xmlDocVendorSettings == nullptr)
-            throw FrameworkException(
-                JFW_E_ERROR,
-                OStringLiteral("[Java framework] Error while parsing file: ")
-                + sSettingsPath + ".");
+    if (sSettingsPath.isEmpty())
+        return;
 
-        m_xmlPathContextVendorSettings = xmlXPathNewContext(m_xmlDocVendorSettings);
-        int res = xmlXPathRegisterNs(
-            m_xmlPathContextVendorSettings, reinterpret_cast<xmlChar const *>("jf"),
-            reinterpret_cast<xmlChar const *>(NS_JAVA_FRAMEWORK));
-        if (res == -1)
-            throw FrameworkException(JFW_E_ERROR,
-                    "[Java framework] Error in constructor VendorSettings::VendorSettings() (fwkbase.cxx)");
-    }
+    m_xmlDocVendorSettings = xmlParseFile(sSettingsPath.getStr());
+    if (m_xmlDocVendorSettings == nullptr)
+        throw FrameworkException(
+            JFW_E_ERROR,
+            OStringLiteral("[Java framework] Error while parsing file: ")
+            + sSettingsPath + ".");
+
+    m_xmlPathContextVendorSettings = xmlXPathNewContext(m_xmlDocVendorSettings);
+    int res = xmlXPathRegisterNs(
+        m_xmlPathContextVendorSettings, reinterpret_cast<xmlChar const *>("jf"),
+        reinterpret_cast<xmlChar const *>(NS_JAVA_FRAMEWORK));
+    if (res == -1)
+        throw FrameworkException(JFW_E_ERROR,
+                "[Java framework] Error in constructor VendorSettings::VendorSettings() (fwkbase.cxx)");
 }
 
 std::optional<VersionInfo> VendorSettings::getVersionInformation(const OUString & sVendor) const
