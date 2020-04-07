@@ -383,24 +383,25 @@ void AstAttribute::dumpExceptions(
     typereg::Writer & writer, OUString const & documentation,
     DeclList const & exceptions, RTMethodMode flags, sal_uInt16 * methodIndex) const
 {
-    if (!exceptions.empty()) {
-        OSL_ASSERT(methodIndex != nullptr);
-        sal_uInt16 idx = (*methodIndex)++;
-        // exceptions.size() <= SAL_MAX_UINT16 already checked in
-        // AstInterface::dump:
-        writer.setMethodData(
-            idx, documentation, flags,
-            OStringToOUString(getLocalName(), RTL_TEXTENCODING_UTF8),
-            "void", 0,
-            static_cast< sal_uInt16 >(exceptions.size()));
-        sal_uInt16 exceptionIndex = 0;
-        for (auto const& elem : exceptions)
-        {
-            writer.setMethodExceptionTypeName(
-                idx, exceptionIndex++,
-                OStringToOUString(
-                    elem->getRelativName(), RTL_TEXTENCODING_UTF8));
-        }
+    if (exceptions.empty())
+        return;
+
+    OSL_ASSERT(methodIndex != nullptr);
+    sal_uInt16 idx = (*methodIndex)++;
+    // exceptions.size() <= SAL_MAX_UINT16 already checked in
+    // AstInterface::dump:
+    writer.setMethodData(
+        idx, documentation, flags,
+        OStringToOUString(getLocalName(), RTL_TEXTENCODING_UTF8),
+        "void", 0,
+        static_cast< sal_uInt16 >(exceptions.size()));
+    sal_uInt16 exceptionIndex = 0;
+    for (auto const& elem : exceptions)
+    {
+        writer.setMethodExceptionTypeName(
+            idx, exceptionIndex++,
+            OStringToOUString(
+                elem->getRelativName(), RTL_TEXTENCODING_UTF8));
     }
 }
 

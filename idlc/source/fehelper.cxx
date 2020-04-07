@@ -69,33 +69,33 @@ FeInheritanceHeader::FeInheritanceHeader(
 
 void FeInheritanceHeader::initializeInherits(OString const * pInherits)
 {
-    if ( pInherits )
+    if ( !pInherits )
+        return;
+
+    AstScope* pScope = idlc()->scopes()->topNonNull();
+    AstDeclaration* pDecl = pScope->lookupByName(*pInherits);
+    if ( pDecl )
     {
-        AstScope* pScope = idlc()->scopes()->topNonNull();
-        AstDeclaration* pDecl = pScope->lookupByName(*pInherits);
-        if ( pDecl )
+        AstDeclaration const * resolved = resolveTypedefs(pDecl);
+        if ( resolved->getNodeType() == getNodeType()
+             && (resolved->getNodeType() != NT_interface
+                 || static_cast< AstInterface const * >(
+                     resolved)->isDefined()) )
         {
-            AstDeclaration const * resolved = resolveTypedefs(pDecl);
-            if ( resolved->getNodeType() == getNodeType()
-                 && (resolved->getNodeType() != NT_interface
-                     || static_cast< AstInterface const * >(
-                         resolved)->isDefined()) )
+            if ( ErrorHandler::checkPublished( pDecl ) )
             {
-                if ( ErrorHandler::checkPublished( pDecl ) )
-                {
-                    m_pInherits = pDecl;
-                }
-            }
-            else
-            {
-                ErrorHandler::inheritanceError(
-                    getNodeType(), getName(), pDecl);
+                m_pInherits = pDecl;
             }
         }
         else
         {
-            ErrorHandler::lookupError(*pInherits);
+            ErrorHandler::inheritanceError(
+                getNodeType(), getName(), pDecl);
         }
+    }
+    else
+    {
+        ErrorHandler::lookupError(*pInherits);
     }
 }
 
