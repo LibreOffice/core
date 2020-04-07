@@ -84,6 +84,8 @@
 #include <comphelper/interaction.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/documentconstants.hxx>
+#include <comphelper/namedvaluecollection.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/app.hxx>
@@ -1858,6 +1860,13 @@ bool SfxObjectShell::IsContinueImportOnFilterExceptions(const OUString& aErrMess
             mbContinueImportOnFilterExceptions = no;
     }
     return mbContinueImportOnFilterExceptions == yes;
+}
+
+bool SfxObjectShell::isEditDocLocked()
+{
+    if (!officecfg::Office::Common::Misc::AllowEditReadonlyDocs::get())
+        return true;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

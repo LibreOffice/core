@@ -1755,13 +1755,6 @@ void SfxViewShell::SetController( SfxBaseController* pController )
     pImpl->xClipboardListener = new SfxClipboardChangeListener( this, GetClipboardNotifier() );
 }
 
-bool SfxViewShell::isEditDocLocked()
-{
-    if (!officecfg::Office::Common::Misc::AllowEditReadonlyDocs::get())
-        return true;
-    return false;
-}
-
 Reference < XController > SfxViewShell::GetController()
 {
     return pImpl->m_pController.get();
