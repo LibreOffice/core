@@ -1017,7 +1017,7 @@ static int oslDoCopyFile(const char* pszSourceFileName, const char* pszDestFileN
     if ( nRemains )
     {
         /* mmap has problems, try the direct streaming */
-        char pBuffer[0x7FFF];
+        char pBuffer[0x40000];
 
         do
         {

@@ -41,7 +41,7 @@ private:
 
     static const size_t nBufferLowWater = 2;
     static const size_t nBufferHighWater = 4;
-    static const size_t nBufferSize = 32 * 1024;
+    static const size_t nBufferSize = 256 * 1024;
 
     const Buffer& getNextBlock();
     sal_Int64 remainingSize() const { return mnStreamSize - mnPos; }
