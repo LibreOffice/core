@@ -102,26 +102,26 @@ NumberText_Impl::NumberText_Impl()
 
 void NumberText_Impl::EnsureInitialized()
 {
-    if (!m_bInitialized)
-    {
-        // set this to true at the very start to prevent loops because of
-        // implicitly called functions below
-        m_bInitialized = true;
+    if (m_bInitialized)
+        return;
 
-        // set default numbertext path to where those get installed
-        OUString aPhysPath;
-        OUString aURL(SvtPathOptions().GetNumbertextPath());
-        osl::FileBase::getSystemPathFromFileURL(aURL, aPhysPath);
+    // set this to true at the very start to prevent loops because of
+    // implicitly called functions below
+    m_bInitialized = true;
+
+    // set default numbertext path to where those get installed
+    OUString aPhysPath;
+    OUString aURL(SvtPathOptions().GetNumbertextPath());
+    osl::FileBase::getSystemPathFromFileURL(aURL, aPhysPath);
 #ifdef _WIN32
-        aPhysPath += "\\";
+    aPhysPath += "\\";
 #else
-        aPhysPath += "/";
+    aPhysPath += "/";
 #endif
 #if ENABLE_LIBNUMBERTEXT
-        OString path = OUStringToOString(aPhysPath, osl_getThreadTextEncoding());
-        m_aNumberText.set_prefix(path.getStr());
+    OString path = OUStringToOString(aPhysPath, osl_getThreadTextEncoding());
+    m_aNumberText.set_prefix(path.getStr());
 #endif
-    }
 }
 
 OUString SAL_CALL NumberText_Impl::getNumberText(const OUString& rText, const Locale&

@@ -569,25 +569,25 @@ void SAL_CALL SpellChecker::initialize( const Sequence< Any >& rArguments )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    if (!m_pPropHelper)
-    {
-        sal_Int32 nLen = rArguments.getLength();
-        if (2 == nLen)
-        {
-            Reference< XLinguProperties >   xPropSet;
-            rArguments.getConstArray()[0] >>= xPropSet;
-            // rArguments.getConstArray()[1] >>= xDicList;
+    if (m_pPropHelper)
+        return;
 
-            //! Pointer allows for access of the non-UNO functions.
-            //! And the reference to the UNO-functions while increasing
-            //! the ref-count and will implicitly free the memory
-            //! when the object is no longer used.
-            m_pPropHelper.reset( new PropertyHelper_Spelling( static_cast<XSpellChecker *>(this), xPropSet ) );
-            m_pPropHelper->AddAsPropListener();   //! after a reference is established
-        }
-        else {
-            OSL_FAIL( "wrong number of arguments in sequence" );
-        }
+    sal_Int32 nLen = rArguments.getLength();
+    if (2 == nLen)
+    {
+        Reference< XLinguProperties >   xPropSet;
+        rArguments.getConstArray()[0] >>= xPropSet;
+        // rArguments.getConstArray()[1] >>= xDicList;
+
+        //! Pointer allows for access of the non-UNO functions.
+        //! And the reference to the UNO-functions while increasing
+        //! the ref-count and will implicitly free the memory
+        //! when the object is no longer used.
+        m_pPropHelper.reset( new PropertyHelper_Spelling( static_cast<XSpellChecker *>(this), xPropSet ) );
+        m_pPropHelper->AddAsPropListener();   //! after a reference is established
+    }
+    else {
+        OSL_FAIL( "wrong number of arguments in sequence" );
     }
 }
 
