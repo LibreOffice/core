@@ -58,7 +58,6 @@
 #include <vcl/keycodes.hxx>
 
 
-
 using namespace ::com::sun::star;
 
 /// Impress miscellaneous tests.
