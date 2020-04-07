@@ -2297,7 +2297,8 @@ void ScTable::FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCC
     }
 }
 
-bool ScTable::HasBlockMatrixFragment( const SCCOL nCol1, SCROW nRow1, const SCCOL nCol2, SCROW nRow2 ) const
+bool ScTable::HasBlockMatrixFragment( const SCCOL nCol1, SCROW nRow1, const SCCOL nCol2, SCROW nRow2,
+        bool bNoMatrixAtAll ) const
 {
     using namespace sc;
 
@@ -2311,28 +2312,38 @@ bool ScTable::HasBlockMatrixFragment( const SCCOL nCol1, SCROW nRow1, const SCCO
     if ( nCol1 == nMaxCol2 )
     {   // left and right column
         const MatrixEdge n = MatrixEdge::Left | MatrixEdge::Right;
-        nEdges = aCol[nCol1].GetBlockMatrixEdges( nRow1, nRow2, n );
+        nEdges = aCol[nCol1].GetBlockMatrixEdges( nRow1, nRow2, n, bNoMatrixAtAll );
         if ((nEdges != MatrixEdge::Nothing) && (((nEdges & n)!=n) || (nEdges & (MatrixEdge::Inside|MatrixEdge::Open))))
             return true;        // left or right edge is missing or open
     }
     else
     {   // left column
-        nEdges = aCol[nCol1].GetBlockMatrixEdges(nRow1, nRow2, MatrixEdge::Left);
+        nEdges = aCol[nCol1].GetBlockMatrixEdges(nRow1, nRow2, MatrixEdge::Left, bNoMatrixAtAll);
         if ((nEdges != MatrixEdge::Nothing) && ((!(nEdges & MatrixEdge::Left)) || (nEdges & (MatrixEdge::Inside|MatrixEdge::Open))))
             return true;        // left edge missing or open
         // right column
-        nEdges = aCol[nMaxCol2].GetBlockMatrixEdges(nRow1, nRow2, MatrixEdge::Right);
+        nEdges = aCol[nMaxCol2].GetBlockMatrixEdges(nRow1, nRow2, MatrixEdge::Right, bNoMatrixAtAll);
         if ((nEdges != MatrixEdge::Nothing) && ((!(nEdges & MatrixEdge::Right)) || (nEdges & (MatrixEdge::Inside|MatrixEdge::Open))))
             return true;        // right edge is missing or open
     }
 
-    if ( nRow1 == nRow2 )
+    if (bNoMatrixAtAll)
+    {
+        for (SCCOL i=nCol1; i<=nMaxCol2; i++)
+        {
+            nEdges = aCol[i].GetBlockMatrixEdges( nRow1, nRow2, MatrixEdge::Nothing, bNoMatrixAtAll);
+            if (nEdges != MatrixEdge::Nothing
+                    && (nEdges != (MatrixEdge::Top | MatrixEdge::Left | MatrixEdge::Bottom | MatrixEdge::Right)))
+                return true;
+        }
+    }
+    else if ( nRow1 == nRow2 )
     {   // Row on top and on bottom
         bool bOpen = false;
         const MatrixEdge n = MatrixEdge::Bottom | MatrixEdge::Top;
         for ( SCCOL i=nCol1; i<=nMaxCol2; i++)
         {
-            nEdges = aCol[i].GetBlockMatrixEdges( nRow1, nRow1, n );
+            nEdges = aCol[i].GetBlockMatrixEdges( nRow1, nRow1, n, bNoMatrixAtAll );
             if (nEdges != MatrixEdge::Nothing)
             {
                 if ( (nEdges & n) != n )
@@ -2360,7 +2371,7 @@ bool ScTable::HasBlockMatrixFragment( const SCCOL nCol1, SCROW nRow1, const SCCO
             bool bOpen = false;
             for ( SCCOL i=nCol1; i<=nMaxCol2; i++)
             {
-                nEdges = aCol[i].GetBlockMatrixEdges( nR, nR, n );
+                nEdges = aCol[i].GetBlockMatrixEdges( nR, nR, n, bNoMatrixAtAll );
                 if ( nEdges != MatrixEdge::Nothing)
                 {
                     // in top row no top edge respectively
@@ -2399,7 +2410,8 @@ bool ScTable::HasSelectionMatrixFragment( const ScMarkData& rMark ) const
 }
 
 bool ScTable::IsBlockEditable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
-            SCROW nRow2, bool* pOnlyNotBecauseOfMatrix /* = NULL */ ) const
+            SCROW nRow2, bool* pOnlyNotBecauseOfMatrix /* = NULL */,
+            bool bNoMatrixAtAll ) const
 {
     if ( !ValidColRow( nCol2, nRow2 ) )
     {
@@ -2467,7 +2479,7 @@ bool ScTable::IsBlockEditable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
     }
     if ( bIsEditable )
     {
-        if ( HasBlockMatrixFragment( nCol1, nRow1, nCol2, nRow2 ) )
+        if (HasBlockMatrixFragment( nCol1, nRow1, nCol2, nRow2, bNoMatrixAtAll))
         {
             bIsEditable = false;
             if ( pOnlyNotBecauseOfMatrix )

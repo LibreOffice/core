@@ -512,8 +512,8 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         else
             nStartingColToEdit++;
     }
-    ScEditableTester aTester( &rDoc, nTab, nStartingColToEdit,nStartingRowToEdit,
-                                        aLocalParam.nCol2,aLocalParam.nRow2 );
+    ScEditableTester aTester( &rDoc, nTab, nStartingColToEdit, nStartingRowToEdit,
+            aLocalParam.nCol2, aLocalParam.nRow2, true /*bNoMatrixAtAll*/ );
     if (!aTester.IsEditable())
     {
         if (!bApi)
