@@ -234,7 +234,7 @@ public:
     void        FindUsed( SCROW nStartRow, SCROW nEndRow, mdds::flat_segment_tree<SCROW, bool>& rUsed ) const;
 
     SCSIZE             VisibleCount( SCROW nStartRow, SCROW nEndRow ) const;
-    sc::MatrixEdge     GetBlockMatrixEdges(SCROW nRow1, SCROW nRow2, sc::MatrixEdge nMask ) const;
+    sc::MatrixEdge     GetBlockMatrixEdges(SCROW nRow1, SCROW nRow2, sc::MatrixEdge nMask, bool bNoMatrixAtAll ) const;
     bool    HasSelectionMatrixFragment(const ScMarkData& rMark) const;
 
     bool    GetFirstVisibleAttr( SCROW& rFirstRow ) const;

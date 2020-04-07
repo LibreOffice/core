@@ -29,11 +29,11 @@ ScEditableTester::ScEditableTester() :
 }
 
 ScEditableTester::ScEditableTester( const ScDocument* pDoc, SCTAB nTab,
-                        SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow ) :
+        SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, bool bNoMatrixAtAll ) :
     mbIsEditable(true),
     mbOnlyMatrix(true)
 {
-    TestBlock( pDoc, nTab, nStartCol, nStartRow, nEndCol, nEndRow );
+    TestBlock( pDoc, nTab, nStartCol, nStartRow, nEndCol, nEndRow, bNoMatrixAtAll );
 }
 
 ScEditableTester::ScEditableTester( const ScDocument* pDoc,
@@ -80,12 +80,12 @@ ScEditableTester::ScEditableTester(
 }
 
 void ScEditableTester::TestBlock( const ScDocument* pDoc, SCTAB nTab,
-                        SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow )
+        SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, bool bNoMatrixAtAll )
 {
     if (mbIsEditable || mbOnlyMatrix)
     {
         bool bThisMatrix;
-        if ( !pDoc->IsBlockEditable( nTab, nStartCol, nStartRow, nEndCol, nEndRow, &bThisMatrix ) )
+        if (!pDoc->IsBlockEditable( nTab, nStartCol, nStartRow, nEndCol, nEndRow, &bThisMatrix, bNoMatrixAtAll))
         {
             mbIsEditable = false;
             if ( !bThisMatrix )
@@ -104,7 +104,7 @@ void ScEditableTester::TestSelectedBlock( const ScDocument* pDoc,
         if (rTab >= nTabCount)
             break;
 
-        TestBlock( pDoc, rTab, nStartCol, nStartRow, nEndCol, nEndRow );
+        TestBlock( pDoc, rTab, nStartCol, nStartRow, nEndCol, nEndRow, false );
     }
 }
 
@@ -117,7 +117,7 @@ void ScEditableTester::TestRange(  const ScDocument* pDoc, const ScRange& rRange
     SCROW nEndRow = rRange.aEnd.Row();
     SCTAB nEndTab = rRange.aEnd.Tab();
     for (SCTAB nTab=nStartTab; nTab<=nEndTab; nTab++)
-        TestBlock( pDoc, nTab, nStartCol, nStartRow, nEndCol, nEndRow );
+        TestBlock( pDoc, nTab, nStartCol, nStartRow, nEndCol, nEndRow, false );
 }
 
 void ScEditableTester::TestSelection( const ScDocument* pDoc, const ScMarkData& rMark )
