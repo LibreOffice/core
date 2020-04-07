@@ -45,51 +45,51 @@ JobURL::JobURL( /*IN*/ const OUString& sURL )
     // syntax: vnd.sun.star.job:{[event=<name>],[alias=<name>],[service=<name>]}
 
     // check for "vnd.sun.star.job:"
-    if (sURL.startsWithIgnoreAsciiCase("vnd.sun.star.job:"))
-    {
-        sal_Int32 t = std::strlen("vnd.sun.star.job:");
-        do
-        {
-            // separate all token of "{[event=<name>],[alias=<name>],[service=<name>]}"
-            OUString sToken = sURL.getToken(0, JOBURL_PART_SEPARATOR, t);
-            OUString sPartValue;
-            OUString sPartArguments;
+    if (!sURL.startsWithIgnoreAsciiCase("vnd.sun.star.job:"))
+        return;
 
-            // check for "event="
-            if (
-                (JobURL::implst_split(sToken,JOBURL_EVENT_STR,JOBURL_EVENT_LEN,sPartValue,sPartArguments)) &&
-                (!sPartValue.isEmpty())
-               )
-            {
-                // set the part value
-                m_sEvent     = sPartValue;
-                m_eRequest  |= E_EVENT;
-            }
-            else
-            // check for "alias="
-            if (
-                (JobURL::implst_split(sToken,JOBURL_ALIAS_STR,JOBURL_ALIAS_LEN,sPartValue,sPartArguments)) &&
-                (!sPartValue.isEmpty())
-               )
-            {
-                // set the part value
-                m_sAlias     = sPartValue;
-                m_eRequest  |= E_ALIAS;
-            }
-            else
-            // check for "service="
-            if (
-                (JobURL::implst_split(sToken,JOBURL_SERVICE_STR,JOBURL_SERVICE_LEN,sPartValue,sPartArguments)) &&
-                (!sPartValue.isEmpty())
-               )
-            {
-                // set the part value
-                m_sService     = sPartValue;
-                m_eRequest    |= E_SERVICE;
-            }
+    sal_Int32 t = std::strlen("vnd.sun.star.job:");
+    do
+    {
+        // separate all token of "{[event=<name>],[alias=<name>],[service=<name>]}"
+        OUString sToken = sURL.getToken(0, JOBURL_PART_SEPARATOR, t);
+        OUString sPartValue;
+        OUString sPartArguments;
+
+        // check for "event="
+        if (
+            (JobURL::implst_split(sToken,JOBURL_EVENT_STR,JOBURL_EVENT_LEN,sPartValue,sPartArguments)) &&
+            (!sPartValue.isEmpty())
+           )
+        {
+            // set the part value
+            m_sEvent     = sPartValue;
+            m_eRequest  |= E_EVENT;
         }
-        while(t!=-1);
+        else
+        // check for "alias="
+        if (
+            (JobURL::implst_split(sToken,JOBURL_ALIAS_STR,JOBURL_ALIAS_LEN,sPartValue,sPartArguments)) &&
+            (!sPartValue.isEmpty())
+           )
+        {
+            // set the part value
+            m_sAlias     = sPartValue;
+            m_eRequest  |= E_ALIAS;
+        }
+        else
+        // check for "service="
+        if (
+            (JobURL::implst_split(sToken,JOBURL_SERVICE_STR,JOBURL_SERVICE_LEN,sPartValue,sPartArguments)) &&
+            (!sPartValue.isEmpty())
+           )
+        {
+            // set the part value
+            m_sService     = sPartValue;
+            m_eRequest    |= E_SERVICE;
+        }
     }
+    while(t!=-1);
 }
 
 /**

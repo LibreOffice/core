@@ -294,24 +294,24 @@ void impl_setDockingWindowVisibility( const css::uno::Reference< css::uno::XComp
     sal_Int32 nIndex = nID - DOCKWIN_ID_BASE;
 
     css::uno::Reference< css::frame::XDispatchProvider > xProvider(rFrame, css::uno::UNO_QUERY);
-    if ( nIndex >= 0 && xProvider.is() )
-    {
-        OUString aDockWinArgName = "DockingWindow" + OUString::number( nIndex );
+    if ( !(nIndex >= 0 && xProvider.is()) )
+        return;
 
-        css::uno::Sequence< css::beans::PropertyValue > aArgs(1);
-        aArgs[0].Name  = aDockWinArgName;
-        aArgs[0].Value <<= bVisible;
+    OUString aDockWinArgName = "DockingWindow" + OUString::number( nIndex );
 
-        css::uno::Reference< css::frame::XDispatchHelper > xDispatcher = css::frame::DispatchHelper::create( rxContext );
+    css::uno::Sequence< css::beans::PropertyValue > aArgs(1);
+    aArgs[0].Name  = aDockWinArgName;
+    aArgs[0].Value <<= bVisible;
 
-        OUString aDockWinCommand = ".uno:" + aDockWinArgName;
-        xDispatcher->executeDispatch(
-            xProvider,
-            aDockWinCommand,
-            "_self",
-            0,
-            aArgs);
-    }
+    css::uno::Reference< css::frame::XDispatchHelper > xDispatcher = css::frame::DispatchHelper::create( rxContext );
+
+    OUString aDockWinCommand = ".uno:" + aDockWinArgName;
+    xDispatcher->executeDispatch(
+        xProvider,
+        aDockWinCommand,
+        "_self",
+        0,
+        aArgs);
 }
 
 void impl_addWindowListeners(
@@ -320,21 +320,21 @@ void impl_addWindowListeners(
 {
     css::uno::Reference< css::awt::XWindow > xWindow( xUIElement->getRealInterface(), css::uno::UNO_QUERY );
     css::uno::Reference< css::awt::XDockableWindow > xDockWindow( xUIElement->getRealInterface(), css::uno::UNO_QUERY );
-    if ( xDockWindow.is() && xWindow.is() )
+    if ( !(xDockWindow.is() && xWindow.is()) )
+        return;
+
+    try
     {
-        try
-        {
-            xDockWindow->addDockableWindowListener(
-                css::uno::Reference< css::awt::XDockableWindowListener >(
-                    xThis, css::uno::UNO_QUERY ));
-            xWindow->addWindowListener(
-                css::uno::Reference< css::awt::XWindowListener >(
-                    xThis, css::uno::UNO_QUERY ));
-            xDockWindow->enableDocking( true );
-        }
-        catch ( const css::uno::Exception& )
-        {
-        }
+        xDockWindow->addDockableWindowListener(
+            css::uno::Reference< css::awt::XDockableWindowListener >(
+                xThis, css::uno::UNO_QUERY ));
+        xWindow->addWindowListener(
+            css::uno::Reference< css::awt::XWindowListener >(
+                xThis, css::uno::UNO_QUERY ));
+        xDockWindow->enableDocking( true );
+    }
+    catch ( const css::uno::Exception& )
+    {
     }
 }
 

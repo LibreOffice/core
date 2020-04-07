@@ -70,21 +70,21 @@ void FixedTextToolbarController::executeControlCommand(
 {
     SolarMutexGuard aSolarMutexGuard;
 
-    if (rControlCommand.Command == "SetText")
-    {
-        for (sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++)
-        {
-            if (rControlCommand.Arguments[i].Name == "Text")
-            {
-                OUString aText;
-                rControlCommand.Arguments[i].Value >>= aText;
-                m_pFixedTextControl->SetText(aText);
-                m_pFixedTextControl->SetSizePixel(m_pFixedTextControl->GetOptimalSize());
+    if (rControlCommand.Command != "SetText")
+        return;
 
-                // send notification
-                notifyTextChanged(aText);
-                break;
-            }
+    for (sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++)
+    {
+        if (rControlCommand.Arguments[i].Name == "Text")
+        {
+            OUString aText;
+            rControlCommand.Arguments[i].Value >>= aText;
+            m_pFixedTextControl->SetText(aText);
+            m_pFixedTextControl->SetSizePixel(m_pFixedTextControl->GetOptimalSize());
+
+            // send notification
+            notifyTextChanged(aText);
+            break;
         }
     }
 }

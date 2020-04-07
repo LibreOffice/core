@@ -250,57 +250,57 @@ void SAL_CALL PopupMenuDispatcher::disposing( const EventObject& )
     // Safe impossible cases
     SAL_WARN_IF( m_bAlreadyDisposed, "fwk", "MenuDispatcher::disposing(): Object already disposed .. don't call it again!" );
 
-    if( !m_bAlreadyDisposed )
+    if( m_bAlreadyDisposed )
+        return;
+
+    m_bAlreadyDisposed = true;
+
+    if ( m_bActivateListener )
     {
-        m_bAlreadyDisposed = true;
-
-        if ( m_bActivateListener )
+        uno::Reference< XFrame > xFrame( m_xWeakFrame.get(), UNO_QUERY );
+        if ( xFrame.is() )
         {
-            uno::Reference< XFrame > xFrame( m_xWeakFrame.get(), UNO_QUERY );
-            if ( xFrame.is() )
-            {
-                xFrame->removeFrameActionListener( uno::Reference< XFrameActionListener >( static_cast<OWeakObject *>(this), UNO_QUERY ));
-                m_bActivateListener = false;
-            }
+            xFrame->removeFrameActionListener( uno::Reference< XFrameActionListener >( static_cast<OWeakObject *>(this), UNO_QUERY ));
+            m_bActivateListener = false;
         }
-
-        // Forget our factory.
-        m_xContext.clear();
     }
+
+    // Forget our factory.
+    m_xContext.clear();
 }
 
 void PopupMenuDispatcher::impl_RetrievePopupControllerQuery()
 {
-    if ( !m_xPopupCtrlQuery.is() )
+    if ( m_xPopupCtrlQuery.is() )
+        return;
+
+    css::uno::Reference< css::frame::XLayoutManager2 > xLayoutManager;
+    css::uno::Reference< css::frame::XFrame > xFrame( m_xWeakFrame );
+
+    if ( !xFrame.is() )
+        return;
+
+    css::uno::Reference< css::beans::XPropertySet > xPropSet( xFrame, css::uno::UNO_QUERY );
+    if ( !xPropSet.is() )
+        return;
+
+    try
     {
-        css::uno::Reference< css::frame::XLayoutManager2 > xLayoutManager;
-        css::uno::Reference< css::frame::XFrame > xFrame( m_xWeakFrame );
+        xPropSet->getPropertyValue( FRAME_PROPNAME_ASCII_LAYOUTMANAGER ) >>= xLayoutManager;
 
-        if ( xFrame.is() )
+        if ( xLayoutManager.is() )
         {
-            css::uno::Reference< css::beans::XPropertySet > xPropSet( xFrame, css::uno::UNO_QUERY );
-            if ( xPropSet.is() )
-            {
-                try
-                {
-                    xPropSet->getPropertyValue( FRAME_PROPNAME_ASCII_LAYOUTMANAGER ) >>= xLayoutManager;
+            css::uno::Reference< css::ui::XUIElement > xMenuBar = xLayoutManager->getElement( "private:resource/menubar/menubar" );
 
-                    if ( xLayoutManager.is() )
-                    {
-                        css::uno::Reference< css::ui::XUIElement > xMenuBar = xLayoutManager->getElement( "private:resource/menubar/menubar" );
-
-                        m_xPopupCtrlQuery.set( xMenuBar, css::uno::UNO_QUERY );
-                    }
-                }
-                catch ( const css::uno::RuntimeException& )
-                {
-                    throw;
-                }
-                catch ( const css::uno::Exception& )
-                {
-                }
-            }
+            m_xPopupCtrlQuery.set( xMenuBar, css::uno::UNO_QUERY );
         }
+    }
+    catch ( const css::uno::RuntimeException& )
+    {
+        throw;
+    }
+    catch ( const css::uno::Exception& )
+    {
     }
 }
 

@@ -89,44 +89,44 @@ static sal_uInt16 FindMenuId( Menu const * pMenu, const OUString& aCommand )
 void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame,
                                            MenuBar const * pMergeMenuBar )
 {
-    if ( pMergeMenuBar )
+    if ( !pMergeMenuBar )
+        return;
+
+    PopupMenu* pHelpMenu(nullptr);
+    sal_uInt16 nId = FindMenuId(pMergeMenuBar, ".uno:HelpMenu");
+    if ( nId != USHRT_MAX )
+        pHelpMenu = pMergeMenuBar->GetPopupMenu( nId );
+
+    if ( !pHelpMenu )
+        return;
+
+    // Add-Ons help menu items should be inserted after the "registration" menu item
+    sal_uInt16 nItemCount       = pHelpMenu->GetItemCount();
+    sal_uInt16 nInsSepAfterPos  = MENU_APPEND;
+    sal_uInt16 nUniqueMenuId    = ADDONMENU_ITEMID_START;
+    AddonsOptions aOptions;
+
+    // try to detect the about menu item with the command URL
+    nId = FindMenuId(pHelpMenu, ".uno:About");
+    sal_uInt16 nInsPos = pHelpMenu->GetItemPos( nId );
+
+    const Sequence< Sequence< PropertyValue > >& rAddonHelpMenuEntries = aOptions.GetAddonsHelpMenu();
+
+    if ( nInsPos < nItemCount && pHelpMenu->GetItemType( nInsPos ) != MenuItemType::SEPARATOR )
+        nInsSepAfterPos = nInsPos;
+
+    OUString aModuleIdentifier = vcl::CommandInfoProvider::GetModuleIdentifier(rFrame);
+    AddonMenuManager::BuildMenu( pHelpMenu, nInsPos, nUniqueMenuId, rAddonHelpMenuEntries, rFrame, aModuleIdentifier );
+
+    if ( pHelpMenu->GetItemCount() > nItemCount )
     {
-        PopupMenu* pHelpMenu(nullptr);
-        sal_uInt16 nId = FindMenuId(pMergeMenuBar, ".uno:HelpMenu");
-        if ( nId != USHRT_MAX )
-            pHelpMenu = pMergeMenuBar->GetPopupMenu( nId );
-
-        if ( pHelpMenu )
+        if ( nInsSepAfterPos < MENU_APPEND )
         {
-            // Add-Ons help menu items should be inserted after the "registration" menu item
-            sal_uInt16 nItemCount       = pHelpMenu->GetItemCount();
-            sal_uInt16 nInsSepAfterPos  = MENU_APPEND;
-            sal_uInt16 nUniqueMenuId    = ADDONMENU_ITEMID_START;
-            AddonsOptions aOptions;
-
-            // try to detect the about menu item with the command URL
-            nId = FindMenuId(pHelpMenu, ".uno:About");
-            sal_uInt16 nInsPos = pHelpMenu->GetItemPos( nId );
-
-            const Sequence< Sequence< PropertyValue > >& rAddonHelpMenuEntries = aOptions.GetAddonsHelpMenu();
-
-            if ( nInsPos < nItemCount && pHelpMenu->GetItemType( nInsPos ) != MenuItemType::SEPARATOR )
-                nInsSepAfterPos = nInsPos;
-
-            OUString aModuleIdentifier = vcl::CommandInfoProvider::GetModuleIdentifier(rFrame);
-            AddonMenuManager::BuildMenu( pHelpMenu, nInsPos, nUniqueMenuId, rAddonHelpMenuEntries, rFrame, aModuleIdentifier );
-
-            if ( pHelpMenu->GetItemCount() > nItemCount )
-            {
-                if ( nInsSepAfterPos < MENU_APPEND )
-                {
-                    nInsSepAfterPos += ( pHelpMenu->GetItemCount() - nItemCount );
-                    if ( pHelpMenu->GetItemType( nInsSepAfterPos ) != MenuItemType::SEPARATOR )
-                        pHelpMenu->InsertSeparator(OString(), nInsSepAfterPos);
-                }
-                pHelpMenu->InsertSeparator(OString(), nItemCount);
-            }
+            nInsSepAfterPos += ( pHelpMenu->GetItemCount() - nItemCount );
+            if ( pHelpMenu->GetItemType( nInsSepAfterPos ) != MenuItemType::SEPARATOR )
+                pHelpMenu->InsertSeparator(OString(), nInsSepAfterPos);
         }
+        pHelpMenu->InsertSeparator(OString(), nItemCount);
     }
 }
 
@@ -135,52 +135,52 @@ void AddonMenuManager::MergeAddonPopupMenus( const Reference< XFrame >& rFrame,
                                              sal_uInt16               nMergeAtPos,
                                              MenuBar*             pMergeMenuBar )
 {
-    if ( pMergeMenuBar )
+    if ( !pMergeMenuBar )
+        return;
+
+    AddonsOptions   aAddonsOptions;
+    sal_uInt16          nInsertPos = nMergeAtPos;
+
+    OUString                              aTitle;
+    OUString                              aURL;
+    OUString                              aTarget;
+    OUString                              aImageId;
+    OUString                              aContext;
+    Sequence< Sequence< PropertyValue > > aAddonSubMenu;
+    sal_uInt16                            nUniqueMenuId = ADDONMENU_ITEMID_START;
+
+    OUString aModuleIdentifier = vcl::CommandInfoProvider::GetModuleIdentifier(rFrame);
+
+    const Sequence< Sequence< PropertyValue > >&    rAddonMenuEntries = aAddonsOptions.GetAddonsMenuBarPart();
+    for ( sal_Int32 i = 0; i < rAddonMenuEntries.getLength(); i++ )
     {
-        AddonsOptions   aAddonsOptions;
-        sal_uInt16          nInsertPos = nMergeAtPos;
-
-        OUString                              aTitle;
-        OUString                              aURL;
-        OUString                              aTarget;
-        OUString                              aImageId;
-        OUString                              aContext;
-        Sequence< Sequence< PropertyValue > > aAddonSubMenu;
-        sal_uInt16                            nUniqueMenuId = ADDONMENU_ITEMID_START;
-
-        OUString aModuleIdentifier = vcl::CommandInfoProvider::GetModuleIdentifier(rFrame);
-
-        const Sequence< Sequence< PropertyValue > >&    rAddonMenuEntries = aAddonsOptions.GetAddonsMenuBarPart();
-        for ( sal_Int32 i = 0; i < rAddonMenuEntries.getLength(); i++ )
+        AddonMenuManager::GetMenuEntry( rAddonMenuEntries[i],
+                                        aTitle,
+                                        aURL,
+                                        aTarget,
+                                        aImageId,
+                                        aContext,
+                                        aAddonSubMenu );
+        if ( !aTitle.isEmpty() &&
+             !aURL.isEmpty()   &&
+             aAddonSubMenu.hasElements() &&
+             AddonMenuManager::IsCorrectContext( aModuleIdentifier, aContext ))
         {
-            AddonMenuManager::GetMenuEntry( rAddonMenuEntries[i],
-                                            aTitle,
-                                            aURL,
-                                            aTarget,
-                                            aImageId,
-                                            aContext,
-                                            aAddonSubMenu );
-            if ( !aTitle.isEmpty() &&
-                 !aURL.isEmpty()   &&
-                 aAddonSubMenu.hasElements() &&
-                 AddonMenuManager::IsCorrectContext( aModuleIdentifier, aContext ))
+            sal_uInt16          nId             = nUniqueMenuId++;
+            VclPtrInstance<PopupMenu> pAddonPopupMenu;
+
+            AddonMenuManager::BuildMenu( pAddonPopupMenu, MENU_APPEND, nUniqueMenuId, aAddonSubMenu, rFrame, aModuleIdentifier );
+
+            if ( pAddonPopupMenu->GetItemCount() > 0 )
             {
-                sal_uInt16          nId             = nUniqueMenuId++;
-                VclPtrInstance<PopupMenu> pAddonPopupMenu;
+                pMergeMenuBar->InsertItem( nId, aTitle, MenuItemBits::NONE, OString(), nInsertPos++ );
+                pMergeMenuBar->SetPopupMenu( nId, pAddonPopupMenu );
 
-                AddonMenuManager::BuildMenu( pAddonPopupMenu, MENU_APPEND, nUniqueMenuId, aAddonSubMenu, rFrame, aModuleIdentifier );
-
-                if ( pAddonPopupMenu->GetItemCount() > 0 )
-                {
-                    pMergeMenuBar->InsertItem( nId, aTitle, MenuItemBits::NONE, OString(), nInsertPos++ );
-                    pMergeMenuBar->SetPopupMenu( nId, pAddonPopupMenu );
-
-                    // Store the command URL into the VCL menu bar for later identification
-                    pMergeMenuBar->SetItemCommand( nId, aURL );
-                }
-                else
-                    pAddonPopupMenu.disposeAndClear();
+                // Store the command URL into the VCL menu bar for later identification
+                pMergeMenuBar->SetItemCommand( nId, aURL );
             }
+            else
+                pAddonPopupMenu.disposeAndClear();
         }
     }
 }

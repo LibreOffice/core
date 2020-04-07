@@ -532,20 +532,20 @@ void StatusBarManager::UserDraw( const UserDrawEvent& rUDEvt )
 
     sal_uInt16 nId( rUDEvt.GetItemId() );
     StatusBarControllerMap::const_iterator it = m_aControllerMap.find( nId );
-    if (( nId > 0 ) && ( it != m_aControllerMap.end() ))
-    {
-        uno::Reference< frame::XStatusbarController > xController( it->second );
-        if (xController.is() && rUDEvt.GetRenderContext())
-        {
-            uno::Reference< awt::XGraphics > xGraphics = rUDEvt.GetRenderContext()->CreateUnoGraphics();
+    if (!(( nId > 0 ) && ( it != m_aControllerMap.end() )))
+        return;
 
-            awt::Rectangle aRect( rUDEvt.GetRect().Left(),
-                                  rUDEvt.GetRect().Top(),
-                                  rUDEvt.GetRect().GetWidth(),
-                                  rUDEvt.GetRect().GetHeight() );
-            aGuard.clear();
-            xController->paint( xGraphics, aRect, rUDEvt.GetStyle() );
-        }
+    uno::Reference< frame::XStatusbarController > xController( it->second );
+    if (xController.is() && rUDEvt.GetRenderContext())
+    {
+        uno::Reference< awt::XGraphics > xGraphics = rUDEvt.GetRenderContext()->CreateUnoGraphics();
+
+        awt::Rectangle aRect( rUDEvt.GetRect().Left(),
+                              rUDEvt.GetRect().Top(),
+                              rUDEvt.GetRect().GetWidth(),
+                              rUDEvt.GetRect().GetHeight() );
+        aGuard.clear();
+        xController->paint( xGraphics, aRect, rUDEvt.GetStyle() );
     }
 }
 
@@ -556,20 +556,20 @@ void StatusBarManager::Command( const CommandEvent& rEvt )
     if ( m_bDisposed )
         return;
 
-    if ( rEvt.GetCommand() == CommandEventId::ContextMenu )
+    if ( rEvt.GetCommand() != CommandEventId::ContextMenu )
+        return;
+
+    sal_uInt16 nId = m_pStatusBar->GetItemId( rEvt.GetMousePosPixel() );
+    StatusBarControllerMap::const_iterator it = m_aControllerMap.find( nId );
+    if (( nId > 0 ) && ( it != m_aControllerMap.end() ))
     {
-        sal_uInt16 nId = m_pStatusBar->GetItemId( rEvt.GetMousePosPixel() );
-        StatusBarControllerMap::const_iterator it = m_aControllerMap.find( nId );
-        if (( nId > 0 ) && ( it != m_aControllerMap.end() ))
+        uno::Reference< frame::XStatusbarController > xController( it->second );
+        if ( xController.is() )
         {
-            uno::Reference< frame::XStatusbarController > xController( it->second );
-            if ( xController.is() )
-            {
-                awt::Point aPos;
-                aPos.X = rEvt.GetMousePosPixel().X();
-                aPos.Y = rEvt.GetMousePosPixel().Y();
-                xController->command( aPos, awt::Command::CONTEXTMENU, true, uno::Any() );
-            }
+            awt::Point aPos;
+            aPos.X = rEvt.GetMousePosPixel().X();
+            aPos.Y = rEvt.GetMousePosPixel().Y();
+            xController->command( aPos, awt::Command::CONTEXTMENU, true, uno::Any() );
         }
     }
 }
@@ -583,23 +583,23 @@ void StatusBarManager::MouseButton( const MouseEvent& rMEvt ,sal_Bool ( SAL_CALL
 {
     SolarMutexGuard g;
 
-    if ( !m_bDisposed )
+    if ( m_bDisposed )
+        return;
+
+    sal_uInt16 nId = m_pStatusBar->GetItemId( rMEvt.GetPosPixel() );
+    StatusBarControllerMap::const_iterator it = m_aControllerMap.find( nId );
+    if (!(( nId > 0 ) && ( it != m_aControllerMap.end() )))
+        return;
+
+    uno::Reference< frame::XStatusbarController > xController( it->second );
+    if ( xController.is() )
     {
-        sal_uInt16 nId = m_pStatusBar->GetItemId( rMEvt.GetPosPixel() );
-        StatusBarControllerMap::const_iterator it = m_aControllerMap.find( nId );
-        if (( nId > 0 ) && ( it != m_aControllerMap.end() ))
-        {
-            uno::Reference< frame::XStatusbarController > xController( it->second );
-            if ( xController.is() )
-            {
-                css::awt::MouseEvent aMouseEvent;
-                aMouseEvent.Buttons = rMEvt.GetButtons();
-                aMouseEvent.X = rMEvt.GetPosPixel().X();
-                aMouseEvent.Y = rMEvt.GetPosPixel().Y();
-                aMouseEvent.ClickCount = rMEvt.GetClicks();
-                (xController.get()->*_pMethod)( aMouseEvent);
-            }
-        }
+        css::awt::MouseEvent aMouseEvent;
+        aMouseEvent.Buttons = rMEvt.GetButtons();
+        aMouseEvent.X = rMEvt.GetPosPixel().X();
+        aMouseEvent.Y = rMEvt.GetPosPixel().Y();
+        aMouseEvent.ClickCount = rMEvt.GetClicks();
+        (xController.get()->*_pMethod)( aMouseEvent);
     }
 }
 

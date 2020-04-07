@@ -81,43 +81,43 @@ void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments )
     if ( m_bDisposed )
         throw DisposedException();
 
-    if ( !m_bInitialized )
+    if ( m_bInitialized )
+        return;
+
+    UIConfigElementWrapperBase::initialize( aArguments );
+
+    Reference< XFrame > xFrame( m_xWeakFrame );
+    if ( !(xFrame.is() && m_xConfigSource.is()) )
+        return;
+
+    // Create VCL based toolbar which will be filled with settings data
+    StatusBar*        pStatusBar( nullptr );
+    StatusBarManager* pStatusBarManager( nullptr );
     {
-        UIConfigElementWrapperBase::initialize( aArguments );
-
-        Reference< XFrame > xFrame( m_xWeakFrame );
-        if ( xFrame.is() && m_xConfigSource.is() )
+        SolarMutexGuard aSolarMutexGuard;
+        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+        if ( pWindow )
         {
-            // Create VCL based toolbar which will be filled with settings data
-            StatusBar*        pStatusBar( nullptr );
-            StatusBarManager* pStatusBarManager( nullptr );
-            {
-                SolarMutexGuard aSolarMutexGuard;
-                VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
-                if ( pWindow )
-                {
-                    sal_uLong nStyles = WinBits( WB_LEFT | WB_3DLOOK );
+            sal_uLong nStyles = WinBits( WB_LEFT | WB_3DLOOK );
 
-                    pStatusBar = VclPtr<FrameworkStatusBar>::Create( pWindow, nStyles );
-                    pStatusBarManager = new StatusBarManager( m_xContext, xFrame, pStatusBar );
-                    static_cast<FrameworkStatusBar*>(pStatusBar)->SetStatusBarManager( pStatusBarManager );
-                    m_xStatusBarManager.set( static_cast< OWeakObject *>( pStatusBarManager ), UNO_QUERY );
-                }
-            }
-
-            try
-            {
-                m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, false );
-                if ( m_xConfigData.is() && pStatusBar && pStatusBarManager )
-                {
-                    // Fill statusbar with container contents
-                    pStatusBarManager->FillStatusBar( m_xConfigData );
-                }
-            }
-            catch ( const NoSuchElementException& )
-            {
-            }
+            pStatusBar = VclPtr<FrameworkStatusBar>::Create( pWindow, nStyles );
+            pStatusBarManager = new StatusBarManager( m_xContext, xFrame, pStatusBar );
+            static_cast<FrameworkStatusBar*>(pStatusBar)->SetStatusBarManager( pStatusBarManager );
+            m_xStatusBarManager.set( static_cast< OWeakObject *>( pStatusBarManager ), UNO_QUERY );
         }
+    }
+
+    try
+    {
+        m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, false );
+        if ( m_xConfigData.is() && pStatusBar && pStatusBarManager )
+        {
+            // Fill statusbar with container contents
+            pStatusBarManager->FillStatusBar( m_xConfigData );
+        }
+    }
+    catch ( const NoSuchElementException& )
+    {
     }
 }
 
@@ -129,21 +129,21 @@ void SAL_CALL StatusBarWrapper::updateSettings()
     if ( m_bDisposed )
         throw DisposedException();
 
-    if ( m_bPersistent &&
+    if ( !(m_bPersistent &&
          m_xConfigSource.is() &&
-         m_xStatusBarManager.is() )
-    {
-        try
-        {
-            StatusBarManager* pStatusBarManager = static_cast< StatusBarManager *>( m_xStatusBarManager.get() );
+         m_xStatusBarManager.is()) )
+        return;
 
-            m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, false );
-            if ( m_xConfigData.is() )
-                pStatusBarManager->FillStatusBar( m_xConfigData );
-        }
-        catch ( const NoSuchElementException& )
-        {
-        }
+    try
+    {
+        StatusBarManager* pStatusBarManager = static_cast< StatusBarManager *>( m_xStatusBarManager.get() );
+
+        m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, false );
+        if ( m_xConfigData.is() )
+            pStatusBarManager->FillStatusBar( m_xConfigData );
+    }
+    catch ( const NoSuchElementException& )
+    {
     }
 }
 

@@ -276,32 +276,32 @@ void ConfigurationAccess_FactoryManager::readConfigurationData()
         m_bConfigAccessInitialized = true;
     }
 
-    if ( m_xConfigAccess.is() )
+    if ( !m_xConfigAccess.is() )
+        return;
+
+    Sequence< OUString >   aUIElementFactories = m_xConfigAccess->getElementNames();
+
+    OUString             aType;
+    OUString             aName;
+    OUString             aModule;
+    OUString             aService;
+    OUString             aHashKey;
+    for ( sal_Int32 i = 0; i < aUIElementFactories.getLength(); i++ )
     {
-        Sequence< OUString >   aUIElementFactories = m_xConfigAccess->getElementNames();
-
-        OUString             aType;
-        OUString             aName;
-        OUString             aModule;
-        OUString             aService;
-        OUString             aHashKey;
-        for ( sal_Int32 i = 0; i < aUIElementFactories.getLength(); i++ )
+        if ( impl_getElementProps( m_xConfigAccess->getByName( aUIElementFactories[i] ), aType, aName, aModule, aService ))
         {
-            if ( impl_getElementProps( m_xConfigAccess->getByName( aUIElementFactories[i] ), aType, aName, aModule, aService ))
-            {
-                // Create hash key from type, name and module as they are together a primary key to
-                // the UNO service that implements the user interface element factory.
-                aHashKey = getHashKeyFromStrings( aType, aName, aModule );
-                m_aFactoryManagerMap.emplace( aHashKey, aService );
-            }
+            // Create hash key from type, name and module as they are together a primary key to
+            // the UNO service that implements the user interface element factory.
+            aHashKey = getHashKeyFromStrings( aType, aName, aModule );
+            m_aFactoryManagerMap.emplace( aHashKey, aService );
         }
+    }
 
-        Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
-        if ( xContainer.is() )
-        {
-            m_xConfigListener = new WeakContainerListener(this);
-            xContainer->addContainerListener(m_xConfigListener);
-        }
+    Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
+    if ( xContainer.is() )
+    {
+        m_xConfigListener = new WeakContainerListener(this);
+        xContainer->addContainerListener(m_xConfigListener);
     }
 }
 

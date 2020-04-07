@@ -83,26 +83,26 @@ void SAL_CALL UIElementWrapperBase::initialize( const Sequence< Any >& aArgument
 {
     SolarMutexGuard g;
 
-    if ( !m_bInitialized )
+    if ( m_bInitialized )
+        return;
+
+    for ( sal_Int32 n = 0; n < aArguments.getLength(); n++ )
     {
-        for ( sal_Int32 n = 0; n < aArguments.getLength(); n++ )
+        PropertyValue aPropValue;
+        if ( aArguments[n] >>= aPropValue )
         {
-            PropertyValue aPropValue;
-            if ( aArguments[n] >>= aPropValue )
+            if ( aPropValue.Name == "ResourceURL" )
+                aPropValue.Value >>= m_aResourceURL;
+            else if ( aPropValue.Name == "Frame" )
             {
-                if ( aPropValue.Name == "ResourceURL" )
-                    aPropValue.Value >>= m_aResourceURL;
-                else if ( aPropValue.Name == "Frame" )
-                {
-                    Reference< XFrame > xFrame;
-                    aPropValue.Value >>= xFrame;
-                    m_xWeakFrame = xFrame;
-                }
+                Reference< XFrame > xFrame;
+                aPropValue.Value >>= xFrame;
+                m_xWeakFrame = xFrame;
             }
         }
-
-        m_bInitialized = true;
     }
+
+    m_bInitialized = true;
 }
 
 // XUIElement

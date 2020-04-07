@@ -100,25 +100,25 @@ void SAL_CALL ButtonToolbarController::initialize(
         bInitialized = m_bInitialized;
     }
 
-    if ( !bInitialized )
-    {
-        SolarMutexGuard aSolarMutexGuard;
-        m_bInitialized = true;
+    if ( bInitialized )
+        return;
 
-        PropertyValue aPropValue;
-        for ( int i = 0; i < aArguments.getLength(); i++ )
+    SolarMutexGuard aSolarMutexGuard;
+    m_bInitialized = true;
+
+    PropertyValue aPropValue;
+    for ( int i = 0; i < aArguments.getLength(); i++ )
+    {
+        if ( aArguments[i] >>= aPropValue )
         {
-            if ( aArguments[i] >>= aPropValue )
+            if ( aPropValue.Name == "Frame" )
+                m_xFrame.set(aPropValue.Value,UNO_QUERY);
+            else if ( aPropValue.Name == "CommandURL" )
+                aPropValue.Value >>= m_aCommandURL;
+            else if ( aPropValue.Name == "ServiceManager" )
             {
-                if ( aPropValue.Name == "Frame" )
-                    m_xFrame.set(aPropValue.Value,UNO_QUERY);
-                else if ( aPropValue.Name == "CommandURL" )
-                    aPropValue.Value >>= m_aCommandURL;
-                else if ( aPropValue.Name == "ServiceManager" )
-                {
-                    Reference<XMultiServiceFactory> xServiceManager(aPropValue.Value,UNO_QUERY);
-                    m_xContext = comphelper::getComponentContext(xServiceManager);
-                }
+                Reference<XMultiServiceFactory> xServiceManager(aPropValue.Value,UNO_QUERY);
+                m_xContext = comphelper::getComponentContext(xServiceManager);
             }
         }
     }
@@ -224,21 +224,21 @@ void SAL_CALL ButtonToolbarController::execute( sal_Int16 KeyModifier )
         xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
     }
 
-    if ( xDispatch.is() )
+    if ( !xDispatch.is() )
+        return;
+
+    try
     {
-        try
-        {
-            Sequence<PropertyValue>   aArgs( 1 );
+        Sequence<PropertyValue>   aArgs( 1 );
 
-            // Provide key modifier information to dispatch function
-            aArgs[0].Name   = "KeyModifier";
-            aArgs[0].Value  <<= KeyModifier;
+        // Provide key modifier information to dispatch function
+        aArgs[0].Name   = "KeyModifier";
+        aArgs[0].Value  <<= KeyModifier;
 
-            xDispatch->dispatch( aTargetURL, aArgs );
-        }
-        catch ( const DisposedException& )
-        {
-        }
+        xDispatch->dispatch( aTargetURL, aArgs );
+    }
+    catch ( const DisposedException& )
+    {
     }
 }
 

@@ -433,32 +433,32 @@ void StatusIndicatorFactory::impl_showProgress()
 
     css::uno::Reference< css::task::XStatusIndicator > xProgress;
 
-    if (xFrame.is())
+    if (!xFrame.is())
+        return;
+
+    // use frame layouted progress implementation
+    css::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, css::uno::UNO_QUERY);
+    if (xPropSet.is())
     {
-        // use frame layouted progress implementation
-        css::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, css::uno::UNO_QUERY);
-        if (xPropSet.is())
+        css::uno::Reference< css::frame::XLayoutManager2 > xLayoutManager;
+        xPropSet->getPropertyValue(FRAME_PROPNAME_ASCII_LAYOUTMANAGER) >>= xLayoutManager;
+        if (xLayoutManager.is())
         {
-            css::uno::Reference< css::frame::XLayoutManager2 > xLayoutManager;
-            xPropSet->getPropertyValue(FRAME_PROPNAME_ASCII_LAYOUTMANAGER) >>= xLayoutManager;
-            if (xLayoutManager.is())
-            {
-                // Be sure that we have always a progress. It can be that our frame
-                // was recycled and therefore the progress was destroyed!
-                // CreateElement does nothing if there is already a valid progress.
-                OUString sPROGRESS_RESOURCE(PROGRESS_RESOURCE);
-                xLayoutManager->createElement( sPROGRESS_RESOURCE );
-                xLayoutManager->showElement( sPROGRESS_RESOURCE );
+            // Be sure that we have always a progress. It can be that our frame
+            // was recycled and therefore the progress was destroyed!
+            // CreateElement does nothing if there is already a valid progress.
+            OUString sPROGRESS_RESOURCE(PROGRESS_RESOURCE);
+            xLayoutManager->createElement( sPROGRESS_RESOURCE );
+            xLayoutManager->showElement( sPROGRESS_RESOURCE );
 
-                css::uno::Reference< css::ui::XUIElement > xProgressBar = xLayoutManager->getElement(sPROGRESS_RESOURCE);
-                if (xProgressBar.is())
-                    xProgress.set(xProgressBar->getRealInterface(), css::uno::UNO_QUERY);
-            }
+            css::uno::Reference< css::ui::XUIElement > xProgressBar = xLayoutManager->getElement(sPROGRESS_RESOURCE);
+            if (xProgressBar.is())
+                xProgress.set(xProgressBar->getRealInterface(), css::uno::UNO_QUERY);
         }
-
-        osl::MutexGuard g(m_mutex);
-        m_xProgress = xProgress;
     }
+
+    osl::MutexGuard g(m_mutex);
+    m_xProgress = xProgress;
 }
 
 void StatusIndicatorFactory::impl_hideProgress()
@@ -509,21 +509,21 @@ void StatusIndicatorFactory::impl_reschedule(bool bForce)
     // SAFE ->
     osl::ResettableMutexGuard aRescheduleGuard(RescheduleLock::get());
 
-    if (m_nInReschedule == 0)
+    if (m_nInReschedule != 0)
+        return;
+
+    ++m_nInReschedule;
+    aRescheduleGuard.clear();
+    // <- SAFE
+
     {
-        ++m_nInReschedule;
-        aRescheduleGuard.clear();
-        // <- SAFE
-
-        {
-            SolarMutexGuard g;
-            Application::Reschedule(true);
-        }
-
-        // SAFE ->
-        aRescheduleGuard.reset();
-        --m_nInReschedule;
+        SolarMutexGuard g;
+        Application::Reschedule(true);
     }
+
+    // SAFE ->
+    aRescheduleGuard.reset();
+    --m_nInReschedule;
 }
 
 void StatusIndicatorFactory::impl_startWakeUpThread()

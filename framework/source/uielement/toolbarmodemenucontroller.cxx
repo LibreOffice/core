@@ -168,43 +168,43 @@ void SAL_CALL ToolbarModeMenuController::statusChanged( const FeatureStateEvent&
     Reference< css::awt::XPopupMenu > xPopupMenu( m_xPopupMenu );
     aLock.clear();
 
-    if ( xPopupMenu.is() )
+    if ( !xPopupMenu.is() )
+        return;
+
+    SolarMutexGuard aGuard;
+    VCLXPopupMenu* pXPopupMenu = static_cast<VCLXPopupMenu *>(comphelper::getUnoTunnelImplementation<VCLXMenu>( xPopupMenu ));
+    PopupMenu*     pVCLPopupMenu = pXPopupMenu ? static_cast<PopupMenu *>(pXPopupMenu->GetMenu()) : nullptr;
+
+    SAL_WARN_IF(!pVCLPopupMenu, "fwk.uielement", "worrying lack of popup menu");
+    if (!pVCLPopupMenu)
+        return;
+
+    bool bSetCheckmark      = false;
+    bool bCheckmark         = false;
+    for ( sal_uInt16 i = 0; i < pVCLPopupMenu->GetItemCount(); i++ )
     {
-        SolarMutexGuard aGuard;
-        VCLXPopupMenu* pXPopupMenu = static_cast<VCLXPopupMenu *>(comphelper::getUnoTunnelImplementation<VCLXMenu>( xPopupMenu ));
-        PopupMenu*     pVCLPopupMenu = pXPopupMenu ? static_cast<PopupMenu *>(pXPopupMenu->GetMenu()) : nullptr;
+        sal_uInt16 nId = pVCLPopupMenu->GetItemId( i );
+        if ( nId == 0 )
+            continue;
 
-        SAL_WARN_IF(!pVCLPopupMenu, "fwk.uielement", "worrying lack of popup menu");
-        if (!pVCLPopupMenu)
-            return;
-
-        bool bSetCheckmark      = false;
-        bool bCheckmark         = false;
-        for ( sal_uInt16 i = 0; i < pVCLPopupMenu->GetItemCount(); i++ )
+        OUString aCmd = pVCLPopupMenu->GetItemCommand( nId );
+        if ( aCmd == aFeatureURL )
         {
-            sal_uInt16 nId = pVCLPopupMenu->GetItemId( i );
-            if ( nId == 0 )
-                continue;
+            // Enable/disable item
+            pVCLPopupMenu->EnableItem( nId, Event.IsEnabled );
 
-            OUString aCmd = pVCLPopupMenu->GetItemCommand( nId );
-            if ( aCmd == aFeatureURL )
+            // Checkmark
+            if ( Event.State >>= bCheckmark )
+                bSetCheckmark = true;
+
+            if ( bSetCheckmark )
+                pVCLPopupMenu->CheckItem( nId, bCheckmark );
+            else
             {
-                // Enable/disable item
-                pVCLPopupMenu->EnableItem( nId, Event.IsEnabled );
+                OUString aItemText;
 
-                // Checkmark
-                if ( Event.State >>= bCheckmark )
-                    bSetCheckmark = true;
-
-                if ( bSetCheckmark )
-                    pVCLPopupMenu->CheckItem( nId, bCheckmark );
-                else
-                {
-                    OUString aItemText;
-
-                    if ( Event.State >>= aItemText )
-                        pVCLPopupMenu->SetItemText( nId, aItemText );
-                }
+                if ( Event.State >>= aItemText )
+                    pVCLPopupMenu->SetItemText( nId, aItemText );
             }
         }
     }
@@ -224,53 +224,53 @@ void SAL_CALL ToolbarModeMenuController::itemSelected( const css::awt::MenuEvent
         xFrame = m_xFrame;
     }
 
-    if ( xPopupMenu.is() )
+    if ( !xPopupMenu.is() )
+        return;
+
+    VCLXPopupMenu* pPopupMenu = static_cast<VCLXPopupMenu *>(comphelper::getUnoTunnelImplementation<VCLXMenu>( xPopupMenu ));
+    if ( !pPopupMenu )
+        return;
+
+    SolarMutexGuard aSolarMutexGuard;
+    PopupMenu* pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
+    OUString aCmd( pVCLPopupMenu->GetItemCommand( rEvent.MenuId ));
+
     {
-        VCLXPopupMenu* pPopupMenu = static_cast<VCLXPopupMenu *>(comphelper::getUnoTunnelImplementation<VCLXMenu>( xPopupMenu ));
-        if ( pPopupMenu )
+        URL aTargetURL;
+        Sequence<PropertyValue> aArgs;
+
+        aTargetURL.Complete = ".uno:Notebookbar?File:string=" + aCmd;
+        xURLTransformer->parseStrict( aTargetURL );
+        Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
+        if ( xDispatchProvider.is() )
         {
-            SolarMutexGuard aSolarMutexGuard;
-            PopupMenu* pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
-            OUString aCmd( pVCLPopupMenu->GetItemCommand( rEvent.MenuId ));
+            Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch(
+                                                aTargetURL, OUString(), 0 );
 
-            {
-                URL aTargetURL;
-                Sequence<PropertyValue> aArgs;
-
-                aTargetURL.Complete = ".uno:Notebookbar?File:string=" + aCmd;
-                xURLTransformer->parseStrict( aTargetURL );
-                Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-                if ( xDispatchProvider.is() )
-                {
-                    Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch(
-                                                        aTargetURL, OUString(), 0 );
-
-                    ExecuteInfo* pExecuteInfo = new ExecuteInfo;
-                    pExecuteInfo->xDispatch     = xDispatch;
-                    pExecuteInfo->aTargetURL    = aTargetURL;
-                    pExecuteInfo->aArgs         = aArgs;
-                    Application::PostUserEvent( LINK(nullptr,ToolbarModeMenuController, ExecuteHdl_Impl), pExecuteInfo );
-                }
-            }
-
-            URL aTargetURL;
-            Sequence<PropertyValue> aArgs;
-
-            aTargetURL.Complete = ".uno:ToolbarMode?Mode:string=" + aCmd;
-            xURLTransformer->parseStrict( aTargetURL );
-            Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-            if ( xDispatchProvider.is() )
-            {
-                Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch(
-                                                        aTargetURL, OUString(), 0 );
-
-                ExecuteInfo* pExecuteInfo = new ExecuteInfo;
-                pExecuteInfo->xDispatch     = xDispatch;
-                pExecuteInfo->aTargetURL    = aTargetURL;
-                pExecuteInfo->aArgs         = aArgs;
-                Application::PostUserEvent( LINK(nullptr, ToolbarModeMenuController, ExecuteHdl_Impl), pExecuteInfo );
-            }
+            ExecuteInfo* pExecuteInfo = new ExecuteInfo;
+            pExecuteInfo->xDispatch     = xDispatch;
+            pExecuteInfo->aTargetURL    = aTargetURL;
+            pExecuteInfo->aArgs         = aArgs;
+            Application::PostUserEvent( LINK(nullptr,ToolbarModeMenuController, ExecuteHdl_Impl), pExecuteInfo );
         }
+    }
+
+    URL aTargetURL;
+    Sequence<PropertyValue> aArgs;
+
+    aTargetURL.Complete = ".uno:ToolbarMode?Mode:string=" + aCmd;
+    xURLTransformer->parseStrict( aTargetURL );
+    Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
+    if ( xDispatchProvider.is() )
+    {
+        Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch(
+                                                aTargetURL, OUString(), 0 );
+
+        ExecuteInfo* pExecuteInfo = new ExecuteInfo;
+        pExecuteInfo->xDispatch     = xDispatch;
+        pExecuteInfo->aTargetURL    = aTargetURL;
+        pExecuteInfo->aArgs         = aArgs;
+        Application::PostUserEvent( LINK(nullptr, ToolbarModeMenuController, ExecuteHdl_Impl), pExecuteInfo );
     }
 }
 

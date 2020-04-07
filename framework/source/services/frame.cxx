@@ -1319,49 +1319,49 @@ void SAL_CALL XFrameImpl::deactivate()
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
     // Work only, if there something to do!
-    if( eState != E_INACTIVE )
+    if( eState == E_INACTIVE )
+        return;
+
+
+    //  1)  Deactivate all active children.
+    if ( xActiveChild.is() && xActiveChild->isActive() )
     {
+        xActiveChild->deactivate();
+    }
 
-        //  1)  Deactivate all active children.
-        if ( xActiveChild.is() && xActiveChild->isActive() )
-        {
-            xActiveChild->deactivate();
-        }
+    //  2)  If I have the focus - I will lost it now.
+    if( eState == E_FOCUS )
+    {
+        // Set new state INACTIVE(!) and send message to all listener.
+        // Don't set ACTIVE as new state. This frame is deactivated for next time - due to activate().
+        aWriteLock.reset();
+        eState          = E_ACTIVE;
+        m_eActiveState  = eState;
+        aWriteLock.clear();
+        implts_sendFrameActionEvent( css::frame::FrameAction_FRAME_UI_DEACTIVATING );
+    }
 
-        //  2)  If I have the focus - I will lost it now.
-        if( eState == E_FOCUS )
-        {
-            // Set new state INACTIVE(!) and send message to all listener.
-            // Don't set ACTIVE as new state. This frame is deactivated for next time - due to activate().
-            aWriteLock.reset();
-            eState          = E_ACTIVE;
-            m_eActiveState  = eState;
-            aWriteLock.clear();
-            implts_sendFrameActionEvent( css::frame::FrameAction_FRAME_UI_DEACTIVATING );
-        }
+    //  3)  If I am active - I will be deactivated now.
+    if( eState == E_ACTIVE )
+    {
+        // Set new state and send message to all listener.
+        aWriteLock.reset();
+        eState          = E_INACTIVE;
+        m_eActiveState  = eState;
+        aWriteLock.clear();
+        implts_sendFrameActionEvent( css::frame::FrameAction_FRAME_DEACTIVATING );
+    }
 
-        //  3)  If I am active - I will be deactivated now.
-        if( eState == E_ACTIVE )
-        {
-            // Set new state and send message to all listener.
-            aWriteLock.reset();
-            eState          = E_INACTIVE;
-            m_eActiveState  = eState;
-            aWriteLock.clear();
-            implts_sendFrameActionEvent( css::frame::FrameAction_FRAME_DEACTIVATING );
-        }
-
-        //  4)  If there is a path from here to my parent...
-        //      ... I am on the top or in the middle of deactivated subtree and action was started here.
-        //      I must deactivate all frames from here to top, which are members of current path.
-        //      Stop, if THESE frame not the active frame of our parent!
-        if ( xParent.is() && xParent->getActiveFrame() == xThis )
-        {
-            // We MUST break the path - otherwise we will get the focus - not our parent! ...
-            // Attention: Our parent don't call us again - WE ARE NOT ACTIVE YET!
-            // [ see step 3 and condition "if ( m_eActiveState!=INACTIVE ) ..." in this method! ]
-            xParent->deactivate();
-        }
+    //  4)  If there is a path from here to my parent...
+    //      ... I am on the top or in the middle of deactivated subtree and action was started here.
+    //      I must deactivate all frames from here to top, which are members of current path.
+    //      Stop, if THESE frame not the active frame of our parent!
+    if ( xParent.is() && xParent->getActiveFrame() == xThis )
+    {
+        // We MUST break the path - otherwise we will get the focus - not our parent! ...
+        // Attention: Our parent don't call us again - WE ARE NOT ACTIVE YET!
+        // [ see step 3 and condition "if ( m_eActiveState!=INACTIVE ) ..." in this method! ]
+        xParent->deactivate();
     }
 }
 
@@ -2493,33 +2493,33 @@ void SAL_CALL XFrameImpl::windowDeactivated( const css::lang::EventObject& )
 
     aReadLock.clear();
 
-    if( eActiveState != E_INACTIVE )
+    if( eActiveState == E_INACTIVE )
+        return;
+
+    // Deactivation is always done implicitly by activation of another frame.
+    // Only if no activation is done, deactivations have to be processed if the activated window
+    // is a parent window of the last active Window!
+    SolarMutexClearableGuard aSolarGuard;
+    vcl::Window* pFocusWindow = Application::GetFocusWindow();
+    if  ( !(xContainerWindow.is() && xParent.is() &&
+          !css::uno::Reference< css::frame::XDesktop >( xParent, css::uno::UNO_QUERY ).is())
+        )
+        return;
+
+    css::uno::Reference< css::awt::XWindow >  xParentWindow   = xParent->getContainerWindow();
+    VclPtr<vcl::Window>                       pParentWindow   = VCLUnoHelper::GetWindow( xParentWindow    );
+    //#i70261#: dialogs opened from an OLE object will cause a deactivate on the frame of the OLE object
+    // on Solaris/Linux at that time pFocusWindow is still NULL because the focus handling is different; right after
+    // the deactivation the focus will be set into the dialog!
+    // currently I see no case where a sub frame could get a deactivate with pFocusWindow being NULL permanently
+    // so for now this case is omitted from handled deactivations
+    if( pFocusWindow && pParentWindow->IsChild( pFocusWindow ) )
     {
-        // Deactivation is always done implicitly by activation of another frame.
-        // Only if no activation is done, deactivations have to be processed if the activated window
-        // is a parent window of the last active Window!
-        SolarMutexClearableGuard aSolarGuard;
-        vcl::Window* pFocusWindow = Application::GetFocusWindow();
-        if  ( xContainerWindow.is() && xParent.is() &&
-              !css::uno::Reference< css::frame::XDesktop >( xParent, css::uno::UNO_QUERY ).is()
-            )
+        css::uno::Reference< css::frame::XFramesSupplier > xSupplier( xParent, css::uno::UNO_QUERY );
+        if( xSupplier.is() )
         {
-            css::uno::Reference< css::awt::XWindow >  xParentWindow   = xParent->getContainerWindow();
-            VclPtr<vcl::Window>                       pParentWindow   = VCLUnoHelper::GetWindow( xParentWindow    );
-            //#i70261#: dialogs opened from an OLE object will cause a deactivate on the frame of the OLE object
-            // on Solaris/Linux at that time pFocusWindow is still NULL because the focus handling is different; right after
-            // the deactivation the focus will be set into the dialog!
-            // currently I see no case where a sub frame could get a deactivate with pFocusWindow being NULL permanently
-            // so for now this case is omitted from handled deactivations
-            if( pFocusWindow && pParentWindow->IsChild( pFocusWindow ) )
-            {
-                css::uno::Reference< css::frame::XFramesSupplier > xSupplier( xParent, css::uno::UNO_QUERY );
-                if( xSupplier.is() )
-                {
-                    aSolarGuard.clear();
-                    xSupplier->setActiveFrame( css::uno::Reference< css::frame::XFrame >() );
-                }
-            }
+            aSolarGuard.clear();
+            xSupplier->setActiveFrame( css::uno::Reference< css::frame::XFrame >() );
         }
     }
 }
@@ -2590,20 +2590,20 @@ void SAL_CALL XFrameImpl::windowShown( const css::lang::EventObject& )
 
     impl_checkMenuCloser();
 
-    if (xDesktopCheck.is())
-    {
-        static bool bFirstVisibleTask = true;
-        osl::ClearableMutexGuard aGuard(aFirstVisibleLock);
-        bool bMustBeTriggered = bFirstVisibleTask;
-        bFirstVisibleTask = false;
-        aGuard.clear();
+    if (!xDesktopCheck.is())
+        return;
 
-        if (bMustBeTriggered)
-        {
-            css::uno::Reference< css::task::XJobExecutor > xExecutor
-                = css::task::theJobExecutor::get( m_xContext );
-            xExecutor->trigger( "onFirstVisibleTask" );
-        }
+    static bool bFirstVisibleTask = true;
+    osl::ClearableMutexGuard aGuard(aFirstVisibleLock);
+    bool bMustBeTriggered = bFirstVisibleTask;
+    bFirstVisibleTask = false;
+    aGuard.clear();
+
+    if (bMustBeTriggered)
+    {
+        css::uno::Reference< css::task::XJobExecutor > xExecutor
+            = css::task::theJobExecutor::get( m_xContext );
+        xExecutor->trigger( "onFirstVisibleTask" );
     }
 }
 
@@ -2928,24 +2928,24 @@ void XFrameImpl::implts_sendFrameActionEvent( const css::frame::FrameAction& aAc
     ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer(
         cppu::UnoType<css::frame::XFrameActionListener>::get());
 
-    if( pContainer != nullptr )
-    {
-        // Build action event.
-        css::frame::FrameActionEvent aFrameActionEvent( static_cast< ::cppu::OWeakObject* >(this), this, aAction );
+    if( pContainer == nullptr )
+        return;
 
-        // Get iterator for access to listener.
-        ::cppu::OInterfaceIteratorHelper aIterator( *pContainer );
-        // Send message to all listener.
-        while( aIterator.hasMoreElements() )
+    // Build action event.
+    css::frame::FrameActionEvent aFrameActionEvent( static_cast< ::cppu::OWeakObject* >(this), this, aAction );
+
+    // Get iterator for access to listener.
+    ::cppu::OInterfaceIteratorHelper aIterator( *pContainer );
+    // Send message to all listener.
+    while( aIterator.hasMoreElements() )
+    {
+        try
         {
-            try
-            {
-                static_cast<css::frame::XFrameActionListener*>(aIterator.next())->frameAction( aFrameActionEvent );
-            }
-            catch( const css::uno::RuntimeException& )
-            {
-                aIterator.remove();
-            }
+            static_cast<css::frame::XFrameActionListener*>(aIterator.next())->frameAction( aFrameActionEvent );
+        }
+        catch( const css::uno::RuntimeException& )
+        {
+            aIterator.remove();
         }
     }
 }
@@ -2960,23 +2960,23 @@ void XFrameImpl::implts_resizeComponentWindow()
 {
     // usually the LayoutManager does the resizing
     // in case there is no LayoutManager resizing has to be done here
-    if ( !m_xLayoutManager.is() )
-    {
-        css::uno::Reference< css::awt::XWindow > xComponentWindow( getComponentWindow() );
-        if( xComponentWindow.is() )
-        {
-            css::uno::Reference< css::awt::XDevice > xDevice( getContainerWindow(), css::uno::UNO_QUERY );
+    if ( m_xLayoutManager.is() )
+        return;
 
-            // Convert relative size to output size.
-            css::awt::Rectangle  aRectangle  = getContainerWindow()->getPosSize();
-            css::awt::DeviceInfo aInfo = xDevice->getInfo();
-            css::awt::Size aSize( aRectangle.Width - aInfo.LeftInset - aInfo.RightInset,
-                                  aRectangle.Height - aInfo.TopInset - aInfo.BottomInset );
+    css::uno::Reference< css::awt::XWindow > xComponentWindow( getComponentWindow() );
+    if( !xComponentWindow.is() )
+        return;
 
-            // Resize our component window.
-            xComponentWindow->setPosSize( 0, 0, aSize.Width, aSize.Height, css::awt::PosSize::POSSIZE );
-        }
-    }
+    css::uno::Reference< css::awt::XDevice > xDevice( getContainerWindow(), css::uno::UNO_QUERY );
+
+    // Convert relative size to output size.
+    css::awt::Rectangle  aRectangle  = getContainerWindow()->getPosSize();
+    css::awt::DeviceInfo aInfo = xDevice->getInfo();
+    css::awt::Size aSize( aRectangle.Width - aInfo.LeftInset - aInfo.RightInset,
+                          aRectangle.Height - aInfo.TopInset - aInfo.BottomInset );
+
+    // Resize our component window.
+    xComponentWindow->setPosSize( 0, 0, aSize.Width, aSize.Height, css::awt::PosSize::POSSIZE );
 }
 
 /*-****************************************************************************************************
@@ -3000,69 +3000,69 @@ void XFrameImpl::implts_setIconOnWindow()
     aReadLock.clear();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
-    if( xContainerWindow.is() && xController.is() )
+    if( !(xContainerWindow.is() && xController.is()) )
+        return;
+
+
+    // a) set default value to an invalid one. So we can start further searches for right icon id, if
+    //    first steps failed!
+    //    We must reset it to any fallback value - if no search step returns a valid result.
+    sal_Int32 nIcon = -1;
+
+    // b) try to find information on controller propertyset directly
+    //    Don't forget to catch possible exceptions - because these property is an optional one!
+    css::uno::Reference< css::beans::XPropertySet > xSet( xController, css::uno::UNO_QUERY );
+    if( xSet.is() )
     {
-
-        // a) set default value to an invalid one. So we can start further searches for right icon id, if
-        //    first steps failed!
-        //    We must reset it to any fallback value - if no search step returns a valid result.
-        sal_Int32 nIcon = -1;
-
-        // b) try to find information on controller propertyset directly
-        //    Don't forget to catch possible exceptions - because these property is an optional one!
-        css::uno::Reference< css::beans::XPropertySet > xSet( xController, css::uno::UNO_QUERY );
-        if( xSet.is() )
+        try
         {
-            try
-            {
-                css::uno::Reference< css::beans::XPropertySetInfo > const xPSI( xSet->getPropertySetInfo(),
-                                                                                css::uno::UNO_SET_THROW );
-                if ( xPSI->hasPropertyByName( "IconId" ) )
-                    xSet->getPropertyValue( "IconId" ) >>= nIcon;
-            }
-            catch( css::uno::Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION("fwk");
-            }
+            css::uno::Reference< css::beans::XPropertySetInfo > const xPSI( xSet->getPropertySetInfo(),
+                                                                            css::uno::UNO_SET_THROW );
+            if ( xPSI->hasPropertyByName( "IconId" ) )
+                xSet->getPropertyValue( "IconId" ) >>= nIcon;
         }
-
-        // c) if b) failed... analyze argument list of currently loaded document inside the frame to find the filter.
-        //    He can be used to detect right factory - and these can be used to match factory to icon...
-        if( nIcon == -1 )
+        catch( css::uno::Exception& )
         {
-            css::uno::Reference< css::frame::XModel > xModel = xController->getModel();
-            if( xModel.is() )
-            {
-                SvtModuleOptions::EFactory eFactory = SvtModuleOptions::ClassifyFactoryByModel(xModel);
-                if (eFactory != SvtModuleOptions::EFactory::UNKNOWN_FACTORY)
-                    nIcon = SvtModuleOptions().GetFactoryIcon( eFactory );
-            }
+            DBG_UNHANDLED_EXCEPTION("fwk");
         }
-
-        // d) if all steps failed - use fallback!
-        if( nIcon == -1 )
-        {
-            nIcon = 0;
-        }
-
-        // e) set icon on container window now
-        //    Don't forget SolarMutex! We use vcl directly :-(
-        //    Check window pointer for right WorkWindow class too!!!
-        /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-        {
-            SolarMutexGuard aSolarGuard;
-            VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
-            if(
-                ( pWindow            != nullptr              ) &&
-                ( pWindow->GetType() == WindowType::WORKWINDOW )
-                )
-            {
-                WorkWindow* pWorkWindow = static_cast<WorkWindow*>(pWindow.get());
-                pWorkWindow->SetIcon( static_cast<sal_uInt16>(nIcon) );
-            }
-        }
-        /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     }
+
+    // c) if b) failed... analyze argument list of currently loaded document inside the frame to find the filter.
+    //    He can be used to detect right factory - and these can be used to match factory to icon...
+    if( nIcon == -1 )
+    {
+        css::uno::Reference< css::frame::XModel > xModel = xController->getModel();
+        if( xModel.is() )
+        {
+            SvtModuleOptions::EFactory eFactory = SvtModuleOptions::ClassifyFactoryByModel(xModel);
+            if (eFactory != SvtModuleOptions::EFactory::UNKNOWN_FACTORY)
+                nIcon = SvtModuleOptions().GetFactoryIcon( eFactory );
+        }
+    }
+
+    // d) if all steps failed - use fallback!
+    if( nIcon == -1 )
+    {
+        nIcon = 0;
+    }
+
+    // e) set icon on container window now
+    //    Don't forget SolarMutex! We use vcl directly :-(
+    //    Check window pointer for right WorkWindow class too!!!
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    {
+        SolarMutexGuard aSolarGuard;
+        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
+        if(
+            ( pWindow            != nullptr              ) &&
+            ( pWindow->GetType() == WindowType::WORKWINDOW )
+            )
+        {
+            WorkWindow* pWorkWindow = static_cast<WorkWindow*>(pWindow.get());
+            pWorkWindow->SetIcon( static_cast<sal_uInt16>(nIcon) );
+        }
+    }
+    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 }
 
 /*-************************************************************************************************************
@@ -3095,23 +3095,23 @@ void XFrameImpl::implts_startWindowListening()
     aReadLock.clear();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
-    if( xContainerWindow.is() )
+    if( !xContainerWindow.is() )
+        return;
+
+    xContainerWindow->addWindowListener( xWindowListener);
+    xContainerWindow->addFocusListener ( xFocusListener );
+
+    css::uno::Reference< css::awt::XTopWindow > xTopWindow( xContainerWindow, css::uno::UNO_QUERY );
+    if( xTopWindow.is() )
     {
-        xContainerWindow->addWindowListener( xWindowListener);
-        xContainerWindow->addFocusListener ( xFocusListener );
+        xTopWindow->addTopWindowListener( xTopWindowListener );
 
-        css::uno::Reference< css::awt::XTopWindow > xTopWindow( xContainerWindow, css::uno::UNO_QUERY );
-        if( xTopWindow.is() )
+        css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( m_xContext );
+        css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget = xToolkit->getDropTarget( xContainerWindow );
+        if( xDropTarget.is() )
         {
-            xTopWindow->addTopWindowListener( xTopWindowListener );
-
-            css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( m_xContext );
-            css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget = xToolkit->getDropTarget( xContainerWindow );
-            if( xDropTarget.is() )
-            {
-                xDropTarget->addDropTargetListener( xDragDropListener );
-                xDropTarget->setActive( true );
-            }
+            xDropTarget->addDropTargetListener( xDragDropListener );
+            xDropTarget->setActive( true );
         }
     }
 }
@@ -3134,25 +3134,25 @@ void XFrameImpl::implts_stopWindowListening()
     aReadLock.clear();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
-    if( xContainerWindow.is() )
+    if( !xContainerWindow.is() )
+        return;
+
+    xContainerWindow->removeWindowListener( xWindowListener);
+    xContainerWindow->removeFocusListener ( xFocusListener );
+
+    css::uno::Reference< css::awt::XTopWindow > xTopWindow( xContainerWindow, css::uno::UNO_QUERY );
+    if( !xTopWindow.is() )
+        return;
+
+    xTopWindow->removeTopWindowListener( xTopWindowListener );
+
+    css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( m_xContext );
+    css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget =
+        xToolkit->getDropTarget( xContainerWindow );
+    if( xDropTarget.is() )
     {
-        xContainerWindow->removeWindowListener( xWindowListener);
-        xContainerWindow->removeFocusListener ( xFocusListener );
-
-        css::uno::Reference< css::awt::XTopWindow > xTopWindow( xContainerWindow, css::uno::UNO_QUERY );
-        if( xTopWindow.is() )
-        {
-            xTopWindow->removeTopWindowListener( xTopWindowListener );
-
-            css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( m_xContext );
-            css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget =
-                xToolkit->getDropTarget( xContainerWindow );
-            if( xDropTarget.is() )
-            {
-                xDropTarget->removeDropTargetListener( xDragDropListener );
-                xDropTarget->setActive( false );
-            }
-        }
+        xDropTarget->removeDropTargetListener( xDragDropListener );
+        xDropTarget->setActive( false );
     }
 }
 

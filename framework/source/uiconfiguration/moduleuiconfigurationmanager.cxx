@@ -348,50 +348,50 @@ void ModuleUIConfigurationManager::impl_preloadUIElementTypeList( Layer eLayer, 
 {
     UIElementType& rElementTypeData = m_aUIElements[eLayer][nElementType];
 
-    if ( !rElementTypeData.bLoaded )
+    if ( rElementTypeData.bLoaded )
+        return;
+
+    Reference< XStorage > xElementTypeStorage = rElementTypeData.xStorage;
+    if ( !xElementTypeStorage.is() )
+        return;
+
+    OUString aResURLPrefix =
+        RESOURCEURL_PREFIX +
+        UIELEMENTTYPENAMES[ nElementType ] +
+        "/";
+
+    UIElementDataHashMap& rHashMap = rElementTypeData.aElementsHashMap;
+    Sequence< OUString > aUIElementNames = xElementTypeStorage->getElementNames();
+    for ( sal_Int32 n = 0; n < aUIElementNames.getLength(); n++ )
     {
-        Reference< XStorage > xElementTypeStorage = rElementTypeData.xStorage;
-        if ( xElementTypeStorage.is() )
+        UIElementData aUIElementData;
+
+        // Resource name must be without ".xml"
+        sal_Int32 nIndex = aUIElementNames[n].lastIndexOf( '.' );
+        if (( nIndex > 0 ) && ( nIndex < aUIElementNames[n].getLength() ))
         {
-            OUString aResURLPrefix =
-                RESOURCEURL_PREFIX +
-                UIELEMENTTYPENAMES[ nElementType ] +
-                "/";
+            OUString aExtension( aUIElementNames[n].copy( nIndex+1 ));
+            OUString aUIElementName( aUIElementNames[n].copy( 0, nIndex ));
 
-            UIElementDataHashMap& rHashMap = rElementTypeData.aElementsHashMap;
-            Sequence< OUString > aUIElementNames = xElementTypeStorage->getElementNames();
-            for ( sal_Int32 n = 0; n < aUIElementNames.getLength(); n++ )
+            if (!aUIElementName.isEmpty() &&
+                ( aExtension.equalsIgnoreAsciiCase("xml")))
             {
-                UIElementData aUIElementData;
+                aUIElementData.aResourceURL = aResURLPrefix + aUIElementName;
+                aUIElementData.aName        = aUIElementNames[n];
 
-                // Resource name must be without ".xml"
-                sal_Int32 nIndex = aUIElementNames[n].lastIndexOf( '.' );
-                if (( nIndex > 0 ) && ( nIndex < aUIElementNames[n].getLength() ))
+                if ( eLayer == LAYER_USERDEFINED )
                 {
-                    OUString aExtension( aUIElementNames[n].copy( nIndex+1 ));
-                    OUString aUIElementName( aUIElementNames[n].copy( 0, nIndex ));
-
-                    if (!aUIElementName.isEmpty() &&
-                        ( aExtension.equalsIgnoreAsciiCase("xml")))
-                    {
-                        aUIElementData.aResourceURL = aResURLPrefix + aUIElementName;
-                        aUIElementData.aName        = aUIElementNames[n];
-
-                        if ( eLayer == LAYER_USERDEFINED )
-                        {
-                            aUIElementData.bModified    = false;
-                            aUIElementData.bDefault     = false;
-                            aUIElementData.bDefaultNode = false;
-                        }
-
-                        // Create std::unordered_map entries for all user interface elements inside the storage. We don't load the
-                        // settings to speed up the process.
-                        rHashMap.emplace( aUIElementData.aResourceURL, aUIElementData );
-                    }
+                    aUIElementData.bModified    = false;
+                    aUIElementData.bDefault     = false;
+                    aUIElementData.bDefaultNode = false;
                 }
-                rElementTypeData.bLoaded = true;
+
+                // Create std::unordered_map entries for all user interface elements inside the storage. We don't load the
+                // settings to speed up the process.
+                rHashMap.emplace( aUIElementData.aResourceURL, aUIElementData );
             }
         }
+        rElementTypeData.bLoaded = true;
     }
 
 }
@@ -791,29 +791,29 @@ void ModuleUIConfigurationManager::impl_Initialize()
         }
     }
 
-    if ( m_xDefaultConfigStorage.is() )
+    if ( !m_xDefaultConfigStorage.is() )
+        return;
+
+    Reference< XNameAccess > xNameAccess( m_xDefaultConfigStorage, UNO_QUERY_THROW );
+
+    // Try to access our module sub folder
+    for ( sal_Int16 i = 1; i < css::ui::UIElementType::COUNT;
+          i++ )
     {
-        Reference< XNameAccess > xNameAccess( m_xDefaultConfigStorage, UNO_QUERY_THROW );
-
-        // Try to access our module sub folder
-        for ( sal_Int16 i = 1; i < css::ui::UIElementType::COUNT;
-              i++ )
+        Reference< XStorage > xElementTypeStorage;
+        try
         {
-            Reference< XStorage > xElementTypeStorage;
-            try
-            {
-                const OUString sName( UIELEMENTTYPENAMES[i] );
-                if( xNameAccess->hasByName( sName ) )
-                    xNameAccess->getByName( sName ) >>= xElementTypeStorage;
-            }
-            catch ( const css::container::NoSuchElementException& )
-            {
-            }
-
-            m_aUIElements[LAYER_DEFAULT][i].nElementType = i;
-            m_aUIElements[LAYER_DEFAULT][i].bModified = false;
-            m_aUIElements[LAYER_DEFAULT][i].xStorage = xElementTypeStorage;
+            const OUString sName( UIELEMENTTYPENAMES[i] );
+            if( xNameAccess->hasByName( sName ) )
+                xNameAccess->getByName( sName ) >>= xElementTypeStorage;
         }
+        catch ( const css::container::NoSuchElementException& )
+        {
+        }
+
+        m_aUIElements[LAYER_DEFAULT][i].nElementType = i;
+        m_aUIElements[LAYER_DEFAULT][i].bModified = false;
+        m_aUIElements[LAYER_DEFAULT][i].xStorage = xElementTypeStorage;
     }
 }
 
@@ -969,80 +969,80 @@ void SAL_CALL ModuleUIConfigurationManager::reset()
     if ( m_bDisposed )
         throw DisposedException();
 
-    if ( !isReadOnly() )
+    if ( isReadOnly() )
+        return;
+
+    // Remove all elements from our user-defined storage!
+    try
     {
-        // Remove all elements from our user-defined storage!
-        try
+        for ( int i = 1; i < css::ui::UIElementType::COUNT; i++ )
         {
-            for ( int i = 1; i < css::ui::UIElementType::COUNT; i++ )
+            UIElementType&        rElementType = m_aUIElements[LAYER_USERDEFINED][i];
+
+            if ( rElementType.xStorage.is() )
             {
-                UIElementType&        rElementType = m_aUIElements[LAYER_USERDEFINED][i];
-
-                if ( rElementType.xStorage.is() )
+                bool bCommitSubStorage( false );
+                Sequence< OUString > aUIElementStreamNames = rElementType.xStorage->getElementNames();
+                for ( sal_Int32 j = 0; j < aUIElementStreamNames.getLength(); j++ )
                 {
-                    bool bCommitSubStorage( false );
-                    Sequence< OUString > aUIElementStreamNames = rElementType.xStorage->getElementNames();
-                    for ( sal_Int32 j = 0; j < aUIElementStreamNames.getLength(); j++ )
-                    {
-                        rElementType.xStorage->removeElement( aUIElementStreamNames[j] );
-                        bCommitSubStorage = true;
-                    }
+                    rElementType.xStorage->removeElement( aUIElementStreamNames[j] );
+                    bCommitSubStorage = true;
+                }
 
-                    if ( bCommitSubStorage )
-                    {
-                        Reference< XTransactedObject > xTransactedObject( rElementType.xStorage, UNO_QUERY );
-                        if ( xTransactedObject.is() )
-                            xTransactedObject->commit();
-                        m_pStorageHandler[i]->commitUserChanges();
-                    }
+                if ( bCommitSubStorage )
+                {
+                    Reference< XTransactedObject > xTransactedObject( rElementType.xStorage, UNO_QUERY );
+                    if ( xTransactedObject.is() )
+                        xTransactedObject->commit();
+                    m_pStorageHandler[i]->commitUserChanges();
                 }
             }
+        }
 
-            // remove settings from user defined layer and notify listener about removed settings data!
-            ConfigEventNotifyContainer aRemoveEventNotifyContainer;
-            ConfigEventNotifyContainer aReplaceEventNotifyContainer;
-            for ( sal_Int16 j = 1; j < css::ui::UIElementType::COUNT; j++ )
+        // remove settings from user defined layer and notify listener about removed settings data!
+        ConfigEventNotifyContainer aRemoveEventNotifyContainer;
+        ConfigEventNotifyContainer aReplaceEventNotifyContainer;
+        for ( sal_Int16 j = 1; j < css::ui::UIElementType::COUNT; j++ )
+        {
+            try
             {
-                try
-                {
-                    UIElementType& rUserElementType     = m_aUIElements[LAYER_USERDEFINED][j];
-                    UIElementType& rDefaultElementType  = m_aUIElements[LAYER_DEFAULT][j];
+                UIElementType& rUserElementType     = m_aUIElements[LAYER_USERDEFINED][j];
+                UIElementType& rDefaultElementType  = m_aUIElements[LAYER_DEFAULT][j];
 
-                    impl_resetElementTypeData( rUserElementType, rDefaultElementType, aRemoveEventNotifyContainer, aReplaceEventNotifyContainer );
-                    rUserElementType.bModified = false;
-                }
-                catch (const Exception&)
-                {
-                    css::uno::Any anyEx = cppu::getCaughtException();
-                    throw css::lang::WrappedTargetRuntimeException(
-                            "ModuleUIConfigurationManager::reset exception",
-                            css::uno::Reference<css::uno::XInterface>(*this), anyEx);
-                }
+                impl_resetElementTypeData( rUserElementType, rDefaultElementType, aRemoveEventNotifyContainer, aReplaceEventNotifyContainer );
+                rUserElementType.bModified = false;
             }
+            catch (const Exception&)
+            {
+                css::uno::Any anyEx = cppu::getCaughtException();
+                throw css::lang::WrappedTargetRuntimeException(
+                        "ModuleUIConfigurationManager::reset exception",
+                        css::uno::Reference<css::uno::XInterface>(*this), anyEx);
+            }
+        }
 
-            m_bModified = false;
+        m_bModified = false;
 
-            // Unlock mutex before notify our listeners
-            aGuard.clear();
+        // Unlock mutex before notify our listeners
+        aGuard.clear();
 
-            // Notify our listeners
-            for ( auto const & k: aRemoveEventNotifyContainer )
-                implts_notifyContainerListener( k, NotifyOp_Remove );
-            for ( auto const & k: aReplaceEventNotifyContainer )
-                implts_notifyContainerListener( k, NotifyOp_Replace );
-        }
-        catch ( const css::lang::IllegalArgumentException& )
-        {
-        }
-        catch ( const css::container::NoSuchElementException& )
-        {
-        }
-        catch ( const css::embed::InvalidStorageException& )
-        {
-        }
-        catch ( const css::embed::StorageWrappedTargetException& )
-        {
-        }
+        // Notify our listeners
+        for ( auto const & k: aRemoveEventNotifyContainer )
+            implts_notifyContainerListener( k, NotifyOp_Remove );
+        for ( auto const & k: aReplaceEventNotifyContainer )
+            implts_notifyContainerListener( k, NotifyOp_Replace );
+    }
+    catch ( const css::lang::IllegalArgumentException& )
+    {
+    }
+    catch ( const css::container::NoSuchElementException& )
+    {
+    }
+    catch ( const css::embed::InvalidStorageException& )
+    {
+    }
+    catch ( const css::embed::StorageWrappedTargetException& )
+    {
     }
 }
 
@@ -1494,40 +1494,40 @@ void SAL_CALL ModuleUIConfigurationManager::reload()
     if ( m_bDisposed )
         throw DisposedException();
 
-    if ( m_xUserConfigStorage.is() && m_bModified && !m_bReadOnly )
-    {
-        // Try to access our module sub folder
-        ConfigEventNotifyContainer aRemoveNotifyContainer;
-        ConfigEventNotifyContainer aReplaceNotifyContainer;
-        for ( sal_Int16 i = 1; i < css::ui::UIElementType::COUNT; i++ )
-        {
-            try
-            {
-                UIElementType& rUserElementType    = m_aUIElements[LAYER_USERDEFINED][i];
+    if ( !(m_xUserConfigStorage.is() && m_bModified && !m_bReadOnly) )
+        return;
 
-                if ( rUserElementType.bModified )
-                {
-                    UIElementType& rDefaultElementType = m_aUIElements[LAYER_DEFAULT][i];
-                    impl_reloadElementTypeData( rUserElementType, rDefaultElementType, aRemoveNotifyContainer, aReplaceNotifyContainer );
-                }
-            }
-            catch ( const Exception& )
+    // Try to access our module sub folder
+    ConfigEventNotifyContainer aRemoveNotifyContainer;
+    ConfigEventNotifyContainer aReplaceNotifyContainer;
+    for ( sal_Int16 i = 1; i < css::ui::UIElementType::COUNT; i++ )
+    {
+        try
+        {
+            UIElementType& rUserElementType    = m_aUIElements[LAYER_USERDEFINED][i];
+
+            if ( rUserElementType.bModified )
             {
-                throw IOException();
+                UIElementType& rDefaultElementType = m_aUIElements[LAYER_DEFAULT][i];
+                impl_reloadElementTypeData( rUserElementType, rDefaultElementType, aRemoveNotifyContainer, aReplaceNotifyContainer );
             }
         }
-
-        m_bModified = false;
-
-        // Unlock mutex before notify our listeners
-        aGuard.clear();
-
-        // Notify our listeners
-        for (const ui::ConfigurationEvent & j : aRemoveNotifyContainer)
-            implts_notifyContainerListener( j, NotifyOp_Remove );
-        for (const ui::ConfigurationEvent & k : aReplaceNotifyContainer)
-            implts_notifyContainerListener( k, NotifyOp_Replace );
+        catch ( const Exception& )
+        {
+            throw IOException();
+        }
     }
+
+    m_bModified = false;
+
+    // Unlock mutex before notify our listeners
+    aGuard.clear();
+
+    // Notify our listeners
+    for (const ui::ConfigurationEvent & j : aRemoveNotifyContainer)
+        implts_notifyContainerListener( j, NotifyOp_Remove );
+    for (const ui::ConfigurationEvent & k : aReplaceNotifyContainer)
+        implts_notifyContainerListener( k, NotifyOp_Replace );
 }
 
 void SAL_CALL ModuleUIConfigurationManager::store()
@@ -1537,29 +1537,29 @@ void SAL_CALL ModuleUIConfigurationManager::store()
     if ( m_bDisposed )
         throw DisposedException();
 
-    if ( m_xUserConfigStorage.is() && m_bModified && !m_bReadOnly )
-    {
-        // Try to access our module sub folder
-        for ( int i = 1; i < css::ui::UIElementType::COUNT; i++ )
-        {
-            try
-            {
-                UIElementType&        rElementType = m_aUIElements[LAYER_USERDEFINED][i];
+    if ( !(m_xUserConfigStorage.is() && m_bModified && !m_bReadOnly) )
+        return;
 
-                if ( rElementType.bModified && rElementType.xStorage.is() )
-                {
-                    impl_storeElementTypeData( rElementType.xStorage, rElementType );
-                    m_pStorageHandler[i]->commitUserChanges();
-                }
-            }
-            catch ( const Exception& )
+    // Try to access our module sub folder
+    for ( int i = 1; i < css::ui::UIElementType::COUNT; i++ )
+    {
+        try
+        {
+            UIElementType&        rElementType = m_aUIElements[LAYER_USERDEFINED][i];
+
+            if ( rElementType.bModified && rElementType.xStorage.is() )
             {
-                throw IOException();
+                impl_storeElementTypeData( rElementType.xStorage, rElementType );
+                m_pStorageHandler[i]->commitUserChanges();
             }
         }
-
-        m_bModified = false;
+        catch ( const Exception& )
+        {
+            throw IOException();
+        }
     }
+
+    m_bModified = false;
 }
 
 void SAL_CALL ModuleUIConfigurationManager::storeToStorage( const Reference< XStorage >& Storage )
@@ -1569,30 +1569,30 @@ void SAL_CALL ModuleUIConfigurationManager::storeToStorage( const Reference< XSt
     if ( m_bDisposed )
         throw DisposedException();
 
-    if ( m_xUserConfigStorage.is() && m_bModified && !m_bReadOnly )
+    if ( !(m_xUserConfigStorage.is() && m_bModified && !m_bReadOnly) )
+        return;
+
+    // Try to access our module sub folder
+    for ( int i = 1; i < css::ui::UIElementType::COUNT; i++ )
     {
-        // Try to access our module sub folder
-        for ( int i = 1; i < css::ui::UIElementType::COUNT; i++ )
+        try
         {
-            try
-            {
-                Reference< XStorage > xElementTypeStorage( Storage->openStorageElement(
-                                                              UIELEMENTTYPENAMES[i], ElementModes::READWRITE ));
-                UIElementType&        rElementType = m_aUIElements[LAYER_USERDEFINED][i];
+            Reference< XStorage > xElementTypeStorage( Storage->openStorageElement(
+                                                          UIELEMENTTYPENAMES[i], ElementModes::READWRITE ));
+            UIElementType&        rElementType = m_aUIElements[LAYER_USERDEFINED][i];
 
-                if ( rElementType.bModified && xElementTypeStorage.is() )
-                    impl_storeElementTypeData( xElementTypeStorage, rElementType, false ); // store data to storage, but don't reset modify flag!
-            }
-            catch ( const Exception& )
-            {
-                throw IOException();
-            }
+            if ( rElementType.bModified && xElementTypeStorage.is() )
+                impl_storeElementTypeData( xElementTypeStorage, rElementType, false ); // store data to storage, but don't reset modify flag!
         }
-
-        Reference< XTransactedObject > xTransactedObject( Storage, UNO_QUERY );
-        if ( xTransactedObject.is() )
-            xTransactedObject->commit();
+        catch ( const Exception& )
+        {
+            throw IOException();
+        }
     }
+
+    Reference< XTransactedObject > xTransactedObject( Storage, UNO_QUERY );
+    if ( xTransactedObject.is() )
+        xTransactedObject->commit();
 }
 
 sal_Bool SAL_CALL ModuleUIConfigurationManager::isModified()
@@ -1612,30 +1612,30 @@ sal_Bool SAL_CALL ModuleUIConfigurationManager::isReadOnly()
 void ModuleUIConfigurationManager::implts_notifyContainerListener( const ui::ConfigurationEvent& aEvent, NotifyOp eOp )
 {
     ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::ui::XUIConfigurationListener>::get());
-    if ( pContainer != nullptr )
+    if ( pContainer == nullptr )
+        return;
+
+    ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );
+    while ( pIterator.hasMoreElements() )
     {
-        ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );
-        while ( pIterator.hasMoreElements() )
+        try
         {
-            try
+            switch ( eOp )
             {
-                switch ( eOp )
-                {
-                    case NotifyOp_Replace:
-                        static_cast< css::ui::XUIConfigurationListener*>(pIterator.next())->elementReplaced( aEvent );
-                        break;
-                    case NotifyOp_Insert:
-                        static_cast< css::ui::XUIConfigurationListener*>(pIterator.next())->elementInserted( aEvent );
-                        break;
-                    case NotifyOp_Remove:
-                        static_cast< css::ui::XUIConfigurationListener*>(pIterator.next())->elementRemoved( aEvent );
-                        break;
-                }
+                case NotifyOp_Replace:
+                    static_cast< css::ui::XUIConfigurationListener*>(pIterator.next())->elementReplaced( aEvent );
+                    break;
+                case NotifyOp_Insert:
+                    static_cast< css::ui::XUIConfigurationListener*>(pIterator.next())->elementInserted( aEvent );
+                    break;
+                case NotifyOp_Remove:
+                    static_cast< css::ui::XUIConfigurationListener*>(pIterator.next())->elementRemoved( aEvent );
+                    break;
             }
-            catch( const css::uno::RuntimeException& )
-            {
-                pIterator.remove();
-            }
+        }
+        catch( const css::uno::RuntimeException& )
+        {
+            pIterator.remove();
         }
     }
 }

@@ -229,36 +229,36 @@ void JobData::setJobConfig( const std::vector< css::beans::NamedValue >& lArgume
     m_lArguments = lArguments;
 
     // update the configuration ... if possible!
-    if (m_eMode==E_ALIAS)
+    if (m_eMode!=E_ALIAS)
+        return;
+
+    // It doesn't matter if this config object was already opened before.
+    // It doesn nothing here then ... or it change the mode automatically, if
+    // it was opened using another one before.
+    ConfigAccess aConfig(
+        m_xContext,
+        ("/org.openoffice.Office.Jobs/Jobs/"
+         + utl::wrapConfigurationElementName(m_sAlias)));
+    aConfig.open(ConfigAccess::E_READWRITE);
+    if (aConfig.getMode()==ConfigAccess::E_CLOSED)
+        return;
+
+    css::uno::Reference< css::beans::XMultiHierarchicalPropertySet > xArgumentList(aConfig.cfg(), css::uno::UNO_QUERY);
+    if (xArgumentList.is())
     {
-        // It doesn't matter if this config object was already opened before.
-        // It doesn nothing here then ... or it change the mode automatically, if
-        // it was opened using another one before.
-        ConfigAccess aConfig(
-            m_xContext,
-            ("/org.openoffice.Office.Jobs/Jobs/"
-             + utl::wrapConfigurationElementName(m_sAlias)));
-        aConfig.open(ConfigAccess::E_READWRITE);
-        if (aConfig.getMode()==ConfigAccess::E_CLOSED)
-            return;
+        sal_Int32                             nCount = m_lArguments.size();
+        css::uno::Sequence< OUString > lNames (nCount);
+        css::uno::Sequence< css::uno::Any >   lValues(nCount);
 
-        css::uno::Reference< css::beans::XMultiHierarchicalPropertySet > xArgumentList(aConfig.cfg(), css::uno::UNO_QUERY);
-        if (xArgumentList.is())
+        for (sal_Int32 i=0; i<nCount; ++i)
         {
-            sal_Int32                             nCount = m_lArguments.size();
-            css::uno::Sequence< OUString > lNames (nCount);
-            css::uno::Sequence< css::uno::Any >   lValues(nCount);
-
-            for (sal_Int32 i=0; i<nCount; ++i)
-            {
-                lNames [i] = m_lArguments[i].Name;
-                lValues[i] = m_lArguments[i].Value;
-            }
-
-            xArgumentList->setHierarchicalPropertyValues(lNames, lValues);
+            lNames [i] = m_lArguments[i].Name;
+            lValues[i] = m_lArguments[i].Value;
         }
-        aConfig.close();
+
+        xArgumentList->setHierarchicalPropertyValues(lNames, lValues);
     }
+    aConfig.close();
 }
 
 /**

@@ -2708,21 +2708,21 @@ void lc_removeLockFile(AutoRecovery::TDocumentInfo const & rInfo)
 #if !HAVE_FEATURE_MULTIUSER_ENVIRONMENT || HAVE_FEATURE_MACOSX_SANDBOX
     (void) rInfo;
 #else
-    if ( rInfo.Document.is() )
+    if ( !rInfo.Document.is() )
+        return;
+
+    try
     {
-        try
+        css::uno::Reference< css::frame::XStorable > xStore(rInfo.Document, css::uno::UNO_QUERY_THROW);
+        OUString aURL = xStore->getLocation();
+        if ( !aURL.isEmpty() )
         {
-            css::uno::Reference< css::frame::XStorable > xStore(rInfo.Document, css::uno::UNO_QUERY_THROW);
-            OUString aURL = xStore->getLocation();
-            if ( !aURL.isEmpty() )
-            {
-                ::svt::DocumentLockFile aLockFile( aURL );
-                aLockFile.RemoveFile();
-            }
+            ::svt::DocumentLockFile aLockFile( aURL );
+            aLockFile.RemoveFile();
         }
-        catch( const css::uno::Exception& )
-        {
-        }
+    }
+    catch( const css::uno::Exception& )
+    {
     }
 #endif
 }
@@ -3496,20 +3496,20 @@ void AutoRecovery::implts_informListener(      Job                      eJob  ,
 
     // inform listener, which are registered for any URLs(!)
     pListenerForURL = m_lListener.getContainer(sJob);
-    if(pListenerForURL != nullptr)
+    if(pListenerForURL == nullptr)
+        return;
+
+    ::cppu::OInterfaceIteratorHelper pIt(*pListenerForURL);
+    while(pIt.hasMoreElements())
     {
-        ::cppu::OInterfaceIteratorHelper pIt(*pListenerForURL);
-        while(pIt.hasMoreElements())
+        try
         {
-            try
-            {
-                css::uno::Reference< css::frame::XStatusListener > xListener(static_cast<css::frame::XStatusListener*>(pIt.next()), css::uno::UNO_QUERY);
-                xListener->statusChanged(aEvent);
-            }
-            catch(const css::uno::RuntimeException&)
-            {
-                pIt.remove();
-            }
+            css::uno::Reference< css::frame::XStatusListener > xListener(static_cast<css::frame::XStatusListener*>(pIt.next()), css::uno::UNO_QUERY);
+            xListener->statusChanged(aEvent);
+        }
+        catch(const css::uno::RuntimeException&)
+        {
+            pIt.remove();
         }
     }
 }

@@ -80,100 +80,100 @@ void HeaderMenuController::fillPopupMenu( const Reference< css::frame::XModel >&
         pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
 
     Reference< XStyleFamiliesSupplier > xStyleFamiliesSupplier( rModel, UNO_QUERY );
-    if ( pVCLPopupMenu && xStyleFamiliesSupplier.is())
+    if ( !(pVCLPopupMenu && xStyleFamiliesSupplier.is()))
+        return;
+
+    Reference< XNameAccess > xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
+
+    OUString aCmd( ".uno:InsertPageHeader" );
+    OUString aHeaderFooterIsOnStr( "HeaderIsOn" );
+    if ( m_bFooter )
     {
-        Reference< XNameAccess > xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
+        aCmd = ".uno:InsertPageFooter";
+        aHeaderFooterIsOnStr = "FooterIsOn";
+    }
+    const OUString aIsPhysicalStr( "IsPhysical" );
+    const OUString aDisplayNameStr( "DisplayName" );
 
-        OUString aCmd( ".uno:InsertPageHeader" );
-        OUString aHeaderFooterIsOnStr( "HeaderIsOn" );
-        if ( m_bFooter )
+    try
+    {
+        Reference< XNameContainer > xNameContainer;
+        if ( xStyleFamilies->getByName("PageStyles") >>= xNameContainer )
         {
-            aCmd = ".uno:InsertPageFooter";
-            aHeaderFooterIsOnStr = "FooterIsOn";
-        }
-        const OUString aIsPhysicalStr( "IsPhysical" );
-        const OUString aDisplayNameStr( "DisplayName" );
+            Sequence< OUString > aSeqNames = xNameContainer->getElementNames();
 
-        try
-        {
-            Reference< XNameContainer > xNameContainer;
-            if ( xStyleFamilies->getByName("PageStyles") >>= xNameContainer )
+            sal_uInt16   nId = 2;
+            sal_uInt16  nCount = 0;
+            bool bAllOneState( true );
+            bool bLastCheck( true );
+            bool bFirstChecked( false );
+            bool bFirstItemInserted( false );
+            for ( sal_Int32 n = 0; n < aSeqNames.getLength(); n++ )
             {
-                Sequence< OUString > aSeqNames = xNameContainer->getElementNames();
-
-                sal_uInt16   nId = 2;
-                sal_uInt16  nCount = 0;
-                bool bAllOneState( true );
-                bool bLastCheck( true );
-                bool bFirstChecked( false );
-                bool bFirstItemInserted( false );
-                for ( sal_Int32 n = 0; n < aSeqNames.getLength(); n++ )
+                OUString aName = aSeqNames[n];
+                Reference< XPropertySet > xPropSet( xNameContainer->getByName( aName ), UNO_QUERY );
+                if ( xPropSet.is() )
                 {
-                    OUString aName = aSeqNames[n];
-                    Reference< XPropertySet > xPropSet( xNameContainer->getByName( aName ), UNO_QUERY );
-                    if ( xPropSet.is() )
+                    bool bIsPhysical( false );
+                    if (( xPropSet->getPropertyValue( aIsPhysicalStr ) >>= bIsPhysical ) && bIsPhysical )
                     {
-                        bool bIsPhysical( false );
-                        if (( xPropSet->getPropertyValue( aIsPhysicalStr ) >>= bIsPhysical ) && bIsPhysical )
+                        OUString aDisplayName;
+                        bool      bHeaderIsOn( false );
+                        xPropSet->getPropertyValue( aDisplayNameStr ) >>= aDisplayName;
+                        xPropSet->getPropertyValue( aHeaderFooterIsOnStr ) >>= bHeaderIsOn;
+
+                        OUStringBuffer aStrBuf( aCmd );
+                        aStrBuf.append( "?PageStyle:string=");
+                        aStrBuf.append( aDisplayName );
+                        aStrBuf.append( "&On:bool=" );
+                        if ( !bHeaderIsOn )
+                            aStrBuf.append( "true" );
+                        else
+                            aStrBuf.append( "false" );
+                        OUString aCommand( aStrBuf.makeStringAndClear() );
+                        pVCLPopupMenu->InsertItem( nId, aDisplayName, MenuItemBits::CHECKABLE );
+                        if ( !bFirstItemInserted )
                         {
-                            OUString aDisplayName;
-                            bool      bHeaderIsOn( false );
-                            xPropSet->getPropertyValue( aDisplayNameStr ) >>= aDisplayName;
-                            xPropSet->getPropertyValue( aHeaderFooterIsOnStr ) >>= bHeaderIsOn;
-
-                            OUStringBuffer aStrBuf( aCmd );
-                            aStrBuf.append( "?PageStyle:string=");
-                            aStrBuf.append( aDisplayName );
-                            aStrBuf.append( "&On:bool=" );
-                            if ( !bHeaderIsOn )
-                                aStrBuf.append( "true" );
-                            else
-                                aStrBuf.append( "false" );
-                            OUString aCommand( aStrBuf.makeStringAndClear() );
-                            pVCLPopupMenu->InsertItem( nId, aDisplayName, MenuItemBits::CHECKABLE );
-                            if ( !bFirstItemInserted )
-                            {
-                                bFirstItemInserted = true;
-                                bFirstChecked      = bHeaderIsOn;
-                            }
-
-                            pVCLPopupMenu->SetItemCommand( nId, aCommand );
-
-                            if ( bHeaderIsOn )
-                                pVCLPopupMenu->CheckItem( nId );
-                            ++nId;
-
-                            // Check if all entries have the same state
-                            if( bAllOneState && n && bHeaderIsOn != bLastCheck )
-                                bAllOneState = false;
-                            bLastCheck = bHeaderIsOn;
-                            ++nCount;
+                            bFirstItemInserted = true;
+                            bFirstChecked      = bHeaderIsOn;
                         }
+
+                        pVCLPopupMenu->SetItemCommand( nId, aCommand );
+
+                        if ( bHeaderIsOn )
+                            pVCLPopupMenu->CheckItem( nId );
+                        ++nId;
+
+                        // Check if all entries have the same state
+                        if( bAllOneState && n && bHeaderIsOn != bLastCheck )
+                            bAllOneState = false;
+                        bLastCheck = bHeaderIsOn;
+                        ++nCount;
                     }
                 }
+            }
 
-                if ( bAllOneState && ( nCount > 1 ))
-                {
-                    // Insert special item for all command
-                    pVCLPopupMenu->InsertItem( ALL_MENUITEM_ID, FwkResId(STR_MENU_HEADFOOTALL), MenuItemBits::NONE, OString(), 0 );
+            if ( bAllOneState && ( nCount > 1 ))
+            {
+                // Insert special item for all command
+                pVCLPopupMenu->InsertItem( ALL_MENUITEM_ID, FwkResId(STR_MENU_HEADFOOTALL), MenuItemBits::NONE, OString(), 0 );
 
-                    OUStringBuffer aStrBuf( aCmd );
-                    aStrBuf.append( "?On:bool=" );
+                OUStringBuffer aStrBuf( aCmd );
+                aStrBuf.append( "?On:bool=" );
 
-                    // Command depends on check state of first menu item entry
-                    if ( !bFirstChecked )
-                        aStrBuf.append( "true" );
-                    else
-                        aStrBuf.append( "false" );
+                // Command depends on check state of first menu item entry
+                if ( !bFirstChecked )
+                    aStrBuf.append( "true" );
+                else
+                    aStrBuf.append( "false" );
 
-                    pVCLPopupMenu->SetItemCommand( 1, aStrBuf.makeStringAndClear() );
-                    pVCLPopupMenu->InsertSeparator(OString(), 1);
-                }
+                pVCLPopupMenu->SetItemCommand( 1, aStrBuf.makeStringAndClear() );
+                pVCLPopupMenu->InsertSeparator(OString(), 1);
             }
         }
-        catch ( const css::container::NoSuchElementException& )
-        {
-        }
+    }
+    catch ( const css::container::NoSuchElementException& )
+    {
     }
 }
 

@@ -83,32 +83,32 @@ void ImageButtonToolbarController::executeControlCommand( const css::frame::Cont
 {
     SolarMutexGuard aSolarMutexGuard;
     // i73486 to be downward compatible use old and "wrong" also!
-    if( rControlCommand.Command == "SetImag" ||
-        rControlCommand.Command == "SetImage" )
+    if( !(rControlCommand.Command == "SetImag" ||
+        rControlCommand.Command == "SetImage") )
+        return;
+
+    for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
     {
-        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+        if ( rControlCommand.Arguments[i].Name == "URL" )
         {
-            if ( rControlCommand.Arguments[i].Name == "URL" )
+            OUString aURL;
+            rControlCommand.Arguments[i].Value >>= aURL;
+
+            SubstituteVariables( aURL );
+
+            Image aImage;
+            if ( ReadImageFromURL( SvtMiscOptions().AreCurrentSymbolsLarge(),
+                                   aURL,
+                                   aImage ))
             {
-                OUString aURL;
-                rControlCommand.Arguments[i].Value >>= aURL;
+                m_xToolbar->SetItemImage( m_nID, aImage );
 
-                SubstituteVariables( aURL );
-
-                Image aImage;
-                if ( ReadImageFromURL( SvtMiscOptions().AreCurrentSymbolsLarge(),
-                                       aURL,
-                                       aImage ))
-                {
-                    m_xToolbar->SetItemImage( m_nID, aImage );
-
-                    // send notification
-                    uno::Sequence< beans::NamedValue > aInfo { { "URL", css::uno::makeAny(aURL) } };
-                    addNotifyInfo( "ImageChanged",
-                                getDispatchFromCommand( m_aCommandURL ),
-                                aInfo );
-                    break;
-                }
+                // send notification
+                uno::Sequence< beans::NamedValue > aInfo { { "URL", css::uno::makeAny(aURL) } };
+                addNotifyInfo( "ImageChanged",
+                            getDispatchFromCommand( m_aCommandURL ),
+                            aInfo );
+                break;
             }
         }
     }

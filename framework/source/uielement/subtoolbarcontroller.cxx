@@ -136,48 +136,48 @@ void SubToolBarController::statusChanged( const css::frame::FeatureStateEvent& E
 
     ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
-    if ( getToolboxId( nId, &pToolBox ) )
+    if ( !getToolboxId( nId, &pToolBox ) )
+        return;
+
+    ToolBoxItemBits nItemBits = pToolBox->GetItemBits( nId );
+    nItemBits &= ~ToolBoxItemBits::CHECKABLE;
+    TriState eTri = TRISTATE_FALSE;
+
+    if ( Event.FeatureURL.Complete == m_aCommandURL )
     {
-        ToolBoxItemBits nItemBits = pToolBox->GetItemBits( nId );
-        nItemBits &= ~ToolBoxItemBits::CHECKABLE;
-        TriState eTri = TRISTATE_FALSE;
+        pToolBox->EnableItem( nId, Event.IsEnabled );
 
-        if ( Event.FeatureURL.Complete == m_aCommandURL )
+        OUString aStrValue;
+        css::frame::status::Visibility aItemVisibility;
+        if ( Event.State >>= aStrValue )
         {
-            pToolBox->EnableItem( nId, Event.IsEnabled );
-
-            OUString aStrValue;
-            css::frame::status::Visibility aItemVisibility;
-            if ( Event.State >>= aStrValue )
+            // Enum command, such as the current custom shape,
+            // toggle checked state.
+            if ( m_aLastCommand == ( m_aCommandURL + "." + aStrValue ) )
             {
-                // Enum command, such as the current custom shape,
-                // toggle checked state.
-                if ( m_aLastCommand == ( m_aCommandURL + "." + aStrValue ) )
-                {
-                    eTri = TRISTATE_TRUE;
-                    nItemBits |= ToolBoxItemBits::CHECKABLE;
-                }
-            }
-            else if ( Event.State >>= aItemVisibility )
-            {
-                pToolBox->ShowItem( nId, aItemVisibility.bVisible );
-            }
-        }
-        else
-        {
-            bool bValue;
-            if ( Event.State >>= bValue )
-            {
-                // Boolean, treat it as checked/unchecked
-                if ( bValue )
-                    eTri = TRISTATE_TRUE;
+                eTri = TRISTATE_TRUE;
                 nItemBits |= ToolBoxItemBits::CHECKABLE;
             }
         }
-
-        pToolBox->SetItemState( nId, eTri );
-        pToolBox->SetItemBits( nId, nItemBits );
+        else if ( Event.State >>= aItemVisibility )
+        {
+            pToolBox->ShowItem( nId, aItemVisibility.bVisible );
+        }
     }
+    else
+    {
+        bool bValue;
+        if ( Event.State >>= bValue )
+        {
+            // Boolean, treat it as checked/unchecked
+            if ( bValue )
+                eTri = TRISTATE_TRUE;
+            nItemBits |= ToolBoxItemBits::CHECKABLE;
+        }
+    }
+
+    pToolBox->SetItemState( nId, eTri );
+    pToolBox->SetItemBits( nId, nItemBits );
 }
 
 void SubToolBarController::execute( sal_Int16 nKeyModifier )
@@ -345,49 +345,49 @@ void SubToolBarController::endPopupMode( const css::awt::EndPopupModeEvent& e )
     m_xUIElement = nullptr;
 
     // if the toolbar was teared-off recreate it and place it at the given position
-    if( e.bTearoff )
+    if( !e.bTearoff )
+        return;
+
+    css::uno::Reference< css::ui::XUIElement > xUIElement;
+    css::uno::Reference< css::frame::XLayoutManager > xLayoutManager = getLayoutManager();
+
+    if ( !xLayoutManager.is() )
+        return;
+
+    xLayoutManager->createElement( aSubToolBarResName );
+    xUIElement = xLayoutManager->getElement( aSubToolBarResName );
+    if ( !xUIElement.is() )
+        return;
+
+    css::uno::Reference< css::awt::XWindow > xSubToolBar( xUIElement->getRealInterface(), css::uno::UNO_QUERY );
+    css::uno::Reference< css::beans::XPropertySet > xProp( xUIElement, css::uno::UNO_QUERY );
+    if ( !(xSubToolBar.is() && xProp.is()) )
+        return;
+
+    OUString aPersistentString( "Persistent" );
+    try
     {
-        css::uno::Reference< css::ui::XUIElement > xUIElement;
-        css::uno::Reference< css::frame::XLayoutManager > xLayoutManager = getLayoutManager();
-
-        if ( !xLayoutManager.is() )
-            return;
-
-        xLayoutManager->createElement( aSubToolBarResName );
-        xUIElement = xLayoutManager->getElement( aSubToolBarResName );
-        if ( xUIElement.is() )
+        VclPtr<vcl::Window> pTbxWindow = VCLUnoHelper::GetWindow( xSubToolBar );
+        if ( pTbxWindow && pTbxWindow->GetType() == WindowType::TOOLBOX )
         {
-            css::uno::Reference< css::awt::XWindow > xSubToolBar( xUIElement->getRealInterface(), css::uno::UNO_QUERY );
-            css::uno::Reference< css::beans::XPropertySet > xProp( xUIElement, css::uno::UNO_QUERY );
-            if ( xSubToolBar.is() && xProp.is() )
-            {
-                OUString aPersistentString( "Persistent" );
-                try
-                {
-                    VclPtr<vcl::Window> pTbxWindow = VCLUnoHelper::GetWindow( xSubToolBar );
-                    if ( pTbxWindow && pTbxWindow->GetType() == WindowType::TOOLBOX )
-                    {
-                        css::uno::Any a = xProp->getPropertyValue( aPersistentString );
-                        xProp->setPropertyValue( aPersistentString, css::uno::makeAny( false ) );
+            css::uno::Any a = xProp->getPropertyValue( aPersistentString );
+            xProp->setPropertyValue( aPersistentString, css::uno::makeAny( false ) );
 
-                        xLayoutManager->hideElement( aSubToolBarResName );
-                        xLayoutManager->floatWindow( aSubToolBarResName );
+            xLayoutManager->hideElement( aSubToolBarResName );
+            xLayoutManager->floatWindow( aSubToolBarResName );
 
-                        xLayoutManager->setElementPos( aSubToolBarResName, e.FloatingPosition );
-                        xLayoutManager->showElement( aSubToolBarResName );
+            xLayoutManager->setElementPos( aSubToolBarResName, e.FloatingPosition );
+            xLayoutManager->showElement( aSubToolBarResName );
 
-                        xProp->setPropertyValue("Persistent", a );
-                    }
-                }
-                catch ( css::uno::RuntimeException& )
-                {
-                    throw;
-                }
-                catch ( css::uno::Exception& )
-                {}
-            }
+            xProp->setPropertyValue("Persistent", a );
         }
     }
+    catch ( css::uno::RuntimeException& )
+    {
+        throw;
+    }
+    catch ( css::uno::Exception& )
+    {}
 }
 
 void SubToolBarController::disposing( const css::lang::EventObject& e )

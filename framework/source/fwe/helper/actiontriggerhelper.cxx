@@ -96,139 +96,139 @@ static void GetMenuItemAttributes( const Reference< XPropertySet >& xActionTrigg
 
 static void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, const Reference< XIndexContainer >& xActionTriggerContainer )
 {
-    if ( xActionTriggerContainer.is() )
+    if ( !xActionTriggerContainer.is() )
+        return;
+
+    AddonsOptions aAddonOptions;
+    OUString aSlotURL( "slot:" );
+
+    for ( sal_Int32 i = 0; i < xActionTriggerContainer->getCount(); i++ )
     {
-        AddonsOptions aAddonOptions;
-        OUString aSlotURL( "slot:" );
-
-        for ( sal_Int32 i = 0; i < xActionTriggerContainer->getCount(); i++ )
+        try
         {
-            try
+            Reference< XPropertySet > xPropSet;
+            if (( xActionTriggerContainer->getByIndex( i ) >>= xPropSet ) && ( xPropSet.is() ))
             {
-                Reference< XPropertySet > xPropSet;
-                if (( xActionTriggerContainer->getByIndex( i ) >>= xPropSet ) && ( xPropSet.is() ))
+                if ( IsSeparator( xPropSet ))
                 {
-                    if ( IsSeparator( xPropSet ))
-                    {
-                        // Separator
-                        SolarMutexGuard aGuard;
-                        pSubMenu->InsertSeparator();
-                    }
-                    else
-                    {
-                        // Menu item
-                        OUString aLabel;
-                        OUString aCommandURL;
-                        OUString aHelpURL;
-                        Reference< XBitmap > xBitmap;
-                        Reference< XIndexContainer > xSubContainer;
+                    // Separator
+                    SolarMutexGuard aGuard;
+                    pSubMenu->InsertSeparator();
+                }
+                else
+                {
+                    // Menu item
+                    OUString aLabel;
+                    OUString aCommandURL;
+                    OUString aHelpURL;
+                    Reference< XBitmap > xBitmap;
+                    Reference< XIndexContainer > xSubContainer;
 
-                        sal_uInt16 nNewItemId = nItemId++;
-                        GetMenuItemAttributes( xPropSet, aLabel, aCommandURL, aHelpURL, xBitmap, xSubContainer );
+                    sal_uInt16 nNewItemId = nItemId++;
+                    GetMenuItemAttributes( xPropSet, aLabel, aCommandURL, aHelpURL, xBitmap, xSubContainer );
 
-                        SolarMutexGuard aGuard;
+                    SolarMutexGuard aGuard;
+                    {
+                        // insert new menu item
+                        sal_Int32 nIndex = aCommandURL.indexOf( aSlotURL );
+                        if ( nIndex >= 0 )
                         {
-                            // insert new menu item
-                            sal_Int32 nIndex = aCommandURL.indexOf( aSlotURL );
-                            if ( nIndex >= 0 )
-                            {
-                                // Special code for our menu implementation: some menu items don't have a
-                                // command url but uses the item id as a unique identifier. These entries
-                                // got a special url during conversion from menu=>actiontriggercontainer.
-                                // Now we have to extract this special url and set the correct item id!!!
-                                nNewItemId = static_cast<sal_uInt16>(aCommandURL.copy( nIndex+aSlotURL.getLength() ).toInt32());
-                                pSubMenu->InsertItem( nNewItemId, aLabel );
-                            }
-                            else
-                            {
-                                pSubMenu->InsertItem( nNewItemId, aLabel );
-                                pSubMenu->SetItemCommand( nNewItemId, aCommandURL );
-                            }
+                            // Special code for our menu implementation: some menu items don't have a
+                            // command url but uses the item id as a unique identifier. These entries
+                            // got a special url during conversion from menu=>actiontriggercontainer.
+                            // Now we have to extract this special url and set the correct item id!!!
+                            nNewItemId = static_cast<sal_uInt16>(aCommandURL.copy( nIndex+aSlotURL.getLength() ).toInt32());
+                            pSubMenu->InsertItem( nNewItemId, aLabel );
+                        }
+                        else
+                        {
+                            pSubMenu->InsertItem( nNewItemId, aLabel );
+                            pSubMenu->SetItemCommand( nNewItemId, aCommandURL );
+                        }
 
-                            // handle bitmap
-                            if ( xBitmap.is() )
-                            {
-                                bool bImageSet = false;
+                        // handle bitmap
+                        if ( xBitmap.is() )
+                        {
+                            bool bImageSet = false;
 
-                                Reference< XUnoTunnel > xUnoTunnel( xBitmap, UNO_QUERY );
-                                if ( xUnoTunnel.is() )
+                            Reference< XUnoTunnel > xUnoTunnel( xBitmap, UNO_QUERY );
+                            if ( xUnoTunnel.is() )
+                            {
+                                // Try to get implementation pointer through XUnoTunnel
+                                sal_Int64 nPointer = xUnoTunnel->getSomething( ImageWrapper::GetUnoTunnelId() );
+                                if ( nPointer )
                                 {
-                                    // Try to get implementation pointer through XUnoTunnel
-                                    sal_Int64 nPointer = xUnoTunnel->getSomething( ImageWrapper::GetUnoTunnelId() );
-                                    if ( nPointer )
-                                    {
-                                        // This is our own optimized implementation of menu images!
-                                        ImageWrapper* pImageWrapper = reinterpret_cast< ImageWrapper * >( nPointer );
-                                        const Image& aMenuImage = pImageWrapper->GetImage();
+                                    // This is our own optimized implementation of menu images!
+                                    ImageWrapper* pImageWrapper = reinterpret_cast< ImageWrapper * >( nPointer );
+                                    const Image& aMenuImage = pImageWrapper->GetImage();
 
-                                        if ( !!aMenuImage )
-                                            pSubMenu->SetItemImage( nNewItemId, aMenuImage );
+                                    if ( !!aMenuImage )
+                                        pSubMenu->SetItemImage( nNewItemId, aMenuImage );
 
-                                        bImageSet = true;
-                                    }
-                                }
-
-                                if ( !bImageSet )
-                                {
-                                    // This is an unknown implementation of a XBitmap interface. We have to
-                                    // use a more time consuming way to build an Image!
-                                    Image   aImage;
-                                    BitmapEx aBitmap;
-
-                                    Sequence< sal_Int8 > aDIBSeq;
-                                    {
-                                        aDIBSeq = xBitmap->getDIB();
-                                        SvMemoryStream aMem( const_cast<sal_Int8 *>(aDIBSeq.getConstArray()), aDIBSeq.getLength(), StreamMode::READ );
-                                        ReadDIBBitmapEx(aBitmap, aMem);
-                                    }
-
-                                    aDIBSeq = xBitmap->getMaskDIB();
-                                    if ( aDIBSeq.hasElements() )
-                                    {
-                                        Bitmap aMaskBitmap;
-                                        SvMemoryStream aMem( const_cast<sal_Int8 *>(aDIBSeq.getConstArray()), aDIBSeq.getLength(), StreamMode::READ );
-                                        ReadDIB(aMaskBitmap, aMem, true);
-                                        aImage = Image(BitmapEx(aBitmap.GetBitmap(), aMaskBitmap));
-                                    }
-                                    else
-                                        aImage = Image( aBitmap );
-
-                                    if ( !!aImage )
-                                        pSubMenu->SetItemImage( nNewItemId, aImage );
+                                    bImageSet = true;
                                 }
                             }
-                            else
+
+                            if ( !bImageSet )
                             {
-                                // Support add-on images for context menu interceptors
-                                Image aImage = aAddonOptions.GetImageFromURL( aCommandURL, false, true );
+                                // This is an unknown implementation of a XBitmap interface. We have to
+                                // use a more time consuming way to build an Image!
+                                Image   aImage;
+                                BitmapEx aBitmap;
+
+                                Sequence< sal_Int8 > aDIBSeq;
+                                {
+                                    aDIBSeq = xBitmap->getDIB();
+                                    SvMemoryStream aMem( const_cast<sal_Int8 *>(aDIBSeq.getConstArray()), aDIBSeq.getLength(), StreamMode::READ );
+                                    ReadDIBBitmapEx(aBitmap, aMem);
+                                }
+
+                                aDIBSeq = xBitmap->getMaskDIB();
+                                if ( aDIBSeq.hasElements() )
+                                {
+                                    Bitmap aMaskBitmap;
+                                    SvMemoryStream aMem( const_cast<sal_Int8 *>(aDIBSeq.getConstArray()), aDIBSeq.getLength(), StreamMode::READ );
+                                    ReadDIB(aMaskBitmap, aMem, true);
+                                    aImage = Image(BitmapEx(aBitmap.GetBitmap(), aMaskBitmap));
+                                }
+                                else
+                                    aImage = Image( aBitmap );
+
                                 if ( !!aImage )
                                     pSubMenu->SetItemImage( nNewItemId, aImage );
                             }
+                        }
+                        else
+                        {
+                            // Support add-on images for context menu interceptors
+                            Image aImage = aAddonOptions.GetImageFromURL( aCommandURL, false, true );
+                            if ( !!aImage )
+                                pSubMenu->SetItemImage( nNewItemId, aImage );
+                        }
 
-                            if ( xSubContainer.is() )
-                            {
-                                VclPtr<PopupMenu> pNewSubMenu = VclPtr<PopupMenu>::Create();
+                        if ( xSubContainer.is() )
+                        {
+                            VclPtr<PopupMenu> pNewSubMenu = VclPtr<PopupMenu>::Create();
 
-                                // Sub menu (recursive call CreateSubMenu )
-                                InsertSubMenuItems( pNewSubMenu, nItemId, xSubContainer );
-                                pSubMenu->SetPopupMenu( nNewItemId, pNewSubMenu );
-                            }
+                            // Sub menu (recursive call CreateSubMenu )
+                            InsertSubMenuItems( pNewSubMenu, nItemId, xSubContainer );
+                            pSubMenu->SetPopupMenu( nNewItemId, pNewSubMenu );
                         }
                     }
                 }
             }
-            catch (const IndexOutOfBoundsException&)
-            {
-                return;
-            }
-            catch (const WrappedTargetException&)
-            {
-                return;
-            }
-            catch (const RuntimeException&)
-            {
-                return;
-            }
+        }
+        catch (const IndexOutOfBoundsException&)
+        {
+            return;
+        }
+        catch (const WrappedTargetException&)
+        {
+            return;
+        }
+        catch (const RuntimeException&)
+        {
+            return;
         }
     }
 }

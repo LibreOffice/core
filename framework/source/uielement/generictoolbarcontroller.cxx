@@ -138,26 +138,26 @@ void SAL_CALL GenericToolbarController::execute( sal_Int16 KeyModifier )
         }
     }
 
-    if ( xDispatch.is() )
-    {
-        css::util::URL aTargetURL;
-        Sequence<PropertyValue>   aArgs( 1 );
+    if ( !xDispatch.is() )
+        return;
 
-        // Add key modifier to argument list
-        aArgs[0].Name  = "KeyModifier";
-        aArgs[0].Value <<= KeyModifier;
+    css::util::URL aTargetURL;
+    Sequence<PropertyValue>   aArgs( 1 );
 
-        aTargetURL.Complete = aCommandURL;
-        if ( m_xUrlTransformer.is() )
-            m_xUrlTransformer->parseStrict( aTargetURL );
+    // Add key modifier to argument list
+    aArgs[0].Name  = "KeyModifier";
+    aArgs[0].Value <<= KeyModifier;
 
-        // Execute dispatch asynchronously
-        ExecuteInfo* pExecuteInfo = new ExecuteInfo;
-        pExecuteInfo->xDispatch     = xDispatch;
-        pExecuteInfo->aTargetURL    = aTargetURL;
-        pExecuteInfo->aArgs         = aArgs;
-        Application::PostUserEvent( LINK(nullptr, GenericToolbarController , ExecuteHdl_Impl), pExecuteInfo );
-    }
+    aTargetURL.Complete = aCommandURL;
+    if ( m_xUrlTransformer.is() )
+        m_xUrlTransformer->parseStrict( aTargetURL );
+
+    // Execute dispatch asynchronously
+    ExecuteInfo* pExecuteInfo = new ExecuteInfo;
+    pExecuteInfo->xDispatch     = xDispatch;
+    pExecuteInfo->aTargetURL    = aTargetURL;
+    pExecuteInfo->aArgs         = aArgs;
+    Application::PostUserEvent( LINK(nullptr, GenericToolbarController , ExecuteHdl_Impl), pExecuteInfo );
 }
 
 void GenericToolbarController::statusChanged( const FeatureStateEvent& Event )
@@ -167,100 +167,100 @@ void GenericToolbarController::statusChanged( const FeatureStateEvent& Event )
     if ( m_bDisposed )
         return;
 
-    if ( m_xToolbar )
+    if ( !m_xToolbar )
+        return;
+
+    m_xToolbar->EnableItem( m_nID, Event.IsEnabled );
+
+    ToolBoxItemBits nItemBits = m_xToolbar->GetItemBits( m_nID );
+    nItemBits &= ~ToolBoxItemBits::CHECKABLE;
+    TriState eTri = TRISTATE_FALSE;
+
+    bool            bValue;
+    OUString        aStrValue;
+    ItemStatus      aItemState;
+    Visibility      aItemVisibility;
+    ControlCommand  aControlCommand;
+
+    if (( Event.State >>= bValue ) && !m_bEnumCommand )
     {
-        m_xToolbar->EnableItem( m_nID, Event.IsEnabled );
-
-        ToolBoxItemBits nItemBits = m_xToolbar->GetItemBits( m_nID );
-        nItemBits &= ~ToolBoxItemBits::CHECKABLE;
-        TriState eTri = TRISTATE_FALSE;
-
-        bool            bValue;
-        OUString        aStrValue;
-        ItemStatus      aItemState;
-        Visibility      aItemVisibility;
-        ControlCommand  aControlCommand;
-
-        if (( Event.State >>= bValue ) && !m_bEnumCommand )
+        // Boolean, treat it as checked/unchecked
+        if ( m_bMadeInvisible )
+            m_xToolbar->ShowItem( m_nID );
+        m_xToolbar->CheckItem( m_nID, bValue );
+        if ( bValue )
+            eTri = TRISTATE_TRUE;
+        nItemBits |= ToolBoxItemBits::CHECKABLE;
+    }
+    else if ( Event.State >>= aStrValue )
+    {
+        if ( m_bEnumCommand )
         {
-            // Boolean, treat it as checked/unchecked
-            if ( m_bMadeInvisible )
-                m_xToolbar->ShowItem( m_nID );
+            bValue = aStrValue == m_aEnumCommand;
+
             m_xToolbar->CheckItem( m_nID, bValue );
             if ( bValue )
                 eTri = TRISTATE_TRUE;
             nItemBits |= ToolBoxItemBits::CHECKABLE;
         }
-        else if ( Event.State >>= aStrValue )
+        else
         {
-            if ( m_bEnumCommand )
+            // Replacement for place holders
+            if ( aStrValue.startsWith("($1)") )
             {
-                bValue = aStrValue == m_aEnumCommand;
+                aStrValue = FwkResId(STR_UPDATEDOC) + " " + aStrValue.copy( 4 );
+            }
+            else if ( aStrValue.startsWith("($2)") )
+            {
+                aStrValue = FwkResId(STR_CLOSEDOC_ANDRETURN) + aStrValue.copy( 4 );
+            }
+            else if ( aStrValue.startsWith("($3)") )
+            {
+                aStrValue = FwkResId(STR_SAVECOPYDOC) + aStrValue.copy( 4 );
+            }
+            m_xToolbar->SetItemText( m_nID, aStrValue );
+            // tdf#124267 strip mnemonic from tooltip
+            m_xToolbar->SetQuickHelpText(m_nID, aStrValue.replaceFirst("~", ""));
+        }
 
-                m_xToolbar->CheckItem( m_nID, bValue );
-                if ( bValue )
-                    eTri = TRISTATE_TRUE;
-                nItemBits |= ToolBoxItemBits::CHECKABLE;
-            }
-            else
-            {
-                // Replacement for place holders
-                if ( aStrValue.startsWith("($1)") )
-                {
-                    aStrValue = FwkResId(STR_UPDATEDOC) + " " + aStrValue.copy( 4 );
-                }
-                else if ( aStrValue.startsWith("($2)") )
-                {
-                    aStrValue = FwkResId(STR_CLOSEDOC_ANDRETURN) + aStrValue.copy( 4 );
-                }
-                else if ( aStrValue.startsWith("($3)") )
-                {
-                    aStrValue = FwkResId(STR_SAVECOPYDOC) + aStrValue.copy( 4 );
-                }
-                m_xToolbar->SetItemText( m_nID, aStrValue );
-                // tdf#124267 strip mnemonic from tooltip
-                m_xToolbar->SetQuickHelpText(m_nID, aStrValue.replaceFirst("~", ""));
-            }
-
-            if ( m_bMadeInvisible )
-                m_xToolbar->ShowItem( m_nID );
-        }
-        else if (( Event.State >>= aItemState ) && !m_bEnumCommand )
-        {
-            eTri = TRISTATE_INDET;
-            nItemBits |= ToolBoxItemBits::CHECKABLE;
-            if ( m_bMadeInvisible )
-                m_xToolbar->ShowItem( m_nID );
-        }
-        else if ( Event.State >>= aItemVisibility )
-        {
-            m_xToolbar->ShowItem( m_nID, aItemVisibility.bVisible );
-            m_bMadeInvisible = !aItemVisibility.bVisible;
-        }
-        else if ( Event.State >>= aControlCommand )
-        {
-            if (aControlCommand.Command == "SetQuickHelpText")
-            {
-                for (sal_Int32 i = 0; i < aControlCommand.Arguments.getLength(); i++)
-                {
-                    if (aControlCommand.Arguments[i].Name == "HelpText")
-                    {
-                        OUString aHelpText;
-                        aControlCommand.Arguments[i].Value >>= aHelpText;
-                        m_xToolbar->SetQuickHelpText(m_nID, aHelpText);
-                        break;
-                    }
-                }
-            }
-            if ( m_bMadeInvisible )
-                m_xToolbar->ShowItem( m_nID );
-        }
-        else if ( m_bMadeInvisible )
+        if ( m_bMadeInvisible )
             m_xToolbar->ShowItem( m_nID );
-
-        m_xToolbar->SetItemState( m_nID, eTri );
-        m_xToolbar->SetItemBits( m_nID, nItemBits );
     }
+    else if (( Event.State >>= aItemState ) && !m_bEnumCommand )
+    {
+        eTri = TRISTATE_INDET;
+        nItemBits |= ToolBoxItemBits::CHECKABLE;
+        if ( m_bMadeInvisible )
+            m_xToolbar->ShowItem( m_nID );
+    }
+    else if ( Event.State >>= aItemVisibility )
+    {
+        m_xToolbar->ShowItem( m_nID, aItemVisibility.bVisible );
+        m_bMadeInvisible = !aItemVisibility.bVisible;
+    }
+    else if ( Event.State >>= aControlCommand )
+    {
+        if (aControlCommand.Command == "SetQuickHelpText")
+        {
+            for (sal_Int32 i = 0; i < aControlCommand.Arguments.getLength(); i++)
+            {
+                if (aControlCommand.Arguments[i].Name == "HelpText")
+                {
+                    OUString aHelpText;
+                    aControlCommand.Arguments[i].Value >>= aHelpText;
+                    m_xToolbar->SetQuickHelpText(m_nID, aHelpText);
+                    break;
+                }
+            }
+        }
+        if ( m_bMadeInvisible )
+            m_xToolbar->ShowItem( m_nID );
+    }
+    else if ( m_bMadeInvisible )
+        m_xToolbar->ShowItem( m_nID );
+
+    m_xToolbar->SetItemState( m_nID, eTri );
+    m_xToolbar->SetItemBits( m_nID, nItemBits );
 }
 
 IMPL_STATIC_LINK( GenericToolbarController, ExecuteHdl_Impl, void*, p, void )
@@ -324,25 +324,25 @@ void MenuToolbarController::initialize( const css::uno::Sequence< css::uno::Any 
         {}
     }
 
-    if ( xMenuContainer.is() && xMenuContainer->getCount() )
-    {
-        Sequence< PropertyValue > aProps;
-        // drop down menu info is currently the first ( and only ) menu in the menusettings container
-        xMenuContainer->getByIndex(0) >>= aProps;
-        for ( const auto& aProp : std::as_const(aProps) )
-        {
-            if ( aProp.Name == "ItemDescriptorContainer" )
-            {
-                aProp.Value >>= m_xMenuDesc;
-                break;
-            }
-        }
+    if ( !(xMenuContainer.is() && xMenuContainer->getCount()) )
+        return;
 
-        ToolBox* pToolBox = nullptr;
-        sal_uInt16 nId = 0;
-        if ( getToolboxId( nId, &pToolBox ) )
-            pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );
+    Sequence< PropertyValue > aProps;
+    // drop down menu info is currently the first ( and only ) menu in the menusettings container
+    xMenuContainer->getByIndex(0) >>= aProps;
+    for ( const auto& aProp : std::as_const(aProps) )
+    {
+        if ( aProp.Name == "ItemDescriptorContainer" )
+        {
+            aProp.Value >>= m_xMenuDesc;
+            break;
+        }
     }
+
+    ToolBox* pToolBox = nullptr;
+    sal_uInt16 nId = 0;
+    if ( getToolboxId( nId, &pToolBox ) )
+        pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );
 }
 
 Reference< XWindow > SAL_CALL

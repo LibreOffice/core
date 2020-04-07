@@ -270,29 +270,29 @@ void SAL_CALL OReadMenuDocumentHandler::characters(const OUString&)
 
 void SAL_CALL OReadMenuDocumentHandler::endElement( const OUString& aName )
 {
-    if ( m_eReaderMode != ReaderMode::None )
+    if ( m_eReaderMode == ReaderMode::None )
+        return;
+
+    --m_nElementDepth;
+    m_xReader->endElement( aName );
+    if ( 0 != m_nElementDepth )
+        return;
+
+    m_xReader->endDocument();
+    m_xReader.clear();
+    if ( m_eReaderMode == ReaderMode::MenuBar && aName != ELEMENT_MENUBAR )
     {
-        --m_nElementDepth;
-        m_xReader->endElement( aName );
-        if ( 0 == m_nElementDepth )
-        {
-            m_xReader->endDocument();
-            m_xReader.clear();
-            if ( m_eReaderMode == ReaderMode::MenuBar && aName != ELEMENT_MENUBAR )
-            {
-                OUString aErrorMessage = getErrorLineString() +
-                    "closing element menubar expected!";
-                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-            }
-            else if ( m_eReaderMode == ReaderMode::MenuPopup && aName != ELEMENT_MENUPOPUP )
-            {
-                OUString aErrorMessage = getErrorLineString() +
-                    "closing element menupopup expected!";
-                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-            }
-            m_eReaderMode = ReaderMode::None;
-        }
+        OUString aErrorMessage = getErrorLineString() +
+            "closing element menubar expected!";
+        throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
     }
+    else if ( m_eReaderMode == ReaderMode::MenuPopup && aName != ELEMENT_MENUPOPUP )
+    {
+        OUString aErrorMessage = getErrorLineString() +
+            "closing element menupopup expected!";
+        throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+    }
+    m_eReaderMode = ReaderMode::None;
 }
 
 OReadMenuBarHandler::OReadMenuBarHandler(
@@ -410,24 +410,24 @@ void SAL_CALL OReadMenuBarHandler::characters(const OUString&)
 
 void OReadMenuBarHandler::endElement( const OUString& aName )
 {
-    if ( m_bMenuMode )
+    if ( !m_bMenuMode )
+        return;
+
+    --m_nElementDepth;
+    if ( 0 == m_nElementDepth )
     {
-        --m_nElementDepth;
-        if ( 0 == m_nElementDepth )
+        m_xReader->endDocument();
+        m_xReader.clear();
+        m_bMenuMode = false;
+        if ( aName != ELEMENT_MENU )
         {
-            m_xReader->endDocument();
-            m_xReader.clear();
-            m_bMenuMode = false;
-            if ( aName != ELEMENT_MENU )
-            {
-                OUString aErrorMessage = getErrorLineString() +
-                    "closing element menu expected!";
-                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-            }
+            OUString aErrorMessage = getErrorLineString() +
+                "closing element menu expected!";
+            throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
         }
-        else
-            m_xReader->endElement( aName );
     }
+    else
+        m_xReader->endElement( aName );
 }
 
 OReadMenuHandler::OReadMenuHandler(
@@ -481,24 +481,24 @@ void SAL_CALL OReadMenuHandler::characters(const OUString&)
 
 void SAL_CALL OReadMenuHandler::endElement( const OUString& aName )
 {
-    if ( m_bMenuPopupMode )
+    if ( !m_bMenuPopupMode )
+        return;
+
+    --m_nElementDepth;
+    if ( 0 == m_nElementDepth )
     {
-        --m_nElementDepth;
-        if ( 0 == m_nElementDepth )
+        m_xReader->endDocument();
+        m_xReader.clear();
+        m_bMenuPopupMode = false;
+        if ( aName != ELEMENT_MENUPOPUP )
         {
-            m_xReader->endDocument();
-            m_xReader.clear();
-            m_bMenuPopupMode = false;
-            if ( aName != ELEMENT_MENUPOPUP )
-            {
-                OUString aErrorMessage = getErrorLineString() +
-                    "closing element menupopup expected!";
-                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-            }
+            OUString aErrorMessage = getErrorLineString() +
+                "closing element menupopup expected!";
+            throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
         }
-        else
-            m_xReader->endElement( aName );
     }
+    else
+        m_xReader->endElement( aName );
 }
 
 OReadMenuPopupHandler::OReadMenuPopupHandler(

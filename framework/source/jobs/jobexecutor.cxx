@@ -139,25 +139,25 @@ void JobExecutor::initListeners()
     // list too ... Be listener at the configuration.
 
     m_aConfig.open(ConfigAccess::E_READONLY);
-    if (m_aConfig.getMode() == ConfigAccess::E_READONLY)
+    if (m_aConfig.getMode() != ConfigAccess::E_READONLY)
+        return;
+
+    css::uno::Reference< css::container::XNameAccess > xRegistry(
+            m_aConfig.cfg(), css::uno::UNO_QUERY);
+    if (xRegistry.is())
+        m_lEvents = Converter::convert_seqOUString2OUStringList(
+                xRegistry->getElementNames());
+
+    css::uno::Reference< css::container::XContainer > xNotifier(
+            m_aConfig.cfg(), css::uno::UNO_QUERY);
+    if (xNotifier.is())
     {
-        css::uno::Reference< css::container::XNameAccess > xRegistry(
-                m_aConfig.cfg(), css::uno::UNO_QUERY);
-        if (xRegistry.is())
-            m_lEvents = Converter::convert_seqOUString2OUStringList(
-                    xRegistry->getElementNames());
-
-        css::uno::Reference< css::container::XContainer > xNotifier(
-                m_aConfig.cfg(), css::uno::UNO_QUERY);
-        if (xNotifier.is())
-        {
-            m_xConfigListener = new WeakContainerListener(this);
-            xNotifier->addContainerListener(m_xConfigListener);
-        }
-
-        // don't close cfg here!
-        // It will be done inside disposing ...
+        m_xConfigListener = new WeakContainerListener(this);
+        xNotifier->addContainerListener(m_xConfigListener);
     }
+
+    // don't close cfg here!
+    // It will be done inside disposing ...
 }
 
 JobExecutor::~JobExecutor()

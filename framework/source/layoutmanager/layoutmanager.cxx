@@ -150,46 +150,46 @@ void LayoutManager::implts_createMenuBar(const OUString& rMenuBarName)
     }
 
     // Create the default menubar otherwise
-    if (!m_bInplaceMenuSet && !m_xMenuBar.is())
+    if (m_bInplaceMenuSet || m_xMenuBar.is())
+        return;
+
+    m_xMenuBar = implts_createElement( rMenuBarName );
+    if ( !m_xMenuBar.is() )
+        return;
+
+    SystemWindow* pSysWindow = getTopSystemWindow( m_xContainerWindow );
+    if ( !pSysWindow )
+        return;
+
+    Reference< awt::XMenuBar > xMenuBar;
+
+    Reference< XPropertySet > xPropSet( m_xMenuBar, UNO_QUERY );
+    if ( xPropSet.is() )
     {
-        m_xMenuBar = implts_createElement( rMenuBarName );
-        if ( m_xMenuBar.is() )
+        try
         {
-            SystemWindow* pSysWindow = getTopSystemWindow( m_xContainerWindow );
-            if ( pSysWindow )
-            {
-                Reference< awt::XMenuBar > xMenuBar;
+            xPropSet->getPropertyValue("XMenuBar") >>= xMenuBar;
+        }
+        catch (const beans::UnknownPropertyException&)
+        {
+        }
+        catch (const lang::WrappedTargetException&)
+        {
+        }
+    }
 
-                Reference< XPropertySet > xPropSet( m_xMenuBar, UNO_QUERY );
-                if ( xPropSet.is() )
-                {
-                    try
-                    {
-                        xPropSet->getPropertyValue("XMenuBar") >>= xMenuBar;
-                    }
-                    catch (const beans::UnknownPropertyException&)
-                    {
-                    }
-                    catch (const lang::WrappedTargetException&)
-                    {
-                    }
-                }
+    if ( !xMenuBar.is() )
+        return;
 
-                if ( xMenuBar.is() )
-                {
-                    VCLXMenu* pAwtMenuBar = comphelper::getUnoTunnelImplementation<VCLXMenu>( xMenuBar );
-                    if ( pAwtMenuBar )
-                    {
-                        MenuBar* pMenuBar = static_cast<MenuBar*>(pAwtMenuBar->GetMenu());
-                        if ( pMenuBar )
-                        {
-                            pSysWindow->SetMenuBar(pMenuBar);
-                            pMenuBar->SetDisplayable( m_bMenuVisible );
-                            implts_updateMenuBarClose();
-                        }
-                    }
-                }
-            }
+    VCLXMenu* pAwtMenuBar = comphelper::getUnoTunnelImplementation<VCLXMenu>( xMenuBar );
+    if ( pAwtMenuBar )
+    {
+        MenuBar* pMenuBar = static_cast<MenuBar*>(pAwtMenuBar->GetMenu());
+        if ( pMenuBar )
+        {
+            pSysWindow->SetMenuBar(pMenuBar);
+            pMenuBar->SetDisplayable( m_bMenuVisible );
+            implts_updateMenuBarClose();
         }
     }
 }
@@ -669,47 +669,47 @@ void LayoutManager::implts_writeWindowStateData( const OUString& aName, const UI
         }
     }
 
-    if ( bPersistent && xPersistentWindowState.is() )
+    if ( !(bPersistent && xPersistentWindowState.is()) )
+        return;
+
+    try
     {
-        try
+        Sequence< PropertyValue > aWindowState( 8 );
+
+        aWindowState[0].Name  = WINDOWSTATE_PROPERTY_DOCKED;
+        aWindowState[0].Value <<= !rElementData.m_bFloating;
+        aWindowState[1].Name  = WINDOWSTATE_PROPERTY_VISIBLE;
+        aWindowState[1].Value <<= rElementData.m_bVisible;
+
+        aWindowState[2].Name  = WINDOWSTATE_PROPERTY_DOCKINGAREA;
+        aWindowState[2].Value <<= rElementData.m_aDockedData.m_nDockedArea;
+
+        aWindowState[3].Name = WINDOWSTATE_PROPERTY_DOCKPOS;
+        aWindowState[3].Value <<= rElementData.m_aDockedData.m_aPos;
+
+        aWindowState[4].Name = WINDOWSTATE_PROPERTY_POS;
+        aWindowState[4].Value <<= rElementData.m_aFloatingData.m_aPos;
+
+        aWindowState[5].Name  = WINDOWSTATE_PROPERTY_SIZE;
+        aWindowState[5].Value <<= rElementData.m_aFloatingData.m_aSize;
+        aWindowState[6].Name  = WINDOWSTATE_PROPERTY_UINAME;
+        aWindowState[6].Value <<= rElementData.m_aUIName;
+        aWindowState[7].Name  = WINDOWSTATE_PROPERTY_LOCKED;
+        aWindowState[7].Value <<= rElementData.m_aDockedData.m_bLocked;
+
+        if ( xPersistentWindowState->hasByName( aName ))
         {
-            Sequence< PropertyValue > aWindowState( 8 );
-
-            aWindowState[0].Name  = WINDOWSTATE_PROPERTY_DOCKED;
-            aWindowState[0].Value <<= !rElementData.m_bFloating;
-            aWindowState[1].Name  = WINDOWSTATE_PROPERTY_VISIBLE;
-            aWindowState[1].Value <<= rElementData.m_bVisible;
-
-            aWindowState[2].Name  = WINDOWSTATE_PROPERTY_DOCKINGAREA;
-            aWindowState[2].Value <<= rElementData.m_aDockedData.m_nDockedArea;
-
-            aWindowState[3].Name = WINDOWSTATE_PROPERTY_DOCKPOS;
-            aWindowState[3].Value <<= rElementData.m_aDockedData.m_aPos;
-
-            aWindowState[4].Name = WINDOWSTATE_PROPERTY_POS;
-            aWindowState[4].Value <<= rElementData.m_aFloatingData.m_aPos;
-
-            aWindowState[5].Name  = WINDOWSTATE_PROPERTY_SIZE;
-            aWindowState[5].Value <<= rElementData.m_aFloatingData.m_aSize;
-            aWindowState[6].Name  = WINDOWSTATE_PROPERTY_UINAME;
-            aWindowState[6].Value <<= rElementData.m_aUIName;
-            aWindowState[7].Name  = WINDOWSTATE_PROPERTY_LOCKED;
-            aWindowState[7].Value <<= rElementData.m_aDockedData.m_bLocked;
-
-            if ( xPersistentWindowState->hasByName( aName ))
-            {
-                Reference< XNameReplace > xReplace( xPersistentWindowState, uno::UNO_QUERY );
-                xReplace->replaceByName( aName, makeAny( aWindowState ));
-            }
-            else
-            {
-                Reference< XNameContainer > xInsert( xPersistentWindowState, uno::UNO_QUERY );
-                xInsert->insertByName( aName, makeAny( aWindowState ));
-            }
+            Reference< XNameReplace > xReplace( xPersistentWindowState, uno::UNO_QUERY );
+            xReplace->replaceByName( aName, makeAny( aWindowState ));
         }
-        catch (const Exception&)
+        else
         {
+            Reference< XNameContainer > xInsert( xPersistentWindowState, uno::UNO_QUERY );
+            xInsert->insertByName( aName, makeAny( aWindowState ));
         }
+    }
+    catch (const Exception&)
+    {
     }
 }
 
@@ -994,18 +994,18 @@ void LayoutManager::implts_setStatusBarPosSize( const ::Point& rPos, const ::Siz
     aReadLock.clear();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
-    if ( xWindow.is() )
+    if ( !xWindow.is() )
+        return;
+
+    SolarMutexGuard aGuard;
+    VclPtr<vcl::Window> pParentWindow = VCLUnoHelper::GetWindow( xContainerWindow );
+    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
+    if ( pParentWindow && ( pWindow && pWindow->GetType() == WindowType::STATUSBAR ))
     {
-        SolarMutexGuard aGuard;
-        VclPtr<vcl::Window> pParentWindow = VCLUnoHelper::GetWindow( xContainerWindow );
-        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
-        if ( pParentWindow && ( pWindow && pWindow->GetType() == WindowType::STATUSBAR ))
-        {
-            vcl::Window* pOldParentWindow = pWindow->GetParent();
-            if ( pParentWindow != pOldParentWindow )
-                pWindow->SetParent( pParentWindow );
-            static_cast<StatusBar *>(pWindow.get())->SetPosSizePixel( rPos, rSize );
-        }
+        vcl::Window* pOldParentWindow = pWindow->GetParent();
+        if ( pParentWindow != pOldParentWindow )
+            pWindow->SetParent( pParentWindow );
+        static_cast<StatusBar *>(pWindow.get())->SetPosSizePixel( rPos, rSize );
     }
 }
 
@@ -1155,42 +1155,42 @@ void LayoutManager::implts_setInplaceMenuBar( const Reference< XIndexAccess >& x
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexClearableGuard aWriteLock;
 
-    if ( !m_bInplaceMenuSet )
+    if ( m_bInplaceMenuSet )
+        return;
+
+    SolarMutexGuard aGuard;
+
+    // Reset old inplace menubar!
+    VclPtr<Menu> pOldMenuBar;
+    if (m_xInplaceMenuBar.is())
     {
-        SolarMutexGuard aGuard;
-
-        // Reset old inplace menubar!
-        VclPtr<Menu> pOldMenuBar;
-        if (m_xInplaceMenuBar.is())
-        {
-            pOldMenuBar = m_xInplaceMenuBar->GetMenuBar();
-            m_xInplaceMenuBar->dispose();
-            m_xInplaceMenuBar.clear();
-        }
-        pOldMenuBar.disposeAndClear();
-
-        m_bInplaceMenuSet = false;
-
-        if ( m_xFrame.is() && m_xContainerWindow.is() )
-        {
-            Reference< XDispatchProvider > xDispatchProvider;
-
-            VclPtr<MenuBar> pMenuBar = VclPtr<MenuBar>::Create();
-            m_xInplaceMenuBar = new MenuBarManager( m_xContext, m_xFrame, m_xURLTransformer, xDispatchProvider, OUString(), pMenuBar, true );
-            m_xInplaceMenuBar->SetItemContainer( xMergedMenuBar );
-
-            SystemWindow* pSysWindow = getTopSystemWindow( m_xContainerWindow );
-            if ( pSysWindow )
-                pSysWindow->SetMenuBar(pMenuBar);
-
-            m_bInplaceMenuSet = true;
-        }
-
-        aWriteLock.clear();
-        /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-
-        implts_updateMenuBarClose();
+        pOldMenuBar = m_xInplaceMenuBar->GetMenuBar();
+        m_xInplaceMenuBar->dispose();
+        m_xInplaceMenuBar.clear();
     }
+    pOldMenuBar.disposeAndClear();
+
+    m_bInplaceMenuSet = false;
+
+    if ( m_xFrame.is() && m_xContainerWindow.is() )
+    {
+        Reference< XDispatchProvider > xDispatchProvider;
+
+        VclPtr<MenuBar> pMenuBar = VclPtr<MenuBar>::Create();
+        m_xInplaceMenuBar = new MenuBarManager( m_xContext, m_xFrame, m_xURLTransformer, xDispatchProvider, OUString(), pMenuBar, true );
+        m_xInplaceMenuBar->SetItemContainer( xMergedMenuBar );
+
+        SystemWindow* pSysWindow = getTopSystemWindow( m_xContainerWindow );
+        if ( pSysWindow )
+            pSysWindow->SetMenuBar(pMenuBar);
+
+        m_bInplaceMenuSet = true;
+    }
+
+    aWriteLock.clear();
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+
+    implts_updateMenuBarClose();
 }
 
 void LayoutManager::implts_resetInplaceMenuBar()
@@ -1954,52 +1954,52 @@ sal_Bool SAL_CALL LayoutManager::unlockWindow( const OUString& aName )
 
 void SAL_CALL LayoutManager::setElementSize( const OUString& aName, const awt::Size& aSize )
 {
-    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
-    {
-        SolarMutexClearableGuard aReadLock;
-        ToolbarLayoutManager*             pToolbarManager = m_xToolbarManager.get();
-        aReadLock.clear();
+    if ( !getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
+        return;
 
-        if ( pToolbarManager )
-        {
-            pToolbarManager->setToolbarSize( aName, aSize );
-            if ( pToolbarManager->isLayoutDirty() )
-                doLayout();
-        }
+    SolarMutexClearableGuard aReadLock;
+    ToolbarLayoutManager*             pToolbarManager = m_xToolbarManager.get();
+    aReadLock.clear();
+
+    if ( pToolbarManager )
+    {
+        pToolbarManager->setToolbarSize( aName, aSize );
+        if ( pToolbarManager->isLayoutDirty() )
+            doLayout();
     }
 }
 
 void SAL_CALL LayoutManager::setElementPos( const OUString& aName, const awt::Point& aPos )
 {
-    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
-    {
-        SolarMutexClearableGuard aReadLock;
-        ToolbarLayoutManager* pToolbarManager( m_xToolbarManager.get() );
-        aReadLock.clear();
+    if ( !getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
+        return;
 
-        if ( pToolbarManager )
-        {
-            pToolbarManager->setToolbarPos( aName, aPos );
-            if ( pToolbarManager->isLayoutDirty() )
-                doLayout();
-        }
+    SolarMutexClearableGuard aReadLock;
+    ToolbarLayoutManager* pToolbarManager( m_xToolbarManager.get() );
+    aReadLock.clear();
+
+    if ( pToolbarManager )
+    {
+        pToolbarManager->setToolbarPos( aName, aPos );
+        if ( pToolbarManager->isLayoutDirty() )
+            doLayout();
     }
 }
 
 void SAL_CALL LayoutManager::setElementPosSize( const OUString& aName, const awt::Point& aPos, const awt::Size& aSize )
 {
-    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
-    {
-        SolarMutexClearableGuard aReadLock;
-        ToolbarLayoutManager* pToolbarManager( m_xToolbarManager.get() );
-        aReadLock.clear();
+    if ( !getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
+        return;
 
-        if ( pToolbarManager )
-        {
-            pToolbarManager->setToolbarPosSize( aName, aPos, aSize );
-            if ( pToolbarManager->isLayoutDirty() )
-                doLayout();
-        }
+    SolarMutexClearableGuard aReadLock;
+    ToolbarLayoutManager* pToolbarManager( m_xToolbarManager.get() );
+    aReadLock.clear();
+
+    if ( pToolbarManager )
+    {
+        pToolbarManager->setToolbarPosSize( aName, aPos, aSize );
+        if ( pToolbarManager->isLayoutDirty() )
+            doLayout();
     }
 }
 
@@ -2458,20 +2458,20 @@ void LayoutManager::implts_updateMenuBarClose()
     Reference< awt::XWindow > xContainerWindow( m_xContainerWindow );
     aWriteLock.clear();
 
-    if ( xContainerWindow.is() )
-    {
-        SolarMutexGuard aGuard;
+    if ( !xContainerWindow.is() )
+        return;
 
-        SystemWindow* pSysWindow = getTopSystemWindow( xContainerWindow );
-        if ( pSysWindow )
+    SolarMutexGuard aGuard;
+
+    SystemWindow* pSysWindow = getTopSystemWindow( xContainerWindow );
+    if ( pSysWindow )
+    {
+        MenuBar* pMenuBar = pSysWindow->GetMenuBar();
+        if ( pMenuBar )
         {
-            MenuBar* pMenuBar = pSysWindow->GetMenuBar();
-            if ( pMenuBar )
-            {
-                // TODO remove link on sal_False ?!
-                pMenuBar->ShowCloseButton(bShowCloseButton);
-                pMenuBar->SetCloseButtonClickHdl(LINK(this, LayoutManager, MenuBarClose));
-            }
+            // TODO remove link on sal_False ?!
+            pMenuBar->ShowCloseButton(bShowCloseButton);
+            pMenuBar->SetCloseButtonClickHdl(LINK(this, LayoutManager, MenuBarClose));
         }
     }
 }
@@ -2592,19 +2592,19 @@ void LayoutManager::implts_notifyListeners(short nEvent, const uno::Any& rInfoPa
 {
     lang::EventObject                  aSource( static_cast< ::cppu::OWeakObject*>(this) );
     ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<frame::XLayoutManagerListener>::get());
-    if (pContainer!=nullptr)
+    if (pContainer==nullptr)
+        return;
+
+    ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+    while (pIterator.hasMoreElements())
     {
-        ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
-        while (pIterator.hasMoreElements())
+        try
         {
-            try
-            {
-                static_cast<frame::XLayoutManagerListener*>(pIterator.next())->layoutEvent(aSource, nEvent, rInfoParam);
-            }
-            catch( const uno::RuntimeException& )
-            {
-                pIterator.remove();
-            }
+            static_cast<frame::XLayoutManagerListener*>(pIterator.next())->layoutEvent(aSource, nEvent, rInfoParam);
+        }
+        catch( const uno::RuntimeException& )
+        {
+            pIterator.remove();
         }
     }
 }
@@ -2851,40 +2851,40 @@ void SAL_CALL LayoutManager::elementInserted( const ui::ConfigurationEvent& Even
     rtl::Reference< ToolbarLayoutManager > xToolbarManager( m_xToolbarManager );
     aReadLock.clear();
 
-    if ( xFrame.is() )
+    if ( !xFrame.is() )
+        return;
+
+    OUString aElementType;
+    OUString aElementName;
+    bool            bRefreshLayout(false);
+
+    parseResourceURL( Event.ResourceURL, aElementType, aElementName );
+    if ( aElementType.equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
-        OUString aElementType;
-        OUString aElementName;
-        bool            bRefreshLayout(false);
-
-        parseResourceURL( Event.ResourceURL, aElementType, aElementName );
-        if ( aElementType.equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
+        if ( xToolbarManager.is() )
         {
-            if ( xToolbarManager.is() )
-            {
-                xToolbarManager->elementInserted( Event );
-                bRefreshLayout = xToolbarManager->isLayoutDirty();
-            }
+            xToolbarManager->elementInserted( Event );
+            bRefreshLayout = xToolbarManager->isLayoutDirty();
         }
-        else if ( aElementType.equalsIgnoreAsciiCase( UIRESOURCETYPE_MENUBAR ))
-        {
-            Reference< XUIElement >         xUIElement = implts_findElement( Event.ResourceURL );
-            Reference< XUIElementSettings > xElementSettings( xUIElement, UNO_QUERY );
-            if ( xElementSettings.is() )
-            {
-                uno::Reference< XPropertySet > xPropSet( xElementSettings, uno::UNO_QUERY );
-                if ( xPropSet.is() )
-                {
-                    if ( Event.Source == uno::Reference< uno::XInterface >( m_xDocCfgMgr, uno::UNO_QUERY ))
-                        xPropSet->setPropertyValue( "ConfigurationSource", makeAny( m_xDocCfgMgr ));
-                }
-                xElementSettings->updateSettings();
-            }
-        }
-
-        if ( bRefreshLayout )
-            doLayout();
     }
+    else if ( aElementType.equalsIgnoreAsciiCase( UIRESOURCETYPE_MENUBAR ))
+    {
+        Reference< XUIElement >         xUIElement = implts_findElement( Event.ResourceURL );
+        Reference< XUIElementSettings > xElementSettings( xUIElement, UNO_QUERY );
+        if ( xElementSettings.is() )
+        {
+            uno::Reference< XPropertySet > xPropSet( xElementSettings, uno::UNO_QUERY );
+            if ( xPropSet.is() )
+            {
+                if ( Event.Source == uno::Reference< uno::XInterface >( m_xDocCfgMgr, uno::UNO_QUERY ))
+                    xPropSet->setPropertyValue( "ConfigurationSource", makeAny( m_xDocCfgMgr ));
+            }
+            xElementSettings->updateSettings();
+        }
+    }
+
+    if ( bRefreshLayout )
+        doLayout();
 }
 
 void SAL_CALL LayoutManager::elementRemoved( const ui::ConfigurationEvent& Event )
@@ -2898,80 +2898,80 @@ void SAL_CALL LayoutManager::elementRemoved( const ui::ConfigurationEvent& Event
     Reference< ui::XUIConfigurationManager >  xDocCfgMgr( m_xDocCfgMgr );
     aReadLock.clear();
 
-    if ( xFrame.is() )
+    if ( !xFrame.is() )
+        return;
+
+    OUString aElementType;
+    OUString aElementName;
+    bool            bRefreshLayout(false);
+
+    parseResourceURL( Event.ResourceURL, aElementType, aElementName );
+    if ( aElementType.equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
-        OUString aElementType;
-        OUString aElementName;
-        bool            bRefreshLayout(false);
-
-        parseResourceURL( Event.ResourceURL, aElementType, aElementName );
-        if ( aElementType.equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
+        if ( xToolbarManager.is() )
         {
-            if ( xToolbarManager.is() )
-            {
-                xToolbarManager->elementRemoved( Event );
-                bRefreshLayout = xToolbarManager->isLayoutDirty();
-            }
+            xToolbarManager->elementRemoved( Event );
+            bRefreshLayout = xToolbarManager->isLayoutDirty();
         }
-        else
-        {
-            Reference< XUIElement > xUIElement = implts_findElement( Event.ResourceURL );
-            Reference< XUIElementSettings > xElementSettings( xUIElement, UNO_QUERY );
-            if ( xElementSettings.is() )
-            {
-                bool                      bNoSettings( false );
-                OUString           aConfigSourcePropName( "ConfigurationSource" );
-                Reference< XInterface >   xElementCfgMgr;
-                Reference< XPropertySet > xPropSet( xElementSettings, UNO_QUERY );
-
-                if ( xPropSet.is() )
-                    xPropSet->getPropertyValue( aConfigSourcePropName ) >>= xElementCfgMgr;
-
-                if ( !xElementCfgMgr.is() )
-                    return;
-
-                // Check if the same UI configuration manager has changed => check further
-                if ( Event.Source == xElementCfgMgr )
-                {
-                    // Same UI configuration manager where our element has its settings
-                    if ( Event.Source == Reference< XInterface >( xDocCfgMgr, UNO_QUERY ))
-                    {
-                        // document settings removed
-                        if ( xModuleCfgMgr->hasSettings( Event.ResourceURL ))
-                        {
-                            xPropSet->setPropertyValue( aConfigSourcePropName, makeAny( m_xModuleCfgMgr ));
-                            xElementSettings->updateSettings();
-                            return;
-                        }
-                    }
-
-                    bNoSettings = true;
-                }
-
-                // No settings anymore, element must be destroyed
-                if ( xContainerWindow.is() && bNoSettings )
-                {
-                    if ( aElementType.equalsIgnoreAsciiCase("menubar") &&
-                         aElementName.equalsIgnoreAsciiCase("menubar") )
-                    {
-                        SystemWindow* pSysWindow = getTopSystemWindow( xContainerWindow );
-                        if ( pSysWindow && !m_bInplaceMenuSet )
-                            pSysWindow->SetMenuBar( nullptr );
-
-                        Reference< XComponent > xComp( xMenuBar, UNO_QUERY );
-                        if ( xComp.is() )
-                            xComp->dispose();
-
-                        SolarMutexGuard g;
-                        m_xMenuBar.clear();
-                    }
-                }
-            }
-        }
-
-        if ( bRefreshLayout )
-            doLayout();
     }
+    else
+    {
+        Reference< XUIElement > xUIElement = implts_findElement( Event.ResourceURL );
+        Reference< XUIElementSettings > xElementSettings( xUIElement, UNO_QUERY );
+        if ( xElementSettings.is() )
+        {
+            bool                      bNoSettings( false );
+            OUString           aConfigSourcePropName( "ConfigurationSource" );
+            Reference< XInterface >   xElementCfgMgr;
+            Reference< XPropertySet > xPropSet( xElementSettings, UNO_QUERY );
+
+            if ( xPropSet.is() )
+                xPropSet->getPropertyValue( aConfigSourcePropName ) >>= xElementCfgMgr;
+
+            if ( !xElementCfgMgr.is() )
+                return;
+
+            // Check if the same UI configuration manager has changed => check further
+            if ( Event.Source == xElementCfgMgr )
+            {
+                // Same UI configuration manager where our element has its settings
+                if ( Event.Source == Reference< XInterface >( xDocCfgMgr, UNO_QUERY ))
+                {
+                    // document settings removed
+                    if ( xModuleCfgMgr->hasSettings( Event.ResourceURL ))
+                    {
+                        xPropSet->setPropertyValue( aConfigSourcePropName, makeAny( m_xModuleCfgMgr ));
+                        xElementSettings->updateSettings();
+                        return;
+                    }
+                }
+
+                bNoSettings = true;
+            }
+
+            // No settings anymore, element must be destroyed
+            if ( xContainerWindow.is() && bNoSettings )
+            {
+                if ( aElementType.equalsIgnoreAsciiCase("menubar") &&
+                     aElementName.equalsIgnoreAsciiCase("menubar") )
+                {
+                    SystemWindow* pSysWindow = getTopSystemWindow( xContainerWindow );
+                    if ( pSysWindow && !m_bInplaceMenuSet )
+                        pSysWindow->SetMenuBar( nullptr );
+
+                    Reference< XComponent > xComp( xMenuBar, UNO_QUERY );
+                    if ( xComp.is() )
+                        xComp->dispose();
+
+                    SolarMutexGuard g;
+                    m_xMenuBar.clear();
+                }
+            }
+        }
+    }
+
+    if ( bRefreshLayout )
+        doLayout();
 }
 
 void SAL_CALL LayoutManager::elementReplaced( const ui::ConfigurationEvent& Event )
@@ -2981,45 +2981,45 @@ void SAL_CALL LayoutManager::elementReplaced( const ui::ConfigurationEvent& Even
     rtl::Reference< ToolbarLayoutManager >    xToolbarManager( m_xToolbarManager );
     aReadLock.clear();
 
-    if ( xFrame.is() )
+    if ( !xFrame.is() )
+        return;
+
+    OUString aElementType;
+    OUString aElementName;
+    bool            bRefreshLayout(false);
+
+    parseResourceURL( Event.ResourceURL, aElementType, aElementName );
+    if ( aElementType.equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
-        OUString aElementType;
-        OUString aElementName;
-        bool            bRefreshLayout(false);
-
-        parseResourceURL( Event.ResourceURL, aElementType, aElementName );
-        if ( aElementType.equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
+        if ( xToolbarManager.is() )
         {
-            if ( xToolbarManager.is() )
-            {
-                xToolbarManager->elementReplaced( Event );
-                bRefreshLayout = xToolbarManager->isLayoutDirty();
-            }
+            xToolbarManager->elementReplaced( Event );
+            bRefreshLayout = xToolbarManager->isLayoutDirty();
         }
-        else
-        {
-            Reference< XUIElement >         xUIElement = implts_findElement( Event.ResourceURL );
-            Reference< XUIElementSettings > xElementSettings( xUIElement, UNO_QUERY );
-            if ( xElementSettings.is() )
-            {
-                Reference< XInterface >   xElementCfgMgr;
-                Reference< XPropertySet > xPropSet( xElementSettings, UNO_QUERY );
-
-                if ( xPropSet.is() )
-                    xPropSet->getPropertyValue( "ConfigurationSource" ) >>= xElementCfgMgr;
-
-                if ( !xElementCfgMgr.is() )
-                    return;
-
-                // Check if the same UI configuration manager has changed => update settings
-                if ( Event.Source == xElementCfgMgr )
-                    xElementSettings->updateSettings();
-            }
-        }
-
-        if ( bRefreshLayout )
-            doLayout();
     }
+    else
+    {
+        Reference< XUIElement >         xUIElement = implts_findElement( Event.ResourceURL );
+        Reference< XUIElementSettings > xElementSettings( xUIElement, UNO_QUERY );
+        if ( xElementSettings.is() )
+        {
+            Reference< XInterface >   xElementCfgMgr;
+            Reference< XPropertySet > xPropSet( xElementSettings, UNO_QUERY );
+
+            if ( xPropSet.is() )
+                xPropSet->getPropertyValue( "ConfigurationSource" ) >>= xElementCfgMgr;
+
+            if ( !xElementCfgMgr.is() )
+                return;
+
+            // Check if the same UI configuration manager has changed => update settings
+            if ( Event.Source == xElementCfgMgr )
+                xElementSettings->updateSettings();
+        }
+    }
+
+    if ( bRefreshLayout )
+        doLayout();
 }
 
 void SAL_CALL LayoutManager::setFastPropertyValue_NoBroadcast( sal_Int32       nHandle,

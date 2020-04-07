@@ -161,32 +161,31 @@ void SAL_CALL ContextChangeEventMultiplexer::addContextChangeEventListener (
 
     // Send out an initial event that informs the new listener about
     // the current context.
-    if (rxEventFocus.is() && pFocusDescriptor!=nullptr)
+    if (!(rxEventFocus.is() && pFocusDescriptor!=nullptr))
+        return;
+
+    if (pFocusDescriptor->msCurrentApplicationName.isEmpty() && pFocusDescriptor->msCurrentContextName.isEmpty()
+            && rxEventFocus.is())
     {
-        if (pFocusDescriptor->msCurrentApplicationName.isEmpty() && pFocusDescriptor->msCurrentContextName.isEmpty()
-                && rxEventFocus.is())
+        Reference< lang::XServiceInfo > xServInfo( rxEventFocus, uno::UNO_QUERY );
+        if( xServInfo.is() && xServInfo->getImplementationName() == "com.sun.star.comp.chart2.ChartController")
         {
-            Reference< lang::XServiceInfo > xServInfo( rxEventFocus, uno::UNO_QUERY );
-            if( xServInfo.is() && xServInfo->getImplementationName() == "com.sun.star.comp.chart2.ChartController")
-            {
-                css::ui::ContextChangeEventObject aEvent (
-                            rxEventFocus,
-                            "com.sun.star.chart2.ChartDocument",
-                            "Chart");
-                rxListener->notifyContextChangeEvent(aEvent);
+            css::ui::ContextChangeEventObject aEvent (
+                        rxEventFocus,
+                        "com.sun.star.chart2.ChartDocument",
+                        "Chart");
+            rxListener->notifyContextChangeEvent(aEvent);
 
-                return;
-            }
-
+            return;
         }
 
-        css::ui::ContextChangeEventObject aEvent (
-                    nullptr,
-                    pFocusDescriptor->msCurrentApplicationName,
-                    pFocusDescriptor->msCurrentContextName);
-        rxListener->notifyContextChangeEvent(aEvent);
-
     }
+
+    css::ui::ContextChangeEventObject aEvent (
+                nullptr,
+                pFocusDescriptor->msCurrentApplicationName,
+                pFocusDescriptor->msCurrentContextName);
+    rxListener->notifyContextChangeEvent(aEvent);
 }
 
 void SAL_CALL ContextChangeEventMultiplexer::removeContextChangeEventListener (
@@ -199,18 +198,18 @@ void SAL_CALL ContextChangeEventMultiplexer::removeContextChangeEventListener (
             static_cast<XWeak*>(this), 0);
 
     FocusDescriptor* pFocusDescriptor = GetFocusDescriptor(rxEventFocus, false);
-    if (pFocusDescriptor != nullptr)
-    {
-        ListenerContainer& rContainer (pFocusDescriptor->maListeners);
-        const ListenerContainer::iterator iListener (
-            ::std::find(rContainer.begin(), rContainer.end(), rxListener));
-        if (iListener != rContainer.end())
-        {
-            rContainer.erase(iListener);
+    if (pFocusDescriptor == nullptr)
+        return;
 
-            // We hold on to the focus descriptor even when the last listener has been removed.
-            // This allows us to keep track of the current context and send it to new listeners.
-        }
+    ListenerContainer& rContainer (pFocusDescriptor->maListeners);
+    const ListenerContainer::iterator iListener (
+        ::std::find(rContainer.begin(), rContainer.end(), rxListener));
+    if (iListener != rContainer.end())
+    {
+        rContainer.erase(iListener);
+
+        // We hold on to the focus descriptor even when the last listener has been removed.
+        // This allows us to keep track of the current context and send it to new listeners.
     }
 
 }

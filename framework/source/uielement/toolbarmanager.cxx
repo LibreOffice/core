@@ -563,48 +563,48 @@ void ToolBarManager::impl_elementChanged(bool const isRemove,
     sal_Int16                nImageType = sal_Int16();
     sal_Int16                nCurrentImageType = getCurrentImageType();
 
-    if (( Event.aInfo >>= nImageType ) &&
+    if (!(( Event.aInfo >>= nImageType ) &&
         ( nImageType == nCurrentImageType ) &&
-        ( Event.Element >>= xNameAccess ))
+        ( Event.Element >>= xNameAccess )))
+        return;
+
+    sal_Int16 nImageInfo( 1 );
+    Reference< XInterface > xIfacDocImgMgr( m_xDocImageManager, UNO_QUERY );
+    if ( xIfacDocImgMgr == Event.Source )
+        nImageInfo = 0;
+
+    Sequence< OUString > aSeq = xNameAccess->getElementNames();
+    for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )
     {
-        sal_Int16 nImageInfo( 1 );
-        Reference< XInterface > xIfacDocImgMgr( m_xDocImageManager, UNO_QUERY );
-        if ( xIfacDocImgMgr == Event.Source )
-            nImageInfo = 0;
-
-        Sequence< OUString > aSeq = xNameAccess->getElementNames();
-        for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )
+        CommandToInfoMap::iterator pIter = m_aCommandMap.find( aSeq[i] );
+        if ( pIter != m_aCommandMap.end() && ( pIter->second.nImageInfo >= nImageInfo ))
         {
-            CommandToInfoMap::iterator pIter = m_aCommandMap.find( aSeq[i] );
-            if ( pIter != m_aCommandMap.end() && ( pIter->second.nImageInfo >= nImageInfo ))
+            if (isRemove)
             {
-                if (isRemove)
+                Image aImage;
+                if (( pIter->second.nImageInfo == 0 ) && ( pIter->second.nImageInfo == nImageInfo ))
                 {
-                    Image aImage;
-                    if (( pIter->second.nImageInfo == 0 ) && ( pIter->second.nImageInfo == nImageInfo ))
-                    {
-                        // Special case: An image from the document image manager has been removed.
-                        // It is possible that we have an image at our module image manager. Before
-                        // we can remove our image we have to ask our module image manager.
-                        Sequence< OUString > aCmdURLSeq( 1 );
-                        Sequence< Reference< XGraphic > > aGraphicSeq;
-                        aCmdURLSeq[0] = pIter->first;
-                        aGraphicSeq = m_xModuleImageManager->getImages( nImageType, aCmdURLSeq );
-                        aImage = Image( aGraphicSeq[0] );
-                    }
-
-                    setToolBarImage(aImage,pIter);
-                } // if (isRemove)
-                else
-                {
-                    Reference< XGraphic > xGraphic;
-                    if ( xNameAccess->getByName( aSeq[i] ) >>= xGraphic )
-                    {
-                        Image aImage( xGraphic );
-                        setToolBarImage(aImage,pIter);
-                    }
-                    pIter->second.nImageInfo = nImageInfo;
+                    // Special case: An image from the document image manager has been removed.
+                    // It is possible that we have an image at our module image manager. Before
+                    // we can remove our image we have to ask our module image manager.
+                    Sequence< OUString > aCmdURLSeq( 1 );
+                    Sequence< Reference< XGraphic > > aGraphicSeq;
+                    aCmdURLSeq[0] = pIter->first;
+                    aGraphicSeq = m_xModuleImageManager->getImages( nImageType, aCmdURLSeq );
+                    aImage = Image( aGraphicSeq[0] );
                 }
+
+                setToolBarImage(aImage,pIter);
+            } // if (isRemove)
+            else
+            {
+                Reference< XGraphic > xGraphic;
+                if ( xNameAccess->getByName( aSeq[i] ) >>= xGraphic )
+                {
+                    Image aImage( xGraphic );
+                    setToolBarImage(aImage,pIter);
+                }
+                pIter->second.nImageInfo = nImageInfo;
             }
         }
     }
@@ -1155,18 +1155,18 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
     // Try to retrieve UIName from the container property set and set it as the title
     // if it is not empty.
     Reference< XPropertySet > xPropSet( rItemContainer, UNO_QUERY );
-    if ( xPropSet.is() )
+    if ( !xPropSet.is() )
+        return;
+
+    try
     {
-        try
-        {
-            OUString aUIName;
-            xPropSet->getPropertyValue("UIName") >>= aUIName;
-            if ( !aUIName.isEmpty() )
-                m_pToolBar->SetText( aUIName );
-        }
-        catch (const Exception&)
-        {
-        }
+        OUString aUIName;
+        xPropSet->getPropertyValue("UIName") >>= aUIName;
+        if ( !aUIName.isEmpty() )
+            m_pToolBar->SetText( aUIName );
+    }
+    catch (const Exception&)
+    {
     }
 }
 
@@ -1280,37 +1280,37 @@ void ToolBarManager::RequestImages()
 void ToolBarManager::notifyRegisteredControllers( const OUString& aUIElementName, const OUString& aCommand )
 {
     SolarMutexClearableGuard aGuard;
-    if ( !m_aSubToolBarControllerMap.empty() )
+    if ( m_aSubToolBarControllerMap.empty() )
+        return;
+
+    SubToolBarToSubToolBarControllerMap::const_iterator pIter =
+        m_aSubToolBarControllerMap.find( aUIElementName );
+
+    if ( pIter == m_aSubToolBarControllerMap.end() )
+        return;
+
+    const SubToolBarControllerVector& rSubToolBarVector = pIter->second;
+    if ( rSubToolBarVector.empty() )
+        return;
+
+    SubToolBarControllerVector aNotifyVector = rSubToolBarVector;
+    aGuard.clear();
+
+    const sal_uInt32 nCount = aNotifyVector.size();
+    for ( sal_uInt32 i=0; i < nCount; i++ )
     {
-        SubToolBarToSubToolBarControllerMap::const_iterator pIter =
-            m_aSubToolBarControllerMap.find( aUIElementName );
-
-        if ( pIter != m_aSubToolBarControllerMap.end() )
+        try
         {
-            const SubToolBarControllerVector& rSubToolBarVector = pIter->second;
-            if ( !rSubToolBarVector.empty() )
-            {
-                SubToolBarControllerVector aNotifyVector = rSubToolBarVector;
-                aGuard.clear();
-
-                const sal_uInt32 nCount = aNotifyVector.size();
-                for ( sal_uInt32 i=0; i < nCount; i++ )
-                {
-                    try
-                    {
-                        Reference< XSubToolbarController > xController = aNotifyVector[i];
-                        if ( xController.is() )
-                            xController->functionSelected( aCommand );
-                    }
-                    catch (const RuntimeException&)
-                    {
-                        throw;
-                    }
-                    catch (const Exception&)
-                    {
-                    }
-                }
-            }
+            Reference< XSubToolbarController > xController = aNotifyVector[i];
+            if ( xController.is() )
+                xController->functionSelected( aCommand );
+        }
+        catch (const RuntimeException&)
+        {
+            throw;
+        }
+        catch (const Exception&)
+        {
         }
     }
 }

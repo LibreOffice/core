@@ -50,38 +50,38 @@ ItemContainer::ItemContainer( const ConstItemContainer& rConstItemContainer, con
 ItemContainer::ItemContainer( const Reference< XIndexAccess >& rSourceContainer, const ShareableMutex& rMutex ) :
     m_aShareMutex( rMutex )
 {
-    if ( rSourceContainer.is() )
+    if ( !rSourceContainer.is() )
+        return;
+
+    sal_Int32 nCount = rSourceContainer->getCount();
+    try
     {
-        sal_Int32 nCount = rSourceContainer->getCount();
-        try
+        for ( sal_Int32 i = 0; i < nCount; i++ )
         {
-            for ( sal_Int32 i = 0; i < nCount; i++ )
+            Sequence< PropertyValue > aPropSeq;
+            if ( rSourceContainer->getByIndex( i ) >>= aPropSeq )
             {
-                Sequence< PropertyValue > aPropSeq;
-                if ( rSourceContainer->getByIndex( i ) >>= aPropSeq )
+                sal_Int32 nContainerIndex = -1;
+                Reference< XIndexAccess > xIndexAccess;
+                for ( sal_Int32 j = 0; j < aPropSeq.getLength(); j++ )
                 {
-                    sal_Int32 nContainerIndex = -1;
-                    Reference< XIndexAccess > xIndexAccess;
-                    for ( sal_Int32 j = 0; j < aPropSeq.getLength(); j++ )
+                    if ( aPropSeq[j].Name == "ItemDescriptorContainer" )
                     {
-                        if ( aPropSeq[j].Name == "ItemDescriptorContainer" )
-                        {
-                            aPropSeq[j].Value >>= xIndexAccess;
-                            nContainerIndex = j;
-                            break;
-                        }
+                        aPropSeq[j].Value >>= xIndexAccess;
+                        nContainerIndex = j;
+                        break;
                     }
-
-                    if ( xIndexAccess.is() && nContainerIndex >= 0 )
-                        aPropSeq[nContainerIndex].Value <<= deepCopyContainer( xIndexAccess, rMutex );
-
-                    m_aItemVector.push_back( aPropSeq );
                 }
+
+                if ( xIndexAccess.is() && nContainerIndex >= 0 )
+                    aPropSeq[nContainerIndex].Value <<= deepCopyContainer( xIndexAccess, rMutex );
+
+                m_aItemVector.push_back( aPropSeq );
             }
         }
-        catch ( const IndexOutOfBoundsException& )
-        {
-        }
+    }
+    catch ( const IndexOutOfBoundsException& )
+    {
     }
 }
 

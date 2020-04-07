@@ -202,202 +202,202 @@ void SAL_CALL OReadStatusBarDocumentHandler::startElement(
     SolarMutexGuard g;
 
     StatusBarHashMap::const_iterator pStatusBarEntry = m_aStatusBarMap.find( aName );
-    if ( pStatusBarEntry != m_aStatusBarMap.end() )
+    if ( pStatusBarEntry == m_aStatusBarMap.end() )
+        return;
+
+    switch ( pStatusBarEntry->second )
     {
-        switch ( pStatusBarEntry->second )
+        case SB_ELEMENT_STATUSBAR:
         {
-            case SB_ELEMENT_STATUSBAR:
+            if ( m_bStatusBarStartFound )
             {
-                if ( m_bStatusBarStartFound )
-                {
-                    OUString aErrorMessage = getErrorLineString() + "Element 'statusbar:statusbar' cannot be embedded into 'statusbar:statusbar'!";
-                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-                }
-
-                m_bStatusBarStartFound = true;
+                OUString aErrorMessage = getErrorLineString() + "Element 'statusbar:statusbar' cannot be embedded into 'statusbar:statusbar'!";
+                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
             }
-            break;
 
-            case SB_ELEMENT_STATUSBARITEM:
-            {
-                if ( !m_bStatusBarStartFound )
-                {
-                    OUString aErrorMessage = getErrorLineString() + "Element 'statusbar:statusbaritem' must be embedded into element 'statusbar:statusbar'!";
-                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-                }
-
-                if ( m_bStatusBarItemStartFound )
-                {
-                    OUString aErrorMessage = getErrorLineString() + "Element statusbar:statusbaritem is not a container!";
-                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-                }
-
-                OUString    aCommandURL;
-                OUString    aHelpURL;
-                sal_Int16   nItemBits( ItemStyle::ALIGN_CENTER|ItemStyle::DRAW_IN3D|ItemStyle::MANDATORY );
-                sal_Int16   nWidth( 0 );
-                sal_Int16   nOffset( STATUSBAR_OFFSET );
-                bool    bCommandURL( false );
-
-                m_bStatusBarItemStartFound = true;
-                for ( sal_Int16 n = 0; n < xAttribs->getLength(); n++ )
-                {
-                    pStatusBarEntry = m_aStatusBarMap.find( xAttribs->getNameByIndex( n ) );
-                    if ( pStatusBarEntry != m_aStatusBarMap.end() )
-                    {
-                        switch ( pStatusBarEntry->second )
-                        {
-                            case SB_ATTRIBUTE_URL:
-                            {
-                                bCommandURL = true;
-                                aCommandURL = xAttribs->getValueByIndex( n );
-                            }
-                            break;
-
-                            case SB_ATTRIBUTE_ALIGN:
-                            {
-                                if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_ALIGN_LEFT )
-                                {
-                                    nItemBits |= ItemStyle::ALIGN_LEFT;
-                                    nItemBits &= ~ItemStyle::ALIGN_CENTER;
-                                }
-                                else if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_ALIGN_CENTER )
-                                {
-                                    nItemBits |= ItemStyle::ALIGN_CENTER;
-                                    nItemBits &= ~ItemStyle::ALIGN_LEFT;
-                                }
-                                else if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_ALIGN_RIGHT )
-                                {
-                                    nItemBits |= ItemStyle::ALIGN_RIGHT;
-                                }
-                                else
-                                {
-                                    OUString aErrorMessage = getErrorLineString() + "Attribute statusbar:align must have one value of 'left','right' or 'center'!";
-                                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-                                }
-                            }
-                            break;
-
-                            case SB_ATTRIBUTE_STYLE:
-                            {
-                                if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_STYLE_IN )
-                                {
-                                    nItemBits |= ItemStyle::DRAW_IN3D;
-                                    nItemBits &= ~ItemStyle::DRAW_OUT3D;
-                                }
-                                else if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_STYLE_OUT )
-                                {
-                                    nItemBits |= ItemStyle::DRAW_OUT3D;
-                                    nItemBits &= ~ItemStyle::DRAW_IN3D;
-                                }
-                                else if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_STYLE_FLAT )
-                                {
-                                    nItemBits |= ItemStyle::DRAW_FLAT;
-                                }
-                                else
-                                {
-                                    OUString aErrorMessage = getErrorLineString() + "Attribute statusbar:autosize must have value 'true' or 'false'!";
-                                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-                                }
-                            }
-                            break;
-
-                            case SB_ATTRIBUTE_AUTOSIZE:
-                            {
-                                if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_BOOLEAN_TRUE )
-                                    nItemBits |= ItemStyle::AUTO_SIZE;
-                                else if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_BOOLEAN_FALSE )
-                                    nItemBits &= ~ItemStyle::AUTO_SIZE;
-                                else
-                                {
-                                    OUString aErrorMessage = getErrorLineString() + "Attribute statusbar:autosize must have value 'true' or 'false'!";
-                                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-                                }
-                            }
-                            break;
-
-                            case SB_ATTRIBUTE_OWNERDRAW:
-                            {
-                                if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_BOOLEAN_TRUE )
-                                    nItemBits |= ItemStyle::OWNER_DRAW;
-                                else if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_BOOLEAN_FALSE )
-                                    nItemBits &= ~ItemStyle::OWNER_DRAW;
-                                else
-                                {
-                                    OUString aErrorMessage = getErrorLineString() + "Attribute statusbar:ownerdraw must have value 'true' or 'false'!";
-                                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-                                }
-                            }
-                            break;
-
-                            case SB_ATTRIBUTE_WIDTH:
-                            {
-                                nWidth = static_cast<sal_Int16>(xAttribs->getValueByIndex( n ).toInt32());
-                            }
-                            break;
-
-                            case SB_ATTRIBUTE_OFFSET:
-                            {
-                                nOffset = static_cast<sal_Int16>(xAttribs->getValueByIndex( n ).toInt32());
-                            }
-                            break;
-
-                            case SB_ATTRIBUTE_HELPURL:
-                            {
-                                aHelpURL = xAttribs->getValueByIndex( n );
-                            }
-                            break;
-
-                            case SB_ATTRIBUTE_MANDATORY:
-                            {
-                                if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_BOOLEAN_TRUE )
-                                    nItemBits |= ItemStyle::MANDATORY;
-                                else if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_BOOLEAN_FALSE )
-                                    nItemBits &= ~ItemStyle::MANDATORY;
-                                else
-                                {
-                                    OUString aErrorMessage = getErrorLineString() + "Attribute statusbar:mandatory must have value 'true' or 'false'!";
-                                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-                                }
-                            }
-                            break;
-
-                            default:
-                                break;
-                        }
-                    }
-                } // for
-
-                if ( !bCommandURL )
-                {
-                    OUString aErrorMessage = getErrorLineString() + "Required attribute statusbar:url must have a value!";
-                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-                }
-                else
-                {
-                    Sequence< PropertyValue > aStatusbarItemProp( 6 );
-                    aStatusbarItemProp[0].Name = ITEM_DESCRIPTOR_COMMANDURL;
-                    aStatusbarItemProp[1].Name = ITEM_DESCRIPTOR_HELPURL;
-                    aStatusbarItemProp[2].Name = ITEM_DESCRIPTOR_OFFSET;
-                    aStatusbarItemProp[3].Name = ITEM_DESCRIPTOR_STYLE;
-                    aStatusbarItemProp[4].Name = ITEM_DESCRIPTOR_WIDTH;
-                    aStatusbarItemProp[5].Name = ITEM_DESCRIPTOR_TYPE;
-
-                    aStatusbarItemProp[0].Value <<= aCommandURL;
-                    aStatusbarItemProp[1].Value <<= aHelpURL;
-                    aStatusbarItemProp[2].Value <<= nOffset;
-                    aStatusbarItemProp[3].Value <<= nItemBits;
-                    aStatusbarItemProp[4].Value <<= nWidth;
-                    aStatusbarItemProp[5].Value <<= css::ui::ItemType::DEFAULT;
-
-                    m_aStatusBarItems->insertByIndex( m_aStatusBarItems->getCount(), makeAny( aStatusbarItemProp ) );
-               }
-            }
-            break;
-
-                  default:
-                      break;
+            m_bStatusBarStartFound = true;
         }
+        break;
+
+        case SB_ELEMENT_STATUSBARITEM:
+        {
+            if ( !m_bStatusBarStartFound )
+            {
+                OUString aErrorMessage = getErrorLineString() + "Element 'statusbar:statusbaritem' must be embedded into element 'statusbar:statusbar'!";
+                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+            }
+
+            if ( m_bStatusBarItemStartFound )
+            {
+                OUString aErrorMessage = getErrorLineString() + "Element statusbar:statusbaritem is not a container!";
+                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+            }
+
+            OUString    aCommandURL;
+            OUString    aHelpURL;
+            sal_Int16   nItemBits( ItemStyle::ALIGN_CENTER|ItemStyle::DRAW_IN3D|ItemStyle::MANDATORY );
+            sal_Int16   nWidth( 0 );
+            sal_Int16   nOffset( STATUSBAR_OFFSET );
+            bool    bCommandURL( false );
+
+            m_bStatusBarItemStartFound = true;
+            for ( sal_Int16 n = 0; n < xAttribs->getLength(); n++ )
+            {
+                pStatusBarEntry = m_aStatusBarMap.find( xAttribs->getNameByIndex( n ) );
+                if ( pStatusBarEntry != m_aStatusBarMap.end() )
+                {
+                    switch ( pStatusBarEntry->second )
+                    {
+                        case SB_ATTRIBUTE_URL:
+                        {
+                            bCommandURL = true;
+                            aCommandURL = xAttribs->getValueByIndex( n );
+                        }
+                        break;
+
+                        case SB_ATTRIBUTE_ALIGN:
+                        {
+                            if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_ALIGN_LEFT )
+                            {
+                                nItemBits |= ItemStyle::ALIGN_LEFT;
+                                nItemBits &= ~ItemStyle::ALIGN_CENTER;
+                            }
+                            else if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_ALIGN_CENTER )
+                            {
+                                nItemBits |= ItemStyle::ALIGN_CENTER;
+                                nItemBits &= ~ItemStyle::ALIGN_LEFT;
+                            }
+                            else if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_ALIGN_RIGHT )
+                            {
+                                nItemBits |= ItemStyle::ALIGN_RIGHT;
+                            }
+                            else
+                            {
+                                OUString aErrorMessage = getErrorLineString() + "Attribute statusbar:align must have one value of 'left','right' or 'center'!";
+                                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+                            }
+                        }
+                        break;
+
+                        case SB_ATTRIBUTE_STYLE:
+                        {
+                            if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_STYLE_IN )
+                            {
+                                nItemBits |= ItemStyle::DRAW_IN3D;
+                                nItemBits &= ~ItemStyle::DRAW_OUT3D;
+                            }
+                            else if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_STYLE_OUT )
+                            {
+                                nItemBits |= ItemStyle::DRAW_OUT3D;
+                                nItemBits &= ~ItemStyle::DRAW_IN3D;
+                            }
+                            else if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_STYLE_FLAT )
+                            {
+                                nItemBits |= ItemStyle::DRAW_FLAT;
+                            }
+                            else
+                            {
+                                OUString aErrorMessage = getErrorLineString() + "Attribute statusbar:autosize must have value 'true' or 'false'!";
+                                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+                            }
+                        }
+                        break;
+
+                        case SB_ATTRIBUTE_AUTOSIZE:
+                        {
+                            if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_BOOLEAN_TRUE )
+                                nItemBits |= ItemStyle::AUTO_SIZE;
+                            else if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_BOOLEAN_FALSE )
+                                nItemBits &= ~ItemStyle::AUTO_SIZE;
+                            else
+                            {
+                                OUString aErrorMessage = getErrorLineString() + "Attribute statusbar:autosize must have value 'true' or 'false'!";
+                                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+                            }
+                        }
+                        break;
+
+                        case SB_ATTRIBUTE_OWNERDRAW:
+                        {
+                            if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_BOOLEAN_TRUE )
+                                nItemBits |= ItemStyle::OWNER_DRAW;
+                            else if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_BOOLEAN_FALSE )
+                                nItemBits &= ~ItemStyle::OWNER_DRAW;
+                            else
+                            {
+                                OUString aErrorMessage = getErrorLineString() + "Attribute statusbar:ownerdraw must have value 'true' or 'false'!";
+                                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+                            }
+                        }
+                        break;
+
+                        case SB_ATTRIBUTE_WIDTH:
+                        {
+                            nWidth = static_cast<sal_Int16>(xAttribs->getValueByIndex( n ).toInt32());
+                        }
+                        break;
+
+                        case SB_ATTRIBUTE_OFFSET:
+                        {
+                            nOffset = static_cast<sal_Int16>(xAttribs->getValueByIndex( n ).toInt32());
+                        }
+                        break;
+
+                        case SB_ATTRIBUTE_HELPURL:
+                        {
+                            aHelpURL = xAttribs->getValueByIndex( n );
+                        }
+                        break;
+
+                        case SB_ATTRIBUTE_MANDATORY:
+                        {
+                            if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_BOOLEAN_TRUE )
+                                nItemBits |= ItemStyle::MANDATORY;
+                            else if ( xAttribs->getValueByIndex( n ) == ATTRIBUTE_BOOLEAN_FALSE )
+                                nItemBits &= ~ItemStyle::MANDATORY;
+                            else
+                            {
+                                OUString aErrorMessage = getErrorLineString() + "Attribute statusbar:mandatory must have value 'true' or 'false'!";
+                                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+                            }
+                        }
+                        break;
+
+                        default:
+                            break;
+                    }
+                }
+            } // for
+
+            if ( !bCommandURL )
+            {
+                OUString aErrorMessage = getErrorLineString() + "Required attribute statusbar:url must have a value!";
+                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+            }
+            else
+            {
+                Sequence< PropertyValue > aStatusbarItemProp( 6 );
+                aStatusbarItemProp[0].Name = ITEM_DESCRIPTOR_COMMANDURL;
+                aStatusbarItemProp[1].Name = ITEM_DESCRIPTOR_HELPURL;
+                aStatusbarItemProp[2].Name = ITEM_DESCRIPTOR_OFFSET;
+                aStatusbarItemProp[3].Name = ITEM_DESCRIPTOR_STYLE;
+                aStatusbarItemProp[4].Name = ITEM_DESCRIPTOR_WIDTH;
+                aStatusbarItemProp[5].Name = ITEM_DESCRIPTOR_TYPE;
+
+                aStatusbarItemProp[0].Value <<= aCommandURL;
+                aStatusbarItemProp[1].Value <<= aHelpURL;
+                aStatusbarItemProp[2].Value <<= nOffset;
+                aStatusbarItemProp[3].Value <<= nItemBits;
+                aStatusbarItemProp[4].Value <<= nWidth;
+                aStatusbarItemProp[5].Value <<= css::ui::ItemType::DEFAULT;
+
+                m_aStatusBarItems->insertByIndex( m_aStatusBarItems->getCount(), makeAny( aStatusbarItemProp ) );
+           }
+        }
+        break;
+
+              default:
+                  break;
     }
 }
 
@@ -406,37 +406,36 @@ void SAL_CALL OReadStatusBarDocumentHandler::endElement(const OUString& aName)
     SolarMutexGuard g;
 
     StatusBarHashMap::const_iterator pStatusBarEntry = m_aStatusBarMap.find( aName );
-    if ( pStatusBarEntry != m_aStatusBarMap.end() )
+    if ( pStatusBarEntry == m_aStatusBarMap.end() )
+        return;
+
+    switch ( pStatusBarEntry->second )
     {
-        switch ( pStatusBarEntry->second )
+        case SB_ELEMENT_STATUSBAR:
         {
-            case SB_ELEMENT_STATUSBAR:
+            if ( !m_bStatusBarStartFound )
             {
-                if ( !m_bStatusBarStartFound )
-                {
-                    OUString aErrorMessage = getErrorLineString() + "End element 'statusbar' found, but no start element 'statusbar'";
-                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-                }
-
-                m_bStatusBarStartFound = false;
+                OUString aErrorMessage = getErrorLineString() + "End element 'statusbar' found, but no start element 'statusbar'";
+                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
             }
-            break;
 
-            case SB_ELEMENT_STATUSBARITEM:
-            {
-                if ( !m_bStatusBarItemStartFound )
-                {
-                    OUString aErrorMessage = getErrorLineString() + "End element 'statusbar:statusbaritem' found, but no start element 'statusbar:statusbaritem'";
-                    throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
-                }
-
-                m_bStatusBarItemStartFound = false;
-            }
-            break;
-
-                  default:
-                      break;
+            m_bStatusBarStartFound = false;
         }
+        break;
+
+        case SB_ELEMENT_STATUSBARITEM:
+        {
+            if ( !m_bStatusBarItemStartFound )
+            {
+                OUString aErrorMessage = getErrorLineString() + "End element 'statusbar:statusbaritem' found, but no start element 'statusbar:statusbaritem'";
+                throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+            }
+
+            m_bStatusBarItemStartFound = false;
+        }
+        break;
+
+        default: break;
     }
 }
 

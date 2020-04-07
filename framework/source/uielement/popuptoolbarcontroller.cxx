@@ -355,28 +355,28 @@ void GenericPopupToolbarController::statusChanged( const css::frame::FeatureStat
 
 void GenericPopupToolbarController::functionExecuted( const OUString& rCommand )
 {
-    if ( m_bReplaceWithLast )
+    if ( !m_bReplaceWithLast )
+        return;
+
+    removeStatusListener( m_aCommandURL );
+
+    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(rCommand, m_sModuleName);
+    OUString aRealCommand( vcl::CommandInfoProvider::GetRealCommandForCommand(aProperties) );
+    m_aCommandURL = aRealCommand.isEmpty() ? rCommand : aRealCommand;
+    addStatusListener( m_aCommandURL );
+
+    ToolBox* pToolBox = nullptr;
+    sal_uInt16 nId = 0;
+    if ( getToolboxId( nId, &pToolBox ) )
     {
-        removeStatusListener( m_aCommandURL );
+        pToolBox->SetItemCommand( nId, rCommand );
+        pToolBox->SetHelpText( nId, OUString() ); // Will retrieve the new one from help.
+        pToolBox->SetItemText(nId, vcl::CommandInfoProvider::GetLabelForCommand(aProperties));
+        pToolBox->SetQuickHelpText(nId, vcl::CommandInfoProvider::GetTooltipForCommand(rCommand, aProperties, m_xFrame));
 
-        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(rCommand, m_sModuleName);
-        OUString aRealCommand( vcl::CommandInfoProvider::GetRealCommandForCommand(aProperties) );
-        m_aCommandURL = aRealCommand.isEmpty() ? rCommand : aRealCommand;
-        addStatusListener( m_aCommandURL );
-
-        ToolBox* pToolBox = nullptr;
-        sal_uInt16 nId = 0;
-        if ( getToolboxId( nId, &pToolBox ) )
-        {
-            pToolBox->SetItemCommand( nId, rCommand );
-            pToolBox->SetHelpText( nId, OUString() ); // Will retrieve the new one from help.
-            pToolBox->SetItemText(nId, vcl::CommandInfoProvider::GetLabelForCommand(aProperties));
-            pToolBox->SetQuickHelpText(nId, vcl::CommandInfoProvider::GetTooltipForCommand(rCommand, aProperties, m_xFrame));
-
-            Image aImage = vcl::CommandInfoProvider::GetImageForCommand(rCommand, m_xFrame, pToolBox->GetImageSize());
-            if ( !!aImage )
-                pToolBox->SetItemImage( nId, aImage );
-        }
+        Image aImage = vcl::CommandInfoProvider::GetImageForCommand(rCommand, m_xFrame, pToolBox->GetImageSize());
+        if ( !!aImage )
+            pToolBox->SetItemImage( nId, aImage );
     }
 }
 
