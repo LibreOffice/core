@@ -1779,17 +1779,6 @@ bool SfxViewShell::isPrintLocked()
     return aArgs.getOrDefault("LockPrint", false);
 }
 
-bool SfxViewShell::isEditDocLocked()
-{
-    Reference<XModel> xModel = GetCurrentDocument();
-    if (!xModel.is())
-        return false;
-    if (!officecfg::Office::Common::Misc::AllowEditReadonlyDocs::get())
-        return true;
-    comphelper::NamedValueCollection aArgs(xModel->getArgs());
-    return aArgs.getOrDefault("LockEditDoc", false);
-}
-
 bool SfxViewShell::isSaveLocked()
 {
     Reference<XModel> xModel = GetCurrentDocument();

@@ -585,6 +585,8 @@ public:
                                     const css::uno::Reference<css::embed::XStorage>& xTarget,
                                     const css::uno::Sequence<OUString>& rExceptions = css::uno::Sequence<OUString>());
 
+    bool isEditDocLocked();
+
     // The functions from SvPersist
     void            EnableSetModified( bool bEnable = true );
     bool            IsEnableSetModified() const;
