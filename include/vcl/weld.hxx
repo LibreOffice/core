@@ -677,6 +677,9 @@ public:
     virtual void set_entry_completion(bool bEnable, bool bCaseSensitive = false) = 0;
     virtual void set_entry_placeholder_text(const OUString& rText) = 0;
 
+    // font size is in points, not pixels, e.g. see Window::[G]etPointFont
+    virtual void set_entry_font(const vcl::Font& rFont) = 0;
+
     virtual bool get_popup_shown() const = 0;
 
     void connect_entry_insert_text(const Link<OUString&, bool>& rLink)

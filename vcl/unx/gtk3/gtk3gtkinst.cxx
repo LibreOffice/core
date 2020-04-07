@@ -13403,6 +13403,16 @@ public:
         gtk_entry_set_placeholder_text(pEntry, rText.toUtf8().getStr());
     }
 
+    virtual void set_entry_font(const vcl::Font& rFont) override
+    {
+        PangoAttrList* pAttrList = create_attr_list(rFont);
+        GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pComboBox));
+        assert(pChild && GTK_IS_ENTRY(pChild));
+        GtkEntry* pEntry = GTK_ENTRY(pChild);
+        gtk_entry_set_attributes(pEntry, pAttrList);
+        pango_attr_list_unref(pAttrList);
+    }
+
     virtual void disable_notify_events() override
     {
         if (GtkEntry* pEntry = get_entry())
@@ -13699,6 +13709,11 @@ public:
     virtual void set_entry_placeholder_text(const OUString& rText) override
     {
         m_xEntry->set_placeholder_text(rText);
+    }
+
+    virtual void set_entry_font(const vcl::Font& rFont) override
+    {
+        m_xEntry->set_font(rFont);
     }
 
     virtual void grab_focus() override { m_xEntry->grab_focus(); }
