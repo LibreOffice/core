@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "95be445a_7904f547",
+        "filename": "oox/source/drawingml/textcharacterpropertiescontext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-04-07T17:00:36Z",
+      "side": 1,
+      "message": "what happens if the token is intended to turn strike off? does that never happen?",
+      "revId": "fe4aa2a7704f9a3010b73e340ffd9b2c839c1099",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
