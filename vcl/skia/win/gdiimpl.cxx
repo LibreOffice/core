@@ -247,16 +247,7 @@ sk_sp<SkImage> SkiaCompatibleDC::getAsMaskImage() const
     alpha.setPixelRef(sk_ref_sp(bitmap8.pixelRef()), bitmap8.pixelRefOrigin().x(),
                       bitmap8.pixelRefOrigin().y());
     alpha.setImmutable();
-    sk_sp<SkSurface> surface
-        = SkiaHelper::createSkSurface(alpha.width(), alpha.height(), kAlpha_8_SkColorType);
-    // https://bugs.chromium.org/p/skia/issues/detail?id=9692
-    // Raster kAlpha_8_SkColorType surfaces need empty contents for SkBlendMode::kSrc.
-    if (!surface->getCanvas()->getGrContext())
-        surface->getCanvas()->clear(SkColorSetARGB(0x00, 0x00, 0x00, 0x00));
-    SkPaint paint;
-    paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
-    surface->getCanvas()->drawBitmap(alpha, 0, 0, &paint);
-    return surface->makeImageSnapshot();
+    return SkiaHelper::createSkImage(alpha);
 }
 
 sk_sp<SkImage> SkiaCompatibleDC::getAsImage() const
