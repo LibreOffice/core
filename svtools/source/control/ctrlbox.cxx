@@ -329,30 +329,102 @@ void DrawLine( OutputDevice& rDev, const basegfx::B2DPoint& rP1, const basegfx::
 
 }
 
-FontNameBox::FontNameBox( vcl::Window* pParent, WinBits nWinStyle ) :
-    ComboBox( pParent, nWinStyle )
+FontNameBox::FontNameBox(std::unique_ptr<weld::ComboBox> p)
+    : m_xComboBox(std::move(p))
+    , mnMRUCount(0)
+    , mnMaxMRUCount(0)
 {
-    EnableSelectAll();
-    mbWYSIWYG = false;
     InitFontMRUEntriesFile();
 }
 
 FontNameBox::~FontNameBox()
-{
-    disposeOnce();
-}
-
-void FontNameBox::dispose()
 {
     if (mpFontList)
     {
         SaveMRUEntries (maFontMRUEntriesFile);
         ImplDestroyFontList();
     }
-    ComboBox::dispose();
 }
 
-void FontNameBox::SaveMRUEntries( const OUString& aFontMRUEntriesFile ) const
+void FontNameBox::UpdateMRU()
+{
+    int nMRUCount = mnMRUCount;
+
+    if (mnMaxMRUCount)
+    {
+        OUString sActiveText = m_xComboBox->get_active_text();
+        m_xComboBox->insert_text(0, sActiveText);
+        m_xComboBox->set_id(0, m_xComboBox->get_active_id());
+        ++mnMRUCount;
+
+        for (int i = 1; i < mnMRUCount - 1; ++i)
+        {
+            if (m_xComboBox->get_text(i) == sActiveText)
+            {
+                m_xComboBox->remove(i);
+                --mnMRUCount;
+                break;
+            }
+        }
+
+        m_xComboBox->set_active(0);
+    }
+
+    while (mnMRUCount > mnMaxMRUCount)
+    {
+        m_xComboBox->remove(mnMRUCount - 1);
+        --mnMRUCount;
+    }
+
+    if (mnMRUCount && !nMRUCount)
+        m_xComboBox->insert_separator(mnMRUCount, "separator");
+    else if (!mnMRUCount && nMRUCount)
+        m_xComboBox->remove_id("separator");
+}
+
+OUString FontNameBox::GetMRUEntries(sal_Unicode cSep) const
+{
+    OUStringBuffer aEntries;
+    for (sal_Int32 n = 0; n < mnMRUCount; n++)
+    {
+        aEntries.append(m_xComboBox->get_text(n));
+        if (n < mnMRUCount - 1)
+            aEntries.append(cSep);
+    }
+    return aEntries.makeStringAndClear();
+}
+
+void FontNameBox::SetMRUEntries(const OUString& rEntries, sal_Unicode cSep)
+{
+    // Remove old MRU entries
+    for (sal_Int32 n = mnMRUCount; n;)
+        m_xComboBox->remove(--n);
+
+    sal_Int32 nMRUCount = 0;
+    sal_Int32 nIndex = 0;
+    do
+    {
+        OUString aEntry = rEntries.getToken(0, cSep, nIndex);
+        // Accept only existing entries
+        int nPos = m_xComboBox->find_text(aEntry);
+        if (nPos != 0)
+        {
+            m_xComboBox->insert_text(nMRUCount, aEntry);
+            m_xComboBox->set_id(nMRUCount, m_xComboBox->get_id(nPos));
+            ++nMRUCount;
+        }
+    }
+    while (nIndex >= 0);
+
+    if (nMRUCount && !mnMRUCount)
+        m_xComboBox->insert_separator(nMRUCount, "separator");
+    else if (!nMRUCount && mnMRUCount)
+        m_xComboBox->remove_id("separator");
+
+    mnMRUCount = nMRUCount;
+}
+
+void FontNameBox::SaveMRUEntries(const OUString& aFontMRUEntriesFile) const
 {
     OString aEntries(OUStringToOString(GetMRUEntries(),
         RTL_TEXTENCODING_UTF8));
@@ -416,61 +488,50 @@ void FontNameBox::ImplDestroyFontList()
 void FontNameBox::Fill( const FontList* pList )
 {
     // store old text and clear box
-    OUString aOldText = GetText();
+    OUString aOldText = m_xComboBox->get_active_text();
     OUString rEntries = GetMRUEntries();
     bool bLoadFromFile = rEntries.isEmpty();
-    Clear();
+    m_xComboBox->freeze();
+    m_xComboBox->clear();
 
     ImplDestroyFontList();
     mpFontList.reset(new ImplFontList);
 
     // insert fonts
-    sal_uInt16 nFontCount = pList->GetFontNameCount();
-    for ( sal_uInt16 i = 0; i < nFontCount; i++ )
+    size_t nFontCount = pList->GetFontNameCount();
+    for (size_t i = 0; i < nFontCount; ++i)
     {
-        const FontMetric& rFontMetric = pList->GetFontName( i );
-        sal_Int32 nIndex = InsertEntry( rFontMetric.GetFamilyName() );
-        if ( nIndex < static_cast<sal_Int32>(mpFontList->size()) ) {
-            ImplFontList::iterator it = mpFontList->begin();
-            ::std::advance( it, nIndex );
-            mpFontList->insert( it, rFontMetric );
-        } else {
-            mpFontList->push_back( rFontMetric );
-        }
+        const FontMetric& rFontMetric = pList->GetFontName(i);
+        m_xComboBox->append(OUString::number(i), rFontMetric.GetFamilyName());
+        mpFontList->push_back(rFontMetric);
     }
 
-    if ( bLoadFromFile )
-        LoadMRUEntries (maFontMRUEntriesFile);
+    if (bLoadFromFile)
+        LoadMRUEntries(maFontMRUEntriesFile);
     else
-        SetMRUEntries( rEntries );
+        SetMRUEntries(rEntries);
 
-    ImplCalcUserItemSize();
+    m_xComboBox->thaw();
 
     // restore text
     if (!aOldText.isEmpty())
-        SetText( aOldText );
+        m_xComboBox->set_entry_text(aOldText);
 }
 
-void FontNameBox::EnableWYSIWYG( bool bEnable )
+void FontNameBox::EnableWYSIWYG()
 {
-    if ( bEnable != mbWYSIWYG )
-    {
-        mbWYSIWYG = bEnable;
-        EnableUserDraw( mbWYSIWYG );
-        ImplCalcUserItemSize();
-    }
+    m_xComboBox->set_custom_renderer();
+    m_xComboBox->connect_custom_get_size(LINK(this, FontNameBox, CustomGetSizeHdl));
+    m_xComboBox->connect_custom_render(LINK(this, FontNameBox, CustomRenderHdl));
+
+    maUserItemSz = Size(MAXPREVIEWWIDTH + m_xComboBox->get_preferred_size().Width(), m_xComboBox->get_text_height());
+    maUserItemSz.setHeight(maUserItemSz.Height() * 16);
+    maUserItemSz.setHeight(maUserItemSz.Height() / 10);
 }
 
-void FontNameBox::ImplCalcUserItemSize()
+IMPL_LINK_NOARG(FontNameBox, CustomGetSizeHdl, weld::ComboBox::get_size_args, Size)
 {
-    Size aUserItemSz;
-    if ( mbWYSIWYG && mpFontList )
-    {
-        aUserItemSz = Size(MAXPREVIEWWIDTH, GetTextHeight() );
-        aUserItemSz.setHeight( aUserItemSz.Height() * 16 );
-        aUserItemSz.setHeight( aUserItemSz.Height() / 10 );
-    }
-    SetUserItemSize( aUserItemSz );
+    return maUserItemSz;
 }
 
 namespace
@@ -501,190 +562,200 @@ namespace
     }
 }
 
-void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
+IMPL_LINK(FontNameBox, CustomRenderHdl, weld::ComboBox::render_args, aPayload, void)
 {
+    vcl::RenderContext& rRenderContext = std::get<0>(aPayload);
+    const ::tools::Rectangle& rRect = std::get<1>(aPayload);
+    bool bSelected = std::get<2>(aPayload);
+    const OUString& rId = std::get<3>(aPayload);
+
+    rRenderContext.Push(PushFlags::TEXTCOLOR);
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    if (bSelected)
+        rRenderContext.SetTextColor(rStyleSettings.GetHighlightTextColor());
+    else
+        rRenderContext.SetTextColor(rStyleSettings.GetDialogTextColor());
+
     assert( mpFontList );
 
-    FontMetric& rFontMetric = (*mpFontList)[ rUDEvt.GetItemId() ];
-    Point aTopLeft = rUDEvt.GetRect().TopLeft();
+    FontMetric& rFontMetric = (*mpFontList)[rId.toUInt32()];
+    Point aTopLeft = rRect.TopLeft();
     long nX = aTopLeft.X();
-    long nH = rUDEvt.GetRect().GetHeight();
+    long nH = rRect.GetHeight();
 
-    if ( mbWYSIWYG )
-    {
-        nX += IMGOUTERTEXTSPACE;
+    nX += IMGOUTERTEXTSPACE;
 
-        const bool bSymbolFont = isSymbolFont(rFontMetric);
-        vcl::RenderContext* pRenderContext = rUDEvt.GetRenderContext();
+    const bool bSymbolFont = isSymbolFont(rFontMetric);
 
-        Color aTextColor = pRenderContext->GetTextColor();
-        vcl::Font aOldFont(pRenderContext->GetFont());
-        Size aSize( aOldFont.GetFontSize() );
-        aSize.AdjustHeight(EXTRAFONTSIZE );
-        vcl::Font aFont( rFontMetric );
-        aFont.SetFontSize( aSize );
-        pRenderContext->SetFont(aFont);
-        pRenderContext->SetTextColor(aTextColor);
+    Color aTextColor = rRenderContext.GetTextColor();
+    vcl::Font aOldFont(rRenderContext.GetFont());
+    Size aSize( aOldFont.GetFontSize() );
+    aSize.AdjustHeight(EXTRAFONTSIZE );
+    vcl::Font aFont( rFontMetric );
+    aFont.SetFontSize( aSize );
+    rRenderContext.SetFont(aFont);
+    rRenderContext.SetTextColor(aTextColor);
 
-        bool bUsingCorrectFont = true;
-        tools::Rectangle aTextRect;
+    bool bUsingCorrectFont = true;
+    tools::Rectangle aTextRect;
 
-        // Preview the font name
-        const OUString& sFontName = rFontMetric.GetFamilyName();
+    // Preview the font name
+    const OUString& sFontName = rFontMetric.GetFamilyName();
 
-        //If it shouldn't or can't draw its own name because it doesn't have the glyphs
-        if (!canRenderNameOfSelectedFont(*pRenderContext))
-            bUsingCorrectFont = false;
-        else
-        {
-            //Make sure it fits in the available height, shrinking the font if necessary
-            bUsingCorrectFont = shrinkFontToFit(sFontName, nH, aFont, *pRenderContext, aTextRect) != 0;
-        }
-
-        if (!bUsingCorrectFont)
-        {
-            pRenderContext->SetFont(aOldFont);
-            pRenderContext->GetTextBoundRect(aTextRect, sFontName);
-        }
-
-        long nTextHeight = aTextRect.GetHeight();
-        long nDesiredGap = (nH-nTextHeight)/2;
-        long nVertAdjust = nDesiredGap - aTextRect.Top();
-        Point aPos( nX, aTopLeft.Y() + nVertAdjust );
-        pRenderContext->DrawText(aPos, sFontName);
-        long nTextX = aPos.X() + aTextRect.GetWidth() + GAPTOEXTRAPREVIEW;
-
-        if (!bUsingCorrectFont)
-            pRenderContext->SetFont(aFont);
-
-        OUString sSampleText;
-
-        if (!bSymbolFont)
-        {
-            const bool bNameBeginsWithLatinText = rFontMetric.GetFamilyName()[0] <= 'z';
-
-            if (bNameBeginsWithLatinText || !bUsingCorrectFont)
-                sSampleText = makeShortRepresentativeTextForSelectedFont(*pRenderContext);
-        }
-
-        //If we're not a symbol font, but could neither render our own name and
-        //we can't determine what script it would like to render, then try a
-        //few well known scripts
-        if (sSampleText.isEmpty() && !bUsingCorrectFont)
-        {
-            static const UScriptCode aScripts[] =
-            {
-                USCRIPT_ARABIC,
-                USCRIPT_HEBREW,
-
-                USCRIPT_BENGALI,
-                USCRIPT_GURMUKHI,
-                USCRIPT_GUJARATI,
-                USCRIPT_ORIYA,
-                USCRIPT_TAMIL,
-                USCRIPT_TELUGU,
-                USCRIPT_KANNADA,
-                USCRIPT_MALAYALAM,
-                USCRIPT_SINHALA,
-                USCRIPT_DEVANAGARI,
-
-                USCRIPT_THAI,
-                USCRIPT_LAO,
-                USCRIPT_GEORGIAN,
-                USCRIPT_TIBETAN,
-                USCRIPT_SYRIAC,
-                USCRIPT_MYANMAR,
-                USCRIPT_ETHIOPIC,
-                USCRIPT_KHMER,
-                USCRIPT_MONGOLIAN,
-
-                USCRIPT_KOREAN,
-                USCRIPT_JAPANESE,
-                USCRIPT_HAN,
-                USCRIPT_SIMPLIFIED_HAN,
-                USCRIPT_TRADITIONAL_HAN,
-
-                USCRIPT_GREEK
-            };
-
-            for (const UScriptCode& rScript : aScripts)
-            {
-                OUString sText = makeShortRepresentativeTextForScript(rScript);
-                if (!sText.isEmpty())
-                {
-                    bool bHasSampleTextGlyphs = (-1 == pRenderContext->HasGlyphs(aFont, sText));
-                    if (bHasSampleTextGlyphs)
-                    {
-                        sSampleText = sText;
-                        break;
-                    }
-                }
-            }
-
-            static const UScriptCode aMinimalScripts[] =
-            {
-                USCRIPT_HEBREW, //e.g. biblical hebrew
-                USCRIPT_GREEK
-            };
-
-            for (const UScriptCode& rMinimalScript : aMinimalScripts)
-            {
-                OUString sText = makeShortMinimalTextForScript(rMinimalScript);
-                if (!sText.isEmpty())
-                {
-                    bool bHasSampleTextGlyphs = (-1 == pRenderContext->HasGlyphs(aFont, sText));
-                    if (bHasSampleTextGlyphs)
-                    {
-                        sSampleText = sText;
-                        break;
-                    }
-                }
-            }
-        }
-
-        //If we're a symbol font, or for some reason the font still couldn't
-        //render something representative of what it would like to render then
-        //make up some semi-random text that it *can* display
-        if (bSymbolFont || (!bUsingCorrectFont && sSampleText.isEmpty()))
-            sSampleText = makeShortRepresentativeSymbolTextForSelectedFont(*pRenderContext);
-
-        if (!sSampleText.isEmpty())
-        {
-            const Size &rItemSize = rUDEvt.GetWindow()->GetOutputSize();
-
-            //leave a little border at the edge
-            long nSpace = rItemSize.Width() - nTextX - IMGOUTERTEXTSPACE;
-            if (nSpace >= 0)
-            {
-                //Make sure it fits in the available height, and get how wide that would be
-                long nWidth = shrinkFontToFit(sSampleText, nH, aFont, *pRenderContext, aTextRect);
-                //Chop letters off until it fits in the available width
-                while (nWidth > nSpace || nWidth > MAXPREVIEWWIDTH)
-                {
-                    sSampleText = sSampleText.copy(0, sSampleText.getLength()-1);
-                    nWidth = pRenderContext->GetTextBoundRect(aTextRect, sSampleText) ?
-                             aTextRect.GetWidth() : 0;
-                }
-
-                //center the text on the line
-                if (!sSampleText.isEmpty() && nWidth)
-                {
-                    nTextHeight = aTextRect.GetHeight();
-                    nDesiredGap = (nH-nTextHeight)/2;
-                    nVertAdjust = nDesiredGap - aTextRect.Top();
-                    aPos = Point(nTextX + nSpace - nWidth, aTopLeft.Y() + nVertAdjust);
-                    pRenderContext->DrawText(aPos, sSampleText);
-                }
-            }
-        }
-
-        pRenderContext->SetFont(aOldFont);
-        DrawEntry( rUDEvt, false, false);   // draw separator
-    }
+    //If it shouldn't or can't draw its own name because it doesn't have the glyphs
+    if (!canRenderNameOfSelectedFont(rRenderContext))
+        bUsingCorrectFont = false;
     else
     {
-        DrawEntry( rUDEvt, true, true );
+        //Make sure it fits in the available height, shrinking the font if necessary
+        bUsingCorrectFont = shrinkFontToFit(sFontName, nH, aFont, rRenderContext, aTextRect) != 0;
     }
+
+    if (!bUsingCorrectFont)
+    {
+        rRenderContext.SetFont(aOldFont);
+        rRenderContext.GetTextBoundRect(aTextRect, sFontName);
+    }
+
+    long nTextHeight = aTextRect.GetHeight();
+    long nDesiredGap = (nH-nTextHeight)/2;
+    long nVertAdjust = nDesiredGap - aTextRect.Top();
+    Point aPos( nX, aTopLeft.Y() + nVertAdjust );
+    rRenderContext.DrawText(aPos, sFontName);
+    long nTextX = aPos.X() + aTextRect.GetWidth() + GAPTOEXTRAPREVIEW;
+
+    if (!bUsingCorrectFont)
+        rRenderContext.SetFont(aFont);
+
+    OUString sSampleText;
+
+    if (!bSymbolFont)
+    {
+        const bool bNameBeginsWithLatinText = rFontMetric.GetFamilyName()[0] <= 'z';
+
+        if (bNameBeginsWithLatinText || !bUsingCorrectFont)
+            sSampleText = makeShortRepresentativeTextForSelectedFont(rRenderContext);
+    }
+
+    //If we're not a symbol font, but could neither render our own name and
+    //we can't determine what script it would like to render, then try a
+    //few well known scripts
+    if (sSampleText.isEmpty() && !bUsingCorrectFont)
+    {
+        static const UScriptCode aScripts[] =
+        {
+            USCRIPT_ARABIC,
+            USCRIPT_HEBREW,
+
+            USCRIPT_BENGALI,
+            USCRIPT_GURMUKHI,
+            USCRIPT_GUJARATI,
+            USCRIPT_ORIYA,
+            USCRIPT_TAMIL,
+            USCRIPT_TELUGU,
+            USCRIPT_KANNADA,
+            USCRIPT_MALAYALAM,
+            USCRIPT_SINHALA,
+            USCRIPT_DEVANAGARI,
+
+            USCRIPT_THAI,
+            USCRIPT_LAO,
+            USCRIPT_GEORGIAN,
+            USCRIPT_TIBETAN,
+            USCRIPT_SYRIAC,
+            USCRIPT_MYANMAR,
+            USCRIPT_ETHIOPIC,
+            USCRIPT_KHMER,
+            USCRIPT_MONGOLIAN,
+
+            USCRIPT_KOREAN,
+            USCRIPT_JAPANESE,
+            USCRIPT_HAN,
+            USCRIPT_SIMPLIFIED_HAN,
+            USCRIPT_TRADITIONAL_HAN,
+
+            USCRIPT_GREEK
+        };
+
+        for (const UScriptCode& rScript : aScripts)
+        {
+            OUString sText = makeShortRepresentativeTextForScript(rScript);
+            if (!sText.isEmpty())
+            {
+                bool bHasSampleTextGlyphs = (-1 == rRenderContext.HasGlyphs(aFont, sText));
+                if (bHasSampleTextGlyphs)
+                {
+                    sSampleText = sText;
+                    break;
+                }
+            }
+        }
+
+        static const UScriptCode aMinimalScripts[] =
+        {
+            USCRIPT_HEBREW, //e.g. biblical hebrew
+            USCRIPT_GREEK
+        };
+
+        for (const UScriptCode& rMinimalScript : aMinimalScripts)
+        {
+            OUString sText = makeShortMinimalTextForScript(rMinimalScript);
+            if (!sText.isEmpty())
+            {
+                bool bHasSampleTextGlyphs = (-1 == rRenderContext.HasGlyphs(aFont, sText));
+                if (bHasSampleTextGlyphs)
+                {
+                    sSampleText = sText;
+                    break;
+                }
+            }
+        }
+    }
+
+    //If we're a symbol font, or for some reason the font still couldn't
+    //render something representative of what it would like to render then
+    //make up some semi-random text that it *can* display
+    if (bSymbolFont || (!bUsingCorrectFont && sSampleText.isEmpty()))
+        sSampleText = makeShortRepresentativeSymbolTextForSelectedFont(rRenderContext);
+
+    if (!sSampleText.isEmpty())
+    {
+        const Size &rItemSize = rRect.GetSize();
+
+        //leave a little border at the edge
+        long nSpace = rItemSize.Width() - nTextX - IMGOUTERTEXTSPACE;
+        if (nSpace >= 0)
+        {
+            //Make sure it fits in the available height, and get how wide that would be
+            long nWidth = shrinkFontToFit(sSampleText, nH, aFont, rRenderContext, aTextRect);
+            //Chop letters off until it fits in the available width
+            while (nWidth > nSpace || nWidth > MAXPREVIEWWIDTH)
+            {
+                sSampleText = sSampleText.copy(0, sSampleText.getLength()-1);
+                nWidth = rRenderContext.GetTextBoundRect(aTextRect, sSampleText) ?
+                         aTextRect.GetWidth() : 0;
+            }
+
+            //center the text on the line
+            if (!sSampleText.isEmpty() && nWidth)
+            {
+                nTextHeight = aTextRect.GetHeight();
+                nDesiredGap = (nH-nTextHeight)/2;
+                nVertAdjust = nDesiredGap - aTextRect.Top();
+                aPos = Point(nTextX + nSpace - nWidth, aTopLeft.Y() + nVertAdjust);
+                rRenderContext.DrawText(aPos, sSampleText);
+            }
+        }
+    }
+
+    rRenderContext.SetFont(aOldFont);
+//TODO    DrawEntry( rUDEvt, false, false);   // draw separator
+    rRenderContext.Pop();
+}
+
+void FontNameBox::set_entry_text(const OUString& rText)
+{
+    m_xComboBox->set_entry_text(rText);
 }
 
 FontStyleBox::FontStyleBox(std::unique_ptr<weld::ComboBox> p)
