@@ -724,4 +724,12 @@ $(eval $(call gb_Library_add_nativeres,vcl,vcl/salsrc))
 $(eval $(call gb_Library_use_package,vcl,postprocess_images))
 endif
 
+ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
+ifeq ($(USING_X11),TRUE)
+$(eval $(call gb_Library_use_static_libraries,vcl,\
+	glxtest \
+))
+endif
+endif
+
 # vim: set noet sw=4 ts=4:
