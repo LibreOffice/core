@@ -692,6 +692,62 @@ DECLARE_OOXMLEXPORT_TEST(testTbrlFrameVml, "tbrl-frame-vml.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf119037, "tdf119037.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pBdr/w:top", "val", "single");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pBdr/w:left", "val", "single");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pBdr/w:right", "val", "single");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pBdr/w:bottom", "val", "single");
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:pBdr/w:top", "val", "dotted");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:pBdr/w:left", "val", "dotted");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:pBdr/w:right", "val", "dotted");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:pBdr/w:bottom", "val", "dotted");
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:pPr/w:pBdr/w:top", "val", "dashed");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:pPr/w:pBdr/w:left", "val", "dashed");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:pPr/w:pBdr/w:right", "val", "dashed");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:pPr/w:pBdr/w:bottom", "val", "dashed");
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:pBdr/w:top", "val", "dashSmallGap");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:pBdr/w:left", "val", "dashSmallGap");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:pBdr/w:right", "val", "dashSmallGap");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:pBdr/w:bottom", "val", "dashSmallGap");
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[9]/w:pPr/w:pBdr/w:top", "val", "dotDash");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[9]/w:pPr/w:pBdr/w:left", "val", "dotDash");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[9]/w:pPr/w:pBdr/w:right", "val", "dotDash");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[9]/w:pPr/w:pBdr/w:bottom", "val", "dotDash");
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[11]/w:pPr/w:pBdr/w:top", "val", "dotDotDash");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[11]/w:pPr/w:pBdr/w:left", "val", "dotDotDash");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[11]/w:pPr/w:pBdr/w:right", "val", "dotDotDash");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[11]/w:pPr/w:pBdr/w:bottom", "val", "dotDotDash");
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[13]/w:pPr/w:pBdr/w:top", "val", "double");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[13]/w:pPr/w:pBdr/w:left", "val", "double");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[13]/w:pPr/w:pBdr/w:right", "val", "double");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[13]/w:pPr/w:pBdr/w:bottom", "val", "double");
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[15]/w:pPr/w:pBdr/w:top", "val", "double");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[15]/w:pPr/w:pBdr/w:left", "val", "double");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[15]/w:pPr/w:pBdr/w:right", "val", "double");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[15]/w:pPr/w:pBdr/w:bottom", "val", "double");
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[17]/w:pPr/w:pBdr/w:top", "val", "thinThickSmallGap");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[17]/w:pPr/w:pBdr/w:left", "val", "thinThickSmallGap");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[17]/w:pPr/w:pBdr/w:right", "val", "thinThickSmallGap");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[17]/w:pPr/w:pBdr/w:bottom", "val", "thinThickSmallGap");
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[19]/w:pPr/w:pBdr/w:top", "val", "double");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[19]/w:pPr/w:pBdr/w:left", "val", "double");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[19]/w:pPr/w:pBdr/w:right", "val", "double");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[19]/w:pPr/w:pBdr/w:bottom", "val", "double");
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf125657, "tdf125657.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
