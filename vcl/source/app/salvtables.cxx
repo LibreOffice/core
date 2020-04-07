@@ -1853,8 +1853,9 @@ IMPL_LINK_NOARG(SalInstanceAssistant, OnRoadmapItemSelected, LinkParamNone*, voi
 {
     if (notify_events_disabled())
         return;
-    int nPageIndex(find_id(m_xWizard->GetCurrentRoadmapItemID()));
-    if (!signal_jump_page(get_page_ident(nPageIndex)))
+    auto nCurItemId = m_xWizard->GetCurrentRoadmapItemID();
+    int nPageIndex(find_id(nCurItemId));
+    if (!signal_jump_page(get_page_ident(nPageIndex)) && nCurItemId != m_xWizard->GetCurLevel())
         m_xWizard->SelectRoadmapItemByID(m_xWizard->GetCurLevel());
 }
 
