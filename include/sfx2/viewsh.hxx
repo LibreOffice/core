@@ -293,7 +293,6 @@ public:
     bool isExportLocked();
     bool isPrintLocked();
     bool isSaveLocked();
-    bool isEditDocLocked();
 
     SAL_DLLPRIVATE SfxInPlaceClient* GetUIActiveIPClient_Impl() const;
     SAL_DLLPRIVATE void AddContextMenuInterceptor_Impl( const css::uno::Reference < css::ui::XContextMenuInterceptor >& xInterceptor );
