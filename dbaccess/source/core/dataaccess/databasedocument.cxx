@@ -1093,18 +1093,21 @@ void ODatabaseDocument::impl_storeAs_throw( const OUString& _rURL, const ::comph
         }
 
         // store to current storage
-        Reference< XStorage > xCurrentStorage( m_pImpl->getOrCreateRootStorage(), UNO_QUERY_THROW );
+        Reference< XStorage > xCurrentStorage( m_pImpl->getOrCreateRootStorage(), UNO_SET_THROW );
+        OUString aODFVersion(comphelper::OStorageHelper::GetODFVersionFromStorage(xCurrentStorage));
         Sequence< PropertyValue > aMediaDescriptor( lcl_appendFileNameToDescriptor( _rArguments, _rURL ) );
         impl_storeToStorage_throw( xCurrentStorage, aMediaDescriptor, _rGuard );
 
         // Preserve script signature if the script has not changed
         if (bTryToPreserveScriptSignature)
         {
+            // Need to close this storage, otherwise we can't open it for signing below
+            // (Windows needs exclusive file access)
+            uno::Reference < lang::XComponent > xComp = xCurrentStorage;
+            xComp->dispose();
             uno::Reference<security::XDocumentDigitalSignatures> xDDSigns;
             try
             {
-                OUString aODFVersion(
-                    comphelper::OStorageHelper::GetODFVersionFromStorage(xCurrentStorage));
                 xDDSigns = security::DocumentDigitalSignatures::createWithVersion(
                     comphelper::getProcessComponentContext(), aODFVersion);
 
@@ -1162,7 +1165,7 @@ void ODatabaseDocument::impl_storeAs_throw( const OUString& _rURL, const ::comph
             }
             catch (uno::Exception&)
             {
-                SAL_WARN("dbaccess", "Preserving macro signature failed!");
+                TOOLS_WARN_EXCEPTION("dbaccess", "");
             }
         }
 
