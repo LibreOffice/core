@@ -166,7 +166,7 @@ static void ImplHandleMouseHelpRequest( vcl::Window* pChild, const Point& rMouse
         // (e.g. Character Properties dialog -> Font Effects -> Font Color)
         if(pChild->GetType() == WindowType::CONTROL &&
            pChild->GetParent() && pChild->GetParent()->GetParent() &&
-           pChild->GetParent()->GetParent()->GetType() == WindowType::DOCKINGWINDOW)
+           pChild->GetParent()->GetParent()->GetType() == WindowType::SCROLLWINDOW)
         return;
     }
 
