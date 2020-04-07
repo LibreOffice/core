@@ -68,21 +68,22 @@ void MemRingBuffer::resizeBuffer( sal_Int32 nMinSize )
         nNewLen = m_nBufferLen;
     }
 
-    if( nNewLen != m_nBufferLen ) {
-        if (auto p = static_cast<sal_Int8*>(std::realloc(m_p, nNewLen)))
-            m_p = p;
-        else
-        {
-            throw css::io::BufferSizeExceededException(
-                "MemRingBuffer::resizeBuffer BufferSizeExceededException");
-        }
+    if( nNewLen == m_nBufferLen )
+        return;
 
-        if( m_nStart + m_nOccupiedBuffer > m_nBufferLen ) {
-            memmove( &( m_p[m_nStart+(nNewLen-m_nBufferLen)]) , &(m_p[m_nStart]) , m_nBufferLen - m_nStart );
-            m_nStart += nNewLen - m_nBufferLen;
-        }
-        m_nBufferLen = nNewLen;
+    auto p = static_cast<sal_Int8*>(std::realloc(m_p, nNewLen));
+    if (!p)
+        throw css::io::BufferSizeExceededException(
+            "MemRingBuffer::resizeBuffer BufferSizeExceededException");
+
+    m_p = p;
+
+
+    if( m_nStart + m_nOccupiedBuffer > m_nBufferLen ) {
+        memmove( &( m_p[m_nStart+(nNewLen-m_nBufferLen)]) , &(m_p[m_nStart]) , m_nBufferLen - m_nStart );
+        m_nStart += nNewLen - m_nBufferLen;
     }
+    m_nBufferLen = nNewLen;
 }
 
 

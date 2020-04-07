@@ -146,19 +146,19 @@ void Pump::fireClose()
         }
     }
 
-    if( bFire )
+    if( !bFire )
+        return;
+
+    OInterfaceIteratorHelper iter( m_cnt );
+    while( iter.hasMoreElements() )
     {
-        OInterfaceIteratorHelper iter( m_cnt );
-        while( iter.hasMoreElements() )
+        try
         {
-            try
-            {
-                static_cast< XStreamListener * > ( iter.next() )->closed( );
-            }
-            catch ( const RuntimeException & )
-            {
-                TOOLS_WARN_EXCEPTION("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners");
-            }
+            static_cast< XStreamListener * > ( iter.next() )->closed( );
+        }
+        catch ( const RuntimeException & )
+        {
+            TOOLS_WARN_EXCEPTION("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners");
         }
     }
 }
