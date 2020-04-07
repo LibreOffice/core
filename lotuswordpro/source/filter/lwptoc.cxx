@@ -261,44 +261,44 @@ void  LwpTocSuperLayout::XFConvert(XFContentContainer* pCont)
  */
 void  LwpTocSuperLayout::XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart, sal_Int32 nEnd, bool bAll)
 {
-    if (m_pFrame)
+    if (!m_pFrame)
+        return;
+
+    rtl::Reference<XFFrame> xXFFrame;
+    if(nEnd < nStart)
     {
-        rtl::Reference<XFFrame> xXFFrame;
-        if(nEnd < nStart)
-        {
-            xXFFrame.set(new XFFrame);
-        }
-        else
-        {
-            xXFFrame.set(new XFFloatFrame(nStart, nEnd, bAll));
-        }
-
-        m_pFrame->Parse(xXFFrame.get(), static_cast<sal_uInt16>(nStart));
-
-        //parse table, and add table to frame or TOC
-        LwpTableLayout * pTableLayout = GetTableLayout();
-        if (pTableLayout)
-        {
-            XFContentContainer* pTableContainer = xXFFrame.get();
-            // if *this is a TOCSuperTableLayout and it's located in a cell
-            // add the frame to upper level and add TOCSuperTableLayout into the frame
-            rtl::Reference<LwpVirtualLayout> xContainer(GetContainerLayout());
-            if (!xContainer.is())
-                return;
-            if (xContainer->IsCell())
-            {
-                pTableContainer = pCont; // TOC contain table directly
-                xXFFrame->Add(pCont);
-                m_pCont->Add(xXFFrame.get());
-            }
-            else
-            {
-                //add frame to the container
-                pCont->Add(xXFFrame.get());
-            }
-            pTableLayout->XFConvert(pTableContainer);
-        }
+        xXFFrame.set(new XFFrame);
     }
+    else
+    {
+        xXFFrame.set(new XFFloatFrame(nStart, nEnd, bAll));
+    }
+
+    m_pFrame->Parse(xXFFrame.get(), static_cast<sal_uInt16>(nStart));
+
+    //parse table, and add table to frame or TOC
+    LwpTableLayout * pTableLayout = GetTableLayout();
+    if (!pTableLayout)
+        return;
+
+    XFContentContainer* pTableContainer = xXFFrame.get();
+    // if *this is a TOCSuperTableLayout and it's located in a cell
+    // add the frame to upper level and add TOCSuperTableLayout into the frame
+    rtl::Reference<LwpVirtualLayout> xContainer(GetContainerLayout());
+    if (!xContainer.is())
+        return;
+    if (xContainer->IsCell())
+    {
+        pTableContainer = pCont; // TOC contain table directly
+        xXFFrame->Add(pCont);
+        m_pCont->Add(xXFFrame.get());
+    }
+    else
+    {
+        //add frame to the container
+        pCont->Add(xXFFrame.get());
+    }
+    pTableLayout->XFConvert(pTableContainer);
 
 }
 
@@ -318,22 +318,22 @@ void LwpTocSuperLayout::AddSourceStyle(XFIndex* pToc, LwpTocLevelData * pLevel, 
 
     OUString sLwpStyleName = pLevel->GetSearchStyle();
 
-    if (pFoundry)
+    if (!pFoundry)
+        return;
+
+    LwpDocument * pDoc = pFoundry->GetDocument();
+    if (pDoc && pDoc->IsChildDoc())
     {
-        LwpDocument * pDoc = pFoundry->GetDocument();
-        if (pDoc && pDoc->IsChildDoc())
+        OUString sSodcStyleName = pFoundry->FindActuralStyleName(sLwpStyleName);
+        pToc->AddTocSource(pLevel->GetLevel(), sSodcStyleName);
+    }
+    else
+    {
+        pDoc = pDoc->GetFirstDivision();
+        while (pDoc)
         {
-            OUString sSodcStyleName = pFoundry->FindActuralStyleName(sLwpStyleName);
-            pToc->AddTocSource(pLevel->GetLevel(), sSodcStyleName);
-        }
-        else
-        {
-            pDoc = pDoc->GetFirstDivision();
-            while (pDoc)
-            {
-                AddSourceStyle(pToc, pLevel, pDoc->GetFoundry() );
-                pDoc = pDoc->GetNextDivision();
-            }
+            AddSourceStyle(pToc, pLevel, pDoc->GetFoundry() );
+            pDoc = pDoc->GetNextDivision();
         }
     }
 }

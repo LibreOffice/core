@@ -304,27 +304,27 @@ void LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     m_StyleName = pXFStyleManager->AddStyle(std::move(xOverStyle)).m_pStyle->GetStyleName();
     //register section style here
-    if(m_bNewSection)
-    {
-        std::unique_ptr<XFSectionStyle> pSectStyle(new XFSectionStyle());
-        //set margin
-        pStory = dynamic_cast<LwpStory*>(m_pPara->GetStoryID().obj().get());
-        LwpPageLayout* pCurrentLayout = pStory ? pStory->GetCurrentLayout() : nullptr;
-        if (pCurrentLayout)
-        {
-            double fLeft = m_pLayout->GetMarginsValue(MARGIN_LEFT) - pCurrentLayout->GetMarginsValue(MARGIN_LEFT);
-            double fRight = m_pLayout->GetMarginsValue(MARGIN_RIGHT) - pCurrentLayout->GetMarginsValue(MARGIN_RIGHT);
-            pSectStyle->SetMarginLeft(fLeft);
-            pSectStyle->SetMarginRight(fRight);
-        }
+    if(!m_bNewSection)
+        return;
 
-        XFColumns* pColumns = m_pLayout->GetXFColumns();
-        if(pColumns)
-        {
-            pSectStyle->SetColumns(pColumns);
-        }
-        m_SectionStyleName = pXFStyleManager->AddStyle(std::move(pSectStyle)).m_pStyle->GetStyleName();
+    std::unique_ptr<XFSectionStyle> pSectStyle(new XFSectionStyle());
+    //set margin
+    pStory = dynamic_cast<LwpStory*>(m_pPara->GetStoryID().obj().get());
+    LwpPageLayout* pCurrentLayout = pStory ? pStory->GetCurrentLayout() : nullptr;
+    if (pCurrentLayout)
+    {
+        double fLeft = m_pLayout->GetMarginsValue(MARGIN_LEFT) - pCurrentLayout->GetMarginsValue(MARGIN_LEFT);
+        double fRight = m_pLayout->GetMarginsValue(MARGIN_RIGHT) - pCurrentLayout->GetMarginsValue(MARGIN_RIGHT);
+        pSectStyle->SetMarginLeft(fLeft);
+        pSectStyle->SetMarginRight(fRight);
     }
+
+    XFColumns* pColumns = m_pLayout->GetXFColumns();
+    if(pColumns)
+    {
+        pSectStyle->SetColumns(pColumns);
+    }
+    m_SectionStyleName = pXFStyleManager->AddStyle(std::move(pSectStyle)).m_pStyle->GetStyleName();
 }
 
 /**

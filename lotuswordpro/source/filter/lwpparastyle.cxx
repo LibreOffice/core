@@ -326,37 +326,36 @@ void LwpParaStyle::ApplyParaBorder(XFParaStyle* pParaStyle, LwpParaBorderOverrid
 
     //convert to XFBorders object:
     LwpBorderStuff  *pBorderStuff = pBorder->GetBorderStuff();
-    if( pBorderStuff && pBorderStuff->GetSide() != 0 )
+    if( !(pBorderStuff && pBorderStuff->GetSide() != 0) )
+        return;
+
+    XFBorders   *pXFBorders = new XFBorders();
+    pParaStyle->SetBorders(pXFBorders);
+
+    LwpMargins* pMargins = pBorder->GetMargins();
+
+    // apply 4 borders respectively
+    LwpBorderStuff::BorderType pType[] = { LwpBorderStuff::LEFT, LwpBorderStuff::RIGHT,
+        LwpBorderStuff::TOP, LwpBorderStuff::BOTTOM };
+    float pMarginValue[4] = { 0.0, 0.0, 0.0, 0.0 };
+
+    for (sal_uInt8 nC = 0; nC < 4; nC++)
     {
-        XFBorders   *pXFBorders = new XFBorders();
-        pParaStyle->SetBorders(pXFBorders);
-
-        LwpMargins* pMargins = pBorder->GetMargins();
-
-        // apply 4 borders respectively
-        LwpBorderStuff::BorderType pType[] = { LwpBorderStuff::LEFT, LwpBorderStuff::RIGHT,
-            LwpBorderStuff::TOP, LwpBorderStuff::BOTTOM };
-        float pMarginValue[4] = { 0.0, 0.0, 0.0, 0.0 };
-
-        for (sal_uInt8 nC = 0; nC < 4; nC++)
+        if (pBorderStuff->HasSide(pType[nC]))
         {
-            if (pBorderStuff->HasSide(pType[nC]))
+            ApplySubBorder(pBorderStuff, pType[nC], pXFBorders);
+
+            //get border spacing to text content
+            if (pMargins)
             {
-                ApplySubBorder(pBorderStuff, pType[nC], pXFBorders);
-
-                //get border spacing to text content
-                if (pMargins)
-                {
-                    pMarginValue[nC] = static_cast<float>(pMargins->GetMarginsValue(nC));
-                }
+                pMarginValue[nC] = static_cast<float>(pMargins->GetMarginsValue(nC));
             }
-
         }
 
-        //apply border spacing to text content
-        pParaStyle->SetPadding(pMarginValue[0], pMarginValue[1], pMarginValue[2], pMarginValue[3]);
-
     }
+
+    //apply border spacing to text content
+    pParaStyle->SetPadding(pMarginValue[0], pMarginValue[1], pMarginValue[2], pMarginValue[3]);
 }
 
 void LwpParaStyle::ApplyBreaks(XFParaStyle* pParaStyle, const LwpBreaksOverride* pBreaks)

@@ -792,18 +792,17 @@ void LwpFrameLayout::Read()
  */
  void LwpFrameLayout::XFConvert(XFContentContainer* pCont)
  {
-    if(m_pFrame)
-    {
-        //parse the frame which anchor to paragraph
-        if(IsRelativeAnchored())
-        {
-            XFConvertFrame(pCont);
-        }
-        else
-        {
-            m_pFrame->XFConvert(pCont);
-        }
+    if(!m_pFrame)
+        return;
 
+    //parse the frame which anchor to paragraph
+    if(IsRelativeAnchored())
+    {
+        XFConvertFrame(pCont);
+    }
+    else
+    {
+        m_pFrame->XFConvert(pCont);
     }
  }
 /**
@@ -814,32 +813,32 @@ void LwpFrameLayout::Read()
  */
 void LwpFrameLayout::XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart , sal_Int32 nEnd, bool bAll )
 {
-    if(m_pFrame)
-    {
-        rtl::Reference<XFFrame> xXFFrame;
-        if(nEnd < nStart)
-        {
-            xXFFrame.set(new XFFrame);
-        }
-        else
-        {
-            xXFFrame.set(new XFFloatFrame(nStart, nEnd, bAll));
-        }
+    if(!m_pFrame)
+        return;
 
-        m_pFrame->Parse(xXFFrame.get(), nStart);
-        //if it is a link frame, parse contents only once
-        if(!HasPreviousLinkLayout())
-        {
-            rtl::Reference<LwpObject> content = m_Content.obj();
-            if (content.is())
-            {
-                content->DoXFConvert(xXFFrame.get());
-                //set frame size according to ole size
-                ApplyGraphicSize(xXFFrame.get());
-            }
-        }
-        pCont->Add(xXFFrame.get());
+    rtl::Reference<XFFrame> xXFFrame;
+    if(nEnd < nStart)
+    {
+        xXFFrame.set(new XFFrame);
     }
+    else
+    {
+        xXFFrame.set(new XFFloatFrame(nStart, nEnd, bAll));
+    }
+
+    m_pFrame->Parse(xXFFrame.get(), nStart);
+    //if it is a link frame, parse contents only once
+    if(!HasPreviousLinkLayout())
+    {
+        rtl::Reference<LwpObject> content = m_Content.obj();
+        if (content.is())
+        {
+            content->DoXFConvert(xXFFrame.get());
+            //set frame size according to ole size
+            ApplyGraphicSize(xXFFrame.get());
+        }
+    }
+    pCont->Add(xXFFrame.get());
 }
 /**
  * @descr register frame style
@@ -985,38 +984,38 @@ double LwpFrameLayout::GetMaxWidth()
 void LwpFrameLayout::ApplyGraphicSize(XFFrame * pXFFrame)
 {
     rtl::Reference<LwpObject> content = m_Content.obj();
-    if(content.is() && (content->GetTag() == VO_GRAPHIC
-                || content->GetTag() == VO_OLEOBJECT ))
+    if(!(content.is() && (content->GetTag() == VO_GRAPHIC
+                || content->GetTag() == VO_OLEOBJECT )))
+        return;
+
+    LwpGraphicOleObject* pGraOle = static_cast<LwpGraphicOleObject*>(content.get());
+    //Get frame geometry size
+    double fWidth = 0;
+    double fHeight = 0;
+    pGraOle->GetGrafScaledSize(fWidth, fHeight);
+    if( IsFitGraphic())
     {
-        LwpGraphicOleObject* pGraOle = static_cast<LwpGraphicOleObject*>(content.get());
-        //Get frame geometry size
-        double fWidth = 0;
-        double fHeight = 0;
-        pGraOle->GetGrafScaledSize(fWidth, fHeight);
-        if( IsFitGraphic())
-        {
-            //graphic scaled sze
-            fWidth += GetMarginsValue(MARGIN_LEFT) + GetMarginsValue(MARGIN_RIGHT);
-            fHeight += GetMarginsValue(MARGIN_TOP) + GetMarginsValue(MARGIN_BOTTOM);
-        }
-        else if(IsAutoGrowDown() || IsAutoGrowUp())
-        {
-            fWidth = GetWidth();
-            fHeight += GetMarginsValue(MARGIN_TOP) + GetMarginsValue(MARGIN_BOTTOM);
-        }
-        else if( IsAutoGrowLeft() || IsAutoGrowRight())
-        {
-            fHeight = GetHeight();
-            fWidth += GetMarginsValue(MARGIN_LEFT) + GetMarginsValue(MARGIN_RIGHT);
-        }
-        else
-        {
-            fWidth = GetWidth();
-            fHeight = GetHeight();
-        }
-        pXFFrame->SetWidth(fWidth);
-        pXFFrame->SetHeight(fHeight);
+        //graphic scaled sze
+        fWidth += GetMarginsValue(MARGIN_LEFT) + GetMarginsValue(MARGIN_RIGHT);
+        fHeight += GetMarginsValue(MARGIN_TOP) + GetMarginsValue(MARGIN_BOTTOM);
     }
+    else if(IsAutoGrowDown() || IsAutoGrowUp())
+    {
+        fWidth = GetWidth();
+        fHeight += GetMarginsValue(MARGIN_TOP) + GetMarginsValue(MARGIN_BOTTOM);
+    }
+    else if( IsAutoGrowLeft() || IsAutoGrowRight())
+    {
+        fHeight = GetHeight();
+        fWidth += GetMarginsValue(MARGIN_LEFT) + GetMarginsValue(MARGIN_RIGHT);
+    }
+    else
+    {
+        fWidth = GetWidth();
+        fHeight = GetHeight();
+    }
+    pXFFrame->SetWidth(fWidth);
+    pXFFrame->SetHeight(fHeight);
 }
 
 LwpGroupLayout::LwpGroupLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
@@ -1061,18 +1060,17 @@ void LwpGroupLayout::RegisterStyle()
  */
 void LwpGroupLayout::XFConvert(XFContentContainer *pCont)
 {
-    if(m_pFrame)
-    {
-        //parse the frame which anchor to paragraph
-        if(IsRelativeAnchored())
-        {
-            XFConvertFrame(pCont);
-        }
-        else
-        {
-            m_pFrame->XFConvert(pCont);
-        }
+    if(!m_pFrame)
+        return;
 
+    //parse the frame which anchor to paragraph
+    if(IsRelativeAnchored())
+    {
+        XFConvertFrame(pCont);
+    }
+    else
+    {
+        m_pFrame->XFConvert(pCont);
     }
 }
 /**
@@ -1083,31 +1081,31 @@ void LwpGroupLayout::XFConvert(XFContentContainer *pCont)
  */
 void LwpGroupLayout::XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart , sal_Int32 nEnd, bool bAll)
 {
-    if(m_pFrame)
+    if(!m_pFrame)
+        return;
+
+    rtl::Reference<XFFrame> xXFFrame;
+    if(nEnd < nStart)
     {
-        rtl::Reference<XFFrame> xXFFrame;
-        if(nEnd < nStart)
-        {
-            xXFFrame.set(new XFFrame);
-        }
-        else
-        {
-            xXFFrame.set(new XFFloatFrame(nStart, nEnd, bAll));
-        }
-
-        m_pFrame->Parse(xXFFrame.get(), nStart);
-
-        //add child frame into group
-        LwpVirtualLayout* pLayout = dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get());
-
-        while (pLayout && pLayout != this)
-        {
-            pLayout->DoXFConvert(xXFFrame.get());
-            pLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetNext().obj().get());
-        }
-
-        pCont->Add(xXFFrame.get());
+        xXFFrame.set(new XFFrame);
     }
+    else
+    {
+        xXFFrame.set(new XFFloatFrame(nStart, nEnd, bAll));
+    }
+
+    m_pFrame->Parse(xXFFrame.get(), nStart);
+
+    //add child frame into group
+    LwpVirtualLayout* pLayout = dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get());
+
+    while (pLayout && pLayout != this)
+    {
+        pLayout->DoXFConvert(xXFFrame.get());
+        pLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetNext().obj().get());
+    }
+
+    pCont->Add(xXFFrame.get());
 }
 
 LwpGroupFrame::LwpGroupFrame(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)

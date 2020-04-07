@@ -81,21 +81,21 @@ void LwpSdwFileLoader::CreateDrawObjects(std::vector< rtl::Reference<XFFrame> >*
     unsigned char BinSignature[2];
     m_pStream->ReadBytes(BinSignature, 2);
 
-    if (BinSignature[0] == 'S' && BinSignature[1] == 'M')
-    {
-        unsigned short nVersion;
-        m_pStream->ReadUInt16(nVersion);
+    if (!(BinSignature[0] == 'S' && BinSignature[1] == 'M'))
+        return;
 
-        m_pStream->Seek(0);
-        if (nVersion<0x0102)
-        {
-            assert(false);
-        }
-        if (nVersion>=0x0102)
-        {
-            LwpSdwGroupLoaderV0102 sdwGroupLoader(m_pStream, m_pGraphicObj);
-            sdwGroupLoader.BeginDrawObjects(pDrawObjVector);
-        }
+    unsigned short nVersion;
+    m_pStream->ReadUInt16(nVersion);
+
+    m_pStream->Seek(0);
+    if (nVersion<0x0102)
+    {
+        assert(false);
+    }
+    if (nVersion>=0x0102)
+    {
+        LwpSdwGroupLoaderV0102 sdwGroupLoader(m_pStream, m_pGraphicObj);
+        sdwGroupLoader.BeginDrawObjects(pDrawObjVector);
     }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

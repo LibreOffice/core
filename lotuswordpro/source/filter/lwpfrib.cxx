@@ -291,29 +291,29 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
         }
     }
 
-    if (m_pModifiers->HasHighlight)
-    {
-        XFColor  aColor = GetHighlightColor();//right yellow
-        if (pStyle)//change the style directly
-            pStyle->GetFont()->SetBackColor(aColor);
-        else //register a new style
-        {
-            std::unique_ptr<XFTextStyle> pNewStyle(new XFTextStyle());
+    if (!m_pModifiers->HasHighlight)
+        return;
 
-            if (!m_StyleName.isEmpty())
-            {
-                XFTextStyle* pOldStyle = pXFStyleManager->FindTextStyle(m_StyleName);
-                *pNewStyle = *pOldStyle;
-                pNewStyle->GetFont()->SetBackColor(aColor);
-            }
-            else
-            {
-                pFont = new XFFont;
-                pFont->SetBackColor(aColor);
-                pNewStyle->SetFont(pFont);
-            }
-            m_StyleName = pXFStyleManager->AddStyle(std::move(pNewStyle)).m_pStyle->GetStyleName();
+    XFColor  aColor = GetHighlightColor();//right yellow
+    if (pStyle)//change the style directly
+        pStyle->GetFont()->SetBackColor(aColor);
+    else //register a new style
+    {
+        std::unique_ptr<XFTextStyle> pNewStyle(new XFTextStyle());
+
+        if (!m_StyleName.isEmpty())
+        {
+            XFTextStyle* pOldStyle = pXFStyleManager->FindTextStyle(m_StyleName);
+            *pNewStyle = *pOldStyle;
+            pNewStyle->GetFont()->SetBackColor(aColor);
         }
+        else
+        {
+            pFont = new XFFont;
+            pFont->SetBackColor(aColor);
+            pNewStyle->SetFont(pFont);
+        }
+        m_StyleName = pXFStyleManager->AddStyle(std::move(pNewStyle)).m_pStyle->GetStyleName();
     }
 }
 

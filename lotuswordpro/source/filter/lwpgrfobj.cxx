@@ -638,49 +638,49 @@ void LwpGraphicObject::XFConvertEquation(XFContentContainer * pCont)
 {
     std::unique_ptr<sal_uInt8[]> pGrafData;
     sal_uInt32 nDataLen = GetGrafData(pGrafData);
-    if(pGrafData)
+    if(!pGrafData)
+        return;
+
+    //convert equation
+    XFParagraph* pXFPara = new XFParagraph;
+    pXFPara->Add("Formula:");
+    //add notes
+    XFAnnotation* pXFNote = new XFAnnotation;
+    //add equation to comment notes
+    XFParagraph* pXFNotePara = new XFParagraph;
+    //equation header text: Times New Roman,
+    //                                18,12,0,0,0,0,0.
+    //                                 .TCIformat{2}
+    //total head length = 45
+    bool bOk = true;
+    sal_uInt32 nBegin = 45;
+    sal_uInt32 nEnd = 0;
+    if (nDataLen >= 1)
+        nEnd = nDataLen - 1;
+    else
+        bOk = false;
+
+    if (bOk && pGrafData[nEnd] == '$' && nEnd > 0 && pGrafData[nEnd-1] != '\\')
     {
-        //convert equation
-        XFParagraph* pXFPara = new XFParagraph;
-        pXFPara->Add("Formula:");
-        //add notes
-        XFAnnotation* pXFNote = new XFAnnotation;
-        //add equation to comment notes
-        XFParagraph* pXFNotePara = new XFParagraph;
-        //equation header text: Times New Roman,
-        //                                18,12,0,0,0,0,0.
-        //                                 .TCIformat{2}
-        //total head length = 45
-        bool bOk = true;
-        sal_uInt32 nBegin = 45;
-        sal_uInt32 nEnd = 0;
-        if (nDataLen >= 1)
-            nEnd = nDataLen - 1;
-        else
-            bOk = false;
-
-        if (bOk && pGrafData[nEnd] == '$' && nEnd > 0 && pGrafData[nEnd-1] != '\\')
-        {
-            //equation body is contained by '$';
-            nBegin++;
-            nEnd--;
-        }
-
-        bOk &= nEnd >= nBegin;
-        if (bOk)
-        {
-            std::unique_ptr<sal_uInt8[]> pEquData( new sal_uInt8[nEnd - nBegin + 1] );
-            for(sal_uInt32 nIndex = 0; nIndex < nEnd - nBegin +1 ; nIndex++)
-            {
-                pEquData[nIndex] = pGrafData[nBegin + nIndex];
-            }
-            pXFNotePara->Add(OUString(reinterpret_cast<char*>(pEquData.get()), (nEnd - nBegin + 1), osl_getThreadTextEncoding()));
-        }
-        pXFNote->Add(pXFNotePara);
-
-        pXFPara->Add(pXFNote);
-        pCont->Add(pXFPara);
+        //equation body is contained by '$';
+        nBegin++;
+        nEnd--;
     }
+
+    bOk &= nEnd >= nBegin;
+    if (bOk)
+    {
+        std::unique_ptr<sal_uInt8[]> pEquData( new sal_uInt8[nEnd - nBegin + 1] );
+        for(sal_uInt32 nIndex = 0; nIndex < nEnd - nBegin +1 ; nIndex++)
+        {
+            pEquData[nIndex] = pGrafData[nBegin + nIndex];
+        }
+        pXFNotePara->Add(OUString(reinterpret_cast<char*>(pEquData.get()), (nEnd - nBegin + 1), osl_getThreadTextEncoding()));
+    }
+    pXFNote->Add(pXFNotePara);
+
+    pXFPara->Add(pXFNote);
+    pCont->Add(pXFPara);
 }
 
 void LwpGraphicObject::GetGrafOrgSize(double & rWidth, double & rHeight)

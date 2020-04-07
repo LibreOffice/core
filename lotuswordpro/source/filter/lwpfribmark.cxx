@@ -1213,19 +1213,19 @@ void LwpFribField::ConvertDocFieldStart(XFContentContainer* pXFPara,LwpFieldMark
             break;
         }
     }
-    if (pContent)
+    if (!pContent)
+        return;
+
+    if (m_ModFlag)//(m_pModifiers)
     {
-        if (m_ModFlag)//(m_pModifiers)
-        {
-            XFTextSpanStart* pSpan = new XFTextSpanStart;
-            pSpan->SetStyleName(GetStyleName());
-            pSpan->Add(pContent);
-            pXFPara->Add(pSpan);
-            pFieldMark->SetStyleFlag(true);
-        }
-        else
-            pXFPara->Add(pContent);
+        XFTextSpanStart* pSpan = new XFTextSpanStart;
+        pSpan->SetStyleName(GetStyleName());
+        pSpan->Add(pContent);
+        pXFPara->Add(pSpan);
+        pFieldMark->SetStyleFlag(true);
     }
+    else
+        pXFPara->Add(pContent);
 }
 
 void LwpFribField::ConvertDocFieldEnd(XFContentContainer* pXFPara, const LwpFieldMark* pFieldMark)
@@ -1299,19 +1299,19 @@ void LwpFribField::ConvertDateTimeStart(XFContentContainer* pXFPara,LwpFieldMark
     default:
         break;
     }
-    if (pContent)
+    if (!pContent)
+        return;
+
+    if (m_ModFlag)
     {
-        if (m_ModFlag)
-        {
-            XFTextSpanStart* pSpan = new XFTextSpanStart;
-            pSpan->SetStyleName(GetStyleName());
-            pSpan->Add(pContent);
-            pXFPara->Add(pSpan);
-            pFieldMark->SetStyleFlag(true);
-        }
-        else
-            pXFPara->Add(pContent);
+        XFTextSpanStart* pSpan = new XFTextSpanStart;
+        pSpan->SetStyleName(GetStyleName());
+        pSpan->Add(pContent);
+        pXFPara->Add(pSpan);
+        pFieldMark->SetStyleFlag(true);
     }
+    else
+        pXFPara->Add(pContent);
 
 }
 

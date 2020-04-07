@@ -99,29 +99,29 @@ void LwpFribNote::RegisterNewStyle()
 void LwpFribNote::XFConvert(XFContentContainer* pCont)
 {
     LwpNoteLayout* pLayout = dynamic_cast<LwpNoteLayout*>(m_Layout.obj().get());
-    if(pLayout)
-    {
-        XFAnnotation* pXFNote = new XFAnnotation;
-        pXFNote->SetAuthor(pLayout->GetAuthor());
-        LtTm aTm;
-        long nTime = pLayout->GetTime();
-        if(LtgLocalTime(nTime, aTm))
-        {
-            pXFNote->SetDate(LwpTools::DateTimeToOUString(aTm));
-        }
+    if(!pLayout)
+        return;
 
-        pLayout->XFConvert(pXFNote);
-        if(m_pModifiers)
-        {
-            XFTextSpan *pSpan = new XFTextSpan();
-            pSpan->SetStyleName(GetStyleName());
-            pSpan->Add(pXFNote);
-            pCont->Add(pSpan);
-        }
-        else
-        {
-            pCont->Add(pXFNote);
-        }
+    XFAnnotation* pXFNote = new XFAnnotation;
+    pXFNote->SetAuthor(pLayout->GetAuthor());
+    LtTm aTm;
+    long nTime = pLayout->GetTime();
+    if(LtgLocalTime(nTime, aTm))
+    {
+        pXFNote->SetDate(LwpTools::DateTimeToOUString(aTm));
+    }
+
+    pLayout->XFConvert(pXFNote);
+    if(m_pModifiers)
+    {
+        XFTextSpan *pSpan = new XFTextSpan();
+        pSpan->SetStyleName(GetStyleName());
+        pSpan->Add(pXFNote);
+        pCont->Add(pSpan);
+    }
+    else
+    {
+        pCont->Add(pXFNote);
     }
 
 }

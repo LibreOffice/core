@@ -210,20 +210,20 @@ LwpExternalBorder::~LwpExternalBorder()
 
 void LwpExternalBorder:: Read(LwpObjectStream *pStrm)
 {
-    if( LwpFileHeader::m_nFileRevision >= 0x000F )
-    {
-        //enum {BORDER,JOIN};
-        m_LeftName.Read(pStrm);
-        m_TopName.Read(pStrm);
-        m_RightName.Read(pStrm);
-        m_BottomName.Read(pStrm);
-        // TODO: Do not know what it is for
-        /*cLeftName = CStyleMgr::GetUniqueMetaFileName(cLeftName,BORDER);
-        cRightName = CStyleMgr::GetUniqueMetaFileName(cRightName,BORDER);
-        cTopName = CStyleMgr::GetUniqueMetaFileName(cTopName,BORDER);
-        cBottomName = CStyleMgr::GetUniqueMetaFileName(cBottomName,BORDER);*/
-        pStrm->SkipExtra();
-    }
+    if( LwpFileHeader::m_nFileRevision < 0x000F )
+        return;
+
+    //enum {BORDER,JOIN};
+    m_LeftName.Read(pStrm);
+    m_TopName.Read(pStrm);
+    m_RightName.Read(pStrm);
+    m_BottomName.Read(pStrm);
+    // TODO: Do not know what it is for
+    /*cLeftName = CStyleMgr::GetUniqueMetaFileName(cLeftName,BORDER);
+    cRightName = CStyleMgr::GetUniqueMetaFileName(cRightName,BORDER);
+    cTopName = CStyleMgr::GetUniqueMetaFileName(cTopName,BORDER);
+    cBottomName = CStyleMgr::GetUniqueMetaFileName(cBottomName,BORDER);*/
+    pStrm->SkipExtra();
 }
 
 LwpLayoutExternalBorder::LwpLayoutExternalBorder(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)

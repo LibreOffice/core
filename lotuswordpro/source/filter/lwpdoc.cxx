@@ -260,19 +260,19 @@ void LwpDocument::RegisterLayoutStyles()
 
     //set initial pagelayout in story for parsing pagelayout
     LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*> (m_DivInfo.obj( VO_DIVISIONINFO).get());
-    if (pDivInfo)
+    if (!pDivInfo)
+        return;
+
+    LwpPageLayout* pPageLayout = dynamic_cast<LwpPageLayout*>(pDivInfo->GetInitialLayoutID().obj(VO_PAGELAYOUT).get());
+    if(pPageLayout)
     {
-        LwpPageLayout* pPageLayout = dynamic_cast<LwpPageLayout*>(pDivInfo->GetInitialLayoutID().obj(VO_PAGELAYOUT).get());
-        if(pPageLayout)
+        //In Ole division, the content of pagelayout is VO_OLEOBJECT
+        LwpStory* pStory = dynamic_cast<LwpStory*>(pPageLayout->GetContent().obj(VO_STORY).get());
+        if(pStory)
         {
-            //In Ole division, the content of pagelayout is VO_OLEOBJECT
-            LwpStory* pStory = dynamic_cast<LwpStory*>(pPageLayout->GetContent().obj(VO_STORY).get());
-            if(pStory)
-            {
-                //add all the pagelayout in order into the pagelayout list;
-                pStory->SortPageLayout();
-                pStory->SetCurrentLayout(pPageLayout);
-            }
+            //add all the pagelayout in order into the pagelayout list;
+            pStory->SortPageLayout();
+            pStory->SetCurrentLayout(pPageLayout);
         }
     }
 }
@@ -285,20 +285,20 @@ void LwpDocument::RegisterStylesInPara()
     rtl::Reference<LwpHeadContent> xContent(m_xOwnedFoundry
         ? dynamic_cast<LwpHeadContent*> (m_xOwnedFoundry->GetContentManager().GetContentList().obj().get())
         : nullptr);
-    if (xContent.is())
+    if (!xContent.is())
+        return;
+
+    rtl::Reference<LwpStory> xStory(dynamic_cast<LwpStory*>(xContent->GetChildHead().obj(VO_STORY).get()));
+    o3tl::sorted_vector<LwpStory*> aSeen;
+    while (xStory.is())
     {
-        rtl::Reference<LwpStory> xStory(dynamic_cast<LwpStory*>(xContent->GetChildHead().obj(VO_STORY).get()));
-        o3tl::sorted_vector<LwpStory*> aSeen;
-        while (xStory.is())
-        {
-            aSeen.insert(xStory.get());
-            //Register the child para
-            xStory->SetFoundry(m_xOwnedFoundry.get());
-            xStory->DoRegisterStyle();
-            xStory.set(dynamic_cast<LwpStory*>(xStory->GetNext().obj(VO_STORY).get()));
-            if (aSeen.find(xStory.get()) != aSeen.end())
-                throw std::runtime_error("loop in conversion");
-        }
+        aSeen.insert(xStory.get());
+        //Register the child para
+        xStory->SetFoundry(m_xOwnedFoundry.get());
+        xStory->DoRegisterStyle();
+        xStory.set(dynamic_cast<LwpStory*>(xStory->GetNext().obj(VO_STORY).get()));
+        if (aSeen.find(xStory.get()) != aSeen.end())
+            throw std::runtime_error("loop in conversion");
     }
 }
 /**
@@ -368,21 +368,21 @@ void LwpDocument::RegisterFootnoteStyles()
     //Register endnote page style for endnote configuration, use the last division that has endnote for the endnote page style
     //This page style must register after its division default styles have registered
     LwpDocument* pEndnoteDiv = GetLastDivisionThatHasEndnote();
-    if(this == pEndnoteDiv)
+    if(this != pEndnoteDiv)
+        return;
+
+    LwpDLVListHeadTailHolder* pHeadTail = dynamic_cast<LwpDLVListHeadTailHolder*>(GetPageHintsID().obj().get());
+    if(!pHeadTail)
+        return;
+
+    LwpPageHint* pPageHint = dynamic_cast<LwpPageHint*>(pHeadTail->GetTail().obj().get());
+    if(pPageHint && !pPageHint->GetPageLayoutID().IsNull())
     {
-        LwpDLVListHeadTailHolder* pHeadTail = dynamic_cast<LwpDLVListHeadTailHolder*>(GetPageHintsID().obj().get());
-        if(pHeadTail)
+        LwpPageLayout* pPageLayout = dynamic_cast<LwpPageLayout*>(pPageHint->GetPageLayoutID().obj().get());
+        if(pPageLayout)
         {
-            LwpPageHint* pPageHint = dynamic_cast<LwpPageHint*>(pHeadTail->GetTail().obj().get());
-            if(pPageHint && !pPageHint->GetPageLayoutID().IsNull())
-            {
-                LwpPageLayout* pPageLayout = dynamic_cast<LwpPageLayout*>(pPageHint->GetPageLayoutID().obj().get());
-                if(pPageLayout)
-                {
-                    pPageLayout->SetFoundry(GetFoundry());
-                    pPageLayout->RegisterEndnoteStyle();
-                }
-            }
+            pPageLayout->SetFoundry(GetFoundry());
+            pPageLayout->RegisterEndnoteStyle();
         }
     }
 }
@@ -392,20 +392,19 @@ void LwpDocument::RegisterFootnoteStyles()
 */
 void LwpDocument::RegisterDefaultParaStyles()
 {
-    if(!IsChildDoc())
-    {
-        //Get First Division
-        //LwpDocument* pFirstDoc = GetFirstDivision();
-        LwpDocument* pFirstDoc = GetFirstDivisionWithContentsThatIsNotOLE();
-        if(pFirstDoc)
-        {
-            LwpVerDocument* pVerDoc = dynamic_cast<LwpVerDocument*>(pFirstDoc->GetVerDoc().obj().get());
-            if(pVerDoc)
-            {
-                pVerDoc->RegisterStyle();
-            }
-        }
+    if(IsChildDoc())
+        return;
 
+    //Get First Division
+    //LwpDocument* pFirstDoc = GetFirstDivision();
+    LwpDocument* pFirstDoc = GetFirstDivisionWithContentsThatIsNotOLE();
+    if(pFirstDoc)
+    {
+        LwpVerDocument* pVerDoc = dynamic_cast<LwpVerDocument*>(pFirstDoc->GetVerDoc().obj().get());
+        if(pVerDoc)
+        {
+            pVerDoc->RegisterStyle();
+        }
     }
 }
 
