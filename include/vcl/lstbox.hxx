@@ -236,6 +236,7 @@ public:
     void                SetSelectHdl( const Link<ListBox&,void>& rLink )     { maSelectHdl = rLink; }
     void                SetDoubleClickHdl( const Link<ListBox&,void>& rLink ) { maDoubleClickHdl = rLink; }
     const Link<ListBox&,void>& GetDoubleClickHdl() const               { return maDoubleClickHdl; }
+    void                SetUserDrawHdl(const Link<UserDrawEvent*, void>& rLink);
 
     Size                CalcSubEditSize() const;    //size of area inside lstbox, i.e. no scrollbar/dropdown
     Size                CalcMinimumSize() const;    //size of lstbox area, i.e. including scrollbar/dropdown

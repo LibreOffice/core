@@ -65,9 +65,6 @@ ImplEntryList::ImplEntryList( vcl::Window* pWindow )
     mnSelectionAnchor = LISTBOX_ENTRY_NOTFOUND;
     mnImages = 0;
     mbCallSelectionChangedHdl = true;
-
-    mnMRUCount = 0;
-    mnMaxMRUCount = 0;
 }
 
 ImplEntryList::~ImplEntryList()
@@ -164,7 +161,7 @@ sal_Int32 ImplEntryList::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEntry, 
             }
             else
             {
-                pTemp = GetEntry( mnMRUCount );
+                pTemp = GetEntry(0);
 
                 nComp = rSorter.compare(rStr, pTemp->maStr);
                 if ( nComp <= 0 )
@@ -174,7 +171,7 @@ sal_Int32 ImplEntryList::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEntry, 
                 }
                 else
                 {
-                    sal_uLong nLow = mnMRUCount;
+                    sal_uLong nLow = 0;
                     sal_uLong nHigh = maEntries.size()-1;
                     sal_Int32 nMid;
 
@@ -234,10 +231,10 @@ void ImplEntryList::RemoveEntry( sal_Int32 nPos )
     }
 }
 
-sal_Int32 ImplEntryList::FindEntry( const OUString& rString, bool bSearchMRUArea ) const
+sal_Int32 ImplEntryList::FindEntry( const OUString& rString ) const
 {
     const sal_Int32 nEntries = static_cast<sal_Int32>(maEntries.size());
-    for ( sal_Int32 n = bSearchMRUArea ? 0 : GetMRUCount(); n < nEntries; n++ )
+    for ( sal_Int32 n = 0; n < nEntries; n++ )
     {
         OUString aComp( vcl::I18nHelper::filterFormattingChars( maEntries[n]->maStr ) );
         if ( aComp == rString )
@@ -695,41 +692,6 @@ void ImplListBoxWindow::ImplUpdateEntryMetrics( ImplEntryType& rEntry )
 
 void ImplListBoxWindow::ImplCallSelect()
 {
-    if ( !IsTravelSelect() && GetEntryList()->GetMaxMRUCount() )
-    {
-        // Insert the selected entry as MRU, if not already first MRU
-        sal_Int32 nSelected = GetEntryList()->GetSelectedEntryPos( 0 );
-        sal_Int32 nMRUCount = GetEntryList()->GetMRUCount();
-        OUString aSelected = GetEntryList()->GetEntryText( nSelected );
-        sal_Int32 nFirstMatchingEntryPos = GetEntryList()->FindEntry( aSelected, true );
-        if ( nFirstMatchingEntryPos || !nMRUCount )
-        {
-            bool bSelectNewEntry = false;
-            if ( nFirstMatchingEntryPos < nMRUCount )
-            {
-                RemoveEntry( nFirstMatchingEntryPos );
-                nMRUCount--;
-                if ( nFirstMatchingEntryPos == nSelected )
-                    bSelectNewEntry = true;
-            }
-            else if ( nMRUCount == GetEntryList()->GetMaxMRUCount() )
-            {
-                RemoveEntry( nMRUCount - 1 );
-                nMRUCount--;
-            }
-
-            ImplClearLayoutData();
-
-            ImplEntryType* pNewEntry = new ImplEntryType( aSelected );
-            pNewEntry->mbIsSelected = bSelectNewEntry;
-            GetEntryList()->InsertEntry( 0, pNewEntry, false );
-            ImplUpdateEntryMetrics( *pNewEntry );
-            GetEntryList()->SetMRUCount( ++nMRUCount );
-            SetSeparatorPos( nMRUCount ? nMRUCount-1 : 0 );
-            maMRUChangedHdl.Call( nullptr );
-        }
-    }
-
     maSelectHdl.Call( nullptr );
     mbSelectionChanged = false;
 }
@@ -1731,13 +1693,7 @@ void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 
         mbInUserDraw = true;
         mnUserDrawEntry = nPos;
         aRect.AdjustLeft( -mnLeft );
-        if (nPos < GetEntryList()->GetMRUCount())
-            nPos = GetEntryList()->FindEntry(GetEntryList()->GetEntryText(nPos));
-        nPos = nPos - GetEntryList()->GetMRUCount();
         sal_Int32 nCurr = mnCurrentPos;
-        if (mnCurrentPos < GetEntryList()->GetMRUCount())
-            nCurr = GetEntryList()->FindEntry(GetEntryList()->GetEntryText(nCurr));
-        nCurr = sal::static_int_cast<sal_Int32>(nCurr - GetEntryList()->GetMRUCount());
 
         UserDrawEvent aUDEvt(this, &rRenderContext, aRect, nPos, nCurr);
         maUserDrawHdl.Call( &aUDEvt );
@@ -2068,7 +2024,7 @@ tools::Rectangle ImplListBoxWindow::GetBoundingRectangle( sal_Int32 nItem ) cons
 {
     const ImplEntryType* pEntry = mpEntryList->GetEntryPtr( nItem );
     Size aSz( GetSizePixel().Width(), pEntry ? pEntry->getHeightWithMargin() : GetEntryHeightWithMargin() );
-    long nY = mpEntryList->GetAddedHeight( nItem, GetTopEntry() ) + GetEntryList()->GetMRUCount()*GetEntryHeightWithMargin();
+    long nY = mpEntryList->GetAddedHeight( nItem, GetTopEntry() );
     tools::Rectangle aRect( Point( 0, nY ), aSz );
     return aRect;
 }
@@ -2165,7 +2121,6 @@ ImplListBox::ImplListBox( vcl::Window* pParent, WinBits nWinStyle ) :
     mbEdgeBlending  = false;
 
     maLBWindow->SetScrollHdl( LINK( this, ImplListBox, LBWindowScrolled ) );
-    maLBWindow->SetMRUChangedHdl( LINK( this, ImplListBox, MRUChanged ) );
     maLBWindow->SetEdgeBlending(GetEdgeBlending());
     maLBWindow->Show();
 }
@@ -2187,11 +2142,6 @@ void ImplListBox::dispose()
 void ImplListBox::Clear()
 {
     maLBWindow->Clear();
-    if ( GetEntryList()->GetMRUCount() )
-    {
-        maLBWindow->GetEntryList()->SetMRUCount( 0 );
-        maLBWindow->SetSeparatorPos( LISTBOX_ENTRY_NOTFOUND );
-    }
     mpVScrollBar->SetThumbPos( 0 );
     mpHScrollBar->SetThumbPos( 0 );
     CompatStateChanged( StateChangedType::Data );
@@ -2247,11 +2197,6 @@ void ImplListBox::Resize()
     Control::Resize();
     ImplResizeControls();
     ImplCheckScrollBars();
-}
-
-IMPL_LINK_NOARG(ImplListBox, MRUChanged, LinkParamNone*, void)
-{
-    CompatStateChanged( StateChangedType::Data );
 }
 
 IMPL_LINK_NOARG(ImplListBox, LBWindowScrolled, ImplListBoxWindow*, void)
@@ -2534,49 +2479,6 @@ bool ImplListBox::HandleWheelAsCursorTravel( const CommandEvent& rCEvt )
         }
     }
     return bDone;
-}
-
-void ImplListBox::SetMRUEntries( const OUString& rEntries, sal_Unicode cSep )
-{
-    bool bChanges = GetEntryList()->GetMRUCount() != 0;
-
-    // Remove old MRU entries
-    for ( sal_Int32 n = GetEntryList()->GetMRUCount();n; )
-        maLBWindow->RemoveEntry( --n );
-
-    sal_Int32 nMRUCount = 0;
-    sal_Int32 nIndex = 0;
-    do
-    {
-        OUString aEntry = rEntries.getToken( 0, cSep, nIndex );
-        // Accept only existing entries
-        if ( GetEntryList()->FindEntry( aEntry ) != LISTBOX_ENTRY_NOTFOUND )
-        {
-            ImplEntryType* pNewEntry = new ImplEntryType( aEntry );
-            maLBWindow->GetEntryList()->InsertEntry( nMRUCount++, pNewEntry, false );
-            bChanges = true;
-        }
-    }
-    while ( nIndex >= 0 );
-
-    if ( bChanges )
-    {
-        maLBWindow->GetEntryList()->SetMRUCount( nMRUCount );
-        SetSeparatorPos( nMRUCount ? nMRUCount-1 : 0 );
-        CompatStateChanged( StateChangedType::Data );
-    }
-}
-
-OUString ImplListBox::GetMRUEntries( sal_Unicode cSep ) const
-{
-    OUStringBuffer aEntries;
-    for ( sal_Int32 n = 0; n < GetEntryList()->GetMRUCount(); n++ )
-    {
-        aEntries.append(GetEntryList()->GetEntryText( n ));
-        if( n < ( GetEntryList()->GetMRUCount() - 1 ) )
-            aEntries.append(cSep);
-    }
-    return aEntries.makeStringAndClear();
 }
 
 void ImplListBox::SetEdgeBlending(bool bNew)

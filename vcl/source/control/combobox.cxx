@@ -280,10 +280,7 @@ IMPL_LINK_NOARG(ComboBox::Impl, ImplClickBtnHdl, void*, void)
 {
     m_rThis.CallEventListeners( VclEventId::DropdownPreOpen );
     m_pSubEdit->GrabFocus();
-    if (!m_pImplLB->GetEntryList()->GetMRUCount())
-        ImplUpdateFloatSelection();
-    else
-        m_pImplLB->SelectEntry( 0 , true );
+    ImplUpdateFloatSelection();
     m_pBtn->SetPressed( true );
     m_rThis.SetSelection( Selection( 0, SELECTION_MAX ) );
     m_pFloatWin->StartFloat( true );
@@ -488,10 +485,7 @@ void ComboBox::ToggleDropDown()
         else
         {
             m_pImpl->m_pSubEdit->GrabFocus();
-            if (!m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount())
-                m_pImpl->ImplUpdateFloatSelection();
-            else
-                m_pImpl->m_pImplLB->SelectEntry( 0 , true );
+            m_pImpl->ImplUpdateFloatSelection();
             CallEventListeners( VclEventId::DropdownPreOpen );
             m_pImpl->m_pBtn->SetPressed( true );
             SetSelection( Selection( 0, SELECTION_MAX ) );
@@ -528,10 +522,6 @@ void ComboBox::EnableAutoSize( bool bAuto )
             m_pImpl->m_pFloatWin->SetDropDownLineCount( 0 );
         }
     }
-}
-void ComboBox::EnableSelectAll()
-{
-    m_pImpl->m_pSubEdit->SetSelectAllSingleClick(true);
 }
 
 void ComboBox::SetDropDownLineCount( sal_uInt16 nLines )
@@ -740,8 +730,6 @@ bool ComboBox::EventNotify( NotifyEvent& rNEvt )
                 {
                     CallEventListeners( VclEventId::DropdownPreOpen );
                     m_pImpl->m_pBtn->SetPressed( true );
-                    if (m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount())
-                        m_pImpl->m_pImplLB->SelectEntry( 0 , true );
                     SetSelection( Selection( 0, SELECTION_MAX ) );
                     m_pImpl->m_pFloatWin->StartFloat( false );
                     CallEventListeners( VclEventId::DropdownOpen );
@@ -892,13 +880,11 @@ sal_Int32 ComboBox::InsertEntry(const OUString& rStr, sal_Int32 const nPos)
         nRealPos = nPos;
     else
     {
-        const sal_Int32 nMRUCount = m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount();
-        assert(nPos <= COMBOBOX_MAX_ENTRIES - nMRUCount);
-        nRealPos = nPos + nMRUCount;
+        assert(nPos <= COMBOBOX_MAX_ENTRIES);
+        nRealPos = nPos;
     }
 
     nRealPos = m_pImpl->m_pImplLB->InsertEntry( nRealPos, rStr );
-    nRealPos -= m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount();
     CallEventListeners( VclEventId::ComboboxItemAdded, reinterpret_cast<void*>(nRealPos) );
     return nRealPos;
 }
@@ -913,13 +899,11 @@ sal_Int32 ComboBox::InsertEntryWithImage(
         nRealPos = nPos;
     else
     {
-        const sal_Int32 nMRUCount = m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount();
-        assert(nPos <= COMBOBOX_MAX_ENTRIES - nMRUCount);
-        nRealPos = nPos + nMRUCount;
+        assert(nPos <= COMBOBOX_MAX_ENTRIES);
+        nRealPos = nPos;
     }
 
     nRealPos = m_pImpl->m_pImplLB->InsertEntry( nRealPos, rStr, rImage );
-    nRealPos -= m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount();
     CallEventListeners( VclEventId::ComboboxItemAdded, reinterpret_cast<void*>(nRealPos) );
     return nRealPos;
 }
@@ -931,9 +915,8 @@ void ComboBox::RemoveEntry( const OUString& rStr )
 
 void ComboBox::RemoveEntryAt(sal_Int32 const nPos)
 {
-    const sal_Int32 nMRUCount = m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount();
-    assert(nPos >= 0 && nPos <= COMBOBOX_MAX_ENTRIES - nMRUCount);
-    m_pImpl->m_pImplLB->RemoveEntry( nPos + nMRUCount );
+    assert(nPos >= 0 && nPos <= COMBOBOX_MAX_ENTRIES);
+    m_pImpl->m_pImplLB->RemoveEntry(nPos);
     CallEventListeners( VclEventId::ComboboxItemRemoved, reinterpret_cast<void*>(nPos) );
 }
 
@@ -955,25 +938,22 @@ Image ComboBox::GetEntryImage( sal_Int32 nPos ) const
 sal_Int32 ComboBox::GetEntryPos( const OUString& rStr ) const
 {
     sal_Int32 nPos = m_pImpl->m_pImplLB->GetEntryList()->FindEntry( rStr );
-    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-        nPos -= m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount();
     return nPos;
 }
 
 OUString ComboBox::GetEntry( sal_Int32 nPos ) const
 {
-    const sal_Int32 nMRUCount = m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount();
-    if (nPos < 0 || nPos > COMBOBOX_MAX_ENTRIES - nMRUCount)
+    if (nPos < 0 || nPos > COMBOBOX_MAX_ENTRIES)
         return OUString();
 
-    return m_pImpl->m_pImplLB->GetEntryList()->GetEntryText( nPos + nMRUCount );
+    return m_pImpl->m_pImplLB->GetEntryList()->GetEntryText(nPos);
 }
 
 sal_Int32 ComboBox::GetEntryCount() const
 {
     if (!m_pImpl->m_pImplLB)
         return 0;
-    return m_pImpl->m_pImplLB->GetEntryList()->GetEntryCount() - m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount();
+    return m_pImpl->m_pImplLB->GetEntryList()->GetEntryCount();
 }
 
 bool ComboBox::IsTravelSelect() const
@@ -1268,6 +1248,11 @@ void ComboBox::UserDraw( const UserDrawEvent& )
 {
 }
 
+void ComboBox::SetUserDrawHdl(const Link<UserDrawEvent*, void>& rLink)
+{
+    m_pImpl->m_pImplLB->SetUserDrawHdl(rLink);
+}
+
 void ComboBox::SetUserItemSize( const Size& rSz )
 {
     m_pImpl->m_pImplLB->GetMainWindow()->SetUserItemSize( rSz );
@@ -1294,26 +1279,6 @@ void ComboBox::AddSeparator( sal_Int32 n )
     m_pImpl->m_pImplLB->AddSeparator( n );
 }
 
-void ComboBox::SetMRUEntries( const OUString& rEntries )
-{
-    m_pImpl->m_pImplLB->SetMRUEntries( rEntries, ';' );
-}
-
-OUString ComboBox::GetMRUEntries() const
-{
-    return m_pImpl->m_pImplLB ? m_pImpl->m_pImplLB->GetMRUEntries( ';' ) : OUString();
-}
-
-void ComboBox::SetMaxMRUCount( sal_Int32 n )
-{
-    m_pImpl->m_pImplLB->SetMaxMRUCount( n );
-}
-
-sal_Int32 ComboBox::GetMaxMRUCount() const
-{
-    return m_pImpl->m_pImplLB ? m_pImpl->m_pImplLB->GetMaxMRUCount() : 0;
-}
-
 sal_uInt16 ComboBox::GetDisplayLineCount() const
 {
     return m_pImpl->m_pImplLB ? m_pImpl->m_pImplLB->GetDisplayLineCount() : 0;
@@ -1321,20 +1286,17 @@ sal_uInt16 ComboBox::GetDisplayLineCount() const
 
 void ComboBox::SetEntryData( sal_Int32 nPos, void* pNewData )
 {
-    m_pImpl->m_pImplLB->SetEntryData( nPos + m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount(), pNewData );
+    m_pImpl->m_pImplLB->SetEntryData( nPos, pNewData );
 }
 
 void* ComboBox::GetEntryData( sal_Int32 nPos ) const
 {
-    return m_pImpl->m_pImplLB->GetEntryList()->GetEntryData(
-            nPos + m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount() );
+    return m_pImpl->m_pImplLB->GetEntryList()->GetEntryData(nPos);
 }
 
 sal_Int32 ComboBox::GetTopEntry() const
 {
     sal_Int32 nPos = GetEntryCount() ? m_pImpl->m_pImplLB->GetTopEntry() : LISTBOX_ENTRY_NOTFOUND;
-    if (nPos < m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount())
-        nPos = 0;
     return nPos;
 }
 
@@ -1367,26 +1329,18 @@ sal_Int32 ComboBox::GetSelectedEntryCount() const
 sal_Int32 ComboBox::GetSelectedEntryPos( sal_Int32 nIndex ) const
 {
     sal_Int32 nPos = m_pImpl->m_pImplLB->GetEntryList()->GetSelectedEntryPos( nIndex );
-    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-    {
-        if (nPos < m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount())
-            nPos = m_pImpl->m_pImplLB->GetEntryList()->FindEntry(m_pImpl->m_pImplLB->GetEntryList()->GetEntryText(nPos));
-        nPos = sal::static_int_cast<sal_Int32>(nPos - m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount());
-    }
     return nPos;
 }
 
 bool ComboBox::IsEntryPosSelected( sal_Int32 nPos ) const
 {
-    return m_pImpl->m_pImplLB->GetEntryList()->IsEntryPosSelected(
-            nPos + m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount() );
+    return m_pImpl->m_pImplLB->GetEntryList()->IsEntryPosSelected(nPos);
 }
 
 void ComboBox::SelectEntryPos( sal_Int32 nPos, bool bSelect)
 {
     if (nPos < m_pImpl->m_pImplLB->GetEntryList()->GetEntryCount())
-        m_pImpl->m_pImplLB->SelectEntry(
-            nPos + m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount(), bSelect);
+        m_pImpl->m_pImplLB->SelectEntry(nPos, bSelect);
 }
 
 void ComboBox::SetNoSelection()
