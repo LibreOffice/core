@@ -614,6 +614,7 @@ typedef enum
      *  - "dialog" - window is a dialog
      *  - "child" - window is a floating window (combo boxes, etc.)
      *  - "deck" - window is a docked/floating deck (i.e. the sidebar)
+     *  - "tooltip" - window is a tooltip popup
      *
      * "action" can take following values:
      * - "created" - window is created in the backend, client can render it now
