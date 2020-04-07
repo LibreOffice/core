@@ -22,6 +22,30 @@
       "revId": "c786b2a8fe8686205fc6f9c685fb59d9bbf92905",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1afbb6c6_d46fad02",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableHandler.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 626,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-04-07T17:27:48Z",
+      "side": 1,
+      "message": "Justin: I am going to fix it soon. Many thanks for the review.",
+      "parentUuid": "1da16542_e4d99bb0",
+      "range": {
+        "startLine": 626,
+        "startChar": 98,
+        "endLine": 626,
+        "endChar": 103
+      },
+      "revId": "c786b2a8fe8686205fc6f9c685fb59d9bbf92905",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
