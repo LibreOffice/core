@@ -423,8 +423,6 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 
     if ( !sFileName.isEmpty() )
     {
-        uno::Reference<XComponent> xCom = GetModel();
-
         tools::SvRef<SfxMedium> pMedium = new SfxMedium(
                 sFileName, ( StreamMode::READ | StreamMode::NOCREATE ) );
 

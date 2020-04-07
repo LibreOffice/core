@@ -126,9 +126,9 @@ void OReportSection::dispose()
     m_pFunc.reset();
 
     {
-        ::std::unique_ptr<OSectionView> aTemp( m_pView);
         if ( m_pView )
             m_pView->EndListening( *m_pModel );
+        delete m_pView;
         m_pView = nullptr;
     }
     m_pParent.clear();
