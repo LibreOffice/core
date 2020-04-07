@@ -4303,7 +4303,6 @@ static void lcl_setTableFieldsFromCriteria( OUString& sCriteria1, const uno::Ref
     //  *searchtext* - contains
     //  <>*searchtext* - doesn't contain
     // [>|>=|<=|...]searchtext for GREATER_value, GREATER_EQUAL_value etc.
-    bool bIsNumeric = false;
     if ( sCriteria1.startsWith( EQUALS ) )
     {
         if ( sCriteria1.getLength() == static_cast<sal_Int32>(strlen(EQUALS)) )
@@ -4335,7 +4334,6 @@ static void lcl_setTableFieldsFromCriteria( OUString& sCriteria1, const uno::Ref
     }
     else if ( sCriteria1.startsWith( GREATERTHAN ) )
     {
-        bIsNumeric = true;
         if ( sCriteria1.startsWith( GREATERTHANEQUALS ) )
         {
             sCriteria1 = sCriteria1.copy( strlen(GREATERTHANEQUALS) );
@@ -4350,7 +4348,6 @@ static void lcl_setTableFieldsFromCriteria( OUString& sCriteria1, const uno::Ref
     }
     else if ( sCriteria1.startsWith( LESSTHAN ) )
     {
-        bIsNumeric = true;
         if ( sCriteria1.startsWith( LESSTHANEQUALS ) )
         {
             sCriteria1 = sCriteria1.copy( strlen(LESSTHANEQUALS) );
@@ -4366,11 +4363,27 @@ static void lcl_setTableFieldsFromCriteria( OUString& sCriteria1, const uno::Ref
     else
         rFilterField.Operator = sheet::FilterOperator2::EQUAL;
 
-    if ( bIsNumeric )
+    // tdf#107885 - check if criteria is numeric using locale dependent settings without group seperator
+    // or, if the decimal separator is different from the English locale, without any locale.
+    sal_Int32 nParseEnd = 0;
+    rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
+    double fValue = ScGlobal::getLocaleDataPtr()->stringToDouble( sCriteria1, false, &eStatus, &nParseEnd );
+    if ( nParseEnd == sCriteria1.getLength() && eStatus == rtl_math_ConversionStatus_Ok )
     {
-        rFilterField.IsNumeric= true;
-        rFilterField.NumericValue = sCriteria1.toDouble();
+        rFilterField.IsNumeric = true;
+        rFilterField.NumericValue = fValue;
     }
+    else if ( ScGlobal::getLocaleDataPtr()->getNumDecimalSep()[0] != '.' )
+    {
+        eStatus = rtl_math_ConversionStatus_Ok;
+        fValue = ::rtl::math::stringToDouble( sCriteria1, '.', 0, &eStatus, &nParseEnd );
+        if ( nParseEnd == sCriteria1.getLength() && eStatus == rtl_math_ConversionStatus_Ok )
+        {
+            rFilterField.IsNumeric = true;
+            rFilterField.NumericValue = fValue;
+        }
+    }
+
     rFilterField.StringValue = sCriteria1;
 }
 
