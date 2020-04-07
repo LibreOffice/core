@@ -120,6 +120,7 @@ public:
     void            SetDoubleClickHdl(const Link<ComboBox&,void>& rLink);
     const Link<ComboBox&,void>&   GetDoubleClickHdl() const;
     void            SetEntryActivateHdl(const Link<Edit&,bool>& rLink);
+    void            SetUserDrawHdl(const Link<UserDrawEvent*, void>& rLink);
 
     Size            CalcMinimumSize() const override;
     virtual Size    GetOptimalSize() const override;
@@ -182,6 +183,8 @@ public:
     void setMaxWidthChars(sal_Int32 nWidth);
 
     void SetWidthInChars(sal_Int32 nWidthInChars);
+
+    long GetDropDownEntryHeight() const;
 
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
 
