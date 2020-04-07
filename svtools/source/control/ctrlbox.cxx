@@ -329,30 +329,63 @@ void DrawLine( OutputDevice& rDev, const basegfx::B2DPoint& rP1, const basegfx::
 
 }
 
-FontNameBox::FontNameBox( vcl::Window* pParent, WinBits nWinStyle ) :
-    ComboBox( pParent, nWinStyle )
+FontNameBox::FontNameBox(std::unique_ptr<weld::ComboBox> p)
+    : m_xComboBox(std::move(p))
+    , mnMRUCount(0)
+    , mnMaxMRUCount(0)
 {
-    EnableSelectAll();
+//TODO    EnableSelectAll();
     mbWYSIWYG = false;
     InitFontMRUEntriesFile();
 }
 
 FontNameBox::~FontNameBox()
 {
-    disposeOnce();
-}
-
-void FontNameBox::dispose()
-{
     if (mpFontList)
     {
         SaveMRUEntries (maFontMRUEntriesFile);
         ImplDestroyFontList();
     }
-    ComboBox::dispose();
 }
 
-void FontNameBox::SaveMRUEntries( const OUString& aFontMRUEntriesFile ) const
+OUString FontNameBox::GetMRUEntries(sal_Unicode cSep) const
+{
+    OUStringBuffer aEntries;
+    for (sal_Int32 n = 0; n < mnMRUCount; n++)
+    {
+        aEntries.append(m_xComboBox->get_text(n));
+        if (n < mnMRUCount - 1)
+            aEntries.append(cSep);
+    }
+    return aEntries.makeStringAndClear();
+}
+
+void FontNameBox::SetMRUEntries(const OUString& rEntries, sal_Unicode cSep)
+{
+    // Remove old MRU entries
+    for (sal_Int32 n = mnMRUCount; n;)
+        m_xComboBox->remove(--n);
+
+    sal_Int32 nMRUCount = 0;
+    sal_Int32 nIndex = 0;
+    do
+    {
+        OUString aEntry = rEntries.getToken(0, cSep, nIndex);
+        // Accept only existing entries
+        if (m_xComboBox->find_text(aEntry) != -1)
+            m_xComboBox->insert_text(nMRUCount++, aEntry);
+    }
+    while (nIndex >= 0);
+
+    if (mnMRUCount && !nMRUCount)
+        m_xComboBox->insert_separator(nMRUCount, "separator");
+    else if (!mnMRUCount && nMRUCount)
+        m_xComboBox->remove_id("separator");
+
+    mnMRUCount = nMRUCount;
+}
+
+void FontNameBox::SaveMRUEntries(const OUString& aFontMRUEntriesFile) const
 {
     OString aEntries(OUStringToOString(GetMRUEntries(),
         RTL_TEXTENCODING_UTF8));
@@ -416,14 +449,16 @@ void FontNameBox::ImplDestroyFontList()
 void FontNameBox::Fill( const FontList* pList )
 {
     // store old text and clear box
-    OUString aOldText = GetText();
+    OUString aOldText = m_xComboBox->get_active_text();
     OUString rEntries = GetMRUEntries();
     bool bLoadFromFile = rEntries.isEmpty();
-    Clear();
+    m_xComboBox->freeze();
+    m_xComboBox->clear();
 
     ImplDestroyFontList();
     mpFontList.reset(new ImplFontList);
 
+#if 0
     // insert fonts
     sal_uInt16 nFontCount = pList->GetFontNameCount();
     for ( sal_uInt16 i = 0; i < nFontCount; i++ )
@@ -438,17 +473,28 @@ void FontNameBox::Fill( const FontList* pList )
             mpFontList->push_back( rFontMetric );
         }
     }
+#else
+    // insert fonts
+    sal_uInt16 nFontCount = pList->GetFontNameCount();
+    for (sal_uInt16 i = 0; i < nFontCount; i++)
+    {
+        const FontMetric& rFontMetric = pList->GetFontName(i);
+        m_xComboBox->append_text(rFontMetric.GetFamilyName());
+        mpFontList->push_back(rFontMetric);
+    }
+#endif
 
-    if ( bLoadFromFile )
-        LoadMRUEntries (maFontMRUEntriesFile);
+    if (bLoadFromFile)
+        LoadMRUEntries(maFontMRUEntriesFile);
     else
-        SetMRUEntries( rEntries );
+        SetMRUEntries(rEntries);
 
-    ImplCalcUserItemSize();
+//TODO    ImplCalcUserItemSize();
+    m_xComboBox->thaw();
 
     // restore text
     if (!aOldText.isEmpty())
-        SetText( aOldText );
+        m_xComboBox->set_entry_text(aOldText);
 }
 
 void FontNameBox::EnableWYSIWYG( bool bEnable )
@@ -456,11 +502,14 @@ void FontNameBox::EnableWYSIWYG( bool bEnable )
     if ( bEnable != mbWYSIWYG )
     {
         mbWYSIWYG = bEnable;
+#if 0
         EnableUserDraw( mbWYSIWYG );
         ImplCalcUserItemSize();
+#endif
     }
 }
 
+#if 0
 void FontNameBox::ImplCalcUserItemSize()
 {
     Size aUserItemSz;
@@ -472,6 +521,7 @@ void FontNameBox::ImplCalcUserItemSize()
     }
     SetUserItemSize( aUserItemSz );
 }
+#endif
 
 namespace
 {
@@ -501,6 +551,7 @@ namespace
     }
 }
 
+#if 0
 void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
 {
     assert( mpFontList );
@@ -685,6 +736,12 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
     {
         DrawEntry( rUDEvt, true, true );
     }
+}
+#endif
+
+void FontNameBox::set_entry_text(const OUString& rText)
+{
+    m_xComboBox->set_entry_text(rText);
 }
 
 FontStyleBox::FontStyleBox(std::unique_ptr<weld::ComboBox> p)

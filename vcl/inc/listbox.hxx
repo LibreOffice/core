@@ -90,9 +90,6 @@ private:
     sal_Int32       mnSelectionAnchor;
     sal_Int32       mnImages;
 
-    sal_Int32       mnMRUCount;
-    sal_Int32       mnMaxMRUCount;
-
     Link<sal_Int32,void> maSelectionChangedHdl;
     bool            mbCallSelectionChangedHdl;
     std::vector<std::unique_ptr<ImplEntryType> > maEntries;
@@ -115,7 +112,7 @@ public:
     void                    Clear();
 
     sal_Int32           FindMatchingEntry( const OUString& rStr, sal_Int32  nStart, bool bLazy ) const;
-    sal_Int32           FindEntry( const OUString& rStr, bool bSearchMRUArea = false ) const;
+    sal_Int32           FindEntry( const OUString& rStr ) const;
 
     /// helper: add up heights up to index nEndIndex.
     /// GetAddedHeight( 0 ) @return 0
@@ -153,12 +150,6 @@ public:
 
     void            SetSelectionChangedHdl( const Link<sal_Int32,void>& rLnk ) { maSelectionChangedHdl = rLnk; }
     void            SetCallSelectionChangedHdl( bool bCall )    { mbCallSelectionChangedHdl = bCall; }
-
-    void            SetMRUCount( sal_Int32  n ) { mnMRUCount = n; }
-    sal_Int32       GetMRUCount() const     { return mnMRUCount; }
-
-    void            SetMaxMRUCount( sal_Int32  n )  { mnMaxMRUCount = n; }
-    sal_Int32       GetMaxMRUCount() const      { return mnMaxMRUCount; }
 
     /** An Entry is selectable if its mnFlags does not have the
         ListBoxEntryFlags::DisableSelection flag set. */
@@ -489,10 +480,6 @@ public:
     bool            IsSelectionChanged() const                  { return maLBWindow->IsSelectionChanged(); }
     sal_uInt16      GetSelectModifier() const                   { return maLBWindow->GetSelectModifier(); }
 
-    void            SetMRUEntries( const OUString& rEntries, sal_Unicode cSep );
-    OUString        GetMRUEntries( sal_Unicode cSep ) const;
-    void            SetMaxMRUCount( sal_Int32  n )                  { maLBWindow->GetEntryList()->SetMaxMRUCount( n ); }
-    sal_Int32       GetMaxMRUCount() const                      { return maLBWindow->GetEntryList()->GetMaxMRUCount(); }
     sal_uInt16      GetDisplayLineCount() const
     { return maLBWindow->GetDisplayLineCount(); }
 
