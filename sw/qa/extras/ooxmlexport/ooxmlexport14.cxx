@@ -44,6 +44,16 @@ protected:
     }
 };
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf78749, "tdf78749.docx")
+{
+    //Shape lost the background image before, now check if it still has...
+    auto xShape = getShape(1);
+    uno::Reference<beans::XPropertySet> xShpProps(xShape, uno::UNO_QUERY);
+    OUString aPropertyVal;
+    xShpProps->getPropertyValue("FillBitmapName") >>= aPropertyVal;
+    CPPUNIT_ASSERT(!aPropertyVal.isEmpty());
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128207, "tdf128207.docx")
 {
     //There was the charts on each other, because their horizontal and vertical position was 0!
