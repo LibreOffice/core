@@ -362,7 +362,7 @@ class ScCellTextObj final : public ScCellTextData, public SvxUnoText
 {
 public:
                  ScCellTextObj(ScDocShell* pDocSh, const ScAddress& rP);
-        virtual  ~ScCellTextObj() throw() override;
+        virtual  ~ScCellTextObj() COVERITY_NOEXCEPT_FALSE override;
 };
 
 #endif
