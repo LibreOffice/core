@@ -27,7 +27,7 @@ class CheckBoxTest(UITestCase):
         print(json_content)
         print(json.dumps(json_content, indent=4))
 
-        closeBtn = xAboutDlg.getChild("close")
+        closeBtn = xAboutDlg.getChild("btnClose")
         self.ui_test.close_dialog_through_button(closeBtn)
 
         self.ui_test.close_doc()

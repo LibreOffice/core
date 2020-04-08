@@ -1842,7 +1842,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     extractButtonImage(id, rMap, name == "GtkRadioButton");
 
     VclPtr<vcl::Window> xWindow;
-    if (name == "GtkDialog" || name == "GtkAboutDialog" || name == "GtkAssistant")
+    if (name == "GtkDialog" || name == "GtkAssistant")
     {
         // WB_ALLOWMENUBAR because we don't know in advance if we will encounter
         // a menubar, and menubars need a BorderWindow in the toplevel, and
@@ -1855,8 +1855,6 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         Dialog::InitFlag eInit = !pParent ? Dialog::InitFlag::NoParent : Dialog::InitFlag::Default;
         if (name == "GtkAssistant")
             xWindow = VclPtr<vcl::RoadmapWizard>::Create(pParent, nBits, eInit);
-        else if (name == "GtkAboutDialog")
-            xWindow = VclPtr<vcl::AboutDialog>::Create(pParent, nBits, eInit);
         else
             xWindow = VclPtr<Dialog>::Create(pParent, nBits, eInit);
 #if HAVE_FEATURE_DESKTOP
