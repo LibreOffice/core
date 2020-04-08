@@ -479,8 +479,8 @@ IMPL_LINK(CustomAnimationList, DragBeginHdl, bool&, rUnsetDragIcon, bool)
 
     // Note: pEntry is the effect with focus (if multiple effects are selected)
     mxDndEffectDragging = mxTreeView->make_iterator();
-    mxTreeView->get_cursor(mxDndEffectDragging.get());
-    mxDndEffectInsertBefore = mxTreeView->make_iterator(mxDndEffectDragging.get());
+    if (!mxTreeView->get_cursor(mxDndEffectDragging.get()))
+        mxDndEffectDragging.reset();
 
     // Allow normal processing.
     return false;
@@ -500,17 +500,18 @@ sal_Int8 CustomAnimationList::AcceptDrop( const AcceptDropEvent& rEvt )
 // D'n'D #5: Tell model to update effect order.
 sal_Int8 CustomAnimationList::ExecuteDrop(const ExecuteDropEvent& rEvt)
 {
-    if (!mxTreeView->get_dest_row_at_pos(rEvt.maPosPixel, mxDndEffectInsertBefore.get()))
-        mxDndEffectInsertBefore.reset();
+    std::unique_ptr<weld::TreeIter> xDndEffectInsertBefore(mxTreeView->make_iterator());
+    if (!mxTreeView->get_dest_row_at_pos(rEvt.maPosPixel, xDndEffectInsertBefore.get()))
+        xDndEffectInsertBefore.reset();
 
     const bool bMovingEffect = ( mxDndEffectDragging != nullptr );
-    const bool bMoveNotSelf  = !mxDndEffectInsertBefore || (mxDndEffectDragging && mxTreeView->iter_compare(*mxDndEffectInsertBefore, *mxDndEffectDragging) != 0);
+    const bool bMoveNotSelf  = !xDndEffectInsertBefore || (mxDndEffectDragging && mxTreeView->iter_compare(*xDndEffectInsertBefore, *mxDndEffectDragging) != 0);
     const bool bHaveSequence = ( mpMainSequence.get() != nullptr );
 
     if( bMovingEffect && bMoveNotSelf && bHaveSequence )
     {
-        CustomAnimationListEntryItem* pTarget = mxDndEffectInsertBefore ?
-                                                    reinterpret_cast<CustomAnimationListEntryItem*>(mxTreeView->get_id(*mxDndEffectInsertBefore).toInt64()) :
+        CustomAnimationListEntryItem* pTarget = xDndEffectInsertBefore ?
+                                                    reinterpret_cast<CustomAnimationListEntryItem*>(mxTreeView->get_id(*xDndEffectInsertBefore).toInt64()) :
                                                     nullptr;
 
         // Build list of effects
@@ -1100,7 +1101,7 @@ EffectSequence CustomAnimationList::getSelection() const
         if (!mxTreeView->get_row_expanded(rEntry) && mxTreeView->iter_has_child(rEntry))
         {
             std::unique_ptr<weld::TreeIter> xChild = mxTreeView->make_iterator(&rEntry);
-            mxTreeView->iter_children(*xChild);
+            (void)mxTreeView->iter_children(*xChild);
 
             do
             {
