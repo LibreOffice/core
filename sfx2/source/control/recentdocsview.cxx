@@ -39,6 +39,7 @@
 #include <bitmaps.hlst>
 #include <vcl/virdev.hxx>
 #include "recentdocsviewitem.hxx"
+#include <sfx2/app.hxx>
 
 #include <officecfg/Office/Common.hxx>
 
@@ -124,7 +125,7 @@ RecentDocsView::RecentDocsView( vcl::Window* pParent )
     : ThumbnailView(pParent)
     , mnFileTypes(ApplicationType::TYPE_NONE)
     , mnLastMouseDownItem(THUMBNAILVIEW_ITEM_NOTFOUND)
-    , maWelcomeImage(StockImage::Yes, BMP_WELCOME)
+    , maWelcomeImage()
     , maWelcomeLine1(SfxResId(STR_WELCOME_LINE1))
     , maWelcomeLine2(SfxResId(STR_WELCOME_LINE2))
 {
@@ -134,6 +135,8 @@ RecentDocsView::RecentDocsView( vcl::Window* pParent )
     SetStyle(GetStyle() | WB_VSCROLL);
     setItemMaxTextLength( 30 );
     setItemDimensions( mnItemMaxSize, mnItemMaxSize, gnTextHeight, gnItemPadding );
+
+    maWelcomeImage = SfxApplication::GetApplicationLogo(500);
 
     maFillColor = Color(officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsBackgroundColor::get());
     maTextColor = Color(officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsTextColor::get());
@@ -365,13 +368,13 @@ void RecentDocsView::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
         const int nX = (rSize.Width() - rImgSize.Width())/2;
         int nY = (rSize.Height() - 3 * nTextHeight - rImgSize.Height())/2;
         Point aImgPoint(nX, nY);
-        rRenderContext.DrawImage(aImgPoint, rImgSize, maWelcomeImage);
+        rRenderContext.DrawBitmapEx(aImgPoint, rImgSize, maWelcomeImage);
 
         nY = nY + rImgSize.Height();
-        rRenderContext.DrawText(tools::Rectangle(0, nY, rSize.Width(), nY + nTextHeight),
+        rRenderContext.DrawText(tools::Rectangle(0, nY + 1 * nTextHeight, rSize.Width(), nY + nTextHeight),
                                 maWelcomeLine1,
                                 DrawTextFlags::Center);
-        rRenderContext.DrawText(tools::Rectangle(0, nY + 1.5 * nTextHeight, rSize.Width(), rSize.Height()),
+        rRenderContext.DrawText(tools::Rectangle(0, nY + 2 * nTextHeight, rSize.Width(), rSize.Height()),
                                 maWelcomeLine2,
                                 DrawTextFlags::MultiLine | DrawTextFlags::WordBreak | DrawTextFlags::Center);
 
