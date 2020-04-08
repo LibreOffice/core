@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7e103e1f_80c46d86",
+        "filename": "filter/source/msfilter/escherex.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 911,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-04-08T11:00:46Z",
+      "side": 1,
+      "message": "sorry, fix of my bad Hungarian notation: aLastSpacePos -\u003e nPos",
+      "parentUuid": "ba200b19_f62c515f",
+      "range": {
+        "startLine": 889,
+        "startChar": 0,
+        "endLine": 911,
+        "endChar": 17
+      },
+      "revId": "6c9e771ffeef74ae6cec2dd2552f106aa20699da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "04edf4b2_9e386086",
         "filename": "sw/qa/extras/ooxmlexport/ooxmlexport3.cxx",
         "patchSetId": 5
