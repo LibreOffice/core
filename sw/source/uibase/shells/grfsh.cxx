@@ -754,7 +754,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
 
         case SID_SAVE_GRAPHIC:
         case SID_EXTERNAL_EDIT:
-            if( rSh.GetGraphicType() == GraphicType::NONE || GetView().isExportLocked())
+            if( rSh.GetGraphicType() == GraphicType::NONE || GetObjectShell()->isExportLocked())
                 bDisable = true;
             break;
 

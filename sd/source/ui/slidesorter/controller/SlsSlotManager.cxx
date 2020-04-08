@@ -763,7 +763,7 @@ void SlotManager::GetClipboardState ( SfxItemSet& rSet)
     }
 
     ViewShellBase* pBase = mrSlideSorter.GetViewShellBase();
-    if (pBase && pBase->isContentExtractionLocked())
+    if (pBase && pBase->GetObjectShell()->isContentExtractionLocked())
     {
         rSet.DisableItem(SID_COPY);
         rSet.DisableItem(SID_CUT);

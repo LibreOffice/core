@@ -915,7 +915,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
         if (pOlView)
         {
-            if (pOlView->GetSelected().isEmpty() || GetViewShell()->isContentExtractionLocked())
+            if (pOlView->GetSelected().isEmpty() || GetObjectShell()->isContentExtractionLocked())
             {
                 rSet.DisableItem( SID_CUT );
                 rSet.DisableItem( SID_COPY );
@@ -1585,7 +1585,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             rSet.DisableItem(SID_SAVE_BACKGROUND);
     }
 
-    if (GetViewShell()->isExportLocked())
+    if (GetObjectShell()->isExportLocked())
         rSet.DisableItem(SID_PRESENTATION_MINIMIZER);
 
     GetModeSwitchingMenuState (rSet);

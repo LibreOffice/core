@@ -210,7 +210,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                 bDisable = false;
                 break;
             case SID_CUT:               // cut
-                bDisable = !bSimpleArea || GetViewData()->GetViewShell()->isContentExtractionLocked();
+                bDisable = !bSimpleArea || GetObjectShell()->isContentExtractionLocked();
                 break;
             case FID_INS_CELL:          // insert cells, just simple selection
                 bDisable = (!bSimpleArea);
@@ -273,7 +273,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                 //! work is to be done once more
                 if ( !(!bEditable && bOnlyNotBecauseOfMatrix) )
                     bNeedEdit = false;          // allowed when protected/ReadOnly
-                bDisable = GetViewData()->GetViewShell()->isContentExtractionLocked();
+                bDisable = GetObjectShell()->isContentExtractionLocked();
                 break;
 
             case SID_AUTOFORMAT:        // Autoformat, at least 3x3 selected
