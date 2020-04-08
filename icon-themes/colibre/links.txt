@@ -401,8 +401,18 @@ cmd/sc_showchanges.png cmd/sc_addwatch.png
 
 # Locale language support
 cmd/32/es/italic.png cmd/32/de/italic.png
+cmd/32/fa/recundo.png cmd/32/ar/recundo.png
+cmd/32/he/recundo.png cmd/32/ar/recundo.png
+cmd/32/ur/recundo.png cmd/32/ar/recundo.png
 cmd/es/lc_italic.png cmd/de/lc_italic.png
 cmd/es/sc_italic.png cmd/de/sc_italic.png
+cmd/fa/lc_recundo.png cmd/ar/lc_recundo.png
+cmd/fa/sc_recundo.png cmd/ar/sc_recundo.png
+cmd/he/lc_recundo.png cmd/ar/lc_recundo.png
+cmd/he/sc_recundo.png cmd/ar/sc_recundo.png
+cmd/ur/lc_recundo.png cmd/ar/lc_recundo.png
+cmd/ur/sc_recundo.png cmd/ar/sc_recundo.png
+
 
 # Template Menu
 cmd/32/templatemenu.png cmd/32/adddirect.png
