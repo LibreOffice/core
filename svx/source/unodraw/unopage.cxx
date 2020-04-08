@@ -611,9 +611,6 @@ void SvxDrawPage::GetTypeAndInventor( sal_uInt16& rType, SdrInventor& rInventor,
 
 SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, SdrInventor nInventor, SdrObject *pObj, SvxDrawPage *mpPage, OUString const & referer )
 {
-#if !HAVE_FEATURE_DESKTOP
-    (void) referer;
-#endif
     SvxShape* pRet = nullptr;
 
     switch( nInventor )
@@ -779,11 +776,9 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, SdrInvent
                 case OBJ_CUSTOMSHAPE:
                     pRet = new SvxCustomShape( pObj );
                     break;
-#if HAVE_FEATURE_DESKTOP
                 case OBJ_MEDIA:
                     pRet = new SvxMediaShape( pObj, referer );
                     break;
-#endif
                 case OBJ_TABLE:
                     pRet = new SvxTableShape( pObj );
                     break;
