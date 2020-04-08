@@ -19,34 +19,15 @@
 #ifndef INCLUDED_WRITERFILTER_INC_OOXML_QNAMETOSTRING_HXX
 #define INCLUDED_WRITERFILTER_INC_OOXML_QNAMETOSTRING_HXX
 
-#include <map>
 #include <string>
 #include <dmapper/resourcemodel.hxx>
 
 namespace writerfilter
 {
 
-class QNameToString final : public virtual SvRefBase
-{
-    typedef tools::SvRef<QNameToString> Pointer_t;
-    typedef std::map < Id, std::string > Map;
-
-    static Pointer_t pInstance;
-
-    void init();
-
-    Map mMap;
-
-    /**
-       Generated.
-     */
-    QNameToString();
-
-public:
-    static Pointer_t const & Instance();
-
-    std::string operator()(Id qName);
-};
+#ifdef DBG_UTIL
+    std::string QNameToString(Id);
+#endif
 
 }
 

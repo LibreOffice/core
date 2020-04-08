@@ -258,7 +258,7 @@ void LoggedStream::table(Id name, writerfilter::Reference<Table>::Pointer_t ref)
 {
 #ifdef DBG_UTIL
     mHelper.startElement("table");
-    LoggedResourcesHelper::attribute("name", (*QNameToString::Instance())(name));
+    LoggedResourcesHelper::attribute("name", QNameToString(name));
 #endif
 
     lcl_table(name, ref);
@@ -272,7 +272,7 @@ void LoggedStream::substream(Id name, writerfilter::Reference<Stream>::Pointer_t
 {
 #ifdef DBG_UTIL
     mHelper.startElement("substream");
-    LoggedResourcesHelper::attribute("name", (*QNameToString::Instance())(name));
+    LoggedResourcesHelper::attribute("name", QNameToString(name));
 #endif
 
     lcl_substream(name, ref);
@@ -341,7 +341,7 @@ void LoggedProperties::attribute(Id name, Value & val)
 {
 #ifdef DBG_UTIL
     mHelper.startElement("attribute");
-    LoggedResourcesHelper::attribute("name", (*QNameToString::Instance())(name));
+    LoggedResourcesHelper::attribute("name", QNameToString(name));
     LoggedResourcesHelper::attribute("value", val.toString());
     LoggedResourcesHelper::endElement();
 #endif
@@ -353,7 +353,7 @@ void LoggedProperties::sprm(Sprm & rSprm)
 {
 #ifdef DBG_UTIL
     mHelper.startElement("sprm");
-    LoggedResourcesHelper::attribute("name", (*QNameToString::Instance())(rSprm.getId()));
+    LoggedResourcesHelper::attribute("name", QNameToString(rSprm.getId()));
     LoggedResourcesHelper::chars(rSprm.toString());
 #endif
 
