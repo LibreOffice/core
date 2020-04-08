@@ -354,19 +354,24 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
             mrTypeModel.maStrokeModel.moJoinStyle = rAttribs.getToken( XML_joinstyle );
         break;
         case VML_TOKEN( fill ):
-            mrTypeModel.maFillModel.moFilled.assignIfUsed( lclDecodeBool( rAttribs, XML_on ) );
-            mrTypeModel.maFillModel.moColor.assignIfUsed( rAttribs.getString( XML_color ) );
-            mrTypeModel.maFillModel.moOpacity = lclDecodeOpacity( rAttribs, XML_opacity, 1.0 );
-            mrTypeModel.maFillModel.moColor2 = rAttribs.getString( XML_color2 );
-            mrTypeModel.maFillModel.moOpacity2 = lclDecodeOpacity( rAttribs, XML_opacity2, 1.0 );
-            mrTypeModel.maFillModel.moType = rAttribs.getToken( XML_type );
-            mrTypeModel.maFillModel.moAngle = rAttribs.getInteger( XML_angle );
-            mrTypeModel.maFillModel.moFocus = lclDecodePercent( rAttribs, XML_focus, 0.0 );
-            mrTypeModel.maFillModel.moFocusPos = lclDecodePercentPair( rAttribs, XML_focusposition );
-            mrTypeModel.maFillModel.moFocusSize = lclDecodePercentPair( rAttribs, XML_focussize );
-            mrTypeModel.maFillModel.moBitmapPath = decodeFragmentPath( rAttribs, O_TOKEN( relid ) );
-            mrTypeModel.maFillModel.moRotate = lclDecodeBool( rAttribs, XML_rotate );
-        break;
+        {
+            // shapes in docx use r:id for the relationship id
+            // in xlsx it they use o:relid
+            bool bHasORelId = rAttribs.hasAttribute(O_TOKEN(relid));
+            mrTypeModel.maFillModel.moFilled.assignIfUsed(lclDecodeBool(rAttribs, XML_on));
+            mrTypeModel.maFillModel.moColor.assignIfUsed(rAttribs.getString(XML_color));
+            mrTypeModel.maFillModel.moOpacity = lclDecodeOpacity(rAttribs, XML_opacity, 1.0);
+            mrTypeModel.maFillModel.moColor2 = rAttribs.getString(XML_color2);
+            mrTypeModel.maFillModel.moOpacity2 = lclDecodeOpacity(rAttribs, XML_opacity2, 1.0);
+            mrTypeModel.maFillModel.moType = rAttribs.getToken(XML_type);
+            mrTypeModel.maFillModel.moAngle = rAttribs.getInteger(XML_angle);
+            mrTypeModel.maFillModel.moFocus = lclDecodePercent(rAttribs, XML_focus, 0.0);
+            mrTypeModel.maFillModel.moFocusPos = lclDecodePercentPair(rAttribs, XML_focusposition);
+            mrTypeModel.maFillModel.moFocusSize = lclDecodePercentPair(rAttribs, XML_focussize);
+            mrTypeModel.maFillModel.moBitmapPath = decodeFragmentPath(rAttribs, bHasORelId ? O_TOKEN(relid) : R_TOKEN(id));
+            mrTypeModel.maFillModel.moRotate = lclDecodeBool(rAttribs, XML_rotate);
+            break;
+        }
         case VML_TOKEN( imagedata ):
         {
             // shapes in docx use r:id for the relationship id
