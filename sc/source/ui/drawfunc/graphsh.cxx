@@ -145,7 +145,7 @@ void ScGraphicShell::GetExternalEditState( SfxItemSet& rSet )
             bEnable = true;
     }
 
-    if (GetViewShell()->isExportLocked())
+    if (GetObjectShell()->isExportLocked())
         bEnable = false;
 
     if( !bEnable )
@@ -307,7 +307,7 @@ void ScGraphicShell::GetSaveGraphicState(SfxItemSet &rSet)
             bEnable = true;
     }
 
-    if (GetViewShell()->isExportLocked())
+    if (GetObjectShell()->isExportLocked())
         bEnable = false;
 
     if( !bEnable )

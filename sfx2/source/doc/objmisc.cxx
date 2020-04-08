@@ -1880,4 +1880,40 @@ bool SfxObjectShell::isEditDocLocked()
     return aArgs.getOrDefault("LockEditDoc", false);
 }
 
+bool SfxObjectShell::isContentExtractionLocked()
+{
+    Reference<XModel> xModel = GetModel();
+    if (!xModel.is())
+        return false;
+    comphelper::NamedValueCollection aArgs(xModel->getArgs());
+    return aArgs.getOrDefault("LockContentExtraction", false);
+}
+
+bool SfxObjectShell::isExportLocked()
+{
+    Reference<XModel> xModel = GetModel();
+    if (!xModel.is())
+        return false;
+    comphelper::NamedValueCollection aArgs(xModel->getArgs());
+    return aArgs.getOrDefault("LockExport", false);
+}
+
+bool SfxObjectShell::isPrintLocked()
+{
+    Reference<XModel> xModel = GetModel();
+    if (!xModel.is())
+        return false;
+    comphelper::NamedValueCollection aArgs(xModel->getArgs());
+    return aArgs.getOrDefault("LockPrint", false);
+}
+
+bool SfxObjectShell::isSaveLocked()
+{
+    Reference<XModel> xModel = GetModel();
+    if (!xModel.is())
+        return false;
+    comphelper::NamedValueCollection aArgs(xModel->getArgs());
+    return aArgs.getOrDefault("LockSave", false);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

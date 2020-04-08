@@ -21,6 +21,7 @@
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
+#include <sfx2/objsh.hxx>
 #include <svx/svxids.hrc>
 #include <svx/sdmetitm.hxx>
 #include <editeng/flditem.hxx>
@@ -503,12 +504,12 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
         rSet.DisableItem (SID_OBJECT_SHEAR);
     }
 
-    if (GetViewShell()->isContentExtractionLocked())
+    if (GetObjectShell()->isContentExtractionLocked())
     {
         rSet.DisableItem(SID_COPY);
         rSet.DisableItem(SID_CUT);
     }
-    if(GetViewShell()->isExportLocked())
+    if(GetObjectShell()->isExportLocked())
     {
         rSet.DisableItem(SID_SAVE_GRAPHIC);
         rSet.DisableItem(SID_EXTERNAL_EDIT);

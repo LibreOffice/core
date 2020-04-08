@@ -156,7 +156,8 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // disable functions
         rSet.DisableItem( SID_FLIP_VERTICAL );
     }
 
-    if (pViewData->GetViewShell()->isContentExtractionLocked())
+
+    if (GetObjectShell()->isContentExtractionLocked())
     {
         rSet.DisableItem(SID_COPY);
         rSet.DisableItem(SID_CUT);
