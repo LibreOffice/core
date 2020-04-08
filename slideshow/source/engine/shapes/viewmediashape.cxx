@@ -150,7 +150,7 @@ namespace slideshow::internal
             if( !pCanvas )
                 return false;
 
-            if( !mpMediaWindow.get() && !mxPlayerWindow.is() )
+            if( !mpMediaWindow && !mxPlayerWindow.is() )
             {
                 uno::Reference< graphic::XGraphic > xGraphic;
                 uno::Reference< beans::XPropertySet > xPropSet( mxShape, uno::UNO_QUERY );
@@ -235,7 +235,7 @@ namespace slideshow::internal
             const Size  aSizePixel( rRangePix.getMaxX() - rRangePix.getMinX(),
                                     rRangePix.getMaxY() - rRangePix.getMinY() );
 
-            if( mpMediaWindow.get() )
+            if( mpMediaWindow )
             {
                 mpMediaWindow->SetPosSizePixel( aPosPixel, aSizePixel );
                 mxPlayerWindow->setPosSize( 0, 0,
@@ -384,7 +384,7 @@ namespace slideshow::internal
                                                                  const OUString& )
         {
             SAL_INFO("slideshow", "ViewMediaShape::implInitializePlayerWindow" );
-            if( mpMediaWindow.get() || rBounds.isEmpty() )
+            if( mpMediaWindow || rBounds.isEmpty() )
                 return;
 
             try

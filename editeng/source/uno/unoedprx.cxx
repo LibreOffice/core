@@ -302,7 +302,7 @@ SvxEditSourceAdapter::~SvxEditSourceAdapter()
 
 std::unique_ptr<SvxEditSource> SvxEditSourceAdapter::Clone() const
 {
-    if( mbEditSourceValid && mpAdaptee.get() )
+    if( mbEditSourceValid && mpAdaptee )
     {
         std::unique_ptr< SvxEditSource > pClonedAdaptee( mpAdaptee->Clone() );
 
@@ -319,7 +319,7 @@ std::unique_ptr<SvxEditSource> SvxEditSourceAdapter::Clone() const
 
 SvxAccessibleTextAdapter* SvxEditSourceAdapter::GetTextForwarderAdapter()
 {
-    if( mbEditSourceValid && mpAdaptee.get() )
+    if( mbEditSourceValid && mpAdaptee )
     {
         SvxTextForwarder* pTextForwarder = mpAdaptee->GetTextForwarder();
 
@@ -341,7 +341,7 @@ SvxTextForwarder* SvxEditSourceAdapter::GetTextForwarder()
 
 SvxViewForwarder* SvxEditSourceAdapter::GetViewForwarder()
 {
-    if( mbEditSourceValid && mpAdaptee.get() )
+    if( mbEditSourceValid && mpAdaptee )
         return mpAdaptee->GetViewForwarder();
 
     return nullptr;
@@ -349,7 +349,7 @@ SvxViewForwarder* SvxEditSourceAdapter::GetViewForwarder()
 
 SvxAccessibleTextEditViewAdapter* SvxEditSourceAdapter::GetEditViewForwarderAdapter( bool bCreate )
 {
-    if( mbEditSourceValid && mpAdaptee.get() )
+    if( mbEditSourceValid && mpAdaptee )
     {
         SvxEditViewForwarder* pEditViewForwarder = mpAdaptee->GetEditViewForwarder(bCreate);
 
@@ -376,13 +376,13 @@ SvxEditViewForwarder* SvxEditSourceAdapter::GetEditViewForwarder( bool bCreate )
 
 void SvxEditSourceAdapter::UpdateData()
 {
-    if( mbEditSourceValid && mpAdaptee.get() )
+    if( mbEditSourceValid && mpAdaptee )
         mpAdaptee->UpdateData();
 }
 
 SfxBroadcaster& SvxEditSourceAdapter::GetBroadcaster() const
 {
-    if( mbEditSourceValid && mpAdaptee.get() )
+    if( mbEditSourceValid && mpAdaptee )
         return mpAdaptee->GetBroadcaster();
 
     return maDummyBroadcaster;

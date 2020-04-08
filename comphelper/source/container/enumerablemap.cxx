@@ -374,7 +374,7 @@ namespace comphelper
 
     void EnumerableMap::impl_initValues_throw( const Sequence< Pair< Any, Any > >& _initialValues )
     {
-        OSL_PRECOND( m_aData.m_pValues.get() && m_aData.m_pValues->empty(), "EnumerableMap::impl_initValues_throw: illegal call!" );
+        OSL_PRECOND( m_aData.m_pValues && m_aData.m_pValues->empty(), "EnumerableMap::impl_initValues_throw: illegal call!" );
         if (!m_aData.m_pValues || !m_aData.m_pValues->empty())
             throw RuntimeException();
 

@@ -1578,7 +1578,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
     pDoc->CopyMultiRangeFromClip(rCurPos, aMark, nNoObjFlags, pClipDoc,
                                  true, bAsLink, false, bSkipEmpty);
 
-    if (pMixDoc.get())
+    if (pMixDoc)
         pDoc->MixDocument(aMarkedRange, nFunction, bSkipEmpty, pMixDoc.get());
 
     AdjustBlockHeight();            // update row heights before pasting objects
@@ -1737,7 +1737,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
             false, false, true, bSkipEmpty);
     }
 
-    if (pMixDoc.get())
+    if (pMixDoc)
     {
         for (size_t i = 0, n = aRanges.size(); i < n; ++i)
             pDoc->MixDocument(aRanges[i], nFunction, bSkipEmpty, pMixDoc.get());

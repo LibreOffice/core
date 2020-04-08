@@ -248,7 +248,7 @@ void XclImpPageSettings::Finalize()
     sal_uInt16 nStartPage = maData.mbManualStart ? maData.mnStartPage : 0;
     ScfTools::PutItem( rItemSet, SfxUInt16Item( ATTR_PAGE_FIRSTPAGENO, nStartPage ), true );
 
-    if( maData.mxBrushItem.get() )
+    if( maData.mxBrushItem )
         rItemSet.Put( *maData.mxBrushItem );
 
     if( mbValidPaper )

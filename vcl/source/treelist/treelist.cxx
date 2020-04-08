@@ -225,7 +225,7 @@ sal_uLong SvTreeList::Move(SvTreeListEntry* pSrcEntry,SvTreeListEntry* pTargetPa
 
         // Release the original.
         std::unique_ptr<SvTreeListEntry> pOriginal(std::move(*itSrcPos));
-        assert(pOriginal.get());
+        assert(pOriginal);
         rSrc.erase(itSrcPos);
 
         // Determine the insertion position.
@@ -247,7 +247,7 @@ sal_uLong SvTreeList::Move(SvTreeListEntry* pSrcEntry,SvTreeListEntry* pTargetPa
             std::advance(itDstPos, nListPos);
         }
         std::unique_ptr<SvTreeListEntry> pOriginal(std::move(*itSrcPos));
-        assert(pOriginal.get());
+        assert(pOriginal);
         rSrc.erase(itSrcPos);
         rDst.insert(itDstPos, std::move(pOriginal));
     }

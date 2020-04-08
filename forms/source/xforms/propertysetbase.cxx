@@ -120,7 +120,7 @@ void PropertySetBase::initializePropertyValueCache( sal_Int32 nHandle )
 PropertyAccessorBase& PropertySetBase::locatePropertyHandler( sal_Int32 nHandle ) const
 {
     PropertyAccessors::const_iterator aPropertyPos = m_aAccessors.find( nHandle );
-    OSL_ENSURE( aPropertyPos != m_aAccessors.end() && aPropertyPos->second.get(),
+    OSL_ENSURE( aPropertyPos != m_aAccessors.end() && aPropertyPos->second,
         "PropertySetBase::locatePropertyHandler: accessor map is corrupted!" );
         // neither should this be called for handles where there is no accessor, nor should a
         // NULL accessor be in the map

@@ -603,7 +603,7 @@ css::uno::Reference<css::accessibility::XAccessible>
     ShowWindow::CreateAccessible()
 {
     css::uno::Reference< css::accessibility::XAccessible > xAcc = GetAccessible(false);
-    if (xAcc.get())
+    if (xAcc)
     {
         return xAcc;
     }

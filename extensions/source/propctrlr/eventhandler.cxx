@@ -809,7 +809,7 @@ namespace pcr
             nInitialSelection
         ) );
 
-        if ( !pDialog.get() )
+        if ( !pDialog )
             return InteractiveSelectionResult_Cancelled;
 
         // DF definite problem here

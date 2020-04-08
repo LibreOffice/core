@@ -92,7 +92,7 @@ void PageBordersHandler::lcl_sprm( Sprm& rSprm )
         case NS_ooxml::LN_CT_PageBorders_right:
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-            if( pProperties.get())
+            if( pProperties )
             {
                 auto pBorderHandler = std::make_shared<BorderHandler>( true );
                 pProperties->resolve(*pBorderHandler);

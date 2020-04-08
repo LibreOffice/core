@@ -172,7 +172,7 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_TblPrBase_tblCellMar:
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-            if ( pProperties.get() )
+            if ( pProperties )
             {
                 auto pCellMarginHandler = std::make_shared<CellMarginHandler>();
                 pCellMarginHandler->enableInteropGrabBag("tblCellMar");
@@ -218,7 +218,7 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
 void TblStylePrHandler::resolveSprmProps(Sprm & rSprm)
 {
     writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-    if( pProperties.get())
+    if( pProperties )
         pProperties->resolve(*this);
 }
 

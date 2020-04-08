@@ -317,8 +317,8 @@ void ScChartListener::SetUpdateQueue()
 
 bool ScChartListener::operator==( const ScChartListener& r ) const
 {
-    bool b1 = (mpTokens.get() && !mpTokens->empty());
-    bool b2 = (r.mpTokens.get() && !r.mpTokens->empty());
+    bool b1 = (mpTokens && !mpTokens->empty());
+    bool b2 = (r.mpTokens && !r.mpTokens->empty());
 
     if (mpDoc != r.mpDoc || bUsed != r.bUsed || bDirty != r.bDirty ||
         GetName() != r.GetName() || b1 != b2)

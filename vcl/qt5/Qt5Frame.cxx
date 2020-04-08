@@ -308,7 +308,7 @@ SalGraphics* Qt5Frame::AcquireGraphics()
 
     if (m_bUseCairo)
     {
-        if (!m_pOurSvpGraphics.get() || m_bGraphicsInvalid)
+        if (!m_pOurSvpGraphics || m_bGraphicsInvalid)
         {
             m_pOurSvpGraphics.reset(new Qt5SvpGraphics(this));
             InitQt5SvpGraphics(m_pOurSvpGraphics.get());
@@ -318,7 +318,7 @@ SalGraphics* Qt5Frame::AcquireGraphics()
     }
     else
     {
-        if (!m_pQt5Graphics.get() || m_bGraphicsInvalid)
+        if (!m_pQt5Graphics || m_bGraphicsInvalid)
         {
             m_pQt5Graphics.reset(new Qt5Graphics(this));
             m_pQImage.reset(

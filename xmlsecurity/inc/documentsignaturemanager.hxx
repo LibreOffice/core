@@ -120,7 +120,7 @@ public:
     css::uno::Reference<css::xml::crypto::XXMLSecurityContext> const& getGpgSecurityContext() const;
     void setStore(const css::uno::Reference<css::embed::XStorage>& xStore) { mxStore = xStore; }
     XMLSignatureHelper& getSignatureHelper() { return maSignatureHelper; }
-    bool hasPDFSignatureHelper() const { return mpPDFSignatureHelper.get(); }
+    bool hasPDFSignatureHelper() const { return bool(mpPDFSignatureHelper); }
     void setSignatureStream(const css::uno::Reference<css::io::XStream>& xSignatureStream)
     {
         mxSignatureStream = xSignatureStream;

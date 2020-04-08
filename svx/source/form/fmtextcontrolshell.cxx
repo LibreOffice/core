@@ -1111,7 +1111,7 @@ namespace svx
         ControlFeatures aEmpty;
         m_aControlFeatures.swap( aEmpty );
 
-        if ( m_aContextMenuObserver.get() )
+        if ( m_aContextMenuObserver )
         {
             m_aContextMenuObserver->dispose();
             m_aContextMenuObserver = MouseListenerAdapter();

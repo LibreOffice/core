@@ -176,7 +176,7 @@ OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_u
         sal_Int32 nUserIndex = 1;
         const OUString aUser(SvxResId(pPrefixResId) + " ");
 
-        if( pDefaults.get() )
+        if( pDefaults )
         {
             const int nCount = pDefaults->Count();
             int nIndex;

@@ -317,9 +317,9 @@ OUString XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
 
     OSL_ENSURE( rStrm.GetRecLeft() == 0, "XclImpHyperlink::ReadEmbeddedData - record size mismatch" );
 
-    if (!xLongName && xShortName.get())
+    if (!xLongName && xShortName)
         xLongName = std::move(xShortName);
-    else if (!xLongName && xTextMark.get())
+    else if (!xLongName && xTextMark)
         xLongName.reset( new OUString );
 
     if (xLongName)
@@ -674,7 +674,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
 
     const ScAddress aPos(rPos); //in case maRanges.Join invalidates it
 
-    if( !mxScCondFmt.get() )
+    if( !mxScCondFmt )
     {
         mxScCondFmt.reset( new ScConditionalFormat( 0/*nKey*/, &GetDoc() ) );
         if(maRanges.size() > 1)
@@ -689,7 +689,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
 
 void XclImpCondFormat::Apply()
 {
-    if( mxScCondFmt.get() )
+    if( mxScCondFmt )
     {
         ScDocument& rDoc = GetDoc();
 
@@ -887,7 +887,7 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     const ScRange& rScRange = aScRanges.front();    // aScRanges is not empty
 
     // process string list of a list validity (convert to list of string tokens)
-    if( xTokArr1.get() && (eValMode == SC_VALID_LIST) && ::get_flag( nFlags, EXC_DV_STRINGLIST ) )
+    if( xTokArr1 && (eValMode == SC_VALID_LIST) && ::get_flag( nFlags, EXC_DV_STRINGLIST ) )
         XclTokenArrayHelper::ConvertStringToList(*xTokArr1, rDoc.GetSharedStringPool(), '\n');
 
     maDVItems.push_back(

@@ -288,7 +288,7 @@ void SAL_CALL ElementSelectorToolbarController::release() throw ()
 }
 void SAL_CALL ElementSelectorToolbarController::statusChanged( const frame::FeatureStateEvent& rEvent )
 {
-    if( m_apSelectorListBox.get() )
+    if( m_apSelectorListBox )
     {
         SolarMutexGuard aSolarMutexGuard;
         if ( rEvent.FeatureURL.Path == "ChartElementSelector" )
@@ -303,7 +303,7 @@ void SAL_CALL ElementSelectorToolbarController::statusChanged( const frame::Feat
 uno::Reference< awt::XWindow > SAL_CALL ElementSelectorToolbarController::createItemWindow( const uno::Reference< awt::XWindow >& xParent )
 {
     uno::Reference< awt::XWindow > xItemWindow;
-    if( !m_apSelectorListBox.get() )
+    if( !m_apSelectorListBox )
     {
         VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( xParent );
         if( pParent )
@@ -311,7 +311,7 @@ uno::Reference< awt::XWindow > SAL_CALL ElementSelectorToolbarController::create
             m_apSelectorListBox.reset(VclPtr<SelectorListBox>::Create(pParent));
         }
     }
-    if( m_apSelectorListBox.get() )
+    if( m_apSelectorListBox )
         xItemWindow = VCLUnoHelper::GetInterface( m_apSelectorListBox.get() );
     return xItemWindow;
 }

@@ -1026,7 +1026,7 @@ double Polygon::CalcDistance( sal_uInt16 nP1, sal_uInt16 nP2 ) const
 
 void Polygon::Optimize( PolyOptimizeFlags nOptimizeFlags )
 {
-    DBG_ASSERT( !mpImplPolygon->mxFlagAry.get(), "Optimizing could fail with beziers!" );
+    DBG_ASSERT( !mpImplPolygon->mxFlagAry, "Optimizing could fail with beziers!" );
 
     sal_uInt16 nSize = mpImplPolygon->mnPoints;
 
@@ -1484,7 +1484,7 @@ tools::Rectangle Polygon::GetBoundRect() const
 
 bool Polygon::IsInside( const Point& rPoint ) const
 {
-    DBG_ASSERT( !mpImplPolygon->mxFlagAry.get(), "IsInside could fail with beziers!" );
+    DBG_ASSERT( !mpImplPolygon->mxFlagAry, "IsInside could fail with beziers!" );
 
     const tools::Rectangle aBound( GetBoundRect() );
     const Line      aLine( rPoint, Point( aBound.Right() + 100, rPoint.Y() ) );

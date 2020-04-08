@@ -29,7 +29,7 @@ std::string XTextRangeToString(uno::Reference< text::XTextRange > const & textRa
     std::string result;
 
 #ifdef DBG_UTIL
-    if (textRange.get())
+    if (textRange)
     {
         OUString aOUStr;
 
@@ -62,7 +62,7 @@ std::string XTextRangeToString(uno::Reference< text::XTextRange > const & textRa
 void resolveSprmProps(Properties & rHandler, Sprm & rSprm)
 {
     writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-    if( pProperties.get())
+    if( pProperties)
         pProperties->resolve(rHandler);
 }
 

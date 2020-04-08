@@ -21,7 +21,7 @@ void MtfRenderer::setMetafile (const uno::Sequence< sal_Int8 >& /*rMtf*/)
 
 void MtfRenderer::draw (double fScaleX, double fScaleY)
 {
-    if (mpMetafile && mxCanvas.get()) {
+    if (mpMetafile && mxCanvas) {
         cppcanvas::BitmapCanvasSharedPtr canvas = cppcanvas::VCLFactory::createBitmapCanvas (mxCanvas);
         cppcanvas::RendererSharedPtr renderer = cppcanvas::VCLFactory::createRenderer (canvas, *mpMetafile, cppcanvas::Renderer::Parameters ());
         ::basegfx::B2DHomMatrix aMatrix;

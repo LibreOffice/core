@@ -1650,7 +1650,7 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     // available to them.
     bool bInstalledScTabViewObjAsTempController = false;
     uno::Reference<frame::XController> xCurrentController(GetViewData().GetDocShell()->GetModel()->getCurrentController());
-    if (!xCurrentController.get())
+    if (!xCurrentController)
     {
         //GetController here returns the ScTabViewObj above
         GetViewData().GetDocShell()->GetModel()->setCurrentController(GetController());

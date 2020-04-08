@@ -534,7 +534,7 @@ BackendImpl::PackageImpl::isRegistered_(
 
 #if HAVE_FEATURE_EXTENSIONS
     const OUString url(getURL());
-    if (!bReg && that->m_registeredPackages.get())
+    if (!bReg && that->m_registeredPackages)
     {
         // fallback for user extension registered in berkeley DB
         bReg = that->m_registeredPackages->has(
@@ -723,7 +723,7 @@ void BackendImpl::PackageImpl::processPackage_(
     {
 #if HAVE_FEATURE_EXTENSIONS
         if (!that->removeFromConfigmgrIni(m_isSchema, url, xCmdEnv) &&
-            that->m_registeredPackages.get()) {
+            that->m_registeredPackages) {
             // Obsolete package database handling - should be removed for LibreOffice 4.0
             t_string2string_map entries(
                 that->m_registeredPackages->getEntries());

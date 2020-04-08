@@ -71,7 +71,7 @@ void ScSpellDialogChildWindow::InvalidateSpellDialog()
 svx::SpellPortions ScSpellDialogChildWindow::GetNextWrongSentence( bool /*bRecheck*/ )
 {
     svx::SpellPortions aPortions;
-    if( mxEngine.get() && mpViewData )
+    if( mxEngine && mpViewData )
     {
         if( EditView* pEditView = mpViewData->GetSpellingView() )
         {
@@ -90,7 +90,7 @@ svx::SpellPortions ScSpellDialogChildWindow::GetNextWrongSentence( bool /*bReche
 
 void ScSpellDialogChildWindow::ApplyChangedSentence( const svx::SpellPortions& rChanged, bool bRecheck )
 {
-    if( mxEngine.get() && mpViewData )
+    if( mxEngine && mpViewData )
         if( EditView* pEditView = mpViewData->GetSpellingView() )
         {
             mxEngine->ApplyChangedSentence( *pEditView, rChanged, bRecheck );
@@ -122,7 +122,7 @@ void ScSpellDialogChildWindow::Reset()
 {
     if( mpViewShell && (mpViewShell == dynamic_cast<ScTabViewShell*>( SfxViewShell::Current() ))  )
     {
-        if( mxEngine.get() && mxEngine->IsAnyModified() )
+        if( mxEngine && mxEngine->IsAnyModified() )
         {
             const ScAddress& rCursor = mxOldSel->GetCellCursor();
             SCTAB nTab = rCursor.Tab();

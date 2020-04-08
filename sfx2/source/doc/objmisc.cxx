@@ -1445,7 +1445,7 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
     {
         SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
         ScopedVclPtr<VclAbstractDialog> pScriptErrDlg( pFact->CreateScriptErrorDialog( aException ) );
-        if ( pScriptErrDlg.get() )
+        if ( pScriptErrDlg )
             pScriptErrDlg->Execute();
     }
 

@@ -400,8 +400,7 @@ std::shared_ptr<SfxItemSet> StylePoolImpl::insertItemSet( const SfxItemSet& rSet
         }
         pItem = aIter.NextItem();
     }
-    if ( xFoundIgnorableItems.get() &&
-         xFoundIgnorableItems->Count() > 0 )
+    if ( xFoundIgnorableItems && xFoundIgnorableItems->Count() > 0 )
     {
         SfxItemIter aIgnorableItemsIter( *xFoundIgnorableItems );
         pItem = aIgnorableItemsIter.GetCurItem();

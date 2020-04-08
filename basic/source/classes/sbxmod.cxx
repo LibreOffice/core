@@ -2178,7 +2178,7 @@ SbxVariable*
 SbObjModule::Find( const OUString& rName, SbxClassType t )
 {
     SbxVariable* pVar = nullptr;
-    if ( pDocObject.get() )
+    if ( pDocObject )
         pVar = pDocObject->Find( rName, t );
     if ( !pVar )
         pVar = SbModule::Find( rName, t );

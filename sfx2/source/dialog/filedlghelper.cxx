@@ -2395,7 +2395,7 @@ sal_Int16 FileDialogHelper::GetDialogType() const { return mpImpl ? mpImpl->m_nD
 
 bool FileDialogHelper::IsPasswordEnabled() const
 {
-    return mpImpl.get() && mpImpl->isPasswordEnabled();
+    return mpImpl && mpImpl->isPasswordEnabled();
 }
 
 OUString FileDialogHelper::GetRealFilter() const

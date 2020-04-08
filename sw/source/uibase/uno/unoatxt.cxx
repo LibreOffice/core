@@ -919,7 +919,7 @@ void SwXAutoTextEntry::applyTo(const uno::Reference< text::XTextRange > & xTextR
     }
 
     std::unique_ptr<SwTextBlocks> pBlock(pGlossaries->GetGroupDoc(sGroupName));
-    const bool bResult = pBlock.get() && !pBlock->GetError()
+    const bool bResult = pBlock && !pBlock->GetError()
                     && pDoc->InsertGlossary( *pBlock, sEntryName, InsertPaM);
 
     if(!bResult)

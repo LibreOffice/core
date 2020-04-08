@@ -553,7 +553,7 @@ void AnnotationTag::OpenPopup( bool bEdit )
     if( !mxAnnotation.is() )
         return;
 
-    if( !mpAnnotationWindow.get() )
+    if( !mpAnnotationWindow )
     {
         vcl::Window* pWindow = dynamic_cast< vcl::Window* >( getView().GetFirstOutputDevice() );
         if( pWindow )
@@ -583,13 +583,13 @@ void AnnotationTag::OpenPopup( bool bEdit )
         }
     }
 
-    if( bEdit && mpAnnotationWindow.get() )
+    if( bEdit && mpAnnotationWindow )
         mpAnnotationWindow->StartEdit();
 }
 
 void AnnotationTag::ClosePopup()
 {
-    if( mpAnnotationWindow.get())
+    if( mpAnnotationWindow )
     {
         mpAnnotationWindow->RemoveEventListener( LINK(this, AnnotationTag, WindowEventHandler));
         mpAnnotationWindow->Deactivate();

@@ -373,7 +373,7 @@ storeError FileLockBytes::readPageAt_Impl (std::shared_ptr<PageData> & rPage, sa
 
     if (!m_xAllocator.is())
         return store_E_InvalidAccess;
-    if (!rPage.get())
+    if (!rPage)
         return store_E_OutOfMemory;
 
     PageData * pagedata = rPage.get();
@@ -724,7 +724,7 @@ storeError MemoryLockBytes::readPageAt_Impl (std::shared_ptr<PageData> & rPage, 
 
     if (!m_xAllocator.is())
         return store_E_InvalidAccess;
-    if (!rPage.get())
+    if (!rPage)
         return store_E_OutOfMemory;
 
     PageData * pagedata = rPage.get();

@@ -310,7 +310,7 @@ void TDefTableHandler::lcl_attribute(Id rName, Value & rVal)
 
 void TDefTableHandler::localResolve(Id rName, const writerfilter::Reference<Properties>::Pointer_t& pProperties)
 {
-    if( pProperties.get())
+    if( pProperties )
     {
         m_nLineWidth = m_nLineType = m_nLineColor = 0;
         std::vector<beans::PropertyValue> aSavedGrabBag;

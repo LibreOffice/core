@@ -1495,7 +1495,7 @@ bool HandleWheelEvent::HandleEvent(const SalWheelMouseEvent& rEvt)
 
     pSVData->mpWinData->mpLastWheelWindow = Dispatch(xMouseWindow);
 
-    return pSVData->mpWinData->mpLastWheelWindow.get();
+    return pSVData->mpWinData->mpLastWheelWindow;
 }
 
 namespace {

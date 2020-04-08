@@ -255,7 +255,7 @@ css::uno::Reference<css::accessibility::XAccessible>
 
 void SlideSorterViewShell::SwitchViewFireFocus(const css::uno::Reference< css::accessibility::XAccessible >& xAcc )
 {
-    if (xAcc.get())
+    if (xAcc)
     {
         ::accessibility::AccessibleSlideSorterView* pBase = static_cast< ::accessibility::AccessibleSlideSorterView* >(xAcc.get());
         if (pBase)

@@ -819,10 +819,10 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
         SCTAB nTableCount = pDoc->GetTableCount();
         EnsureTabDataSize(nTableCount);
 
-        for ( auto &it : maTabData )
+        for ( auto & xTabData : maTabData )
         {
-            if (it.get())
-                it->InitData( pDoc );
+            if (xTabData)
+                xTabData->InitData( pDoc );
         }
     }
 
@@ -833,10 +833,10 @@ void ScViewData::InitData( ScDocument* pDocument )
 {
     pDoc = pDocument;
     *pOptions = pDoc->GetViewOptions();
-    for ( auto &it : maTabData )
+    for ( auto & xTabData : maTabData )
     {
-        if (it.get())
-            it->InitData( pDocument );
+        if (xTabData)
+            xTabData->InitData( pDocument );
     }
 }
 

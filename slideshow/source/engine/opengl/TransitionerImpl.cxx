@@ -375,7 +375,7 @@ void OGLTransitionerImpl::setSlides( const uno::Reference< rendering::XBitmap >&
     css::uno::Reference<css::beans::XFastPropertySet> xLeavingFastPropertySet(mxLeavingBitmap, css::uno::UNO_QUERY);
     css::uno::Sequence<css::uno::Any> aEnteringBitmap;
     css::uno::Sequence<css::uno::Any> aLeavingBitmap;
-    if (xEnteringFastPropertySet.get() && xLeavingFastPropertySet.get())
+    if (xEnteringFastPropertySet && xLeavingFastPropertySet)
     {
         xEnteringFastPropertySet->getFastPropertyValue(1) >>= aEnteringBitmap;
         xLeavingFastPropertySet->getFastPropertyValue(1) >>= aLeavingBitmap;

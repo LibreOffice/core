@@ -101,7 +101,7 @@ public:
 
     virtual void cellProps(const TablePropertyMapPtr& pProps) override
     {
-        if ( m_pStyleProps.get( ) )
+        if ( m_pStyleProps )
             m_pStyleProps->InsertProps(pProps.get());
         else
            TableManager::cellProps( pProps );
@@ -109,7 +109,7 @@ public:
 
     virtual void insertRowProps(const TablePropertyMapPtr& pProps) override
     {
-        if ( m_pStyleProps.get( ) )
+        if ( m_pStyleProps )
             m_pStyleProps->InsertProps(pProps.get());
         else
            TableManager::insertRowProps( pProps );
@@ -117,7 +117,7 @@ public:
 
     virtual void insertTableProps(const TablePropertyMapPtr& pProps) override
     {
-        if ( m_pStyleProps.get( ) )
+        if ( m_pStyleProps )
             m_pStyleProps->InsertProps(pProps.get());
         else
             m_aTmpTableProperties.back()->InsertProps(pProps.get());

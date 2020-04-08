@@ -303,7 +303,7 @@ namespace accessibility
         const SdrHint* pSdrHint = ( rHint.GetId() == SfxHintId::ThisIsAnSdrHint ? static_cast<const SdrHint*>(&rHint) : nullptr );
 
         if( pSdrHint && pSdrHint->GetKind() == SdrHintKind::BeginEdit &&
-            &mrObj == pSdrHint->GetObject() && mpEditSource.get() )
+            &mrObj == pSdrHint->GetObject() && mpEditSource )
         {
             // switch edit source, if not yet done. This is necessary
             // to become a full-fledged EditSource the first time a

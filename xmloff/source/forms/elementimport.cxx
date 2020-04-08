@@ -489,7 +489,7 @@ namespace xmloff
                 }
 
                 const PPropertyHandler handler = (*first->factory)( first->propertyId );
-                if ( !handler.get() )
+                if ( !handler )
                 {
                     SAL_WARN( "xmloff.forms", "OElementImport::handleAttribute: invalid property handler!" );
                     break;

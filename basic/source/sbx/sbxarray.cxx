@@ -134,7 +134,7 @@ void SbxArray::Put32( SbxVariable* pVar, sal_uInt32 nIdx )
         SbxVariableRef& rRef = GetRef32( nIdx );
         // tdf#122250. It is possible that I hold the last reference to myself, so check, otherwise I might
         // call SetFlag on myself after I have died.
-        bool removingMyself = rRef.get() && rRef->GetParameters() == this && GetRefCount() == 1;
+        bool removingMyself = rRef && rRef->GetParameters() == this && GetRefCount() == 1;
         if( rRef.get() != pVar )
         {
             rRef = pVar;

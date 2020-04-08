@@ -230,7 +230,7 @@ void ErrorBarResources::UpdateControlStates()
     bool bShowRange = m_xRbRange->get_active();
     bool bCanChooseRange =
         ( bShowRange &&
-          m_apRangeSelectionHelper.get() &&
+          m_apRangeSelectionHelper &&
           m_apRangeSelectionHelper->hasRangeSelection());
 
     m_xMfPositive->set_visible( ! bShowRange );
@@ -700,7 +700,7 @@ void ErrorBarResources::isRangeFieldContentValid(weld::Entry& rEdit)
 {
     OUString aRange( rEdit.get_text());
     bool bIsValid = ( aRange.isEmpty() ) ||
-        ( m_apRangeSelectionHelper.get() &&
+        ( m_apRangeSelectionHelper &&
           m_apRangeSelectionHelper->verifyCellRange( aRange ));
 
     if( bIsValid || !rEdit.get_sensitive())

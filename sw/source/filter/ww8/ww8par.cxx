@@ -336,12 +336,12 @@ void SwWW8ImplReader::ReadEmbeddedData(SvStream& rStrm, SwDocShell const * pDocS
         xTextMark.reset(new OUString(read_uInt32_lenPrefixed_uInt16s_ToOUString(rStrm)));
     }
 
-    if (!xLongName && xShortName.get())
+    if (!xLongName && xShortName)
     {
         xLongName.reset( new OUString );
         *xLongName += *xShortName;
     }
-    else if (!xLongName && xTextMark.get())
+    else if (!xLongName && xTextMark)
         xLongName.reset( new OUString );
 
     if (xLongName)

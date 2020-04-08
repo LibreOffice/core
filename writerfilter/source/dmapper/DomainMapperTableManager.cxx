@@ -134,7 +134,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             {
                 //contains unit and value
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-                if( pProperties.get())
+                if( pProperties )
                 {
                     MeasureHandlerPtr pMeasureHandler( new MeasureHandler );
                     pProperties->resolve(*pMeasureHandler);
@@ -321,7 +321,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                     // us, later we'll just distribute these values in a
                     // 0..10000 scale.
                     writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-                    if( pProperties.get())
+                    if( pProperties )
                     {
                         MeasureHandlerPtr pMeasureHandler(new MeasureHandler());
                         pProperties->resolve(*pMeasureHandler);
@@ -339,7 +339,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 {
                     writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                     // Ignore <w:tblpPr> in shape text, those tables should be always non-floating ones.
-                    if (!m_bIsInShape && pProperties.get())
+                    if (!m_bIsInShape && pProperties)
                     {
                         TablePositionHandlerPtr pHandler = m_aTmpPosition.back();
                         if ( !pHandler )

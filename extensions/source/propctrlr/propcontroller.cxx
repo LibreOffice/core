@@ -639,7 +639,7 @@ namespace pcr
     void OPropertyBrowserController::Construct(const Reference<XWindow>& rContainerWindow, std::unique_ptr<weld::Builder> xBuilder)
     {
         DBG_ASSERT(!haveView(), "OPropertyBrowserController::Construct: already have a view!");
-        assert(xBuilder.get() && "OPropertyBrowserController::Construct: invalid parent window!");
+        assert(xBuilder && "OPropertyBrowserController::Construct: invalid parent window!");
 
         m_xBuilder = std::move(xBuilder);
 

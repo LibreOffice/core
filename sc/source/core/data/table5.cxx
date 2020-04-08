@@ -1039,7 +1039,7 @@ void ScTable::SetPageSize( const Size& rSize )
 
 bool ScTable::IsProtected() const
 {
-    return pTabProtection.get() && pTabProtection->isProtected();
+    return pTabProtection && pTabProtection->isProtected();
 }
 
 void ScTable::SetProtection(const ScTableProtection* pProtect)

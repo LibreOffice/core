@@ -306,6 +306,9 @@ int derivedFromCount(const CXXRecordDecl* subtypeRecord, const CXXRecordDecl* ba
 // if it contained the 'extern' specifier:
 bool hasExternalLinkage(VarDecl const * decl);
 
+bool isSmartPointerType(const clang::Type*);
+bool isSmartPointerType(const Expr*);
+
 } // namespace
 
 #endif // COMPILEPLUGIN_H

@@ -413,14 +413,14 @@ XclImpExtName::~XclImpExtName()
 void XclImpExtName::CreateDdeData( ScDocument& rDoc, const OUString& rApplic, const OUString& rTopic ) const
 {
     ScMatrixRef xResults;
-    if( mxDdeMatrix.get() )
+    if( mxDdeMatrix )
         xResults = mxDdeMatrix->CreateScMatrix(rDoc.GetSharedStringPool());
     rDoc.CreateDdeLink( rApplic, rTopic, maName, SC_DDE_DEFAULT, xResults );
 }
 
 void XclImpExtName::CreateExtNameData( const ScDocument& rDoc, sal_uInt16 nFileId ) const
 {
-    if (!mxArray.get())
+    if (!mxArray)
         return;
 
     ScExternalRefManager* pRefMgr = rDoc.GetExternalRefManager();

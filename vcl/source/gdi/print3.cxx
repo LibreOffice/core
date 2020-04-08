@@ -795,7 +795,7 @@ void PrinterController::setPrinter( const VclPtr<Printer>& i_rPrinter )
     bool bSavedSizeOrientation = false;
 
     // #tdf 126744 Transfer paper size and orientation settings to newly selected printer
-    if ( xPrinter.get() )
+    if ( xPrinter )
     {
         aPaperSize = xPrinter->GetPaperSize();
         eOrientation = xPrinter->GetOrientation();
@@ -835,7 +835,7 @@ void PrinterController::setupPrinter( weld::Window* i_pParent )
     // Important to hold printer alive while doing setup etc.
     VclPtr< Printer > xPrinter = mpImplData->mxPrinter;
 
-    if( xPrinter.get() )
+    if( xPrinter )
     {
         xPrinter->Push();
         xPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));

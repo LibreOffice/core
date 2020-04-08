@@ -613,7 +613,7 @@ ScExternalRefManager* ScDocument::GetExternalRefManager() const
 
 bool ScDocument::IsInExternalReferenceMarking() const
 {
-    return pExternalRefMgr.get() && pExternalRefMgr->isInReferenceMarking();
+    return pExternalRefMgr && pExternalRefMgr->isInReferenceMarking();
 }
 
 void ScDocument::MarkUsedExternalReferences()
@@ -1860,7 +1860,7 @@ void ScDocument::SetDocProtection(const ScDocProtection* pProtect)
 
 bool ScDocument::IsDocProtected() const
 {
-    return pDocProtection.get() && pDocProtection->isProtected();
+    return pDocProtection && pDocProtection->isProtected();
 }
 
 bool ScDocument::IsDocEditable() const

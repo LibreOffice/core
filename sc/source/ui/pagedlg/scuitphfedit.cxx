@@ -453,7 +453,7 @@ bool ScHFEditPage::IsPageEntry(EditEngine*pEngine, const EditTextObject* pTextOb
                 aSel.nStartPos = aSel.nEndPos;
                 aSel.nEndPos++;
                 std::unique_ptr< EditTextObject > pPageObj = pEngine->CreateTextObject(aSel);
-                if(pPageObj.get() && pPageObj->IsFieldObject() )
+                if(pPageObj && pPageObj->IsFieldObject() )
                 {
                     const SvxFieldItem* pFieldItem = pPageObj->GetField();
                     if(pFieldItem)

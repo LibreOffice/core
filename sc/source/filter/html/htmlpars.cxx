@@ -1888,7 +1888,7 @@ ScHTMLTable::~ScHTMLTable()
 const SfxItemSet& ScHTMLTable::GetCurrItemSet() const
 {
     // first try cell item set, then row item set, then table item set
-    return mxDataItemSet.get() ? *mxDataItemSet : (mxRowItemSet.get() ? *mxRowItemSet : maTableItemSet);
+    return mxDataItemSet ? *mxDataItemSet : (mxRowItemSet ? *mxRowItemSet : maTableItemSet);
 }
 
 ScHTMLSize ScHTMLTable::GetSpan( const ScHTMLPos& rCellPos ) const
@@ -1904,20 +1904,20 @@ ScHTMLSize ScHTMLTable::GetSpan( const ScHTMLPos& rCellPos ) const
 
 ScHTMLTable* ScHTMLTable::FindNestedTable( ScHTMLTableId nTableId ) const
 {
-    return mxNestedTables.get() ? mxNestedTables->FindTable( nTableId ) : nullptr;
+    return mxNestedTables ? mxNestedTables->FindTable( nTableId ) : nullptr;
 }
 
 void ScHTMLTable::PutItem( const SfxPoolItem& rItem )
 {
     OSL_ENSURE( mxCurrEntry.get(), "ScHTMLTable::PutItem - no current entry" );
-    if( mxCurrEntry.get() && mxCurrEntry->IsEmpty() )
+    if( mxCurrEntry && mxCurrEntry->IsEmpty() )
         mxCurrEntry->GetItemSet().Put( rItem );
 }
 
 void ScHTMLTable::PutText( const HtmlImportInfo& rInfo )
 {
     OSL_ENSURE( mxCurrEntry.get(), "ScHTMLTable::PutText - no current entry" );
-    if( mxCurrEntry.get() )
+    if( mxCurrEntry )
     {
         if( !mxCurrEntry->HasContents() && IsSpaceCharInfo( rInfo ) )
             mxCurrEntry->AdjustStart( rInfo );
@@ -1928,7 +1928,7 @@ void ScHTMLTable::PutText( const HtmlImportInfo& rInfo )
 
 void ScHTMLTable::InsertPara( const HtmlImportInfo& rInfo )
 {
-    if( mxCurrEntry.get() && mbDataOn && !IsEmptyCell() )
+    if( mxCurrEntry && mbDataOn && !IsEmptyCell() )
         mxCurrEntry->SetImportAlways();
     PushEntry( rInfo );
     CreateNewEntry( rInfo );
@@ -1957,7 +1957,7 @@ void ScHTMLTable::AnchorOn()
 {
     OSL_ENSURE( mxCurrEntry.get(), "ScHTMLTable::AnchorOn - no current entry" );
     // don't skip entries with single hyperlinks
-    if( mxCurrEntry.get() )
+    if( mxCurrEntry )
         mxCurrEntry->SetImportAlways();
 }
 
@@ -2288,7 +2288,7 @@ ScHTMLTable::ScHTMLEntryPtr ScHTMLTable::CreateEntry() const
 
 void ScHTMLTable::CreateNewEntry( const HtmlImportInfo& rInfo )
 {
-    OSL_ENSURE( !mxCurrEntry.get(), "ScHTMLTable::CreateNewEntry - old entry still present" );
+    OSL_ENSURE( !mxCurrEntry, "ScHTMLTable::CreateNewEntry - old entry still present" );
     mxCurrEntry = CreateEntry();
     mxCurrEntry->aSel = rInfo.aSelection;
 }
@@ -2304,7 +2304,7 @@ void ScHTMLTable::ImplPushEntryToVector( ScHTMLEntryVector& rEntryVector, ScHTML
 bool ScHTMLTable::PushEntry( ScHTMLEntryPtr& rxEntry )
 {
     bool bPushed = false;
-    if( rxEntry.get() && rxEntry->HasContents() )
+    if( rxEntry && rxEntry->HasContents() )
     {
         if( mpCurrEntryVector )
         {
@@ -2333,7 +2333,7 @@ bool ScHTMLTable::PushEntry( const HtmlImportInfo& rInfo, bool bLastInCell )
 {
     OSL_ENSURE( mxCurrEntry.get(), "ScHTMLTable::PushEntry - no current entry" );
     bool bPushed = false;
-    if( mxCurrEntry.get() )
+    if( mxCurrEntry )
     {
         mxCurrEntry->AdjustEnd( rInfo );
         mxCurrEntry->Strip( mrEditEngine );
@@ -2365,7 +2365,7 @@ void ScHTMLTable::PushTableEntry( ScHTMLTableId nTableId )
 
 ScHTMLTable* ScHTMLTable::GetExistingTable( ScHTMLTableId nTableId ) const
 {
-    ScHTMLTable* pTable = ((nTableId != SC_HTML_GLOBAL_TABLE) && mxNestedTables.get()) ?
+    ScHTMLTable* pTable = ((nTableId != SC_HTML_GLOBAL_TABLE) && mxNestedTables) ?
         mxNestedTables->FindTable( nTableId, false ) : nullptr;
     OSL_ENSURE( pTable || (nTableId == SC_HTML_GLOBAL_TABLE), "ScHTMLTable::GetExistingTable - table not found" );
     return pTable;
@@ -2373,7 +2373,7 @@ ScHTMLTable* ScHTMLTable::GetExistingTable( ScHTMLTableId nTableId ) const
 
 ScHTMLTable* ScHTMLTable::InsertNestedTable( const HtmlImportInfo& rInfo, bool bPreFormText )
 {
-    if( !mxNestedTables.get() )
+    if( !mxNestedTables )
         mxNestedTables.reset( new ScHTMLTableMap( *this ) );
     if( bPreFormText )      // enclose new preformatted table with empty lines
         InsertLeadingEmptyLine();

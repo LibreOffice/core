@@ -1359,7 +1359,7 @@ void ScAccessibleCsvTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
     {
         mpWindow = nullptr;
         mpEditEngine = nullptr;
-        if (mpViewForwarder.get())
+        if (mpViewForwarder)
             mpViewForwarder->SetInvalid();
     }
     ScAccessibleTextData::Notify( rBC, rHint );
@@ -1376,7 +1376,7 @@ SvxTextForwarder* ScAccessibleCsvTextData::GetTextForwarder()
     {
         mpEditEngine->SetPaperSize( maCellSize );
         mpEditEngine->SetText( maCellText );
-        if( !mpTextForwarder.get() )
+        if( !mpTextForwarder )
             mpTextForwarder.reset( new SvxEditEngineForwarder( *mpEditEngine ) );
     }
     else
@@ -1386,7 +1386,7 @@ SvxTextForwarder* ScAccessibleCsvTextData::GetTextForwarder()
 
 SvxViewForwarder* ScAccessibleCsvTextData::GetViewForwarder()
 {
-    if( !mpViewForwarder.get() )
+    if( !mpViewForwarder )
         mpViewForwarder.reset( new ScCsvViewForwarder( mpWindow ) );
     return mpViewForwarder.get();
 }

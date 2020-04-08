@@ -1448,7 +1448,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         {
             // All properties obtained already?
             std::vector< OUString > aMissingProps;
-            if ( !( xProps.get()
+            if ( !( xProps
                     && xProps->containsAllNames(
                         rProperties, aMissingProps ) )
                  && !m_bDidGetOrHead )

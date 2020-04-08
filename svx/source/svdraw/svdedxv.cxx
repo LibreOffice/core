@@ -2175,7 +2175,7 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
                     // multiple portions exist with multiple formats. If an OutlinerParaObject
                     // really exists and needs to be rescued is evaluated in the undo
                     // implementation itself.
-                    bool bRescueText = mxTextEditObj.get();
+                    bool bRescueText = mxTextEditObj;
 
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(
                         *mxTextEditObj, false, !bNoEEItems || bRescueText));

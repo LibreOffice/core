@@ -186,7 +186,7 @@ void ValueSet::ImplInitScrollBar()
     if (!(GetStyle() & WB_VSCROLL))
         return;
 
-    if (!mxScrollBar.get())
+    if (!mxScrollBar)
     {
         mxScrollBar.reset(VclPtr<ScrollBar>::Create(this, WB_VSCROLL | WB_DRAG));
         mxScrollBar->SetScrollHdl(LINK(this, ValueSet, ImplScrollHdl));
@@ -401,7 +401,7 @@ void ValueSet::Format(vcl::RenderContext& rRenderContext)
 
     // calculate ScrollBar width
     long nScrBarWidth = 0;
-    if (mxScrollBar.get())
+    if (mxScrollBar)
         nScrBarWidth = mxScrollBar->GetSizePixel().Width() + SCRBAR_OFFSET;
 
     // calculate number of columns
@@ -500,7 +500,7 @@ void ValueSet::Format(vcl::RenderContext& rRenderContext)
             mItemList[i]->mbVisible = false;
         }
 
-        if (mxScrollBar.get())
+        if (mxScrollBar)
             mxScrollBar->Hide();
     }
     else
@@ -621,7 +621,7 @@ void ValueSet::Format(vcl::RenderContext& rRenderContext)
         }
 
         // arrange ScrollBar, set values and show it
-        if (mxScrollBar.get())
+        if (mxScrollBar)
         {
             Point   aPos(aWinSize.Width() - nScrBarWidth + SCRBAR_OFFSET, 0);
             Size    aSize(nScrBarWidth - SCRBAR_OFFSET, aWinSize.Height());
@@ -872,7 +872,7 @@ size_t ValueSet::ImplGetItem( const Point& rPos ) const
         return VALUESET_ITEM_NOTFOUND;
     }
 
-    if (mpNoneItem.get() && maNoneItemRect.IsInside(rPos))
+    if (mpNoneItem && maNoneItemRect.IsInside(rPos))
     {
         return VALUESET_ITEM_NONEITEM;
     }
@@ -1293,7 +1293,7 @@ void ValueSet::StateChanged(StateChangedType nType)
     }
     else if (nType == StateChangedType::Text)
     {
-        if (mpNoneItem.get() && !mbFormat && IsReallyVisible() && IsUpdateMode())
+        if (mpNoneItem && !mbFormat && IsReallyVisible() && IsUpdateMode())
         {
             Invalidate(maNoneItemRect);
         }
@@ -1975,7 +1975,7 @@ size_t SvtValueSet::ImplGetItem( const Point& rPos ) const
         return VALUESET_ITEM_NOTFOUND;
     }
 
-    if (mpNoneItem.get() && maNoneItemRect.IsInside(rPos))
+    if (mpNoneItem && maNoneItemRect.IsInside(rPos))
     {
         return VALUESET_ITEM_NONEITEM;
     }

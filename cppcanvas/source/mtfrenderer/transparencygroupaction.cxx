@@ -451,7 +451,7 @@ namespace cppcanvas::internal
 
             sal_Int32 TransparencyGroupAction::getActionCount() const
             {
-                return mpGroupMtf.get() ? mpGroupMtf->GetActionSize() : 0;
+                return mpGroupMtf ? mpGroupMtf->GetActionSize() : 0;
             }
 
         }

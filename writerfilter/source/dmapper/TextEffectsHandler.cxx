@@ -732,7 +732,7 @@ void TextEffectsHandler::lcl_sprm(Sprm& rSprm)
     mpGrabBagStack->push(aElementName);
 
     writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-    if( !pProperties.get())
+    if( !pProperties )
         return;
 
     pProperties->resolve( *this );

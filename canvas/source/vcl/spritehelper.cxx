@@ -60,7 +60,7 @@ namespace vclcanvas
                              const BackBufferSharedPtr&                rBackBufferMask,
                              bool                                      bShowSpriteBounds )
     {
-        ENSURE_OR_THROW( rOwningSpriteCanvas.get() && rBackBuffer && rBackBufferMask,
+        ENSURE_OR_THROW( rOwningSpriteCanvas && rBackBuffer && rBackBufferMask,
                          "SpriteHelper::init(): Invalid sprite canvas or back buffer" );
 
         mpBackBuffer        = rBackBuffer;

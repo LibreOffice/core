@@ -773,7 +773,7 @@ void SwUndoAttr::RedoImpl(::sw::UndoRedoContext & rContext)
         }
     }
 
-    if ( m_pRedlineData.get() &&
+    if ( m_pRedlineData &&
          IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ) ) {
         RedlineFlags eOld = rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
         rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld & ~RedlineFlags::Ignore );

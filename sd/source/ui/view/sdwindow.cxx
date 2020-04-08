@@ -957,7 +957,7 @@ css::uno::Reference<css::accessibility::XAccessible>
         return vcl::Window::CreateAccessible ();
     }
     css::uno::Reference< css::accessibility::XAccessible > xAcc = GetAccessible(false);
-    if (xAcc.get())
+    if (xAcc)
     {
         return xAcc;
     }

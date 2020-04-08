@@ -86,7 +86,7 @@ void ScfProgressBar::SetCurrSegment( ScfProgressSegment* pSegment )
         {
             mpParentProgress->SetCurrSegment( mpParentSegment );
         }
-        else if( !mxSysProgress.get() && (mnTotalSize > 0) )
+        else if( !mxSysProgress && (mnTotalSize > 0) )
         {
             // System progress has an internal limit of ULONG_MAX/100.
             mnSysProgressScale = 1;
@@ -121,7 +121,7 @@ void ScfProgressBar::IncreaseProgressBar( std::size_t nDelta )
         mpParentProgress->ProgressAbs( nParentPos );
     }
     // modify system progress bar
-    else if( mxSysProgress.get() )
+    else if( mxSysProgress )
     {
         if( nNewPos >= mnNextUnitPos )
         {
@@ -154,7 +154,7 @@ ScfProgressBar& ScfProgressBar::GetSegmentProgressBar( sal_Int32 nSegment )
     OSL_ENSURE( !pSegment || (pSegment->mnPos == 0), "ScfProgressBar::GetSegmentProgressBar - segment already started" );
     if( pSegment && (pSegment->mnPos == 0) )
     {
-        if( !pSegment->mxProgress.get() )
+        if( !pSegment->mxProgress )
             pSegment->mxProgress.reset( new ScfProgressBar( *this, pSegment ) );
         return *pSegment->mxProgress;
     }

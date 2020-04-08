@@ -68,7 +68,7 @@ void TableManager::insertTableProps(const TablePropertyMapPtr& pProps)
     TagLogger::getInstance().startElement("tablemanager.insertTableProps");
 #endif
 
-    if (getTableProps().get() && getTableProps() != pProps)
+    if (getTableProps() && getTableProps() != pProps)
         getTableProps()->InsertProps(pProps.get());
     else
         mState.setTableProps(pProps);
@@ -84,7 +84,7 @@ void TableManager::insertRowProps(const TablePropertyMapPtr& pProps)
     TagLogger::getInstance().startElement("tablemanager.insertRowProps");
 #endif
 
-    if (getRowProps().get())
+    if (getRowProps())
         getRowProps()->InsertProps(pProps.get());
     else
         mState.setRowProps(pProps);
@@ -100,7 +100,7 @@ void TableManager::cellProps(const TablePropertyMapPtr& pProps)
     TagLogger::getInstance().startElement("tablemanager.cellProps");
 #endif
 
-    if (getCellProps().get())
+    if (getCellProps())
         getCellProps()->InsertProps(pProps.get());
     else
         mState.setCellProps(pProps);

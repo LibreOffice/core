@@ -130,7 +130,7 @@ void BorderHandler::lcl_sprm(Sprm & rSprm)
             return;
     }
     writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-    if( pProperties.get())
+    if( pProperties)
     {
         std::vector<beans::PropertyValue> aSavedGrabBag;
         if (!m_aInteropGrabBagName.isEmpty())
