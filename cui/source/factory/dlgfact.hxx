@@ -26,6 +26,7 @@
 #include <tools/link.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 
+#include <about.hxx>
 #include <cfgutil.hxx>
 #include <cui/cuicharmap.hxx>
 #include <cuifmsearch.hxx>
@@ -738,6 +739,20 @@ public:
     virtual short Execute() override;
 };
 
+class AboutDialog;
+class AbstractAboutDialog_Impl : public AbstractAboutDialog
+{
+protected:
+    std::unique_ptr<AboutDialog> m_xDlg;
+
+public:
+    explicit AbstractAboutDialog_Impl(std::unique_ptr<AboutDialog> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+};
+
 class TipOfTheDayDialog;
 class AbstractTipOfTheDayDialog_Impl : public AbstractTipOfTheDayDialog
 {
@@ -773,8 +788,6 @@ class AbstractDialogFactory_Impl : public SvxAbstractDialogFactory
 {
 public:
     virtual VclPtr<VclAbstractDialog>    CreateVclDialog(weld::Window* pParent, sal_uInt32 nResId) override;
-
-    virtual VclPtr<VclAbstractDialog>    CreateAboutDialog(weld::Window* pParent) override;
 
     virtual VclPtr<SfxAbstractDialog>    CreateSfxDialog( weld::Window* pParent,
                                             const SfxItemSet& rAttr,
@@ -953,6 +966,8 @@ public:
     virtual VclPtr<AbstractQrCodeGenDialog>
     CreateQrCodeGenDialog(weld::Window* pParent,
                               const css::uno::Reference<css::frame::XModel> xModel, bool bEditExisting) override;
+
+    virtual VclPtr<AbstractAboutDialog> CreateAboutDialog(weld::Window* pParent) override;
 
     virtual VclPtr<AbstractTipOfTheDayDialog> CreateTipOfTheDayDialog(weld::Window* pParent) override;
 
