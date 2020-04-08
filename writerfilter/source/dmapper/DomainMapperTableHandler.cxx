@@ -514,6 +514,14 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         }
 
         m_aTableProperties->getValue( TablePropertyMap::GAP_HALF, nGapHalf );
+
+        std::optional<PropertyMap::Property> oLeftMarginFromStyle = m_aTableProperties->getProperty(PROP_LEFT_MARGIN);
+        if (oLeftMarginFromStyle)
+        {
+            oLeftMarginFromStyle->second >>= nLeftMargin;
+            // don't need to erase, we will push back the adjusted value
+            // of this (or the direct formatting, if that exists) later
+        }
         m_aTableProperties->getValue( TablePropertyMap::LEFT_MARGIN, nLeftMargin );
 
         m_aTableProperties->getValue( TablePropertyMap::CELL_MAR_LEFT,

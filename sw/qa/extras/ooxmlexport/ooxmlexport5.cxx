@@ -235,6 +235,15 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf131819, "NumberedList.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tblGrid/w:gridCol[2]", "w", "4049");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf131959, "NumberedList.docx")
+{
+    // import tblInd from table style
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    // These were 0.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblInd", "w", "360");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tblPr/w:tblInd", "w", "360");
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO76597, "fdo76597.docx")
 {
     // check XML

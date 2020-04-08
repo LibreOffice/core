@@ -21,6 +21,7 @@
 #include "TagLogger.hxx"
 #include "CellMarginHandler.hxx"
 #include "PropertyMap.hxx"
+#include "MeasureHandler.hxx"
 #include <ooxml/resourceids.hxx>
 #include <comphelper/sequence.hxx>
 
@@ -167,6 +168,20 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
             aValue.Name = "tblHeader";
             aValue.Value <<= true;
             m_aInteropGrabBag.push_back(aValue);
+        }
+            break;
+        case NS_ooxml::LN_CT_TblPrBase_tblInd:
+        {
+            //contains unit and value
+            writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+            if( pProperties.get())
+            {
+                MeasureHandlerPtr pMeasureHandler( new MeasureHandler );
+                pProperties->resolve(*pMeasureHandler);
+                TablePropertyMapPtr pPropMap( new TablePropertyMap );
+                pPropMap->setValue( TablePropertyMap::LEFT_MARGIN, pMeasureHandler->getMeasureValue() );
+                m_pProperties->Insert( PROP_LEFT_MARGIN, uno::makeAny(pMeasureHandler->getMeasureValue()) );
+            }
         }
             break;
         case NS_ooxml::LN_CT_TblPrBase_tblCellMar:
