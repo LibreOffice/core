@@ -75,7 +75,6 @@
 #define SFX_FILE_THUMBNAIL_MATH             "res/math128.png"
 #define SFX_FILE_THUMBNAIL_DEFAULT          "res/main128.png"
 
-#define BMP_WELCOME                         "sfx2/res/logo.png"
 #define BMP_RECENTDOC_REMOVE                "res/recentdoc_remove.png"
 #define BMP_RECENTDOC_REMOVE_HIGHLIGHTED    "res/recentdoc_remove_highlighted.png"
 #define BMP_DEFAULT                         "res/templatestar.png"

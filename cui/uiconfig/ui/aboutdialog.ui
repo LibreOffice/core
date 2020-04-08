@@ -1,36 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.22.2 -->
 <interface domain="cui">
-  <requires lib="gtk+" version="3.18"/>
-  <object class="GtkAboutDialog" id="AboutDialog">
+  <requires lib="gtk+" version="3.20"/>
+  <object class="GtkDialog" id="AboutDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes" context="aboutdialog|AboutDialog">About %PRODUCTNAME</property>
+    <property name="title">%PRODUCTNAME</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
-    <property name="default_width">0</property>
-    <property name="default_height">0</property>
+    <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
-    <property name="program_name">%PRODUCTNAME</property>
-    <property name="comments" translatable="yes" context="aboutdialog|description">%PRODUCTNAME is a modern, easy-to-use, open source productivity suite for word processing, spreadsheets, presentations and more.</property>
-    <property name="website">https://www.libreoffice.org/</property>
-    <property name="website_label" translatable="yes" context="aboutdialog|buildIdLink">See Log: $GITHASH</property>
-    <property name="logo_icon_name">image-missing</property>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
     <child internal-child="vbox">
-      <object class="GtkBox" id="dialog-vbox1">
+      <object class="GtkBox">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
+        <property name="spacing">12</property>
         <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area1">
-            <property name="visible">True</property>
+          <object class="GtkButtonBox">
             <property name="can_focus">False</property>
+            <property name="margin_top">12</property>
+            <property name="hexpand">True</property>
             <property name="layout_style">end</property>
             <child>
-              <placeholder/>
+              <object class="GtkButton" id="btnClose">
+                <property name="label">gtk-close</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="pack_type">end</property>
+                <property name="position">3</property>
+              </packing>
             </child>
           </object>
           <packing>
@@ -40,7 +48,172 @@
             <property name="position">0</property>
           </packing>
         </child>
+        <child>
+          <object class="GtkGrid">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <child>
+              <object class="GtkImage" id="imAbout">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_right">12</property>
+                <property name="hexpand">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+                <property name="height">5</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="imBrand">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_left">24</property>
+                <property name="margin_top">24</property>
+                <property name="margin_bottom">24</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="lbCopyright">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="valign">start</property>
+                <property name="margin_bottom">6</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="label" context="aboutdialog|copyright">This release was supplied by The Document Foundation.
+Copyright © 2000–2020 LibreOffice contributors.
+LibreOffice was based on OpenOffice.org</property>
+                <property name="wrap">True</property>
+                <property name="max_width_chars">50</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="lbAbout">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="valign">end</property>
+                <property name="margin_top">12</property>
+                <property name="margin_bottom">12</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="label" translatable="yes" context="aboutdialog|description">%PRODUCTNAME is a modern, easy-to-use, open source productivity suite for word processing, spreadsheets, presentations and more.</property>
+                <property name="wrap">True</property>
+                <property name="max_width_chars">50</property>
+                <property name="xalign">0</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="lbVersion">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="valign">end</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="label">Version: 7.0
+Build ID: 7.0
+CPU threads
+Locale:
+Calc:</property>
+                <property name="wrap">True</property>
+                <property name="selectable">True</property>
+                <property name="ellipsize">end</property>
+                <property name="max_width_chars">50</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="homogeneous">True</property>
+                <child>
+                  <object class="GtkLinkButton" id="btnCredits">
+                    <property name="label" translatable="yes" context="aboutdialog|credits">Credits</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLinkButton" id="btnWebsite">
+                    <property name="label" translatable="yes" context="aboutdialog|website">Website</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <property name="xalign">0</property>
+                    <property name="uri">https://www.libreoffice.org/</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLinkButton" id="btnReleaseNotes">
+                    <property name="label" translatable="yes" context="aboutdialog|description">Release Notes</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">4</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
       </object>
     </child>
+    <action-widgets>
+      <action-widget response="-7">btnClose</action-widget>
+    </action-widgets>
   </object>
 </interface>
