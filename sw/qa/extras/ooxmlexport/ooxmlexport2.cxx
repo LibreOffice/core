@@ -18,13 +18,11 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
-// #include <com/sun/star/text/XTextViewCursorSupplier.hpp> // keep for test1Table1Page
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
-//#include <com/sun/star/text/XPageCursor.hpp> // keep for test1Table1Page
 //#include <com/sun/star/awt/FontWeight.hpp> // keep for testTableStylerPrSz
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
@@ -434,20 +432,13 @@ DECLARE_OOXMLEXPORT_TEST(testFdo51550, "fdo51550.odt")
         "Excel.Sheet.12");
 }
 
-/*
- * doesn't work on openSUSE12.2 at least
 DECLARE_OOXMLEXPORT_TEST(test1Table1Page, "1-table-1-page.docx")
 {
     // 2 problem for this document after export:
     //   - invalid sectPr inserted at the beginning of the page
     //   - font of empty cell is not preserved, leading to change in rows height
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
-    xCursor->jumpToLastPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
-*/
 
 DECLARE_OOXMLEXPORT_TEST(testTextFrames, "textframes.odt")
 {
