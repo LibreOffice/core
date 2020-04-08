@@ -43,7 +43,7 @@ public:
             // calls TestBlock
             /** @param  bNoMatrixAtAll
                         TRUE if there must not be any matrix, not even entirely
-                        containted; for example in sorting. */
+                        contained; for example in sorting. */
             ScEditableTester( const ScDocument* pDoc, SCTAB nTab,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         bool bNoMatrixAtAll = false );
