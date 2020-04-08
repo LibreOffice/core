@@ -142,7 +142,8 @@ void SaveFlyInRange( const SwPaM& rPam, const SwPosition& rInsPos,
     SwPosition atParaEnd(*rPam.End());
     if (bMoveAllFlys)
     {
-        assert(rPam.End()->nContent.GetIndex() == rPam.End()->nNode.GetNode().GetTextNode()->Len());
+        assert(!rPam.End()->nNode.GetNode().IsTextNode() // can be table end-node
+            || rPam.End()->nContent.GetIndex() == rPam.End()->nNode.GetNode().GetTextNode()->Len());
         ++atParaEnd.nNode;
         atParaEnd.nContent.Assign(atParaEnd.nNode.GetNode().GetContentNode(), 0);
     }
