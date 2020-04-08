@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b4b5663e_83b5bf80",
+        "filename": "ridljar/Jar_libreoffice.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-04-08T14:45:44Z",
+      "side": 1,
+      "message": "Not sure this is really needed. I couldn\u0027t find any use of it in the classes currently in libreoffice.jar.\n\nHowever, it was on the ridl.jar classpath.\n\nShould I just remove this?",
+      "range": {
+        "startLine": 26,
+        "startChar": 4,
+        "endLine": 26,
+        "endChar": 17
+      },
+      "revId": "ed154fd05032bb14098901b2c7029bdd66572043",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
