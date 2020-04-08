@@ -462,7 +462,7 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
             }
             [[fallthrough]];
         case SID_COPY:
-            if( !bCopy || GetView().isContentExtractionLocked())
+            if( !bCopy || GetObjectShell()->isContentExtractionLocked())
                 rSet.DisableItem( nWhich );
             break;
 

@@ -658,6 +658,7 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
 {
 
     SfxWhichIter aIter( rSet );
+    SfxObjectShell *pSh = GetViewFrame()->GetObjectShell();
     for ( sal_uInt16 nSID = aIter.FirstWhich(); nSID; nSID = aIter.NextWhich() )
     {
         switch ( nSID )
@@ -673,13 +674,13 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
 #if HAVE_FEATURE_MACOSX_SANDBOX
                 rSet.DisableItem(nSID);
 #endif
-                if (isExportLocked() && nSID != SID_MAIL_SENDDOC)
+                if (pSh && pSh->isExportLocked() && nSID != SID_MAIL_SENDDOC)
                     rSet.DisableItem(nSID);
                 break;
             }
             case SID_WEBHTML:
             {
-                if (isExportLocked())
+                if (pSh && pSh->isExportLocked())
                     rSet.DisableItem(nSID);
                 break;
             }
@@ -689,7 +690,8 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
             case SID_SETUPPRINTER:
             case SID_PRINTER_NAME:
             {
-                if (Application::GetSettings().GetMiscSettings().GetDisablePrinting() || isPrintLocked())
+                if (Application::GetSettings().GetMiscSettings().GetDisablePrinting()
+                    || (pSh && pSh->isPrintLocked()))
                 {
                     rSet.DisableItem(nSID);
                     break;
@@ -1750,42 +1752,6 @@ void SfxViewShell::SetController( SfxBaseController* pController )
         pImpl->xClipboardListener->DisconnectViewShell();
 
     pImpl->xClipboardListener = new SfxClipboardChangeListener( this, GetClipboardNotifier() );
-}
-
-bool SfxViewShell::isContentExtractionLocked()
-{
-    Reference<XModel> xModel = GetCurrentDocument();
-    if (!xModel.is())
-        return false;
-    comphelper::NamedValueCollection aArgs(xModel->getArgs());
-    return aArgs.getOrDefault("LockContentExtraction", false);
-}
-
-bool SfxViewShell::isExportLocked()
-{
-    Reference<XModel> xModel = GetCurrentDocument();
-    if (!xModel.is())
-        return false;
-    comphelper::NamedValueCollection aArgs(xModel->getArgs());
-    return aArgs.getOrDefault("LockExport", false);
-}
-
-bool SfxViewShell::isPrintLocked()
-{
-    Reference<XModel> xModel = GetCurrentDocument();
-    if (!xModel.is())
-        return false;
-    comphelper::NamedValueCollection aArgs(xModel->getArgs());
-    return aArgs.getOrDefault("LockPrint", false);
-}
-
-bool SfxViewShell::isSaveLocked()
-{
-    Reference<XModel> xModel = GetCurrentDocument();
-    if (!xModel.is())
-        return false;
-    comphelper::NamedValueCollection aArgs(xModel->getArgs());
-    return aArgs.getOrDefault("LockSave", false);
 }
 
 Reference < XController > SfxViewShell::GetController() const
