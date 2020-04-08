@@ -158,8 +158,7 @@ void SwModule::StateOther(SfxItemSet &rSet)
             break;
             case FN_MAILMERGE_WIZARD:
             {
-                SwView* pView = ::GetActiveView();
-                if (pView && pView->GetViewShell()->isExportLocked())
+                if (GetObjectShell()->isExportLocked())
                     rSet.DisableItem(nWhich);
                 break;
             }

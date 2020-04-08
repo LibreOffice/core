@@ -1098,8 +1098,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
         {
             case SID_DOCTEMPLATE :
             {
-                SfxViewFrame *pFrame = SfxViewFrame::GetFirst(this);
-                if ( pFrame && pFrame->GetViewShell()->isExportLocked())
+                if ( isExportLocked())
                     rSet.DisableItem( nWhich );
                 break;
             }
@@ -1183,8 +1182,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 }
             case SID_SAVEDOC:
                 {
-                    SfxViewFrame *pFrame = SfxViewFrame::GetFirst(this);
-                    if ( IsReadOnly() || (pFrame && pFrame->GetViewShell()->isSaveLocked()))
+                    if ( IsReadOnly() || isSaveLocked())
                     {
                         rSet.DisableItem(nWhich);
                         break;
@@ -1204,9 +1202,8 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
 
             case SID_SAVEASDOC:
             {
-                SfxViewFrame *pFrame = SfxViewFrame::GetFirst(this);
                 if (!(pImpl->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT)
-                    || (pFrame && pFrame->GetViewShell()->isExportLocked()))
+                    || isExportLocked())
                 {
                     rSet.DisableItem( nWhich );
                     break;
@@ -1220,9 +1217,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
 
             case SID_SAVEACOPY:
             {
-                SfxViewFrame *pFrame = SfxViewFrame::GetFirst(this);
-                if (!(pImpl->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT)
-                    || (pFrame && pFrame->GetViewShell()->isExportLocked()))
+                if (!(pImpl->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT) || isExportLocked())
                 {
                     rSet.DisableItem( nWhich );
                     break;
@@ -1243,8 +1238,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
             case SID_AUTOREDACTDOC:
             case SID_SAVEASREMOTE:
             {
-                SfxViewFrame *pFrame = SfxViewFrame::GetFirst(this);
-                if (pFrame && pFrame->GetViewShell()->isExportLocked())
+                if (isExportLocked())
                     rSet.DisableItem( nWhich );
                 break;
             }
