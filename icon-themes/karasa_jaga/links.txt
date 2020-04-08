@@ -31,12 +31,6 @@ cmd/32/anchormenu.png cmd/32/toggleanchortype.png
 cmd/32/ar/bulletliststyle.png cmd/32/ar/defaultbullet.png
 cmd/32/ar/linenumberdialog.png cmd/32/ar/linenumberingdialog.png
 cmd/32/ar/numberliststyle.png cmd/32/ar/defaultnumbering.png
-cmd/32/bg/autoformatmenu.png cmd/32/bg/autocorrectdlg.png
-cmd/32/bg/spellingandgrammardialog.png cmd/32/bg/spelling.png
-cmd/32/bg/spelldialog.png cmd/32/bg/spelling.png
-cmd/32/bg/underline.png cmd/32/ca/underline.png
-cmd/32/bg/underlinedouble.png cmd/32/hu/underlinedouble.png
-cmd/32/bg/underlinesimple.png cmd/32/hu/underline.png
 cmd/32/arrangeframemenu.png cmd/32/bringtofront.png
 cmd/32/arrangemenu.png cmd/32/bringtofront.png
 cmd/32/arrowshapes.png cmd/32/arrowshapes.left-right-arrow.png
@@ -48,6 +42,12 @@ cmd/32/availabletoolbars.png cmd/32/showtoolbar.png
 cmd/32/backgroundcolor.png cmd/32/formatarea.png
 cmd/32/backgroundpatterncontroller.png cmd/32/formatarea.png
 cmd/32/basicshapes.png cmd/32/basicshapes.diamond.png
+cmd/32/bg/autoformatmenu.png cmd/32/bg/autocorrectdlg.png
+cmd/32/bg/spelldialog.png cmd/32/bg/spelling.png
+cmd/32/bg/spellingandgrammardialog.png cmd/32/bg/spelling.png
+cmd/32/bg/underline.png cmd/32/ca/underline.png
+cmd/32/bg/underlinedouble.png cmd/32/hu/underlinedouble.png
+cmd/32/bg/underlinesimple.png cmd/32/hu/underline.png
 cmd/32/break.png cmd/32/polygon_unfilled.png
 cmd/32/browsebackward.png cmd/32/navigateback.png
 cmd/32/browseforward.png cmd/32/navigateforward.png
@@ -147,6 +147,7 @@ cmd/32/fa/linenumberingdialog.png cmd/32/ar/linenumberingdialog.png
 cmd/32/fa/numberingstart.png cmd/32/ar/numberingstart.png
 cmd/32/fa/numberliststyle.png cmd/32/ar/defaultnumbering.png
 cmd/32/fa/outlinebullet.png cmd/32/ar/outlinebullet.png
+cmd/32/fa/recundo.png cmd/32/ar/recundo.png
 cmd/32/fa/redo.png cmd/32/ar/redo.png
 cmd/32/fa/removebullets.png cmd/32/ar/removebullets.png
 cmd/32/fa/romanliststyle.png cmd/32/ar/romanliststyle.png
@@ -208,6 +209,7 @@ cmd/32/he/linenumberingdialog.png cmd/32/ar/linenumberingdialog.png
 cmd/32/he/numberingstart.png cmd/32/ar/numberingstart.png
 cmd/32/he/numberliststyle.png cmd/32/ar/defaultnumbering.png
 cmd/32/he/outlinebullet.png cmd/32/ar/outlinebullet.png
+cmd/32/he/recundo.png cmd/32/ar/recundo.png
 cmd/32/he/redo.png cmd/32/ar/redo.png
 cmd/32/he/removebullets.png cmd/32/ar/removebullets.png
 cmd/32/he/romanliststyle.png cmd/32/ar/romanliststyle.png
@@ -381,7 +383,6 @@ cmd/32/questionanswers.png cmd/32/webhtml.png
 cmd/32/rect.png cmd/32/basicshapes.rectangle.png
 cmd/32/rect_rounded.png cmd/32/basicshapes.round-rectangle.png
 cmd/32/rectangletoolbox.png cmd/32/basicshapes.rectangle.png
-cmd/32/recundo.png cmd/32/undo.png
 cmd/32/refresh.png cmd/32/reload.png
 cmd/32/rejecttracedchange.png cmd/32/rejecttrackedchange.png
 cmd/32/removefilter.png cmd/32/removefiltersort.png
@@ -491,6 +492,7 @@ cmd/32/ur/linenumberingdialog.png cmd/32/ar/linenumberingdialog.png
 cmd/32/ur/numberingstart.png cmd/32/ar/numberingstart.png
 cmd/32/ur/numberliststyle.png cmd/32/ar/defaultnumbering.png
 cmd/32/ur/outlinebullet.png cmd/32/ar/outlinebullet.png
+cmd/32/ur/recundo.png cmd/32/ar/recundo.png
 cmd/32/ur/redo.png cmd/32/ar/redo.png
 cmd/32/ur/removebullets.png cmd/32/ar/removebullets.png
 cmd/32/ur/romanliststyle.png cmd/32/ar/romanliststyle.png
@@ -516,14 +518,14 @@ cmd/ar/sc_bulletliststyle.png cmd/ar/sc_defaultbullet.png
 cmd/ar/sc_linenumberdialog.png cmd/ar/sc_linenumberingdialog.png
 cmd/ar/sc_numberliststyle.png cmd/ar/sc_defaultnumbering.png
 cmd/bg/lc_autoformatmenu.png cmd/bg/lc_autocorrectdlg.png
-cmd/bg/lc_spellingandgrammardialog.png cmd/bg/lc_spelling.png
 cmd/bg/lc_spelldialog.png cmd/bg/lc_spelling.png
+cmd/bg/lc_spellingandgrammardialog.png cmd/bg/lc_spelling.png
 cmd/bg/lc_underline.png cmd/hu/lc_underline.png
 cmd/bg/lc_underlinedouble.png cmd/hu/lc_underlinedouble.png
 cmd/bg/lc_underlinesimple.png cmd/hu/lc_underline.png
 cmd/bg/sc_autoformatmenu.png cmd/bg/sc_autocorrectdlg.png
-cmd/bg/sc_spellingandgrammardialog.png cmd/bg/sc_spelling.png
 cmd/bg/sc_spelldialog.png cmd/bg/sc_spelling.png
+cmd/bg/sc_spellingandgrammardialog.png cmd/bg/sc_spelling.png
 cmd/bg/sc_underline.png cmd/hu/sc_underline.png
 cmd/bg/sc_underlinedouble.png cmd/hu/sc_underlinedouble.png
 cmd/bg/sc_underlinesimple.png cmd/hu/sc_underline.png
@@ -563,6 +565,7 @@ cmd/fa/lc_linenumberingdialog.png cmd/ar/lc_linenumberingdialog.png
 cmd/fa/lc_numberingstart.png cmd/ar/lc_numberingstart.png
 cmd/fa/lc_numberliststyle.png cmd/ar/lc_defaultnumbering.png
 cmd/fa/lc_outlinebullet.png cmd/ar/lc_outlinebullet.png
+cmd/fa/lc_recundo.png cmd/ar/lc_recundo.png
 cmd/fa/lc_redo.png cmd/ar/lc_redo.png
 cmd/fa/lc_removebullets.png cmd/ar/lc_removebullets.png
 cmd/fa/lc_romanliststyle.png cmd/ar/lc_romanliststyle.png
@@ -585,6 +588,7 @@ cmd/fa/sc_linenumberingdialog.png cmd/ar/sc_linenumberingdialog.png
 cmd/fa/sc_numberingstart.png cmd/ar/sc_numberingstart.png
 cmd/fa/sc_numberliststyle.png cmd/ar/sc_defaultnumbering.png
 cmd/fa/sc_outlinebullet.png cmd/ar/sc_outlinebullet.png
+cmd/fa/sc_recundo.png cmd/ar/sc_recundo.png
 cmd/fa/sc_redo.png cmd/ar/sc_redo.png
 cmd/fa/sc_removebullets.png cmd/ar/sc_removebullets.png
 cmd/fa/sc_romanliststyle.png cmd/ar/sc_romanliststyle.png
@@ -613,6 +617,7 @@ cmd/he/lc_linenumberingdialog.png cmd/ar/lc_linenumberingdialog.png
 cmd/he/lc_numberingstart.png cmd/ar/lc_numberingstart.png
 cmd/he/lc_numberliststyle.png cmd/ar/lc_defaultnumbering.png
 cmd/he/lc_outlinebullet.png cmd/ar/lc_outlinebullet.png
+cmd/he/lc_recundo.png cmd/ar/lc_recundo.png
 cmd/he/lc_redo.png cmd/ar/lc_redo.png
 cmd/he/lc_removebullets.png cmd/ar/lc_removebullets.png
 cmd/he/lc_romanliststyle.png cmd/ar/lc_romanliststyle.png
@@ -635,6 +640,7 @@ cmd/he/sc_linenumberingdialog.png cmd/ar/sc_linenumberingdialog.png
 cmd/he/sc_numberingstart.png cmd/ar/sc_numberingstart.png
 cmd/he/sc_numberliststyle.png cmd/ar/sc_defaultnumbering.png
 cmd/he/sc_outlinebullet.png cmd/ar/sc_outlinebullet.png
+cmd/he/sc_recundo.png cmd/ar/sc_recundo.png
 cmd/he/sc_redo.png cmd/ar/sc_redo.png
 cmd/he/sc_removebullets.png cmd/ar/sc_removebullets.png
 cmd/he/sc_romanliststyle.png cmd/ar/sc_romanliststyle.png
@@ -944,7 +950,6 @@ cmd/lc_questionanswers.png cmd/lc_webhtml.png
 cmd/lc_rect.png cmd/lc_basicshapes.rectangle.png
 cmd/lc_rect_rounded.png cmd/lc_basicshapes.round-rectangle.png
 cmd/lc_rectangletoolbox.png cmd/lc_basicshapes.rectangle.png
-cmd/lc_recundo.png cmd/lc_undo.png
 cmd/lc_refresh.png cmd/lc_reload.png
 cmd/lc_rejecttracedchange.png cmd/lc_rejecttrackedchange.png
 cmd/lc_removefilter.png cmd/lc_removefiltersort.png
@@ -1333,7 +1338,6 @@ cmd/sc_questionanswers.png cmd/sc_webhtml.png
 cmd/sc_rect.png cmd/sc_basicshapes.rectangle.png
 cmd/sc_rect_rounded.png cmd/sc_basicshapes.round-rectangle.png
 cmd/sc_rectangletoolbox.png cmd/sc_basicshapes.rectangle.png
-cmd/sc_recundo.png cmd/sc_undo.png
 cmd/sc_refresh.png cmd/sc_reload.png
 cmd/sc_rejecttracedchange.png cmd/sc_rejecttrackedchange.png
 cmd/sc_removefilter.png cmd/sc_removefiltersort.png
@@ -1462,6 +1466,7 @@ cmd/ur/lc_linenumberingdialog.png cmd/ar/lc_linenumberingdialog.png
 cmd/ur/lc_numberingstart.png cmd/ar/lc_numberingstart.png
 cmd/ur/lc_numberliststyle.png cmd/ar/lc_defaultnumbering.png
 cmd/ur/lc_outlinebullet.png cmd/ar/lc_outlinebullet.png
+cmd/ur/lc_recundo.png cmd/ar/lc_recundo.png
 cmd/ur/lc_redo.png cmd/ar/lc_redo.png
 cmd/ur/lc_removebullets.png cmd/ar/lc_removebullets.png
 cmd/ur/lc_romanliststyle.png cmd/ar/lc_romanliststyle.png
@@ -1484,6 +1489,7 @@ cmd/ur/sc_linenumberingdialog.png cmd/ar/sc_linenumberingdialog.png
 cmd/ur/sc_numberingstart.png cmd/ar/sc_numberingstart.png
 cmd/ur/sc_numberliststyle.png cmd/ar/sc_defaultnumbering.png
 cmd/ur/sc_outlinebullet.png cmd/ar/sc_outlinebullet.png
+cmd/ur/sc_recundo.png cmd/ar/sc_recundo.png
 cmd/ur/sc_redo.png cmd/ar/sc_redo.png
 cmd/ur/sc_removebullets.png cmd/ar/sc_removebullets.png
 cmd/ur/sc_romanliststyle.png cmd/ar/sc_romanliststyle.png
