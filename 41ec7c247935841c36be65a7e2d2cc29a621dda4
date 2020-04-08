@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "49ee6b7b_a60f9ef9",
+        "filename": "vcl/headless/svpinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2020-04-08T17:53:07Z",
+      "side": 1,
+      "message": "Can be const now.",
+      "revId": "41ec7c247935841c36be65a7e2d2cc29a621dda4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93fcf096_6fb53398",
+        "filename": "vcl/headless/svpinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2020-04-08T17:53:07Z",
+      "side": 1,
+      "message": "const",
+      "revId": "41ec7c247935841c36be65a7e2d2cc29a621dda4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7cb1a3f5_bfecae93",
+        "filename": "vcl/headless/svpinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2020-04-08T17:53:07Z",
+      "side": 1,
+      "message": "I suppose a comment should help here. My reading of it is\n// For LOK don\u0027t skip polling due to timeout, to pump socket data.\n\nBut whatever is more accurate/comprehensible, of course.\n\nOn second thought, why don\u0027t we *never* skip polling in LOK case? IIRC, we have a wakeup callback that we can use to break the poll wait, when necessary, so we should be able to always idle in the poll (but I also vaguely remember this didn\u0027t work well, due to certain design assumptions here, that don\u0027t play well with an explicit wakeup call, rather assumes the loop never yields to the system).",
+      "revId": "41ec7c247935841c36be65a7e2d2cc29a621dda4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
