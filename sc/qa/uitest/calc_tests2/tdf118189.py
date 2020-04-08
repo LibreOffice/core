@@ -46,7 +46,7 @@ class tdf118189(UITestCase):
         self.xUITest.executeCommand(".uno:Undo")
 
         #-> CRASH
-        self.assertEqual(get_cell_by_position(document2, 0, 0, 0).getString(), "")
+        self.assertEqual(get_cell_by_position(document2, 0, 0, 0).getString(), "On Back Order")
 
         self.ui_test.close_doc()
 

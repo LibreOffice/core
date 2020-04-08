@@ -82,6 +82,7 @@ class VCL_DLLPUBLIC SalInstance
 private:
     rtl::Reference< vcl::DisplayConnectionDispatch > m_pEventInst;
     const std::unique_ptr<comphelper::SolarMutex> m_pYieldMutex;
+    css::uno::Reference<css::uno::XInterface> m_clipboard;
 
 public:
     SalInstance(std::unique_ptr<comphelper::SolarMutex> pMutex);
