@@ -4400,7 +4400,7 @@ sal_uInt32 XclImpDffPropSet::GetPropertyValue( sal_uInt16 nPropId ) const
 
 void XclImpDffPropSet::FillToItemSet( SfxItemSet& rItemSet ) const
 {
-    if( mxMemStrm.get() )
+    if( mxMemStrm )
         maDffConv.ApplyAttributes( *mxMemStrm, rItemSet );
 }
 

@@ -341,7 +341,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
     // will receive the table style if any
     TableStyleSheetEntry* pTableStyle = nullptr;
 
-    if( m_aTableProperties.get() )
+    if( m_aTableProperties )
     {
         //create properties from the table attributes
         //...pPropMap->Insert( PROP_LEFT_MARGIN, uno::makeAny( m_nLeftMargin - m_nGapHalf ));
@@ -674,7 +674,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         m_aTableProperties->Insert( PROP_HEADER_ROW_COUNT, uno::makeAny( sal_Int32(0)), false);
 
         // if table is only a single row, and row is set as don't split, set the same value for the whole table.
-        if( m_aRowProperties.size() == 1 && m_aRowProperties[0].get() )
+        if( m_aRowProperties.size() == 1 && m_aRowProperties[0] )
         {
             std::optional<PropertyMap::Property> oSplitAllowed = m_aRowProperties[0]->getProperty(PROP_IS_SPLIT_ALLOWED);
             if( oSplitAllowed )
@@ -1469,7 +1469,7 @@ void DomainMapperTableHandler::startCell(const css::uno::Reference< css::text::X
                                          const TablePropertyMapPtr& pProps )
 {
     sal_uInt32 nRow = m_aRowProperties.size();
-    if ( pProps.get( ) )
+    if ( pProps )
         m_aCellProperties[nRow - 1].push_back( pProps.get() );
     else
     {
@@ -1484,14 +1484,14 @@ void DomainMapperTableHandler::startCell(const css::uno::Reference< css::text::X
     TagLogger::getInstance().startElement("table.cell.start");
     TagLogger::getInstance().chars(XTextRangeToString(start));
     TagLogger::getInstance().endElement();
-    if (pProps.get())
+    if (pProps)
         pProps->printProperties();
 #endif
 
     //add a new 'row' of properties
     m_aCellRange.clear();
     uno::Reference<text::XTextRange> xStart;
-    if (start.get())
+    if (start)
         xStart = start->getStart();
     m_aCellRange.push_back(xStart);
 }
@@ -1506,7 +1506,7 @@ void DomainMapperTableHandler::endCell(const css::uno::Reference< css::text::XTe
 #endif
 
     uno::Reference<text::XTextRange> xEnd;
-    if (end.get())
+    if (end)
         xEnd = end->getEnd();
     m_aCellRange.push_back(xEnd);
     m_aRowRanges.push_back(comphelper::containerToSequence(m_aCellRange));

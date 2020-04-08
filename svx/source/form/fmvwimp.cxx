@@ -882,7 +882,7 @@ Reference< XFormController > FmXFormView::getFormController( const Reference< XF
 
     for (const PFormViewPageWindowAdapter& pAdapter : m_aPageWindowAdapters)
     {
-        if ( !pAdapter.get() )
+        if ( !pAdapter )
         {
             SAL_WARN( "svx.form", "FmXFormView::getFormController: invalid page window adapter!" );
             continue;
@@ -914,7 +914,7 @@ IMPL_LINK_NOARG(FmXFormView, OnAutoFocus, void*, void)
     Reference< XIndexAccess > xForms( pPage ? Reference< XIndexAccess >( pPage->GetForms() ) : Reference< XIndexAccess >() );
 
     const PFormViewPageWindowAdapter pAdapter = m_aPageWindowAdapters.empty() ? nullptr : m_aPageWindowAdapters[0];
-    const vcl::Window* pWindow = pAdapter.get() ? pAdapter->getWindow() : nullptr;
+    const vcl::Window* pWindow = pAdapter ? pAdapter->getWindow() : nullptr;
 
     ENSURE_OR_RETURN_VOID( xForms.is() && pWindow, "FmXFormView::OnAutoFocus: could not collect all essentials!" );
 

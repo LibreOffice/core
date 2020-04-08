@@ -294,7 +294,7 @@ uno::Sequence< Reference<uno::XInterface> > PropBrw::CreateCompPropSet(const Sdr
                 aSets.push_back(CreateComponentPair(pObj));
 
             // next element
-            pCurrent = pGroupIterator.get() && pGroupIterator->IsMore() ? pGroupIterator->Next() : nullptr;
+            pCurrent = pGroupIterator && pGroupIterator->IsMore() ? pGroupIterator->Next() : nullptr;
         }
     }
     return uno::Sequence< Reference<uno::XInterface> >(aSets.data(), aSets.size());

@@ -1235,7 +1235,7 @@ void OOXMLFastContextHandlerValue::setDefaultStringValue()
 void OOXMLFastContextHandlerValue::pushBiDiEmbedLevel()
 {
     const bool bRtl
-        = mpValue.get() && mpValue->getInt() == NS_ooxml::LN_Value_ST_Direction_rtl;
+        = mpValue && mpValue->getInt() == NS_ooxml::LN_Value_ST_Direction_rtl;
     OOXMLFactory::characters(this, bRtl ? u"\u202B" : u"\u202A"); // RLE / LRE
 }
 

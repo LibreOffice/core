@@ -252,7 +252,7 @@ sal_Bool VCLXPrinter::start( const OUString& /*rJobName*/, sal_Int16 /*nCopies*/
 {
     ::osl::MutexGuard aGuard( Mutex );
 
-    if (mxPrinter.get())
+    if (mxPrinter)
     {
         maInitJobSetup = mxPrinter->GetJobSetup();
         mxListener = std::make_shared<vcl::OldStylePrintAdaptor>(mxPrinter, nullptr);

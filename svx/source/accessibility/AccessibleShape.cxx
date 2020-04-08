@@ -365,7 +365,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
 
     //this mxshape is the captioned shape
     uno::Sequence< uno::Reference< uno::XInterface > > aSequence { mpParent->GetAccessibleCaption(mxShape) };
-    if(aSequence[0].get())
+    if(aSequence[0])
     {
         pRelationSet->AddRelation(
                                   AccessibleRelation( AccessibleRelationType::DESCRIBED_BY, aSequence ) );

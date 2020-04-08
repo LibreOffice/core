@@ -187,7 +187,7 @@ namespace dbaui
 
     public:
         ::osl::Mutex&   getMutex() { return m_aMutex; }
-        bool            isInitialized() const { return m_xSourceConnection.is() && m_pSourceObject.get() && m_xDestConnection.is(); }
+        bool            isInitialized() const { return m_xSourceConnection.is() && m_pSourceObject && m_xDestConnection.is(); }
 
     protected:
         explicit CopyTableWizard( const Reference< XComponentContext >& _rxORB );

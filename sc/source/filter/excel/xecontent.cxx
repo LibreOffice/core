@@ -1363,7 +1363,7 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
             }
         aScRanges.Format( msSeqRef, ScRefFlags::VALID, GetDoc(), formula::FormulaGrammar::CONV_XL_OOX, ' ', true );
 
-        if(!aExtEntries.empty() && xExtLst.get())
+        if(!aExtEntries.empty() && xExtLst)
         {
             XclExpExt* pParent = xExtLst->GetItem( XclExpExtDataBarType );
             if( !pParent )
@@ -1930,7 +1930,7 @@ void XclExpDval::SaveXml( XclExpXmlStream& rStrm )
 XclExpDV& XclExpDval::SearchOrCreateDv( sal_uLong nScHandle )
 {
     // test last found record
-    if( mxLastFoundDV.get() && (mxLastFoundDV->GetScHandle() == nScHandle) )
+    if( mxLastFoundDV && (mxLastFoundDV->GetScHandle() == nScHandle) )
         return *mxLastFoundDV;
 
     // binary search

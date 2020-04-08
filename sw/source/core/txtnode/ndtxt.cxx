@@ -3123,7 +3123,7 @@ OUString SwTextNode::GetNumString( const bool _bInclPrefixAndSuffixStrings,
         const unsigned int _nRestrictToThisLevel,
         SwRootFrame const*const pLayout) const
 {
-    if (GetDoc()->IsClipBoard() && m_pNumStringCache.get())
+    if (GetDoc()->IsClipBoard() && m_pNumStringCache)
     {
         // #i111677# do not expand number strings in clipboard documents
         return *m_pNumStringCache;

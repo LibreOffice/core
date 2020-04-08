@@ -378,7 +378,7 @@ void XclExpPageSettings::Save( XclExpStream& rStrm )
     XclExpDoubleRecord( EXC_ID_BOTTOMMARGIN, maData.mfBottomMargin ).Save( rStrm );
     XclExpSetup( maData ).Save( rStrm );
 
-    if( (GetBiff() == EXC_BIFF8) && maData.mxBrushItem.get() )
+    if( (GetBiff() == EXC_BIFF8) && maData.mxBrushItem )
         if( const Graphic* pGraphic = maData.mxBrushItem->GetGraphic() )
             XclExpImgData( *pGraphic, EXC_ID8_IMGDATA ).Save( rStrm );
 }

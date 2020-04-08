@@ -112,7 +112,7 @@ namespace dbaui
             {
                 const KeyEvent* pKeyEvent = _rNEvt.GetKeyEvent();
                 const vcl::KeyCode& aKeyCode = pKeyEvent->GetKeyCode();
-                if ( m_pAccel.get() && m_pAccel->execute( aKeyCode ) )
+                if ( m_pAccel && m_pAccel->execute( aKeyCode ) )
                     // the accelerator consumed the event
                     return true;
                 [[fallthrough]];

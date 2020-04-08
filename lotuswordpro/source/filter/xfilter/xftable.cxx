@@ -84,7 +84,7 @@ void    XFTable::SetColumnStyle(sal_Int32 col, const OUString& style)
 
 void XFTable::AddRow(rtl::Reference<XFRow> const & rRow)
 {
-    assert(rRow.get());
+    assert(rRow);
 
     for (sal_Int32 i = 0; i < rRow->GetCellCount(); ++i)
     {

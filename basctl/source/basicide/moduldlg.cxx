@@ -828,7 +828,7 @@ void ObjectPage::NewDialog()
                 {
                     m_xBasicBox->AddEntry(aDlgName, RID_BMP_DIALOG, xSubRootEntry.get(), false,
                                        std::make_unique<Entry>(OBJ_TYPE_DIALOG), xIter.get());
-                    assert(xIter.get() && "Insert entry failed!");
+                    assert(xIter && "Insert entry failed!");
                 }
                 m_xBasicBox->set_cursor(*xIter);
                 m_xBasicBox->select(*xIter);

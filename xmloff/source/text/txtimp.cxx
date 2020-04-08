@@ -2720,7 +2720,7 @@ void XMLTextImportHelper::ConnectFrameChains(
             m_xImpl->m_xNextFrmNames->push_back(sNextFrmName);
         }
     }
-    if (m_xImpl->m_xPrevFrmNames.get() && !m_xImpl->m_xPrevFrmNames->empty())
+    if (m_xImpl->m_xPrevFrmNames && !m_xImpl->m_xPrevFrmNames->empty())
     {
         for(std::vector<OUString>::iterator i = m_xImpl->m_xPrevFrmNames->begin(), j = m_xImpl->m_xNextFrmNames->begin(); i != m_xImpl->m_xPrevFrmNames->end() && j != m_xImpl->m_xNextFrmNames->end(); ++i, ++j)
         {

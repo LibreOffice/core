@@ -192,7 +192,7 @@ bool ODesignView::PreNotify( NotifyEvent& rNEvt )
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
             if ( handleKeyEvent(*pKeyEvent) )
                 bRet = true;
-            else if ( bRet && m_pAccel.get() )
+            else if ( bRet && m_pAccel )
             {
                 const vcl::KeyCode& rCode = pKeyEvent->GetKeyCode();
                 util::URL aUrl;

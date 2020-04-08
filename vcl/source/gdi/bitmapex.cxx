@@ -776,7 +776,7 @@ bool BitmapEx::Create( const css::uno::Reference< css::rendering::XBitmapCanvas 
                        const Size &rSize )
 {
     uno::Reference< beans::XFastPropertySet > xFastPropertySet( xBitmapCanvas, uno::UNO_QUERY );
-    if( xFastPropertySet.get() )
+    if( xFastPropertySet )
     {
         // 0 means get BitmapEx
         uno::Any aAny = xFastPropertySet->getFastPropertyValue( 0 );

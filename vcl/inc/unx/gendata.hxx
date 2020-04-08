@@ -83,7 +83,7 @@ public:
         if (!m_pPrintFontManager)
             InitPrintFontManager();
         // PrintFontManager needs the FreetypeManager
-        assert(m_pFreetypeManager.get());
+        assert(m_pFreetypeManager);
         return m_pPrintFontManager.get();
     }
 

@@ -60,7 +60,7 @@ void ExternalToolEdit::HandleCloseEvent(ExternalToolEdit* pData)
 void ExternalToolEdit::StartListeningEvent()
 {
     //Start an event listener implemented via VCL timeout
-    assert(!m_pChecker.get());
+    assert(!m_pChecker);
     m_pChecker.reset(new FileChangedChecker(
             m_aFileName, [this] () { return HandleCloseEvent(this); }));
 }

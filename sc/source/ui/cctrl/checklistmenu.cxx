@@ -2025,7 +2025,7 @@ void ScCheckListMenuWindow::launch(const tools::Rectangle& rRect)
 
 void ScCheckListMenuWindow::close(bool bOK)
 {
-    if (bOK && mpOKAction.get())
+    if (bOK && mpOKAction)
         mpOKAction->execute();
 
     EndPopupMode();

@@ -39,7 +39,7 @@ namespace vclcanvas
                                             const OutDevProviderSharedPtr&            rOutDevProvider,
                                             bool                                      bShowSpriteBounds )
     {
-        ENSURE_OR_THROW( rOwningSpriteCanvas.get() &&
+        ENSURE_OR_THROW( rOwningSpriteCanvas &&
                          rOutDevProvider,
                          "CanvasCustomSprite::CanvasCustomSprite(): Invalid sprite canvas" );
 

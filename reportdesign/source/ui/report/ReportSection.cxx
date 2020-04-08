@@ -547,7 +547,7 @@ void OReportSection::impl_adjustObjectSizePosition(sal_Int32 i_nPaperWidth,sal_I
 
 bool OReportSection::handleKeyEvent(const KeyEvent& _rEvent)
 {
-    return m_pFunc.get() && m_pFunc->handleKeyEvent(_rEvent);
+    return m_pFunc && m_pFunc->handleKeyEvent(_rEvent);
 }
 
 void OReportSection::deactivateOle()

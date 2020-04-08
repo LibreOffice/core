@@ -198,7 +198,7 @@ void LwpStory::SortPageLayout()
     //Get all the pagelayout and store in list
     std::vector<LwpPageLayout*>  aLayoutList;
     rtl::Reference<LwpVirtualLayout> xLayout(GetLayout(nullptr));
-    while (xLayout.get())
+    while (xLayout)
     {
         LwpPageLayout *pLayout = xLayout->IsPage()
             ? dynamic_cast<LwpPageLayout*>(xLayout.get())
@@ -347,7 +347,7 @@ void LwpStory::XFConvertFrameInPage(XFContentContainer* pCont)
 void LwpStory::XFConvertFrameInFrame(XFContentContainer* pCont)
 {
     rtl::Reference<LwpVirtualLayout> xLayout(GetLayout(nullptr));
-    while (xLayout.get())
+    while (xLayout)
     {
         rtl::Reference<LwpVirtualLayout> xFrameLayout(dynamic_cast<LwpVirtualLayout*>(xLayout->GetChildHead().obj().get()));
         o3tl::sorted_vector<LwpVirtualLayout*> aSeen;
