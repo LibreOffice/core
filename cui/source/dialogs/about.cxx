@@ -27,6 +27,10 @@
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+//new
+#include <vcl/virdev.hxx>
+#include <config_folders.h>
+#include <rtl/bootstrap.hxx>
 
 #include <unotools/configmgr.hxx>
 #include <unotools/bootstrap.hxx>
@@ -57,59 +61,78 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star;
 
-AboutDialog::AboutDialog(weld::Window* pParent)
-    : m_xBuilder(Application::CreateBuilder(pParent, "cui/ui/aboutdialog.ui"))
-    , m_xDialog(m_xBuilder->weld_about_dialog("AboutDialog"))
-    , m_xContentArea(m_xDialog->weld_content_area())
+AboutDialogEx::AboutDialogEx(weld::Window* pParent)
+    : GenericDialogController(pParent, "cui/ui/aboutdialog.ui", "AboutDialog")
+    , m_pCreditsButton(m_xBuilder->weld_button("btnCredits"))
+    , m_pWebsiteButton(m_xBuilder->weld_button("btnWebsite"))
+    , m_pReleaseNotesButton(m_xBuilder->weld_button("btnReleaseNotes"))
+    , m_pCloseButton(m_xBuilder->weld_button("btnClose"))
+    , m_pBrandImage(m_xBuilder->weld_image("imBrand"))
+    , m_pAboutImage(m_xBuilder->weld_image("imAbout"))
+    , m_pVersionLabel(m_xBuilder->weld_label("lbVersion"))
+    , m_pAboutLabel(m_xBuilder->weld_label("lbAbout"))
+    , m_pCopyrightLabel(m_xBuilder->weld_label("lbCopyright"))
 {
-    m_xDialog->add_button(GetStandardText(StandardButtonType::Close), RET_CLOSE);
-    m_xDialog->add_button(CuiResId(RID_SVXSTR_ABOUT_CREDITS), 101);
-    m_xDialog->add_button(CuiResId(RID_SVXSTR_ABOUT_WEBSITE), 102);
-    m_xDialog->add_button(CuiResId(RID_SVXSTR_ABOUT_RELEASE_NOTES), 103);
+//    m_buildIdLinkString = m_xDialog->get_website_label();
 
-    m_xCreditsButton.reset(m_xDialog->weld_widget_for_response(101));
-    m_xCreditsButton->set_secondary(true);
-    m_xWebsiteButton.reset(m_xDialog->weld_widget_for_response(102));
-    m_xWebsiteButton->set_secondary(true);
-    m_xReleaseNotesButton.reset(m_xDialog->weld_widget_for_response(103));
-    m_xReleaseNotesButton->set_secondary(true);
-    m_xCloseButton.reset(m_xDialog->weld_widget_for_response(RET_CLOSE));
+    m_pVersionLabel->set_label( GetVersionString() );
+    m_pCopyrightLabel->set_label( GetCopyrightString() );
 
-    m_buildIdLinkString = m_xDialog->get_website_label();
+    Graphic aGraphic;
 
-    m_xDialog->set_version(GetVersionString());
-    m_xDialog->set_copyright(GetCopyrightString());
+    OUString aURL = "$BRAND_BASE_DIR/" LIBO_ETC_FOLDER + OUString::createFromAscii("/shell/about.png");
+    rtl::Bootstrap::expandMacros( aURL );
+    if (GraphicFilter::LoadGraphic(aURL, OUString(), aGraphic) == ERRCODE_NONE)
+    {
+        ScopedVclPtr<VirtualDevice> m_pVirDev = m_pAboutImage->create_virtual_device();
+        m_pVirDev->SetOutputSizePixel(aGraphic.GetSizePixel());
+        m_pVirDev->DrawBitmapEx(Point(0, 0), aGraphic.GetBitmapEx());
+        m_pAboutImage->set_image(m_pVirDev.get());
+        m_pVirDev.disposeAndClear();
+    }
 
-    SetBuildIdLink();
+    aURL = "$BRAND_BASE_DIR/" LIBO_ETC_FOLDER + OUString::createFromAscii("/shell/logo.png");
+    rtl::Bootstrap::expandMacros( aURL );
+    if (GraphicFilter::LoadGraphic(aURL, OUString(), aGraphic) == ERRCODE_NONE)
+    {
+        ScopedVclPtr<VirtualDevice> m_pVirDev = m_pBrandImage->create_virtual_device();
+        m_pVirDev->SetOutputSizePixel(aGraphic.GetSizePixel());
+        m_pVirDev->DrawBitmapEx(Point(0, 0), aGraphic.GetBitmapEx());
+        m_pBrandImage->set_image(m_pVirDev.get());
+        m_pVirDev.disposeAndClear();
+    }
 
-    SetLogo();
+ //   SetBuildIdLink();
 
-    m_xDialog->connect_size_allocate(LINK(this, AboutDialog, SizeAllocHdl));
+//    SetLogo();
+
+    //m_xDialog->connect_size_allocate(LINK(this, AboutDialog, SizeAllocHdl));
 
     // Connect all handlers
-    m_xCreditsButton->connect_clicked( LINK( this, AboutDialog, HandleClick ) );
-    m_xWebsiteButton->connect_clicked( LINK( this, AboutDialog, HandleClick ) );
-    m_xReleaseNotesButton->connect_clicked( LINK( this, AboutDialog, HandleClick ) );
-    m_xCloseButton->grab_focus();
+    m_pCreditsButton->connect_clicked( LINK( this, AboutDialogEx, HandleClick ) );
+    m_pWebsiteButton->connect_clicked( LINK( this, AboutDialogEx, HandleClick ) );
+    m_pReleaseNotesButton->connect_clicked( LINK( this, AboutDialogEx, HandleClick ) );
+
+    m_pCloseButton->grab_focus();
 }
 
-AboutDialog::~AboutDialog()
+AboutDialogEx::~AboutDialogEx()
 {
 }
 
-IMPL_LINK(AboutDialog, HandleClick, weld::Button&, rButton, void)
+IMPL_LINK(AboutDialogEx, HandleClick, weld::Button&, rButton, void)
 {
     OUString sURL = "";
 
     // Find which button was pressed and from this, get the URL to be opened
-    if (&rButton == m_xCreditsButton.get())
+    if (&rButton == m_pCreditsButton.get())
         sURL = CuiResId(RID_SVXSTR_ABOUT_CREDITS_URL);
-    else if (&rButton == m_xWebsiteButton.get())
+    else if (&rButton == m_pWebsiteButton.get())
     {
         sURL = officecfg::Office::Common::Help::StartCenter::InfoURL::get();
         localizeWebserviceURI(sURL);
     }
-    else if (&rButton == m_xReleaseNotesButton.get())
+    else if (&rButton == m_pReleaseNotesButton.get())
     {
         sURL = officecfg::Office::Common::Menus::ReleaseNotesURL::get() +
                "?LOvers=" + utl::ConfigManager::getProductVersion() +
@@ -136,7 +159,7 @@ IMPL_LINK(AboutDialog, HandleClick, weld::Button&, rButton, void)
         xErrorBox->run();
     }
 }
-
+/*
 void AboutDialog::SetBuildIdLink()
 {
     const OUString buildId = GetBuildId();
@@ -158,7 +181,8 @@ void AboutDialog::SetBuildIdLink()
         m_xDialog->set_website(OUString());
     }
 }
-
+*/
+/*
 void AboutDialog::SetLogo()
 {
     auto nWidth = m_xContentArea->get_preferred_size().Width();
@@ -181,21 +205,37 @@ void AboutDialog::SetLogo()
         m_xDialog->set_logo(aGraphic.GetXGraphic());
     }
 }
-
+*/
+/*
 IMPL_LINK(AboutDialog, SizeAllocHdl, const Size&, rSize, void)
 {
     if (rSize.Width() == aBackgroundBitmap.GetSizePixel().Width())
         return;
+
     // Load background image
     if (!(Application::GetSettings().GetStyleSettings().GetHighContrastMode()))
     {
-        SfxApplication::loadBrandSvg("shell/about", aBackgroundBitmap, rSize.Width());
-        Graphic aGraphic(aBackgroundBitmap);
+        Graphic aGraphic;
+
+        if (SfxApplication::loadBrandSvg("shell/about", aBackgroundBitmap, rSize.Width()))
+        {
+            aGraphic = aBackgroundBitmap;
+        } else
+        {
+            OUString aBaseName = OUString::createFromAscii( "/shell/about.png" );
+            OUString uri = "$BRAND_BASE_DIR/" LIBO_ETC_FOLDER + aBaseName;
+            rtl::Bootstrap::expandMacros( uri );
+            GraphicFilter::LoadGraphic(uri, OUString(), aGraphic);
+            aBackgroundBitmap = aGraphic.GetBitmapEx();
+            Size aSize(aBackgroundBitmap.GetSizePixel());
+            m_xDialog->set_size_request(aSize.getWidth(),aSize.getHeight());
+       }
+
         m_xDialog->set_background(aGraphic.GetXGraphic());
     }
 }
-
-OUString AboutDialog::GetBuildId()
+*/
+OUString AboutDialogEx::GetBuildId()
 {
     OUString sDefault;
     OUString sBuildId(utl::Bootstrap::getBuildVersion(sDefault));
@@ -213,7 +253,7 @@ OUString AboutDialog::GetBuildId()
     return sBuildId;
 }
 
-OUString AboutDialog::GetLocaleString()
+OUString AboutDialogEx::GetLocaleString()
 {
     OUString aLocaleStr;
     rtl_Locale * pLocale;
@@ -233,7 +273,7 @@ OUString AboutDialog::GetLocaleString()
     return aLocaleStr;
 }
 
-bool AboutDialog::IsStringValidGitHash(const OUString& hash)
+bool AboutDialogEx::IsStringValidGitHash(const OUString& hash)
 {
     for (int i = 0; i < hash.getLength(); i++)
     {
@@ -246,7 +286,7 @@ bool AboutDialog::IsStringValidGitHash(const OUString& hash)
     return true;
 }
 
-OUString AboutDialog::GetVersionString()
+OUString AboutDialogEx::GetVersionString()
 {
     OUString sVersion = CuiResId(RID_SVXSTR_ABOUT_VERSION);
 
@@ -323,7 +363,7 @@ OUString AboutDialog::GetVersionString()
     return sVersion;
 }
 
-OUString AboutDialog::GetCopyrightString()
+OUString AboutDialogEx::GetCopyrightString()
 {
     OUString sVendorTextStr(CuiResId(RID_SVXSTR_ABOUT_VENDOR));
     OUString aCopyrightString  = sVendorTextStr + "\n"

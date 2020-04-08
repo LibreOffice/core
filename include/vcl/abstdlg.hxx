@@ -125,6 +125,12 @@ protected:
     virtual ~AbstractQrCodeGenDialog() override = default;
 };
 
+class VCL_DLLPUBLIC AbstractAboutDialogEx : public VclAbstractDialog
+{
+protected:
+    virtual ~AbstractAboutDialogEx() override = default;
+};
+
 class VCL_DLLPUBLIC AbstractTipOfTheDayDialog : public VclAbstractDialog
 {
 protected:
@@ -172,6 +178,10 @@ public:
     // creates instance of ScreenshotAnnotationDlg from cui
     virtual VclPtr<AbstractScreenshotAnnotationDlg> CreateScreenshotAnnotationDlg(
         weld::Dialog& rParentDialog) = 0;
+
+    // create about dialog
+    virtual VclPtr<AbstractAboutDialogEx>
+    CreateAboutDialogEx(weld::Window* pParent) = 0;
 
     // create info dialog to show tip-of-the-day
     virtual VclPtr<AbstractTipOfTheDayDialog>

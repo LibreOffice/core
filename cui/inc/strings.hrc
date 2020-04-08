@@ -390,9 +390,6 @@
 #define RID_SVXSTR_ABOUT_DERIVED                    NC_("aboutdialog|derived", "%PRODUCTNAME is derived from LibreOffice which was based on OpenOffice.org")
 #define RID_SVXSTR_ABOUT_LOCALE                     NC_("aboutdialog|locale", "Locale: $LOCALE")
 #define RID_SVXSTR_ABOUT_UILOCALE                   NC_("aboutdialog|uilocale", "UI-Language: $LOCALE")
-#define RID_SVXSTR_ABOUT_RELEASE_NOTES              NC_("aboutdialog|releasenotes", "~Release Notes")
-#define RID_SVXSTR_ABOUT_WEBSITE                    NC_("aboutdialog|website", "~Website")
-#define RID_SVXSTR_ABOUT_CREDITS                    NC_("aboutdialog|credits", "Cre~dits")
 
 #define RID_SVXSTR_EDIT_PATHS                       NC_("optpathspage|editpaths", "Edit Paths: %1")
 

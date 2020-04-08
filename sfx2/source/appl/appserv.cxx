@@ -653,8 +653,10 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_ABOUT:
         {
-            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateAboutDialog(rReq.GetFrameWeld()));
+//            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+//            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateAboutDialog(rReq.GetFrameWeld()));
+            VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateAboutDialogEx(rReq.GetFrameWeld()));
             pDlg->Execute();
             bDone = true;
             break;

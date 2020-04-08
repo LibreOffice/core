@@ -1,3 +1,8 @@
+cui/uiconfig/ui/aboutdialog.ui://GtkImage[@id='imAbout'] no-labelled-by
+cui/uiconfig/ui/aboutdialog.ui://GtkImage[@id='imBrand'] no-labelled-by
+cui/uiconfig/ui/aboutdialog.ui://GtkLabel[@id='lbCopyright'] orphan-label
+cui/uiconfig/ui/aboutdialog.ui://GtkLabel[@id='lbAbout'] orphan-label
+cui/uiconfig/ui/aboutdialog.ui://GtkLabel[@id='lbVersion'] orphan-label
 cui/uiconfig/ui/aboutconfigdialog.ui://GtkEntry[@id='searchEntry'] no-labelled-by
 cui/uiconfig/ui/acorexceptpage.ui://GtkEntry[@id='abbrev'] no-labelled-by
 cui/uiconfig/ui/acorexceptpage.ui://GtkEntry[@id='double'] no-labelled-by
