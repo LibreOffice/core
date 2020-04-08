@@ -2132,9 +2132,6 @@ public:
                                                                bool bTakeOwnership = true)
         = 0;
     virtual std::unique_ptr<Dialog> weld_dialog(const OString& id, bool bTakeOwnership = true) = 0;
-    virtual std::unique_ptr<AboutDialog> weld_about_dialog(const OString& id,
-                                                           bool bTakeOwnership = true)
-        = 0;
     virtual std::unique_ptr<Assistant> weld_assistant(const OString& id, bool bTakeOwnership = true)
         = 0;
     virtual std::unique_ptr<Window> weld_window(const OString& id, bool bTakeOwnership = true) = 0;

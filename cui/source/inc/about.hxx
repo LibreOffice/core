@@ -22,24 +22,18 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/weld.hxx>
 
-class AboutDialog : public weld::DialogController
+class AboutDialog : public weld::GenericDialogController
 {
 private:
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    std::shared_ptr<weld::AboutDialog> m_xDialog;
-    std::unique_ptr<weld::Container> m_xContentArea;
-    std::unique_ptr<weld::Button> m_xCreditsButton;
-    std::unique_ptr<weld::Button> m_xWebsiteButton;
-    std::unique_ptr<weld::Button> m_xReleaseNotesButton;
-    std::unique_ptr<weld::Button> m_xCloseButton;
+    std::unique_ptr<weld::LinkButton> m_pCreditsButton;
+    std::unique_ptr<weld::LinkButton> m_pWebsiteButton;
+    std::unique_ptr<weld::LinkButton> m_pReleaseNotesButton;
+    std::unique_ptr<weld::Button> m_pCloseButton;
 
-    BitmapEx aLogoBitmap;
-    BitmapEx aBackgroundBitmap;
-
-    OUString m_buildIdLinkString;
-
-    void SetBuildIdLink();
-    void SetLogo();
+    std::unique_ptr<weld::Image> m_pBrandImage;
+    std::unique_ptr<weld::Image> m_pAboutImage;
+    std::unique_ptr<weld::Label> m_pVersionLabel;
+    std::unique_ptr<weld::Label> m_pCopyrightLabel;
 
     static OUString GetBuildId();
     static OUString GetVersionString();
@@ -49,11 +43,7 @@ private:
 
 public:
     AboutDialog(weld::Window* pParent);
-    virtual weld::Dialog* getDialog() override { return m_xDialog.get(); }
     virtual ~AboutDialog() override;
-
-    DECL_LINK(HandleClick, weld::Button&, void);
-    DECL_LINK(SizeAllocHdl, const Size&, void);
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_ABOUT_HXX
