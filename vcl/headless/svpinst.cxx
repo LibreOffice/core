@@ -422,13 +422,20 @@ bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
     if (!bHandleAllCurrentEvents && bEvent)
         return true;
 
-    bEvent = CheckTimeout() || bEvent;
+    ImplSVData* pSVData = ImplGetSVData();
+
+    bool bTimeout = CheckTimeout();
+    bool bSkipPoll = bEvent;
+    if (pSVData->mpPollCallback == nullptr)
+        bSkipPoll = bEvent || bTimeout;
+    // else - give the poll-callback visibility into waiting timeouts too.
 
     SvpSalYieldMutex *const pMutex(static_cast<SvpSalYieldMutex*>(GetYieldMutex()));
 
     if (IsMainThread())
     {
-        if (bWait && ! bEvent)
+        // in kit case
+        if (bWait && !bSkipPoll)
         {
             sal_Int64 nTimeoutMicroS = 0;
             if (m_aTimeout.tv_sec) // Timer is started.
@@ -443,7 +450,6 @@ bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
             else
                 nTimeoutMicroS = -1; // wait until something happens
 
-            ImplSVData* pSVData = ImplGetSVData();
             sal_uInt32 nAcquireCount = ReleaseYieldMutexAll();
 
             if (pSVData->mpPollCallback)
@@ -479,7 +485,7 @@ bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
             }
             AcquireYieldMutex( nAcquireCount );
         }
-        else if (bEvent)
+        else if (bSkipPoll)
         {
             pMutex->m_NonMainWaitingYieldCond.set(); // wake up other threads
         }
@@ -504,7 +510,7 @@ bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
         }
     }
 
-    return bEvent;
+    return bSkipPoll;
 }
 
 bool SvpSalInstance::AnyInput( VclInputFlags nType )
