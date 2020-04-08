@@ -20,20 +20,31 @@ class ContentHandler(xml.sax.handler.ContentHandler):
         print("""
 #include "ooxml/resourceids.hxx"
 #include "ooxml/QNameToString.hxx"
+#include "unordered_map"
 
 namespace writerfilter
 {
 
-void QNameToString::init()
-{
 #ifdef DBG_UTIL
+
     /* ooxml */
+    static const std::unordered_map<Id, const char*> g_QNameToStringMap {
 """)
 
     def endDocument(self):
-        print("""#endif
-}
+        print("""
+   };
 
+    std::string QNameToString(Id qName)
+    {
+        auto it = g_QNameToStringMap.find(qName);
+        if (it == g_QNameToStringMap.end())
+            return std::string();
+
+        return it->second;
+    }
+
+#endif
 }
 """)
 
@@ -43,7 +54,7 @@ void QNameToString::init()
                 if v.startswith("ooxml:"):
                     token = v.replace('ooxml:', '')
                     if token not in self.tokens:
-                        print("""    mMap[NS_ooxml::LN_%s] = "ooxml:%s";""" % (token, token))
+                        print("""    { NS_ooxml::LN_%s, "ooxml:%s" },""" % (token, token))
                         self.tokens.append(token)
 
 
