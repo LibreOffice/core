@@ -20,6 +20,7 @@
 #include <align.hxx>
 #include "dlgfact.hxx"
 
+#include <about.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/pageids.hxx>
@@ -85,7 +86,6 @@
 #include <screenshotannotationdlg.hxx>
 #include <hyphen.hxx>
 #include <thesdlg.hxx>
-#include <about.hxx>
 #include <tipofthedaydlg.hxx>
 #include <DiagramDialog.hxx>
 
@@ -1022,11 +1022,6 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateVclDialog(weld::Wind
     return nullptr;
 }
 
-VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateAboutDialog(weld::Window* pParent)
-{
-    return VclPtr<CuiAbstractController_Impl>::Create(std::make_unique<AboutDialog>(pParent));
-}
-
 VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateFrameDialog(weld::Window* pParent, const Reference< frame::XFrame >& rxFrame,
     sal_uInt32 nResId, const OUString& rParameter )
 {
@@ -1421,6 +1416,11 @@ short SvxMacroAssignDialog::Execute()
     return m_xDialog->run();
 }
 
+short AbstractAboutDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 short AbstractTipOfTheDayDialog_Impl::Execute()
 {
     return m_xDlg->run();
@@ -1674,6 +1674,13 @@ VclPtr<AbstractQrCodeGenDialog> AbstractDialogFactory_Impl::CreateQrCodeGenDialo
 {
     return VclPtr<AbstractQrCodeGenDialog_Impl>::Create(
         std::make_unique<QrCodeGenDialog>(pParent, xModel, bEditExisting));
+}
+
+VclPtr<AbstractAboutDialog>
+AbstractDialogFactory_Impl::CreateAboutDialog(weld::Window* pParent)
+{
+    return VclPtr<AbstractAboutDialog_Impl>::Create(
+        std::make_unique<AboutDialog>(pParent));
 }
 
 VclPtr<AbstractTipOfTheDayDialog>
