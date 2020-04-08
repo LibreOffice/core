@@ -586,6 +586,10 @@ public:
                                     const css::uno::Sequence<OUString>& rExceptions = css::uno::Sequence<OUString>());
 
     bool isEditDocLocked();
+    bool isContentExtractionLocked();
+    bool isExportLocked();
+    bool isPrintLocked();
+    bool isSaveLocked();
 
     // The functions from SvPersist
     void            EnableSetModified( bool bEnable = true );

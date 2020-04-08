@@ -963,7 +963,7 @@ void SwAnnotationShell::StateClpbrd(SfxItemSet &rSet)
             }
             case SID_COPY:
             {
-                if (!pOLV->HasSelection() || rView.isContentExtractionLocked())
+                if (!pOLV->HasSelection() || GetObjectShell()->isContentExtractionLocked())
                     rSet.DisableItem( nWhich );
                 break;
             }

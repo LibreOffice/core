@@ -73,7 +73,7 @@ void ScChartShell::GetExportAsGraphicState( SfxItemSet& rSet )
             bEnable = true;
     }
 
-    if (GetViewShell()->isExportLocked())
+    if (GetObjectShell()->isExportLocked())
         bEnable = false;
 
     if( !bEnable )
