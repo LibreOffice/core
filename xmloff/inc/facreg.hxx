@@ -31,15 +31,6 @@ namespace com { namespace sun { namespace star {
     namespace uno { class XInterface; }
 } } }
 
-// chart oasis export
-OUString SchXMLExport_Oasis_Content_getImplementationName() throw();
-css::uno::Sequence<OUString> SchXMLExport_Oasis_Content_getSupportedServiceNames() throw();
-/// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SchXMLExport_Oasis_Content_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
-
-// chart OOo import
-
 // chart OOo export
 OUString SchXMLExport_getImplementationName() throw();
 css::uno::Sequence<OUString> SchXMLExport_getSupportedServiceNames() throw();
