@@ -234,6 +234,7 @@ public:
     void testTdf128976();
     void testTdf120502();
     void testTdf131372();
+    void testTdf122331();
     void testTdf83779();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
@@ -369,6 +370,7 @@ public:
     CPPUNIT_TEST(testTdf128976);
     CPPUNIT_TEST(testTdf120502);
     CPPUNIT_TEST(testTdf131372);
+    CPPUNIT_TEST(testTdf122331);
     CPPUNIT_TEST(testTdf83779);
 
     CPPUNIT_TEST_SUITE_END();
@@ -4737,6 +4739,23 @@ void ScExportTest::testTdf131372()
 
     assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row/x:c[1]/x:f", "NA()");
     assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row/x:c[2]/x:f", "#N/A");
+
+    xShell->DoClose();
+}
+
+void ScExportTest::testTdf122331()
+{
+    ScDocShellRef xShell = loadDoc("tdf122331.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell);
+
+    auto pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+
+    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pSheet);
+
+    assertXPath(pSheet, "/x:worksheet/x:sheetPr", "filterMode", "true");
+    assertXPath(pSheet, "/x:worksheet/x:autoFilter", "ref", "A1:B761");
+    assertXPath(pSheet, "/x:worksheet/x:autoFilter/x:filterColumn", "colId", "1");
 
     xShell->DoClose();
 }
