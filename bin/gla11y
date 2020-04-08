@@ -47,7 +47,6 @@ widgets_toplevel = [
     'GtkOffscreenWindow',
     'GtkApplicationWindow',
     'GtkDialog',
-    'GtkAboutDialog',
     'GtkFileChooserDialog',
     'GtkColorChooserDialog',
     'GtkFontChooserDialog',

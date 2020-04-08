@@ -28,7 +28,7 @@ class tdf106667(UITestCase):
 
         self.ui_test.execute_dialog_through_command(".uno:About")
         xAboutDlg = self.xUITest.getTopFocusWindow()
-        xCloseBtn = xAboutDlg.getChild("close")
+        xCloseBtn = xAboutDlg.getChild("btnClose")
         self.ui_test.close_dialog_through_button(xCloseBtn)
 
         self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "A")
