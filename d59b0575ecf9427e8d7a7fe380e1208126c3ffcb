@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b830762d_88c2b2ef",
+        "filename": "sfx2/source/view/viewsh.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 661,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-04-08T15:05:00Z",
+      "side": 1,
+      "message": "suspect this can be null ...",
+      "revId": "d59b0575ecf9427e8d7a7fe380e1208126c3ffcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

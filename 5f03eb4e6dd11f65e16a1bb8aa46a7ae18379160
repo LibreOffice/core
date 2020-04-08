@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a6464ecb_5e70be66",
+        "filename": "sfx2/source/view/viewsh.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1758,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-04-08T15:05:00Z",
+      "side": 0,
+      "message": "because of this check here, if there\u0027s no XModel there\u0027s probably no ObjectShell.",
+      "revId": "5f03eb4e6dd11f65e16a1bb8aa46a7ae18379160",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
