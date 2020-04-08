@@ -447,23 +447,18 @@ bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
     {
         if (bWait && ! bEvent)
         {
-            int nTimeoutMS = 0;
+            sal_Int64 nTimeoutMicroS = 0;
             if (m_aTimeout.tv_sec) // Timer is started.
             {
                 timeval Timeout;
                 // determine remaining timeout.
                 gettimeofday (&Timeout, nullptr);
                 if (m_aTimeout > Timeout)
-                {
-                    int nTimeoutMicroS = m_aTimeout.tv_usec - Timeout.tv_usec;
-                    nTimeoutMS = (m_aTimeout.tv_sec - Timeout.tv_sec) * 1000
-                               + nTimeoutMicroS / 1000;
-                    if ( nTimeoutMicroS % 1000 )
-                        nTimeoutMS += 1;
-                }
+                    nTimeoutMicroS = ((m_aTimeout.tv_sec - Timeout.tv_sec) * 1000 * 1000 +
+                                      (m_aTimeout.tv_usec - Timeout.tv_usec));
             }
             else
-                nTimeoutMS = -1; // wait until something happens
+                nTimeoutMicroS = -1; // wait until something happens
 
             ImplSVData* pSVData = ImplGetSVData();
             sal_uInt32 nAcquireCount = ReleaseYieldMutexAll();
@@ -471,25 +466,28 @@ bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
             if (pSVData->mpPollCallback)
             {
                 // Poll for events from the LOK client.
-                if (nTimeoutMS < 0)
-                    nTimeoutMS = 5000;
+                if (nTimeoutMicroS < 0)
+                    nTimeoutMicroS = 5000 * 1000;
 
                 // External poll.
                 if (pSVData->mpPollClosure != nullptr &&
-                    pSVData->mpPollCallback(pSVData->mpPollClosure, nTimeoutMS * 1000 /* us */) < 0)
+                    pSVData->mpPollCallback(pSVData->mpPollClosure, nTimeoutMicroS) < 0)
                     pSVData->maAppData.mbAppQuit = true;
             }
             else
             {
                 std::unique_lock<std::mutex> g(pMutex->m_WakeUpMainMutex);
                 // wait for doRelease() or Wakeup() to set the condition
-                if (nTimeoutMS == -1)
+                if (nTimeoutMicroS == -1)
                 {
                     pMutex->m_WakeUpMainCond.wait(g,
                             [pMutex]() { return pMutex->m_wakeUpMain; });
                 }
                 else
                 {
+                    int nTimeoutMS = nTimeoutMicroS / 1000;
+                    if ( nTimeoutMicroS % 1000 )
+                        nTimeoutMS += 1;
                     pMutex->m_WakeUpMainCond.wait_for(g,
                             std::chrono::milliseconds(nTimeoutMS),
                             [pMutex]() { return pMutex->m_wakeUpMain; });
