@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a969030a_0bf84aef",
+        "filename": "chart2/source/controller/itemsetwrapper/StatisticsItemConverter.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-04-08T17:39:59Z",
+      "side": 0,
+      "message": "I tried a lot to track where the ApplySpecialItem method gets called but could not find it.\nAs you had earlier suggested that this the first curve might not be called so i considered removing this code.\nBut on doing so this method returns nothing (i mean empty curve). Guide me on what change should I do here ?",
+      "range": {
+        "startLine": 121,
+        "startChar": 102,
+        "endLine": 123,
+        "endChar": 86
+      },
+      "revId": "9383980a9f07a352c62fc09b7bea3a24e2e46b48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c41fd07_56026b2b",
+        "filename": "chart2/source/controller/itemsetwrapper/StatisticsItemConverter.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-04-08T17:39:59Z",
+      "side": 0,
+      "message": "Same goes for this",
+      "range": {
+        "startLine": 152,
+        "startChar": 102,
+        "endLine": 154,
+        "endChar": 86
+      },
+      "revId": "9383980a9f07a352c62fc09b7bea3a24e2e46b48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

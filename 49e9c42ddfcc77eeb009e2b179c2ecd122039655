@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "94fe6fdc_1d6507af",
+        "filename": "chart2/source/controller/main/ChartController_Properties.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2020-04-08T17:39:59Z",
+      "side": 1,
+      "message": "The else part is always called, but it is supposed to return the Line Equation of the current cure which has been selected.\nSo, I used getCurrentSelectedCurve to get the current selected curve.",
+      "range": {
+        "startLine": 574,
+        "startChar": 0,
+        "endLine": 577,
+        "endChar": 100
+      },
+      "revId": "49e9c42ddfcc77eeb009e2b179c2ecd122039655",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
