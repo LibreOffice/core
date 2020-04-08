@@ -2408,32 +2408,43 @@ void SVGActionWriter::ImplWriteMask( GDIMetaFile& rMtf,
     if( nMoveX || nMoveY )
         rMtf.Move( nMoveX, nMoveY );
 
-    OUString aMaskId = "mask" + OUString::number( mnCurMaskId++ );
-
+    OUString aStyle;
+    if (rGradient.GetStartColor() == rGradient.GetEndColor())
     {
-        SvXMLElementExport aElemDefs( mrExport, XML_NAMESPACE_NONE, aXMLElemDefs, true, true );
-
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrId, aMaskId );
-        {
-            SvXMLElementExport aElemMask( mrExport, XML_NAMESPACE_NONE, "mask", true, true );
-
-            const tools::PolyPolygon aPolyPolygon( tools::PolyPolygon( tools::Rectangle( rDestPt, rDestSize ) ) );
-            Gradient aGradient( rGradient );
-
-            // swap gradient stops to adopt SVG mask
-            Color aTmpColor( aGradient.GetStartColor() );
-            sal_uInt16 nTmpIntensity( aGradient.GetStartIntensity() );
-            aGradient.SetStartColor( aGradient.GetEndColor() );
-            aGradient.SetStartIntensity( aGradient.GetEndIntensity() ) ;
-            aGradient.SetEndColor( aTmpColor );
-            aGradient.SetEndIntensity( nTmpIntensity );
-
-            ImplWriteGradientEx( aPolyPolygon, aGradient, nWriteFlags );
-        }
+        // Special case: constant alpha value.
+        const Color& rColor = rGradient.GetStartColor();
+        const double fOpacity = 1.0 - static_cast<double>(rColor.GetLuminance()) / 255;
+        aStyle = "opacity: " + OUString::number(fOpacity);
     }
+    else
+    {
+        OUString aMaskId = "mask" + OUString::number(mnCurMaskId++);
 
-    OUString aMaskStyle = "mask:url(#" + aMaskId + ")";
-    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, aMaskStyle );
+        {
+            SvXMLElementExport aElemDefs(mrExport, XML_NAMESPACE_NONE, aXMLElemDefs, true, true);
+
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrId, aMaskId);
+            {
+                SvXMLElementExport aElemMask(mrExport, XML_NAMESPACE_NONE, "mask", true, true);
+
+                const tools::PolyPolygon aPolyPolygon(tools::PolyPolygon(tools::Rectangle(rDestPt, rDestSize)));
+                Gradient aGradient(rGradient);
+
+                // swap gradient stops to adopt SVG mask
+                Color aTmpColor(aGradient.GetStartColor());
+                sal_uInt16 nTmpIntensity(aGradient.GetStartIntensity());
+                aGradient.SetStartColor(aGradient.GetEndColor());
+                aGradient.SetStartIntensity(aGradient.GetEndIntensity());
+                aGradient.SetEndColor(aTmpColor);
+                aGradient.SetEndIntensity(nTmpIntensity);
+
+                ImplWriteGradientEx(aPolyPolygon, aGradient, nWriteFlags);
+            }
+        }
+
+        aStyle = "mask:url(#" + aMaskId + ")";
+    }
+    mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStyle, aStyle);
 
     {
         SvXMLElementExport aElemG( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true );
