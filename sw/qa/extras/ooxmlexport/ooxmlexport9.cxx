@@ -64,11 +64,7 @@ public:
 
 DECLARE_OOXMLEXPORT_TEST(testFdo55381, "fdo55381.docx")
 {
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
-    xCursor->jumpToLastPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(4), xCursor->getPage());
+    CPPUNIT_ASSERT_EQUAL(4, getPages());
     //TODO: frames not located on the correct pages
 }
 

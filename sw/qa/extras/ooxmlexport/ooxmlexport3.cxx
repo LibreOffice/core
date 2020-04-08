@@ -959,11 +959,7 @@ DECLARE_OOXMLEXPORT_TEST(testExtraSectionBreak, "1_page.docx")
     // There was a problem for some documents during export.Invalid sectPr getting added
     // because of faulty calculation of PageDesc value
     // This was the reason for increasing number of pages after RT
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
-    xCursor->jumpToLastPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     // tdf126544 Styles were being added before their base/parent/inherited-from style existed, and so were using default settings.
     uno::Reference<container::XNameAccess> xParaStyles(getStyles("ParagraphStyles"));

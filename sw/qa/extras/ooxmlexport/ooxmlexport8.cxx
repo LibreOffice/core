@@ -87,12 +87,8 @@ DECLARE_OOXMLEXPORT_TEST(testN751054, "n751054.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testN750935, "n750935.docx")
 {
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
-    xCursor->jumpToLastPage();
     // Some page break types were ignores, resulting in less pages.
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(5), xCursor->getPage());
+    CPPUNIT_ASSERT_EQUAL(5, getPages());
 
     /*
      * The problem was that the header and footer was not shared.
@@ -446,11 +442,7 @@ DECLARE_OOXMLEXPORT_TEST(testN778828, "n778828.docx")
      * The problem was that a page break after a continuous section break caused
      * double page break on title page.
      */
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
-    xCursor->jumpToLastPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCursor->getPage());
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testN779834, "n779834.docx")
@@ -560,11 +552,7 @@ DECLARE_OOXMLEXPORT_TEST(testN780843, "n780843.docx")
 
 
     //tdf64372 this document should only have one page break (2 pages, not 3)
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
-    xCursor->jumpToLastPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCursor->getPage());
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testN780843b, "n780843b.docx")
@@ -634,11 +622,7 @@ DECLARE_OOXMLEXPORT_TEST(testN783638, "n783638.docx")
 DECLARE_OOXMLEXPORT_TEST(testFdo52208, "fdo52208.docx")
 {
     // The problem was that the document had 2 pages instead of 1.
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
-    xCursor->jumpToLastPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testN785767, "n785767.docx")
@@ -1081,11 +1065,7 @@ DECLARE_OOXMLEXPORT_TEST(testBnc780044Spacing, "bnc780044_spacing.docx")
 {
     // The document has global w:spacing in styles.xml , and local w:spacing in w:pPr, which however
     // only applied to text runs, not to as-character pictures. So the picture made the line higher.
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
-    xCursor->jumpToLastPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTableAutoNested, "table-auto-nested.docx")
