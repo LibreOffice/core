@@ -12,6 +12,7 @@
 #include <memory>
 
 #include <vcl/mtfxmldump.hxx>
+#include <sal/log.hxx>
 
 namespace {
 
@@ -53,7 +54,9 @@ xmlDocPtr XmlTestTools::parseXmlStream(SvStream* pStream)
     std::unique_ptr<sal_uInt8[]> pBuffer(new sal_uInt8[nSize + 1]);
     pStream->ReadBytes(pBuffer.get(), nSize);
     pBuffer[nSize] = 0;
-    return xmlParseDoc(reinterpret_cast<xmlChar*>(pBuffer.get()));
+    auto pCharBuffer = reinterpret_cast<xmlChar*>(pBuffer.get());
+    SAL_INFO("test", "XmlTestTools::parseXmlStream: pBuffer is '" << pCharBuffer << "'");
+    return xmlParseDoc(pCharBuffer);
 }
 
 xmlDocPtr XmlTestTools::dumpAndParse(MetafileXmlDump& rDumper, const GDIMetaFile& rGDIMetaFile)

@@ -20,9 +20,7 @@
 
 using namespace ::com::sun::star;
 
-#if !defined MACOSX
 char const DATA_DIRECTORY[] = "/filter/qa/unit/data/";
-#endif
 
 /// SVG filter tests.
 class SvgFilterTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
@@ -34,10 +32,8 @@ public:
     void setUp() override;
     void tearDown() override;
     void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
-#if !defined MACOSX
     uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
     void load(const OUString& rURL);
-#endif
 };
 
 void SvgFilterTest::setUp()
@@ -55,13 +51,11 @@ void SvgFilterTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-#if !defined MACOSX
 void SvgFilterTest::load(const OUString& rFileName)
 {
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + rFileName;
     mxComponent = loadFromDesktop(aURL);
 }
-#endif
 
 void SvgFilterTest::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
 {
@@ -98,6 +92,34 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testPreserveJpg)
     // transformed image is the same, so there is no need for that.
     CPPUNIT_ASSERT(aAttributeValue.startsWith("data:image/jpeg"));
 #endif
+}
+
+CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentLine)
+{
+    // Load a document with a semi-transparent line shape.
+    load("semi-transparent-line.odg");
+
+    // Export it to SVG.
+    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY_THROW);
+    SvMemoryStream aStream;
+    uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aStream);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("draw_svg_Export");
+    aMediaDescriptor["OutputStream"] <<= xOut;
+    xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
+    aStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+    // Get the style of the group around the actual <path> element.
+    xmlDocPtr pXmlDoc = parseXmlStream(&aStream);
+    OUString aStyle = getXPath(
+        pXmlDoc, "//svg:g[@class='com.sun.star.drawing.LineShape']/svg:g/svg:g", "style");
+    OUString aPrefix("opacity: ");
+    // Without the accompanying fix in place, this test would have failed, as the style was
+    // "mask:url(#mask1)", not "opacity: <value>".
+    CPPUNIT_ASSERT(aStyle.startsWith(aPrefix));
+    int nPercent = std::round(aStyle.copy(aPrefix.getLength()).toDouble() * 100);
+    // Make sure that the line is still 30% opaque, rather than completely invisible.
+    CPPUNIT_ASSERT_EQUAL(30, nPercent);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
