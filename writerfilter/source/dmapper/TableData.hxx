@@ -75,7 +75,7 @@ public:
      */
     void insertProperties(TablePropertyMapPtr pProps)
     {
-        if( mpProps.get() )
+        if( mpProps )
             mpProps->InsertProps(pProps.get());
         else
             mpProps = pProps;
@@ -164,9 +164,9 @@ public:
      */
     void insertProperties(TablePropertyMapPtr pProperties)
     {
-        if( pProperties.get() )
+        if( pProperties )
         {
-            if( !mpProperties.get() )
+            if( !mpProperties )
                 mpProperties = pProperties;
             else
                 mpProperties->InsertProps(pProperties.get());

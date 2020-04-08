@@ -1445,7 +1445,7 @@ namespace emfplushelper
                         SAL_INFO("drawinglayer", "EMF+\t TODO: use image attributes");
 
                         // For DrawImage and DrawImagePoints, source unit of measurement type must be 1 pixel
-                        if (sourceUnit == UnitTypePixel && maEMFPObjects[flags & 0xff].get())
+                        if (sourceUnit == UnitTypePixel && maEMFPObjects[flags & 0xff])
                         {
                             EMFPImage& image = *static_cast<EMFPImage *>(maEMFPObjects[flags & 0xff].get());
                             float sx, sy, sw, sh;

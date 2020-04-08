@@ -1488,7 +1488,7 @@ Reference< XIndexAccess > SAL_CALL ORowSet::getParameters(  )
         // complete command, and thus the parameters, changed
         impl_disposeParametersContainer_nothrow();
 
-    if ( !m_pParameters.get() && !m_aCommand.isEmpty() )
+    if ( !m_pParameters && !m_aCommand.isEmpty() )
     {
         try
         {

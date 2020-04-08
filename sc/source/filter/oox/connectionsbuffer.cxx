@@ -99,7 +99,7 @@ ConnectionModel::ConnectionModel() :
 
 WebPrModel& ConnectionModel::createWebPr()
 {
-    OSL_ENSURE( !mxWebPr.get(), "ConnectionModel::createWebPr - multiple call" );
+    OSL_ENSURE( !mxWebPr, "ConnectionModel::createWebPr - multiple call" );
     mxWebPr.reset( new WebPrModel );
     return *mxWebPr;
 }
@@ -154,7 +154,7 @@ void Connection::importWebPr( const AttributeList& rAttribs )
 
 void Connection::importTables()
 {
-    if( maModel.mxWebPr.get() )
+    if( maModel.mxWebPr )
     {
         OSL_ENSURE( maModel.mxWebPr->maTables.empty(), "Connection::importTables - multiple calls" );
         maModel.mxWebPr->maTables.clear();
@@ -163,7 +163,7 @@ void Connection::importTables()
 
 void Connection::importTable( const AttributeList& rAttribs, sal_Int32 nElement )
 {
-    if( maModel.mxWebPr.get() )
+    if( maModel.mxWebPr )
     {
         Any aTableAny;
         switch( nElement )
@@ -250,7 +250,7 @@ void Connection::importWebPr( SequenceInputStream& rStrm )
 
 void Connection::importWebPrTables( SequenceInputStream& /*rStrm*/ )
 {
-    if( maModel.mxWebPr.get() )
+    if( maModel.mxWebPr )
     {
         OSL_ENSURE( maModel.mxWebPr->maTables.empty(), "Connection::importWebPrTables - multiple calls" );
         maModel.mxWebPr->maTables.clear();
@@ -259,7 +259,7 @@ void Connection::importWebPrTables( SequenceInputStream& /*rStrm*/ )
 
 void Connection::importWebPrTable( SequenceInputStream& rStrm, sal_Int32 nRecId )
 {
-    if( maModel.mxWebPr.get() )
+    if( maModel.mxWebPr )
     {
         Any aTableAny;
         switch( nRecId )

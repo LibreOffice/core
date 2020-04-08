@@ -832,7 +832,7 @@ Symbol* VDataSeries::getSymbolProperties( sal_Int32 index ) const
             if (!m_apSymbolProperties_Series)
                 m_apSymbolProperties_Series
                     = getSymbolPropertiesFromPropertySet(getPropertiesOfSeries());
-            if( m_apSymbolProperties_Series.get() && m_apSymbolProperties_Series->Style != SymbolStyle_NONE )
+            if( m_apSymbolProperties_Series && m_apSymbolProperties_Series->Style != SymbolStyle_NONE )
             {
                 if (!m_apSymbolProperties_InvisibleSymbolForSelection)
                 {

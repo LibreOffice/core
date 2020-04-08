@@ -538,8 +538,8 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
 {
     sal_uInt32 nSprmId = rSprm.getId();
     Value::Pointer_t pValue = rSprm.getValue();
-    sal_Int32 nIntValue = pValue.get() ? pValue->getInt() : 0;
-    OUString sStringValue = pValue.get() ? pValue->getString() : OUString();
+    sal_Int32 nIntValue = pValue ? pValue->getInt() : 0;
+    OUString sStringValue = pValue ? pValue->getString() : OUString();
 
     switch(nSprmId)
     {
@@ -581,7 +581,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_Style_tcPr:
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-            if( pProperties.get() && m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_TABLE)
+            if( pProperties && m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_TABLE)
             {
                 auto pTblStylePrHandler = std::make_shared<TblStylePrHandler>(m_pImpl->m_rDMapper);
                 pProperties->resolve(*pTblStylePrHandler);
@@ -655,7 +655,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_EG_RPrBase_rFonts: //table fonts
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-            if( pProperties.get())
+            if( pProperties )
             {
                 auto pTblStylePrHandler = std::make_shared<TblStylePrHandler>( m_pImpl->m_rDMapper );
                 pProperties->resolve( *pTblStylePrHandler );
@@ -694,7 +694,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_DocDefaults_pPrDefault:
             m_pImpl->m_rDMapper.PushStyleSheetProperties( m_pImpl->m_pDefaultParaProps );
             resolveSprmProps( m_pImpl->m_rDMapper, rSprm );
-            if ( nSprmId == NS_ooxml::LN_CT_DocDefaults_pPrDefault && m_pImpl->m_pDefaultParaProps.get() &&
+            if ( nSprmId == NS_ooxml::LN_CT_DocDefaults_pPrDefault && m_pImpl->m_pDefaultParaProps &&
                 !m_pImpl->m_pDefaultParaProps->isSet( PROP_PARA_TOP_MARGIN ) )
             {
                 SetDefaultParaProps( PROP_PARA_TOP_MARGIN, uno::makeAny( sal_Int32(0) ) );
@@ -719,7 +719,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_TblPrBase_tblBorders: //table borders, might be defined in table style
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-            if( pProperties.get())
+            if( pProperties )
             {
                 auto pBorderHandler = std::make_shared<BorderHandler>(m_pImpl->m_rDMapper.IsOOXMLImport());
                 pProperties->resolve(*pBorderHandler);
@@ -737,7 +737,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_LatentStyles_lsdException:
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-            if (pProperties.get())
+            if (pProperties)
             {
                 tools::SvRef<LatentStyleHandler> pLatentStyleHandler(new LatentStyleHandler());
                 pProperties->resolve(*pLatentStyleHandler);
@@ -1529,7 +1529,7 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
         }
 
         // WARNING: these defaults only take effect IF there is a DocDefaults style section. Normally there is, but not always.
-        if( bParaProperties && m_pImpl->m_pDefaultParaProps.get())
+        if( bParaProperties && m_pImpl->m_pDefaultParaProps)
         {
             // tdf#87533 LO will have different defaults here, depending on the locale. Import with documented defaults
             SetDefaultParaProps(PROP_WRITING_MODE, uno::makeAny(sal_Int16(text::WritingMode_LR_TB)));
@@ -1561,7 +1561,7 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
                 }
             }
         }
-        if( !bParaProperties && m_pImpl->m_pDefaultCharProps.get())
+        if( !bParaProperties && m_pImpl->m_pDefaultCharProps )
         {
             // tdf#108350: Earlier in DomainMapper for DOCX, Calibri/11pt was set to match MSWord 2007+,
             // but that is valid only if DocDefaults_rPrDefault is omitted.

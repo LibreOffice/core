@@ -1540,7 +1540,7 @@ bool ViewShell::RelocateToParentWindow (vcl::Window* pParentWindow)
 
 void ViewShell::SwitchViewFireFocus(const css::uno::Reference< css::accessibility::XAccessible >& xAcc )
 {
-    if (xAcc.get())
+    if (xAcc)
     {
         ::accessibility::AccessibleDocumentViewBase* pBase = static_cast< ::accessibility::AccessibleDocumentViewBase* >(xAcc.get());
         if (pBase)

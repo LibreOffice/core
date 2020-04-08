@@ -570,7 +570,7 @@ public:
             return store_E_InvalidAccess;
 
         std::shared_ptr<PageData> tmp (rxAllocator->construct<U>(), PageData::Deallocate(rxAllocator));
-        if (!tmp.get())
+        if (!tmp)
             return store_E_OutOfMemory;
 
         m_xPage.swap (tmp);

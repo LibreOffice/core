@@ -167,7 +167,7 @@ size_t ValueSet::ImplGetItem( const Point& rPos ) const
         return VALUESET_ITEM_NOTFOUND;
     }
 
-    if (mpNoneItem.get() && maNoneItemRect.IsInside(rPos))
+    if (mpNoneItem && maNoneItemRect.IsInside(rPos))
     {
         return VALUESET_ITEM_NONEITEM;
     }

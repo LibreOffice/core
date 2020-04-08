@@ -703,7 +703,7 @@ bool X11SalBitmap::Create(
 ) {
     css::uno::Reference< css::beans::XFastPropertySet > xFastPropertySet( rBitmapCanvas, css::uno::UNO_QUERY );
 
-    if( xFastPropertySet.get() ) {
+    if( xFastPropertySet ) {
         sal_Int32 depth;
         css::uno::Sequence< css::uno::Any > args;
 

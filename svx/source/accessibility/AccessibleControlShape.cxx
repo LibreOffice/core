@@ -829,7 +829,7 @@ void SAL_CALL AccessibleControlShape::elementInserted( const css::container::Con
 
     Reference< XInterface > xNewNormalized( xControl->getModel(), UNO_QUERY );
     Reference< XInterface > xMyModelNormalized( m_xControlModel, UNO_QUERY );
-    if ( xNewNormalized.get() && xMyModelNormalized.get() )
+    if ( xNewNormalized && xMyModelNormalized )
     {
         // now finally the control for the model we're responsible for has been inserted into the container
         Reference< XInterface > xKeepAlive( *this );

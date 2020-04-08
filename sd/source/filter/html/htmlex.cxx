@@ -2647,7 +2647,7 @@ OUString HtmlExport::CreateNavBar( sal_uInt16 nSdPage, bool bIsText ) const
 // export navigation graphics from button set
 void HtmlExport::CreateBitmaps()
 {
-    if(mnButtonThema == -1 || !mpButtonSet.get())
+    if(mnButtonThema == -1 || !mpButtonSet)
         return;
 
     for( int nButton = 0; nButton != SAL_N_ELEMENTS(pButtonNames); nButton++ )

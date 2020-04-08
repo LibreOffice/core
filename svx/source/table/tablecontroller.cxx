@@ -205,7 +205,7 @@ SvxTableController::~SvxTableController()
         Application::RemoveUserEvent( mnUpdateEvent );
     }
 
-    if( mxModifyListener.is() && mxTableObj.get() )
+    if( mxModifyListener.is() && mxTableObj )
     {
         Reference< XTable > xTable( mxTableObj->getTable() );
         if( xTable.is() )

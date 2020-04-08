@@ -139,7 +139,7 @@ void OLEHandler::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_OLEObject_OLEObject:
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-            if( pProperties.get())
+            if( pProperties )
             {
                 pProperties->resolve(*this);
             }
@@ -148,7 +148,7 @@ void OLEHandler::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_wrap_wrap:
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-            if ( pProperties.get( ) )
+            if ( pProperties )
             {
                 tools::SvRef<WrapHandler> pHandler( new WrapHandler );
                 pProperties->resolve( *pHandler );

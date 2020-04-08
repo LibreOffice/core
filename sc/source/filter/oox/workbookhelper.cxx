@@ -524,7 +524,7 @@ void WorkbookGlobals::initialize()
     mxDoc.set( mrBaseFilter.getModel(), UNO_QUERY );
     OSL_ENSURE( mxDoc.is(), "WorkbookGlobals::initialize - no spreadsheet document" );
 
-    if (mxDoc.get())
+    if (mxDoc)
     {
         ScModelObj* pModel = dynamic_cast<ScModelObj*>(mxDoc.get());
         if (pModel)

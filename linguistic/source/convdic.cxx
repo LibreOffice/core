@@ -284,7 +284,7 @@ void ConvDic::AddEntry( const OUString &rLeftText, const OUString &rRightText )
     {
         if (rLeftText.getLength() > nMaxLeftCharCount)
             nMaxLeftCharCount   = static_cast<sal_Int16>(rLeftText.getLength());
-        if (pFromRight.get() && rRightText.getLength() > nMaxRightCharCount)
+        if (pFromRight && rRightText.getLength() > nMaxRightCharCount)
             nMaxRightCharCount  = static_cast<sal_Int16>(rRightText.getLength());
     }
 

@@ -600,7 +600,7 @@ ContextHandlerRef GroupShapeContext::onCreateContext( sal_Int32 nElement, const 
     // try to create a context of an embedded shape
     ContextHandlerRef xContext = createShapeContext( *this, mrShapes, nElement, rAttribs );
     // handle remaining stuff of this shape in base class
-    return xContext.get() ? xContext : ShapeContext::onCreateContext( nElement, rAttribs );
+    return xContext ? xContext : ShapeContext::onCreateContext( nElement, rAttribs );
 }
 
 RectangleShapeContext::RectangleShapeContext(ContextHandler2Helper const& rParent,

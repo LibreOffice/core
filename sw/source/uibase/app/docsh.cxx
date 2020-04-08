@@ -273,7 +273,7 @@ bool SwDocShell::Save()
     CalcLayoutForOLEObjects();  // format for OLE objects
     // #i62875#
     // reset compatibility flag <DoNotCaptureDrawObjsOnPage>, if possible
-    if (m_pWrtShell && m_xDoc.get() &&
+    if (m_pWrtShell && m_xDoc &&
         m_xDoc->getIDocumentSettingAccess().get(DocumentSettingId::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE) &&
         docfunc::AllDrawObjsOnPage(*m_xDoc))
     {

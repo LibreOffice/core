@@ -113,7 +113,7 @@ void FontTable::lcl_sprm(Sprm& rSprm)
         case NS_ooxml::LN_CT_Font_embedBoldItalic:
         {
             writerfilter::Reference< Properties >::Pointer_t pProperties = rSprm.getProps();
-            if( pProperties.get( ))
+            if( pProperties )
             {
                 EmbeddedFontHandler handler( m_pImpl->pCurrentEntry->sFontName,
                     nSprmId == NS_ooxml::LN_CT_Font_embedRegular ? ""
@@ -143,7 +143,7 @@ void FontTable::lcl_sprm(Sprm& rSprm)
 void FontTable::resolveSprm(Sprm & r_Sprm)
 {
     writerfilter::Reference<Properties>::Pointer_t pProperties = r_Sprm.getProps();
-    if( pProperties.get())
+    if( pProperties )
         pProperties->resolve(*this);
 }
 

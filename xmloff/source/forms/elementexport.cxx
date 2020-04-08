@@ -450,7 +450,7 @@ namespace xmloff
                 // let the factory provide the concrete handler. Note that caching, if desired, is the task
                 // of the factory
                 PPropertyHandler handler = (*propDescription->factory)( propDescription->propertyId );
-                if ( !handler.get() )
+                if ( !handler )
                 {
                     SAL_WARN( "xmloff.forms", "OControlExport::exportGenericHandlerAttributes: invalid property handler provided by the factory!" );
                     continue;

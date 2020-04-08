@@ -583,7 +583,7 @@ bool DataBrowser::MayMoveLeftColumns() const
     return ! IsReadOnly()
         && ( nColIdx > 1 )
         && ( nColIdx <= ColCount() - 2 )
-        && m_apDataBrowserModel.get()
+        && m_apDataBrowserModel
         && !m_apDataBrowserModel->isCategoriesColumn( nColIdx );
 }
 
@@ -600,7 +600,7 @@ bool DataBrowser::MayMoveRightColumns() const
     return ! IsReadOnly()
         && ( nColIdx > 0 )
         && ( nColIdx < ColCount()-2 )
-        && m_apDataBrowserModel.get()
+        && m_apDataBrowserModel
         && !m_apDataBrowserModel->isCategoriesColumn( nColIdx );
 }
 
@@ -701,7 +701,7 @@ OUString DataBrowser::GetCellText( long nRow, sal_uInt16 nColumnId ) const
     {
         aResult = OUString::number(static_cast< sal_Int32 >( nRow ) + 1);
     }
-    else if( nRow >= 0 && m_apDataBrowserModel.get())
+    else if( nRow >= 0 && m_apDataBrowserModel)
     {
         sal_Int32 nColIndex = static_cast< sal_Int32 >( nColumnId ) - 1;
 
@@ -758,8 +758,7 @@ double DataBrowser::GetCellNumber( long nRow, sal_uInt16 nColumnId ) const
     double fResult;
     ::rtl::math::setNan( & fResult );
 
-    if(( nColumnId >= 1 ) && ( nRow >= 0 ) &&
-        m_apDataBrowserModel.get())
+    if(( nColumnId >= 1 ) && ( nRow >= 0 ) && m_apDataBrowserModel)
     {
         fResult = m_apDataBrowserModel->getCellNumber(
             static_cast< sal_Int32 >( nColumnId ) - 1, nRow );
@@ -878,8 +877,7 @@ void DataBrowser::InsertColumn()
 {
     sal_Int32 nColIdx = lcl_getColumnInDataOrHeader( GetCurColumnId(), m_aSeriesHeaders );
 
-    if( nColIdx >= 0 &&
-        m_apDataBrowserModel.get())
+    if( nColIdx >= 0 && m_apDataBrowserModel)
     {
         // save changes made to edit-field
         if( IsModified() )
@@ -894,8 +892,7 @@ void DataBrowser::InsertTextColumn()
 {
     sal_Int32 nColIdx = lcl_getColumnInDataOrHeader( GetCurColumnId(), m_aSeriesHeaders );
 
-    if( nColIdx >= 0 &&
-        m_apDataBrowserModel.get())
+    if( nColIdx >= 0 && m_apDataBrowserModel)
     {
         // save changes made to edit-field
         if( IsModified() )
@@ -910,8 +907,7 @@ void DataBrowser::RemoveColumn()
 {
     sal_Int32 nColIdx = lcl_getColumnInDataOrHeader( GetCurColumnId(), m_aSeriesHeaders );
 
-    if( nColIdx >= 0 &&
-        m_apDataBrowserModel.get())
+    if( nColIdx >= 0 && m_apDataBrowserModel)
     {
         // save changes made to edit-field
         if( IsModified() )
@@ -927,8 +923,7 @@ void DataBrowser::InsertRow()
 {
      sal_Int32 nRowIdx = lcl_getRowInData( GetCurRow());
 
-     if( nRowIdx >= 0 &&
-        m_apDataBrowserModel.get())
+     if( nRowIdx >= 0 && m_apDataBrowserModel)
     {
         // save changes made to edit-field
         if( IsModified() )
@@ -943,8 +938,7 @@ void DataBrowser::RemoveRow()
 {
      sal_Int32 nRowIdx = lcl_getRowInData( GetCurRow());
 
-     if( nRowIdx >= 0 &&
-        m_apDataBrowserModel.get())
+     if( nRowIdx >= 0 && m_apDataBrowserModel)
     {
         // save changes made to edit-field
         if( IsModified() )
@@ -960,8 +954,7 @@ void DataBrowser::MoveLeftColumn()
 {
     sal_Int32 nColIdx = lcl_getColumnInDataOrHeader( GetCurColumnId(), m_aSeriesHeaders );
 
-    if( !(nColIdx > 0 &&
-        m_apDataBrowserModel.get()))
+    if( !(nColIdx > 0 && m_apDataBrowserModel))
         return;
 
     // save changes made to edit-field
@@ -982,8 +975,7 @@ void DataBrowser::MoveRightColumn()
 {
     sal_Int32 nColIdx = lcl_getColumnInDataOrHeader( GetCurColumnId(), m_aSeriesHeaders );
 
-    if( !(nColIdx >= 0 &&
-        m_apDataBrowserModel.get()))
+    if( !(nColIdx >= 0 && m_apDataBrowserModel))
         return;
 
     // save changes made to edit-field
@@ -1004,8 +996,7 @@ void DataBrowser::MoveUpRow()
 {
     sal_Int32 nRowIdx = lcl_getRowInData( GetCurRow());
 
-    if( !(nRowIdx > 0 &&
-        m_apDataBrowserModel.get()))
+    if( !(nRowIdx > 0 && m_apDataBrowserModel))
         return;
 
     // save changes made to edit-field
@@ -1026,8 +1017,7 @@ void DataBrowser::MoveDownRow()
 {
     sal_Int32 nRowIdx = lcl_getRowInData( GetCurRow());
 
-    if( !(nRowIdx >= 0 &&
-        m_apDataBrowserModel.get()))
+    if( !(nRowIdx >= 0 && m_apDataBrowserModel))
         return;
 
     // save changes made to edit-field

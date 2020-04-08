@@ -2761,7 +2761,7 @@ void WW8TabDesc::ParkPaM()
 
 void WW8TabDesc::MoveOutsideTable()
 {
-    OSL_ENSURE(m_xTmpPos.get() && m_pIo, "I've forgotten where the table is anchored");
+    OSL_ENSURE(m_xTmpPos && m_pIo, "I've forgotten where the table is anchored");
     if (m_xTmpPos && m_pIo)
         *m_pIo->m_pPaM->GetPoint() = *m_xTmpPos;
 }

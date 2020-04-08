@@ -706,7 +706,7 @@ void Chart2Positioner::calcGlueState(SCCOL nColSize, SCROW nRowSize)
 
 void Chart2Positioner::createPositionMap()
 {
-    if (meGlue == GLUETYPE_NA && mpPositionMap.get())
+    if (meGlue == GLUETYPE_NA && mpPositionMap)
         mpPositionMap.reset();
 
     if (mpPositionMap)
@@ -2620,7 +2620,7 @@ sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScTokenRef& pToke
 
 void ScChart2DataSequence::UpdateTokensFromRanges(const ScRangeList& rRanges)
 {
-    if (!m_pRangeIndices.get())
+    if (!m_pRangeIndices)
         return;
 
     for ( size_t i = 0, nCount = rRanges.size(); i < nCount; ++i )
@@ -2642,7 +2642,7 @@ void ScChart2DataSequence::UpdateTokensFromRanges(const ScRangeList& rRanges)
 
 ScChart2DataSequence::ExternalRefListener* ScChart2DataSequence::GetExtRefListener()
 {
-    if (!m_pExtRefListener.get())
+    if (!m_pExtRefListener)
         m_pExtRefListener.reset(new ExternalRefListener(*this, m_pDocument));
 
     return m_pExtRefListener.get();
@@ -2650,7 +2650,7 @@ ScChart2DataSequence::ExternalRefListener* ScChart2DataSequence::GetExtRefListen
 
 void ScChart2DataSequence::StopListeningToAllExternalRefs()
 {
-    if (!m_pExtRefListener.get())
+    if (!m_pExtRefListener)
         return;
 
     const std::unordered_set<sal_uInt16>& rFileIds = m_pExtRefListener->getAllFileIds();
@@ -2675,10 +2675,10 @@ void ScChart2DataSequence::CopyData(const ScChart2DataSequence& r)
     m_aHiddenValues = r.m_aHiddenValues;
     m_aRole = r.m_aRole;
 
-    if (r.m_pRangeIndices.get())
+    if (r.m_pRangeIndices)
         m_pRangeIndices.reset(new vector<sal_uInt32>(*r.m_pRangeIndices));
 
-    if (r.m_pExtRefListener.get())
+    if (r.m_pExtRefListener)
     {
         // Re-register all external files that the old instance was
         // listening to.
@@ -2751,7 +2751,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
             // The hint object provides the old ranges.  Restore the old state
             // from these ranges.
 
-            if (!m_pRangeIndices.get() || m_pRangeIndices->empty())
+            if (!m_pRangeIndices || m_pRangeIndices->empty())
             {
                 OSL_FAIL(" faulty range indices");
                 break;
@@ -3229,7 +3229,7 @@ void SAL_CALL ScChart2DataSequence::removeModifyListener( const uno::Reference< 
                 if (m_pValueListener)
                     m_pValueListener->EndListeningAll();
 
-                if (m_pHiddenListener.get() && m_pDocument)
+                if (m_pHiddenListener && m_pDocument)
                 {
                     ScChartListenerCollection* pCLC = m_pDocument->GetChartListenerCollection();
                     if (pCLC)

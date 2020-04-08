@@ -177,7 +177,7 @@ void ScFormulaReferenceHelper::ShowFormulaReference(const OUString& rStr)
     {
         m_bHighlightRef=true;
         ScViewData* pViewData=ScDocShell::GetViewData();
-        if ( pViewData && m_pRefComp.get() )
+        if ( pViewData && m_pRefComp )
         {
             ScTabViewShell* pTabViewShell=pViewData->GetViewShell();
             SCCOL nCol = pViewData->GetCurX();

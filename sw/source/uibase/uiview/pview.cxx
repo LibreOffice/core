@@ -1238,7 +1238,7 @@ void SwPagePreview::CreateScrollbar( bool bHori )
     vcl::Window *pMDI = &GetViewFrame()->GetWindow();
     VclPtr<SwScrollbar>& ppScrollbar = bHori ? m_pHScrollbar : m_pVScrollbar;
 
-    assert(!ppScrollbar.get()); //check beforehand!
+    assert(!ppScrollbar); //check beforehand!
 
     ppScrollbar = VclPtr<SwScrollbar>::Create( pMDI, bHori );
 

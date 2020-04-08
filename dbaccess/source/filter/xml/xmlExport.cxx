@@ -753,7 +753,7 @@ void ODBExport::exportCharSet()
 
 void ODBExport::exportDelimiter()
 {
-    if ( m_aDelimiter.get() && m_aDelimiter->bUsed )
+    if ( m_aDelimiter && m_aDelimiter->bUsed )
     {
         AddAttribute(XML_NAMESPACE_DB, XML_FIELD,m_aDelimiter->sField);
         AddAttribute(XML_NAMESPACE_DB, XML_STRING,m_aDelimiter->sText);

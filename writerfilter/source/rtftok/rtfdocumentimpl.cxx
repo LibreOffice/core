@@ -89,7 +89,7 @@ void putNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId, const RTFValue::Po
                         RTFOverwrite eOverwrite, bool bAttribute)
 {
     RTFValue::Pointer_t pParent = rSprms.find(nParent, /*bFirst=*/true, /*bForWrite=*/true);
-    if (!pParent.get())
+    if (!pParent)
     {
         RTFSprms aAttributes;
         if (nParent == NS_ooxml::LN_CT_TcPrBase_shd)
@@ -133,7 +133,7 @@ RTFValue::Pointer_t getNestedSprm(RTFSprms& rSprms, Id nParent, Id nId)
 bool eraseNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId)
 {
     RTFValue::Pointer_t pParent = rSprms.find(nParent);
-    if (!pParent.get())
+    if (!pParent)
         // It doesn't even have a parent, we're done.
         return false;
     RTFSprms& rAttributes = pParent->getAttributes();
@@ -143,7 +143,7 @@ bool eraseNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId)
 RTFSprms& getLastAttributes(RTFSprms& rSprms, Id nId)
 {
     RTFValue::Pointer_t p = rSprms.find(nId);
-    if (p.get() && !p->getSprms().empty())
+    if (p && !p->getSprms().empty())
         return p->getSprms().back().second->getAttributes();
 
     SAL_WARN("writerfilter.rtf", "trying to set property when no type is defined");
@@ -555,10 +555,8 @@ void RTFDocumentImpl::checkNeedPap()
 
             // Writer will ignore a page break before a text frame, so guard it with empty paragraphs
             bool hasBreakBeforeFrame = m_aStates.top().getFrame().hasProperties()
-                                       && m_aStates.top()
-                                              .getParagraphSprms()
-                                              .find(NS_ooxml::LN_CT_PPrBase_pageBreakBefore)
-                                              .get();
+                                       && m_aStates.top().getParagraphSprms().find(
+                                              NS_ooxml::LN_CT_PPrBase_pageBreakBefore);
             if (hasBreakBeforeFrame)
             {
                 dispatchSymbol(RTF_PAR);
@@ -649,7 +647,7 @@ void RTFDocumentImpl::sectBreak(bool bFinal)
     RTFValue::Pointer_t pBreak
         = m_aStates.top().getSectionSprms().find(NS_ooxml::LN_EG_SectPrContents_type);
     bool bContinuous
-        = pBreak.get()
+        = pBreak
           && pBreak->getInt()
                  == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_continuous);
     // If there is no paragraph in this section, then insert a dummy one, as required by Writer,
@@ -1483,7 +1481,7 @@ void RTFDocumentImpl::text(OUString& rString)
     }
 
     // Are we in the middle of the table definition? (No cell defs yet, but we already have some cell props.)
-    if (m_aStates.top().getTableCellSprms().find(NS_ooxml::LN_CT_TcPrBase_vAlign).get()
+    if (m_aStates.top().getTableCellSprms().find(NS_ooxml::LN_CT_TcPrBase_vAlign)
         && m_nTopLevelCells == 0)
     {
         m_aTableBufferStack.back().emplace_back(
@@ -1553,7 +1551,7 @@ void RTFDocumentImpl::prepareProperties(
     // Table width.
     RTFValue::Pointer_t const pTableWidthProps
         = rState.getTableRowSprms().find(NS_ooxml::LN_CT_TblPrBase_tblW);
-    if (!pTableWidthProps.get())
+    if (!pTableWidthProps)
     {
         auto pUnitValue = new RTFValue(3);
         putNestedAttribute(rState.getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblW,
@@ -1568,7 +1566,7 @@ void RTFDocumentImpl::prepareProperties(
 
     RTFValue::Pointer_t const pCellMar
         = rState.getTableRowSprms().find(NS_ooxml::LN_CT_TblPrBase_tblCellMar);
-    if (!pCellMar.get())
+    if (!pCellMar)
     {
         // If no cell margins are defined, the default left/right margin is 0 in Word, but not in Writer.
         RTFSprms aAttributes;
@@ -3182,7 +3180,7 @@ void RTFDocumentImpl::afterPopState(RTFParserState& rState)
         {
             RTFValue::Pointer_t pIdValue
                 = rState.getTableAttributes().find(NS_ooxml::LN_CT_AbstractNum_nsid);
-            if (pIdValue.get() && !m_aStates.empty())
+            if (pIdValue && !m_aStates.empty())
             {
                 // Abstract numbering
                 RTFSprms aLeveltextAttributes;

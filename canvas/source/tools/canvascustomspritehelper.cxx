@@ -223,7 +223,7 @@ namespace canvas
     void CanvasCustomSpriteHelper::setAlpha( const Sprite::Reference&   rSprite,
                                              double                     alpha )
     {
-        if( !mpSpriteCanvas.get() )
+        if( !mpSpriteCanvas )
             return; // we're disposed
 
         if( alpha != mfAlpha )
@@ -244,7 +244,7 @@ namespace canvas
                                          const rendering::ViewState&    viewState,
                                          const rendering::RenderState&  renderState )
     {
-        if( !mpSpriteCanvas.get() )
+        if( !mpSpriteCanvas )
             return; // we're disposed
 
         ::basegfx::B2DHomMatrix aTransform;
@@ -330,7 +330,7 @@ namespace canvas
     void CanvasCustomSpriteHelper::setPriority( const Sprite::Reference&    rSprite,
                                                 double                      nPriority )
     {
-        if( !mpSpriteCanvas.get() )
+        if( !mpSpriteCanvas )
             return; // we're disposed
 
         if( nPriority != mfPriority )
@@ -348,7 +348,7 @@ namespace canvas
 
     void CanvasCustomSpriteHelper::show( const Sprite::Reference& rSprite )
     {
-        if( !mpSpriteCanvas.get() )
+        if( !mpSpriteCanvas )
             return; // we're disposed
 
         if( mbActive )
@@ -370,7 +370,7 @@ namespace canvas
 
     void CanvasCustomSpriteHelper::hide( const Sprite::Reference& rSprite )
     {
-        if( !mpSpriteCanvas.get() )
+        if( !mpSpriteCanvas )
             return; // we're disposed
 
         if( !mbActive )

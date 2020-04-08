@@ -2775,7 +2775,7 @@ void SwAccessibleMap::InvalidateFocus()
     if(GetShell()->IsPreview())
     {
         uno::Reference<XAccessible> xAcc = GetDocumentView_( true );
-        if (xAcc.get())
+        if (xAcc)
         {
             SwAccessiblePreview *pAccPreview = static_cast<SwAccessiblePreview *>(xAcc.get());
             if (pAccPreview)

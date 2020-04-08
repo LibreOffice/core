@@ -848,7 +848,7 @@ void wwSectionManager::CreateSep(const long nTextPos)
     if (!pSep)
         return;
 
-    if (!maSegments.empty() && mrReader.m_pLastAnchorPos.get() && *mrReader.m_pLastAnchorPos == *mrReader.m_pPaM->GetPoint())
+    if (!maSegments.empty() && mrReader.m_pLastAnchorPos && *mrReader.m_pLastAnchorPos == *mrReader.m_pPaM->GetPoint())
     {
         bool insert = true;
         SwPaM pam( *mrReader.m_pLastAnchorPos );

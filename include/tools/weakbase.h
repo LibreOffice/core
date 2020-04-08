@@ -88,6 +88,9 @@ public:
     /** returns true if the reference object is not null and still alive */
     inline bool is() const;
 
+    /** returns true if the reference object is not null and still alive */
+    operator bool() const { return is(); }
+
     /** returns the pointer to the reference object or null */
     inline reference_type * get() const;
 

@@ -2127,7 +2127,7 @@ void Xf::writeToDoc( ScDocumentImport& rDoc, const ScRange& rRange )
 const ::ScPatternAttr&
 Xf::createPattern( bool bSkipPoolDefs )
 {
-    if( mpPattern.get() )
+    if( mpPattern )
         return *mpPattern;
     mpPattern.reset( new ::ScPatternAttr( getScDocument().GetPool() ) );
     SfxItemSet& rItemSet = mpPattern->GetItemSet();

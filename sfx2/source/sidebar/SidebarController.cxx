@@ -1218,7 +1218,7 @@ IMPL_LINK(SidebarController, OnMenuItemSelected, Menu*, pMenu, bool)
 
 void SidebarController::RequestCloseDeck()
 {
-    if (comphelper::LibreOfficeKit::isActive() && mpCurrentDeck.get())
+    if (comphelper::LibreOfficeKit::isActive() && mpCurrentDeck)
     {
         const vcl::ILibreOfficeKitNotifier* pNotifier = mpCurrentDeck->GetLOKNotifier();
         auto pMobileNotifier = SfxViewShell::Current();
@@ -1243,7 +1243,7 @@ void SidebarController::RequestCloseDeck()
     mbIsDeckRequestedOpen = false;
     UpdateDeckOpenState();
 
-    if (!mpCurrentDeck.get())
+    if (!mpCurrentDeck)
         mpTabBar->RemoveDeckHighlight();
 }
 

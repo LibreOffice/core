@@ -501,10 +501,10 @@ void ControllerCommandDispatch::initialize()
     if( m_xSelectionSupplier.is() )
         m_xSelectionSupplier->addSelectionChangeListener( this );
 
-    if( m_apModelState.get() && xModel.is())
+    if( m_apModelState && xModel.is())
         m_apModelState->update( xModel );
 
-    if( m_apControllerState.get() && xModel.is())
+    if( m_apControllerState && xModel.is())
         m_apControllerState->update( m_xChartController.get(), xModel );
 
     updateCommandAvailability();
@@ -793,14 +793,14 @@ void SAL_CALL ControllerCommandDispatch::modified( const lang::EventObject& aEve
     bool bUpdateCommandAvailability = false;
 
     // Update the "ModelState" Struct.
-    if( m_apModelState.get() && m_xChartController.is())
+    if( m_apModelState && m_xChartController.is())
     {
         m_apModelState->update( m_xChartController->getModel());
         bUpdateCommandAvailability = true;
     }
 
     // Update the "ControllerState" Struct.
-    if( m_apControllerState.get() && m_xChartController.is())
+    if( m_apControllerState && m_xChartController.is())
     {
         m_apControllerState->update( m_xChartController.get(), m_xChartController->getModel());
         bUpdateCommandAvailability = true;
@@ -823,7 +823,7 @@ void SAL_CALL ControllerCommandDispatch::modified( const lang::EventObject& aEve
 void SAL_CALL ControllerCommandDispatch::selectionChanged( const lang::EventObject& aEvent )
 {
     // Update the "ControllerState" Struct.
-    if( m_apControllerState.get() && m_xChartController.is())
+    if( m_apControllerState && m_xChartController.is())
     {
         m_apControllerState->update( m_xChartController.get(), m_xChartController->getModel());
         updateCommandAvailability();

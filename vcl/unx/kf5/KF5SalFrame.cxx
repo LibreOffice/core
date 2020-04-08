@@ -169,7 +169,7 @@ SalGraphics* KF5SalFrame::AcquireGraphics()
 
     m_bGraphicsInUse = true;
 
-    if (!m_pKF5Graphics.get())
+    if (!m_pKF5Graphics)
     {
         m_pKF5Graphics.reset(new Qt5SvpGraphics(this));
         Qt5Frame::InitQt5SvpGraphics(m_pKF5Graphics.get());

@@ -525,7 +525,7 @@ rtl::Reference<LwpVirtualLayout> LwpHeadLayout::FindEnSuperTableLayout()
 {
     rtl::Reference<LwpVirtualLayout> xLayout(dynamic_cast<LwpVirtualLayout*>(GetChildHead().obj().get()));
     o3tl::sorted_vector<LwpVirtualLayout*> aSeen;
-    while (xLayout.get())
+    while (xLayout)
     {
         aSeen.insert(xLayout.get());
         if (xLayout->GetLayoutType() == LWP_ENDNOTE_SUPERTABLE_LAYOUT)

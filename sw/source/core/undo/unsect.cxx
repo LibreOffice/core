@@ -221,7 +221,7 @@ void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
 
     SwSectionNode *const pSectNd =
         rDoc.GetNodes()[ m_nSectionNodePos ]->GetSectionNode();
-    if (m_pRedlData.get() &&
+    if (m_pRedlData &&
         IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags()))
     {
         RedlineFlags eOld = rDoc.getIDocumentRedlineAccess().GetRedlineFlags();

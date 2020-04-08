@@ -1238,7 +1238,7 @@ void XclImpXF::ReadXF( XclImpStream& rStrm )
 
 const ScPatternAttr& XclImpXF::CreatePattern( bool bSkipPoolDefs )
 {
-    if( mpPattern.get() )
+    if( mpPattern )
         return *mpPattern;
 
     // create new pattern attribute set

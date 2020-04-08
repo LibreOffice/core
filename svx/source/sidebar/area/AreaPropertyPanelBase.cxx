@@ -615,7 +615,7 @@ void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
 
 void AreaPropertyPanelBase::ImpUpdateTransparencies()
 {
-    if(mpTransparanceItem.get() || mpFloatTransparenceItem.get())
+    if(mpTransparanceItem || mpFloatTransparenceItem)
     {
         bool bZeroValue(false);
 
@@ -646,7 +646,7 @@ void AreaPropertyPanelBase::ImpUpdateTransparencies()
             }
         }
 
-        if(bZeroValue && mpFloatTransparenceItem.get())
+        if(bZeroValue && mpFloatTransparenceItem)
         {
             if(mpFloatTransparenceItem->IsEnabled())
             {

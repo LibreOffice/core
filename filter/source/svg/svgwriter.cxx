@@ -3325,7 +3325,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         }
                     }
 
-                    if(mapCurShape.get() && mapCurShape->maShapePolyPoly.Count() && (aStartArrow.Count() || aEndArrow.Count()))
+                    if(mapCurShape && mapCurShape->maShapePolyPoly.Count() && (aStartArrow.Count() || aEndArrow.Count()))
                     {
                         ImplWriteShape( *mapCurShape );
 

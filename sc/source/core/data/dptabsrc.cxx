@@ -2358,7 +2358,7 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
         if (maMembers.empty())
             maMembers.resize(nMbrCount);
 
-        if (!maMembers[nIndex].get())
+        if (!maMembers[nIndex])
         {
             rtl::Reference<ScDPMember> pNew;
             long nSrcDim = pSource->GetSourceDim( nDim );

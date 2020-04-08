@@ -1049,7 +1049,7 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
     maNoteData.mxCaption->getSdrModelFromSdrObject().setLock(true);
 
     // transfer ownership of outliner object to caption, or set simple text
-    OSL_ENSURE( xInitData->mxOutlinerObj.get() || !xInitData->maSimpleText.isEmpty(),
+    OSL_ENSURE( xInitData->mxOutlinerObj || !xInitData->maSimpleText.isEmpty(),
         "ScPostIt::CreateCaptionFromInitData - need either outliner para object or simple text" );
     if (xInitData->mxOutlinerObj)
         maNoteData.mxCaption->SetOutlinerParaObject( std::move(xInitData->mxOutlinerObj) );

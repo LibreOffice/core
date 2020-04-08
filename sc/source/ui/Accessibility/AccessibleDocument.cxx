@@ -489,7 +489,7 @@ ScChildrenShapes::GetAccessibleCaption (const css::uno::Reference < css::drawing
         return nullptr;
     ScAccessibleShapeData* pShape = it->second;
     css::uno::Reference< css::accessibility::XAccessible > xNewChild( pShape->pAccShape.get() );
-    if(xNewChild.get())
+    if(xNewChild)
         return xNewChild;
     return nullptr;
 }

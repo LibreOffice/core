@@ -94,7 +94,7 @@ void CellMarginHandler::createGrabBag(const OUString& aName)
 void CellMarginHandler::lcl_sprm(Sprm & rSprm)
 {
     writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-    if( pProperties.get())
+    if( pProperties)
     {
         pProperties->resolve( *this );
         const bool rtl = false; // TODO
