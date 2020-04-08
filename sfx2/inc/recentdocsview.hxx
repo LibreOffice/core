@@ -89,7 +89,7 @@ private:
     size_t mnLastMouseDownItem;
 
     /// Image that appears when there is no recent document.
-    Image maWelcomeImage;
+    BitmapEx maWelcomeImage;
     OUString maWelcomeLine1;
     OUString maWelcomeLine2;
 };

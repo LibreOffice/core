@@ -1778,10 +1778,6 @@ include/vcl/weld.hxx:2102
     class std::unique_ptr<class weld::Dialog, struct std::default_delete<class weld::Dialog> > weld::Builder::weld_dialog(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
     1
-include/vcl/weld.hxx:2103
-    class std::unique_ptr<class weld::AboutDialog, struct std::default_delete<class weld::AboutDialog> > weld::Builder::weld_about_dialog(const class rtl::OString &,_Bool)
-    _Bool bTakeOwnership
-    1
 include/vcl/weld.hxx:2106
     class std::unique_ptr<class weld::Assistant, struct std::default_delete<class weld::Assistant> > weld::Builder::weld_assistant(const class rtl::OString &,_Bool)
     _Bool bTakeOwnership
@@ -4210,10 +4206,6 @@ vcl/qa/cppunit/BitmapTest.cxx:68
     void assertColorsAreSimilar(int,const class std::__cxx11::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > &,const class BitmapColor &,const class BitmapColor &)
     int maxDifference
     1
-vcl/source/app/salvtables.cxx:1624
-    void (anonymous namespace)::SalInstanceAboutDialog::SalInstanceAboutDialog(class vcl::AboutDialog *,class SalInstanceBuilder *,_Bool)
-    _Bool bTakeOwnership
-    0
 vcl/source/app/salvtables.cxx:1694
     void (anonymous namespace)::SalInstanceAssistant::SalInstanceAssistant(class vcl::RoadmapWizard *,class SalInstanceBuilder *,_Bool)
     _Bool bTakeOwnership

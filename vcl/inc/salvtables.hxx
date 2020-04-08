@@ -22,9 +22,6 @@ public:
     virtual std::unique_ptr<weld::MessageDialog>
     weld_message_dialog(const OString& id, bool bTakeOwnership = true) override;
 
-    virtual std::unique_ptr<weld::AboutDialog>
-    weld_about_dialog(const OString& id, bool bTakeOwnership = true) override;
-
     virtual std::unique_ptr<weld::Dialog> weld_dialog(const OString& id,
                                                       bool bTakeOwnership = true) override;
 
