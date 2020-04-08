@@ -18,6 +18,7 @@
  */
 
 #include <config_folders.h>
+#include <ucbhelper/content.hxx>
 
 #include <vcl/canvastools.hxx>
 #include <vcl/svapp.hxx>
@@ -101,6 +102,29 @@ bool  SfxApplication::IsDowning() const { return pImpl->bDowning; }
 SfxDispatcher* SfxApplication::GetAppDispatcher_Impl() { return pImpl->pAppDispat; }
 SfxSlotPool& SfxApplication::GetAppSlotPool_Impl() const { return *pImpl->pSlotPool; }
 
+static bool FileExists( const INetURLObject& rURL )
+{
+    bool bRet = false;
+
+    if( rURL.GetProtocol() != INetProtocol::NotValid )
+    {
+        try
+        {
+            ::ucbhelper::Content  aCnt( rURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+            OUString aTitle;
+
+            aCnt.getPropertyValue("Title") >>= aTitle;
+            bRet = ( !aTitle.isEmpty() );
+        }
+        catch(const Exception&)
+        {
+            return false;
+        }
+    }
+
+    return bRet;
+}
+
 bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWidth)
 {
     // Load from disk
@@ -109,7 +133,11 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
 
     OUString uri = "$BRAND_BASE_DIR/" LIBO_ETC_FOLDER + aBaseName + ".svg";
     rtl::Bootstrap::expandMacros( uri );
+
     INetURLObject aObj( uri );
+    if ( !FileExists(aObj) )
+        return false;
+
     VectorGraphicData aVectorGraphicData(aObj.PathToFileName(), VectorGraphicDataType::Svg);
 
     // transform into [0,0,width,width*aspect] std dimensions
@@ -175,8 +203,7 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
 BitmapEx SfxApplication::GetApplicationLogo(long nWidth)
 {
     BitmapEx aBitmap;
-    SfxApplication::loadBrandSvg("flat_logo", aBitmap, nWidth);
-    (void)Application::LoadBrandBitmap ("about", aBitmap);
+    SfxApplication::loadBrandSvg("shell/about", aBitmap, nWidth);
     return aBitmap;
 }
 

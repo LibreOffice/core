@@ -1615,48 +1615,6 @@ public:
     }
 };
 
-class SalInstanceAboutDialog : public SalInstanceDialog, public virtual weld::AboutDialog
-{
-private:
-    VclPtr<vcl::AboutDialog> m_xAboutDialog;
-
-public:
-    SalInstanceAboutDialog(vcl::AboutDialog* pDialog, SalInstanceBuilder* pBuilder,
-                           bool bTakeOwnership)
-        : SalInstanceDialog(pDialog, pBuilder, bTakeOwnership)
-        , m_xAboutDialog(pDialog)
-    {
-    }
-    virtual void set_version(const OUString& rVersion) override
-    {
-        m_xAboutDialog->SetVersion(rVersion);
-    }
-    virtual void set_copyright(const OUString& rCopyright) override
-    {
-        m_xAboutDialog->SetCopyright(rCopyright);
-    }
-    virtual void set_website(const OUString& rURL) override
-    {
-        m_xAboutDialog->SetWebsiteLink(rURL);
-    }
-    virtual void set_website_label(const OUString& rLabel) override
-    {
-        m_xAboutDialog->SetWebsiteLabel(rLabel);
-    }
-    virtual OUString get_website_label() const override
-    {
-        return m_xAboutDialog->GetWebsiteLabel();
-    }
-    virtual void set_logo(const css::uno::Reference<css::graphic::XGraphic>& rImage) override
-    {
-        m_xAboutDialog->SetLogo(Image(rImage));
-    }
-    virtual void set_background(const css::uno::Reference<css::graphic::XGraphic>& rImage) override
-    {
-        m_xAboutDialog->SetBackground(Image(rImage));
-    }
-};
-
 class SalInstanceAssistant : public SalInstanceDialog, public virtual weld::Assistant
 {
 private:
@@ -6266,21 +6224,6 @@ std::unique_ptr<weld::MessageDialog> SalInstanceBuilder::weld_message_dialog(con
         assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
         m_aOwnedToplevel.set(pMessageDialog);
         m_xBuilder->drop_ownership(pMessageDialog);
-    }
-    return pRet;
-}
-
-std::unique_ptr<weld::AboutDialog> SalInstanceBuilder::weld_about_dialog(const OString& id,
-                                                                         bool bTakeOwnership)
-{
-    vcl::AboutDialog* pAboutDialog = m_xBuilder->get<vcl::AboutDialog>(id);
-    std::unique_ptr<weld::AboutDialog> pRet(
-        pAboutDialog ? new SalInstanceAboutDialog(pAboutDialog, this, false) : nullptr);
-    if (bTakeOwnership && pAboutDialog)
-    {
-        assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
-        m_aOwnedToplevel.set(pAboutDialog);
-        m_xBuilder->drop_ownership(pAboutDialog);
     }
     return pRet;
 }
