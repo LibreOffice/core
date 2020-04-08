@@ -1418,7 +1418,9 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
                             if( nLegendExpansion == chart::ChartLegendExpansion_CUSTOM)
                             {
                                 awt::Size aSize( xLegendShape->getSize() );
-                                addSize( aSize, true );
+                                // tdf#131966: chart legend attributes width and height shouldn't be exported to ODF 1.2 (strict)
+                                if (nCurrentODFVersion > SvtSaveOptions::ODFVER_012)
+                                    addSize( aSize, true );
                                 OUStringBuffer aAspectRatioString;
                                 ::sax::Converter::convertDouble(
                                     aAspectRatioString,
