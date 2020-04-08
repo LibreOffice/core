@@ -17,14 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "osl/mutex.hxx"
+#include <sal/config.h>
 
+#include <comphelper/lok.hxx>
+#include <osl/mutex.hxx>
+#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 
 #include "factory.hxx"
 #include "svdata.hxx"
 #include "salinst.hxx"
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/lang/XSingleServiceFactory.hpp"
@@ -441,9 +445,26 @@ Reference< XInterface > SAL_CALL DropTarget_createInstance( const Reference< XMu
 /*
 *   SalInstance generic
 */
-Reference< XInterface > SalInstance::CreateClipboard( const Sequence< Any >& )
+Reference< XInterface > SalInstance::CreateClipboard( const Sequence< Any >& arguments )
 {
-    return Reference< XInterface >( static_cast<cppu::OWeakObject *>(new vcl::GenericClipboard()) );
+    if (arguments.hasElements()) {
+        throw css::lang::IllegalArgumentException(
+            "non-empty SalInstance::CreateClipboard arguments", {}, -1);
+    }
+    if (comphelper::LibreOfficeKit::isActive()) {
+        // In LOK, each document view shall have its own clipboard instance, and the way that
+        // (happens to?) work is that apparently this function is called at most once for each such
+        // document view, so it is OK if we hand out a fresh instance on each call in LOK (whereas
+        // in non-LOK below we keep handing out one single instance; see also
+        // <https://lists.freedesktop.org/archives/libreoffice/2020-April/084824.html> "Re: Linux
+        // SAL_USE_VCLPLUGIN=svp and the clipboard"):
+        return Reference< XInterface >( static_cast<cppu::OWeakObject *>(new vcl::GenericClipboard()) );
+    }
+    DBG_TESTSOLARMUTEX();
+    if (!m_clipboard.is()) {
+        m_clipboard = static_cast<cppu::OWeakObject *>(new vcl::GenericClipboard());
+    }
+    return m_clipboard;
 }
 
 Reference< XInterface > SalInstance::CreateDragSource()

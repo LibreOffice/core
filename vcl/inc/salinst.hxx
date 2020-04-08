@@ -66,6 +66,7 @@ class VCL_PLUGIN_PUBLIC SalInstance
 {
 private:
     rtl::Reference< vcl::DisplayConnectionDispatch > m_pEventInst;
+    css::uno::Reference<css::uno::XInterface> m_clipboard;
 
 public:
     SalInstance() {}
