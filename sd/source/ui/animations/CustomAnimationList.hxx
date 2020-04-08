@@ -154,7 +154,6 @@ private:
 
     // drag & drop
     std::unique_ptr<weld::TreeIter> mxDndEffectDragging;
-    std::unique_ptr<weld::TreeIter> mxDndEffectInsertBefore;
     std::vector<std::unique_ptr<weld::TreeIter>> mDndEffectsSelected;
 };
 
