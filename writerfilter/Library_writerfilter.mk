@@ -123,7 +123,6 @@ $(eval $(call gb_Library_add_exception_objects,writerfilter,\
     writerfilter/source/ooxml/OOXMLParserState \
     writerfilter/source/ooxml/OOXMLPropertySet \
     writerfilter/source/ooxml/OOXMLStreamImpl \
-    writerfilter/source/ooxml/qnametostrcore \
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,writerfilter,\

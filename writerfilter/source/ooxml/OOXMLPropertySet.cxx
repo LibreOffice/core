@@ -70,7 +70,7 @@ writerfilter::Reference<Properties>::Pointer_t OOXMLProperty::getProps()
 #ifdef DBG_UTIL
 string OOXMLProperty::getName() const
 {
-    string sResult((*QNameToString::Instance())(mId));
+    string sResult(QNameToString(mId));
 
     if (sResult.length() == 0)
         sResult = fastTokenToId(mId);

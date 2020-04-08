@@ -17804,7 +17804,6 @@ writerfilter/source/ooxml/OOXMLPropertySet.cxx
 writerfilter/source/ooxml/OOXMLPropertySet.hxx
 writerfilter/source/ooxml/OOXMLStreamImpl.cxx
 writerfilter/source/ooxml/OOXMLStreamImpl.hxx
-writerfilter/source/ooxml/qnametostrcore.cxx
 xmlhelp/source/cxxhelp/inc/tvfactory.hxx
 xmlhelp/source/cxxhelp/inc/tvread.hxx
 xmlhelp/source/cxxhelp/provider/content.cxx
