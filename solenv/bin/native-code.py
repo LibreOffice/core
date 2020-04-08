@@ -277,6 +277,7 @@ core_constructor_list = [
     "stardiv_Toolkit_UnoControlRadioButtonModel_get_implementation",
     "stardiv_Toolkit_UnoControlScrollBarModel_get_implementation",
     "stardiv_Toolkit_UnoDateFieldControl_get_implementation",
+    "stardiv_Toolkit_UnoGroupBoxControl_get_implementation",
     "stardiv_Toolkit_UnoListBoxControl_get_implementation",
     "stardiv_Toolkit_UnoRadioButtonControl_get_implementation",
     "stardiv_Toolkit_UnoSpinButtonModel_get_implementation",
