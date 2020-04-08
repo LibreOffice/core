@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9031963c_5b9099db",
+        "filename": "javaunohelper/util/manifest",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-08T15:51:52Z",
+      "side": 0,
+      "message": "The empty UNO-Type-Path attribute should probably stay in the manifest of the empty warpper juh.jar.  It had been added with \u003chttps://gerrit.libreoffice.org/plugins/gitiles/core/+/f506d2c0ae9343187ba2eddce3bed8bc4072413a%5E!/\u003e \"INTEGRATION: CWS sb36 (1.3.6); FILE MERGED: 2007/01/19 13:28:59 sb 1.3.6.1: #i51803# Explicit empty UNO-Type-Path\" for reasons that are no longer entirely clear to me.  Probably \"just in case\", if juh.jar was explicitly referenced from client code (even though it is guaranteed to be available within the com.sun.star.lib.unoloader.UnoClassLoader), and because juh.jar indeed does not provide any UNO types.  (Now that juh.jar is just a wrapper around libreoffice.jar, it would nominally provide UNO types, from the original jurt.jar and unoil.jar, but those are already present in UnoClassLoader and don\u0027t need special UNO-Type-Path handling, so it would still be OK to claim that the wrapper juh.jar does not provide any UNO types, and thus has an empty UNO-Type-Path attribute.)",
+      "revId": "08a11f8fe19560b000c62da00d7425b4f500d605",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
