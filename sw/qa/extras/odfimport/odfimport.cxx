@@ -480,11 +480,7 @@ DECLARE_ODFIMPORT_TEST(testFdo60842, "fdo60842.odt")
 
 DECLARE_ODFIMPORT_TEST(testFdo79269, "fdo79269.odt")
 {
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
-    xCursor->jumpToLastPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCursor->getPage());
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
 
     // The problem was that the first-footer was shared.
     uno::Reference<beans::XPropertySet> xPropSet(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
@@ -498,11 +494,7 @@ DECLARE_ODFIMPORT_TEST(testFdo79269, "fdo79269.odt")
 
 DECLARE_ODFIMPORT_TEST(testFdo79269_header, "fdo79269_header.odt")
 {
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
-    xCursor->jumpToLastPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCursor->getPage());
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
 
     uno::Reference<beans::XPropertySet> xPropSet(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xPropSet, "FirstIsShared"));
@@ -849,11 +841,7 @@ DECLARE_ODFIMPORT_TEST(testTdf76322_columnBreakInHeader, "tdf76322_columnBreakIn
 DECLARE_ODFIMPORT_TEST(testTdf76349_1columnBreak, "tdf76349_1columnBreak.odt")
 {
     //single-column breaks should only be treated as page breaks for MS formats - should be only one page here.
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
-    xCursor->jumpToLastPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
 DECLARE_ODFIMPORT_TEST(testTdf96113, "tdf96113.odt")

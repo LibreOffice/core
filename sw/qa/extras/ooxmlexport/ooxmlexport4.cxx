@@ -221,11 +221,7 @@ DECLARE_OOXMLEXPORT_TEST(testTableRowDataDisplayedTwice,"table-row-data-displaye
     // fdo#73534: There was a problem for some documents during export.Invalid sectPr getting added
     // because of wrong condition in code.
     // This was the reason for increasing number of pages after RT
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
-    xCursor->jumpToLastPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCursor->getPage());
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo73556,"fdo73556.docx")
@@ -348,11 +344,7 @@ DECLARE_OOXMLEXPORT_TEST(testColumnBreak_ColumnCountIsZero,"fdo74153.docx")
         assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:br","type","column");
 
     //tdf76349 match Word's behavior of treating breaks in single columns as page breaks.
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
-    xCursor->jumpToLastPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCursor->getPage());
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf90697_complexBreaksHeaders,"tdf90697_complexBreaksHeaders.docx")
@@ -1045,21 +1037,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf86926_A3, "tdf86926_A3.docx")
 DECLARE_OOXMLEXPORT_TEST(testTdf64372_continuousBreaks,"tdf64372_continuousBreaks.docx")
 {
     //There are no page breaks, so everything should be on the first page.
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
-    xCursor->jumpToLastPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf92724_continuousBreaksComplex,"tdf92724_continuousBreaksComplex.docx")
 {
     //There are 2 page breaks, so there should be 3 pages.
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
-    xCursor->jumpToLastPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(3), xCursor->getPage());
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf90697_continuousBreaksComplex2,"tdf92724_continuousBreaksComplex2.docx")

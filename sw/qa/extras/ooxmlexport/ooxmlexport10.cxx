@@ -649,25 +649,16 @@ DECLARE_OOXMLEXPORT_TEST(testFdo78883, "fdo78883.docx")
 {
     // fdo#78883 : LO was getting hang while opening document
     // Checking there is a single page after loading a doc in LO.
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
-    xCursor->jumpToLastPage();
-
     // Check to make sure the document loaded.  Note that the page number may
     // be 1 or 2 depending on the environment.
-    CPPUNIT_ASSERT(xCursor->getPage() > sal_Int16(0));
+    CPPUNIT_ASSERT(getPages() > 0);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo79535, "fdo79535.docx")
 {
     // fdo#79535 : LO was crashing while opening document
     // Checking there is a single page after loading a doc successfully in LO.
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
-    xCursor->jumpToLastPage();
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testBnc875718, "bnc875718.docx")
