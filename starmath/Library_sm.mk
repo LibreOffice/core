@@ -27,6 +27,7 @@ $(eval $(call gb_Library_add_defs,sm,\
 
 $(eval $(call gb_Library_use_externals,sm, \
     boost_headers \
+    icuuc \
     icu_headers \
 ))
 

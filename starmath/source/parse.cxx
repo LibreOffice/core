@@ -22,6 +22,7 @@
 #include <com/sun/star/i18n/KParseTokens.hpp>
 #include <com/sun/star/i18n/KParseType.hpp>
 #include <i18nlangtag/lang.h>
+#include <unicode/uchar.h>
 #include <tools/lineend.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/syslocale.hxx>
@@ -956,9 +957,14 @@ void SmParser::NextToken()
         m_aCurToken.cMathChar  = '\0';
         m_aCurToken.nGroup     = TG::NONE;
         m_aCurToken.nLevel     = 5;
-        m_aCurToken.aText      = m_aBufferString.copy( nRealStart, 1 );
 
-        aRes.EndPos = nRealStart + 1;
+        // tdf#129372: we may have to deal with surrogate pairs
+        // (see https://en.wikipedia.org/wiki/Universal_Character_Set_characters#Surrogates)
+        // in this case, we must read 2 sal_Unicode instead of 1
+        int nOffset(u_charType(m_aBufferString[nRealStart]) == U_SURROGATE? 2 : 1);
+        m_aCurToken.aText      = m_aBufferString.copy( nRealStart, nOffset );
+
+        aRes.EndPos = nRealStart + nOffset;
     }
 
     if (TEND != m_aCurToken.eType)
