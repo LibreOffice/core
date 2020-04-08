@@ -326,7 +326,7 @@ void Bitmap::ImplMakeUnique()
     {
         std::shared_ptr<SalBitmap> xOldImpBmp = mxSalBmp;
         mxSalBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
-        mxSalBmp->Create(*xOldImpBmp);
+        (void)mxSalBmp->Create(*xOldImpBmp);
     }
 }
 
