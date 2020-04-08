@@ -3821,20 +3821,14 @@ Reference< uno::XInterface > SchXMLExport_Content_createInstance(const Reference
     return static_cast<cppu::OWeakObject*>(new SchXMLExport( comphelper::getComponentContext(rSMgr), SchXMLExport_Content_getImplementationName(), SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::CONTENT | SvXMLExportFlags::FONTDECLS ));
 }
 
-// Oasis format
-Sequence< OUString > SchXMLExport_Oasis_Content_getSupportedServiceNames() throw()
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_comp_Chart_XMLOasisContentExporter_get_implementation(
+    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
 {
-    return Sequence< OUString > { "com.sun.star.comp.Chart.XMLOasisContentExporter" };
-}
-
-OUString SchXMLExport_Oasis_Content_getImplementationName() throw()
-{
-    return "SchXMLExport.Oasis.Content";
-}
-
-Reference< uno::XInterface > SchXMLExport_Oasis_Content_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr)
-{
-    return static_cast<cppu::OWeakObject*>(new SchXMLExport( comphelper::getComponentContext(rSMgr), SchXMLExport_Oasis_Content_getImplementationName(), SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::CONTENT | SvXMLExportFlags::FONTDECLS | SvXMLExportFlags::OASIS ));
+    return cppu::acquire(new SchXMLExport(pCtx, "SchXMLExport.Oasis.Content",
+                                          SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::CONTENT
+                                              | SvXMLExportFlags::FONTDECLS
+                                              | SvXMLExportFlags::OASIS));
 }
 
 // Oasis format
