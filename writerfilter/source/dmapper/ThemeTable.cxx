@@ -110,7 +110,7 @@ void ThemeTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_BaseStyles_fontScheme:
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-            if( pProperties.get())
+            if( pProperties )
                 pProperties->resolve(*this);
     }
     break;
@@ -119,7 +119,7 @@ void ThemeTable::lcl_sprm(Sprm& rSprm)
     {
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
         m_pImpl->m_currentFontThemeEntry = std::map<sal_uInt32, OUString>();
-        if( pProperties.get())
+        if( pProperties )
                 pProperties->resolve(*this);
         m_pImpl->m_themeFontMap[nSprmId] = m_pImpl->m_currentFontThemeEntry;
     }
@@ -130,14 +130,14 @@ void ThemeTable::lcl_sprm(Sprm& rSprm)
     {
         m_pImpl->m_currentThemeFontId = nSprmId;
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-        if( pProperties.get())
+        if( pProperties )
                 pProperties->resolve(*this);
     }
     break;
     case NS_ooxml::LN_CT_FontCollection_font:
     {
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-        if (pProperties.get())
+        if (pProperties )
             pProperties->resolve(*this);
     }
     break;

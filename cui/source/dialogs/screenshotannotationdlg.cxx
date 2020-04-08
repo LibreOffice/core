@@ -218,11 +218,11 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
 
     // get needed widgets
     mxPicture.reset(new weld::CustomWeld(rParentBuilder, "picture", maPicture));
-    assert(mxPicture.get());
+    assert(mxPicture);
     mxText = rParentBuilder.weld_text_view("text");
-    assert(mxText.get());
+    assert(mxText);
     mxSave = rParentBuilder.weld_button("save");
-    assert(mxSave.get());
+    assert(mxSave);
 
     // set screenshot image at DrawingArea, resize, set event listener
     if (mxPicture)

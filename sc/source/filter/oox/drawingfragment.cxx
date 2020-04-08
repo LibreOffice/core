@@ -173,7 +173,7 @@ ContextHandlerRef GroupShapeContext::onCreateContext(
         sal_Int32 nElement, const AttributeList& rAttribs )
 {
     ContextHandlerRef xContext = createShapeContext( *this, *this, nElement, rAttribs, mpGroupShapePtr );
-    return xContext.get() ? xContext.get() : ShapeGroupContext::onCreateContext( nElement, rAttribs );
+    return xContext ? xContext : ShapeGroupContext::onCreateContext( nElement, rAttribs );
 }
 
 DrawingFragment::DrawingFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
@@ -212,9 +212,9 @@ ContextHandlerRef DrawingFragment::onCreateContext( sal_Int32 nElement, const At
                 case XDR_TOKEN( from ):
                 case XDR_TOKEN( to ):           return this;
 
-                case XDR_TOKEN( pos ):          if( mxAnchor.get() ) mxAnchor->importPos( rAttribs );           break;
-                case XDR_TOKEN( ext ):          if( mxAnchor.get() ) mxAnchor->importExt( rAttribs );           break;
-                case XDR_TOKEN( clientData ):   if( mxAnchor.get() ) mxAnchor->importClientData( rAttribs );    break;
+                case XDR_TOKEN( pos ):          if( mxAnchor ) mxAnchor->importPos( rAttribs );           break;
+                case XDR_TOKEN( ext ):          if( mxAnchor ) mxAnchor->importExt( rAttribs );           break;
+                case XDR_TOKEN( clientData ):   if( mxAnchor ) mxAnchor->importClientData( rAttribs );    break;
 
                 default:                        return GroupShapeContext::createShapeContext( *this, *this, nElement, rAttribs, ShapePtr(), &mxShape );
             }
@@ -243,7 +243,7 @@ void DrawingFragment::onCharacters( const OUString& rChars )
         case XDR_TOKEN( row ):
         case XDR_TOKEN( colOff ):
         case XDR_TOKEN( rowOff ):
-            if( mxAnchor.get() ) mxAnchor->setCellPos( getCurrentElement(), getParentElement(), rChars );
+            if( mxAnchor ) mxAnchor->setCellPos( getCurrentElement(), getParentElement(), rChars );
         break;
     }
 }
@@ -255,7 +255,7 @@ void DrawingFragment::onEndElement()
         case XDR_TOKEN( absoluteAnchor ):
         case XDR_TOKEN( oneCellAnchor ):
         case XDR_TOKEN( twoCellAnchor ):
-            if( mxDrawPage.is() && mxShape.get() && mxAnchor.get() )
+            if( mxDrawPage.is() && mxShape.get() && mxAnchor )
             {
                 // Rotation is decided by orientation of shape determined
                 // by the anchor position given by 'editAs="oneCell"'

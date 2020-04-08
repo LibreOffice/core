@@ -804,7 +804,7 @@ OUString DomainMapper_Impl::GetDefaultParaStyleName()
 
 uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId, StyleSheetEntryPtr pEntry, const bool bDocDefaults, const bool bPara, bool* pIsDocDefault)
 {
-    while(pEntry.get( ) )
+    while(pEntry)
     {
         if(pEntry->pProperties)
         {
@@ -1081,7 +1081,7 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
         return;
     TextAppendContext& rAppendContext = m_aTextAppendStack.top();
     // n#779642: ignore fly frame inside table as it could lead to messy situations
-    if (!rAppendContext.pLastParagraphProperties.get())
+    if (!rAppendContext.pLastParagraphProperties)
         return;
     if (!rAppendContext.pLastParagraphProperties->IsFrameMode())
         return;
@@ -1096,7 +1096,7 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
 
         std::vector<beans::PropertyValue> aFrameProperties;
 
-        if ( pParaStyle.get( ) )
+        if ( pParaStyle )
         {
             const ParagraphProperties* pStyleProperties = dynamic_cast<const ParagraphProperties*>( pParaStyle->pProperties.get() );
             if (!pStyleProperties)
@@ -1509,7 +1509,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 sal_Int32 nCount = xParaCursor->getString().getLength();
                 pToBeSavedProperties->SetDropCapLength(nCount > 0 && nCount < 255 ? static_cast<sal_Int8>(nCount) : 1);
             }
-            if( rAppendContext.pLastParagraphProperties.get() )
+            if( rAppendContext.pLastParagraphProperties )
             {
                 if( sal::static_int_cast<Id>(rAppendContext.pLastParagraphProperties->GetDropCap()) != NS_ooxml::LN_Value_doc_ST_DropCap_none)
                 {
@@ -1554,12 +1554,12 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 }
             }
             std::vector<beans::PropertyValue> aProperties;
-            if (pPropertyMap.get())
+            if (pPropertyMap)
             {
                 aProperties = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(pPropertyMap->GetPropertyValues());
             }
             // TODO: this *should* work for RTF but there are test failures, maybe rtftok doesn't distinguish between formatting for the paragraph marker and for the paragraph as a whole; needs investigation
-            if (pPropertyMap.get() && IsOOXMLImport())
+            if (pPropertyMap && IsOOXMLImport())
             {
                 // tdf#64222 filter out the "paragraph marker" formatting and
                 // set it as a separate paragraph property, not a empty hint at
@@ -1600,7 +1600,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 {
                     xTextRange = xTextAppend->finishParagraphInsert( comphelper::containerToSequence(aProperties), rAppendContext.xInsertPosition );
                     rAppendContext.xCursor->gotoNextParagraph(false);
-                    if (rAppendContext.pLastParagraphProperties.get())
+                    if (rAppendContext.pLastParagraphProperties)
                         rAppendContext.pLastParagraphProperties->SetEndingRange(xTextRange->getEnd());
                 }
                 else
@@ -1779,7 +1779,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
                     xCur->goLeft( 1 , true );
                     // Extend the redline ranges for empty paragraphs
-                    if ( !m_bParaChanged && m_previousRedline.get() )
+                    if ( !m_bParaChanged && m_previousRedline )
                         CreateRedline( xCur, m_previousRedline );
                     CheckParaMarkerRedline( xCur );
                 }
@@ -1953,7 +1953,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
         SetIsFirstParagraphInSection(false);
         // count first not deleted paragraph as first paragraph in section to avoid of
         // its deletion later, resulting loss of the associated page break
-        if (!m_previousRedline.get())
+        if (!m_previousRedline)
         {
             SetIsFirstParagraphInSectionAfterRedline(false);
             SetIsLastParagraphInSection(false);
@@ -2075,7 +2075,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
             }
 
             // reset moveFrom data of non-terminating runs of the paragraph
-            if ( m_pParaMarkerRedlineMoveFrom.get( ) )
+            if ( m_pParaMarkerRedlineMoveFrom )
             {
                 m_pParaMarkerRedlineMoveFrom.clear();
             }
@@ -2514,7 +2514,7 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
 void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xRange,
         const RedlineParamsPtr& pRedline)
 {
-    if ( pRedline.get( ) )
+    if ( pRedline )
     {
         try
         {
@@ -2569,22 +2569,22 @@ void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xR
 
 void DomainMapper_Impl::CheckParaMarkerRedline( uno::Reference< text::XTextRange > const& xRange )
 {
-    if ( m_pParaMarkerRedline.get( ) )
+    if ( m_pParaMarkerRedline )
     {
         CreateRedline( xRange, m_pParaMarkerRedline );
-        if ( m_pParaMarkerRedline.get( ) )
+        if ( m_pParaMarkerRedline )
         {
             m_pParaMarkerRedline.clear();
             m_currentRedline.clear();
         }
     }
-    else if ( m_pParaMarkerRedlineMoveFrom.get( ) )
+    else if ( m_pParaMarkerRedlineMoveFrom )
     {
         // terminating moveFrom redline removes also the paragraph mark
         m_pParaMarkerRedlineMoveFrom->m_nToken = XML_del;
         CreateRedline( xRange, m_pParaMarkerRedlineMoveFrom );
     }
-    if ( m_pParaMarkerRedlineMoveFrom.get( ) )
+    if ( m_pParaMarkerRedlineMoveFrom )
     {
         m_pParaMarkerRedlineMoveFrom.clear();
     }
@@ -3860,7 +3860,7 @@ void DomainMapper_Impl::AppendFieldCommand(OUString const & rPartOfCommand)
 
     FieldContextPtr pContext = m_aFieldStack.back();
     OSL_ENSURE( pContext.get(), "no field context available");
-    if( pContext.get() )
+    if( pContext )
     {
         pContext->AppendCommand( rPartOfCommand );
     }
@@ -4128,7 +4128,7 @@ void  DomainMapper_Impl::handleRubyEQField( const FieldContextPtr& pContext)
     PropertyValueVector_t aProps = comphelper::sequenceToContainer< PropertyValueVector_t >(pRubyContext->GetPropertyValues());
     aInfo.sRubyStyle = m_rDMapper.getOrCreateCharStyle(aProps, /*bAlwaysCreate=*/false);
     PropertyMapPtr pCharContext(new PropertyMap());
-    if (m_pLastCharacterContext.get())
+    if (m_pLastCharacterContext)
         pCharContext->InsertProps(m_pLastCharacterContext);
     pCharContext->InsertProps(pContext->getProperties());
     pCharContext->Insert(PROP_RUBY_TEXT, uno::makeAny( aInfo.sRubyText ) );
@@ -4832,7 +4832,7 @@ void DomainMapper_Impl::CloseFieldCommand()
     if(!m_aFieldStack.empty())
         pContext = m_aFieldStack.back();
     OSL_ENSURE( pContext.get(), "no field context available");
-    if( pContext.get() )
+    if( pContext )
     {
         m_bSetUserFieldContent = false;
         m_bSetCitation = false;
@@ -4848,7 +4848,7 @@ void DomainMapper_Impl::CloseFieldCommand()
             OUString const sFirstParam(vArguments.empty() ? OUString() : vArguments.front());
 
             // apply font size to the form control
-            if ( m_pLastCharacterContext.get() && m_pLastCharacterContext->isSet(PROP_CHAR_HEIGHT) )
+            if ( m_pLastCharacterContext && m_pLastCharacterContext->isSet(PROP_CHAR_HEIGHT) )
             {
                 uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
                 if (xTextAppend.is())
@@ -5640,7 +5640,7 @@ bool DomainMapper_Impl::IsFieldResultAsString()
     OSL_ENSURE( !m_aFieldStack.empty(), "field stack empty?");
     FieldContextPtr pContext = m_aFieldStack.back();
     OSL_ENSURE( pContext.get(), "no field context available");
-    if( pContext.get() )
+    if( pContext )
     {
         bRet = pContext->GetTextField().is()
             || pContext->GetFieldId() == FIELD_FORMDROPDOWN
@@ -5666,8 +5666,8 @@ void DomainMapper_Impl::AppendFieldResult(OUString const& rString)
 {
     assert(!m_aFieldStack.empty());
     FieldContextPtr pContext = m_aFieldStack.back();
-    SAL_WARN_IF(!pContext.get(), "writerfilter.dmapper", "no field context");
-    if (pContext.get())
+    SAL_WARN_IF(!pContext, "writerfilter.dmapper", "no field context");
+    if (pContext)
     {
         FieldContextPtr pOuter = GetParentFieldContext(m_aFieldStack);
         if (pOuter)
@@ -5732,7 +5732,7 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
         }
     }
 
-    if( pContext.get() )
+    if( pContext )
     {
         uno::Reference<text::XTextField> xTextField = pContext->GetTextField();
         try
@@ -5858,7 +5858,7 @@ void DomainMapper_Impl::SetFieldFFData(const FFDataHandler::Pointer_t& pFFDataHa
     if (!m_aFieldStack.empty())
     {
         FieldContextPtr pContext = m_aFieldStack.back();
-        if (pContext.get())
+        if (pContext)
         {
             pContext->setFFDataHandler(pFFDataHandler);
         }
@@ -5882,7 +5882,7 @@ void DomainMapper_Impl::PopFieldContext()
 
     FieldContextPtr pContext = m_aFieldStack.back();
     OSL_ENSURE( pContext.get(), "no field context available");
-    if( pContext.get() )
+    if( pContext )
     {
         if( !pContext->IsCommandCompleted() )
             CloseFieldCommand();
@@ -5947,7 +5947,7 @@ void DomainMapper_Impl::PopFieldContext()
                         // properties from there.
                         // Also merge in the properties from the field context,
                         // e.g. SdtEndBefore.
-                        if (m_pLastCharacterContext.get())
+                        if (m_pLastCharacterContext)
                             aMap.InsertProps(m_pLastCharacterContext);
                         aMap.InsertProps(m_aFieldStack.back()->getProperties());
                         appendTextContent(xToInsert, aMap.GetPropertyValues());
@@ -6616,7 +6616,7 @@ void DomainMapper_Impl::SetCurrentRedlineIsRead()
 
 sal_Int32 DomainMapper_Impl::GetCurrentRedlineToken(  ) const
 {
-    assert(m_currentRedline.get());
+    assert(m_currentRedline);
     return m_currentRedline->m_nToken;
 }
 
@@ -6624,7 +6624,7 @@ void DomainMapper_Impl::SetCurrentRedlineAuthor( const OUString& sAuthor )
 {
     if (!m_xAnnotationField.is())
     {
-        if (m_currentRedline.get())
+        if (m_currentRedline)
             m_currentRedline->m_sAuthor = sAuthor;
         else
             SAL_INFO("writerfilter.dmapper", "numberingChange not implemented");
@@ -6643,7 +6643,7 @@ void DomainMapper_Impl::SetCurrentRedlineDate( const OUString& sDate )
 {
     if (!m_xAnnotationField.is())
     {
-        if (m_currentRedline.get())
+        if (m_currentRedline)
             m_currentRedline->m_sDate = sDate;
         else
             SAL_INFO("writerfilter.dmapper", "numberingChange not implemented");
@@ -6662,20 +6662,20 @@ void DomainMapper_Impl::SetCurrentRedlineId( sal_Int32 sId )
     {
         // This should be an assert, but somebody had the smart idea to reuse this function also for comments and whatnot,
         // and in some cases the id is actually not handled, which may be in fact a bug.
-        if( !m_currentRedline.get())
+        if( !m_currentRedline)
             SAL_INFO("writerfilter.dmapper", "no current redline");
     }
 }
 
 void DomainMapper_Impl::SetCurrentRedlineToken( sal_Int32 nToken )
 {
-    assert(m_currentRedline.get());
+    assert(m_currentRedline);
     m_currentRedline->m_nToken = nToken;
 }
 
 void DomainMapper_Impl::SetCurrentRedlineRevertProperties( const uno::Sequence<beans::PropertyValue>& aProperties )
 {
-    assert(m_currentRedline.get());
+    assert(m_currentRedline);
     m_currentRedline->m_aRevertProperties = aProperties;
 }
 

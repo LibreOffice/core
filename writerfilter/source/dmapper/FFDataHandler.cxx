@@ -159,7 +159,7 @@ void FFDataHandler::lcl_sprm(Sprm & r_Sprm)
 void FFDataHandler::resolveSprm(Sprm & r_Sprm)
 {
     writerfilter::Reference<Properties>::Pointer_t pProperties = r_Sprm.getProps();
-    if( pProperties.get())
+    if( pProperties)
         pProperties->resolve(*this);
 }
 

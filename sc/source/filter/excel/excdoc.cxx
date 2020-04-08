@@ -663,7 +663,7 @@ void ExcTable::FillAsEmptyTable( SCTAB nCodeNameIdx )
 void ExcTable::Write( XclExpStream& rStrm )
 {
     SetCurrScTab( mnScTab );
-    if( mxCellTable.get() )
+    if( mxCellTable )
         mxCellTable->Finalize(true);
     aRecList.Save( rStrm );
 }
@@ -781,7 +781,7 @@ void ExcDocument::Write( SvStream& rSvStrm )
         {
             // set current stream position in BOUNDSHEET record
             ExcBoundsheetRef xBoundsheet = maBoundsheetList.GetRecord( nTab );
-            if( xBoundsheet.get() )
+            if( xBoundsheet )
                 xBoundsheet->SetStreamPos( aXclStrm.GetSvStreamPos() );
             // write the table
             maTableList.GetRecord( nTab )->Write( aXclStrm );

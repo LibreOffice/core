@@ -415,7 +415,7 @@ void PdfExportTest::testTdf107868()
     SvMemoryStream aMemory;
     aMemory.WriteStream(aFile);
     DocumentHolder pPdfDocument(FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr));
-    if (!pPdfDocument.get())
+    if (!pPdfDocument)
         // Printing to PDF failed in a non-interesting way, e.g. CUPS is not
         // running, there is no printer defined, etc.
         return;

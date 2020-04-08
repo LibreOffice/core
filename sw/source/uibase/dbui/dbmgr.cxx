@@ -1587,7 +1587,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             if( IsMergeOk() && bMT_FILE )
             {
                 // save merged document
-                assert( aTempFile.get() );
+                assert( aTempFile );
                 INetURLObject aTempFileURL;
                 if (sDescriptorPrefix.isEmpty() || !rMergeDescriptor.bPrefixIsFilename)
                     aTempFileURL.SetURL( aTempFile->GetURL() );

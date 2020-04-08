@@ -3919,7 +3919,7 @@ OUString SAL_CALL SfxBaseModel::getTitle()
     SfxModelGuard aGuard( *this );
 
     OUString aResult = impl_getTitleHelper()->getTitle ();
-    if ( !m_pData->m_bExternalTitle && m_pData->m_pObjectShell.get() )
+    if ( !m_pData->m_bExternalTitle && m_pData->m_pObjectShell )
     {
         SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
         if ( pMedium )

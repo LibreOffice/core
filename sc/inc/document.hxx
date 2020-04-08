@@ -988,7 +988,7 @@ public:
                                                                              const OUString& aFileName,
                                                                              const OUString& aTabName );
 
-    bool                               HasExternalRefManager() const { return pExternalRefMgr.get(); }
+    bool                               HasExternalRefManager() const { return bool(pExternalRefMgr); }
     SC_DLLPUBLIC ScExternalRefManager* GetExternalRefManager() const;
     bool                               IsInExternalReferenceMarking() const;
     void                               MarkUsedExternalReferences();

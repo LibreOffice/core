@@ -331,7 +331,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             if (pCols)
             {
                 RTFValue::Pointer_t pNum = pCols->getAttributes().find(NS_ooxml::LN_CT_Columns_num);
-                if (pNum.get() && pNum->getInt() > 1)
+                if (pNum && pNum->getInt() > 1)
                     bColumns = true;
             }
             checkFirstRun();
@@ -365,11 +365,11 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             // Unless we're on a title page.
             RTFValue::Pointer_t pTitlePg
                 = m_aStates.top().getSectionSprms().find(NS_ooxml::LN_EG_SectPrContents_titlePg);
-            if (((pBreak.get()
+            if (((pBreak
                   && pBreak->getInt()
                          == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_continuous))
                  || m_nResetBreakOnSectBreak == RTF_SBKNONE)
-                && !(pTitlePg.get() && pTitlePg->getInt()))
+                && !(pTitlePg && pTitlePg->getInt()))
             {
                 if (m_bWasInFrame)
                 {

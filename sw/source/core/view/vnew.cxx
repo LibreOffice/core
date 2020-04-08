@@ -289,7 +289,7 @@ SwViewShell::~SwViewShell()
         // i#9684 Stopping the animated graphics is not
         // necessary during printing or pdf export, because the animation
         // has not been started in this case.
-        if( mxDoc.get() && GetWin() )
+        if( mxDoc && GetWin() )
         {
             SwNodes& rNds = mxDoc->GetNodes();
 

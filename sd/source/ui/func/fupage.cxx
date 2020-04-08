@@ -348,7 +348,7 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
             pTempSet.reset( new SfxItemSet(*pDlg->GetOutputItemSet()) );
     }
 
-    if (pTempSet.get() && pStyleSheet)
+    if (pTempSet && pStyleSheet)
     {
         pStyleSheet->AdjustToFontHeight(*pTempSet);
 

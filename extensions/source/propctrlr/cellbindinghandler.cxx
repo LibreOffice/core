@@ -449,9 +449,9 @@ namespace pcr
     {
         std::vector< Property > aProperties;
 
-        bool bAllowCellLinking      = m_pHelper.get() && m_pHelper->isCellBindingAllowed();
-        bool bAllowCellIntLinking   = m_pHelper.get() && m_pHelper->isCellIntegerBindingAllowed();
-        bool bAllowListCellRange    = m_pHelper.get() && m_pHelper->isListCellRangeAllowed();
+        bool bAllowCellLinking      = m_pHelper && m_pHelper->isCellBindingAllowed();
+        bool bAllowCellIntLinking   = m_pHelper && m_pHelper->isCellIntegerBindingAllowed();
+        bool bAllowListCellRange    = m_pHelper && m_pHelper->isListCellRangeAllowed();
         if ( bAllowCellLinking || bAllowListCellRange || bAllowCellIntLinking )
         {
             sal_Int32 nPos =  ( bAllowCellLinking    ? 1 : 0 )

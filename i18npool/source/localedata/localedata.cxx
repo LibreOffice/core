@@ -1434,7 +1434,7 @@ oslGenericFunction LocaleDataImpl::getFunctionSymbol( const Locale& rLocale, con
 {
     lcl_LookupTableHelper & rLookupTable = lcl_LookupTableStatic::get();
 
-    if (cachedItem.get() && cachedItem->equals(rLocale))
+    if (cachedItem && cachedItem->equals(rLocale))
     {
         OString sSymbolName = rtl::OStringView(pFunction) + "_" +
                 cachedItem->localeName;

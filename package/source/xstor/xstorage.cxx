@@ -1841,7 +1841,7 @@ void OStorage::InternalDispose( bool bNotifyImpl )
 
     if ( m_pData->m_bReadOnlyWrap )
     {
-        OSL_ENSURE( m_pData->m_aOpenSubComponentsVector.empty() || m_pData->m_pSubElDispListener.get(),
+        OSL_ENSURE( m_pData->m_aOpenSubComponentsVector.empty() || m_pData->m_pSubElDispListener,
                     "If any subelements are open the listener must exist!" );
 
         if (m_pData->m_pSubElDispListener)

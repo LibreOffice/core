@@ -884,7 +884,7 @@ public:
 
     void appendTableHandler( )
     {
-        if (m_pTableHandler.get())
+        if (m_pTableHandler)
             m_aTableManagers.top()->setHandler(m_pTableHandler);
     }
 
