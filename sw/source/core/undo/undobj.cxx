@@ -1571,14 +1571,14 @@ bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
                 && ((rStart.nNode != rEnd.nNode && rStart.nContent == 0
                         // but not if the selection is backspace/delete!
                         && IsNotBackspaceHeuristic(rStart, rEnd))
-                    || IsAtStartOfSection(rAnchorPos))))
+                    || (IsAtStartOfSection(rAnchorPos) && IsAtEndOfSection(rEnd)))))
         && ((rAnchorPos < rEnd)
             || (rAnchorPos == rEnd
                 && !(nDelContentType & DelContentType::ExcludeFlyAtStartEnd)
                 // special case: fully deleted node
                 && ((rEnd.nNode != rStart.nNode && rEnd.nContent == rEnd.nNode.GetNode().GetTextNode()->Len()
                         && IsNotBackspaceHeuristic(rStart, rEnd))
-                    || IsAtEndOfSection(rAnchorPos))));
+                    || (IsAtEndOfSection(rAnchorPos) && IsAtStartOfSection(rStart)))));
 }
 
 bool IsSelectFrameAnchoredAtPara(SwPosition const & rAnchorPos,
