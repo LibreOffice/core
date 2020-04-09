@@ -32,7 +32,61 @@ using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
+namespace
+{
+class FillGraphicPrimitive2DContainer:
+    public BasePrimitive2DContainer
+{
+    const attribute::FillGraphicAttribute& mrAttribute;
+    basegfx::B2DHomMatrix maTransformation;
+public:
+    FillGraphicPrimitive2DContainer(const attribute::FillGraphicAttribute& rAttribute, const basegfx::B2DHomMatrix& rTransformation):
+        mrAttribute(rAttribute),
+        maTransformation(rTransformation)
+
+    {
+    }
+
+    virtual void processAll(Primitive2DProcessingCallback aCallback) const override
+    {
+        const double fWidth(mrAttribute.getGraphicRange().getWidth());
+        const double fHeight(mrAttribute.getGraphicRange().getHeight());
+        Primitive2DContainer aContainer;
+
+        create2DDecompositionOfGraphic(aContainer,
+            mrAttribute.getGraphic(),
+            basegfx::B2DHomMatrix());
+
+        texture::GeoTexSvxTiled aTiling(mrAttribute.getGraphicRange(),
+                mrAttribute.getOffsetX(),
+                mrAttribute.getOffsetY());
+
+        aTiling.iterateTiles([&](double fPosX, double fPosY) {
+            const drawinglayer::primitive2d::Primitive2DReference aEmbed(
+                new drawinglayer::primitive2d::TransformPrimitive2D(
+            maTransformation * basegfx::utils::createScaleTranslateB2DHomMatrix(
+                fWidth,
+                fHeight,
+                fPosX,
+                fPosY),
+            aContainer));
+
+
+            aCallback(aEmbed);
+        });
+    }
+
+    virtual void append(const Primitive2DReference&) override {}
+
+    virtual void append(const Primitive2DContainer&) override {}
+
+    virtual void append(Primitive2DContainer&&) override {}
+};
+
+}
+
         void FillGraphicPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
+
         {
             const attribute::FillGraphicAttribute& rAttribute = getFillGraphic();
 
@@ -89,6 +143,16 @@ namespace drawinglayer::primitive2d
             }
         }
 
+        void FillGraphicPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
+        {
+            // This type of container is ready when constructed.
+            if (dynamic_cast<FillGraphicPrimitive2DContainer*>(&rVisitor))
+                return;
+
+            // Otherwise use base class to visit the primitive.
+            BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
+        }
+
         FillGraphicPrimitive2D::FillGraphicPrimitive2D(
             const basegfx::B2DHomMatrix& rTransformation,
             const attribute::FillGraphicAttribute& rFillGraphic)
@@ -118,6 +182,11 @@ namespace drawinglayer::primitive2d
             aPolygon.transform(getTransformation());
 
             return basegfx::utils::getRange(aPolygon);
+        }
+
+        BasePrimitive2DContainer *FillGraphicPrimitive2D::createPreferredContainer() const
+        {
+            return new FillGraphicPrimitive2DContainer(getFillGraphic(), getTransformation());
         }
 
         // provide unique ID
