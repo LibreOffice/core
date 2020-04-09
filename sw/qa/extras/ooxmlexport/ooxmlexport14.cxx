@@ -823,6 +823,16 @@ DECLARE_OOXMLEXPORT_TEST(testStrikeoutGroupShapeText, "tdf131776_StrikeoutGroupS
         "wps:wsp[6]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:strike", "val", "false");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf131539, "tdf131539.odt")
+{
+    //The positions of OLE objects were not exported, check if now it is exported correctly
+    xmlDocPtr p_XmlDoc = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(p_XmlDoc);
+    OUString aXmlVal = getXPath(p_XmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:object/v:shape", "style");
+    // This data was missing
+    CPPUNIT_ASSERT(aXmlVal.indexOf("margin-left:139.95")>-1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
