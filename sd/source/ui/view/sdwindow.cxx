@@ -1009,6 +1009,8 @@ void Window::LogicInvalidate(const ::tools::Rectangle* pRectangle)
     if (!pDrawViewShell || pDrawViewShell->IsInSwitchPage())
         return;
 
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
     OString sRectangle;
     if (!pRectangle)
         sRectangle = "EMPTY";
