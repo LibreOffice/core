@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e16f5a8_5696ee3b",
+        "filename": "sfx2/source/appl/appuno.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-09T10:11:55Z",
+      "side": 1,
+      "message": "is rArg.pName guaranteed to only contain ASCII characters (asking because the original code used RTL_TEXTENCODING_UTF8, suggesting that it may rather have UTF-8 content)?",
+      "range": {
+        "startLine": 298,
+        "startChar": 79,
+        "endLine": 298,
+        "endChar": 90
+      },
+      "revId": "c6a26473f47c141026bf624668607f19394594ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
