@@ -26,6 +26,8 @@ chart2/res/dataeditor_icon06.png cmd/sc_insertcellsdown.png
 chart2/res/dataeditor_icon07.png cmd/sc_insertcolumnsafter.png
 chart2/res/dataeditor_icon08.png cmd/sc_insertcolumns.png
 chart2/res/dataeditor_icon09.png cmd/sc_insertrowsbefore.png
+chart2/res/netlinepoint_52x60.png chart2/res/net_52x60.png
+chart2/res/netlinepointstack_52x60.png chart2/res/netstack_52x60.png
 chart2/res/selectrange.png formula/res/refinp1.png
 
 cmd/32/charttitlemenu.png cmd/32/toggletitle.png
@@ -400,9 +402,52 @@ cmd/sc_showallnotes.png cmd/sc_showannotations.png
 cmd/sc_showchanges.png cmd/sc_addwatch.png
 
 # Locale language support
+cmd/32/ar/bulletliststyle.png cmd/32/ar/defaultbullet.png
+cmd/32/ar/defaultparastyle.png cmd/32/ar/controlcodes.png
+cmd/32/ar/numberliststyle.png cmd/32/ar/defaultnumbering.png
+cmd/32/ar/recundo.png cmd/32/redo.png
+cmd/32/ar/redo.png cmd/32/undo.png
+cmd/32/ar/undo.png cmd/32/redo.png
 cmd/32/es/italic.png cmd/32/de/italic.png
+cmd/32/fa/recundo.png cmd/32/redo.png
+cmd/32/fa/redo.png cmd/32/undo.png	
+cmd/32/fa/undo.png cmd/32/redo.png
+cmd/32/he/recundo.png cmd/32/redo.png
+cmd/32/he/redo.png cmd/32/undo.png
+cmd/32/he/undo.png cmd/32/redo.png
+cmd/32/ur/recundo.png cmd/32/redo.png
+cmd/32/ur/redo.png cmd/32/undo.png
+cmd/32/ur/undo.png cmd/32/redo.png
+cmd/ar/lc_bulletliststyle.png cmd/ar/lc_defaultbullet.png
+cmd/ar/lc_defaultparastyle.png cmd/ar/lc_controlcodes.png
+cmd/ar/lc_numberliststyle.png cmd/ar/lc_defaultnumbering.png
+cmd/ar/lc_redo.png cmd/lc_undo.png
+cmd/ar/lc_undo.png cmd/lc_redo.png
+cmd/ar/sc_bulletliststyle.png cmd/ar/sc_defaultbullet.png
+cmd/ar/sc_defaultparastyle.png cmd/ar/sc_controlcodes.png
+cmd/ar/sc_numberliststyle.png cmd/ar/sc_defaultnumbering.png
+cmd/ar/sc_redo.png cmd/sc_undo.png
+cmd/ar/sc_undo.png cmd/sc_redo.png
 cmd/es/lc_italic.png cmd/de/lc_italic.png
 cmd/es/sc_italic.png cmd/de/sc_italic.png
+cmd/fa/lc_recundo.png cmd/lc_redo.png
+cmd/fa/lc_redo.png cmd/lc_undo.png
+cmd/fa/lc_undo.png cmd/lc_redo.png
+cmd/fa/sc_recundo.png cmd/sc_redo.png
+cmd/fa/sc_redo.png cmd/sc_undo.png
+cmd/fa/sc_undo.png cmd/sc_redo.png
+cmd/he/lc_recundo.png cmd/lc_redo.png
+cmd/he/lc_redo.png cmd/lc_undo.png
+cmd/he/lc_undo.png cmd/lc_redo.png
+cmd/he/sc_recundo.png cmd/sc_redo.png
+cmd/he/sc_redo.png cmd/sc_undo.png
+cmd/he/sc_undo.png cmd/sc_redo.png
+cmd/ur/lc_recundo.png cmd/lc_redo.png
+cmd/ur/lc_redo.png cmd/lc_undo.png
+cmd/ur/lc_undo.png cmd/lc_redo.png
+cmd/ur/sc_recundo.png cmd/sc_redo.png
+cmd/ur/sc_redo.png cmd/sc_undo.png
+cmd/ur/sc_undo.png cmd/sc_redo.png
 
 # Template Menu
 cmd/32/templatemenu.png cmd/32/adddirect.png
@@ -1318,18 +1363,12 @@ cmd/sc_rehearsetimings.png cmd/sc_diatime.png
 # Arrange
 cmd/32/arrangeframemenu.png cmd/32/bringtofront.png
 cmd/32/arrangemenu.png cmd/32/bringtofront.png
-cmd/32/setobjecttobackground.png cmd/32/sendtoback.png
-cmd/32/setobjecttoforeground.png cmd/32/bringtofront.png
 
 cmd/lc_arrangeframemenu.png cmd/lc_bringtofront.png
 cmd/lc_arrangemenu.png cmd/lc_bringtofront.png
-cmd/lc_setobjecttobackground.png cmd/lc_sendtoback.png
-cmd/lc_setobjecttoforeground.png cmd/lc_bringtofront.png
 
 cmd/sc_arrangeframemenu.png cmd/sc_bringtofront.png
 cmd/sc_arrangemenu.png cmd/sc_bringtofront.png
-cmd/sc_setobjecttobackground.png cmd/sc_sendtoback.png
-cmd/sc_setobjecttoforeground.png cmd/sc_bringtofront.png
 
 # Calc
 cmd/32/fieldmenu.png cmd/32/insertfieldctrl.png
@@ -1495,35 +1534,6 @@ cmd/sc_tableselectmenu.png cmd/sc_selecttable.png
 cmd/32/absoluterecord.png cmd/32/helpindex.png
 cmd/lc_absoluterecord.png cmd/lc_helpindex.png
 cmd/sc_absoluterecord.png cmd/sc_helpindex.png
-
-# language support for rtl
-# doesn't work for all other languages
-#cmd/lc_redo.png cmd/ar/lc_undo.png
-#cmd/lc_undo.png cmd/ar/lc_redo.png
-#cmd/sc_redo.png cmd/ar/sc_undo.png
-#cmd/sc_undo.png cmd/ar/sc_redo.png
-
-#cmd/lc_redo.png cmd/fa/lc_undo.png
-#cmd/lc_undo.png cmd/fa/lc_redo.png
-#cmd/sc_redo.png cmd/fa/sc_undo.png
-#cmd/sc_undo.png cmd/fa/sc_redo.png
-
-#cmd/lc_redo.png cmd/he/lc_undo.png
-#cmd/lc_undo.png cmd/he/lc_redo.png
-#cmd/sc_redo.png cmd/he/sc_undo.png
-#cmd/sc_undo.png cmd/he/sc_redo.png
-
-cmd/32/ar/bulletliststyle.png cmd/32/ar/defaultbullet.png
-cmd/32/ar/defaultparastyle.png cmd/32/ar/controlcodes.png
-cmd/32/ar/numberliststyle.png cmd/32/ar/defaultnumbering.png
-
-cmd/ar/lc_bulletliststyle.png cmd/ar/lc_defaultbullet.png
-cmd/ar/lc_defaultparastyle.png cmd/ar/lc_controlcodes.png
-cmd/ar/lc_numberliststyle.png cmd/ar/lc_defaultnumbering.png
-
-cmd/ar/sc_bulletliststyle.png cmd/ar/sc_defaultbullet.png
-cmd/ar/sc_defaultparastyle.png cmd/ar/sc_controlcodes.png
-cmd/ar/sc_numberliststyle.png cmd/ar/sc_defaultnumbering.png
 
 # text background colour Impress/Draw
 cmd/32/charbackcolor.png cmd/32/backcolor.png
@@ -2277,6 +2287,7 @@ sw/res/sc20173.png cmd/sc_nextrecord.png
 sw/res/sc20174.png cmd/sc_upsearch.png
 sw/res/sc20175.png cmd/sc_nextrecord.png
 sw/res/sc20182.png cmd/sc_toggleanchortype.png
+sw/res/sc20183.png cmd/sc_setreminder.png
 sw/res/sc20186.png cmd/sc_prevrecord.png
 sw/res/sc20233.png cmd/sc_ok.png
 sw/res/sc20235.png cmd/sc_inserthyperlinkcontrol.png
@@ -2311,7 +2322,7 @@ sw/res/sr20009.png cmd/sc_insertgraphic.png
 sw/res/sr20010.png cmd/sc_insertobject.png
 sw/res/sr20011.png sw/res/nc20000.png
 sw/res/sr20013.png cmd/sc_insertfootnote.png
-sw/res/sr20014.png sw/res/sc20183.png
+sw/res/sr20014.png cmd/sc_setreminder.png
 sw/res/sr20015.png cmd/sc_shownote.png
 sw/res/sr20016.png cmd/sc_recsearch.png
 sw/res/sr20017.png cmd/sc_insertindexesentry.png
@@ -2566,4 +2577,3 @@ cmd/lc_pastespecialmenu.png cmd/lc_pastespecial.png
 cmd/sc_editpastespecialmenu.png cmd/sc_pastespecial.png
 cmd/sc_insertcontents.png cmd/sc_pastespecial.png
 cmd/sc_pastespecialmenu.png cmd/sc_pastespecial.png
-
