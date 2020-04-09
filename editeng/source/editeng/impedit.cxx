@@ -274,6 +274,10 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
     const sal_Int32 nEndPara = pEditEngine->GetEditDoc().GetPos(pEndNode);
     if (nStartPara == EE_PARA_NOT_FOUND || nEndPara == EE_PARA_NOT_FOUND)
         return;
+
+    bool bStartHandleVisible = false;
+    bool bEndHandleVisible = false;
+
     for ( sal_Int32 nPara = nStartPara; nPara <= nEndPara; nPara++ )
     {
         ParaPortion* pTmpPortion = pEditEngine->GetParaPortions().SafeGetObject( nPara );
@@ -336,6 +340,11 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
 
             if ( aBottomRight.Y() < GetVisDocTop() )
                 continue;
+
+            if ( ( nPara == nStartPara ) && ( nLine == nStartLine ) )
+                bStartHandleVisible = true;
+            if ( ( nPara == nEndPara ) && ( nLine == nEndLine ) )
+                bEndHandleVisible = true;
 
             // Now that we have Bidi, the first/last index doesn't have to be the 'most outside' position
             if ( !bPartOfLine )
@@ -401,6 +410,8 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
                 const OUString rAction("text_selection");
                 std::vector<vcl::LOKPayloadItem> aItems;
                 aItems.emplace_back("rectangles", sRectangle);
+                aItems.emplace_back("startHandleVisible", OString::boolean(bStartHandleVisible));
+                aItems.emplace_back("endHandleVisible", OString::boolean(bEndHandleVisible));
                 pNotifier->notifyWindow(pParent->GetLOKWindowId(), rAction, aItems);
                 delete pPolyPoly;
                 return;
@@ -1355,6 +1366,11 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
         {
             EENotify aNotify( EE_NOTIFY_TEXTVIEWSCROLLED );
             pEditEngine->pImpEditEngine->GetNotifyHdl().Call( aNotify );
+        }
+
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            DrawSelectionXOR();
         }
     }
 
