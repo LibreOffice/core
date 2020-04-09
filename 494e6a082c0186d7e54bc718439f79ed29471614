@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "36fe7c90_b803c310",
+        "filename": "setup_native/scripts/admin.pl",
+        "patchSetId": 3
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-04-09T09:31:04Z",
+      "side": 0,
+      "message": "make_path defaults to 777 (see \"mode \u003d\u003e $num\" discussion at [1]), so is it correct to drop this?\n\n[1] https://perldoc.perl.org/File/Path.html",
+      "range": {
+        "startLine": 352,
+        "startChar": 47,
+        "endLine": 352,
+        "endChar": 51
+      },
+      "revId": "494e6a082c0186d7e54bc718439f79ed29471614",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
