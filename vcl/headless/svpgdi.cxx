@@ -102,7 +102,8 @@ namespace
     {
         double x1, y1, x2, y2;
 
-        cairo_stroke_extents(cr, &x1, &y1, &x2, &y2);
+        // less accurate, but much faster
+        cairo_path_extents(cr, &x1, &y1, &x2, &y2);
 
         // support B2DRange::isEmpty()
         if(0.0 != x1 || 0.0 != y1 || 0.0 != x2 || 0.0 != y2)
