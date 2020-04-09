@@ -62,9 +62,8 @@ class VCL_DLLPUBLIC GfxLink
 private:
     GfxLinkType     meType;
     sal_uInt32      mnUserId;
-
     mutable std::shared_ptr<sal_uInt8> mpSwapInData;
-
+    mutable size_t  maHash;
     sal_uInt32      mnSwapInDataSize;
     MapMode         maPrefMapMode;
     Size            maPrefSize;
@@ -81,6 +80,8 @@ public:
     bool                operator==( const GfxLink& ) const;
 
     GfxLinkType         GetType() const { return meType;}
+
+    size_t              GetHash() const;
 
     void                SetUserId( sal_uInt32 nUserId ) { mnUserId = nUserId; }
     sal_uInt32          GetUserId() const { return mnUserId; }
