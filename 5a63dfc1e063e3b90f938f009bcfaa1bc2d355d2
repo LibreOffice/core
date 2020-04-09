@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c69b26e1_ef0e081d",
+        "filename": "starmath/Library_sm.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-04-09T07:32:22Z",
+      "side": 1,
+      "message": "I gave a try:\ndiff --git a/starmath/CppunitTest_starmath_qa_cppunit.mk b/starmath/CppunitTest_starmath_qa_cppunit.mk\nindex ee436749f95a..639ad5bbdd4c 100644\n--- a/starmath/CppunitTest_starmath_qa_cppunit.mk\n+++ b/starmath/CppunitTest_starmath_qa_cppunit.mk\n@@ -29,6 +29,7 @@ $(eval $(call gb_CppunitTest_use_libraries,starmath_qa_cppunit,\\\n     editeng \\\n     i18nlangtag \\\n     i18nutil \\\n+    icuuc \\\n     msfilter \\\n     oox \\\n     sal \\\n\nbut had this:\n/home/julien/lo/libreoffice/starmath/CppunitTest_starmath_qa_cppunit.mk:25: *** Cannot link against library/libraries icuuc. Libraries must be registered in Repository.mk or RepositoryExternal.mk.",
+      "parentUuid": "366306ff_7002f417",
+      "revId": "5a63dfc1e063e3b90f938f009bcfaa1bc2d355d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b5c3664b_2cffa3f1",
         "filename": "starmath/source/parse.cxx",
         "patchSetId": 2
