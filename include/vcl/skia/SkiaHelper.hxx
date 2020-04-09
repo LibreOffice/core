@@ -14,6 +14,8 @@
 
 #include <config_features.h>
 
+#include <rtl/ustring.hxx>
+
 namespace SkiaHelper
 {
 VCL_DLLPUBLIC bool isVCLSkiaEnabled();
@@ -28,6 +30,8 @@ enum RenderMethod
 };
 
 VCL_DLLPUBLIC RenderMethod renderMethodToUse();
+
+VCL_DLLPUBLIC rtl::OUString driverInfoString();
 
 // Clean up before exit.
 VCL_DLLPUBLIC void cleanup();

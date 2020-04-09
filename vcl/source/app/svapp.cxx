@@ -1149,7 +1149,7 @@ OUString Application::GetHWOSConfInfo()
 
     aDetails.append( VclResId(SV_APP_OSVERSION) );
     aDetails.append( aVersion );
-    aDetails.append( "; " );
+    aDetails.append( "\n" );
 
     aDetails.append( VclResId(SV_APP_UIRENDER) );
 #if HAVE_FEATURE_SKIA
@@ -1158,10 +1158,10 @@ OUString Application::GetHWOSConfInfo()
         switch(SkiaHelper::renderMethodToUse())
         {
             case SkiaHelper::RenderVulkan:
-                aDetails.append( VclResId(SV_APP_SKIA_VULKAN) );
+                aDetails.append( VclResId(SV_APP_SKIA_VULKAN) + "(" + SkiaHelper::driverInfoString() + ")");
                 break;
             case SkiaHelper::RenderRaster:
-                aDetails.append( VclResId(SV_APP_SKIA_RASTER) );
+                aDetails.append( VclResId(SV_APP_SKIA_RASTER) + "(" + SkiaHelper::driverInfoString() + ")");
                 break;
         }
     }
