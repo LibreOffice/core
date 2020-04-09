@@ -108,6 +108,30 @@
     },
     {
       "key": {
+        "uuid": "96543269_d27ce15e",
+        "filename": "ridljar/Jar_libreoffice.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-04-09T12:26:26Z",
+      "side": 1,
+      "message": "Sorry, I was wrong. There is another place where it fails now, which probably needs the same addition.",
+      "parentUuid": "e8acceea_eec2834e",
+      "range": {
+        "startLine": 18,
+        "startChar": 4,
+        "endLine": 18,
+        "endChar": 10
+      },
+      "revId": "f4c9f2f59dcae0416bbb6521e4597a96e0cbc646",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "29b443ef_93b2e375",
         "filename": "unotest/Jar_test.mk",
         "patchSetId": 2
