@@ -813,7 +813,7 @@ void ScEditShell::GetState( SfxItemSet& rSet )
             break;
             case SID_COPY:
             case SID_CUT:
-                if (GetObjectShell() && GetObjectShell()->isContentExtractionLocked())
+                if (GetObjectShell()->isContentExtractionLocked())
                 {
                     rSet.DisableItem(SID_COPY);
                     rSet.DisableItem(SID_CUT);
