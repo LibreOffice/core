@@ -25,6 +25,7 @@
 #include <svx/ImageMapInfo.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/lokhelper.hxx>
 
 #include <sc.hrc>
 #include <fudraw.hxx>
@@ -34,6 +35,7 @@
 #include <userdat.hxx>
 #include <docsh.hxx>
 #include <drawview.hxx>
+#include <comphelper/lok.hxx>
 
 // base class for draw module specific functions
 FuDraw::FuDraw(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,
@@ -244,6 +246,15 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                 if( !pView->IsTextEdit() && 1 == rMarkList.GetMarkCount() )
                 {
                     SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+                    bool isMobilePhone = comphelper::LibreOfficeKit::isActive() && comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView());
+                    // Double tapping on charts on phone may result in activating the edit mode which is not wanted.
+                    // It happens due to the delay of selection message of the object from kit to javascript
+                    // in that case F2 is sent instead of double click
+                    if (isMobilePhone && ScDocument::IsChart(pObj))
+                    {
+                        rViewShell.ActivateObject( static_cast< SdrOle2Obj* >( pObj ), 0 );
+                        break;
+                    }
                     if ( lcl_KeyEditMode( pObj, rViewShell, nullptr ) )            // start text edit for suitable object
                         bReturn = true;
                 }
