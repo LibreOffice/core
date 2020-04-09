@@ -16,6 +16,24 @@
       "revId": "08a11f8fe19560b000c62da00d7425b4f500d605",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f988559b_2d2d945b",
+        "filename": "javaunohelper/util/manifest",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-04-09T07:51:16Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "9031963c_5b9099db",
+      "revId": "08a11f8fe19560b000c62da00d7425b4f500d605",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

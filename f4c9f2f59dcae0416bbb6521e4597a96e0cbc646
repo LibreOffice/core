@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aff07b2e_1dba8e7c",
+        "filename": "ridljar/Jar_libreoffice.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-04-09T07:51:16Z",
+      "side": 1,
+      "message": "I added this, but the build currently fails with http://paste.debian.net/1139256/\nAny idea what\u0027s missing?",
+      "range": {
+        "startLine": 18,
+        "startChar": 4,
+        "endLine": 18,
+        "endChar": 10
+      },
+      "revId": "f4c9f2f59dcae0416bbb6521e4597a96e0cbc646",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
