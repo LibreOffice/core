@@ -128,6 +128,24 @@
       "revId": "ed154fd05032bb14098901b2c7029bdd66572043",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55068ea7_a9ee1689",
+        "filename": "ridljar/util/manifest",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-09T09:07:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4f319cd_2f631e72",
+      "revId": "ed154fd05032bb14098901b2c7029bdd66572043",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
