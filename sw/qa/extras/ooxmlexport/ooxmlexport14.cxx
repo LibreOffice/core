@@ -44,6 +44,18 @@ protected:
     }
 };
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf131539, "tdf131539.odt")
+{
+    //The positions of OLE objects haven been exported, check if now it is exported correctly
+    xmlDocPtr p_XmlDoc = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(p_XmlDoc);
+    OUString aXmlVal = getXPath(p_XmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:object/v:shape", "style");
+    OUString aExpectedVal =
+        "position:absolute;margin-left:139.95pt;margin-top:-0.7pt;width:75.05pt;height:75.05pt;mso-position-horizontal-relative:text;mso-position-vertical-relative:text";
+    bool bXmlHasValue = aXmlVal.match(aExpectedVal);
+    CPPUNIT_ASSERT( bXmlHasValue );
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128207, "tdf128207.docx")
 {
     //There was the charts on each other, because their horizontal and vertical position was 0!
