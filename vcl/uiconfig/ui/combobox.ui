@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.22.2 -->
+<interface domain="vcl">
+  <requires lib="gtk+" version="3.18"/>
+  <object class="GtkImage" id="arrow">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">pan-down-symbolic</property>
+  </object>
+  <object class="GtkBox" id="box">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="no_show_all">True</property>
+    <child>
+      <object class="GtkEntry" id="entry">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="no_show_all">True</property>
+        <property name="activates_default">True</property>
+        <style>
+          <class name="combo"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToggleButton" id="button">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="no_show_all">True</property>
+        <property name="image">arrow</property>
+        <property name="always_show_image">True</property>
+        <property name="draw_indicator">True</property>
+        <style>
+          <class name="combo"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="pack_type">end</property>
+        <property name="position">2</property>
+      </packing>
+    </child>
+    <style>
+      <class name="linked"/>
+    </style>
+  </object>
+</interface>

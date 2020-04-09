@@ -1746,6 +1746,7 @@ namespace
         gtk_container_remove(GTK_CONTAINER(pParent), pWidget);
 
         gtk_widget_set_visible(pReplacement, gtk_widget_get_visible(pWidget));
+        gtk_widget_set_no_show_all(pReplacement, gtk_widget_get_no_show_all(pWidget));
 
         gtk_container_add(GTK_CONTAINER(pParent), pReplacement);
 
@@ -12489,14 +12490,24 @@ static void disable_area_apply_attributes_cb(GtkWidget* pItem, gpointer userdata
 
 namespace {
 
+GtkBuilder* makeComboBoxBuilder()
+{
+    OUString aUri(VclBuilderContainer::getUIRootDir() + "vcl/ui/combobox.ui");
+    OUString aPath;
+    osl::FileBase::getSystemPathFromFileURL(aUri, aPath);
+    return gtk_builder_new_from_file(OUStringToOString(aPath, RTL_TEXTENCODING_UTF8).getStr());
+}
+
 class GtkInstanceComboBox : public GtkInstanceContainer, public vcl::ISearchableStringList, public virtual weld::ComboBox
 {
 private:
+    GtkBuilder* m_pComboBuilder;
     GtkComboBox* m_pComboBox;
     GtkTreeModel* m_pTreeModel;
     GtkCellRenderer* m_pTextRenderer;
     GtkMenu* m_pMenu;
     GtkWidget* m_pToggleButton;
+    GtkWidget* m_pEntry;
     std::unique_ptr<vcl::Font> m_xFont;
     std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
     vcl::QuickSelectionEngine m_aQuickSelectionEngine;
@@ -12688,7 +12699,7 @@ private:
         {
             SolarMutexGuard aGuard;
             if (m_aEntryActivateHdl.Call(*this))
-                g_signal_stop_emission_by_name(get_entry(), "activate");
+                g_signal_stop_emission_by_name(m_pEntry, "activate");
         }
     }
 
@@ -12964,24 +12975,20 @@ private:
         g_signal_connect(m_pMenu, "key-press-event", G_CALLBACK(signalKeyPress), this);
     }
 
-    static void find_toggle_button(GtkWidget *pWidget, gpointer user_data)
+    static void signalToggled(GtkToggleButton* pToggleButton, gpointer widget)
     {
-        if (g_strcmp0(gtk_widget_get_name(pWidget), "GtkToggleButton") == 0)
-        {
-            GtkWidget **ppToggleButton = static_cast<GtkWidget**>(user_data);
-            *ppToggleButton = pWidget;
-        }
-        else if (GTK_IS_CONTAINER(pWidget))
-            gtk_container_forall(GTK_CONTAINER(pWidget), find_toggle_button, user_data);
+        fprintf(stderr, "combobox toggled\n");
     }
 
 public:
-    GtkInstanceComboBox(GtkComboBox* pComboBox, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
-        : GtkInstanceContainer(GTK_CONTAINER(pComboBox), pBuilder, bTakeOwnership)
+    GtkInstanceComboBox(GtkBuilder* pComboBuilder, GtkComboBox* pComboBox, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : GtkInstanceContainer(GTK_CONTAINER(gtk_builder_get_object(pComboBuilder, "box")), pBuilder, bTakeOwnership)
+        , m_pComboBuilder(pComboBuilder)
         , m_pComboBox(pComboBox)
-        , m_pTreeModel(gtk_combo_box_get_model(m_pComboBox))
+        , m_pTreeModel(gtk_combo_box_get_model(pComboBox))
         , m_pMenu(nullptr)
-        , m_pToggleButton(nullptr)
+        , m_pToggleButton(GTK_WIDGET(gtk_builder_get_object(pComboBuilder, "button")))
+        , m_pEntry(GTK_WIDGET(gtk_builder_get_object(pComboBuilder, "entry")))
         , m_aQuickSelectionEngine(*this)
         , m_bPopupActive(false)
         , m_bAutoComplete(false)
@@ -12989,12 +12996,16 @@ public:
         , m_bChangedByMenu(false)
         , m_nToggleFocusInSignalId(0)
         , m_nToggleFocusOutSignalId(0)
-        , m_nChangedSignalId(g_signal_connect(m_pComboBox, "changed", G_CALLBACK(signalChanged), this))
-        , m_nPopupShownSignalId(g_signal_connect(m_pComboBox, "notify::popup-shown", G_CALLBACK(signalPopupToggled), this))
+//        , m_nChangedSignalId(g_signal_connect(m_pComboBox, "changed", G_CALLBACK(signalChanged), this))
+//        , m_nPopupShownSignalId(g_signal_connect(m_pComboBox, "notify::popup-shown", G_CALLBACK(signalPopupToggled), this))
         , m_nOriginalMenuActivateEventId(0)
         , m_nMenuActivateSignalId(0)
         , m_nAutoCompleteIdleId(0)
     {
+        insertParent(GTK_WIDGET(m_pComboBox), GTK_WIDGET(getContainer()));
+        gtk_widget_set_visible(GTK_WIDGET(m_pComboBox), false);
+        gtk_widget_set_no_show_all(GTK_WIDGET(m_pComboBox), true);
+
         GList* cells = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(m_pComboBox));
         if (!g_list_length(cells))
         {
@@ -13018,17 +13029,22 @@ public:
         }
         g_list_free(cells);
 
-        if (GtkEntry* pEntry = get_entry())
+        if (gtk_combo_box_get_has_entry(m_pComboBox))
         {
             m_bAutoComplete = true;
-            m_nEntryInsertTextSignalId = g_signal_connect(pEntry, "insert-text", G_CALLBACK(signalEntryInsertText), this);
-            m_nEntryActivateSignalId = g_signal_connect(pEntry, "activate", G_CALLBACK(signalEntryActivate), this);
-            m_nEntryFocusInSignalId = g_signal_connect(pEntry, "focus-in-event", G_CALLBACK(signalEntryFocusIn), this);
-            m_nEntryFocusOutSignalId = g_signal_connect(pEntry, "focus-out-event", G_CALLBACK(signalEntryFocusOut), this);
+            m_nEntryInsertTextSignalId = g_signal_connect(m_pEntry, "insert-text", G_CALLBACK(signalEntryInsertText), this);
+            m_nEntryActivateSignalId = g_signal_connect(m_pEntry, "activate", G_CALLBACK(signalEntryActivate), this);
+            m_nEntryFocusInSignalId = g_signal_connect(m_pEntry, "focus-in-event", G_CALLBACK(signalEntryFocusIn), this);
+            m_nEntryFocusOutSignalId = g_signal_connect(m_pEntry, "focus-out-event", G_CALLBACK(signalEntryFocusOut), this);
             m_nKeyPressEventSignalId = 0;
         }
         else
         {
+            gtk_widget_set_visible(m_pEntry, false);
+            m_pEntry = nullptr;
+
+            gtk_container_child_set(getContainer(), m_pToggleButton, "expand", true, nullptr);
+
             m_nEntryInsertTextSignalId = 0;
             m_nEntryActivateSignalId = 0;
             m_nEntryFocusInSignalId = 0;
@@ -13036,7 +13052,7 @@ public:
             m_nKeyPressEventSignalId = g_signal_connect(m_pWidget, "key-press-event", G_CALLBACK(signalKeyPress), this);
         }
 
-        find_toggle_button(GTK_WIDGET(m_pComboBox), &m_pToggleButton);
+        g_signal_connect(m_pToggleButton, "toggled", G_CALLBACK(signalToggled), this);
 
         install_menu_typeahead();
     }
@@ -13105,10 +13121,9 @@ public:
 
     virtual OUString get_active_text() const override
     {
-        if (gtk_combo_box_get_has_entry(m_pComboBox))
+        if (m_pEntry)
         {
-            GtkWidget *pEntry = gtk_bin_get_child(GTK_BIN(m_pComboBox));
-            const gchar* pText = gtk_entry_get_text(GTK_ENTRY(pEntry));
+            const gchar* pText = gtk_entry_get_text(GTK_ENTRY(m_pEntry));
             return OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
         }
 
@@ -13257,59 +13272,47 @@ public:
 
     virtual void set_entry_message_type(weld::EntryMessageType eType) override
     {
-        GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pComboBox));
-        assert(GTK_IS_ENTRY(pChild));
-        GtkEntry* pEntry = GTK_ENTRY(pChild);
-        ::set_entry_message_type(pEntry, eType);
+        assert(m_pEntry);
+        ::set_entry_message_type(GTK_ENTRY(m_pEntry), eType);
     }
 
     virtual void set_entry_text(const OUString& rText) override
     {
-        GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pComboBox));
-        assert(pChild && GTK_IS_ENTRY(pChild));
-        GtkEntry* pEntry = GTK_ENTRY(pChild);
+        assert(m_pEntry);
         disable_notify_events();
-        gtk_entry_set_text(pEntry, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr());
+        gtk_entry_set_text(GTK_ENTRY(m_pEntry), OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr());
         enable_notify_events();
     }
 
     virtual void set_entry_width_chars(int nChars) override
     {
-        GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pComboBox));
-        assert(pChild && GTK_IS_ENTRY(pChild));
-        GtkEntry* pEntry = GTK_ENTRY(pChild);
+        assert(m_pEntry);
         disable_notify_events();
-        gtk_entry_set_width_chars(pEntry, nChars);
-        gtk_entry_set_max_width_chars(pEntry, nChars);
+        gtk_entry_set_width_chars(GTK_ENTRY(m_pEntry), nChars);
+        gtk_entry_set_max_width_chars(GTK_ENTRY(m_pEntry), nChars);
         enable_notify_events();
     }
 
     virtual void set_entry_max_length(int nChars) override
     {
-        GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pComboBox));
-        assert(pChild && GTK_IS_ENTRY(pChild));
-        GtkEntry* pEntry = GTK_ENTRY(pChild);
+        assert(m_pEntry);
         disable_notify_events();
-        gtk_entry_set_max_length(pEntry, nChars);
+        gtk_entry_set_max_length(GTK_ENTRY(m_pEntry), nChars);
         enable_notify_events();
     }
 
     virtual void select_entry_region(int nStartPos, int nEndPos) override
     {
-        GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pComboBox));
-        assert(pChild && GTK_IS_ENTRY(pChild));
-        GtkEntry* pEntry = GTK_ENTRY(pChild);
+        assert(m_pEntry);
         disable_notify_events();
-        gtk_editable_select_region(GTK_EDITABLE(pEntry), nStartPos, nEndPos);
+        gtk_editable_select_region(GTK_EDITABLE(m_pEntry), nStartPos, nEndPos);
         enable_notify_events();
     }
 
     virtual bool get_entry_selection_bounds(int& rStartPos, int &rEndPos) override
     {
-        GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pComboBox));
-        assert(pChild && GTK_IS_ENTRY(pChild));
-        GtkEntry* pEntry = GTK_ENTRY(pChild);
-        return gtk_editable_get_selection_bounds(GTK_EDITABLE(pEntry), &rStartPos, &rEndPos);
+        assert(m_pEntry);
+        return gtk_editable_get_selection_bounds(GTK_EDITABLE(m_pEntry), &rStartPos, &rEndPos);
     }
 
     virtual void set_entry_completion(bool bEnable, bool bCaseSensitive) override
@@ -13320,20 +13323,16 @@ public:
 
     virtual void set_entry_placeholder_text(const OUString& rText) override
     {
-        GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pComboBox));
-        assert(pChild && GTK_IS_ENTRY(pChild));
-        GtkEntry* pEntry = GTK_ENTRY(pChild);
-        gtk_entry_set_placeholder_text(pEntry, rText.toUtf8().getStr());
+        assert(m_pEntry);
+        gtk_entry_set_placeholder_text(GTK_ENTRY(m_pEntry), rText.toUtf8().getStr());
     }
 
     virtual void set_entry_font(const vcl::Font& rFont) override
     {
         m_xFont.reset(new vcl::Font(rFont));
         PangoAttrList* pAttrList = create_attr_list(rFont);
-        GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pComboBox));
-        assert(pChild && GTK_IS_ENTRY(pChild));
-        GtkEntry* pEntry = GTK_ENTRY(pChild);
-        gtk_entry_set_attributes(pEntry, pAttrList);
+        assert(m_pEntry);
+        gtk_entry_set_attributes(GTK_ENTRY(m_pEntry), pAttrList);
         pango_attr_list_unref(pAttrList);
     }
 
@@ -13341,22 +13340,20 @@ public:
     {
         if (m_xFont)
             return *m_xFont;
-        GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pComboBox));
-        assert(pChild && GTK_IS_ENTRY(pChild));
-        GtkEntry* pEntry = GTK_ENTRY(pChild);
-        PangoContext* pContext = gtk_widget_get_pango_context(GTK_WIDGET(pEntry));
+        assert(m_pEntry);
+        PangoContext* pContext = gtk_widget_get_pango_context(m_pEntry);
         return pango_to_vcl(pango_context_get_font_description(pContext),
                             Application::GetSettings().GetUILanguageTag().getLocale());
     }
 
     virtual void disable_notify_events() override
     {
-        if (GtkEntry* pEntry = get_entry())
+        if (m_pEntry)
         {
-            g_signal_handler_block(pEntry, m_nEntryInsertTextSignalId);
-            g_signal_handler_block(pEntry, m_nEntryActivateSignalId);
-            g_signal_handler_block(pEntry, m_nEntryFocusInSignalId);
-            g_signal_handler_block(pEntry, m_nEntryFocusOutSignalId);
+            g_signal_handler_block(m_pEntry, m_nEntryInsertTextSignalId);
+            g_signal_handler_block(m_pEntry, m_nEntryActivateSignalId);
+            g_signal_handler_block(m_pEntry, m_nEntryFocusInSignalId);
+            g_signal_handler_block(m_pEntry, m_nEntryFocusOutSignalId);
         }
         else
             g_signal_handler_block(m_pComboBox, m_nKeyPressEventSignalId);
@@ -13378,12 +13375,12 @@ public:
             g_signal_handler_unblock(m_pToggleButton, m_nToggleFocusInSignalId);
         if (m_nToggleFocusOutSignalId)
             g_signal_handler_unblock(m_pToggleButton, m_nToggleFocusOutSignalId);
-        if (GtkEntry* pEntry = get_entry())
+        if (m_pEntry)
         {
-            g_signal_handler_unblock(pEntry, m_nEntryActivateSignalId);
-            g_signal_handler_unblock(pEntry, m_nEntryFocusInSignalId);
-            g_signal_handler_unblock(pEntry, m_nEntryFocusOutSignalId);
-            g_signal_handler_unblock(pEntry, m_nEntryInsertTextSignalId);
+            g_signal_handler_unblock(m_pEntry, m_nEntryActivateSignalId);
+            g_signal_handler_unblock(m_pEntry, m_nEntryFocusInSignalId);
+            g_signal_handler_unblock(m_pEntry, m_nEntryFocusOutSignalId);
+            g_signal_handler_unblock(m_pEntry, m_nEntryInsertTextSignalId);
         }
         else
             g_signal_handler_unblock(m_pComboBox, m_nKeyPressEventSignalId);
@@ -13441,7 +13438,7 @@ public:
 
     virtual bool has_focus() const override
     {
-        return gtk_widget_has_focus(m_pToggleButton) || GtkInstanceWidget::has_focus();
+        return gtk_widget_has_focus(m_pToggleButton) || gtk_widget_has_focus(m_pEntry) || GtkInstanceWidget::has_focus();
     }
 
     virtual bool changed_by_direct_pick() const override
@@ -13483,12 +13480,12 @@ public:
             g_signal_handler_disconnect(m_pMenu, m_nMenuActivateSignalId);
         if (m_nAutoCompleteIdleId)
             g_source_remove(m_nAutoCompleteIdleId);
-        if (GtkEntry* pEntry = get_entry())
+        if (m_pEntry)
         {
-            g_signal_handler_disconnect(pEntry, m_nEntryInsertTextSignalId);
-            g_signal_handler_disconnect(pEntry, m_nEntryActivateSignalId);
-            g_signal_handler_disconnect(pEntry, m_nEntryFocusInSignalId);
-            g_signal_handler_disconnect(pEntry, m_nEntryFocusOutSignalId);
+            g_signal_handler_disconnect(m_pEntry, m_nEntryInsertTextSignalId);
+            g_signal_handler_disconnect(m_pEntry, m_nEntryActivateSignalId);
+            g_signal_handler_disconnect(m_pEntry, m_nEntryFocusInSignalId);
+            g_signal_handler_disconnect(m_pEntry, m_nEntryFocusOutSignalId);
         }
         else
             g_signal_handler_disconnect(m_pComboBox, m_nKeyPressEventSignalId);
@@ -13498,6 +13495,8 @@ public:
             g_signal_handler_disconnect(m_pToggleButton, m_nToggleFocusOutSignalId);
         g_signal_handler_disconnect(m_pComboBox, m_nChangedSignalId);
         g_signal_handler_disconnect(m_pComboBox, m_nPopupShownSignalId);
+
+        g_object_unref(m_pComboBuilder);
     }
 };
 
@@ -14575,7 +14574,10 @@ public:
         if (!pComboBox)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pComboBox));
-        return std::make_unique<GtkInstanceComboBox>(pComboBox, this, bTakeOwnership);
+
+        // we replace GtkComboBox because of difficulties with too tall menus
+        GtkBuilder* pComboBuilder = makeComboBoxBuilder();
+        return std::make_unique<GtkInstanceComboBox>(pComboBuilder, pComboBox, this, bTakeOwnership);
     }
 
     virtual std::unique_ptr<weld::TreeView> weld_tree_view(const OString &id, bool bTakeOwnership) override
