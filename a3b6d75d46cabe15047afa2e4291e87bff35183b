@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f109e9b9_015ab676",
+        "filename": "setup_native/scripts/admin.pl",
+        "patchSetId": 3
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2020-04-09T11:12:43Z",
+      "side": 1,
+      "message": "The check whether target directory exists was superfluous before, and is superfluous after the change, so can be removed here and in the other places.",
+      "revId": "a3b6d75d46cabe15047afa2e4291e87bff35183b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "979a1932_47429e69",
+        "filename": "setup_native/scripts/admin.pl",
+        "patchSetId": 3
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2020-04-09T11:12:43Z",
+      "side": 1,
+      "message": "what\u0027s the point of keeping this construct if all it does is redirect to actual method call?",
+      "range": {
+        "startLine": 349,
+        "startChar": 0,
+        "endLine": 354,
+        "endChar": 1
+      },
+      "revId": "a3b6d75d46cabe15047afa2e4291e87bff35183b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47b23ff2_8a7c8b27",
+        "filename": "setup_native/scripts/admin.pl",
+        "patchSetId": 3
+      },
+      "lineNbr": 815,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2020-04-09T11:12:43Z",
+      "side": 1,
+      "message": "wrong/pointless condition/error handling here.\nmake_path returns number of created directories in scalar context, so with this change (and the superfluous check for the directory just above) this is in effect always true and always runs the chmod.\nJust fail hard when the call fails. All supported platforms have working perl, so it should never be the chmod part that fails here. And chmod\u0027s result is ignored as well. So no point in keeping that.",
+      "range": {
+        "startLine": 810,
+        "startChar": 0,
+        "endLine": 815,
+        "endChar": 9
+      },
+      "revId": "a3b6d75d46cabe15047afa2e4291e87bff35183b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af501310_9a8dfe17",
+        "filename": "solenv/bin/modules/installer/systemactions.pm",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2020-04-09T11:12:43Z",
+      "side": 1,
+      "message": "IMHO no point in keeping checking for partent directories and manually walking the path when using a function that is meant to create the full directory hierarchy.\nAlso same note re pointless condition always running chmod.\n\nwith make_path there is no failure in attempting to create a directory that already exists, so no reason to keep this \"concurrency guard\"",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 90,
+        "endChar": 21
+      },
+      "revId": "a3b6d75d46cabe15047afa2e4291e87bff35183b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
