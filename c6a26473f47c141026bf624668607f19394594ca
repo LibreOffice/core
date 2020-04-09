@@ -22,6 +22,30 @@
       "revId": "c6a26473f47c141026bf624668607f19394594ca",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae34b48a_9a46932a",
+        "filename": "sfx2/source/appl/appuno.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-04-09T10:19:35Z",
+      "side": 1,
+      "message": "As far as I can tell, all existing SFX param names are ascii only, and this is internal-only logic, so we don\u0027t have to worry about extensions/etc feeding non-ascii names to us",
+      "parentUuid": "9e16f5a8_5696ee3b",
+      "range": {
+        "startLine": 298,
+        "startChar": 79,
+        "endLine": 298,
+        "endChar": 90
+      },
+      "revId": "c6a26473f47c141026bf624668607f19394594ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
