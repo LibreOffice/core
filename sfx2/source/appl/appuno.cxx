@@ -294,9 +294,8 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
         if ( nSubCount == 0 )
         {
             // "simple" (base type) argument
-            auto aName = OUString( rArg.pName, strlen(rArg.pName), RTL_TEXTENCODING_UTF8 );
             auto pProp = std::find_if(rArgs.begin(), rArgs.end(),
-                [&aName](const beans::PropertyValue& rProp) { return rProp.Name == aName; });
+                [&rArg](const beans::PropertyValue& rProp) { return rProp.Name.equalsAscii(rArg.pName); });
             if (pProp != rArgs.end())
             {
 #ifdef DBG_UTIL
