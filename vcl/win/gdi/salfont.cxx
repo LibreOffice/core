@@ -58,6 +58,7 @@
 #include <win/saldata.hxx>
 #include <win/salgdi.h>
 #include <win/winlayout.hxx>
+#include <win/wingdiimpl.hxx>
 #include <impfontcharmap.hxx>
 #include <impfontmetricdata.hxx>
 #include <impglyphitem.hxx>
@@ -1272,6 +1273,9 @@ void WinSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
 
 void WinSalGraphics::ClearDevFontCache()
 {
+    WinSalGraphicsImplBase* pImpl = dynamic_cast<WinSalGraphicsImplBase*>(GetImpl());
+    assert(pImpl != nullptr);
+    pImpl->ClearDevFontCache();
     ImplReleaseTempFonts(*GetSalData(), false);
 }
 

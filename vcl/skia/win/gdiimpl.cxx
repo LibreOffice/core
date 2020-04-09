@@ -14,6 +14,7 @@
 #include <skia/utils.hxx>
 #include <skia/zone.hxx>
 #include <win/winlayout.hxx>
+#include <comphelper/windowserrorstring.hxx>
 
 #include <SkCanvas.h>
 #include <SkColorFilter.h>
@@ -21,6 +22,7 @@
 #include <SkPixelRef.h>
 #include <SkTypeface_win.h>
 #include <SkFont.h>
+#include <SkFontMgr.h>
 #include <tools/sk_app/win/WindowContextFactory_win.h>
 #include <tools/sk_app/WindowContext.h>
 
@@ -111,6 +113,55 @@ bool WinSkiaSalGraphicsImpl::RenderAndCacheNativeControl(CompatibleDC& rWhite, C
     return true;
 }
 
+#ifdef SAL_LOG_WARN
+HRESULT checkResult(HRESULT hr, const char* file, size_t line)
+{
+    if (FAILED(hr))
+    {
+        OUString sLocationString
+            = OUString::createFromAscii(file) + ":" + OUString::number(line) + " ";
+        SAL_DETAIL_LOG_STREAM(SAL_DETAIL_ENABLE_LOG_WARN, ::SAL_DETAIL_LOG_LEVEL_WARN, "vcl.skia",
+                              sLocationString.toUtf8().getStr(),
+                              "HRESULT failed with: 0x" << OUString::number(hr, 16) << ": "
+                                                        << WindowsErrorStringFromHRESULT(hr));
+    }
+    return hr;
+}
+
+#define CHECKHR(funct) checkResult(funct, __FILE__, __LINE__)
+#else
+#define CHECKHR(funct) (funct)
+#endif
+
+sk_sp<SkTypeface> WinSkiaSalGraphicsImpl::createDirectWriteTypeface(const LOGFONTW& logFont)
+{
+    if (!dwriteDone)
+    {
+        IDWriteFactory* factory;
+        if (SUCCEEDED(
+                CHECKHR(DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory),
+                                            reinterpret_cast<IUnknown**>(&factory)))))
+        {
+            if (SUCCEEDED(CHECKHR(factory->GetGdiInterop(&dwriteGdiInterop))))
+                dwriteFontMgr = SkFontMgr_New_DirectWrite(dwriteFactory);
+            else
+                factory->Release();
+        }
+        dwriteDone = true;
+    }
+    IDWriteFont* font = nullptr;
+    IDWriteFontFace* fontFace;
+    IDWriteFontFamily* fontFamily;
+    if (FAILED(CHECKHR(dwriteGdiInterop->CreateFontFromLOGFONT(&logFont, &font))))
+        return nullptr;
+    if (FAILED(CHECKHR(font->CreateFontFace(&fontFace))))
+        return nullptr;
+    if (FAILED(CHECKHR(font->GetFontFamily(&fontFamily))))
+        return nullptr;
+    return sk_sp<SkTypeface>(
+        SkCreateTypefaceDirectWrite(dwriteFontMgr, fontFace, font, fontFamily));
+}
+
 bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
 {
     const WinFontInstance& rWinFont = static_cast<const WinFontInstance&>(rLayout.GetFont());
@@ -125,7 +176,9 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
         assert(false);
         return false;
     }
-    sk_sp<SkTypeface> typeface(SkCreateTypefaceFromLOGFONT(logFont));
+    sk_sp<SkTypeface> typeface = createDirectWriteTypeface(logFont);
+    if (!typeface) // fall back to GDI text rendering
+        typeface.reset(SkCreateTypefaceFromLOGFONT(logFont));
     // lfHeight actually depends on DPI, so it's not really font height as such,
     // but for LOGFONT-based typefaces Skia simply sets lfHeight back to this value
     // directly.
@@ -133,6 +186,20 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
     if (fontHeight < 0)
         fontHeight = -fontHeight;
     SkFont font(typeface, fontHeight, fHScale, 0);
+    font.setEdging(getFontEdging());
+    assert(dynamic_cast<SkiaSalGraphicsImpl*>(mWinParent.GetImpl()));
+    SkiaSalGraphicsImpl* impl = static_cast<SkiaSalGraphicsImpl*>(mWinParent.GetImpl());
+    COLORREF color = ::GetTextColor(mWinParent.getHDC());
+    Color salColor(GetRValue(color), GetGValue(color), GetBValue(color));
+    // The font already is set up to have glyphs rotated as needed.
+    impl->drawGenericLayout(rLayout, salColor, font, SkiaSalGraphicsImpl::GlyphOrientation::Ignore);
+    return true;
+}
+
+SkFont::Edging WinSkiaSalGraphicsImpl::getFontEdging()
+{
+    if (fontEdgingDone)
+        return fontEdging;
     // Skia needs to be explicitly told what kind of antialiasing should be used,
     // get it from system settings. This does not actually matter for the text
     // rendering itself, since Skia has been patched to simply use the setting
@@ -141,23 +208,27 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
     // the appropriate AA setting. But Skia internally chooses the format to which
     // the glyphs will be rendered based on this setting (subpixel AA requires colors,
     // others do not).
+    fontEdging = SkFont::Edging::kAlias;
     BOOL set;
     if (SystemParametersInfo(SPI_GETFONTSMOOTHING, 0, &set, 0) && set)
     {
         UINT set2;
         if (SystemParametersInfo(SPI_GETFONTSMOOTHINGTYPE, 0, &set2, 0)
             && set2 == FE_FONTSMOOTHINGCLEARTYPE)
-            font.setEdging(SkFont::Edging::kSubpixelAntiAlias);
+            fontEdging = SkFont::Edging::kSubpixelAntiAlias;
         else
-            font.setEdging(SkFont::Edging::kAntiAlias);
+            fontEdging = SkFont::Edging::kAntiAlias;
     }
-    assert(dynamic_cast<SkiaSalGraphicsImpl*>(mWinParent.GetImpl()));
-    SkiaSalGraphicsImpl* impl = static_cast<SkiaSalGraphicsImpl*>(mWinParent.GetImpl());
-    COLORREF color = ::GetTextColor(mWinParent.getHDC());
-    Color salColor(GetRValue(color), GetGValue(color), GetBValue(color));
-    // The font already is set up to have glyphs rotated as needed.
-    impl->drawGenericLayout(rLayout, salColor, font, SkiaSalGraphicsImpl::GlyphOrientation::Ignore);
-    return true;
+    // Cache this, it is actually visible a little bit when profiling.
+    fontEdgingDone = true;
+    return fontEdging;
+}
+
+void WinSkiaSalGraphicsImpl::ClearDevFontCache()
+{
+    dwriteFontMgr.reset();
+    dwriteDone = false;
+    fontEdgingDone = false;
 }
 
 void WinSkiaSalGraphicsImpl::PreDrawText() { preDraw(); }

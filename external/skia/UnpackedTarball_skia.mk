@@ -33,6 +33,7 @@ skia_patches := \
     operator-eq-bool.patch.0 \
     fix-without-gl.patch.0 \
     extend-rgb-to-rgba.patch.0 \
+    windows-typeface-directwrite.patch.0 \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 

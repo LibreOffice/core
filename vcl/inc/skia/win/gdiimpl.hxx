@@ -21,6 +21,10 @@
 #include <ControlCacheKey.hxx>
 #include <svdata.hxx>
 
+#include <SkFont.h>
+
+class SkTypeface;
+class SkFontMgr;
 class ControlCacheKey;
 
 class SkiaCompatibleDC : public CompatibleDC
@@ -83,12 +87,21 @@ public:
                               const SalTwoRect& rPosAry) override;
     virtual void DeferredTextDraw(const CompatibleDC::Texture* pTexture, Color nMaskColor,
                                   const SalTwoRect& rPosAry) override;
+    virtual void ClearDevFontCache() override;
 
     static void prepareSkia();
 
 protected:
     virtual void createWindowContext() override;
     virtual void performFlush() override;
+    sk_sp<SkTypeface> createDirectWriteTypeface(const LOGFONTW& logFont);
+    SkFont::Edging getFontEdging();
+    IDWriteFactory* dwriteFactory;
+    IDWriteGdiInterop* dwriteGdiInterop;
+    sk_sp<SkFontMgr> dwriteFontMgr;
+    bool dwriteDone = false;
+    SkFont::Edging fontEdging;
+    bool fontEdgingDone = false;
 };
 
 typedef std::pair<ControlCacheKey, sk_sp<SkImage>> SkiaControlCachePair;
