@@ -4424,6 +4424,11 @@ freebsd*)
     P_SEP=:
 
     case "$host_cpu" in
+    aarch64)
+        CPUNAME=AARCH64
+        PLATFORMID=freebsd_aarch64
+        RTL_ARCH=AARCH64
+        ;;
     i*86)
         CPUNAME=INTEL
         RTL_ARCH=x86
