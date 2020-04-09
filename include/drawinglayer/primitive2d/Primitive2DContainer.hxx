@@ -39,7 +39,11 @@ class SAL_WARN_UNUSED DRAWINGLAYER_DLLPUBLIC Primitive2DContainer
       public Primitive2DDecompositionVisitor
 {
 public:
-    explicit Primitive2DContainer() {}
+    // use zero because we allocate a lot of empty containers
+    explicit Primitive2DContainer()
+        : deque(0)
+    {
+    }
     explicit Primitive2DContainer(size_type count)
         : deque(count)
     {
