@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c6710517_909a5390",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1232,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-04-09T11:34:11Z",
+      "side": 1,
+      "message": "maybe make this an assert, so it can\u0027t be ignored?",
+      "revId": "bc342704f59942174306b274d18ca69b7a710e6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
