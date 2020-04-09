@@ -10433,7 +10433,10 @@ public:
             GtkTreeModel *pModel = GTK_TREE_MODEL(m_pTreeStore);
             gtk_tree_model_get_iter(pModel, &pGtkIter->iter, path);
         }
-        return path != nullptr;
+        if (!path)
+            return false;
+        gtk_tree_path_free(path);
+        return true;
     }
 
     virtual int get_cursor_index() const override
