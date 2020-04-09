@@ -18,7 +18,7 @@
  */
 
 #include <config_features.h>
-
+#include <config_options.h>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/drawing/ModuleDispatcher.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -1220,7 +1220,18 @@ static OUString ChooseMacro(weld::Window* pParent, const Reference<XModel>& rxLi
     osl::Module aMod;
 
     // load basctl module
-    aMod.loadRelative(&thisModule, SVLIBRARY("basctl"));
+    if (!aMod.loadRelative(
+            &thisModule,
+#if ENABLE_MERGELIBS
+            SVLIBRARY("merged")
+#else
+            SVLIBRARY("basctl")
+#endif
+        ))
+    {
+        SAL_WARN("sfx.appl", "cannot load basctl");
+        return "";
+    }
 
     // get symbol
     basicide_choose_macro pSymbol = reinterpret_cast<basicide_choose_macro>(aMod.getFunctionSymbol("basicide_choose_macro"));
