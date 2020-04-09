@@ -1710,6 +1710,74 @@ namespace
     }
 #endif
 
+    void insertParent(GtkWidget* pWidget, GtkWidget* pReplacement)
+    {
+        // remove the widget and replace it with pReplacement
+        GtkWidget* pParent = gtk_widget_get_parent(pWidget);
+
+        g_object_ref(pWidget);
+
+        gint nTopAttach(0), nLeftAttach(0), nHeight(1), nWidth(1);
+        if (GTK_IS_GRID(pParent))
+        {
+            gtk_container_child_get(GTK_CONTAINER(pParent), pWidget,
+                    "left-attach", &nTopAttach,
+                    "top-attach", &nLeftAttach,
+                    "width", &nWidth,
+                    "height", &nHeight,
+                    nullptr);
+        }
+
+        gboolean bExpand(false), bFill(false);
+        GtkPackType ePackType(GTK_PACK_START);
+        guint nPadding(0);
+        gint nPosition(0);
+        if (GTK_IS_BOX(pParent))
+        {
+            gtk_container_child_get(GTK_CONTAINER(pParent), pWidget,
+                    "expand", &bExpand,
+                    "fill", &bFill,
+                    "pack-type", &ePackType,
+                    "padding", &nPadding,
+                    "position", &nPosition,
+                    nullptr);
+        }
+
+        gtk_container_remove(GTK_CONTAINER(pParent), pWidget);
+
+        gtk_widget_set_visible(pReplacement, gtk_widget_get_visible(pWidget));
+
+        gtk_container_add(GTK_CONTAINER(pParent), pReplacement);
+
+        if (GTK_IS_GRID(pParent))
+        {
+            gtk_container_child_set(GTK_CONTAINER(pParent), pReplacement,
+                    "left-attach", nTopAttach,
+                    "top-attach", nLeftAttach,
+                    "width", nWidth,
+                    "height", nHeight,
+                    nullptr);
+        }
+
+        if (GTK_IS_BOX(pParent))
+        {
+            gtk_container_child_set(GTK_CONTAINER(pParent), pReplacement,
+                    "expand", bExpand,
+                    "fill", bFill,
+                    "pack-type", ePackType,
+                    "padding", nPadding,
+                    "position", nPosition,
+                    nullptr);
+        }
+
+        gtk_widget_set_hexpand(pReplacement, gtk_widget_get_hexpand(pWidget));
+        gtk_widget_set_vexpand(pReplacement, gtk_widget_get_vexpand(pWidget));
+
+        gtk_container_add(GTK_CONTAINER(pReplacement), pWidget);
+
+        g_object_unref(pWidget);
+    }
+
     GtkWidget* ensureEventWidget(GtkWidget* pWidget)
     {
         if (!pWidget)
@@ -1725,71 +1793,10 @@ namespace
         {
             // remove the widget and replace it with an eventbox and put the old
             // widget into it
-            GtkWidget* pParent = gtk_widget_get_parent(pWidget);
-
-            g_object_ref(pWidget);
-
-            gint nTopAttach(0), nLeftAttach(0), nHeight(1), nWidth(1);
-            if (GTK_IS_GRID(pParent))
-            {
-                gtk_container_child_get(GTK_CONTAINER(pParent), pWidget,
-                        "left-attach", &nTopAttach,
-                        "top-attach", &nLeftAttach,
-                        "width", &nWidth,
-                        "height", &nHeight,
-                        nullptr);
-            }
-
-            gboolean bExpand(false), bFill(false);
-            GtkPackType ePackType(GTK_PACK_START);
-            guint nPadding(0);
-            gint nPosition(0);
-            if (GTK_IS_BOX(pParent))
-            {
-                gtk_container_child_get(GTK_CONTAINER(pParent), pWidget,
-                        "expand", &bExpand,
-                        "fill", &bFill,
-                        "pack-type", &ePackType,
-                        "padding", &nPadding,
-                        "position", &nPosition,
-                        nullptr);
-            }
-
-            gtk_container_remove(GTK_CONTAINER(pParent), pWidget);
-
             pMouseEventBox = gtk_event_box_new();
             gtk_event_box_set_above_child(GTK_EVENT_BOX(pMouseEventBox), false);
             gtk_event_box_set_visible_window(GTK_EVENT_BOX(pMouseEventBox), false);
-            gtk_widget_set_visible(pMouseEventBox, gtk_widget_get_visible(pWidget));
-
-            gtk_container_add(GTK_CONTAINER(pParent), pMouseEventBox);
-
-            if (GTK_IS_GRID(pParent))
-            {
-                gtk_container_child_set(GTK_CONTAINER(pParent), pMouseEventBox,
-                        "left-attach", nTopAttach,
-                        "top-attach", nLeftAttach,
-                        "width", nWidth,
-                        "height", nHeight,
-                        nullptr);
-            }
-
-            if (GTK_IS_BOX(pParent))
-            {
-                gtk_container_child_set(GTK_CONTAINER(pParent), pMouseEventBox,
-                        "expand", bExpand,
-                        "fill", bFill,
-                        "pack-type", ePackType,
-                        "padding", nPadding,
-                        "position", nPosition,
-                        nullptr);
-            }
-
-            gtk_container_add(GTK_CONTAINER(pMouseEventBox), pWidget);
-            g_object_unref(pWidget);
-
-            gtk_widget_set_hexpand(pMouseEventBox, gtk_widget_get_hexpand(pWidget));
-            gtk_widget_set_vexpand(pMouseEventBox, gtk_widget_get_vexpand(pWidget));
+            insertParent(pWidget, pMouseEventBox);
         }
 
         return pMouseEventBox;
