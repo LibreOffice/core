@@ -529,6 +529,21 @@ AtkObject* ooo_fixed_get_accessible(GtkWidget *obj);
 
 } // extern "C"
 
+#if !GTK_CHECK_VERSION(3, 22, 0)
+enum GdkAnchorHints
+{
+  GDK_ANCHOR_FLIP_X   = 1 << 0,
+  GDK_ANCHOR_FLIP_Y   = 1 << 1,
+  GDK_ANCHOR_SLIDE_X  = 1 << 2,
+  GDK_ANCHOR_SLIDE_Y  = 1 << 3,
+  GDK_ANCHOR_RESIZE_X = 1 << 4,
+  GDK_ANCHOR_RESIZE_Y = 1 << 5,
+  GDK_ANCHOR_FLIP     = GDK_ANCHOR_FLIP_X | GDK_ANCHOR_FLIP_Y,
+  GDK_ANCHOR_SLIDE    = GDK_ANCHOR_SLIDE_X | GDK_ANCHOR_SLIDE_Y,
+  GDK_ANCHOR_RESIZE   = GDK_ANCHOR_RESIZE_X | GDK_ANCHOR_RESIZE_Y
+}
+#endif
+
 #endif // INCLUDED_VCL_INC_UNX_GTK_GTKFRAME_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
