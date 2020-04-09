@@ -720,6 +720,17 @@ DECLARE_OOXMLEXPORT_TEST(testHyphenationAuto, "hyphenation.odt")
     assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:pPrDefault/w:pPr/w:suppressAutoHyphens", "val", "true");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf131539, "tdf131539.odt")
+{
+    //The positions of OLE objects haven been exported, check if now it is exported correctly
+    xmlDocPtr p_XmlDoc = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(p_XmlDoc);
+    OUString aXmlVal = getXPath(p_XmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:object/v:shape", "style");
+    bool bXmlHasValue = (aXmlVal.copy(OUString("position:absolute;margin-left:").getLength(),
+        OUString("139.95").getLength())).match("139.95");
+    CPPUNIT_ASSERT(bXmlHasValue);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
