@@ -160,6 +160,7 @@ public:
     void testTdf130225();
     void testTdf126076();
     void testTdf75330();
+    void testTdf131979();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -283,6 +284,7 @@ public:
     CPPUNIT_TEST(testTdf130225);
     CPPUNIT_TEST(testTdf126076);
     CPPUNIT_TEST(testTdf75330);
+    CPPUNIT_TEST(testTdf131979);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2617,6 +2619,37 @@ void Chart2ExportTest::testTdf75330()
         bool bOverlay = false;
         CPPUNIT_ASSERT(xPropertySet->getPropertyValue("Overlay") >>= bOverlay);
         CPPUNIT_ASSERT(bOverlay);
+    }
+}
+
+void Chart2ExportTest::testTdf131979()
+{
+    load("/chart2/qa/extras/data/ods/", "tdf131115.ods");
+    {
+        reload("calc8");
+        Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+        CPPUNIT_ASSERT(xChartDoc.is());
+        Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+        CPPUNIT_ASSERT(xDataSeries.is());
+        Reference<beans::XPropertySet> xPropertySet;
+        xPropertySet.set(xDataSeries->getDataPointByIndex(2), uno::UNO_SET_THROW);
+        bool blinknumberformattosource = true;
+        CPPUNIT_ASSERT(xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= blinknumberformattosource);
+        CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to false.", !blinknumberformattosource);
+    }
+
+    load("/chart2/qa/extras/data/ods/", "tdf131979.ods");
+    {
+        reload("calc8");
+        Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+        CPPUNIT_ASSERT(xChartDoc.is());
+        Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+        CPPUNIT_ASSERT(xDataSeries.is());
+        Reference<beans::XPropertySet> xPropertySet;
+        xPropertySet.set(xDataSeries->getDataPointByIndex(2), uno::UNO_SET_THROW);
+        bool blinknumberformattosource = true;
+        CPPUNIT_ASSERT(xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= blinknumberformattosource);
+        CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", blinknumberformattosource);
     }
 }
 
