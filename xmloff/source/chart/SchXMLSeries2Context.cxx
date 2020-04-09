@@ -172,6 +172,26 @@ void lcl_resetSymbolSizeForPointsIfNecessary( const uno::Reference< beans::XProp
         lcl_setSymbolSizeIfNeeded( xPointProp, rImport );
 }
 
+void lcl_setLinkNumberFormatToSourceIfNeeded( const uno::Reference< beans::XPropertySet >& xPointProp
+    , const XMLPropStyleContext* pPropStyleContext, const SvXMLStylesContext* pStylesCtxt )
+{
+    uno::Any aAny( SchXMLTools::getPropertyFromContext("LinkNumberFormatToSource", pPropStyleContext, pStylesCtxt) );
+    if( !aAny.hasValue() )
+    {
+        if( !xPointProp.is() )
+            return;
+
+        bool bLinkToSource = false;
+        if( xPointProp.is() && (xPointProp->getPropertyValue("LinkNumberFormatToSource") >>= bLinkToSource) )
+        {
+            if( bLinkToSource )
+            {
+                xPointProp->setPropertyValue("LinkNumberFormatToSource", uno::makeAny(false));
+            }
+        }
+    }
+}
+
 void lcl_insertErrorBarLSequencesToMap(
     tSchXMLLSequencesPerIndex & rInOutMap,
     const uno::Reference< beans::XPropertySet > & xSeriesProp )
@@ -1086,6 +1106,8 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                     pPropStyleContext->FillPropertySet( xPointProp );
                     if( seriesStyle.mbSymbolSizeForSeriesIsMissingInFile )
                         lcl_resetSymbolSizeForPointsIfNecessary( xPointProp, rImport, pPropStyleContext, pStylesCtxt );
+                    if( !pPropStyleContext->isEmptyDataStyleName() )
+                        lcl_setLinkNumberFormatToSourceIfNeeded( xPointProp, pPropStyleContext, pStylesCtxt );
                 }
 
                 // Custom labels might be passed as property
