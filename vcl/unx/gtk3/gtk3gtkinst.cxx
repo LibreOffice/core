@@ -7304,7 +7304,9 @@ public:
 
         if (m_pMenuHack)
         {
-            gtk_menu_button_set_popover(m_pMenuButton, gtk_popover_new(GTK_WIDGET(m_pMenuButton)));
+            GtkWidget* pPlaceHolder = gtk_popover_new(GTK_WIDGET(m_pMenuButton));
+            gtk_popover_set_transitions_enabled(GTK_POPOVER(pPlaceHolder), false);
+            gtk_menu_button_set_popover(m_pMenuButton, pPlaceHolder);
         }
         else
         {
