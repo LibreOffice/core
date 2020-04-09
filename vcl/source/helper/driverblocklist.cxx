@@ -157,6 +157,23 @@ DeviceVendor GetVendorFromId(uint32_t id)
     }
 }
 
+OUStringLiteral GetVendorNameFromId(uint32_t id)
+{
+    switch (id)
+    {
+        case 0x8086:
+            return "Intel";
+        case 0x10de:
+            return "Nvidia";
+        case 0x1002:
+            return "AMD";
+        case 0x1414:
+            return "Microsoft";
+        default:
+            return "?";
+    }
+}
+
 Parser::Parser(const OUString& rURL, std::vector<DriverInfo>& rDriverList)
     : meBlockType(BlockType::UNKNOWN)
     , mrDriverList(rDriverList)

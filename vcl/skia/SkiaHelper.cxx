@@ -29,6 +29,8 @@ bool isVCLSkiaEnabled() { return false; }
 #include <driverblocklist.hxx>
 #include <skia/utils.hxx>
 #include <config_folders.h>
+#include <osl/file.hxx>
+#include <tools/stream.hxx>
 
 #include <SkCanvas.h>
 #include <SkPaint.h>
@@ -40,8 +42,6 @@ bool isVCLSkiaEnabled() { return false; }
 
 namespace SkiaHelper
 {
-uint32_t vendorId = 0;
-
 static OUString getBlacklistFile()
 {
     OUString url("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER);
@@ -50,25 +50,98 @@ static OUString getBlacklistFile()
     return url + "/skia/skia_blacklist_vulkan.xml";
 }
 
+static uint32_t driverVersion = 0;
+uint32_t vendorId = 0;
+
+static OUString versionAsString(uint32_t version)
+{
+    return OUString::number(version >> 22) + "." + OUString::number((version >> 12) & 0x3ff) + "."
+           + OUString::number(version & 0xfff);
+}
+
+static OUStringLiteral vendorAsString(uint32_t vendor)
+{
+    return DriverBlocklist::GetVendorNameFromId(vendor);
+}
+
+static OUString getCacheFolder()
+{
+    OUString url("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER
+                 "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache/");
+    rtl::Bootstrap::expandMacros(url);
+    osl::Directory::create(url);
+    return url;
+}
+
+static void writeToLog(SvStream& stream, const char* key, const char* value)
+{
+    stream.WriteCharPtr(key);
+    stream.WriteCharPtr(": ");
+    stream.WriteCharPtr(value);
+    stream.WriteChar('\n');
+}
+
+static void writeToLog(SvStream& stream, const char* key, const OUString& value)
+{
+    writeToLog(stream, key, OUStringToOString(value, RTL_TEXTENCODING_UTF8).getStr());
+}
+
+// Note that this function also logs system information about Vulkan.
 static bool isVulkanBlacklisted(const VkPhysicalDeviceProperties& props)
 {
     static const char* const types[]
         = { "other", "integrated", "discrete", "virtual", "cpu", "??" }; // VkPhysicalDeviceType
-    OUString driverVersion = OUString::number(props.driverVersion >> 22) + "."
-                             + OUString::number((props.driverVersion >> 12) & 0x3ff) + "."
-                             + OUString::number(props.driverVersion & 0xfff);
+    driverVersion = props.driverVersion;
     vendorId = props.vendorID;
     OUString vendorIdStr = "0x" + OUString::number(props.vendorID, 16);
     OUString deviceIdStr = "0x" + OUString::number(props.deviceID, 16);
+    OUString driverVersionString = versionAsString(driverVersion);
+    OUString apiVersion = versionAsString(props.apiVersion);
+    const char* deviceType = types[std::min<unsigned>(props.deviceType, SAL_N_ELEMENTS(types) - 1)];
+
+    CrashReporter::addKeyValue("VulkanVendor", vendorIdStr, CrashReporter::AddItem);
+    CrashReporter::addKeyValue("VulkanDevice", deviceIdStr, CrashReporter::AddItem);
+    CrashReporter::addKeyValue("VulkanAPI", apiVersion, CrashReporter::AddItem);
+    CrashReporter::addKeyValue("VulkanDriver", driverVersionString, CrashReporter::AddItem);
+    CrashReporter::addKeyValue("VulkanDeviceType", OUString::createFromAscii(deviceType),
+                               CrashReporter::AddItem);
+    CrashReporter::addKeyValue("VulkanDeviceName", OUString::createFromAscii(props.deviceName),
+                               CrashReporter::Write);
+
+    SvFileStream logFile(getCacheFolder() + "/skia.log", StreamMode::WRITE);
+    writeToLog(logFile, "RenderMethod", "vulkan");
+    writeToLog(logFile, "Vendor", vendorIdStr);
+    writeToLog(logFile, "Device", deviceIdStr);
+    writeToLog(logFile, "API", apiVersion);
+    writeToLog(logFile, "Driver", driverVersionString);
+    writeToLog(logFile, "DeviceType", deviceType);
+    writeToLog(logFile, "DeviceName", props.deviceName);
+
     SAL_INFO("vcl.skia",
-             "Vulkan API version: "
-                 << (props.apiVersion >> 22) << "." << ((props.apiVersion >> 12) & 0x3ff) << "."
-                 << (props.apiVersion & 0xfff) << ", driver version: " << driverVersion
-                 << ", vendor: " << vendorIdStr << ", device: " << deviceIdStr << ", type: "
-                 << types[std::min<unsigned>(props.deviceType, SAL_N_ELEMENTS(types) - 1)]
-                 << ", name: " << props.deviceName);
-    return DriverBlocklist::IsDeviceBlocked(getBlacklistFile(), driverVersion, vendorIdStr,
-                                            deviceIdStr);
+             "Vulkan API version: " << apiVersion << ", driver version: " << driverVersionString
+                                    << ", vendor: " << vendorIdStr << " ("
+                                    << vendorAsString(vendorId) << "), device: " << deviceIdStr
+                                    << ", type: " << deviceType << ", name: " << props.deviceName);
+    bool blacklisted = DriverBlocklist::IsDeviceBlocked(getBlacklistFile(), driverVersionString,
+                                                        vendorIdStr, deviceIdStr);
+    writeToLog(logFile, "Blacklisted", blacklisted ? "yes" : "no");
+    return blacklisted;
+}
+
+static void writeSkiaRasterInfo()
+{
+    SvFileStream logFile(getCacheFolder() + "/skia.log", StreamMode::WRITE);
+    writeToLog(logFile, "RenderMethod", "raster");
+    // Log compiler, Skia works best when compiled with Clang.
+#if defined __clang__
+    writeToLog(logFile, "Compiler", "Clang");
+#elif defined __GNUC__
+    writeToLog(logFile, "Compiler", "GCC");
+#elif defined _MSC_VER
+    writeToLog(logFile, "Compiler", "MSVC");
+#else
+    writeToLog(logFile, "Compiler", "?");
+#endif
 }
 
 static sk_app::VulkanWindowContext::SharedGrContext getTemporaryGrContext();
@@ -109,11 +182,15 @@ static void checkDeviceBlacklisted(bool blockDisable = false)
                 else
                     SAL_INFO("vcl.skia", "Vulkan could not be initialized");
                 if (blacklisted && !blockDisable)
+                {
                     disableRenderMethod(RenderVulkan);
+                    writeSkiaRasterInfo();
+                }
                 break;
             }
             case RenderRaster:
                 SAL_INFO("vcl.skia", "Using Skia raster mode");
+                writeSkiaRasterInfo();
                 return; // software, never blacklisted
         }
         done = true;
