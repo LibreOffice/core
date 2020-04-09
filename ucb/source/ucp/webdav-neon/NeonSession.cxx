@@ -1826,8 +1826,8 @@ void NeonSession::HandleError( int nError,
 
         case NE_ERROR:        // Generic error
         {
-            OUString aText = OUString::createFromAscii(
-                ne_get_error( m_pHttpSession ) );
+            const char* sErr = ne_get_error(m_pHttpSession);
+            OUString aText(sErr, strlen(sErr), osl_getThreadTextEncoding());
 
             sal_uInt16 code = makeStatusCode( aText );
 
@@ -1987,9 +1987,9 @@ void NeonSession::HandleError( int nError,
         default:
         {
             SAL_WARN( "ucb.ucp.webdav", "Unknown Neon error code!" );
+            const char* sErr = ne_get_error(m_pHttpSession);
             throw DAVException( DAVException::DAV_HTTP_ERROR,
-                                OUString::createFromAscii(
-                                    ne_get_error( m_pHttpSession ) ) );
+                                OUString(sErr, strlen(sErr), osl_getThreadTextEncoding()) );
         }
     }
 }
