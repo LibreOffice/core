@@ -322,9 +322,16 @@ extern "C" void vtableSlotCall(
     double fpr2, double fpr3, double fpr4, double fpr5, double fpr6,
     double fpr7, ...)
 {
-    register void * volatile indirectRet asm ("x8");
-    register sal_Int32 volatile functionIndex asm ("x9");
-    register sal_Int32 volatile vtableOffset asm ("x10");
+    void * volatile indirectRet;
+    sal_Int32 volatile functionIndex, vtableOffset;
+
+    asm volatile(
+        "mov %0, x8\n\t"
+        "mov %0, x9\n\t"
+        "mov %0, x10\n\t"
+        : "=r" (indirectRet), "=r" (functionIndex), "=r" (vtableOffset)
+        ::);
+
     va_list ap;
     va_start(ap, fpr7);
     assert(sizeof (va_list) == sizeof (aarch64_va_list));
