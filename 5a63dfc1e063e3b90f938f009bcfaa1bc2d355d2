@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "366306ff_7002f417",
+        "filename": "starmath/Library_sm.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-04-09T07:26:44Z",
+      "side": 1,
+      "message": "You need to do the same in starmath/CppunitTest_starmath_qa_cppunit.mk, becauses it does not use the sm library, rather it uses objects from it. Does that help?",
+      "revId": "5a63dfc1e063e3b90f938f009bcfaa1bc2d355d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
