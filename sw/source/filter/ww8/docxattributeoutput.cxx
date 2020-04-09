@@ -5516,11 +5516,32 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
         m_pSerializer->startElementNS(XML_w, XML_object);
     }
 
+    OString aPos ="";
+    OString aAnch = "";
+    if (1)
+    {
+        OString aHAlign = convertToOOXMLHoriOrient(rFlyFrameFormat->GetHoriOrient().GetHoriOrient(),
+            rFlyFrameFormat->GetHoriOrient().IsPosToggle());
+        OString aVAlign = convertToOOXMLVertOrient(rFlyFrameFormat->GetVertOrient().GetVertOrient());
+        OString aHAnch = convertToOOXMLHoriOrientRel(rFlyFrameFormat->GetHoriOrient().GetRelationOrient());
+        OString aVAnch = convertToOOXMLVertOrientRel(rFlyFrameFormat->GetVertOrient().GetRelationOrient());
+        if (!aHAlign.isEmpty())
+            aHAlign = ";mso-position-horizontal:" + aHAlign;
+        aHAlign = ";mso-position-horizontal-relative:" + aHAnch;
+        if (!aVAlign.isEmpty())
+            aVAlign = ";mso-position-vertical:" + aVAlign;
+        aVAlign = ";mso-position-vertical-relative:" + aVAnch;
+        aAnch =  aHAlign +  aVAlign;
+        aPos =
+            "position:absolute;margin-left:" + OString::number(double(rFlyFrameFormat->GetHoriOrient().GetPos()) / 20) +
+            "pt;margin-top:" + OString::number(double(rFlyFrameFormat->GetVertOrient().GetPos()) / 20) + "pt;";
+    }
     OString sShapeStyle = "width:" + OString::number( double( rSize.Width() ) / 20 ) +
                         "pt;height:" + OString::number( double( rSize.Height() ) / 20 ) +
                         "pt"; //from VMLExport::AddRectangleDimensions(), it does: value/20
     OString sShapeId = "ole_" + sId;
 
+    if (!aPos.isEmpty() && !aAnch.isEmpty()) sShapeStyle = aPos + sShapeStyle  + aAnch;
     // shape definition
     m_pSerializer->startElementNS( XML_v, XML_shape,
                                    XML_id, sShapeId.getStr(),
