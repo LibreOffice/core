@@ -151,6 +151,7 @@ public:
     void testTdf115012();
     void testTdf123206_customLabelText();
     void testCustomLabelText();
+    void testTdf131979();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -265,6 +266,7 @@ public:
     CPPUNIT_TEST(testTdf115012);
     CPPUNIT_TEST(testTdf123206_customLabelText);
     CPPUNIT_TEST(testCustomLabelText);
+    CPPUNIT_TEST(testTdf131979);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2433,6 +2435,38 @@ void Chart2ExportTest::testCustomLabelText()
     assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:dLbl[2]/c:tx/c:rich/a:p/a:r[1]/a:t", "4.5");
     assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:dLbl[2]/c:tx/c:rich/a:p/a:r[3]/a:t", "CustomLabel 2");
 }
+
+void Chart2ExportTest::testTdf131979()
+{
+    load("/chart2/qa/extras/data/ods/", "tdf131115.ods");
+    {
+        reload("calc8");
+        Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+        CPPUNIT_ASSERT(xChartDoc.is());
+        Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+        CPPUNIT_ASSERT(xDataSeries.is());
+        Reference<beans::XPropertySet> xPropertySet;
+        xPropertySet.set(xDataSeries->getDataPointByIndex(2), uno::UNO_SET_THROW);
+        bool blinknumberformattosource = true;
+        CPPUNIT_ASSERT(xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= blinknumberformattosource);
+        CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to false.", !blinknumberformattosource);
+    }
+
+    load("/chart2/qa/extras/data/ods/", "tdf131979.ods");
+    {
+        reload("calc8");
+        Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+        CPPUNIT_ASSERT(xChartDoc.is());
+        Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+        CPPUNIT_ASSERT(xDataSeries.is());
+        Reference<beans::XPropertySet> xPropertySet;
+        xPropertySet.set(xDataSeries->getDataPointByIndex(2), uno::UNO_SET_THROW);
+        bool blinknumberformattosource = true;
+        CPPUNIT_ASSERT(xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= blinknumberformattosource);
+        CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", blinknumberformattosource);
+    }
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
