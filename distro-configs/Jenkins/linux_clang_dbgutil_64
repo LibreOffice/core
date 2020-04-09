@@ -4,3 +4,4 @@ COMPILER_PLUGINS_CXX=ccache g++ -std=c++11
 --enable-kf5
 --disable-compiler-plugins-analyzer-pch
 --disable-dependency-tracking
+--disable-split-debug
