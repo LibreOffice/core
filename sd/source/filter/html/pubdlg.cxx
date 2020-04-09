@@ -648,7 +648,7 @@ void SdPublishingDlg::SetDefaults()
     SetDesign(&aDefault);
 
     m_xPage1_NewDesign->set_active(true);
-    m_xPage1_OldDesign->set_sensitive(false);
+    m_xPage1_OldDesign->set_active(false);
     UpdatePage();
 }
 
@@ -832,7 +832,7 @@ IMPL_LINK( SdPublishingDlg, DesignHdl, weld::Button&, rButton, void )
     if (&rButton == m_xPage1_NewDesign.get())
     {
         m_xPage1_NewDesign->set_active(true); // because of DesignDeleteHdl
-        m_xPage1_OldDesign->set_sensitive(false);
+        m_xPage1_OldDesign->set_active(false);
         m_xPage1_Designs->set_sensitive(false);
         m_xPage1_DelDesign->set_sensitive(false);
         m_pDesign = nullptr;
@@ -842,7 +842,7 @@ IMPL_LINK( SdPublishingDlg, DesignHdl, weld::Button&, rButton, void )
     }
     else
     {
-        m_xPage1_NewDesign->set_sensitive(false);
+        m_xPage1_NewDesign->set_active(false);
         m_xPage1_Designs->set_sensitive(true);
         m_xPage1_DelDesign->set_sensitive(true);
 
@@ -950,7 +950,7 @@ IMPL_LINK( SdPublishingDlg, ResolutionHdl, weld::Button&, rButton, void )
 IMPL_LINK_NOARG(SdPublishingDlg, ButtonsHdl, SvtValueSet*, void)
 {
     // if one bitmap-button is chosen, then disable TextOnly
-    m_xPage5_TextOnly->set_sensitive(false);
+    m_xPage5_TextOnly->set_active(false);
 }
 
 // Fill the SfxItemSet with the settings of the dialog
