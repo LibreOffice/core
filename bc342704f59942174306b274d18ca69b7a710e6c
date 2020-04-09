@@ -16,6 +16,24 @@
       "revId": "bc342704f59942174306b274d18ca69b7a710e6c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59cbbefd_71d5344a",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1232,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-09T12:01:06Z",
+      "side": 1,
+      "message": "Sounds reasonable, if there can be no legitimate scenario in which there would be no basctl library.  But I\u0027ll leave it for another commit, as it should also cover a getFunctionSymbol failure below.",
+      "parentUuid": "c6710517_909a5390",
+      "revId": "bc342704f59942174306b274d18ca69b7a710e6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
