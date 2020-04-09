@@ -24,6 +24,7 @@
 #include <vcl/gfxlink.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <memory>
+#include <boost/functional/hash.hpp>
 
 GfxLink::GfxLink()
     : meType(GfxLinkType::NONE)
@@ -33,6 +34,8 @@ GfxLink::GfxLink()
     , mbPrefSizeValid(false)
 {
 }
+
+
 
 GfxLink::GfxLink(std::unique_ptr<sal_uInt8[]> pBuf, sal_uInt32 nSize, GfxLinkType nType)
     : meType(nType)
@@ -46,26 +49,41 @@ GfxLink::GfxLink(std::unique_ptr<sal_uInt8[]> pBuf, sal_uInt32 nSize, GfxLinkTyp
                 "GfxLink::GfxLink(): empty/NULL buffer given");
 }
 
-bool GfxLink::operator==( const GfxLink& rGfxLink ) const
+size_t GfxLink::GetHash() const
 {
-    bool bIsEqual = false;
-
-    if ( ( mnSwapInDataSize == rGfxLink.mnSwapInDataSize ) && ( meType == rGfxLink.meType ) )
+    if (!maHash)
     {
-        const sal_uInt8* pSource = GetData();
-        const sal_uInt8* pDest = rGfxLink.GetData();
-        sal_uInt32 nSourceSize = GetDataSize();
-        sal_uInt32 nDestSize = rGfxLink.GetDataSize();
-        if ( pSource && pDest && ( nSourceSize == nDestSize ) )
-        {
-            bIsEqual = memcmp( pSource, pDest, nSourceSize ) == 0;
-        }
-        else if ( ( pSource == nullptr ) && ( pDest == nullptr ) )
-            bIsEqual = true;
+        std::size_t seed = 0;
+        boost::hash_combine(seed, mnSwapInDataSize);
+        boost::hash_combine(seed, meType);
+        const sal_uInt8* pData = GetData();
+        if (pData)
+            seed += boost::hash_range(pData, pData + GetDataSize());
+        maHash = seed;
+
     }
-    return bIsEqual;
+    return maHash;
 }
 
+bool GfxLink::operator==( const GfxLink& rGfxLink ) const
+{
+    if (GetHash() != rGfxLink.GetHash())
+        return false;
+
+    if ( mnSwapInDataSize != rGfxLink.mnSwapInDataSize ||
+         meType != rGfxLink.meType )
+        return false;
+
+    const sal_uInt8* pSource = GetData();
+    const sal_uInt8* pDest = rGfxLink.GetData();
+    if ( pSource == pDest )
+        return true;
+    sal_uInt32 nSourceSize = GetDataSize();
+    sal_uInt32 nDestSize = rGfxLink.GetDataSize();
+    if ( pSource && pDest && ( nSourceSize == nDestSize ) )
+        return (memcmp( pSource, pDest, nSourceSize ) == 0);
+    return false;
+}
 
 bool GfxLink::IsNative() const
 {
