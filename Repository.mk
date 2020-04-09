@@ -878,7 +878,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	extras_database \
 	extras_databasebiblio \
 	extras_gallbullets \
-	extras_gallhtmlexpo \
 	extras_gallmytheme \
 	extras_gallroot \
 	extras_gallsystem \
