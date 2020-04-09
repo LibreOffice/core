@@ -26,3 +26,45 @@
              RGBToLcd16<false>(src, srcRB, glyph, fPreBlend.fR, fPreBlend.fG, fPreBlend.fB);
          }
      }
+--- ./src/ports/SkScalerContext_win_dw.cpp
++++ ./src/ports/SkScalerContext_win_dw.cpp
+@@ -1132,27 +1132,36 @@ void SkScalerContext_DW::generateImage(const SkGlyph& glyph) {
+         BilevelToBW(src, glyph);
+     } else if (!isLCD(fRec)) {
+         if (textureType == DWRITE_TEXTURE_ALIASED_1x1) {
++#if defined(SK_GAMMA_APPLY_TO_A8)
+             if (fPreBlend.isApplicable()) {
+                 GrayscaleToA8<true>(src, glyph, fPreBlend.fG);
+-            } else {
++            } else
++#endif
++            {
+                 GrayscaleToA8<false>(src, glyph, fPreBlend.fG);
+             }
+         } else {
++#if defined(SK_GAMMA_APPLY_TO_A8)
+             if (fPreBlend.isApplicable()) {
+                 RGBToA8<true>(src, glyph, fPreBlend.fG);
+-            } else {
++            } else
++#endif
++            {
+                 RGBToA8<false>(src, glyph, fPreBlend.fG);
+             }
+         }
+     } else {
+         SkASSERT(SkMask::kLCD16_Format == glyph.fMaskFormat);
++#if defined(SK_GAMMA_APPLY_TO_A8)
+         if (fPreBlend.isApplicable()) {
+             if (fRec.fFlags & SkScalerContext::kLCD_BGROrder_Flag) {
+                 RGBToLcd16<true, false>(src, glyph, fPreBlend.fR, fPreBlend.fG, fPreBlend.fB);
+             } else {
+                 RGBToLcd16<true, true>(src, glyph, fPreBlend.fR, fPreBlend.fG, fPreBlend.fB);
+             }
+-        } else {
++        } else
++#endif
++        {
+             if (fRec.fFlags & SkScalerContext::kLCD_BGROrder_Flag) {
+                 RGBToLcd16<false, false>(src, glyph, fPreBlend.fR, fPreBlend.fG, fPreBlend.fB);
+             } else {
