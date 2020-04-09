@@ -2662,3 +2662,15 @@ cmd/sc_editpastespecialmenu.png cmd/sc_pastespecial.png
 cmd/sc_insertcontents.png cmd/sc_pastespecial.png
 cmd/sc_pastespecialmenu.png cmd/sc_pastespecial.png
 
+# Calc's Style
+cmd/32/badcellstyle.png cmd/32/badcellstyles.png
+cmd/32/goodcellstyle.png cmd/32/goodcellstyles.png
+cmd/32/neutralcellstyle.png cmd/32/neutralcellstyles.png
+
+cmd/lc_badcellstyle.png cmd/lc_badcellstyles.png
+cmd/lc_goodcellstyle.png cmd/lc_goodcellstyles.png
+cmd/lc_neutralcellstyle.png cmd/lc_neutralcellstyles.png
+
+cmd/sc_badcellstyle.png cmd/sc_badcellstyles.png
+cmd/sc_goodcellstyle.png cmd/sc_goodcellstyles.png
+cmd/sc_neutralcellstyle.png cmd/sc_neutralcellstyles.png
