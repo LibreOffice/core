@@ -19,8 +19,9 @@ def main():
         print("Usage: upload-symbols.py symbols.zip config.ini \"long explanation\" [--system]")
         sys.exit(1)
 
-    upload_url = "http://crashreport.libreoffice.org/upload/"
-    login_url = "http://crashreport.libreoffice.org/accounts/login/"
+    base_url = "https://crashreport.libreoffice.org/"
+    upload_url = base_url + "upload/"
+    login_url = base_url + "accounts/login/"
 
     config = configparser.ConfigParser()
     config.read(sys.argv[2])
@@ -41,11 +42,12 @@ def main():
 
     login_data = { 'username': user,'password': password,
             'csrfmiddlewaretoken': csrftoken }
-    r1 = session.post(login_url,data=login_data)
+    headers = { "Referer": base_url }
+    r1 = session.post(login_url, headers=headers, data=login_data)
 
     data['csrfmiddlewaretoken'] = csrftoken
 
-    r = session.post(upload_url, files = files, data = data)
+    r = session.post(upload_url, headers=headers, files=files, data=data)
 
 if __name__ == "__main__":
     main()
