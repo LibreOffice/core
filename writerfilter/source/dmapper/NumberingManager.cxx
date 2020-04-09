@@ -633,6 +633,10 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
 
                 aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_POSITION_AND_SPACE_MODE), sal_Int16(text::PositionAndSpaceMode::LABEL_ALIGNMENT)));
 
+                const StyleSheetEntryPtr pParaStyle = pAbsLevel->GetParaStyle();
+                // Although the documentation doesn't indicate any exception for the  default style, it seems to ignore this setting
+                if ( pParaStyle.get() && !pParaStyle->bIsDefaultStyle )
+                    aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_PARAGRAPH_STYLE_NAME), pParaStyle->sConvertedStyleName));
 
                 // Replace the numbering rules for the level
                 m_xNumRules->replaceByIndex(nLevel, uno::makeAny(comphelper::containerToSequence(aLvlProps)));
@@ -645,7 +649,6 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                     uno::Reference< container::XIndexReplace > xOutlineRules =
                         xOutlines->getChapterNumberingRules( );
 
-                    StyleSheetEntryPtr pParaStyle = pAbsLevel->GetParaStyle( );
                     aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HEADING_STYLE_NAME), pParaStyle->sConvertedStyleName));
 
                     xOutlineRules->replaceByIndex(nLevel, uno::makeAny(comphelper::containerToSequence(aLvlProps)));

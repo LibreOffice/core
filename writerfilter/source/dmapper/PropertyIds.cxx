@@ -252,6 +252,7 @@ OUString getPropertyName( PropertyIds eId )
         case PROP_SERVICE_PARA_STYLE       :    sName = "com.sun.star.style.ParagraphStyle"; break;
         case PROP_CHARACTER_STYLES :    sName = "CharacterStyles"; break;
         case PROP_PARAGRAPH_STYLES :    sName = "ParagraphStyles"; break;
+        case PROP_PARAGRAPH_STYLE_NAME: sName = "ParagraphStyleName"; break;
         case PROP_TABLE_BORDER_DISTANCES:    sName = "TableBorderDistances"; break;
         case META_PROP_CELL_MAR_TOP    :    sName = "MetaPropCellMarTop"; break;
         case META_PROP_CELL_MAR_BOTTOM :    sName = "MetaPropCellMarBottom"; break;
