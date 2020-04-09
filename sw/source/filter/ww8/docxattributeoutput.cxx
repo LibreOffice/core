@@ -5516,10 +5516,48 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
         m_pSerializer->startElementNS(XML_w, XML_object);
     }
 
+    //tdf#131539: Export OLE positions in docx:
+    //This string will store the position output for the xml
+    OString aPos ="";
+    //This string will store the relative position for aPos
+    OString aAnch = "";
+
+    //Get the horizontal alignment of the OLE via the frameformat, to aHAilgn
+    OString aHAlign = convertToOOXMLHoriOrient(rFlyFrameFormat->GetHoriOrient().GetHoriOrient(),
+        rFlyFrameFormat->GetHoriOrient().IsPosToggle());
+    //Get the vertical alignment og the OLE via the frame format to aVAlign
+    OString aVAlign = convertToOOXMLVertOrient(rFlyFrameFormat->GetVertOrient().GetVertOrient());
+
+    //Get the relative horizontal positions for the anchors
+    OString aHAnch = convertToOOXMLHoriOrientRel(rFlyFrameFormat->GetHoriOrient().GetRelationOrient());
+    //Get the relative vertical positions for the anchors
+    OString aVAnch = convertToOOXMLVertOrientRel(rFlyFrameFormat->GetVertOrient().GetRelationOrient());
+
+    //Choice that the horizontal position is relative or not
+    if (!aHAlign.isEmpty())
+        aHAlign = ";mso-position-horizontal:" + aHAlign;
+    aHAlign = ";mso-position-horizontal-relative:" + aHAnch;
+
+    //Choice that the vertical position is relative or not
+    if (!aVAlign.isEmpty())
+        aVAlign = ";mso-position-vertical:" + aVAlign;
+    aVAlign = ";mso-position-vertical-relative:" + aVAnch;
+
+    //Set the anchoring information into one string for aPos
+    aAnch =  aHAlign +  aVAlign;
+
+    //Query the positions to aPos from frameformat
+    aPos =
+        "position:absolute;margin-left:" + OString::number(double(rFlyFrameFormat->GetHoriOrient().GetPos()) / 20) +
+        "pt;margin-top:" + OString::number(double(rFlyFrameFormat->GetVertOrient().GetPos()) / 20) + "pt;";
+
     OString sShapeStyle = "width:" + OString::number( double( rSize.Width() ) / 20 ) +
                         "pt;height:" + OString::number( double( rSize.Height() ) / 20 ) +
                         "pt"; //from VMLExport::AddRectangleDimensions(), it does: value/20
     OString sShapeId = "ole_" + sId;
+
+    //if there is a successfull anchor setting send it to export
+    if (!aPos.isEmpty() && !aAnch.isEmpty()) sShapeStyle = aPos + sShapeStyle  + aAnch;
 
     // shape definition
     m_pSerializer->startElementNS( XML_v, XML_shape,
