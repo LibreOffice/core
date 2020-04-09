@@ -43,7 +43,7 @@ class insertCaption(UITestCase):
 
         xFrame = document.TextFrames[0]
 
-        self.assertEqual(document.TextFrames[0].Text.String, "\nText 1: Caption")
+        self.assertEqual(document.TextFrames[0].Text.String.replace('\r\n', '\n'), "\nText 1: Caption")
 
         self.ui_test.execute_dialog_through_command(".uno:InsertCaptionDialog")   # 2nd caption
         xDialogCaption = self.xUITest.getTopFocusWindow()
@@ -55,7 +55,7 @@ class insertCaption(UITestCase):
         xOkBtn=xDialogCaption.getChild("ok")
         xOkBtn.executeAction("CLICK", tuple())
 
-        self.assertEqual(document.TextFrames[0].Text.String, "\nText 1: Caption\nText 2-: Caption2")
+        self.assertEqual(document.TextFrames[0].Text.String.replace('\r\n', '\n'), "\nText 1: Caption\nText 2-: Caption2")
 
         self.ui_test.execute_dialog_through_command(".uno:InsertCaptionDialog")   # 3. caption
         xDialogCaption = self.xUITest.getTopFocusWindow()
@@ -69,7 +69,7 @@ class insertCaption(UITestCase):
         xOkBtn=xDialogCaption.getChild("ok")
         xOkBtn.executeAction("CLICK", tuple())
 
-        self.assertEqual(document.TextFrames[0].Text.String, "\nText 1: Caption\nText 2-: Caption2\nText 3--: Caption3")
+        self.assertEqual(document.TextFrames[0].Text.String.replace('\r\n', '\n'), "\nText 1: Caption\nText 2-: Caption2\nText 3--: Caption3")
 
         self.ui_test.close_doc()
 
