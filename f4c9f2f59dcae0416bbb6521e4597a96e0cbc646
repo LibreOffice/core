@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "fb61e48d_cc482ad9",
+        "filename": "bean/test/applet/oooapplet/makefile.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-09T09:02:26Z",
+      "side": 1,
+      "message": "for obsolete files like this, we didn\u0027t bother to touch them in \u003chttps://git.libreoffice.org/core/+/ae855bf48163ff64d94cfc34aff8e37abdb5518d%5E!/\u003e \"tdf#117331 Merge jurt and unoil into ridl\", and I wouldn\u0027t bother now, either",
+      "revId": "f4c9f2f59dcae0416bbb6521e4597a96e0cbc646",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "aff07b2e_1dba8e7c",
         "filename": "ridljar/Jar_libreoffice.mk",
         "patchSetId": 2
@@ -19,6 +36,64 @@
         "endLine": 18,
         "endChar": 10
       },
+      "revId": "f4c9f2f59dcae0416bbb6521e4597a96e0cbc646",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8f1b043_d74ee8ec",
+        "filename": "ridljar/Jar_libreoffice.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-09T09:02:26Z",
+      "side": 1,
+      "message": "What is that meant to be good for?  It manipulates some gb_Library,libreoffice, not gb_Jar,libreoffice?",
+      "parentUuid": "aff07b2e_1dba8e7c",
+      "range": {
+        "startLine": 18,
+        "startChar": 4,
+        "endLine": 18,
+        "endChar": 10
+      },
+      "revId": "f4c9f2f59dcae0416bbb6521e4597a96e0cbc646",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29b443ef_93b2e375",
+        "filename": "unotest/Jar_test.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-09T09:02:26Z",
+      "side": 1,
+      "message": "why drop the gb_Helper_make_url part?",
+      "revId": "f4c9f2f59dcae0416bbb6521e4597a96e0cbc646",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8a41185_6b423432",
+        "filename": "ure/source/README",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-09T09:02:26Z",
+      "side": 1,
+      "message": "libreoffice.jar should be added to the lists here",
       "revId": "f4c9f2f59dcae0416bbb6521e4597a96e0cbc646",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true

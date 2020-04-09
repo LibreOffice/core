@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "7ab5074c_f7acd8de",
+        "filename": "ridljar/Jar_libreoffice.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-09T09:02:26Z",
+      "side": 1,
+      "message": "\u003e When using Java 9 modules, the classpath is ignored. So the user would still have to manually add unoloader.jar to his module path.\n\nYou mean, the value of the Class-Path attribute in the manifest of libreoffice.jar is completely ignored?  Then how are native libraries found?\n\n\u003e So we need to either add a module-info.java to unoloader too (then it can be required from libreoffice.jar), or we integrate unoloader into libreoffice.jar.\n\nunoloader.jar cannot be integrated into libreoffice.jar.  What unoloader.jar does is load the other URE jars in the UnoClassLoader.",
+      "parentUuid": "7a2c4618_32a07cbd",
+      "range": {
+        "startLine": 26,
+        "startChar": 4,
+        "endLine": 26,
+        "endChar": 17
+      },
+      "revId": "ed154fd05032bb14098901b2c7029bdd66572043",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4f027cb1_ed7ce28c",
         "filename": "ridljar/source/libreoffice/manifest",
         "patchSetId": 1
