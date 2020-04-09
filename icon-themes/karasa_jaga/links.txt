@@ -41,6 +41,7 @@ cmd/32/autoformatmenu.png cmd/32/autocorrectdlg.png
 cmd/32/availabletoolbars.png cmd/32/showtoolbar.png
 cmd/32/backgroundcolor.png cmd/32/formatarea.png
 cmd/32/backgroundpatterncontroller.png cmd/32/formatarea.png
+cmd/32/badcellstyle.png cmd/32/badcellstyles.png
 cmd/32/basicshapes.png cmd/32/basicshapes.diamond.png
 cmd/32/bg/autoformatmenu.png cmd/32/bg/autocorrectdlg.png
 cmd/32/bg/spelldialog.png cmd/32/bg/spelling.png
@@ -186,6 +187,7 @@ cmd/32/fr/underlinedouble.png cmd/32/ca/underlinedouble.png
 cmd/32/fr/underlinesimple.png cmd/32/ca/underline.png
 cmd/32/functionbox.png cmd/32/insertformula.png
 cmd/32/functiondialog.png cmd/32/insertformula.png
+cmd/32/goodcellstyle.png cmd/32/goodcellstyles.png
 cmd/32/gotoendofdoc.png cmd/32/lastpage.png
 cmd/32/gotostartofdoc.png cmd/32/firstpage.png
 cmd/32/graphicfilterinvert.png cmd/32/grafinvert.png
@@ -329,6 +331,7 @@ cmd/32/mirrorvert.png cmd/32/flipvertical.png
 cmd/32/modifyfield.png cmd/32/fields.png
 cmd/32/namegroup.png cmd/32/renameobject.png
 cmd/32/navigatemenu.png cmd/32/navigator.png
+cmd/32/neutralcellstyle.png cmd/32/neutralcellstyles.png
 cmd/32/newglobaldoc.png res/odm_32_8.png
 cmd/32/nl/italic.png cmd/32/ca/italic.png
 cmd/32/nl/underlinesimple.png cmd/32/nl/underline.png
@@ -706,6 +709,7 @@ cmd/lc_autoformatmenu.png cmd/lc_autocorrectdlg.png
 cmd/lc_availabletoolbars.png cmd/lc_showtoolbar.png
 cmd/lc_backgroundcolor.png cmd/lc_formatarea.png
 cmd/lc_backgroundpatterncontroller.png cmd/lc_formatarea.png
+cmd/lc_badcellstyle.png cmd/lc_badcellstyles.png
 cmd/lc_basicshapes.png cmd/lc_basicshapes.diamond.png
 cmd/lc_break.png cmd/lc_polygon_unfilled.png
 cmd/lc_browsebackward.png cmd/lc_navigateback.png
@@ -810,6 +814,7 @@ cmd/lc_formatspacingmenu.png cmd/lc_spacepara15.png
 cmd/lc_formattextmenu.png cmd/lc_text.png
 cmd/lc_functionbox.png cmd/lc_insertformula.png
 cmd/lc_functiondialog.png cmd/lc_insertformula.png
+cmd/lc_goodcellstyle.png cmd/lc_goodcellstyles.png
 cmd/lc_gotoendofdoc.png cmd/lc_lastpage.png
 cmd/lc_gotostartofdoc.png cmd/lc_firstpage.png
 cmd/lc_graphicfilterinvert.png cmd/lc_grafinvert.png
@@ -910,6 +915,7 @@ cmd/lc_mirrorvert.png cmd/lc_flipvertical.png
 cmd/lc_modifyfield.png cmd/lc_fields.png
 cmd/lc_namegroup.png cmd/lc_renameobject.png
 cmd/lc_navigatemenu.png cmd/lc_navigator.png
+cmd/lc_neutralcellstyle.png cmd/lc_neutralcellstyles.png
 cmd/lc_no.png cmd/lc_cancel.png
 cmd/lc_notecellstyles.png cmd/lc_shownote.png
 cmd/lc_notevisible.png cmd/lc_shownote.png
@@ -1093,6 +1099,7 @@ cmd/sc_autoformatmenu.png cmd/sc_autocorrectdlg.png
 cmd/sc_availabletoolbars.png cmd/sc_showtoolbar.png
 cmd/sc_backgroundcolor.png cmd/sc_formatarea.png
 cmd/sc_backgroundpatterncontroller.png cmd/sc_formatarea.png
+cmd/sc_badcellstyle.png cmd/sc_badcellstyles.png
 cmd/sc_basicshapes.png cmd/sc_basicshapes.diamond.png
 cmd/sc_break.png cmd/sc_polygon_unfilled.png
 cmd/sc_browsebackward.png cmd/sc_navigateback.png
@@ -1197,6 +1204,7 @@ cmd/sc_formatspacingmenu.png cmd/sc_spacepara15.png
 cmd/sc_formattextmenu.png cmd/sc_text.png
 cmd/sc_functionbox.png cmd/sc_insertformula.png
 cmd/sc_functiondialog.png cmd/sc_insertformula.png
+cmd/sc_goodcellstyle.png cmd/sc_goodcellstyles.png
 cmd/sc_gotoendofdoc.png cmd/sc_lastpage.png
 cmd/sc_gotostartofdoc.png cmd/sc_firstpage.png
 cmd/sc_graphicfilterinvert.png cmd/sc_grafinvert.png
@@ -1297,6 +1305,7 @@ cmd/sc_mirrorvert.png cmd/sc_flipvertical.png
 cmd/sc_modifyfield.png cmd/sc_fields.png
 cmd/sc_namegroup.png cmd/sc_renameobject.png
 cmd/sc_navigatemenu.png cmd/sc_navigator.png
+cmd/sc_neutralcellstyle.png cmd/sc_neutralcellstyles.png
 cmd/sc_newglobaldoc.png res/odm_16_8.png
 cmd/sc_no.png cmd/sc_cancel.png
 cmd/sc_notecellstyles.png cmd/sc_shownote.png
