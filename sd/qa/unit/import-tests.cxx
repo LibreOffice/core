@@ -207,15 +207,12 @@ public:
     void testTdf116899();
     void testTdf77747();
     void testTdf116266();
-    void testTdf126324();
     void testTdf128684();
     void testShapeGlowEffectPPTXImpoer();
 
     bool checkPattern(sd::DrawDocShellRef const & rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
     void testPatternImport();
     void testPptCrop();
-    void testTdf119015();
-    void testTdf123090();
     void testTdf120028();
     void testTdf120028b();
     void testDescriptionImport();
@@ -312,15 +309,12 @@ public:
     CPPUNIT_TEST(testTdf114913);
     CPPUNIT_TEST(testTdf114821);
     CPPUNIT_TEST(testTdf115394);
-    CPPUNIT_TEST(testTdf126324);
     CPPUNIT_TEST(testTdf115394PPT);
     CPPUNIT_TEST(testTdf51340);
     CPPUNIT_TEST(testTdf116899);
     CPPUNIT_TEST(testTdf77747);
     CPPUNIT_TEST(testTdf116266);
     CPPUNIT_TEST(testPptCrop);
-    CPPUNIT_TEST(testTdf119015);
-    CPPUNIT_TEST(testTdf123090);
     CPPUNIT_TEST(testTdf120028);
     CPPUNIT_TEST(testTdf120028b);
     CPPUNIT_TEST(testDescriptionImport);
@@ -2801,55 +2795,6 @@ void SdImportTest::testTdf116266()
     xDocShRef->DoClose();
 }
 
-void SdImportTest::testTdf119015()
-{
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf119015.pptx"), PPTX);
-
-    const SdrPage* pPage = GetPage(1, xDocShRef);
-
-    sdr::table::SdrTableObj* pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
-    CPPUNIT_ASSERT(pTableObj);
-    // The position was previously not properly initialized: (0, 0, 100, 100)
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(6991, 6902), Size(14099, 1999)),
-                         pTableObj->GetLogicRect());
-    uno::Reference<table::XTable> xTable(pTableObj->getTable());
-
-    // Test that we actually have three cells: this threw css.lang.IndexOutOfBoundsException
-    uno::Reference<text::XTextRange> xTextRange(xTable->getCellByPosition(1, 0),
-                                                uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(OUString("A3"), xTextRange->getString());
-
-    xDocShRef->DoClose();
-}
-
-void SdImportTest::testTdf123090()
-{
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf123090.pptx"), PPTX);
-
-    const SdrPage* pPage = GetPage(1, xDocShRef);
-
-    sdr::table::SdrTableObj* pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
-    CPPUNIT_ASSERT(pTableObj);
-
-    uno::Reference<table::XTable> xTable(pTableObj->getTable());
-
-    // Test that we actually have two cells: this threw css.lang.IndexOutOfBoundsException
-    uno::Reference<text::XTextRange> xTextRange(xTable->getCellByPosition(1, 0),
-                                                uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(OUString("aaa"), xTextRange->getString());
-
-    sal_Int32 nWidth;
-    const OUString sWidth("Width");
-    uno::Reference< css::table::XTableColumns > xColumns( xTable->getColumns(), uno::UNO_SET_THROW);
-    uno::Reference< beans::XPropertySet > xRefColumn( xColumns->getByIndex(1), uno::UNO_QUERY_THROW );
-    xRefColumn->getPropertyValue( sWidth ) >>= nWidth;
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(9136), nWidth);
-
-    xDocShRef->DoClose();
-}
-
 void SdImportTest::testTdf120028()
 {
     // Check that the table shape has 4 columns.
@@ -2921,21 +2866,6 @@ void SdImportTest::testTdf120028b()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffffff), nCharColor);
 
     xDocShRef->DoClose();
-}
-
-void SdImportTest::testTdf126324()
-{
-    sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf126324.pptx"), PPTX);
-    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(),
-                                                     uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xDoc.is());
-    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xPage.is());
-    uno::Reference<beans::XPropertySet> xShape(getShape(0, xPage));
-    CPPUNIT_ASSERT(xShape.is());
-    uno::Reference< text::XText > xText = uno::Reference< text::XTextRange>( xShape, uno::UNO_QUERY_THROW )->getText();
-    CPPUNIT_ASSERT_EQUAL(OUString{"17"}, xText->getString());
 }
 
 void SdImportTest::testDescriptionImport()
