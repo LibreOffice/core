@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c2b1701e_10e60654",
+        "filename": "stoc/source/javaloader/javaloader.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-04-09T13:38:04Z",
+      "side": 1,
+      "message": "I guess we can simply skip the commitChanges call - configmgr will eventually write it out anyway, and this is just a non-essential flag, so.. ?",
+      "revId": "91ab9850a11b49c213822f990f107b7fd83f5e59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
