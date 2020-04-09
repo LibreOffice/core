@@ -30,7 +30,7 @@ class tdf115088(UITestCase):
         self.xUITest.executeCommand(".uno:GoLeft")
         self.xUITest.executeCommand(".uno:GoLeft")
         self.xUITest.executeCommand(".uno:PasteUnformatted")
-        self.assertEqual(document.Text.String[0:2], "1\n")
+        self.assertEqual(document.Text.String[0:2].replace('\r', '\n'), "1\n")
 
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
