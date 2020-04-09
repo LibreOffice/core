@@ -16,6 +16,23 @@
       "revId": "5a63dfc1e063e3b90f938f009bcfaa1bc2d355d2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5c3664b_2cffa3f1",
+        "filename": "starmath/source/parse.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 964,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-09T07:30:54Z",
+      "side": 1,
+      "message": "There should be no need to use ICU here.  See include/rtl/character.hxx for rtl::isSurrogate, rtl::isHighSurrogate, rtl::isLowSurrogate, and include/rtl/ustring.hxx for rtl::OUString::iterateCodePoints.",
+      "revId": "5a63dfc1e063e3b90f938f009bcfaa1bc2d355d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
