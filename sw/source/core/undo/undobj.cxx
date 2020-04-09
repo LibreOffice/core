@@ -1566,13 +1566,13 @@ bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
                 && !(nDelContentType & DelContentType::ExcludeAtCharFlyAtStartEnd)
                 // special case: fully deleted node
                 && ((rStart.nNode != rEnd.nNode && rStart.nContent == 0)
-                    || IsAtStartOfSection(rAnchorPos))))
+                    || (IsAtStartOfSection(rAnchorPos) && IsAtEndOfSection(rEnd)))))
         && ((rAnchorPos < rEnd)
             || (rAnchorPos == rEnd
                 && !(nDelContentType & DelContentType::ExcludeAtCharFlyAtStartEnd)
                 // special case: fully deleted node
                 && ((rEnd.nNode != rStart.nNode && rEnd.nContent == rEnd.nNode.GetNode().GetTextNode()->Len())
-                    || IsAtEndOfSection(rAnchorPos))));
+                    || (IsAtEndOfSection(rAnchorPos) && IsAtStartOfSection(rStart)))));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
