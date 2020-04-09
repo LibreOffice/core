@@ -214,6 +214,7 @@ public:
 
     void testTdf118990();
     void testTdf121612();
+    void testTdf126748();
     void testPivotCacheAfterExportXLSX();
     void testTdf114969XLSX();
     void testTdf115192XLSX();
@@ -349,6 +350,7 @@ public:
 
     CPPUNIT_TEST(testTdf118990);
     CPPUNIT_TEST(testTdf121612);
+    CPPUNIT_TEST(testTdf126748);
     CPPUNIT_TEST(testPivotCacheAfterExportXLSX);
     CPPUNIT_TEST(testTdf114969XLSX);
     CPPUNIT_TEST(testTdf115192XLSX);
@@ -4333,6 +4335,25 @@ void ScExportTest::testTdf121612()
     ScDPCollection* pDPColl = rDoc.GetDPCollection();
     CPPUNIT_ASSERT(pDPColl);
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDPColl->GetCount());
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf126748()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf126748.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.is());
+    //crash exporting to XLSX
+    xDocSh = saveAndReload(xDocSh.get(), FORMAT_XLSX);
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // There should be a pivot table
+    CPPUNIT_ASSERT(rDoc.HasPivotTable());
+
+    ScDPCollection* pDPColl = rDoc.GetDPCollection();
+    CPPUNIT_ASSERT(pDPColl);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pDPColl->GetCount());
 
     xDocSh->DoClose();
 }
