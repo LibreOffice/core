@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "01b0ea2f_ed56279f",
+        "filename": "offapi/com/sun/star/accessibility/XAccessibleText.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-09T09:19:32Z",
+      "side": 1,
+      "message": "can this be \u003c nStartIndex?  (though I see the existing methods do not address that question, either)",
+      "revId": "3ce35abd49d54d59b15ef310ebc1bf7ffcc227ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "163f6d2a_871d47a7",
+        "filename": "offapi/com/sun/star/accessibility/XAccessibleText.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-09T09:19:32Z",
+      "side": 1,
+      "message": "what would be a reason for failure?  (depending on the answer, maybe it would be more suitable to throw an exception?)",
+      "revId": "3ce35abd49d54d59b15ef310ebc1bf7ffcc227ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38b1ce52_0cafe840",
+        "filename": "offapi/com/sun/star/accessibility/XAccessibleText.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-09T09:19:32Z",
+      "side": 1,
+      "message": "can this be \u003c nStartIndex?  (though I see the existing methods do not address that question, either)",
+      "revId": "3ce35abd49d54d59b15ef310ebc1bf7ffcc227ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc9bcb1c_f040ce77",
+        "filename": "offapi/com/sun/star/accessibility/XAccessibleText.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-09T09:19:32Z",
+      "side": 1,
+      "message": "what would be a reason for failure?  (depending on the answer, maybe it would be more suitable to throw an exception?)",
+      "revId": "3ce35abd49d54d59b15ef310ebc1bf7ffcc227ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

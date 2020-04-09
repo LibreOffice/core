@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "2b19248a_e0185bf1",
+        "filename": "offapi/com/sun/star/accessibility/AccessibleScrollType.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-09T09:19:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "78dee45d_6b03e39b",
+      "revId": "1fd9ad553397699188a1eb2f95f1b31fe9fc3a6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8dcfaac8_873f68ea",
         "filename": "offapi/com/sun/star/accessibility/AccessibleScrollType.idl",
         "patchSetId": 1
@@ -76,6 +94,24 @@
     },
     {
       "key": {
+        "uuid": "4b4d0e6e_1c20f2fa",
+        "filename": "offapi/com/sun/star/accessibility/XAccessibleText.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-09T09:19:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "edbc8dad_155643c0",
+      "revId": "1fd9ad553397699188a1eb2f95f1b31fe9fc3a6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "41ad7744_535d4690",
         "filename": "offapi/com/sun/star/accessibility/XAccessibleText.idl",
         "patchSetId": 1
@@ -93,6 +129,24 @@
     },
     {
       "key": {
+        "uuid": "f02cb526_114adc2a",
+        "filename": "offapi/com/sun/star/accessibility/XAccessibleText.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-09T09:19:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "41ad7744_535d4690",
+      "revId": "1fd9ad553397699188a1eb2f95f1b31fe9fc3a6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8918e7a0_06eabdc3",
         "filename": "offapi/com/sun/star/accessibility/XAccessibleText.idl",
         "patchSetId": 1
@@ -107,6 +161,24 @@
       "revId": "1fd9ad553397699188a1eb2f95f1b31fe9fc3a6c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25f58432_811125f1",
+        "filename": "offapi/com/sun/star/accessibility/XAccessibleText.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-09T09:19:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8918e7a0_06eabdc3",
+      "revId": "1fd9ad553397699188a1eb2f95f1b31fe9fc3a6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
