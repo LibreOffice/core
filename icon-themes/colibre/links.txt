@@ -400,9 +400,58 @@ cmd/sc_showallnotes.png cmd/sc_showannotations.png
 cmd/sc_showchanges.png cmd/sc_addwatch.png
 
 # Locale language support
+cmd/32/ar/bulletliststyle.png cmd/32/ar/defaultbullet.png
+cmd/32/ar/defaultparastyle.png cmd/32/ar/controlcodes.png
+cmd/32/ar/numberliststyle.png cmd/32/ar/defaultnumbering.png
+cmd/32/ar/recundo.png cmd/32/redo.png
+cmd/32/ar/redo.png cmd/32/undo.png
+cmd/32/ar/undo.png cmd/32/redo.png
 cmd/32/es/italic.png cmd/32/de/italic.png
+<<<<<<< HEAD   (ecc95d Resolves tdf#127782 - New Print dialog is too high)
+=======
+cmd/32/fa/recundo.png cmd/32/redo.png
+cmd/32/fa/redo.png cmd/32/undo.png	
+cmd/32/fa/undo.png cmd/32/redo.png
+cmd/32/he/recundo.png cmd/32/redo.png
+cmd/32/he/redo.png cmd/32/undo.png
+cmd/32/he/undo.png cmd/32/redo.png
+cmd/32/ur/recundo.png cmd/32/redo.png
+cmd/32/ur/redo.png cmd/32/undo.png
+cmd/32/ur/undo.png cmd/32/redo.png
+cmd/ar/lc_bulletliststyle.png cmd/ar/lc_defaultbullet.png
+cmd/ar/lc_defaultparastyle.png cmd/ar/lc_controlcodes.png
+cmd/ar/lc_numberliststyle.png cmd/ar/lc_defaultnumbering.png
+cmd/ar/lc_redo.png cmd/lc_undo.png
+cmd/ar/lc_undo.png cmd/lc_redo.png
+cmd/ar/sc_bulletliststyle.png cmd/ar/sc_defaultbullet.png
+cmd/ar/sc_defaultparastyle.png cmd/ar/sc_controlcodes.png
+cmd/ar/sc_numberliststyle.png cmd/ar/sc_defaultnumbering.png
+cmd/ar/sc_redo.png cmd/sc_undo.png
+cmd/ar/sc_undo.png cmd/sc_redo.png
+>>>>>>> CHANGE (5b56db Colibre: Fix for tdf#131974 & tdf#131975)
 cmd/es/lc_italic.png cmd/de/lc_italic.png
 cmd/es/sc_italic.png cmd/de/sc_italic.png
+<<<<<<< HEAD   (ecc95d Resolves tdf#127782 - New Print dialog is too high)
+=======
+cmd/fa/lc_recundo.png cmd/lc_redo.png
+cmd/fa/lc_redo.png cmd/lc_undo.png
+cmd/fa/lc_undo.png cmd/lc_redo.png
+cmd/fa/sc_recundo.png cmd/sc_redo.png
+cmd/fa/sc_redo.png cmd/sc_undo.png
+cmd/fa/sc_undo.png cmd/sc_redo.png
+cmd/he/lc_recundo.png cmd/lc_redo.png
+cmd/he/lc_redo.png cmd/lc_undo.png
+cmd/he/lc_undo.png cmd/lc_redo.png
+cmd/he/sc_recundo.png cmd/sc_redo.png
+cmd/he/sc_redo.png cmd/sc_undo.png
+cmd/he/sc_undo.png cmd/sc_redo.png
+cmd/ur/lc_recundo.png cmd/lc_redo.png
+cmd/ur/lc_redo.png cmd/lc_undo.png
+cmd/ur/lc_undo.png cmd/lc_redo.png
+cmd/ur/sc_recundo.png cmd/sc_redo.png
+cmd/ur/sc_redo.png cmd/sc_undo.png
+cmd/ur/sc_undo.png cmd/sc_redo.png
+>>>>>>> CHANGE (5b56db Colibre: Fix for tdf#131974 & tdf#131975)
 
 # Template Menu
 cmd/32/templatemenu.png cmd/32/adddirect.png
@@ -1489,35 +1538,6 @@ cmd/sc_tableselectmenu.png cmd/sc_selecttable.png
 cmd/32/absoluterecord.png cmd/32/helpindex.png
 cmd/lc_absoluterecord.png cmd/lc_helpindex.png
 cmd/sc_absoluterecord.png cmd/sc_helpindex.png
-
-# language support for rtl
-# doesn't work for all other languages
-#cmd/lc_redo.png cmd/ar/lc_undo.png
-#cmd/lc_undo.png cmd/ar/lc_redo.png
-#cmd/sc_redo.png cmd/ar/sc_undo.png
-#cmd/sc_undo.png cmd/ar/sc_redo.png
-
-#cmd/lc_redo.png cmd/fa/lc_undo.png
-#cmd/lc_undo.png cmd/fa/lc_redo.png
-#cmd/sc_redo.png cmd/fa/sc_undo.png
-#cmd/sc_undo.png cmd/fa/sc_redo.png
-
-#cmd/lc_redo.png cmd/he/lc_undo.png
-#cmd/lc_undo.png cmd/he/lc_redo.png
-#cmd/sc_redo.png cmd/he/sc_undo.png
-#cmd/sc_undo.png cmd/he/sc_redo.png
-
-cmd/32/ar/bulletliststyle.png cmd/32/ar/defaultbullet.png
-cmd/32/ar/defaultparastyle.png cmd/32/ar/controlcodes.png
-cmd/32/ar/numberliststyle.png cmd/32/ar/defaultnumbering.png
-
-cmd/ar/lc_bulletliststyle.png cmd/ar/lc_defaultbullet.png
-cmd/ar/lc_defaultparastyle.png cmd/ar/lc_controlcodes.png
-cmd/ar/lc_numberliststyle.png cmd/ar/lc_defaultnumbering.png
-
-cmd/ar/sc_bulletliststyle.png cmd/ar/sc_defaultbullet.png
-cmd/ar/sc_defaultparastyle.png cmd/ar/sc_controlcodes.png
-cmd/ar/sc_numberliststyle.png cmd/ar/sc_defaultnumbering.png
 
 # text background colour Impress/Draw
 cmd/32/charbackcolor.png cmd/32/backcolor.png
