@@ -1,0 +1,48 @@
+--- ./include/ports/SkTypeface_win.h
++++ ./include/ports/SkTypeface_win.h
+@@ -75,5 +75,13 @@ SK_API sk_sp<SkFontMgr> SkFontMgr_New_DirectWriteRenderer(sk_sp<SkRemotableFontM
+  */
+ SK_API sk_sp<SkRemotableFontMgr> SkRemotableFontMgr_New_DirectWrite();
+ 
++struct IDWriteFontFace;
++struct IDWriteFont;
++struct IDWriteFontFamily;
++SK_API SkTypeface* SkCreateTypefaceDirectWrite(sk_sp<SkFontMgr> fontMgr,
++                                               IDWriteFontFace* fontFace,
++                                               IDWriteFont* font,
++                                               IDWriteFontFamily* fontFamily);
++
+ #endif  // SK_BUILD_FOR_WIN
+ #endif  // SkTypeface_win_DEFINED
+--- ./src/ports/SkFontMgr_win_dw.cpp
++++ ./src/ports/SkFontMgr_win_dw.cpp
+@@ -320,6 +320,10 @@ private:
+ 
+     friend class SkFontStyleSet_DirectWrite;
+     friend class FontFallbackRenderer;
++    friend SK_API SkTypeface* SkCreateTypefaceDirectWrite(sk_sp<SkFontMgr> fontMgr,
++                                               IDWriteFontFace* fontFace,
++                                               IDWriteFont* font,
++                                               IDWriteFontFamily* fontFamily);
+ };
+ 
+ class SkFontStyleSet_DirectWrite : public SkFontStyleSet {
+@@ -1215,6 +1219,18 @@ SK_API sk_sp<SkFontMgr> SkFontMgr_New_DirectWrite(IDWriteFactory* factory,
+                                              defaultFamilyName, defaultFamilyNameLen);
+ }
+ 
++SkTypeface* SkCreateTypefaceDirectWrite(sk_sp<SkFontMgr> fontMgr,
++                                        IDWriteFontFace* fontFace,
++                                        IDWriteFont* font,
++                                        IDWriteFontFamily* fontFamily)
++{
++    SkFontMgr_DirectWrite* mgr = dynamic_cast<SkFontMgr_DirectWrite*>(fontMgr.get());
++    if(!mgr)
++        return nullptr;
++    sk_sp<SkTypeface> typeface = mgr->makeTypefaceFromDWriteFont(fontFace, font, fontFamily);
++    return typeface.release();
++}
++
+ #include "include/ports/SkFontMgr_indirect.h"
+ SK_API sk_sp<SkFontMgr> SkFontMgr_New_DirectWriteRenderer(sk_sp<SkRemotableFontMgr> proxy) {
+     sk_sp<SkFontMgr> impl(SkFontMgr_New_DirectWrite());
