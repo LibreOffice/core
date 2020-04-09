@@ -74,7 +74,6 @@ using namespace css;
 using namespace css::uno;
 using namespace css::beans;
 using namespace css::lang;
-using namespace css::i18n;
 using namespace css::text;
 using namespace css::container;
 using namespace css::style;
