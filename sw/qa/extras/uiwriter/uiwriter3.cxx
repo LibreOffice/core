@@ -95,6 +95,19 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf128739)
     CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf124722)
+{
+    load(DATA_DIRECTORY, "tdf124722.rtf");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    CPPUNIT_ASSERT_EQUAL(true, getParagraph(1)->getString().startsWith("The quick"));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf125261)
 {
     load(DATA_DIRECTORY, "tdf125261.odt");
