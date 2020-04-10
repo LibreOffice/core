@@ -40,6 +40,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 namespace drawinglayer::primitive2d
 {
@@ -170,7 +171,7 @@ namespace drawinglayer::primitive2d
 
                 return Primitive2DReference(
                     new BitmapPrimitive2D(
-                        BitmapEx(aMainBitmap, aMaskBitmap),
+                        VCLUnoHelper::CreateVCLXBitmap(BitmapEx(aMainBitmap, aMaskBitmap)),
                         getTransform()));
             }
 
@@ -511,7 +512,7 @@ namespace drawinglayer::primitive2d
                     {
                         aRetval.resize(1);
                         aRetval[0] = new BitmapPrimitive2D(
-                            rGraphic.GetBitmapEx(),
+                            VCLUnoHelper::CreateVCLXBitmap(rGraphic.GetBitmapEx()),
                             rTransform);
                     }
 

@@ -23,6 +23,7 @@
 #include <com/sun/star/awt/XDisplayBitmap.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/util/XAccounting.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
@@ -34,7 +35,8 @@
 class VCLXBitmap final : public cppu::WeakImplHelper<
                             css::awt::XBitmap,
                             css::awt::XDisplayBitmap,
-                            css::lang::XUnoTunnel>
+                            css::lang::XUnoTunnel,
+                            css::util::XAccounting>
 {
     ::osl::Mutex    maMutex;
     BitmapEx        maBitmap;
@@ -43,6 +45,10 @@ class VCLXBitmap final : public cppu::WeakImplHelper<
 
 
 public:
+    // linine constructors
+    VCLXBitmap() : maMutex(), maBitmap() {}
+    VCLXBitmap(const BitmapEx& rBitmapEx) : maMutex(), maBitmap(rBitmapEx) {}
+
     void            SetBitmap( const BitmapEx& rBmp )   { maBitmap = rBmp; }
     const BitmapEx& GetBitmap() const                   { return maBitmap; }
 
@@ -53,6 +59,9 @@ public:
     css::awt::Size                 SAL_CALL getSize() override;
     css::uno::Sequence< sal_Int8 > SAL_CALL getDIB() override;
     css::uno::Sequence< sal_Int8 > SAL_CALL getMaskDIB() override;
+
+    // XAccounting
+    sal_Int64 SAL_CALL estimateUsage() override;
 };
 
 

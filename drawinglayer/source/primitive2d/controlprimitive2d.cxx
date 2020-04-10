@@ -37,6 +37,7 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <vcl/window.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 using namespace com::sun::star;
 
@@ -205,7 +206,9 @@ namespace drawinglayer::primitive2d
                                     aBitmapSizeLogic.getX(), aBitmapSizeLogic.getY(), aTranslate.getX(), aTranslate.getY()));
 
                                 // create primitive
-                                xRetval = new BitmapPrimitive2D(aContent, aBitmapTransform);
+                                xRetval = new BitmapPrimitive2D(
+                                    VCLUnoHelper::CreateVCLXBitmap(aContent),
+                                    aBitmapTransform);
                             }
                             catch( const uno::Exception& )
                             {
