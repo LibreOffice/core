@@ -42,7 +42,7 @@ def main():
 
     login_data = { 'username': user,'password': password,
             'csrfmiddlewaretoken': csrftoken }
-    headers = { "Referer": base_url }
+    headers = { "Referrer": base_url }
     r1 = session.post(login_url, headers=headers, data=login_data)
 
     data['csrfmiddlewaretoken'] = csrftoken
