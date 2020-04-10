@@ -137,15 +137,14 @@ sk_sp<SkTypeface> WinSkiaSalGraphicsImpl::createDirectWriteTypeface(const LOGFON
 {
     if (!dwriteDone)
     {
-        IDWriteFactory* factory;
         if (SUCCEEDED(
                 CHECKHR(DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory),
-                                            reinterpret_cast<IUnknown**>(&factory)))))
+                                            reinterpret_cast<IUnknown**>(&dwriteFactory)))))
         {
-            if (SUCCEEDED(CHECKHR(factory->GetGdiInterop(&dwriteGdiInterop))))
+            if (SUCCEEDED(CHECKHR(dwriteFactory->GetGdiInterop(&dwriteGdiInterop))))
                 dwriteFontMgr = SkFontMgr_New_DirectWrite(dwriteFactory);
             else
-                factory->Release();
+                dwriteFactory->Release();
         }
         dwriteDone = true;
     }
