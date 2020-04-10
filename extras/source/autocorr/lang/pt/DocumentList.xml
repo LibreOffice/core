@@ -135,6 +135,8 @@
 <block-list:block block-list:abbreviated-name="amisade" block-list:name="amizade"/>
 <block-list:block block-list:abbreviated-name="amisades" block-list:name="amizades"/>
 <block-list:block block-list:abbreviated-name="ams" block-list:name="mas"/>
+<block-list:block block-list:abbreviated-name="analgégico" block-list:name="analgésico"/>
+<block-list:block block-list:abbreviated-name="analgégicos" block-list:name="analgésicos"/>
 <block-list:block block-list:abbreviated-name="analizam" block-list:name="analisam"/>
 <block-list:block block-list:abbreviated-name="analizamos" block-list:name="analisamos"/>
 <block-list:block block-list:abbreviated-name="analizar" block-list:name="analisar"/>
@@ -561,8 +563,11 @@
 <block-list:block block-list:abbreviated-name="consciecias" block-list:name="consciências"/>
 <block-list:block block-list:abbreviated-name="consciencia" block-list:name="consciência"/>
 <block-list:block block-list:abbreviated-name="consciencias" block-list:name="consciências"/>
+<block-list:block block-list:abbreviated-name="consequencia" block-list:name="consequência"/>
+<block-list:block block-list:abbreviated-name="consequencias" block-list:name="consequências"/>
 <block-list:block block-list:abbreviated-name="consertesa" block-list:name="com certeza"/>
 <block-list:block block-list:abbreviated-name="conserteza" block-list:name="com certeza"/>
+<block-list:block block-list:abbreviated-name="constituisse" block-list:name="constituísse"/>
 <block-list:block block-list:abbreviated-name="constituitivo" block-list:name="constitutivo"/>
 <block-list:block block-list:abbreviated-name="constituitivos" block-list:name="constitutivos"/>
 <block-list:block block-list:abbreviated-name="contactada" block-list:name="contactada"/>
@@ -644,6 +649,7 @@
 <block-list:block block-list:abbreviated-name="derimir" block-list:name="dirimir"/>
 <block-list:block block-list:abbreviated-name="denovo" block-list:name="de novo"/>
 <block-list:block block-list:abbreviated-name="derrepente" block-list:name="de repente"/>
+<block-list:block block-list:abbreviated-name="desanove" block-list:name="dezanove"/>
 <block-list:block block-list:abbreviated-name="descança" block-list:name="descansa"/>
 <block-list:block block-list:abbreviated-name="descançam" block-list:name="descansam"/>
 <block-list:block block-list:abbreviated-name="descançar" block-list:name="descansar"/>
@@ -1259,6 +1265,7 @@
 <block-list:block block-list:abbreviated-name="imaginaveis" block-list:name="imagináveis"/>
 <block-list:block block-list:abbreviated-name="imaginavel" block-list:name="imaginável"/>
 <block-list:block block-list:abbreviated-name="ímans" block-list:name="ímanes"/>
+<block-list:block block-list:abbreviated-name="impedio" block-list:name="impediu"/>
 <block-list:block block-list:abbreviated-name="implatação" block-list:name="implantação"/>
 <block-list:block block-list:abbreviated-name="impôr" block-list:name="impor"/>
 <block-list:block block-list:abbreviated-name="importancia" block-list:name="importância"/>
@@ -2044,6 +2051,8 @@
 <block-list:block block-list:abbreviated-name="prufessoras" block-list:name="professoras"/>  
 <block-list:block block-list:abbreviated-name="psiconpata" block-list:name="psicopata"/>
 <block-list:block block-list:abbreviated-name="psiconpatas" block-list:name="psicopatas"/>
+<block-list:block block-list:abbreviated-name="psiquiatrica" block-list:name="psiquiátrica"/>
+<block-list:block block-list:abbreviated-name="psiquiatricas" block-list:name="psiquiátricas"/>
 <block-list:block block-list:abbreviated-name="público alvo" block-list:name="público-alvo"/>
 <block-list:block block-list:abbreviated-name="públicos alvo" block-list:name="públicos-alvo"/>
 <block-list:block block-list:abbreviated-name="públicos alvos" block-list:name="públicos-alvos"/>
@@ -2097,6 +2106,7 @@
 <block-list:block block-list:abbreviated-name="rapidos" block-list:name="rápidos"/>
 <block-list:block block-list:abbreviated-name="raxar" block-list:name="rachar"/>
 <block-list:block block-list:abbreviated-name="razam" block-list:name="razão"/>
+<block-list:block block-list:abbreviated-name="razoavel" block-list:name="razoável"/>
 <block-list:block block-list:abbreviated-name="rea" block-list:name="era"/>
 <block-list:block block-list:abbreviated-name="recem" block-list:name="recém"/>
 <block-list:block block-list:abbreviated-name="reciar" block-list:name="recear"/>
@@ -2364,6 +2374,7 @@
 <block-list:block block-list:abbreviated-name="vcs" block-list:name="vocês"/>
 <block-list:block block-list:abbreviated-name="vechame" block-list:name="vexame"/>
 <block-list:block block-list:abbreviated-name="vega" block-list:name="veja"/>
+<block-list:block block-list:abbreviated-name="veijo" block-list:name="vejo"/>
 <block-list:block block-list:abbreviated-name="veim" block-list:name="vem"/>
 <block-list:block block-list:abbreviated-name="vejão" block-list:name="vejam"/>
 <block-list:block block-list:abbreviated-name="venda à vista" block-list:name="venda a vista"/>
