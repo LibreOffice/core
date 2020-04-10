@@ -22,6 +22,7 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 
 using namespace com::sun::star;
@@ -59,7 +60,10 @@ namespace drawinglayer::primitive2d
                         aTransform.set(0, 2, aRange.getMinX());
                         aTransform.set(1, 2, aRange.getMinY());
 
-                        rContainer.push_back(new BitmapPrimitive2D(getMarker(), aTransform));
+                        rContainer.push_back(
+                            new BitmapPrimitive2D(
+                                VCLUnoHelper::CreateVCLXBitmap(getMarker()),
+                                aTransform));
                     }
                 }
             }

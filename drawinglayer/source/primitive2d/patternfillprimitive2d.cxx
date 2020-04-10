@@ -26,6 +26,7 @@
 #include <texture/texture.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <converters.hxx>
 
@@ -122,7 +123,7 @@ namespace drawinglayer::primitive2d
                     {
                         const primitive2d::Primitive2DReference xEmbedRefBitmap(
                             new primitive2d::BitmapPrimitive2D(
-                                aBitmapEx,
+                                VCLUnoHelper::CreateVCLXBitmap(aBitmapEx),
                                 basegfx::B2DHomMatrix()));
                         aContent = primitive2d::Primitive2DContainer { xEmbedRefBitmap };
                     }

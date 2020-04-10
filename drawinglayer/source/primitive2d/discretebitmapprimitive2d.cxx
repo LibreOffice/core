@@ -20,6 +20,7 @@
 #include <drawinglayer/primitive2d/discretebitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 
 namespace drawinglayer::primitive2d
@@ -62,7 +63,10 @@ namespace drawinglayer::primitive2d
                 aObjectTransform = aInverseObjectTransformation * aObjectTransform;
 
                 // create BitmapPrimitive2D with now object-local coordinate data
-                rContainer.push_back(new BitmapPrimitive2D(getBitmapEx(), aObjectTransform));
+                rContainer.push_back(
+                    new BitmapPrimitive2D(
+                        VCLUnoHelper::CreateVCLXBitmap(getBitmapEx()),
+                        aObjectTransform));
             }
         }
 

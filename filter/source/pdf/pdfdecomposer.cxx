@@ -20,6 +20,7 @@
 #include <vcl/pdfread.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <com/sun/star/graphic/XPdfDecomposer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -84,7 +85,9 @@ uno::Sequence<uno::Reference<graphic::XPrimitive2D>> SAL_CALL XPdfDecomposer::ge
 
     // create primitive
     uno::Sequence<uno::Reference<graphic::XPrimitive2D>> aSequence(1);
-    aSequence[0] = new drawinglayer::primitive2d::BitmapPrimitive2D(aReplacement, aBitmapTransform);
+    aSequence[0] = new drawinglayer::primitive2d::BitmapPrimitive2D(
+        VCLUnoHelper::CreateVCLXBitmap(aReplacement),
+        aBitmapTransform);
 
     return aSequence;
 }

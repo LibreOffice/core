@@ -55,6 +55,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <algorithm>
 
@@ -1510,7 +1511,9 @@ namespace emfplushelper
                                 if (aSize.Width() > 0 && aSize.Height() > 0)
                                 {
                                     mrTargetHolders.Current().append(
-                                        std::make_unique<drawinglayer::primitive2d::BitmapPrimitive2D>(aBmp, aTransformMatrix));
+                                        std::make_unique<drawinglayer::primitive2d::BitmapPrimitive2D>(
+                                            VCLUnoHelper::CreateVCLXBitmap(aBmp),
+                                            aTransformMatrix));
                                 }
                                 else
                                 {

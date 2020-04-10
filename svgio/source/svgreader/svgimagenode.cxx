@@ -32,6 +32,7 @@
 #include <sal/log.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <comphelper/base64.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 namespace svgio::svgreader
 {
@@ -304,7 +305,7 @@ namespace svgio::svgreader
                 // as transformation to map the picture data correctly
                 aNewTarget.resize(1);
                 aNewTarget[0] = new drawinglayer::primitive2d::BitmapPrimitive2D(
-                    aBitmapEx,
+                    VCLUnoHelper::CreateVCLXBitmap(aBitmapEx),
                     basegfx::utils::createScaleTranslateB2DHomMatrix(
                         aViewBox.getRange(),
                         aViewBox.getMinimum()));

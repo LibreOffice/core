@@ -33,6 +33,7 @@
 #include <basegfx/raster/bzpixelraster.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <comphelper/threadpool.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 using namespace com::sun::star;
 
@@ -468,7 +469,10 @@ namespace drawinglayer::primitive2d
                         aNew2DTransform *= aInverseOToV;
 
                         // create bitmap primitive and add
-                        rContainer.push_back(new BitmapPrimitive2D(maOldRenderedBitmap, aNew2DTransform));
+                        rContainer.push_back(
+                            new BitmapPrimitive2D(
+                                VCLUnoHelper::CreateVCLXBitmap(maOldRenderedBitmap),
+                                aNew2DTransform));
 
                         // test: Allow to add an outline in the debugger when tests are needed
                         static bool bAddOutlineToCreated3DSceneRepresentation(false); // loplugin:constvars:ignore

@@ -46,6 +46,7 @@
 #include <editeng/colritem.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <bitmaps.hlst>
 
@@ -211,7 +212,8 @@ namespace sdr::contact
                     xRetval.push_back(
                         drawinglayer::primitive2d::Primitive2DReference(
                             new drawinglayer::primitive2d::BitmapPrimitive2D(
-                                aDraftBitmap, aBitmapMatrix)));
+                                VCLUnoHelper::CreateVCLXBitmap(aDraftBitmap),
+                                aBitmapMatrix)));
 
                     // consume bitmap size in X
                     aScale.setX(std::max(0.0, aScale.getX() - (fWidth + fDistance)));
