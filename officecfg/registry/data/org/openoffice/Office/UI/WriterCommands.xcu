@@ -1908,6 +1908,14 @@
           <value>7</value>
         </prop>
       </node>
+      <node oor:name=".uno:NoNumberedList" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">No List</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:RemoveBullets</value>
+        </prop>
+      </node>
       <node oor:name=".uno:SetOptimalRowHeight" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Optimal Row Height</value>
