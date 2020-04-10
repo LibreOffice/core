@@ -22,7 +22,7 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <drawinglayer/primitive2d/CommonTypes.hxx>
-#include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
+#include <drawinglayer/primitive2d/BasePrimitive2DContainer.hxx>
 
 #include <basegfx/range/b2drange.hxx>
 #include <deque>
@@ -36,7 +36,7 @@ namespace drawinglayer::primitive2d
 {
 class SAL_WARN_UNUSED DRAWINGLAYER_DLLPUBLIC Primitive2DContainer
     : public std::deque<Primitive2DReference>,
-      public Primitive2DDecompositionVisitor
+      public BasePrimitive2DContainer
 {
 public:
     // use zero because we allocate a lot of empty containers
@@ -71,6 +71,7 @@ public:
     {
     }
 
+    virtual void processAll(Primitive2DProcessingCallback aCallback) const override;
     virtual void append(const Primitive2DReference&) override;
     virtual void append(const Primitive2DContainer& rSource) override;
     virtual void append(Primitive2DContainer&& rSource) override;

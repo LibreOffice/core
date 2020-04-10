@@ -102,6 +102,15 @@ bool Primitive2DContainer::operator==(const Primitive2DContainer& rB) const
 
 Primitive2DContainer::~Primitive2DContainer() {}
 
+void Primitive2DContainer::processAll(Primitive2DProcessingCallback aCallback) const
+{
+    if (!empty())
+    {
+        for (const Primitive2DReference aRef : *this)
+            aCallback(aRef);
+    }
+}
+
 void Primitive2DContainer::append(const Primitive2DReference& rSource) { push_back(rSource); }
 
 void Primitive2DContainer::append(const Primitive2DContainer& rSource)

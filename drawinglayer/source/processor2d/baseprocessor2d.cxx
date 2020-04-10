@@ -41,27 +41,18 @@ namespace drawinglayer::processor2d
 
         void BaseProcessor2D::process(const primitive2d::BasePrimitive2D& rCandidate)
         {
-            primitive2d::Primitive2DContainer aContainer;
-            rCandidate.get2DDecomposition(aContainer, getViewInformation2D());
-            process(aContainer);
+            primitive2d::BasePrimitive2DContainerPtr pContainer(rCandidate.createPreferredContainer());
+            rCandidate.get2DDecomposition(*pContainer, getViewInformation2D());
+            process(*pContainer);
         }
 
-        void BaseProcessor2D::process(const primitive2d::Primitive2DContainer& rSource)
+        void BaseProcessor2D::process(const primitive2d::BasePrimitive2DContainer& rSource)
         {
-            if(!rSource.empty())
-            {
-                const sal_Int32 nCount(rSource.size());
-
-                for(sal_Int32 a(0); a < nCount; a++)
-                {
-                    // get reference
-                    const primitive2d::Primitive2DReference xReference(rSource[a]);
-
+            rSource.processAll([this](const primitive2d::Primitive2DReference xReference) {
                     if(xReference.is())
                     {
                         // try to cast to BasePrimitive2D implementation
                         const primitive2d::BasePrimitive2D* pBasePrimitive = dynamic_cast< const primitive2d::BasePrimitive2D* >(xReference.get());
-
                         if(pBasePrimitive)
                         {
                             // it is a BasePrimitive2D implementation, use local processor
@@ -74,8 +65,7 @@ namespace drawinglayer::processor2d
                             process(comphelper::sequenceToContainer<primitive2d::Primitive2DContainer>(xReference->getDecomposition(rViewParameters)));
                         }
                     }
-                }
-            }
+                });
         }
 
 } // end of namespace

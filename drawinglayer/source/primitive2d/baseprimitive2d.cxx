@@ -72,6 +72,11 @@ public:
 };
 }
 
+BasePrimitive2DContainer* BasePrimitive2D::createPreferredContainer() const
+{
+    return new Primitive2DContainer();
+}
+
 basegfx::B2DRange
 BasePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
 {

@@ -183,7 +183,7 @@ namespace drawinglayer
             virtual ~BaseProcessor2D();
 
             /// the central processing method
-            void process(const primitive2d::Primitive2DContainer& rSource);
+            void process(const primitive2d::BasePrimitive2DContainer& rSource);
 
             /// data read access
             const geometry::ViewInformation2D& getViewInformation2D() const { return maViewInformation2D; }
