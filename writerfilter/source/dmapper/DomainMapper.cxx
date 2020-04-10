@@ -1310,7 +1310,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                     PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
                     if (pContext)
                     {
-                        assert(dynamic_cast<ParagraphPropertyMap*>(pContext.get()));
                         static_cast<ParagraphPropertyMap*>(pContext.get())->SetListId(pList->GetId());
                     }
                     // erase numbering from pStyle if already set
