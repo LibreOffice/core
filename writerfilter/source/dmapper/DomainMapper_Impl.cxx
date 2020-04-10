@@ -1983,7 +1983,6 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
                     {
                         m_bStartedTOC = true;
                         uno::Reference< text::XTextCursor > xTOCTextCursor = xTextAppend->getEnd()->getText( )->createTextCursor( );
-                        assert(xTOCTextCursor.is());
                         xTOCTextCursor->gotoEnd(false);
                         if (m_nStartGenericField != 0)
                         {
@@ -4287,7 +4286,6 @@ DomainMapper_Impl::StartIndexSectionChecked(const OUString& sServiceName)
             m_bStartedTOC = true;
             uno::Reference<text::XTextCursor> xTOCTextCursor
                 = xTextRange->getText()->createTextCursor();
-            assert(xTOCTextCursor.is());
             xTOCTextCursor->gotoEnd(false);
             m_aTextAppendStack.push(TextAppendContext(xTextAppend, xTOCTextCursor));
         }
@@ -6524,10 +6522,7 @@ void DomainMapper_Impl::SetCurrentRedlineIsRead()
 
 sal_Int32 DomainMapper_Impl::GetCurrentRedlineToken(  ) const
 {
-    sal_Int32 nToken = 0;
-    assert( m_currentRedline.get());
-    nToken = m_currentRedline->m_nToken;
-    return nToken;
+    return m_currentRedline->m_nToken;
 }
 
 void DomainMapper_Impl::SetCurrentRedlineAuthor( const OUString& sAuthor )
@@ -6579,13 +6574,11 @@ void DomainMapper_Impl::SetCurrentRedlineId( sal_Int32 sId )
 
 void DomainMapper_Impl::SetCurrentRedlineToken( sal_Int32 nToken )
 {
-    assert( m_currentRedline.get());
     m_currentRedline->m_nToken = nToken;
 }
 
 void DomainMapper_Impl::SetCurrentRedlineRevertProperties( const uno::Sequence<beans::PropertyValue>& aProperties )
 {
-    assert( m_currentRedline.get());
     m_currentRedline->m_aRevertProperties = aProperties;
 }
 
@@ -6806,7 +6799,6 @@ sal_Int32 DomainMapper_Impl::getNumberingProperty(const sal_Int32 nListId, sal_I
             nNumberingLevel = 0;
 
         auto const pList(GetListTable()->GetList(nListId));
-        assert(pList);
         const OUString aListName = pList->GetStyleName();
         const uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier(GetTextDocument(), uno::UNO_QUERY_THROW);
         const uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
