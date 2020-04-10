@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d23e27ba_d0193c9a",
+        "filename": "solenv/bin/desktop-translate.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-04-10T21:00:39Z",
+      "side": 1,
+      "message": "Why not newline?",
+      "range": {
+        "startLine": 85,
+        "startChar": 26,
+        "endLine": 85,
+        "endChar": 27
+      },
+      "revId": "1b288e18f7ed66cb26609fb027d0f34a8ec3ab3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c69b30b5_3588ed63",
+        "filename": "solenv/bin/desktop-translate.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-04-10T21:00:39Z",
+      "side": 1,
+      "message": "This seems unreachable because of condition in ln 84. If this is possible, won\u0027t that condition never be met?",
+      "range": {
+        "startLine": 89,
+        "startChar": 16,
+        "endLine": 89,
+        "endChar": 33
+      },
+      "revId": "1b288e18f7ed66cb26609fb027d0f34a8ec3ab3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
