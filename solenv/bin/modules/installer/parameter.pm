@@ -33,7 +33,7 @@ use File::Temp qw/ :mktemp /;
 
 sub usage
 {
-    print <<Ende;
+    print <<End;
 --------------------------------------------------------------------------------
 The following parameter are needed:
 -f: Path to the product list (required)
@@ -70,7 +70,7 @@ Examples for Non-Windows:
 perl make_epmlist.pl -f zip.lst -p OfficeFAT -l en-US -format rpm
                      -u /export/unpack -buildid 8712 -ispatchedepm
 --------------------------------------------------------------------------------
-Ende
+End
     exit(-1);
 }
 
