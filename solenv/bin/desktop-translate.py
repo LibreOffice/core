@@ -79,7 +79,10 @@ for line in source:
             # use just anything inside the ""
             value = value.strip()
             assert(value[0] == '"')
-            assert(value[-1] == '"')
+            # Some entries span multiple lines.
+            # An entry will always end on a double quote.
+            while not value.endswith('"'):
+                value += '\n'  + source.readline().rstrip()
             value = value[1:-1]
 
             # replace resource placeholder
