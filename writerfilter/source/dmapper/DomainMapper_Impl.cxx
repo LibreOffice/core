@@ -1378,7 +1378,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
         auto const pList(GetListTable()->GetList(nListId));
         if (pList && nListId >= 0 && !pParaContext->isSet(PROP_NUMBERING_STYLE_NAME))
         {
-            pParaContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny( pList->GetStyleName(nListId) ), false);
+            pParaContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny( pList->GetStyleName() ), false);
             isNumberingViaStyle = true;
 
             // Indent properties from the paragraph style have priority
@@ -6674,7 +6674,7 @@ uno::Reference<container::XIndexAccess> DomainMapper_Impl::GetCurrentNumberingRu
         OUString aListName;
         if (pList)
         {
-            aListName = pList->GetStyleName(nListId);
+            aListName = pList->GetStyleName();
         }
         uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier(GetTextDocument(), uno::UNO_QUERY_THROW);
         uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
@@ -6795,7 +6795,7 @@ sal_Int32 DomainMapper_Impl::getNumberingProperty(const sal_Int32 nListId, sal_I
 
         auto const pList(GetListTable()->GetList(nListId));
         assert(pList);
-        const OUString aListName = pList->GetStyleName(nListId);
+        const OUString aListName = pList->GetStyleName();
         const uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier(GetTextDocument(), uno::UNO_QUERY_THROW);
         const uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
         uno::Reference<container::XNameAccess> xNumberingStyles;
