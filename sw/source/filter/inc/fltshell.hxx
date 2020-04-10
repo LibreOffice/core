@@ -165,7 +165,7 @@ public:
 
     void NewAttr(const SwPosition& rPos, const SfxPoolItem & rAttr );
 
-    virtual SwFltStackEntry* SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId, bool bTstEnde=true, long nHand = LONG_MAX, bool consumedByField=false);
+    virtual SwFltStackEntry* SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId, bool bTstEnd=true, long nHand = LONG_MAX, bool consumedByField=false);
 
     void StealAttr(const SwNodeIndex& rNode);
     void MarkAllAttrsOld();
