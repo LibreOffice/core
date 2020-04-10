@@ -387,7 +387,7 @@ public:
 
     void NewAttr(const SwPosition& rPos, const SfxPoolItem& rAttr);
 
-    virtual SwFltStackEntry* SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId, bool bTstEnde=true, long nHand=LONG_MAX, bool consumedByField=false) override;
+    virtual SwFltStackEntry* SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId, bool bTstEnd=true, long nHand=LONG_MAX, bool consumedByField=false) override;
 
     void SetToggleAttr(sal_uInt8 nId, bool bOn)
     {
