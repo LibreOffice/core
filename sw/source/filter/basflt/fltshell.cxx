@@ -347,7 +347,7 @@ void SwFltControlStack::KillUnlockedAttrs(const SwPosition& rPos)
 // be applied to the document and removed from the stack.
 // Returns if there were any selected attributes on the stack
 SwFltStackEntry* SwFltControlStack::SetAttr(const SwPosition& rPos,
-    sal_uInt16 nAttrId, bool bTstEnde, long nHand,
+    sal_uInt16 nAttrId, bool bTstEnd, long nHand,
     bool consumedByField)
 {
     SwFltStackEntry *pRet = nullptr;
@@ -413,7 +413,7 @@ SwFltStackEntry* SwFltControlStack::SetAttr(const SwPosition& rPos,
         // refrain from applying it; there needs to be following text,
         // except at the very end. (attribute expansion !!)
         // Never apply end stack except at document ending
-        if (bTstEnde)
+        if (bTstEnd)
         {
             if (bIsEndStack)
             {
