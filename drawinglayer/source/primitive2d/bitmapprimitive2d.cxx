@@ -19,15 +19,16 @@
 
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <com/sun/star/awt/XBitmap.hpp>
 
 using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-BitmapPrimitive2D::BitmapPrimitive2D(const BitmapEx& rBitmapEx,
+BitmapPrimitive2D::BitmapPrimitive2D(const css::uno::Reference<css::awt::XBitmap>& rXBitmap,
                                      const basegfx::B2DHomMatrix& rTransform)
     : BasePrimitive2D()
-    , maBitmapEx(rBitmapEx)
+    , maXBitmap(rXBitmap)
     , maTransform(rTransform)
 {
 }
@@ -38,8 +39,7 @@ bool BitmapPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
     {
         const BitmapPrimitive2D& rCompare = static_cast<const BitmapPrimitive2D&>(rPrimitive);
 
-        return (getBitmapEx() == rCompare.getBitmapEx()
-                && getTransform() == rCompare.getTransform());
+        return (getXBitmap() == rCompare.getXBitmap() && getTransform() == rCompare.getTransform());
     }
 
     return false;
@@ -53,7 +53,22 @@ BitmapPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInforma
     return aRetval;
 }
 
-sal_Int64 SAL_CALL BitmapPrimitive2D::estimateUsage() { return getBitmapEx().GetSizeBytes(); }
+sal_Int64 SAL_CALL BitmapPrimitive2D::estimateUsage()
+{
+    if (!getXBitmap().is())
+    {
+        return 0;
+    }
+
+    uno::Reference<util::XAccounting> const xAcc(getXBitmap(), uno::UNO_QUERY);
+
+    if (!xAcc.is())
+    {
+        return 0;
+    }
+
+    return xAcc->estimateUsage();
+}
 
 // provide unique ID
 ImplPrimitive2DIDBlock(BitmapPrimitive2D, PRIMITIVE2D_ID_BITMAPPRIMITIVE2D)

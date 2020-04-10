@@ -101,6 +101,11 @@ css::uno::Reference< css::awt::XBitmap> VCLUnoHelper::CreateBitmap( const Bitmap
     return xBmp;
 }
 
+css::uno::Reference< css::awt::XBitmap> VCLUnoHelper::CreateVCLXBitmap( const BitmapEx& rBitmap )
+{
+    return css::uno::Reference< css::awt::XBitmap >(new VCLXBitmap(rBitmap));
+}
+
 VclPtr< vcl::Window > VCLUnoHelper::GetWindow( const css::uno::Reference< css::awt::XWindow>& rxWindow )
 {
     VCLXWindow* pVCLXWindow = comphelper::getUnoTunnelImplementation<VCLXWindow>( rxWindow );

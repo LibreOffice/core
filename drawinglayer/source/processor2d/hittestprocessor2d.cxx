@@ -33,6 +33,7 @@
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <comphelper/lok.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 namespace drawinglayer::processor2d
 {
@@ -432,8 +433,8 @@ namespace drawinglayer::processor2d
                         if(!aRange.isEmpty())
                         {
                             const primitive2d::BitmapPrimitive2D& rBitmapCandidate(static_cast< const primitive2d::BitmapPrimitive2D& >(rCandidate));
-                            const BitmapEx& rBitmapEx = rBitmapCandidate.getBitmapEx();
-                            const Size& rSizePixel(rBitmapEx.GetSizePixel());
+                            const BitmapEx aBitmapEx(VCLUnoHelper::GetBitmap(rBitmapCandidate.getXBitmap()));
+                            const Size& rSizePixel(aBitmapEx.GetSizePixel());
 
                             // When tiled rendering, don't bother with the pixel size of the candidate.
                             if(rSizePixel.Width() && rSizePixel.Height() && !comphelper::LibreOfficeKit::isActive())
@@ -451,7 +452,7 @@ namespace drawinglayer::processor2d
                                     const sal_Int32 nX(basegfx::fround(aRelativePoint.getX() * rSizePixel.Width()));
                                     const sal_Int32 nY(basegfx::fround(aRelativePoint.getY() * rSizePixel.Height()));
 
-                                    mbHit = (0xff != rBitmapEx.GetTransparency(nX, nY));
+                                    mbHit = (0xff != aBitmapEx.GetTransparency(nX, nY));
                                 }
                             }
                             else

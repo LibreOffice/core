@@ -59,6 +59,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <emfplushelper.hxx>
 #include <numeric>
+#include <toolkit/helper/vclunohelper.hxx>
 
 namespace drawinglayer::primitive2d
 {
@@ -661,7 +662,7 @@ namespace wmfemfhelper
 
             rTarget.append(
                 std::make_unique<drawinglayer::primitive2d::BitmapPrimitive2D>(
-                    rBitmapEx,
+                    VCLUnoHelper::CreateVCLXBitmap(rBitmapEx),
                     aObjectTransform));
         }
     }
