@@ -1191,7 +1191,7 @@ void SwWW8FltControlStack::NewAttr(const SwPosition& rPos,
 }
 
 SwFltStackEntry* SwWW8FltControlStack::SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId,
-    bool bTstEnde, long nHand, bool )
+    bool bTstEnd, long nHand, bool )
 {
     SwFltStackEntry *pRet = nullptr;
     // Doing a textbox, and using the control stack only as a temporary
@@ -1211,7 +1211,7 @@ SwFltStackEntry* SwWW8FltControlStack::SetAttr(const SwPosition& rPos, sal_uInt1
         }
     }
     else // Normal case, set the attribute into the document
-        pRet = SwFltControlStack::SetAttr(rPos, nAttrId, bTstEnde, nHand);
+        pRet = SwFltControlStack::SetAttr(rPos, nAttrId, bTstEnd, nHand);
     return pRet;
 }
 
