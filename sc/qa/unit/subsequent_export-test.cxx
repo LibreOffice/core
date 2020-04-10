@@ -195,6 +195,7 @@ public:
     void testPreserveTextWhitespace2XLSX();
     void testTextDirectionXLSX();
     void testTdf129985();
+    void testTdf73063();
 
     void testRefStringXLSX();
     void testRefStringConfigXLSX();
@@ -331,6 +332,7 @@ public:
     CPPUNIT_TEST(testMatrixMultiplicationXLSX);
     CPPUNIT_TEST(testTextDirectionXLSX);
     CPPUNIT_TEST(testTdf129985);
+    CPPUNIT_TEST(testTdf73063);
 
     CPPUNIT_TEST(testRefStringXLSX);
     CPPUNIT_TEST(testRefStringConfigXLSX);
@@ -4017,6 +4019,19 @@ void ScExportTest::testTdf129985()
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[2]", "formatCode", "m/d/yyyy");
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf73063()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf73063.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/styles.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[2]", "formatCode", "[$-1C1A]dddd\", \"d\". \"mmmm\\ yyyy;@");
 
     xDocSh->DoClose();
 }
