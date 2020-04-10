@@ -448,6 +448,7 @@ cmd/32/es/numberformatthousands.png cmd/32/de/numberformatthousands.png
 cmd/32/es/underline.png cmd/32/ca/underline.png
 cmd/32/es/underlinedouble.png cmd/32/ca/underlinedouble.png
 cmd/32/es/underlinesimple.png cmd/32/ca/underline.png
+cmd/32/fa/absoluterecord.png cmd/32/ar/absoluterecord.png
 cmd/32/fa/alphaliststyle.png cmd/32/ar/alphaliststyle.png
 cmd/32/fa/alphalowliststyle.png cmd/32/ar/alphalowliststyle.png
 cmd/32/fa/bulletliststyle.png cmd/32/ar/defaultbullet.png
@@ -455,9 +456,11 @@ cmd/32/fa/bulletsandnumberingdialog.png cmd/32/ar/bulletsandnumberingdialog.png
 cmd/32/fa/chapternumberingdialog.png cmd/32/ar/chapternumberingdialog.png
 cmd/32/fa/defaultbullet.png cmd/32/ar/defaultbullet.png
 cmd/32/fa/defaultnumbering.png cmd/32/ar/defaultnumbering.png
+cmd/32/fa/deleterecord.png cmd/32/ar/deleterecord.png
 cmd/32/fa/insertneutralparagraph.png cmd/32/ar/insertneutralparagraph.png
 cmd/32/fa/linenumberdialog.png cmd/32/ar/linenumberingdialog.png
 cmd/32/fa/linenumberingdialog.png cmd/32/ar/linenumberingdialog.png
+cmd/32/fa/newrecord.png cmd/32/ar/newrecord.png
 cmd/32/fa/numberingstart.png cmd/32/ar/numberingstart.png
 cmd/32/fa/numberliststyle.png cmd/32/ar/defaultnumbering.png
 cmd/32/fa/outlinebullet.png cmd/32/ar/outlinebullet.png
@@ -475,6 +478,7 @@ cmd/32/fr/numberformatthousands.png cmd/32/de/numberformatthousands.png
 cmd/32/fr/underline.png cmd/32/ca/underline.png
 cmd/32/fr/underlinedouble.png cmd/32/ca/underlinedouble.png
 cmd/32/fr/underlinesimple.png cmd/32/ca/underline.png
+cmd/32/he/absoluterecord.png cmd/32/ar/absoluterecord.png
 cmd/32/he/alphaliststyle.png cmd/32/ar/alphaliststyle.png
 cmd/32/he/alphalowliststyle.png cmd/32/ar/alphalowliststyle.png
 cmd/32/he/bulletliststyle.png cmd/32/ar/defaultbullet.png
@@ -482,9 +486,11 @@ cmd/32/he/bulletsandnumberingdialog.png cmd/32/ar/bulletsandnumberingdialog.png
 cmd/32/he/chapternumberingdialog.png cmd/32/ar/chapternumberingdialog.png
 cmd/32/he/defaultbullet.png cmd/32/ar/defaultbullet.png
 cmd/32/he/defaultnumbering.png cmd/32/ar/defaultnumbering.png
+cmd/32/he/deleterecord.png cmd/32/ar/deleterecord.png
 cmd/32/he/insertneutralparagraph.png cmd/32/ar/insertneutralparagraph.png
 cmd/32/he/linenumberdialog.png cmd/32/ar/linenumberingdialog.png
 cmd/32/he/linenumberingdialog.png cmd/32/ar/linenumberingdialog.png
+cmd/32/he/newrecord.png cmd/32/ar/newrecord.png
 cmd/32/he/numberingstart.png cmd/32/ar/numberingstart.png
 cmd/32/he/numberliststyle.png cmd/32/ar/defaultnumbering.png
 cmd/32/he/outlinebullet.png cmd/32/ar/outlinebullet.png
@@ -532,6 +538,7 @@ cmd/32/tr/underline.png cmd/32/hu/underline.png
 cmd/32/tr/underlinedouble.png cmd/32/hu/underlinedouble.png
 cmd/32/tr/underlinesimple.png cmd/32/hu/underline.png
 cmd/32/underlinesimple.png cmd/32/underline.png
+cmd/32/ur/absoluterecord.png cmd/32/ar/absoluterecord.png
 cmd/32/ur/alphaliststyle.png cmd/32/ar/alphaliststyle.png
 cmd/32/ur/alphalowliststyle.png cmd/32/ar/alphalowliststyle.png
 cmd/32/ur/bulletliststyle.png cmd/32/ar/defaultbullet.png
@@ -539,9 +546,11 @@ cmd/32/ur/bulletsandnumberingdialog.png cmd/32/ar/bulletsandnumberingdialog.png
 cmd/32/ur/chapternumberingdialog.png cmd/32/ar/chapternumberingdialog.png
 cmd/32/ur/defaultbullet.png cmd/32/ar/defaultbullet.png
 cmd/32/ur/defaultnumbering.png cmd/32/ar/defaultnumbering.png
+cmd/32/ur/deleterecord.png cmd/32/ar/deleterecord.png
 cmd/32/ur/insertneutralparagraph.png cmd/32/ar/insertneutralparagraph.png
 cmd/32/ur/linenumberdialog.png cmd/32/ar/linenumberingdialog.png
 cmd/32/ur/linenumberingdialog.png cmd/32/ar/linenumberingdialog.png
+cmd/32/ur/newrecord.png cmd/32/ar/newrecord.png
 cmd/32/ur/numberingstart.png cmd/32/ar/numberingstart.png
 cmd/32/ur/numberliststyle.png cmd/32/ar/defaultnumbering.png
 cmd/32/ur/outlinebullet.png cmd/32/ar/outlinebullet.png
@@ -586,6 +595,7 @@ cmd/es/sc_numberformatthousands.png cmd/de/sc_numberformatthousands.png
 cmd/es/sc_underline.png cmd/ca/sc_underline.png
 cmd/es/sc_underlinedouble.png cmd/ca/sc_underlinedouble.png
 cmd/es/sc_underlinesimple.png cmd/ca/sc_underline.png
+cmd/fa/lc_absoluterecord.png cmd/ar/lc_absoluterecord.png
 cmd/fa/lc_alphaliststyle.png cmd/ar/lc_alphaliststyle.png
 cmd/fa/lc_alphalowliststyle.png cmd/ar/lc_alphalowliststyle.png
 cmd/fa/lc_bulletliststyle.png cmd/ar/lc_defaultbullet.png
@@ -593,9 +603,11 @@ cmd/fa/lc_bulletsandnumberingdialog.png cmd/ar/lc_bulletsandnumberingdialog.png
 cmd/fa/lc_chapternumberingdialog.png cmd/ar/lc_chapternumberingdialog.png
 cmd/fa/lc_defaultbullet.png cmd/ar/lc_defaultbullet.png
 cmd/fa/lc_defaultnumbering.png cmd/ar/lc_defaultnumbering.png
+cmd/fa/lc_deleterecord.png cmd/ar/lc_deleterecord.png
 cmd/fa/lc_insertneutralparagraph.png cmd/ar/lc_insertneutralparagraph.png
 cmd/fa/lc_linenumberdialog.png cmd/ar/lc_linenumberingdialog.png
 cmd/fa/lc_linenumberingdialog.png cmd/ar/sc_linenumberingdialog.png
+cmd/fa/lc_newrecord.png cmd/ar/lc_newrecord.png
 cmd/fa/lc_numberingstart.png cmd/ar/lc_numberingstart.png
 cmd/fa/lc_numberliststyle.png cmd/ar/lc_defaultnumbering.png
 cmd/fa/lc_outlinebullet.png cmd/ar/lc_outlinebullet.png
@@ -606,6 +618,7 @@ cmd/fa/lc_romanliststyle.png cmd/ar/lc_romanliststyle.png
 cmd/fa/lc_romanlowliststyle.png cmd/ar/lc_romanlowliststyle.png
 cmd/fa/lc_setoutline.png cmd/ar/lc_setoutline.png
 cmd/fa/lc_undo.png cmd/lc_redo.png
+cmd/fa/sc_absoluterecord.png cmd/ar/sc_absoluterecord.png
 cmd/fa/sc_alphaliststyle.png cmd/ar/sc_alphaliststyle.png
 cmd/fa/sc_alphalowliststyle.png cmd/ar/sc_alphalowliststyle.png
 cmd/fa/sc_bulletliststyle.png cmd/ar/sc_defaultbullet.png
@@ -613,9 +626,11 @@ cmd/fa/sc_bulletsandnumberingdialog.png cmd/ar/sc_bulletsandnumberingdialog.png
 cmd/fa/sc_chapternumberingdialog.png cmd/ar/sc_chapternumberingdialog.png
 cmd/fa/sc_defaultbullet.png cmd/ar/sc_defaultbullet.png
 cmd/fa/sc_defaultnumbering.png cmd/ar/sc_defaultnumbering.png
+cmd/fa/sc_deleterecord.png cmd/ar/sc_deleterecord.png
 cmd/fa/sc_insertneutralparagraph.png cmd/ar/sc_insertneutralparagraph.png
 cmd/fa/sc_linenumberdialog.png cmd/ar/sc_linenumberingdialog.png
 cmd/fa/sc_linenumberingdialog.png cmd/ar/sc_linenumberingdialog.png
+cmd/fa/sc_newrecord.png cmd/ar/sc_newrecord.png
 cmd/fa/sc_numberingstart.png cmd/ar/sc_numberingstart.png
 cmd/fa/sc_numberliststyle.png cmd/ar/sc_defaultnumbering.png
 cmd/fa/sc_outlinebullet.png cmd/ar/sc_outlinebullet.png
@@ -640,6 +655,7 @@ cmd/fr/sc_numberformatthousands.png cmd/de/sc_numberformatthousands.png
 cmd/fr/sc_underline.png cmd/ca/sc_underline.png
 cmd/fr/sc_underlinedouble.png cmd/ca/sc_underlinedouble.png
 cmd/fr/sc_underlinesimple.png cmd/ca/sc_underline.png
+cmd/he/lc_absoluterecord.png cmd/ar/lc_absoluterecord.png
 cmd/he/lc_alphaliststyle.png cmd/ar/lc_alphaliststyle.png
 cmd/he/lc_alphalowliststyle.png cmd/ar/lc_alphalowliststyle.png
 cmd/he/lc_bulletliststyle.png cmd/ar/lc_defaultbullet.png
@@ -647,9 +663,11 @@ cmd/he/lc_bulletsandnumberingdialog.png cmd/ar/lc_bulletsandnumberingdialog.png
 cmd/he/lc_chapternumberingdialog.png cmd/ar/lc_chapternumberingdialog.png
 cmd/he/lc_defaultbullet.png cmd/ar/lc_defaultbullet.png
 cmd/he/lc_defaultnumbering.png cmd/ar/lc_defaultnumbering.png
+cmd/he/lc_deleterecord.png cmd/ar/lc_deleterecord.png
 cmd/he/lc_insertneutralparagraph.png cmd/ar/lc_insertneutralparagraph.png
 cmd/he/lc_linenumberdialog.png cmd/ar/lc_linenumberingdialog.png
 cmd/he/lc_linenumberingdialog.png cmd/ar/lc_linenumberingdialog.png
+cmd/he/lc_newrecord.png cmd/ar/lc_newrecord.png
 cmd/he/lc_numberingstart.png cmd/ar/lc_numberingstart.png
 cmd/he/lc_numberliststyle.png cmd/ar/lc_defaultnumbering.png
 cmd/he/lc_outlinebullet.png cmd/ar/lc_outlinebullet.png
@@ -660,6 +678,7 @@ cmd/he/lc_romanliststyle.png cmd/ar/lc_romanliststyle.png
 cmd/he/lc_romanlowliststyle.png cmd/ar/lc_romanlowliststyle.png
 cmd/he/lc_setoutline.png cmd/ar/lc_setoutline.png
 cmd/he/lc_undo.png cmd/lc_redo.png
+cmd/he/sc_absoluterecord.png cmd/ar/sc_absoluterecord.png
 cmd/he/sc_alphaliststyle.png cmd/ar/sc_alphaliststyle.png
 cmd/he/sc_alphalowliststyle.png cmd/ar/sc_alphalowliststyle.png
 cmd/he/sc_bulletliststyle.png cmd/ar/sc_defaultbullet.png
@@ -667,9 +686,11 @@ cmd/he/sc_bulletsandnumberingdialog.png cmd/ar/sc_bulletsandnumberingdialog.png
 cmd/he/sc_chapternumberingdialog.png cmd/ar/sc_chapternumberingdialog.png
 cmd/he/sc_defaultbullet.png cmd/ar/sc_defaultbullet.png
 cmd/he/sc_defaultnumbering.png cmd/ar/sc_defaultnumbering.png
+cmd/he/sc_deleterecord.png cmd/ar/sc_deleterecord.png
 cmd/he/sc_insertneutralparagraph.png cmd/ar/sc_insertneutralparagraph.png
 cmd/he/sc_linenumberdialog.png cmd/ar/sc_linenumberingdialog.png
 cmd/he/sc_linenumberingdialog.png cmd/ar/sc_linenumberingdialog.png
+cmd/he/sc_newrecord.png cmd/ar/sc_newrecord.png
 cmd/he/sc_numberingstart.png cmd/ar/sc_numberingstart.png
 cmd/he/sc_numberliststyle.png cmd/ar/sc_defaultnumbering.png
 cmd/he/sc_outlinebullet.png cmd/ar/sc_outlinebullet.png
@@ -754,6 +775,7 @@ cmd/tr/sc_bold.png cmd/sl/sc_bold.png
 cmd/tr/sc_underline.png cmd/hu/sc_underline.png
 cmd/tr/sc_underlinedouble.png cmd/hu/sc_underlinedouble.png
 cmd/tr/sc_underlinesimple.png cmd/hu/sc_underline.png
+cmd/ur/lc_absoluterecord.png cmd/ar/lc_absoluterecord.png
 cmd/ur/lc_alphaliststyle.png cmd/ar/lc_alphaliststyle.png
 cmd/ur/lc_alphalowliststyle.png cmd/ar/lc_alphalowliststyle.png
 cmd/ur/lc_bulletliststyle.png cmd/ar/lc_defaultbullet.png
@@ -761,9 +783,11 @@ cmd/ur/lc_bulletsandnumberingdialog.png cmd/ar/lc_bulletsandnumberingdialog.png
 cmd/ur/lc_chapternumberingdialog.png cmd/ar/lc_chapternumberingdialog.png
 cmd/ur/lc_defaultbullet.png cmd/ar/lc_defaultbullet.png
 cmd/ur/lc_defaultnumbering.png cmd/ar/lc_defaultnumbering.png
+cmd/ur/lc_deleterecord.png cmd/ar/lc_deleterecord.png
 cmd/ur/lc_insertneutralparagraph.png cmd/ar/lc_insertneutralparagraph.png
 cmd/ur/lc_linenumberdialog.png cmd/ar/lc_linenumberingdialog.png
 cmd/ur/lc_linenumberingdialog.png cmd/ar/lc_linenumberingdialog.png
+cmd/ur/lc_newrecord.png cmd/ar/lc_newrecord.png
 cmd/ur/lc_numberingstart.png cmd/ar/lc_numberingstart.png
 cmd/ur/lc_numberliststyle.png cmd/ar/lc_defaultnumbering.png
 cmd/ur/lc_outlinebullet.png cmd/ar/lc_outlinebullet.png
@@ -774,6 +798,7 @@ cmd/ur/lc_romanliststyle.png cmd/ar/lc_romanliststyle.png
 cmd/ur/lc_romanlowliststyle.png cmd/ar/lc_romanlowliststyle.png
 cmd/ur/lc_setoutline.png cmd/ar/lc_setoutline.png
 cmd/ur/lc_undo.png cmd/lc_redo.png
+cmd/ur/sc_absoluterecord.png cmd/ar/sc_absoluterecord.png
 cmd/ur/sc_alphaliststyle.png cmd/ar/sc_alphaliststyle.png
 cmd/ur/sc_alphalowliststyle.png cmd/ar/sc_alphalowliststyle.png
 cmd/ur/sc_bulletliststyle.png cmd/ar/sc_defaultbullet.png
@@ -781,9 +806,11 @@ cmd/ur/sc_bulletsandnumberingdialog.png cmd/ar/sc_bulletsandnumberingdialog.png
 cmd/ur/sc_chapternumberingdialog.png cmd/ar/sc_chapternumberingdialog.png
 cmd/ur/sc_defaultbullet.png cmd/ar/sc_defaultbullet.png
 cmd/ur/sc_defaultnumbering.png cmd/ar/sc_defaultnumbering.png
+cmd/ur/sc_deleterecord.png cmd/ar/sc_deleterecord.png
 cmd/ur/sc_insertneutralparagraph.png cmd/ar/sc_insertneutralparagraph.png
 cmd/ur/sc_linenumberdialog.png cmd/ar/sc_linenumberingdialog.png
 cmd/ur/sc_linenumberingdialog.png cmd/ar/sc_linenumberingdialog.png
+cmd/ur/sc_newrecord.png cmd/ar/sc_newrecord.png
 cmd/ur/sc_numberingstart.png cmd/ar/sc_numberingstart.png
 cmd/ur/sc_numberliststyle.png cmd/ar/sc_defaultnumbering.png
 cmd/ur/sc_outlinebullet.png cmd/ar/sc_outlinebullet.png
@@ -959,17 +986,14 @@ cmd/sc_sendfax.png cmd/sc_print.png
 cmd/32/dbclearquery.png cmd/32/dbquerydelete.png
 cmd/32/deletepivottable.png cmd/32/delete.png
 cmd/32/deleteprintarea.png cmd/32/delete.png
-cmd/32/deleterecord.png cmd/32/delete.png
 
 cmd/lc_dbclearquery.png cmd/lc_dbquerydelete.png
 cmd/lc_deletepivottable.png cmd/lc_delete.png
 cmd/lc_deleteprintarea.png cmd/lc_delete.png
-cmd/lc_deleterecord.png cmd/lc_delete.png
 
 cmd/sc_dbclearquery.png cmd/sc_dbquerydelete.png
 cmd/sc_deletepivottable.png cmd/sc_delete.png
 cmd/sc_deleteprintarea.png cmd/sc_delete.png
-cmd/sc_deleterecord.png cmd/sc_delete.png
 
 # Folder
 cmd/32/dbformopen.png cmd/32/open.png
@@ -977,24 +1001,18 @@ cmd/32/dbqueryopen.png cmd/32/open.png
 cmd/32/dbreportopen.png cmd/32/open.png
 cmd/32/dbtableopen.png cmd/32/open.png
 cmd/32/insertdoc.png cmd/32/open.png
-cmd/32/newrecord.png cmd/32/open.png
-cmd/32/open_h.png cmd/32/open.png
 
 cmd/lc_dbformopen.png cmd/lc_open.png
 cmd/lc_dbqueryopen.png cmd/lc_open.png
 cmd/lc_dbreportopen.png cmd/lc_open.png
 cmd/lc_dbtableopen.png cmd/lc_open.png
 cmd/lc_insertdoc.png cmd/lc_open.png
-cmd/lc_newrecord.png cmd/lc_open.png
-cmd/lc_open_h.png cmd/lc_open.png
 
 cmd/sc_dbformopen.png cmd/sc_open.png
 cmd/sc_dbqueryopen.png cmd/sc_open.png
 cmd/sc_dbreportopen.png cmd/sc_open.png
 cmd/sc_dbtableopen.png cmd/sc_open.png
 cmd/sc_insertdoc.png cmd/sc_open.png
-cmd/sc_newrecord.png cmd/sc_open.png
-cmd/sc_open_h.png cmd/sc_open.png
 
 # Import
 cmd/32/importfromfile.png cmd/32/dataimport.png
