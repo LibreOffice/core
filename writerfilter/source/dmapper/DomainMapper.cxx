@@ -1329,14 +1329,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             }
             else
             {
-                if( IsStyleSheetImport() )
-                {
-                    // set the number id for AbstractNum references
-                    StyleSheetPropertyMap* pStyleSheetPropertyMap = dynamic_cast< StyleSheetPropertyMap* >( rContext.get() );
-                    if (pStyleSheetPropertyMap)
-                        pStyleSheetPropertyMap->SetNumId( nIntValue );
-                }
-                else
+                if( !IsStyleSheetImport() )
                 {
                     // eg. disabled numbering using non-existent numId "0"
                     rContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny( OUString() ) );
