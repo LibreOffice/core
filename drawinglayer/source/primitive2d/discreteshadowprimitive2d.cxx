@@ -23,6 +23,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 
 namespace drawinglayer::primitive2d
@@ -176,7 +177,7 @@ namespace drawinglayer::primitive2d
                 // TopLeft
                 xRetval[0] = Primitive2DReference(
                     new BitmapPrimitive2D(
-                        getDiscreteShadow().getTopLeft(),
+                        VCLUnoHelper::CreateVCLXBitmap(getDiscreteShadow().getTopLeft()),
                         basegfx::utils::createScaleTranslateB2DHomMatrix(
                             fBigLenX,
                             fBigLenY,
@@ -186,7 +187,7 @@ namespace drawinglayer::primitive2d
                 // Top
                 xRetval[1] = Primitive2DReference(
                     new BitmapPrimitive2D(
-                        getDiscreteShadow().getTop(),
+                        VCLUnoHelper::CreateVCLXBitmap(getDiscreteShadow().getTop()),
                         basegfx::utils::createScaleTranslateB2DHomMatrix(
                             1.0 - (2.0 * (fBorderX + fSingleX)) + fSingleX,
                             fBorderY,
@@ -196,7 +197,7 @@ namespace drawinglayer::primitive2d
                 // TopRight
                 xRetval[2] = Primitive2DReference(
                     new BitmapPrimitive2D(
-                        getDiscreteShadow().getTopRight(),
+                        VCLUnoHelper::CreateVCLXBitmap(getDiscreteShadow().getTopRight()),
                         basegfx::utils::createScaleTranslateB2DHomMatrix(
                             fBigLenX,
                             fBigLenY,
@@ -206,7 +207,7 @@ namespace drawinglayer::primitive2d
                 // Right
                 xRetval[3] = Primitive2DReference(
                     new BitmapPrimitive2D(
-                        getDiscreteShadow().getRight(),
+                        VCLUnoHelper::CreateVCLXBitmap(getDiscreteShadow().getRight()),
                         basegfx::utils::createScaleTranslateB2DHomMatrix(
                             fBorderX,
                             1.0 - (2.0 * (fBorderY + fSingleY)) + fSingleY,
@@ -216,7 +217,7 @@ namespace drawinglayer::primitive2d
                 // BottomRight
                 xRetval[4] = Primitive2DReference(
                     new BitmapPrimitive2D(
-                        getDiscreteShadow().getBottomRight(),
+                        VCLUnoHelper::CreateVCLXBitmap(getDiscreteShadow().getBottomRight()),
                         basegfx::utils::createScaleTranslateB2DHomMatrix(
                             fBigLenX,
                             fBigLenY,
@@ -226,7 +227,7 @@ namespace drawinglayer::primitive2d
                 // Bottom
                 xRetval[5] = Primitive2DReference(
                     new BitmapPrimitive2D(
-                        getDiscreteShadow().getBottom(),
+                        VCLUnoHelper::CreateVCLXBitmap(getDiscreteShadow().getBottom()),
                         basegfx::utils::createScaleTranslateB2DHomMatrix(
                             1.0 - (2.0 * (fBorderX + fSingleX)) + fSingleX,
                             fBorderY,
@@ -236,7 +237,7 @@ namespace drawinglayer::primitive2d
                 // BottomLeft
                 xRetval[6] = Primitive2DReference(
                     new BitmapPrimitive2D(
-                        getDiscreteShadow().getBottomLeft(),
+                        VCLUnoHelper::CreateVCLXBitmap(getDiscreteShadow().getBottomLeft()),
                         basegfx::utils::createScaleTranslateB2DHomMatrix(
                             fBigLenX,
                             fBigLenY,
@@ -246,7 +247,7 @@ namespace drawinglayer::primitive2d
                 // Left
                 xRetval[7] = Primitive2DReference(
                     new BitmapPrimitive2D(
-                        getDiscreteShadow().getLeft(),
+                        VCLUnoHelper::CreateVCLXBitmap(getDiscreteShadow().getLeft()),
                         basegfx::utils::createScaleTranslateB2DHomMatrix(
                             fBorderX,
                             1.0 - (2.0 * (fBorderY + fSingleY)) + fSingleY,

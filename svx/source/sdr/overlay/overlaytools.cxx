@@ -33,6 +33,7 @@
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 
 namespace drawinglayer::primitive2d
@@ -179,7 +180,10 @@ ImplPrimitive2DIDBlock(OverlayStaticRectanglePrimitive, PRIMITIVE2D_ID_OVERLAYRE
             // add BasePosition
             aTransform.translate(getBasePosition().getX(), getBasePosition().getY());
 
-            rContainer.push_back(new BitmapPrimitive2D(getBitmapEx(), aTransform));
+            rContainer.push_back(
+                new BitmapPrimitive2D(
+                    VCLUnoHelper::CreateVCLXBitmap(getBitmapEx()),
+                    aTransform));
         }
 
         bool OverlayBitmapExPrimitive::operator==( const BasePrimitive2D& rPrimitive ) const

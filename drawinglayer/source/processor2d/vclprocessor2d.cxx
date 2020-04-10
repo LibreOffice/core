@@ -66,6 +66,8 @@
 // for support of Title/Description in all apps when embedding pictures
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 
+#include <toolkit/helper/vclunohelper.hxx>
+
 using namespace com::sun::star;
 
 namespace
@@ -346,7 +348,7 @@ namespace drawinglayer::processor2d
         // direct draw of transformed BitmapEx primitive
         void VclProcessor2D::RenderBitmapPrimitive2D(const primitive2d::BitmapPrimitive2D& rBitmapCandidate)
         {
-            BitmapEx aBitmapEx(rBitmapCandidate.getBitmapEx());
+            BitmapEx aBitmapEx(VCLUnoHelper::GetBitmap(rBitmapCandidate.getXBitmap()));
             const basegfx::B2DHomMatrix aLocalTransform(maCurrentTransformation * rBitmapCandidate.getTransform());
 
             if(maBColorModifierStack.count())

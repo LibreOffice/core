@@ -55,4 +55,11 @@ css::uno::Sequence< sal_Int8 > VCLXBitmap::getMaskDIB()
     return vcl::bitmap::GetMaskDIB(maBitmap);
 }
 
+sal_Int64 SAL_CALL VCLXBitmap::estimateUsage()
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    return maBitmap.GetSizeBytes();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
