@@ -187,9 +187,8 @@ public:
     const AbstractListDef::Pointer& GetAbstractDefinition( ) const { return m_pAbstractDef; };
 
     // Mapping functions
-    OUString GetStyleName(sal_Int32 nId,
-            css::uno::Reference<css::container::XNameContainer> const& xStyles
-                = css::uno::Reference<css::container::XNameContainer>());
+    OUString GetStyleName() const { return m_StyleName; };
+    OUString GetStyleName(sal_Int32 nId, css::uno::Reference<css::container::XNameContainer> const& xStyles);
 
     css::uno::Sequence< css::uno::Sequence<css::beans::PropertyValue> > GetMergedPropertyValues();
 
