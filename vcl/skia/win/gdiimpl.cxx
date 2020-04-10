@@ -120,7 +120,7 @@ HRESULT checkResult(HRESULT hr, const char* file, size_t line)
     {
         OUString sLocationString
             = OUString::createFromAscii(file) + ":" + OUString::number(line) + " ";
-        SAL_DETAIL_LOG_STREAM(SAL_DETAIL_ENABLE_LOG_INFO, ::SAL_DETAIL_LOG_LEVEL_WARN, "vcl.skia",
+        SAL_DETAIL_LOG_STREAM(SAL_DETAIL_ENABLE_LOG_INFO, ::SAL_DETAIL_LOG_LEVEL_INFO, "vcl.skia",
                               sLocationString.toUtf8().getStr(),
                               "HRESULT failed with: 0x" << OUString::number(hr, 16) << ": "
                                                         << WindowsErrorStringFromHRESULT(hr));
