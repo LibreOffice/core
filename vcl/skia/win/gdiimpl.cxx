@@ -113,14 +113,14 @@ bool WinSkiaSalGraphicsImpl::RenderAndCacheNativeControl(CompatibleDC& rWhite, C
     return true;
 }
 
-#ifdef SAL_LOG_WARN
+#ifdef SAL_LOG_INFO
 HRESULT checkResult(HRESULT hr, const char* file, size_t line)
 {
     if (FAILED(hr))
     {
         OUString sLocationString
             = OUString::createFromAscii(file) + ":" + OUString::number(line) + " ";
-        SAL_DETAIL_LOG_STREAM(SAL_DETAIL_ENABLE_LOG_WARN, ::SAL_DETAIL_LOG_LEVEL_WARN, "vcl.skia",
+        SAL_DETAIL_LOG_STREAM(SAL_DETAIL_ENABLE_LOG_INFO, ::SAL_DETAIL_LOG_LEVEL_WARN, "vcl.skia",
                               sLocationString.toUtf8().getStr(),
                               "HRESULT failed with: 0x" << OUString::number(hr, 16) << ": "
                                                         << WindowsErrorStringFromHRESULT(hr));
