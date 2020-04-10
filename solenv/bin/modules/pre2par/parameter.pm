@@ -30,7 +30,7 @@ use pre2par::systemactions;
 
 sub usage
 {
-    print <<Ende;
+    print <<End;
 ---------------------------------------------------------
 $pre2par::globals::prog
 The following parameter are needed:
@@ -44,7 +44,7 @@ Example:
 perl pre2par.pl -l test.mlf -s readme.pre -o readme.par -v
 
 ---------------------------------------------------------
-Ende
+End
     exit(-1);
 }
 
