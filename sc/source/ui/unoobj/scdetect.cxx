@@ -45,32 +45,32 @@ namespace {
 
 #define M_DC        0x0100
 #define M_ALT(CNT)  (0x0200+(CNT))
-#define M_ENDE      0x8000
+#define M_END       0x8000
 
 const sal_uInt16 pLotus[] =      // Lotus 1/1A/2
     { 0x0000, 0x0000, 0x0002, 0x0000,
     M_ALT(2), 0x0004, 0x0006,
-    0x0004, M_ENDE };
+    0x0004, M_END };
 
 const sal_uInt16 pLotusNew[] =   // Lotus >= 9.7
     { 0x0000, 0x0000, M_DC, 0x0000,     // Rec# + Len (0x1a)
       M_ALT(3), 0x0003, 0x0004, 0x0005, // File Revision Code 97->ME
       0x0010, 0x0004, 0x0000, 0x0000,
-      M_ENDE };
+      M_END };
 
 const sal_uInt16 pLotus2[] =     // Lotus >3
     { 0x0000, 0x0000, 0x001A, 0x0000,   // Rec# + Len (26)
     M_ALT(2), 0x0000, 0x0002,         // File Revision Code
     0x0010,
     0x0004, 0x0000,                   // File Revision Subcode
-    M_ENDE };
+    M_END };
 
 const sal_uInt16 pQPro[] =
        { 0x0000, 0x0000, 0x0002, 0x0000,
          M_ALT(4), 0x0001, 0x0002, // WB1, WB2
          0x0006, 0x0007,           // QPro 6/7 (?)
          0x0010,
-         M_ENDE };
+         M_END };
 
 const sal_uInt16 pDIF1[] =       // DIF with CR-LF
     {
@@ -79,7 +79,7 @@ const sal_uInt16 pDIF1[] =       // DIF with CR-LF
     '0', ',', '1',
     M_DC, M_DC,
     '\"',
-    M_ENDE };
+    M_END };
 
 const sal_uInt16 pDIF2[] =       // DIF with CR or LF
     {
@@ -88,13 +88,13 @@ const sal_uInt16 pDIF2[] =       // DIF with CR or LF
     '0', ',', '1',
     M_DC,
     '\"',
-    M_ENDE };
+    M_END };
 
 const sal_uInt16 pSylk[] =       // Sylk
     {
     'I', 'D', ';',
     M_ALT(3), 'P', 'N', 'E',        // 'P' plus undocumented Excel extensions 'N' and 'E'
-    M_ENDE };
+    M_END };
 
 bool detectThisFormat(SvStream& rStr, const sal_uInt16* pSearch)
 {
@@ -126,7 +126,7 @@ bool detectThisFormat(SvStream& rStr, const sal_uInt16* pSearch)
                 nCntAlt--;
             }
         }
-        else if( nMuster & M_ENDE )
+        else if( nMuster & M_END )
         { // Format detected
             return true;
         }
