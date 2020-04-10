@@ -74,13 +74,15 @@ for line in source:
 
         if locale != line:
             # replace en-US with en
-            locale.replace('en-US', 'en')
+            locale = locale.replace('en-US', 'en')
 
             # use just anything inside the ""
-            value = value.strip()
             assert(value[0] == '"')
-            assert(value[-1] == '"')
-            value = value[1:-1]
+            # Some entries span multiple lines.
+            # An entry will always end on a double quote.
+            while not value.endswith('"\n'):
+                value += source.readline()
+            value = value[1:-2]
 
             # replace resource placeholder
             value = value.replace('%PRODUCTNAME', o.productname)
