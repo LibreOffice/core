@@ -79,8 +79,14 @@ for line in source:
             # use just anything inside the ""
             value = value.strip()
             assert(value[0] == '"')
-            assert(value[-1] == '"')
-            value = value[1:-1]
+            # Some entries are multiline and do not end with a double quote
+            # sign.
+            while not value.endswith('"'):
+                value += ' '  + source.readline().strip()
+            if value[-1] == '"':
+                value = value[1:-1]
+            else:
+                value = value[1:]
 
             # replace resource placeholder
             value = value.replace('%PRODUCTNAME', o.productname)
