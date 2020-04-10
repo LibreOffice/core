@@ -37,7 +37,7 @@ use par2script::systemactions;
 
 sub usage
 {
-    print <<Ende;
+    print <<End;
 
 --------------------------------------------------------------
 $par2script::globals::prog
@@ -53,7 +53,7 @@ Example:
          -o ..\\wntmsci8.pro\\bin\\osl\\setup_osl.inf \[-v\]
 
 --------------------------------------------------------------
-Ende
+End
     exit(-1);
 }
 

@@ -56,7 +56,7 @@ BEGIN
 
 sub usage
 {
-    print <<Ende;
+    print <<End;
 ----------------------------------------------------------------------
 This program installs a Windows Installer installation set
 without using msiexec.exe. The installation is comparable
@@ -66,7 +66,7 @@ Required parameter:
 -d Path to installation set or msi database
 -t Target directory
 ---------------------------------------------------------------------
-Ende
+End
     exit(-1);
 }
 
