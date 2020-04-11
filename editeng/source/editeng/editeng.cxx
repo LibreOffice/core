@@ -1610,7 +1610,7 @@ void EditEngine::RemoveParagraph( sal_Int32 nPara )
         return;
 
     ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( nPara );
-    const ParaPortion* pPortion = pImpEditEngine->GetParaPortions().SafeGetObject( nPara );
+    const ParaPortion* pPortion = pImpEditEngine->GetParaPortions()[ nPara ];
     DBG_ASSERT( pPortion && pNode, "Paragraph not found: RemoveParagraph" );
     if ( pNode && pPortion )
     {
@@ -1817,16 +1817,13 @@ void EditEngine::GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList )
     if ( !pImpEditEngine->IsFormatted() )
         pImpEditEngine->FormatFullDoc();
 
-    const ParaPortion* pParaPortion = pImpEditEngine->GetParaPortions().SafeGetObject( nPara );
-    if ( pParaPortion )
+    const ParaPortion* pParaPortion = pImpEditEngine->GetParaPortions()[ nPara ];
+    sal_Int32 nEnd = 0;
+    sal_Int32 nTextPortions = pParaPortion->GetTextPortions().Count();
+    for ( sal_Int32 n = 0; n < nTextPortions; n++ )
     {
-        sal_Int32 nEnd = 0;
-        sal_Int32 nTextPortions = pParaPortion->GetTextPortions().Count();
-        for ( sal_Int32 n = 0; n < nTextPortions; n++ )
-        {
-            nEnd = nEnd + pParaPortion->GetTextPortions()[n].GetLen();
-            rList.push_back( nEnd );
-        }
+        nEnd = nEnd + pParaPortion->GetTextPortions()[n].GetLen();
+        rList.push_back( nEnd );
     }
 }
 
@@ -1920,17 +1917,13 @@ EEControlBits EditEngine::GetControlWord() const
 
 long EditEngine::GetFirstLineStartX( sal_Int32 nParagraph )
 {
-
     long nX = 0;
-    const ParaPortion* pPPortion = pImpEditEngine->GetParaPortions().SafeGetObject( nParagraph );
-    if ( pPPortion )
-    {
-        DBG_ASSERT( pImpEditEngine->IsFormatted() || !pImpEditEngine->IsFormatting(), "GetFirstLineStartX: Doc not formatted - unable to format!" );
-        if ( !pImpEditEngine->IsFormatted() )
-            pImpEditEngine->FormatDoc();
-        const EditLine& rFirstLine = pPPortion->GetLines()[0];
-        nX = rFirstLine.GetStartPosX();
-    }
+    const ParaPortion* pPPortion = pImpEditEngine->GetParaPortions()[ nParagraph ];
+    DBG_ASSERT( pImpEditEngine->IsFormatted() || !pImpEditEngine->IsFormatting(), "GetFirstLineStartX: Doc not formatted - unable to format!" );
+    if ( !pImpEditEngine->IsFormatted() )
+        pImpEditEngine->FormatDoc();
+    const EditLine& rFirstLine = pPPortion->GetLines()[0];
+    nX = rFirstLine.GetStartPosX();
     return nX;
 }
 
@@ -1955,36 +1948,33 @@ Point EditEngine::GetDocPos( const Point& rPaperPos ) const
 
 Point EditEngine::GetDocPosTopLeft( sal_Int32 nParagraph )
 {
-    const ParaPortion* pPPortion = pImpEditEngine->GetParaPortions().SafeGetObject( nParagraph );
-    DBG_ASSERT( pPPortion, "Paragraph not found: GetWindowPosTopLeft" );
+    const ParaPortion* pPPortion = pImpEditEngine->GetParaPortions()[ nParagraph ];
     Point aPoint;
-    if ( pPPortion )
-    {
 
-        // If someone calls GetLineHeight() with an empty Engine.
-        DBG_ASSERT( pImpEditEngine->IsFormatted() || !pImpEditEngine->IsFormatting(), "GetDocPosTopLeft: Doc not formatted - unable to format!" );
-        if ( !pImpEditEngine->IsFormatted() )
-            pImpEditEngine->FormatAndUpdate();
-        if ( pPPortion->GetLines().Count() )
-        {
-            // Correct it if large Bullet.
-            const EditLine& rFirstLine = pPPortion->GetLines()[0];
-            aPoint.setX( rFirstLine.GetStartPosX() );
-        }
-        else
-        {
-            const SvxLRSpaceItem& rLRItem = pImpEditEngine->GetLRSpaceItem( pPPortion->GetNode() );
-// TL_NF_LR         aPoint.X() = pImpEditEngine->GetXValue( (short)(rLRItem.GetTextLeft() + rLRItem.GetTextFirstLineOffset()) );
-            sal_Int32 nSpaceBefore = 0;
-            pImpEditEngine->GetSpaceBeforeAndMinLabelWidth( pPPortion->GetNode(), &nSpaceBefore );
-            short nX = static_cast<short>(rLRItem.GetTextLeft()
-                            + rLRItem.GetTextFirstLineOffset()
-                            + nSpaceBefore);
-            aPoint.setX( pImpEditEngine->GetXValue( nX
-                             ) );
-        }
-        aPoint.setY( pImpEditEngine->GetParaPortions().GetYOffset( pPPortion ) );
+    // If someone calls GetLineHeight() with an empty Engine.
+    DBG_ASSERT( pImpEditEngine->IsFormatted() || !pImpEditEngine->IsFormatting(), "GetDocPosTopLeft: Doc not formatted - unable to format!" );
+    if ( !pImpEditEngine->IsFormatted() )
+        pImpEditEngine->FormatAndUpdate();
+    if ( pPPortion->GetLines().Count() )
+    {
+        // Correct it if large Bullet.
+        const EditLine& rFirstLine = pPPortion->GetLines()[0];
+        aPoint.setX( rFirstLine.GetStartPosX() );
     }
+    else
+    {
+        const SvxLRSpaceItem& rLRItem = pImpEditEngine->GetLRSpaceItem( pPPortion->GetNode() );
+// TL_NF_LR         aPoint.X() = pImpEditEngine->GetXValue( (short)(rLRItem.GetTextLeft() + rLRItem.GetTextFirstLineOffset()) );
+        sal_Int32 nSpaceBefore = 0;
+        pImpEditEngine->GetSpaceBeforeAndMinLabelWidth( pPPortion->GetNode(), &nSpaceBefore );
+        short nX = static_cast<short>(rLRItem.GetTextLeft()
+                        + rLRItem.GetTextFirstLineOffset()
+                        + nSpaceBefore);
+        aPoint.setX( pImpEditEngine->GetXValue( nX
+                         ) );
+    }
+    aPoint.setY( pImpEditEngine->GetParaPortions().GetYOffset( pPPortion ) );
+
     return aPoint;
 }
 
@@ -2056,9 +2046,8 @@ void EditEngine::QuickMarkInvalid( const ESelection& rSel )
     DBG_ASSERT( rSel.nEndPara < pImpEditEngine->GetEditDoc().Count(), "MarkInvalid: End out of Range!" );
     for ( sal_Int32 nPara = rSel.nStartPara; nPara <= rSel.nEndPara; nPara++ )
     {
-        ParaPortion* pPortion = pImpEditEngine->GetParaPortions().SafeGetObject( nPara );
-        if ( pPortion )
-            pPortion->MarkSelectionInvalid( 0 );
+        ParaPortion* pPortion = pImpEditEngine->GetParaPortions()[ nPara ];
+        pPortion->MarkSelectionInvalid( 0 );
     }
 }
 
@@ -2082,9 +2071,8 @@ void EditEngine::QuickDelete( const ESelection& rSel )
 
 void EditEngine::QuickMarkToBeRepainted( sal_Int32 nPara )
 {
-    ParaPortion* pPortion = pImpEditEngine->GetParaPortions().SafeGetObject( nPara );
-    if ( pPortion )
-        pPortion->SetMustRepaint( true );
+    ParaPortion* pPortion = pImpEditEngine->GetParaPortions()[ nPara ];
+    pPortion->SetMustRepaint( true );
 }
 
 void EditEngine::QuickInsertLineBreak( const ESelection& rSel )

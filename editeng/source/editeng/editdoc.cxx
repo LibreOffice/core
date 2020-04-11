@@ -403,11 +403,13 @@ TextPortion& TextPortionList::operator[](sal_Int32 nPos)
 
 void TextPortionList::Append(TextPortion* p)
 {
+    assert( p );
     maPortions.push_back(std::unique_ptr<TextPortion>(p));
 }
 
 void TextPortionList::Insert(sal_Int32 nPos, TextPortion* p)
 {
+    assert( p );
     maPortions.insert(maPortions.begin()+nPos, std::unique_ptr<TextPortion>(p));
 }
 
@@ -775,16 +777,6 @@ sal_Int32 ParaPortionList::FindParagraph(long nYOffset) const
     return EE_PARA_NOT_FOUND;
 }
 
-const ParaPortion* ParaPortionList::SafeGetObject(sal_Int32 nPos) const
-{
-    return 0 <= nPos && nPos < static_cast<sal_Int32>(maPortions.size()) ? maPortions[nPos].get() : nullptr;
-}
-
-ParaPortion* ParaPortionList::SafeGetObject(sal_Int32 nPos)
-{
-    return 0 <= nPos && nPos < static_cast<sal_Int32>(maPortions.size()) ? maPortions[nPos].get() : nullptr;
-}
-
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
 void
 ParaPortionList::DbgCheck(ParaPortionList const& rParas, EditDoc const& rDoc)
@@ -792,9 +784,9 @@ ParaPortionList::DbgCheck(ParaPortionList const& rParas, EditDoc const& rDoc)
     assert(rParas.Count() == rDoc.Count());
     for (sal_Int32 i = 0; i < rParas.Count(); ++i)
     {
-        assert(rParas.SafeGetObject(i) != nullptr);
-        assert(rParas.SafeGetObject(i)->GetNode() != nullptr);
-        assert(rParas.SafeGetObject(i)->GetNode() == rDoc.GetObject(i));
+        assert(rParas.maPortions[i].get() != nullptr);
+        assert(rParas.maPortions[i]->GetNode() != nullptr);
+        assert(rParas.maPortions[i]->GetNode() == rDoc.GetObject(i));
     }
 }
 #endif

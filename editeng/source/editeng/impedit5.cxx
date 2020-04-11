@@ -518,7 +518,6 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, SetA
         bool bCharAttribFound = false;
 
         DBG_ASSERT( aEditDoc.GetObject( nNode ), "Node not found: SetAttribs" );
-        DBG_ASSERT( GetParaPortions().SafeGetObject( nNode ), "Portion not found: SetAttribs" );
 
         ContentNode* pNode = aEditDoc.GetObject( nNode );
         ParaPortion* pPortion = GetParaPortions()[nNode];
@@ -604,7 +603,6 @@ void ImpEditEngine::RemoveCharAttribs( EditSelection aSel, bool bRemoveParaAttri
         ParaPortion* pPortion = GetParaPortions()[nNode];
 
         DBG_ASSERT( aEditDoc.GetObject( nNode ), "Node not found: SetAttribs" );
-        DBG_ASSERT( GetParaPortions().SafeGetObject( nNode ), "Portion not found: SetAttribs" );
 
         const sal_Int32 nStartPos = nNode==nStartNode ? aSel.Min().GetIndex() : 0;
         const sal_Int32 nEndPos = nNode==nEndNode ? aSel.Max().GetIndex() : pNode->Len(); // can also be == nStart!
@@ -643,12 +641,11 @@ void ImpEditEngine::RemoveCharAttribs( EditSelection aSel, bool bRemoveParaAttri
 void ImpEditEngine::RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich, bool bRemoveFeatures )
 {
     ContentNode* pNode = aEditDoc.GetObject( nPara );
-    ParaPortion* pPortion = GetParaPortions().SafeGetObject( nPara );
+    ParaPortion* pPortion = GetParaPortions()[ nPara ];
 
     DBG_ASSERT( pNode, "Node not found: RemoveCharAttribs" );
-    DBG_ASSERT( pPortion, "Portion not found: RemoveCharAttribs" );
 
-    if ( !pNode || !pPortion )
+    if ( !pNode )
         return;
 
     size_t nAttr = 0;

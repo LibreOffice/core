@@ -642,9 +642,6 @@ public:
     long GetYOffset(const ParaPortion* pPPortion) const;
     sal_Int32 FindParagraph(long nYOffset) const;
 
-    const ParaPortion* SafeGetObject(sal_Int32 nPos) const;
-    ParaPortion* SafeGetObject(sal_Int32 nPos);
-
     sal_Int32 GetPos(const ParaPortion* p) const;
     ParaPortion* operator[](sal_Int32 nPos);
     const ParaPortion* operator[](sal_Int32 nPos) const;

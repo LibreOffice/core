@@ -3954,9 +3954,8 @@ void ImpEditEngine::SetUpdateMode( bool bUp, EditView* pCurView, bool bForceUpda
 
 void ImpEditEngine::ShowParagraph( sal_Int32 nParagraph, bool bShow )
 {
-    ParaPortion* pPPortion = GetParaPortions().SafeGetObject( nParagraph );
-    DBG_ASSERT( pPPortion, "ShowParagraph: Paragraph does not exist! ");
-    if ( pPPortion && ( pPPortion->IsVisible() != bShow ) )
+    ParaPortion* pPPortion = GetParaPortions()[ nParagraph ];
+    if ( pPPortion->IsVisible() != bShow )
     {
         pPPortion->SetVisible( bShow );
 
@@ -4022,18 +4021,16 @@ EditSelection ImpEditEngine::MoveParagraphs( Range aOldPositions, sal_Int32 nNew
         sal_Int32 nFirstPortion = std::min( static_cast<sal_Int32>(aOldPositions.Min()), nNewPos );
         sal_Int32 nLastPortion = std::max( static_cast<sal_Int32>(aOldPositions.Max()), nNewPos );
 
-        ParaPortion* pUpperPortion = GetParaPortions().SafeGetObject( nFirstPortion );
-        ParaPortion* pLowerPortion = GetParaPortions().SafeGetObject( nLastPortion );
-        if (pUpperPortion && pLowerPortion)
-        {
-            aInvalidRect = tools::Rectangle();  // make empty
-            aInvalidRect.SetLeft( 0 );
-            aInvalidRect.SetRight( aPaperSize.Width() );
-            aInvalidRect.SetTop( GetParaPortions().GetYOffset( pUpperPortion ) );
-            aInvalidRect.SetBottom( GetParaPortions().GetYOffset( pLowerPortion ) + pLowerPortion->GetHeight() );
+        ParaPortion* pUpperPortion = GetParaPortions()[ nFirstPortion ];
+        ParaPortion* pLowerPortion = GetParaPortions()[ nLastPortion ];
 
-            UpdateViews( pCurView );
-        }
+        aInvalidRect = tools::Rectangle();  // make empty
+        aInvalidRect.SetLeft( 0 );
+        aInvalidRect.SetRight( aPaperSize.Width() );
+        aInvalidRect.SetTop( GetParaPortions().GetYOffset( pUpperPortion ) );
+        aInvalidRect.SetBottom( GetParaPortions().GetYOffset( pLowerPortion ) + pLowerPortion->GetHeight() );
+
+        UpdateViews( pCurView );
     }
     else
     {
@@ -4115,9 +4112,9 @@ const ParaPortion* ImpEditEngine::GetNextVisPortion( const ParaPortion* pCurPort
 {
     sal_Int32 nPara = GetParaPortions().GetPos( pCurPortion );
     DBG_ASSERT( nPara < GetParaPortions().Count() , "Portion not found: GetPrevVisNode" );
-    const ParaPortion* pPortion = GetParaPortions().SafeGetObject( ++nPara );
-    while ( pPortion && !pPortion->IsVisible() )
-        pPortion = GetParaPortions().SafeGetObject( ++nPara );
+    const ParaPortion* pPortion = GetParaPortions()[ ++nPara ];
+    while ( nPara < GetParaPortions().Count() && !pPortion->IsVisible() )
+        pPortion = GetParaPortions()[ ++nPara ];
 
     return pPortion;
 }
