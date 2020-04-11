@@ -66,9 +66,9 @@ void lcl_addDataSourceRanges(
 {
     if( xDataSource.is() )
     {
-        uno::Sequence< uno::Reference< data::XLabeledDataSequence > > aDataSequences( xDataSource->getDataSequences() );
-        for( sal_Int32 i=0; i<aDataSequences.getLength(); ++i)
-            lcl_addRanges( rOutResult, aDataSequences[i] );
+        const auto aDataSequences(xDataSource->getDataSequences());
+        for (const auto& rDataSequence : aDataSequences)
+            lcl_addRanges(rOutResult, rDataSequence);
     }
 }
 
