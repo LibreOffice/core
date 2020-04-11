@@ -5851,7 +5851,6 @@ include/drawinglayer/attribute/fillgradientattribute.hxx
 include/drawinglayer/attribute/fillgraphicattribute.hxx
 include/drawinglayer/attribute/fillhatchattribute.hxx
 include/drawinglayer/attribute/fontattribute.hxx
-include/drawinglayer/attribute/lineattribute.hxx
 include/drawinglayer/attribute/linestartendattribute.hxx
 include/drawinglayer/attribute/materialattribute3d.hxx
 include/drawinglayer/attribute/sdrallattribute3d.hxx
@@ -5864,7 +5863,6 @@ include/drawinglayer/attribute/sdrlinestartendattribute.hxx
 include/drawinglayer/attribute/sdrobjectattribute3d.hxx
 include/drawinglayer/attribute/sdrsceneattribute3d.hxx
 include/drawinglayer/attribute/sdrshadowattribute.hxx
-include/drawinglayer/attribute/strokeattribute.hxx
 include/drawinglayer/geometry/viewinformation3d.hxx
 include/drawinglayer/primitive2d/discretebitmapprimitive2d.hxx
 include/drawinglayer/primitive2d/discreteshadowprimitive2d.hxx
