@@ -961,22 +961,6 @@
 #define RID_SVXSTR_COLOR_LIBRE_PURPLE_ACCENT                NC_("RID_SVXSTR_COLOR_LIBRE_PURPLE_ACCENT", "Purple Accent")
 #define RID_SVXSTR_COLOR_LIBRE_YELLOW_ACCENT                NC_("RID_SVXSTR_COLOR_LIBRE_YELLOW_ACCENT", "Yellow Accent")
 
-// Tango colors, see: http://tango.freedesktop.org/Tango_Icon_Theme_Guidelines
-#define RID_SVXSTR_COLOR_TANGO_BUTTER                       NC_("RID_SVXSTR_COLOR_TANGO_BUTTER", "Tango: Butter")
-// Tango colors, see: http://tango.freedesktop.org/Tango_Icon_Theme_Guidelines
-#define RID_SVXSTR_COLOR_TANGO_ORANGE                       NC_("RID_SVXSTR_COLOR_TANGO_ORANGE", "Tango: Orange")
-// Tango colors, see: http://tango.freedesktop.org/Tango_Icon_Theme_Guidelines
-#define RID_SVXSTR_COLOR_TANGO_CHOCOLATE                    NC_("RID_SVXSTR_COLOR_TANGO_CHOCOLATE", "Tango: Chocolate")
-// Tango colors, see: http://tango.freedesktop.org/Tango_Icon_Theme_Guidelines
-#define RID_SVXSTR_COLOR_TANGO_CHAMELEON                    NC_("RID_SVXSTR_COLOR_TANGO_CHAMELEON", "Tango: Chameleon")
-// Tango colors, see: http://tango.freedesktop.org/Tango_Icon_Theme_Guidelines
-#define RID_SVXSTR_COLOR_TANGO_SKY_BLUE                     NC_("RID_SVXSTR_COLOR_TANGO_SKY_BLUE", "Tango: Sky Blue")
-// Tango colors, see: http://tango.freedesktop.org/Tango_Icon_Theme_Guidelines
-#define RID_SVXSTR_COLOR_TANGO_PLUM                         NC_("RID_SVXSTR_COLOR_TANGO_PLUM", "Tango: Plum")
-// Tango colors, see: http://tango.freedesktop.org/Tango_Icon_Theme_Guidelines
-#define RID_SVXSTR_COLOR_TANGO_SCARLET_RED                  NC_("RID_SVXSTR_COLOR_TANGO_SCARLET_RED", "Tango: Scarlet Red")
-// Tango colors, see: http://tango.freedesktop.org/Tango_Icon_Theme_Guidelines
-#define RID_SVXSTR_COLOR_TANGO_ALUMINIUM                    NC_("RID_SVXSTR_COLOR_TANGO_ALUMINIUM", "Tango: Aluminium")
 #define RID_SVXSTR_GALLERYPROPS_GALTHEME                    NC_("RID_SVXSTR_GALLERYPROPS_GALTHEME", "Gallery Theme")
 #define RID_SVXSTR_GALLERY_PREVIEW                          NC_("RID_SVXSTR_GALLERY_PREVIEW", "Preview")
 #define RID_SVXSTR_SUCCESSRECOV                             NC_("RID_SVXSTR_SUCCESSRECOV", "Successfully recovered")

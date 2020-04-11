@@ -49,7 +49,6 @@
   <draw:gradient draw:name="Gradient_20_7" draw:display-name="Gradient 7" draw:style="linear" draw:start-color="#8ae234" draw:end-color="#4e9a06" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="300" draw:border="0%"/>
   <draw:gradient draw:name="Gradient_20_8" draw:display-name="Gradient 8" draw:style="linear" draw:start-color="#8ae234" draw:end-color="#4e9a06" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="290" draw:border="0%"/>
   <draw:gradient draw:name="Gradient_20_9" draw:display-name="Gradient 9" draw:style="linear" draw:start-color="#8ae234" draw:end-color="#4e9a06" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="280" draw:border="0%"/>
-  <draw:gradient draw:name="Tango_20_Green" draw:display-name="Tango Green" draw:style="linear" draw:start-color="#8ae234" draw:end-color="#4e9a06" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="310" draw:border="0%"/>
   <draw:opacity draw:name="Transparency_20_1" draw:display-name="Transparency 1" draw:style="linear" draw:start="100%" draw:end="0%" draw:angle="90deg" draw:border="0%"/>
   <draw:opacity draw:name="Transparency_20_2" draw:display-name="Transparency 2" draw:style="linear" draw:start="100%" draw:end="0%" draw:angle="10" draw:border="0%"/>
   <draw:opacity draw:name="Transparency_20_3" draw:display-name="Transparency 3" draw:style="linear" draw:start="100%" draw:end="0%" draw:angle="1.0rad" draw:border="0%"/>
