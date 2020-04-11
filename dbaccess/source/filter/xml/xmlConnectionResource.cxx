@@ -69,7 +69,7 @@ OXMLConnectionResource::OXMLConnectionResource( ODBFilter& rImport,
                     aProperty.Name = "Actuate";
                     break;
                 default:
-                    SAL_WARN("dbaccess", "unknown attribute " << SvXMLImport::getNameFromToken(aIter.getToken()) << " value=" << aIter.toString());
+                    SAL_WARN("dbaccess", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
             }
             if ( !aProperty.Name.isEmpty() )
             {

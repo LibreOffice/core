@@ -461,7 +461,7 @@ ScXMLTableProtectionContext::ScXMLTableProtectionContext(
                 bDeleteRows = IsXMLToken(aIter, XML_TRUE);
                 break;
             default:
-                SAL_WARN("sc", "unknown attribute: " << nToken);
+                SAL_WARN("sc", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(nToken) << "=" << aIter.toString());
             }
         }
     }

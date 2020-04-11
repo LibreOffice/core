@@ -76,7 +76,7 @@ OXMLTable::OXMLTable( ODBFilter& _rImport
                 m_bApplyOrder = sValue == "true";
                 break;
             default:
-                SAL_WARN("dbaccess", "unknown attribute " << SvXMLImport::getNameFromToken(aIter.getToken()) << "=" << aIter.toString());
+                SAL_WARN("dbaccess", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
         }
     }
     uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
@@ -221,7 +221,7 @@ void OXMLTable::fillAttributes(const uno::Reference< XFastAttributeList > & _xAt
                 _rsTableName = sValue;
                 break;
             default:
-                SAL_WARN("dbaccess", "unknown attribute " << SvXMLImport::getNameFromToken(aIter.getToken()) << " value=" << aIter.toString());
+                SAL_WARN("dbaccess", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
         }
     }
 }

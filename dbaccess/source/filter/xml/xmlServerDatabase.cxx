@@ -65,7 +65,7 @@ OXMLServerDatabase::OXMLServerDatabase( ODBFilter& rImport,
                     sDatabaseName = sValue;
                     break;
                 default:
-                    SAL_WARN("dbaccess", "unknown attribute " << SvXMLImport::getNameFromToken(aIter.getToken()) << " value=" << aIter.toString());
+                    SAL_WARN("dbaccess", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
             }
         }
     }
