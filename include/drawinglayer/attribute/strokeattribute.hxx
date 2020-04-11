@@ -23,43 +23,42 @@
 #include <o3tl/cow_wrapper.hxx>
 #include <vector>
 
-namespace drawinglayer::attribute {
-    class ImpStrokeAttribute;
+namespace drawinglayer::attribute
+{
+class ImpStrokeAttribute;
 }
 
 namespace drawinglayer::attribute
 {
-        class DRAWINGLAYER_DLLPUBLIC StrokeAttribute
-        {
-        public:
-            typedef o3tl::cow_wrapper< ImpStrokeAttribute > ImplType;
+class DRAWINGLAYER_DLLPUBLIC StrokeAttribute
+{
+public:
+    typedef o3tl::cow_wrapper<ImpStrokeAttribute> ImplType;
 
-        private:
-            ImplType mpStrokeAttribute;
+private:
+    ImplType mpStrokeAttribute;
 
-        public:
-            /// constructors/assignmentoperator/destructor
-            explicit StrokeAttribute(
-                const ::std::vector< double >& rDotDashArray,
-                double fFullDotDashLen = 0.0);
-            StrokeAttribute();
-            StrokeAttribute(const StrokeAttribute&);
-            StrokeAttribute(StrokeAttribute&&);
-            StrokeAttribute& operator=(const StrokeAttribute&);
-            StrokeAttribute& operator=(StrokeAttribute&&);
-            ~StrokeAttribute();
+public:
+    /// constructors/assignmentoperator/destructor
+    explicit StrokeAttribute(const ::std::vector<double>& rDotDashArray,
+                             double fFullDotDashLen = 0.0);
+    StrokeAttribute();
+    StrokeAttribute(const StrokeAttribute&);
+    StrokeAttribute(StrokeAttribute&&);
+    StrokeAttribute& operator=(const StrokeAttribute&);
+    StrokeAttribute& operator=(StrokeAttribute&&);
+    ~StrokeAttribute();
 
-            // checks if the incarnation is default constructed
-            bool isDefault() const;
+    // checks if the incarnation is default constructed
+    bool isDefault() const;
 
-            // compare operator
-            bool operator==(const StrokeAttribute& rCandidate) const;
+    // compare operator
+    bool operator==(const StrokeAttribute& rCandidate) const;
 
-            // data read access
-            const ::std::vector< double >& getDotDashArray() const;
-            double getFullDotDashLen() const;
-        };
+    // data read access
+    const ::std::vector<double>& getDotDashArray() const;
+    double getFullDotDashLen() const;
+};
 } // end of namespace drawinglayer::attribute
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
