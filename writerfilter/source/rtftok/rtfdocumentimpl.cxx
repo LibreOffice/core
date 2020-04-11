@@ -2113,6 +2113,7 @@ RTFReferenceTable::Entries_t RTFDocumentImpl::deduplicateStyleTable()
                 auto const pStyleType(
                     static_cast<RTFReferenceProperties&>(*pStyle).getAttributes().find(
                         NS_ooxml::LN_CT_Style_type));
+                assert(pStyleType);
                 int const nStyleType(pStyleType->getInt());
                 RTFSprms const sprms(
                     static_cast<RTFReferenceProperties&>(*pStyle).getSprms().cloneAndDeduplicate(
