@@ -468,6 +468,11 @@ bool UnnecessaryParen::VisitVarDecl(const VarDecl* varDecl)
     // Sometimes parentheses make the RHS of an assignment easier to read by
     // visually disambiguating the = from a call to ==
     auto sub = parenExpr->getSubExpr();
+#if CLANG_VERSION >= 100000
+    if (auto const e = dyn_cast<CXXRewrittenBinaryOperator>(sub)) {
+        sub = e->getDecomposedForm().InnerBinOp;
+    }
+#endif
     if (auto subBinOp = dyn_cast<BinaryOperator>(sub))
     {
         if (!(subBinOp->isMultiplicativeOp() || subBinOp->isAdditiveOp() || subBinOp->isPtrMemOp()))
