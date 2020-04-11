@@ -115,8 +115,6 @@ public:
     bool isPrimitiveSequenceCreated() const { return mbSequenceCreated; }
 };
 
-typedef std::shared_ptr< VectorGraphicData > VectorGraphicDataPtr;
-
 #endif // INCLUDED_VCL_VECTORGRAPHICDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

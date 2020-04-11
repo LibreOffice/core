@@ -99,7 +99,7 @@ public:
                     Graphic( const Bitmap& rBmp );
                     Graphic( const Image& rImage );
                     Graphic( const BitmapEx& rBmpEx );
-                    Graphic( const VectorGraphicDataPtr& rVectorGraphicDataPtr );
+                    Graphic( const std::shared_ptr<VectorGraphicData>& rVectorGraphicDataPtr );
                     Graphic( const Animation& rAnimation );
                     Graphic( const GDIMetaFile& rMtf );
                     Graphic( const css::uno::Reference< css::graphic::XGraphic >& rxGraphic );
@@ -202,7 +202,7 @@ public:
 
 public:
 
-    const VectorGraphicDataPtr& getVectorGraphicData() const;
+    const std::shared_ptr<VectorGraphicData>& getVectorGraphicData() const;
 
     /// Get the page number of the multi-page source this Graphic is rendered from.
     sal_Int32 getPageNumber() const;

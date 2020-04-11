@@ -30,9 +30,9 @@ GraphicID::GraphicID(ImpGraphic const& rGraphic)
 
     if (rGraphic.ImplGetType() == GraphicType::Bitmap)
     {
-        if (rGraphic.getVectorGraphicData().get())
+        auto const& rVectorGraphicDataPtr = rGraphic.getVectorGraphicData();
+        if (rVectorGraphicDataPtr)
         {
-            const VectorGraphicDataPtr& rVectorGraphicDataPtr = rGraphic.getVectorGraphicData();
             const basegfx::B2DRange& rRange = rVectorGraphicDataPtr->getRange();
 
             mnID1 |= rVectorGraphicDataPtr->getVectorGraphicDataArrayLength();

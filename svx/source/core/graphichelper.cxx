@@ -67,11 +67,11 @@ namespace drawing = com::sun::star::drawing;
 void GraphicHelper::GetPreferredExtension( OUString& rExtension, const Graphic& rGraphic )
 {
     OUString aExtension = "png";
-    const VectorGraphicDataPtr& aVectorGraphicDataPtr(rGraphic.getVectorGraphicData());
+    auto const & rVectorGraphicDataPtr(rGraphic.getVectorGraphicData());
 
-    if (aVectorGraphicDataPtr.get() && aVectorGraphicDataPtr->getVectorGraphicDataArrayLength())
+    if (rVectorGraphicDataPtr && rVectorGraphicDataPtr->getVectorGraphicDataArrayLength())
     {
-        switch (aVectorGraphicDataPtr->getVectorGraphicDataType())
+        switch (rVectorGraphicDataPtr->getVectorGraphicDataType())
         {
         case VectorGraphicDataType::Wmf:
             aExtension = "wmf";

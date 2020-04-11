@@ -65,7 +65,7 @@ private:
     mutable sal_uLong            mnSizeBytes;
     bool                         mbSwapOut;
     bool                         mbDummyContext;
-    VectorGraphicDataPtr         maVectorGraphicData;
+    std::shared_ptr<VectorGraphicData> maVectorGraphicData;
     // cache checksum computation
     mutable BitmapChecksum       mnChecksum = 0;
 
@@ -82,7 +82,7 @@ public:
     ImpGraphic( const GraphicExternalLink& rExternalLink);
     ImpGraphic( const Bitmap& rBmp );
     ImpGraphic( const BitmapEx& rBmpEx );
-    ImpGraphic(const VectorGraphicDataPtr& rVectorGraphicDataPtr);
+    ImpGraphic(const std::shared_ptr<VectorGraphicData>& rVectorGraphicDataPtr);
     ImpGraphic( const Animation& rAnimation );
     ImpGraphic( const GDIMetaFile& rMtf );
     ~ImpGraphic();
@@ -193,7 +193,7 @@ private:
     friend void         WriteImpGraphic(SvStream& rOStm, const ImpGraphic& rImpGraphic);
     friend void         ReadImpGraphic(SvStream& rIStm, ImpGraphic& rImpGraphic);
 
-    const VectorGraphicDataPtr& getVectorGraphicData() const;
+    const std::shared_ptr<VectorGraphicData>& getVectorGraphicData() const;
 
     bool ensureAvailable () const;
 

@@ -133,9 +133,9 @@ void SdrGrafObj::onGraphicChanged()
     if (!mpGraphicObject || !mpGraphicObject->GetGraphic().isAvailable())
         return;
 
-    const VectorGraphicDataPtr& rVectorGraphicDataPtr = mpGraphicObject->GetGraphic().getVectorGraphicData();
+    auto const & rVectorGraphicDataPtr = mpGraphicObject->GetGraphic().getVectorGraphicData();
 
-    if (!rVectorGraphicDataPtr.get())
+    if (!rVectorGraphicDataPtr)
         return;
 
     // Skip for PDF as it is only a bitmap primitive in a sequence and
@@ -282,9 +282,9 @@ const GraphicObject* SdrGrafObj::GetReplacementGraphicObject() const
 {
     if (!mpReplacementGraphicObject && mpGraphicObject)
     {
-        const VectorGraphicDataPtr& rVectorGraphicDataPtr = mpGraphicObject->GetGraphic().getVectorGraphicData();
+        auto const & rVectorGraphicDataPtr = mpGraphicObject->GetGraphic().getVectorGraphicData();
 
-        if (rVectorGraphicDataPtr.get())
+        if (rVectorGraphicDataPtr)
         {
             const_cast< SdrGrafObj* >(this)->mpReplacementGraphicObject.reset(new GraphicObject(rVectorGraphicDataPtr->getReplacement()));
         }
@@ -552,11 +552,11 @@ OUString SdrGrafObj::TakeObjNameSingul() const
     if (!mpGraphicObject)
         return OUString();
 
-    const VectorGraphicDataPtr& rVectorGraphicDataPtr = mpGraphicObject->GetGraphic().getVectorGraphicData();
+    auto const & rVectorGraphicDataPtr = mpGraphicObject->GetGraphic().getVectorGraphicData();
 
     OUStringBuffer sName;
 
-    if(rVectorGraphicDataPtr.get())
+    if (rVectorGraphicDataPtr)
     {
         switch (rVectorGraphicDataPtr->getVectorGraphicDataType())
         {
@@ -622,11 +622,11 @@ OUString SdrGrafObj::TakeObjNamePlural() const
     if (!mpGraphicObject)
         return OUString();
 
-    const VectorGraphicDataPtr& rVectorGraphicDataPtr = mpGraphicObject->GetGraphic().getVectorGraphicData();
+    auto const & rVectorGraphicDataPtr = mpGraphicObject->GetGraphic().getVectorGraphicData();
 
     OUStringBuffer sName;
 
-    if(rVectorGraphicDataPtr.get())
+    if (rVectorGraphicDataPtr)
     {
         switch (rVectorGraphicDataPtr->getVectorGraphicDataType())
         {
