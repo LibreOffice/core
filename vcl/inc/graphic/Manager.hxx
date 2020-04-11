@@ -62,7 +62,8 @@ public:
     std::shared_ptr<ImpGraphic> newInstance();
     std::shared_ptr<ImpGraphic> newInstance(const Bitmap& rBitmap);
     std::shared_ptr<ImpGraphic> newInstance(const BitmapEx& rBitmapEx);
-    std::shared_ptr<ImpGraphic> newInstance(const VectorGraphicDataPtr& rVectorGraphicDataPtr);
+    std::shared_ptr<ImpGraphic>
+    newInstance(const std::shared_ptr<VectorGraphicData>& rVectorGraphicDataPtr);
     std::shared_ptr<ImpGraphic> newInstance(const Animation& rAnimation);
     std::shared_ptr<ImpGraphic> newInstance(const GDIMetaFile& rMtf);
     std::shared_ptr<ImpGraphic> newInstance(const GraphicExternalLink& rGraphicLink);
