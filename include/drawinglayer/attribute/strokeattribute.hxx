@@ -17,25 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_STROKEATTRIBUTE_HXX
-#define INCLUDED_DRAWINGLAYER_ATTRIBUTE_STROKEATTRIBUTE_HXX
+#pragma once
 
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <vector>
 
-
-// predefines
-
-namespace drawinglayer { namespace attribute {
+namespace drawinglayer::attribute {
     class ImpStrokeAttribute;
-}}
+}
 
-
-namespace drawinglayer
+namespace drawinglayer::attribute
 {
-    namespace attribute
-    {
         class DRAWINGLAYER_DLLPUBLIC StrokeAttribute
         {
         public:
@@ -66,10 +59,7 @@ namespace drawinglayer
             const ::std::vector< double >& getDotDashArray() const;
             double getFullDotDashLen() const;
         };
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::attribute
 
-
-#endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_STROKEATTRIBUTE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
