@@ -328,7 +328,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         # don't use remove_file as we don't want them removed from the buildroot.
         mv_file_between_flists /dev/null common_list.txt $INSTALLDIR/share/config/images_crystal.zip
         mv_file_between_flists /dev/null common_list.txt $INSTALLDIR/share/config/images_hicontrast.zip
-        mv_file_between_flists /dev/null common_list.txt $INSTALLDIR/share/config/images_tango.zip
         mv_file_between_flists /dev/null common_list.txt $INSTALLDIR/share/config/images.zip
     fi
 

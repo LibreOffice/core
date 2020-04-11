@@ -375,14 +375,6 @@
 #define RID_SVXSTR_COLOR_LIBRE_PURPLE_DEF           "Purple"
 #define RID_SVXSTR_COLOR_LIBRE_PURPLE_ACCENT_DEF    "Purple Accent"
 #define RID_SVXSTR_COLOR_LIBRE_YELLOW_ACCENT_DEF    "Yellow Accent"
-#define RID_SVXSTR_COLOR_TANGO_BUTTER_DEF           "Tango: Butter"
-#define RID_SVXSTR_COLOR_TANGO_ORANGE_DEF           "Tango: Orange"
-#define RID_SVXSTR_COLOR_TANGO_CHOCOLATE_DEF        "Tango: Chocolate"
-#define RID_SVXSTR_COLOR_TANGO_CHAMELEON_DEF        "Tango: Chameleon"
-#define RID_SVXSTR_COLOR_TANGO_SKY_BLUE_DEF         "Tango: Sky Blue"
-#define RID_SVXSTR_COLOR_TANGO_PLUM_DEF             "Tango: Plum"
-#define RID_SVXSTR_COLOR_TANGO_SCARLET_RED_DEF      "Tango: Scarlet Red"
-#define RID_SVXSTR_COLOR_TANGO_ALUMINIUM_DEF        "Tango: Aluminium"
 
 #endif
 

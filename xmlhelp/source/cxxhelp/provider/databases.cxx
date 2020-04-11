@@ -189,7 +189,7 @@ OString Databases::getImageTheme() const
 
     if ( aSymbolsStyleName.isEmpty() || aSymbolsStyleName == "auto" )
     {
-        aSymbolsStyleName = "tango";
+        aSymbolsStyleName = "colibre";
     }
     return aSymbolsStyleName.toUtf8();
 }
