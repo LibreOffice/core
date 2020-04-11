@@ -2525,7 +2525,7 @@ void ScChangeTrack::AppendOneDeleteRange( const ScRange& rOrgRange,
         aTrackRange.aStart.IncTab( -nDz );
         aTrackRange.aEnd.IncTab( -nDz );
     }
-    ScChangeActionDel* pAct = new ScChangeActionDel( pRefDoc, aTrackRange, nDx, nDy,
+    ScChangeActionDel* pAct = new ScChangeActionDel( pDoc, aTrackRange, nDx, nDy,
         this );
     // TabDelete not Contents; they are in separate columns
     if ( !(rOrgRange.aStart.Col() == 0 && rOrgRange.aStart.Row() == 0 &&
