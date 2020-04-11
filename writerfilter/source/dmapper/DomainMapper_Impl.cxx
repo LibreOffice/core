@@ -914,6 +914,12 @@ uno::Any DomainMapper_Impl::GetAnyProperty(PropertyIds eId, const PropertyMapPtr
     return GetPropertyFromParaStyleSheet(eId);
 }
 
+OUString DomainMapper_Impl::GetListStyleName(sal_Int32 nListId)
+{
+    auto const pList(GetListTable()->GetList( nListId ));
+    return pList ? pList->GetStyleName() : OUString();
+}
+
 ListsManager::Pointer const & DomainMapper_Impl::GetListTable()
 {
     if(!m_pListTable)

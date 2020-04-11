@@ -887,6 +887,48 @@ uno::Sequence< OUString > PropValVector::getNames()
     return comphelper::containerToSequence(aRet);
 }
 
+void StyleSheetTable::ApplyNumberingStyleNameToParaStyles()
+{
+    try
+    {
+        uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier( m_pImpl->m_xTextDocument, uno::UNO_QUERY_THROW );
+        uno::Reference< lang::XMultiServiceFactory > xDocFactory( m_pImpl->m_xTextDocument, uno::UNO_QUERY_THROW );
+        uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
+        uno::Reference<container::XNameContainer> xParaStyles;
+        xStyleFamilies->getByName(getPropertyName( PROP_PARAGRAPH_STYLES )) >>= xParaStyles;
+
+        if ( !xParaStyles.is() )
+            return;
+
+        for ( auto& pEntry : m_pImpl->m_aStyleSheetEntries )
+        {
+            StyleSheetPropertyMap* pStyleSheetProperties = nullptr;
+            if ( pEntry->nStyleTypeCode == STYLE_TYPE_PARA && (pStyleSheetProperties = dynamic_cast<StyleSheetPropertyMap*>(pEntry->pProperties.get())) )
+            {
+                // ListId 0 means turn off numbering - to cancel inheritance - so make sure that can be set.
+                // Ignore the special "chapter numbering" outline styles as they are handled internally.
+                if ( pStyleSheetProperties->GetListId() > -1 && pStyleSheetProperties->GetOutlineLevel() == -1 )
+                {
+                    uno::Reference< style::XStyle > xStyle;
+                    xParaStyles->getByName( ConvertStyleName(pEntry->sStyleName) ) >>= xStyle;
+
+                    if ( !xStyle.is() )
+                        break;
+
+                    uno::Reference<beans::XPropertySet> xPropertySet( xStyle, uno::UNO_QUERY_THROW );
+                    const OUString sNumberingStyleName = m_pImpl->m_rDMapper.GetListStyleName( pStyleSheetProperties->GetListId() );
+                    if ( !sNumberingStyleName.isEmpty() || !pStyleSheetProperties->GetListId() )
+                        xPropertySet->setPropertyValue( getPropertyName(PROP_NUMBERING_STYLE_NAME), uno::makeAny(sNumberingStyleName) );
+                }
+            }
+        }
+    }
+    catch( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("writerfilter", "Failed applying numbering style name to Paragraph styles");
+    }
+}
+
 void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
 {
     try

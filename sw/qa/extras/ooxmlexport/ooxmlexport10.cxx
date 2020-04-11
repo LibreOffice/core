@@ -1022,6 +1022,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95376, "tdf95376.docx")
     // did not have priority over indentation-from-paragraph-style, due to a
     // filter workaround that's not correct here.
     CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DEFAULT_VALUE, xParagraph->getPropertyState("ParaFirstLineIndent"));
+
+    //tdf#131321 - paragraph styles lost their numbering. Bullet+space inherits WWNum1 from Bullet
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("ParagraphStyles")->getByName("Bullet+space"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(!(getProperty<OUString>(xStyle, "NumberingStyleName")).isEmpty());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf92124, "tdf92124.docx")

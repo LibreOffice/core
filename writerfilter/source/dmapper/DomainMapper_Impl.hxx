@@ -718,6 +718,7 @@ public:
             m_pStyleSheetTable = new StyleSheetTable( m_rDMapper, m_xTextDocument, m_bIsNewDoc );
         return m_pStyleSheetTable;
     }
+    OUString GetListStyleName(sal_Int32 nListId);
     ListsManager::Pointer const & GetListTable();
     ThemeTablePtr const & GetThemeTable()
     {
