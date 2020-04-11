@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_LINEATTRIBUTE_HXX
-#define INCLUDED_DRAWINGLAYER_ATTRIBUTE_LINEATTRIBUTE_HXX
+#pragma once
 
 #include <drawinglayer/drawinglayerdllapi.h>
 
@@ -27,22 +26,16 @@
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <o3tl/cow_wrapper.hxx>
 
-
-// predefines
-
 namespace basegfx {
     class BColor;
 }
 
-namespace drawinglayer { namespace attribute {
+namespace drawinglayer::attribute {
     class ImpLineAttribute;
-}}
+}
 
-
-namespace drawinglayer
+namespace drawinglayer::attribute
 {
-    namespace attribute
-    {
         class DRAWINGLAYER_DLLPUBLIC LineAttribute
         {
         public:
@@ -77,10 +70,7 @@ namespace drawinglayer
             css::drawing::LineCap getLineCap() const;
             double getMiterMinimumAngle() const;
         };
-    } // end of namespace attribute
 } // end of namespace drawinglayer
 
-
-#endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_LINEATTRIBUTE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
