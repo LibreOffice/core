@@ -49,7 +49,7 @@ bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF )
         // Throw into VectorGraphicData to get the import. Do not care
         // too much for type, this will be checked there. Also no path
         // needed, it is a temporary object
-        VectorGraphicDataPtr aVectorGraphicDataPtr =
+        auto aVectorGraphicDataPtr =
             std::make_shared<VectorGraphicData>(
                 aNewData,
                 OUString(),

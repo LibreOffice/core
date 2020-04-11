@@ -254,7 +254,7 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
 
             // tdf#118232 Get the sequence of primitives and check if geometry is completely
             // hidden. If so, there is no need to add a SdrObject at all
-            const VectorGraphicDataPtr& rVectorGraphicData(aGraphic.getVectorGraphicData());
+            auto const & rVectorGraphicData(aGraphic.getVectorGraphicData());
             bool bContainsNoGeometry(false);
 
             if(bool(rVectorGraphicData) && VectorGraphicDataType::Svg == rVectorGraphicData->getVectorGraphicDataType())

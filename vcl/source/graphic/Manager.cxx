@@ -199,7 +199,8 @@ std::shared_ptr<ImpGraphic> Manager::newInstance(const Animation& rAnimation)
     return pReturn;
 }
 
-std::shared_ptr<ImpGraphic> Manager::newInstance(const VectorGraphicDataPtr& rVectorGraphicDataPtr)
+std::shared_ptr<ImpGraphic>
+Manager::newInstance(const std::shared_ptr<VectorGraphicData>& rVectorGraphicDataPtr)
 {
     auto pReturn = std::make_shared<ImpGraphic>(rVectorGraphicDataPtr);
     registerGraphic(pReturn, "VectorGraphic");
