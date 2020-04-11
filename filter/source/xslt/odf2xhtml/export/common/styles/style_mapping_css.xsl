@@ -123,10 +123,10 @@
             <xsl:when test="contains(., 'end')">
                 <xsl:choose>
                     <xsl:when test="parent::*/@style:writing-mode and contains(parent::*/@style:writing-mode, 'rl')">
-                        <xsl:text>text-align:left ! important;</xsl:text>
+                        <xsl:text>text-align:right ! important;</xsl:text>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:text>text-align:right ! important; </xsl:text>
+                        <xsl:text>text-align:left ! important; </xsl:text>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:when>
@@ -290,8 +290,20 @@
     </xsl:template>
     <xsl:template match="@style:writing-mode">
         <xsl:text>writing-mode:</xsl:text>
-        <xsl:value-of select="."/>
-        <xsl:text>; </xsl:text>
+        <xsl:choose>
+            <xsl:when test=".='rl-tb'">
+                <xsl:text>horizontal-tb; direction:rtl; </xsl:text>
+            </xsl:when>
+            <xsl:when test=".='lr-tb'">
+                <xsl:text>horizontal-tb; direction:ltr; </xsl:text>
+            </xsl:when>
+            <xsl:when test=".='tb-rl'">
+                <xsl:text>vertical-rl; </xsl:text>
+            </xsl:when>
+            <xsl:when test=".='tb-lr'">
+                <xsl:text>vertical-lr; </xsl:text>
+            </xsl:when>
+        </xsl:choose>
     </xsl:template>
     <!-- *** Properties with a no 'fo:' or 'style:' prefix *** -->
     <xsl:template match="@table:align">
