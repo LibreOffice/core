@@ -21,12 +21,11 @@
 #include <sal/log.hxx>
 
 #include <comphelper/fileformat.h>
-#include <comphelper/processfactory.hxx>
 #include <tools/fract.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
-#include <ucbhelper/content.hxx>
+#include <unotools/ucbhelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/outdev.hxx>
@@ -37,8 +36,6 @@
 #include <vcl/graph.hxx>
 #include <vcl/metaact.hxx>
 #include <impgraph.hxx>
-#include <com/sun/star/ucb/CommandAbortedException.hpp>
-#include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 #include <vcl/dibtools.hxx>
 #include <map>
@@ -355,26 +352,7 @@ void ImpGraphic::ImplClearGraphics()
 
 ImpSwapFile::~ImpSwapFile()
 {
-    try
-    {
-        ::ucbhelper::Content aCnt( aSwapURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
-            css::uno::Reference< css::ucb::XCommandEnvironment >(),
-            comphelper::getProcessComponentContext() );
-
-        aCnt.executeCommand( "delete", css::uno::makeAny( true ) );
-    }
-    catch( const css::ucb::ContentCreationException& )
-    {
-    }
-    catch( const css::uno::RuntimeException& )
-    {
-    }
-    catch( const css::ucb::CommandAbortedException& )
-    {
-    }
-    catch( const css::uno::Exception& )
-    {
-    }
+    utl::UCBContentHelper::Kill(aSwapURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
 }
 
 void ImpGraphic::ImplSetPrepared(bool bAnimated, const Size* pSizeHint)
@@ -1335,27 +1313,7 @@ bool ImpGraphic::ImplSwapOut()
                 else
                 {
                     xOStm.reset();
-
-                    try
-                    {
-                        ::ucbhelper::Content aCnt( aTmpURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
-                                            css::uno::Reference< css::ucb::XCommandEnvironment >(),
-                                            comphelper::getProcessComponentContext() );
-
-                        aCnt.executeCommand( "delete", css::uno::makeAny( true ) );
-                    }
-                    catch( const css::ucb::ContentCreationException& )
-                    {
-                    }
-                    catch( const css::uno::RuntimeException& )
-                    {
-                    }
-                    catch( const css::ucb::CommandAbortedException& )
-                    {
-                    }
-                    catch( const css::uno::Exception& )
-                    {
-                    }
+                    utl::UCBContentHelper::Kill(aTmpURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
                 }
             }
         }
