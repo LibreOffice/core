@@ -151,7 +151,7 @@ ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
 {
 }
 
-ImpGraphic::ImpGraphic(const VectorGraphicDataPtr& rVectorGraphicDataPtr)
+ImpGraphic::ImpGraphic(const std::shared_ptr<VectorGraphicData>& rVectorGraphicDataPtr)
 :   meType( rVectorGraphicDataPtr.get() ? GraphicType::Bitmap : GraphicType::NONE ),
     mnSizeBytes( 0 ),
     mbSwapOut( false ),
@@ -320,7 +320,7 @@ bool ImpGraphic::operator==( const ImpGraphic& rImpGraphic ) const
     return bRet;
 }
 
-const VectorGraphicDataPtr& ImpGraphic::getVectorGraphicData() const
+const std::shared_ptr<VectorGraphicData>& ImpGraphic::getVectorGraphicData() const
 {
     ensureAvailable();
 
@@ -1716,7 +1716,7 @@ void ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
                             aDataType = VectorGraphicDataType::Pdf;
                         }
 
-                        VectorGraphicDataPtr aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(aNewData, aPath, aDataType);
+                        auto aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(aNewData, aPath, aDataType);
                         rImpGraphic = aVectorGraphicDataPtr;
                     }
                 }

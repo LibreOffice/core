@@ -313,9 +313,9 @@ void SwGrfNode::onGraphicChanged()
         OUString aName;
         OUString aTitle;
         OUString aDesc;
-        const VectorGraphicDataPtr& rVectorGraphicDataPtr = GetGrf().getVectorGraphicData();
+        auto const & rVectorGraphicDataPtr = GetGrf().getVectorGraphicData();
 
-        if(rVectorGraphicDataPtr.get())
+        if (rVectorGraphicDataPtr)
         {
             const drawinglayer::primitive2d::Primitive2DContainer aSequence(rVectorGraphicDataPtr->getPrimitive2DSequence());
 
@@ -375,9 +375,9 @@ const GraphicObject* SwGrfNode::GetReplacementGrfObj() const
 {
     if(!mpReplacementGraphic)
     {
-        const VectorGraphicDataPtr& rVectorGraphicDataPtr = GetGrfObj().GetGraphic().getVectorGraphicData();
+        auto const & rVectorGraphicDataPtr = GetGrfObj().GetGraphic().getVectorGraphicData();
 
-        if(rVectorGraphicDataPtr.get())
+        if (rVectorGraphicDataPtr)
         {
             const_cast< SwGrfNode* >(this)->mpReplacementGraphic.reset( new GraphicObject(rVectorGraphicDataPtr->getReplacement()) );
         }
