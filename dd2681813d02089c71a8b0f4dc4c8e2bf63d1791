@@ -39,6 +39,30 @@
       "revId": "dd2681813d02089c71a8b0f4dc4c8e2bf63d1791",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc25825b_249ab145",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-04-11T11:55:58Z",
+      "side": 1,
+      "message": "I think the end user might disagree that crashing is better than not crashing when the code is wrong. :-)",
+      "parentUuid": "e297d28f_75e6ac57",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 18
+      },
+      "revId": "dd2681813d02089c71a8b0f4dc4c8e2bf63d1791",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
