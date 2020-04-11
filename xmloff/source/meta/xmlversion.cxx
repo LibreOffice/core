@@ -22,6 +22,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlmetae.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <xmloff/xmltoken.hxx>
 #include <comphelper/processfactory.hxx>
@@ -105,8 +106,6 @@ XMLVersionListImport::XMLVersionListImport(
 :   SvXMLImport(rContext, ""),
     maVersions( rVersions )
 {
-    GetNamespaceMap().Add( xmloff::token::GetXMLToken(xmloff::token::XML_NP_VERSIONS_LIST),
-                           xmloff::token::GetXMLToken(xmloff::token::XML_N_VERSIONS_LIST), XML_NAMESPACE_VERSIONS_LIST );
 }
 
 XMLVersionListImport::~XMLVersionListImport() throw()
@@ -139,7 +138,8 @@ XMLVersionListContext::createFastChildContext(sal_Int32 nElement,
 {
     SvXMLImportContext *pContext = nullptr;
 
-    if ( nElement == XML_ELEMENT(FRAMEWORK, xmloff::token::XML_VERSION_ENTRY) )
+    if ( nElement == XML_ELEMENT(FRAMEWORK, xmloff::token::XML_VERSION_ENTRY)
+        || nElement == XML_ELEMENT(VERSIONS_LIST, xmloff::token::XML_VERSION_ENTRY) )
     {
         pContext = new XMLVersionContext( GetImport(), xAttrList );
     }
@@ -161,16 +161,19 @@ XMLVersionContext::XMLVersionContext( XMLVersionListImport& rImport,
         switch( aIter.getToken() )
         {
         case XML_ELEMENT(FRAMEWORK, xmloff::token::XML_TITLE):
+        case XML_ELEMENT(VERSIONS_LIST, xmloff::token::XML_TITLE):
         {
             aInfo.Identifier = aIter.toString();
             break;
         }
         case XML_ELEMENT(FRAMEWORK, xmloff::token::XML_COMMENT):
+        case XML_ELEMENT(VERSIONS_LIST, xmloff::token::XML_COMMENT):
         {
             aInfo.Comment = aIter.toString();
             break;
         }
         case XML_ELEMENT(FRAMEWORK, xmloff::token::XML_CREATOR):
+        case XML_ELEMENT(VERSIONS_LIST, xmloff::token::XML_CREATOR):
         {
             aInfo.Author = aIter.toString();
             break;
@@ -182,6 +185,9 @@ XMLVersionContext::XMLVersionContext( XMLVersionListImport& rImport,
                 aInfo.TimeStamp = aTime;
             break;
         }
+        default:
+            SAL_WARN("xmloff", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
+            break;
         }
     }
 
