@@ -123,6 +123,7 @@ public:
     void testTdf112333();
     void testTdf112552();
     void testTdf112557();
+    void testTdf106026();
     void testTdf112334();
     void testTdf112089();
     void testTdf112086();
@@ -231,6 +232,7 @@ public:
     CPPUNIT_TEST(testTdf112333);
     CPPUNIT_TEST(testTdf112552);
     CPPUNIT_TEST(testTdf112557);
+    CPPUNIT_TEST(testTdf106026);
     CPPUNIT_TEST(testTdf112334);
     CPPUNIT_TEST(testTdf112089);
     CPPUNIT_TEST(testTdf112086);
@@ -1381,6 +1383,31 @@ void SdOOXMLExportTest2::testTdf112557()
 
     xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slideMasters/slideMaster1.xml");
     assertXPath(pXmlDocContent, "/p:sldMaster/p:cSld/p:spTree/p:sp", 2); // title and object
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf106026()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/tdf106026.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    xmlDocPtr pXmlMasterContent = parseExport(tempFile, "ppt/slideMasters/slideMaster1.xml");
+    assertXPath(pXmlMasterContent, "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:p[1]/a:pPr/a:spcBef/a:spcPts", "val", "1417");
+    assertXPath(pXmlMasterContent, "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:p[2]/a:pPr/a:spcBef/a:spcPts", "val", "1134");
+    assertXPath(pXmlMasterContent, "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:p[3]/a:pPr/a:spcBef/a:spcPts", "val", "850");
+    assertXPath(pXmlMasterContent, "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:p[4]/a:pPr/a:spcBef/a:spcPts", "val", "567");
+    assertXPath(pXmlMasterContent, "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:p[5]/a:pPr/a:spcBef/a:spcPts", "val", "283");
+    assertXPath(pXmlMasterContent, "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:p[6]/a:pPr/a:spcBef/a:spcPts", "val", "283");
+    assertXPath(pXmlMasterContent, "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:p[7]/a:pPr/a:spcBef/a:spcPts", "val", "283");
+
+    xmlDocPtr pXmlSlideContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlSlideContent,
+                       "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p[1]/a:pPr/a:spcAft/a:spcPts", "val", "11339");
+    assertXPath(pXmlSlideContent,
+                       "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p[2]/a:pPr/a:spcAft/a:spcPts", "val", "11339");
+    assertXPath(pXmlSlideContent,
+                       "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p[3]/a:pPr/a:spcAft/a:spcPts", "val", "11339");
     xDocShRef->DoClose();
 }
 
