@@ -68,7 +68,7 @@ OXMLComponent::OXMLComponent( ODBFilter& rImport
                 bAsTemplate = sValue == s_sTRUE;
                 break;
             default:
-                SAL_WARN("dbaccess", "unknown attribute " << SvXMLImport::getNameFromToken(aIter.getToken()) << "=" << aIter.toString());
+                SAL_WARN("dbaccess", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
         }
     }
     if ( !sHREF.isEmpty() && !sName.isEmpty() && _xParentContainer.is() )

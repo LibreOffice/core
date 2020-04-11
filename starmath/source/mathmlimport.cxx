@@ -642,7 +642,7 @@ void SmXMLContext_Helper::RetrieveAttrs(const uno::Reference<
                 bMvFound = true;
                 break;
             default:
-                SAL_WARN("starmath", "unknown attribute " << SvXMLImport::getNameFromToken(aIter.getToken()) << " value=" << aIter.toString());
+                SAL_WARN("starmath", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
                 break;
         }
     }
@@ -780,7 +780,7 @@ void SmXMLTokenAttrHelper::RetrieveAttrs(const uno::Reference<xml::sax::XFastAtt
                 mbMvFound = true;
                 break;
             default:
-                SAL_WARN("starmath", "unknown attribute " << SvXMLImport::getNameFromToken(aIter.getToken()) << " value=" << aIter.toString());
+                SAL_WARN("starmath", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
                 break;
         }
     }
@@ -1092,7 +1092,7 @@ void SmXMLFencedContext_Impl::startFastElement(sal_Int32 /*nElement*/, const uno
                 cEnd = sValue[0];
                 break;
             default:
-                SAL_WARN("starmath", "unknown attribute " << SvXMLImport::getNameFromToken(aIter.getToken()) << " value=" << aIter.toString());
+                SAL_WARN("starmath", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
                 /*Go to superclass*/
                 break;
         }
@@ -1239,7 +1239,7 @@ void SmXMLAnnotationContext_Impl::startFastElement(sal_Int32 /*nElement*/, const
                 bIsStarMath= sValue == "StarMath 5.0";
                 break;
             default:
-                SAL_WARN("starmath", "unknown attribute " << SvXMLImport::getNameFromToken(aIter.getToken()) << " value=" << aIter.toString());
+                SAL_WARN("starmath", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
                 break;
         }
     }
@@ -1454,7 +1454,7 @@ void SmXMLOperatorContext_Impl::startFastElement(sal_Int32 /*nElement*/, const u
                 bIsStretchy = sValue == GetXMLToken(XML_TRUE);
                 break;
             default:
-                SAL_WARN("starmath", "unknown attribute " << SvXMLImport::getNameFromToken(aIter.getToken()) << " value=" << aIter.toString());
+                SAL_WARN("starmath", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
                 break;
         }
     }
@@ -1523,7 +1523,7 @@ void SmXMLSpaceContext_Impl::startFastElement(sal_Int32 /*nElement*/,
                     SAL_WARN("starmath", "ignore mspace's width: " << sValue);
                 break;
             default:
-                SAL_WARN("starmath", "unknown attribute " << SvXMLImport::getNameFromToken(aIter.getToken()) << " value=" << aIter.toString());
+                SAL_WARN("starmath", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
                 break;
         }
     }
@@ -2573,7 +2573,7 @@ void SmXMLActionContext_Impl::startFastElement(sal_Int32 /*nElement*/, const uno
                 }
                 break;
             default:
-                SAL_WARN("starmath", "unknown attribute " << SvXMLImport::getNameFromToken(aIter.getToken()) << " value=" << aIter.toString());
+                SAL_WARN("starmath", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
                 break;
         }
     }
