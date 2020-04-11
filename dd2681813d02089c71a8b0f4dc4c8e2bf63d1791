@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b84b67a1_b35b912a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-11T10:27:02Z",
+      "side": 1,
+      "message": "What an\n\n  assert(P)\n\nshould mean is to assert that P is known (through some typically non-obvious program analysis) to always be true at this point in the program.  (Ideally.  An assert can also be written in error, just like any other part of the program, of course.  And also some confused people may have written asserts which they thought would mean something else.)\n\nSo if P states \"pointer X is non-null\" and shortly thereafter X is dereferenced, the assert codifies the knowledge that X can legitimately be dereferenced there.  And that if X ever is a null-pointer there, the program is in error, and the likely correct fix is /not/ to assume that X can be null there and to add an explicit check for that into the code.",
+      "revId": "dd2681813d02089c71a8b0f4dc4c8e2bf63d1791",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e297d28f_75e6ac57",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-11T10:27:02Z",
+      "side": 1,
+      "message": "That is nonsensical.  If an assert states P to always be true, there is never a reason to follow it with an\n\n  if (P)",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 18
+      },
+      "revId": "dd2681813d02089c71a8b0f4dc4c8e2bf63d1791",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
