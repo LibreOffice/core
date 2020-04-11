@@ -1221,6 +1221,7 @@ void ListsManager::CreateNumberingRules( )
     {
         rList->CreateNumberingRules( m_rDMapper, m_xFactory );
     }
+    m_rDMapper.GetStyleSheetTable()->ApplyNumberingStyleNameToParaStyles();
 }
 
 }

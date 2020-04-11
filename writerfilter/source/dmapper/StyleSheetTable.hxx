@@ -92,6 +92,7 @@ public:
     StyleSheetTable(DomainMapper& rDMapper, css::uno::Reference<css::text::XTextDocument> const& xTextDocument, bool bIsNewDoc);
     virtual ~StyleSheetTable() override;
 
+    void ApplyNumberingStyleNameToParaStyles();
     void ApplyStyleSheets( const FontTablePtr& rFontTable );
     StyleSheetEntryPtr FindStyleSheetByISTD(const OUString& sIndex);
     StyleSheetEntryPtr FindStyleSheetByConvertedStyleName(const OUString& rIndex);

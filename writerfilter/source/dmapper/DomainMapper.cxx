@@ -3910,6 +3910,11 @@ bool DomainMapper::IsInTable() const
     return m_pImpl->hasTableManager() && m_pImpl->getTableManager().isInCell();
 }
 
+OUString DomainMapper::GetListStyleName(sal_Int32 nListId) const
+{
+    return m_pImpl->GetListStyleName( nListId );
+}
+
 bool DomainMapper::IsStyleSheetImport() const
 {
     return m_pImpl->IsStyleSheetImport();

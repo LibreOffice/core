@@ -95,6 +95,7 @@ public:
 
     void PushListProperties( const ::tools::SvRef<PropertyMap>& pListProperties );
     void PopListProperties();
+    OUString GetListStyleName(sal_Int32 nListId) const;
 
     bool IsOOXMLImport() const;
     bool IsRTFImport() const;
