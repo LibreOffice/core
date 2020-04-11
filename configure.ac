@@ -1619,7 +1619,7 @@ AC_ARG_WITH(theme,
     AS_HELP_STRING([--with-theme="theme1 theme2..."],
         [Choose which themes to include. By default those themes with an '*' are included.
          Possible choices: *breeze, *breeze_dark, *breeze_dark_svg, *breeze_svg, *colibre, *colibre_svg, *elementary,
-         *elementary_svg, *karasa_jaga, *karasa_jaga_svg, *sifr, *sifr_dark, *sifr_dark_svg, *sifr_svg, *sukapura, *sukapura_svg, *tango.]),
+         *elementary_svg, *karasa_jaga, *karasa_jaga_svg, *sifr, *sifr_dark, *sifr_dark_svg, *sifr_svg, *sukapura, *sukapura_svg.]),
 ,)
 
 libo_FUZZ_ARG_WITH(helppack-integration,
@@ -11757,14 +11757,14 @@ dnl ===================================================================
 AC_MSG_CHECKING([which themes to include])
 # if none given use default subset of available themes
 if test "x$with_theme" = "x" -o "x$with_theme" = "xyes"; then
-    with_theme="breeze breeze_dark breeze_dark_svg breeze_svg colibre colibre_svg elementary elementary_svg karasa_jaga karasa_jaga_svg sifr sifr_svg sifr_dark sifr_dark_svg sukapura sukapura_svg tango"
+    with_theme="breeze breeze_dark breeze_dark_svg breeze_svg colibre colibre_svg elementary elementary_svg karasa_jaga karasa_jaga_svg sifr sifr_svg sifr_dark sifr_dark_svg sukapura sukapura_svg"
 fi
 
 WITH_THEMES=""
 if test "x$with_theme" != "xno"; then
     for theme in $with_theme; do
         case $theme in
-        breeze|breeze_dark|breeze_dark_svg|breeze_svg|colibre|colibre_svg|elementary|elementary_svg|karasa_jaga|karasa_jaga_svg|sifr|sifr_svg|sifr_dark|sifr_dark_svg|sukapura|sukapura_svg|tango) real_theme="$theme" ;;
+        breeze|breeze_dark|breeze_dark_svg|breeze_svg|colibre|colibre_svg|elementary|elementary_svg|karasa_jaga|karasa_jaga_svg|sifr|sifr_svg|sifr_dark|sifr_dark_svg|sukapura|sukapura_svg) real_theme="$theme" ;;
         default) real_theme=colibre ;;
         *) AC_MSG_ERROR([Unknown value for --with-theme: $theme]) ;;
         esac
@@ -12954,7 +12954,7 @@ if test "$enable_mpl_subset" = "yes"; then
     for theme in $WITH_THEMES; do
         case $theme in
         breeze|breeze_dark|breeze_dark_svg|breeze_svg|elementary|elementary_svg|karasa_jaga|karasa_jaga_svg|sukapura|sukapura_svg) #blacklist of icon themes under GPL or LGPL
-            AC_MSG_ERROR([need to disable icon themes from '$WITH_THEMES': $theme present, use --with-theme=tango]) ;;
+            AC_MSG_ERROR([need to disable icon themes from '$WITH_THEMES': $theme present, use --with-theme=colibre]) ;;
         *) : ;;
         esac
     done
