@@ -8,6 +8,7 @@
  */
 
 #include <config_feature_desktop.h>
+#include <config_options.h>
 
 #include <memory>
 #include <unordered_map>
