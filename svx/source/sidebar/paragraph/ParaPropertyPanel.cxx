@@ -313,6 +313,10 @@ void ParaPropertyPanel::StateChangedIndentImpl( SfxItemState eState, const SfxPo
         long nfVal = OutputDevice::LogicToLogic( aTxtFirstLineOfst, MapUnit::MapTwip, MapUnit::Map100thMM );
         nfVal = static_cast<long>(mxFLineIndent->normalize( nfVal ));
         mxFLineIndent->set_value( nfVal, FieldUnit::MM_100TH );
+
+        mxLeftIndent->set_sensitive(true);
+        mxRightIndent->set_sensitive(true);
+        mxFLineIndent->set_sensitive(true);
     }
     else if( eState == SfxItemState::DISABLED )
     {
@@ -354,6 +358,9 @@ void ParaPropertyPanel::StateChangedULImpl( SfxItemState eState, const SfxPoolIt
         nVal = OutputDevice::LogicToLogic( maLower, MapUnit::MapTwip, MapUnit::Map100thMM );
         nVal = mxBottomDist->normalize( nVal );
         mxBottomDist->set_value( nVal, FieldUnit::MM_100TH );
+
+        mxTopDist->set_sensitive(true);
+        mxBottomDist->set_sensitive(true);
     }
     else if(eState == SfxItemState::DISABLED )
     {
