@@ -40,6 +40,7 @@
 #include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
+#include <drawinglayer/primitive2d/glowprimitive2d.hxx>
 #include <primitive2d/pointarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
@@ -356,43 +357,7 @@ namespace drawinglayer::processor2d
                 }
                 case PRIMITIVE2D_ID_GLOWPRIMITIVE2D:
                 {
-                    basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
-                    aRange.transform(maCurrentTransformation);
-                    aRange.grow(10.0);
-                    impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
-                    if(aBufferDevice.isVisible())
-                    {
-                        // remember last OutDev and set to content
-                        OutputDevice* pLastOutputDevice = mpOutputDevice;
-                        mpOutputDevice = &aBufferDevice.getTransparence();
-                        // paint content to virtual device
-                        mpOutputDevice->Erase();
-                        process(rCandidate);
-
-                        // obtain result as a bitmap
-                        auto bitmap = mpOutputDevice->GetBitmapEx(Point(aRange.getMinX(), aRange.getMinY()), Size(aRange.getWidth(), aRange.getHeight()));
-                        constexpr double nRadius = 5.0;
-                        bitmap.Scale(Size(aRange.getWidth()-nRadius, aRange.getHeight()-nRadius));
-                        // use bitmap later as mask
-                        auto mask = bitmap.GetBitmap();
-
-                        mpOutputDevice = &aBufferDevice.getContent();
-                        process(rCandidate);
-                        bitmap = mpOutputDevice->GetBitmapEx(Point(aRange.getMinX(), aRange.getMinY()), Size(aRange.getWidth(), aRange.getHeight()));
-                        bitmap.Scale(Size(aRange.getWidth()-nRadius, aRange.getHeight()-nRadius));
-
-                        // calculate blurry effect
-                        BitmapFilterStackBlur glowFilter(nRadius);
-                        BitmapFilter::Filter(bitmap, glowFilter);
-                        // back to old OutDev
-                        mpOutputDevice = pLastOutputDevice;
-                        mpOutputDevice->DrawBitmapEx(Point(aRange.getMinX()-nRadius/2, aRange.getMinY()-nRadius/2), BitmapEx(bitmap.GetBitmap(), mask));
-
-                        // paint result
-                        //aBufferDevice.paint();
-                    }
-                    else
-                        SAL_WARN("drawinglayer", "Temporary buffered virtual device is not visible");
+                    processGlowPrimitive2D(static_cast<const drawinglayer::primitive2d::GlowPrimitive2D&>(rCandidate));
                     break;
                 }
                 default :
@@ -880,6 +845,46 @@ namespace drawinglayer::processor2d
             }
         }
 
+        void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitive2D& rCandidate)
+        {
+            basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
+            aRange.transform(maCurrentTransformation);
+            aRange.grow(10.0);
+            impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
+            if (aBufferDevice.isVisible())
+            {
+                // remember last OutDev and set to content
+                OutputDevice* pLastOutputDevice = mpOutputDevice;
+                mpOutputDevice = &aBufferDevice.getTransparence();
+                // paint content to virtual device
+                mpOutputDevice->Erase();
+                process(rCandidate);
+
+                // obtain result as a bitmap
+                auto bitmap = mpOutputDevice->GetBitmapEx(Point(aRange.getMinX(), aRange.getMinY()), Size(aRange.getWidth(), aRange.getHeight()));
+                constexpr double nRadius = 5.0;
+                bitmap.Scale(Size(aRange.getWidth()-nRadius, aRange.getHeight()-nRadius));
+                // use bitmap later as mask
+                auto mask = bitmap.GetBitmap();
+
+                mpOutputDevice = &aBufferDevice.getContent();
+                process(rCandidate);
+                bitmap = mpOutputDevice->GetBitmapEx(Point(aRange.getMinX(), aRange.getMinY()), Size(aRange.getWidth(), aRange.getHeight()));
+                bitmap.Scale(Size(aRange.getWidth()-nRadius, aRange.getHeight()-nRadius));
+
+                // calculate blurry effect
+                BitmapFilterStackBlur glowFilter(nRadius);
+                BitmapFilter::Filter(bitmap, glowFilter);
+                // back to old OutDev
+                mpOutputDevice = pLastOutputDevice;
+                mpOutputDevice->DrawBitmapEx(Point(aRange.getMinX()-nRadius/2, aRange.getMinY()-nRadius/2), BitmapEx(bitmap.GetBitmap(), mask));
+
+                // paint result
+                //aBufferDevice.paint();
+            }
+            else
+                SAL_WARN("drawinglayer", "Temporary buffered virtual device is not visible");
+        }
 } // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
