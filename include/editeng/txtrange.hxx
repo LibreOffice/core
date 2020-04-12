@@ -22,30 +22,28 @@
 
 #include <editeng/editengdllapi.h>
 #include <tools/gen.hxx>
+#include <tools/poly.hxx>
 #include <deque>
 #include <memory>
-
-namespace tools { class PolyPolygon; }
+#include <optional>
 
 namespace basegfx {
     class B2DPolyPolygon;
 }
 
-typedef std::deque<long>* LongDqPtr;
-
 class EDITENG_DLLPUBLIC TextRanger
 {
     //! The RangeCache class is used to cache the result of a single range calculation.
-    struct RangeCache
+    struct RangeCacheItem
     {
         Range range;        //!< Range for which we calculated results.
         std::deque<long> results;  //!< Calculated results for the range.
-        RangeCache(const Range& rng) : range(rng) {};
+        RangeCacheItem(const Range& rng) : range(rng) {};
     };
-    std::deque<RangeCache> mRangeCache; //!< Cached range calculations.
-    std::unique_ptr<tools::PolyPolygon> mpPolyPolygon; // Surface polygon
+    std::deque<RangeCacheItem> mRangeCache; //!< Cached range calculations.
+    tools::PolyPolygon     maPolyPolygon; // Surface polygon
     std::unique_ptr<tools::PolyPolygon> mpLinePolyPolygon; // Line polygon
-    std::unique_ptr<tools::Rectangle> pBound;  // Comprehensive rectangle
+    mutable std::optional<tools::Rectangle> mxBound;  // Comprehensive rectangle
     sal_uInt16 nCacheSize;  // Cache-Size
     sal_uInt16 nRight;      // Distance Contour-Text
     sal_uInt16 nLeft;       // Distance Text-Contour
@@ -58,14 +56,14 @@ class EDITENG_DLLPUBLIC TextRanger
     bool       bVertical :1;// for vertical writing mode
 
     TextRanger( const TextRanger& ) = delete;
-    const tools::Rectangle& GetBoundRect_();
+    const tools::Rectangle& GetBoundRect_() const;
 public:
     TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon,
                 const basegfx::B2DPolyPolygon* pLinePolyPolygon,
                 sal_uInt16 nCacheSize, sal_uInt16 nLeft, sal_uInt16 nRight,
                 bool bSimple, bool bInner, bool bVert = false );
     ~TextRanger();
-    LongDqPtr GetTextRanges( const Range& rRange );
+    std::deque<long>* GetTextRanges( const Range& rRange );
     sal_uInt16 GetRight() const { return nRight; }
     sal_uInt16 GetLeft() const { return nLeft; }
     sal_uInt16 GetUpper() const { return nUpper; }
@@ -74,8 +72,8 @@ public:
     bool IsSimple() const { return bSimple; }
     bool IsInner() const { return bInner; }
     bool IsVertical() const { return bVertical; }
-    const tools::Rectangle& GetBoundRect()
-        { return pBound ? const_cast< const tools::Rectangle& >(*pBound) : GetBoundRect_(); }
+    const tools::Rectangle& GetBoundRect() const
+        { return mxBound ? const_cast< const tools::Rectangle& >(*mxBound) : GetBoundRect_(); }
     void SetUpper( sal_uInt16 nNew ){ nUpper = nNew; }
     void SetLower( sal_uInt16 nNew ){ nLower = nNew; }
     void SetVertical( bool bNew );

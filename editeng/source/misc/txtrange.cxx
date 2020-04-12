@@ -31,6 +31,7 @@ TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon,
                         const basegfx::B2DPolyPolygon* pLinePolyPolygon,
                         sal_uInt16 nCacheSz, sal_uInt16 nLft, sal_uInt16 nRght,
                         bool bSimpl, bool bInnr, bool bVert ) :
+    maPolyPolygon( rPolyPolygon.count() ),
     nCacheSize( nCacheSz ),
     nRight( nRght ),
     nLeft( nLft ),
@@ -42,13 +43,12 @@ TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon,
     bVertical( bVert )
 {
     sal_uInt32 nCount(rPolyPolygon.count());
-    mpPolyPolygon.reset( new tools::PolyPolygon( static_cast<sal_uInt16>(nCount) ) );
 
     for(sal_uInt32 i(0); i < nCount; i++)
     {
         const basegfx::B2DPolygon aCandidate(rPolyPolygon.getB2DPolygon(i).getDefaultAdaptiveSubdivision());
         nPointCount += aCandidate.count();
-        mpPolyPolygon->Insert( tools::Polygon(aCandidate), static_cast<sal_uInt16>(i) );
+        maPolyPolygon.Insert( tools::Polygon(aCandidate), static_cast<sal_uInt16>(i) );
     }
 
     if( pLinePolyPolygon )
@@ -93,7 +93,7 @@ namespace {
 class SvxBoundArgs
 {
     std::vector<bool> aBoolArr;
-    LongDqPtr pLongArr;
+    std::deque<long>* pLongArr;
     TextRanger *pTextRanger;
     long nMin;
     long nMax;
@@ -126,7 +126,7 @@ class SvxBoundArgs
     long A( const Point& rP ) const { return bRotate ? rP.Y() : rP.X(); }
     long B( const Point& rP ) const { return bRotate ? rP.X() : rP.Y(); }
 public:
-    SvxBoundArgs( TextRanger* pRanger, LongDqPtr pLong, const Range& rRange );
+    SvxBoundArgs( TextRanger* pRanger, std::deque<long>* pLong, const Range& rRange );
     void NotePoint( const long nA ) { NoteMargin( nA - nStart, nA + nEnd ); }
     void NoteMargin( const long nL, const long nR )
         { if( nMin > nL ) nMin = nL; if( nMax < nR ) nMax = nR; }
@@ -142,7 +142,7 @@ public:
 
 }
 
-SvxBoundArgs::SvxBoundArgs( TextRanger* pRanger, LongDqPtr pLong,
+SvxBoundArgs::SvxBoundArgs( TextRanger* pRanger, std::deque<long>* pLong,
     const Range& rRange )
     : pLongArr(pLong)
     , pTextRanger(pRanger)
@@ -489,7 +489,7 @@ void SvxBoundArgs::Concat( const tools::PolyPolygon* pPoly )
 {
     SetConcat( true );
     DBG_ASSERT( pPoly, "Nothing to do?" );
-    LongDqPtr pOld = pLongArr;
+    std::deque<long>* pOld = pLongArr;
     pLongArr = new std::deque<long>;
     aBoolArr.clear();
     bInner = false;
@@ -631,7 +631,7 @@ void SvxBoundArgs::NoteUpLow( long nA, const sal_uInt8 nArea )
     }
 }
 
-LongDqPtr TextRanger::GetTextRanges( const Range& rRange )
+std::deque<long>* TextRanger::GetTextRanges( const Range& rRange )
 {
     DBG_ASSERT( rRange.Min() || rRange.Max(), "Zero-Range not allowed, Bye Bye" );
     //Can we find the result we need in the cache?
@@ -641,23 +641,23 @@ LongDqPtr TextRanger::GetTextRanges( const Range& rRange )
             return &(elem.results);
     }
     //Calculate a new result
-    RangeCache rngCache(rRange);
+    RangeCacheItem rngCache(rRange);
     SvxBoundArgs aArg( this, &(rngCache.results), rRange );
-    aArg.Calc( *mpPolyPolygon );
+    aArg.Calc( maPolyPolygon );
     if( mpLinePolyPolygon )
         aArg.Concat( mpLinePolyPolygon.get() );
     //Add new result to the cache
-    mRangeCache.push_back(rngCache);
+    mRangeCache.push_back(std::move(rngCache));
     if (mRangeCache.size() > nCacheSize)
         mRangeCache.pop_front();
     return &(mRangeCache.back().results);
 }
 
-const tools::Rectangle& TextRanger::GetBoundRect_()
+const tools::Rectangle& TextRanger::GetBoundRect_() const
 {
-    DBG_ASSERT( nullptr == pBound, "Don't call twice." );
-    pBound.reset( new tools::Rectangle( mpPolyPolygon->GetBoundRect() ) );
-    return *pBound;
+    DBG_ASSERT( !mxBound, "Don't call twice." );
+    mxBound = maPolyPolygon.GetBoundRect();
+    return *mxBound;
 }
 
 

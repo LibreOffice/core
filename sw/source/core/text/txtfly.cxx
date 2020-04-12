@@ -272,7 +272,7 @@ SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
 
     Range aRange( std::min( nTmpTop, nTmpBottom ), std::max( nTmpTop, nTmpBottom ) );
 
-    LongDqPtr pTmp = mvItems[0].mxTextRanger->GetTextRanges( aRange );
+    std::deque<long>* pTmp = mvItems[0].mxTextRanger->GetTextRanges( aRange );
 
     const size_t nCount = pTmp->size();
     if( 0 != nCount )
