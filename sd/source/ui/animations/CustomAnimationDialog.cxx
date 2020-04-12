@@ -36,6 +36,7 @@
 
 #include <memory>
 
+#include <comphelper/lok.hxx>
 #include <i18nutil/unicode.hxx>
 #include <unotools/pathoptions.hxx>
 #include <vcl/tabctrl.hxx>
@@ -1981,8 +1982,18 @@ void CustomAnimationEffectTabPage::updateControlStates()
         mxFTTextDelay->set_sensitive( nPos != 0 );
     }
 
-    nPos = mxLBSound->get_active();
-    mxPBSoundPreview->set_sensitive( nPos >= 2 );
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        mxFTSound->hide();
+        mxLBSound->hide();
+        mxPBSoundPreview->hide();
+    }
+    else
+    {
+        nPos = mxLBSound->get_active();
+        mxPBSoundPreview->set_sensitive( nPos >= 2 );
+    }
+
 }
 
 IMPL_LINK(CustomAnimationEffectTabPage, implClickHdl, weld::Button&, rBtn, void)
