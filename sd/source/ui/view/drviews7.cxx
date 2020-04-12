@@ -1802,15 +1802,25 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
 
             case SID_ATTR_PAGE_GRADIENT:
             {
-                XFillGradientItem aGradientItem( pArgs->Get( XATTR_FILLGRADIENT ) );
+                if (SfxItemState::SET == pArgs->GetItemState(SID_FILL_GRADIENT_JSON, false, &pItem))
+                {
+                    const SfxStringItem* pJSON = static_cast<const SfxStringItem*>(pItem);
+                    XFillGradientItem aGradient( XGradient::fromJSON(pJSON->GetValue()) );
+                    rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_GRADIENT ) );
+                    rPageProperties.PutItem( aGradient );
+                }
+                else
+                {
+                    XFillGradientItem aGradientItem( pArgs->Get( XATTR_FILLGRADIENT ) );
 
-                // MigrateItemSet guarantees unique gradient names
-                SfxItemSet aMigrateSet( mpDrawView->GetModel()->GetItemPool(), svl::Items<XATTR_FILLGRADIENT, XATTR_FILLGRADIENT>{} );
-                aMigrateSet.Put( aGradientItem );
-                SdrModel::MigrateItemSet( &aMigrateSet, pTempSet.get(), mpDrawView->GetModel() );
+                    // MigrateItemSet guarantees unique gradient names
+                    SfxItemSet aMigrateSet( mpDrawView->GetModel()->GetItemPool(), svl::Items<XATTR_FILLGRADIENT, XATTR_FILLGRADIENT>{} );
+                    aMigrateSet.Put( aGradientItem );
+                    SdrModel::MigrateItemSet( &aMigrateSet, pTempSet.get(), mpDrawView->GetModel() );
 
-                rPageProperties.PutItemSet( *pTempSet );
-                rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_GRADIENT ) );
+                    rPageProperties.PutItemSet( *pTempSet );
+                    rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_GRADIENT ) );
+                }
             }
             break;
 
