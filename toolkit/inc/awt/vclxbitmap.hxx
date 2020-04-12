@@ -45,7 +45,7 @@ class VCLXBitmap final : public cppu::WeakImplHelper<
 
 
 public:
-    // linine constructors
+    // inline constructors
     VCLXBitmap() : maMutex(), maBitmap() {}
     VCLXBitmap(const BitmapEx& rBitmapEx) : maMutex(), maBitmap(rBitmapEx) {}
 
