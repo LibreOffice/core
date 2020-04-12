@@ -581,7 +581,7 @@ namespace drawinglayer::processor2d
                                 {
                                     // single transparent tools::PolyPolygon identified, use directly
                                     const primitive2d::PolyPolygonColorPrimitive2D* pPoPoColor = static_cast< const primitive2d::PolyPolygonColorPrimitive2D* >(pBasePrimitive);
-                                    OSL_ENSURE(pPoPoColor, "OOps, PrimitiveID and PrimitiveType do not match (!)");
+                                    SAL_WARN_IF(!pPoPoColor, "drawinglayer", "OOps, PrimitiveID and PrimitiveType do not match (!)");
                                     bDrawTransparentUsed = true;
                                     tryDrawPolyPolygonColorPrimitive2DDirect(*pPoPoColor, rUniTransparenceCandidate.getTransparence());
                                     break;
@@ -590,7 +590,7 @@ namespace drawinglayer::processor2d
                                 {
                                     // single transparent PolygonHairlinePrimitive2D identified, use directly
                                     const primitive2d::PolygonHairlinePrimitive2D* pPoHair = static_cast< const primitive2d::PolygonHairlinePrimitive2D* >(pBasePrimitive);
-                                    OSL_ENSURE(pPoHair, "OOps, PrimitiveID and PrimitiveType do not match (!)");
+                                    SAL_WARN_IF(!pPoHair, "drawinglayer", "OOps, PrimitiveID and PrimitiveType do not match (!)");
 
                                     // do no tallow by default - problem is that self-overlapping parts of this geometry will
                                     // not be in an all-same transparency but will already alpha-cover themselves with blending.
@@ -604,7 +604,7 @@ namespace drawinglayer::processor2d
                                 {
                                     // single transparent PolygonStrokePrimitive2D identified, use directly
                                     const primitive2d::PolygonStrokePrimitive2D* pPoStroke = static_cast< const primitive2d::PolygonStrokePrimitive2D* >(pBasePrimitive);
-                                    OSL_ENSURE(pPoStroke, "OOps, PrimitiveID and PrimitiveType do not match (!)");
+                                    SAL_WARN_IF(!pPoStroke, "drawinglayer", "OOps, PrimitiveID and PrimitiveType do not match (!)");
 
                                     // do no tallow by default - problem is that self-overlapping parts of this geometry will
                                     // not be in an all-same transparency but will already alpha-cover themselves with blending.
