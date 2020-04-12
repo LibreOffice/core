@@ -704,6 +704,9 @@ void SlideTransitionPane::updateControls()
         mpPB_PLAY->Hide();
         mpCB_AUTO_PREVIEW->Check(false);
         mpCB_AUTO_PREVIEW->Hide();
+        mpFT_SOUND->Hide();
+        mpLB_SOUND->Hide();
+        mpCB_LOOP_SOUND->Hide();
     }
     else
     {
