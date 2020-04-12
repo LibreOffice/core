@@ -212,6 +212,7 @@ public:
     void testOpenDocumentAsReadOnly();
     void testKeepSettingsOfBlankRows();
 
+    void testTdf105272();
     void testTdf118990();
     void testTdf121612();
     void testPivotCacheAfterExportXLSX();
@@ -348,6 +349,7 @@ public:
     CPPUNIT_TEST(testOpenDocumentAsReadOnly);
     CPPUNIT_TEST(testKeepSettingsOfBlankRows);
 
+    CPPUNIT_TEST(testTdf105272);
     CPPUNIT_TEST(testTdf118990);
     CPPUNIT_TEST(testTdf121612);
     CPPUNIT_TEST(testPivotCacheAfterExportXLSX);
@@ -4295,6 +4297,21 @@ void ScExportTest::testKeepSettingsOfBlankRows()
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row", 2);
 
     xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf105272()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf105272.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+    xDocSh = saveAndReload(xDocSh.get(), FORMAT_XLSX);
+    ScDocument& rDoc = xDocSh->GetDocument();
+    //without the fix in place,it would fail
+    //Expected: Table1[[#This Row],[Total]]/Table1[[#This Row],['# Athletes]]
+    //Actual  : table1[[#this row],[total]]/table1[[#this row],['# athletes]]
+
+    ASSERT_FORMULA_EQUAL(rDoc, ScAddress(7, 3, 0),
+                         "Table1[[#This Row],[Total]]/Table1[[#This Row],['# Athletes]]",
+                         "Wrong formula");
 }
 
 void ScExportTest::testTdf118990()
