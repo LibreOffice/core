@@ -204,6 +204,7 @@ public:
     void testHeaderImageODS();
 
     void testTdf88657ODS();
+    void testTdf41722();
     void testEscapeCharInNumberFormatXLSX();
     void testNatNumInNumberFormatXLSX();
     void testExponentWithoutSignFormatXLSX();
@@ -343,6 +344,7 @@ public:
     CPPUNIT_TEST(testHeaderImageODS);
 
     CPPUNIT_TEST(testTdf88657ODS);
+    CPPUNIT_TEST(testTdf41722);
     CPPUNIT_TEST(testEscapeCharInNumberFormatXLSX);
     CPPUNIT_TEST(testNatNumInNumberFormatXLSX);
     CPPUNIT_TEST(testExponentWithoutSignFormatXLSX);
@@ -4149,6 +4151,21 @@ void ScExportTest::testConditionalFormatOriginXLSX()
     // tdf#124953 : The range-list is B3:C6 F1:G2, origin address in the formula should be B1, not B3.
     OUString aFormula = getXPathContent(pDoc, "//x:conditionalFormatting/x:cfRule/x:formula");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong origin address in formula", OUString("NOT(ISERROR(SEARCH(\"BAC\",B1)))"), aFormula);
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf41722()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf41722.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "//x:conditionalFormatting/x:cfRule[1]", "operator", "containsText");
+    assertXPath(pDoc, "//x:conditionalFormatting/x:cfRule[2]", "operator", "containsText");
+    assertXPath(pDoc, "//x:conditionalFormatting/x:cfRule[3]", "operator", "containsText");
 
     xDocSh->DoClose();
 }
