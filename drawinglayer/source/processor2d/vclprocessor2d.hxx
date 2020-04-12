@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_SOURCE_PROCESSOR2D_VCLPROCESSOR2D_HXX
-#define INCLUDED_DRAWINGLAYER_SOURCE_PROCESSOR2D_VCLPROCESSOR2D_HXX
+#pragma once
 
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -26,11 +25,9 @@
 #include <svtools/optionsdrawinglayer.hxx>
 #include <vcl/vclptr.hxx>
 
-
-// predefines
 class OutputDevice;
 
-namespace drawinglayer { namespace primitive2d {
+namespace drawinglayer::primitive2d {
     class TextSimplePortionPrimitive2D;
     class PolygonHairlinePrimitive2D;
     class BitmapPrimitive2D;
@@ -52,13 +49,10 @@ namespace drawinglayer { namespace primitive2d {
     class ObjectInfoPrimitive2D;
     class SvgLinearAtomPrimitive2D;
     class SvgRadialAtomPrimitive2D;
-}}
+}
 
-
-namespace drawinglayer
+namespace drawinglayer::processor2d
 {
-    namespace processor2d
-    {
         /** VclProcessor2D class
 
             This processor is the base class for VCL-Based processors. It has no
@@ -125,10 +119,7 @@ namespace drawinglayer
             // access to currently used ObjectInfoPrimitive2D
             const primitive2d::ObjectInfoPrimitive2D* getObjectInfoPrimitive2D() const { return mpObjectInfoPrimitive2D; }
         };
-    } // end of namespace processor2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::processor2d
 
-
-#endif // INCLUDED_DRAWINGLAYER_SOURCE_PROCESSOR2D_VCLPROCESSOR2D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
