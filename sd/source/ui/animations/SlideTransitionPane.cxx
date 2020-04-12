@@ -656,6 +656,9 @@ void SlideTransitionPane::updateControls()
         mxPB_PLAY->hide();
         mxCB_AUTO_PREVIEW->set_active(false);
         mxCB_AUTO_PREVIEW->hide();
+        mxFT_SOUND->hide();
+        mxLB_SOUND->hide();
+        mxCB_LOOP_SOUND->hide();
     }
     else
     {
