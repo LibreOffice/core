@@ -140,6 +140,7 @@ public:
     void testTdf114848();
     void testTdf68759();
     void testTdf127901();
+    void testTdf48735();
     void testTdf90626();
     void testTdf107608();
     void testTdf111786();
@@ -249,6 +250,7 @@ public:
     CPPUNIT_TEST(testTdf114848);
     CPPUNIT_TEST(testTdf68759);
     CPPUNIT_TEST(testTdf127901);
+    CPPUNIT_TEST(testTdf48735);
     CPPUNIT_TEST(testTdf90626);
     CPPUNIT_TEST(testTdf107608);
     CPPUNIT_TEST(testTdf111786);
@@ -1666,6 +1668,20 @@ void SdOOXMLExportTest2::testTdf127901()
     xmlDocPtr pXmlDocContent3 = parseExport(tempFile, "ppt/slides/slide3.xml");
     assertXPath(pXmlDocContent3, "/p:sld/p:cSld/p:spTree/p:pic/p:blipFill/a:blip/a:biLevel", "thresh", "50000");
 
+}
+
+void SdOOXMLExportTest2::testTdf48735()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/tdf48735.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocPtr pXmlDocContent1 = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:spTree/p:pic/p:blipFill/a:srcRect", "b", "23627");
+    assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:spTree/p:pic/p:blipFill/a:srcRect", "l", "23627");
+    assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:spTree/p:pic/p:blipFill/a:srcRect", "r", "23627");
+    assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:spTree/p:pic/p:blipFill/a:srcRect", "t", "18842");
 }
 
 void SdOOXMLExportTest2::testTdf90626()
