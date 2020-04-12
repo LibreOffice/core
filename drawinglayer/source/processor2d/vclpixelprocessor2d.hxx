@@ -17,18 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_SOURCE_PROCESSOR2D_VCLPIXELPROCESSOR2D_HXX
-#define INCLUDED_DRAWINGLAYER_SOURCE_PROCESSOR2D_VCLPIXELPROCESSOR2D_HXX
+#pragma once
 
 #include "vclprocessor2d.hxx"
 #include <vcl/outdev.hxx>
 
 #include <memory>
 
-
-// predefines
-
-namespace drawinglayer { namespace primitive2d {
+namespace drawinglayer::primitive2d {
     class PolyPolygonColorPrimitive2D;
     class PolygonHairlinePrimitive2D;
     class PolygonStrokePrimitive2D;
@@ -42,12 +38,10 @@ namespace drawinglayer { namespace primitive2d {
     class FillHatchPrimitive2D;
     class BackgroundColorPrimitive2D;
     class BorderLinePrimitive2D;
-}}
+}
 
-namespace drawinglayer
+namespace drawinglayer::processor2d
 {
-    namespace processor2d
-    {
         /** VclPixelProcessor2D class
 
             This processor derived from VclProcessor2D is the base class for rendering
@@ -92,10 +86,7 @@ namespace drawinglayer
                 OutputDevice& rOutDev);
             virtual ~VclPixelProcessor2D() override;
         };
-    } // end of namespace processor2d
-} // end of namespace drawinglayer
+} // end of namespace drawinglayer::processor2d
 
-
-#endif // INCLUDED_DRAWINGLAYER_SOURCE_PROCESSOR2D_VCLPIXELPROCESSOR2D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
