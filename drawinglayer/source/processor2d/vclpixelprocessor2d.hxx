@@ -39,6 +39,7 @@ class PolygonStrokePrimitive2D;
 class FillHatchPrimitive2D;
 class BackgroundColorPrimitive2D;
 class BorderLinePrimitive2D;
+class GlowPrimitive2D;
 }
 
 namespace drawinglayer::processor2d
@@ -93,6 +94,7 @@ class VclPixelProcessor2D final : public VclProcessor2D
     processBorderLinePrimitive2D(const drawinglayer::primitive2d::BorderLinePrimitive2D& rBorder);
     void processInvertPrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
     void processMetaFilePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
+    void processGlowPrimitive2D(const primitive2d::GlowPrimitive2D& rCandidate);
 
 public:
     /// constructor/destructor
