@@ -18,6 +18,7 @@
  */
 
 #include <config_feature_desktop.h>
+#include <config_options.h>
 #include <sal/log.hxx>
 #include <osl/module.hxx>
 #include <tools/debug.hxx>
@@ -390,9 +391,20 @@ IMPL_STATIC_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBas
 #else
 
 #ifndef DISABLE_DYNLOADING
-    // load basctl module
     osl::Module aMod;
-    aMod.loadRelative(&thisModule, SVLIBRARY("basctl"));
+    // load basctl module
+    if (!aMod.loadRelative(
+            &thisModule,
+#if ENABLE_MERGELIBS
+            SVLIBRARY("merged")
+#else
+            SVLIBRARY("basctl")
+#endif
+        ))
+    {
+        SAL_WARN("sfx.appl", "cannot load basctl");
+        return false;
+    }
 
     // get symbol
     basicide_handle_basic_error pSymbol = reinterpret_cast<basicide_handle_basic_error>(aMod.getFunctionSymbol("basicide_handle_basic_error"));
@@ -483,9 +495,20 @@ void SfxApplication::MacroOrganizer(weld::Window* pParent, sal_Int16 nTabId)
 #else
 
 #ifndef DISABLE_DYNLOADING
-    // load basctl module
     osl::Module aMod;
-    aMod.loadRelative(&thisModule, SVLIBRARY("basctl"));
+    // load basctl module
+    if (!aMod.loadRelative(
+            &thisModule,
+#if ENABLE_MERGELIBS
+            SVLIBRARY("merged")
+#else
+            SVLIBRARY("basctl")
+#endif
+        ))
+    {
+        SAL_WARN("sfx.appl", "cannot load basctl");
+        return;
+    }
 
     // get symbol
     basicide_macro_organizer pSymbol = reinterpret_cast<basicide_macro_organizer>(aMod.getFunctionSymbol("basicide_macro_organizer"));
