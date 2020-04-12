@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.22.2 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
+  <object class="GtkAdjustment" id="adjustmentANGLE">
+    <property name="upper">360</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkGrid" id="PicturePage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -282,7 +287,8 @@
                       <object class="GtkSpinButton" id="NF_ANGLE">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" context="picturepage">0,00</property>
+                        <property name="activates_default">True</property>
+                        <property name="adjustment">adjustmentANGLE</property>
                         <property name="digits">2</property>
                         <property name="wrap">True</property>
                       </object>
