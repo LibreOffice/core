@@ -18,7 +18,6 @@
  */
 
 #include <config_features.h>
-#include <config_options.h>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/drawing/ModuleDispatcher.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -68,7 +67,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/file.hxx>
-#include <osl/module.hxx>
 #include <vcl/EnumContext.hxx>
 
 #include <unotools/moduleoptions.hxx>
@@ -110,6 +108,8 @@
 #include <memory>
 
 #include <openuriexternally.hxx>
+
+#include "getbasctlfunction.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -1206,8 +1206,6 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
 
 typedef rtl_uString* (*basicide_choose_macro)(void*, void*, void*, sal_Bool);
 
-extern "C" { static void thisModule() {} }
-
 #else
 
 extern "C" rtl_uString* basicide_choose_macro(void*, void*, void*, sal_Bool);
@@ -1217,28 +1215,9 @@ extern "C" rtl_uString* basicide_choose_macro(void*, void*, void*, sal_Bool);
 static OUString ChooseMacro(weld::Window* pParent, const Reference<XModel>& rxLimitToDocument, const Reference<XFrame>& xDocFrame, bool bChooseOnly)
 {
 #ifndef DISABLE_DYNLOADING
-    osl::Module aMod;
-
-    // load basctl module
-    if (!aMod.loadRelative(
-            &thisModule,
-#if ENABLE_MERGELIBS
-            SVLIBRARY("merged")
-#else
-            SVLIBRARY("basctl")
-#endif
-        ))
-    {
-        SAL_WARN("sfx.appl", "cannot load basctl");
-        return "";
-    }
-
-    // get symbol
-    basicide_choose_macro pSymbol = reinterpret_cast<basicide_choose_macro>(aMod.getFunctionSymbol("basicide_choose_macro"));
-    SAL_WARN_IF(!pSymbol, "sfx.appl", "SfxApplication::MacroOrganizer, no symbol!");
+    basicide_choose_macro pSymbol = reinterpret_cast<basicide_choose_macro>(sfx2::getBasctlFunction("basicide_choose_macro"));
     if (!pSymbol)
         return OUString();
-    aMod.release();
 #else
 #define pSymbol basicide_choose_macro
 #endif

@@ -98,6 +98,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/appl/fileobj \
     sfx2/source/appl/flatpak \
     sfx2/source/appl/fwkhelper \
+    sfx2/source/appl/getbasctlfunction \
     sfx2/source/appl/helpdispatch \
     sfx2/source/appl/helpinterceptor \
     sfx2/source/appl/impldde \

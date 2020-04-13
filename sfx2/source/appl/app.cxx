@@ -18,9 +18,7 @@
  */
 
 #include <config_feature_desktop.h>
-#include <config_options.h>
 #include <sal/log.hxx>
-#include <osl/module.hxx>
 #include <tools/debug.hxx>
 
 #include <sfx2/app.hxx>
@@ -60,6 +58,8 @@
 #include <memory>
 #include <framework/sfxhelperfunctions.hxx>
 #include <fwkhelper.hxx>
+
+#include "getbasctlfunction.hxx"
 
 using namespace ::com::sun::star;
 
@@ -372,8 +372,6 @@ void SfxApplication::Invalidate( sal_uInt16 nId )
 typedef long (*basicide_handle_basic_error)(void const *);
 typedef void (*basicide_macro_organizer)(void *, sal_Int16);
 
-extern "C" { static void thisModule() {} }
-
 #else
 
 extern "C" long basicide_handle_basic_error(void const*);
@@ -391,25 +389,7 @@ IMPL_STATIC_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBas
 #else
 
 #ifndef DISABLE_DYNLOADING
-    osl::Module aMod;
-    // load basctl module
-    if (!aMod.loadRelative(
-            &thisModule,
-#if ENABLE_MERGELIBS
-            SVLIBRARY("merged")
-#else
-            SVLIBRARY("basctl")
-#endif
-        ))
-    {
-        SAL_WARN("sfx.appl", "cannot load basctl");
-        return false;
-    }
-
-    // get symbol
-    basicide_handle_basic_error pSymbol = reinterpret_cast<basicide_handle_basic_error>(aMod.getFunctionSymbol("basicide_handle_basic_error"));
-
-    aMod.release();
+    basicide_handle_basic_error pSymbol = reinterpret_cast<basicide_handle_basic_error>(sfx2::getBasctlFunction("basicide_handle_basic_error"));
 
     // call basicide_handle_basic_error in basctl
     bool bRet = pSymbol && pSymbol( pStarBasic );
@@ -495,27 +475,8 @@ void SfxApplication::MacroOrganizer(weld::Window* pParent, sal_Int16 nTabId)
 #else
 
 #ifndef DISABLE_DYNLOADING
-    osl::Module aMod;
-    // load basctl module
-    if (!aMod.loadRelative(
-            &thisModule,
-#if ENABLE_MERGELIBS
-            SVLIBRARY("merged")
-#else
-            SVLIBRARY("basctl")
-#endif
-        ))
-    {
-        SAL_WARN("sfx.appl", "cannot load basctl");
-        return;
-    }
+    basicide_macro_organizer pSymbol = reinterpret_cast<basicide_macro_organizer>(sfx2::getBasctlFunction("basicide_macro_organizer"));
 
-    // get symbol
-    basicide_macro_organizer pSymbol = reinterpret_cast<basicide_macro_organizer>(aMod.getFunctionSymbol("basicide_macro_organizer"));
-
-    aMod.release();
-
-    SAL_WARN_IF(!pSymbol, "sfx.appl", "SfxApplication::MacroOrganizer, no symbol!");
     if (!pSymbol)
         return;
 
