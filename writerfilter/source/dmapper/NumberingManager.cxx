@@ -42,6 +42,7 @@
 #include <tools/diagnose_ex.h>
 #include <comphelper/sequence.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/string.hxx>
 
 using namespace com::sun::star;
 
@@ -148,55 +149,6 @@ void ListLevel::SetParaStyle( const tools::SvRef< StyleSheetEntry >& pStyle )
         && styleId.match( "Heading ", 0 )
         && styleId[ RTL_CONSTASCII_LENGTH( "Heading " ) ] >= '1'
         && styleId[ RTL_CONSTASCII_LENGTH( "Heading " ) ] <= '9' );
-}
-
-sal_Int16 ListLevel::GetParentNumbering( const OUString& sText, sal_Int16 nLevel,
-        OUString& rPrefix, OUString& rSuffix )
-{
-    sal_Int16 nParentNumbering = 1;
-
-    //now parse the text to find %n from %1 to %nLevel+1
-    //everything before the first % and the last %x is prefix and suffix
-    OUString sLevelText( sText );
-    sal_Int32 nCurrentIndex = 0;
-    sal_Int32 nFound = sLevelText.indexOf( '%', nCurrentIndex );
-    if( nFound > 0 )
-    {
-        rPrefix = sLevelText.copy( 0, nFound );
-        sLevelText = sLevelText.copy( nFound );
-    }
-    sal_Int32 nMinLevel = nLevel;
-    //now the text should either be empty or start with %
-    nFound = sLevelText.getLength( ) > 1 ? 0 : -1;
-    while( nFound >= 0 )
-    {
-        if( sLevelText.getLength() > 1 )
-        {
-            sal_Unicode cLevel = sLevelText[1];
-            if( cLevel >= '1' && cLevel <= '9' )
-            {
-                if( cLevel - '1' < nMinLevel )
-                    nMinLevel = cLevel - '1';
-                //remove first char - next char is removed later
-                sLevelText = sLevelText.copy( 1 );
-            }
-        }
-        //remove old '%' or number
-        sLevelText = sLevelText.copy( 1 );
-        nCurrentIndex = 0;
-        nFound = sLevelText.indexOf( '%', nCurrentIndex );
-        //remove the text before the next %
-        if(nFound > 0)
-            sLevelText = sLevelText.copy( nFound -1 );
-    }
-    if( nMinLevel < nLevel )
-    {
-        nParentNumbering = sal_Int16( nLevel - nMinLevel + 1);
-    }
-
-    rSuffix = sLevelText;
-
-    return nParentNumbering;
 }
 
 uno::Sequence<beans::PropertyValue> ListLevel::GetProperties(bool bDefaults)
@@ -598,19 +550,11 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                 if (pLevel.get() && !pLevel->GetBulletChar().isEmpty())
                     sText = pLevel->GetBulletChar( );
 
-                OUString sPrefix;
-                OUString sSuffix;
-                OUString& rPrefix = sPrefix;
-                OUString& rSuffix = sSuffix;
-                sal_Int16 nParentNum = ListLevel::GetParentNumbering(
-                       sText, nLevel, rPrefix, rSuffix );
-
-                aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_PREFIX), rPrefix));
-
                 if (sText.isEmpty())
                 {
                     // Empty <w:lvlText>? Then put a Unicode "zero width space" as a suffix, so LabelFollowedBy is still shown, as in Word.
                     // With empty suffix, Writer does not show LabelFollowedBy, either.
+                    OUString sSuffix;
                     auto it = std::find_if(aLvlProps.begin(), aLvlProps.end(), [](const beans::PropertyValue& rValue) { return rValue.Name == "NumberingType"; });
                     if (it != aLvlProps.end())
                     {
@@ -627,12 +571,19 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                         }
 
                         if (bLabelFollowedBy && nNumberFormat == style::NumberingType::NUMBER_NONE)
-                            rSuffix = OUString(u'\x200B');
+                            sSuffix = OUString(u'\x200B');
                     }
+                    aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SUFFIX), sSuffix));
                 }
+                else
+                {
+                    aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_LIST_FORMAT), sText));
 
-                aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SUFFIX), rSuffix));
-                aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_PARENT_NUMBERING), nParentNum));
+                    // Total count of replacement holders is determining amount of required parent numbering to include
+                    // TODO: not sure how "%" symbol is escaped. This is not supported yet
+                    sal_Int16 nParentNum = comphelper::string::getTokenCount(sText, '%');
+                    aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_PARENT_NUMBERING), nParentNum));
+                }
 
                 aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_POSITION_AND_SPACE_MODE), sal_Int16(text::PositionAndSpaceMode::LABEL_ALIGNMENT)));
 

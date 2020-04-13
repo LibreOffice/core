@@ -858,25 +858,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf65955_2, "tdf65955_2.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testChtOutlineNumberingOoxml, "chtoutline.docx")
 {
-    const sal_Unicode aExpectedPrefix[2] = { 0x7b2c, 0x0020 };
-    const sal_Unicode aExpectedSuffix[2] = { 0x0020, 0x7ae0 };
-    uno::Reference< text::XChapterNumberingSupplier > xChapterNumberingSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference< container::XIndexAccess> xLevels(xChapterNumberingSupplier->getChapterNumberingRules());
-    uno::Sequence<beans::PropertyValue> aProps;
-    xLevels->getByIndex(0) >>= aProps; // 1st level
+    const sal_Unicode aExpectedNumbering[] = { 0x7b2c, ' ', '1', ' ', 0x7ae0 };
 
-    OUString aSuffix,aPrefix;
-    for (int i = 0; i < aProps.getLength(); ++i)
-    {
-        const beans::PropertyValue& rProp = aProps[i];
-
-        if (rProp.Name == "Suffix")
-            aSuffix = rProp.Value.get<OUString>();
-        if (rProp.Name == "Prefix")
-            aPrefix = rProp.Value.get<OUString>();
-    }
-    CPPUNIT_ASSERT_EQUAL(OUString(aExpectedPrefix,SAL_N_ELEMENTS(aExpectedPrefix)), aPrefix);
-    CPPUNIT_ASSERT_EQUAL(OUString(aExpectedSuffix,SAL_N_ELEMENTS(aExpectedSuffix)), aSuffix);
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(aExpectedNumbering,SAL_N_ELEMENTS(aExpectedNumbering)),
+        getProperty<OUString>(xPara, "ListLabelString"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(mathtype, "mathtype.docx")

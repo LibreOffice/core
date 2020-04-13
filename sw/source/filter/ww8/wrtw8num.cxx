@@ -490,7 +490,13 @@ void MSWordExportBase::NumberingLevel(
     const vcl::Font* pBulletFont=nullptr;
     rtl_TextEncoding eChrSet=0;
     FontFamily eFamily=FAMILY_DECORATIVE;
-    if (SVX_NUM_CHAR_SPECIAL == rFormat.GetNumberingType() ||
+
+    if (!rRule.Get(nLvl).GetListFormat().isEmpty())
+    {
+        // We have stored list format, use it
+        sNumStr = rRule.Get(nLvl).GetListFormat();
+    }
+    else if (SVX_NUM_CHAR_SPECIAL == rFormat.GetNumberingType() ||
         SVX_NUM_BITMAP == rFormat.GetNumberingType())
     {
         sNumStr = OUString(rFormat.GetBulletChar());

@@ -88,11 +88,6 @@ public:
     bool HasValues() const;
 
     // UNO mapping functions
-
-    // rPrefix and rSuffix are out parameters
-    static sal_Int16 GetParentNumbering( const OUString& sText, sal_Int16 nLevel,
-        OUString& rPrefix, OUString& rSuffix );
-
     css::uno::Sequence<css::beans::PropertyValue> GetProperties(bool bDefaults);
 
     css::uno::Sequence<css::beans::PropertyValue> GetCharStyleProperties();
