@@ -218,6 +218,7 @@ public:
     void testTdf105272();
     void testTdf118990();
     void testTdf121612();
+    void testTdf112936();
     void testPivotCacheAfterExportXLSX();
     void testTdf114969XLSX();
     void testTdf115192XLSX();
@@ -358,6 +359,7 @@ public:
     CPPUNIT_TEST(testTdf105272);
     CPPUNIT_TEST(testTdf118990);
     CPPUNIT_TEST(testTdf121612);
+    CPPUNIT_TEST(testTdf112936);
     CPPUNIT_TEST(testPivotCacheAfterExportXLSX);
     CPPUNIT_TEST(testTdf114969XLSX);
     CPPUNIT_TEST(testTdf115192XLSX);
@@ -4399,6 +4401,20 @@ void ScExportTest::testTdf121612()
     ScDPCollection* pDPColl = rDoc.GetDPCollection();
     CPPUNIT_ASSERT(pDPColl);
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDPColl->GetCount());
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf112936()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf112936.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/pivotCache/pivotCacheDefinition1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "//x:pivotCacheDefinition", "recordCount", "4");
+    assertXPath(pDoc, "//x:pivotCacheDefinition", "createdVersion", "3");
 
     xDocSh->DoClose();
 }
