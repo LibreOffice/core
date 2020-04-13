@@ -75,6 +75,7 @@ echo $INSTDIR/$LIBO_LIB_FOLDER/lib*.a \
      $WORKDIR/UnpackedTarball/lcms2/src/.libs/*.a \
      $WORKDIR/UnpackedTarball/libabw/src/lib/.libs/*.a \
      $WORKDIR/UnpackedTarball/libcdr/src/lib/.libs/*.a \
+     $WORKDIR/UnpackedTarball/libepubgen/src/lib/.libs/*.a \
      $WORKDIR/UnpackedTarball/libexttextcat/src/.libs/*.a \
      $WORKDIR/UnpackedTarball/libmspub/src/lib/.libs/*.a \
      $WORKDIR/UnpackedTarball/libmwaw/src/lib/.libs/*.a \
