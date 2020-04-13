@@ -830,7 +830,7 @@ bool SalGraphics::DrawNativeControl( ControlType nType, ControlPart nPart, const
 {
     bool bRet = false;
     tools::Rectangle aControlRegion(rControlRegion);
-    if (aControlRegion.IsEmpty())
+    if (aControlRegion.IsEmpty() || aControlRegion.GetWidth() <= 0 || aControlRegion.GetHeight() <= 0)
         return bRet;
 
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || (pOutDev && pOutDev->IsRTLEnabled()) )
