@@ -52,10 +52,9 @@ BitmapEx BitmapFastScaleFilter::execute(BitmapEx const& rBitmapEx) const
             if (pWriteAcc)
             {
                 const long nScanlineSize = pWriteAcc->GetScanlineSize();
-                const long nNewWidth1 = nNewWidth - 1;
                 const long nNewHeight1 = nNewHeight - 1;
 
-                if (nNewWidth1 && nNewHeight1)
+                if (nNewWidth && nNewHeight)
                 {
                     const double nWidth = pReadAcc->Width();
                     const double nHeight = pReadAcc->Height();
