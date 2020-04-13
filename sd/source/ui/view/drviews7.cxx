@@ -1756,6 +1756,7 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
         SdrPageProperties& rPageProperties = pPage->getSdrPageProperties();
         const SfxItemSet &aPageItemSet = rPageProperties.GetItemSet();
         std::unique_ptr<SfxItemSet> pTempSet = aPageItemSet.Clone(false, &mpDrawView->GetModel()->GetItemPool());
+        const SfxPoolItem* pItem = nullptr;
 
         rPageProperties.ClearItem(XATTR_FILLSTYLE);
         rPageProperties.ClearItem(XATTR_FILLGRADIENT);
@@ -1776,9 +1777,28 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
 
             case SID_ATTR_PAGE_COLOR:
             {
-                XFillColorItem aColorItem( pArgs->Get( XATTR_FILLCOLOR ) );
                 rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_SOLID ) );
-                rPageProperties.PutItem( aColorItem );
+                if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pItem))
+                {
+                    Color aColor;
+                    OUString sColor;
+
+                    sColor = static_cast<const SfxStringItem*>(pItem)->GetValue();
+
+                    if (sColor == "transparent")
+                        aColor = COL_TRANSPARENT;
+                    else
+                        aColor = Color(sColor.toInt32(16));
+
+                    XFillColorItem aColorItem(OUString(), aColor);
+
+                    rPageProperties.PutItem( aColorItem );
+                }
+                else
+                {
+                    XFillColorItem aColorItem( pArgs->Get( XATTR_FILLCOLOR ) );
+                    rPageProperties.PutItem( aColorItem );
+                }
             }
             break;
 
