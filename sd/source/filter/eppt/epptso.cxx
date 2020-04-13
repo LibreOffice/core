@@ -1236,7 +1236,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
             if ( nTextRulerAtomFlags & 4 )
             {
                 pRuleOut->WriteUInt16( nTabCount );
-                for ( const css::style::TabStop& rTabStop : std::as_const(pPara->maTabStop) )
+                for ( const css::style::TabStop& rTabStop : std::as_const(aTextObj.GetParagraph(0)->maTabStop) )
                 {
                     sal_uInt16 nPosition = static_cast<sal_uInt16>( ( rTabStop.Position / 4.40972 ) + nTextOfs );
                     sal_uInt16 nType;
