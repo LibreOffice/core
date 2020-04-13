@@ -16,9 +16,7 @@
 #include <comphelper/seqstream.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/stream.hxx>
-
-#include <com/sun/star/graphic/SvgTools.hpp>
-#include <com/sun/star/graphic/XSvgParser.hpp>
+#include <vcl/svgparser.hxx>
 
 #include <basegfx/DrawCommands.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -64,7 +62,7 @@ void TestParsing::testSimpleRectangle()
     CPPUNIT_ASSERT(xStream.is());
 
     uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
-    const uno::Reference<graphic::XSvgParser> xSvgParser = graphic::SvgTools::create(xContext);
+    std::unique_ptr<vcl::AbstractSvgParser> xSvgParser = vcl::loadSvgParser();
 
     uno::Any aAny = xSvgParser->getDrawCommands(xStream, aPath);
     CPPUNIT_ASSERT(aAny.has<sal_uInt64>());
@@ -97,7 +95,7 @@ void TestParsing::testPath()
     CPPUNIT_ASSERT(xStream.is());
 
     uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
-    const uno::Reference<graphic::XSvgParser> xSvgParser = graphic::SvgTools::create(xContext);
+    std::unique_ptr<vcl::AbstractSvgParser> xSvgParser = vcl::loadSvgParser();
 
     uno::Any aAny = xSvgParser->getDrawCommands(xStream, aPath);
     CPPUNIT_ASSERT(aAny.has<sal_uInt64>());

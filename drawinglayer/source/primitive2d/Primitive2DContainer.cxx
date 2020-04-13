@@ -100,8 +100,6 @@ bool Primitive2DContainer::operator==(const Primitive2DContainer& rB) const
     return true;
 }
 
-Primitive2DContainer::~Primitive2DContainer() {}
-
 void Primitive2DContainer::append(const Primitive2DReference& rSource) { push_back(rSource); }
 
 void Primitive2DContainer::append(const Primitive2DContainer& rSource)

@@ -22,6 +22,7 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
+#include <vcl/svgparser.hxx>
 #include <tools/stream.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapTools.hxx>
@@ -32,7 +33,6 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
 
-#include <com/sun/star/graphic/SvgTools.hpp>
 #include <basegfx/DrawCommands.hxx>
 
 using namespace css;
@@ -478,10 +478,7 @@ void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDr
                 {
                     SvFileStream aFileStream(rWidgetDraw.msSource, StreamMode::READ);
 
-                    uno::Reference<uno::XComponentContext> xContext(
-                        comphelper::getProcessComponentContext());
-                    const uno::Reference<graphic::XSvgParser> xSvgParser
-                        = graphic::SvgTools::create(xContext);
+                    std::unique_ptr<vcl::AbstractSvgParser> xSvgParser = vcl::loadSvgParser();
 
                     std::size_t nSize = aFileStream.remainingSize();
                     std::vector<sal_Int8> aBuffer(nSize + 1);
@@ -492,16 +489,11 @@ void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDr
                     uno::Reference<io::XInputStream> aInputStream(
                         new comphelper::SequenceInputStream(aData));
 
-                    uno::Any aAny = xSvgParser->getDrawCommands(aInputStream, "");
-                    if (aAny.has<sal_uInt64>())
+                    gfx::DrawRoot* pDrawRoot = xSvgParser->getDrawCommands(aInputStream, "");
+                    if (pDrawRoot)
                     {
-                        auto* pDrawRoot = reinterpret_cast<gfx::DrawRoot*>(aAny.get<sal_uInt64>());
-                        if (pDrawRoot)
-                        {
-                            rCacheDrawCommands.insert(
-                                std::make_pair(rWidgetDraw.msSource, *pDrawRoot));
-                            drawFromDrawCommands(*pDrawRoot, rGraphics, nX, nY, nWidth, nHeight);
-                        }
+                        rCacheDrawCommands.insert(std::make_pair(rWidgetDraw.msSource, *pDrawRoot));
+                        drawFromDrawCommands(*pDrawRoot, rGraphics, nX, nY, nWidth, nHeight);
                     }
                 }
                 else

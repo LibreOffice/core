@@ -15,11 +15,11 @@
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 
-#include <com/sun/star/graphic/SvgTools.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 
 #include <drawinglayer/primitive2d/Tools.hxx>
 #include <drawinglayer/tools/primitive2dxmldump.hxx>
+#include <vcl/svgparser.hxx>
 
 #include <memory>
 
@@ -106,9 +106,9 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-Primitive2DSequence Test::parseSvg(const OUString& aSource)
+drawinglayer::primitive2d::Primitive2DContainer Test::parseSvg(const OUString& aSource)
 {
-    const Reference<XSvgParser> xSvgParser = SvgTools::create(m_xContext);
+    std::unique_ptr<vcl::AbstractSvgParser> xSvgParser = vcl::loadSvgParser();
 
     OUString aUrl  = m_directories.getURLFromSrc(aSource);
     OUString aPath = m_directories.getPathFromSrc(aSource);

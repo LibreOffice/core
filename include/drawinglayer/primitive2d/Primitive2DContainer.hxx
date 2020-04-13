@@ -34,7 +34,7 @@ class ViewInformation2D;
 
 namespace drawinglayer::primitive2d
 {
-class SAL_WARN_UNUSED DRAWINGLAYER_DLLPUBLIC Primitive2DContainer
+class SAL_WARN_UNUSED DRAWINGLAYER_DLLPUBLIC Primitive2DContainer final
     : public std::deque<Primitive2DReference>,
       public Primitive2DDecompositionVisitor
 {
@@ -48,7 +48,7 @@ public:
         : deque(count)
     {
     }
-    virtual ~Primitive2DContainer() override;
+    virtual ~Primitive2DContainer() override {}
     Primitive2DContainer(const Primitive2DContainer& other)
         : deque(other)
     {
