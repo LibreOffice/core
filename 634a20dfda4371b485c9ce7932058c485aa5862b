@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2bfc36bd_70d4d469",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1337,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-04-13T07:01:45Z",
+      "side": 0,
+      "message": "This doesn\u0027t look like duplicating the code in ln1302 - SetListId is used there, not SetNumId... or is there another place?",
+      "range": {
+        "startLine": 1337,
+        "startChar": 48,
+        "endLine": 1337,
+        "endChar": 56
+      },
+      "revId": "634a20dfda4371b485c9ce7932058c485aa5862b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
