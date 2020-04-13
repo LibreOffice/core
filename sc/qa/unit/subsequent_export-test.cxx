@@ -205,6 +205,7 @@ public:
 
     void testTdf88657ODS();
     void testTdf41722();
+    void testTdf113621();
     void testEscapeCharInNumberFormatXLSX();
     void testNatNumInNumberFormatXLSX();
     void testExponentWithoutSignFormatXLSX();
@@ -345,6 +346,7 @@ public:
 
     CPPUNIT_TEST(testTdf88657ODS);
     CPPUNIT_TEST(testTdf41722);
+    CPPUNIT_TEST(testTdf113621);
     CPPUNIT_TEST(testEscapeCharInNumberFormatXLSX);
     CPPUNIT_TEST(testNatNumInNumberFormatXLSX);
     CPPUNIT_TEST(testExponentWithoutSignFormatXLSX);
@@ -4166,6 +4168,19 @@ void ScExportTest::testTdf41722()
     assertXPath(pDoc, "//x:conditionalFormatting/x:cfRule[1]", "operator", "containsText");
     assertXPath(pDoc, "//x:conditionalFormatting/x:cfRule[2]", "operator", "containsText");
     assertXPath(pDoc, "//x:conditionalFormatting/x:cfRule[3]", "operator", "containsText");
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf113621()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf113621.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "//x:conditionalFormatting", "sqref", "A1:A1048576");
 
     xDocSh->DoClose();
 }
