@@ -12067,6 +12067,7 @@ sfx2/source/appl/fileobj.cxx
 sfx2/source/appl/fileobj.hxx
 sfx2/source/appl/flatpak.cxx
 sfx2/source/appl/fwkhelper.cxx
+sfx2/source/appl/getbasctlfunction.cxx
 sfx2/source/appl/helpdispatch.cxx
 sfx2/source/appl/helpdispatch.hxx
 sfx2/source/appl/helpinterceptor.cxx
