@@ -1342,6 +1342,10 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFormat
     aUString = rFormat.GetSuffix();
     aPropertyValues.push_back(comphelper::makePropertyValue("Suffix", aUString));
 
+    //listformat
+    aUString = rFormat.GetListFormat();
+    aPropertyValues.push_back(comphelper::makePropertyValue("ListFormat", aUString));
+
     //char style name
 
     aUString.clear();
@@ -1581,7 +1585,9 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
         // these two are accepted but ignored for some reason
         UNO_NAME_BULLET_REL_SIZE,               // 25
         UNO_NAME_BULLET_COLOR,                  // 26
-        UNO_NAME_GRAPHIC_URL                    // 27
+        UNO_NAME_GRAPHIC_URL,                   // 27
+
+        UNO_NAME_LIST_FORMAT                    // 28
     };
 
     enum {
@@ -2033,6 +2039,13 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                     }
                     else
                         bWrongArg = true;
+                }
+                break;
+                case 28: //"ListFormat",
+                {
+                    OUString uTmp;
+                    pProp->Value >>= uTmp;
+                    aFormat.SetListFormat(uTmp);
                 }
                 break;
             }
