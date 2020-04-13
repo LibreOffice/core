@@ -524,7 +524,6 @@ class StyleSheetPropertyMap
 private:
     sal_Int16 mnListLevel;
     sal_Int16 mnOutlineLevel;
-    sal_Int32 mnNumId;
 
 public:
     explicit StyleSheetPropertyMap();
@@ -534,9 +533,6 @@ public:
 
     sal_Int16 GetOutlineLevel() const             { return mnOutlineLevel; }
     void      SetOutlineLevel( sal_Int16 nLevel ) { if ( nLevel < WW_OUTLINE_MAX ) mnOutlineLevel = nLevel; }
-
-    sal_Int32 GetNumId() const        { return mnNumId; }
-    void      SetNumId(sal_Int32 nId) { mnNumId = nId; }
 };
 
 class ParagraphPropertyMap
