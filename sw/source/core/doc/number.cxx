@@ -679,7 +679,7 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
                 else
                     aStr.append("0");        // all 0 level are a 0
                 if( i != nLevel && !aStr.isEmpty() )
-                    aStr.append(".");
+                    aStr.append(rMyNFormat.GetSeparator());
             }
 
             // The type doesn't have any number, so don't append

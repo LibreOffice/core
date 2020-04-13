@@ -107,6 +107,7 @@ public:
 private:
     OUString            sPrefix;
     OUString            sSuffix;
+    OUString            sSeparator;         // Separator between list levels, by default it is dot "." E.g. "1.1.3"
 
     SvxAdjust           eNumAdjust;
 
@@ -171,6 +172,8 @@ public:
     const OUString& GetPrefix() const { return sPrefix;}
     void            SetSuffix(const OUString& rSet) { sSuffix = rSet;}
     const OUString& GetSuffix() const { return sSuffix;}
+    void            SetSeparator(const OUString& rSet) { sSeparator = rSet; }
+    const OUString& GetSeparator() const { return sSeparator; }
 
     void                    SetCharFormatName(const OUString& rSet){ sCharStyleName = rSet; }
     virtual OUString        GetCharFormatName()const;

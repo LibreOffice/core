@@ -88,7 +88,7 @@ public:
 
     // rPrefix and rSuffix are out parameters
     static sal_Int16 GetParentNumbering( const OUString& sText, sal_Int16 nLevel,
-        OUString& rPrefix, OUString& rSuffix );
+        OUString& rPrefix, OUString& rSuffix, OUString& rSeparator );
 
     css::uno::Sequence<css::beans::PropertyValue> GetProperties(bool bDefaults);
 
