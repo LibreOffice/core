@@ -1746,6 +1746,21 @@ namespace
         gtk_container_remove(GTK_CONTAINER(pParent), pWidget);
 
         gtk_widget_set_visible(pReplacement, gtk_widget_get_visible(pWidget));
+        gtk_widget_set_no_show_all(pReplacement, gtk_widget_get_no_show_all(pWidget));
+
+        int nReqWidth, nReqHeight;
+        gtk_widget_get_size_request(pWidget, &nReqWidth, &nReqHeight);
+        gtk_widget_set_size_request(pReplacement, nReqWidth, nReqHeight);
+
+        static GQuark quark_size_groups = g_quark_from_static_string("gtk-widget-size-groups");
+        GSList* pSizeGroups = static_cast<GSList*>(g_object_get_qdata(G_OBJECT(pWidget), quark_size_groups));
+        while (pSizeGroups)
+        {
+            GtkSizeGroup *pSizeGroup = static_cast<GtkSizeGroup*>(pSizeGroups->data);
+            pSizeGroups = pSizeGroups->next;
+            gtk_size_group_remove_widget(pSizeGroup, pWidget);
+            gtk_size_group_add_widget(pSizeGroup, pReplacement);
+        }
 
         gtk_container_add(GTK_CONTAINER(pParent), pReplacement);
 
