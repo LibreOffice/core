@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "934c9057_123660b6",
+        "filename": "include/editeng/charrotateitem.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-04-13T22:49:33Z",
+      "side": 1,
+      "message": "This breaks mergedlibs build on Linux, with:\n\nworkdir/CxxObject/cui/source/tabpages/chardlg.o: In function `SvxCharPositionPage::FillItemSet(SfxItemSet*)\u0027:\ncore/cui/source/tabpages/chardlg.cxx:3034: undefined reference to `vtable for SvxTextRotateItem\u0027\ncollect2: error: ld returned 1 exit status\nmake[1]: *** [workdir/instdir/program/libcuilo.so] Error 1",
+      "revId": "01159643623de55f9e1de84d568032ca919dbd8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
