@@ -89,6 +89,7 @@ public:
     void testIndividualDataLabelProps();
     void testTdf108107();
     void testTdf114139();
+    void testTdf64224();
     void testChartTitlePropertiesColorFillDOCX();
     void testChartTitlePropertiesGradientFillDOCX();
     void testChartTitlePropertiesBitmapFillDOCX();
@@ -214,6 +215,7 @@ public:
     CPPUNIT_TEST(testIndividualDataLabelProps);
     CPPUNIT_TEST(testTdf108107);
     CPPUNIT_TEST(testTdf114139);
+    CPPUNIT_TEST(testTdf64224);
     CPPUNIT_TEST(testChartTitlePropertiesColorFillDOCX);
     CPPUNIT_TEST(testChartTitlePropertiesGradientFillDOCX);
     CPPUNIT_TEST(testChartTitlePropertiesBitmapFillDOCX);
@@ -1262,6 +1264,17 @@ void Chart2ExportTest::testTdf114139()
     //no fill
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr", 0);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:solidFill", 0);
+}
+
+void Chart2ExportTest::testTdf64224()
+{
+    load("/chart2/qa/extras/data/ods/", "tdf64224.ods");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    //no fill
+    assertXPath(pXmlDoc, "/c:chartSpace/c:spPr/a:noFill", 1);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:spPr/a:solidFill", 0);
 }
 
 void Chart2ExportTest::testChartTitlePropertiesColorFillDOCX()
