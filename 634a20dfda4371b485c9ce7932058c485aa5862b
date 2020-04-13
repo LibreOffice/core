@@ -22,6 +22,30 @@
       "revId": "634a20dfda4371b485c9ce7932058c485aa5862b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47228f83_8a54fca9",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1337,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-04-13T12:56:54Z",
+      "side": 0,
+      "message": "Thanks for reviewing Mike. I looked at that about 4 times trying to see any difference and just skipped over that each time. I even did it once more before I pushed. I think it is partly because the same nIntValue is being used for two things - that doesn\u0027t sound right. Unfortunately there is no unit test for this.\n\nPatch came from https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d40a5d22fd4117f8e3ad6807264fb448f4d9959aa\nRelated: #i119657#, importing docx, add code to handle the problem...",
+      "parentUuid": "2bfc36bd_70d4d469",
+      "range": {
+        "startLine": 1337,
+        "startChar": 48,
+        "endLine": 1337,
+        "endChar": 56
+      },
+      "revId": "634a20dfda4371b485c9ce7932058c485aa5862b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
