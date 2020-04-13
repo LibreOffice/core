@@ -659,16 +659,16 @@ DECLARE_RTFEXPORT_TEST(testFdo66682, "fdo66682.rtf")
     uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
-    OUString aSuffix;
+    OUString aListFormat;
     for (int i = 0; i < aProps.getLength(); ++i)
     {
         const beans::PropertyValue& rProp = aProps[i];
 
-        if (rProp.Name == "Suffix")
-            aSuffix = rProp.Value.get<OUString>();
+        if (rProp.Name == "ListFormat")
+            aListFormat = rProp.Value.get<OUString>();
     }
     // Suffix was '\0' instead of ' '.
-    CPPUNIT_ASSERT_EQUAL(OUString(" "), aSuffix);
+    CPPUNIT_ASSERT_EQUAL(OUString(" %1 "), aListFormat);
 }
 
 DECLARE_RTFEXPORT_TEST(testParaShadow, "para-shadow.rtf")
