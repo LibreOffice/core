@@ -1900,7 +1900,6 @@ sal_Int32 SectionPropertyMap::GetPageWidth() const
 StyleSheetPropertyMap::StyleSheetPropertyMap()
     : mnListLevel( -1 )
     , mnOutlineLevel( -1 )
-    , mnNumId( -1 )
 {
 }
 

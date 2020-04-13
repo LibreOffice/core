@@ -1112,7 +1112,6 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                                                     = dynamic_cast<StyleSheetPropertyMap&>(*aSheetProps->pProperties);
                                                 pStyleSheetProperties->SetListLevel(rStyleSheetProps.GetListLevel());
                                                 pStyleSheetProperties->SetOutlineLevel(rStyleSheetProps.GetOutlineLevel());
-                                                pStyleSheetProperties->SetNumId(rStyleSheetProps.GetNumId());
                                                 break;
                                             }
                                         }
