@@ -24,7 +24,6 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/graphic/PdfTools.hpp>
-#include <com/sun/star/graphic/SvgTools.hpp>
 #include <com/sun/star/graphic/EmfTools.hpp>
 #include <com/sun/star/graphic/Primitive2DTools.hpp>
 #include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
@@ -38,6 +37,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/wmfexternal.hxx>
 #include <vcl/pdfread.hxx>
+#include <vcl/svgparser.hxx>
 
 using namespace ::com::sun::star;
 
@@ -189,11 +189,11 @@ void VectorGraphicData::ensureSequenceAndRange()
         {
             case VectorGraphicDataType::Svg:
             {
-                const uno::Reference< graphic::XSvgParser > xSvgParser = graphic::SvgTools::create(xContext);
+                std::unique_ptr<vcl::AbstractSvgParser> xSvgParser = vcl::loadSvgParser();
                 const uno::Reference< io::XInputStream > myInputStream(new comphelper::SequenceInputStream(maVectorGraphicDataArray));
 
                 if (myInputStream.is())
-                    maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xSvgParser->getDecomposition(myInputStream, maPath));
+                    maSequence = xSvgParser->getDecomposition(myInputStream, maPath);
 
                 break;
             }

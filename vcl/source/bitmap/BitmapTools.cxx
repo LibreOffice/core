@@ -13,10 +13,10 @@
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/seqstream.hxx>
+#include <comphelper/sequence.hxx>
 #include <vcl/canvastools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-#include <com/sun/star/graphic/SvgTools.hpp>
 #include <com/sun/star/graphic/Primitive2DTools.hpp>
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
@@ -34,6 +34,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
+#include <vcl/svgparser.hxx>
 #include <bitmapwriteaccess.hxx>
 
 using namespace css;
@@ -58,7 +59,7 @@ BitmapEx loadFromName(const OUString& rFileName, const ImageLoadFlags eFlags)
 void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, double fScalingFactor)
 {
     uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
-    const uno::Reference<graphic::XSvgParser> xSvgParser = graphic::SvgTools::create(xContext);
+    std::unique_ptr<vcl::AbstractSvgParser> xSvgParser = vcl::loadSvgParser();
 
     std::size_t nSize = rStream.remainingSize();
     std::vector<sal_Int8> aBuffer(nSize + 1);
@@ -68,16 +69,16 @@ void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, 
     uno::Sequence<sal_Int8> aData(aBuffer.data(), nSize + 1);
     uno::Reference<io::XInputStream> aInputStream(new comphelper::SequenceInputStream(aData));
 
-    const Primitive2DSequence aPrimitiveSequence = xSvgParser->getDecomposition(aInputStream, sPath);
+    const drawinglayer::primitive2d::Primitive2DContainer aDecomposedPrimitives = xSvgParser->getDecomposition(aInputStream, sPath);
 
-    if (!aPrimitiveSequence.hasElements())
+    if (aDecomposedPrimitives.empty())
         return;
 
     uno::Sequence<beans::PropertyValue> aViewParameters;
 
     geometry::RealRectangle2D aRealRect;
     basegfx::B2DRange aRange;
-    for (Primitive2DReference const & xReference : aPrimitiveSequence)
+    for (Primitive2DReference const & xReference : aDecomposedPrimitives)
     {
         if (xReference.is())
         {
@@ -95,7 +96,7 @@ void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, 
 
     const css::uno::Reference<css::graphic::XPrimitive2DRenderer> xPrimitive2DRenderer = css::graphic::Primitive2DTools::create(xContext);
     const css::uno::Reference<css::rendering::XBitmap> xBitmap(
-        xPrimitive2DRenderer->rasterize(aPrimitiveSequence, aViewParameters, nDPI, nDPI, aRealRect, 256*256));
+        xPrimitive2DRenderer->rasterize(comphelper::containerToSequence(aDecomposedPrimitives), aViewParameters, nDPI, nDPI, aRealRect, 256*256));
 
     if (xBitmap.is())
     {

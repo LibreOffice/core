@@ -29,6 +29,10 @@ $(eval $(call gb_Library_use_external,svgio,boost_headers))
 
 $(eval $(call gb_Library_set_precompiled_header,svgio,svgio/inc/pch/precompiled_svgio))
 
+$(eval $(call gb_Library_add_defs,svgio,\
+    -DSVGIO_DLLIMPLEMENTATION \
+))
+
 $(eval $(call gb_Library_use_sdk_api,svgio))
 
 $(eval $(call gb_Library_use_libraries,svgio,\
@@ -79,7 +83,6 @@ $(eval $(call gb_Library_add_exception_objects,svgio,\
     svgio/source/svgreader/svgtspannode \
     svgio/source/svgreader/svgusenode \
     svgio/source/svgreader/svgvisitor \
-    svgio/source/svguno/svguno \
     svgio/source/svguno/xsvgparser \
 ))
 

@@ -436,6 +436,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/filter/png/PngImageReader \
     vcl/source/filter/png/pngread \
     vcl/source/filter/png/pngwrite \
+    vcl/source/filter/svgparser \
     vcl/source/font/Feature \
     vcl/source/font/FeatureCollector \
     vcl/source/font/FeatureParser \

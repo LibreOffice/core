@@ -19,7 +19,4 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="svgio" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="svgio::svgreader::XSvgParser">
-    <service name="com.sun.star.graphic.SvgTools"/>
-  </implementation>
 </component>
