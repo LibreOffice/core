@@ -6945,6 +6945,49 @@ public:
     }
 };
 
+void do_grab(GtkWidget* pWidget)
+{
+    GdkDisplay *pDisplay = gtk_widget_get_display(pWidget);
+#if GTK_CHECK_VERSION(3, 20, 0)
+    if (gtk_check_version(3, 20, 0) == nullptr)
+    {
+        GdkSeat* pSeat = gdk_display_get_default_seat(pDisplay);
+        gdk_seat_grab(pSeat, gtk_widget_get_window(pWidget),
+                      GDK_SEAT_CAPABILITY_ALL, true, nullptr, nullptr, nullptr, nullptr);
+        return;
+    }
+#endif
+    //else older gtk3
+    GdkDeviceManager* pDeviceManager = gdk_display_get_device_manager(pDisplay);
+    GdkDevice* pPointer = gdk_device_manager_get_client_pointer(pDeviceManager);
+    GdkWindow* pWindow = gtk_widget_get_window(pWidget);
+    guint32 nCurrentTime = gtk_get_current_event_time();
+    gdk_device_grab(pPointer, pWindow, GDK_OWNERSHIP_NONE, true, GDK_ALL_EVENTS_MASK, nullptr, nCurrentTime);
+    if (GdkDevice* pKeyboard = gdk_device_get_associated_device(pPointer))
+        gdk_device_grab(pKeyboard, pWindow, GDK_OWNERSHIP_NONE, true, GDK_ALL_EVENTS_MASK, nullptr, nCurrentTime);
+}
+
+void do_ungrab(GtkWidget* pWidget)
+{
+    GdkDisplay *pDisplay = gtk_widget_get_display(pWidget);
+#if GTK_CHECK_VERSION(3, 20, 0)
+    if (gtk_check_version(3, 20, 0) == nullptr)
+    {
+        GdkSeat* pSeat = gdk_display_get_default_seat(pDisplay);
+        gdk_seat_ungrab(pSeat);
+        return;
+    }
+#endif
+    //else older gtk3
+    GdkDeviceManager* pDeviceManager = gdk_display_get_device_manager(pDisplay);
+    GdkDevice* pPointer = gdk_device_manager_get_client_pointer(pDeviceManager);
+    guint32 nCurrentTime = gtk_get_current_event_time();
+    gdk_device_ungrab(pPointer, nCurrentTime);
+    if (GdkDevice* pKeyboard = gdk_device_get_associated_device(pPointer))
+        gdk_device_ungrab(pKeyboard, nCurrentTime);
+}
+
+
 class GtkInstanceMenuButton : public GtkInstanceToggleButton, public MenuHelper, public virtual weld::MenuButton
 {
 private:
@@ -6964,55 +7007,13 @@ private:
         pThis->toggle_menu();
     }
 
-    void do_grab()
-    {
-        GdkDisplay *pDisplay = gtk_widget_get_display(GTK_WIDGET(m_pMenuHack));
-#if GTK_CHECK_VERSION(3, 20, 0)
-        if (gtk_check_version(3, 20, 0) == nullptr)
-        {
-            GdkSeat* pSeat = gdk_display_get_default_seat(pDisplay);
-            gdk_seat_grab(pSeat, gtk_widget_get_window(GTK_WIDGET(m_pMenuHack)),
-                          GDK_SEAT_CAPABILITY_ALL, true, nullptr, nullptr, nullptr, nullptr);
-            return;
-        }
-#endif
-        //else older gtk3
-        GdkDeviceManager* pDeviceManager = gdk_display_get_device_manager(pDisplay);
-        GdkDevice* pPointer = gdk_device_manager_get_client_pointer(pDeviceManager);
-        GdkWindow* pWindow = gtk_widget_get_window(GTK_WIDGET(m_pMenuHack));
-        guint32 nCurrentTime = gtk_get_current_event_time();
-        gdk_device_grab(pPointer, pWindow, GDK_OWNERSHIP_NONE, true, GDK_ALL_EVENTS_MASK, nullptr, nCurrentTime);
-        if (GdkDevice* pKeyboard = gdk_device_get_associated_device(pPointer))
-            gdk_device_grab(pKeyboard, pWindow, GDK_OWNERSHIP_NONE, true, GDK_ALL_EVENTS_MASK, nullptr, nCurrentTime);
-    }
-
-    void do_ungrab()
-    {
-        GdkDisplay *pDisplay = gtk_widget_get_display(GTK_WIDGET(m_pMenuHack));
-#if GTK_CHECK_VERSION(3, 20, 0)
-        if (gtk_check_version(3, 20, 0) == nullptr)
-        {
-            GdkSeat* pSeat = gdk_display_get_default_seat(pDisplay);
-            gdk_seat_ungrab(pSeat);
-            return;
-        }
-#endif
-        //else older gtk3
-        GdkDeviceManager* pDeviceManager = gdk_display_get_device_manager(pDisplay);
-        GdkDevice* pPointer = gdk_device_manager_get_client_pointer(pDeviceManager);
-        guint32 nCurrentTime = gtk_get_current_event_time();
-        gdk_device_ungrab(pPointer, nCurrentTime);
-        if (GdkDevice* pKeyboard = gdk_device_get_associated_device(pPointer))
-            gdk_device_ungrab(pKeyboard, nCurrentTime);
-    }
-
     void toggle_menu()
     {
         if (!m_pMenuHack)
             return;
         if (!get_active())
         {
-            do_ungrab();
+            do_ungrab(GTK_WIDGET(m_pMenuHack));
 
             gtk_widget_hide(GTK_WIDGET(m_pMenuHack));
             //put contents back from where the came from
@@ -7072,7 +7073,7 @@ private:
 
             gtk_widget_grab_focus(GTK_WIDGET(m_pMenuHack));
 
-            do_grab();
+            do_grab(GTK_WIDGET(m_pMenuHack));
         }
     }
 
@@ -7093,7 +7094,7 @@ private:
             //try and regrab, so when we lose the grab to the menu of the color palette
             //combobox we regain it so the color palette doesn't itself disappear on next
             //click on the color palette combobox
-            do_grab();
+            do_grab(GTK_WIDGET(m_pMenuHack));
         }
     }
 
