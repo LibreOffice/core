@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <config_features.h>
 #include <config_options.h>
 #include <osl/module.h>
 #include <osl/module.hxx>
@@ -26,6 +27,8 @@
 #include <tools/svlibrary.h>
 
 #include "getbasctlfunction.hxx"
+
+#if HAVE_FEATURE_SCRIPTING
 
 extern "C" { static void thisModule() {} }
 
@@ -54,5 +57,7 @@ oslGenericFunction sfx2::getBasctlFunction(char const* name)
 
     return pSymbol;
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
