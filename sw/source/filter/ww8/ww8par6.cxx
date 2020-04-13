@@ -767,7 +767,9 @@ void SwWW8ImplReader::HandleLineNumbering(const wwSection &rSection)
 
             aInfo.SetRestartEachPage(rSection.maSep.lnc == 0);
 
-            aInfo.SetPosFromLeft(writer_cast<sal_uInt16>(rSection.maSep.dxaLnn));
+            // A value of 0 (auto) indicates that the application MUST automatically determine positioning.
+            if ( rSection.maSep.dxaLnn )
+                aInfo.SetPosFromLeft(writer_cast<sal_uInt16>(rSection.maSep.dxaLnn));
 
             //Paint only for every n line
             aInfo.SetCountBy(rSection.maSep.nLnnMod);
