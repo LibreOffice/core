@@ -126,6 +126,22 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testChicagoNumberingFootnote)
     CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
 }
 
+DECLARE_WW8EXPORT_TEST(testdf79533_lineNumbers, "tdf79533_lineNumbers.doc")
+{
+    bool bValue = false;
+    sal_Int32 nValue = -1;
+
+    uno::Reference< text::XTextDocument > xtextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference< text::XLineNumberingProperties > xLineProperties( xtextDocument, uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xPropertySet = xLineProperties->getLineNumberingProperties();
+
+    xPropertySet->getPropertyValue("IsOn") >>= bValue;
+    CPPUNIT_ASSERT_EQUAL(true, bValue);
+
+    xPropertySet->getPropertyValue("Distance") >>= nValue;
+    CPPUNIT_ASSERT_MESSAGE("automatic distance", nValue > 0);
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf122429_header, "tdf122429_header.doc")
 {
     uno::Reference<container::XNameAccess> pageStyles = getStyles("PageStyles");
