@@ -148,7 +148,7 @@ void ListLevel::SetParaStyle( const tools::SvRef< StyleSheetEntry >& pStyle )
 }
 
 sal_Int16 ListLevel::GetParentNumbering( const OUString& sText, sal_Int16 nLevel,
-        OUString& rPrefix, OUString& rSuffix )
+        OUString& rPrefix, OUString& rSuffix, OUString& rSeparator )
 {
     sal_Int16 nParentNumbering = 1;
 
@@ -183,8 +183,11 @@ sal_Int16 ListLevel::GetParentNumbering( const OUString& sText, sal_Int16 nLevel
         nCurrentIndex = 0;
         nFound = sLevelText.indexOf( '%', nCurrentIndex );
         //remove the text before the next %
-        if(nFound > 0)
-            sLevelText = sLevelText.copy( nFound -1 );
+        if ( nFound > 0 )
+        {
+            sLevelText = sLevelText.copy( nFound - 1 );
+            rSeparator = sLevelText.copy( 0, nFound );
+        }
     }
     if( nMinLevel < nLevel )
     {
@@ -597,12 +600,10 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
 
                 OUString sPrefix;
                 OUString sSuffix;
-                OUString& rPrefix = sPrefix;
-                OUString& rSuffix = sSuffix;
-                sal_Int16 nParentNum = ListLevel::GetParentNumbering(
-                       sText, nLevel, rPrefix, rSuffix );
+                OUString sSeparator;
+                sal_Int16 nParentNum = ListLevel::GetParentNumbering( sText, nLevel, sPrefix, sSuffix, sSeparator );
 
-                aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_PREFIX), rPrefix));
+                aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_PREFIX), sPrefix));
 
                 if (sText.isEmpty())
                 {
@@ -624,11 +625,12 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                         }
 
                         if (bLabelFollowedBy && nNumberFormat == style::NumberingType::NUMBER_NONE)
-                            rSuffix = OUString(u'\x200B');
+                            sSuffix = OUString(u'\x200B');
                     }
                 }
 
-                aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SUFFIX), rSuffix));
+                aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SEPARATOR), sSeparator));
+                aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SUFFIX), sSuffix));
                 aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_PARENT_NUMBERING), nParentNum));
 
                 aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_POSITION_AND_SPACE_MODE), sal_Int16(text::PositionAndSpaceMode::LABEL_ALIGNMENT)));

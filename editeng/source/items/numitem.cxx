@@ -161,6 +161,7 @@ void SvxNumberType::dumpAsXml( xmlTextWriterPtr pWriter ) const
 
 SvxNumberFormat::SvxNumberFormat( SvxNumType eType )
     : SvxNumberType(eType),
+      sSeparator(u"."),
       eNumAdjust(SvxAdjust::Left),
       nInclUpperLevels(0),
       nStart(1),
@@ -187,7 +188,8 @@ SvxNumberFormat::SvxNumberFormat(const SvxNumberFormat& rFormat) :
 }
 
 SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
-    : nStart(0)
+    : sSeparator(u".")
+    , nStart(0)
     , nBulletRelSize(100)
     , nFirstLineOffset(0)
     , nAbsLSpace(0)
@@ -346,9 +348,10 @@ SvxNumberFormat& SvxNumberFormat::operator=( const SvxNumberFormat& rFormat )
     mnListtabPos = rFormat.mnListtabPos;
     mnFirstLineIndent = rFormat.mnFirstLineIndent;
     mnIndentAt = rFormat.mnIndentAt;
-    eVertOrient         = rFormat.eVertOrient ;
-    sPrefix             = rFormat.sPrefix     ;
-    sSuffix             = rFormat.sSuffix     ;
+    eVertOrient         = rFormat.eVertOrient;
+    sPrefix             = rFormat.sPrefix;
+    sSuffix             = rFormat.sSuffix;
+    sSeparator          = rFormat.sSeparator;
     aGraphicSize        = rFormat.aGraphicSize  ;
     nBulletColor        = rFormat.nBulletColor   ;
     nBulletRelSize      = rFormat.nBulletRelSize;
@@ -383,6 +386,7 @@ bool  SvxNumberFormat::operator==( const SvxNumberFormat& rFormat) const
         eVertOrient         != rFormat.eVertOrient ||
         sPrefix             != rFormat.sPrefix     ||
         sSuffix             != rFormat.sSuffix     ||
+        sSeparator          != rFormat.sSeparator ||
         aGraphicSize        != rFormat.aGraphicSize  ||
         nBulletColor        != rFormat.nBulletColor   ||
         nBulletRelSize      != rFormat.nBulletRelSize ||

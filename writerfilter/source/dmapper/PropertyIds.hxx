@@ -259,6 +259,7 @@ enum PropertyIds
         ,PROP_RIGHT_MARGIN
         ,PROP_SERVICE_CHAR_STYLE
         ,PROP_SERVICE_PARA_STYLE
+        ,PROP_SEPARATOR
         ,PROP_SIZE
         ,PROP_SIZE100th_M_M
         ,PROP_SIZE_PIXEL

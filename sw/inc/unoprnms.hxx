@@ -77,6 +77,7 @@
 #define UNO_NAME_ANCHOR_CHAR_STYLE_NAME "AnchorCharStyleName"
 #define UNO_NAME_SUFFIX "Suffix"
 #define UNO_NAME_PREFIX "Prefix"
+#define UNO_NAME_SEPARATOR "Separator"
 #define UNO_NAME_PARENT_NUMBERING "ParentNumbering"
 #define UNO_NAME_CHAR_FONT_NAME "CharFontName"
 #define UNO_NAME_CHAR_FONT_STYLE_NAME "CharFontStyleName"

@@ -239,6 +239,7 @@ OUString getPropertyName( PropertyIds eId )
         case PROP_TABS_RELATIVE_TO_INDENT:    sName = "TabsRelativeToIndent"; break;
         case PROP_PREFIX           :    sName = "Prefix"; break;
         case PROP_SUFFIX           :    sName = "Suffix"; break;
+        case PROP_SEPARATOR        :    sName = "Separator"; break;
         case PROP_CREATE_FROM_LEVEL_PARAGRAPH_STYLES:    sName = "CreateFromLevelParagraphStyles"; break;
         case PROP_DROP_CAP_FORMAT  :    sName = "DropCapFormat"; break;
         case PROP_REFERENCE_FIELD_PART :    sName = "ReferenceFieldPart"; break;
