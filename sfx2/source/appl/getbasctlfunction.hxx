@@ -20,12 +20,17 @@
 #pragma once
 
 #include <sal/config.h>
+#include <config_features.h>
 
 #include <osl/module.h>
+
+#if HAVE_FEATURE_SCRIPTING
 
 namespace sfx2
 {
 oslGenericFunction getBasctlFunction(char const* name);
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
