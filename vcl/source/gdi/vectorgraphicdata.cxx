@@ -38,6 +38,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/wmfexternal.hxx>
 #include <vcl/pdfread.hxx>
+#include <vcl/svgparser.hxx>
 
 using namespace ::com::sun::star;
 
@@ -189,7 +190,7 @@ void VectorGraphicData::ensureSequenceAndRange()
         {
             case VectorGraphicDataType::Svg:
             {
-                const uno::Reference< graphic::XSvgParser > xSvgParser = graphic::SvgTools::create(xContext);
+                std::unique_ptr<vcl::AbstractSvgParser> xSvgParser = vcl::loadSvgParser();
                 const uno::Reference< io::XInputStream > myInputStream(new comphelper::SequenceInputStream(maVectorGraphicDataArray));
 
                 if (myInputStream.is())

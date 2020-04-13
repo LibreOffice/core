@@ -210,7 +210,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/graphic,\
 	GraphicObject \
 	GraphicProvider \
 	Primitive2DTools \
-	SvgTools \
 	EmfTools \
 	PdfTools \
 ))
@@ -2721,7 +2720,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/graphic,\
 	XPrimitive2DRenderer \
 	XPrimitive3D \
 	XPrimitiveFactory2D \
-	XSvgParser \
 	XEmfParser \
 	XPdfDecomposer \
 ))

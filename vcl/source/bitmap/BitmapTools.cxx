@@ -34,6 +34,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
+#include <vcl/svgparser.hxx>
 #include <bitmapwriteaccess.hxx>
 
 using namespace css;
@@ -58,7 +59,7 @@ BitmapEx loadFromName(const OUString& rFileName, const ImageLoadFlags eFlags)
 void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, double fScalingFactor)
 {
     uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
-    const uno::Reference<graphic::XSvgParser> xSvgParser = graphic::SvgTools::create(xContext);
+    std::unique_ptr<vcl::AbstractSvgParser> xSvgParser = vcl::loadSvgParser();
 
     std::size_t nSize = rStream.remainingSize();
     std::vector<sal_Int8> aBuffer(nSize + 1);
