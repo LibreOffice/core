@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c9294408_63f7aa62",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1115,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-04-13T18:38:18Z",
+      "side": 0,
+      "message": "I did test this to see if it should change the LinkId, but that causes a unit test failure.",
+      "range": {
+        "startLine": 1115,
+        "startChar": 97,
+        "endLine": 1115,
+        "endChar": 107
+      },
+      "revId": "c9236fc211d1ba1c22e096172285983d6687b41f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
