@@ -107,6 +107,7 @@ public:
 private:
     OUString            sPrefix;
     OUString            sSuffix;
+    OUString            sListFormat;        // Format string ">%1.%2<" can be used instead of prefix/suffix
 
     SvxAdjust           eNumAdjust;
 
@@ -171,6 +172,8 @@ public:
     const OUString& GetPrefix() const { return sPrefix;}
     void            SetSuffix(const OUString& rSet) { sSuffix = rSet;}
     const OUString& GetSuffix() const { return sSuffix;}
+    void            SetListFormat(const OUString& rSet) { sListFormat = rSet; }
+    const OUString& GetListFormat() const { return sListFormat; }
 
     void                    SetCharFormatName(const OUString& rSet){ sCharStyleName = rSet; }
     virtual OUString        GetCharFormatName()const;
