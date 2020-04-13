@@ -363,6 +363,7 @@ edit_constructor_list = [
     "math_FormatDetector_get_implementation",
 # sw/util/sw.component
     "com_sun_star_comp_Writer_XMLOasisContentExporter_get_implementation",
+    "com_sun_star_comp_Writer_XMLOasisExporter_get_implementation",
     "com_sun_star_comp_Writer_XMLOasisMetaExporter_get_implementation",
     "com_sun_star_comp_Writer_XMLOasisSettingsExporter_get_implementation",
     "com_sun_star_comp_Writer_XMLOasisStylesExporter_get_implementation",
@@ -467,6 +468,8 @@ writer_constructor_list = [
 # writerfilter/util/writerfilter.component
     "com_sun_star_comp_Writer_RtfFilter_get_implementation",
     "com_sun_star_comp_Writer_WriterFilter_get_implementation",
+# writerperfect/source/writer/wpftwriter.component
+    "com_sun_star_comp_Writer_EPUBExportFilter_get_implementation",
     ]
 
 factory_map = {
