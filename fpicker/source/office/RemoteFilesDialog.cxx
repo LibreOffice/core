@@ -233,22 +233,22 @@ void RemoteFilesDialog::InitSize()
     // initialize from config
     SvtViewOptions aDlgOpt( EViewType::Dialog, m_sIniKey );
 
-    if( aDlgOpt.Exists() )
-    {
-        m_xDialog->set_window_state(OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_UTF8));
+    if( !aDlgOpt.Exists() )
+        return;
 
-        Any aUserData = aDlgOpt.GetUserItem( "UserData" );
-        OUString sCfgStr;
-        if( aUserData >>= sCfgStr )
-        {
-            sal_Int32 nPos1{ sCfgStr.indexOf('|') };
-            if (nPos1<0)
-                return;
-            sal_Int32 nPos2{ sCfgStr.indexOf('|', nPos1+1 ) };
-            if (nPos2<0)
-                return;
-            m_xFileView->SetConfigString( sCfgStr.copy(nPos2+1) );
-        }
+    m_xDialog->set_window_state(OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_UTF8));
+
+    Any aUserData = aDlgOpt.GetUserItem( "UserData" );
+    OUString sCfgStr;
+    if( aUserData >>= sCfgStr )
+    {
+        sal_Int32 nPos1{ sCfgStr.indexOf('|') };
+        if (nPos1<0)
+            return;
+        sal_Int32 nPos2{ sCfgStr.indexOf('|', nPos1+1 ) };
+        if (nPos2<0)
+            return;
+        m_xFileView->SetConfigString( sCfgStr.copy(nPos2+1) );
     }
 }
 
@@ -339,61 +339,61 @@ void RemoteFilesDialog::AddFilter( const OUString& rFilter, const OUString& rTyp
 
 void RemoteFilesDialog::OpenURL( OUString const & sURL )
 {
-    if( m_xFileView )
+    if( !m_xFileView )
+        return;
+
+    DisableControls();
+
+    auto xWait = std::make_unique<weld::WaitObject>(m_xDialog.get());
+
+    if( !sURL.isEmpty() )
     {
-        DisableControls();
+        OUString sFilter = FILEDIALOG_FILTER_ALL;
 
-        auto xWait = std::make_unique<weld::WaitObject>(m_xDialog.get());
-
-        if( !sURL.isEmpty() )
+        if( m_nCurrentFilter != -1)
         {
-            OUString sFilter = FILEDIALOG_FILTER_ALL;
-
-            if( m_nCurrentFilter != -1)
-            {
-                sFilter = m_aFilters[m_nCurrentFilter].second;
-            }
-
-            m_xFileView->EndInplaceEditing();
-
-            DBG_ASSERT( !m_pCurrentAsyncAction.is(), "SvtFileDialog::executeAsync: previous async action not yet finished!" );
-
-            m_pCurrentAsyncAction = new AsyncPickerAction( this, m_xFileView.get(), AsyncPickerAction::Action::eOpenURL );
-
-            // -1 timeout - sync
-            m_pCurrentAsyncAction->execute( sURL, sFilter, -1, -1, GetBlackList() );
-
-            if( m_eMode != REMOTEDLG_MODE_SAVE )
-                m_xName_ed->set_text( "" );
-
-            m_xFileView->grab_focus();
+            sFilter = m_aFilters[m_nCurrentFilter].second;
         }
-        else
-        {
-            xWait.reset();
 
-            // content doesn't exist
-            ErrorHandler::HandleError( ERRCODE_IO_NOTEXISTS );
+        m_xFileView->EndInplaceEditing();
 
-            EnableControls();
-        }
+        DBG_ASSERT( !m_pCurrentAsyncAction.is(), "SvtFileDialog::executeAsync: previous async action not yet finished!" );
+
+        m_pCurrentAsyncAction = new AsyncPickerAction( this, m_xFileView.get(), AsyncPickerAction::Action::eOpenURL );
+
+        // -1 timeout - sync
+        m_pCurrentAsyncAction->execute( sURL, sFilter, -1, -1, GetBlackList() );
+
+        if( m_eMode != REMOTEDLG_MODE_SAVE )
+            m_xName_ed->set_text( "" );
+
+        m_xFileView->grab_focus();
+    }
+    else
+    {
+        xWait.reset();
+
+        // content doesn't exist
+        ErrorHandler::HandleError( ERRCODE_IO_NOTEXISTS );
+
+        EnableControls();
     }
 }
 
 void RemoteFilesDialog::AddFileExtension()
 {
-    if (m_nCurrentFilter != -1)
+    if (m_nCurrentFilter == -1)
+        return;
+
+    OUString sExt = m_aFilters[m_nCurrentFilter].second;
+    OUString sFileName = m_xName_ed->get_text();
+
+    sal_Int32 nDotPos = sFileName.lastIndexOf( '.' );
+
+    if ( nDotPos == -1 )
     {
-        OUString sExt = m_aFilters[m_nCurrentFilter].second;
-        OUString sFileName = m_xName_ed->get_text();
-
-        sal_Int32 nDotPos = sFileName.lastIndexOf( '.' );
-
-        if ( nDotPos == -1 )
-        {
-            sFileName += sExt.copy( 1 ); // without '*'
-            m_xName_ed->set_text( sFileName );
-        }
+        sFileName += sExt.copy( 1 ); // without '*'
+        m_xName_ed->set_text( sFileName );
     }
 }
 
@@ -725,32 +725,32 @@ IMPL_LINK_NOARG( RemoteFilesDialog, DoubleClickHdl, SvtFileView*, bool )
 IMPL_LINK_NOARG( RemoteFilesDialog, SelectHdl, SvtFileView*, void )
 {
     SvtContentEntry* pData = m_xFileView->FirstSelected();
-    if (pData)
+    if (!pData)
+        return;
+
+    if( ( pData->mbIsFolder && ( m_eType == REMOTEDLG_TYPE_PATHDLG ) )
+        || ( !pData->mbIsFolder && ( m_eType == REMOTEDLG_TYPE_FILEDLG ) ) )
     {
-        if( ( pData->mbIsFolder && ( m_eType == REMOTEDLG_TYPE_PATHDLG ) )
-            || ( !pData->mbIsFolder && ( m_eType == REMOTEDLG_TYPE_FILEDLG ) ) )
-        {
-            // url must contain user info, because we need this info in recent files entry
-            // (to fill user field in login box by default)
-            INetURLObject aURL( pData->maURL );
-            INetURLObject aCurrentURL( m_sLastServiceUrl );
-            aURL.SetUser( aCurrentURL.GetUser() );
+        // url must contain user info, because we need this info in recent files entry
+        // (to fill user field in login box by default)
+        INetURLObject aURL( pData->maURL );
+        INetURLObject aCurrentURL( m_sLastServiceUrl );
+        aURL.SetUser( aCurrentURL.GetUser() );
 
-            m_sPath = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+        m_sPath = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
-            m_xName_ed->set_text( aURL.GetLastName(INetURLObject::DecodeMechanism::WithCharset) );
-        }
-        else
-        {
-            if( m_eMode == REMOTEDLG_MODE_OPEN )
-            {
-                m_sPath.clear();
-                m_xName_ed->set_text( "" );
-            }
-        }
-
-        EnableControls();
+        m_xName_ed->set_text( aURL.GetLastName(INetURLObject::DecodeMechanism::WithCharset) );
     }
+    else
+    {
+        if( m_eMode == REMOTEDLG_MODE_OPEN )
+        {
+            m_sPath.clear();
+            m_xName_ed->set_text( "" );
+        }
+    }
+
+    EnableControls();
 }
 
 IMPL_LINK_NOARG(RemoteFilesDialog, FileNameGetFocusHdl, weld::Widget&, void)
