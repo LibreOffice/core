@@ -10,7 +10,6 @@
 #include <cassert>
 #include <string>
 #include <iostream>
-#include <unordered_map>
 #include <unordered_set>
 
 #include "plugin.hxx"
@@ -18,15 +17,11 @@
 #include "clang/AST/CXXInheritance.h"
 #include "clang/AST/StmtVisitor.h"
 
-/**
-  TODO deal with C++ operator overload assign
-*/
+// This checker aims to pull buried assignments out of complex expressions,
+// where they are quite hard to notice amidst the other conditional logic.
 
 namespace
 {
-//static bool startswith(const std::string& rStr, const char* pSubStr) {
-//    return rStr.compare(0, strlen(pSubStr), pSubStr) == 0;
-//}
 class BuriedAssign : public loplugin::FilteringPlugin<BuriedAssign>
 {
 public:
@@ -39,25 +34,187 @@ public:
     {
         std::string fn(handler.getMainFileName());
         loplugin::normalizeDotDotInFilePath(fn);
-        // getParentStmt appears not to be working very well here
-        if (fn == SRCDIR "/stoc/source/inspect/introspection.cxx"
-            || fn == SRCDIR "/stoc/source/corereflection/criface.cxx")
+
+        // code where I don't have a better alternative
+        if (fn == SRCDIR "/sal/osl/unx/profile.cxx")
             return;
-        // calling an acquire via function pointer
-        if (fn == SRCDIR "/cppu/source/uno/lbenv.cxx"
-            || fn == SRCDIR "cppu/source/typelib/static_types.cxx")
+        if (fn == SRCDIR "/sal/rtl/uri.cxx")
             return;
-        // false+, not sure why
+        if (fn == SRCDIR "/sal/osl/unx/process.cxx")
+            return;
+        if (fn == SRCDIR "/sal/rtl/bootstrap.cxx")
+            return;
+        if (fn == SRCDIR "/i18npool/source/textconversion/genconv_dict.cxx")
+            return;
+        if (fn == SRCDIR "/soltools/cpp/_macro.c")
+            return;
+        if (fn == SRCDIR "/stoc/source/inspect/introspection.cxx")
+            return;
+        if (fn == SRCDIR "/tools/source/fsys/urlobj.cxx")
+            return;
+        if (fn == SRCDIR "/sax/source/tools/fastserializer.cxx")
+            return;
+        if (fn == SRCDIR "/svl/source/crypto/cryptosign.cxx")
+            return;
+        if (fn == SRCDIR "/svl/source/numbers/zforfind.cxx")
+            return;
+        if (fn == SRCDIR "/svl/source/numbers/zformat.cxx")
+            return;
+        if (fn == SRCDIR "/svl/source/numbers/zforscan.cxx")
+            return;
+        if (fn == SRCDIR "/svl/source/numbers/zforlist.cxx")
+            return;
+        if (fn == SRCDIR "/vcl/source/window/debugevent.cxx")
+            return;
+        if (fn == SRCDIR "/vcl/source/control/scrbar.cxx")
+            return;
+        if (fn == SRCDIR "/vcl/source/gdi/bitmap3.cxx")
+            return;
         if (fn == SRCDIR "/vcl/source/window/menu.cxx")
+            return;
+        if (fn == SRCDIR "/vcl/source/fontsubset/sft.cxx")
+            return;
+        if (fn == SRCDIR "/vcl/unx/generic/print/prtsetup.cxx")
+            return;
+        if (fn == SRCDIR "/svtools/source/brwbox/brwbox1.cxx")
+            return;
+        if (fn == SRCDIR "/svtools/source/control/valueset.cxx")
+            return;
+        if (fn == SRCDIR "/basic/source/runtime/iosys.cxx")
+            return;
+        if (fn == SRCDIR "/basic/source/runtime/runtime.cxx")
+            return;
+        if (fn == SRCDIR "/basic/source/sbx/sbxvalue.cxx")
+            return;
+        if (fn == SRCDIR "/basic/source/sbx/sbxvalue.cxx")
+            return;
+        if (fn == SRCDIR "/sfx2/source/dialog/templdlg.cxx")
+            return;
+        if (fn == SRCDIR "/sfx2/source/view/viewfrm.cxx")
+            return;
+        if (fn == SRCDIR "/connectivity/source/commontools/dbtools.cxx")
+            return;
+        if (fn == SRCDIR "/xmloff/source/style/xmlnumfi.cxx")
+            return;
+        if (fn == SRCDIR "/xmloff/source/style/xmlnumfe .cxx")
+            return;
+        if (fn == SRCDIR "/editeng/source/items/textitem.cxx")
+            return;
+        if (fn == SRCDIR "/editeng/source/rtf/rtfitem.cxx")
+            return;
+        if (fn == SRCDIR "/editeng/source/rtf/svxrtf.cxx")
+            return;
+        if (fn == SRCDIR "/editeng/source/misc/svxacorr.cxx")
+            return;
+        if (fn == SRCDIR "/svx/source/items/numfmtsh.cxx")
+            return;
+        if (fn == SRCDIR "/svx/source/dialog/hdft.cxx")
+            return;
+        if (fn == SRCDIR "/cui/source/dialogs/insdlg.cxx")
+            return;
+        if (fn == SRCDIR "/cui/source/tabpages/paragrph.cxx")
+            return;
+        if (fn == SRCDIR "/cui/source/tabpages/page.cxx")
+            return;
+        if (fn == SRCDIR "/cui/source/tabpages/border.cxx")
+            return;
+        if (fn == SRCDIR "/cui/source/tabpages/chardlg.cxx")
+            return;
+        if (fn == SRCDIR "/cui/source/tabpages/numpages.cxx")
+            return;
+        if (fn == SRCDIR "/cui/source/dialogs/SpellDialog.cxx")
+            return;
+        if (fn == SRCDIR "/oox/source/drawingml/diagram/diagramlayoutatoms.cxx")
+            return;
+        if (fn == SRCDIR "/dbaccess/source/core/dataaccess/intercept.cxx")
+            return;
+        if (fn == SRCDIR "/writerfilter/source/dmapper/DomainMapper.cxx")
+            return;
+        if (fn == SRCDIR "/writerfilter/source/dmapper/DomainMapper_Impl.cxx")
+            return;
+        if (fn == SRCDIR "/lotuswordpro/source/filter/lwptablelayout.cxx")
+            return;
+        if (fn == SRCDIR "/i18npool/source/characterclassification/cclass_unicode_parser.cxx")
+            return;
+        if (fn == SRCDIR "/sd/source/filter/eppt/pptx-animations.cxx")
+            return;
+        if (fn == SRCDIR "/sc/source/core/tool/address.cxx")
+            return;
+        if (fn == SRCDIR "/sc/source/core/tool/interpr1.cxx")
+            return;
+        if (fn == SRCDIR "/sc/source/core/tool/interpr4.cxx")
+            return;
+        if (fn == SRCDIR "/sc/source/core/tool/interpr5.cxx")
+            return;
+        if (fn == SRCDIR "/sc/source/core/tool/compiler.cxx")
+            return;
+        if (fn == SRCDIR "/sc/source/core/data/table4.cxx")
+            return;
+        if (fn == SRCDIR "/sc/source/ui/drawfunc/fudraw.cxx")
+            return;
+        if (fn == SRCDIR "/sc/source/filter/xml/xmlcelli.cxx")
+            return;
+        if (fn == SRCDIR "/sc/source/ui/miscdlgs/crnrdlg.cxx")
+            return;
+        if (fn == SRCDIR "/sc/source/ui/app/inputwin.cxx")
+            return;
+        if (fn == SRCDIR "/sc/source/ui/view/viewfun2.cxx")
+            return;
+        if (fn == SRCDIR "/sc/source/ui/unoobj/docuno.cxx")
+            return;
+        if (fn == SRCDIR "/sc/source/ui/view/gridwin.cxx")
+            return;
+        if (fn == SRCDIR "/sw/source/core/crsr/callnk.cxx")
+            return;
+        if (fn == SRCDIR "/sw/source/core/crsr/findtxt.cxx")
+            return;
+        if (fn == SRCDIR "/sw/source/core/crsr/crsrsh.cxx")
+            return;
+        if (fn == SRCDIR "/sw/source/core/crsr/crstrvl.cxx")
+            return;
+        if (fn == SRCDIR "/sw/source/core/doc/doccomp.cxx")
+            return;
+        if (fn == SRCDIR "/sw/source/core/doc/docedt.cxx")
+            return;
+        if (fn == SRCDIR "/sw/source/core/doc/docfly.cxx")
+            return;
+        if (fn == SRCDIR "/sw/source/core/doc/DocumentRedlineManager.cxx")
+            return;
+        if (fn == SRCDIR "/sw/source/core/doc/notxtfrm.cxx")
+            return;
+        // the point at which I gave up on sw/ because it just does it EVERYWHER
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/"))
+            return;
+        if (fn == SRCDIR "/starmath/source/mathtype.cxx")
+            return;
+        if (fn == SRCDIR "/starmath/source/mathmlexport.cxx")
+            return;
+        if (fn == SRCDIR "/starmath/source/view.cxx")
+            return;
+        if (fn == SRCDIR "/xmlhelp/source/treeview/tvread.cxx")
             return;
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
 
     bool VisitBinaryOperator(BinaryOperator const*);
     bool VisitCXXOperatorCallExpr(CXXOperatorCallExpr const*);
+    bool VisitCompoundStmt(CompoundStmt const*);
+    bool VisitIfStmt(IfStmt const*);
+    bool VisitLabelStmt(LabelStmt const*);
+    bool VisitForStmt(ForStmt const*);
+    bool VisitCXXForRangeStmt(CXXForRangeStmt const*);
+    bool VisitWhileStmt(WhileStmt const*);
+    bool VisitDoStmt(DoStmt const*);
+    bool VisitCaseStmt(CaseStmt const*);
+    bool VisitDefaultStmt(DefaultStmt const*);
+    bool VisitVarDecl(VarDecl const*);
+    bool VisitCXXFoldExpr(CXXFoldExpr const*);
 
 private:
-    void checkExpr(Expr const*);
+    void MarkIfAssignment(Stmt const*);
+    void MarkConditionForControlLoops(Expr const*);
+
+    std::unordered_set<const Stmt*> m_handled;
 };
 
 static bool isAssignmentOp(clang::BinaryOperatorKind op)
@@ -80,15 +237,67 @@ static bool isAssignmentOp(clang::OverloadedOperatorKind Opc)
            || Opc == OO_AmpEqual || Opc == OO_CaretEqual || Opc == OO_PipeEqual;
 }
 
+static bool isComparisonOp(clang::OverloadedOperatorKind op)
+{
+    return op == OO_Less || op == OO_Greater || op == OO_LessEqual || op == OO_GreaterEqual
+           || op == OO_EqualEqual || op == OO_ExclaimEqual;
+}
+
+static const Expr* IgnoreImplicitAndConversionOperator(const Expr* expr)
+{
+    expr = compat::IgnoreImplicit(expr);
+    if (auto memberCall = dyn_cast<CXXMemberCallExpr>(expr))
+    {
+        if (auto conversionDecl = dyn_cast_or_null<CXXConversionDecl>(memberCall->getMethodDecl()))
+        {
+            if (!conversionDecl->isExplicit())
+                expr = compat::IgnoreImplicit(memberCall->getImplicitObjectArgument());
+        }
+    }
+    return expr;
+}
+
 bool BuriedAssign::VisitBinaryOperator(BinaryOperator const* binaryOp)
 {
     if (ignoreLocation(binaryOp))
         return true;
-
+    if (compat::getBeginLoc(binaryOp).isMacroID())
+        return true;
     if (!isAssignmentOp(binaryOp->getOpcode()))
         return true;
+    auto expr = IgnoreImplicitAndConversionOperator(binaryOp->getRHS());
+    if (auto rhs = dyn_cast<BinaryOperator>(expr))
+    {
+        // Ignore chained assignment.
+        // TODO limit this to only ordinary assignment
+        if (isAssignmentOp(rhs->getOpcode()))
+            m_handled.insert(rhs);
+    }
+    else if (auto rhs = dyn_cast<CXXOperatorCallExpr>(expr))
+    {
+        // Ignore chained assignment.
+        // TODO limit this to only ordinary assignment
+        if (isAssignmentOp(rhs->getOperator()))
+            m_handled.insert(rhs);
+    }
+    else if (auto cxxConstruct = dyn_cast<CXXConstructExpr>(expr))
+    {
+        if (cxxConstruct->getNumArgs() == 1)
+            MarkIfAssignment(cxxConstruct->getArg(0));
+    }
+    if (!m_handled.insert(binaryOp).second)
+        return true;
 
-    checkExpr(binaryOp);
+    // assignment in constructor
+    StringRef aFileName = getFilenameOfLocation(
+        compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(binaryOp)));
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/include/comphelper/flagguard.hxx"))
+        return true;
+
+    report(DiagnosticsEngine::Warning, "buried assignment, rather put on own line",
+           compat::getBeginLoc(binaryOp))
+        << binaryOp->getSourceRange();
+    //getParentStmt(getParentStmt(getParentStmt(binaryOp)))->dump();
     return true;
 }
 
@@ -96,127 +305,256 @@ bool BuriedAssign::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* cxxOper)
 {
     if (ignoreLocation(cxxOper))
         return true;
+    if (compat::getBeginLoc(cxxOper).isMacroID())
+        return true;
     if (!isAssignmentOp(cxxOper->getOperator()))
         return true;
-    checkExpr(cxxOper);
+    auto expr = IgnoreImplicitAndConversionOperator(cxxOper->getArg(1));
+    if (auto rhs = dyn_cast<BinaryOperator>(expr))
+    {
+        // Ignore chained assignment.
+        // TODO limit this to only ordinary assignment
+        if (isAssignmentOp(rhs->getOpcode()))
+            m_handled.insert(rhs);
+    }
+    else if (auto rhs = dyn_cast<CXXOperatorCallExpr>(expr))
+    {
+        // Ignore chained assignment.
+        // TODO limit this to only ordinary assignment
+        if (isAssignmentOp(rhs->getOperator()))
+            m_handled.insert(rhs);
+    }
+    else if (auto cxxConstruct = dyn_cast<CXXConstructExpr>(expr))
+    {
+        if (cxxConstruct->getNumArgs() == 1)
+            MarkIfAssignment(cxxConstruct->getArg(0));
+    }
+    if (!m_handled.insert(cxxOper).second)
+        return true;
+    report(DiagnosticsEngine::Warning, "buried assignment, rather put on own line",
+           compat::getBeginLoc(cxxOper))
+        << cxxOper->getSourceRange();
+    //getParentStmt(getParentStmt(getParentStmt(getParentStmt(getParentStmt(cxxOper)))))->dump();
     return true;
 }
 
-void BuriedAssign::checkExpr(Expr const* binaryOp)
+bool BuriedAssign::VisitCompoundStmt(CompoundStmt const* compoundStmt)
 {
-    if (compiler.getSourceManager().isMacroBodyExpansion(compat::getBeginLoc(binaryOp)))
-        return;
-    if (compiler.getSourceManager().isMacroArgExpansion(compat::getBeginLoc(binaryOp)))
-        return;
-
-    /**
-    Note: I tried writing this plugin without getParentStmt, but in order to make that work, I had to
-    hack things like TraverseWhileStmt to call TraverseStmt on the child nodes myself, so I could know whether I was inside the body or the condition.
-    But I could not get that to work, so switched to this approach.
-    */
-
-    // look up past the temporary nodes
-    Stmt const* child = binaryOp;
-    Stmt const* parent = getParentStmt(binaryOp);
-    while (true)
+    if (ignoreLocation(compoundStmt))
+        return true;
+    for (auto i = compoundStmt->child_begin(); i != compoundStmt->child_end(); ++i)
     {
-        // This part is not ideal, but getParentStmt() appears to fail us in some cases, notably when the assignment
-        // is inside a decl like:
-        //     int x = a = 1;
-        if (!parent)
-            return;
-        if (!(isa<MaterializeTemporaryExpr>(parent) || isa<CXXBindTemporaryExpr>(parent)
-              || isa<ImplicitCastExpr>(parent) || isa<CXXConstructExpr>(parent)
-              || isa<ParenExpr>(parent) || isa<ExprWithCleanups>(parent)))
-            break;
-        child = parent;
-        parent = getParentStmt(parent);
-    }
-
-    if (isa<CompoundStmt>(parent))
-        return;
-    // ignore chained assignment like "a = b = 1;"
-    if (auto cxxOper = dyn_cast<CXXOperatorCallExpr>(parent))
-    {
-        if (cxxOper->getOperator() == OO_Equal)
-            return;
-    }
-    // ignore chained assignment like "a = b = 1;"
-    if (auto parentBinOp = dyn_cast<BinaryOperator>(parent))
-    {
-        if (parentBinOp->getOpcode() == BO_Assign)
-            return;
-    }
-    // ignore chained assignment like "int a = b = 1;"
-    if (isa<DeclStmt>(parent))
-        return;
-
-    if (isa<CaseStmt>(parent) || isa<DefaultStmt>(parent) || isa<LabelStmt>(parent)
-        || isa<ForStmt>(parent) || isa<CXXForRangeStmt>(parent) || isa<IfStmt>(parent)
-        || isa<DoStmt>(parent) || isa<WhileStmt>(parent) || isa<ReturnStmt>(parent))
-        return;
-
-    // now check for the statements where we don't care at all if we see a buried assignment
-    while (true)
-    {
-        if (isa<CompoundStmt>(parent))
-            break;
-        if (isa<CaseStmt>(parent) || isa<DefaultStmt>(parent) || isa<LabelStmt>(parent))
-            return;
-        // Ignore assign in these statements, just seems to be part of the "natural" idiom of C/C++
-        // TODO: perhaps include ReturnStmt?
-        if (auto forStmt = dyn_cast<ForStmt>(parent))
+        if (auto expr = dyn_cast<Expr>(*i))
         {
-            if (child == forStmt->getBody())
-                break;
-            return;
-        }
-        if (auto forRangeStmt = dyn_cast<CXXForRangeStmt>(parent))
-        {
-            if (child == forRangeStmt->getBody())
-                break;
-            return;
-        }
-        if (auto ifStmt = dyn_cast<IfStmt>(parent))
-        {
-            if (child == ifStmt->getCond())
-                return;
-        }
-        if (auto doStmt = dyn_cast<DoStmt>(parent))
-        {
-            if (child == doStmt->getCond())
-                return;
-        }
-        if (auto whileStmt = dyn_cast<WhileStmt>(parent))
-        {
-            if (child == whileStmt->getBody())
-                break;
-            return;
-        }
-        if (isa<ReturnStmt>(parent))
-            return;
-        // This appears to be a valid way of making it obvious that we need to call acquire when assigning such ref-counted
-        // stuff e.g.
-        //     rtl_uString_acquire( a = b );
-        if (auto callExpr = dyn_cast<CallExpr>(parent))
-        {
-            if (callExpr->getDirectCallee() && callExpr->getDirectCallee()->getIdentifier())
+            expr = compat::IgnoreImplicit(expr);
+            if (auto binaryOp = dyn_cast<BinaryOperator>(expr))
             {
-                auto name = callExpr->getDirectCallee()->getName();
-                if (name == "rtl_uString_acquire" || name == "_acquire"
-                    || name == "typelib_typedescriptionreference_acquire")
-                    return;
+                // ignore comma-chained statements at this level
+                if (binaryOp->getOpcode() == BO_Comma)
+                {
+                    MarkIfAssignment(binaryOp->getLHS());
+                    MarkIfAssignment(binaryOp->getRHS());
+                    continue;
+                }
+            }
+            MarkIfAssignment(expr);
+        }
+    }
+    return true;
+}
+
+void BuriedAssign::MarkIfAssignment(Stmt const* stmt)
+{
+    if (auto expr = dyn_cast_or_null<Expr>(stmt))
+    {
+        expr = compat::IgnoreImplicit(expr);
+        if (auto binaryOp = dyn_cast<BinaryOperator>(expr))
+        {
+            if (isAssignmentOp(binaryOp->getOpcode()))
+            {
+                m_handled.insert(expr);
+                MarkIfAssignment(binaryOp->getRHS()); // in case it is chained
+            }
+            else if (binaryOp->getOpcode() == BO_Comma)
+            {
+                MarkIfAssignment(binaryOp->getLHS());
+                MarkIfAssignment(binaryOp->getRHS());
             }
         }
-        child = parent;
-        parent = getParentStmt(parent);
-        if (!parent)
-            break;
+        else if (auto cxxOper = dyn_cast<CXXOperatorCallExpr>(expr))
+        {
+            if (isAssignmentOp(cxxOper->getOperator()))
+            {
+                m_handled.insert(expr);
+                MarkIfAssignment(cxxOper->getArg(1)); // in case it is chained
+            }
+        }
+    }
+}
+
+bool BuriedAssign::VisitIfStmt(IfStmt const* ifStmt)
+{
+    if (ignoreLocation(ifStmt))
+        return true;
+    MarkConditionForControlLoops(ifStmt->getCond());
+    MarkIfAssignment(ifStmt->getThen());
+    MarkIfAssignment(ifStmt->getElse());
+    return true;
+}
+
+bool BuriedAssign::VisitCaseStmt(CaseStmt const* stmt)
+{
+    if (ignoreLocation(stmt))
+        return true;
+    MarkIfAssignment(stmt->getSubStmt());
+    return true;
+}
+
+bool BuriedAssign::VisitDefaultStmt(DefaultStmt const* stmt)
+{
+    if (ignoreLocation(stmt))
+        return true;
+    MarkIfAssignment(stmt->getSubStmt());
+    return true;
+}
+
+bool BuriedAssign::VisitWhileStmt(WhileStmt const* stmt)
+{
+    if (ignoreLocation(stmt))
+        return true;
+    MarkConditionForControlLoops(stmt->getCond());
+    MarkIfAssignment(stmt->getBody());
+    return true;
+}
+
+bool BuriedAssign::VisitDoStmt(DoStmt const* stmt)
+{
+    if (ignoreLocation(stmt))
+        return true;
+    MarkConditionForControlLoops(stmt->getCond());
+    MarkIfAssignment(stmt->getBody());
+    return true;
+}
+
+/** stuff like
+ *    while ((x = foo())
+ * and
+ *    while ((x = foo() < 0)
+ * is considered idiomatic.
+ */
+void BuriedAssign::MarkConditionForControlLoops(Expr const* expr)
+{
+    if (!expr)
+        return;
+    expr = compat::IgnoreImplicit(expr);
+
+    if (auto binaryOp = dyn_cast<BinaryOperator>(expr))
+    {
+        // ignore comma-chained statements at this level
+        if (binaryOp->getOpcode() == BO_Comma)
+        {
+            MarkConditionForControlLoops(binaryOp->getLHS());
+            MarkConditionForControlLoops(binaryOp->getRHS());
+            return;
+        }
     }
 
-    report(DiagnosticsEngine::Warning, "buried assignment, very hard to read",
-           compat::getBeginLoc(binaryOp))
-        << binaryOp->getSourceRange();
+    // unwrap conversion to bool
+    if (auto memberCall = dyn_cast<CXXMemberCallExpr>(expr))
+    {
+        if (memberCall->getMethodDecl() && isa<CXXConversionDecl>(memberCall->getMethodDecl()))
+        {
+            // TODO check that the conversion is converting to bool
+            expr = compat::IgnoreImplicit(memberCall->getImplicitObjectArgument());
+        }
+    }
+
+    if (auto binaryOp = dyn_cast<BinaryOperator>(expr))
+    {
+        // handle: ((xxx = foo()) != error)
+        if (binaryOp->isComparisonOp())
+        {
+            MarkIfAssignment(compat::IgnoreImplicit(binaryOp->getLHS())->IgnoreParens());
+            MarkIfAssignment(compat::IgnoreImplicit(binaryOp->getRHS())->IgnoreParens());
+        }
+    }
+    else if (auto cxxOper = dyn_cast<CXXOperatorCallExpr>(expr))
+    {
+        // handle: ((xxx = foo()) != error)
+        if (isComparisonOp(cxxOper->getOperator()))
+        {
+            MarkIfAssignment(compat::IgnoreImplicit(cxxOper->getArg(0))->IgnoreParens());
+            MarkIfAssignment(compat::IgnoreImplicit(cxxOper->getArg(1))->IgnoreParens());
+        }
+        // handle: (!(xxx = foo()))
+        else if (cxxOper->getOperator() == OO_Exclaim)
+            MarkIfAssignment(compat::IgnoreImplicit(cxxOper->getArg(0))->IgnoreParens());
+    }
+    else if (auto parenExpr = dyn_cast<ParenExpr>(expr))
+    {
+        // handle: ((xxx = foo()))
+        MarkIfAssignment(compat::IgnoreImplicit(parenExpr->getSubExpr()));
+    }
+    else if (auto unaryOp = dyn_cast<UnaryOperator>(expr))
+    {
+        // handle: (!(xxx = foo()))
+        MarkIfAssignment(compat::IgnoreImplicit(unaryOp->getSubExpr())->IgnoreParens());
+    }
+    else
+        MarkIfAssignment(expr);
+}
+
+bool BuriedAssign::VisitForStmt(ForStmt const* stmt)
+{
+    if (ignoreLocation(stmt))
+        return true;
+    MarkIfAssignment(stmt->getInit());
+    MarkConditionForControlLoops(stmt->getCond());
+    MarkIfAssignment(stmt->getInc());
+    MarkIfAssignment(stmt->getBody());
+    return true;
+}
+
+bool BuriedAssign::VisitCXXForRangeStmt(CXXForRangeStmt const* stmt)
+{
+    if (ignoreLocation(stmt))
+        return true;
+    MarkIfAssignment(stmt->getBody());
+    return true;
+}
+
+bool BuriedAssign::VisitLabelStmt(LabelStmt const* stmt)
+{
+    if (ignoreLocation(stmt))
+        return true;
+    MarkIfAssignment(stmt->getSubStmt());
+    return true;
+}
+
+bool BuriedAssign::VisitVarDecl(VarDecl const* stmt)
+{
+    if (ignoreLocation(stmt))
+        return true;
+    if (stmt->getInit())
+    {
+        auto expr = IgnoreImplicitAndConversionOperator(stmt->getInit());
+        MarkIfAssignment(expr);
+        if (auto cxxConstruct = dyn_cast<CXXConstructExpr>(expr))
+        {
+            if (cxxConstruct->getNumArgs() == 1)
+                MarkIfAssignment(cxxConstruct->getArg(0));
+        }
+    }
+    return true;
+}
+
+bool BuriedAssign::VisitCXXFoldExpr(CXXFoldExpr const* stmt)
+{
+    if (ignoreLocation(stmt))
+        return true;
+    MarkConditionForControlLoops(stmt->getLHS());
+    MarkConditionForControlLoops(stmt->getRHS());
+    return true;
 }
 
 // off by default because it uses getParentStmt so it's more expensive to run

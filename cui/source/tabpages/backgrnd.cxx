@@ -75,22 +75,19 @@ SvxBkgTabPage::SvxBkgTabPage(weld::Container* pPage, weld::DialogController* pCo
     m_xBtnPattern->hide();
 
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
-    const SfxPoolItem* pItem = nullptr;
 
     XColorListRef pColorTable;
-    if ( pDocSh && ( nullptr != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) ) )
-    {
-        pColorTable = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
-    }
+    if ( pDocSh )
+        if (auto pItem = pDocSh->GetItem( SID_COLOR_TABLE ))
+            pColorTable = pItem->GetColorList();
 
     if ( !pColorTable.is() )
         pColorTable = XColorList::CreateStdColorList();
 
     XBitmapListRef pBitmapList;
-    if ( pDocSh && ( nullptr != ( pItem = pDocSh->GetItem( SID_BITMAP_LIST ) ) ) )
-    {
-        pBitmapList = static_cast<const SvxBitmapListItem*>(pItem)->GetBitmapList();
-    }
+    if ( pDocSh )
+        if (auto pItem = pDocSh->GetItem( SID_BITMAP_LIST ) )
+            pBitmapList = pItem->GetBitmapList();
 
     SetColorList(pColorTable);
     SetBitmapList(pBitmapList);

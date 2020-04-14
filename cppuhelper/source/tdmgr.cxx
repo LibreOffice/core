@@ -93,7 +93,8 @@ static typelib_TypeDescription * createCTD(
             rInit.eTypeClass = static_cast<typelib_TypeClass>(pMemberTypes[nPos]->getTypeClass());
 
             OUString aMemberTypeName( pMemberTypes[nPos]->getName() );
-            rtl_uString_acquire( rInit.pTypeName = aMemberTypeName.pData );
+            rInit.pTypeName = aMemberTypeName.pData;
+            rtl_uString_acquire( rInit.pTypeName );
 
             // string is held by rMemberNames
             rInit.pMemberName = pMemberNames[nPos].pData;
@@ -165,8 +166,8 @@ static typelib_TypeDescription * createCTD(
                 = static_cast<typelib_TypeClass>(pMemberTypes[nPos]->getTypeClass());
 
             OUString aMemberTypeName( pMemberTypes[nPos]->getName() );
-            rtl_uString_acquire(
-                rInit.aBase.pTypeName = aMemberTypeName.pData );
+            rInit.aBase.pTypeName = aMemberTypeName.pData;
+            rtl_uString_acquire( rInit.aBase.pTypeName );
 
             // string is held by rMemberNames
             rInit.aBase.pMemberName = pMemberNames[nPos].pData;
@@ -256,9 +257,11 @@ static typelib_TypeDescription * createCTD(
 
             rInit.eTypeClass = static_cast<typelib_TypeClass>(xType->getTypeClass());
             OUString aParamTypeName( xType->getName() );
-            rtl_uString_acquire( rInit.pTypeName = aParamTypeName.pData );
+            rInit.pTypeName = aParamTypeName.pData;
+            rtl_uString_acquire( rInit.pTypeName );
             OUString aParamName( xParam->getName() );
-            rtl_uString_acquire( rInit.pParamName = aParamName.pData );
+            rInit.pParamName = aParamName.pData;
+            rtl_uString_acquire( rInit.pParamName );
             rInit.bIn  = xParam->isIn();
             rInit.bOut = xParam->isOut();
         }
@@ -273,7 +276,8 @@ static typelib_TypeDescription * createCTD(
         for ( nPos = nExceptions; nPos--; )
         {
             OUString aExceptionTypeName( pExceptions[nPos]->getName() );
-            rtl_uString_acquire( ppExceptionNames[nPos] = aExceptionTypeName.pData );
+            ppExceptionNames[nPos] = aExceptionTypeName.pData;
+            rtl_uString_acquire( ppExceptionNames[nPos] );
         }
 
         OUString aTypeName( xMethod->getName() );
