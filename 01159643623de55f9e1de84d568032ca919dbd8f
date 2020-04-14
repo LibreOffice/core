@@ -16,6 +16,24 @@
       "revId": "01159643623de55f9e1de84d568032ca919dbd8f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf4fb015_942c55e8",
+        "filename": "include/editeng/charrotateitem.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-04-14T08:52:38Z",
+      "side": 1,
+      "message": "huh, weird. I always test first on Linux, and then on Windows, and this worked fine for me, and works with current master too.\n\nAnyhoo, no problem, will revert this part. What platform/gcc version are you using?",
+      "parentUuid": "934c9057_123660b6",
+      "revId": "01159643623de55f9e1de84d568032ca919dbd8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
