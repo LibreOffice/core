@@ -68,7 +68,8 @@ namespace basegfx
     B3DVector operator*( const ::basegfx::B3DHomMatrix& rMat, const B3DVector& rVec )
     {
         B3DVector aRes( rVec );
-        return aRes*=rMat;
+        aRes *= rMat;
+        return aRes;
     }
 
     bool areParallel( const B3DVector& rVecA, const B3DVector& rVecB )
