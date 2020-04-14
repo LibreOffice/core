@@ -1153,6 +1153,7 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
              aEvent.FeatureURL.Path == "WrapText" ||
              aEvent.FeatureURL.Path == "NumberFormatCurrency" ||
              aEvent.FeatureURL.Path == "NumberFormatPercent" ||
+             aEvent.FeatureURL.Path == "NumberFormatDecimal" ||
              aEvent.FeatureURL.Path == "NumberFormatDate")
     {
         bool aBool;
