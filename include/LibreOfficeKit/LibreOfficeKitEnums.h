@@ -719,7 +719,12 @@ typedef enum
      * Send the list of functions whose name starts with the characters entered
      * by the user in the formula input bar.
      */
-    LOK_CALLBACK_CALC_FUNCTION_LIST = 47
+    LOK_CALLBACK_CALC_FUNCTION_LIST = 47,
+
+    /**
+     * Sends the tab stop list for the current of the current cursor position.
+     */
+    LOK_CALLBACK_TAB_STOP_LIST = 48,
 }
 LibreOfficeKitCallbackType;
 
@@ -844,6 +849,8 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_JSDIALOG";
     case LOK_CALLBACK_CALC_FUNCTION_LIST:
         return "LOK_CALLBACK_CALC_FUNCTION_LIST";
+    case LOK_CALLBACK_TAB_STOP_LIST:
+        return "LOK_CALLBACK_TAB_STOP_LIST";
     }
 
     assert(!"Unknown LibreOfficeKitCallbackType type.");
