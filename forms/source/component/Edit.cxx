@@ -556,31 +556,31 @@ sal_uInt16 OEditModel::getPersistenceFlags() const
 void OEditModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
 {
     Reference< XPropertySet > xField = getField();
-    if ( xField.is() )
+    if ( !xField.is() )
+        return;
+
+    m_pValueFormatter.reset( new ::dbtools::FormattedColumnValue( getContext(), Reference< XRowSet >( _rxForm, UNO_QUERY ), xField ) );
+
+    if ( m_pValueFormatter->getKeyType() == NumberFormat::SCIENTIFIC )
+        return;
+
+    m_bMaxTextLenModified = getINT16(m_xAggregateSet->getPropertyValue(PROPERTY_MAXTEXTLEN)) != 0;
+    if ( !m_bMaxTextLenModified )
     {
-        m_pValueFormatter.reset( new ::dbtools::FormattedColumnValue( getContext(), Reference< XRowSet >( _rxForm, UNO_QUERY ), xField ) );
+        sal_Int32 nFieldLen = 0;
+        xField->getPropertyValue("Precision") >>= nFieldLen;
 
-        if ( m_pValueFormatter->getKeyType() != NumberFormat::SCIENTIFIC )
+        if (nFieldLen > 0 && nFieldLen <= SAL_MAX_INT16)
         {
-            m_bMaxTextLenModified = getINT16(m_xAggregateSet->getPropertyValue(PROPERTY_MAXTEXTLEN)) != 0;
-            if ( !m_bMaxTextLenModified )
-            {
-                sal_Int32 nFieldLen = 0;
-                xField->getPropertyValue("Precision") >>= nFieldLen;
+            Any aVal;
+            aVal <<= static_cast<sal_Int16>(nFieldLen);
+            m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, aVal);
 
-                if (nFieldLen > 0 && nFieldLen <= SAL_MAX_INT16)
-                {
-                    Any aVal;
-                    aVal <<= static_cast<sal_Int16>(nFieldLen);
-                    m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, aVal);
-
-                    m_bMaxTextLenModified = true;
-                }
-            }
-            else
-                m_bMaxTextLenModified = false; // to get sure that the text len won't be set in unloaded
+            m_bMaxTextLenModified = true;
         }
     }
+    else
+        m_bMaxTextLenModified = false; // to get sure that the text len won't be set in unloaded
 }
 
 

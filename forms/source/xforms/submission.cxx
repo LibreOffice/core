@@ -510,18 +510,18 @@ static void cloneNodes(Model& aModel, const Reference< XNode >& dstParent, const
     Reference< XDocument > dstDoc = dstParent->getOwnerDocument();
     Reference< XNode > imported;
 
-    if (cur.is())
+    if (!cur.is())
+        return;
+
+    //  is this node relevant?
+    MIP mip = aModel.queryMIP(cur);
+    if(mip.isRelevant() && !(bRemoveWSNodes && isIgnorable(cur)))
     {
-        //  is this node relevant?
-        MIP mip = aModel.queryMIP(cur);
-        if(mip.isRelevant() && !(bRemoveWSNodes && isIgnorable(cur)))
-        {
-            imported = dstDoc->importNode(cur, false);
-            imported = dstParent->appendChild(imported);
-            // append source children to new imported parent
-            for( cur = cur->getFirstChild(); cur.is(); cur = cur->getNextSibling() )
-                cloneNodes(aModel, imported, cur, bRemoveWSNodes);
-        }
+        imported = dstDoc->importNode(cur, false);
+        imported = dstParent->appendChild(imported);
+        // append source children to new imported parent
+        for( cur = cur->getFirstChild(); cur.is(); cur = cur->getNextSibling() )
+            cloneNodes(aModel, imported, cur, bRemoveWSNodes);
     }
 }
 Reference< XDocument > Submission::getInstanceDocument(const Reference< XXPathObject >& aObj)

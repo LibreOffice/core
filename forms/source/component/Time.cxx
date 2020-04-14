@@ -196,18 +196,18 @@ void OTimeModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
 {
     OBoundControlModel::onConnectedDbColumn( _rxForm );
     Reference<XPropertySet> xField = getField();
-    if (xField.is())
+    if (!xField.is())
+        return;
+
+    m_bDateTimeField = false;
+    try
     {
-        m_bDateTimeField = false;
-        try
-        {
-            sal_Int32 nFieldType = 0;
-            xField->getPropertyValue(PROPERTY_FIELDTYPE) >>= nFieldType;
-            m_bDateTimeField = (nFieldType == DataType::TIMESTAMP);
-        }
-        catch(const Exception&)
-        {
-        }
+        sal_Int32 nFieldType = 0;
+        xField->getPropertyValue(PROPERTY_FIELDTYPE) >>= nFieldType;
+        m_bDateTimeField = (nFieldType == DataType::TIMESTAMP);
+    }
+    catch(const Exception&)
+    {
     }
 }
 

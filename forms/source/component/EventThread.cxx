@@ -76,25 +76,25 @@ void OComponentEventThread::impl_clearEventQueue()
 
 void OComponentEventThread::disposing( const EventObject& evt )
 {
-    if( evt.Source == static_cast<XWeak*>(m_xComp.get()) )
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
+    if( evt.Source != static_cast<XWeak*>(m_xComp.get()) )
+        return;
 
-        // Remove EventListener
-        Reference<XEventListener>  xEvtLstnr = static_cast<XEventListener*>(this);
-        m_xComp->removeEventListener( xEvtLstnr );
+    ::osl::MutexGuard aGuard( m_aMutex );
 
-        // Clear EventQueue
-        impl_clearEventQueue();
+    // Remove EventListener
+    Reference<XEventListener>  xEvtLstnr = static_cast<XEventListener*>(this);
+    m_xComp->removeEventListener( xEvtLstnr );
 
-        // Free the Control and set pCompImpl to 0,
-        // so that the thread knows, that it should terminate.
-        m_xComp.clear();
+    // Clear EventQueue
+    impl_clearEventQueue();
 
-        // Wake up the thread and terminate
-        m_aCond.set();
-        terminate();
-    }
+    // Free the Control and set pCompImpl to 0,
+    // so that the thread knows, that it should terminate.
+    m_xComp.clear();
+
+    // Wake up the thread and terminate
+    m_aCond.set();
+    terminate();
 }
 
 void OComponentEventThread::addEvent( std::unique_ptr<EventObject> _pEvt )

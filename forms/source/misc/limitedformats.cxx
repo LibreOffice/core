@@ -148,53 +148,53 @@ namespace frm
     void OLimitedFormats::ensureTableInitialized(const sal_Int16 _nTableId)
     {
         FormatEntry* pFormatTable = lcl_getFormatTable(_nTableId);
-        if (-1 == pFormatTable->nKey)
+        if (-1 != pFormatTable->nKey)
+            return;
+
+        ::osl::MutexGuard aGuard(s_aMutex);
+        if (-1 != pFormatTable->nKey)
+            return;
+
+        // initialize the keys
+        Reference<XNumberFormats> xStandardFormats;
+        if (s_xStandardFormats.is())
+            xStandardFormats = s_xStandardFormats->getNumberFormats();
+        OSL_ENSURE(xStandardFormats.is(), "OLimitedFormats::ensureTableInitialized: don't have a formats supplier!");
+
+        if (!xStandardFormats.is())
+            return;
+
+        // loop through the table
+        FormatEntry* pLoopFormats = pFormatTable;
+        while (pLoopFormats->pDescription)
         {
-            ::osl::MutexGuard aGuard(s_aMutex);
-            if (-1 == pFormatTable->nKey)
+            // get the key for the description
+            pLoopFormats->nKey = xStandardFormats->queryKey(
+                OUString::createFromAscii(pLoopFormats->pDescription),
+                getLocale(pLoopFormats->eLocale),
+                false
+            );
+
+            if (-1 == pLoopFormats->nKey)
             {
-                // initialize the keys
-                Reference<XNumberFormats> xStandardFormats;
-                if (s_xStandardFormats.is())
-                    xStandardFormats = s_xStandardFormats->getNumberFormats();
-                OSL_ENSURE(xStandardFormats.is(), "OLimitedFormats::ensureTableInitialized: don't have a formats supplier!");
-
-                if (xStandardFormats.is())
-                {
-                    // loop through the table
-                    FormatEntry* pLoopFormats = pFormatTable;
-                    while (pLoopFormats->pDescription)
-                    {
-                        // get the key for the description
-                        pLoopFormats->nKey = xStandardFormats->queryKey(
-                            OUString::createFromAscii(pLoopFormats->pDescription),
-                            getLocale(pLoopFormats->eLocale),
-                            false
-                        );
-
-                        if (-1 == pLoopFormats->nKey)
-                        {
-                            pLoopFormats->nKey = xStandardFormats->addNew(
-                                OUString::createFromAscii(pLoopFormats->pDescription),
-                                getLocale(pLoopFormats->eLocale)
-                            );
+                pLoopFormats->nKey = xStandardFormats->addNew(
+                    OUString::createFromAscii(pLoopFormats->pDescription),
+                    getLocale(pLoopFormats->eLocale)
+                );
 #ifdef DBG_UTIL
-                            try
-                            {
-                                xStandardFormats->getByKey(pLoopFormats->nKey);
-                            }
-                            catch(const Exception&)
-                            {
-                                OSL_FAIL("OLimitedFormats::ensureTableInitialized: adding the key to the formats collection failed!");
-                            }
-#endif
-                        }
-
-                        // next
-                        ++pLoopFormats;
-                    }
+                try
+                {
+                    xStandardFormats->getByKey(pLoopFormats->nKey);
                 }
+                catch(const Exception&)
+                {
+                    OSL_FAIL("OLimitedFormats::ensureTableInitialized: adding the key to the formats collection failed!");
+                }
+#endif
             }
+
+            // next
+            ++pLoopFormats;
         }
     }
 
@@ -241,27 +241,27 @@ namespace frm
         _rValue.clear();
 
         OSL_ENSURE(m_xAggregate.is() && (-1 != m_nFormatEnumPropertyHandle), "OLimitedFormats::getFormatKeyPropertyValue: not initialized!");
-        if (m_xAggregate.is())
-        {
-            // get the aggregate's enum property value
-            Any aEnumPropertyValue = m_xAggregate->getFastPropertyValue(m_nFormatEnumPropertyHandle);
-            sal_Int32 nValue = -1;
-            ::cppu::enum2int(nValue, aEnumPropertyValue);
+        if (!m_xAggregate.is())
+            return;
 
-            // get the translation table
-            const FormatEntry* pFormats = lcl_getFormatTable(m_nTableId);
+        // get the aggregate's enum property value
+        Any aEnumPropertyValue = m_xAggregate->getFastPropertyValue(m_nFormatEnumPropertyHandle);
+        sal_Int32 nValue = -1;
+        ::cppu::enum2int(nValue, aEnumPropertyValue);
 
-            // seek to the nValue'th entry
-            sal_Int32 nLookup = 0;
-            for (   ;
-                    (nullptr != pFormats->pDescription) && (nLookup < nValue);
-                    ++pFormats, ++nLookup
-                )
-                ;
-            OSL_ENSURE(nullptr != pFormats->pDescription, "OLimitedFormats::getFormatKeyPropertyValue: did not find the value!");
-            if (pFormats->pDescription)
-                _rValue <<= pFormats->nKey;
-        }
+        // get the translation table
+        const FormatEntry* pFormats = lcl_getFormatTable(m_nTableId);
+
+        // seek to the nValue'th entry
+        sal_Int32 nLookup = 0;
+        for (   ;
+                (nullptr != pFormats->pDescription) && (nLookup < nValue);
+                ++pFormats, ++nLookup
+            )
+            ;
+        OSL_ENSURE(nullptr != pFormats->pDescription, "OLimitedFormats::getFormatKeyPropertyValue: did not find the value!");
+        if (pFormats->pDescription)
+            _rValue <<= pFormats->nKey;
 
         // TODO: should use a standard format for the control type we're working for
     }

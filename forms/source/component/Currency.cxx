@@ -61,45 +61,45 @@ css::uno::Sequence<OUString> SAL_CALL OCurrencyControl::getSupportedServiceNames
 
 void OCurrencyModel::implConstruct()
 {
-    if (m_xAggregateSet.is())
-    {
-        try
-        {
-            // get the system international information
-            const SvtSysLocale aSysLocale;
-            const LocaleDataWrapper& aLocaleInfo = aSysLocale.GetLocaleData();
+    if (!m_xAggregateSet.is())
+        return;
 
-            OUString sCurrencySymbol;
-            bool bPrependCurrencySymbol = false;
-            switch ( aLocaleInfo.getCurrPositiveFormat() )
-            {
-                case 0: // $1
-                    sCurrencySymbol = aLocaleInfo.getCurrSymbol();
-                    bPrependCurrencySymbol = true;
-                    break;
-                case 1: // 1$
-                    sCurrencySymbol = aLocaleInfo.getCurrSymbol();
-                    bPrependCurrencySymbol = false;
-                    break;
-                case 2: // $ 1
-                    sCurrencySymbol = aLocaleInfo.getCurrSymbol() + " ";
-                    bPrependCurrencySymbol = true;
-                    break;
-                case 3: // 1 $
-                    sCurrencySymbol = " " + aLocaleInfo.getCurrSymbol();
-                    bPrependCurrencySymbol = false;
-                    break;
-            }
-            if (!sCurrencySymbol.isEmpty())
-            {
-                m_xAggregateSet->setPropertyValue(PROPERTY_CURRENCYSYMBOL, makeAny(sCurrencySymbol));
-                m_xAggregateSet->setPropertyValue(PROPERTY_CURRSYM_POSITION, makeAny(bPrependCurrencySymbol));
-            }
-        }
-        catch(const Exception&)
+    try
+    {
+        // get the system international information
+        const SvtSysLocale aSysLocale;
+        const LocaleDataWrapper& aLocaleInfo = aSysLocale.GetLocaleData();
+
+        OUString sCurrencySymbol;
+        bool bPrependCurrencySymbol = false;
+        switch ( aLocaleInfo.getCurrPositiveFormat() )
         {
-            OSL_FAIL( "OCurrencyModel::implConstruct: caught an exception while initializing the aggregate!" );
+            case 0: // $1
+                sCurrencySymbol = aLocaleInfo.getCurrSymbol();
+                bPrependCurrencySymbol = true;
+                break;
+            case 1: // 1$
+                sCurrencySymbol = aLocaleInfo.getCurrSymbol();
+                bPrependCurrencySymbol = false;
+                break;
+            case 2: // $ 1
+                sCurrencySymbol = aLocaleInfo.getCurrSymbol() + " ";
+                bPrependCurrencySymbol = true;
+                break;
+            case 3: // 1 $
+                sCurrencySymbol = " " + aLocaleInfo.getCurrSymbol();
+                bPrependCurrencySymbol = false;
+                break;
         }
+        if (!sCurrencySymbol.isEmpty())
+        {
+            m_xAggregateSet->setPropertyValue(PROPERTY_CURRENCYSYMBOL, makeAny(sCurrencySymbol));
+            m_xAggregateSet->setPropertyValue(PROPERTY_CURRSYM_POSITION, makeAny(bPrependCurrencySymbol));
+        }
+    }
+    catch(const Exception&)
+    {
+        OSL_FAIL( "OCurrencyModel::implConstruct: caught an exception while initializing the aggregate!" );
     }
 }
 

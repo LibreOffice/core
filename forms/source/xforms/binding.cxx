@@ -461,40 +461,40 @@ static void lcl_addListenerToNode( const Reference<XNode>& xNode,
                                    const Reference<XEventListener>& xListener )
 {
     Reference<XEventTarget> xTarget( xNode, UNO_QUERY );
-    if( xTarget.is() )
-    {
-        xTarget->addEventListener( "DOMCharacterDataModified",
-                                   xListener, false );
-        xTarget->addEventListener( "DOMCharacterDataModified",
-                                   xListener, true );
-        xTarget->addEventListener( "DOMAttrModified",
-                                   xListener, false );
-        xTarget->addEventListener( "DOMAttrModified",
-                                   xListener, true );
-        xTarget->addEventListener( "DOMAttrModified",
-                                   xListener, true );
-        xTarget->addEventListener( "xforms-generic",
-                                   xListener, true );
-    }
+    if( !xTarget.is() )
+        return;
+
+    xTarget->addEventListener( "DOMCharacterDataModified",
+                               xListener, false );
+    xTarget->addEventListener( "DOMCharacterDataModified",
+                               xListener, true );
+    xTarget->addEventListener( "DOMAttrModified",
+                               xListener, false );
+    xTarget->addEventListener( "DOMAttrModified",
+                               xListener, true );
+    xTarget->addEventListener( "DOMAttrModified",
+                               xListener, true );
+    xTarget->addEventListener( "xforms-generic",
+                               xListener, true );
 }
 
 static void lcl_removeListenerFromNode( const Reference<XNode>& xNode,
                                         const Reference<XEventListener>& xListener )
 {
     Reference<XEventTarget> xTarget( xNode, UNO_QUERY );
-    if( xTarget.is() )
-    {
-        xTarget->removeEventListener( "DOMCharacterDataModified",
-                                      xListener, false );
-        xTarget->removeEventListener( "DOMCharacterDataModified",
-                                      xListener, true );
-        xTarget->removeEventListener( "DOMAttrModified",
-                                      xListener, false );
-        xTarget->removeEventListener( "DOMAttrModified",
-                                      xListener, true );
-        xTarget->removeEventListener( "xforms-generic",
-                                      xListener, true );
-    }
+    if( !xTarget.is() )
+        return;
+
+    xTarget->removeEventListener( "DOMCharacterDataModified",
+                                  xListener, false );
+    xTarget->removeEventListener( "DOMCharacterDataModified",
+                                  xListener, true );
+    xTarget->removeEventListener( "DOMAttrModified",
+                                  xListener, false );
+    xTarget->removeEventListener( "DOMAttrModified",
+                                  xListener, true );
+    xTarget->removeEventListener( "xforms-generic",
+                                  xListener, true );
 }
 
 ::std::vector<EvaluationContext> Binding::_getMIPEvaluationContexts() const
@@ -931,24 +931,24 @@ void Binding::_setNamespaces( const css::uno::Reference<css::container::XNameCon
 
 void Binding::_checkBindingID()
 {
-    if( getModel().is() )
+    if( !getModel().is() )
+        return;
+
+    Reference<XNameAccess> xBindings( getModel()->getBindings(), UNO_QUERY_THROW );
+    if( !msBindingID.isEmpty() )
+        return;
+
+    // no binding ID? then make one up!
+    OUString sIDPrefix = getResource( RID_STR_XFORMS_BINDING_UI_NAME ) + " ";
+    sal_Int32 nNumber = 0;
+    OUString sName;
+    do
     {
-        Reference<XNameAccess> xBindings( getModel()->getBindings(), UNO_QUERY_THROW );
-        if( msBindingID.isEmpty() )
-        {
-            // no binding ID? then make one up!
-            OUString sIDPrefix = getResource( RID_STR_XFORMS_BINDING_UI_NAME ) + " ";
-            sal_Int32 nNumber = 0;
-            OUString sName;
-            do
-            {
-                nNumber++;
-                sName = sIDPrefix + OUString::number( nNumber );
-            }
-            while( xBindings->hasByName( sName ) );
-            setBindingID( sName );
-        }
+        nNumber++;
+        sName = sIDPrefix + OUString::number( nNumber );
     }
+    while( xBindings->hasByName( sName ) );
+    setBindingID( sName );
 }
 
 

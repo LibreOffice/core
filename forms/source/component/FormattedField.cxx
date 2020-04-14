@@ -411,43 +411,43 @@ void OFormattedModel::_propertyChanged( const css::beans::PropertyChangeEvent& e
 {
     // TODO: check how this works with external bindings
     OSL_ENSURE( evt.Source == m_xAggregateSet, "OFormattedModel::_propertyChanged: where did this come from?" );
-    if ( evt.Source == m_xAggregateSet )
+    if ( evt.Source != m_xAggregateSet )
+        return;
+
+    if ( evt.PropertyName == PROPERTY_FORMATKEY )
     {
-        if ( evt.PropertyName == PROPERTY_FORMATKEY )
+        if ( evt.NewValue.getValueType().getTypeClass() == TypeClass_LONG )
         {
-            if ( evt.NewValue.getValueType().getTypeClass() == TypeClass_LONG )
+            try
             {
-                try
+                ::osl::MutexGuard aGuard( m_aMutex );
+                Reference<XNumberFormatsSupplier> xSupplier( calcFormatsSupplier() );
+                m_nKeyType  = getNumberFormatType(xSupplier->getNumberFormats(), getINT32( evt.NewValue ) );
+                // as m_aSaveValue (which is used by commitControlValueToDbColumn) is format dependent we have
+                // to recalc it, which is done by translateDbColumnToControlValue
+                if ( m_xColumn.is() && m_xAggregateFastSet.is()  && !m_xCursor->isBeforeFirst() && !m_xCursor->isAfterLast())
                 {
-                    ::osl::MutexGuard aGuard( m_aMutex );
-                    Reference<XNumberFormatsSupplier> xSupplier( calcFormatsSupplier() );
-                    m_nKeyType  = getNumberFormatType(xSupplier->getNumberFormats(), getINT32( evt.NewValue ) );
-                    // as m_aSaveValue (which is used by commitControlValueToDbColumn) is format dependent we have
-                    // to recalc it, which is done by translateDbColumnToControlValue
-                    if ( m_xColumn.is() && m_xAggregateFastSet.is()  && !m_xCursor->isBeforeFirst() && !m_xCursor->isAfterLast())
-                    {
-                        setControlValue( translateDbColumnToControlValue(), eOther );
-                    }
-                    // if we're connected to an external value binding, then re-calculate the type
-                    // used to exchange the value - it depends on the format, too
-                    if ( hasExternalValueBinding() )
-                    {
-                        calculateExternalValueType();
-                    }
+                    setControlValue( translateDbColumnToControlValue(), eOther );
                 }
-                catch(const Exception&)
+                // if we're connected to an external value binding, then re-calculate the type
+                // used to exchange the value - it depends on the format, too
+                if ( hasExternalValueBinding() )
                 {
+                    calculateExternalValueType();
                 }
             }
-            return;
+            catch(const Exception&)
+            {
+            }
         }
-        if ( evt.PropertyName == PROPERTY_FORMATSSUPPLIER )
-        {
-            updateFormatterNullDate();
-            return;
-        }
-        OBoundControlModel::_propertyChanged( evt );
+        return;
     }
+    if ( evt.PropertyName == PROPERTY_FORMATSSUPPLIER )
+    {
+        updateFormatterNullDate();
+        return;
+    }
+    OBoundControlModel::_propertyChanged( evt );
 }
 
 void OFormattedModel::updateFormatterNullDate()

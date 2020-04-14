@@ -740,23 +740,23 @@ void SAL_CALL OImageControlControl::disposing( const EventObject& Event )
 void OImageControlControl::implClearGraphics( bool _bForce )
 {
     Reference< XPropertySet > xSet( getModel(), UNO_QUERY );
-    if ( xSet.is() )
+    if ( !xSet.is() )
+        return;
+
+    if ( _bForce )
     {
-        if ( _bForce )
-        {
-            OUString sOldImageURL;
-            xSet->getPropertyValue( PROPERTY_IMAGE_URL ) >>= sOldImageURL;
+        OUString sOldImageURL;
+        xSet->getPropertyValue( PROPERTY_IMAGE_URL ) >>= sOldImageURL;
 
-            if ( sOldImageURL.isEmpty() )
-                // the ImageURL is already empty, so simply setting a new empty one would not suffice
-                // (since it would be ignored)
-                xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( OUString( "private:emptyImage" ) ) );
-                    // (the concrete URL we're passing here doesn't matter. It's important that
-                    // the model cannot resolve it to a valid resource describing an image stream
-        }
-
-        xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( OUString() ) );
+        if ( sOldImageURL.isEmpty() )
+            // the ImageURL is already empty, so simply setting a new empty one would not suffice
+            // (since it would be ignored)
+            xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( OUString( "private:emptyImage" ) ) );
+                // (the concrete URL we're passing here doesn't matter. It's important that
+                // the model cannot resolve it to a valid resource describing an image stream
     }
+
+    xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( OUString() ) );
 }
 
 

@@ -131,35 +131,35 @@ namespace frm
         OSL_ENSURE( ( _rEvent.Position > 0 ) && ( _rEvent.Count > 0 ) && ( _rEvent.Position + _rEvent.Count <= static_cast<sal_Int32>(m_aStringItems.size()) ),
             "OEntryListHelper::entryRangeRemoved: invalid count and/or position!" );
 
-        if  (   ( _rEvent.Position > 0 )
+        if  (   !(( _rEvent.Position > 0 )
             &&  ( _rEvent.Count > 0 )
-            &&  ( _rEvent.Position + _rEvent.Count <= static_cast<sal_Int32>(m_aStringItems.size()) )
+            &&  ( _rEvent.Position + _rEvent.Count <= static_cast<sal_Int32>(m_aStringItems.size()) ))
             )
+            return;
+
+        m_aStringItems.erase(m_aStringItems.begin() + _rEvent.Position,
+                             m_aStringItems.begin() + _rEvent.Position + _rEvent.Count );
+        if (_rEvent.Position + _rEvent.Count <= m_aTypedItems.getLength())
         {
-            m_aStringItems.erase(m_aStringItems.begin() + _rEvent.Position,
-                                 m_aStringItems.begin() + _rEvent.Position + _rEvent.Count );
-            if (_rEvent.Position + _rEvent.Count <= m_aTypedItems.getLength())
+            Sequence<Any> aTmp( m_aTypedItems.getLength() - _rEvent.Count );
+            sal_Int32 nStop = _rEvent.Position;
+            sal_Int32 i = 0;
+            for ( ; i < nStop; ++i)
             {
-                Sequence<Any> aTmp( m_aTypedItems.getLength() - _rEvent.Count );
-                sal_Int32 nStop = _rEvent.Position;
-                sal_Int32 i = 0;
-                for ( ; i < nStop; ++i)
-                {
-                    aTmp[i] = m_aTypedItems[i];
-                }
-                nStop = aTmp.getLength();
-                for (sal_Int32 j = _rEvent.Position + _rEvent.Count; i < nStop; ++i, ++j)
-                {
-                    aTmp[i] = m_aTypedItems[j];
-                }
-                m_aTypedItems = aTmp;
+                aTmp[i] = m_aTypedItems[i];
             }
-            else if (m_aTypedItems.hasElements())
+            nStop = aTmp.getLength();
+            for (sal_Int32 j = _rEvent.Position + _rEvent.Count; i < nStop; ++i, ++j)
             {
-                m_aTypedItems = Sequence<Any>();    // doesn't match anymore
+                aTmp[i] = m_aTypedItems[j];
             }
-            stringItemListChanged( aLock );
+            m_aTypedItems = aTmp;
         }
+        else if (m_aTypedItems.hasElements())
+        {
+            m_aTypedItems = Sequence<Any>();    // doesn't match anymore
+        }
+        stringItemListChanged( aLock );
     }
 
 

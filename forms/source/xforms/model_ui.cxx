@@ -170,32 +170,32 @@ static void lcl_OutInstance( OUStringBuffer& rBuffer,
 {
     Reference<XDocument> xDoc = xNode->getOwnerDocument();
 
-    if( xDoc != pModel->getDefaultInstance() )
+    if( xDoc == pModel->getDefaultInstance() )
+        return;
+
+    rBuffer.insert( 0, "')" );
+
+    // iterate over instances, and find the right one
+    OUString sInstanceName;
+    Reference<XEnumeration> xEnum =
+        pModel->getInstances()->createEnumeration();
+    while( sInstanceName.isEmpty() && xEnum->hasMoreElements() )
     {
-        rBuffer.insert( 0, "')" );
+        Sequence<PropertyValue> aValues;
+        xEnum->nextElement() >>= aValues;
 
-        // iterate over instances, and find the right one
-        OUString sInstanceName;
-        Reference<XEnumeration> xEnum =
-            pModel->getInstances()->createEnumeration();
-        while( sInstanceName.isEmpty() && xEnum->hasMoreElements() )
-        {
-            Sequence<PropertyValue> aValues;
-            xEnum->nextElement() >>= aValues;
+        // get ID and instance
+        OUString sId;
+        Reference<XDocument> xInstance;
+        getInstanceData( aValues, &sId, &xInstance, nullptr, nullptr );
 
-            // get ID and instance
-            OUString sId;
-            Reference<XDocument> xInstance;
-            getInstanceData( aValues, &sId, &xInstance, nullptr, nullptr );
-
-            // now check whether this was our instance:
-            if( xInstance == xDoc )
-                sInstanceName = sId;
-        }
-
-        rBuffer.insert( 0, sInstanceName );
-        rBuffer.insert( 0, "instance('" );
+        // now check whether this was our instance:
+        if( xInstance == xDoc )
+            sInstanceName = sId;
     }
+
+    rBuffer.insert( 0, sInstanceName );
+    rBuffer.insert( 0, "instance('" );
 }
 
 OUString Model::getDefaultBindingExpressionForNode(
@@ -443,38 +443,38 @@ void Model::renameInstance( const OUString& sFrom,
                             sal_Bool bURLOnce )
 {
     sal_Int32 nPos = lcl_findInstance( mxInstances.get(), sFrom );
-    if( nPos != -1 )
+    if( nPos == -1 )
+        return;
+
+    Sequence<PropertyValue> aSeq = mxInstances->getItem( nPos );
+    PropertyValue* pSeq = aSeq.getArray();
+    sal_Int32 nLength = aSeq.getLength();
+
+    sal_Int32 nProp = lcl_findProp( pSeq, nLength, "ID" );
+    if( nProp == -1 )
     {
-        Sequence<PropertyValue> aSeq = mxInstances->getItem( nPos );
-        PropertyValue* pSeq = aSeq.getArray();
-        sal_Int32 nLength = aSeq.getLength();
-
-        sal_Int32 nProp = lcl_findProp( pSeq, nLength, "ID" );
-        if( nProp == -1 )
-        {
-            // add name property
-            aSeq.realloc( nLength + 1 );
-            pSeq = aSeq.getArray();
-            pSeq[ nLength ].Name = "ID";
-            nProp = nLength;
-        }
-
-        // change name
-        pSeq[ nProp ].Value <<= sTo;
-
-        // change url
-        nProp = lcl_findProp( pSeq, nLength, "URL" );
-        if(nProp != -1)
-            pSeq[ nProp ].Value <<= sURL;
-
-        // change urlonce
-        nProp = lcl_findProp( pSeq, nLength, "URLOnce" );
-        if(nProp != -1)
-            pSeq[ nProp ].Value <<= bURLOnce;
-
-        // set instance
-        mxInstances->setItem( nPos, aSeq );
+        // add name property
+        aSeq.realloc( nLength + 1 );
+        pSeq = aSeq.getArray();
+        pSeq[ nLength ].Name = "ID";
+        nProp = nLength;
     }
+
+    // change name
+    pSeq[ nProp ].Value <<= sTo;
+
+    // change url
+    nProp = lcl_findProp( pSeq, nLength, "URL" );
+    if(nProp != -1)
+        pSeq[ nProp ].Value <<= sURL;
+
+    // change urlonce
+    nProp = lcl_findProp( pSeq, nLength, "URLOnce" );
+    if(nProp != -1)
+        pSeq[ nProp ].Value <<= bURLOnce;
+
+    // set instance
+    mxInstances->setItem( nPos, aSeq );
 }
 
 void Model::removeInstance( const OUString& sName )
