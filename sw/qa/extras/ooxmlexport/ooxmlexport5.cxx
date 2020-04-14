@@ -1096,10 +1096,11 @@ DECLARE_OOXMLEXPORT_TEST(tdf106843, "tdf106843.fodt")
         assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "edit",               "trackedChanges");
         assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "enforcement",        "1");
 
-        // LO intends to export a .docx format that is natively compatible with 2013.
+        // LO intends to export a .docx format that is natively compatible with 2013
+        // but this document has an implicitly added setting AddExternalLeading = false
         assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]", "name", "compatibilityMode");
         assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]", "uri", "http://schemas.microsoft.com/office/word");
-        assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]", "val", "15"); // compatible with 2003/2016/2019
+        assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]", "val", "14"); // compatible with 2010
     }
 }
 

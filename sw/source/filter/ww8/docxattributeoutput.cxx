@@ -3770,6 +3770,15 @@ sal_Int32 lcl_getWordCompatibilityMode( const SwDoc& rDoc )
         }
     }
 
+    // TODO: this is duplicative, better store it in DocxExport member?
+    if (!rDoc.getIDocumentSettingAccess().get(DocumentSettingId::ADD_EXT_LEADING))
+    {
+        if (nWordCompatibilityMode == -1 || 14 < nWordCompatibilityMode)
+        {
+            nWordCompatibilityMode = 14;
+        }
+    }
+
     return nWordCompatibilityMode;
 }
 
