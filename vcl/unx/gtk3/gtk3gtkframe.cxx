@@ -45,6 +45,8 @@
 
 #include <basegfx/vector/b2ivector.hxx>
 
+#include <dlfcn.h>
+
 #include <algorithm>
 
 #if OSL_DEBUG_LEVEL > 1
@@ -2908,7 +2910,6 @@ void GtkSalFrame::sizeAllocated(GtkWidget* pWidget, GdkRectangle *pAllocation, g
         pThis->TriggerPaintEvent();
 }
 
-#if GTK_CHECK_VERSION(3,23,0)
 namespace {
 
 void swapDirection(GdkGravity& gravity)
@@ -2924,7 +2925,6 @@ void swapDirection(GdkGravity& gravity)
 }
 
 }
-#endif
 
 void GtkSalFrame::signalRealize(GtkWidget*, gpointer frame)
 {
@@ -2934,8 +2934,13 @@ void GtkSalFrame::signalRealize(GtkWidget*, gpointer frame)
         return;
     pThis->TriggerPaintEvent();
 
-#if GTK_CHECK_VERSION(3,23,0)
-    if (gtk_check_version(3, 23, 0) == nullptr && pThis->m_bFloatPositioned)
+    if (!pThis->m_bFloatPositioned)
+        return;
+
+    static auto window_move_to_rect = reinterpret_cast<void (*) (GdkWindow*, const GdkRectangle*, GdkGravity,
+                                                                 GdkGravity, GdkAnchorHints, gint, gint)>(
+                                                                    dlsym(nullptr, "gdk_window_move_to_rect"));
+    if (window_move_to_rect)
     {
         GdkGravity rect_anchor = GDK_GRAVITY_SOUTH_WEST, menu_anchor = GDK_GRAVITY_NORTH_WEST;
 
@@ -2969,9 +2974,8 @@ void GtkSalFrame::signalRealize(GtkWidget*, gpointer frame)
                            static_cast<int>(aFloatRect.GetWidth()), static_cast<int>(aFloatRect.GetHeight())};
 
         GdkWindow* gdkWindow = gtk_widget_get_window(pThis->m_pWindow);
-        gdk_window_move_to_rect(gdkWindow, &rect, rect_anchor, menu_anchor, GDK_ANCHOR_FLIP, 0, 0);
+        window_move_to_rect(gdkWindow, &rect, rect_anchor, menu_anchor, GDK_ANCHOR_FLIP, 0, 0);
     }
-#endif
 }
 
 gboolean GtkSalFrame::signalConfigure(GtkWidget*, GdkEventConfigure* pEvent, gpointer frame)
