@@ -22,7 +22,6 @@
 #include <drawinglayer/processor3d/baseprocessor3d.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
-#include <svtools/optionsdrawinglayer.hxx>
 
 // predefines
 
@@ -85,9 +84,6 @@ namespace drawinglayer
             /// the current active transparence texture
             std::shared_ptr< texture::GeoTexSvx >             mpTransparenceGeoTexSvx;
 
-            /// SvtOptionsDrawinglayer incarnation to react on diverse settings
-            const SvtOptionsDrawinglayer                        maDrawinglayerOpt;
-
             /// counter for entered transparence textures
             sal_uInt32                                          mnTransparenceCounter;
 
@@ -135,9 +131,6 @@ namespace drawinglayer
             bool getModulate() const { return mbModulate; }
             bool getFilter() const { return mbFilter; }
             bool getSimpleTextureActive() const { return mbSimpleTextureActive; }
-
-            /// access to Drawinglayer configuration options
-            const SvtOptionsDrawinglayer& getOptionsDrawinglayer() const { return maDrawinglayerOpt; }
         };
     } // end of namespace processor3d
 } // end of namespace drawinglayer

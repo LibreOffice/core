@@ -18,6 +18,10 @@ $(eval $(call gb_Library_add_defs,drawinglayer,\
     -DDRAWINGLAYER_DLLIMPLEMENTATION \
 ))
 
+$(eval $(call gb_Library_use_custom_headers,drawinglayer,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_set_precompiled_header,drawinglayer,drawinglayer/inc/pch/precompiled_drawinglayer))
 
 $(eval $(call gb_Library_set_componentfile,drawinglayer,drawinglayer/drawinglayer))
@@ -39,10 +43,8 @@ $(eval $(call gb_Library_use_libraries,drawinglayer,\
     i18nlangtag \
     sal \
     salhelper \
-    svl \
-    svt \
-    tk \
     tl \
+    tk \
     vcl \
 ))
 

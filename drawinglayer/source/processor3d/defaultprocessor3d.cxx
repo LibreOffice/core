@@ -581,7 +581,6 @@ namespace drawinglayer::processor3d
             maBColorModifierStack(),
             mpGeoTexSvx(),
             mpTransparenceGeoTexSvx(),
-            maDrawinglayerOpt(),
             mnTransparenceCounter(0),
             mbModulate(false),
             mbFilter(false),
