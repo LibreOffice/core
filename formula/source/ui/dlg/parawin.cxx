@@ -108,55 +108,55 @@ void ParaWin::UpdateArgDesc( sal_uInt16 nArg )
     if (nMaxArgs > 4)
         nArg = sal::static_int_cast<sal_uInt16>( nArg + GetSliderPos() );
 
-    if ((nMaxArgs > 0) && (nArg<nMaxArgs))
+    if (!((nMaxArgs > 0) && (nArg<nMaxArgs)))
+        return;
+
+    OUString  aArgDesc;
+    OUString  aArgName;
+
+    SetArgumentDesc( OUString() );
+    SetArgumentText( OUString() );
+
+    if ( nArgs < VAR_ARGS )
     {
-        OUString  aArgDesc;
-        OUString  aArgName;
-
-        SetArgumentDesc( OUString() );
-        SetArgumentText( OUString() );
-
-        if ( nArgs < VAR_ARGS )
-        {
-            sal_uInt16 nRealArg = (nArg < aVisibleArgMapping.size()) ? aVisibleArgMapping[nArg] : nArg;
-            aArgDesc  = pFuncDesc->getParameterDescription(nRealArg);
-            aArgName  = pFuncDesc->getParameterName(nRealArg) + " " +
-                ((pFuncDesc->isParameterOptional(nRealArg)) ? m_sOptional : m_sRequired);
-        }
-        else if ( nArgs < PAIRED_VAR_ARGS )
-        {
-            sal_uInt16 nFix = nArgs - VAR_ARGS;
-            sal_uInt16 nPos = std::min( nArg, nFix );
-            sal_uInt16 nRealArg = (nPos < aVisibleArgMapping.size() ?
-                    aVisibleArgMapping[nPos] : aVisibleArgMapping.back());
-            aArgDesc  = pFuncDesc->getParameterDescription(nRealArg);
-            aArgName  = pFuncDesc->getParameterName(nRealArg);
-            sal_uInt16 nVarArgsStart = pFuncDesc->getVarArgsStart();
-            if ( nArg >= nVarArgsStart )
-                aArgName += OUString::number( nArg-nVarArgsStart+1 );
-            aArgName += " " + ((nArg > nFix || pFuncDesc->isParameterOptional(nRealArg)) ? m_sOptional : m_sRequired) ;
-        }
-        else
-        {
-            sal_uInt16 nFix = nArgs - PAIRED_VAR_ARGS;
-            sal_uInt16 nPos;
-            if ( nArg < nFix )
-                nPos = nArg;
-            else
-                nPos = nFix + ( (nArg-nFix) % 2);
-            sal_uInt16 nRealArg = (nPos < aVisibleArgMapping.size() ?
-                    aVisibleArgMapping[nPos] : aVisibleArgMapping.back());
-            aArgDesc  = pFuncDesc->getParameterDescription(nRealArg);
-            aArgName  = pFuncDesc->getParameterName(nRealArg);
-            sal_uInt16 nVarArgsStart = pFuncDesc->getVarArgsStart();
-            if ( nArg >= nVarArgsStart )
-                aArgName += OUString::number( (nArg-nVarArgsStart)/2 + 1 );
-            aArgName += " " + ((nArg > (nFix+1) || pFuncDesc->isParameterOptional(nRealArg)) ? m_sOptional : m_sRequired) ;
-        }
-
-        SetArgumentDesc(aArgDesc);
-        SetArgumentText(aArgName);
+        sal_uInt16 nRealArg = (nArg < aVisibleArgMapping.size()) ? aVisibleArgMapping[nArg] : nArg;
+        aArgDesc  = pFuncDesc->getParameterDescription(nRealArg);
+        aArgName  = pFuncDesc->getParameterName(nRealArg) + " " +
+            ((pFuncDesc->isParameterOptional(nRealArg)) ? m_sOptional : m_sRequired);
     }
+    else if ( nArgs < PAIRED_VAR_ARGS )
+    {
+        sal_uInt16 nFix = nArgs - VAR_ARGS;
+        sal_uInt16 nPos = std::min( nArg, nFix );
+        sal_uInt16 nRealArg = (nPos < aVisibleArgMapping.size() ?
+                aVisibleArgMapping[nPos] : aVisibleArgMapping.back());
+        aArgDesc  = pFuncDesc->getParameterDescription(nRealArg);
+        aArgName  = pFuncDesc->getParameterName(nRealArg);
+        sal_uInt16 nVarArgsStart = pFuncDesc->getVarArgsStart();
+        if ( nArg >= nVarArgsStart )
+            aArgName += OUString::number( nArg-nVarArgsStart+1 );
+        aArgName += " " + ((nArg > nFix || pFuncDesc->isParameterOptional(nRealArg)) ? m_sOptional : m_sRequired) ;
+    }
+    else
+    {
+        sal_uInt16 nFix = nArgs - PAIRED_VAR_ARGS;
+        sal_uInt16 nPos;
+        if ( nArg < nFix )
+            nPos = nArg;
+        else
+            nPos = nFix + ( (nArg-nFix) % 2);
+        sal_uInt16 nRealArg = (nPos < aVisibleArgMapping.size() ?
+                aVisibleArgMapping[nPos] : aVisibleArgMapping.back());
+        aArgDesc  = pFuncDesc->getParameterDescription(nRealArg);
+        aArgName  = pFuncDesc->getParameterName(nRealArg);
+        sal_uInt16 nVarArgsStart = pFuncDesc->getVarArgsStart();
+        if ( nArg >= nVarArgsStart )
+            aArgName += OUString::number( (nArg-nVarArgsStart)/2 + 1 );
+        aArgName += " " + ((nArg > (nFix+1) || pFuncDesc->isParameterOptional(nRealArg)) ? m_sOptional : m_sRequired) ;
+    }
+
+    SetArgumentDesc(aArgDesc);
+    SetArgumentText(aArgName);
 }
 
 void ParaWin::UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 i )
@@ -234,20 +234,20 @@ ParaWin::~ParaWin()
 
 void ParaWin::SetActiveLine(sal_uInt16 no)
 {
-    if (no < nMaxArgs)
+    if (no >= nMaxArgs)
+        return;
+
+    long nOffset = GetSliderPos();
+    nActiveLine=no;
+    long nNewEdPos=static_cast<long>(nActiveLine)-nOffset;
+    if(nNewEdPos<0 || nNewEdPos>3)
     {
-        long nOffset = GetSliderPos();
-        nActiveLine=no;
-        long nNewEdPos=static_cast<long>(nActiveLine)-nOffset;
-        if(nNewEdPos<0 || nNewEdPos>3)
-        {
-            nOffset+=nNewEdPos;
-            SetSliderPos(static_cast<sal_uInt16>(nOffset));
-            nOffset=GetSliderPos();
-        }
-        nEdFocus=no-static_cast<sal_uInt16>(nOffset);
-        UpdateArgDesc( nEdFocus );
+        nOffset+=nNewEdPos;
+        SetSliderPos(static_cast<sal_uInt16>(nOffset));
+        nOffset=GetSliderPos();
     }
+    nEdFocus=no-static_cast<sal_uInt16>(nOffset);
+    UpdateArgDesc( nEdFocus );
 }
 
 RefEdit* ParaWin::GetActiveEdit()

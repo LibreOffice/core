@@ -127,26 +127,26 @@ const FormulaToken* StructPage::GetFunctionEntry(const weld::TreeIter* pEntry)
 
 IMPL_LINK(StructPage, SelectHdl, weld::TreeView&, rTlb, void)
 {
-    if (GetActiveFlag())
+    if (!GetActiveFlag())
+        return;
+
+    if (&rTlb == m_xTlbStruct.get())
     {
-        if (&rTlb == m_xTlbStruct.get())
+        std::unique_ptr<weld::TreeIter> xCurEntry(m_xTlbStruct->make_iterator());
+        if (m_xTlbStruct->get_cursor(xCurEntry.get()))
         {
-            std::unique_ptr<weld::TreeIter> xCurEntry(m_xTlbStruct->make_iterator());
-            if (m_xTlbStruct->get_cursor(xCurEntry.get()))
+            pSelectedToken = reinterpret_cast<const FormulaToken *>(m_xTlbStruct->get_id(*xCurEntry).toInt64());
+            if (pSelectedToken)
             {
-                pSelectedToken = reinterpret_cast<const FormulaToken *>(m_xTlbStruct->get_id(*xCurEntry).toInt64());
-                if (pSelectedToken)
+                if ( !(pSelectedToken->IsFunction() || pSelectedToken->GetParamCount() > 1) )
                 {
-                    if ( !(pSelectedToken->IsFunction() || pSelectedToken->GetParamCount() > 1) )
-                    {
-                        pSelectedToken = GetFunctionEntry(xCurEntry.get());
-                    }
+                    pSelectedToken = GetFunctionEntry(xCurEntry.get());
                 }
             }
         }
-
-        aSelLink.Call(*this);
     }
+
+    aSelLink.Call(*this);
 }
 
 } // formula
