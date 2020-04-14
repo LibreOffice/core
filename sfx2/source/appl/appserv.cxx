@@ -1216,8 +1216,6 @@ static OUString ChooseMacro(weld::Window* pParent, const Reference<XModel>& rxLi
 {
 #ifndef DISABLE_DYNLOADING
     basicide_choose_macro pSymbol = reinterpret_cast<basicide_choose_macro>(sfx2::getBasctlFunction("basicide_choose_macro"));
-    if (!pSymbol)
-        return OUString();
 #else
 #define pSymbol basicide_choose_macro
 #endif
