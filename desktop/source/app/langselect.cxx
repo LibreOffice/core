@@ -52,19 +52,20 @@ OUString foundLocale;
 void setMsLangIdFallback(OUString const & locale) {
     // #i32939# setting of default document language
     // See #i42730# for rules for determining source of settings
-    if (!locale.isEmpty()) {
-        LanguageType type = LanguageTag::convertToLanguageTypeWithFallback(locale);
-        switch (SvtLanguageOptions::GetScriptTypeOfLanguage(type)) {
-        case SvtScriptType::ASIAN:
-            MsLangId::setConfiguredAsianFallback(type);
-            break;
-        case SvtScriptType::COMPLEX:
-            MsLangId::setConfiguredComplexFallback(type);
-            break;
-        default:
-            MsLangId::setConfiguredWesternFallback(type);
-            break;
-        }
+    if (locale.isEmpty())
+        return;
+
+    LanguageType type = LanguageTag::convertToLanguageTypeWithFallback(locale);
+    switch (SvtLanguageOptions::GetScriptTypeOfLanguage(type)) {
+    case SvtScriptType::ASIAN:
+        MsLangId::setConfiguredAsianFallback(type);
+        break;
+    case SvtScriptType::COMPLEX:
+        MsLangId::setConfiguredComplexFallback(type);
+        break;
+    default:
+        MsLangId::setConfiguredWesternFallback(type);
+        break;
     }
 }
 

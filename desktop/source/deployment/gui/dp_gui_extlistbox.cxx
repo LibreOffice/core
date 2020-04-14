@@ -978,52 +978,52 @@ void ExtensionBox_Impl::updateEntry( const uno::Reference< deployment::XPackage 
 //is in the disposing state and all calls on it may result in a DisposedException.
 void ExtensionBox_Impl::removeEntry( const uno::Reference< deployment::XPackage > &xPackage )
 {
-   if ( ! m_bInDelete )
+    if (  m_bInDelete )
+        return;
+
+    bool invalidate = false;
     {
-        bool invalidate = false;
+        ::osl::ClearableMutexGuard aGuard( m_entriesMutex );
+
+        auto iIndex = std::find_if(m_vEntries.begin(), m_vEntries.end(),
+            [&xPackage](const TEntry_Impl& rxEntry) { return rxEntry->m_xPackage == xPackage; });
+        if (iIndex != m_vEntries.end())
         {
-            ::osl::ClearableMutexGuard aGuard( m_entriesMutex );
+            long nPos = iIndex - m_vEntries.begin();
 
-            auto iIndex = std::find_if(m_vEntries.begin(), m_vEntries.end(),
-                [&xPackage](const TEntry_Impl& rxEntry) { return rxEntry->m_xPackage == xPackage; });
-            if (iIndex != m_vEntries.end())
+            // Entries mustn't be removed here, because they contain a hyperlink control
+            // which can only be deleted when the thread has the solar mutex. Therefore
+            // the entry will be moved into the m_vRemovedEntries list which will be
+            // cleared on the next paint event
+            m_vRemovedEntries.push_back( *iIndex );
+            (*iIndex)->m_xPackage->removeEventListener(m_xRemoveListener.get());
+            m_vEntries.erase( iIndex );
+
+            m_bNeedsRecalc = true;
+
+            if ( IsReallyVisible() )
+                invalidate = true;
+
+            if ( m_bHasActive )
             {
-                long nPos = iIndex - m_vEntries.begin();
+                if ( nPos < m_nActive )
+                    m_nActive -= 1;
+                else if ( ( nPos == m_nActive ) &&
+                          ( nPos == static_cast<long>(m_vEntries.size()) ) )
+                    m_nActive -= 1;
 
-                // Entries mustn't be removed here, because they contain a hyperlink control
-                // which can only be deleted when the thread has the solar mutex. Therefore
-                // the entry will be moved into the m_vRemovedEntries list which will be
-                // cleared on the next paint event
-                m_vRemovedEntries.push_back( *iIndex );
-                (*iIndex)->m_xPackage->removeEventListener(m_xRemoveListener.get());
-                m_vEntries.erase( iIndex );
-
-                m_bNeedsRecalc = true;
-
-                if ( IsReallyVisible() )
-                    invalidate = true;
-
-                if ( m_bHasActive )
-                {
-                    if ( nPos < m_nActive )
-                        m_nActive -= 1;
-                    else if ( ( nPos == m_nActive ) &&
-                              ( nPos == static_cast<long>(m_vEntries.size()) ) )
-                        m_nActive -= 1;
-
-                    m_bHasActive = false;
-                    //clear before calling out of this method
-                    aGuard.clear();
-                    selectEntry( m_nActive );
-                }
+                m_bHasActive = false;
+                //clear before calling out of this method
+                aGuard.clear();
+                selectEntry( m_nActive );
             }
         }
+    }
 
-        if (invalidate)
-        {
-            SolarMutexGuard g;
-            Invalidate();
-        }
+    if (invalidate)
+    {
+        SolarMutexGuard g;
+        Invalidate();
     }
 }
 

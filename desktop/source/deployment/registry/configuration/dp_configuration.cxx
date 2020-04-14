@@ -350,54 +350,54 @@ void BackendImpl::configmgrini_verify_init(
     if (transientMode())
         return;
     const ::osl::MutexGuard guard( getMutex() );
-    if (! m_configmgrini_inited)
+    if ( m_configmgrini_inited)
+        return;
+
+    // common rc:
+    ::ucbhelper::Content ucb_content;
+    if (create_ucb_content(
+            &ucb_content,
+            makeURL( getCachePath(), "configmgr.ini" ),
+            xCmdEnv, false /* no throw */ ))
     {
-        // common rc:
-        ::ucbhelper::Content ucb_content;
-        if (create_ucb_content(
-                &ucb_content,
-                makeURL( getCachePath(), "configmgr.ini" ),
-                xCmdEnv, false /* no throw */ ))
+        OUString line;
+        if (readLine( &line, "SCHEMA=", ucb_content,
+                      RTL_TEXTENCODING_UTF8 ))
         {
-            OUString line;
-            if (readLine( &line, "SCHEMA=", ucb_content,
-                          RTL_TEXTENCODING_UTF8 ))
-            {
-                sal_Int32 index = RTL_CONSTASCII_LENGTH("SCHEMA=");
-                do {
-                    OUString token( line.getToken( 0, ' ', index ).trim() );
-                    if (!token.isEmpty()) {
-                        //The  file may not exist anymore if a shared or bundled
-                        //extension was removed, but it can still be in the configmgrini.
-                        //After running XExtensionManager::synchronize, the configmgrini is
-                        //cleaned up
-                        m_xcs_files.push_back( token );
-                    }
+            sal_Int32 index = RTL_CONSTASCII_LENGTH("SCHEMA=");
+            do {
+                OUString token( line.getToken( 0, ' ', index ).trim() );
+                if (!token.isEmpty()) {
+                    //The  file may not exist anymore if a shared or bundled
+                    //extension was removed, but it can still be in the configmgrini.
+                    //After running XExtensionManager::synchronize, the configmgrini is
+                    //cleaned up
+                    m_xcs_files.push_back( token );
                 }
-                while (index >= 0);
             }
-            if (readLine( &line, "DATA=", ucb_content,
-                          RTL_TEXTENCODING_UTF8 )) {
-                sal_Int32 index = RTL_CONSTASCII_LENGTH("DATA=");
-                do {
-                    OUString token( line.getToken( 0, ' ', index ).trim() );
-                    if (!token.isEmpty())
-                    {
-                        if (token[ 0 ] == '?')
-                            token = token.copy( 1 );
-                        //The  file may not exist anymore if a shared or bundled
-                        //extension was removed, but it can still be in the configmgrini.
-                        //After running XExtensionManager::synchronize, the configmgrini is
-                        //cleaned up
-                        m_xcu_files.push_back( token );
-                    }
-                }
-                while (index >= 0);
-            }
+            while (index >= 0);
         }
-        m_configmgrini_modified = false;
-        m_configmgrini_inited = true;
+        if (readLine( &line, "DATA=", ucb_content,
+                      RTL_TEXTENCODING_UTF8 )) {
+            sal_Int32 index = RTL_CONSTASCII_LENGTH("DATA=");
+            do {
+                OUString token( line.getToken( 0, ' ', index ).trim() );
+                if (!token.isEmpty())
+                {
+                    if (token[ 0 ] == '?')
+                        token = token.copy( 1 );
+                    //The  file may not exist anymore if a shared or bundled
+                    //extension was removed, but it can still be in the configmgrini.
+                    //After running XExtensionManager::synchronize, the configmgrini is
+                    //cleaned up
+                    m_xcu_files.push_back( token );
+                }
+            }
+            while (index >= 0);
+        }
     }
+    m_configmgrini_modified = false;
+    m_configmgrini_inited = true;
 }
 
 

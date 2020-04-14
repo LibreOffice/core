@@ -87,35 +87,35 @@ void Desktop::InitApplicationServiceManager()
 
 void Desktop::RegisterServices(Reference< XComponentContext > const & context)
 {
-    if( !m_bServicesRegistered )
-    {
-        // interpret command line arguments
-        CommandLineArgs& rCmdLine = GetCommandLineArgs();
+    if( m_bServicesRegistered )
+        return;
 
-        // Headless mode for FAT Office, auto cancels any dialogs that popup
-        if (rCmdLine.IsEventTesting())
-            Application::EnableEventTestingMode();
-        else if (rCmdLine.IsHeadless())
-            Application::EnableHeadlessMode(false);
+    // interpret command line arguments
+    CommandLineArgs& rCmdLine = GetCommandLineArgs();
 
-        // read accept string from configuration
-        OUString conDcpCfg(
-            officecfg::Setup::Office::ooSetupConnectionURL::get(context));
-        if (!conDcpCfg.isEmpty()) {
-            createAcceptor(conDcpCfg);
-        }
+    // Headless mode for FAT Office, auto cancels any dialogs that popup
+    if (rCmdLine.IsEventTesting())
+        Application::EnableEventTestingMode();
+    else if (rCmdLine.IsHeadless())
+        Application::EnableHeadlessMode(false);
 
-        std::vector< OUString > const & conDcp = rCmdLine.GetAccept();
-        for (auto const& elem : conDcp)
-        {
-            createAcceptor(elem);
-        }
-
-        configureUcb();
-
-        CreateTemporaryDirectory();
-        m_bServicesRegistered = true;
+    // read accept string from configuration
+    OUString conDcpCfg(
+        officecfg::Setup::Office::ooSetupConnectionURL::get(context));
+    if (!conDcpCfg.isEmpty()) {
+        createAcceptor(conDcpCfg);
     }
+
+    std::vector< OUString > const & conDcp = rCmdLine.GetAccept();
+    for (auto const& elem : conDcp)
+    {
+        createAcceptor(elem);
+    }
+
+    configureUcb();
+
+    CreateTemporaryDirectory();
+    m_bServicesRegistered = true;
 }
 
 typedef std::map< OUString, css::uno::Reference<css::lang::XInitialization> > AcceptorMap;
@@ -133,34 +133,34 @@ void Desktop::createAcceptor(const OUString& aAcceptString)
     // check whether the requested acceptor already exists
     AcceptorMap &rMap = acceptorMap::get();
     AcceptorMap::const_iterator pIter = rMap.find(aAcceptString);
-    if (pIter == rMap.end() )
+    if (pIter != rMap.end() )
+        return;
+
+    Sequence< Any > aSeq( 2 );
+    aSeq[0] <<= aAcceptString;
+    aSeq[1] <<= bAccept;
+    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    Reference<XInitialization> rAcceptor(
+        xContext->getServiceManager()->createInstanceWithContext("com.sun.star.office.Acceptor", xContext),
+        UNO_QUERY );
+    if ( rAcceptor.is() )
     {
-        Sequence< Any > aSeq( 2 );
-        aSeq[0] <<= aAcceptString;
-        aSeq[1] <<= bAccept;
-        Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-        Reference<XInitialization> rAcceptor(
-            xContext->getServiceManager()->createInstanceWithContext("com.sun.star.office.Acceptor", xContext),
-            UNO_QUERY );
-        if ( rAcceptor.is() )
+        try
         {
-            try
-            {
-                rAcceptor->initialize( aSeq );
-                rMap.emplace(aAcceptString, rAcceptor);
-            }
-            catch (const css::uno::Exception&)
-            {
-                // no error handling needed...
-                // acceptor just won't come up
-                TOOLS_WARN_EXCEPTION( "desktop.app", "Acceptor could not be created");
-            }
+            rAcceptor->initialize( aSeq );
+            rMap.emplace(aAcceptString, rAcceptor);
         }
-        else
+        catch (const css::uno::Exception&)
         {
-            // there is already an acceptor with this description
-            SAL_WARN( "desktop.app", "Acceptor already exists.");
+            // no error handling needed...
+            // acceptor just won't come up
+            TOOLS_WARN_EXCEPTION( "desktop.app", "Acceptor could not be created");
         }
+    }
+    else
+    {
+        // there is already an acceptor with this description
+        SAL_WARN( "desktop.app", "Acceptor already exists.");
     }
 }
 

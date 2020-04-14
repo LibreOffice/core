@@ -344,86 +344,87 @@ OUString DescriptionInfoset::getNodeValueFromExpression(OUString const & express
 
 void DescriptionInfoset::checkBlacklist() const
 {
-    if (m_element.is()) {
-        std::optional< OUString > id(getIdentifier());
-        if (!id)
-            return; // nothing to check
-        OUString currentversion(getVersion());
-        if (currentversion.getLength() == 0)
-            return;  // nothing to check
+    if (!m_element.is())
+        return;
 
-        css::uno::Sequence<css::uno::Any> args(comphelper::InitAnyPropertySequence(
-        {
-            {"nodepath", css::uno::Any(OUString("/org.openoffice.Office.ExtensionDependencies/Extensions"))}
-        }));
-        css::uno::Reference< css::container::XNameAccess > blacklist(
-            (css::configuration::theDefaultProvider::get(m_context)
-             ->createInstanceWithArguments(
-                 "com.sun.star.configuration.ConfigurationAccess", args)),
-            css::uno::UNO_QUERY_THROW);
+    std::optional< OUString > id(getIdentifier());
+    if (!id)
+        return; // nothing to check
+    OUString currentversion(getVersion());
+    if (currentversion.getLength() == 0)
+        return;  // nothing to check
 
-        // check first if a blacklist entry is available
-        if (blacklist.is() && blacklist->hasByName(*id)) {
-            css::uno::Reference< css::beans::XPropertySet > extProps(
-                blacklist->getByName(*id), css::uno::UNO_QUERY_THROW);
+    css::uno::Sequence<css::uno::Any> args(comphelper::InitAnyPropertySequence(
+    {
+        {"nodepath", css::uno::Any(OUString("/org.openoffice.Office.ExtensionDependencies/Extensions"))}
+    }));
+    css::uno::Reference< css::container::XNameAccess > blacklist(
+        (css::configuration::theDefaultProvider::get(m_context)
+         ->createInstanceWithArguments(
+             "com.sun.star.configuration.ConfigurationAccess", args)),
+        css::uno::UNO_QUERY_THROW);
 
-            css::uno::Any anyValue = extProps->getPropertyValue("Versions");
+    // check first if a blacklist entry is available
+    if (!(blacklist.is() && blacklist->hasByName(*id)))        return;
 
-            css::uno::Sequence< OUString > blversions;
-            anyValue >>= blversions;
+    css::uno::Reference< css::beans::XPropertySet > extProps(
+        blacklist->getByName(*id), css::uno::UNO_QUERY_THROW);
 
-            // check if the current version requires further dependency checks from the blacklist
-            if (checkBlacklistVersion(currentversion, blversions)) {
-                anyValue = extProps->getPropertyValue("Dependencies");
-                OUString udeps;
-                anyValue >>= udeps;
+    css::uno::Any anyValue = extProps->getPropertyValue("Versions");
 
-                if (udeps.getLength() == 0)
-                    return; // nothing todo
+    css::uno::Sequence< OUString > blversions;
+    anyValue >>= blversions;
 
-                OString xmlDependencies = OUStringToOString(udeps, RTL_TEXTENCODING_UNICODE);
+    // check if the current version requires further dependency checks from the blacklist
+    if (!checkBlacklistVersion(currentversion, blversions))        return;
 
-                css::uno::Reference< css::xml::dom::XDocumentBuilder> docbuilder(
-                    m_context->getServiceManager()->createInstanceWithContext("com.sun.star.xml.dom.DocumentBuilder", m_context),
-                    css::uno::UNO_QUERY_THROW);
+    anyValue = extProps->getPropertyValue("Dependencies");
+    OUString udeps;
+    anyValue >>= udeps;
 
-                css::uno::Sequence< sal_Int8 > byteSeq(reinterpret_cast<const sal_Int8*>(xmlDependencies.getStr()), xmlDependencies.getLength());
+    if (udeps.getLength() == 0)
+        return; // nothing todo
 
-                css::uno::Reference< css::io::XInputStream> inputstream( css::io::SequenceInputStream::createStreamFromSequence(m_context, byteSeq),
-                                                                         css::uno::UNO_QUERY_THROW);
+    OString xmlDependencies = OUStringToOString(udeps, RTL_TEXTENCODING_UNICODE);
 
-                css::uno::Reference< css::xml::dom::XDocument > xDocument(docbuilder->parse(inputstream));
-                css::uno::Reference< css::xml::dom::XElement > xElement(xDocument->getDocumentElement());
-                css::uno::Reference< css::xml::dom::XNodeList > xDeps(xElement->getChildNodes());
-                sal_Int32 nLen = xDeps->getLength();
+    css::uno::Reference< css::xml::dom::XDocumentBuilder> docbuilder(
+        m_context->getServiceManager()->createInstanceWithContext("com.sun.star.xml.dom.DocumentBuilder", m_context),
+        css::uno::UNO_QUERY_THROW);
 
-                // get the parent xml document  of current description info for the import
-                css::uno::Reference< css::xml::dom::XDocument > xCurrentDescInfo(m_element->getOwnerDocument());
+    css::uno::Sequence< sal_Int8 > byteSeq(reinterpret_cast<const sal_Int8*>(xmlDependencies.getStr()), xmlDependencies.getLength());
 
-                // get dependency node of current description info to merge the new dependencies from the blacklist
-                css::uno::Reference< css::xml::dom::XNode > xCurrentDeps(
-                    m_xpath->selectSingleNode(m_element, "desc:dependencies"));
+    css::uno::Reference< css::io::XInputStream> inputstream( css::io::SequenceInputStream::createStreamFromSequence(m_context, byteSeq),
+                                                             css::uno::UNO_QUERY_THROW);
 
-                // if no dependency node exists, create a new one in the current description info
-                if (!xCurrentDeps.is()) {
-                    css::uno::Reference< css::xml::dom::XNode > xNewDepNode(
-                        xCurrentDescInfo->createElementNS(
-                            "http://openoffice.org/extensions/description/2006",
-                            "dependencies"), css::uno::UNO_QUERY_THROW);
-                    m_element->appendChild(xNewDepNode);
-                    xCurrentDeps = m_xpath->selectSingleNode(m_element, "desc:dependencies");
-                }
+    css::uno::Reference< css::xml::dom::XDocument > xDocument(docbuilder->parse(inputstream));
+    css::uno::Reference< css::xml::dom::XElement > xElement(xDocument->getDocumentElement());
+    css::uno::Reference< css::xml::dom::XNodeList > xDeps(xElement->getChildNodes());
+    sal_Int32 nLen = xDeps->getLength();
 
-                for (sal_Int32 i=0; i<nLen; i++) {
-                    css::uno::Reference< css::xml::dom::XNode > xNode(xDeps->item(i));
-                    css::uno::Reference< css::xml::dom::XElement > xDep(xNode, css::uno::UNO_QUERY);
-                    if (xDep.is()) {
-                        // found valid blacklist dependency, import the node first and append it to the existing dependency node
-                        css::uno::Reference< css::xml::dom::XNode > importedNode = xCurrentDescInfo->importNode(xNode, true);
-                        xCurrentDeps->appendChild(importedNode);
-                    }
-                }
-            }
+    // get the parent xml document  of current description info for the import
+    css::uno::Reference< css::xml::dom::XDocument > xCurrentDescInfo(m_element->getOwnerDocument());
+
+    // get dependency node of current description info to merge the new dependencies from the blacklist
+    css::uno::Reference< css::xml::dom::XNode > xCurrentDeps(
+        m_xpath->selectSingleNode(m_element, "desc:dependencies"));
+
+    // if no dependency node exists, create a new one in the current description info
+    if (!xCurrentDeps.is()) {
+        css::uno::Reference< css::xml::dom::XNode > xNewDepNode(
+            xCurrentDescInfo->createElementNS(
+                "http://openoffice.org/extensions/description/2006",
+                "dependencies"), css::uno::UNO_QUERY_THROW);
+        m_element->appendChild(xNewDepNode);
+        xCurrentDeps = m_xpath->selectSingleNode(m_element, "desc:dependencies");
+    }
+
+    for (sal_Int32 i=0; i<nLen; i++) {
+        css::uno::Reference< css::xml::dom::XNode > xNode(xDeps->item(i));
+        css::uno::Reference< css::xml::dom::XElement > xDep(xNode, css::uno::UNO_QUERY);
+        if (xDep.is()) {
+            // found valid blacklist dependency, import the node first and append it to the existing dependency node
+            css::uno::Reference< css::xml::dom::XNode > importedNode = xCurrentDescInfo->importNode(xNode, true);
+            xCurrentDeps->appendChild(importedNode);
         }
     }
 }

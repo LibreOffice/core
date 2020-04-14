@@ -234,26 +234,26 @@ void JavaMigration::migrateJavarc()
     bool bSuccess = javaini.getFrom("Home", sValue);
     OSL_ENSURE(bSuccess, "[Service implementation " IMPL_NAME
                        "] XJob::execute: Could not get Home entry from java.ini/javarc.");
-    if (bSuccess && !sValue.isEmpty())
-    {
-        //get the directory
-        std::unique_ptr<JavaInfo> aInfo;
-        javaFrameworkError err = jfw_getJavaInfoByPath(sValue, &aInfo);
+    if (!(bSuccess && !sValue.isEmpty()))
+        return;
 
-        if (err == JFW_E_NONE)
+    //get the directory
+    std::unique_ptr<JavaInfo> aInfo;
+    javaFrameworkError err = jfw_getJavaInfoByPath(sValue, &aInfo);
+
+    if (err == JFW_E_NONE)
+    {
+        if (jfw_setSelectedJRE(aInfo.get()) != JFW_E_NONE)
         {
-            if (jfw_setSelectedJRE(aInfo.get()) != JFW_E_NONE)
-            {
-                OSL_FAIL("[Service implementation " IMPL_NAME
-                           "] XJob::execute: jfw_setSelectedJRE failed.");
-                fprintf(stderr, "\nCannot migrate Java. An error occurred.\n");
-            }
+            OSL_FAIL("[Service implementation " IMPL_NAME
+                       "] XJob::execute: jfw_setSelectedJRE failed.");
+            fprintf(stderr, "\nCannot migrate Java. An error occurred.\n");
         }
-        else if (err == JFW_E_FAILED_VERSION)
-        {
-            fprintf(stderr, "\nCannot migrate Java settings because the version of the Java  "
-                    "is not supported anymore.\n");
-        }
+    }
+    else if (err == JFW_E_FAILED_VERSION)
+    {
+        fprintf(stderr, "\nCannot migrate Java settings because the version of the Java  "
+                "is not supported anymore.\n");
     }
 }
 
@@ -312,41 +312,41 @@ void SAL_CALL  JavaMigration::overrideProperty(
 void SAL_CALL  JavaMigration::setPropertyValue(
         const Any& aValue )
 {
-    if ( !m_aStack.empty())
+    if ( m_aStack.empty())
+        return;
+
+    switch (m_aStack.top().second)
     {
-        switch (m_aStack.top().second)
-        {
-        case ENABLE_JAVA:
-        {
-            bool val;
-            if (!(aValue >>= val))
-                throw MalformedDataException(
-                       "[Service implementation " IMPL_NAME
-                       "] XLayerHandler::setPropertyValue received wrong type for Enable property", nullptr, Any());
-            if (jfw_setEnabled(val) != JFW_E_NONE)
-                throw WrappedTargetException(
-                       "[Service implementation " IMPL_NAME
-                       "] XLayerHandler::setPropertyValue: jfw_setEnabled failed.", nullptr, Any());
+    case ENABLE_JAVA:
+    {
+        bool val;
+        if (!(aValue >>= val))
+            throw MalformedDataException(
+                   "[Service implementation " IMPL_NAME
+                   "] XLayerHandler::setPropertyValue received wrong type for Enable property", nullptr, Any());
+        if (jfw_setEnabled(val) != JFW_E_NONE)
+            throw WrappedTargetException(
+                   "[Service implementation " IMPL_NAME
+                   "] XLayerHandler::setPropertyValue: jfw_setEnabled failed.", nullptr, Any());
 
-            break;
-        }
-        case USER_CLASS_PATH:
-         {
-             OUString cp;
-             if (!(aValue >>= cp))
-                 throw MalformedDataException(
-                           "[Service implementation " IMPL_NAME
-                           "] XLayerHandler::setPropertyValue received wrong type for UserClassPath property", nullptr, Any());
-
-             if (jfw_setUserClassPath(cp) != JFW_E_NONE)
-                 throw WrappedTargetException(
+        break;
+    }
+    case USER_CLASS_PATH:
+     {
+         OUString cp;
+         if (!(aValue >>= cp))
+             throw MalformedDataException(
                        "[Service implementation " IMPL_NAME
-                       "] XLayerHandler::setPropertyValue: jfw_setUserClassPath failed.", nullptr, Any());
-             break;
-         }
-        default:
-            OSL_ASSERT(false);
-        }
+                       "] XLayerHandler::setPropertyValue received wrong type for UserClassPath property", nullptr, Any());
+
+         if (jfw_setUserClassPath(cp) != JFW_E_NONE)
+             throw WrappedTargetException(
+                   "[Service implementation " IMPL_NAME
+                   "] XLayerHandler::setPropertyValue: jfw_setUserClassPath failed.", nullptr, Any());
+         break;
+     }
+    default:
+        OSL_ASSERT(false);
     }
 }
 

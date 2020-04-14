@@ -723,117 +723,117 @@ void BackendImpl::unorc_verify_init(
     if (transientMode())
         return;
     const ::osl::MutexGuard guard( getMutex() );
-    if (! m_unorc_inited)
-    {
-        // common rc:
-        ::ucbhelper::Content ucb_content;
-        if (create_ucb_content(
-                &ucb_content,
-                makeURL( getCachePath(), "unorc" ),
-                xCmdEnv, false /* no throw */ ))
-        {
-            OUString line;
-            if (readLine( &line, "UNO_JAVA_CLASSPATH=", ucb_content,
-                          RTL_TEXTENCODING_UTF8 ))
-            {
-                sal_Int32 index = sizeof ("UNO_JAVA_CLASSPATH=") - 1;
-                do {
-                    OUString token( line.getToken( 0, ' ', index ).trim() );
-                    if (!token.isEmpty())
-                    {
-                        if (create_ucb_content(
-                                nullptr, expandUnoRcTerm(token), xCmdEnv,
-                                false /* no throw */ ))
-                        {
-                            //The jar file may not exist anymore if a shared or bundled
-                            //extension was removed, but it can still be in the unorc
-                            //After running XExtensionManager::synchronize, the unorc is
-                            //cleaned up
-                            m_jar_typelibs.push_back( token );
-                        }
-                    }
-                }
-                while (index >= 0);
-            }
-            if (readLine( &line, "UNO_TYPES=", ucb_content,
-                          RTL_TEXTENCODING_UTF8 )) {
-                sal_Int32 index = sizeof ("UNO_TYPES=") - 1;
-                do {
-                    OUString token( line.getToken( 0, ' ', index ).trim() );
-                    if (!token.isEmpty())
-                    {
-                        if (token[ 0 ] == '?')
-                            token = token.copy( 1 );
-                        if (create_ucb_content(
-                                nullptr, expandUnoRcTerm(token), xCmdEnv,
-                                false /* no throw */ ))
-                        {
-                             //The RDB file may not exist anymore if a shared or bundled
-                             //extension was removed, but it can still be in the unorc.
-                             //After running XExtensionManager::synchronize, the unorc is
-                             //cleaned up
-                             m_rdb_typelibs.push_back( token );
-                        }
-                    }
-                }
-                while (index >= 0);
-            }
-            if (readLine( &line, "UNO_SERVICES=", ucb_content,
-                          RTL_TEXTENCODING_UTF8 ))
-            {
-                // The UNO_SERVICES line always has the BNF form
-                //  "UNO_SERVICES="
-                //  ("?$ORIGIN/" <common-rdb>)?                        -- first
-                //  "${$ORIGIN/${_OS}_${_ARCH}rc:UNO_SERVICES}"?       -- second
-                //  ("?" ("BUNDLED_EXTENSIONS" |                       -- third
-                //   "UNO_SHARED_PACKAGES_CACHE" | "UNO_USER_PACKAGES_CACHE")
-                //   ...)*
-                // so can unambiguously be split into its three parts:
-                int state = 1;
-                for (sal_Int32 i = RTL_CONSTASCII_LENGTH("UNO_SERVICES=");
-                     i >= 0;)
-                {
-                    OUString token(line.getToken(0, ' ', i));
-                    if (!token.isEmpty())
-                    {
-                        if (state == 1 && token.match("?$ORIGIN/"))
-                        {
-                            m_commonRDB_orig = token.copy(
-                                RTL_CONSTASCII_LENGTH("?$ORIGIN/"));
-                            state = 2;
-                        }
-                        else if ( state <= 2 && token == "${$ORIGIN/${_OS}_${_ARCH}rc:UNO_SERVICES}" )
-                        {
-                            state = 3;
-                        }
-                        else
-                        {
-                            if (token[0] == '?')
-                            {
-                                token = token.copy(1);
-                            }
-                            m_components.push_back(token);
-                            state = 3;
-                        }
-                    }
-                }
-            }
+    if ( m_unorc_inited)
+        return;
 
-            // native rc:
-            if (create_ucb_content(
-                    &ucb_content,
-                    makeURL( getCachePath(), getPlatformString() + "rc"),
-                    xCmdEnv, false /* no throw */ )) {
-                if (readLine( &line, "UNO_SERVICES=", ucb_content,
-                              RTL_TEXTENCODING_UTF8 )) {
-                    m_nativeRDB_orig = line.copy(
-                        sizeof ("UNO_SERVICES=?$ORIGIN/") - 1 );
+    // common rc:
+    ::ucbhelper::Content ucb_content;
+    if (create_ucb_content(
+            &ucb_content,
+            makeURL( getCachePath(), "unorc" ),
+            xCmdEnv, false /* no throw */ ))
+    {
+        OUString line;
+        if (readLine( &line, "UNO_JAVA_CLASSPATH=", ucb_content,
+                      RTL_TEXTENCODING_UTF8 ))
+        {
+            sal_Int32 index = sizeof ("UNO_JAVA_CLASSPATH=") - 1;
+            do {
+                OUString token( line.getToken( 0, ' ', index ).trim() );
+                if (!token.isEmpty())
+                {
+                    if (create_ucb_content(
+                            nullptr, expandUnoRcTerm(token), xCmdEnv,
+                            false /* no throw */ ))
+                    {
+                        //The jar file may not exist anymore if a shared or bundled
+                        //extension was removed, but it can still be in the unorc
+                        //After running XExtensionManager::synchronize, the unorc is
+                        //cleaned up
+                        m_jar_typelibs.push_back( token );
+                    }
+                }
+            }
+            while (index >= 0);
+        }
+        if (readLine( &line, "UNO_TYPES=", ucb_content,
+                      RTL_TEXTENCODING_UTF8 )) {
+            sal_Int32 index = sizeof ("UNO_TYPES=") - 1;
+            do {
+                OUString token( line.getToken( 0, ' ', index ).trim() );
+                if (!token.isEmpty())
+                {
+                    if (token[ 0 ] == '?')
+                        token = token.copy( 1 );
+                    if (create_ucb_content(
+                            nullptr, expandUnoRcTerm(token), xCmdEnv,
+                            false /* no throw */ ))
+                    {
+                         //The RDB file may not exist anymore if a shared or bundled
+                         //extension was removed, but it can still be in the unorc.
+                         //After running XExtensionManager::synchronize, the unorc is
+                         //cleaned up
+                         m_rdb_typelibs.push_back( token );
+                    }
+                }
+            }
+            while (index >= 0);
+        }
+        if (readLine( &line, "UNO_SERVICES=", ucb_content,
+                      RTL_TEXTENCODING_UTF8 ))
+        {
+            // The UNO_SERVICES line always has the BNF form
+            //  "UNO_SERVICES="
+            //  ("?$ORIGIN/" <common-rdb>)?                        -- first
+            //  "${$ORIGIN/${_OS}_${_ARCH}rc:UNO_SERVICES}"?       -- second
+            //  ("?" ("BUNDLED_EXTENSIONS" |                       -- third
+            //   "UNO_SHARED_PACKAGES_CACHE" | "UNO_USER_PACKAGES_CACHE")
+            //   ...)*
+            // so can unambiguously be split into its three parts:
+            int state = 1;
+            for (sal_Int32 i = RTL_CONSTASCII_LENGTH("UNO_SERVICES=");
+                 i >= 0;)
+            {
+                OUString token(line.getToken(0, ' ', i));
+                if (!token.isEmpty())
+                {
+                    if (state == 1 && token.match("?$ORIGIN/"))
+                    {
+                        m_commonRDB_orig = token.copy(
+                            RTL_CONSTASCII_LENGTH("?$ORIGIN/"));
+                        state = 2;
+                    }
+                    else if ( state <= 2 && token == "${$ORIGIN/${_OS}_${_ARCH}rc:UNO_SERVICES}" )
+                    {
+                        state = 3;
+                    }
+                    else
+                    {
+                        if (token[0] == '?')
+                        {
+                            token = token.copy(1);
+                        }
+                        m_components.push_back(token);
+                        state = 3;
+                    }
                 }
             }
         }
-        m_unorc_modified = false;
-        m_unorc_inited = true;
+
+        // native rc:
+        if (create_ucb_content(
+                &ucb_content,
+                makeURL( getCachePath(), getPlatformString() + "rc"),
+                xCmdEnv, false /* no throw */ )) {
+            if (readLine( &line, "UNO_SERVICES=", ucb_content,
+                          RTL_TEXTENCODING_UTF8 )) {
+                m_nativeRDB_orig = line.copy(
+                    sizeof ("UNO_SERVICES=?$ORIGIN/") - 1 );
+            }
+        }
     }
+    m_unorc_modified = false;
+    m_unorc_inited = true;
 }
 
 
@@ -1184,27 +1184,27 @@ void BackendImpl::ComponentPackageImpl::componentLiveInsertion(
             SAL_WARN("desktop.deployment", "implementation already registered " << implementationName);
         }
     }
-    if (!data.singletons.empty()) {
-        css::uno::Reference< css::container::XNameContainer > cont(
-            rootContext, css::uno::UNO_QUERY_THROW);
-        for (auto const& singleton : data.singletons)
-        {
-            OUString name("/singletons/" + singleton.first);
-            //TODO: Update should be atomic:
-            try {
-                cont->removeByName( name + "/arguments");
-            } catch (const container::NoSuchElementException &) {}
-            try {
-                cont->insertByName( name + "/service", css::uno::Any(singleton.second));
-            } catch (const container::ElementExistException &) {
-                cont->replaceByName( name + "/service", css::uno::Any(singleton.second));
-            }
-            try {
-                cont->insertByName(name, css::uno::Any());
-            } catch (const container::ElementExistException &) {
-                SAL_WARN("desktop.deployment", "singleton already registered " << singleton.first);
-                cont->replaceByName(name, css::uno::Any());
-            }
+    if (data.singletons.empty())        return;
+
+    css::uno::Reference< css::container::XNameContainer > cont(
+        rootContext, css::uno::UNO_QUERY_THROW);
+    for (auto const& singleton : data.singletons)
+    {
+        OUString name("/singletons/" + singleton.first);
+        //TODO: Update should be atomic:
+        try {
+            cont->removeByName( name + "/arguments");
+        } catch (const container::NoSuchElementException &) {}
+        try {
+            cont->insertByName( name + "/service", css::uno::Any(singleton.second));
+        } catch (const container::ElementExistException &) {
+            cont->replaceByName( name + "/service", css::uno::Any(singleton.second));
+        }
+        try {
+            cont->insertByName(name, css::uno::Any());
+        } catch (const container::ElementExistException &) {
+            SAL_WARN("desktop.deployment", "singleton already registered " << singleton.first);
+            cont->replaceByName(name, css::uno::Any());
         }
     }
 }
@@ -1224,23 +1224,24 @@ void BackendImpl::ComponentPackageImpl::componentLiveRemoval(
             // ignore if factory has not been live deployed
         }
     }
-    if (!data.singletons.empty()) {
-        css::uno::Reference< css::container::XNameContainer > cont(
-            rootContext, css::uno::UNO_QUERY_THROW);
-        for (auto const& singleton : data.singletons)
-        {
-            OUString name("/singletons/" + singleton.first);
-            //TODO: Removal should be atomic:
-            try {
-                cont->removeByName(name);
-            } catch (const container::NoSuchElementException &) {}
-            try {
-                cont->removeByName( name + "/service" );
-            } catch (const container::NoSuchElementException &) {}
-            try {
-                cont->removeByName( name + "/arguments" );
-            } catch (const container::NoSuchElementException &) {}
-        }
+    if (data.singletons.empty())
+        return;
+
+    css::uno::Reference< css::container::XNameContainer > cont(
+        rootContext, css::uno::UNO_QUERY_THROW);
+    for (auto const& singleton : data.singletons)
+    {
+        OUString name("/singletons/" + singleton.first);
+        //TODO: Removal should be atomic:
+        try {
+            cont->removeByName(name);
+        } catch (const container::NoSuchElementException &) {}
+        try {
+            cont->removeByName( name + "/service" );
+        } catch (const container::NoSuchElementException &) {}
+        try {
+            cont->removeByName( name + "/arguments" );
+        } catch (const container::NoSuchElementException &) {}
     }
 }
 

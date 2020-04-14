@@ -1877,65 +1877,65 @@ void CallbackFlushHandler::Invoke()
 {
     comphelper::ProfileZone aZone("CallbackFlushHander::Invoke");
 
-    if (m_pCallback)
+    if (!m_pCallback)
+        return;
+
+    std::scoped_lock<std::mutex> lock(m_mutex);
+
+    SAL_INFO("lok", "Flushing " << m_queue.size() << " elements.");
+    for (const auto& rCallbackData : m_queue)
     {
-        std::scoped_lock<std::mutex> lock(m_mutex);
+        const int type = rCallbackData.Type;
+        const auto& payload = rCallbackData.PayloadString;
+        const int viewId = lcl_isViewCallbackType(type) ? lcl_getViewId(rCallbackData) : -1;
 
-        SAL_INFO("lok", "Flushing " << m_queue.size() << " elements.");
-        for (const auto& rCallbackData : m_queue)
+        if (viewId == -1)
         {
-            const int type = rCallbackData.Type;
-            const auto& payload = rCallbackData.PayloadString;
-            const int viewId = lcl_isViewCallbackType(type) ? lcl_getViewId(rCallbackData) : -1;
-
-            if (viewId == -1)
+            const auto stateIt = m_states.find(type);
+            if (stateIt != m_states.end())
             {
-                const auto stateIt = m_states.find(type);
-                if (stateIt != m_states.end())
+                // If the state didn't change, it's safe to ignore.
+                if (stateIt->second == payload)
+                {
+                    SAL_INFO("lok", "Skipping duplicate [" << type << "]: [" << payload << "].");
+                    continue;
+                }
+
+                stateIt->second = payload;
+            }
+        }
+        else
+        {
+            const auto statesIt = m_viewStates.find(viewId);
+            if (statesIt != m_viewStates.end())
+            {
+                auto& states = statesIt->second;
+                const auto stateIt = states.find(type);
+                if (stateIt != states.end())
                 {
                     // If the state didn't change, it's safe to ignore.
                     if (stateIt->second == payload)
                     {
-                        SAL_INFO("lok", "Skipping duplicate [" << type << "]: [" << payload << "].");
+                        SAL_INFO("lok", "Skipping view duplicate [" << type << ',' << viewId << "]: [" << payload << "].");
                         continue;
                     }
 
+                    SAL_INFO("lok", "Replacing an element in view states [" << type << ',' << viewId << "]: [" << payload << "].");
                     stateIt->second = payload;
                 }
-            }
-            else
-            {
-                const auto statesIt = m_viewStates.find(viewId);
-                if (statesIt != m_viewStates.end())
+                else
                 {
-                    auto& states = statesIt->second;
-                    const auto stateIt = states.find(type);
-                    if (stateIt != states.end())
-                    {
-                        // If the state didn't change, it's safe to ignore.
-                        if (stateIt->second == payload)
-                        {
-                            SAL_INFO("lok", "Skipping view duplicate [" << type << ',' << viewId << "]: [" << payload << "].");
-                            continue;
-                        }
+                    SAL_INFO("lok", "Inserted a new element in view states: [" << type << ',' << viewId << "]: [" << payload << "]");
+                    states.emplace(type, payload);
 
-                        SAL_INFO("lok", "Replacing an element in view states [" << type << ',' << viewId << "]: [" << payload << "].");
-                        stateIt->second = payload;
-                    }
-                    else
-                    {
-                        SAL_INFO("lok", "Inserted a new element in view states: [" << type << ',' << viewId << "]: [" << payload << "]");
-                        states.emplace(type, payload);
-
-                    }
                 }
             }
-
-            m_pCallback(type, payload.c_str(), m_pData);
         }
 
-        m_queue.clear();
+        m_pCallback(type, payload.c_str(), m_pData);
     }
+
+    m_queue.clear();
 }
 
 bool CallbackFlushHandler::removeAll(const std::function<bool (const CallbackFlushHandler::queue_type::value_type&)>& rTestFunc)

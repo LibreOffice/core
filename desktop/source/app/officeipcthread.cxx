@@ -869,30 +869,30 @@ void RequestHandler::Disable()
 {
     osl::ClearableMutexGuard aMutex( GetMutex() );
 
-    if( pGlobal.is() )
-    {
-        rtl::Reference< RequestHandler > handler(pGlobal);
-        pGlobal.clear();
+    if( !pGlobal.is() )
+        return;
 
-        handler->mState = State::Downing;
-        if (handler->mIpcThread.is()) {
-            handler->mIpcThread->close();
-        }
+    rtl::Reference< RequestHandler > handler(pGlobal);
+    pGlobal.clear();
 
-        // release mutex to avoid deadlocks
-        aMutex.clear();
-
-        handler->cReady.set();
-
-        // exit gracefully and join
-        if (handler->mIpcThread.is())
-        {
-            handler->mIpcThread->join();
-            handler->mIpcThread.clear();
-        }
-
-        handler->cReady.reset();
+    handler->mState = State::Downing;
+    if (handler->mIpcThread.is()) {
+        handler->mIpcThread->close();
     }
+
+    // release mutex to avoid deadlocks
+    aMutex.clear();
+
+    handler->cReady.set();
+
+    // exit gracefully and join
+    if (handler->mIpcThread.is())
+    {
+        handler->mIpcThread->join();
+        handler->mIpcThread.clear();
+    }
+
+    handler->cReady.reset();
 }
 
 RequestHandler::RequestHandler() :

@@ -553,17 +553,18 @@ void Package::fireModified()
 {
     ::cppu::OInterfaceContainerHelper * container = rBHelper.getContainer(
         cppu::UnoType<util::XModifyListener>::get() );
-    if (container != nullptr) {
-        Sequence< Reference<XInterface> > elements(
-            container->getElements() );
-        lang::EventObject evt( static_cast<OWeakObject *>(this) );
-        for ( sal_Int32 pos = 0; pos < elements.getLength(); ++pos )
-        {
-            Reference<util::XModifyListener> xListener(
-                elements[ pos ], UNO_QUERY );
-            if (xListener.is())
-                xListener->modified( evt );
-        }
+    if (container == nullptr)
+        return;
+
+    Sequence< Reference<XInterface> > elements(
+        container->getElements() );
+    lang::EventObject evt( static_cast<OWeakObject *>(this) );
+    for ( sal_Int32 pos = 0; pos < elements.getLength(); ++pos )
+    {
+        Reference<util::XModifyListener> xListener(
+            elements[ pos ], UNO_QUERY );
+        if (xListener.is())
+            xListener->modified( evt );
     }
 }
 

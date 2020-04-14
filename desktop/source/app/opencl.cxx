@@ -223,32 +223,32 @@ void Desktop::CheckOpenCLCompute(const Reference< XDesktop2 > &xDesktop)
     aSelectedCLDeviceVersionID += "--" +
         OUString::number(aTimeVal.Seconds);
 
-    if (aSelectedCLDeviceVersionID != officecfg::Office::Common::Misc::SelectedOpenCLDeviceIdentifier::get())
-    {
-        // OpenCL device changed - sanity check it and disable if bad.
+    if (aSelectedCLDeviceVersionID == officecfg::Office::Common::Misc::SelectedOpenCLDeviceIdentifier::get())
+        return;
 
-        sal_Int32 nOrigMinimumSize = officecfg::Office::Calc::Formula::Calculation::OpenCLMinimumDataSize::get();
-        { // set the minimum group size to something small for quick testing.
-            std::shared_ptr<comphelper::ConfigurationChanges> xBatch(comphelper::ConfigurationChanges::create());
-            officecfg::Office::Calc::Formula::Calculation::OpenCLMinimumDataSize::set(3 /* small */, xBatch);
-            xBatch->commit();
-        }
+    // OpenCL device changed - sanity check it and disable if bad.
 
-        // Hopefully at least basic functionality always works and broken OpenCL implementations break
-        // only when they are used to compute something. If this assumptions turns out to be not true,
-        // the driver check needs to be moved sooner.
-        bool bSucceeded = testOpenCLDriver() && testOpenCLCompute(xDesktop, aURL);
-
-        { // restore the minimum group size
-            std::shared_ptr<comphelper::ConfigurationChanges> xBatch(comphelper::ConfigurationChanges::create());
-            officecfg::Office::Calc::Formula::Calculation::OpenCLMinimumDataSize::set(nOrigMinimumSize, xBatch);
-            officecfg::Office::Common::Misc::SelectedOpenCLDeviceIdentifier::set(aSelectedCLDeviceVersionID, xBatch);
-            xBatch->commit();
-        }
-
-        if (!bSucceeded)
-            OpenCLZone::hardDisable();
+    sal_Int32 nOrigMinimumSize = officecfg::Office::Calc::Formula::Calculation::OpenCLMinimumDataSize::get();
+    { // set the minimum group size to something small for quick testing.
+        std::shared_ptr<comphelper::ConfigurationChanges> xBatch(comphelper::ConfigurationChanges::create());
+        officecfg::Office::Calc::Formula::Calculation::OpenCLMinimumDataSize::set(3 /* small */, xBatch);
+        xBatch->commit();
     }
+
+    // Hopefully at least basic functionality always works and broken OpenCL implementations break
+    // only when they are used to compute something. If this assumptions turns out to be not true,
+    // the driver check needs to be moved sooner.
+    bool bSucceeded = testOpenCLDriver() && testOpenCLCompute(xDesktop, aURL);
+
+    { // restore the minimum group size
+        std::shared_ptr<comphelper::ConfigurationChanges> xBatch(comphelper::ConfigurationChanges::create());
+        officecfg::Office::Calc::Formula::Calculation::OpenCLMinimumDataSize::set(nOrigMinimumSize, xBatch);
+        officecfg::Office::Common::Misc::SelectedOpenCLDeviceIdentifier::set(aSelectedCLDeviceVersionID, xBatch);
+        xBatch->commit();
+    }
+
+    if (!bSucceeded)
+        OpenCLZone::hardDisable();
 }
 #endif // HAVE_FEATURE_OPENCL
 
