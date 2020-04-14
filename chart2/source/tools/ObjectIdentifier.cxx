@@ -1127,8 +1127,7 @@ OUString ObjectIdentifier::createSeriesSubObjectStub( ObjectType eSubObjectType
 
 OUString ObjectIdentifier::createPointCID( const OUString& rPointCID_Stub, sal_Int32 nIndex  )
 {
-    OUString aRet(rPointCID_Stub);
-    return aRet+=OUString::number( nIndex );
+    return rPointCID_Stub + OUString::number( nIndex );
 }
 
 OUString ObjectIdentifier::getParticleID( const OUString& rCID )

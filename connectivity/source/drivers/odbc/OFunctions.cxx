@@ -110,7 +110,8 @@ bool LoadLibrary_ODBC3(OUString &_rPath)
     if( !pODBCso)
         return false;
 
-    return bLoaded = LoadFunctions(pODBCso);
+    bLoaded = LoadFunctions(pODBCso);
+    return bLoaded;
 }
 
 
