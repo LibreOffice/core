@@ -123,32 +123,32 @@ void ORadioButtonModel::SetSiblingPropsTo(const OUString& rPropName, const Any& 
 
     // Iterate over my siblings
     Reference<XIndexAccess> xIndexAccess(getParent(), UNO_QUERY);
-    if (xIndexAccess.is())
+    if (!xIndexAccess.is())
+        return;
+
+    Reference<XPropertySet> xMyProps = this;
+    OUString sCurrentGroup;
+    sal_Int32 nNumSiblings = xIndexAccess->getCount();
+    for (sal_Int32 i=0; i<nNumSiblings; ++i)
     {
-        Reference<XPropertySet> xMyProps = this;
-        OUString sCurrentGroup;
-        sal_Int32 nNumSiblings = xIndexAccess->getCount();
-        for (sal_Int32 i=0; i<nNumSiblings; ++i)
-        {
-            Reference<XPropertySet> xSiblingProperties(xIndexAccess->getByIndex(i), UNO_QUERY);
-            if (!xSiblingProperties.is())
-                continue;
-            if (xMyProps == xSiblingProperties)
-                continue;   // do not set myself
+        Reference<XPropertySet> xSiblingProperties(xIndexAccess->getByIndex(i), UNO_QUERY);
+        if (!xSiblingProperties.is())
+            continue;
+        if (xMyProps == xSiblingProperties)
+            continue;   // do not set myself
 
-            // Only if it's a RadioButton
-            if (!hasProperty(PROPERTY_CLASSID, xSiblingProperties))
-                continue;
-            sal_Int16 nType = 0;
-            xSiblingProperties->getPropertyValue(PROPERTY_CLASSID) >>= nType;
-            if (nType != FormComponentType::RADIOBUTTON)
-                continue;
+        // Only if it's a RadioButton
+        if (!hasProperty(PROPERTY_CLASSID, xSiblingProperties))
+            continue;
+        sal_Int16 nType = 0;
+        xSiblingProperties->getPropertyValue(PROPERTY_CLASSID) >>= nType;
+        if (nType != FormComponentType::RADIOBUTTON)
+            continue;
 
-            // The group association is attached to the name
-            sCurrentGroup = OGroupManager::GetGroupName( xSiblingProperties );
-            if (sCurrentGroup == sMyGroup)
-                xSiblingProperties->setPropertyValue(rPropName, rValue);
-        }
+        // The group association is attached to the name
+        sCurrentGroup = OGroupManager::GetGroupName( xSiblingProperties );
+        if (sCurrentGroup == sMyGroup)
+            xSiblingProperties->setPropertyValue(rPropName, rValue);
     }
 }
 
@@ -175,62 +175,62 @@ void ORadioButtonModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, cons
         setControlSource();
     }
 
-    if (nHandle == PROPERTY_ID_DEFAULT_STATE)
-    {
-        sal_Int16 nValue;
-        rValue >>= nValue;
-        if (1 == nValue)
-        {   // Reset the 'default checked' for all Radios of the same group.
-            // Because (as the Highlander already knew): "There can be only one"
-            Any aZero;
-            nValue = 0;
-            aZero <<= nValue;
-            SetSiblingPropsTo(PROPERTY_DEFAULT_STATE, aZero);
-        }
+    if (nHandle != PROPERTY_ID_DEFAULT_STATE)
+        return;
+
+    sal_Int16 nValue;
+    rValue >>= nValue;
+    if (1 == nValue)
+    {   // Reset the 'default checked' for all Radios of the same group.
+        // Because (as the Highlander already knew): "There can be only one"
+        Any aZero;
+        nValue = 0;
+        aZero <<= nValue;
+        SetSiblingPropsTo(PROPERTY_DEFAULT_STATE, aZero);
     }
 }
 
 void ORadioButtonModel::setControlSource()
 {
     Reference<XIndexAccess> xIndexAccess(getParent(), UNO_QUERY);
-    if (xIndexAccess.is())
+    if (!xIndexAccess.is())
+        return;
+
+    OUString sName, sGroupName;
+
+    if (hasProperty(PROPERTY_GROUP_NAME, this))
+        getPropertyValue(PROPERTY_GROUP_NAME) >>= sGroupName;
+    getPropertyValue(PROPERTY_NAME) >>= sName;
+
+    Reference<XPropertySet> xMyProps = this;
+    for (sal_Int32 i=0; i<xIndexAccess->getCount(); ++i)
     {
-        OUString sName, sGroupName;
+        Reference<XPropertySet> xSiblingProperties(xIndexAccess->getByIndex(i), UNO_QUERY);
+        if (!xSiblingProperties.is())
+            continue;
 
-        if (hasProperty(PROPERTY_GROUP_NAME, this))
-            getPropertyValue(PROPERTY_GROUP_NAME) >>= sGroupName;
-        getPropertyValue(PROPERTY_NAME) >>= sName;
+        if (xMyProps == xSiblingProperties)
+            // Only if I didn't find myself
+            continue;
 
-        Reference<XPropertySet> xMyProps = this;
-        for (sal_Int32 i=0; i<xIndexAccess->getCount(); ++i)
+        sal_Int16 nType = 0;
+        xSiblingProperties->getPropertyValue(PROPERTY_CLASSID) >>= nType;
+        if (nType != FormComponentType::RADIOBUTTON)
+            // Only RadioButtons
+            continue;
+
+        OUString sSiblingName, sSiblingGroupName;
+        if (hasProperty(PROPERTY_GROUP_NAME, xSiblingProperties))
+            xSiblingProperties->getPropertyValue(PROPERTY_GROUP_NAME) >>= sSiblingGroupName;
+        xSiblingProperties->getPropertyValue(PROPERTY_NAME) >>= sSiblingName;
+
+        if ((sGroupName.isEmpty() && sSiblingGroupName.isEmpty() &&                 // (no group name
+             sName == sSiblingName) ||                                              //  names match) or
+            (!sGroupName.isEmpty() && !sSiblingGroupName.isEmpty() &&               // (have group name
+             sGroupName == sSiblingGroupName))                                      //  they match)
         {
-            Reference<XPropertySet> xSiblingProperties(xIndexAccess->getByIndex(i), UNO_QUERY);
-            if (!xSiblingProperties.is())
-                continue;
-
-            if (xMyProps == xSiblingProperties)
-                // Only if I didn't find myself
-                continue;
-
-            sal_Int16 nType = 0;
-            xSiblingProperties->getPropertyValue(PROPERTY_CLASSID) >>= nType;
-            if (nType != FormComponentType::RADIOBUTTON)
-                // Only RadioButtons
-                continue;
-
-            OUString sSiblingName, sSiblingGroupName;
-            if (hasProperty(PROPERTY_GROUP_NAME, xSiblingProperties))
-                xSiblingProperties->getPropertyValue(PROPERTY_GROUP_NAME) >>= sSiblingGroupName;
-            xSiblingProperties->getPropertyValue(PROPERTY_NAME) >>= sSiblingName;
-
-            if ((sGroupName.isEmpty() && sSiblingGroupName.isEmpty() &&                 // (no group name
-                 sName == sSiblingName) ||                                              //  names match) or
-                (!sGroupName.isEmpty() && !sSiblingGroupName.isEmpty() &&               // (have group name
-                 sGroupName == sSiblingGroupName))                                      //  they match)
-            {
-                setPropertyValue(PROPERTY_CONTROLSOURCE, xSiblingProperties->getPropertyValue(PROPERTY_CONTROLSOURCE));
-                break;
-            }
+            setPropertyValue(PROPERTY_CONTROLSOURCE, xSiblingProperties->getPropertyValue(PROPERTY_CONTROLSOURCE));
+            break;
         }
     }
 }

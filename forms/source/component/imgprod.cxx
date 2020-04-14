@@ -62,26 +62,26 @@ ImgProdLockBytes::ImgProdLockBytes( SvStream* pStm, bool bOwner ) :
 ImgProdLockBytes::ImgProdLockBytes( css::uno::Reference< css::io::XInputStream > const & rStmRef ) :
         xStmRef( rStmRef )
 {
-    if( xStmRef.is() )
+    if( !xStmRef.is() )
+        return;
+
+    const sal_uInt32    nBytesToRead = 65535;
+    sal_uInt32          nRead;
+
+    do
     {
-        const sal_uInt32    nBytesToRead = 65535;
-        sal_uInt32          nRead;
+        css::uno::Sequence< sal_Int8 > aReadSeq;
 
-        do
+        nRead = xStmRef->readSomeBytes( aReadSeq, nBytesToRead );
+
+        if( nRead )
         {
-            css::uno::Sequence< sal_Int8 > aReadSeq;
-
-            nRead = xStmRef->readSomeBytes( aReadSeq, nBytesToRead );
-
-            if( nRead )
-            {
-                const sal_uInt32 nOldLength = maSeq.getLength();
-                maSeq.realloc( nOldLength + nRead );
-                memcpy( maSeq.getArray() + nOldLength, aReadSeq.getConstArray(), aReadSeq.getLength() );
-            }
+            const sal_uInt32 nOldLength = maSeq.getLength();
+            maSeq.realloc( nOldLength + nRead );
+            memcpy( maSeq.getArray() + nOldLength, aReadSeq.getConstArray(), aReadSeq.getLength() );
         }
-        while( nBytesToRead == nRead );
     }
+    while( nBytesToRead == nRead );
 }
 
 ErrCode ImgProdLockBytes::ReadAt(sal_uInt64 const nPos,
@@ -248,45 +248,45 @@ void ImageProducer::NewDataAvailable()
 
 void ImageProducer::startProduction()
 {
-    if( !maConsList.empty() || maDoneHdl.IsSet() )
+    if( !(!maConsList.empty() || maDoneHdl.IsSet()) )
+        return;
+
+    bool bNotifyEmptyGraphics = false;
+
+    // valid stream or filled graphic? => update consumers
+    if( mpStm || ( mpGraphic->GetType() != GraphicType::NONE ) )
     {
-        bool bNotifyEmptyGraphics = false;
-
-        // valid stream or filled graphic? => update consumers
-        if( mpStm || ( mpGraphic->GetType() != GraphicType::NONE ) )
+        // if we already have a graphic, we don't have to import again;
+        // graphic is cleared if a new Stream is set
+        if( ( mpGraphic->GetType() == GraphicType::NONE ) || mpGraphic->GetReaderContext() )
         {
-            // if we already have a graphic, we don't have to import again;
-            // graphic is cleared if a new Stream is set
-            if( ( mpGraphic->GetType() == GraphicType::NONE ) || mpGraphic->GetReaderContext() )
-            {
-                if ( ImplImportGraphic( *mpGraphic ) )
-                    maDoneHdl.Call( mpGraphic.get() );
-            }
-
-            if( mpGraphic->GetType() != GraphicType::NONE )
-                ImplUpdateData( *mpGraphic );
-            else
-                bNotifyEmptyGraphics = true;
+            if ( ImplImportGraphic( *mpGraphic ) )
+                maDoneHdl.Call( mpGraphic.get() );
         }
+
+        if( mpGraphic->GetType() != GraphicType::NONE )
+            ImplUpdateData( *mpGraphic );
         else
             bNotifyEmptyGraphics = true;
-
-        if ( bNotifyEmptyGraphics )
-        {
-            // reset image
-            // create temporary list to hold interfaces
-            ConsumerList_t aTmp = maConsList;
-
-            // iterate through interfaces
-            for (auto const& elem : aTmp)
-            {
-                elem->init( 0, 0 );
-                elem->complete( css::awt::ImageStatus::IMAGESTATUS_STATICIMAGEDONE, this );
-            }
-
-            maDoneHdl.Call( nullptr );
-        }
     }
+    else
+        bNotifyEmptyGraphics = true;
+
+    if ( !bNotifyEmptyGraphics )
+        return;
+
+    // reset image
+    // create temporary list to hold interfaces
+    ConsumerList_t aTmp = maConsList;
+
+    // iterate through interfaces
+    for (auto const& elem : aTmp)
+    {
+        elem->init( 0, 0 );
+        elem->complete( css::awt::ImageStatus::IMAGESTATUS_STATICIMAGEDONE, this );
+    }
+
+    maDoneHdl.Call( nullptr );
 }
 
 
@@ -360,99 +360,72 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
     Bitmap              aBmp( aBmpEx.GetBitmap() );
     BitmapReadAccess*   pBmpAcc = aBmp.AcquireReadAccess();
 
-    if( pBmpAcc )
+    if( !pBmpAcc )
+        return;
+
+    Bitmap              aMask( aBmpEx.GetMask() );
+    BitmapReadAccess*   pMskAcc = !!aMask ? aMask.AcquireReadAccess() : nullptr;
+    const long          nWidth = pBmpAcc->Width();
+    const long          nHeight = pBmpAcc->Height();
+    const long          nStartX = 0;
+    const long          nEndX = nWidth - 1;
+    const long          nStartY = 0;
+    const long          nEndY = nHeight - 1;
+    const long          nPartWidth = nEndX - nStartX + 1;
+    const long          nPartHeight = nEndY - nStartY + 1;
+
+    if( !pMskAcc )
     {
-        Bitmap              aMask( aBmpEx.GetMask() );
-        BitmapReadAccess*   pMskAcc = !!aMask ? aMask.AcquireReadAccess() : nullptr;
-        const long          nWidth = pBmpAcc->Width();
-        const long          nHeight = pBmpAcc->Height();
-        const long          nStartX = 0;
-        const long          nEndX = nWidth - 1;
-        const long          nStartY = 0;
-        const long          nEndY = nHeight - 1;
-        const long          nPartWidth = nEndX - nStartX + 1;
-        const long          nPartHeight = nEndY - nStartY + 1;
+        aMask = Bitmap( aBmp.GetSizePixel(), 1 );
+        aMask.Erase( COL_BLACK );
+        pMskAcc = aMask.AcquireReadAccess();
+    }
 
-        if( !pMskAcc )
+    // create temporary list to hold interfaces
+    ConsumerList_t aTmp = maConsList;
+
+    if( pBmpAcc->HasPalette() )
+    {
+        const BitmapColor aWhite( pMskAcc->GetBestMatchingColor( COL_WHITE ) );
+
+        if( mnTransIndex < 256 )
         {
-            aMask = Bitmap( aBmp.GetSizePixel(), 1 );
-            aMask.Erase( COL_BLACK );
-            pMskAcc = aMask.AcquireReadAccess();
-        }
+            css::uno::Sequence<sal_Int8>   aData( nPartWidth * nPartHeight );
+            sal_Int8*                                   pTmp = aData.getArray();
 
-        // create temporary list to hold interfaces
-        ConsumerList_t aTmp = maConsList;
-
-        if( pBmpAcc->HasPalette() )
-        {
-            const BitmapColor aWhite( pMskAcc->GetBestMatchingColor( COL_WHITE ) );
-
-            if( mnTransIndex < 256 )
+            for( long nY = nStartY; nY <= nEndY; nY++ )
             {
-                css::uno::Sequence<sal_Int8>   aData( nPartWidth * nPartHeight );
-                sal_Int8*                                   pTmp = aData.getArray();
-
-                for( long nY = nStartY; nY <= nEndY; nY++ )
+                Scanline pScanlineMask = pMskAcc->GetScanline( nY );
+                Scanline pScanline = pBmpAcc->GetScanline( nY );
+                for( long nX = nStartX; nX <= nEndX; nX++ )
                 {
-                    Scanline pScanlineMask = pMskAcc->GetScanline( nY );
-                    Scanline pScanline = pBmpAcc->GetScanline( nY );
-                    for( long nX = nStartX; nX <= nEndX; nX++ )
-                    {
-                        if( pMskAcc->GetPixelFromData( pScanlineMask, nX ) == aWhite )
-                            *pTmp++ = sal::static_int_cast< sal_Int8 >(
-                                mnTransIndex );
-                        else
-                            *pTmp++ = pBmpAcc->GetPixelFromData( pScanline, nX ).GetIndex();
-                    }
+                    if( pMskAcc->GetPixelFromData( pScanlineMask, nX ) == aWhite )
+                        *pTmp++ = sal::static_int_cast< sal_Int8 >(
+                            mnTransIndex );
+                    else
+                        *pTmp++ = pBmpAcc->GetPixelFromData( pScanline, nX ).GetIndex();
                 }
-
-                // iterate through interfaces
-                for (auto const& elem : aTmp)
-                    elem->setPixelsByBytes( nStartX, nStartY, nPartWidth, nPartHeight, aData, 0UL, nPartWidth );
             }
-            else
-            {
-                css::uno::Sequence<sal_Int32>  aData( nPartWidth * nPartHeight );
-                sal_Int32*                                  pTmp = aData.getArray();
 
-                for( long nY = nStartY; nY <= nEndY; nY++ )
-                {
-                    Scanline pScanlineMask = pMskAcc->GetScanline( nY );
-                    Scanline pScanline = pBmpAcc->GetScanline( nY );
-                    for( long nX = nStartX; nX <= nEndX; nX++ )
-                    {
-                        if( pMskAcc->GetPixelFromData( pScanlineMask, nX ) == aWhite )
-                            *pTmp++ = mnTransIndex;
-                        else
-                            *pTmp++ = pBmpAcc->GetPixelFromData( pScanline, nX ).GetIndex();
-                    }
-                }
-
-                // iterate through interfaces
-                for (auto const& elem : aTmp)
-                    elem->setPixelsByLongs( nStartX, nStartY, nPartWidth, nPartHeight, aData, 0UL, nPartWidth );
-            }
+            // iterate through interfaces
+            for (auto const& elem : aTmp)
+                elem->setPixelsByBytes( nStartX, nStartY, nPartWidth, nPartHeight, aData, 0UL, nPartWidth );
         }
         else
         {
             css::uno::Sequence<sal_Int32>  aData( nPartWidth * nPartHeight );
-            const BitmapColor                           aWhite( pMskAcc->GetBestMatchingColor( COL_WHITE ) );
             sal_Int32*                                  pTmp = aData.getArray();
 
             for( long nY = nStartY; nY <= nEndY; nY++ )
             {
                 Scanline pScanlineMask = pMskAcc->GetScanline( nY );
                 Scanline pScanline = pBmpAcc->GetScanline( nY );
-                for( long nX = nStartX; nX <= nEndX; nX++, pTmp++ )
+                for( long nX = nStartX; nX <= nEndX; nX++ )
                 {
-                    const BitmapColor aCol( pBmpAcc->GetPixelFromData( pScanline, nX ) );
-
-                    *pTmp = static_cast<sal_Int32>(aCol.GetRed()) << 24;
-                    *pTmp |= static_cast<sal_Int32>(aCol.GetGreen()) << 16;
-                    *pTmp |= static_cast<sal_Int32>(aCol.GetBlue()) << 8;
-
-                    if( pMskAcc->GetPixelFromData( pScanlineMask, nX ) != aWhite )
-                        *pTmp |= 0x000000ffUL;
+                    if( pMskAcc->GetPixelFromData( pScanlineMask, nX ) == aWhite )
+                        *pTmp++ = mnTransIndex;
+                    else
+                        *pTmp++ = pBmpAcc->GetPixelFromData( pScanline, nX ).GetIndex();
                 }
             }
 
@@ -460,10 +433,37 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
             for (auto const& elem : aTmp)
                 elem->setPixelsByLongs( nStartX, nStartY, nPartWidth, nPartHeight, aData, 0UL, nPartWidth );
         }
-
-        Bitmap::ReleaseAccess( pBmpAcc );
-        Bitmap::ReleaseAccess( pMskAcc );
     }
+    else
+    {
+        css::uno::Sequence<sal_Int32>  aData( nPartWidth * nPartHeight );
+        const BitmapColor                           aWhite( pMskAcc->GetBestMatchingColor( COL_WHITE ) );
+        sal_Int32*                                  pTmp = aData.getArray();
+
+        for( long nY = nStartY; nY <= nEndY; nY++ )
+        {
+            Scanline pScanlineMask = pMskAcc->GetScanline( nY );
+            Scanline pScanline = pBmpAcc->GetScanline( nY );
+            for( long nX = nStartX; nX <= nEndX; nX++, pTmp++ )
+            {
+                const BitmapColor aCol( pBmpAcc->GetPixelFromData( pScanline, nX ) );
+
+                *pTmp = static_cast<sal_Int32>(aCol.GetRed()) << 24;
+                *pTmp |= static_cast<sal_Int32>(aCol.GetGreen()) << 16;
+                *pTmp |= static_cast<sal_Int32>(aCol.GetBlue()) << 8;
+
+                if( pMskAcc->GetPixelFromData( pScanlineMask, nX ) != aWhite )
+                    *pTmp |= 0x000000ffUL;
+            }
+        }
+
+        // iterate through interfaces
+        for (auto const& elem : aTmp)
+            elem->setPixelsByLongs( nStartX, nStartY, nPartWidth, nPartHeight, aData, 0UL, nPartWidth );
+    }
+
+    Bitmap::ReleaseAccess( pBmpAcc );
+    Bitmap::ReleaseAccess( pMskAcc );
 }
 
 

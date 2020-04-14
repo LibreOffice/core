@@ -503,32 +503,32 @@ OControlModel::OControlModel(
     // the native look is ugly...
     // #i37342#
 {
-    if (!_rUnoControlModelTypeName.isEmpty())  // the is a model we have to aggregate
-    {
-        osl_atomic_increment(&m_refCount);
-        {
-            m_xAggregate.set(m_xContext->getServiceManager()->createInstanceWithContext(_rUnoControlModelTypeName, m_xContext), UNO_QUERY);
-            setAggregation(m_xAggregate);
+    if (_rUnoControlModelTypeName.isEmpty())  // the is a model we have to aggregate
+        return;
 
-            if ( m_xAggregateSet.is() )
+    osl_atomic_increment(&m_refCount);
+    {
+        m_xAggregate.set(m_xContext->getServiceManager()->createInstanceWithContext(_rUnoControlModelTypeName, m_xContext), UNO_QUERY);
+        setAggregation(m_xAggregate);
+
+        if ( m_xAggregateSet.is() )
+        {
+            try
             {
-                try
-                {
-                    if ( !rDefault.isEmpty() )
-                        m_xAggregateSet->setPropertyValue( PROPERTY_DEFAULTCONTROL, makeAny( rDefault ) );
-                }
-                catch( const Exception& )
-                {
-                    TOOLS_WARN_EXCEPTION("forms.component",  "OControlModel::OControlModel");
-                }
+                if ( !rDefault.isEmpty() )
+                    m_xAggregateSet->setPropertyValue( PROPERTY_DEFAULTCONTROL, makeAny( rDefault ) );
+            }
+            catch( const Exception& )
+            {
+                TOOLS_WARN_EXCEPTION("forms.component",  "OControlModel::OControlModel");
             }
         }
-        if (_bSetDelegator)
-            doSetDelegator();
-
-        // Refcount is at NULL again
-        osl_atomic_decrement(&m_refCount);
     }
+    if (_bSetDelegator)
+        doSetDelegator();
+
+    // Refcount is at NULL again
+    osl_atomic_decrement(&m_refCount);
 }
 
 OControlModel::OControlModel( const OControlModel* _pOriginal, const Reference< XComponentContext>& _rxFactory, const bool _bCloneAggregate, const bool _bSetDelegator )
@@ -552,25 +552,25 @@ OControlModel::OControlModel( const OControlModel* _pOriginal, const Reference< 
     m_nControlTypeinMSO = _pOriginal->m_nControlTypeinMSO;
     m_nObjIDinMSO = _pOriginal->m_nObjIDinMSO;
 
-    if ( _bCloneAggregate )
+    if ( !_bCloneAggregate )
+        return;
+
+    // temporarily increment refcount because of temporary references to ourself in the following
+    osl_atomic_increment( &m_refCount );
     {
-        // temporarily increment refcount because of temporary references to ourself in the following
-        osl_atomic_increment( &m_refCount );
-        {
-            // transfer the (only, at the very moment!) ref count
-            m_xAggregate = createAggregateClone( _pOriginal );
+        // transfer the (only, at the very moment!) ref count
+        m_xAggregate = createAggregateClone( _pOriginal );
 
-            // set aggregation (retrieve other direct interfaces of the aggregate)
-            setAggregation( m_xAggregate );
-        }
-
-        // set the delegator, if allowed by our derived class
-        if ( _bSetDelegator )
-            doSetDelegator();
-
-        // decrement ref count
-        osl_atomic_decrement( &m_refCount );
+        // set aggregation (retrieve other direct interfaces of the aggregate)
+        setAggregation( m_xAggregate );
     }
+
+    // set the delegator, if allowed by our derived class
+    if ( _bSetDelegator )
+        doSetDelegator();
+
+    // decrement ref count
+    osl_atomic_decrement( &m_refCount );
 }
 
 OControlModel::~OControlModel()
@@ -1224,18 +1224,17 @@ void OBoundControlModel::clonedFrom( const OControlModel* _pOriginal )
     const OBoundControlModel* pBoundOriginal = static_cast< const OBoundControlModel* >( _pOriginal );
     // the value binding can be handled as if somebody called setValueBinding here
     // By definition, bindings can be share between bindables
-    if ( pBoundOriginal && pBoundOriginal->m_xExternalBinding.is() )
+    if ( !(pBoundOriginal && pBoundOriginal->m_xExternalBinding.is()) )
+        return;
+
+    try
     {
-        try
-        {
-            setValueBinding( pBoundOriginal->m_xExternalBinding );
-        }
+        setValueBinding( pBoundOriginal->m_xExternalBinding );
+    }
 
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("forms.component");
-        }
-
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("forms.component");
     }
 }
 
@@ -1907,94 +1906,93 @@ void OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
 {
     OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::connectToField: invalid call (have an external binding)!" );
     // if there's a connection to the database
-    if (rForm.is() && getConnection(rForm).is())
+    if (!(rForm.is() && getConnection(rForm).is()))
+        return;
+
+    // determine field and PropertyChangeListener
+    m_xCursor = rForm;
+    Reference<XPropertySet> xFieldCandidate;
+    if (m_xCursor.is())
     {
-        // determine field and PropertyChangeListener
-        m_xCursor = rForm;
-        Reference<XPropertySet> xFieldCandidate;
-        if (m_xCursor.is())
+        Reference<XColumnsSupplier> xColumnsSupplier(m_xCursor, UNO_QUERY);
+        DBG_ASSERT(xColumnsSupplier.is(), "OBoundControlModel::connectToField : the row set should support the css::sdb::ResultSet service !");
+        if (xColumnsSupplier.is())
         {
-            Reference<XColumnsSupplier> xColumnsSupplier(m_xCursor, UNO_QUERY);
-            DBG_ASSERT(xColumnsSupplier.is(), "OBoundControlModel::connectToField : the row set should support the css::sdb::ResultSet service !");
-            if (xColumnsSupplier.is())
+            Reference<XNameAccess> xColumns = xColumnsSupplier->getColumns();
+            if (xColumns.is() && xColumns->hasByName(m_aControlSource))
             {
-                Reference<XNameAccess> xColumns = xColumnsSupplier->getColumns();
-                if (xColumns.is() && xColumns->hasByName(m_aControlSource))
-                {
-                    OSL_VERIFY( xColumns->getByName(m_aControlSource) >>= xFieldCandidate );
-                }
-
+                OSL_VERIFY( xColumns->getByName(m_aControlSource) >>= xFieldCandidate );
             }
 
         }
 
-        try
-        {
-            sal_Int32 nFieldType = DataType::OTHER;
-            if ( xFieldCandidate.is() )
-            {
-                xFieldCandidate->getPropertyValue( PROPERTY_FIELDTYPE ) >>= nFieldType;
-                if ( approveDbColumnType( nFieldType ) )
-                    impl_setField_noNotify( xFieldCandidate );
-            }
+    }
 
+    try
+    {
+        sal_Int32 nFieldType = DataType::OTHER;
+        if ( xFieldCandidate.is() )
+        {
+            xFieldCandidate->getPropertyValue( PROPERTY_FIELDTYPE ) >>= nFieldType;
+            if ( approveDbColumnType( nFieldType ) )
+                impl_setField_noNotify( xFieldCandidate );
+        }
+
+        else
+            impl_setField_noNotify( nullptr );
+        if ( m_xField.is() )
+        {
+            if ( m_xField->getPropertySetInfo()->hasPropertyByName( PROPERTY_VALUE ) )
+            {
+                m_nFieldType = nFieldType;
+                // listen to changing values
+                m_xField->addPropertyChangeListener( PROPERTY_VALUE, this );
+                m_xColumnUpdate.set( m_xField, UNO_QUERY );
+                m_xColumn.set( m_xField, UNO_QUERY );
+                sal_Int32 nNullableFlag = ColumnValue::NO_NULLS;
+                m_xField->getPropertyValue(PROPERTY_ISNULLABLE) >>= nNullableFlag;
+                m_bRequired = (ColumnValue::NO_NULLS == nNullableFlag);
+                // we're optimistic: in case of ColumnValue_NULLABLE_UNKNOWN we assume nullability...
+            }
             else
-                impl_setField_noNotify( nullptr );
-            if ( m_xField.is() )
             {
-                if ( m_xField->getPropertySetInfo()->hasPropertyByName( PROPERTY_VALUE ) )
-                {
-                    m_nFieldType = nFieldType;
-                    // listen to changing values
-                    m_xField->addPropertyChangeListener( PROPERTY_VALUE, this );
-                    m_xColumnUpdate.set( m_xField, UNO_QUERY );
-                    m_xColumn.set( m_xField, UNO_QUERY );
-                    sal_Int32 nNullableFlag = ColumnValue::NO_NULLS;
-                    m_xField->getPropertyValue(PROPERTY_ISNULLABLE) >>= nNullableFlag;
-                    m_bRequired = (ColumnValue::NO_NULLS == nNullableFlag);
-                    // we're optimistic: in case of ColumnValue_NULLABLE_UNKNOWN we assume nullability...
-                }
-                else
-                {
-                    SAL_WARN("forms.component", "OBoundControlModel::connectToField: property " PROPERTY_VALUE " not supported!");
-                    impl_setField_noNotify( nullptr );
-                }
-
+                SAL_WARN("forms.component", "OBoundControlModel::connectToField: property " PROPERTY_VALUE " not supported!");
+                impl_setField_noNotify( nullptr );
             }
 
         }
 
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("forms.component");
-            resetField();
-        }
+    }
 
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("forms.component");
+        resetField();
     }
 }
 
 void OBoundControlModel::initFromField( const Reference< XRowSet >& _rxRowSet )
 {
     // but only if the rowset is positioned on a valid record
-    if ( hasField() && _rxRowSet.is() )
+    if ( !(hasField() && _rxRowSet.is()) )
+        return;
+
+    bool shouldTransfer(!_rxRowSet->isBeforeFirst() && !_rxRowSet->isAfterLast());
+    if (!shouldTransfer)
     {
-        bool shouldTransfer(!_rxRowSet->isBeforeFirst() && !_rxRowSet->isAfterLast());
-        if (!shouldTransfer)
+        const Reference< XPropertySet > xPS(_rxRowSet, UNO_QUERY);
+        if (xPS.is())
         {
-            const Reference< XPropertySet > xPS(_rxRowSet, UNO_QUERY);
-            if (xPS.is())
-            {
-                assert(!shouldTransfer);
-                xPS->getPropertyValue("IsNew") >>= shouldTransfer;
-            }
+            assert(!shouldTransfer);
+            xPS->getPropertyValue("IsNew") >>= shouldTransfer;
         }
-        if ( shouldTransfer )
-            transferDbValueToControl();
-        else
-            // reset the field if the row set is empty
-            // #i30661#
-            resetNoBroadcast();
     }
+    if ( shouldTransfer )
+        transferDbValueToControl();
+    else
+        // reset the field if the row set is empty
+        // #i30661#
+        resetNoBroadcast();
 }
 
 bool OBoundControlModel::approveDbColumnType(sal_Int32 _nColumnType)
@@ -2422,20 +2420,19 @@ void OBoundControlModel::connectExternalValueBinding(
     transferExternalValueToControl( _rInstanceLock );
     // if the binding is also a validator, use it, too. This is a constraint of the
     // com.sun.star.form.binding.ValidatableBindableFormComponent service
-    if ( m_bSupportsValidation )
+    if ( !m_bSupportsValidation )
+        return;
+
+    try
     {
-        try
-        {
-            Reference< XValidator > xAsValidator( _rxBinding, UNO_QUERY );
-            if ( xAsValidator.is() )
-                setValidator( xAsValidator );
-        }
+        Reference< XValidator > xAsValidator( _rxBinding, UNO_QUERY );
+        if ( xAsValidator.is() )
+            setValidator( xAsValidator );
+    }
 
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("forms.component");
-        }
-
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("forms.component");
     }
 }
 
@@ -2556,26 +2553,26 @@ void OBoundControlModel::transferControlValueToExternal( ControlModelLock& _rIns
 {
     OSL_PRECOND( m_bSupportsExternalBinding && hasExternalValueBinding(),
         "OBoundControlModel::transferControlValueToExternal: precondition not met!" );
-    if ( m_xExternalBinding.is() )
+    if ( !m_xExternalBinding.is() )
+        return;
+
+    Any aExternalValue( translateControlValueToExternalValue() );
+    m_bTransferingValue = true;
+    _rInstanceLock.release();
+     // UNSAFE >
+    try
     {
-        Any aExternalValue( translateControlValueToExternalValue() );
-        m_bTransferingValue = true;
-        _rInstanceLock.release();
-         // UNSAFE >
-        try
-        {
-            m_xExternalBinding->setValue( aExternalValue );
-        }
-
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("forms.component");
-        }
-
-        // < UNSAFE
-        _rInstanceLock.acquire();
-        m_bTransferingValue = false;
+        m_xExternalBinding->setValue( aExternalValue );
     }
+
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("forms.component");
+    }
+
+    // < UNSAFE
+    _rInstanceLock.acquire();
+    m_bTransferingValue = false;
 }
 
 Sequence< Type > OBoundControlModel::getSupportedBindingTypes()

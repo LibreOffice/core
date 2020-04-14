@@ -1022,39 +1022,39 @@ namespace frm
             impl_invalidateAllSupportedFeatures_nothrow( aGuard );
         }
 
-        if ( m_xParser.is() && ( m_xCursor == _rEvent.Source ) )
+        if ( !(m_xParser.is() && ( m_xCursor == _rEvent.Source )) )
+            return;
+
+        try
         {
-            try
+            OUString sNewValue;
+            _rEvent.NewValue >>= sNewValue;
+            if ( _rEvent.PropertyName == PROPERTY_ACTIVECOMMAND )
             {
-                OUString sNewValue;
+                m_xParser->setElementaryQuery( sNewValue );
+            }
+            else if ( _rEvent.PropertyName == PROPERTY_FILTER )
+            {
+                if ( m_xParser->getFilter() != sNewValue )
+                    m_xParser->setFilter( sNewValue );
+            }
+            else if ( _rEvent.PropertyName == PROPERTY_HAVINGCLAUSE )
+            {
+                if ( m_xParser->getHavingClause() != sNewValue )
+                    m_xParser->setHavingClause( sNewValue );
+            }
+            else if ( _rEvent.PropertyName == PROPERTY_SORT )
+            {
                 _rEvent.NewValue >>= sNewValue;
-                if ( _rEvent.PropertyName == PROPERTY_ACTIVECOMMAND )
-                {
-                    m_xParser->setElementaryQuery( sNewValue );
-                }
-                else if ( _rEvent.PropertyName == PROPERTY_FILTER )
-                {
-                    if ( m_xParser->getFilter() != sNewValue )
-                        m_xParser->setFilter( sNewValue );
-                }
-                else if ( _rEvent.PropertyName == PROPERTY_HAVINGCLAUSE )
-                {
-                    if ( m_xParser->getHavingClause() != sNewValue )
-                        m_xParser->setHavingClause( sNewValue );
-                }
-                else if ( _rEvent.PropertyName == PROPERTY_SORT )
-                {
-                    _rEvent.NewValue >>= sNewValue;
-                    if ( m_xParser->getOrder() != sNewValue )
-                        m_xParser->setOrder( sNewValue );
-                }
+                if ( m_xParser->getOrder() != sNewValue )
+                    m_xParser->setOrder( sNewValue );
             }
-            catch( const Exception& )
-            {
-                OSL_FAIL( "FormOperations::propertyChange: caught an exception while updating the parser!" );
-            }
-            impl_invalidateAllSupportedFeatures_nothrow( aGuard );
         }
+        catch( const Exception& )
+        {
+            OSL_FAIL( "FormOperations::propertyChange: caught an exception while updating the parser!" );
+        }
+        impl_invalidateAllSupportedFeatures_nothrow( aGuard );
     }
 
 

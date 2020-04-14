@@ -119,21 +119,21 @@ namespace frm
     void SAL_CALL OFormNavigationHelper::disposing( const EventObject& _rSource )
     {
         // was it one of our external dispatchers?
-        if ( m_nConnectedFeatures )
-        {
-            for (auto & feature : m_aSupportedFeatures)
-            {
-                if ( feature.second.xDispatcher == _rSource.Source )
-                {
-                    feature.second.xDispatcher->removeStatusListener( static_cast< XStatusListener* >( this ), feature.second.aURL );
-                    feature.second.xDispatcher = nullptr;
-                    feature.second.bCachedState = false;
-                    feature.second.aCachedAdditionalState.clear();
-                    --m_nConnectedFeatures;
+        if ( !m_nConnectedFeatures )
+            return;
 
-                    featureStateChanged( feature.first, false );
-                    break;
-                }
+        for (auto & feature : m_aSupportedFeatures)
+        {
+            if ( feature.second.xDispatcher == _rSource.Source )
+            {
+                feature.second.xDispatcher->removeStatusListener( static_cast< XStatusListener* >( this ), feature.second.aURL );
+                feature.second.xDispatcher = nullptr;
+                feature.second.bCachedState = false;
+                feature.second.aCachedAdditionalState.clear();
+                --m_nConnectedFeatures;
+
+                featureStateChanged( feature.first, false );
+                break;
             }
         }
     }
@@ -234,26 +234,26 @@ namespace frm
 
     void OFormNavigationHelper::initializeSupportedFeatures( )
     {
-        if ( m_aSupportedFeatures.empty() )
+        if ( !m_aSupportedFeatures.empty() )
+            return;
+
+        // ask the derivee which feature ids it wants us to support
+        ::std::vector< sal_Int16 > aFeatureIds;
+        getSupportedFeatures( aFeatureIds );
+
+        OFormNavigationMapper aUrlMapper( m_xORB );
+
+        for (auto const& feature : aFeatureIds)
         {
-            // ask the derivee which feature ids it wants us to support
-            ::std::vector< sal_Int16 > aFeatureIds;
-            getSupportedFeatures( aFeatureIds );
+            FeatureInfo aFeatureInfo;
 
-            OFormNavigationMapper aUrlMapper( m_xORB );
+            bool bKnownId =
+                aUrlMapper.getFeatureURL( feature, aFeatureInfo.aURL );
+            DBG_ASSERT( bKnownId, "OFormNavigationHelper::initializeSupportedFeatures: unknown feature id!" );
 
-            for (auto const& feature : aFeatureIds)
-            {
-                FeatureInfo aFeatureInfo;
-
-                bool bKnownId =
-                    aUrlMapper.getFeatureURL( feature, aFeatureInfo.aURL );
-                DBG_ASSERT( bKnownId, "OFormNavigationHelper::initializeSupportedFeatures: unknown feature id!" );
-
-                if ( bKnownId )
-                    // add to our map
-                    m_aSupportedFeatures.emplace( feature, aFeatureInfo );
-            }
+            if ( bKnownId )
+                // add to our map
+                m_aSupportedFeatures.emplace( feature, aFeatureInfo );
         }
     }
 

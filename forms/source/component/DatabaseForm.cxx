@@ -2085,23 +2085,23 @@ static void lcl_dispatch(const Reference< XFrame >& xFrame,const Reference<XURLT
         FrameSearchFlag::SELF | FrameSearchFlag::PARENT | FrameSearchFlag::CHILDREN |
         FrameSearchFlag::SIBLINGS | FrameSearchFlag::CREATE | FrameSearchFlag::TASKS);
 
-    if (xDisp.is())
-    {
-        Sequence<PropertyValue> aArgs(2);
-        aArgs.getArray()[0].Name = "Referer";
-        aArgs.getArray()[0].Value <<= aReferer;
+    if (!xDisp.is())
+        return;
 
-        // build a sequence from the to-be-submitted string
-        OString a8BitData(OUStringToOString(aData, _eEncoding));
-        // always ANSI #58641
-        Sequence< sal_Int8 > aPostData(reinterpret_cast<const sal_Int8*>(a8BitData.getStr()), a8BitData.getLength());
-        Reference< XInputStream > xPostData = new SequenceInputStream(aPostData);
+    Sequence<PropertyValue> aArgs(2);
+    aArgs.getArray()[0].Name = "Referer";
+    aArgs.getArray()[0].Value <<= aReferer;
 
-        aArgs.getArray()[1].Name = "PostData";
-        aArgs.getArray()[1].Value <<= xPostData;
+    // build a sequence from the to-be-submitted string
+    OString a8BitData(OUStringToOString(aData, _eEncoding));
+    // always ANSI #58641
+    Sequence< sal_Int8 > aPostData(reinterpret_cast<const sal_Int8*>(a8BitData.getStr()), a8BitData.getLength());
+    Reference< XInputStream > xPostData = new SequenceInputStream(aPostData);
 
-        xDisp->dispatch(aURL, aArgs);
-    } // if (xDisp.is())
+    aArgs.getArray()[1].Name = "PostData";
+    aArgs.getArray()[1].Value <<= xPostData;
+
+    xDisp->dispatch(aURL, aArgs);
 }
 
 void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const css::awt::MouseEvent& MouseEvt)
@@ -2386,26 +2386,26 @@ void SAL_CALL ODatabaseForm::setControlModels(const Sequence<Reference<XControlM
     sal_Int32 nCount = getCount();
 
     // HiddenControls and forms are not listed
-    if (rControls.getLength() <= nCount)
+    if (rControls.getLength() > nCount)
+        return;
+
+    sal_Int16 nTabIndex = 1;
+    for (auto const& rControl : rControls)
     {
-        sal_Int16 nTabIndex = 1;
-        for (auto const& rControl : rControls)
+        Reference<XFormComponent> xComp(rControl, UNO_QUERY);
+        if (xComp.is())
         {
-            Reference<XFormComponent> xComp(rControl, UNO_QUERY);
-            if (xComp.is())
+            // Find component in the list
+            for (sal_Int32 j = 0; j < nCount; ++j)
             {
-                // Find component in the list
-                for (sal_Int32 j = 0; j < nCount; ++j)
+                Reference<XFormComponent> xElement(
+                    getByIndex(j), css::uno::UNO_QUERY);
+                if (xComp == xElement)
                 {
-                    Reference<XFormComponent> xElement(
-                        getByIndex(j), css::uno::UNO_QUERY);
-                    if (xComp == xElement)
-                    {
-                        Reference<XPropertySet>  xSet(xComp, UNO_QUERY);
-                        if (xSet.is() && hasProperty(PROPERTY_TABINDEX, xSet))
-                            xSet->setPropertyValue( PROPERTY_TABINDEX, makeAny(nTabIndex++) );
-                        break;
-                    }
+                    Reference<XPropertySet>  xSet(xComp, UNO_QUERY);
+                    if (xSet.is() && hasProperty(PROPERTY_TABINDEX, xSet))
+                        xSet->setPropertyValue( PROPERTY_TABINDEX, makeAny(nTabIndex++) );
+                    break;
                 }
             }
         }
@@ -2689,30 +2689,30 @@ void ODatabaseForm::stopSharingConnection( )
 {
     OSL_ENSURE( m_bSharingConnection, "ODatabaseForm::stopSharingConnection: invalid call!" );
 
-    if ( m_bSharingConnection )
-    {
-        // get the connection
-        Reference< XConnection > xSharedConn;
-        m_xAggregateSet->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xSharedConn;
-        OSL_ENSURE( xSharedConn.is(), "ODatabaseForm::stopSharingConnection: there's no conn!" );
+    if ( !m_bSharingConnection )
+        return;
 
-        // remove ourself as event listener
-        Reference< XComponent > xSharedConnComp( xSharedConn, UNO_QUERY );
-        if ( xSharedConnComp.is() )
-            xSharedConnComp->removeEventListener( static_cast< XLoadListener* >( this ) );
+    // get the connection
+    Reference< XConnection > xSharedConn;
+    m_xAggregateSet->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xSharedConn;
+    OSL_ENSURE( xSharedConn.is(), "ODatabaseForm::stopSharingConnection: there's no conn!" );
 
-        // no need to dispose the conn: we're not the owner, this is our parent
-        // (in addition, this method may be called if the connection is being disposed while we use it)
+    // remove ourself as event listener
+    Reference< XComponent > xSharedConnComp( xSharedConn, UNO_QUERY );
+    if ( xSharedConnComp.is() )
+        xSharedConnComp->removeEventListener( static_cast< XLoadListener* >( this ) );
 
-        // reset the property
-        xSharedConn.clear();
-        m_bForwardingConnection = true;
-        m_xAggregateSet->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( xSharedConn ) );
-        m_bForwardingConnection = false;
+    // no need to dispose the conn: we're not the owner, this is our parent
+    // (in addition, this method may be called if the connection is being disposed while we use it)
 
-        // reset the flag
-        m_bSharingConnection = false;
-    }
+    // reset the property
+    xSharedConn.clear();
+    m_bForwardingConnection = true;
+    m_xAggregateSet->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( xSharedConn ) );
+    m_bForwardingConnection = false;
+
+    // reset the flag
+    m_bSharingConnection = false;
 }
 
 namespace
@@ -3492,35 +3492,35 @@ void SAL_CALL ODatabaseForm::cancelRowUpdates()
 void SAL_CALL ODatabaseForm::moveToInsertRow()
 {
     Reference<XResultSetUpdate>  xUpdate;
-    if (query_aggregation( m_xAggregate, xUpdate))
-    {
-        // _always_ move to the insert row
-        //
-        // Formerly, the following line was conditioned with a "not is new", means we did not move the aggregate
-        // to the insert row if it was already positioned there.
-        //
-        // This prevented the RowSet implementation from resetting its column values. We, ourself, formerly
-        // did this reset of columns in reset_impl, where we set every column to the ControlDefault, or, if this
-        // was not present, to NULL. However, the problem with setting to NULL was #88888#, the problem with
-        // _not_ setting to NULL (which was the original fix for #88888#) was #97955#.
-        //
-        // So now we
-        // * move our aggregate to the insert row
-        // * in reset_impl
-        //   - set the control defaults into the columns if not void
-        //   - do _not_ set the columns to NULL if no control default is set
-        //
-        // Still, there is #72756#. During fixing this bug, DG introduced not calling the aggregate here. So
-        // in theory, we re-introduced #72756#. But the bug described therein does not happen anymore, as the
-        // preliminaries for it changed (no display of guessed values for new records with autoinc fields)
-        //
-        // BTW: the public Issuezilla bug is #i2815#
-        //
-        xUpdate->moveToInsertRow();
+    if (!query_aggregation( m_xAggregate, xUpdate))
+        return;
 
-        // then set the default values and the parameters given from the parent
-        reset();
-    }
+    // _always_ move to the insert row
+    //
+    // Formerly, the following line was conditioned with a "not is new", means we did not move the aggregate
+    // to the insert row if it was already positioned there.
+    //
+    // This prevented the RowSet implementation from resetting its column values. We, ourself, formerly
+    // did this reset of columns in reset_impl, where we set every column to the ControlDefault, or, if this
+    // was not present, to NULL. However, the problem with setting to NULL was #88888#, the problem with
+    // _not_ setting to NULL (which was the original fix for #88888#) was #97955#.
+    //
+    // So now we
+    // * move our aggregate to the insert row
+    // * in reset_impl
+    //   - set the control defaults into the columns if not void
+    //   - do _not_ set the columns to NULL if no control default is set
+    //
+    // Still, there is #72756#. During fixing this bug, DG introduced not calling the aggregate here. So
+    // in theory, we re-introduced #72756#. But the bug described therein does not happen anymore, as the
+    // preliminaries for it changed (no display of guessed values for new records with autoinc fields)
+    //
+    // BTW: the public Issuezilla bug is #i2815#
+    //
+    xUpdate->moveToInsertRow();
+
+    // then set the default values and the parameters given from the parent
+    reset();
 }
 
 

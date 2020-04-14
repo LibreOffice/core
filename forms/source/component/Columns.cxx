@@ -197,23 +197,23 @@ OGridColumn::OGridColumn( const Reference<XComponentContext>& _rContext, const O
 {
 
     // Create the UnoControlModel
-    if ( !m_aModelName.isEmpty() ) // is there a to-be-aggregated model?
+    if ( m_aModelName.isEmpty() ) // is there a to-be-aggregated model?
+        return;
+
+    osl_atomic_increment( &m_refCount );
+
     {
-        osl_atomic_increment( &m_refCount );
-
-        {
-            m_xAggregate.set( _rContext->getServiceManager()->createInstanceWithContext( m_aModelName, _rContext ), UNO_QUERY );
-            setAggregation( m_xAggregate );
-        }
-
-        if ( m_xAggregate.is() )
-        {   // don't omit those brackets - they ensure that the following temporary is properly deleted
-            m_xAggregate->setDelegator( static_cast< ::cppu::OWeakObject* >( this ) );
-        }
-
-        // Set refcount back to zero
-        osl_atomic_decrement( &m_refCount );
+        m_xAggregate.set( _rContext->getServiceManager()->createInstanceWithContext( m_aModelName, _rContext ), UNO_QUERY );
+        setAggregation( m_xAggregate );
     }
+
+    if ( m_xAggregate.is() )
+    {   // don't omit those brackets - they ensure that the following temporary is properly deleted
+        m_xAggregate->setDelegator( static_cast< ::cppu::OWeakObject* >( this ) );
+    }
+
+    // Set refcount back to zero
+    osl_atomic_decrement( &m_refCount );
 }
 
 

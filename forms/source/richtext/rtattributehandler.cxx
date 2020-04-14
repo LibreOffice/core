@@ -345,26 +345,26 @@ namespace frm
         const SvxFontHeightItem* pFontHeightItem = dynamic_cast<const SvxFontHeightItem*>( _pAdditionalArg  );
         OSL_ENSURE( pFontHeightItem, "FontSizeHandler::executeAttribute: need a FontHeightItem!" );
 
-        if ( pFontHeightItem )
+        if ( !pFontHeightItem )
+            return;
+
+        sal_uLong nHeight = pFontHeightItem->GetHeight();
+        if ( _rNewAttribs.GetPool()->GetMetric( getWhich() ) != MapUnit::MapTwip )
         {
-            sal_uLong nHeight = pFontHeightItem->GetHeight();
-            if ( _rNewAttribs.GetPool()->GetMetric( getWhich() ) != MapUnit::MapTwip )
-            {
-                nHeight = OutputDevice::LogicToLogic(
-                    Size( 0, nHeight ),
-                    MapMode( MapUnit::MapTwip ),
-                    MapMode( _rNewAttribs.GetPool()->GetMetric( getWhich() ) )
-                ).Height();
-            }
-
-            SvxFontHeightItem aNewItem( nHeight, 100, getWhich() );
-            aNewItem.SetProp( pFontHeightItem->GetProp(), pFontHeightItem->GetPropUnit() );
-
-            if ( ( getAttributeId() == SID_ATTR_CHAR_FONTHEIGHT ) && _nForScriptType != SvtScriptType::NONE)
-                putItemForScript( _rNewAttribs, aNewItem, _nForScriptType );
-            else
-                _rNewAttribs.Put( aNewItem );
+            nHeight = OutputDevice::LogicToLogic(
+                Size( 0, nHeight ),
+                MapMode( MapUnit::MapTwip ),
+                MapMode( _rNewAttribs.GetPool()->GetMetric( getWhich() ) )
+            ).Height();
         }
+
+        SvxFontHeightItem aNewItem( nHeight, 100, getWhich() );
+        aNewItem.SetProp( pFontHeightItem->GetProp(), pFontHeightItem->GetPropUnit() );
+
+        if ( ( getAttributeId() == SID_ATTR_CHAR_FONTHEIGHT ) && _nForScriptType != SvtScriptType::NONE)
+            putItemForScript( _rNewAttribs, aNewItem, _nForScriptType );
+        else
+            _rNewAttribs.Put( aNewItem );
     }
 
     ParagraphDirectionHandler::ParagraphDirectionHandler( AttributeId _nAttributeId )

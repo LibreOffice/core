@@ -324,29 +324,29 @@ void Model::loadInstance( sal_Int32 nInstance )
     getInstanceData( aSequence, nullptr, nullptr, &sURL, &bOnce );
 
     // if we have a URL, load the document and set it into the instance
-    if( !sURL.isEmpty() )
+    if( sURL.isEmpty() )
+        return;
+
+    try
     {
-        try
+        Reference<XInputStream> xInput =
+            SimpleFileAccess::create( ::comphelper::getProcessComponentContext() )->openFileRead( sURL );
+        if( xInput.is() )
         {
-            Reference<XInputStream> xInput =
-                SimpleFileAccess::create( ::comphelper::getProcessComponentContext() )->openFileRead( sURL );
-            if( xInput.is() )
+            Reference<XDocument> xInstance =
+                getDocumentBuilder()->parse( xInput );
+            if( xInstance.is() )
             {
-                Reference<XDocument> xInstance =
-                    getDocumentBuilder()->parse( xInput );
-                if( xInstance.is() )
-                {
-                    OUString sEmpty;
-                    setInstanceData( aSequence, nullptr, &xInstance,
-                                     bOnce ? &sEmpty : &sURL, nullptr);
-                    mxInstances->setItem( nInstance, aSequence );
-                }
+                OUString sEmpty;
+                setInstanceData( aSequence, nullptr, &xInstance,
+                                 bOnce ? &sEmpty : &sURL, nullptr);
+                mxInstances->setItem( nInstance, aSequence );
             }
         }
-        catch( const Exception& )
-        {
-            // couldn't load the instance -> ignore!
-        }
+    }
+    catch( const Exception& )
+    {
+        // couldn't load the instance -> ignore!
     }
 }
 
