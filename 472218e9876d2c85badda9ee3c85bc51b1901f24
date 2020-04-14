@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "52e07c27_f209b9bb",
+        "filename": "cui/uiconfig/ui/aboutdialog.ui",
+        "patchSetId": 9
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2020-04-14T12:18:56Z",
+      "side": 1,
+      "message": "Pls restore the translatable dialog title as it was before.",
+      "revId": "472218e9876d2c85badda9ee3c85bc51b1901f24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d5e1ea2_9f680656",
+        "filename": "cui/uiconfig/ui/aboutdialog.ui",
+        "patchSetId": 9
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2020-04-14T12:18:56Z",
+      "side": 1,
+      "message": "This string should read “Copyright © 2000–2020 LibreOffice contributors.”\n\nUse the Unicode em dash and the real copyright sign. In general, don’t use ASCII symbols in new strings.",
+      "revId": "472218e9876d2c85badda9ee3c85bc51b1901f24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
