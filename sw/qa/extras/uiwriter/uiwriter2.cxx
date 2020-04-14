@@ -142,6 +142,37 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf47471_paraStyleBackground)
                          getProperty<OUString>(getParagraph(3), "ParaStyleName"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf131684)
+{
+    load(DATA_DIRECTORY, "tdf131684.docx");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+
+    //Use selectAll 3 times in a row
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    lcl_dispatchCommand(mxComponent, ".uno:Cut", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+
+    lcl_dispatchCommand(mxComponent, ".uno:Paste", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+
+    // without the fix, it crashes
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdfChangeNumberingListAutoFormat)
 {
     createDoc("tdf117923.docx");
