@@ -266,13 +266,17 @@ void SkiaSalGraphicsImpl::createOffscreenSurface()
     assert(isOffscreen());
     assert(!mSurface);
     assert(!mWindowContext);
+    // When created (especially on Windows), Init() gets called with size (0,0), which is invalid size
+    // for Skia. May happen also in rare cases such as shutting down (tdf#131939).
+    int width = std::max(1, GetWidth());
+    int height = std::max(1, GetHeight());
     switch (SkiaHelper::renderMethodToUse())
     {
         case SkiaHelper::RenderVulkan:
         {
             if (SkiaHelper::getSharedGrContext())
             {
-                mSurface = SkiaHelper::createSkSurface(GetWidth(), GetHeight());
+                mSurface = SkiaHelper::createSkSurface(width, height);
                 assert(mSurface);
                 assert(mSurface->getCanvas()->getGrContext()); // is GPU-backed
                 mIsGPU = true;
@@ -286,7 +290,7 @@ void SkiaSalGraphicsImpl::createOffscreenSurface()
             break;
     }
     // Create raster surface as a fallback.
-    mSurface = SkiaHelper::createSkSurface(GetWidth(), GetHeight());
+    mSurface = SkiaHelper::createSkSurface(width, height);
     assert(mSurface);
     assert(!mSurface->getCanvas()->getGrContext()); // is not GPU-backed
     mIsGPU = false;
