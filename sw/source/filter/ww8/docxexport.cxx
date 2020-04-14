@@ -895,6 +895,21 @@ void DocxExport::WriteProperties( )
     m_pFilter->exportDocumentProperties( xDocProps, bSecurityOptOpenReadOnly );
 }
 
+static auto
+WriteCompat(SwDoc const& rDoc, ::sax_fastparser::FSHelperPtr const& rpFS
+        ) -> void
+{
+    if (!rDoc.getIDocumentSettingAccess().get(DocumentSettingId::ADD_EXT_LEADING))
+    {
+        rpFS->singleElementNS(XML_w, XML_noLeading);
+    }
+    // Do not justify lines with manual break
+    if (rDoc.getIDocumentSettingAccess().get(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK))
+    {
+        rpFS->singleElementNS(XML_w, XML_doNotExpandShiftReturn);
+    }
+}
+
 void DocxExport::WriteSettings()
 {
     SwViewShell *pViewShell(m_pDoc->getIDocumentLayoutAccess().GetCurrentViewShell());
@@ -978,14 +993,6 @@ void DocxExport::WriteSettings()
         pFS->singleElementNS( XML_w, XML_defaultTabStop, FSNS( XML_w, XML_val ),
             OString::number(m_aSettings.defaultTabStop) );
 
-    // Do not justify lines with manual break
-    if( m_pDoc->getIDocumentSettingAccess().get( DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK ))
-    {
-        pFS->startElementNS(XML_w, XML_compat);
-        pFS->singleElementNS(XML_w, XML_doNotExpandShiftReturn);
-        pFS->endElementNS( XML_w, XML_compat );
-    }
-
     // export current mail merge database and table names
     SwDBData aData = m_pDoc->GetDBData();
     if ( !aData.sDataSource.isEmpty() && aData.nCommandType == css::sdb::CommandType::TABLE && !aData.sCommand.isEmpty() )
@@ -1046,6 +1053,7 @@ void DocxExport::WriteSettings()
         bHasDummyRedlineProtectionKey = aKey.getLength() == 1 && aKey[0] == 1;
     }
     const OUString aGrabBagName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
+    bool bHasCompat = false;
     if ( xPropSetInfo->hasPropertyByName( aGrabBagName ) )
     {
         uno::Sequence< beans::PropertyValue > propList;
@@ -1075,6 +1083,10 @@ void DocxExport::WriteSettings()
             else if ( rProp.Name == "CompatSettings" )
             {
                 pFS->startElementNS(XML_w, XML_compat);
+
+                WriteCompat(*m_pDoc, pFS);
+
+                bHasCompat = true;
 
                 uno::Sequence< beans::PropertyValue > aCompatSettingsSequence;
                 rProp.Value >>= aCompatSettingsSequence;
@@ -1160,6 +1172,14 @@ void DocxExport::WriteSettings()
                                          OString::number(nHyphenationZone));
             }
         }
+    }
+    if (!bHasCompat)
+    {
+        pFS->startElementNS(XML_w, XML_compat);
+
+        WriteCompat(*m_pDoc, pFS);
+
+        pFS->endElementNS( XML_w, XML_compat );
     }
 
     if (! hasProtectionProperties)
