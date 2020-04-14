@@ -1460,6 +1460,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
 
         if (comphelper::LibreOfficeKit::isActive())
         {
+            pEditView[eWhich]->SetBroadcastLOKViewCursor(false);
             pEditView[eWhich]->RegisterViewShell(pViewShell);
         }
     }

@@ -301,6 +301,59 @@ void ScGridWindow::PrePaint(vcl::RenderContext& /*rRenderContext*/)
     }
 }
 
+bool ScGridWindow::NeedLOKCursorInvalidation(const tools::Rectangle& rCursorRect,
+        const Fraction aScaleX, const Fraction aScaleY)
+{
+    // Don't see the need for a map as there will be only a few zoom levels
+    // and as of now X and Y zooms in online are the same.
+    for (auto& rEntry : maLOKLastCursor)
+    {
+        if (aScaleX == rEntry.aScaleX && aScaleY == rEntry.aScaleY)
+        {
+            if (rCursorRect == rEntry.aRect)
+                return false; // No change
+
+            // Update and allow invalidate.
+            rEntry.aRect = rCursorRect;
+            return true;
+        }
+    }
+
+    maLOKLastCursor.push_back(LOKCursorEntry{aScaleX, aScaleY, rCursorRect});
+    return true;
+}
+
+void ScGridWindow::InvalidateLOKViewCursor(const tools::Rectangle& rCursorRect,
+        const Fraction aScaleX, const Fraction aScaleY)
+{
+    if (!NeedLOKCursorInvalidation(rCursorRect, aScaleX, aScaleY))
+        return;
+
+    ScTabViewShell* pThisViewShell = pViewData->GetViewShell();
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+
+    while (pViewShell)
+    {
+        if (pViewShell != pThisViewShell)
+        {
+            ScTabViewShell* pOtherViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+            if (pOtherViewShell)
+            {
+                ScViewData& rOtherViewData = pOtherViewShell->GetViewData();
+                Fraction aZoomX = rOtherViewData.GetZoomX();
+                Fraction aZoomY = rOtherViewData.GetZoomY();
+                if (aZoomX == aScaleX && aZoomY == aScaleY)
+                {
+                    SfxLokHelper::notifyOtherView(pThisViewShell, pOtherViewShell,
+                            LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", rCursorRect.toString());
+                }
+            }
+        }
+
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+}
+
 void ScGridWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rRect )
 {
     ScDocument* pDoc = pViewData->GetDocument();
@@ -922,13 +975,11 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                         {
                             long nScreenX = aOutputData.nScrX;
                             long nScreenY = aOutputData.nScrY;
-                            long nScreenW = aOutputData.GetScrW();
-                            long nScreenH = aOutputData.GetScrH();
 
                             rDevice.SetLineColor();
                             rDevice.SetFillColor(pOtherEditView->GetBackgroundColor());
-                            Point aStart = rOtherViewData.GetScrPos( nCol1, nRow1, eOtherWhich );
-                            Point aEnd = rOtherViewData.GetScrPos( nCol2+1, nRow2+1, eOtherWhich );
+                            Point aStart = pViewData->GetScrPos( nCol1, nRow1, eOtherWhich );
+                            Point aEnd = pViewData->GetScrPos( nCol2+1, nRow2+1, eOtherWhich );
 
                             // don't overwrite grid
                             long nLayoutSign = bLayoutRTL ? -1 : 1;
@@ -956,8 +1007,24 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                             // paint the background
                             rDevice.DrawRect(rDevice.PixelToLogic(aBackground));
 
-                            tools::Rectangle aEditRect(Point(nScreenX, nScreenY), Size(nScreenW, nScreenH));
+                            tools::Rectangle aEditRect(aBackground);
+                            aEditRect.AdjustLeft(1);
+                            aEditRect.AdjustTop(1);
+
+                            // EditView has an 'output area' which is used to clip the 'paint area' we provide below.
+                            // So they need to be in the same coordinates/units. This is tied to the mapmode of the gridwin
+                            // attached to the EditView, so we have to change its mapmode too (temporarily). We save the
+                            // original mapmode and 'output area' and roll them back when we finish painting to rDevice.
+                            vcl::Window* pOtherWin = pOtherEditView->GetWindow();
+                            const tools::Rectangle aOrigOutputArea(pOtherEditView->GetOutputArea()); // Not in pixels.
+                            const MapMode aOrigMapMode = pOtherWin->GetMapMode();
+                            pOtherWin->SetMapMode(rDevice.GetMapMode());
+                            pOtherEditView->SetOutputArea(rDevice.PixelToLogic(aEditRect));
                             pOtherEditView->Paint(rDevice.PixelToLogic(aEditRect), &rDevice);
+
+                            // Rollback the mapmode and 'output area'.
+                            pOtherWin->SetMapMode(aOrigMapMode);
+                            pOtherEditView->SetOutputArea(aOrigOutputArea);
                             rDevice.SetMapMode(MapMode(MapUnit::MapPixel));
                         }
                     }
@@ -1001,6 +1068,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
         // set the correct mapmode
         tools::Rectangle aBackground(aStart, aEnd);
+        tools::Rectangle aBGAbs(aStart, aEnd);
+
         if (bIsTiledRendering)
         {
             // Need to draw the background in absolute coords.
@@ -1036,8 +1105,50 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         rDevice.DrawRect(aLogicRect);
 
         // paint the editeng text
-        tools::Rectangle aEditRect(Point(nScrX, nScrY), Size(aOutputData.GetScrW(), aOutputData.GetScrH()));
-        pEditView->Paint(rDevice.PixelToLogic(aEditRect), &rDevice);
+        if (bIsTiledRendering)
+        {
+            tools::Rectangle aEditRect(aBackground);
+            aEditRect.AdjustLeft(1);
+            aEditRect.AdjustTop(1);
+            // EditView has an 'output area' which is used to clip the paint area we provide below.
+            // So they need to be in the same coordinates/units. This is tied to the mapmode of the gridwin
+            // attached to the EditView, so we have to change its mapmode too (temporarily). We save the
+            // original mapmode and 'output area' and roll them back when we finish painting to rDevice.
+            const tools::Rectangle aOrigOutputArea(pEditView->GetOutputArea()); // Not in pixels.
+            const MapMode aOrigMapMode = GetMapMode();
+            SetMapMode(rDevice.GetMapMode());
+            pEditView->SetOutputArea(rDevice.PixelToLogic(aEditRect));
+            pEditView->Paint(rDevice.PixelToLogic(aEditRect), &rDevice);
+
+            // Now we need to get relative cursor position within the editview.
+            // This is for sending the absolute twips position of the cursor to the specific views with
+            // the same given zoom level.
+            tools::Rectangle aCursorRect = pEditView->GetEditCursor();
+            Point aCursPos = OutputDevice::LogicToLogic(aCursorRect.TopLeft(), MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+
+            // Rollback the mapmode and 'output area'.
+            SetMapMode(aOrigMapMode);
+            pEditView->SetOutputArea(aOrigOutputArea);
+
+            const MapMode& rDevMM = rDevice.GetMapMode();
+            MapMode aMM(MapUnit::MapTwip);
+            aMM.SetScaleX(rDevMM.GetScaleX());
+            aMM.SetScaleY(rDevMM.GetScaleY());
+
+            aBGAbs.AdjustLeft(1);
+            aBGAbs.AdjustTop(1);
+            aCursorRect = OutputDevice::PixelToLogic(aBGAbs, aMM);
+            aCursorRect.setWidth(0);
+            aCursorRect.Move(aCursPos.getX(), 0);
+            // Sends view cursor position to views of all matching zooms if needed (avoids duplicates).
+            InvalidateLOKViewCursor(aCursorRect, aMM.GetScaleX(), aMM.GetScaleY());
+        }
+        else
+        {
+            tools::Rectangle aEditRect(Point(nScrX, nScrY), Size(aOutputData.GetScrW(), aOutputData.GetScrH()));
+            pEditView->Paint(rDevice.PixelToLogic(aEditRect), &rDevice);
+        }
+
         rDevice.SetMapMode(MapMode(MapUnit::MapPixel));
 
         // restore the cursor it was originally visible

@@ -470,6 +470,16 @@ void EditView::Command( const CommandEvent& rCEvt )
     pImpEditView->Command( rCEvt );
 }
 
+void EditView::SetBroadcastLOKViewCursor(bool bSet)
+{
+    pImpEditView->SetBroadcastLOKViewCursor(bSet);
+}
+
+tools::Rectangle EditView::GetEditCursor() const
+{
+    return pImpEditView->GetEditCursor();
+}
+
 void EditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bActivate )
 {
     if ( !pImpEditView->pEditEngine->HasView( this ) )
