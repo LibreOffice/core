@@ -91,6 +91,7 @@ void NumberFormatPropertyPanel::Initialize()
     mpLbCategory->SetSelectHdl ( LINK(this, NumberFormatPropertyPanel, NumFormatSelectHdl) );
     mpLbCategory->SelectEntryPos(0);
     mpLbCategory->SetDropDownLineCount(mpLbCategory->GetEntryCount());
+    mpLbCategory->set_id("numberformatcombobox");
 
     Link<Edit&,void> aLink = LINK(this, NumberFormatPropertyPanel, NumFormatValueHdl);
 
