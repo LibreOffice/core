@@ -119,82 +119,82 @@ uno::Sequence< sal_Int32 > OleEmbeddedObject::GetIntermediateVerbsSequence_Impl(
 
 void OleEmbeddedObject::MoveListeners()
 {
-    if ( m_pInterfaceContainer )
+    if ( !m_pInterfaceContainer )
+        return;
+
+    // move state change listeners
     {
-        // move state change listeners
+        ::cppu::OInterfaceContainerHelper* pStateChangeContainer =
+            m_pInterfaceContainer->getContainer( cppu::UnoType<embed::XStateChangeListener>::get());
+        if ( pStateChangeContainer != nullptr )
         {
-            ::cppu::OInterfaceContainerHelper* pStateChangeContainer =
-                m_pInterfaceContainer->getContainer( cppu::UnoType<embed::XStateChangeListener>::get());
-            if ( pStateChangeContainer != nullptr )
+            if ( m_xWrappedObject.is() )
             {
-                if ( m_xWrappedObject.is() )
+                ::cppu::OInterfaceIteratorHelper pIterator( *pStateChangeContainer );
+                while ( pIterator.hasMoreElements() )
                 {
-                    ::cppu::OInterfaceIteratorHelper pIterator( *pStateChangeContainer );
-                    while ( pIterator.hasMoreElements() )
+                    try
                     {
-                        try
-                        {
-                            m_xWrappedObject->addStateChangeListener( static_cast<embed::XStateChangeListener*>(pIterator.next()) );
-                        }
-                        catch( const uno::RuntimeException& )
-                        {
-                            pIterator.remove();
-                        }
+                        m_xWrappedObject->addStateChangeListener( static_cast<embed::XStateChangeListener*>(pIterator.next()) );
+                    }
+                    catch( const uno::RuntimeException& )
+                    {
+                        pIterator.remove();
                     }
                 }
             }
         }
-
-        // move event listeners
-        {
-            ::cppu::OInterfaceContainerHelper* pEventContainer =
-                m_pInterfaceContainer->getContainer( cppu::UnoType<document::XEventListener>::get());
-            if ( pEventContainer != nullptr )
-            {
-                if ( m_xWrappedObject.is() )
-                {
-                    ::cppu::OInterfaceIteratorHelper pIterator( *pEventContainer );
-                    while ( pIterator.hasMoreElements() )
-                    {
-                        try
-                        {
-                            m_xWrappedObject->addEventListener( static_cast<document::XEventListener*>(pIterator.next()) );
-                        }
-                        catch( const uno::RuntimeException& )
-                        {
-                            pIterator.remove();
-                        }
-                    }
-                }
-            }
-        }
-
-        // move close listeners
-        {
-            ::cppu::OInterfaceContainerHelper* pCloseContainer =
-                m_pInterfaceContainer->getContainer( cppu::UnoType<util::XCloseListener>::get());
-            if ( pCloseContainer != nullptr )
-            {
-                if ( m_xWrappedObject.is() )
-                {
-                    ::cppu::OInterfaceIteratorHelper pIterator( *pCloseContainer );
-                    while ( pIterator.hasMoreElements() )
-                    {
-                        try
-                        {
-                            m_xWrappedObject->addCloseListener( static_cast<util::XCloseListener*>(pIterator.next()) );
-                        }
-                        catch( const uno::RuntimeException& )
-                        {
-                            pIterator.remove();
-                        }
-                    }
-                }
-            }
-        }
-
-        m_pInterfaceContainer.reset();
     }
+
+    // move event listeners
+    {
+        ::cppu::OInterfaceContainerHelper* pEventContainer =
+            m_pInterfaceContainer->getContainer( cppu::UnoType<document::XEventListener>::get());
+        if ( pEventContainer != nullptr )
+        {
+            if ( m_xWrappedObject.is() )
+            {
+                ::cppu::OInterfaceIteratorHelper pIterator( *pEventContainer );
+                while ( pIterator.hasMoreElements() )
+                {
+                    try
+                    {
+                        m_xWrappedObject->addEventListener( static_cast<document::XEventListener*>(pIterator.next()) );
+                    }
+                    catch( const uno::RuntimeException& )
+                    {
+                        pIterator.remove();
+                    }
+                }
+            }
+        }
+    }
+
+    // move close listeners
+    {
+        ::cppu::OInterfaceContainerHelper* pCloseContainer =
+            m_pInterfaceContainer->getContainer( cppu::UnoType<util::XCloseListener>::get());
+        if ( pCloseContainer != nullptr )
+        {
+            if ( m_xWrappedObject.is() )
+            {
+                ::cppu::OInterfaceIteratorHelper pIterator( *pCloseContainer );
+                while ( pIterator.hasMoreElements() )
+                {
+                    try
+                    {
+                        m_xWrappedObject->addCloseListener( static_cast<util::XCloseListener*>(pIterator.next()) );
+                    }
+                    catch( const uno::RuntimeException& )
+                    {
+                        pIterator.remove();
+                    }
+                }
+            }
+        }
+    }
+
+    m_pInterfaceContainer.reset();
 }
 
 

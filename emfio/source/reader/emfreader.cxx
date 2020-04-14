@@ -624,26 +624,26 @@ namespace emfio
             return;
 
         // taking the amount of points of each polygon, retrieving the total number of points
-        if ( mpInputStream->good() &&
+        if ( !(mpInputStream->good() &&
              ( nNumberOfPolylines < SAL_MAX_UINT32 / sizeof( sal_uInt16 ) ) &&
-             ( nNumberOfPolylines * sizeof( sal_uInt16 ) ) <= ( nEndPos - mpInputStream->Tell() )
+             ( nNumberOfPolylines * sizeof( sal_uInt16 ) ) <= ( nEndPos - mpInputStream->Tell() ))
            )
-        {
-            std::unique_ptr< sal_uInt32[] > pnPolylinePointCount( new sal_uInt32[ nNumberOfPolylines ] );
-            for ( sal_uInt32 i = 0; i < nNumberOfPolylines && mpInputStream->good(); i++ )
-            {
-                sal_uInt32 nPoints;
-                mpInputStream->ReadUInt32( nPoints );
-                SAL_INFO("emfio", "\t\t\tPoint " << i << " of " << nNumberOfPolylines << ": " << nPoints);
-                pnPolylinePointCount[ i ] = nPoints;
-            }
+            return;
 
-            // Get polyline points:
-            for ( sal_uInt32 i = 0; ( i < nNumberOfPolylines ) && mpInputStream->good(); i++ )
-            {
-                tools::Polygon aPolygon = ReadPolygon<T>(0, pnPolylinePointCount[i], nNextPos);
-                DrawPolyLine(aPolygon, false, mbRecordPath);
-            }
+        std::unique_ptr< sal_uInt32[] > pnPolylinePointCount( new sal_uInt32[ nNumberOfPolylines ] );
+        for ( sal_uInt32 i = 0; i < nNumberOfPolylines && mpInputStream->good(); i++ )
+        {
+            sal_uInt32 nPoints;
+            mpInputStream->ReadUInt32( nPoints );
+            SAL_INFO("emfio", "\t\t\tPoint " << i << " of " << nNumberOfPolylines << ": " << nPoints);
+            pnPolylinePointCount[ i ] = nPoints;
+        }
+
+        // Get polyline points:
+        for ( sal_uInt32 i = 0; ( i < nNumberOfPolylines ) && mpInputStream->good(); i++ )
+        {
+            tools::Polygon aPolygon = ReadPolygon<T>(0, pnPolylinePointCount[i], nNextPos);
+            DrawPolyLine(aPolygon, false, mbRecordPath);
         }
     }
 

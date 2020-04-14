@@ -217,23 +217,23 @@ static uno::Reference< util::XCloseable > CreateDocument( const uno::Reference< 
 
 static void SetDocToEmbedded( const uno::Reference< frame::XModel >& rDocument, const OUString& aModuleName )
 {
-    if (rDocument.is())
-    {
-        uno::Sequence< beans::PropertyValue > aSeq( 1 );
-        aSeq[0].Name = "SetEmbedded";
-        aSeq[0].Value <<= true;
-        rDocument->attachResource( OUString(), aSeq );
+    if (!rDocument.is())
+        return;
 
-        if ( !aModuleName.isEmpty() )
+    uno::Sequence< beans::PropertyValue > aSeq( 1 );
+    aSeq[0].Name = "SetEmbedded";
+    aSeq[0].Value <<= true;
+    rDocument->attachResource( OUString(), aSeq );
+
+    if ( !aModuleName.isEmpty() )
+    {
+        try
         {
-            try
-            {
-                uno::Reference< frame::XModule > xModule( rDocument, uno::UNO_QUERY_THROW );
-                xModule->setIdentifier( aModuleName );
-            }
-            catch( const uno::Exception& )
-            {}
+            uno::Reference< frame::XModule > xModule( rDocument, uno::UNO_QUERY_THROW );
+            xModule->setIdentifier( aModuleName );
         }
+        catch( const uno::Exception& )
+        {}
     }
 }
 
@@ -612,26 +612,26 @@ uno::Reference< io::XInputStream > OCommonEmbeddedObject::StoreDocumentToTempStr
 
 void OCommonEmbeddedObject::SaveObject_Impl()
 {
-    if ( m_xClientSite.is() )
-    {
-        try
-        {
-            // check whether the component is modified,
-            // if not there is no need for storing
-            uno::Reference< util::XModifiable > xModifiable( m_xDocHolder->GetComponent(), uno::UNO_QUERY );
-            if ( xModifiable.is() && !xModifiable->isModified() )
-                return;
-        }
-        catch( const uno::Exception& )
-        {}
+    if ( !m_xClientSite.is() )
+        return;
 
-        try {
-            m_xClientSite->saveObject();
-        }
-        catch( const uno::Exception& )
-        {
-            SAL_WARN( "embeddedobj.common", "The object was not stored!" );
-        }
+    try
+    {
+        // check whether the component is modified,
+        // if not there is no need for storing
+        uno::Reference< util::XModifiable > xModifiable( m_xDocHolder->GetComponent(), uno::UNO_QUERY );
+        if ( xModifiable.is() && !xModifiable->isModified() )
+            return;
+    }
+    catch( const uno::Exception& )
+    {}
+
+    try {
+        m_xClientSite->saveObject();
+    }
+    catch( const uno::Exception& )
+    {
+        SAL_WARN( "embeddedobj.common", "The object was not stored!" );
     }
 }
 
@@ -1232,23 +1232,23 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
         }
     }
 
-    if ( m_nObjectState != embed::EmbedStates::LOADED )
-    {
-        uno::Reference< embed::XStorage > xSubStorage =
-                    xStorage->openStorageElement( sEntName, embed::ElementModes::READWRITE );
+    if ( m_nObjectState == embed::EmbedStates::LOADED )
+        return;
 
-        if ( !xSubStorage.is() )
-            throw uno::RuntimeException(); //TODO
+    uno::Reference< embed::XStorage > xSubStorage =
+                xStorage->openStorageElement( sEntName, embed::ElementModes::READWRITE );
 
-        aGuard.clear();
-        // TODO/LATER: support hierarchical name for embedded objects in embedded objects
-        StoreDocToStorage_Impl(
-            xSubStorage, lArguments, lObjArgs, nTargetStorageFormat, sEntName, false );
-        aGuard.reset();
+    if ( !xSubStorage.is() )
+        throw uno::RuntimeException(); //TODO
 
-        if ( bSwitchBackToLoaded )
-            changeState( embed::EmbedStates::LOADED );
-    }
+    aGuard.clear();
+    // TODO/LATER: support hierarchical name for embedded objects in embedded objects
+    StoreDocToStorage_Impl(
+        xSubStorage, lArguments, lObjArgs, nTargetStorageFormat, sEntName, false );
+    aGuard.reset();
+
+    if ( bSwitchBackToLoaded )
+        changeState( embed::EmbedStates::LOADED );
 
     // TODO: should the listener notification be done?
 }
@@ -1723,20 +1723,20 @@ void SAL_CALL OCommonEmbeddedObject::reload(
         if ( lArguments[nInd].Name == "ReadOnly" )
             lArguments[nInd].Value >>= m_bReadOnly;
 
-    if ( bOldReadOnlyValue != m_bReadOnly && !m_bIsLink )
-    {
-        // close own storage
-        try {
-            if ( m_xObjectStorage.is() )
-                m_xObjectStorage->dispose();
-        }
-        catch ( const uno::Exception& )
-        {
-        }
+    if ( bOldReadOnlyValue == m_bReadOnly || m_bIsLink )
+        return;
 
-        sal_Int32 nStorageMode = m_bReadOnly ? embed::ElementModes::READ : embed::ElementModes::READWRITE;
-        m_xObjectStorage = m_xParentStorage->openStorageElement( m_aEntryName, nStorageMode );
+    // close own storage
+    try {
+        if ( m_xObjectStorage.is() )
+            m_xObjectStorage->dispose();
     }
+    catch ( const uno::Exception& )
+    {
+    }
+
+    sal_Int32 nStorageMode = m_bReadOnly ? embed::ElementModes::READ : embed::ElementModes::READWRITE;
+    m_xObjectStorage = m_xParentStorage->openStorageElement( m_aEntryName, nStorageMode );
 }
 
 sal_Bool SAL_CALL OCommonEmbeddedObject::isStored()
