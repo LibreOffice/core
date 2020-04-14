@@ -115,26 +115,26 @@ static void addFile_( Reference< XInterface > const & xRootFolder, Reference< XS
 
 void XMLFilterJarHelper::addFile( Reference< XInterface > const & xRootFolder, Reference< XSingleServiceFactory > const & xFactory, const OUString& rSourceFile )
 {
-    if( !rSourceFile.isEmpty() &&
+    if( !(!rSourceFile.isEmpty() &&
         !rSourceFile.startsWith("http:") &&
         !rSourceFile.startsWith("https:") &&
         !rSourceFile.startsWith("jar:") &&
-        !rSourceFile.startsWith("ftp:") )
+        !rSourceFile.startsWith("ftp:")) )
+        return;
+
+    OUString aFileURL( rSourceFile );
+
+    if( !aFileURL.matchIgnoreAsciiCase("file://") )
     {
-        OUString aFileURL( rSourceFile );
-
-        if( !aFileURL.matchIgnoreAsciiCase("file://") )
-        {
-            aFileURL = URIHelper::SmartRel2Abs( INetURLObject(sProgPath), aFileURL, Link<OUString *, bool>(), false );
-        }
-
-        INetURLObject aURL( aFileURL );
-        OUString aName( aURL.getName() );
-
-        SvFileStream* pStream = new SvFileStream(aFileURL, StreamMode::READ );
-        Reference< XInputStream > xInput(  new utl::OSeekableInputStreamWrapper( pStream, true ) );
-        addFile_( xRootFolder, xFactory, xInput, aName );
+        aFileURL = URIHelper::SmartRel2Abs( INetURLObject(sProgPath), aFileURL, Link<OUString *, bool>(), false );
     }
+
+    INetURLObject aURL( aFileURL );
+    OUString aName( aURL.getName() );
+
+    SvFileStream* pStream = new SvFileStream(aFileURL, StreamMode::READ );
+    Reference< XInputStream > xInput(  new utl::OSeekableInputStreamWrapper( pStream, true ) );
+    addFile_( xRootFolder, xFactory, xInput, aName );
 }
 
 bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const std::vector<filter_info_impl*>& rFilters )

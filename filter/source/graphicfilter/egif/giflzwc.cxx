@@ -122,89 +122,89 @@ GIFLZWCompressor::~GIFLZWCompressor()
 
 void GIFLZWCompressor::StartCompression( SvStream& rGIF, sal_uInt16 nPixelSize )
 {
-    if( !pIDOS )
+    if( pIDOS )
+        return;
+
+    sal_uInt16 i;
+
+    nDataSize = nPixelSize;
+
+    if( nDataSize < 2 )
+        nDataSize=2;
+
+    nClearCode=1<<nDataSize;
+    nEOICode=nClearCode+1;
+    nTableSize=nEOICode+1;
+    nCodeSize=nDataSize+1;
+
+    pIDOS.reset(new GIFImageDataOutputStream(rGIF,static_cast<sal_uInt8>(nDataSize)));
+    pTable.reset(new GIFLZWCTreeNode[4096]);
+
+    for (i=0; i<4096; i++)
     {
-        sal_uInt16 i;
-
-        nDataSize = nPixelSize;
-
-        if( nDataSize < 2 )
-            nDataSize=2;
-
-        nClearCode=1<<nDataSize;
-        nEOICode=nClearCode+1;
-        nTableSize=nEOICode+1;
-        nCodeSize=nDataSize+1;
-
-        pIDOS.reset(new GIFImageDataOutputStream(rGIF,static_cast<sal_uInt8>(nDataSize)));
-        pTable.reset(new GIFLZWCTreeNode[4096]);
-
-        for (i=0; i<4096; i++)
-        {
-            pTable[i].pBrother = pTable[i].pFirstChild = nullptr;
-            pTable[i].nCode = i;
-            pTable[i].nValue = static_cast<sal_uInt8>( i );
-        }
-
-        pPrefix = nullptr;
-        pIDOS->WriteBits( nClearCode,nCodeSize );
+        pTable[i].pBrother = pTable[i].pFirstChild = nullptr;
+        pTable[i].nCode = i;
+        pTable[i].nValue = static_cast<sal_uInt8>( i );
     }
+
+    pPrefix = nullptr;
+    pIDOS->WriteBits( nClearCode,nCodeSize );
 }
 
 void GIFLZWCompressor::Compress(sal_uInt8* pSrc, sal_uInt32 nSize)
 {
-    if( pIDOS )
-    {
-        GIFLZWCTreeNode* p;
-        sal_uInt16 i;
-        sal_uInt8 nV;
+    if( !pIDOS )
+        return;
 
-        if( !pPrefix && nSize )
+    GIFLZWCTreeNode* p;
+    sal_uInt16 i;
+    sal_uInt8 nV;
+
+    if( !pPrefix && nSize )
+    {
+        pPrefix=&pTable[*pSrc++];
+        nSize--;
+    }
+
+    while( nSize )
+    {
+        nSize--;
+        nV=*pSrc++;
+        for( p=pPrefix->pFirstChild; p!=nullptr; p=p->pBrother )
         {
-            pPrefix=&pTable[*pSrc++];
-            nSize--;
+            if (p->nValue==nV)
+                break;
         }
 
-        while( nSize )
+        if( p)
+            pPrefix=p;
+        else
         {
-            nSize--;
-            nV=*pSrc++;
-            for( p=pPrefix->pFirstChild; p!=nullptr; p=p->pBrother )
-            {
-                if (p->nValue==nV)
-                    break;
-            }
+            pIDOS->WriteBits(pPrefix->nCode,nCodeSize);
 
-            if( p)
-                pPrefix=p;
+            if (nTableSize==4096)
+            {
+                pIDOS->WriteBits(nClearCode,nCodeSize);
+
+                for (i=0; i<nClearCode; i++)
+                    pTable[i].pFirstChild=nullptr;
+
+                nCodeSize=nDataSize+1;
+                nTableSize=nEOICode+1;
+            }
             else
             {
-                pIDOS->WriteBits(pPrefix->nCode,nCodeSize);
+                if(nTableSize==static_cast<sal_uInt16>(1<<nCodeSize))
+                    nCodeSize++;
 
-                if (nTableSize==4096)
-                {
-                    pIDOS->WriteBits(nClearCode,nCodeSize);
-
-                    for (i=0; i<nClearCode; i++)
-                        pTable[i].pFirstChild=nullptr;
-
-                    nCodeSize=nDataSize+1;
-                    nTableSize=nEOICode+1;
-                }
-                else
-                {
-                    if(nTableSize==static_cast<sal_uInt16>(1<<nCodeSize))
-                        nCodeSize++;
-
-                    p=&pTable[nTableSize++];
-                    p->pBrother=pPrefix->pFirstChild;
-                    pPrefix->pFirstChild=p;
-                    p->nValue=nV;
-                    p->pFirstChild=nullptr;
-                }
-
-                pPrefix=&pTable[nV];
+                p=&pTable[nTableSize++];
+                p->pBrother=pPrefix->pFirstChild;
+                pPrefix->pFirstChild=p;
+                p->nValue=nV;
+                p->pFirstChild=nullptr;
             }
+
+            pPrefix=&pTable[nV];
         }
     }
 }

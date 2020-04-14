@@ -1154,159 +1154,159 @@ static void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, S
 {
     Size aBitmapSizePixel( static_cast< sal_Int32 >( ( rObjData.aBoundRect.GetWidth() / 2540.0 ) * 90.0 ),      // we will create a bitmap with 90 dpi
                            static_cast< sal_Int32 >( ( rObjData.aBoundRect.GetHeight() / 2540.0 ) * 90.0 ) );
-    if (aBitmapSizePixel.Width() > 0 && aBitmapSizePixel.Height() > 0 &&
-        aBitmapSizePixel.Width() <= 1024 && aBitmapSizePixel.Height() <= 1024)
+    if (!(aBitmapSizePixel.Width() > 0 && aBitmapSizePixel.Height() > 0 &&
+        aBitmapSizePixel.Width() <= 1024 && aBitmapSizePixel.Height() <= 1024))
+        return;
+
+    double fFocusX = rManager.GetPropertyValue( DFF_Prop_fillToRight, 0 ) / 65536.0;
+    double fFocusY = rManager.GetPropertyValue( DFF_Prop_fillToBottom, 0 ) / 65536.0;
+
+    vcl::bitmap::RawBitmap aBitmap(aBitmapSizePixel, 24);
+
+    for ( long nY = 0; nY < aBitmapSizePixel.Height(); nY++ )
     {
-        double fFocusX = rManager.GetPropertyValue( DFF_Prop_fillToRight, 0 ) / 65536.0;
-        double fFocusY = rManager.GetPropertyValue( DFF_Prop_fillToBottom, 0 ) / 65536.0;
-
-        vcl::bitmap::RawBitmap aBitmap(aBitmapSizePixel, 24);
-
-        for ( long nY = 0; nY < aBitmapSizePixel.Height(); nY++ )
+        for ( long nX = 0; nX < aBitmapSizePixel.Width(); nX++ )
         {
-            for ( long nX = 0; nX < aBitmapSizePixel.Width(); nX++ )
-            {
-                double fX = static_cast< double >( nX ) / aBitmapSizePixel.Width();
-                double fY = static_cast< double >( nY ) / aBitmapSizePixel.Height();
+            double fX = static_cast< double >( nX ) / aBitmapSizePixel.Width();
+            double fY = static_cast< double >( nY ) / aBitmapSizePixel.Height();
 
-                double fD, fDist;
-                if ( fX < fFocusX )
+            double fD, fDist;
+            if ( fX < fFocusX )
+            {
+                if ( fY < fFocusY )
                 {
-                    if ( fY < fFocusY )
+                    if ( fX > fY )
                     {
-                        if ( fX > fY )
-                        {
-                            fDist = fY;
-                            fD = fFocusY;
-                        }
-                        else
-                        {
-                            fDist = fX;
-                            fD = fFocusX;
-                        }
+                        fDist = fY;
+                        fD = fFocusY;
                     }
                     else
                     {
-                        if ( fX > ( 1 - fY ) )
-                        {
-                            fDist = 1 - fY;
-                            fD = 1 - fFocusY;
-                        }
-                        else
-                        {
-                            fDist = fX;
-                            fD = fFocusX;
-                        }
+                        fDist = fX;
+                        fD = fFocusX;
                     }
                 }
                 else
                 {
-                    if ( fY < fFocusY )
+                    if ( fX > ( 1 - fY ) )
                     {
-                        if ( ( 1 - fX ) > fY )
-                        {
-                            fDist = fY;
-                            fD = fFocusY;
-                        }
-                        else
-                        {
-                            fDist = 1 - fX;
-                            fD = 1 - fFocusX;
-                        }
+                        fDist = 1 - fY;
+                        fD = 1 - fFocusY;
                     }
                     else
                     {
-                        if ( ( 1 - fX ) > ( 1 - fY ) )
-                        {
-                            fDist = 1 - fY;
-                            fD = 1 - fFocusY;
-                        }
-                        else
-                        {
-                            fDist = 1 - fX;
-                            fD = 1 - fFocusX;
-                        }
+                        fDist = fX;
+                        fD = fFocusX;
                     }
                 }
-                if ( fD != 0.0 )
-                    fDist /= fD;
-
-                double fA = 0.0;
-                Color aColorA = rShadeColors.front().aColor;
-                double fB = 1.0;
-                Color aColorB( aColorA );
-                for ( const auto& rShadeColor : rShadeColors )
-                {
-                    if ( fA <= rShadeColor.fDist && rShadeColor.fDist <= fDist )
-                    {
-                        fA = rShadeColor.fDist;
-                        aColorA = rShadeColor.aColor;
-                    }
-                    if ( fDist < rShadeColor.fDist && rShadeColor.fDist <= fB )
-                    {
-                        fB = rShadeColor.fDist;
-                        aColorB = rShadeColor.aColor;
-                    }
-                }
-                double fRed = aColorA.GetRed(), fGreen = aColorA.GetGreen(), fBlue = aColorA.GetBlue();
-                double fD1 = fB - fA;
-                if ( fD1 != 0.0 )
-                {
-                    fRed   += ( ( ( fDist - fA ) * ( aColorB.GetRed() - aColorA.GetRed() ) ) / fD1 );       // + aQuantErrCurrScan[ nX ].fRed;
-                    fGreen += ( ( ( fDist - fA ) * ( aColorB.GetGreen() - aColorA.GetGreen() ) ) / fD1 );   // + aQuantErrCurrScan[ nX ].fGreen;
-                    fBlue  += ( ( ( fDist - fA ) * ( aColorB.GetBlue() - aColorA.GetBlue() ) ) / fD1 );     // + aQuantErrCurrScan[ nX ].fBlue;
-                }
-                sal_Int16 nRed   = static_cast< sal_Int16 >( fRed   + 0.5 );
-                sal_Int16 nGreen = static_cast< sal_Int16 >( fGreen + 0.5 );
-                sal_Int16 nBlue  = static_cast< sal_Int16 >( fBlue  + 0.5 );
-                if ( nRed < 0 )
-                    nRed = 0;
-                if ( nRed > 255 )
-                    nRed = 255;
-                if ( nGreen < 0 )
-                    nGreen = 0;
-                if ( nGreen > 255 )
-                    nGreen = 255;
-                if ( nBlue < 0 )
-                    nBlue = 0;
-                if ( nBlue > 255 )
-                    nBlue = 255;
-
-                aBitmap.SetPixel(nY, nX, Color(static_cast<sal_Int8>(nRed), static_cast<sal_Int8>(nGreen), static_cast<sal_Int8>(nBlue)));
             }
-        }
-        BitmapEx aBitmapEx = vcl::bitmap::CreateFromData( std::move(aBitmap) );
-
-        if ( nFix16Angle )
-        {
-            bool bRotateWithShape = true;   // sal_True seems to be default
-            sal_uInt32 nPos = rIn.Tell();
-            if ( const_cast< SvxMSDffManager& >( rManager ).maShapeRecords.SeekToContent( rIn, DFF_msofbtUDefProp, SEEK_FROM_CURRENT_AND_RESTART ) )
+            else
             {
-                const_cast< SvxMSDffManager& >( rManager ).maShapeRecords.Current()->SeekToBegOfRecord( rIn );
-                DffPropertyReader aSecPropSet( rManager );
-                aSecPropSet.ReadPropSet( rIn, nullptr );
-                sal_Int32 nSecFillProperties = aSecPropSet.GetPropertyValue( DFF_Prop_fNoFillHitTest, 0x200020 );
-                bRotateWithShape = ( nSecFillProperties & 0x0020 );
+                if ( fY < fFocusY )
+                {
+                    if ( ( 1 - fX ) > fY )
+                    {
+                        fDist = fY;
+                        fD = fFocusY;
+                    }
+                    else
+                    {
+                        fDist = 1 - fX;
+                        fD = 1 - fFocusX;
+                    }
+                }
+                else
+                {
+                    if ( ( 1 - fX ) > ( 1 - fY ) )
+                    {
+                        fDist = 1 - fY;
+                        fD = 1 - fFocusY;
+                    }
+                    else
+                    {
+                        fDist = 1 - fX;
+                        fD = 1 - fFocusX;
+                    }
+                }
             }
-            rIn.Seek( nPos );
-            if ( bRotateWithShape )
+            if ( fD != 0.0 )
+                fDist /= fD;
+
+            double fA = 0.0;
+            Color aColorA = rShadeColors.front().aColor;
+            double fB = 1.0;
+            Color aColorB( aColorA );
+            for ( const auto& rShadeColor : rShadeColors )
             {
-                aBitmapEx.Rotate( nFix16Angle / 10, rShadeColors[ 0 ].aColor );
-
-                BmpMirrorFlags nMirrorFlags = BmpMirrorFlags::NONE;
-                if ( rObjData.nSpFlags & ShapeFlag::FlipV )
-                    nMirrorFlags |= BmpMirrorFlags::Vertical;
-                if ( rObjData.nSpFlags & ShapeFlag::FlipH )
-                    nMirrorFlags |= BmpMirrorFlags::Horizontal;
-                if ( nMirrorFlags != BmpMirrorFlags::NONE )
-                    aBitmapEx.Mirror( nMirrorFlags );
+                if ( fA <= rShadeColor.fDist && rShadeColor.fDist <= fDist )
+                {
+                    fA = rShadeColor.fDist;
+                    aColorA = rShadeColor.aColor;
+                }
+                if ( fDist < rShadeColor.fDist && rShadeColor.fDist <= fB )
+                {
+                    fB = rShadeColor.fDist;
+                    aColorB = rShadeColor.aColor;
+                }
             }
-        }
+            double fRed = aColorA.GetRed(), fGreen = aColorA.GetGreen(), fBlue = aColorA.GetBlue();
+            double fD1 = fB - fA;
+            if ( fD1 != 0.0 )
+            {
+                fRed   += ( ( ( fDist - fA ) * ( aColorB.GetRed() - aColorA.GetRed() ) ) / fD1 );       // + aQuantErrCurrScan[ nX ].fRed;
+                fGreen += ( ( ( fDist - fA ) * ( aColorB.GetGreen() - aColorA.GetGreen() ) ) / fD1 );   // + aQuantErrCurrScan[ nX ].fGreen;
+                fBlue  += ( ( ( fDist - fA ) * ( aColorB.GetBlue() - aColorA.GetBlue() ) ) / fD1 );     // + aQuantErrCurrScan[ nX ].fBlue;
+            }
+            sal_Int16 nRed   = static_cast< sal_Int16 >( fRed   + 0.5 );
+            sal_Int16 nGreen = static_cast< sal_Int16 >( fGreen + 0.5 );
+            sal_Int16 nBlue  = static_cast< sal_Int16 >( fBlue  + 0.5 );
+            if ( nRed < 0 )
+                nRed = 0;
+            if ( nRed > 255 )
+                nRed = 255;
+            if ( nGreen < 0 )
+                nGreen = 0;
+            if ( nGreen > 255 )
+                nGreen = 255;
+            if ( nBlue < 0 )
+                nBlue = 0;
+            if ( nBlue > 255 )
+                nBlue = 255;
 
-        rSet.Put(XFillBmpTileItem(false));
-        rSet.Put(XFillBitmapItem(OUString(), Graphic(aBitmapEx)));
+            aBitmap.SetPixel(nY, nX, Color(static_cast<sal_Int8>(nRed), static_cast<sal_Int8>(nGreen), static_cast<sal_Int8>(nBlue)));
+        }
     }
+    BitmapEx aBitmapEx = vcl::bitmap::CreateFromData( std::move(aBitmap) );
+
+    if ( nFix16Angle )
+    {
+        bool bRotateWithShape = true;   // sal_True seems to be default
+        sal_uInt32 nPos = rIn.Tell();
+        if ( const_cast< SvxMSDffManager& >( rManager ).maShapeRecords.SeekToContent( rIn, DFF_msofbtUDefProp, SEEK_FROM_CURRENT_AND_RESTART ) )
+        {
+            const_cast< SvxMSDffManager& >( rManager ).maShapeRecords.Current()->SeekToBegOfRecord( rIn );
+            DffPropertyReader aSecPropSet( rManager );
+            aSecPropSet.ReadPropSet( rIn, nullptr );
+            sal_Int32 nSecFillProperties = aSecPropSet.GetPropertyValue( DFF_Prop_fNoFillHitTest, 0x200020 );
+            bRotateWithShape = ( nSecFillProperties & 0x0020 );
+        }
+        rIn.Seek( nPos );
+        if ( bRotateWithShape )
+        {
+            aBitmapEx.Rotate( nFix16Angle / 10, rShadeColors[ 0 ].aColor );
+
+            BmpMirrorFlags nMirrorFlags = BmpMirrorFlags::NONE;
+            if ( rObjData.nSpFlags & ShapeFlag::FlipV )
+                nMirrorFlags |= BmpMirrorFlags::Vertical;
+            if ( rObjData.nSpFlags & ShapeFlag::FlipH )
+                nMirrorFlags |= BmpMirrorFlags::Horizontal;
+            if ( nMirrorFlags != BmpMirrorFlags::NONE )
+                aBitmapEx.Mirror( nMirrorFlags );
+        }
+    }
+
+    rSet.Put(XFillBmpTileItem(false));
+    rSet.Put(XFillBitmapItem(OUString(), Graphic(aBitmapEx)));
 }
 
 void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, const DffObjData& rObjData ) const
@@ -2814,27 +2814,27 @@ void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItem
             }
         }
     }
-    if ( !bRotateTextWithShape )
-    {
-        const css::uno::Any* pAny;
-        SdrCustomShapeGeometryItem aGeometryItem(rSet.Get( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
-        const OUString sTextRotateAngle( "TextRotateAngle" );
-        pAny = aGeometryItem.GetPropertyValueByName( sTextRotateAngle );
-        double fExtraTextRotateAngle = 0.0;
-        if ( pAny )
-            *pAny >>= fExtraTextRotateAngle;
+    if ( bRotateTextWithShape )
+        return;
 
-        if ( rManager.mnFix16Angle )
-            fExtraTextRotateAngle += mnFix16Angle / 100.0;
-        if ( rObjData.nSpFlags & ShapeFlag::FlipV )
-            fExtraTextRotateAngle -= 180.0;
+    const css::uno::Any* pAny;
+    SdrCustomShapeGeometryItem aGeometryItem(rSet.Get( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
+    const OUString sTextRotateAngle( "TextRotateAngle" );
+    pAny = aGeometryItem.GetPropertyValueByName( sTextRotateAngle );
+    double fExtraTextRotateAngle = 0.0;
+    if ( pAny )
+        *pAny >>= fExtraTextRotateAngle;
 
-        css::beans::PropertyValue aTextRotateAngle;
-        aTextRotateAngle.Name = sTextRotateAngle;
-        aTextRotateAngle.Value <<= fExtraTextRotateAngle;
-        aGeometryItem.SetPropertyValue( aTextRotateAngle );
-        rSet.Put( aGeometryItem );
-    }
+    if ( rManager.mnFix16Angle )
+        fExtraTextRotateAngle += mnFix16Angle / 100.0;
+    if ( rObjData.nSpFlags & ShapeFlag::FlipV )
+        fExtraTextRotateAngle -= 180.0;
+
+    css::beans::PropertyValue aTextRotateAngle;
+    aTextRotateAngle.Name = sTextRotateAngle;
+    aTextRotateAngle.Value <<= fExtraTextRotateAngle;
+    aGeometryItem.SetPropertyValue( aTextRotateAngle );
+    rSet.Put( aGeometryItem );
 }
 
 
@@ -2986,23 +2986,23 @@ void DffRecordManager::Consume( SvStream& rIn, sal_uInt32 nStOfs )
         if (bOk && aHd.nRecVer == DFF_PSFLAG_CONTAINER)
             nStOfs = aHd.GetRecEndFilePos();
     }
-    if ( nStOfs )
+    if ( !nStOfs )
+        return;
+
+    pCList = this;
+    while ( pCList->pNext )
+        pCList = pCList->pNext.get();
+    while (rIn.good() && ( ( rIn.Tell() + 8 ) <=  nStOfs ))
     {
-        pCList = this;
-        while ( pCList->pNext )
-            pCList = pCList->pNext.get();
-        while (rIn.good() && ( ( rIn.Tell() + 8 ) <=  nStOfs ))
-        {
-            if ( pCList->nCount == DFF_RECORD_MANAGER_BUF_SIZE )
-                pCList = new DffRecordList( pCList );
-            if (!ReadDffRecordHeader(rIn, pCList->mHd[ pCList->nCount ]))
-                break;
-            bool bSeekSucceeded = pCList->mHd[ pCList->nCount++ ].SeekToEndOfRecord(rIn);
-            if (!bSeekSucceeded)
-                break;
-        }
-        rIn.Seek( nOldPos );
+        if ( pCList->nCount == DFF_RECORD_MANAGER_BUF_SIZE )
+            pCList = new DffRecordList( pCList );
+        if (!ReadDffRecordHeader(rIn, pCList->mHd[ pCList->nCount ]))
+            break;
+        bool bSeekSucceeded = pCList->mHd[ pCList->nCount++ ].SeekToEndOfRecord(rIn);
+        if (!bSeekSucceeded)
+            break;
     }
+    rIn.Seek( nOldPos );
 }
 
 void DffRecordManager::Clear()
@@ -3635,31 +3635,31 @@ void SvxMSDffManager::ReadObjText( SvStream& rStream, SdrObject* pObj )
     DffRecordHeader aRecHd;
     if (!ReadDffRecordHeader(rStream, aRecHd))
         return;
-    if( aRecHd.nRecType == DFF_msofbtClientTextbox || aRecHd.nRecType == 0x1022 )
+    if( !(aRecHd.nRecType == DFF_msofbtClientTextbox || aRecHd.nRecType == 0x1022) )
+        return;
+
+    while (rStream.good() && rStream.Tell() < aRecHd.GetRecEndFilePos())
     {
-        while (rStream.good() && rStream.Tell() < aRecHd.GetRecEndFilePos())
+        DffRecordHeader aHd;
+        if (!ReadDffRecordHeader(rStream, aHd))
+            break;
+        switch( aHd.nRecType )
         {
-            DffRecordHeader aHd;
-            if (!ReadDffRecordHeader(rStream, aHd))
+            case DFF_PST_TextBytesAtom:
+            case DFF_PST_TextCharsAtom:
+                {
+                    bool bUniCode = ( aHd.nRecType == DFF_PST_TextCharsAtom );
+                    sal_uInt32 nBytes = aHd.nRecLen;
+                    OUString aStr = MSDFFReadZString( rStream, nBytes, bUniCode );
+                    ReadObjText( aStr, pObj );
+                }
                 break;
-            switch( aHd.nRecType )
-            {
-                case DFF_PST_TextBytesAtom:
-                case DFF_PST_TextCharsAtom:
-                    {
-                        bool bUniCode = ( aHd.nRecType == DFF_PST_TextCharsAtom );
-                        sal_uInt32 nBytes = aHd.nRecLen;
-                        OUString aStr = MSDFFReadZString( rStream, nBytes, bUniCode );
-                        ReadObjText( aStr, pObj );
-                    }
-                    break;
-                default:
-                    break;
-            }
-            bool bSeekSuccess = aHd.SeekToEndOfRecord(rStream);
-            if (!bSeekSuccess)
+            default:
                 break;
         }
+        bool bSeekSuccess = aHd.SeekToEndOfRecord(rStream);
+        if (!bSeekSuccess)
+            break;
     }
 }
 
@@ -3669,61 +3669,61 @@ void SvxMSDffManager::ReadObjText( SvStream& rStream, SdrObject* pObj )
 void SvxMSDffManager::ReadObjText( const OUString& rText, SdrObject* pObj )
 {
     SdrTextObj* pText = dynamic_cast<SdrTextObj*>( pObj  );
-    if ( pText )
+    if ( !pText )
+        return;
+
+    SdrOutliner& rOutliner = pText->ImpGetDrawOutliner();
+    rOutliner.Init( OutlinerMode::TextObject );
+
+    bool bOldUpdateMode = rOutliner.GetUpdateMode();
+    rOutliner.SetUpdateMode( false );
+    rOutliner.SetVertical( pText->IsVerticalWriting() );
+
+    sal_Int32 nParaIndex = 0;
+    sal_Int32 nParaSize;
+    const sal_Unicode* pBuf = rText.getStr();
+    const sal_Unicode* pEnd = rText.getStr() + rText.getLength();
+
+    while( pBuf < pEnd )
     {
-        SdrOutliner& rOutliner = pText->ImpGetDrawOutliner();
-        rOutliner.Init( OutlinerMode::TextObject );
+        const sal_Unicode* pCurrent = pBuf;
 
-        bool bOldUpdateMode = rOutliner.GetUpdateMode();
-        rOutliner.SetUpdateMode( false );
-        rOutliner.SetVertical( pText->IsVerticalWriting() );
-
-        sal_Int32 nParaIndex = 0;
-        sal_Int32 nParaSize;
-        const sal_Unicode* pBuf = rText.getStr();
-        const sal_Unicode* pEnd = rText.getStr() + rText.getLength();
-
-        while( pBuf < pEnd )
+        for ( nParaSize = 0; pBuf < pEnd; )
         {
-            const sal_Unicode* pCurrent = pBuf;
-
-            for ( nParaSize = 0; pBuf < pEnd; )
+            sal_Unicode nChar = *pBuf++;
+            if ( nChar == 0xa )
             {
-                sal_Unicode nChar = *pBuf++;
-                if ( nChar == 0xa )
-                {
-                    if ( ( pBuf < pEnd ) && ( *pBuf == 0xd ) )
-                        pBuf++;
-                    break;
-                }
-                else if ( nChar == 0xd )
-                {
-                    if ( ( pBuf < pEnd ) && ( *pBuf == 0xa ) )
-                        pBuf++;
-                    break;
-                }
-                else
-                    ++nParaSize;
+                if ( ( pBuf < pEnd ) && ( *pBuf == 0xd ) )
+                    pBuf++;
+                break;
             }
-            ESelection aSelection( nParaIndex, 0, nParaIndex, 0 );
-            OUString aParagraph( pCurrent, nParaSize );
-            if ( !nParaIndex && aParagraph.isEmpty() )              // SJ: we are crashing if the first paragraph is empty ?
-                aParagraph += " ";                   // otherwise these two lines can be removed.
-            rOutliner.Insert( aParagraph, nParaIndex );
-            rOutliner.SetParaAttribs( nParaIndex, rOutliner.GetEmptyItemSet() );
-
-            SfxItemSet aParagraphAttribs( rOutliner.GetEmptyItemSet() );
-            if ( !aSelection.nStartPos )
-                aParagraphAttribs.Put( SfxBoolItem( EE_PARA_BULLETSTATE, false ) );
-            aSelection.nStartPos = 0;
-            rOutliner.QuickSetAttribs( aParagraphAttribs, aSelection );
-            nParaIndex++;
+            else if ( nChar == 0xd )
+            {
+                if ( ( pBuf < pEnd ) && ( *pBuf == 0xa ) )
+                    pBuf++;
+                break;
+            }
+            else
+                ++nParaSize;
         }
-        std::unique_ptr<OutlinerParaObject> pNewText = rOutliner.CreateParaObject();
-        rOutliner.Clear();
-        rOutliner.SetUpdateMode( bOldUpdateMode );
-        pText->SetOutlinerParaObject( std::move(pNewText) );
+        ESelection aSelection( nParaIndex, 0, nParaIndex, 0 );
+        OUString aParagraph( pCurrent, nParaSize );
+        if ( !nParaIndex && aParagraph.isEmpty() )              // SJ: we are crashing if the first paragraph is empty ?
+            aParagraph += " ";                   // otherwise these two lines can be removed.
+        rOutliner.Insert( aParagraph, nParaIndex );
+        rOutliner.SetParaAttribs( nParaIndex, rOutliner.GetEmptyItemSet() );
+
+        SfxItemSet aParagraphAttribs( rOutliner.GetEmptyItemSet() );
+        if ( !aSelection.nStartPos )
+            aParagraphAttribs.Put( SfxBoolItem( EE_PARA_BULLETSTATE, false ) );
+        aSelection.nStartPos = 0;
+        rOutliner.QuickSetAttribs( aParagraphAttribs, aSelection );
+        nParaIndex++;
     }
+    std::unique_ptr<OutlinerParaObject> pNewText = rOutliner.CreateParaObject();
+    rOutliner.Clear();
+    rOutliner.SetUpdateMode( bOldUpdateMode );
+    pText->SetOutlinerParaObject( std::move(pNewText) );
 }
 
 //static
@@ -3771,51 +3771,51 @@ static void lcl_ApplyCropping( const DffPropSet& rPropSet, SfxItemSet* pSet, Gra
     sal_Int32 nCropLeft     = static_cast<sal_Int32>(rPropSet.GetPropertyValue( DFF_Prop_cropFromLeft, 0 ));
     sal_Int32 nCropRight    = static_cast<sal_Int32>(rPropSet.GetPropertyValue( DFF_Prop_cropFromRight, 0 ));
 
-    if( nCropTop || nCropBottom || nCropLeft || nCropRight )
+    if( !(nCropTop || nCropBottom || nCropLeft || nCropRight) )
+        return;
+
+    double      fFactor;
+    Size        aCropSize;
+    BitmapEx    aCropBitmap;
+    sal_uInt32  nTop( 0 ),  nBottom( 0 ), nLeft( 0 ), nRight( 0 );
+
+    // Cropping has to be applied on a loaded graphic.
+    rGraf.makeAvailable();
+
+    if ( pSet ) // use crop attributes ?
+        aCropSize = lcl_GetPrefSize(rGraf, MapMode(MapUnit::Map100thMM));
+    else
     {
-        double      fFactor;
-        Size        aCropSize;
-        BitmapEx    aCropBitmap;
-        sal_uInt32  nTop( 0 ),  nBottom( 0 ), nLeft( 0 ), nRight( 0 );
-
-        // Cropping has to be applied on a loaded graphic.
-        rGraf.makeAvailable();
-
-        if ( pSet ) // use crop attributes ?
-            aCropSize = lcl_GetPrefSize(rGraf, MapMode(MapUnit::Map100thMM));
-        else
-        {
-            aCropBitmap = rGraf.GetBitmapEx();
-            aCropSize = aCropBitmap.GetSizePixel();
-        }
-        if ( nCropTop )
-        {
-            fFactor = static_cast<double>(nCropTop) / 65536.0;
-            nTop = static_cast<sal_uInt32>( ( static_cast<double>( aCropSize.Height() + 1 ) * fFactor ) + 0.5 );
-        }
-        if ( nCropBottom )
-        {
-            fFactor = static_cast<double>(nCropBottom) / 65536.0;
-            nBottom = static_cast<sal_uInt32>( ( static_cast<double>( aCropSize.Height() + 1 ) * fFactor ) + 0.5 );
-        }
-        if ( nCropLeft )
-        {
-            fFactor = static_cast<double>(nCropLeft) / 65536.0;
-            nLeft = static_cast<sal_uInt32>( ( static_cast<double>( aCropSize.Width() + 1 ) * fFactor ) + 0.5 );
-        }
-        if ( nCropRight )
-        {
-            fFactor = static_cast<double>(nCropRight) / 65536.0;
-            nRight = static_cast<sal_uInt32>( ( static_cast<double>( aCropSize.Width() + 1 ) * fFactor ) + 0.5 );
-        }
-        if ( pSet ) // use crop attributes ?
-            pSet->Put( SdrGrafCropItem( nLeft, nTop, nRight, nBottom ) );
-        else
-        {
-            tools::Rectangle aCropRect( nLeft, nTop, aCropSize.Width() - nRight, aCropSize.Height() - nBottom );
-            aCropBitmap.Crop( aCropRect );
-            rGraf = aCropBitmap;
-        }
+        aCropBitmap = rGraf.GetBitmapEx();
+        aCropSize = aCropBitmap.GetSizePixel();
+    }
+    if ( nCropTop )
+    {
+        fFactor = static_cast<double>(nCropTop) / 65536.0;
+        nTop = static_cast<sal_uInt32>( ( static_cast<double>( aCropSize.Height() + 1 ) * fFactor ) + 0.5 );
+    }
+    if ( nCropBottom )
+    {
+        fFactor = static_cast<double>(nCropBottom) / 65536.0;
+        nBottom = static_cast<sal_uInt32>( ( static_cast<double>( aCropSize.Height() + 1 ) * fFactor ) + 0.5 );
+    }
+    if ( nCropLeft )
+    {
+        fFactor = static_cast<double>(nCropLeft) / 65536.0;
+        nLeft = static_cast<sal_uInt32>( ( static_cast<double>( aCropSize.Width() + 1 ) * fFactor ) + 0.5 );
+    }
+    if ( nCropRight )
+    {
+        fFactor = static_cast<double>(nCropRight) / 65536.0;
+        nRight = static_cast<sal_uInt32>( ( static_cast<double>( aCropSize.Width() + 1 ) * fFactor ) + 0.5 );
+    }
+    if ( pSet ) // use crop attributes ?
+        pSet->Put( SdrGrafCropItem( nLeft, nTop, nRight, nBottom ) );
+    else
+    {
+        tools::Rectangle aCropRect( nLeft, nTop, aCropSize.Width() - nRight, aCropSize.Height() - nBottom );
+        aCropBitmap.Crop( aCropRect );
+        rGraf = aCropBitmap;
     }
 }
 
@@ -5982,39 +5982,39 @@ void SvxMSDffManager::GetCtrlData(sal_uInt32 nOffsDggL)
     sal_uLong nPos = nOffsDggL + DFF_COMMON_RECORD_HEADER_SIZE;
 
     // case A: first Drawing Group Container, then n times Drawing Container
-    if( DFF_msofbtDggContainer == nFbt )
+    if( DFF_msofbtDggContainer != nFbt )
+        return;
+
+    bool bOk;
+    GetDrawingGroupContainerData( rStCtrl, nLength );
+
+    sal_uInt32 nMaxStrPos = rStCtrl.TellEnd();
+
+    nPos += nLength;
+    sal_uInt16 nDrawingContainerId = 1;
+    do
     {
-        bool bOk;
-        GetDrawingGroupContainerData( rStCtrl, nLength );
+        if (!checkSeek(rStCtrl, nPos))
+            break;
 
-        sal_uInt32 nMaxStrPos = rStCtrl.TellEnd();
+        bOk = ReadCommonRecordHeader( rStCtrl, nVer, nInst, nFbt, nLength ) && ( DFF_msofbtDgContainer == nFbt );
 
-        nPos += nLength;
-        sal_uInt16 nDrawingContainerId = 1;
-        do
+        if( !bOk )
         {
-            if (!checkSeek(rStCtrl, nPos))
+            nPos++;                // ????????? TODO: trying to get a one-hit wonder, this code should be rewritten...
+            if (nPos != rStCtrl.Seek(nPos))
                 break;
-
-            bOk = ReadCommonRecordHeader( rStCtrl, nVer, nInst, nFbt, nLength ) && ( DFF_msofbtDgContainer == nFbt );
-
-            if( !bOk )
-            {
-                nPos++;                // ????????? TODO: trying to get a one-hit wonder, this code should be rewritten...
-                if (nPos != rStCtrl.Seek(nPos))
-                    break;
-                bOk = ReadCommonRecordHeader( rStCtrl, nVer, nInst, nFbt, nLength )
-                        && ( DFF_msofbtDgContainer == nFbt );
-            }
-            if( bOk )
-            {
-                GetDrawingContainerData( rStCtrl, nLength, nDrawingContainerId );
-            }
-            nPos += DFF_COMMON_RECORD_HEADER_SIZE + nLength;
-            ++nDrawingContainerId;
+            bOk = ReadCommonRecordHeader( rStCtrl, nVer, nInst, nFbt, nLength )
+                    && ( DFF_msofbtDgContainer == nFbt );
         }
-        while( ( rStCtrl.GetError() == ERRCODE_NONE ) && ( nPos < nMaxStrPos ) && bOk );
+        if( bOk )
+        {
+            GetDrawingContainerData( rStCtrl, nLength, nDrawingContainerId );
+        }
+        nPos += DFF_COMMON_RECORD_HEADER_SIZE + nLength;
+        ++nDrawingContainerId;
     }
+    while( ( rStCtrl.GetError() == ERRCODE_NONE ) && ( nPos < nMaxStrPos ) && bOk );
 }
 
 

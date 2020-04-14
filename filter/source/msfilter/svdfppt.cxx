@@ -593,101 +593,101 @@ void SdrEscherImport::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd,
 
 void SdrEscherImport::RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic& rGraphic )
 {
-    if ( rGraphic.GetType() == GraphicType::GdiMetafile )
+    if ( rGraphic.GetType() != GraphicType::GdiMetafile )
+        return;
+
+    sal_uInt16 nX, nGlobalColorsCount, nFillColorsCount;
+
+    rSt.ReadUInt16( nX )
+       .ReadUInt16( nGlobalColorsCount )
+       .ReadUInt16( nFillColorsCount )
+       .ReadUInt16( nX )
+       .ReadUInt16( nX )
+       .ReadUInt16( nX );
+
+    if ( !(( nGlobalColorsCount <= 64 ) && ( nFillColorsCount <= 64 )) )
+        return;
+
+    if ( static_cast<sal_uInt32>( ( nGlobalColorsCount + nFillColorsCount ) * 44 + 12 ) != nRecLen )
+        return;
+
+    sal_uInt32 OriginalGlobalColors[ 64 ];
+    sal_uInt32 NewGlobalColors[ 64 ];
+
+    sal_uInt32 i, j, nGlobalColorsChanged, nFillColorsChanged;
+    nGlobalColorsChanged = nFillColorsChanged = 0;
+
+    sal_uInt32* pCurrentOriginal = OriginalGlobalColors;
+    sal_uInt32* pCurrentNew = NewGlobalColors;
+    sal_uInt32* pCount = &nGlobalColorsChanged;
+    i = nGlobalColorsCount;
+
+    for ( j = 0; j < 2; j++ )
     {
-        sal_uInt16 nX, nGlobalColorsCount, nFillColorsCount;
-
-        rSt.ReadUInt16( nX )
-           .ReadUInt16( nGlobalColorsCount )
-           .ReadUInt16( nFillColorsCount )
-           .ReadUInt16( nX )
-           .ReadUInt16( nX )
-           .ReadUInt16( nX );
-
-        if ( ( nGlobalColorsCount <= 64 ) && ( nFillColorsCount <= 64 ) )
+        for ( ; i > 0; i-- )
         {
-            if ( static_cast<sal_uInt32>( ( nGlobalColorsCount + nFillColorsCount ) * 44 + 12 ) == nRecLen )
+            sal_uInt32 nIndex, nPos = rSt.Tell();
+            sal_uInt8  nDummy, nRed, nGreen, nBlue;
+            sal_uInt16 nChanged;
+            rSt.ReadUInt16( nChanged );
+            if ( nChanged & 1 )
             {
-                sal_uInt32 OriginalGlobalColors[ 64 ];
-                sal_uInt32 NewGlobalColors[ 64 ];
+                sal_uInt32 nColor = 0;
+                rSt.ReadUChar( nDummy )
+                   .ReadUChar( nRed )
+                   .ReadUChar( nDummy )
+                   .ReadUChar( nGreen )
+                   .ReadUChar( nDummy )
+                   .ReadUChar( nBlue )
+                   .ReadUInt32( nIndex );
 
-                sal_uInt32 i, j, nGlobalColorsChanged, nFillColorsChanged;
-                nGlobalColorsChanged = nFillColorsChanged = 0;
-
-                sal_uInt32* pCurrentOriginal = OriginalGlobalColors;
-                sal_uInt32* pCurrentNew = NewGlobalColors;
-                sal_uInt32* pCount = &nGlobalColorsChanged;
-                i = nGlobalColorsCount;
-
-                for ( j = 0; j < 2; j++ )
+                if ( nIndex < 8 )
                 {
-                    for ( ; i > 0; i-- )
-                    {
-                        sal_uInt32 nIndex, nPos = rSt.Tell();
-                        sal_uInt8  nDummy, nRed, nGreen, nBlue;
-                        sal_uInt16 nChanged;
-                        rSt.ReadUInt16( nChanged );
-                        if ( nChanged & 1 )
-                        {
-                            sal_uInt32 nColor = 0;
-                            rSt.ReadUChar( nDummy )
-                               .ReadUChar( nRed )
-                               .ReadUChar( nDummy )
-                               .ReadUChar( nGreen )
-                               .ReadUChar( nDummy )
-                               .ReadUChar( nBlue )
-                               .ReadUInt32( nIndex );
-
-                            if ( nIndex < 8 )
-                            {
-                                Color aColor = MSO_CLR_ToColor( nIndex << 24 );
-                                nRed = aColor.GetRed();
-                                nGreen = aColor.GetGreen();
-                                nBlue = aColor.GetBlue();
-                            }
-                            nColor = nRed | ( nGreen << 8 ) | ( nBlue << 16 );
-                            *pCurrentNew++ = nColor;
-                            rSt.ReadUChar( nDummy )
-                               .ReadUChar( nRed )
-                               .ReadUChar( nDummy )
-                               .ReadUChar( nGreen )
-                               .ReadUChar( nDummy )
-                               .ReadUChar( nBlue );
-                            nColor = nRed | ( nGreen << 8 ) | ( nBlue << 16 );
-                            *pCurrentOriginal++ = nColor;
-                            (*pCount)++;
-                        }
-                        rSt.Seek( nPos + 44 );
-                    }
-                    pCount = &nFillColorsChanged;
-                    i = nFillColorsCount;
+                    Color aColor = MSO_CLR_ToColor( nIndex << 24 );
+                    nRed = aColor.GetRed();
+                    nGreen = aColor.GetGreen();
+                    nBlue = aColor.GetBlue();
                 }
-                if ( nGlobalColorsChanged || nFillColorsChanged )
-                {
-                    std::unique_ptr<Color[]> pSearchColors(new Color[ nGlobalColorsChanged ]);
-                    std::unique_ptr<Color[]> pReplaceColors(new Color[ nGlobalColorsChanged ]);
-
-                    for ( j = 0; j < nGlobalColorsChanged; j++ )
-                    {
-                        sal_uInt32 nSearch = OriginalGlobalColors[ j ];
-                        sal_uInt32 nReplace = NewGlobalColors[ j ];
-
-                        pSearchColors[ j ].SetRed( static_cast<sal_uInt8>(nSearch) );
-                        pSearchColors[ j ].SetGreen( static_cast<sal_uInt8>( nSearch >> 8 ) );
-                        pSearchColors[ j ].SetBlue( static_cast<sal_uInt8>( nSearch >> 16 ) );
-
-                        pReplaceColors[ j ].SetRed( static_cast<sal_uInt8>(nReplace) );
-                        pReplaceColors[ j ].SetGreen( static_cast<sal_uInt8>( nReplace >> 8 ) );
-                        pReplaceColors[ j ].SetBlue( static_cast<sal_uInt8>( nReplace >> 16 ) );
-                    }
-                    GDIMetaFile aGdiMetaFile( rGraphic.GetGDIMetaFile() );
-                    aGdiMetaFile.ReplaceColors( pSearchColors.get(), pReplaceColors.get(),
-                        nGlobalColorsChanged );
-                    rGraphic = aGdiMetaFile;
-                }
+                nColor = nRed | ( nGreen << 8 ) | ( nBlue << 16 );
+                *pCurrentNew++ = nColor;
+                rSt.ReadUChar( nDummy )
+                   .ReadUChar( nRed )
+                   .ReadUChar( nDummy )
+                   .ReadUChar( nGreen )
+                   .ReadUChar( nDummy )
+                   .ReadUChar( nBlue );
+                nColor = nRed | ( nGreen << 8 ) | ( nBlue << 16 );
+                *pCurrentOriginal++ = nColor;
+                (*pCount)++;
             }
+            rSt.Seek( nPos + 44 );
         }
+        pCount = &nFillColorsChanged;
+        i = nFillColorsCount;
     }
+    if ( !(nGlobalColorsChanged || nFillColorsChanged) )
+        return;
+
+    std::unique_ptr<Color[]> pSearchColors(new Color[ nGlobalColorsChanged ]);
+    std::unique_ptr<Color[]> pReplaceColors(new Color[ nGlobalColorsChanged ]);
+
+    for ( j = 0; j < nGlobalColorsChanged; j++ )
+    {
+        sal_uInt32 nSearch = OriginalGlobalColors[ j ];
+        sal_uInt32 nReplace = NewGlobalColors[ j ];
+
+        pSearchColors[ j ].SetRed( static_cast<sal_uInt8>(nSearch) );
+        pSearchColors[ j ].SetGreen( static_cast<sal_uInt8>( nSearch >> 8 ) );
+        pSearchColors[ j ].SetBlue( static_cast<sal_uInt8>( nSearch >> 16 ) );
+
+        pReplaceColors[ j ].SetRed( static_cast<sal_uInt8>(nReplace) );
+        pReplaceColors[ j ].SetGreen( static_cast<sal_uInt8>( nReplace >> 8 ) );
+        pReplaceColors[ j ].SetBlue( static_cast<sal_uInt8>( nReplace >> 16 ) );
+    }
+    GDIMetaFile aGdiMetaFile( rGraphic.GetGDIMetaFile() );
+    aGdiMetaFile.ReplaceColors( pSearchColors.get(), pReplaceColors.get(),
+        nGlobalColorsChanged );
+    rGraphic = aGdiMetaFile;
 }
 
 sal_uLong DffPropSet::SanitizeEndPos(SvStream &rIn, sal_uLong nEndRecPos)
@@ -1723,36 +1723,36 @@ bool PPTConvertOCXControls::InsertControl(
 };
 void PPTConvertOCXControls::GetDrawPage()
 {
-    if( !xDrawPage.is() && mxModel.is() )
-    {
-        css::uno::Reference< css::drawing::XDrawPages > xDrawPages;
-        switch( ePageKind )
-        {
-            case PPT_SLIDEPAGE :
-            case PPT_NOTEPAGE :
-            {
-                css::uno::Reference< css::drawing::XDrawPagesSupplier >
-                        xDrawPagesSupplier( mxModel, css::uno::UNO_QUERY);
-                if ( xDrawPagesSupplier.is() )
-                    xDrawPages = xDrawPagesSupplier->getDrawPages();
-            }
-            break;
+    if( !(!xDrawPage.is() && mxModel.is()) )
+        return;
 
-            case PPT_MASTERPAGE :
-            {
-                css::uno::Reference< css::drawing::XMasterPagesSupplier >
-                        xMasterPagesSupplier( mxModel, css::uno::UNO_QUERY);
-                if ( xMasterPagesSupplier.is() )
-                    xDrawPages = xMasterPagesSupplier->getMasterPages();
-            }
-            break;
-        }
-        if ( xDrawPages.is() && xDrawPages->getCount() )
+    css::uno::Reference< css::drawing::XDrawPages > xDrawPages;
+    switch( ePageKind )
+    {
+        case PPT_SLIDEPAGE :
+        case PPT_NOTEPAGE :
         {
-            xDrawPages->getCount();
-            css::uno::Any aAny( xDrawPages->getByIndex( xDrawPages->getCount() - 1 ) );
-            aAny >>= xDrawPage;
+            css::uno::Reference< css::drawing::XDrawPagesSupplier >
+                    xDrawPagesSupplier( mxModel, css::uno::UNO_QUERY);
+            if ( xDrawPagesSupplier.is() )
+                xDrawPages = xDrawPagesSupplier->getDrawPages();
         }
+        break;
+
+        case PPT_MASTERPAGE :
+        {
+            css::uno::Reference< css::drawing::XMasterPagesSupplier >
+                    xMasterPagesSupplier( mxModel, css::uno::UNO_QUERY);
+            if ( xMasterPagesSupplier.is() )
+                xDrawPages = xMasterPagesSupplier->getMasterPages();
+        }
+        break;
+    }
+    if ( xDrawPages.is() && xDrawPages->getCount() )
+    {
+        xDrawPages->getCount();
+        css::uno::Any aAny( xDrawPages->getByIndex( xDrawPages->getCount() - 1 ) );
+        aAny >>= xDrawPage;
     }
 }
 
@@ -1994,92 +1994,92 @@ std::unique_ptr<SvMemoryStream> SdrPowerPointImport::ImportExOleObjStg( sal_uInt
 
 void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOptions )
 {
-    if ( pShell )
+    if ( !pShell )
+        return;
+
+    DffRecordHeader*    pHd;
+
+    sal_uInt32 nOldPos = rStCtrl.Tell();
+    if ( nFilterOptions & 1 )
     {
-        DffRecordHeader*    pHd;
-
-        sal_uInt32 nOldPos = rStCtrl.Tell();
-        if ( nFilterOptions & 1 )
+        pHd = aDocRecManager.GetRecordHeader( PPT_PST_List );
+        if ( pHd )
         {
-            pHd = aDocRecManager.GetRecordHeader( PPT_PST_List );
-            if ( pHd )
+            // we try to locate the basic atom
+            pHd->SeekToContent( rStCtrl );
+            if ( SeekToRec( rStCtrl, PPT_PST_VBAInfo, pHd->GetRecEndFilePos(), pHd ) )
             {
-                // we try to locate the basic atom
-                pHd->SeekToContent( rStCtrl );
-                if ( SeekToRec( rStCtrl, PPT_PST_VBAInfo, pHd->GetRecEndFilePos(), pHd ) )
+                if ( SeekToRec( rStCtrl, PPT_PST_VBAInfoAtom, pHd->GetRecEndFilePos(), pHd ) )
                 {
-                    if ( SeekToRec( rStCtrl, PPT_PST_VBAInfoAtom, pHd->GetRecEndFilePos(), pHd ) )
+                    sal_uInt32 nPersistPtr, nIDoNotKnow1, nIDoNotKnow2;
+                    rStCtrl.ReadUInt32( nPersistPtr )
+                           .ReadUInt32( nIDoNotKnow1 )
+                           .ReadUInt32( nIDoNotKnow2 );
+
+                    sal_uInt32 nOleId;
+                    std::unique_ptr<SvMemoryStream> pBas = ImportExOleObjStg( nPersistPtr, nOleId );
+                    if ( pBas )
                     {
-                        sal_uInt32 nPersistPtr, nIDoNotKnow1, nIDoNotKnow2;
-                        rStCtrl.ReadUInt32( nPersistPtr )
-                               .ReadUInt32( nIDoNotKnow1 )
-                               .ReadUInt32( nIDoNotKnow2 );
-
-                        sal_uInt32 nOleId;
-                        std::unique_ptr<SvMemoryStream> pBas = ImportExOleObjStg( nPersistPtr, nOleId );
-                        if ( pBas )
+                        tools::SvRef<SotStorage> xSource( new SotStorage( pBas.release(), true ) );
+                        tools::SvRef<SotStorage> xDest( new SotStorage( new SvMemoryStream(), true ) );
+                        if ( xSource.is() && xDest.is() )
                         {
-                            tools::SvRef<SotStorage> xSource( new SotStorage( pBas.release(), true ) );
-                            tools::SvRef<SotStorage> xDest( new SotStorage( new SvMemoryStream(), true ) );
-                            if ( xSource.is() && xDest.is() )
+                            // is this a visual basic storage ?
+                            tools::SvRef<SotStorage> xSubStorage = xSource->OpenSotStorage( "VBA",
+                                StreamMode::READWRITE | StreamMode::NOCREATE | StreamMode::SHARE_DENYALL );
+                            if( xSubStorage.is() && ( ERRCODE_NONE == xSubStorage->GetError() ) )
                             {
-                                // is this a visual basic storage ?
-                                tools::SvRef<SotStorage> xSubStorage = xSource->OpenSotStorage( "VBA",
-                                    StreamMode::READWRITE | StreamMode::NOCREATE | StreamMode::SHARE_DENYALL );
-                                if( xSubStorage.is() && ( ERRCODE_NONE == xSubStorage->GetError() ) )
+                                tools::SvRef<SotStorage> xMacros = xDest->OpenSotStorage( "MACROS" );
+                                if ( xMacros.is() )
                                 {
-                                    tools::SvRef<SotStorage> xMacros = xDest->OpenSotStorage( "MACROS" );
-                                    if ( xMacros.is() )
+                                    SvStorageInfoList aList;
+                                    xSource->FillInfoList( &aList );
+                                    SvStorageInfoList::size_type i;
+
+                                    bool bCopied = true;
+                                    for ( i = 0; i < aList.size(); i++ )    // copy all entries
                                     {
-                                        SvStorageInfoList aList;
-                                        xSource->FillInfoList( &aList );
-                                        SvStorageInfoList::size_type i;
-
-                                        bool bCopied = true;
-                                        for ( i = 0; i < aList.size(); i++ )    // copy all entries
+                                        const SvStorageInfo& rInfo = aList[ i ];
+                                        if ( !xSource->CopyTo( rInfo.GetName(), xMacros.get(), rInfo.GetName() ) )
+                                            bCopied = false;
+                                    }
+                                    if ( i && bCopied )
+                                    {
+                                        uno::Reference < embed::XStorage > xDoc( pShell->GetStorage() );
+                                        if ( xDoc.is() )
                                         {
-                                            const SvStorageInfo& rInfo = aList[ i ];
-                                            if ( !xSource->CopyTo( rInfo.GetName(), xMacros.get(), rInfo.GetName() ) )
-                                                bCopied = false;
-                                        }
-                                        if ( i && bCopied )
-                                        {
-                                            uno::Reference < embed::XStorage > xDoc( pShell->GetStorage() );
-                                            if ( xDoc.is() )
+                                            tools::SvRef<SotStorage> xVBA = SotStorage::OpenOLEStorage( xDoc, SvxImportMSVBasic::GetMSBasicStorageName() );
+                                            if ( xVBA.is() && ( xVBA->GetError() == ERRCODE_NONE ) )
                                             {
-                                                tools::SvRef<SotStorage> xVBA = SotStorage::OpenOLEStorage( xDoc, SvxImportMSVBasic::GetMSBasicStorageName() );
-                                                if ( xVBA.is() && ( xVBA->GetError() == ERRCODE_NONE ) )
+                                                tools::SvRef<SotStorage> xSubVBA = xVBA->OpenSotStorage( "_MS_VBA_Overhead" );
+                                                if ( xSubVBA.is() && ( xSubVBA->GetError() == ERRCODE_NONE ) )
                                                 {
-                                                    tools::SvRef<SotStorage> xSubVBA = xVBA->OpenSotStorage( "_MS_VBA_Overhead" );
-                                                    if ( xSubVBA.is() && ( xSubVBA->GetError() == ERRCODE_NONE ) )
+                                                    tools::SvRef<SotStorageStream> xOriginal = xSubVBA->OpenSotStream( "_MS_VBA_Overhead2" );
+                                                    if ( xOriginal.is() && ( xOriginal->GetError() == ERRCODE_NONE ) )
                                                     {
-                                                        tools::SvRef<SotStorageStream> xOriginal = xSubVBA->OpenSotStream( "_MS_VBA_Overhead2" );
-                                                        if ( xOriginal.is() && ( xOriginal->GetError() == ERRCODE_NONE ) )
+                                                        if ( nPersistPtr && ( nPersistPtr < m_nPersistPtrCnt ) )
                                                         {
-                                                            if ( nPersistPtr && ( nPersistPtr < m_nPersistPtrCnt ) )
+                                                            rStCtrl.Seek( m_pPersistPtr[ nPersistPtr ] );
+                                                            ReadDffRecordHeader( rStCtrl, *pHd );
+
+                                                            xOriginal->WriteUInt32( nIDoNotKnow1 )
+                                                                      .WriteUInt32( nIDoNotKnow2 );
+
+                                                            sal_uInt32 nToCopy, nBufSize;
+                                                            nToCopy = pHd->nRecLen;
+                                                            std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ 0x40000 ]); // 256KB Buffer
+                                                            while ( nToCopy )
                                                             {
-                                                                rStCtrl.Seek( m_pPersistPtr[ nPersistPtr ] );
-                                                                ReadDffRecordHeader( rStCtrl, *pHd );
-
-                                                                xOriginal->WriteUInt32( nIDoNotKnow1 )
-                                                                          .WriteUInt32( nIDoNotKnow2 );
-
-                                                                sal_uInt32 nToCopy, nBufSize;
-                                                                nToCopy = pHd->nRecLen;
-                                                                std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ 0x40000 ]); // 256KB Buffer
-                                                                while ( nToCopy )
-                                                                {
-                                                                    nBufSize = ( nToCopy >= 0x40000 ) ? 0x40000 : nToCopy;
-                                                                    rStCtrl.ReadBytes(pBuf.get(), nBufSize);
-                                                                    xOriginal->WriteBytes(pBuf.get(), nBufSize);
-                                                                    nToCopy -= nBufSize;
-                                                                }
+                                                                nBufSize = ( nToCopy >= 0x40000 ) ? 0x40000 : nToCopy;
+                                                                rStCtrl.ReadBytes(pBuf.get(), nBufSize);
+                                                                xOriginal->WriteBytes(pBuf.get(), nBufSize);
+                                                                nToCopy -= nBufSize;
                                                             }
                                                         }
                                                     }
                                                 }
-                                                xVBA->Commit();
                                             }
+                                            xVBA->Commit();
                                         }
                                     }
                                 }
@@ -2089,52 +2089,52 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                 }
             }
         }
-        pHd = aDocRecManager.GetRecordHeader( PPT_PST_ExObjList );
-        if ( pHd )
+    }
+    pHd = aDocRecManager.GetRecordHeader( PPT_PST_ExObjList );
+    if ( pHd )
+    {
+        DffRecordHeader*    pExEmbed = nullptr;
+
+        pHd->SeekToBegOfRecord( rStCtrl );
+        std::unique_ptr<DffRecordManager> pExObjListManager(new DffRecordManager( rStCtrl ));
+        sal_uInt16 i, nRecType(PPT_PST_ExEmbed);
+
+        for ( i = 0; i < 2; i++ )
         {
-            DffRecordHeader*    pExEmbed = nullptr;
-
-            pHd->SeekToBegOfRecord( rStCtrl );
-            std::unique_ptr<DffRecordManager> pExObjListManager(new DffRecordManager( rStCtrl ));
-            sal_uInt16 i, nRecType(PPT_PST_ExEmbed);
-
-            for ( i = 0; i < 2; i++ )
+            switch ( i )
             {
-                switch ( i )
-                {
-                    case 0 : nRecType = PPT_PST_ExEmbed; break;
-                    case 1 : nRecType = PPT_PST_ExControl; break;
-                }
-                for ( pExEmbed = pExObjListManager->GetRecordHeader( nRecType );
-                        pExEmbed; pExEmbed = pExObjListManager->GetRecordHeader( nRecType, SEEK_FROM_CURRENT ) )
-                {
-                    pExEmbed->SeekToContent( rStCtrl );
+                case 0 : nRecType = PPT_PST_ExEmbed; break;
+                case 1 : nRecType = PPT_PST_ExControl; break;
+            }
+            for ( pExEmbed = pExObjListManager->GetRecordHeader( nRecType );
+                    pExEmbed; pExEmbed = pExObjListManager->GetRecordHeader( nRecType, SEEK_FROM_CURRENT ) )
+            {
+                pExEmbed->SeekToContent( rStCtrl );
 
-                    DffRecordHeader aExOleAtHd;
-                    if ( SeekToRec( rStCtrl, PPT_PST_ExOleObjAtom, pExEmbed->GetRecEndFilePos(), &aExOleAtHd ) )
+                DffRecordHeader aExOleAtHd;
+                if ( SeekToRec( rStCtrl, PPT_PST_ExOleObjAtom, pExEmbed->GetRecEndFilePos(), &aExOleAtHd ) )
+                {
+                    PptExOleObjAtom aAt;
+                    ReadPptExOleObjAtom( rStCtrl, aAt );
+
+                    if ( aAt.nPersistPtr && ( aAt.nPersistPtr < m_nPersistPtrCnt ) )
                     {
-                        PptExOleObjAtom aAt;
-                        ReadPptExOleObjAtom( rStCtrl, aAt );
-
-                        if ( aAt.nPersistPtr && ( aAt.nPersistPtr < m_nPersistPtrCnt ) )
+                        sal_uInt32 nId;
+                        rStCtrl.Seek( m_pPersistPtr[ aAt.nPersistPtr ] );
+                        DffRecordHeader aHd;
+                        ReadDffRecordHeader( rStCtrl, aHd );
+                        if ( aHd.nRecType == DFF_PST_ExOleObjStg )
                         {
-                            sal_uInt32 nId;
-                            rStCtrl.Seek( m_pPersistPtr[ aAt.nPersistPtr ] );
-                            DffRecordHeader aHd;
-                            ReadDffRecordHeader( rStCtrl, aHd );
-                            if ( aHd.nRecType == DFF_PST_ExOleObjStg )
-                            {
-                                rStCtrl.ReadUInt32( nId );
-                                aOleObjectList.emplace_back(
-                                    aAt.nId, aHd.nFilePos, pShell, nRecType, aAt.nAspect );
-                            }
+                            rStCtrl.ReadUInt32( nId );
+                            aOleObjectList.emplace_back(
+                                aAt.nId, aHd.nFilePos, pShell, nRecType, aAt.nAspect );
                         }
                     }
                 }
             }
         }
-        rStCtrl.Seek( nOldPos );
     }
+    rStCtrl.Seek( nOldPos );
 }
 
 bool SdrPowerPointImport::ReadFontCollection()
@@ -4534,80 +4534,80 @@ PPTTextRulerInterpreter::PPTTextRulerInterpreter( PPTTextRulerInterpreter const 
 PPTTextRulerInterpreter::PPTTextRulerInterpreter( sal_uInt32 nFileOfs, DffRecordHeader const & rHeader, SvStream& rIn ) :
     mxImplRuler ( new PPTRuler() )
 {
-    if ( nFileOfs != 0xffffffff )
+    if ( nFileOfs == 0xffffffff )
+        return;
+
+    sal_uInt32 nOldPos = rIn.Tell();
+    DffRecordHeader rHd;
+    if ( nFileOfs )
     {
-        sal_uInt32 nOldPos = rIn.Tell();
-        DffRecordHeader rHd;
-        if ( nFileOfs )
-        {
-            rIn.Seek( nFileOfs );
-            ReadDffRecordHeader( rIn, rHd );
-        }
-        else
-        {
-            rHeader.SeekToContent( rIn );
-            if ( SvxMSDffManager::SeekToRec( rIn, PPT_PST_TextRulerAtom, rHeader.GetRecEndFilePos(), &rHd ) )
-                nFileOfs++;
-        }
-        if ( nFileOfs )
-        {
-            bool bRecordOk = true;
-
-            sal_Int16   nTCount(0);
-            sal_Int32   i;
-            rIn.ReadInt32( mxImplRuler->nFlags );
-
-            // number of indent levels, unused now
-            if ( mxImplRuler->nFlags & 2 )
-                rIn.ReadInt16( nTCount );
-            if ( mxImplRuler->nFlags & 1 )
-                rIn.ReadUInt16( mxImplRuler->nDefaultTab );
-            if ( mxImplRuler->nFlags & 4 )
-            {
-                rIn.ReadInt16(nTCount);
-
-                const size_t nMaxPossibleRecords = rIn.remainingSize() / (2*sizeof(sal_uInt16));
-                const sal_uInt16 nTabCount(nTCount);
-
-                bRecordOk = nTabCount <= nMaxPossibleRecords;
-
-                if (nTCount && bRecordOk)
-                {
-                    mxImplRuler->nTabCount = nTabCount;
-                    mxImplRuler->pTab.reset( new PPTTabEntry[ mxImplRuler->nTabCount ] );
-                    for ( i = 0; i < nTCount; i++ )
-                    {
-                        rIn.ReadUInt16( mxImplRuler->pTab[ i ].nOffset )
-                           .ReadUInt16( mxImplRuler->pTab[ i ].nStyle );
-                    }
-                }
-            }
-
-            if (bRecordOk)
-            {
-                for ( i = 0; i < 5; i++ )
-                {
-                    if ( mxImplRuler->nFlags & ( 8 << i ) )
-                        rIn.ReadUInt16( mxImplRuler->nTextOfs[ i ] );
-                    if ( mxImplRuler->nFlags & ( 256 << i ) )
-                        rIn.ReadUInt16( mxImplRuler->nBulletOfs[ i ] );
-                    if( mxImplRuler->nBulletOfs[ i ] > 0x7fff)
-                    {
-                        // workaround
-                        // when bullet offset is > 0x7fff, the paragraph should look like
-                        // *    first line text
-                        // second line text
-
-                        // we add to bullet para indent 0xffff - bullet offset. It looks like
-                        // best we can do for now
-                        mxImplRuler->nTextOfs[ i ] += 0xffff - mxImplRuler->nBulletOfs[ i ];
-                        mxImplRuler->nBulletOfs[ i ] = 0;
-                    }
-                }
-            }
-        }
-        rIn.Seek( nOldPos );
+        rIn.Seek( nFileOfs );
+        ReadDffRecordHeader( rIn, rHd );
     }
+    else
+    {
+        rHeader.SeekToContent( rIn );
+        if ( SvxMSDffManager::SeekToRec( rIn, PPT_PST_TextRulerAtom, rHeader.GetRecEndFilePos(), &rHd ) )
+            nFileOfs++;
+    }
+    if ( nFileOfs )
+    {
+        bool bRecordOk = true;
+
+        sal_Int16   nTCount(0);
+        sal_Int32   i;
+        rIn.ReadInt32( mxImplRuler->nFlags );
+
+        // number of indent levels, unused now
+        if ( mxImplRuler->nFlags & 2 )
+            rIn.ReadInt16( nTCount );
+        if ( mxImplRuler->nFlags & 1 )
+            rIn.ReadUInt16( mxImplRuler->nDefaultTab );
+        if ( mxImplRuler->nFlags & 4 )
+        {
+            rIn.ReadInt16(nTCount);
+
+            const size_t nMaxPossibleRecords = rIn.remainingSize() / (2*sizeof(sal_uInt16));
+            const sal_uInt16 nTabCount(nTCount);
+
+            bRecordOk = nTabCount <= nMaxPossibleRecords;
+
+            if (nTCount && bRecordOk)
+            {
+                mxImplRuler->nTabCount = nTabCount;
+                mxImplRuler->pTab.reset( new PPTTabEntry[ mxImplRuler->nTabCount ] );
+                for ( i = 0; i < nTCount; i++ )
+                {
+                    rIn.ReadUInt16( mxImplRuler->pTab[ i ].nOffset )
+                       .ReadUInt16( mxImplRuler->pTab[ i ].nStyle );
+                }
+            }
+        }
+
+        if (bRecordOk)
+        {
+            for ( i = 0; i < 5; i++ )
+            {
+                if ( mxImplRuler->nFlags & ( 8 << i ) )
+                    rIn.ReadUInt16( mxImplRuler->nTextOfs[ i ] );
+                if ( mxImplRuler->nFlags & ( 256 << i ) )
+                    rIn.ReadUInt16( mxImplRuler->nBulletOfs[ i ] );
+                if( mxImplRuler->nBulletOfs[ i ] > 0x7fff)
+                {
+                    // workaround
+                    // when bullet offset is > 0x7fff, the paragraph should look like
+                    // *    first line text
+                    // second line text
+
+                    // we add to bullet para indent 0xffff - bullet offset. It looks like
+                    // best we can do for now
+                    mxImplRuler->nTextOfs[ i ] += 0xffff - mxImplRuler->nBulletOfs[ i ];
+                    mxImplRuler->nBulletOfs[ i ] = 0;
+                }
+            }
+        }
+    }
+    rIn.Seek( nOldPos );
 }
 
 bool PPTTextRulerInterpreter::GetDefaultTab( sal_uInt16& nValue ) const
@@ -5159,18 +5159,18 @@ void PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aChar
         rIn.ReadUInt16( aSet.mnEscapement );
         aSet.mnAttrSet |= 1 << PPT_CharAttr_Escapement;
     }
-    if ( nExtParaPos )
+    if ( !nExtParaPos )
+        return;
+
+    sal_uInt32 nExtBuInd = nMask & 0x3c00;
+    if ( nExtBuInd )
+        nExtBuInd = ( aSet.mnFlags & 0x3c00 ) >> 10;
+    if ( nExtBuInd < aStyleTextProp9.size() )
     {
-        sal_uInt32 nExtBuInd = nMask & 0x3c00;
-        if ( nExtBuInd )
-            nExtBuInd = ( aSet.mnFlags & 0x3c00 ) >> 10;
-        if ( nExtBuInd < aStyleTextProp9.size() )
-        {
-            nExtParaFlags = aStyleTextProp9[ nExtBuInd ].mnExtParagraphMask;
-            nBuBlip = aStyleTextProp9[ nExtBuInd ].mnBuBlip;
-            nHasAnm = aStyleTextProp9[ nExtBuInd ].mnHasAnm;
-            nAnmScheme = aStyleTextProp9[ nExtBuInd ].mnAnmScheme;
-        }
+        nExtParaFlags = aStyleTextProp9[ nExtBuInd ].mnExtParagraphMask;
+        nBuBlip = aStyleTextProp9[ nExtBuInd ].mnBuBlip;
+        nHasAnm = aStyleTextProp9[ nExtBuInd ].mnHasAnm;
+        nAnmScheme = aStyleTextProp9[ nExtBuInd ].mnAnmScheme;
     }
 }
 
@@ -5833,24 +5833,24 @@ PPTParagraphObj::PPTParagraphObj( PPTStyleTextPropReader& rPropReader,
     mbTab                   ( false ),
     mnCurrentObject         ( 0 )
 {
-    if (rnCurCharPos < rPropReader.aCharPropList.size())
+    if (rnCurCharPos >= rPropReader.aCharPropList.size())
+        return;
+
+    sal_uInt32 const nCurrentParagraph =
+        rPropReader.aCharPropList[rnCurCharPos]->mnParagraph;
+    for (; rnCurCharPos < rPropReader.aCharPropList.size() &&
+         rPropReader.aCharPropList[rnCurCharPos]->mnParagraph == nCurrentParagraph;
+         ++rnCurCharPos)
     {
-        sal_uInt32 const nCurrentParagraph =
-            rPropReader.aCharPropList[rnCurCharPos]->mnParagraph;
-        for (; rnCurCharPos < rPropReader.aCharPropList.size() &&
-             rPropReader.aCharPropList[rnCurCharPos]->mnParagraph == nCurrentParagraph;
-             ++rnCurCharPos)
+        PPTCharPropSet *const pCharPropSet =
+            rPropReader.aCharPropList[rnCurCharPos].get();
+        std::unique_ptr<PPTPortionObj> pPPTPortion(new PPTPortionObj(
+                *pCharPropSet, rStyleSheet, nInstance, mxParaSet->mnDepth));
+        if (!mbTab)
         {
-            PPTCharPropSet *const pCharPropSet =
-                rPropReader.aCharPropList[rnCurCharPos].get();
-            std::unique_ptr<PPTPortionObj> pPPTPortion(new PPTPortionObj(
-                    *pCharPropSet, rStyleSheet, nInstance, mxParaSet->mnDepth));
-            if (!mbTab)
-            {
-                mbTab = pPPTPortion->HasTabulator();
-            }
-            m_PortionList.push_back(std::move(pPPTPortion));
+            mbTab = pPPTPortion->HasTabulator();
         }
+        m_PortionList.push_back(std::move(pPPTPortion));
     }
 }
 
@@ -5870,24 +5870,24 @@ void PPTParagraphObj::AppendPortion( PPTPortionObj& rPPTPortion )
 
 void PPTParagraphObj::UpdateBulletRelSize( sal_uInt32& nBulletRelSize ) const
 {
-    if ( nBulletRelSize > 0x7fff )      // a negative value is the absolute bullet height
+    if ( nBulletRelSize <= 0x7fff )      // a negative value is the absolute bullet height
+        return;
+
+    sal_uInt16 nFontHeight = 0;
+    if (!m_PortionList.empty())
     {
-        sal_uInt16 nFontHeight = 0;
-        if (!m_PortionList.empty())
+        PPTPortionObj const& rPortion = *m_PortionList.front();
+        if (rPortion.mpImplPPTCharPropSet->mnAttrSet & (1 << PPT_CharAttr_FontHeight))
         {
-            PPTPortionObj const& rPortion = *m_PortionList.front();
-            if (rPortion.mpImplPPTCharPropSet->mnAttrSet & (1 << PPT_CharAttr_FontHeight))
-            {
-                nFontHeight = rPortion.mpImplPPTCharPropSet->mnFontHeight;
-            }
+            nFontHeight = rPortion.mpImplPPTCharPropSet->mnFontHeight;
         }
-        // if we do not have a hard attributed fontheight, the fontheight is taken from the style
-        if ( !nFontHeight )
-        {
-            nFontHeight = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[sanitizeForMaxPPTLevels(mxParaSet->mnDepth)].mnFontHeight;
-        }
-        nBulletRelSize = nFontHeight ? ((- static_cast<sal_Int16>(nBulletRelSize)) * 100 ) / nFontHeight : 100;
     }
+    // if we do not have a hard attributed fontheight, the fontheight is taken from the style
+    if ( !nFontHeight )
+    {
+        nFontHeight = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[sanitizeForMaxPPTLevels(mxParaSet->mnDepth)].mnFontHeight;
+    }
+    nBulletRelSize = nFontHeight ? ((- static_cast<sal_Int16>(nBulletRelSize)) * 100 ) / nFontHeight : 100;
 }
 
 bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, TSS_Type nDestinationInstance )
@@ -6310,50 +6310,50 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  std::optional< sal_Int16 >& rS
         rSet.Put( aULSpaceItem );
     }
 
-    if ( mbTab )    // makes it sense to apply tabsettings
+    if ( !mbTab )    // makes it sense to apply tabsettings
+        return;
+
+    sal_uInt32 i, nDefaultTab, nTab, nTextOfs2 = 0;
+    sal_uInt32 nLatestManTab = 0;
+    GetAttrib( PPT_ParaAttr_TextOfs, nTextOfs2, nDestinationInstance );
+    GetAttrib( PPT_ParaAttr_BulletOfs, nTab, nDestinationInstance );
+    GetAttrib( PPT_ParaAttr_BulletOn, i, nDestinationInstance );
+    GetAttrib( PPT_ParaAttr_DefaultTab, nDefaultTab, nDestinationInstance );
+    SvxTabStopItem aTabItem( 0, 0, SvxTabAdjust::Default, EE_PARA_TABS );
+    if ( GetTabCount() )
     {
-        sal_uInt32 i, nDefaultTab, nTab, nTextOfs2 = 0;
-        sal_uInt32 nLatestManTab = 0;
-        GetAttrib( PPT_ParaAttr_TextOfs, nTextOfs2, nDestinationInstance );
-        GetAttrib( PPT_ParaAttr_BulletOfs, nTab, nDestinationInstance );
-        GetAttrib( PPT_ParaAttr_BulletOn, i, nDestinationInstance );
-        GetAttrib( PPT_ParaAttr_DefaultTab, nDefaultTab, nDestinationInstance );
-        SvxTabStopItem aTabItem( 0, 0, SvxTabAdjust::Default, EE_PARA_TABS );
-        if ( GetTabCount() )
+        //paragraph offset = MIN(first_line_offset, hanging_offset)
+        sal_uInt32 nParaOffset = std::min(nTextOfs2, nTab);
+        for ( i = 0; i < GetTabCount(); i++ )
         {
-            //paragraph offset = MIN(first_line_offset, hanging_offset)
-            sal_uInt32 nParaOffset = std::min(nTextOfs2, nTab);
-            for ( i = 0; i < GetTabCount(); i++ )
+            SvxTabAdjust eTabAdjust;
+            nTab = GetTabOffsetByIndex( static_cast<sal_uInt16>(i) );
+            switch( GetTabStyleByIndex( static_cast<sal_uInt16>(i) ) )
             {
-                SvxTabAdjust eTabAdjust;
-                nTab = GetTabOffsetByIndex( static_cast<sal_uInt16>(i) );
-                switch( GetTabStyleByIndex( static_cast<sal_uInt16>(i) ) )
-                {
-                    case 1 :    eTabAdjust = SvxTabAdjust::Center; break;
-                    case 2 :    eTabAdjust = SvxTabAdjust::Right; break;
-                    case 3 :    eTabAdjust = SvxTabAdjust::Decimal; break;
-                    default :   eTabAdjust = SvxTabAdjust::Left;
-                }
-                if ( nTab > nParaOffset )//If tab stop greater than paragraph offset
-                    aTabItem.Insert( SvxTabStop( ( ( (long( nTab - nTextOfs2 )) * 2540 ) / 576 ), eTabAdjust ) );
+                case 1 :    eTabAdjust = SvxTabAdjust::Center; break;
+                case 2 :    eTabAdjust = SvxTabAdjust::Right; break;
+                case 3 :    eTabAdjust = SvxTabAdjust::Decimal; break;
+                default :   eTabAdjust = SvxTabAdjust::Left;
             }
-            nLatestManTab = nTab;
+            if ( nTab > nParaOffset )//If tab stop greater than paragraph offset
+                aTabItem.Insert( SvxTabStop( ( ( (long( nTab - nTextOfs2 )) * 2540 ) / 576 ), eTabAdjust ) );
         }
-        if ( nIsBullet2 == 0 )
-            aTabItem.Insert( SvxTabStop( sal_uInt16(0) ) );
-        if ( nDefaultTab )
-        {
-            nTab = std::max( nTextOfs2, nLatestManTab );
-            nTab /= nDefaultTab;
-            nTab = nDefaultTab * ( 1 + nTab );
-            for ( i = 0; ( i < 20 ) && ( nTab < 0x1b00 ); i++ )
-            {
-                aTabItem.Insert( SvxTabStop( static_cast<sal_uInt16>( ( ( nTab - nTextOfs2 ) * 2540 ) / 576 ) ) );
-                nTab += nDefaultTab;
-            }
-        }
-        rSet.Put( aTabItem );
+        nLatestManTab = nTab;
     }
+    if ( nIsBullet2 == 0 )
+        aTabItem.Insert( SvxTabStop( sal_uInt16(0) ) );
+    if ( nDefaultTab )
+    {
+        nTab = std::max( nTextOfs2, nLatestManTab );
+        nTab /= nDefaultTab;
+        nTab = nDefaultTab * ( 1 + nTab );
+        for ( i = 0; ( i < 20 ) && ( nTab < 0x1b00 ); i++ )
+        {
+            aTabItem.Insert( SvxTabStop( static_cast<sal_uInt16>( ( ( nTab - nTextOfs2 ) * 2540 ) / 576 ) ) );
+            nTab += nDefaultTab;
+        }
+    }
+    rSet.Put( aTabItem );
 }
 
 sal_uInt32 PPTParagraphObj::GetTextSize()
@@ -6469,623 +6469,623 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
     DffRecordHeader aShapeContainerHd;
     ReadDffRecordHeader( rIn, aShapeContainerHd );
 
-    if ( ( pObjData == nullptr ) || ( pObjData->bShapeType ) )
+    if ( !(( pObjData == nullptr ) || ( pObjData->bShapeType )) )
+        return;
+
+    PPTExtParaProv* pExtParaProv = rSdrPowerPointImport.m_pPPTStyleSheet->pExtParaProv.get();
+    if ( pObjData )
     {
-        PPTExtParaProv* pExtParaProv = rSdrPowerPointImport.m_pPPTStyleSheet->pExtParaProv.get();
-        if ( pObjData )
+        mxImplTextObj->mnShapeId = pObjData->nShapeId;
+        if ( pObjData->nSpFlags & ShapeFlag::HaveMaster )
+            mxImplTextObj->mnShapeMaster = rSdrPowerPointImport.GetPropertyValue( DFF_Prop_hspMaster, 0 );
+    }
+    // ClientData
+    if ( rSdrPowerPointImport.maShapeRecords.SeekToContent( rIn, DFF_msofbtClientData, SEEK_FROM_CURRENT_AND_RESTART ) )
+    {
+        sal_uInt32 nOldPos = rIn.Tell();
+        DffRecordHeader& aClientDataContainerHd = *rSdrPowerPointImport.maShapeRecords.Current();
+        DffRecordHeader aPlaceHolderAtomHd;
+        if ( SvxMSDffManager::SeekToRec( rIn, PPT_PST_OEPlaceholderAtom, aClientDataContainerHd.GetRecEndFilePos(), &aPlaceHolderAtomHd ) )
         {
-            mxImplTextObj->mnShapeId = pObjData->nShapeId;
-            if ( pObjData->nSpFlags & ShapeFlag::HaveMaster )
-                mxImplTextObj->mnShapeMaster = rSdrPowerPointImport.GetPropertyValue( DFF_Prop_hspMaster, 0 );
+            mxImplTextObj->mpPlaceHolderAtom.reset( new PptOEPlaceholderAtom );
+            ReadPptOEPlaceholderAtom( rIn, *( mxImplTextObj->mpPlaceHolderAtom ) );
         }
-        // ClientData
-        if ( rSdrPowerPointImport.maShapeRecords.SeekToContent( rIn, DFF_msofbtClientData, SEEK_FROM_CURRENT_AND_RESTART ) )
+        rIn.Seek( nOldPos );
+        DffRecordHeader aProgTagHd;
+        if ( SdrPowerPointImport::SeekToContentOfProgTag( 9, rIn, aClientDataContainerHd, aProgTagHd ) )
         {
-            sal_uInt32 nOldPos = rIn.Tell();
-            DffRecordHeader& aClientDataContainerHd = *rSdrPowerPointImport.maShapeRecords.Current();
-            DffRecordHeader aPlaceHolderAtomHd;
-            if ( SvxMSDffManager::SeekToRec( rIn, PPT_PST_OEPlaceholderAtom, aClientDataContainerHd.GetRecEndFilePos(), &aPlaceHolderAtomHd ) )
-            {
-                mxImplTextObj->mpPlaceHolderAtom.reset( new PptOEPlaceholderAtom );
-                ReadPptOEPlaceholderAtom( rIn, *( mxImplTextObj->mpPlaceHolderAtom ) );
-            }
-            rIn.Seek( nOldPos );
-            DffRecordHeader aProgTagHd;
-            if ( SdrPowerPointImport::SeekToContentOfProgTag( 9, rIn, aClientDataContainerHd, aProgTagHd ) )
-            {
-                ReadDffRecordHeader( rIn, aExtParaHd );
-            }
+            ReadDffRecordHeader( rIn, aExtParaHd );
         }
+    }
 
-        // ClientTextBox
-        if ( rSdrPowerPointImport.maShapeRecords.SeekToContent( rIn, DFF_msofbtClientTextbox, SEEK_FROM_CURRENT_AND_RESTART ) )
+    // ClientTextBox
+    if ( !rSdrPowerPointImport.maShapeRecords.SeekToContent( rIn, DFF_msofbtClientTextbox, SEEK_FROM_CURRENT_AND_RESTART ) )
+        return;
+
+    bool bStatus = true;
+
+
+    DffRecordHeader aClientTextBoxHd( *rSdrPowerPointImport.maShapeRecords.Current() );
+    sal_uInt32  nTextRulerAtomOfs = 0;  // case of zero -> this atom may be found in aClientDataContainerHd;
+                                    // case of -1 -> there is no atom of this kind
+                                    // else -> this is the fileofs where we can get it
+
+    // checkout if this is a referenced
+    // textobj, if so the we will patch
+    // the ClientTextBoxHd for a
+    // equivalent one
+    DffRecordHeader aTextHd;
+    if ( SvxMSDffManager::SeekToRec( rIn, PPT_PST_OutlineTextRefAtom, aClientTextBoxHd.GetRecEndFilePos(), &aTextHd ) )
+    {
+        sal_uInt32 nRefNum;
+        rIn.ReadUInt32( nRefNum );
+
+        if ( SvxMSDffManager::SeekToRec( rIn, PPT_PST_TextRulerAtom, aClientTextBoxHd.GetRecEndFilePos() ) )
+            nTextRulerAtomOfs = rIn.Tell();
+        else
+            nTextRulerAtomOfs = 0xffffffff;
+
+        sal_uInt32 nInstance = 0;
+        switch( rSdrPowerPointImport.m_eCurrentPageKind )
         {
-            bool bStatus = true;
-
-
-            DffRecordHeader aClientTextBoxHd( *rSdrPowerPointImport.maShapeRecords.Current() );
-            sal_uInt32  nTextRulerAtomOfs = 0;  // case of zero -> this atom may be found in aClientDataContainerHd;
-                                            // case of -1 -> there is no atom of this kind
-                                            // else -> this is the fileofs where we can get it
-
-            // checkout if this is a referenced
-            // textobj, if so the we will patch
-            // the ClientTextBoxHd for a
-            // equivalent one
-            DffRecordHeader aTextHd;
-            if ( SvxMSDffManager::SeekToRec( rIn, PPT_PST_OutlineTextRefAtom, aClientTextBoxHd.GetRecEndFilePos(), &aTextHd ) )
+            case PPT_NOTEPAGE :
+                nInstance++;
+                [[fallthrough]];
+            case PPT_MASTERPAGE :
+                nInstance++;
+                break;
+            case PPT_SLIDEPAGE :
+            break;
+            default :
+                bStatus = false;
+        }
+        if ( bStatus )
+        {
+            sal_uInt32 nSlideId = rSdrPowerPointImport.GetCurrentPageId();
+            if ( !nSlideId )
+                bStatus = false;
+            else
             {
-                sal_uInt32 nRefNum;
-                rIn.ReadUInt32( nRefNum );
-
-                if ( SvxMSDffManager::SeekToRec( rIn, PPT_PST_TextRulerAtom, aClientTextBoxHd.GetRecEndFilePos() ) )
-                    nTextRulerAtomOfs = rIn.Tell();
-                else
-                    nTextRulerAtomOfs = 0xffffffff;
-
-                sal_uInt32 nInstance = 0;
-                switch( rSdrPowerPointImport.m_eCurrentPageKind )
+                if ( !aExtParaHd.nRecType )
                 {
-                    case PPT_NOTEPAGE :
-                        nInstance++;
-                        [[fallthrough]];
-                    case PPT_MASTERPAGE :
-                        nInstance++;
-                        break;
-                    case PPT_SLIDEPAGE :
-                    break;
-                    default :
-                        bStatus = false;
+                    sal_uInt32 nOldPos = rIn.Tell();
+                    // try to locate the referenced ExtendedParaHd
+                    DffRecordHeader* pHd = pExtParaProv->
+                                                aExtendedPresRules.GetRecordHeader( PPT_PST_ExtendedParagraphHeaderAtom,
+                                                                                    SEEK_FROM_CURRENT_AND_RESTART );
+                    DffRecordHeader     aPresRuleHd;
+                    DffRecordHeader*    pFirst = pHd;
+
+                    sal_uInt32  nTmpSlideId, nTmpRef;
+                    while ( pHd )
+                    {
+                        pHd->SeekToContent( rIn );
+                        rIn.ReadUInt32( nTmpSlideId )
+                           .ReadUInt32( nTmpRef );         // this seems to be the instance
+
+                        if ( ( nTmpSlideId == nSlideId ) && ( pHd->nRecInstance == nRefNum ) )
+                        {
+                            if (!pHd->SeekToEndOfRecord(rIn))
+                                break;
+                            ReadDffRecordHeader( rIn, aPresRuleHd );
+                            if ( aPresRuleHd.nRecType == PPT_PST_ExtendedParagraphAtom )
+                            {
+                                aExtParaHd = aPresRuleHd;
+                                break;
+                            }
+                        }
+                        pHd = pExtParaProv->
+                                aExtendedPresRules.GetRecordHeader( PPT_PST_ExtendedParagraphHeaderAtom,
+                                                                    SEEK_FROM_CURRENT_AND_RESTART );
+                        if ( pHd == pFirst )
+                            break;
+                    }
+                    rIn.Seek( nOldPos );
                 }
-                if ( bStatus )
+                // now pHd points to the right SlideListWithText Container
+                PptSlidePersistList* pPageList = rSdrPowerPointImport.GetPageList( rSdrPowerPointImport.m_eCurrentPageKind );
+                PptSlidePersistEntry* pE = nullptr;
+                if ( pPageList && ( rSdrPowerPointImport.m_nCurrentPageNum < pPageList->size() ) )
+                    pE = &(*pPageList)[ rSdrPowerPointImport.m_nCurrentPageNum ];
+                if ( (!pE) || (!pE->nSlidePersistStartOffset) || ( pE->aPersistAtom.nSlideId != nSlideId ) )
+                    bStatus = false;
+                else
                 {
-                    sal_uInt32 nSlideId = rSdrPowerPointImport.GetCurrentPageId();
-                    if ( !nSlideId )
+                    auto nOffset(pE->nSlidePersistStartOffset);
+                    bStatus = (nOffset == rIn.Seek(nOffset));
+                    // now we got the right page and are searching for the right
+                    // TextHeaderAtom
+                    auto nEndRecPos = DffPropSet::SanitizeEndPos(rIn, pE->nSlidePersistEndOffset);
+                    while (bStatus && rIn.Tell() < nEndRecPos)
+                    {
+                        ReadDffRecordHeader( rIn, aClientTextBoxHd );
+                        if ( aClientTextBoxHd.nRecType == PPT_PST_TextHeaderAtom )
+                        {
+                            if ( aClientTextBoxHd.nRecInstance == nRefNum )
+                            {
+                                aClientTextBoxHd.SeekToEndOfRecord( rIn );
+                                break;
+                            }
+                        }
+                        if (!aClientTextBoxHd.SeekToEndOfRecord(rIn))
+                            break;
+                    }
+                    if ( rIn.Tell() > pE->nSlidePersistEndOffset )
                         bStatus = false;
                     else
-                    {
-                        if ( !aExtParaHd.nRecType )
+                    {   // patching the RecordHeader
+                        aClientTextBoxHd.nFilePos -= DFF_COMMON_RECORD_HEADER_SIZE;
+                        aClientTextBoxHd.nRecLen += DFF_COMMON_RECORD_HEADER_SIZE;
+                        aClientTextBoxHd.nRecType = DFF_msofbtClientTextbox;
+                        aClientTextBoxHd.nRecVer = DFF_PSFLAG_CONTAINER;
+
+                        // we have to calculate the correct record len
+                        DffRecordHeader aTmpHd;
+                        nEndRecPos = DffPropSet::SanitizeEndPos(rIn, pE->nSlidePersistEndOffset);
+                        while (rIn.Tell() < nEndRecPos)
                         {
-                            sal_uInt32 nOldPos = rIn.Tell();
-                            // try to locate the referenced ExtendedParaHd
-                            DffRecordHeader* pHd = pExtParaProv->
-                                                        aExtendedPresRules.GetRecordHeader( PPT_PST_ExtendedParagraphHeaderAtom,
-                                                                                            SEEK_FROM_CURRENT_AND_RESTART );
-                            DffRecordHeader     aPresRuleHd;
-                            DffRecordHeader*    pFirst = pHd;
-
-                            sal_uInt32  nTmpSlideId, nTmpRef;
-                            while ( pHd )
-                            {
-                                pHd->SeekToContent( rIn );
-                                rIn.ReadUInt32( nTmpSlideId )
-                                   .ReadUInt32( nTmpRef );         // this seems to be the instance
-
-                                if ( ( nTmpSlideId == nSlideId ) && ( pHd->nRecInstance == nRefNum ) )
-                                {
-                                    if (!pHd->SeekToEndOfRecord(rIn))
-                                        break;
-                                    ReadDffRecordHeader( rIn, aPresRuleHd );
-                                    if ( aPresRuleHd.nRecType == PPT_PST_ExtendedParagraphAtom )
-                                    {
-                                        aExtParaHd = aPresRuleHd;
-                                        break;
-                                    }
-                                }
-                                pHd = pExtParaProv->
-                                        aExtendedPresRules.GetRecordHeader( PPT_PST_ExtendedParagraphHeaderAtom,
-                                                                            SEEK_FROM_CURRENT_AND_RESTART );
-                                if ( pHd == pFirst )
-                                    break;
-                            }
-                            rIn.Seek( nOldPos );
+                            ReadDffRecordHeader( rIn, aTmpHd );
+                            if ( ( aTmpHd.nRecType == PPT_PST_SlidePersistAtom ) || ( aTmpHd.nRecType == PPT_PST_TextHeaderAtom ) )
+                                break;
+                            if (!aTmpHd.SeekToEndOfRecord(rIn))
+                                break;
+                            aClientTextBoxHd.nRecLen += aTmpHd.nRecLen + DFF_COMMON_RECORD_HEADER_SIZE;
                         }
-                        // now pHd points to the right SlideListWithText Container
-                        PptSlidePersistList* pPageList = rSdrPowerPointImport.GetPageList( rSdrPowerPointImport.m_eCurrentPageKind );
-                        PptSlidePersistEntry* pE = nullptr;
-                        if ( pPageList && ( rSdrPowerPointImport.m_nCurrentPageNum < pPageList->size() ) )
-                            pE = &(*pPageList)[ rSdrPowerPointImport.m_nCurrentPageNum ];
-                        if ( (!pE) || (!pE->nSlidePersistStartOffset) || ( pE->aPersistAtom.nSlideId != nSlideId ) )
-                            bStatus = false;
-                        else
-                        {
-                            auto nOffset(pE->nSlidePersistStartOffset);
-                            bStatus = (nOffset == rIn.Seek(nOffset));
-                            // now we got the right page and are searching for the right
-                            // TextHeaderAtom
-                            auto nEndRecPos = DffPropSet::SanitizeEndPos(rIn, pE->nSlidePersistEndOffset);
-                            while (bStatus && rIn.Tell() < nEndRecPos)
-                            {
-                                ReadDffRecordHeader( rIn, aClientTextBoxHd );
-                                if ( aClientTextBoxHd.nRecType == PPT_PST_TextHeaderAtom )
-                                {
-                                    if ( aClientTextBoxHd.nRecInstance == nRefNum )
-                                    {
-                                        aClientTextBoxHd.SeekToEndOfRecord( rIn );
-                                        break;
-                                    }
-                                }
-                                if (!aClientTextBoxHd.SeekToEndOfRecord(rIn))
-                                    break;
-                            }
-                            if ( rIn.Tell() > pE->nSlidePersistEndOffset )
-                                bStatus = false;
-                            else
-                            {   // patching the RecordHeader
-                                aClientTextBoxHd.nFilePos -= DFF_COMMON_RECORD_HEADER_SIZE;
-                                aClientTextBoxHd.nRecLen += DFF_COMMON_RECORD_HEADER_SIZE;
-                                aClientTextBoxHd.nRecType = DFF_msofbtClientTextbox;
-                                aClientTextBoxHd.nRecVer = DFF_PSFLAG_CONTAINER;
-
-                                // we have to calculate the correct record len
-                                DffRecordHeader aTmpHd;
-                                nEndRecPos = DffPropSet::SanitizeEndPos(rIn, pE->nSlidePersistEndOffset);
-                                while (rIn.Tell() < nEndRecPos)
-                                {
-                                    ReadDffRecordHeader( rIn, aTmpHd );
-                                    if ( ( aTmpHd.nRecType == PPT_PST_SlidePersistAtom ) || ( aTmpHd.nRecType == PPT_PST_TextHeaderAtom ) )
-                                        break;
-                                    if (!aTmpHd.SeekToEndOfRecord(rIn))
-                                        break;
-                                    aClientTextBoxHd.nRecLen += aTmpHd.nRecLen + DFF_COMMON_RECORD_HEADER_SIZE;
-                                }
-                                aClientTextBoxHd.SeekToContent( rIn );
-                            }
-                        }
-                    }
-                }
-            }
-
-            if ( bStatus )
-            {
-                if ( SvxMSDffManager::SeekToRec( rIn, PPT_PST_TextHeaderAtom, aClientTextBoxHd.GetRecEndFilePos(), &aTextHd ) )
-                {
-                    // TextHeaderAtom is always the first Atom
-                    sal_uInt16 nTmp;
-                    rIn.ReadUInt16( nTmp );   // this number tells us the TxMasterStyleAtom Instance
-                    if ( nTmp > 8 )
-                        nTmp = 4;
-                    TSS_Type nInstance = static_cast<TSS_Type>(nTmp);
-                    aTextHd.SeekToEndOfRecord( rIn );
-                    mxImplTextObj->mnInstance = nInstance;
-
-                    sal_uInt32 nFilePos = rIn.Tell();
-                    if ( rSdrPowerPointImport.SeekToRec2( PPT_PST_TextBytesAtom,
-                                                          PPT_PST_TextCharsAtom,
-                                                          aClientTextBoxHd.GetRecEndFilePos() )
-                         || SvxMSDffManager::SeekToRec( rIn,
-                                                            PPT_PST_StyleTextPropAtom,
-                                                            aClientTextBoxHd.GetRecEndFilePos() ) )
-                    {
-                        PPTTextRulerInterpreter aTextRulerInterpreter( nTextRulerAtomOfs, aClientTextBoxHd, rIn );
-
-                        PPTStyleTextPropReader aStyleTextPropReader( rIn, aClientTextBoxHd,
-                                                                        aTextRulerInterpreter, aExtParaHd, nInstance );
-                        sal_uInt32 nParagraphs = mxImplTextObj->mnParagraphCount = aStyleTextPropReader.aParaPropList.size();
-                        if ( nParagraphs )
-                        {
-                            // the language settings will be merged into the list of PPTCharPropSet
-                            DffRecordHeader aTextSpecInfoHd;
-                            PPTTextSpecInfoAtomInterpreter aTextSpecInfoAtomInterpreter;
-                            if ( SvxMSDffManager::SeekToRec( rIn, PPT_PST_TextSpecInfoAtom,
-                                                        aClientTextBoxHd.GetRecEndFilePos(), &aTextSpecInfoHd ) )
-                            {
-                                if ( aTextSpecInfoAtomInterpreter.Read( rIn, aTextSpecInfoHd, PPT_PST_TextSpecInfoAtom,
-                                        &(rSdrPowerPointImport.m_pPPTStyleSheet->maTxSI) ) )
-                                {
-                                    size_t nI = 0;
-                                    for (const PPTTextSpecInfo& rSpecInfo : aTextSpecInfoAtomInterpreter.aList)
-                                    {
-                                        sal_uInt32 nCharIdx = rSpecInfo.nCharIdx;
-
-                                        // portions and text have to been split in some cases
-                                        for ( ; nI < aStyleTextPropReader.aCharPropList.size(); ++nI)
-                                        {
-                                            PPTCharPropSet* pSet = aStyleTextPropReader.aCharPropList[nI].get();
-                                            if (pSet->mnOriginalTextPos >= nCharIdx)
-                                                break;
-                                            pSet->mnLanguage[0] = rSpecInfo.nLanguage[0];
-                                            pSet->mnLanguage[1] = rSpecInfo.nLanguage[1];
-                                            pSet->mnLanguage[2] = rSpecInfo.nLanguage[2];
-                                            // test if the current portion needs to be split
-                                            if (pSet->maString.getLength() <= 1)
-                                                continue;
-                                            sal_Int32 nIndexOfNextPortion = pSet->maString.getLength() + pSet->mnOriginalTextPos;
-                                            sal_Int32 nNewLen = nIndexOfNextPortion - nCharIdx;
-                                            if (nNewLen <= 0)
-                                                continue;
-                                            sal_Int32 nOldLen = pSet->maString.getLength() - nNewLen;
-                                            if (nOldLen <= 0)
-                                                continue;
-                                            OUString aString(pSet->maString);
-                                            PPTCharPropSet* pNew = new PPTCharPropSet(*pSet);
-                                            pSet->maString = aString.copy(0, nOldLen);
-                                            pNew->maString = aString.copy(nOldLen, nNewLen);
-                                            pNew->mnOriginalTextPos += nOldLen;
-                                            aStyleTextPropReader.aCharPropList.emplace(aStyleTextPropReader.aCharPropList.begin() + nI + 1, pNew);
-                                        }
-                                    }
-                                }
-#ifdef DBG_UTIL
-                                else
-                                {
-                                    if (!(rSdrPowerPointImport.rImportParam.nImportFlags & PPT_IMPORTFLAGS_NO_TEXT_ASSERT))
-                                    {
-                                        OSL_FAIL( "SdrTextSpecInfoAtomInterpreter::Ctor(): parsing error, this document needs to be analysed (SJ)" );
-                                    }
-                                }
-#endif
-                            }
-                            // now will search for possible textextensions such as date/time fields
-                            // or ParaTabStops and append them on this textobj
-                            rIn.Seek( nFilePos );
-                            ::std::vector< std::unique_ptr<PPTFieldEntry> > FieldList;
-                            auto nEndRecPos = DffPropSet::SanitizeEndPos(rIn, aClientTextBoxHd.GetRecEndFilePos());
-                            while (rIn.Tell() < nEndRecPos)
-                            {
-                                ReadDffRecordHeader( rIn, aTextHd );
-                                sal_uInt16 nVal = 0;
-                                std::unique_ptr<PPTFieldEntry> xEntry;
-                                switch ( aTextHd.nRecType )
-                                {
-                                    case PPT_PST_DateTimeMCAtom :
-                                    {
-                                        xEntry.reset(new PPTFieldEntry);
-                                        rIn.ReadUInt16(xEntry->nPos)
-                                           .ReadUInt16( nVal )
-                                           .ReadUInt16( nVal );
-                                        xEntry->SetDateTime( nVal & 0xff );
-                                    }
-                                    break;
-
-                                    case PPT_PST_FooterMCAtom :
-                                    {
-                                        xEntry.reset(new PPTFieldEntry);
-                                        rIn.ReadUInt16(xEntry->nPos);
-                                        xEntry->xField1.reset(new SvxFieldItem(SvxFooterField(), EE_FEATURE_FIELD));
-                                    }
-                                    break;
-
-                                    case PPT_PST_HeaderMCAtom :
-                                    {
-                                        xEntry.reset(new PPTFieldEntry);
-                                        rIn.ReadUInt16(xEntry->nPos);
-                                        xEntry->xField1.reset(new SvxFieldItem(SvxHeaderField(), EE_FEATURE_FIELD));
-                                    }
-                                    break;
-
-                                    case PPT_PST_GenericDateMCAtom :
-                                    {
-                                        xEntry.reset(new PPTFieldEntry);
-                                        rIn.ReadUInt16(xEntry->nPos);
-                                        xEntry->xField1.reset(new SvxFieldItem(SvxDateTimeField(), EE_FEATURE_FIELD));
-                                        if (rPersistEntry.xHeaderFooterEntry) // sj: #i34111# on master pages it is possible
-                                        {                                     // that there is no HeaderFooterEntry available
-                                            if (rPersistEntry.xHeaderFooterEntry->nAtom & 0x20000)    // auto date time
-                                                xEntry->SetDateTime(rPersistEntry.xHeaderFooterEntry->nAtom & 0xff);
-                                            else
-                                                xEntry->xString = rPersistEntry.xHeaderFooterEntry->pPlaceholder[nVal];
-                                        }
-                                    }
-                                    break;
-
-                                    case PPT_PST_SlideNumberMCAtom :
-                                    case PPT_PST_RTFDateTimeMCAtom :
-                                    {
-                                        xEntry.reset(new PPTFieldEntry);
-                                        if ( aTextHd.nRecLen >= 4 )
-                                        {
-                                            rIn.ReadUInt16(xEntry->nPos)
-                                               .ReadUInt16( nVal );
-
-                                            // evaluate ID
-                                            //SvxFieldItem* pFieldItem = NULL;
-                                            switch( aTextHd.nRecType )
-                                            {
-                                                case PPT_PST_SlideNumberMCAtom:
-                                                    xEntry->xField1.reset(new SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD));
-                                                break;
-
-                                                case PPT_PST_RTFDateTimeMCAtom:
-                                                {
-                                                    // Rude workaround for one special case reported
-                                                    // by a customer. (#i75203#)
-
-                                                    // Don't even attempt to handle the general use
-                                                    // case for PPT_PST_RTFDateTimeMCAtom (a generic
-                                                    // MS style date/time format string). Just handle
-                                                    // the special case where the format string
-                                                    // contains only one or several possibly empty
-                                                    // quoted strings. I.e. something that doesn't
-                                                    // expand to any date or time at all, but to a
-                                                    // fixed string. How on earth somebody manages to
-                                                    // produce such things in PPT slides I have no
-                                                    // idea.
-                                                    if (nVal == 0)
-                                                    {
-                                                        OUStringBuffer aStr;
-                                                        bool inquote = false;
-                                                        for (int nLen = 0; nLen < 64; ++nLen)
-                                                        {
-                                                            sal_Unicode n(0);
-                                                            rIn.ReadUtf16( n );
-
-                                                            // Collect quoted characters into aStr
-                                                            if ( n == '\'')
-                                                                inquote = !inquote;
-                                                            else if (!n)
-                                                            {
-                                                                // End of format string
-                                                                xEntry->xString = aStr.makeStringAndClear();
-                                                                break;
-                                                            }
-                                                            else if (!inquote)
-                                                            {
-                                                                // Non-quoted character, i.e. a real
-                                                                // format specifier. We don't handle
-                                                                // those. Sorry.
-                                                                break;
-                                                            }
-                                                            else
-                                                            {
-                                                                aStr.append(OUStringChar(n));
-                                                            }
-                                                        }
-                                                    }
-                                                    if (!xEntry->xString)
-                                                    {
-                                                        // Handle as previously
-                                                        xEntry->xField1.reset(new SvxFieldItem( SvxDateField( Date( Date::SYSTEM ), SvxDateType::Fix ), EE_FEATURE_FIELD ));
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    break;
-
-                                    case PPT_PST_InteractiveInfo :
-                                    {
-                                        DffRecordHeader aHdInteractiveInfoAtom;
-                                        if ( SvxMSDffManager::SeekToRec( rIn, PPT_PST_InteractiveInfoAtom, aTextHd.GetRecEndFilePos(), &aHdInteractiveInfoAtom ) )
-                                        {
-                                            PptInteractiveInfoAtom aInteractiveInfoAtom;
-                                            ReadPptInteractiveInfoAtom( rIn, aInteractiveInfoAtom );
-                                            for (const SdHyperlinkEntry& rHyperlink : rSdrPowerPointImport.m_aHyperList)
-                                            {
-                                                if ( rHyperlink.nIndex == aInteractiveInfoAtom.nExHyperlinkId )
-                                                {
-                                                    if (!aTextHd.SeekToEndOfRecord(rIn))
-                                                    {
-                                                        break;
-                                                    }
-                                                    ReadDffRecordHeader( rIn, aTextHd );
-                                                    if ( aTextHd.nRecType != PPT_PST_TxInteractiveInfoAtom )
-                                                    {
-                                                        aTextHd.SeekToBegOfRecord( rIn );
-                                                        continue;
-                                                    }
-                                                    else
-                                                    {
-                                                        sal_uInt32 nStartPos, nEndPos;
-                                                        rIn.ReadUInt32( nStartPos )
-                                                           .ReadUInt32( nEndPos );
-                                                        if ( nEndPos )
-                                                        {
-                                                            xEntry.reset(new PPTFieldEntry);
-                                                            xEntry->nPos = static_cast<sal_uInt16>(nStartPos);
-                                                            xEntry->nTextRangeEnd = static_cast<sal_uInt16>(nEndPos);
-                                                            OUString aTarget( rHyperlink.aTarget );
-                                                            if ( !rHyperlink.aConvSubString.isEmpty() )
-                                                            {
-                                                                aTarget += "#" + rHyperlink.aConvSubString;
-                                                            }
-                                                            xEntry->xField1.reset(new SvxFieldItem( SvxURLField( aTarget, OUString(), SvxURLFormat::Repr ), EE_FEATURE_FIELD ));
-                                                        }
-                                                    }
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    break;
-                                }
-                                if (!aTextHd.SeekToEndOfRecord(rIn))
-                                    break;
-                                if (xEntry)
-                                {
-                                    // sorting fields ( hi >> lo )
-                                    auto it = std::find_if(FieldList.begin(), FieldList.end(),
-                                        [&xEntry](const std::unique_ptr<PPTFieldEntry>& rxField) {
-                                            return rxField->nPos < xEntry->nPos; });
-                                    if ( it != FieldList.end() ) {
-                                        FieldList.insert(it, std::move(xEntry));
-                                    } else {
-                                        FieldList.push_back( std::move(xEntry));
-                                    }
-                                }
-                            }
-                            if ( !FieldList.empty() )
-                            {
-                                auto FE = FieldList.begin();
-                                auto& aCharPropList = aStyleTextPropReader.aCharPropList;
-
-                                sal_Int32   i = nParagraphs - 1;
-                                sal_Int32   n = aCharPropList.size() - 1;
-
-                                // at this point we just have a list of textportions(aCharPropList)
-                                // the next while loop tries to resolve the list of fields(pFieldList)
-                                while( ( FE < FieldList.end() ) && ( n >= 0 ) && ( i >= 0 ) )
-                                {
-                                    PPTCharPropSet* pSet  = aCharPropList[n].get();
-                                    OUString aString( pSet->maString );
-                                    sal_uInt32 nCount = aString.getLength();
-                                    sal_uInt32 nPos = pSet->mnOriginalTextPos + nCount;
-                                    while ( ( FE < FieldList.end() ) && nCount-- )
-                                    {
-                                        nPos--;
-                                        FE = std::find_if(FE, FieldList.end(),
-                                            [&nPos](const std::unique_ptr<PPTFieldEntry>& rxField) {return rxField->nPos <= nPos;});
-                                        if (FE == FieldList.end())
-                                            break;
-
-                                        if ( (*FE)->nPos == nPos )
-                                        {
-                                            if ( aString[nCount] == 0x2a )
-                                            {
-                                                sal_uInt32 nBehind = aString.getLength() - ( nCount + 1 );
-                                                pSet->maString.clear();
-                                                if ( nBehind )
-                                                {
-                                                    PPTCharPropSet* pNewCPS = new PPTCharPropSet( *pSet );
-                                                    pNewCPS->maString = aString.copy( nCount + 1, nBehind );
-                                                    aCharPropList.emplace( aCharPropList.begin() + n + 1, pNewCPS );
-                                                }
-                                                if ( (*FE)->xField2 )
-                                                {
-                                                    PPTCharPropSet* pNewCPS = new PPTCharPropSet( *pSet );
-                                                    pNewCPS->mpFieldItem = std::move((*FE)->xField2);
-                                                    aCharPropList.emplace( aCharPropList.begin() + n + 1, pNewCPS );
-
-                                                    pNewCPS = new PPTCharPropSet( *pSet );
-                                                    pNewCPS->maString = " ";
-                                                    aCharPropList.emplace( aCharPropList.begin() + n + 1, pNewCPS );
-                                                }
-                                                if ( nCount )
-                                                {
-                                                    PPTCharPropSet* pNewCPS = new PPTCharPropSet( *pSet );
-                                                    pNewCPS->maString = aString.copy( 0, nCount );
-                                                    aCharPropList.emplace( aCharPropList.begin() + n++, pNewCPS );
-                                                }
-                                                if ( (*FE)->xField1 )
-                                                {
-                                                    pSet->mpFieldItem = std::move((*FE)->xField1);
-                                                }
-                                                else if ( (*FE)->xString )
-                                                    pSet->maString = *(*FE)->xString;
-                                            }
-                                            else
-                                            {
-                                                if ( (*FE)->nTextRangeEnd )   // text range hyperlink
-                                                {
-                                                    sal_uInt32 nHyperLen = (*FE)->nTextRangeEnd - nPos;
-                                                    if ( nHyperLen )
-                                                    {
-                                                        PPTCharPropSet* pBefCPS = nullptr;
-                                                        if ( nCount )
-                                                        {
-                                                            pBefCPS = new PPTCharPropSet( *pSet );
-                                                            pSet->maString = pSet->maString.copy(nCount);
-                                                        }
-                                                        sal_uInt32  nIdx = n;
-                                                        sal_Int32   nHyperLenLeft = nHyperLen;
-
-                                                        while ( ( aCharPropList.size() > nIdx ) && nHyperLenLeft )
-                                                        {
-                                                            // the textrange hyperlink can take more than 1 paragraph
-                                                            // the solution here is to clone the hyperlink...
-
-                                                            PPTCharPropSet* pCurrent = aCharPropList[ nIdx ].get();
-                                                            sal_Int32       nNextStringLen = pCurrent->maString.getLength();
-
-                                                            DBG_ASSERT( (*FE)->xField1, "missing field!" );
-                                                            if (!(*FE)->xField1)
-                                                                break;
-
-                                                            const SvxURLField* pField = static_cast<const SvxURLField*>((*FE)->xField1->GetField());
-
-                                                            pCurrent->mbIsHyperlink = true;
-                                                            pCurrent->mnHylinkOrigColor = pCurrent->mpImplPPTCharPropSet->mnColor;
-                                                            pCurrent->mbHardHylinkOrigColor = ( ( pCurrent->mpImplPPTCharPropSet->mnAttrSet >>PPT_CharAttr_FontColor ) & 1)>0;
-
-                                                            // add missing attribute to show underline property
-                                                            pCurrent->mpImplPPTCharPropSet->mnAttrSet |= 1 << PPT_CharAttr_Underline;
-                                                            pCurrent->mpImplPPTCharPropSet->mnFlags = 1 << PPT_CharAttr_Underline;
-
-                                                            if ( pCurrent->mpFieldItem )
-                                                            {
-                                                                pCurrent->SetColor( PPT_COLSCHEME_A_UND_HYPERLINK );
-                                                                if ( dynamic_cast< const SvxURLField* >(pCurrent->mpFieldItem->GetField()) != nullptr)
-                                                                    break;
-                                                                nHyperLenLeft--;
-                                                            }
-                                                            else if ( nNextStringLen )
-                                                            {
-                                                                if ( nNextStringLen <= nHyperLenLeft )
-                                                                {
-                                                                    pCurrent->mpFieldItem.reset( new SvxFieldItem( SvxURLField( pField->GetURL(), pCurrent->maString, SvxURLFormat::Repr ), EE_FEATURE_FIELD ) );
-                                                                    nHyperLenLeft -= nNextStringLen;
-
-                                                                    if ( nHyperLenLeft )
-                                                                    {
-                                                                        // if the next portion is in a higher paragraph,
-                                                                        // the textrange is to decrease (because of the LineBreak character)
-                                                                        if ( aCharPropList.size() > ( nIdx + 1 ) )
-                                                                        {
-                                                                            PPTCharPropSet* pNext = aCharPropList[ nIdx + 1 ].get();
-                                                                            if ( pNext->mnParagraph > pCurrent->mnParagraph )
-                                                                                nHyperLenLeft--;
-                                                                        }
-                                                                    }
-                                                                }
-                                                                else
-                                                                {
-                                                                    PPTCharPropSet* pNewCPS = new PPTCharPropSet( *pCurrent );
-                                                                    pNewCPS->maString = pCurrent->maString.copy( nHyperLenLeft,( nNextStringLen - nHyperLenLeft ) );
-                                                                    aCharPropList.emplace( aCharPropList.begin() + nIdx + 1, pNewCPS );
-                                                                    OUString aRepresentation = pCurrent->maString.copy( 0, nHyperLenLeft );
-                                                                    pCurrent->mpFieldItem.reset( new SvxFieldItem( SvxURLField( pField->GetURL(), aRepresentation, SvxURLFormat::Repr ), EE_FEATURE_FIELD ) );
-                                                                    nHyperLenLeft = 0;
-                                                                }
-                                                                pCurrent->maString.clear();
-                                                                pCurrent->SetColor( PPT_COLSCHEME_A_UND_HYPERLINK );
-                                                            }
-                                                            nIdx++;
-                                                        }
-                                                        (*FE)->xField1.reset();
-
-                                                        if ( pBefCPS )
-                                                        {
-                                                            pBefCPS->maString = aString.copy( 0, nCount );
-                                                            aCharPropList.emplace( aCharPropList.begin() + n, pBefCPS );
-                                                            n++;
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            break;
-                                        }
-                                    }
-                                    n--;
-                                }
-                            }
-                            mxImplTextObj->maParagraphList.resize( nParagraphs );
-                            for (size_t nCurCharPos = 0, nCurPos = 0;
-                                nCurPos < aStyleTextPropReader.aParaPropList.size();
-                                ++nCurPos)
-                            {
-                                mxImplTextObj->maParagraphList[ nCurPos ].reset(
-                                    new PPTParagraphObj(
-                                        aStyleTextPropReader, nCurPos, nCurCharPos,
-                                        *rSdrPowerPointImport.m_pPPTStyleSheet,
-                                        nInstance, aTextRulerInterpreter ) );
-
-                                sal_uInt32 nParaAdjust, nFlags = 0;
-                                mxImplTextObj->maParagraphList[ nCurPos ]->GetAttrib( PPT_ParaAttr_Adjust, nParaAdjust, GetInstance() );
-
-                                switch ( nParaAdjust )
-                                {
-                                    case 0 : nFlags = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT;   break;
-                                    case 1 : nFlags = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_CENTER; break;
-                                    case 2 : nFlags = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT;  break;
-                                    case 3 : nFlags = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_BLOCK;  break;
-                                }
-                                mxImplTextObj->mnTextFlags |= nFlags;
-                            }
-                        }
+                        aClientTextBoxHd.SeekToContent( rIn );
                     }
                 }
             }
         }
+    }
+
+    if ( !bStatus )
+        return;
+
+    if ( !SvxMSDffManager::SeekToRec( rIn, PPT_PST_TextHeaderAtom, aClientTextBoxHd.GetRecEndFilePos(), &aTextHd ) )
+        return;
+
+    // TextHeaderAtom is always the first Atom
+    sal_uInt16 nTmp;
+    rIn.ReadUInt16( nTmp );   // this number tells us the TxMasterStyleAtom Instance
+    if ( nTmp > 8 )
+        nTmp = 4;
+    TSS_Type nInstance = static_cast<TSS_Type>(nTmp);
+    aTextHd.SeekToEndOfRecord( rIn );
+    mxImplTextObj->mnInstance = nInstance;
+
+    sal_uInt32 nFilePos = rIn.Tell();
+    if ( !(rSdrPowerPointImport.SeekToRec2( PPT_PST_TextBytesAtom,
+                                          PPT_PST_TextCharsAtom,
+                                          aClientTextBoxHd.GetRecEndFilePos() )
+         || SvxMSDffManager::SeekToRec( rIn,
+                                            PPT_PST_StyleTextPropAtom,
+                                            aClientTextBoxHd.GetRecEndFilePos() )) )
+        return;
+
+    PPTTextRulerInterpreter aTextRulerInterpreter( nTextRulerAtomOfs, aClientTextBoxHd, rIn );
+
+    PPTStyleTextPropReader aStyleTextPropReader( rIn, aClientTextBoxHd,
+                                                    aTextRulerInterpreter, aExtParaHd, nInstance );
+    sal_uInt32 nParagraphs = mxImplTextObj->mnParagraphCount = aStyleTextPropReader.aParaPropList.size();
+    if ( !nParagraphs )
+        return;
+
+    // the language settings will be merged into the list of PPTCharPropSet
+    DffRecordHeader aTextSpecInfoHd;
+    PPTTextSpecInfoAtomInterpreter aTextSpecInfoAtomInterpreter;
+    if ( SvxMSDffManager::SeekToRec( rIn, PPT_PST_TextSpecInfoAtom,
+                                aClientTextBoxHd.GetRecEndFilePos(), &aTextSpecInfoHd ) )
+    {
+        if ( aTextSpecInfoAtomInterpreter.Read( rIn, aTextSpecInfoHd, PPT_PST_TextSpecInfoAtom,
+                &(rSdrPowerPointImport.m_pPPTStyleSheet->maTxSI) ) )
+        {
+            size_t nI = 0;
+            for (const PPTTextSpecInfo& rSpecInfo : aTextSpecInfoAtomInterpreter.aList)
+            {
+                sal_uInt32 nCharIdx = rSpecInfo.nCharIdx;
+
+                // portions and text have to been split in some cases
+                for ( ; nI < aStyleTextPropReader.aCharPropList.size(); ++nI)
+                {
+                    PPTCharPropSet* pSet = aStyleTextPropReader.aCharPropList[nI].get();
+                    if (pSet->mnOriginalTextPos >= nCharIdx)
+                        break;
+                    pSet->mnLanguage[0] = rSpecInfo.nLanguage[0];
+                    pSet->mnLanguage[1] = rSpecInfo.nLanguage[1];
+                    pSet->mnLanguage[2] = rSpecInfo.nLanguage[2];
+                    // test if the current portion needs to be split
+                    if (pSet->maString.getLength() <= 1)
+                        continue;
+                    sal_Int32 nIndexOfNextPortion = pSet->maString.getLength() + pSet->mnOriginalTextPos;
+                    sal_Int32 nNewLen = nIndexOfNextPortion - nCharIdx;
+                    if (nNewLen <= 0)
+                        continue;
+                    sal_Int32 nOldLen = pSet->maString.getLength() - nNewLen;
+                    if (nOldLen <= 0)
+                        continue;
+                    OUString aString(pSet->maString);
+                    PPTCharPropSet* pNew = new PPTCharPropSet(*pSet);
+                    pSet->maString = aString.copy(0, nOldLen);
+                    pNew->maString = aString.copy(nOldLen, nNewLen);
+                    pNew->mnOriginalTextPos += nOldLen;
+                    aStyleTextPropReader.aCharPropList.emplace(aStyleTextPropReader.aCharPropList.begin() + nI + 1, pNew);
+                }
+            }
+        }
+#ifdef DBG_UTIL
+        else
+        {
+            if (!(rSdrPowerPointImport.rImportParam.nImportFlags & PPT_IMPORTFLAGS_NO_TEXT_ASSERT))
+            {
+                OSL_FAIL( "SdrTextSpecInfoAtomInterpreter::Ctor(): parsing error, this document needs to be analysed (SJ)" );
+            }
+        }
+#endif
+    }
+    // now will search for possible textextensions such as date/time fields
+    // or ParaTabStops and append them on this textobj
+    rIn.Seek( nFilePos );
+    ::std::vector< std::unique_ptr<PPTFieldEntry> > FieldList;
+    auto nEndRecPos = DffPropSet::SanitizeEndPos(rIn, aClientTextBoxHd.GetRecEndFilePos());
+    while (rIn.Tell() < nEndRecPos)
+    {
+        ReadDffRecordHeader( rIn, aTextHd );
+        sal_uInt16 nVal = 0;
+        std::unique_ptr<PPTFieldEntry> xEntry;
+        switch ( aTextHd.nRecType )
+        {
+            case PPT_PST_DateTimeMCAtom :
+            {
+                xEntry.reset(new PPTFieldEntry);
+                rIn.ReadUInt16(xEntry->nPos)
+                   .ReadUInt16( nVal )
+                   .ReadUInt16( nVal );
+                xEntry->SetDateTime( nVal & 0xff );
+            }
+            break;
+
+            case PPT_PST_FooterMCAtom :
+            {
+                xEntry.reset(new PPTFieldEntry);
+                rIn.ReadUInt16(xEntry->nPos);
+                xEntry->xField1.reset(new SvxFieldItem(SvxFooterField(), EE_FEATURE_FIELD));
+            }
+            break;
+
+            case PPT_PST_HeaderMCAtom :
+            {
+                xEntry.reset(new PPTFieldEntry);
+                rIn.ReadUInt16(xEntry->nPos);
+                xEntry->xField1.reset(new SvxFieldItem(SvxHeaderField(), EE_FEATURE_FIELD));
+            }
+            break;
+
+            case PPT_PST_GenericDateMCAtom :
+            {
+                xEntry.reset(new PPTFieldEntry);
+                rIn.ReadUInt16(xEntry->nPos);
+                xEntry->xField1.reset(new SvxFieldItem(SvxDateTimeField(), EE_FEATURE_FIELD));
+                if (rPersistEntry.xHeaderFooterEntry) // sj: #i34111# on master pages it is possible
+                {                                     // that there is no HeaderFooterEntry available
+                    if (rPersistEntry.xHeaderFooterEntry->nAtom & 0x20000)    // auto date time
+                        xEntry->SetDateTime(rPersistEntry.xHeaderFooterEntry->nAtom & 0xff);
+                    else
+                        xEntry->xString = rPersistEntry.xHeaderFooterEntry->pPlaceholder[nVal];
+                }
+            }
+            break;
+
+            case PPT_PST_SlideNumberMCAtom :
+            case PPT_PST_RTFDateTimeMCAtom :
+            {
+                xEntry.reset(new PPTFieldEntry);
+                if ( aTextHd.nRecLen >= 4 )
+                {
+                    rIn.ReadUInt16(xEntry->nPos)
+                       .ReadUInt16( nVal );
+
+                    // evaluate ID
+                    //SvxFieldItem* pFieldItem = NULL;
+                    switch( aTextHd.nRecType )
+                    {
+                        case PPT_PST_SlideNumberMCAtom:
+                            xEntry->xField1.reset(new SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD));
+                        break;
+
+                        case PPT_PST_RTFDateTimeMCAtom:
+                        {
+                            // Rude workaround for one special case reported
+                            // by a customer. (#i75203#)
+
+                            // Don't even attempt to handle the general use
+                            // case for PPT_PST_RTFDateTimeMCAtom (a generic
+                            // MS style date/time format string). Just handle
+                            // the special case where the format string
+                            // contains only one or several possibly empty
+                            // quoted strings. I.e. something that doesn't
+                            // expand to any date or time at all, but to a
+                            // fixed string. How on earth somebody manages to
+                            // produce such things in PPT slides I have no
+                            // idea.
+                            if (nVal == 0)
+                            {
+                                OUStringBuffer aStr;
+                                bool inquote = false;
+                                for (int nLen = 0; nLen < 64; ++nLen)
+                                {
+                                    sal_Unicode n(0);
+                                    rIn.ReadUtf16( n );
+
+                                    // Collect quoted characters into aStr
+                                    if ( n == '\'')
+                                        inquote = !inquote;
+                                    else if (!n)
+                                    {
+                                        // End of format string
+                                        xEntry->xString = aStr.makeStringAndClear();
+                                        break;
+                                    }
+                                    else if (!inquote)
+                                    {
+                                        // Non-quoted character, i.e. a real
+                                        // format specifier. We don't handle
+                                        // those. Sorry.
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        aStr.append(OUStringChar(n));
+                                    }
+                                }
+                            }
+                            if (!xEntry->xString)
+                            {
+                                // Handle as previously
+                                xEntry->xField1.reset(new SvxFieldItem( SvxDateField( Date( Date::SYSTEM ), SvxDateType::Fix ), EE_FEATURE_FIELD ));
+                            }
+                        }
+                    }
+                }
+            }
+            break;
+
+            case PPT_PST_InteractiveInfo :
+            {
+                DffRecordHeader aHdInteractiveInfoAtom;
+                if ( SvxMSDffManager::SeekToRec( rIn, PPT_PST_InteractiveInfoAtom, aTextHd.GetRecEndFilePos(), &aHdInteractiveInfoAtom ) )
+                {
+                    PptInteractiveInfoAtom aInteractiveInfoAtom;
+                    ReadPptInteractiveInfoAtom( rIn, aInteractiveInfoAtom );
+                    for (const SdHyperlinkEntry& rHyperlink : rSdrPowerPointImport.m_aHyperList)
+                    {
+                        if ( rHyperlink.nIndex == aInteractiveInfoAtom.nExHyperlinkId )
+                        {
+                            if (!aTextHd.SeekToEndOfRecord(rIn))
+                            {
+                                break;
+                            }
+                            ReadDffRecordHeader( rIn, aTextHd );
+                            if ( aTextHd.nRecType != PPT_PST_TxInteractiveInfoAtom )
+                            {
+                                aTextHd.SeekToBegOfRecord( rIn );
+                                continue;
+                            }
+                            else
+                            {
+                                sal_uInt32 nStartPos, nEndPos;
+                                rIn.ReadUInt32( nStartPos )
+                                   .ReadUInt32( nEndPos );
+                                if ( nEndPos )
+                                {
+                                    xEntry.reset(new PPTFieldEntry);
+                                    xEntry->nPos = static_cast<sal_uInt16>(nStartPos);
+                                    xEntry->nTextRangeEnd = static_cast<sal_uInt16>(nEndPos);
+                                    OUString aTarget( rHyperlink.aTarget );
+                                    if ( !rHyperlink.aConvSubString.isEmpty() )
+                                    {
+                                        aTarget += "#" + rHyperlink.aConvSubString;
+                                    }
+                                    xEntry->xField1.reset(new SvxFieldItem( SvxURLField( aTarget, OUString(), SvxURLFormat::Repr ), EE_FEATURE_FIELD ));
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            break;
+        }
+        if (!aTextHd.SeekToEndOfRecord(rIn))
+            break;
+        if (xEntry)
+        {
+            // sorting fields ( hi >> lo )
+            auto it = std::find_if(FieldList.begin(), FieldList.end(),
+                [&xEntry](const std::unique_ptr<PPTFieldEntry>& rxField) {
+                    return rxField->nPos < xEntry->nPos; });
+            if ( it != FieldList.end() ) {
+                FieldList.insert(it, std::move(xEntry));
+            } else {
+                FieldList.push_back( std::move(xEntry));
+            }
+        }
+    }
+    if ( !FieldList.empty() )
+    {
+        auto FE = FieldList.begin();
+        auto& aCharPropList = aStyleTextPropReader.aCharPropList;
+
+        sal_Int32   i = nParagraphs - 1;
+        sal_Int32   n = aCharPropList.size() - 1;
+
+        // at this point we just have a list of textportions(aCharPropList)
+        // the next while loop tries to resolve the list of fields(pFieldList)
+        while( ( FE < FieldList.end() ) && ( n >= 0 ) && ( i >= 0 ) )
+        {
+            PPTCharPropSet* pSet  = aCharPropList[n].get();
+            OUString aString( pSet->maString );
+            sal_uInt32 nCount = aString.getLength();
+            sal_uInt32 nPos = pSet->mnOriginalTextPos + nCount;
+            while ( ( FE < FieldList.end() ) && nCount-- )
+            {
+                nPos--;
+                FE = std::find_if(FE, FieldList.end(),
+                    [&nPos](const std::unique_ptr<PPTFieldEntry>& rxField) {return rxField->nPos <= nPos;});
+                if (FE == FieldList.end())
+                    break;
+
+                if ( (*FE)->nPos == nPos )
+                {
+                    if ( aString[nCount] == 0x2a )
+                    {
+                        sal_uInt32 nBehind = aString.getLength() - ( nCount + 1 );
+                        pSet->maString.clear();
+                        if ( nBehind )
+                        {
+                            PPTCharPropSet* pNewCPS = new PPTCharPropSet( *pSet );
+                            pNewCPS->maString = aString.copy( nCount + 1, nBehind );
+                            aCharPropList.emplace( aCharPropList.begin() + n + 1, pNewCPS );
+                        }
+                        if ( (*FE)->xField2 )
+                        {
+                            PPTCharPropSet* pNewCPS = new PPTCharPropSet( *pSet );
+                            pNewCPS->mpFieldItem = std::move((*FE)->xField2);
+                            aCharPropList.emplace( aCharPropList.begin() + n + 1, pNewCPS );
+
+                            pNewCPS = new PPTCharPropSet( *pSet );
+                            pNewCPS->maString = " ";
+                            aCharPropList.emplace( aCharPropList.begin() + n + 1, pNewCPS );
+                        }
+                        if ( nCount )
+                        {
+                            PPTCharPropSet* pNewCPS = new PPTCharPropSet( *pSet );
+                            pNewCPS->maString = aString.copy( 0, nCount );
+                            aCharPropList.emplace( aCharPropList.begin() + n++, pNewCPS );
+                        }
+                        if ( (*FE)->xField1 )
+                        {
+                            pSet->mpFieldItem = std::move((*FE)->xField1);
+                        }
+                        else if ( (*FE)->xString )
+                            pSet->maString = *(*FE)->xString;
+                    }
+                    else
+                    {
+                        if ( (*FE)->nTextRangeEnd )   // text range hyperlink
+                        {
+                            sal_uInt32 nHyperLen = (*FE)->nTextRangeEnd - nPos;
+                            if ( nHyperLen )
+                            {
+                                PPTCharPropSet* pBefCPS = nullptr;
+                                if ( nCount )
+                                {
+                                    pBefCPS = new PPTCharPropSet( *pSet );
+                                    pSet->maString = pSet->maString.copy(nCount);
+                                }
+                                sal_uInt32  nIdx = n;
+                                sal_Int32   nHyperLenLeft = nHyperLen;
+
+                                while ( ( aCharPropList.size() > nIdx ) && nHyperLenLeft )
+                                {
+                                    // the textrange hyperlink can take more than 1 paragraph
+                                    // the solution here is to clone the hyperlink...
+
+                                    PPTCharPropSet* pCurrent = aCharPropList[ nIdx ].get();
+                                    sal_Int32       nNextStringLen = pCurrent->maString.getLength();
+
+                                    DBG_ASSERT( (*FE)->xField1, "missing field!" );
+                                    if (!(*FE)->xField1)
+                                        break;
+
+                                    const SvxURLField* pField = static_cast<const SvxURLField*>((*FE)->xField1->GetField());
+
+                                    pCurrent->mbIsHyperlink = true;
+                                    pCurrent->mnHylinkOrigColor = pCurrent->mpImplPPTCharPropSet->mnColor;
+                                    pCurrent->mbHardHylinkOrigColor = ( ( pCurrent->mpImplPPTCharPropSet->mnAttrSet >>PPT_CharAttr_FontColor ) & 1)>0;
+
+                                    // add missing attribute to show underline property
+                                    pCurrent->mpImplPPTCharPropSet->mnAttrSet |= 1 << PPT_CharAttr_Underline;
+                                    pCurrent->mpImplPPTCharPropSet->mnFlags = 1 << PPT_CharAttr_Underline;
+
+                                    if ( pCurrent->mpFieldItem )
+                                    {
+                                        pCurrent->SetColor( PPT_COLSCHEME_A_UND_HYPERLINK );
+                                        if ( dynamic_cast< const SvxURLField* >(pCurrent->mpFieldItem->GetField()) != nullptr)
+                                            break;
+                                        nHyperLenLeft--;
+                                    }
+                                    else if ( nNextStringLen )
+                                    {
+                                        if ( nNextStringLen <= nHyperLenLeft )
+                                        {
+                                            pCurrent->mpFieldItem.reset( new SvxFieldItem( SvxURLField( pField->GetURL(), pCurrent->maString, SvxURLFormat::Repr ), EE_FEATURE_FIELD ) );
+                                            nHyperLenLeft -= nNextStringLen;
+
+                                            if ( nHyperLenLeft )
+                                            {
+                                                // if the next portion is in a higher paragraph,
+                                                // the textrange is to decrease (because of the LineBreak character)
+                                                if ( aCharPropList.size() > ( nIdx + 1 ) )
+                                                {
+                                                    PPTCharPropSet* pNext = aCharPropList[ nIdx + 1 ].get();
+                                                    if ( pNext->mnParagraph > pCurrent->mnParagraph )
+                                                        nHyperLenLeft--;
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            PPTCharPropSet* pNewCPS = new PPTCharPropSet( *pCurrent );
+                                            pNewCPS->maString = pCurrent->maString.copy( nHyperLenLeft,( nNextStringLen - nHyperLenLeft ) );
+                                            aCharPropList.emplace( aCharPropList.begin() + nIdx + 1, pNewCPS );
+                                            OUString aRepresentation = pCurrent->maString.copy( 0, nHyperLenLeft );
+                                            pCurrent->mpFieldItem.reset( new SvxFieldItem( SvxURLField( pField->GetURL(), aRepresentation, SvxURLFormat::Repr ), EE_FEATURE_FIELD ) );
+                                            nHyperLenLeft = 0;
+                                        }
+                                        pCurrent->maString.clear();
+                                        pCurrent->SetColor( PPT_COLSCHEME_A_UND_HYPERLINK );
+                                    }
+                                    nIdx++;
+                                }
+                                (*FE)->xField1.reset();
+
+                                if ( pBefCPS )
+                                {
+                                    pBefCPS->maString = aString.copy( 0, nCount );
+                                    aCharPropList.emplace( aCharPropList.begin() + n, pBefCPS );
+                                    n++;
+                                }
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+            n--;
+        }
+    }
+    mxImplTextObj->maParagraphList.resize( nParagraphs );
+    for (size_t nCurCharPos = 0, nCurPos = 0;
+        nCurPos < aStyleTextPropReader.aParaPropList.size();
+        ++nCurPos)
+    {
+        mxImplTextObj->maParagraphList[ nCurPos ].reset(
+            new PPTParagraphObj(
+                aStyleTextPropReader, nCurPos, nCurCharPos,
+                *rSdrPowerPointImport.m_pPPTStyleSheet,
+                nInstance, aTextRulerInterpreter ) );
+
+        sal_uInt32 nParaAdjust, nFlags = 0;
+        mxImplTextObj->maParagraphList[ nCurPos ]->GetAttrib( PPT_ParaAttr_Adjust, nParaAdjust, GetInstance() );
+
+        switch ( nParaAdjust )
+        {
+            case 0 : nFlags = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT;   break;
+            case 1 : nFlags = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_CENTER; break;
+            case 2 : nFlags = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT;  break;
+            case 3 : nFlags = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_BLOCK;  break;
+        }
+        mxImplTextObj->mnTextFlags |= nFlags;
     }
 }
 
@@ -7186,19 +7186,19 @@ static void GetRowPositions( const tools::Rectangle& rSnapRect, const std::set< 
                         const std::set< sal_Int32 >& rColumns, std::vector< sal_Int32 >& rPositions, sal_Int32 nColumn, sal_Int32 nFlags )
 {
     std::set< sal_Int32 >::const_iterator aRow( rRows.find( rSnapRect.Top() ) );
-    if ( aRow != rRows.end() )
-    {
-        sal_Int32 nRow = std::distance( rRows.begin(), aRow );
-        while( ( aRow != rRows.end() ) && ((*aRow) < rSnapRect.Bottom() ) )
-        {
-            if ( nFlags & LinePositionLeft )
-                rPositions.push_back( ( ( nRow * rColumns.size() ) + nColumn ) | LinePositionLeft );
-            if ( nFlags & LinePositionRight )
-                rPositions.push_back( ( ( nRow * rColumns.size() ) + ( nColumn - 1 ) ) | LinePositionRight );
+    if ( aRow == rRows.end() )
+        return;
 
-            ++nRow;
-            ++aRow;
-        }
+    sal_Int32 nRow = std::distance( rRows.begin(), aRow );
+    while( ( aRow != rRows.end() ) && ((*aRow) < rSnapRect.Bottom() ) )
+    {
+        if ( nFlags & LinePositionLeft )
+            rPositions.push_back( ( ( nRow * rColumns.size() ) + nColumn ) | LinePositionLeft );
+        if ( nFlags & LinePositionRight )
+            rPositions.push_back( ( ( nRow * rColumns.size() ) + ( nColumn - 1 ) ) | LinePositionRight );
+
+        ++nRow;
+        ++aRow;
     }
 }
 
@@ -7207,19 +7207,19 @@ static void GetColumnPositions( const tools::Rectangle& rSnapRect,
                         const std::set< sal_Int32 >& rColumns, std::vector< sal_Int32 >& rPositions, sal_Int32 nRow, sal_Int32 nFlags )
 {
     std::set< sal_Int32 >::const_iterator aColumn( rColumns.find( rSnapRect.Left() ) );
-    if ( aColumn != rColumns.end() )
-    {
-        sal_Int32 nColumn = std::distance( rColumns.begin(), aColumn );
-        while( ( aColumn != rColumns.end() ) && ((*aColumn) < rSnapRect.Right() ) )
-        {
-            if ( nFlags & LinePositionTop )
-                rPositions.push_back( ( ( nRow * rColumns.size() ) + nColumn ) | LinePositionTop );
-            if ( nFlags & LinePositionBottom )
-                rPositions.push_back( ( ( ( nRow - 1 ) * rColumns.size() ) + nColumn ) | LinePositionBottom );
+    if ( aColumn == rColumns.end() )
+        return;
 
-            ++nColumn;
-            ++aColumn;
-        }
+    sal_Int32 nColumn = std::distance( rColumns.begin(), aColumn );
+    while( ( aColumn != rColumns.end() ) && ((*aColumn) < rSnapRect.Right() ) )
+    {
+        if ( nFlags & LinePositionTop )
+            rPositions.push_back( ( ( nRow * rColumns.size() ) + nColumn ) | LinePositionTop );
+        if ( nFlags & LinePositionBottom )
+            rPositions.push_back( ( ( ( nRow - 1 ) * rColumns.size() ) + nColumn ) | LinePositionBottom );
+
+        ++nColumn;
+        ++aColumn;
     }
 }
 

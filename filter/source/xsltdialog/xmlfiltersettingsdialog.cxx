@@ -230,19 +230,19 @@ void XMLFilterSettingsDialog::onEdit()
 {
     // get selected filter info
     filter_info_impl* pOldInfo = reinterpret_cast<filter_info_impl*>(m_xFilterListBox->get_selected_id().toInt64());
-    if (pOldInfo)
-    {
-        // execute XML Filter Dialog
-        XMLFilterTabDialog aDlg(m_xDialog.get(), mxContext, pOldInfo);
-        if (aDlg.run() == RET_OK)
-        {
-            filter_info_impl* pNewInfo = aDlg.getNewFilterInfo();
+    if (!pOldInfo)
+        return;
 
-            if( !(*pOldInfo == *pNewInfo) )
-            {
-                // change filter
-                insertOrEdit( pNewInfo, pOldInfo );
-            }
+    // execute XML Filter Dialog
+    XMLFilterTabDialog aDlg(m_xDialog.get(), mxContext, pOldInfo);
+    if (aDlg.run() == RET_OK)
+    {
+        filter_info_impl* pNewInfo = aDlg.getNewFilterInfo();
+
+        if( !(*pOldInfo == *pNewInfo) )
+        {
+            // change filter
+            insertOrEdit( pNewInfo, pOldInfo );
         }
     }
 }
@@ -853,34 +853,34 @@ void XMLFilterSettingsDialog::onSave()
 
     aDlg.AddFilter( aFilterName, aExtensions );
 
-    if ( aDlg.Execute() == ERRCODE_NONE )
+    if ( aDlg.Execute() != ERRCODE_NONE )
+        return;
+
+    XMLFilterJarHelper aJarHelper( mxContext );
+    aJarHelper.savePackage( aDlg.GetPath(), aFilters );
+
+    INetURLObject aURL( aDlg.GetPath() );
+
+    OUString sPlaceholder( "%s" );
+
+    OUString aMsg;
+    if( nFilters > 0 )
     {
-        XMLFilterJarHelper aJarHelper( mxContext );
-        aJarHelper.savePackage( aDlg.GetPath(), aFilters );
-
-        INetURLObject aURL( aDlg.GetPath() );
-
-        OUString sPlaceholder( "%s" );
-
-        OUString aMsg;
-        if( nFilters > 0 )
-        {
-            aMsg = XsltResId(STR_FILTERS_HAVE_BEEN_SAVED);
-            aMsg = aMsg.replaceFirst( sPlaceholder, OUString::number( nFilters ) );
-            aMsg = aMsg.replaceFirst(sPlaceholder, aURL.GetLastName());
-        }
-        else
-        {
-            aMsg = XsltResId(STR_FILTER_HAS_BEEN_SAVED);
-            aMsg = aMsg.replaceFirst( sPlaceholder, (*aFilters.begin())->maFilterName );
-            aMsg = aMsg.replaceFirst(sPlaceholder, aURL.GetLastName());
-        }
-
-        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
-                                                      VclMessageType::Info, VclButtonsType::Ok,
-                                                      aMsg));
-        xInfoBox->run();
+        aMsg = XsltResId(STR_FILTERS_HAVE_BEEN_SAVED);
+        aMsg = aMsg.replaceFirst( sPlaceholder, OUString::number( nFilters ) );
+        aMsg = aMsg.replaceFirst(sPlaceholder, aURL.GetLastName());
     }
+    else
+    {
+        aMsg = XsltResId(STR_FILTER_HAS_BEEN_SAVED);
+        aMsg = aMsg.replaceFirst( sPlaceholder, (*aFilters.begin())->maFilterName );
+        aMsg = aMsg.replaceFirst(sPlaceholder, aURL.GetLastName());
+    }
+
+    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
+                                                  VclMessageType::Info, VclButtonsType::Ok,
+                                                  aMsg));
+    xInfoBox->run();
 }
 
 void XMLFilterSettingsDialog::onOpen()
@@ -898,53 +898,53 @@ void XMLFilterSettingsDialog::onOpen()
 
     aDlg.AddFilter( aFilterName, aExtensions );
 
-    if ( aDlg.Execute() == ERRCODE_NONE )
+    if ( aDlg.Execute() != ERRCODE_NONE )
+        return;
+
+    OUString aURL( aDlg.GetPath() );
+
+    XMLFilterJarHelper aJarHelper( mxContext );
+    aJarHelper.openPackage( aURL, aFilters );
+
+    int nFilters = 0;
+    for (auto& filter : aFilters)
     {
-        OUString aURL( aDlg.GetPath() );
-
-        XMLFilterJarHelper aJarHelper( mxContext );
-        aJarHelper.openPackage( aURL, aFilters );
-
-        int nFilters = 0;
-        for (auto& filter : aFilters)
+        if( insertOrEdit(filter.get()) )
         {
-            if( insertOrEdit(filter.get()) )
-            {
-                aFilterName = filter->maFilterName;
-                nFilters++;
-            }
-
-            filter.reset();
+            aFilterName = filter->maFilterName;
+            nFilters++;
         }
 
-        disposeFilterList();
-        initFilterList();
-
-        OUString sPlaceholder( "%s" );
-        OUString aMsg;
-        if( nFilters == 0 )
-        {
-            INetURLObject aURLObj( aURL );
-            aMsg = XsltResId(STR_NO_FILTERS_FOUND);
-            aMsg = aMsg.replaceFirst(sPlaceholder, aURLObj.GetLastName());
-        }
-        else if( nFilters == 1 )
-        {
-            aMsg = XsltResId(STR_FILTER_INSTALLED);
-            aMsg = aMsg.replaceFirst( sPlaceholder, aFilterName );
-
-        }
-        else
-        {
-            aMsg = XsltResId(STR_FILTERS_INSTALLED);
-            aMsg = aMsg.replaceFirst( sPlaceholder, OUString::number( nFilters ) );
-        }
-
-        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
-                                                      VclMessageType::Info, VclButtonsType::Ok,
-                                                      aMsg));
-        xInfoBox->run();
+        filter.reset();
     }
+
+    disposeFilterList();
+    initFilterList();
+
+    OUString sPlaceholder( "%s" );
+    OUString aMsg;
+    if( nFilters == 0 )
+    {
+        INetURLObject aURLObj( aURL );
+        aMsg = XsltResId(STR_NO_FILTERS_FOUND);
+        aMsg = aMsg.replaceFirst(sPlaceholder, aURLObj.GetLastName());
+    }
+    else if( nFilters == 1 )
+    {
+        aMsg = XsltResId(STR_FILTER_INSTALLED);
+        aMsg = aMsg.replaceFirst( sPlaceholder, aFilterName );
+
+    }
+    else
+    {
+        aMsg = XsltResId(STR_FILTERS_INSTALLED);
+        aMsg = aMsg.replaceFirst( sPlaceholder, OUString::number( nFilters ) );
+    }
+
+    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
+                                                  VclMessageType::Info, VclButtonsType::Ok,
+                                                  aMsg));
+    xInfoBox->run();
 }
 
 void XMLFilterSettingsDialog::disposeFilterList()

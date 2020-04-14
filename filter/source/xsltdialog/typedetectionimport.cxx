@@ -263,38 +263,38 @@ void SAL_CALL TypeDetectionImporter::startElement( const OUString& aName, const 
 }
 void SAL_CALL TypeDetectionImporter::endElement( const OUString& /* aName */ )
 {
-    if( !maStack.empty()  )
+    if( maStack.empty()  )
+        return;
+
+    ImportState eCurrentState = maStack.top();
+    switch( eCurrentState )
     {
-        ImportState eCurrentState = maStack.top();
-        switch( eCurrentState )
+    case e_Filter:
+    case e_Type:
         {
-        case e_Filter:
-        case e_Type:
+            std::unique_ptr<Node> pNode(new Node);
+            pNode->maName = maNodeName;
+            pNode->maPropertyMap = maPropertyMap;
+            maPropertyMap.clear();
+
+            if( eCurrentState == e_Filter )
             {
-                std::unique_ptr<Node> pNode(new Node);
-                pNode->maName = maNodeName;
-                pNode->maPropertyMap = maPropertyMap;
-                maPropertyMap.clear();
-
-                if( eCurrentState == e_Filter )
-                {
-                    maFilterNodes.push_back( std::move(pNode) );
-                }
-                else
-                {
-                    maTypeNodes.push_back( std::move(pNode) );
-                }
+                maFilterNodes.push_back( std::move(pNode) );
             }
-            break;
-
-        case e_Property:
-            maPropertyMap[ maPropertyName ] = maValue;
-            break;
-        default: break;
+            else
+            {
+                maTypeNodes.push_back( std::move(pNode) );
+            }
         }
+        break;
 
-        maStack.pop();
+    case e_Property:
+        maPropertyMap[ maPropertyName ] = maValue;
+        break;
+    default: break;
     }
+
+    maStack.pop();
 }
 void SAL_CALL TypeDetectionImporter::characters( const OUString& aChars )
 {

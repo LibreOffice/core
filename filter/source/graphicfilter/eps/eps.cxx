@@ -1489,23 +1489,23 @@ void PSWriter::ImplRectFill( const tools::Rectangle & rRect )
 void PSWriter::ImplAddPath( const tools::Polygon & rPolygon )
 {
     sal_uInt16 nPointCount = rPolygon.GetSize();
-    if ( nPointCount > 1 )
+    if ( nPointCount <= 1 )
+        return;
+
+    sal_uInt16 i = 1;
+    ImplMoveTo( rPolygon.GetPoint( 0 ) );
+    while ( i < nPointCount )
     {
-        sal_uInt16 i = 1;
-        ImplMoveTo( rPolygon.GetPoint( 0 ) );
-        while ( i < nPointCount )
+        if ( ( rPolygon.GetFlags( i ) == PolyFlags::Control )
+                && ( ( i + 2 ) < nPointCount )
+                    && ( rPolygon.GetFlags( i + 1 ) == PolyFlags::Control )
+                        && ( rPolygon.GetFlags( i + 2 ) != PolyFlags::Control ) )
         {
-            if ( ( rPolygon.GetFlags( i ) == PolyFlags::Control )
-                    && ( ( i + 2 ) < nPointCount )
-                        && ( rPolygon.GetFlags( i + 1 ) == PolyFlags::Control )
-                            && ( rPolygon.GetFlags( i + 2 ) != PolyFlags::Control ) )
-            {
-                ImplCurveTo( rPolygon[ i ], rPolygon[ i + 1 ], rPolygon[ i + 2 ], PS_WRAP );
-                i += 3;
-            }
-            else
-                ImplLineTo( rPolygon.GetPoint( i++ ), PS_SPACE | PS_WRAP );
+            ImplCurveTo( rPolygon[ i ], rPolygon[ i + 1 ], rPolygon[ i + 2 ], PS_WRAP );
+            i += 3;
         }
+        else
+            ImplLineTo( rPolygon.GetPoint( i++ ), PS_SPACE | PS_WRAP );
     }
 }
 
@@ -1537,107 +1537,107 @@ void PSWriter::ImplWriteGradient( const tools::PolyPolygon& rPolyPoly, const Gra
 void PSWriter::ImplPolyPoly( const tools::PolyPolygon & rPolyPoly, bool bTextOutline )
 {
     sal_uInt16 i, nPolyCount = rPolyPoly.Count();
-    if ( nPolyCount )
+    if ( !nPolyCount )
+        return;
+
+    if ( bFillColor || bTextOutline )
     {
-        if ( bFillColor || bTextOutline )
+        if ( bTextOutline )
+            ImplWriteTextColor( PS_SPACE );
+        else
+            ImplWriteFillColor( PS_SPACE );
+        for ( i = 0; i < nPolyCount; )
         {
-            if ( bTextOutline )
-                ImplWriteTextColor( PS_SPACE );
-            else
-                ImplWriteFillColor( PS_SPACE );
-            for ( i = 0; i < nPolyCount; )
+            ImplAddPath( rPolyPoly.GetObject( i ) );
+            if ( ++i < nPolyCount )
             {
-                ImplAddPath( rPolyPoly.GetObject( i ) );
-                if ( ++i < nPolyCount )
-                {
-                    mpPS->WriteCharPtr( "p" );
-                    mnCursorPos += 2;
-                    ImplExecMode( PS_RET );
-                }
+                mpPS->WriteCharPtr( "p" );
+                mnCursorPos += 2;
+                ImplExecMode( PS_RET );
             }
-            mpPS->WriteCharPtr( "p ef" );
-            mnCursorPos += 4;
-            ImplExecMode( PS_RET );
         }
-        if ( bLineColor )
-        {
-            ImplWriteLineColor( PS_SPACE );
-            for ( i = 0; i < nPolyCount; i++ )
-                ImplAddPath( rPolyPoly.GetObject( i ) );
-            ImplClosePathDraw();
-        }
+        mpPS->WriteCharPtr( "p ef" );
+        mnCursorPos += 4;
+        ImplExecMode( PS_RET );
+    }
+    if ( bLineColor )
+    {
+        ImplWriteLineColor( PS_SPACE );
+        for ( i = 0; i < nPolyCount; i++ )
+            ImplAddPath( rPolyPoly.GetObject( i ) );
+        ImplClosePathDraw();
     }
 }
 
 void PSWriter::ImplPolyLine( const tools::Polygon & rPoly )
 {
-    if ( bLineColor )
-    {
-        ImplWriteLineColor( PS_SPACE );
-        sal_uInt16 i, nPointCount = rPoly.GetSize();
-        if ( nPointCount )
-        {
-            if ( nPointCount > 1 )
-            {
-                ImplMoveTo( rPoly.GetPoint( 0 ) );
-                i = 1;
-                while ( i < nPointCount )
-                {
-                    if ( ( rPoly.GetFlags( i ) == PolyFlags::Control )
-                            && ( ( i + 2 ) < nPointCount )
-                                && ( rPoly.GetFlags( i + 1 ) == PolyFlags::Control )
-                                    && ( rPoly.GetFlags( i + 2 ) != PolyFlags::Control ) )
-                    {
-                        ImplCurveTo( rPoly[ i ], rPoly[ i + 1 ], rPoly[ i + 2 ], PS_WRAP );
-                        i += 3;
-                    }
-                    else
-                        ImplLineTo( rPoly.GetPoint( i++ ), PS_SPACE | PS_WRAP );
-                }
-            }
+    if ( !bLineColor )
+        return;
 
-            // #104645# explicitly close path if polygon is closed
-            if( rPoly[ 0 ] == rPoly[ nPointCount-1 ] )
-                ImplClosePathDraw();
+    ImplWriteLineColor( PS_SPACE );
+    sal_uInt16 i, nPointCount = rPoly.GetSize();
+    if ( !nPointCount )
+        return;
+
+    if ( nPointCount > 1 )
+    {
+        ImplMoveTo( rPoly.GetPoint( 0 ) );
+        i = 1;
+        while ( i < nPointCount )
+        {
+            if ( ( rPoly.GetFlags( i ) == PolyFlags::Control )
+                    && ( ( i + 2 ) < nPointCount )
+                        && ( rPoly.GetFlags( i + 1 ) == PolyFlags::Control )
+                            && ( rPoly.GetFlags( i + 2 ) != PolyFlags::Control ) )
+            {
+                ImplCurveTo( rPoly[ i ], rPoly[ i + 1 ], rPoly[ i + 2 ], PS_WRAP );
+                i += 3;
+            }
             else
-                ImplPathDraw();
+                ImplLineTo( rPoly.GetPoint( i++ ), PS_SPACE | PS_WRAP );
         }
     }
+
+    // #104645# explicitly close path if polygon is closed
+    if( rPoly[ 0 ] == rPoly[ nPointCount-1 ] )
+        ImplClosePathDraw();
+    else
+        ImplPathDraw();
 }
 
 void PSWriter::ImplSetClipRegion( vcl::Region const & rClipRegion )
 {
-    if ( !rClipRegion.IsEmpty() )
+    if ( rClipRegion.IsEmpty() )
+        return;
+
+    RectangleVector aRectangles;
+    rClipRegion.GetRegionRectangles(aRectangles);
+
+    for (auto const& rectangle : aRectangles)
     {
-        RectangleVector aRectangles;
-        rClipRegion.GetRegionRectangles(aRectangles);
+        double nX1(rectangle.Left());
+        double nY1(rectangle.Top());
+        double nX2(rectangle.Right());
+        double nY2(rectangle.Bottom());
 
-        for (auto const& rectangle : aRectangles)
-        {
-            double nX1(rectangle.Left());
-            double nY1(rectangle.Top());
-            double nX2(rectangle.Right());
-            double nY2(rectangle.Bottom());
-
-            ImplWriteDouble( nX1 );
-            ImplWriteDouble( nY1 );
-            ImplWriteByte( 'm' );
-            ImplWriteDouble( nX2 );
-            ImplWriteDouble( nY1 );
-            ImplWriteByte( 'l' );
-            ImplWriteDouble( nX2 );
-            ImplWriteDouble( nY2 );
-            ImplWriteByte( 'l' );
-            ImplWriteDouble( nX1 );
-            ImplWriteDouble( nY2 );
-            ImplWriteByte( 'l' );
-            ImplWriteDouble( nX1 );
-            ImplWriteDouble( nY1 );
-            ImplWriteByte( 'l', PS_SPACE | PS_WRAP );
-        }
-
-        ImplWriteLine( "eoclip newpath" );
+        ImplWriteDouble( nX1 );
+        ImplWriteDouble( nY1 );
+        ImplWriteByte( 'm' );
+        ImplWriteDouble( nX2 );
+        ImplWriteDouble( nY1 );
+        ImplWriteByte( 'l' );
+        ImplWriteDouble( nX2 );
+        ImplWriteDouble( nY2 );
+        ImplWriteByte( 'l' );
+        ImplWriteDouble( nX1 );
+        ImplWriteDouble( nY2 );
+        ImplWriteByte( 'l' );
+        ImplWriteDouble( nX1 );
+        ImplWriteDouble( nY1 );
+        ImplWriteByte( 'l', PS_SPACE | PS_WRAP );
     }
+
+    ImplWriteLine( "eoclip newpath" );
 }
 
 // possible gfx formats:
@@ -1969,30 +1969,30 @@ void PSWriter::ImplWriteCharacter( char nChar )
 void PSWriter::ImplWriteString( const OString& rString, VirtualDevice const & rVDev, const long* pDXArry, bool bStretch )
 {
     sal_Int32 nLen = rString.getLength();
-    if ( nLen )
-    {
-        if ( pDXArry )
-        {
-            double nx = 0;
+    if ( !nLen )
+        return;
 
-            for (sal_Int32 i = 0; i < nLen; ++i)
-            {
-                if ( i > 0 )
-                    nx = pDXArry[ i - 1 ];
-                ImplWriteDouble( bStretch ? nx : rVDev.GetTextWidth( OUString(rString[i]) ) );
-                ImplWriteDouble( nx );
-                ImplWriteLine( "(", PS_NONE );
-                ImplWriteCharacter( rString[i] );
-                ImplWriteLine( ") bs" );
-            }
-        }
-        else
+    if ( pDXArry )
+    {
+        double nx = 0;
+
+        for (sal_Int32 i = 0; i < nLen; ++i)
         {
-            ImplWriteByte( '(', PS_NONE );
-            for (sal_Int32 i = 0; i < nLen; ++i)
-                ImplWriteCharacter( rString[i] );
-            ImplWriteLine( ") sw" );
+            if ( i > 0 )
+                nx = pDXArry[ i - 1 ];
+            ImplWriteDouble( bStretch ? nx : rVDev.GetTextWidth( OUString(rString[i]) ) );
+            ImplWriteDouble( nx );
+            ImplWriteLine( "(", PS_NONE );
+            ImplWriteCharacter( rString[i] );
+            ImplWriteLine( ") bs" );
         }
+    }
+    else
+    {
+        ImplWriteByte( '(', PS_NONE );
+        for (sal_Int32 i = 0; i < nLen; ++i)
+            ImplWriteCharacter( rString[i] );
+        ImplWriteLine( ") sw" );
     }
 }
 

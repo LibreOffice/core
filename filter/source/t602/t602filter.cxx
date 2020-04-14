@@ -568,26 +568,27 @@ void T602ImportFilter::par602(bool endofpage)
         pst.waspar = true;
     }
 
-    if(!pst.comment) {
-        switch(format602.lh) {
-            case 3: pst.pars += 4; break;
-            case 4: pst.pars += 3; break;
-            case 6: pst.pars += 2; break;
-            default: pst.pars +=2; break;
-        }
-        endp = format602.pl-format602.mt-format602.mb;
-        if(((pst.pars+1)/2) >= endp || endofpage) {
-            pst.pars = 0;
-            if(!ini.reformatpars) {
-                End_("text:span");
-                End_("text:p");
-                if (mpAttrList)
-                    mpAttrList->AddAttribute("text:style-name", "P2");
-                Start_("text:p");
-                Start_("text:span");
-                wrtfnt();
-            }
-        }
+    if(pst.comment)
+        return;
+
+    switch(format602.lh) {
+        case 3: pst.pars += 4; break;
+        case 4: pst.pars += 3; break;
+        case 6: pst.pars += 2; break;
+        default: pst.pars +=2; break;
+    }
+    endp = format602.pl-format602.mt-format602.mb;
+    if(!(((pst.pars+1)/2) >= endp || endofpage))        return;
+
+    pst.pars = 0;
+    if(!ini.reformatpars) {
+        End_("text:span");
+        End_("text:p");
+        if (mpAttrList)
+            mpAttrList->AddAttribute("text:style-name", "P2");
+        Start_("text:p");
+        Start_("text:span");
+        wrtfnt();
     }
 }
 
