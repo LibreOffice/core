@@ -269,6 +269,7 @@ private:
     // in Draw/Impress in an OverlayObject which avoids evtl. expensive full
     // repaints of the EditView(s)
     const EditViewCallbacks* mpEditViewCallbacks;
+    bool mbBroadcastLOKViewCursor;
 
     const EditViewCallbacks* getEditViewCallbacks() const
     {
@@ -285,6 +286,11 @@ private:
     css::uno::Reference<css::datatransfer::clipboard::XClipboard> GetClipboard() const;
     css::uno::Reference<css::datatransfer::clipboard::XClipboard> GetSelection() const;
 
+    void SetBroadcastLOKViewCursor(bool bSet)
+    {
+        mbBroadcastLOKViewCursor = bSet;
+    }
+
 protected:
 
     // DragAndDropClient
@@ -299,6 +305,8 @@ protected:
     void HideDDCursor();
 
     void ImplDrawHighlightRect( OutputDevice* _pTarget, const Point& rDocPosTopLeft, const Point& rDocPosBottomRight, tools::PolyPolygon* pPolyPoly );
+    tools::Rectangle ImplGetEditCursor(EditPaM& aPaM, GetCursorFlags nShowCursorFlags,
+            sal_Int32& nTextPortionStart, const ParaPortion* pParaPortion) const;
 
 public:
                     ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindow );
@@ -376,6 +384,8 @@ public:
     EEAnchorMode    GetAnchorMode() const           { return eAnchorMode; }
     void            CalcAnchorPoint();
     void            RecalcOutputArea();
+
+    tools::Rectangle GetEditCursor() const;
 
     void            ShowCursor( bool bGotoCursor, bool bForceVisCursor );
     Pair            Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck = ScrollRangeCheck::NoNegative );
