@@ -392,7 +392,7 @@ IMPL_STATIC_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBas
     basicide_handle_basic_error pSymbol = reinterpret_cast<basicide_handle_basic_error>(sfx2::getBasctlFunction("basicide_handle_basic_error"));
 
     // call basicide_handle_basic_error in basctl
-    bool bRet = pSymbol && pSymbol( pStarBasic );
+    bool bRet = pSymbol( pStarBasic );
 
 #else
 
@@ -476,9 +476,6 @@ void SfxApplication::MacroOrganizer(weld::Window* pParent, sal_Int16 nTabId)
 
 #ifndef DISABLE_DYNLOADING
     basicide_macro_organizer pSymbol = reinterpret_cast<basicide_macro_organizer>(sfx2::getBasctlFunction("basicide_macro_organizer"));
-
-    if (!pSymbol)
-        return;
 
     // call basicide_macro_organizer in basctl
     pSymbol(pParent, nTabId);

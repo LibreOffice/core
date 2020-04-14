@@ -19,11 +19,12 @@
 
 #include <sal/config.h>
 
+#include <cassert>
+
 #include <config_features.h>
 #include <config_options.h>
 #include <osl/module.h>
 #include <osl/module.hxx>
-#include <sal/log.hxx>
 #include <tools/svlibrary.h>
 
 #include "getbasctlfunction.hxx"
@@ -37,22 +38,20 @@ oslGenericFunction sfx2::getBasctlFunction(char const* name)
     osl::Module aMod;
 
     // load basctl module
-    if (!aMod.loadRelative(
-            &thisModule,
+    auto const ok = aMod.loadRelative(
+        &thisModule,
 #if ENABLE_MERGELIBS
-            SVLIBRARY("merged")
+        SVLIBRARY("merged")
 #else
-            SVLIBRARY("basctl")
+        SVLIBRARY("basctl")
 #endif
-        ))
-    {
-        SAL_WARN("sfx.appl", "cannot load basctl");
-        return nullptr;
-    }
+        );
+    assert(ok);
+    (void) ok;
 
     // get symbol
     auto pSymbol = aMod.getFunctionSymbol(name);
-    SAL_WARN_IF(!pSymbol, "sfx.appl", "cannot get basctl function " << name);
+    assert(pSymbol);
     aMod.release();
 
     return pSymbol;
