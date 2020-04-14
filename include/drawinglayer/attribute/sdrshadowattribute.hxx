@@ -52,6 +52,7 @@ namespace drawinglayer
             /// constructors/assignmentoperator/destructor
             SdrShadowAttribute(
                 const basegfx::B2DVector& rOffset,
+                const basegfx::B2DVector& rSize,
                 double fTransparence,
                 const basegfx::BColor& rColor);
             SdrShadowAttribute();
@@ -69,6 +70,7 @@ namespace drawinglayer
 
             // data access
             const basegfx::B2DVector& getOffset() const;
+            const basegfx::B2DVector& getSize() const;
             double getTransparence() const;
             const basegfx::BColor& getColor() const;
         };
