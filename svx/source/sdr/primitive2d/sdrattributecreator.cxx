@@ -384,9 +384,14 @@ namespace drawinglayer::primitive2d
                     const basegfx::B2DVector aOffset(
                         static_cast<double>(rSet.Get(SDRATTR_SHADOWXDIST).GetValue()),
                         static_cast<double>(rSet.Get(SDRATTR_SHADOWYDIST).GetValue()));
+
+                    const basegfx::B2DVector aSize(
+                        static_cast<double>(rSet.Get(SDRATTR_SHADOWSIZEX).GetValue()),
+                        static_cast<double>(rSet.Get(SDRATTR_SHADOWSIZEY).GetValue()));
+
                     const Color aColor(rSet.Get(SDRATTR_SHADOWCOLOR).GetColorValue());
 
-                    return attribute::SdrShadowAttribute(aOffset, static_cast<double>(nTransparence) * 0.01, aColor.getBColor());
+                    return attribute::SdrShadowAttribute(aOffset, aSize, static_cast<double>(nTransparence) * 0.01, aColor.getBColor());
                 }
             }
 
