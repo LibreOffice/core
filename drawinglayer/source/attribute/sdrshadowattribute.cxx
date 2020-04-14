@@ -30,14 +30,17 @@ namespace drawinglayer::attribute
         public:
             // shadow definitions
             basegfx::B2DVector                  maOffset;                   // shadow offset 1/100th mm
+            basegfx::B2DVector                  maSize;
             double                              mfTransparence;             // [0.0 .. 1.0], 0.0==no transp.
             basegfx::BColor                     maColor;                    // color of shadow
 
             ImpSdrShadowAttribute(
                 const basegfx::B2DVector& rOffset,
+                const basegfx::B2DVector& rSize,
                 double fTransparence,
                 const basegfx::BColor& rColor)
             :   maOffset(rOffset),
+                maSize(rSize),
                 mfTransparence(fTransparence),
                 maColor(rColor)
             {
@@ -45,6 +48,7 @@ namespace drawinglayer::attribute
 
             ImpSdrShadowAttribute()
             :   maOffset(basegfx::B2DVector()),
+                maSize(basegfx::B2DVector()),
                 mfTransparence(0.0),
                 maColor(basegfx::BColor())
             {
@@ -52,12 +56,14 @@ namespace drawinglayer::attribute
 
             // data read access
             const basegfx::B2DVector& getOffset() const { return maOffset; }
+            const basegfx::B2DVector& getSize() const { return maSize; }
             double getTransparence() const { return mfTransparence; }
             const basegfx::BColor& getColor() const { return maColor; }
 
             bool operator==(const ImpSdrShadowAttribute& rCandidate) const
             {
                 return (getOffset() == rCandidate.getOffset()
+                    && getSize() == rCandidate.getSize()
                     && getTransparence() == rCandidate.getTransparence()
                     && getColor() == rCandidate.getColor());
             }
@@ -72,10 +78,11 @@ namespace drawinglayer::attribute
 
         SdrShadowAttribute::SdrShadowAttribute(
             const basegfx::B2DVector& rOffset,
+            const basegfx::B2DVector& rSize,
             double fTransparence,
             const basegfx::BColor& rColor)
         :   mpSdrShadowAttribute(ImpSdrShadowAttribute(
-                rOffset, fTransparence, rColor))
+                rOffset, rSize, fTransparence, rColor))
         {
         }
 
@@ -111,6 +118,11 @@ namespace drawinglayer::attribute
         const basegfx::B2DVector& SdrShadowAttribute::getOffset() const
         {
             return mpSdrShadowAttribute->getOffset();
+        }
+
+        const basegfx::B2DVector& SdrShadowAttribute::getSize() const
+        {
+            return mpSdrShadowAttribute->getSize();
         }
 
         double SdrShadowAttribute::getTransparence() const

@@ -489,9 +489,10 @@ namespace drawinglayer::primitive2d
                 Primitive2DContainer aRetval(2);
                 basegfx::B2DHomMatrix aShadowOffset;
 
-                // prepare shadow offset
-                aShadowOffset.set(0, 2, rShadow.getOffset().getX());
-                aShadowOffset.set(1, 2, rShadow.getOffset().getY());
+                aShadowOffset = basegfx::utils::createScaleTranslateB2DHomMatrix(rShadow.getSize().getX() * 0.00001,
+                                                                                 rShadow.getSize().getY() * 0.00001,
+                                                                                 rShadow.getOffset().getX(),
+                                                                                 rShadow.getOffset().getY());
 
                 // create shadow primitive and add content
                 aRetval[0] = Primitive2DReference(
