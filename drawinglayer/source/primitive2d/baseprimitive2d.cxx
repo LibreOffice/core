@@ -27,6 +27,7 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <comphelper/sequence.hxx>
+#include <sal/log.hxx>
 
 using namespace css;
 

@@ -493,6 +493,10 @@ namespace drawinglayer::primitive2d
                 aShadowOffset.set(0, 2, rShadow.getOffset().getX());
                 aShadowOffset.set(1, 2, rShadow.getOffset().getY());
 
+                // prepare shadow scale
+                aShadowOffset.set(0, 0, rShadow.getSize().getX() * 0.00001);
+                aShadowOffset.set(1, 1, rShadow.getSize().getY() * 0.00001);
+
                 // create shadow primitive and add content
                 aRetval[0] = Primitive2DReference(
                     new ShadowPrimitive2D(
