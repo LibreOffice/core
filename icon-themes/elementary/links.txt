@@ -1146,6 +1146,10 @@ cmd/sc_outlineright.png cmd/sc_nextrecord.png
 cmd/sc_outlineup.png cmd/sc_moveup.png
 
 # Line
+cmd/32/formatline.png cmd/32/linestyle.png
+cmd/lc_formatline.png cmd/lc_linestyle.png
+cmd/sc_formatline.png cmd/sc_linestyle.png
+
 cmd/32/xlinestyle.png cmd/32/linestyle.png
 cmd/lc_xlinestyle.png cmd/lc_linestyle.png
 cmd/sc_xlinestyle.png cmd/sc_linestyle.png
