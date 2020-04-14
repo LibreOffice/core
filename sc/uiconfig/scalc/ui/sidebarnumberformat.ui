@@ -67,27 +67,27 @@
               </packing>
             </child>
             <child>
-              <object class="GtkComboBoxText" id="category">
+              <object class="GtkComboBoxText" id="numberformatcombobox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes" context="sidebarnumberformat|category|tooltip_text">Select a category of contents.</property>
+                <property name="tooltip_text" translatable="yes" context="sidebarnumberformat|numberformatcombobox|tooltip_text">Select a category of contents.</property>
                 <property name="valign">center</property>
                 <property name="hexpand">True</property>
                 <items>
-                  <item translatable="yes" context="sidebarnumberformat|category">General</item>
-                  <item translatable="yes" context="sidebarnumberformat|category">Number</item>
-                  <item translatable="yes" context="sidebarnumberformat|category">Percent</item>
-                  <item translatable="yes" context="sidebarnumberformat|category">Currency</item>
-                  <item translatable="yes" context="sidebarnumberformat|category">Date </item>
-                  <item translatable="yes" context="sidebarnumberformat|category">Time</item>
-                  <item translatable="yes" context="sidebarnumberformat|category">Scientific</item>
-                  <item translatable="yes" context="sidebarnumberformat|category">Fraction</item>
-                  <item translatable="yes" context="sidebarnumberformat|category">Boolean Value</item>
-                  <item translatable="yes" context="sidebarnumberformat|category">Text</item>
+                  <item translatable="yes" context="sidebarnumberformat|numberformatcombobox">General</item>
+                  <item translatable="yes" context="sidebarnumberformat|numberformatcombobox">Number</item>
+                  <item translatable="yes" context="sidebarnumberformat|numberformatcombobox">Percent</item>
+                  <item translatable="yes" context="sidebarnumberformat|numberformatcombobox">Currency</item>
+                  <item translatable="yes" context="sidebarnumberformat|numberformatcombobox">Date </item>
+                  <item translatable="yes" context="sidebarnumberformat|numberformatcombobox">Time</item>
+                  <item translatable="yes" context="sidebarnumberformat|numberformatcombobox">Scientific</item>
+                  <item translatable="yes" context="sidebarnumberformat|numberformatcombobox">Fraction</item>
+                  <item translatable="yes" context="sidebarnumberformat|numberformatcombobox">Boolean Value</item>
+                  <item translatable="yes" context="sidebarnumberformat|numberformatcombobox">Text</item>
                 </items>
                 <child internal-child="accessible">
-                  <object class="AtkObject" id="category-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes" context="sidebarnumberformat|category-atkobject">Category</property>
+                  <object class="AtkObject" id="numberformatcombobox-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="sidebarnumberformat|numberformatcombobox-atkobject">Category</property>
                   </object>
                 </child>
               </object>
