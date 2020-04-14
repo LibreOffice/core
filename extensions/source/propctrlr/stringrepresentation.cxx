@@ -246,31 +246,31 @@ struct CompareConstants {
 void SAL_CALL StringRepresentation::initialize(const uno::Sequence< uno::Any > & aArguments)
 {
     sal_Int32 nLength = aArguments.getLength();
-    if ( nLength )
-    {
-        const uno::Any* pIter = aArguments.getConstArray();
-        m_xTypeConverter.set(*pIter++,uno::UNO_QUERY);
-        if ( nLength == 3 )
-        {
-            OUString sConstantName;
-            *pIter++ >>= sConstantName;
-            *pIter >>= m_aValues;
+    if ( !nLength )
+        return;
 
-            if ( m_xContext.is() )
-            {
-                uno::Reference< container::XHierarchicalNameAccess > xTypeDescProv(
-                    m_xContext->getValueByName("/singletons/com.sun.star.reflection.theTypeDescriptionManager"),
-                    uno::UNO_QUERY_THROW );
+    const uno::Any* pIter = aArguments.getConstArray();
+    m_xTypeConverter.set(*pIter++,uno::UNO_QUERY);
+    if ( nLength != 3 )
+        return;
 
-                m_xTypeDescription.set( xTypeDescProv->getByHierarchicalName( sConstantName ), uno::UNO_QUERY_THROW );
-                uno::Sequence<
-                    uno::Reference< reflection::XConstantTypeDescription > >
-                    cs(m_xTypeDescription->getConstants());
-                std::sort(cs.begin(), cs.end(), CompareConstants());
-                m_aConstants = cs;
-            }
-        }
-    }
+    OUString sConstantName;
+    *pIter++ >>= sConstantName;
+    *pIter >>= m_aValues;
+
+    if ( !m_xContext.is() )
+        return;
+
+    uno::Reference< container::XHierarchicalNameAccess > xTypeDescProv(
+        m_xContext->getValueByName("/singletons/com.sun.star.reflection.theTypeDescriptionManager"),
+        uno::UNO_QUERY_THROW );
+
+    m_xTypeDescription.set( xTypeDescProv->getByHierarchicalName( sConstantName ), uno::UNO_QUERY_THROW );
+    uno::Sequence<
+        uno::Reference< reflection::XConstantTypeDescription > >
+        cs(m_xTypeDescription->getConstants());
+    std::sort(cs.begin(), cs.end(), CompareConstants());
+    m_aConstants = cs;
 }
 
 OUString StringRepresentation::convertSimpleToString( const uno::Any& _rValue )

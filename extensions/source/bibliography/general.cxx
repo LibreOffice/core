@@ -584,22 +584,22 @@ void BibGeneralPage::InitFixedTexts()
 void BibGeneralPage::focusGained(const awt::FocusEvent& rEvent)
 {
     Reference<awt::XWindow> xCtrWin(rEvent.Source, UNO_QUERY );
-    if(xCtrWin.is())
-    {
-        ::Size aOutSize = pScrolledWindow->getVisibleChildSize();
-        awt::Rectangle aRect = xCtrWin->getPosSize();
-        Point aOffset(pGrid->GetPosPixel());
-        long nX = aRect.X + aOffset.X();
-        if (nX < 0 || nX > aOutSize.Width())
-        {
-            pScrolledWindow->getHorzScrollBar().DoScroll(aRect.X);
-        }
+    if(!xCtrWin.is())
+        return;
 
-        long nY = aRect.Y + aOffset.Y();
-        if (nY < 0 || nY > aOutSize.Height())
-        {
-            pScrolledWindow->getVertScrollBar().DoScroll(aRect.Y);
-        }
+    ::Size aOutSize = pScrolledWindow->getVisibleChildSize();
+    awt::Rectangle aRect = xCtrWin->getPosSize();
+    Point aOffset(pGrid->GetPosPixel());
+    long nX = aRect.X + aOffset.X();
+    if (nX < 0 || nX > aOutSize.Width())
+    {
+        pScrolledWindow->getHorzScrollBar().DoScroll(aRect.X);
+    }
+
+    long nY = aRect.Y + aOffset.Y();
+    if (nY < 0 || nY > aOutSize.Height())
+    {
+        pScrolledWindow->getVertScrollBar().DoScroll(aRect.Y);
     }
 }
 

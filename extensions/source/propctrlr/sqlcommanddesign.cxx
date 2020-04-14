@@ -113,29 +113,29 @@ namespace pcr
     {
         OSL_ENSURE( m_xDesigner.is() && ( Event.Source == m_xDesigner ), "SQLCommandDesigner::propertyChange: where did this come from?" );
 
-        if ( m_xDesigner.is() && ( Event.Source == m_xDesigner ) )
+        if ( !(m_xDesigner.is() && ( Event.Source == m_xDesigner )) )
+            return;
+
+        try
         {
-            try
+            if ( PROPERTY_ACTIVECOMMAND == Event.PropertyName )
             {
-                if ( PROPERTY_ACTIVECOMMAND == Event.PropertyName )
-                {
-                    OUString sCommand;
-                    OSL_VERIFY( Event.NewValue >>= sCommand );
-                    m_xObjectAdapter->setSQLCommand( sCommand );
-                }
-                else if ( PROPERTY_ESCAPE_PROCESSING == Event.PropertyName )
-                {
-                    bool bEscapeProcessing( false );
-                    OSL_VERIFY( Event.NewValue >>= bEscapeProcessing );
-                    m_xObjectAdapter->setEscapeProcessing( bEscapeProcessing );
-                }
+                OUString sCommand;
+                OSL_VERIFY( Event.NewValue >>= sCommand );
+                m_xObjectAdapter->setSQLCommand( sCommand );
             }
-            catch( const RuntimeException& ) { throw; }
-            catch( const Exception& )
+            else if ( PROPERTY_ESCAPE_PROCESSING == Event.PropertyName )
             {
-                // not allowed to leave, so silence it
-                DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
+                bool bEscapeProcessing( false );
+                OSL_VERIFY( Event.NewValue >>= bEscapeProcessing );
+                m_xObjectAdapter->setEscapeProcessing( bEscapeProcessing );
             }
+        }
+        catch( const RuntimeException& ) { throw; }
+        catch( const Exception& )
+        {
+            // not allowed to leave, so silence it
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
     }
 

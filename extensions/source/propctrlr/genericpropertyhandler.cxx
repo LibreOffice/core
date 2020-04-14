@@ -467,65 +467,65 @@ namespace pcr
 
     void GenericPropertyHandler::impl_ensurePropertyMap()
     {
-        if ( !m_bPropertyMapInitialized )
+        if ( m_bPropertyMapInitialized )
+            return;
+
+        m_bPropertyMapInitialized = true;
+        try
         {
-            m_bPropertyMapInitialized = true;
-            try
+            Reference< XPropertySetInfo > xPSI;
+            if ( m_xComponent.is() )
+                xPSI = m_xComponent->getPropertySetInfo();
+            Sequence< Property > aProperties;
+            if ( xPSI.is() )
+                aProperties = xPSI->getProperties();
+            DBG_ASSERT( aProperties.hasElements(), "GenericPropertyHandler::getSupportedProperties: no properties!" );
+
+            for ( auto const & property : std::as_const(aProperties) )
             {
-                Reference< XPropertySetInfo > xPSI;
-                if ( m_xComponent.is() )
-                    xPSI = m_xComponent->getPropertySetInfo();
-                Sequence< Property > aProperties;
-                if ( xPSI.is() )
-                    aProperties = xPSI->getProperties();
-                DBG_ASSERT( aProperties.hasElements(), "GenericPropertyHandler::getSupportedProperties: no properties!" );
-
-                for ( auto const & property : std::as_const(aProperties) )
+                switch ( property.Type.getTypeClass() )
                 {
-                    switch ( property.Type.getTypeClass() )
-                    {
-                    case TypeClass_BOOLEAN:
-                    case TypeClass_BYTE:
-                    case TypeClass_SHORT:
-                    case TypeClass_UNSIGNED_SHORT:
-                    case TypeClass_LONG:
-                    case TypeClass_UNSIGNED_LONG:
-                    case TypeClass_HYPER:
-                    case TypeClass_UNSIGNED_HYPER:
-                    case TypeClass_FLOAT:
-                    case TypeClass_DOUBLE:
-                    case TypeClass_ENUM:
-                    case TypeClass_STRING:
-                        // allowed, we can handle this type
-                        break;
-
-                    case TypeClass_SEQUENCE:
-                    {
-                        TypeClass eElementTypeClass = ::comphelper::getSequenceElementType( property.Type ).getTypeClass();
-                        if  (   ( eElementTypeClass != TypeClass_STRING )
-                            &&  ( eElementTypeClass != TypeClass_BYTE )
-                            &&  ( eElementTypeClass != TypeClass_SHORT )
-                            &&  ( eElementTypeClass != TypeClass_UNSIGNED_SHORT )
-                            &&  ( eElementTypeClass != TypeClass_LONG )
-                            &&  ( eElementTypeClass != TypeClass_UNSIGNED_LONG )
-                            )
-                            // can only handle the above
-                            continue;
-                    }
+                case TypeClass_BOOLEAN:
+                case TypeClass_BYTE:
+                case TypeClass_SHORT:
+                case TypeClass_UNSIGNED_SHORT:
+                case TypeClass_LONG:
+                case TypeClass_UNSIGNED_LONG:
+                case TypeClass_HYPER:
+                case TypeClass_UNSIGNED_HYPER:
+                case TypeClass_FLOAT:
+                case TypeClass_DOUBLE:
+                case TypeClass_ENUM:
+                case TypeClass_STRING:
+                    // allowed, we can handle this type
                     break;
 
-                    default:
-                        // next property, we don't support this type
+                case TypeClass_SEQUENCE:
+                {
+                    TypeClass eElementTypeClass = ::comphelper::getSequenceElementType( property.Type ).getTypeClass();
+                    if  (   ( eElementTypeClass != TypeClass_STRING )
+                        &&  ( eElementTypeClass != TypeClass_BYTE )
+                        &&  ( eElementTypeClass != TypeClass_SHORT )
+                        &&  ( eElementTypeClass != TypeClass_UNSIGNED_SHORT )
+                        &&  ( eElementTypeClass != TypeClass_LONG )
+                        &&  ( eElementTypeClass != TypeClass_UNSIGNED_LONG )
+                        )
+                        // can only handle the above
                         continue;
-                    }
-
-                    m_aProperties.emplace( property.Name, property );
                 }
+                break;
+
+                default:
+                    // next property, we don't support this type
+                    continue;
+                }
+
+                m_aProperties.emplace( property.Name, property );
             }
-            catch( const Exception& )
-            {
-                TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "GenericPropertyHandler::impl_ensurePropertyMap" );
-            }
+        }
+        catch( const Exception& )
+        {
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "GenericPropertyHandler::impl_ensurePropertyMap" );
         }
     }
 

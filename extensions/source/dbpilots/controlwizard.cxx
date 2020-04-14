@@ -256,23 +256,23 @@ namespace dbp
         // for comparing the model
         Reference< XControlModel > xModelCompare(m_aContext.xObjectModel, UNO_QUERY);
 
-        if (xPageObjects.is())
+        if (!xPageObjects.is())
+            return;
+
+        // loop through all objects of the page
+        sal_Int32 nObjects = xPageObjects->getCount();
+        Reference< XControlShape > xControlShape;
+        Reference< XControlModel > xControlModel;
+        for (sal_Int32 i=0; i<nObjects; ++i)
         {
-            // loop through all objects of the page
-            sal_Int32 nObjects = xPageObjects->getCount();
-            Reference< XControlShape > xControlShape;
-            Reference< XControlModel > xControlModel;
-            for (sal_Int32 i=0; i<nObjects; ++i)
-            {
-                if (xPageObjects->getByIndex(i) >>= xControlShape)
-                {   // it _is_ a control shape
-                    xControlModel = xControlShape->getControl();
-                    DBG_ASSERT(xControlModel.is(), "OControlWizard::implDetermineShape: control shape without model!");
-                    if (xModelCompare.get() == xControlModel.get())
-                    {
-                        m_aContext.xObjectShape = xControlShape;
-                        break;
-                    }
+            if (xPageObjects->getByIndex(i) >>= xControlShape)
+            {   // it _is_ a control shape
+                xControlModel = xControlShape->getControl();
+                DBG_ASSERT(xControlModel.is(), "OControlWizard::implDetermineShape: control shape without model!");
+                if (xModelCompare.get() == xControlModel.get())
+                {
+                    m_aContext.xObjectShape = xControlShape;
+                    break;
                 }
             }
         }

@@ -336,21 +336,21 @@ namespace pcr
 
     void OBrowserListBox::CommitModified( )
     {
-        if ( IsModified() && m_xActiveControl.is() )
+        if ( !(IsModified() && m_xActiveControl.is()) )
+            return;
+
+        // for the time of this commit, notify all events synchronously
+        // #i63814#
+        m_pControlContextImpl->setNotificationMode( PropertyControlContext_Impl::eSynchronously );
+        try
         {
-            // for the time of this commit, notify all events synchronously
-            // #i63814#
-            m_pControlContextImpl->setNotificationMode( PropertyControlContext_Impl::eSynchronously );
-            try
-            {
-                m_xActiveControl->notifyModifiedValue();
-            }
-            catch( const Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
-            }
-            m_pControlContextImpl->setNotificationMode( PropertyControlContext_Impl::eAsynchronously );
+            m_xActiveControl->notifyModifiedValue();
         }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
+        }
+        m_pControlContextImpl->setNotificationMode( PropertyControlContext_Impl::eAsynchronously );
     }
 
     void OBrowserListBox::SetListener( IPropertyLineListener* _pListener )
@@ -497,39 +497,39 @@ namespace pcr
             return;
         }
 
-        if (nPos < m_aLines.size())
+        if (nPos >= m_aLines.size())
+            return;
+
+        unsigned const nWinHeight = m_xScrolledWindow->vadjustment_get_page_size();
+
+        auto nThumbPos = m_xScrolledWindow->vadjustment_get_value();
+        int const nWinTop = nThumbPos;
+        int const nWinBottom = nWinTop + nWinHeight;
+
+        auto nCtrlPosY = nPos * m_nRowHeight;
+
+        int const nSelectedItemTop = nCtrlPosY;
+        int const nSelectedItemBottom = nCtrlPosY + m_nRowHeight;
+        bool const shouldScrollDown = nSelectedItemBottom >= nWinBottom;
+        bool const shouldScrollUp = nSelectedItemTop <= nWinTop;
+        bool const isNeedToScroll = shouldScrollDown || shouldScrollUp;
+
+        if (!isNeedToScroll)
+            return;
+
+        if (shouldScrollDown)
         {
-            unsigned const nWinHeight = m_xScrolledWindow->vadjustment_get_page_size();
-
-            auto nThumbPos = m_xScrolledWindow->vadjustment_get_value();
-            int const nWinTop = nThumbPos;
-            int const nWinBottom = nWinTop + nWinHeight;
-
-            auto nCtrlPosY = nPos * m_nRowHeight;
-
-            int const nSelectedItemTop = nCtrlPosY;
-            int const nSelectedItemBottom = nCtrlPosY + m_nRowHeight;
-            bool const shouldScrollDown = nSelectedItemBottom >= nWinBottom;
-            bool const shouldScrollUp = nSelectedItemTop <= nWinTop;
-            bool const isNeedToScroll = shouldScrollDown || shouldScrollUp;
-
-            if (isNeedToScroll)
-            {
-                if (shouldScrollDown)
-                {
-                    int nOffset = nSelectedItemBottom - nWinBottom;
-                    nThumbPos += nOffset;
-                }
-                else
-                {
-                    int nOffset = nWinTop - nSelectedItemTop;
-                    nThumbPos -= nOffset;
-                    if(nThumbPos < 0)
-                        nThumbPos = 0;
-                }
-                m_xScrolledWindow->vadjustment_set_value(nThumbPos);
-            }
+            int nOffset = nSelectedItemBottom - nWinBottom;
+            nThumbPos += nOffset;
         }
+        else
+        {
+            int nOffset = nWinTop - nSelectedItemTop;
+            nThumbPos -= nOffset;
+            if(nThumbPos < 0)
+                nThumbPos = 0;
+        }
+        m_xScrolledWindow->vadjustment_set_value(nThumbPos);
     }
 
     void OBrowserListBox::buttonClicked( OBrowserLine* _pLine, bool _bPrimary )
@@ -719,96 +719,96 @@ namespace pcr
         if ( nPos == EDITOR_LIST_REPLACE_EXISTING )
             nPos = GetPropertyPos( rPropertyData.sName );
 
-        if ( nPos < m_aLines.size() )
+        if ( nPos >= m_aLines.size() )
+            return;
+
+        // the current line and control
+        ListBoxLine& rLine = m_aLines[nPos];
+
+        // the old control and some data about it
+        Reference< XPropertyControl > xControl = rLine.pLine->getControl();
+
+        // clean up the old control
+        lcl_implDisposeControl_nothrow( xControl );
+
+        // set the new control at the line
+        rLine.pLine->setControl( rPropertyData.Control );
+        xControl = rLine.pLine->getControl();
+
+        if ( xControl.is() )
+            xControl->setControlContext( m_pControlContextImpl.get() );
+
+        // the initial property value
+        if ( rPropertyData.bUnknownValue )
+            xControl->setValue( Any() );
+        else
+            impl_setControlAsPropertyValue( rLine, rPropertyData.aValue );
+
+        rLine.pLine->SetTitle(rPropertyData.DisplayName);
+        rLine.xHandler = rPropertyData.xPropertyHandler;
+
+        if ( rPropertyData.HasPrimaryButton )
         {
-            // the current line and control
-            ListBoxLine& rLine = m_aLines[nPos];
-
-            // the old control and some data about it
-            Reference< XPropertyControl > xControl = rLine.pLine->getControl();
-
-            // clean up the old control
-            lcl_implDisposeControl_nothrow( xControl );
-
-            // set the new control at the line
-            rLine.pLine->setControl( rPropertyData.Control );
-            xControl = rLine.pLine->getControl();
-
-            if ( xControl.is() )
-                xControl->setControlContext( m_pControlContextImpl.get() );
-
-            // the initial property value
-            if ( rPropertyData.bUnknownValue )
-                xControl->setValue( Any() );
+            if ( !rPropertyData.PrimaryButtonImageURL.isEmpty() )
+                rLine.pLine->ShowBrowseButton( rPropertyData.PrimaryButtonImageURL, true );
+            else if ( rPropertyData.PrimaryButtonImage.is() )
+                rLine.pLine->ShowBrowseButton( rPropertyData.PrimaryButtonImage, true );
             else
-                impl_setControlAsPropertyValue( rLine, rPropertyData.aValue );
+                rLine.pLine->ShowBrowseButton( true );
 
-            rLine.pLine->SetTitle(rPropertyData.DisplayName);
-            rLine.xHandler = rPropertyData.xPropertyHandler;
-
-            if ( rPropertyData.HasPrimaryButton )
+            if ( rPropertyData.HasSecondaryButton )
             {
-                if ( !rPropertyData.PrimaryButtonImageURL.isEmpty() )
-                    rLine.pLine->ShowBrowseButton( rPropertyData.PrimaryButtonImageURL, true );
-                else if ( rPropertyData.PrimaryButtonImage.is() )
-                    rLine.pLine->ShowBrowseButton( rPropertyData.PrimaryButtonImage, true );
+                if ( !rPropertyData.SecondaryButtonImageURL.isEmpty() )
+                    rLine.pLine->ShowBrowseButton( rPropertyData.SecondaryButtonImageURL, false );
+                else if ( rPropertyData.SecondaryButtonImage.is() )
+                    rLine.pLine->ShowBrowseButton( rPropertyData.SecondaryButtonImage, false );
                 else
-                    rLine.pLine->ShowBrowseButton( true );
-
-                if ( rPropertyData.HasSecondaryButton )
-                {
-                    if ( !rPropertyData.SecondaryButtonImageURL.isEmpty() )
-                        rLine.pLine->ShowBrowseButton( rPropertyData.SecondaryButtonImageURL, false );
-                    else if ( rPropertyData.SecondaryButtonImage.is() )
-                        rLine.pLine->ShowBrowseButton( rPropertyData.SecondaryButtonImage, false );
-                    else
-                        rLine.pLine->ShowBrowseButton( false );
-                }
-                else
-                    rLine.pLine->HideBrowseButton( false );
-
-                rLine.pLine->SetClickListener( this );
+                    rLine.pLine->ShowBrowseButton( false );
             }
             else
-            {
-                rLine.pLine->HideBrowseButton( true );
                 rLine.pLine->HideBrowseButton( false );
-            }
 
-            DBG_ASSERT( ( rPropertyData.IndentLevel == 0 ) || ( rPropertyData.IndentLevel == 1 ),
-                "OBrowserListBox::ChangeEntry: unsupported indent level!" );
-            rLine.pLine->IndentTitle( rPropertyData.IndentLevel > 0 );
+            rLine.pLine->SetClickListener( this );
+        }
+        else
+        {
+            rLine.pLine->HideBrowseButton( true );
+            rLine.pLine->HideBrowseButton( false );
+        }
 
-            rLine.pLine->SetComponentHelpIds(
-                HelpIdUrl::getHelpId( rPropertyData.HelpURL )
-            );
+        DBG_ASSERT( ( rPropertyData.IndentLevel == 0 ) || ( rPropertyData.IndentLevel == 1 ),
+            "OBrowserListBox::ChangeEntry: unsupported indent level!" );
+        rLine.pLine->IndentTitle( rPropertyData.IndentLevel > 0 );
 
-            if ( rPropertyData.bReadOnly )
+        rLine.pLine->SetComponentHelpIds(
+            HelpIdUrl::getHelpId( rPropertyData.HelpURL )
+        );
+
+        if ( rPropertyData.bReadOnly )
+        {
+            rLine.pLine->SetReadOnly( true );
+
+            // user controls (i.e. the ones not provided by the usual
+            // XPropertyControlFactory) have no chance to know that they should be read-only,
+            // since XPropertyHandler::describePropertyLine does not transport this
+            // information.
+            // So, we manually switch this to read-only.
+            if ( xControl.is() && ( xControl->getControlType() == PropertyControlType::Unknown ) )
             {
-                rLine.pLine->SetReadOnly( true );
-
-                // user controls (i.e. the ones not provided by the usual
-                // XPropertyControlFactory) have no chance to know that they should be read-only,
-                // since XPropertyHandler::describePropertyLine does not transport this
-                // information.
-                // So, we manually switch this to read-only.
-                if ( xControl.is() && ( xControl->getControlType() == PropertyControlType::Unknown ) )
-                {
-                    weld::Widget* pWindow = rLine.pLine->getControlWindow();
-                    weld::Entry* pControlWindowAsEdit = dynamic_cast<weld::Entry*>(pWindow);
-                    if (pControlWindowAsEdit)
-                        pControlWindowAsEdit->set_editable(false);
-                    else
-                        pWindow->set_sensitive(false);
-                }
+                weld::Widget* pWindow = rLine.pLine->getControlWindow();
+                weld::Entry* pControlWindowAsEdit = dynamic_cast<weld::Entry*>(pWindow);
+                if (pControlWindowAsEdit)
+                    pControlWindowAsEdit->set_editable(false);
+                else
+                    pWindow->set_sensitive(false);
             }
+        }
 
-            sal_uInt16 nTextWidth = m_xLinesPlayground->get_pixel_size(rPropertyData.DisplayName).Width();
-            if (m_nTheNameSize< nTextWidth)
-            {
-                m_nTheNameSize = nTextWidth;
-                UpdatePlayGround();
-            }
+        sal_uInt16 nTextWidth = m_xLinesPlayground->get_pixel_size(rPropertyData.DisplayName).Width();
+        if (m_nTheNameSize< nTextWidth)
+        {
+            m_nTheNameSize = nTextWidth;
+            UpdatePlayGround();
         }
     }
 } // namespace pcr
