@@ -490,6 +490,18 @@ bool ImpGraphic::makeAvailable()
     return ensureAvailable();
 }
 
+BitmapEx ImpGraphic::getVectorGraphicReplacement() const
+{
+    BitmapEx aRet = maVectorGraphicData->getReplacement();
+
+    if (maExPrefSize.getWidth() && maExPrefSize.getHeight())
+    {
+        aRet.SetPrefSize(maExPrefSize);
+    }
+
+    return aRet;
+}
+
 Bitmap ImpGraphic::ImplGetBitmap(const GraphicConversionParameters& rParameters) const
 {
     Bitmap aRetBmp;
@@ -501,7 +513,7 @@ Bitmap ImpGraphic::ImplGetBitmap(const GraphicConversionParameters& rParameters)
         if(maVectorGraphicData.get() && maEx.IsEmpty())
         {
             // use maEx as local buffer for rendered svg
-            const_cast< ImpGraphic* >(this)->maEx = maVectorGraphicData->getReplacement();
+            const_cast< ImpGraphic* >(this)->maEx = getVectorGraphicReplacement();
         }
 
         const BitmapEx& rRetBmpEx = ( mpAnimation ? mpAnimation->GetBitmapEx() : maEx );
@@ -610,7 +622,7 @@ BitmapEx ImpGraphic::ImplGetBitmapEx(const GraphicConversionParameters& rParamet
         if(maVectorGraphicData.get() && maEx.IsEmpty())
         {
             // use maEx as local buffer for rendered svg
-            const_cast< ImpGraphic* >(this)->maEx = maVectorGraphicData->getReplacement();
+            const_cast< ImpGraphic* >(this)->maEx = getVectorGraphicReplacement();
         }
 
         aRetBmpEx = ( mpAnimation ? mpAnimation->GetBitmapEx() : maEx );
@@ -697,7 +709,7 @@ const GDIMetaFile& ImpGraphic::ImplGetGDIMetaFile() const
         if(maVectorGraphicData.get() && !maEx)
         {
             // use maEx as local buffer for rendered svg
-            pThat->maEx = maVectorGraphicData->getReplacement();
+            pThat->maEx = getVectorGraphicReplacement();
         }
 
         // #123983# directly create a metafile with the same PrefSize and PrefMapMode
@@ -752,10 +764,17 @@ Size ImpGraphic::ImplGetPrefSize() const
             {
                 if(maVectorGraphicData.get() && maEx.IsEmpty())
                 {
-                    // svg not yet buffered in maEx, return size derived from range
-                    const basegfx::B2DRange& rRange = maVectorGraphicData->getRange();
+                    if (!maExPrefSize.getWidth() || !maExPrefSize.getHeight())
+                    {
+                        // svg not yet buffered in maEx, return size derived from range
+                        const basegfx::B2DRange& rRange = maVectorGraphicData->getRange();
 
-                    aSize = Size(basegfx::fround(rRange.getWidth()), basegfx::fround(rRange.getHeight()));
+                        aSize = Size(basegfx::fround(rRange.getWidth()), basegfx::fround(rRange.getHeight()));
+                    }
+                    else
+                    {
+                        aSize = maExPrefSize;
+                    }
                 }
                 else
                 {
@@ -797,8 +816,7 @@ void ImpGraphic::ImplSetPrefSize( const Size& rPrefSize )
             // to allow setting the PrefSize at the BitmapEx to hold it
             if(maVectorGraphicData.get() && maEx.IsEmpty())
             {
-                // use maEx as local buffer for rendered svg
-                maEx = maVectorGraphicData->getReplacement();
+                maExPrefSize = rPrefSize;
             }
 
             // #108077# Push through pref size to animation object,
@@ -808,7 +826,10 @@ void ImpGraphic::ImplSetPrefSize( const Size& rPrefSize )
                 const_cast< BitmapEx& >(mpAnimation->GetBitmapEx()).SetPrefSize( rPrefSize );
             }
 
-            maEx.SetPrefSize( rPrefSize );
+            if (!maExPrefSize.getWidth() || !maExPrefSize.getHeight())
+            {
+                maEx.SetPrefSize( rPrefSize );
+            }
         }
         break;
 
@@ -881,7 +902,7 @@ void ImpGraphic::ImplSetPrefMapMode( const MapMode& rPrefMapMode )
             if(maVectorGraphicData.get())
             {
                 // ignore for Vector Graphic Data. If this is really used (except the grfcache)
-                // it can be extended by using maEx as buffer for maVectorGraphicData->getReplacement()
+                // it can be extended by using maEx as buffer for getVectorGraphicReplacement()
             }
             else
             {
@@ -953,7 +974,7 @@ void ImpGraphic::ImplDraw( OutputDevice* pOutDev, const Point& rDestPt ) const
                 if(maVectorGraphicData.get() && !maEx)
                 {
                     // use maEx as local buffer for rendered svg
-                    const_cast< ImpGraphic* >(this)->maEx = maVectorGraphicData->getReplacement();
+                    const_cast< ImpGraphic* >(this)->maEx = getVectorGraphicReplacement();
                 }
 
                 if ( mpAnimation )
@@ -990,7 +1011,7 @@ void ImpGraphic::ImplDraw( OutputDevice* pOutDev,
                 if(maVectorGraphicData.get() && maEx.IsEmpty())
                 {
                     // use maEx as local buffer for rendered svg
-                    const_cast< ImpGraphic* >(this)->maEx = maVectorGraphicData->getReplacement();
+                    const_cast< ImpGraphic* >(this)->maEx = getVectorGraphicReplacement();
                 }
 
                 if( mpAnimation )
@@ -1138,7 +1159,7 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
             if(maVectorGraphicData.get() && maEx.IsEmpty())
             {
                 // use maEx as local buffer for rendered svg
-                maEx = maVectorGraphicData->getReplacement();
+                maEx = getVectorGraphicReplacement();
             }
 
             maEx.SetSizePixel(aSize);
