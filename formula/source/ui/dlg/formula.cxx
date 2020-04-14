@@ -327,23 +327,23 @@ FormulaDlg_Impl::~FormulaDlg_Impl()
 
 void FormulaDlg_Impl::StoreFormEditData(FormEditData* pData)
 {
-    if (pData) // it won't be destroyed via Close
-    {
-        int nStartPos, nEndPos;
-        m_xMEdit->get_selection_bounds(nStartPos, nEndPos);
-        if (nStartPos > nEndPos)
-            std::swap(nStartPos, nEndPos);
+    if (!pData) // it won't be destroyed via Close
+        return;
 
-        pData->SetFStart(nStartPos);
-        pData->SetSelection(Selection(nStartPos, nEndPos));
+    int nStartPos, nEndPos;
+    m_xMEdit->get_selection_bounds(nStartPos, nEndPos);
+    if (nStartPos > nEndPos)
+        std::swap(nStartPos, nEndPos);
 
-        if (m_xTabCtrl->get_current_page_ident() == "function")
-            pData->SetMode( FormulaDlgMode::Formula );
-        else
-            pData->SetMode( FormulaDlgMode::Edit );
-        pData->SetUndoStr(m_xMEdit->get_text());
-        pData->SetMatrixFlag(m_xBtnMatrix->get_active());
-    }
+    pData->SetFStart(nStartPos);
+    pData->SetSelection(Selection(nStartPos, nEndPos));
+
+    if (m_xTabCtrl->get_current_page_ident() == "function")
+        pData->SetMode( FormulaDlgMode::Formula );
+    else
+        pData->SetMode( FormulaDlgMode::Edit );
+    pData->SetUndoStr(m_xMEdit->get_text());
+    pData->SetMatrixFlag(m_xBtnMatrix->get_active());
 }
 
 void FormulaDlg_Impl::InitFormulaOpCodeMapper()
@@ -557,187 +557,187 @@ void FormulaDlg_Impl::CalcStruct( const OUString& rStrExp, bool bForceRecalcStru
 {
     sal_Int32 nLength = rStrExp.getLength();
 
-    if ( !rStrExp.isEmpty() && (bForceRecalcStruct || m_aOldFormula != rStrExp) && m_bStructUpdate)
+    if ( !(!rStrExp.isEmpty() && (bForceRecalcStruct || m_aOldFormula != rStrExp) && m_bStructUpdate))
+        return;
+
+    m_xStructPage->ClearStruct();
+
+    OUString aString = rStrExp;
+    if (rStrExp[nLength-1] == '(')
     {
-        m_xStructPage->ClearStruct();
-
-        OUString aString = rStrExp;
-        if (rStrExp[nLength-1] == '(')
-        {
-            aString = aString.copy( 0, nLength-1);
-        }
-
-        aString = aString.replaceAll( "\n", "");
-        OUString aStrResult;
-
-        if ( CalcValue( aString, aStrResult ) )
-            m_xWndFormResult->set_text(aStrResult);
-
-        UpdateTokenArray(aString);
-        fillTree(m_xStructPage.get());
-
-        m_aOldFormula = rStrExp;
-        if (rStrExp[nLength-1] == '(')
-            UpdateTokenArray(rStrExp);
+        aString = aString.copy( 0, nLength-1);
     }
+
+    aString = aString.replaceAll( "\n", "");
+    OUString aStrResult;
+
+    if ( CalcValue( aString, aStrResult ) )
+        m_xWndFormResult->set_text(aStrResult);
+
+    UpdateTokenArray(aString);
+    fillTree(m_xStructPage.get());
+
+    m_aOldFormula = rStrExp;
+    if (rStrExp[nLength-1] == '(')
+        UpdateTokenArray(rStrExp);
 }
 
 void FormulaDlg_Impl::MakeTree(StructPage* _pTree, weld::TreeIter* pParent, const FormulaToken* pFuncToken,
                                const FormulaToken* _pToken, long Count)
 {
-    if ( _pToken != nullptr && Count > 0 )
+    if ( !(_pToken != nullptr && Count > 0) )
+        return;
+
+    long nParas = _pToken->GetParamCount();
+    OpCode eOp = _pToken->GetOpCode();
+
+    // #i101512# for output, the original token is needed
+    const FormulaToken* pOrigToken = (_pToken->GetType() == svFAP) ? _pToken->GetFAPOrigToken() : _pToken;
+    uno::Sequence<sheet::FormulaToken> aArgs(1);
+    ::std::map<const FormulaToken*, sheet::FormulaToken>::const_iterator itr = m_aTokenMap.find(pOrigToken);
+    if (itr == m_aTokenMap.end())
+        return;
+
+    aArgs[0] = itr->second;
+    try
     {
-        long nParas = _pToken->GetParamCount();
-        OpCode eOp = _pToken->GetOpCode();
+        const table::CellAddress aRefPos(m_pHelper->getReferencePosition());
+        const OUString aResult = m_pHelper->getFormulaParser()->printFormula( aArgs, aRefPos);
 
-        // #i101512# for output, the original token is needed
-        const FormulaToken* pOrigToken = (_pToken->GetType() == svFAP) ? _pToken->GetFAPOrigToken() : _pToken;
-        uno::Sequence<sheet::FormulaToken> aArgs(1);
-        ::std::map<const FormulaToken*, sheet::FormulaToken>::const_iterator itr = m_aTokenMap.find(pOrigToken);
-        if (itr == m_aTokenMap.end())
-            return;
-
-        aArgs[0] = itr->second;
-        try
+        if ( nParas > 0 || (nParas == 0 && _pToken->IsFunction()) )
         {
-            const table::CellAddress aRefPos(m_pHelper->getReferencePosition());
-            const OUString aResult = m_pHelper->getFormulaParser()->printFormula( aArgs, aRefPos);
+            std::unique_ptr<weld::TreeIter> xEntry;
+            weld::TreeIter* pEntry;
 
-            if ( nParas > 0 || (nParas == 0 && _pToken->IsFunction()) )
+            bool bCalcSubformula = false;
+            OUString aTest = _pTree->GetEntryText(pParent);
+
+            if (aTest == aResult && (eOp == ocAdd || eOp == ocMul || eOp == ocAmpersand))
             {
-                std::unique_ptr<weld::TreeIter> xEntry;
-                weld::TreeIter* pEntry;
-
-                bool bCalcSubformula = false;
-                OUString aTest = _pTree->GetEntryText(pParent);
-
-                if (aTest == aResult && (eOp == ocAdd || eOp == ocMul || eOp == ocAmpersand))
-                {
-                    pEntry = pParent;
-                }
-                else
-                {
-                    xEntry = m_xStructPage->GetTlbStruct().make_iterator();
-
-                    if (eOp == ocBad)
-                    {
-                        _pTree->InsertEntry(aResult, pParent, STRUCT_ERROR, 0, _pToken, *xEntry);
-                    }
-                    else if (!((SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_BIN_OP) ||
-                                (SC_OPCODE_START_UN_OP <= eOp && eOp < SC_OPCODE_STOP_UN_OP)))
-                    {
-                        // Not a binary or unary operator.
-                        bCalcSubformula = true;
-                        _pTree->InsertEntry(aResult, pParent, STRUCT_FOLDER, 0, _pToken, *xEntry);
-                    }
-                    else
-                    {
-                        /* TODO: question remains, why not sub calculate operators? */
-                        _pTree->InsertEntry(aResult, pParent, STRUCT_FOLDER, 0, _pToken, *xEntry);
-                    }
-
-                    pEntry = xEntry.get();
-                }
-
-                MakeTree(_pTree, pEntry, _pToken, m_pTokenArrayIterator->PrevRPN(), nParas);
-
-                if (bCalcSubformula)
-                {
-                    OUString aFormula;
-
-                    if (!m_bMakingTree)
-                    {
-                        // gets the last subformula result
-                        m_bMakingTree = true;
-                        aFormula = GetPrevFuncExpression( true);
-                    }
-                    else
-                    {
-                        // gets subsequent subformula results (from the back)
-                        aFormula = GetPrevFuncExpression( false);
-                    }
-
-                    OUString aStr;
-                    if (CalcValue( aFormula, aStr, _pToken->IsInForceArray()))
-                        m_xWndResult->set_text( aStr );
-                    aStr = m_xWndResult->get_text();
-                    m_xStructPage->GetTlbStruct().set_text(*pEntry, aResult + " = " + aStr);
-                }
-
-                --Count;
-                m_pTokenArrayIterator->NextRPN();   /* TODO: what's this to be? ThisRPN()? */
-                MakeTree( _pTree, pParent, _pToken, m_pTokenArrayIterator->PrevRPN(), Count);
+                pEntry = pParent;
             }
             else
             {
-                std::unique_ptr<weld::TreeIter> xEntry(m_xStructPage->GetTlbStruct().make_iterator());
+                xEntry = m_xStructPage->GetTlbStruct().make_iterator();
+
                 if (eOp == ocBad)
                 {
-                    _pTree->InsertEntry( aResult, pParent, STRUCT_ERROR, 0, _pToken, *xEntry);
+                    _pTree->InsertEntry(aResult, pParent, STRUCT_ERROR, 0, _pToken, *xEntry);
                 }
-                else if (eOp == ocPush)
+                else if (!((SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_BIN_OP) ||
+                            (SC_OPCODE_START_UN_OP <= eOp && eOp < SC_OPCODE_STOP_UN_OP)))
                 {
-                    // Interpret range reference in matrix context to resolve
-                    // as array elements. Depending on parameter classification
-                    // a scalar value (non-array context) is calculated first.
-                    OUString aUnforcedResult;
-                    bool bForceMatrix = (!m_xBtnMatrix->get_active() &&
-                            (_pToken->GetType() == svDoubleRef || _pToken->GetType() == svExternalDoubleRef));
-                    if (bForceMatrix && pFuncToken)
-                    {
-                        formula::ParamClass eParamClass = ParamClass::Reference;
-                        if (pFuncToken->IsInForceArray())
-                            eParamClass = ParamClass::ForceArray;
-                        else
-                        {
-                            std::shared_ptr<FormulaCompiler> pCompiler = m_pHelper->getCompiler();
-                            if (pCompiler)
-                                eParamClass = pCompiler->GetForceArrayParameter( pFuncToken, Count - 1);
-                        }
-                        switch (eParamClass)
-                        {
-                            case ParamClass::Unknown:
-                            case ParamClass::Bounds:
-                            case ParamClass::Value:
-                                if (CalcValue( "=" + aResult, aUnforcedResult, false) && aUnforcedResult != aResult)
-                                    aUnforcedResult += "  ";
-                                else
-                                    aUnforcedResult.clear();
-                            break;
-                            case ParamClass::Reference:
-                            case ParamClass::ReferenceOrRefArray:
-                            case ParamClass::Array:
-                            case ParamClass::ForceArray:
-                            case ParamClass::ReferenceOrForceArray:
-                            case ParamClass::SuppressedReferenceOrForceArray:
-                            case ParamClass::ForceArrayReturn:
-                                ;   // nothing, only as array/matrix
-                            // no default to get compiler warning
-                        }
-                    }
-                    OUString aCellResult;
-                    if (CalcValue( "=" + aResult, aCellResult, bForceMatrix) && aCellResult != aResult)
-                    {
-                        // Cell is a formula, print subformula.
-                        // With scalar values prints "A1:A3 = 2 {1;2;3}"
-                        _pTree->InsertEntry( aResult + " = " + aUnforcedResult + aCellResult,
-                                pParent, STRUCT_END, 0, _pToken, *xEntry);
-                    }
-                    else
-                        _pTree->InsertEntry(aResult, pParent, STRUCT_END, 0, _pToken, *xEntry);
+                    // Not a binary or unary operator.
+                    bCalcSubformula = true;
+                    _pTree->InsertEntry(aResult, pParent, STRUCT_FOLDER, 0, _pToken, *xEntry);
                 }
                 else
                 {
-                    _pTree->InsertEntry(aResult, pParent, STRUCT_END, 0, _pToken, *xEntry);
+                    /* TODO: question remains, why not sub calculate operators? */
+                    _pTree->InsertEntry(aResult, pParent, STRUCT_FOLDER, 0, _pToken, *xEntry);
                 }
-                --Count;
-                MakeTree( _pTree, pParent, _pToken, m_pTokenArrayIterator->PrevRPN(), Count);
+
+                pEntry = xEntry.get();
             }
+
+            MakeTree(_pTree, pEntry, _pToken, m_pTokenArrayIterator->PrevRPN(), nParas);
+
+            if (bCalcSubformula)
+            {
+                OUString aFormula;
+
+                if (!m_bMakingTree)
+                {
+                    // gets the last subformula result
+                    m_bMakingTree = true;
+                    aFormula = GetPrevFuncExpression( true);
+                }
+                else
+                {
+                    // gets subsequent subformula results (from the back)
+                    aFormula = GetPrevFuncExpression( false);
+                }
+
+                OUString aStr;
+                if (CalcValue( aFormula, aStr, _pToken->IsInForceArray()))
+                    m_xWndResult->set_text( aStr );
+                aStr = m_xWndResult->get_text();
+                m_xStructPage->GetTlbStruct().set_text(*pEntry, aResult + " = " + aStr);
+            }
+
+            --Count;
+            m_pTokenArrayIterator->NextRPN();   /* TODO: what's this to be? ThisRPN()? */
+            MakeTree( _pTree, pParent, _pToken, m_pTokenArrayIterator->PrevRPN(), Count);
         }
-        catch (const uno::Exception&)
+        else
         {
-            DBG_UNHANDLED_EXCEPTION("formula.ui");
+            std::unique_ptr<weld::TreeIter> xEntry(m_xStructPage->GetTlbStruct().make_iterator());
+            if (eOp == ocBad)
+            {
+                _pTree->InsertEntry( aResult, pParent, STRUCT_ERROR, 0, _pToken, *xEntry);
+            }
+            else if (eOp == ocPush)
+            {
+                // Interpret range reference in matrix context to resolve
+                // as array elements. Depending on parameter classification
+                // a scalar value (non-array context) is calculated first.
+                OUString aUnforcedResult;
+                bool bForceMatrix = (!m_xBtnMatrix->get_active() &&
+                        (_pToken->GetType() == svDoubleRef || _pToken->GetType() == svExternalDoubleRef));
+                if (bForceMatrix && pFuncToken)
+                {
+                    formula::ParamClass eParamClass = ParamClass::Reference;
+                    if (pFuncToken->IsInForceArray())
+                        eParamClass = ParamClass::ForceArray;
+                    else
+                    {
+                        std::shared_ptr<FormulaCompiler> pCompiler = m_pHelper->getCompiler();
+                        if (pCompiler)
+                            eParamClass = pCompiler->GetForceArrayParameter( pFuncToken, Count - 1);
+                    }
+                    switch (eParamClass)
+                    {
+                        case ParamClass::Unknown:
+                        case ParamClass::Bounds:
+                        case ParamClass::Value:
+                            if (CalcValue( "=" + aResult, aUnforcedResult, false) && aUnforcedResult != aResult)
+                                aUnforcedResult += "  ";
+                            else
+                                aUnforcedResult.clear();
+                        break;
+                        case ParamClass::Reference:
+                        case ParamClass::ReferenceOrRefArray:
+                        case ParamClass::Array:
+                        case ParamClass::ForceArray:
+                        case ParamClass::ReferenceOrForceArray:
+                        case ParamClass::SuppressedReferenceOrForceArray:
+                        case ParamClass::ForceArrayReturn:
+                            ;   // nothing, only as array/matrix
+                        // no default to get compiler warning
+                    }
+                }
+                OUString aCellResult;
+                if (CalcValue( "=" + aResult, aCellResult, bForceMatrix) && aCellResult != aResult)
+                {
+                    // Cell is a formula, print subformula.
+                    // With scalar values prints "A1:A3 = 2 {1;2;3}"
+                    _pTree->InsertEntry( aResult + " = " + aUnforcedResult + aCellResult,
+                            pParent, STRUCT_END, 0, _pToken, *xEntry);
+                }
+                else
+                    _pTree->InsertEntry(aResult, pParent, STRUCT_END, 0, _pToken, *xEntry);
+            }
+            else
+            {
+                _pTree->InsertEntry(aResult, pParent, STRUCT_END, 0, _pToken, *xEntry);
+            }
+            --Count;
+            MakeTree( _pTree, pParent, _pToken, m_pTokenArrayIterator->PrevRPN(), Count);
         }
+    }
+    catch (const uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("formula.ui");
     }
 }
 
@@ -1222,64 +1222,64 @@ OUString FormulaDlg_Impl::GetPrevFuncExpression( bool bStartFromEnd )
 
 void FormulaDlg_Impl::SaveArg( sal_uInt16 nEd )
 {
-    if (nEd < m_nArgs)
+    if (nEd >= m_nArgs)
+        return;
+
+    for (sal_uInt16 i = 0; i <= nEd; i++)
     {
-        for (sal_uInt16 i = 0; i <= nEd; i++)
-        {
-            if ( m_aArguments[i].isEmpty() )
-                m_aArguments[i] = " ";
-        }
-        if (!m_xParaWin->GetArgument(nEd).isEmpty())
-            m_aArguments[nEd] = m_xParaWin->GetArgument(nEd);
+        if ( m_aArguments[i].isEmpty() )
+            m_aArguments[i] = " ";
+    }
+    if (!m_xParaWin->GetArgument(nEd).isEmpty())
+        m_aArguments[nEd] = m_xParaWin->GetArgument(nEd);
 
-        sal_uInt16 nClearPos = nEd+1;
-        for (sal_Int32 i = nEd+1; i < m_nArgs; i++)
+    sal_uInt16 nClearPos = nEd+1;
+    for (sal_Int32 i = nEd+1; i < m_nArgs; i++)
+    {
+        if ( !m_xParaWin->GetArgument(i).isEmpty() )
         {
-            if ( !m_xParaWin->GetArgument(i).isEmpty() )
-            {
-                nClearPos = i+1;
-            }
+            nClearPos = i+1;
         }
+    }
 
-        for (sal_Int32 i = nClearPos; i < m_nArgs; i++)
-        {
-            m_aArguments[i].clear();
-        }
+    for (sal_Int32 i = nClearPos; i < m_nArgs; i++)
+    {
+        m_aArguments[i].clear();
     }
 }
 
 IMPL_LINK( FormulaDlg_Impl, FxHdl, ParaWin&, rPtr, void )
 {
-    if (&rPtr == m_xParaWin.get())
-    {
-        m_xBtnForward->set_sensitive(true); //@ In order to be able to input another function.
-        m_xTabCtrl->set_current_page("function");
+    if (&rPtr != m_xParaWin.get())
+        return;
 
-        OUString aUndoStr = m_pHelper->getCurrentFormula();       // it will be added before a ";"
-        FormEditData* pData = m_pHelper->getFormEditData();
-        if (!pData)
-            return;
+    m_xBtnForward->set_sensitive(true); //@ In order to be able to input another function.
+    m_xTabCtrl->set_current_page("function");
 
-        sal_uInt16 nArgNo = m_xParaWin->GetActiveLine();
-        sal_uInt16 nEdFocus = nArgNo;
+    OUString aUndoStr = m_pHelper->getCurrentFormula();       // it will be added before a ";"
+    FormEditData* pData = m_pHelper->getFormEditData();
+    if (!pData)
+        return;
 
-        SaveArg(nArgNo);
-        UpdateSelection();
+    sal_uInt16 nArgNo = m_xParaWin->GetActiveLine();
+    sal_uInt16 nEdFocus = nArgNo;
 
-        sal_Int32 nFormulaStrPos = pData->GetFStart();
+    SaveArg(nArgNo);
+    UpdateSelection();
 
-        OUString aFormula = m_pHelper->getCurrentFormula();
-        sal_Int32 n1 = m_aFormulaHelper.GetArgStart( aFormula, nFormulaStrPos, nEdFocus + pData->GetOffset() );
+    sal_Int32 nFormulaStrPos = pData->GetFStart();
 
-        pData->SaveValues();
-        pData->SetMode( FormulaDlgMode::Formula );
-        pData->SetFStart( n1 );
-        pData->SetUndoStr( aUndoStr );
-        ClearAllParas();
+    OUString aFormula = m_pHelper->getCurrentFormula();
+    sal_Int32 n1 = m_aFormulaHelper.GetArgStart( aFormula, nFormulaStrPos, nEdFocus + pData->GetOffset() );
 
-        FillDialog(false);
-        m_xFuncPage->SetFocus(); //There Parawin is not visible anymore
-    }
+    pData->SaveValues();
+    pData->SetMode( FormulaDlgMode::Formula );
+    pData->SetFStart( n1 );
+    pData->SetUndoStr( aUndoStr );
+    ClearAllParas();
+
+    FillDialog(false);
+    m_xFuncPage->SetFocus(); //There Parawin is not visible anymore
 }
 
 IMPL_LINK( FormulaDlg_Impl, ModifyHdl, ParaWin&, rPtr, void )
@@ -1528,43 +1528,43 @@ void FormulaDlg_Impl::RefInputStartAfter()
 {
     m_xRefBtn->SetEndImage();
 
-    if (m_pTheRefEdit)
-    {
-        OUString aStr = m_aTitle2 + " " + m_xFtEditName->get_label() + "( ";
+    if (!m_pTheRefEdit)
+        return;
 
-        if ( m_xParaWin->GetActiveLine() > 0 )
-            aStr += "...; ";
-        aStr += m_xParaWin->GetActiveArgName();
-        if ( m_xParaWin->GetActiveLine() + 1 < m_nArgs )
-            aStr += "; ...";
-        aStr += " )";
+    OUString aStr = m_aTitle2 + " " + m_xFtEditName->get_label() + "( ";
 
-        m_rDialog.set_title(m_rDialog.strip_mnemonic(aStr));
-    }
+    if ( m_xParaWin->GetActiveLine() > 0 )
+        aStr += "...; ";
+    aStr += m_xParaWin->GetActiveArgName();
+    if ( m_xParaWin->GetActiveLine() + 1 < m_nArgs )
+        aStr += "; ...";
+    aStr += " )";
+
+    m_rDialog.set_title(m_rDialog.strip_mnemonic(aStr));
 }
 
 void FormulaDlg_Impl::RefInputDoneAfter( bool bForced )
 {
     m_xRefBtn->SetStartImage();
-    if (bForced || !m_xRefBtn->GetWidget()->get_visible())
+    if (!(bForced || !m_xRefBtn->GetWidget()->get_visible()))
+        return;
+
+    m_xEdRef->GetWidget()->hide();
+    m_xRefBtn->GetWidget()->hide();
+    if ( m_pTheRefEdit )
     {
-        m_xEdRef->GetWidget()->hide();
-        m_xRefBtn->GetWidget()->hide();
-        if ( m_pTheRefEdit )
-        {
-            m_pTheRefEdit->SetRefString( m_xEdRef->GetText() );
-            m_pTheRefEdit->GrabFocus();
+        m_pTheRefEdit->SetRefString( m_xEdRef->GetText() );
+        m_pTheRefEdit->GrabFocus();
 
-            if ( m_pTheRefButton )
-                m_pTheRefButton->SetStartImage();
+        if ( m_pTheRefButton )
+            m_pTheRefButton->SetStartImage();
 
-            sal_uInt16 nPrivActiv = m_xParaWin->GetActiveLine();
-            m_xParaWin->SetArgument( nPrivActiv, m_xEdRef->GetText() );
-            ModifyHdl( *m_xParaWin );
-            m_pTheRefEdit = nullptr;
-        }
-        m_rDialog.set_title(m_aTitle1);
+        sal_uInt16 nPrivActiv = m_xParaWin->GetActiveLine();
+        m_xParaWin->SetArgument( nPrivActiv, m_xEdRef->GetText() );
+        ModifyHdl( *m_xParaWin );
+        m_pTheRefEdit = nullptr;
     }
+    m_rDialog.set_title(m_aTitle1);
 }
 
 RefEdit* FormulaDlg_Impl::GetCurrRefEdit()
