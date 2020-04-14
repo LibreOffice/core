@@ -165,6 +165,7 @@ class SdrTextAniDirectionItem;
 class SdrTextAniKindItem;
 class SdrTextHorzAdjustItem;
 
+<<<<<<< HEAD   (175143 tdf#131169: Retrieve right category in function wizard)
 #define SDRATTR_START               XATTR_START                    /* 1000   */
                                                                                                          /* Pool V4*/ /* Pool V3*/ /* Pool V2*/
 #define SDRATTR_SHADOW_FIRST            (XATTR_END + 1)                                                  /* 1067   */ /* 1067   */ /* 1050   */ /* Pool V1: 1036 */
@@ -176,6 +177,21 @@ class SdrTextHorzAdjustItem;
 #define SDRATTR_SHADOW3D                TypedWhichId<SfxVoidItem>(SDRATTR_SHADOW_FIRST+ 5)               /*   1072 */ /*   1072 */ /*   1055 */ /* Pool V2 */
 #define SDRATTR_SHADOWPERSP             TypedWhichId<SfxVoidItem>(SDRATTR_SHADOW_FIRST+ 6)               /*   1073 */ /*   1073 */ /*   1056 */ /* Pool V2 */
 #define SDRATTR_SHADOW_LAST             (SDRATTR_SHADOWPERSP)                                            /* 1078   */ /* 1078   */ /* 1061   */ /* Pool V1: 1039 */
+=======
+constexpr sal_uInt16 SDRATTR_START (XATTR_START);                    /* 1000   */
+                                                                                                             /* Pool V4*/ /* Pool V3*/ /* Pool V2*/
+constexpr sal_uInt16                   SDRATTR_SHADOW_FIRST       (XATTR_END + 1);                           /* 1067   */ /* 1067   */ /* 1050   */ /* Pool V1: 1036 */
+constexpr TypedWhichId<SdrOnOffItem>   SDRATTR_SHADOW             (SDRATTR_SHADOW_FIRST+ 0);                 /*   1067 */ /*   1067 */ /*   1050 */
+constexpr TypedWhichId<XColorItem>     SDRATTR_SHADOWCOLOR        (SDRATTR_SHADOW_FIRST+ 1);                 /*   1068 */ /*   1068 */ /*   1051 */
+constexpr TypedWhichId<SdrMetricItem>  SDRATTR_SHADOWXDIST        (SDRATTR_SHADOW_FIRST+ 2);                 /*   1069 */ /*   1069 */ /*   1052 */
+constexpr TypedWhichId<SdrMetricItem>  SDRATTR_SHADOWYDIST        (SDRATTR_SHADOW_FIRST+ 3);                 /*   1070 */ /*   1070 */ /*   1053 */
+constexpr TypedWhichId<SdrPercentItem> SDRATTR_SHADOWTRANSPARENCE (SDRATTR_SHADOW_FIRST+ 4);                 /*   1071 */ /*   1071 */ /*   1054 */ /* Pool V2 */
+constexpr TypedWhichId<SfxVoidItem>    SDRATTR_SHADOW3D           (SDRATTR_SHADOW_FIRST+ 5);                 /*   1072 */ /*   1072 */ /*   1055 */ /* Pool V2 */
+constexpr TypedWhichId<SfxVoidItem>    SDRATTR_SHADOWPERSP        (SDRATTR_SHADOW_FIRST+ 6);                 /*   1073 */ /*   1073 */ /*   1056 */ /* Pool V2 */
+constexpr TypedWhichId<SdrMetricItem>  SDRATTR_SHADOWSIZEX        (SDRATTR_SHADOW_FIRST+ 7);
+constexpr TypedWhichId<SdrMetricItem>  SDRATTR_SHADOWSIZEY        (SDRATTR_SHADOW_FIRST+ 8);
+constexpr sal_uInt16                   SDRATTR_SHADOW_LAST        (SDRATTR_SHADOWSIZEY);                     /* 1078   */ /* 1078   */ /* 1061   */ /* Pool V1: 1039 */
+>>>>>>> CHANGE (6454b6 tdf#130058 Import shadow size.)
 
 #define SDRATTR_CAPTION_FIRST           (SDRATTR_SHADOW_LAST + 1)                                        /* 1080   */ /* 1080   */ /* 1063   */ /* Pool V1: 1041 */
 #define SDRATTR_CAPTIONTYPE             TypedWhichId<SdrCaptionTypeItem>(SDRATTR_CAPTION_FIRST+ 0)       /*   1080 */ /*   1080 */ /*   1063 */

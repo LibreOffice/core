@@ -73,7 +73,9 @@ enum class ShapeProperty
     FillBackground,
     FillBitmapName,
     ShadowXDistance,
-    LAST = ShadowXDistance
+    ShadowSizeX,
+    ShadowSizeY,
+    LAST = ShadowSizeY
 };
 
 typedef o3tl::enumarray<ShapeProperty, sal_Int32> ShapePropertyIds;
