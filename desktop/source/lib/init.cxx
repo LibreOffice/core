@@ -2646,6 +2646,7 @@ static void doc_iniUnoCommands ()
         OUString(".uno:ToggleMergeCells"),
         OUString(".uno:NumberFormatCurrency"),
         OUString(".uno:NumberFormatPercent"),
+        OUString(".uno:NumberFormatDecimal"),
         OUString(".uno:NumberFormatDate"),
         OUString(".uno:SortAscending"),
         OUString(".uno:SortDescending"),
