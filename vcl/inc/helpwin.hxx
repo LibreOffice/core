@@ -26,6 +26,7 @@
 enum class QuickHelpFlags;
 struct ImplSVHelpData;
 
+/// A tooltip: adds tips to widgets in a floating / popup window.
 class HelpTextWindow final : public FloatingWindow
 {
 private:
