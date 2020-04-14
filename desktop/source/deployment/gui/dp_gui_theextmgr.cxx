@@ -262,25 +262,25 @@ bool TheExtensionManager::installPackage( const OUString &rPackageURL, bool bWar
 
 void TheExtensionManager::terminateDialog()
 {
-    if ( ! dp_misc::office_is_running() )
+    if (  dp_misc::office_is_running() )
+        return;
+
+    const SolarMutexGuard guard;
+    if (m_xExtMgrDialog)
     {
-        const SolarMutexGuard guard;
-        if (m_xExtMgrDialog)
+        if (m_bExtMgrDialogExecuting)
+            m_xExtMgrDialog->response(RET_CANCEL);
+        else
         {
-            if (m_bExtMgrDialogExecuting)
-                m_xExtMgrDialog->response(RET_CANCEL);
-            else
-            {
-                m_xExtMgrDialog->Close();
-                m_xExtMgrDialog.reset();
-            }
+            m_xExtMgrDialog->Close();
+            m_xExtMgrDialog.reset();
         }
-        assert(!m_xExtMgrDialog);
-        if (m_xUpdReqDialog)
-            m_xUpdReqDialog->response(RET_CANCEL);
-        assert(!m_xUpdReqDialog);
-        Application::Quit();
     }
+    assert(!m_xExtMgrDialog);
+    if (m_xUpdReqDialog)
+        m_xUpdReqDialog->response(RET_CANCEL);
+    assert(!m_xUpdReqDialog);
+    Application::Quit();
 }
 
 
@@ -436,28 +436,28 @@ void TheExtensionManager::disposing( lang::EventObject const & rEvt )
         m_xDesktop.clear();
     }
 
-    if ( shutDown )
+    if ( !shutDown )
+        return;
+
+    if ( dp_misc::office_is_running() )
     {
-        if ( dp_misc::office_is_running() )
+        const SolarMutexGuard guard;
+        if (m_xExtMgrDialog)
         {
-            const SolarMutexGuard guard;
-            if (m_xExtMgrDialog)
+            if (m_bExtMgrDialogExecuting)
+                m_xExtMgrDialog->response(RET_CANCEL);
+            else
             {
-                if (m_bExtMgrDialogExecuting)
-                    m_xExtMgrDialog->response(RET_CANCEL);
-                else
-                {
-                    m_xExtMgrDialog->Close();
-                    m_xExtMgrDialog.reset();
-                }
+                m_xExtMgrDialog->Close();
+                m_xExtMgrDialog.reset();
             }
-            assert(!m_xExtMgrDialog);
-            if (m_xUpdReqDialog)
-                m_xUpdReqDialog->response(RET_CANCEL);
-            assert(!m_xUpdReqDialog);
         }
-        s_ExtMgr.clear();
+        assert(!m_xExtMgrDialog);
+        if (m_xUpdReqDialog)
+            m_xUpdReqDialog->response(RET_CANCEL);
+        assert(!m_xUpdReqDialog);
     }
+    s_ExtMgr.clear();
 }
 
 // XTerminateListener

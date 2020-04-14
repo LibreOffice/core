@@ -727,22 +727,22 @@ void splash_draw_progress( struct splash* splash, int progress )
 
 void splash_destroy(struct splash* splash)
 {
-    if(splash)
-    {
-        if(splash->display)
-        {
-            if(splash->gc)
-            {
-                XFreeGC(splash->display, splash->gc);
-                splash->gc = NULL;
-            }
+    if(!splash)
+        return;
 
-            XCloseDisplay( splash->display );
-            splash->display = NULL;
-            png_destroy_read_struct( &(splash->png_ptr), &(splash->info_ptr), NULL );
+    if(splash->display)
+    {
+        if(splash->gc)
+        {
+            XFreeGC(splash->display, splash->gc);
+            splash->gc = NULL;
         }
-        free(splash);
+
+        XCloseDisplay( splash->display );
+        splash->display = NULL;
+        png_destroy_read_struct( &(splash->png_ptr), &(splash->info_ptr), NULL );
     }
+    free(splash);
 }
 
 struct splash* splash_create(rtl_uString* pAppPath, int argc, char** argv)

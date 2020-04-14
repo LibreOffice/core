@@ -129,20 +129,20 @@ BackendImpl::BackendImpl(
       m_typeInfos( 1 )
 {
     m_typeInfos[ 0 ] = m_xHelpTypeInfo;
-    if (!transientMode())
-    {
-        OUString dbFile = makeURL(getCachePath(), "backenddb.xml");
-        m_backendDb.reset(
-            new HelpBackendDb(getComponentContext(), dbFile));
+    if (transientMode())
+        return;
 
-        //clean up data folders which are no longer used.
-        //This must not be done in the same process where the help files
-        //are still registers. Only after revoking and restarting OOo the folders
-        //can be removed. This works now, because the extension manager is a singleton
-        //and the backends are only create once per process.
-        std::vector<OUString> folders = m_backendDb->getAllDataUrls();
-        deleteUnusedFolders(folders);
-   }
+    OUString dbFile = makeURL(getCachePath(), "backenddb.xml");
+    m_backendDb.reset(
+        new HelpBackendDb(getComponentContext(), dbFile));
+
+    //clean up data folders which are no longer used.
+    //This must not be done in the same process where the help files
+    //are still registers. Only after revoking and restarting OOo the folders
+    //can be removed. This works now, because the extension manager is a singleton
+    //and the backends are only create once per process.
+    std::vector<OUString> folders = m_backendDb->getAllDataUrls();
+    deleteUnusedFolders(folders);
 }
 
 // XPackageRegistry

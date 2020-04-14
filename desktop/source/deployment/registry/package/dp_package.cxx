@@ -1454,28 +1454,28 @@ void BackendImpl::PackageImpl::scanBundle(
         }
     }
 
-    if (!descrFile.isEmpty())
+    if (descrFile.isEmpty())
+        return;
+
+    ::ucbhelper::Content descrFileContent;
+    if (!create_ucb_content( &descrFileContent, descrFile,
+                            xCmdEnv, false /* no throw */ ))
+        return;
+
+    // patch description:
+    std::vector<sal_Int8> bytes( readFile( descrFileContent ) );
+    OUStringBuffer buf;
+    if ( !bytes.empty() )
     {
-        ::ucbhelper::Content descrFileContent;
-        if (create_ucb_content( &descrFileContent, descrFile,
-                                xCmdEnv, false /* no throw */ ))
-        {
-            // patch description:
-            std::vector<sal_Int8> bytes( readFile( descrFileContent ) );
-            OUStringBuffer buf;
-            if ( !bytes.empty() )
-            {
-                buf.append( OUString( reinterpret_cast<char const *>(
-                                          bytes.data() ),
-                                      bytes.size(), RTL_TEXTENCODING_UTF8 ) );
-            }
-            else
-            {
-                buf.append( Package::getDescription() );
-            }
-            m_oldDescription = buf.makeStringAndClear();
-        }
+        buf.append( OUString( reinterpret_cast<char const *>(
+                                  bytes.data() ),
+                              bytes.size(), RTL_TEXTENCODING_UTF8 ) );
     }
+    else
+    {
+        buf.append( Package::getDescription() );
+    }
+    m_oldDescription = buf.makeStringAndClear();
 }
 
 

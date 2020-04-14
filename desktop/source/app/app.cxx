@@ -304,21 +304,22 @@ void SetRestartState() {
 }
 
 void DoRestartActionsIfNecessary(bool quickstart) {
-    if (quickstart) {
-        try {
-            if (officecfg::Setup::Office::OfficeRestartInProgress::get()) {
-                std::shared_ptr< comphelper::ConfigurationChanges > batch(
-                    comphelper::ConfigurationChanges::create());
-                officecfg::Setup::Office::OfficeRestartInProgress::set(
-                    false, batch);
-                batch->commit();
-                css::office::Quickstart::createStart(
-                    comphelper::getProcessComponentContext(),
-                    shouldLaunchQuickstart());
-            }
-        } catch (css::uno::Exception &) {
-            TOOLS_WARN_EXCEPTION("desktop.app", "ignoring");
+    if (!quickstart)
+        return;
+
+    try {
+        if (officecfg::Setup::Office::OfficeRestartInProgress::get()) {
+            std::shared_ptr< comphelper::ConfigurationChanges > batch(
+                comphelper::ConfigurationChanges::create());
+            officecfg::Setup::Office::OfficeRestartInProgress::set(
+                false, batch);
+            batch->commit();
+            css::office::Quickstart::createStart(
+                comphelper::getProcessComponentContext(),
+                shouldLaunchQuickstart());
         }
+    } catch (css::uno::Exception &) {
+        TOOLS_WARN_EXCEPTION("desktop.app", "ignoring");
     }
 }
 
@@ -496,41 +497,41 @@ void Desktop::Init()
         }
     }
 
-    if ( true )
+    if ( !(true) )
+        return;
+
+    // start ipc thread only for non-remote offices
+    RequestHandler::Status aStatus = RequestHandler::Enable(true);
+    if ( aStatus == RequestHandler::IPC_STATUS_PIPE_ERROR )
     {
-        // start ipc thread only for non-remote offices
-        RequestHandler::Status aStatus = RequestHandler::Enable(true);
-        if ( aStatus == RequestHandler::IPC_STATUS_PIPE_ERROR )
-        {
 #if defined ANDROID
-            // Ignore crack pipe errors on Android
+        // Ignore crack pipe errors on Android
 #else
-            // Keep using this oddly named BE_PATHINFO_MISSING value
-            // for pipe-related errors on other platforms. Of course
-            // this crack with two (if not more) levels of our own
-            // error codes hiding the actual system error code is
-            // broken, but that is done all over the code, let's leave
-            // reengineering that to another year.
-            SetBootstrapError( BE_PATHINFO_MISSING, OUString() );
+        // Keep using this oddly named BE_PATHINFO_MISSING value
+        // for pipe-related errors on other platforms. Of course
+        // this crack with two (if not more) levels of our own
+        // error codes hiding the actual system error code is
+        // broken, but that is done all over the code, let's leave
+        // reengineering that to another year.
+        SetBootstrapError( BE_PATHINFO_MISSING, OUString() );
 #endif
-        }
-        else if ( aStatus == RequestHandler::IPC_STATUS_BOOTSTRAP_ERROR )
-        {
-            SetBootstrapError( BE_PATHINFO_MISSING, OUString() );
-        }
-        else if ( aStatus == RequestHandler::IPC_STATUS_2ND_OFFICE )
-        {
-            // 2nd office startup should terminate after sending cmdlineargs through pipe
-            SetBootstrapStatus(BS_TERMINATE);
-        }
-        else if ( !rCmdLineArgs.GetUnknown().isEmpty()
-                  || rCmdLineArgs.IsHelp() || rCmdLineArgs.IsVersion() )
-        {
-            // disable IPC thread in an instance that is just showing a help message
-            RequestHandler::Disable();
-        }
-        pSignalHandler = osl_addSignalHandler(SalMainPipeExchangeSignal_impl, nullptr);
     }
+    else if ( aStatus == RequestHandler::IPC_STATUS_BOOTSTRAP_ERROR )
+    {
+        SetBootstrapError( BE_PATHINFO_MISSING, OUString() );
+    }
+    else if ( aStatus == RequestHandler::IPC_STATUS_2ND_OFFICE )
+    {
+        // 2nd office startup should terminate after sending cmdlineargs through pipe
+        SetBootstrapStatus(BS_TERMINATE);
+    }
+    else if ( !rCmdLineArgs.GetUnknown().isEmpty()
+              || rCmdLineArgs.IsHelp() || rCmdLineArgs.IsVersion() )
+    {
+        // disable IPC thread in an instance that is just showing a help message
+        RequestHandler::Disable();
+    }
+    pSignalHandler = osl_addSignalHandler(SalMainPipeExchangeSignal_impl, nullptr);
 }
 
 void Desktop::InitFinished()
@@ -616,27 +617,27 @@ void Desktop::Shutdown()
 
 void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStatus, const OUString& aDiagnosticMessage )
 {
-    if ( aBootstrapStatus != ::utl::Bootstrap::DATA_OK )
-    {
-        OUString        aProductKey;
-        OUString        aTemp;
+    if ( aBootstrapStatus == ::utl::Bootstrap::DATA_OK )
+        return;
 
-        osl_getExecutableFile( &aProductKey.pData );
-        sal_uInt32     lastIndex = aProductKey.lastIndexOf('/');
-        if ( lastIndex > 0 )
-            aProductKey = aProductKey.copy( lastIndex+1 );
+    OUString        aProductKey;
+    OUString        aTemp;
 
-        aTemp = ::utl::Bootstrap::getProductKey( aProductKey );
-        if ( !aTemp.isEmpty() )
-            aProductKey = aTemp;
+    osl_getExecutableFile( &aProductKey.pData );
+    sal_uInt32     lastIndex = aProductKey.lastIndexOf('/');
+    if ( lastIndex > 0 )
+        aProductKey = aProductKey.copy( lastIndex+1 );
 
-        OUString const aMessage(aDiagnosticMessage + "\n");
+    aTemp = ::utl::Bootstrap::getProductKey( aProductKey );
+    if ( !aTemp.isEmpty() )
+        aProductKey = aTemp;
 
-        std::unique_ptr<weld::MessageDialog> xBootstrapFailedBox(Application::CreateMessageDialog(nullptr,
-                                                                 VclMessageType::Warning, VclButtonsType::Ok, aMessage));
-        xBootstrapFailedBox->set_title(aProductKey);
-        xBootstrapFailedBox->run();
-    }
+    OUString const aMessage(aDiagnosticMessage + "\n");
+
+    std::unique_ptr<weld::MessageDialog> xBootstrapFailedBox(Application::CreateMessageDialog(nullptr,
+                                                             VclMessageType::Warning, VclButtonsType::Ok, aMessage));
+    xBootstrapFailedBox->set_title(aProductKey);
+    xBootstrapFailedBox->run();
 }
 
 // Create an error message depending on bootstrap failure code and an optional file url
@@ -2400,7 +2401,7 @@ void Desktop::OpenSplashScreen()
 {
     const CommandLineArgs &rCmdLine = GetCommandLineArgs();
     // Show intro only if this is normal start (e.g. no server, no quickstart, no printing )
-    if ( !rCmdLine.IsInvisible() &&
+    if ( !(!rCmdLine.IsInvisible() &&
          !rCmdLine.IsHeadless() &&
          !rCmdLine.IsQuickstart() &&
          !rCmdLine.IsMinimized() &&
@@ -2408,43 +2409,43 @@ void Desktop::OpenSplashScreen()
          !rCmdLine.IsTerminateAfterInit() &&
          rCmdLine.GetPrintList().empty() &&
          rCmdLine.GetPrintToList().empty() &&
-         rCmdLine.GetConversionList().empty() )
-    {
-        // Determine application name from command line parameters
-        OUString aAppName;
-        if ( rCmdLine.IsWriter() )
-            aAppName = "writer";
-        else if ( rCmdLine.IsCalc() )
-            aAppName = "calc";
-        else if ( rCmdLine.IsDraw() )
-            aAppName = "draw";
-        else if ( rCmdLine.IsImpress() )
-            aAppName = "impress";
-        else if ( rCmdLine.IsBase() )
-            aAppName = "base";
-        else if ( rCmdLine.IsGlobal() )
-            aAppName = "global";
-        else if ( rCmdLine.IsMath() )
-            aAppName = "math";
-        else if ( rCmdLine.IsWeb() )
-            aAppName = "web";
+         rCmdLine.GetConversionList().empty()) )
+        return;
 
-        // Which splash to use
-        OUString aSplashService( "com.sun.star.office.SplashScreen" );
-        if ( rCmdLine.HasSplashPipe() )
-            aSplashService = "com.sun.star.office.PipeSplashScreen";
+    // Determine application name from command line parameters
+    OUString aAppName;
+    if ( rCmdLine.IsWriter() )
+        aAppName = "writer";
+    else if ( rCmdLine.IsCalc() )
+        aAppName = "calc";
+    else if ( rCmdLine.IsDraw() )
+        aAppName = "draw";
+    else if ( rCmdLine.IsImpress() )
+        aAppName = "impress";
+    else if ( rCmdLine.IsBase() )
+        aAppName = "base";
+    else if ( rCmdLine.IsGlobal() )
+        aAppName = "global";
+    else if ( rCmdLine.IsMath() )
+        aAppName = "math";
+    else if ( rCmdLine.IsWeb() )
+        aAppName = "web";
 
-        Sequence< Any > aSeq( 2 );
-        aSeq[0] <<= true; // bVisible
-        aSeq[1] <<= aAppName;
-        css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-        m_rSplashScreen.set(
-            xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aSplashService, aSeq, xContext),
-            UNO_QUERY);
+    // Which splash to use
+    OUString aSplashService( "com.sun.star.office.SplashScreen" );
+    if ( rCmdLine.HasSplashPipe() )
+        aSplashService = "com.sun.star.office.PipeSplashScreen";
 
-        if(m_rSplashScreen.is())
-                m_rSplashScreen->start("SplashScreen", 100);
-    }
+    Sequence< Any > aSeq( 2 );
+    aSeq[0] <<= true; // bVisible
+    aSeq[1] <<= aAppName;
+    css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    m_rSplashScreen.set(
+        xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aSplashService, aSeq, xContext),
+        UNO_QUERY);
+
+    if(m_rSplashScreen.is())
+            m_rSplashScreen->start("SplashScreen", 100);
 
 }
 
@@ -2505,68 +2506,68 @@ void Desktop::ShowBackingComponent(Desktop * progress)
 
     if (xBackingFrame.is())
         xContainerWindow = xBackingFrame->getContainerWindow();
-    if (xContainerWindow.is())
-    {
-        // set the WindowExtendedStyle::Document style. Normally, this is done by the TaskCreator service when a "_blank"
-        // frame/window is created. Since we do not use the TaskCreator here, we need to mimic its behavior,
-        // otherwise documents loaded into this frame will later on miss functionality depending on the style.
-        VclPtr<vcl::Window> pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
-        SAL_WARN_IF( !pContainerWindow, "desktop.app", "Desktop::Main: no implementation access to the frame's container window!" );
-        pContainerWindow->SetExtendedStyle( pContainerWindow->GetExtendedStyle() | WindowExtendedStyle::Document );
-        if (progress != nullptr)
-        {
-            progress->SetSplashScreenProgress(75);
-        }
+    if (!xContainerWindow.is())
+        return;
 
-        Reference< XController > xStartModule = StartModule::createWithParentWindow( xContext, xContainerWindow);
-        // Attention: You MUST(!) call setComponent() before you call attachFrame().
-        // Because the backing component set the property "IsBackingMode" of the frame
-        // to true inside attachFrame(). But setComponent() reset this state everytimes ...
-        xBackingFrame->setComponent(Reference< XWindow >(xStartModule, UNO_QUERY), xStartModule);
-        if (progress != nullptr)
-        {
-            progress->SetSplashScreenProgress(100);
-        }
-        xStartModule->attachFrame(xBackingFrame);
-        if (progress != nullptr)
-        {
-            progress->CloseSplashScreen();
-        }
-        xContainerWindow->setVisible(true);
+    // set the WindowExtendedStyle::Document style. Normally, this is done by the TaskCreator service when a "_blank"
+    // frame/window is created. Since we do not use the TaskCreator here, we need to mimic its behavior,
+    // otherwise documents loaded into this frame will later on miss functionality depending on the style.
+    VclPtr<vcl::Window> pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
+    SAL_WARN_IF( !pContainerWindow, "desktop.app", "Desktop::Main: no implementation access to the frame's container window!" );
+    pContainerWindow->SetExtendedStyle( pContainerWindow->GetExtendedStyle() | WindowExtendedStyle::Document );
+    if (progress != nullptr)
+    {
+        progress->SetSplashScreenProgress(75);
     }
+
+    Reference< XController > xStartModule = StartModule::createWithParentWindow( xContext, xContainerWindow);
+    // Attention: You MUST(!) call setComponent() before you call attachFrame().
+    // Because the backing component set the property "IsBackingMode" of the frame
+    // to true inside attachFrame(). But setComponent() reset this state everytimes ...
+    xBackingFrame->setComponent(Reference< XWindow >(xStartModule, UNO_QUERY), xStartModule);
+    if (progress != nullptr)
+    {
+        progress->SetSplashScreenProgress(100);
+    }
+    xStartModule->attachFrame(xBackingFrame);
+    if (progress != nullptr)
+    {
+        progress->CloseSplashScreen();
+    }
+    xContainerWindow->setVisible(true);
 }
 
 
 void Desktop::CheckFirstRun( )
 {
-    if (officecfg::Office::Common::Misc::FirstRun::get())
-    {
-        // use VCL timer, which won't trigger during shutdown if the
-        // application exits before timeout
-        m_firstRunTimer.Start();
+    if (!officecfg::Office::Common::Misc::FirstRun::get())
+        return;
+
+    // use VCL timer, which won't trigger during shutdown if the
+    // application exits before timeout
+    m_firstRunTimer.Start();
 
 #ifdef _WIN32
-        // Check if Quickstarter should be started (on Windows only)
-        OUString sRootKey = ReplaceStringHookProc("Software\\%OOOVENDOR\\%PRODUCTNAME\\%PRODUCTVERSION");
-        WCHAR szValue[8192];
-        DWORD nValueSize = sizeof(szValue);
-        HKEY hKey;
-        if (ERROR_SUCCESS == RegOpenKeyW(HKEY_LOCAL_MACHINE, o3tl::toW(sRootKey.getStr()), &hKey))
+    // Check if Quickstarter should be started (on Windows only)
+    OUString sRootKey = ReplaceStringHookProc("Software\\%OOOVENDOR\\%PRODUCTNAME\\%PRODUCTVERSION");
+    WCHAR szValue[8192];
+    DWORD nValueSize = sizeof(szValue);
+    HKEY hKey;
+    if (ERROR_SUCCESS == RegOpenKeyW(HKEY_LOCAL_MACHINE, o3tl::toW(sRootKey.getStr()), &hKey))
+    {
+        if ( ERROR_SUCCESS == RegQueryValueExW( hKey, L"RunQuickstartAtFirstStart", nullptr, nullptr, reinterpret_cast<LPBYTE>(szValue), &nValueSize ) )
         {
-            if ( ERROR_SUCCESS == RegQueryValueExW( hKey, L"RunQuickstartAtFirstStart", nullptr, nullptr, reinterpret_cast<LPBYTE>(szValue), &nValueSize ) )
-            {
-                css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-                css::office::Quickstart::createAutoStart(xContext, true/*Quickstart*/, true/*bAutostart*/);
-                RegCloseKey( hKey );
-            }
+            css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+            css::office::Quickstart::createAutoStart(xContext, true/*Quickstart*/, true/*bAutostart*/);
+            RegCloseKey( hKey );
         }
+    }
 #endif
 
-        std::shared_ptr< comphelper::ConfigurationChanges > batch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Misc::FirstRun::set(false, batch);
-        batch->commit();
-    }
+    std::shared_ptr< comphelper::ConfigurationChanges > batch(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Misc::FirstRun::set(false, batch);
+    batch->commit();
 }
 
 }

@@ -245,67 +245,67 @@ void SAL_CALL
 SplashScreen::initialize( const css::uno::Sequence< css::uno::Any>& aArguments )
 {
     osl::MutexGuard  aGuard( _aMutex );
-    if (aArguments.hasElements())
+    if (!aArguments.hasElements())
+        return;
+
+    aArguments[0] >>= _bVisible;
+    if (aArguments.getLength() > 1 )
+        aArguments[1] >>= _sAppName;
+
+    // start to determine bitmap and all other required value
+    if ( _bShowLogo )
+        SetScreenBitmap (_aIntroBmp);
+    Size aSize = _aIntroBmp.GetSizePixel();
+    pWindow->SetOutputSizePixel( aSize );
+    pWindow->_vdev->SetOutputSizePixel( aSize );
+    _height = aSize.Height();
+    _width = aSize.Width();
+    if (_width > 500)
     {
-        aArguments[0] >>= _bVisible;
-        if (aArguments.getLength() > 1 )
-            aArguments[1] >>= _sAppName;
-
-        // start to determine bitmap and all other required value
-        if ( _bShowLogo )
-            SetScreenBitmap (_aIntroBmp);
-        Size aSize = _aIntroBmp.GetSizePixel();
-        pWindow->SetOutputSizePixel( aSize );
-        pWindow->_vdev->SetOutputSizePixel( aSize );
-        _height = aSize.Height();
-        _width = aSize.Width();
-        if (_width > 500)
+        Point xtopleft(212,216);
+        if ( NOT_LOADED == _tlx || NOT_LOADED == _tly )
         {
-            Point xtopleft(212,216);
-            if ( NOT_LOADED == _tlx || NOT_LOADED == _tly )
-            {
-                _tlx = xtopleft.X();    // top-left x
-                _tly = xtopleft.Y();    // top-left y
-            }
-            if ( NOT_LOADED == _barwidth )
-                _barwidth = 263;
-            if ( NOT_LOADED == _barheight )
-                _barheight = 8;
+            _tlx = xtopleft.X();    // top-left x
+            _tly = xtopleft.Y();    // top-left y
         }
-        else
-        {
-            if ( NOT_LOADED == _barwidth )
-                _barwidth  = _width - (2 * _xoffset);
-            if ( NOT_LOADED == _barheight )
-                _barheight = 6;
-            if ( NOT_LOADED == _tlx || NOT_LOADED == _tly )
-            {
-                _tlx = _xoffset;           // top-left x
-                _tly = _height - _yoffset; // top-left y
-            }
-        }
-
-        if ( NOT_LOADED == _textBaseline )
-            _textBaseline = _height;
-
-        if ( NOT_LOADED_COLOR == _cProgressFrameColor )
-            _cProgressFrameColor = COL_LIGHTGRAY;
-
-        if ( NOT_LOADED_COLOR == _cProgressBarColor )
-        {
-            // progress bar: new color only for big bitmap format
-            if ( _width > 500 )
-                _cProgressBarColor = Color( 157, 202, 18 );
-            else
-                _cProgressBarColor = COL_BLUE;
-        }
-
-        if ( NOT_LOADED_COLOR == _cProgressTextColor )
-            _cProgressTextColor = COL_BLACK;
-
-        Application::AddEventListener(
-            LINK( this, SplashScreen, AppEventListenerHdl ) );
+        if ( NOT_LOADED == _barwidth )
+            _barwidth = 263;
+        if ( NOT_LOADED == _barheight )
+            _barheight = 8;
     }
+    else
+    {
+        if ( NOT_LOADED == _barwidth )
+            _barwidth  = _width - (2 * _xoffset);
+        if ( NOT_LOADED == _barheight )
+            _barheight = 6;
+        if ( NOT_LOADED == _tlx || NOT_LOADED == _tly )
+        {
+            _tlx = _xoffset;           // top-left x
+            _tly = _height - _yoffset; // top-left y
+        }
+    }
+
+    if ( NOT_LOADED == _textBaseline )
+        _textBaseline = _height;
+
+    if ( NOT_LOADED_COLOR == _cProgressFrameColor )
+        _cProgressFrameColor = COL_LIGHTGRAY;
+
+    if ( NOT_LOADED_COLOR == _cProgressBarColor )
+    {
+        // progress bar: new color only for big bitmap format
+        if ( _width > 500 )
+            _cProgressBarColor = Color( 157, 202, 18 );
+        else
+            _cProgressBarColor = COL_BLUE;
+    }
+
+    if ( NOT_LOADED_COLOR == _cProgressTextColor )
+        _cProgressTextColor = COL_BLACK;
+
+    Application::AddEventListener(
+        LINK( this, SplashScreen, AppEventListenerHdl ) );
 }
 
 void SplashScreen::updateStatus()

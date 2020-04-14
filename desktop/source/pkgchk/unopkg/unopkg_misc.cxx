@@ -272,18 +272,19 @@ void printf_package(
         printf_line( "Media-Type", xPackageType->getMediaType(), level + 1 );
     }
     printf_line( "Description", xPackage->getDescription(), level + 1 );
-    if (xPackage->isBundle()) {
-        Sequence< Reference<deployment::XPackage> > seq(
-            xPackage->getBundle( Reference<task::XAbortChannel>(), xCmdEnv ) );
-        printf_space( level + 1 );
-        dp_misc::writeConsole("bundled Packages: {\n");
-        std::vector<Reference<deployment::XPackage> >vec_bundle;
-        ::comphelper::sequenceToContainer(vec_bundle, seq);
-        printf_packages( vec_bundle, std::vector<bool>(vec_bundle.size()),
-                         xCmdEnv, level + 2 );
-        printf_space( level + 1 );
-        dp_misc::writeConsole("}\n");
-    }
+    if (!xPackage->isBundle())
+        return;
+
+    Sequence< Reference<deployment::XPackage> > seq(
+        xPackage->getBundle( Reference<task::XAbortChannel>(), xCmdEnv ) );
+    printf_space( level + 1 );
+    dp_misc::writeConsole("bundled Packages: {\n");
+    std::vector<Reference<deployment::XPackage> >vec_bundle;
+    ::comphelper::sequenceToContainer(vec_bundle, seq);
+    printf_packages( vec_bundle, std::vector<bool>(vec_bundle.size()),
+                     xCmdEnv, level + 2 );
+    printf_space( level + 1 );
+    dp_misc::writeConsole("}\n");
 }
 
 } // anon namespace

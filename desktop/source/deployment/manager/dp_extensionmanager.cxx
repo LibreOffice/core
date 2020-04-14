@@ -931,19 +931,19 @@ void ExtensionManager::enableExtension(
         excOccurred <<= exc;
     }
 
-    if (excOccurred.hasValue())
+    if (!excOccurred.hasValue())
+        return;
+
+    try
     {
-        try
-        {
-            activateExtension(dp_misc::getIdentifier(extension),
-                              extension->getName(), bUserDisabled, false,
-                              xAbortChannel, xCmdEnv);
-        }
-        catch (...)
-        {
-        }
-        ::cppu::throwException(excOccurred);
+        activateExtension(dp_misc::getIdentifier(extension),
+                          extension->getName(), bUserDisabled, false,
+                          xAbortChannel, xCmdEnv);
     }
+    catch (...)
+    {
+    }
+    ::cppu::throwException(excOccurred);
 }
 
 sal_Int32 ExtensionManager::checkPrerequisitesAndEnable(
@@ -1032,19 +1032,19 @@ void ExtensionManager::disableExtension(
         excOccurred <<= exc;
     }
 
-    if (excOccurred.hasValue())
+    if (!excOccurred.hasValue())
+        return;
+
+    try
     {
-        try
-        {
-            activateExtension(dp_misc::getIdentifier(extension),
-                              extension->getName(), bUserDisabled, false,
-                              xAbortChannel, xCmdEnv);
-        }
-        catch (...)
-        {
-        }
-        ::cppu::throwException(excOccurred);
+        activateExtension(dp_misc::getIdentifier(extension),
+                          extension->getName(), bUserDisabled, false,
+                          xAbortChannel, xCmdEnv);
     }
+    catch (...)
+    {
+    }
+    ::cppu::throwException(excOccurred);
 }
 
 uno::Sequence< Reference<css::deployment::XPackage> >

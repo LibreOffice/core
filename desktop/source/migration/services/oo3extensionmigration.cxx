@@ -78,37 +78,37 @@ void OO3ExtensionMigration::scanUserExtensions( const OUString& sSourceDir, TStr
     osl::Directory    aScanRootDir( sSourceDir );
     osl::FileStatus   fs(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL);
     osl::FileBase::RC nRetCode = aScanRootDir.open();
-    if ( nRetCode == osl::Directory::E_None )
+    if ( nRetCode != osl::Directory::E_None )
+        return;
+
+    sal_uInt32    nHint( 0 );
+    osl::DirectoryItem aItem;
+    while ( aScanRootDir.getNextItem( aItem, nHint ) == osl::Directory::E_None )
     {
-        sal_uInt32    nHint( 0 );
-        osl::DirectoryItem aItem;
-        while ( aScanRootDir.getNextItem( aItem, nHint ) == osl::Directory::E_None )
+        if (( aItem.getFileStatus(fs) == osl::FileBase::E_None ) &&
+            ( fs.getFileType() == osl::FileStatus::Directory   ))
         {
-            if (( aItem.getFileStatus(fs) == osl::FileBase::E_None ) &&
-                ( fs.getFileType() == osl::FileStatus::Directory   ))
+            //Check next folder as the "real" extension folder is below a temp folder!
+            OUString sExtensionFolderURL = fs.getFileURL();
+
+            osl::Directory     aExtensionRootDir( sExtensionFolderURL );
+
+            nRetCode = aExtensionRootDir.open();
+            if ( nRetCode == osl::Directory::E_None )
             {
-                //Check next folder as the "real" extension folder is below a temp folder!
-                OUString sExtensionFolderURL = fs.getFileURL();
-
-                osl::Directory     aExtensionRootDir( sExtensionFolderURL );
-
-                nRetCode = aExtensionRootDir.open();
-                if ( nRetCode == osl::Directory::E_None )
+                osl::DirectoryItem aExtDirItem;
+                while ( aExtensionRootDir.getNextItem( aExtDirItem, nHint ) == osl::Directory::E_None )
                 {
-                    osl::DirectoryItem aExtDirItem;
-                    while ( aExtensionRootDir.getNextItem( aExtDirItem, nHint ) == osl::Directory::E_None )
-                    {
-                        bool bFileStatus = aExtDirItem.getFileStatus(fs) == osl::FileBase::E_None;
-                        bool bIsDir      = fs.getFileType() == osl::FileStatus::Directory;
+                    bool bFileStatus = aExtDirItem.getFileStatus(fs) == osl::FileBase::E_None;
+                    bool bIsDir      = fs.getFileType() == osl::FileStatus::Directory;
 
-                        if ( bFileStatus && bIsDir )
-                        {
-                            sExtensionFolderURL = fs.getFileURL();
-                            ScanResult eResult = scanExtensionFolder( sExtensionFolderURL );
-                            if ( eResult == SCANRESULT_MIGRATE_EXTENSION )
-                                aMigrateExtensions.push_back( sExtensionFolderURL );
-                            break;
-                        }
+                    if ( bFileStatus && bIsDir )
+                    {
+                        sExtensionFolderURL = fs.getFileURL();
+                        ScanResult eResult = scanExtensionFolder( sExtensionFolderURL );
+                        if ( eResult == SCANRESULT_MIGRATE_EXTENSION )
+                            aMigrateExtensions.push_back( sExtensionFolderURL );
+                        break;
                     }
                 }
             }
