@@ -34,6 +34,24 @@
       "revId": "bc342704f59942174306b274d18ca69b7a710e6c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05b8f20a_fd69fbc0",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1232,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-14T08:08:06Z",
+      "side": 1,
+      "message": "\u003chttps://gerrit.libreoffice.org/c/core/+/92143\u003e \"basctl functions cannot be missing here\"",
+      "parentUuid": "59cbbefd_71d5344a",
+      "revId": "bc342704f59942174306b274d18ca69b7a710e6c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
