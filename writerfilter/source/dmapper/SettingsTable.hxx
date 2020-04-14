@@ -77,6 +77,7 @@ class SettingsTable : public LoggedProperties, public LoggedTable
     bool GetProtectForm() const;
     bool GetReadOnly() const;
     bool GetLongerSpaceSequence() const;
+    bool GetNoLeading() const;
     bool GetNoHyphenateCaps() const;
     sal_Int16 GetHypenationZone() const;
 
