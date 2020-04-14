@@ -210,7 +210,8 @@ std::unique_ptr<SbiExprNode> SbiExpression::Term( const KeywordSymbolInfo* pKeyw
         bError = true;
     }
 
-    if( DoParametersFollow( pParser, eCurExpr, eTok = eNextTok ) )
+    eTok = eNextTok;
+    if( DoParametersFollow( pParser, eCurExpr, eTok ) )
     {
         bool bStandaloneExpression = (m_eMode == EXPRMODE_STANDALONE);
         pPar = SbiExprList::ParseParameters( pParser, bStandaloneExpression );

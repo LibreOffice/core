@@ -259,7 +259,8 @@ SbiToken SbiTokenizer::Peek()
         nPCol1 = nCol1; nCol1 = nOldCol1;
         nPCol2 = nCol2; nCol2 = nOldCol2;
     }
-    return eCurTok = ePush;
+    eCurTok = ePush;
+    return eCurTok;
 }
 
 // For decompilation. Numbers and symbols return an empty string.
@@ -329,44 +330,54 @@ SbiToken SbiTokenizer::Next()
     if( !NextSym() )
     {
         bEof = bEos = true;
-        return eCurTok = EOLN;
+        eCurTok = EOLN;
+        return eCurTok;
     }
 
     if( aSym.startsWith("\n") )
     {
         bEos = true;
-        return eCurTok = EOLN;
+        eCurTok = EOLN;
+        return eCurTok;
     }
     bEos = false;
 
     if( bNumber )
     {
-        return eCurTok = NUMBER;
+        eCurTok = NUMBER;
+        return eCurTok;
     }
     else if( ( eScanType == SbxDATE || eScanType == SbxSTRING ) && !bSymbol )
     {
-        return eCurTok = FIXSTRING;
+        eCurTok = FIXSTRING;
+        return eCurTok;
     }
     else if( aSym.isEmpty() )
     {
         //something went wrong
         bEof = bEos = true;
-        return eCurTok = EOLN;
+        eCurTok = EOLN;
+        return eCurTok;
     }
     // Special cases of characters that are between "Z" and "a". ICompare()
     // evaluates the position of these characters in different ways.
     else if( aSym[0] == '^' )
     {
-        return eCurTok = EXPON;
+        eCurTok = EXPON;
+        return eCurTok;
     }
     else if( aSym[0] == '\\' )
     {
-        return eCurTok = IDIV;
+        eCurTok = IDIV;
+        return eCurTok;
     }
     else
     {
         if( eScanType != SbxVARIANT )
-            return eCurTok = SYMBOL;
+        {
+            eCurTok = SYMBOL;
+            return eCurTok;
+        }
         // valid token?
         short lb = 0;
         short ub = SAL_N_ELEMENTS(aTokTable_Basic)-1;
@@ -409,9 +420,11 @@ SbiToken SbiTokenizer::Next()
         sal_Unicode ch = aSym[0];
         if( !BasicCharClass::isAlpha( ch, bCompatible ) && !bSymbol )
         {
-            return eCurTok = static_cast<SbiToken>(ch & 0x00FF);
+            eCurTok = static_cast<SbiToken>(ch & 0x00FF);
+            return eCurTok;
         }
-        return eCurTok = SYMBOL;
+        eCurTok = SYMBOL;
+        return eCurTok;
     }
 special:
     // #i92642
@@ -419,11 +432,13 @@ special:
             eCurTok == THEN || eCurTok == ELSE); // single line If
     if( !bStartOfLine && (tp->t == NAME || tp->t == LINE) )
     {
-        return eCurTok = SYMBOL;
+        eCurTok = SYMBOL;
+        return eCurTok;
     }
     else if( tp->t == TEXT )
     {
-        return eCurTok = SYMBOL;
+        eCurTok = SYMBOL;
+        return eCurTok;
     }
     // maybe we can expand this for other statements that have parameters
     // that are keywords ( and those keywords are only used within such
@@ -434,7 +449,8 @@ special:
     // Also we accept Dim APPEND
     else if ( ( !bInStatement || eCurTok == DIM ) && tp->t == APPEND )
     {
-        return eCurTok = SYMBOL;
+        eCurTok = SYMBOL;
+        return eCurTok;
     }
     // #i92642: Special LINE token handling -> SbiParser::Line()
 

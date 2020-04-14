@@ -3221,11 +3221,14 @@ bool SbiRuntime::implIsClass( SbxObject const * pObj, const OUString& aClass )
         {
             const OUString& aObjClass = pObj->GetClassName();
             SbModule* pClassMod = GetSbData()->pClassFac->FindClass( aObjClass );
-            SbClassData* pClassData;
-            if( pClassMod && (pClassData=pClassMod->pClassData.get()) != nullptr )
+            if( pClassMod )
             {
-                SbxVariable* pClassVar = pClassData->mxIfaces->Find( aClass, SbxClassType::DontCare );
-                bRet = (pClassVar != nullptr);
+                SbClassData* pClassData = pClassMod->pClassData.get();
+                if (pClassData != nullptr )
+                {
+                    SbxVariable* pClassVar = pClassData->mxIfaces->Find( aClass, SbxClassType::DontCare );
+                    bRet = (pClassVar != nullptr);
+                }
             }
         }
     }

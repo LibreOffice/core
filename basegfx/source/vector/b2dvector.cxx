@@ -161,7 +161,8 @@ namespace basegfx
     B2DVector operator*( const B2DHomMatrix& rMat, const B2DVector& rVec )
     {
         B2DVector aRes( rVec );
-        return aRes*=rMat;
+        aRes *= rMat;
+        return aRes;
     }
 
     B2VectorContinuity getContinuity(const B2DVector& rBackVector, const B2DVector& rForwardVector )
