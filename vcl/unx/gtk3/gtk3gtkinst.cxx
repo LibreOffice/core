@@ -1623,7 +1623,7 @@ OpenGLContext* GtkInstance::CreateOpenGLContext()
 // tdf#123800 avoid requiring wayland at runtime just because it existed at buildtime
 bool DLSYM_GDK_IS_WAYLAND_DISPLAY(GdkDisplay* pDisplay)
 {
-    auto get_type = reinterpret_cast<GType (*) (void)>(dlsym(nullptr, "gdk_wayland_display_get_type"));
+    static auto get_type = reinterpret_cast<GType (*) (void)>(dlsym(nullptr, "gdk_wayland_display_get_type"));
     if (!get_type)
         return false;
     return G_TYPE_CHECK_INSTANCE_TYPE(pDisplay, get_type());
@@ -1631,7 +1631,7 @@ bool DLSYM_GDK_IS_WAYLAND_DISPLAY(GdkDisplay* pDisplay)
 
 bool DLSYM_GDK_IS_X11_DISPLAY(GdkDisplay* pDisplay)
 {
-    auto get_type = reinterpret_cast<GType (*) (void)>(dlsym(nullptr, "gdk_x11_display_get_type"));
+    static auto get_type = reinterpret_cast<GType (*) (void)>(dlsym(nullptr, "gdk_x11_display_get_type"));
     if (!get_type)
         return false;
     return G_TYPE_CHECK_INSTANCE_TYPE(pDisplay, get_type());
