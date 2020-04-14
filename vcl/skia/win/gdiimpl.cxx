@@ -38,10 +38,6 @@ WinSkiaSalGraphicsImpl::WinSkiaSalGraphicsImpl(WinSalGraphics& rGraphics,
 void WinSkiaSalGraphicsImpl::createWindowContext()
 {
     SkiaZone zone;
-    // When created, Init() gets called with size (0,0), which is invalid size
-    // for Skia. Creating the actual surface is delayed, so the size should be always
-    // valid here, but better check.
-    assert((GetWidth() != 0 && GetHeight() != 0) || isOffscreen());
     sk_app::DisplayParams displayParams;
     switch (SkiaHelper::renderMethodToUse())
     {
