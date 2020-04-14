@@ -74,7 +74,12 @@ void SwWatermarkDialog::InitFields()
         const SfxWatermarkItem* pWatermark = static_cast<const SfxWatermarkItem*>( pItem );
         const OUString& sText = pWatermark->GetText();
         m_xTextInput->set_text(sText);
-        m_xFont->set_entry_text(pWatermark->GetFont());
+        OUString sFontName = pWatermark->GetFont();
+        int nFontIndex = m_xFont->find_text(sFontName);
+        if (nFontIndex != -1)
+            m_xFont->set_active(nFontIndex);
+        else
+            m_xFont->set_entry_text(sFontName);
         m_xAngle->set_value(pWatermark->GetAngle(), FieldUnit::DEGREE);
         m_xColor->SelectEntry( pWatermark->GetColor() );
         m_xTransparency->set_value(pWatermark->GetTransparency(), FieldUnit::PERCENT);
