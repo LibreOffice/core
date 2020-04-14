@@ -33,6 +33,8 @@ struct EffectShadowProperties
 {
     OptValue< sal_Int64 > moShadowDist;
     OptValue< sal_Int64 > moShadowDir;
+    OptValue< sal_Int64 > moShadowSx;
+    OptValue< sal_Int64 > moShadowSy;
     Color moShadowColor;
 
     /** Overwrites all members that are explicitly set in rSourceProps. */
