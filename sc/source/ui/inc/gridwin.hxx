@@ -131,6 +131,17 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
 
     VisibleRange maVisibleRange;
 
+    struct LOKCursorEntry
+    {
+        Fraction aScaleX;
+        Fraction aScaleY;
+        tools::Rectangle aRect;
+    };
+
+    // Stores the last cursor position in twips for all
+    // zoom levels demanded from a ScGridWindow instance.
+    std::vector<LOKCursorEntry> maLOKLastCursor;
+
     std::unique_ptr<sc::SpellCheckContext> mpSpellCheckCxt;
 
     ScViewData*             pViewData;
@@ -289,6 +300,10 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
                                       ::std::vector< tools::Rectangle >& rPixelRects ) const;
     void            UpdateKitSelection(const std::vector<tools::Rectangle>& rRectangles,
                                        std::vector<tools::Rectangle>* pLogicRects = nullptr);
+    bool            NeedLOKCursorInvalidation(const tools::Rectangle& rCursorRect,
+                                              const Fraction aScaleX, const Fraction aScaleY);
+    void            InvalidateLOKViewCursor(const tools::Rectangle& rCursorRect,
+                                            const Fraction aScaleX, const Fraction aScaleY);
 
 protected:
     virtual void    PrePaint(vcl::RenderContext& rRenderContext) override;
