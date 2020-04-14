@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e9e63046_99ca6f1f",
+        "filename": "sd/source/filter/eppt/epptso.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1175,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-04-14T09:43:42Z",
+      "side": 1,
+      "message": "Possibly better turn this from pointer to css::style::TabStop into const sequence reference; then use it in the loop, as before the regressed commit (where pTabStop was used).",
+      "range": {
+        "startLine": 1175,
+        "startChar": 35,
+        "endLine": 1175,
+        "endChar": 43
+      },
+      "revId": "dca59ca3260e2616b44e4adcdc46c28eb61857b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
