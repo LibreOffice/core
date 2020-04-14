@@ -256,6 +256,7 @@ struct SettingsTable_Impl
     bool                m_bRedlineProtection;
     OUString            m_sRedlineProtectionKey;
     bool                m_bDisplayBackgroundShape;
+    bool                m_bNoLeading = false;
 
     uno::Sequence<beans::PropertyValue> m_pThemeFontLangProps;
 
@@ -571,6 +572,9 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_Settings_displayBackgroundShape:
         m_pImpl->m_bDisplayBackgroundShape = nIntValue;
         break;
+    case NS_ooxml::LN_CT_Compat_noLeading:
+        m_pImpl->m_bNoLeading = nIntValue != 0;
+        break;
     default:
     {
 #ifdef DBG_UTIL
@@ -793,6 +797,11 @@ sal_Int32 SettingsTable::GetWordCompatibilityMode() const
 bool SettingsTable::GetLongerSpaceSequence() const
 {
     return m_pImpl->m_bLongerSpaceSequence;
+}
+
+bool SettingsTable::GetNoLeading() const
+{
+    return m_pImpl->m_bNoLeading;
 }
 
 }//namespace dmapper
