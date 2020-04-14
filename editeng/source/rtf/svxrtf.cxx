@@ -677,169 +677,169 @@ void SvxRTFParser::ClearStyleAttr_( SvxRTFItemStackType& rStkType )
 
 void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
 {
-    if( !aAttrStack.empty() )
-    {
-        std::unique_ptr<SvxRTFItemStackType> pOld = std::move(aAttrStack.back());
-        aAttrStack.pop_back();
-        SvxRTFItemStackType *pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back().get();
+    if( aAttrStack.empty() )
+        return;
 
-        do {        // middle check loop
-            sal_Int32 nOldSttNdIdx = pOld->pSttNd->GetIdx();
-            if (!pOld->m_pChildList &&
-                ((!pOld->aAttrSet.Count() && !pOld->nStyleNo ) ||
-                (nOldSttNdIdx == pInsPos->GetNodeIdx() &&
-                pOld->nSttCnt == pInsPos->GetCntIdx() )))
-                break;          // no attributes or Area
+    std::unique_ptr<SvxRTFItemStackType> pOld = std::move(aAttrStack.back());
+    aAttrStack.pop_back();
+    SvxRTFItemStackType *pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back().get();
 
-            // set only the attributes that are different from the parent
-            if( pCurrent && pOld->aAttrSet.Count() )
+    do {        // middle check loop
+        sal_Int32 nOldSttNdIdx = pOld->pSttNd->GetIdx();
+        if (!pOld->m_pChildList &&
+            ((!pOld->aAttrSet.Count() && !pOld->nStyleNo ) ||
+            (nOldSttNdIdx == pInsPos->GetNodeIdx() &&
+            pOld->nSttCnt == pInsPos->GetCntIdx() )))
+            break;          // no attributes or Area
+
+        // set only the attributes that are different from the parent
+        if( pCurrent && pOld->aAttrSet.Count() )
+        {
+            SfxItemIter aIter( pOld->aAttrSet );
+            const SfxPoolItem* pItem = aIter.GetCurItem(), *pGet;
+            do
             {
-                SfxItemIter aIter( pOld->aAttrSet );
-                const SfxPoolItem* pItem = aIter.GetCurItem(), *pGet;
-                do
+                if( SfxItemState::SET == pCurrent->aAttrSet.GetItemState(
+                    pItem->Which(), false, &pGet ) &&
+                    *pItem == *pGet )
+                    pOld->aAttrSet.ClearItem( pItem->Which() );
+
+                pItem = aIter.NextItem();
+            } while (pItem);
+
+            if (!pOld->aAttrSet.Count() && !pOld->m_pChildList &&
+                !pOld->nStyleNo )
+                break;
+        }
+
+        // Set all attributes which have been defined from start until here
+        bool bCrsrBack = !pInsPos->GetCntIdx();
+        if( bCrsrBack )
+        {
+            // at the beginning of a paragraph? Move back one position
+            sal_Int32 nNd = pInsPos->GetNodeIdx();
+            MovePos(false);
+            // if can not move backward then later don't move forward !
+            bCrsrBack = nNd != pInsPos->GetNodeIdx();
+        }
+
+        if( pOld->pSttNd->GetIdx() < pInsPos->GetNodeIdx() ||
+            ( pOld->pSttNd->GetIdx() == pInsPos->GetNodeIdx() &&
+              pOld->nSttCnt <= pInsPos->GetCntIdx() ) )
+        {
+            if( !bCrsrBack )
+            {
+                // all pard attributes are only valid until the previous
+                // paragraph !!
+                if( nOldSttNdIdx == pInsPos->GetNodeIdx() )
                 {
-                    if( SfxItemState::SET == pCurrent->aAttrSet.GetItemState(
-                        pItem->Which(), false, &pGet ) &&
-                        *pItem == *pGet )
-                        pOld->aAttrSet.ClearItem( pItem->Which() );
-
-                    pItem = aIter.NextItem();
-                } while (pItem);
-
-                if (!pOld->aAttrSet.Count() && !pOld->m_pChildList &&
-                    !pOld->nStyleNo )
-                    break;
-            }
-
-            // Set all attributes which have been defined from start until here
-            bool bCrsrBack = !pInsPos->GetCntIdx();
-            if( bCrsrBack )
-            {
-                // at the beginning of a paragraph? Move back one position
-                sal_Int32 nNd = pInsPos->GetNodeIdx();
-                MovePos(false);
-                // if can not move backward then later don't move forward !
-                bCrsrBack = nNd != pInsPos->GetNodeIdx();
-            }
-
-            if( pOld->pSttNd->GetIdx() < pInsPos->GetNodeIdx() ||
-                ( pOld->pSttNd->GetIdx() == pInsPos->GetNodeIdx() &&
-                  pOld->nSttCnt <= pInsPos->GetCntIdx() ) )
-            {
-                if( !bCrsrBack )
+                }
+                else
                 {
-                    // all pard attributes are only valid until the previous
-                    // paragraph !!
-                    if( nOldSttNdIdx == pInsPos->GetNodeIdx() )
+                    // Now it gets complicated:
+                    // - all character attributes sre keep the area
+                    // - all paragraph attributes to get the area
+                    //   up to the previous paragraph
+                    std::unique_ptr<SvxRTFItemStackType> pNew(
+                        new SvxRTFItemStackType(*pOld, *pInsPos, true));
+                    pNew->aAttrSet.SetParent( pOld->aAttrSet.GetParent() );
+
+                    // Delete all paragraph attributes from pNew
+                    for( sal_uInt16 n = 0; n < (sizeof(aPardMap) / sizeof(sal_uInt16)) &&
+                                        pNew->aAttrSet.Count(); ++n )
+                        if( reinterpret_cast<sal_uInt16*>(&aPardMap)[n] )
+                            pNew->aAttrSet.ClearItem( reinterpret_cast<sal_uInt16*>(&aPardMap)[n] );
+                    pNew->SetRTFDefaults( GetRTFDefaults() );
+
+                    // Were there any?
+                    if( pNew->aAttrSet.Count() == pOld->aAttrSet.Count() )
                     {
+                        pNew.reset();
                     }
                     else
                     {
-                        // Now it gets complicated:
-                        // - all character attributes sre keep the area
-                        // - all paragraph attributes to get the area
-                        //   up to the previous paragraph
-                        std::unique_ptr<SvxRTFItemStackType> pNew(
-                            new SvxRTFItemStackType(*pOld, *pInsPos, true));
-                        pNew->aAttrSet.SetParent( pOld->aAttrSet.GetParent() );
+                        pNew->nStyleNo = 0;
 
-                        // Delete all paragraph attributes from pNew
-                        for( sal_uInt16 n = 0; n < (sizeof(aPardMap) / sizeof(sal_uInt16)) &&
-                                            pNew->aAttrSet.Count(); ++n )
-                            if( reinterpret_cast<sal_uInt16*>(&aPardMap)[n] )
-                                pNew->aAttrSet.ClearItem( reinterpret_cast<sal_uInt16*>(&aPardMap)[n] );
-                        pNew->SetRTFDefaults( GetRTFDefaults() );
+                        // Now span the real area of pNew from old
+                        SetEndPrevPara( pOld->pEndNd, pOld->nEndCnt );
+                        pNew->nSttCnt = 0;
 
-                        // Were there any?
-                        if( pNew->aAttrSet.Count() == pOld->aAttrSet.Count() )
+                        if( IsChkStyleAttr() )
                         {
-                            pNew.reset();
+                            ClearStyleAttr_( *pOld );
+                            ClearStyleAttr_( *pNew );   //#i10381#, methinks.
+                        }
+
+                        if( pCurrent )
+                        {
+                            pCurrent->Add(std::move(pOld));
+                            pCurrent->Add(std::move(pNew));
                         }
                         else
                         {
-                            pNew->nStyleNo = 0;
+                            // Last off the stack, thus cache it until the next text was
+                            // read. (Span no attributes!)
 
-                            // Now span the real area of pNew from old
-                            SetEndPrevPara( pOld->pEndNd, pOld->nEndCnt );
-                            pNew->nSttCnt = 0;
-
-                            if( IsChkStyleAttr() )
-                            {
-                                ClearStyleAttr_( *pOld );
-                                ClearStyleAttr_( *pNew );   //#i10381#, methinks.
-                            }
-
-                            if( pCurrent )
-                            {
-                                pCurrent->Add(std::move(pOld));
-                                pCurrent->Add(std::move(pNew));
-                            }
-                            else
-                            {
-                                // Last off the stack, thus cache it until the next text was
-                                // read. (Span no attributes!)
-
-                                m_AttrSetList.push_back(std::move(pOld));
-                                m_AttrSetList.push_back(std::move(pNew));
-                            }
-                            break;
+                            m_AttrSetList.push_back(std::move(pOld));
+                            m_AttrSetList.push_back(std::move(pNew));
                         }
+                        break;
                     }
                 }
-
-                pOld->pEndNd = pInsPos->MakeNodeIdx().release();
-                pOld->nEndCnt = pInsPos->GetCntIdx();
-
-                /*
-                #i21422#
-                If the parent (pCurrent) sets something e.g. , and the child (pOld)
-                unsets it and the style both are based on has it unset then
-                clearing the pOld by looking at the style is clearly a disaster
-                as the text ends up with pCurrents bold and not pOlds no bold, this
-                should be rethought out. For the moment its safest to just do
-                the clean if we have no parent, all we suffer is too many
-                redundant properties.
-                */
-                if (IsChkStyleAttr() && !pCurrent)
-                    ClearStyleAttr_( *pOld );
-
-                if( pCurrent )
-                {
-                    pCurrent->Add(std::move(pOld));
-                    // split up and create new entry, because it makes no sense
-                    // to create a "so long" depend list. Bug 95010
-                    if (bCrsrBack && 50 < pCurrent->m_pChildList->size())
-                    {
-                        // at the beginning of a paragraph? Move back one position
-                        MovePos();
-                        bCrsrBack = false;
-
-                        // Open a new Group.
-                        std::unique_ptr<SvxRTFItemStackType> pNew(new SvxRTFItemStackType(
-                                                *pCurrent, *pInsPos, true ));
-                        pNew->SetRTFDefaults( GetRTFDefaults() );
-
-                        // Set all until here valid Attributes
-                        AttrGroupEnd();
-                        pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back().get();  // can be changed after AttrGroupEnd!
-                        pNew->aAttrSet.SetParent( pCurrent ? &pCurrent->aAttrSet : nullptr );
-                        aAttrStack.push_back( std::move(pNew) );
-                    }
-                }
-                else
-                    // Last off the stack, thus cache it until the next text was
-                    // read. (Span no attributes!)
-                    m_AttrSetList.push_back(std::move(pOld));
             }
 
-            if( bCrsrBack )
-                // at the beginning of a paragraph? Move back one position
-                MovePos();
+            pOld->pEndNd = pInsPos->MakeNodeIdx().release();
+            pOld->nEndCnt = pInsPos->GetCntIdx();
 
-        } while( false );
+            /*
+            #i21422#
+            If the parent (pCurrent) sets something e.g. , and the child (pOld)
+            unsets it and the style both are based on has it unset then
+            clearing the pOld by looking at the style is clearly a disaster
+            as the text ends up with pCurrents bold and not pOlds no bold, this
+            should be rethought out. For the moment its safest to just do
+            the clean if we have no parent, all we suffer is too many
+            redundant properties.
+            */
+            if (IsChkStyleAttr() && !pCurrent)
+                ClearStyleAttr_( *pOld );
 
-        bNewGroup = false;
-    }
+            if( pCurrent )
+            {
+                pCurrent->Add(std::move(pOld));
+                // split up and create new entry, because it makes no sense
+                // to create a "so long" depend list. Bug 95010
+                if (bCrsrBack && 50 < pCurrent->m_pChildList->size())
+                {
+                    // at the beginning of a paragraph? Move back one position
+                    MovePos();
+                    bCrsrBack = false;
+
+                    // Open a new Group.
+                    std::unique_ptr<SvxRTFItemStackType> pNew(new SvxRTFItemStackType(
+                                            *pCurrent, *pInsPos, true ));
+                    pNew->SetRTFDefaults( GetRTFDefaults() );
+
+                    // Set all until here valid Attributes
+                    AttrGroupEnd();
+                    pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back().get();  // can be changed after AttrGroupEnd!
+                    pNew->aAttrSet.SetParent( pCurrent ? &pCurrent->aAttrSet : nullptr );
+                    aAttrStack.push_back( std::move(pNew) );
+                }
+            }
+            else
+                // Last off the stack, thus cache it until the next text was
+                // read. (Span no attributes!)
+                m_AttrSetList.push_back(std::move(pOld));
+        }
+
+        if( bCrsrBack )
+            // at the beginning of a paragraph? Move back one position
+            MovePos();
+
+    } while( false );
+
+    bNewGroup = false;
 }
 
 void SvxRTFParser::SetAllAttrOfStk()        // end all Attr. and set it into doc

@@ -382,42 +382,42 @@ SvxUnoTextRangeEnumeration::SvxUnoTextRangeEnumeration(const SvxUnoTextBase& rPa
     if (rParentText.GetEditSource())
         mpEditSource = rParentText.GetEditSource()->Clone();
 
-    if( mpEditSource && mpEditSource->GetTextForwarder() && (nParagraph == rSel.nStartPara && nParagraph == rSel.nEndPara) )
+    if( !(mpEditSource && mpEditSource->GetTextForwarder() && (nParagraph == rSel.nStartPara && nParagraph == rSel.nEndPara)) )
+        return;
+
+    std::vector<sal_Int32> aPortions;
+    mpEditSource->GetTextForwarder()->GetPortions( nParagraph, aPortions );
+    for( size_t aPortionIndex = 0; aPortionIndex < aPortions.size(); aPortionIndex++ )
     {
-        std::vector<sal_Int32> aPortions;
-        mpEditSource->GetTextForwarder()->GetPortions( nParagraph, aPortions );
-        for( size_t aPortionIndex = 0; aPortionIndex < aPortions.size(); aPortionIndex++ )
+        sal_uInt16 nStartPos = 0;
+        if ( aPortionIndex > 0 )
+            nStartPos = aPortions.at( aPortionIndex - 1 );
+        if( nStartPos > rSel.nEndPos )
+            continue;
+        sal_uInt16 nEndPos = aPortions.at( aPortionIndex );
+        if( nEndPos < rSel.nStartPos )
+            continue;
+
+        nStartPos = std::max<int>(nStartPos, rSel.nStartPos);
+        nEndPos = std::min<sal_uInt16>(nEndPos, rSel.nEndPos);
+        ESelection aSel( nParagraph, nStartPos, nParagraph, nEndPos );
+
+        const SvxUnoTextRangeBaseVec& rRanges( mpEditSource->getRanges() );
+        SvxUnoTextRange* pRange = nullptr;
+        for (auto const& elemRange : rRanges)
         {
-            sal_uInt16 nStartPos = 0;
-            if ( aPortionIndex > 0 )
-                nStartPos = aPortions.at( aPortionIndex - 1 );
-            if( nStartPos > rSel.nEndPos )
-                continue;
-            sal_uInt16 nEndPos = aPortions.at( aPortionIndex );
-            if( nEndPos < rSel.nStartPos )
-                continue;
-
-            nStartPos = std::max<int>(nStartPos, rSel.nStartPos);
-            nEndPos = std::min<sal_uInt16>(nEndPos, rSel.nEndPos);
-            ESelection aSel( nParagraph, nStartPos, nParagraph, nEndPos );
-
-            const SvxUnoTextRangeBaseVec& rRanges( mpEditSource->getRanges() );
-            SvxUnoTextRange* pRange = nullptr;
-            for (auto const& elemRange : rRanges)
-            {
-                if (pRange)
-                    break;
-                SvxUnoTextRange* pIterRange = dynamic_cast< SvxUnoTextRange* >( elemRange );
-                if( pIterRange && pIterRange->mbPortion && (aSel == pIterRange->maSelection) )
-                    pRange = pIterRange;
-            }
-            if( pRange == nullptr )
-            {
-                pRange = new SvxUnoTextRange( rParentText, true );
-                pRange->SetSelection( aSel );
-            }
-            maPortions.emplace_back(pRange );
+            if (pRange)
+                break;
+            SvxUnoTextRange* pIterRange = dynamic_cast< SvxUnoTextRange* >( elemRange );
+            if( pIterRange && pIterRange->mbPortion && (aSel == pIterRange->maSelection) )
+                pRange = pIterRange;
         }
+        if( pRange == nullptr )
+        {
+            pRange = new SvxUnoTextRange( rParentText, true );
+            pRange->SetSelection( aSel );
+        }
+        maPortions.emplace_back(pRange );
     }
 }
 
@@ -589,19 +589,19 @@ void SAL_CALL SvxUnoTextCursor::gotoRange( const uno::Reference< text::XTextRang
 
     SvxUnoTextRangeBase* pRange = comphelper::getUnoTunnelImplementation<SvxUnoTextRangeBase>( xRange );
 
-    if( pRange )
+    if( !pRange )
+        return;
+
+    ESelection aNewSel = pRange->GetSelection();
+
+    if( bExpand )
     {
-        ESelection aNewSel = pRange->GetSelection();
-
-        if( bExpand )
-        {
-            const ESelection& rOldSel = GetSelection();
-            aNewSel.nStartPara = rOldSel.nStartPara;
-            aNewSel.nStartPos  = rOldSel.nStartPos;
-        }
-
-        SetSelection( aNewSel );
+        const ESelection& rOldSel = GetSelection();
+        aNewSel.nStartPara = rOldSel.nStartPara;
+        aNewSel.nStartPos  = rOldSel.nStartPos;
     }
+
+    SetSelection( aNewSel );
 }
 
 // text::XTextRange (rest in SvxTextRange)

@@ -680,36 +680,36 @@ void ImpEditEngine::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet )
     if ( !pNode )
         return;
 
-    if ( !( pNode->GetContentAttribs().GetItems() == rSet ) )
+    if ( pNode->GetContentAttribs().GetItems() == rSet )
+        return;
+
+    if ( IsUndoEnabled() && !IsInUndo() && aStatus.DoUndoAttribs() )
     {
-        if ( IsUndoEnabled() && !IsInUndo() && aStatus.DoUndoAttribs() )
+        if ( rSet.GetPool() != &aEditDoc.GetItemPool() )
         {
-            if ( rSet.GetPool() != &aEditDoc.GetItemPool() )
-            {
-                SfxItemSet aTmpSet( GetEmptyItemSet() );
-                aTmpSet.Put( rSet );
-                InsertUndo(std::make_unique<EditUndoSetParaAttribs>(pEditEngine, nPara, pNode->GetContentAttribs().GetItems(), aTmpSet));
-            }
-            else
-            {
-                InsertUndo(std::make_unique<EditUndoSetParaAttribs>(pEditEngine, nPara, pNode->GetContentAttribs().GetItems(), rSet));
-            }
+            SfxItemSet aTmpSet( GetEmptyItemSet() );
+            aTmpSet.Put( rSet );
+            InsertUndo(std::make_unique<EditUndoSetParaAttribs>(pEditEngine, nPara, pNode->GetContentAttribs().GetItems(), aTmpSet));
         }
-
-        bool bCheckLanguage = ( rSet.GetItemState( EE_CHAR_LANGUAGE ) == SfxItemState::SET ) ||
-                         ( rSet.GetItemState( EE_CHAR_LANGUAGE_CJK ) == SfxItemState::SET ) ||
-                         ( rSet.GetItemState( EE_CHAR_LANGUAGE_CTL ) == SfxItemState::SET );
-
-        pNode->GetContentAttribs().GetItems().Set( rSet );
-
-        if ( bCheckLanguage && pNode->GetWrongList() )
-            pNode->GetWrongList()->ResetInvalidRange(0, pNode->Len());
-
-        if ( aStatus.UseCharAttribs() )
-            pNode->CreateDefFont();
-
-        ParaAttribsChanged( pNode );
+        else
+        {
+            InsertUndo(std::make_unique<EditUndoSetParaAttribs>(pEditEngine, nPara, pNode->GetContentAttribs().GetItems(), rSet));
+        }
     }
+
+    bool bCheckLanguage = ( rSet.GetItemState( EE_CHAR_LANGUAGE ) == SfxItemState::SET ) ||
+                     ( rSet.GetItemState( EE_CHAR_LANGUAGE_CJK ) == SfxItemState::SET ) ||
+                     ( rSet.GetItemState( EE_CHAR_LANGUAGE_CTL ) == SfxItemState::SET );
+
+    pNode->GetContentAttribs().GetItems().Set( rSet );
+
+    if ( bCheckLanguage && pNode->GetWrongList() )
+        pNode->GetWrongList()->ResetInvalidRange(0, pNode->Len());
+
+    if ( aStatus.UseCharAttribs() )
+        pNode->CreateDefFont();
+
+    ParaAttribsChanged( pNode );
 }
 
 const SfxItemSet& ImpEditEngine::GetParaAttribs( sal_Int32 nPara ) const
@@ -737,19 +737,19 @@ void ImpEditEngine::GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& 
 {
     rLst.clear();
     const ContentNode* pNode = aEditDoc.GetObject( nPara );
-    if ( pNode )
+    if ( !pNode )
+        return;
+
+    rLst.reserve(pNode->GetCharAttribs().Count());
+    const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
+    for (const auto & i : rAttrs)
     {
-        rLst.reserve(pNode->GetCharAttribs().Count());
-        const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
-        for (const auto & i : rAttrs)
-        {
-            const EditCharAttrib& rAttr = *i;
-            EECharAttrib aEEAttr;
-            aEEAttr.pAttr = rAttr.GetItem();
-            aEEAttr.nStart = rAttr.GetStart();
-            aEEAttr.nEnd = rAttr.GetEnd();
-            rLst.push_back(aEEAttr);
-        }
+        const EditCharAttrib& rAttr = *i;
+        EECharAttrib aEEAttr;
+        aEEAttr.pAttr = rAttr.GetItem();
+        aEEAttr.nStart = rAttr.GetStart();
+        aEEAttr.nEnd = rAttr.GetEnd();
+        rLst.push_back(aEEAttr);
     }
 }
 

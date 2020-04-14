@@ -185,20 +185,20 @@ void ImpEditEngine::Write(SvStream& rOutput, EETextFormat eFormat, const EditSel
     if ( !rOutput.IsWritable() )
         rOutput.SetError( SVSTREAM_WRITE_ERROR );
 
-    if ( !rOutput.GetError() )
+    if ( rOutput.GetError() )
+        return;
+
+    if ( eFormat == EETextFormat::Text )
+        WriteText( rOutput, rSel );
+    else if ( eFormat == EETextFormat::Rtf )
+        WriteRTF( rOutput, rSel );
+    else if ( eFormat == EETextFormat::Xml )
+        WriteXML( rOutput, rSel );
+    else if ( eFormat == EETextFormat::Html )
+        ;
+    else
     {
-        if ( eFormat == EETextFormat::Text )
-            WriteText( rOutput, rSel );
-        else if ( eFormat == EETextFormat::Rtf )
-            WriteRTF( rOutput, rSel );
-        else if ( eFormat == EETextFormat::Xml )
-            WriteXML( rOutput, rSel );
-        else if ( eFormat == EETextFormat::Html )
-            ;
-        else
-        {
-            OSL_FAIL( "Write: Unknown Format" );
-        }
+        OSL_FAIL( "Write: Unknown Format" );
     }
 }
 
@@ -1976,20 +1976,19 @@ void ImpEditEngine::AddPortion(
                             svx::SpellPortions& rToFill,
                             bool bIsField)
 {
-    if(rSel.HasRange())
-    {
-        svx::SpellPortion aPortion;
-        aPortion.sText = GetSelected( rSel );
-        aPortion.eLanguage = GetLanguage( rSel.Min() );
-        aPortion.xAlternatives = xAlt;
-        aPortion.bIsField = bIsField;
-        rToFill.push_back(aPortion);
+    if(!rSel.HasRange())
+        return;
 
-        //save the spelled portions for later use
-        pSpellInfo->aLastSpellPortions.push_back(aPortion);
-        pSpellInfo->aLastSpellContentSelections.push_back(rSel);
+    svx::SpellPortion aPortion;
+    aPortion.sText = GetSelected( rSel );
+    aPortion.eLanguage = GetLanguage( rSel.Min() );
+    aPortion.xAlternatives = xAlt;
+    aPortion.bIsField = bIsField;
+    rToFill.push_back(aPortion);
 
-    }
+    //save the spelled portions for later use
+    pSpellInfo->aLastSpellPortions.push_back(aPortion);
+    pSpellInfo->aLastSpellContentSelections.push_back(rSel);
 }
 
 // Adds one or more portions of text to the SpellPortions depending on language changes
@@ -1999,65 +1998,65 @@ void ImpEditEngine::AddPortionIterated(
                             const Reference< XSpellAlternatives >& xAlt,
                             svx::SpellPortions& rToFill)
 {
-    if (rSel.HasRange())
-    {
-        if(xAlt.is())
-        {
-            AddPortion(rSel, xAlt, rToFill, false);
-        }
-        else
-        {
-            //iterate and search for language attribute changes
-            //save the start and end positions
-            bool bTest = rSel.Min().GetIndex() <= rSel.Max().GetIndex();
-            EditPaM aStart(bTest ? rSel.Min() : rSel.Max());
-            EditPaM aEnd(bTest ? rSel.Max() : rSel.Min());
-            //iterate over the text to find changes in language
-            //set the mark equal to the point
-            EditPaM aCursor(aStart);
-            rEditView.pImpEditView->SetEditSelection( aCursor );
-            LanguageType eStartLanguage = GetLanguage( aCursor );
-            //search for a field attribute at the beginning - only the end position
-            //of this field is kept to end a portion at that position
-            const EditCharAttrib* pFieldAttr = aCursor.GetNode()->GetCharAttribs().
-                                                    FindFeature( aCursor.GetIndex() );
-            bool bIsField = pFieldAttr &&
-                    pFieldAttr->GetStart() == aCursor.GetIndex() &&
-                    pFieldAttr->GetStart() != pFieldAttr->GetEnd() &&
-                    pFieldAttr->Which() == EE_FEATURE_FIELD;
-            sal_Int32 nEndField = bIsField ? pFieldAttr->GetEnd() : -1;
-            do
-            {
-                aCursor = CursorRight( aCursor);
-                //determine whether a field and has been reached
-                bool bIsEndField = nEndField == aCursor.GetIndex();
-                //search for a new field attribute
-                const EditCharAttrib* _pFieldAttr = aCursor.GetNode()->GetCharAttribs().
-                                                        FindFeature( aCursor.GetIndex() );
-                bIsField = _pFieldAttr &&
-                        _pFieldAttr->GetStart() == aCursor.GetIndex() &&
-                        _pFieldAttr->GetStart() != _pFieldAttr->GetEnd() &&
-                        _pFieldAttr->Which() == EE_FEATURE_FIELD;
-                //on every new field move the end position
-                if (bIsField)
-                    nEndField = _pFieldAttr->GetEnd();
+    if (!rSel.HasRange())
+        return;
 
-                LanguageType eCurLanguage = GetLanguage( aCursor );
-                if(eCurLanguage != eStartLanguage || bIsField || bIsEndField)
-                {
-                    eStartLanguage = eCurLanguage;
-                    //go one step back - the cursor currently selects the first character
-                    //with a different language
-                    //create a selection from start to the current Cursor
-                    EditSelection aSelection(aStart, aCursor);
-                    AddPortion(aSelection, xAlt, rToFill, bIsEndField);
-                    aStart = aCursor;
-                }
+    if(xAlt.is())
+    {
+        AddPortion(rSel, xAlt, rToFill, false);
+    }
+    else
+    {
+        //iterate and search for language attribute changes
+        //save the start and end positions
+        bool bTest = rSel.Min().GetIndex() <= rSel.Max().GetIndex();
+        EditPaM aStart(bTest ? rSel.Min() : rSel.Max());
+        EditPaM aEnd(bTest ? rSel.Max() : rSel.Min());
+        //iterate over the text to find changes in language
+        //set the mark equal to the point
+        EditPaM aCursor(aStart);
+        rEditView.pImpEditView->SetEditSelection( aCursor );
+        LanguageType eStartLanguage = GetLanguage( aCursor );
+        //search for a field attribute at the beginning - only the end position
+        //of this field is kept to end a portion at that position
+        const EditCharAttrib* pFieldAttr = aCursor.GetNode()->GetCharAttribs().
+                                                FindFeature( aCursor.GetIndex() );
+        bool bIsField = pFieldAttr &&
+                pFieldAttr->GetStart() == aCursor.GetIndex() &&
+                pFieldAttr->GetStart() != pFieldAttr->GetEnd() &&
+                pFieldAttr->Which() == EE_FEATURE_FIELD;
+        sal_Int32 nEndField = bIsField ? pFieldAttr->GetEnd() : -1;
+        do
+        {
+            aCursor = CursorRight( aCursor);
+            //determine whether a field and has been reached
+            bool bIsEndField = nEndField == aCursor.GetIndex();
+            //search for a new field attribute
+            const EditCharAttrib* _pFieldAttr = aCursor.GetNode()->GetCharAttribs().
+                                                    FindFeature( aCursor.GetIndex() );
+            bIsField = _pFieldAttr &&
+                    _pFieldAttr->GetStart() == aCursor.GetIndex() &&
+                    _pFieldAttr->GetStart() != _pFieldAttr->GetEnd() &&
+                    _pFieldAttr->Which() == EE_FEATURE_FIELD;
+            //on every new field move the end position
+            if (bIsField)
+                nEndField = _pFieldAttr->GetEnd();
+
+            LanguageType eCurLanguage = GetLanguage( aCursor );
+            if(eCurLanguage != eStartLanguage || bIsField || bIsEndField)
+            {
+                eStartLanguage = eCurLanguage;
+                //go one step back - the cursor currently selects the first character
+                //with a different language
+                //create a selection from start to the current Cursor
+                EditSelection aSelection(aStart, aCursor);
+                AddPortion(aSelection, xAlt, rToFill, bIsEndField);
+                aStart = aCursor;
             }
-            while(aCursor.GetIndex() < aEnd.GetIndex());
-            EditSelection aSelection(aStart, aCursor);
-            AddPortion(aSelection, xAlt, rToFill, bIsField);
         }
+        while(aCursor.GetIndex() < aEnd.GetIndex());
+        EditSelection aSelection(aStart, aCursor);
+        AddPortion(aSelection, xAlt, rToFill, bIsField);
     }
 }
 
@@ -2069,41 +2068,87 @@ void ImpEditEngine::ApplyChangedSentence(EditView const & rEditView,
     // sentence got removed in the dialog
 
     DBG_ASSERT(pSpellInfo, "pSpellInfo not initialized");
-    if (pSpellInfo &&
-        !pSpellInfo->aLastSpellPortions.empty())  // no portions -> no text to be changed
+    if (!(pSpellInfo &&
+        !pSpellInfo->aLastSpellPortions.empty()))  // no portions -> no text to be changed
+        return;
+
+    // get current paragraph length to calculate later on how the sentence length changed,
+    // in order to place the cursor at the end of the sentence again
+    EditSelection aOldSel( rEditView.pImpEditView->GetEditSelection() );
+    sal_Int32 nOldLen = aOldSel.Max().GetNode()->Len();
+
+    UndoActionStart( EDITUNDO_INSERT );
+    if(pSpellInfo->aLastSpellPortions.size() == rNewPortions.size())
     {
-        // get current paragraph length to calculate later on how the sentence length changed,
-        // in order to place the cursor at the end of the sentence again
-        EditSelection aOldSel( rEditView.pImpEditView->GetEditSelection() );
-        sal_Int32 nOldLen = aOldSel.Max().GetNode()->Len();
+        DBG_ASSERT( !rNewPortions.empty(), "rNewPortions should not be empty here" );
+        DBG_ASSERT( pSpellInfo->aLastSpellPortions.size() == pSpellInfo->aLastSpellContentSelections.size(),
+                "aLastSpellPortions and aLastSpellContentSelections size mismatch" );
 
-        UndoActionStart( EDITUNDO_INSERT );
-        if(pSpellInfo->aLastSpellPortions.size() == rNewPortions.size())
+        //the simple case: the same number of elements on both sides
+        //each changed element has to be applied to the corresponding source element
+        svx::SpellPortions::const_iterator aCurrentNewPortion = rNewPortions.end();
+        svx::SpellPortions::const_iterator aCurrentOldPortion = pSpellInfo->aLastSpellPortions.end();
+        SpellContentSelections::const_iterator aCurrentOldPosition = pSpellInfo->aLastSpellContentSelections.end();
+        bool bSetToEnd = false;
+        do
         {
-            DBG_ASSERT( !rNewPortions.empty(), "rNewPortions should not be empty here" );
-            DBG_ASSERT( pSpellInfo->aLastSpellPortions.size() == pSpellInfo->aLastSpellContentSelections.size(),
-                    "aLastSpellPortions and aLastSpellContentSelections size mismatch" );
-
-            //the simple case: the same number of elements on both sides
-            //each changed element has to be applied to the corresponding source element
-            svx::SpellPortions::const_iterator aCurrentNewPortion = rNewPortions.end();
-            svx::SpellPortions::const_iterator aCurrentOldPortion = pSpellInfo->aLastSpellPortions.end();
-            SpellContentSelections::const_iterator aCurrentOldPosition = pSpellInfo->aLastSpellContentSelections.end();
-            bool bSetToEnd = false;
-            do
+            --aCurrentNewPortion;
+            --aCurrentOldPortion;
+            --aCurrentOldPosition;
+            //set the cursor to the end of the sentence - necessary to
+            //resume there at the next step
+            if(!bSetToEnd)
             {
-                --aCurrentNewPortion;
-                --aCurrentOldPortion;
-                --aCurrentOldPosition;
-                //set the cursor to the end of the sentence - necessary to
-                //resume there at the next step
-                if(!bSetToEnd)
-                {
-                    bSetToEnd = true;
-                    rEditView.pImpEditView->SetEditSelection( aCurrentOldPosition->Max() );
-                }
+                bSetToEnd = true;
+                rEditView.pImpEditView->SetEditSelection( aCurrentOldPosition->Max() );
+            }
 
-                SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( aCurrentNewPortion->eLanguage );
+            SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( aCurrentNewPortion->eLanguage );
+            sal_uInt16 nLangWhichId = EE_CHAR_LANGUAGE;
+            switch(nScriptType)
+            {
+                case SvtScriptType::ASIAN : nLangWhichId = EE_CHAR_LANGUAGE_CJK; break;
+                case SvtScriptType::COMPLEX : nLangWhichId = EE_CHAR_LANGUAGE_CTL; break;
+                default: break;
+            }
+            if(aCurrentNewPortion->sText != aCurrentOldPortion->sText)
+            {
+                //change text and apply language
+                SfxItemSet aSet( aEditDoc.GetItemPool(), {{nLangWhichId, nLangWhichId}});
+                aSet.Put(SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId));
+                SetAttribs( *aCurrentOldPosition, aSet );
+                ImpInsertText( *aCurrentOldPosition, aCurrentNewPortion->sText );
+            }
+            else if(aCurrentNewPortion->eLanguage != aCurrentOldPortion->eLanguage)
+            {
+                //apply language
+                SfxItemSet aSet( aEditDoc.GetItemPool(), {{nLangWhichId, nLangWhichId}});
+                aSet.Put(SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId));
+                SetAttribs( *aCurrentOldPosition, aSet );
+            }
+        }
+        while(aCurrentNewPortion != rNewPortions.begin());
+    }
+    else
+    {
+        DBG_ASSERT( !pSpellInfo->aLastSpellContentSelections.empty(), "aLastSpellContentSelections should not be empty here" );
+
+        //select the complete sentence
+        SpellContentSelections::const_iterator aCurrentEndPosition = pSpellInfo->aLastSpellContentSelections.end();
+        --aCurrentEndPosition;
+        SpellContentSelections::const_iterator aCurrentStartPosition = pSpellInfo->aLastSpellContentSelections.begin();
+        EditSelection aAllSentence(aCurrentStartPosition->Min(), aCurrentEndPosition->Max());
+
+        //delete the sentence completely
+        ImpDeleteSelection( aAllSentence );
+        EditPaM aCurrentPaM = aAllSentence.Min();
+        for(const auto& rCurrentNewPortion : rNewPortions)
+        {
+            //set the language attribute
+            LanguageType eCurLanguage = GetLanguage( aCurrentPaM );
+            if(eCurLanguage != rCurrentNewPortion.eLanguage)
+            {
+                SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( rCurrentNewPortion.eLanguage );
                 sal_uInt16 nLangWhichId = EE_CHAR_LANGUAGE;
                 switch(nScriptType)
                 {
@@ -2111,78 +2156,32 @@ void ImpEditEngine::ApplyChangedSentence(EditView const & rEditView,
                     case SvtScriptType::COMPLEX : nLangWhichId = EE_CHAR_LANGUAGE_CTL; break;
                     default: break;
                 }
-                if(aCurrentNewPortion->sText != aCurrentOldPortion->sText)
-                {
-                    //change text and apply language
-                    SfxItemSet aSet( aEditDoc.GetItemPool(), {{nLangWhichId, nLangWhichId}});
-                    aSet.Put(SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId));
-                    SetAttribs( *aCurrentOldPosition, aSet );
-                    ImpInsertText( *aCurrentOldPosition, aCurrentNewPortion->sText );
-                }
-                else if(aCurrentNewPortion->eLanguage != aCurrentOldPortion->eLanguage)
-                {
-                    //apply language
-                    SfxItemSet aSet( aEditDoc.GetItemPool(), {{nLangWhichId, nLangWhichId}});
-                    aSet.Put(SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId));
-                    SetAttribs( *aCurrentOldPosition, aSet );
-                }
+                SfxItemSet aSet( aEditDoc.GetItemPool(), {{nLangWhichId, nLangWhichId}});
+                aSet.Put(SvxLanguageItem(rCurrentNewPortion.eLanguage, nLangWhichId));
+                SetAttribs( aCurrentPaM, aSet );
             }
-            while(aCurrentNewPortion != rNewPortions.begin());
+            //insert the new string and set the cursor to the end of the inserted string
+            aCurrentPaM = ImpInsertText( aCurrentPaM , rCurrentNewPortion.sText );
         }
-        else
-        {
-            DBG_ASSERT( !pSpellInfo->aLastSpellContentSelections.empty(), "aLastSpellContentSelections should not be empty here" );
-
-            //select the complete sentence
-            SpellContentSelections::const_iterator aCurrentEndPosition = pSpellInfo->aLastSpellContentSelections.end();
-            --aCurrentEndPosition;
-            SpellContentSelections::const_iterator aCurrentStartPosition = pSpellInfo->aLastSpellContentSelections.begin();
-            EditSelection aAllSentence(aCurrentStartPosition->Min(), aCurrentEndPosition->Max());
-
-            //delete the sentence completely
-            ImpDeleteSelection( aAllSentence );
-            EditPaM aCurrentPaM = aAllSentence.Min();
-            for(const auto& rCurrentNewPortion : rNewPortions)
-            {
-                //set the language attribute
-                LanguageType eCurLanguage = GetLanguage( aCurrentPaM );
-                if(eCurLanguage != rCurrentNewPortion.eLanguage)
-                {
-                    SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( rCurrentNewPortion.eLanguage );
-                    sal_uInt16 nLangWhichId = EE_CHAR_LANGUAGE;
-                    switch(nScriptType)
-                    {
-                        case SvtScriptType::ASIAN : nLangWhichId = EE_CHAR_LANGUAGE_CJK; break;
-                        case SvtScriptType::COMPLEX : nLangWhichId = EE_CHAR_LANGUAGE_CTL; break;
-                        default: break;
-                    }
-                    SfxItemSet aSet( aEditDoc.GetItemPool(), {{nLangWhichId, nLangWhichId}});
-                    aSet.Put(SvxLanguageItem(rCurrentNewPortion.eLanguage, nLangWhichId));
-                    SetAttribs( aCurrentPaM, aSet );
-                }
-                //insert the new string and set the cursor to the end of the inserted string
-                aCurrentPaM = ImpInsertText( aCurrentPaM , rCurrentNewPortion.sText );
-            }
-        }
-        UndoActionEnd();
-
-        EditPaM aNext;
-        if (bRecheck)
-            aNext = pSpellInfo->aCurSentenceStart;
-        else
-        {
-            // restore cursor position to the end of the modified sentence.
-            // (This will define the continuation position for spell/grammar checking)
-            // First: check if the sentence/para length changed
-            const sal_Int32 nDelta = rEditView.pImpEditView->GetEditSelection().Max().GetNode()->Len() - nOldLen;
-            const sal_Int32 nEndOfSentence = aOldSel.Max().GetIndex() + nDelta;
-            aNext = EditPaM( aOldSel.Max().GetNode(), nEndOfSentence );
-        }
-        rEditView.pImpEditView->SetEditSelection( aNext );
-
-        FormatAndUpdate();
-        aEditDoc.SetModified(true);
     }
+    UndoActionEnd();
+
+    EditPaM aNext;
+    if (bRecheck)
+        aNext = pSpellInfo->aCurSentenceStart;
+    else
+    {
+        // restore cursor position to the end of the modified sentence.
+        // (This will define the continuation position for spell/grammar checking)
+        // First: check if the sentence/para length changed
+        const sal_Int32 nDelta = rEditView.pImpEditView->GetEditSelection().Max().GetNode()->Len() - nOldLen;
+        const sal_Int32 nEndOfSentence = aOldSel.Max().GetIndex() + nDelta;
+        aNext = EditPaM( aOldSel.Max().GetNode(), nEndOfSentence );
+    }
+    rEditView.pImpEditView->SetEditSelection( aNext );
+
+    FormatAndUpdate();
+    aEditDoc.SetModified(true);
 }
 
 void ImpEditEngine::PutSpellingToSentenceStart( EditView const & rEditView )

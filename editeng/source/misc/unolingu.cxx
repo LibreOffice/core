@@ -97,18 +97,18 @@ public:
 
 void ThesDummy_Impl::GetCfgLocales()
 {
-    if (!pLocaleSeq)
+    if (pLocaleSeq)
+        return;
+
+    SvtLinguConfig aCfg;
+    Sequence < OUString > aNodeNames( aCfg.GetNodeNames( "ServiceManager/ThesaurusList" ) );
+    const OUString *pNodeNames = aNodeNames.getConstArray();
+    sal_Int32 nLen = aNodeNames.getLength();
+    pLocaleSeq.reset( new Sequence< lang::Locale >( nLen ) );
+    lang::Locale *pLocale = pLocaleSeq->getArray();
+    for (sal_Int32 i = 0;  i < nLen;  ++i)
     {
-        SvtLinguConfig aCfg;
-        Sequence < OUString > aNodeNames( aCfg.GetNodeNames( "ServiceManager/ThesaurusList" ) );
-        const OUString *pNodeNames = aNodeNames.getConstArray();
-        sal_Int32 nLen = aNodeNames.getLength();
-        pLocaleSeq.reset( new Sequence< lang::Locale >( nLen ) );
-        lang::Locale *pLocale = pLocaleSeq->getArray();
-        for (sal_Int32 i = 0;  i < nLen;  ++i)
-        {
-            pLocale[i] = LanguageTag::convertToLocaleWithFallback( pNodeNames[i] );
-        }
+        pLocale[i] = LanguageTag::convertToLocaleWithFallback( pNodeNames[i] );
     }
 }
 

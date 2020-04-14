@@ -260,20 +260,20 @@ void SvxSpellWrapper::SpellDocument( )
         SpellStart( bReverse ? SvxSpellArea::BodyStart : SvxSpellArea::BodyEnd );
     }
 
-    if ( FindSpellError() )
-    {
-        Reference< XHyphenatedWord >        xHyphWord( GetLast(), UNO_QUERY );
+    if ( !FindSpellError() )
+        return;
 
-        if (xHyphWord.is())
-        {
-            EditAbstractDialogFactory* pFact = EditAbstractDialogFactory::Create();
-            ScopedVclPtr<AbstractHyphenWordDialog> pDlg(pFact->CreateHyphenWordDialog(
-                            pWin,
-                            xHyphWord->getWord(),
-                            LanguageTag( xHyphWord->getLocale() ).getLanguageType(),
-                            xHyph, this ));
-            pDlg->Execute();
-        }
+    Reference< XHyphenatedWord >        xHyphWord( GetLast(), UNO_QUERY );
+
+    if (xHyphWord.is())
+    {
+        EditAbstractDialogFactory* pFact = EditAbstractDialogFactory::Create();
+        ScopedVclPtr<AbstractHyphenWordDialog> pDlg(pFact->CreateHyphenWordDialog(
+                        pWin,
+                        xHyphWord->getWord(),
+                        LanguageTag( xHyphWord->getLocale() ).getLanguageType(),
+                        xHyph, this ));
+        pDlg->Execute();
     }
 }
 

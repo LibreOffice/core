@@ -512,46 +512,46 @@ void ImpEditEngine::CheckAutoPageSize()
 
     SetValidPaperSize( aPaperSize );    // consider Min, Max
 
-    if ( aPaperSize != aPrevPaperSize )
+    if ( aPaperSize == aPrevPaperSize )
+        return;
+
+    if ( ( !IsVertical() && ( aPaperSize.Width() != aPrevPaperSize.Width() ) )
+         || ( IsVertical() && ( aPaperSize.Height() != aPrevPaperSize.Height() ) ) )
     {
-        if ( ( !IsVertical() && ( aPaperSize.Width() != aPrevPaperSize.Width() ) )
-             || ( IsVertical() && ( aPaperSize.Height() != aPrevPaperSize.Height() ) ) )
+        // If ahead is centered / right or tabs...
+        aStatus.GetStatusWord() |= !IsVertical() ? EditStatusFlags::TEXTWIDTHCHANGED : EditStatusFlags::TextHeightChanged;
+        for ( sal_Int32 nPara = 0; nPara < GetParaPortions().Count(); nPara++ )
         {
-            // If ahead is centered / right or tabs...
-            aStatus.GetStatusWord() |= !IsVertical() ? EditStatusFlags::TEXTWIDTHCHANGED : EditStatusFlags::TextHeightChanged;
-            for ( sal_Int32 nPara = 0; nPara < GetParaPortions().Count(); nPara++ )
+            // Only paragraphs which are not aligned to the left need to be
+            // reformatted, the height can not be changed here anymore.
+            ParaPortion* pParaPortion = GetParaPortions()[nPara];
+            SvxAdjust eJustification = GetJustification( nPara );
+            if ( eJustification != SvxAdjust::Left )
             {
-                // Only paragraphs which are not aligned to the left need to be
-                // reformatted, the height can not be changed here anymore.
-                ParaPortion* pParaPortion = GetParaPortions()[nPara];
-                SvxAdjust eJustification = GetJustification( nPara );
-                if ( eJustification != SvxAdjust::Left )
-                {
-                    pParaPortion->MarkSelectionInvalid( 0 );
-                    CreateLines( nPara, 0 );  // 0: For AutoPageSize no TextRange!
-                }
+                pParaPortion->MarkSelectionInvalid( 0 );
+                CreateLines( nPara, 0 );  // 0: For AutoPageSize no TextRange!
             }
         }
+    }
 
-        Size aInvSize = aPaperSize;
-        if ( aPaperSize.Width() < aPrevPaperSize.Width() )
-            aInvSize.setWidth( aPrevPaperSize.Width() );
-        if ( aPaperSize.Height() < aPrevPaperSize.Height() )
-            aInvSize.setHeight( aPrevPaperSize.Height() );
+    Size aInvSize = aPaperSize;
+    if ( aPaperSize.Width() < aPrevPaperSize.Width() )
+        aInvSize.setWidth( aPrevPaperSize.Width() );
+    if ( aPaperSize.Height() < aPrevPaperSize.Height() )
+        aInvSize.setHeight( aPrevPaperSize.Height() );
 
-        Size aSz( aInvSize );
-        if ( IsVertical() )
-        {
-            aSz.setWidth( aInvSize.Height() );
-            aSz.setHeight( aInvSize.Width() );
-        }
-        aInvalidRect = tools::Rectangle( Point(), aSz );
+    Size aSz( aInvSize );
+    if ( IsVertical() )
+    {
+        aSz.setWidth( aInvSize.Height() );
+        aSz.setHeight( aInvSize.Width() );
+    }
+    aInvalidRect = tools::Rectangle( Point(), aSz );
 
 
-        for (EditView* pView : aEditViews)
-        {
-            pView->pImpEditView->RecalcOutputArea();
-        }
+    for (EditView* pView : aEditViews)
+    {
+        pView->pImpEditView->RecalcOutputArea();
     }
 }
 
@@ -2846,35 +2846,35 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
         }
     }
 
-    if ( mpIMEInfos && mpIMEInfos->pAttribs && ( mpIMEInfos->aPos.GetNode() == pNode ) &&
-        ( nPos > mpIMEInfos->aPos.GetIndex() ) && ( nPos <= ( mpIMEInfos->aPos.GetIndex() + mpIMEInfos->nLen ) ) )
+    if ( !(mpIMEInfos && mpIMEInfos->pAttribs && ( mpIMEInfos->aPos.GetNode() == pNode ) &&
+        ( nPos > mpIMEInfos->aPos.GetIndex() ) && ( nPos <= ( mpIMEInfos->aPos.GetIndex() + mpIMEInfos->nLen ) )) )
+        return;
+
+    ExtTextInputAttr nAttr = mpIMEInfos->pAttribs[ nPos - mpIMEInfos->aPos.GetIndex() - 1 ];
+    if ( nAttr & ExtTextInputAttr::Underline )
+        rFont.SetUnderline( LINESTYLE_SINGLE );
+    else if ( nAttr & ExtTextInputAttr::BoldUnderline )
+        rFont.SetUnderline( LINESTYLE_BOLD );
+    else if ( nAttr & ExtTextInputAttr::DottedUnderline )
+        rFont.SetUnderline( LINESTYLE_DOTTED );
+    else if ( nAttr & ExtTextInputAttr::DashDotUnderline )
+        rFont.SetUnderline( LINESTYLE_DOTTED );
+    else if ( nAttr & ExtTextInputAttr::RedText )
+        rFont.SetColor( COL_RED );
+    else if ( nAttr & ExtTextInputAttr::HalfToneText )
+        rFont.SetColor( COL_LIGHTGRAY );
+    if ( nAttr & ExtTextInputAttr::Highlight )
     {
-        ExtTextInputAttr nAttr = mpIMEInfos->pAttribs[ nPos - mpIMEInfos->aPos.GetIndex() - 1 ];
-        if ( nAttr & ExtTextInputAttr::Underline )
-            rFont.SetUnderline( LINESTYLE_SINGLE );
-        else if ( nAttr & ExtTextInputAttr::BoldUnderline )
-            rFont.SetUnderline( LINESTYLE_BOLD );
-        else if ( nAttr & ExtTextInputAttr::DottedUnderline )
-            rFont.SetUnderline( LINESTYLE_DOTTED );
-        else if ( nAttr & ExtTextInputAttr::DashDotUnderline )
-            rFont.SetUnderline( LINESTYLE_DOTTED );
-        else if ( nAttr & ExtTextInputAttr::RedText )
-            rFont.SetColor( COL_RED );
-        else if ( nAttr & ExtTextInputAttr::HalfToneText )
-            rFont.SetColor( COL_LIGHTGRAY );
-        if ( nAttr & ExtTextInputAttr::Highlight )
-        {
-            const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-            rFont.SetColor( rStyleSettings.GetHighlightTextColor() );
-            rFont.SetFillColor( rStyleSettings.GetHighlightColor() );
-            rFont.SetTransparent( false );
-        }
-        else if ( nAttr & ExtTextInputAttr::GrayWaveline )
-        {
-            rFont.SetUnderline( LINESTYLE_WAVE );
-            if( pOut )
-                pOut->SetTextLineColor( COL_LIGHTGRAY );
-        }
+        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+        rFont.SetColor( rStyleSettings.GetHighlightTextColor() );
+        rFont.SetFillColor( rStyleSettings.GetHighlightColor() );
+        rFont.SetTransparent( false );
+    }
+    else if ( nAttr & ExtTextInputAttr::GrayWaveline )
+    {
+        rFont.SetUnderline( LINESTYLE_WAVE );
+        if( pOut )
+            pOut->SetTextLineColor( COL_LIGHTGRAY );
     }
 }
 
@@ -2924,23 +2924,23 @@ void ImpEditEngine::RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics
     if ( nDescent > rCurMetrics.nMaxDescent )
         rCurMetrics.nMaxDescent= nDescent;
     // Special treatment of high/low:
-    if ( rFont.GetEscapement() )
+    if ( !rFont.GetEscapement() )
+        return;
+
+    // Now in consideration of Escape/Propr
+    // possibly enlarge Ascent or Descent
+    short nDiff = static_cast<short>(rFont.GetFontSize().Height()*rFont.GetEscapement()/100);
+    if ( rFont.GetEscapement() > 0 )
     {
-        // Now in consideration of Escape/Propr
-        // possibly enlarge Ascent or Descent
-        short nDiff = static_cast<short>(rFont.GetFontSize().Height()*rFont.GetEscapement()/100);
-        if ( rFont.GetEscapement() > 0 )
-        {
-            nAscent = static_cast<sal_uInt16>(static_cast<long>(nAscent)*nPropr/100 + nDiff);
-            if ( nAscent > rCurMetrics.nMaxAscent )
-                rCurMetrics.nMaxAscent = nAscent;
-        }
-        else    // has to be < 0
-        {
-            nDescent = static_cast<sal_uInt16>(static_cast<long>(nDescent)*nPropr/100 - nDiff);
-            if ( nDescent > rCurMetrics.nMaxDescent )
-                rCurMetrics.nMaxDescent= nDescent;
-        }
+        nAscent = static_cast<sal_uInt16>(static_cast<long>(nAscent)*nPropr/100 + nDiff);
+        if ( nAscent > rCurMetrics.nMaxAscent )
+            rCurMetrics.nMaxAscent = nAscent;
+    }
+    else    // has to be < 0
+    {
+        nDescent = static_cast<sal_uInt16>(static_cast<long>(nDescent)*nPropr/100 - nDiff);
+        if ( nDescent > rCurMetrics.nMaxDescent )
+            rCurMetrics.nMaxDescent= nDescent;
     }
 }
 
@@ -3956,47 +3956,47 @@ void ImpEditEngine::ShowParagraph( sal_Int32 nParagraph, bool bShow )
 {
     ParaPortion* pPPortion = GetParaPortions().SafeGetObject( nParagraph );
     DBG_ASSERT( pPPortion, "ShowParagraph: Paragraph does not exist! ");
-    if ( pPPortion && ( pPPortion->IsVisible() != bShow ) )
+    if ( !(pPPortion && ( pPPortion->IsVisible() != bShow )) )
+        return;
+
+    pPPortion->SetVisible( bShow );
+
+    if ( !bShow )
     {
-        pPPortion->SetVisible( bShow );
+        // Mark as deleted, so that no selection will end or begin at
+        // this paragraph...
+        aDeletedNodes.push_back(std::make_unique<DeletedNodeInfo>( pPPortion->GetNode(), nParagraph ));
+        UpdateSelections();
+        // The region below will not be invalidated if UpdateMode = sal_False!
+        // If anyway, then save as sal_False before SetVisible !
+    }
 
-        if ( !bShow )
+    if ( bShow && ( pPPortion->IsInvalid() || !pPPortion->nHeight ) )
+    {
+        if ( !GetTextRanger() )
         {
-            // Mark as deleted, so that no selection will end or begin at
-            // this paragraph...
-            aDeletedNodes.push_back(std::make_unique<DeletedNodeInfo>( pPPortion->GetNode(), nParagraph ));
-            UpdateSelections();
-            // The region below will not be invalidated if UpdateMode = sal_False!
-            // If anyway, then save as sal_False before SetVisible !
-        }
-
-        if ( bShow && ( pPPortion->IsInvalid() || !pPPortion->nHeight ) )
-        {
-            if ( !GetTextRanger() )
+            if ( pPPortion->IsInvalid() )
             {
-                if ( pPPortion->IsInvalid() )
-                {
-                    CreateLines( nParagraph, 0 );   // 0: No TextRanger
-                }
-                else
-                {
-                    CalcHeight( pPPortion );
-                }
-                nCurTextHeight += pPPortion->GetHeight();
+                CreateLines( nParagraph, 0 );   // 0: No TextRanger
             }
             else
             {
-                nCurTextHeight = 0x7fffffff;
+                CalcHeight( pPPortion );
             }
+            nCurTextHeight += pPPortion->GetHeight();
         }
-
-        pPPortion->SetMustRepaint( true );
-        if ( GetUpdateMode() && !IsInUndo() && !GetTextRanger() )
+        else
         {
-            aInvalidRect = tools::Rectangle(    Point( 0, GetParaPortions().GetYOffset( pPPortion ) ),
-                                        Point( GetPaperSize().Width(), nCurTextHeight ) );
-            UpdateViews( GetActiveView() );
+            nCurTextHeight = 0x7fffffff;
         }
+    }
+
+    pPPortion->SetMustRepaint( true );
+    if ( GetUpdateMode() && !IsInUndo() && !GetTextRanger() )
+    {
+        aInvalidRect = tools::Rectangle(    Point( 0, GetParaPortions().GetYOffset( pPPortion ) ),
+                                    Point( GetPaperSize().Width(), nCurTextHeight ) );
+        UpdateViews( GetActiveView() );
     }
 }
 
@@ -4601,32 +4601,32 @@ void ImpEditEngine::ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* 
         pTP = ( nPortion > pLine->GetStartPortion() ) ? &pParaPortion->GetTextPortions()[ --nPortion ] : nullptr;
     }
 
-    if ( bFoundCompressedPortion )
-    {
-        long nCompressPercent = 0;
-        if ( nCompressed > nRemainingWidth )
-        {
-            nCompressPercent = nCompressed - nRemainingWidth;
-            DBG_ASSERT( nCompressPercent < 200000, "ImplExpandCompressedPortions - Overflow!" );
-            nCompressPercent *= 10000;
-            nCompressPercent /= nCompressed;
-        }
+    if ( !bFoundCompressedPortion )
+        return;
 
-        for (TextPortion* pTP2 : aCompressedPortions)
+    long nCompressPercent = 0;
+    if ( nCompressed > nRemainingWidth )
+    {
+        nCompressPercent = nCompressed - nRemainingWidth;
+        DBG_ASSERT( nCompressPercent < 200000, "ImplExpandCompressedPortions - Overflow!" );
+        nCompressPercent *= 10000;
+        nCompressPercent /= nCompressed;
+    }
+
+    for (TextPortion* pTP2 : aCompressedPortions)
+    {
+        pTP = pTP2;
+        pTP->GetExtraInfos()->bCompressed = false;
+        pTP->GetSize().setWidth( pTP->GetExtraInfos()->nOrgWidth );
+        if ( nCompressPercent )
         {
-            pTP = pTP2;
-            pTP->GetExtraInfos()->bCompressed = false;
-            pTP->GetSize().setWidth( pTP->GetExtraInfos()->nOrgWidth );
-            if ( nCompressPercent )
-            {
-                sal_Int32 nTxtPortion = pParaPortion->GetTextPortions().GetPos( pTP );
-                sal_Int32 nTxtPortionStart = pParaPortion->GetTextPortions().GetStartPos( nTxtPortion );
-                DBG_ASSERT( nTxtPortionStart >= pLine->GetStart(), "Portion doesn't belong to the line!!!" );
-                long* pDXArray = pLine->GetCharPosArray().data() + (nTxtPortionStart - pLine->GetStart());
-                if ( pTP->GetExtraInfos()->pOrgDXArray )
-                    memcpy( pDXArray, pTP->GetExtraInfos()->pOrgDXArray.get(), (pTP->GetLen()-1)*sizeof(sal_Int32) );
-                ImplCalcAsianCompression( pParaPortion->GetNode(), pTP, nTxtPortionStart, pDXArray, static_cast<sal_uInt16>(nCompressPercent), true );
-            }
+            sal_Int32 nTxtPortion = pParaPortion->GetTextPortions().GetPos( pTP );
+            sal_Int32 nTxtPortionStart = pParaPortion->GetTextPortions().GetStartPos( nTxtPortion );
+            DBG_ASSERT( nTxtPortionStart >= pLine->GetStart(), "Portion doesn't belong to the line!!!" );
+            long* pDXArray = pLine->GetCharPosArray().data() + (nTxtPortionStart - pLine->GetStart());
+            if ( pTP->GetExtraInfos()->pOrgDXArray )
+                memcpy( pDXArray, pTP->GetExtraInfos()->pOrgDXArray.get(), (pTP->GetLen()-1)*sizeof(sal_Int32) );
+            ImplCalcAsianCompression( pParaPortion->GetNode(), pTP, nTxtPortionStart, pDXArray, static_cast<sal_uInt16>(nCompressPercent), true );
         }
     }
 }

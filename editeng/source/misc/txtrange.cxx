@@ -212,21 +212,21 @@ void SvxBoundArgs::CheckCut( const Point& rLst, const Point& rNxt )
         NotePoint( Cut( nBottom, rLst, rNxt ) );
     if( nCut & 2 )
         NotePoint( Cut( nTop, rLst, rNxt ) );
-    if( rLst.X() != rNxt.X() && rLst.Y() != rNxt.Y() )
+    if( rLst.X() == rNxt.X() || rLst.Y() == rNxt.Y() )
+        return;
+
+    long nYps;
+    if( nLowDiff && ( ( nCut & 1 ) || nLast == 1 || nNext == 1 ) )
     {
-        long nYps;
-        if( nLowDiff && ( ( nCut & 1 ) || nLast == 1 || nNext == 1 ) )
-        {
-            nYps = CalcMax( rLst, rNxt, nBottom, nLower );
-            if( nYps )
-                NoteFarPoint_( Cut( nYps, rLst, rNxt ), nLower-nYps, nLowDiff );
-        }
-        if( nUpDiff && ( ( nCut & 2 ) || nLast == 2 || nNext == 2 ) )
-        {
-            nYps = CalcMax( rLst, rNxt, nTop, nUpper );
-            if( nYps )
-                NoteFarPoint_( Cut( nYps, rLst, rNxt ), nYps-nUpper, nUpDiff );
-        }
+        nYps = CalcMax( rLst, rNxt, nBottom, nLower );
+        if( nYps )
+            NoteFarPoint_( Cut( nYps, rLst, rNxt ), nLower-nYps, nLowDiff );
+    }
+    if( nUpDiff && ( ( nCut & 2 ) || nLast == 2 || nNext == 2 ) )
+    {
+        nYps = CalcMax( rLst, rNxt, nTop, nUpper );
+        if( nYps )
+            NoteFarPoint_( Cut( nYps, rLst, rNxt ), nYps-nUpper, nUpDiff );
     }
 }
 
@@ -467,22 +467,21 @@ void SvxBoundArgs::Add()
                         "BoundArgs: Array-Count: Confusion" );
         }
     }
-    if( !pLongArr->empty() )
-    {
-        if( bInner )
-        {
-            pLongArr->pop_front();
-            pLongArr->pop_back();
+    if( pLongArr->empty() )
+        return;
 
-            // Here the line is held inside a large rectangle for "simple"
-            // contour wrap. Currently (April 1999) the EditEngine evaluates
-            // only the first rectangle. If it one day is able to output a line
-            // in several parts, it may be advisable to delete the following lines.
-            if( pTextRanger->IsSimple() && pLongArr->size() > 2 )
-                pLongArr->erase( pLongArr->begin() + 1, pLongArr->end() - 1 );
+    if( !bInner )
+        return;
 
-        }
-    }
+    pLongArr->pop_front();
+    pLongArr->pop_back();
+
+    // Here the line is held inside a large rectangle for "simple"
+    // contour wrap. Currently (April 1999) the EditEngine evaluates
+    // only the first rectangle. If it one day is able to output a line
+    // in several parts, it may be advisable to delete the following lines.
+    if( pTextRanger->IsSimple() && pLongArr->size() > 2 )
+        pLongArr->erase( pLongArr->begin() + 1, pLongArr->end() - 1 );
 }
 
 void SvxBoundArgs::Concat( const tools::PolyPolygon* pPoly )

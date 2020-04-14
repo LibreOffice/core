@@ -1690,107 +1690,107 @@ void SvxRTFParser::ReadBackgroundAttr( int nToken, SfxItemSet& rSet,
 // pard / plain handling
 void SvxRTFParser::RTFPardPlain( bool const bPard, SfxItemSet** ppSet )
 {
-    if( !bNewGroup && !aAttrStack.empty() ) // not at the beginning of a new group
+    if( bNewGroup || aAttrStack.empty() ) // not at the beginning of a new group
+        return;
+
+    SvxRTFItemStackType* pCurrent = aAttrStack.back().get();
+
+    int nLastToken = GetStackPtr(-1)->nTokenId;
+    bool bNewStkEntry = true;
+    if( RTF_PARD != nLastToken &&
+        RTF_PLAIN != nLastToken &&
+        BRACELEFT != nLastToken )
     {
-        SvxRTFItemStackType* pCurrent = aAttrStack.back().get();
-
-        int nLastToken = GetStackPtr(-1)->nTokenId;
-        bool bNewStkEntry = true;
-        if( RTF_PARD != nLastToken &&
-            RTF_PLAIN != nLastToken &&
-            BRACELEFT != nLastToken )
+        if (pCurrent->aAttrSet.Count() || pCurrent->m_pChildList || pCurrent->nStyleNo)
         {
-            if (pCurrent->aAttrSet.Count() || pCurrent->m_pChildList || pCurrent->nStyleNo)
-            {
-                // open a new group
-                std::unique_ptr<SvxRTFItemStackType> pNew(new SvxRTFItemStackType( *pCurrent, *pInsPos, true ));
-                pNew->SetRTFDefaults( GetRTFDefaults() );
+            // open a new group
+            std::unique_ptr<SvxRTFItemStackType> pNew(new SvxRTFItemStackType( *pCurrent, *pInsPos, true ));
+            pNew->SetRTFDefaults( GetRTFDefaults() );
 
-                // Set all until here valid attributes
-                AttrGroupEnd();
-                pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back().get();  // can be changed after AttrGroupEnd!
-                pNew->aAttrSet.SetParent( pCurrent ? &pCurrent->aAttrSet : nullptr );
-                aAttrStack.push_back( std::move(pNew) );
-                pCurrent = aAttrStack.back().get();
-            }
-            else
-            {
-                // continue to use this entry as new
-                pCurrent->SetStartPos( *pInsPos );
-                bNewStkEntry = false;
-            }
+            // Set all until here valid attributes
+            AttrGroupEnd();
+            pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back().get();  // can be changed after AttrGroupEnd!
+            pNew->aAttrSet.SetParent( pCurrent ? &pCurrent->aAttrSet : nullptr );
+            aAttrStack.push_back( std::move(pNew) );
+            pCurrent = aAttrStack.back().get();
         }
-
-        // now reset all to default
-        if( bNewStkEntry &&
-            ( pCurrent->aAttrSet.GetParent() || pCurrent->aAttrSet.Count() ))
+        else
         {
-            const SfxPoolItem *pItem, *pDef;
-            const sal_uInt16* pPtr;
-            sal_uInt16 nCnt;
-            const SfxItemSet* pDfltSet = &GetRTFDefaults();
-            if( bPard )
-            {
-                pCurrent->nStyleNo = 0;
-                pPtr = reinterpret_cast<sal_uInt16*>(&aPardMap);
-                nCnt = sizeof(aPardMap) / sizeof(sal_uInt16);
-            }
-            else
-            {
-                pPtr = reinterpret_cast<sal_uInt16*>(&aPlainMap);
-                nCnt = sizeof(aPlainMap) / sizeof(sal_uInt16);
-            }
-
-            for( sal_uInt16 n = 0; n < nCnt; ++n, ++pPtr )
-            {
-                // Item set and different -> Set the Default Pool
-                if( !*pPtr )
-                    ;
-                else if (SfxItemPool::IsSlot(*pPtr))
-                    pCurrent->aAttrSet.ClearItem( *pPtr );
-                else if( IsChkStyleAttr() )
-                    pCurrent->aAttrSet.Put( pDfltSet->Get( *pPtr ) );
-                else if( !pCurrent->aAttrSet.GetParent() )
-                {
-                    if( SfxItemState::SET ==
-                        pDfltSet->GetItemState( *pPtr, false, &pDef ))
-                        pCurrent->aAttrSet.Put( *pDef );
-                    else
-                        pCurrent->aAttrSet.ClearItem( *pPtr );
-                }
-                else if( SfxItemState::SET == pCurrent->aAttrSet.GetParent()->
-                            GetItemState( *pPtr, true, &pItem ) &&
-                        *( pDef = &pDfltSet->Get( *pPtr )) != *pItem )
-                    pCurrent->aAttrSet.Put( *pDef );
-                else
-                {
-                    if( SfxItemState::SET ==
-                        pDfltSet->GetItemState( *pPtr, false, &pDef ))
-                        pCurrent->aAttrSet.Put( *pDef );
-                    else
-                        pCurrent->aAttrSet.ClearItem( *pPtr );
-                }
-            }
-        }
-        else if( bPard )
-            pCurrent->nStyleNo = 0;     // reset Style number
-
-        *ppSet = &pCurrent->aAttrSet;
-
-        if (!bPard)
-        {
-            //Once we have a default font, then any text without a font specifier is
-            //in the default font, and thus has the default font charset, otherwise
-            //we can fall back to the ansicpg set codeset
-            if (nDfltFont != -1)
-            {
-                const vcl::Font& rSVFont = GetFont(sal_uInt16(nDfltFont));
-                SetEncoding(rSVFont.GetCharSet());
-            }
-            else
-                SetEncoding(GetCodeSet());
+            // continue to use this entry as new
+            pCurrent->SetStartPos( *pInsPos );
+            bNewStkEntry = false;
         }
     }
+
+    // now reset all to default
+    if( bNewStkEntry &&
+        ( pCurrent->aAttrSet.GetParent() || pCurrent->aAttrSet.Count() ))
+    {
+        const SfxPoolItem *pItem, *pDef;
+        const sal_uInt16* pPtr;
+        sal_uInt16 nCnt;
+        const SfxItemSet* pDfltSet = &GetRTFDefaults();
+        if( bPard )
+        {
+            pCurrent->nStyleNo = 0;
+            pPtr = reinterpret_cast<sal_uInt16*>(&aPardMap);
+            nCnt = sizeof(aPardMap) / sizeof(sal_uInt16);
+        }
+        else
+        {
+            pPtr = reinterpret_cast<sal_uInt16*>(&aPlainMap);
+            nCnt = sizeof(aPlainMap) / sizeof(sal_uInt16);
+        }
+
+        for( sal_uInt16 n = 0; n < nCnt; ++n, ++pPtr )
+        {
+            // Item set and different -> Set the Default Pool
+            if( !*pPtr )
+                ;
+            else if (SfxItemPool::IsSlot(*pPtr))
+                pCurrent->aAttrSet.ClearItem( *pPtr );
+            else if( IsChkStyleAttr() )
+                pCurrent->aAttrSet.Put( pDfltSet->Get( *pPtr ) );
+            else if( !pCurrent->aAttrSet.GetParent() )
+            {
+                if( SfxItemState::SET ==
+                    pDfltSet->GetItemState( *pPtr, false, &pDef ))
+                    pCurrent->aAttrSet.Put( *pDef );
+                else
+                    pCurrent->aAttrSet.ClearItem( *pPtr );
+            }
+            else if( SfxItemState::SET == pCurrent->aAttrSet.GetParent()->
+                        GetItemState( *pPtr, true, &pItem ) &&
+                    *( pDef = &pDfltSet->Get( *pPtr )) != *pItem )
+                pCurrent->aAttrSet.Put( *pDef );
+            else
+            {
+                if( SfxItemState::SET ==
+                    pDfltSet->GetItemState( *pPtr, false, &pDef ))
+                    pCurrent->aAttrSet.Put( *pDef );
+                else
+                    pCurrent->aAttrSet.ClearItem( *pPtr );
+            }
+        }
+    }
+    else if( bPard )
+        pCurrent->nStyleNo = 0;     // reset Style number
+
+    *ppSet = &pCurrent->aAttrSet;
+
+    if (bPard)
+        return;
+
+    //Once we have a default font, then any text without a font specifier is
+    //in the default font, and thus has the default font charset, otherwise
+    //we can fall back to the ansicpg set codeset
+    if (nDfltFont != -1)
+    {
+        const vcl::Font& rSVFont = GetFont(sal_uInt16(nDfltFont));
+        SetEncoding(rSVFont.GetCharSet());
+    }
+    else
+        SetEncoding(GetCodeSet());
 }
 
 void SvxRTFParser::SetDefault( int nToken, int nValue )

@@ -294,18 +294,18 @@ namespace accessibility
         mpEditSource = nullptr;
 
         // notify listeners
-        if( nClientId != -1 )
-        {
-            try
-            {
-                uno::Reference < XAccessibleContext > xThis = getAccessibleContext();
+        if( nClientId == -1 )
+            return;
 
-                // #106234# Delegate to EventNotifier
-                ::comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( nClientId, xThis );
-            }
-            catch (const uno::Exception&)
-            {
-            }
+        try
+        {
+            uno::Reference < XAccessibleContext > xThis = getAccessibleContext();
+
+            // #106234# Delegate to EventNotifier
+            ::comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( nClientId, xThis );
+        }
+        catch (const uno::Exception&)
+        {
         }
     }
 
@@ -976,19 +976,19 @@ namespace accessibility
 
     void SAL_CALL AccessibleEditableTextPara::removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
     {
-        if( getNotifierClientId() != -1 )
+        if( getNotifierClientId() == -1 )
+            return;
+
+        const sal_Int32 nListenerCount = ::comphelper::AccessibleEventNotifier::removeEventListener( getNotifierClientId(), xListener );
+        if ( !nListenerCount )
         {
-            const sal_Int32 nListenerCount = ::comphelper::AccessibleEventNotifier::removeEventListener( getNotifierClientId(), xListener );
-            if ( !nListenerCount )
-            {
-                // no listeners anymore
-                // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-                // and at least to us not firing any events anymore, in case somebody calls
-                // NotifyAccessibleEvent, again
-                ::comphelper::AccessibleEventNotifier::TClientId nId( getNotifierClientId() );
-                mnNotifierClientId = -1;
-                ::comphelper::AccessibleEventNotifier::revokeClient( nId );
-            }
+            // no listeners anymore
+            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
+            // and at least to us not firing any events anymore, in case somebody calls
+            // NotifyAccessibleEvent, again
+            ::comphelper::AccessibleEventNotifier::TClientId nId( getNotifierClientId() );
+            mnNotifierClientId = -1;
+            ::comphelper::AccessibleEventNotifier::revokeClient( nId );
         }
     }
 
@@ -1636,39 +1636,39 @@ namespace accessibility
                 }
             }
         }
-        if( nFoundFieldIndex >= 0 )
+        if( nFoundFieldIndex < 0 )
+            return;
+
+        bool bExtend = false;
+        if( Segment.SegmentEnd < reeEnd )
         {
-            bool bExtend = false;
-            if( Segment.SegmentEnd < reeEnd )
-            {
-                Segment.SegmentEnd  = reeEnd;
-                bExtend = true;
-            }
-            if( Segment.SegmentStart > reeBegin )
-            {
-                Segment.SegmentStart = reeBegin;
-                bExtend = true;
-            }
-            if( bExtend )
-            {
-                //If there is a bullet before the field, should add the bullet length into the segment.
-                EBulletInfo aBulletInfo = rCacheTF.GetBulletInfo(nParaIndex);
-                sal_Int32 nBulletLen = aBulletInfo.aText.getLength();
-                if (nBulletLen > 0)
-                {
-                    Segment.SegmentEnd += nBulletLen;
-                    if (nFoundFieldIndex > 0)
-                        Segment.SegmentStart += nBulletLen;
-                    Segment.SegmentText = GetTextRange(Segment.SegmentStart, Segment.SegmentEnd);
-                    //After get the correct field name, should restore the offset value which don't contain the bullet.
-                    Segment.SegmentEnd -= nBulletLen;
-                    if (nFoundFieldIndex > 0)
-                        Segment.SegmentStart -= nBulletLen;
-                }
-                else
-                    Segment.SegmentText = GetTextRange(Segment.SegmentStart, Segment.SegmentEnd);
-            }
+            Segment.SegmentEnd  = reeEnd;
+            bExtend = true;
         }
+        if( Segment.SegmentStart > reeBegin )
+        {
+            Segment.SegmentStart = reeBegin;
+            bExtend = true;
+        }
+        if( !bExtend )
+            return;
+
+        //If there is a bullet before the field, should add the bullet length into the segment.
+        EBulletInfo aBulletInfo = rCacheTF.GetBulletInfo(nParaIndex);
+        sal_Int32 nBulletLen = aBulletInfo.aText.getLength();
+        if (nBulletLen > 0)
+        {
+            Segment.SegmentEnd += nBulletLen;
+            if (nFoundFieldIndex > 0)
+                Segment.SegmentStart += nBulletLen;
+            Segment.SegmentText = GetTextRange(Segment.SegmentStart, Segment.SegmentEnd);
+            //After get the correct field name, should restore the offset value which don't contain the bullet.
+            Segment.SegmentEnd -= nBulletLen;
+            if (nFoundFieldIndex > 0)
+                Segment.SegmentStart -= nBulletLen;
+        }
+        else
+            Segment.SegmentText = GetTextRange(Segment.SegmentStart, Segment.SegmentEnd);
     }
 
     css::accessibility::TextSegment SAL_CALL AccessibleEditableTextPara::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType )

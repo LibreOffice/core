@@ -677,34 +677,34 @@ void OutlinerView::PasteSpecial()
 
 void OutlinerView::Paste( bool bUseSpecial )
 {
-    if ( !ImpCalcSelectedPages( false ) || pOwner->ImpCanDeleteSelectedPages( this ) )
+    if ( !(!ImpCalcSelectedPages( false ) || pOwner->ImpCanDeleteSelectedPages( this )) )
+        return;
+
+    pOwner->UndoActionStart( OLUNDO_INSERT );
+
+    pOwner->pEditEngine->SetUpdateMode( false );
+    pOwner->bPasting = true;
+
+    if ( bUseSpecial )
+        pEditView->PasteSpecial();
+    else
+        pEditView->Paste();
+
+    if ( pOwner->ImplGetOutlinerMode() == OutlinerMode::OutlineObject )
     {
-        pOwner->UndoActionStart( OLUNDO_INSERT );
+        const sal_Int32 nParaCount = pOwner->pEditEngine->GetParagraphCount();
 
-        pOwner->pEditEngine->SetUpdateMode( false );
-        pOwner->bPasting = true;
-
-        if ( bUseSpecial )
-            pEditView->PasteSpecial();
-        else
-            pEditView->Paste();
-
-        if ( pOwner->ImplGetOutlinerMode() == OutlinerMode::OutlineObject )
-        {
-            const sal_Int32 nParaCount = pOwner->pEditEngine->GetParagraphCount();
-
-            for( sal_Int32 nPara = 0; nPara < nParaCount; nPara++ )
-                pOwner->ImplSetLevelDependentStyleSheet( nPara );
-        }
-
-        pEditView->SetEditEngineUpdateMode( true );
-        pOwner->UndoActionEnd();
-        pEditView->ShowCursor();
-
-        // Chaining handling
-        // NOTE: We need to do this last because it pEditView may be deleted if a switch of box occurs
-        aEndCutPasteLink.Call(nullptr);
+        for( sal_Int32 nPara = 0; nPara < nParaCount; nPara++ )
+            pOwner->ImplSetLevelDependentStyleSheet( nPara );
     }
+
+    pEditView->SetEditEngineUpdateMode( true );
+    pOwner->UndoActionEnd();
+    pEditView->ShowCursor();
+
+    // Chaining handling
+    // NOTE: We need to do this last because it pEditView may be deleted if a switch of box occurs
+    aEndCutPasteLink.Call(nullptr);
 }
 
 void OutlinerView::CreateSelectionList (std::vector<Paragraph*> &aSelList)

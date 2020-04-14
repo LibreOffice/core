@@ -544,49 +544,49 @@ namespace legacy
                     rItem.SetColor(aTempColor);
             }
 
-            if ( nItemVersion >= BRUSH_GRAPHIC_VERSION )
+            if ( nItemVersion < BRUSH_GRAPHIC_VERSION )
+                return;
+
+            sal_uInt16 nDoLoad = 0;
+            sal_Int8 nPos;
+
+            rStrm.ReadUInt16( nDoLoad );
+
+            if ( nDoLoad & LOAD_GRAPHIC )
             {
-                sal_uInt16 nDoLoad = 0;
-                sal_Int8 nPos;
+                Graphic aGraphic;
 
-                rStrm.ReadUInt16( nDoLoad );
+                ReadGraphic( rStrm, aGraphic );
+                rItem.SetGraphicObject(GraphicObject(aGraphic));
 
-                if ( nDoLoad & LOAD_GRAPHIC )
+                if( SVSTREAM_FILEFORMAT_ERROR == rStrm.GetError() )
                 {
-                    Graphic aGraphic;
-
-                    ReadGraphic( rStrm, aGraphic );
-                    rItem.SetGraphicObject(GraphicObject(aGraphic));
-
-                    if( SVSTREAM_FILEFORMAT_ERROR == rStrm.GetError() )
-                    {
-                        rStrm.ResetError();
-                        rStrm.SetError( ERRCODE_SVX_GRAPHIC_WRONG_FILEFORMAT.MakeWarning() );
-                    }
+                    rStrm.ResetError();
+                    rStrm.SetError( ERRCODE_SVX_GRAPHIC_WRONG_FILEFORMAT.MakeWarning() );
                 }
-
-                if ( nDoLoad & LOAD_LINK )
-                {
-                    // UNICODE: rStrm >> aRel;
-                    OUString aRel = rStrm.ReadUniOrByteString(rStrm.GetStreamCharSet());
-
-                    // TODO/MBA: how can we get a BaseURL here?!
-                    OSL_FAIL("No BaseURL!");
-                    OUString aAbs = INetURLObject::GetAbsURL( "", aRel );
-                    DBG_ASSERT( !aAbs.isEmpty(), "Invalid URL!" );
-                    rItem.SetGraphicLink(aAbs);
-                }
-
-                if ( nDoLoad & LOAD_FILTER )
-                {
-                    // UNICODE: rStrm >> maStrFilter;
-                    rItem.SetGraphicFilter(rStrm.ReadUniOrByteString(rStrm.GetStreamCharSet()));
-                }
-
-                rStrm.ReadSChar( nPos );
-
-                rItem.SetGraphicPos(static_cast<SvxGraphicPosition>(nPos));
             }
+
+            if ( nDoLoad & LOAD_LINK )
+            {
+                // UNICODE: rStrm >> aRel;
+                OUString aRel = rStrm.ReadUniOrByteString(rStrm.GetStreamCharSet());
+
+                // TODO/MBA: how can we get a BaseURL here?!
+                OSL_FAIL("No BaseURL!");
+                OUString aAbs = INetURLObject::GetAbsURL( "", aRel );
+                DBG_ASSERT( !aAbs.isEmpty(), "Invalid URL!" );
+                rItem.SetGraphicLink(aAbs);
+            }
+
+            if ( nDoLoad & LOAD_FILTER )
+            {
+                // UNICODE: rStrm >> maStrFilter;
+                rItem.SetGraphicFilter(rStrm.ReadUniOrByteString(rStrm.GetStreamCharSet()));
+            }
+
+            rStrm.ReadSChar( nPos );
+
+            rItem.SetGraphicPos(static_cast<SvxGraphicPosition>(nPos));
         }
 
         SvStream& Store(const SvxBrushItem& rItem, SvStream& rStrm, sal_uInt16)

@@ -68,18 +68,18 @@ sal_Int32 SvxNumberType::nRefCount = 0;
 css::uno::Reference<css::text::XNumberingFormatter> SvxNumberType::xFormatter;
 static void lcl_getFormatter(css::uno::Reference<css::text::XNumberingFormatter>& _xFormatter)
 {
-    if(!_xFormatter.is())
-       {
-        try
-        {
-            Reference<XComponentContext>         xContext( ::comphelper::getProcessComponentContext() );
-            Reference<XDefaultNumberingProvider> xRet = text::DefaultNumberingProvider::create(xContext);
-            _xFormatter.set(xRet, UNO_QUERY);
-        }
-        catch(const Exception&)
-        {
-            SAL_WARN("editeng", "service missing: \"com.sun.star.text.DefaultNumberingProvider\"");
-        }
+    if(_xFormatter.is())
+        return;
+
+    try
+    {
+        Reference<XComponentContext>         xContext( ::comphelper::getProcessComponentContext() );
+        Reference<XDefaultNumberingProvider> xRet = text::DefaultNumberingProvider::create(xContext);
+        _xFormatter.set(xRet, UNO_QUERY);
+    }
+    catch(const Exception&)
+    {
+        SAL_WARN("editeng", "service missing: \"com.sun.star.text.DefaultNumberingProvider\"");
     }
 }
 
@@ -797,20 +797,20 @@ void SvxNumRule::SetLevel( sal_uInt16 i, const SvxNumberFormat& rNumFmt, bool bI
 {
     DBG_ASSERT(i < SVX_MAX_NUM, "Wrong Level" );
 
-    if( i < SVX_MAX_NUM )
-    {
-        bool bReplace = !aFmtsSet[i];
-        if (!bReplace)
-        {
-            const SvxNumberFormat *pFmt = Get(i);
-            bReplace = pFmt == nullptr || rNumFmt != *pFmt;
-        }
+    if( i >= SVX_MAX_NUM )
+        return;
 
-        if (bReplace)
-        {
-            aFmts[i].reset( new SvxNumberFormat(rNumFmt) );
-            aFmtsSet[i] = bIsValid;
-        }
+    bool bReplace = !aFmtsSet[i];
+    if (!bReplace)
+    {
+        const SvxNumberFormat *pFmt = Get(i);
+        bReplace = pFmt == nullptr || rNumFmt != *pFmt;
+    }
+
+    if (bReplace)
+    {
+        aFmts[i].reset( new SvxNumberFormat(rNumFmt) );
+        aFmtsSet[i] = bIsValid;
     }
 }
 

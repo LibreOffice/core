@@ -472,23 +472,23 @@ void EditView::Command( const CommandEvent& rCEvt )
 
 void EditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bActivate )
 {
-    if ( pImpEditView->pEditEngine->HasView( this ) )
+    if ( !pImpEditView->pEditEngine->HasView( this ) )
+        return;
+
+    // The control word is more important:
+    if ( !pImpEditView->DoAutoScroll() )
+        bGotoCursor = false;
+    pImpEditView->ShowCursor( bGotoCursor, bForceVisCursor );
+
+    if (pImpEditView->mpViewShell && !bActivate)
     {
-        // The control word is more important:
-        if ( !pImpEditView->DoAutoScroll() )
-            bGotoCursor = false;
-        pImpEditView->ShowCursor( bGotoCursor, bForceVisCursor );
+        VclPtr<vcl::Window> pParent = pImpEditView->pOutWin->GetParentWithLOKNotifier();
+        if (pParent && pParent->GetLOKWindowId() != 0)
+            return;
 
-        if (pImpEditView->mpViewShell && !bActivate)
-        {
-            VclPtr<vcl::Window> pParent = pImpEditView->pOutWin->GetParentWithLOKNotifier();
-            if (pParent && pParent->GetLOKWindowId() != 0)
-                return;
-
-            static const OString aPayload = OString::boolean(true);
-            pImpEditView->mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, aPayload.getStr());
-            pImpEditView->mpViewShell->NotifyOtherViews(LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", aPayload);
-        }
+        static const OString aPayload = OString::boolean(true);
+        pImpEditView->mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, aPayload.getStr());
+        pImpEditView->mpViewShell->NotifyOtherViews(LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", aPayload);
     }
 }
 
@@ -893,308 +893,308 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
     EditPaM aPaM = pImpEditView->pEditEngine->GetPaM(aPos, false);
     Reference< linguistic2::XSpellChecker1 >  xSpeller( pImpEditView->pEditEngine->pImpEditEngine->GetSpeller() );
     ESelection aOldSel = GetSelection();
-    if ( xSpeller.is() && pImpEditView->IsWrongSpelledWord( aPaM, true ) )
+    if ( !(xSpeller.is() && pImpEditView->IsWrongSpelledWord( aPaM, true )) )
+        return;
+
+    VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "editeng/ui/spellmenu.ui", "");
+    VclPtr<PopupMenu> aPopupMenu(aBuilder.get_menu("menu"));
+    const sal_uInt16 nAutoCorrId = aPopupMenu->GetItemId("autocorrect");
+    PopupMenu *pAutoMenu = aPopupMenu->GetPopupMenu(nAutoCorrId);
+    const sal_uInt16 nInsertId = aPopupMenu->GetItemId("insert");
+    PopupMenu *pInsertMenu = aPopupMenu->GetPopupMenu(nInsertId);  // add word to user-dictionaries
+    pInsertMenu->SetMenuFlags( MenuFlags::NoAutoMnemonics );         //! necessary to retrieve the correct dictionary names later
+    const sal_uInt16 nAddId = aPopupMenu->GetItemId("add");
+    const sal_uInt16 nIgnoreId = aPopupMenu->GetItemId("ignore");
+    const sal_uInt16 nCheckId = aPopupMenu->GetItemId("check");
+    const sal_uInt16 nAutoCorrectDlgId = aPopupMenu->GetItemId("autocorrectdlg");
+
+    EditPaM aPaM2( aPaM );
+    aPaM2.SetIndex( aPaM2.GetIndex()+1 );
+
+    // Are there any replace suggestions?
+    OUString aSelected( GetSelected() );
+
+    // restrict the maximal number of suggestions displayed
+    // in the context menu.
+    // Note: That could of course be done by clipping the
+    // resulting sequence but the current third party
+    // implementations result differs greatly if the number of
+    // suggestions to be returned gets changed. Statistically
+    // it gets much better if told to return e.g. only 7 strings
+    // than returning e.g. 16 suggestions and using only the
+    // first 7. Thus we hand down the value to use to that
+    // implementation here by providing an additional parameter.
+    Sequence< PropertyValue > aPropVals(1);
+    PropertyValue &rVal = aPropVals.getArray()[0];
+    rVal.Name = UPN_MAX_NUMBER_OF_SUGGESTIONS;
+    rVal.Value <<= sal_Int16(7);
+
+    // Are there any replace suggestions?
+    Reference< linguistic2::XSpellAlternatives >  xSpellAlt =
+            xSpeller->spell( aSelected, static_cast<sal_uInt16>(pImpEditView->pEditEngine->pImpEditEngine->GetLanguage( aPaM2 )), aPropVals );
+
+    Reference< linguistic2::XLanguageGuessing >  xLangGuesser( EditDLL::Get().GetGlobalData()->GetLanguageGuesser() );
+
+    // check if text might belong to a different language...
+    LanguageType nGuessLangWord = LANGUAGE_NONE;
+    LanguageType nGuessLangPara = LANGUAGE_NONE;
+    if (xSpellAlt.is() && xLangGuesser.is())
     {
-        VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "editeng/ui/spellmenu.ui", "");
-        VclPtr<PopupMenu> aPopupMenu(aBuilder.get_menu("menu"));
-        const sal_uInt16 nAutoCorrId = aPopupMenu->GetItemId("autocorrect");
-        PopupMenu *pAutoMenu = aPopupMenu->GetPopupMenu(nAutoCorrId);
-        const sal_uInt16 nInsertId = aPopupMenu->GetItemId("insert");
-        PopupMenu *pInsertMenu = aPopupMenu->GetPopupMenu(nInsertId);  // add word to user-dictionaries
-        pInsertMenu->SetMenuFlags( MenuFlags::NoAutoMnemonics );         //! necessary to retrieve the correct dictionary names later
-        const sal_uInt16 nAddId = aPopupMenu->GetItemId("add");
-        const sal_uInt16 nIgnoreId = aPopupMenu->GetItemId("ignore");
-        const sal_uInt16 nCheckId = aPopupMenu->GetItemId("check");
-        const sal_uInt16 nAutoCorrectDlgId = aPopupMenu->GetItemId("autocorrectdlg");
-
-        EditPaM aPaM2( aPaM );
-        aPaM2.SetIndex( aPaM2.GetIndex()+1 );
-
-        // Are there any replace suggestions?
-        OUString aSelected( GetSelected() );
-
-        // restrict the maximal number of suggestions displayed
-        // in the context menu.
-        // Note: That could of course be done by clipping the
-        // resulting sequence but the current third party
-        // implementations result differs greatly if the number of
-        // suggestions to be returned gets changed. Statistically
-        // it gets much better if told to return e.g. only 7 strings
-        // than returning e.g. 16 suggestions and using only the
-        // first 7. Thus we hand down the value to use to that
-        // implementation here by providing an additional parameter.
-        Sequence< PropertyValue > aPropVals(1);
-        PropertyValue &rVal = aPropVals.getArray()[0];
-        rVal.Name = UPN_MAX_NUMBER_OF_SUGGESTIONS;
-        rVal.Value <<= sal_Int16(7);
-
-        // Are there any replace suggestions?
-        Reference< linguistic2::XSpellAlternatives >  xSpellAlt =
-                xSpeller->spell( aSelected, static_cast<sal_uInt16>(pImpEditView->pEditEngine->pImpEditEngine->GetLanguage( aPaM2 )), aPropVals );
-
-        Reference< linguistic2::XLanguageGuessing >  xLangGuesser( EditDLL::Get().GetGlobalData()->GetLanguageGuesser() );
-
-        // check if text might belong to a different language...
-        LanguageType nGuessLangWord = LANGUAGE_NONE;
-        LanguageType nGuessLangPara = LANGUAGE_NONE;
-        if (xSpellAlt.is() && xLangGuesser.is())
+        OUString aParaText;
+        ContentNode *pNode = aPaM.GetNode();
+        if (pNode)
         {
-            OUString aParaText;
-            ContentNode *pNode = aPaM.GetNode();
-            if (pNode)
-            {
-                aParaText = pNode->GetString();
-            }
-            else
-            {
-                OSL_FAIL( "content node is NULL" );
-            }
-
-            nGuessLangWord = CheckLanguage( xSpellAlt->getWord(), xSpeller, xLangGuesser, false );
-            nGuessLangPara = CheckLanguage( aParaText, xSpeller, xLangGuesser, true );
-        }
-        if (nGuessLangWord != LANGUAGE_NONE || nGuessLangPara != LANGUAGE_NONE)
-        {
-            // make sure LANGUAGE_NONE gets not used as menu entry
-            if (nGuessLangWord == LANGUAGE_NONE)
-                nGuessLangWord = nGuessLangPara;
-            if (nGuessLangPara == LANGUAGE_NONE)
-                nGuessLangPara = nGuessLangWord;
-
-            aPopupMenu->InsertSeparator();
-            OUString aTmpWord( SvtLanguageTable::GetLanguageString( nGuessLangWord ) );
-            OUString aTmpPara( SvtLanguageTable::GetLanguageString( nGuessLangPara ) );
-            OUString aWordStr( EditResId( RID_STR_WORD ) );
-            aWordStr = aWordStr.replaceFirst( "%x", aTmpWord );
-            OUString aParaStr( EditResId( RID_STR_PARAGRAPH ) );
-            aParaStr = aParaStr.replaceFirst( "%x", aTmpPara );
-            aPopupMenu->InsertItem( MN_WORDLANGUAGE, aWordStr );
-            aPopupMenu->SetHelpId( MN_WORDLANGUAGE, HID_EDITENG_SPELLER_WORDLANGUAGE );
-            aPopupMenu->InsertItem( MN_PARALANGUAGE, aParaStr );
-            aPopupMenu->SetHelpId( MN_PARALANGUAGE, HID_EDITENG_SPELLER_PARALANGUAGE );
-        }
-
-        // ## Create mnemonics here
-        aPopupMenu->CreateAutoMnemonics();
-        aPopupMenu->SetMenuFlags(aPopupMenu->GetMenuFlags() | MenuFlags::NoAutoMnemonics);
-
-        // Replace suggestions...
-        Sequence< OUString > aAlt;
-        if (xSpellAlt.is())
-            aAlt = xSpellAlt->getAlternatives();
-        const OUString *pAlt = aAlt.getConstArray();
-        sal_uInt16 nWords = static_cast<sal_uInt16>(aAlt.getLength());
-        if ( nWords )
-        {
-            for ( sal_uInt16 nW = 0; nW < nWords; nW++ )
-            {
-                OUString aAlternate( pAlt[nW] );
-                aPopupMenu->InsertItem( MN_ALTSTART+nW, aAlternate, MenuItemBits::NONE, OString(), nW );
-                pAutoMenu->InsertItem( MN_AUTOSTART+nW, aAlternate, MenuItemBits::NONE, OString(), nW );
-            }
-            aPopupMenu->InsertSeparator(OString(), nWords);
+            aParaText = pNode->GetString();
         }
         else
-            aPopupMenu->RemoveItem(nAutoCorrId);   // delete?
-
-        SvtLinguConfig aCfg;
-
-        Reference< linguistic2::XSearchableDictionaryList >  xDicList( LinguMgr::GetDictionaryList() );
-        Sequence< Reference< linguistic2::XDictionary >  > aDics;
-        if (xDicList.is())
         {
-            const Reference< linguistic2::XDictionary >  *pDic = nullptr;
-            // add the default positive dictionary to dic-list (if not already done).
-            // This is to ensure that there is at least one dictionary to which
-            // words could be added.
-            uno::Reference< linguistic2::XDictionary >  xDic( LinguMgr::GetStandardDic() );
-            if (xDic.is())
-                xDic->setActive( true );
+            OSL_FAIL( "content node is NULL" );
+        }
 
-            aDics = xDicList->getDictionaries();
-            pDic  = aDics.getConstArray();
-            LanguageType nCheckedLanguage = pImpEditView->pEditEngine->pImpEditEngine->GetLanguage( aPaM2 );
-            sal_uInt16 nDicCount = static_cast<sal_uInt16>(aDics.getLength());
-            for (sal_uInt16 i = 0; i < nDicCount; i++)
+        nGuessLangWord = CheckLanguage( xSpellAlt->getWord(), xSpeller, xLangGuesser, false );
+        nGuessLangPara = CheckLanguage( aParaText, xSpeller, xLangGuesser, true );
+    }
+    if (nGuessLangWord != LANGUAGE_NONE || nGuessLangPara != LANGUAGE_NONE)
+    {
+        // make sure LANGUAGE_NONE gets not used as menu entry
+        if (nGuessLangWord == LANGUAGE_NONE)
+            nGuessLangWord = nGuessLangPara;
+        if (nGuessLangPara == LANGUAGE_NONE)
+            nGuessLangPara = nGuessLangWord;
+
+        aPopupMenu->InsertSeparator();
+        OUString aTmpWord( SvtLanguageTable::GetLanguageString( nGuessLangWord ) );
+        OUString aTmpPara( SvtLanguageTable::GetLanguageString( nGuessLangPara ) );
+        OUString aWordStr( EditResId( RID_STR_WORD ) );
+        aWordStr = aWordStr.replaceFirst( "%x", aTmpWord );
+        OUString aParaStr( EditResId( RID_STR_PARAGRAPH ) );
+        aParaStr = aParaStr.replaceFirst( "%x", aTmpPara );
+        aPopupMenu->InsertItem( MN_WORDLANGUAGE, aWordStr );
+        aPopupMenu->SetHelpId( MN_WORDLANGUAGE, HID_EDITENG_SPELLER_WORDLANGUAGE );
+        aPopupMenu->InsertItem( MN_PARALANGUAGE, aParaStr );
+        aPopupMenu->SetHelpId( MN_PARALANGUAGE, HID_EDITENG_SPELLER_PARALANGUAGE );
+    }
+
+    // ## Create mnemonics here
+    aPopupMenu->CreateAutoMnemonics();
+    aPopupMenu->SetMenuFlags(aPopupMenu->GetMenuFlags() | MenuFlags::NoAutoMnemonics);
+
+    // Replace suggestions...
+    Sequence< OUString > aAlt;
+    if (xSpellAlt.is())
+        aAlt = xSpellAlt->getAlternatives();
+    const OUString *pAlt = aAlt.getConstArray();
+    sal_uInt16 nWords = static_cast<sal_uInt16>(aAlt.getLength());
+    if ( nWords )
+    {
+        for ( sal_uInt16 nW = 0; nW < nWords; nW++ )
+        {
+            OUString aAlternate( pAlt[nW] );
+            aPopupMenu->InsertItem( MN_ALTSTART+nW, aAlternate, MenuItemBits::NONE, OString(), nW );
+            pAutoMenu->InsertItem( MN_AUTOSTART+nW, aAlternate, MenuItemBits::NONE, OString(), nW );
+        }
+        aPopupMenu->InsertSeparator(OString(), nWords);
+    }
+    else
+        aPopupMenu->RemoveItem(nAutoCorrId);   // delete?
+
+    SvtLinguConfig aCfg;
+
+    Reference< linguistic2::XSearchableDictionaryList >  xDicList( LinguMgr::GetDictionaryList() );
+    Sequence< Reference< linguistic2::XDictionary >  > aDics;
+    if (xDicList.is())
+    {
+        const Reference< linguistic2::XDictionary >  *pDic = nullptr;
+        // add the default positive dictionary to dic-list (if not already done).
+        // This is to ensure that there is at least one dictionary to which
+        // words could be added.
+        uno::Reference< linguistic2::XDictionary >  xDic( LinguMgr::GetStandardDic() );
+        if (xDic.is())
+            xDic->setActive( true );
+
+        aDics = xDicList->getDictionaries();
+        pDic  = aDics.getConstArray();
+        LanguageType nCheckedLanguage = pImpEditView->pEditEngine->pImpEditEngine->GetLanguage( aPaM2 );
+        sal_uInt16 nDicCount = static_cast<sal_uInt16>(aDics.getLength());
+        for (sal_uInt16 i = 0; i < nDicCount; i++)
+        {
+            uno::Reference< linguistic2::XDictionary >  xDicTmp = pDic[i];
+            if (!xDicTmp.is() || LinguMgr::GetIgnoreAllList() == xDicTmp)
+                continue;
+
+            uno::Reference< frame::XStorable > xStor( xDicTmp, uno::UNO_QUERY );
+            LanguageType nActLanguage = LanguageTag( xDicTmp->getLocale() ).getLanguageType();
+            if( xDicTmp->isActive()
+                &&  xDicTmp->getDictionaryType() != linguistic2::DictionaryType_NEGATIVE
+                && (nCheckedLanguage == nActLanguage || LANGUAGE_NONE == nActLanguage )
+                && (!xStor.is() || !xStor->isReadonly()) )
             {
-                uno::Reference< linguistic2::XDictionary >  xDicTmp = pDic[i];
-                if (!xDicTmp.is() || LinguMgr::GetIgnoreAllList() == xDicTmp)
-                    continue;
+                // the extra 1 is because of the (possible) external
+                // linguistic entry above
+                sal_uInt16 nPos = MN_DICTSTART + i;
+                pInsertMenu->InsertItem( nPos, xDicTmp->getName() );
+                aDicNameSingle = xDicTmp->getName();
 
-                uno::Reference< frame::XStorable > xStor( xDicTmp, uno::UNO_QUERY );
-                LanguageType nActLanguage = LanguageTag( xDicTmp->getLocale() ).getLanguageType();
-                if( xDicTmp->isActive()
-                    &&  xDicTmp->getDictionaryType() != linguistic2::DictionaryType_NEGATIVE
-                    && (nCheckedLanguage == nActLanguage || LANGUAGE_NONE == nActLanguage )
-                    && (!xStor.is() || !xStor->isReadonly()) )
+                uno::Reference< lang::XServiceInfo > xSvcInfo( xDicTmp, uno::UNO_QUERY );
+                if (xSvcInfo.is())
                 {
-                    // the extra 1 is because of the (possible) external
-                    // linguistic entry above
-                    sal_uInt16 nPos = MN_DICTSTART + i;
-                    pInsertMenu->InsertItem( nPos, xDicTmp->getName() );
-                    aDicNameSingle = xDicTmp->getName();
-
-                    uno::Reference< lang::XServiceInfo > xSvcInfo( xDicTmp, uno::UNO_QUERY );
-                    if (xSvcInfo.is())
+                    OUString aDictionaryImageUrl( aCfg.GetSpellAndGrammarContextDictionaryImage(
+                            xSvcInfo->getImplementationName()) );
+                    if (!aDictionaryImageUrl.isEmpty() )
                     {
-                        OUString aDictionaryImageUrl( aCfg.GetSpellAndGrammarContextDictionaryImage(
-                                xSvcInfo->getImplementationName()) );
-                        if (!aDictionaryImageUrl.isEmpty() )
-                        {
-                            Image aImage( aDictionaryImageUrl );
-                            pInsertMenu->SetItemImage( nPos, aImage );
-                        }
+                        Image aImage( aDictionaryImageUrl );
+                        pInsertMenu->SetItemImage( nPos, aImage );
                     }
                 }
             }
         }
+    }
 
-        if (pInsertMenu->GetItemCount() != 1)
-            aPopupMenu->EnableItem(nAddId, false);
-        if (pInsertMenu->GetItemCount() < 2)
-            aPopupMenu->EnableItem(nInsertId, false);
+    if (pInsertMenu->GetItemCount() != 1)
+        aPopupMenu->EnableItem(nAddId, false);
+    if (pInsertMenu->GetItemCount() < 2)
+        aPopupMenu->EnableItem(nInsertId, false);
 
-        aPopupMenu->RemoveDisabledEntries( true, true );
+    aPopupMenu->RemoveDisabledEntries( true, true );
 
-        tools::Rectangle aTempRect = pImpEditView->pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, GetCursorFlags::TextOnly );
-        Point aScreenPos = pImpEditView->GetWindowPos( aTempRect.TopLeft() );
-        aScreenPos = pImpEditView->GetWindow()->OutputToScreenPixel( aScreenPos );
-        aTempRect = pImpEditView->GetWindow()->LogicToPixel( tools::Rectangle(aScreenPos, aTempRect.GetSize() ));
+    tools::Rectangle aTempRect = pImpEditView->pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, GetCursorFlags::TextOnly );
+    Point aScreenPos = pImpEditView->GetWindowPos( aTempRect.TopLeft() );
+    aScreenPos = pImpEditView->GetWindow()->OutputToScreenPixel( aScreenPos );
+    aTempRect = pImpEditView->GetWindow()->LogicToPixel( tools::Rectangle(aScreenPos, aTempRect.GetSize() ));
 
-        //tdf#106123 store and restore the EditPaM around the menu Execute
-        //because the loss of focus in the current editeng causes writer
-        //annotations to save their contents, making the pContent of the
-        //current EditPams invalid
-        EPaM aP = pImpEditView->pEditEngine->pImpEditEngine->CreateEPaM(aPaM);
-        EPaM aP2 = pImpEditView->pEditEngine->pImpEditEngine->CreateEPaM(aPaM2);
+    //tdf#106123 store and restore the EditPaM around the menu Execute
+    //because the loss of focus in the current editeng causes writer
+    //annotations to save their contents, making the pContent of the
+    //current EditPams invalid
+    EPaM aP = pImpEditView->pEditEngine->pImpEditEngine->CreateEPaM(aPaM);
+    EPaM aP2 = pImpEditView->pEditEngine->pImpEditEngine->CreateEPaM(aPaM2);
 
 
-        if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // For mobile phones, send the context menu structure
+        if (comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView()))
         {
-            // For mobile phones, send the context menu structure
-            if (comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView()))
-            {
-                LOKSendSpellPopupMenu(aPopupMenu, nGuessLangWord, nGuessLangPara, nWords);
-                return;
-            }
-            else // For desktop and tablets, we use the tunneled dialog
-                aPopupMenu->SetLOKNotifier(SfxViewShell::Current());
+            LOKSendSpellPopupMenu(aPopupMenu, nGuessLangWord, nGuessLangPara, nWords);
+            return;
         }
-        sal_uInt16 nId = aPopupMenu->Execute(pImpEditView->GetWindow(), aTempRect, PopupMenuFlags::NoMouseUpClose);
+        else // For desktop and tablets, we use the tunneled dialog
+            aPopupMenu->SetLOKNotifier(SfxViewShell::Current());
+    }
+    sal_uInt16 nId = aPopupMenu->Execute(pImpEditView->GetWindow(), aTempRect, PopupMenuFlags::NoMouseUpClose);
 
-        aPaM2 = pImpEditView->pEditEngine->pImpEditEngine->CreateEditPaM(aP2);
-        aPaM = pImpEditView->pEditEngine->pImpEditEngine->CreateEditPaM(aP);
+    aPaM2 = pImpEditView->pEditEngine->pImpEditEngine->CreateEditPaM(aP2);
+    aPaM = pImpEditView->pEditEngine->pImpEditEngine->CreateEditPaM(aP);
 
-        if (nId == nIgnoreId)
+    if (nId == nIgnoreId)
+    {
+        OUString aWord = pImpEditView->SpellIgnoreWord();
+        if ( pCallBack )
         {
-            OUString aWord = pImpEditView->SpellIgnoreWord();
-            if ( pCallBack )
-            {
-                SpellCallbackInfo aInf( SpellCallbackCommand::IGNOREWORD, aWord );
-                pCallBack->Call( aInf );
-            }
-            SetSelection( aOldSel );
-        }
-        else if ( ( nId == MN_WORDLANGUAGE ) || ( nId == MN_PARALANGUAGE ) )
-        {
-            LanguageType nLangToUse = (nId == MN_WORDLANGUAGE) ? nGuessLangWord : nGuessLangPara;
-            SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( nLangToUse );
-
-            SfxItemSet aAttrs = GetEditEngine()->GetEmptyItemSet();
-            if (nScriptType == SvtScriptType::LATIN)
-                aAttrs.Put( SvxLanguageItem( nLangToUse, EE_CHAR_LANGUAGE ) );
-            if (nScriptType == SvtScriptType::COMPLEX)
-                aAttrs.Put( SvxLanguageItem( nLangToUse, EE_CHAR_LANGUAGE_CTL ) );
-            if (nScriptType == SvtScriptType::ASIAN)
-                aAttrs.Put( SvxLanguageItem( nLangToUse, EE_CHAR_LANGUAGE_CJK ) );
-            if ( nId == MN_PARALANGUAGE )
-            {
-                ESelection aSel = GetSelection();
-                aSel.nStartPos = 0;
-                aSel.nEndPos = EE_TEXTPOS_ALL;
-                SetSelection( aSel );
-            }
-            SetAttribs( aAttrs );
-            pImpEditView->pEditEngine->pImpEditEngine->StartOnlineSpellTimer();
-
-            if ( pCallBack )
-            {
-                SpellCallbackInfo aInf( ( nId == MN_WORDLANGUAGE ) ? SpellCallbackCommand::WORDLANGUAGE : SpellCallbackCommand::PARALANGUAGE );
-                pCallBack->Call( aInf );
-            }
-            SetSelection( aOldSel );
-        }
-        else if (nId == nCheckId)
-        {
-            if ( !pCallBack )
-            {
-                // Set Cursor before word...
-                EditPaM aCursor = pImpEditView->GetEditSelection().Min();
-                pImpEditView->DrawSelectionXOR();
-                pImpEditView->SetEditSelection( EditSelection( aCursor, aCursor ) );
-                pImpEditView->DrawSelectionXOR();
-                // Crashes when no SfxApp
-                pImpEditView->pEditEngine->pImpEditEngine->Spell( this, false );
-            }
-            else
-            {
-                SpellCallbackInfo aInf( SpellCallbackCommand::STARTSPELLDLG, OUString() );
-                pCallBack->Call( aInf );
-            }
-        }
-        else if (nId == nAutoCorrectDlgId && pCallBack)
-        {
-            SpellCallbackInfo aInf( SpellCallbackCommand::AUTOCORRECT_OPTIONS, OUString() );
+            SpellCallbackInfo aInf( SpellCallbackCommand::IGNOREWORD, aWord );
             pCallBack->Call( aInf );
         }
-        else if ( nId >= MN_DICTSTART || nId == nAddId)
+        SetSelection( aOldSel );
+    }
+    else if ( ( nId == MN_WORDLANGUAGE ) || ( nId == MN_PARALANGUAGE ) )
+    {
+        LanguageType nLangToUse = (nId == MN_WORDLANGUAGE) ? nGuessLangWord : nGuessLangPara;
+        SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( nLangToUse );
+
+        SfxItemSet aAttrs = GetEditEngine()->GetEmptyItemSet();
+        if (nScriptType == SvtScriptType::LATIN)
+            aAttrs.Put( SvxLanguageItem( nLangToUse, EE_CHAR_LANGUAGE ) );
+        if (nScriptType == SvtScriptType::COMPLEX)
+            aAttrs.Put( SvxLanguageItem( nLangToUse, EE_CHAR_LANGUAGE_CTL ) );
+        if (nScriptType == SvtScriptType::ASIAN)
+            aAttrs.Put( SvxLanguageItem( nLangToUse, EE_CHAR_LANGUAGE_CJK ) );
+        if ( nId == MN_PARALANGUAGE )
         {
-            OUString aDicName;
-            if (nId >= MN_DICTSTART)
-                aDicName = pInsertMenu->GetItemText(nId);
-            else
-                aDicName = aDicNameSingle;
-
-            uno::Reference< linguistic2::XDictionary >      xDic;
-            if (xDicList.is())
-                xDic = xDicList->getDictionaryByName( aDicName );
-
-            if (xDic.is())
-                xDic->add( aSelected, false, OUString() );
-            // save modified user-dictionary if it is persistent
-            Reference< frame::XStorable >  xSavDic( xDic, UNO_QUERY );
-            if (xSavDic.is())
-                xSavDic->store();
-
-            aPaM.GetNode()->GetWrongList()->ResetInvalidRange(0, aPaM.GetNode()->Len());
-            pImpEditView->pEditEngine->pImpEditEngine->StartOnlineSpellTimer();
-
-            if ( pCallBack )
-            {
-                SpellCallbackInfo aInf( SpellCallbackCommand::ADDTODICTIONARY, aSelected );
-                pCallBack->Call( aInf );
-            }
-            SetSelection( aOldSel );
+            ESelection aSel = GetSelection();
+            aSel.nStartPos = 0;
+            aSel.nEndPos = EE_TEXTPOS_ALL;
+            SetSelection( aSel );
         }
-        else if ( nId >= MN_AUTOSTART )
+        SetAttribs( aAttrs );
+        pImpEditView->pEditEngine->pImpEditEngine->StartOnlineSpellTimer();
+
+        if ( pCallBack )
         {
-            DBG_ASSERT(nId - MN_AUTOSTART < aAlt.getLength(), "index out of range");
-            OUString aWord = pAlt[nId - MN_AUTOSTART];
-            SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
-            if ( pAutoCorrect )
-                pAutoCorrect->PutText( aSelected, aWord, pImpEditView->pEditEngine->pImpEditEngine->GetLanguage( aPaM2 ) );
-            InsertText( aWord );
+            SpellCallbackInfo aInf( ( nId == MN_WORDLANGUAGE ) ? SpellCallbackCommand::WORDLANGUAGE : SpellCallbackCommand::PARALANGUAGE );
+            pCallBack->Call( aInf );
         }
-        else if ( nId >= MN_ALTSTART )  // Replace
+        SetSelection( aOldSel );
+    }
+    else if (nId == nCheckId)
+    {
+        if ( !pCallBack )
         {
-            DBG_ASSERT(nId - MN_ALTSTART < aAlt.getLength(), "index out of range");
-            OUString aWord = pAlt[nId - MN_ALTSTART];
-            InsertText( aWord );
+            // Set Cursor before word...
+            EditPaM aCursor = pImpEditView->GetEditSelection().Min();
+            pImpEditView->DrawSelectionXOR();
+            pImpEditView->SetEditSelection( EditSelection( aCursor, aCursor ) );
+            pImpEditView->DrawSelectionXOR();
+            // Crashes when no SfxApp
+            pImpEditView->pEditEngine->pImpEditEngine->Spell( this, false );
         }
         else
         {
-            SetSelection( aOldSel );
+            SpellCallbackInfo aInf( SpellCallbackCommand::STARTSPELLDLG, OUString() );
+            pCallBack->Call( aInf );
         }
+    }
+    else if (nId == nAutoCorrectDlgId && pCallBack)
+    {
+        SpellCallbackInfo aInf( SpellCallbackCommand::AUTOCORRECT_OPTIONS, OUString() );
+        pCallBack->Call( aInf );
+    }
+    else if ( nId >= MN_DICTSTART || nId == nAddId)
+    {
+        OUString aDicName;
+        if (nId >= MN_DICTSTART)
+            aDicName = pInsertMenu->GetItemText(nId);
+        else
+            aDicName = aDicNameSingle;
+
+        uno::Reference< linguistic2::XDictionary >      xDic;
+        if (xDicList.is())
+            xDic = xDicList->getDictionaryByName( aDicName );
+
+        if (xDic.is())
+            xDic->add( aSelected, false, OUString() );
+        // save modified user-dictionary if it is persistent
+        Reference< frame::XStorable >  xSavDic( xDic, UNO_QUERY );
+        if (xSavDic.is())
+            xSavDic->store();
+
+        aPaM.GetNode()->GetWrongList()->ResetInvalidRange(0, aPaM.GetNode()->Len());
+        pImpEditView->pEditEngine->pImpEditEngine->StartOnlineSpellTimer();
+
+        if ( pCallBack )
+        {
+            SpellCallbackInfo aInf( SpellCallbackCommand::ADDTODICTIONARY, aSelected );
+            pCallBack->Call( aInf );
+        }
+        SetSelection( aOldSel );
+    }
+    else if ( nId >= MN_AUTOSTART )
+    {
+        DBG_ASSERT(nId - MN_AUTOSTART < aAlt.getLength(), "index out of range");
+        OUString aWord = pAlt[nId - MN_AUTOSTART];
+        SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
+        if ( pAutoCorrect )
+            pAutoCorrect->PutText( aSelected, aWord, pImpEditView->pEditEngine->pImpEditEngine->GetLanguage( aPaM2 ) );
+        InsertText( aWord );
+    }
+    else if ( nId >= MN_ALTSTART )  // Replace
+    {
+        DBG_ASSERT(nId - MN_ALTSTART < aAlt.getLength(), "index out of range");
+        OUString aWord = pAlt[nId - MN_ALTSTART];
+        InsertText( aWord );
+    }
+    else
+    {
+        SetSelection( aOldSel );
     }
 }
 

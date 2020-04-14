@@ -742,48 +742,48 @@ bool EditHTMLParser::HasTextInCurrentPara()
 void EditHTMLParser::AnchorStart()
 {
     // ignore anchor in anchor
-    if ( !pCurAnchor )
+    if ( pCurAnchor )
+        return;
+
+    const HTMLOptions& aOptions = GetOptions();
+    OUString aRef;
+
+    for (const auto & aOption : aOptions)
     {
-        const HTMLOptions& aOptions = GetOptions();
-        OUString aRef;
-
-        for (const auto & aOption : aOptions)
-        {
-            if( aOption.GetToken() == HtmlOptionId::HREF)
-                aRef = aOption.GetString();
-        }
-
-        if ( !aRef.isEmpty() )
-        {
-            OUString aURL = aRef;
-            if ( !aURL.isEmpty() && ( aURL[ 0 ] != '#' ) )
-            {
-                INetURLObject aTargetURL;
-                INetURLObject aRootURL( aBaseURL );
-                aRootURL.GetNewAbsURL( aRef, &aTargetURL );
-                aURL = aTargetURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
-            }
-            pCurAnchor.reset( new AnchorInfo );
-            pCurAnchor->aHRef = aURL;
-        }
+        if( aOption.GetToken() == HtmlOptionId::HREF)
+            aRef = aOption.GetString();
     }
+
+    if ( aRef.isEmpty() )
+        return;
+
+    OUString aURL = aRef;
+    if ( !aURL.isEmpty() && ( aURL[ 0 ] != '#' ) )
+    {
+        INetURLObject aTargetURL;
+        INetURLObject aRootURL( aBaseURL );
+        aRootURL.GetNewAbsURL( aRef, &aTargetURL );
+        aURL = aTargetURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
+    }
+    pCurAnchor.reset( new AnchorInfo );
+    pCurAnchor->aHRef = aURL;
 }
 
 void EditHTMLParser::AnchorEnd()
 {
-    if ( pCurAnchor )
-    {
-        // Insert as URL-Field...
-        SvxFieldItem aFld( SvxURLField( pCurAnchor->aHRef, pCurAnchor->aText, SvxURLFormat::Repr ), EE_FEATURE_FIELD  );
-        aCurSel = mpEditEngine->InsertField(aCurSel, aFld);
-        bFieldsInserted = true;
-        pCurAnchor.reset();
+    if ( !pCurAnchor )
+        return;
 
-        if (mpEditEngine->IsHtmlImportHandlerSet())
-        {
-            HtmlImportInfo aImportInfo(HtmlImportState::InsertField, this, mpEditEngine->CreateESelection(aCurSel));
-            mpEditEngine->CallHtmlImportHandler(aImportInfo);
-        }
+    // Insert as URL-Field...
+    SvxFieldItem aFld( SvxURLField( pCurAnchor->aHRef, pCurAnchor->aText, SvxURLFormat::Repr ), EE_FEATURE_FIELD  );
+    aCurSel = mpEditEngine->InsertField(aCurSel, aFld);
+    bFieldsInserted = true;
+    pCurAnchor.reset();
+
+    if (mpEditEngine->IsHtmlImportHandlerSet())
+    {
+        HtmlImportInfo aImportInfo(HtmlImportState::InsertField, this, mpEditEngine->CreateESelection(aCurSel));
+        mpEditEngine->CallHtmlImportHandler(aImportInfo);
     }
 }
 
