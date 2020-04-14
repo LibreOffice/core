@@ -71,7 +71,9 @@ namespace drawinglayer
 
         Primitive2DContainer SVXCORE_DLLPUBLIC createEmbeddedShadowPrimitive(
             const Primitive2DContainer& rContent,
-            const attribute::SdrShadowAttribute& rShadow);
+            const attribute::SdrShadowAttribute& rShadow,
+            sal_Int32 nGraphicTranslateX = 0,
+            sal_Int32 nGraphicTranslateY = 0);
 
         Primitive2DContainer SVXCORE_DLLPUBLIC createEmbeddedGlowPrimitive(
             const Primitive2DContainer& rContent,
