@@ -87,6 +87,30 @@
       "revId": "dd2681813d02089c71a8b0f4dc4c8e2bf63d1791",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14c774e7_5b25c321",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-04-14T10:44:18Z",
+      "side": 1,
+      "message": "thank you Stephan for answering to these misconceptions, because i\u0027d use more bad language :)",
+      "parentUuid": "120b12c5_ee6bee46",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 18
+      },
+      "revId": "dd2681813d02089c71a8b0f4dc4c8e2bf63d1791",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
