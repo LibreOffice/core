@@ -339,8 +339,8 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
     bool bSkipFiltered = !rSearchItem.IsSearchFiltered();
     bool bSearchNotes = (rSearchItem.GetCellType() == SvxSearchCellType::NOTE);
     // We need to cache sc::ColumnBlockConstPosition per each column.
-    std::vector< sc::ColumnBlockConstPosition > blockPos( nLastCol + 1 );
-    for( SCCOL i = 0; i <= nLastCol; ++i )
+    std::vector< sc::ColumnBlockConstPosition > blockPos( nLastCol + 2 );
+    for( SCCOL i = 0; i <= nLastCol+1; ++i )
         aCol[ i ].InitBlockPosition( blockPos[ i ] );
     if (!bAll && rSearchItem.GetBackward())
     {
