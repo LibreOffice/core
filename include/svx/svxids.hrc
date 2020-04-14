@@ -529,6 +529,9 @@ class SfxStringItem;
 #define SID_ATTR_ALIGN_DEGREES                          ( SID_SVX_START + 577 )
 #define SID_ATTR_ALIGN_LOCKPOS                          ( SID_SVX_START + 578 )
 #define SID_ATTR_NUMBERFORMAT_ONE_AREA                  ( SID_SVX_START + 580 )
+#define SID_TABSTOP_ADD_OR_CHANGE                       ( SID_SVX_START + 581 )
+#define SID_TABSTOP_ATTR_INDEX                          ( SID_SVX_START + 582 )
+#define SID_TABSTOP_ATTR_POSITION                       ( SID_SVX_START + 583 )
 
 // CAUTION! Range <587 .. 587> used by EditEngine (!)
 
