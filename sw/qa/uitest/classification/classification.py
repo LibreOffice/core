@@ -12,9 +12,10 @@ from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict, type_text
 from uitest.debug import sleep
-# import org.libreoffice.unotest
-# import pathlib
 from uitest.path import get_srcdir_url
+
+from com.sun.star.awt.FontWeight import BOLD
+
 def get_url_for_data_file(file_name):
 #    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
     return get_srcdir_url() + "/sw/qa/uitest/writer_tests/data/" + file_name
@@ -41,7 +42,6 @@ def get_url_for_data_file(file_name):
         #do the same for Paragraph classification
         # verify the text on characters 0-6 : "(Conf)"
         #+ new file and do it only for Paragraph classification (no watermark!)
-        #+ bug with bold text Bug 122565 - Classification dialog - Button "bold" works only in dialog
 
         #variants of content written manually, IP strings, classification (Conf, NB, GB, IO)
         #[Bug 122491] with testdoc
@@ -59,6 +59,7 @@ class classification(UITestCase):
         internationalClassificationCB = xDialog.getChild("internationalClassificationCB")
         intellectualPropertyPartEntry = xDialog.getChild("intellectualPropertyPartEntry")
         intellectualPropertyPartAddButton = xDialog.getChild("intellectualPropertyPartAddButton")
+        boldButton = xDialog.getChild("toolbox")
 
         props = {"TEXT": "Confidential"}
         actionProps = mkPropertyValues(props)
@@ -67,8 +68,17 @@ class classification(UITestCase):
         self.assertEqual(get_state_as_dict(internationalClassificationCB)["SelectEntryText"], "Confidential")
         #verify textBox Content
         # self.assertEqual(get_state_as_dict(classificationEditWindow)["Text"], "Conf")
+
+        boldButton.executeAction("CLICK", tuple())
+
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
+
+        #tdf#122565
+        header = document.StyleFamilies.PageStyles.Standard.HeaderText.createEnumeration().nextElement()
+        self.assertEqual(header.String, "Confidential")
+        self.assertEqual(header.CharWeight, BOLD)
+
         #verify watermark
         #Bug 122586 - Classification: by using the dialog, Watermark text from policy is not placed in the document
         self.ui_test.execute_dialog_through_command(".uno:Watermark")
