@@ -340,52 +340,52 @@ namespace svt
     {
         weld::Widget* pControl = m_pFilePickerController->getControl( nControlId );
         DBG_ASSERT( pControl, "OControlAccess::SetValue: don't have this control in the current mode!" );
-        if ( pControl )
+        if ( !pControl )
+            return;
+
+        PropFlags nPropertyId = PropFlags::Unknown;
+        if ( ControlActions::SET_HELP_URL == nControlAction )
         {
-            PropFlags nPropertyId = PropFlags::Unknown;
-            if ( ControlActions::SET_HELP_URL == nControlAction )
-            {
-                nPropertyId = PropFlags::HelpUrl;
-            }
-            else
-            {
-                switch ( nControlId )
-                {
-                    case CHECKBOX_AUTOEXTENSION:
-                    case CHECKBOX_PASSWORD:
-                    case CHECKBOX_FILTEROPTIONS:
-                    case CHECKBOX_READONLY:
-                    case CHECKBOX_LINK:
-                    case CHECKBOX_PREVIEW:
-                    case CHECKBOX_SELECTION:
-                        nPropertyId = PropFlags::Checked;
-                        break;
-
-                    case LISTBOX_FILTER:
-                        SAL_WARN( "fpicker.office", "Use the XFilterManager to access the filter listbox" );
-                        break;
-
-                    case LISTBOX_VERSION:
-                    case LISTBOX_TEMPLATE:
-                    case LISTBOX_IMAGE_TEMPLATE:
-                    case LISTBOX_IMAGE_ANCHOR:
-                        if ( ControlActions::SET_SELECT_ITEM == nControlAction )
-                        {
-                            nPropertyId = PropFlags::SelectedItemIndex;
-                        }
-                        else
-                        {
-                            weld::ComboBox* pComboBox = dynamic_cast<weld::ComboBox*>(pControl);
-                            assert(pComboBox && "OControlAccess::SetValue: implGetControl returned nonsense!");
-                            implDoListboxAction(pComboBox, nControlAction, rValue);
-                        }
-                        break;
-                }
-            }
-
-            if ( PropFlags::Unknown != nPropertyId )
-                implSetControlProperty( nControlId, pControl, nPropertyId, rValue );
+            nPropertyId = PropFlags::HelpUrl;
         }
+        else
+        {
+            switch ( nControlId )
+            {
+                case CHECKBOX_AUTOEXTENSION:
+                case CHECKBOX_PASSWORD:
+                case CHECKBOX_FILTEROPTIONS:
+                case CHECKBOX_READONLY:
+                case CHECKBOX_LINK:
+                case CHECKBOX_PREVIEW:
+                case CHECKBOX_SELECTION:
+                    nPropertyId = PropFlags::Checked;
+                    break;
+
+                case LISTBOX_FILTER:
+                    SAL_WARN( "fpicker.office", "Use the XFilterManager to access the filter listbox" );
+                    break;
+
+                case LISTBOX_VERSION:
+                case LISTBOX_TEMPLATE:
+                case LISTBOX_IMAGE_TEMPLATE:
+                case LISTBOX_IMAGE_ANCHOR:
+                    if ( ControlActions::SET_SELECT_ITEM == nControlAction )
+                    {
+                        nPropertyId = PropFlags::SelectedItemIndex;
+                    }
+                    else
+                    {
+                        weld::ComboBox* pComboBox = dynamic_cast<weld::ComboBox*>(pControl);
+                        assert(pComboBox && "OControlAccess::SetValue: implGetControl returned nonsense!");
+                        implDoListboxAction(pComboBox, nControlAction, rValue);
+                    }
+                    break;
+            }
+        }
+
+        if ( PropFlags::Unknown != nPropertyId )
+            implSetControlProperty( nControlId, pControl, nPropertyId, rValue );
     }
 
     Any OControlAccess::getValue( sal_Int16 nControlId, sal_Int16 nControlAction ) const

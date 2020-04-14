@@ -163,55 +163,55 @@ namespace
     void lcl_autoUpdateFileExtension( SvtFileDialog* _pDialog, const OUString& _rLastFilterExt )
     {
         // if auto extension is enabled...
-        if ( _pDialog->isAutoExtensionEnabled() )
+        if ( !_pDialog->isAutoExtensionEnabled() )
+            return;
+
+        // automatically switch to the extension of the (maybe just newly selected) extension
+        OUString aNewFile = _pDialog->getCurrentFileText( );
+        OUString aExt = GetFsysExtension_Impl( aNewFile, _rLastFilterExt );
+
+        // but only if there already is an extension
+        if ( aExt.isEmpty() )
+            return;
+
+        // check if it is a real file extension, and not only the "post-dot" part in
+        // a directory name
+        bool bRealExtensions = true;
+        if ( -1 != aExt.indexOf( '/' ) )
+            bRealExtensions = false;
+        else if ( -1 != aExt.indexOf( '\\' ) )
+            bRealExtensions = false;
+        else
         {
-            // automatically switch to the extension of the (maybe just newly selected) extension
-            OUString aNewFile = _pDialog->getCurrentFileText( );
-            OUString aExt = GetFsysExtension_Impl( aNewFile, _rLastFilterExt );
-
-            // but only if there already is an extension
-            if ( !aExt.isEmpty() )
+            // no easy way to tell, because the part containing the dot already is the last
+            // segment of the complete file name
+            // So we have to check if the file name denotes a folder or a file.
+            // For performance reasons, we do this for file urls only
+            INetURLObject aURL( aNewFile );
+            if ( INetProtocol::NotValid == aURL.GetProtocol() )
             {
-                // check if it is a real file extension, and not only the "post-dot" part in
-                // a directory name
-                bool bRealExtensions = true;
-                if ( -1 != aExt.indexOf( '/' ) )
-                    bRealExtensions = false;
-                else if ( -1 != aExt.indexOf( '\\' ) )
-                    bRealExtensions = false;
-                else
+                OUString sURL;
+                if ( osl::FileBase::getFileURLFromSystemPath( aNewFile, sURL )
+                     == osl::FileBase::E_None )
+                    aURL = INetURLObject( sURL );
+            }
+            if ( INetProtocol::File == aURL.GetProtocol() )
+            {
+                try
                 {
-                    // no easy way to tell, because the part containing the dot already is the last
-                    // segment of the complete file name
-                    // So we have to check if the file name denotes a folder or a file.
-                    // For performance reasons, we do this for file urls only
-                    INetURLObject aURL( aNewFile );
-                    if ( INetProtocol::NotValid == aURL.GetProtocol() )
-                    {
-                        OUString sURL;
-                        if ( osl::FileBase::getFileURLFromSystemPath( aNewFile, sURL )
-                             == osl::FileBase::E_None )
-                            aURL = INetURLObject( sURL );
-                    }
-                    if ( INetProtocol::File == aURL.GetProtocol() )
-                    {
-                        try
-                        {
-                            bRealExtensions = !_pDialog->ContentIsFolder( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
-                        }
-                        catch( const css::uno::Exception& )
-                        {
-                            SAL_INFO( "fpicker.office", "Exception in lcl_autoUpdateFileExtension" );
-                        }
-                    }
+                    bRealExtensions = !_pDialog->ContentIsFolder( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
                 }
-
-                if ( bRealExtensions )
+                catch( const css::uno::Exception& )
                 {
-                    SetFsysExtension_Impl( aNewFile, _pDialog->GetDefaultExt() );
-                    _pDialog->setCurrentFileText( aNewFile );
+                    SAL_INFO( "fpicker.office", "Exception in lcl_autoUpdateFileExtension" );
                 }
             }
+        }
+
+        if ( bRealExtensions )
+        {
+            SetFsysExtension_Impl( aNewFile, _pDialog->GetDefaultExt() );
+            _pDialog->setCurrentFileText( aNewFile );
         }
     }
 
@@ -484,25 +484,26 @@ SvtFileDialog::~SvtFileDialog()
     m_xFileView->SetSelectHdl(Link<SvtFileView*,void>());
 
     // Save bookmarked places
-    if (m_xImpl->m_xPlaces->IsUpdated()) {
-        const std::vector<PlacePtr> aPlaces = m_xImpl->m_xPlaces->GetPlaces();
-        Sequence< OUString > placesUrlsList(m_xImpl->m_xPlaces->GetNbEditablePlaces());
-        Sequence< OUString > placesNamesList(m_xImpl->m_xPlaces->GetNbEditablePlaces());
-        int i(0);
-        for (auto const& place : aPlaces)
-        {
-            if(place->IsEditable()) {
-                placesUrlsList[i] = place->GetUrl();
-                placesNamesList[i] = place->GetName();
-                ++i;
-            }
-        }
+    if (!m_xImpl->m_xPlaces->IsUpdated())
+        return;
 
-        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_xContext));
-        officecfg::Office::Common::Misc::FilePickerPlacesUrls::set(placesUrlsList, batch);
-        officecfg::Office::Common::Misc::FilePickerPlacesNames::set(placesNamesList, batch);
-        batch->commit();
+    const std::vector<PlacePtr> aPlaces = m_xImpl->m_xPlaces->GetPlaces();
+    Sequence< OUString > placesUrlsList(m_xImpl->m_xPlaces->GetNbEditablePlaces());
+    Sequence< OUString > placesNamesList(m_xImpl->m_xPlaces->GetNbEditablePlaces());
+    int i(0);
+    for (auto const& place : aPlaces)
+    {
+        if(place->IsEditable()) {
+            placesUrlsList[i] = place->GetUrl();
+            placesNamesList[i] = place->GetName();
+            ++i;
+        }
     }
+
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_xContext));
+    officecfg::Office::Common::Misc::FilePickerPlacesUrls::set(placesUrlsList, batch);
+    officecfg::Office::Common::Misc::FilePickerPlacesNames::set(placesNamesList, batch);
+    batch->commit();
 }
 
 IMPL_LINK_NOARG(SvtFileDialog, NewFolderHdl_Impl, weld::Button&, void)
@@ -2266,25 +2267,25 @@ void SvtFileDialog::appendDefaultExtension(OUString& rFileName,
 {
     const OUString aType(rFilterExtensions.toAsciiLowerCase());
 
-    if ( aType != FILEDIALOG_FILTER_ALL )
+    if ( aType == FILEDIALOG_FILTER_ALL )
+        return;
+
+    const OUString aTemp(rFileName.toAsciiLowerCase());
+    sal_Int32 nPos = 0;
+
+    do
     {
-        const OUString aTemp(rFileName.toAsciiLowerCase());
-        sal_Int32 nPos = 0;
-
-        do
-        {
-            if (nPos+1<aType.getLength() && aType[nPos]=='*') // take care of a leading *
-                ++nPos;
-            const OUString aExt(aType.getToken( 0, FILEDIALOG_DEF_EXTSEP, nPos ));
-            if (aExt.isEmpty())
-                continue;
-            if (aTemp.endsWith(aExt))
-                return;
-        }
-        while (nPos>=0);
-
-        rFileName += "." + rFilterDefaultExtension;
+        if (nPos+1<aType.getLength() && aType[nPos]=='*') // take care of a leading *
+            ++nPos;
+        const OUString aExt(aType.getToken( 0, FILEDIALOG_DEF_EXTSEP, nPos ));
+        if (aExt.isEmpty())
+            continue;
+        if (aTemp.endsWith(aExt))
+            return;
     }
+    while (nPos>=0);
+
+    rFileName += "." + rFilterDefaultExtension;
 }
 
 void SvtFileDialog::initDefaultPlaces( )
