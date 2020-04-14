@@ -11,9 +11,39 @@ from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.calc import enter_text_to_cell
 from uitest.uihelper.common import get_state_as_dict
+from uitest.path import get_srcdir_url
 import datetime
 
+
+def get_url_for_data_file(file_name):
+    return get_srcdir_url() + "/sc/qa/uitest/calc_tests/data/" + file_name
+
 class CalcTrackedChanges(UITestCase):
+
+    def test_tdf131907(self):
+        calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf130960.odt"))
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptChanges")
+        xTrackDlg = self.xUITest.getTopFocusWindow()
+
+        xChangesList = xTrackDlg.getChild("calcchanges")
+        self.assertEqual(1, len(xChangesList.getChildren()))
+
+        text = "Row inserted \tSheet1.1:1\t \t04/05/2020 17:01:10\t (Row 1:1 inserted)"
+        self.assertEqual(get_state_as_dict(xChangesList.getChild('0'))["Text"], text)
+
+        #it would crash here
+        xRejBtn = xTrackDlg.getChild("reject")
+        xRejBtn.executeAction("CLICK", tuple())
+
+        self.assertEqual(2, len(xChangesList.getChildren()))
+        self.assertEqual(get_state_as_dict(xChangesList.getChild('0'))["Text"], "Accepted")
+        self.assertEqual(get_state_as_dict(xChangesList.getChild('1'))["Text"], "Rejected")
+
+        xCancBtn = xTrackDlg.getChild("close")
+        xCancBtn.executeAction("CLICK", tuple())
+
+        self.ui_test.close_doc()
 
     def test_tdf66263_Protect_Records(self):
         calc_doc = self.ui_test.create_doc_in_start_center("calc")
