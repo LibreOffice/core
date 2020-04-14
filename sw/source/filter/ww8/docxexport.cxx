@@ -895,6 +895,25 @@ void DocxExport::WriteProperties( )
     m_pFilter->exportDocumentProperties( xDocProps, bSecurityOptOpenReadOnly );
 }
 
+static auto
+WriteCompat(SwDoc const& rDoc, ::sax_fastparser::FSHelperPtr const& rpFS,
+        sal_Int32 & rTargetCompatibilityMode) -> void
+{
+    if (!rDoc.getIDocumentSettingAccess().get(DocumentSettingId::ADD_EXT_LEADING))
+    {
+        rpFS->singleElementNS(XML_w, XML_noLeading);
+        if (rTargetCompatibilityMode > 14)
+        {   // Word ignores noLeading in compatibilityMode 15
+            rTargetCompatibilityMode = 14;
+        }
+    }
+    // Do not justify lines with manual break
+    if (rDoc.getIDocumentSettingAccess().get(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK))
+    {
+        rpFS->singleElementNS(XML_w, XML_doNotExpandShiftReturn);
+    }
+}
+
 void DocxExport::WriteSettings()
 {
     SwViewShell *pViewShell(m_pDoc->getIDocumentLayoutAccess().GetCurrentViewShell());
@@ -978,14 +997,6 @@ void DocxExport::WriteSettings()
         pFS->singleElementNS( XML_w, XML_defaultTabStop, FSNS( XML_w, XML_val ),
             OString::number(m_aSettings.defaultTabStop) );
 
-    // Do not justify lines with manual break
-    if( m_pDoc->getIDocumentSettingAccess().get( DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK ))
-    {
-        pFS->startElementNS(XML_w, XML_compat);
-        pFS->singleElementNS(XML_w, XML_doNotExpandShiftReturn);
-        pFS->endElementNS( XML_w, XML_compat );
-    }
-
     // export current mail merge database and table names
     SwDBData aData = m_pDoc->GetDBData();
     if ( !aData.sDataSource.isEmpty() && aData.nCommandType == css::sdb::CommandType::TABLE && !aData.sCommand.isEmpty() )
@@ -1061,7 +1072,7 @@ void DocxExport::WriteSettings()
      * 2.) Many years later, change the TargetCompatilityMode for new documents, when we no longer care
      *     about working with perfect compatibility with older versions of MS Word.
      */
-    const sal_Int32 nTargetCompatibilityMode = 15; //older versions might not open our files well
+    sal_Int32 nTargetCompatibilityMode = 15; //older versions might not open our files well
     bool bHasCompatibilityMode = false;
     const OUString aGrabBagName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
     if ( xPropSetInfo->hasPropertyByName( aGrabBagName ) )
@@ -1093,6 +1104,8 @@ void DocxExport::WriteSettings()
             else if ( rProp.Name == "CompatSettings" )
             {
                 pFS->startElementNS(XML_w, XML_compat);
+
+                WriteCompat(*m_pDoc, pFS, nTargetCompatibilityMode);
 
                 uno::Sequence< beans::PropertyValue > aCompatSettingsSequence;
                 rProp.Value >>= aCompatSettingsSequence;
@@ -1203,6 +1216,9 @@ void DocxExport::WriteSettings()
     if ( !bHasCompatibilityMode )
     {
         pFS->startElementNS(XML_w, XML_compat);
+
+        WriteCompat(*m_pDoc, pFS, nTargetCompatibilityMode);
+
         pFS->singleElementNS( XML_w, XML_compatSetting,
             FSNS( XML_w, XML_name ), "compatibilityMode",
             FSNS( XML_w, XML_uri ),  "http://schemas.microsoft.com/office/word",

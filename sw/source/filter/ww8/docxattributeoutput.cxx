@@ -3697,6 +3697,7 @@ sal_Int32 lcl_getWordCompatibilityMode( const SwDoc& rDoc )
     uno::Reference< beans::XPropertySet >     xPropSet( rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
 
+    sal_Int32 nWordCompatibilityMode = -1;
     if ( xPropSetInfo->hasPropertyByName( UNO_NAME_MISC_OBJ_INTEROPGRABBAG ) )
     {
         uno::Sequence< beans::PropertyValue > propList;
@@ -3727,14 +3728,23 @@ sal_Int32 lcl_getWordCompatibilityMode( const SwDoc& rDoc )
 
                     if ( sName == "compatibilityMode" && sUri == "http://schemas.microsoft.com/office/word" )
                     {
-                        return sVal.toInt32();
+                        nWordCompatibilityMode = sVal.toInt32();
                     }
                 }
             }
         }
     }
 
-    return -1; // Word compatibility mode not found
+    // TODO: this is duplicative, better store it in DocxExport member?
+    if (!rDoc.getIDocumentSettingAccess().get(DocumentSettingId::ADD_EXT_LEADING))
+    {
+        if (nWordCompatibilityMode == -1 || 14 < nWordCompatibilityMode)
+        {
+            nWordCompatibilityMode = 14;
+        }
+    }
+
+    return nWordCompatibilityMode;
 }
 
 }
