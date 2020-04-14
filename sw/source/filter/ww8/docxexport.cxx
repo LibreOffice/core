@@ -944,6 +944,20 @@ void DocxExport::WriteDocVars(const sax_fastparser::FSHelperPtr& pFS)
     }
 }
 
+static auto
+WriteCompat(SwDoc const& rDoc, ::sax_fastparser::FSHelperPtr const& rpFS) -> void
+{
+    rpFS->singleElementNS(XML_w, XML_noLeading, FSNS(XML_w, XML_val),
+        rDoc.getIDocumentSettingAccess().get(DocumentSettingId::ADD_EXT_LEADING)
+            ? "false"
+            : "true");
+    // Do not justify lines with manual break
+    if (rDoc.getIDocumentSettingAccess().get(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK))
+    {
+        rpFS->singleElementNS(XML_w, XML_doNotExpandShiftReturn);
+    }
+}
+
 void DocxExport::WriteSettings()
 {
     SwViewShell *pViewShell(m_pDoc->getIDocumentLayoutAccess().GetCurrentViewShell());
@@ -1026,14 +1040,6 @@ void DocxExport::WriteSettings()
     if( m_aSettings.defaultTabStop != 0 )
         pFS->singleElementNS( XML_w, XML_defaultTabStop, FSNS( XML_w, XML_val ),
             OString::number(m_aSettings.defaultTabStop) );
-
-    // Do not justify lines with manual break
-    if( m_pDoc->getIDocumentSettingAccess().get( DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK ))
-    {
-        pFS->startElementNS(XML_w, XML_compat);
-        pFS->singleElementNS(XML_w, XML_doNotExpandShiftReturn);
-        pFS->endElementNS( XML_w, XML_compat );
-    }
 
     // export current mail merge database and table names
     SwDBData aData = m_pDoc->GetDBData();
@@ -1153,6 +1159,8 @@ void DocxExport::WriteSettings()
             else if ( rProp.Name == "CompatSettings" )
             {
                 pFS->startElementNS(XML_w, XML_compat);
+
+                WriteCompat(*m_pDoc, pFS);
 
                 uno::Sequence< beans::PropertyValue > aCompatSettingsSequence;
                 rProp.Value >>= aCompatSettingsSequence;
@@ -1282,6 +1290,9 @@ void DocxExport::WriteSettings()
     if ( !bHasCompatibilityMode )
     {
         pFS->startElementNS(XML_w, XML_compat);
+
+        WriteCompat(*m_pDoc, pFS);
+
         pFS->singleElementNS( XML_w, XML_compatSetting,
             FSNS( XML_w, XML_name ), "compatibilityMode",
             FSNS( XML_w, XML_uri ),  "http://schemas.microsoft.com/office/word",
