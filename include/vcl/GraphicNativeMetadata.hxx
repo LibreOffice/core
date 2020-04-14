@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_GRAPHICNATIVEMETADATA_HXX
-#define INCLUDED_VCL_GRAPHICNATIVEMETADATA_HXX
+#pragma once
 
 #include <vcl/graph.hxx>
 
@@ -33,7 +32,5 @@ public:
     bool read(Graphic const & rGraphic);
     sal_uInt16 getRotation() const { return mRotation;}
 };
-
-#endif // INCLUDED_VCL_GRAPHICNATIVEMETADATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
