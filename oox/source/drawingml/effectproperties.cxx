@@ -26,6 +26,8 @@ void EffectShadowProperties::assignUsed(const EffectShadowProperties& rSourcePro
 {
     moShadowDist.assignIfUsed( rSourceProps.moShadowDist );
     moShadowDir.assignIfUsed( rSourceProps.moShadowDir );
+    moShadowSx.assignIfUsed( rSourceProps.moShadowSx );
+    moShadowSy.assignIfUsed( rSourceProps.moShadowSy );
     moShadowColor.assignIfUsed( rSourceProps.moShadowColor );
 }
 
@@ -51,7 +53,7 @@ void EffectProperties::pushToPropMap( PropertyMap& rPropMap,
     {
         if( it->msName == "outerShdw" )
         {
-            sal_Int32 nAttrDir = 0, nAttrDist = 0;
+            sal_Int32 nAttrDir = 0, nAttrDist = 0, nAttrSizeX = 0, nAttrSizeY = 0;
             std::map< OUString, css::uno::Any >::const_iterator attribIt = it->maAttribs.find( "dir" );
             if( attribIt != it->maAttribs.end() )
                 attribIt->second >>= nAttrDir;
@@ -60,6 +62,15 @@ void EffectProperties::pushToPropMap( PropertyMap& rPropMap,
             if( attribIt != it->maAttribs.end() )
                 attribIt->second >>= nAttrDist;
 
+            attribIt = it->maAttribs.find( "sx" );
+            if( attribIt != it->maAttribs.end() )
+                attribIt->second >>= nAttrSizeX;
+
+            attribIt = it->maAttribs.find( "sy" );
+            if( attribIt != it->maAttribs.end() )
+                attribIt->second >>= nAttrSizeY;
+
+            // Negative X or Y dist indicates left or up, respectively
             // Negative X or Y dist indicates left or up, respectively
             double nAngle = basegfx::deg2rad(static_cast<double>(nAttrDir) / PER_DEGREE);
             sal_Int32 nDist = convertEmuToHmm( nAttrDist );
@@ -69,6 +80,8 @@ void EffectProperties::pushToPropMap( PropertyMap& rPropMap,
             rPropMap.setProperty( PROP_Shadow, true );
             rPropMap.setProperty( PROP_ShadowXDistance, nXDist);
             rPropMap.setProperty( PROP_ShadowYDistance, nYDist);
+            rPropMap.setProperty( PROP_ShadowSizeX, nAttrSizeX);
+            rPropMap.setProperty( PROP_ShadowSizeY, nAttrSizeY);
             rPropMap.setProperty( PROP_ShadowColor, it->moColor.getColor(rGraphicHelper ) );
             rPropMap.setProperty( PROP_ShadowTransparence, it->moColor.getTransparency());
         }

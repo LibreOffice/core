@@ -449,6 +449,8 @@ SelectedPage
 Shadow
 ShadowColor
 ShadowFormat
+ShadowSizeX
+ShadowSizeY
 ShadowTransparence
 ShadowXDistance
 ShadowYDistance

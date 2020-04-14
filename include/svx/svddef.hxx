@@ -180,7 +180,9 @@ class SdrTextAniDelayItem;
 #define SDRATTR_SHADOWTRANSPARENCE      TypedWhichId<SdrPercentItem>(SDRATTR_SHADOW_FIRST+ 4)            /*   1071 */ /*   1071 */ /*   1054 */ /* Pool V2 */
 #define SDRATTR_SHADOW3D                TypedWhichId<SfxVoidItem>(SDRATTR_SHADOW_FIRST+ 5)               /*   1072 */ /*   1072 */ /*   1055 */ /* Pool V2 */
 #define SDRATTR_SHADOWPERSP             TypedWhichId<SfxVoidItem>(SDRATTR_SHADOW_FIRST+ 6)               /*   1073 */ /*   1073 */ /*   1056 */ /* Pool V2 */
-#define SDRATTR_SHADOW_LAST             (SDRATTR_SHADOWPERSP)                                            /* 1078   */ /* 1078   */ /* 1061   */ /* Pool V1: 1039 */
+#define SDRATTR_SHADOWSIZEX             TypedWhichId<SdrMetricItem>(SDRATTR_SHADOW_FIRST+ 7)
+#define SDRATTR_SHADOWSIZEY             TypedWhichId<SdrMetricItem>(SDRATTR_SHADOW_FIRST+ 8)
+#define SDRATTR_SHADOW_LAST             (SDRATTR_SHADOWSIZEY)                                            /* 1078   */ /* 1078   */ /* 1061   */ /* Pool V1: 1039 */
 
 #define SDRATTR_CAPTION_FIRST           (SDRATTR_SHADOW_LAST + 1)                                        /* 1080   */ /* 1080   */ /* 1063   */ /* Pool V1: 1041 */
 #define SDRATTR_CAPTIONTYPE             TypedWhichId<SdrCaptionTypeItem>(SDRATTR_CAPTION_FIRST+ 0)       /*   1080 */ /*   1080 */ /*   1063 */
