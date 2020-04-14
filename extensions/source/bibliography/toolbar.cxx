@@ -83,31 +83,31 @@ BibTBListBoxListener::~BibTBListBoxListener()
 
 void BibTBListBoxListener::statusChanged(const css::frame::FeatureStateEvent& rEvt)
 {
-    if(rEvt.FeatureURL.Complete == GetCommand())
+    if(rEvt.FeatureURL.Complete != GetCommand())
+        return;
+
+    SolarMutexGuard aGuard;
+    pToolBar->EnableSourceList(rEvt.IsEnabled);
+
+    Any aState = rEvt.State;
+    if(auto pStringSeq = o3tl::tryAccess<Sequence<OUString>>(aState))
     {
-        SolarMutexGuard aGuard;
-        pToolBar->EnableSourceList(rEvt.IsEnabled);
+        pToolBar->UpdateSourceList(false);
+        pToolBar->ClearSourceList();
 
-        Any aState = rEvt.State;
-        if(auto pStringSeq = o3tl::tryAccess<Sequence<OUString>>(aState))
+        const OUString* pStringArray = pStringSeq->getConstArray();
+
+        sal_uInt32 nCount = pStringSeq->getLength();
+        OUString aEntry;
+        for( sal_uInt32 i=0; i<nCount; i++ )
         {
-            pToolBar->UpdateSourceList(false);
-            pToolBar->ClearSourceList();
-
-            const OUString* pStringArray = pStringSeq->getConstArray();
-
-            sal_uInt32 nCount = pStringSeq->getLength();
-            OUString aEntry;
-            for( sal_uInt32 i=0; i<nCount; i++ )
-            {
-                aEntry = pStringArray[i];
-                pToolBar->InsertSourceEntry(aEntry);
-            }
-            pToolBar->UpdateSourceList(true);
+            aEntry = pStringArray[i];
+            pToolBar->InsertSourceEntry(aEntry);
         }
-
-        pToolBar->SelectSourceEntry(rEvt.FeatureDescriptor);
+        pToolBar->UpdateSourceList(true);
     }
+
+    pToolBar->SelectSourceEntry(rEvt.FeatureDescriptor);
 };
 
 BibTBQueryMenuListener::BibTBQueryMenuListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId):
@@ -121,27 +121,28 @@ BibTBQueryMenuListener::~BibTBQueryMenuListener()
 
 void BibTBQueryMenuListener::statusChanged(const frame::FeatureStateEvent& rEvt)
 {
-    if(rEvt.FeatureURL.Complete == GetCommand())
+    if(rEvt.FeatureURL.Complete != GetCommand())
+        return;
+
+    SolarMutexGuard aGuard;
+    pToolBar->EnableSourceList(rEvt.IsEnabled);
+
+    uno::Any aState=rEvt.State;
+    auto pStringSeq = o3tl::tryAccess<Sequence<OUString>>(aState);
+    if(!pStringSeq)
+        return;
+
+    pToolBar->ClearFilterMenu();
+
+    const OUString* pStringArray = pStringSeq->getConstArray();
+
+    sal_uInt32 nCount = pStringSeq->getLength();
+    for( sal_uInt32 i=0; i<nCount; i++ )
     {
-        SolarMutexGuard aGuard;
-        pToolBar->EnableSourceList(rEvt.IsEnabled);
-
-        uno::Any aState=rEvt.State;
-        if(auto pStringSeq = o3tl::tryAccess<Sequence<OUString>>(aState))
+        sal_uInt16 nID = pToolBar->InsertFilterItem(pStringArray[i]);
+        if(pStringArray[i]==rEvt.FeatureDescriptor)
         {
-            pToolBar->ClearFilterMenu();
-
-            const OUString* pStringArray = pStringSeq->getConstArray();
-
-            sal_uInt32 nCount = pStringSeq->getLength();
-            for( sal_uInt32 i=0; i<nCount; i++ )
-            {
-                sal_uInt16 nID = pToolBar->InsertFilterItem(pStringArray[i]);
-                if(pStringArray[i]==rEvt.FeatureDescriptor)
-                {
-                    pToolBar->SelectFilterItem(nID);
-                }
-            }
+            pToolBar->SelectFilterItem(nID);
         }
     }
 };
@@ -259,44 +260,44 @@ void BibToolBar::InitListener()
 
     uno::Reference< frame::XDispatch >  xDisp(xController,UNO_QUERY);
     uno::Reference< util::XURLTransformer > xTrans( util::URLTransformer::create(comphelper::getProcessComponentContext()) );
-    if( xTrans.is() )
+    if( !xTrans.is() )
+        return;
+
+    util::URL aQueryURL;
+    aQueryURL.Complete = ".uno:Bib/MenuFilter";
+    xTrans->parseStrict( aQueryURL);
+    BibToolBarListener* pQuery=new BibTBQueryMenuListener(this, aQueryURL.Complete, nTBC_BT_AUTOFILTER);
+    xDisp->addStatusListener(uno::Reference< frame::XStatusListener > (pQuery),aQueryURL);
+
+    for(ToolBox::ImplToolItems::size_type nPos=0;nPos<nCount;nPos++)
     {
-        util::URL aQueryURL;
-        aQueryURL.Complete = ".uno:Bib/MenuFilter";
-        xTrans->parseStrict( aQueryURL);
-        BibToolBarListener* pQuery=new BibTBQueryMenuListener(this, aQueryURL.Complete, nTBC_BT_AUTOFILTER);
-        xDisp->addStatusListener(uno::Reference< frame::XStatusListener > (pQuery),aQueryURL);
+        sal_uInt16 nId=GetItemId(nPos);
+        if(!nId || nId== nTBC_FT_SOURCE || nId == nTBC_FT_QUERY)
+            continue;
 
-        for(ToolBox::ImplToolItems::size_type nPos=0;nPos<nCount;nPos++)
+        util::URL aURL;
+        aURL.Complete = GetItemCommand(nId);
+        if(aURL.Complete.isEmpty())
+            continue;
+
+        xTrans->parseStrict( aURL );
+
+        css::uno::Reference< css::frame::XStatusListener> xListener;
+        if (nId == nTBC_LB_SOURCE)
         {
-            sal_uInt16 nId=GetItemId(nPos);
-            if(!nId || nId== nTBC_FT_SOURCE || nId == nTBC_FT_QUERY)
-                continue;
-
-            util::URL aURL;
-            aURL.Complete = GetItemCommand(nId);
-            if(aURL.Complete.isEmpty())
-                continue;
-
-            xTrans->parseStrict( aURL );
-
-            css::uno::Reference< css::frame::XStatusListener> xListener;
-            if (nId == nTBC_LB_SOURCE)
-            {
-                xListener=new BibTBListBoxListener(this,aURL.Complete,nId);
-            }
-            else if (nId == nTBC_ED_QUERY)
-            {
-                xListener=new BibTBEditListener(this,aURL.Complete,nId);
-            }
-            else
-            {
-                xListener=new BibToolBarListener(this,aURL.Complete,nId);
-            }
-
-            aListenerArr.push_back( xListener );
-            xDisp->addStatusListener(xListener,aURL);
+            xListener=new BibTBListBoxListener(this,aURL.Complete,nId);
         }
+        else if (nId == nTBC_ED_QUERY)
+        {
+            xListener=new BibTBEditListener(this,aURL.Complete,nId);
+        }
+        else
+        {
+            xListener=new BibToolBarListener(this,aURL.Complete,nId);
+        }
+
+        aListenerArr.push_back( xListener );
+        xDisp->addStatusListener(xListener,aURL);
     }
 }
 
@@ -335,23 +336,23 @@ void BibToolBar::SendDispatch(sal_uInt16 nId, const Sequence< PropertyValue >& r
 
     uno::Reference< frame::XDispatchProvider >  xDSP( xController, UNO_QUERY );
 
-    if( xDSP.is() && !aCommand.isEmpty())
-    {
-        uno::Reference< util::XURLTransformer >  xTrans( util::URLTransformer::create(comphelper::getProcessComponentContext()) );
-        if( xTrans.is() )
-        {
-            // load the file
-            util::URL aURL;
-            aURL.Complete = aCommand;
+    if( !(xDSP.is() && !aCommand.isEmpty()))
+        return;
 
-            xTrans->parseStrict( aURL );
+    uno::Reference< util::XURLTransformer >  xTrans( util::URLTransformer::create(comphelper::getProcessComponentContext()) );
+    if( !xTrans.is() )
+        return;
 
-            uno::Reference< frame::XDispatch >  xDisp = xDSP->queryDispatch( aURL, OUString(), frame::FrameSearchFlag::SELF );
+    // load the file
+    util::URL aURL;
+    aURL.Complete = aCommand;
 
-            if ( xDisp.is() )
-                    xDisp->dispatch( aURL, rArgs);
-        }
-    }
+    xTrans->parseStrict( aURL );
+
+    uno::Reference< frame::XDispatch >  xDisp = xDSP->queryDispatch( aURL, OUString(), frame::FrameSearchFlag::SELF );
+
+    if ( xDisp.is() )
+            xDisp->dispatch( aURL, rArgs);
 
 }
 
@@ -483,36 +484,34 @@ IMPL_LINK_NOARG( BibToolBar, SendSelHdl, Timer*, void )
 IMPL_LINK_NOARG( BibToolBar, MenuHdl, ToolBox*, void)
 {
     sal_uInt16  nId=GetCurItemId();
-    if (nId == nTBC_BT_AUTOFILTER)
+    if (nId != nTBC_BT_AUTOFILTER)
+        return;
+
+    EndSelection();     // before SetDropMode (SetDropMode calls SetItemImage)
+
+    SetItemDown(nTBC_BT_AUTOFILTER, true);
+    nId = pPopupMenu->Execute(this, GetItemRect(nTBC_BT_AUTOFILTER));
+
+
+    if(nId>0)
     {
-        EndSelection();     // before SetDropMode (SetDropMode calls SetItemImage)
-
-        SetItemDown(nTBC_BT_AUTOFILTER, true);
-        nId = pPopupMenu->Execute(this, GetItemRect(nTBC_BT_AUTOFILTER));
-
-
-        if(nId>0)
-        {
-            pPopupMenu->CheckItem(nSelMenuItem,false);
-            pPopupMenu->CheckItem(nId);
-            nSelMenuItem=nId;
-            aQueryField = MnemonicGenerator::EraseAllMnemonicChars( pPopupMenu->GetItemText(nId) );
-            Sequence<PropertyValue> aPropVal(2);
-            PropertyValue* pPropertyVal = const_cast<PropertyValue*>(aPropVal.getConstArray());
-            pPropertyVal[0].Name = "QueryText";
-            OUString aSelection = aEdQuery->GetText();
-            pPropertyVal[0].Value <<= aSelection;
-            pPropertyVal[1].Name="QueryField";
-            pPropertyVal[1].Value <<= aQueryField;
-            SendDispatch(nTBC_BT_AUTOFILTER, aPropVal);
-        }
-
-        MouseEvent aLeave( Point(), 0, MouseEventModifiers::LEAVEWINDOW | MouseEventModifiers::SYNTHETIC );
-        MouseMove( aLeave );
-        SetItemDown(nTBC_BT_AUTOFILTER, false);
-
-
+        pPopupMenu->CheckItem(nSelMenuItem,false);
+        pPopupMenu->CheckItem(nId);
+        nSelMenuItem=nId;
+        aQueryField = MnemonicGenerator::EraseAllMnemonicChars( pPopupMenu->GetItemText(nId) );
+        Sequence<PropertyValue> aPropVal(2);
+        PropertyValue* pPropertyVal = const_cast<PropertyValue*>(aPropVal.getConstArray());
+        pPropertyVal[0].Name = "QueryText";
+        OUString aSelection = aEdQuery->GetText();
+        pPropertyVal[0].Value <<= aSelection;
+        pPropertyVal[1].Name="QueryField";
+        pPropertyVal[1].Value <<= aQueryField;
+        SendDispatch(nTBC_BT_AUTOFILTER, aPropVal);
     }
+
+    MouseEvent aLeave( Point(), 0, MouseEventModifiers::LEAVEWINDOW | MouseEventModifiers::SYNTHETIC );
+    MouseMove( aLeave );
+    SetItemDown(nTBC_BT_AUTOFILTER, false);
 }
 
 void    BibToolBar::statusChanged(const frame::FeatureStateEvent& rEvent)

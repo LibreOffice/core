@@ -277,23 +277,23 @@ double GridWindow::findMaxY()
 
 void GridWindow::computeExtremes()
 {
-    if( m_nValues && m_pXValues && m_pOrigYValues )
+    if( !(m_nValues && m_pXValues && m_pOrigYValues) )
+        return;
+
+    m_fMaxX = m_fMinX = m_pXValues[0];
+    m_fMaxY = m_fMinY = m_pOrigYValues[0];
+    for( int i = 1; i < m_nValues; i++ )
     {
-        m_fMaxX = m_fMinX = m_pXValues[0];
-        m_fMaxY = m_fMinY = m_pOrigYValues[0];
-        for( int i = 1; i < m_nValues; i++ )
-        {
-            if( m_pXValues[ i ] > m_fMaxX )
-                m_fMaxX = m_pXValues[ i ];
-            else if( m_pXValues[ i ] < m_fMinX )
-                m_fMinX = m_pXValues[ i ];
-            if( m_pOrigYValues[ i ] > m_fMaxY )
-                m_fMaxY = m_pOrigYValues[ i ];
-            else if( m_pOrigYValues[ i ] < m_fMinY )
-                m_fMinY = m_pOrigYValues[ i ];
-        }
-        setBoundings( m_fMinX, m_fMinY, m_fMaxX, m_fMaxY );
+        if( m_pXValues[ i ] > m_fMaxX )
+            m_fMaxX = m_pXValues[ i ];
+        else if( m_pXValues[ i ] < m_fMinX )
+            m_fMinX = m_pXValues[ i ];
+        if( m_pOrigYValues[ i ] > m_fMaxY )
+            m_fMaxY = m_pOrigYValues[ i ];
+        else if( m_pOrigYValues[ i ] < m_fMinY )
+            m_fMinY = m_pOrigYValues[ i ];
     }
+    setBoundings( m_fMinX, m_fMinY, m_fMaxX, m_fMaxY );
 }
 
 

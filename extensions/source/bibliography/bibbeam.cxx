@@ -122,39 +122,39 @@ namespace bib
     {
         m_xGridModel = xGModel;
 
-        if( m_xControlContainer.is())
+        if( !m_xControlContainer.is())
+            return;
+
+        uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+
+        if ( !m_xGridModel.is())
+            return;
+
+        uno::Reference< XPropertySet >  xPropSet( m_xGridModel, UNO_QUERY );
+
+        if ( xPropSet.is() && m_xGridModel.is() )
         {
-            uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+            uno::Any aAny = xPropSet->getPropertyValue( "DefaultControl" );
+            OUString aControlName;
+            aAny >>= aControlName;
 
-            if ( m_xGridModel.is())
-            {
-                uno::Reference< XPropertySet >  xPropSet( m_xGridModel, UNO_QUERY );
-
-                if ( xPropSet.is() && m_xGridModel.is() )
-                {
-                    uno::Any aAny = xPropSet->getPropertyValue( "DefaultControl" );
-                    OUString aControlName;
-                    aAny >>= aControlName;
-
-                    m_xControl.set( xContext->getServiceManager()->createInstanceWithContext(aControlName, xContext), UNO_QUERY_THROW );
-                    m_xControl->setModel( m_xGridModel );
-                }
-
-                if ( m_xControl.is() )
-                {
-                    // Peer as Child to the FrameWindow
-                    m_xControlContainer->addControl("GridControl", m_xControl);
-                    m_xGridWin.set(m_xControl, UNO_QUERY );
-                    m_xDispatchProviderInterception.set(m_xControl, UNO_QUERY );
-                    m_xGridWin->setVisible( true );
-                    m_xControl->setDesignMode( true );
-                    // initially switch on the design mode - switch it off _after_ loading the form
-
-                    ::Size aSize = GetOutputSizePixel();
-                    m_xGridWin->setPosSize(0, 0, aSize.Width(),aSize.Height(), awt::PosSize::POSSIZE);
-                }
-            }
+            m_xControl.set( xContext->getServiceManager()->createInstanceWithContext(aControlName, xContext), UNO_QUERY_THROW );
+            m_xControl->setModel( m_xGridModel );
         }
+
+        if ( !m_xControl.is() )
+            return;
+
+        // Peer as Child to the FrameWindow
+        m_xControlContainer->addControl("GridControl", m_xControl);
+        m_xGridWin.set(m_xControl, UNO_QUERY );
+        m_xDispatchProviderInterception.set(m_xControl, UNO_QUERY );
+        m_xGridWin->setVisible( true );
+        m_xControl->setDesignMode( true );
+        // initially switch on the design mode - switch it off _after_ loading the form
+
+        ::Size aSize = GetOutputSizePixel();
+        m_xGridWin->setPosSize(0, 0, aSize.Width(),aSize.Height(), awt::PosSize::POSSIZE);
     }
 
     void BibGridwin::disposeGridWin()

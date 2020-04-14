@@ -656,168 +656,168 @@ IMPL_LINK( SaneDlg, SelectHdl, weld::ComboBox&, rListBox, void )
 
 IMPL_LINK_NOARG(SaneDlg, OptionsBoxSelectHdl, weld::TreeView&, void)
 {
-    if (Sane::IsSane())
+    if (!Sane::IsSane())
+        return;
+
+    OUString aOption = mxOptionBox->get_selected_text();
+    int nOption = mrSane.GetOptionByName(OUStringToOString(aOption,
+        osl_getThreadTextEncoding()).getStr());
+    if( nOption == -1 || nOption == mnCurrentOption )
+        return;
+
+    DisableOption();
+    mnCurrentOption = nOption;
+    mxOptionTitle->set_label(mrSane.GetOptionTitle(mnCurrentOption));
+    SANE_Value_Type nType = mrSane.GetOptionType( mnCurrentOption );
+    SANE_Constraint_Type nConstraint;
+    switch( nType )
     {
-        OUString aOption = mxOptionBox->get_selected_text();
-        int nOption = mrSane.GetOptionByName(OUStringToOString(aOption,
-            osl_getThreadTextEncoding()).getStr());
-        if( nOption != -1 && nOption != mnCurrentOption )
+        case SANE_TYPE_BOOL:    EstablishBoolOption();break;
+        case SANE_TYPE_STRING:
+            nConstraint = mrSane.GetOptionConstraintType( mnCurrentOption );
+            if( nConstraint == SANE_CONSTRAINT_STRING_LIST )
+                EstablishStringRange();
+            else
+                EstablishStringOption();
+            break;
+        case SANE_TYPE_FIXED:
+        case SANE_TYPE_INT:
         {
-            DisableOption();
-            mnCurrentOption = nOption;
-            mxOptionTitle->set_label(mrSane.GetOptionTitle(mnCurrentOption));
-            SANE_Value_Type nType = mrSane.GetOptionType( mnCurrentOption );
-            SANE_Constraint_Type nConstraint;
-            switch( nType )
+            nConstraint = mrSane.GetOptionConstraintType( mnCurrentOption );
+            int nElements = mrSane.GetOptionElements( mnCurrentOption );
+            mnCurrentElement = 0;
+            if( nConstraint == SANE_CONSTRAINT_RANGE ||
+                nConstraint == SANE_CONSTRAINT_WORD_LIST )
+                EstablishQuantumRange();
+            else
             {
-                case SANE_TYPE_BOOL:    EstablishBoolOption();break;
-                case SANE_TYPE_STRING:
-                    nConstraint = mrSane.GetOptionConstraintType( mnCurrentOption );
-                    if( nConstraint == SANE_CONSTRAINT_STRING_LIST )
-                        EstablishStringRange();
-                    else
-                        EstablishStringOption();
-                    break;
-                case SANE_TYPE_FIXED:
-                case SANE_TYPE_INT:
+                mfMin = mfMax = 0.0;
+                EstablishNumericOption();
+            }
+            if( nElements > 1 )
+            {
+                if( nElements <= 10 )
                 {
-                    nConstraint = mrSane.GetOptionConstraintType( mnCurrentOption );
-                    int nElements = mrSane.GetOptionElements( mnCurrentOption );
-                    mnCurrentElement = 0;
-                    if( nConstraint == SANE_CONSTRAINT_RANGE ||
-                        nConstraint == SANE_CONSTRAINT_WORD_LIST )
-                        EstablishQuantumRange();
-                    else
-                    {
-                        mfMin = mfMax = 0.0;
-                        EstablishNumericOption();
-                    }
-                    if( nElements > 1 )
-                    {
-                        if( nElements <= 10 )
-                        {
-                            mxVectorBox->set_range(1, mrSane.GetOptionElements(mnCurrentOption));
-                            mxVectorBox->set_value(1);
-                            mxVectorBox->show();
-                            mxVectorTxt->show();
-                        }
-                        else
-                        {
-                            DisableOption();
-                            // bring up dialog only on button click
-                            EstablishButtonOption();
-                        }
-                    }
+                    mxVectorBox->set_range(1, mrSane.GetOptionElements(mnCurrentOption));
+                    mxVectorBox->set_value(1);
+                    mxVectorBox->show();
+                    mxVectorTxt->show();
                 }
-                break;
-                case SANE_TYPE_BUTTON:
+                else
+                {
+                    DisableOption();
+                    // bring up dialog only on button click
                     EstablishButtonOption();
-                    break;
-                default: break;
+                }
             }
         }
+        break;
+        case SANE_TYPE_BUTTON:
+            EstablishButtonOption();
+            break;
+        default: break;
     }
 }
 
 IMPL_LINK(SaneDlg, ModifyHdl, weld::Entry&, rEdit, void)
 {
-    if( mrSane.IsOpen() )
+    if( !mrSane.IsOpen() )
+        return;
+
+    if (&rEdit == mxStringEdit.get())
     {
-        if (&rEdit == mxStringEdit.get())
+        mrSane.SetOptionValue( mnCurrentOption, mxStringEdit->get_text() );
+    }
+    else if (&rEdit == mxNumericEdit.get())
+    {
+        double fValue = mxNumericEdit->get_text().toDouble();
+        if( mfMin != mfMax && ( fValue < mfMin || fValue > mfMax ) )
         {
-            mrSane.SetOptionValue( mnCurrentOption, mxStringEdit->get_text() );
+            char pBuf[256];
+            if( fValue < mfMin )
+                fValue = mfMin;
+            else if( fValue > mfMax )
+                fValue = mfMax;
+            sprintf( pBuf, "%g", fValue );
+            mxNumericEdit->set_text( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
         }
-        else if (&rEdit == mxNumericEdit.get())
+        mrSane.SetOptionValue( mnCurrentOption, fValue, mnCurrentElement );
+    }
+    else if (&rEdit == mxVectorBox.get())
+    {
+        mnCurrentElement = mxVectorBox->get_value() - 1;
+        double fValue;
+        if( mrSane.GetOptionValue( mnCurrentOption, fValue, mnCurrentElement ))
         {
-            double fValue = mxNumericEdit->get_text().toDouble();
-            if( mfMin != mfMax && ( fValue < mfMin || fValue > mfMax ) )
-            {
-                char pBuf[256];
-                if( fValue < mfMin )
-                    fValue = mfMin;
-                else if( fValue > mfMax )
-                    fValue = mfMax;
-                sprintf( pBuf, "%g", fValue );
-                mxNumericEdit->set_text( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
-            }
-            mrSane.SetOptionValue( mnCurrentOption, fValue, mnCurrentElement );
-        }
-        else if (&rEdit == mxVectorBox.get())
-        {
-            mnCurrentElement = mxVectorBox->get_value() - 1;
-            double fValue;
-            if( mrSane.GetOptionValue( mnCurrentOption, fValue, mnCurrentElement ))
-            {
-                char pBuf[256];
-                sprintf( pBuf, "%g", fValue );
-                OUString aValue( pBuf, strlen(pBuf), osl_getThreadTextEncoding() );
-                mxNumericEdit->set_text( aValue );
-                mxQuantumRangeBox->set_active_text( aValue );
-            }
+            char pBuf[256];
+            sprintf( pBuf, "%g", fValue );
+            OUString aValue( pBuf, strlen(pBuf), osl_getThreadTextEncoding() );
+            mxNumericEdit->set_text( aValue );
+            mxQuantumRangeBox->set_active_text( aValue );
         }
     }
 }
 
 IMPL_LINK(SaneDlg, ValueModifyHdl, weld::ComboBox&, rEdit, void)
 {
-    if( mrSane.IsOpen() )
+    if( !mrSane.IsOpen() )
+        return;
+
+    if (&rEdit != mxReslBox.get())
+        return;
+
+    double fRes = static_cast<double>(mxReslBox->get_active_text().toUInt32());
+    int nOption = mrSane.GetOptionByName( "resolution" );
+    if( nOption == -1 )
+        return;
+
+    std::unique_ptr<double[]> pDouble;
+    int nValues = mrSane.GetRange( nOption, pDouble );
+    if( nValues > 0 )
     {
-        if (&rEdit == mxReslBox.get())
+        int i;
+        for( i = 0; i < nValues; i++ )
         {
-            double fRes = static_cast<double>(mxReslBox->get_active_text().toUInt32());
-            int nOption = mrSane.GetOptionByName( "resolution" );
-            if( nOption != -1 )
-            {
-                std::unique_ptr<double[]> pDouble;
-                int nValues = mrSane.GetRange( nOption, pDouble );
-                if( nValues > 0 )
-                {
-                    int i;
-                    for( i = 0; i < nValues; i++ )
-                    {
-                        if( fRes == pDouble[i] )
-                            break;
-                    }
-                    if( i >= nValues )
-                        fRes = pDouble[0];
-                }
-                else if( nValues == 0 )
-                {
-                    if( fRes < pDouble[ 0 ] )
-                        fRes = pDouble[ 0 ];
-                    if( fRes > pDouble[ 1 ] )
-                        fRes = pDouble[ 1 ];
-                }
-                mxReslBox->set_entry_text(OUString::number(static_cast<sal_uInt32>(fRes)));
-            }
+            if( fRes == pDouble[i] )
+                break;
         }
+        if( i >= nValues )
+            fRes = pDouble[0];
     }
+    else if( nValues == 0 )
+    {
+        if( fRes < pDouble[ 0 ] )
+            fRes = pDouble[ 0 ];
+        if( fRes > pDouble[ 1 ] )
+            fRes = pDouble[ 1 ];
+    }
+    mxReslBox->set_entry_text(OUString::number(static_cast<sal_uInt32>(fRes)));
 }
 
 IMPL_LINK(SaneDlg, MetricValueModifyHdl, weld::MetricSpinButton&, rEdit, void)
 {
-    if( mrSane.IsOpen() )
+    if( !mrSane.IsOpen() )
+        return;
+
+    if (&rEdit == mxTopField.get())
     {
-        if (&rEdit == mxTopField.get())
-        {
-            mxPreview->ChangePreviewLogicTopLeftY(mxTopField->get_value(FieldUnit::NONE));
-            mxPreview->Invalidate();
-        }
-        else if (&rEdit == mxLeftField.get())
-        {
-            mxPreview->ChangePreviewLogicTopLeftX(mxLeftField->get_value(FieldUnit::NONE));
-            mxPreview->Invalidate();
-        }
-        else if (&rEdit == mxBottomField.get())
-        {
-            mxPreview->ChangePreviewLogicBottomRightY(mxBottomField->get_value(FieldUnit::NONE));
-            mxPreview->Invalidate();
-        }
-        else if (&rEdit == mxRightField.get())
-        {
-            mxPreview->ChangePreviewLogicBottomRightX(mxRightField->get_value(FieldUnit::NONE));
-            mxPreview->Invalidate();
-        }
+        mxPreview->ChangePreviewLogicTopLeftY(mxTopField->get_value(FieldUnit::NONE));
+        mxPreview->Invalidate();
+    }
+    else if (&rEdit == mxLeftField.get())
+    {
+        mxPreview->ChangePreviewLogicTopLeftX(mxLeftField->get_value(FieldUnit::NONE));
+        mxPreview->Invalidate();
+    }
+    else if (&rEdit == mxBottomField.get())
+    {
+        mxPreview->ChangePreviewLogicBottomRightY(mxBottomField->get_value(FieldUnit::NONE));
+        mxPreview->Invalidate();
+    }
+    else if (&rEdit == mxRightField.get())
+    {
+        mxPreview->ChangePreviewLogicBottomRightX(mxRightField->get_value(FieldUnit::NONE));
+        mxPreview->Invalidate();
     }
 }
 

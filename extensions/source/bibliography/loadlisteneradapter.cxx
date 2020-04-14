@@ -74,19 +74,19 @@ namespace bib
 
     void OComponentAdapterBase::dispose()
     {
-        if ( m_bListening )
-        {
-            ::rtl::Reference< OComponentAdapterBase > xPreventDelete(this);
+        if ( !m_bListening )
+            return;
 
-            disposing();
+        ::rtl::Reference< OComponentAdapterBase > xPreventDelete(this);
 
-            m_pListener->setAdapter(nullptr);
+        disposing();
 
-            m_pListener = nullptr;
-            m_bListening = false;
+        m_pListener->setAdapter(nullptr);
 
-            m_xComponent = nullptr;
-        }
+        m_pListener = nullptr;
+        m_bListening = false;
+
+        m_xComponent = nullptr;
     }
 
     // XEventListener

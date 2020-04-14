@@ -292,25 +292,25 @@ namespace pcr
 
     void EFormsHelper::getFormModelNames( std::vector< OUString >& /* [out] */ _rModelNames ) const
     {
-        if ( m_xDocument.is() )
-        {
-            try
-            {
-                _rModelNames.resize( 0 );
+        if ( !m_xDocument.is() )
+            return;
 
-                Reference< XNameContainer > xForms( m_xDocument->getXForms() );
-                OSL_ENSURE( xForms.is(), "EFormsHelper::getFormModelNames: invalid forms container!" );
-                if ( xForms.is() )
-                {
-                    Sequence< OUString > aModelNames = xForms->getElementNames();
-                    _rModelNames.resize( aModelNames.getLength() );
-                    std::copy( aModelNames.begin(), aModelNames.end(), _rModelNames.begin() );
-                }
-            }
-            catch( const Exception& )
+        try
+        {
+            _rModelNames.resize( 0 );
+
+            Reference< XNameContainer > xForms( m_xDocument->getXForms() );
+            OSL_ENSURE( xForms.is(), "EFormsHelper::getFormModelNames: invalid forms container!" );
+            if ( xForms.is() )
             {
-                TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EFormsHelper::getFormModelNames" );
+                Sequence< OUString > aModelNames = xForms->getElementNames();
+                _rModelNames.resize( aModelNames.getLength() );
+                std::copy( aModelNames.begin(), aModelNames.end(), _rModelNames.begin() );
             }
+        }
+        catch( const Exception& )
+        {
+            TOOLS_WARN_EXCEPTION( "extensions.propctrlr", "EFormsHelper::getFormModelNames" );
         }
     }
 

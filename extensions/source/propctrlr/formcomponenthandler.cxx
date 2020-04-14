@@ -3214,25 +3214,25 @@ namespace pcr
     IMPL_LINK_NOARG( FormComponentPropertyHandler, OnDesignerClosed, SQLCommandDesigner&, void )
     {
         OSL_ENSURE( m_xBrowserUI.is() && m_xCommandDesigner.is(), "FormComponentPropertyHandler::OnDesignerClosed: too many NULLs!" );
-        if ( m_xBrowserUI.is() && m_xCommandDesigner.is() )
-        {
-            try
-            {
-                ::rtl::Reference< ISQLCommandPropertyUI > xCommandUI(
-                    dynamic_cast< ISQLCommandPropertyUI* >( m_xCommandDesigner->getPropertyAdapter().get() ) );
-                if ( !xCommandUI.is() )
-                    throw NullPointerException();
+        if ( !(m_xBrowserUI.is() && m_xCommandDesigner.is()) )
+            return;
 
-                const OUString* pToEnable = xCommandUI->getPropertiesToDisable();
-                while ( !pToEnable->isEmpty() )
-                {
-                    m_xBrowserUI->enablePropertyUIElements( *pToEnable++, PropertyLineElement::All, true );
-                }
-            }
-            catch( const Exception& )
+        try
+        {
+            ::rtl::Reference< ISQLCommandPropertyUI > xCommandUI(
+                dynamic_cast< ISQLCommandPropertyUI* >( m_xCommandDesigner->getPropertyAdapter().get() ) );
+            if ( !xCommandUI.is() )
+                throw NullPointerException();
+
+            const OUString* pToEnable = xCommandUI->getPropertiesToDisable();
+            while ( !pToEnable->isEmpty() )
             {
-                DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
+                m_xBrowserUI->enablePropertyUIElements( *pToEnable++, PropertyLineElement::All, true );
             }
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
     }
 
