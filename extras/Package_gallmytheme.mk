@@ -27,4 +27,7 @@ $(eval $(call gb_Package_add_files,extras_gallmytheme,$(LIBO_SHARE_PRESETS_FOLDE
 	shapes.sdg \
 	shapes.sdv \
 	shapes.thm \
+	network.sdg \
+	network.sdv \
+	network.thm \
 ))
