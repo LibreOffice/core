@@ -379,7 +379,7 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
             nRow--;
             while (!bFound && (nCol >= 0))
             {
-                while (!bFound && (nRow >= 0))
+                while (!bFound && (nRow >= 0) && (nCol <= nLastCol))
                 {
                     if (bSkipFiltered)
                         SkipFilteredRows(nRow, nLastNonFilteredRow, false);
