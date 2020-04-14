@@ -63,6 +63,30 @@
       "revId": "dd2681813d02089c71a8b0f4dc4c8e2bf63d1791",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "120b12c5_ee6bee46",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-14T06:29:04Z",
+      "side": 1,
+      "message": "I suggest reading e.g section 11.6 \"Contracting for Software Reliability\" of Bertrand Meyer\u0027s Object-Oriented Software Construction (2nd ed., 1997, Prentice Hall).",
+      "parentUuid": "cc25825b_249ab145",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 18
+      },
+      "revId": "dd2681813d02089c71a8b0f4dc4c8e2bf63d1791",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
