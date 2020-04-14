@@ -81,7 +81,8 @@ ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindo
     aOutArea( Point(), pEng->GetPaperSize() ),
     eSelectionMode(EESelectionMode::Std),
     eAnchorMode(EEAnchorMode::TopLeft),
-    mpEditViewCallbacks(nullptr)
+    mpEditViewCallbacks(nullptr),
+    mbBroadcastLOKViewCursor(comphelper::LibreOfficeKit::isActive())
 {
     aEditSelection.Min() = pEng->GetEditDoc().GetStartPaM();
     aEditSelection.Max() = pEng->GetEditDoc().GetEndPaM();
@@ -913,6 +914,69 @@ OString buildHyperlinkJSON(const OUString& sText, const OUString& sLink)
 
 } // End of anon namespace
 
+tools::Rectangle ImpEditView::ImplGetEditCursor(EditPaM& aPaM, GetCursorFlags nShowCursorFlags, sal_Int32& nTextPortionStart,
+        const ParaPortion* pParaPortion) const
+{
+    tools::Rectangle aEditCursor = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, nShowCursorFlags );
+    if ( !IsInsertMode() && !aEditSelection.HasRange() )
+    {
+        if ( aPaM.GetNode()->Len() && ( aPaM.GetIndex() < aPaM.GetNode()->Len() ) )
+        {
+            // If we are behind a portion, and the next portion has other direction, we must change position...
+            aEditCursor.SetLeft( pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, GetCursorFlags::TextOnly|GetCursorFlags::PreferPortionStart ).Left() );
+            aEditCursor.SetRight( aEditCursor.Left() );
+
+            sal_Int32 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, true );
+            const TextPortion& rTextPortion = pParaPortion->GetTextPortions()[nTextPortion];
+            if ( rTextPortion.GetKind() == PortionKind::TAB )
+            {
+                aEditCursor.AdjustRight(rTextPortion.GetSize().Width() );
+            }
+            else
+            {
+                EditPaM aNext = pEditEngine->CursorRight( aPaM );
+                tools::Rectangle aTmpRect = pEditEngine->pImpEditEngine->PaMtoEditCursor( aNext, GetCursorFlags::TextOnly );
+                if ( aTmpRect.Top() != aEditCursor.Top() )
+                    aTmpRect = pEditEngine->pImpEditEngine->PaMtoEditCursor( aNext, GetCursorFlags::TextOnly|GetCursorFlags::EndOfLine );
+                aEditCursor.SetRight( aTmpRect.Left() );
+            }
+        }
+    }
+
+    long nMaxHeight = !IsVertical() ? aOutArea.GetHeight() : aOutArea.GetWidth();
+    if ( aEditCursor.GetHeight() > nMaxHeight )
+    {
+        aEditCursor.SetBottom( aEditCursor.Top() + nMaxHeight - 1 );
+    }
+
+    return aEditCursor;
+}
+
+tools::Rectangle ImpEditView::GetEditCursor() const
+{
+    EditPaM aPaM( aEditSelection.Max() );
+
+    sal_Int32 nTextPortionStart = 0;
+    sal_Int32 nPara = pEditEngine->GetEditDoc().GetPos( aPaM.GetNode() );
+    if (nPara == EE_PARA_NOT_FOUND) // #i94322
+        return tools::Rectangle();
+
+    const ParaPortion* pParaPortion = pEditEngine->GetParaPortions()[nPara];
+
+    GetCursorFlags nShowCursorFlags = nExtraCursorFlags | GetCursorFlags::TextOnly;
+
+    // Use CursorBidiLevel 0/1 in meaning of
+    // 0: prefer portion end, normal mode
+    // 1: prefer portion start
+
+    if ( ( GetCursorBidiLevel() != CURSOR_BIDILEVEL_DONTKNOW ) && GetCursorBidiLevel() )
+    {
+        nShowCursorFlags |= GetCursorFlags::PreferPortionStart;
+    }
+
+    return ImplGetEditCursor(aPaM, nShowCursorFlags, nTextPortionStart, pParaPortion);
+}
+
 void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
 {
     // No ShowCursor in an empty View ...
@@ -957,36 +1021,8 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
         nShowCursorFlags |= GetCursorFlags::PreferPortionStart;
     }
 
-    tools::Rectangle aEditCursor = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, nShowCursorFlags );
-    if ( !IsInsertMode() && !aEditSelection.HasRange() )
-    {
-        if ( aPaM.GetNode()->Len() && ( aPaM.GetIndex() < aPaM.GetNode()->Len() ) )
-        {
-            // If we are behind a portion, and the next portion has other direction, we must change position...
-            aEditCursor.SetLeft( pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, GetCursorFlags::TextOnly|GetCursorFlags::PreferPortionStart ).Left() );
-            aEditCursor.SetRight( aEditCursor.Left() );
+    tools::Rectangle aEditCursor = ImplGetEditCursor(aPaM, nShowCursorFlags, nTextPortionStart, pParaPortion);
 
-            sal_Int32 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, true );
-            const TextPortion& rTextPortion = pParaPortion->GetTextPortions()[nTextPortion];
-            if ( rTextPortion.GetKind() == PortionKind::TAB )
-            {
-                aEditCursor.AdjustRight(rTextPortion.GetSize().Width() );
-            }
-            else
-            {
-                EditPaM aNext = pEditEngine->CursorRight( aPaM );
-                tools::Rectangle aTmpRect = pEditEngine->pImpEditEngine->PaMtoEditCursor( aNext, GetCursorFlags::TextOnly );
-                if ( aTmpRect.Top() != aEditCursor.Top() )
-                    aTmpRect = pEditEngine->pImpEditEngine->PaMtoEditCursor( aNext, GetCursorFlags::TextOnly|GetCursorFlags::EndOfLine );
-                aEditCursor.SetRight( aTmpRect.Left() );
-            }
-        }
-    }
-    long nMaxHeight = !IsVertical() ? aOutArea.GetHeight() : aOutArea.GetWidth();
-    if ( aEditCursor.GetHeight() > nMaxHeight )
-    {
-        aEditCursor.SetBottom( aEditCursor.Top() + nMaxHeight - 1 );
-    }
     if ( bGotoCursor  ) // && (!pEditEngine->pImpEditEngine->GetStatus().AutoPageSize() ) )
     {
         // check if scrolling is necessary...
@@ -1177,7 +1213,8 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
                 }
 
                 SfxLokHelper::notifyVisCursorInvalidation(mpViewShell, sRect, bIsWrong, sHyperlink);
-                mpViewShell->NotifyOtherViews(LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", sRect);
+                if (mbBroadcastLOKViewCursor)
+                    mpViewShell->NotifyOtherViews(LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", sRect);
             }
         }
 
