@@ -84,6 +84,8 @@
 #define UNO_NAME_SHADOWCOLOR                    "ShadowColor"
 #define UNO_NAME_SHADOWXDIST                    "ShadowXDistance"
 #define UNO_NAME_SHADOWYDIST                    "ShadowYDistance"
+#define UNO_NAME_SHADOWSIZEX                    "ShadowSizeX"
+#define UNO_NAME_SHADOWSIZEY                    "ShadowSizeY"
 #define UNO_NAME_SHADOWTRANSPARENCE             "ShadowTransparence"
 
 #define UNO_NAME_EDGERADIUS                     "CornerRadius"
