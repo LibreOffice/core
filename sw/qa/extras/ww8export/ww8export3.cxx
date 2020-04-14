@@ -300,6 +300,16 @@ DECLARE_WW8EXPORT_TEST(testTdf128608_fillStyleNoneB, "tdf128608_fillStyleNoneB.o
     CPPUNIT_ASSERT_EQUAL_MESSAGE("No fill", drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xText, "FillStyle"));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf132094_transparentPageImage, "tdf132094_transparentPageImage.doc")
+{
+    uno::Reference<drawing::XShape> image (getShape(1), uno::UNO_QUERY);
+    // Don't add fillstyle when none is set.
+    // Well, ok, at least make it transparent if you do uselessly set a solid color...
+    const bool bFillNone = drawing::FillStyle_NONE == getProperty<drawing::FillStyle>(image, "FillStyle");
+    const bool bTransparent = sal_Int16(0) != getProperty<sal_Int16>(image, "FillTransparence");
+    CPPUNIT_ASSERT_MESSAGE("no background fill", bTransparent || bFillNone);
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf112618_textbox_no_bg, "tdf112618_textbox_no_bg.doc")
 {
     sal_uInt16 nTransparence = getProperty<sal_Int16>(getShape(2), "FillTransparence");
