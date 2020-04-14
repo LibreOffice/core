@@ -5768,6 +5768,11 @@ public:
         m_xComboBox->SetEntryData(row, m_aUserData.back().get());
     }
 
+    virtual void set_own_id(const OUString& rId) override
+    {
+        m_xComboBox->set_id(rId);
+    }
+
     virtual void insert_vector(const std::vector<weld::ComboBoxEntry>& rItems,
                                bool bKeepExisting) override
     {

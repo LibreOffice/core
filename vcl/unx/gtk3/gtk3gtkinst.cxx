@@ -13169,6 +13169,8 @@ public:
         set(pos, id_column, rId);
     }
 
+    virtual void set_own_id(const OUString&) override {}
+
     // https://gitlab.gnome.org/GNOME/gtk/issues/94
     // when a super tall combobox menu is activated, and the selected entry is sufficiently
     // far down the list, then the menu doesn't appear under wayland
