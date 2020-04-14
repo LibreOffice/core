@@ -86,6 +86,7 @@ void NumberFormatPropertyPanel::Initialize()
 {
     mxLbCategory->connect_changed( LINK(this, NumberFormatPropertyPanel, NumFormatSelectHdl) );
     mxLbCategory->set_active(0);
+    mxLbCategory->set_id("numberformatcombobox");
 
     Link<weld::SpinButton&,void> aLink = LINK(this, NumberFormatPropertyPanel, NumFormatValueHdl);
 
