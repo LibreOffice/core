@@ -640,8 +640,12 @@ BitmapEx ImpGraphic::ImplGetBitmapEx(const GraphicConversionParameters& rParamet
         {
             const ImpGraphic aMonoMask( maMetaFile.GetMonochromeMtf( COL_BLACK ) );
 
+            auto aNewBitmap = aMonoMask.ImplGetBitmap(rParameters);
+            auto aNewMask = aNewBitmap;
+            // reduce to 1-bit
+            aNewMask.Convert(BmpConversion::N1BitThreshold);
             // use maEx as local buffer for rendered metafile
-            const_cast< ImpGraphic* >(this)->maEx = BitmapEx(ImplGetBitmap(rParameters), aMonoMask.ImplGetBitmap(rParameters));
+            const_cast< ImpGraphic* >(this)->maEx = BitmapEx(aNewBitmap, aNewMask);
         }
 
         aRetBmpEx = maEx;
