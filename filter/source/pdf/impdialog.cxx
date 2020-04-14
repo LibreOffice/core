@@ -803,22 +803,22 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleWatermarkHdl, weld::ToggleButton&, v
 
 IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleAddStreamHdl, weld::ToggleButton&, void)
 {
-    if (mxCbAddStream->get_visible())
+    if (!mxCbAddStream->get_visible())
+        return;
+
+    if( mxCbAddStream->get_active() )
     {
-        if( mxCbAddStream->get_active() )
-        {
-            mxRbAll->set_active(true);
-            mxRbRange->set_sensitive( false );
-            mxRbSelection->set_sensitive( false );
-            mxEdPages->set_sensitive( false );
-            mxRbAll->set_sensitive( false );
-        }
-        else
-        {
-            mxRbAll->set_sensitive(true);
-            mxRbRange->set_sensitive(true);
-            mxRbSelection->set_sensitive(true);
-        }
+        mxRbAll->set_active(true);
+        mxRbRange->set_sensitive( false );
+        mxRbSelection->set_sensitive( false );
+        mxEdPages->set_sensitive( false );
+        mxRbAll->set_sensitive( false );
+    }
+    else
+    {
+        mxRbAll->set_sensitive(true);
+        mxRbRange->set_sensitive(true);
+        mxRbSelection->set_sensitive(true);
     }
 }
 
@@ -1535,37 +1535,37 @@ IMPL_LINK_NOARG(ImpPDFTabSigningPage, ClickmaPbSignCertSelect, weld::Button&, vo
     OUString aDescription;
     maSignCertificate = xSigner->chooseCertificate(aDescription);
 
-    if (maSignCertificate.is())
-    {
-        mxEdSignCert->set_text(maSignCertificate->getSubjectName());
-        mxPbSignCertClear->set_sensitive(true);
-        mxEdSignLocation->set_sensitive(true);
-        mxEdSignPassword->set_sensitive(true);
-        mxEdSignContactInfo->set_sensitive(true);
-        mxEdSignReason->set_sensitive(true);
-        mxEdSignReason->set_text(aDescription);
+    if (!maSignCertificate.is())
+        return;
 
-        try
+    mxEdSignCert->set_text(maSignCertificate->getSubjectName());
+    mxPbSignCertClear->set_sensitive(true);
+    mxEdSignLocation->set_sensitive(true);
+    mxEdSignPassword->set_sensitive(true);
+    mxEdSignContactInfo->set_sensitive(true);
+    mxEdSignReason->set_sensitive(true);
+    mxEdSignReason->set_text(aDescription);
+
+    try
+    {
+        std::optional<css::uno::Sequence<OUString>> aTSAURLs(officecfg::Office::Common::Security::Scripting::TSAURLs::get());
+        if (aTSAURLs)
         {
-            std::optional<css::uno::Sequence<OUString>> aTSAURLs(officecfg::Office::Common::Security::Scripting::TSAURLs::get());
-            if (aTSAURLs)
+            const css::uno::Sequence<OUString>& rTSAURLs = *aTSAURLs;
+            for (auto const& elem : rTSAURLs)
             {
-                const css::uno::Sequence<OUString>& rTSAURLs = *aTSAURLs;
-                for (auto const& elem : rTSAURLs)
-                {
-                    mxLBSignTSA->append_text(elem);
-                }
+                mxLBSignTSA->append_text(elem);
             }
         }
-        catch (const uno::Exception &)
-        {
-            TOOLS_INFO_EXCEPTION("filter.pdf", "TSAURLsDialog::TSAURLsDialog()");
-        }
-
-        // If more than only the "None" entry is there, enable the ListBox
-        if (mxLBSignTSA->get_count() > 1)
-            mxLBSignTSA->set_sensitive(true);
     }
+    catch (const uno::Exception &)
+    {
+        TOOLS_INFO_EXCEPTION("filter.pdf", "TSAURLsDialog::TSAURLsDialog()");
+    }
+
+    // If more than only the "None" entry is there, enable the ListBox
+    if (mxLBSignTSA->get_count() > 1)
+        mxLBSignTSA->set_sensitive(true);
 }
 
 IMPL_LINK_NOARG(ImpPDFTabSigningPage, ClickmaPbSignCertClear, weld::Button&, void)

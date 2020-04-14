@@ -179,19 +179,19 @@ sal_uInt16 Writer::startSprite()
 
 void Writer::endSprite()
 {
-    if( mpSprite )
+    if( !mpSprite )
+        return;
+
+    startTag( TAG_END );
+    endTag();
+
+    mpSprite->write( *mpMovieStream );
+    mpSprite.reset();
+
+    if (!mvSpriteStack.empty())
     {
-        startTag( TAG_END );
-        endTag();
-
-        mpSprite->write( *mpMovieStream );
-        mpSprite.reset();
-
-        if (!mvSpriteStack.empty())
-        {
-            mpSprite.reset( mvSpriteStack.top() );
-            mvSpriteStack.pop();
-        }
+        mpSprite.reset( mvSpriteStack.top() );
+        mvSpriteStack.pop();
     }
 }
 

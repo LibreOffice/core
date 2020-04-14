@@ -475,33 +475,34 @@ TBCGeneralInfo::Print( FILE* fp )
 void
 TBCGeneralInfo::ImportToolBarControlData( CustomToolBarImportHelper& helper, std::vector< beans::PropertyValue >& sControlData )
 {
-    if ( bFlags & 0x5 )
+    if ( !(bFlags & 0x5) )
+        return;
+
+    beans::PropertyValue aProp;
+    // probably access to the header would be a better test than seeing if there is an action, e.g.
+    // if ( rHeader.getTct() == 0x01 && rHeader.getTcID() == 0x01 ) // not defined, probably this is a command
+    if ( !extraInfo.getOnAction().isEmpty() )
     {
-        beans::PropertyValue aProp;
-        // probably access to the header would be a better test than seeing if there is an action, e.g.
-        // if ( rHeader.getTct() == 0x01 && rHeader.getTcID() == 0x01 ) // not defined, probably this is a command
-        if ( !extraInfo.getOnAction().isEmpty() )
-        {
-            aProp.Name = "CommandURL";
-            ooo::vba::MacroResolvedInfo aMacroInf = ooo::vba::resolveVBAMacro( &helper.GetDocShell(), extraInfo.getOnAction(), true );
-            if ( aMacroInf.mbFound )
-                aProp.Value = CustomToolBarImportHelper::createCommandFromMacro( aMacroInf.msResolvedMacro );
-            else
-                aProp.Value <<= OUString( "UnResolvedMacro[" ).concat( extraInfo.getOnAction() ).concat( "]" );
-            sControlData.push_back( aProp );
-        }
-
-        aProp.Name = "Label";
-        aProp.Value <<= customText.getString().replace('&','~');
+        aProp.Name = "CommandURL";
+        ooo::vba::MacroResolvedInfo aMacroInf = ooo::vba::resolveVBAMacro( &helper.GetDocShell(), extraInfo.getOnAction(), true );
+        if ( aMacroInf.mbFound )
+            aProp.Value = CustomToolBarImportHelper::createCommandFromMacro( aMacroInf.msResolvedMacro );
+        else
+            aProp.Value <<= OUString( "UnResolvedMacro[" ).concat( extraInfo.getOnAction() ).concat( "]" );
         sControlData.push_back( aProp );
+    }
 
-        aProp.Name = "Type";
-        aProp.Value <<= ui::ItemType::DEFAULT;
-        sControlData.push_back( aProp );
+    aProp.Name = "Label";
+    aProp.Value <<= customText.getString().replace('&','~');
+    sControlData.push_back( aProp );
 
-        aProp.Name = "Tooltip";
-        aProp.Value <<= tooltip.getString();
-        sControlData.push_back( aProp );
+    aProp.Name = "Type";
+    aProp.Value <<= ui::ItemType::DEFAULT;
+    sControlData.push_back( aProp );
+
+    aProp.Name = "Tooltip";
+    aProp.Value <<= tooltip.getString();
+    sControlData.push_back( aProp );
 /*
 aToolbarItem(0).Name = "CommandURL" wstrOnAction
 aToolbarItem(0).Value = Command
@@ -512,7 +513,6 @@ aToolbarItem(2).Value = 0
 aToolbarItem(3).Name = "Visible"
 aToolbarItem(3).Value = true
 */
-    }
 }
 
 TBCMenuSpecific::TBCMenuSpecific() : tbid( 0 )

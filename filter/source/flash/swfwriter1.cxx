@@ -82,18 +82,18 @@ Size Writer::map( const Size& rSize ) const
 void Writer::map( tools::PolyPolygon& rPolyPolygon ) const
 {
     const sal_uInt16 nPolyCount = rPolyPolygon.Count();
-    if( nPolyCount )
-    {
-        sal_uInt16 nPoly, nPoint, nPointCount;
-        for( nPoly = 0; nPoly < nPolyCount; nPoly++ )
-        {
-            tools::Polygon& rPoly = rPolyPolygon[nPoly];
-            nPointCount = rPoly.GetSize();
+    if( !nPolyCount )
+        return;
 
-            for( nPoint = 0; nPoint < nPointCount; nPoint++ )
-            {
-                rPoly[nPoint] = map( rPoly[nPoint] );
-            }
+    sal_uInt16 nPoly, nPoint, nPointCount;
+    for( nPoly = 0; nPoly < nPolyCount; nPoly++ )
+    {
+        tools::Polygon& rPoly = rPolyPolygon[nPoly];
+        nPointCount = rPoly.GetSize();
+
+        for( nPoint = 0; nPoint < nPointCount; nPoint++ )
+        {
+            rPoly[nPoint] = map( rPoly[nPoint] );
         }
     }
 }
@@ -278,66 +278,66 @@ void Writer::Impl_writePolyPolygon( const tools::PolyPolygon& rPolyPoly, bool bF
 {
     tools::PolyPolygon aPolyPoly( rPolyPoly );
 
-    if( aPolyPoly.Count() )
+    if( !aPolyPoly.Count() )
+        return;
+
+    map( aPolyPoly );
+
+    if( mpClipPolyPolygon )
+        rPolyPoly.GetIntersection( *mpClipPolyPolygon, aPolyPoly );
+
+    sal_uInt16 nID;
+    if( bFilled )
     {
-        map( aPolyPoly );
+        Color aFillColor( rFillColor );
+        if( 0 != mnGlobalTransparency )
+            aFillColor.SetTransparency( mnGlobalTransparency );
 
-        if( mpClipPolyPolygon )
-            rPolyPoly.GetIntersection( *mpClipPolyPolygon, aPolyPoly );
-
-        sal_uInt16 nID;
-        if( bFilled )
-        {
-            Color aFillColor( rFillColor );
-            if( 0 != mnGlobalTransparency )
-                aFillColor.SetTransparency( mnGlobalTransparency );
-
-            FillStyle aStyle( aFillColor );
-            nID = defineShape( aPolyPoly, aStyle );
-        }
-        else
-        {
-            Color aLineColor( rLineColor );
-            if( 0 != mnGlobalTransparency )
-                aLineColor.SetTransparency( mnGlobalTransparency );
-
-            nID = defineShape( aPolyPoly, 1, aLineColor );
-        }
-        maShapeIds.push_back( nID );
+        FillStyle aStyle( aFillColor );
+        nID = defineShape( aPolyPoly, aStyle );
     }
+    else
+    {
+        Color aLineColor( rLineColor );
+        if( 0 != mnGlobalTransparency )
+            aLineColor.SetTransparency( mnGlobalTransparency );
+
+        nID = defineShape( aPolyPoly, 1, aLineColor );
+    }
+    maShapeIds.push_back( nID );
 }
 
 
 /** A gradient is a transition from one color to another, rendered inside a given polypolygon */
 void Writer::Impl_writeGradientEx( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient )
 {
-    if( rPolyPoly.Count() )
+    if( !rPolyPoly.Count() )
+        return;
+
+    tools::PolyPolygon aPolyPolygon( rPolyPoly );
+    map( aPolyPolygon );
+
+    if( (rGradient.GetStyle() == GradientStyle::Linear && rGradient.GetAngle() == 900) || (rGradient.GetStyle() == GradientStyle::Radial)  )
     {
-        tools::PolyPolygon aPolyPolygon( rPolyPoly );
-        map( aPolyPolygon );
+        const tools::Rectangle aBoundRect( aPolyPolygon.GetBoundRect() );
 
-        if( (rGradient.GetStyle() == GradientStyle::Linear && rGradient.GetAngle() == 900) || (rGradient.GetStyle() == GradientStyle::Radial)  )
+        FillStyle aFillStyle( aBoundRect, rGradient );
+
+        sal_uInt16 nShapeId = defineShape( aPolyPolygon, aFillStyle );
+        maShapeIds.push_back( nShapeId );
+    }
+    else
+    {
+        setClipping( &aPolyPolygon );
+
+        // render the gradient filling to simple polygons
         {
-            const tools::Rectangle aBoundRect( aPolyPolygon.GetBoundRect() );
-
-            FillStyle aFillStyle( aBoundRect, rGradient );
-
-            sal_uInt16 nShapeId = defineShape( aPolyPolygon, aFillStyle );
-            maShapeIds.push_back( nShapeId );
+            GDIMetaFile aTmpMtf;
+            mpVDev->AddGradientActions( aPolyPolygon.GetBoundRect(), rGradient, aTmpMtf );
+            Impl_writeActions( aTmpMtf );
         }
-        else
-        {
-            setClipping( &aPolyPolygon );
 
-            // render the gradient filling to simple polygons
-            {
-                GDIMetaFile aTmpMtf;
-                mpVDev->AddGradientActions( aPolyPolygon.GetBoundRect(), rGradient, aTmpMtf );
-                Impl_writeActions( aTmpMtf );
-            }
-
-            setClipping( nullptr );
-        }
+        setClipping( nullptr );
     }
 }
 
@@ -781,98 +781,98 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
 
 void Writer::Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& /* rSrcPt */, const Size& /* rSrcSz */, const tools::Rectangle& rClipRect, bool bNeedToMapClipRect )
 {
-    if( !!rBmpEx )
+    if( !rBmpEx )
+        return;
+
+    BitmapEx bmpSource( rBmpEx );
+
+    tools::Rectangle originalPixelRect(Point(), bmpSource.GetSizePixel());
+
+    Point srcPt( map(rPt) );
+    Size srcSize( map(rSz) );
+    tools::Rectangle destRect( srcPt, srcSize );
+
+    // AS: Christian, my scaling factors are different than yours, and work better for me.
+    //  However, I can't explain why exactly.  I got some of this by trial and error.
+    double XScale = destRect.GetWidth() ? static_cast<double>(originalPixelRect.GetWidth())/destRect.GetWidth() : 1.0;
+    double YScale = destRect.GetHeight() ? static_cast<double>(originalPixelRect.GetHeight())/destRect.GetHeight() : 1.0;
+
+    // AS: If rClipRect has a value set, then we need to crop the bmp appropriately.
+    //  If a map event already occurred in the metafile, then we do not need to map
+    //  the clip rect as it's already been done.
+    if (!rClipRect.IsEmpty())
     {
-        BitmapEx bmpSource( rBmpEx );
+        // AS: Christian, I also don't understand why bNeedToMapClipRect is necessary, but it
+        //  works like a charm.  Usually, the map event in the meta file does not cause the
+        //  clipping rectangle to get mapped.  However, sometimes there are multiple layers
+        //  of mapping which eventually do cause the clipping rect to be mapped.
+        Size clipSize( bNeedToMapClipRect ? map(rClipRect.GetSize()) : rClipRect.GetSize() );
+        tools::Rectangle clipRect(Point(), clipSize);
+        destRect.Intersection( clipRect );
 
-        tools::Rectangle originalPixelRect(Point(), bmpSource.GetSizePixel());
+        tools::Rectangle cropRect(destRect);
 
-        Point srcPt( map(rPt) );
-        Size srcSize( map(rSz) );
-        tools::Rectangle destRect( srcPt, srcSize );
+        // AS: The bmp origin is always 0,0 so we have to adjust before we crop.
+        cropRect.Move(-srcPt.X(), -srcPt.Y());
+        // AS: Rectangle has no scale function (?!) so I do it manually...
+        tools::Rectangle cropPixelRect(static_cast<long>(cropRect.Left()*XScale),
+                                static_cast<long>(cropRect.Top()*YScale),
+                                static_cast<long>(cropRect.Right()*XScale),
+                                static_cast<long>(cropRect.Bottom()*YScale));
 
-        // AS: Christian, my scaling factors are different than yours, and work better for me.
-        //  However, I can't explain why exactly.  I got some of this by trial and error.
-        double XScale = destRect.GetWidth() ? static_cast<double>(originalPixelRect.GetWidth())/destRect.GetWidth() : 1.0;
-        double YScale = destRect.GetHeight() ? static_cast<double>(originalPixelRect.GetHeight())/destRect.GetHeight() : 1.0;
-
-        // AS: If rClipRect has a value set, then we need to crop the bmp appropriately.
-        //  If a map event already occurred in the metafile, then we do not need to map
-        //  the clip rect as it's already been done.
-        if (!rClipRect.IsEmpty())
-        {
-            // AS: Christian, I also don't understand why bNeedToMapClipRect is necessary, but it
-            //  works like a charm.  Usually, the map event in the meta file does not cause the
-            //  clipping rectangle to get mapped.  However, sometimes there are multiple layers
-            //  of mapping which eventually do cause the clipping rect to be mapped.
-            Size clipSize( bNeedToMapClipRect ? map(rClipRect.GetSize()) : rClipRect.GetSize() );
-            tools::Rectangle clipRect(Point(), clipSize);
-            destRect.Intersection( clipRect );
-
-            tools::Rectangle cropRect(destRect);
-
-            // AS: The bmp origin is always 0,0 so we have to adjust before we crop.
-            cropRect.Move(-srcPt.X(), -srcPt.Y());
-            // AS: Rectangle has no scale function (?!) so I do it manually...
-            tools::Rectangle cropPixelRect(static_cast<long>(cropRect.Left()*XScale),
-                                    static_cast<long>(cropRect.Top()*YScale),
-                                    static_cast<long>(cropRect.Right()*XScale),
-                                    static_cast<long>(cropRect.Bottom()*YScale));
-
-            bmpSource.Crop(cropPixelRect);
-        }
-
-        if( !!bmpSource )
-        {
-            // #105949# fix images that are under 16 pixels width or height by
-            //          expanding them. Some swf players can't display such small
-            //          bitmaps
-            const Size& rSizePixel = bmpSource.GetSizePixel();
-            if( (rSizePixel.Width() < 16) || (rSizePixel.Height() < 16) )
-            {
-                const sal_uInt32 nDX = rSizePixel.Width() < 16 ? 16 - rSizePixel.Width() : 0;
-                const sal_uInt32 nDY = rSizePixel.Height() < 16 ? 16 - rSizePixel.Height() : 0;
-                bmpSource.Expand( nDX, nDY );
-            }
-
-            sal_Int32 nJPEGQuality = mnJPEGCompressMode;
-
-            Size szDestPixel = mpVDev->LogicToPixel(srcSize, aTWIPSMode);
-
-            double pixXScale = originalPixelRect.GetWidth() ? static_cast<double>(szDestPixel.Width()) / originalPixelRect.GetWidth() : 1.0;
-            double pixYScale = originalPixelRect.GetHeight() ? static_cast<double>(szDestPixel.Height()) / originalPixelRect.GetHeight() : 1.0;
-
-            // AS: If the image has been scaled down, then scale down the quality
-            //   that we use for JPEG compression.
-            if (pixXScale < 1.0 && pixYScale < 1.0)
-            {
-
-                double qualityScale = (pixXScale + pixYScale)/2;
-
-                nJPEGQuality = static_cast<sal_Int32>( nJPEGQuality * qualityScale );
-
-                if (nJPEGQuality < 10)
-                    nJPEGQuality += 3;
-            }
-
-            sal_uInt16 nBitmapId = defineBitmap(bmpSource, nJPEGQuality);
-
-            tools::Polygon aPoly( destRect );
-
-            // AS: Since images are being cropped now, no translation is normally necessary.
-            //  However, some things like graphical bullet points still get translated.
-            ::basegfx::B2DHomMatrix m; // #i73264#
-            m.scale(1.0/XScale, 1.0/YScale );
-            if (destRect.Left() || destRect.Top())
-                m.translate(destRect.Left(), destRect.Top());
-
-            FillStyle aFillStyle( nBitmapId, true, m );
-
-            sal_uInt16 nShapeId = defineShape( aPoly, aFillStyle );
-
-            maShapeIds.push_back( nShapeId );
-        }
+        bmpSource.Crop(cropPixelRect);
     }
+
+    if( !bmpSource )
+        return;
+
+    // #105949# fix images that are under 16 pixels width or height by
+    //          expanding them. Some swf players can't display such small
+    //          bitmaps
+    const Size& rSizePixel = bmpSource.GetSizePixel();
+    if( (rSizePixel.Width() < 16) || (rSizePixel.Height() < 16) )
+    {
+        const sal_uInt32 nDX = rSizePixel.Width() < 16 ? 16 - rSizePixel.Width() : 0;
+        const sal_uInt32 nDY = rSizePixel.Height() < 16 ? 16 - rSizePixel.Height() : 0;
+        bmpSource.Expand( nDX, nDY );
+    }
+
+    sal_Int32 nJPEGQuality = mnJPEGCompressMode;
+
+    Size szDestPixel = mpVDev->LogicToPixel(srcSize, aTWIPSMode);
+
+    double pixXScale = originalPixelRect.GetWidth() ? static_cast<double>(szDestPixel.Width()) / originalPixelRect.GetWidth() : 1.0;
+    double pixYScale = originalPixelRect.GetHeight() ? static_cast<double>(szDestPixel.Height()) / originalPixelRect.GetHeight() : 1.0;
+
+    // AS: If the image has been scaled down, then scale down the quality
+    //   that we use for JPEG compression.
+    if (pixXScale < 1.0 && pixYScale < 1.0)
+    {
+
+        double qualityScale = (pixXScale + pixYScale)/2;
+
+        nJPEGQuality = static_cast<sal_Int32>( nJPEGQuality * qualityScale );
+
+        if (nJPEGQuality < 10)
+            nJPEGQuality += 3;
+    }
+
+    sal_uInt16 nBitmapId = defineBitmap(bmpSource, nJPEGQuality);
+
+    tools::Polygon aPoly( destRect );
+
+    // AS: Since images are being cropped now, no translation is normally necessary.
+    //  However, some things like graphical bullet points still get translated.
+    ::basegfx::B2DHomMatrix m; // #i73264#
+    m.scale(1.0/XScale, 1.0/YScale );
+    if (destRect.Left() || destRect.Top())
+        m.translate(destRect.Left(), destRect.Top());
+
+    FillStyle aFillStyle( nBitmapId, true, m );
+
+    sal_uInt16 nShapeId = defineShape( aPoly, aFillStyle );
+
+    maShapeIds.push_back( nShapeId );
 }
 
 
@@ -1230,40 +1230,40 @@ bool Writer::Impl_writePageField( Rectangle& rTextBounds )
 
 void Writer::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon)
 {
-    if(rLinePolygon.count())
+    if(!rLinePolygon.count())
+        return;
+
+    basegfx::B2DPolyPolygon aLinePolyPolygon(rLinePolygon);
+    basegfx::B2DPolyPolygon aFillPolyPolygon;
+
+    rInfo.applyToB2DPolyPolygon(aLinePolyPolygon, aFillPolyPolygon);
+
+    if(aLinePolyPolygon.count())
     {
-        basegfx::B2DPolyPolygon aLinePolyPolygon(rLinePolygon);
-        basegfx::B2DPolyPolygon aFillPolyPolygon;
-
-        rInfo.applyToB2DPolyPolygon(aLinePolyPolygon, aFillPolyPolygon);
-
-        if(aLinePolyPolygon.count())
+        for(sal_uInt32 a(0); a < aLinePolyPolygon.count(); a++)
         {
-            for(sal_uInt32 a(0); a < aLinePolyPolygon.count(); a++)
-            {
-                const basegfx::B2DPolygon& aCandidate(aLinePolyPolygon.getB2DPolygon(a));
-                Impl_writePolygon( tools::Polygon(aCandidate), false );
-            }
-        }
-
-        if(aFillPolyPolygon.count())
-        {
-            const Color aOldLineColor(mpVDev->GetLineColor());
-            const Color aOldFillColor(mpVDev->GetFillColor());
-
-            mpVDev->SetLineColor();
-            mpVDev->SetFillColor(aOldLineColor);
-
-            for(sal_uInt32 a(0); a < aFillPolyPolygon.count(); a++)
-            {
-                const tools::Polygon aPolygon(aFillPolyPolygon.getB2DPolygon(a));
-                Impl_writePolyPolygon(tools::PolyPolygon(aPolygon), true );
-            }
-
-            mpVDev->SetLineColor(aOldLineColor);
-            mpVDev->SetFillColor(aOldFillColor);
+            const basegfx::B2DPolygon& aCandidate(aLinePolyPolygon.getB2DPolygon(a));
+            Impl_writePolygon( tools::Polygon(aCandidate), false );
         }
     }
+
+    if(!aFillPolyPolygon.count())
+        return;
+
+    const Color aOldLineColor(mpVDev->GetLineColor());
+    const Color aOldFillColor(mpVDev->GetFillColor());
+
+    mpVDev->SetLineColor();
+    mpVDev->SetFillColor(aOldLineColor);
+
+    for(sal_uInt32 a(0); a < aFillPolyPolygon.count(); a++)
+    {
+        const tools::Polygon aPolygon(aFillPolyPolygon.getB2DPolygon(a));
+        Impl_writePolyPolygon(tools::PolyPolygon(aPolygon), true );
+    }
+
+    mpVDev->SetLineColor(aOldLineColor);
+    mpVDev->SetFillColor(aOldFillColor);
 }
 
 

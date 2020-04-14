@@ -219,34 +219,34 @@ void XMLFilterTestDialog::updateCurrentDocumentButtonState( Reference< XComponen
     m_xPBCurrentDocument->set_sensitive( bExport && xCurrentDocument.is() );
     m_xFTNameOfCurrentFile->set_sensitive( bExport && xCurrentDocument.is() );
 
-    if( xCurrentDocument.is() )
+    if( !xCurrentDocument.is() )
+        return;
+
+    OUString aTitle;
+    Reference< XDocumentPropertiesSupplier > xDPS( xCurrentDocument, UNO_QUERY );
+    if( xDPS.is() )
     {
-        OUString aTitle;
-        Reference< XDocumentPropertiesSupplier > xDPS( xCurrentDocument, UNO_QUERY );
-        if( xDPS.is() )
+        Reference< XDocumentProperties > xProps( xDPS->getDocumentProperties() );
+        if( xProps.is() )
         {
-            Reference< XDocumentProperties > xProps( xDPS->getDocumentProperties() );
-            if( xProps.is() )
-            {
-                aTitle = xProps->getTitle();
-            }
+            aTitle = xProps->getTitle();
         }
-
-        if( aTitle.isEmpty() )
-        {
-            Reference< XStorable > xStorable( xCurrentDocument, UNO_QUERY );
-            if( xStorable.is() )
-            {
-                if( xStorable->hasLocation() )
-                {
-                    OUString aURL( xStorable->getLocation() );
-                    aTitle = getFileNameFromURL( aURL );
-                }
-            }
-        }
-
-        m_xFTNameOfCurrentFile->set_label( aTitle );
     }
+
+    if( aTitle.isEmpty() )
+    {
+        Reference< XStorable > xStorable( xCurrentDocument, UNO_QUERY );
+        if( xStorable.is() )
+        {
+            if( xStorable->hasLocation() )
+            {
+                OUString aURL( xStorable->getLocation() );
+                aTitle = getFileNameFromURL( aURL );
+            }
+        }
+    }
+
+    m_xFTNameOfCurrentFile->set_label( aTitle );
 }
 
 void XMLFilterTestDialog::initDialog()

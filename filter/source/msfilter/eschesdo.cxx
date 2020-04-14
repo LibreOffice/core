@@ -1129,39 +1129,39 @@ static basegfx::B2DRange getUnrotatedGroupBoundRange(const Reference< XShape >& 
 void ImplEESdrObject::Init( ImplEESdrWriter& rEx )
 {
     mXPropSet.set( mXShape, UNO_QUERY );
-    if( mXPropSet.is() )
+    if( !mXPropSet.is() )
+        return;
+
+    // detect name first to make below test (is group) work
+    mType = mXShape->getShapeType();
+    (void)mType.startsWith( "com.sun.star.", &mType );  // strip "com.sun.star."
+    (void)mType.endsWith( "Shape", &mType );  // strip "Shape"
+
+    if(GetType() == "drawing.Group")
     {
-        // detect name first to make below test (is group) work
-        mType = mXShape->getShapeType();
-        (void)mType.startsWith( "com.sun.star.", &mType );  // strip "com.sun.star."
-        (void)mType.endsWith( "Shape", &mType );  // strip "Shape"
+        // if it's a group, the unrotated range is needed for that group
+        const basegfx::B2DRange aUnroatedRange(getUnrotatedGroupBoundRange(mXShape));
+        const Point aNewP(basegfx::fround(aUnroatedRange.getMinX()), basegfx::fround(aUnroatedRange.getMinY()));
+        const Size aNewS(basegfx::fround(aUnroatedRange.getWidth()), basegfx::fround(aUnroatedRange.getHeight()));
 
-        if(GetType() == "drawing.Group")
-        {
-            // if it's a group, the unrotated range is needed for that group
-            const basegfx::B2DRange aUnroatedRange(getUnrotatedGroupBoundRange(mXShape));
-            const Point aNewP(basegfx::fround(aUnroatedRange.getMinX()), basegfx::fround(aUnroatedRange.getMinY()));
-            const Size aNewS(basegfx::fround(aUnroatedRange.getWidth()), basegfx::fround(aUnroatedRange.getHeight()));
-
-            SetRect(rEx.ImplMapPoint(aNewP), rEx.ImplMapSize(aNewS));
-        }
-        else
-        {
-            // if it's no group, use position and size directly, rotated/sheared or not
-            const Point aOldP(mXShape->getPosition().X, mXShape->getPosition().Y);
-            const Size aOldS(mXShape->getSize().Width, mXShape->getSize().Height);
-
-            SetRect(rEx.ImplMapPoint(aOldP), rEx.ImplMapSize(aOldS));
-        }
-
-        if( ImplGetPropertyValue( "IsPresentationObject" ) )
-            mbPresObj = ::cppu::any2bool( mAny );
-
-        if( mbPresObj && ImplGetPropertyValue( "IsEmptyPresentationObject" ) )
-            mbEmptyPresObj = ::cppu::any2bool( mAny );
-
-        mbValid = true;
+        SetRect(rEx.ImplMapPoint(aNewP), rEx.ImplMapSize(aNewS));
     }
+    else
+    {
+        // if it's no group, use position and size directly, rotated/sheared or not
+        const Point aOldP(mXShape->getPosition().X, mXShape->getPosition().Y);
+        const Size aOldS(mXShape->getSize().Width, mXShape->getSize().Height);
+
+        SetRect(rEx.ImplMapPoint(aOldP), rEx.ImplMapSize(aOldS));
+    }
+
+    if( ImplGetPropertyValue( "IsPresentationObject" ) )
+        mbPresObj = ::cppu::any2bool( mAny );
+
+    if( mbPresObj && ImplGetPropertyValue( "IsEmptyPresentationObject" ) )
+        mbEmptyPresObj = ::cppu::any2bool( mAny );
+
+    mbValid = true;
 }
 
 bool ImplEESdrObject::ImplGetPropertyValue( const OUString& rString )

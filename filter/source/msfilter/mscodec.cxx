@@ -578,31 +578,31 @@ void MSCodec_Std97::GetEncryptKey (
     sal_uInt8 pSaltData[16],
     sal_uInt8 pSaltDigest[16])
 {
-    if (InitCipher(0))
-    {
-        sal_uInt8 pDigest[RTL_DIGEST_LENGTH_MD5];
-        sal_uInt8 pBuffer[64];
+    if (!InitCipher(0))
+        return;
 
-        rtl_cipher_encode (
-            m_hCipher, pSalt, 16, pSaltData, sizeof(pBuffer));
+    sal_uInt8 pDigest[RTL_DIGEST_LENGTH_MD5];
+    sal_uInt8 pBuffer[64];
 
-        (void)memcpy( pBuffer, pSalt, 16 );
+    rtl_cipher_encode (
+        m_hCipher, pSalt, 16, pSaltData, sizeof(pBuffer));
 
-        pBuffer[16] = 0x80;
-        (void)memset (pBuffer + 17, 0, sizeof(pBuffer) - 17);
-        pBuffer[56] = 0x80;
+    (void)memcpy( pBuffer, pSalt, 16 );
 
-        rtl_digest_updateMD5 (
-            m_hDigest, pBuffer, sizeof(pBuffer));
-        rtl_digest_rawMD5 (
-            m_hDigest, pDigest, sizeof(pDigest));
+    pBuffer[16] = 0x80;
+    (void)memset (pBuffer + 17, 0, sizeof(pBuffer) - 17);
+    pBuffer[56] = 0x80;
 
-        rtl_cipher_encode (
-            m_hCipher, pDigest, 16, pSaltDigest, 16);
+    rtl_digest_updateMD5 (
+        m_hDigest, pBuffer, sizeof(pBuffer));
+    rtl_digest_rawMD5 (
+        m_hDigest, pDigest, sizeof(pDigest));
 
-        rtl_secureZeroMemory (pBuffer, sizeof(pBuffer));
-        rtl_secureZeroMemory (pDigest, sizeof(pDigest));
-    }
+    rtl_cipher_encode (
+        m_hCipher, pDigest, 16, pSaltDigest, 16);
+
+    rtl_secureZeroMemory (pBuffer, sizeof(pBuffer));
+    rtl_secureZeroMemory (pDigest, sizeof(pDigest));
 }
 
 void MSCodec97::GetDocId( sal_uInt8 pDocId[16] )

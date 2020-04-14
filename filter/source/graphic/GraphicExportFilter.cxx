@@ -86,22 +86,22 @@ void GraphicExportFilter::gatherProperties( const uno::Sequence< beans::Property
         }
     }
 
-    if ( !aInternalFilterName.isEmpty() )
+    if ( aInternalFilterName.isEmpty() )
+        return;
+
+    GraphicFilter aGraphicFilter( true );
+
+    sal_uInt16 nFilterCount = aGraphicFilter.GetExportFormatCount();
+    sal_uInt16 nFormat;
+
+    for ( nFormat = 0; nFormat < nFilterCount; nFormat++ )
     {
-        GraphicFilter aGraphicFilter( true );
-
-        sal_uInt16 nFilterCount = aGraphicFilter.GetExportFormatCount();
-        sal_uInt16 nFormat;
-
-        for ( nFormat = 0; nFormat < nFilterCount; nFormat++ )
-        {
-            if ( aGraphicFilter.GetExportInternalFilterName( nFormat ) == aInternalFilterName )
-                break;
-        }
-        if ( nFormat < nFilterCount )
-        {
-            maFilterExtension = aGraphicFilter.GetExportFormatShortName( nFormat );
-        }
+        if ( aGraphicFilter.GetExportInternalFilterName( nFormat ) == aInternalFilterName )
+            break;
+    }
+    if ( nFormat < nFilterCount )
+    {
+        maFilterExtension = aGraphicFilter.GetExportFormatShortName( nFormat );
     }
 }
 

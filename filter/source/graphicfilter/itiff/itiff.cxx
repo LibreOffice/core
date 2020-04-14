@@ -1218,23 +1218,23 @@ void TIFFReader::MakePalCol()
         }
     }
 
-    if ( fXResolution > 1.0 && fYResolution > 1.0 && ( nResolutionUnit == 2 || nResolutionUnit == 3 ) )
+    if ( !(fXResolution > 1.0 && fYResolution > 1.0 && ( nResolutionUnit == 2 || nResolutionUnit == 3 )) )
+        return;
+
+    sal_uInt32 nRX, nRY;
+    if (nResolutionUnit==2)
     {
-        sal_uInt32 nRX, nRY;
-        if (nResolutionUnit==2)
-        {
-            nRX=static_cast<sal_uInt32>(fXResolution+0.5);
-            nRY=static_cast<sal_uInt32>(fYResolution+0.5);
-        }
-        else
-        {
-            nRX=static_cast<sal_uInt32>(fXResolution*2.54+0.5);
-            nRY=static_cast<sal_uInt32>(fYResolution*2.54+0.5);
-        }
-        MapMode aMapMode(MapUnit::MapInch,Point(0,0),Fraction(1,nRX),Fraction(1,nRY));
-        maBitmapPrefMapMode = aMapMode;
-        maBitmapPrefSize = Size(nImageWidth,nImageLength);
+        nRX=static_cast<sal_uInt32>(fXResolution+0.5);
+        nRY=static_cast<sal_uInt32>(fYResolution+0.5);
     }
+    else
+    {
+        nRX=static_cast<sal_uInt32>(fXResolution*2.54+0.5);
+        nRY=static_cast<sal_uInt32>(fYResolution*2.54+0.5);
+    }
+    MapMode aMapMode(MapUnit::MapInch,Point(0,0),Fraction(1,nRX),Fraction(1,nRY));
+    maBitmapPrefMapMode = aMapMode;
+    maBitmapPrefSize = Size(nImageWidth,nImageLength);
 }
 
 

@@ -418,146 +418,146 @@ void CGM::ImplSetMapMode()
 
 void CGM::ImplMapDouble( double& nNumb )
 {
-    if ( pElement->eDeviceViewPortMap == DVPM_FORCED )
+    if ( pElement->eDeviceViewPortMap != DVPM_FORCED )
+        return;
+
+    // point is 1mm * ScalingFactor
+    switch ( pElement->eDeviceViewPortMode )
     {
-        // point is 1mm * ScalingFactor
-        switch ( pElement->eDeviceViewPortMode )
+        case DVPM_FRACTION :
         {
-            case DVPM_FRACTION :
-            {
-                nNumb *= ( mnXFraction + mnYFraction ) / 2;
-            }
-            break;
-
-            case DVPM_METRIC :
-            {
-                // nNumb *= ( 100 * pElement->nDeviceViewPortScale );
-                nNumb *= ( mnXFraction + mnYFraction ) / 2;
-                if ( pElement->nDeviceViewPortScale < 0 )
-                    nNumb = -nNumb;
-            }
-            break;
-
-            case DVPM_DEVICE :
-            {
-
-            }
-            break;
-
-            default:
-
-                break;
+            nNumb *= ( mnXFraction + mnYFraction ) / 2;
         }
+        break;
+
+        case DVPM_METRIC :
+        {
+            // nNumb *= ( 100 * pElement->nDeviceViewPortScale );
+            nNumb *= ( mnXFraction + mnYFraction ) / 2;
+            if ( pElement->nDeviceViewPortScale < 0 )
+                nNumb = -nNumb;
+        }
+        break;
+
+        case DVPM_DEVICE :
+        {
+
+        }
+        break;
+
+        default:
+
+            break;
     }
 }
 
 void CGM::ImplMapX( double& nNumb )
 {
-    if ( pElement->eDeviceViewPortMap == DVPM_FORCED )
+    if ( pElement->eDeviceViewPortMap != DVPM_FORCED )
+        return;
+
+    // point is 1mm * ScalingFactor
+    switch ( pElement->eDeviceViewPortMode )
     {
-        // point is 1mm * ScalingFactor
-        switch ( pElement->eDeviceViewPortMode )
+        case DVPM_FRACTION :
         {
-            case DVPM_FRACTION :
-            {
-                nNumb *= mnXFraction;
-            }
-            break;
-
-            case DVPM_METRIC :
-            {
-                // nNumb *= ( 100 * pElement->nDeviceViewPortScale );
-                nNumb *= mnXFraction;
-                if ( pElement->nDeviceViewPortScale < 0 )
-                    nNumb = -nNumb;
-            }
-            break;
-
-            case DVPM_DEVICE :
-            {
-
-            }
-            break;
-
-            default:
-
-                break;
+            nNumb *= mnXFraction;
         }
+        break;
+
+        case DVPM_METRIC :
+        {
+            // nNumb *= ( 100 * pElement->nDeviceViewPortScale );
+            nNumb *= mnXFraction;
+            if ( pElement->nDeviceViewPortScale < 0 )
+                nNumb = -nNumb;
+        }
+        break;
+
+        case DVPM_DEVICE :
+        {
+
+        }
+        break;
+
+        default:
+
+            break;
     }
 }
 
 void CGM::ImplMapY( double& nNumb )
 {
-    if ( pElement->eDeviceViewPortMap == DVPM_FORCED )
+    if ( pElement->eDeviceViewPortMap != DVPM_FORCED )
+        return;
+
+    // point is 1mm * ScalingFactor
+    switch ( pElement->eDeviceViewPortMode )
     {
-        // point is 1mm * ScalingFactor
-        switch ( pElement->eDeviceViewPortMode )
+        case DVPM_FRACTION :
         {
-            case DVPM_FRACTION :
-            {
-                nNumb *= mnYFraction;
-            }
-            break;
-
-            case DVPM_METRIC :
-            {
-                // nNumb *= ( 100 * pElement->nDeviceViewPortScale );
-                nNumb *= mnYFraction;
-                if ( pElement->nDeviceViewPortScale < 0 )
-                    nNumb = -nNumb;
-            }
-            break;
-
-            case DVPM_DEVICE :
-            {
-
-            }
-            break;
-
-            default:
-
-                break;
+            nNumb *= mnYFraction;
         }
+        break;
+
+        case DVPM_METRIC :
+        {
+            // nNumb *= ( 100 * pElement->nDeviceViewPortScale );
+            nNumb *= mnYFraction;
+            if ( pElement->nDeviceViewPortScale < 0 )
+                nNumb = -nNumb;
+        }
+        break;
+
+        case DVPM_DEVICE :
+        {
+
+        }
+        break;
+
+        default:
+
+            break;
     }
 }
 
 // convert a point to the current VC mapmode (1/100TH mm)
 void CGM::ImplMapPoint( FloatPoint& rFloatPoint )
 {
-    if ( pElement->eDeviceViewPortMap == DVPM_FORCED )
+    if ( pElement->eDeviceViewPortMap != DVPM_FORCED )
+        return;
+
+    // point is 1mm * ScalingFactor
+    switch ( pElement->eDeviceViewPortMode )
     {
-        // point is 1mm * ScalingFactor
-        switch ( pElement->eDeviceViewPortMode )
+        case DVPM_FRACTION :
         {
-            case DVPM_FRACTION :
-            {
-                rFloatPoint.X *= mnXFraction;
-                rFloatPoint.Y *= mnYFraction;
-            }
-            break;
-
-            case DVPM_METRIC :
-            {
-                rFloatPoint.X *= mnXFraction;
-                rFloatPoint.Y *= mnYFraction;
-                if ( pElement->nDeviceViewPortScale < 0 )
-                {
-                    rFloatPoint.X = -rFloatPoint.X;
-                    rFloatPoint.Y = -rFloatPoint.Y;
-                }
-            }
-            break;
-
-            case DVPM_DEVICE :
-            {
-
-            }
-            break;
-
-            default:
-
-                break;
+            rFloatPoint.X *= mnXFraction;
+            rFloatPoint.Y *= mnYFraction;
         }
+        break;
+
+        case DVPM_METRIC :
+        {
+            rFloatPoint.X *= mnXFraction;
+            rFloatPoint.Y *= mnYFraction;
+            if ( pElement->nDeviceViewPortScale < 0 )
+            {
+                rFloatPoint.X = -rFloatPoint.X;
+                rFloatPoint.Y = -rFloatPoint.Y;
+            }
+        }
+        break;
+
+        case DVPM_DEVICE :
+        {
+
+        }
+        break;
+
+        default:
+
+            break;
     }
 }
 
@@ -588,60 +588,60 @@ void CGM::ImplDoClass()
 
 void CGM::ImplDefaultReplacement()
 {
-    if (!maDefRepList.empty())
+    if (maDefRepList.empty())
+        return;
+
+    if (mbInDefaultReplacement)
     {
-        if (mbInDefaultReplacement)
-        {
-            SAL_WARN("filter.icgm", "recursion in ImplDefaultReplacement");
-            return;
-        }
-
-        mbInDefaultReplacement = true;
-
-        sal_uInt32  nOldEscape = mnEscape;
-        sal_uInt32  nOldElementClass = mnElementClass;
-        sal_uInt32  nOldElementID = mnElementID;
-        sal_uInt32  nOldElementSize = mnElementSize;
-        sal_uInt8*  pOldBuf = mpSource;
-        sal_uInt8*  pOldEndValidSource = mpEndValidSource;
-
-        for ( size_t i = 0, n = maDefRepList.size(); i < n; ++i )
-        {
-            sal_uInt8*  pBuf = maDefRepList[ i ].get();
-            sal_uInt32  nElementSize = maDefRepSizeList[ i ];
-            mpEndValidSource = pBuf + nElementSize;
-            sal_uInt32  nCount = 0;
-            while ( mbStatus && ( nCount < nElementSize ) )
-            {
-                mpSource = pBuf + nCount;
-                mnParaSize = 0;
-                mnEscape = ImplGetUI16();
-                mnElementClass = mnEscape >> 12;
-                mnElementID = ( mnEscape & 0x0fe0 ) >> 5;
-                mnElementSize = mnEscape & 0x1f;
-                if ( mnElementSize == 31 )
-                {
-                    mnElementSize = ImplGetUI16();
-                }
-                nCount += mnParaSize;
-                mnParaSize = 0;
-                mpSource = pBuf + nCount;
-                if ( mnElementSize & 1 )
-                    nCount++;
-                nCount += mnElementSize;
-                if ( ( mnElementClass != 1 ) || ( mnElementID != 0xc ) )    // recursion is not possible here!!
-                    ImplDoClass();
-            }
-        }
-        mnEscape = nOldEscape;
-        mnElementClass = nOldElementClass;
-        mnElementID = nOldElementID;
-        mnParaSize = mnElementSize = nOldElementSize;
-        mpSource = pOldBuf;
-        mpEndValidSource = pOldEndValidSource;
-
-        mbInDefaultReplacement = false;
+        SAL_WARN("filter.icgm", "recursion in ImplDefaultReplacement");
+        return;
     }
+
+    mbInDefaultReplacement = true;
+
+    sal_uInt32  nOldEscape = mnEscape;
+    sal_uInt32  nOldElementClass = mnElementClass;
+    sal_uInt32  nOldElementID = mnElementID;
+    sal_uInt32  nOldElementSize = mnElementSize;
+    sal_uInt8*  pOldBuf = mpSource;
+    sal_uInt8*  pOldEndValidSource = mpEndValidSource;
+
+    for ( size_t i = 0, n = maDefRepList.size(); i < n; ++i )
+    {
+        sal_uInt8*  pBuf = maDefRepList[ i ].get();
+        sal_uInt32  nElementSize = maDefRepSizeList[ i ];
+        mpEndValidSource = pBuf + nElementSize;
+        sal_uInt32  nCount = 0;
+        while ( mbStatus && ( nCount < nElementSize ) )
+        {
+            mpSource = pBuf + nCount;
+            mnParaSize = 0;
+            mnEscape = ImplGetUI16();
+            mnElementClass = mnEscape >> 12;
+            mnElementID = ( mnEscape & 0x0fe0 ) >> 5;
+            mnElementSize = mnEscape & 0x1f;
+            if ( mnElementSize == 31 )
+            {
+                mnElementSize = ImplGetUI16();
+            }
+            nCount += mnParaSize;
+            mnParaSize = 0;
+            mpSource = pBuf + nCount;
+            if ( mnElementSize & 1 )
+                nCount++;
+            nCount += mnElementSize;
+            if ( ( mnElementClass != 1 ) || ( mnElementID != 0xc ) )    // recursion is not possible here!!
+                ImplDoClass();
+        }
+    }
+    mnEscape = nOldEscape;
+    mnElementClass = nOldElementClass;
+    mnElementID = nOldElementID;
+    mnParaSize = mnElementSize = nOldElementSize;
+    mpSource = pOldBuf;
+    mpEndValidSource = pOldEndValidSource;
+
+    mbInDefaultReplacement = false;
 }
 
 bool CGM::Write( SvStream& rIStm )

@@ -454,24 +454,24 @@ void SAL_CALL BaseContainer::flush()
     // if an outside object is called :-)
     css::lang::EventObject             aSource    (static_cast< css::util::XFlushable* >(this));
     ::cppu::OInterfaceContainerHelper* pContainer = m_lListener.getContainer(cppu::UnoType<css::util::XFlushListener>::get());
-    if (pContainer)
+    if (!pContainer)
+        return;
+
+    ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+    while (pIterator.hasMoreElements())
     {
-        ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
-        while (pIterator.hasMoreElements())
+        try
         {
-            try
-            {
-                // ... this pointer can be interesting to find out, where will be called as listener
-                // Don't optimize it to a direct iterator cast :-)
-                css::util::XFlushListener* pListener = static_cast<css::util::XFlushListener*>(pIterator.next());
-                pListener->flushed(aSource);
-            }
-            catch(const css::uno::Exception&)
-            {
-                // ignore any "damaged" flush listener!
-                // May its remote reference is broken ...
-                pIterator.remove();
-            }
+            // ... this pointer can be interesting to find out, where will be called as listener
+            // Don't optimize it to a direct iterator cast :-)
+            css::util::XFlushListener* pListener = static_cast<css::util::XFlushListener*>(pIterator.next());
+            pListener->flushed(aSource);
+        }
+        catch(const css::uno::Exception&)
+        {
+            // ignore any "damaged" flush listener!
+            // May its remote reference is broken ...
+            pIterator.remove();
         }
     }
 }

@@ -948,38 +948,38 @@ void SVGFilter::implExportDocumentHeaderImpressOrDraw(sal_Int32 nDocX, sal_Int32
     mpSVGDoc = new SvXMLElementExport( *mpSVGExport, XML_NAMESPACE_NONE, "svg", true, true );
 
     // Create a ClipPath element that will be used for cutting bitmaps and other elements that could exceed the page margins.
-    if(!mbExportShapeSelection)
+    if(mbExportShapeSelection)
+        return;
+
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "ClipPathGroup" );
+    SvXMLElementExport aDefsElem( *mpSVGExport, XML_NAMESPACE_NONE, "defs", true, true );
     {
-        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "ClipPathGroup" );
-        SvXMLElementExport aDefsElem( *mpSVGExport, XML_NAMESPACE_NONE, "defs", true, true );
+        msClipPathId = "presentation_clip_path";
+        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", msClipPathId );
+        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "clipPathUnits", "userSpaceOnUse" );
+        SvXMLElementExport aClipPathElem( *mpSVGExport, XML_NAMESPACE_NONE, "clipPath", true, true );
         {
-            msClipPathId = "presentation_clip_path";
-            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", msClipPathId );
-            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "clipPathUnits", "userSpaceOnUse" );
-            SvXMLElementExport aClipPathElem( *mpSVGExport, XML_NAMESPACE_NONE, "clipPath", true, true );
-            {
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "x", OUString::number( nDocX ) );
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "y", OUString::number( nDocY ) );
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "width", OUString::number( nDocWidth ) );
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "height", OUString::number( nDocHeight ) );
-                SvXMLElementExport aRectElem( *mpSVGExport, XML_NAMESPACE_NONE, "rect", true, true );
-            }
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "x", OUString::number( nDocX ) );
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "y", OUString::number( nDocY ) );
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "width", OUString::number( nDocWidth ) );
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "height", OUString::number( nDocHeight ) );
+            SvXMLElementExport aRectElem( *mpSVGExport, XML_NAMESPACE_NONE, "rect", true, true );
         }
-        // Create a ClipPath element applied to the leaving slide in order
-        // to avoid that slide borders are visible during transition
+    }
+    // Create a ClipPath element applied to the leaving slide in order
+    // to avoid that slide borders are visible during transition
+    {
+        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", "presentation_clip_path_shrink" );
+        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "clipPathUnits", "userSpaceOnUse" );
+        SvXMLElementExport aClipPathElem( *mpSVGExport, XML_NAMESPACE_NONE, "clipPath", true, true );
         {
-            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", "presentation_clip_path_shrink" );
-            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "clipPathUnits", "userSpaceOnUse" );
-            SvXMLElementExport aClipPathElem( *mpSVGExport, XML_NAMESPACE_NONE, "clipPath", true, true );
-            {
-                sal_Int32 nDocWidthExt = nDocWidth / 500;
-                sal_Int32 nDocHeightExt = nDocHeight / 500;
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "x", OUString::number( nDocX + nDocWidthExt / 2 ) );
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "y", OUString::number( nDocY + nDocHeightExt / 2) );
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "width", OUString::number( nDocWidth - nDocWidthExt ) );
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "height", OUString::number( nDocHeight - nDocHeightExt ) );
-                SvXMLElementExport aRectElem( *mpSVGExport, XML_NAMESPACE_NONE, "rect", true, true );
-            }
+            sal_Int32 nDocWidthExt = nDocWidth / 500;
+            sal_Int32 nDocHeightExt = nDocHeight / 500;
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "x", OUString::number( nDocX + nDocWidthExt / 2 ) );
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "y", OUString::number( nDocY + nDocHeightExt / 2) );
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "width", OUString::number( nDocWidth - nDocWidthExt ) );
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "height", OUString::number( nDocHeight - nDocHeightExt ) );
+            SvXMLElementExport aRectElem( *mpSVGExport, XML_NAMESPACE_NONE, "rect", true, true );
         }
     }
 }
@@ -1048,229 +1048,229 @@ static OUString implGenerateFieldId( std::vector< std::unique_ptr<TextField> > &
 void SVGFilter::implGenerateMetaData()
 {
     sal_Int32 nCount = mSelectedPages.size();
-    if( nCount != 0 )
+    if( nCount == 0 )
+        return;
+
+    // we wrap all meta presentation info into a svg:defs element
+    SvXMLElementExport aDefsElem( *mpSVGExport, XML_NAMESPACE_NONE, "defs", true, true );
+
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", NSPREFIX "meta_slides" );
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, NSPREFIX "number-of-slides", OUString::number( nCount ) );
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, NSPREFIX "start-slide-number", OUString::number( mnVisiblePage ) );
+
+    if( mpSVGExport->IsUsePositionedCharacters() )
     {
-        // we wrap all meta presentation info into a svg:defs element
-        SvXMLElementExport aDefsElem( *mpSVGExport, XML_NAMESPACE_NONE, "defs", true, true );
+        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, NSPREFIX "use-positioned-chars", "true" );
+    }
 
-        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", NSPREFIX "meta_slides" );
-        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, NSPREFIX "number-of-slides", OUString::number( nCount ) );
-        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, NSPREFIX "start-slide-number", OUString::number( mnVisiblePage ) );
+    // Add a (global) Page Numbering Type attribute for the document
+    // NOTE: at present pSdrModel->GetPageNumType() returns always css::style::NumberingType::ARABIC
+    // so the following code fragment is pretty useless
+    sal_Int32 nPageNumberingType = css::style::NumberingType::ARABIC;
+    SvxDrawPage* pSvxDrawPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( mSelectedPages[0] );
+    if( pSvxDrawPage )
+    {
+        SdrPage* pSdrPage = pSvxDrawPage->GetSdrPage();
+        SdrModel& rSdrModel(pSdrPage->getSdrModelFromSdrPage());
+        nPageNumberingType = rSdrModel.GetPageNumType();
 
-        if( mpSVGExport->IsUsePositionedCharacters() )
+        // That is used by CalcFieldHdl method.
+        mVisiblePagePropSet.nPageNumberingType = nPageNumberingType;
+    }
+    if( nPageNumberingType != css::style::NumberingType::NUMBER_NONE )
+    {
+        OUString sNumberingType;
+        switch( nPageNumberingType )
         {
-            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, NSPREFIX "use-positioned-chars", "true" );
+            case css::style::NumberingType::CHARS_UPPER_LETTER:
+                sNumberingType = "alpha-upper";
+                break;
+            case css::style::NumberingType::CHARS_LOWER_LETTER:
+                sNumberingType = "alpha-lower";
+                break;
+            case css::style::NumberingType::ROMAN_UPPER:
+                sNumberingType = "roman-upper";
+                break;
+            case css::style::NumberingType::ROMAN_LOWER:
+                sNumberingType = "roman-lower";
+                break;
+            case css::style::NumberingType::ARABIC:
+                // arabic numbering type is the default, so we do not append any attribute for it
+            default:
+                // in case the numbering type is not handled we fall back on arabic numbering
+                break;
+        }
+        if( !sNumberingType.isEmpty() )
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, NSPREFIX "page-numbering-type", sNumberingType );
+    }
+
+
+    {
+        SvXMLElementExport    aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
+        const OUString                aId( NSPREFIX "meta_slide" );
+        const OUString                aElemTextFieldId( aOOOElemTextField );
+        std::vector< std::unique_ptr<TextField> >     aFieldSet;
+
+        // dummy slide - used as leaving slide for transition on the first slide
+        if( mbPresentation )
+        {
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", NSPREFIX "meta_dummy_slide" );
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrSlide, "dummy-slide" );
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrMaster, "dummy-master-page" );
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrBackgroundVisibility, "hidden" );
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrMasterObjectsVisibility, "hidden" );
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrHasTransition, "false" );
+            SvXMLElementExport aMetaDummySlideElem( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
         }
 
-        // Add a (global) Page Numbering Type attribute for the document
-        // NOTE: at present pSdrModel->GetPageNumType() returns always css::style::NumberingType::ARABIC
-        // so the following code fragment is pretty useless
-        sal_Int32 nPageNumberingType = css::style::NumberingType::ARABIC;
-        SvxDrawPage* pSvxDrawPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( mSelectedPages[0] );
-        if( pSvxDrawPage )
+        for( sal_Int32 i = 0; i < nCount; ++i )
         {
-            SdrPage* pSdrPage = pSvxDrawPage->GetSdrPage();
-            SdrModel& rSdrModel(pSdrPage->getSdrModelFromSdrPage());
-            nPageNumberingType = rSdrModel.GetPageNumType();
+            const Reference< css::drawing::XDrawPage > & xDrawPage = mSelectedPages[i];
+            Reference< css::drawing::XMasterPageTarget > xMasterPageTarget( xDrawPage, UNO_QUERY );
+            Reference< css::drawing::XDrawPage > xMasterPage = xMasterPageTarget->getMasterPage();
+            OUString aSlideId(aId + "_" + OUString::number( i ));
 
-            // That is used by CalcFieldHdl method.
-            mVisiblePagePropSet.nPageNumberingType = nPageNumberingType;
-        }
-        if( nPageNumberingType != css::style::NumberingType::NUMBER_NONE )
-        {
-            OUString sNumberingType;
-            switch( nPageNumberingType )
-            {
-                case css::style::NumberingType::CHARS_UPPER_LETTER:
-                    sNumberingType = "alpha-upper";
-                    break;
-                case css::style::NumberingType::CHARS_LOWER_LETTER:
-                    sNumberingType = "alpha-lower";
-                    break;
-                case css::style::NumberingType::ROMAN_UPPER:
-                    sNumberingType = "roman-upper";
-                    break;
-                case css::style::NumberingType::ROMAN_LOWER:
-                    sNumberingType = "roman-lower";
-                    break;
-                case css::style::NumberingType::ARABIC:
-                    // arabic numbering type is the default, so we do not append any attribute for it
-                default:
-                    // in case the numbering type is not handled we fall back on arabic numbering
-                    break;
-            }
-            if( !sNumberingType.isEmpty() )
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, NSPREFIX "page-numbering-type", sNumberingType );
-        }
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", aSlideId );
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrSlide, implGetValidIDFromInterface( xDrawPage ) );
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrMaster, implGetValidIDFromInterface( xMasterPage ) );
 
 
-        {
-            SvXMLElementExport    aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
-            const OUString                aId( NSPREFIX "meta_slide" );
-            const OUString                aElemTextFieldId( aOOOElemTextField );
-            std::vector< std::unique_ptr<TextField> >     aFieldSet;
-
-            // dummy slide - used as leaving slide for transition on the first slide
             if( mbPresentation )
             {
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", NSPREFIX "meta_dummy_slide" );
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrSlide, "dummy-slide" );
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrMaster, "dummy-master-page" );
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrBackgroundVisibility, "hidden" );
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrMasterObjectsVisibility, "hidden" );
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrHasTransition, "false" );
-                SvXMLElementExport aMetaDummySlideElem( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
-            }
+                Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY );
 
-            for( sal_Int32 i = 0; i < nCount; ++i )
-            {
-                const Reference< css::drawing::XDrawPage > & xDrawPage = mSelectedPages[i];
-                Reference< css::drawing::XMasterPageTarget > xMasterPageTarget( xDrawPage, UNO_QUERY );
-                Reference< css::drawing::XDrawPage > xMasterPage = xMasterPageTarget->getMasterPage();
-                OUString aSlideId(aId + "_" + OUString::number( i ));
-
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", aSlideId );
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrSlide, implGetValidIDFromInterface( xDrawPage ) );
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrMaster, implGetValidIDFromInterface( xMasterPage ) );
-
-
-                if( mbPresentation )
+                if( xPropSet.is() )
                 {
-                    Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY );
+                    bool bBackgroundVisibility                = true;     // default: visible
+                    bool bBackgroundObjectsVisibility         = true;     // default: visible
 
-                    if( xPropSet.is() )
+                    FixedDateTimeField            aFixedDateTimeField;
+                    VariableDateTimeField         aVariableDateTimeField;
+                    FooterField                   aFooterField;
+
+                    xPropSet->getPropertyValue( "IsBackgroundVisible" )  >>= bBackgroundVisibility;
+                    // in case the attribute is set to its default value it is not appended to the meta-slide element
+                    if( !bBackgroundVisibility ) // visibility default value: 'visible'
+                        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrBackgroundVisibility, "hidden" );
+
+                    // Page Number, Date/Time, Footer and Header Fields are regarded as background objects.
+                    // So bBackgroundObjectsVisibility overrides visibility of master page text fields.
+                    xPropSet->getPropertyValue( "IsBackgroundObjectsVisible" )  >>= bBackgroundObjectsVisibility;
+                    if( bBackgroundObjectsVisibility ) // visibility default value: 'visible'
                     {
-                        bool bBackgroundVisibility                = true;     // default: visible
-                        bool bBackgroundObjectsVisibility         = true;     // default: visible
+                        bool bPageNumberVisibility    = false;    // default: hidden
+                        bool bDateTimeVisibility      = true;     // default: visible
+                        bool bFooterVisibility        = true;     // default: visible
 
-                        FixedDateTimeField            aFixedDateTimeField;
-                        VariableDateTimeField         aVariableDateTimeField;
-                        FooterField                   aFooterField;
-
-                        xPropSet->getPropertyValue( "IsBackgroundVisible" )  >>= bBackgroundVisibility;
-                        // in case the attribute is set to its default value it is not appended to the meta-slide element
-                        if( !bBackgroundVisibility ) // visibility default value: 'visible'
-                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrBackgroundVisibility, "hidden" );
-
-                        // Page Number, Date/Time, Footer and Header Fields are regarded as background objects.
-                        // So bBackgroundObjectsVisibility overrides visibility of master page text fields.
-                        xPropSet->getPropertyValue( "IsBackgroundObjectsVisible" )  >>= bBackgroundObjectsVisibility;
-                        if( bBackgroundObjectsVisibility ) // visibility default value: 'visible'
+                        //  Page Number Field
+                        xPropSet->getPropertyValue( "IsPageNumberVisible" )  >>= bPageNumberVisibility;
+                        bPageNumberVisibility = bPageNumberVisibility && ( nPageNumberingType != css::style::NumberingType::NUMBER_NONE );
+                        if( bPageNumberVisibility ) // visibility default value: 'hidden'
                         {
-                            bool bPageNumberVisibility    = false;    // default: hidden
-                            bool bDateTimeVisibility      = true;     // default: visible
-                            bool bFooterVisibility        = true;     // default: visible
+                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, NSPREFIX "page-number-visibility", "visible" );
+                        }
 
-                            //  Page Number Field
-                            xPropSet->getPropertyValue( "IsPageNumberVisible" )  >>= bPageNumberVisibility;
-                            bPageNumberVisibility = bPageNumberVisibility && ( nPageNumberingType != css::style::NumberingType::NUMBER_NONE );
-                            if( bPageNumberVisibility ) // visibility default value: 'hidden'
+                        // Date/Time Field
+                        xPropSet->getPropertyValue( "IsDateTimeVisible" ) >>= bDateTimeVisibility;
+                        if( bDateTimeVisibility ) // visibility default value: 'visible'
+                        {
+                            bool bDateTimeFixed           = true;     // default: fixed
+                            xPropSet->getPropertyValue( "IsDateTimeFixed" ) >>= bDateTimeFixed;
+                            if( bDateTimeFixed ) // we are interested only in the field text not in the date/time format
                             {
-                                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, NSPREFIX "page-number-visibility", "visible" );
-                            }
-
-                            // Date/Time Field
-                            xPropSet->getPropertyValue( "IsDateTimeVisible" ) >>= bDateTimeVisibility;
-                            if( bDateTimeVisibility ) // visibility default value: 'visible'
-                            {
-                                bool bDateTimeFixed           = true;     // default: fixed
-                                xPropSet->getPropertyValue( "IsDateTimeFixed" ) >>= bDateTimeFixed;
-                                if( bDateTimeFixed ) // we are interested only in the field text not in the date/time format
+                                xPropSet->getPropertyValue( "DateTimeText" ) >>= aFixedDateTimeField.text;
+                                if( !aFixedDateTimeField.text.isEmpty() )
                                 {
-                                    xPropSet->getPropertyValue( "DateTimeText" ) >>= aFixedDateTimeField.text;
-                                    if( !aFixedDateTimeField.text.isEmpty() )
-                                    {
-                                        OUString sFieldId = implGenerateFieldId( aFieldSet, aFixedDateTimeField, aElemTextFieldId, xMasterPage );
-                                        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrDateTimeField, sFieldId );
-                                    }
-                                }
-                                else // the inverse applies: we are interested only in the date/time format not in the field text
-                                {
-                                    xPropSet->getPropertyValue( "DateTimeFormat" ) >>= aVariableDateTimeField.format;
-                                    OUString sFieldId = implGenerateFieldId( aFieldSet, aVariableDateTimeField, aElemTextFieldId, xMasterPage );
+                                    OUString sFieldId = implGenerateFieldId( aFieldSet, aFixedDateTimeField, aElemTextFieldId, xMasterPage );
                                     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrDateTimeField, sFieldId );
                                 }
                             }
-                            else
+                            else // the inverse applies: we are interested only in the date/time format not in the field text
                             {
-                                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, NSPREFIX "date-time-visibility", "hidden" );
-                            }
-
-                            // Footer Field
-                            xPropSet->getPropertyValue( "IsFooterVisible" )  >>= bFooterVisibility;
-                            if( bFooterVisibility ) // visibility default value: 'visible'
-                            {
-                                xPropSet->getPropertyValue( "FooterText" ) >>= aFooterField.text;
-                                if( !aFooterField.text.isEmpty() )
-                                {
-                                    OUString sFieldId = implGenerateFieldId( aFieldSet, aFooterField, aElemTextFieldId, xMasterPage );
-                                    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrFooterField, sFieldId );
-                                }
-                            }
-                            else
-                            {
-                                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, NSPREFIX "footer-visibility", "hidden" );
+                                xPropSet->getPropertyValue( "DateTimeFormat" ) >>= aVariableDateTimeField.format;
+                                OUString sFieldId = implGenerateFieldId( aFieldSet, aVariableDateTimeField, aElemTextFieldId, xMasterPage );
+                                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrDateTimeField, sFieldId );
                             }
                         }
                         else
                         {
-                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrMasterObjectsVisibility, "hidden" );
+                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, NSPREFIX "date-time-visibility", "hidden" );
                         }
 
-                        sal_Int32 nChange(0);
-                        double fSlideDuration(0);
-
-                        if( xPropSet->getPropertySetInfo()->hasPropertyByName( "Change" ) &&
-                            (xPropSet->getPropertyValue( "Change" ) >>= nChange ) && nChange == 1 )
+                        // Footer Field
+                        xPropSet->getPropertyValue( "IsFooterVisible" )  >>= bFooterVisibility;
+                        if( bFooterVisibility ) // visibility default value: 'visible'
                         {
-                            if( xPropSet->getPropertySetInfo()->hasPropertyByName( "HighResDuration" ) &&
-                                (xPropSet->getPropertyValue( "HighResDuration" ) >>= fSlideDuration) )
+                            xPropSet->getPropertyValue( "FooterText" ) >>= aFooterField.text;
+                            if( !aFooterField.text.isEmpty() )
                             {
-                                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrSlideDuration, OUString::number(fSlideDuration) );
+                                OUString sFieldId = implGenerateFieldId( aFieldSet, aFooterField, aElemTextFieldId, xMasterPage );
+                                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrFooterField, sFieldId );
                             }
                         }
-                        // We look for a slide transition.
-                        // Transition properties are exported together with animations.
-                        sal_Int16 nTransitionType(0);
-                        if( xPropSet->getPropertySetInfo()->hasPropertyByName( "TransitionType" ) &&
-                            (xPropSet->getPropertyValue( "TransitionType" ) >>= nTransitionType) )
+                        else
                         {
-                            sal_Int16 nTransitionSubType(0);
-                            if( xPropSet->getPropertyValue( "TransitionSubtype" )  >>= nTransitionSubType )
-                            {
-                                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrHasTransition, "true" );
-                            }
+                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, NSPREFIX "footer-visibility", "hidden" );
                         }
-
                     }
-                }
-
-                {
-                    SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
-                }  // when the aExp2 destructor is called the </g> tag is appended to the output file
-            }
-
-            // export text field elements
-            if( mbPresentation )
-            {
-                for( sal_Int32 i = 0, nSize = aFieldSet.size(); i < nSize; ++i )
-                {
-                    OUString sElemId = OUStringLiteral(aOOOElemTextField) + "_" + OUString::number( i );
-                    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sElemId );
-                    aFieldSet[i]->elementExport( mpSVGExport );
-                }
-                if( mpSVGExport->IsEmbedFonts() && mpSVGExport->IsUsePositionedCharacters() )
-                {
-                    for(const std::unique_ptr<TextField>& i : aFieldSet)
+                    else
                     {
-                        i->growCharSet( mTextFieldCharSets );
+                        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrMasterObjectsVisibility, "hidden" );
                     }
+
+                    sal_Int32 nChange(0);
+                    double fSlideDuration(0);
+
+                    if( xPropSet->getPropertySetInfo()->hasPropertyByName( "Change" ) &&
+                        (xPropSet->getPropertyValue( "Change" ) >>= nChange ) && nChange == 1 )
+                    {
+                        if( xPropSet->getPropertySetInfo()->hasPropertyByName( "HighResDuration" ) &&
+                            (xPropSet->getPropertyValue( "HighResDuration" ) >>= fSlideDuration) )
+                        {
+                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrSlideDuration, OUString::number(fSlideDuration) );
+                        }
+                    }
+                    // We look for a slide transition.
+                    // Transition properties are exported together with animations.
+                    sal_Int16 nTransitionType(0);
+                    if( xPropSet->getPropertySetInfo()->hasPropertyByName( "TransitionType" ) &&
+                        (xPropSet->getPropertyValue( "TransitionType" ) >>= nTransitionType) )
+                    {
+                        sal_Int16 nTransitionSubType(0);
+                        if( xPropSet->getPropertyValue( "TransitionSubtype" )  >>= nTransitionSubType )
+                        {
+                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrHasTransition, "true" );
+                        }
+                    }
+
                 }
             }
 
-            // text fields are used only for generating meta info so we don't need them anymore
-            aFieldSet.clear();
+            {
+                SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
+            }  // when the aExp2 destructor is called the </g> tag is appended to the output file
         }
+
+        // export text field elements
+        if( mbPresentation )
+        {
+            for( sal_Int32 i = 0, nSize = aFieldSet.size(); i < nSize; ++i )
+            {
+                OUString sElemId = OUStringLiteral(aOOOElemTextField) + "_" + OUString::number( i );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sElemId );
+                aFieldSet[i]->elementExport( mpSVGExport );
+            }
+            if( mpSVGExport->IsEmbedFonts() && mpSVGExport->IsUsePositionedCharacters() )
+            {
+                for(const std::unique_ptr<TextField>& i : aFieldSet)
+                {
+                    i->growCharSet( mTextFieldCharSets );
+                }
+            }
+        }
+
+        // text fields are used only for generating meta info so we don't need them anymore
+        aFieldSet.clear();
     }
 }
 
@@ -1524,33 +1524,33 @@ void SVGFilter::implGetPagePropSet( const Reference< css::drawing::XDrawPage > &
 
     //  We collect info on master page elements visibility, and placeholder text shape content.
     Reference< XPropertySet > xPropSet( rxPage, UNO_QUERY );
-    if( xPropSet.is() )
+    if( !xPropSet.is() )
+        return;
+
+    Reference< XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
+    if( !xPropSetInfo.is() )
+        return;
+
+    implSafeGetPagePropSet( "IsBackgroundVisible", xPropSet, xPropSetInfo )          >>= mVisiblePagePropSet.bIsBackgroundVisible;
+    implSafeGetPagePropSet( "IsBackgroundObjectsVisible", xPropSet, xPropSetInfo )   >>= mVisiblePagePropSet.bAreBackgroundObjectsVisible;
+    implSafeGetPagePropSet( "IsPageNumberVisible", xPropSet, xPropSetInfo )          >>= mVisiblePagePropSet.bIsPageNumberFieldVisible;
+    implSafeGetPagePropSet( "IsHeaderVisible", xPropSet, xPropSetInfo )              >>= mVisiblePagePropSet.bIsHeaderFieldVisible;
+    implSafeGetPagePropSet( "IsFooterVisible", xPropSet, xPropSetInfo )              >>= mVisiblePagePropSet.bIsFooterFieldVisible;
+    implSafeGetPagePropSet( "IsDateTimeVisible", xPropSet, xPropSetInfo )            >>= mVisiblePagePropSet.bIsDateTimeFieldVisible;
+
+    implSafeGetPagePropSet( "IsDateTimeFixed", xPropSet, xPropSetInfo )              >>= mVisiblePagePropSet.bIsDateTimeFieldFixed;
+    sal_Int32 nTmp;
+    if (implSafeGetPagePropSet( "DateTimeFormat", xPropSet, xPropSetInfo ) >>= nTmp)
+        mVisiblePagePropSet.nDateTimeFormat = static_cast<SvxDateFormat>(nTmp);
+
+    if( mVisiblePagePropSet.bIsPageNumberFieldVisible )
     {
-        Reference< XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
-        if( xPropSetInfo.is() )
+        SvxDrawPage* pSvxDrawPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( rxPage );
+        if( pSvxDrawPage )
         {
-            implSafeGetPagePropSet( "IsBackgroundVisible", xPropSet, xPropSetInfo )          >>= mVisiblePagePropSet.bIsBackgroundVisible;
-            implSafeGetPagePropSet( "IsBackgroundObjectsVisible", xPropSet, xPropSetInfo )   >>= mVisiblePagePropSet.bAreBackgroundObjectsVisible;
-            implSafeGetPagePropSet( "IsPageNumberVisible", xPropSet, xPropSetInfo )          >>= mVisiblePagePropSet.bIsPageNumberFieldVisible;
-            implSafeGetPagePropSet( "IsHeaderVisible", xPropSet, xPropSetInfo )              >>= mVisiblePagePropSet.bIsHeaderFieldVisible;
-            implSafeGetPagePropSet( "IsFooterVisible", xPropSet, xPropSetInfo )              >>= mVisiblePagePropSet.bIsFooterFieldVisible;
-            implSafeGetPagePropSet( "IsDateTimeVisible", xPropSet, xPropSetInfo )            >>= mVisiblePagePropSet.bIsDateTimeFieldVisible;
-
-            implSafeGetPagePropSet( "IsDateTimeFixed", xPropSet, xPropSetInfo )              >>= mVisiblePagePropSet.bIsDateTimeFieldFixed;
-            sal_Int32 nTmp;
-            if (implSafeGetPagePropSet( "DateTimeFormat", xPropSet, xPropSetInfo ) >>= nTmp)
-                mVisiblePagePropSet.nDateTimeFormat = static_cast<SvxDateFormat>(nTmp);
-
-            if( mVisiblePagePropSet.bIsPageNumberFieldVisible )
-            {
-                SvxDrawPage* pSvxDrawPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( rxPage );
-                if( pSvxDrawPage )
-                {
-                    SdrPage* pSdrPage = pSvxDrawPage->GetSdrPage();
-                    SdrModel& rSdrModel(pSdrPage->getSdrModelFromSdrPage());
-                    mVisiblePagePropSet.nPageNumberingType = rSdrModel.GetPageNumType();
-                }
-            }
+            SdrPage* pSdrPage = pSvxDrawPage->GetSdrPage();
+            SdrModel& rSdrModel(pSdrPage->getSdrModelFromSdrPage());
+            mVisiblePagePropSet.nPageNumberingType = rSdrModel.GetPageNumType();
         }
     }
 }

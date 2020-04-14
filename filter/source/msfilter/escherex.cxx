@@ -319,27 +319,27 @@ static int EscherPropSortFunc( const void* p1, const void* p2 )
 void EscherPropertyContainer::Commit( SvStream& rSt, sal_uInt16 nVersion, sal_uInt16 nRecType )
 {
     rSt.WriteUInt16( ( nCountCount << 4 ) | ( nVersion & 0xf ) ).WriteUInt16( nRecType ).WriteUInt32( nCountSize );
-    if ( !pSortStruct.empty() )
-    {
-        qsort( pSortStruct.data(), pSortStruct.size(), sizeof( EscherPropSortStruct ), EscherPropSortFunc );
+    if ( pSortStruct.empty() )
+        return;
 
+    qsort( pSortStruct.data(), pSortStruct.size(), sizeof( EscherPropSortStruct ), EscherPropSortFunc );
+
+    for ( size_t i = 0; i < pSortStruct.size(); i++ )
+    {
+        sal_uInt32 nPropValue = pSortStruct[ i ].nPropValue;
+        sal_uInt16 nPropId = pSortStruct[ i ].nPropId;
+
+        rSt.WriteUInt16( nPropId )
+           .WriteUInt32( nPropValue );
+    }
+    if ( bHasComplexData )
+    {
         for ( size_t i = 0; i < pSortStruct.size(); i++ )
         {
-            sal_uInt32 nPropValue = pSortStruct[ i ].nPropValue;
-            sal_uInt16 nPropId = pSortStruct[ i ].nPropId;
-
-            rSt.WriteUInt16( nPropId )
-               .WriteUInt32( nPropValue );
-        }
-        if ( bHasComplexData )
-        {
-            for ( size_t i = 0; i < pSortStruct.size(); i++ )
-            {
-                if ( !pSortStruct[ i ].nProp.empty() )
-                    rSt.WriteBytes(
-                        pSortStruct[i].nProp.data(),
-                        pSortStruct[i].nProp.size());
-            }
+            if ( !pSortStruct[ i ].nProp.empty() )
+                rSt.WriteBytes(
+                    pSortStruct[i].nProp.data(),
+                    pSortStruct[i].nProp.size());
         }
     }
 }
@@ -845,19 +845,19 @@ void EscherPropertyContainer::CreateTextProperties(
     // n#404221: In case of rotation we need to write the txtflTextFlow
     // attribute too.
     // fdo#58204: not custom shapes (TODO: other cases when it doesn't work?)
-    if (bIsTextFrame && !bIsCustomShape)
+    if (!(bIsTextFrame && !bIsCustomShape))
+        return;
+
+    sal_uInt16 nAngle = EscherPropertyValueHelper::GetPropertyValue(
+        aAny, rXPropSet, "RotateAngle", true ) ?
+            static_cast<sal_uInt16>( ( *o3tl::doAccess<sal_Int32>(aAny) ) + 5 ) / 10 : 0;
+    if (nAngle==900)
     {
-        sal_uInt16 nAngle = EscherPropertyValueHelper::GetPropertyValue(
-            aAny, rXPropSet, "RotateAngle", true ) ?
-                static_cast<sal_uInt16>( ( *o3tl::doAccess<sal_Int32>(aAny) ) + 5 ) / 10 : 0;
-        if (nAngle==900)
-        {
-            AddOpt( ESCHER_Prop_txflTextFlow, ESCHER_txflBtoT );
-        }
-        if (nAngle==2700)
-        {
-            AddOpt( ESCHER_Prop_txflTextFlow, ESCHER_txflTtoBA );
-        }
+        AddOpt( ESCHER_Prop_txflTextFlow, ESCHER_txflBtoT );
+    }
+    if (nAngle==2700)
+    {
+        AddOpt( ESCHER_Prop_txflTextFlow, ESCHER_txflTtoBA );
     }
 }
 
@@ -1260,71 +1260,71 @@ void EscherPropertyContainer::ImplCreateGraphicAttributes( const uno::Reference<
     if ( nPicFlags )
         AddOpt( ESCHER_Prop_pictureActive, nPicFlags );
 
-    if ( bCreateCroppingAttributes && pGraphicProvider )
+    if ( !(bCreateCroppingAttributes && pGraphicProvider) )
+        return;
+
+    Size    aPrefSize;
+    MapMode aPrefMapMode;
+    if ( !pGraphicProvider->GetPrefSize( nBlibId, aPrefSize, aPrefMapMode ) )
+        return;
+
+    Size aCropSize(lcl_SizeToEmu(aPrefSize, aPrefMapMode));
+    if ( !(aCropSize.Width() && aCropSize.Height()) )
+        return;
+
+    if ( !EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "GraphicCrop" ) )
+        return;
+
+    text::GraphicCrop aGraphCrop;
+    if ( !(aAny >>= aGraphCrop) )
+        return;
+
+    if ( aGraphCrop.Left )
     {
-        Size    aPrefSize;
-        MapMode aPrefMapMode;
-        if ( pGraphicProvider->GetPrefSize( nBlibId, aPrefSize, aPrefMapMode ) )
-        {
-            Size aCropSize(lcl_SizeToEmu(aPrefSize, aPrefMapMode));
-            if ( aCropSize.Width() && aCropSize.Height() )
-            {
-                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "GraphicCrop" ) )
-                {
-                    text::GraphicCrop aGraphCrop;
-                    if ( aAny >>= aGraphCrop )
-                    {
-                        if ( aGraphCrop.Left )
-                        {
-                            sal_uInt32 nLeft = ( aGraphCrop.Left * 65536 ) / aCropSize.Width();
-                            AddOpt( ESCHER_Prop_cropFromLeft, nLeft );
-                        }
-                        if ( aGraphCrop.Top )
-                        {
-                            sal_uInt32 nTop = ( aGraphCrop.Top * 65536 ) / aCropSize.Height();
-                            AddOpt( ESCHER_Prop_cropFromTop, nTop );
-                        }
-                        if ( aGraphCrop.Right )
-                        {
-                            sal_uInt32 nRight = ( aGraphCrop.Right * 65536 ) / aCropSize.Width();
-                            AddOpt( ESCHER_Prop_cropFromRight, nRight );
-                        }
-                        if ( aGraphCrop.Bottom )
-                        {
-                            sal_uInt32 nBottom = ( aGraphCrop.Bottom * 65536 ) / aCropSize.Height();
-                            AddOpt( ESCHER_Prop_cropFromBottom, nBottom );
-                        }
-                    }
-                }
-            }
-        }
+        sal_uInt32 nLeft = ( aGraphCrop.Left * 65536 ) / aCropSize.Width();
+        AddOpt( ESCHER_Prop_cropFromLeft, nLeft );
+    }
+    if ( aGraphCrop.Top )
+    {
+        sal_uInt32 nTop = ( aGraphCrop.Top * 65536 ) / aCropSize.Height();
+        AddOpt( ESCHER_Prop_cropFromTop, nTop );
+    }
+    if ( aGraphCrop.Right )
+    {
+        sal_uInt32 nRight = ( aGraphCrop.Right * 65536 ) / aCropSize.Width();
+        AddOpt( ESCHER_Prop_cropFromRight, nRight );
+    }
+    if ( aGraphCrop.Bottom )
+    {
+        sal_uInt32 nBottom = ( aGraphCrop.Bottom * 65536 ) / aCropSize.Height();
+        AddOpt( ESCHER_Prop_cropFromBottom, nBottom );
     }
 }
 
 void EscherPropertyContainer::CreateShapeProperties( const uno::Reference<drawing::XShape> & rXShape )
 {
     uno::Reference< beans::XPropertySet > aXPropSet( rXShape, uno::UNO_QUERY );
-    if ( aXPropSet.is() )
+    if ( !aXPropSet.is() )
+        return;
+
+    bool bVisible = false;
+    bool bPrintable = false;
+    uno::Any aAny;
+    sal_uInt32 nShapeAttr = 0;
+    if (EscherPropertyValueHelper::GetPropertyValue(aAny, aXPropSet, "Visible", true) && (aAny >>= bVisible))
     {
-        bool bVisible = false;
-        bool bPrintable = false;
-        uno::Any aAny;
-        sal_uInt32 nShapeAttr = 0;
-        if (EscherPropertyValueHelper::GetPropertyValue(aAny, aXPropSet, "Visible", true) && (aAny >>= bVisible))
-        {
-            if ( !bVisible )
-                nShapeAttr |= 0x20002;  // set fHidden = true
-        }
-        // This property (fPrint) isn't used in Excel anymore, leaving it for legacy reasons
-        // one change, based on XLSX: hidden implies not printed, let's not export the fPrint property in that case
-        if (bVisible && EscherPropertyValueHelper::GetPropertyValue(aAny, aXPropSet, "Printable", true) && (aAny >>= bPrintable))
-        {
-            if ( !bPrintable )
-                nShapeAttr |= 0x10000;  // set fPrint = false;
-        }
-        if ( nShapeAttr )
-            AddOpt( ESCHER_Prop_fPrint, nShapeAttr );
+        if ( !bVisible )
+            nShapeAttr |= 0x20002;  // set fHidden = true
     }
+    // This property (fPrint) isn't used in Excel anymore, leaving it for legacy reasons
+    // one change, based on XLSX: hidden implies not printed, let's not export the fPrint property in that case
+    if (bVisible && EscherPropertyValueHelper::GetPropertyValue(aAny, aXPropSet, "Printable", true) && (aAny >>= bPrintable))
+    {
+        if ( !bPrintable )
+            nShapeAttr |= 0x10000;  // set fPrint = false;
+    }
+    if ( nShapeAttr )
+        AddOpt( ESCHER_Prop_fPrint, nShapeAttr );
 }
 
 bool EscherPropertyContainer::CreateOLEGraphicProperties(const uno::Reference<drawing::XShape> & rXShape)
@@ -2441,67 +2441,67 @@ static void ConvertEnhancedCustomShapeEquation(
     if ( pAny )
         *pAny >>= sEquationSource;
     sal_Int32 nEquationSourceCount = sEquationSource.getLength();
-    if ( nEquationSourceCount && (nEquationSourceCount <= 128) )
-    {
-        sal_Int32 i;
-        for ( i = 0; i < nEquationSourceCount; i++ )
-        {
-            EnhancedCustomShape2d aCustoShape2d(
-                const_cast< SdrObjCustomShape& >(rSdrObjCustomShape));
-            try
-            {
-                std::shared_ptr< EnhancedCustomShape::ExpressionNode > aExpressNode(
-                    EnhancedCustomShape::FunctionParser::parseFunction(
-                        sEquationSource[ i ], aCustoShape2d));
-                drawing::EnhancedCustomShapeParameter aPara( aExpressNode->fillNode( rEquations, nullptr, 0 ) );
-                if ( aPara.Type != drawing::EnhancedCustomShapeParameterType::EQUATION )
-                {
-                    EnhancedCustomShapeEquation aEquation;
-                    aEquation.nOperation = 0;
-                    EnhancedCustomShape::FillEquationParameter( aPara, 0, aEquation );
-                    rEquations.push_back( aEquation );
-                }
-            }
-            catch ( const EnhancedCustomShape::ParseError& )
-            {
-                EnhancedCustomShapeEquation aEquation;      // ups, we should not be here,
-                aEquation.nOperation = 0;                   // creating a default equation with value 1
-                aEquation.nPara[ 0 ] = 1;                   // hoping that this will not break anything
-                rEquations.push_back( aEquation );
-            }
-            catch ( ... )
-            {
-                EnhancedCustomShapeEquation aEquation;      // #i112309# EnhancedCustomShape::Parse error
-                aEquation.nOperation = 0;                   // not caught on linux platform
-                aEquation.nPara[ 0 ] = 1;
-                rEquations.push_back( aEquation );
-            }
-            rEquationOrder.push_back( rEquations.size() - 1 );
-        }
-        // now updating our old equation indices, they are marked with a bit in the hiword of nOperation
-        for (auto & equation : rEquations)
-        {
-            sal_uInt32 nMask = 0x20000000;
-            for( i = 0; i < 3; i++ )
-            {
-                if ( equation.nOperation & nMask )
-                {
-                    equation.nOperation ^= nMask;
-                    const size_t nIndex(equation.nPara[ i ] & 0x3ff);
+    if ( !(nEquationSourceCount && (nEquationSourceCount <= 128)) )
+        return;
 
-                    // #i124661# check index access, there are cases where this is out of bound leading
-                    // to errors up to crashes when executed
-                    if(nIndex < rEquationOrder.size())
-                    {
-                        equation.nPara[ i ] = rEquationOrder[ nIndex ] | 0x400;
-                    }
-                    else
-                    {
-                        OSL_ENSURE(false, "Attempted out of bound access to rEquationOrder of CustomShape (!)");
-                    }
-                }
-                nMask <<= 1;
+    sal_Int32 i;
+    for ( i = 0; i < nEquationSourceCount; i++ )
+    {
+        EnhancedCustomShape2d aCustoShape2d(
+            const_cast< SdrObjCustomShape& >(rSdrObjCustomShape));
+        try
+        {
+            std::shared_ptr< EnhancedCustomShape::ExpressionNode > aExpressNode(
+                EnhancedCustomShape::FunctionParser::parseFunction(
+                    sEquationSource[ i ], aCustoShape2d));
+            drawing::EnhancedCustomShapeParameter aPara( aExpressNode->fillNode( rEquations, nullptr, 0 ) );
+            if ( aPara.Type != drawing::EnhancedCustomShapeParameterType::EQUATION )
+            {
+                EnhancedCustomShapeEquation aEquation;
+                aEquation.nOperation = 0;
+                EnhancedCustomShape::FillEquationParameter( aPara, 0, aEquation );
+                rEquations.push_back( aEquation );
             }
+        }
+        catch ( const EnhancedCustomShape::ParseError& )
+        {
+            EnhancedCustomShapeEquation aEquation;      // ups, we should not be here,
+            aEquation.nOperation = 0;                   // creating a default equation with value 1
+            aEquation.nPara[ 0 ] = 1;                   // hoping that this will not break anything
+            rEquations.push_back( aEquation );
+        }
+        catch ( ... )
+        {
+            EnhancedCustomShapeEquation aEquation;      // #i112309# EnhancedCustomShape::Parse error
+            aEquation.nOperation = 0;                   // not caught on linux platform
+            aEquation.nPara[ 0 ] = 1;
+            rEquations.push_back( aEquation );
+        }
+        rEquationOrder.push_back( rEquations.size() - 1 );
+    }
+    // now updating our old equation indices, they are marked with a bit in the hiword of nOperation
+    for (auto & equation : rEquations)
+    {
+        sal_uInt32 nMask = 0x20000000;
+        for( i = 0; i < 3; i++ )
+        {
+            if ( equation.nOperation & nMask )
+            {
+                equation.nOperation ^= nMask;
+                const size_t nIndex(equation.nPara[ i ] & 0x3ff);
+
+                // #i124661# check index access, there are cases where this is out of bound leading
+                // to errors up to crashes when executed
+                if(nIndex < rEquationOrder.size())
+                {
+                    equation.nPara[ i ] = rEquationOrder[ nIndex ] | 0x400;
+                }
+                else
+                {
+                    OSL_ENSURE(false, "Attempted out of bound access to rEquationOrder of CustomShape (!)");
+                }
+            }
+            nMask <<= 1;
         }
     }
 }
@@ -2533,8 +2533,9 @@ bool EscherPropertyContainer::IsDefaultObject(
 void EscherPropertyContainer::LookForPolarHandles( const MSO_SPT eShapeType, sal_Int32& nAdjustmentsWhichNeedsToBeConverted )
 {
     const mso_CustomShape* pDefCustomShape = GetCustomShapeContent( eShapeType );
-    if ( pDefCustomShape && pDefCustomShape->nHandles && pDefCustomShape->pHandles )
-    {
+    if ( !(pDefCustomShape && pDefCustomShape->nHandles && pDefCustomShape->pHandles) )
+        return;
+
     sal_Int32 k, nkCount = pDefCustomShape->nHandles;
     const SvxMSDffHandle* pData = pDefCustomShape->pHandles;
     for ( k = 0; k < nkCount; k++, pData++ )
@@ -2544,7 +2545,6 @@ void EscherPropertyContainer::LookForPolarHandles( const MSO_SPT eShapeType, sal
         if ( ( pData->nPositionY >= 0x256 ) || ( pData->nPositionY <= 0x107 ) )
             nAdjustmentsWhichNeedsToBeConverted |= ( 1 << k );
         }
-    }
     }
 }
 
@@ -2575,1158 +2575,1158 @@ bool EscherPropertyContainer::GetAdjustmentValue( const drawing::EnhancedCustomS
 void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeType, const uno::Reference< drawing::XShape > & rXShape )
 {
     uno::Reference< beans::XPropertySet > aXPropSet( rXShape, uno::UNO_QUERY );
-    if ( aXPropSet.is() )
+    if ( !aXPropSet.is() )
+        return;
+
+    if(nullptr == dynamic_cast< SdrObjCustomShape* >(GetSdrObjectFromXShape(rXShape)))
     {
-        if(nullptr == dynamic_cast< SdrObjCustomShape* >(GetSdrObjectFromXShape(rXShape)))
+        return;
+    }
+
+    SdrObjCustomShape& rSdrObjCustomShape(static_cast< SdrObjCustomShape& >(*GetSdrObjectFromXShape(rXShape)));
+    const OUString sCustomShapeGeometry( "CustomShapeGeometry"  );
+    uno::Any aGeoPropSet = aXPropSet->getPropertyValue( sCustomShapeGeometry );
+    uno::Sequence< beans::PropertyValue > aGeoPropSeq;
+    if ( !(aGeoPropSet >>= aGeoPropSeq) )
+        return;
+
+    const OUString sViewBox            ( "ViewBox"  );
+    const OUString sTextRotateAngle    ( "TextRotateAngle"  );
+    const OUString sExtrusion          ( "Extrusion"  );
+    const OUString sEquations          ( "Equations"  );
+    const OUString sPath               ( "Path"  );
+    const OUString sTextPath           ( "TextPath"  );
+    const OUString sHandles            ( "Handles"  );
+    const OUString sAdjustmentValues   ( "AdjustmentValues"  );
+
+    bool bAdjustmentValuesProp = false;
+    uno::Any aAdjustmentValuesProp;
+    bool bPathCoordinatesProp = false;
+    uno::Any aPathCoordinatesProp;
+
+    sal_Int32 nAdjustmentsWhichNeedsToBeConverted = 0;
+    uno::Sequence< beans::PropertyValues > aHandlesPropSeq;
+    bool bPredefinedHandlesUsed = true;
+    const bool bIsDefaultObject(
+        IsDefaultObject(
+            rSdrObjCustomShape,
+            eShapeType));
+
+    // convert property "Equations" into std::vector< EnhancedCustomShapeEquationEquation >
+    std::vector< EnhancedCustomShapeEquation >  aEquations;
+    std::vector< sal_Int32 >                    aEquationOrder;
+    ConvertEnhancedCustomShapeEquation(
+        rSdrObjCustomShape,
+        aEquations,
+        aEquationOrder);
+
+    sal_Int32 i, nCount = aGeoPropSeq.getLength();
+    for ( i = 0; i < nCount; i++ )
+    {
+        const beans::PropertyValue& rProp = aGeoPropSeq[ i ];
+        if ( rProp.Name == sViewBox )
         {
-            return;
-        }
-
-        SdrObjCustomShape& rSdrObjCustomShape(static_cast< SdrObjCustomShape& >(*GetSdrObjectFromXShape(rXShape)));
-        const OUString sCustomShapeGeometry( "CustomShapeGeometry"  );
-        uno::Any aGeoPropSet = aXPropSet->getPropertyValue( sCustomShapeGeometry );
-        uno::Sequence< beans::PropertyValue > aGeoPropSeq;
-        if ( aGeoPropSet >>= aGeoPropSeq )
-        {
-            const OUString sViewBox            ( "ViewBox"  );
-            const OUString sTextRotateAngle    ( "TextRotateAngle"  );
-            const OUString sExtrusion          ( "Extrusion"  );
-            const OUString sEquations          ( "Equations"  );
-            const OUString sPath               ( "Path"  );
-            const OUString sTextPath           ( "TextPath"  );
-            const OUString sHandles            ( "Handles"  );
-            const OUString sAdjustmentValues   ( "AdjustmentValues"  );
-
-            bool bAdjustmentValuesProp = false;
-            uno::Any aAdjustmentValuesProp;
-            bool bPathCoordinatesProp = false;
-            uno::Any aPathCoordinatesProp;
-
-            sal_Int32 nAdjustmentsWhichNeedsToBeConverted = 0;
-            uno::Sequence< beans::PropertyValues > aHandlesPropSeq;
-            bool bPredefinedHandlesUsed = true;
-            const bool bIsDefaultObject(
-                IsDefaultObject(
-                    rSdrObjCustomShape,
-                    eShapeType));
-
-            // convert property "Equations" into std::vector< EnhancedCustomShapeEquationEquation >
-            std::vector< EnhancedCustomShapeEquation >  aEquations;
-            std::vector< sal_Int32 >                    aEquationOrder;
-            ConvertEnhancedCustomShapeEquation(
-                rSdrObjCustomShape,
-                aEquations,
-                aEquationOrder);
-
-            sal_Int32 i, nCount = aGeoPropSeq.getLength();
-            for ( i = 0; i < nCount; i++ )
+            if ( !bIsDefaultObject )
             {
-                const beans::PropertyValue& rProp = aGeoPropSeq[ i ];
-                if ( rProp.Name == sViewBox )
+                awt::Rectangle aViewBox;
+                if ( rProp.Value >>= aViewBox )
                 {
-                    if ( !bIsDefaultObject )
+                    AddOpt( DFF_Prop_geoLeft,  aViewBox.X );
+                    AddOpt( DFF_Prop_geoTop,   aViewBox.Y );
+                    AddOpt( DFF_Prop_geoRight, aViewBox.X + aViewBox.Width );
+                    AddOpt( DFF_Prop_geoBottom,aViewBox.Y + aViewBox.Height );
+                }
+            }
+        }
+        else if ( rProp.Name == sTextRotateAngle )
+        {
+            double f = 0;
+            if ( rProp.Value >>= f )
+            {
+                double fTextRotateAngle = fmod( f, 360.0 );
+                if ( fTextRotateAngle < 0 )
+                    fTextRotateAngle = 360 + fTextRotateAngle;
+                if ( ( fTextRotateAngle < 271.0 ) && ( fTextRotateAngle > 269.0 ) )
+                    AddOpt( DFF_Prop_cdirFont, mso_cdir90 );
+                else if ( ( fTextRotateAngle < 181.0 ) && ( fTextRotateAngle > 179.0 ) )
+                    AddOpt( DFF_Prop_cdirFont, mso_cdir180 );
+                else if ( ( fTextRotateAngle < 91.0 ) && ( fTextRotateAngle > 79.0 ) )
+                    AddOpt( DFF_Prop_cdirFont, mso_cdir270 );
+            }
+        }
+        else if ( rProp.Name == sExtrusion )
+        {
+            uno::Sequence< beans::PropertyValue > aExtrusionPropSeq;
+            if ( rProp.Value >>= aExtrusionPropSeq )
+            {
+                sal_uInt32 nLightFaceFlagsOrg, nLightFaceFlags;
+                sal_uInt32 nFillHarshFlagsOrg, nFillHarshFlags;
+                nLightFaceFlagsOrg = nLightFaceFlags = 0x000001;
+                nFillHarshFlagsOrg = nFillHarshFlags = 0x00001e;
+                if ( GetOpt( DFF_Prop_fc3DLightFace, nLightFaceFlags ) )
+                    nLightFaceFlagsOrg = nLightFaceFlags;
+                if ( GetOpt( DFF_Prop_fc3DFillHarsh, nFillHarshFlags ) )
+                    nFillHarshFlagsOrg = nFillHarshFlags;
+
+                sal_Int32 r, nrCount = aExtrusionPropSeq.getLength();
+                for ( r = 0; r < nrCount; r++ )
+                {
+                    const beans::PropertyValue& rrProp = aExtrusionPropSeq[ r ];
+                    const OUString sExtrusionBrightness            ( "Brightness"  );
+                    const OUString sExtrusionDepth                 ( "Depth"  );
+                    const OUString sExtrusionDiffusion             ( "Diffusion"  );
+                    const OUString sExtrusionNumberOfLineSegments  ( "NumberOfLineSegments"  );
+                    const OUString sExtrusionLightFace             ( "LightFace"  );
+                    const OUString sExtrusionFirstLightHarsh       ( "FirstLightHarsh"  );
+                    const OUString sExtrusionSecondLightHarsh      ( "SecondLightHarsh"  );
+                    const OUString sExtrusionFirstLightLevel       ( "FirstLightLevel"  );
+                    const OUString sExtrusionSecondLightLevel      ( "SecondLightLevel"  );
+                    const OUString sExtrusionFirstLightDirection   ( "FirstLightDirection"  );
+                    const OUString sExtrusionSecondLightDirection  ( "SecondLightDirection"  );
+                    const OUString sExtrusionMetal                 ( "Metal"  );
+                    const OUString sExtrusionShadeMode             ( "ShadeMode"  );
+                    const OUString sExtrusionRotateAngle           ( "RotateAngle"  );
+                    const OUString sExtrusionRotationCenter        ( "RotationCenter"  );
+                    const OUString sExtrusionShininess             ( "Shininess"  );
+                    const OUString sExtrusionSkew                  ( "Skew"  );
+                    const OUString sExtrusionSpecularity           ( "Specularity"  );
+                    const OUString sExtrusionProjectionMode        ( "ProjectionMode"  );
+                    const OUString sExtrusionViewPoint             ( "ViewPoint"  );
+                    const OUString sExtrusionOrigin                ( "Origin"  );
+                    const OUString sExtrusionColor                 ( "Color"  );
+
+                    if ( rrProp.Name == sExtrusion )
                     {
-                        awt::Rectangle aViewBox;
-                        if ( rProp.Value >>= aViewBox )
+                        bool bExtrusionOn;
+                        if ( rrProp.Value >>= bExtrusionOn )
                         {
-                            AddOpt( DFF_Prop_geoLeft,  aViewBox.X );
-                            AddOpt( DFF_Prop_geoTop,   aViewBox.Y );
-                            AddOpt( DFF_Prop_geoRight, aViewBox.X + aViewBox.Width );
-                            AddOpt( DFF_Prop_geoBottom,aViewBox.Y + aViewBox.Height );
+                            nLightFaceFlags |= 0x80000;
+                            if ( bExtrusionOn )
+                                nLightFaceFlags |= 8;
+                            else
+                                nLightFaceFlags &=~8;
                         }
                     }
-                }
-                else if ( rProp.Name == sTextRotateAngle )
-                {
-                    double f = 0;
-                    if ( rProp.Value >>= f )
+                    else if ( rrProp.Name == sExtrusionBrightness )
                     {
-                        double fTextRotateAngle = fmod( f, 360.0 );
-                        if ( fTextRotateAngle < 0 )
-                            fTextRotateAngle = 360 + fTextRotateAngle;
-                        if ( ( fTextRotateAngle < 271.0 ) && ( fTextRotateAngle > 269.0 ) )
-                            AddOpt( DFF_Prop_cdirFont, mso_cdir90 );
-                        else if ( ( fTextRotateAngle < 181.0 ) && ( fTextRotateAngle > 179.0 ) )
-                            AddOpt( DFF_Prop_cdirFont, mso_cdir180 );
-                        else if ( ( fTextRotateAngle < 91.0 ) && ( fTextRotateAngle > 79.0 ) )
-                            AddOpt( DFF_Prop_cdirFont, mso_cdir270 );
+                        double fExtrusionBrightness = 0;
+                        if ( rrProp.Value >>= fExtrusionBrightness )
+                            AddOpt( DFF_Prop_c3DAmbientIntensity, static_cast<sal_Int32>( fExtrusionBrightness * 655.36 ) );
                     }
-                }
-                else if ( rProp.Name == sExtrusion )
-                {
-                    uno::Sequence< beans::PropertyValue > aExtrusionPropSeq;
-                    if ( rProp.Value >>= aExtrusionPropSeq )
+                    else if ( rrProp.Name == sExtrusionDepth )
                     {
-                        sal_uInt32 nLightFaceFlagsOrg, nLightFaceFlags;
-                        sal_uInt32 nFillHarshFlagsOrg, nFillHarshFlags;
-                        nLightFaceFlagsOrg = nLightFaceFlags = 0x000001;
-                        nFillHarshFlagsOrg = nFillHarshFlags = 0x00001e;
-                        if ( GetOpt( DFF_Prop_fc3DLightFace, nLightFaceFlags ) )
-                            nLightFaceFlagsOrg = nLightFaceFlags;
-                        if ( GetOpt( DFF_Prop_fc3DFillHarsh, nFillHarshFlags ) )
-                            nFillHarshFlagsOrg = nFillHarshFlags;
-
-                        sal_Int32 r, nrCount = aExtrusionPropSeq.getLength();
-                        for ( r = 0; r < nrCount; r++ )
+                        double fDepth = 0;
+                        double fFraction = 0;
+                        drawing::EnhancedCustomShapeParameterPair aDepthParaPair;
+                        if ( ( rrProp.Value >>= aDepthParaPair ) && ( aDepthParaPair.First.Value >>= fDepth ) && ( aDepthParaPair.Second.Value >>= fFraction ) )
                         {
-                            const beans::PropertyValue& rrProp = aExtrusionPropSeq[ r ];
-                            const OUString sExtrusionBrightness            ( "Brightness"  );
-                            const OUString sExtrusionDepth                 ( "Depth"  );
-                            const OUString sExtrusionDiffusion             ( "Diffusion"  );
-                            const OUString sExtrusionNumberOfLineSegments  ( "NumberOfLineSegments"  );
-                            const OUString sExtrusionLightFace             ( "LightFace"  );
-                            const OUString sExtrusionFirstLightHarsh       ( "FirstLightHarsh"  );
-                            const OUString sExtrusionSecondLightHarsh      ( "SecondLightHarsh"  );
-                            const OUString sExtrusionFirstLightLevel       ( "FirstLightLevel"  );
-                            const OUString sExtrusionSecondLightLevel      ( "SecondLightLevel"  );
-                            const OUString sExtrusionFirstLightDirection   ( "FirstLightDirection"  );
-                            const OUString sExtrusionSecondLightDirection  ( "SecondLightDirection"  );
-                            const OUString sExtrusionMetal                 ( "Metal"  );
-                            const OUString sExtrusionShadeMode             ( "ShadeMode"  );
-                            const OUString sExtrusionRotateAngle           ( "RotateAngle"  );
-                            const OUString sExtrusionRotationCenter        ( "RotationCenter"  );
-                            const OUString sExtrusionShininess             ( "Shininess"  );
-                            const OUString sExtrusionSkew                  ( "Skew"  );
-                            const OUString sExtrusionSpecularity           ( "Specularity"  );
-                            const OUString sExtrusionProjectionMode        ( "ProjectionMode"  );
-                            const OUString sExtrusionViewPoint             ( "ViewPoint"  );
-                            const OUString sExtrusionOrigin                ( "Origin"  );
-                            const OUString sExtrusionColor                 ( "Color"  );
+                            double fForeDepth = fDepth * fFraction;
+                            double fBackDepth = fDepth - fForeDepth;
 
-                            if ( rrProp.Name == sExtrusion )
-                            {
-                                bool bExtrusionOn;
-                                if ( rrProp.Value >>= bExtrusionOn )
-                                {
-                                    nLightFaceFlags |= 0x80000;
-                                    if ( bExtrusionOn )
-                                        nLightFaceFlags |= 8;
-                                    else
-                                        nLightFaceFlags &=~8;
-                                }
-                            }
-                            else if ( rrProp.Name == sExtrusionBrightness )
-                            {
-                                double fExtrusionBrightness = 0;
-                                if ( rrProp.Value >>= fExtrusionBrightness )
-                                    AddOpt( DFF_Prop_c3DAmbientIntensity, static_cast<sal_Int32>( fExtrusionBrightness * 655.36 ) );
-                            }
-                            else if ( rrProp.Name == sExtrusionDepth )
-                            {
-                                double fDepth = 0;
-                                double fFraction = 0;
-                                drawing::EnhancedCustomShapeParameterPair aDepthParaPair;
-                                if ( ( rrProp.Value >>= aDepthParaPair ) && ( aDepthParaPair.First.Value >>= fDepth ) && ( aDepthParaPair.Second.Value >>= fFraction ) )
-                                {
-                                    double fForeDepth = fDepth * fFraction;
-                                    double fBackDepth = fDepth - fForeDepth;
+                            fBackDepth *= 360.0;
+                            AddOpt( DFF_Prop_c3DExtrudeBackward, static_cast<sal_Int32>(fBackDepth) );
 
-                                    fBackDepth *= 360.0;
-                                    AddOpt( DFF_Prop_c3DExtrudeBackward, static_cast<sal_Int32>(fBackDepth) );
-
-                                    if ( fForeDepth != 0.0 )
-                                    {
-                                        fForeDepth *= 360.0;
-                                        AddOpt( DFF_Prop_c3DExtrudeForward, static_cast<sal_Int32>(fForeDepth) );
-                                    }
-                                }
-                            }
-                            else if ( rrProp.Name == sExtrusionDiffusion )
+                            if ( fForeDepth != 0.0 )
                             {
-                                double fExtrusionDiffusion = 0;
-                                if ( rrProp.Value >>= fExtrusionDiffusion )
-                                    AddOpt( DFF_Prop_c3DDiffuseAmt, static_cast<sal_Int32>( fExtrusionDiffusion * 655.36 ) );
+                                fForeDepth *= 360.0;
+                                AddOpt( DFF_Prop_c3DExtrudeForward, static_cast<sal_Int32>(fForeDepth) );
                             }
-                            else if ( rrProp.Name == sExtrusionNumberOfLineSegments )
-                            {
-                                sal_Int32 nExtrusionNumberOfLineSegments = 0;
-                                if ( rrProp.Value >>= nExtrusionNumberOfLineSegments )
-                                    AddOpt( DFF_Prop_c3DTolerance, nExtrusionNumberOfLineSegments );
-                            }
-                            else if ( rrProp.Name == sExtrusionLightFace )
-                            {
-                                bool bExtrusionLightFace;
-                                if ( rrProp.Value >>= bExtrusionLightFace )
-                                {
-                                    nLightFaceFlags |= 0x10000;
-                                    if ( bExtrusionLightFace )
-                                        nLightFaceFlags |= 1;
-                                    else
-                                        nLightFaceFlags &=~1;
-                                }
-                            }
-                            else if ( rrProp.Name == sExtrusionFirstLightHarsh )
-                            {
-                                bool bExtrusionFirstLightHarsh;
-                                if ( rrProp.Value >>= bExtrusionFirstLightHarsh )
-                                {
-                                    nFillHarshFlags |= 0x20000;
-                                    if ( bExtrusionFirstLightHarsh )
-                                        nFillHarshFlags |= 2;
-                                    else
-                                        nFillHarshFlags &=~2;
-                                }
-                            }
-                            else if ( rrProp.Name == sExtrusionSecondLightHarsh )
-                            {
-                                bool bExtrusionSecondLightHarsh;
-                                if ( rrProp.Value >>= bExtrusionSecondLightHarsh )
-                                {
-                                    nFillHarshFlags |= 0x10000;
-                                    if ( bExtrusionSecondLightHarsh )
-                                        nFillHarshFlags |= 1;
-                                    else
-                                        nFillHarshFlags &=~1;
-                                }
-                            }
-                            else if ( rrProp.Name == sExtrusionFirstLightLevel )
-                            {
-                                double fExtrusionFirstLightLevel = 0;
-                                if ( rrProp.Value >>= fExtrusionFirstLightLevel )
-                                    AddOpt( DFF_Prop_c3DKeyIntensity, static_cast<sal_Int32>( fExtrusionFirstLightLevel * 655.36 ) );
-                            }
-                            else if ( rrProp.Name == sExtrusionSecondLightLevel )
-                            {
-                                double fExtrusionSecondLightLevel = 0;
-                                if ( rrProp.Value >>= fExtrusionSecondLightLevel )
-                                    AddOpt( DFF_Prop_c3DFillIntensity, static_cast<sal_Int32>( fExtrusionSecondLightLevel * 655.36 ) );
-                            }
-                            else if ( rrProp.Name == sExtrusionFirstLightDirection )
-                            {
-                                drawing::Direction3D aExtrusionFirstLightDirection;
-                                if ( rrProp.Value >>= aExtrusionFirstLightDirection )
-                                {
-                                    AddOpt( DFF_Prop_c3DKeyX, static_cast<sal_Int32>(aExtrusionFirstLightDirection.DirectionX)  );
-                                    AddOpt( DFF_Prop_c3DKeyY, static_cast<sal_Int32>(aExtrusionFirstLightDirection.DirectionY)  );
-                                    AddOpt( DFF_Prop_c3DKeyZ, static_cast<sal_Int32>(aExtrusionFirstLightDirection.DirectionZ)  );
-                                }
-                            }
-                            else if ( rrProp.Name == sExtrusionSecondLightDirection )
-                            {
-                                drawing::Direction3D aExtrusionSecondLightPosition;
-                                if ( rrProp.Value >>= aExtrusionSecondLightPosition )
-                                {
-                                    AddOpt( DFF_Prop_c3DFillX, static_cast<sal_Int32>(aExtrusionSecondLightPosition.DirectionX)  );
-                                    AddOpt( DFF_Prop_c3DFillY, static_cast<sal_Int32>(aExtrusionSecondLightPosition.DirectionY)  );
-                                    AddOpt( DFF_Prop_c3DFillZ, static_cast<sal_Int32>(aExtrusionSecondLightPosition.DirectionZ)  );
-                                }
-                            }
-                            else if ( rrProp.Name == sExtrusionMetal )
-                            {
-                                bool bExtrusionMetal;
-                                if ( rrProp.Value >>= bExtrusionMetal )
-                                {
-                                    nLightFaceFlags |= 0x40000;
-                                    if ( bExtrusionMetal )
-                                        nLightFaceFlags |= 4;
-                                    else
-                                        nLightFaceFlags &=~4;
-                                }
-                            }
-                            else if ( rrProp.Name == sExtrusionShadeMode )
-                            {
-                                drawing::ShadeMode eExtrusionShadeMode;
-                                if ( rrProp.Value >>= eExtrusionShadeMode )
-                                {
-                                    sal_uInt32 nRenderMode;
-                                    switch( eExtrusionShadeMode )
-                                    {
-                                        default:
-                                        case drawing::ShadeMode_FLAT :
-                                        case drawing::ShadeMode_PHONG :
-                                        case drawing::ShadeMode_SMOOTH :
-                                            nRenderMode = mso_FullRender;
-                                        break;
-                                        case drawing::ShadeMode_DRAFT :
-                                        {
-                                            nRenderMode = mso_Wireframe;
-                                        }
-                                        break;
-                                    }
-                                    AddOpt( DFF_Prop_c3DRenderMode, nRenderMode );
-                                }
-                            }
-                            else if ( rrProp.Name == sExtrusionRotateAngle )
-                            {
-                                double fExtrusionAngleX = 0;
-                                double fExtrusionAngleY = 0;
-                                drawing::EnhancedCustomShapeParameterPair aRotateAnglePair;
-                                if ( ( rrProp.Value >>= aRotateAnglePair ) && ( aRotateAnglePair.First.Value >>= fExtrusionAngleX ) && ( aRotateAnglePair.Second.Value >>= fExtrusionAngleY ) )
-                                {
-                                    fExtrusionAngleX *= 65536;
-                                    fExtrusionAngleY *= 65536;
-                                    AddOpt( DFF_Prop_c3DXRotationAngle, static_cast<sal_Int32>(fExtrusionAngleX) );
-                                    AddOpt( DFF_Prop_c3DYRotationAngle, static_cast<sal_Int32>(fExtrusionAngleY) );
-                                }
-                            }
-                            else if ( rrProp.Name == sExtrusionRotationCenter )
-                            {
-                                drawing::Direction3D aExtrusionRotationCenter;
-                                if ( rrProp.Value >>= aExtrusionRotationCenter )
-                                {
-                                    AddOpt( DFF_Prop_c3DRotationCenterX, static_cast<sal_Int32>( aExtrusionRotationCenter.DirectionX * 360.0 ) );
-                                    AddOpt( DFF_Prop_c3DRotationCenterY, static_cast<sal_Int32>( aExtrusionRotationCenter.DirectionY * 360.0 ) );
-                                    AddOpt( DFF_Prop_c3DRotationCenterZ, static_cast<sal_Int32>( aExtrusionRotationCenter.DirectionZ * 360.0 ) );
-                                    nFillHarshFlags &=~8; // don't use AutoRotationCenter;
-                                }
-                            }
-                            else if ( rrProp.Name == sExtrusionShininess )
-                            {
-                                double fExtrusionShininess = 0;
-                                if ( rrProp.Value >>= fExtrusionShininess )
-                                    AddOpt( DFF_Prop_c3DShininess, static_cast<sal_Int32>( fExtrusionShininess * 655.36 ) );
-                            }
-                            else if ( rrProp.Name == sExtrusionSkew )
-                            {
-                                double fSkewAmount = 0;
-                                double fSkewAngle = 0;
-                                drawing::EnhancedCustomShapeParameterPair aSkewParaPair;
-                                if ( ( rrProp.Value >>= aSkewParaPair ) && ( aSkewParaPair.First.Value >>= fSkewAmount ) && ( aSkewParaPair.Second.Value >>= fSkewAngle ) )
-                                {
-                                    AddOpt( DFF_Prop_c3DSkewAmount, static_cast<sal_Int32>(fSkewAmount) );
-                                    AddOpt( DFF_Prop_c3DSkewAngle, static_cast<sal_Int32>( fSkewAngle * 65536 ) );
-                                }
-                            }
-                            else if ( rrProp.Name == sExtrusionSpecularity )
-                            {
-                                double fExtrusionSpecularity = 0;
-                                if ( rrProp.Value >>= fExtrusionSpecularity )
-                                    AddOpt( DFF_Prop_c3DSpecularAmt, static_cast<sal_Int32>( fExtrusionSpecularity * 1333 ) );
-                            }
-                            else if ( rrProp.Name == sExtrusionProjectionMode )
-                            {
-                                drawing::ProjectionMode eExtrusionProjectionMode;
-                                if ( rrProp.Value >>= eExtrusionProjectionMode )
-                                {
-                                    nFillHarshFlags |= 0x40000;
-                                    if ( eExtrusionProjectionMode == drawing::ProjectionMode_PARALLEL )
-                                        nFillHarshFlags |= 4;
-                                    else
-                                        nFillHarshFlags &=~4;
-                                }
-                            }
-                            else if ( rrProp.Name == sExtrusionViewPoint )
-                            {
-                                drawing::Position3D aExtrusionViewPoint;
-                                if ( rrProp.Value >>= aExtrusionViewPoint )
-                                {
-                                    aExtrusionViewPoint.PositionX *= 360.0;
-                                    aExtrusionViewPoint.PositionY *= 360.0;
-                                    aExtrusionViewPoint.PositionZ *= 360.0;
-                                    AddOpt( DFF_Prop_c3DXViewpoint, static_cast<sal_Int32>(aExtrusionViewPoint.PositionX)  );
-                                    AddOpt( DFF_Prop_c3DYViewpoint, static_cast<sal_Int32>(aExtrusionViewPoint.PositionY)  );
-                                    AddOpt( DFF_Prop_c3DZViewpoint, static_cast<sal_Int32>(aExtrusionViewPoint.PositionZ)  );
-                                }
-                            }
-                            else if ( rrProp.Name == sExtrusionOrigin )
-                            {
-                                double fExtrusionOriginX = 0;
-                                double fExtrusionOriginY = 0;
-                                drawing::EnhancedCustomShapeParameterPair aOriginPair;
-                                if ( ( rrProp.Value >>= aOriginPair ) && ( aOriginPair.First.Value >>= fExtrusionOriginX ) && ( aOriginPair.Second.Value >>= fExtrusionOriginY ) )
-                                {
-                                    AddOpt( DFF_Prop_c3DOriginX, static_cast<sal_Int32>( fExtrusionOriginX * 65536 ) );
-                                    AddOpt( DFF_Prop_c3DOriginY, static_cast<sal_Int32>( fExtrusionOriginY * 65536 ) );
-                                }
-                            }
-                            else if ( rrProp.Name == sExtrusionColor )
-                            {
-                                bool bExtrusionColor;
-                                if ( rrProp.Value >>= bExtrusionColor )
-                                {
-                                    nLightFaceFlags |= 0x20000;
-                                    if ( bExtrusionColor )
-                                    {
-                                        nLightFaceFlags |= 2;
-                                        uno::Any aFillColor2;
-                                        if ( EscherPropertyValueHelper::GetPropertyValue( aFillColor2, aXPropSet, "FillColor2", true ) )
-                                        {
-                                            sal_uInt32 nFillColor = ImplGetColor( *o3tl::doAccess<sal_uInt32>(aFillColor2) );
-                                            AddOpt( DFF_Prop_c3DExtrusionColor, nFillColor );
-                                        }
-                                    }
-                                    else
-                                        nLightFaceFlags &=~2;
-                                }
-                            }
-                        }
-                        if ( nLightFaceFlags != nLightFaceFlagsOrg )
-                            AddOpt( DFF_Prop_fc3DLightFace, nLightFaceFlags );
-                        if ( nFillHarshFlags != nFillHarshFlagsOrg )
-                            AddOpt( DFF_Prop_fc3DFillHarsh, nFillHarshFlags );
-                    }
-                }
-                else if ( rProp.Name == sEquations )
-                {
-                    if ( !bIsDefaultObject )
-                    {
-                        sal_uInt16 nElements = static_cast<sal_uInt16>(aEquations.size());
-                        if ( nElements )
-                        {
-                            sal_uInt16 nElementSize = 8;
-                            sal_uInt32 nStreamSize = nElementSize * nElements + 6;
-                            SvMemoryStream aMemStrm( nStreamSize );
-                            aMemStrm.WriteUInt16( nElements )
-                               .WriteUInt16( nElements )
-                               .WriteUInt16( nElementSize );
-
-                            for (auto const& equation : aEquations)
-                            {
-                                aMemStrm.WriteUInt16( equation.nOperation )
-                                    .WriteInt16(
-                                        std::clamp(
-                                            equation.nPara[ 0 ], sal_Int32(SAL_MIN_INT16),
-                                            sal_Int32(SAL_MAX_INT16)) )
-                                    .WriteInt16(
-                                        std::clamp(
-                                            equation.nPara[ 1 ], sal_Int32(SAL_MIN_INT16),
-                                            sal_Int32(SAL_MAX_INT16)) )
-                                    .WriteInt16(
-                                        std::clamp(
-                                            equation.nPara[ 2 ], sal_Int32(SAL_MIN_INT16),
-                                            sal_Int32(SAL_MAX_INT16)) );
-                            }
-
-                            AddOpt(DFF_Prop_pFormulas, true, 6, aMemStrm);
-                        }
-                        else
-                        {
-                            AddOpt(DFF_Prop_pFormulas, 0, true);
                         }
                     }
-                }
-                else if ( rProp.Name == sPath )
-                {
-                    uno::Sequence< beans::PropertyValue > aPathPropSeq;
-                    if ( rProp.Value >>= aPathPropSeq )
+                    else if ( rrProp.Name == sExtrusionDiffusion )
                     {
-                        sal_uInt32 nPathFlags, nPathFlagsOrg;
-                        nPathFlagsOrg = nPathFlags = 0x39;
-                        if ( GetOpt( DFF_Prop_fFillOK, nPathFlags ) )
-                            nPathFlagsOrg = nPathFlags;
-
-                        sal_Int32 r, nrCount = aPathPropSeq.getLength();
-                        for ( r = 0; r < nrCount; r++ )
-                        {
-                            const beans::PropertyValue& rrProp = aPathPropSeq[ r ];
-                            const OUString sPathExtrusionAllowed               ( "ExtrusionAllowed"  );
-                            const OUString sPathConcentricGradientFillAllowed  ( "ConcentricGradientFillAllowed"  );
-                            const OUString sPathTextPathAllowed                ( "TextPathAllowed"  );
-                            const OUString sPathCoordinates                    ( "Coordinates"  );
-                            const OUString sPathGluePoints                     ( "GluePoints"  );
-                            const OUString sPathGluePointType                  ( "GluePointType"  );
-                            const OUString sPathSegments                       ( "Segments"  );
-                            const OUString sPathStretchX                       ( "StretchX"  );
-                            const OUString sPathStretchY                       ( "StretchY"  );
-                            const OUString sPathTextFrames                     ( "TextFrames"  );
-
-                            if ( rrProp.Name == sPathExtrusionAllowed )
-                            {
-                                bool bExtrusionAllowed;
-                                if ( rrProp.Value >>= bExtrusionAllowed )
-                                {
-                                    nPathFlags |= 0x100000;
-                                    if ( bExtrusionAllowed )
-                                        nPathFlags |= 16;
-                                    else
-                                        nPathFlags &=~16;
-                                }
-                            }
-                            else if ( rrProp.Name == sPathConcentricGradientFillAllowed )
-                            {
-                                bool bConcentricGradientFillAllowed;
-                                if ( rrProp.Value >>= bConcentricGradientFillAllowed )
-                                {
-                                    nPathFlags |= 0x20000;
-                                    if ( bConcentricGradientFillAllowed )
-                                        nPathFlags |= 2;
-                                    else
-                                        nPathFlags &=~2;
-                                }
-                            }
-                            else if ( rrProp.Name == sPathTextPathAllowed )
-                            {
-                                bool bTextPathAllowed;
-                                if ( rrProp.Value >>= bTextPathAllowed )
-                                {
-                                    nPathFlags |= 0x40000;
-                                    if ( bTextPathAllowed )
-                                        nPathFlags |= 4;
-                                    else
-                                        nPathFlags &=~4;
-                                }
-                            }
-                            else if ( rrProp.Name == sPathCoordinates )
-                            {
-                                if ( !bIsDefaultObject )
-                                {
-                                    aPathCoordinatesProp = rrProp.Value;
-                                    bPathCoordinatesProp = true;
-                                }
-                            }
-                            else if ( rrProp.Name == sPathGluePoints )
-                            {
-                                if ( !bIsDefaultObject )
-                                {
-                                    uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aGluePoints;
-                                    if ( rrProp.Value >>= aGluePoints )
-                                    {
-                                        // creating the vertices
-                                        sal_uInt16 nElements = static_cast<sal_uInt16>(aGluePoints.getLength());
-                                        if ( nElements )
-                                        {
-                                            sal_uInt16 j, nElementSize = 8;
-                                            sal_uInt32 nStreamSize = nElementSize * nElements + 6;
-                                            SvMemoryStream aMemStrm( nStreamSize );
-                                            aMemStrm.WriteUInt16( nElements )
-                                               .WriteUInt16( nElements )
-                                               .WriteUInt16( nElementSize );
-                                            for( j = 0; j < nElements; j++ )
-                                            {
-                                                sal_Int32 X = GetValueForEnhancedCustomShapeParameter( aGluePoints[ j ].First, aEquationOrder );
-                                                sal_Int32 Y = GetValueForEnhancedCustomShapeParameter( aGluePoints[ j ].Second, aEquationOrder );
-                                                aMemStrm.WriteInt32( X )
-                                                   .WriteInt32( Y );
-                                            }
-
-                                            AddOpt(DFF_Prop_connectorPoints, true, 6, aMemStrm);   // -6
-                                        }
-                                        else
-                                        {
-                                            AddOpt(DFF_Prop_connectorPoints, 0, true);
-                                        }
-                                    }
-                                }
-                            }
-                            else if ( rrProp.Name == sPathGluePointType )
-                            {
-                                sal_Int16 nGluePointType = sal_Int16();
-                                if ( rrProp.Value >>= nGluePointType )
-                                    AddOpt( DFF_Prop_connectorType, static_cast<sal_uInt16>(nGluePointType) );
-                            }
-                            else if ( rrProp.Name == sPathSegments )
-                            {
-                                if ( !bIsDefaultObject )
-                                {
-                                    uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
-                                    if ( rrProp.Value >>= aSegments )
-                                    {
-                                        // creating seginfo
-                                        if ( aSegments.hasElements() )
-                                        {
-                                            sal_uInt16 j, nElements = static_cast<sal_uInt16>(aSegments.getLength());
-                                            sal_uInt16 nElementSize = 2;
-                                            sal_uInt32 nStreamSize = nElementSize * nElements + 6;
-                                            SvMemoryStream aMemStrm( nStreamSize );
-                                            aMemStrm.WriteUInt16( nElements )
-                                               .WriteUInt16( nElements )
-                                               .WriteUInt16( nElementSize );
-                                            for ( j = 0; j < nElements; j++ )
-                                            {
-                                                // The segment type is stored in the upper 3 bits
-                                                // and segment count is stored in the lower 13
-                                                // bits.
-                                                //
-                                                // If the segment type is msopathEscape, the lower 13 bits
-                                                // are divided in a 5 bit escape code and 8 bit
-                                                // vertex count (not segment count!)
-                                                sal_uInt16 nVal = static_cast<sal_uInt16>(aSegments[ j ].Count);
-                                                switch( aSegments[ j ].Command )
-                                                {
-                                                    case drawing::EnhancedCustomShapeSegmentCommand::UNKNOWN :
-                                                    case drawing::EnhancedCustomShapeSegmentCommand::LINETO :
-                                                        break;
-                                                    case drawing::EnhancedCustomShapeSegmentCommand::MOVETO :
-                                                        nVal = (msopathMoveTo << 13);
-                                                        break;
-                                                    case drawing::EnhancedCustomShapeSegmentCommand::CURVETO :
-                                                    {
-                                                        nVal |= (msopathCurveTo << 13);
-                                                    }
-                                                    break;
-                                                    case drawing::EnhancedCustomShapeSegmentCommand::CLOSESUBPATH :
-                                                    {
-                                                        nVal = 1;
-                                                        nVal |= (msopathClose << 13);
-                                                    }
-                                                    break;
-                                                    case drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH :
-                                                    {
-                                                        nVal = (msopathEnd << 13);
-                                                    }
-                                                    break;
-                                                    case drawing::EnhancedCustomShapeSegmentCommand::NOFILL :
-                                                    {
-                                                        nVal = (msopathEscape << 13) | (10 << 8);
-                                                    }
-                                                    break;
-                                                    case drawing::EnhancedCustomShapeSegmentCommand::NOSTROKE :
-                                                    {
-                                                        nVal = (msopathEscape << 13) | (11 << 8);
-                                                    }
-                                                    break;
-                                                    case drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSETO :
-                                                    {
-                                                        nVal *= 3;
-                                                        nVal |= (msopathEscape << 13) | (1 << 8);
-                                                    }
-                                                    break;
-                                                    case drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSE :
-                                                    {
-                                                        nVal *= 3;
-                                                        nVal |= (msopathEscape << 13) | (2 << 8);
-                                                    }
-                                                    break;
-                                                    case drawing::EnhancedCustomShapeSegmentCommand::ARCTO :
-                                                    {
-                                                        nVal <<= 2;
-                                                        nVal |= (msopathEscape << 13) | (3 << 8);
-                                                    }
-                                                    break;
-                                                    case drawing::EnhancedCustomShapeSegmentCommand::ARC :
-                                                    {
-                                                        nVal <<= 2;
-                                                        nVal |= (msopathEscape << 13) | (4 << 8);
-                                                    }
-                                                    break;
-                                                    case drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO :
-                                                    {
-                                                        nVal <<= 2;
-                                                        nVal |= (msopathEscape << 13) | (5 << 8);
-                                                    }
-                                                    break;
-                                                    case drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARC :
-                                                    {
-                                                        nVal <<= 2;
-                                                        nVal |= (msopathEscape << 13) | (6 << 8);
-                                                    }
-                                                    break;
-                                                    case drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTX :
-                                                    {
-                                                        nVal |= (msopathEscape << 13) | (7 << 8);
-                                                    }
-                                                    break;
-                                                    case drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTY :
-                                                    {
-                                                        nVal |= (msopathEscape << 13) | (8 << 8);
-                                                    }
-                                                    break;
-                                                }
-                                                aMemStrm.WriteUInt16( nVal );
-                                            }
-
-                                            AddOpt(DFF_Prop_pSegmentInfo, false, 6, aMemStrm);
-                                        }
-                                        else
-                                        {
-                                            AddOpt(DFF_Prop_pSegmentInfo, 0, true);
-                                        }
-                                    }
-                                }
-                            }
-                            else if ( rrProp.Name == sPathStretchX )
-                            {
-                                if ( !bIsDefaultObject )
-                                {
-                                    sal_Int32 nStretchX = 0;
-                                    if ( rrProp.Value >>= nStretchX )
-                                        AddOpt( DFF_Prop_stretchPointX, nStretchX );
-                                }
-                            }
-                            else if ( rrProp.Name == sPathStretchY )
-                            {
-                                if ( !bIsDefaultObject )
-                                {
-                                    sal_Int32 nStretchY = 0;
-                                    if ( rrProp.Value >>= nStretchY )
-                                        AddOpt( DFF_Prop_stretchPointY, nStretchY );
-                                }
-                            }
-                            else if ( rrProp.Name == sPathTextFrames )
-                            {
-                                if ( !bIsDefaultObject )
-                                {
-                                    uno::Sequence<drawing::EnhancedCustomShapeTextFrame> aPathTextFrames;
-                                    if ( rrProp.Value >>= aPathTextFrames )
-                                    {
-                                        if ( aPathTextFrames.hasElements() )
-                                        {
-                                            sal_uInt16 j, nElements = static_cast<sal_uInt16>(aPathTextFrames.getLength());
-                                            sal_uInt16 nElementSize = 16;
-                                            sal_uInt32 nStreamSize = nElementSize * nElements + 6;
-                                            SvMemoryStream aMemStrm( nStreamSize );
-                                            aMemStrm.WriteUInt16( nElements )
-                                               .WriteUInt16( nElements )
-                                               .WriteUInt16( nElementSize );
-                                            for ( j = 0; j < nElements; j++ )
-                                            {
-                                                sal_Int32 nLeft = GetValueForEnhancedCustomShapeParameter( aPathTextFrames[ j ].TopLeft.First, aEquationOrder );
-                                                sal_Int32 nTop  = GetValueForEnhancedCustomShapeParameter( aPathTextFrames[ j ].TopLeft.Second, aEquationOrder );
-                                                sal_Int32 nRight = GetValueForEnhancedCustomShapeParameter( aPathTextFrames[ j ].BottomRight.First, aEquationOrder );
-                                                sal_Int32 nBottom = GetValueForEnhancedCustomShapeParameter( aPathTextFrames[ j ].BottomRight.Second, aEquationOrder );
-
-                                                aMemStrm.WriteInt32( nLeft )
-                                                   .WriteInt32( nTop )
-                                                   .WriteInt32( nRight )
-                                                   .WriteInt32( nBottom );
-                                            }
-
-                                            AddOpt(DFF_Prop_textRectangles, true, 6, aMemStrm);
-                                        }
-                                        else
-                                        {
-                                            AddOpt(DFF_Prop_textRectangles, 0, true);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        if ( nPathFlags != nPathFlagsOrg )
-                            AddOpt( DFF_Prop_fFillOK, nPathFlags );
+                        double fExtrusionDiffusion = 0;
+                        if ( rrProp.Value >>= fExtrusionDiffusion )
+                            AddOpt( DFF_Prop_c3DDiffuseAmt, static_cast<sal_Int32>( fExtrusionDiffusion * 655.36 ) );
                     }
-                }
-                else if ( rProp.Name == sTextPath )
-                {
-                    uno::Sequence< beans::PropertyValue > aTextPathPropSeq;
-                    if ( rProp.Value >>= aTextPathPropSeq )
+                    else if ( rrProp.Name == sExtrusionNumberOfLineSegments )
                     {
-                        sal_uInt32 nTextPathFlagsOrg, nTextPathFlags;
-                        nTextPathFlagsOrg = nTextPathFlags = 0xffff1000;        // default
-                        if ( GetOpt( DFF_Prop_gtextFStrikethrough, nTextPathFlags ) )
-                            nTextPathFlagsOrg = nTextPathFlags;
-
-                        sal_Int32 r, nrCount = aTextPathPropSeq.getLength();
-                        for ( r = 0; r < nrCount; r++ )
+                        sal_Int32 nExtrusionNumberOfLineSegments = 0;
+                        if ( rrProp.Value >>= nExtrusionNumberOfLineSegments )
+                            AddOpt( DFF_Prop_c3DTolerance, nExtrusionNumberOfLineSegments );
+                    }
+                    else if ( rrProp.Name == sExtrusionLightFace )
+                    {
+                        bool bExtrusionLightFace;
+                        if ( rrProp.Value >>= bExtrusionLightFace )
                         {
-                            const beans::PropertyValue& rrProp = aTextPathPropSeq[ r ];
-                            const OUString sTextPathMode       ( "TextPathMode"  );
-                            const OUString sTextPathScaleX     ( "ScaleX"  );
-                            const OUString sSameLetterHeights  ( "SameLetterHeights"  );
-
-                            if ( rrProp.Name == sTextPath )
-                            {
-                                bool bTextPathOn;
-                                if ( rrProp.Value >>= bTextPathOn )
-                                {
-                                    nTextPathFlags |= 0x40000000;
-                                    if ( bTextPathOn )
-                                    {
-                                        nTextPathFlags |= 0x4000;
-
-                                        sal_uInt32 nPathFlags = 0x39;
-                                        GetOpt( DFF_Prop_fFillOK, nPathFlags ); // SJ: can be removed if we are supporting the TextPathAllowed property in XML
-                                        nPathFlags |= 0x40004;
-                                        AddOpt( DFF_Prop_fFillOK, nPathFlags );
-                                    }
-                                    else
-                                        nTextPathFlags &=~0x4000;
-                                }
-                            }
-                            else if ( rrProp.Name == sTextPathMode )
-                            {
-                                drawing::EnhancedCustomShapeTextPathMode eTextPathMode;
-                                if ( rrProp.Value >>= eTextPathMode )
-                                {
-                                    nTextPathFlags |= 0x05000000;
-                                    nTextPathFlags &=~0x500;    // TextPathMode_NORMAL
-                                    if ( eTextPathMode == drawing::EnhancedCustomShapeTextPathMode_PATH )
-                                        nTextPathFlags |= 0x100;
-                                    else if ( eTextPathMode == drawing::EnhancedCustomShapeTextPathMode_SHAPE )
-                                        nTextPathFlags |= 0x500;
-                                }
-                            }
-                            else if ( rrProp.Name == sTextPathScaleX )
-                            {
-                                bool bTextPathScaleX;
-                                if ( rrProp.Value >>= bTextPathScaleX )
-                                {
-                                    nTextPathFlags |= 0x00400000;
-                                    if ( bTextPathScaleX )
-                                        nTextPathFlags |= 0x40;
-                                    else
-                                        nTextPathFlags &=~0x40;
-                                }
-                            }
-                            else if ( rrProp.Name == sSameLetterHeights )
-                            {
-                                bool bSameLetterHeights;
-                                if ( rrProp.Value >>= bSameLetterHeights )
-                                {
-                                    nTextPathFlags |= 0x00800000;
-                                    if ( bSameLetterHeights )
-                                        nTextPathFlags |= 0x80;
-                                    else
-                                        nTextPathFlags &=~0x80;
-                                }
-                            }
+                            nLightFaceFlags |= 0x10000;
+                            if ( bExtrusionLightFace )
+                                nLightFaceFlags |= 1;
+                            else
+                                nLightFaceFlags &=~1;
                         }
-                        if ( nTextPathFlags & 0x4000 )      // Is FontWork ?
+                    }
+                    else if ( rrProp.Name == sExtrusionFirstLightHarsh )
+                    {
+                        bool bExtrusionFirstLightHarsh;
+                        if ( rrProp.Value >>= bExtrusionFirstLightHarsh )
                         {
-                            // FontWork Text
-                            OUString aText;
-                            uno::Reference< text::XSimpleText > xText( rXShape, uno::UNO_QUERY );
-                            if ( xText.is() )
-                                aText = xText->getString();
-                            if ( aText.isEmpty() )
-                                aText = "your text";   // TODO: moving into a resource
-                            AddOpt( DFF_Prop_gtextUNICODE, aText );
-
-                            // FontWork Font
-                            OUString aFontName;
-                            const OUString sCharFontName( "CharFontName"  );
-                            uno::Any aAny = aXPropSet->getPropertyValue( sCharFontName );
-                            aAny >>= aFontName;
-                            if ( aFontName.isEmpty() )
-                                aFontName = "Arial Black";
-                            AddOpt( DFF_Prop_gtextFont, aFontName );
-
-                            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "CharScaleWidth", true ) )
+                            nFillHarshFlags |= 0x20000;
+                            if ( bExtrusionFirstLightHarsh )
+                                nFillHarshFlags |= 2;
+                            else
+                                nFillHarshFlags &=~2;
+                        }
+                    }
+                    else if ( rrProp.Name == sExtrusionSecondLightHarsh )
+                    {
+                        bool bExtrusionSecondLightHarsh;
+                        if ( rrProp.Value >>= bExtrusionSecondLightHarsh )
+                        {
+                            nFillHarshFlags |= 0x10000;
+                            if ( bExtrusionSecondLightHarsh )
+                                nFillHarshFlags |= 1;
+                            else
+                                nFillHarshFlags &=~1;
+                        }
+                    }
+                    else if ( rrProp.Name == sExtrusionFirstLightLevel )
+                    {
+                        double fExtrusionFirstLightLevel = 0;
+                        if ( rrProp.Value >>= fExtrusionFirstLightLevel )
+                            AddOpt( DFF_Prop_c3DKeyIntensity, static_cast<sal_Int32>( fExtrusionFirstLightLevel * 655.36 ) );
+                    }
+                    else if ( rrProp.Name == sExtrusionSecondLightLevel )
+                    {
+                        double fExtrusionSecondLightLevel = 0;
+                        if ( rrProp.Value >>= fExtrusionSecondLightLevel )
+                            AddOpt( DFF_Prop_c3DFillIntensity, static_cast<sal_Int32>( fExtrusionSecondLightLevel * 655.36 ) );
+                    }
+                    else if ( rrProp.Name == sExtrusionFirstLightDirection )
+                    {
+                        drawing::Direction3D aExtrusionFirstLightDirection;
+                        if ( rrProp.Value >>= aExtrusionFirstLightDirection )
+                        {
+                            AddOpt( DFF_Prop_c3DKeyX, static_cast<sal_Int32>(aExtrusionFirstLightDirection.DirectionX)  );
+                            AddOpt( DFF_Prop_c3DKeyY, static_cast<sal_Int32>(aExtrusionFirstLightDirection.DirectionY)  );
+                            AddOpt( DFF_Prop_c3DKeyZ, static_cast<sal_Int32>(aExtrusionFirstLightDirection.DirectionZ)  );
+                        }
+                    }
+                    else if ( rrProp.Name == sExtrusionSecondLightDirection )
+                    {
+                        drawing::Direction3D aExtrusionSecondLightPosition;
+                        if ( rrProp.Value >>= aExtrusionSecondLightPosition )
+                        {
+                            AddOpt( DFF_Prop_c3DFillX, static_cast<sal_Int32>(aExtrusionSecondLightPosition.DirectionX)  );
+                            AddOpt( DFF_Prop_c3DFillY, static_cast<sal_Int32>(aExtrusionSecondLightPosition.DirectionY)  );
+                            AddOpt( DFF_Prop_c3DFillZ, static_cast<sal_Int32>(aExtrusionSecondLightPosition.DirectionZ)  );
+                        }
+                    }
+                    else if ( rrProp.Name == sExtrusionMetal )
+                    {
+                        bool bExtrusionMetal;
+                        if ( rrProp.Value >>= bExtrusionMetal )
+                        {
+                            nLightFaceFlags |= 0x40000;
+                            if ( bExtrusionMetal )
+                                nLightFaceFlags |= 4;
+                            else
+                                nLightFaceFlags &=~4;
+                        }
+                    }
+                    else if ( rrProp.Name == sExtrusionShadeMode )
+                    {
+                        drawing::ShadeMode eExtrusionShadeMode;
+                        if ( rrProp.Value >>= eExtrusionShadeMode )
+                        {
+                            sal_uInt32 nRenderMode;
+                            switch( eExtrusionShadeMode )
                             {
-                                sal_Int16 nCharScaleWidth = 100;
-                                if ( aAny >>= nCharScaleWidth )
-                                {
-                                    if ( nCharScaleWidth != 100 )
-                                    {
-                                        sal_Int32 nVal = nCharScaleWidth * 655;
-                                        AddOpt( DFF_Prop_gtextSpacing, nVal );
-                                    }
-                                }
-                            }
-                            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "CharHeight", true ) )
-                            {
-                                float fCharHeight = 0.0;
-                                if ( aAny >>= fCharHeight )
-                                {
-                                    sal_Int32 nTextSize = static_cast< sal_Int32 > ( fCharHeight * 65536 );
-                                    AddOpt(ESCHER_Prop_gtextSize, nTextSize);
-                                }
-                            }
-                            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "CharKerning", true ) )
-                            {
-                                sal_Int16 nCharKerning = sal_Int16();
-                                if ( aAny >>= nCharKerning )
-                                {
-                                    nTextPathFlags |= 0x10000000;
-                                    if ( nCharKerning )
-                                        nTextPathFlags |= 0x1000;
-                                    else
-                                        nTextPathFlags &=~0x1000;
-                                }
-                            }
-                            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "CharPosture", true ) )
-                            {
-                                awt::FontSlant eFontSlant;
-                                if ( aAny >>= eFontSlant )
-                                {
-                                    nTextPathFlags |= 0x100010;
-                                    if ( eFontSlant != awt::FontSlant_NONE )
-                                        nTextPathFlags |= 0x10;
-                                    else
-                                        nTextPathFlags &=~0x10;
-                                }
-                            }
-                            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "CharWeight", true ) )
-                            {
-                                float fFontWidth = 0;
-                                if ( aAny >>= fFontWidth )
-                                {
-                                    nTextPathFlags |= 0x200020;
-                                    if ( fFontWidth > awt::FontWeight::NORMAL )
-                                        nTextPathFlags |= 0x20;
-                                    else
-                                        nTextPathFlags &=~0x20;
-                                }
-                            }
-                            // export gTextAlign attr
-                            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "TextHorizontalAdjust", true ) )
-                            {
-                                MSO_GeoTextAlign  gTextAlign = mso_alignTextCenter;
-                                drawing::TextHorizontalAdjust   eHA( drawing::TextHorizontalAdjust_LEFT );
-                                aAny >>= eHA;
-                                switch( eHA )
-                                {
-                                case drawing::TextHorizontalAdjust_LEFT :
-                                    gTextAlign = mso_alignTextLeft;
-                                    break;
-                                case drawing::TextHorizontalAdjust_CENTER:
-                                    gTextAlign = mso_alignTextCenter;
-                                    break;
-                                case drawing::TextHorizontalAdjust_RIGHT:
-                                    gTextAlign = mso_alignTextRight;
-                                    break;
-                                case drawing::TextHorizontalAdjust_BLOCK:
-                                    {
-                                        drawing::TextFitToSizeType const eFTS(
-                                            rSdrObjCustomShape.GetMergedItem( SDRATTR_TEXT_FITTOSIZE ).GetValue() );
-                                        if (eFTS == drawing::TextFitToSizeType_ALLLINES ||
-                                            eFTS == drawing::TextFitToSizeType_PROPORTIONAL)
-                                        {
-                                            gTextAlign = mso_alignTextStretch;
-                                        }
-                                        else
-                                        {
-                                            gTextAlign = mso_alignTextWordJust;
-                                        }
-                                        break;
-                                    }
                                 default:
-                                    break;
-                                }
-                                AddOpt(DFF_Prop_gtextAlign,gTextAlign);
-                            }
-                        }
-                        if((nTextPathFlags & 0x4000) != 0)  // Is Font work
-                        {
-                            OutlinerParaObject* pOutlinerParaObject(rSdrObjCustomShape.GetOutlinerParaObject());
-                            if ( pOutlinerParaObject && pOutlinerParaObject->IsVertical() )
-                                nTextPathFlags |= 0x2000;
-                        }
-
-                        // Use gtextFStretch for Watermark like MSO does
-                        nTextPathFlags |= use_gtextFBestFit | gtextFBestFit
-                                        | use_gtextFStretch | gtextFStretch
-                                        | use_gtextFShrinkFit | gtextFShrinkFit;
-
-                        if ( nTextPathFlags != nTextPathFlagsOrg )
-                            AddOpt( DFF_Prop_gtextFStrikethrough, nTextPathFlags );
-                    }
-                }
-                else if ( rProp.Name == sHandles )
-                {
-                    if ( !bIsDefaultObject )
-                    {
-                        bPredefinedHandlesUsed = false;
-                        if ( rProp.Value >>= aHandlesPropSeq )
-                        {
-                            sal_uInt16 nElements = static_cast<sal_uInt16>(aHandlesPropSeq.getLength());
-                            if ( nElements )
-                            {
-                                sal_uInt16 k, nElementSize = 36;
-                                sal_uInt32 nStreamSize = nElementSize * nElements + 6;
-                                SvMemoryStream aMemStrm( nStreamSize );
-                                aMemStrm.WriteUInt16( nElements )
-                                   .WriteUInt16( nElements )
-                                   .WriteUInt16( nElementSize );
-
-                                for ( k = 0; k < nElements; k++ )
+                                case drawing::ShadeMode_FLAT :
+                                case drawing::ShadeMode_PHONG :
+                                case drawing::ShadeMode_SMOOTH :
+                                    nRenderMode = mso_FullRender;
+                                break;
+                                case drawing::ShadeMode_DRAFT :
                                 {
-                                    sal_uInt32 nFlags = 0;
-                                    sal_Int32 nXPosition = 0;
-                                    sal_Int32 nYPosition = 0;
-                                    sal_Int32 nXMap = 0;
-                                    sal_Int32 nYMap = 0;
-                                    sal_Int32 nXRangeMin = 0x80000000;
-                                    sal_Int32 nXRangeMax = 0x7fffffff;
-                                    sal_Int32 nYRangeMin = 0x80000000;
-                                    sal_Int32 nYRangeMax = 0x7fffffff;
-
-                                    const uno::Sequence< beans::PropertyValue >& rPropSeq = aHandlesPropSeq[ k ];
-                                    for ( const beans::PropertyValue& rPropVal: rPropSeq )
-                                    {
-                                        const OUString sPosition           ( "Position"  );
-                                        const OUString sMirroredX          ( "MirroredX"  );
-                                        const OUString sMirroredY          ( "MirroredY"  );
-                                        const OUString sSwitched           ( "Switched"  );
-                                        const OUString sPolar              ( "Polar"  );
-                                        const OUString sRadiusRangeMinimum ( "RadiusRangeMinimum"  );
-                                        const OUString sRadiusRangeMaximum ( "RadiusRangeMaximum"  );
-                                        const OUString sRangeXMinimum      ( "RangeXMinimum"  );
-                                        const OUString sRangeXMaximum      ( "RangeXMaximum"  );
-                                        const OUString sRangeYMinimum      ( "RangeYMinimum"  );
-                                        const OUString sRangeYMaximum      ( "RangeYMaximum"  );
-
-                                        if ( rPropVal.Name == sPosition )
-                                        {
-                                            drawing::EnhancedCustomShapeParameterPair aPosition;
-                                            if ( rPropVal.Value >>= aPosition )
-                                            {
-                                                GetValueForEnhancedCustomShapeHandleParameter( nXPosition, aPosition.First );
-                                                GetValueForEnhancedCustomShapeHandleParameter( nYPosition, aPosition.Second );
-                                            }
-                                        }
-                                        else if ( rPropVal.Name == sMirroredX )
-                                        {
-                                            bool bMirroredX;
-                                            if ( rPropVal.Value >>= bMirroredX )
-                                            {
-                                                if ( bMirroredX )
-                                                    nFlags |= 1;
-                                            }
-                                        }
-                                        else if ( rPropVal.Name == sMirroredY )
-                                        {
-                                            bool bMirroredY;
-                                            if ( rPropVal.Value >>= bMirroredY )
-                                            {
-                                                if ( bMirroredY )
-                                                    nFlags |= 2;
-                                            }
-                                        }
-                                        else if ( rPropVal.Name == sSwitched )
-                                        {
-                                            bool bSwitched;
-                                            if ( rPropVal.Value >>= bSwitched )
-                                            {
-                                                if ( bSwitched )
-                                                    nFlags |= 4;
-                                            }
-                                        }
-                                        else if ( rPropVal.Name == sPolar )
-                                        {
-                                            drawing::EnhancedCustomShapeParameterPair aPolar;
-                                            if ( rPropVal.Value >>= aPolar )
-                                            {
-                                                if ( GetValueForEnhancedCustomShapeHandleParameter( nXMap, aPolar.First ) )
-                                                    nFlags |= 0x800;
-                                                if ( GetValueForEnhancedCustomShapeHandleParameter( nYMap, aPolar.Second ) )
-                                                    nFlags |= 0x1000;
-                                                nFlags |= 8;
-                                            }
-                                        }
-                                        else if ( rPropVal.Name == sRadiusRangeMinimum )
-                                        {
-                                            nYRangeMin = sal_Int32(0xff4c0000); // the range of angles seems to be a not
-                                            nYRangeMax = sal_Int32(0x00b40000); // used feature, so we are defaulting this
-
-                                            drawing::EnhancedCustomShapeParameter aRadiusRangeMinimum;
-                                            if ( rPropVal.Value >>= aRadiusRangeMinimum )
-                                            {
-                                                if ( GetValueForEnhancedCustomShapeHandleParameter( nXRangeMin, aRadiusRangeMinimum ) )
-                                                    nFlags |= 0x80;
-                                                nFlags |= 0x2000;
-                                            }
-                                        }
-                                        else if ( rPropVal.Name == sRadiusRangeMaximum )
-                                        {
-                                            nYRangeMin = sal_Int32(0xff4c0000); // the range of angles seems to be a not
-                                            nYRangeMax = sal_Int32(0x00b40000); // used feature, so we are defaulting this
-
-                                            drawing::EnhancedCustomShapeParameter aRadiusRangeMaximum;
-                                            if ( rPropVal.Value >>= aRadiusRangeMaximum )
-                                            {
-                                                if ( GetValueForEnhancedCustomShapeHandleParameter( nXRangeMax, aRadiusRangeMaximum ) )
-                                                    nFlags |= 0x100;
-                                                nFlags |= 0x2000;
-                                            }
-                                        }
-                                        else if ( rPropVal.Name == sRangeXMinimum )
-                                        {
-                                            drawing::EnhancedCustomShapeParameter aXRangeMinimum;
-                                            if ( rPropVal.Value >>= aXRangeMinimum )
-                                            {
-                                                if ( GetValueForEnhancedCustomShapeHandleParameter( nXRangeMin, aXRangeMinimum ) )
-                                                    nFlags |= 0x80;
-                                                nFlags |= 0x20;
-                                            }
-                                        }
-                                        else if ( rPropVal.Name == sRangeXMaximum )
-                                        {
-                                            drawing::EnhancedCustomShapeParameter aXRangeMaximum;
-                                            if ( rPropVal.Value >>= aXRangeMaximum )
-                                            {
-                                                if ( GetValueForEnhancedCustomShapeHandleParameter( nXRangeMax, aXRangeMaximum ) )
-                                                    nFlags |= 0x100;
-                                                nFlags |= 0x20;
-                                            }
-                                        }
-                                        else if ( rPropVal.Name == sRangeYMinimum )
-                                        {
-                                            drawing::EnhancedCustomShapeParameter aYRangeMinimum;
-                                            if ( rPropVal.Value >>= aYRangeMinimum )
-                                            {
-                                                if ( GetValueForEnhancedCustomShapeHandleParameter( nYRangeMin, aYRangeMinimum ) )
-                                                    nFlags |= 0x200;
-                                                nFlags |= 0x20;
-                                            }
-                                        }
-                                        else if ( rPropVal.Name == sRangeYMaximum )
-                                        {
-                                            drawing::EnhancedCustomShapeParameter aYRangeMaximum;
-                                            if ( rPropVal.Value >>= aYRangeMaximum )
-                                            {
-                                                if ( GetValueForEnhancedCustomShapeHandleParameter( nYRangeMax, aYRangeMaximum ) )
-                                                    nFlags |= 0x400;
-                                                nFlags |= 0x20;
-                                            }
-                                        }
-                                    }
-                                    aMemStrm.WriteUInt32( nFlags )
-                                       .WriteInt32( nXPosition )
-                                       .WriteInt32( nYPosition )
-                                       .WriteInt32( nXMap )
-                                       .WriteInt32( nYMap )
-                                       .WriteInt32( nXRangeMin )
-                                       .WriteInt32( nXRangeMax )
-                                       .WriteInt32( nYRangeMin )
-                                       .WriteInt32( nYRangeMax );
-
-                                    if ( nFlags & 8 )
-                                        nAdjustmentsWhichNeedsToBeConverted |= ( 1 << ( nYPosition - 0x100 ) );
+                                    nRenderMode = mso_Wireframe;
                                 }
-
-                                AddOpt(DFF_Prop_Handles, true, 6, aMemStrm);
+                                break;
+                            }
+                            AddOpt( DFF_Prop_c3DRenderMode, nRenderMode );
+                        }
+                    }
+                    else if ( rrProp.Name == sExtrusionRotateAngle )
+                    {
+                        double fExtrusionAngleX = 0;
+                        double fExtrusionAngleY = 0;
+                        drawing::EnhancedCustomShapeParameterPair aRotateAnglePair;
+                        if ( ( rrProp.Value >>= aRotateAnglePair ) && ( aRotateAnglePair.First.Value >>= fExtrusionAngleX ) && ( aRotateAnglePair.Second.Value >>= fExtrusionAngleY ) )
+                        {
+                            fExtrusionAngleX *= 65536;
+                            fExtrusionAngleY *= 65536;
+                            AddOpt( DFF_Prop_c3DXRotationAngle, static_cast<sal_Int32>(fExtrusionAngleX) );
+                            AddOpt( DFF_Prop_c3DYRotationAngle, static_cast<sal_Int32>(fExtrusionAngleY) );
+                        }
+                    }
+                    else if ( rrProp.Name == sExtrusionRotationCenter )
+                    {
+                        drawing::Direction3D aExtrusionRotationCenter;
+                        if ( rrProp.Value >>= aExtrusionRotationCenter )
+                        {
+                            AddOpt( DFF_Prop_c3DRotationCenterX, static_cast<sal_Int32>( aExtrusionRotationCenter.DirectionX * 360.0 ) );
+                            AddOpt( DFF_Prop_c3DRotationCenterY, static_cast<sal_Int32>( aExtrusionRotationCenter.DirectionY * 360.0 ) );
+                            AddOpt( DFF_Prop_c3DRotationCenterZ, static_cast<sal_Int32>( aExtrusionRotationCenter.DirectionZ * 360.0 ) );
+                            nFillHarshFlags &=~8; // don't use AutoRotationCenter;
+                        }
+                    }
+                    else if ( rrProp.Name == sExtrusionShininess )
+                    {
+                        double fExtrusionShininess = 0;
+                        if ( rrProp.Value >>= fExtrusionShininess )
+                            AddOpt( DFF_Prop_c3DShininess, static_cast<sal_Int32>( fExtrusionShininess * 655.36 ) );
+                    }
+                    else if ( rrProp.Name == sExtrusionSkew )
+                    {
+                        double fSkewAmount = 0;
+                        double fSkewAngle = 0;
+                        drawing::EnhancedCustomShapeParameterPair aSkewParaPair;
+                        if ( ( rrProp.Value >>= aSkewParaPair ) && ( aSkewParaPair.First.Value >>= fSkewAmount ) && ( aSkewParaPair.Second.Value >>= fSkewAngle ) )
+                        {
+                            AddOpt( DFF_Prop_c3DSkewAmount, static_cast<sal_Int32>(fSkewAmount) );
+                            AddOpt( DFF_Prop_c3DSkewAngle, static_cast<sal_Int32>( fSkewAngle * 65536 ) );
+                        }
+                    }
+                    else if ( rrProp.Name == sExtrusionSpecularity )
+                    {
+                        double fExtrusionSpecularity = 0;
+                        if ( rrProp.Value >>= fExtrusionSpecularity )
+                            AddOpt( DFF_Prop_c3DSpecularAmt, static_cast<sal_Int32>( fExtrusionSpecularity * 1333 ) );
+                    }
+                    else if ( rrProp.Name == sExtrusionProjectionMode )
+                    {
+                        drawing::ProjectionMode eExtrusionProjectionMode;
+                        if ( rrProp.Value >>= eExtrusionProjectionMode )
+                        {
+                            nFillHarshFlags |= 0x40000;
+                            if ( eExtrusionProjectionMode == drawing::ProjectionMode_PARALLEL )
+                                nFillHarshFlags |= 4;
+                            else
+                                nFillHarshFlags &=~4;
+                        }
+                    }
+                    else if ( rrProp.Name == sExtrusionViewPoint )
+                    {
+                        drawing::Position3D aExtrusionViewPoint;
+                        if ( rrProp.Value >>= aExtrusionViewPoint )
+                        {
+                            aExtrusionViewPoint.PositionX *= 360.0;
+                            aExtrusionViewPoint.PositionY *= 360.0;
+                            aExtrusionViewPoint.PositionZ *= 360.0;
+                            AddOpt( DFF_Prop_c3DXViewpoint, static_cast<sal_Int32>(aExtrusionViewPoint.PositionX)  );
+                            AddOpt( DFF_Prop_c3DYViewpoint, static_cast<sal_Int32>(aExtrusionViewPoint.PositionY)  );
+                            AddOpt( DFF_Prop_c3DZViewpoint, static_cast<sal_Int32>(aExtrusionViewPoint.PositionZ)  );
+                        }
+                    }
+                    else if ( rrProp.Name == sExtrusionOrigin )
+                    {
+                        double fExtrusionOriginX = 0;
+                        double fExtrusionOriginY = 0;
+                        drawing::EnhancedCustomShapeParameterPair aOriginPair;
+                        if ( ( rrProp.Value >>= aOriginPair ) && ( aOriginPair.First.Value >>= fExtrusionOriginX ) && ( aOriginPair.Second.Value >>= fExtrusionOriginY ) )
+                        {
+                            AddOpt( DFF_Prop_c3DOriginX, static_cast<sal_Int32>( fExtrusionOriginX * 65536 ) );
+                            AddOpt( DFF_Prop_c3DOriginY, static_cast<sal_Int32>( fExtrusionOriginY * 65536 ) );
+                        }
+                    }
+                    else if ( rrProp.Name == sExtrusionColor )
+                    {
+                        bool bExtrusionColor;
+                        if ( rrProp.Value >>= bExtrusionColor )
+                        {
+                            nLightFaceFlags |= 0x20000;
+                            if ( bExtrusionColor )
+                            {
+                                nLightFaceFlags |= 2;
+                                uno::Any aFillColor2;
+                                if ( EscherPropertyValueHelper::GetPropertyValue( aFillColor2, aXPropSet, "FillColor2", true ) )
+                                {
+                                    sal_uInt32 nFillColor = ImplGetColor( *o3tl::doAccess<sal_uInt32>(aFillColor2) );
+                                    AddOpt( DFF_Prop_c3DExtrusionColor, nFillColor );
+                                }
                             }
                             else
+                                nLightFaceFlags &=~2;
+                        }
+                    }
+                }
+                if ( nLightFaceFlags != nLightFaceFlagsOrg )
+                    AddOpt( DFF_Prop_fc3DLightFace, nLightFaceFlags );
+                if ( nFillHarshFlags != nFillHarshFlagsOrg )
+                    AddOpt( DFF_Prop_fc3DFillHarsh, nFillHarshFlags );
+            }
+        }
+        else if ( rProp.Name == sEquations )
+        {
+            if ( !bIsDefaultObject )
+            {
+                sal_uInt16 nElements = static_cast<sal_uInt16>(aEquations.size());
+                if ( nElements )
+                {
+                    sal_uInt16 nElementSize = 8;
+                    sal_uInt32 nStreamSize = nElementSize * nElements + 6;
+                    SvMemoryStream aMemStrm( nStreamSize );
+                    aMemStrm.WriteUInt16( nElements )
+                       .WriteUInt16( nElements )
+                       .WriteUInt16( nElementSize );
+
+                    for (auto const& equation : aEquations)
+                    {
+                        aMemStrm.WriteUInt16( equation.nOperation )
+                            .WriteInt16(
+                                std::clamp(
+                                    equation.nPara[ 0 ], sal_Int32(SAL_MIN_INT16),
+                                    sal_Int32(SAL_MAX_INT16)) )
+                            .WriteInt16(
+                                std::clamp(
+                                    equation.nPara[ 1 ], sal_Int32(SAL_MIN_INT16),
+                                    sal_Int32(SAL_MAX_INT16)) )
+                            .WriteInt16(
+                                std::clamp(
+                                    equation.nPara[ 2 ], sal_Int32(SAL_MIN_INT16),
+                                    sal_Int32(SAL_MAX_INT16)) );
+                    }
+
+                    AddOpt(DFF_Prop_pFormulas, true, 6, aMemStrm);
+                }
+                else
+                {
+                    AddOpt(DFF_Prop_pFormulas, 0, true);
+                }
+            }
+        }
+        else if ( rProp.Name == sPath )
+        {
+            uno::Sequence< beans::PropertyValue > aPathPropSeq;
+            if ( rProp.Value >>= aPathPropSeq )
+            {
+                sal_uInt32 nPathFlags, nPathFlagsOrg;
+                nPathFlagsOrg = nPathFlags = 0x39;
+                if ( GetOpt( DFF_Prop_fFillOK, nPathFlags ) )
+                    nPathFlagsOrg = nPathFlags;
+
+                sal_Int32 r, nrCount = aPathPropSeq.getLength();
+                for ( r = 0; r < nrCount; r++ )
+                {
+                    const beans::PropertyValue& rrProp = aPathPropSeq[ r ];
+                    const OUString sPathExtrusionAllowed               ( "ExtrusionAllowed"  );
+                    const OUString sPathConcentricGradientFillAllowed  ( "ConcentricGradientFillAllowed"  );
+                    const OUString sPathTextPathAllowed                ( "TextPathAllowed"  );
+                    const OUString sPathCoordinates                    ( "Coordinates"  );
+                    const OUString sPathGluePoints                     ( "GluePoints"  );
+                    const OUString sPathGluePointType                  ( "GluePointType"  );
+                    const OUString sPathSegments                       ( "Segments"  );
+                    const OUString sPathStretchX                       ( "StretchX"  );
+                    const OUString sPathStretchY                       ( "StretchY"  );
+                    const OUString sPathTextFrames                     ( "TextFrames"  );
+
+                    if ( rrProp.Name == sPathExtrusionAllowed )
+                    {
+                        bool bExtrusionAllowed;
+                        if ( rrProp.Value >>= bExtrusionAllowed )
+                        {
+                            nPathFlags |= 0x100000;
+                            if ( bExtrusionAllowed )
+                                nPathFlags |= 16;
+                            else
+                                nPathFlags &=~16;
+                        }
+                    }
+                    else if ( rrProp.Name == sPathConcentricGradientFillAllowed )
+                    {
+                        bool bConcentricGradientFillAllowed;
+                        if ( rrProp.Value >>= bConcentricGradientFillAllowed )
+                        {
+                            nPathFlags |= 0x20000;
+                            if ( bConcentricGradientFillAllowed )
+                                nPathFlags |= 2;
+                            else
+                                nPathFlags &=~2;
+                        }
+                    }
+                    else if ( rrProp.Name == sPathTextPathAllowed )
+                    {
+                        bool bTextPathAllowed;
+                        if ( rrProp.Value >>= bTextPathAllowed )
+                        {
+                            nPathFlags |= 0x40000;
+                            if ( bTextPathAllowed )
+                                nPathFlags |= 4;
+                            else
+                                nPathFlags &=~4;
+                        }
+                    }
+                    else if ( rrProp.Name == sPathCoordinates )
+                    {
+                        if ( !bIsDefaultObject )
+                        {
+                            aPathCoordinatesProp = rrProp.Value;
+                            bPathCoordinatesProp = true;
+                        }
+                    }
+                    else if ( rrProp.Name == sPathGluePoints )
+                    {
+                        if ( !bIsDefaultObject )
+                        {
+                            uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aGluePoints;
+                            if ( rrProp.Value >>= aGluePoints )
                             {
-                                AddOpt(DFF_Prop_Handles, 0, true);
+                                // creating the vertices
+                                sal_uInt16 nElements = static_cast<sal_uInt16>(aGluePoints.getLength());
+                                if ( nElements )
+                                {
+                                    sal_uInt16 j, nElementSize = 8;
+                                    sal_uInt32 nStreamSize = nElementSize * nElements + 6;
+                                    SvMemoryStream aMemStrm( nStreamSize );
+                                    aMemStrm.WriteUInt16( nElements )
+                                       .WriteUInt16( nElements )
+                                       .WriteUInt16( nElementSize );
+                                    for( j = 0; j < nElements; j++ )
+                                    {
+                                        sal_Int32 X = GetValueForEnhancedCustomShapeParameter( aGluePoints[ j ].First, aEquationOrder );
+                                        sal_Int32 Y = GetValueForEnhancedCustomShapeParameter( aGluePoints[ j ].Second, aEquationOrder );
+                                        aMemStrm.WriteInt32( X )
+                                           .WriteInt32( Y );
+                                    }
+
+                                    AddOpt(DFF_Prop_connectorPoints, true, 6, aMemStrm);   // -6
+                                }
+                                else
+                                {
+                                    AddOpt(DFF_Prop_connectorPoints, 0, true);
+                                }
+                            }
+                        }
+                    }
+                    else if ( rrProp.Name == sPathGluePointType )
+                    {
+                        sal_Int16 nGluePointType = sal_Int16();
+                        if ( rrProp.Value >>= nGluePointType )
+                            AddOpt( DFF_Prop_connectorType, static_cast<sal_uInt16>(nGluePointType) );
+                    }
+                    else if ( rrProp.Name == sPathSegments )
+                    {
+                        if ( !bIsDefaultObject )
+                        {
+                            uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
+                            if ( rrProp.Value >>= aSegments )
+                            {
+                                // creating seginfo
+                                if ( aSegments.hasElements() )
+                                {
+                                    sal_uInt16 j, nElements = static_cast<sal_uInt16>(aSegments.getLength());
+                                    sal_uInt16 nElementSize = 2;
+                                    sal_uInt32 nStreamSize = nElementSize * nElements + 6;
+                                    SvMemoryStream aMemStrm( nStreamSize );
+                                    aMemStrm.WriteUInt16( nElements )
+                                       .WriteUInt16( nElements )
+                                       .WriteUInt16( nElementSize );
+                                    for ( j = 0; j < nElements; j++ )
+                                    {
+                                        // The segment type is stored in the upper 3 bits
+                                        // and segment count is stored in the lower 13
+                                        // bits.
+                                        //
+                                        // If the segment type is msopathEscape, the lower 13 bits
+                                        // are divided in a 5 bit escape code and 8 bit
+                                        // vertex count (not segment count!)
+                                        sal_uInt16 nVal = static_cast<sal_uInt16>(aSegments[ j ].Count);
+                                        switch( aSegments[ j ].Command )
+                                        {
+                                            case drawing::EnhancedCustomShapeSegmentCommand::UNKNOWN :
+                                            case drawing::EnhancedCustomShapeSegmentCommand::LINETO :
+                                                break;
+                                            case drawing::EnhancedCustomShapeSegmentCommand::MOVETO :
+                                                nVal = (msopathMoveTo << 13);
+                                                break;
+                                            case drawing::EnhancedCustomShapeSegmentCommand::CURVETO :
+                                            {
+                                                nVal |= (msopathCurveTo << 13);
+                                            }
+                                            break;
+                                            case drawing::EnhancedCustomShapeSegmentCommand::CLOSESUBPATH :
+                                            {
+                                                nVal = 1;
+                                                nVal |= (msopathClose << 13);
+                                            }
+                                            break;
+                                            case drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH :
+                                            {
+                                                nVal = (msopathEnd << 13);
+                                            }
+                                            break;
+                                            case drawing::EnhancedCustomShapeSegmentCommand::NOFILL :
+                                            {
+                                                nVal = (msopathEscape << 13) | (10 << 8);
+                                            }
+                                            break;
+                                            case drawing::EnhancedCustomShapeSegmentCommand::NOSTROKE :
+                                            {
+                                                nVal = (msopathEscape << 13) | (11 << 8);
+                                            }
+                                            break;
+                                            case drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSETO :
+                                            {
+                                                nVal *= 3;
+                                                nVal |= (msopathEscape << 13) | (1 << 8);
+                                            }
+                                            break;
+                                            case drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSE :
+                                            {
+                                                nVal *= 3;
+                                                nVal |= (msopathEscape << 13) | (2 << 8);
+                                            }
+                                            break;
+                                            case drawing::EnhancedCustomShapeSegmentCommand::ARCTO :
+                                            {
+                                                nVal <<= 2;
+                                                nVal |= (msopathEscape << 13) | (3 << 8);
+                                            }
+                                            break;
+                                            case drawing::EnhancedCustomShapeSegmentCommand::ARC :
+                                            {
+                                                nVal <<= 2;
+                                                nVal |= (msopathEscape << 13) | (4 << 8);
+                                            }
+                                            break;
+                                            case drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO :
+                                            {
+                                                nVal <<= 2;
+                                                nVal |= (msopathEscape << 13) | (5 << 8);
+                                            }
+                                            break;
+                                            case drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARC :
+                                            {
+                                                nVal <<= 2;
+                                                nVal |= (msopathEscape << 13) | (6 << 8);
+                                            }
+                                            break;
+                                            case drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTX :
+                                            {
+                                                nVal |= (msopathEscape << 13) | (7 << 8);
+                                            }
+                                            break;
+                                            case drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTY :
+                                            {
+                                                nVal |= (msopathEscape << 13) | (8 << 8);
+                                            }
+                                            break;
+                                        }
+                                        aMemStrm.WriteUInt16( nVal );
+                                    }
+
+                                    AddOpt(DFF_Prop_pSegmentInfo, false, 6, aMemStrm);
+                                }
+                                else
+                                {
+                                    AddOpt(DFF_Prop_pSegmentInfo, 0, true);
+                                }
+                            }
+                        }
+                    }
+                    else if ( rrProp.Name == sPathStretchX )
+                    {
+                        if ( !bIsDefaultObject )
+                        {
+                            sal_Int32 nStretchX = 0;
+                            if ( rrProp.Value >>= nStretchX )
+                                AddOpt( DFF_Prop_stretchPointX, nStretchX );
+                        }
+                    }
+                    else if ( rrProp.Name == sPathStretchY )
+                    {
+                        if ( !bIsDefaultObject )
+                        {
+                            sal_Int32 nStretchY = 0;
+                            if ( rrProp.Value >>= nStretchY )
+                                AddOpt( DFF_Prop_stretchPointY, nStretchY );
+                        }
+                    }
+                    else if ( rrProp.Name == sPathTextFrames )
+                    {
+                        if ( !bIsDefaultObject )
+                        {
+                            uno::Sequence<drawing::EnhancedCustomShapeTextFrame> aPathTextFrames;
+                            if ( rrProp.Value >>= aPathTextFrames )
+                            {
+                                if ( aPathTextFrames.hasElements() )
+                                {
+                                    sal_uInt16 j, nElements = static_cast<sal_uInt16>(aPathTextFrames.getLength());
+                                    sal_uInt16 nElementSize = 16;
+                                    sal_uInt32 nStreamSize = nElementSize * nElements + 6;
+                                    SvMemoryStream aMemStrm( nStreamSize );
+                                    aMemStrm.WriteUInt16( nElements )
+                                       .WriteUInt16( nElements )
+                                       .WriteUInt16( nElementSize );
+                                    for ( j = 0; j < nElements; j++ )
+                                    {
+                                        sal_Int32 nLeft = GetValueForEnhancedCustomShapeParameter( aPathTextFrames[ j ].TopLeft.First, aEquationOrder );
+                                        sal_Int32 nTop  = GetValueForEnhancedCustomShapeParameter( aPathTextFrames[ j ].TopLeft.Second, aEquationOrder );
+                                        sal_Int32 nRight = GetValueForEnhancedCustomShapeParameter( aPathTextFrames[ j ].BottomRight.First, aEquationOrder );
+                                        sal_Int32 nBottom = GetValueForEnhancedCustomShapeParameter( aPathTextFrames[ j ].BottomRight.Second, aEquationOrder );
+
+                                        aMemStrm.WriteInt32( nLeft )
+                                           .WriteInt32( nTop )
+                                           .WriteInt32( nRight )
+                                           .WriteInt32( nBottom );
+                                    }
+
+                                    AddOpt(DFF_Prop_textRectangles, true, 6, aMemStrm);
+                                }
+                                else
+                                {
+                                    AddOpt(DFF_Prop_textRectangles, 0, true);
+                                }
                             }
                         }
                     }
                 }
-                else if ( rProp.Name == sAdjustmentValues )
-                {
-                    // it is required, that the information which handle is polar has already be read,
-                    // so we are able to change the polar value to a fixed float
-                    aAdjustmentValuesProp = rProp.Value;
-                    bAdjustmentValuesProp = true;
-                }
+                if ( nPathFlags != nPathFlagsOrg )
+                    AddOpt( DFF_Prop_fFillOK, nPathFlags );
             }
-            if ( bAdjustmentValuesProp )
+        }
+        else if ( rProp.Name == sTextPath )
+        {
+            uno::Sequence< beans::PropertyValue > aTextPathPropSeq;
+            if ( rProp.Value >>= aTextPathPropSeq )
             {
-                uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentSeq;
-                if ( aAdjustmentValuesProp >>= aAdjustmentSeq )
-                {
-                    if ( bPredefinedHandlesUsed )
-                        LookForPolarHandles( eShapeType, nAdjustmentsWhichNeedsToBeConverted );
+                sal_uInt32 nTextPathFlagsOrg, nTextPathFlags;
+                nTextPathFlagsOrg = nTextPathFlags = 0xffff1000;        // default
+                if ( GetOpt( DFF_Prop_gtextFStrikethrough, nTextPathFlags ) )
+                    nTextPathFlagsOrg = nTextPathFlags;
 
-                    sal_Int32 k, nValue = 0, nAdjustmentValues = aAdjustmentSeq.getLength();
-                    for ( k = 0; k < nAdjustmentValues; k++ )
-                        if( GetAdjustmentValue( aAdjustmentSeq[ k ], k, nAdjustmentsWhichNeedsToBeConverted, nValue ) )
-                            AddOpt( static_cast<sal_uInt16>( DFF_Prop_adjustValue + k ), static_cast<sal_uInt32>(nValue) );
-                }
-            }
-            if( bPathCoordinatesProp )
-            {
-                uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
-                if ( aPathCoordinatesProp >>= aCoordinates )
+                sal_Int32 r, nrCount = aTextPathPropSeq.getLength();
+                for ( r = 0; r < nrCount; r++ )
                 {
-                    // creating the vertices
-                    if (aCoordinates.hasElements())
+                    const beans::PropertyValue& rrProp = aTextPathPropSeq[ r ];
+                    const OUString sTextPathMode       ( "TextPathMode"  );
+                    const OUString sTextPathScaleX     ( "ScaleX"  );
+                    const OUString sSameLetterHeights  ( "SameLetterHeights"  );
+
+                    if ( rrProp.Name == sTextPath )
                     {
-                        sal_uInt16 j, nElements = static_cast<sal_uInt16>(aCoordinates.getLength());
-                        sal_uInt16 nElementSize = 8;
+                        bool bTextPathOn;
+                        if ( rrProp.Value >>= bTextPathOn )
+                        {
+                            nTextPathFlags |= 0x40000000;
+                            if ( bTextPathOn )
+                            {
+                                nTextPathFlags |= 0x4000;
+
+                                sal_uInt32 nPathFlags = 0x39;
+                                GetOpt( DFF_Prop_fFillOK, nPathFlags ); // SJ: can be removed if we are supporting the TextPathAllowed property in XML
+                                nPathFlags |= 0x40004;
+                                AddOpt( DFF_Prop_fFillOK, nPathFlags );
+                            }
+                            else
+                                nTextPathFlags &=~0x4000;
+                        }
+                    }
+                    else if ( rrProp.Name == sTextPathMode )
+                    {
+                        drawing::EnhancedCustomShapeTextPathMode eTextPathMode;
+                        if ( rrProp.Value >>= eTextPathMode )
+                        {
+                            nTextPathFlags |= 0x05000000;
+                            nTextPathFlags &=~0x500;    // TextPathMode_NORMAL
+                            if ( eTextPathMode == drawing::EnhancedCustomShapeTextPathMode_PATH )
+                                nTextPathFlags |= 0x100;
+                            else if ( eTextPathMode == drawing::EnhancedCustomShapeTextPathMode_SHAPE )
+                                nTextPathFlags |= 0x500;
+                        }
+                    }
+                    else if ( rrProp.Name == sTextPathScaleX )
+                    {
+                        bool bTextPathScaleX;
+                        if ( rrProp.Value >>= bTextPathScaleX )
+                        {
+                            nTextPathFlags |= 0x00400000;
+                            if ( bTextPathScaleX )
+                                nTextPathFlags |= 0x40;
+                            else
+                                nTextPathFlags &=~0x40;
+                        }
+                    }
+                    else if ( rrProp.Name == sSameLetterHeights )
+                    {
+                        bool bSameLetterHeights;
+                        if ( rrProp.Value >>= bSameLetterHeights )
+                        {
+                            nTextPathFlags |= 0x00800000;
+                            if ( bSameLetterHeights )
+                                nTextPathFlags |= 0x80;
+                            else
+                                nTextPathFlags &=~0x80;
+                        }
+                    }
+                }
+                if ( nTextPathFlags & 0x4000 )      // Is FontWork ?
+                {
+                    // FontWork Text
+                    OUString aText;
+                    uno::Reference< text::XSimpleText > xText( rXShape, uno::UNO_QUERY );
+                    if ( xText.is() )
+                        aText = xText->getString();
+                    if ( aText.isEmpty() )
+                        aText = "your text";   // TODO: moving into a resource
+                    AddOpt( DFF_Prop_gtextUNICODE, aText );
+
+                    // FontWork Font
+                    OUString aFontName;
+                    const OUString sCharFontName( "CharFontName"  );
+                    uno::Any aAny = aXPropSet->getPropertyValue( sCharFontName );
+                    aAny >>= aFontName;
+                    if ( aFontName.isEmpty() )
+                        aFontName = "Arial Black";
+                    AddOpt( DFF_Prop_gtextFont, aFontName );
+
+                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "CharScaleWidth", true ) )
+                    {
+                        sal_Int16 nCharScaleWidth = 100;
+                        if ( aAny >>= nCharScaleWidth )
+                        {
+                            if ( nCharScaleWidth != 100 )
+                            {
+                                sal_Int32 nVal = nCharScaleWidth * 655;
+                                AddOpt( DFF_Prop_gtextSpacing, nVal );
+                            }
+                        }
+                    }
+                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "CharHeight", true ) )
+                    {
+                        float fCharHeight = 0.0;
+                        if ( aAny >>= fCharHeight )
+                        {
+                            sal_Int32 nTextSize = static_cast< sal_Int32 > ( fCharHeight * 65536 );
+                            AddOpt(ESCHER_Prop_gtextSize, nTextSize);
+                        }
+                    }
+                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "CharKerning", true ) )
+                    {
+                        sal_Int16 nCharKerning = sal_Int16();
+                        if ( aAny >>= nCharKerning )
+                        {
+                            nTextPathFlags |= 0x10000000;
+                            if ( nCharKerning )
+                                nTextPathFlags |= 0x1000;
+                            else
+                                nTextPathFlags &=~0x1000;
+                        }
+                    }
+                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "CharPosture", true ) )
+                    {
+                        awt::FontSlant eFontSlant;
+                        if ( aAny >>= eFontSlant )
+                        {
+                            nTextPathFlags |= 0x100010;
+                            if ( eFontSlant != awt::FontSlant_NONE )
+                                nTextPathFlags |= 0x10;
+                            else
+                                nTextPathFlags &=~0x10;
+                        }
+                    }
+                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "CharWeight", true ) )
+                    {
+                        float fFontWidth = 0;
+                        if ( aAny >>= fFontWidth )
+                        {
+                            nTextPathFlags |= 0x200020;
+                            if ( fFontWidth > awt::FontWeight::NORMAL )
+                                nTextPathFlags |= 0x20;
+                            else
+                                nTextPathFlags &=~0x20;
+                        }
+                    }
+                    // export gTextAlign attr
+                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "TextHorizontalAdjust", true ) )
+                    {
+                        MSO_GeoTextAlign  gTextAlign = mso_alignTextCenter;
+                        drawing::TextHorizontalAdjust   eHA( drawing::TextHorizontalAdjust_LEFT );
+                        aAny >>= eHA;
+                        switch( eHA )
+                        {
+                        case drawing::TextHorizontalAdjust_LEFT :
+                            gTextAlign = mso_alignTextLeft;
+                            break;
+                        case drawing::TextHorizontalAdjust_CENTER:
+                            gTextAlign = mso_alignTextCenter;
+                            break;
+                        case drawing::TextHorizontalAdjust_RIGHT:
+                            gTextAlign = mso_alignTextRight;
+                            break;
+                        case drawing::TextHorizontalAdjust_BLOCK:
+                            {
+                                drawing::TextFitToSizeType const eFTS(
+                                    rSdrObjCustomShape.GetMergedItem( SDRATTR_TEXT_FITTOSIZE ).GetValue() );
+                                if (eFTS == drawing::TextFitToSizeType_ALLLINES ||
+                                    eFTS == drawing::TextFitToSizeType_PROPORTIONAL)
+                                {
+                                    gTextAlign = mso_alignTextStretch;
+                                }
+                                else
+                                {
+                                    gTextAlign = mso_alignTextWordJust;
+                                }
+                                break;
+                            }
+                        default:
+                            break;
+                        }
+                        AddOpt(DFF_Prop_gtextAlign,gTextAlign);
+                    }
+                }
+                if((nTextPathFlags & 0x4000) != 0)  // Is Font work
+                {
+                    OutlinerParaObject* pOutlinerParaObject(rSdrObjCustomShape.GetOutlinerParaObject());
+                    if ( pOutlinerParaObject && pOutlinerParaObject->IsVertical() )
+                        nTextPathFlags |= 0x2000;
+                }
+
+                // Use gtextFStretch for Watermark like MSO does
+                nTextPathFlags |= use_gtextFBestFit | gtextFBestFit
+                                | use_gtextFStretch | gtextFStretch
+                                | use_gtextFShrinkFit | gtextFShrinkFit;
+
+                if ( nTextPathFlags != nTextPathFlagsOrg )
+                    AddOpt( DFF_Prop_gtextFStrikethrough, nTextPathFlags );
+            }
+        }
+        else if ( rProp.Name == sHandles )
+        {
+            if ( !bIsDefaultObject )
+            {
+                bPredefinedHandlesUsed = false;
+                if ( rProp.Value >>= aHandlesPropSeq )
+                {
+                    sal_uInt16 nElements = static_cast<sal_uInt16>(aHandlesPropSeq.getLength());
+                    if ( nElements )
+                    {
+                        sal_uInt16 k, nElementSize = 36;
                         sal_uInt32 nStreamSize = nElementSize * nElements + 6;
                         SvMemoryStream aMemStrm( nStreamSize );
                         aMemStrm.WriteUInt16( nElements )
                            .WriteUInt16( nElements )
                            .WriteUInt16( nElementSize );
-                        for( j = 0; j < nElements; j++ )
+
+                        for ( k = 0; k < nElements; k++ )
                         {
-                            sal_Int32 X = GetValueForEnhancedCustomShapeParameter( aCoordinates[ j ].First, aEquationOrder, true );
-                            sal_Int32 Y = GetValueForEnhancedCustomShapeParameter( aCoordinates[ j ].Second, aEquationOrder, true );
-                            aMemStrm.WriteInt32( X )
-                               .WriteInt32( Y );
+                            sal_uInt32 nFlags = 0;
+                            sal_Int32 nXPosition = 0;
+                            sal_Int32 nYPosition = 0;
+                            sal_Int32 nXMap = 0;
+                            sal_Int32 nYMap = 0;
+                            sal_Int32 nXRangeMin = 0x80000000;
+                            sal_Int32 nXRangeMax = 0x7fffffff;
+                            sal_Int32 nYRangeMin = 0x80000000;
+                            sal_Int32 nYRangeMax = 0x7fffffff;
+
+                            const uno::Sequence< beans::PropertyValue >& rPropSeq = aHandlesPropSeq[ k ];
+                            for ( const beans::PropertyValue& rPropVal: rPropSeq )
+                            {
+                                const OUString sPosition           ( "Position"  );
+                                const OUString sMirroredX          ( "MirroredX"  );
+                                const OUString sMirroredY          ( "MirroredY"  );
+                                const OUString sSwitched           ( "Switched"  );
+                                const OUString sPolar              ( "Polar"  );
+                                const OUString sRadiusRangeMinimum ( "RadiusRangeMinimum"  );
+                                const OUString sRadiusRangeMaximum ( "RadiusRangeMaximum"  );
+                                const OUString sRangeXMinimum      ( "RangeXMinimum"  );
+                                const OUString sRangeXMaximum      ( "RangeXMaximum"  );
+                                const OUString sRangeYMinimum      ( "RangeYMinimum"  );
+                                const OUString sRangeYMaximum      ( "RangeYMaximum"  );
+
+                                if ( rPropVal.Name == sPosition )
+                                {
+                                    drawing::EnhancedCustomShapeParameterPair aPosition;
+                                    if ( rPropVal.Value >>= aPosition )
+                                    {
+                                        GetValueForEnhancedCustomShapeHandleParameter( nXPosition, aPosition.First );
+                                        GetValueForEnhancedCustomShapeHandleParameter( nYPosition, aPosition.Second );
+                                    }
+                                }
+                                else if ( rPropVal.Name == sMirroredX )
+                                {
+                                    bool bMirroredX;
+                                    if ( rPropVal.Value >>= bMirroredX )
+                                    {
+                                        if ( bMirroredX )
+                                            nFlags |= 1;
+                                    }
+                                }
+                                else if ( rPropVal.Name == sMirroredY )
+                                {
+                                    bool bMirroredY;
+                                    if ( rPropVal.Value >>= bMirroredY )
+                                    {
+                                        if ( bMirroredY )
+                                            nFlags |= 2;
+                                    }
+                                }
+                                else if ( rPropVal.Name == sSwitched )
+                                {
+                                    bool bSwitched;
+                                    if ( rPropVal.Value >>= bSwitched )
+                                    {
+                                        if ( bSwitched )
+                                            nFlags |= 4;
+                                    }
+                                }
+                                else if ( rPropVal.Name == sPolar )
+                                {
+                                    drawing::EnhancedCustomShapeParameterPair aPolar;
+                                    if ( rPropVal.Value >>= aPolar )
+                                    {
+                                        if ( GetValueForEnhancedCustomShapeHandleParameter( nXMap, aPolar.First ) )
+                                            nFlags |= 0x800;
+                                        if ( GetValueForEnhancedCustomShapeHandleParameter( nYMap, aPolar.Second ) )
+                                            nFlags |= 0x1000;
+                                        nFlags |= 8;
+                                    }
+                                }
+                                else if ( rPropVal.Name == sRadiusRangeMinimum )
+                                {
+                                    nYRangeMin = sal_Int32(0xff4c0000); // the range of angles seems to be a not
+                                    nYRangeMax = sal_Int32(0x00b40000); // used feature, so we are defaulting this
+
+                                    drawing::EnhancedCustomShapeParameter aRadiusRangeMinimum;
+                                    if ( rPropVal.Value >>= aRadiusRangeMinimum )
+                                    {
+                                        if ( GetValueForEnhancedCustomShapeHandleParameter( nXRangeMin, aRadiusRangeMinimum ) )
+                                            nFlags |= 0x80;
+                                        nFlags |= 0x2000;
+                                    }
+                                }
+                                else if ( rPropVal.Name == sRadiusRangeMaximum )
+                                {
+                                    nYRangeMin = sal_Int32(0xff4c0000); // the range of angles seems to be a not
+                                    nYRangeMax = sal_Int32(0x00b40000); // used feature, so we are defaulting this
+
+                                    drawing::EnhancedCustomShapeParameter aRadiusRangeMaximum;
+                                    if ( rPropVal.Value >>= aRadiusRangeMaximum )
+                                    {
+                                        if ( GetValueForEnhancedCustomShapeHandleParameter( nXRangeMax, aRadiusRangeMaximum ) )
+                                            nFlags |= 0x100;
+                                        nFlags |= 0x2000;
+                                    }
+                                }
+                                else if ( rPropVal.Name == sRangeXMinimum )
+                                {
+                                    drawing::EnhancedCustomShapeParameter aXRangeMinimum;
+                                    if ( rPropVal.Value >>= aXRangeMinimum )
+                                    {
+                                        if ( GetValueForEnhancedCustomShapeHandleParameter( nXRangeMin, aXRangeMinimum ) )
+                                            nFlags |= 0x80;
+                                        nFlags |= 0x20;
+                                    }
+                                }
+                                else if ( rPropVal.Name == sRangeXMaximum )
+                                {
+                                    drawing::EnhancedCustomShapeParameter aXRangeMaximum;
+                                    if ( rPropVal.Value >>= aXRangeMaximum )
+                                    {
+                                        if ( GetValueForEnhancedCustomShapeHandleParameter( nXRangeMax, aXRangeMaximum ) )
+                                            nFlags |= 0x100;
+                                        nFlags |= 0x20;
+                                    }
+                                }
+                                else if ( rPropVal.Name == sRangeYMinimum )
+                                {
+                                    drawing::EnhancedCustomShapeParameter aYRangeMinimum;
+                                    if ( rPropVal.Value >>= aYRangeMinimum )
+                                    {
+                                        if ( GetValueForEnhancedCustomShapeHandleParameter( nYRangeMin, aYRangeMinimum ) )
+                                            nFlags |= 0x200;
+                                        nFlags |= 0x20;
+                                    }
+                                }
+                                else if ( rPropVal.Name == sRangeYMaximum )
+                                {
+                                    drawing::EnhancedCustomShapeParameter aYRangeMaximum;
+                                    if ( rPropVal.Value >>= aYRangeMaximum )
+                                    {
+                                        if ( GetValueForEnhancedCustomShapeHandleParameter( nYRangeMax, aYRangeMaximum ) )
+                                            nFlags |= 0x400;
+                                        nFlags |= 0x20;
+                                    }
+                                }
+                            }
+                            aMemStrm.WriteUInt32( nFlags )
+                               .WriteInt32( nXPosition )
+                               .WriteInt32( nYPosition )
+                               .WriteInt32( nXMap )
+                               .WriteInt32( nYMap )
+                               .WriteInt32( nXRangeMin )
+                               .WriteInt32( nXRangeMax )
+                               .WriteInt32( nYRangeMin )
+                               .WriteInt32( nYRangeMax );
+
+                            if ( nFlags & 8 )
+                                nAdjustmentsWhichNeedsToBeConverted |= ( 1 << ( nYPosition - 0x100 ) );
                         }
 
-                        AddOpt(DFF_Prop_pVertices, true, 6, aMemStrm); // -6
+                        AddOpt(DFF_Prop_Handles, true, 6, aMemStrm);
                     }
                     else
                     {
-                        AddOpt(DFF_Prop_pVertices, 0, true);
+                        AddOpt(DFF_Prop_Handles, 0, true);
                     }
                 }
             }
         }
+        else if ( rProp.Name == sAdjustmentValues )
+        {
+            // it is required, that the information which handle is polar has already be read,
+            // so we are able to change the polar value to a fixed float
+            aAdjustmentValuesProp = rProp.Value;
+            bAdjustmentValuesProp = true;
+        }
+    }
+    if ( bAdjustmentValuesProp )
+    {
+        uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentSeq;
+        if ( aAdjustmentValuesProp >>= aAdjustmentSeq )
+        {
+            if ( bPredefinedHandlesUsed )
+                LookForPolarHandles( eShapeType, nAdjustmentsWhichNeedsToBeConverted );
+
+            sal_Int32 k, nValue = 0, nAdjustmentValues = aAdjustmentSeq.getLength();
+            for ( k = 0; k < nAdjustmentValues; k++ )
+                if( GetAdjustmentValue( aAdjustmentSeq[ k ], k, nAdjustmentsWhichNeedsToBeConverted, nValue ) )
+                    AddOpt( static_cast<sal_uInt16>( DFF_Prop_adjustValue + k ), static_cast<sal_uInt32>(nValue) );
+        }
+    }
+    if( !bPathCoordinatesProp )
+        return;
+
+    uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
+    if ( !(aPathCoordinatesProp >>= aCoordinates) )
+        return;
+
+    // creating the vertices
+    if (aCoordinates.hasElements())
+    {
+        sal_uInt16 j, nElements = static_cast<sal_uInt16>(aCoordinates.getLength());
+        sal_uInt16 nElementSize = 8;
+        sal_uInt32 nStreamSize = nElementSize * nElements + 6;
+        SvMemoryStream aMemStrm( nStreamSize );
+        aMemStrm.WriteUInt16( nElements )
+           .WriteUInt16( nElements )
+           .WriteUInt16( nElementSize );
+        for( j = 0; j < nElements; j++ )
+        {
+            sal_Int32 X = GetValueForEnhancedCustomShapeParameter( aCoordinates[ j ].First, aEquationOrder, true );
+            sal_Int32 Y = GetValueForEnhancedCustomShapeParameter( aCoordinates[ j ].Second, aEquationOrder, true );
+            aMemStrm.WriteInt32( X )
+               .WriteInt32( Y );
+        }
+
+        AddOpt(DFF_Prop_pVertices, true, 6, aMemStrm); // -6
+    }
+    else
+    {
+        AddOpt(DFF_Prop_pVertices, 0, true);
     }
 }
 
@@ -3951,56 +3951,56 @@ EscherBlibEntry::EscherBlibEntry( sal_uInt32 nPictureOffset, const GraphicObject
     sal_uInt32  nLen = static_cast<sal_uInt32>(rId.getLength());
     const char* pData = rId.getStr();
     GraphicType eType( rObject.GetType() );
-    if (nLen && (eType != GraphicType::NONE))
-    {
-        mnIdentifier[ 0 ] = rtl_crc32( 0,pData, nLen );
-        mnIdentifier[ 1 ] = 0;
+    if (!(nLen && (eType != GraphicType::NONE)))
+        return;
 
-        if ( pGraphicAttr )
+    mnIdentifier[ 0 ] = rtl_crc32( 0,pData, nLen );
+    mnIdentifier[ 1 ] = 0;
+
+    if ( pGraphicAttr )
+    {
+        if ( pGraphicAttr->IsSpecialDrawMode()
+                || pGraphicAttr->IsMirrored()
+                     || pGraphicAttr->IsCropped()
+                        || pGraphicAttr->IsRotated()
+                            || pGraphicAttr->IsTransparent()
+                                || pGraphicAttr->IsAdjusted() )
         {
-            if ( pGraphicAttr->IsSpecialDrawMode()
-                    || pGraphicAttr->IsMirrored()
-                         || pGraphicAttr->IsCropped()
-                            || pGraphicAttr->IsRotated()
-                                || pGraphicAttr->IsTransparent()
-                                    || pGraphicAttr->IsAdjusted() )
-            {
-                SvMemoryStream aSt( sizeof( GraphicAttr ) );
-                aSt.WriteUInt16( static_cast<sal_uInt16>(pGraphicAttr->GetDrawMode()) )
-                   .WriteUInt32( static_cast<sal_uInt32>(pGraphicAttr->GetMirrorFlags()) )
-                   .WriteInt32( pGraphicAttr->GetLeftCrop() )
-                   .WriteInt32( pGraphicAttr->GetTopCrop() )
-                   .WriteInt32( pGraphicAttr->GetRightCrop() )
-                   .WriteInt32( pGraphicAttr->GetBottomCrop() )
-                   .WriteUInt16( pGraphicAttr->GetRotation() )
-                   .WriteInt16( pGraphicAttr->GetLuminance() )
-                   .WriteInt16( pGraphicAttr->GetContrast() )
-                   .WriteInt16( pGraphicAttr->GetChannelR() )
-                   .WriteInt16( pGraphicAttr->GetChannelG() )
-                   .WriteInt16( pGraphicAttr->GetChannelB() )
-                   .WriteDouble( pGraphicAttr->GetGamma() );
-                aSt.WriteBool( pGraphicAttr->IsInvert() )
-                   .WriteUChar( pGraphicAttr->GetTransparency() );
-                mnIdentifier[ 1 ] = rtl_crc32( 0, aSt.GetData(), aSt.Tell() );
-            }
-            else
-                mbIsNativeGraphicPossible = true;
+            SvMemoryStream aSt( sizeof( GraphicAttr ) );
+            aSt.WriteUInt16( static_cast<sal_uInt16>(pGraphicAttr->GetDrawMode()) )
+               .WriteUInt32( static_cast<sal_uInt32>(pGraphicAttr->GetMirrorFlags()) )
+               .WriteInt32( pGraphicAttr->GetLeftCrop() )
+               .WriteInt32( pGraphicAttr->GetTopCrop() )
+               .WriteInt32( pGraphicAttr->GetRightCrop() )
+               .WriteInt32( pGraphicAttr->GetBottomCrop() )
+               .WriteUInt16( pGraphicAttr->GetRotation() )
+               .WriteInt16( pGraphicAttr->GetLuminance() )
+               .WriteInt16( pGraphicAttr->GetContrast() )
+               .WriteInt16( pGraphicAttr->GetChannelR() )
+               .WriteInt16( pGraphicAttr->GetChannelG() )
+               .WriteInt16( pGraphicAttr->GetChannelB() )
+               .WriteDouble( pGraphicAttr->GetGamma() );
+            aSt.WriteBool( pGraphicAttr->IsInvert() )
+               .WriteUChar( pGraphicAttr->GetTransparency() );
+            mnIdentifier[ 1 ] = rtl_crc32( 0, aSt.GetData(), aSt.Tell() );
         }
-        sal_uInt32 i, nTmp, n1, n2;
-        n1 = n2 = 0;
-        for ( i = 0; i < nLen; i++ )
-        {
-            nTmp = n2 >> 28;    // rotating 4 bit
-            n2 <<= 4;
-            n2 |= n1 >> 28;
-            n1 <<= 4;
-            n1 |= nTmp;
-            n1 ^= *pData++ - '0';
-        }
-        mnIdentifier[ 2 ] = n1;
-        mnIdentifier[ 3 ] = n2;
-        mbIsEmpty = false;
+        else
+            mbIsNativeGraphicPossible = true;
     }
+    sal_uInt32 i, nTmp, n1, n2;
+    n1 = n2 = 0;
+    for ( i = 0; i < nLen; i++ )
+    {
+        nTmp = n2 >> 28;    // rotating 4 bit
+        n2 <<= 4;
+        n2 |= n1 >> 28;
+        n1 <<= 4;
+        n1 |= nTmp;
+        n1 ^= *pData++ - '0';
+    }
+    mnIdentifier[ 2 ] = n1;
+    mnIdentifier[ 3 ] = n2;
+    mbIsEmpty = false;
 };
 
 void EscherBlibEntry::WriteBlibEntry( SvStream& rSt, bool bWritePictureOffset, sal_uInt32 nResize )
@@ -4088,57 +4088,57 @@ void EscherGraphicProvider::WriteBlibStoreEntry(SvStream& rSt,
 void EscherGraphicProvider::WriteBlibStoreContainer( SvStream& rSt, SvStream* pMergePicStreamBSE )
 {
     sal_uInt32  nSize = GetBlibStoreContainerSize( pMergePicStreamBSE );
-    if ( nSize )
+    if ( !nSize )
+        return;
+
+    rSt.WriteUInt32( ( ESCHER_BstoreContainer << 16 ) | 0x1f )
+       .WriteUInt32( nSize - 8 );
+
+    if ( pMergePicStreamBSE )
     {
-        rSt.WriteUInt32( ( ESCHER_BstoreContainer << 16 ) | 0x1f )
-           .WriteUInt32( nSize - 8 );
+        sal_uInt32 nBlipSize, nOldPos = pMergePicStreamBSE->Tell();
+        const sal_uInt32 nBuf = 0x40000;    // 256KB buffer
+        std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ nBuf ]);
 
-        if ( pMergePicStreamBSE )
+        for ( size_t i = 0; i < mvBlibEntrys.size(); i++ )
         {
-            sal_uInt32 nBlipSize, nOldPos = pMergePicStreamBSE->Tell();
-            const sal_uInt32 nBuf = 0x40000;    // 256KB buffer
-            std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ nBuf ]);
+            EscherBlibEntry* pBlibEntry = mvBlibEntrys[ i ].get();
 
-            for ( size_t i = 0; i < mvBlibEntrys.size(); i++ )
+            ESCHER_BlibType nBlibType = pBlibEntry->meBlibType;
+            nBlipSize = pBlibEntry->mnSize + pBlibEntry->mnSizeExtra;
+            pBlibEntry->WriteBlibEntry( rSt, false, nBlipSize );
+
+            // BLIP
+            pMergePicStreamBSE->Seek( pBlibEntry->mnPictureOffset );
+            sal_uInt16 n16;
+            // record version and instance
+            pMergePicStreamBSE->ReadUInt16( n16 );
+            rSt.WriteUInt16( n16 );
+            // record type
+            pMergePicStreamBSE->ReadUInt16( n16 );
+            rSt.WriteUInt16( ESCHER_BlipFirst + nBlibType );
+            DBG_ASSERT( n16 == ESCHER_BlipFirst + nBlibType , "EscherGraphicProvider::WriteBlibStoreContainer: BLIP record types differ" );
+            sal_uInt32 n32;
+            // record size
+            pMergePicStreamBSE->ReadUInt32( n32 );
+            nBlipSize -= 8;
+            rSt.WriteUInt32( nBlipSize );
+            DBG_ASSERT( nBlipSize == n32, "EscherGraphicProvider::WriteBlibStoreContainer: BLIP sizes differ" );
+            // record
+            while ( nBlipSize )
             {
-                EscherBlibEntry* pBlibEntry = mvBlibEntrys[ i ].get();
-
-                ESCHER_BlibType nBlibType = pBlibEntry->meBlibType;
-                nBlipSize = pBlibEntry->mnSize + pBlibEntry->mnSizeExtra;
-                pBlibEntry->WriteBlibEntry( rSt, false, nBlipSize );
-
-                // BLIP
-                pMergePicStreamBSE->Seek( pBlibEntry->mnPictureOffset );
-                sal_uInt16 n16;
-                // record version and instance
-                pMergePicStreamBSE->ReadUInt16( n16 );
-                rSt.WriteUInt16( n16 );
-                // record type
-                pMergePicStreamBSE->ReadUInt16( n16 );
-                rSt.WriteUInt16( ESCHER_BlipFirst + nBlibType );
-                DBG_ASSERT( n16 == ESCHER_BlipFirst + nBlibType , "EscherGraphicProvider::WriteBlibStoreContainer: BLIP record types differ" );
-                sal_uInt32 n32;
-                // record size
-                pMergePicStreamBSE->ReadUInt32( n32 );
-                nBlipSize -= 8;
-                rSt.WriteUInt32( nBlipSize );
-                DBG_ASSERT( nBlipSize == n32, "EscherGraphicProvider::WriteBlibStoreContainer: BLIP sizes differ" );
-                // record
-                while ( nBlipSize )
-                {
-                    sal_uInt32 nBytes = std::min( nBlipSize, nBuf );
-                    pMergePicStreamBSE->ReadBytes(pBuf.get(), nBytes);
-                    rSt.WriteBytes(pBuf.get(), nBytes);
-                    nBlipSize -= nBytes;
-                }
+                sal_uInt32 nBytes = std::min( nBlipSize, nBuf );
+                pMergePicStreamBSE->ReadBytes(pBuf.get(), nBytes);
+                rSt.WriteBytes(pBuf.get(), nBytes);
+                nBlipSize -= nBytes;
             }
-            pMergePicStreamBSE->Seek( nOldPos );
         }
-        else
-        {
-            for ( size_t i = 0; i < mvBlibEntrys.size(); i++ )
-                mvBlibEntrys[ i ]->WriteBlibEntry( rSt, true );
-        }
+        pMergePicStreamBSE->Seek( nOldPos );
+    }
+    else
+    {
+        for ( size_t i = 0; i < mvBlibEntrys.size(); i++ )
+            mvBlibEntrys[ i ]->WriteBlibEntry( rSt, true );
     }
 }
 
@@ -4720,49 +4720,49 @@ sal_uInt32 EscherSolverContainer::GetShapeId( const uno::Reference<drawing::XSha
 void EscherSolverContainer::WriteSolver( SvStream& rStrm )
 {
     sal_uInt32 nCount = maConnectorList.size();
-    if ( nCount )
+    if ( !nCount )
+        return;
+
+    sal_uInt32  nRecHdPos, nCurrentPos, nSize;
+    rStrm  .WriteUInt16( ( nCount << 4 ) | 0xf )    // open an ESCHER_SolverContainer
+           .WriteUInt16( ESCHER_SolverContainer )
+           .WriteUInt32( 0 );
+
+    nRecHdPos = rStrm.Tell() - 4;
+
+    EscherConnectorRule aConnectorRule;
+    aConnectorRule.nRuleId = 2;
+    for (auto const & pPtr : maConnectorList)
     {
-        sal_uInt32  nRecHdPos, nCurrentPos, nSize;
-        rStrm  .WriteUInt16( ( nCount << 4 ) | 0xf )    // open an ESCHER_SolverContainer
-               .WriteUInt16( ESCHER_SolverContainer )
-               .WriteUInt32( 0 );
+        aConnectorRule.ncptiA  = aConnectorRule.ncptiB = 0xffffffff;
+        aConnectorRule.nShapeC = GetShapeId( pPtr->mXConnector );
+        aConnectorRule.nShapeA = GetShapeId( pPtr->mXConnectToA );
+        aConnectorRule.nShapeB = GetShapeId( pPtr->mXConnectToB );
 
-        nRecHdPos = rStrm.Tell() - 4;
-
-        EscherConnectorRule aConnectorRule;
-        aConnectorRule.nRuleId = 2;
-        for (auto const & pPtr : maConnectorList)
+        if ( aConnectorRule.nShapeC )
         {
-            aConnectorRule.ncptiA  = aConnectorRule.ncptiB = 0xffffffff;
-            aConnectorRule.nShapeC = GetShapeId( pPtr->mXConnector );
-            aConnectorRule.nShapeA = GetShapeId( pPtr->mXConnectToA );
-            aConnectorRule.nShapeB = GetShapeId( pPtr->mXConnectToB );
-
-            if ( aConnectorRule.nShapeC )
-            {
-                if ( aConnectorRule.nShapeA )
-                    aConnectorRule.ncptiA = pPtr->GetConnectorRule( true );
-                if ( aConnectorRule.nShapeB )
-                    aConnectorRule.ncptiB = pPtr->GetConnectorRule( false );
-            }
-            rStrm  .WriteUInt32( ( ESCHER_ConnectorRule << 16 ) | 1 )   // atom hd
-                   .WriteUInt32( 24 )
-                   .WriteUInt32( aConnectorRule.nRuleId )
-                   .WriteUInt32( aConnectorRule.nShapeA )
-                   .WriteUInt32( aConnectorRule.nShapeB )
-                   .WriteUInt32( aConnectorRule.nShapeC )
-                   .WriteUInt32( aConnectorRule.ncptiA )
-                   .WriteUInt32( aConnectorRule.ncptiB );
-
-            aConnectorRule.nRuleId += 2;
+            if ( aConnectorRule.nShapeA )
+                aConnectorRule.ncptiA = pPtr->GetConnectorRule( true );
+            if ( aConnectorRule.nShapeB )
+                aConnectorRule.ncptiB = pPtr->GetConnectorRule( false );
         }
+        rStrm  .WriteUInt32( ( ESCHER_ConnectorRule << 16 ) | 1 )   // atom hd
+               .WriteUInt32( 24 )
+               .WriteUInt32( aConnectorRule.nRuleId )
+               .WriteUInt32( aConnectorRule.nShapeA )
+               .WriteUInt32( aConnectorRule.nShapeB )
+               .WriteUInt32( aConnectorRule.nShapeC )
+               .WriteUInt32( aConnectorRule.ncptiA )
+               .WriteUInt32( aConnectorRule.ncptiB );
 
-        nCurrentPos = rStrm.Tell();             // close the ESCHER_SolverContainer
-        nSize = ( nCurrentPos - nRecHdPos ) - 4;
-        rStrm.Seek( nRecHdPos );
-        rStrm.WriteUInt32( nSize );
-        rStrm.Seek( nCurrentPos );
+        aConnectorRule.nRuleId += 2;
     }
+
+    nCurrentPos = rStrm.Tell();             // close the ESCHER_SolverContainer
+    nSize = ( nCurrentPos - nRecHdPos ) - 4;
+    rStrm.Seek( nRecHdPos );
+    rStrm.WriteUInt32( nSize );
+    rStrm.Seek( nCurrentPos );
 }
 
 EscherExGlobal::EscherExGlobal() :
@@ -4940,37 +4940,37 @@ EscherEx::~EscherEx()
 
 void EscherEx::Flush( SvStream* pPicStreamMergeBSE /* = NULL */ )
 {
-    if ( mxGlobal->HasDggContainer() )
+    if ( !mxGlobal->HasDggContainer() )
+        return;
+
+    // store the current stream position at ESCHER_Persist_CurrentPosition key
+    PtReplaceOrInsert( ESCHER_Persist_CurrentPosition, mpOutStrm->Tell() );
+    if ( DoSeek( ESCHER_Persist_Dgg ) )
     {
-        // store the current stream position at ESCHER_Persist_CurrentPosition key
-        PtReplaceOrInsert( ESCHER_Persist_CurrentPosition, mpOutStrm->Tell() );
-        if ( DoSeek( ESCHER_Persist_Dgg ) )
+        /*  The DGG record is still not written. ESCHER_Persist_Dgg seeks
+            to the place where the complete record has to be inserted. */
+        InsertAtCurrentPos( mxGlobal->GetDggAtomSize() );
+        mxGlobal->WriteDggAtom( *mpOutStrm );
+
+        if ( mxGlobal->HasGraphics() )
         {
-            /*  The DGG record is still not written. ESCHER_Persist_Dgg seeks
-                to the place where the complete record has to be inserted. */
-            InsertAtCurrentPos( mxGlobal->GetDggAtomSize() );
-            mxGlobal->WriteDggAtom( *mpOutStrm );
-
-            if ( mxGlobal->HasGraphics() )
+            /*  Calculate the total size of the BSTORECONTAINER including
+                all BSE records containing the picture data contained in
+                the passed in pPicStreamMergeBSE. */
+            sal_uInt32 nBSCSize = mxGlobal->GetBlibStoreContainerSize( pPicStreamMergeBSE );
+            if ( nBSCSize > 0 )
             {
-                /*  Calculate the total size of the BSTORECONTAINER including
-                    all BSE records containing the picture data contained in
-                    the passed in pPicStreamMergeBSE. */
-                sal_uInt32 nBSCSize = mxGlobal->GetBlibStoreContainerSize( pPicStreamMergeBSE );
-                if ( nBSCSize > 0 )
-                {
-                    InsertAtCurrentPos( nBSCSize );
-                    mxGlobal->WriteBlibStoreContainer( *mpOutStrm, pPicStreamMergeBSE );
-                }
+                InsertAtCurrentPos( nBSCSize );
+                mxGlobal->WriteBlibStoreContainer( *mpOutStrm, pPicStreamMergeBSE );
             }
-
-            /*  Forget the stream position stored for the DGG which is invalid
-                after the call to InsertAtCurrentPos() anyway. */
-            PtDelete( ESCHER_Persist_Dgg );
         }
-        // seek to initial position (may be different due to inserted DGG and BLIPs)
-        mpOutStrm->Seek( PtGetOffsetByID( ESCHER_Persist_CurrentPosition ) );
+
+        /*  Forget the stream position stored for the DGG which is invalid
+            after the call to InsertAtCurrentPos() anyway. */
+        PtDelete( ESCHER_Persist_Dgg );
     }
+    // seek to initial position (may be different due to inserted DGG and BLIPs)
+    mpOutStrm->Seek( PtGetOffsetByID( ESCHER_Persist_CurrentPosition ) );
 }
 
 void EscherEx::InsertAtCurrentPos( sal_uInt32 nBytes )

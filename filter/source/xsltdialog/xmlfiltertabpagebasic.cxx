@@ -73,56 +73,56 @@ static OUString checkExtensions( const OUString& rExtensions )
 
 void XMLFilterTabPageBasic::FillInfo( filter_info_impl* pInfo )
 {
-    if( pInfo )
+    if( !pInfo )
+        return;
+
+    if( !m_xEDFilterName->get_text().isEmpty() )
+        pInfo->maFilterName = m_xEDFilterName->get_text();
+
+    if( !m_xCBApplication->get_active_text().isEmpty() )
+        pInfo->maDocumentService = m_xCBApplication->get_active_text();
+
+    if( !m_xEDInterfaceName->get_text().isEmpty() )
+        pInfo->maInterfaceName = m_xEDInterfaceName->get_text();
+
+    if( !m_xEDExtension->get_text().isEmpty() )
+        pInfo->maExtension = checkExtensions( m_xEDExtension->get_text() );
+
+    pInfo->maComment = string_encode( m_xEDDescription->get_text() );
+
+    if( pInfo->maDocumentService.isEmpty() )
+        return;
+
+    std::vector< application_info_impl > const & rInfos = getApplicationInfos();
+    for (auto const& info : rInfos)
     {
-        if( !m_xEDFilterName->get_text().isEmpty() )
-            pInfo->maFilterName = m_xEDFilterName->get_text();
-
-        if( !m_xCBApplication->get_active_text().isEmpty() )
-            pInfo->maDocumentService = m_xCBApplication->get_active_text();
-
-        if( !m_xEDInterfaceName->get_text().isEmpty() )
-            pInfo->maInterfaceName = m_xEDInterfaceName->get_text();
-
-        if( !m_xEDExtension->get_text().isEmpty() )
-            pInfo->maExtension = checkExtensions( m_xEDExtension->get_text() );
-
-        pInfo->maComment = string_encode( m_xEDDescription->get_text() );
-
-        if( !pInfo->maDocumentService.isEmpty() )
+        if( pInfo->maDocumentService == info.maDocumentUIName )
         {
-            std::vector< application_info_impl > const & rInfos = getApplicationInfos();
-            for (auto const& info : rInfos)
-            {
-                if( pInfo->maDocumentService == info.maDocumentUIName )
-                {
-                    pInfo->maDocumentService = info.maDocumentService;
-                    pInfo->maExportService = info.maXMLExporter;
-                    pInfo->maImportService = info.maXMLImporter;
-                    break;
-                }
-            }
+            pInfo->maDocumentService = info.maDocumentService;
+            pInfo->maExportService = info.maXMLExporter;
+            pInfo->maImportService = info.maXMLImporter;
+            break;
         }
     }
 }
 
 void XMLFilterTabPageBasic::SetInfo(const filter_info_impl* pInfo)
 {
-    if( pInfo )
-    {
-        m_xEDFilterName->set_text( string_decode(pInfo->maFilterName) );
-        /*
-        if( pInfo->maDocumentService.getLength() )
-            maCBApplication.set_text( getApplicationUIName( pInfo->maDocumentService ) );
-        */
-        if( !pInfo->maExportService.isEmpty() )
-            m_xCBApplication->set_entry_text( getApplicationUIName( pInfo->maExportService ) );
-        else
-            m_xCBApplication->set_entry_text( getApplicationUIName( pInfo->maImportService ) );
-        m_xEDInterfaceName->set_text( string_decode(pInfo->maInterfaceName) );
-        m_xEDExtension->set_text( pInfo->maExtension );
-        m_xEDDescription->set_text( string_decode( pInfo->maComment ) );
-    }
+    if( !pInfo )
+        return;
+
+    m_xEDFilterName->set_text( string_decode(pInfo->maFilterName) );
+    /*
+    if( pInfo->maDocumentService.getLength() )
+        maCBApplication.set_text( getApplicationUIName( pInfo->maDocumentService ) );
+    */
+    if( !pInfo->maExportService.isEmpty() )
+        m_xCBApplication->set_entry_text( getApplicationUIName( pInfo->maExportService ) );
+    else
+        m_xCBApplication->set_entry_text( getApplicationUIName( pInfo->maImportService ) );
+    m_xEDInterfaceName->set_text( string_decode(pInfo->maInterfaceName) );
+    m_xEDExtension->set_text( pInfo->maExtension );
+    m_xEDDescription->set_text( string_decode( pInfo->maComment ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

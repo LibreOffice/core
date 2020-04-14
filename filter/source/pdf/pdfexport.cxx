@@ -292,25 +292,25 @@ public:
 void PDFExportStreamDoc::write( const Reference< XOutputStream >& xStream )
 {
     Reference< css::frame::XStorable > xStore( m_xSrcDoc, UNO_QUERY );
-    if( xStore.is() )
-    {
-        Sequence< beans::PropertyValue > aArgs( 2 + (m_aPreparedPassword.hasElements() ? 1 : 0) );
-        aArgs.getArray()[0].Name = "FilterName";
-        aArgs.getArray()[1].Name = "OutputStream";
-        aArgs.getArray()[1].Value <<= xStream;
-        if( m_aPreparedPassword.hasElements() )
-        {
-            aArgs.getArray()[2].Name = "EncryptionData";
-            aArgs.getArray()[2].Value <<= m_aPreparedPassword;
-        }
+    if( !xStore.is() )
+        return;
 
-        try
-        {
-            xStore->storeToURL( "private:stream", aArgs );
-        }
-        catch( const IOException& )
-        {
-        }
+    Sequence< beans::PropertyValue > aArgs( 2 + (m_aPreparedPassword.hasElements() ? 1 : 0) );
+    aArgs.getArray()[0].Name = "FilterName";
+    aArgs.getArray()[1].Name = "OutputStream";
+    aArgs.getArray()[1].Value <<= xStream;
+    if( m_aPreparedPassword.hasElements() )
+    {
+        aArgs.getArray()[2].Name = "EncryptionData";
+        aArgs.getArray()[2].Value <<= m_aPreparedPassword;
+    }
+
+    try
+    {
+        xStore->storeToURL( "private:stream", aArgs );
+    }
+    catch( const IOException& )
+    {
     }
 }
 

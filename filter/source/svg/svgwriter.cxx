@@ -338,69 +338,69 @@ void SVGAttributeWriter::SetFontAttr( const vcl::Font& rFont )
 {
     vcl::Font& rCurFont = mrCurrentState.aFont;
 
-    if( rFont != rCurFont )
+    if( rFont == rCurFont )
+        return;
+
+    OUString  aFontStyle, aTextDecoration;
+    sal_Int32        nFontWeight;
+
+    rCurFont = rFont;
+
+    // Font Family
+    setFontFamily();
+
+    // Font Size
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontSize,
+                           OUString::number( rFont.GetFontHeight() ) + "px" );
+
+    // Font Style
+    if( rFont.GetItalic() != ITALIC_NONE )
     {
-        OUString  aFontStyle, aTextDecoration;
-        sal_Int32        nFontWeight;
+        if( rFont.GetItalic() == ITALIC_OBLIQUE )
+            aFontStyle = "oblique";
+        else
+            aFontStyle = "italic";
+    }
+    else
+        aFontStyle = "normal";
 
-        rCurFont = rFont;
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontStyle, aFontStyle );
 
-        // Font Family
-        setFontFamily();
+    // Font Weight
+    switch( rFont.GetWeight() )
+    {
+        case WEIGHT_THIN:           nFontWeight = 100; break;
+        case WEIGHT_ULTRALIGHT:     nFontWeight = 200; break;
+        case WEIGHT_LIGHT:          nFontWeight = 300; break;
+        case WEIGHT_SEMILIGHT:      nFontWeight = 400; break;
+        case WEIGHT_NORMAL:         nFontWeight = 400; break;
+        case WEIGHT_MEDIUM:         nFontWeight = 500; break;
+        case WEIGHT_SEMIBOLD:       nFontWeight = 600; break;
+        case WEIGHT_BOLD:           nFontWeight = 700; break;
+        case WEIGHT_ULTRABOLD:      nFontWeight = 800; break;
+        case WEIGHT_BLACK:          nFontWeight = 900; break;
+        default:                    nFontWeight = 400; break;
+    }
 
-        // Font Size
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontSize,
-                               OUString::number( rFont.GetFontHeight() ) + "px" );
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontWeight, OUString::number( nFontWeight ) );
 
-        // Font Style
-        if( rFont.GetItalic() != ITALIC_NONE )
+    if( mrExport.IsUseNativeTextDecoration() )
+    {
+        if( rFont.GetUnderline() != LINESTYLE_NONE || rFont.GetStrikeout() != STRIKEOUT_NONE )
         {
-            if( rFont.GetItalic() == ITALIC_OBLIQUE )
-                aFontStyle = "oblique";
-            else
-                aFontStyle = "italic";
+            if( rFont.GetUnderline() != LINESTYLE_NONE )
+                aTextDecoration = "underline ";
+
+            if( rFont.GetStrikeout() != STRIKEOUT_NONE )
+                aTextDecoration += "line-through ";
         }
         else
-            aFontStyle = "normal";
+            aTextDecoration = "none";
 
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontStyle, aFontStyle );
-
-        // Font Weight
-        switch( rFont.GetWeight() )
-        {
-            case WEIGHT_THIN:           nFontWeight = 100; break;
-            case WEIGHT_ULTRALIGHT:     nFontWeight = 200; break;
-            case WEIGHT_LIGHT:          nFontWeight = 300; break;
-            case WEIGHT_SEMILIGHT:      nFontWeight = 400; break;
-            case WEIGHT_NORMAL:         nFontWeight = 400; break;
-            case WEIGHT_MEDIUM:         nFontWeight = 500; break;
-            case WEIGHT_SEMIBOLD:       nFontWeight = 600; break;
-            case WEIGHT_BOLD:           nFontWeight = 700; break;
-            case WEIGHT_ULTRABOLD:      nFontWeight = 800; break;
-            case WEIGHT_BLACK:          nFontWeight = 900; break;
-            default:                    nFontWeight = 400; break;
-        }
-
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontWeight, OUString::number( nFontWeight ) );
-
-        if( mrExport.IsUseNativeTextDecoration() )
-        {
-            if( rFont.GetUnderline() != LINESTYLE_NONE || rFont.GetStrikeout() != STRIKEOUT_NONE )
-            {
-                if( rFont.GetUnderline() != LINESTYLE_NONE )
-                    aTextDecoration = "underline ";
-
-                if( rFont.GetStrikeout() != STRIKEOUT_NONE )
-                    aTextDecoration += "line-through ";
-            }
-            else
-                aTextDecoration = "none";
-
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTextDecoration, aTextDecoration );
-        }
-
-        startFontSettings();
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTextDecoration, aTextDecoration );
     }
+
+    startFontSettings();
 }
 
 
@@ -787,114 +787,113 @@ void SVGTextWriter::addFontAttributes( bool bIsTextContainer )
 {
     implSetCurrentFont();
 
-    if( maCurrentFont !=  maParentFont )
+    if( maCurrentFont ==  maParentFont )
+        return;
+
+    const OUString& rsCurFontName               = maCurrentFont.GetFamilyName();
+    long int nCurFontSize                       = maCurrentFont.GetFontHeight();
+    FontItalic eCurFontItalic                   = maCurrentFont.GetItalic();
+    FontWeight eCurFontWeight                   = maCurrentFont.GetWeight();
+
+    const OUString& rsParFontName               = maParentFont.GetFamilyName();
+    long int nParFontSize                       = maParentFont.GetFontHeight();
+    FontItalic eParFontItalic                   = maParentFont.GetItalic();
+    FontWeight eParFontWeight                   = maParentFont.GetWeight();
+
+
+    // Font Family
+    if( rsCurFontName != rsParFontName )
     {
-        const OUString& rsCurFontName               = maCurrentFont.GetFamilyName();
-        long int nCurFontSize                       = maCurrentFont.GetFontHeight();
-        FontItalic eCurFontItalic                   = maCurrentFont.GetItalic();
-        FontWeight eCurFontWeight                   = maCurrentFont.GetWeight();
-
-        const OUString& rsParFontName               = maParentFont.GetFamilyName();
-        long int nParFontSize                       = maParentFont.GetFontHeight();
-        FontItalic eParFontItalic                   = maParentFont.GetItalic();
-        FontWeight eParFontWeight                   = maParentFont.GetWeight();
-
-
-        // Font Family
-        if( rsCurFontName != rsParFontName )
-        {
-            implSetFontFamily();
-        }
-
-        // Font Size
-        if( nCurFontSize != nParFontSize )
-        {
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontSize,
-                                   OUString::number( nCurFontSize ) +  "px" );
-        }
-
-        // Font Style
-        if( eCurFontItalic != eParFontItalic )
-        {
-            OUString sFontStyle;
-            if( eCurFontItalic != ITALIC_NONE )
-            {
-                if( eCurFontItalic == ITALIC_OBLIQUE )
-                    sFontStyle = "oblique";
-                else
-                    sFontStyle = "italic";
-            }
-            else
-            {
-                sFontStyle = "normal";
-            }
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontStyle, sFontStyle );
-        }
-
-        // Font Weight
-        if( eCurFontWeight != eParFontWeight )
-        {
-            sal_Int32 nFontWeight;
-            switch( eCurFontWeight )
-            {
-                case WEIGHT_THIN:           nFontWeight = 100; break;
-                case WEIGHT_ULTRALIGHT:     nFontWeight = 200; break;
-                case WEIGHT_LIGHT:          nFontWeight = 300; break;
-                case WEIGHT_SEMILIGHT:      nFontWeight = 400; break;
-                case WEIGHT_NORMAL:         nFontWeight = 400; break;
-                case WEIGHT_MEDIUM:         nFontWeight = 500; break;
-                case WEIGHT_SEMIBOLD:       nFontWeight = 600; break;
-                case WEIGHT_BOLD:           nFontWeight = 700; break;
-                case WEIGHT_ULTRABOLD:      nFontWeight = 800; break;
-                case WEIGHT_BLACK:          nFontWeight = 900; break;
-                default:                    nFontWeight = 400; break;
-            }
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontWeight, OUString::number( nFontWeight ) );
-        }
-
-
-        if( mrExport.IsUseNativeTextDecoration() )
-        {
-            FontLineStyle eCurFontLineStyle         = maCurrentFont.GetUnderline();
-            FontStrikeout eCurFontStrikeout         = maCurrentFont.GetStrikeout();
-
-            FontLineStyle eParFontLineStyle         = maParentFont.GetUnderline();
-            FontStrikeout eParFontStrikeout         = maParentFont.GetStrikeout();
-
-            OUString sTextDecoration;
-            bool bIsDecorationChanged = false;
-            if( eCurFontLineStyle != eParFontLineStyle )
-            {
-                if( eCurFontLineStyle != LINESTYLE_NONE )
-                    sTextDecoration = "underline";
-                bIsDecorationChanged = true;
-            }
-            if( eCurFontStrikeout != eParFontStrikeout )
-            {
-                if( eCurFontStrikeout != STRIKEOUT_NONE )
-                {
-                    if( !sTextDecoration.isEmpty() )
-                        sTextDecoration += " ";
-                    sTextDecoration += "line-through";
-                }
-                bIsDecorationChanged = true;
-            }
-
-            if( !sTextDecoration.isEmpty() )
-            {
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTextDecoration, sTextDecoration );
-            }
-            else if( bIsDecorationChanged )
-            {
-                sTextDecoration = "none";
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTextDecoration, sTextDecoration );
-            }
-        }
-
-        if( bIsTextContainer )
-            maParentFont = maCurrentFont;
-
+        implSetFontFamily();
     }
+
+    // Font Size
+    if( nCurFontSize != nParFontSize )
+    {
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontSize,
+                               OUString::number( nCurFontSize ) +  "px" );
+    }
+
+    // Font Style
+    if( eCurFontItalic != eParFontItalic )
+    {
+        OUString sFontStyle;
+        if( eCurFontItalic != ITALIC_NONE )
+        {
+            if( eCurFontItalic == ITALIC_OBLIQUE )
+                sFontStyle = "oblique";
+            else
+                sFontStyle = "italic";
+        }
+        else
+        {
+            sFontStyle = "normal";
+        }
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontStyle, sFontStyle );
+    }
+
+    // Font Weight
+    if( eCurFontWeight != eParFontWeight )
+    {
+        sal_Int32 nFontWeight;
+        switch( eCurFontWeight )
+        {
+            case WEIGHT_THIN:           nFontWeight = 100; break;
+            case WEIGHT_ULTRALIGHT:     nFontWeight = 200; break;
+            case WEIGHT_LIGHT:          nFontWeight = 300; break;
+            case WEIGHT_SEMILIGHT:      nFontWeight = 400; break;
+            case WEIGHT_NORMAL:         nFontWeight = 400; break;
+            case WEIGHT_MEDIUM:         nFontWeight = 500; break;
+            case WEIGHT_SEMIBOLD:       nFontWeight = 600; break;
+            case WEIGHT_BOLD:           nFontWeight = 700; break;
+            case WEIGHT_ULTRABOLD:      nFontWeight = 800; break;
+            case WEIGHT_BLACK:          nFontWeight = 900; break;
+            default:                    nFontWeight = 400; break;
+        }
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontWeight, OUString::number( nFontWeight ) );
+    }
+
+
+    if( mrExport.IsUseNativeTextDecoration() )
+    {
+        FontLineStyle eCurFontLineStyle         = maCurrentFont.GetUnderline();
+        FontStrikeout eCurFontStrikeout         = maCurrentFont.GetStrikeout();
+
+        FontLineStyle eParFontLineStyle         = maParentFont.GetUnderline();
+        FontStrikeout eParFontStrikeout         = maParentFont.GetStrikeout();
+
+        OUString sTextDecoration;
+        bool bIsDecorationChanged = false;
+        if( eCurFontLineStyle != eParFontLineStyle )
+        {
+            if( eCurFontLineStyle != LINESTYLE_NONE )
+                sTextDecoration = "underline";
+            bIsDecorationChanged = true;
+        }
+        if( eCurFontStrikeout != eParFontStrikeout )
+        {
+            if( eCurFontStrikeout != STRIKEOUT_NONE )
+            {
+                if( !sTextDecoration.isEmpty() )
+                    sTextDecoration += " ";
+                sTextDecoration += "line-through";
+            }
+            bIsDecorationChanged = true;
+        }
+
+        if( !sTextDecoration.isEmpty() )
+        {
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTextDecoration, sTextDecoration );
+        }
+        else if( bIsDecorationChanged )
+        {
+            sTextDecoration = "none";
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTextDecoration, sTextDecoration );
+        }
+    }
+
+    if( bIsTextContainer )
+        maParentFont = maCurrentFont;
 }
 
 
@@ -1427,72 +1426,72 @@ void SVGTextWriter::writeBitmapPlaceholder( const MetaBitmapActionType* pAction 
 
 void SVGTextWriter::implWriteEmbeddedBitmaps()
 {
-    if( mpTextEmbeddedBitmapMtf && mpTextEmbeddedBitmapMtf->GetActionSize() )
+    if( !(mpTextEmbeddedBitmapMtf && mpTextEmbeddedBitmapMtf->GetActionSize()) )
+        return;
+
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "EmbeddedBitmaps" );
+    SvXMLElementExport aEmbBitmapGroupElem( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true );
+
+    const GDIMetaFile& rMtf = *mpTextEmbeddedBitmapMtf;
+
+    BitmapChecksum nId, nChecksum = 0;
+    Point aPt;
+    Size  aSz;
+    sal_uLong nCount = rMtf.GetActionSize();
+    for( sal_uLong nCurAction = 0; nCurAction < nCount; nCurAction++ )
     {
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "EmbeddedBitmaps" );
-        SvXMLElementExport aEmbBitmapGroupElem( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true );
 
-        const GDIMetaFile& rMtf = *mpTextEmbeddedBitmapMtf;
+        const MetaAction*    pAction = rMtf.GetAction( nCurAction );
+        const MetaActionType nType = pAction->GetType();
 
-        BitmapChecksum nId, nChecksum = 0;
-        Point aPt;
-        Size  aSz;
-        sal_uLong nCount = rMtf.GetActionSize();
-        for( sal_uLong nCurAction = 0; nCurAction < nCount; nCurAction++ )
+        switch( nType )
         {
-
-            const MetaAction*    pAction = rMtf.GetAction( nCurAction );
-            const MetaActionType nType = pAction->GetType();
-
-            switch( nType )
+            case MetaActionType::BMPSCALE:
             {
-                case MetaActionType::BMPSCALE:
-                {
-                    const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pAction);
-                    nChecksum = pA->GetBitmap().GetChecksum();
-                    aPt = pA->GetPoint();
-                    aSz = pA->GetSize();
-                }
-                break;
-                case MetaActionType::BMPEXSCALE:
-                {
-                    const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
-                    nChecksum = pA->GetBitmapEx().GetChecksum();
-                    aPt = pA->GetPoint();
-                    aSz = pA->GetSize();
-                }
-                break;
-                default: break;
+                const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pAction);
+                nChecksum = pA->GetBitmap().GetChecksum();
+                aPt = pA->GetPoint();
+                aSz = pA->GetSize();
             }
-
-            // <g id="?" > (used by animations)
+            break;
+            case MetaActionType::BMPEXSCALE:
             {
-                // embedded bitmap id
-                nId = SVGActionWriter::GetChecksum( pAction );
-                OUString sId = "embedded-bitmap(" + msShapeId + "." + OUString::number( nId ) + ")";
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", sId );
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "EmbeddedBitmap" );
-
-                SvXMLElementExport aEmbBitmapElem( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true );
-
-                // <use x="?" y="?" xlink:ref="?" >
-                {
-                    // referenced bitmap template
-                    OUString sRefId = "#bitmap(" + OUString::number( nChecksum ) + ")";
-
-                    Point aPoint;
-                    Size  aSize;
-                    implMap( aPt, aPoint );
-                    implMap( aSz, aSize );
-
-                    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, OUString::number( aPoint.X() ) );
-                    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, OUString::number( aPoint.Y() ) );
-                    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, sRefId );
-
-                    SvXMLElementExport aRefElem( mrExport, XML_NAMESPACE_NONE, "use", true, true );
-                }
-            } // close aEmbBitmapElem
+                const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
+                nChecksum = pA->GetBitmapEx().GetChecksum();
+                aPt = pA->GetPoint();
+                aSz = pA->GetSize();
+            }
+            break;
+            default: break;
         }
+
+        // <g id="?" > (used by animations)
+        {
+            // embedded bitmap id
+            nId = SVGActionWriter::GetChecksum( pAction );
+            OUString sId = "embedded-bitmap(" + msShapeId + "." + OUString::number( nId ) + ")";
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", sId );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "EmbeddedBitmap" );
+
+            SvXMLElementExport aEmbBitmapElem( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true );
+
+            // <use x="?" y="?" xlink:ref="?" >
+            {
+                // referenced bitmap template
+                OUString sRefId = "#bitmap(" + OUString::number( nChecksum ) + ")";
+
+                Point aPoint;
+                Size  aSize;
+                implMap( aPt, aPoint );
+                implMap( aSz, aSize );
+
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, OUString::number( aPoint.X() ) );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, OUString::number( aPoint.Y() ) );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, sRefId );
+
+                SvXMLElementExport aRefElem( mrExport, XML_NAMESPACE_NONE, "use", true, true );
+            }
+        } // close aEmbBitmapElem
     }
 }
 
@@ -1921,54 +1920,53 @@ void SVGActionWriter::ImplWriteEllipse( const Point& rCenter, long nRadX, long n
 
 void SVGActionWriter::ImplAddLineAttr( const LineInfo &rAttrs )
 {
-    if ( !rAttrs.IsDefault() )
+    if ( rAttrs.IsDefault() )
+        return;
+
+    sal_Int32 nStrokeWidth = ImplMap( rAttrs.GetWidth() );
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStrokeWidth,
+                           OUString::number( nStrokeWidth ) );
+    // support for LineJoint
+    switch(rAttrs.GetLineJoin())
     {
-        sal_Int32 nStrokeWidth = ImplMap( rAttrs.GetWidth() );
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStrokeWidth,
-                               OUString::number( nStrokeWidth ) );
-        // support for LineJoint
-        switch(rAttrs.GetLineJoin())
+        case basegfx::B2DLineJoin::NONE:
+        case basegfx::B2DLineJoin::Miter:
         {
-            case basegfx::B2DLineJoin::NONE:
-            case basegfx::B2DLineJoin::Miter:
-            {
-                mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "miter");
-                break;
-            }
-            case basegfx::B2DLineJoin::Bevel:
-            {
-                mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "bevel");
-                break;
-            }
-            case basegfx::B2DLineJoin::Round:
-            {
-                mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "round");
-                break;
-            }
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "miter");
+            break;
         }
-
-        // support for LineCap
-        switch(rAttrs.GetLineCap())
+        case basegfx::B2DLineJoin::Bevel:
         {
-            default: /* css::drawing::LineCap_BUTT */
-            {
-                // butt is Svg default, so no need to write until the exporter might write styles.
-                // If this happens, activate here
-                // mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, "butt");
-                break;
-            }
-            case css::drawing::LineCap_ROUND:
-            {
-                mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, "round");
-                break;
-            }
-            case css::drawing::LineCap_SQUARE:
-            {
-                mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, "square");
-                break;
-            }
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "bevel");
+            break;
         }
+        case basegfx::B2DLineJoin::Round:
+        {
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "round");
+            break;
+        }
+    }
 
+    // support for LineCap
+    switch(rAttrs.GetLineCap())
+    {
+        default: /* css::drawing::LineCap_BUTT */
+        {
+            // butt is Svg default, so no need to write until the exporter might write styles.
+            // If this happens, activate here
+            // mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, "butt");
+            break;
+        }
+        case css::drawing::LineCap_ROUND:
+        {
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, "round");
+            break;
+        }
+        case css::drawing::LineCap_SQUARE:
+        {
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, "square");
+            break;
+        }
     }
 
 }
@@ -2134,56 +2132,56 @@ void SVGActionWriter::ImplWritePattern( const tools::PolyPolygon& rPolyPoly,
                                         const Gradient* pGradient,
                                         sal_uInt32 nWriteFlags )
 {
-    if( rPolyPoly.Count() )
-    {
-        SvXMLElementExport aElemG( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true );
+    if( !rPolyPoly.Count() )
+        return;
 
-        OUString aPatternId = "pattern" + OUString::number( mnCurPatternId++ );
+    SvXMLElementExport aElemG( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true );
+
+    OUString aPatternId = "pattern" + OUString::number( mnCurPatternId++ );
+
+    {
+        SvXMLElementExport aElemDefs( mrExport, XML_NAMESPACE_NONE, aXMLElemDefs, true, true );
+
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrId, aPatternId );
+
+        tools::Rectangle aRect;
+        ImplMap( rPolyPoly.GetBoundRect(), aRect );
+
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, OUString::number( aRect.Left() ) );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, OUString::number( aRect.Top() ) );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrWidth, OUString::number( aRect.GetWidth() ) );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrHeight, OUString::number( aRect.GetHeight() ) );
+
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, "patternUnits", OUString( "userSpaceOnUse") );
 
         {
-            SvXMLElementExport aElemDefs( mrExport, XML_NAMESPACE_NONE, aXMLElemDefs, true, true );
+            SvXMLElementExport aElemPattern( mrExport, XML_NAMESPACE_NONE, "pattern", true, true );
 
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrId, aPatternId );
-
-            tools::Rectangle aRect;
-            ImplMap( rPolyPoly.GetBoundRect(), aRect );
-
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, OUString::number( aRect.Left() ) );
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, OUString::number( aRect.Top() ) );
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrWidth, OUString::number( aRect.GetWidth() ) );
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrHeight, OUString::number( aRect.GetHeight() ) );
-
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, "patternUnits", OUString( "userSpaceOnUse") );
+            // The origin of a pattern is positioned at (aRect.Left(), aRect.Top()).
+            // So we need to adjust the pattern coordinate.
+            OUString aTransform = "translate(" +
+                                  OUString::number( -aRect.Left() ) +
+                                  "," + OUString::number( -aRect.Top() ) +
+                                  ")";
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTransform, aTransform );
 
             {
-                SvXMLElementExport aElemPattern( mrExport, XML_NAMESPACE_NONE, "pattern", true, true );
+                SvXMLElementExport aElemG2( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true );
 
-                // The origin of a pattern is positioned at (aRect.Left(), aRect.Top()).
-                // So we need to adjust the pattern coordinate.
-                OUString aTransform = "translate(" +
-                                      OUString::number( -aRect.Left() ) +
-                                      "," + OUString::number( -aRect.Top() ) +
-                                      ")";
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTransform, aTransform );
-
-                {
-                    SvXMLElementExport aElemG2( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true );
-
-                    GDIMetaFile aTmpMtf;
-                    if( pHatch )
-                        mpVDev->AddHatchActions( rPolyPoly, *pHatch, aTmpMtf );
-                    else if ( pGradient )
-                        mpVDev->AddGradientActions( rPolyPoly.GetBoundRect(), *pGradient, aTmpMtf );
-                    ImplWriteActions( aTmpMtf, nWriteFlags, nullptr );
-                }
+                GDIMetaFile aTmpMtf;
+                if( pHatch )
+                    mpVDev->AddHatchActions( rPolyPoly, *pHatch, aTmpMtf );
+                else if ( pGradient )
+                    mpVDev->AddGradientActions( rPolyPoly.GetBoundRect(), *pGradient, aTmpMtf );
+                ImplWriteActions( aTmpMtf, nWriteFlags, nullptr );
             }
         }
-
-        OUString aPatternStyle = "fill:url(#" + aPatternId + ")";
-
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, aPatternStyle );
-        ImplWritePolyPolygon( rPolyPoly, false );
     }
+
+    OUString aPatternStyle = "fill:url(#" + aPatternId + ")";
+
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, aPatternStyle );
+    ImplWritePolyPolygon( rPolyPoly, false );
 }
 
 
@@ -2205,109 +2203,109 @@ void SVGActionWriter::ImplWriteGradientEx( const tools::PolyPolygon& rPolyPoly, 
 void SVGActionWriter::ImplWriteGradientLinear( const tools::PolyPolygon& rPolyPoly,
                                                const Gradient& rGradient )
 {
-    if( rPolyPoly.Count() )
-    {
-        SvXMLElementExport aElemG( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true );
+    if( !rPolyPoly.Count() )
+        return;
 
-        OUString aGradientId = "gradient" + OUString::number( mnCurGradientId++ );
+    SvXMLElementExport aElemG( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true );
+
+    OUString aGradientId = "gradient" + OUString::number( mnCurGradientId++ );
+
+    {
+        SvXMLElementExport aElemDefs( mrExport, XML_NAMESPACE_NONE, aXMLElemDefs, true, true );
+
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrId, aGradientId );
+        {
+            tools::Rectangle aTmpRect, aRect;
+            Point aTmpCenter, aCenter;
+
+            rGradient.GetBoundRect( rPolyPoly.GetBoundRect(), aTmpRect, aTmpCenter );
+            ImplMap( aTmpRect, aRect );
+            ImplMap( aTmpCenter, aCenter );
+            const sal_uInt16 nAngle = rGradient.GetAngle() % 3600;
+
+            tools::Polygon aPoly( 2 );
+            // Setting x value of a gradient vector to rotation center to
+            // place a gradient vector in a target polygon.
+            // This would help editing it in SVG editors like inkscape.
+            aPoly[ 0 ].setX( aCenter.X() );
+            aPoly[ 1 ].setX( aCenter.X() );
+            aPoly[ 0 ].setY( aRect.Top() );
+            aPoly[ 1 ].setY( aRect.Bottom() );
+            aPoly.Rotate( aCenter, nAngle );
+
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX1, OUString::number( aPoly[ 0 ].X() ) );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY1, OUString::number( aPoly[ 0 ].Y() ) );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX2, OUString::number( aPoly[ 1 ].X() ) );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY2, OUString::number( aPoly[ 1 ].Y() ) );
+
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrGradientUnits,
+                                   OUString( "userSpaceOnUse" ) );
+        }
 
         {
-            SvXMLElementExport aElemDefs( mrExport, XML_NAMESPACE_NONE, aXMLElemDefs, true, true );
+            SvXMLElementExport aElemLinearGradient( mrExport, XML_NAMESPACE_NONE, aXMLElemLinearGradient, true, true );
 
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrId, aGradientId );
+            const Color aStartColor = ImplGetColorWithIntensity( rGradient.GetStartColor(), rGradient.GetStartIntensity() );
+            const Color aEndColor = ImplGetColorWithIntensity( rGradient.GetEndColor(), rGradient.GetEndIntensity() );
+            double fBorderOffset = rGradient.GetBorder() / 100.0;
+            const sal_uInt16 nSteps = rGradient.GetSteps();
+            if( rGradient.GetStyle() == GradientStyle::Linear )
             {
-                tools::Rectangle aTmpRect, aRect;
-                Point aTmpCenter, aCenter;
-
-                rGradient.GetBoundRect( rPolyPoly.GetBoundRect(), aTmpRect, aTmpCenter );
-                ImplMap( aTmpRect, aRect );
-                ImplMap( aTmpCenter, aCenter );
-                const sal_uInt16 nAngle = rGradient.GetAngle() % 3600;
-
-                tools::Polygon aPoly( 2 );
-                // Setting x value of a gradient vector to rotation center to
-                // place a gradient vector in a target polygon.
-                // This would help editing it in SVG editors like inkscape.
-                aPoly[ 0 ].setX( aCenter.X() );
-                aPoly[ 1 ].setX( aCenter.X() );
-                aPoly[ 0 ].setY( aRect.Top() );
-                aPoly[ 1 ].setY( aRect.Bottom() );
-                aPoly.Rotate( aCenter, nAngle );
-
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX1, OUString::number( aPoly[ 0 ].X() ) );
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY1, OUString::number( aPoly[ 0 ].Y() ) );
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX2, OUString::number( aPoly[ 1 ].X() ) );
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY2, OUString::number( aPoly[ 1 ].Y() ) );
-
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrGradientUnits,
-                                       OUString( "userSpaceOnUse" ) );
-            }
-
-            {
-                SvXMLElementExport aElemLinearGradient( mrExport, XML_NAMESPACE_NONE, aXMLElemLinearGradient, true, true );
-
-                const Color aStartColor = ImplGetColorWithIntensity( rGradient.GetStartColor(), rGradient.GetStartIntensity() );
-                const Color aEndColor = ImplGetColorWithIntensity( rGradient.GetEndColor(), rGradient.GetEndIntensity() );
-                double fBorderOffset = rGradient.GetBorder() / 100.0;
-                const sal_uInt16 nSteps = rGradient.GetSteps();
-                if( rGradient.GetStyle() == GradientStyle::Linear )
+                // Emulate non-smooth gradient
+                if( 0 < nSteps && nSteps < 100 )
                 {
-                    // Emulate non-smooth gradient
-                    if( 0 < nSteps && nSteps < 100 )
-                    {
-                        double fOffsetStep = ( 1.0 - fBorderOffset ) / static_cast<double>(nSteps);
-                        for( sal_uInt16 i = 0; i < nSteps; i++ ) {
-                            Color aColor = ImplGetGradientColor( aStartColor, aEndColor, i / static_cast<double>(nSteps) );
-                            ImplWriteGradientStop( aColor, fBorderOffset + ( i + 1 ) * fOffsetStep );
-                            aColor = ImplGetGradientColor( aStartColor, aEndColor, ( i + 1 ) / static_cast<double>(nSteps) );
-                            ImplWriteGradientStop( aColor, fBorderOffset + ( i + 1 ) * fOffsetStep );
-                        }
-                    }
-                    else
-                    {
-                        ImplWriteGradientStop( aStartColor, fBorderOffset );
-                        ImplWriteGradientStop( aEndColor, 1.0 );
+                    double fOffsetStep = ( 1.0 - fBorderOffset ) / static_cast<double>(nSteps);
+                    for( sal_uInt16 i = 0; i < nSteps; i++ ) {
+                        Color aColor = ImplGetGradientColor( aStartColor, aEndColor, i / static_cast<double>(nSteps) );
+                        ImplWriteGradientStop( aColor, fBorderOffset + ( i + 1 ) * fOffsetStep );
+                        aColor = ImplGetGradientColor( aStartColor, aEndColor, ( i + 1 ) / static_cast<double>(nSteps) );
+                        ImplWriteGradientStop( aColor, fBorderOffset + ( i + 1 ) * fOffsetStep );
                     }
                 }
                 else
                 {
-                    fBorderOffset /= 2;
-                    // Emulate non-smooth gradient
-                    if( 0 < nSteps && nSteps < 100 )
+                    ImplWriteGradientStop( aStartColor, fBorderOffset );
+                    ImplWriteGradientStop( aEndColor, 1.0 );
+                }
+            }
+            else
+            {
+                fBorderOffset /= 2;
+                // Emulate non-smooth gradient
+                if( 0 < nSteps && nSteps < 100 )
+                {
+                    double fOffsetStep = ( 0.5 - fBorderOffset ) / static_cast<double>(nSteps);
+                    // Upper half
+                    for( sal_uInt16 i = 0; i < nSteps; i++ )
                     {
-                        double fOffsetStep = ( 0.5 - fBorderOffset ) / static_cast<double>(nSteps);
-                        // Upper half
-                        for( sal_uInt16 i = 0; i < nSteps; i++ )
-                        {
-                            Color aColor = ImplGetGradientColor( aEndColor, aStartColor, i / static_cast<double>(nSteps) );
-                            ImplWriteGradientStop( aColor, fBorderOffset + i * fOffsetStep );
-                            aColor = ImplGetGradientColor( aEndColor, aStartColor, (i + 1 ) / static_cast<double>(nSteps) );
-                            ImplWriteGradientStop( aColor, fBorderOffset + i * fOffsetStep );
-                        }
-                        // Lower half
-                        for( sal_uInt16 i = 0; i < nSteps; i++ )
-                        {
-                            Color aColor = ImplGetGradientColor( aStartColor, aEndColor, i / static_cast<double>(nSteps) );
-                            ImplWriteGradientStop( aColor, 0.5 + (i + 1) * fOffsetStep );
-                            aColor = ImplGetGradientColor( aStartColor, aEndColor, (i + 1 ) / static_cast<double>(nSteps) );
-                            ImplWriteGradientStop( aColor, 0.5 + (i + 1) * fOffsetStep );
-                        }
+                        Color aColor = ImplGetGradientColor( aEndColor, aStartColor, i / static_cast<double>(nSteps) );
+                        ImplWriteGradientStop( aColor, fBorderOffset + i * fOffsetStep );
+                        aColor = ImplGetGradientColor( aEndColor, aStartColor, (i + 1 ) / static_cast<double>(nSteps) );
+                        ImplWriteGradientStop( aColor, fBorderOffset + i * fOffsetStep );
                     }
-                    else
+                    // Lower half
+                    for( sal_uInt16 i = 0; i < nSteps; i++ )
                     {
-                        ImplWriteGradientStop( aEndColor, fBorderOffset );
-                        ImplWriteGradientStop( aStartColor, 0.5 );
-                        ImplWriteGradientStop( aEndColor, 1.0 - fBorderOffset );
+                        Color aColor = ImplGetGradientColor( aStartColor, aEndColor, i / static_cast<double>(nSteps) );
+                        ImplWriteGradientStop( aColor, 0.5 + (i + 1) * fOffsetStep );
+                        aColor = ImplGetGradientColor( aStartColor, aEndColor, (i + 1 ) / static_cast<double>(nSteps) );
+                        ImplWriteGradientStop( aColor, 0.5 + (i + 1) * fOffsetStep );
                     }
+                }
+                else
+                {
+                    ImplWriteGradientStop( aEndColor, fBorderOffset );
+                    ImplWriteGradientStop( aStartColor, 0.5 );
+                    ImplWriteGradientStop( aEndColor, 1.0 - fBorderOffset );
                 }
             }
         }
-
-        OUString aGradientStyle = "fill:url(#" + aGradientId + ")";
-
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, aGradientStyle );
-        ImplWritePolyPolygon( rPolyPoly, false );
     }
+
+    OUString aGradientStyle = "fill:url(#" + aGradientId + ")";
+
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, aGradientStyle );
+    ImplWritePolyPolygon( rPolyPoly, false );
 }
 
 
@@ -2663,37 +2661,37 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
     }
 
 
-    if( !mrExport.IsUseNativeTextDecoration() )
+    if( mrExport.IsUseNativeTextDecoration() )
+        return;
+
+    if( rFont.GetStrikeout() == STRIKEOUT_NONE && rFont.GetUnderline() == LINESTYLE_NONE )
+        return;
+
+    tools::Polygon aPoly( 4 );
+    const long  nLineHeight = std::max<long>( FRound( aMetric.GetLineHeight() * 0.05 ), 1 );
+
+    if( rFont.GetStrikeout() )
     {
-        if( rFont.GetStrikeout() != STRIKEOUT_NONE || rFont.GetUnderline() != LINESTYLE_NONE )
-        {
-            tools::Polygon aPoly( 4 );
-            const long  nLineHeight = std::max<long>( FRound( aMetric.GetLineHeight() * 0.05 ), 1 );
+        const long nYLinePos = aBaseLinePos.Y() - FRound( aMetric.GetAscent() * 0.26 );
 
-            if( rFont.GetStrikeout() )
-            {
-                const long nYLinePos = aBaseLinePos.Y() - FRound( aMetric.GetAscent() * 0.26 );
+        aPoly[ 0 ].setX( aBaseLinePos.X() ); aPoly[ 0 ].setY( nYLinePos - ( nLineHeight >> 1 ) );
+        aPoly[ 1 ].setX( aBaseLinePos.X() + aNormSize.Width() - 1 ); aPoly[ 1 ].setY( aPoly[ 0 ].Y() );
+        aPoly[ 2 ].setX( aPoly[ 1 ].X() ); aPoly[ 2 ].setY( aPoly[ 0 ].Y() + nLineHeight - 1 );
+        aPoly[ 3 ].setX( aPoly[ 0 ].X() ); aPoly[ 3 ].setY( aPoly[ 2 ].Y() );
 
-                aPoly[ 0 ].setX( aBaseLinePos.X() ); aPoly[ 0 ].setY( nYLinePos - ( nLineHeight >> 1 ) );
-                aPoly[ 1 ].setX( aBaseLinePos.X() + aNormSize.Width() - 1 ); aPoly[ 1 ].setY( aPoly[ 0 ].Y() );
-                aPoly[ 2 ].setX( aPoly[ 1 ].X() ); aPoly[ 2 ].setY( aPoly[ 0 ].Y() + nLineHeight - 1 );
-                aPoly[ 3 ].setX( aPoly[ 0 ].X() ); aPoly[ 3 ].setY( aPoly[ 2 ].Y() );
+        ImplWritePolyPolygon( aPoly, false );
+    }
 
-                ImplWritePolyPolygon( aPoly, false );
-            }
+    if( rFont.GetUnderline() )
+    {
+        const long  nYLinePos = aBaseLinePos.Y() + ( nLineHeight << 1 );
 
-            if( rFont.GetUnderline() )
-            {
-                const long  nYLinePos = aBaseLinePos.Y() + ( nLineHeight << 1 );
+        aPoly[ 0 ].setX( aBaseLinePos.X() ); aPoly[ 0 ].setY( nYLinePos - ( nLineHeight >> 1 ) );
+        aPoly[ 1 ].setX( aBaseLinePos.X() + aNormSize.Width() - 1 ); aPoly[ 1 ].setY( aPoly[ 0 ].Y() );
+        aPoly[ 2 ].setX( aPoly[ 1 ].X() ); aPoly[ 2 ].setY( aPoly[ 0 ].Y() + nLineHeight - 1 );
+        aPoly[ 3 ].setX( aPoly[ 0 ].X() ); aPoly[ 3 ].setY( aPoly[ 2 ].Y() );
 
-                aPoly[ 0 ].setX( aBaseLinePos.X() ); aPoly[ 0 ].setY( nYLinePos - ( nLineHeight >> 1 ) );
-                aPoly[ 1 ].setX( aBaseLinePos.X() + aNormSize.Width() - 1 ); aPoly[ 1 ].setY( aPoly[ 0 ].Y() );
-                aPoly[ 2 ].setX( aPoly[ 1 ].X() ); aPoly[ 2 ].setY( aPoly[ 0 ].Y() + nLineHeight - 1 );
-                aPoly[ 3 ].setX( aPoly[ 0 ].X() ); aPoly[ 3 ].setY( aPoly[ 2 ].Y() );
-
-                ImplWritePolyPolygon( aPoly, false );
-            }
-        }
+        ImplWritePolyPolygon( aPoly, false );
     }
 }
 
@@ -2723,82 +2721,82 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
                                     const Point& rSrcPt, const Size& rSrcSz,
                                     const css::uno::Reference<css::drawing::XShape>* pShape )
 {
-    if( !!rBmpEx )
+    if( !rBmpEx )
+        return;
+
+    BitmapEx aBmpEx( rBmpEx );
+    const tools::Rectangle aBmpRect( Point(), rBmpEx.GetSizePixel() );
+    const tools::Rectangle aSrcRect( rSrcPt, rSrcSz );
+
+    if( aSrcRect != aBmpRect )
+        aBmpEx.Crop( aSrcRect );
+
+    if( !aBmpEx )
+        return;
+
+    SvMemoryStream aOStm( 65535, 65535 );
+
+    bool bCached = false;
+    Graphic aGraphic;
+    bool bPNG = false;
+    bool bJPG = false;
+    if (pShape)
     {
-        BitmapEx aBmpEx( rBmpEx );
-        const tools::Rectangle aBmpRect( Point(), rBmpEx.GetSizePixel() );
-        const tools::Rectangle aSrcRect( rSrcPt, rSrcSz );
-
-        if( aSrcRect != aBmpRect )
-            aBmpEx.Crop( aSrcRect );
-
-        if( !!aBmpEx )
+        GetGraphicFromXShape(pShape, aGraphic);
+        if (aGraphic.GetType() == GraphicType::Bitmap)
         {
-            SvMemoryStream aOStm( 65535, 65535 );
-
-            bool bCached = false;
-            Graphic aGraphic;
-            bool bPNG = false;
-            bool bJPG = false;
-            if (pShape)
+            const BitmapEx& rGraphicBitmap = aGraphic.GetBitmapExRef();
+            if (rGraphicBitmap.GetChecksum() == rBmpEx.GetChecksum())
             {
-                GetGraphicFromXShape(pShape, aGraphic);
-                if (aGraphic.GetType() == GraphicType::Bitmap)
+                GfxLink aGfxLink = aGraphic.GetGfxLink();
+                if (aGfxLink.GetType() == GfxLinkType::NativePng)
                 {
-                    const BitmapEx& rGraphicBitmap = aGraphic.GetBitmapExRef();
-                    if (rGraphicBitmap.GetChecksum() == rBmpEx.GetChecksum())
-                    {
-                        GfxLink aGfxLink = aGraphic.GetGfxLink();
-                        if (aGfxLink.GetType() == GfxLinkType::NativePng)
-                        {
-                            bPNG = true;
-                        }
-                        else if (aGfxLink.GetType() == GfxLinkType::NativeJpg)
-                        {
-                            bJPG = true;
-                        }
-                        if (bPNG || bJPG)
-                        {
-                            aOStm.WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
-                            bCached = true;
-                        }
-                    }
+                    bPNG = true;
                 }
-            }
-
-            if( bCached || GraphicConverter::Export( aOStm, rBmpEx, ConvertDataFormat::PNG ) == ERRCODE_NONE )
-            {
-                Point                    aPt;
-                Size                     aSz;
-                Sequence< sal_Int8 >     aSeq( static_cast<sal_Int8 const *>(aOStm.GetData()), aOStm.Tell() );
-                OUStringBuffer aBuffer;
-                if (bJPG)
+                else if (aGfxLink.GetType() == GfxLinkType::NativeJpg)
                 {
-                    aBuffer.append("data:image/jpeg;base64,");
+                    bJPG = true;
                 }
-                else
+                if (bPNG || bJPG)
                 {
-                    aBuffer.append("data:image/png;base64,");
-                }
-                ::comphelper::Base64::encode( aBuffer, aSeq );
-
-                ImplMap( rPt, aPt );
-                ImplMap( rSz, aSz );
-
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, OUString::number( aPt.X() ) );
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, OUString::number( aPt.Y() ) );
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrWidth, OUString::number( aSz.Width() ) );
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrHeight, OUString::number( aSz.Height() ) );
-
-                // the image must be scaled to aSz in a non-uniform way
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, "preserveAspectRatio", "none" );
-
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, aBuffer.makeStringAndClear() );
-                {
-                    SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, "image", true, true );
+                    aOStm.WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
+                    bCached = true;
                 }
             }
         }
+    }
+
+    if( !(bCached || GraphicConverter::Export( aOStm, rBmpEx, ConvertDataFormat::PNG ) == ERRCODE_NONE) )
+        return;
+
+    Point                    aPt;
+    Size                     aSz;
+    Sequence< sal_Int8 >     aSeq( static_cast<sal_Int8 const *>(aOStm.GetData()), aOStm.Tell() );
+    OUStringBuffer aBuffer;
+    if (bJPG)
+    {
+        aBuffer.append("data:image/jpeg;base64,");
+    }
+    else
+    {
+        aBuffer.append("data:image/png;base64,");
+    }
+    ::comphelper::Base64::encode( aBuffer, aSeq );
+
+    ImplMap( rPt, aPt );
+    ImplMap( rSz, aSz );
+
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, OUString::number( aPt.X() ) );
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, OUString::number( aPt.Y() ) );
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrWidth, OUString::number( aSz.Width() ) );
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrHeight, OUString::number( aSz.Height() ) );
+
+    // the image must be scaled to aSz in a non-uniform way
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, "preserveAspectRatio", "none" );
+
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, aBuffer.makeStringAndClear() );
+    {
+        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, "image", true, true );
     }
 }
 
