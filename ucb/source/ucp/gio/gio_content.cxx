@@ -196,6 +196,9 @@ css::uno::Any convertToException(GError *pError, const css::uno::Reference< css:
                 css::task::InteractionClassification_ERROR, css::ucb::IOErrorCode_NAME_TOO_LONG, aArgs);
               EXCEPT(aExcept); }
             break;
+        case G_IO_ERROR_FAILED_HANDLED: /* Operation failed and a helper program
+                                           has already interacted with the user. Do not display any error
+                                           dialog */
         case G_IO_ERROR_PENDING:
             { css::ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
                 css::task::InteractionClassification_ERROR, css::ucb::IOErrorCode_PENDING, aArgs);
@@ -257,7 +260,6 @@ css::uno::Any convertToException(GError *pError, const css::uno::Reference< css:
         case G_IO_ERROR_NOT_EMPTY:
         case G_IO_ERROR_NOT_SYMBOLIC_LINK:
         case G_IO_ERROR_NOT_MOUNTABLE_FILE:
-        case G_IO_ERROR_FAILED_HANDLED:
             { css::ucb::InteractiveNetworkGeneralException aExcept(sMessage, rContext,
                 css::task::InteractionClassification_ERROR);
               EXCEPT(aExcept);}
