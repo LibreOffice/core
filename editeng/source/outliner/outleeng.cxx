@@ -171,22 +171,22 @@ OUString OutlinerEditEng::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 
 void OutlinerEditEng::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet )
 {
     Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
-    if( pPara )
-    {
-        if ( !IsInUndo() && IsUndoEnabled() )
-            pOwner->UndoActionStart( OLUNDO_ATTR );
+    if( !pPara )
+        return;
 
-        EditEngine::SetParaAttribs( nPara, rSet );
+    if ( !IsInUndo() && IsUndoEnabled() )
+        pOwner->UndoActionStart( OLUNDO_ATTR );
 
-        pOwner->ImplCheckNumBulletItem( nPara );
-        // #i100014#
-        // It is not a good idea to subtract 1 from a count and cast the result
-        // to sal_uInt16 without check, if the count is 0.
-        pOwner->ImplCheckParagraphs( nPara, pOwner->pParaList->GetParagraphCount() );
+    EditEngine::SetParaAttribs( nPara, rSet );
 
-        if ( !IsInUndo() && IsUndoEnabled() )
-            pOwner->UndoActionEnd();
-    }
+    pOwner->ImplCheckNumBulletItem( nPara );
+    // #i100014#
+    // It is not a good idea to subtract 1 from a count and cast the result
+    // to sal_uInt16 without check, if the count is 0.
+    pOwner->ImplCheckParagraphs( nPara, pOwner->pParaList->GetParagraphCount() );
+
+    if ( !IsInUndo() && IsUndoEnabled() )
+        pOwner->UndoActionEnd();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

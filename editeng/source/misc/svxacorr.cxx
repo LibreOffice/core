@@ -2106,49 +2106,49 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
                             tools::SvRef<SotStorage> const &rStg,
                             bool bConvert )
 {
-    if( rStg.is() )
+    if( !rStg.is() )
+        return;
+
+    OUString sStrmName( pStrmName, strlen(pStrmName), RTL_TEXTENCODING_MS_1252 );
+    if( rLst.empty() )
     {
-        OUString sStrmName( pStrmName, strlen(pStrmName), RTL_TEXTENCODING_MS_1252 );
-        if( rLst.empty() )
+        rStg->Remove( sStrmName );
+        rStg->Commit();
+    }
+    else
+    {
+        tools::SvRef<SotStorageStream> xStrm = rStg->OpenSotStream( sStrmName,
+                ( StreamMode::READ | StreamMode::WRITE | StreamMode::SHARE_DENYWRITE ) );
+        if( xStrm.is() )
         {
-            rStg->Remove( sStrmName );
-            rStg->Commit();
-        }
-        else
-        {
-            tools::SvRef<SotStorageStream> xStrm = rStg->OpenSotStream( sStrmName,
-                    ( StreamMode::READ | StreamMode::WRITE | StreamMode::SHARE_DENYWRITE ) );
-            if( xStrm.is() )
+            xStrm->SetSize( 0 );
+            xStrm->SetBufferSize( 8192 );
+            xStrm->SetProperty( "MediaType", Any(OUString( "text/xml" )) );
+
+
+            uno::Reference< uno::XComponentContext > xContext =
+                comphelper::getProcessComponentContext();
+
+            uno::Reference < xml::sax::XWriter > xWriter  = xml::sax::Writer::create(xContext);
+            uno::Reference < io::XOutputStream> xOut = new utl::OOutputStreamWrapper( *xStrm );
+            xWriter->setOutputStream(xOut);
+
+            uno::Reference < xml::sax::XDocumentHandler > xHandler(xWriter, UNO_QUERY_THROW);
+            rtl::Reference< SvXMLExceptionListExport > xExp( new SvXMLExceptionListExport( xContext, rLst, sStrmName, xHandler ) );
+
+            xExp->exportDoc( XML_BLOCK_LIST );
+
+            xStrm->Commit();
+            if( xStrm->GetError() == ERRCODE_NONE )
             {
-                xStrm->SetSize( 0 );
-                xStrm->SetBufferSize( 8192 );
-                xStrm->SetProperty( "MediaType", Any(OUString( "text/xml" )) );
-
-
-                uno::Reference< uno::XComponentContext > xContext =
-                    comphelper::getProcessComponentContext();
-
-                uno::Reference < xml::sax::XWriter > xWriter  = xml::sax::Writer::create(xContext);
-                uno::Reference < io::XOutputStream> xOut = new utl::OOutputStreamWrapper( *xStrm );
-                xWriter->setOutputStream(xOut);
-
-                uno::Reference < xml::sax::XDocumentHandler > xHandler(xWriter, UNO_QUERY_THROW);
-                rtl::Reference< SvXMLExceptionListExport > xExp( new SvXMLExceptionListExport( xContext, rLst, sStrmName, xHandler ) );
-
-                xExp->exportDoc( XML_BLOCK_LIST );
-
-                xStrm->Commit();
-                if( xStrm->GetError() == ERRCODE_NONE )
+                xStrm.clear();
+                if (!bConvert)
                 {
-                    xStrm.clear();
-                    if (!bConvert)
+                    rStg->Commit();
+                    if( ERRCODE_NONE != rStg->GetError() )
                     {
+                        rStg->Remove( sStrmName );
                         rStg->Commit();
-                        if( ERRCODE_NONE != rStg->GetError() )
-                        {
-                            rStg->Remove( sStrmName );
-                            rStg->Commit();
-                        }
                     }
                 }
             }

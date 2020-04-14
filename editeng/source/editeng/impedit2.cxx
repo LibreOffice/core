@@ -1613,131 +1613,131 @@ void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
     rTypes.clear();
 
     ContentNode* pNode = pParaPortion->GetNode();
-    if ( pNode->Len() )
+    if ( !pNode->Len() )
+        return;
+
+    uno::Reference < i18n::XBreakIterator > _xBI( ImplGetBreakIterator() );
+
+    OUString aText = pNode->GetString();
+
+    // To handle fields put the character from the field in the string,
+    // because endOfScript( ... ) will skip the CH_FEATURE, because this is WEAK
+    const EditCharAttrib* pField = pNode->GetCharAttribs().FindNextAttrib( EE_FEATURE_FIELD, 0 );
+    while ( pField )
     {
-        uno::Reference < i18n::XBreakIterator > _xBI( ImplGetBreakIterator() );
-
-        OUString aText = pNode->GetString();
-
-        // To handle fields put the character from the field in the string,
-        // because endOfScript( ... ) will skip the CH_FEATURE, because this is WEAK
-        const EditCharAttrib* pField = pNode->GetCharAttribs().FindNextAttrib( EE_FEATURE_FIELD, 0 );
-        while ( pField )
+        const OUString aFldText = static_cast<const EditCharAttribField*>(pField)->GetFieldValue();
+        if ( !aFldText.isEmpty() )
         {
-            const OUString aFldText = static_cast<const EditCharAttribField*>(pField)->GetFieldValue();
-            if ( !aFldText.isEmpty() )
+            aText = aText.replaceAt( pField->GetStart(), 1, aFldText.copy(0,1) );
+            short nFldScriptType = _xBI->getScriptType( aFldText, 0 );
+
+            for ( sal_Int32 nCharInField = 1; nCharInField < aFldText.getLength(); nCharInField++ )
             {
-                aText = aText.replaceAt( pField->GetStart(), 1, aFldText.copy(0,1) );
-                short nFldScriptType = _xBI->getScriptType( aFldText, 0 );
+                short nTmpType = _xBI->getScriptType( aFldText, nCharInField );
 
-                for ( sal_Int32 nCharInField = 1; nCharInField < aFldText.getLength(); nCharInField++ )
+                // First char from field wins...
+                if ( nFldScriptType == i18n::ScriptType::WEAK )
                 {
-                    short nTmpType = _xBI->getScriptType( aFldText, nCharInField );
+                    nFldScriptType = nTmpType;
+                    aText = aText.replaceAt( pField->GetStart(), 1, aFldText.copy(nCharInField,1) );
+                }
 
-                    // First char from field wins...
-                    if ( nFldScriptType == i18n::ScriptType::WEAK )
-                    {
-                        nFldScriptType = nTmpType;
-                        aText = aText.replaceAt( pField->GetStart(), 1, aFldText.copy(nCharInField,1) );
-                    }
-
-                    // ...  but if the first one is LATIN, and there are CJK or CTL chars too,
-                    // we prefer that ScriptType because we need another font.
-                    if ( ( nTmpType == i18n::ScriptType::ASIAN ) || ( nTmpType == i18n::ScriptType::COMPLEX ) )
-                    {
-                        aText = aText.replaceAt( pField->GetStart(), 1, aFldText.copy(nCharInField,1) );
-                        break;
-                    }
+                // ...  but if the first one is LATIN, and there are CJK or CTL chars too,
+                // we prefer that ScriptType because we need another font.
+                if ( ( nTmpType == i18n::ScriptType::ASIAN ) || ( nTmpType == i18n::ScriptType::COMPLEX ) )
+                {
+                    aText = aText.replaceAt( pField->GetStart(), 1, aFldText.copy(nCharInField,1) );
+                    break;
                 }
             }
-            // #112831# Last Field might go from 0xffff to 0x0000
-            pField = pField->GetEnd() ? pNode->GetCharAttribs().FindNextAttrib( EE_FEATURE_FIELD, pField->GetEnd() ) : nullptr;
+        }
+        // #112831# Last Field might go from 0xffff to 0x0000
+        pField = pField->GetEnd() ? pNode->GetCharAttribs().FindNextAttrib( EE_FEATURE_FIELD, pField->GetEnd() ) : nullptr;
+    }
+
+    sal_Int32 nTextLen = aText.getLength();
+
+    sal_Int32 nPos = 0;
+    short nScriptType = _xBI->getScriptType( aText, nPos );
+    rTypes.emplace_back( nScriptType, nPos, nTextLen );
+    nPos = _xBI->endOfScript( aText, nPos, nScriptType );
+    while ( ( nPos != -1 ) && ( nPos < nTextLen ) )
+    {
+        rTypes.back().nEndPos = nPos;
+
+        nScriptType = _xBI->getScriptType( aText, nPos );
+        long nEndPos = _xBI->endOfScript( aText, nPos, nScriptType );
+
+        if ( ( nScriptType == i18n::ScriptType::WEAK ) || ( nScriptType == rTypes.back().nScriptType ) )
+        {
+            // Expand last ScriptTypePosInfo, don't create weak or unnecessary portions
+            rTypes.back().nEndPos = nEndPos;
+        }
+        else
+        {
+            if ( _xBI->getScriptType( aText, nPos - 1 ) == i18n::ScriptType::WEAK )
+            {
+                switch ( u_charType(aText.iterateCodePoints(&nPos, 0) ) ) {
+                case U_NON_SPACING_MARK:
+                case U_ENCLOSING_MARK:
+                case U_COMBINING_SPACING_MARK:
+                    --nPos;
+                    rTypes.back().nEndPos--;
+                    break;
+                }
+            }
+            rTypes.emplace_back( nScriptType, nPos, nTextLen );
         }
 
-        sal_Int32 nTextLen = aText.getLength();
+        nPos = nEndPos;
+    }
 
-        sal_Int32 nPos = 0;
-        short nScriptType = _xBI->getScriptType( aText, nPos );
-        rTypes.emplace_back( nScriptType, nPos, nTextLen );
-        nPos = _xBI->endOfScript( aText, nPos, nScriptType );
-        while ( ( nPos != -1 ) && ( nPos < nTextLen ) )
+    if ( rTypes[0].nScriptType == i18n::ScriptType::WEAK )
+        rTypes[0].nScriptType = ( rTypes.size() > 1 ) ? rTypes[1].nScriptType : SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetDefaultLanguage() );
+
+    // create writing direction information:
+    if ( pParaPortion->aWritingDirectionInfos.empty() )
+        InitWritingDirections( nPara );
+
+    // i89825: Use CTL font for numbers embedded into an RTL run:
+    WritingDirectionInfos& rDirInfos = pParaPortion->aWritingDirectionInfos;
+    for (const WritingDirectionInfo & rDirInfo : rDirInfos)
+    {
+        const sal_Int32 nStart = rDirInfo.nStartPos;
+        const sal_Int32 nEnd   = rDirInfo.nEndPos;
+        const sal_uInt8 nCurrDirType = rDirInfo.nType;
+
+        if ( nCurrDirType % 2 == UBIDI_RTL  || // text in RTL run
+            ( nCurrDirType > UBIDI_LTR && !lcl_HasStrongLTR( aText, nStart, nEnd ) ) ) // non-strong text in embedded LTR run
         {
-            rTypes.back().nEndPos = nPos;
+            size_t nIdx = 0;
 
-            nScriptType = _xBI->getScriptType( aText, nPos );
-            long nEndPos = _xBI->endOfScript( aText, nPos, nScriptType );
-
-            if ( ( nScriptType == i18n::ScriptType::WEAK ) || ( nScriptType == rTypes.back().nScriptType ) )
-            {
-                // Expand last ScriptTypePosInfo, don't create weak or unnecessary portions
-                rTypes.back().nEndPos = nEndPos;
-            }
-            else
-            {
-                if ( _xBI->getScriptType( aText, nPos - 1 ) == i18n::ScriptType::WEAK )
-                {
-                    switch ( u_charType(aText.iterateCodePoints(&nPos, 0) ) ) {
-                    case U_NON_SPACING_MARK:
-                    case U_ENCLOSING_MARK:
-                    case U_COMBINING_SPACING_MARK:
-                        --nPos;
-                        rTypes.back().nEndPos--;
-                        break;
-                    }
-                }
-                rTypes.emplace_back( nScriptType, nPos, nTextLen );
-            }
-
-            nPos = nEndPos;
-        }
-
-        if ( rTypes[0].nScriptType == i18n::ScriptType::WEAK )
-            rTypes[0].nScriptType = ( rTypes.size() > 1 ) ? rTypes[1].nScriptType : SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetDefaultLanguage() );
-
-        // create writing direction information:
-        if ( pParaPortion->aWritingDirectionInfos.empty() )
-            InitWritingDirections( nPara );
-
-        // i89825: Use CTL font for numbers embedded into an RTL run:
-        WritingDirectionInfos& rDirInfos = pParaPortion->aWritingDirectionInfos;
-        for (const WritingDirectionInfo & rDirInfo : rDirInfos)
-        {
-            const sal_Int32 nStart = rDirInfo.nStartPos;
-            const sal_Int32 nEnd   = rDirInfo.nEndPos;
-            const sal_uInt8 nCurrDirType = rDirInfo.nType;
-
-            if ( nCurrDirType % 2 == UBIDI_RTL  || // text in RTL run
-                ( nCurrDirType > UBIDI_LTR && !lcl_HasStrongLTR( aText, nStart, nEnd ) ) ) // non-strong text in embedded LTR run
-            {
-                size_t nIdx = 0;
-
-                // Skip entries in ScriptArray which are not inside the RTL run:
-                while ( nIdx < rTypes.size() && rTypes[nIdx].nStartPos < nStart )
-                    ++nIdx;
-
-                // Remove any entries *inside* the current run:
-                while (nIdx < rTypes.size() && rTypes[nIdx].nEndPos <= nEnd)
-                {
-                    // coverity[use_iterator] - we're protected from a bad iterator by the above condition
-                    rTypes.erase(rTypes.begin() + nIdx);
-                }
-
-                // special case:
-                if(nIdx < rTypes.size() && rTypes[nIdx].nStartPos < nStart && rTypes[nIdx].nEndPos > nEnd)
-                {
-                    rTypes.insert( rTypes.begin()+nIdx, ScriptTypePosInfo( rTypes[nIdx].nScriptType, nEnd, rTypes[nIdx].nEndPos ) );
-                    rTypes[nIdx].nEndPos = nStart;
-                }
-
-                if( nIdx )
-                    rTypes[nIdx - 1].nEndPos = nStart;
-
-                rTypes.insert( rTypes.begin()+nIdx, ScriptTypePosInfo( i18n::ScriptType::COMPLEX, nStart, nEnd) );
+            // Skip entries in ScriptArray which are not inside the RTL run:
+            while ( nIdx < rTypes.size() && rTypes[nIdx].nStartPos < nStart )
                 ++nIdx;
 
-                if( nIdx < rTypes.size() )
-                    rTypes[nIdx].nStartPos = nEnd;
+            // Remove any entries *inside* the current run:
+            while (nIdx < rTypes.size() && rTypes[nIdx].nEndPos <= nEnd)
+            {
+                // coverity[use_iterator] - we're protected from a bad iterator by the above condition
+                rTypes.erase(rTypes.begin() + nIdx);
             }
+
+            // special case:
+            if(nIdx < rTypes.size() && rTypes[nIdx].nStartPos < nStart && rTypes[nIdx].nEndPos > nEnd)
+            {
+                rTypes.insert( rTypes.begin()+nIdx, ScriptTypePosInfo( rTypes[nIdx].nScriptType, nEnd, rTypes[nIdx].nEndPos ) );
+                rTypes[nIdx].nEndPos = nStart;
+            }
+
+            if( nIdx )
+                rTypes[nIdx - 1].nEndPos = nStart;
+
+            rTypes.insert( rTypes.begin()+nIdx, ScriptTypePosInfo( i18n::ScriptType::COMPLEX, nStart, nEnd) );
+            ++nIdx;
+
+            if( nIdx < rTypes.size() )
+                rTypes[nIdx].nStartPos = nEnd;
         }
     }
 }
@@ -4091,97 +4091,97 @@ void ImpEditEngine::CalcHeight( ParaPortion* pPortion )
     pPortion->nHeight = 0;
     pPortion->nFirstLineOffset = 0;
 
-    if ( pPortion->IsVisible() )
+    if ( !pPortion->IsVisible() )
+        return;
+
+    OSL_ENSURE( pPortion->GetLines().Count(), "Paragraph with no lines in ParaPortion::CalcHeight" );
+    for (sal_Int32 nLine = 0; nLine < pPortion->GetLines().Count(); ++nLine)
+        pPortion->nHeight += pPortion->GetLines()[nLine].GetHeight();
+
+    if ( aStatus.IsOutliner() )
+        return;
+
+    const SvxULSpaceItem& rULItem = pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_ULSPACE );
+    const SvxLineSpacingItem& rLSItem = pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL );
+    sal_Int32 nSBL = ( rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Fix ) ? GetYValue( rLSItem.GetInterLineSpace() ) : 0;
+
+    if ( nSBL )
     {
-        OSL_ENSURE( pPortion->GetLines().Count(), "Paragraph with no lines in ParaPortion::CalcHeight" );
-        for (sal_Int32 nLine = 0; nLine < pPortion->GetLines().Count(); ++nLine)
-            pPortion->nHeight += pPortion->GetLines()[nLine].GetHeight();
+        if ( pPortion->GetLines().Count() > 1 )
+            pPortion->nHeight += ( pPortion->GetLines().Count() - 1 ) * nSBL;
+        if ( aStatus.ULSpaceSummation() )
+            pPortion->nHeight += nSBL;
+    }
 
-        if ( !aStatus.IsOutliner() )
+    sal_Int32 nPortion = GetParaPortions().GetPos( pPortion );
+    if ( nPortion )
+    {
+        sal_uInt16 nUpper = GetYValue( rULItem.GetUpper() );
+        pPortion->nHeight += nUpper;
+        pPortion->nFirstLineOffset = nUpper;
+    }
+
+    if ( nPortion != (GetParaPortions().Count()-1) )
+    {
+        pPortion->nHeight += GetYValue( rULItem.GetLower() );   // not in the last
+    }
+
+
+    if ( !(nPortion && !aStatus.ULSpaceSummation()) )
+        return;
+
+    ParaPortion* pPrev = GetParaPortions().SafeGetObject( nPortion-1 );
+    if (!pPrev)
+        return;
+
+    const SvxULSpaceItem& rPrevULItem = pPrev->GetNode()->GetContentAttribs().GetItem( EE_PARA_ULSPACE );
+    const SvxLineSpacingItem& rPrevLSItem = pPrev->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL );
+
+    // In relation between WinWord6/Writer3:
+    // With a proportional line spacing the paragraph spacing is
+    // also manipulated.
+    // Only Writer3: Do not add up, but minimum distance.
+
+    // check if distance by LineSpacing > Upper:
+    sal_uInt16 nExtraSpace = GetYValue( lcl_CalcExtraSpace( rLSItem ) );
+    if ( nExtraSpace > pPortion->nFirstLineOffset )
+    {
+        // Paragraph becomes 'bigger':
+        pPortion->nHeight += ( nExtraSpace - pPortion->nFirstLineOffset );
+        pPortion->nFirstLineOffset = nExtraSpace;
+    }
+
+    // Determine nFirstLineOffset now f(pNode) => now f(pNode, pPrev):
+    sal_uInt16 nPrevLower = GetYValue( rPrevULItem.GetLower() );
+
+    // This PrevLower is still in the height of PrevPortion ...
+    if ( nPrevLower > pPortion->nFirstLineOffset )
+    {
+        // Paragraph is 'small':
+        pPortion->nHeight -= pPortion->nFirstLineOffset;
+        pPortion->nFirstLineOffset = 0;
+    }
+    else if ( nPrevLower )
+    {
+        // Paragraph becomes 'somewhat smaller':
+        pPortion->nHeight -= nPrevLower;
+        pPortion->nFirstLineOffset =
+            pPortion->nFirstLineOffset - nPrevLower;
+    }
+    // I find it not so good, but Writer3 feature:
+    // Check if distance by LineSpacing > Lower: this value is not
+    // stuck in the height of PrevPortion.
+    if ( !pPrev->IsInvalid() )
+    {
+        nExtraSpace = GetYValue( lcl_CalcExtraSpace( rPrevLSItem ) );
+        if ( nExtraSpace > nPrevLower )
         {
-            const SvxULSpaceItem& rULItem = pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_ULSPACE );
-            const SvxLineSpacingItem& rLSItem = pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL );
-            sal_Int32 nSBL = ( rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Fix ) ? GetYValue( rLSItem.GetInterLineSpace() ) : 0;
-
-            if ( nSBL )
+            sal_uInt16 nMoreLower = nExtraSpace - nPrevLower;
+            // Paragraph becomes 'bigger', 'grows' downwards:
+            if ( nMoreLower > pPortion->nFirstLineOffset )
             {
-                if ( pPortion->GetLines().Count() > 1 )
-                    pPortion->nHeight += ( pPortion->GetLines().Count() - 1 ) * nSBL;
-                if ( aStatus.ULSpaceSummation() )
-                    pPortion->nHeight += nSBL;
-            }
-
-            sal_Int32 nPortion = GetParaPortions().GetPos( pPortion );
-            if ( nPortion )
-            {
-                sal_uInt16 nUpper = GetYValue( rULItem.GetUpper() );
-                pPortion->nHeight += nUpper;
-                pPortion->nFirstLineOffset = nUpper;
-            }
-
-            if ( nPortion != (GetParaPortions().Count()-1) )
-            {
-                pPortion->nHeight += GetYValue( rULItem.GetLower() );   // not in the last
-            }
-
-
-            if ( nPortion && !aStatus.ULSpaceSummation() )
-            {
-                ParaPortion* pPrev = GetParaPortions().SafeGetObject( nPortion-1 );
-                if (pPrev)
-                {
-                    const SvxULSpaceItem& rPrevULItem = pPrev->GetNode()->GetContentAttribs().GetItem( EE_PARA_ULSPACE );
-                    const SvxLineSpacingItem& rPrevLSItem = pPrev->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL );
-
-                    // In relation between WinWord6/Writer3:
-                    // With a proportional line spacing the paragraph spacing is
-                    // also manipulated.
-                    // Only Writer3: Do not add up, but minimum distance.
-
-                    // check if distance by LineSpacing > Upper:
-                    sal_uInt16 nExtraSpace = GetYValue( lcl_CalcExtraSpace( rLSItem ) );
-                    if ( nExtraSpace > pPortion->nFirstLineOffset )
-                    {
-                        // Paragraph becomes 'bigger':
-                        pPortion->nHeight += ( nExtraSpace - pPortion->nFirstLineOffset );
-                        pPortion->nFirstLineOffset = nExtraSpace;
-                    }
-
-                    // Determine nFirstLineOffset now f(pNode) => now f(pNode, pPrev):
-                    sal_uInt16 nPrevLower = GetYValue( rPrevULItem.GetLower() );
-
-                    // This PrevLower is still in the height of PrevPortion ...
-                    if ( nPrevLower > pPortion->nFirstLineOffset )
-                    {
-                        // Paragraph is 'small':
-                        pPortion->nHeight -= pPortion->nFirstLineOffset;
-                        pPortion->nFirstLineOffset = 0;
-                    }
-                    else if ( nPrevLower )
-                    {
-                        // Paragraph becomes 'somewhat smaller':
-                        pPortion->nHeight -= nPrevLower;
-                        pPortion->nFirstLineOffset =
-                            pPortion->nFirstLineOffset - nPrevLower;
-                    }
-                    // I find it not so good, but Writer3 feature:
-                    // Check if distance by LineSpacing > Lower: this value is not
-                    // stuck in the height of PrevPortion.
-                    if ( !pPrev->IsInvalid() )
-                    {
-                        nExtraSpace = GetYValue( lcl_CalcExtraSpace( rPrevLSItem ) );
-                        if ( nExtraSpace > nPrevLower )
-                        {
-                            sal_uInt16 nMoreLower = nExtraSpace - nPrevLower;
-                            // Paragraph becomes 'bigger', 'grows' downwards:
-                            if ( nMoreLower > pPortion->nFirstLineOffset )
-                            {
-                                pPortion->nHeight += ( nMoreLower - pPortion->nFirstLineOffset );
-                                pPortion->nFirstLineOffset = nMoreLower;
-                            }
-                        }
-                    }
-                }
+                pPortion->nHeight += ( nMoreLower - pPortion->nFirstLineOffset );
+                pPortion->nFirstLineOffset = nMoreLower;
             }
         }
     }

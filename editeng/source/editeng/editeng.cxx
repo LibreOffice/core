@@ -385,31 +385,31 @@ void EditEngine::SetPaperSize( const Size& rNewSize )
     Size aNewSize( pImpEditEngine->GetPaperSize() );
 
     bool bAutoPageSize = pImpEditEngine->GetStatus().AutoPageSize();
-    if ( bAutoPageSize || ( aNewSize.Width() != aOldSize.Width() ) )
+    if ( !(bAutoPageSize || ( aNewSize.Width() != aOldSize.Width() )) )
+        return;
+
+    for (EditView* pView : pImpEditEngine->aEditViews)
     {
-        for (EditView* pView : pImpEditEngine->aEditViews)
+        if ( bAutoPageSize )
+            pView->pImpEditView->RecalcOutputArea();
+        else if ( pView->pImpEditView->DoAutoSize() )
         {
-            if ( bAutoPageSize )
-                pView->pImpEditView->RecalcOutputArea();
-            else if ( pView->pImpEditView->DoAutoSize() )
-            {
-                pView->pImpEditView->ResetOutputArea( tools::Rectangle(
-                    pView->pImpEditView->GetOutputArea().TopLeft(), aNewSize ) );
-            }
+            pView->pImpEditView->ResetOutputArea( tools::Rectangle(
+                pView->pImpEditView->GetOutputArea().TopLeft(), aNewSize ) );
         }
+    }
 
-        if ( bAutoPageSize || pImpEditEngine->IsFormatted() )
-        {
-            // Changing the width has no effect for AutoPageSize, as this is
-            // determined by the text width.
-            // Optimization first after Vobis delivery was enabled ...
-            pImpEditEngine->FormatFullDoc();
+    if ( bAutoPageSize || pImpEditEngine->IsFormatted() )
+    {
+        // Changing the width has no effect for AutoPageSize, as this is
+        // determined by the text width.
+        // Optimization first after Vobis delivery was enabled ...
+        pImpEditEngine->FormatFullDoc();
 
-            pImpEditEngine->UpdateViews( pImpEditEngine->GetActiveView() );
+        pImpEditEngine->UpdateViews( pImpEditEngine->GetActiveView() );
 
-            if ( pImpEditEngine->GetUpdateMode() && pImpEditEngine->GetActiveView() )
-                pImpEditEngine->pActiveView->ShowCursor( false, false );
-        }
+        if ( pImpEditEngine->GetUpdateMode() && pImpEditEngine->GetActiveView() )
+            pImpEditEngine->pActiveView->ShowCursor( false, false );
     }
 }
 
@@ -1843,72 +1843,72 @@ bool EditEngine::IsFlatMode() const
 void EditEngine::SetControlWord( EEControlBits nWord )
 {
 
-    if ( nWord != pImpEditEngine->aStatus.GetControlWord() )
+    if ( nWord == pImpEditEngine->aStatus.GetControlWord() )
+        return;
+
+    EEControlBits nPrev = pImpEditEngine->aStatus.GetControlWord();
+    pImpEditEngine->aStatus.GetControlWord() = nWord;
+
+    EEControlBits nChanges = nPrev ^ nWord;
+    if ( pImpEditEngine->IsFormatted() )
     {
-        EEControlBits nPrev = pImpEditEngine->aStatus.GetControlWord();
-        pImpEditEngine->aStatus.GetControlWord() = nWord;
-
-        EEControlBits nChanges = nPrev ^ nWord;
-        if ( pImpEditEngine->IsFormatted() )
+        // possibly reformat:
+        if ( ( nChanges & EEControlBits::USECHARATTRIBS ) ||
+             ( nChanges & EEControlBits::ONECHARPERLINE ) ||
+             ( nChanges & EEControlBits::STRETCHING ) ||
+             ( nChanges & EEControlBits::OUTLINER ) ||
+             ( nChanges & EEControlBits::NOCOLORS ) ||
+             ( nChanges & EEControlBits::OUTLINER2 ) )
         {
-            // possibly reformat:
-            if ( ( nChanges & EEControlBits::USECHARATTRIBS ) ||
-                 ( nChanges & EEControlBits::ONECHARPERLINE ) ||
-                 ( nChanges & EEControlBits::STRETCHING ) ||
-                 ( nChanges & EEControlBits::OUTLINER ) ||
-                 ( nChanges & EEControlBits::NOCOLORS ) ||
-                 ( nChanges & EEControlBits::OUTLINER2 ) )
+            if ( nChanges & EEControlBits::USECHARATTRIBS )
             {
-                if ( nChanges & EEControlBits::USECHARATTRIBS )
-                {
-                    pImpEditEngine->GetEditDoc().CreateDefFont( true );
-                }
-
-                pImpEditEngine->FormatFullDoc();
-                pImpEditEngine->UpdateViews( pImpEditEngine->GetActiveView() );
+                pImpEditEngine->GetEditDoc().CreateDefFont( true );
             }
+
+            pImpEditEngine->FormatFullDoc();
+            pImpEditEngine->UpdateViews( pImpEditEngine->GetActiveView() );
         }
+    }
 
-        bool bSpellingChanged = bool(nChanges & EEControlBits::ONLINESPELLING);
+    bool bSpellingChanged = bool(nChanges & EEControlBits::ONLINESPELLING);
 
-        if ( bSpellingChanged )
+    if ( !bSpellingChanged )
+        return;
+
+    pImpEditEngine->StopOnlineSpellTimer();
+    if (nWord & EEControlBits::ONLINESPELLING)
+    {
+        // Create WrongList, start timer...
+        sal_Int32 nNodes = pImpEditEngine->GetEditDoc().Count();
+        for ( sal_Int32 n = 0; n < nNodes; n++ )
         {
-            pImpEditEngine->StopOnlineSpellTimer();
-            if (nWord & EEControlBits::ONLINESPELLING)
+            ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( n );
+            pNode->CreateWrongList();
+        }
+        if (pImpEditEngine->IsFormatted())
+            pImpEditEngine->StartOnlineSpellTimer();
+    }
+    else
+    {
+        long nY = 0;
+        sal_Int32 nNodes = pImpEditEngine->GetEditDoc().Count();
+        for ( sal_Int32 n = 0; n < nNodes; n++ )
+        {
+            ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( n );
+            const ParaPortion* pPortion = pImpEditEngine->GetParaPortions()[n];
+            bool bWrongs = false;
+            if (pNode->GetWrongList() != nullptr)
+                bWrongs = !pNode->GetWrongList()->empty();
+            pNode->DestroyWrongList();
+            if ( bWrongs )
             {
-                // Create WrongList, start timer...
-                sal_Int32 nNodes = pImpEditEngine->GetEditDoc().Count();
-                for ( sal_Int32 n = 0; n < nNodes; n++ )
-                {
-                    ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( n );
-                    pNode->CreateWrongList();
-                }
-                if (pImpEditEngine->IsFormatted())
-                    pImpEditEngine->StartOnlineSpellTimer();
+                pImpEditEngine->aInvalidRect.SetLeft( 0 );
+                pImpEditEngine->aInvalidRect.SetRight( pImpEditEngine->GetPaperSize().Width() );
+                pImpEditEngine->aInvalidRect.SetTop( nY+1 );
+                pImpEditEngine->aInvalidRect.SetBottom( nY+pPortion->GetHeight()-1 );
+                pImpEditEngine->UpdateViews( pImpEditEngine->pActiveView );
             }
-            else
-            {
-                long nY = 0;
-                sal_Int32 nNodes = pImpEditEngine->GetEditDoc().Count();
-                for ( sal_Int32 n = 0; n < nNodes; n++ )
-                {
-                    ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( n );
-                    const ParaPortion* pPortion = pImpEditEngine->GetParaPortions()[n];
-                    bool bWrongs = false;
-                    if (pNode->GetWrongList() != nullptr)
-                        bWrongs = !pNode->GetWrongList()->empty();
-                    pNode->DestroyWrongList();
-                    if ( bWrongs )
-                    {
-                        pImpEditEngine->aInvalidRect.SetLeft( 0 );
-                        pImpEditEngine->aInvalidRect.SetRight( pImpEditEngine->GetPaperSize().Width() );
-                        pImpEditEngine->aInvalidRect.SetTop( nY+1 );
-                        pImpEditEngine->aInvalidRect.SetBottom( nY+pPortion->GetHeight()-1 );
-                        pImpEditEngine->UpdateViews( pImpEditEngine->pActiveView );
-                    }
-                    nY += pPortion->GetHeight();
-                }
-            }
+            nY += pPortion->GetHeight();
         }
     }
 }

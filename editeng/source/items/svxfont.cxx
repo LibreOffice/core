@@ -704,21 +704,21 @@ public:
 
 void SvxDoDrawCapital::DoSpace( const bool bDraw )
 {
-    if ( bDraw || pFont->IsWordLineMode() )
+    if ( !(bDraw || pFont->IsWordLineMode()) )
+        return;
+
+    sal_uLong nDiff = static_cast<sal_uLong>(aPos.X() - aSpacePos.X());
+    if ( nDiff )
     {
-        sal_uLong nDiff = static_cast<sal_uLong>(aPos.X() - aSpacePos.X());
-        if ( nDiff )
-        {
-            bool bWordWise = pFont->IsWordLineMode();
-            bool bTrans = pFont->IsTransparent();
-            pFont->SetWordLineMode( false );
-            pFont->SetTransparent( true );
-            pFont->SetPhysFont( pOut );
-            pOut->DrawStretchText( aSpacePos, nDiff, "  ", 0, 2 );
-            pFont->SetWordLineMode( bWordWise );
-            pFont->SetTransparent( bTrans );
-            pFont->SetPhysFont( pOut );
-        }
+        bool bWordWise = pFont->IsWordLineMode();
+        bool bTrans = pFont->IsTransparent();
+        pFont->SetWordLineMode( false );
+        pFont->SetTransparent( true );
+        pFont->SetPhysFont( pOut );
+        pOut->DrawStretchText( aSpacePos, nDiff, "  ", 0, 2 );
+        pFont->SetWordLineMode( bWordWise );
+        pFont->SetTransparent( bTrans );
+        pFont->SetPhysFont( pOut );
     }
 }
 

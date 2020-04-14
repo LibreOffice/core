@@ -347,19 +347,19 @@ lang::Locale SAL_CALL
 void SAL_CALL AccessibleContextBase::addAccessibleEventListener (
         const uno::Reference<XAccessibleEventListener >& rxListener)
 {
-    if (rxListener.is())
+    if (!rxListener.is())
+        return;
+
+    if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
-        if (rBHelper.bDisposed || rBHelper.bInDispose)
-        {
-            uno::Reference<uno::XInterface> x (static_cast<lang::XComponent *>(this), uno::UNO_QUERY);
-            rxListener->disposing (lang::EventObject (x));
-        }
-        else
-        {
-            if (!mnClientId)
-                mnClientId = comphelper::AccessibleEventNotifier::registerClient( );
-            comphelper::AccessibleEventNotifier::addEventListener( mnClientId, rxListener );
-        }
+        uno::Reference<uno::XInterface> x (static_cast<lang::XComponent *>(this), uno::UNO_QUERY);
+        rxListener->disposing (lang::EventObject (x));
+    }
+    else
+    {
+        if (!mnClientId)
+            mnClientId = comphelper::AccessibleEventNotifier::registerClient( );
+        comphelper::AccessibleEventNotifier::addEventListener( mnClientId, rxListener );
     }
 }
 
@@ -368,18 +368,18 @@ void SAL_CALL AccessibleContextBase::removeAccessibleEventListener (
         const uno::Reference<XAccessibleEventListener >& rxListener )
 {
     ThrowIfDisposed ();
-    if (rxListener.is() && mnClientId)
+    if (!(rxListener.is() && mnClientId))
+        return;
+
+    sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, rxListener );
+    if ( !nListenerCount )
     {
-        sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, rxListener );
-        if ( !nListenerCount )
-        {
-            // no listeners anymore
-            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-            // and at least to us not firing any events anymore, in case somebody calls
-            // NotifyAccessibleEvent, again
-            comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
-            mnClientId = 0;
-        }
+        // no listeners anymore
+        // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
+        // and at least to us not firing any events anymore, in case somebody calls
+        // NotifyAccessibleEvent, again
+        comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
+        mnClientId = 0;
     }
 }
 
@@ -432,21 +432,21 @@ void AccessibleContextBase::SetAccessibleDescription (
     const OUString& rDescription,
     StringOrigin eDescriptionOrigin)
 {
-    if (eDescriptionOrigin < meDescriptionOrigin
-        || (eDescriptionOrigin == meDescriptionOrigin && msDescription != rDescription))
-    {
-        uno::Any aOldValue, aNewValue;
-        aOldValue <<= msDescription;
-        aNewValue <<= rDescription;
+    if (!(eDescriptionOrigin < meDescriptionOrigin
+        || (eDescriptionOrigin == meDescriptionOrigin && msDescription != rDescription)))
+        return;
 
-        msDescription = rDescription;
-        meDescriptionOrigin = eDescriptionOrigin;
+    uno::Any aOldValue, aNewValue;
+    aOldValue <<= msDescription;
+    aNewValue <<= rDescription;
 
-        CommitChange(
-            AccessibleEventId::DESCRIPTION_CHANGED,
-            aNewValue,
-            aOldValue);
-    }
+    msDescription = rDescription;
+    meDescriptionOrigin = eDescriptionOrigin;
+
+    CommitChange(
+        AccessibleEventId::DESCRIPTION_CHANGED,
+        aNewValue,
+        aOldValue);
 }
 
 
@@ -454,21 +454,21 @@ void AccessibleContextBase::SetAccessibleName (
     const OUString& rName,
     StringOrigin eNameOrigin)
 {
-    if (eNameOrigin < meNameOrigin
-        || (eNameOrigin == meNameOrigin && msName != rName))
-    {
-        uno::Any aOldValue, aNewValue;
-        aOldValue <<= msName;
-        aNewValue <<= rName;
+    if (!(eNameOrigin < meNameOrigin
+        || (eNameOrigin == meNameOrigin && msName != rName)))
+        return;
 
-        msName = rName;
-        meNameOrigin = eNameOrigin;
+    uno::Any aOldValue, aNewValue;
+    aOldValue <<= msName;
+    aNewValue <<= rName;
 
-        CommitChange(
-            AccessibleEventId::NAME_CHANGED,
-            aNewValue,
-            aOldValue);
-    }
+    msName = rName;
+    meNameOrigin = eNameOrigin;
+
+    CommitChange(
+        AccessibleEventId::NAME_CHANGED,
+        aNewValue,
+        aOldValue);
 }
 
 

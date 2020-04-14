@@ -151,48 +151,48 @@ void GetSelection( struct ESelection& rSel, SvxTextForwarder const * pForwarder 
 void CheckSelection( struct ESelection& rSel, SvxTextForwarder const * pForwarder ) throw()
 {
     DBG_ASSERT( pForwarder, "I need a valid SvxTextForwarder!" );
-    if( pForwarder )
+    if( !pForwarder )
+        return;
+
+    if( rSel.nStartPara == EE_PARA_MAX_COUNT )
     {
-        if( rSel.nStartPara == EE_PARA_MAX_COUNT )
+        ::GetSelection( rSel, pForwarder );
+    }
+    else
+    {
+        ESelection aMaxSelection;
+        GetSelection( aMaxSelection, pForwarder );
+
+        // check start position
+        if( rSel.nStartPara < aMaxSelection.nStartPara )
         {
-            ::GetSelection( rSel, pForwarder );
+            rSel.nStartPara = aMaxSelection.nStartPara;
+            rSel.nStartPos = aMaxSelection.nStartPos;
         }
-        else
+        else if( rSel.nStartPara > aMaxSelection.nEndPara )
         {
-            ESelection aMaxSelection;
-            GetSelection( aMaxSelection, pForwarder );
+            rSel.nStartPara = aMaxSelection.nEndPara;
+            rSel.nStartPos = aMaxSelection.nEndPos;
+        }
+        else if( rSel.nStartPos  > pForwarder->GetTextLen( rSel.nStartPara ) )
+        {
+            rSel.nStartPos = pForwarder->GetTextLen( rSel.nStartPara );
+        }
 
-            // check start position
-            if( rSel.nStartPara < aMaxSelection.nStartPara )
-            {
-                rSel.nStartPara = aMaxSelection.nStartPara;
-                rSel.nStartPos = aMaxSelection.nStartPos;
-            }
-            else if( rSel.nStartPara > aMaxSelection.nEndPara )
-            {
-                rSel.nStartPara = aMaxSelection.nEndPara;
-                rSel.nStartPos = aMaxSelection.nEndPos;
-            }
-            else if( rSel.nStartPos  > pForwarder->GetTextLen( rSel.nStartPara ) )
-            {
-                rSel.nStartPos = pForwarder->GetTextLen( rSel.nStartPara );
-            }
-
-            // check end position
-            if( rSel.nEndPara < aMaxSelection.nStartPara )
-            {
-                rSel.nEndPara = aMaxSelection.nStartPara;
-                rSel.nEndPos = aMaxSelection.nStartPos;
-            }
-            else if( rSel.nEndPara > aMaxSelection.nEndPara )
-            {
-                rSel.nEndPara = aMaxSelection.nEndPara;
-                rSel.nEndPos = aMaxSelection.nEndPos;
-            }
-            else if( rSel.nEndPos > pForwarder->GetTextLen( rSel.nEndPara ) )
-            {
-                rSel.nEndPos = pForwarder->GetTextLen( rSel.nEndPara );
-            }
+        // check end position
+        if( rSel.nEndPara < aMaxSelection.nStartPara )
+        {
+            rSel.nEndPara = aMaxSelection.nStartPara;
+            rSel.nEndPos = aMaxSelection.nStartPos;
+        }
+        else if( rSel.nEndPara > aMaxSelection.nEndPara )
+        {
+            rSel.nEndPara = aMaxSelection.nEndPara;
+            rSel.nEndPos = aMaxSelection.nEndPos;
+        }
+        else if( rSel.nEndPos > pForwarder->GetTextLen( rSel.nEndPara ) )
+        {
+            rSel.nEndPos = pForwarder->GetTextLen( rSel.nEndPara );
         }
     }
 }
@@ -380,24 +380,24 @@ void SAL_CALL SvxUnoTextRangeBase::setString(const OUString& aString)
     SolarMutexGuard aGuard;
 
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : nullptr;
-    if( pForwarder )
-    {
-        CheckSelection( maSelection, pForwarder );
+    if( !pForwarder )
+        return;
 
-        OUString aConverted(convertLineEnd(aString, LINEEND_LF));  // Simply count the number of line endings
+    CheckSelection( maSelection, pForwarder );
 
-        pForwarder->QuickInsertText( aConverted, maSelection );
-        mpEditSource->UpdateData();
+    OUString aConverted(convertLineEnd(aString, LINEEND_LF));  // Simply count the number of line endings
 
-        //  Adapt selection
-        //! It would be easier if the EditEngine would return the selection
-        //! on QuickInsertText...
-        CollapseToStart();
+    pForwarder->QuickInsertText( aConverted, maSelection );
+    mpEditSource->UpdateData();
 
-        sal_Int32 nLen = aConverted.getLength();
-        if (nLen)
-            GoRight( nLen, true );
-    }
+    //  Adapt selection
+    //! It would be easier if the EditEngine would return the selection
+    //! on QuickInsertText...
+    CollapseToStart();
+
+    sal_Int32 nLen = aConverted.getLength();
+    if (nLen)
+        GoRight( nLen, true );
 }
 
 // Interface beans::XPropertySet
@@ -751,117 +751,117 @@ void SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< OUString >& a
     SolarMutexGuard aGuard;
 
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : nullptr;
-    if( pForwarder )
+    if( !pForwarder )
+        return;
+
+    CheckSelection( maSelection, pForwarder );
+
+    ESelection aSel( GetSelection() );
+
+    const OUString* pPropertyNames = aPropertyNames.getConstArray();
+    const uno::Any* pValues = aValues.getConstArray();
+    sal_Int32 nCount = aPropertyNames.getLength();
+
+    sal_Int32 nEndPara = nPara;
+    sal_Int32 nTempPara = nPara;
+
+    if( nTempPara == -1 )
     {
-        CheckSelection( maSelection, pForwarder );
-
-        ESelection aSel( GetSelection() );
-
-        const OUString* pPropertyNames = aPropertyNames.getConstArray();
-        const uno::Any* pValues = aValues.getConstArray();
-        sal_Int32 nCount = aPropertyNames.getLength();
-
-        sal_Int32 nEndPara = nPara;
-        sal_Int32 nTempPara = nPara;
-
-        if( nTempPara == -1 )
-        {
-            nTempPara = aSel.nStartPara;
-            nEndPara = aSel.nEndPara;
-        }
-
-        std::unique_ptr<SfxItemSet> pOldAttrSet;
-        std::unique_ptr<SfxItemSet> pNewAttrSet;
-
-        std::unique_ptr<SfxItemSet> pOldParaSet;
-        std::unique_ptr<SfxItemSet> pNewParaSet;
-
-        for( ; nCount; nCount--, pPropertyNames++, pValues++ )
-        {
-            const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry( *pPropertyNames );
-
-            if( pMap )
-            {
-                bool bParaAttrib = (pMap->nWID >= EE_PARA_START) && ( pMap->nWID <= EE_PARA_END );
-
-                if( (nPara == -1) && !bParaAttrib )
-                {
-                    if( nullptr == pNewAttrSet )
-                    {
-                        const SfxItemSet aSet( pForwarder->GetAttribs( aSel ) );
-                        pOldAttrSet.reset(new SfxItemSet( aSet ));
-                        pNewAttrSet.reset(new SfxItemSet( *pOldAttrSet->GetPool(), pOldAttrSet->GetRanges() ));
-                    }
-
-                    setPropertyValue( pMap, *pValues, GetSelection(), *pOldAttrSet, *pNewAttrSet );
-
-                    if( pMap->nWID >= EE_ITEMS_START && pMap->nWID <= EE_ITEMS_END )
-                    {
-                        const SfxPoolItem* pItem;
-                        if( pNewAttrSet->GetItemState( pMap->nWID, true, &pItem ) == SfxItemState::SET )
-                        {
-                            pOldAttrSet->Put( *pItem );
-                        }
-                    }
-                }
-                else
-                {
-                    if( nullptr == pNewParaSet )
-                    {
-                        const SfxItemSet & rSet = pForwarder->GetParaAttribs( nTempPara );
-                        pOldParaSet.reset(new SfxItemSet( rSet ));
-                        pNewParaSet.reset(new SfxItemSet( *pOldParaSet->GetPool(), pOldParaSet->GetRanges() ));
-                    }
-
-                    setPropertyValue( pMap, *pValues, GetSelection(), *pOldParaSet, *pNewParaSet );
-
-                    if( pMap->nWID >= EE_ITEMS_START && pMap->nWID <= EE_ITEMS_END )
-                    {
-                        const SfxPoolItem* pItem;
-                        if( pNewParaSet->GetItemState( pMap->nWID, true, &pItem ) == SfxItemState::SET )
-                        {
-                            pOldParaSet->Put( *pItem );
-                        }
-                    }
-
-                }
-            }
-        }
-
-        bool bNeedsUpdate = false;
-
-        if( pNewParaSet )
-        {
-            if( pNewParaSet->Count() )
-            {
-                while( nTempPara <= nEndPara )
-                {
-                    SfxItemSet aSet( pForwarder->GetParaAttribs( nTempPara ) );
-                    aSet.Put( *pNewParaSet );
-                    pForwarder->SetParaAttribs( nTempPara, aSet );
-                    nTempPara++;
-                }
-                bNeedsUpdate = true;
-            }
-
-            pNewParaSet.reset();
-            pOldParaSet.reset();
-        }
-
-        if( pNewAttrSet )
-        {
-            if( pNewAttrSet->Count() )
-            {
-                pForwarder->QuickSetAttribs( *pNewAttrSet, GetSelection() );
-                bNeedsUpdate = true;
-            }
-            pNewAttrSet.reset();
-            pOldAttrSet.reset();
-        }
-
-        if( bNeedsUpdate )
-            GetEditSource()->UpdateData();
+        nTempPara = aSel.nStartPara;
+        nEndPara = aSel.nEndPara;
     }
+
+    std::unique_ptr<SfxItemSet> pOldAttrSet;
+    std::unique_ptr<SfxItemSet> pNewAttrSet;
+
+    std::unique_ptr<SfxItemSet> pOldParaSet;
+    std::unique_ptr<SfxItemSet> pNewParaSet;
+
+    for( ; nCount; nCount--, pPropertyNames++, pValues++ )
+    {
+        const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry( *pPropertyNames );
+
+        if( pMap )
+        {
+            bool bParaAttrib = (pMap->nWID >= EE_PARA_START) && ( pMap->nWID <= EE_PARA_END );
+
+            if( (nPara == -1) && !bParaAttrib )
+            {
+                if( nullptr == pNewAttrSet )
+                {
+                    const SfxItemSet aSet( pForwarder->GetAttribs( aSel ) );
+                    pOldAttrSet.reset(new SfxItemSet( aSet ));
+                    pNewAttrSet.reset(new SfxItemSet( *pOldAttrSet->GetPool(), pOldAttrSet->GetRanges() ));
+                }
+
+                setPropertyValue( pMap, *pValues, GetSelection(), *pOldAttrSet, *pNewAttrSet );
+
+                if( pMap->nWID >= EE_ITEMS_START && pMap->nWID <= EE_ITEMS_END )
+                {
+                    const SfxPoolItem* pItem;
+                    if( pNewAttrSet->GetItemState( pMap->nWID, true, &pItem ) == SfxItemState::SET )
+                    {
+                        pOldAttrSet->Put( *pItem );
+                    }
+                }
+            }
+            else
+            {
+                if( nullptr == pNewParaSet )
+                {
+                    const SfxItemSet & rSet = pForwarder->GetParaAttribs( nTempPara );
+                    pOldParaSet.reset(new SfxItemSet( rSet ));
+                    pNewParaSet.reset(new SfxItemSet( *pOldParaSet->GetPool(), pOldParaSet->GetRanges() ));
+                }
+
+                setPropertyValue( pMap, *pValues, GetSelection(), *pOldParaSet, *pNewParaSet );
+
+                if( pMap->nWID >= EE_ITEMS_START && pMap->nWID <= EE_ITEMS_END )
+                {
+                    const SfxPoolItem* pItem;
+                    if( pNewParaSet->GetItemState( pMap->nWID, true, &pItem ) == SfxItemState::SET )
+                    {
+                        pOldParaSet->Put( *pItem );
+                    }
+                }
+
+            }
+        }
+    }
+
+    bool bNeedsUpdate = false;
+
+    if( pNewParaSet )
+    {
+        if( pNewParaSet->Count() )
+        {
+            while( nTempPara <= nEndPara )
+            {
+                SfxItemSet aSet( pForwarder->GetParaAttribs( nTempPara ) );
+                aSet.Put( *pNewParaSet );
+                pForwarder->SetParaAttribs( nTempPara, aSet );
+                nTempPara++;
+            }
+            bNeedsUpdate = true;
+        }
+
+        pNewParaSet.reset();
+        pOldParaSet.reset();
+    }
+
+    if( pNewAttrSet )
+    {
+        if( pNewAttrSet->Count() )
+        {
+            pForwarder->QuickSetAttribs( *pNewAttrSet, GetSelection() );
+            bNeedsUpdate = true;
+        }
+        pNewAttrSet.reset();
+        pOldAttrSet.reset();
+    }
+
+    if( bNeedsUpdate )
+        GetEditSource()->UpdateData();
 }
 
 uno::Sequence< uno::Any > SAL_CALL SvxUnoTextRangeBase::getPropertyValues( const uno::Sequence< OUString >& aPropertyNames )
@@ -1413,19 +1413,18 @@ void SvxUnoTextRangeBase::GotoEnd(bool Expand) throw()
     CheckSelection( maSelection, mpEditSource.get() );
 
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : nullptr;
-    if( pForwarder )
-    {
+    if( !pForwarder )
+        return;
 
-        sal_Int32 nPar = pForwarder->GetParagraphCount();
-        if (nPar)
-            --nPar;
+    sal_Int32 nPar = pForwarder->GetParagraphCount();
+    if (nPar)
+        --nPar;
 
-        maSelection.nEndPara = nPar;
-        maSelection.nEndPos  = pForwarder->GetTextLen( nPar );
+    maSelection.nEndPara = nPar;
+    maSelection.nEndPos  = pForwarder->GetTextLen( nPar );
 
-        if (!Expand)
-            CollapseToEnd();
-    }
+    if (!Expand)
+        CollapseToEnd();
 }
 
 // lang::XServiceInfo
@@ -1742,20 +1741,20 @@ void SAL_CALL SvxUnoTextBase::insertString( const uno::Reference< text::XTextRan
     }
 
     SvxUnoTextRangeBase* pRange = comphelper::getUnoTunnelImplementation<SvxUnoTextRange>( xRange );
-    if(pRange)
-    {
-        // setString on SvxUnoTextRangeBase instead of itself QuickInsertText
-        // and UpdateData, so that the selection will be adjusted to
-        // SvxUnoTextRangeBase. Actually all cursor objects of this Text must
-        // to be statement to be adapted!
+    if(!pRange)
+        return;
 
-        if (!bAbsorb)                   // do not replace -> append on tail
-            pRange->CollapseToEnd();
+    // setString on SvxUnoTextRangeBase instead of itself QuickInsertText
+    // and UpdateData, so that the selection will be adjusted to
+    // SvxUnoTextRangeBase. Actually all cursor objects of this Text must
+    // to be statement to be adapted!
 
-        pRange->setString( aString );
-
+    if (!bAbsorb)                   // do not replace -> append on tail
         pRange->CollapseToEnd();
-    }
+
+    pRange->setString( aString );
+
+    pRange->CollapseToEnd();
 }
 
 void SAL_CALL SvxUnoTextBase::insertControlCharacter( const uno::Reference< text::XTextRange >& xRange, sal_Int16 nControlCharacter, sal_Bool bAbsorb )
@@ -1764,83 +1763,83 @@ void SAL_CALL SvxUnoTextBase::insertControlCharacter( const uno::Reference< text
 
     SvxTextForwarder* pForwarder = GetEditSource() ? GetEditSource()->GetTextForwarder() : nullptr;
 
-    if( pForwarder )
+    if( !pForwarder )
+        return;
+
+    ESelection aSelection;
+    ::GetSelection( aSelection, pForwarder );
+    SetSelection( aSelection );
+
+    switch( nControlCharacter )
     {
-        ESelection aSelection;
-        ::GetSelection( aSelection, pForwarder );
-        SetSelection( aSelection );
+    case text::ControlCharacter::PARAGRAPH_BREAK:
+    {
+        const OUString aText( u'\x000D' );  // '\r' does not work on Mac
+        insertString( xRange, aText, bAbsorb );
 
-        switch( nControlCharacter )
+        return;
+    }
+    case text::ControlCharacter::LINE_BREAK:
+    {
+        SvxUnoTextRangeBase* pRange = comphelper::getUnoTunnelImplementation<SvxUnoTextRange>( xRange );
+        if(pRange)
         {
-        case text::ControlCharacter::PARAGRAPH_BREAK:
-        {
-            const OUString aText( u'\x000D' );  // '\r' does not work on Mac
-            insertString( xRange, aText, bAbsorb );
+            ESelection aRange = pRange->GetSelection();
 
-            return;
-        }
-        case text::ControlCharacter::LINE_BREAK:
-        {
-            SvxUnoTextRangeBase* pRange = comphelper::getUnoTunnelImplementation<SvxUnoTextRange>( xRange );
-            if(pRange)
+            if( bAbsorb )
             {
-                ESelection aRange = pRange->GetSelection();
+                pForwarder->QuickInsertText( "", aRange );
 
-                if( bAbsorb )
-                {
-                    pForwarder->QuickInsertText( "", aRange );
-
-                    aRange.nEndPos = aRange.nStartPos;
-                    aRange.nEndPara = aRange.nStartPara;
-                }
-                else
-                {
-                    aRange.nStartPara = aRange.nEndPara;
-                    aRange.nStartPos = aRange.nEndPos;
-                }
-
-                pForwarder->QuickInsertLineBreak( aRange );
-                GetEditSource()->UpdateData();
-
-                aRange.nEndPos += 1;
-                if( !bAbsorb )
-                    aRange.nStartPos += 1;
-
-                pRange->SetSelection( aRange );
+                aRange.nEndPos = aRange.nStartPos;
+                aRange.nEndPara = aRange.nStartPara;
             }
-            return;
-        }
-        case text::ControlCharacter::APPEND_PARAGRAPH:
-        {
-            SvxUnoTextRangeBase* pRange = comphelper::getUnoTunnelImplementation<SvxUnoTextRange>( xRange );
-            if(pRange)
+            else
             {
-                ESelection aRange = pRange->GetSelection();
+                aRange.nStartPara = aRange.nEndPara;
+                aRange.nStartPos = aRange.nEndPos;
+            }
+
+            pForwarder->QuickInsertLineBreak( aRange );
+            GetEditSource()->UpdateData();
+
+            aRange.nEndPos += 1;
+            if( !bAbsorb )
+                aRange.nStartPos += 1;
+
+            pRange->SetSelection( aRange );
+        }
+        return;
+    }
+    case text::ControlCharacter::APPEND_PARAGRAPH:
+    {
+        SvxUnoTextRangeBase* pRange = comphelper::getUnoTunnelImplementation<SvxUnoTextRange>( xRange );
+        if(pRange)
+        {
+            ESelection aRange = pRange->GetSelection();
 //              ESelection aOldSelection = aRange;
 
-                aRange.nStartPos  = pForwarder->GetTextLen( aRange.nStartPara );
+            aRange.nStartPos  = pForwarder->GetTextLen( aRange.nStartPara );
 
-                aRange.nEndPara = aRange.nStartPara;
-                aRange.nEndPos  = aRange.nStartPos;
+            aRange.nEndPara = aRange.nStartPara;
+            aRange.nEndPos  = aRange.nStartPos;
 
-                pRange->SetSelection( aRange );
-                const OUString aText( u'\x000D' );  // '\r' does not work on Mac
-                pRange->setString( aText );
+            pRange->SetSelection( aRange );
+            const OUString aText( u'\x000D' );  // '\r' does not work on Mac
+            pRange->setString( aText );
 
-                aRange.nStartPos = 0;
-                aRange.nStartPara += 1;
-                aRange.nEndPos = 0;
-                aRange.nEndPara += 1;
+            aRange.nStartPos = 0;
+            aRange.nStartPara += 1;
+            aRange.nEndPos = 0;
+            aRange.nEndPara += 1;
 
-                pRange->SetSelection( aRange );
+            pRange->SetSelection( aRange );
 
-                return;
-            }
-            [[fallthrough]];
+            return;
         }
-        default:
-            throw lang::IllegalArgumentException();
-        }
+        [[fallthrough]];
+    }
+    default:
+        throw lang::IllegalArgumentException();
     }
 }
 

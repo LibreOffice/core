@@ -444,26 +444,26 @@ void EditTextObject::dumpAsXml(xmlTextWriterPtr pWriter) const
 // from SfxItemPoolUser
 void EditTextObjectImpl::ObjectInDestruction(const SfxItemPool& rSfxItemPool)
 {
-    if(!bOwnerOfPool && pPool == &rSfxItemPool)
-    {
-        // The pool we are based on gets destructed; get owner of pool by creating own one.
-        // No need to call RemoveSfxItemPoolUser(), this is done from the pool's destructor
-        // Base new pool on EditEnginePool; it would also be possible to clone the used
-        // pool if needed, but only text attributes should be used.
-        SfxItemPool* pNewPool = EditEngine::CreatePool();
+    if(!(!bOwnerOfPool && pPool == &rSfxItemPool))
+        return;
 
-        pNewPool->SetDefaultMetric(pPool->GetMetric(DEF_METRIC));
+    // The pool we are based on gets destructed; get owner of pool by creating own one.
+    // No need to call RemoveSfxItemPoolUser(), this is done from the pool's destructor
+    // Base new pool on EditEnginePool; it would also be possible to clone the used
+    // pool if needed, but only text attributes should be used.
+    SfxItemPool* pNewPool = EditEngine::CreatePool();
 
-        ContentInfosType aReplaced;
-        aReplaced.reserve(aContents.size());
-        for (auto const& content : aContents)
-            aReplaced.push_back(std::unique_ptr<ContentInfo>(new ContentInfo(*content, *pNewPool)));
-        aReplaced.swap(aContents);
+    pNewPool->SetDefaultMetric(pPool->GetMetric(DEF_METRIC));
 
-        // set local variables
-        pPool = pNewPool;
-        bOwnerOfPool = true;
-    }
+    ContentInfosType aReplaced;
+    aReplaced.reserve(aContents.size());
+    for (auto const& content : aContents)
+        aReplaced.push_back(std::unique_ptr<ContentInfo>(new ContentInfo(*content, *pNewPool)));
+    aReplaced.swap(aContents);
+
+    // set local variables
+    pPool = pNewPool;
+    bOwnerOfPool = true;
 }
 
 #if DEBUG_EDIT_ENGINE

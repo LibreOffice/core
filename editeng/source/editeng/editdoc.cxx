@@ -1825,18 +1825,18 @@ void ContentAttribs::SetStyleSheet( SfxStyleSheet* pS )
     bool bStyleChanged = ( pStyle != pS );
     pStyle = pS;
     // Only when other style sheet, not when current style sheet modified
-    if ( pStyle && bStyleChanged )
+    if ( !(pStyle && bStyleChanged) )
+        return;
+
+    // Selectively remove the attributes from the paragraph formatting
+    // which are specified in the style, so that the attributes of the
+    // style can have an affect.
+    const SfxItemSet& rStyleAttribs = pStyle->GetItemSet();
+    for ( sal_uInt16 nWhich = EE_PARA_START; nWhich <= EE_CHAR_END; nWhich++ )
     {
-        // Selectively remove the attributes from the paragraph formatting
-        // which are specified in the style, so that the attributes of the
-        // style can have an affect.
-        const SfxItemSet& rStyleAttribs = pStyle->GetItemSet();
-        for ( sal_uInt16 nWhich = EE_PARA_START; nWhich <= EE_CHAR_END; nWhich++ )
-        {
-            // Don't change bullet on/off
-            if ( ( nWhich != EE_PARA_BULLETSTATE ) && ( rStyleAttribs.GetItemState( nWhich ) == SfxItemState::SET ) )
-                aAttribSet.ClearItem( nWhich );
-        }
+        // Don't change bullet on/off
+        if ( ( nWhich != EE_PARA_BULLETSTATE ) && ( rStyleAttribs.GetItemState( nWhich ) == SfxItemState::SET ) )
+            aAttribSet.ClearItem( nWhich );
     }
 }
 
