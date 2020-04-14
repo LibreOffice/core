@@ -6608,6 +6608,10 @@ void DomainMapper_Impl::ApplySettingsTable()
             if( m_pSettingsTable->GetEmbedSystemFonts())
                 xSettings->setPropertyValue( getPropertyName( PROP_EMBED_SYSTEM_FONTS ), uno::makeAny(true) );
             xSettings->setPropertyValue("AddParaTableSpacing", uno::makeAny(m_pSettingsTable->GetDoNotUseHTMLParagraphAutoSpacing()));
+            if (m_pSettingsTable->GetNoLeading())
+            {
+                xSettings->setPropertyValue("AddExternalLeading", uno::makeAny(!m_pSettingsTable->GetNoLeading()));
+            }
             if( m_pSettingsTable->GetProtectForm() )
                 xSettings->setPropertyValue("ProtectForm", uno::makeAny( true ));
         }
