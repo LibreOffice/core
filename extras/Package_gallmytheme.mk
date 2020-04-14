@@ -30,4 +30,7 @@ $(eval $(call gb_Package_add_files,extras_gallmytheme,$(LIBO_SHARE_PRESETS_FOLDE
 	network.sdg \
 	network.sdv \
 	network.thm \
+	diagrams.sdg \
+	diagrams.sdv \
+	diagrams.thm \
 ))
