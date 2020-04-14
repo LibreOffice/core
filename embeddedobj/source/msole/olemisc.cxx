@@ -158,25 +158,25 @@ OleEmbeddedObject::~OleEmbeddedObject()
 
 void OleEmbeddedObject::MakeEventListenerNotification_Impl( const OUString& aEventName )
 {
-    if ( m_pInterfaceContainer )
+    if ( !m_pInterfaceContainer )
+        return;
+
+    ::cppu::OInterfaceContainerHelper* pContainer =
+    m_pInterfaceContainer->getContainer(
+                                cppu::UnoType<document::XEventListener>::get());
+    if ( pContainer == nullptr )
+        return;
+
+    document::EventObject aEvent( static_cast< ::cppu::OWeakObject* >( this ), aEventName );
+    ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+    while (pIterator.hasMoreElements())
     {
-        ::cppu::OInterfaceContainerHelper* pContainer =
-        m_pInterfaceContainer->getContainer(
-                                    cppu::UnoType<document::XEventListener>::get());
-        if ( pContainer != nullptr )
+        try
         {
-            document::EventObject aEvent( static_cast< ::cppu::OWeakObject* >( this ), aEventName );
-            ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
-            while (pIterator.hasMoreElements())
-            {
-                try
-                {
-                    static_cast<document::XEventListener*>(pIterator.next())->notifyEvent( aEvent );
-                }
-                catch( const uno::RuntimeException& )
-                {
-                }
-            }
+            static_cast<document::XEventListener*>(pIterator.next())->notifyEvent( aEvent );
+        }
+        catch( const uno::RuntimeException& )
+        {
         }
     }
 }

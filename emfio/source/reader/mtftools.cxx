@@ -675,31 +675,31 @@ namespace emfio
 
     void MtfTools::ImplDrawClippedPolyPolygon( const tools::PolyPolygon& rPolyPoly )
     {
-        if ( rPolyPoly.Count() )
+        if ( !rPolyPoly.Count() )
+            return;
+
+        ImplSetNonPersistentLineColorTransparenz();
+        if ( rPolyPoly.Count() == 1 )
         {
-            ImplSetNonPersistentLineColorTransparenz();
-            if ( rPolyPoly.Count() == 1 )
+            if ( rPolyPoly.IsRect() )
+                mpGDIMetaFile->AddAction( new MetaRectAction( rPolyPoly.GetBoundRect() ) );
+            else
             {
-                if ( rPolyPoly.IsRect() )
-                    mpGDIMetaFile->AddAction( new MetaRectAction( rPolyPoly.GetBoundRect() ) );
-                else
+                tools::Polygon aPoly( rPolyPoly[ 0 ] );
+                sal_uInt16 nCount = aPoly.GetSize();
+                if ( nCount )
                 {
-                    tools::Polygon aPoly( rPolyPoly[ 0 ] );
-                    sal_uInt16 nCount = aPoly.GetSize();
-                    if ( nCount )
+                    if ( aPoly[ nCount - 1 ] != aPoly[ 0 ] )
                     {
-                        if ( aPoly[ nCount - 1 ] != aPoly[ 0 ] )
-                        {
-                            Point aPoint( aPoly[ 0 ] );
-                            aPoly.Insert( nCount, aPoint );
-                        }
-                        mpGDIMetaFile->AddAction( new MetaPolygonAction( aPoly ) );
+                        Point aPoint( aPoly[ 0 ] );
+                        aPoly.Insert( nCount, aPoint );
                     }
+                    mpGDIMetaFile->AddAction( new MetaPolygonAction( aPoly ) );
                 }
             }
-            else
-                mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( rPolyPoly ) );
         }
+        else
+            mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( rPolyPoly ) );
     }
 
     void MtfTools::CreateObject( std::unique_ptr<GDIObj> pObject )
@@ -736,39 +736,39 @@ namespace emfio
 
     void MtfTools::CreateObjectIndexed( sal_Int32 nIndex, std::unique_ptr<GDIObj> pObject )
     {
-        if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
-        {
-            nIndex &= 0xffff;       // safety check: do not allow index to be > 65535
-            if ( pObject )
-            {
-                const auto pLineStyle = dynamic_cast<WinMtfLineStyle*>(pObject.get());
-                const auto pFontStyle = dynamic_cast<WinMtfFontStyle*>(pObject.get());
-                if ( pFontStyle )
-                {
-                    if (pFontStyle->aFont.GetFontHeight() == 0)
-                        pFontStyle->aFont.SetFontHeight(423);
-                    ImplMap(pFontStyle->aFont);
-                }
-                else if ( pLineStyle )
-                {
-                    Size aSize(pLineStyle->aLineInfo.GetWidth(), 0);
-                    pLineStyle->aLineInfo.SetWidth( ImplMap(aSize).Width() );
+        if ( ( nIndex & ENHMETA_STOCK_OBJECT ) != 0 )
+            return;
 
-                    if ( pLineStyle->aLineInfo.GetStyle() == LineStyle::Dash )
-                    {
-                        aSize.AdjustWidth(1 );
-                        long nDotLen = ImplMap( aSize ).Width();
-                        pLineStyle->aLineInfo.SetDistance( nDotLen );
-                        pLineStyle->aLineInfo.SetDotLen( nDotLen );
-                        pLineStyle->aLineInfo.SetDashLen( nDotLen * 3 );
-                    }
+        nIndex &= 0xffff;       // safety check: do not allow index to be > 65535
+        if ( pObject )
+        {
+            const auto pLineStyle = dynamic_cast<WinMtfLineStyle*>(pObject.get());
+            const auto pFontStyle = dynamic_cast<WinMtfFontStyle*>(pObject.get());
+            if ( pFontStyle )
+            {
+                if (pFontStyle->aFont.GetFontHeight() == 0)
+                    pFontStyle->aFont.SetFontHeight(423);
+                ImplMap(pFontStyle->aFont);
+            }
+            else if ( pLineStyle )
+            {
+                Size aSize(pLineStyle->aLineInfo.GetWidth(), 0);
+                pLineStyle->aLineInfo.SetWidth( ImplMap(aSize).Width() );
+
+                if ( pLineStyle->aLineInfo.GetStyle() == LineStyle::Dash )
+                {
+                    aSize.AdjustWidth(1 );
+                    long nDotLen = ImplMap( aSize ).Width();
+                    pLineStyle->aLineInfo.SetDistance( nDotLen );
+                    pLineStyle->aLineInfo.SetDotLen( nDotLen );
+                    pLineStyle->aLineInfo.SetDashLen( nDotLen * 3 );
                 }
             }
-            if ( o3tl::make_unsigned(nIndex) >= mvGDIObj.size() )
-                ImplResizeObjectArry( nIndex + 16 );
-
-            mvGDIObj[ nIndex ] = std::move(pObject);
         }
+        if ( o3tl::make_unsigned(nIndex) >= mvGDIObj.size() )
+            ImplResizeObjectArry( nIndex + 16 );
+
+        mvGDIObj[ nIndex ] = std::move(pObject);
     }
 
     void MtfTools::CreateObject()
@@ -933,53 +933,53 @@ namespace emfio
 
     void MtfTools::UpdateClipRegion()
     {
-        if (mbClipNeedsUpdate)
+        if (!mbClipNeedsUpdate)
+            return;
+
+        mbClipNeedsUpdate = false;
+        mbComplexClip = false;
+
+        mpGDIMetaFile->AddAction( new MetaPopAction() );                    // taking the original clipregion
+        mpGDIMetaFile->AddAction( new MetaPushAction( PushFlags::CLIPREGION ) );
+
+        // skip for 'no clipping at all' case
+        if( maClipPath.isEmpty() )
+            return;
+
+        const basegfx::B2DPolyPolygon& rClipPoly( maClipPath.getClipPath() );
+
+        mbComplexClip = rClipPoly.count() > 1
+            || !basegfx::utils::isRectangle(rClipPoly);
+
+        static bool bEnableComplexClipViaRegion = getenv("SAL_WMF_COMPLEXCLIP_VIA_REGION") != nullptr;
+
+        if (bEnableComplexClipViaRegion)
         {
-            mbClipNeedsUpdate = false;
-            mbComplexClip = false;
-
-            mpGDIMetaFile->AddAction( new MetaPopAction() );                    // taking the original clipregion
-            mpGDIMetaFile->AddAction( new MetaPushAction( PushFlags::CLIPREGION ) );
-
-            // skip for 'no clipping at all' case
-            if( !maClipPath.isEmpty() )
+            //this makes cases like tdf#45820 work in reasonable time, and I feel in theory should
+            //be just fine. In practice I see the output is different so needs work before its the
+            //default, but for file fuzzing it should be good enough
+            if (mbComplexClip)
             {
-                const basegfx::B2DPolyPolygon& rClipPoly( maClipPath.getClipPath() );
-
-                mbComplexClip = rClipPoly.count() > 1
-                    || !basegfx::utils::isRectangle(rClipPoly);
-
-                static bool bEnableComplexClipViaRegion = getenv("SAL_WMF_COMPLEXCLIP_VIA_REGION") != nullptr;
-
-                if (bEnableComplexClipViaRegion)
-                {
-                    //this makes cases like tdf#45820 work in reasonable time, and I feel in theory should
-                    //be just fine. In practice I see the output is different so needs work before its the
-                    //default, but for file fuzzing it should be good enough
-                    if (mbComplexClip)
-                    {
-                        mpGDIMetaFile->AddAction(
-                            new MetaISectRegionClipRegionAction(
-                                vcl::Region(rClipPoly)));
-                        mbComplexClip = false;
-                    }
-                    else
-                    {
-                        mpGDIMetaFile->AddAction(
-                            new MetaISectRectClipRegionAction(
-                                vcl::unotools::rectangleFromB2DRectangle(
-                                    rClipPoly.getB2DRange())));
-                    }
-                }
-                else
-                {
-                    //normal case
-                    mpGDIMetaFile->AddAction(
-                        new MetaISectRectClipRegionAction(
-                            vcl::unotools::rectangleFromB2DRectangle(
-                                rClipPoly.getB2DRange())));
-                }
+                mpGDIMetaFile->AddAction(
+                    new MetaISectRegionClipRegionAction(
+                        vcl::Region(rClipPoly)));
+                mbComplexClip = false;
             }
+            else
+            {
+                mpGDIMetaFile->AddAction(
+                    new MetaISectRectClipRegionAction(
+                        vcl::unotools::rectangleFromB2DRectangle(
+                            rClipPoly.getB2DRange())));
+            }
+        }
+        else
+        {
+            //normal case
+            mpGDIMetaFile->AddAction(
+                new MetaISectRectClipRegionAction(
+                    vcl::unotools::rectangleFromB2DRectangle(
+                        rClipPoly.getB2DRange())));
         }
     }
 
@@ -1063,34 +1063,34 @@ namespace emfio
 
     void MtfTools::StrokeAndFillPath( bool bStroke, bool bFill )
     {
-        if ( maPathObj.Count() )
-        {
-            UpdateClipRegion();
-            UpdateLineStyle();
-            UpdateFillStyle();
-            if ( bFill )
-            {
-                if ( !bStroke )
-                {
-                    mpGDIMetaFile->AddAction( new MetaPushAction( PushFlags::LINECOLOR ) );
-                    mpGDIMetaFile->AddAction( new MetaLineColorAction( Color(), false ) );
-                }
-                if ( maPathObj.Count() == 1 )
-                    mpGDIMetaFile->AddAction( new MetaPolygonAction( maPathObj.GetObject( 0 ) ) );
-                else
-                    mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( maPathObj ) );
+        if ( !maPathObj.Count() )
+            return;
 
-                if ( !bStroke )
-                    mpGDIMetaFile->AddAction( new MetaPopAction() );
-            }
-            else
+        UpdateClipRegion();
+        UpdateLineStyle();
+        UpdateFillStyle();
+        if ( bFill )
+        {
+            if ( !bStroke )
             {
-                sal_uInt16 i, nCount = maPathObj.Count();
-                for ( i = 0; i < nCount; i++ )
-                    mpGDIMetaFile->AddAction( new MetaPolyLineAction( maPathObj[ i ], maLineStyle.aLineInfo ) );
+                mpGDIMetaFile->AddAction( new MetaPushAction( PushFlags::LINECOLOR ) );
+                mpGDIMetaFile->AddAction( new MetaLineColorAction( Color(), false ) );
             }
-            ClearPath();
+            if ( maPathObj.Count() == 1 )
+                mpGDIMetaFile->AddAction( new MetaPolygonAction( maPathObj.GetObject( 0 ) ) );
+            else
+                mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( maPathObj ) );
+
+            if ( !bStroke )
+                mpGDIMetaFile->AddAction( new MetaPopAction() );
         }
+        else
+        {
+            sal_uInt16 i, nCount = maPathObj.Count();
+            for ( i = 0; i < nCount; i++ )
+                mpGDIMetaFile->AddAction( new MetaPolyLineAction( maPathObj[ i ], maLineStyle.aLineInfo ) );
+        }
+        ClearPath();
     }
 
     void MtfTools::DrawPixel( const Point& rSource, const Color& rColor )
@@ -1380,51 +1380,51 @@ namespace emfio
         UpdateClipRegion();
 
         sal_uInt16 nPoints = rPolygon.GetSize();
-        if (nPoints >= 1)
+        if (nPoints < 1)
+            return;
+
+        ImplMap( rPolygon );
+        if ( bTo )
         {
-            ImplMap( rPolygon );
-            if ( bTo )
-            {
-                rPolygon[ 0 ] = maActPos;
-                maActPos = rPolygon[ rPolygon.GetSize() - 1 ];
-            }
-            if ( bRecordPath )
-                maPathObj.AddPolyLine( rPolygon );
-            else
-            {
-                UpdateLineStyle();
-                mpGDIMetaFile->AddAction( new MetaPolyLineAction( rPolygon, maLineStyle.aLineInfo ) );
-            }
+            rPolygon[ 0 ] = maActPos;
+            maActPos = rPolygon[ rPolygon.GetSize() - 1 ];
+        }
+        if ( bRecordPath )
+            maPathObj.AddPolyLine( rPolygon );
+        else
+        {
+            UpdateLineStyle();
+            mpGDIMetaFile->AddAction( new MetaPolyLineAction( rPolygon, maLineStyle.aLineInfo ) );
         }
     }
 
     void MtfTools::DrawPolyBezier( tools::Polygon rPolygon, bool bTo, bool bRecordPath )
     {
         sal_uInt16 nPoints = rPolygon.GetSize();
-        if ( ( nPoints >= 4 ) && ( ( ( nPoints - 4 ) % 3 ) == 0 ) )
-        {
-            UpdateClipRegion();
+        if ( !(( nPoints >= 4 ) && ( ( ( nPoints - 4 ) % 3 ) == 0 )) )
+            return;
 
-            ImplMap( rPolygon );
-            if ( bTo )
-            {
-                rPolygon[ 0 ] = maActPos;
-                maActPos = rPolygon[ nPoints - 1 ];
-            }
-            sal_uInt16 i;
-            for ( i = 0; ( i + 2 ) < nPoints; )
-            {
-                rPolygon.SetFlags( i++, PolyFlags::Normal );
-                rPolygon.SetFlags( i++, PolyFlags::Control );
-                rPolygon.SetFlags( i++, PolyFlags::Control );
-            }
-            if ( bRecordPath )
-                maPathObj.AddPolyLine( rPolygon );
-            else
-            {
-                UpdateLineStyle();
-                mpGDIMetaFile->AddAction( new MetaPolyLineAction( rPolygon, maLineStyle.aLineInfo ) );
-            }
+        UpdateClipRegion();
+
+        ImplMap( rPolygon );
+        if ( bTo )
+        {
+            rPolygon[ 0 ] = maActPos;
+            maActPos = rPolygon[ nPoints - 1 ];
+        }
+        sal_uInt16 i;
+        for ( i = 0; ( i + 2 ) < nPoints; )
+        {
+            rPolygon.SetFlags( i++, PolyFlags::Normal );
+            rPolygon.SetFlags( i++, PolyFlags::Control );
+            rPolygon.SetFlags( i++, PolyFlags::Control );
+        }
+        if ( bRecordPath )
+            maPathObj.AddPolyLine( rPolygon );
+        else
+        {
+            UpdateLineStyle();
+            mpGDIMetaFile->AddAction( new MetaPolyLineAction( rPolygon, maLineStyle.aLineInfo ) );
         }
     }
 
@@ -1892,21 +1892,21 @@ namespace emfio
 
     void MtfTools::SetDevExt( const Size& rSize ,bool regular)
     {
-        if ( rSize.Width() && rSize.Height() )
+        if ( !(rSize.Width() && rSize.Height()) )
+            return;
+
+        switch( mnMapMode )
         {
-            switch( mnMapMode )
+            case MM_ISOTROPIC :
+            case MM_ANISOTROPIC :
             {
-                case MM_ISOTROPIC :
-                case MM_ANISOTROPIC :
-                {
-                    mnDevWidth = rSize.Width();
-                    mnDevHeight = rSize.Height();
-                }
+                mnDevWidth = rSize.Width();
+                mnDevHeight = rSize.Height();
             }
-            if (regular)
-            {
-                mbIsMapDevSet=true;
-            }
+        }
+        if (regular)
+        {
+            mbIsMapDevSet=true;
         }
     }
 
@@ -1950,21 +1950,21 @@ namespace emfio
 
     void MtfTools::SetWinExt(const Size& rSize, bool bIsEMF)
     {
-        if (rSize.Width() && rSize.Height())
+        if (!(rSize.Width() && rSize.Height()))
+            return;
+
+        switch( mnMapMode )
         {
-            switch( mnMapMode )
+            case MM_ISOTROPIC :
+            case MM_ANISOTROPIC :
             {
-                case MM_ISOTROPIC :
-                case MM_ANISOTROPIC :
+                mnWinExtX = rSize.Width();
+                mnWinExtY = rSize.Height();
+                if (bIsEMF)
                 {
-                    mnWinExtX = rSize.Width();
-                    mnWinExtY = rSize.Height();
-                    if (bIsEMF)
-                    {
-                        SetDevByWin();
-                    }
-                    mbIsMapWinSet = true;
+                    SetDevByWin();
                 }
+                mbIsMapWinSet = true;
             }
         }
     }
@@ -2146,50 +2146,50 @@ namespace emfio
     void MtfTools::Pop()
     {
         // Get the latest data from the stack
-        if( !mvSaveStack.empty() )
+        if( mvSaveStack.empty() )
+            return;
+
+        // Backup the current data on the stack
+        std::shared_ptr<SaveStruct>& pSave( mvSaveStack.back() );
+
+        maLineStyle = pSave->aLineStyle;
+        maFillStyle = pSave->aFillStyle;
+
+        maFont = pSave->aFont;
+        maTextColor = pSave->aTextColor;
+        mnTextAlign = pSave->nTextAlign;
+        mnTextLayoutMode = pSave->nTextLayoutMode;
+        mnBkMode = pSave->nBkMode;
+        mnGfxMode = pSave->nGfxMode;
+        mnMapMode = pSave->nMapMode;
+        maBkColor = pSave->aBkColor;
+        mbFillStyleSelected = pSave->bFillStyleSelected;
+
+        maActPos = pSave->aActPos;
+        maXForm = pSave->aXForm;
+        meRasterOp = pSave->eRasterOp;
+
+        mnWinOrgX = pSave->nWinOrgX;
+        mnWinOrgY = pSave->nWinOrgY;
+        mnWinExtX = pSave->nWinExtX;
+        mnWinExtY = pSave->nWinExtY;
+        mnDevOrgX = pSave->nDevOrgX;
+        mnDevOrgY = pSave->nDevOrgY;
+        mnDevWidth = pSave->nDevWidth;
+        mnDevHeight = pSave->nDevHeight;
+
+        maPathObj = pSave->maPathObj;
+        if ( ! ( maClipPath == pSave->maClipPath ) )
         {
-            // Backup the current data on the stack
-            std::shared_ptr<SaveStruct>& pSave( mvSaveStack.back() );
-
-            maLineStyle = pSave->aLineStyle;
-            maFillStyle = pSave->aFillStyle;
-
-            maFont = pSave->aFont;
-            maTextColor = pSave->aTextColor;
-            mnTextAlign = pSave->nTextAlign;
-            mnTextLayoutMode = pSave->nTextLayoutMode;
-            mnBkMode = pSave->nBkMode;
-            mnGfxMode = pSave->nGfxMode;
-            mnMapMode = pSave->nMapMode;
-            maBkColor = pSave->aBkColor;
-            mbFillStyleSelected = pSave->bFillStyleSelected;
-
-            maActPos = pSave->aActPos;
-            maXForm = pSave->aXForm;
-            meRasterOp = pSave->eRasterOp;
-
-            mnWinOrgX = pSave->nWinOrgX;
-            mnWinOrgY = pSave->nWinOrgY;
-            mnWinExtX = pSave->nWinExtX;
-            mnWinExtY = pSave->nWinExtY;
-            mnDevOrgX = pSave->nDevOrgX;
-            mnDevOrgY = pSave->nDevOrgY;
-            mnDevWidth = pSave->nDevWidth;
-            mnDevHeight = pSave->nDevHeight;
-
-            maPathObj = pSave->maPathObj;
-            if ( ! ( maClipPath == pSave->maClipPath ) )
-            {
-                maClipPath = pSave->maClipPath;
-                mbClipNeedsUpdate = true;
-            }
-            if ( meLatestRasterOp != meRasterOp )
-            {
-                mpGDIMetaFile->AddAction( new MetaRasterOpAction( meRasterOp ) );
-                meLatestRasterOp = meRasterOp;
-            }
-            mvSaveStack.pop_back();
+            maClipPath = pSave->maClipPath;
+            mbClipNeedsUpdate = true;
         }
+        if ( meLatestRasterOp != meRasterOp )
+        {
+            mpGDIMetaFile->AddAction( new MetaRasterOpAction( meRasterOp ) );
+            meLatestRasterOp = meRasterOp;
+        }
+        mvSaveStack.pop_back();
     }
 
     void MtfTools::AddFromGDIMetaFile( GDIMetaFile& rGDIMetaFile )

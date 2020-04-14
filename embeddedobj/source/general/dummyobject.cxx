@@ -57,35 +57,35 @@ void ODummyEmbeddedObject::CheckInit_Runtime()
 }
 void ODummyEmbeddedObject::PostEvent_Impl( const OUString& aEventName )
 {
-    if ( m_pInterfaceContainer )
-    {
-        ::cppu::OInterfaceContainerHelper* pIC = m_pInterfaceContainer->getContainer(
-                                            cppu::UnoType<document::XEventListener>::get());
-        if( pIC )
-        {
-            document::EventObject aEvent;
-            aEvent.EventName = aEventName;
-            aEvent.Source.set( static_cast< ::cppu::OWeakObject* >( this ) );
-            // For now all the events are sent as object events
-            // aEvent.Source = ( xSource.is() ? xSource
-            //                     : uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) ) );
-            ::cppu::OInterfaceIteratorHelper aIt( *pIC );
-            while( aIt.hasMoreElements() )
-            {
-                try
-                {
-                    static_cast<document::XEventListener *>(aIt.next())->notifyEvent( aEvent );
-                }
-                catch( const uno::RuntimeException& )
-                {
-                    aIt.remove();
-                }
+    if ( !m_pInterfaceContainer )
+        return;
 
-                // the listener could dispose the object.
-                if ( m_bDisposed )
-                    return;
-            }
+    ::cppu::OInterfaceContainerHelper* pIC = m_pInterfaceContainer->getContainer(
+                                        cppu::UnoType<document::XEventListener>::get());
+    if( !pIC )
+        return;
+
+    document::EventObject aEvent;
+    aEvent.EventName = aEventName;
+    aEvent.Source.set( static_cast< ::cppu::OWeakObject* >( this ) );
+    // For now all the events are sent as object events
+    // aEvent.Source = ( xSource.is() ? xSource
+    //                     : uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) ) );
+    ::cppu::OInterfaceIteratorHelper aIt( *pIC );
+    while( aIt.hasMoreElements() )
+    {
+        try
+        {
+            static_cast<document::XEventListener *>(aIt.next())->notifyEvent( aEvent );
         }
+        catch( const uno::RuntimeException& )
+        {
+            aIt.remove();
+        }
+
+        // the listener could dispose the object.
+        if ( m_bDisposed )
+            return;
     }
 }
 

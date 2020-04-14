@@ -294,27 +294,27 @@ void DocumentHolder::PlaceFrame( const awt::Rectangle& aNewRect )
                 "The object does not have windows required for inplace mode!" );
 
     //TODO: may need mutex locking???
-    if ( m_xFrame.is() && m_xOwnWindow.is() )
+    if ( !(m_xFrame.is() && m_xOwnWindow.is()) )
+        return;
+
+    // the frame can be replaced only in inplace mode
+    frame::BorderWidths aOldWidths;
+    IntCounterGuard aGuard( m_nNoBorderResizeReact );
+
+    do
     {
-        // the frame can be replaced only in inplace mode
-        frame::BorderWidths aOldWidths;
-        IntCounterGuard aGuard( m_nNoBorderResizeReact );
+        aOldWidths = m_aBorderWidths;
 
-        do
-        {
-            aOldWidths = m_aBorderWidths;
+        awt::Rectangle aHatchRect = AddBorderToArea( aNewRect );
 
-            awt::Rectangle aHatchRect = AddBorderToArea( aNewRect );
+        ResizeWindows_Impl( aHatchRect );
 
-            ResizeWindows_Impl( aHatchRect );
+    } while ( aOldWidths.Left != m_aBorderWidths.Left
+           || aOldWidths.Top != m_aBorderWidths.Top
+           || aOldWidths.Right != m_aBorderWidths.Right
+           || aOldWidths.Bottom != m_aBorderWidths.Bottom );
 
-        } while ( aOldWidths.Left != m_aBorderWidths.Left
-               || aOldWidths.Top != m_aBorderWidths.Top
-               || aOldWidths.Right != m_aBorderWidths.Right
-               || aOldWidths.Bottom != m_aBorderWidths.Bottom );
-
-        m_aObjRect = aNewRect;
-    }
+    m_aObjRect = aNewRect;
 }
 
 
@@ -1244,30 +1244,30 @@ awt::Rectangle SAL_CALL DocumentHolder::calcAdjustedRectangle( const awt::Rectan
 
 void SAL_CALL DocumentHolder::activated(  )
 {
-    if ( m_pEmbedObj->getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
+    if ( !(m_pEmbedObj->getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) )
+        return;
+
+    if ( m_pEmbedObj->getCurrentState() != embed::EmbedStates::UI_ACTIVE &&
+    !(m_pEmbedObj->getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_NOUIACTIVATE) )
     {
-        if ( m_pEmbedObj->getCurrentState() != embed::EmbedStates::UI_ACTIVE &&
-        !(m_pEmbedObj->getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_NOUIACTIVATE) )
+        try
         {
-            try
-            {
-                m_pEmbedObj->changeState( embed::EmbedStates::UI_ACTIVE );
-            }
-            catch ( const css::embed::StateChangeInProgressException& )
-            {
-                // must catch this exception because focus is grabbed while UI activation in doVerb()
-            }
-            catch ( const css::uno::Exception& )
-            {
-                // no outgoing exceptions specified here
-            }
+            m_pEmbedObj->changeState( embed::EmbedStates::UI_ACTIVE );
         }
-        else
+        catch ( const css::embed::StateChangeInProgressException& )
         {
-            uno::Reference< frame::XFramesSupplier > xSupp = m_xFrame->getCreator();
-            if ( xSupp.is() )
-                xSupp->setActiveFrame( m_xFrame );
+            // must catch this exception because focus is grabbed while UI activation in doVerb()
         }
+        catch ( const css::uno::Exception& )
+        {
+            // no outgoing exceptions specified here
+        }
+    }
+    else
+    {
+        uno::Reference< frame::XFramesSupplier > xSupp = m_xFrame->getCreator();
+        if ( xSupp.is() )
+            xSupp->setActiveFrame( m_xFrame );
     }
 }
 

@@ -580,24 +580,24 @@ void SAL_CALL OwnView_Impl::notifyEvent( const document::EventObject& aEvent )
         }
     }
 
-    if ( xModel.is() )
-    {
-        try {
-            uno::Reference< document::XEventBroadcaster > xBroadCaster( xModel, uno::UNO_QUERY );
-            if ( xBroadCaster.is() )
-                xBroadCaster->removeEventListener( uno::Reference< document::XEventListener >(
-                                                                        static_cast< ::cppu::OWeakObject* >( this ),
-                                                                         uno::UNO_QUERY ) );
+    if ( !xModel.is() )
+        return;
 
-            uno::Reference< util::XCloseable > xCloseable( xModel, uno::UNO_QUERY );
-            if ( xCloseable.is() )
-                xCloseable->removeCloseListener( uno::Reference< util::XCloseListener >(
-                                                                        static_cast< ::cppu::OWeakObject* >( this ),
-                                                                         uno::UNO_QUERY ) );
-        }
-        catch( uno::Exception& )
-        {}
+    try {
+        uno::Reference< document::XEventBroadcaster > xBroadCaster( xModel, uno::UNO_QUERY );
+        if ( xBroadCaster.is() )
+            xBroadCaster->removeEventListener( uno::Reference< document::XEventListener >(
+                                                                    static_cast< ::cppu::OWeakObject* >( this ),
+                                                                     uno::UNO_QUERY ) );
+
+        uno::Reference< util::XCloseable > xCloseable( xModel, uno::UNO_QUERY );
+        if ( xCloseable.is() )
+            xCloseable->removeCloseListener( uno::Reference< util::XCloseListener >(
+                                                                    static_cast< ::cppu::OWeakObject* >( this ),
+                                                                     uno::UNO_QUERY ) );
     }
+    catch( uno::Exception& )
+    {}
 }
 
 

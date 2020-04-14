@@ -256,34 +256,34 @@ void OCommonEmbeddedObject::LinkInit_Impl(
 
 OCommonEmbeddedObject::~OCommonEmbeddedObject()
 {
-    if ( m_pInterfaceContainer || m_xDocHolder.is() )
-    {
-        osl_atomic_increment(&m_refCount);
-        try {
-            lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >( this ) );
+    if ( !(m_pInterfaceContainer || m_xDocHolder.is()) )
+        return;
 
-            if ( m_pInterfaceContainer )
-            {
-                m_pInterfaceContainer->disposeAndClear( aSource );
+    osl_atomic_increment(&m_refCount);
+    try {
+        lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >( this ) );
 
-                delete m_pInterfaceContainer;
-                m_pInterfaceContainer = nullptr;
-            }
-        } catch( const uno::Exception& ) {}
+        if ( m_pInterfaceContainer )
+        {
+            m_pInterfaceContainer->disposeAndClear( aSource );
 
-        try {
-            if ( m_xDocHolder.is() )
-            {
-                m_xDocHolder->CloseFrame();
-                try {
-                    m_xDocHolder->CloseDocument( true, true );
-                } catch ( const uno::Exception& ) {}
-                m_xDocHolder->FreeOffice();
+            delete m_pInterfaceContainer;
+            m_pInterfaceContainer = nullptr;
+        }
+    } catch( const uno::Exception& ) {}
 
-                m_xDocHolder.clear();
-            }
-        } catch( const uno::Exception& ) {}
-    }
+    try {
+        if ( m_xDocHolder.is() )
+        {
+            m_xDocHolder->CloseFrame();
+            try {
+                m_xDocHolder->CloseDocument( true, true );
+            } catch ( const uno::Exception& ) {}
+            m_xDocHolder->FreeOffice();
+
+            m_xDocHolder.clear();
+        }
+    } catch( const uno::Exception& ) {}
 }
 
 
@@ -292,20 +292,20 @@ void OCommonEmbeddedObject::requestPositioning( const awt::Rectangle& aRect )
     // the method is called in case object is inplace active and the object window was resized
 
     OSL_ENSURE( m_xClientSite.is(), "The client site must be set for inplace active object!" );
-    if ( m_xClientSite.is() )
-    {
-        uno::Reference< embed::XInplaceClient > xInplaceClient( m_xClientSite, uno::UNO_QUERY );
+    if ( !m_xClientSite.is() )
+        return;
 
-        OSL_ENSURE( xInplaceClient.is(), "The client site must support XInplaceClient to allow inplace activation!" );
-        if ( xInplaceClient.is() )
+    uno::Reference< embed::XInplaceClient > xInplaceClient( m_xClientSite, uno::UNO_QUERY );
+
+    OSL_ENSURE( xInplaceClient.is(), "The client site must support XInplaceClient to allow inplace activation!" );
+    if ( xInplaceClient.is() )
+    {
+        try {
+            xInplaceClient->changedPlacement( aRect );
+        }
+        catch( const uno::Exception& )
         {
-            try {
-                xInplaceClient->changedPlacement( aRect );
-            }
-            catch( const uno::Exception& )
-            {
-                OSL_FAIL( "Exception on request to resize!" );
-            }
+            OSL_FAIL( "Exception on request to resize!" );
         }
     }
 }
@@ -313,35 +313,35 @@ void OCommonEmbeddedObject::requestPositioning( const awt::Rectangle& aRect )
 
 void OCommonEmbeddedObject::PostEvent_Impl( const OUString& aEventName )
 {
-    if ( m_pInterfaceContainer )
-    {
-        ::cppu::OInterfaceContainerHelper* pIC = m_pInterfaceContainer->getContainer(
-                                            cppu::UnoType<document::XEventListener>::get());
-        if( pIC )
-        {
-            document::EventObject aEvent;
-            aEvent.EventName = aEventName;
-            aEvent.Source.set( static_cast< ::cppu::OWeakObject* >( this ) );
-            // For now all the events are sent as object events
-            // aEvent.Source = ( xSource.is() ? xSource
-            //                       : uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) ) );
-            ::cppu::OInterfaceIteratorHelper aIt( *pIC );
-            while( aIt.hasMoreElements() )
-            {
-                try
-                {
-                    static_cast<document::XEventListener *>(aIt.next())->notifyEvent( aEvent );
-                }
-                catch( const uno::RuntimeException& )
-                {
-                    aIt.remove();
-                }
+    if ( !m_pInterfaceContainer )
+        return;
 
-                // the listener could dispose the object.
-                if ( m_bDisposed )
-                    return;
-            }
+    ::cppu::OInterfaceContainerHelper* pIC = m_pInterfaceContainer->getContainer(
+                                        cppu::UnoType<document::XEventListener>::get());
+    if( !pIC )
+        return;
+
+    document::EventObject aEvent;
+    aEvent.EventName = aEventName;
+    aEvent.Source.set( static_cast< ::cppu::OWeakObject* >( this ) );
+    // For now all the events are sent as object events
+    // aEvent.Source = ( xSource.is() ? xSource
+    //                       : uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) ) );
+    ::cppu::OInterfaceIteratorHelper aIt( *pIC );
+    while( aIt.hasMoreElements() )
+    {
+        try
+        {
+            static_cast<document::XEventListener *>(aIt.next())->notifyEvent( aEvent );
         }
+        catch( const uno::RuntimeException& )
+        {
+            aIt.remove();
+        }
+
+        // the listener could dispose the object.
+        if ( m_bDisposed )
+            return;
     }
 }
 

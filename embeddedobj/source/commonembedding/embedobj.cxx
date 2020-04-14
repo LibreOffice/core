@@ -120,39 +120,39 @@ void OCommonEmbeddedObject::Deactivate()
 
 void OCommonEmbeddedObject::StateChangeNotification_Impl( bool bBeforeChange, sal_Int32 nOldState, sal_Int32 nNewState ,::osl::ResettableMutexGuard& rGuard )
 {
-    if ( m_pInterfaceContainer )
+    if ( !m_pInterfaceContainer )
+        return;
+
+    ::cppu::OInterfaceContainerHelper* pContainer = m_pInterfaceContainer->getContainer(
+                        cppu::UnoType<embed::XStateChangeListener>::get());
+    if ( pContainer == nullptr )
+        return;
+
+    lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >( this ) );
+    ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+
+    // should be locked after the method is finished successfully
+    rGuard.clear();
+
+    while (pIterator.hasMoreElements())
     {
-        ::cppu::OInterfaceContainerHelper* pContainer = m_pInterfaceContainer->getContainer(
-                            cppu::UnoType<embed::XStateChangeListener>::get());
-        if ( pContainer != nullptr )
+        try
         {
-            lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >( this ) );
-            ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
-
-            // should be locked after the method is finished successfully
-            rGuard.clear();
-
-            while (pIterator.hasMoreElements())
-            {
-                try
-                {
-                    if ( bBeforeChange )
-                        static_cast<embed::XStateChangeListener*>(pIterator.next())->changingState( aSource, nOldState, nNewState );
-                    else
-                        static_cast<embed::XStateChangeListener*>(pIterator.next())->stateChanged( aSource, nOldState, nNewState );
-                }
-                catch( const uno::Exception& )
-                {
-                    // even if the listener complains ignore it for now
-                   }
-
-                if ( m_bDisposed )
-                    return;
-            }
-
-            rGuard.reset();
+            if ( bBeforeChange )
+                static_cast<embed::XStateChangeListener*>(pIterator.next())->changingState( aSource, nOldState, nNewState );
+            else
+                static_cast<embed::XStateChangeListener*>(pIterator.next())->stateChanged( aSource, nOldState, nNewState );
         }
+        catch( const uno::Exception& )
+        {
+            // even if the listener complains ignore it for now
+           }
+
+        if ( m_bDisposed )
+            return;
     }
+
+    rGuard.reset();
 }
 
 
