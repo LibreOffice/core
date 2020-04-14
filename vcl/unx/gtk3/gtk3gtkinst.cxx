@@ -7022,6 +7022,8 @@ private:
             gtk_container_remove(GTK_CONTAINER(m_pMenuHack), pChild);
             gtk_container_add(GTK_CONTAINER(m_pPopover), pChild);
             g_object_unref(pChild);
+
+            gtk_widget_unrealize(GTK_WIDGET(m_pMenuHack));
         }
         else
         {
@@ -7050,7 +7052,7 @@ private:
             gtk_window_group_add_window(gtk_window_get_group(GTK_WINDOW(pToplevel)), m_pMenuHack);
             gtk_window_set_transient_for(m_pMenuHack, GTK_WINDOW(pToplevel));
 
-            gtk_widget_show_all(GTK_WIDGET(m_pMenuHack));
+            gtk_widget_realize(GTK_WIDGET(m_pMenuHack));
 
             tools::Rectangle aWorkArea(::get_monitor_workarea(GTK_WIDGET(m_pMenuHack)));
             gint endx = x + gtk_widget_get_allocated_width(GTK_WIDGET(m_pMenuHack));
@@ -7070,6 +7072,7 @@ private:
             }
 
             gtk_window_move(m_pMenuHack, x, y);
+            gtk_widget_show_all(GTK_WIDGET(m_pMenuHack));
 
             gtk_widget_grab_focus(GTK_WIDGET(m_pMenuHack));
 
