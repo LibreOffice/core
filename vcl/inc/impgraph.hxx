@@ -75,6 +75,8 @@ private:
 
     GDIMetaFile                  maMetaFile;
     BitmapEx                     maEx;
+    /// If maEx is empty, this preferred size will be set on it when it gets initialized.
+    Size                         maExPrefSize;
     ImpSwapInfo                  maSwapInfo;
     std::unique_ptr<Animation>   mpAnimation;
     std::shared_ptr<GraphicReader> mpContext;
@@ -231,6 +233,9 @@ private:
     const std::shared_ptr<std::vector<sal_Int8>> & getPdfData() const;
 
     void setPdfData(const std::shared_ptr<std::vector<sal_Int8>>& rPdfData);
+
+    /// Gets the bitmap replacement for a vector graphic.
+    BitmapEx getVectorGraphicReplacement() const;
 
     bool ensureAvailable () const;
 
