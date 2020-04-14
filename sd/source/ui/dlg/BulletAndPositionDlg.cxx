@@ -81,7 +81,7 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
     , bModified(false)
     , bInInitControl(false)
     , bLabelAlignmentPosAndSpaceModeActive(false)
-    , bApplyToMaster(false)
+    /*, bApplyToMaster(false)*/
     , nBullet(0xff)
     , nActNumLvl(1)
     , p_Window(pWindow)
@@ -119,7 +119,7 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
     , m_xRightTB(m_xBuilder->weld_toggle_button("right"))
     , m_xSlideRB(m_xBuilder->weld_radio_button("sliderb"))
     , m_xSelectionRB(m_xBuilder->weld_radio_button("selectionrb"))
-    , m_xApplyToMaster(m_xBuilder->weld_toggle_button("applytomaster"))
+    /*, m_xApplyToMaster(m_xBuilder->weld_toggle_button("applytomaster"))*/
     , m_xReset(m_xBuilder->weld_button("reset"))
 {
     m_xBulColLB->SetSlotId(SID_ATTR_CHAR_COLOR);
@@ -145,7 +145,7 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
     m_xCenterTB->connect_toggled(
         LINK(this, SvxBulletAndPositionDlg, SelectCenterAlignmentHdl_Impl));
     m_xRightTB->connect_toggled(LINK(this, SvxBulletAndPositionDlg, SelectRightAlignmentHdl_Impl));
-    m_xApplyToMaster->connect_toggled(LINK(this, SvxBulletAndPositionDlg, ApplyToMasterHdl_Impl));
+    /*m_xApplyToMaster->connect_toggled(LINK(this, SvxBulletAndPositionDlg, ApplyToMasterHdl_Impl));*/
     m_xReset->connect_clicked(LINK(this, SvxBulletAndPositionDlg, ResetHdl_Impl));
 
     aInvalidateTimer.SetInvokeHandler(
@@ -278,7 +278,7 @@ SfxItemSet* SvxBulletAndPositionDlg::GetOutputItemSet(SfxItemSet* pSet)
     return pSet;
 };
 
-bool SvxBulletAndPositionDlg::IsApplyToMaster() const { return bApplyToMaster; }
+/*bool SvxBulletAndPositionDlg::IsApplyToMaster() const { return bApplyToMaster; }*/
 bool SvxBulletAndPositionDlg::IsSlideScope() const { return m_xSlideRB->get_active(); }
 
 void SvxBulletAndPositionDlg::Reset(const SfxItemSet* rSet)
@@ -1110,10 +1110,10 @@ void SvxBulletAndPositionDlg::SetAlignmentHdl_Impl(SvxAdjust eAdjust)
     }
 }
 
-IMPL_LINK(SvxBulletAndPositionDlg, ApplyToMasterHdl_Impl, weld::ToggleButton&, rButton, void)
+/*IMPL_LINK(SvxBulletAndPositionDlg, ApplyToMasterHdl_Impl, weld::ToggleButton&, rButton, void)
 {
     bApplyToMaster = rButton.get_active();
-}
+}*/
 
 IMPL_LINK_NOARG(SvxBulletAndPositionDlg, ResetHdl_Impl, weld::Button&, void)
 {
