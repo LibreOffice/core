@@ -1398,6 +1398,7 @@ callback (gpointer pData)
     case LOK_CALLBACK_TABLE_SELECTED:
     case LOK_CALLBACK_JSDIALOG:
     case LOK_CALLBACK_CALC_FUNCTION_LIST:
+    case LOK_CALLBACK_TAB_STOP_LIST:
     {
         // TODO: Implement me
         break;

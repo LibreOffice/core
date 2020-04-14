@@ -55,6 +55,9 @@
 #include <section.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
+#include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <boost/property_tree/json_parser.hpp>
 
 #include <IDocumentSettingAccess.hxx>
 
@@ -645,6 +648,49 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
             }
             else
                 rSh.SetAttrItem( aTabStops );
+        }
+        break;
+    case SID_TABSTOP_ADD_OR_CHANGE:
+        if (pReqArgs)
+        {
+            const auto aIndexItem = static_cast<const SfxInt32Item&>(pReqArgs->Get(SID_TABSTOP_ATTR_INDEX));
+            const auto aPositionItem = static_cast<const SfxInt32Item&>(pReqArgs->Get(SID_TABSTOP_ATTR_POSITION));
+            const sal_Int32 nIndex = aIndexItem.GetValue();
+            const sal_Int32 nPosition = aPositionItem.GetValue();
+
+            SfxItemSet aItemSet(GetPool(), svl::Items<RES_PARATR_TABSTOP, RES_PARATR_TABSTOP>{});
+            rSh.GetCurAttr(aItemSet);
+            SvxTabStopItem aTabStopItem(aItemSet.Get(RES_PARATR_TABSTOP));
+            lcl_EraseDefTabs(aTabStopItem);
+
+            if (nIndex < aTabStopItem.Count())
+            {
+                if (nIndex == -1)
+                {
+                    SvxTabStop aSwTabStop(0, SvxTabAdjust::Default);
+                    aTabStopItem.Insert(aSwTabStop);
+
+                    const SvxTabStopItem& rDefaultTabs = rSh.GetDefault(RES_PARATR_TABSTOP);
+                    MakeDefTabs(GetTabDist(rDefaultTabs), aTabStopItem);
+
+                    SvxTabStop aTabStop(nPosition);
+                    aTabStopItem.Insert(aTabStop);
+                }
+                else
+                {
+                    SvxTabStop aTabStop = aTabStopItem.At(nIndex);
+                    aTabStopItem.Remove(nIndex);
+                    aTabStop.GetTabPos() = nPosition;
+                    aTabStopItem.Insert(aTabStop);
+
+                    SvxTabStop aSwTabStop(0, SvxTabAdjust::Default);
+                    aTabStopItem.Insert(aSwTabStop);
+
+                    const SvxTabStopItem& rDefaultTabs = rSh.GetDefault(RES_PARATR_TABSTOP);
+                    MakeDefTabs(GetTabDist(rDefaultTabs), aTabStopItem);
+                }
+                rSh.SetAttrItem(aTabStopItem);
+            }
         }
         break;
 
@@ -1266,14 +1312,14 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
 // will be submitted to the tab bar.
 void SwView::StateTabWin(SfxItemSet& rSet)
 {
-    SwWrtShell &rSh         = GetWrtShell();
+    SwWrtShell &rSh = GetWrtShell();
 
     const Point* pPt = IsTabColFromDoc() || IsTabRowFromDoc() ? &m_aTabColFromDocPos : nullptr;
     const FrameTypeFlags nFrameType   = rSh.IsObjSelected()
                 ? FrameTypeFlags::DRAWOBJ
                 : rSh.GetFrameType( pPt, true );
 
-    const bool  bFrameSelection = rSh.IsFrameSelected();
+    const bool bFrameSelection = rSh.IsFrameSelected();
     const bool bBrowse = rSh.GetViewOptions()->getBrowseMode();
     // PageOffset/limiter
     const SwRect& rPageRect = rSh.GetAnyCurRect( CurRectType::Page, pPt );
@@ -1496,6 +1542,28 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 ::lcl_EraseDefTabs(aTabStops);
                 aTabStops.SetWhich(nWhich);
                 rSet.Put(aTabStops);
+
+                if (comphelper::LibreOfficeKit::isActive() && nWhich == RES_PARATR_TABSTOP)
+                {
+                    boost::property_tree::ptree aRootTree;
+                    boost::property_tree::ptree aEntries;
+
+                    for (sal_uInt16 i = 0; i < aTabStops.Count(); ++i)
+                    {
+                        SvxTabStop const & rTabStop = aTabStops[i];
+                        boost::property_tree::ptree aEntry;
+                        aEntry.put("position", convertTwipToMm100(rTabStop.GetTabPos()));
+                        aEntry.put("type", sal_uInt16(rTabStop.GetAdjustment()));
+                        aEntry.put("decimal", OUString(rTabStop.GetDecimal()));
+                        aEntry.put("fill", OUString(rTabStop.GetFill()));
+                        aEntries.push_back(std::make_pair("", aEntry));
+                    }
+                    aRootTree.push_back(std::make_pair("tabstops", aEntries));
+
+                    std::stringstream aStream;
+                    boost::property_tree::write_json(aStream, aRootTree);
+                    rSh.GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TAB_STOP_LIST, aStream.str().c_str());
+                }
             }
             break;
         }
