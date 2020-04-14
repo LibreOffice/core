@@ -11,14 +11,15 @@
 
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
-#include <svl/ctloptions.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <officecfg/Office/Common.hxx>
+#include <svl/ctloptions.hxx>
 
 #include "getdigitlanguage.hxx"
 
 LanguageType drawinglayer::detail::getDigitLanguage() {
-    switch (SvtCTLOptions().GetCTLTextNumerals()) {
+    switch (officecfg::Office::Common::I18N::CTL::CTLTextNumerals::get()) {
     case SvtCTLOptions::NUMERALS_ARABIC:
         return LANGUAGE_ENGLISH;
     case SvtCTLOptions::NUMERALS_HINDI:

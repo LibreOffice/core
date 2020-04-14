@@ -59,6 +59,8 @@
 
 #include <vcl/dibtools.hxx>
 #include <tools/stream.hxx>
+#include <officecfg/Office/Common.hxx>
+
 
 using namespace com::sun::star;
 
@@ -85,7 +87,7 @@ namespace drawinglayer::processor2d
             mpOutputDevice->SetMapMode();
 
             // react on AntiAliasing settings
-            if(getOptionsDrawinglayer().IsAntiAliasing())
+            if(officecfg::Office::Common::Drawinglayer::AntiAliasing::get())
             {
                 mpOutputDevice->SetAntialiasing(
                    m_pImpl->m_nOrigAntiAliasing | AntialiasingFlags::EnableB2dDraw);
@@ -424,7 +426,7 @@ namespace drawinglayer::processor2d
             const DrawModeFlags nOriginalDrawMode(mpOutputDevice->GetDrawMode());
             adaptTextToFillDrawMode();
 
-            if(getOptionsDrawinglayer().IsRenderSimpleTextDirect())
+            if(officecfg::Office::Common::Drawinglayer::RenderSimpleTextDirect::get())
             {
                 RenderTextSimpleOrDecoratedPortionPrimitive2D(rCandidate);
             }
@@ -443,7 +445,7 @@ namespace drawinglayer::processor2d
             const DrawModeFlags nOriginalDrawMode(mpOutputDevice->GetDrawMode());
             adaptTextToFillDrawMode();
 
-            if(getOptionsDrawinglayer().IsRenderDecoratedTextDirect())
+            if(officecfg::Office::Common::Drawinglayer::RenderDecoratedTextDirect::get())
             {
                 RenderTextSimpleOrDecoratedPortionPrimitive2D(rCandidate);
             }
@@ -528,7 +530,7 @@ namespace drawinglayer::processor2d
             // draw the geometry once extra as lines to avoid AA 'gaps' between partial polygons
             // Caution: This is needed in both cases (!)
             if(mnPolygonStrokePrimitive2D
-                && getOptionsDrawinglayer().IsAntiAliasing()
+                && officecfg::Office::Common::Drawinglayer::AntiAliasing::get()
                 && (mpOutputDevice->GetAntialiasing() & AntialiasingFlags::EnableB2dDraw))
             {
                 const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(rPolyPolygonColorPrimitive2D.getBColor()));
@@ -710,7 +712,7 @@ namespace drawinglayer::processor2d
 
         void VclPixelProcessor2D::processFillHatchPrimitive2D(const primitive2d::FillHatchPrimitive2D& rFillHatchPrimitive)
         {
-            if(getOptionsDrawinglayer().IsAntiAliasing())
+            if(officecfg::Office::Common::Drawinglayer::AntiAliasing::get())
             {
                 // if AA is used (or ignore smoothing is on), there is no need to smooth
                 // hatch painting, use decomposition
@@ -864,7 +866,8 @@ namespace drawinglayer::processor2d
         void VclPixelProcessor2D::processMetaFilePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
         {
             // #i98289#
-            const bool bForceLineSnap(getOptionsDrawinglayer().IsAntiAliasing() && getOptionsDrawinglayer().IsSnapHorVerLinesToDiscrete());
+            const bool bForceLineSnap = officecfg::Office::Common::Drawinglayer::AntiAliasing::get()
+                && officecfg::Office::Common::Drawinglayer::SnapHorVerLinesToDiscrete::get();
             const AntialiasingFlags nOldAntiAliase(mpOutputDevice->GetAntialiasing());
 
             if(bForceLineSnap)

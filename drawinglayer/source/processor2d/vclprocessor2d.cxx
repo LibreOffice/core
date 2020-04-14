@@ -67,6 +67,7 @@
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
+#include <officecfg/Office/Common.hxx>
 
 using namespace com::sun::star;
 
@@ -332,7 +333,9 @@ namespace drawinglayer::processor2d
             basegfx::B2DPolygon aLocalPolygon(rPolygonCandidate.getB2DPolygon());
             aLocalPolygon.transform(maCurrentTransformation);
 
-            if(bPixelBased && getOptionsDrawinglayer().IsAntiAliasing() && getOptionsDrawinglayer().IsSnapHorVerLinesToDiscrete())
+            const double bConfigAntiAliasing = officecfg::Office::Common::Drawinglayer::AntiAliasing::get();
+            const double bSnapHorVerLinesToDiscrete = officecfg::Office::Common::Drawinglayer::SnapHorVerLinesToDiscrete::get();
+            if(bPixelBased && bConfigAntiAliasing && bSnapHorVerLinesToDiscrete)
             {
                 // #i98289#
                 // when a Hairline is painted and AntiAliasing is on the option SnapHorVerLinesToDiscrete
@@ -735,7 +738,7 @@ namespace drawinglayer::processor2d
                         if (!basegfx::utils::isRectangle(aMask))
                         {
                             // draw mask
-                            if(getOptionsDrawinglayer().IsAntiAliasing())
+                            if(officecfg::Office::Common::Drawinglayer::AntiAliasing::get())
                             {
                                 // with AA, use 8bit AlphaMask to get nice borders
                                 VirtualDevice& rTransparence = aBufferDevice.getTransparence();
@@ -993,7 +996,7 @@ namespace drawinglayer::processor2d
 
                 if(nCount)
                 {
-                    const bool bAntiAliased(getOptionsDrawinglayer().IsAntiAliasing());
+                    const bool bAntiAliased = officecfg::Office::Common::Drawinglayer::AntiAliasing::get();
                     aHairlinePolyPolygon.transform(maCurrentTransformation);
 
                     if(bAntiAliased)
@@ -1428,7 +1431,6 @@ namespace drawinglayer::processor2d
             mpOutputDevice(&rOutDev),
             maBColorModifierStack(),
             maCurrentTransformation(),
-            maDrawinglayerOpt(),
             mnPolygonStrokePrimitive2D(0),
             mpObjectInfoPrimitive2D(nullptr)
         {

@@ -27,13 +27,13 @@
 #include <processor3d/shadow3dextractor.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
-#include <svtools/optionsdrawinglayer.hxx>
 #include <processor3d/geometry2dextractor.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <basegfx/raster/bzpixelraster.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <comphelper/threadpool.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <officecfg/Office/Common.hxx>
 
 using namespace com::sun::star;
 
@@ -242,8 +242,7 @@ namespace drawinglayer::primitive2d
                 double fViewSizeX(aVisibleDiscreteRange.getWidth());
                 double fViewSizeY(aVisibleDiscreteRange.getHeight());
                 const double fViewVisibleArea(fViewSizeX * fViewSizeY);
-                const SvtOptionsDrawinglayer aDrawinglayerOpt;
-                const double fMaximumVisibleArea(aDrawinglayerOpt.GetQuadratic3DRenderLimit());
+                const double fMaximumVisibleArea = officecfg::Office::Common::Drawinglayer::Quadratic3DRenderLimit::get();
                 double fReduceFactor(1.0);
 
                 if(fViewVisibleArea > fMaximumVisibleArea)
@@ -281,7 +280,8 @@ namespace drawinglayer::primitive2d
 
                 // determine the oversample value
                 static const sal_uInt16 nDefaultOversampleValue(3);
-                const sal_uInt16 nOversampleValue(aDrawinglayerOpt.IsAntiAliasing() ? nDefaultOversampleValue : 0);
+                const sal_uInt16 nOversampleValue = officecfg::Office::Common::Drawinglayer::AntiAliasing::get()
+                                                ? nDefaultOversampleValue : 0;
 
                 geometry::ViewInformation3D aViewInformation3D(getViewInformation3D());
                 {
