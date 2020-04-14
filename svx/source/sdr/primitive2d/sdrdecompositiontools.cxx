@@ -482,16 +482,26 @@ namespace drawinglayer::primitive2d
 
         Primitive2DContainer createEmbeddedShadowPrimitive(
             const Primitive2DContainer& rContent,
-            const attribute::SdrShadowAttribute& rShadow)
+            const attribute::SdrShadowAttribute& rShadow,
+            sal_Int32 nGraphicTranslateX,
+            sal_Int32 nGraphicTranslateY)
         {
             if(!rContent.empty())
             {
                 Primitive2DContainer aRetval(2);
                 basegfx::B2DHomMatrix aShadowOffset;
 
-                // prepare shadow offset
-                aShadowOffset.set(0, 2, rShadow.getOffset().getX());
-                aShadowOffset.set(1, 2, rShadow.getOffset().getY());
+                {
+                    if(rShadow.getSize().getX() != 100000)
+                    {
+                        // Scale the shadow
+                        aShadowOffset.translate(-nGraphicTranslateX, -nGraphicTranslateY);
+                        aShadowOffset.scale(rShadow.getSize().getX() * 0.00001, rShadow.getSize().getY() * 0.00001);
+                        aShadowOffset.translate(nGraphicTranslateX, nGraphicTranslateY);
+                    }
+
+                    aShadowOffset.translate(rShadow.getOffset().getX(), rShadow.getOffset().getY());
+                }
 
                 // create shadow primitive and add content
                 aRetval[0] = Primitive2DReference(

@@ -29,6 +29,7 @@ namespace drawinglayer::primitive2d
         void SdrGrafPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
             Primitive2DContainer  aRetval;
+            basegfx::B2DTuple aTranslateGrf;
 
             // create unit outline polygon
             const basegfx::B2DPolygon& aUnitOutline(basegfx::utils::createUnitPolygon());
@@ -55,7 +56,10 @@ namespace drawinglayer::primitive2d
                         getTransform(),
                         getGraphicObject(),
                         getGraphicAttr()));
-
+                double fRotate = 0;
+                double fShearX = 0;
+                basegfx::B2DTuple aScaleGrf;
+                getTransform().decompose(aScaleGrf, aTranslateGrf, fRotate, fShearX);
                 aRetval.push_back(xGraphicContentPrimitive);
             }
 
@@ -116,7 +120,9 @@ namespace drawinglayer::primitive2d
             {
                 aRetval = createEmbeddedShadowPrimitive(
                     aRetval,
-                    getSdrLFSTAttribute().getShadow());
+                    getSdrLFSTAttribute().getShadow(),
+                    aTranslateGrf.getX(),
+                    aTranslateGrf.getY());
             }
 
             rContainer.insert(rContainer.end(), aRetval.begin(), aRetval.end());
