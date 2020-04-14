@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SOURCE_FILTER_JPEG_EXIF_HXX
-#define INCLUDED_VCL_SOURCE_FILTER_JPEG_EXIF_HXX
+#pragma once
 
 #include <tools/stream.hxx>
 
 namespace exif {
+
 enum Orientation {
     TOP_LEFT        = 1,
     TOP_RIGHT       = 2,
@@ -79,7 +79,5 @@ public:
     void write(SvStream& rStream);
 
 };
-
-#endif // INCLUDED_VCL_SOURCE_FILTER_JPEG_EXIF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
