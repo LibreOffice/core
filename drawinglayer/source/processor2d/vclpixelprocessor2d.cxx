@@ -389,14 +389,7 @@ namespace drawinglayer::processor2d
             const DrawModeFlags nOriginalDrawMode(mpOutputDevice->GetDrawMode());
             adaptTextToFillDrawMode();
 
-            if(getOptionsDrawinglayer().IsRenderSimpleTextDirect())
-            {
-                RenderTextSimpleOrDecoratedPortionPrimitive2D(rCandidate);
-            }
-            else
-            {
-                process(rCandidate);
-            }
+            RenderTextSimpleOrDecoratedPortionPrimitive2D(rCandidate);
 
             // restore DrawMode
             mpOutputDevice->SetDrawMode(nOriginalDrawMode);
@@ -408,14 +401,7 @@ namespace drawinglayer::processor2d
             const DrawModeFlags nOriginalDrawMode(mpOutputDevice->GetDrawMode());
             adaptTextToFillDrawMode();
 
-            if(getOptionsDrawinglayer().IsRenderDecoratedTextDirect())
-            {
-                RenderTextSimpleOrDecoratedPortionPrimitive2D(rCandidate);
-            }
-            else
-            {
-                process(rCandidate);
-            }
+            RenderTextSimpleOrDecoratedPortionPrimitive2D(rCandidate);
 
             // restore DrawMode
             mpOutputDevice->SetDrawMode(nOriginalDrawMode);
@@ -829,7 +815,7 @@ namespace drawinglayer::processor2d
         void VclPixelProcessor2D::processMetaFilePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
         {
             // #i98289#
-            const bool bForceLineSnap(getOptionsDrawinglayer().IsAntiAliasing() && getOptionsDrawinglayer().IsSnapHorVerLinesToDiscrete());
+            const bool bForceLineSnap(getOptionsDrawinglayer().IsAntiAliasing());
             const AntialiasingFlags nOldAntiAliase(mpOutputDevice->GetAntialiasing());
 
             if(bForceLineSnap)
