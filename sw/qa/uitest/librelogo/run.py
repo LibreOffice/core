@@ -64,7 +64,7 @@ class LibreLogoTest(UITestCase):
         self.logo("__translate__")
         # a) check expansion of abbreviated commands : fd -> FORWARD, rt -> RIGHT,
         # b) check line breaking (fix for tdf#100941: new line instead of the text "\" and "n")
-        self.assertEqual(document.Text.String, "\nFORWARD 100 RIGHT 45 FORWARD 100")
+        self.assertEqual(document.Text.String.replace('\r\n', '\n'), "\nFORWARD 100 RIGHT 45 FORWARD 100")
         # c) check usage of real paragraphs instead of line break (tdf#120422)
         # first paragraph is empty (for working page break)
         self.assertEqual(document.Text.createEnumeration().nextElement().String, "")

@@ -46,7 +46,7 @@ class tableToText(UITestCase):
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
         #verify
-        self.assertEqual(document.Text.String[0:4], "a\na\n")
+        self.assertEqual(document.Text.String.replace('\r\n', '\n')[0:4], "a\na\n")
         self.assertEqual(document.TextTables.getCount(), 0)
         #undo
         self.xUITest.executeCommand(".uno:Undo")
@@ -60,7 +60,7 @@ class tableToText(UITestCase):
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
         #verify
-        self.assertEqual(document.Text.String[0:6], "a;a\n;\n")
+        self.assertEqual(document.Text.String.replace('\r\n', '\n')[0:6], "a;a\n;\n")
         self.assertEqual(document.TextTables.getCount(), 0)
         #undo
         self.xUITest.executeCommand(".uno:Undo")
@@ -78,7 +78,7 @@ class tableToText(UITestCase):
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
         #verify
-        self.assertEqual(document.Text.String[0:6], "a:a\n:\n")
+        self.assertEqual(document.Text.String.replace('\r\n', '\n')[0:6], "a:a\n:\n")
         self.assertEqual(document.TextTables.getCount(), 0)
         #undo
         self.xUITest.executeCommand(".uno:Undo")

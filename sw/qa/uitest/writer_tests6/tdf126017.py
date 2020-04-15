@@ -55,7 +55,7 @@ class tdf126017(UITestCase):
         self.xUITest.executeCommand(".uno:Undo")
         self.xUITest.executeCommand(".uno:Undo")
 
-        self.assertEqual(document.Text.String[1:7], "CRASHY")
+        self.assertEqual(document.Text.String.replace('\r\n', '\n')[1:7], "CRASHY")
 
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
