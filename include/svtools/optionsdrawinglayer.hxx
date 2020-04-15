@@ -101,12 +101,8 @@ class SVT_DLLPUBLIC SvtOptionsDrawinglayer
 
         // primitives
         bool        IsAntiAliasing() const;
-        bool        IsSnapHorVerLinesToDiscrete() const;
-        bool        IsSolidDragCreate() const;
-        bool        IsRenderDecoratedTextDirect() const;
-        bool        IsRenderSimpleTextDirect() const;
-        sal_uInt32  GetQuadratic3DRenderLimit() const;
-        sal_uInt32  GetQuadraticFormControlRenderLimit() const;
+        static sal_uInt32  GetQuadratic3DRenderLimit() { return 1000000; }
+        static sal_uInt32  GetQuadraticFormControlRenderLimit() { return 45000; }
 
         void        SetAntiAliasing( bool bState );
 

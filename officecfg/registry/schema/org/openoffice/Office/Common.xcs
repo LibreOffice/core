@@ -1140,45 +1140,6 @@
         </info>
         <value>true</value>
       </prop>
-      <prop oor:name="SnapHorVerLinesToDiscrete" oor:type="xs:boolean" oor:nillable="false">
-        <info>
-          <desc>This switch allows to enhance visualisation of graphics which
-          use Horizontal or Vertical Hairlines combined with AntiAliased mode
-          (e.g. in 2D charts). When not used, those lines will be AntiAliased as
-          everything else. Since this is not pleasing for the eye, this option
-          allows to force those lines to snap to discrete points (pixels) when
-          activated and thus avoids AntiAliasing of pure Horizontal or Vertical
-          Hairlines.</desc>
-          <label>Determines if Horizontal and Vertical HairLines in AntiAliased
-          mode are snapped to discrete pixels to enhance visualisation</label>
-        </info>
-        <value>true</value>
-      </prop>
-      <prop oor:name="RenderDecoratedTextDirect" oor:type="xs:boolean" oor:nillable="false">
-        <info>
-          <desc>This switch determines if the decorations of decorated text
-          portions (e.g. underline, strike through) are rendered using VCL
-          direct rendering or if the primitive is decomposed into simple text
-          and the corresponding geometrical representations of the decorations.
-          Default is true since VCL's usage of the diverse System's hinting
-          possibilities for decorations is useful.</desc>
-          <label>Determines if decorated texts are decomposed at render time or
-          directly rendered using VCL</label>
-        </info>
-        <value>true</value>
-      </prop>
-      <prop oor:name="RenderSimpleTextDirect" oor:type="xs:boolean" oor:nillable="false">
-        <info>
-          <desc>This switch determines if simple text is directly rendered using
-          VCL or not. If not, the simple text is decomposed into PolyPolygons
-          which will be painted then. Default is true, since VCL will use the
-          hinting for font rendering on the diverse supported systems, which
-          gives better quality than rendering the text as Polygons.</desc>
-          <label>Determines if simple texts are decomposed at render time or
-          directly rendered using VCL</label>
-        </info>
-        <value>true</value>
-      </prop>
       <prop oor:name="SolidDragCreate" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>This switch decides if Interactions in the DrawingLayer are
@@ -1193,31 +1154,6 @@
           Wireframe or Full-Object preview.</label>
         </info>
         <value>true</value>
-      </prop>
-      <prop oor:name="Quadratic3DRenderLimit" oor:type="xs:int" oor:nillable="false">
-        <info>
-          <desc>This defines a Limitation for the default raster conversion from
-          3D Scenes to Bitmaps. The number is the maximum number of pixels to
-          use, e.g. 1000x1000 Pixels is allowed as default. When Scenes would
-          need more Pixels than this, the Bitmap will be limited and scaled to
-          the needed pixel size at paint time.</desc>
-          <label>A Pixel limitation for the creation of 3D Scenes with the
-          default renderer.</label>
-        </info>
-        <value>1000000</value>
-      </prop>
-      <prop oor:name="QuadraticFormControlRenderLimit" oor:type="xs:int" oor:nillable="false">
-        <info>
-          <desc>This defines a Limitation for the default raster conversion of
-          FormControls in edit mode. These have the ability to be displayed
-          using this fallback to Bitmaps. The number is the maximum number of
-          pixels to use, e.g. 300x150 Pixels is allowed as default. When
-          FormControls would need more Pixels than this, the Bitmap will be
-          limited and scaled to the needed pixel size at paint time.</desc>
-          <label>A Pixel limitation for the creation of FormControl fallback
-          display.</label>
-        </info>
-        <value>45000</value>
       </prop>
       <prop oor:name="TransparentSelection" oor:type="xs:boolean" oor:nillable="false">
         <info>
