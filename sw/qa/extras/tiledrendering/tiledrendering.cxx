@@ -124,6 +124,7 @@ public:
     void testLanguageStatus();
     void testRedlineNotificationDuringSave();
     void testHyperlink();
+    void testFieldmark();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -187,6 +188,7 @@ public:
     CPPUNIT_TEST(testLanguageStatus);
     CPPUNIT_TEST(testRedlineNotificationDuringSave);
     CPPUNIT_TEST(testHyperlink);
+    CPPUNIT_TEST(testFieldmark);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2510,6 +2512,12 @@ void SwTiledRenderingTest::testHyperlink()
 
     CPPUNIT_ASSERT_EQUAL(OString("hyperlink"), m_sHyperlinkText);
     CPPUNIT_ASSERT_EQUAL(OString("http://example.com/"), m_sHyperlinkLink);
+}
+
+void SwTiledRenderingTest::testFieldmark()
+{
+    // Without the accompanying fix in place, this crashed on load.
+    createDoc("fieldmark.docx");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwTiledRenderingTest);
