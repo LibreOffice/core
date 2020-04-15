@@ -437,9 +437,10 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
         else
             pClassName = SAL_TMPSUBFRAME_CLASSNAMEW;
     }
+    HWND hWndCreateParent = (Application::IsBitmapRendering() && !hWndParent) ? HWND_MESSAGE : hWndParent;
     hWnd = CreateWindowExW( nExSysStyle, pClassName, L"", nSysStyle,
                             CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
-                            hWndParent, nullptr, pInst->mhInst, pFrame );
+                            hWndCreateParent, nullptr, pInst->mhInst, pFrame);
     SAL_WARN_IF(!hWnd, "vcl", "CreateWindowExW failed: " << WindowsErrorString(GetLastError()));
 
 #if OSL_DEBUG_LEVEL > 1
@@ -518,9 +519,10 @@ HWND ImplSalReCreateHWND( HWND hWndParent, HWND oldhWnd, bool bAsChild )
     }
 
     LPCWSTR pClassName = SAL_SUBFRAME_CLASSNAMEW;
+    HWND hWndCreateParent = (Application::IsBitmapRendering() && !hWndParent) ? HWND_MESSAGE : hWndParent;
     return CreateWindowExW( nExSysStyle, pClassName, L"", nSysStyle,
                             CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
-                            hWndParent, nullptr, hInstance, GetWindowPtr( oldhWnd ) );
+                            hWndCreateParent, nullptr, hInstance, GetWindowPtr(oldhWnd));
 }
 
 // translation table from System keycodes into StartView keycodes
