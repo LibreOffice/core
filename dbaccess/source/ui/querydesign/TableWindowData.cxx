@@ -114,22 +114,22 @@ bool OTableWindowData::init(const Reference< XConnection  >& _xConnection,bool _
 
 void OTableWindowData::listen()
 {
-    if ( m_xTable.is() )
-    {
-        // listen for the object being disposed
-        Reference<XComponent> xComponent( m_xTable, UNO_QUERY );
-        if ( xComponent.is() )
-            startComponentListening( xComponent );
+    if ( !m_xTable.is() )
+        return;
 
-        // obtain the columns
-        Reference< XColumnsSupplier > xColumnsSups( m_xTable, UNO_QUERY);
-        if ( xColumnsSups.is() )
-            m_xColumns = xColumnsSups->getColumns();
+    // listen for the object being disposed
+    Reference<XComponent> xComponent( m_xTable, UNO_QUERY );
+    if ( xComponent.is() )
+        startComponentListening( xComponent );
 
-        Reference<XKeysSupplier> xKeySup(m_xTable,UNO_QUERY);
-        if ( xKeySup.is() )
-            m_xKeys = xKeySup->getKeys();
-    }
+    // obtain the columns
+    Reference< XColumnsSupplier > xColumnsSups( m_xTable, UNO_QUERY);
+    if ( xColumnsSups.is() )
+        m_xColumns = xColumnsSups->getColumns();
+
+    Reference<XKeysSupplier> xKeySup(m_xTable,UNO_QUERY);
+    if ( xKeySup.is() )
+        m_xKeys = xKeySup->getKeys();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -209,36 +209,36 @@ namespace dbaui
         const SfxBoolItem* pAllowEmptyPwd = _rSet.GetItem<SfxBoolItem>(DSID_PASSWORDREQUIRED);
 
         // forward the values to the controls
-        if ( bValid )
+        if ( !bValid )
+            return;
+
+        m_xUserName->set_text(pUidItem->GetValue());
+        m_xPasswordRequired->set_active(pAllowEmptyPwd->GetValue());
+
+        const OUString& sUrl = pUrlItem->GetValue();
+        setURL( sUrl );
+
+        const bool bEnableJDBC = m_pCollection->determineType(m_eType) == ::dbaccess::DST_JDBC;
+        if ( !pJdbcDrvItem->GetValue().getLength() )
         {
-            m_xUserName->set_text(pUidItem->GetValue());
-            m_xPasswordRequired->set_active(pAllowEmptyPwd->GetValue());
-
-            const OUString& sUrl = pUrlItem->GetValue();
-            setURL( sUrl );
-
-            const bool bEnableJDBC = m_pCollection->determineType(m_eType) == ::dbaccess::DST_JDBC;
-            if ( !pJdbcDrvItem->GetValue().getLength() )
-            {
-                OUString sDefaultJdbcDriverName = m_pCollection->getJavaDriverClass(m_eType);
-                if ( !sDefaultJdbcDriverName.isEmpty() )
-                    m_xJavaDriver->set_text(sDefaultJdbcDriverName);
-            }
-            else
-                m_xJavaDriver->set_text(pJdbcDrvItem->GetValue());
-
-            m_xJavaDriverLabel->set_visible(bEnableJDBC);
-            m_xJavaDriver->set_visible(bEnableJDBC);
-            m_xTestJavaDriver->set_visible(bEnableJDBC);
-            m_xTestJavaDriver->set_sensitive( !m_xJavaDriver->get_text().trim().isEmpty() );
-            m_xFL3->set_visible(bEnableJDBC);
-
-            checkTestConnection();
-
-            m_xUserName->save_value();
-            m_xConnectionURL->save_value();
-            m_xJavaDriver->save_value();
+            OUString sDefaultJdbcDriverName = m_pCollection->getJavaDriverClass(m_eType);
+            if ( !sDefaultJdbcDriverName.isEmpty() )
+                m_xJavaDriver->set_text(sDefaultJdbcDriverName);
         }
+        else
+            m_xJavaDriver->set_text(pJdbcDrvItem->GetValue());
+
+        m_xJavaDriverLabel->set_visible(bEnableJDBC);
+        m_xJavaDriver->set_visible(bEnableJDBC);
+        m_xTestJavaDriver->set_visible(bEnableJDBC);
+        m_xTestJavaDriver->set_sensitive( !m_xJavaDriver->get_text().trim().isEmpty() );
+        m_xFL3->set_visible(bEnableJDBC);
+
+        checkTestConnection();
+
+        m_xUserName->save_value();
+        m_xConnectionURL->save_value();
+        m_xJavaDriver->save_value();
     }
 
     bool OConnectionTabPage::FillItemSet(SfxItemSet* _rSet)

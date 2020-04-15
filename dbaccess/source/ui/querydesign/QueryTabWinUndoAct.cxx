@@ -48,24 +48,24 @@ OQueryTabWinUndoAct::OQueryTabWinUndoAct(OQueryTableView* pOwner, const char* pC
 
 OQueryTabWinUndoAct::~OQueryTabWinUndoAct()
 {
-    if (m_bOwnerOfObjects)
+    if (!m_bOwnerOfObjects)
+        return;
+
+    // I should take care to delete the window if I am the only owner
+    OSL_ENSURE(m_pTabWin != nullptr, "OQueryTabWinUndoAct::~OQueryTabWinUndoAct() : m_pTabWin must not be NULL");
+    OSL_ENSURE(!m_pTabWin->IsVisible(), "OQueryTabWinUndoAct::~OQueryTabWinUndoAct() : *m_pTabWin must not be visible");
+
+    if ( m_pTabWin )
+        m_pTabWin->clearListBox();
+    m_pTabWin.disposeAndClear();
+
+    // and of course the corresponding connections
+    for (auto & connection : m_vTableConnection)
     {
-        // I should take care to delete the window if I am the only owner
-        OSL_ENSURE(m_pTabWin != nullptr, "OQueryTabWinUndoAct::~OQueryTabWinUndoAct() : m_pTabWin must not be NULL");
-        OSL_ENSURE(!m_pTabWin->IsVisible(), "OQueryTabWinUndoAct::~OQueryTabWinUndoAct() : *m_pTabWin must not be visible");
-
-        if ( m_pTabWin )
-            m_pTabWin->clearListBox();
-        m_pTabWin.disposeAndClear();
-
-        // and of course the corresponding connections
-        for (auto & connection : m_vTableConnection)
-        {
-            m_pOwner->DeselectConn(connection);
-            connection.disposeAndClear();
-        }
-        m_vTableConnection.clear();
+        m_pOwner->DeselectConn(connection);
+        connection.disposeAndClear();
     }
+    m_vTableConnection.clear();
 }
 
 void OTabFieldCellModifiedUndoAct::Undo()

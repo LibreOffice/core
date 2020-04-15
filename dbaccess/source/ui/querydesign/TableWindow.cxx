@@ -255,18 +255,18 @@ void OTableWindow::deleteUserData(void*& _pUserData)
 
 void OTableWindow::clearListBox()
 {
-    if ( m_xListBox )
-    {
-        SvTreeListEntry* pEntry = m_xListBox->First();
+    if ( !m_xListBox )
+        return;
 
-        while(pEntry)
-        {
-            void* pUserData = pEntry->GetUserData();
-            deleteUserData(pUserData);
-            SvTreeListEntry* pNextEntry = m_xListBox->Next(pEntry);
-            m_xListBox->GetModel()->Remove(pEntry);
-            pEntry = pNextEntry;
-        }
+    SvTreeListEntry* pEntry = m_xListBox->First();
+
+    while(pEntry)
+    {
+        void* pUserData = pEntry->GetUserData();
+        deleteUserData(pUserData);
+        SvTreeListEntry* pNextEntry = m_xListBox->Next(pEntry);
+        m_xListBox->GetModel()->Remove(pEntry);
+        pEntry = pNextEntry;
     }
 }
 
@@ -538,20 +538,20 @@ void OTableWindow::StateChanged( StateChangedType nType )
 
     // FIXME RenderContext
 
-    if ( nType == StateChangedType::Zoom )
-    {
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    if ( nType != StateChangedType::Zoom )
+        return;
 
-        vcl::Font aFont = rStyleSettings.GetGroupFont();
-        if ( IsControlFont() )
-            aFont.Merge( GetControlFont() );
-        SetZoomedPointFont(*this, aFont);
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-        m_xTitle->SetZoom(GetZoom());
-        m_xListBox->SetZoom(GetZoom());
-        Resize();
-        Invalidate();
-    }
+    vcl::Font aFont = rStyleSettings.GetGroupFont();
+    if ( IsControlFont() )
+        aFont.Merge( GetControlFont() );
+    SetZoomedPointFont(*this, aFont);
+
+    m_xTitle->SetZoom(GetZoom());
+    m_xListBox->SetZoom(GetZoom());
+    Resize();
+    Invalidate();
 }
 
 Reference< XAccessible > OTableWindow::CreateAccessible()

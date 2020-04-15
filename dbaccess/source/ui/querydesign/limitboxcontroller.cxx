@@ -240,21 +240,21 @@ void SAL_CALL LimitBoxController::dispose()
 void SAL_CALL LimitBoxController::statusChanged(
     const frame::FeatureStateEvent& rEvent )
 {
-    if ( m_xLimitBox )
+    if ( !m_xLimitBox )
+        return;
+
+    SolarMutexGuard aSolarMutexGuard;
+    if ( rEvent.FeatureURL.Path == "DBLimit" )
     {
-        SolarMutexGuard aSolarMutexGuard;
-        if ( rEvent.FeatureURL.Path == "DBLimit" )
+        if ( rEvent.IsEnabled )
         {
-            if ( rEvent.IsEnabled )
-            {
-                m_xLimitBox->set_sensitive(true);
-                sal_Int64 nLimit = 0;
-                if (rEvent.State >>= nLimit)
-                    m_xLimitBox->set_value(nLimit);
-            }
-            else
-                m_xLimitBox->set_sensitive(false);
+            m_xLimitBox->set_sensitive(true);
+            sal_Int64 nLimit = 0;
+            if (rEvent.State >>= nLimit)
+                m_xLimitBox->set_value(nLimit);
         }
+        else
+            m_xLimitBox->set_sensitive(false);
     }
 }
 

@@ -480,25 +480,25 @@ void DlgFilterCrit::SetLine( int nIdx, const PropertyValue& _rItem, bool _bOr )
             break;
     }
 
-    if ( pColumnListControl && pPredicateListControl && pPredicateValueControl )
-    {
-        OUString sName;
-        if ( xColumn.is() )
-            xColumn->getPropertyValue(PROPERTY_NAME) >>= sName;
-        else
-            sName = _rItem.Name;
-        // select the appropriate field name
-        SelectField( *pColumnListControl, sName );
-        ListSelectHdl( *pColumnListControl );
+    if ( !(pColumnListControl && pPredicateListControl && pPredicateValueControl) )
+        return;
 
-        // select the appropriate condition
-        pPredicateListControl->set_active( GetSelectionPos( _rItem.Handle, *pPredicateListControl ) );
+    OUString sName;
+    if ( xColumn.is() )
+        xColumn->getPropertyValue(PROPERTY_NAME) >>= sName;
+    else
+        sName = _rItem.Name;
+    // select the appropriate field name
+    SelectField( *pColumnListControl, sName );
+    ListSelectHdl( *pColumnListControl );
 
-        // initially normalize this value
-        OUString aString( aStr );
-        m_aPredicateInput.normalizePredicateString( aString, xColumn );
-        pPredicateValueControl->set_text( aString );
-    }
+    // select the appropriate condition
+    pPredicateListControl->set_active( GetSelectionPos( _rItem.Handle, *pPredicateListControl ) );
+
+    // initially normalize this value
+    OUString aString( aStr );
+    m_aPredicateInput.normalizePredicateString( aString, xColumn );
+    pPredicateValueControl->set_text( aString );
 }
 
 void DlgFilterCrit::SelectField(weld::ComboBox& rBox, const OUString& rField)

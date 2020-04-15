@@ -160,20 +160,20 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
     // if there previously was a document instance for the same Impl which was already initialized,
     // then consider ourself initialized, too.
     // #i94840#
-    if ( m_pImpl->hadInitializedDocument() )
-    {
-        // Note we set our init-state to "Initializing", not "Initialized". We're created from inside the ModelImpl,
-        // which is expected to call attachResource in case there was a previous incarnation of the document,
-        // so we can properly finish our initialization then.
-        impl_setInitializing();
+    if ( !m_pImpl->hadInitializedDocument() )
+        return;
 
-        if ( !m_pImpl->getURL().isEmpty() )
-        {
-            // if the previous incarnation of the DatabaseDocument already had a URL, then creating this incarnation
-            // here is effectively loading the document.
-            // #i105505#
-            m_aViewMonitor.onLoadedDocument();
-        }
+    // Note we set our init-state to "Initializing", not "Initialized". We're created from inside the ModelImpl,
+    // which is expected to call attachResource in case there was a previous incarnation of the document,
+    // so we can properly finish our initialization then.
+    impl_setInitializing();
+
+    if ( !m_pImpl->getURL().isEmpty() )
+    {
+        // if the previous incarnation of the DatabaseDocument already had a URL, then creating this incarnation
+        // here is effectively loading the document.
+        // #i105505#
+        m_aViewMonitor.onLoadedDocument();
     }
 }
 
@@ -856,18 +856,18 @@ void SAL_CALL ODatabaseDocument::disconnectController( const Reference< XControl
     if ( bNotifyViewClosed )
         m_aEventNotifier.notifyDocumentEvent( "OnViewClosed", Reference< XController2 >( _xController, UNO_QUERY ) );
 
-    if ( bLastControllerGone && !bIsClosing )
+    if ( !(bLastControllerGone && !bIsClosing) )
+        return;
+
+    // if this was the last view, close the document as a whole
+    // #i51157#
+    try
     {
-        // if this was the last view, close the document as a whole
-        // #i51157#
-        try
-        {
-            close( true );
-        }
-        catch( const CloseVetoException& )
-        {
-            // okay, somebody vetoed and took ownership
-        }
+        close( true );
+    }
+    catch( const CloseVetoException& )
+    {
+        // okay, somebody vetoed and took ownership
     }
 }
 

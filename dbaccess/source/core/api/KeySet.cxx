@@ -68,19 +68,19 @@ namespace
 {
     void lcl_fillIndexColumns(const Reference<XIndexAccess>& _xIndexes, std::vector< Reference<XNameAccess> >& _rAllIndexColumns)
     {
-        if ( _xIndexes.is() )
+        if ( !_xIndexes.is() )
+            return;
+
+        Reference<XPropertySet> xIndexColsSup;
+        sal_Int32 nCount = _xIndexes->getCount();
+        for(sal_Int32 j = 0 ; j < nCount ; ++j)
         {
-            Reference<XPropertySet> xIndexColsSup;
-            sal_Int32 nCount = _xIndexes->getCount();
-            for(sal_Int32 j = 0 ; j < nCount ; ++j)
-            {
-                xIndexColsSup.set(_xIndexes->getByIndex(j),UNO_QUERY);
-                if( xIndexColsSup.is()
-                    && comphelper::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISUNIQUE))
-                    && !comphelper::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISPRIMARYKEYINDEX))
-                )
-                    _rAllIndexColumns.push_back(Reference<XColumnsSupplier>(xIndexColsSup,UNO_QUERY_THROW)->getColumns());
-            }
+            xIndexColsSup.set(_xIndexes->getByIndex(j),UNO_QUERY);
+            if( xIndexColsSup.is()
+                && comphelper::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISUNIQUE))
+                && !comphelper::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISPRIMARYKEYINDEX))
+               )
+                _rAllIndexColumns.push_back(Reference<XColumnsSupplier>(xIndexColsSup,UNO_QUERY_THROW)->getColumns());
         }
     }
 

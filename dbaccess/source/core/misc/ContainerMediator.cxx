@@ -111,54 +111,54 @@ void SAL_CALL OContainerMediator::elementRemoved( const ContainerEvent& _rEvent 
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     Reference< XContainer > xContainer = m_xContainer;
-    if ( _rEvent.Source == xContainer && xContainer.is() )
+    if ( !(_rEvent.Source == xContainer && xContainer.is()) )
+        return;
+
+    OUString sElementName;
+    _rEvent.Accessor >>= sElementName;
+    m_aForwardList.erase(sElementName);
+    try
     {
-        OUString sElementName;
-        _rEvent.Accessor >>= sElementName;
-        m_aForwardList.erase(sElementName);
-        try
-        {
-            Reference<XNameContainer> xNameContainer( m_xSettings, UNO_QUERY );
-            if ( xNameContainer.is() && m_xSettings->hasByName( sElementName ) )
-                xNameContainer->removeByName( sElementName );
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("dbaccess");
-        }
+        Reference<XNameContainer> xNameContainer( m_xSettings, UNO_QUERY );
+        if ( xNameContainer.is() && m_xSettings->hasByName( sElementName ) )
+            xNameContainer->removeByName( sElementName );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
 void SAL_CALL OContainerMediator::elementReplaced( const ContainerEvent& _rEvent )
 {
     Reference< XContainer > xContainer = m_xContainer;
-    if ( _rEvent.Source == xContainer && xContainer.is() )
+    if ( !(_rEvent.Source == xContainer && xContainer.is()) )
+        return;
+
+    OUString sElementName;
+    _rEvent.ReplacedElement >>= sElementName;
+
+    PropertyForwardList::const_iterator aFind = m_aForwardList.find(sElementName);
+    if ( aFind == m_aForwardList.end() )
+        return;
+
+    OUString sNewName;
+    _rEvent.Accessor >>= sNewName;
+    try
     {
-        OUString sElementName;
-        _rEvent.ReplacedElement >>= sElementName;
-
-        PropertyForwardList::const_iterator aFind = m_aForwardList.find(sElementName);
-        if ( aFind != m_aForwardList.end() )
+        Reference<XNameContainer> xNameContainer( m_xSettings, UNO_QUERY_THROW );
+        if ( xNameContainer.is() && m_xSettings->hasByName( sElementName ) )
         {
-            OUString sNewName;
-            _rEvent.Accessor >>= sNewName;
-            try
-            {
-                Reference<XNameContainer> xNameContainer( m_xSettings, UNO_QUERY_THROW );
-                if ( xNameContainer.is() && m_xSettings->hasByName( sElementName ) )
-                {
-                    Reference<XRename> xSource(m_xSettings->getByName(sElementName),UNO_QUERY_THROW);
-                    xSource->rename(sNewName);
-                }
-            }
-            catch( const Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION("dbaccess");
-            }
-
-            aFind->second->setName(sNewName);
+            Reference<XRename> xSource(m_xSettings->getByName(sElementName),UNO_QUERY_THROW);
+            xSource->rename(sNewName);
         }
     }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
+    }
+
+    aFind->second->setName(sNewName);
 }
 
 void SAL_CALL OContainerMediator::disposing( const EventObject& /*Source*/ )

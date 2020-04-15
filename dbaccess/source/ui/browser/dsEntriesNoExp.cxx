@@ -195,59 +195,59 @@ sal_Int32 SbaTableQueryBrowser::getDatabaseObjectType( EntryType _eType )
 
 void SbaTableQueryBrowser::notifyHiContrastChanged()
 {
-    if ( m_pTreeView )
+    if ( !m_pTreeView )
+        return;
+
+    auto pTreeModel = m_pTreeView->GetTreeModel();
+    // change all bitmap entries
+    SvTreeListEntry* pEntryLoop = pTreeModel->First();
+    while ( pEntryLoop )
     {
-        auto pTreeModel = m_pTreeView->GetTreeModel();
-        // change all bitmap entries
-        SvTreeListEntry* pEntryLoop = pTreeModel->First();
-        while ( pEntryLoop )
+        DBTreeListUserData* pData = static_cast<DBTreeListUserData*>(pEntryLoop->GetUserData());
+        if ( !pData )
         {
-            DBTreeListUserData* pData = static_cast<DBTreeListUserData*>(pEntryLoop->GetUserData());
-            if ( !pData )
+            pEntryLoop = pTreeModel->Next(pEntryLoop);
+            continue;
+        }
+
+        // the connection to which this entry belongs, if any
+        std::unique_ptr< ImageProvider > pImageProvider( getImageProviderFor( pEntryLoop ) );
+
+        // the images for this entry
+        Image aImage;
+        if ( pData->eType == etDatasource )
+            aImage = ImageProvider::getDatabaseImage();
+        else
+        {
+            bool bIsFolder = !isObject( pData->eType );
+            if ( bIsFolder )
             {
-                pEntryLoop = pTreeModel->Next(pEntryLoop);
-                continue;
+                sal_Int32 nObjectType( getDatabaseObjectType( pData->eType ) );
+                aImage = ImageProvider::getFolderImage( nObjectType );
             }
-
-            // the connection to which this entry belongs, if any
-            std::unique_ptr< ImageProvider > pImageProvider( getImageProviderFor( pEntryLoop ) );
-
-            // the images for this entry
-            Image aImage;
-            if ( pData->eType == etDatasource )
-                aImage = ImageProvider::getDatabaseImage();
             else
             {
-                bool bIsFolder = !isObject( pData->eType );
-                if ( bIsFolder )
-                {
-                    sal_Int32 nObjectType( getDatabaseObjectType( pData->eType ) );
-                    aImage = ImageProvider::getFolderImage( nObjectType );
-                }
-                else
-                {
-                    sal_Int32 nObjectType( getDatabaseObjectType( pData->eType ) );
-                    pImageProvider->getImages( GetEntryText( pEntryLoop ), nObjectType, aImage );
-                }
+                sal_Int32 nObjectType( getDatabaseObjectType( pData->eType ) );
+                pImageProvider->getImages( GetEntryText( pEntryLoop ), nObjectType, aImage );
             }
-
-            // find the proper item, and set its icons
-            sal_uInt16 nCount = pEntryLoop->ItemCount();
-            for (sal_uInt16 i=0;i<nCount;++i)
-            {
-                SvLBoxItem& rItem = pEntryLoop->GetItem(i);
-                if (rItem.GetType() != SvLBoxItemType::ContextBmp)
-                    continue;
-
-                SvLBoxContextBmp& rContextBitmapItem = static_cast< SvLBoxContextBmp& >( rItem );
-
-                rContextBitmapItem.SetBitmap1( aImage );
-                rContextBitmapItem.SetBitmap2( aImage );
-                break;
-            }
-
-            pEntryLoop = pTreeModel->Next(pEntryLoop);
         }
+
+        // find the proper item, and set its icons
+        sal_uInt16 nCount = pEntryLoop->ItemCount();
+        for (sal_uInt16 i=0;i<nCount;++i)
+        {
+            SvLBoxItem& rItem = pEntryLoop->GetItem(i);
+            if (rItem.GetType() != SvLBoxItemType::ContextBmp)
+                continue;
+
+            SvLBoxContextBmp& rContextBitmapItem = static_cast< SvLBoxContextBmp& >( rItem );
+
+            rContextBitmapItem.SetBitmap1( aImage );
+            rContextBitmapItem.SetBitmap2( aImage );
+            break;
+        }
+
+        pEntryLoop = pTreeModel->Next(pEntryLoop);
     }
 }
 

@@ -152,20 +152,20 @@ void OSqlEdit::GetFocus()
 IMPL_LINK_NOARG(OSqlEdit, OnUndoActionTimer, Timer *, void)
 {
     OUString aText = GetText();
-    if(aText != m_strOrigText)
-    {
-        OJoinController& rController = m_pView->getContainerWindow()->getDesignView()->getController();
-        SfxUndoManager& rUndoMgr = rController.GetUndoManager();
-        std::unique_ptr<OSqlEditUndoAct> pUndoAct(new OSqlEditUndoAct( this ));
+    if(aText == m_strOrigText)
+        return;
 
-        pUndoAct->SetOriginalText( m_strOrigText );
-        rUndoMgr.AddUndoAction( std::move(pUndoAct) );
+    OJoinController& rController = m_pView->getContainerWindow()->getDesignView()->getController();
+    SfxUndoManager& rUndoMgr = rController.GetUndoManager();
+    std::unique_ptr<OSqlEditUndoAct> pUndoAct(new OSqlEditUndoAct( this ));
 
-        rController.InvalidateFeature(SID_UNDO);
-        rController.InvalidateFeature(SID_REDO);
+    pUndoAct->SetOriginalText( m_strOrigText );
+    rUndoMgr.AddUndoAction( std::move(pUndoAct) );
 
-        m_strOrigText  =aText;
-    }
+    rController.InvalidateFeature(SID_UNDO);
+    rController.InvalidateFeature(SID_REDO);
+
+    m_strOrigText  =aText;
 }
 
 IMPL_LINK_NOARG(OSqlEdit, OnInvalidateTimer, Timer *, void)

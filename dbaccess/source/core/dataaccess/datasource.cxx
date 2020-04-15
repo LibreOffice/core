@@ -960,128 +960,128 @@ namespace
 
 void ODatabaseSource::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue )
 {
-    if ( m_pImpl.is() )
+    if ( !m_pImpl.is() )
+        return;
+
+    switch(nHandle)
     {
-        switch(nHandle)
-        {
-            case PROPERTY_ID_TABLEFILTER:
-                rValue >>= m_pImpl->m_aTableFilter;
-                break;
-            case PROPERTY_ID_TABLETYPEFILTER:
-                rValue >>= m_pImpl->m_aTableTypeFilter;
-                break;
-            case PROPERTY_ID_USER:
-                rValue >>= m_pImpl->m_sUser;
-                // if the user name has changed, reset the password
-                m_pImpl->m_aPassword.clear();
-                break;
-            case PROPERTY_ID_PASSWORD:
-                rValue >>= m_pImpl->m_aPassword;
-                break;
-            case PROPERTY_ID_ISPASSWORDREQUIRED:
-                m_pImpl->m_bPasswordRequired = any2bool(rValue);
-                break;
-            case PROPERTY_ID_SUPPRESSVERSIONCL:
-                m_pImpl->m_bSuppressVersionColumns = any2bool(rValue);
-                break;
-            case PROPERTY_ID_URL:
-                rValue >>= m_pImpl->m_sConnectURL;
-                break;
-            case PROPERTY_ID_INFO:
-            {
-                Sequence< PropertyValue > aInfo;
-                OSL_VERIFY( rValue >>= aInfo );
-                lcl_setPropertyValues_resetOrRemoveOther( m_pImpl->m_xSettings, aInfo );
-            }
+        case PROPERTY_ID_TABLEFILTER:
+            rValue >>= m_pImpl->m_aTableFilter;
             break;
-            case PROPERTY_ID_LAYOUTINFORMATION:
-                rValue >>= m_pImpl->m_aLayoutInformation;
-                break;
+        case PROPERTY_ID_TABLETYPEFILTER:
+            rValue >>= m_pImpl->m_aTableTypeFilter;
+            break;
+        case PROPERTY_ID_USER:
+            rValue >>= m_pImpl->m_sUser;
+            // if the user name has changed, reset the password
+            m_pImpl->m_aPassword.clear();
+            break;
+        case PROPERTY_ID_PASSWORD:
+            rValue >>= m_pImpl->m_aPassword;
+            break;
+        case PROPERTY_ID_ISPASSWORDREQUIRED:
+            m_pImpl->m_bPasswordRequired = any2bool(rValue);
+            break;
+        case PROPERTY_ID_SUPPRESSVERSIONCL:
+            m_pImpl->m_bSuppressVersionColumns = any2bool(rValue);
+            break;
+        case PROPERTY_ID_URL:
+            rValue >>= m_pImpl->m_sConnectURL;
+            break;
+        case PROPERTY_ID_INFO:
+        {
+            Sequence< PropertyValue > aInfo;
+            OSL_VERIFY( rValue >>= aInfo );
+            lcl_setPropertyValues_resetOrRemoveOther( m_pImpl->m_xSettings, aInfo );
         }
-        m_pImpl->setModified(true);
+        break;
+        case PROPERTY_ID_LAYOUTINFORMATION:
+            rValue >>= m_pImpl->m_aLayoutInformation;
+            break;
     }
+    m_pImpl->setModified(true);
 }
 
 void ODatabaseSource::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
 {
-    if ( m_pImpl.is() )
+    if ( !m_pImpl.is() )
+        return;
+
+    switch (nHandle)
     {
-        switch (nHandle)
-        {
-            case PROPERTY_ID_TABLEFILTER:
-                rValue <<= m_pImpl->m_aTableFilter;
-                break;
-            case PROPERTY_ID_TABLETYPEFILTER:
-                rValue <<= m_pImpl->m_aTableTypeFilter;
-                break;
-            case PROPERTY_ID_USER:
-                rValue <<= m_pImpl->m_sUser;
-                break;
-            case PROPERTY_ID_PASSWORD:
-                rValue <<= m_pImpl->m_aPassword;
-                break;
-            case PROPERTY_ID_ISPASSWORDREQUIRED:
-                rValue <<= m_pImpl->m_bPasswordRequired;
-                break;
-            case PROPERTY_ID_SUPPRESSVERSIONCL:
-                rValue <<= m_pImpl->m_bSuppressVersionColumns;
-                break;
-            case PROPERTY_ID_ISREADONLY:
-                rValue <<= m_pImpl->m_bReadOnly;
-                break;
-            case PROPERTY_ID_INFO:
-            {
-                try
-                {
-                    // collect the property attributes of all current settings
-                    Reference< XPropertySet > xSettingsAsProps( m_pImpl->m_xSettings, UNO_QUERY_THROW );
-                    Reference< XPropertySetInfo > xPST( xSettingsAsProps->getPropertySetInfo(), UNO_SET_THROW );
-                    const Sequence< Property > aSettings( xPST->getProperties() );
-                    std::map< OUString, sal_Int32 > aPropertyAttributes;
-                    for ( auto const & setting : aSettings )
-                    {
-                        aPropertyAttributes[ setting.Name ] = setting.Attributes;
-                    }
-
-                    // get all current settings with their values
-                    Sequence< PropertyValue > aValues( m_pImpl->m_xSettings->getPropertyValues() );
-
-                    // transform them so that only property values which fulfill certain
-                    // criteria survive
-                    Sequence< PropertyValue > aNonDefaultOrUserDefined( aValues.getLength() );
-                    const PropertyValue* pCopyEnd = std::remove_copy_if(
-                        aValues.begin(),
-                        aValues.end(),
-                        aNonDefaultOrUserDefined.getArray(),
-                        IsDefaultAndNotRemoveable( aPropertyAttributes )
-                    );
-                    aNonDefaultOrUserDefined.realloc( pCopyEnd - aNonDefaultOrUserDefined.getArray() );
-                    rValue <<= aNonDefaultOrUserDefined;
-                }
-                catch( const Exception& )
-                {
-                    DBG_UNHANDLED_EXCEPTION("dbaccess");
-                }
-            }
+        case PROPERTY_ID_TABLEFILTER:
+            rValue <<= m_pImpl->m_aTableFilter;
             break;
-            case PROPERTY_ID_SETTINGS:
-                rValue <<= m_pImpl->m_xSettings;
-                break;
-            case PROPERTY_ID_URL:
-                rValue <<= m_pImpl->m_sConnectURL;
-                break;
-            case PROPERTY_ID_NUMBERFORMATSSUPPLIER:
-                rValue <<= m_pImpl->getNumberFormatsSupplier();
-                break;
-            case PROPERTY_ID_NAME:
-                rValue <<= m_pImpl->m_sName;
-                break;
-            case PROPERTY_ID_LAYOUTINFORMATION:
-                rValue <<= m_pImpl->m_aLayoutInformation;
-                break;
-            default:
-                SAL_WARN("dbaccess","unknown Property");
+        case PROPERTY_ID_TABLETYPEFILTER:
+            rValue <<= m_pImpl->m_aTableTypeFilter;
+            break;
+        case PROPERTY_ID_USER:
+            rValue <<= m_pImpl->m_sUser;
+            break;
+        case PROPERTY_ID_PASSWORD:
+            rValue <<= m_pImpl->m_aPassword;
+            break;
+        case PROPERTY_ID_ISPASSWORDREQUIRED:
+            rValue <<= m_pImpl->m_bPasswordRequired;
+            break;
+        case PROPERTY_ID_SUPPRESSVERSIONCL:
+            rValue <<= m_pImpl->m_bSuppressVersionColumns;
+            break;
+        case PROPERTY_ID_ISREADONLY:
+            rValue <<= m_pImpl->m_bReadOnly;
+            break;
+        case PROPERTY_ID_INFO:
+        {
+            try
+            {
+                // collect the property attributes of all current settings
+                Reference< XPropertySet > xSettingsAsProps( m_pImpl->m_xSettings, UNO_QUERY_THROW );
+                Reference< XPropertySetInfo > xPST( xSettingsAsProps->getPropertySetInfo(), UNO_SET_THROW );
+                const Sequence< Property > aSettings( xPST->getProperties() );
+                std::map< OUString, sal_Int32 > aPropertyAttributes;
+                for ( auto const & setting : aSettings )
+                {
+                    aPropertyAttributes[ setting.Name ] = setting.Attributes;
+                }
+
+                // get all current settings with their values
+                Sequence< PropertyValue > aValues( m_pImpl->m_xSettings->getPropertyValues() );
+
+                // transform them so that only property values which fulfill certain
+                // criteria survive
+                Sequence< PropertyValue > aNonDefaultOrUserDefined( aValues.getLength() );
+                const PropertyValue* pCopyEnd = std::remove_copy_if(
+                    aValues.begin(),
+                    aValues.end(),
+                    aNonDefaultOrUserDefined.getArray(),
+                    IsDefaultAndNotRemoveable( aPropertyAttributes )
+                );
+                aNonDefaultOrUserDefined.realloc( pCopyEnd - aNonDefaultOrUserDefined.getArray() );
+                rValue <<= aNonDefaultOrUserDefined;
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION("dbaccess");
+            }
         }
+        break;
+        case PROPERTY_ID_SETTINGS:
+            rValue <<= m_pImpl->m_xSettings;
+            break;
+        case PROPERTY_ID_URL:
+            rValue <<= m_pImpl->m_sConnectURL;
+            break;
+        case PROPERTY_ID_NUMBERFORMATSSUPPLIER:
+            rValue <<= m_pImpl->getNumberFormatsSupplier();
+            break;
+        case PROPERTY_ID_NAME:
+            rValue <<= m_pImpl->m_sName;
+            break;
+        case PROPERTY_ID_LAYOUTINFORMATION:
+            rValue <<= m_pImpl->m_aLayoutInformation;
+            break;
+        default:
+            SAL_WARN("dbaccess","unknown Property");
     }
 }
 

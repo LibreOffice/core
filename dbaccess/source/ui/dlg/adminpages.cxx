@@ -194,24 +194,24 @@ namespace dbaui
     }
     void OGenericAdministrationPage::fillBool( SfxItemSet& _rSet, const weld::CheckButton* pCheckBox, sal_uInt16 _nID, bool bOptionalBool, bool& _bChangedSomething, bool _bRevertValue )
     {
-        if (pCheckBox && pCheckBox->get_state_changed_from_saved())
+        if (!(pCheckBox && pCheckBox->get_state_changed_from_saved()))
+            return;
+
+        bool bValue = pCheckBox->get_active();
+        if ( _bRevertValue )
+            bValue = !bValue;
+
+        if (bOptionalBool)
         {
-            bool bValue = pCheckBox->get_active();
-            if ( _bRevertValue )
-                bValue = !bValue;
-
-            if (bOptionalBool)
-            {
-                OptionalBoolItem aValue( _nID );
-                if ( pCheckBox->get_state() != TRISTATE_INDET )
-                    aValue.SetValue( bValue );
-                _rSet.Put( aValue );
-            }
-            else
-                _rSet.Put( SfxBoolItem( _nID, bValue ) );
-
-            _bChangedSomething = true;
+            OptionalBoolItem aValue( _nID );
+            if ( pCheckBox->get_state() != TRISTATE_INDET )
+                aValue.SetValue( bValue );
+            _rSet.Put( aValue );
         }
+        else
+            _rSet.Put( SfxBoolItem( _nID, bValue ) );
+
+        _bChangedSomething = true;
     }
     void OGenericAdministrationPage::fillInt32(SfxItemSet& _rSet, const weld::SpinButton* pEdit, sal_uInt16 _nID, bool& _bChangedSomething)
     {
@@ -242,41 +242,41 @@ namespace dbaui
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         bool bSuccess = false;
-        if ( m_pAdminDialog )
+        if ( !m_pAdminDialog )
+            return;
+
+        m_pAdminDialog->saveDatasource();
+        OGenericAdministrationPage::implInitControls(*m_pItemSetHelper->getOutputSet(), true);
+        bool bShowMessage = true;
+        try
         {
-            m_pAdminDialog->saveDatasource();
-            OGenericAdministrationPage::implInitControls(*m_pItemSetHelper->getOutputSet(), true);
-            bool bShowMessage = true;
-            try
-            {
-                std::pair< Reference<XConnection>,bool> aConnectionPair = m_pAdminDialog->createConnection();
-                bShowMessage = aConnectionPair.second;
-                bSuccess = aConnectionPair.first.is();
-                ::comphelper::disposeComponent(aConnectionPair.first);
-            }
-            catch(Exception&)
-            {
-            }
-            if ( bShowMessage )
-            {
-                MessageType eImage = MessageType::Info;
-                OUString aMessage,sTitle;
-                sTitle = DBA_RES(STR_CONNECTION_TEST);
-                if ( bSuccess )
-                {
-                    aMessage = DBA_RES(STR_CONNECTION_SUCCESS);
-                }
-                else
-                {
-                    eImage = MessageType::Error;
-                    aMessage = DBA_RES(STR_CONNECTION_NO_SUCCESS);
-                }
-                OSQLMessageBox aMsg(GetFrameWeld(), sTitle, aMessage, MessBoxStyle::Ok, eImage);
-                aMsg.run();
-            }
-            if ( !bSuccess )
-                m_pAdminDialog->clearPassword();
+            std::pair< Reference<XConnection>,bool> aConnectionPair = m_pAdminDialog->createConnection();
+            bShowMessage = aConnectionPair.second;
+            bSuccess = aConnectionPair.first.is();
+            ::comphelper::disposeComponent(aConnectionPair.first);
         }
+        catch(Exception&)
+        {
+        }
+        if ( bShowMessage )
+        {
+            MessageType eImage = MessageType::Info;
+            OUString aMessage,sTitle;
+            sTitle = DBA_RES(STR_CONNECTION_TEST);
+            if ( bSuccess )
+            {
+                aMessage = DBA_RES(STR_CONNECTION_SUCCESS);
+            }
+            else
+            {
+                eImage = MessageType::Error;
+                aMessage = DBA_RES(STR_CONNECTION_NO_SUCCESS);
+            }
+            OSQLMessageBox aMsg(GetFrameWeld(), sTitle, aMessage, MessBoxStyle::Ok, eImage);
+            aMsg.run();
+        }
+        if ( !bSuccess )
+            m_pAdminDialog->clearPassword();
     }
 }   // namespace dbaui
 

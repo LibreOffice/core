@@ -71,25 +71,25 @@ OXMLComponent::OXMLComponent( ODBFilter& rImport
                 SAL_WARN("dbaccess", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
         }
     }
-    if ( !sHREF.isEmpty() && !sName.isEmpty() && _xParentContainer.is() )
+    if ( !(!sHREF.isEmpty() && !sName.isEmpty() && _xParentContainer.is()) )
+        return;
+
+    Sequence<Any> aArguments(comphelper::InitAnyPropertySequence(
     {
-        Sequence<Any> aArguments(comphelper::InitAnyPropertySequence(
-        {
-            {PROPERTY_NAME, Any(sName)}, // set as folder
-            {PROPERTY_PERSISTENT_NAME, Any(sHREF.copy(sHREF.lastIndexOf('/')+1))},
-            {PROPERTY_AS_TEMPLATE, Any(bAsTemplate)},
-        }));
-        try
-        {
-            Reference< XMultiServiceFactory > xORB( _xParentContainer, UNO_QUERY_THROW );
-            Reference< XInterface > xComponent( xORB->createInstanceWithArguments( _sComponentServiceName, aArguments ) );
-            Reference< XNameContainer > xNameContainer( _xParentContainer, UNO_QUERY_THROW );
-            xNameContainer->insertByName( sName, makeAny( xComponent ) );
-        }
-        catch(Exception&)
-        {
-            DBG_UNHANDLED_EXCEPTION("dbaccess");
-        }
+        {PROPERTY_NAME, Any(sName)}, // set as folder
+        {PROPERTY_PERSISTENT_NAME, Any(sHREF.copy(sHREF.lastIndexOf('/')+1))},
+        {PROPERTY_AS_TEMPLATE, Any(bAsTemplate)},
+    }));
+    try
+    {
+        Reference< XMultiServiceFactory > xORB( _xParentContainer, UNO_QUERY_THROW );
+        Reference< XInterface > xComponent( xORB->createInstanceWithArguments( _sComponentServiceName, aArguments ) );
+        Reference< XNameContainer > xNameContainer( _xParentContainer, UNO_QUERY_THROW );
+        xNameContainer->insertByName( sName, makeAny( xComponent ) );
+    }
+    catch(Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 

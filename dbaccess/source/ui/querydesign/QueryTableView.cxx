@@ -592,30 +592,30 @@ void OQueryTableView::ConnDoubleClicked(VclPtr<OTableConnection>& rConnection)
 void OQueryTableView::createNewConnection()
 {
     TTableConnectionData::value_type pData = std::make_shared<OQueryTableConnectionData>();
-    if( openJoinDialog(this,pData,true) )
+    if( !openJoinDialog(this,pData,true) )
+        return;
+
+    OTableWindowMap& rMap = GetTabWinMap();
+    OQueryTableWindow* pSourceWin   = static_cast< OQueryTableWindow*>(rMap[pData->getReferencingTable()->GetWinName()].get());
+    OQueryTableWindow* pDestWin     = static_cast< OQueryTableWindow*>(rMap[pData->getReferencedTable()->GetWinName()].get());
+    // first we have to look if the this connection already exists
+    OTableConnection* pConn = GetTabConn(pSourceWin,pDestWin,true);
+    bool bNew = true;
+    if ( pConn )
     {
-        OTableWindowMap& rMap = GetTabWinMap();
-        OQueryTableWindow* pSourceWin   = static_cast< OQueryTableWindow*>(rMap[pData->getReferencingTable()->GetWinName()].get());
-        OQueryTableWindow* pDestWin     = static_cast< OQueryTableWindow*>(rMap[pData->getReferencedTable()->GetWinName()].get());
-        // first we have to look if the this connection already exists
-        OTableConnection* pConn = GetTabConn(pSourceWin,pDestWin,true);
-        bool bNew = true;
-        if ( pConn )
-        {
-            pConn->GetData()->CopyFrom( *pData );
-            bNew = false;
-        }
-        else
-        {
-            // create a new connection and append it
-            VclPtrInstance<OQueryTableConnection> pQConn(this, pData);
-            GetConnection(pQConn);
-            pConn = pQConn;
-        }
-        connectionModified(this,pConn,bNew);
-        if ( !bNew && pConn == GetSelectedConn() ) // our connection was selected before so we have to reselect it
-            SelectConn( pConn );
+        pConn->GetData()->CopyFrom( *pData );
+        bNew = false;
     }
+    else
+    {
+        // create a new connection and append it
+        VclPtrInstance<OQueryTableConnection> pQConn(this, pData);
+        GetConnection(pQConn);
+        pConn = pQConn;
+    }
+    connectionModified(this,pConn,bNew);
+    if ( !bNew && pConn == GetSelectedConn() ) // our connection was selected before so we have to reselect it
+        SelectConn( pConn );
 }
 
 bool OQueryTableView::RemoveConnection(VclPtr<OTableConnection>& rConnection, bool /*_bDelete*/)
@@ -675,34 +675,34 @@ void OQueryTableView::RemoveTabWin(OTableWindow* pTabWin)
 {
     OSL_ENSURE(pTabWin != nullptr, "OQueryTableView::RemoveTabWin : Window should not be NULL !");
 
-    if(pTabWin && ContainsTabWin(*pTabWin)) // #i122589# check if registered before deleting
-    {
-        // I need my parent so it can be informed about the deletion
-        OQueryDesignView* pParent = static_cast<OQueryDesignView*>(getDesignView());
+    if(!(pTabWin && ContainsTabWin(*pTabWin))) // #i122589# check if registered before deleting
+        return;
 
-        SfxUndoManager& rUndoMgr = m_pView->getController().GetUndoManager();
-        rUndoMgr.EnterListAction(DBA_RES(STR_QUERY_UNDO_TABWINDELETE) , OUString(), 0, ViewShellId(-1));
+    // I need my parent so it can be informed about the deletion
+    OQueryDesignView* pParent = static_cast<OQueryDesignView*>(getDesignView());
 
-        // add the Undo-Action
-        std::unique_ptr<OQueryTabWinDelUndoAct> pUndoAction(new OQueryTabWinDelUndoAct(this));
-        pUndoAction->SetTabWin(static_cast< OQueryTableWindow*>(pTabWin));
+    SfxUndoManager& rUndoMgr = m_pView->getController().GetUndoManager();
+    rUndoMgr.EnterListAction(DBA_RES(STR_QUERY_UNDO_TABWINDELETE) , OUString(), 0, ViewShellId(-1));
 
-        // and hide the window
-        HideTabWin(static_cast< OQueryTableWindow*>(pTabWin), pUndoAction.get());
+    // add the Undo-Action
+    std::unique_ptr<OQueryTabWinDelUndoAct> pUndoAction(new OQueryTabWinDelUndoAct(this));
+    pUndoAction->SetTabWin(static_cast< OQueryTableWindow*>(pTabWin));
 
-        // Undo Actions and delete the fields in SelectionBrowseBox
-        pParent->TableDeleted( static_cast< OQueryTableWindowData*>(pTabWin->GetData().get())->GetAliasName() );
+    // and hide the window
+    HideTabWin(static_cast< OQueryTableWindow*>(pTabWin), pUndoAction.get());
 
-        m_pView->getController().addUndoActionAndInvalidate( std::move(pUndoAction) );
-        rUndoMgr.LeaveListAction();
+    // Undo Actions and delete the fields in SelectionBrowseBox
+    pParent->TableDeleted( static_cast< OQueryTableWindowData*>(pTabWin->GetData().get())->GetAliasName() );
 
-        modified();
-        if ( m_pAccessible )
-            m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::CHILD,
-                                                    makeAny(pTabWin->GetAccessible()),
-                                                    Any()
-                                                    );
-    }
+    m_pView->getController().addUndoActionAndInvalidate( std::move(pUndoAction) );
+    rUndoMgr.LeaveListAction();
+
+    modified();
+    if ( m_pAccessible )
+        m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::CHILD,
+                                                makeAny(pTabWin->GetAccessible()),
+                                                Any()
+                                                );
 }
 
 void OQueryTableView::EnsureVisible(const OTableWindow* pWin)

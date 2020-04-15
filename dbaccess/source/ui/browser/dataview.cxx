@@ -139,25 +139,25 @@ namespace dbaui
             m_xController->notifyHiContrastChanged();
         }
 
-        if ( nType == StateChangedType::InitShow )
+        if ( nType != StateChangedType::InitShow )
+            return;
+
+        // now that there's a view which is finally visible, remove the "Hidden" value from the
+        // model's arguments.
+        try
         {
-            // now that there's a view which is finally visible, remove the "Hidden" value from the
-            // model's arguments.
-            try
+            Reference< XController > xController( m_xController->getXController(), UNO_SET_THROW );
+            Reference< XModel > xModel = xController->getModel();
+            if ( xModel.is() )
             {
-                Reference< XController > xController( m_xController->getXController(), UNO_SET_THROW );
-                Reference< XModel > xModel = xController->getModel();
-                if ( xModel.is() )
-                {
-                    ::comphelper::NamedValueCollection aArgs( xModel->getArgs() );
-                    aArgs.remove( "Hidden" );
-                    xModel->attachResource( xModel->getURL(), aArgs.getPropertyValues() );
-                }
+                ::comphelper::NamedValueCollection aArgs( xModel->getArgs() );
+                aArgs.remove( "Hidden" );
+                xModel->attachResource( xModel->getURL(), aArgs.getPropertyValues() );
             }
-            catch( const Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION("dbaccess");
-            }
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
     void ODataView::DataChanged( const DataChangedEvent& rDCEvt )

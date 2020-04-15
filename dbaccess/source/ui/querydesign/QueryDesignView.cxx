@@ -328,19 +328,19 @@ namespace
         OSL_ENSURE(_pEntryConn,"TableConnection can not be null!");
 
         OQueryTableConnectionData* pData = static_cast< OQueryTableConnectionData*>(_pEntryConn->GetData().get());
-        if ( pData->GetJoinType() != INNER_JOIN && _pEntryTabTo->ExistsAVisitedConn() )
+        if ( !(pData->GetJoinType() != INNER_JOIN && _pEntryTabTo->ExistsAVisitedConn()) )
+            return;
+
+        bool bBrace = false;
+        if(_rJoin.endsWith(")"))
         {
-            bool bBrace = false;
-            if(_rJoin.endsWith(")"))
-            {
-                bBrace = true;
-                _rJoin = _rJoin.replaceAt(_rJoin.getLength()-1,1,OUString(' '));
-            }
-            _rJoin += C_AND + BuildJoinCriteria(_xConnection,&pData->GetConnLineDataList(),pData);
-            if(bBrace)
-                _rJoin += ")";
-            _pEntryConn->SetVisited(true);
+            bBrace = true;
+            _rJoin = _rJoin.replaceAt(_rJoin.getLength()-1,1,OUString(' '));
         }
+        _rJoin += C_AND + BuildJoinCriteria(_xConnection,&pData->GetConnLineDataList(),pData);
+        if(bBrace)
+            _rJoin += ")";
+        _pEntryConn->SetVisited(true);
     }
     OUString BuildTable( const Reference< XConnection>& _xConnection,
                                 const OQueryTableWindow* pEntryTab,
@@ -514,20 +514,20 @@ namespace
         }
 
         // when nothing found look for the "from" window
-        if(!bFound)
+        if(bFound)
+            return;
+
+        OQueryTableWindow* pEntryTabFrom = static_cast<OQueryTableWindow*>(pEntryConn->GetSourceWin());
+        for (auto const& connection : rConnections)
         {
-            OQueryTableWindow* pEntryTabFrom = static_cast<OQueryTableWindow*>(pEntryConn->GetSourceWin());
-            for (auto const& connection : rConnections)
+            OQueryTableConnection* pNext = static_cast<OQueryTableConnection*>(connection.get());
+            if(!pNext->IsVisited() && (pNext->GetSourceWin() == pEntryTabFrom || pNext->GetDestWin() == pEntryTabFrom))
             {
-                OQueryTableConnection* pNext = static_cast<OQueryTableConnection*>(connection.get());
-                if(!pNext->IsVisited() && (pNext->GetSourceWin() == pEntryTabFrom || pNext->GetDestWin() == pEntryTabFrom))
-                {
-                    OQueryTableWindow* pEntryTab = pNext->GetSourceWin() == pEntryTabFrom ? static_cast<OQueryTableWindow*>(pNext->GetDestWin()) : static_cast<OQueryTableWindow*>(pNext->GetSourceWin());
-                    // exists there a connection to a OQueryTableWindow that holds a connection that has been already visited
-                    JoinCycle(_xConnection,pNext,pEntryTab,aJoin);
-                    if(!pNext->IsVisited())
-                        GetNextJoin(_xConnection, pNext, pEntryTab, aJoin, _rTableNames);
-                }
+                OQueryTableWindow* pEntryTab = pNext->GetSourceWin() == pEntryTabFrom ? static_cast<OQueryTableWindow*>(pNext->GetDestWin()) : static_cast<OQueryTableWindow*>(pNext->GetSourceWin());
+                // exists there a connection to a OQueryTableWindow that holds a connection that has been already visited
+                JoinCycle(_xConnection,pNext,pEntryTab,aJoin);
+                if(!pNext->IsVisited())
+                    GetNextJoin(_xConnection, pNext, pEntryTab, aJoin, _rTableNames);
             }
         }
     }

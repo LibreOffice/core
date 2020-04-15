@@ -57,47 +57,47 @@ void OColumnPeer::setColumn(const Reference< XPropertySet>& _xColumn)
     SolarMutexGuard aGuard;
 
     VclPtr<OColumnControlWindow> pFieldControl = GetAs<OColumnControlWindow>();
-    if ( pFieldControl )
+    if ( !pFieldControl )
+        return;
+
+    if ( m_pActFieldDescr )
     {
-        if ( m_pActFieldDescr )
-        {
-            delete m_pActFieldDescr;
-            m_pActFieldDescr = nullptr;
-        }
-        if ( _xColumn.is() )
-        {
-            sal_Int32 nType         = 0;
-            sal_Int32 nScale        = 0;
-            sal_Int32 nPrecision    = 0;
-            bool bAutoIncrement = false;
-            OUString sTypeName;
-
-            try
-            {
-                // get the properties from the column
-                _xColumn->getPropertyValue(PROPERTY_TYPENAME)       >>= sTypeName;
-                _xColumn->getPropertyValue(PROPERTY_TYPE)           >>= nType;
-                _xColumn->getPropertyValue(PROPERTY_SCALE)          >>= nScale;
-                _xColumn->getPropertyValue(PROPERTY_PRECISION)      >>= nPrecision;
-                _xColumn->getPropertyValue(PROPERTY_ISAUTOINCREMENT)    >>= bAutoIncrement;
-            }
-            catch(const Exception&)
-            {
-            }
-
-            m_pActFieldDescr = new OFieldDescription(_xColumn,true);
-            // search for type
-            OUString const sCreateParam("x");
-            bool bForce;
-            TOTypeInfoSP pTypeInfo = ::dbaui::getTypeInfoFromType(*pFieldControl->getTypeInfo(),nType,sTypeName,sCreateParam,nPrecision,nScale,bAutoIncrement,bForce);
-            if ( !pTypeInfo.get() )
-                pTypeInfo = pFieldControl->getDefaultTyp();
-
-            m_pActFieldDescr->FillFromTypeInfo(pTypeInfo,true,false);
-            m_xColumn = _xColumn;
-        }
-        pFieldControl->DisplayData(m_pActFieldDescr);
+        delete m_pActFieldDescr;
+        m_pActFieldDescr = nullptr;
     }
+    if ( _xColumn.is() )
+    {
+        sal_Int32 nType         = 0;
+        sal_Int32 nScale        = 0;
+        sal_Int32 nPrecision    = 0;
+        bool bAutoIncrement = false;
+        OUString sTypeName;
+
+        try
+        {
+            // get the properties from the column
+            _xColumn->getPropertyValue(PROPERTY_TYPENAME)       >>= sTypeName;
+            _xColumn->getPropertyValue(PROPERTY_TYPE)           >>= nType;
+            _xColumn->getPropertyValue(PROPERTY_SCALE)          >>= nScale;
+            _xColumn->getPropertyValue(PROPERTY_PRECISION)      >>= nPrecision;
+            _xColumn->getPropertyValue(PROPERTY_ISAUTOINCREMENT)    >>= bAutoIncrement;
+        }
+        catch(const Exception&)
+        {
+        }
+
+        m_pActFieldDescr = new OFieldDescription(_xColumn,true);
+        // search for type
+        OUString const sCreateParam("x");
+        bool bForce;
+        TOTypeInfoSP pTypeInfo = ::dbaui::getTypeInfoFromType(*pFieldControl->getTypeInfo(),nType,sTypeName,sCreateParam,nPrecision,nScale,bAutoIncrement,bForce);
+        if ( !pTypeInfo.get() )
+            pTypeInfo = pFieldControl->getDefaultTyp();
+
+        m_pActFieldDescr->FillFromTypeInfo(pTypeInfo,true,false);
+        m_xColumn = _xColumn;
+    }
+    pFieldControl->DisplayData(m_pActFieldDescr);
 }
 
 void OColumnPeer::setConnection(const Reference< XConnection>& _xCon)

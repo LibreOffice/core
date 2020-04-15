@@ -133,20 +133,20 @@ void lcl_createDefintionObject(const OUString& _rName
                            ,Reference<XPropertySet>& _xTableDefinition
                            ,Reference<XNameAccess>& _xColumnDefinitions)
 {
-    if ( _xTableDefinitions.is() )
+    if ( !_xTableDefinitions.is() )
+        return;
+
+    if ( _xTableDefinitions->hasByName(_rName) )
+        _xTableDefinition.set(_xTableDefinitions->getByName(_rName),UNO_QUERY);
+    else
     {
-        if ( _xTableDefinitions->hasByName(_rName) )
-            _xTableDefinition.set(_xTableDefinitions->getByName(_rName),UNO_QUERY);
-        else
-        {
-            // set as folder
-            _xTableDefinition = TableDefinition::createWithName( ::comphelper::getProcessComponentContext(), _rName );
-            _xTableDefinitions->insertByName(_rName,makeAny(_xTableDefinition));
-        }
-        Reference<XColumnsSupplier> xColumnsSupplier(_xTableDefinition,UNO_QUERY);
-        if ( xColumnsSupplier.is() )
-            _xColumnDefinitions = xColumnsSupplier->getColumns();
+        // set as folder
+        _xTableDefinition = TableDefinition::createWithName( ::comphelper::getProcessComponentContext(), _rName );
+        _xTableDefinitions->insertByName(_rName,makeAny(_xTableDefinition));
     }
+    Reference<XColumnsSupplier> xColumnsSupplier(_xTableDefinition,UNO_QUERY);
+    if ( xColumnsSupplier.is() )
+        _xColumnDefinitions = xColumnsSupplier->getColumns();
 }
 
 }

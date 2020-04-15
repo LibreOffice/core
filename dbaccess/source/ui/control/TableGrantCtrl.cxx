@@ -287,31 +287,31 @@ void OTableGrantControl::InitController( CellControllerRef& /*rController*/, lon
 void OTableGrantControl::fillPrivilege(sal_Int32 _nRow) const
 {
 
-    if ( m_xUsers->hasByName(m_sUserName) )
-    {
-        try
-        {
-            Reference<XAuthorizable> xAuth(m_xUsers->getByName(m_sUserName),UNO_QUERY);
-            if ( xAuth.is() )
-            {
-                // get the privileges
-                TPrivileges nRights;
-                nRights.nRights = xAuth->getPrivileges(m_aTableNames[_nRow],PrivilegeObject::TABLE);
-                if(m_xGrantUser.is())
-                    nRights.nWithGrant = m_xGrantUser->getGrantablePrivileges(m_aTableNames[_nRow],PrivilegeObject::TABLE);
-                else
-                    nRights.nWithGrant = 0;
+    if ( !m_xUsers->hasByName(m_sUserName) )
+        return;
 
-                m_aPrivMap[m_aTableNames[_nRow]] = nRights;
-            }
-        }
-        catch(SQLException& e)
+    try
+    {
+        Reference<XAuthorizable> xAuth(m_xUsers->getByName(m_sUserName),UNO_QUERY);
+        if ( xAuth.is() )
         {
-            ::dbtools::showError(::dbtools::SQLExceptionInfo(e),VCLUnoHelper::GetInterface(GetParent()),m_xContext);
+            // get the privileges
+            TPrivileges nRights;
+            nRights.nRights = xAuth->getPrivileges(m_aTableNames[_nRow],PrivilegeObject::TABLE);
+            if(m_xGrantUser.is())
+                nRights.nWithGrant = m_xGrantUser->getGrantablePrivileges(m_aTableNames[_nRow],PrivilegeObject::TABLE);
+            else
+                nRights.nWithGrant = 0;
+
+            m_aPrivMap[m_aTableNames[_nRow]] = nRights;
         }
-        catch(Exception& )
-        {
-        }
+    }
+    catch(SQLException& e)
+    {
+        ::dbtools::showError(::dbtools::SQLExceptionInfo(e),VCLUnoHelper::GetInterface(GetParent()),m_xContext);
+    }
+    catch(Exception& )
+    {
     }
 }
 

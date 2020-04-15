@@ -1486,34 +1486,34 @@ void SAL_CALL OApplicationController::elementInserted( const ContainerEvent& _rE
     ::osl::MutexGuard aGuard( getMutex() );
 
     Reference< XContainer > xContainer(_rEvent.Source, UNO_QUERY);
-    if ( std::find(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),xContainer) != m_aCurrentContainers.end() )
-    {
-        OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
-        if ( getContainer() )
-        {
-            OUString sName;
-            _rEvent.Accessor >>= sName;
-            ElementType eType = getElementType(xContainer);
+    if ( std::find(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),xContainer) == m_aCurrentContainers.end() )
+        return;
 
-            switch( eType )
+    OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
+    if ( !getContainer() )
+        return;
+
+    OUString sName;
+    _rEvent.Accessor >>= sName;
+    ElementType eType = getElementType(xContainer);
+
+    switch( eType )
+    {
+        case E_TABLE:
+            ensureConnection();
+            break;
+        case E_FORM:
+        case E_REPORT:
             {
-                case E_TABLE:
-                    ensureConnection();
-                    break;
-                case E_FORM:
-                case E_REPORT:
-                    {
-                        Reference< XContainer > xSubContainer(_rEvent.Element,UNO_QUERY);
-                        if ( xSubContainer.is() )
-                            containerFound(xSubContainer);
-                    }
-                    break;
-                default:
-                    break;
+                Reference< XContainer > xSubContainer(_rEvent.Element,UNO_QUERY);
+                if ( xSubContainer.is() )
+                    containerFound(xSubContainer);
             }
-            getContainer()->elementAdded(eType,sName,_rEvent.Element);
-        }
+            break;
+        default:
+            break;
     }
+    getContainer()->elementAdded(eType,sName,_rEvent.Element);
 }
 
 void SAL_CALL OApplicationController::elementRemoved( const ContainerEvent& _rEvent )
@@ -1522,17 +1522,61 @@ void SAL_CALL OApplicationController::elementRemoved( const ContainerEvent& _rEv
     ::osl::MutexGuard aGuard( getMutex() );
 
     Reference< XContainer > xContainer(_rEvent.Source, UNO_QUERY);
-    if ( std::find(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),xContainer) != m_aCurrentContainers.end() )
+    if ( std::find(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),xContainer) == m_aCurrentContainers.end() )
+        return;
+
+    OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
+    OUString sName;
+    _rEvent.Accessor >>= sName;
+    ElementType eType = getElementType(xContainer);
+    switch( eType )
     {
-        OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
-        OUString sName;
+        case E_TABLE:
+            ensureConnection();
+            break;
+        case E_FORM:
+        case E_REPORT:
+            {
+                Reference<XContent> xContent(xContainer,UNO_QUERY);
+                if ( xContent.is() )
+                {
+                    sName = xContent->getIdentifier()->getContentIdentifier() + "/" + sName;
+                }
+            }
+            break;
+        default:
+            break;
+    }
+    getContainer()->elementRemoved(eType,sName);
+}
+
+void SAL_CALL OApplicationController::elementReplaced( const ContainerEvent& _rEvent )
+{
+    SolarMutexGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( getMutex() );
+
+    Reference< XContainer > xContainer(_rEvent.Source, UNO_QUERY);
+    if ( std::find(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),xContainer) == m_aCurrentContainers.end() )
+        return;
+
+    OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
+    OUString sName;
+    try
+    {
         _rEvent.Accessor >>= sName;
+        Reference<XPropertySet> xProp(_rEvent.Element,UNO_QUERY);
+        OUString sNewName;
+
         ElementType eType = getElementType(xContainer);
         switch( eType )
         {
             case E_TABLE:
+            {
                 ensureConnection();
-                break;
+                if ( xProp.is() && m_xMetaData.is() )
+                    sNewName = ::dbaui::composeTableName( m_xMetaData, xProp, ::dbtools::EComposeRule::InDataManipulation, false );
+            }
+            break;
             case E_FORM:
             case E_REPORT:
                 {
@@ -1546,55 +1590,11 @@ void SAL_CALL OApplicationController::elementRemoved( const ContainerEvent& _rEv
             default:
                 break;
         }
-        getContainer()->elementRemoved(eType,sName);
+        //  getContainer()->elementReplaced(getContainer()->getElementType(),sName,sNewName);
     }
-}
-
-void SAL_CALL OApplicationController::elementReplaced( const ContainerEvent& _rEvent )
-{
-    SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getMutex() );
-
-    Reference< XContainer > xContainer(_rEvent.Source, UNO_QUERY);
-    if ( std::find(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),xContainer) != m_aCurrentContainers.end() )
+    catch( Exception& )
     {
-        OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
-        OUString sName;
-        try
-        {
-            _rEvent.Accessor >>= sName;
-            Reference<XPropertySet> xProp(_rEvent.Element,UNO_QUERY);
-            OUString sNewName;
-
-            ElementType eType = getElementType(xContainer);
-            switch( eType )
-            {
-                case E_TABLE:
-                {
-                    ensureConnection();
-                    if ( xProp.is() && m_xMetaData.is() )
-                        sNewName = ::dbaui::composeTableName( m_xMetaData, xProp, ::dbtools::EComposeRule::InDataManipulation, false );
-                }
-                break;
-                case E_FORM:
-                case E_REPORT:
-                    {
-                        Reference<XContent> xContent(xContainer,UNO_QUERY);
-                        if ( xContent.is() )
-                        {
-                            sName = xContent->getIdentifier()->getContentIdentifier() + "/" + sName;
-                        }
-                    }
-                    break;
-                default:
-                    break;
-            }
-            //  getContainer()->elementReplaced(getContainer()->getElementType(),sName,sNewName);
-        }
-        catch( Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("dbaccess");
-        }
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 

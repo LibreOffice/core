@@ -101,83 +101,83 @@ void OApplicationController::deleteTables(const std::vector< OUString>& _rList)
 
     Reference<XTablesSupplier> xSup(xConnection,UNO_QUERY);
     OSL_ENSURE(xSup.is(),"OApplicationController::deleteTable: no XTablesSupplier!");
-    if ( xSup.is() )
+    if ( !xSup.is() )
+        return;
+
+    Reference<XNameAccess> xTables = xSup->getTables();
+    Reference<XDrop> xDrop(xTables,UNO_QUERY);
+    if ( xDrop.is() )
     {
-        Reference<XNameAccess> xTables = xSup->getTables();
-        Reference<XDrop> xDrop(xTables,UNO_QUERY);
-        if ( xDrop.is() )
+        bool bConfirm = true;
+        std::vector< OUString>::const_iterator aEnd = _rList.end();
+        for (std::vector< OUString>::const_iterator aIter = _rList.begin(); aIter != aEnd; ++aIter)
         {
-            bool bConfirm = true;
-            std::vector< OUString>::const_iterator aEnd = _rList.end();
-            for (std::vector< OUString>::const_iterator aIter = _rList.begin(); aIter != aEnd; ++aIter)
+            OUString sTableName = *aIter;
+
+            sal_Int32 nResult = RET_YES;
+            if ( bConfirm )
+                nResult = ::dbaui::askForUserAction(getFrameWeld(), STR_TITLE_CONFIRM_DELETION, STR_QUERY_DELETE_TABLE, _rList.size() > 1 && (aIter+1) != _rList.end(), sTableName);
+
+            bool bUserConfirmedDelete =
+                        ( RET_YES == nResult )
+                    ||  ( RET_ALL == nResult );
+            if ( bUserConfirmedDelete && m_pSubComponentManager->closeSubFrames( sTableName, E_TABLE ) )
             {
-                OUString sTableName = *aIter;
-
-                sal_Int32 nResult = RET_YES;
-                if ( bConfirm )
-                    nResult = ::dbaui::askForUserAction(getFrameWeld(), STR_TITLE_CONFIRM_DELETION, STR_QUERY_DELETE_TABLE, _rList.size() > 1 && (aIter+1) != _rList.end(), sTableName);
-
-                bool bUserConfirmedDelete =
-                            ( RET_YES == nResult )
-                        ||  ( RET_ALL == nResult );
-                if ( bUserConfirmedDelete && m_pSubComponentManager->closeSubFrames( sTableName, E_TABLE ) )
+                SQLExceptionInfo aErrorInfo;
+                try
                 {
-                    SQLExceptionInfo aErrorInfo;
-                    try
-                    {
-                        if ( xTables->hasByName(sTableName) )
-                            xDrop->dropByName(sTableName);
-                        else
-                        {// could be a view
-                            Reference<XViewsSupplier> xViewsSup(xConnection,UNO_QUERY);
+                    if ( xTables->hasByName(sTableName) )
+                        xDrop->dropByName(sTableName);
+                    else
+                    {// could be a view
+                        Reference<XViewsSupplier> xViewsSup(xConnection,UNO_QUERY);
 
-                            Reference<XNameAccess> xViews;
-                            if ( xViewsSup.is() )
+                        Reference<XNameAccess> xViews;
+                        if ( xViewsSup.is() )
+                        {
+                            xViews = xViewsSup->getViews();
+                            if ( xViews.is() && xViews->hasByName(sTableName) )
                             {
-                                xViews = xViewsSup->getViews();
-                                if ( xViews.is() && xViews->hasByName(sTableName) )
-                                {
-                                    xDrop.set(xViews,UNO_QUERY);
-                                    if ( xDrop.is() )
-                                        xDrop->dropByName(sTableName);
-                                }
+                                xDrop.set(xViews,UNO_QUERY);
+                                if ( xDrop.is() )
+                                    xDrop->dropByName(sTableName);
                             }
                         }
                     }
-                    catch(SQLContext& e) { aErrorInfo = e; }
-                    catch(SQLWarning& e) { aErrorInfo = e; }
-                    catch(SQLException& e) { aErrorInfo = e; }
-                    catch(WrappedTargetException& e)
-                    {
-                        SQLException aSql;
-                        if(e.TargetException >>= aSql)
-                            aErrorInfo = aSql;
-                        else
-                            OSL_FAIL("OApplicationController::implDropTable: something strange happened!");
-                    }
-                    catch( const Exception& )
-                    {
-                        DBG_UNHANDLED_EXCEPTION("dbaccess");
-                    }
-
-                    if ( aErrorInfo.isValid() )
-                        showError(aErrorInfo);
-
-                    if ( RET_ALL == nResult )
-                        bConfirm = false;
                 }
-                else
-                    break;
+                catch(SQLContext& e) { aErrorInfo = e; }
+                catch(SQLWarning& e) { aErrorInfo = e; }
+                catch(SQLException& e) { aErrorInfo = e; }
+                catch(WrappedTargetException& e)
+                {
+                    SQLException aSql;
+                    if(e.TargetException >>= aSql)
+                        aErrorInfo = aSql;
+                    else
+                        OSL_FAIL("OApplicationController::implDropTable: something strange happened!");
+                }
+                catch( const Exception& )
+                {
+                    DBG_UNHANDLED_EXCEPTION("dbaccess");
+                }
+
+                if ( aErrorInfo.isValid() )
+                    showError(aErrorInfo);
+
+                if ( RET_ALL == nResult )
+                    bConfirm = false;
             }
+            else
+                break;
         }
-        else
-        {
-            OUString sMessage(DBA_RES(STR_MISSING_TABLES_XDROP));
-            std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(getFrameWeld(),
-                                                        VclMessageType::Warning, VclButtonsType::Ok,
-                                                        sMessage));
-            xError->run();
-        }
+    }
+    else
+    {
+        OUString sMessage(DBA_RES(STR_MISSING_TABLES_XDROP));
+        std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(getFrameWeld(),
+                                                    VclMessageType::Warning, VclButtonsType::Ok,
+                                                    sMessage));
+        xError->run();
     }
 }
 
@@ -185,99 +185,99 @@ void OApplicationController::deleteObjects( ElementType _eType, const std::vecto
 {
     Reference< XNameContainer > xNames( getElements( _eType ), UNO_QUERY );
     Reference< XHierarchicalNameContainer > xHierarchyName( xNames, UNO_QUERY );
-    if ( xNames.is() )
+    if ( !xNames.is() )
+        return;
+
+    short eResult = _bConfirm ? svtools::QUERYDELETE_YES : svtools::QUERYDELETE_ALL;
+
+    // The list of elements to delete is allowed to contain related elements: A given element may
+    // be the ancestor or child of another element from the list.
+    // We want to ensure that ancestors get deleted first, so we normalize the list in this respect.
+    // #i33353#
+    std::set< OUString > aDeleteNames;
+        // Note that this implicitly uses std::less< OUString > a comparison operation, which
+        // results in lexicographical order, which is exactly what we need, because "foo" is *before*
+        // any "foo/bar" in this order.
+    std::copy(
+        _rList.begin(), _rList.end(),
+        std::insert_iterator< std::set< OUString > >( aDeleteNames, aDeleteNames.begin() )
+    );
+
+    std::set< OUString >::size_type nCount = aDeleteNames.size();
+    for ( std::set< OUString >::size_type nObjectsLeft = nCount; !aDeleteNames.empty(); )
     {
-        short eResult = _bConfirm ? svtools::QUERYDELETE_YES : svtools::QUERYDELETE_ALL;
+        std::set< OUString >::const_iterator  aThisRound = aDeleteNames.begin();
 
-        // The list of elements to delete is allowed to contain related elements: A given element may
-        // be the ancestor or child of another element from the list.
-        // We want to ensure that ancestors get deleted first, so we normalize the list in this respect.
-        // #i33353#
-        std::set< OUString > aDeleteNames;
-            // Note that this implicitly uses std::less< OUString > a comparison operation, which
-            // results in lexicographical order, which is exactly what we need, because "foo" is *before*
-            // any "foo/bar" in this order.
-        std::copy(
-            _rList.begin(), _rList.end(),
-            std::insert_iterator< std::set< OUString > >( aDeleteNames, aDeleteNames.begin() )
-        );
-
-        std::set< OUString >::size_type nCount = aDeleteNames.size();
-        for ( std::set< OUString >::size_type nObjectsLeft = nCount; !aDeleteNames.empty(); )
+        if ( eResult != svtools::QUERYDELETE_ALL )
         {
-            std::set< OUString >::const_iterator  aThisRound = aDeleteNames.begin();
+            svtools::QueryDeleteDlg_Impl aDlg(getFrameWeld(), *aThisRound);
 
-            if ( eResult != svtools::QUERYDELETE_ALL )
+            if ( nObjectsLeft > 1 )
+                aDlg.EnableAllButton();
+
+            eResult = aDlg.run();
+        }
+
+        bool bSuccess = false;
+
+        bool bUserConfirmedDelete =
+                    ( eResult == svtools::QUERYDELETE_ALL )
+                ||  ( eResult == svtools::QUERYDELETE_YES );
+
+        if  (   bUserConfirmedDelete
+            &&  (   _eType != E_QUERY || m_pSubComponentManager->closeSubFrames( *aThisRound, _eType ) )
+            )
+        {
+            try
             {
-                svtools::QueryDeleteDlg_Impl aDlg(getFrameWeld(), *aThisRound);
+                if ( xHierarchyName.is() )
+                    xHierarchyName->removeByHierarchicalName( *aThisRound );
+                else
+                    xNames->removeByName( *aThisRound );
 
-                if ( nObjectsLeft > 1 )
-                    aDlg.EnableAllButton();
+                bSuccess = true;
 
-                eResult = aDlg.run();
-            }
+                // now that we removed the element, care for all its child elements
+                // which may also be a part of the list
+                // #i33353#
+                OSL_ENSURE( aThisRound->getLength() - 1 >= 0, "OApplicationController::deleteObjects: empty name?" );
+                OUString sSmallestSiblingName = *aThisRound + OUStringChar( sal_Unicode( '/' + 1) );
 
-            bool bSuccess = false;
-
-            bool bUserConfirmedDelete =
-                        ( eResult == svtools::QUERYDELETE_ALL )
-                    ||  ( eResult == svtools::QUERYDELETE_YES );
-
-            if  (   bUserConfirmedDelete
-                &&  (   _eType != E_QUERY || m_pSubComponentManager->closeSubFrames( *aThisRound, _eType ) )
-                )
-            {
-                try
+                std::set< OUString >::const_iterator aUpperChildrenBound = aDeleteNames.lower_bound( sSmallestSiblingName );
+                for ( std::set< OUString >::const_iterator aObsolete = aThisRound;
+                      aObsolete != aUpperChildrenBound;
+                    )
                 {
-                    if ( xHierarchyName.is() )
-                        xHierarchyName->removeByHierarchicalName( *aThisRound );
-                    else
-                        xNames->removeByName( *aThisRound );
-
-                    bSuccess = true;
-
-                    // now that we removed the element, care for all its child elements
-                    // which may also be a part of the list
-                    // #i33353#
-                    OSL_ENSURE( aThisRound->getLength() - 1 >= 0, "OApplicationController::deleteObjects: empty name?" );
-                    OUString sSmallestSiblingName = *aThisRound + OUStringChar( sal_Unicode( '/' + 1) );
-
-                    std::set< OUString >::const_iterator aUpperChildrenBound = aDeleteNames.lower_bound( sSmallestSiblingName );
-                    for ( std::set< OUString >::const_iterator aObsolete = aThisRound;
-                          aObsolete != aUpperChildrenBound;
-                        )
-                    {
-                        std::set< OUString >::const_iterator aNextObsolete = aObsolete; ++aNextObsolete;
-                        aDeleteNames.erase( aObsolete );
-                        --nObjectsLeft;
-                        aObsolete = aNextObsolete;
-                    }
-                }
-                catch(const SQLException&)
-                {
-                    showError( SQLExceptionInfo( ::cppu::getCaughtException() ) );
-                }
-                catch(const WrappedTargetException& e)
-                {
-                    SQLException aSql;
-                    if ( e.TargetException >>= aSql )
-                        showError( SQLExceptionInfo( e.TargetException ) );
-                    else
-                        OSL_FAIL( "OApplicationController::deleteObjects: something strange happened!" );
-                }
-                catch( const Exception& )
-                {
-                    DBG_UNHANDLED_EXCEPTION("dbaccess");
+                    std::set< OUString >::const_iterator aNextObsolete = aObsolete; ++aNextObsolete;
+                    aDeleteNames.erase( aObsolete );
+                    --nObjectsLeft;
+                    aObsolete = aNextObsolete;
                 }
             }
-
-            if ( !bSuccess )
+            catch(const SQLException&)
             {
-                // okay, this object could not be deleted (or the user did not want to delete it),
-                // but continue with the rest
-                aDeleteNames.erase( aThisRound );
-                --nObjectsLeft;
+                showError( SQLExceptionInfo( ::cppu::getCaughtException() ) );
             }
+            catch(const WrappedTargetException& e)
+            {
+                SQLException aSql;
+                if ( e.TargetException >>= aSql )
+                    showError( SQLExceptionInfo( e.TargetException ) );
+                else
+                    OSL_FAIL( "OApplicationController::deleteObjects: something strange happened!" );
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION("dbaccess");
+            }
+        }
+
+        if ( !bSuccess )
+        {
+            // okay, this object could not be deleted (or the user did not want to delete it),
+            // but continue with the rest
+            aDeleteNames.erase( aThisRound );
+            --nObjectsLeft;
         }
     }
 }
@@ -287,28 +287,28 @@ void OApplicationController::deleteEntries()
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
-    if ( getContainer() )
+    if ( !getContainer() )
+        return;
+
+    std::vector< OUString> aList;
+    getSelectionElementNames(aList);
+    ElementType eType = getContainer()->getElementType();
+    switch(eType)
     {
-        std::vector< OUString> aList;
-        getSelectionElementNames(aList);
-        ElementType eType = getContainer()->getElementType();
-        switch(eType)
-        {
-        case E_TABLE:
-            deleteTables(aList);
-            break;
-        case E_QUERY:
-            deleteObjects( E_QUERY, aList, true );
-            break;
-        case E_FORM:
-            deleteObjects( E_FORM, aList, true );
-            break;
-        case E_REPORT:
-            deleteObjects( E_REPORT, aList, true );
-            break;
-        case E_NONE:
-            break;
-        }
+    case E_TABLE:
+        deleteTables(aList);
+        break;
+    case E_QUERY:
+        deleteObjects( E_QUERY, aList, true );
+        break;
+    case E_FORM:
+        deleteObjects( E_FORM, aList, true );
+        break;
+    case E_REPORT:
+        deleteObjects( E_REPORT, aList, true );
+        break;
+    case E_NONE:
+        break;
     }
 }
 

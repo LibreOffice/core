@@ -80,25 +80,25 @@ void ORelationTableConnectionData::DropRelation()
     ::osl::MutexGuard aGuard( m_aMutex );
     // delete relation
     Reference< XIndexAccess> xKeys = getReferencingTable()->getKeys();
-    if( !m_aConnName.isEmpty() && xKeys.is() )
+    if( !(!m_aConnName.isEmpty() && xKeys.is()) )
+        return;
+
+    const sal_Int32 nCount = xKeys->getCount();
+    for(sal_Int32 i = 0;i < nCount;++i)
     {
-        const sal_Int32 nCount = xKeys->getCount();
-        for(sal_Int32 i = 0;i < nCount;++i)
+        Reference< XPropertySet> xKey(xKeys->getByIndex(i),UNO_QUERY);
+        OSL_ENSURE(xKey.is(),"Key is not valid!");
+        if(xKey.is())
         {
-            Reference< XPropertySet> xKey(xKeys->getByIndex(i),UNO_QUERY);
-            OSL_ENSURE(xKey.is(),"Key is not valid!");
-            if(xKey.is())
+            OUString sName;
+            xKey->getPropertyValue(PROPERTY_NAME) >>= sName;
+            if(sName == m_aConnName)
             {
-                OUString sName;
-                xKey->getPropertyValue(PROPERTY_NAME) >>= sName;
-                if(sName == m_aConnName)
-                {
-                    Reference< XDrop> xDrop(xKeys,UNO_QUERY);
-                    OSL_ENSURE(xDrop.is(),"can't drop key because we haven't a drop interface!");
-                    if(xDrop.is())
-                        xDrop->dropByIndex(i);
-                    break;
-                }
+                Reference< XDrop> xDrop(xKeys,UNO_QUERY);
+                OSL_ENSURE(xDrop.is(),"can't drop key because we haven't a drop interface!");
+                if(xDrop.is())
+                    xDrop->dropByIndex(i);
+                break;
             }
         }
     }

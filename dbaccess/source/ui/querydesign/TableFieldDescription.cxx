@@ -175,22 +175,22 @@ void OTableFieldDesc::Save( ::comphelper::NamedValueCollection& o_rSettings, con
     o_rSettings.put( "GroupBy", m_bGroupBy );
     o_rSettings.put( "Visible", m_bVisible );
 
-    if ( i_bIncludingCriteria )
-    {
-        if ( !m_aCriteria.empty() )
-        {
-            sal_Int32 c = 0;
-            Sequence< PropertyValue > aCriteria( m_aCriteria.size() );
-            for (auto const& criteria : m_aCriteria)
-            {
-                aCriteria[c].Name = "Criterion_" + OUString::number( c );
-                aCriteria[c].Value <<= criteria;
-                ++c;
-            }
+    if ( !i_bIncludingCriteria )
+        return;
 
-            o_rSettings.put( "Criteria", aCriteria );
-        }
+    if ( m_aCriteria.empty() )
+        return;
+
+    sal_Int32 c = 0;
+    Sequence< PropertyValue > aCriteria( m_aCriteria.size() );
+    for (auto const& criteria : m_aCriteria)
+    {
+        aCriteria[c].Name = "Criterion_" + OUString::number( c );
+        aCriteria[c].Value <<= criteria;
+        ++c;
     }
+
+    o_rSettings.put( "Criteria", aCriteria );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

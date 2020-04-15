@@ -1334,40 +1334,40 @@ void OTableController::dropPrimaryKey()
 void OTableController::assignTable()
 {
     // get the table
-    if(!m_sName.isEmpty())
+    if(m_sName.isEmpty())
+        return;
+
+    Reference<XNameAccess> xNameAccess;
+    Reference<XTablesSupplier> xSup(getConnection(),UNO_QUERY);
+    if(!xSup.is())
+        return;
+
+    xNameAccess = xSup->getTables();
+    OSL_ENSURE(xNameAccess.is(),"no nameaccess for the queries!");
+
+    if(!xNameAccess->hasByName(m_sName))
+        return;
+
+    Reference<XPropertySet> xProp(xNameAccess->getByName(m_sName), css::uno::UNO_QUERY);
+    if (!xProp.is())
+        return;
+
+    m_xTable = xProp;
+    startTableListening();
+
+    // check if we set the table editable
+    Reference<XDatabaseMetaData> xMeta = getConnection()->getMetaData();
+    setEditable( xMeta.is() && !xMeta->isReadOnly() && (isAlterAllowed() || isDropAllowed() || isAddAllowed()) );
+    if(!isEditable())
     {
-        Reference<XNameAccess> xNameAccess;
-        Reference<XTablesSupplier> xSup(getConnection(),UNO_QUERY);
-        if(xSup.is())
+        for( const auto& rTableRow : m_vRowList )
         {
-            xNameAccess = xSup->getTables();
-            OSL_ENSURE(xNameAccess.is(),"no nameaccess for the queries!");
-
-            if(xNameAccess->hasByName(m_sName))
-            {
-                Reference<XPropertySet> xProp(xNameAccess->getByName(m_sName), css::uno::UNO_QUERY);
-                if (xProp.is())
-                {
-                    m_xTable = xProp;
-                    startTableListening();
-
-                    // check if we set the table editable
-                    Reference<XDatabaseMetaData> xMeta = getConnection()->getMetaData();
-                    setEditable( xMeta.is() && !xMeta->isReadOnly() && (isAlterAllowed() || isDropAllowed() || isAddAllowed()) );
-                    if(!isEditable())
-                    {
-                        for( const auto& rTableRow : m_vRowList )
-                        {
-                            rTableRow->SetReadOnly();
-                        }
-                    }
-                    m_bNew = false;
-                    // be notified when the table is in disposing
-                    InvalidateAll();
-                }
-            }
+            rTableRow->SetReadOnly();
         }
     }
+    m_bNew = false;
+    // be notified when the table is in disposing
+    InvalidateAll();
 }
 
 bool OTableController::isAddAllowed() const

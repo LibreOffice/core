@@ -99,81 +99,81 @@ namespace dbaui
 
     void OGeneralPage::initializeTypeList()
     {
-        if ( m_bInitTypeList )
+        if ( !m_bInitTypeList )
+            return;
+
+        m_bInitTypeList = false;
+        m_xDatasourceType->clear();
+
+        if ( !m_pCollection )
+            return;
+
+        DisplayedTypes aDisplayedTypes;
+
+        ::dbaccess::ODsnTypeCollection::TypeIterator aEnd = m_pCollection->end();
+        for (   ::dbaccess::ODsnTypeCollection::TypeIterator aTypeLoop =  m_pCollection->begin();
+                aTypeLoop != aEnd;
+                ++aTypeLoop
+            )
         {
-            m_bInitTypeList = false;
-            m_xDatasourceType->clear();
-
-            if ( m_pCollection )
+            const OUString& sURLPrefix = aTypeLoop.getURLPrefix();
+            if ( !sURLPrefix.isEmpty() )
             {
-                DisplayedTypes aDisplayedTypes;
+                // skip mysql connection variations. It is handled in another window.
+                if(sURLPrefix.startsWith("sdbc:mysql:") && !sURLPrefix.startsWith("sdbc:mysql:jdbc:"))
+                    continue;
 
-                ::dbaccess::ODsnTypeCollection::TypeIterator aEnd = m_pCollection->end();
-                for (   ::dbaccess::ODsnTypeCollection::TypeIterator aTypeLoop =  m_pCollection->begin();
-                        aTypeLoop != aEnd;
-                        ++aTypeLoop
-                    )
+                OUString sDisplayName = aTypeLoop.getDisplayName();
+                if (m_xDatasourceType->find_text(sDisplayName) == -1 &&
+                    approveDatasourceType(sURLPrefix, sDisplayName))
                 {
-                    const OUString& sURLPrefix = aTypeLoop.getURLPrefix();
-                    if ( !sURLPrefix.isEmpty() )
-                    {
-                        // skip mysql connection variations. It is handled in another window.
-                        if(sURLPrefix.startsWith("sdbc:mysql:") && !sURLPrefix.startsWith("sdbc:mysql:jdbc:"))
-                            continue;
-
-                        OUString sDisplayName = aTypeLoop.getDisplayName();
-                        if (m_xDatasourceType->find_text(sDisplayName) == -1 &&
-                            approveDatasourceType(sURLPrefix, sDisplayName))
-                        {
-                            aDisplayedTypes.emplace_back( sURLPrefix, sDisplayName );
-                        }
-                    }
+                    aDisplayedTypes.emplace_back( sURLPrefix, sDisplayName );
                 }
-                std::sort( aDisplayedTypes.begin(), aDisplayedTypes.end(), DisplayedTypeLess() );
-                for ( const auto& rDisplayedType : aDisplayedTypes )
-                    insertDatasourceTypeEntryData( rDisplayedType.eType, rDisplayedType.sDisplayName );
             }
         }
+        std::sort( aDisplayedTypes.begin(), aDisplayedTypes.end(), DisplayedTypeLess() );
+        for ( const auto& rDisplayedType : aDisplayedTypes )
+            insertDatasourceTypeEntryData( rDisplayedType.eType, rDisplayedType.sDisplayName );
     }
 
     void OGeneralPageWizard::initializeEmbeddedDBList()
     {
-        if ( m_bInitEmbeddedDBList )
+        if ( !m_bInitEmbeddedDBList )
+            return;
+
+        m_bInitEmbeddedDBList = false;
+        m_xEmbeddedDBType->clear();
+
+        if ( !m_pCollection )
+            return;
+
+        DisplayedTypes aDisplayedTypes;
+
+        ::dbaccess::ODsnTypeCollection::TypeIterator aEnd = m_pCollection->end();
+
+        SvtMiscOptions aMiscOptions;
+
+        for (   ::dbaccess::ODsnTypeCollection::TypeIterator aTypeLoop =  m_pCollection->begin();
+                aTypeLoop != aEnd;
+                ++aTypeLoop
+            )
         {
-            m_bInitEmbeddedDBList = false;
-            m_xEmbeddedDBType->clear();
-
-            if ( m_pCollection )
+            const OUString& sURLPrefix = aTypeLoop.getURLPrefix();
+            if ( !sURLPrefix.isEmpty() )
             {
-                DisplayedTypes aDisplayedTypes;
-
-                ::dbaccess::ODsnTypeCollection::TypeIterator aEnd = m_pCollection->end();
-
-                SvtMiscOptions aMiscOptions;
-
-                for (   ::dbaccess::ODsnTypeCollection::TypeIterator aTypeLoop =  m_pCollection->begin();
-                        aTypeLoop != aEnd;
-                        ++aTypeLoop
-                    )
+                OUString sDisplayName = aTypeLoop.getDisplayName();
+                if (m_xEmbeddedDBType->find_text(sDisplayName) == -1 &&
+                    dbaccess::ODsnTypeCollection::isEmbeddedDatabase(sURLPrefix))
                 {
-                    const OUString& sURLPrefix = aTypeLoop.getURLPrefix();
-                    if ( !sURLPrefix.isEmpty() )
-                    {
-                        OUString sDisplayName = aTypeLoop.getDisplayName();
-                        if (m_xEmbeddedDBType->find_text(sDisplayName) == -1 &&
-                            dbaccess::ODsnTypeCollection::isEmbeddedDatabase(sURLPrefix))
-                        {
-                            if( !aMiscOptions.IsExperimentalMode() && sURLPrefix.startsWith("sdbc:embedded:firebird") )
-                                continue;
-                            aDisplayedTypes.emplace_back( sURLPrefix, sDisplayName );
-                        }
-                    }
+                    if( !aMiscOptions.IsExperimentalMode() && sURLPrefix.startsWith("sdbc:embedded:firebird") )
+                        continue;
+                    aDisplayedTypes.emplace_back( sURLPrefix, sDisplayName );
                 }
-                std::sort( aDisplayedTypes.begin(), aDisplayedTypes.end(), DisplayedTypeLess() );
-                for (auto const& displayedType : aDisplayedTypes)
-                    insertEmbeddedDBTypeEntryData( displayedType.eType, displayedType.sDisplayName );
             }
         }
+        std::sort( aDisplayedTypes.begin(), aDisplayedTypes.end(), DisplayedTypeLess() );
+        for (auto const& displayedType : aDisplayedTypes)
+            insertEmbeddedDBTypeEntryData( displayedType.eType, displayedType.sDisplayName );
     }
 
     void OGeneralPage::setParentTitle(const OUString&)
@@ -664,26 +664,26 @@ namespace dbaui
         {
             aFileDlg.SetCurrentFilter(pFilter->GetUIName());
         }
-        if ( aFileDlg.Execute() == ERRCODE_NONE )
+        if ( aFileDlg.Execute() != ERRCODE_NONE )
+            return;
+
+        OUString sPath = aFileDlg.GetPath();
+        // check for aFileDlg.GetCurrentFilter used to be here but current fpicker filter
+        // can be set to anything, see tdf#125267 how this breaks if other value
+        // than 'ODF Database' is selected. Let's therefore check only if wildcard matches
+        if ( !pFilter->GetWildcard().Matches(sPath) )
         {
-            OUString sPath = aFileDlg.GetPath();
-            // check for aFileDlg.GetCurrentFilter used to be here but current fpicker filter
-            // can be set to anything, see tdf#125267 how this breaks if other value
-            // than 'ODF Database' is selected. Let's therefore check only if wildcard matches
-            if ( !pFilter->GetWildcard().Matches(sPath) )
-            {
-                OUString sMessage(DBA_RES(STR_ERR_USE_CONNECT_TO));
-                std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
-                                                              VclMessageType::Info, VclButtonsType::Ok,
-                                                              sMessage));
-                xInfoBox->run();
-                m_xRB_ConnectDatabase->set_active(true);
-                OnSetupModeSelected( *m_xRB_ConnectDatabase );
-                return;
-            }
-            m_aBrowsedDocumentURL = sPath;
-            m_aChooseDocumentHandler.Call( *this );
+            OUString sMessage(DBA_RES(STR_ERR_USE_CONNECT_TO));
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                          VclMessageType::Info, VclButtonsType::Ok,
+                                                          sMessage));
+            xInfoBox->run();
+            m_xRB_ConnectDatabase->set_active(true);
+            OnSetupModeSelected( *m_xRB_ConnectDatabase );
+            return;
         }
+        m_aBrowsedDocumentURL = sPath;
+        m_aChooseDocumentHandler.Call( *this );
     }
 
 }   // namespace dbaui

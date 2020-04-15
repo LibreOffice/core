@@ -172,24 +172,24 @@ namespace
     void ensureToolbars( OQueryController& _rController, bool _bDesign )
     {
         Reference< css::frame::XLayoutManager > xLayoutManager = OGenericUnoController::getLayoutManager( _rController.getFrame() );
-        if ( xLayoutManager.is() )
+        if ( !xLayoutManager.is() )
+            return;
+
+        xLayoutManager->lock();
+        static const char s_sDesignToolbar[] = "private:resource/toolbar/designobjectbar";
+        static const char s_sSqlToolbar[] = "private:resource/toolbar/sqlobjectbar";
+        if ( _bDesign )
         {
-            xLayoutManager->lock();
-            static const char s_sDesignToolbar[] = "private:resource/toolbar/designobjectbar";
-            static const char s_sSqlToolbar[] = "private:resource/toolbar/sqlobjectbar";
-            if ( _bDesign )
-            {
-                xLayoutManager->destroyElement( s_sSqlToolbar );
-                xLayoutManager->createElement( s_sDesignToolbar );
-            }
-            else
-            {
-                xLayoutManager->destroyElement( s_sDesignToolbar );
-                xLayoutManager->createElement( s_sSqlToolbar );
-            }
-            xLayoutManager->unlock();
-            xLayoutManager->doLayout();
+            xLayoutManager->destroyElement( s_sSqlToolbar );
+            xLayoutManager->createElement( s_sDesignToolbar );
         }
+        else
+        {
+            xLayoutManager->destroyElement( s_sDesignToolbar );
+            xLayoutManager->createElement( s_sSqlToolbar );
+        }
+        xLayoutManager->unlock();
+        xLayoutManager->doLayout();
     }
 
     /**
@@ -924,27 +924,27 @@ OUString OQueryController::getPrivateTitle( ) const
 
 void OQueryController::setQueryComposer()
 {
-    if(isConnected())
+    if(!isConnected())
+        return;
+
+    Reference< XSQLQueryComposerFactory >  xFactory(getConnection(), UNO_QUERY);
+    OSL_ENSURE(xFactory.is(),"Connection doesn't support a querycomposer");
+    if ( !(xFactory.is() && getContainer()) )
+        return;
+
+    try
     {
-        Reference< XSQLQueryComposerFactory >  xFactory(getConnection(), UNO_QUERY);
-        OSL_ENSURE(xFactory.is(),"Connection doesn't support a querycomposer");
-        if ( xFactory.is() && getContainer() )
-        {
-            try
-            {
-                m_xComposer = xFactory->createQueryComposer();
-                getContainer()->setStatement(m_sStatement);
-            }
-            catch(const Exception&)
-            {
-                m_xComposer = nullptr;
-            }
-            OSL_ENSURE(m_xComposer.is(),"No querycomposer available!");
-            Reference<XTablesSupplier> xTablesSup(getConnection(), UNO_QUERY);
-            deleteIterator();
-            m_pSqlIterator.reset(new ::connectivity::OSQLParseTreeIterator( getConnection(), xTablesSup->getTables(), m_aSqlParser ));
-        }
+        m_xComposer = xFactory->createQueryComposer();
+        getContainer()->setStatement(m_sStatement);
     }
+    catch(const Exception&)
+    {
+        m_xComposer = nullptr;
+    }
+    OSL_ENSURE(m_xComposer.is(),"No querycomposer available!");
+    Reference<XTablesSupplier> xTablesSup(getConnection(), UNO_QUERY);
+    deleteIterator();
+    m_pSqlIterator.reset(new ::connectivity::OSQLParseTreeIterator( getConnection(), xTablesSup->getTables(), m_aSqlParser ));
 }
 
 bool OQueryController::Construct(vcl::Window* pParent)
@@ -1126,67 +1126,67 @@ void OQueryController::executeQuery()
     OUString sTranslatedStmt = translateStatement( false );
 
     OUString sDataSourceName = getDataSourceName();
-    if ( !(sDataSourceName.isEmpty() || sTranslatedStmt.isEmpty()) )
+    if ( sDataSourceName.isEmpty() || sTranslatedStmt.isEmpty() )
+        return;
+
+    try
     {
-        try
+        getContainer()->showPreview( getFrame() );
+        InvalidateFeature(SID_DB_QUERY_PREVIEW);
+
+        URL aWantToDispatch;
+        aWantToDispatch.Complete = ".component:DB/DataSourceBrowser";
+
+        OUString sFrameName( FRAME_NAME_QUERY_PREVIEW );
+        sal_Int32 nSearchFlags = FrameSearchFlag::CHILDREN;
+
+        Reference< XDispatch> xDisp;
+        Reference< XDispatchProvider> xProv( getFrame()->findFrame( sFrameName, nSearchFlags ), UNO_QUERY );
+        if(!xProv.is())
         {
-            getContainer()->showPreview( getFrame() );
-            InvalidateFeature(SID_DB_QUERY_PREVIEW);
-
-            URL aWantToDispatch;
-            aWantToDispatch.Complete = ".component:DB/DataSourceBrowser";
-
-            OUString sFrameName( FRAME_NAME_QUERY_PREVIEW );
-            sal_Int32 nSearchFlags = FrameSearchFlag::CHILDREN;
-
-            Reference< XDispatch> xDisp;
-            Reference< XDispatchProvider> xProv( getFrame()->findFrame( sFrameName, nSearchFlags ), UNO_QUERY );
-            if(!xProv.is())
-            {
-                xProv.set( getFrame(), UNO_QUERY );
-                if (xProv.is())
-                    xDisp = xProv->queryDispatch(aWantToDispatch, sFrameName, nSearchFlags);
-            }
-            else
-            {
-                xDisp = xProv->queryDispatch(aWantToDispatch, sFrameName, FrameSearchFlag::SELF);
-            }
-            if (xDisp.is())
-            {
-                auto aProps(::comphelper::InitPropertySequence(
-                    {
-                        { PROPERTY_DATASOURCENAME, makeAny(sDataSourceName) },
-                        { PROPERTY_COMMAND_TYPE, makeAny(CommandType::COMMAND) },
-                        { PROPERTY_COMMAND, makeAny(sTranslatedStmt) },
-                        { PROPERTY_ENABLE_BROWSER, makeAny(false) },
-                        { PROPERTY_ACTIVE_CONNECTION, makeAny(getConnection()) },
-                        { PROPERTY_UPDATE_CATALOGNAME, makeAny(m_sUpdateCatalogName) },
-                        { PROPERTY_UPDATE_SCHEMANAME, makeAny(m_sUpdateSchemaName) },
-                        { PROPERTY_UPDATE_TABLENAME, makeAny(OUString()) },
-                        { PROPERTY_ESCAPE_PROCESSING, makeAny(m_bEscapeProcessing) }
-                    }));
-
-                xDisp->dispatch(aWantToDispatch, aProps);
-                // check the state of the beamer
-                // be notified when the beamer frame is closed
-                Reference< XComponent >  xComponent = getFrame()->findFrame( sFrameName, nSearchFlags );
-                if (xComponent.is())
+            xProv.set( getFrame(), UNO_QUERY );
+            if (xProv.is())
+                xDisp = xProv->queryDispatch(aWantToDispatch, sFrameName, nSearchFlags);
+        }
+        else
+        {
+            xDisp = xProv->queryDispatch(aWantToDispatch, sFrameName, FrameSearchFlag::SELF);
+        }
+        if (xDisp.is())
+        {
+            auto aProps(::comphelper::InitPropertySequence(
                 {
-                    OSL_ENSURE(Reference< XFrame >(xComponent, UNO_QUERY).get() == getContainer()->getPreviewFrame().get(),
-                        "OQueryController::executeQuery: oops ... which window do I have here?");
-                    Reference< XEventListener> xEvtL(static_cast<cppu::OWeakObject*>(this),UNO_QUERY);
-                    xComponent->addEventListener(xEvtL);
-                }
-            }
-            else
+                    { PROPERTY_DATASOURCENAME, makeAny(sDataSourceName) },
+                    { PROPERTY_COMMAND_TYPE, makeAny(CommandType::COMMAND) },
+                    { PROPERTY_COMMAND, makeAny(sTranslatedStmt) },
+                    { PROPERTY_ENABLE_BROWSER, makeAny(false) },
+                    { PROPERTY_ACTIVE_CONNECTION, makeAny(getConnection()) },
+                    { PROPERTY_UPDATE_CATALOGNAME, makeAny(m_sUpdateCatalogName) },
+                    { PROPERTY_UPDATE_SCHEMANAME, makeAny(m_sUpdateSchemaName) },
+                    { PROPERTY_UPDATE_TABLENAME, makeAny(OUString()) },
+                    { PROPERTY_ESCAPE_PROCESSING, makeAny(m_bEscapeProcessing) }
+                }));
+
+            xDisp->dispatch(aWantToDispatch, aProps);
+            // check the state of the beamer
+            // be notified when the beamer frame is closed
+            Reference< XComponent >  xComponent = getFrame()->findFrame( sFrameName, nSearchFlags );
+            if (xComponent.is())
             {
-                OSL_FAIL("Couldn't create a beamer window!");
+                OSL_ENSURE(Reference< XFrame >(xComponent, UNO_QUERY).get() == getContainer()->getPreviewFrame().get(),
+                    "OQueryController::executeQuery: oops ... which window do I have here?");
+                Reference< XEventListener> xEvtL(static_cast<cppu::OWeakObject*>(this),UNO_QUERY);
+                xComponent->addEventListener(xEvtL);
             }
         }
-        catch(const Exception&)
+        else
         {
             OSL_FAIL("Couldn't create a beamer window!");
         }
+    }
+    catch(const Exception&)
+    {
+        OSL_FAIL("Couldn't create a beamer window!");
     }
 }
 

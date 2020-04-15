@@ -602,27 +602,27 @@ void ODefinitionContainer::approveNewObject(const OUString& _sName,const Referen
 void SAL_CALL ODefinitionContainer::propertyChange( const PropertyChangeEvent& evt )
 {
     MutexGuard aGuard(m_aMutex);
-    if( evt.PropertyName == PROPERTY_NAME || evt.PropertyName ==  "Title" )
+    if( !(evt.PropertyName == PROPERTY_NAME || evt.PropertyName ==  "Title") )
+        return;
+
+    m_bInPropertyChange = true;
+    try
     {
-        m_bInPropertyChange = true;
-        try
-        {
-            OUString sNewName,sOldName;
-            evt.OldValue >>= sOldName;
-            evt.NewValue >>= sNewName;
-            Reference<XContent> xContent( evt.Source, UNO_QUERY );
-            removeObjectListener( xContent );
-            implRemove( sOldName );
-            implAppend( sNewName, xContent );
-        }
-        catch(const Exception& ex)
-        {
-            css::uno::Any anyEx = cppu::getCaughtException();
-            throw css::lang::WrappedTargetRuntimeException( ex.Message,
-                            nullptr, anyEx );
-        }
-        m_bInPropertyChange = false;
+        OUString sNewName,sOldName;
+        evt.OldValue >>= sOldName;
+        evt.NewValue >>= sNewName;
+        Reference<XContent> xContent( evt.Source, UNO_QUERY );
+        removeObjectListener( xContent );
+        implRemove( sOldName );
+        implAppend( sNewName, xContent );
     }
+    catch(const Exception& ex)
+    {
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw css::lang::WrappedTargetRuntimeException( ex.Message,
+                        nullptr, anyEx );
+    }
+    m_bInPropertyChange = false;
 }
 
 // XVetoableChangeListener

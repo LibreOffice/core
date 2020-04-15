@@ -89,19 +89,19 @@ bool OStaticSet::fetchRow()
 
 void OStaticSet::fillAllRows()
 {
-    if(!m_bEnd)
+    if(m_bEnd)
+        return;
+
+    sal_Int32 nColumnCount = m_xSetMetaData->getColumnCount();
+    while(m_xDriverSet->next())
     {
-        sal_Int32 nColumnCount = m_xSetMetaData->getColumnCount();
-        while(m_xDriverSet->next())
-        {
-            ORowSetRow pRow = new connectivity::ORowVector< connectivity::ORowSetValue >(nColumnCount);
-            m_aSet.push_back(pRow);
-            m_aSetIter = m_aSet.end() - 1;
-            (*pRow)[0] = getRow();
-            OCacheSet::fillValueRow(pRow,(*pRow)[0]);
-        }
-        m_bEnd = true;
+        ORowSetRow pRow = new connectivity::ORowVector< connectivity::ORowSetValue >(nColumnCount);
+        m_aSet.push_back(pRow);
+        m_aSetIter = m_aSet.end() - 1;
+        (*pRow)[0] = getRow();
+        OCacheSet::fillValueRow(pRow,(*pRow)[0]);
     }
+    m_bEnd = true;
 }
 
 // XResultSet

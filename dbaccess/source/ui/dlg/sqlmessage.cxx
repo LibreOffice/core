@@ -476,19 +476,19 @@ void OSQLMessageBox::impl_createStandardButtons( MessBoxStyle _nStyle )
         lcl_addButton(m_xDialog.get(), StandardButtonType::OK,     true);
     }
 
-    if ( !m_sHelpURL.isEmpty() )
-    {
-        lcl_addButton(m_xDialog.get(), StandardButtonType::Help, false);
+    if ( m_sHelpURL.isEmpty() )
+        return;
 
-        OUString aTmp;
-        INetURLObject aHID( m_sHelpURL );
-        if ( aHID.GetProtocol() == INetProtocol::Hid )
-              aTmp = aHID.GetURLPath();
-        else
-            aTmp = m_sHelpURL;
+    lcl_addButton(m_xDialog.get(), StandardButtonType::Help, false);
 
-        m_xDialog->set_help_id(OUStringToOString(aTmp, RTL_TEXTENCODING_UTF8));
-    }
+    OUString aTmp;
+    INetURLObject aHID( m_sHelpURL );
+    if ( aHID.GetProtocol() == INetProtocol::Hid )
+          aTmp = aHID.GetURLPath();
+    else
+        aTmp = m_sHelpURL;
+
+    m_xDialog->set_help_id(OUStringToOString(aTmp, RTL_TEXTENCODING_UTF8));
 }
 
 void OSQLMessageBox::impl_addDetailsButton()

@@ -129,23 +129,23 @@ OOdbcEnumeration::OOdbcEnumeration()
         bLoaded = load(ODBC_LIBRARY_PLAIN);
 #endif
 
-    if ( bLoaded )
-    {
-#ifdef HAVE_ODBC_SUPPORT
-        // load the generic functions
-        m_pAllocHandle = loadSymbol("SQLAllocHandle");
-        m_pFreeHandle = loadSymbol("SQLFreeHandle");
-        m_pSetEnvAttr = loadSymbol("SQLSetEnvAttr");
-        m_pDataSources = loadSymbol("SQLDataSources");
+    if ( !bLoaded )
+        return;
 
-        // all or nothing
-        if (!m_pAllocHandle || !m_pSetEnvAttr || !m_pDataSources || !m_pFreeHandle)
-        {
-            unload();
-            m_pAllocHandle = m_pFreeHandle = m_pSetEnvAttr = m_pDataSources = nullptr;
-        }
-#endif
+#ifdef HAVE_ODBC_SUPPORT
+    // load the generic functions
+    m_pAllocHandle = loadSymbol("SQLAllocHandle");
+    m_pFreeHandle = loadSymbol("SQLFreeHandle");
+    m_pSetEnvAttr = loadSymbol("SQLSetEnvAttr");
+    m_pDataSources = loadSymbol("SQLDataSources");
+
+    // all or nothing
+    if (!m_pAllocHandle || !m_pSetEnvAttr || !m_pDataSources || !m_pFreeHandle)
+    {
+        unload();
+        m_pAllocHandle = m_pFreeHandle = m_pSetEnvAttr = m_pDataSources = nullptr;
     }
+#endif
 }
 
 OOdbcEnumeration::~OOdbcEnumeration()

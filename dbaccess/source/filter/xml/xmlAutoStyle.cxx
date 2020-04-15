@@ -36,30 +36,30 @@ void OXMLAutoStylePoolP::exportStyleAttributes(
             ) const
 {
     SvXMLAutoStylePoolP::exportStyleAttributes( rAttrList, nFamily, rProperties, rPropExp, rUnitConverter, rNamespaceMap );
-    if ( nFamily == XmlStyleFamily::TABLE_COLUMN )
+    if ( nFamily != XmlStyleFamily::TABLE_COLUMN )
+        return;
+
+    rtl::Reference< XMLPropertySetMapper > aPropMapper = rODBExport.GetColumnStylesPropertySetMapper();
+    for (auto const& property : rProperties)
     {
-        rtl::Reference< XMLPropertySetMapper > aPropMapper = rODBExport.GetColumnStylesPropertySetMapper();
-        for (auto const& property : rProperties)
+        sal_Int16 nContextID = aPropMapper->GetEntryContextId(property.mnIndex);
+        switch (nContextID)
         {
-            sal_Int16 nContextID = aPropMapper->GetEntryContextId(property.mnIndex);
-            switch (nContextID)
+            case CTF_DB_NUMBERFORMAT :
             {
-                case CTF_DB_NUMBERFORMAT :
+                sal_Int32 nNumberFormat = 0;
+                if ( property.maValue >>= nNumberFormat )
                 {
-                    sal_Int32 nNumberFormat = 0;
-                    if ( property.maValue >>= nNumberFormat )
+                    OUString sAttrValue = rODBExport.getDataStyleName(nNumberFormat);
+                    if ( !sAttrValue.isEmpty() )
                     {
-                        OUString sAttrValue = rODBExport.getDataStyleName(nNumberFormat);
-                        if ( !sAttrValue.isEmpty() )
-                        {
-                            GetExport().AddAttribute(
-                                aPropMapper->GetEntryNameSpace(property.mnIndex),
-                                aPropMapper->GetEntryXMLName(property.mnIndex),
-                                sAttrValue );
-                        }
+                        GetExport().AddAttribute(
+                            aPropMapper->GetEntryNameSpace(property.mnIndex),
+                            aPropMapper->GetEntryXMLName(property.mnIndex),
+                            sAttrValue );
                     }
-                    break;
                 }
+                break;
             }
         }
     }

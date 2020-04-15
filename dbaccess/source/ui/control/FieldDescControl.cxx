@@ -338,25 +338,25 @@ IMPL_LINK_NOARG(OFieldDescControl, FormatClickHdl, weld::Button&, void)
         return;
 
     SvNumberFormatter* pFormatter = pSupplierImpl->GetNumberFormatter();
-    if(::dbaui::callColumnFormatDialog(this,pFormatter,pActFieldDescr->GetType(),nOldFormatKey,rOldJustify,true))
-    {
-        bool bModified = false;
-        if(nOldFormatKey != pActFieldDescr->GetFormatKey())
-        {
-            pActFieldDescr->SetFormatKey( nOldFormatKey );
-            bModified = true;
-        }
-        if(rOldJustify != pActFieldDescr->GetHorJustify())
-        {
-            pActFieldDescr->SetHorJustify( rOldJustify );
-            bModified = true;
-        }
+    if(!::dbaui::callColumnFormatDialog(this,pFormatter,pActFieldDescr->GetType(),nOldFormatKey,rOldJustify,true))
+        return;
 
-        if(bModified)
-        {
-            SetModified(true);
-            UpdateFormatSample(pActFieldDescr);
-        }
+    bool bModified = false;
+    if(nOldFormatKey != pActFieldDescr->GetFormatKey())
+    {
+        pActFieldDescr->SetFormatKey( nOldFormatKey );
+        bModified = true;
+    }
+    if(rOldJustify != pActFieldDescr->GetHorJustify())
+    {
+        pActFieldDescr->SetHorJustify( rOldJustify );
+        bModified = true;
+    }
+
+    if(bModified)
+    {
+        SetModified(true);
+        UpdateFormatSample(pActFieldDescr);
     }
 }
 

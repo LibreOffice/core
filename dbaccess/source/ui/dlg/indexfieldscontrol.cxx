@@ -370,34 +370,35 @@ static constexpr auto BROWSER_STANDARD_FLAGS = BrowserMode::COLUMNSELECTION | Br
         if (!rListBox.IsTravelSelect())
             m_aModifyHdl.Call(*this);
 
-        if (&rListBox == m_pFieldNameCell.get())
-        {   // a field has been selected
-            if (GetCurRow() >= GetRowCount() - 2)
-            {   // and we're in one of the last two rows
-                OUString sSelectedEntry = m_pFieldNameCell->GetSelectedEntry();
-                sal_Int32 nCurrentRow = GetCurRow();
-                sal_Int32 rowCount = GetRowCount();
+        if (&rListBox != m_pFieldNameCell.get())
+            return;
 
-                OSL_ENSURE((static_cast<sal_Int32>(m_aFields.size() + 1)) == rowCount, "IndexFieldsControl::OnListEntrySelected: inconsistence!");
+// a field has been selected
+        if (GetCurRow() >= GetRowCount() - 2)
+        {   // and we're in one of the last two rows
+            OUString sSelectedEntry = m_pFieldNameCell->GetSelectedEntry();
+            sal_Int32 nCurrentRow = GetCurRow();
+            sal_Int32 rowCount = GetRowCount();
 
-                if (!sSelectedEntry.isEmpty() && (nCurrentRow == rowCount - 1) /*&& (!m_nMaxColumnsInIndex || rowCount < m_nMaxColumnsInIndex )*/ )
-                {   // in the last row, a non-empty string has been selected
-                    // -> insert a new row
-                    m_aFields.emplace_back();
-                    RowInserted(GetRowCount());
-                    Invalidate(GetRowRectPixel(nCurrentRow));
-                }
-                else if (sSelectedEntry.isEmpty() && (nCurrentRow == rowCount - 2))
-                {   // in the (last-1)th row, an empty entry has been selected
-                    // -> remove the last row
-                    m_aFields.pop_back();
-                    RowRemoved(GetRowCount() - 1);
-                    Invalidate(GetRowRectPixel(nCurrentRow));
-                }
+            OSL_ENSURE((static_cast<sal_Int32>(m_aFields.size() + 1)) == rowCount, "IndexFieldsControl::OnListEntrySelected: inconsistence!");
+
+            if (!sSelectedEntry.isEmpty() && (nCurrentRow == rowCount - 1) /*&& (!m_nMaxColumnsInIndex || rowCount < m_nMaxColumnsInIndex )*/ )
+            {   // in the last row, a non-empty string has been selected
+                // -> insert a new row
+                m_aFields.emplace_back();
+                RowInserted(GetRowCount());
+                Invalidate(GetRowRectPixel(nCurrentRow));
             }
-
-            SaveModified();
+            else if (sSelectedEntry.isEmpty() && (nCurrentRow == rowCount - 2))
+            {   // in the (last-1)th row, an empty entry has been selected
+                // -> remove the last row
+                m_aFields.pop_back();
+                RowRemoved(GetRowCount() - 1);
+                Invalidate(GetRowRectPixel(nCurrentRow));
+            }
         }
+
+        SaveModified();
     }
     OUString IndexFieldsControl::GetCellText(long _nRow,sal_uInt16 nColId) const
     {

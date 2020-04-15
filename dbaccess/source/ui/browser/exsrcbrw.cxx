@@ -362,37 +362,36 @@ void SbaExternalSourceBrowser::Attach(const Reference< XRowSet > & xMaster)
     m_pDataSourceImpl->AttachForm(xMaster);
     startListening();
 
-    if (xMaster.is())
-    {
-        // at this point we have to reset the formatter for the new form
-        initFormatter();
-        // assume that the master form is already loaded
+    if (!xMaster.is())
+        return;
+
+    // at this point we have to reset the formatter for the new form
+    initFormatter();
+    // assume that the master form is already loaded
 #if OSL_DEBUG_LEVEL > 0
-        {
-            Reference< XLoadable > xLoadable( xMaster, UNO_QUERY );
-            OSL_ENSURE( xLoadable.is() && xLoadable->isLoaded(), "SbaExternalSourceBrowser::Attach: master is not loaded!" );
-        }
+    {
+        Reference< XLoadable > xLoadable( xMaster, UNO_QUERY );
+        OSL_ENSURE( xLoadable.is() && xLoadable->isLoaded(), "SbaExternalSourceBrowser::Attach: master is not loaded!" );
+    }
 #endif
 
-        LoadFinished(true);
+    LoadFinished(true);
 
-        Reference< XResultSetUpdate >  xUpdate(xMaster, UNO_QUERY);
-        try
-        {
-            if (bWasInsertRow && xUpdate.is())
-                xUpdate->moveToInsertRow();
-            else if (xCursor.is() && aOldPos.hasValue())
-                xCursor->moveToBookmark(aOldPos);
-            else if(bBeforeFirst && xMaster.is())
-                xMaster->beforeFirst();
-            else if(bAfterLast && xMaster.is())
-                xMaster->afterLast();
-        }
-        catch(Exception&)
-        {
-            SAL_WARN("dbaccess.ui", "SbaExternalSourceBrowser::Attach : couldn't restore the cursor position !");
-        }
-
+    Reference< XResultSetUpdate >  xUpdate(xMaster, UNO_QUERY);
+    try
+    {
+        if (bWasInsertRow && xUpdate.is())
+            xUpdate->moveToInsertRow();
+        else if (xCursor.is() && aOldPos.hasValue())
+            xCursor->moveToBookmark(aOldPos);
+        else if(bBeforeFirst && xMaster.is())
+            xMaster->beforeFirst();
+        else if(bAfterLast && xMaster.is())
+            xMaster->afterLast();
+    }
+    catch(Exception&)
+    {
+        SAL_WARN("dbaccess.ui", "SbaExternalSourceBrowser::Attach : couldn't restore the cursor position !");
     }
 }
 
