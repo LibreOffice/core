@@ -1582,7 +1582,8 @@ void SmViewShell::Execute(SfxRequest& rReq)
             SotClipboardFormatId nId = SOT_FORMAT_SYSTEM_START; //dummy initialize to avoid warning
             if  ( aDataHelper.GetTransferable().is() )
             {
-                if (aDataHelper.HasFormat(nId = SotClipboardFormatId::MATHML))
+                nId = SotClipboardFormatId::MATHML;
+                if (aDataHelper.HasFormat(nId))
                 {
                     xStrm = aDataHelper.GetInputStream(nId, "");
                     if (xStrm.is())
@@ -1599,7 +1600,8 @@ void SmViewShell::Execute(SfxRequest& rReq)
                 }
                 else
                 {
-                    if (aDataHelper.HasFormat(nId = SotClipboardFormatId::STRING))
+                    nId = SotClipboardFormatId::STRING;
+                    if (aDataHelper.HasFormat(nId))
                     {
                         // In case of FORMAT_STRING no stream exists, need to generate one
                         OUString aString;

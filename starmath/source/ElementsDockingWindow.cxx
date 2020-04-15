@@ -1016,7 +1016,10 @@ FactoryFunction SmElementsControl::GetUITestFactory() const
 
 bool SmElementsControl::itemIsSeparator(sal_uInt16 nPos) const
 {
-    if (nPos < m_nCurrentOffset || (nPos -= m_nCurrentOffset) >= maElementList.size())
+    if (nPos < m_nCurrentOffset)
+        return true;
+    nPos -= m_nCurrentOffset;
+    if (nPos >= maElementList.size())
         return true;
     return maElementList[nPos]->isSeparator();
 }
@@ -1033,7 +1036,10 @@ css::uno::Reference<css::accessibility::XAccessible> SmElementsControl::CreateAc
 
 bool SmElementsControl::itemTrigger(sal_uInt16 nPos)
 {
-    if (nPos < m_nCurrentOffset || (nPos -= m_nCurrentOffset) >= maElementList.size())
+    if (nPos < m_nCurrentOffset)
+        return false;
+    nPos -= m_nCurrentOffset;
+    if (nPos >= maElementList.size())
         return false;
 
     maSelectHdlLink.Call(*maElementList[nPos]);
@@ -1043,7 +1049,10 @@ bool SmElementsControl::itemTrigger(sal_uInt16 nPos)
 
 tools::Rectangle SmElementsControl::itemPosRect(sal_uInt16 nPos) const
 {
-    if (nPos < m_nCurrentOffset || (nPos -= m_nCurrentOffset) >= maElementList.size())
+    if (nPos < m_nCurrentOffset)
+        return tools::Rectangle();
+    nPos -= m_nCurrentOffset;
+    if (nPos >= maElementList.size())
         return tools::Rectangle();
 
     SmElement* pItem = maElementList[nPos].get();
@@ -1080,7 +1089,10 @@ void SmElementsControl::setItemHighlighted(sal_uInt16 nPos)
 
 OUString SmElementsControl::itemName(sal_uInt16 nPos) const
 {
-    if (nPos < m_nCurrentOffset || (nPos -= m_nCurrentOffset) >= maElementList.size())
+    if (nPos < m_nCurrentOffset)
+        return OUString();
+    nPos -= m_nCurrentOffset;
+    if (nPos >= maElementList.size())
         return OUString();
 
     return maElementList[nPos]->getHelpText();
