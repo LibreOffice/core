@@ -79,7 +79,7 @@ public:
 private:
     void                parseRelationship( const AttributeList& rAttribs );
 
-    static OUString     getFilterNameFromContentType( const OUString& rContentType, const OUString& rFileName );
+    OUString            getFilterNameFromContentType( const OUString& rContentType, const OUString& rFileName );
     void                parseContentTypesDefault( const AttributeList& rAttribs );
     void                parseContentTypesOverride( const AttributeList& rAttribs );
 
@@ -90,6 +90,7 @@ private:
     OUString            maFileName;
     ContextVector       maContextStack;
     OUString            maTargetPath;
+    bool                mbIsEcmaOOXML;
     css::uno::Reference< css::uno::XComponentContext > mxContext;
 };
 
