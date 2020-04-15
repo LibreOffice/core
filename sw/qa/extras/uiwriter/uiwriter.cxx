@@ -6020,11 +6020,11 @@ void SwUiWriterTest::testTdf72942()
     CPPUNIT_ASSERT_EQUAL(OUString("Liberation Sans"), getProperty<OUString>(xRun2, "CharFontName"));
 
     // check styles of paragraphs added from [fdo72942-insert.docx]
-    const uno::Reference< text::XTextRange > xRun3 = getRun(getParagraph(4), 1);
+    const uno::Reference< text::XTextRange > xRun3 = getRun(getParagraph(3), 1);
     CPPUNIT_ASSERT_EQUAL(OUString("Default German text (Calibri) with "), xRun3->getString());
     CPPUNIT_ASSERT_EQUAL(OUString("Liberation Serif"), getProperty<OUString>(xRun3, "CharFontName"));
 
-    const uno::Reference< text::XTextRange > xRun4 = getRun(getParagraph(5), 1);
+    const uno::Reference< text::XTextRange > xRun4 = getRun(getParagraph(4), 1);
     CPPUNIT_ASSERT_EQUAL(OUString("Header 1 German text (Calibri Light) with "), xRun4->getString());
     CPPUNIT_ASSERT_EQUAL(OUString("Liberation Sans"), getProperty<OUString>(xRun4, "CharFontName"));
 }

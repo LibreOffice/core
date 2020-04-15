@@ -620,7 +620,11 @@ writeCoreProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties 
 {
     OUString sValue;
     if( rSelf.getVersion() == oox::core::ISOIEC_29500_2008  )
+    {
+        // The lowercase "officedocument" is intentional and according to the spec
+        // (although most other places are written "officeDocument")
         sValue = "http://schemas.openxmlformats.org/officedocument/2006/relationships/metadata/core-properties";
+    }
     else
         sValue = "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties";
 
