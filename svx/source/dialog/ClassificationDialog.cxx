@@ -178,6 +178,7 @@ ClassificationDialog::ClassificationDialog(weld::Window* pParent, const bool bPe
     , m_xEditWindow(new ClassificationEditView)
     , m_xEditWindowWeld(new weld::CustomWeld(*m_xBuilder, "classificationEditWindow", *m_xEditWindow))
 {
+    m_xOkButton->connect_clicked(LINK(this, ClassificationDialog, OkHdl));
     m_xSignButton->connect_clicked(LINK(this, ClassificationDialog, ButtonClicked));
     m_xSignButton->set_visible(m_bPerParagraph);
 
@@ -242,25 +243,9 @@ ClassificationDialog::ClassificationDialog(weld::Window* pParent, const bool bPe
         m_nAsyncExpandEvent = nullptr;
 
     m_xEditWindow->SetModifyHdl(LINK(this, ClassificationDialog, EditWindowModifiedHdl));
-}
 
-//do it async so gtk has a chance to shrink it to best size, otherwise its larger than min
-IMPL_LINK_NOARG(ClassificationDialog, OnAsyncExpandHdl, void*, void)
-{
-    m_nAsyncExpandEvent = nullptr;
-    m_xIntellectualPropertyExpander->set_expanded(true);
-}
-
-ClassificationDialog::~ClassificationDialog()
-{
-    if (m_nAsyncExpandEvent)
-        Application::RemoveUserEvent(m_nAsyncExpandEvent);
-}
-
-short ClassificationDialog::run()
-{
     readRecentlyUsed();
-    readIn(m_aInitialValues);
+    toggleWidgetsDependingOnCategory();
 
     int nNumber = 1;
     if (m_aRecentlyUsedValuesCollection.empty())
@@ -278,13 +263,19 @@ short ClassificationDialog::run()
             m_xRecentlyUsedListBox->append_text(rDescription);
         }
     }
+}
 
-    short nResult = GenericDialogController::run();
-    if (nResult == RET_OK)
-    {
-        writeRecentlyUsed();
-    }
-    return nResult;
+//do it async so gtk has a chance to shrink it to best size, otherwise its larger than min
+IMPL_LINK_NOARG(ClassificationDialog, OnAsyncExpandHdl, void*, void)
+{
+    m_nAsyncExpandEvent = nullptr;
+    m_xIntellectualPropertyExpander->set_expanded(true);
+}
+
+ClassificationDialog::~ClassificationDialog()
+{
+    if (m_nAsyncExpandEvent)
+        Application::RemoveUserEvent(m_nAsyncExpandEvent);
 }
 
 void ClassificationDialog::insertCategoryField(sal_Int32 nID)
@@ -304,6 +295,7 @@ void ClassificationDialog::insertField(ClassificationType eType, OUString const 
 void ClassificationDialog::setupValues(std::vector<ClassificationResult> const & rInput)
 {
     m_aInitialValues = rInput;
+    readIn(m_aInitialValues);
 }
 
 void ClassificationDialog::readRecentlyUsed()
@@ -671,6 +663,12 @@ IMPL_LINK(ClassificationDialog, ButtonClicked, weld::Button&, rButton, void)
         const OUString sString = m_xIntellectualPropertyPartEdit->get_text();
         insertField(ClassificationType::INTELLECTUAL_PROPERTY_PART, sString, sString);
     }
+}
+
+IMPL_LINK_NOARG(ClassificationDialog, OkHdl, weld::Button&, void)
+{
+    writeRecentlyUsed();
+    m_xDialog->response(RET_OK);
 }
 
 IMPL_LINK_NOARG(ClassificationDialog, SelectToolboxHdl, weld::ToggleButton&, void)
