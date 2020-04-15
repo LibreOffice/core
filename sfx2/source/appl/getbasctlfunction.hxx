@@ -24,6 +24,7 @@
 
 #include <osl/module.h>
 
+#ifndef DISABLE_DYNLOADING
 #if HAVE_FEATURE_SCRIPTING
 
 namespace sfx2
@@ -31,6 +32,7 @@ namespace sfx2
 oslGenericFunction getBasctlFunction(char const* name);
 }
 
+#endif
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

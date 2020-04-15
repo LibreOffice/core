@@ -30,6 +30,7 @@
 #include "getbasctlfunction.hxx"
 
 #if HAVE_FEATURE_SCRIPTING
+#ifndef DISABLE_DYNLOADING
 
 extern "C" { static void thisModule() {} }
 
@@ -57,6 +58,7 @@ oslGenericFunction sfx2::getBasctlFunction(char const* name)
     return pSymbol;
 }
 
+#endif
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
