@@ -184,10 +184,6 @@ editeng/source/editeng/impedit.hxx:458
     ImpEditEngine aSelFuncSet class EditSelFunctionSet
 extensions/source/bibliography/datman.cxx:403
     (anonymous namespace)::DBChangeDialog_Impl aConfig class DBChangeDialogConfig_Impl
-filter/source/flash/swfwriter.hxx:391
-    swf::Writer maMovieTempFile utl::TempFile
-filter/source/flash/swfwriter.hxx:392
-    swf::Writer maFontsTempFile utl::TempFile
 filter/source/graphicfilter/icgm/chart.hxx:49
     DataNode nBoxX1 sal_Int16
 filter/source/graphicfilter/icgm/chart.hxx:50

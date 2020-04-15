@@ -87,7 +87,6 @@ public:
             || fn == SRCDIR "/svx/source/dialog/_bmpmask.cxx"
             || fn == SRCDIR "/media/noel/disk2/libo4/cui/source/dialogs/SignSignatureLineDialog.cxx"
             || fn == SRCDIR "/filter/source/msfilter/msdffimp.cxx"
-            || fn == SRCDIR "/filter/source/flash/swffilter.cxx"
             || fn == SRCDIR "/cui/source/dialogs/SignSignatureLineDialog.cxx"
             || fn == SRCDIR "/cui/source/dialogs/screenshotannotationdlg.cxx"
             || fn == SRCDIR "/cui/source/options/optupdt.cxx"
