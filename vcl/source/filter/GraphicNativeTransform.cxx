@@ -30,12 +30,12 @@
 
 using namespace ::exif;
 
-GraphicNativeTransform::GraphicNativeTransform(Graphic& rGraphic) :
-    mrGraphic(rGraphic)
-{}
+GraphicNativeTransform::GraphicNativeTransform(Graphic& rGraphic)
+    : mrGraphic(rGraphic)
+{
+}
 
-GraphicNativeTransform::~GraphicNativeTransform()
-{}
+GraphicNativeTransform::~GraphicNativeTransform() {}
 
 void GraphicNativeTransform::rotate(sal_uInt16 aInputRotation)
 {
@@ -52,19 +52,19 @@ void GraphicNativeTransform::rotate(sal_uInt16 aInputRotation)
     }
 
     GfxLink aLink = mrGraphic.GetGfxLink();
-    if ( aLink.GetType() == GfxLinkType::NativeJpg )
+    if (aLink.GetType() == GfxLinkType::NativeJpg)
     {
         rotateJPEG(aRotation);
     }
-    else if ( aLink.GetType() == GfxLinkType::NativePng )
+    else if (aLink.GetType() == GfxLinkType::NativePng)
     {
         rotateGeneric(aRotation, "png");
     }
-    else if ( aLink.GetType() == GfxLinkType::NativeGif )
+    else if (aLink.GetType() == GfxLinkType::NativeGif)
     {
         rotateGeneric(aRotation, "gif");
     }
-    else if ( aLink.GetType() == GfxLinkType::NONE )
+    else if (aLink.GetType() == GfxLinkType::NONE)
     {
         rotateBitmapOnly(aRotation);
     }
@@ -96,24 +96,24 @@ bool GraphicNativeTransform::rotateGeneric(sal_uInt16 aRotation, const OUString&
 
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
 
-    css::uno::Sequence< css::beans::PropertyValue > aFilterData( 3 );
-    aFilterData[ 0 ].Name = "Interlaced";
-    aFilterData[ 0 ].Value <<= sal_Int32(0);
-    aFilterData[ 1 ].Name = "Compression";
-    aFilterData[ 1 ].Value <<= sal_Int32(9);
-    aFilterData[ 2 ].Name = "Quality";
-    aFilterData[ 2 ].Value <<= sal_Int32(90);
+    css::uno::Sequence<css::beans::PropertyValue> aFilterData(3);
+    aFilterData[0].Name = "Interlaced";
+    aFilterData[0].Value <<= sal_Int32(0);
+    aFilterData[1].Name = "Compression";
+    aFilterData[1].Value <<= sal_Int32(9);
+    aFilterData[2].Name = "Quality";
+    aFilterData[2].Value <<= sal_Int32(90);
 
-    sal_uInt16 nFilterFormat = rFilter.GetExportFormatNumberForShortName( aType );
+    sal_uInt16 nFilterFormat = rFilter.GetExportFormatNumberForShortName(aType);
 
     BitmapEx aBitmap = mrGraphic.GetBitmapEx();
     aBitmap.Rotate(aRotation, COL_BLACK);
-    rFilter.ExportGraphic( aBitmap, "none", aStream, nFilterFormat, &aFilterData );
+    rFilter.ExportGraphic(aBitmap, "none", aStream, nFilterFormat, &aFilterData);
 
-    aStream.Seek( STREAM_SEEK_TO_BEGIN );
+    aStream.Seek(STREAM_SEEK_TO_BEGIN);
 
     Graphic aGraphic;
-    rFilter.ImportGraphic( aGraphic, "import", aStream );
+    rFilter.ImportGraphic(aGraphic, "import", aStream);
 
     mrGraphic = aGraphic;
     return true;
@@ -123,8 +123,7 @@ void GraphicNativeTransform::rotateJPEG(sal_uInt16 aRotation)
 {
     BitmapEx aBitmap = mrGraphic.GetBitmapEx();
 
-    if (aBitmap.GetSizePixel().Width()  % 16 != 0 ||
-        aBitmap.GetSizePixel().Height() % 16 != 0 )
+    if (aBitmap.GetSizePixel().Width() % 16 != 0 || aBitmap.GetSizePixel().Height() % 16 != 0)
     {
         rotateGeneric(aRotation, "png");
     }
@@ -134,12 +133,12 @@ void GraphicNativeTransform::rotateJPEG(sal_uInt16 aRotation)
 
         SvMemoryStream aSourceStream;
         aSourceStream.WriteBytes(aLink.GetData(), aLink.GetDataSize());
-        aSourceStream.Seek( STREAM_SEEK_TO_BEGIN );
+        aSourceStream.Seek(STREAM_SEEK_TO_BEGIN);
 
         Orientation aOrientation = TOP_LEFT;
 
         Exif exif;
-        if ( exif.read(aSourceStream) )
+        if (exif.read(aSourceStream))
         {
             aOrientation = exif.getOrientation();
         }
@@ -149,20 +148,20 @@ void GraphicNativeTransform::rotateJPEG(sal_uInt16 aRotation)
         transform.setRotate(aRotation);
         transform.perform();
 
-        aTargetStream.Seek( STREAM_SEEK_TO_BEGIN );
+        aTargetStream.Seek(STREAM_SEEK_TO_BEGIN);
 
         // Reset orientation in exif if needed
-        if ( exif.hasExif() && aOrientation != TOP_LEFT)
+        if (exif.hasExif() && aOrientation != TOP_LEFT)
         {
             exif.setOrientation(TOP_LEFT);
             exif.write(aTargetStream);
         }
 
-        aTargetStream.Seek( STREAM_SEEK_TO_BEGIN );
+        aTargetStream.Seek(STREAM_SEEK_TO_BEGIN);
 
         Graphic aGraphic;
         GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
-        rFilter.ImportGraphic( aGraphic, "import", aTargetStream );
+        rFilter.ImportGraphic(aGraphic, "import", aTargetStream);
         mrGraphic = aGraphic;
     }
 }

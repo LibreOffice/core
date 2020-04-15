@@ -7320,8 +7320,6 @@ include/vcl/BitmapTools.hxx
 include/vcl/ColorMask.hxx
 include/vcl/EnumContext.hxx
 include/vcl/FilterConfigItem.hxx
-include/vcl/GraphicNativeMetadata.hxx
-include/vcl/GraphicNativeTransform.hxx
 include/vcl/GraphicObject.hxx
 include/vcl/IContext.hxx
 include/vcl/IDialogRenderable.hxx
@@ -17152,8 +17150,6 @@ vcl/source/edit/xtextedt.cxx
 vcl/source/filter/FilterConfigCache.cxx
 vcl/source/filter/FilterConfigCache.hxx
 vcl/source/filter/FilterConfigItem.cxx
-vcl/source/filter/GraphicNativeMetadata.cxx
-vcl/source/filter/GraphicNativeTransform.cxx
 vcl/source/filter/graphicfilter.cxx
 vcl/source/filter/graphicfilter2.cxx
 vcl/source/filter/graphicfilter_internal.hxx
