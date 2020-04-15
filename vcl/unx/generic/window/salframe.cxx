@@ -1851,7 +1851,7 @@ void X11SalFrame::GetPosSize( tools::Rectangle &rPosSize )
 
 void X11SalFrame::SetSize( const Size &rSize )
 {
-    if( rSize.Width() > 0 && rSize.Height() > 0 )
+    if( !rSize.IsEmpty() )
     {
         if( ! ( nStyle_ & SalFrameStyleFlags::SIZEABLE )
             && ! IsChildWindow()

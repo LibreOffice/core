@@ -488,7 +488,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
 
         // Find the overall bounding rect of the control
         scrollbarRect = rControlRectangle;
-        if (scrollbarRect.GetWidth() <= 0 || scrollbarRect.GetHeight() <= 0)
+        if (scrollbarRect.IsEmpty())
             return;
 
         gint slider_side;
@@ -599,7 +599,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
             button22BoundRect.SetSize( Size( slider_width, stepper_size ) );
         }
 
-        bool has_slider = ( thumbRect.GetWidth() > 0 && thumbRect.GetHeight() > 0 );
+        bool has_slider = !thumbRect.IsEmpty();
 
         // ----------------- CONTENTS
         GtkStyleContext* pScrollbarContentsStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
@@ -914,7 +914,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
         thumbRect.Move( (scrollbarRect.GetWidth() - slider_width) / 2, 0 );
     }
 
-    bool has_slider = ( thumbRect.GetWidth() > 0 && thumbRect.GetHeight() > 0 );
+    bool has_slider = !thumbRect.IsEmpty();
 
     // ----------------- CONTENTS
     GtkStyleContext* pScrollbarContentsStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
@@ -2702,7 +2702,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
 
     cairo_destroy(cr); // unref
 
-    if (rControlRegion.GetWidth() >= 0 && rControlRegion.GetHeight() >= 0)
+    if (!rControlRegion.IsEmpty())
         mpFrame->damaged(rControlRegion.Left(), rControlRegion.Top(), rControlRegion.GetWidth(), rControlRegion.GetHeight());
 
     return true;

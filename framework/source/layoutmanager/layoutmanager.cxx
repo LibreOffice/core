@@ -2350,7 +2350,7 @@ bool LayoutManager::implts_resizeContainerWindow( const awt::Size& rContainerSiz
     sal_Int32 nDisplay = xContainerTopWindow->getDisplay();
     tools::Rectangle aWorkArea = Application::GetScreenPosSizePixel( nDisplay );
 
-    if (( aWorkArea.GetWidth() > 0 ) && ( aWorkArea.GetHeight() > 0 ))
+    if (!aWorkArea.IsEmpty())
     {
         if (( rContainerSize.Width > aWorkArea.GetWidth() ) || ( rContainerSize.Height > aWorkArea.GetHeight() ))
             return false;

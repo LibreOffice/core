@@ -877,7 +877,7 @@ void ViewShell::Resize()
 
     // Make sure that the new size is not degenerate.
     const Size aSize (mpParentWindow->GetSizePixel());
-    if (aSize.Width()==0 || aSize.Height()==0)
+    if (aSize.IsEmpty())
         return;
 
     // Remember the new position and size.

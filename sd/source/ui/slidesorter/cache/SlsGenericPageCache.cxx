@@ -119,7 +119,7 @@ BitmapEx GenericPageCache::GetPreviewBitmap (
         {
             // Scale the bitmap to the desired size when that is possible,
             // i.e. the bitmap is not empty.
-            if (bResize && aBitmapSize.Width()>0 && aBitmapSize.Height()>0)
+            if (bResize && !aBitmapSize.IsEmpty())
             {
                 aPreview.Scale(maPreviewSize);
             }

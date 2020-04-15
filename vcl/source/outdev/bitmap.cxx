@@ -1449,7 +1449,7 @@ void OutputDevice::DrawImage( const Point& rPos, const Size& rSize,
 {
     assert(!is_double_buffered_window());
 
-    bool bIsSizeValid = rSize.getWidth() != 0 && rSize.getHeight() != 0;
+    bool bIsSizeValid = !rSize.IsEmpty();
 
     if (!ImplIsRecordLayout())
     {

@@ -358,7 +358,7 @@ void PreviewRenderer::SetupOutputSize (
 
     // Adapt it to the desired width.
     const Size aPageModelSize (rPage.GetSize());
-    if (aPageModelSize.Width()>0 || aPageModelSize.Height()>0)
+    if (!aPageModelSize.IsEmpty())
     {
         const sal_Int32 nFrameWidth (mbHasFrame ? snFrameWidth : 0);
         aMapMode.SetScaleX(

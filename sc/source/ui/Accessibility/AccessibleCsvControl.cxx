@@ -1429,7 +1429,7 @@ css::awt::Rectangle ScAccessibleCsvCell::implGetBounds()
 
     tools::Rectangle aRect( implGetRealPos(), implGetRealSize() );
     aRect.Intersection( aClipRect );
-    if( (aRect.GetWidth() <= 0) || (aRect.GetHeight() <= 0) )
+    if( aRect.IsEmpty() )
         aRect.SetSize( Size( -1, -1 ) );
 
     return css::awt::Rectangle(aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight());

@@ -380,7 +380,7 @@ bool GraphicObject::ImplGetCropParams( OutputDevice const * pOut, Point& rPt, Si
         nTotalWidth = aSize100.Width() - pAttr->GetLeftCrop() - pAttr->GetRightCrop();
         nTotalHeight = aSize100.Height() - pAttr->GetTopCrop() - pAttr->GetBottomCrop();
 
-        if( aSize100.Width() > 0 && aSize100.Height() > 0 && nTotalWidth > 0 && nTotalHeight > 0 )
+        if( !aSize100.IsEmpty() && nTotalWidth > 0 && nTotalHeight > 0 )
         {
             double fScale = static_cast<double>(aSize100.Width()) / nTotalWidth;
             const long nNewLeft = -FRound( ( ( pAttr->GetMirrorFlags() & BmpMirrorFlags::Horizontal ) ? pAttr->GetRightCrop() : pAttr->GetLeftCrop() ) * fScale );
@@ -524,7 +524,7 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
 void GraphicObject::DrawTiled( OutputDevice* pOut, const tools::Rectangle& rArea, const Size& rSize,
                                const Size& rOffset, int nTileCacheSize1D )
 {
-    if( pOut == nullptr || rSize.Width() == 0 || rSize.Height() == 0 )
+    if( pOut == nullptr || rSize.IsEmpty() )
         return;
 
     const MapMode   aOutMapMode( pOut->GetMapMode() );

@@ -224,7 +224,7 @@ private:
     // returns true if there's no need to print the shape/text/frame
     bool IsInvisible( PictDrawingMethod eMethod ) const {
       if ( eActROP == RasterOp::N1 ) return true;
-      if ( eMethod == PictDrawingMethod::FRAME && ( nActPenSize.Width() == 0 || nActPenSize.Height() == 0 ) ) return true;
+      if ( eMethod == PictDrawingMethod::FRAME && nActPenSize.IsEmpty() ) return true;
       return false;
     }
 

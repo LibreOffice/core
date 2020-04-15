@@ -313,7 +313,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView*
                 aSize = Size( aSz.Width, aSz.Height );
 
                 aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
-                if (aSize.Height() == 0 || aSize.Width() == 0)
+                if (aSize.IsEmpty())
                 {
                     // rectangle with balanced edge ratio
                     aSize.setWidth( 5000 );
@@ -498,7 +498,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
     MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
 
     bool bSizeCh = false;
-    if (aSize.Height() <= 0 || aSize.Width() <= 0)
+    if (aSize.IsEmpty())
     {
         aSize.setWidth( 5000 );
         aSize.setHeight( 5000 );
@@ -651,7 +651,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
                                 >>= aDialogAWTSize )
                             {
                                 Size aDialogSize( aDialogAWTSize.Width, aDialogAWTSize.Height );
-                                if ( aDialogSize.Width() > 0 && aDialogSize.Height() > 0 )
+                                if ( !aDialogSize.IsEmpty() )
                                 {
                                     //calculate and set new position
                                     Point aDialogPos = rViewShell.GetChartDialogPos( aDialogSize, aRect );

@@ -1577,7 +1577,7 @@ Image AddonsOptions_Impl::ReadImageFromURL(const OUString& aImageURL)
         BitmapEx aBitmapEx = aGraphic.GetBitmapEx();
 
         Size aBmpSize = aBitmapEx.GetSizePixel();
-        if ( aBmpSize.Width() > 0 && aBmpSize.Height() > 0 )
+        if ( !aBmpSize.IsEmpty() )
         {
             // Support non-transparent bitmaps to be downward compatible with OOo 1.1.x addons
             if( !aBitmapEx.IsTransparent() )

@@ -569,7 +569,7 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const ww8::Frame &rFly,
     still keep the correct display size anyway.
     */
     const bool bIsSubstitutedSize = (aGrTwipSz.Width() > SHRT_MAX) || (aGrTwipSz.Height() > SHRT_MAX) ||
-                                    (aGrTwipSz.Width() < 0 ) || (aGrTwipSz.Height() < 0);
+                                    aGrTwipSz.IsEmpty();
     if ( bIsSubstitutedSize )
     {
         aGrTwipSz.setWidth( nWidth );
@@ -703,7 +703,7 @@ void SwWW8WrGrf::WritePICBulletFHeader(SvStream& rStrm, const Graphic &rGrf,
     Set_UInt16( pArr, mm );                         // set mm
 
     if ( (convertTwipToMm100(aGrTwipSz.Width()) > USHRT_MAX ) || ( convertTwipToMm100(aGrTwipSz.Height()) > USHRT_MAX )
-        || (aGrTwipSz.Width() < 0 ) || (aGrTwipSz.Height() < 0) )
+        || aGrTwipSz.IsEmpty() )
     {
         aGrTwipSz.setWidth( nWidth );
         aGrTwipSz.setHeight( nHeight );
