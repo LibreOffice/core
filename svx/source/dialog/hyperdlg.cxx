@@ -44,8 +44,7 @@ SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
     SetVisible_Impl(false);
 
     vcl::Window* pTopWindow = nullptr;
-    if ( pInfo->aSize.Width() != 0 && pInfo->aSize.Height() != 0 &&
-            (nullptr != (pTopWindow = SfxGetpApp()->GetTopWindow())))
+    if ( !pInfo->aSize.IsEmpty() && (nullptr != (pTopWindow = SfxGetpApp()->GetTopWindow())))
     {
         weld::Dialog* pDialog = GetController()->getDialog();
 

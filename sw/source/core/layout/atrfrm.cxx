@@ -3481,7 +3481,7 @@ IMapObject* SwFrameFormat::GetIMapObject( const Point& rPoint,
         aOrigSz = pFly->GetFormat()->GetFrameSize().GetSize();
     }
 
-    if( aOrigSz.Width() != 0 && aOrigSz.Height() != 0 )
+    if( !aOrigSz.IsEmpty() )
     {
         Point aPos( rPoint );
         Size aActSz ( pRef == pFly ? pFly->getFrameArea().SSize() : pRef->getFramePrintArea().SSize() );

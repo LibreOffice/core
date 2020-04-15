@@ -371,7 +371,7 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
     const Size aDestBmpSize( ::basegfx::fround( rDestRect.getWidth() ),
                              ::basegfx::fround( rDestRect.getHeight() ) );
 
-    if( aDestBmpSize.Width() == 0 || aDestBmpSize.Height() == 0 )
+    if( aDestBmpSize.IsEmpty() )
         return BitmapEx();
 
     Bitmap aDstBitmap( aDestBmpSize, aSrcBitmap.GetBitCount(), &pReadAccess->GetPalette() );

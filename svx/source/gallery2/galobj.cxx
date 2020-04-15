@@ -98,7 +98,7 @@ bool SgaObject::CreateThumb( const Graphic& rGraphic )
             {
                 Size aLogSize( OutputDevice::LogicToLogic(aBmpEx.GetPrefSize(), aBmpEx.GetPrefMapMode(), MapMode(MapUnit::Map100thMM)) );
 
-                if( aLogSize.Width() > 0 && aLogSize.Height() > 0 )
+                if( !aLogSize.IsEmpty() )
                 {
                     double  fFactorLog = static_cast< double >( aLogSize.Width() ) / aLogSize.Height();
                     double  fFactorPix = static_cast< double >( aBmpSize.Width() ) / aBmpSize.Height();

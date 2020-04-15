@@ -338,7 +338,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 
                 Size aSize( aSz.Width, aSz.Height );
 
-                if (aSize.Height() == 0 || aSize.Width() == 0)
+                if (aSize.IsEmpty())
                 {
                     // rectangle with balanced edge ratio
                     aSize.setWidth( 14100 );
@@ -514,7 +514,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                     aSize =Size( aSz.Width, aSz.Height );
 
                     aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
-                    if (aSize.Height() == 0 || aSize.Width() == 0)
+                    if (aSize.IsEmpty())
                     {
                         // rectangle with balanced edge ratio
                         aSize.setWidth( 14100 );

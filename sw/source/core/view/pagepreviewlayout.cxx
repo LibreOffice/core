@@ -301,7 +301,7 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
         if ( !bStartPosRangeValid )
             return false;
 
-        bool bWinSizeValid = _rPxWinSize.Width() != 0 && _rPxWinSize.Height() != 0;
+        bool bWinSizeValid = !_rPxWinSize.IsEmpty();
         OSL_ENSURE( bWinSizeValid, "no window size - no prepare of preview paint");
         if ( !bWinSizeValid )
             return false;

@@ -82,7 +82,7 @@ bool SwLayVout::DoesFit( const Size &rNew )
 {
     if( rNew.Height() > VIRTUALHEIGHT )
         return false;
-    if( rNew.Width() <= 0 || rNew.Height() <= 0 )
+    if( rNew.IsEmpty() )
         return false;
     if( rNew.Width() <= aSize.Width() )
         return true;

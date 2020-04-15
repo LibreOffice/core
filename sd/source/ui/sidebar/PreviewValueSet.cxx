@@ -73,7 +73,7 @@ void PreviewValueSet::Resize()
     SvtValueSet::Resize();
 
     Size aWindowSize (GetOutputSizePixel());
-    if (aWindowSize.Width()>0 && aWindowSize.Height()>0)
+    if (!aWindowSize.IsEmpty())
     {
         Rearrange();
     }

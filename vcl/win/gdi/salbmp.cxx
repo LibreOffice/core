@@ -207,7 +207,7 @@ std::shared_ptr< Gdiplus::Bitmap > WinSalBitmap::ImplGetGdiPlusBitmap(const WinS
         // use from buffer
         aRetval = pSystemDependentData_GdiPlusBitmap->getGdiPlusBitmap();
     }
-    else if(maSize.Width() > 0 && maSize.Height() > 0)
+    else if(!maSize.IsEmpty())
     {
         // create and set data
         const WinSalBitmap* pAssociatedAlpha(nullptr);
@@ -709,7 +709,7 @@ HGLOBAL WinSalBitmap::ImplCreateDIB( const Size& rSize, sal_uInt16 nBits, const 
 
     HGLOBAL hDIB = nullptr;
 
-    if( rSize.Width() <= 0 || rSize.Height() <= 0 )
+    if( rSize.IsEmpty() )
         return hDIB;
 
     // calculate bitmap size in Bytes

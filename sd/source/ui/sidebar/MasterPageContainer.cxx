@@ -566,7 +566,7 @@ void MasterPageContainer::Implementation::UpdatePreviewSizePixel()
     if (iDescriptor != maContainer.end())
     {
         Size aPageSize ((*iDescriptor)->mpMasterPage->GetSize());
-        OSL_ASSERT(aPageSize.Width() > 0 && aPageSize.Height() > 0);
+        OSL_ASSERT(!aPageSize.IsEmpty());
         if (aPageSize.Width() > 0)
             nWidth = aPageSize.Width();
         if (aPageSize.Height() > 0)

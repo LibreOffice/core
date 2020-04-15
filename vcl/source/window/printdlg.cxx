@@ -303,7 +303,7 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
 
 void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
 {
-    if(maPreviewSize.getWidth() < 0 || maPreviewSize.getHeight() < 0)
+    if(maPreviewSize.IsEmpty())
     {
         // not yet fully initialized, no need to prepare anything
         return;
@@ -502,7 +502,7 @@ void PrintDialog::ShowNupOrderWindow::Paint(vcl::RenderContext& rRenderContext, 
 
 Size const & PrintDialog::getJobPageSize()
 {
-    if( maFirstPageSize.Width() == 0 && maFirstPageSize.Height() == 0)
+    if( maFirstPageSize.IsEmpty() )
     {
         maFirstPageSize = maNupPortraitSize;
         GDIMetaFile aMtf;

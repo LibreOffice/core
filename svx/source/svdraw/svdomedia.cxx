@@ -166,7 +166,7 @@ void SdrMediaObj::AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrin
                     MapMode(MapUnit::Map100thMM)) );
     Size aMaxSize( rMaxRect.GetSize() );
 
-    if( aSize.Height() != 0 && aSize.Width() != 0 )
+    if( !aSize.IsEmpty() )
     {
         Point aPos( rMaxRect.TopLeft() );
 

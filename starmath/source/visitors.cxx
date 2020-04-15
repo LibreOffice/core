@@ -462,8 +462,7 @@ void SmDrawingVisitor::Visit( SmRectangleNode* pNode )
     aTmp.AdjustTop(nTmpBorderWidth );
     aTmp.AdjustBottom( -sal_Int32(nTmpBorderWidth) );
 
-    SAL_WARN_IF( aTmp.GetHeight() == 0 || aTmp.GetWidth() == 0,
-                "starmath", "Empty rectangle" );
+    SAL_WARN_IF( aTmp.IsEmpty(), "starmath", "Empty rectangle" );
 
     //! avoid GROWING AND SHRINKING of drawn rectangle when constantly
     //! increasing zoomfactor.

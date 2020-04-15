@@ -122,7 +122,7 @@ Size OScrollWindowHelper::ResizeScrollBars()
 {
     // get the new output-size in pixel
     Size aOutPixSz = GetOutputSizePixel();
-    if ( aOutPixSz.Width() == 0 || aOutPixSz.Height() == 0 )
+    if ( aOutPixSz.IsEmpty() )
         return aOutPixSz;
 
     aOutPixSz.AdjustHeight( -(m_aReportWindow->getRulerHeight()) );

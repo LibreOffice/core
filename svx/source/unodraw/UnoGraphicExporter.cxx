@@ -1038,7 +1038,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     {
         // export graphic only if it has a size
         const Size aGraphSize( aGraphic.GetPrefSize() );
-        if ( ( aGraphSize.Width() == 0 ) || ( aGraphSize.Height() == 0 ) )
+        if ( aGraphSize.IsEmpty() )
         {
             nStatus = ERRCODE_GRFILTER_FILTERERROR;
         }
