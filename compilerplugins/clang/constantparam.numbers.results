@@ -262,10 +262,6 @@ filter/source/config/cache/filtercache.hxx:332
     _Bool filter::config::FilterCache::isFillState(enum filter::config::FilterCache::EFillState) const
     enum filter::config::FilterCache::EFillState eRequired
     2
-filter/source/flash/swfwriter.hxx:301
-    void swf::Writer::waitOnClick(unsigned short)
-    unsigned short nDepth
-    10
 filter/source/graphicfilter/eps/eps.cxx:91
     enum (anonymous namespace)::NMode operator|(enum (anonymous namespace)::NMode,enum (anonymous namespace)::NMode)
     enum (anonymous namespace)::NMode b

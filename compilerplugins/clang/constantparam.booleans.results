@@ -490,14 +490,6 @@ filter/qa/cppunit/filters-tiff-test.cxx:19
     _Bool itiGraphicImport(class SvStream &,class Graphic &,class FilterConfigItem *)
     class FilterConfigItem * 
     0
-filter/source/flash/swfwriter.hxx:304
-    void swf::Writer::gotoFrame(unsigned short)
-    unsigned short nFrame
-    0
-filter/source/flash/swfwriter.hxx:322
-    void swf::Writer::Impl_writePolygon(const class tools::Polygon &,_Bool,const class Color &,const class Color &)
-    _Bool bFilled
-    1
 filter/source/graphicfilter/eps/eps.cxx:91
     enum (anonymous namespace)::NMode operator|(enum (anonymous namespace)::NMode,enum (anonymous namespace)::NMode)
     enum (anonymous namespace)::NMode a

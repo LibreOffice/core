@@ -242,7 +242,6 @@ static const ExtensionMap aImpressExtensionMap[] =
     { "pps",   "MS PowerPoint 97 Autoplay" },
     { "ppt",   "MS PowerPoint 97" },
     { "svg",   "impress_svg_Export" },
-    { "swf",   "impress_flash_Export" },
     { "xhtml", "XHTML Impress File" },
     { "png",   "impress_png_Export"},
     { nullptr, nullptr }
@@ -255,7 +254,6 @@ static const ExtensionMap aDrawExtensionMap[] =
     { "odg",   "draw8" },
     { "pdf",   "draw_pdf_Export" },
     { "svg",   "draw_svg_Export" },
-    { "swf",   "draw_flash_Export" },
     { "xhtml", "XHTML Draw File" },
     { "png",   "draw_png_Export"},
     { nullptr, nullptr }

@@ -27,7 +27,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	embeddedobj/util/embobj \
 	eventattacher/source/evtatt \
 	filter/source/config/cache/filterconfig1 \
-	filter/source/flash/flash \
 	filter/source/graphic/graphicfilter \
 	filter/source/msfilter/msfilter \
 	filter/source/odfflatxml/odfflatxml \
