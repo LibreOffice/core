@@ -63,7 +63,7 @@ void SdrDragView::ImpClearVars()
     mbCrookAtCenter=false;
 
     // init using default
-    mbSolidDragging = getOptionsDrawinglayer().IsSolidDragCreate();
+    mbSolidDragging = true;
 }
 
 SdrDragView::SdrDragView(
@@ -917,9 +917,8 @@ void SdrDragView::SetSolidDragging(bool bOn)
 
 bool SdrDragView::IsSolidDragging() const
 {
-    // allow each user to disable by having a local setting, but using AND for
-    // checking allowance
-    return mbSolidDragging && getOptionsDrawinglayer().IsSolidDragCreate();
+    // allow each user to disable by having a local setting
+    return mbSolidDragging;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
