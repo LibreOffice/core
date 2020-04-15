@@ -38,70 +38,70 @@ OXMLLogin::OXMLLogin( ODBFilter& rImport,
 
     static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
     bool bUserFound = false;
-    if (xDataSource.is())
-    {
-        sax_fastparser::FastAttributeList *pAttribList =
-                        sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
-        for (auto &aIter : *pAttribList)
-        {
-            OUString sValue = aIter.toString();
+    if (!xDataSource.is())
+        return;
 
-            try
+    sax_fastparser::FastAttributeList *pAttribList =
+                    sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
+    for (auto &aIter : *pAttribList)
+    {
+        OUString sValue = aIter.toString();
+
+        try
+        {
+            switch( aIter.getToken() & TOKEN_MASK )
             {
-                switch( aIter.getToken() & TOKEN_MASK )
-                {
-                    case XML_USER_NAME:
-                        if ( !bUserFound )
-                        {
-                            bUserFound = true;
-                            try
-                            {
-                                xDataSource->setPropertyValue(PROPERTY_USER,makeAny(sValue));
-                            }
-                            catch(const Exception&)
-                            {
-                                DBG_UNHANDLED_EXCEPTION("dbaccess");
-                            }
-                        }
-                        break;
-                    case XML_IS_PASSWORD_REQUIRED:
+                case XML_USER_NAME:
+                    if ( !bUserFound )
+                    {
+                        bUserFound = true;
                         try
                         {
-                            xDataSource->setPropertyValue(PROPERTY_ISPASSWORDREQUIRED,makeAny(sValue == s_sTRUE));
+                            xDataSource->setPropertyValue(PROPERTY_USER,makeAny(sValue));
                         }
                         catch(const Exception&)
                         {
                             DBG_UNHANDLED_EXCEPTION("dbaccess");
                         }
-                        break;
-                    case XML_USE_SYSTEM_USER:
-                        if ( !bUserFound )
-                        {
-                            bUserFound = true;
-                            PropertyValue aProperty;
-                            aProperty.Name = "UseSystemUser";
-                            aProperty.Value <<= (sValue == s_sTRUE);
-                            rImport.addInfo(aProperty);
-                        }
-                        break;
-                    case XML_LOGIN_TIMEOUT:
-                        try
-                        {
-                            Reference< XDataSource>(xDataSource,UNO_QUERY_THROW)->setLoginTimeout(sValue.toInt32());
-                        }
-                        catch(const Exception&)
-                        {
-                            DBG_UNHANDLED_EXCEPTION("dbaccess");
-                        }
-                        break;
-                    default:
-                        SAL_WARN("dbaccess", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
-                }
+                    }
+                    break;
+                case XML_IS_PASSWORD_REQUIRED:
+                    try
+                    {
+                        xDataSource->setPropertyValue(PROPERTY_ISPASSWORDREQUIRED,makeAny(sValue == s_sTRUE));
+                    }
+                    catch(const Exception&)
+                    {
+                        DBG_UNHANDLED_EXCEPTION("dbaccess");
+                    }
+                    break;
+                case XML_USE_SYSTEM_USER:
+                    if ( !bUserFound )
+                    {
+                        bUserFound = true;
+                        PropertyValue aProperty;
+                        aProperty.Name = "UseSystemUser";
+                        aProperty.Value <<= (sValue == s_sTRUE);
+                        rImport.addInfo(aProperty);
+                    }
+                    break;
+                case XML_LOGIN_TIMEOUT:
+                    try
+                    {
+                        Reference< XDataSource>(xDataSource,UNO_QUERY_THROW)->setLoginTimeout(sValue.toInt32());
+                    }
+                    catch(const Exception&)
+                    {
+                        DBG_UNHANDLED_EXCEPTION("dbaccess");
+                    }
+                    break;
+                default:
+                    SAL_WARN("dbaccess", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
             }
-            catch(const Exception&)
-            {
-                DBG_UNHANDLED_EXCEPTION("dbaccess");
-            }
+        }
+        catch(const Exception&)
+        {
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
 }

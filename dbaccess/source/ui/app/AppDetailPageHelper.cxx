@@ -312,33 +312,33 @@ void OAppDetailPageHelper::sortUp()
 void OAppDetailPageHelper::getSelectionElementNames( std::vector< OUString>& _rNames ) const
 {
     int nPos = getVisibleControlIndex();
-    if ( nPos < E_ELEMENT_TYPE_COUNT )
+    if ( nPos >= E_ELEMENT_TYPE_COUNT )
+        return;
+
+    DBTreeListBox& rTree = *m_pLists[nPos];
+    sal_Int32 nCount = rTree.GetEntryCount();
+    _rNames.reserve(nCount);
+    SvTreeListEntry* pEntry = rTree.FirstSelected();
+    ElementType eType = getElementType();
+    while( pEntry )
     {
-        DBTreeListBox& rTree = *m_pLists[nPos];
-        sal_Int32 nCount = rTree.GetEntryCount();
-        _rNames.reserve(nCount);
-        SvTreeListEntry* pEntry = rTree.FirstSelected();
-        ElementType eType = getElementType();
-        while( pEntry )
+        if ( eType == E_TABLE )
         {
-            if ( eType == E_TABLE )
-            {
-                if( rTree.GetChildCount(pEntry) == 0 )
-                    _rNames.push_back( getQualifiedName( pEntry ) );
-            }
-            else
-            {
-                OUString sName = rTree.GetEntryText(pEntry);
-                SvTreeListEntry* pParent = rTree.GetParent(pEntry);
-                while(pParent)
-                {
-                    sName = rTree.GetEntryText(pParent) + "/" + sName;
-                    pParent = rTree.GetParent(pParent);
-                }
-                _rNames.push_back(sName);
-            }
-            pEntry = rTree.NextSelected(pEntry);
+            if( rTree.GetChildCount(pEntry) == 0 )
+                _rNames.push_back( getQualifiedName( pEntry ) );
         }
+        else
+        {
+            OUString sName = rTree.GetEntryText(pEntry);
+            SvTreeListEntry* pParent = rTree.GetParent(pEntry);
+            while(pParent)
+            {
+                sName = rTree.GetEntryText(pParent) + "/" + sName;
+                pParent = rTree.GetParent(pParent);
+            }
+            _rNames.push_back(sName);
+        }
+        pEntry = rTree.NextSelected(pEntry);
     }
 }
 
@@ -425,18 +425,18 @@ void OAppDetailPageHelper::describeCurrentSelectionForType( const ElementType _e
 void OAppDetailPageHelper::selectElements(const Sequence< OUString>& _aNames)
 {
     int nPos = getVisibleControlIndex();
-    if ( nPos < E_ELEMENT_TYPE_COUNT )
+    if ( nPos >= E_ELEMENT_TYPE_COUNT )
+        return;
+
+    DBTreeListBox& rTree = *m_pLists[nPos];
+    rTree.SelectAll(false);
+    const OUString* pIter = _aNames.getConstArray();
+    const OUString* pEnd  = pIter + _aNames.getLength();
+    for(;pIter != pEnd;++pIter)
     {
-        DBTreeListBox& rTree = *m_pLists[nPos];
-        rTree.SelectAll(false);
-        const OUString* pIter = _aNames.getConstArray();
-        const OUString* pEnd  = pIter + _aNames.getLength();
-        for(;pIter != pEnd;++pIter)
-        {
-            SvTreeListEntry* pEntry = rTree.GetEntryPosByName(*pIter);
-            if ( pEntry )
-                rTree.Select(pEntry);
-        }
+        SvTreeListEntry* pEntry = rTree.GetEntryPosByName(*pIter);
+        if ( pEntry )
+            rTree.Select(pEntry);
     }
 }
 
@@ -685,31 +685,31 @@ void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContaine
     if ( !pList )
         return;
 
-    if ( _xContainer.is() && _xContainer->hasElements() )
+    if ( !(_xContainer.is() && _xContainer->hasElements()) )
+        return;
+
+    const sal_Int32 nFolderIndicator = lcl_getFolderIndicatorForType( _eType );
+
+    Sequence< OUString> aSeq = _xContainer->getElementNames();
+    const OUString* pIter = aSeq.getConstArray();
+    const OUString* pEnd  = pIter + aSeq.getLength();
+    for(;pIter != pEnd;++pIter)
     {
-        const sal_Int32 nFolderIndicator = lcl_getFolderIndicatorForType( _eType );
-
-        Sequence< OUString> aSeq = _xContainer->getElementNames();
-        const OUString* pIter = aSeq.getConstArray();
-        const OUString* pEnd  = pIter + aSeq.getLength();
-        for(;pIter != pEnd;++pIter)
+        SvTreeListEntry* pEntry = nullptr;
+        Reference<XNameAccess> xSubElements(_xContainer->getByName(*pIter),UNO_QUERY);
+        if ( xSubElements.is() )
         {
-            SvTreeListEntry* pEntry = nullptr;
-            Reference<XNameAccess> xSubElements(_xContainer->getByName(*pIter),UNO_QUERY);
-            if ( xSubElements.is() )
-            {
-                pEntry = pList->InsertEntry( *pIter, _pParent, false, TREELIST_APPEND, reinterpret_cast< void* >( nFolderIndicator ) );
-                getBorderWin().getView()->getAppController().containerFound( Reference< XContainer >( xSubElements, UNO_QUERY ) );
-                fillNames( xSubElements, _eType, rImageId, pEntry );
-            }
-            else
-            {
-                pEntry = pList->InsertEntry( *pIter, _pParent );
+            pEntry = pList->InsertEntry( *pIter, _pParent, false, TREELIST_APPEND, reinterpret_cast< void* >( nFolderIndicator ) );
+            getBorderWin().getView()->getAppController().containerFound( Reference< XContainer >( xSubElements, UNO_QUERY ) );
+            fillNames( xSubElements, _eType, rImageId, pEntry );
+        }
+        else
+        {
+            pEntry = pList->InsertEntry( *pIter, _pParent );
 
-                Image aImage(StockImage::Yes, rImageId);
-                pList->SetExpandedEntryBmp(pEntry, aImage);
-                pList->SetCollapsedEntryBmp(pEntry, aImage);
-            }
+            Image aImage(StockImage::Yes, rImageId);
+            pList->SetExpandedEntryBmp(pEntry, aImage);
+            pList->SetCollapsedEntryBmp(pEntry, aImage);
         }
     }
 }
@@ -771,31 +771,31 @@ void OAppDetailPageHelper::elementReplaced(ElementType _eType
                                                     ,const OUString& _rNewName )
 {
     DBTreeListBox* pTreeView = getCurrentView();
-    if ( pTreeView )
-    {
-        SvTreeListEntry* pEntry = nullptr;
-        switch( _eType )
-        {
-            case E_TABLE:
-                static_cast<OTableTreeListBox*>(pTreeView)->removedTable( _rOldName );
-                static_cast<OTableTreeListBox*>(pTreeView)->addedTable( _rNewName );
-                return;
+    if ( !pTreeView )
+        return;
 
-            case E_QUERY:
-                pEntry = lcl_findEntry_impl(*pTreeView,_rOldName,pTreeView->First());
-                break;
-            case E_FORM:
-            case E_REPORT:
-                pEntry = lcl_findEntry(*pTreeView,_rOldName,pTreeView->First());
-                break;
-            default:
-                OSL_FAIL("Invalid element type");
-        }
-        OSL_ENSURE(pEntry,"Do you know that the name isn't existence!");
-        if ( pEntry )
-        {
-            pTreeView->SetEntryText(pEntry,_rNewName);
-        }
+    SvTreeListEntry* pEntry = nullptr;
+    switch( _eType )
+    {
+        case E_TABLE:
+            static_cast<OTableTreeListBox*>(pTreeView)->removedTable( _rOldName );
+            static_cast<OTableTreeListBox*>(pTreeView)->addedTable( _rNewName );
+            return;
+
+        case E_QUERY:
+            pEntry = lcl_findEntry_impl(*pTreeView,_rOldName,pTreeView->First());
+            break;
+        case E_FORM:
+        case E_REPORT:
+            pEntry = lcl_findEntry(*pTreeView,_rOldName,pTreeView->First());
+            break;
+        default:
+            OSL_FAIL("Invalid element type");
+    }
+    OSL_ENSURE(pEntry,"Do you know that the name isn't existence!");
+    if ( pEntry )
+    {
+        pTreeView->SetEntryText(pEntry,_rNewName);
     }
 }
 
@@ -845,29 +845,29 @@ SvTreeListEntry* OAppDetailPageHelper::elementAdded(ElementType _eType,const OUS
 void OAppDetailPageHelper::elementRemoved( ElementType _eType,const OUString& _rName )
 {
     DBTreeListBox* pTreeView = getCurrentView();
-    if ( pTreeView )
+    if ( !pTreeView )
+        return;
+
+    switch( _eType )
     {
-        switch( _eType )
-        {
-            case E_TABLE:
-                // we don't need to clear the table here, it is already done by the dispose listener
-                static_cast< OTableTreeListBox* >( pTreeView )->removedTable( _rName );
-                break;
-            case E_QUERY:
-                if (auto pEntry = lcl_findEntry_impl(*pTreeView, _rName, pTreeView->First()))
-                    pTreeView->GetModel()->Remove(pEntry);
-                break;
-            case E_FORM:
-            case E_REPORT:
-                if (auto pEntry = lcl_findEntry(*pTreeView, _rName, pTreeView->First()))
-                    pTreeView->GetModel()->Remove(pEntry);
-                break;
-            default:
-                OSL_FAIL("Invalid element type");
-        }
-        if ( !pTreeView->GetEntryCount() )
-            showPreview(nullptr);
+        case E_TABLE:
+            // we don't need to clear the table here, it is already done by the dispose listener
+            static_cast< OTableTreeListBox* >( pTreeView )->removedTable( _rName );
+            break;
+        case E_QUERY:
+            if (auto pEntry = lcl_findEntry_impl(*pTreeView, _rName, pTreeView->First()))
+                pTreeView->GetModel()->Remove(pEntry);
+            break;
+        case E_FORM:
+        case E_REPORT:
+            if (auto pEntry = lcl_findEntry(*pTreeView, _rName, pTreeView->First()))
+                pTreeView->GetModel()->Remove(pEntry);
+            break;
+        default:
+            OSL_FAIL("Invalid element type");
     }
+    if ( !pTreeView->GetEntryCount() )
+        showPreview(nullptr);
 }
 
 IMPL_LINK(OAppDetailPageHelper, OnEntryEnterKey, DBTreeListBox*, _pTree, void )
@@ -909,26 +909,26 @@ void OAppDetailPageHelper::Resize()
     long nOutputHeight = aOutputSize.Height();
 
     vcl::Window* pWindow = getCurrentView();
-    if ( pWindow )
-    {
-        Size aFLSize = LogicToPixel(Size(2, 6), MapMode(MapUnit::MapAppFont));
-        sal_Int32 n6PPT = aFLSize.Height();
-        long nHalfOutputWidth = static_cast<long>(nOutputWidth * 0.5);
+    if ( !pWindow )
+        return;
 
-        pWindow->SetPosSizePixel( Point(0, 0), Size(nHalfOutputWidth - n6PPT, nOutputHeight) );
+    Size aFLSize = LogicToPixel(Size(2, 6), MapMode(MapUnit::MapAppFont));
+    sal_Int32 n6PPT = aFLSize.Height();
+    long nHalfOutputWidth = static_cast<long>(nOutputWidth * 0.5);
 
-        m_aFL->SetPosSizePixel( Point(nHalfOutputWidth , 0 ), Size(aFLSize.Width(), nOutputHeight ) );
+    pWindow->SetPosSizePixel( Point(0, 0), Size(nHalfOutputWidth - n6PPT, nOutputHeight) );
 
-        Size aTBSize = m_aTBPreview->CalcWindowSizePixel();
-        m_aTBPreview->SetPosSizePixel(Point(nOutputWidth - aTBSize.getWidth(), 0 ),
-                                     aTBSize );
+    m_aFL->SetPosSizePixel( Point(nHalfOutputWidth , 0 ), Size(aFLSize.Width(), nOutputHeight ) );
 
-        m_aBorder->SetPosSizePixel(Point(nHalfOutputWidth + aFLSize.Width() + n6PPT, aTBSize.getHeight() + n6PPT ),
-                                  Size(nHalfOutputWidth - aFLSize.Width() - n6PPT, nOutputHeight - 2*n6PPT - aTBSize.getHeight()) );
-        m_aPreview->SetPosSizePixel(Point(0,0),m_aBorder->GetSizePixel() );
-        m_aDocumentInfo->SetPosSizePixel(Point(0,0),m_aBorder->GetSizePixel() );
-        m_pTablePreview->SetPosSizePixel(Point(0,0),m_aBorder->GetSizePixel() );
-    }
+    Size aTBSize = m_aTBPreview->CalcWindowSizePixel();
+    m_aTBPreview->SetPosSizePixel(Point(nOutputWidth - aTBSize.getWidth(), 0 ),
+                                 aTBSize );
+
+    m_aBorder->SetPosSizePixel(Point(nHalfOutputWidth + aFLSize.Width() + n6PPT, aTBSize.getHeight() + n6PPT ),
+                              Size(nHalfOutputWidth - aFLSize.Width() - n6PPT, nOutputHeight - 2*n6PPT - aTBSize.getHeight()) );
+    m_aPreview->SetPosSizePixel(Point(0,0),m_aBorder->GetSizePixel() );
+    m_aDocumentInfo->SetPosSizePixel(Point(0,0),m_aBorder->GetSizePixel() );
+    m_pTablePreview->SetPosSizePixel(Point(0,0),m_aBorder->GetSizePixel() );
 }
 
 
@@ -947,112 +947,112 @@ namespace
 
 void OAppDetailPageHelper::switchPreview(PreviewMode _eMode,bool _bForce)
 {
-    if ( m_ePreviewMode != _eMode || _bForce )
+    if ( !(m_ePreviewMode != _eMode || _bForce) )
+        return;
+
+    m_ePreviewMode = _eMode;
+
+    getBorderWin().getView()->getAppController().previewChanged(static_cast<sal_Int32>(m_ePreviewMode));
+
+    OUString aCommand;
+    switch ( m_ePreviewMode )
     {
-        m_ePreviewMode = _eMode;
-
-        getBorderWin().getView()->getAppController().previewChanged(static_cast<sal_Int32>(m_ePreviewMode));
-
-        OUString aCommand;
-        switch ( m_ePreviewMode )
-        {
-            case E_PREVIEWNONE:
-                aCommand = ".uno:DBDisablePreview";
-                break;
-            case E_DOCUMENT:
-                aCommand = ".uno:DBShowDocPreview";
-                break;
-            case E_DOCUMENTINFO:
-                if ( getBorderWin().getView()->getAppController().isCommandEnabled(SID_DB_APP_VIEW_DOCINFO_PREVIEW) )
-                    aCommand = ".uno:DBShowDocInfoPreview";
-                else
-                {
-                    m_ePreviewMode = E_PREVIEWNONE;
-                    aCommand = ".uno:DBDisablePreview";
-                }
-                break;
-        }
-
-        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aCommand, "com.sun.star.sdb.OfficeDatabaseDocument");
-        OUString aCommandLabel = vcl::CommandInfoProvider::GetLabelForCommand(aProperties);
-        m_aTBPreview->SetItemText(SID_DB_APP_DISABLE_PREVIEW, stripTrailingDots(aCommandLabel));
-        Resize();
-
-        // simulate a selectionChanged event at the controller, to force the preview to be updated
-        if ( isPreviewEnabled() )
-        {
-            if ( getCurrentView() && getCurrentView()->FirstSelected() )
+        case E_PREVIEWNONE:
+            aCommand = ".uno:DBDisablePreview";
+            break;
+        case E_DOCUMENT:
+            aCommand = ".uno:DBShowDocPreview";
+            break;
+        case E_DOCUMENTINFO:
+            if ( getBorderWin().getView()->getAppController().isCommandEnabled(SID_DB_APP_VIEW_DOCINFO_PREVIEW) )
+                aCommand = ".uno:DBShowDocInfoPreview";
+            else
             {
-                getBorderWin().getView()->getAppController().onSelectionChanged();
+                m_ePreviewMode = E_PREVIEWNONE;
+                aCommand = ".uno:DBDisablePreview";
             }
-        }
-        else
+            break;
+    }
+
+    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aCommand, "com.sun.star.sdb.OfficeDatabaseDocument");
+    OUString aCommandLabel = vcl::CommandInfoProvider::GetLabelForCommand(aProperties);
+    m_aTBPreview->SetItemText(SID_DB_APP_DISABLE_PREVIEW, stripTrailingDots(aCommandLabel));
+    Resize();
+
+    // simulate a selectionChanged event at the controller, to force the preview to be updated
+    if ( isPreviewEnabled() )
+    {
+        if ( getCurrentView() && getCurrentView()->FirstSelected() )
         {
-            m_pTablePreview->Hide();
-            m_aPreview->Hide();
-            m_aDocumentInfo->Hide();
+            getBorderWin().getView()->getAppController().onSelectionChanged();
         }
+    }
+    else
+    {
+        m_pTablePreview->Hide();
+        m_aPreview->Hide();
+        m_aDocumentInfo->Hide();
     }
 }
 
 void OAppDetailPageHelper::showPreview(const Reference< XContent >& _xContent)
 {
-    if ( isPreviewEnabled() )
+    if ( !isPreviewEnabled() )
+        return;
+
+    m_pTablePreview->Hide();
+
+    weld::WaitObject aWaitCursor(GetFrameWeld());
+    try
     {
-        m_pTablePreview->Hide();
-
-        weld::WaitObject aWaitCursor(GetFrameWeld());
-        try
+        Reference<XCommandProcessor> xContent(_xContent,UNO_QUERY);
+        if ( xContent.is() )
         {
-            Reference<XCommandProcessor> xContent(_xContent,UNO_QUERY);
-            if ( xContent.is() )
+            css::ucb::Command aCommand;
+            if ( m_ePreviewMode == E_DOCUMENT )
+                aCommand.Name = "preview";
+            else
+                aCommand.Name = "getDocumentInfo";
+
+            Any aPreview = xContent->execute(aCommand,xContent->createCommandIdentifier(),Reference< XCommandEnvironment >());
+            if ( m_ePreviewMode == E_DOCUMENT )
             {
-                css::ucb::Command aCommand;
-                if ( m_ePreviewMode == E_DOCUMENT )
-                    aCommand.Name = "preview";
-                else
-                    aCommand.Name = "getDocumentInfo";
+                m_aDocumentInfo->Hide();
+                m_aPreview->Show();
 
-                Any aPreview = xContent->execute(aCommand,xContent->createCommandIdentifier(),Reference< XCommandEnvironment >());
-                if ( m_ePreviewMode == E_DOCUMENT )
+                Graphic aGraphic;
+                Sequence < sal_Int8 > aBmpSequence;
+                if ( aPreview >>= aBmpSequence )
                 {
-                    m_aDocumentInfo->Hide();
-                    m_aPreview->Show();
+                    SvMemoryStream  aData( aBmpSequence.getArray(),
+                                        aBmpSequence.getLength(),
+                                        StreamMode::READ );
 
-                    Graphic aGraphic;
-                    Sequence < sal_Int8 > aBmpSequence;
-                    if ( aPreview >>= aBmpSequence )
-                    {
-                        SvMemoryStream  aData( aBmpSequence.getArray(),
-                                            aBmpSequence.getLength(),
-                                            StreamMode::READ );
-
-                        GraphicConverter::Import(aData,aGraphic);
-                    }
-                    m_aPreview->setGraphic( aGraphic );
-                    m_aPreview->Invalidate();
+                    GraphicConverter::Import(aData,aGraphic);
                 }
-                else
-                {
-                    m_aPreview->Hide();
-                    m_aDocumentInfo->clear();
-                    m_aDocumentInfo->Show();
-                    Reference<document::XDocumentProperties> xProp(
-                        aPreview, UNO_QUERY);
-                    if ( xProp.is() )
-                        m_aDocumentInfo->fill(xProp);
-                }
+                m_aPreview->setGraphic( aGraphic );
+                m_aPreview->Invalidate();
             }
             else
             {
                 m_aPreview->Hide();
-                m_aDocumentInfo->Hide();
+                m_aDocumentInfo->clear();
+                m_aDocumentInfo->Show();
+                Reference<document::XDocumentProperties> xProp(
+                    aPreview, UNO_QUERY);
+                if ( xProp.is() )
+                    m_aDocumentInfo->fill(xProp);
             }
         }
-        catch( const Exception& )
+        else
         {
-            DBG_UNHANDLED_EXCEPTION("dbaccess");
+            m_aPreview->Hide();
+            m_aDocumentInfo->Hide();
         }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -1060,66 +1060,66 @@ void OAppDetailPageHelper::showPreview( const OUString& _sDataSourceName,
                                         const OUString& _sName,
                                         bool _bTable)
 {
-    if ( isPreviewEnabled() )
+    if ( !isPreviewEnabled() )
+        return;
+
+    weld::WaitObject aWaitCursor(GetFrameWeld());
+    m_aPreview->Hide();
+    m_aDocumentInfo->Hide();
+    m_pTablePreview->Show();
+    if ( !m_xFrame.is() )
     {
-        weld::WaitObject aWaitCursor(GetFrameWeld());
-        m_aPreview->Hide();
-        m_aDocumentInfo->Hide();
-        m_pTablePreview->Show();
-        if ( !m_xFrame.is() )
+        try
         {
-            try
-            {
-                m_xFrame = Frame::create( getBorderWin().getView()->getORB() );
-                m_xFrame->initialize( m_xWindow );
+            m_xFrame = Frame::create( getBorderWin().getView()->getORB() );
+            m_xFrame->initialize( m_xWindow );
 
-                // no layout manager (and thus no toolbars) in the preview
-                // Must be called after initialize ... but before any other call to this frame.
-                // Otherwise frame throws "life time exceptions" as e.g. NON_INITIALIZED
-                m_xFrame->setLayoutManager( Reference< XLayoutManager >() );
+            // no layout manager (and thus no toolbars) in the preview
+            // Must be called after initialize ... but before any other call to this frame.
+            // Otherwise frame throws "life time exceptions" as e.g. NON_INITIALIZED
+            m_xFrame->setLayoutManager( Reference< XLayoutManager >() );
 
-                Reference<XFramesSupplier> xSup(getBorderWin().getView()->getAppController().getXController()->getFrame(),UNO_QUERY);
-                if ( xSup.is() )
-                {
-                    Reference<XFrames> xFrames = xSup->getFrames();
-                    xFrames->append( Reference<XFrame>(m_xFrame,UNO_QUERY_THROW));
-                }
-            }
-            catch(const Exception&)
+            Reference<XFramesSupplier> xSup(getBorderWin().getView()->getAppController().getXController()->getFrame(),UNO_QUERY);
+            if ( xSup.is() )
             {
+                Reference<XFrames> xFrames = xSup->getFrames();
+                xFrames->append( Reference<XFrame>(m_xFrame,UNO_QUERY_THROW));
             }
         }
+        catch(const Exception&)
+        {
+        }
+    }
 
-        Reference< XDatabaseDocumentUI > xApplication( getBorderWin().getView()->getAppController().getXController(), UNO_QUERY );
-        std::unique_ptr< DatabaseObjectView > pDispatcher( new ResultSetBrowser(
-            getBorderWin().getView()->getORB(),
-            xApplication, nullptr, _bTable
-        ) );
-        pDispatcher->setTargetFrame( Reference<XFrame>(m_xFrame,UNO_QUERY_THROW) );
+    Reference< XDatabaseDocumentUI > xApplication( getBorderWin().getView()->getAppController().getXController(), UNO_QUERY );
+    std::unique_ptr< DatabaseObjectView > pDispatcher( new ResultSetBrowser(
+        getBorderWin().getView()->getORB(),
+        xApplication, nullptr, _bTable
+    ) );
+    pDispatcher->setTargetFrame( Reference<XFrame>(m_xFrame,UNO_QUERY_THROW) );
 
-        ::comphelper::NamedValueCollection aArgs;
-        aArgs.put( "Preview", true );
-        aArgs.put( "ReadOnly", true );
-        aArgs.put( "AsTemplate", false );
-        aArgs.put( OUString(PROPERTY_SHOWMENU), false );
+    ::comphelper::NamedValueCollection aArgs;
+    aArgs.put( "Preview", true );
+    aArgs.put( "ReadOnly", true );
+    aArgs.put( "AsTemplate", false );
+    aArgs.put( OUString(PROPERTY_SHOWMENU), false );
 
-        Reference< XController > xPreview( pDispatcher->openExisting( makeAny( _sDataSourceName ), _sName, aArgs ), UNO_QUERY );
-        bool bClearPreview = !xPreview.is();
+    Reference< XController > xPreview( pDispatcher->openExisting( makeAny( _sDataSourceName ), _sName, aArgs ), UNO_QUERY );
+    bool bClearPreview = !xPreview.is();
 
-        // clear the preview when the query or table could not be loaded
+    // clear the preview when the query or table could not be loaded
+    if ( !bClearPreview )
+    {
+        Reference< XTabController > xTabController( xPreview, UNO_QUERY );
+        bClearPreview = !xTabController.is();
         if ( !bClearPreview )
         {
-            Reference< XTabController > xTabController( xPreview, UNO_QUERY );
-            bClearPreview = !xTabController.is();
-            if ( !bClearPreview )
-            {
-                Reference< XLoadable > xLoadable( xTabController->getModel(), UNO_QUERY );
-                bClearPreview = !( xLoadable.is() && xLoadable->isLoaded() );
-            }
+            Reference< XLoadable > xLoadable( xTabController->getModel(), UNO_QUERY );
+            bClearPreview = !( xLoadable.is() && xLoadable->isLoaded() );
         }
-        if ( bClearPreview )
-            showPreview(nullptr);
     }
+    if ( bClearPreview )
+        showPreview(nullptr);
 }
 
 IMPL_LINK_NOARG(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, void)

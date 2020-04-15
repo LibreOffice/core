@@ -219,26 +219,26 @@ void SAL_CALL SbaXGridControl::dispatch(const css::util::URL& aURL, const Sequen
 void SAL_CALL SbaXGridControl::addStatusListener( const Reference< XStatusListener > & _rxListener, const URL& _rURL )
 {
     ::osl::MutexGuard aGuard( GetMutex() );
-    if ( _rxListener.is() )
-    {
-        rtl::Reference<SbaXStatusMultiplexer>& xMultiplexer = m_aStatusMultiplexer[ _rURL ];
-        if ( !xMultiplexer.is() )
-        {
-            xMultiplexer = new SbaXStatusMultiplexer( *this, GetMutex() );
-        }
+    if ( !_rxListener.is() )
+        return;
 
-        xMultiplexer->addInterface( _rxListener );
-        if ( getPeer().is() )
-        {
-            if ( 1 == xMultiplexer->getLength() )
-            {   // the first external listener for this URL
-                Reference< XDispatch >  xDisp( getPeer(), UNO_QUERY );
-                xDisp->addStatusListener( xMultiplexer.get(), _rURL );
-            }
-            else
-            {   // already have other listeners for this URL
-                _rxListener->statusChanged( xMultiplexer->getLastEvent() );
-            }
+    rtl::Reference<SbaXStatusMultiplexer>& xMultiplexer = m_aStatusMultiplexer[ _rURL ];
+    if ( !xMultiplexer.is() )
+    {
+        xMultiplexer = new SbaXStatusMultiplexer( *this, GetMutex() );
+    }
+
+    xMultiplexer->addInterface( _rxListener );
+    if ( getPeer().is() )
+    {
+        if ( 1 == xMultiplexer->getLength() )
+        {   // the first external listener for this URL
+            Reference< XDispatch >  xDisp( getPeer(), UNO_QUERY );
+            xDisp->addStatusListener( xMultiplexer.get(), _rURL );
+        }
+        else
+        {   // already have other listeners for this URL
+            _rxListener->statusChanged( xMultiplexer->getLastEvent() );
         }
     }
 }
@@ -356,21 +356,21 @@ Reference< css::frame::XDispatch >  SAL_CALL SbaXGridPeer::queryDispatch(const c
 IMPL_LINK_NOARG( SbaXGridPeer, OnDispatchEvent, void*, void )
 {
     VclPtr< SbaGridControl > pGrid = GetAs< SbaGridControl >();
-    if ( pGrid )    // if this fails, we were disposing before arriving here
-    {
-        if ( !Application::IsMainThread() )
-        {
-            // still not in the main thread (see SbaXGridPeer::dispatch). post an event, again
-            // without moving the special even to the back of the queue
-            pGrid->PostUserEvent( LINK( this, SbaXGridPeer, OnDispatchEvent ) );
-        }
-        else
-        {
-            DispatchArgs aArgs = m_aDispatchArgs.front();
-            m_aDispatchArgs.pop();
+    if ( !pGrid )    // if this fails, we were disposing before arriving here
+        return;
 
-            SbaXGridPeer::dispatch( aArgs.aURL, aArgs.aArgs );
-        }
+    if ( !Application::IsMainThread() )
+    {
+        // still not in the main thread (see SbaXGridPeer::dispatch). post an event, again
+        // without moving the special even to the back of the queue
+        pGrid->PostUserEvent( LINK( this, SbaXGridPeer, OnDispatchEvent ) );
+    }
+    else
+    {
+        DispatchArgs aArgs = m_aDispatchArgs.front();
+        m_aDispatchArgs.pop();
+
+        SbaXGridPeer::dispatch( aArgs.aURL, aArgs.aArgs );
     }
 }
 
@@ -440,49 +440,49 @@ void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyVa
 
     DispatchType eURLType = classifyDispatchURL( aURL );
 
-    if ( dtUnknown != eURLType )
+    if ( dtUnknown == eURLType )
+        return;
+
+    // notify any status listeners that the dialog is now active (well, about to be active)
+    MapDispatchToBool::const_iterator aThisURLState = m_aDispatchStates.emplace( eURLType, true ).first;
+    NotifyStatusChanged( aURL, nullptr );
+
+    // execute the dialog
+    switch ( eURLType )
     {
-        // notify any status listeners that the dialog is now active (well, about to be active)
-        MapDispatchToBool::const_iterator aThisURLState = m_aDispatchStates.emplace( eURLType, true ).first;
-        NotifyStatusChanged( aURL, nullptr );
+        case dtBrowserAttribs:
+            pGrid->SetBrowserAttrs();
+            break;
 
-        // execute the dialog
-        switch ( eURLType )
+        case dtRowHeight:
+            pGrid->SetRowHeight();
+            break;
+
+        case dtColumnAttribs:
         {
-            case dtBrowserAttribs:
-                pGrid->SetBrowserAttrs();
+            OSL_ENSURE(nColId != -1, "SbaXGridPeer::dispatch : invalid parameter !");
+            if (nColId != -1)
                 break;
-
-            case dtRowHeight:
-                pGrid->SetRowHeight();
-                break;
-
-            case dtColumnAttribs:
-            {
-                OSL_ENSURE(nColId != -1, "SbaXGridPeer::dispatch : invalid parameter !");
-                if (nColId != -1)
-                    break;
-                pGrid->SetColAttrs(nColId);
-            }
-            break;
-
-            case dtColumnWidth:
-            {
-                OSL_ENSURE(nColId != -1, "SbaXGridPeer::dispatch : invalid parameter !");
-                if (nColId != -1)
-                    break;
-                pGrid->SetColWidth(nColId);
-            }
-            break;
-
-            case dtUnknown:
-                break;
+            pGrid->SetColAttrs(nColId);
         }
+        break;
 
-        // notify any status listeners that the dialog vanished
-        m_aDispatchStates.erase( aThisURLState );
-        NotifyStatusChanged( aURL, nullptr );
+        case dtColumnWidth:
+        {
+            OSL_ENSURE(nColId != -1, "SbaXGridPeer::dispatch : invalid parameter !");
+            if (nColId != -1)
+                break;
+            pGrid->SetColWidth(nColId);
+        }
+        break;
+
+        case dtUnknown:
+            break;
     }
+
+    // notify any status listeners that the dialog vanished
+    m_aDispatchStates.erase( aThisURLState );
+    NotifyStatusChanged( aURL, nullptr );
 }
 
 void SAL_CALL SbaXGridPeer::addStatusListener(const Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL)
@@ -567,23 +567,23 @@ void SbaGridHeader::ImplStartColumnDrag(sal_Int8 _nAction, const Point& _rMouseP
         aColRect.AdjustRight( -3 );
         bResizingCol = !aColRect.IsInside(_rMousePos);
     }
-    if (!bResizingCol)
-    {
-        // force the base class to end its drag mode
-        EndTracking(TrackingEventFlags::Cancel | TrackingEventFlags::End);
+    if (bResizingCol)
+        return;
 
-        // because we have 3d-buttons the select handler is called from MouseButtonUp, but StartDrag
-        // occurs earlier (while the mouse button is down)
-        // so for optical reasons we select the column before really starting the drag operation.
-        notifyColumnSelect(nId);
+    // force the base class to end its drag mode
+    EndTracking(TrackingEventFlags::Cancel | TrackingEventFlags::End);
 
-        static_cast<SbaGridControl*>(GetParent())->StartDrag(_nAction,
-                Point(
-                    _rMousePos.X() + GetPosPixel().X(),     // we aren't left-justified with our parent, in contrast to the data window
-                    _rMousePos.Y() - GetSizePixel().Height()
-                )
-            );
-    }
+    // because we have 3d-buttons the select handler is called from MouseButtonUp, but StartDrag
+    // occurs earlier (while the mouse button is down)
+    // so for optical reasons we select the column before really starting the drag operation.
+    notifyColumnSelect(nId);
+
+    static_cast<SbaGridControl*>(GetParent())->StartDrag(_nAction,
+            Point(
+                _rMousePos.X() + GetPosPixel().X(),     // we aren't left-justified with our parent, in contrast to the data window
+                _rMousePos.Y() - GetSizePixel().Height()
+            )
+        );
 }
 
 void SbaGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMenu)
@@ -610,36 +610,36 @@ void SbaGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rM
 
     // prepend some new items
     bool bColAttrs = (nColId != sal_uInt16(-1)) && (nColId != 0);
-    if ( bColAttrs && !bDBIsReadOnly)
+    if ( !(bColAttrs && !bDBIsReadOnly))
+        return;
+
+    sal_uInt16 nPos = 0;
+    sal_uInt16 nModelPos = static_cast<SbaGridControl*>(GetParent())->GetModelColumnPos(nColId);
+    Reference< XPropertySet >  xField = static_cast<SbaGridControl*>(GetParent())->getField(nModelPos);
+
+    if ( xField.is() )
     {
-        sal_uInt16 nPos = 0;
-        sal_uInt16 nModelPos = static_cast<SbaGridControl*>(GetParent())->GetModelColumnPos(nColId);
-        Reference< XPropertySet >  xField = static_cast<SbaGridControl*>(GetParent())->getField(nModelPos);
-
-        if ( xField.is() )
+        switch( ::comphelper::getINT32(xField->getPropertyValue(PROPERTY_TYPE)) )
         {
-            switch( ::comphelper::getINT32(xField->getPropertyValue(PROPERTY_TYPE)) )
-            {
-            case DataType::BINARY:
-            case DataType::VARBINARY:
-            case DataType::LONGVARBINARY:
-            case DataType::SQLNULL:
-            case DataType::OBJECT:
-            case DataType::BLOB:
-            case DataType::CLOB:
-            case DataType::REF:
-                break;
-            default:
-                rMenu.InsertItem(ID_BROWSER_COLATTRSET, DBA_RES(RID_STR_COLUMN_FORMAT), MenuItemBits::NONE, OString(), nPos++);
-                rMenu.SetHelpId(ID_BROWSER_COLATTRSET, HID_BROWSER_COLUMNFORMAT);
-                rMenu.InsertSeparator(OString(), nPos++);
-            }
+        case DataType::BINARY:
+        case DataType::VARBINARY:
+        case DataType::LONGVARBINARY:
+        case DataType::SQLNULL:
+        case DataType::OBJECT:
+        case DataType::BLOB:
+        case DataType::CLOB:
+        case DataType::REF:
+            break;
+        default:
+            rMenu.InsertItem(ID_BROWSER_COLATTRSET, DBA_RES(RID_STR_COLUMN_FORMAT), MenuItemBits::NONE, OString(), nPos++);
+            rMenu.SetHelpId(ID_BROWSER_COLATTRSET, HID_BROWSER_COLUMNFORMAT);
+            rMenu.InsertSeparator(OString(), nPos++);
         }
-
-        rMenu.InsertItem(ID_BROWSER_COLWIDTH, DBA_RES(RID_STR_COLUMN_WIDTH), MenuItemBits::NONE, OString(), nPos++);
-        rMenu.SetHelpId(ID_BROWSER_COLWIDTH, HID_BROWSER_COLUMNWIDTH);
-        rMenu.InsertSeparator(OString(), nPos++);
     }
+
+    rMenu.InsertItem(ID_BROWSER_COLWIDTH, DBA_RES(RID_STR_COLUMN_WIDTH), MenuItemBits::NONE, OString(), nPos++);
+    rMenu.SetHelpId(ID_BROWSER_COLWIDTH, HID_BROWSER_COLUMNWIDTH);
+    rMenu.InsertSeparator(OString(), nPos++);
 }
 
 void SbaGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMenu& rMenu, sal_uInt16 nExecutionResult)
@@ -752,29 +752,29 @@ void SbaGridControl::SetColWidth(sal_uInt16 nColId)
     if (xCols.is() && (nModelPos != sal_uInt16(-1)))
         xAffectedCol.set(xCols->getByIndex(nModelPos), css::uno::UNO_QUERY);
 
-    if (xAffectedCol.is())
-    {
-        Any aWidth = xAffectedCol->getPropertyValue(PROPERTY_WIDTH);
-        sal_Int32 nCurWidth = aWidth.hasValue() ? ::comphelper::getINT32(aWidth) : -1;
+    if (!xAffectedCol.is())
+        return;
 
-        DlgSize aDlgColWidth(GetFrameWeld(), nCurWidth, false);
-        if (aDlgColWidth.run() == RET_OK)
+    Any aWidth = xAffectedCol->getPropertyValue(PROPERTY_WIDTH);
+    sal_Int32 nCurWidth = aWidth.hasValue() ? ::comphelper::getINT32(aWidth) : -1;
+
+    DlgSize aDlgColWidth(GetFrameWeld(), nCurWidth, false);
+    if (aDlgColWidth.run() != RET_OK)
+        return;
+
+    sal_Int32 nValue = aDlgColWidth.GetValue();
+    Any aNewWidth;
+    if (-1 == nValue)
+    {   // set to default
+        Reference< XPropertyState >  xPropState(xAffectedCol, UNO_QUERY);
+        if (xPropState.is())
         {
-            sal_Int32 nValue = aDlgColWidth.GetValue();
-            Any aNewWidth;
-            if (-1 == nValue)
-            {   // set to default
-                Reference< XPropertyState >  xPropState(xAffectedCol, UNO_QUERY);
-                if (xPropState.is())
-                {
-                    try { aNewWidth = xPropState->getPropertyDefault(PROPERTY_WIDTH); } catch(Exception&) { } ;
-                }
-            }
-            else
-                aNewWidth <<= nValue;
-            try {  xAffectedCol->setPropertyValue(PROPERTY_WIDTH, aNewWidth); } catch(Exception&) { } ;
+            try { aNewWidth = xPropState->getPropertyDefault(PROPERTY_WIDTH); } catch(Exception&) { } ;
         }
     }
+    else
+        aNewWidth <<= nValue;
+    try {  xAffectedCol->setPropertyValue(PROPERTY_WIDTH, aNewWidth); } catch(Exception&) { } ;
 }
 
 void SbaGridControl::SetRowHeight()
@@ -787,33 +787,33 @@ void SbaGridControl::SetRowHeight()
     sal_Int32 nCurHeight = aHeight.hasValue() ? ::comphelper::getINT32(aHeight) : -1;
 
     DlgSize aDlgRowHeight(GetFrameWeld(), nCurHeight, true);
-    if (aDlgRowHeight.run() == RET_OK)
-    {
-        sal_Int32 nValue = aDlgRowHeight.GetValue();
-        Any aNewHeight;
-        if (sal_Int16(-1) == nValue)
-        {   // set to default
-            Reference< XPropertyState >  xPropState(xCols, UNO_QUERY);
-            if (xPropState.is())
+    if (aDlgRowHeight.run() != RET_OK)
+        return;
+
+    sal_Int32 nValue = aDlgRowHeight.GetValue();
+    Any aNewHeight;
+    if (sal_Int16(-1) == nValue)
+    {   // set to default
+        Reference< XPropertyState >  xPropState(xCols, UNO_QUERY);
+        if (xPropState.is())
+        {
+            try
             {
-                try
-                {
-                    aNewHeight = xPropState->getPropertyDefault(PROPERTY_ROW_HEIGHT);
-                }
-                catch(Exception&)
-                { }
+                aNewHeight = xPropState->getPropertyDefault(PROPERTY_ROW_HEIGHT);
             }
+            catch(Exception&)
+            { }
         }
-        else
-            aNewHeight <<= nValue;
-        try
-        {
-            xCols->setPropertyValue(PROPERTY_ROW_HEIGHT, aNewHeight);
-        }
-        catch(Exception&)
-        {
-            OSL_FAIL("setPropertyValue: PROPERTY_ROW_HEIGHT throws an exception");
-        }
+    }
+    else
+        aNewHeight <<= nValue;
+    try
+    {
+        xCols->setPropertyValue(PROPERTY_ROW_HEIGHT, aNewHeight);
+    }
+    catch(Exception&)
+    {
+        OSL_FAIL("setPropertyValue: PROPERTY_ROW_HEIGHT throws an exception");
     }
 }
 

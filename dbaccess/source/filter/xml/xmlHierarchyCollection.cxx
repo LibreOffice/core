@@ -61,28 +61,28 @@ OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
                 SAL_WARN("dbaccess", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
         }
     }
-    if ( !sName.isEmpty() && _xParentContainer.is() )
+    if ( !(!sName.isEmpty() && _xParentContainer.is()) )
+        return;
+
+    try
     {
-        try
+        Reference<XMultiServiceFactory> xORB(_xParentContainer,UNO_QUERY);
+        if ( xORB.is() )
         {
-            Reference<XMultiServiceFactory> xORB(_xParentContainer,UNO_QUERY);
-            if ( xORB.is() )
+            Sequence<Any> aArguments(comphelper::InitAnyPropertySequence(
             {
-                Sequence<Any> aArguments(comphelper::InitAnyPropertySequence(
-                {
-                    {"Name", Any(sName)}, // set as folder
-                    {"Parent", Any(_xParentContainer)},
-                }));
-                m_xContainer.set(xORB->createInstanceWithArguments(_sCollectionServiceName,aArguments),UNO_QUERY);
-                Reference<XNameContainer> xNameContainer(_xParentContainer,UNO_QUERY);
-                if ( xNameContainer.is() && !xNameContainer->hasByName(sName) )
-                    xNameContainer->insertByName(sName,makeAny(m_xContainer));
-            }
+                {"Name", Any(sName)}, // set as folder
+                {"Parent", Any(_xParentContainer)},
+            }));
+            m_xContainer.set(xORB->createInstanceWithArguments(_sCollectionServiceName,aArguments),UNO_QUERY);
+            Reference<XNameContainer> xNameContainer(_xParentContainer,UNO_QUERY);
+            if ( xNameContainer.is() && !xNameContainer->hasByName(sName) )
+                xNameContainer->insertByName(sName,makeAny(m_xContainer));
         }
-        catch(Exception&)
-        {
-            OSL_FAIL("OXMLHierarchyCollection::OXMLHierarchyCollection -> exception caught");
-        }
+    }
+    catch(Exception&)
+    {
+        OSL_FAIL("OXMLHierarchyCollection::OXMLHierarchyCollection -> exception caught");
     }
 }
 

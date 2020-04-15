@@ -88,29 +88,29 @@ OXMLDataSourceInfo::OXMLDataSourceInfo( ODBFilter& rImport
         aProperty.Value <<= true;
         rImport.addInfo(aProperty);
     }
-    if ( rImport.isNewFormat() )
+    if ( !rImport.isNewFormat() )
+        return;
+
+    if ( (nElement & TOKEN_MASK) == XML_DELIMITER )
     {
-        if ( (nElement & TOKEN_MASK) == XML_DELIMITER )
+        if ( !bFoundField )
         {
-            if ( !bFoundField )
-            {
-                aProperty.Name = INFO_FIELDDELIMITER;
-                aProperty.Value <<= OUString(";");
-                rImport.addInfo(aProperty);
-            }
-            if ( !bFoundThousand )
-            {
-                aProperty.Name = INFO_THOUSANDSDELIMITER;
-                aProperty.Value <<= OUString(",");
-                rImport.addInfo(aProperty);
-            }
-        }
-        if ( (nElement & TOKEN_MASK) == XML_FONT_CHARSET && !bFoundCharset )
-        {
-            aProperty.Name = INFO_CHARSET;
-            aProperty.Value <<= OUString("utf8");
+            aProperty.Name = INFO_FIELDDELIMITER;
+            aProperty.Value <<= OUString(";");
             rImport.addInfo(aProperty);
         }
+        if ( !bFoundThousand )
+        {
+            aProperty.Name = INFO_THOUSANDSDELIMITER;
+            aProperty.Value <<= OUString(",");
+            rImport.addInfo(aProperty);
+        }
+    }
+    if ( (nElement & TOKEN_MASK) == XML_FONT_CHARSET && !bFoundCharset )
+    {
+        aProperty.Name = INFO_CHARSET;
+        aProperty.Value <<= OUString("utf8");
+        rImport.addInfo(aProperty);
     }
 }
 

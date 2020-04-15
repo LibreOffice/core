@@ -80,26 +80,26 @@ void OTableWindowTitle::LoseFocus()
 
 void OTableWindowTitle::RequestHelp( const HelpEvent& rHEvt )
 {
-    if(m_pTabWin)
-    {
-        OUString aHelpText = m_pTabWin->GetComposedName();
-        if( !aHelpText.isEmpty())
-        {
-            // show help
-            tools::Rectangle aItemRect(Point(0,0),GetSizePixel());
-            aItemRect = LogicToPixel( aItemRect );
-            Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
-            aItemRect.SetLeft( aPt.X() );
-            aItemRect.SetTop( aPt.Y() );
-            aPt = OutputToScreenPixel( aItemRect.BottomRight() );
-            aItemRect.SetRight( aPt.X() );
-            aItemRect.SetBottom( aPt.Y() );
-            if( rHEvt.GetMode() == HelpEventMode::BALLOON )
-                Help::ShowBalloon( this, aItemRect.Center(), aItemRect, aHelpText);
-            else
-                Help::ShowQuickHelp( this, aItemRect, aHelpText );
-        }
-    }
+    if(!m_pTabWin)
+        return;
+
+    OUString aHelpText = m_pTabWin->GetComposedName();
+    if( aHelpText.isEmpty())
+        return;
+
+    // show help
+    tools::Rectangle aItemRect(Point(0,0),GetSizePixel());
+    aItemRect = LogicToPixel( aItemRect );
+    Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
+    aItemRect.SetLeft( aPt.X() );
+    aItemRect.SetTop( aPt.Y() );
+    aPt = OutputToScreenPixel( aItemRect.BottomRight() );
+    aItemRect.SetRight( aPt.X() );
+    aItemRect.SetBottom( aPt.Y() );
+    if( rHEvt.GetMode() == HelpEventMode::BALLOON )
+        Help::ShowBalloon( this, aItemRect.Center(), aItemRect, aHelpText);
+    else
+        Help::ShowQuickHelp( this, aItemRect, aHelpText );
 }
 
 void OTableWindowTitle::Command( const CommandEvent& rEvt )

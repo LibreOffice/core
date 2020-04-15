@@ -809,89 +809,89 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl, weld::Button&, void)
     m_ePressed = WIZARD_FINISH;
     bool bFinish = DeactivatePage();
 
-    if(bFinish)
+    if(!bFinish)
+        return;
+
+    weld::WaitObject aWait(m_xAssistant.get());
+    switch(getOperation())
     {
-        weld::WaitObject aWait(m_xAssistant.get());
-        switch(getOperation())
+        case CopyTableOperation::CopyDefinitionAndData:
+        case CopyTableOperation::CopyDefinitionOnly:
         {
-            case CopyTableOperation::CopyDefinitionAndData:
-            case CopyTableOperation::CopyDefinitionOnly:
+            bool bOnFirstPage = GetCurLevel() == 0;
+            if ( bOnFirstPage )
             {
-                bool bOnFirstPage = GetCurLevel() == 0;
-                if ( bOnFirstPage )
+                // we came from the first page so we have to clear
+                // all column information already collected
+                clearDestColumns();
+                m_mNameMapping.clear();
+            }
+            sal_Int32 nBreakPos = 0;
+            bool bCheckOk = CheckColumns(nBreakPos);
+            if ( bOnFirstPage && !bCheckOk )
+            {
+                showColumnTypeNotSupported(m_vSourceVec[nBreakPos-1]->first);
+                OWizTypeSelect* pPage = static_cast<OWizTypeSelect*>(GetPage(3));
+                if ( pPage )
                 {
-                    // we came from the first page so we have to clear
-                    // all column information already collected
-                    clearDestColumns();
                     m_mNameMapping.clear();
+                    pPage->setDisplayRow(nBreakPos);
+                    ShowPage(3);
+                    return;
                 }
-                sal_Int32 nBreakPos = 0;
-                bool bCheckOk = CheckColumns(nBreakPos);
-                if ( bOnFirstPage && !bCheckOk )
+            }
+            if ( m_xDestConnection.is() )
+            {
+                if ( supportsPrimaryKey() )
                 {
-                    showColumnTypeNotSupported(m_vSourceVec[nBreakPos-1]->first);
-                    OWizTypeSelect* pPage = static_cast<OWizTypeSelect*>(GetPage(3));
-                    if ( pPage )
+                    bool noPrimaryKey = std::none_of(m_vDestColumns.begin(),m_vDestColumns.end(),
+                        [] (const ODatabaseExport::TColumns::value_type& tCol) { return tCol.second->IsPrimaryKey(); });
+                    if ( noPrimaryKey && m_xInteractionHandler.is() )
                     {
-                        m_mNameMapping.clear();
-                        pPage->setDisplayRow(nBreakPos);
-                        ShowPage(3);
-                        return;
-                    }
-                }
-                if ( m_xDestConnection.is() )
-                {
-                    if ( supportsPrimaryKey() )
-                    {
-                        bool noPrimaryKey = std::none_of(m_vDestColumns.begin(),m_vDestColumns.end(),
-                            [] (const ODatabaseExport::TColumns::value_type& tCol) { return tCol.second->IsPrimaryKey(); });
-                        if ( noPrimaryKey && m_xInteractionHandler.is() )
+
+                        OUString sMsg(DBA_RES(STR_TABLEDESIGN_NO_PRIM_KEY));
+                        SQLContext aError;
+                        aError.Message = sMsg;
+                        ::rtl::Reference xRequest( new ::comphelper::OInteractionRequest( makeAny( aError ) ) );
+                        ::rtl::Reference xYes = new ::comphelper::OInteractionApprove;
+                        xRequest->addContinuation( xYes.get() );
+                        xRequest->addContinuation( new ::comphelper::OInteractionDisapprove );
+                        ::rtl::Reference< ::comphelper::OInteractionAbort > xAbort = new ::comphelper::OInteractionAbort;
+                        xRequest->addContinuation( xAbort.get() );
+
+                        m_xInteractionHandler->handle( xRequest.get() );
+
+                        if ( xYes->wasSelected() )
                         {
-
-                            OUString sMsg(DBA_RES(STR_TABLEDESIGN_NO_PRIM_KEY));
-                            SQLContext aError;
-                            aError.Message = sMsg;
-                            ::rtl::Reference xRequest( new ::comphelper::OInteractionRequest( makeAny( aError ) ) );
-                            ::rtl::Reference xYes = new ::comphelper::OInteractionApprove;
-                            xRequest->addContinuation( xYes.get() );
-                            xRequest->addContinuation( new ::comphelper::OInteractionDisapprove );
-                            ::rtl::Reference< ::comphelper::OInteractionAbort > xAbort = new ::comphelper::OInteractionAbort;
-                            xRequest->addContinuation( xAbort.get() );
-
-                            m_xInteractionHandler->handle( xRequest.get() );
-
-                            if ( xYes->wasSelected() )
-                            {
-                                OCopyTable* pPage = static_cast<OCopyTable*>(GetPage(0));
-                                m_bCreatePrimaryKeyColumn = true;
-                                m_aKeyName = pPage->GetKeyName();
-                                if ( m_aKeyName.isEmpty() )
-                                    m_aKeyName = "ID";
-                                m_aKeyName = createUniqueName( m_aKeyName );
-                                sal_Int32 nBreakPos2 = 0;
-                                CheckColumns(nBreakPos2);
-                            }
-                            else if ( xAbort->wasSelected() )
-                            {
-                                ShowPage(3);
-                                return;
-                            }
+                            OCopyTable* pPage = static_cast<OCopyTable*>(GetPage(0));
+                            m_bCreatePrimaryKeyColumn = true;
+                            m_aKeyName = pPage->GetKeyName();
+                            if ( m_aKeyName.isEmpty() )
+                                m_aKeyName = "ID";
+                            m_aKeyName = createUniqueName( m_aKeyName );
+                            sal_Int32 nBreakPos2 = 0;
+                            CheckColumns(nBreakPos2);
+                        }
+                        else if ( xAbort->wasSelected() )
+                        {
+                            ShowPage(3);
+                            return;
                         }
                     }
                 }
-                break;
             }
-            case CopyTableOperation::AppendData:
-            case CopyTableOperation::CreateAsView:
-                break;
-            default:
-            {
-                SAL_WARN("dbaccess.ui", "OCopyTableWizard::ImplOKHdl: invalid creation style!");
-            }
+            break;
         }
-
-        m_xAssistant->response(RET_OK);
+        case CopyTableOperation::AppendData:
+        case CopyTableOperation::CreateAsView:
+            break;
+        default:
+        {
+            SAL_WARN("dbaccess.ui", "OCopyTableWizard::ImplOKHdl: invalid creation style!");
+        }
     }
+
+    m_xAssistant->response(RET_OK);
 }
 
 void OCopyTableWizard::setCreatePrimaryKey( bool _bDoCreate, const OUString& _rSuggestedName )
@@ -964,19 +964,19 @@ void OCopyTableWizard::AddWizardPage(std::unique_ptr<OWizardPage> xPage)
 void OCopyTableWizard::insertColumn(sal_Int32 _nPos,OFieldDescription* _pField)
 {
     OSL_ENSURE(_pField,"FieldDescrioption is null!");
-    if ( _pField )
-    {
-        ODatabaseExport::TColumns::const_iterator aFind = m_vDestColumns.find(_pField->GetName());
-        if ( aFind != m_vDestColumns.end() )
-        {
-            delete aFind->second;
-            m_vDestColumns.erase(aFind);
-        }
+    if ( !_pField )
+        return;
 
-        m_aDestVec.insert(m_aDestVec.begin() + _nPos,
-            m_vDestColumns.emplace(_pField->GetName(),_pField).first);
-        m_mNameMapping[_pField->GetName()] = _pField->GetName();
+    ODatabaseExport::TColumns::const_iterator aFind = m_vDestColumns.find(_pField->GetName());
+    if ( aFind != m_vDestColumns.end() )
+    {
+        delete aFind->second;
+        m_vDestColumns.erase(aFind);
     }
+
+    m_aDestVec.insert(m_aDestVec.begin() + _nPos,
+        m_vDestColumns.emplace(_pField->GetName(),_pField).first);
+    m_mNameMapping[_pField->GetName()] = _pField->GetName();
 }
 
 void OCopyTableWizard::replaceColumn(sal_Int32 _nPos,OFieldDescription* _pField,const OUString& _sOldName)

@@ -236,28 +236,28 @@ IMPL_LINK_NOARG(DlgQryJoin, NaturalToggleHdl, weld::ToggleButton&, void)
     bool bChecked = m_xCBNatural->get_active();
     static_cast<OQueryTableConnectionData*>(m_pConnData.get())->setNatural(bChecked);
     m_xTableControl->enableRelation(!bChecked);
-    if ( bChecked )
+    if ( !bChecked )
+        return;
+
+    m_pConnData->ResetConnLines();
+    try
     {
-        m_pConnData->ResetConnLines();
-        try
+        Reference<XNameAccess> xReferencedTableColumns(m_pConnData->getReferencedTable()->getColumns());
+        Sequence< OUString> aSeq = m_pConnData->getReferencingTable()->getColumns()->getElementNames();
+        const OUString* pIter = aSeq.getConstArray();
+        const OUString* pEnd   = pIter + aSeq.getLength();
+        for(;pIter != pEnd;++pIter)
         {
-            Reference<XNameAccess> xReferencedTableColumns(m_pConnData->getReferencedTable()->getColumns());
-            Sequence< OUString> aSeq = m_pConnData->getReferencingTable()->getColumns()->getElementNames();
-            const OUString* pIter = aSeq.getConstArray();
-            const OUString* pEnd   = pIter + aSeq.getLength();
-            for(;pIter != pEnd;++pIter)
-            {
-                if ( xReferencedTableColumns->hasByName(*pIter) )
-                    m_pConnData->AppendConnLine(*pIter,*pIter);
-            }
+            if ( xReferencedTableColumns->hasByName(*pIter) )
+                m_pConnData->AppendConnLine(*pIter,*pIter);
         }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("dbaccess");
-        }
-        m_xTableControl->NotifyCellChange();
-        m_xTableControl->Invalidate();
     }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
+    }
+    m_xTableControl->NotifyCellChange();
+    m_xTableControl->Invalidate();
 }
 
 void DlgQryJoin::setValid(bool _bValid)

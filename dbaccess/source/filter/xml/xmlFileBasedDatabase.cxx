@@ -90,18 +90,18 @@ OXMLFileBasedDatabase::OXMLFileBasedDatabase( ODBFilter& rImport,
             }
         }
     }
-    if ( !(sLocation.isEmpty() || sMediaType.isEmpty()) )
+    if ( sLocation.isEmpty() || sMediaType.isEmpty() )
+        return;
+
+    ::dbaccess::ODsnTypeCollection aTypeCollection(rImport.GetComponentContext());
+    OUString sURL = aTypeCollection.getDatasourcePrefixFromMediaType(sMediaType,sFileTypeExtension) + sLocation;
+    try
     {
-        ::dbaccess::ODsnTypeCollection aTypeCollection(rImport.GetComponentContext());
-        OUString sURL = aTypeCollection.getDatasourcePrefixFromMediaType(sMediaType,sFileTypeExtension) + sLocation;
-        try
-        {
-            xDataSource->setPropertyValue(PROPERTY_URL,makeAny(sURL));
-        }
-        catch(const Exception&)
-        {
-            DBG_UNHANDLED_EXCEPTION("dbaccess");
-        }
+        xDataSource->setPropertyValue(PROPERTY_URL,makeAny(sURL));
+    }
+    catch(const Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 

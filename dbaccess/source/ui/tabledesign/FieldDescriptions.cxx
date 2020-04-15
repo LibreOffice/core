@@ -96,71 +96,71 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
     ,m_bHidden(false)
 {
     OSL_ENSURE(xAffectedCol.is(),"PropertySet can not be null!");
-    if ( xAffectedCol.is() )
+    if ( !xAffectedCol.is() )
+        return;
+
+    if ( _bUseAsDest )
     {
-        if ( _bUseAsDest )
+        m_xDest = xAffectedCol;
+        m_xDestInfo = xAffectedCol->getPropertySetInfo();
+    }
+    else
+    {
+        try
         {
-            m_xDest = xAffectedCol;
-            m_xDestInfo = xAffectedCol->getPropertySetInfo();
+            Reference<XPropertySetInfo> xPropSetInfo = xAffectedCol->getPropertySetInfo();
+            if(xPropSetInfo->hasPropertyByName(PROPERTY_NAME))
+                SetName(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_NAME)));
+            if(xPropSetInfo->hasPropertyByName(PROPERTY_DESCRIPTION))
+                SetDescription(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_DESCRIPTION)));
+            if(xPropSetInfo->hasPropertyByName(PROPERTY_HELPTEXT))
+            {
+                OUString sHelpText;
+                xAffectedCol->getPropertyValue(PROPERTY_HELPTEXT) >>= sHelpText;
+                SetHelpText(sHelpText);
+            }
+            if(xPropSetInfo->hasPropertyByName(PROPERTY_DEFAULTVALUE))
+                SetDefaultValue( xAffectedCol->getPropertyValue(PROPERTY_DEFAULTVALUE) );
+
+            if(xPropSetInfo->hasPropertyByName(PROPERTY_CONTROLDEFAULT))
+                SetControlDefault( xAffectedCol->getPropertyValue(PROPERTY_CONTROLDEFAULT) );
+
+            if(xPropSetInfo->hasPropertyByName(PROPERTY_AUTOINCREMENTCREATION))
+                SetAutoIncrementValue(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_AUTOINCREMENTCREATION)));
+            if(xPropSetInfo->hasPropertyByName(PROPERTY_TYPE))
+                SetTypeValue(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_TYPE)));
+            if (xPropSetInfo->hasPropertyByName(PROPERTY_TYPENAME))
+                SetTypeName(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_TYPENAME)));
+            if(xPropSetInfo->hasPropertyByName(PROPERTY_PRECISION))
+                SetPrecision(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_PRECISION)));
+            if(xPropSetInfo->hasPropertyByName(PROPERTY_SCALE))
+                SetScale(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_SCALE)));
+            if(xPropSetInfo->hasPropertyByName(PROPERTY_ISNULLABLE))
+                SetIsNullable(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_ISNULLABLE)));
+            if(xPropSetInfo->hasPropertyByName(PROPERTY_FORMATKEY))
+            {
+                const Any aValue = xAffectedCol->getPropertyValue(PROPERTY_FORMATKEY);
+                if ( aValue.hasValue() )
+                    SetFormatKey(::comphelper::getINT32(aValue));
+            }
+            if(xPropSetInfo->hasPropertyByName(PROPERTY_RELATIVEPOSITION))
+                m_aRelativePosition = xAffectedCol->getPropertyValue(PROPERTY_RELATIVEPOSITION);
+            if(xPropSetInfo->hasPropertyByName(PROPERTY_WIDTH))
+                m_aWidth = xAffectedCol->getPropertyValue(PROPERTY_WIDTH);
+            if(xPropSetInfo->hasPropertyByName(PROPERTY_HIDDEN))
+                xAffectedCol->getPropertyValue(PROPERTY_HIDDEN) >>= m_bHidden;
+            if(xPropSetInfo->hasPropertyByName(PROPERTY_ALIGN))
+            {
+                const Any aValue = xAffectedCol->getPropertyValue(PROPERTY_ALIGN);
+                if ( aValue.hasValue() )
+                    SetHorJustify( ::dbaui::mapTextJustify(::comphelper::getINT32(aValue)));
+            }
+            if(xPropSetInfo->hasPropertyByName(PROPERTY_ISAUTOINCREMENT))
+                SetAutoIncrement(::cppu::any2bool(xAffectedCol->getPropertyValue(PROPERTY_ISAUTOINCREMENT)));
         }
-        else
+        catch(const Exception&)
         {
-            try
-            {
-                Reference<XPropertySetInfo> xPropSetInfo = xAffectedCol->getPropertySetInfo();
-                if(xPropSetInfo->hasPropertyByName(PROPERTY_NAME))
-                    SetName(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_NAME)));
-                if(xPropSetInfo->hasPropertyByName(PROPERTY_DESCRIPTION))
-                    SetDescription(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_DESCRIPTION)));
-                if(xPropSetInfo->hasPropertyByName(PROPERTY_HELPTEXT))
-                {
-                    OUString sHelpText;
-                    xAffectedCol->getPropertyValue(PROPERTY_HELPTEXT) >>= sHelpText;
-                    SetHelpText(sHelpText);
-                }
-                if(xPropSetInfo->hasPropertyByName(PROPERTY_DEFAULTVALUE))
-                    SetDefaultValue( xAffectedCol->getPropertyValue(PROPERTY_DEFAULTVALUE) );
-
-                if(xPropSetInfo->hasPropertyByName(PROPERTY_CONTROLDEFAULT))
-                    SetControlDefault( xAffectedCol->getPropertyValue(PROPERTY_CONTROLDEFAULT) );
-
-                if(xPropSetInfo->hasPropertyByName(PROPERTY_AUTOINCREMENTCREATION))
-                    SetAutoIncrementValue(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_AUTOINCREMENTCREATION)));
-                if(xPropSetInfo->hasPropertyByName(PROPERTY_TYPE))
-                    SetTypeValue(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_TYPE)));
-                if (xPropSetInfo->hasPropertyByName(PROPERTY_TYPENAME))
-                    SetTypeName(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_TYPENAME)));
-                if(xPropSetInfo->hasPropertyByName(PROPERTY_PRECISION))
-                    SetPrecision(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_PRECISION)));
-                if(xPropSetInfo->hasPropertyByName(PROPERTY_SCALE))
-                    SetScale(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_SCALE)));
-                if(xPropSetInfo->hasPropertyByName(PROPERTY_ISNULLABLE))
-                    SetIsNullable(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_ISNULLABLE)));
-                if(xPropSetInfo->hasPropertyByName(PROPERTY_FORMATKEY))
-                {
-                    const Any aValue = xAffectedCol->getPropertyValue(PROPERTY_FORMATKEY);
-                    if ( aValue.hasValue() )
-                        SetFormatKey(::comphelper::getINT32(aValue));
-                }
-                if(xPropSetInfo->hasPropertyByName(PROPERTY_RELATIVEPOSITION))
-                    m_aRelativePosition = xAffectedCol->getPropertyValue(PROPERTY_RELATIVEPOSITION);
-                if(xPropSetInfo->hasPropertyByName(PROPERTY_WIDTH))
-                    m_aWidth = xAffectedCol->getPropertyValue(PROPERTY_WIDTH);
-                if(xPropSetInfo->hasPropertyByName(PROPERTY_HIDDEN))
-                    xAffectedCol->getPropertyValue(PROPERTY_HIDDEN) >>= m_bHidden;
-                if(xPropSetInfo->hasPropertyByName(PROPERTY_ALIGN))
-                {
-                    const Any aValue = xAffectedCol->getPropertyValue(PROPERTY_ALIGN);
-                    if ( aValue.hasValue() )
-                        SetHorJustify( ::dbaui::mapTextJustify(::comphelper::getINT32(aValue)));
-                }
-                if(xPropSetInfo->hasPropertyByName(PROPERTY_ISAUTOINCREMENT))
-                    SetAutoIncrement(::cppu::any2bool(xAffectedCol->getPropertyValue(PROPERTY_ISAUTOINCREMENT)));
-            }
-            catch(const Exception&)
-            {
-                DBG_UNHANDLED_EXCEPTION("dbaccess");
-            }
+            DBG_UNHANDLED_EXCEPTION("dbaccess");
         }
     }
 }
@@ -168,70 +168,70 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
 void OFieldDescription::FillFromTypeInfo(const TOTypeInfoSP& _pType,bool _bForce,bool _bReset)
 {
     TOTypeInfoSP pOldType = getTypeInfo();
-    if ( _pType != pOldType )
+    if ( _pType == pOldType )
+        return;
+
+    // reset type depending information
+    if ( _bReset )
     {
-        // reset type depending information
-        if ( _bReset )
-        {
-            SetFormatKey(0);
-            SetControlDefault(Any());
-        }
-
-        bool bForce = _bForce || pOldType.get() == nullptr || pOldType->nType != _pType->nType;
-        switch ( _pType->nType )
-        {
-            case DataType::CHAR:
-            case DataType::VARCHAR:
-                if ( bForce )
-                {
-                    sal_Int32 nPrec = DEFAULT_VARCHAR_PRECISION;
-                    if ( GetPrecision() )
-                        nPrec = GetPrecision();
-                    SetPrecision(std::min<sal_Int32>(nPrec,_pType->nPrecision));
-                }
-                break;
-            case DataType::TIMESTAMP:
-                if ( bForce && _pType->nMaximumScale)
-                {
-                    SetScale(std::min<sal_Int32>(GetScale() ? GetScale() : DEFAULT_NUMERIC_SCALE,_pType->nMaximumScale));
-                }
-                break;
-            default:
-                if ( bForce )
-                {
-                    sal_Int32 nPrec = DEFAULT_OTHER_PRECISION;
-                    switch ( _pType->nType )
-                    {
-                        case DataType::BIT:
-                        case DataType::BLOB:
-                        case DataType::CLOB:
-                            nPrec = _pType->nPrecision;
-                            break;
-                        default:
-                            if ( GetPrecision() )
-                                nPrec = GetPrecision();
-                            break;
-                    }
-
-                    if ( _pType->nPrecision )
-                        SetPrecision(std::min<sal_Int32>(nPrec ? nPrec : DEFAULT_NUMERIC_PRECISION,_pType->nPrecision));
-                    if ( _pType->nMaximumScale )
-                        SetScale(std::min<sal_Int32>(GetScale() ? GetScale() : DEFAULT_NUMERIC_SCALE,_pType->nMaximumScale));
-                }
-        }
-        if ( _pType->aCreateParams.isEmpty() )
-        {
-            SetPrecision(_pType->nPrecision);
-            SetScale(_pType->nMinimumScale);
-        }
-        if ( !_pType->bNullable && IsNullable() )
-            SetIsNullable(ColumnValue::NO_NULLS);
-        if ( !_pType->bAutoIncrement && IsAutoIncrement() )
-            SetAutoIncrement(false);
-        SetCurrency( _pType->bCurrency );
-        SetType(_pType);
-        SetTypeName(_pType->aTypeName);
+        SetFormatKey(0);
+        SetControlDefault(Any());
     }
+
+    bool bForce = _bForce || pOldType.get() == nullptr || pOldType->nType != _pType->nType;
+    switch ( _pType->nType )
+    {
+        case DataType::CHAR:
+        case DataType::VARCHAR:
+            if ( bForce )
+            {
+                sal_Int32 nPrec = DEFAULT_VARCHAR_PRECISION;
+                if ( GetPrecision() )
+                    nPrec = GetPrecision();
+                SetPrecision(std::min<sal_Int32>(nPrec,_pType->nPrecision));
+            }
+            break;
+        case DataType::TIMESTAMP:
+            if ( bForce && _pType->nMaximumScale)
+            {
+                SetScale(std::min<sal_Int32>(GetScale() ? GetScale() : DEFAULT_NUMERIC_SCALE,_pType->nMaximumScale));
+            }
+            break;
+        default:
+            if ( bForce )
+            {
+                sal_Int32 nPrec = DEFAULT_OTHER_PRECISION;
+                switch ( _pType->nType )
+                {
+                    case DataType::BIT:
+                    case DataType::BLOB:
+                    case DataType::CLOB:
+                        nPrec = _pType->nPrecision;
+                        break;
+                    default:
+                        if ( GetPrecision() )
+                            nPrec = GetPrecision();
+                        break;
+                }
+
+                if ( _pType->nPrecision )
+                    SetPrecision(std::min<sal_Int32>(nPrec ? nPrec : DEFAULT_NUMERIC_PRECISION,_pType->nPrecision));
+                if ( _pType->nMaximumScale )
+                    SetScale(std::min<sal_Int32>(GetScale() ? GetScale() : DEFAULT_NUMERIC_SCALE,_pType->nMaximumScale));
+            }
+    }
+    if ( _pType->aCreateParams.isEmpty() )
+    {
+        SetPrecision(_pType->nPrecision);
+        SetScale(_pType->nMinimumScale);
+    }
+    if ( !_pType->bNullable && IsNullable() )
+        SetIsNullable(ColumnValue::NO_NULLS);
+    if ( !_pType->bAutoIncrement && IsAutoIncrement() )
+        SetAutoIncrement(false);
+    SetCurrency( _pType->bCurrency );
+    SetType(_pType);
+    SetTypeName(_pType->aTypeName);
 }
 
 void OFieldDescription::SetName(const OUString& _rName)
@@ -325,19 +325,19 @@ void OFieldDescription::SetAutoIncrementValue(const OUString& _sAutoIncValue)
 void OFieldDescription::SetType(const TOTypeInfoSP& _pType)
 {
     m_pType = _pType;
-    if ( m_pType.get() )
+    if ( !m_pType.get() )
+        return;
+
+    try
     {
-        try
-        {
-            if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_TYPE) )
-                m_xDest->setPropertyValue(PROPERTY_TYPE,makeAny(m_pType->nType));
-            else
-                m_nType = m_pType->nType;
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("dbaccess");
-        }
+        if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_TYPE) )
+            m_xDest->setPropertyValue(PROPERTY_TYPE,makeAny(m_pType->nType));
+        else
+            m_nType = m_pType->nType;
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 
@@ -618,26 +618,26 @@ void OFieldDescription::SetTypeName(const OUString& _sTypeName)
 
 void OFieldDescription::copyColumnSettingsTo(const Reference< XPropertySet >& _rxColumn)
 {
-    if ( _rxColumn.is() )
-    {
-        Reference<XPropertySetInfo> xInfo = _rxColumn->getPropertySetInfo();
+    if ( !_rxColumn.is() )
+        return;
 
-        if ( GetFormatKey() != NumberFormat::ALL && xInfo->hasPropertyByName(PROPERTY_FORMATKEY) )
-            _rxColumn->setPropertyValue(PROPERTY_FORMATKEY,makeAny(GetFormatKey()));
-        if ( GetHorJustify() != SvxCellHorJustify::Standard && xInfo->hasPropertyByName(PROPERTY_ALIGN) )
-            _rxColumn->setPropertyValue(PROPERTY_ALIGN,makeAny(dbaui::mapTextAllign(GetHorJustify())));
-        if ( !GetHelpText().isEmpty() && xInfo->hasPropertyByName(PROPERTY_HELPTEXT) )
-            _rxColumn->setPropertyValue(PROPERTY_HELPTEXT,makeAny(GetHelpText()));
-        if ( GetControlDefault().hasValue() && xInfo->hasPropertyByName(PROPERTY_CONTROLDEFAULT) )
-            _rxColumn->setPropertyValue(PROPERTY_CONTROLDEFAULT,GetControlDefault());
+    Reference<XPropertySetInfo> xInfo = _rxColumn->getPropertySetInfo();
 
-        if(xInfo->hasPropertyByName(PROPERTY_RELATIVEPOSITION))
-            _rxColumn->setPropertyValue(PROPERTY_RELATIVEPOSITION,m_aRelativePosition);
-        if(xInfo->hasPropertyByName(PROPERTY_WIDTH))
-            _rxColumn->setPropertyValue(PROPERTY_WIDTH,m_aWidth);
-        if(xInfo->hasPropertyByName(PROPERTY_HIDDEN))
-            _rxColumn->setPropertyValue(PROPERTY_HIDDEN,makeAny(m_bHidden));
-    }
+    if ( GetFormatKey() != NumberFormat::ALL && xInfo->hasPropertyByName(PROPERTY_FORMATKEY) )
+        _rxColumn->setPropertyValue(PROPERTY_FORMATKEY,makeAny(GetFormatKey()));
+    if ( GetHorJustify() != SvxCellHorJustify::Standard && xInfo->hasPropertyByName(PROPERTY_ALIGN) )
+        _rxColumn->setPropertyValue(PROPERTY_ALIGN,makeAny(dbaui::mapTextAllign(GetHorJustify())));
+    if ( !GetHelpText().isEmpty() && xInfo->hasPropertyByName(PROPERTY_HELPTEXT) )
+        _rxColumn->setPropertyValue(PROPERTY_HELPTEXT,makeAny(GetHelpText()));
+    if ( GetControlDefault().hasValue() && xInfo->hasPropertyByName(PROPERTY_CONTROLDEFAULT) )
+        _rxColumn->setPropertyValue(PROPERTY_CONTROLDEFAULT,GetControlDefault());
+
+    if(xInfo->hasPropertyByName(PROPERTY_RELATIVEPOSITION))
+        _rxColumn->setPropertyValue(PROPERTY_RELATIVEPOSITION,m_aRelativePosition);
+    if(xInfo->hasPropertyByName(PROPERTY_WIDTH))
+        _rxColumn->setPropertyValue(PROPERTY_WIDTH,m_aWidth);
+    if(xInfo->hasPropertyByName(PROPERTY_HIDDEN))
+        _rxColumn->setPropertyValue(PROPERTY_HIDDEN,makeAny(m_bHidden));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

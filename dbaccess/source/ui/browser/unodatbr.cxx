@@ -1237,61 +1237,61 @@ void SbaTableQueryBrowser::connectExternalDispatches()
 {
     Reference< XDispatchProvider >  xProvider( getFrame(), UNO_QUERY );
     OSL_ENSURE(xProvider.is(), "SbaTableQueryBrowser::connectExternalDispatches: no DispatchProvider !");
-    if (xProvider.is())
+    if (!xProvider.is())
+        return;
+
+    if ( m_aExternalFeatures.empty() )
     {
-        if ( m_aExternalFeatures.empty() )
-        {
-            const char* pURLs[] = {
-                ".uno:DataSourceBrowser/DocumentDataSource",
-                ".uno:DataSourceBrowser/FormLetter",
-                ".uno:DataSourceBrowser/InsertColumns",
-                ".uno:DataSourceBrowser/InsertContent",
-            };
-            const sal_uInt16 nIds[] = {
-                ID_BROWSER_DOCUMENT_DATASOURCE,
-                ID_BROWSER_FORMLETTER,
-                ID_BROWSER_INSERTCOLUMNS,
-                ID_BROWSER_INSERTCONTENT
-            };
+        const char* pURLs[] = {
+            ".uno:DataSourceBrowser/DocumentDataSource",
+            ".uno:DataSourceBrowser/FormLetter",
+            ".uno:DataSourceBrowser/InsertColumns",
+            ".uno:DataSourceBrowser/InsertContent",
+        };
+        const sal_uInt16 nIds[] = {
+            ID_BROWSER_DOCUMENT_DATASOURCE,
+            ID_BROWSER_FORMLETTER,
+            ID_BROWSER_INSERTCOLUMNS,
+            ID_BROWSER_INSERTCONTENT
+        };
 
-            for ( size_t i=0; i < SAL_N_ELEMENTS( pURLs ); ++i )
+        for ( size_t i=0; i < SAL_N_ELEMENTS( pURLs ); ++i )
+        {
+            URL aURL;
+            aURL.Complete = OUString::createFromAscii( pURLs[i] );
+            if ( m_xUrlTransformer.is() )
+                m_xUrlTransformer->parseStrict( aURL );
+            m_aExternalFeatures[ nIds[ i ] ] = ExternalFeature( aURL );
+        }
+    }
+
+    for (auto & externalFeature : m_aExternalFeatures)
+    {
+        externalFeature.second.xDispatcher = xProvider->queryDispatch(
+            externalFeature.second.aURL, "_parent", FrameSearchFlag::PARENT
+        );
+
+        if ( externalFeature.second.xDispatcher.get() == static_cast< XDispatch* >( this ) )
+        {
+            SAL_WARN("dbaccess.ui",  "SbaTableQueryBrowser::connectExternalDispatches: this should not happen anymore!" );
+                // (nowadays, the URLs aren't in our SupportedFeatures list anymore, so we should
+                // not supply a dispatcher for this)
+            externalFeature.second.xDispatcher.clear();
+        }
+
+        if ( externalFeature.second.xDispatcher.is() )
+        {
+            try
             {
-                URL aURL;
-                aURL.Complete = OUString::createFromAscii( pURLs[i] );
-                if ( m_xUrlTransformer.is() )
-                    m_xUrlTransformer->parseStrict( aURL );
-                m_aExternalFeatures[ nIds[ i ] ] = ExternalFeature( aURL );
+                externalFeature.second.xDispatcher->addStatusListener( this, externalFeature.second.aURL );
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION("dbaccess");
             }
         }
 
-        for (auto & externalFeature : m_aExternalFeatures)
-        {
-            externalFeature.second.xDispatcher = xProvider->queryDispatch(
-                externalFeature.second.aURL, "_parent", FrameSearchFlag::PARENT
-            );
-
-            if ( externalFeature.second.xDispatcher.get() == static_cast< XDispatch* >( this ) )
-            {
-                SAL_WARN("dbaccess.ui",  "SbaTableQueryBrowser::connectExternalDispatches: this should not happen anymore!" );
-                    // (nowadays, the URLs aren't in our SupportedFeatures list anymore, so we should
-                    // not supply a dispatcher for this)
-                externalFeature.second.xDispatcher.clear();
-            }
-
-            if ( externalFeature.second.xDispatcher.is() )
-            {
-                try
-                {
-                    externalFeature.second.xDispatcher->addStatusListener( this, externalFeature.second.aURL );
-                }
-                catch( const Exception& )
-                {
-                    DBG_UNHANDLED_EXCEPTION("dbaccess");
-                }
-            }
-
-            implCheckExternalSlot( externalFeature.first );
-        }
+        implCheckExternalSlot( externalFeature.first );
     }
 }
 

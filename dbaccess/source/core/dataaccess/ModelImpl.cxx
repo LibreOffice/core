@@ -309,19 +309,19 @@ void SAL_CALL DocumentStorageAccess::commited( const css::lang::EventObject& aEv
     if ( m_pModelImplementation )
         m_pModelImplementation->setModified( true );
 
-    if ( m_pModelImplementation && m_bPropagateCommitToRoot )
-    {
-        Reference< XStorage > xStorage( aEvent.Source, UNO_QUERY );
+    if ( !(m_pModelImplementation && m_bPropagateCommitToRoot) )
+        return;
 
-        // check if this is the dedicated "database" sub storage
-        NamedStorages::const_iterator pos = m_aExposedStorages.find( "database" );
-        if  (   ( pos != m_aExposedStorages.end() )
-            &&  ( pos->second == xStorage )
-            )
-        {
-            // if so, also commit the root storage
-            m_pModelImplementation->commitRootStorage();
-        }
+    Reference< XStorage > xStorage( aEvent.Source, UNO_QUERY );
+
+    // check if this is the dedicated "database" sub storage
+    NamedStorages::const_iterator pos = m_aExposedStorages.find( "database" );
+    if  (   ( pos != m_aExposedStorages.end() )
+        &&  ( pos->second == xStorage )
+        )
+    {
+        // if so, also commit the root storage
+        m_pModelImplementation->commitRootStorage();
     }
 }
 

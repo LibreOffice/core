@@ -230,36 +230,36 @@ namespace dbaui
         if (xSuppCols.is())
             xCols = xSuppCols->getColumns();
         OSL_ENSURE(xCols.is(), "OIndexCollection::implFillIndexInfo: the index does not have columns!");
-        if (xCols.is())
+        if (!xCols.is())
+            return;
+
+        Sequence< OUString > aFieldNames = xCols->getElementNames();
+        _rIndex.aFields.resize(aFieldNames.getLength());
+
+        const OUString* pFieldNames = aFieldNames.getConstArray();
+        const OUString* pFieldNamesEnd = pFieldNames + aFieldNames.getLength();
+        IndexFields::iterator aCopyTo = _rIndex.aFields.begin();
+
+        Reference< XPropertySet > xIndexColumn;
+        for (;pFieldNames < pFieldNamesEnd; ++pFieldNames, ++aCopyTo)
         {
-            Sequence< OUString > aFieldNames = xCols->getElementNames();
-            _rIndex.aFields.resize(aFieldNames.getLength());
-
-            const OUString* pFieldNames = aFieldNames.getConstArray();
-            const OUString* pFieldNamesEnd = pFieldNames + aFieldNames.getLength();
-            IndexFields::iterator aCopyTo = _rIndex.aFields.begin();
-
-            Reference< XPropertySet > xIndexColumn;
-            for (;pFieldNames < pFieldNamesEnd; ++pFieldNames, ++aCopyTo)
+            // extract the column
+            xIndexColumn.clear();
+            xCols->getByName(*pFieldNames) >>= xIndexColumn;
+            if (!xIndexColumn.is())
             {
-                // extract the column
-                xIndexColumn.clear();
-                xCols->getByName(*pFieldNames) >>= xIndexColumn;
-                if (!xIndexColumn.is())
-                {
-                    OSL_FAIL("OIndexCollection::implFillIndexInfo: invalid index column!");
-                    --aCopyTo;
-                    continue;
-                }
-
-                // get the relevant properties
-                aCopyTo->sFieldName = *pFieldNames;
-                aCopyTo->bSortAscending = ::cppu::any2bool(xIndexColumn->getPropertyValue("IsAscending"));
+                OSL_FAIL("OIndexCollection::implFillIndexInfo: invalid index column!");
+                --aCopyTo;
+                continue;
             }
 
-            _rIndex.aFields.resize(aCopyTo - _rIndex.aFields.begin());
-                // (just in case some fields were invalid ...)
+            // get the relevant properties
+            aCopyTo->sFieldName = *pFieldNames;
+            aCopyTo->bSortAscending = ::cppu::any2bool(xIndexColumn->getPropertyValue("IsAscending"));
         }
+
+        _rIndex.aFields.resize(aCopyTo - _rIndex.aFields.begin());
+            // (just in case some fields were invalid ...)
     }
 
     void OIndexCollection::resetIndex(const Indexes::iterator& _rPos)
@@ -299,28 +299,28 @@ namespace dbaui
         detach();
 
         m_xIndexes = _rxIndexes;
-        if (m_xIndexes.is())
-        {
-            // loop through all the indexes
-            Sequence< OUString > aNames = m_xIndexes->getElementNames();
-            const OUString* pNames = aNames.getConstArray();
-            const OUString* pEnd = pNames + aNames.getLength();
-            for (; pNames < pEnd; ++pNames)
-            {
-                // extract the index object
-                Reference< XPropertySet > xIndex;
-                m_xIndexes->getByName(*pNames) >>= xIndex;
-                if (!xIndex.is())
-                {
-                    OSL_FAIL("OIndexCollection::implConstructFrom: got an invalid index object ... ignoring!");
-                    continue;
-                }
+        if (!m_xIndexes.is())
+            return;
 
-                // fill the OIndex structure
-                OIndex aCurrentIndex(*pNames);
-                implFillIndexInfo(aCurrentIndex);
-                m_aIndexes.push_back(aCurrentIndex);
+        // loop through all the indexes
+        Sequence< OUString > aNames = m_xIndexes->getElementNames();
+        const OUString* pNames = aNames.getConstArray();
+        const OUString* pEnd = pNames + aNames.getLength();
+        for (; pNames < pEnd; ++pNames)
+        {
+            // extract the index object
+            Reference< XPropertySet > xIndex;
+            m_xIndexes->getByName(*pNames) >>= xIndex;
+            if (!xIndex.is())
+            {
+                OSL_FAIL("OIndexCollection::implConstructFrom: got an invalid index object ... ignoring!");
+                continue;
             }
+
+            // fill the OIndex structure
+            OIndex aCurrentIndex(*pNames);
+            implFillIndexInfo(aCurrentIndex);
+            m_aIndexes.push_back(aCurrentIndex);
         }
     }
 

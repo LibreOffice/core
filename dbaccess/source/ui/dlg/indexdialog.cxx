@@ -281,26 +281,26 @@ namespace dbaui
     {
         std::unique_ptr<weld::TreeIter> xSelected(m_xIndexList->make_iterator());
         // the selected index
-        if (m_xIndexList->get_selected(xSelected.get()))
+        if (!m_xIndexList->get_selected(xSelected.get()))
+            return;
+
+        // let the user confirm the drop
+        if (_bConfirm)
         {
-            // let the user confirm the drop
-            if (_bConfirm)
-            {
-                OUString sConfirm(DBA_RES(STR_CONFIRM_DROP_INDEX));
-                sConfirm = sConfirm.replaceFirst("$name$", m_xIndexList->get_text(*xSelected));
-                std::unique_ptr<weld::MessageDialog> xConfirm(Application::CreateMessageDialog(m_xDialog.get(),
-                                                              VclMessageType::Question, VclButtonsType::YesNo,
-                                                              sConfirm));
-                if (RET_YES != xConfirm->run())
-                    return;
-            }
-
-            // do the drop
-            implDropIndex(xSelected.get(), true);
-
-            // reflect the new selection in the toolbox
-            updateToolbox();
+            OUString sConfirm(DBA_RES(STR_CONFIRM_DROP_INDEX));
+            sConfirm = sConfirm.replaceFirst("$name$", m_xIndexList->get_text(*xSelected));
+            std::unique_ptr<weld::MessageDialog> xConfirm(Application::CreateMessageDialog(m_xDialog.get(),
+                                                          VclMessageType::Question, VclButtonsType::YesNo,
+                                                          sConfirm));
+            if (RET_YES != xConfirm->run())
+                return;
         }
+
+        // do the drop
+        implDropIndex(xSelected.get(), true);
+
+        // reflect the new selection in the toolbox
+        updateToolbox();
     }
 
     bool DbaIndexDialog::implDropIndex(const weld::TreeIter* pEntry, bool _bRemoveFromCollection)

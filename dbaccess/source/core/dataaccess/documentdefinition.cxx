@@ -1696,24 +1696,24 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_
 void ODocumentDefinition::onCommandPreview(Any& _rImage)
 {
     loadEmbeddedObjectForPreview();
-    if ( m_xEmbeddedObject.is() )
-    {
-        try
-        {
-            Reference<XTransferable> xTransfer(getComponent(),UNO_QUERY);
-            if ( xTransfer.is() )
-            {
-                DataFlavor aFlavor;
-                aFlavor.MimeType = "image/png";
-                aFlavor.HumanPresentableName = "Portable Network Graphics";
-                aFlavor.DataType = cppu::UnoType<Sequence < sal_Int8 >>::get();
+    if ( !m_xEmbeddedObject.is() )
+        return;
 
-                _rImage = xTransfer->getTransferData( aFlavor );
-            }
-        }
-        catch( const Exception& )
+    try
+    {
+        Reference<XTransferable> xTransfer(getComponent(),UNO_QUERY);
+        if ( xTransfer.is() )
         {
+            DataFlavor aFlavor;
+            aFlavor.MimeType = "image/png";
+            aFlavor.HumanPresentableName = "Portable Network Graphics";
+            aFlavor.DataType = cppu::UnoType<Sequence < sal_Int8 >>::get();
+
+            _rImage = xTransfer->getTransferData( aFlavor );
         }
+    }
+    catch( const Exception& )
+    {
     }
 }
 
@@ -1725,19 +1725,19 @@ void ODocumentDefinition::getPropertyDefaultByHandle( sal_Int32 /*_nHandle*/, An
 void ODocumentDefinition::onCommandGetDocumentProperties( Any& _rProps )
 {
     loadEmbeddedObjectForPreview();
-    if ( m_xEmbeddedObject.is() )
+    if ( !m_xEmbeddedObject.is() )
+        return;
+
+    try
     {
-        try
-        {
-            Reference<XDocumentPropertiesSupplier> xDocSup(
-                getComponent(), UNO_QUERY );
-            if ( xDocSup.is() )
-                _rProps <<= xDocSup->getDocumentProperties();
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("dbaccess");
-        }
+        Reference<XDocumentPropertiesSupplier> xDocSup(
+            getComponent(), UNO_QUERY );
+        if ( xDocSup.is() )
+            _rProps <<= xDocSup->getDocumentProperties();
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 }
 

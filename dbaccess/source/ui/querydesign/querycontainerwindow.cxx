@@ -171,54 +171,54 @@ namespace dbaui
     }
     void OQueryContainerWindow::showPreview(const Reference<XFrame>& _xFrame)
     {
-        if(!m_pBeamer)
+        if(m_pBeamer)
+            return;
+
+        m_pBeamer = VclPtr<OBeamer>::Create(this);
+
+        ::dbaui::notifySystemWindow(this,m_pBeamer,::comphelper::mem_fun(&TaskPaneList::AddWindow));
+
+        m_xBeamer = Frame::create( m_pViewSwitch->getORB() );
+        m_xBeamer->initialize( VCLUnoHelper::GetInterface ( m_pBeamer ) );
+
+        // notify layout manager to not create internal toolbars
+        try
         {
-            m_pBeamer = VclPtr<OBeamer>::Create(this);
-
-            ::dbaui::notifySystemWindow(this,m_pBeamer,::comphelper::mem_fun(&TaskPaneList::AddWindow));
-
-            m_xBeamer = Frame::create( m_pViewSwitch->getORB() );
-            m_xBeamer->initialize( VCLUnoHelper::GetInterface ( m_pBeamer ) );
-
-            // notify layout manager to not create internal toolbars
-            try
+            Reference < XPropertySet > xLMPropSet(m_xBeamer->getLayoutManager(), UNO_QUERY);
+            if ( xLMPropSet.is() )
             {
-                Reference < XPropertySet > xLMPropSet(m_xBeamer->getLayoutManager(), UNO_QUERY);
-                if ( xLMPropSet.is() )
-                {
-                    const OUString aAutomaticToolbars( "AutomaticToolbars" );
-                    xLMPropSet->setPropertyValue( aAutomaticToolbars, Any( false ));
-                }
+                const OUString aAutomaticToolbars( "AutomaticToolbars" );
+                xLMPropSet->setPropertyValue( aAutomaticToolbars, Any( false ));
             }
-            catch( Exception& )
-            {
-            }
-
-            m_xBeamer->setName(FRAME_NAME_QUERY_PREVIEW);
-
-            // append our frame
-            Reference < XFramesSupplier > xSup(_xFrame,UNO_QUERY);
-            Reference < XFrames > xFrames = xSup->getFrames();
-            xFrames->append( Reference<XFrame>(m_xBeamer,UNO_QUERY_THROW) );
-
-            Size aSize = GetOutputSizePixel();
-            Size aBeamer(aSize.Width(),sal_Int32(aSize.Height()*0.33));
-
-            const long  nFrameHeight = LogicToPixel(Size(0, 3), MapMode(MapUnit::MapAppFont)).Height();
-            Point aPos(0,aBeamer.Height()+nFrameHeight);
-
-            m_pBeamer->SetPosSizePixel(Point(0,0),aBeamer);
-            m_pBeamer->Show();
-
-            m_pSplitter->SetPosSizePixel( Point(0,aBeamer.Height()), Size(aSize.Width(),nFrameHeight) );
-            // a default pos for the splitter, so that the listbox is about 80 (logical) pixels wide
-            m_pSplitter->SetSplitPosPixel( aBeamer.Height() );
-            m_pViewSwitch->SetPosSizePixel(aPos,Size(aBeamer.Width(),aSize.Height() - aBeamer.Height()-nFrameHeight));
-
-            m_pSplitter->Show();
-
-            Resize();
         }
+        catch( Exception& )
+        {
+        }
+
+        m_xBeamer->setName(FRAME_NAME_QUERY_PREVIEW);
+
+        // append our frame
+        Reference < XFramesSupplier > xSup(_xFrame,UNO_QUERY);
+        Reference < XFrames > xFrames = xSup->getFrames();
+        xFrames->append( Reference<XFrame>(m_xBeamer,UNO_QUERY_THROW) );
+
+        Size aSize = GetOutputSizePixel();
+        Size aBeamer(aSize.Width(),sal_Int32(aSize.Height()*0.33));
+
+        const long  nFrameHeight = LogicToPixel(Size(0, 3), MapMode(MapUnit::MapAppFont)).Height();
+        Point aPos(0,aBeamer.Height()+nFrameHeight);
+
+        m_pBeamer->SetPosSizePixel(Point(0,0),aBeamer);
+        m_pBeamer->Show();
+
+        m_pSplitter->SetPosSizePixel( Point(0,aBeamer.Height()), Size(aSize.Width(),nFrameHeight) );
+        // a default pos for the splitter, so that the listbox is about 80 (logical) pixels wide
+        m_pSplitter->SetSplitPosPixel( aBeamer.Height() );
+        m_pViewSwitch->SetPosSizePixel(aPos,Size(aBeamer.Width(),aSize.Height() - aBeamer.Height()-nFrameHeight));
+
+        m_pSplitter->Show();
+
+        Resize();
     }
 
 }   // namespace dbaui

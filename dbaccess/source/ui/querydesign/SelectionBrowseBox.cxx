@@ -568,19 +568,19 @@ void OSelectionBrowseBox::notifyFunctionFieldChanged(const OUString& _sOldFuncti
 
 void OSelectionBrowseBox::clearEntryFunctionField(const OUString& _sFieldName,OTableFieldDescRef const & _pEntry, bool& _bListAction,sal_uInt16 _nColumnId)
 {
-    if ( isFieldNameAsterisk( _sFieldName ) && (!_pEntry->isNoneFunction() || _pEntry->IsGroupBy()) )
+    if ( !(isFieldNameAsterisk( _sFieldName ) && (!_pEntry->isNoneFunction() || _pEntry->IsGroupBy())) )
+        return;
+
+    OUString sFunctionName;
+    GetFunctionName(SQL_TOKEN_COUNT,sFunctionName);
+    OUString sOldLocalizedFunctionName = _pEntry->GetFunction();
+    if ( sOldLocalizedFunctionName != sFunctionName || _pEntry->IsGroupBy() )
     {
-        OUString sFunctionName;
-        GetFunctionName(SQL_TOKEN_COUNT,sFunctionName);
-        OUString sOldLocalizedFunctionName = _pEntry->GetFunction();
-        if ( sOldLocalizedFunctionName != sFunctionName || _pEntry->IsGroupBy() )
-        {
-            // append undo action for the function field
-            _pEntry->SetFunctionType(FKT_NONE);
-            _pEntry->SetFunction(OUString());
-            _pEntry->SetGroupBy(false);
-            notifyFunctionFieldChanged(sOldLocalizedFunctionName,_pEntry->GetFunction(),_bListAction,_nColumnId);
-        }
+        // append undo action for the function field
+        _pEntry->SetFunctionType(FKT_NONE);
+        _pEntry->SetFunction(OUString());
+        _pEntry->SetGroupBy(false);
+        notifyFunctionFieldChanged(sOldLocalizedFunctionName,_pEntry->GetFunction(),_bListAction,_nColumnId);
     }
 }
 
@@ -1417,26 +1417,26 @@ OTableFieldDescRef const & OSelectionBrowseBox::AppendNewCol( sal_uInt16 nCnt)
 
 void OSelectionBrowseBox::DeleteFields(const OUString& rAliasName)
 {
-    if (!getFields().empty())
+    if (getFields().empty())
+        return;
+
+    sal_uInt16 nColId = GetCurColumnId();
+    sal_uInt32 nRow = GetCurRow();
+
+    bool bWasEditing = IsEditing();
+    if (bWasEditing)
+        DeactivateCell();
+
+    auto aIter = std::find_if(getFields().rbegin(), getFields().rend(),
+        [&rAliasName](const OTableFieldDescRef pEntry) { return pEntry->GetAlias() == rAliasName; });
+    if (aIter != getFields().rend())
     {
-        sal_uInt16 nColId = GetCurColumnId();
-        sal_uInt32 nRow = GetCurRow();
-
-        bool bWasEditing = IsEditing();
-        if (bWasEditing)
-            DeactivateCell();
-
-        auto aIter = std::find_if(getFields().rbegin(), getFields().rend(),
-            [&rAliasName](const OTableFieldDescRef pEntry) { return pEntry->GetAlias() == rAliasName; });
-        if (aIter != getFields().rend())
-        {
-            sal_uInt16 nPos = sal::static_int_cast<sal_uInt16>(std::distance(aIter, getFields().rend()));
-            RemoveField( GetColumnId( nPos ) );
-        }
-
-        if (bWasEditing)
-            ActivateCell(nRow , nColId);
+        sal_uInt16 nPos = sal::static_int_cast<sal_uInt16>(std::distance(aIter, getFields().rend()));
+        RemoveField( GetColumnId( nPos ) );
     }
+
+    if (bWasEditing)
+        ActivateCell(nRow , nColId);
 }
 
 void OSelectionBrowseBox::SetColWidth(sal_uInt16 nColId, long nNewWidth)
@@ -2589,56 +2589,56 @@ bool OSelectionBrowseBox::fillEntryTable(OTableFieldDescRef const & _pEntry,cons
 void OSelectionBrowseBox::setFunctionCell(OTableFieldDescRef const & _pEntry)
 {
     Reference< XConnection> xConnection = static_cast<OQueryController&>(getDesignView()->getController()).getConnection();
-    if ( xConnection.is() )
+    if ( !xConnection.is() )
+        return;
+
+    // Aggregate functions in general only available with Core SQL
+    if ( lcl_SupportsCoreSQLGrammar(xConnection) )
     {
-        // Aggregate functions in general only available with Core SQL
-        if ( lcl_SupportsCoreSQLGrammar(xConnection) )
-        {
-            sal_Int32 nIdx {0};
-            // if we have an asterisk, no other function than count is allowed
-            m_pFunctionCell->Clear();
-            m_pFunctionCell->InsertEntry(m_aFunctionStrings.getToken(0, ';', nIdx));
-            if ( isFieldNameAsterisk(_pEntry->GetField()) )
-                m_pFunctionCell->InsertEntry(m_aFunctionStrings.getToken(1, ';', nIdx)); // 2nd token: COUNT
-            else
-            {
-                const bool bSkipLastToken {_pEntry->isNumeric()};
-                while (nIdx>0)
-                {
-                    const OUString sTok {m_aFunctionStrings.getToken(0, ';', nIdx)};
-                    if (bSkipLastToken && nIdx<0)
-                        break;
-                    m_pFunctionCell->InsertEntry(sTok);
-                }
-            }
-
-            if ( _pEntry->IsGroupBy() )
-            {
-                OSL_ENSURE(!_pEntry->isNumeric(),"Not allowed to combine group by and numeric values!");
-                m_pFunctionCell->SelectEntry(m_pFunctionCell->GetEntry(m_pFunctionCell->GetEntryCount() - 1));
-            }
-            else if ( m_pFunctionCell->GetEntryPos(_pEntry->GetFunction()) != COMBOBOX_ENTRY_NOTFOUND )
-                m_pFunctionCell->SelectEntry(_pEntry->GetFunction());
-            else
-                m_pFunctionCell->SelectEntryPos(0);
-
-            enableControl(_pEntry,m_pFunctionCell);
-        }
+        sal_Int32 nIdx {0};
+        // if we have an asterisk, no other function than count is allowed
+        m_pFunctionCell->Clear();
+        m_pFunctionCell->InsertEntry(m_aFunctionStrings.getToken(0, ';', nIdx));
+        if ( isFieldNameAsterisk(_pEntry->GetField()) )
+            m_pFunctionCell->InsertEntry(m_aFunctionStrings.getToken(1, ';', nIdx)); // 2nd token: COUNT
         else
         {
-            // only COUNT(*) and COUNT("table".*) allowed
-            bool bCountRemoved = !isFieldNameAsterisk(_pEntry->GetField());
-            if ( bCountRemoved )
-                m_pFunctionCell->RemoveEntry(1);
-
-            if ( !bCountRemoved && m_pFunctionCell->GetEntryCount() < 2)
-                m_pFunctionCell->InsertEntry(m_aFunctionStrings.getToken(2, ';')); // 2 -> COUNT
-
-            if(m_pFunctionCell->GetEntryPos(_pEntry->GetFunction()) != COMBOBOX_ENTRY_NOTFOUND)
-                m_pFunctionCell->SelectEntry(_pEntry->GetFunction());
-            else
-                m_pFunctionCell->SelectEntryPos(0);
+            const bool bSkipLastToken {_pEntry->isNumeric()};
+            while (nIdx>0)
+            {
+                const OUString sTok {m_aFunctionStrings.getToken(0, ';', nIdx)};
+                if (bSkipLastToken && nIdx<0)
+                    break;
+                m_pFunctionCell->InsertEntry(sTok);
+            }
         }
+
+        if ( _pEntry->IsGroupBy() )
+        {
+            OSL_ENSURE(!_pEntry->isNumeric(),"Not allowed to combine group by and numeric values!");
+            m_pFunctionCell->SelectEntry(m_pFunctionCell->GetEntry(m_pFunctionCell->GetEntryCount() - 1));
+        }
+        else if ( m_pFunctionCell->GetEntryPos(_pEntry->GetFunction()) != COMBOBOX_ENTRY_NOTFOUND )
+            m_pFunctionCell->SelectEntry(_pEntry->GetFunction());
+        else
+            m_pFunctionCell->SelectEntryPos(0);
+
+        enableControl(_pEntry,m_pFunctionCell);
+    }
+    else
+    {
+        // only COUNT(*) and COUNT("table".*) allowed
+        bool bCountRemoved = !isFieldNameAsterisk(_pEntry->GetField());
+        if ( bCountRemoved )
+            m_pFunctionCell->RemoveEntry(1);
+
+        if ( !bCountRemoved && m_pFunctionCell->GetEntryCount() < 2)
+            m_pFunctionCell->InsertEntry(m_aFunctionStrings.getToken(2, ';')); // 2 -> COUNT
+
+        if(m_pFunctionCell->GetEntryPos(_pEntry->GetFunction()) != COMBOBOX_ENTRY_NOTFOUND)
+            m_pFunctionCell->SelectEntry(_pEntry->GetFunction());
+        else
+            m_pFunctionCell->SelectEntryPos(0);
     }
 }
 

@@ -304,19 +304,19 @@ namespace dbaui
                 break;
         }
 
-        if ( xDef.is() )
-        {
-            fillListBox(xDef);
-            OUString sName = GetCellText( nRow, nColumnId );
-            m_pListCell->SelectEntry( sName );
-            if ( m_pListCell->GetSelectedEntry() != sName )
-            {
-                m_pListCell->InsertEntry( sName );
-                m_pListCell->SelectEntry( sName );
-            }
+        if ( !xDef.is() )
+            return;
 
-            m_pListCell->SetHelpId(sHelpId);
+        fillListBox(xDef);
+        OUString sName = GetCellText( nRow, nColumnId );
+        m_pListCell->SelectEntry( sName );
+        if ( m_pListCell->GetSelectedEntry() != sName )
+        {
+            m_pListCell->InsertEntry( sName );
+            m_pListCell->SelectEntry( sName );
         }
+
+        m_pListCell->SetHelpId(sHelpId);
     }
 
     CellController* ORelationControl::GetController( long /*nRow*/, sal_uInt16 /*nColumnId*/ )

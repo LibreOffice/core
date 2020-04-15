@@ -76,36 +76,36 @@ void OCacheSet::construct(  const Reference< XResultSet>& _xDriverSet,const OUSt
 
     m_sRowSetFilter = i_sRowSetFilter;
 
-    if(_xDriverSet.is())
+    if(!_xDriverSet.is())
+        return;
+
+    m_xDriverSet = _xDriverSet;
+    m_xDriverRow.set(_xDriverSet,UNO_QUERY);
+    m_xSetMetaData = Reference<XResultSetMetaDataSupplier>(_xDriverSet,UNO_QUERY_THROW)->getMetaData();
+    if ( m_xSetMetaData.is() )
     {
-        m_xDriverSet = _xDriverSet;
-        m_xDriverRow.set(_xDriverSet,UNO_QUERY);
-        m_xSetMetaData = Reference<XResultSetMetaDataSupplier>(_xDriverSet,UNO_QUERY_THROW)->getMetaData();
-        if ( m_xSetMetaData.is() )
+        const sal_Int32 nCount = m_xSetMetaData->getColumnCount();
+        m_aNullable.resize(nCount);
+        m_aSignedFlags.resize(nCount);
+        m_aColumnTypes.resize(nCount);
+        auto pNullableIter = m_aNullable.begin();
+        auto pSignedIter = m_aSignedFlags.begin();
+        auto pColumnIter = m_aColumnTypes.begin();
+        for (sal_Int32 i=1; i <= nCount; ++i,++pSignedIter,++pColumnIter,++pNullableIter)
         {
-            const sal_Int32 nCount = m_xSetMetaData->getColumnCount();
-            m_aNullable.resize(nCount);
-            m_aSignedFlags.resize(nCount);
-            m_aColumnTypes.resize(nCount);
-            auto pNullableIter = m_aNullable.begin();
-            auto pSignedIter = m_aSignedFlags.begin();
-            auto pColumnIter = m_aColumnTypes.begin();
-            for (sal_Int32 i=1; i <= nCount; ++i,++pSignedIter,++pColumnIter,++pNullableIter)
-            {
-                *pNullableIter = m_xSetMetaData->isNullable(i) != ColumnValue::NO_NULLS;
-                *pSignedIter = m_xSetMetaData->isSigned(i);
-                *pColumnIter = m_xSetMetaData->getColumnType(i);
-            }
+            *pNullableIter = m_xSetMetaData->isNullable(i) != ColumnValue::NO_NULLS;
+            *pSignedIter = m_xSetMetaData->isSigned(i);
+            *pColumnIter = m_xSetMetaData->getColumnType(i);
         }
-        Reference< XStatement> xStmt(m_xDriverSet->getStatement(),UNO_QUERY);
-        if(xStmt.is())
-            m_xConnection = xStmt->getConnection();
-        else
-        {
-            Reference< XPreparedStatement> xPrepStmt(m_xDriverSet->getStatement(),UNO_QUERY);
-            if ( xPrepStmt.is() )
-                m_xConnection = xPrepStmt->getConnection();
-        }
+    }
+    Reference< XStatement> xStmt(m_xDriverSet->getStatement(),UNO_QUERY);
+    if(xStmt.is())
+        m_xConnection = xStmt->getConnection();
+    else
+    {
+        Reference< XPreparedStatement> xPrepStmt(m_xDriverSet->getStatement(),UNO_QUERY);
+        if ( xPrepStmt.is() )
+            m_xConnection = xPrepStmt->getConnection();
     }
 }
 

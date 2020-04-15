@@ -481,65 +481,65 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
 {
 
     sal_Int32 nCount = evt.getLength();
-    if ( nCount )
+    if ( !nCount )
+        return;
+
+    // First, notify listeners interested in changes of every property.
+    OInterfaceContainerHelper* pAllPropsContainer = m_aPropertyChangeListeners.getContainer( OUString() );
+    if ( pAllPropsContainer )
     {
-        // First, notify listeners interested in changes of every property.
-        OInterfaceContainerHelper* pAllPropsContainer = m_aPropertyChangeListeners.getContainer( OUString() );
-        if ( pAllPropsContainer )
+        OInterfaceIteratorHelper aIter( *pAllPropsContainer );
+        while ( aIter.hasMoreElements() )
         {
-            OInterfaceIteratorHelper aIter( *pAllPropsContainer );
+            // Propagate event.
+            Reference< XPropertiesChangeListener > xListener( aIter.next(), UNO_QUERY );
+            if ( xListener.is() )
+                xListener->propertiesChange( evt );
+        }
+    }
+
+    typedef std::map< XPropertiesChangeListener*, Sequence< PropertyChangeEvent > > PropertiesEventListenerMap;
+    PropertiesEventListenerMap aListeners;
+
+    const PropertyChangeEvent* propertyChangeEvent = evt.getConstArray();
+
+    for ( sal_Int32 n = 0; n < nCount; ++n, ++propertyChangeEvent )
+    {
+        const PropertyChangeEvent& rEvent = *propertyChangeEvent;
+        const OUString& rName = rEvent.PropertyName;
+
+        OInterfaceContainerHelper* pPropsContainer = m_aPropertyChangeListeners.getContainer( rName );
+        if ( pPropsContainer )
+        {
+            OInterfaceIteratorHelper aIter( *pPropsContainer );
             while ( aIter.hasMoreElements() )
             {
-                // Propagate event.
-                Reference< XPropertiesChangeListener > xListener( aIter.next(), UNO_QUERY );
-                if ( xListener.is() )
-                    xListener->propertiesChange( evt );
-            }
-        }
+                Sequence< PropertyChangeEvent >* propertyEvents;
 
-        typedef std::map< XPropertiesChangeListener*, Sequence< PropertyChangeEvent > > PropertiesEventListenerMap;
-        PropertiesEventListenerMap aListeners;
-
-        const PropertyChangeEvent* propertyChangeEvent = evt.getConstArray();
-
-        for ( sal_Int32 n = 0; n < nCount; ++n, ++propertyChangeEvent )
-        {
-            const PropertyChangeEvent& rEvent = *propertyChangeEvent;
-            const OUString& rName = rEvent.PropertyName;
-
-            OInterfaceContainerHelper* pPropsContainer = m_aPropertyChangeListeners.getContainer( rName );
-            if ( pPropsContainer )
-            {
-                OInterfaceIteratorHelper aIter( *pPropsContainer );
-                while ( aIter.hasMoreElements() )
+                XPropertiesChangeListener* pListener = static_cast< XPropertiesChangeListener * >( aIter.next() );
+                PropertiesEventListenerMap::iterator it = aListeners.find( pListener );
+                if ( it == aListeners.end() )
                 {
-                    Sequence< PropertyChangeEvent >* propertyEvents;
-
-                    XPropertiesChangeListener* pListener = static_cast< XPropertiesChangeListener * >( aIter.next() );
-                    PropertiesEventListenerMap::iterator it = aListeners.find( pListener );
-                    if ( it == aListeners.end() )
-                    {
-                        // Not in map - create and insert new entry.
-                        auto pair = aListeners.emplace( pListener, Sequence< PropertyChangeEvent >( nCount ));
-                        propertyEvents = &pair.first->second;
-                    }
-                    else
-                        propertyEvents = &(*it).second;
-
-                    (*propertyEvents)[n] = rEvent;
+                    // Not in map - create and insert new entry.
+                    auto pair = aListeners.emplace( pListener, Sequence< PropertyChangeEvent >( nCount ));
+                    propertyEvents = &pair.first->second;
                 }
+                else
+                    propertyEvents = &(*it).second;
+
+                (*propertyEvents)[n] = rEvent;
             }
         }
+    }
 
-        // Notify listeners.
-        for (auto & rPair : aListeners)
-        {
-            XPropertiesChangeListener* pListener = rPair.first;
-            Sequence< PropertyChangeEvent >& rSeq = rPair.second;
+    // Notify listeners.
+    for (auto & rPair : aListeners)
+    {
+        XPropertiesChangeListener* pListener = rPair.first;
+        Sequence< PropertyChangeEvent >& rSeq = rPair.second;
 
-            // Propagate event.
-            pListener->propertiesChange( rSeq );
-        }
+        // Propagate event.
+        pListener->propertiesChange( rSeq );
     }
 }
 

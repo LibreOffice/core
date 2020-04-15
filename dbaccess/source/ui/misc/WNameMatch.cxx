@@ -242,59 +242,59 @@ namespace
 IMPL_LINK_NOARG(OWizNameMatching, TableListClickHdl, weld::TreeView&, void)
 {
     int nPos = m_xCTRL_LEFT->get_selected_index();
-    if (nPos != -1)
+    if (nPos == -1)
+        return;
+
+    int nOldEntry = m_xCTRL_RIGHT->get_selected_index();
+    if (nOldEntry != -1 && nPos != nOldEntry)
     {
-        int nOldEntry = m_xCTRL_RIGHT->get_selected_index();
-        if (nOldEntry != -1 && nPos != nOldEntry)
+        m_xCTRL_RIGHT->unselect(nOldEntry);
+        if (nPos < m_xCTRL_RIGHT->n_children())
         {
-            m_xCTRL_RIGHT->unselect(nOldEntry);
-            if (nPos < m_xCTRL_RIGHT->n_children())
-            {
-                int nNewPos = GetFirstEntryInView(*m_xCTRL_LEFT);
-                if ( nNewPos - nPos == 1 )
-                    --nNewPos;
-                m_xCTRL_RIGHT->scroll_to_row(nNewPos);
-                m_xCTRL_RIGHT->select(nPos);
-            }
+            int nNewPos = GetFirstEntryInView(*m_xCTRL_LEFT);
+            if ( nNewPos - nPos == 1 )
+                --nNewPos;
+            m_xCTRL_RIGHT->scroll_to_row(nNewPos);
+            m_xCTRL_RIGHT->select(nPos);
         }
-        else if (nOldEntry == -1)
-        {
-            if (nPos < m_xCTRL_RIGHT->n_children())
-                m_xCTRL_RIGHT->select(nPos);
-        }
+    }
+    else if (nOldEntry == -1)
+    {
+        if (nPos < m_xCTRL_RIGHT->n_children())
+            m_xCTRL_RIGHT->select(nPos);
     }
 }
 
 IMPL_LINK_NOARG( OWizNameMatching, TableListRightSelectHdl, weld::TreeView&, void )
 {
     int nPos = m_xCTRL_RIGHT->get_selected_index();
-    if (nPos != -1)
-    {
-        OFieldDescription* pColumn = reinterpret_cast<OFieldDescription*>(m_xCTRL_RIGHT->get_id(nPos).toInt64());
-        if (pColumn->IsAutoIncrement())
-        {
-            m_xCTRL_RIGHT->unselect(nPos);
-            return;
-        }
+    if (nPos == -1)
+        return;
 
-        int nOldEntry = m_xCTRL_LEFT->get_selected_index();
-        if (nOldEntry != -1 && nPos != nOldEntry)
+    OFieldDescription* pColumn = reinterpret_cast<OFieldDescription*>(m_xCTRL_RIGHT->get_id(nPos).toInt64());
+    if (pColumn->IsAutoIncrement())
+    {
+        m_xCTRL_RIGHT->unselect(nPos);
+        return;
+    }
+
+    int nOldEntry = m_xCTRL_LEFT->get_selected_index();
+    if (nOldEntry != -1 && nPos != nOldEntry)
+    {
+        m_xCTRL_LEFT->unselect(nOldEntry);
+        if (nPos < m_xCTRL_LEFT->n_children())
         {
-            m_xCTRL_LEFT->unselect(nOldEntry);
-            if (nPos < m_xCTRL_LEFT->n_children())
-            {
-                int nNewPos = GetFirstEntryInView(*m_xCTRL_RIGHT);
-                if ( nNewPos - nPos == 1 )
-                    nNewPos--;
-                m_xCTRL_LEFT->scroll_to_row(nNewPos);
-                m_xCTRL_LEFT->select(nPos);
-            }
+            int nNewPos = GetFirstEntryInView(*m_xCTRL_RIGHT);
+            if ( nNewPos - nPos == 1 )
+                nNewPos--;
+            m_xCTRL_LEFT->scroll_to_row(nNewPos);
+            m_xCTRL_LEFT->select(nPos);
         }
-        else if (nOldEntry == -1)
-        {
-            if (nPos < m_xCTRL_LEFT->n_children())
-                m_xCTRL_LEFT->select(nPos);
-        }
+    }
+    else if (nOldEntry == -1)
+    {
+        if (nPos < m_xCTRL_LEFT->n_children())
+            m_xCTRL_LEFT->select(nPos);
     }
 }
 

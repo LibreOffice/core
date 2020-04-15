@@ -693,22 +693,22 @@ void ORowSetCache::beforeFirst(  )
 
 void ORowSetCache::afterLast(  )
 {
-    if(!m_bAfterLast)
+    if(m_bAfterLast)
+        return;
+
+    m_bBeforeFirst = false;
+    m_bAfterLast = true;
+
+    if(!m_bRowCountFinal)
     {
-        m_bBeforeFirst = false;
-        m_bAfterLast = true;
-
-        if(!m_bRowCountFinal)
-        {
-            m_xCacheSet->last();
-            m_bRowCountFinal = true;
-            m_nRowCount = m_xCacheSet->getRow();// + 1 removed
-        }
-        m_xCacheSet->afterLast();
-
-        m_nPosition = 0;
-        m_aMatrixIter = m_pMatrix->end();
+        m_xCacheSet->last();
+        m_bRowCountFinal = true;
+        m_nRowCount = m_xCacheSet->getRow();// + 1 removed
     }
+    m_xCacheSet->afterLast();
+
+    m_nPosition = 0;
+    m_aMatrixIter = m_pMatrix->end();
 }
 
 bool ORowSetCache::fillMatrix(sal_Int32& _nNewStartPos, sal_Int32 &_nNewEndPos)
@@ -1436,26 +1436,26 @@ void ORowSetCache::rotateCacheIterator(ORowSetMatrix::difference_type _nDist)
     if (m_bModified)
         return;
 
-    if(_nDist)
+    if(!_nDist)
+        return;
+
+    // now correct the iterator in our iterator vector
+    for(auto& rCacheIter : m_aCacheIterators)
     {
-        // now correct the iterator in our iterator vector
-        for(auto& rCacheIter : m_aCacheIterators)
+        if ( !rCacheIter.second.pRowSet->isInsertRow()
+            && rCacheIter.second.aIterator != m_pMatrix->end())
         {
-            if ( !rCacheIter.second.pRowSet->isInsertRow()
-                && rCacheIter.second.aIterator != m_pMatrix->end())
+            ptrdiff_t nDist = rCacheIter.second.aIterator - m_pMatrix->begin();
+            if(nDist < _nDist)
             {
-                ptrdiff_t nDist = rCacheIter.second.aIterator - m_pMatrix->begin();
-                if(nDist < _nDist)
-                {
-                    rCacheIter.second.aIterator = m_pMatrix->end();
-                }
-                else
-                {
-                    OSL_ENSURE((rCacheIter.second.aIterator - m_pMatrix->begin()) >= _nDist,"Invalid Dist value!");
-                    rCacheIter.second.aIterator -= _nDist;
-                    OSL_ENSURE(rCacheIter.second.aIterator >= m_pMatrix->begin()
-                            && rCacheIter.second.aIterator < m_pMatrix->end(),"Iterator out of area!");
-                }
+                rCacheIter.second.aIterator = m_pMatrix->end();
+            }
+            else
+            {
+                OSL_ENSURE((rCacheIter.second.aIterator - m_pMatrix->begin()) >= _nDist,"Invalid Dist value!");
+                rCacheIter.second.aIterator -= _nDist;
+                OSL_ENSURE(rCacheIter.second.aIterator >= m_pMatrix->begin()
+                        && rCacheIter.second.aIterator < m_pMatrix->end(),"Iterator out of area!");
             }
         }
     }

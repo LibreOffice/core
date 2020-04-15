@@ -177,19 +177,19 @@ void SbaXFormAdapter::AttachForm(const Reference< css::sdbc::XRowSet >& xNewMast
 
     m_xMainForm = xNewMaster;
 
-    if (m_xMainForm.is())
-    {
-        StartListening();
+    if (!m_xMainForm.is())
+        return;
 
-        // if our new master is loaded we have to send an 'loaded' event
-        Reference< css::form::XLoadable >  xLoadable(m_xMainForm, UNO_QUERY);
-        if (xLoadable->isLoaded())
-        {
-            css::lang::EventObject aEvt(*this);
-            ::comphelper::OInterfaceIteratorHelper2 aIt(m_aLoadListeners);
-            while (aIt.hasMoreElements())
-                static_cast< css::form::XLoadListener*>(aIt.next())->loaded(aEvt);
-        }
+    StartListening();
+
+    // if our new master is loaded we have to send an 'loaded' event
+    Reference< css::form::XLoadable >  xLoadable(m_xMainForm, UNO_QUERY);
+    if (xLoadable->isLoaded())
+    {
+        css::lang::EventObject aEvt(*this);
+        ::comphelper::OInterfaceIteratorHelper2 aIt(m_aLoadListeners);
+        while (aIt.hasMoreElements())
+            static_cast< css::form::XLoadListener*>(aIt.next())->loaded(aEvt);
     }
 
     // TODO : perhaps _all_ of our listeners should be notified about our new state
@@ -1622,18 +1622,18 @@ Reference< css::container::XEnumeration > SAL_CALL SbaXFormAdapter::createEnumer
 // css::beans::XPropertyChangeListener
 void SAL_CALL SbaXFormAdapter::propertyChange(const css::beans::PropertyChangeEvent& evt)
 {
-    if (evt.PropertyName == PROPERTY_NAME)
-    {
-        std::vector<  css::uno::Reference< css::form::XFormComponent > >::const_iterator aIter = std::find_if(  m_aChildren.begin(),
-                                                                m_aChildren.end(),
-                                                                [&evt](css::uno::Reference< css::uno::XInterface > const & x) { return x == evt.Source; });
+    if (evt.PropertyName != PROPERTY_NAME)
+        return;
 
-        if(aIter != m_aChildren.end())
-        {
-            sal_Int32 nPos = aIter - m_aChildren.begin();
-            OSL_ENSURE(*(m_aChildNames.begin() + nPos) == ::comphelper::getString(evt.OldValue), "SAL_CALL SbaXFormAdapter::propertyChange : object has a wrong name !");
-            *(m_aChildNames.begin() + nPos) = ::comphelper::getString(evt.NewValue);
-        }
+    std::vector<  css::uno::Reference< css::form::XFormComponent > >::const_iterator aIter = std::find_if(  m_aChildren.begin(),
+                                                            m_aChildren.end(),
+                                                            [&evt](css::uno::Reference< css::uno::XInterface > const & x) { return x == evt.Source; });
+
+    if(aIter != m_aChildren.end())
+    {
+        sal_Int32 nPos = aIter - m_aChildren.begin();
+        OSL_ENSURE(*(m_aChildNames.begin() + nPos) == ::comphelper::getString(evt.OldValue), "SAL_CALL SbaXFormAdapter::propertyChange : object has a wrong name !");
+        *(m_aChildNames.begin() + nPos) = ::comphelper::getString(evt.NewValue);
     }
 }
 

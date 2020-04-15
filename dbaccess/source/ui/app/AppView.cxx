@@ -473,36 +473,36 @@ void OApplicationView::showPreview( const OUString& _sDataSourceName,
                                     bool _bTable)
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
-    if ( isPreviewEnabled() )
+    if ( !isPreviewEnabled() )
+        return;
+
+    stopComponentListening(m_xObject);
+    m_xObject = nullptr;
+    try
     {
-        stopComponentListening(m_xObject);
-        m_xObject = nullptr;
-        try
+        Reference<XNameAccess> xNameAccess;
+        if ( _bTable )
         {
-            Reference<XNameAccess> xNameAccess;
-            if ( _bTable )
-            {
-                Reference<XTablesSupplier> xSup(_xConnection,UNO_QUERY);
-                if ( xSup.is() )
-                    xNameAccess = xSup->getTables();
-            }
-            else
-            {
-                Reference<XQueriesSupplier> xSup(_xConnection,UNO_QUERY);
-                if ( xSup.is() )
-                    xNameAccess = xSup->getQueries();
-            }
-            if ( xNameAccess.is() && xNameAccess->hasByName(_sName) )
-                m_xObject.set(xNameAccess->getByName(_sName),UNO_QUERY);
+            Reference<XTablesSupplier> xSup(_xConnection,UNO_QUERY);
+            if ( xSup.is() )
+                xNameAccess = xSup->getTables();
         }
-        catch( const Exception& )
+        else
         {
-            DBG_UNHANDLED_EXCEPTION("dbaccess");
+            Reference<XQueriesSupplier> xSup(_xConnection,UNO_QUERY);
+            if ( xSup.is() )
+                xNameAccess = xSup->getQueries();
         }
-        if ( m_xObject.is() )
-            startComponentListening(m_xObject);
-        getDetailView()->showPreview(_sDataSourceName,_sName,_bTable);
+        if ( xNameAccess.is() && xNameAccess->hasByName(_sName) )
+            m_xObject.set(xNameAccess->getByName(_sName),UNO_QUERY);
     }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
+    }
+    if ( m_xObject.is() )
+        startComponentListening(m_xObject);
+    getDetailView()->showPreview(_sDataSourceName,_sName,_bTable);
 }
 
 void OApplicationView::GetFocus()

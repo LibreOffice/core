@@ -532,41 +532,41 @@ void ORowSet::freeResources( bool _bComplete )
     m_bLastKnownRowCountFinal = false;
     m_nLastKnownRowCount      = 0;
 
-    if ( _bComplete )
+    if ( !_bComplete )
+        return;
+
+    // the columns must be disposed before the querycomposer is disposed because
+    // their owner can be the composer
+    TDataColumns().swap(m_aDataColumns);// clear and resize capacity
+    std::vector<bool>().swap(m_aReadOnlyDataColumns);
+
+    m_xColumns      = nullptr;
+    if ( m_pColumns )
+        m_pColumns->disposing();
+    // dispose the composer to avoid that everybody knows that the querycomposer is eol
+    try { ::comphelper::disposeComponent( m_xComposer ); }
+    catch(Exception&)
     {
-        // the columns must be disposed before the querycomposer is disposed because
-        // their owner can be the composer
-        TDataColumns().swap(m_aDataColumns);// clear and resize capacity
-        std::vector<bool>().swap(m_aReadOnlyDataColumns);
-
-        m_xColumns      = nullptr;
-        if ( m_pColumns )
-            m_pColumns->disposing();
-        // dispose the composer to avoid that everybody knows that the querycomposer is eol
-        try { ::comphelper::disposeComponent( m_xComposer ); }
-        catch(Exception&)
-        {
-            DBG_UNHANDLED_EXCEPTION("dbaccess");
-            m_xComposer = nullptr;
-        }
-
-        // let our warnings container forget the reference to the (possibly disposed) old result set
-        m_aWarnings.setExternalWarnings( nullptr );
-
-        m_pCache.reset();
-
-        impl_resetTables_nothrow();
-
-        m_xStatement    = nullptr;
-        m_xTypeMap      = nullptr;
-
-        if ( m_aOldRow.is() )
-            m_aOldRow->clearRow();
-
-        impl_disposeParametersContainer_nothrow();
-
-        m_bCommandFacetsDirty = true;
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
+        m_xComposer = nullptr;
     }
+
+    // let our warnings container forget the reference to the (possibly disposed) old result set
+    m_aWarnings.setExternalWarnings( nullptr );
+
+    m_pCache.reset();
+
+    impl_resetTables_nothrow();
+
+    m_xStatement    = nullptr;
+    m_xTypeMap      = nullptr;
+
+    if ( m_aOldRow.is() )
+        m_aOldRow->clearRow();
+
+    impl_disposeParametersContainer_nothrow();
+
+    m_bCommandFacetsDirty = true;
 }
 
 void ORowSet::setActiveConnection( Reference< XConnection > const & _rxNewConn, bool _bFireEvent )
@@ -923,53 +923,53 @@ void SAL_CALL ORowSet::updateRow(  )
         throwFunctionSequenceException(*this);
 
 
-    if(m_bModified)
+    if(!m_bModified)
+        return;
+
+    ORowSetRow aOldValues;
+    if ( !m_aCurrentRow.isNull() )
+        aOldValues = new ORowSetValueVector( *(*m_aCurrentRow) );
+
+    Sequence<Any> aChangedBookmarks;
+    RowsChangeEvent aEvt(*this,RowChangeAction::UPDATE,1,aChangedBookmarks);
+    notifyAllListenersRowBeforeChange(aGuard,aEvt);
+
+    std::vector< Any > aBookmarks;
+    m_pCache->updateRow(m_aCurrentRow.operator ->(),aBookmarks);
+    if ( !aBookmarks.empty() )
+        aEvt.Bookmarks = comphelper::containerToSequence(aBookmarks);
+    aEvt.Rows += aBookmarks.size();
+    m_aBookmark     = m_pCache->getBookmark();
+    m_aCurrentRow   = m_pCache->m_aMatrixIter;
+    m_bIsInsertRow  = false;
+    if ( m_pCache->m_aMatrixIter != m_pCache->getEnd() && (*m_pCache->m_aMatrixIter).is() )
     {
-        ORowSetRow aOldValues;
-        if ( !m_aCurrentRow.isNull() )
-            aOldValues = new ORowSetValueVector( *(*m_aCurrentRow) );
-
-        Sequence<Any> aChangedBookmarks;
-        RowsChangeEvent aEvt(*this,RowChangeAction::UPDATE,1,aChangedBookmarks);
-        notifyAllListenersRowBeforeChange(aGuard,aEvt);
-
-        std::vector< Any > aBookmarks;
-        m_pCache->updateRow(m_aCurrentRow.operator ->(),aBookmarks);
-        if ( !aBookmarks.empty() )
-            aEvt.Bookmarks = comphelper::containerToSequence(aBookmarks);
-        aEvt.Rows += aBookmarks.size();
-        m_aBookmark     = m_pCache->getBookmark();
-        m_aCurrentRow   = m_pCache->m_aMatrixIter;
-        m_bIsInsertRow  = false;
-        if ( m_pCache->m_aMatrixIter != m_pCache->getEnd() && (*m_pCache->m_aMatrixIter).is() )
+        if ( m_pCache->isResultSetChanged() )
         {
-            if ( m_pCache->isResultSetChanged() )
-            {
-                impl_rebuild_throw(aGuard);
-            }
-            else
-            {
-                m_aOldRow->setRow(new ORowSetValueVector(*(*m_aCurrentRow)));
-
-                // notification order
-                // - column values
-                ORowSetBase::firePropertyChange(aOldValues);
-            }
-            // - rowChanged
-            notifyAllListenersRowChanged(aGuard,aEvt);
-
-            // - IsModified
-            if(!m_bModified)
-                fireProperty(PROPERTY_ID_ISMODIFIED,false,true);
-            OSL_ENSURE( !m_bModified, "ORowSet::updateRow: just updated, but _still_ modified?" );
-
-            // - RowCount/IsRowCountFinal
-            fireRowcount();
+            impl_rebuild_throw(aGuard);
         }
-        else if ( !m_bAfterLast ) // the update went wrong
+        else
         {
-            ::dbtools::throwSQLException( DBA_RES( RID_STR_UPDATE_FAILED ), StandardSQLState::INVALID_CURSOR_POSITION, *this );
+            m_aOldRow->setRow(new ORowSetValueVector(*(*m_aCurrentRow)));
+
+            // notification order
+            // - column values
+            ORowSetBase::firePropertyChange(aOldValues);
         }
+        // - rowChanged
+        notifyAllListenersRowChanged(aGuard,aEvt);
+
+        // - IsModified
+        if(!m_bModified)
+            fireProperty(PROPERTY_ID_ISMODIFIED,false,true);
+        OSL_ENSURE( !m_bModified, "ORowSet::updateRow: just updated, but _still_ modified?" );
+
+        // - RowCount/IsRowCountFinal
+        fireRowcount();
+    }
+    else if ( !m_bAfterLast ) // the update went wrong
+    {
+        ::dbtools::throwSQLException( DBA_RES( RID_STR_UPDATE_FAILED ), StandardSQLState::INVALID_CURSOR_POSITION, *this );
     }
 }
 
@@ -1156,55 +1156,55 @@ void SAL_CALL ORowSet::moveToInsertRow(  )
     if ( ( m_pCache->m_nPrivileges & Privilege::INSERT ) != Privilege::INSERT )
         ::dbtools::throwSQLException( DBA_RES( RID_STR_NO_INSERT_PRIVILEGE ), StandardSQLState::GENERAL_ERROR, *this );
 
-    if ( notifyAllListenersCursorBeforeMove( aGuard ) )
+    if ( !notifyAllListenersCursorBeforeMove( aGuard ) )
+        return;
+
+    // remember old value for fire
+    ORowSetRow aOldValues;
+    if ( rowDeleted() )
     {
-        // remember old value for fire
-        ORowSetRow aOldValues;
-        if ( rowDeleted() )
-        {
-            positionCache( MOVE_FORWARD );
-            m_pCache->next();
-            setCurrentRow( true, false, aOldValues, aGuard);
-        }
-        else
-            positionCache( MOVE_NONE );
-
-        // check before because the resultset could be empty
-        if  (   !m_bBeforeFirst
-            &&  !m_bAfterLast
-            &&  m_pCache->m_aMatrixIter != m_pCache->getEnd()
-            &&  m_pCache->m_aMatrixIter->is()
-            )
-            aOldValues = new ORowSetValueVector( *(*(m_pCache->m_aMatrixIter)) );
-
-        const bool bNewState = m_bNew;
-        const bool bModState = m_bModified;
-
-        m_pCache->moveToInsertRow();
-        m_aCurrentRow = m_pCache->m_aInsertRow;
-        m_bIsInsertRow  = true;
-
-        // set read-only flag to false
-        impl_setDataColumnsWriteable_throw();
-
-        // notification order
-        // - column values
-        ORowSetBase::firePropertyChange(aOldValues);
-
-        // - cursorMoved
-        notifyAllListenersCursorMoved(aGuard);
-
-        // - IsModified
-        if ( bModState != m_bModified )
-            fireProperty( PROPERTY_ID_ISMODIFIED, m_bModified, bModState );
-
-        // - IsNew
-        if ( bNewState != m_bNew )
-            fireProperty( PROPERTY_ID_ISNEW, m_bNew, bNewState );
-
-        // - RowCount/IsRowCountFinal
-        fireRowcount();
+        positionCache( MOVE_FORWARD );
+        m_pCache->next();
+        setCurrentRow( true, false, aOldValues, aGuard);
     }
+    else
+        positionCache( MOVE_NONE );
+
+    // check before because the resultset could be empty
+    if  (   !m_bBeforeFirst
+        &&  !m_bAfterLast
+        &&  m_pCache->m_aMatrixIter != m_pCache->getEnd()
+        &&  m_pCache->m_aMatrixIter->is()
+        )
+        aOldValues = new ORowSetValueVector( *(*(m_pCache->m_aMatrixIter)) );
+
+    const bool bNewState = m_bNew;
+    const bool bModState = m_bModified;
+
+    m_pCache->moveToInsertRow();
+    m_aCurrentRow = m_pCache->m_aInsertRow;
+    m_bIsInsertRow  = true;
+
+    // set read-only flag to false
+    impl_setDataColumnsWriteable_throw();
+
+    // notification order
+    // - column values
+    ORowSetBase::firePropertyChange(aOldValues);
+
+    // - cursorMoved
+    notifyAllListenersCursorMoved(aGuard);
+
+    // - IsModified
+    if ( bModState != m_bModified )
+        fireProperty( PROPERTY_ID_ISMODIFIED, m_bModified, bModState );
+
+    // - IsNew
+    if ( bNewState != m_bNew )
+        fireProperty( PROPERTY_ID_ISNEW, m_bNew, bNewState );
+
+    // - RowCount/IsRowCountFinal
+    fireRowcount();
 }
 
 void ORowSet::impl_setDataColumnsWriteable_throw()
@@ -1254,20 +1254,20 @@ void SAL_CALL ORowSet::moveToCurrentRow(  )
         // check "if ( !m_pCache->m_bNew && !m_bModified )"
         ::dbtools::throwSQLException( DBA_RES( RID_STR_ROW_ALREADY_DELETED ), StandardSQLState::FUNCTION_SEQUENCE_ERROR, *this );
 
-    if ( notifyAllListenersCursorBeforeMove( aGuard ) )
-    {
-        positionCache( MOVE_NONE_REFRESH );
+    if ( !notifyAllListenersCursorBeforeMove( aGuard ) )
+        return;
 
-        ORowSetNotifier aNotifier( this );
+    positionCache( MOVE_NONE_REFRESH );
 
-        // notification order
-        // - cursorMoved
-        notifyAllListenersCursorMoved(aGuard);
+    ORowSetNotifier aNotifier( this );
 
-        // - IsModified
-        // - IsNew
-        aNotifier.fire();
-    }
+    // notification order
+    // - cursorMoved
+    notifyAllListenersCursorMoved(aGuard);
+
+    // - IsModified
+    // - IsNew
+    aNotifier.fire();
 }
 
 // XRow

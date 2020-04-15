@@ -37,46 +37,46 @@ OXMLConnectionResource::OXMLConnectionResource( ODBFilter& rImport,
 
     PropertyValue aProperty;
 
-    if (xDataSource.is())
-    {
-        sax_fastparser::FastAttributeList *pAttribList =
-                        sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
-        for (auto &aIter : *pAttribList)
-        {
-            OUString sValue = aIter.toString();
-            aProperty.Name.clear();
-            aProperty.Value = Any();
+    if (!xDataSource.is())
+        return;
 
-            switch( aIter.getToken() )
-            {
-                case XML_ELEMENT(XLINK, XML_HREF):
-                    try
-                    {
-                        xDataSource->setPropertyValue(PROPERTY_URL,makeAny(sValue));
-                    }
-                    catch(const Exception&)
-                    {
-                        DBG_UNHANDLED_EXCEPTION("dbaccess");
-                    }
-                    break;
-                case XML_ELEMENT(XLINK, XML_TYPE):
-                    aProperty.Name = PROPERTY_TYPE;
-                    break;
-                case XML_ELEMENT(XLINK, XML_SHOW):
-                    aProperty.Name = "Show";
-                    break;
-                case XML_ELEMENT(XLINK, XML_ACTUATE):
-                    aProperty.Name = "Actuate";
-                    break;
-                default:
-                    SAL_WARN("dbaccess", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
-            }
-            if ( !aProperty.Name.isEmpty() )
-            {
-                if ( !aProperty.Value.hasValue() )
-                    aProperty.Value <<= sValue;
-                rImport.addInfo(aProperty);
-            }
+    sax_fastparser::FastAttributeList *pAttribList =
+                    sax_fastparser::FastAttributeList::castToFastAttributeList( _xAttrList );
+    for (auto &aIter : *pAttribList)
+    {
+        OUString sValue = aIter.toString();
+        aProperty.Name.clear();
+        aProperty.Value = Any();
+
+        switch( aIter.getToken() )
+        {
+            case XML_ELEMENT(XLINK, XML_HREF):
+                try
+                {
+                    xDataSource->setPropertyValue(PROPERTY_URL,makeAny(sValue));
+                }
+                catch(const Exception&)
+                {
+                    DBG_UNHANDLED_EXCEPTION("dbaccess");
+                }
+                break;
+            case XML_ELEMENT(XLINK, XML_TYPE):
+                aProperty.Name = PROPERTY_TYPE;
+                break;
+            case XML_ELEMENT(XLINK, XML_SHOW):
+                aProperty.Name = "Show";
+                break;
+            case XML_ELEMENT(XLINK, XML_ACTUATE):
+                aProperty.Name = "Actuate";
+                break;
+            default:
+                SAL_WARN("dbaccess", "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(aIter.getToken()) << "=" << aIter.toString());
+        }
+        if ( !aProperty.Name.isEmpty() )
+        {
+            if ( !aProperty.Value.hasValue() )
+                aProperty.Value <<= sValue;
+            rImport.addInfo(aProperty);
         }
     }
 }

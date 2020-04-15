@@ -1231,34 +1231,36 @@ void SbaXDataBrowserController::frameAction(const css::frame::FrameActionEvent& 
 
     SbaXDataBrowserController_Base::frameAction( aEvent );
 
-    if ( aEvent.Source == getFrame() )
-        switch ( aEvent.Action )
-        {
-            case FrameAction_FRAME_ACTIVATED:
-            case FrameAction_FRAME_UI_ACTIVATED:
-                // ensure that the active cell (if any) has the focus
-                m_aAsyncGetCellFocus.Call();
-                // start the clipboard timer
-                if (getBrowserView() && getBrowserView()->getVclControl() && !m_aInvalidateClipboard.IsActive())
-                {
-                    m_aInvalidateClipboard.Start();
-                    OnInvalidateClipboard( nullptr );
-                }
-                break;
-            case FrameAction_FRAME_DEACTIVATING:
-            case FrameAction_FRAME_UI_DEACTIVATING:
-                // stop the clipboard invalidator
-                if (getBrowserView() && getBrowserView()->getVclControl() && m_aInvalidateClipboard.IsActive())
-                {
-                    m_aInvalidateClipboard.Stop();
-                    OnInvalidateClipboard( nullptr );
-                }
-                // remove the "get cell focus"-event
-                m_aAsyncGetCellFocus.CancelCall();
-                break;
-            default:
-                break;
-        }
+    if ( aEvent.Source != getFrame() )
+        return;
+
+    switch ( aEvent.Action )
+    {
+        case FrameAction_FRAME_ACTIVATED:
+        case FrameAction_FRAME_UI_ACTIVATED:
+            // ensure that the active cell (if any) has the focus
+            m_aAsyncGetCellFocus.Call();
+            // start the clipboard timer
+            if (getBrowserView() && getBrowserView()->getVclControl() && !m_aInvalidateClipboard.IsActive())
+            {
+                m_aInvalidateClipboard.Start();
+                OnInvalidateClipboard( nullptr );
+            }
+            break;
+        case FrameAction_FRAME_DEACTIVATING:
+        case FrameAction_FRAME_UI_DEACTIVATING:
+            // stop the clipboard invalidator
+            if (getBrowserView() && getBrowserView()->getVclControl() && m_aInvalidateClipboard.IsActive())
+            {
+                m_aInvalidateClipboard.Stop();
+                OnInvalidateClipboard( nullptr );
+            }
+            // remove the "get cell focus"-event
+            m_aAsyncGetCellFocus.CancelCall();
+            break;
+        default:
+            break;
+    }
 }
 
 IMPL_LINK_NOARG( SbaXDataBrowserController, OnAsyncDisplayError, void*, void )
@@ -2422,50 +2424,50 @@ void SbaXDataBrowserController::LoadFinished(bool /*bWasSynch*/)
 {
     m_nRowSetPrivileges = 0;
 
-    if (isValid() && !loadingCancelled())
+    if (!(isValid() && !loadingCancelled()))
+        return;
+
+    // obtain cached values
+    try
     {
-        // obtain cached values
-        try
-        {
-            Reference< XPropertySet > xFormProps( m_xLoadable, UNO_QUERY_THROW );
-            OSL_VERIFY( xFormProps->getPropertyValue( PROPERTY_PRIVILEGES ) >>= m_nRowSetPrivileges );
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("dbaccess");
-        }
-
-        // switch the control to alive mode
-        getBrowserView()->getGridControl()->setDesignMode(false);
-
-        initializeParser();
-
-        InvalidateAll();
-
-        m_aAsyncGetCellFocus.Call();
+        Reference< XPropertySet > xFormProps( m_xLoadable, UNO_QUERY_THROW );
+        OSL_VERIFY( xFormProps->getPropertyValue( PROPERTY_PRIVILEGES ) >>= m_nRowSetPrivileges );
     }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
+    }
+
+    // switch the control to alive mode
+    getBrowserView()->getGridControl()->setDesignMode(false);
+
+    initializeParser();
+
+    InvalidateAll();
+
+    m_aAsyncGetCellFocus.Call();
 }
 
 void SbaXDataBrowserController::initializeParser() const
 {
-    if ( !m_xParser.is() )
+    if ( m_xParser.is() )
+        return;
+
+    // create a parser (needed for filtering/sorting)
+    try
     {
-        // create a parser (needed for filtering/sorting)
-        try
-        {
-            const Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
-            if (::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_ESCAPE_PROCESSING)))
-            {   // (only if the statement isn't native)
-                // (it is allowed to use the PROPERTY_ISPASSTHROUGH : _after_ loading a form it is valid)
-                xFormSet->getPropertyValue(PROPERTY_SINGLESELECTQUERYCOMPOSER) >>= m_xParser;
-            }
+        const Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
+        if (::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_ESCAPE_PROCESSING)))
+        {   // (only if the statement isn't native)
+            // (it is allowed to use the PROPERTY_ISPASSTHROUGH : _after_ loading a form it is valid)
+            xFormSet->getPropertyValue(PROPERTY_SINGLESELECTQUERYCOMPOSER) >>= m_xParser;
         }
-        catch(Exception&)
-        {
-            DBG_UNHANDLED_EXCEPTION("dbaccess");
-            m_xParser = nullptr;
-            // no further handling, we ignore the error
-        }
+    }
+    catch(Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("dbaccess");
+        m_xParser = nullptr;
+        // no further handling, we ignore the error
     }
 }
 

@@ -384,29 +384,29 @@ void OJoinController::loadTableWindow( const ::comphelper::NamedValueCollection&
 
 void OJoinController::saveTableWindows( ::comphelper::NamedValueCollection& o_rViewSettings ) const
 {
-    if ( !m_vTableData.empty() )
+    if ( m_vTableData.empty() )
+        return;
+
+    ::comphelper::NamedValueCollection aAllTablesData;
+
+    sal_Int32 i = 1;
+    for (auto const& elem : m_vTableData)
     {
-        ::comphelper::NamedValueCollection aAllTablesData;
+        ::comphelper::NamedValueCollection aWindowData;
+        aWindowData.put( "ComposedName", elem->GetComposedName() );
+        aWindowData.put( "TableName", elem->GetTableName() );
+        aWindowData.put( "WindowName", elem->GetWinName() );
+        aWindowData.put( "WindowTop", static_cast<sal_Int32>(elem->GetPosition().Y()) );
+        aWindowData.put( "WindowLeft", static_cast<sal_Int32>(elem->GetPosition().X()) );
+        aWindowData.put( "WindowWidth", static_cast<sal_Int32>(elem->GetSize().Width()) );
+        aWindowData.put( "WindowHeight", static_cast<sal_Int32>(elem->GetSize().Height()) );
+        aWindowData.put( "ShowAll", elem->IsShowAll() );
 
-        sal_Int32 i = 1;
-        for (auto const& elem : m_vTableData)
-        {
-            ::comphelper::NamedValueCollection aWindowData;
-            aWindowData.put( "ComposedName", elem->GetComposedName() );
-            aWindowData.put( "TableName", elem->GetTableName() );
-            aWindowData.put( "WindowName", elem->GetWinName() );
-            aWindowData.put( "WindowTop", static_cast<sal_Int32>(elem->GetPosition().Y()) );
-            aWindowData.put( "WindowLeft", static_cast<sal_Int32>(elem->GetPosition().X()) );
-            aWindowData.put( "WindowWidth", static_cast<sal_Int32>(elem->GetSize().Width()) );
-            aWindowData.put( "WindowHeight", static_cast<sal_Int32>(elem->GetSize().Height()) );
-            aWindowData.put( "ShowAll", elem->IsShowAll() );
-
-            const OUString sTableName( "Table" + OUString::number( i++ ) );
-            aAllTablesData.put( sTableName, aWindowData.getPropertyValues() );
-        }
-
-        o_rViewSettings.put( "Tables", aAllTablesData.getPropertyValues() );
+        const OUString sTableName( "Table" + OUString::number( i++ ) );
+        aAllTablesData.put( sTableName, aWindowData.getPropertyValues() );
     }
+
+    o_rViewSettings.put( "Tables", aAllTablesData.getPropertyValues() );
 }
 
 TTableWindowData::value_type OJoinController::createTableWindowData(const OUString& _sComposedName,const OUString& _sTableName,const OUString& _sWindowName)
