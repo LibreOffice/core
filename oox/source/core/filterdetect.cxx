@@ -54,6 +54,7 @@ using comphelper::DocPasswordVerifierResult;
 FilterDetectDocHandler::FilterDetectDocHandler( const  Reference< XComponentContext >& rxContext, OUString& rFilterName, const OUString& rFileName ) :
     mrFilterName( rFilterName ),
     maFileName(rFileName),
+    maOOXMLVariant( OOXMLVariant::ECMA_Transitional ),
     mxContext( rxContext )
 {
     maContextStack.reserve( 2 );
@@ -142,6 +143,15 @@ void SAL_CALL FilterDetectDocHandler::characters( const OUString& /*aChars*/ )
 void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
 {
     OUString aType = rAttribs.getString( XML_Type, OUString() );
+
+    // tdf#131936 Remember filter when opening file as 'Office Open XML Text'
+    if (aType.startsWithIgnoreAsciiCase("http://schemas.openxmlformats.org/officedocument/2006/relationships/metadata/core-properties"))
+        maOOXMLVariant = OOXMLVariant::ISO_Transitional;
+    else if (aType.startsWithIgnoreAsciiCase("http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties"))
+        maOOXMLVariant = OOXMLVariant::ECMA_Transitional;
+    else if (aType.startsWithIgnoreAsciiCase("http://purl.oclc.org/ooxml/officeDocument"))
+        maOOXMLVariant = OOXMLVariant::ISO_Strict;
+
     if ( !(aType == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" // OOXML Transitional
             || aType == "http://purl.oclc.org/ooxml/officeDocument/relationships/officeDocument") ) //OOXML strict
         return;
@@ -169,14 +179,32 @@ OUString FilterDetectDocHandler::getFilterNameFromContentType( const OUString& r
     bool bDocm = rFileName.endsWithIgnoreAsciiCase(".docm");
 
     if( rContentType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml" && !bDocm )
-        return "writer_MS_Word_2007";
+    {
+        switch (maOOXMLVariant)
+        {
+            case OOXMLVariant::ISO_Transitional:
+            case OOXMLVariant::ISO_Strict: // Not supported, map to ISO transitional
+                return "writer_OOXML";
+            case OOXMLVariant::ECMA_Transitional:
+                return "writer_MS_Word_2007";
+        }
+    }
 
     if( rContentType == "application/vnd.ms-word.document.macroEnabled.main+xml" || bDocm )
         return "writer_MS_Word_2007_VBA";
 
     if( rContentType == "application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml" ||
         rContentType == "application/vnd.ms-word.template.macroEnabledTemplate.main+xml" )
-        return "writer_MS_Word_2007_Template";
+    {
+        switch (maOOXMLVariant)
+        {
+            case OOXMLVariant::ISO_Transitional:
+            case OOXMLVariant::ISO_Strict: // Not supported, map to ISO transitional
+                return "writer_OOXML_Text_Template";
+            case OOXMLVariant::ECMA_Transitional:
+                return "writer_MS_Word_2007_Template";
+        }
+    }
 
     if( rContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml")
         return "MS Excel 2007 XML";
