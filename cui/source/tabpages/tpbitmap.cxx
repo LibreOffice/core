@@ -161,7 +161,25 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet& rSet )
     {
         nPos = SearchBitmapList( aItem.GetGraphicObject() );
         if (nPos == -1)
-            return;
+            //return;
+        // tdf#125969 start - Writer cannot load existed background image into Bitmap list
+        {
+            long nCount = m_pBitmapList->Count();
+            m_pBitmapList->Insert( std::make_unique<XBitmapEntry>( aItem.GetGraphicObject(), aItem.GetName() ), nCount );
+
+            sal_Int32 nId = m_xBitmapLB->GetItemId( nCount - 1 );
+            BitmapEx aBitmap = m_pBitmapList->GetBitmapForPreview( nCount, m_xBitmapLB->GetIconSize() );
+            if ( aBitmap.IsEmpty() )
+            {
+                m_pBitmapList->Remove(nCount);
+                nPos = 0;
+                return;
+            }
+
+            m_xBitmapLB->InsertItem( nId + 1, Image( aBitmap ), aItem.GetName() );
+            nPos = nId;
+        }
+        // tdf#125969 end
     }
     else
     {
