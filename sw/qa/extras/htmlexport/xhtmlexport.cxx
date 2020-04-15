@@ -42,6 +42,18 @@ DECLARE_HTMLEXPORT_TEST(testImageEmbedding, "image-mimetype.odt")
     CPPUNIT_ASSERT(aValue.startsWith("data:image/svg+xml;base64"));
 }
 
+DECLARE_HTMLEXPORT_TEST(testTdf131812, "tdf131812.odt")
+{
+    SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
+    CPPUNIT_ASSERT(pStream);
+    sal_uInt64 nLength = pStream->TellEnd();
+    OString aStream(read_uInt8s_ToOString(*pStream, nLength));
+    CPPUNIT_ASSERT(
+        aStream.indexOf(".P1 { font-size:12pt; font-family:Liberation Serif; "
+                        "writing-mode:horizontal-tb; direction:rtl; text-align:right ! important;}")
+        != -1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
