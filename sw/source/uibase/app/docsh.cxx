@@ -1186,6 +1186,8 @@ void SwDocShell::SetFormatSpecificCompatibilityOptions( const OUString& rFilterT
          rFilterTypeName == "writer_MS_Word_2003_XML" ||
          rFilterTypeName == "writer_MS_Word_2007" ||
          rFilterTypeName == "writer_MS_Word_2007_Template" ||
+         rFilterTypeName == "writer_OOXML" ||
+         rFilterTypeName == "writer_OOXML_Text_Template" ||
          rFilterTypeName == "writer_Rich_Text_Format" )
     {
         GetDoc()->getIDocumentSettingAccess().set( DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS, true );
