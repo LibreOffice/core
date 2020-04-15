@@ -79,7 +79,8 @@ dialogs = [
         # dialog does not open
     {"command": ".uno:CreateNames", "closeButton": "cancel", "skipTestOK": True},
         # OK button triggers a new dialog
-    {"command": ".uno:DefineLabelRange", "closeButton": "cancel"},
+    #{"command": ".uno:DefineLabelRange", "closeButton": "cancel"},
+        # tested in sc/qa/uitest/calc_tests4/tdf131170.py
     # {"command": ".uno:RenameTable", "closeButton": "cancel"},
         # tested in sc/qa/uitest/calc_tests/sheetRename.py
     # {"command": ".uno:Move", "closeButton": "cancel"},
