@@ -432,7 +432,22 @@ void SkiaSalGraphicsImpl::checkSurface()
         if (!avoidRecreateByResize())
         {
             Size oldSize(mSurface->width(), mSurface->height());
+            // Recreating a surface means that the old SkSurface contents will be lost.
+            // But if a window has been resized the windowing system may send repaint events
+            // only for changed parts and VCL would not repaint the whole area, assuming
+            // that some parts have not changed (this is what seems to cause tdf#131952).
+            // So carry over the old contents for windows, even though generally everything
+            // will be usually repainted anyway.
+            sk_sp<SkImage> snapshot;
+            if (!isOffscreen())
+                snapshot = mSurface->makeImageSnapshot();
             recreateSurface();
+            if (snapshot)
+            {
+                SkPaint paint;
+                paint.setBlendMode(SkBlendMode::kSrc); // copy as is
+                mSurface->getCanvas()->drawImage(snapshot, 0, 0, &paint);
+            }
             SAL_INFO("vcl.skia.trace", "recreate(" << this << "): old " << oldSize << " new "
                                                    << Size(mSurface->width(), mSurface->height())
                                                    << " requested "
