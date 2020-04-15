@@ -1249,7 +1249,9 @@ void UnitConverter::implIncludeList( const NameListBase& /*rList*/ )
 
 NameListRef NameListWrapper::getNameList( const Config& rCfg ) const
 {
-    return mxList.get() ? mxList : (mxList = rCfg.getNameList( maName ));
+    if (!mxList.get())
+        mxList = rCfg.getNameList( maName );
+    return mxList;
 }
 
 SharedConfigData::SharedConfigData( const OUString& rFileName,
