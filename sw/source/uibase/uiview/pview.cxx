@@ -1321,7 +1321,7 @@ void SwPagePreview::OuterResizePixel( const Point &rOfst, const Size &rSize )
     // Call of the DocSzChgd-Method of the scrollbars is necessary,
     // because from the maximum scroll range half the height of the
     // VisArea is always deducted.
-    if ( m_pVScrollbar && aTmpSize.Width() > 0 && aTmpSize.Height() > 0 )
+    if ( m_pVScrollbar && !aTmpSize.IsEmpty() )
     {
         ScrollDocSzChg();
     }

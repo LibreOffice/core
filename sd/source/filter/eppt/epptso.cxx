@@ -92,7 +92,7 @@ sal_uInt16 PPTExBulletProvider::GetId(Graphic const & rGraphic, Size& rGraphicSi
 
         if ( rGraphicSize.Width() && rGraphicSize.Height() )
         {
-            if (aPrefSize.Width() == 0 || aPrefSize.Height() == 0)
+            if (aPrefSize.IsEmpty())
             {
                 aBmpEx.Scale(aPrefSize);
             }

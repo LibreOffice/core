@@ -189,7 +189,7 @@ void SwInsertChart()
                             >>= aDialogAWTSize )
                         {
                             Size aDialogSize( aDialogAWTSize.Width, aDialogAWTSize.Height );
-                            if ( aDialogSize.Width() > 0 && aDialogSize.Height() > 0 )
+                            if ( !aDialogSize.IsEmpty() )
                             {
                                 //calculate and set new position
                                 SwRect aSwRect;

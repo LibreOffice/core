@@ -292,7 +292,7 @@ void SlideSorterView::Rearrange()
     if ( ! pWindow)
         return;
     const Size aWindowSize (pWindow->GetSizePixel());
-    if (aWindowSize.Width()<=0 || aWindowSize.Height()<=0)
+    if (aWindowSize.IsEmpty())
         return;
 
     const bool bRearrangeSuccess (

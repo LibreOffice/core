@@ -192,7 +192,7 @@ namespace
 {
     void formatBitmapExToSize(BitmapEx& rBitmapEx, const Size& rSize)
     {
-        if(!rBitmapEx.IsEmpty() && rSize.Width() > 0 && rSize.Height() > 0)
+        if(!rBitmapEx.IsEmpty() && !rSize.IsEmpty())
         {
             ScopedVclPtrInstance< VirtualDevice > pVirtualDevice;
             pVirtualDevice->SetOutputSizePixel(rSize);

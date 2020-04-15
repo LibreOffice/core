@@ -599,7 +599,7 @@ void SmGraphicWindow::ZoomToFitInWindow()
     Size       aSize (LogicToPixel(rDoc.GetSize()));
     Size       aWindowSize (GetSizePixel());
 
-    if (aSize.Width() > 0  &&  aSize.Height() > 0)
+    if (!aSize.IsEmpty())
     {
         long nVal = std::min ((85 * aWindowSize.Width())  / aSize.Width(),
                       (85 * aWindowSize.Height()) / aSize.Height());
@@ -884,7 +884,7 @@ SFX_IMPL_NAMED_VIEWFACTORY(SmViewShell, "Default")
 void SmViewShell::InnerResizePixel(const Point &rOfs, const Size &rSize, bool)
 {
     Size aObjSize = GetObjectShell()->GetVisArea().GetSize();
-    if ( aObjSize.Width() > 0 && aObjSize.Height() > 0 )
+    if ( !aObjSize.IsEmpty() )
     {
         Size aProvidedSize = GetWindow()->PixelToLogic(rSize, MapMode(MapUnit::Map100thMM));
         SfxViewShell::SetZoomFactor( Fraction( aProvidedSize.Width(), aObjSize.Width() ),
@@ -1192,7 +1192,7 @@ void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPri
             break;
 
         case PRINT_SIZE_SCALED:
-            if ((aSize.Width() > 0) && (aSize.Height() > 0))
+            if (!aSize.IsEmpty())
             {
                 Size     OutputSize (rOutDev.LogicToPixel(Size(aOutRect.GetWidth(),
                                                             aOutRect.GetHeight()), MapMode(MapUnit::Map100thMM)));

@@ -130,7 +130,7 @@ bool ImageButtonToolbarController::ReadImageFromURL( bool bBigImage, const OUStr
         const ::Size aSize = bBigImage ? aImageSizeBig : aImageSizeSmall; // Sizes used for toolbar images
 
         ::Size aBmpSize = aBitmapEx.GetSizePixel();
-        if ( aBmpSize.Width() > 0 && aBmpSize.Height() > 0 )
+        if ( !aBmpSize.IsEmpty() )
         {
             ::Size aNoScaleSize( aBmpSize.Width(), aSize.Height() );
             if ( aBmpSize != aNoScaleSize )

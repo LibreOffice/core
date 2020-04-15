@@ -1362,7 +1362,7 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
         }
 
         // set the new Size at the fly themself
-        if ( pFly->getFramePrintArea().Height() > 0 && pFly->getFramePrintArea().Width() > 0 )
+        if ( !pFly->getFramePrintArea().IsEmpty() )
         {
             aSz.AdjustWidth(pFly->getFrameArea().Width() - pFly->getFramePrintArea().Width() );
             aSz.AdjustHeight(pFly->getFrameArea().Height()- pFly->getFramePrintArea().Height() );

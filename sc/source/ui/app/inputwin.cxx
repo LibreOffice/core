@@ -520,7 +520,7 @@ void ScInputWindow::NotifyLOKClient()
     if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
     {
         Size aSize = GetSizePixel();
-        if (aSize.Width() != 0 && aSize.Height() != 0)
+        if (!aSize.IsEmpty())
         {
             std::vector<vcl::LOKPayloadItem> aItems;
             aItems.emplace_back("type", "calc-input-win");

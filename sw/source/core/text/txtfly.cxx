@@ -608,7 +608,7 @@ void SwTextFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect )
                     SwRect aFly( pAnchoredObjTmp->GetObjRect() );
                     // OD 24.01.2003 #106593#
                     ::SwAlignRect( aFly, pPage->getRootFrame()->GetCurrShell(), pOut );
-                    if( aFly.Width() > 0 && aFly.Height() > 0 )
+                    if( !aFly.IsEmpty() )
                         aRegion -= aFly;
                 }
             }

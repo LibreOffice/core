@@ -2479,7 +2479,7 @@ void ToolbarLayoutManager::implts_calcWindowPosSizeOnSingleRowColumn(
                     aMinSize = static_cast<ToolBox *>(pWindow.get())->CalcMinimumWindowSizePixel();
             }
 
-            if (( aMinSize.Width() > 0 ) && ( aMinSize.Height() > 0 ))
+            if ( !aMinSize.IsEmpty() )
             {
                 if ( isHorizontalDockingArea( nDockingArea ))
                 {

@@ -466,7 +466,7 @@ bool ViewShellBase::HasSelection(bool bText) const
 void ViewShellBase::InnerResizePixel (const Point& rOrigin, const Size &rSize, bool)
 {
     Size aObjSize = GetObjectShell()->GetVisArea().GetSize();
-    if ( aObjSize.Width() > 0 && aObjSize.Height() > 0 )
+    if ( !aObjSize.IsEmpty() )
     {
         SvBorder aBorder( GetBorderPixel() );
         Size aSize( rSize );

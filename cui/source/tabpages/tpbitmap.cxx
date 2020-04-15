@@ -362,7 +362,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
     ClickScaleHdl(*m_xTsbScale);
 
 
-    if(rBitmapSize.Width() > 0 && rBitmapSize.Height() > 0)
+    if(!rBitmapSize.IsEmpty())
     {
         if (eRelative == TRISTATE_TRUE)
         {
@@ -436,7 +436,7 @@ void SvxBitmapTabPage::ClickBitmapHdl_Impl()
 
 void SvxBitmapTabPage::CalculateBitmapPresetSize()
 {
-    if(rBitmapSize.Width() > 0 && rBitmapSize.Height() > 0)
+    if(!rBitmapSize.IsEmpty())
     {
         long nObjectWidth = static_cast<long>(m_fObjectWidth);
         long nObjectHeight = static_cast<long>(m_fObjectHeight);

@@ -196,6 +196,8 @@ public:
     void            setWidth(long nWidth)  { nA = nWidth; }
     void            setHeight(long nHeight)  { nB = nHeight; }
 
+    bool            IsEmpty() const { return nA <= 0 || nB <= 0; }
+
     void extendBy(long x, long y)
     {
         nA += x;

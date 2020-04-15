@@ -685,8 +685,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
                       (nPercentHeight ? 0
                                   : pFSItem->GetHeight()-aTwipSpc.Height()) );
 
-        OSL_ENSURE( aTwipSz.Width() >= 0 && aTwipSz.Height() >= 0,
-                "Frame size minus spacing  < 0!!!???" );
+        OSL_ENSURE( !aTwipSz.IsEmpty(), "Frame size minus spacing  < 0!!!???" );
         if( aTwipSz.Width() < 0 )
             aTwipSz.setWidth( 0 );
         if( aTwipSz.Height() < 0 )
@@ -951,8 +950,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
                       (nPercentHeight ? 0
                                   : pFSItem->GetHeight()-aTwipSpc.Height()) );
 
-        OSL_ENSURE( aTwipSz.Width() >= 0 && aTwipSz.Height() >= 0,
-                "Frame size minus spacing < 0!!!???" );
+        OSL_ENSURE( !aTwipSz.IsEmpty(), "Frame size minus spacing < 0!!!???" );
         if( aTwipSz.Width() < 0 )
             aTwipSz.setWidth( 0 );
         if( aTwipSz.Height() < 0 )

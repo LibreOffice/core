@@ -1221,7 +1221,7 @@ void Window::PixelInvalidate(const tools::Rectangle* pRectangle)
         return;
 
     Size aSize = GetSizePixel();
-    if (aSize.getWidth() <= 0 || aSize.getHeight() <= 0)
+    if (aSize.IsEmpty())
         return;
 
     if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())

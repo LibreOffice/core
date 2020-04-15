@@ -1025,7 +1025,7 @@ void ScTable::SyncColRowFlags()
 
 void ScTable::SetPageSize( const Size& rSize )
 {
-    if ( rSize.Width() != 0 && rSize.Height() != 0 )
+    if ( !rSize.IsEmpty() )
     {
         if (aPageSizeTwips != rSize)
             InvalidatePageBreaks();

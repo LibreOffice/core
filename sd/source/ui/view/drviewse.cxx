@@ -1209,7 +1209,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             ::tools::Rectangle aVisArea = mpFrameView->GetVisArea();
             Size aVisAreaSize = aVisArea.GetSize();
 
-            if (aVisAreaSize.Height()!=0 && aVisAreaSize.Width()!=0)
+            if (!aVisAreaSize.IsEmpty())
             {
                 mbZoomOnPage = false;
                 SetZoomRect(aVisArea);

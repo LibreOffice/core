@@ -27,7 +27,7 @@ cairo_t* SkiaX11CairoTextRender::getCairoContext()
     if (pImpl)
     {
         tools::Rectangle aClipRect = pImpl->getClipRegion().GetBoundRect();
-        if (aClipRect.GetWidth() == 0 || aClipRect.GetHeight() == 0)
+        if (aClipRect.IsEmpty())
         {
             aClipRect.setWidth(GetWidth());
             aClipRect.setHeight(GetHeight());

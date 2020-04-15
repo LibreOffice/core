@@ -305,7 +305,7 @@ void ScTabViewShell::UpdateOleZoom()
     {
         //TODO/LATER: is there a difference between the two GetVisArea methods?
         Size aObjSize = static_cast<const SfxObjectShell*>(pDocSh)->GetVisArea().GetSize();
-        if ( aObjSize.Width() > 0 && aObjSize.Height() > 0 )
+        if ( !aObjSize.IsEmpty() )
         {
             vcl::Window* pWin = GetActiveWin();
             Size aWinHMM = pWin->PixelToLogic(pWin->GetOutputSizePixel(), MapMode(MapUnit::Map100thMM));
@@ -330,7 +330,7 @@ void ScTabViewShell::InnerResizePixel( const Point &rOfs, const Size &rSize, boo
         aSize.AdjustWidth( -(aBorder.Left() + aBorder.Right()) );
         aSize.AdjustHeight( -(aBorder.Top() + aBorder.Bottom()) );
 
-        if ( aObjSize.Width() > 0 && aObjSize.Height() > 0 )
+        if ( !aObjSize.IsEmpty() )
         {
             Size aLogicSize = GetWindow()->PixelToLogic(aSize, MapMode(MapUnit::Map100thMM));
             SfxViewShell::SetZoomFactor( Fraction( aLogicSize.Width(),aObjSize.Width() ),
