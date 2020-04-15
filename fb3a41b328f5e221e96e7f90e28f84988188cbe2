@@ -22,6 +22,30 @@
       "revId": "fb3a41b328f5e221e96e7f90e28f84988188cbe2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3557e987_240ebbcb",
+        "filename": "vcl/unx/gtk3/gtk3gtkframe.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2977,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-04-15T18:24:47Z",
+      "side": 1,
+      "message": "does https://gerrit.libreoffice.org/c/core/+/92316 solve that problem ?",
+      "parentUuid": "04fb1fa3_61b4d5b9",
+      "range": {
+        "startLine": 2977,
+        "startChar": 72,
+        "endLine": 2977,
+        "endChar": 87
+      },
+      "revId": "fb3a41b328f5e221e96e7f90e28f84988188cbe2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
