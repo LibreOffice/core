@@ -260,7 +260,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,calc, \
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,graphicfilter, \
 	svgfilter \
-	flash \
 	wpftdraw \
 	graphicfilter \
 ))

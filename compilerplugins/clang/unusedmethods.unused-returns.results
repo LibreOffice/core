@@ -18,8 +18,6 @@ extensions/source/scanner/sanedlg.hxx:87
     _Bool SaneDlg::LoadState()
 extensions/source/scanner/sanedlg.hxx:101
     _Bool SaneDlg::SetAdjustedNumericalValue(const char *,double,int)
-filter/source/flash/swfexporter.hxx:85
-    _Bool swf::FlashExporter::exportAll(const class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> &,const class com::sun::star::uno::Reference<class com::sun::star::io::XOutputStream> &,const class com::sun::star::uno::Reference<class com::sun::star::task::XStatusIndicator> &)
 i18nlangtag/source/languagetag/languagetag.cxx:277
     const class rtl::OUString & LanguageTagImpl::getBcp47() const
 idlc/inc/aststack.hxx:38
