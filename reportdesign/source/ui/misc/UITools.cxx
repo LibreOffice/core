@@ -903,10 +903,12 @@ SdrObject* isOver(const tools::Rectangle& _rRect, SdrPage const & _rPage, SdrVie
 {
     SdrObject* pOverlappedObj = nullptr;
     SdrObjListIter aIter(&_rPage,SdrIterMode::DeepNoGroups);
-    SdrObject* pObjIter = nullptr;
 
-    while( !pOverlappedObj && (pObjIter = aIter.Next()) != nullptr )
+    while( !pOverlappedObj )
     {
+        SdrObject* pObjIter = aIter.Next();
+        if( !pObjIter )
+            break;
         if ( _pIgnore != pObjIter
             && (_bAllObjects || !_rView.IsObjMarked(pObjIter))
             && (dynamic_cast<OUnoObject*>(pObjIter) != nullptr || dynamic_cast<OOle2Obj*>(pObjIter) != nullptr))
@@ -944,10 +946,12 @@ SdrObject* isOver(const tools::Rectangle& _rRect,SdrPage const & _rPage,SdrView 
 {
     SdrObject* pOverlappedObj = nullptr;
     SdrObjListIter aIter(&_rPage,SdrIterMode::DeepNoGroups);
-    SdrObject* pObjIter = nullptr;
 
-    while( !pOverlappedObj && (pObjIter = aIter.Next()) != nullptr )
+    while( !pOverlappedObj )
     {
+        SdrObject* pObjIter = aIter.Next();
+        if( !pObjIter )
+            break;
         if (checkArrayForOccurrence(pObjIter, _pIgnoreList, _nIgnoreListLength))
         {
             continue;
