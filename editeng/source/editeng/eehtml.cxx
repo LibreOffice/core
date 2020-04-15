@@ -669,8 +669,11 @@ void EditHTMLParser::SkipGroup( HtmlTokenId nEndToken )
     // for example: <td><form></td>   lacks a closing </form>
     sal_uInt8 nCellLevel = nInCell;
     HtmlTokenId nToken;
-    while( nCellLevel <= nInCell && ( (nToken = GetNextToken() ) != nEndToken ) && nToken != HtmlTokenId::NONE )
+    while( nCellLevel <= nInCell )
     {
+        nToken = GetNextToken();
+        if (nToken == nEndToken || nToken == HtmlTokenId::NONE)
+            break;
         switch ( nToken )
         {
             case HtmlTokenId::TABLEHEADER_ON:

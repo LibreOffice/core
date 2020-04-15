@@ -546,24 +546,28 @@ bool Sane::Start( BitmapTransporter& rBitmap )
     int nHeightMM   = 0;
     double fTLx, fTLy, fResl = 0.0;
     int nOption;
-    if( ( nOption = GetOptionByName( "tl-x" ) ) != -1   &&
+    nOption = GetOptionByName( "tl-x" );
+    if( nOption != -1   &&
         GetOptionValue( nOption, fTLx )              &&
         GetOptionUnit( nOption ) == SANE_UNIT_MM )
     {
         double fBRx;
-        if( ( nOption = GetOptionByName( "br-x" ) ) != -1   &&
+        nOption = GetOptionByName( "br-x" );
+        if( nOption != -1   &&
             GetOptionValue( nOption, fBRx )              &&
             GetOptionUnit( nOption ) == SANE_UNIT_MM )
         {
             nWidthMM = static_cast<int>(fabs(fBRx - fTLx));
         }
     }
-    if( ( nOption = GetOptionByName( "tl-y" ) ) != -1   &&
+    nOption = GetOptionByName( "tl-y" );
+    if( nOption != -1   &&
         GetOptionValue( nOption, fTLy )              &&
         GetOptionUnit( nOption ) == SANE_UNIT_MM )
     {
         double fBRy;
-        if( ( nOption = GetOptionByName( "br-y" ) ) != -1   &&
+        nOption = GetOptionByName( "br-y" );
+        if( nOption != -1   &&
             GetOptionValue( nOption, fBRy )              &&
             GetOptionUnit( nOption ) == SANE_UNIT_MM )
         {
