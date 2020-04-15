@@ -54,6 +54,7 @@ using comphelper::DocPasswordVerifierResult;
 FilterDetectDocHandler::FilterDetectDocHandler( const  Reference< XComponentContext >& rxContext, OUString& rFilterName, const OUString& rFileName ) :
     mrFilterName( rFilterName ),
     maFileName(rFileName),
+    mbIsOOXMLTransitional( false ),
     mxContext( rxContext )
 {
     maContextStack.reserve( 2 );
@@ -142,6 +143,13 @@ void SAL_CALL FilterDetectDocHandler::characters( const OUString& /*aChars*/ )
 void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
 {
     OUString aType = rAttribs.getString( XML_Type, OUString() );
+
+    // tdf#131936 Remember filter when opening file as 'Office Open XML Text'
+    mbIsOOXMLTransitional
+        = mbIsOOXMLTransitional
+          || aType.startsWithIgnoreAsciiCase("http://schemas.openxmlformats.org/officedocument/"
+                                             "2006/relationships/metadata/core-properties");
+
     if ( !(aType == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" // OOXML Transitional
             || aType == "http://purl.oclc.org/ooxml/officeDocument/relationships/officeDocument") ) //OOXML strict
         return;
@@ -169,14 +177,14 @@ OUString FilterDetectDocHandler::getFilterNameFromContentType( const OUString& r
     bool bDocm = rFileName.endsWithIgnoreAsciiCase(".docm");
 
     if( rContentType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml" && !bDocm )
-        return "writer_MS_Word_2007";
+        return mbIsOOXMLTransitional ? OUString("writer_OOXML") : OUString("writer_MS_Word_2007");
 
     if( rContentType == "application/vnd.ms-word.document.macroEnabled.main+xml" || bDocm )
         return "writer_MS_Word_2007_VBA";
 
     if( rContentType == "application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml" ||
         rContentType == "application/vnd.ms-word.template.macroEnabledTemplate.main+xml" )
-        return "writer_MS_Word_2007_Template";
+        return mbIsOOXMLTransitional ? OUString("writer_OOXML_Text_Template") : OUString("writer_MS_Word_2007_Template");
 
     if( rContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml")
         return "MS Excel 2007 XML";
