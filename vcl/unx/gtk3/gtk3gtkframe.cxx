@@ -2926,6 +2926,21 @@ void swapDirection(GdkGravity& gravity)
 
 }
 
+#if !GTK_CHECK_VERSION(3, 22, 0)
+enum GdkAnchorHints
+{
+  GDK_ANCHOR_FLIP_X   = 1 << 0,
+  GDK_ANCHOR_FLIP_Y   = 1 << 1,
+  GDK_ANCHOR_SLIDE_X  = 1 << 2,
+  GDK_ANCHOR_SLIDE_Y  = 1 << 3,
+  GDK_ANCHOR_RESIZE_X = 1 << 4,
+  GDK_ANCHOR_RESIZE_Y = 1 << 5,
+  GDK_ANCHOR_FLIP     = GDK_ANCHOR_FLIP_X | GDK_ANCHOR_FLIP_Y,
+  GDK_ANCHOR_SLIDE    = GDK_ANCHOR_SLIDE_X | GDK_ANCHOR_SLIDE_Y,
+  GDK_ANCHOR_RESIZE   = GDK_ANCHOR_RESIZE_X | GDK_ANCHOR_RESIZE_Y
+}
+#endif
+
 void GtkSalFrame::signalRealize(GtkWidget*, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
