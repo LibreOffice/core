@@ -54,6 +54,7 @@ private:
     std::unique_ptr<weld::CustomWeld> m_xEditWindowWeld;
 
     DECL_LINK(ButtonClicked, weld::Button&, void);
+    DECL_LINK(OkHdl, weld::Button&, void);
     DECL_LINK(SelectToolboxHdl, weld::ToggleButton&, void);
     DECL_LINK(SelectClassificationHdl, weld::ComboBox&, void);
     DECL_LINK(SelectMarkingHdl, weld::TreeView&, bool);
@@ -76,8 +77,6 @@ private:
 public:
     ClassificationDialog(weld::Window* pParent, bool bPerParagraph, const std::function<void()>& rParagraphSignHandler = [](){});
     ~ClassificationDialog() override;
-
-    short run() override;
 
     std::vector<ClassificationResult> getResult();
     void setupValues(std::vector<ClassificationResult> const & rInput);
