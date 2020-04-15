@@ -322,20 +322,24 @@ const SmNode * SmNode::FindRectClosestTo(const Point &rPoint) const
             if (!pNode)
                 continue;
 
-            long  nTmp;
             const SmNode *pFound = pNode->FindRectClosestTo(rPoint);
-            if (pFound  &&  (nTmp = pFound->OrientedDist(rPoint)) < nDist)
-            {   nDist   = nTmp;
-                pResult = pFound;
+            if (pFound)
+            {
+                long nTmp = pFound->OrientedDist(rPoint);
+                if (nTmp < nDist)
+                {
+                    nDist   = nTmp;
+                    pResult = pFound;
 
-                // quit immediately if 'rPoint' is inside the *should not
-                // overlap with other rectangles* part.
-                // This (partly) serves for getting the attributes in eg
-                // "bar overstrike a".
-                // ('nDist < 0' is used as *quick shot* to avoid evaluation of
-                // the following expression, where the result is already determined)
-                if (nDist < 0  &&  pFound->IsInsideRect(rPoint))
-                    break;
+                    // quit immediately if 'rPoint' is inside the *should not
+                    // overlap with other rectangles* part.
+                    // This (partly) serves for getting the attributes in eg
+                    // "bar overstrike a".
+                    // ('nDist < 0' is used as *quick shot* to avoid evaluation of
+                    // the following expression, where the result is already determined)
+                    if (nDist < 0  &&  pFound->IsInsideRect(rPoint))
+                        break;
+                }
             }
         }
     }

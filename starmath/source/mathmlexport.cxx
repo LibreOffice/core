@@ -1139,8 +1139,11 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
     int nItalic = -1;   // for the following variables: -1 = yet undefined; 0 = false; 1 = true;
     int nSansSerifFixed   = -1;
     SmTokenType eNodeType = TUNKNOWN;
-    while (lcl_HasEffectOnMathvariant( (eNodeType = pNode->GetToken().eType) ))
+    for (;;)
     {
+        eNodeType = pNode->GetToken().eType;
+        if (!lcl_HasEffectOnMathvariant(eNodeType))
+            break;
         switch (eNodeType)
         {
             case TBOLD      : nBold   = 1; break;

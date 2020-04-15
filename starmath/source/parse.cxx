@@ -1538,9 +1538,13 @@ std::unique_ptr<SmNode> SmParser::DoTerm(bool bGroupNumberIdent)
             {
                 std::stack<std::unique_ptr<SmStructureNode>> aStack;
                 bool    bIsAttr;
-                while ( (bIsAttr = TokenInGroup(TG::Attribute))
-                       ||  TokenInGroup(TG::FontAttr))
+                for (;;)
+                {
+                    bIsAttr = TokenInGroup(TG::Attribute);
+                    if (!bIsAttr && !TokenInGroup(TG::FontAttr))
+                        break;
                     aStack.push(bIsAttr ? DoAttribut() : DoFontAttribut());
+                }
 
                 auto xFirstNode = DoPower();
                 while (!aStack.empty())
