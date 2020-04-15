@@ -75,23 +75,57 @@ static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, 
     switch (rWordType) {
         case WordType::ANYWORD_IGNOREWHITESPACES:
             if (bDirection)
-                while (nPos < len && (u_isWhitespace(ch = Text.iterateCodePoints(&pos)) || isZWSP(ch))) nPos=pos;
+                while (nPos < len)
+                {
+                    ch = Text.iterateCodePoints(&pos);
+                    if (!u_isWhitespace(ch) && !isZWSP(ch))
+                        break;
+                    nPos = pos;
+                }
             else
-                while (nPos > 0 && (u_isWhitespace(ch = Text.iterateCodePoints(&pos, -1)) || isZWSP(ch))) nPos=pos;
+                while (nPos > 0)
+                {
+                    ch = Text.iterateCodePoints(&pos, -1);
+                    if (!u_isWhitespace(ch) && !isZWSP(ch))
+                        break;
+                    nPos = pos;
+                }
             break;
         case WordType::DICTIONARY_WORD:
             if (bDirection)
-                while (nPos < len && (u_isWhitespace(ch = Text.iterateCodePoints(&pos)) || isZWSP(ch) ||
-                            ! (ch == 0x002E || u_isalnum(ch)))) nPos=pos;
+                while (nPos < len)
+                {
+                    ch = Text.iterateCodePoints(&pos);
+                    if (!u_isWhitespace(ch) && !isZWSP(ch) && (ch == 0x002E || u_isalnum(ch)))
+                        break;
+                    nPos = pos;
+                }
             else
-                while (nPos > 0 && (u_isWhitespace(ch = Text.iterateCodePoints(&pos, -1)) || isZWSP(ch) ||
-                            ! (ch == 0x002E || u_isalnum(ch)))) nPos=pos;
+                while (nPos > 0)
+                {
+                    ch = Text.iterateCodePoints(&pos, -1);
+                    if (!u_isWhitespace(ch) && !isZWSP(ch) && (ch == 0x002E || u_isalnum(ch)))
+                        break;
+                    nPos = pos;
+                }
             break;
         case WordType::WORD_COUNT:
             if (bDirection)
-                while (nPos < len && (u_isUWhiteSpace(ch = Text.iterateCodePoints(&pos)) || isZWSP(ch))) nPos=pos;
+                while (nPos < len)
+                {
+                    ch = Text.iterateCodePoints(&pos);
+                    if (!u_isUWhiteSpace(ch) && !isZWSP(ch))
+                        break;
+                    nPos = pos;
+                }
             else
-                while (nPos > 0 && (u_isUWhiteSpace(ch = Text.iterateCodePoints(&pos, -1)) || isZWSP(ch))) nPos=pos;
+                while (nPos > 0)
+                {
+                    ch = Text.iterateCodePoints(&pos, -1);
+                    if (!u_isUWhiteSpace(ch) && !isZWSP(ch))
+                        break;
+                    nPos = pos;
+                }
             break;
     }
     return nPos;
@@ -578,7 +612,10 @@ BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale)
 
         for (const lookupTableItem& listItem : lookupTable) {
             if (rLocale == listItem.aLocale)
-                return xBI = listItem.xBI;
+            {
+                xBI = listItem.xBI;
+                return xBI;
+            }
         }
 
         OUStringLiteral under("_");

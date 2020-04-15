@@ -73,8 +73,11 @@ unicode::getUnicodeType( const sal_Unicode ch ) {
     else c = ch;
 
     sal_Int16 address = UnicodeTypeIndex[ch >> 8];
-    return r = static_cast<sal_Int16>((address < UnicodeTypeNumberBlock) ? UnicodeTypeBlockValue[address] :
-        UnicodeTypeValue[((address - UnicodeTypeNumberBlock) << 8) + (ch & 0xff)]);
+    r = static_cast<sal_Int16>(
+            (address < UnicodeTypeNumberBlock)
+            ? UnicodeTypeBlockValue[address]
+            : UnicodeTypeValue[((address - UnicodeTypeNumberBlock) << 8) + (ch & 0xff)]);
+    return r;
 }
 
 sal_uInt8
@@ -86,9 +89,10 @@ unicode::getUnicodeDirection( const sal_Unicode ch ) {
     else c = ch;
 
     sal_Int16 address = UnicodeDirectionIndex[ch >> 8];
-    return r = ((address < UnicodeDirectionNumberBlock) ? UnicodeDirectionBlockValue[address] :
-        UnicodeDirectionValue[((address - UnicodeDirectionNumberBlock) << 8) + (ch & 0xff)]);
-
+    r = (address < UnicodeDirectionNumberBlock)
+            ? UnicodeDirectionBlockValue[address]
+            : UnicodeDirectionValue[((address - UnicodeDirectionNumberBlock) << 8) + (ch & 0xff)];
+    return r;
 }
 
 #define bit(name)   (1U << name)
