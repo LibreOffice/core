@@ -37,93 +37,6 @@
 
 using namespace com::sun::star;
 
-namespace
-{
-    BitmapEx BPixelRasterToBitmapEx(const basegfx::BZPixelRaster& rRaster, sal_uInt16 mnAntiAlialize)
-    {
-        BitmapEx aRetval;
-        const sal_uInt32 nWidth(mnAntiAlialize ? rRaster.getWidth()/mnAntiAlialize : rRaster.getWidth());
-        const sal_uInt32 nHeight(mnAntiAlialize ? rRaster.getHeight()/mnAntiAlialize : rRaster.getHeight());
-
-        if(nWidth && nHeight)
-        {
-            const Size aDestSize(nWidth, nHeight);
-            vcl::bitmap::RawBitmap aContent(aDestSize, 32);
-
-            if(mnAntiAlialize)
-            {
-                const sal_uInt16 nDivisor(mnAntiAlialize * mnAntiAlialize);
-
-                for(sal_uInt32 y(0); y < nHeight; y++)
-                {
-                    for(sal_uInt32 x(0); x < nWidth; x++)
-                    {
-                        sal_uInt16 nRed(0);
-                        sal_uInt16 nGreen(0);
-                        sal_uInt16 nBlue(0);
-                        sal_uInt16 nOpacity(0);
-                        sal_uInt32 nIndex(rRaster.getIndexFromXY(x * mnAntiAlialize, y * mnAntiAlialize));
-
-                        for(sal_uInt32 c(0); c < mnAntiAlialize; c++)
-                        {
-                            for(sal_uInt32 d(0); d < mnAntiAlialize; d++)
-                            {
-                                const basegfx::BPixel& rPixel(rRaster.getBPixel(nIndex++));
-                                nRed = nRed + rPixel.getRed();
-                                nGreen = nGreen + rPixel.getGreen();
-                                nBlue = nBlue + rPixel.getBlue();
-                                nOpacity = nOpacity + rPixel.getOpacity();
-                            }
-
-                            nIndex += rRaster.getWidth() - mnAntiAlialize;
-                        }
-
-                        nOpacity = nOpacity / nDivisor;
-
-                        if(nOpacity)
-                        {
-                            aContent.SetPixel(y, x, Color(
-                                255 - static_cast<sal_uInt8>(nOpacity),
-                                static_cast<sal_uInt8>(nRed / nDivisor),
-                                static_cast<sal_uInt8>(nGreen / nDivisor),
-                                static_cast<sal_uInt8>(nBlue / nDivisor) ));
-                        }
-                        else
-                            aContent.SetPixel(y, x, Color(255, 0, 0, 0));
-                    }
-                }
-            }
-            else
-            {
-                sal_uInt32 nIndex(0);
-
-                for(sal_uInt32 y(0); y < nHeight; y++)
-                {
-                    for(sal_uInt32 x(0); x < nWidth; x++)
-                    {
-                        const basegfx::BPixel& rPixel(rRaster.getBPixel(nIndex++));
-
-                        if(rPixel.getOpacity())
-                        {
-                            aContent.SetPixel(y, x, Color(255 - rPixel.getOpacity(), rPixel.getRed(), rPixel.getGreen(), rPixel.getBlue()));
-                        }
-                        else
-                            aContent.SetPixel(y, x, Color(255, 0, 0, 0));
-                    }
-                }
-            }
-
-            aRetval = vcl::bitmap::CreateFromData(std::move(aContent));
-
-            // #i101811# set PrefMapMode and PrefSize at newly created Bitmap
-            aRetval.SetPrefMapMode(MapMode(MapUnit::MapPixel));
-            aRetval.SetPrefSize(Size(nWidth, nHeight));
-        }
-
-        return aRetval;
-    }
-} // end of anonymous namespace
-
 namespace drawinglayer::primitive2d
 {
         bool ScenePrimitive2D::impGetShadow3D() const
@@ -243,7 +156,7 @@ namespace drawinglayer::primitive2d
                 double fViewSizeY(aVisibleDiscreteRange.getHeight());
                 const double fViewVisibleArea(fViewSizeX * fViewSizeY);
                 const SvtOptionsDrawinglayer aDrawinglayerOpt;
-                const double fMaximumVisibleArea(aDrawinglayerOpt.GetQuadratic3DRenderLimit());
+                const double fMaximumVisibleArea(SvtOptionsDrawinglayer::GetQuadratic3DRenderLimit());
                 double fReduceFactor(1.0);
 
                 if(fViewVisibleArea > fMaximumVisibleArea)
