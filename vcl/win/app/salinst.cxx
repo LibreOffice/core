@@ -374,8 +374,9 @@ VCLPLUG_WIN_PUBLIC SalInstance* create_SalInstance()
     if ( !RegisterClassExW( &aWndClassEx ) )
         return nullptr;
 
+    HWND hWndParent = Application::IsBitmapRendering() ? HWND_MESSAGE : nullptr;
     HWND hComWnd = CreateWindowExW( WS_EX_TOOLWINDOW, SAL_COM_CLASSNAMEW,
-                               L"", WS_POPUP, 0, 0, 0, 0, nullptr, nullptr,
+                               L"", WS_POPUP, 0, 0, 0, 0, hWndParent, nullptr,
                                pSalData->mhInst, nullptr );
     if ( !hComWnd )
         return nullptr;
