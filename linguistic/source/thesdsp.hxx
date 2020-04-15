@@ -81,8 +81,9 @@ public:
 inline css::uno::Reference< css::linguistic2::XLinguProperties >
         ThesaurusDispatcher::GetPropSet()
 {
-    return xPropSet.is() ?
-        xPropSet : xPropSet = linguistic::GetLinguProperties();
+    if (!xPropSet.is())
+        xPropSet = linguistic::GetLinguProperties();
+    return xPropSet;
 }
 
 
