@@ -13164,7 +13164,8 @@ private:
         else
         {
             GtkTreePath* path = gtk_tree_path_new_from_indices(pos, -1);
-            gtk_tree_view_scroll_to_cell(m_pTreeView, path, nullptr, false, 0, 0);
+            if (gtk_tree_view_get_model(m_pTreeView))
+                gtk_tree_view_scroll_to_cell(m_pTreeView, path, nullptr, false, 0, 0);
             gtk_tree_view_set_cursor(m_pTreeView, path, nullptr, false);
             if (m_pCellView)
                 gtk_cell_view_set_displayed_row(m_pCellView, path);
