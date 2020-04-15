@@ -2088,6 +2088,12 @@ namespace emfio
         mpInputStream->ReadInt32(nBottom);
 
         SAL_INFO("emfio", "\t\tLeft: " << nLeft << ", top: " << nTop << ", right: " << nRight << ", bottom: " << nBottom);
+        if (nLeft > nRight || nTop > nBottom)
+        {
+            SAL_WARN("emfio", "broken rectangle");
+            mpInputStream->SetError( SVSTREAM_FILEFORMAT_ERROR );
+            return tools::Rectangle();
+        }
 
         return tools::Rectangle(nLeft, nTop, nRight, nBottom);
     }

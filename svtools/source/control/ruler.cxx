@@ -594,8 +594,8 @@ void Ruler::ImplDrawTicks(vcl::RenderContext& rRenderContext, long nMin, long nM
 
                 if (nMin < nHorizontalLocation && nHorizontalLocation < nMax)
                 {
-                    ImplVDrawRect(rRenderContext, nHorizontalLocation, nBottom, nHorizontalLocation + DPIOffset, nBottom - 1 * nScale);
-                    ImplVDrawRect(rRenderContext, nHorizontalLocation, nTop,    nHorizontalLocation + DPIOffset, nTop + 1 * nScale);
+                    ImplVDrawRect(rRenderContext, nHorizontalLocation, nBottom - 1 * nScale, nHorizontalLocation + DPIOffset, nBottom);
+                    ImplVDrawRect(rRenderContext, nHorizontalLocation, nTop, nHorizontalLocation + DPIOffset, nTop + 1 * nScale);
                 }
 
                 nHorizontalLocation = nStart - n;
