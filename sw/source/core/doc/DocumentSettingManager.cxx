@@ -628,7 +628,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     // No mbPropLineSpacingShrinksFirstLine
     // No mbSubtractFlys
     // No mbLastBrowseMode
-    // No mbDisableOffPagePositioning
+    mbDisableOffPagePositioning = rSource.mbDisableOffPagePositioning;
     // No mbEmptyDbFieldHidesPara
     mbEmptyDbFieldHidesPara = rSource.mbEmptyDbFieldHidesPara;
     mbContinuousEndnotes = rSource.mbContinuousEndnotes;
