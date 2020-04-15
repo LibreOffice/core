@@ -9630,6 +9630,9 @@ private:
         if (gtk_tree_model_iter_next(pModel, &tmp))
         {
             rGtkIter.iter = tmp;
+            //on-demand dummy entry doesn't count
+            if (get_text(rGtkIter, -1) == "<dummy>")
+                return iter_next(rGtkIter, bOnlyExpanded);
             return true;
         }
         // Move up level(s) until we find the level where the next node exists.
@@ -9639,6 +9642,9 @@ private:
             if (gtk_tree_model_iter_next(pModel, &tmp))
             {
                 rGtkIter.iter = tmp;
+                //on-demand dummy entry doesn't count
+                if (get_text(rGtkIter, -1) == "<dummy>")
+                    return iter_next(rGtkIter, bOnlyExpanded);
                 return true;
             }
         }
