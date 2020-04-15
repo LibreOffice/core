@@ -185,8 +185,8 @@ bool copyFile(const OString* source, const OString& target)
 
     while ( !feof(pSource) )
     {
-        size_t readSize;
-        if ( (readSize = fread(pBuffer, 1, totalSize, pSource)) > 0 && !ferror(pSource) )
+        size_t readSize = fread(pBuffer, 1, totalSize, pSource);
+        if ( readSize > 0 && !ferror(pSource) )
         {
             if ( (fwrite(pBuffer, 1, readSize, pTarget)) != readSize || ferror(pTarget) )
             {

@@ -730,29 +730,33 @@ bool Impl_ExistURLInMenu(
 {
     bool bValidFallback( false );
     sal_uInt16 nCount( 0 );
-    if ( rPopupMenu.is() && ( nCount = rPopupMenu->getItemCount() ) != 0 && sURL.getLength() )
+    if ( rPopupMenu.is() )
     {
-        for ( sal_uInt16 n = 0; n < nCount; ++n )
+        nCount = rPopupMenu->getItemCount();
+        if (nCount != 0 && sURL.getLength() )
         {
-            sal_uInt16 nId = rPopupMenu->getItemId( n );
-            OUString aCmd( rPopupMenu->getCommand( nId ) );
-
-            if ( !bValidFallback && aCmd.getLength() )
+            for ( sal_uInt16 n = 0; n < nCount; ++n )
             {
-                sFallback = aCmd;
-                bValidFallback = true;
-            }
+                sal_uInt16 nId = rPopupMenu->getItemId( n );
+                OUString aCmd( rPopupMenu->getCommand( nId ) );
 
-            // match even if the menu command is more detailed
-            // (maybe an additional query) #i28667#
-            if ( aCmd.match( sURL ) )
-            {
-                sURL = aCmd;
-                const css::uno::Reference< css::graphic::XGraphic > xGraphic(
-                    rPopupMenu->getItemImage( nId ) );
-                if ( xGraphic.is() )
-                    aImage = Image( xGraphic );
-                return true;
+                if ( !bValidFallback && aCmd.getLength() )
+                {
+                    sFallback = aCmd;
+                    bValidFallback = true;
+                }
+
+                // match even if the menu command is more detailed
+                // (maybe an additional query) #i28667#
+                if ( aCmd.match( sURL ) )
+                {
+                    sURL = aCmd;
+                    const css::uno::Reference< css::graphic::XGraphic > xGraphic(
+                        rPopupMenu->getItemImage( nId ) );
+                    if ( xGraphic.is() )
+                        aImage = Image( xGraphic );
+                    return true;
+                }
             }
         }
     }
