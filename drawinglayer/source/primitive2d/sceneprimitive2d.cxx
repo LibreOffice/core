@@ -243,7 +243,7 @@ namespace drawinglayer::primitive2d
                 double fViewSizeY(aVisibleDiscreteRange.getHeight());
                 const double fViewVisibleArea(fViewSizeX * fViewSizeY);
                 const SvtOptionsDrawinglayer aDrawinglayerOpt;
-                const double fMaximumVisibleArea(aDrawinglayerOpt.GetQuadratic3DRenderLimit());
+                const double fMaximumVisibleArea(SvtOptionsDrawinglayer::GetQuadratic3DRenderLimit());
                 double fReduceFactor(1.0);
 
                 if(fViewVisibleArea > fMaximumVisibleArea)
