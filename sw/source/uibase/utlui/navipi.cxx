@@ -582,10 +582,12 @@ SwNavigationPI::SwNavigationPI(vcl::Window* pParent,
 
     m_aStatusArr[3] = SwResId(STR_ACTIVE_VIEW);
 
+    bool bFloatingNavigator = SfxChildWindowContext::GetFloatingWindow(GetParent()) != nullptr;
+
     m_xContentTree->set_selection_mode(SelectionMode::Single);
     m_xContentTree->ShowTree();
     m_xContent3ToolBox->set_item_active("listbox", true);
-    m_xContent3ToolBox->set_item_sensitive("listbox", SfxChildWindowContext::GetFloatingWindow(GetParent()) != nullptr);
+    m_xContent3ToolBox->set_item_sensitive("listbox", bFloatingNavigator);
 
 //  TreeListBox for global document
     m_xGlobalTree->set_selection_mode(SelectionMode::Multiple);
@@ -622,9 +624,10 @@ SwNavigationPI::SwNavigationPI(vcl::Window* pParent,
                     pActView->GetWrtShellPtr()->IsGlblDocSaveLinks());
         if (m_pConfig->IsGlobalActive())
             ToggleTree();
-        m_xGlobalTree->grab_focus();
+        if (bFloatingNavigator)
+            m_xGlobalTree->grab_focus();
     }
-    else
+    else if (bFloatingNavigator)
         m_xContentTree->grab_focus();
     UsePage();
     m_aPageChgIdle.SetInvokeHandler(LINK(this, SwNavigationPI, ChangePageHdl));
