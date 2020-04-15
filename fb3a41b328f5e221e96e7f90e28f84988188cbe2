@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "04fb1fa3_61b4d5b9",
+        "filename": "vcl/unx/gtk3/gtk3gtkframe.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2977,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-04-15T17:43:33Z",
+      "side": 1,
+      "message": "I can\u0027t compile on 16.04 now.\nvcl/unx/gtk3/gtk3gtkframe.cxx:2977:73: error: ?GDK_ANCHOR_FLIP? was not declared in this scope\n         window_move_to_rect(gdkWindow, \u0026rect, rect_anchor, menu_anchor, GDK_ANCHOR_FLIP, 0, 0);",
+      "range": {
+        "startLine": 2977,
+        "startChar": 72,
+        "endLine": 2977,
+        "endChar": 87
+      },
+      "revId": "fb3a41b328f5e221e96e7f90e28f84988188cbe2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
