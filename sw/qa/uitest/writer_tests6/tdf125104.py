@@ -33,13 +33,15 @@ class tdf125104(UITestCase):
         self.xUITest.executeCommand(".uno:InsertPageNumberField")
         self.xUITest.executeCommand(".uno:InsertPagebreak")
         self.xUITest.executeCommand(".uno:InsertPageNumberField")
-        self.assertEqual(document.Text.String[0:1], "1")
-        self.assertEqual(document.Text.String[2:3], "2")
+        text = document.Text.String.replace('\r\n', '\n')
+        self.assertEqual(text[0:1], "1")
+        self.assertEqual(text[2:3], "2")
 
         # Bug 125104 - Changing page numbering to "1st, 2nd, 3rd,..." causes crashes when trying to change Page settings later
         self.set_combo_layout_format(self.open_page_style_dialog(), "1st, 2nd, 3rd, ...")
-        self.assertEqual(document.Text.String[0:3], "1st")
-        self.assertEqual(document.Text.String[4:7], "2nd")
+        text = document.Text.String.replace('\r\n', '\n')
+        self.assertEqual(text[0:3], "1st")
+        self.assertEqual(text[4:7], "2nd")
 
         xDialog = self.open_page_style_dialog()
         comboLayoutFormat = xDialog.getChild("comboLayoutFormat")
@@ -49,13 +51,15 @@ class tdf125104(UITestCase):
 
         # change to devanagari alphabet format
         self.set_combo_layout_format(self.open_page_style_dialog(), "क, ख, ग, ...")
-        self.assertEqual(document.Text.String[0:1], "क")
-        self.assertEqual(document.Text.String[2:3], "ख")
+        text = document.Text.String.replace('\r\n', '\n')
+        self.assertEqual(text[0:1], "क")
+        self.assertEqual(text[2:3], "ख")
 
         # change to devanagari number format
         self.set_combo_layout_format(self.open_page_style_dialog(), "१, २, ३, ...")
-        self.assertEqual(document.Text.String[0:1], "१")
-        self.assertEqual(document.Text.String[2:3], "२")
+        text = document.Text.String.replace('\r\n', '\n')
+        self.assertEqual(text[0:1], "१")
+        self.assertEqual(text[2:3], "२")
 
         self.ui_test.close_doc()
 
