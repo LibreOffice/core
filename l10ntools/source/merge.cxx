@@ -196,8 +196,10 @@ MergeDataFile::MergeDataFile(
                     bSkipCurrentPOFile = true;
                     break;
                 }
-            } while( !aPoInput.eof() &&
-                ( bInSameComp = PoEntry::IsInSameComp(aActPo, aNextPo) ) );
+                if (aPoInput.eof())
+                    break;
+                bInSameComp = PoEntry::IsInSameComp(aActPo, aNextPo);
+            } while( bInSameComp );
 
             InsertEntry(
                 aActPo.getResourceType(), aActPo.getGroupId(),

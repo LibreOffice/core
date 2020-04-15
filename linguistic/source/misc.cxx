@@ -290,11 +290,9 @@ uno::Reference< XDictionaryEntry > SearchDicList(
             if (   (!bSearchPosDics  &&  eType == DictionaryType_NEGATIVE)
                 || ( bSearchPosDics  &&  eType == DictionaryType_POSITIVE))
             {
-                if ( (xEntry = axDic->getEntry( rWord )).is() )
-                {
-                    if (bSearchSpellEntry || lcl_HasHyphInfo( xEntry ))
-                        break;
-                }
+                xEntry = axDic->getEntry( rWord );
+                if ( xEntry.is() && (bSearchSpellEntry || lcl_HasHyphInfo( xEntry )) )
+                    break;
                 xEntry = nullptr;
             }
         }

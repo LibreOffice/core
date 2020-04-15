@@ -121,16 +121,18 @@ inline linguistic::SpellCache & SpellCheckerDispatcher::GetCache() const
 inline css::uno::Reference< css::linguistic2::XLinguProperties >
         SpellCheckerDispatcher::GetPropSet()
 {
-    return m_xPropSet.is() ?
-        m_xPropSet : m_xPropSet = linguistic::GetLinguProperties();
+    if (!m_xPropSet.is())
+        m_xPropSet = linguistic::GetLinguProperties();
+    return m_xPropSet;
 }
 
 
 inline css::uno::Reference< css::linguistic2::XSearchableDictionaryList >
         SpellCheckerDispatcher::GetDicList()
 {
-    return m_xDicList.is() ?
-        m_xDicList : m_xDicList = linguistic::GetDictionaryList();
+    if (!m_xDicList.is())
+        m_xDicList = linguistic::GetDictionaryList();
+    return m_xDicList;
 }
 
 
