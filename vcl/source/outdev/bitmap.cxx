@@ -523,7 +523,7 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
 
                 if (bTryDirectPaint && mpGraphics->DrawAlphaBitmap(aPosAry, *pSalSrcBmp, *xMaskBmp, this))
                 {
-                    // tried to paint as alpha directly. If tis worked, we are done (except
+                    // tried to paint as alpha directly. If this worked, we are done (except
                     // alpha, see below)
                 }
                 else
