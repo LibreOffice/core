@@ -232,7 +232,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
 
         // is cursor at a mispelled word ?
         bool bIsWrong = false;
-        if (pView)
+        if (pView && pView->GetWrtShellPtr())
         {
             const SwViewOption* pVOpt = pView->GetWrtShell().GetViewOptions();
             if(pVOpt && pVOpt->IsOnlineSpell())
