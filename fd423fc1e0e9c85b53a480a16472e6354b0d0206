@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "35d4e858_2fa4aec2",
+        "filename": "sc/source/core/data/table6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2020-04-15T15:27:08Z",
+      "side": 1,
+      "message": "Line 337 makes the maximal element to be nLastCol+1, so I think the proper fix is to add +1 to nLastCol here and also add another +1 to the line above.",
+      "range": {
+        "startLine": 332,
+        "startChar": 27,
+        "endLine": 332,
+        "endChar": 35
+      },
+      "revId": "fd423fc1e0e9c85b53a480a16472e6354b0d0206",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
