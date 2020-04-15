@@ -489,10 +489,12 @@ bool ScDocument::MarkUsedExternalReferences( const ScTokenArray& rArr, const ScA
 
     ScExternalRefManager* pRefMgr = nullptr;
     formula::FormulaTokenArrayPlainIterator aIter( rArr );
-    formula::FormulaToken* t = nullptr;
     bool bAllMarked = false;
-    while (!bAllMarked && (t = aIter.GetNextReferenceOrName()) != nullptr)
+    while (!bAllMarked)
     {
+        formula::FormulaToken* t = aIter.GetNextReferenceOrName();
+        if (!t)
+            break;
         if (t->IsExternalRef())
         {
             if (!pRefMgr)
@@ -632,9 +634,10 @@ double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat, const ScI
 {
     const SvNumberFormatter* pFormatter = pContext ? pContext->GetFormatTable() : GetFormatTable();
     const SvNumberformat* pFormat = pFormatter->GetEntry( nFormat );
-    SvNumFormatType nType;
-    if (pFormat && (nType = pFormat->GetMaskedType()) != SvNumFormatType::DATE
-            && nType != SvNumFormatType::TIME && nType != SvNumFormatType::DATETIME )
+    if (!pFormat)
+        return fVal;
+    SvNumFormatType nType = pFormat->GetMaskedType();
+    if (nType != SvNumFormatType::DATE && nType != SvNumFormatType::TIME && nType != SvNumFormatType::DATETIME )
     {
         short nPrecision;
         if ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
