@@ -182,7 +182,7 @@ public:
             return;
         if (fn == SRCDIR "/sw/source/core/doc/notxtfrm.cxx")
             return;
-        // the point at which I gave up on sw/ because it just does it EVERYWHER
+        // the point at which I gave up on sw/ because it just does it EVERYWHERE
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/"))
             return;
         if (fn == SRCDIR "/starmath/source/mathtype.cxx")
