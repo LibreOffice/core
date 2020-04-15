@@ -631,6 +631,8 @@ IMPL_LINK(MacroChooser, ButtonHdl, weld::Button&, rButton, void)
             if (m_xMacroBox->get_selected(m_xMacroBoxIter.get()))
                 aInfoItem.SetMethod(m_xMacroBox->get_text(*m_xMacroBoxIter));
             StoreMacroDescription();
+            m_xDialog->hide(); // tdf#126828 dismiss dialog before opening new window
+
             SfxAllItemSet aArgs( SfxGetpApp()->GetPool() );
             SfxRequest aRequest( SID_BASICIDE_APPEAR, SfxCallMode::SYNCHRON, aArgs );
             SfxGetpApp()->ExecuteSlot( aRequest );
