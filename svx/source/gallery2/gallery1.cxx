@@ -741,9 +741,12 @@ GalleryTheme* Gallery::AcquireTheme( const OUString& rThemeName, SfxListener& rL
     GalleryTheme*           pTheme = nullptr;
     GalleryThemeEntry*      pThemeEntry = ImplGetThemeEntry( rThemeName );
 
-    if( pThemeEntry && ( ( pTheme = ImplGetCachedTheme( pThemeEntry ) ) != nullptr ) )
-        rListener.StartListening(*pTheme, DuplicateHandling::Prevent);
-
+    if( pThemeEntry )
+    {
+        pTheme = ImplGetCachedTheme( pThemeEntry );
+        if (pTheme)
+            rListener.StartListening(*pTheme, DuplicateHandling::Prevent);
+    }
     return pTheme;
 }
 

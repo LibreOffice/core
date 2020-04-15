@@ -279,59 +279,60 @@ OUString SvPasteObjectHelper::GetSotFormatUIName( SotClipboardFormatId nId )
 
 bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rData, OUString& _rName, OUString& _rSource, SotClipboardFormatId const & _nFormat)
 {
-    bool bRet = false;
-    if( _nFormat == SotClipboardFormatId::EMBED_SOURCE_OLE || _nFormat == SotClipboardFormatId::EMBEDDED_OBJ_OLE )
+    if( _nFormat != SotClipboardFormatId::EMBED_SOURCE_OLE && _nFormat != SotClipboardFormatId::EMBEDDED_OBJ_OLE )
+        return false;
+
+    datatransfer::DataFlavor aFlavor;
+    SotExchange::GetFormatDataFlavor( SotClipboardFormatId::OBJECTDESCRIPTOR_OLE, aFlavor );
+
+    if( !rData.HasFormat( aFlavor ) )
+        return false;
+
+    uno::Any aAny = rData.GetAny(aFlavor, OUString());
+    if (!aAny.hasValue())
+        return false;
+
+    uno::Sequence< sal_Int8 > anySequence;
+    aAny >>= anySequence;
+
+    OleObjectDescriptor* pOleObjDescr =
+            reinterpret_cast< OleObjectDescriptor* >( anySequence.getArray( ) );
+
+    // determine the user friendly description of the embedded object
+    if ( pOleObjDescr->dwFullUserTypeName )
     {
-        datatransfer::DataFlavor aFlavor;
-        SotExchange::GetFormatDataFlavor( SotClipboardFormatId::OBJECTDESCRIPTOR_OLE, aFlavor );
+        // we set the pointer to the start of user friendly description
+        // string. it starts  at &OleObjectDescriptor + dwFullUserTypeName.
+        // dwFullUserTypeName is the offset in bytes.
+        // the user friendly description string is '\0' terminated.
+        const sal_Unicode* pUserTypeName =
+            reinterpret_cast< sal_Unicode* >(
+                reinterpret_cast< char* >( pOleObjDescr ) +
+                    pOleObjDescr->dwFullUserTypeName );
 
-        uno::Any aAny;
-        if( rData.HasFormat( aFlavor ) &&
-            ( aAny = rData.GetAny(aFlavor, OUString()) ).hasValue() )
-        {
-            uno::Sequence< sal_Int8 > anySequence;
-            aAny >>= anySequence;
-
-            OleObjectDescriptor* pOleObjDescr =
-                reinterpret_cast< OleObjectDescriptor* >( anySequence.getArray( ) );
-
-            // determine the user friendly description of the embedded object
-            if ( pOleObjDescr->dwFullUserTypeName )
-            {
-                // we set the pointer to the start of user friendly description
-                // string. it starts  at &OleObjectDescriptor + dwFullUserTypeName.
-                // dwFullUserTypeName is the offset in bytes.
-                // the user friendly description string is '\0' terminated.
-                const sal_Unicode* pUserTypeName =
-                    reinterpret_cast< sal_Unicode* >(
-                        reinterpret_cast< char* >( pOleObjDescr ) +
-                            pOleObjDescr->dwFullUserTypeName );
-
-                _rName += pUserTypeName;
-                // the following statement was here for historical reasons, it is commented out since it causes bug i49460
-                // _nFormat = SotClipboardFormatId::EMBED_SOURCE_OLE;
-            }
-
-            // determine the source of the embedded object
-            if ( pOleObjDescr->dwSrcOfCopy )
-            {
-                // we set the pointer to the start of source string
-                // it starts  at &OleObjectDescriptor + dwSrcOfCopy.
-                // dwSrcOfCopy is the offset in bytes.
-                // the source string is '\0' terminated.
-                const sal_Unicode* pSrcOfCopy =
-                    reinterpret_cast< sal_Unicode* >(
-                        reinterpret_cast< char* >( pOleObjDescr ) +
-                            pOleObjDescr->dwSrcOfCopy );
-
-                _rSource += pSrcOfCopy;
-            }
-            else
-                _rSource = SvtResId(STR_UNKNOWN_SOURCE);
-        }
-        bRet = true;
+        _rName += pUserTypeName;
+        // the following statement was here for historical reasons, it is commented out since it causes bug i49460
+        // _nFormat = SotClipboardFormatId::EMBED_SOURCE_OLE;
     }
-    return bRet;
+
+    // determine the source of the embedded object
+    if ( pOleObjDescr->dwSrcOfCopy )
+    {
+        // we set the pointer to the start of source string
+        // it starts  at &OleObjectDescriptor + dwSrcOfCopy.
+        // dwSrcOfCopy is the offset in bytes.
+        // the source string is '\0' terminated.
+        const sal_Unicode* pSrcOfCopy =
+            reinterpret_cast< sal_Unicode* >(
+                reinterpret_cast< char* >( pOleObjDescr ) +
+                    pOleObjDescr->dwSrcOfCopy );
+
+        _rSource += pSrcOfCopy;
+    }
+    else
+        _rSource = SvtResId(STR_UNKNOWN_SOURCE);
+
+    return true;
 }
 
 
