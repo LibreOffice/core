@@ -454,6 +454,13 @@ void PictReader::ReadRectangle(tools::Rectangle & rRect)
 
     aTopLeft=ReadPoint();
     aBottomRight=ReadPoint();
+    if (aTopLeft.X() > aBottomRight.X() || aTopLeft.Y() > aBottomRight.Y())
+    {
+        SAL_WARN("filter.pict", "broken rectangle");
+        pPict->SetError( SVSTREAM_FILEFORMAT_ERROR );
+        rRect = tools::Rectangle();
+        return;
+    }
     rRect=tools::Rectangle(aTopLeft,aBottomRight);
 
     SAL_INFO("filter.pict", "ReadRectangle: " << rRect);

@@ -1290,7 +1290,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
     const SwViewOption* pVOpt = m_pWrtShell->GetViewOptions();
 
     sal_Int64 nX = rRect.Left(), nY = rRect.Top(), nLeft = rVis.Left(), nTop = rVis.Top();
-    sal_Int64 nRight = LONG_MIN;
+    sal_Int64 nRight = nLeft;
     sal_Int64 nBottom = LONG_MIN;
     sal_Int16 nZoomType = static_cast< sal_Int16 >(pVOpt->GetZoomType());
     sal_Int16 nZoomFactor = static_cast < sal_Int16 > (pVOpt->GetZoom());

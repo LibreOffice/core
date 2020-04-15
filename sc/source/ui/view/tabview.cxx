@@ -2440,6 +2440,9 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
     if (rRectangle.IsEmpty())
         return OUString();
 
+    if (mnLOKStartHeaderCol == std::numeric_limits<SCCOL>::min())
+        return OUString();
+
     bool bRangeHeaderSupport = comphelper::LibreOfficeKit::isRangeHeaders();
 
     OUStringBuffer aBuffer(256);
