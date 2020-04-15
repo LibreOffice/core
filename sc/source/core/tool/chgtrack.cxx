@@ -370,9 +370,8 @@ bool ScChangeAction::IsDeletedInDelType( ScChangeActionType eDelType ) const
         }
         while ( pL )
         {
-            ScChangeAction* p;
-            if ( (p = pL->GetAction()) != nullptr &&
-                    (p->GetType() == eDelType || p->GetType() == eInsType) )
+            ScChangeAction* p = pL->GetAction();
+            if ( p != nullptr && (p->GetType() == eDelType || p->GetType() == eInsType) )
                 return true;
             pL = pL->GetNext();
         }
@@ -3654,9 +3653,13 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
                         // Split up the ContentChain
                         ScChangeActionContent *pHere, *pTmp;
                         pHere = static_cast<ScChangeActionContent*>(p);
-                        while ( (pTmp = pHere->GetPrevContent()) != nullptr &&
-                                pTmp->GetActionNumber() > nEndLastCut )
+                        for (;;)
+                        {
+                            pTmp = pHere->GetPrevContent();
+                            if (!pTmp || pTmp->GetActionNumber() <= nEndLastCut)
+                                break;
                             pHere = pTmp;
+                        }
                         if ( pTmp )
                         {   // Becomes TopContent of the Move
                             pTmp->SetNextContent( nullptr );
@@ -3888,9 +3891,14 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
                     // if this Delete is at the top of a Row
                     ScChangeActionType eType = pDel->GetType();
                     ScChangeAction* p = pDel;
-                    while ( (p = p->GetPrev()) != nullptr && p->GetType() == eType &&
-                            !static_cast<ScChangeActionDel*>(p)->IsTopDelete() )
+                    for (;;)
+                    {
+                        p = p->GetPrev();
+                        if (!p || p->GetType() != eType ||
+                            static_cast<ScChangeActionDel*>(p)->IsTopDelete() )
+                            break;
                         rMap.insert( ::std::make_pair( p->GetActionNumber(), p ) );
+                    }
                     // delete this in the map too
                     rMap.insert( ::std::make_pair( pAct->GetActionNumber(), pAct ) );
                 }
@@ -4030,10 +4038,13 @@ bool ScChangeTrack::SelectContent( ScChangeAction* pAct, bool bOldest )
     if ( bOldest )
     {
         pContent = pContent->GetTopContent();
-        ScChangeActionContent* pPrevContent;
-        while ( (pPrevContent = pContent->GetPrevContent()) != nullptr &&
-                pPrevContent->IsVirgin() )
+        for (;;)
+        {
+            ScChangeActionContent* pPrevContent = pContent->GetPrevContent();
+            if ( !pPrevContent || !pPrevContent->IsVirgin() )
+                break;
             pContent = pPrevContent;
+        }
     }
 
     if ( !pContent->IsClickable() )
