@@ -170,7 +170,9 @@ XclExpArrayRef XclExpArrayBuffer::FindArray( const ScTokenArray& rScTokArr, cons
     ScAddress aAbsPos = rRef.toAbs(&GetRoot().GetDoc(), rBasePos);
     XclExpArrayMap::const_iterator it = maRecMap.find(aAbsPos);
 
-    return (it == maRecMap.end()) ? xRec : xRec = it->second;
+    if (it != maRecMap.end())
+        xRec = it->second;
+    return xRec;
 }
 
 // Shared formulas ============================================================
