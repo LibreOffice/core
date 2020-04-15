@@ -620,7 +620,7 @@ writeCoreProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties 
 {
     OUString sValue;
     if( rSelf.getVersion() == oox::core::ISOIEC_29500_2008  )
-        sValue = "http://schemas.openxmlformats.org/officedocument/2006/relationships/metadata/core-properties";
+        sValue = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/metadata/core-properties";
     else
         sValue = "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties";
 
