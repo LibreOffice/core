@@ -1312,8 +1312,11 @@ bool ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
             nFoundCol = GetCol();
             nFoundRow = GetRow();
             aPosSave = maCurPos;
+            if (IsEqualConditionFulfilled())
+                break;
+            bNext = GetNext();
         }
-        while ( !IsEqualConditionFulfilled() && (bNext = GetNext()));
+        while (bNext);
 
         // There may be no pNext but equal condition fulfilled if regular
         // expressions are involved. Keep the found entry and proceed.

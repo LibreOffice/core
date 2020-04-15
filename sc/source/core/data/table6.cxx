@@ -151,16 +151,23 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, sc::Colum
         return bFound;
     }
 
+    if (!bFound)
+        return false;
+    if ( rSearchItem.GetCommand() != SvxSearchCmd::REPLACE
+         && rSearchItem.GetCommand() != SvxSearchCmd::REPLACE_ALL )
+        return bFound;
+
     ScMatrixMode cMatrixFlag = ScMatrixMode::NONE;
-    if ( bFound &&
-        ( (rSearchItem.GetCommand() == SvxSearchCmd::REPLACE)
-        ||(rSearchItem.GetCommand() == SvxSearchCmd::REPLACE_ALL) ) &&
-            // Don't split the matrix, only replace Matrix formulas
-            !( (eCellType == CELLTYPE_FORMULA &&
-            ((cMatrixFlag = aCell.mpFormula->GetMatrixFlag()) == ScMatrixMode::Reference))
-            // No UndoDoc => Matrix not restorable => don't replace
-            || (cMatrixFlag != ScMatrixMode::NONE && !pUndoDoc) ) &&
-         IsBlockEditable(nCol, nRow, nCol, nRow)
+    // Don't split the matrix, only replace Matrix formulas
+    if (eCellType == CELLTYPE_FORMULA)
+    {
+        cMatrixFlag = aCell.mpFormula->GetMatrixFlag();
+        if (cMatrixFlag != ScMatrixMode::Reference)
+            return bFound;
+    }
+    if ( // No UndoDoc => Matrix not restorable => don't replace
+        (cMatrixFlag == ScMatrixMode::NONE && !pUndoDoc) &&
+        IsBlockEditable(nCol, nRow, nCol, nRow)
         )
     {
         if ( cMatrixFlag == ScMatrixMode::NONE && rSearchItem.GetCommand() == SvxSearchCmd::REPLACE )

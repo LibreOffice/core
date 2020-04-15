@@ -421,8 +421,8 @@ Label_fallback_to_unambiguous:
     // Decimal and group separator 0 => only integer and possibly exponent,
     // stops at first non-digit non-sign.
     fValue = ::rtl::math::stringToDouble( rStr, 0, 0, &eStatus, &nParseEnd);
-    sal_Int32 nLen;
-    if (eStatus == rtl_math_ConversionStatus_Ok && nParseEnd < (nLen = rStr.getLength()))
+    sal_Int32 nLen = rStr.getLength();
+    if (eStatus == rtl_math_ConversionStatus_Ok && nParseEnd < nLen)
     {
         // Not at string end, check for trailing blanks or switch to date or
         // time parsing or bail out.
