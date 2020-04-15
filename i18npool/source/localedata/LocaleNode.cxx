@@ -688,14 +688,16 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                 case cssi::NumberFormatIndex::CURRENCY_1000DEC2 :
                     // Remember the currency symbol if present.
                     {
-                        sal_Int32 nStart;
-                        if (sTheCompatibleCurrency.isEmpty() &&
-                                ((nStart = n->getValue().indexOf("[$")) >= 0))
+                        if (sTheCompatibleCurrency.isEmpty())
                         {
-                            const OUString& aCode( n->getValue());
-                            sal_Int32 nHyphen = aCode.indexOf( '-', nStart);
-                            if (nHyphen >= nStart + 3)
-                                sTheCompatibleCurrency = aCode.copy( nStart + 2, nHyphen - nStart - 2);
+                            sal_Int32 nStart = n->getValue().indexOf("[$");
+                            if (nStart >= 0)
+                            {
+                                const OUString& aCode( n->getValue());
+                                sal_Int32 nHyphen = aCode.indexOf( '-', nStart);
+                                if (nHyphen >= nStart + 3)
+                                    sTheCompatibleCurrency = aCode.copy( nStart + 2, nHyphen - nStart - 2);
+                            }
                         }
                     }
                     [[fallthrough]];

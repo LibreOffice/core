@@ -1430,22 +1430,26 @@ const_type :
          * If the constant's type is a scoped name, it must resolve
          * to a scalar constant type
          */
-        if ( pScope && (type = pScope->lookupByName(*$1)) ) {
-            if (!ErrorHandler::checkPublished(type))
-            {
-                type = nullptr;
-                $$ = ET_none;
-            }
-            else
-            {
-                type = resolveTypedefs(type);
-                if (type->getNodeType() == NT_predefined)
+        if ( pScope ) {
+            type = pScope->lookupByName(*$1);
+            if (type) {
+                if (!ErrorHandler::checkPublished(type))
                 {
-                    $$ = static_cast< AstBaseType const * >(type)->
-                        getExprType();
-                } else
-                    $$ = ET_any;
-            }
+                    type = nullptr;
+                    $$ = ET_none;
+                }
+                else
+                {
+                    type = resolveTypedefs(type);
+                    if (type->getNodeType() == NT_predefined)
+                    {
+                        $$ = static_cast< AstBaseType const * >(type)->
+                            getExprType();
+                    } else
+                        $$ = ET_any;
+                }
+            } else
+                $$ = ET_any;
         } else
             $$ = ET_any;
     }

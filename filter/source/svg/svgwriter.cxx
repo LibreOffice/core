@@ -1727,13 +1727,15 @@ long SVGActionWriter::ImplMap( sal_Int32 nVal ) const
 
 Point& SVGActionWriter::ImplMap( const Point& rPt, Point& rDstPt ) const
 {
-    return( rDstPt = OutputDevice::LogicToLogic( rPt, mpVDev->GetMapMode(), maTargetMapMode ) );
+    rDstPt = OutputDevice::LogicToLogic( rPt, mpVDev->GetMapMode(), maTargetMapMode );
+    return rDstPt;
 }
 
 
 Size& SVGActionWriter::ImplMap( const Size& rSz, Size& rDstSz ) const
 {
-    return( rDstSz = OutputDevice::LogicToLogic( rSz, mpVDev->GetMapMode(), maTargetMapMode ) );
+    rDstSz = OutputDevice::LogicToLogic( rSz, mpVDev->GetMapMode(), maTargetMapMode );
+    return rDstSz;
 }
 
 
