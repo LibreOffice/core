@@ -49,6 +49,12 @@ namespace oox { class AttributeList; }
 namespace oox {
 namespace core {
 
+enum class OOXMLVariant {
+    ECMA_Transitional,
+    ISO_Transitional,
+    ISO_Strict
+};
+
 
 /** Document handler specifically designed for detecting OOXML file formats.
 
@@ -79,7 +85,7 @@ public:
 private:
     void                parseRelationship( const AttributeList& rAttribs );
 
-    static OUString     getFilterNameFromContentType( const OUString& rContentType, const OUString& rFileName );
+    OUString            getFilterNameFromContentType( const OUString& rContentType, const OUString& rFileName );
     void                parseContentTypesDefault( const AttributeList& rAttribs );
     void                parseContentTypesOverride( const AttributeList& rAttribs );
 
@@ -90,6 +96,7 @@ private:
     OUString            maFileName;
     ContextVector       maContextStack;
     OUString            maTargetPath;
+    OOXMLVariant        maOOXMLVariant;
     css::uno::Reference< css::uno::XComponentContext > mxContext;
 };
 
