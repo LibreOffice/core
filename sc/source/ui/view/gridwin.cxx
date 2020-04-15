@@ -2511,34 +2511,36 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
 
         //  Page-Break-Mode
 
-        sal_uInt16 nBreakType;
-        if ( !nButtonDown && pViewData->IsPagebreakMode() &&
-                ( nBreakType = HitPageBreak( rMEvt.GetPosPixel(), nullptr, nullptr, nullptr ) ) != 0 )
+        if ( !nButtonDown && pViewData->IsPagebreakMode() )
         {
-            PointerStyle eNew = PointerStyle::Arrow;
-            switch ( nBreakType )
+            sal_uInt16 nBreakType = HitPageBreak( rMEvt.GetPosPixel(), nullptr, nullptr, nullptr );
+            if (nBreakType != 0 )
             {
-                case SC_PD_RANGE_L:
-                case SC_PD_RANGE_R:
-                case SC_PD_BREAK_H:
-                    eNew = PointerStyle::ESize;
-                    break;
-                case SC_PD_RANGE_T:
-                case SC_PD_RANGE_B:
-                case SC_PD_BREAK_V:
-                    eNew = PointerStyle::SSize;
-                    break;
-                case SC_PD_RANGE_TL:
-                case SC_PD_RANGE_BR:
-                    eNew = PointerStyle::SESize;
-                    break;
-                case SC_PD_RANGE_TR:
-                case SC_PD_RANGE_BL:
-                    eNew = PointerStyle::NESize;
-                    break;
+                PointerStyle eNew = PointerStyle::Arrow;
+                switch ( nBreakType )
+                {
+                    case SC_PD_RANGE_L:
+                    case SC_PD_RANGE_R:
+                    case SC_PD_BREAK_H:
+                        eNew = PointerStyle::ESize;
+                        break;
+                    case SC_PD_RANGE_T:
+                    case SC_PD_RANGE_B:
+                    case SC_PD_BREAK_V:
+                        eNew = PointerStyle::SSize;
+                        break;
+                    case SC_PD_RANGE_TL:
+                    case SC_PD_RANGE_BR:
+                        eNew = PointerStyle::SESize;
+                        break;
+                    case SC_PD_RANGE_TR:
+                    case SC_PD_RANGE_BL:
+                        eNew = PointerStyle::NESize;
+                        break;
+                }
+                SetPointer( eNew );
+                bCross = true;
             }
-            SetPointer( eNew );
-            bCross = true;
         }
 
         // Show fill cursor?
