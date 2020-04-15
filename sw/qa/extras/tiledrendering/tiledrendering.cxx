@@ -122,6 +122,7 @@ public:
     void testDeselectCustomShape();
     void testHyperlink();
     void testRedlineNotificationDuringSave();
+    void testFieldmark();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -185,6 +186,7 @@ public:
     CPPUNIT_TEST(testDeselectCustomShape);
     CPPUNIT_TEST(testHyperlink);
     CPPUNIT_TEST(testRedlineNotificationDuringSave);
+    CPPUNIT_TEST(testFieldmark);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2489,7 +2491,6 @@ void SwTiledRenderingTest::testHyperlink()
     CPPUNIT_ASSERT_EQUAL(OString("http://example.com/"), m_sHyperlinkLink);
 }
 
-
 void SwTiledRenderingTest::testRedlineNotificationDuringSave()
 {
     // Load a document with redlines which are hidden at a layout level.
@@ -2506,6 +2507,12 @@ void SwTiledRenderingTest::testRedlineNotificationDuringSave()
     // Without the accompanying fix in place, this test would have never returned due to an infinite
     // loop while sending not needed LOK notifications for redline changes during save.
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+}
+
+void SwTiledRenderingTest::testFieldmark()
+{
+    // Without the accompanying fix in place, this crashed on load.
+    createDoc("fieldmark.docx");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwTiledRenderingTest);
