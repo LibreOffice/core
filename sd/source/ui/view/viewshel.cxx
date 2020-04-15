@@ -929,6 +929,8 @@ void ViewShell::ArrangeGUIElements()
 {
     if (mpImpl->mbArrangeActive)
         return;
+    if (maViewSize.IsEmpty())
+        return;
     mpImpl->mbArrangeActive = true;
 
     // Calculate border for in-place editing.

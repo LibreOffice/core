@@ -2674,7 +2674,7 @@ void ScTabView::PaintTopArea( SCCOL nStartCol, SCCOL nEndCol )
             long nStartX = aViewData.GetScrPos( nStartCol, 0, eWhich ).X();
             long nEndX;
             if (nEndCol >= pDoc->MaxCol())
-                nEndX = bLayoutRTL ? 0 : ( aWinSize.Width()-1 );
+                nEndX = nStartX + (bLayoutRTL ? 0 : ( aWinSize.Width()-1 ));
             else
                 nEndX = aViewData.GetScrPos( nEndCol+1, 0, eWhich ).X() - nLayoutSign;
             pColBar[eWhich]->Invalidate(
@@ -2727,7 +2727,7 @@ void ScTabView::PaintLeftArea( SCROW nStartRow, SCROW nEndRow )
             long nStartY = aViewData.GetScrPos( 0, nStartRow, eWhich ).Y();
             long nEndY;
             if (nEndRow >= pDoc->MaxRow())
-                nEndY = aWinSize.Height()-1;
+                nEndY = nStartY + aWinSize.Height() - 1;
             else
                 nEndY = aViewData.GetScrPos( 0, nEndRow+1, eWhich ).Y() - 1;
             pRowBar[eWhich]->Invalidate(

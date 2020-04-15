@@ -110,6 +110,8 @@ tools::Rectangle Deck::GetContentArea() const
 {
     const Size aWindowSize (GetSizePixel());
     const int nBorderSize (Theme::GetInteger(Theme::Int_DeckBorderSize));
+    if (aWindowSize.IsEmpty())
+        return tools::Rectangle();
 
     return tools::Rectangle(
         Theme::GetInteger(Theme::Int_DeckLeftPadding) + nBorderSize,
