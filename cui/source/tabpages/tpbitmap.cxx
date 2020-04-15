@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/awt/XBitmap.hpp>
+
 #include <memory>
 #include <stdlib.h>
 #include <tools/urlobj.hxx>
@@ -46,6 +48,7 @@
 #include <sal/log.hxx>
 #include <comphelper/lok.hxx>
 #include <svtools/unitconv.hxx>
+#include <svx/unomid.hxx>
 
 using namespace com::sun::star;
 
@@ -161,7 +164,34 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet& rSet )
     {
         nPos = SearchBitmapList( aItem.GetGraphicObject() );
         if (nPos == -1)
-            return;
+            //return;
+        // tdf#125969 start - Writer cannot load existed background image into Bitmap list
+        {
+            bool bFindBitmap = false;
+            css::uno::Any aBitmap;
+            css::uno::Reference<css::awt::XBitmap> xBitmap;
+            if ( aItem.QueryValue( aBitmap, MID_BITMAP )
+                 && (aBitmap >>= xBitmap) && xBitmap.is()
+                 && xBitmap->getSize().Width > 0 && xBitmap->getSize().Height > 0 )
+            {
+                long nCount = m_pBitmapList->Count();
+                m_pBitmapList->Insert( std::make_unique<XBitmapEntry>( aItem.GetGraphicObject(), aItem.GetName() ), nCount );
+
+                sal_Int32 nId = m_xBitmapLB->GetItemId( nCount - 1 );
+                BitmapEx aBitmap = m_pBitmapList->GetBitmapForPreview( nCount, m_xBitmapLB->GetIconSize() );
+                if ( aBitmap.IsEmpty() )
+                {
+                    m_pBitmapList->Remove(nCount);
+                    return;
+                }
+
+                m_xBitmapLB->InsertItem( nId + 1, Image( aBitmap ), aItem.GetName() );
+                nPos = nId;
+            }
+            else
+                return;
+        }
+        // tdf#125969 end
     }
     else
     {
