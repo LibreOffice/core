@@ -279,15 +279,16 @@ OUString SvPasteObjectHelper::GetSotFormatUIName( SotClipboardFormatId nId )
 
 bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rData, OUString& _rName, OUString& _rSource, SotClipboardFormatId const & _nFormat)
 {
-    bool bRet = false;
-    if( _nFormat == SotClipboardFormatId::EMBED_SOURCE_OLE || _nFormat == SotClipboardFormatId::EMBEDDED_OBJ_OLE )
-    {
-        datatransfer::DataFlavor aFlavor;
-        SotExchange::GetFormatDataFlavor( SotClipboardFormatId::OBJECTDESCRIPTOR_OLE, aFlavor );
+    if( _nFormat != SotClipboardFormatId::EMBED_SOURCE_OLE && _nFormat != SotClipboardFormatId::EMBEDDED_OBJ_OLE )
+        return false;
 
-        uno::Any aAny;
-        if( rData.HasFormat( aFlavor ) &&
-            ( aAny = rData.GetAny(aFlavor, OUString()) ).hasValue() )
+    datatransfer::DataFlavor aFlavor;
+    SotExchange::GetFormatDataFlavor( SotClipboardFormatId::OBJECTDESCRIPTOR_OLE, aFlavor );
+
+    if( rData.HasFormat( aFlavor ) )
+    {
+        uno::Any aAny = rData.GetAny(aFlavor, OUString());
+        if (aAny.hasValue())
         {
             uno::Sequence< sal_Int8 > anySequence;
             aAny >>= anySequence;
@@ -329,9 +330,8 @@ bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rData, O
             else
                 _rSource = SvtResId(STR_UNKNOWN_SOURCE);
         }
-        bRet = true;
     }
-    return bRet;
+    return true;
 }
 
 

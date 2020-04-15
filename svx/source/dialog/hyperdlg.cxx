@@ -44,23 +44,26 @@ SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
     SetVisible_Impl(false);
 
     vcl::Window* pTopWindow = nullptr;
-    if ( !pInfo->aSize.IsEmpty() && (nullptr != (pTopWindow = SfxGetpApp()->GetTopWindow())))
+    if ( !pInfo->aSize.IsEmpty() )
     {
-        weld::Dialog* pDialog = GetController()->getDialog();
+        pTopWindow = SfxGetpApp()->GetTopWindow();
+        if (pTopWindow)
+        {
+            weld::Dialog* pDialog = GetController()->getDialog();
 
-        Size aParentSize( pTopWindow->GetSizePixel() );
-        Size aDlgSize(pDialog->get_size());
+            Size aParentSize( pTopWindow->GetSizePixel() );
+            Size aDlgSize(pDialog->get_size());
 
-        if( aParentSize.Width() < pInfo->aPos.X() )
-            pInfo->aPos.setX( aParentSize.Width()-aDlgSize.Width() < long(0.1*aParentSize.Width()) ?
-                              long(0.1*aParentSize.Width()) : aParentSize.Width()-aDlgSize.Width() );
-        if( aParentSize.Height() < pInfo->aPos. Y() )
-            pInfo->aPos.setY( aParentSize.Height()-aDlgSize.Height() < long(0.1*aParentSize.Height()) ?
-                              long(0.1*aParentSize.Height()) : aParentSize.Height()-aDlgSize.Height() );
+            if( aParentSize.Width() < pInfo->aPos.X() )
+                pInfo->aPos.setX( aParentSize.Width()-aDlgSize.Width() < long(0.1*aParentSize.Width()) ?
+                                  long(0.1*aParentSize.Width()) : aParentSize.Width()-aDlgSize.Width() );
+            if( aParentSize.Height() < pInfo->aPos. Y() )
+                pInfo->aPos.setY( aParentSize.Height()-aDlgSize.Height() < long(0.1*aParentSize.Height()) ?
+                                  long(0.1*aParentSize.Height()) : aParentSize.Height()-aDlgSize.Height() );
 
-        pDialog->window_move(pInfo->aPos.X(), pInfo->aPos.Y());
+            pDialog->window_move(pInfo->aPos.X(), pInfo->aPos.Y());
+        }
     }
-
     SetHideNotDelete( true );
 }
 

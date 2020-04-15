@@ -3097,10 +3097,12 @@ void FmXFormShell::CreateExternalView_Lock()
     // FS - 21.10.99 - 69219
     {
         FmXBoundFormFieldIterator aModelIterator(xCurrentNavController->getModel());
-        Reference< XPropertySet> xCurrentModelSet;
         bool bHaveUsableControls = false;
-        while ((xCurrentModelSet = Reference< XPropertySet>(aModelIterator.Next(), UNO_QUERY)).is())
+        for (;;)
         {
+            Reference< XPropertySet> xCurrentModelSet(aModelIterator.Next(), UNO_QUERY);
+            if (!xCurrentModelSet.is())
+                break;
             // the FmXBoundFormFieldIterator only supplies controls with a valid control source
             // so we just have to check the field type
             sal_Int16 nClassId = ::comphelper::getINT16(xCurrentModelSet->getPropertyValue(FM_PROP_CLASSID));
@@ -3213,11 +3215,13 @@ void FmXFormShell::CreateExternalView_Lock()
             FmMapUString2Int16      aRadioPositions;
 
             FmXBoundFormFieldIterator aModelIterator(xCurrentNavController->getModel());
-            Reference< XPropertySet> xCurrentModelSet;
             OUString sColumnType,aGroupName,sControlSource;
             Sequence< Property> aProps;
-            while ((xCurrentModelSet = Reference< XPropertySet>(aModelIterator.Next(), UNO_QUERY)).is())
+            for (;;)
             {
+                Reference< XPropertySet> xCurrentModelSet(aModelIterator.Next(), UNO_QUERY);
+                if (!xCurrentModelSet.is())
+                    break;
                 OSL_ENSURE(xCurrentModelSet.is(),"xCurrentModelSet is null!");
                 // create a description of the column to be created
                 // first : determine it's type

@@ -2745,15 +2745,14 @@ void SvxStyleToolBoxControl::Update()
     }
 
 
-    const SfxTemplateItem* pItem = nullptr;
+    const SfxTemplateItem* pItem = pFamilyState[nActFamily-1].get();
 
-    if ( nActFamily == 0xffff || nullptr == (pItem = pFamilyState[nActFamily-1].get()) )
+    if ( nActFamily == 0xffff || !pItem )
     // Current range not within allowed ranges or default
     {
         pStyleSheetPool = pPool;
         nActFamily      = 2;
 
-        pItem = pFamilyState[nActFamily-1].get();
         if ( !pItem )
         {
             nActFamily++;
