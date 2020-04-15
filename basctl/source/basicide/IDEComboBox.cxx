@@ -408,6 +408,8 @@ void LanguageBox::FillBox()
     msCurrentText = m_xWidget->get_active_text();
     ClearBox();
 
+    sal_Int32 nSelPos = -1;
+
     std::shared_ptr<LocalizationMgr> pCurMgr(GetShell()->GetCurLocalizationMgr());
     if (pCurMgr->isLibraryLocalized())
     {
@@ -417,7 +419,6 @@ void LanguageBox::FillBox()
         Sequence<Locale> aLocaleSeq = pCurMgr->getStringResourceManager()->getLocales();
         const Locale* pLocale = aLocaleSeq.getConstArray();
         sal_Int32 i, nCount = aLocaleSeq.getLength();
-        sal_Int32 nSelPos = -1;
         for (i = 0; i < nCount; ++i)
         {
             bool bIsDefault = localesAreEqual(aDefaultLocale, pLocale[i]);
@@ -437,19 +438,17 @@ void LanguageBox::FillBox()
         }
 
         if (nSelPos != -1)
-        {
-            m_xWidget->set_active(nSelPos);
-            msCurrentText = m_xWidget->get_active_text();
-        }
+            msCurrentText = m_xWidget->get_text(nSelPos);
     }
     else
     {
         m_xWidget->append_text(msNotLocalizedStr);
-        m_xWidget->set_active(0);
+        nSelPos = 0;
         set_sensitive(false);
     }
 
     m_xWidget->thaw();
+    m_xWidget->set_active(nSelPos);
     mbIgnoreSelect = false;
 }
 
