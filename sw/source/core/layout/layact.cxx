@@ -1295,14 +1295,14 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrame *pLa
                     SwRect aSpaceToPrevPage( aPageRect );
                     aSpaceToPrevPage.Top( aSpaceToPrevPage.Top() - nHalfDocBorder );
                     aSpaceToPrevPage.Bottom( pLay->getFrameArea().Top() );
-                    if(aSpaceToPrevPage.Height() > 0 && aSpaceToPrevPage.Width() > 0)
+                    if(!aSpaceToPrevPage.IsEmpty())
                         m_pImp->GetShell()->AddPaintRect( aSpaceToPrevPage );
 
                     // left
                     aSpaceToPrevPage = aPageRect;
                     aSpaceToPrevPage.Left( aSpaceToPrevPage.Left() - nHalfDocBorder );
                     aSpaceToPrevPage.Right( pLay->getFrameArea().Left() );
-                    if(aSpaceToPrevPage.Height() > 0 && aSpaceToPrevPage.Width() > 0)
+                    if(!aSpaceToPrevPage.IsEmpty())
                         m_pImp->GetShell()->AddPaintRect( aSpaceToPrevPage );
                 }
                 if ( bNext )
@@ -1311,14 +1311,14 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrame *pLa
                     SwRect aSpaceToNextPage( aPageRect );
                     aSpaceToNextPage.Bottom( aSpaceToNextPage.Bottom() + nHalfDocBorder );
                     aSpaceToNextPage.Top( pLay->getFrameArea().Bottom() );
-                    if(aSpaceToNextPage.Height() > 0 && aSpaceToNextPage.Width() > 0)
+                    if(!aSpaceToNextPage.IsEmpty())
                         m_pImp->GetShell()->AddPaintRect( aSpaceToNextPage );
 
                     // right
                     aSpaceToNextPage = aPageRect;
                     aSpaceToNextPage.Right( aSpaceToNextPage.Right() + nHalfDocBorder );
                     aSpaceToNextPage.Left( pLay->getFrameArea().Right() );
-                    if(aSpaceToNextPage.Height() > 0 && aSpaceToNextPage.Width() > 0)
+                    if(!aSpaceToNextPage.IsEmpty())
                         m_pImp->GetShell()->AddPaintRect( aSpaceToNextPage );
                 }
             }

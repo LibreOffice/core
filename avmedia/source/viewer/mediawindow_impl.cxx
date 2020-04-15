@@ -577,7 +577,7 @@ void MediaWindowImpl::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
     const Point aBasePos(mpChildWindow->GetPosPixel());
     const tools::Rectangle aVideoRect(aBasePos, mpChildWindow->GetSizePixel());
 
-    if (pLogo && !pLogo->IsEmpty() && (aVideoRect.GetWidth() > 0) && (aVideoRect.GetHeight() > 0))
+    if (pLogo && !pLogo->IsEmpty() && !aVideoRect.IsEmpty())
     {
         Size aLogoSize(pLogo->GetSizePixel());
         const Color aBackgroundColor(67, 67, 67);

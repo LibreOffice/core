@@ -2245,7 +2245,7 @@ void SdrObjCustomShape::SuggestTextFrameSize(Size aSuggestedTextFrameSize)
 bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(tools::Rectangle& rR, bool bHgt, bool bWdt) const
 {
     // Either we have text or the application has native text and suggested its size to us.
-    bool bHasText = HasText() || (m_aSuggestedTextFrameSize.Width() != 0 && m_aSuggestedTextFrameSize.Height() != 0);
+    bool bHasText = HasText() || !m_aSuggestedTextFrameSize.IsEmpty();
     if ( bHasText && !rR.IsEmpty() )
     {
         bool bWdtGrow=bWdt && IsAutoGrowWidth();

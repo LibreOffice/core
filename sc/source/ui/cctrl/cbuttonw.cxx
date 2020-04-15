@@ -49,7 +49,7 @@ void ScDDComboBoxButton::SetOptSizePixel()
 void ScDDComboBoxButton::Draw( const Point& rAt,
                                const Size&  rSize )
 {
-    if ( rSize.Width() == 0 || rSize.Height() == 0 )
+    if ( rSize.IsEmpty() )
         return;
 
     // save old state

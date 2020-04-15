@@ -3428,7 +3428,7 @@ XclExpChartDrawing::XclExpChartDrawing( const XclExpRoot& rRoot,
         const Reference< XModel >& rxModel, const Size& rChartSize ) :
     XclExpRoot( rRoot )
 {
-    if( (rChartSize.Width() > 0) && (rChartSize.Height() > 0) )
+    if( !rChartSize.IsEmpty() )
     {
         ScfPropertySet aPropSet( rxModel );
         Reference< XShapes > xShapes;

@@ -207,7 +207,7 @@ void ThumbnailView::DrawItem(ThumbnailViewItem const *pItem)
     {
         ::tools::Rectangle aRect = pItem->getDrawArea();
 
-        if ((aRect.GetHeight() > 0) && (aRect.GetWidth() > 0))
+        if (!aRect.IsEmpty())
             Invalidate(aRect);
     }
 }
@@ -1382,7 +1382,7 @@ void SfxThumbnailView::DrawItem(ThumbnailViewItem const *pItem)
     {
         ::tools::Rectangle aRect = pItem->getDrawArea();
 
-        if ((aRect.GetHeight() > 0) && (aRect.GetWidth() > 0))
+        if (!aRect.IsEmpty())
             Invalidate(aRect);
     }
 }

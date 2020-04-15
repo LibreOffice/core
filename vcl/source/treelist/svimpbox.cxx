@@ -1279,7 +1279,7 @@ void SvImpLBox::InitScrollBarBox()
 void SvImpLBox::Resize()
 {
     m_aOutputSize = m_pView->Control::GetOutputSizePixel();
-    if( m_aOutputSize.Width() <= 0 || m_aOutputSize.Height() <= 0 )
+    if( m_aOutputSize.IsEmpty() )
         return;
     m_nFlags |= LBoxFlags::InResize;
     InitScrollBarBox();

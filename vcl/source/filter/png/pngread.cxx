@@ -450,7 +450,7 @@ bool PNGReaderImpl::ImplReadHeader()
     maOrigSize.setWidth( ImplReadsal_uInt32() );
     maOrigSize.setHeight( ImplReadsal_uInt32() );
 
-    if (maOrigSize.Width() <= 0 || maOrigSize.Height() <= 0)
+    if (maOrigSize.IsEmpty())
         return false;
 
     mnPngDepth = *(maDataIter++);

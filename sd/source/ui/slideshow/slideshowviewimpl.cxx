@@ -330,7 +330,7 @@ geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  )
 
     const Size& rTmpSize( mrOutputWindow.GetSizePixel() );
 
-    if (rTmpSize.Width()<=0 || rTmpSize.Height()<=0)
+    if (rTmpSize.IsEmpty())
     {
         return geometry::AffineMatrix2D (1,0,0,0,1,0);
     }

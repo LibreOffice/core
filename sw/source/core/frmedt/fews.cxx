@@ -1279,8 +1279,7 @@ Size SwFEShell::GetGraphicDefaultSize() const
         // of the anchor frame is taken.
         const SwFrame* pAnchorFrame = pFly->GetAnchorFrame();
         aRet = pAnchorFrame->getFramePrintArea().SSize();
-        if ( aRet.Width() == 0 && aRet.Height() == 0 &&
-             pAnchorFrame->GetUpper() )
+        if ( aRet.IsEmpty() && pAnchorFrame->GetUpper() )
         {
             aRet = pAnchorFrame->GetUpper()->getFramePrintArea().SSize();
         }

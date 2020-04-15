@@ -328,7 +328,7 @@ bool ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::X
             aSize = Size( aSz.Width, aSz.Height );
             aSize = OutputDevice::LogicToLogic(aSize, MapMode(aMapObj), MapMode(aMap100)); // for SdrOle2Obj
 
-            if( aSize.Height() == 0 || aSize.Width() == 0 )
+            if( aSize.IsEmpty() )
             {
                 OSL_FAIL("SvObjectDescriptor::GetSize == 0");
                 aSize.setWidth( 5000 );

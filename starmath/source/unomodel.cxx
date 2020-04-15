@@ -946,7 +946,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
 
     // if paper size is 0 (usually if no 'real' printer is found),
     // guess the paper size
-    if (aPrtPaperSize.Height() == 0 || aPrtPaperSize.Width() == 0)
+    if (aPrtPaperSize.IsEmpty())
         aPrtPaperSize = lcl_GuessPaperSize();
     awt::Size   aPageSize( aPrtPaperSize.Width(), aPrtPaperSize.Height() );
 
@@ -1019,7 +1019,7 @@ void SAL_CALL SmModel::render(
     Point   aPrtPageOffset( pPrinter->GetPageOffset() );
 
     // no real printer ??
-    if (aPrtPaperSize.Height() == 0 || aPrtPaperSize.Width() == 0)
+    if (aPrtPaperSize.IsEmpty())
     {
         aPrtPaperSize = lcl_GuessPaperSize();
         // factors from Windows DIN A4

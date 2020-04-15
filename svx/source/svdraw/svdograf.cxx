@@ -1063,7 +1063,7 @@ void SdrGrafObj::AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrink
                                             mpGraphicObject->GetPrefMapMode(),
                                             MapMode( MapUnit::Map100thMM ) );
 
-    if( aSize.Height() != 0 && aSize.Width() != 0 )
+    if( !aSize.IsEmpty() )
     {
         Point aPos( rMaxRect.TopLeft() );
 

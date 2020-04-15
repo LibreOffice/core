@@ -2026,7 +2026,7 @@ void SdrObjEditView::ImpMakeTextCursorAreaVisible()
         if (pCsr != nullptr)
         {
             Size aSiz(pCsr->GetSize());
-            if (aSiz.Width() != 0 && aSiz.Height() != 0)
+            if (!aSiz.IsEmpty())
             {
                 MakeVisible(tools::Rectangle(pCsr->GetPos(), aSiz), *pTextEditWin);
             }
