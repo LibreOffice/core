@@ -28,6 +28,7 @@
 #include <swtblfmt.hxx>
 #include <swcrsr.hxx>
 #include <unocrsr.hxx>
+#include <bookmrk.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentRedlineAccess.hxx>
@@ -1403,23 +1404,20 @@ bool SwCursor::SelectWordWT( SwViewShell const * pViewShell, sal_Int16 nWordType
     {
         // Should we select the whole fieldmark?
         const IDocumentMarkAccess* pMarksAccess = GetDoc()->getIDocumentMarkAccess( );
-        sw::mark::IMark* pMark = GetPoint() ? pMarksAccess->getFieldmarkFor( *GetPoint( ) ) : nullptr;
+        sw::mark::IFieldmark const*const pMark(pMarksAccess->getFieldmarkFor(*GetPoint()));
         if ( pMark )
         {
-            const SwPosition& rStart = pMark->GetMarkStart();
-            GetPoint()->nNode = rStart.nNode;
-            GetPoint()->nContent = rStart.nContent;
-            ++GetPoint()->nContent; // Don't select the start delimiter
+            *GetPoint() = sw::mark::FindFieldSep(*pMark);
+            ++GetPoint()->nContent; // Don't select the separator
 
             const SwPosition& rEnd = pMark->GetMarkEnd();
 
-            if ( rStart != rEnd )
-            {
-                SetMark();
-                GetMark()->nNode = rEnd.nNode;
-                GetMark()->nContent = rEnd.nContent;
-                --GetMark()->nContent; //Don't select the end delimiter
-            }
+            assert(pMark->GetMarkEnd() != *GetPoint());
+            SetMark();
+            GetMark()->nNode = rEnd.nNode;
+            GetMark()->nContent = rEnd.nContent;
+            --GetMark()->nContent; // Don't select the end delimiter
+
             bRet = true;
         }
         else
