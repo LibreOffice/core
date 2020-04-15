@@ -25,18 +25,17 @@
 #include "jpeg/Exif.hxx"
 #include <memory>
 
-GraphicNativeMetadata::GraphicNativeMetadata() :
-    mRotation(0)
-{}
+GraphicNativeMetadata::GraphicNativeMetadata()
+    : mRotation(0)
+{
+}
 
-GraphicNativeMetadata::~GraphicNativeMetadata()
-{}
+GraphicNativeMetadata::~GraphicNativeMetadata() {}
 
-
-bool GraphicNativeMetadata::read(Graphic const & rGraphic)
+bool GraphicNativeMetadata::read(Graphic const& rGraphic)
 {
     GfxLink aLink = rGraphic.GetGfxLink();
-    if ( aLink.GetType() != GfxLinkType::NativeJpg )
+    if (aLink.GetType() != GfxLinkType::NativeJpg)
         return false;
 
     sal_uInt32 aDataSize = aLink.GetDataSize();

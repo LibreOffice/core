@@ -29,8 +29,8 @@ public:
     GraphicNativeMetadata();
     ~GraphicNativeMetadata();
 
-    bool read(Graphic const & rGraphic);
-    sal_uInt16 getRotation() const { return mRotation;}
+    bool read(Graphic const& rGraphic);
+    sal_uInt16 getRotation() const { return mRotation; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
