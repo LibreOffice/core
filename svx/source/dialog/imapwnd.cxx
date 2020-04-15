@@ -124,13 +124,17 @@ void IMapWindow::ReplaceActualIMapInfo( const NotifyInfo& rNewInfo )
     const SdrObject*    pSdrObj = GetSelectedSdrObject();
     IMapObject*         pIMapObj;
 
-    if ( pSdrObj && ( ( pIMapObj = GetIMapObj( pSdrObj ) ) != nullptr ) )
+    if ( pSdrObj )
     {
-        pIMapObj->SetURL( rNewInfo.aMarkURL );
-        pIMapObj->SetAltText( rNewInfo.aMarkAltText );
-        pIMapObj->SetTarget( rNewInfo.aMarkTarget );
-        pModel->SetChanged();
-        UpdateInfo( false );
+        pIMapObj = GetIMapObj( pSdrObj );
+        if (pIMapObj)
+        {
+            pIMapObj->SetURL( rNewInfo.aMarkURL );
+            pIMapObj->SetAltText( rNewInfo.aMarkAltText );
+            pIMapObj->SetTarget( rNewInfo.aMarkTarget );
+            pModel->SetChanged();
+            UpdateInfo( false );
+        }
     }
 }
 
@@ -579,12 +583,14 @@ OUString IMapWindow::RequestHelp(tools::Rectangle& rHelpArea)
     if (pSdrObj)
     {
         const IMapObject*   pIMapObj = GetIMapObj( pSdrObj );
-        OUString            aStr;
-
-        if ( pIMapObj && !( aStr = pIMapObj->GetURL() ).isEmpty() )
+        if ( pIMapObj )
         {
-            rHelpArea = rDevice.LogicToPixel(tools::Rectangle( Point(), GetGraphicSize()));
-            return aStr;
+            OUString aStr = pIMapObj->GetURL();
+            if ( !aStr.isEmpty() )
+            {
+                rHelpArea = rDevice.LogicToPixel(tools::Rectangle( Point(), GetGraphicSize()));
+                return aStr;
+            }
         }
     }
 
