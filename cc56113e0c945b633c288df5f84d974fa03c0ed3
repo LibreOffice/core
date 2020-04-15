@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "980cd596_7f3bfdda",
+        "filename": "oox/source/ppt/pptshape.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2020-04-15T08:57:43Z",
+      "side": 1,
+      "message": "Better to rename to aChoice\n\nAnd probably it makes sense to use classical approach with private member and a getter method?",
+      "range": {
+        "startLine": 484,
+        "startChar": 46,
+        "endLine": 484,
+        "endChar": 53
+      },
+      "revId": "cc56113e0c945b633c288df5f84d974fa03c0ed3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
