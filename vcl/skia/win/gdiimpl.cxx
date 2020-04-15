@@ -172,8 +172,12 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
         return false;
     }
     sk_sp<SkTypeface> typeface = createDirectWriteTypeface(logFont);
+    GlyphOrientation glyphOrientation = GlyphOrientation::Apply;
     if (!typeface) // fall back to GDI text rendering
+    {
         typeface.reset(SkCreateTypefaceFromLOGFONT(logFont));
+        glyphOrientation = GlyphOrientation::Ignore;
+    }
     // lfHeight actually depends on DPI, so it's not really font height as such,
     // but for LOGFONT-based typefaces Skia simply sets lfHeight back to this value
     // directly.
@@ -187,7 +191,7 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
     COLORREF color = ::GetTextColor(mWinParent.getHDC());
     Color salColor(GetRValue(color), GetGValue(color), GetBValue(color));
     // The font already is set up to have glyphs rotated as needed.
-    impl->drawGenericLayout(rLayout, salColor, font, SkiaSalGraphicsImpl::GlyphOrientation::Ignore);
+    impl->drawGenericLayout(rLayout, salColor, font, glyphOrientation);
     return true;
 }
 
