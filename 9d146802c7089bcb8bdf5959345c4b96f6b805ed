@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6ad409a9_0a605ca8",
+        "filename": "sw/source/core/undo/undraw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-04-15T19:26:52Z",
+      "side": 1,
+      "message": "sal_uLong node index can\u0027t easily be replaced currently, this would require replacing some \u003e1000 lines at the same time to remain consistent because it\u0027s used all over sw.\n\nbetter to first replace everything in sw that isn\u0027t a node-index, then it can be done automatically...",
+      "revId": "9d146802c7089bcb8bdf5959345c4b96f6b805ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
