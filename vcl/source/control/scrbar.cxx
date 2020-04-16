@@ -269,7 +269,10 @@ void ScrollBar::ImplCalc( bool bUpdate )
                      aControlRegion, ControlState::NONE, ImplControlValue(), aBoundingRegion, aTrackRegion ) )
                 maTrackRect = aTrackRegion;
             else
-                maTrackRect = maBtn1Rect;
+            {
+                maTrackRect = tools::Rectangle( maBtn1Rect.TopRight(), maBtn2Rect.BottomLeft() );
+                maTrackRect.Justify();
+            }
 
             // Check if available space is big enough for thumb ( min thumb size = ScrBar width/height )
             mnThumbPixRange = maTrackRect.Right() - maTrackRect.Left();
@@ -307,8 +310,8 @@ void ScrollBar::ImplCalc( bool bUpdate )
                 maTrackRect = aTrackRegion;
             else
             {
-                maTrackRect = maBtn1Rect;
-                maTrackRect.AdjustTop(1);
+                maTrackRect = tools::Rectangle( maBtn1Rect.BottomLeft()+Point(0,1), maBtn2Rect.TopRight() );
+                maTrackRect.Justify();
             }
 
             // Check if available space is big enough for thumb
