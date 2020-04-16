@@ -1493,6 +1493,7 @@ void ToolBarManager::AddCustomizeMenuItems(ToolBox const * pToolBar)
             Reference< XDockableWindow > xDockable( VCLUnoHelper::GetInterface( m_pToolBar ), UNO_QUERY );
             if( xDockable.is() )
                 pMenu->CheckItem(MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, xDockable->isLocked());
+                pMenu->EnableItem(MENUITEM_TOOLBAR_UNDOCKTOOLBAR, false);
         }
         else
             pMenu->EnableItem(MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, false);
