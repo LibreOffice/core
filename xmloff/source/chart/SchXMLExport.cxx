@@ -3768,20 +3768,15 @@ void SchXMLExportHelper_Impl::InitRangeSegmentationProperties( const Reference< 
 
 // first version: everything goes in one storage
 
-Sequence< OUString > SchXMLExport_getSupportedServiceNames() throw()
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_comp_Chart_XMLExporter_get_implementation(uno::XComponentContext* pCtx,
+                                                       uno::Sequence<uno::Any> const& /*rSeq*/)
 {
-    return Sequence< OUString > { "com.sun.star.comp.Chart.XMLExporter" };
-}
-
-OUString SchXMLExport_getImplementationName() throw()
-{
-    return "SchXMLExport.Compact";
-}
-
-Reference< uno::XInterface > SchXMLExport_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr)
-{
-    // #103997# removed some flags from EXPORT_ALL
-    return static_cast<cppu::OWeakObject*>(new SchXMLExport( comphelper::getComponentContext(rSMgr), SchXMLExport_getImplementationName(), SvXMLExportFlags::ALL ^ ( SvXMLExportFlags::SETTINGS | SvXMLExportFlags::MASTERSTYLES | SvXMLExportFlags::SCRIPTS )));
+    return cppu::acquire(
+        new SchXMLExport(pCtx, "SchXMLExport.Compact",
+                         SvXMLExportFlags::ALL
+                             ^ (SvXMLExportFlags::SETTINGS | SvXMLExportFlags::MASTERSTYLES
+                                | SvXMLExportFlags::SCRIPTS)));
 }
 
 // Oasis format

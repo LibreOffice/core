@@ -32,11 +32,6 @@ namespace com { namespace sun { namespace star {
 } } }
 
 // chart OOo export
-OUString SchXMLExport_getImplementationName() throw();
-css::uno::Sequence<OUString> SchXMLExport_getSupportedServiceNames() throw();
-/// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SchXMLExport_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr);
 OUString SchXMLExport_Styles_getImplementationName() throw();
 css::uno::Sequence<OUString> SchXMLExport_Styles_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
