@@ -834,10 +834,13 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
     const size_t nCount = pSorted ? pSorted->size() : 0;
     // --> #108724# Page header/footer content doesn't have to wrap around
     //              floating screen objects
+    //              which was added simply to be compatible with MS Office.
+    // MSO still allows text in tables to wrap around in-table-flies in the header
     const bool bFooterHeader = nullptr != m_pCurrFrame->FindFooterOrHeader();
     const IDocumentSettingAccess* pIDSA = &m_pCurrFrame->GetDoc().getIDocumentSettingAccess();
     // #i40155# - check, if frame is marked not to wrap
     const bool bWrapAllowed = ( pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) ||
+                                    (pIDSA->get(DocumentSettingId::MS_COMPAT_FOR_LO71) && m_pCurrFrame->IsInTab()) ||
                                     (!m_pCurrFrame->IsInFootnote() && !bFooterHeader));
 
     bOn = false;

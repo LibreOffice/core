@@ -450,6 +450,12 @@ DECLARE_ODFEXPORT_TEST(testredlineTextFrame, "redlineTextFrame.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf104596_breakingExample, "tdf104596_breakingExample.odt")
+{
+    //wrapping should be ignored on in-table flies for pre-LO7.0 documents. MS_COMPAT_FOR_LO71
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Fits on one page", 1, getPages() );
+}
+
 DECLARE_ODFEXPORT_TEST(testTdf131621, "tdf131621.ott")
 {
     //Crash test, Check number of pages

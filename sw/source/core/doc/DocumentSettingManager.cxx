@@ -96,6 +96,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbDisableOffPagePositioning ( false ),
     mbProtectBookmarks(false),
     mbProtectFields(false)
+    ,mbMSCompatForLO71(true) //tdf#104596
 
     // COMPATIBILITY FLAGS END
 {
@@ -222,6 +223,7 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::CONTINUOUS_ENDNOTES: return mbContinuousEndnotes;
         case DocumentSettingId::PROTECT_BOOKMARKS: return mbProtectBookmarks;
         case DocumentSettingId::PROTECT_FIELDS: return mbProtectFields;
+        case DocumentSettingId::MS_COMPAT_FOR_LO71: return mbMSCompatForLO71;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -463,6 +465,9 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
         case DocumentSettingId::PROTECT_FIELDS:
             mbProtectFields = value;
             break;
+        case DocumentSettingId::MS_COMPAT_FOR_LO71:
+            mbMSCompatForLO71 = value;
+            break;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -634,6 +639,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     mbContinuousEndnotes = rSource.mbContinuousEndnotes;
     // No mbProtectBookmarks
     // No mbProtectFields
+    mbMSCompatForLO71 = rSource.mbMSCompatForLO71;
 }
 
 sal_uInt32 sw::DocumentSettingManager::Getn32DummyCompatibilityOptions1() const

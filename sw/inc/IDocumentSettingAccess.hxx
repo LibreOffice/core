@@ -49,6 +49,7 @@ enum class DocumentSettingId
     ADD_PARA_SPACING_TO_TABLE_CELLS,
     USE_FORMER_OBJECT_POS,
     USE_FORMER_TEXT_WRAPPING,
+    MS_COMPAT_FOR_LO71, // change LO to match MS allowing wrapping for table-anchored flies in header
     CONSIDER_WRAP_ON_OBJECT_POSITION,
 
     IGNORE_FIRST_LINE_INDENT_IN_NUMBERING,

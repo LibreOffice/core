@@ -142,6 +142,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_CONTINUOUS_ENDNOTES,
     HANDLE_PROTECT_BOOKMARKS,
     HANDLE_PROTECT_FIELDS,
+    HANDLE_MS_COMPAT_FOR_LO71,
 };
 
 }
@@ -231,6 +232,7 @@ static MasterPropertySetInfo * lcl_createSettingsInfo()
         { OUString("ContinuousEndnotes"), HANDLE_CONTINUOUS_ENDNOTES, cppu::UnoType<bool>::get(), 0 },
         { OUString("ProtectBookmarks"), HANDLE_PROTECT_BOOKMARKS, cppu::UnoType<bool>::get(), 0 },
         { OUString("ProtectFields"), HANDLE_PROTECT_FIELDS, cppu::UnoType<bool>::get(), 0 },
+        { OUString("MSCompatForLO71"), HANDLE_MS_COMPAT_FOR_LO71, cppu::UnoType<bool>::get(), 0 },
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
  * find another solution before adding them to this property set - MTG
@@ -959,6 +961,16 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             }
         }
         break;
+        case HANDLE_MS_COMPAT_FOR_LO71:
+        {
+            bool bTmp;
+            if (rValue >>= bTmp)
+            {
+                mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::MS_COMPAT_FOR_LO71,
+                                                       bTmp);
+            }
+        }
+        break;
         default:
             throw UnknownPropertyException(OUString::number(rInfo.mnHandle));
     }
@@ -1431,6 +1443,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(
                 DocumentSettingId::PROTECT_FIELDS);
+        }
+        break;
+        case HANDLE_MS_COMPAT_FOR_LO71:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get(
+                DocumentSettingId::MS_COMPAT_FOR_LO71);
         }
         break;
         default:
