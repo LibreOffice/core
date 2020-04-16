@@ -160,6 +160,7 @@ public:
     void testCustomLabelText();
     void testDeletedLegendEntries();
     void testTdf130225();
+    void testTdf59857();
     void testTdf126076();
     void testTdf75330();
     void testTdf127792();
@@ -286,6 +287,7 @@ public:
     CPPUNIT_TEST(testCustomLabelText);
     CPPUNIT_TEST(testDeletedLegendEntries);
     CPPUNIT_TEST(testTdf130225);
+    CPPUNIT_TEST(testTdf59857);
     CPPUNIT_TEST(testTdf126076);
     CPPUNIT_TEST(testTdf75330);
     CPPUNIT_TEST(testTdf127792);
@@ -2610,6 +2612,18 @@ void Chart2ExportTest::testTdf130225()
     Sequence<sal_Int32> deletedLegendEntriesSeq;
     CPPUNIT_ASSERT(xPropertySet->getPropertyValue("DeletedLegendEntries") >>= deletedLegendEntriesSeq);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), deletedLegendEntriesSeq[0]);
+}
+
+void Chart2ExportTest::testTdf59857()
+{
+    load("/chart2/qa/extras/data/ods/", "tdf59857.ods");
+    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart","Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:floor/c:spPr/a:ln/a:noFill", 1);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:floor/c:spPr/a:solidFill/a:srgbClr", "val", "cccccc");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:backWall/c:spPr/a:ln/a:noFill", 0);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:backWall/c:spPr/a:ln/a:solidFill/a:srgbClr", "val", "b3b3b3");
 }
 
 void Chart2ExportTest::testTdf126076()
