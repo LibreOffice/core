@@ -447,13 +447,15 @@ const SwSectionNode* SwUpdFootnoteEndNtAtEnd::FindSectNdWithEndAttr(
 {
     sal_uInt16 nWh = rTextFootnote.GetFootnote().IsEndNote() ?
                         sal_uInt16(RES_END_AT_TXTEND) : sal_uInt16(RES_FTN_AT_TXTEND);
-    sal_uInt16 nVal;
     const SwSectionNode* pNd = rTextFootnote.GetTextNode().FindSectionNode();
-    while( pNd && FTNEND_ATTXTEND_OWNNUMSEQ != ( nVal =
-            static_cast<const SwFormatFootnoteEndAtTextEnd&>(pNd->GetSection().GetFormat()->
-            GetFormatAttr( nWh )).GetValue() ) &&
-            FTNEND_ATTXTEND_OWNNUMANDFMT != nVal )
+    while( pNd )
+    {
+        sal_uInt16 nVal = static_cast<const SwFormatFootnoteEndAtTextEnd&>(pNd->GetSection().GetFormat()->
+                 GetFormatAttr( nWh )).GetValue();
+        if( FTNEND_ATTXTEND_OWNNUMSEQ == nVal || FTNEND_ATTXTEND_OWNNUMANDFMT == nVal )
+            break;
         pNd = pNd->StartOfSectionNode()->FindSectionNode();
+    }
 
     return pNd;
 }

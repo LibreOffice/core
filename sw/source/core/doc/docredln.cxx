@@ -389,15 +389,16 @@ void SwRedlineTable::LOKRedlineNotification(RedlineNotification nType, SwRangeRe
         // So we need to do an own invalidation here. It invalidates text frames containing the redlining
         SwDoc* pDoc = pRedline->GetDoc();
         SwViewShell* pSh;
-        if( pDoc && !pDoc->IsInDtor() &&
-            nullptr != ( pSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()) )
+        if( pDoc && !pDoc->IsInDtor() )
         {
-            for(SwNodeIndex nIdx = pStartPos->nNode; nIdx <= pEndPos->nNode; ++nIdx)
-            {
-                SwContentNode* pContentNode = nIdx.GetNode().GetContentNode();
-                if (pContentNode)
-                    pSh->InvalidateWindows(pContentNode->FindLayoutRect());
-            }
+            pSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
+            if( pSh )
+                for(SwNodeIndex nIdx = pStartPos->nNode; nIdx <= pEndPos->nNode; ++nIdx)
+                {
+                    SwContentNode* pContentNode = nIdx.GetNode().GetContentNode();
+                    if (pContentNode)
+                        pSh->InvalidateWindows(pContentNode->FindLayoutRect());
+                }
         }
     }
 
@@ -535,8 +536,10 @@ std::vector<SwRangeRedline*> GetAllValidRanges(std::unique_ptr<SwRangeRedline> p
                 pNew = nullptr;
             }
 
-            if( aNewStt >= *pEnd ||
-                nullptr == (pC = rNds.GoNext( &aNewStt.nNode )) )
+            if( aNewStt >= *pEnd )
+                break;
+            pC = rNds.GoNext( &aNewStt.nNode );
+            if( !pC )
                 break;
 
             aNewStt.nContent.Assign( pC, 0 );
@@ -608,10 +611,12 @@ void SwRedlineTable::Remove( size_type nP )
 
     maVector.erase( maVector.begin() + nP );
 
-    SwViewShell* pSh;
-    if( pDoc && !pDoc->IsInDtor() &&
-        nullptr != ( pSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()) )
-        pSh->InvalidateWindows( SwRect( 0, 0, SAL_MAX_INT32, SAL_MAX_INT32 ) );
+    if( pDoc && !pDoc->IsInDtor() )
+    {
+        SwViewShell* pSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
+        if( pSh )
+            pSh->InvalidateWindows( SwRect( 0, 0, SAL_MAX_INT32, SAL_MAX_INT32 ) );
+    }
 }
 
 void SwRedlineTable::DeleteAndDestroyAll()

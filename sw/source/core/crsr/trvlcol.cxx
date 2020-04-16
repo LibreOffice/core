@@ -65,34 +65,36 @@ SwContentFrame* GetColumnEnd( const SwLayoutFrame* pColFrame )
 
 void SwCursorShell::MoveColumn( SwWhichColumn fnWhichCol, SwPosColumn fnPosCol )
 {
-    if( !m_pTableCursor )
+    if( m_pTableCursor )
+        return;
+    SwLayoutFrame* pLayFrame = GetCurrFrame()->GetUpper();
+    if( !pLayFrame )
+        return;
+    pLayFrame = (*fnWhichCol)( pLayFrame );
+    if(  pLayFrame )
     {
-        SwLayoutFrame* pLayFrame = GetCurrFrame()->GetUpper();
-        if( pLayFrame && nullptr != ( pLayFrame = (*fnWhichCol)( pLayFrame )) )
+        SwContentFrame* pCnt = (*fnPosCol)( pLayFrame );
+        if( pCnt )
         {
-            SwContentFrame* pCnt = (*fnPosCol)( pLayFrame );
-            if( pCnt )
+            SET_CURR_SHELL( this );
+            SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
+            SwCursorSaveState aSaveState( *m_pCurrentCursor );
+
+            pCnt->Calc(GetOut());
+
+            Point aPt( pCnt->getFrameArea().Pos() + pCnt->getFramePrintArea().Pos() );
+            if( fnPosCol == GetColumnEnd )
             {
-                SET_CURR_SHELL( this );
-                SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
-                SwCursorSaveState aSaveState( *m_pCurrentCursor );
+                aPt.setX(aPt.getX() + pCnt->getFramePrintArea().Width());
+                aPt.setY(aPt.getY() + pCnt->getFramePrintArea().Height());
+            }
 
-                pCnt->Calc(GetOut());
+            pCnt->GetModelPositionForViewPoint( m_pCurrentCursor->GetPoint(), aPt );
 
-                Point aPt( pCnt->getFrameArea().Pos() + pCnt->getFramePrintArea().Pos() );
-                if( fnPosCol == GetColumnEnd )
-                {
-                    aPt.setX(aPt.getX() + pCnt->getFramePrintArea().Width());
-                    aPt.setY(aPt.getY() + pCnt->getFramePrintArea().Height());
-                }
-
-                pCnt->GetModelPositionForViewPoint( m_pCurrentCursor->GetPoint(), aPt );
-
-                if( !m_pCurrentCursor->IsInProtectTable( true ) &&
-                    !m_pCurrentCursor->IsSelOvr() )
-                {
-                    UpdateCursor();
-                }
+            if( !m_pCurrentCursor->IsInProtectTable( true ) &&
+                !m_pCurrentCursor->IsSelOvr() )
+            {
+                UpdateCursor();
             }
         }
     }

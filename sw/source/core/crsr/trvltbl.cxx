@@ -40,7 +40,10 @@ bool SwCursorShell::GoNextCell( bool bAppendLine )
     bool bRet = false;
     const SwTableNode* pTableNd = nullptr;
 
-    if( IsTableMode() || nullptr != ( pTableNd = IsCursorInTable() ))
+    if( !IsTableMode() )
+        return false;
+    pTableNd = IsCursorInTable();
+    if( pTableNd )
     {
         SwCursor* pCursor = m_pTableCursor ? m_pTableCursor : m_pCurrentCursor;
         SwCallLink aLk( *this ); // watch Cursor-Moves
@@ -491,9 +494,13 @@ bool GotoPrevTable( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosTable
         // table start node, because we would miss any tables inside this table.
         SwTableNode* pInnerTableNd = nullptr;
         SwNodeIndex aTmpIdx( aIdx );
-        while( aTmpIdx.GetIndex() &&
-                nullptr == ( pInnerTableNd = aTmpIdx.GetNode().StartOfSectionNode()->GetTableNode()) )
+        while( aTmpIdx.GetIndex() )
+        {
+            pInnerTableNd = aTmpIdx.GetNode().StartOfSectionNode()->GetTableNode();
+            if (!pInnerTableNd)
+                break;
             --aTmpIdx;
+        }
 
         if( pInnerTableNd == pTableNd )
             aIdx.Assign( *pTableNd, - 1 );
@@ -502,9 +509,11 @@ bool GotoPrevTable( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosTable
     SwNodeIndex aOldIdx = aIdx;
     sal_uLong nLastNd = rCurrentCursor.GetDoc()->GetNodes().Count() - 1;
     do {
-        while( aIdx.GetIndex() &&
-            nullptr == ( pTableNd = aIdx.GetNode().StartOfSectionNode()->GetTableNode()) )
+        while( aIdx.GetIndex() )
         {
+            pTableNd = aIdx.GetNode().StartOfSectionNode()->GetTableNode();
+            if (pTableNd)
+                break;
             --aIdx;
             if ( aIdx == aOldIdx )
             {
@@ -571,9 +580,11 @@ bool GotoNextTable( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosTable
     SwNodeIndex aOldIdx = aIdx;
     sal_uLong nLastNd = rCurrentCursor.GetDoc()->GetNodes().Count() - 1;
     do {
-        while( aIdx.GetIndex() < nLastNd &&
-                nullptr == ( pTableNd = aIdx.GetNode().GetTableNode()) )
+        while( aIdx.GetIndex() < nLastNd )
         {
+            pTableNd = aIdx.GetNode().GetTableNode();
+            if (pTableNd)
+                break;
             ++aIdx;
             if ( aIdx == aOldIdx )
             {
@@ -814,7 +825,8 @@ bool SwCursorShell::CheckTableBoxContent( const SwPosition* pPos )
     if( !pPos )
     {
         // get stored position
-        if (nullptr != (pSttNd = m_pBoxIdx->GetNode().GetStartNode()) &&
+        pSttNd = m_pBoxIdx->GetNode().GetStartNode();
+        if (nullptr != pSttNd &&
             SwTableBoxStartNode == pSttNd->GetStartNodeType() &&
             m_pBoxPtr == pSttNd->FindTableNode()->GetTable().
                         GetTableBox( m_pBoxIdx->GetIndex() ) )

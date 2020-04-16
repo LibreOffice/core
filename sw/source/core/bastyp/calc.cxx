@@ -358,8 +358,13 @@ SwSbxValue SwCalc::Calculate( const OUString& rStr )
     m_sCommand = rStr;
     m_nCommandPos = 0;
 
-    while( (m_eCurrOper = GetToken()) != CALC_ENDCALC && m_eError == SwCalcError::NONE )
+    for (;;)
+    {
+        m_eCurrOper = GetToken();
+        if (m_eCurrOper == CALC_ENDCALC || m_eError != SwCalcError::NONE )
+            break;
         nResult = Expr();
+    }
 
     if( m_eError != SwCalcError::NONE)
         nResult.PutDouble( DBL_MAX );
@@ -615,7 +620,10 @@ CharClass* SwCalc::GetCharClass()
 SwCalcOper SwCalc::GetToken()
 {
     if( m_nCommandPos >= m_sCommand.getLength() )
-        return m_eCurrOper = CALC_ENDCALC;
+    {
+        m_eCurrOper = CALC_ENDCALC;
+        return m_eCurrOper;
+    }
 
     using namespace ::com::sun::star::i18n;
     {

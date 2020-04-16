@@ -340,9 +340,12 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
             // skip to the next/prev valid paragraph with a layout
             SwNodeIndex& rPtIdx = GetPoint()->nNode;
             bool bGoNxt = m_vSavePos.back().nNode < rPtIdx.GetIndex();
-            while( nullptr != ( pFrame = ( bGoNxt ? pFrame->GetNextContentFrame() : pFrame->GetPrevContentFrame() ))
-                   && 0 == pFrame->getFrameArea().Height() )
-                ;
+            for (;;)
+            {
+                pFrame = bGoNxt ? pFrame->GetNextContentFrame() : pFrame->GetPrevContentFrame();
+                if (!pFrame || 0 != pFrame->getFrameArea().Height() )
+                    break;
+            }
 
             // #i72394# skip to prev/next valid paragraph with a layout in case
             // the first search did not succeed:
@@ -424,7 +427,8 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
         return true; // we need a frame
     }
 
-    if( (pNd = &GetMark()->nNode.GetNode())->IsContentNode()
+    pNd = &GetMark()->nNode.GetNode();
+    if( pNd->IsContentNode()
         && !static_cast<const SwContentNode*>(pNd)->getLayoutFrame( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() )
         && !dynamic_cast<SwUnoCursor*>(this) )
     {
@@ -535,9 +539,15 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
                     return false;
                 }
             }
-            if( bSelTop
-                ? ( !pMyNd->IsEndNode() || nullptr == ( pPtNd = pMyNd->FindTableNode() ))
-                : nullptr == ( pPtNd = pMyNd->GetTableNode() ))
+            if( bSelTop )
+            {
+                if ( !pMyNd->IsEndNode() )
+                    break;
+                pPtNd = pMyNd->FindTableNode();
+            }
+            else
+                pPtNd = pMyNd->GetTableNode();
+            if (!pPtNd)
                 break;
         } while( true );
     }
@@ -629,8 +639,8 @@ SetNextCursor:
         }
         // end of table, so go to next node
         ++aCellStt;
-        SwNode* pNd;
-        if( ( pNd = &aCellStt.GetNode())->IsEndNode() || HasMark())
+        SwNode* pNd = &aCellStt.GetNode();
+        if( pNd->IsEndNode() || HasMark())
         {
             // if only table in FlyFrame or SSelection then stay on old position
             if( bChgCursor )
@@ -653,7 +663,8 @@ SetNextCursor:
         bool bProt = true;
 GoPrevCell:
         for (;;) {
-            if( !( pNd = &aCellStt.GetNode())->IsEndNode() )
+            pNd = &aCellStt.GetNode();
+            if( !pNd->IsEndNode() )
                 break;
             aCellStt.Assign( *pNd->StartOfSectionNode(), +1 );
             if( nullptr == ( pCNd = aCellStt.GetNode().GetContentNode() ))
@@ -679,7 +690,8 @@ SetPrevCursor:
         }
         // at the beginning of a table, so go to next node
         --aCellStt;
-        if( ( pNd = &aCellStt.GetNode())->IsStartNode() || HasMark() )
+        pNd = &aCellStt.GetNode();
+        if( pNd->IsStartNode() || HasMark() )
         {
             // if only table in FlyFrame or SSelection then stay on old position
             if( bChgCursor )
@@ -780,13 +792,14 @@ static sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCurso
             pPHdl.reset(new PercentHdl( aRegion ));
 
         // as long as found and not at same position
-        while(  *pSttPos <= *pEndPos &&
-                0 != ( nFndRet = rParas.DoFind(*pCurrentCursor, fnMove,
-                                            aRegion, bInReadOnly)) &&
-                ( !pFndRing ||
-                    *pFndRing->GetPoint() != *pCurrentCursor->GetPoint() ||
-                    *pFndRing->GetMark() != *pCurrentCursor->GetMark() ))
+        while(  *pSttPos <= *pEndPos )
         {
+            nFndRet = rParas.DoFind(*pCurrentCursor, fnMove, aRegion, bInReadOnly);
+            if( 0 == nFndRet ||
+                ( pFndRing &&
+                  *pFndRing->GetPoint() != *pCurrentCursor->GetPoint() &&
+                  *pFndRing->GetMark() != *pCurrentCursor->GetMark() ))
+                break;
             if( !( FIND_NO_RING & nFndRet ))
             {
                 // #i24084# - create ring similar to the one in CreateCursor
@@ -2372,7 +2385,8 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pCurrentCursor )
                 pPos->nContent.Assign( const_cast<SwContentNode*>(static_cast<const SwContentNode*>(pNd)), 0 );
 
                 aIdx.Assign( *pSttNd->EndOfSectionNode(), - 1 );
-                if( !( pNd = &aIdx.GetNode())->IsContentNode() )
+                pNd = &aIdx.GetNode();
+                if( !pNd->IsContentNode() )
                     pNd = SwNodes::GoPrevSection( &aIdx, true, false );
 
                 pPos = pCur->GetPoint();
@@ -2417,7 +2431,8 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pCurrentCursor )
 
             SwPosition* pPos = pNew->GetPoint();
             pPos->nNode.Assign( *pSttNd->EndOfSectionNode(), - 1 );
-            if( !( pNd = &pPos->nNode.GetNode())->IsContentNode() )
+            pNd = &pPos->nNode.GetNode();
+            if( !pNd->IsContentNode() )
                 pNd = SwNodes::GoPrevSection( &pPos->nNode, true, false );
 
             pPos->nContent.Assign(static_cast<SwContentNode*>(pNd), pNd ? static_cast<SwContentNode*>(pNd)->Len() : 0);

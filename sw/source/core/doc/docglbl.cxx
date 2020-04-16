@@ -87,13 +87,14 @@ bool SwDoc::GenerateHTMLDoc( const OUString& rPath,
 // two helpers for outline mode
 static SwNodePtr GetStartNode( SwOutlineNodes const * pOutlNds, int nOutlineLevel, SwOutlineNodes::size_type* nOutl )
 {
-    SwNodePtr pNd;
-
     for( ; *nOutl < pOutlNds->size(); ++(*nOutl) )
-        if( ( pNd = (*pOutlNds)[ *nOutl ])->GetTextNode()->GetAttrOutlineLevel() == nOutlineLevel && !pNd->FindTableNode() )
+    {
+        SwNodePtr pNd = (*pOutlNds)[ *nOutl ];
+        if( pNd->GetTextNode()->GetAttrOutlineLevel() == nOutlineLevel && !pNd->FindTableNode() )
         {
             return pNd;
         }
+    }
 
     return nullptr;
 }
@@ -120,14 +121,15 @@ static SwNodePtr GetEndNode( SwOutlineNodes const * pOutlNds, int nOutlineLevel,
 // two helpers for collection mode
 static SwNodePtr GetStartNode( const SwOutlineNodes* pOutlNds, const SwTextFormatColl* pSplitColl, SwOutlineNodes::size_type* nOutl )
 {
-    SwNodePtr pNd;
     for( ; *nOutl < pOutlNds->size(); ++(*nOutl) )
-        if( ( pNd = (*pOutlNds)[ *nOutl ])->GetTextNode()->
-                    GetTextColl() == pSplitColl &&
+    {
+        SwNodePtr pNd = (*pOutlNds)[ *nOutl ];
+        if( pNd->GetTextNode()->GetTextColl() == pSplitColl &&
             !pNd->FindTableNode() )
         {
             return pNd;
         }
+    }
     return nullptr;
 }
 

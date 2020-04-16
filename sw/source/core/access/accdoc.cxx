@@ -747,19 +747,21 @@ css::uno::Sequence< css::uno::Any >
         o3tl::sorted_vector<SwFrame*> vFrameList;
         do
         {
-            if ( _pStartCursor && _pStartCursor->HasMark() )
+            if ( !_pStartCursor )
+                break;
+            if ( _pStartCursor->HasMark() )
             {
                 SwContentNode* pContentNode = _pStartCursor->GetContentNode();
-                SwFrame *const pFrame = pContentNode
-                    ? pContentNode->getLayoutFrame(pCursorShell->GetLayout(), _pStartCursor->GetPoint())
-                    : nullptr;
-                if ( pFrame )
+                if (pContentNode)
                 {
-                    vFrameList.insert( pFrame );
+                    SwFrame *const pFrame = pContentNode->getLayoutFrame(pCursorShell->GetLayout(), _pStartCursor->GetPoint());
+                    if ( pFrame )
+                        vFrameList.insert( pFrame );
                 }
             }
+            _pStartCursor = _pStartCursor->GetNext();
         }
-        while( _pStartCursor && ( (_pStartCursor = _pStartCursor->GetNext()) != _pStartCursor2) );
+        while( _pStartCursor != _pStartCursor2 );
 
         if ( !vFrameList.empty() )
         {

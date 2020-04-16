@@ -83,8 +83,10 @@ sal_uInt16 SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList )
                 }
             } while( 30 > rList.size() && *aPam.GetPoint() < *pEnd );
         }
-    } while( 30 > rList.size() &&
-        (_pStartCursor = _pStartCursor->GetNext()) != _pStartCursor2 );
+        if( 30 <= rList.size() )
+            break;
+        _pStartCursor = _pStartCursor->GetNext();
+    } while( _pStartCursor != _pStartCursor2 );
 
     return rList.size();
 }
@@ -169,8 +171,10 @@ void SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList )
                 }
             } while( nListEntry < rList.size() && *aPam.GetPoint() < *pEnd );
         }
-    } while( 30 > rList.size() &&
-        (_pStartCursor = _pStartCursor->GetNext()) != _pStartCursor2 );
+        if( 30 <= rList.size() )
+            break;
+        _pStartCursor = _pStartCursor->GetNext();
+    } while( _pStartCursor != _pStartCursor2 );
 
     GetIDocumentUndoRedo().EndUndo( SwUndoId::SETRUBYATTR, nullptr );
 }
