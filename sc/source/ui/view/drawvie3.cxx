@@ -45,10 +45,10 @@ ScDrawView::ScDrawView(
     bInConstruct( true )
 {
     // #i73602# Use default from the configuration
-    SetBufferedOverlayAllowed(getOptionsDrawinglayer().IsOverlayBuffer_Calc());
+    SetBufferedOverlayAllowed(true);
 
     // #i74769#, #i75172# Use default from the configuration
-    SetBufferedOutputAllowed(getOptionsDrawinglayer().IsPaintBuffer_Calc());
+    SetBufferedOutputAllowed(true);
 
     Construct();
 }

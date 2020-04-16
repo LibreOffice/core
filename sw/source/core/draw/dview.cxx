@@ -117,11 +117,8 @@ SwDrawView::SwDrawView(
 
     SetPrintPreview( rI.GetShell()->IsPreview() );
 
-    // #i73602# Use default from the configuration
-    SetBufferedOverlayAllowed(getOptionsDrawinglayer().IsOverlayBuffer_Writer());
-
-    // #i74769#, #i75172# Use default from the configuration
-    SetBufferedOutputAllowed(getOptionsDrawinglayer().IsPaintBuffer_Writer());
+    SetBufferedOverlayAllowed(true);
+    SetBufferedOutputAllowed(true);
 }
 
 // #i99665#

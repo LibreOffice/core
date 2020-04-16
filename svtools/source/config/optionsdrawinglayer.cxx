@@ -35,22 +35,9 @@ using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 
 #define ROOTNODE_START                  "Office.Common/Drawinglayer"
-#define DEFAULT_OVERLAYBUFFER           true
-#define DEFAULT_PAINTBUFFER             true
 #define DEFAULT_STRIPE_COLOR_A          Color(0)
 #define DEFAULT_STRIPE_COLOR_B          Color(16581375)
 #define DEFAULT_STRIPE_LENGTH           4
-
-// #i73602#
-// #i74769#, #i75172# : Change default for Calc and Writer to True
-#define DEFAULT_OVERLAYBUFFER_CALC          true
-#define DEFAULT_OVERLAYBUFFER_WRITER        true
-#define DEFAULT_OVERLAYBUFFER_DRAWIMPRESS   true
-
-// #i74769#, #i75172#
-#define DEFAULT_PAINTBUFFER_CALC            true
-#define DEFAULT_PAINTBUFFER_WRITER          true
-#define DEFAULT_PAINTBUFFER_DRAWIMPRESS     true
 
 // #i4219#
 #define DEFAULT_MAXIMUMPAPERWIDTH           600
@@ -63,21 +50,9 @@ using namespace ::com::sun::star::uno   ;
 // primitives
 #define DEFAULT_ANTIALIASING                        true
 
-#define PROPERTYNAME_OVERLAYBUFFER      OUString("OverlayBuffer"    )
-#define PROPERTYNAME_PAINTBUFFER        OUString("PaintBuffer"      )
 #define PROPERTYNAME_STRIPE_COLOR_A     OUString("StripeColorA"     )
 #define PROPERTYNAME_STRIPE_COLOR_B     OUString("StripeColorB"     )
 #define PROPERTYNAME_STRIPE_LENGTH      OUString("StripeLength"     )
-
-// #i73602#
-#define PROPERTYNAME_OVERLAYBUFFER_CALC         OUString("OverlayBuffer_Calc")
-#define PROPERTYNAME_OVERLAYBUFFER_WRITER       OUString("OverlayBuffer_Writer")
-#define PROPERTYNAME_OVERLAYBUFFER_DRAWIMPRESS  OUString("OverlayBuffer_DrawImpress")
-
-// #i74769#, #i75172#
-#define PROPERTYNAME_PAINTBUFFER_CALC           OUString("PaintBuffer_Calc")
-#define PROPERTYNAME_PAINTBUFFER_WRITER         OUString("PaintBuffer_Writer")
-#define PROPERTYNAME_PAINTBUFFER_DRAWIMPRESS    OUString("PaintBuffer_DrawImpress")
 
 // #i4219#
 #define PROPERTYNAME_MAXIMUMPAPERWIDTH OUString("MaximumPaperWidth")
@@ -90,34 +65,22 @@ using namespace ::com::sun::star::uno   ;
 // primitives
 #define PROPERTYNAME_ANTIALIASING OUString("AntiAliasing")
 
-#define PROPERTYHANDLE_OVERLAYBUFFER                0
-#define PROPERTYHANDLE_PAINTBUFFER                  1
-#define PROPERTYHANDLE_STRIPE_COLOR_A               2
-#define PROPERTYHANDLE_STRIPE_COLOR_B               3
-#define PROPERTYHANDLE_STRIPE_LENGTH                4
-
-// #i73602#
-#define PROPERTYHANDLE_OVERLAYBUFFER_CALC           5
-#define PROPERTYHANDLE_OVERLAYBUFFER_WRITER         6
-#define PROPERTYHANDLE_OVERLAYBUFFER_DRAWIMPRESS    7
-
-// #i74769#, #i75172#
-#define PROPERTYHANDLE_PAINTBUFFER_CALC             8
-#define PROPERTYHANDLE_PAINTBUFFER_WRITER           9
-#define PROPERTYHANDLE_PAINTBUFFER_DRAWIMPRESS      10
+#define PROPERTYHANDLE_STRIPE_COLOR_A               0
+#define PROPERTYHANDLE_STRIPE_COLOR_B               1
+#define PROPERTYHANDLE_STRIPE_LENGTH                2
 
 // #i4219#
-#define PROPERTYHANDLE_MAXIMUMPAPERWIDTH            11
-#define PROPERTYHANDLE_MAXIMUMPAPERHEIGHT           12
-#define PROPERTYHANDLE_MAXIMUMPAPERLEFTMARGIN       13
-#define PROPERTYHANDLE_MAXIMUMPAPERRIGHTMARGIN      14
-#define PROPERTYHANDLE_MAXIMUMPAPERTOPMARGIN        15
-#define PROPERTYHANDLE_MAXIMUMPAPERBOTTOMMARGIN     16
+#define PROPERTYHANDLE_MAXIMUMPAPERWIDTH            3
+#define PROPERTYHANDLE_MAXIMUMPAPERHEIGHT           4
+#define PROPERTYHANDLE_MAXIMUMPAPERLEFTMARGIN       5
+#define PROPERTYHANDLE_MAXIMUMPAPERRIGHTMARGIN      6
+#define PROPERTYHANDLE_MAXIMUMPAPERTOPMARGIN        7
+#define PROPERTYHANDLE_MAXIMUMPAPERBOTTOMMARGIN     8
 
 // primitives
-#define PROPERTYHANDLE_ANTIALIASING                     17
+#define PROPERTYHANDLE_ANTIALIASING                 9
 
-#define PROPERTYCOUNT                               18
+#define PROPERTYCOUNT                               10
 
 class SvtOptionsDrawinglayer_Impl : public ConfigItem
 {
@@ -127,21 +90,9 @@ public:
 
     virtual void Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
 
-    bool        IsOverlayBuffer() const { return m_bOverlayBuffer;}
-    bool        IsPaintBuffer() const { return m_bPaintBuffer;}
     const Color& GetStripeColorA() const { return m_bStripeColorA;}
     const Color& GetStripeColorB() const { return m_bStripeColorB;}
     sal_uInt16  GetStripeLength() const { return m_nStripeLength;}
-
-    // #i73602#
-    bool        IsOverlayBuffer_Calc() const { return m_bOverlayBuffer_Calc;}
-    bool        IsOverlayBuffer_Writer() const { return m_bOverlayBuffer_Writer;}
-    bool        IsOverlayBuffer_DrawImpress() const { return m_bOverlayBuffer_DrawImpress;}
-
-    // #i74769#, #i75172#
-    bool        IsPaintBuffer_Calc() const { return m_bPaintBuffer_Calc;}
-    bool        IsPaintBuffer_Writer() const { return m_bPaintBuffer_Writer;}
-    bool        IsPaintBuffer_DrawImpress() const { return m_bPaintBuffer_DrawImpress;}
 
     // #i4219#
     sal_uInt32  GetMaximumPaperWidth() const { return m_nMaximumPaperWidth;}
@@ -170,21 +121,9 @@ private:
 
 private:
 
-        bool        m_bOverlayBuffer;
-        bool        m_bPaintBuffer;
         Color       m_bStripeColorA;
         Color       m_bStripeColorB;
         sal_uInt16  m_nStripeLength;
-
-        // #i73602#
-        bool        m_bOverlayBuffer_Calc;
-        bool        m_bOverlayBuffer_Writer;
-        bool        m_bOverlayBuffer_DrawImpress;
-
-        // #i74769#, #i75172#
-        bool        m_bPaintBuffer_Calc;
-        bool        m_bPaintBuffer_Writer;
-        bool        m_bPaintBuffer_DrawImpress;
 
         // #i4219#
         sal_uInt32  m_nMaximumPaperWidth;
@@ -204,21 +143,9 @@ private:
 
 SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
     ConfigItem( ROOTNODE_START  ),
-    m_bOverlayBuffer( DEFAULT_OVERLAYBUFFER ),
-    m_bPaintBuffer( DEFAULT_PAINTBUFFER ),
     m_bStripeColorA(DEFAULT_STRIPE_COLOR_A),
     m_bStripeColorB(DEFAULT_STRIPE_COLOR_B),
     m_nStripeLength(DEFAULT_STRIPE_LENGTH),
-
-    // #i73602#
-    m_bOverlayBuffer_Calc( DEFAULT_OVERLAYBUFFER_CALC ),
-    m_bOverlayBuffer_Writer( DEFAULT_OVERLAYBUFFER_WRITER ),
-    m_bOverlayBuffer_DrawImpress( DEFAULT_OVERLAYBUFFER_DRAWIMPRESS ),
-
-    // #i74769#, #i75172#
-    m_bPaintBuffer_Calc( DEFAULT_PAINTBUFFER_CALC ),
-    m_bPaintBuffer_Writer( DEFAULT_PAINTBUFFER_WRITER ),
-    m_bPaintBuffer_DrawImpress( DEFAULT_PAINTBUFFER_DRAWIMPRESS ),
 
     // #i4219#
     m_nMaximumPaperWidth(DEFAULT_MAXIMUMPAPERWIDTH),
@@ -249,20 +176,6 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
 
         switch( nProperty )
         {
-            case PROPERTYHANDLE_OVERLAYBUFFER:
-            {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\OverlayBuffer\"?" );
-                seqValues[nProperty] >>= m_bOverlayBuffer;
-            }
-            break;
-
-            case PROPERTYHANDLE_PAINTBUFFER:
-            {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\PaintBuffer\"?" );
-                seqValues[nProperty] >>= m_bPaintBuffer;
-            }
-            break;
-
             case PROPERTYHANDLE_STRIPE_COLOR_A:
             {
                 DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\StripeColorA\"?" );
@@ -285,50 +198,6 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
             {
                 DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_SHORT), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\StripeLength\"?" );
                 seqValues[nProperty] >>= m_nStripeLength;
-            }
-            break;
-
-            // #i73602#
-            case PROPERTYHANDLE_OVERLAYBUFFER_CALC:
-            {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\OverlayBuffer_Calc\"?" );
-                seqValues[nProperty] >>= m_bOverlayBuffer_Calc;
-            }
-            break;
-
-            case PROPERTYHANDLE_OVERLAYBUFFER_WRITER:
-            {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\OverlayBuffer_Writer\"?" );
-                seqValues[nProperty] >>= m_bOverlayBuffer_Writer;
-            }
-            break;
-
-            case PROPERTYHANDLE_OVERLAYBUFFER_DRAWIMPRESS:
-            {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\OverlayBuffer_DrawImpress\"?" );
-                seqValues[nProperty] >>= m_bOverlayBuffer_DrawImpress;
-            }
-            break;
-
-            // #i74769#, #i75172#
-            case PROPERTYHANDLE_PAINTBUFFER_CALC:
-            {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\PaintBuffer_Calc\"?" );
-                seqValues[nProperty] >>= m_bPaintBuffer_Calc;
-            }
-            break;
-
-            case PROPERTYHANDLE_PAINTBUFFER_WRITER:
-            {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\PaintBuffer_Writer\"?" );
-                seqValues[nProperty] >>= m_bPaintBuffer_Writer;
-            }
-            break;
-
-            case PROPERTYHANDLE_PAINTBUFFER_DRAWIMPRESS:
-            {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\PaintBuffer_DrawImpress\"?" );
-                seqValues[nProperty] >>= m_bPaintBuffer_DrawImpress;
             }
             break;
 
@@ -404,14 +273,6 @@ void SvtOptionsDrawinglayer_Impl::ImplCommit()
     {
         switch( nProperty )
         {
-            case PROPERTYHANDLE_OVERLAYBUFFER:
-                aSeqValues[nProperty] <<= m_bOverlayBuffer;
-            break;
-
-            case PROPERTYHANDLE_PAINTBUFFER:
-                aSeqValues[nProperty] <<= m_bPaintBuffer;
-            break;
-
             case PROPERTYHANDLE_STRIPE_COLOR_A:
                 aSeqValues[nProperty] <<= m_bStripeColorA;
             break;
@@ -422,32 +283,6 @@ void SvtOptionsDrawinglayer_Impl::ImplCommit()
 
             case PROPERTYHANDLE_STRIPE_LENGTH:
                 aSeqValues[nProperty] <<= m_nStripeLength;
-            break;
-
-            // #i73602#
-            case PROPERTYHANDLE_OVERLAYBUFFER_CALC:
-                aSeqValues[nProperty] <<= m_bOverlayBuffer_Calc;
-            break;
-
-            case PROPERTYHANDLE_OVERLAYBUFFER_WRITER:
-                aSeqValues[nProperty] <<= m_bOverlayBuffer_Writer;
-            break;
-
-            case PROPERTYHANDLE_OVERLAYBUFFER_DRAWIMPRESS:
-                aSeqValues[nProperty] <<= m_bOverlayBuffer_DrawImpress;
-            break;
-
-            // #i74769#, #i75172#
-            case PROPERTYHANDLE_PAINTBUFFER_CALC:
-                aSeqValues[nProperty] <<= m_bPaintBuffer_Calc;
-            break;
-
-            case PROPERTYHANDLE_PAINTBUFFER_WRITER:
-                aSeqValues[nProperty] <<= m_bPaintBuffer_Writer;
-            break;
-
-            case PROPERTYHANDLE_PAINTBUFFER_DRAWIMPRESS:
-                aSeqValues[nProperty] <<= m_bPaintBuffer_DrawImpress;
             break;
 
             // #i4219#
@@ -537,21 +372,9 @@ Sequence< OUString > SvtOptionsDrawinglayer_Impl::impl_GetPropertyNames()
     // Build list of configuration key names.
     const OUString pProperties[] =
     {
-        PROPERTYNAME_OVERLAYBUFFER      ,
-        PROPERTYNAME_PAINTBUFFER        ,
         PROPERTYNAME_STRIPE_COLOR_A     ,
         PROPERTYNAME_STRIPE_COLOR_B     ,
         PROPERTYNAME_STRIPE_LENGTH      ,
-
-        // #i73602#
-        PROPERTYNAME_OVERLAYBUFFER_CALC,
-        PROPERTYNAME_OVERLAYBUFFER_WRITER,
-        PROPERTYNAME_OVERLAYBUFFER_DRAWIMPRESS,
-
-        // #i74769#, #i75172#
-        PROPERTYNAME_PAINTBUFFER_CALC,
-        PROPERTYNAME_PAINTBUFFER_WRITER,
-        PROPERTYNAME_PAINTBUFFER_DRAWIMPRESS,
 
         // #i4219#
         PROPERTYNAME_MAXIMUMPAPERWIDTH,
@@ -598,22 +421,6 @@ SvtOptionsDrawinglayer::~SvtOptionsDrawinglayer()
 
 //  public method
 
-bool SvtOptionsDrawinglayer::IsOverlayBuffer() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->IsOverlayBuffer();
-}
-
-//  public method
-
-bool SvtOptionsDrawinglayer::IsPaintBuffer() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->IsPaintBuffer();
-}
-
-//  public method
-
 Color SvtOptionsDrawinglayer::GetStripeColorA() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
@@ -634,44 +441,6 @@ sal_uInt16 SvtOptionsDrawinglayer::GetStripeLength() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pImpl->GetStripeLength();
-}
-
-// #i73602#
-bool SvtOptionsDrawinglayer::IsOverlayBuffer_Calc() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->IsOverlayBuffer_Calc();
-}
-
-bool SvtOptionsDrawinglayer::IsOverlayBuffer_Writer() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->IsOverlayBuffer_Writer();
-}
-
-bool SvtOptionsDrawinglayer::IsOverlayBuffer_DrawImpress() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->IsOverlayBuffer_DrawImpress();
-}
-
-// #i74769#, #i75172#
-bool SvtOptionsDrawinglayer::IsPaintBuffer_Calc() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->IsPaintBuffer_Calc();
-}
-
-bool SvtOptionsDrawinglayer::IsPaintBuffer_Writer() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->IsPaintBuffer_Writer();
-}
-
-bool SvtOptionsDrawinglayer::IsPaintBuffer_DrawImpress() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->IsPaintBuffer_DrawImpress();
 }
 
 // #i4219#

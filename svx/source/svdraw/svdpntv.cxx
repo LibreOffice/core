@@ -1156,7 +1156,7 @@ void SdrPaintView::SetApplicationDocumentColor(Color aDocumentColor)
 
 bool SdrPaintView::IsBufferedOutputAllowed() const
 {
-    return (mbBufferedOutputAllowed && maDrawinglayerOpt.IsPaintBuffer());
+    return mbBufferedOutputAllowed;
 }
 
 void SdrPaintView::SetBufferedOutputAllowed(bool bNew)
@@ -1169,7 +1169,7 @@ void SdrPaintView::SetBufferedOutputAllowed(bool bNew)
 
 bool SdrPaintView::IsBufferedOverlayAllowed() const
 {
-    return (mbBufferedOverlayAllowed && maDrawinglayerOpt.IsOverlayBuffer());
+    return mbBufferedOverlayAllowed;
 }
 
 void SdrPaintView::SetBufferedOverlayAllowed(bool bNew)

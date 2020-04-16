@@ -52,12 +52,6 @@ class SVT_DLLPUBLIC SvtOptionsDrawinglayer
             @short      interface methods to get and set value of config key "org.openoffice.Office.Common/Drawinglayer/..."
             @descr      These options describe internal states to enable/disable features of installed office.
 
-                        IsOverlayBuffer()
-                        SetOverlayBuffer()      =>  Activate this field for letting Overlay use a buffer
-
-                        IsPaintBuffer()
-                        SetPaintBuffer()        =>  Activate this field for letting Paint use a prerender buffer
-
                         GetStripeColorA()
                         SetStripeColorA()       =>  Set first of two colors which overlay uses to draw stripes
 
@@ -70,21 +64,9 @@ class SVT_DLLPUBLIC SvtOptionsDrawinglayer
             @seealso    configuration package "org.openoffice.Office.Common/Drawinglayer"
         *//*-*****************************************************************************************************/
 
-        bool        IsOverlayBuffer() const;
-        bool        IsPaintBuffer() const;
         Color       GetStripeColorA() const;
         Color       GetStripeColorB() const;
         sal_uInt16  GetStripeLength() const;
-
-        // #i73602#
-        bool        IsOverlayBuffer_Calc() const;
-        bool        IsOverlayBuffer_Writer() const;
-        bool        IsOverlayBuffer_DrawImpress() const;
-
-        // #i74769#, #i75172#
-        bool        IsPaintBuffer_Calc() const;
-        bool        IsPaintBuffer_Writer() const;
-        bool        IsPaintBuffer_DrawImpress() const;
 
         // #i4219#
         sal_uInt32  GetMaximumPaperWidth() const;
