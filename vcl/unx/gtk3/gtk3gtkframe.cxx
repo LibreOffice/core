@@ -2938,7 +2938,7 @@ enum GdkAnchorHints
   GDK_ANCHOR_FLIP     = GDK_ANCHOR_FLIP_X | GDK_ANCHOR_FLIP_Y,
   GDK_ANCHOR_SLIDE    = GDK_ANCHOR_SLIDE_X | GDK_ANCHOR_SLIDE_Y,
   GDK_ANCHOR_RESIZE   = GDK_ANCHOR_RESIZE_X | GDK_ANCHOR_RESIZE_Y
-}
+};
 #endif
 
 void GtkSalFrame::signalRealize(GtkWidget*, gpointer frame)
