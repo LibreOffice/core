@@ -62,6 +62,7 @@
 #include <vcl/keycodes.hxx>
 #include <unx/salbmp.h>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <unx/salobj.h>
 #include <unx/sm.hxx>
 #include <unx/wmadaptor.hxx>
@@ -282,7 +283,7 @@ SalDisplay::SalDisplay( Display *display ) :
         m_nLastUserEventTime( CurrentTime )
 {
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "SalDisplay::SalDisplay()\n" );
+    SAL_INFO("vcl.unx.app", "SalDisplay::SalDisplay().");
 #endif
     GenericUnixSalData *pData = GetGenericUnixSalData();
 
@@ -295,13 +296,13 @@ SalDisplay::SalDisplay( Display *display ) :
 SalDisplay::~SalDisplay()
 {
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "SalDisplay::~SalDisplay()\n" );
+    SAL_INFO("vcl.unx.app", "SalDisplay::~SalDisplay().");
 #endif
     if( pDisp_ )
     {
         doDestruct();
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "display %p closed\n", pDisp_ );
+        SAL_INFO("vcl.unx.app", "display " << pDisp_ << " closed.");
 #endif
         pDisp_ = nullptr;
     }
@@ -431,7 +432,7 @@ SalX11Display::SalX11Display( Display *display )
 SalX11Display::~SalX11Display()
 {
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "SalX11Display::~SalX11Display()\n" );
+    SAL_INFO("vcl.unx.app", "SalX11Display::~SalX11Display().");
 #endif
     if( pDisp_ )
     {
@@ -2087,68 +2088,60 @@ void SalDisplay::DbgPrintDisplayEvent(const char *pComment, XEvent *pEvent) cons
 
     if( pEvent->type <= MappingNotify )
     {
-        fprintf( stderr, "[%s] %s s=%d w=%ld\n",
-                 pComment,
-                 EventNames[pEvent->type],
-                 pEvent->xany.send_event,
-                 pEvent->xany.window );
+        SAL_INFO("vcl.unx.app", "[" << pComment << "] "
+                << EventNames[pEvent->type]
+                << " s=" << pEvent->xany.send_event
+                << " w=" << pEvent->xany.window);
 
         switch( pEvent->type )
         {
             case KeyPress:
             case KeyRelease:
-                fprintf( stderr, "\t\ts=%d c=%d\n",
-                         pEvent->xkey.state,
-                         pEvent->xkey.keycode );
+                SAL_INFO("vcl.unx.app", "\t\ts=" << pEvent->xkey.state
+                        << " c=" << pEvent->xkey.keycode);
                 break;
 
             case ButtonPress:
             case ButtonRelease:
-                fprintf( stderr, "\t\ts=%d b=%d x=%d y=%d rx=%d ry=%d\n",
-                         pEvent->xbutton.state,
-                         pEvent->xbutton.button,
-                         pEvent->xbutton.x,
-                         pEvent->xbutton.y,
-                         pEvent->xbutton.x_root,
-                         pEvent->xbutton.y_root );
+                SAL_INFO("vcl.unx.app", "\t\ts=" << pEvent->xbutton.state
+                         << " b=" << pEvent->xbutton.button
+                         << " x=" << pEvent->xbutton.x
+                         << " y=" << pEvent->xbutton.y
+                         << " rx=" << pEvent->xbutton.x_root
+                         << " ry=" << pEvent->xbutton.y_root);
                 break;
 
             case MotionNotify:
-                fprintf( stderr, "\t\ts=%d x=%d y=%d\n",
-                         pEvent->xmotion.state,
-                         pEvent->xmotion.x,
-                         pEvent->xmotion.y );
+                SAL_INFO("vcl.unx.app", "\t\ts=" << pEvent->xmotion.state
+                         << " x=" << pEvent->xmotion.x
+                         << " y=" << pEvent->xmotion.y);
                 break;
 
             case EnterNotify:
             case LeaveNotify:
-                fprintf( stderr, "\t\tm=%d f=%d x=%d y=%d\n",
-                         pEvent->xcrossing.mode,
-                         pEvent->xcrossing.focus,
-                         pEvent->xcrossing.x,
-                         pEvent->xcrossing.y );
+                SAL_INFO("vcl.unx.app", "\t\tm=" << pEvent->xcrossing.mode
+                         << " f=" << pEvent->xcrossing.focus
+                         << " x=" << pEvent->xcrossing.x
+                         << " y=" << pEvent->xcrossing.y);
                 break;
 
             case FocusIn:
             case FocusOut:
-                fprintf( stderr, "\t\tm=%d d=%d\n",
-                         pEvent->xfocus.mode,
-                         pEvent->xfocus.detail );
+                SAL_INFO("vcl.unx.app", "\t\tm=" << pEvent->xfocus.mode
+                         << " d=" << pEvent->xfocus.detail);
                 break;
 
             case Expose:
             case GraphicsExpose:
-                fprintf( stderr, "\t\tc=%d %d*%d %d+%d\n",
-                         pEvent->xexpose.count,
-                         pEvent->xexpose.width,
-                         pEvent->xexpose.height,
-                         pEvent->xexpose.x,
-                         pEvent->xexpose.y );
+                SAL_INFO("vcl.unx.app", "\t\tc=" << pEvent->xexpose.count
+                         << " " << pEvent->xexpose.width
+                         << "*" << pEvent->xexpose.height
+                         << " " << pEvent->xexpose.x
+                         << "+" << pEvent->xexpose.y );
                 break;
 
             case VisibilityNotify:
-                fprintf( stderr, "\t\ts=%d\n",
-                         pEvent->xvisibility.state );
+                SAL_INFO("vcl.unx.app", "\t\ts=" << pEvent->xvisibility.state);
                 break;
 
             case CreateNotify:
@@ -2160,65 +2153,67 @@ void SalDisplay::DbgPrintDisplayEvent(const char *pComment, XEvent *pEvent) cons
                 break;
 
             case ReparentNotify:
-                fprintf( stderr, "\t\tp=%d x=%d y=%d\n",
-                         sal::static_int_cast< int >(pEvent->xreparent.parent),
-                         pEvent->xreparent.x,
-                         pEvent->xreparent.y );
+                SAL_INFO("vcl.unx.app", "\t\tp=" << sal::static_int_cast< int >(
+                            pEvent->xreparent.parent)
+                         << " x=" << pEvent->xreparent.x
+                         << " y=" << pEvent->xreparent.y );
                 break;
 
             case ConfigureNotify:
-                fprintf( stderr, "\t\tb=%d %d*%d %d+%d\n",
-                         pEvent->xconfigure.border_width,
-                         pEvent->xconfigure.width,
-                         pEvent->xconfigure.height,
-                         pEvent->xconfigure.x,
-                         pEvent->xconfigure.y );
+                SAL_INFO("vcl.unx.app", "\t\tb=" << pEvent->xconfigure.border_width
+                         << " " << pEvent->xconfigure.width
+                         << "*" << pEvent->xconfigure.height
+                         << " " << pEvent->xconfigure.x
+                         << "+" << pEvent->xconfigure.y);
                 break;
 
             case PropertyNotify:
-                fprintf( stderr, "\t\ta=%s (0x%X)\n",
-                         GetAtomName( pDisp_, pEvent->xproperty.atom ),
-                         sal::static_int_cast< unsigned int >(
-                             pEvent->xproperty.atom) );
+                SAL_INFO("vcl.unx.app", "\t\ta=" << GetAtomName(
+                            pDisp_, pEvent->xproperty.atom)
+                        << std::showbase << std::hex << std::uppercase
+                        << " (" << sal::static_int_cast< unsigned int >(
+                            pEvent->xproperty.atom) << ").");
                 break;
 
             case ColormapNotify:
-                fprintf( stderr, "\t\tc=%ld n=%d s=%d\n",
-                         pEvent->xcolormap.colormap,
-                         pEvent->xcolormap.c_new,
-                         pEvent->xcolormap.state );
+                SAL_INFO("vcl.unx.app", "\t\tc=" << pEvent->xcolormap.colormap
+                         << " n=" << pEvent->xcolormap.c_new
+                         << " s=" << pEvent->xcolormap.state);
                 break;
 
             case ClientMessage:
-                fprintf( stderr, "\t\ta=%s (0x%X) f=%i [0x%lX,0x%lX,0x%lX,0x%lX,0x%lX])\n",
-                         GetAtomName( pDisp_, pEvent->xclient.message_type ),
-                         sal::static_int_cast< unsigned int >(
-                             pEvent->xclient.message_type),
-                         pEvent->xclient.format,
-                         pEvent->xclient.data.l[0],
-                         pEvent->xclient.data.l[1],
-                         pEvent->xclient.data.l[2],
-                         pEvent->xclient.data.l[3],
-                         pEvent->xclient.data.l[4] );
+                SAL_INFO("vcl.unx.app", "\t\ta=" << GetAtomName(
+                            pDisp_, pEvent->xclient.message_type)
+                         << std::showbase << std::hex << std::uppercase
+                         << " (" << sal::static_int_cast< unsigned int >(
+                             pEvent->xclient.message_type) << ")"
+                         << std::dec
+                         << " f=" << pEvent->xclient.format
+                         << std::hex
+                         << " [" << pEvent->xclient.data.l[0]
+                         << "," << pEvent->xclient.data.l[1]
+                         << "," << pEvent->xclient.data.l[2]
+                         << "," << pEvent->xclient.data.l[3]
+                         << "," << pEvent->xclient.data.l[4]
+                         << "]");
                 break;
 
             case MappingNotify:
-                fprintf( stderr, "\t\tr=%sd\n",
-                         MappingModifier == pEvent->xmapping.request
-                         ? "MappingModifier"
-                         : MappingKeyboard == pEvent->xmapping.request
-                           ? "MappingKeyboard"
-                           : "MappingPointer" );
+                SAL_INFO("vcl.unx.app", "\t\tr="
+                        << (MappingModifier == pEvent->xmapping.request ?
+                            "MappingModifier" :
+                            (MappingKeyboard == pEvent->xmapping.request ?
+                             "MappingKeyboard" : "MappingPointer"))
+                        << "d");
 
                 break;
         }
     }
     else
-        fprintf( stderr, "[%s] %d s=%d w=%ld\n",
-                 pComment,
-                 pEvent->type,
-                 pEvent->xany.send_event,
-                 pEvent->xany.window );
+        SAL_INFO("vcl.unx.app", "[" << pComment << "] "
+                << pEvent->type
+                << " s=" << pEvent->xany.send_event
+                << " w=" << pEvent->xany.window);
 }
 
 void SalDisplay::PrintInfo() const
@@ -2321,7 +2316,11 @@ void SalDisplay::InitXinerama()
     if( m_bXinerama )
     {
         for (auto const& screen : m_aXineramaScreens)
-            fprintf( stderr, "Xinerama screen: %ldx%ld+%ld+%ld\n", screen.GetWidth(), screen.GetHeight(), screen.Left(), screen.Top() );
+            SAL_INFO("vcl.unx.app", "Xinerama screen: "
+                    << screen.GetWidth()
+                    << "x" << screen.GetHeight()
+                    << "+" << screen.Left()
+                    << "+" << screen.Top());
     }
 #endif
 }
@@ -2837,9 +2836,21 @@ Pixel SalColormap::GetPixel( Color nColor ) const
                             const_cast<SalColormap*>(this)->m_aPalette[aInversColor.pixel] = nInversColor;
 #ifdef DBG_UTIL
                         else
-                            fprintf( stderr, "SalColormap::GetPixel() 0x%06lx=%lu 0x%06lx=%lu\n",
-                                     static_cast< unsigned long >(sal_uInt32(nColor)), aColor.pixel,
-                                     static_cast< unsigned long >(sal_uInt32(nInversColor)), aInversColor.pixel);
+                            SAL_INFO("vcl.unx.app", "SalColormap::GetPixel() "
+                                    << std::showbase << std::setfill('0')
+                                    << std::setw(6) << std::hex
+                                    << static_cast< unsigned long >(
+                                        sal_uInt32(nColor))
+                                    << "="
+                                    << std::dec
+                                    << aColor.pixel << " "
+                                    << std::showbase << std::setfill('0')
+                                    << std::setw(6) << std::hex
+                                    << static_cast< unsigned long >(
+                                        sal_uInt32(nInversColor))
+                                    << "="
+                                    << std::dec
+                                    << aInversColor.pixel);
 #endif
                     }
                 }
@@ -2848,16 +2859,18 @@ Pixel SalColormap::GetPixel( Color nColor ) const
             }
 
 #ifdef DBG_UTIL
-            fprintf( stderr, "SalColormap::GetPixel() !XAllocColor %lx\n",
-                     static_cast< unsigned long >(sal_uInt32(nColor)) );
+            SAL_INFO("vcl.unx.app", "SalColormap::GetPixel() !XAllocColor "
+                    << std::hex
+                    << static_cast< unsigned long >(sal_uInt32(nColor)));
 #endif
         }
 
         if( m_aPalette.empty() )
         {
 #ifdef DBG_UTIL
-            fprintf( stderr, "SalColormap::GetPixel() Palette empty %lx\n",
-                     static_cast< unsigned long >(sal_uInt32(nColor)));
+            SAL_INFO("vcl.unx.app", "SalColormap::GetPixel() Palette empty "
+                    << std::hex
+                    << static_cast< unsigned long >(sal_uInt32(nColor)));
 #endif
             return sal_uInt32(nColor);
         }

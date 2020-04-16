@@ -26,6 +26,7 @@
 #include <osl/thread.h>
 #include <osl/process.h>
 #include <sal/macros.h>
+#include <sal/log.hxx>
 #include <configsettings.hxx>
 
 #include <unx/wmadaptor.hxx>
@@ -183,7 +184,7 @@ std::unique_ptr<WMAdaptor> WMAdaptor::createWMAdaptor( SalDisplay* pSalDisplay )
     }
 #if OSL_DEBUG_LEVEL > 1
     else
-        fprintf( stderr, "WM supports extended WM hints\n" );
+        SAL_INFO("vcl.unx.app", "WM supports extended WM hints.");
 #endif
 
     // try a GnomeWM
@@ -196,7 +197,7 @@ std::unique_ptr<WMAdaptor> WMAdaptor::createWMAdaptor( SalDisplay* pSalDisplay )
         }
 #if OSL_DEBUG_LEVEL > 1
         else
-            fprintf( stderr, "WM supports GNOME WM hints\n" );
+            SAL_INFO("vcl.unx.app", "WM supports GNOME WM hints.");
 #endif
     }
 
@@ -204,9 +205,11 @@ std::unique_ptr<WMAdaptor> WMAdaptor::createWMAdaptor( SalDisplay* pSalDisplay )
         pAdaptor.reset(new WMAdaptor( pSalDisplay ));
 
 #if OSL_DEBUG_LEVEL > 1
-    fprintf(stderr, "Window Manager's name is \"%s\"\n",
-        OUStringToOString(pAdaptor->getWindowManagerName(),
-        RTL_TEXTENCODING_UTF8).getStr());
+    SAL_INFO("vcl.unx.app", "Window Manager's name is \""
+            << OUStringToOString(
+                pAdaptor->getWindowManagerName(),
+                RTL_TEXTENCODING_UTF8).getStr()
+            << "\".");
 #endif
     return pAdaptor;
 }
@@ -382,7 +385,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
             if( XGetAtomNames( m_pDisplay, pAtoms, nItems, pAtomNames ) )
             {
 #if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "supported protocols:\n" );
+                SAL_INFO("vcl.unx.app", "supported protocols:");
 #endif
                 for( unsigned long i = 0; i < nItems; i++ )
                 {
@@ -405,7 +408,10 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
                             m_bEnableAlwaysOnTopWorks = true;
                     }
 #if OSL_DEBUG_LEVEL > 1
-                    fprintf( stderr, "  %s%s\n", pAtomNames[i], ((pMatch)&&(pMatch->nProtocol != -1)) ? "" : " (unsupported)" );
+                    SAL_INFO("vcl.unx.app", "  "
+                            << pAtomNames[i]
+                            << (((pMatch)&&(pMatch->nProtocol != -1)) ?
+                                "" : " (unsupported)"));
 #endif
                     XFree( pAtomNames[i] );
                 }
@@ -468,12 +474,11 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
                     if( aWorkArea != m_aWMWorkAreas[0] )
                         m_bEqualWorkAreas = false;
 #if OSL_DEBUG_LEVEL > 1
-                    fprintf( stderr, "workarea %d: %ldx%ld+%ld+%ld\n",
-                             i,
-                             m_aWMWorkAreas[i].GetWidth(),
-                             m_aWMWorkAreas[i].GetHeight(),
-                             m_aWMWorkAreas[i].Left(),
-                             m_aWMWorkAreas[i].Top() );
+                    SAL_INFO("vcl.unx.app", "workarea " << i
+                            << ": " << m_aWMWorkAreas[i].GetWidth()
+                            << "x"  << m_aWMWorkAreas[i].GetHeight()
+                            << "+"  << m_aWMWorkAreas[i].Left()
+                            << "+"  << m_aWMWorkAreas[i].Top());
 #endif
                 }
                 XFree( pProperty );
@@ -481,7 +486,8 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
             else
             {
 #if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "%ld workareas for %d desktops !\n", nItems/4, m_nDesktops );
+                SAL_INFO("vcl.unx.app", nItems/4 << " workareas for "
+                        << m_nDesktops << " desktops !");
 #endif
                 if( pProperty )
                 {
@@ -632,7 +638,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
             if( XGetAtomNames( m_pDisplay, pAtoms, nItems, pAtomNames ) )
             {
 #if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "supported protocols:\n" );
+                SAL_INFO("vcl.unx.app", "supported protocols:");
 #endif
                 for( unsigned long i = 0; i < nItems; i++ )
                 {
@@ -661,7 +667,10 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
                         m_nInitWinGravity = NorthWestGravity;
                     }
 #if OSL_DEBUG_LEVEL > 1
-                    fprintf( stderr, "  %s%s\n", pAtomNames[i], ((pMatch) && (pMatch->nProtocol != -1)) ? "" : " (unsupported)" );
+                    SAL_INFO("vcl.unx.app", "  "
+                            << pAtomNames[i]
+                            << (((pMatch) && (pMatch->nProtocol != -1)) ?
+                                "" : " (unsupported)"));
 #endif
                     XFree( pAtomNames[i] );
                 }
