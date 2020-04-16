@@ -69,6 +69,12 @@ ifneq (,$(ENABLE_VALGRIND))
     python3_cflags += $(VALGRIND_CFLAGS)
 endif
 
+# This happens to override the -O3 in the default OPT set in
+# workdir/UnpackedTarball/python3/configure.ac while keeping the other content of that OPT intact:
+ifeq ($(ENABLE_OPTIMIZED),)
+python3_cflags += $(gb_COMPILERNOOPTFLAGS)
+endif
+
 $(call gb_ExternalProject_get_state_target,python3,build) :
 	$(call gb_Trace_StartRange,python3,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
@@ -84,9 +90,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 		--prefix=/python-inst \
 		--with-system-expat \
 		$(if $(filter AIX,$(OS)), \
-			--disable-ipv6 --with-threads OPT="-g0 -fwrapv -O3 -Wall", \
-			$(if $(gb_Module_CURRENTMODULE_DEBUG_ENABLED), \
-				OPT="$(gb_COMPILERNOOPTFLAGS) $(gb_DEBUGINFO_FLAGS)")) \
+			--disable-ipv6 --with-threads OPT="-g0 -fwrapv -O3 -Wall") \
 		$(if $(filter MACOSX,$(OS)), \
 			$(if $(filter INTEL,$(CPUNAME)),--enable-universalsdk=$(MACOSX_SDK_PATH) \
                                 --with-universal-archs=intel \
