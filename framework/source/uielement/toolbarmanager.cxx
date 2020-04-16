@@ -1456,8 +1456,9 @@ void ToolBarManager::AddCustomizeMenuItems(ToolBox const * pToolBar)
         }
     }
     else
-    {
-        if (MenuItemAllowed(MENUITEM_TOOLBAR_UNDOCKTOOLBAR))
+    {   Reference< XDockableWindow > xDockable( VCLUnoHelper::GetInterface( m_pToolBar ), UNO_QUERY );
+        if ( MenuItemAllowed(MENUITEM_TOOLBAR_UNDOCKTOOLBAR ) &&
+          !( xDockable->isLocked() ))
         {
             pMenu->InsertItem(MENUITEM_TOOLBAR_UNDOCKTOOLBAR, FwkResId(STR_TOOLBAR_UNDOCK_TOOLBAR));
             pMenu->SetAccelKey(MENUITEM_TOOLBAR_UNDOCKTOOLBAR, vcl::KeyCode(KEY_F10, true, true, false, false));
