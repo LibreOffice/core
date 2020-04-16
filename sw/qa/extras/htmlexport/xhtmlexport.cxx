@@ -79,6 +79,18 @@ DECLARE_HTMLEXPORT_TEST(testTdf107696, "tdf107696.odt")
         != -1);
 }
 
+DECLARE_HTMLEXPORT_TEST(testTdf66305, "tdf66305.odt")
+{
+    SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
+    CPPUNIT_ASSERT(pStream);
+    sal_uInt64 nLength = pStream->TellEnd();
+    OString aStream(read_uInt8s_ToOString(*pStream, nLength));
+    CPPUNIT_ASSERT(
+        aStream.indexOf("<p class=\"P6\"><a href=\"#__RefHeading__82004_486970805\" "
+                        "class=\"Internet_20_link\">Introduction</a></p><p class=\"P7\"> </p>")
+        != -1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
