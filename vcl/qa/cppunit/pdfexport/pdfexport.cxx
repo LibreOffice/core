@@ -138,6 +138,7 @@ public:
     void testTocLink();
     void testPdfImageResourceInlineXObjectRef();
     void testLinkWrongPage();
+    void testLargePage();
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
     CPPUNIT_TEST(testTdf106059);
@@ -176,6 +177,7 @@ public:
     CPPUNIT_TEST(testTocLink);
     CPPUNIT_TEST(testPdfImageResourceInlineXObjectRef);
     CPPUNIT_TEST(testLinkWrongPage);
+    CPPUNIT_TEST(testLargePage);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1893,6 +1895,28 @@ void PdfExportTest::testLinkWrongPage()
     PageHolder pPdfPage2(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/1));
     CPPUNIT_ASSERT(pPdfPage2.get());
     CPPUNIT_ASSERT(!HasLinksOnPage(pPdfPage2));
+}
+
+void PdfExportTest::testLargePage()
+{
+    // Import the bugdoc and export as PDF.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "6m-wide.odg";
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("draw_pdf_Export");
+    DocumentHolder pPdfDocument = exportAndParse(aURL, aMediaDescriptor);
+
+    // The document has 1 page.
+    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
+
+    // Check the value (not the unit) of the page size.
+    double fWidth = 0;
+    double fHeight = 0;
+    FPDF_GetPageSizeByIndex(pPdfDocument.get(), 0, &fWidth, &fHeight);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 8503.94
+    // - Actual  : 17007.875
+    // i.e. the value for 600 cm was larger than the 14 400 limit set in the spec.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(8503.94, fWidth, 0.01);
 }
 
 void PdfExportTest::testPdfImageResourceInlineXObjectRef()
