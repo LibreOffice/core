@@ -1105,6 +1105,12 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
 {
     preDraw();
     SAL_INFO("vcl.skia.trace", "invert(" << this << "): " << rPoly << ":" << int(eFlags));
+    // Intel Vulkan drivers (up to current 0.401.3889) have a problem
+    // with SkBlendMode::kDifference(?) and surfaces wider than 1024 pixels, resulting
+    // in drawing errors. Work that around by fetching the relevant part of the surface
+    // and drawing using CPU.
+    bool intelHack
+        = (isGPU() && SkiaHelper::getVendor() == DriverBlocklist::VendorIntel && !mXorMode);
     // TrackFrame just inverts a dashed path around the polygon
     if (eFlags == SalInvert::TrackFrame)
     {
@@ -1123,8 +1129,21 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
         aPaint.setPathEffect(SkDashPathEffect::Make(intervals, SK_ARRAY_COUNT(intervals), 0));
         aPaint.setColor(SkColorSetARGB(255, 255, 255, 255));
         aPaint.setBlendMode(SkBlendMode::kDifference);
-
-        getDrawCanvas()->drawPath(aPath, aPaint);
+        if (!intelHack)
+            getDrawCanvas()->drawPath(aPath, aPaint);
+        else
+        {
+            SkRect area;
+            aPath.getBounds().roundOut(&area);
+            SkRect size = SkRect::MakeWH(area.width(), area.height());
+            sk_sp<SkSurface> surface = SkSurface::MakeRasterN32Premul(area.width(), area.height());
+            SkPaint copy;
+            copy.setBlendMode(SkBlendMode::kSrc);
+            surface->getCanvas()->drawImageRect(mSurface->makeImageSnapshot(), area, size, &copy);
+            aPath.offset(-area.x(), -area.y());
+            surface->getCanvas()->drawPath(aPath, aPaint);
+            getDrawCanvas()->drawImageRect(surface->makeImageSnapshot(), size, area, &copy);
+        }
         if (mXorMode) // limit xor area update
             mXorExtents = aPath.getBounds();
     }
@@ -1159,8 +1178,21 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
             // as the polygon (usually rectangle)
             aPaint.setShader(aBitmap.makeShader(SkTileMode::kRepeat, SkTileMode::kRepeat));
         }
-
-        getDrawCanvas()->drawPath(aPath, aPaint);
+        if (!intelHack)
+            getDrawCanvas()->drawPath(aPath, aPaint);
+        else
+        {
+            SkRect area;
+            aPath.getBounds().roundOut(&area);
+            SkRect size = SkRect::MakeWH(area.width(), area.height());
+            sk_sp<SkSurface> surface = SkSurface::MakeRasterN32Premul(area.width(), area.height());
+            SkPaint copy;
+            copy.setBlendMode(SkBlendMode::kSrc);
+            surface->getCanvas()->drawImageRect(mSurface->makeImageSnapshot(), area, size, &copy);
+            aPath.offset(-area.x(), -area.y());
+            surface->getCanvas()->drawPath(aPath, aPaint);
+            getDrawCanvas()->drawImageRect(surface->makeImageSnapshot(), size, area, &copy);
+        }
         if (mXorMode) // limit xor area update
             mXorExtents = aPath.getBounds();
     }
