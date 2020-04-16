@@ -726,9 +726,11 @@ struct value
                     if (*p == 'x')
                     {
                         p += 1;
-                        i = digit(*p);
-                        while (i >= 0 && i <= 15)
+                        while (1)
                         {
+                            i = digit(*p);
+                            if (i < 0 || i > 16)
+                                break;
                             p += 1;
                             n <<= 4;
                             n += i;
