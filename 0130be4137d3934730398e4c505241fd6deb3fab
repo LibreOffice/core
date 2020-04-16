@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2ea11bc9_1b931b2c",
+        "filename": "vcl/unx/generic/app/i18n_cb.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-16T09:42:25Z",
+      "side": 1,
+      "message": "same as for OUString, no need to convert from OString to char* (here and maybe elsewhere)",
+      "range": {
+        "startLine": 510,
+        "startChar": 52,
+        "endLine": 510,
+        "endChar": 61
+      },
+      "revId": "0130be4137d3934730398e4c505241fd6deb3fab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
