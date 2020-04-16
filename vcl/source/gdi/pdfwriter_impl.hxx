@@ -115,6 +115,11 @@ struct PDFPage
     VclPtr<PDFWriterImpl>       m_pWriter;
     double                      m_nPageWidth;           // in inch/72
     double                      m_nPageHeight;          // in inch/72
+    /**
+     * A positive number that gives the size of default user space units, in multiples of points.
+     * Typically 1, larger if page size is > 508 cm.
+     */
+    sal_Int32 m_nUserUnit;
     PDFWriter::Orientation      m_eOrientation;
     sal_Int32                   m_nPageObject;
     std::vector<sal_Int32>      m_aStreamObjects;
@@ -167,7 +172,7 @@ struct PDFPage
 
     void appendMatrix3(Matrix3 const & rMatrix, OStringBuffer& rBuffer);
 
-    double getHeight() const { return m_nPageHeight ? m_nPageHeight : vcl::pdf::g_nInheritedPageHeight; }
+    double getHeight() const;
 };
 
 /// Contains information to emit a reference XObject.
