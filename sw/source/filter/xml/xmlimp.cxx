@@ -1358,6 +1358,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bPropLineSpacingShrinksFirstLine = false;
     bool bSubtractFlysAnchoredAtFlys = false;
     bool bCollapseEmptyCellPara = false;
+    bool bIsSetAllowWrapWhenAnchoredInTable = false;
 
     const PropertyValue* currentDatabaseDataSource = nullptr;
     const PropertyValue* currentDatabaseCommand = nullptr;
@@ -1454,6 +1455,8 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                     bSubtractFlysAnchoredAtFlys = true;
                 else if (rValue.Name == "CollapseEmptyCellPara")
                     bCollapseEmptyCellPara = true;
+                else if ( rValue.Name == "AllowWrapWhenAnchoredInTable" )
+                    bIsSetAllowWrapWhenAnchoredInTable = true;
             }
             catch( Exception& )
             {
@@ -1623,6 +1626,9 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
 
     if (!bCollapseEmptyCellPara)
         xProps->setPropertyValue("CollapseEmptyCellPara", makeAny(false));
+
+    if (!bIsSetAllowWrapWhenAnchoredInTable)
+        xProps->setPropertyValue("AllowWrapWhenAnchoredInTable", makeAny(false));
 
     SwDoc *pDoc = getDoc();
     SfxPrinter *pPrinter = pDoc->getIDocumentDeviceAccess().getPrinter( false );
