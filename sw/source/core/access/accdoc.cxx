@@ -758,8 +758,11 @@ css::uno::Sequence< css::uno::Any >
                     vFrameList.insert( pFrame );
                 }
             }
+            _pStartCursor = _pStartCursor->GetNext();
+            if ( !_pStartCursor )
+                break;
         }
-        while( _pStartCursor && ( (_pStartCursor = _pStartCursor->GetNext()) != _pStartCursor2) );
+        while( _pStartCursor != _pStartCursor2 );
 
         if ( !vFrameList.empty() )
         {

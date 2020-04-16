@@ -154,13 +154,16 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
 {
     const SwNode* pPrvNd = nullptr;
     sal_uInt16 nRegionRet = 0;
-    if( rRange.HasMark() &&
-        0 == ( nRegionRet = IsInsRegionAvailable( rRange, &pPrvNd ) ))
+    if( rRange.HasMark() )
     {
-        // demoted to info because this is called from SwXTextSection::attach,
-        // so it could be invalid input
-        SAL_INFO("sw.core" , "InsertSwSection: rRange overlaps other sections");
-        return nullptr;
+        nRegionRet = IsInsRegionAvailable( rRange, &pPrvNd );
+        if( 0 == nRegionRet )
+        {
+            // demoted to info because this is called from SwXTextSection::attach,
+            // so it could be invalid input
+            SAL_INFO("sw.core" , "InsertSwSection: rRange overlaps other sections");
+            return nullptr;
+        }
     }
 
     // See if the whole Document should be hidden, which we currently are not able to do.

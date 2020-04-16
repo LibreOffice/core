@@ -816,16 +816,19 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                         if( !pCNd )
                             pCNd = m_rDoc.GetNodes().GoNext( &aCNdIdx );
 
-                        std::pair<Point, bool> const tmp(aPt, true);
-                        if (pCNd && nullptr != (pFrame = pCNd->getLayoutFrame(
-                                pLayout, nullptr, &tmp)))
+                        if (pCNd)
                         {
-                            SwPosition aPos( *pCNd );
-                            if( GetBodyTextNode( m_rDoc, aPos, *pFrame ) )
-                                FieldsToCalc(*pCalc, SetGetExpField(aPos.nNode),
-                                        pLayout);
-                            else
-                                pFrame = nullptr;
+                            std::pair<Point, bool> const tmp(aPt, true);
+                            pFrame = pCNd->getLayoutFrame(pLayout, nullptr, &tmp);
+                            if( pFrame )
+                            {
+                                SwPosition aPos( *pCNd );
+                                if( GetBodyTextNode( m_rDoc, aPos, *pFrame ) )
+                                    FieldsToCalc(*pCalc, SetGetExpField(aPos.nNode),
+                                            pLayout);
+                                else
+                                    pFrame = nullptr;
+                            }
                         }
                     }
                     if( !pFrame )

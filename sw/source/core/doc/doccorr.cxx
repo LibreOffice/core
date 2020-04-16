@@ -100,10 +100,15 @@ void PaMCorrAbs( const SwPaM& rRange,
             const SwCursorShell* pCursorShell = static_cast<const SwCursorShell*>(&rShell);
             SwPaM *_pStackCursor = pCursorShell->GetStackCursor();
             if( _pStackCursor )
-                do {
+                for (;;)
+                {
                     lcl_PaMCorrAbs( *_pStackCursor, aStart, aEnd, aNewPos );
-                } while ( (_pStackCursor != nullptr ) &&
-                    ((_pStackCursor = _pStackCursor->GetNext()) != pCursorShell->GetStackCursor()) );
+                    if( !_pStackCursor )
+                        break;
+                    _pStackCursor = _pStackCursor->GetNext();
+                    if( _pStackCursor == pCursorShell->GetStackCursor() )
+                        break;
+                }
 
             for(SwPaM& rPaM : const_cast<SwShellCursor*>(pCursorShell->GetCursor_())->GetRingContainer())
             {
@@ -252,10 +257,15 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
             SwCursorShell* pCursorShell = const_cast<SwCursorShell*>(static_cast<const SwCursorShell*>(&rShell));
             SwPaM *_pStackCursor = pCursorShell->GetStackCursor();
             if( _pStackCursor )
-                do {
+                for (;;)
+                {
                     lcl_PaMCorrRel1( _pStackCursor, pOldNode, aNewPos, nCntIdx );
-                } while ( (_pStackCursor != nullptr ) &&
-                    ((_pStackCursor = _pStackCursor->GetNext()) != pCursorShell->GetStackCursor()) );
+                    if( !_pStackCursor )
+                        break;
+                    _pStackCursor = _pStackCursor->GetNext();
+                    if( _pStackCursor == pCursorShell->GetStackCursor() )
+                        break;
+                }
 
             SwPaM* pStartPaM = pCursorShell->GetCursor_();
             for(SwPaM& rPaM : pStartPaM->GetRingContainer())
