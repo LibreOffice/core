@@ -121,10 +121,14 @@ class SVT_DLLPUBLIC SvtOptionsDrawinglayer
 
         void        SetAntiAliasing( bool bState );
 
-        // #i97672# selection settings
-        bool        IsTransparentSelection() const;
-        sal_uInt16  GetTransparentSelectionPercent() const;
-        sal_uInt16  GetSelectionMaximumLuminancePercent() const;
+        /**
+          Specifies the degree of transparence to be used when transparent
+          selection is used. The value is a percent value. Since neither no
+          transparence nor complete transparence makes sense, the value is
+          limited to a range of 10% - 90%. If the given value is outside this
+          range, it is cropped to it.
+         */
+        static sal_uInt16 GetTransparentSelectionPercent() { return 75; }
 
         // get system highlight color, limited to the maximum allowed luminance
         // (defined in GetSelectionMaximumLuminancePercent() in SvtOptionsDrawinglayer,

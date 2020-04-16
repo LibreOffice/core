@@ -440,7 +440,7 @@ void ScreenshotAnnotationDlg_Impl::RepaintToBuffer(
         // get various options
         const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
         const Color aHilightColor(aSvtOptionsDrawinglayer.getHilightColor());
-        const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
+        const double fTransparence(SvtOptionsDrawinglayer::GetTransparentSelectionPercent() * 0.01);
         const bool bIsAntiAliasing(aSvtOptionsDrawinglayer.IsAntiAliasing());
         const AntialiasingFlags nOldAA(mxVirtualBufferDevice->GetAntialiasing());
 

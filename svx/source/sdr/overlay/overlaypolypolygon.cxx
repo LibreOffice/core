@@ -45,7 +45,7 @@ namespace sdr::overlay
 
                 const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
                 const basegfx::BColor aHilightColor(aSvtOptionsDrawinglayer.getHilightColor().getBColor());
-                const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
+                const double fTransparence(SvtOptionsDrawinglayer::GetTransparentSelectionPercent() * 0.01);
 
                 const drawinglayer::primitive2d::Primitive2DReference aFilled(
                     new drawinglayer::primitive2d::PolyPolygonSelectionPrimitive2D(

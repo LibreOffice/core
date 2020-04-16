@@ -447,8 +447,7 @@ TextEditOverlayObject::createOverlayObjectPrimitive2DSequence()
     /// outer frame visualization
     if (mbVisualizeSurroundingFrame)
     {
-        const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-        const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
+        const double fTransparence(SvtOptionsDrawinglayer::GetTransparentSelectionPercent() * 0.01);
         const sal_uInt16 nPixSiz(getOutlinerView().GetInvalidateMore() - 1);
 
         aRetval.push_back(new drawinglayer::primitive2d::OverlayRectanglePrimitive(
@@ -753,8 +752,8 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const tools::
             const basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(aPixRect);
             const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
             const Color aHilightColor(aSvtOptionsDrawinglayer.getHilightColor());
-            const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent()
-                                       * 0.01);
+            const double fTransparence(SvtOptionsDrawinglayer::GetTransparentSelectionPercent()
+                                       / 100.0);
             const sal_uInt16 nPixSiz(rOutlView.GetInvalidateMore() - 1);
             const drawinglayer::primitive2d::Primitive2DReference xReference(
                 new drawinglayer::primitive2d::OverlayRectanglePrimitive(

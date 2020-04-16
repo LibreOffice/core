@@ -73,8 +73,7 @@ namespace sw::overlay
                     aRGBColor));
             }
             // embed all rectangles in transparent paint
-            const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-            const sal_uInt16 nTransparence( aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() );
+            const sal_uInt16 nTransparence( SvtOptionsDrawinglayer::GetTransparentSelectionPercent() );
             const double fTransparence( nTransparence / 100.0 );
             const drawinglayer::primitive2d::Primitive2DReference aUnifiedTransparence(
                 new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(

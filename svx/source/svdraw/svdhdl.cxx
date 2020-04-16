@@ -1823,7 +1823,7 @@ void ImpTextframeHdl::CreateB2dIAObject()
                             const basegfx::B2DPoint aBottomRight(maRect.Right(), maRect.Bottom());
                             const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
                             const Color aHilightColor(aSvtOptionsDrawinglayer.getHilightColor());
-                            const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
+                            const double fTransparence(SvtOptionsDrawinglayer::GetTransparentSelectionPercent() / 100.0);
 
                             std::unique_ptr<sdr::overlay::OverlayRectangle> pNewOverlayObject(new sdr::overlay::OverlayRectangle(
                                 aTopLeft,

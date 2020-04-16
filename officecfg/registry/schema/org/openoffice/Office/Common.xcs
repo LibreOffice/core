@@ -1155,41 +1155,6 @@
         </info>
         <value>true</value>
       </prop>
-      <prop oor:name="TransparentSelection" oor:type="xs:boolean" oor:nillable="false">
-        <info>
-          <desc>This switch defines if the selections in the applications (text
-          or cells) are visualized using inverse (XOR) when set to false (the
-          old selection method, also used when in HighContrast mode) or a
-          transparent overlay selection using the system's selection
-          color.</desc>
-          <label>This switch defines if for text/cell selections the old
-          inverse or the new transparent selection is to be used.</label>
-        </info>
-        <value>true</value>
-      </prop>
-      <prop oor:name="TransparentSelectionPercent" oor:type="xs:short" oor:nillable="false">
-        <info>
-          <desc>Specifies the degree of transparence to be used when transparent
-          selection is used. The value is a percent value. Since neither no
-          transparence nor complete transparence makes sense, the value is
-          limited to a range of 10% - 90%. If the given value is outside this
-          range, it is cropped to it.</desc>
-          <label>Specifies the percent of transparence to use if transparent
-          selection is used.</label>
-        </info>
-        <value>75</value>
-      </prop>
-      <prop oor:name="SelectionMaximumLuminancePercent" oor:type="xs:short" oor:nillable="false">
-        <info>
-          <desc>Specifies the maximum allowed luminance the system's selection
-          color may have. When the colorfetched from the system is brighter
-          (luminance is bigger), it will be scaled to a luminance of exactly
-          this given value.</desc>
-          <label>Specifies the maximum allowed luminance for the system's
-          selection color.</label>
-        </info>
-        <value>70</value>
-      </prop>
     </group>
     <group oor:name="AutoCorrect">
       <info>

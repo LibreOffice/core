@@ -63,11 +63,6 @@ using namespace ::com::sun::star::uno   ;
 // primitives
 #define DEFAULT_ANTIALIASING                        true
 
-// #i97672# selection settings
-#define DEFAULT_TRANSPARENTSELECTION                true
-#define DEFAULT_TRANSPARENTSELECTIONPERCENT         75
-#define DEFAULT_SELECTIONMAXIMUMLUMINANCEPERCENT    70
-
 #define PROPERTYNAME_OVERLAYBUFFER      OUString("OverlayBuffer"    )
 #define PROPERTYNAME_PAINTBUFFER        OUString("PaintBuffer"      )
 #define PROPERTYNAME_STRIPE_COLOR_A     OUString("StripeColorA"     )
@@ -94,11 +89,6 @@ using namespace ::com::sun::star::uno   ;
 
 // primitives
 #define PROPERTYNAME_ANTIALIASING OUString("AntiAliasing")
-
-// #i97672# selection settings
-#define PROPERTYNAME_TRANSPARENTSELECTION OUString("TransparentSelection")
-#define PROPERTYNAME_TRANSPARENTSELECTIONPERCENT OUString("TransparentSelectionPercent")
-#define PROPERTYNAME_SELECTIONMAXIMUMLUMINANCEPERCENT OUString("SelectionMaximumLuminancePercent")
 
 #define PROPERTYHANDLE_OVERLAYBUFFER                0
 #define PROPERTYHANDLE_PAINTBUFFER                  1
@@ -127,12 +117,7 @@ using namespace ::com::sun::star::uno   ;
 // primitives
 #define PROPERTYHANDLE_ANTIALIASING                     17
 
-// #i97672# selection settings
-#define PROPERTYHANDLE_TRANSPARENTSELECTION             18
-#define PROPERTYHANDLE_TRANSPARENTSELECTIONPERCENT      19
-#define PROPERTYHANDLE_SELECTIONMAXIMUMLUMINANCEPERCENT 20
-
-#define PROPERTYCOUNT                               21
+#define PROPERTYCOUNT                               18
 
 class SvtOptionsDrawinglayer_Impl : public ConfigItem
 {
@@ -174,11 +159,6 @@ public:
 
     void        SetAntiAliasing( bool bState );
 
-    // #i97672# selection settings
-    bool        IsTransparentSelection() const { return m_bTransparentSelection;}
-    sal_uInt16  GetTransparentSelectionPercent() const { return m_nTransparentSelectionPercent;}
-    sal_uInt16  GetSelectionMaximumLuminancePercent() const { return m_nSelectionMaximumLuminancePercent;}
-
 //  private methods
 
 private:
@@ -217,11 +197,6 @@ private:
         // primitives
         bool        m_bAntiAliasing;
 
-        // #i97672# selection settings
-        sal_uInt16  m_nTransparentSelectionPercent;
-        sal_uInt16  m_nSelectionMaximumLuminancePercent;
-        bool        m_bTransparentSelection;
-
         // local values
         bool        m_bAllowAA : 1;
         bool        m_bAllowAAChecked : 1;
@@ -255,11 +230,6 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
 
     // primitives
     m_bAntiAliasing(DEFAULT_ANTIALIASING),
-
-    // #i97672# selection settings
-    m_nTransparentSelectionPercent(DEFAULT_TRANSPARENTSELECTIONPERCENT),
-    m_nSelectionMaximumLuminancePercent(DEFAULT_SELECTIONMAXIMUMLUMINANCEPERCENT),
-    m_bTransparentSelection(DEFAULT_TRANSPARENTSELECTION),
 
     // local values
     m_bAllowAA(true),
@@ -413,27 +383,6 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
             }
             break;
 
-            // #i97672# selection settings
-            case PROPERTYHANDLE_TRANSPARENTSELECTION:
-            {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\TransparentSelection\"?" );
-                seqValues[nProperty] >>= m_bTransparentSelection;
-            }
-            break;
-
-            case PROPERTYHANDLE_TRANSPARENTSELECTIONPERCENT:
-            {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_SHORT), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\TransparentSelectionPercent\"?" );
-                seqValues[nProperty] >>= m_nTransparentSelectionPercent;
-            }
-            break;
-
-            case PROPERTYHANDLE_SELECTIONMAXIMUMLUMINANCEPERCENT:
-            {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_SHORT), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\SelectionMaximumLuminancePercent\"?" );
-                seqValues[nProperty] >>= m_nSelectionMaximumLuminancePercent;
-            }
-            break;
         }
     }
 }
@@ -530,19 +479,6 @@ void SvtOptionsDrawinglayer_Impl::ImplCommit()
             case PROPERTYHANDLE_ANTIALIASING:
                 aSeqValues[nProperty] <<= m_bAntiAliasing;
             break;
-
-            // #i97672# selection settings
-            case PROPERTYHANDLE_TRANSPARENTSELECTION:
-                aSeqValues[nProperty] <<= m_bTransparentSelection;
-            break;
-
-            case PROPERTYHANDLE_TRANSPARENTSELECTIONPERCENT:
-                aSeqValues[nProperty] <<= m_nTransparentSelectionPercent;
-            break;
-
-            case PROPERTYHANDLE_SELECTIONMAXIMUMLUMINANCEPERCENT:
-                aSeqValues[nProperty] <<= m_nSelectionMaximumLuminancePercent;
-            break;
         }
     }
 
@@ -627,11 +563,6 @@ Sequence< OUString > SvtOptionsDrawinglayer_Impl::impl_GetPropertyNames()
 
         // primitives
         PROPERTYNAME_ANTIALIASING,
-
-        // #i97672# selection settings
-        PROPERTYNAME_TRANSPARENTSELECTION,
-        PROPERTYNAME_TRANSPARENTSELECTIONPERCENT,
-        PROPERTYNAME_SELECTIONMAXIMUMLUMINANCEPERCENT
     };
 
     // Initialize return sequence with these list ...
@@ -799,56 +730,23 @@ void SvtOptionsDrawinglayer::SetAntiAliasing( bool bState )
     m_pImpl->SetAntiAliasing( bState );
 }
 
-// #i97672# selection settings
-bool SvtOptionsDrawinglayer::IsTransparentSelection() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->IsTransparentSelection();
-}
-
-sal_uInt16 SvtOptionsDrawinglayer::GetTransparentSelectionPercent() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    sal_uInt16 aRetval(m_pImpl->GetTransparentSelectionPercent());
-
-    // crop to range [10% .. 90%]
-    if(aRetval < 10)
-    {
-        aRetval = 10;
-    }
-
-    if(aRetval > 90)
-    {
-        aRetval = 90;
-    }
-
-    return aRetval;
-}
-
-sal_uInt16 SvtOptionsDrawinglayer::GetSelectionMaximumLuminancePercent() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    sal_uInt16 aRetval(m_pImpl->GetSelectionMaximumLuminancePercent());
-
-    // crop to range [0% .. 100%]
-    if(aRetval > 90)
-    {
-        aRetval = 90;
-    }
-
-    return aRetval;
-}
+/**
+   Specifies the maximum allowed luminance the system's selection
+   color may have. When the colorfetched from the system is brighter
+   (luminance is bigger), it will be scaled to a luminance of exactly
+   this given value.
+*/
+constexpr double fSelectionMaximumLuminancePercent = 70 / 100.0;
 
 Color SvtOptionsDrawinglayer::getHilightColor() const
 {
     Color aRetval(Application::GetSettings().GetStyleSettings().GetHighlightColor());
     const basegfx::BColor aSelection(aRetval.getBColor());
     const double fLuminance(aSelection.luminance());
-    const double fMaxLum(GetSelectionMaximumLuminancePercent() / 100.0);
 
-    if(fLuminance > fMaxLum)
+    if(fLuminance > fSelectionMaximumLuminancePercent)
     {
-        const double fFactor(fMaxLum / fLuminance);
+        const double fFactor(fSelectionMaximumLuminancePercent / fLuminance);
         const basegfx::BColor aNewSelection(
             aSelection.getRed() * fFactor,
             aSelection.getGreen() * fFactor,
