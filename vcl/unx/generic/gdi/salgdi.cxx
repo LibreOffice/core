@@ -330,8 +330,12 @@ void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // cons
         // different x- and y- resolutions are usually artifacts of
         // a wrongly calculated screen size.
 #ifdef DEBUG
-        printf("Forcing Resolution from %" SAL_PRIdINT32 "x%" SAL_PRIdINT32 " to %" SAL_PRIdINT32 "x%" SAL_PRIdINT32 "\n",
-                rDPIX,rDPIY,rDPIY,rDPIY);
+        SAL_INFO("vcl.gdi", "Forcing Resolution from "
+            << std::hex << rDPIX
+            << std::dec << rDPIX
+            << " to "
+            << std::hex << rDPIY
+            << std::dec << rDPIY);
 #endif
         rDPIX = rDPIY; // y-resolution is more trustworthy
     }

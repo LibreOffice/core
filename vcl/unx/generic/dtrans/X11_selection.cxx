@@ -199,8 +199,9 @@ rtl_TextEncoding x11::getTextPlainEncoding( const OUString& rMimeType )
         }
     }
 #if OSL_DEBUG_LEVEL > 1
-    if( aEncoding == RTL_TEXTENCODING_DONTKNOW )
-        fprintf( stderr, "getTextPlainEncoding( %s ) failed\n", OUStringToOString( rMimeType, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+    SAL_WARN_IF(aEncoding == RTL_TEXTENCODING_DONTKNOW,
+            "vcl.unx.dtrans", "getTextPlainEncoding( "
+            << rMimeType << " ) failed.");
 #endif
     return aEncoding;
 }
@@ -438,13 +439,14 @@ void SelectionManager::initialize( const Sequence< Any >& arguments )
                     osl_resumeThread( m_aThread );
 #if OSL_DEBUG_LEVEL > 1
                 else
-                    fprintf( stderr, "SelectionManager::initialize: creation of dispatch thread failed !\n" );
+                    SAL_WARN("vcl.unx.dtrans", "SelectionManager::initialize: "
+                            << "creation of dispatch thread failed !.");
 #endif
 
                 if (pipe(m_EndThreadPipe) != 0) {
-                    #if OSL_DEBUG_LEVEL > 1
-                    fprintf(stderr, "Failed to create endThreadPipe\n");
-                    #endif
+#if OSL_DEBUG_LEVEL > 1
+                    SAL_WARN("vcl.unx.dtrans", "Failed to create endThreadPipe.");
+#endif
                     m_EndThreadPipe[0] = m_EndThreadPipe[1] = 0;
                 }
             }
@@ -455,7 +457,9 @@ void SelectionManager::initialize( const Sequence< Any >& arguments )
 SelectionManager::~SelectionManager()
 {
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "SelectionManager::~SelectionManager (%s)\n", m_pDisplay ? DisplayString(m_pDisplay) : "no display" );
+    SAL_INFO("vcl.unx.dtrans", "SelectionManager::~SelectionManager ("
+            << (m_pDisplay ? DisplayString(m_pDisplay) : "no display")
+            << ").");
 #endif
     {
         osl::MutexGuard aGuard( *osl::Mutex::getGlobalMutex() );
@@ -484,7 +488,7 @@ SelectionManager::~SelectionManager()
     osl::MutexGuard aGuard(m_aMutex);
 
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "shutting down SelectionManager\n" );
+    SAL_INFO("vcl.unx.dtrans", "shutting down SelectionManager.");
 #endif
 
     if( m_pDisplay )
@@ -725,11 +729,14 @@ bool SelectionManager::requestOwnership( Atom selection )
             XSetSelectionOwner( m_pDisplay, selection, m_aWindow, CurrentTime );
             if( XGetSelectionOwner( m_pDisplay, selection ) == m_aWindow )
                 bSuccess = true;
+
 #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "%s ownership for selection %s\n",
-                     bSuccess ? "acquired" : "failed to acquire",
-                     OUStringToOString( getString( selection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+            SAL_INFO("vcl.unx.dtrans",
+                    (bSuccess ? "acquired" : "failed to acquire")
+                    << " ownership for selection "
+                    << getString( selection ));
 #endif
+
             Selection* pSel = m_aSelections[ selection ];
             pSel->m_bOwner = bSuccess;
             delete pSel->m_pPixmap;
@@ -738,15 +745,15 @@ bool SelectionManager::requestOwnership( Atom selection )
         }
 #if OSL_DEBUG_LEVEL > 1
         else
-            fprintf( stderr, "no adaptor for selection %s\n",
-                     OUStringToOString( getString( selection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+            SAL_WARN("vcl.unx.dtrans", "no adaptor for selection "
+                    << getString( selection ));
 
         if( pAdaptor->getTransferable().is() )
         {
             Sequence< DataFlavor > aTypes = pAdaptor->getTransferable()->getTransferDataFlavors();
             for( int i = 0; i < aTypes.getLength(); i++ )
             {
-                fprintf( stderr, "   %s\n", OUStringToOString( aTypes.getConstArray()[i].MimeType, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+                SAL_INFO("vcl.unx.dtrans", "   " << aTypes.getConstArray()[i].MimeType);
             }
         }
 #endif
@@ -849,12 +856,8 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
     bool bSuccess = false;
 
 #if OSL_DEBUG_LEVEL > 1
-    OUString aSelection( getString( selection ) );
-    OUString aType( getString( type ) );
-    fprintf( stderr, "getPasteData( %s, native: %s )\n",
-             OUStringToOString( aSelection, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
-             OUStringToOString( aType, RTL_TEXTENCODING_ISO_8859_1 ).getStr()
-             );
+    SAL_INFO("vcl.unx.dtrans", "getPasteData( " << getString( selection )
+            << ", native: " << getString( type ) << " ).");
 #endif
 
     if( ! m_pDisplay )
@@ -871,7 +874,7 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
     {
         // probably bad timing led us here
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "Innere Nabelschau\n" );
+        SAL_WARN("vcl.unx.dtrans", "Innere Nabelschau.");
 #endif
         return false;
     }
@@ -959,9 +962,10 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
     } while( ! it->second->m_aDataArrived.check() && (tv_current.tv_sec - tv_last.tv_sec) < getSelectionTimeout() );
 
 #if OSL_DEBUG_LEVEL > 1
-    if( (tv_current.tv_sec - tv_last.tv_sec) > getSelectionTimeout() )
-        fprintf( stderr, "timed out\n" );
+    SAL_WARN_IF((tv_current.tv_sec - tv_last.tv_sec) > getSelectionTimeout(),
+            "vcl.unx.dtrans", "timed out.");
 #endif
+
     if( it->second->m_aDataArrived.check() &&
         it->second->m_aData.getLength() )
     {
@@ -970,7 +974,7 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
     }
 #if OSL_DEBUG_LEVEL > 1
     else
-        fprintf( stderr, "conversion unsuccessful\n" );
+        SAL_WARN("vcl.unx.dtrans", "conversion unsuccessful.");
 #endif
     return bSuccess;
 }
@@ -998,10 +1002,12 @@ bool SelectionManager::getPasteData( Atom selection, const OUString& rType, Sequ
 
     const Sequence< DataFlavor >& rTypes( it->second->m_aTypes );
     const std::vector< Atom >& rNativeTypes( it->second->m_aNativeTypes );
+
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "getPasteData( \"%s\", \"%s\" )\n",
-             OUStringToOString( getString( selection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
-             OUStringToOString( rType, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+    SAL_INFO("vcl.unx.dtrans", "getPasteData( \""
+            << getString( selection )
+            << "\", \""
+            << rType << "\" ).");
 #endif
 
     if( rType == "text/plain;charset=utf-16" )
@@ -1043,11 +1049,13 @@ bool SelectionManager::getPasteData( Atom selection, const OUString& rType, Sequ
                         )
                     {
 #if OSL_DEBUG_LEVEL > 1
-                        fprintf( stderr, "using \"%s\" instead of \"%s\"\n",
-                                 OUStringToOString( rTypes.getConstArray()[i].MimeType, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
-                                 OUStringToOString( rType, RTL_TEXTENCODING_ISO_8859_1 ).getStr()
-                                 );
+                        SAL_INFO("vcl.unx.dtrans", "using \""
+                                << rTypes.getConstArray()[i].MimeType
+                                << "\" instead of \""
+                                << rType
+                                << "\".");
 #endif
+
                         OString aConvert( reinterpret_cast<char const *>(aData.getConstArray()), aData.getLength() );
                         OUString aUTF( OStringToOUString( aConvert, aEncoding ) );
                         rData = Sequence< sal_Int8 >( reinterpret_cast<sal_Int8 const *>(aUTF.getStr()), (aUTF.getLength()+1)*sizeof( sal_Unicode ) );
@@ -1063,10 +1071,10 @@ bool SelectionManager::getPasteData( Atom selection, const OUString& rType, Sequ
         // #i83376# try if someone has the data in image/bmp already before
         // doing the PIXMAP stuff (e.g. the Gimp has this)
         bSuccess = getPasteData( selection, m_nImageBmpAtom, rData );
-        #if OSL_DEBUG_LEVEL > 1
-        if( bSuccess )
-            fprintf( stderr, "got %d bytes of image/bmp\n", (int)rData.getLength() );
-        #endif
+#if OSL_DEBUG_LEVEL > 1
+        SAL_INFO_IF(bSuccess, "vcl.unx.dtrans",
+                "got " << (int) rData.getLength() << " bytes of image/bmp.");
+#endif
         if( ! bSuccess )
         {
             Pixmap aPixmap = None;
@@ -1119,12 +1127,17 @@ bool SelectionManager::getPasteData( Atom selection, const OUString& rType, Sequ
                             }
                         }
                     }
-                    #if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 1
                     else
                     {
-                        fprintf( stderr, "could not get PIXMAP property: type=%s, format=%d, items=%ld, bytes=%ld, ret=0x%p\n", OUStringToOString( getString( type ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(), format, nItems, nBytes, pReturn );
+                        SAL_WARN("vcl.unx.dtrans", "could not get PIXMAP property: type="
+                                << getString( type )
+                                << ", format=" << format
+                                << ", items=" << nItems
+                                << ", bytes=" << nBytes
+                                << ", ret=0x" << pReturn);
                     }
-                    #endif
+#endif
                 }
             }
 
@@ -1180,12 +1193,14 @@ bool SelectionManager::getPasteData( Atom selection, const OUString& rType, Sequ
             bSuccess = getPasteData( selection, nSelectedType, rData );
     }
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "getPasteData for selection %s and data type %s returns %s, returned sequence has length %" SAL_PRIdINT32 "\n",
-             OUStringToOString( getString( selection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
-             OUStringToOString( rType, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
-             bSuccess ? "true" : "false",
-             rData.getLength()
-             );
+    SAL_INFO("vcl.unx.dtrans", "getPasteData for selection "
+            << getString( selection )
+            << " and data type "
+            << rType
+            << " returns "
+            << ( bSuccess ? "true" : "false")
+            << ", returned sequence has length "
+            << rData.getLength() <<  ".");
 #endif
     return bSuccess;
 }
@@ -1236,7 +1251,9 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
                                     XA_ATOM,
                                     &nType, &nFormat, &nItems, &nBytes, &pBytes );
 #if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "have %ld data types in XdndTypeList\n", nItems );
+                SAL_INFO("vcl.unx.dtrans", "have "
+                        << nItems
+                        << " data types in XdndTypeList.");
 #endif
                 if( nItems == atomcount && nBytes > 0 )
                 {
@@ -1269,7 +1286,9 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
                     if( m_aDropEnterEvent.data.l[2+i] )
                         n++;
 #if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "have %d data types in XdndEnter\n", n );
+                SAL_INFO("vcl.unx.dtrans", "have "
+                        << n
+                        << " data types in XdndEnter.");
 #endif
                 aAtoms.realloc( sizeof(Atom)*n );
                 for( i = 0, n = 0; i < 3; i++ )
@@ -1382,9 +1401,12 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
 
 #if OSL_DEBUG_LEVEL > 1
     {
-        fprintf( stderr, "SelectionManager::getPasteDataTypes( %s ) = %s\n", OUStringToOString( getString( selection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(), bSuccess ? "true" : "false" );
+        SAL_INFO("vcl.unx.dtrans", "SelectionManager::getPasteDataTypes( "
+                << getString( selection )
+                << " ) = "
+                << (bSuccess ? "true" : "false"));
         for( int i = 0; i < rTypes.getLength(); i++ )
-            fprintf( stderr, "type: %s\n", OUStringToOString( rTypes.getConstArray()[i].MimeType, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+            SAL_INFO("vcl.unx.dtrans", "type: " << rTypes.getConstArray()[i].MimeType);
     }
 #endif
 
@@ -1494,7 +1516,7 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
         if( aData.getLength() > m_nIncrementalThreshold )
         {
 #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "using INCR protocol\n" );
+            SAL_INFO("vcl.unx.dtrans", "using INCR protocol.");
             std::unordered_map< ::Window, std::unordered_map< Atom, IncrementalTransfer > >::const_iterator win_it = m_aIncrementals.find( requestor );
             if( win_it != m_aIncrementals.end() )
             {
@@ -1502,11 +1524,13 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
                 if( inc_it != win_it->second.end() )
                 {
                     const IncrementalTransfer& rInc = inc_it->second;
-                    fprintf( stderr, "premature end and new start for INCR transfer for window 0x%lx, property %s, type %s\n",
-                             rInc.m_aRequestor,
-                             OUStringToOString( getString( rInc.m_aProperty ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
-                             OUStringToOString( getString( rInc.m_aTarget ), RTL_TEXTENCODING_ISO_8859_1 ).getStr()
-                             );
+                    SAL_INFO("vcl.unx.dtrans", "premature end and new start for INCR transfer for window "
+                            << std::showbase << std::hex
+                            << rInc.m_aRequestor
+                            << ", property "
+                            << getString( rInc.m_aProperty )
+                            << ", type "
+                            << getString( rInc.m_aTarget ));
                 }
             }
 #endif
@@ -1543,8 +1567,8 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
     }
 #if OSL_DEBUG_LEVEL > 1
     else
-        fprintf( stderr, "convertData failed for type: %s \n",
-                 OUStringToOString( convertTypeFromNative( target, selection, nFormat ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+        SAL_WARN("vcl.unx.dtrans", "convertData failed for type: "
+                << convertTypeFromNative( target, selection, nFormat ));
 #endif
     return bConverted;
 }
@@ -1552,11 +1576,12 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
 bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest )
 {
     osl::ResettableMutexGuard aGuard( m_aMutex );
+
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "handleSelectionRequest for selection %s and target %s\n",
-             OUStringToOString( getString( rRequest.selection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
-             OUStringToOString( getString( rRequest.target ), RTL_TEXTENCODING_ISO_8859_1 ).getStr()
-             );
+    SAL_INFO("vcl.unx.dtrans", "handleSelectionRequest for selection "
+            << getString( rRequest.selection )
+            << " and target "
+            << getString( rRequest.target ));
 #endif
 
     XEvent aNotify;
@@ -1597,9 +1622,11 @@ bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
                                  XA_ATOM, 32, PropModeReplace, reinterpret_cast<unsigned char*>(pTypes), nTypes );
                 aNotify.xselection.property = rRequest.property;
 #if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "sending type list:\n" );
+                SAL_INFO("vcl.unx.dtrans", "sending type list:");
                 for( int k = 0; k < nTypes; k++ )
-                    fprintf( stderr, "   %s\n", pTypes[k] ? XGetAtomName( m_pDisplay, pTypes[k] ) : "<None>" );
+                    SAL_INFO("vcl.unx.dtrans", "   "
+                            << (pTypes[k] ? XGetAtomName( m_pDisplay, pTypes[k] ) :
+                                "<None>"));
 #endif
             }
         }
@@ -1610,7 +1637,7 @@ bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
                              XA_INTEGER, 32, PropModeReplace, reinterpret_cast<unsigned char*>(&nTimeStamp), 1 );
             aNotify.xselection.property = rRequest.property;
 #if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "sending timestamp: %d\n", (int)nTimeStamp );
+            SAL_INFO("vcl.unx.dtrans", "sending timestamp: " << (int)nTimeStamp);
 #endif
         }
         else
@@ -1653,7 +1680,9 @@ bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
                     if( pData && nItems )
                     {
 #if OSL_DEBUG_LEVEL > 1
-                        fprintf( stderr, "found %ld atoms in MULTIPLE request\n", nItems );
+                        SAL_INFO("vcl.unx.dtrans", "found "
+                                << nItems
+                                << " atoms in MULTIPLE request.");
 #endif
                         bEventSuccess = true;
                         bool bResetAtoms = false;
@@ -1662,13 +1691,18 @@ bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
                         for( unsigned long i = 0; i < nItems; i += 2 )
                         {
 #if OSL_DEBUG_LEVEL > 1
-                            fprintf( stderr, "   %s => %s: ",
-                                     OUStringToOString( getString( pAtoms[i] ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
-                                     OUStringToOString( getString( pAtoms[i+1] ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+                            std::ostringstream oss;
+                            oss << "   "
+                                << getString( pAtoms[i] )
+                                << " => "
+                                << getString( pAtoms[i+1] )
+                                << ": ";
 #endif
+
                             bool bSuccess = sendData( pAdaptor, rRequest.requestor, pAtoms[i], pAtoms[i+1], rRequest.selection );
 #if OSL_DEBUG_LEVEL > 1
-                            fprintf( stderr, "%s\n", bSuccess ? "succeeded" : "failed" );
+                            oss << (bSuccess ? "succeeded" : "failed");
+                            SAL_INFO("vcl.unx.dtrans", oss.str());
 #endif
                             if( ! bSuccess )
                             {
@@ -1693,19 +1727,25 @@ bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
 #if OSL_DEBUG_LEVEL > 1
                 else
                 {
-                    fprintf( stderr, "could not get type list from \"%s\" of type \"%s\" on requestor 0x%lx, requestor has properties:",
-                             OUStringToOString( getString( rRequest.property ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
-                             OUStringToOString( getString( nType ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
-                             rRequest.requestor );
+                    std::ostringstream oss;
+                    oss << "could not get type list from \""
+                        << getString( rRequest.property )
+                        << "\" of type \""
+                        << getString( nType )
+                        << "\" on requestor "
+                        << std::showbase << std::hex
+                        << rRequest.requestor
+                        << ", requestor has properties:";
+
                     int nProps = 0;
                     Atom* pProps = XListProperties( m_pDisplay, rRequest.requestor, &nProps );
                     if( pProps )
                     {
                         for( int i = 0; i < nProps; i++ )
-                            fprintf( stderr, " \"%s\"", OUStringToOString( getString( pProps[i]), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+                            oss << " \"" << getString( pProps[i]) << "\"";
                         XFree( pProps );
                     }
-                    fprintf( stderr, "\n" );
+                    SAL_INFO("vcl.unx.dtrans", oss.str());
                 }
 #endif
             }
@@ -1761,8 +1801,8 @@ bool SelectionManager::handleReceivePropertyNotify( XPropertyEvent const & rNoti
     osl::MutexGuard aGuard( m_aMutex );
     // data we requested arrived
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "handleReceivePropertyNotify for property %s\n",
-             OUStringToOString( getString( rNotify.atom ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+    SAL_INFO("vcl.unx.dtrans", "handleReceivePropertyNotify for property "
+             << getString( rNotify.atom ));
 #endif
     bool bHandled = false;
 
@@ -1800,10 +1840,14 @@ bool SelectionManager::handleReceivePropertyNotify( XPropertyEvent const & rNoti
                             &nItems, &nBytes,
                             &pData );
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "found %ld bytes data of type %s and format %d, items = %ld\n",
-                 nBytes,
-                 OUStringToOString( getString( nType ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
-                 nFormat, nItems );
+        SAL_INFO("vcl.unx.dtrans", "found "
+                << nBytes
+                << " bytes data of type "
+                << getString( nType )
+                << " and format "
+                << nFormat
+                << ", items = "
+                << nItems);
 #endif
         if( pData )
         {
@@ -1828,11 +1872,17 @@ bool SelectionManager::handleReceivePropertyNotify( XPropertyEvent const & rNoti
                                 &nType, &nFormat,
                                 &nItems, &nBytes,
                                 &pData );
+
 #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "read %ld items data of type %s and format %d, %ld bytes left in property\n",
-                     nItems,
-                     OUStringToOString( getString( nType ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
-                     nFormat, nBytes );
+            SAL_INFO("vcl.unx.dtrans", "read "
+                    << nItems
+                    << " items data of type "
+                    << getString( nType )
+                    << " and format "
+                    << nFormat
+                    << ", "
+                    << nBytes
+                    << " bytes left in property.");
 #endif
 
             std::size_t nUnitSize = GetTrueFormatSize(nFormat);
@@ -1879,10 +1929,15 @@ bool SelectionManager::handleSendPropertyNotify( XPropertyEvent const & rNotify 
 
     // ready for next part of an IncrementalTransfer
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "handleSendPropertyNotify for property %s (%s)\n",
-             OUStringToOString( getString( rNotify.atom ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
-             rNotify.state == PropertyNewValue ? "new value" : ( rNotify.state == PropertyDelete ? "deleted" : "unknown")
-             );
+    SAL_INFO("vcl.unx.dtrans", "handleSendPropertyNotify for property "
+            << getString( rNotify.atom )
+            << " ("
+            << (rNotify.state == PropertyNewValue ?
+                "new value" :
+                (rNotify.state == PropertyDelete ?
+                  "deleted" :
+                  "unknown"))
+            << ").");
 #endif
 
     bool bHandled = false;
@@ -1903,11 +1958,14 @@ bool SelectionManager::handleSendPropertyNotify( XPropertyEvent const & rNotify 
                     aTimeouts.push_back( incrementalTransfer.first );
 #if OSL_DEBUG_LEVEL > 1
                     const IncrementalTransfer& rInc = incrementalTransfer.second;
-                    fprintf( stderr, "timeout on INCR transfer for window 0x%lx, property %s, type %s\n",
-                             rInc.m_aRequestor,
-                             OUStringToOString( getString( rInc.m_aProperty ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
-                             OUStringToOString( getString( rInc.m_aTarget ), RTL_TEXTENCODING_ISO_8859_1 ).getStr()
-                             );
+                    SAL_INFO("vcl.unx.dtrans",
+                            "timeout on INCR transfer for window "
+                            << std::showbase << std::hex
+                            << rInc.m_aRequestor
+                            << ", property "
+                            << getString( rInc.m_aProperty )
+                            << ", type "
+                            << getString( rInc.m_aTarget ));
 #endif
                 }
             }
@@ -1930,11 +1988,14 @@ bool SelectionManager::handleSendPropertyNotify( XPropertyEvent const & rNotify 
                 if( nBytes < 0 )  // sanity check
                     nBytes = 0;
 #if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "pushing %d bytes: \"%.*s\"...\n",
-                         nBytes, std::min(nBytes, 32),
-                         (const unsigned char*)rInc.m_aData.getConstArray()+rInc.m_nBufferPos );
+                SAL_INFO("vcl.unx.dtrans", "pushing "
+                        << nBytes
+                        << " bytes: \""
+                        << std::setw(std::min(nBytes, 32))
+                        << ((const unsigned char*)
+                            rInc.m_aData.getConstArray()+rInc.m_nBufferPos)
+                        << "\"...");
 #endif
-
                 std::size_t nUnitSize = GetTrueFormatSize(rInc.m_nFormat);
 
                 XChangeProperty( m_pDisplay,
@@ -1951,11 +2012,14 @@ bool SelectionManager::handleSendPropertyNotify( XPropertyEvent const & rNotify 
                 if( nBytes == 0 ) // transfer finished
                 {
 #if OSL_DEBUG_LEVEL > 1
-                    fprintf( stderr, "finished INCR transfer for window 0x%lx, property %s, type %s\n",
-                             rInc.m_aRequestor,
-                             OUStringToOString( getString( rInc.m_aProperty ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
-                             OUStringToOString( getString( rInc.m_aTarget ), RTL_TEXTENCODING_ISO_8859_1 ).getStr()
-                             );
+                    SAL_INFO("vcl.unx.dtrans", "finished INCR transfer for "
+                            << "window "
+                            << std::showbase << std::hex
+                            << rInc.m_aRequestor
+                            << ", property "
+                            << getString( rInc.m_aProperty )
+                            << ", type "
+                            << getString( rInc.m_aTarget ));
 #endif
                     it->second.erase( inc_it );
                 }
@@ -1977,17 +2041,19 @@ bool SelectionManager::handleSelectionNotify( XSelectionEvent const & rNotify )
 
     // notification about success/failure of one of our conversion requests
 #if OSL_DEBUG_LEVEL > 1
-    OUString aSelection( getString( rNotify.selection ) );
-    OUString aProperty("None");
-    if( rNotify.property )
-        aProperty = getString( rNotify.property );
-    fprintf( stderr, "handleSelectionNotify for selection %s and property %s (0x%lx)\n",
-             OUStringToOString( aSelection, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
-             OUStringToOString( aProperty, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
-             rNotify.property
-             );
-    if( rNotify.requestor != m_aWindow && rNotify.requestor != m_aCurrentDropWindow )
-        fprintf( stderr, "Warning: selection notify for unknown window 0x%lx\n", rNotify.requestor );
+    SAL_INFO("vcl.unx.dtrans", "handleSelectionNotify for selection "
+            << getString( rNotify.selection )
+            << " and property "
+            << (rNotify.property ? getString( rNotify.property ) : "None")
+            << " ("
+            << std::showbase << std::hex
+            << rNotify.property
+            << ").");
+    SAL_WARN_IF(rNotify.requestor != m_aWindow &&
+            rNotify.requestor != m_aCurrentDropWindow,
+            "vcl.unx.dtrans", "selection notify for unknown window "
+            << std::showbase << std::hex
+            << rNotify.requestor);
 #endif
     std::unordered_map< Atom, Selection* >::iterator it =
           m_aSelections.find( rNotify.selection );
@@ -2055,7 +2121,7 @@ bool SelectionManager::handleSelectionNotify( XSelectionEvent const & rNotify )
     }
 #if OSL_DEBUG_LEVEL > 1
     else if( it != m_aSelections.end() )
-        fprintf( stderr, "Warning: selection in state %d\n", it->second->m_eState );
+        SAL_WARN("vcl.unx.dtrans", "selection in state " << it->second->m_eState);
 #endif
     return bHandled;
 }
@@ -2079,15 +2145,25 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent const & rMessage )
         rMessage.message_type == m_nXdndDrop      ||
         rMessage.message_type == m_nXdndPosition  )
     {
-        fprintf( stderr, "got drop event %s, ", OUStringToOString( getString( rMessage.message_type ), RTL_TEXTENCODING_ASCII_US).getStr() );
+        std::ostringstream oss;
+        oss << "got drop event "
+            << getString( rMessage.message_type )
+            << ", ";
+
         if( it == m_aDropTargets.end() )
-            fprintf( stderr, "but no target found\n" );
+            oss << "but no target found.";
         else if( ! it->second.m_pTarget->m_bActive )
-            fprintf( stderr, "but target is inactive\n" );
+            oss << "but target is inactive.";
         else if( m_aDropEnterEvent.data.l[0] != None && (::Window)m_aDropEnterEvent.data.l[0] != aSource )
-            fprintf( stderr, "but source 0x%lx is unknown (expected 0x%lx or 0)\n", aSource, m_aDropEnterEvent.data.l[0] );
+            oss << "but source "
+                << std::showbase << std::hex
+                << aSource
+                << " is unknown (expected "
+                << m_aDropEnterEvent.data.l[0]
+                << " or 0).";
         else
-            fprintf( stderr, "processing.\n" );
+            oss << "processing.";
+        SAL_INFO("vcl.unx.dtrans", oss.str());
     }
 #endif
 
@@ -2116,7 +2192,9 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent const & rMessage )
             m_aCurrentDropWindow        = aTarget;
             m_nCurrentProtocolVersion   = m_aDropEnterEvent.data.l[1] >> 24;
 #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "received XdndEnter on 0x%lx\n", aTarget );
+            SAL_INFO("vcl.unx.dtrans", "received XdndEnter on "
+                    << std::showbase << std::hex
+                    << aTarget);
 #endif
         }
         else if(
@@ -2135,9 +2213,16 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent const & rMessage )
                                    rMessage.data.l[2] & 0xffff,
                                    &m_nLastX, &m_nLastY,
                                    &aChild );
-
 #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "received XdndPosition on 0x%lx (%d, %d)\n", aTarget, m_nLastX, m_nLastY );
+            SAL_INFO("vcl.unx.dtrans", "received XdndPosition on "
+                    << std::showbase << std::hex
+                    << aTarget
+                    << " ("
+                    << std::dec
+                    << m_nLastX
+                    << ", "
+                    << m_nLastY
+                    << ").");
 #endif
             DropTargetDragEnterEvent aEvent;
             aEvent.Source       = static_cast< XDropTarget* >(it->second.m_pTarget);
@@ -2180,7 +2265,9 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent const & rMessage )
         {
             bHandled = true;
 #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "received XdndLeave on 0x%lx\n", aTarget );
+            SAL_INFO("vcl.unx.dtrans", "received XdndLeave on "
+                    << std::showbase << std::hex
+                    << aTarget);
 #endif
             DropTargetEvent aEvent;
             aEvent.Source = static_cast< XDropTarget* >(it->second.m_pTarget);
@@ -2198,9 +2285,15 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent const & rMessage )
         {
             bHandled = true;
             m_nDropTime = m_nCurrentProtocolVersion > 0 ? rMessage.data.l[2] : CurrentTime;
-
 #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "received XdndDrop on 0x%lx (%d, %d)\n", aTarget, m_nLastX, m_nLastY );
+            SAL_INFO("vcl.unx.dtrans", "received XdndDrop on "
+                    << std::showbase << std::hex
+                    << aTarget
+                    << " ("
+                    << m_nLastX
+                    << ", "
+                    << m_nLastY
+                    << ").");
 #endif
             if( m_bLastDropAccepted )
             {
@@ -2222,7 +2315,8 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent const & rMessage )
             else
             {
 #if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "XdndDrop canceled due to m_bLastDropAccepted = false\n" );
+                SAL_INFO("vcl.unx.dtrans", "XdndDrop canceled due to "
+                        << "m_bLastDropAccepted = false." );
 #endif
                 DropTargetEvent aEvent;
                 aEvent.Source = static_cast< XDropTarget* >(it->second.m_pTarget);
@@ -2282,13 +2376,11 @@ void SelectionManager::dropComplete( bool bSuccess, ::Window aDropWindow )
                 else if( m_nLastDropAction & DNDConstants::ACTION_LINK )
                     aEvent.xclient.data.l[2] = m_nXdndActionLink;
             }
-
 #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "Sending XdndFinished to 0x%lx\n",
-                     m_aDropEnterEvent.data.l[0]
-                     );
+            SAL_INFO("vcl.unx.dtrans", "Sending XdndFinished to "
+                    << std::showbase << std::hex
+                    << m_aDropEnterEvent.data.l[0]);
 #endif
-
             XSendEvent( m_pDisplay, m_aDropEnterEvent.data.l[0],
                         False, NoEventMask, & aEvent );
 
@@ -2361,10 +2453,11 @@ void SelectionManager::sendDragStatus( Atom nDropAction )
         aEvent.xclient.data.l[4] = m_nCurrentProtocolVersion > 1 ? nDropAction : 0;
 
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "Sending XdndStatus to 0x%lx with action %s\n",
-                 m_aDropEnterEvent.data.l[0],
-                 OUStringToOString( getString( nDropAction ), RTL_TEXTENCODING_ISO_8859_1 ).getStr()
-                 );
+        SAL_INFO("vcl.unx.dtrans", "Sending XdndStatus to "
+                << std::showbase << std::hex
+                << m_aDropEnterEvent.data.l[0]
+                << " with action "
+                << getString( nDropAction ));
 #endif
 
         XSendEvent( m_pDisplay, m_aDropEnterEvent.data.l[0],
@@ -2412,7 +2505,11 @@ bool SelectionManager::updateDragAction( int modifierState )
     if( nNewDropAction != m_nUserDragAction || m_nTargetAcceptAction != DNDConstants::ACTION_DEFAULT )
     {
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "updateDragAction: %x -> %x\n", (int)m_nUserDragAction, (int)nNewDropAction );
+        SAL_INFO("vcl.unx.dtrans", "updateDragAction: "
+                << std::hex
+                << (int)m_nUserDragAction
+                << " -> "
+                << (int)nNewDropAction);
 #endif
         bRet = true;
         m_nUserDragAction = nNewDropAction;
@@ -2499,34 +2596,46 @@ bool SelectionManager::handleDragEvent( XEvent const & rMessage )
     // for shortcut
     std::unordered_map< ::Window, DropTargetEntry >::const_iterator it =
           m_aDropTargets.find( m_aDropWindow );
+
 #if OSL_DEBUG_LEVEL > 1
     switch( rMessage.type )
     {
         case ClientMessage:
-            fprintf( stderr, "handleDragEvent: %s\n", OUStringToOString( getString( rMessage.xclient.message_type ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+            SAL_INFO("vcl.unx.dtrans", "handleDragEvent: "
+                    << getString( rMessage.xclient.message_type ));
             break;
         case MotionNotify:
             break;
         case EnterNotify:
-            fprintf( stderr, "handleDragEvent: EnterNotify\n" );
+            SAL_INFO("vcl.unx.dtrans", "handleDragEvent: EnterNotify.");
             break;
         case LeaveNotify:
-            fprintf( stderr, "handleDragEvent: LeaveNotify\n" );
+            SAL_INFO("vcl.unx.dtrans", "handleDragEvent: LeaveNotify.");
             break;
         case ButtonPress:
-            fprintf( stderr, "handleDragEvent: ButtonPress %d (m_nDragButton = %d)\n", rMessage.xbutton.button, m_nDragButton );
+            SAL_INFO("vcl.unx.dtrans", "handleDragEvent: ButtonPress "
+                    << rMessage.xbutton.button
+                    << " (m_nDragButton = "
+                    << m_nDragButton
+                    << ").");
             break;
         case ButtonRelease:
-            fprintf( stderr, "handleDragEvent: ButtonRelease %d (m_nDragButton = %d)\n", rMessage.xbutton.button, m_nDragButton );
+            SAL_INFO("vcl.unx.dtrans", "handleDragEvent: ButtonRelease "
+                    << rMessage.xbutton.button
+                    << " (m_nDragButton = "
+                    << m_nDragButton
+                    << ").");
             break;
         case KeyPress:
-            fprintf( stderr, "handleDragEvent: KeyPress\n" );
+            SAL_INFO("vcl.unx.dtrans", "handleDragEvent: KeyPress.");
             break;
         case KeyRelease:
-            fprintf( stderr, "handleDragEvent: KeyRelease\n" );
+            SAL_INFO("vcl.unx.dtrans", "handleDragEvent: KeyRelease.");
             break;
         default:
-            fprintf( stderr, "handleDragEvent: <unknown type %d>\n", rMessage.type );
+            SAL_INFO("vcl.unx.dtrans", "handleDragEvent: <unknown type "
+                    << rMessage.type
+                    << ">.");
             break;
     }
 #endif
@@ -2545,9 +2654,10 @@ bool SelectionManager::handleDragEvent( XEvent const & rMessage )
             dsde.DropAction = DNDConstants::ACTION_NONE;
             m_bDropSuccess = (rMessage.xclient.data.l[1] & 1) != 0;
 #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "status drop action: accept = %s, %s\n",
-                     m_bDropSuccess ? "true" : "false",
-                     OUStringToOString( getString( rMessage.xclient.data.l[4] ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+            SAL_INFO("vcl.unx.dtrans", "status drop action: accept = "
+                    << (m_bDropSuccess ? "true" : "false")
+                    << ", "
+                    << getString( rMessage.xclient.data.l[4] ));
 #endif
             if( rMessage.xclient.data.l[1] & 1 )
             {
@@ -2810,7 +2920,7 @@ void SelectionManager::accept( sal_Int8 dragOperation, ::Window aDropWindow )
     if( aDropWindow == m_aCurrentDropWindow )
     {
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "accept: %x\n", dragOperation );
+        SAL_INFO("vcl.unx.dtrans", "accept: " << std::hex << dragOperation);
 #endif
         Atom nAction = None;
         dragOperation &= (DNDConstants::ACTION_MOVE | DNDConstants::ACTION_COPY | DNDConstants::ACTION_LINK);
@@ -2830,7 +2940,7 @@ void SelectionManager::reject( ::Window aDropWindow )
     if( aDropWindow == m_aCurrentDropWindow )
     {
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "reject\n" );
+        SAL_INFO("vcl.unx.dtrans", "reject.");
 #endif
         m_bLastDropAccepted = false;
         sendDragStatus( None );
@@ -2993,9 +3103,20 @@ void SelectionManager::updateDragWindow( int nX, int nY, ::Window aRoot )
     if( aNewCurrentWindow != m_aDropWindow )
     {
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "drag left window 0x%lx (rev. %d), entered window 0x%lx (rev %d)\n", m_aDropWindow, m_nCurrentProtocolVersion, aNewCurrentWindow, nNewProtocolVersion );
+        SAL_INFO("vcl.unx.dtrans", "drag left window "
+                << std::showbase << std::hex
+                << m_aDropWindow
+                << std::dec
+                << " (rev. "
+                << m_nCurrentProtocolVersion
+                << "), entered window "
+                << std::showbase << std::hex
+                << aNewCurrentWindow
+                << " (rev "
+                << std::dec
+                << nNewProtocolVersion
+                << ").");
 #endif
-
         if( m_aDropWindow != None )
         {
             it = m_aDropTargets.find( m_aDropWindow );
@@ -3104,9 +3225,11 @@ void SelectionManager::startDrag(
                                  )
 {
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "startDrag( sourceActions = %x )\n", (int)sourceActions );
+    SAL_INFO("vcl.unx.dtrans", "startDrag( sourceActions = "
+            << std::hex
+            << (int)sourceActions
+            << " ).");
 #endif
-
     DragSourceDropEvent aDragFailedEvent;
     aDragFailedEvent.Source             = static_cast< OWeakObject* >(this);
     aDragFailedEvent.DragSource         = static_cast< XDragSource* >(this);
@@ -3120,11 +3243,14 @@ void SelectionManager::startDrag(
             listener->dragDropEnd( aDragFailedEvent );
 
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "*** ERROR *** second drag and drop started.\n" );
+        SAL_WARN("vcl.unx.dtrans",
+                "*** ERROR *** second drag and drop started.");
         if( m_xDragSourceListener.is() )
-            fprintf( stderr, "*** ERROR *** drag source listener already set.\n" );
+            SAL_WARN("vcl.unx.dtrans",
+                    "*** ERROR *** drag source listener already set.");
         else
-            fprintf( stderr, "*** ERROR *** drag thread already running.\n" );
+            SAL_WARN("vcl.unx.dtrans",
+                    "*** ERROR *** drag thread already running.");
 #endif
         return;
     }
@@ -3180,7 +3306,9 @@ void SelectionManager::startDrag(
             {
                 m_aDragSourceWindow = aChild;
 #if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "found drag source window 0x%lx\n", m_aDragSourceWindow );
+                SAL_INFO("vcl.unx.dtrans", "found drag source window "
+                        << std::showbase << std::hex
+                        << m_aDragSourceWindow);
 #endif
                 break;
             }
@@ -3188,7 +3316,7 @@ void SelectionManager::startDrag(
         } while( aChild != None );
 
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "try to grab pointer ... " );
+        SAL_INFO("vcl.unx.dtrans", "try to grab pointer ...");
 #endif
         int nPointerGrabSuccess =
             XGrabPointer( m_pDisplay, aRoot, True,
@@ -3224,16 +3352,16 @@ void SelectionManager::startDrag(
             }
         }
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "%d\n", nPointerGrabSuccess );
-#endif
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "try to grab keyboard ... " );
+        SAL_INFO("vcl.unx.dtrans", "... grabbed pointer: "
+                << nPointerGrabSuccess);
+        SAL_INFO("vcl.unx.dtrans", "try to grab keyboard ...");
 #endif
         int nKeyboardGrabSuccess =
             XGrabKeyboard( m_pDisplay, aRoot, True,
                            GrabModeAsync, GrabModeAsync, CurrentTime );
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "%d\n", nKeyboardGrabSuccess );
+        SAL_INFO("vcl.unx.dtrans", "... grabbed keyboard: "
+                << nKeyboardGrabSuccess);
 #endif
         if( nPointerGrabSuccess != GrabSuccess || nKeyboardGrabSuccess != GrabSuccess )
         {
@@ -3297,7 +3425,9 @@ void SelectionManager::startDrag(
                 m_nDragButton = Button2;
         }
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "m_nUserDragAction = %x\n", (int)m_nUserDragAction );
+        SAL_INFO("vcl.unx.dtrans", "m_nUserDragAction = "
+                << std::hex
+                << (int)m_nUserDragAction);
 #endif
         updateDragWindow( root_x, root_y, aRoot );
         m_nUserDragAction = ~0;
@@ -3311,7 +3441,8 @@ void SelectionManager::startDrag(
     else
     {
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "osl_createSuspendedThread failed for drag execute\n" );
+        SAL_INFO("vcl.unx.dtrans", "osl_createSuspendedThread failed "
+                << "for drag execute.");
 #endif
         m_xDragSourceListener.clear();
         m_xDragSourceTransferable.clear();
@@ -3362,7 +3493,7 @@ void SelectionManager::dragDoDispatch()
     // do drag
     // m_xDragSourceListener will be cleared on finished drop
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "begin executeDrag dispatching\n" );
+    SAL_INFO("vcl.unx.dtrans", "begin executeDrag dispatching.");
 #endif
     oslThread aThread = m_aDragExecuteThread;
     while( m_xDragSourceListener.is() && ( ! m_bDropSent || time(nullptr)-m_nDropTimeout < 5 ) && osl_scheduleThread( aThread ) )
@@ -3372,7 +3503,7 @@ void SelectionManager::dragDoDispatch()
         osl::Thread::wait(std::chrono::milliseconds(200));
     }
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "end executeDrag dispatching\n" );
+    SAL_INFO("vcl.unx.dtrans", "end executeDrag dispatching.");
 #endif
     {
         osl::ClearableMutexGuard aGuard(m_aMutex);
@@ -3522,9 +3653,8 @@ bool SelectionManager::handleXEvent( XEvent& rEvent )
         {
             osl::ClearableMutexGuard aGuard(m_aMutex);
 #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "SelectionClear for selection %s\n",
-                     OUStringToOString( getString( rEvent.xselectionclear.selection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr()
-                     );
+            SAL_INFO("vcl.unx.dtrans", "SelectionClear for selection "
+                    << getString( rEvent.xselectionclear.selection ));
 #endif
             SelectionAdaptor* pAdaptor = getAdaptor( rEvent.xselectionclear.selection );
             std::unordered_map< Atom, Selection* >::iterator it( m_aSelections.find( rEvent.xselectionclear.selection ) );
@@ -3622,7 +3752,7 @@ void SelectionManager::dispatchEvent( int millisec )
 void SelectionManager::run( void* pThis )
 {
 #if OSL_DEBUG_LEVEL > 1
-    fprintf(stderr, "SelectionManager::run\n" );
+    SAL_INFO("vcl.unx.dtrans", "SelectionManager::run.");
 #endif
     osl::Thread::setName("SelectionManager");
     // dispatch until the cows come home
@@ -3679,15 +3809,15 @@ void SelectionManager::run( void* pThis )
     close(This->m_EndThreadPipe[1]);
     close(This->m_EndThreadPipe[0]);
 #if OSL_DEBUG_LEVEL > 1
-    fprintf(stderr, "SelectionManager::run end\n" );
+    SAL_INFO("vcl.unx.dtrans", "SelectionManager::run end.");
 #endif
 }
 
 void SelectionManager::shutdown() throw()
 {
-    #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "SelectionManager got app termination event\n" );
-    #endif
+#if OSL_DEBUG_LEVEL > 1
+    SAL_INFO("vcl.unx.dtrans", "SelectionManager got app termination event.");
+#endif
 
     osl::ResettableMutexGuard aGuard(m_aMutex);
 
@@ -3768,9 +3898,9 @@ sal_Bool SelectionManager::handleEvent(const Any& event)
     }
     else
     {
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "SelectionManager got downing event\n" );
-        #endif
+#if OSL_DEBUG_LEVEL > 1
+        SAL_INFO("vcl.unx.dtrans", "SelectionManager got downing event.");
+#endif
         shutdown();
     }
     return true;

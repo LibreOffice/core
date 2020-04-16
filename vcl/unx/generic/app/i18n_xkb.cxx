@@ -19,6 +19,9 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <iostream>
+
+#include <sal/log.hxx>
 
 #include <X11/Xlib.h>
 #include <X11/XKBlib.h>
@@ -90,11 +93,13 @@ SalI18N_KeyboardExtension::Dispatch( XEvent* pEvent )
             break;
 
         default:
-
-            #if OSL_DEBUG_LEVEL > 1
-            fprintf(stderr, "Got unrequested XkbAnyEvent %#x/%i\n",
-                    static_cast<unsigned int>(nXKBType), static_cast<int>(nXKBType) );
-            #endif
+#if OSL_DEBUG_LEVEL > 1
+            SAL_WARN("vcl.app", "Got unrequested XkbAnyEvent "
+                    << std::hex << std::showbase
+                    << static_cast<unsigned int>(nXKBType)
+                    << "/" << std::dec
+                    << static_cast<int>(nXKBType));
+#endif
             break;
     }
 }

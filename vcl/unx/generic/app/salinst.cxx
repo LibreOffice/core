@@ -172,7 +172,10 @@ bool X11SalInstance::AnyInput(VclInputFlags nType)
         bRet = aInput.bRet;
     }
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "AnyInput 0x%x = %s\n", static_cast<unsigned int>(nType), bRet ? "true" : "false" );
+    SAL_INFO("vcl.app", "AnyInput "
+            << std::showbase << std::hex
+            << static_cast<unsigned int>(nType)
+            << " = " << (bRet ? "true" : "false"));
 #endif
     return bRet;
 }

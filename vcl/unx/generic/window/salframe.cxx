@@ -1015,9 +1015,10 @@ void X11SalFrame::SetIcon( sal_uInt16 nIcon )
     if ( XGetIconSizes( GetXDisplay(), GetDisplay()->GetRootWindow( m_nXScreen ), &pIconSize, &nSizes ) )
     {
 #if OSL_DEBUG_LEVEL > 1
-        fprintf(stderr, "X11SalFrame::SetIcon(): found %d IconSizes:\n", nSizes);
+        SAL_INFO("vcl.window", "X11SalFrame::SetIcon(): found "
+                << nSizes
+                << " IconSizes:");
 #endif
-
         int i;
         for( i=0; i<nSizes; i++)
         {
@@ -1028,10 +1029,18 @@ void X11SalFrame::SetIcon( sal_uInt16 nIcon )
             }
 
 #if OSL_DEBUG_LEVEL > 1
-            fprintf(stderr, "min: %d, %d\nmax: %d, %d\ninc: %d, %d\n\n",
-                    pIconSize[i].min_width, pIconSize[i].min_height,
-                    pIconSize[i].max_width, pIconSize[i].max_height,
-                    pIconSize[i].width_inc, pIconSize[i].height_inc);
+            SAL_INFO("vcl.window", "min: "
+                    << pIconSize[i].min_width
+                    << ", "
+                    << pIconSize[i].min_height);
+            SAL_INFO("vcl.window", "max: "
+                    << pIconSize[i].max_width
+                    << ", "
+                    << pIconSize[i].max_height);
+            SAL_INFO("vcl.window", "inc: "
+                    << pIconSize[i].width_inc
+                    << ", "
+                    << pIconSize[i].height_inc);
 #endif
         }
 
@@ -2266,8 +2275,8 @@ X11SalFrame::HandleExtTextEvent (XClientMessageEvent const *pEvent)
             break;
 
         default:
-
-            fprintf(stderr, "X11SalFrame::HandleExtTextEvent: invalid extended input\n");
+            SAL_WARN("vcl.window",
+                    "X11SalFrame::HandleExtTextEvent: invalid extended input.");
     }
 }
 #endif /* defined(__synchronous_extinput__) */
@@ -3806,11 +3815,14 @@ bool X11SalFrame::HandleClientMessage( XClientMessageEvent *pEvent )
             else if( static_cast<Atom>(pEvent->data.l[0]) == rWMAdaptor.getAtom( WMAdaptor::WM_TAKE_FOCUS ) )
             {
                 // do nothing, we set the input focus in ToTop() if necessary
-    #if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "got WM_TAKE_FOCUS on %s window\n",
-                         (nStyle_ & SalFrameStyleFlags::OWNERDRAWDECORATION) ?
-                         "ownerdraw" : "NON OWNERDRAW" );
-    #endif
+#if OSL_DEBUG_LEVEL > 1
+                SAL_INFO("vcl.window", "got WM_TAKE_FOCUS on "
+                        << ((nStyle_ &
+                                SalFrameStyleFlags::OWNERDRAWDECORATION) ?
+                            "ownerdraw" :
+                            "NON OWNERDRAW" )
+                        << " window.");
+#endif
             }
         }
     }
