@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "66326963_babad136",
+        "filename": "sw/qa/extras/uiwriter/uiwriter3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2020-04-16T08:36:03Z",
+      "side": 1,
+      "message": "you can just use: CPPUNIT_ASSERT(getParagraph(1)-\u003egetString().startsWith(\"The quick\"));\nAnyway, I think that assert doesn\u0027t make much sense, even in the original test.\nWould it be possible to check the number of pages instead ( see other tests in the same file ). I think it makes sense to test the number of pages before selectAll, after copy and after paste",
+      "revId": "6855cd5be4192d8ef4d3f7a608e64048c594ff55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
