@@ -336,6 +336,10 @@ private:
             WriteAttribute(nAttr, OUString(sVal, strlen(sVal), RTL_TEXTENCODING_UTF8));
     }
 
+    void validateTabNames(std::vector<OUString>& aOriginalTabNames);
+    void restoreTabNames(const std::vector<OUString>& aOriginalTabNames);
+    void renameTab(SCTAB aTab, OUString aNewName);
+
     typedef std::map< OUString,
         std::pair< OUString,
             sax_fastparser::FSHelperPtr > >     XclExpXmlPathToStateMap;

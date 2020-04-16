@@ -49,6 +49,11 @@
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <root.hxx>
+#include <tabvwsh.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sc.hrc>
 
 #include <docsh.hxx>
 #include <viewdata.hxx>
@@ -987,6 +992,9 @@ bool XclExpXmlStream::exportDocument()
     ScDocument& rDoc = pShell->GetDocument();
     ScRefreshTimerProtector aProt(rDoc.GetRefreshTimerControlAddress());
 
+    std::vector<OUString> aOriginalTabNames;
+    validateTabNames(aOriginalTabNames);
+
     uno::Reference<task::XStatusIndicator> xStatusIndicator = getStatusIndicator();
 
     if (xStatusIndicator.is())
@@ -1088,6 +1096,8 @@ bool XclExpXmlStream::exportDocument()
 
     commitStorage();
 
+    restoreTabNames(aOriginalTabNames);
+
     if (xStatusIndicator.is())
         xStatusIndicator->end();
     mpRoot = nullptr;
@@ -1102,6 +1112,127 @@ bool XclExpXmlStream::exportDocument()
 OUString XclExpXmlStream::getImplementationName()
 {
     return "TODO";
+}
+
+void XclExpXmlStream::validateTabNames(std::vector<OUString>& aOriginalTabNames)
+{
+    const int MAX_TAB_NAME_LENGTH = 31;
+
+    ScDocShell* pShell = getDocShell();
+    ScDocument& rDoc = pShell->GetDocument();
+
+    // get original names
+    aOriginalTabNames.resize(rDoc.GetTableCount());
+    for (SCTAB nTab=0; nTab < rDoc.GetTableCount(); nTab++)
+    {
+        rDoc.GetName(nTab, aOriginalTabNames[nTab]);
+    }
+
+    // new tab names
+    std::vector<OUString> aNewTabNames;
+    aNewTabNames.reserve(rDoc.GetTableCount());
+
+    // check and rename
+    for (SCTAB nTab=0; nTab < rDoc.GetTableCount(); nTab++)
+    {
+        const OUString& rOriginalName = aOriginalTabNames[nTab];
+        if (rOriginalName.getLength() > MAX_TAB_NAME_LENGTH)
+        {
+            OUString aNewName;
+
+            // let's try just truncate "<first 31 chars>"
+            if (aNewName.isEmpty())
+            {
+                aNewName = rOriginalName.copy(0, MAX_TAB_NAME_LENGTH);
+                if (aNewTabNames.end() != std::find(aNewTabNames.begin(), aNewTabNames.end(), aNewName))
+                {
+                    // was found => let's use another tab name
+                    aNewName.clear();
+                }
+            }
+
+            // let's try "<first N chars>-XXX" template
+            for (int digits=1; digits<10 && aNewName.isEmpty(); digits++)
+            {
+                const int rangeStart = pow(10, digits - 1);
+                const int rangeEnd = pow(10, digits);
+
+                for (int i=rangeStart; i<rangeEnd && aNewName.isEmpty(); i++)
+                {
+                    aNewName = rOriginalName.copy(0, MAX_TAB_NAME_LENGTH - 1 - digits).concat("-").concat(OUString::number(i));
+                    if (aNewTabNames.end() != std::find(aNewTabNames.begin(), aNewTabNames.end(), aNewName))
+                    {
+                        aNewName.clear();
+                    }
+                }
+            }
+
+            if (!aNewName.isEmpty())
+            {
+                // new name was created => rename
+                renameTab(nTab, aNewName);
+                aNewTabNames.push_back(aNewName);
+            }
+            else
+            {
+                // default: do not rename
+                aNewTabNames.push_back(rOriginalName);
+            }
+        }
+        else
+        {
+            // default: do not rename
+            aNewTabNames.push_back(rOriginalName);
+        }
+    }
+}
+
+void XclExpXmlStream::restoreTabNames(const std::vector<OUString>& aOriginalTabNames)
+{
+    ScDocShell* pShell = getDocShell();
+    ScDocument& rDoc = pShell->GetDocument();
+
+    for (SCTAB nTab=0; nTab < rDoc.GetTableCount(); nTab++)
+    {
+        const OUString& rOriginalName = aOriginalTabNames[nTab];
+
+        OUString rModifiedName;
+        rDoc.GetName(nTab, rModifiedName);
+
+        if (rOriginalName != rModifiedName)
+        {
+            renameTab(nTab, rOriginalName);
+        }
+    }
+}
+
+void XclExpXmlStream::renameTab(SCTAB aTab, OUString aNewName)
+{
+    ScDocShell* pShell = getDocShell();
+    ScDocument& rDoc = pShell->GetDocument();
+
+    if (rDoc.RenameTab(aTab, aNewName))
+    {
+        SfxGetpApp()->Broadcast(SfxHint(SfxHintId::ScTablesChanged));
+
+        if (ScDocShell::GetViewData())
+        {
+            ScTabViewShell* pTabViewShell = ScDocShell::GetViewData()->GetViewShell();
+            if (pTabViewShell && pTabViewShell->GetViewFrame())
+            {
+                SfxBindings& rBindings = pTabViewShell->GetViewFrame()->GetBindings();
+                rBindings.Invalidate(SID_STATUS_SUM);         // always together with the input row
+                rBindings.Invalidate(SID_ATTR_SIZE);
+                rBindings.Invalidate(SID_TABLE_CELL);
+            }
+        }
+
+        if (ScDocShell::GetViewData())
+        {
+            ScTabViewShell* pTabViewShell = ScDocShell::GetViewData()->GetViewShell();
+            pTabViewShell->UpdateInputHandler();
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
