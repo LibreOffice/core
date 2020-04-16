@@ -1007,56 +1007,6 @@
         </info>
         <value>4</value>
       </prop>
-      <prop oor:name="MaximumPaperWidth" oor:type="xs:int" oor:nillable="false">
-        <info>
-          <desc>Specifies the maximum allowed Paper Width for page definitions
-          in cm. Default is 6m, i.e. 600 cm. When this is changed to higher
-          values, it is done on own risk.</desc>
-          <label>Maximum allowed Paper Width for page definitions</label>
-        </info>
-        <value>600</value>
-      </prop>
-      <prop oor:name="MaximumPaperHeight" oor:type="xs:int" oor:nillable="false">
-        <info>
-          <desc>Specifies the maximum allowed Paper Height for page definitions
-          in cm. Default is 6m, i.e. 600 cm. When this is changed to higher
-          values, it is done on own risk.</desc>
-          <label>Maximum allowed Paper Height for page definitions</label>
-        </info>
-        <value>600</value>
-      </prop>
-      <prop oor:name="MaximumPaperLeftMargin" oor:type="xs:int" oor:nillable="false">
-        <info>
-          <desc>Specifies the maximum allowed Left Margin for the page
-          definitions in 1/100th cm.</desc>
-          <label>Maximum allowed Left margin for page definitions</label>
-        </info>
-        <value>9999</value>
-      </prop>
-      <prop oor:name="MaximumPaperRightMargin" oor:type="xs:int" oor:nillable="false">
-        <info>
-          <desc>Specifies the maximum allowed Right Margin for the page
-          definitions in 1/100th cm.</desc>
-          <label>Maximum allowed Right margin for page definitions</label>
-        </info>
-        <value>9999</value>
-      </prop>
-      <prop oor:name="MaximumPaperTopMargin" oor:type="xs:int" oor:nillable="false">
-        <info>
-          <desc>Specifies the maximum allowed Top Margin for the page
-          definitions in 1/100th cm.</desc>
-          <label>Maximum allowed Top margin for page definitions</label>
-        </info>
-        <value>9999</value>
-      </prop>
-      <prop oor:name="MaximumPaperBottomMargin" oor:type="xs:int" oor:nillable="false">
-        <info>
-          <desc>Specifies the maximum allowed Bottom Margin for the page
-          definitions in 1/100th cm.</desc>
-          <label>Maximum allowed Bottom margin for page definitions</label>
-        </info>
-        <value>9999</value>
-      </prop>
       <prop oor:name="AntiAliasing" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>This switch allows to switch DrawingLayer based views to be

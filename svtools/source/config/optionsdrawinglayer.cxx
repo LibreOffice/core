@@ -39,28 +39,12 @@ using namespace ::com::sun::star::uno   ;
 #define DEFAULT_STRIPE_COLOR_B          Color(16581375)
 #define DEFAULT_STRIPE_LENGTH           4
 
-// #i4219#
-#define DEFAULT_MAXIMUMPAPERWIDTH           600
-#define DEFAULT_MAXIMUMPAPERHEIGHT          600
-#define DEFAULT_MAXIMUMPAPERLEFTMARGIN      9999
-#define DEFAULT_MAXIMUMPAPERRIGHTMARGIN     9999
-#define DEFAULT_MAXIMUMPAPERTOPMARGIN       9999
-#define DEFAULT_MAXIMUMPAPERBOTTOMMARGIN    9999
-
 // primitives
 #define DEFAULT_ANTIALIASING                        true
 
 #define PROPERTYNAME_STRIPE_COLOR_A     OUString("StripeColorA"     )
 #define PROPERTYNAME_STRIPE_COLOR_B     OUString("StripeColorB"     )
 #define PROPERTYNAME_STRIPE_LENGTH      OUString("StripeLength"     )
-
-// #i4219#
-#define PROPERTYNAME_MAXIMUMPAPERWIDTH OUString("MaximumPaperWidth")
-#define PROPERTYNAME_MAXIMUMPAPERHEIGHT OUString("MaximumPaperHeight")
-#define PROPERTYNAME_MAXIMUMPAPERLEFTMARGIN OUString("MaximumPaperLeftMargin")
-#define PROPERTYNAME_MAXIMUMPAPERRIGHTMARGIN OUString("MaximumPaperRightMargin")
-#define PROPERTYNAME_MAXIMUMPAPERTOPMARGIN OUString("MaximumPaperTopMargin")
-#define PROPERTYNAME_MAXIMUMPAPERBOTTOMMARGIN OUString("MaximumPaperBottomMargin")
 
 // primitives
 #define PROPERTYNAME_ANTIALIASING OUString("AntiAliasing")
@@ -69,18 +53,10 @@ using namespace ::com::sun::star::uno   ;
 #define PROPERTYHANDLE_STRIPE_COLOR_B               1
 #define PROPERTYHANDLE_STRIPE_LENGTH                2
 
-// #i4219#
-#define PROPERTYHANDLE_MAXIMUMPAPERWIDTH            3
-#define PROPERTYHANDLE_MAXIMUMPAPERHEIGHT           4
-#define PROPERTYHANDLE_MAXIMUMPAPERLEFTMARGIN       5
-#define PROPERTYHANDLE_MAXIMUMPAPERRIGHTMARGIN      6
-#define PROPERTYHANDLE_MAXIMUMPAPERTOPMARGIN        7
-#define PROPERTYHANDLE_MAXIMUMPAPERBOTTOMMARGIN     8
-
 // primitives
-#define PROPERTYHANDLE_ANTIALIASING                 9
+#define PROPERTYHANDLE_ANTIALIASING                 3
 
-#define PROPERTYCOUNT                               10
+#define PROPERTYCOUNT                               4
 
 class SvtOptionsDrawinglayer_Impl : public ConfigItem
 {
@@ -93,14 +69,6 @@ public:
     const Color& GetStripeColorA() const { return m_bStripeColorA;}
     const Color& GetStripeColorB() const { return m_bStripeColorB;}
     sal_uInt16  GetStripeLength() const { return m_nStripeLength;}
-
-    // #i4219#
-    sal_uInt32  GetMaximumPaperWidth() const { return m_nMaximumPaperWidth;}
-    sal_uInt32  GetMaximumPaperHeight() const { return m_nMaximumPaperHeight;}
-    sal_uInt32  GetMaximumPaperLeftMargin() const { return m_nMaximumPaperLeftMargin;}
-    sal_uInt32  GetMaximumPaperRightMargin() const { return m_nMaximumPaperRightMargin;}
-    sal_uInt32  GetMaximumPaperTopMargin() const { return m_nMaximumPaperTopMargin;}
-    sal_uInt32  GetMaximumPaperBottomMargin() const { return m_nMaximumPaperBottomMargin;}
 
     // helper
     bool        IsAAPossibleOnThisSystem() const;
@@ -125,14 +93,6 @@ private:
         Color       m_bStripeColorB;
         sal_uInt16  m_nStripeLength;
 
-        // #i4219#
-        sal_uInt32  m_nMaximumPaperWidth;
-        sal_uInt32  m_nMaximumPaperHeight;
-        sal_uInt32  m_nMaximumPaperLeftMargin;
-        sal_uInt32  m_nMaximumPaperRightMargin;
-        sal_uInt32  m_nMaximumPaperTopMargin;
-        sal_uInt32  m_nMaximumPaperBottomMargin;
-
         // primitives
         bool        m_bAntiAliasing;
 
@@ -146,14 +106,6 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
     m_bStripeColorA(DEFAULT_STRIPE_COLOR_A),
     m_bStripeColorB(DEFAULT_STRIPE_COLOR_B),
     m_nStripeLength(DEFAULT_STRIPE_LENGTH),
-
-    // #i4219#
-    m_nMaximumPaperWidth(DEFAULT_MAXIMUMPAPERWIDTH),
-    m_nMaximumPaperHeight(DEFAULT_MAXIMUMPAPERHEIGHT),
-    m_nMaximumPaperLeftMargin(DEFAULT_MAXIMUMPAPERLEFTMARGIN),
-    m_nMaximumPaperRightMargin(DEFAULT_MAXIMUMPAPERRIGHTMARGIN),
-    m_nMaximumPaperTopMargin(DEFAULT_MAXIMUMPAPERTOPMARGIN),
-    m_nMaximumPaperBottomMargin(DEFAULT_MAXIMUMPAPERBOTTOMMARGIN),
 
     // primitives
     m_bAntiAliasing(DEFAULT_ANTIALIASING),
@@ -201,49 +153,6 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
             }
             break;
 
-            // #i4219#
-            case PROPERTYHANDLE_MAXIMUMPAPERWIDTH:
-            {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\MaximumPaperWidth\"?" );
-                seqValues[nProperty] >>= m_nMaximumPaperWidth;
-            }
-            break;
-
-            case PROPERTYHANDLE_MAXIMUMPAPERHEIGHT:
-            {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\MaximumPaperHeight\"?" );
-                seqValues[nProperty] >>= m_nMaximumPaperHeight;
-            }
-            break;
-
-            case PROPERTYHANDLE_MAXIMUMPAPERLEFTMARGIN:
-            {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\MaximumPaperLeftMargin\"?" );
-                seqValues[nProperty] >>= m_nMaximumPaperLeftMargin;
-            }
-            break;
-
-            case PROPERTYHANDLE_MAXIMUMPAPERRIGHTMARGIN:
-            {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\MaximumPaperRightMargin\"?" );
-                seqValues[nProperty] >>= m_nMaximumPaperRightMargin;
-            }
-            break;
-
-            case PROPERTYHANDLE_MAXIMUMPAPERTOPMARGIN:
-            {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\MaximumPaperTopMargin\"?" );
-                seqValues[nProperty] >>= m_nMaximumPaperTopMargin;
-            }
-            break;
-
-            case PROPERTYHANDLE_MAXIMUMPAPERBOTTOMMARGIN:
-            {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\MaximumPaperBottomMargin\"?" );
-                seqValues[nProperty] >>= m_nMaximumPaperBottomMargin;
-            }
-            break;
-
             // primitives
             case PROPERTYHANDLE_ANTIALIASING:
             {
@@ -283,31 +192,6 @@ void SvtOptionsDrawinglayer_Impl::ImplCommit()
 
             case PROPERTYHANDLE_STRIPE_LENGTH:
                 aSeqValues[nProperty] <<= m_nStripeLength;
-            break;
-
-            // #i4219#
-            case PROPERTYHANDLE_MAXIMUMPAPERWIDTH:
-                aSeqValues[nProperty] <<= m_nMaximumPaperWidth;
-            break;
-
-            case PROPERTYHANDLE_MAXIMUMPAPERHEIGHT:
-                aSeqValues[nProperty] <<= m_nMaximumPaperHeight;
-            break;
-
-            case PROPERTYHANDLE_MAXIMUMPAPERLEFTMARGIN:
-                aSeqValues[nProperty] <<= m_nMaximumPaperLeftMargin;
-            break;
-
-            case PROPERTYHANDLE_MAXIMUMPAPERRIGHTMARGIN:
-                aSeqValues[nProperty] <<= m_nMaximumPaperRightMargin;
-            break;
-
-            case PROPERTYHANDLE_MAXIMUMPAPERTOPMARGIN:
-                aSeqValues[nProperty] <<= m_nMaximumPaperTopMargin;
-            break;
-
-            case PROPERTYHANDLE_MAXIMUMPAPERBOTTOMMARGIN:
-                aSeqValues[nProperty] <<= m_nMaximumPaperBottomMargin;
             break;
 
             // primitives
@@ -376,14 +260,6 @@ Sequence< OUString > SvtOptionsDrawinglayer_Impl::impl_GetPropertyNames()
         PROPERTYNAME_STRIPE_COLOR_B     ,
         PROPERTYNAME_STRIPE_LENGTH      ,
 
-        // #i4219#
-        PROPERTYNAME_MAXIMUMPAPERWIDTH,
-        PROPERTYNAME_MAXIMUMPAPERHEIGHT,
-        PROPERTYNAME_MAXIMUMPAPERLEFTMARGIN,
-        PROPERTYNAME_MAXIMUMPAPERRIGHTMARGIN,
-        PROPERTYNAME_MAXIMUMPAPERTOPMARGIN,
-        PROPERTYNAME_MAXIMUMPAPERBOTTOMMARGIN,
-
         // primitives
         PROPERTYNAME_ANTIALIASING,
     };
@@ -441,43 +317,6 @@ sal_uInt16 SvtOptionsDrawinglayer::GetStripeLength() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pImpl->GetStripeLength();
-}
-
-// #i4219#
-sal_uInt32 SvtOptionsDrawinglayer::GetMaximumPaperWidth() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->GetMaximumPaperWidth();
-}
-
-sal_uInt32 SvtOptionsDrawinglayer::GetMaximumPaperHeight() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->GetMaximumPaperHeight();
-}
-
-sal_uInt32 SvtOptionsDrawinglayer::GetMaximumPaperLeftMargin() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->GetMaximumPaperLeftMargin();
-}
-
-sal_uInt32 SvtOptionsDrawinglayer::GetMaximumPaperRightMargin() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->GetMaximumPaperRightMargin();
-}
-
-sal_uInt32 SvtOptionsDrawinglayer::GetMaximumPaperTopMargin() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->GetMaximumPaperTopMargin();
-}
-
-sal_uInt32 SvtOptionsDrawinglayer::GetMaximumPaperBottomMargin() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->GetMaximumPaperBottomMargin();
 }
 
 // helper

@@ -68,13 +68,38 @@ class SVT_DLLPUBLIC SvtOptionsDrawinglayer
         Color       GetStripeColorB() const;
         sal_uInt16  GetStripeLength() const;
 
-        // #i4219#
-        sal_uInt32  GetMaximumPaperWidth() const;
-        sal_uInt32  GetMaximumPaperHeight() const;
-        sal_uInt32  GetMaximumPaperLeftMargin() const;
-        sal_uInt32  GetMaximumPaperRightMargin() const;
-        sal_uInt32  GetMaximumPaperTopMargin() const;
-        sal_uInt32  GetMaximumPaperBottomMargin() const;
+        /**
+          Specifies the maximum allowed Paper Width for page definitions
+          in cm. Default is 6m, i.e. 600 cm. When this is changed to higher
+          values, it is done on own risk.
+        */
+        static sal_uInt32  GetMaximumPaperWidth() { return 600; }
+        /**
+          Specifies the maximum allowed Paper Height for page definitions
+          in cm. Default is 6m, i.e. 600 cm. When this is changed to higher
+          values, it is done on own risk.
+         */
+        static sal_uInt32  GetMaximumPaperHeight() { return 600; }
+        /**
+          Specifies the maximum allowed Left Margin for the page
+          definitions in 1/100th cm.
+         */
+        static sal_uInt32  GetMaximumPaperLeftMargin() { return 9999; }
+        /**
+          Specifies the maximum allowed Right Margin for the page
+          definitions in 1/100th cm.
+         */
+        static sal_uInt32  GetMaximumPaperRightMargin() { return 9999; }
+        /**
+          Specifies the maximum allowed Top Margin for the page
+          definitions in 1/100th cm.
+         */
+        static sal_uInt32  GetMaximumPaperTopMargin() { return 9999; }
+        /*
+          Specifies the maximum allowed Bottom Margin for the page
+          definitions in 1/100th cm.
+        */
+        static sal_uInt32  GetMaximumPaperBottomMargin() { return 9999; }
 
         // #i95644# helper to check if AA is allowed on this system. Currently, for WIN it's disabled
         // and OutDevSupportType::TransparentRect is checked (this  hits XRenderExtension, e.g.

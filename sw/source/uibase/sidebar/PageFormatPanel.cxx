@@ -145,9 +145,8 @@ void PageFormatPanel::Initialize()
     SetMarginFieldUnit();
     aCustomEntry = mxCustomEntry->get_label();
 
-    const SvtOptionsDrawinglayer aDrawinglayerOpt;
-    mxPaperWidth->set_max(mxPaperWidth->normalize(aDrawinglayerOpt.GetMaximumPaperWidth()), FieldUnit::CM);
-    mxPaperHeight->set_max(mxPaperHeight->normalize(aDrawinglayerOpt.GetMaximumPaperHeight()), FieldUnit::CM);
+    mxPaperWidth->set_max(mxPaperWidth->normalize(SvtOptionsDrawinglayer::GetMaximumPaperWidth()), FieldUnit::CM);
+    mxPaperHeight->set_max(mxPaperHeight->normalize(SvtOptionsDrawinglayer::GetMaximumPaperHeight()), FieldUnit::CM);
 
     mxPaperSizeBox->connect_changed( LINK(this, PageFormatPanel, PaperFormatModifyHdl ));
     mxPaperOrientation->connect_changed( LINK(this, PageFormatPanel, PaperFormatModifyHdl ));

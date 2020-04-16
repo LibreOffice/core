@@ -267,19 +267,16 @@ SvxPageDescPage::SvxPageDescPage(weld::Container* pPage, weld::DialogController*
     nLastTopMargin = m_xTopMarginEdit->convert_value_from(m_xTopMarginEdit->normalize(aPrintOffset.Y() + aPrintSize.Height()), FieldUnit::TWIP);
     nLastBottomMargin = m_xBottomMarginEdit->convert_value_from(m_xBottomMarginEdit->normalize(aPrintOffset.Y() + aPrintSize.Height()), FieldUnit::TWIP);
 
-    // #i4219# get DrawingLayer options
-    const SvtOptionsDrawinglayer aDrawinglayerOpt;
-
     // #i4219# take Maximum now from configuration (1/100th cm)
     // was: 11900 -> 119 cm ;new value 3 meters -> 300 cm -> 30000
-    m_xPaperWidthEdit->set_max(m_xPaperWidthEdit->normalize(aDrawinglayerOpt.GetMaximumPaperWidth()), FieldUnit::CM);
-    m_xPaperHeightEdit->set_max(m_xPaperHeightEdit->normalize(aDrawinglayerOpt.GetMaximumPaperHeight()), FieldUnit::CM);
+    m_xPaperWidthEdit->set_max(m_xPaperWidthEdit->normalize(SvtOptionsDrawinglayer::GetMaximumPaperWidth()), FieldUnit::CM);
+    m_xPaperHeightEdit->set_max(m_xPaperHeightEdit->normalize(SvtOptionsDrawinglayer::GetMaximumPaperHeight()), FieldUnit::CM);
 
     // #i4219# also for margins (1/100th cm). Was: 9999, keeping.
-    m_xLeftMarginEdit->set_max(m_xLeftMarginEdit->normalize(aDrawinglayerOpt.GetMaximumPaperLeftMargin()), FieldUnit::MM);
-    m_xRightMarginEdit->set_max(m_xRightMarginEdit->normalize(aDrawinglayerOpt.GetMaximumPaperRightMargin()), FieldUnit::MM);
-    m_xTopMarginEdit->set_max(m_xTopMarginEdit->normalize(aDrawinglayerOpt.GetMaximumPaperTopMargin()), FieldUnit::MM);
-    m_xBottomMarginEdit->set_max(m_xBottomMarginEdit->normalize(aDrawinglayerOpt.GetMaximumPaperBottomMargin()), FieldUnit::MM);
+    m_xLeftMarginEdit->set_max(m_xLeftMarginEdit->normalize(SvtOptionsDrawinglayer::GetMaximumPaperLeftMargin()), FieldUnit::MM);
+    m_xRightMarginEdit->set_max(m_xRightMarginEdit->normalize(SvtOptionsDrawinglayer::GetMaximumPaperRightMargin()), FieldUnit::MM);
+    m_xTopMarginEdit->set_max(m_xTopMarginEdit->normalize(SvtOptionsDrawinglayer::GetMaximumPaperTopMargin()), FieldUnit::MM);
+    m_xBottomMarginEdit->set_max(m_xBottomMarginEdit->normalize(SvtOptionsDrawinglayer::GetMaximumPaperBottomMargin()), FieldUnit::MM);
 
     // Get the i18n framework numberings and add them to the listbox.
     SvxNumOptionsTabPageHelper::GetI18nNumbering(m_xNumberFormatBox->get_widget(), std::numeric_limits<sal_uInt16>::max());

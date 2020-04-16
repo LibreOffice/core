@@ -102,9 +102,8 @@ namespace sdr::contact
                     //But, see tdf#97276, tdf#126184 and tdf#98366. Don't clip too much if the
                     //underlying page dimension is unknown or a paste document
                     //where the page sizes use the odd default of 10x10
-                    const SvtOptionsDrawinglayer aDrawinglayerOpt;
-                    const sal_Int32 nMaxPaperWidth = aDrawinglayerOpt.GetMaximumPaperWidth() * 1000;
-                    const sal_Int32 nMaxPaperHeight = aDrawinglayerOpt.GetMaximumPaperHeight() * 1000;
+                    const sal_Int32 nMaxPaperWidth = SvtOptionsDrawinglayer::GetMaximumPaperWidth() * 1000;
+                    const sal_Int32 nMaxPaperHeight = SvtOptionsDrawinglayer::GetMaximumPaperHeight() * 1000;
                     nPageWidth = std::max<sal_Int32>(nPageWidth, nMaxPaperWidth);
                     nPageHeight = std::max<sal_Int32>(nPageHeight, nMaxPaperHeight);
                     basegfx::B2DRange aClipRange(-nPageWidth, -nPageHeight,
