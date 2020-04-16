@@ -1841,6 +1841,8 @@ void SwWW8ImplReader::ImportDop()
     // tdf#117923
     m_rDoc.getIDocumentSettingAccess().set(
         DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING, true);
+    m_rDoc.getIDocumentSettingAccess().set(
+        DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS, true);
 
     // Import Default Tabs
     long nDefTabSiz = m_xWDop->dxaTab;

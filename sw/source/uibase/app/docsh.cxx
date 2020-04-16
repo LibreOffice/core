@@ -1197,22 +1197,6 @@ void SwDocShell::LoadingFinished()
     }
 }
 
-void SwDocShell::SetFormatSpecificCompatibilityOptions( const OUString& rFilterTypeName )
-{
-    //Enable MS Word-compatibility trailing blanks option for MS Word files
-    if ( rFilterTypeName == "writer_MS_Word_95" ||
-         rFilterTypeName == "writer_MS_Word_97" ||
-         rFilterTypeName == "writer_MS_Word_2003_XML" ||
-         rFilterTypeName == "writer_MS_Word_2007" ||
-         rFilterTypeName == "writer_MS_Word_2007_Template" ||
-         rFilterTypeName == "writer_OOXML" ||
-         rFilterTypeName == "writer_OOXML_Text_Template" ||
-         rFilterTypeName == "writer_Rich_Text_Format" )
-    {
-        GetDoc()->getIDocumentSettingAccess().set( DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS, true );
-    }
-}
-
 // a Transfer is cancelled (is called from SFX)
 void SwDocShell::CancelTransfers()
 {
