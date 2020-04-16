@@ -54,6 +54,31 @@ DECLARE_HTMLEXPORT_TEST(testTdf131812, "tdf131812.odt")
         != -1);
 }
 
+DECLARE_HTMLEXPORT_TEST(testTdf107696, "tdf107696.odt")
+{
+    SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
+    CPPUNIT_ASSERT(pStream);
+    sal_uInt64 nLength = pStream->TellEnd();
+    OString aStream(read_uInt8s_ToOString(*pStream, nLength));
+    //tdf#111492
+    CPPUNIT_ASSERT(aStream.indexOf("span.heading_numbering { margin-right: 0.8rem; }* { margin:0;}")
+                   != -1);
+    CPPUNIT_ASSERT(
+        aStream.indexOf("<h2 class=\"Heading_20_2\"><a "
+                        "id=\"a__Level_2_without_number\"><span/></a>Level 2 without number</h2>")
+        != -1);
+    CPPUNIT_ASSERT(
+        aStream.indexOf("<h2 class=\"Heading_20_2\"><a id=\"a_3_1_Level_2__number_3_1\"><span "
+                        "class=\"heading_numbering\">3.1</span></a>Level <span "
+                        "class=\"T2\">2</span>, <span class=\"T1\">number 3.1</span></h2>")
+        != -1);
+    CPPUNIT_ASSERT(
+        aStream.indexOf("<h2 class=\"Heading_20_2\"><a id=\"a_3_2_Level_2__number_3_2\"><span "
+                        "class=\"heading_numbering\">3.2</span></a>Level 2, <span "
+                        "class=\"T1\">number 3.2</span></h2>")
+        != -1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
