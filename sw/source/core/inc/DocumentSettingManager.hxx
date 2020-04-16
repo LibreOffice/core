@@ -165,6 +165,7 @@ class DocumentSettingManager :
     bool mbProtectBookmarks;
     bool mbProtectFields;
     bool mbHeaderSpacingBelowLastPara;
+    bool mbAllowWrapWhenAnchoredInTable;
 
 public:
 
