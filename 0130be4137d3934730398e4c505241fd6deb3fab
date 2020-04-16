@@ -45,6 +45,30 @@
       "revId": "0130be4137d3934730398e4c505241fd6deb3fab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2472eb7b_5e8f16d7",
+        "filename": "vcl/unx/generic/fontmanager/fontconfig.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-16T10:34:17Z",
+      "side": 1,
+      "message": "\u003e What should I do here? One thing that sounds reasonable to me is:\n\u003e 1. If there is already a \"SAL_*\" command, stick to that area;\n\u003e 2. Else, just create one based on the file path (which is what I did).\n\nSounds like a good rule of thumb.  (And if you would create a new area code, and a sufficiently similar one already exists, like with \"vcl.unx.printer\" vs. \"vcl.unx.print\", just reuse the existing one.)",
+      "parentUuid": "7025a11f_607fc198",
+      "range": {
+        "startLine": 664,
+        "startChar": 16,
+        "endLine": 664,
+        "endChar": 37
+      },
+      "revId": "0130be4137d3934730398e4c505241fd6deb3fab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
