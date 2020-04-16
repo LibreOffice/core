@@ -1830,6 +1830,23 @@
           </prop>
         </group>
       </group>
+      <group oor:name="Export">
+        <info>
+          <desc>Contains settings for export filters.</desc>
+        </info>
+        <group oor:name="MS_Excel">
+          <info>
+            <desc>Contains settings for MS Excel export.</desc>
+          </info>
+          <prop oor:name="TruncateLongSheetNames" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Indicates whether sheet names should be truncated to 31 characters.</desc>
+              <label>Truncate long sheet names</label>
+            </info>
+            <value>true</value>
+          </prop>
+        </group>
+      </group>
     </group>
     <group oor:name="Print">
       <info>
