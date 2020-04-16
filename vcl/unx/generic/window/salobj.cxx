@@ -114,11 +114,15 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
     }
     else
     {
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "visual id of vcl %x, of visual %x\n",
-                 static_cast<unsigned int> (pSalDisp->GetVisual( nXScreen ).GetVisualId()),
-                 static_cast<unsigned int> (aVisID) );
-        #endif
+#if OSL_DEBUG_LEVEL > 1
+        SAL_INFO("vcl.unx.window", "visual id of vcl "
+                << std::hex
+                << static_cast<unsigned int>
+                (pSalDisp->GetVisual( nXScreen ).GetVisualId())
+                << ", of visual "
+                << static_cast<unsigned int>
+                (aVisID));
+#endif
         GetGenericUnixSalData()->ErrorTrapPush();
 
         // create colormap for visual - there might not be one

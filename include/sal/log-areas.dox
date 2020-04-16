@@ -504,8 +504,14 @@ certain functionality.
 @li @c vcl.sm.debug
 @li @c vcl.uitest - The UI testing framework code
 @li @c vcl.unity
+@li @c vcl.unx.app
 @li @c vcl.unx.dtrans
+@li @c vcl.unx.fontmanager
+@li @c vcl.unx.gdi
+@li @c vcl.unx.gtk3
 @li @c vcl.unx.print
+@li @c vcl.unx.printer
+@li @c vcl.unx.window
 @li @c vcl.virdev
 @li @c vcl.watchdog
 @li @c vcl.window
