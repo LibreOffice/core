@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2fbabb9b_99af4e68",
+        "filename": "sc/source/filter/excel/xestream.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1215,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2020-04-16T13:58:13Z",
+      "side": 1,
+      "message": "TODO:\n- the whole block contains several update routines (taken from actual code which is run when user manually edited tab name). Probably not all of them are necessary.\n\n- the whole solution works only when you save as XLSX in LO. But it doesn\u0027t work when you run LO as converter:\n./scalc.exe --convert-to xlsx %%f --outdir sub_folder\n\nin this case only sheet name is renamed. But all cells formulars use old-original sheet names.",
+      "revId": "558b0ffb220567978a4b5b8ba40f66aed4c570ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
