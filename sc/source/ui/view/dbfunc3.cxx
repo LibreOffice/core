@@ -145,7 +145,7 @@ void ScDBFunc::TestRemoveOutline( bool& rCol, bool& rRow )
             {
                 ScOutlineArray& rArray = pTable->GetColArray();
                 ScSubOutlineIterator aColIter( &rArray );
-                while (bColFound)
+                while (!bColFound)
                 {
                     pEntry=aColIter.GetNext();
                     if (!pEntry)
