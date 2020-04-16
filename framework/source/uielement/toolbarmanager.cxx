@@ -1455,13 +1455,14 @@ void ToolBarManager::AddCustomizeMenuItems(ToolBox const * pToolBar)
             pMenu->SetAccelKey(MENUITEM_TOOLBAR_DOCKTOOLBAR, vcl::KeyCode(KEY_F10, true, true, false, false));
         }
     }
-    else
+    else if (MenuItemAllowed(MENUITEM_TOOLBAR_UNDOCKTOOLBAR) && !MenuItemAllowed(MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION))
     {
-        if (MenuItemAllowed(MENUITEM_TOOLBAR_UNDOCKTOOLBAR))
-        {
-            pMenu->InsertItem(MENUITEM_TOOLBAR_UNDOCKTOOLBAR, FwkResId(STR_TOOLBAR_UNDOCK_TOOLBAR));
-            pMenu->SetAccelKey(MENUITEM_TOOLBAR_UNDOCKTOOLBAR, vcl::KeyCode(KEY_F10, true, true, false, false));
-        }
+        pMenu->InsertItem(MENUITEM_TOOLBAR_UNDOCKTOOLBAR, FwkResId(STR_TOOLBAR_UNDOCK_TOOLBAR));
+        pMenu->SetAccelKey(MENUITEM_TOOLBAR_UNDOCKTOOLBAR, vcl::KeyCode(KEY_F10, true, true, false, false));
+    }
+    else if (MenuItemAllowed(MENUITEM_TOOLBAR_UNDOCKTOOLBAR) && MenuItemAllowed(MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION))
+    {
+        return;
     }
 
     if (MenuItemAllowed(MENUITEM_TOOLBAR_DOCKALLTOOLBAR))
