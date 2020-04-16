@@ -53,6 +53,16 @@ DECLARE_WW8EXPORT_TEST(testTdf37778_readonlySection, "tdf37778_readonlySection.d
     CPPUNIT_ASSERT(drawing::FillStyle_NONE != getProperty<drawing::FillStyle>(xStyle, "FillStyle"));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf104596_wrapInHeaderTable, "tdf104596_wrapInHeaderTable.doc")
+{
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    sal_Int32 nRowHeight = getXPath(pXmlDoc, "//header/tab/row[1]/infos/bounds", "height").toInt32();
+    // The fly is supposed to be no-wrap, so the text should come underneath it, not wrap-through,
+    // thus making the row much higher. Before, height was 706. Now it is 1067.
+    CPPUNIT_ASSERT_MESSAGE("Text must wrap under green box", nRowHeight > 1000);
+}
+
 DECLARE_WW8EXPORT_TEST(testArabicZeroNumbering, "arabic-zero-numbering.doc")
 {
     auto xNumberingRules
