@@ -28,6 +28,7 @@
 #include <sax/fshelper.hxx>
 #include <tools/stream.hxx>
 #include "ftools.hxx"
+#include "types.hxx"
 
 #include <filter/msfilter/mscodec.hxx>
 #include <vector>
@@ -335,6 +336,10 @@ private:
         if (sVal)
             WriteAttribute(nAttr, OUString(sVal, strlen(sVal), RTL_TEXTENCODING_UTF8));
     }
+
+    void validateTabNames(std::vector<OUString>& aOriginalTabNames);
+    void restoreTabNames(const std::vector<OUString>& aOriginalTabNames);
+    void renameTab(SCTAB aTab, OUString aNewName);
 
     typedef std::map< OUString,
         std::pair< OUString,
