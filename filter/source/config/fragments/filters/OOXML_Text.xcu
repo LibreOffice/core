@@ -21,7 +21,7 @@
         <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.WriterFilter</value></prop>
         <prop oor:name="UserData"><value></value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">Office Open XML Text</value>
+            <value xml:lang="en-US">Office Open XML Text (ECMA-376)</value>
         </prop>
         <!-- ISO/IEC 29500:2008 -->
         <prop oor:name="FileFormatVersion"><value>1</value></prop>
