@@ -23,6 +23,7 @@
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <UndoManager.hxx>
 #include <docary.hxx>
 #include <textboxhelper.hxx>
@@ -1295,6 +1296,27 @@ namespace //local functions originally from docfmt.cxx
 
         if( pNode && pNode->IsTextNode() )
         {
+            // tdf#127606 at editing, remove different formatting of DOCX-like numbering symbol
+            if (pLayout && pNode->GetTextNode()->getIDocumentSettingAccess()->
+                    get(DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING ))
+            {
+                SwContentNode* pEndNode = pEnd->nNode.GetNode().GetContentNode();
+                SwContentNode* pCurrentNode = pEndNode;
+                auto nStartIndex = pNode->GetIndex();
+                auto nEndIndex = pEndNode->GetIndex();
+                SwNodeIndex aIdx( pEnd->nNode.GetNode() );
+                while ( pCurrentNode != nullptr && nStartIndex <= pCurrentNode->GetIndex() )
+                {
+                    if (pCurrentNode->GetSwAttrSet().HasItem(RES_PARATR_LIST_AUTOFMT) &&
+                        // remove character formatting only on wholly selected paragraphs
+                        (nStartIndex < pCurrentNode->GetIndex() || pStt->nContent.GetIndex() == 0) &&
+                        (pCurrentNode->GetIndex() < nEndIndex || pEnd->nContent.GetIndex() == pEndNode->Len()))
+                    {
+                        pCurrentNode->ResetAttr(RES_PARATR_LIST_AUTOFMT);
+                    }
+                    pCurrentNode = SwNodes::GoPrevious( &aIdx );
+                }
+            }
             // #i27615#
             if (rRg.IsInFrontOfLabel())
             {

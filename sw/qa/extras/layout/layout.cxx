@@ -2859,6 +2859,37 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf117923)
     assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]/Special", "nHeight", "220");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf127606)
+{
+    createDoc("tdf117923.docx");
+    // Ensure that all text portions are calculated before testing.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwViewShell* pViewShell
+        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+
+    // Check that we actually test the line we need
+    assertXPathContent(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]", "GHI GHI GHI GHI");
+    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]/Special", "nType",
+                "PortionType::Number");
+    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]/Special", "rText", "2.");
+    // The numbering height was 960 in DOC format.
+    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]/Special", "nHeight", "220");
+
+    // tdf#127606: now it's possible to change formatting of numbering
+    // increase font size (220 -> 260)
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Grow", {});
+    pViewShell->Reformat();
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]/Special", "nHeight", "260");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf109077)
 {
     createDoc("tdf109077.docx");
