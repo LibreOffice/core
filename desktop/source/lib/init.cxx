@@ -3647,10 +3647,6 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
         ExecuteOrientationChange();
         return;
     }
-    else if (gImpl && aCommand == ".uno:Text")
-    {
-        aCommand = ".uno:Text?CreateDirectly:bool=true";
-    }
 
     // handle potential interaction
     if (gImpl && aCommand == ".uno:Save")
