@@ -23,6 +23,7 @@
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <vcl/window.hxx>
+#include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 
 #include <vcl/sysdata.hxx>
@@ -53,8 +54,12 @@ using namespace cppu;
 void AccTopWindowListener::HandleWindowOpened( css::accessibility::XAccessible* pAccessible )
 {
     //get SystemData from window
-    VCLXWindow* pvclwindow = static_cast<VCLXWindow*>(pAccessible);
-    auto window = pvclwindow->GetWindow();
+    VclPtr<vcl::Window> window;
+    if (auto pvclwindow = dynamic_cast<VCLXWindow*>(pAccessible))
+        window = pvclwindow->GetWindow();
+    else if (auto pvclxcomponent = dynamic_cast<VCLXAccessibleComponent*>(pAccessible))
+        window = pvclxcomponent->GetWindow();
+    assert(window);
     // The SalFrame of window may be destructed at this time
     const SystemEnvData* systemdata = nullptr;
     try
