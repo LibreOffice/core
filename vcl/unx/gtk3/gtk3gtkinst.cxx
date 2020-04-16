@@ -12818,12 +12818,6 @@ private:
         }
         else
         {
-            if (!m_bHoverSelection)
-            {
-                gtk_tree_view_set_hover_selection(m_pTreeView, true);
-                m_bHoverSelection = true;
-            }
-
             GtkWidget* pComboBox = GTK_WIDGET(getContainer());
 
             gint nComboWidth = gtk_widget_get_allocated_width(pComboBox);
@@ -12836,8 +12830,21 @@ private:
             gtk_widget_set_size_request(GTK_WIDGET(m_pMenuWindow), nPopupWidth, nPopupHeight);
 
             m_nPrePopupCursorPos = get_active();
+
             m_bActivateCalled = false;
             show_menu(pComboBox, m_pMenuWindow);
+
+            // under wayland I see that the cursor pos in super
+            // long treeview menus ends up in the wrong place
+            // but letting all pending events get processed
+            // before enabling hover selection solve it
+            Scheduler::ProcessEventsToIdle();
+
+            if (!m_bHoverSelection)
+            {
+                gtk_tree_view_set_hover_selection(m_pTreeView, true);
+                m_bHoverSelection = true;
+            }
         }
     }
 
@@ -13369,7 +13376,7 @@ public:
         , m_pEntry(GTK_WIDGET(gtk_builder_get_object(pComboBuilder, "entry")))
         , m_pCellView(nullptr)
         , m_aQuickSelectionEngine(*this)
-        , m_bHoverSelection(true)
+        , m_bHoverSelection(false)
         , m_bPopupActive(false)
         , m_bAutoComplete(false)
         , m_bAutoCompleteCaseSensitive(false)
