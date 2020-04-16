@@ -67,6 +67,7 @@
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 #include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
+#include <com/sun/star/chart2/AxisType.hpp>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -258,6 +259,39 @@ static bool lcl_isCategoryAxisShifted(const Reference< chart2::XChartDocument >&
     }
 
     return isCategoryPositionShifted;
+}
+
+static sal_Int32 lcl_getCategoryAxisType( const Reference< chart2::XDiagram >& xDiagram, sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex )
+{
+    sal_Int32 nAxisType = -1;
+    try
+    {
+        Reference< chart2::XCoordinateSystemContainer > xCooSysCnt(
+            xDiagram, uno::UNO_QUERY_THROW);
+        const Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq(
+            xCooSysCnt->getCoordinateSystems());
+        for( const auto& xCooSys : aCooSysSeq )
+        {
+            OSL_ASSERT(xCooSys.is());
+            if( nDimensionIndex < xCooSys->getDimension() && nAxisIndex <= xCooSys->getMaximumAxisIndexByDimension(nDimensionIndex) )
+            {
+                Reference< chart2::XAxis > xAxis = xCooSys->getAxisByDimension(nDimensionIndex, nAxisIndex);
+                OSL_ASSERT(xAxis.is());
+                if( xAxis.is() )
+                {
+                    chart2::ScaleData aScaleData = xAxis->getScaleData();
+                    nAxisType = aScaleData.AxisType;
+                    break;
+                }
+            }
+        }
+    }
+    catch (const uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("oox");
+    }
+
+    return nAxisType;
 }
 
 static bool lcl_isSeriesAttachedToFirstAxis(
@@ -2644,7 +2678,7 @@ void ChartExport::exportAxes( )
 
 namespace {
 
-sal_Int32 getXAxisType(sal_Int32 eChartType)
+sal_Int32 getXAxisTypeByChartType(sal_Int32 eChartType)
 {
     if( (eChartType == chart::TYPEID_SCATTER)
             || (eChartType == chart::TYPEID_BUBBLE) )
@@ -2653,6 +2687,18 @@ sal_Int32 getXAxisType(sal_Int32 eChartType)
         return  XML_dateAx;
 
     return XML_catAx;
+}
+
+sal_Int32 getRealXAxisType(sal_Int32 nAxisType)
+{
+    if( nAxisType == chart2::AxisType::CATEGORY )
+        return XML_catAx;
+    else if( nAxisType == chart2::AxisType::DATE )
+        return XML_dateAx;
+    else if( nAxisType == chart2::AxisType::SERIES )
+        return XML_serAx;
+
+    return XML_valAx;
 }
 
 }
@@ -2709,8 +2755,11 @@ void ChartExport::exportAxis(const AxisIdPair& rAxisIdPair)
             if( bHasXAxisMinorGrid )
                 xMinorGrid = xAxisXSupp->getXHelpGrid();
 
-            sal_Int32 eChartType = getChartType();
-            nAxisType = getXAxisType(eChartType);
+            nAxisType = lcl_getCategoryAxisType(mxNewDiagram, 0, 0);
+            if( nAxisType != -1 )
+                nAxisType = getRealXAxisType(nAxisType);
+            else
+                nAxisType = getXAxisTypeByChartType( getChartType() );
             // FIXME: axPos, need to check axis direction
             sAxPos = "b";
             break;
@@ -2767,8 +2816,11 @@ void ChartExport::exportAxis(const AxisIdPair& rAxisIdPair)
                 xAxisTitle = xAxisSupp->getSecondXAxisTitle();
             }
 
-            sal_Int32 eChartType = getChartType();
-            nAxisType = getXAxisType(eChartType);
+            nAxisType = lcl_getCategoryAxisType(mxNewDiagram, 0, 1);
+            if( nAxisType != -1 )
+                nAxisType = getRealXAxisType(nAxisType);
+            else
+                nAxisType = getXAxisTypeByChartType( getChartType() );
             // FIXME: axPos, need to check axis direction
             sAxPos = "t";
             break;

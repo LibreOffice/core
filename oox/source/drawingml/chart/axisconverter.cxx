@@ -205,10 +205,8 @@ void AxisConverter::convertFromModel(
                     OSL_ENSURE( (mrModel.mnTypeId == C_TOKEN( catAx )) || (mrModel.mnTypeId == C_TOKEN( dateAx )),
                         "AxisConverter::convertFromModel - unexpected axis model type (must: c:catAx or c:dateAx)" );
                     bool bDateAxis = mrModel.mnTypeId == C_TOKEN( dateAx );
-                    /*  Chart2 requires axis type CATEGORY for automatic
-                        category/date axis (even if it is a date axis
-                        currently). */
-                    aScaleData.AxisType = (bDateAxis && !mrModel.mbAuto) ? cssc2::AxisType::DATE : cssc2::AxisType::CATEGORY;
+                    // tdf#132076: set axis type to date, if it is a date axis!
+                    aScaleData.AxisType = bDateAxis ? cssc2::AxisType::DATE : cssc2::AxisType::CATEGORY;
                     aScaleData.AutoDateAxis = mrModel.mbAuto;
                     aScaleData.Categories = rTypeGroups.front()->createCategorySequence();
                     /* set default ShiftedCategoryPosition values for some charttype,
@@ -341,8 +339,10 @@ void AxisConverter::convertFromModel(
         xAxis->setScaleData( aScaleData );
 
         // number format ------------------------------------------------------
-        if( !mrModel.mbDeleted && ((aScaleData.AxisType == cssc2::AxisType::REALNUMBER) || (aScaleData.AxisType == cssc2::AxisType::PERCENT)) )
+        if( !mrModel.mbDeleted && aScaleData.AxisType != cssc2::AxisType::SERIES )
+        {
             getFormatter().convertNumberFormat(aAxisProp, mrModel.maNumberFormat, true);
+        }
 
         // position of crossing axis ------------------------------------------
 
