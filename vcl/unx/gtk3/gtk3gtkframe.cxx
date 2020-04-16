@@ -357,20 +357,20 @@ bool GtkSalFrame::doKeyCallback( guint state,
             // shift-zero forces a re-draw and event is swallowed
             if (keyval == GDK_KEY_0)
             {
-                fprintf( stderr, "force widget_queue_draw\n");
+                SAL_INFO("vcl.gtk3", "force widget_queue_draw.");
                 gtk_widget_queue_draw(GTK_WIDGET(m_pFixedContainer));
                 return false;
             }
             else if (keyval == GDK_KEY_1)
             {
-                fprintf( stderr, "force repaint all\n");
+                SAL_INFO("vcl.gtk3", "force repaint all.");
                 TriggerPaintEvent();
                 return false;
             }
             else if (keyval == GDK_KEY_2)
             {
                 dumpframes = !dumpframes;
-                fprintf(stderr, "toggle dump frames to %d\n", dumpframes);
+                SAL_INFO("vcl.gtk3", "toggle dump frames to " << dumpframes);
                 return false;
             }
         }
@@ -3317,14 +3317,18 @@ gboolean GtkSalFrame::signalWindowState( GtkWidget*, GdkEvent* pEvent, gpointer 
 
     pThis->m_nState = pEvent->window_state.new_window_state;
 
-    #if OSL_DEBUG_LEVEL > 1
-    if( (pEvent->window_state.changed_mask & GDK_WINDOW_STATE_FULLSCREEN) )
-    {
-        fprintf( stderr, "window %p %s full screen state\n",
-            pThis,
-            (pEvent->window_state.new_window_state & GDK_WINDOW_STATE_FULLSCREEN) ? "enters" : "leaves");
-    }
-    #endif
+#if OSL_DEBUG_LEVEL > 1
+    SAL_INFO_IF((pEvent->window_state.changed_mask &
+                GDK_WINDOW_STATE_FULLSCREEN),
+            "vcl.gtk3", "window "
+            << pThis
+            << " "
+            << ((pEvent->window_state.new_window_state &
+                    GDK_WINDOW_STATE_FULLSCREEN) ?
+                "enters" :
+                "leaves")
+            << " full screen state.");
+#endif
 
     return false;
 }

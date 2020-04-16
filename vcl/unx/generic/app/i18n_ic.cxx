@@ -25,6 +25,8 @@
 #include <unx/salframe.h>
 #include <unx/saldisp.hxx>
 
+#include <sal/log.hxx>
+
 using namespace vcl;
 
 static void sendEmptyCommit( SalFrame* pFrame )
@@ -315,7 +317,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
     if ( maContext == nullptr )
     {
 #if OSL_DEBUG_LEVEL > 1
-        fprintf(stderr, "input context creation failed\n");
+        SAL_WARN("vcl.app", "input context creation failed.");
 #endif
 
         mbUseable = False;
@@ -508,7 +510,7 @@ SalI18N_InputContext::CommitKeyEvent(sal_Unicode const * pText, std::size_t nLen
     }
 #if OSL_DEBUG_LEVEL > 1
     else
-        fprintf(stderr, "CommitKeyEvent without frame\n" );
+        SAL_WARN("vcl.app", "CommitKeyEvent without frame.");
 #endif
 }
 

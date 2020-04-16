@@ -31,9 +31,10 @@ public:
                                   const std::vector< OUString >& rButtons ) override
     {
         (void)rButtons;
-        ::fprintf(stdout, "LibreOffice - dialog '%s': '%s'",
-                            OUStringToOString(rTitle, RTL_TEXTENCODING_ASCII_US).getStr(),
-                            OUStringToOString(rMessage, RTL_TEXTENCODING_ASCII_US).getStr());
+        SAL_INFO("vcl.headless",
+                "LibreOffice - dialog '"
+                << rTitle << "': '"
+                << rMessage << "'");
         return 0;
     }
 };
@@ -56,10 +57,10 @@ void SalAbort( const OUString& rErrorText, bool bDumpCore )
     OUString aError( rErrorText );
     if( aError.isEmpty() )
         aError = "Unknown application error";
-    ::fprintf( stderr, "%s\n", OUStringToOString(rErrorText, osl_getThreadTextEncoding()).getStr() );
 
-    ::fprintf( stderr, "SalAbort: '%s'",
-                        OUStringToOString(aError, RTL_TEXTENCODING_ASCII_US).getStr());
+    SAL_WARN("vcl.headless", rErrorText);
+    SAL_INFO("vcl.headless", "SalAbort: '" << aError << "'.");
+
     if( bDumpCore )
         abort();
     else

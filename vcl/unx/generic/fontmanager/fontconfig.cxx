@@ -659,8 +659,10 @@ void PrintFontManager::addFontconfigDir( const OString& rDirName )
         fclose( pCfgFile);
         bool bCfgOk = FcConfigParseAndLoad(FcConfigGetCurrent(),
                         reinterpret_cast<FcChar8 const *>(aConfFileName.getStr()), FcTrue);
-        if( !bCfgOk )
-            fprintf( stderr, "FcConfigParseAndLoad( \"%s\") => %d\n", aConfFileName.getStr(), bCfgOk );
+
+        SAL_INFO_IF(!bCfgOk,
+                "vcl.fonts", "FcConfigParseAndLoad( \""
+                << aConfFileName << "\") => " << bCfgOk);
     } else {
         SAL_INFO("vcl.fonts", "cannot open " << aConfFileName);
     }
