@@ -724,10 +724,9 @@ void SvxCropExample::Paint(vcl::RenderContext& rRenderContext, const ::tools::Re
     // PolygonMarkerPrimitive2D, may be changed to that primitive later.
     // Use this to guarantee good visibility - that was the purpose of
     // the former used XOR paint.
-    const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-    const Color aColA(aSvtOptionsDrawinglayer.GetStripeColorA().getBColor());
-    const Color aColB(aSvtOptionsDrawinglayer.GetStripeColorB().getBColor());
-    const double fStripeLength(aSvtOptionsDrawinglayer.GetStripeLength());
+    const Color aColA(SvtOptionsDrawinglayer::GetStripeColorA().getBColor());
+    const Color aColB(SvtOptionsDrawinglayer::GetStripeColorB().getBColor());
+    const double fStripeLength(SvtOptionsDrawinglayer::GetStripeLength());
     const basegfx::B2DVector aDashVector(rRenderContext.GetInverseViewTransformation() * basegfx::B2DVector(fStripeLength, 0.0));
     const double fLogicDashLength(aDashVector.getX());
 

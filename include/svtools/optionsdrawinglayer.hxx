@@ -48,25 +48,21 @@ class SVT_DLLPUBLIC SvtOptionsDrawinglayer
          SvtOptionsDrawinglayer();
         ~SvtOptionsDrawinglayer();
 
-        /*-****************************************************************************************************
-            @short      interface methods to get and set value of config key "org.openoffice.Office.Common/Drawinglayer/..."
-            @descr      These options describe internal states to enable/disable features of installed office.
-
-                        GetStripeColorA()
-                        SetStripeColorA()       =>  Set first of two colors which overlay uses to draw stripes
-
-                        GetStripeColorB()
-                        SetStripeColorB()       =>  Set second of two colors which overlay uses to draw stripes
-
-                        GetStripeLength()
-                        SetStripeLength()       =>  Set length of a single stripe in pixels
-
-            @seealso    configuration package "org.openoffice.Office.Common/Drawinglayer"
-        *//*-*****************************************************************************************************/
-
-        Color       GetStripeColorA() const;
-        Color       GetStripeColorB() const;
-        sal_uInt16  GetStripeLength() const;
+        /**
+          Specifies the first one of two colors used from overlay to
+          display striped lines as helplines. Default is black.
+        */
+        static Color       GetStripeColorA() { return Color(0); }
+        /**
+          Specifies the second one of two colors used from overlay to
+          display striped lines as helplines. Default is white.
+        */
+        static Color       GetStripeColorB() { return Color(16777215); }
+        /**
+          Specifies the length in pixels of a single stripe used from
+          overlay to display striped lines as helplines. Default is four.
+         */
+        static sal_uInt16  GetStripeLength() { return 4; }
 
         /**
           Specifies the maximum allowed Paper Width for page definitions
@@ -140,7 +136,7 @@ class SVT_DLLPUBLIC SvtOptionsDrawinglayer
         // get system highlight color, limited to the maximum allowed luminance
         // (defined in GetSelectionMaximumLuminancePercent() in SvtOptionsDrawinglayer,
         // combined with Application::GetSettings().GetStyleSettings().GetHighlightColor())
-        Color getHilightColor() const;
+        static Color getHilightColor();
 
     private:
 

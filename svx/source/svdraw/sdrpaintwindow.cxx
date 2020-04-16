@@ -173,8 +173,8 @@ void SdrPreRenderDevice::OutputPreRenderDevice(const vcl::Region& rExpandedRegio
 
 void SdrPaintView::InitOverlayManager(rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager) const
 {
-    Color aColA(getOptionsDrawinglayer().GetStripeColorA());
-    Color aColB(getOptionsDrawinglayer().GetStripeColorB());
+    Color aColA(SvtOptionsDrawinglayer::GetStripeColorA());
+    Color aColB(SvtOptionsDrawinglayer::GetStripeColorB());
 
     if (Application::GetSettings().GetStyleSettings().GetHighContrastMode())
     {
@@ -184,7 +184,7 @@ void SdrPaintView::InitOverlayManager(rtl::Reference<sdr::overlay::OverlayManage
 
     xOverlayManager->setStripeColorA(aColA);
     xOverlayManager->setStripeColorB(aColB);
-    xOverlayManager->setStripeLengthPixel(getOptionsDrawinglayer().GetStripeLength());
+    xOverlayManager->setStripeLengthPixel(SvtOptionsDrawinglayer::GetStripeLength());
 }
 
 rtl::Reference<sdr::overlay::OverlayManager> SdrPaintView::CreateOverlayManager(OutputDevice& rOutputDevice) const

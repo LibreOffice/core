@@ -35,28 +35,17 @@ using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 
 #define ROOTNODE_START                  "Office.Common/Drawinglayer"
-#define DEFAULT_STRIPE_COLOR_A          Color(0)
-#define DEFAULT_STRIPE_COLOR_B          Color(16581375)
-#define DEFAULT_STRIPE_LENGTH           4
 
 // primitives
 #define DEFAULT_ANTIALIASING                        true
 
-#define PROPERTYNAME_STRIPE_COLOR_A     OUString("StripeColorA"     )
-#define PROPERTYNAME_STRIPE_COLOR_B     OUString("StripeColorB"     )
-#define PROPERTYNAME_STRIPE_LENGTH      OUString("StripeLength"     )
-
 // primitives
 #define PROPERTYNAME_ANTIALIASING OUString("AntiAliasing")
 
-#define PROPERTYHANDLE_STRIPE_COLOR_A               0
-#define PROPERTYHANDLE_STRIPE_COLOR_B               1
-#define PROPERTYHANDLE_STRIPE_LENGTH                2
-
 // primitives
-#define PROPERTYHANDLE_ANTIALIASING                 3
+#define PROPERTYHANDLE_ANTIALIASING                 0
 
-#define PROPERTYCOUNT                               4
+#define PROPERTYCOUNT                               1
 
 class SvtOptionsDrawinglayer_Impl : public ConfigItem
 {
@@ -65,10 +54,6 @@ public:
     ~SvtOptionsDrawinglayer_Impl() override;
 
     virtual void Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
-
-    const Color& GetStripeColorA() const { return m_bStripeColorA;}
-    const Color& GetStripeColorB() const { return m_bStripeColorB;}
-    sal_uInt16  GetStripeLength() const { return m_nStripeLength;}
 
     // helper
     bool        IsAAPossibleOnThisSystem() const;
@@ -89,10 +74,6 @@ private:
 
 private:
 
-        Color       m_bStripeColorA;
-        Color       m_bStripeColorB;
-        sal_uInt16  m_nStripeLength;
-
         // primitives
         bool        m_bAntiAliasing;
 
@@ -103,9 +84,6 @@ private:
 
 SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
     ConfigItem( ROOTNODE_START  ),
-    m_bStripeColorA(DEFAULT_STRIPE_COLOR_A),
-    m_bStripeColorB(DEFAULT_STRIPE_COLOR_B),
-    m_nStripeLength(DEFAULT_STRIPE_LENGTH),
 
     // primitives
     m_bAntiAliasing(DEFAULT_ANTIALIASING),
@@ -128,31 +106,6 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
 
         switch( nProperty )
         {
-            case PROPERTYHANDLE_STRIPE_COLOR_A:
-            {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\StripeColorA\"?" );
-                sal_Int32 nValue = 0;
-                seqValues[nProperty] >>= nValue;
-                m_bStripeColorA = Color(nValue);
-            }
-            break;
-
-            case PROPERTYHANDLE_STRIPE_COLOR_B:
-            {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\StripeColorB\"?" );
-                sal_Int32 nValue = 0;
-                seqValues[nProperty] >>= nValue;
-                m_bStripeColorB = Color(nValue);
-            }
-            break;
-
-            case PROPERTYHANDLE_STRIPE_LENGTH:
-            {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_SHORT), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\StripeLength\"?" );
-                seqValues[nProperty] >>= m_nStripeLength;
-            }
-            break;
-
             // primitives
             case PROPERTYHANDLE_ANTIALIASING:
             {
@@ -182,18 +135,6 @@ void SvtOptionsDrawinglayer_Impl::ImplCommit()
     {
         switch( nProperty )
         {
-            case PROPERTYHANDLE_STRIPE_COLOR_A:
-                aSeqValues[nProperty] <<= m_bStripeColorA;
-            break;
-
-            case PROPERTYHANDLE_STRIPE_COLOR_B:
-                aSeqValues[nProperty] <<= m_bStripeColorB;
-            break;
-
-            case PROPERTYHANDLE_STRIPE_LENGTH:
-                aSeqValues[nProperty] <<= m_nStripeLength;
-            break;
-
             // primitives
             case PROPERTYHANDLE_ANTIALIASING:
                 aSeqValues[nProperty] <<= m_bAntiAliasing;
@@ -256,10 +197,6 @@ Sequence< OUString > SvtOptionsDrawinglayer_Impl::impl_GetPropertyNames()
     // Build list of configuration key names.
     const OUString pProperties[] =
     {
-        PROPERTYNAME_STRIPE_COLOR_A     ,
-        PROPERTYNAME_STRIPE_COLOR_B     ,
-        PROPERTYNAME_STRIPE_LENGTH      ,
-
         // primitives
         PROPERTYNAME_ANTIALIASING,
     };
@@ -295,30 +232,6 @@ SvtOptionsDrawinglayer::~SvtOptionsDrawinglayer()
     m_pImpl.reset();
 }
 
-//  public method
-
-Color SvtOptionsDrawinglayer::GetStripeColorA() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->GetStripeColorA();
-}
-
-//  public method
-
-Color SvtOptionsDrawinglayer::GetStripeColorB() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->GetStripeColorB();
-}
-
-//  public method
-
-sal_uInt16 SvtOptionsDrawinglayer::GetStripeLength() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->GetStripeLength();
-}
-
 // helper
 bool SvtOptionsDrawinglayer::IsAAPossibleOnThisSystem() const
 {
@@ -346,7 +259,7 @@ void SvtOptionsDrawinglayer::SetAntiAliasing( bool bState )
 */
 constexpr double fSelectionMaximumLuminancePercent = 70 / 100.0;
 
-Color SvtOptionsDrawinglayer::getHilightColor() const
+Color SvtOptionsDrawinglayer::getHilightColor()
 {
     Color aRetval(Application::GetSettings().GetStyleSettings().GetHighlightColor());
     const basegfx::BColor aSelection(aRetval.getBColor());

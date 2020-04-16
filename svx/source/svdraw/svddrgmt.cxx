@@ -99,9 +99,9 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPolyPolygon::createP
         const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
 
         rDragMethod.applyCurrentTransformationToPolyPolygon(aCopy);
-        basegfx::BColor aColA(aSvtOptionsDrawinglayer.GetStripeColorA().getBColor());
-        basegfx::BColor aColB(aSvtOptionsDrawinglayer.GetStripeColorB().getBColor());
-        const double fStripeLength(aSvtOptionsDrawinglayer.GetStripeLength());
+        basegfx::BColor aColA(SvtOptionsDrawinglayer::GetStripeColorA().getBColor());
+        basegfx::BColor aColB(SvtOptionsDrawinglayer::GetStripeColorB().getBColor());
+        const double fStripeLength(SvtOptionsDrawinglayer::GetStripeLength());
 
         if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
         {
@@ -244,8 +244,7 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPointGlueDrag::creat
 
         if(mbIsPointDrag)
         {
-            const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-            basegfx::BColor aColor(aSvtOptionsDrawinglayer.GetStripeColorA().getBColor());
+            basegfx::BColor aColor(SvtOptionsDrawinglayer::GetStripeColorA().getBColor());
 
             if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
             {
@@ -921,10 +920,9 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragMethod::AddConnectorOverl
                     }
                     else
                     {
-                        const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-                        basegfx::BColor aColA(aSvtOptionsDrawinglayer.GetStripeColorA().getBColor());
-                        basegfx::BColor aColB(aSvtOptionsDrawinglayer.GetStripeColorB().getBColor());
-                        const double fStripeLength(aSvtOptionsDrawinglayer.GetStripeLength());
+                        basegfx::BColor aColA(SvtOptionsDrawinglayer::GetStripeColorA().getBColor());
+                        basegfx::BColor aColB(SvtOptionsDrawinglayer::GetStripeColorB().getBColor());
+                        const double fStripeLength(SvtOptionsDrawinglayer::GetStripeLength());
 
                         if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
                         {

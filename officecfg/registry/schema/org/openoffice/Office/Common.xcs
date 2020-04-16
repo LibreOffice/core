@@ -983,30 +983,6 @@
       <info>
         <desc>Specifies settings for the Drawinglayer.</desc>
       </info>
-      <prop oor:name="StripeColorA" oor:type="xs:int" oor:nillable="false">
-        <info>
-          <desc>Specifies the first one of two colors used from overlay to
-          display striped lines as helplines. Default is black.</desc>
-          <label>Use given color as first stripe color</label>
-        </info>
-        <value>0</value>
-      </prop>
-      <prop oor:name="StripeColorB" oor:type="xs:int" oor:nillable="false">
-        <info>
-          <desc>Specifies the second one of two colors used from overlay to
-          display striped lines as helplines. Default is white.</desc>
-          <label>Use given color as second stripe color</label>
-        </info>
-        <value>16777215</value>
-      </prop>
-      <prop oor:name="StripeLength" oor:type="xs:short" oor:nillable="false">
-        <info>
-          <desc>Specifies the length in pixels of a single stripe used from
-          overlay to display striped lines as helplines. Default is four.</desc>
-          <label>Use given length as stripe length</label>
-        </info>
-        <value>4</value>
-      </prop>
       <prop oor:name="AntiAliasing" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>This switch allows to switch DrawingLayer based views to be
