@@ -97,7 +97,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbDisableOffPagePositioning ( false ),
     mbProtectBookmarks(false),
     mbProtectFields(false),
-    mbHeaderSpacingBelowLastPara(false)
+    mbHeaderSpacingBelowLastPara(false),
+    mbAllowWrapWhenAnchoredInTable(true) //tdf#104596
 
     // COMPATIBILITY FLAGS END
 {
@@ -226,6 +227,7 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::PROTECT_BOOKMARKS: return mbProtectBookmarks;
         case DocumentSettingId::PROTECT_FIELDS: return mbProtectFields;
         case DocumentSettingId::HEADER_SPACING_BELOW_LAST_PARA: return mbHeaderSpacingBelowLastPara;
+        case DocumentSettingId::ALLOW_WRAP_WHEN_ANCHORED_IN_TABLE: return mbAllowWrapWhenAnchoredInTable;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -474,6 +476,9 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
         case DocumentSettingId::HEADER_SPACING_BELOW_LAST_PARA:
             mbHeaderSpacingBelowLastPara = value;
             break;
+        case DocumentSettingId::ALLOW_WRAP_WHEN_ANCHORED_IN_TABLE:
+            mbAllowWrapWhenAnchoredInTable = value;
+            break;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -646,6 +651,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     // No mbProtectBookmarks: this is false by default everywhere
     // No mbProtectFields: this is false by default everywhere
     mbHeaderSpacingBelowLastPara = rSource.mbHeaderSpacingBelowLastPara;
+    mbAllowWrapWhenAnchoredInTable = rSource.mbAllowWrapWhenAnchoredInTable;
 }
 
 sal_uInt32 sw::DocumentSettingManager::Getn32DummyCompatibilityOptions1() const
