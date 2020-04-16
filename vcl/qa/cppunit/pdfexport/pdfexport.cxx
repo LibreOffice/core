@@ -97,6 +97,7 @@ public:
     void testTdf99680_2();
 #endif
     void testTocLink();
+    void testLargePage();
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
 #if HAVE_FEATURE_PDFIUM
@@ -115,6 +116,7 @@ public:
     CPPUNIT_TEST(testTdf99680_2);
 #endif
     CPPUNIT_TEST(testTocLink);
+    CPPUNIT_TEST(testLargePage);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -750,6 +752,36 @@ void PdfExportTest::testTocLink()
     // Without the accompanying fix in place, this test would have failed, as FPDFLink_Enumerate()
     // returned false, as the page contained no links.
     CPPUNIT_ASSERT(FPDFLink_Enumerate(pPdfPage.get(), &nStartPos, &pLinkAnnot));
+}
+
+void PdfExportTest::testLargePage()
+{
+    // Import the bugdoc and export as PDF.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "6m-wide.odg";
+    mxComponent = loadFromDesktop(aURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("draw_pdf_Export");
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
+    maMemory.WriteStream(aFile);
+    DocumentHolder pPdfDocument(
+        FPDF_LoadMemDocument(maMemory.GetData(), maMemory.GetSize(), /*password=*/nullptr));
+
+    // The document has 1 page.
+    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
+
+    // Check the value (not the unit) of the page size.
+    double fWidth = 0;
+    double fHeight = 0;
+    FPDF_GetPageSizeByIndex(pPdfDocument.get(), 0, &fWidth, &fHeight);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 8503.92
+    // - Actual  : 17007.875
+    // i.e. the value for 600 cm was larger than the 14 400 limit set in the spec.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(8503.92, fWidth, 0.01);
 }
 
 #endif

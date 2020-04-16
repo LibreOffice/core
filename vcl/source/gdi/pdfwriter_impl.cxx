@@ -1141,6 +1141,7 @@ PDFWriterImpl::PDFPage::PDFPage( PDFWriterImpl* pWriter, double nPageWidth, doub
 {
     // object ref must be only ever updated in emit()
     m_nPageObject = m_pWriter->createObject();
+    m_nUserUnit = std::ceil(std::max(nPageWidth, nPageHeight) / 14400.0);
 }
 
 PDFWriterImpl::PDFPage::~PDFPage()
@@ -1224,10 +1225,15 @@ bool PDFWriterImpl::PDFPage::emit(sal_Int32 nParentObject )
     if( m_nPageWidth && m_nPageHeight )
     {
         aLine.append( "/MediaBox[0 0 " );
-        aLine.append( m_nPageWidth );
+        aLine.append(m_nPageWidth / m_nUserUnit);
         aLine.append( ' ' );
-        aLine.append( m_nPageHeight );
+        aLine.append(m_nPageHeight / m_nUserUnit);
         aLine.append( "]" );
+        if (m_nUserUnit > 1)
+        {
+            aLine.append("\n/UserUnit ");
+            aLine.append(m_nUserUnit);
+        }
     }
     switch( m_eOrientation )
     {
@@ -1697,6 +1703,18 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
         }
     }
     rBuffer.append( "S\n" );
+}
+
+double PDFWriterImpl::PDFPage::getHeight() const
+{
+    double fRet = m_nPageHeight ? m_nPageHeight : m_pWriter->m_nInheritedPageHeight;
+
+    if (m_nUserUnit > 1)
+    {
+        fRet /= m_nUserUnit;
+    }
+
+    return fRet;
 }
 
  PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
@@ -2262,6 +2280,14 @@ void PDFWriterImpl::newPage( double nPageWidth, double nPageHeight, PDFWriter::O
     endPage();
     m_nCurrentPage = m_aPages.size();
     m_aPages.push_back( PDFPage(this, nPageWidth, nPageHeight, eOrientation ) );
+
+    sal_Int32 nUserUnit = m_aPages.back().m_nUserUnit;
+    if (nUserUnit > 1)
+    {
+        m_aMapMode = MapMode(MapUnit::MapPoint, Point(), Fraction(nUserUnit, pointToPixel(1)),
+                             Fraction(nUserUnit, pointToPixel(1)));
+    }
+
     m_aPages.back().beginStream();
 
     // setup global graphics state
@@ -5048,6 +5074,7 @@ bool PDFWriterImpl::emitCatalog()
 
     sal_Int32 nMediaBoxWidth = 0;
     sal_Int32 nMediaBoxHeight = 0;
+    sal_Int32 nUserUnit = 1;
     if( m_aPages.empty() ) // sanity check, this should not happen
     {
         nMediaBoxWidth = m_nInheritedPageWidth;
@@ -5058,17 +5085,29 @@ bool PDFWriterImpl::emitCatalog()
         for( std::vector<PDFPage>::const_iterator iter = m_aPages.begin(); iter != m_aPages.end(); ++iter )
         {
             if( iter->m_nPageWidth > nMediaBoxWidth )
+            {
                 nMediaBoxWidth = iter->m_nPageWidth;
+                nUserUnit = iter->m_nUserUnit;
+            }
             if( iter->m_nPageHeight > nMediaBoxHeight )
+            {
                 nMediaBoxHeight = iter->m_nPageHeight;
+                nUserUnit = iter->m_nUserUnit;
+            }
         }
     }
     aLine.append( "/MediaBox[ 0 0 " );
-    aLine.append( nMediaBoxWidth );
+    aLine.append(nMediaBoxWidth / nUserUnit);
     aLine.append( ' ' );
-    aLine.append( nMediaBoxHeight );
-    aLine.append( " ]\n"
-                  "/Kids[ " );
+    aLine.append(nMediaBoxHeight / nUserUnit);
+    aLine.append(" ]\n");
+    if (nUserUnit > 1)
+    {
+        aLine.append("/UserUnit ");
+        aLine.append(nUserUnit);
+        aLine.append("\n");
+    }
+    aLine.append("/Kids[ ");
     unsigned int i = 0;
     for( std::vector<PDFPage>::const_iterator iter = m_aPages.begin(); iter != m_aPages.end(); ++iter, i++ )
     {
