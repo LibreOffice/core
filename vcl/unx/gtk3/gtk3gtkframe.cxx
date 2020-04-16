@@ -2370,7 +2370,10 @@ bool GtkSalFrame::ShowTooltip(const OUString& rHelpText, const tools::Rectangle&
 void GtkSalFrame::HideTooltip()
 {
     m_aTooltip.clear();
-    gtk_widget_trigger_tooltip_query(getMouseEventWidget());
+    GtkWidget* pEventWidget = getMouseEventWidget();
+    gtk_widget_trigger_tooltip_query(pEventWidget);
+    GdkDisplay *pDisplay = gtk_widget_get_display(pEventWidget);
+    gtk_tooltip_trigger_tooltip_query(pDisplay);
 }
 
 namespace

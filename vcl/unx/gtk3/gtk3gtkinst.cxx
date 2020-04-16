@@ -6993,6 +6993,17 @@ bool show_menu_newer_gtk(GtkWidget* pComboBox, GtkWindow* pMenu)
 
 void show_menu(GtkWidget* pMenuButton, GtkWindow* pMenu)
 {
+    // tdf#120764 It isn't allowed under wayland to have two visible popups that share
+    // the same top level parent. The problem is that since gtk 3.24 tooltips are also
+    // implemented as popups, which means that we cannot show any popup if there is a
+    // visible tooltip.
+
+    GtkWidget* pParent = gtk_widget_get_toplevel(pMenuButton);
+    fprintf(stderr, "parent %p\n", pParent);
+    GtkSalFrame* pFrame = pParent ? GtkSalFrame::getFromWindow(pParent) : nullptr;
+    if (pFrame)
+        pFrame->HideTooltip();
+
     // try with gdk_window_move_to_rect, but if that's not available, try without
     if (!show_menu_newer_gtk(pMenuButton, pMenu))
         show_menu_older_gtk(pMenuButton, pMenu);
