@@ -189,6 +189,7 @@ class GtkSalFrame final : public SalFrame
     bool                            m_bSpanMonitorsWhenFullscreen;
     bool                            m_bDefaultPos;
     bool                            m_bDefaultSize;
+    bool                            m_bTooltipBlocked;
     OUString                        m_sWMClass;
 
     std::unique_ptr<IMHandler>      m_pIMHandler;
@@ -489,6 +490,8 @@ public:
     virtual void                SetModal(bool bModal) override;
     virtual bool                GetModal() const override;
     void                        HideTooltip();
+    void                        BlockTooltip();
+    void                        UnblockTooltip();
     virtual bool                ShowTooltip(const OUString& rHelpText, const tools::Rectangle& rHelpArea) override;
     virtual void*               ShowPopover(const OUString& rHelpText, vcl::Window* pParent, const tools::Rectangle& rHelpArea, QuickHelpFlags nFlags) override;
     virtual bool                UpdatePopover(void* nId, const OUString& rHelpText, vcl::Window* pParent, const tools::Rectangle& rHelpArea) override;

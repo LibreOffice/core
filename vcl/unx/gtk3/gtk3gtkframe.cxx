@@ -928,6 +928,7 @@ void GtkSalFrame::InitCommon()
     m_pDropTarget       = nullptr;
     m_pDragSource       = nullptr;
     m_bGeometryIsProvisional = false;
+    m_bTooltipBlocked   = false;
     m_ePointerStyle     = static_cast<PointerStyle>(0xffff);
     m_pSalMenu          = nullptr;
     m_nWatcherId        = 0;
@@ -2344,7 +2345,7 @@ gboolean GtkSalFrame::signalTooltipQuery(GtkWidget*, gint /*x*/, gint /*y*/,
                                      gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-    if (pThis->m_aTooltip.isEmpty())
+    if (pThis->m_aTooltip.isEmpty() || pThis->m_bTooltipBlocked)
         return false;
     gtk_tooltip_set_text(tooltip,
         OUStringToOString(pThis->m_aTooltip, RTL_TEXTENCODING_UTF8).getStr());
@@ -2367,10 +2368,21 @@ bool GtkSalFrame::ShowTooltip(const OUString& rHelpText, const tools::Rectangle&
     return true;
 }
 
+void GtkSalFrame::BlockTooltip()
+{
+    m_bTooltipBlocked = true;
+}
+
+void GtkSalFrame::UnblockTooltip()
+{
+    m_bTooltipBlocked = false;
+}
+
 void GtkSalFrame::HideTooltip()
 {
     m_aTooltip.clear();
-    gtk_widget_trigger_tooltip_query(getMouseEventWidget());
+    GtkWidget* pEventWidget = getMouseEventWidget();
+    gtk_widget_trigger_tooltip_query(pEventWidget);
 }
 
 namespace
