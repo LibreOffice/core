@@ -192,6 +192,8 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
                         pPage->GetObj(0)->CloneSdrObject(
                             bUseSpecialCalcMode ? *mpDestModel : mrSdrView.getSdrModelFromSdrView()));
 
+                    pNewObject->MakeNameUnique();
+
                     // tdf#117629
                     // Since the 'old' ::CloneSdrObject also copies the SdrPage* the
                     // SdrObject::getUnoShape() *will* create the wrong UNO API object

@@ -2990,6 +2990,12 @@ bool SdrObject::IsTextBox() const
     return false;
 }
 
+void SdrObject::MakeNameUnique()
+{
+    std::unordered_set<OUString> aNameSet;
+    MakeNameUnique(aNameSet);
+}
+
 void SdrObject::MakeNameUnique(std::unordered_set<OUString>& rNameSet)
 {
     if (GetName().isEmpty())
