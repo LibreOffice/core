@@ -137,7 +137,6 @@ Locale:
 Calc:</property>
                 <property name="wrap">True</property>
                 <property name="selectable">True</property>
-                <property name="ellipsize">end</property>
                 <property name="max_width_chars">50</property>
                 <property name="xalign">0</property>
               </object>
