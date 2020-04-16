@@ -491,8 +491,11 @@ uno::Any SAL_CALL ScAccessibleCell::getExtendedAttributes()
     if (mpViewShell)
     {
         OUString strFor = mpViewShell->GetFormula(maCellAddress) ;
-        strFor = strFor.copy(1);
-        strFor = ReplaceFourChar(strFor);
+        if (!strFor.isEmpty())
+        {
+            strFor = strFor.copy(1);
+            strFor = ReplaceFourChar(strFor);
+        }
         strFor = "Formula:" + strFor +
             ";Note:" +
             ReplaceFourChar(GetAllDisplayNote()) + ";" +
