@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47b1e930_4b754435",
+        "filename": "sw/source/uibase/app/docsh.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1181,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-04-16T09:14:33Z",
+      "side": 1,
+      "message": "this function is funny, there\u0027s at least 2 more functions in writerfilter that also set compat flags via UNO - maybe this can all be consolidated somewhere...",
+      "revId": "d9cdb1fac2aa764b4ed97a3b36a61764d8bb02ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
