@@ -1945,7 +1945,7 @@ void SvTreeListBox::GetFocus()
     SvTreeListEntry* pEntry = FirstSelected();
     if ( !pEntry )
     {
-        pEntry = pImpl->GetCurrentEntry();
+        pEntry = pImpl->GetCurEntry();
     }
     if (pImpl->m_pCursor)
     {

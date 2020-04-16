@@ -272,7 +272,6 @@ public:
     void                SetDragDropMode( DragDropMode eDDMode );
     void                SetSelectionMode( SelectionMode eSelMode  );
 
-    SvTreeListEntry*    GetCurrentEntry() const { return m_pCursor; }
     virtual bool        IsEntryInView( SvTreeListEntry* pEntry ) const;
     virtual SvTreeListEntry*    GetEntry( const Point& rPos ) const;
     // returns last entry, if Pos below last entry
