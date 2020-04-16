@@ -22,6 +22,29 @@
       "revId": "0130be4137d3934730398e4c505241fd6deb3fab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7025a11f_607fc198",
+        "filename": "vcl/unx/generic/fontmanager/fontconfig.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1002519
+      },
+      "writtenOn": "2020-04-16T10:21:09Z",
+      "side": 1,
+      "message": "I am a bit unsure about this log-areas I created.\nSo, it feels like they should depend on some functionality (like \"vcl.fonts\" used below).\nBut, to an extent, the code itself is organized in files and folders, which is how I \"generated\" this one here.\n\nWhat should I do here? One thing that sounds reasonable to me is:\n1. If there is already a \"SAL_*\" command, stick to that area;\n2. Else, just create one based on the file path (which is what I did).\n\nWhat do you guys think?",
+      "range": {
+        "startLine": 664,
+        "startChar": 16,
+        "endLine": 664,
+        "endChar": 37
+      },
+      "revId": "0130be4137d3934730398e4c505241fd6deb3fab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
