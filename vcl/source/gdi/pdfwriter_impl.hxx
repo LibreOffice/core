@@ -118,6 +118,11 @@ public:
         VclPtr<PDFWriterImpl>             m_pWriter;
         double const                      m_nPageWidth;           // in inch/72
         double const                      m_nPageHeight;          // in inch/72
+        /**
+         * A positive number that gives the size of default user space units, in multiples of points.
+         * Typically 1, larger if page size is > 508 cm.
+         */
+        sal_Int32 m_nUserUnit;
         PDFWriter::Orientation const      m_eOrientation;
         sal_Int32                   m_nPageObject;
         std::vector<sal_Int32>      m_aStreamObjects;
@@ -169,7 +174,7 @@ public:
         // appends a horizontal waveline with vertical offset (helper for drawWaveLine)
         void appendWaveLine( sal_Int32 nLength, sal_Int32 nYOffset, sal_Int32 nDelta, OStringBuffer& rBuffer ) const;
 
-        double getHeight() const { return m_nPageHeight ? m_nPageHeight : PDFWriterImpl::g_nInheritedPageHeight; }
+        double getHeight() const;
     };
 
     friend struct PDFPage;
