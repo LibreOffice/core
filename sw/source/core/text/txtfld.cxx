@@ -426,7 +426,8 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
     std::shared_ptr<SfxItemSet> pSet(rListAutoFormat.GetStyleHandle());
 
     // TODO remove this fallback (for WW8/RTF)
-    if (!pSet)
+    bool isDOCX = pIDSA->get(DocumentSettingId::ADD_VERTICAL_FLY_OFFSETS);
+    if (!isDOCX && !pSet)
     {
         TextFrameIndex const nTextLen(rInf.GetTextFrame()->GetText().getLength());
         SwTextNode const* pNode(nullptr);
