@@ -55,8 +55,7 @@ XMLOFF_DLLPUBLIC void * xo_component_getFactory( const char * pImplName, void * 
         const sal_Int32 nImplNameLen = strlen( pImplName );
 
         // chart OOo export
-        SINGLEFACTORY( SchXMLExport )
-        else SINGLEFACTORY( SchXMLExport_Styles )
+        SINGLEFACTORY( SchXMLExport_Styles )
         else SINGLEFACTORY( SchXMLExport_Content )
 
         // meta import/export OOo
