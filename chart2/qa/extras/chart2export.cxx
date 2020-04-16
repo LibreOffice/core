@@ -153,6 +153,7 @@ public:
     void testCustomLabelText();
     void testTdf131979();
     void testTdf126076();
+    void testTdf132076();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -269,6 +270,7 @@ public:
     CPPUNIT_TEST(testCustomLabelText);
     CPPUNIT_TEST(testTdf131979);
     CPPUNIT_TEST(testTdf126076);
+    CPPUNIT_TEST(testTdf132076);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2479,6 +2481,24 @@ void Chart2ExportTest::testTdf126076()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:marker/c:symbol[@val='square']", 0);
     // instead of skipping markers
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:marker", 0);
+}
+
+void Chart2ExportTest::testTdf132076()
+{
+    {
+        load("/chart2/qa/extras/data/ods/", "tdf132076.ods");
+        xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+        CPPUNIT_ASSERT(pXmlDoc);
+        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:numFmt", "formatCode", "dd");
+        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:numFmt", "sourceLinked", "0");
+    }
+    {
+        load("/chart2/qa/extras/data/xlsx/", "tdf132076.xlsx");
+        xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+        CPPUNIT_ASSERT(pXmlDoc);
+        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dateAx/c:numFmt", "formatCode", "dd");
+        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dateAx/c:numFmt", "sourceLinked", "0");
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
