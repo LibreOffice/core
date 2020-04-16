@@ -70,6 +70,7 @@ public:
     void testSharedFormulaXLSX();
     void testSharedFormulaRefUpdateXLSX();
     void testSheetNamesXLSX();
+    void testTdf79998();
     void testLegacyCellAnchoredRotatedShape();
     void testEnhancedProtectionXLS();
     void testEnhancedProtectionXLSX();
@@ -96,6 +97,7 @@ public:
     CPPUNIT_TEST(testSharedFormulaXLSX);
     CPPUNIT_TEST(testSharedFormulaRefUpdateXLSX);
     CPPUNIT_TEST(testSheetNamesXLSX);
+    CPPUNIT_TEST(testTdf79998);
     CPPUNIT_TEST(testLegacyCellAnchoredRotatedShape);
     CPPUNIT_TEST(testEnhancedProtectionXLS);
     CPPUNIT_TEST(testEnhancedProtectionXLSX);
@@ -464,6 +466,24 @@ void ScFiltersTest::testSheetNamesXLSX()
     CPPUNIT_ASSERT_EQUAL(OUString("\"The Sheet\""), aTabNames[2]);
     CPPUNIT_ASSERT_EQUAL(OUString("A<B"), aTabNames[3]);
     CPPUNIT_ASSERT_EQUAL(OUString("C>D"), aTabNames[4]);
+
+    xDocSh->DoClose();
+}
+
+// FILESAVE: XLSX export with long sheet names (length > 31 characters)
+void ScFiltersTest::testTdf79998()
+{
+    // check: original document has tab name > 31 characters
+    ScDocShellRef xDocSh = loadDoc("tdf79998.", FORMAT_ODS);
+    ScDocument& rDoc1 = xDocSh->GetDocument();
+    const std::vector<OUString> aTabNames1 = rDoc1.GetAllTableNames();
+    CPPUNIT_ASSERT_EQUAL(OUString("Utilities (FX Kurse, Kreditkarten etc)"), aTabNames1[1]);
+
+    // check: saved XLSX document has truncated tab name
+    xDocSh = saveAndReload( &(*xDocSh), FORMAT_XLSX);
+    ScDocument& rDoc2 = xDocSh->GetDocument();
+    const std::vector<OUString> aTabNames2 = rDoc2.GetAllTableNames();
+    CPPUNIT_ASSERT_EQUAL(OUString("Utilities (FX Kurse, Kreditkart"), aTabNames2[1]);
 
     xDocSh->DoClose();
 }
