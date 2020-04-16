@@ -442,7 +442,7 @@ void CffSubsetterContext::readDictOp()
         //TODO: if( nStackIdx > 0)
         int nInt = 0;
         switch( *pCmdName) {
-        default: fprintf( stderr, "unsupported DictOp.type=\'%c\'\n", *pCmdName); break;
+        default: SAL_WARN("vcl.fonts", "unsupported DictOp.type='" << *pCmdName << "'."); break;
         case 'b':   // bool
             nInt = popInt();
             switch( nOpId) {
@@ -1051,7 +1051,7 @@ void CffSubsetterContext::convertOneTypeEsc()
         }
         break;
     default:
-        fprintf( stderr,"unhandled type2esc %d\n", nType2Esc);
+        SAL_WARN("vcl.fonts", "unhandled type2esc " << nType2Esc);
         assert( false);
         break;
     }
@@ -1226,7 +1226,7 @@ int CffSubsetterContext::seekIndexData( int nIndexBase, int nDataIndex)
     mpReadPtr += 3 + (nDataOfsSz * nDataIndex);
     int nOfs1 = 0;
     switch( nDataOfsSz) {
-        default: fprintf( stderr, "\tINVALID nDataOfsSz=%d\n\n", nDataOfsSz); return -1;
+        default: SAL_WARN("vcl.fonts", "\tINVALID nDataOfsSz=" << nDataOfsSz); return -1;
         case 1: nOfs1 = mpReadPtr[0]; break;
         case 2: nOfs1 = (mpReadPtr[0]<<8) + mpReadPtr[1]; break;
         case 3: nOfs1 = (mpReadPtr[0]<<16) + (mpReadPtr[1]<<8) + mpReadPtr[2]; break;
@@ -1262,7 +1262,7 @@ void CffSubsetterContext::seekIndexEnd( int nIndexBase)
     assert( mpReadPtr <= mpBaseEnd);
     int nEndOfs = 0;
     switch( nDataOfsSz) {
-        default: fprintf( stderr, "\tINVALID nDataOfsSz=%d\n\n", nDataOfsSz); return;
+        default: SAL_WARN("vcl.fonts", "\tINVALID nDataOfsSz=" << nDataOfsSz); return;
         case 1: nEndOfs = mpReadPtr[0]; break;
         case 2: nEndOfs = (mpReadPtr[0]<<8) + mpReadPtr[1]; break;
         case 3: nEndOfs = (mpReadPtr[0]<<16) + (mpReadPtr[1]<<8) + mpReadPtr[2];break;
@@ -1485,7 +1485,7 @@ int CffSubsetterContext::getFDSelect( int nGlyphIndex) const
                 }
             } break;
         default:    // invalid FDselect format
-            fprintf( stderr, "invalid CFF.FdselType=%d\n", nFDSelFormat);
+            SAL_WARN("vcl.fonts", "invalid CFF.FdselType=" << nFDSelFormat);
             break;
     }
 
@@ -1530,7 +1530,7 @@ int CffSubsetterContext::getGlyphSID( int nGlyphIndex) const
             }
             break;
         default:
-            fprintf( stderr, "ILLEGAL CFF-Charset format %d\n", nCSetFormat);
+            SAL_WARN("vcl.fonts", "ILLEGAL CFF-Charset format " << nCSetFormat);
             return -2;
     }
 

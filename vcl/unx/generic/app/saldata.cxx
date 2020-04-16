@@ -703,7 +703,7 @@ SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
     if( nFound < 0 ) // error
     {
 #ifdef DBG_UTIL
-        std::fprintf( stderr, "SalXLib::Yield e=%d f=%d\n", errno, nFound );
+        SAL_INFO("vcl.app", "SalXLib::Yield e=" << errno << " f=" << nFound);
 #endif
         if( EINTR == errno )
         {
@@ -747,7 +747,7 @@ SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
             {
                 if ( FD_ISSET( nFD, &ExceptionFDS ) ) {
 #if OSL_DEBUG_LEVEL > 1
-                    std::fprintf( stderr, "SalXLib::Yield exception\n" );
+                    SAL_WARN("vcl.app", "SalXLib::Yield exception.");
 #endif
                     nFound--;
                 }
