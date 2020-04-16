@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c76718a_8b07b637",
+        "filename": "vcl/headless/headlessinst.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-16T07:44:53Z",
+      "side": 1,
+      "message": "here and elsewhere: there is operator\u003c\u003c to output OUString (among other types), so no need to convert to OString and then to char*",
+      "range": {
+        "startLine": 36,
+        "startChar": 19,
+        "endLine": 37,
+        "endChar": 63
+      },
+      "revId": "812b7d35747a682ff614522122002e25d64d1a5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
