@@ -1965,7 +1965,7 @@ void ScInterpreter::ScSwitch_MS()
         else
             aStr = GetString();
         nParamCount--;
-        if ( nGlobalError != FormulaError::NONE || (( isValue && rtl::math::approxEqual( fRefVal, fVal ) ) ||
+        if ( (nGlobalError != FormulaError::NONE && nParamCount < 2) || (( isValue && rtl::math::approxEqual( fRefVal, fVal ) ) ||
              ( !isValue && aRefStr.getDataIgnoreCase() == aStr.getDataIgnoreCase() )) )
         {
             // TRUE
