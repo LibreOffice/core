@@ -348,7 +348,8 @@ public:
     virtual void NumberingDefinition( sal_uInt16 nId, const SwNumRule &rRule ) = 0;
 
     /// Numbering definition that overrides abstract numbering definition
-    virtual void OverrideNumberingDefinition(SwNumRule const&, sal_uInt16 /*nNum*/, sal_uInt16 /*nAbstractNum*/)
+    virtual void OverrideNumberingDefinition(SwNumRule const&, sal_uInt16 /*nNum*/, sal_uInt16 /*nAbstractNum*/,
+        const std::map< size_t, size_t > & /*rLevelOverrides*/)
     { assert(false); } // TODO implement for WW8/RTF
 
     /// Start of the abstract numbering definition instance.
