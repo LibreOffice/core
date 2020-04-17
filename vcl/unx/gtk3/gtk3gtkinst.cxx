@@ -12800,6 +12800,14 @@ private:
     {
         if (!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_pToggleButton)))
         {
+            if (m_bHoverSelection)
+            {
+                // turn hover selection back off until mouse is moved again
+                // *after* menu is shown again
+                gtk_tree_view_set_hover_selection(m_pTreeView, false);
+                m_bHoverSelection = false;
+            }
+
             do_ungrab(GTK_WIDGET(m_pMenuWindow));
 
             gtk_widget_hide(GTK_WIDGET(m_pMenuWindow));
@@ -12833,18 +12841,6 @@ private:
 
             m_bActivateCalled = false;
             show_menu(pComboBox, m_pMenuWindow);
-
-            // under wayland I see that the cursor pos in super
-            // long treeview menus ends up in the wrong place
-            // but letting all pending events get processed
-            // before enabling hover selection solve it
-            Scheduler::ProcessEventsToIdle();
-
-            if (!m_bHoverSelection)
-            {
-                gtk_tree_view_set_hover_selection(m_pTreeView, true);
-                m_bHoverSelection = true;
-            }
         }
     }
 
