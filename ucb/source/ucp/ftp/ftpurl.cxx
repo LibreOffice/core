@@ -226,10 +226,14 @@ void FTPURL::parse(const OUString& url)
                         ""/*aAccount*/);
 
     // now check for something like ";type=i" at end of url
-    if(!m_aPathSegmentVec.empty() &&
-       (l = m_aPathSegmentVec.back().indexOf(';')) != -1) {
-        m_aType = m_aPathSegmentVec.back().copy(l);
-        m_aPathSegmentVec.back() = m_aPathSegmentVec.back().copy(0,l);
+    if(!m_aPathSegmentVec.empty())
+    {
+        l = m_aPathSegmentVec.back().indexOf(';');
+        if (l != -1)
+        {
+            m_aType = m_aPathSegmentVec.back().copy(l);
+            m_aPathSegmentVec.back() = m_aPathSegmentVec.back().copy(0,l);
+        }
     }
 }
 

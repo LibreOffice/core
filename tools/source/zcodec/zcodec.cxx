@@ -119,9 +119,12 @@ void ZCodec::Compress( SvStream& rIStm, SvStream& rOStm )
     InitCompress();
     mpInBuf = new sal_uInt8[ mnInBufSize ];
     auto pStream = static_cast<z_stream*>(mpsC_Stream);
-    while ((pStream->avail_in = rIStm.ReadBytes(
-                    pStream->next_in = mpInBuf, mnInBufSize )) != 0)
+    for (;;)
     {
+        pStream->next_in = mpInBuf;
+        pStream->avail_in = rIStm.ReadBytes( pStream->next_in, mnInBufSize );
+        if (pStream->avail_in == 0)
+            break;
         if ( pStream->avail_out == 0 )
             ImplWriteBack();
         if ( deflate( pStream, Z_NO_FLUSH ) < 0 )
@@ -142,7 +145,8 @@ long ZCodec::Decompress( SvStream& rIStm, SvStream& rOStm )
     assert(meState == STATE_INIT);
     mpOStm = &rOStm;
     InitDecompress(rIStm);
-    pStream->next_out = mpOutBuf = new sal_uInt8[ pStream->avail_out = mnOutBufSize ];
+    pStream->avail_out = mnOutBufSize;
+    pStream->next_out = mpOutBuf = new sal_uInt8[ pStream->avail_out ];
     do
     {
         if ( pStream->avail_out == 0 ) ImplWriteBack();

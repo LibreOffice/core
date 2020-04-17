@@ -381,94 +381,111 @@ bool ISO8601parseTime(const OUString &aTimeStr, css::util::Time& rTime)
     bool bFrac = false;
     // hours
     bool bSuccess = getISO8601TimeToken(aTimeStr, n, tokInt, bFrac, tokFrac);
-    if (bSuccess)
+    if (!bSuccess)
+        return false;
+
+    if ( bFrac && n < aTimeStr.getLength())
     {
-        if ( bFrac && n < aTimeStr.getLength())
-            // is it junk or the timezone?
-            bSuccess = getISO8601TimeZoneToken(aTimeStr, n, tokTz);
-        if (bSuccess && (bSuccess = convertNumber32( nHour, tokInt, 0, 23 )) )
-        {
-            if (bFrac)
-            {
-                sal_Int64 fracNumerator;
-                if ( (bSuccess = convertNumber64(fracNumerator, tokFrac)) )
-                {
-                    double frac = static_cast<double>(fracNumerator) / pow(static_cast<double>(10), static_cast<double>(tokFrac.getLength()));
-                    // minutes
-                    OSL_ENSURE(frac < 1 && frac >= 0, "ISO8601parse internal error frac hours (of hours) not between 0 and 1");
-                    frac *= 60;
-                    nMin = floor(frac);
-                    frac -=  nMin;
-                    // seconds
-                    OSL_ENSURE(frac < 1 && frac >= 0, "ISO8601parse internal error frac minutes (of hours) not between 0 and 1");
-                    frac *= 60;
-                    nSec = floor(frac);
-                    frac -=  nSec;
-                    // nanoseconds
-                    OSL_ENSURE(frac < 1 && frac >= 0, "ISO8601parse internal error frac seconds (of hours) not between 0 and 1");
-                    frac *= 1000000000;
-                    nNanoSec = ::rtl::math::round(frac);
-                }
-                goto end;
-            }
-            if(n >= aTimeStr.getLength())
-                goto end;
-        }
+        // is it junk or the timezone?
+        bSuccess = getISO8601TimeZoneToken(aTimeStr, n, tokTz);
+        if (!bSuccess)
+            return false;
     }
+    bSuccess = convertNumber32( nHour, tokInt, 0, 23 );
+    if (!bSuccess)
+        return false;
+
+    if (bFrac)
+    {
+        sal_Int64 fracNumerator;
+        bSuccess = convertNumber64(fracNumerator, tokFrac);
+        if ( bSuccess )
+        {
+            double frac = static_cast<double>(fracNumerator) / pow(static_cast<double>(10), static_cast<double>(tokFrac.getLength()));
+             // minutes
+            OSL_ENSURE(frac < 1 && frac >= 0, "ISO8601parse internal error frac hours (of hours) not between 0 and 1");
+            frac *= 60;
+            nMin = floor(frac);
+            frac -=  nMin;
+            // seconds
+            OSL_ENSURE(frac < 1 && frac >= 0, "ISO8601parse internal error frac minutes (of hours) not between 0 and 1");
+            frac *= 60;
+            nSec = floor(frac);
+            frac -=  nSec;
+            // nanoseconds
+            OSL_ENSURE(frac < 1 && frac >= 0, "ISO8601parse internal error frac seconds (of hours) not between 0 and 1");
+            frac *= 1000000000;
+            nNanoSec = ::rtl::math::round(frac);
+        }
+        goto end;
+    }
+    if(n >= aTimeStr.getLength())
+        goto end;
 
     // minutes
-    if (bSuccess && (bSuccess = getISO8601TimeToken(aTimeStr, n, tokInt, bFrac, tokFrac)))
+    bSuccess = getISO8601TimeToken(aTimeStr, n, tokInt, bFrac, tokFrac);
+    if (!bSuccess)
+        return false;
+    if ( bFrac && n < aTimeStr.getLength())
     {
-        if ( bFrac && n < aTimeStr.getLength())
-            // is it junk or the timezone?
-            bSuccess = getISO8601TimeZoneToken(aTimeStr, n, tokTz);
-        if (bSuccess && (bSuccess = convertNumber32( nMin, tokInt, 0, 59 )) )
-        {
-            if (bFrac)
-            {
-                sal_Int64 fracNumerator;
-                if ( (bSuccess = convertNumber64(fracNumerator, tokFrac)) )
-                {
-                    double frac = static_cast<double>(fracNumerator) / pow(static_cast<double>(10), static_cast<double>(tokFrac.getLength()));
-                    // seconds
-                    OSL_ENSURE(frac < 1 && frac >= 0, "ISO8601parse internal error frac minutes (of minutes) not between 0 and 1");
-                    frac *= 60;
-                    nSec = floor(frac);
-                    frac -=  nSec;
-                    // nanoseconds
-                    OSL_ENSURE(frac < 1 && frac >= 0, "ISO8601parse internal error frac seconds (of minutes) not between 0 and 1");
-                    frac *= 1000000000;
-                    nNanoSec = ::rtl::math::round(frac);
-                }
-                goto end;
-            }
-            if(n >= aTimeStr.getLength())
-                goto end;
-        }
+        // is it junk or the timezone?
+        bSuccess = getISO8601TimeZoneToken(aTimeStr, n, tokTz);
+        if (!bSuccess)
+            return false;
     }
-    // seconds
-    if (bSuccess && (bSuccess = getISO8601TimeToken(aTimeStr, n, tokInt, bFrac, tokFrac)))
+    bSuccess = convertNumber32( nMin, tokInt, 0, 59 );
+    if (!bSuccess)
+        return false;
+    if (bFrac)
     {
-        if (n < aTimeStr.getLength())
-            // is it junk or the timezone?
-            bSuccess = getISO8601TimeZoneToken(aTimeStr, n, tokTz);
-        // max 60 for leap seconds
-        if (bSuccess && (bSuccess = convertNumber32( nSec, tokInt, 0, 60 )) )
+        sal_Int64 fracNumerator;
+        bSuccess = convertNumber64(fracNumerator, tokFrac);
+        if ( bSuccess )
         {
-            if (bFrac)
-            {
-                sal_Int64 fracNumerator;
-                if ( (bSuccess = convertNumber64(fracNumerator, tokFrac)) )
-                {
-                    double frac = static_cast<double>(fracNumerator) / pow(static_cast<double>(10), static_cast<double>(tokFrac.getLength()));
-                    // nanoseconds
-                    OSL_ENSURE(frac < 1 && frac >= 0, "ISO8601parse internal error frac seconds (of seconds) not between 0 and 1");
-                    frac *= 1000000000;
-                    nNanoSec = ::rtl::math::round(frac);
-                }
-                goto end;
-            }
+            double frac = static_cast<double>(fracNumerator) / pow(static_cast<double>(10), static_cast<double>(tokFrac.getLength()));
+            // seconds
+            OSL_ENSURE(frac < 1 && frac >= 0, "ISO8601parse internal error frac minutes (of minutes) not between 0 and 1");
+            frac *= 60;
+            nSec = floor(frac);
+            frac -=  nSec;
+            // nanoseconds
+            OSL_ENSURE(frac < 1 && frac >= 0, "ISO8601parse internal error frac seconds (of minutes) not between 0 and 1");
+            frac *= 1000000000;
+            nNanoSec = ::rtl::math::round(frac);
         }
+        goto end;
+    }
+    if(n >= aTimeStr.getLength())
+        goto end;
+
+    // seconds
+    bSuccess = getISO8601TimeToken(aTimeStr, n, tokInt, bFrac, tokFrac);
+    if (!bSuccess)
+        return false;
+    if (n < aTimeStr.getLength())
+    {
+        // is it junk or the timezone?
+        bSuccess = getISO8601TimeZoneToken(aTimeStr, n, tokTz);
+        if (!bSuccess)
+            return false;
+    }
+    // max 60 for leap seconds
+    bSuccess = convertNumber32( nSec, tokInt, 0, 60 );
+    if (!bSuccess)
+        return false;
+    if (bFrac)
+    {
+        sal_Int64 fracNumerator;
+        bSuccess = convertNumber64(fracNumerator, tokFrac);
+        if ( bSuccess )
+        {
+            double frac = static_cast<double>(fracNumerator) / pow(static_cast<double>(10), static_cast<double>(tokFrac.getLength()));
+            // nanoseconds
+            OSL_ENSURE(frac < 1 && frac >= 0, "ISO8601parse internal error frac seconds (of seconds) not between 0 and 1");
+            frac *= 1000000000;
+            nNanoSec = ::rtl::math::round(frac);
+        }
+        goto end;
     }
 
     end:

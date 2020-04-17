@@ -1395,11 +1395,15 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
             const StyleSheetEntryPtr pParent = (!pEntry->sBaseStyleIdentifier.isEmpty()) ? GetStyleSheetTable()->FindStyleSheetByISTD(pEntry->sBaseStyleIdentifier) : nullptr;
             const StyleSheetPropertyMap* pParentProperties = dynamic_cast<const StyleSheetPropertyMap*>(pParent ? pParent->pProperties.get() : nullptr);
             if (!pEntry->sBaseStyleIdentifier.isEmpty())
-                if ( (oProperty = pStyleSheetProperties->getProperty(PROP_PARA_FIRST_LINE_INDENT))
+            {
+                oProperty = pStyleSheetProperties->getProperty(PROP_PARA_FIRST_LINE_INDENT);
+                if ( oProperty
                     // If the numbering comes from a base style, indent of the base style has also priority.
                     || (bNumberingFromBaseStyle && pParentProperties && (oProperty = pParentProperties->getProperty(PROP_PARA_FIRST_LINE_INDENT))) )
                     pParaContext->Insert(PROP_PARA_FIRST_LINE_INDENT, oProperty->second, /*bOverwrite=*/false);
-            if ( (oProperty = pStyleSheetProperties->getProperty(PROP_PARA_LEFT_MARGIN))
+            }
+            oProperty = pStyleSheetProperties->getProperty(PROP_PARA_LEFT_MARGIN);
+            if ( oProperty
                 || (bNumberingFromBaseStyle && pParentProperties && (oProperty = pParentProperties->getProperty(PROP_PARA_LEFT_MARGIN))) )
                 pParaContext->Insert(PROP_PARA_LEFT_MARGIN, oProperty->second, /*bOverwrite=*/false);
 
@@ -4015,7 +4019,15 @@ void  DomainMapper_Impl::handleRubyEQField( const FieldContextPtr& pContext)
     }
 
     nIndex = rCommand.indexOf("\\o");
-    if (nIndex == -1 || (nIndex = rCommand.indexOf('(', nIndex)) == -1 || (nEnd = rCommand.lastIndexOf(')'))==-1 || nEnd <= nIndex)
+    if (nIndex == -1)
+        return;
+    nIndex = rCommand.indexOf('(', nIndex);
+    if (nIndex == -1)
+        return;
+    nEnd = rCommand.lastIndexOf(')');
+    if (nEnd == -1)
+        return;
+    if (nEnd <= nIndex)
         return;
 
     OUString sRubyParts = rCommand.copy(nIndex+1,nEnd-nIndex-1);

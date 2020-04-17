@@ -853,9 +853,10 @@ static sal_Int32 lcl_FindSymbol( const OUString& sUpperStr, const OUString& sCur
             {
                 //  dm can be escaped as "dm or \d
                 sal_Unicode c;
-                if ( nCPos == 0 ||
-                    ((c = sUpperStr[nCPos-1]) != '"'
-                     && c != '\\') )
+                if ( nCPos == 0 )
+                    return nCPos;                   // found
+                c = sUpperStr[nCPos-1];
+                if ( c != '"' && c != '\\')
                 {
                     return nCPos;                   // found
                 }
