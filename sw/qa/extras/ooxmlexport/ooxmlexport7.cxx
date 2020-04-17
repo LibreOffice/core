@@ -134,6 +134,14 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo76979, "fdo76979.docx")
     assertXPath(pXmlDoc, "//wps:spPr/a:solidFill/a:srgbClr", "val", "FFFFFF");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf104539, "tdf104539.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
+            "wp:inline/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw",
+            "dir", "13500000");
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testShapeEffectPreservation, "shape-effect-preservation.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
