@@ -1700,6 +1700,16 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                     m_xPreviousParagraph->setPropertyValue("ListId", uno::makeAny(listId));
                                 }
                             }
+                            if (pList->GetCurrentLevel())
+                            {
+                                sal_Int16 nOverrideLevel = pList->GetCurrentLevel()->GetStartOverride();
+                                if (nOverrideLevel != -1)
+                                {
+                                    // Restart list, it is overriden
+                                    m_xPreviousParagraph->setPropertyValue("ParaIsNumberingRestart", uno::makeAny(true));
+                                    m_xPreviousParagraph->setPropertyValue("NumberingStartValue", uno::makeAny(nOverrideLevel));
+                                }
+                            }
                         }
                     }
 

@@ -330,8 +330,9 @@ public:
     virtual void NumberingDefinition( sal_uInt16 nId, const SwNumRule &rRule ) override;
 
     /// Numbering definition that overrides abstract numbering definition
-    virtual void OverrideNumberingDefinition(SwNumRule const& rRule,
-            sal_uInt16 nNum, sal_uInt16 nAbstractNum) override;
+    virtual void OverrideNumberingDefinition( SwNumRule const& rRule,
+            sal_uInt16 nNum, sal_uInt16 nAbstractNum,
+            const std::map< size_t, size_t > & rLevelOverrides ) override;
 
     /// Start of the abstract numbering definition instance.
     virtual void StartAbstractNumbering( sal_uInt16 nId ) override;
