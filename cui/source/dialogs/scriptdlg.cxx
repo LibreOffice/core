@@ -553,132 +553,132 @@ IMPL_LINK(SvxScriptOrgDialog, ButtonHdl, weld::Button&, rButton, void)
         StoreCurrentSelection();
         m_xDialog->response(RET_CANCEL);
     }
-    if (&rButton == m_xEditButton.get() ||
+    if (!(&rButton == m_xEditButton.get() ||
         &rButton == m_xCreateButton.get() ||
         &rButton == m_xDelButton.get() ||
         &rButton == m_xRunButton.get() ||
-        &rButton == m_xRenameButton.get())
+        &rButton == m_xRenameButton.get()))
 
+        return;
+
+    std::unique_ptr<weld::TreeIter> xIter = m_xScriptsBox->make_iterator();
+    if (!m_xScriptsBox->get_selected(xIter.get()))
+        return;
+    SFEntry* userData = reinterpret_cast<SFEntry*>(m_xScriptsBox->get_id(*xIter).toInt64());
+    if (!userData)
+        return;
+
+    Reference< browse::XBrowseNode > node;
+    Reference< XModel > xModel;
+
+    node = userData->GetNode();
+    xModel = userData->GetModel();
+
+    if ( !node.is() )
     {
-        std::unique_ptr<weld::TreeIter> xIter = m_xScriptsBox->make_iterator();
-        if (!m_xScriptsBox->get_selected(xIter.get()))
-            return;
-        SFEntry* userData = reinterpret_cast<SFEntry*>(m_xScriptsBox->get_id(*xIter).toInt64());
-        if (!userData)
-            return;
+        return;
+    }
 
-        Reference< browse::XBrowseNode > node;
-        Reference< XModel > xModel;
-
-        node = userData->GetNode();
-        xModel = userData->GetModel();
-
-        if ( !node.is() )
+    if (&rButton == m_xRunButton.get())
+    {
+        OUString tmpString;
+        Reference< beans::XPropertySet > xProp( node, UNO_QUERY );
+        Reference< provider::XScriptProvider > mspNode;
+        if( !xProp.is() )
         {
             return;
         }
 
-        if (&rButton == m_xRunButton.get())
+        if ( xModel.is() )
         {
-            OUString tmpString;
-            Reference< beans::XPropertySet > xProp( node, UNO_QUERY );
-            Reference< provider::XScriptProvider > mspNode;
-            if( !xProp.is() )
+            Reference< XEmbeddedScripts >  xEmbeddedScripts( xModel, UNO_QUERY);
+            if( !xEmbeddedScripts.is() )
             {
                 return;
             }
 
-            if ( xModel.is() )
+            if (!xEmbeddedScripts->getAllowMacroExecution())
             {
-                Reference< XEmbeddedScripts >  xEmbeddedScripts( xModel, UNO_QUERY);
-                if( !xEmbeddedScripts.is() )
-                {
-                    return;
-                }
-
-                if (!xEmbeddedScripts->getAllowMacroExecution())
-                {
-                    // Please FIXME: Show a message box if AllowMacroExecution is false
-                    return;
-                }
+                // Please FIXME: Show a message box if AllowMacroExecution is false
+                return;
             }
+        }
 
-            std::unique_ptr<weld::TreeIter> xParentIter = m_xScriptsBox->make_iterator(xIter.get());
-            bool bParent = m_xScriptsBox->iter_parent(*xParentIter);
-            while (bParent && !mspNode.is() )
+        std::unique_ptr<weld::TreeIter> xParentIter = m_xScriptsBox->make_iterator(xIter.get());
+        bool bParent = m_xScriptsBox->iter_parent(*xParentIter);
+        while (bParent && !mspNode.is() )
+        {
+            SFEntry* mspUserData = reinterpret_cast<SFEntry*>(m_xScriptsBox->get_id(*xParentIter).toInt64());
+            mspNode.set( mspUserData->GetNode() , UNO_QUERY );
+            bParent = m_xScriptsBox->iter_parent(*xParentIter);
+        }
+        xProp->getPropertyValue("URI") >>= tmpString;
+        const OUString scriptURL( tmpString );
+
+        if ( mspNode.is() )
+        {
+            try
             {
-                SFEntry* mspUserData = reinterpret_cast<SFEntry*>(m_xScriptsBox->get_id(*xParentIter).toInt64());
-                mspNode.set( mspUserData->GetNode() , UNO_QUERY );
-                bParent = m_xScriptsBox->iter_parent(*xParentIter);
-            }
-            xProp->getPropertyValue("URI") >>= tmpString;
-            const OUString scriptURL( tmpString );
+                Reference< provider::XScript > xScript(
+                    mspNode->getScript( scriptURL ), UNO_SET_THROW );
 
-            if ( mspNode.is() )
+                const Sequence< Any > args(0);
+                Sequence< sal_Int16 > outIndex;
+                Sequence< Any > outArgs( 0 );
+                xScript->invoke( args, outIndex, outArgs );
+            }
+            catch ( reflection::InvocationTargetException& ite )
             {
-                try
-                {
-                    Reference< provider::XScript > xScript(
-                        mspNode->getScript( scriptURL ), UNO_SET_THROW );
-
-                    const Sequence< Any > args(0);
-                    Sequence< sal_Int16 > outIndex;
-                    Sequence< Any > outArgs( 0 );
-                    xScript->invoke( args, outIndex, outArgs );
-                }
-                catch ( reflection::InvocationTargetException& ite )
-                {
-                    ShowErrorDialog(css::uno::Any(ite));
-                }
-                catch ( provider::ScriptFrameworkErrorException& ite )
-                {
-                    ShowErrorDialog(css::uno::Any(ite));
-                }
-                catch ( RuntimeException& re )
-                {
-                    ShowErrorDialog(css::uno::Any(re));
-                }
-                catch ( Exception& e )
-                {
-                    ShowErrorDialog(css::uno::Any(e));
-                }
+                ShowErrorDialog(css::uno::Any(ite));
             }
+            catch ( provider::ScriptFrameworkErrorException& ite )
+            {
+                ShowErrorDialog(css::uno::Any(ite));
+            }
+            catch ( RuntimeException& re )
+            {
+                ShowErrorDialog(css::uno::Any(re));
+            }
+            catch ( Exception& e )
+            {
+                ShowErrorDialog(css::uno::Any(e));
+            }
+        }
+        StoreCurrentSelection();
+        m_xDialog->response(RET_CANCEL);
+    }
+    else if ( &rButton == m_xEditButton.get() )
+    {
+        Reference< script::XInvocation > xInv( node, UNO_QUERY );
+        if ( xInv.is() )
+        {
             StoreCurrentSelection();
             m_xDialog->response(RET_CANCEL);
-        }
-        else if ( &rButton == m_xEditButton.get() )
-        {
-            Reference< script::XInvocation > xInv( node, UNO_QUERY );
-            if ( xInv.is() )
+            Sequence< Any > args(0);
+            Sequence< Any > outArgs( 0 );
+            Sequence< sal_Int16 > outIndex;
+            try
             {
-                StoreCurrentSelection();
-                m_xDialog->response(RET_CANCEL);
-                Sequence< Any > args(0);
-                Sequence< Any > outArgs( 0 );
-                Sequence< sal_Int16 > outIndex;
-                try
-                {
-                    // ISSUE need code to run script here
-                    xInv->invoke( "Editable", args, outIndex, outArgs );
-                }
-                catch( Exception const & )
-                {
-                    TOOLS_WARN_EXCEPTION("cui.dialogs", "Caught exception trying to invoke" );
-                }
+                // ISSUE need code to run script here
+                xInv->invoke( "Editable", args, outIndex, outArgs );
+            }
+            catch( Exception const & )
+            {
+                TOOLS_WARN_EXCEPTION("cui.dialogs", "Caught exception trying to invoke" );
             }
         }
-        else if ( &rButton == m_xCreateButton.get() )
-        {
-            createEntry(*xIter);
-        }
-        else if ( &rButton == m_xDelButton.get() )
-        {
-            deleteEntry(*xIter);
-        }
-        else if ( &rButton == m_xRenameButton.get() )
-        {
-            renameEntry(*xIter);
-        }
+    }
+    else if ( &rButton == m_xCreateButton.get() )
+    {
+        createEntry(*xIter);
+    }
+    else if ( &rButton == m_xDelButton.get() )
+    {
+        deleteEntry(*xIter);
+    }
+    else if ( &rButton == m_xRenameButton.get() )
+    {
+        renameEntry(*xIter);
     }
 }
 

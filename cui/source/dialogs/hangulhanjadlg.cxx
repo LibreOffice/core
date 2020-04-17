@@ -323,21 +323,21 @@ namespace svx
 
     void SuggestionDisplay::DisplayListBox( bool bDisplayListBox )
     {
-        if( m_bDisplayListBox != bDisplayListBox )
+        if( m_bDisplayListBox == bDisplayListBox )
+            return;
+
+        weld::Widget& rOldControl = implGetCurrentControl();
+        bool bHasFocus = rOldControl.has_focus();
+
+        m_bDisplayListBox = bDisplayListBox;
+
+        if( bHasFocus )
         {
-            weld::Widget& rOldControl = implGetCurrentControl();
-            bool bHasFocus = rOldControl.has_focus();
-
-            m_bDisplayListBox = bDisplayListBox;
-
-            if( bHasFocus )
-            {
-                weld::Widget& rNewControl = implGetCurrentControl();
-                rNewControl.grab_focus();
-            }
-
-            implUpdateDisplay();
+            weld::Widget& rNewControl = implGetCurrentControl();
+            rNewControl.grab_focus();
         }
+
+        implUpdateDisplay();
     }
 
     IMPL_LINK_NOARG(SuggestionDisplay, SelectSuggestionValueSetHdl, SvtValueSet*, void)
@@ -598,24 +598,24 @@ namespace svx
         m_xIgnoreAll->set_sensitive( m_bDocumentMode );
 
         // switch the def button depending if we're working for document text
-        if (bOldDocumentMode != m_bDocumentMode)
-        {
-            weld::Widget* pOldDefButton = nullptr;
-            weld::Widget* pNewDefButton = nullptr;
-            if (m_bDocumentMode)
-            {
-                pOldDefButton = m_xFind.get();
-                pNewDefButton = m_xReplace.get();
-            }
-            else
-            {
-                pOldDefButton = m_xReplace.get();
-                pNewDefButton = m_xFind.get();
-            }
+        if (bOldDocumentMode == m_bDocumentMode)
+            return;
 
-            pOldDefButton->set_has_default(false);
-            pNewDefButton->set_has_default(true);
+        weld::Widget* pOldDefButton = nullptr;
+        weld::Widget* pNewDefButton = nullptr;
+        if (m_bDocumentMode)
+        {
+            pOldDefButton = m_xFind.get();
+            pNewDefButton = m_xReplace.get();
         }
+        else
+        {
+            pOldDefButton = m_xReplace.get();
+            pNewDefButton = m_xFind.get();
+        }
+
+        pOldDefButton->set_has_default(false);
+        pNewDefButton->set_has_default(true);
     }
 
     OUString HangulHanjaConversionDialog::GetCurrentSuggestion( ) const
@@ -810,29 +810,29 @@ namespace svx
         OUString                    aName;
         HangulHanjaNewDictDialog aNewDlg(m_xDialog.get());
         aNewDlg.run();
-        if (aNewDlg.GetName(aName))
-        {
-            if( m_xConversionDictionaryList.is() )
-            {
-                try
-                {
-                    Reference< XConversionDictionary >  xDic =
-                        m_xConversionDictionaryList->addNewDictionary( aName, LanguageTag::convertToLocale( LANGUAGE_KOREAN ), ConversionDictionaryType::HANGUL_HANJA );
+        if (!aNewDlg.GetName(aName))
+            return;
 
-                    if( xDic.is() )
-                    {
-                        //adapt local caches:
-                        m_aDictList.push_back( xDic );
-                        AddDict( xDic->getName(), xDic->isActive() );
-                    }
-                }
-                catch( const ElementExistException& )
-                {
-                }
-                catch( const NoSupportException& )
-                {
-                }
+        if( !m_xConversionDictionaryList.is() )
+            return;
+
+        try
+        {
+            Reference< XConversionDictionary >  xDic =
+                m_xConversionDictionaryList->addNewDictionary( aName, LanguageTag::convertToLocale( LANGUAGE_KOREAN ), ConversionDictionaryType::HANGUL_HANJA );
+
+            if( xDic.is() )
+            {
+                //adapt local caches:
+                m_aDictList.push_back( xDic );
+                AddDict( xDic->getName(), xDic->isActive() );
             }
+        }
+        catch( const ElementExistException& )
+        {
+        }
+        catch( const NoSupportException& )
+        {
         }
     }
 
@@ -850,30 +850,30 @@ namespace svx
     IMPL_LINK_NOARG(HangulHanjaOptionsDialog, DeleteDictHdl, weld::Button&, void)
     {
         int nSelPos = m_xDictsLB->get_selected_index();
-        if (nSelPos != -1)
-        {
-            Reference< XConversionDictionary >  xDic( m_aDictList[ nSelPos ] );
-            if( m_xConversionDictionaryList.is() && xDic.is() )
-            {
-                Reference< XNameContainer >     xNameCont = m_xConversionDictionaryList->getDictionaryContainer();
-                if( xNameCont.is() )
-                {
-                    try
-                    {
-                        xNameCont->removeByName( xDic->getName() );
+        if (nSelPos == -1)
+            return;
 
-                        //adapt local caches:
-                        m_aDictList.erase(m_aDictList.begin()+nSelPos );
-                        m_xDictsLB->remove(nSelPos);
-                    }
-                    catch( const ElementExistException& )
-                    {
-                    }
-                    catch( const NoSupportException& )
-                    {
-                    }
-                }
-            }
+        Reference< XConversionDictionary >  xDic( m_aDictList[ nSelPos ] );
+        if( !(m_xConversionDictionaryList.is() && xDic.is()) )
+            return;
+
+        Reference< XNameContainer >     xNameCont = m_xConversionDictionaryList->getDictionaryContainer();
+        if( !xNameCont.is() )
+            return;
+
+        try
+        {
+            xNameCont->removeByName( xDic->getName() );
+
+            //adapt local caches:
+            m_aDictList.erase(m_aDictList.begin()+nSelPos );
+            m_xDictsLB->remove(nSelPos);
+        }
+        catch( const ElementExistException& )
+        {
+        }
+        catch( const NoSupportException& )
+        {
         }
     }
 

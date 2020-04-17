@@ -534,19 +534,19 @@ void SvxMacroTabPage_::InitAndSetHandler( const Reference< container::XNameRepla
         {
         }
     }
-    if(m_xDocEvents.is())
+    if(!m_xDocEvents.is())
+        return;
+
+    eventNames = m_xDocEvents->getElementNames();
+    nEventCount = eventNames.getLength();
+    for(sal_Int32 nEvent = 0; nEvent < nEventCount; ++nEvent )
     {
-        eventNames = m_xDocEvents->getElementNames();
-        nEventCount = eventNames.getLength();
-        for(sal_Int32 nEvent = 0; nEvent < nEventCount; ++nEvent )
+        try
         {
-            try
-            {
-                m_docEventsHash[ eventNames[nEvent] ] = GetPairFromAny( m_xDocEvents->getByName( eventNames[nEvent] ) );
-            }
-            catch (const Exception&)
-            {
-            }
+            m_docEventsHash[ eventNames[nEvent] ] = GetPairFromAny( m_xDocEvents->getByName( eventNames[nEvent] ) );
+        }
+        catch (const Exception&)
+        {
         }
     }
 }

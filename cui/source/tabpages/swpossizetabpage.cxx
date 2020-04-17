@@ -1007,54 +1007,54 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet* rSet)
     m_xHeightMF->save_value();
     m_fWidthHeightRatio = double(nWidth) / double(nHeight);
 
-    if(!m_bPositioningDisabled)
+    if(m_bPositioningDisabled)
+        return;
+
+    pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_HORI_ORIENT);
+    if(pItem)
     {
-        pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_HORI_ORIENT);
-        if(pItem)
-        {
-            short nHoriOrientation = static_cast< const SfxInt16Item*>(pItem)->GetValue();
-            m_nOldH = nHoriOrientation;
-        }
-        pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_VERT_ORIENT);
-        if(pItem)
-        {
-            short nVertOrientation = static_cast< const SfxInt16Item*>(pItem)->GetValue();
-            m_nOldV = nVertOrientation;
-        }
-        pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_HORI_RELATION);
-        if(pItem)
-        {
-            m_nOldHRel = static_cast< const SfxInt16Item*>(pItem)->GetValue();
-        }
-
-        pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_VERT_RELATION);
-        if(pItem)
-        {
-            m_nOldVRel = static_cast< const SfxInt16Item*>(pItem)->GetValue();
-        }
-        pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_HORI_MIRROR);
-        if(pItem)
-            m_xHoriMirrorCB->set_active(static_cast<const SfxBoolItem*>(pItem)->GetValue());
-        m_xHoriMirrorCB->save_state();
-
-        sal_Int32 nHoriPos = 0;
-        sal_Int32 nVertPos = 0;
-        pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_HORI_POSITION);
-        if(pItem)
-            nHoriPos = static_cast<const SfxInt32Item*>(pItem)->GetValue();
-        pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_VERT_POSITION);
-        if(pItem)
-            nVertPos = static_cast<const SfxInt32Item*>(pItem)->GetValue();
-
-        InitPos(nAnchorType, m_nOldH, m_nOldHRel, m_nOldV, m_nOldVRel, nHoriPos, nVertPos);
-
-        m_xVertByMF->save_value();
-        m_xHoriByMF->save_value();
-        // #i18732#
-        m_xFollowCB->save_state();
-
-        RangeModifyHdl(m_xWidthMF->get_widget());  // initially set maximum values
+        short nHoriOrientation = static_cast< const SfxInt16Item*>(pItem)->GetValue();
+        m_nOldH = nHoriOrientation;
     }
+    pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_VERT_ORIENT);
+    if(pItem)
+    {
+        short nVertOrientation = static_cast< const SfxInt16Item*>(pItem)->GetValue();
+        m_nOldV = nVertOrientation;
+    }
+    pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_HORI_RELATION);
+    if(pItem)
+    {
+        m_nOldHRel = static_cast< const SfxInt16Item*>(pItem)->GetValue();
+    }
+
+    pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_VERT_RELATION);
+    if(pItem)
+    {
+        m_nOldVRel = static_cast< const SfxInt16Item*>(pItem)->GetValue();
+    }
+    pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_HORI_MIRROR);
+    if(pItem)
+        m_xHoriMirrorCB->set_active(static_cast<const SfxBoolItem*>(pItem)->GetValue());
+    m_xHoriMirrorCB->save_state();
+
+    sal_Int32 nHoriPos = 0;
+    sal_Int32 nVertPos = 0;
+    pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_HORI_POSITION);
+    if(pItem)
+        nHoriPos = static_cast<const SfxInt32Item*>(pItem)->GetValue();
+    pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_VERT_POSITION);
+    if(pItem)
+        nVertPos = static_cast<const SfxInt32Item*>(pItem)->GetValue();
+
+    InitPos(nAnchorType, m_nOldH, m_nOldHRel, m_nOldV, m_nOldVRel, nHoriPos, nVertPos);
+
+    m_xVertByMF->save_value();
+    m_xHoriByMF->save_value();
+    // #i18732#
+    m_xFollowCB->save_state();
+
+    RangeModifyHdl(m_xWidthMF->get_widget());  // initially set maximum values
 }
 
 DeactivateRC SvxSwPosSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
@@ -1290,59 +1290,58 @@ IMPL_LINK(SvxSwPosSizeTabPage, PosHdl, weld::ComboBox&, rLB, void)
     UpdateExample();
 
     // special treatment for HTML-Mode with horz-vert-dependencies
-    if (m_bHtmlMode && RndStdIds::FLY_AT_CHAR == GetAnchorType())
-    {
-        bool bSet = false;
-        if(bHori)
-        {
-            // on the right only below is allowed - from the left only at the top
-            // from the left at the character -> below
-            if((HoriOrientation::LEFT == nAlign || HoriOrientation::RIGHT == nAlign) &&
-                    0 == m_xVertLB->get_active())
-            {
-                if(RelOrientation::FRAME == nRel)
-                    m_xVertLB->set_active(1);
-                else
-                    m_xVertLB->set_active(0);
-                bSet = true;
-            }
-            else if(HoriOrientation::LEFT == nAlign && 1 == m_xVertLB->get_active())
-            {
-                m_xVertLB->set_active(0);
-                bSet = true;
-            }
-            else if(HoriOrientation::NONE == nAlign && 1 == m_xVertLB->get_active())
-            {
-                m_xVertLB->set_active(0);
-                bSet = true;
-            }
-            if(bSet)
-                PosHdl(*m_xVertLB);
-        }
-        else
-        {
-            if(VertOrientation::TOP == nAlign)
-            {
-                if(1 == m_xHoriLB->get_active())
-                {
-                    m_xHoriLB->set_active(0);
-                    bSet = true;
-                }
-                m_xHoriToLB->set_active(1);
-            }
-            else if(VertOrientation::CHAR_BOTTOM == nAlign)
-            {
-                if(2 == m_xHoriLB->get_active())
-                {
-                    m_xHoriLB->set_active(0);
-                    bSet = true;
-                }
-                m_xHoriToLB->set_active(0) ;
-            }
-            if(bSet)
-                PosHdl(*m_xHoriLB);
-        }
+    if (!(m_bHtmlMode && RndStdIds::FLY_AT_CHAR == GetAnchorType()))
+        return;
 
+    bool bSet = false;
+    if(bHori)
+    {
+        // on the right only below is allowed - from the left only at the top
+        // from the left at the character -> below
+        if((HoriOrientation::LEFT == nAlign || HoriOrientation::RIGHT == nAlign) &&
+                0 == m_xVertLB->get_active())
+        {
+            if(RelOrientation::FRAME == nRel)
+                m_xVertLB->set_active(1);
+            else
+                m_xVertLB->set_active(0);
+            bSet = true;
+        }
+        else if(HoriOrientation::LEFT == nAlign && 1 == m_xVertLB->get_active())
+        {
+            m_xVertLB->set_active(0);
+            bSet = true;
+        }
+        else if(HoriOrientation::NONE == nAlign && 1 == m_xVertLB->get_active())
+        {
+            m_xVertLB->set_active(0);
+            bSet = true;
+        }
+        if(bSet)
+            PosHdl(*m_xVertLB);
+    }
+    else
+    {
+        if(VertOrientation::TOP == nAlign)
+        {
+            if(1 == m_xHoriLB->get_active())
+            {
+                m_xHoriLB->set_active(0);
+                bSet = true;
+            }
+            m_xHoriToLB->set_active(1);
+        }
+        else if(VertOrientation::CHAR_BOTTOM == nAlign)
+        {
+            if(2 == m_xHoriLB->get_active())
+            {
+                m_xHoriLB->set_active(0);
+                bSet = true;
+            }
+            m_xHoriToLB->set_active(0) ;
+        }
+        if(bSet)
+            PosHdl(*m_xHoriLB);
     }
 }
 

@@ -436,25 +436,25 @@ void SvxBitmapTabPage::ClickBitmapHdl_Impl()
 
 void SvxBitmapTabPage::CalculateBitmapPresetSize()
 {
-    if(!rBitmapSize.IsEmpty())
-    {
-        long nObjectWidth = static_cast<long>(m_fObjectWidth);
-        long nObjectHeight = static_cast<long>(m_fObjectHeight);
+    if(rBitmapSize.IsEmpty())
+        return;
 
-        if(std::abs(rBitmapSize.Width() - nObjectWidth) < std::abs(rBitmapSize.Height() - nObjectHeight))
-        {
-            rFilledSize.setWidth( nObjectWidth );
-            rFilledSize.setHeight( rBitmapSize.Height()*nObjectWidth/rBitmapSize.Width() );
-            rZoomedSize.setWidth( rBitmapSize.Width()*nObjectHeight/rBitmapSize.Height() );
-            rZoomedSize.setHeight( nObjectHeight );
-        }
-        else
-        {
-            rFilledSize.setWidth( rBitmapSize.Width()*nObjectHeight/rBitmapSize.Height() );
-            rFilledSize.setHeight( nObjectHeight );
-            rZoomedSize.setWidth( nObjectWidth );
-            rZoomedSize.setHeight( rBitmapSize.Height()*nObjectWidth/rBitmapSize.Width() );
-        }
+    long nObjectWidth = static_cast<long>(m_fObjectWidth);
+    long nObjectHeight = static_cast<long>(m_fObjectHeight);
+
+    if(std::abs(rBitmapSize.Width() - nObjectWidth) < std::abs(rBitmapSize.Height() - nObjectHeight))
+    {
+        rFilledSize.setWidth( nObjectWidth );
+        rFilledSize.setHeight( rBitmapSize.Height()*nObjectWidth/rBitmapSize.Width() );
+        rZoomedSize.setWidth( rBitmapSize.Width()*nObjectHeight/rBitmapSize.Height() );
+        rZoomedSize.setHeight( nObjectHeight );
+    }
+    else
+    {
+        rFilledSize.setWidth( rBitmapSize.Width()*nObjectHeight/rBitmapSize.Height() );
+        rFilledSize.setHeight( nObjectHeight );
+        rZoomedSize.setWidth( nObjectWidth );
+        rZoomedSize.setHeight( rBitmapSize.Height()*nObjectWidth/rBitmapSize.Width() );
     }
 }
 
@@ -524,37 +524,37 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickRenameHdl, SvxPresetListBox*, void)
     sal_uInt16 nId = m_xBitmapLB->GetSelectedItemId();
     size_t nPos = m_xBitmapLB->GetSelectItemPos();
 
-    if( nPos != VALUESET_ITEM_NOTFOUND )
+    if( nPos == VALUESET_ITEM_NOTFOUND )
+        return;
+
+    OUString aDesc( CuiResId( RID_SVXSTR_DESC_NEW_BITMAP ) );
+    OUString aName( m_pBitmapList->GetBitmap( nPos )->GetName() );
+
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
+
+    bool bLoop = true;
+    while( bLoop && pDlg->Execute() == RET_OK )
     {
-        OUString aDesc( CuiResId( RID_SVXSTR_DESC_NEW_BITMAP ) );
-        OUString aName( m_pBitmapList->GetBitmap( nPos )->GetName() );
+        pDlg->GetName( aName );
+        sal_Int32 nBitmapPos = SearchBitmapList( aName );
+        bool bValidBitmapName = (nBitmapPos == static_cast<sal_Int32>(nPos) ) || (nBitmapPos == -1);
 
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
-
-        bool bLoop = true;
-        while( bLoop && pDlg->Execute() == RET_OK )
+        if(bValidBitmapName)
         {
-            pDlg->GetName( aName );
-            sal_Int32 nBitmapPos = SearchBitmapList( aName );
-            bool bValidBitmapName = (nBitmapPos == static_cast<sal_Int32>(nPos) ) || (nBitmapPos == -1);
+            bLoop = false;
+            m_pBitmapList->GetBitmap(nPos)->SetName(aName);
 
-            if(bValidBitmapName)
-            {
-                bLoop = false;
-                m_pBitmapList->GetBitmap(nPos)->SetName(aName);
+            m_xBitmapLB->SetItemText(nId, aName);
+            m_xBitmapLB->SelectItem( nId );
 
-                m_xBitmapLB->SetItemText(nId, aName);
-                m_xBitmapLB->SelectItem( nId );
-
-                *m_pnBitmapListState |= ChangeType::MODIFIED;
-            }
-            else
-            {
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
-                std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
-                xBox->run();
-            }
+            *m_pnBitmapListState |= ChangeType::MODIFIED;
+        }
+        else
+        {
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
+            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
+            xBox->run();
         }
     }
 }
@@ -564,22 +564,22 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl, SvxPresetListBox*, void)
     sal_uInt16 nId = m_xBitmapLB->GetSelectedItemId();
     size_t nPos = m_xBitmapLB->GetSelectItemPos();
 
-    if( nPos != VALUESET_ITEM_NOTFOUND )
+    if( nPos == VALUESET_ITEM_NOTFOUND )
+        return;
+
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querydeletebitmapdialog.ui"));
+    std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("AskDelBitmapDialog"));
+
+    if (xQueryBox->run() == RET_YES)
     {
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querydeletebitmapdialog.ui"));
-        std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("AskDelBitmapDialog"));
+        m_pBitmapList->Remove( static_cast<sal_uInt16>(nPos) );
+        m_xBitmapLB->RemoveItem( nId );
+        nId = m_xBitmapLB->GetItemId(0);
+        m_xBitmapLB->SelectItem( nId );
 
-        if (xQueryBox->run() == RET_YES)
-        {
-            m_pBitmapList->Remove( static_cast<sal_uInt16>(nPos) );
-            m_xBitmapLB->RemoveItem( nId );
-            nId = m_xBitmapLB->GetItemId(0);
-            m_xBitmapLB->SelectItem( nId );
-
-            m_aCtlBitmapPreview.Invalidate();
-            ModifyBitmapHdl(m_xBitmapLB.get());
-            *m_pnBitmapListState |= ChangeType::MODIFIED;
-        }
+        m_aCtlBitmapPreview.Invalidate();
+        ModifyBitmapHdl(m_xBitmapLB.get());
+        *m_pnBitmapListState |= ChangeType::MODIFIED;
     }
 }
 
@@ -722,70 +722,70 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
     aDlg.EnableLink(false);
     long nCount = m_pBitmapList->Count();
 
-    if( !aDlg.Execute() )
-    {
-        Graphic         aGraphic;
+    if( aDlg.Execute() )
+        return;
 
-        std::unique_ptr<weld::WaitObject> xWait(new weld::WaitObject(pDialogFrameWeld));
-        ErrCode nError = aDlg.GetGraphic( aGraphic );
-        xWait.reset();
+    Graphic         aGraphic;
+
+    std::unique_ptr<weld::WaitObject> xWait(new weld::WaitObject(pDialogFrameWeld));
+    ErrCode nError = aDlg.GetGraphic( aGraphic );
+    xWait.reset();
+
+    if( !nError )
+    {
+        OUString aDesc(CuiResId(RID_SVXSTR_DESC_EXT_BITMAP));
+
+        // convert file URL to UI name
+        OUString        aName;
+        INetURLObject   aURL( aDlg.GetPath() );
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+        ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(
+            pDialogFrameWeld, aURL.GetLastName().getToken(0, '.'), aDesc));
+        nError = ErrCode(1);
+
+        while( pDlg->Execute() == RET_OK )
+        {
+            pDlg->GetName( aName );
+
+            bool bDifferent = true;
+
+            for( long i = 0; i < nCount && bDifferent; i++ )
+                if( aName == m_pBitmapList->GetBitmap( i )->GetName() )
+                    bDifferent = false;
+
+            if( bDifferent ) {
+                nError = ERRCODE_NONE;
+                break;
+            }
+
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pDialogFrameWeld, "cui/ui/queryduplicatedialog.ui"));
+            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
+            if (xBox->run() != RET_OK)
+                break;
+        }
+
+        pDlg.disposeAndClear();
 
         if( !nError )
         {
-            OUString aDesc(CuiResId(RID_SVXSTR_DESC_EXT_BITMAP));
+            m_pBitmapList->Insert(std::make_unique<XBitmapEntry>(aGraphic, aName), nCount);
 
-            // convert file URL to UI name
-            OUString        aName;
-            INetURLObject   aURL( aDlg.GetPath() );
-            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(
-                pDialogFrameWeld, aURL.GetLastName().getToken(0, '.'), aDesc));
-            nError = ErrCode(1);
+            sal_Int32 nId = m_xBitmapLB->GetItemId( nCount - 1 );
+            BitmapEx aBitmap = m_pBitmapList->GetBitmapForPreview( nCount, m_xBitmapLB->GetIconSize() );
 
-            while( pDlg->Execute() == RET_OK )
-            {
-                pDlg->GetName( aName );
+            m_xBitmapLB->InsertItem( nId + 1, Image(aBitmap), aName );
+            m_xBitmapLB->SelectItem( nId + 1 );
+            *m_pnBitmapListState |= ChangeType::MODIFIED;
 
-                bool bDifferent = true;
-
-                for( long i = 0; i < nCount && bDifferent; i++ )
-                    if( aName == m_pBitmapList->GetBitmap( i )->GetName() )
-                        bDifferent = false;
-
-                if( bDifferent ) {
-                    nError = ERRCODE_NONE;
-                    break;
-                }
-
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pDialogFrameWeld, "cui/ui/queryduplicatedialog.ui"));
-                std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
-                if (xBox->run() != RET_OK)
-                    break;
-            }
-
-            pDlg.disposeAndClear();
-
-            if( !nError )
-            {
-                m_pBitmapList->Insert(std::make_unique<XBitmapEntry>(aGraphic, aName), nCount);
-
-                sal_Int32 nId = m_xBitmapLB->GetItemId( nCount - 1 );
-                BitmapEx aBitmap = m_pBitmapList->GetBitmapForPreview( nCount, m_xBitmapLB->GetIconSize() );
-
-                m_xBitmapLB->InsertItem( nId + 1, Image(aBitmap), aName );
-                m_xBitmapLB->SelectItem( nId + 1 );
-                *m_pnBitmapListState |= ChangeType::MODIFIED;
-
-                ModifyBitmapHdl(m_xBitmapLB.get());
-            }
+            ModifyBitmapHdl(m_xBitmapLB.get());
         }
-        else
-        {
-            // graphic couldn't be loaded
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pDialogFrameWeld, "cui/ui/querynoloadedfiledialog.ui"));
-            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("NoLoadedFileDialog"));
-            xBox->run();
-        }
+    }
+    else
+    {
+        // graphic couldn't be loaded
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pDialogFrameWeld, "cui/ui/querynoloadedfiledialog.ui"));
+        std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("NoLoadedFileDialog"));
+        xBox->run();
     }
 }
 

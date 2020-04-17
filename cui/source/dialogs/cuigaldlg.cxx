@@ -809,36 +809,36 @@ void TPGalleryThemeProperties::SearchFiles()
 
 IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickSearchHdl, weld::Button&, void)
 {
-    if( bInputAllowed )
+    if( !bInputAllowed )
+        return;
+
+    try
     {
-        try
+        // setup folder picker
+        css::uno::Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        xFolderPicker = FolderPicker::create(xContext);
+
+        OUString  aDlgPathName( SvtPathOptions().GetGraphicPath() );
+        xFolderPicker->setDisplayDirectory(aDlgPathName);
+
+        aPreviewTimer.Stop();
+
+        css::uno::Reference< XAsynchronousExecutableDialog > xAsyncDlg( xFolderPicker, UNO_QUERY );
+        if ( xAsyncDlg.is() )
+            xAsyncDlg->startExecuteModal( xDialogListener.get() );
+        else
         {
-            // setup folder picker
-            css::uno::Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-            xFolderPicker = FolderPicker::create(xContext);
-
-            OUString  aDlgPathName( SvtPathOptions().GetGraphicPath() );
-            xFolderPicker->setDisplayDirectory(aDlgPathName);
-
-            aPreviewTimer.Stop();
-
-            css::uno::Reference< XAsynchronousExecutableDialog > xAsyncDlg( xFolderPicker, UNO_QUERY );
-            if ( xAsyncDlg.is() )
-                xAsyncDlg->startExecuteModal( xDialogListener.get() );
-            else
+            if( xFolderPicker->execute() == RET_OK )
             {
-                if( xFolderPicker->execute() == RET_OK )
-                {
-                    aURL = INetURLObject( xFolderPicker->getDirectory() );
-                    bSearchRecursive = true;    // UI choice no longer possible, windows file picker allows no user controls
-                    SearchFiles();
-                }
+                aURL = INetURLObject( xFolderPicker->getDirectory() );
+                bSearchRecursive = true;    // UI choice no longer possible, windows file picker allows no user controls
+                SearchFiles();
             }
         }
-        catch (const IllegalArgumentException&)
-        {
-            OSL_FAIL( "Folder picker failed with illegal arguments" );
-        }
+    }
+    catch (const IllegalArgumentException&)
+    {
+        OSL_FAIL( "Folder picker failed with illegal arguments" );
     }
 }
 
@@ -858,20 +858,20 @@ void TPGalleryThemeProperties::TakeFiles()
 
 IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickPreviewHdl, weld::ToggleButton&, void)
 {
-    if ( bInputAllowed )
-    {
-        aPreviewTimer.Stop();
-        aPreviewString.clear();
+    if ( !bInputAllowed )
+        return;
 
-        if (!m_xCbxPreview->get_active())
-        {
-            xMediaPlayer.clear();
-            m_aWndPreview.SetGraphic(Graphic());
-            m_aWndPreview.Invalidate();
-        }
-        else
-            DoPreview();
+    aPreviewTimer.Stop();
+    aPreviewString.clear();
+
+    if (!m_xCbxPreview->get_active())
+    {
+        xMediaPlayer.clear();
+        m_aWndPreview.SetGraphic(Graphic());
+        m_aWndPreview.Invalidate();
     }
+    else
+        DoPreview();
 }
 
 void TPGalleryThemeProperties::DoPreview()
@@ -879,49 +879,49 @@ void TPGalleryThemeProperties::DoPreview()
     int nIndex = m_xLbxFound->get_selected_index();
     OUString aString(m_xLbxFound->get_text(nIndex));
 
-    if (aString != aPreviewString)
-    {
-        INetURLObject _aURL(aFoundList[nIndex]);
-        bInputAllowed = false;
+    if (aString == aPreviewString)
+        return;
 
-        if (!m_aWndPreview.SetGraphic(_aURL))
-        {
-            weld::WaitObject aWaitObject(GetFrameWeld());
-            ErrorHandler::HandleError(ERRCODE_IO_NOTEXISTSPATH, GetFrameWeld());
-        }
-#if HAVE_FEATURE_AVMEDIA
-        else if( ::avmedia::MediaWindow::isMediaURL( _aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ), "" ) )
-        {
-            xMediaPlayer = ::avmedia::MediaWindow::createPlayer( _aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), "" );
-            if( xMediaPlayer.is() )
-                xMediaPlayer->start();
-        }
-#endif
-        bInputAllowed = true;
-        aPreviewString = aString;
+    INetURLObject _aURL(aFoundList[nIndex]);
+    bInputAllowed = false;
+
+    if (!m_aWndPreview.SetGraphic(_aURL))
+    {
+        weld::WaitObject aWaitObject(GetFrameWeld());
+        ErrorHandler::HandleError(ERRCODE_IO_NOTEXISTSPATH, GetFrameWeld());
     }
+#if HAVE_FEATURE_AVMEDIA
+    else if( ::avmedia::MediaWindow::isMediaURL( _aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ), "" ) )
+    {
+        xMediaPlayer = ::avmedia::MediaWindow::createPlayer( _aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), "" );
+        if( xMediaPlayer.is() )
+            xMediaPlayer->start();
+    }
+#endif
+    bInputAllowed = true;
+    aPreviewString = aString;
 }
 
 IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickTakeHdl, weld::Button&, void)
 {
-    if( bInputAllowed )
+    if( !bInputAllowed )
+        return;
+
+    aPreviewTimer.Stop();
+
+    if (!m_xLbxFound->count_selected_rows() || !bEntriesFound)
     {
-        aPreviewTimer.Stop();
+        SvxOpenGraphicDialog aDlg(CuiResId(RID_SVXSTR_KEY_GALLERY_DIR), GetFrameWeld());
+        aDlg.EnableLink(false);
+        aDlg.AsLink(false);
 
-        if (!m_xLbxFound->count_selected_rows() || !bEntriesFound)
-        {
-            SvxOpenGraphicDialog aDlg(CuiResId(RID_SVXSTR_KEY_GALLERY_DIR), GetFrameWeld());
-            aDlg.EnableLink(false);
-            aDlg.AsLink(false);
-
-            if( !aDlg.Execute() )
-                pData->pTheme->InsertURL( INetURLObject( aDlg.GetPath() ) );
-        }
-        else
-        {
-            bTakeAll = false;
-            TakeFiles();
-        }
+        if( !aDlg.Execute() )
+            pData->pTheme->InsertURL( INetURLObject( aDlg.GetPath() ) );
+    }
+    else
+    {
+        bTakeAll = false;
+        TakeFiles();
     }
 }
 
@@ -937,31 +937,31 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickTakeAllHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFoundHdl, weld::TreeView&, void)
 {
-    if (bInputAllowed)
+    if (!bInputAllowed)
+        return;
+
+    bool bPreviewPossible = false;
+
+    aPreviewTimer.Stop();
+
+    if( bEntriesFound )
     {
-        bool bPreviewPossible = false;
-
-        aPreviewTimer.Stop();
-
-        if( bEntriesFound )
+        if (m_xLbxFound->count_selected_rows() == 1)
         {
-            if (m_xLbxFound->count_selected_rows() == 1)
-            {
-                m_xCbxPreview->set_sensitive(true);
-                bPreviewPossible = true;
-            }
-            else
-                m_xCbxPreview->set_sensitive(false);
-
-            if( !aFoundList.empty() )
-                m_xBtnTakeAll->set_sensitive(true);
-            else
-                m_xBtnTakeAll->set_sensitive(false);
+            m_xCbxPreview->set_sensitive(true);
+            bPreviewPossible = true;
         }
+        else
+            m_xCbxPreview->set_sensitive(false);
 
-        if (bPreviewPossible && m_xCbxPreview->get_active())
-            aPreviewTimer.Start();
+        if( !aFoundList.empty() )
+            m_xBtnTakeAll->set_sensitive(true);
+        else
+            m_xBtnTakeAll->set_sensitive(false);
     }
+
+    if (bPreviewPossible && m_xCbxPreview->get_active())
+        aPreviewTimer.Start();
 }
 
 IMPL_LINK_NOARG(TPGalleryThemeProperties, DClickFoundHdl, weld::TreeView&, bool)

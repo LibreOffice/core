@@ -466,20 +466,20 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
 
 IMPL_LINK(SvxSaveTabPage, AutoClickHdl_Impl, weld::Button&, rBox, void)
 {
-    if (&rBox == m_xAutoSaveCB.get())
+    if (&rBox != m_xAutoSaveCB.get())
+        return;
+
+    if (m_xAutoSaveCB->get_active())
     {
-        if (m_xAutoSaveCB->get_active())
-        {
-            m_xAutoSaveEdit->set_sensitive(true);
-            m_xMinuteFT->set_sensitive(true);
-            m_xUserAutoSaveCB->set_sensitive(true);
-        }
-        else
-        {
-            m_xAutoSaveEdit->set_sensitive(false);
-            m_xMinuteFT->set_sensitive(false);
-            m_xUserAutoSaveCB->set_sensitive(false);
-        }
+        m_xAutoSaveEdit->set_sensitive(true);
+        m_xMinuteFT->set_sensitive(true);
+        m_xUserAutoSaveCB->set_sensitive(true);
+    }
+    else
+    {
+        m_xAutoSaveEdit->set_sensitive(false);
+        m_xMinuteFT->set_sensitive(false);
+        m_xUserAutoSaveCB->set_sensitive(false);
     }
 }
 

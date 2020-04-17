@@ -622,20 +622,20 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, ShowPageHdl_Impl, weld::TreeView&, void)
 
 IMPL_LINK_NOARG(OfaTreeOptionsDialog, BackHdl_Impl, weld::Button&, void)
 {
-    if (xCurrentPageEntry && xTreeLB->get_iter_depth(*xCurrentPageEntry))
+    if (!(xCurrentPageEntry && xTreeLB->get_iter_depth(*xCurrentPageEntry)))
+        return;
+
+    OptionsPageInfo* pPageInfo = reinterpret_cast<OptionsPageInfo*>(xTreeLB->get_id(*xCurrentPageEntry).toInt64());
+    if (pPageInfo->m_xPage)
     {
-        OptionsPageInfo* pPageInfo = reinterpret_cast<OptionsPageInfo*>(xTreeLB->get_id(*xCurrentPageEntry).toInt64());
-        if (pPageInfo->m_xPage)
-        {
-            std::unique_ptr<weld::TreeIter> xParent = xTreeLB->make_iterator(xCurrentPageEntry.get());
-            xTreeLB->iter_parent(*xParent);
-            OptionsGroupInfo* pGroupInfo =
-                reinterpret_cast<OptionsGroupInfo*>(xTreeLB->get_id(*xParent).toInt64());
-            pPageInfo->m_xPage->Reset( pGroupInfo->m_pInItemSet.get() );
-        }
-        else if ( pPageInfo->m_xExtPage )
-            pPageInfo->m_xExtPage->ResetPage();
+        std::unique_ptr<weld::TreeIter> xParent = xTreeLB->make_iterator(xCurrentPageEntry.get());
+        xTreeLB->iter_parent(*xParent);
+        OptionsGroupInfo* pGroupInfo =
+            reinterpret_cast<OptionsGroupInfo*>(xTreeLB->get_id(*xParent).toInt64());
+        pPageInfo->m_xPage->Reset( pGroupInfo->m_pInItemSet.get() );
     }
+    else if ( pPageInfo->m_xExtPage )
+        pPageInfo->m_xExtPage->ResetPage();
 }
 
 void OfaTreeOptionsDialog::ApplyOptions(bool deactivate)
@@ -1574,23 +1574,23 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     }
 
     // Internet options
-    if ( !lcl_isOptionHidden( SID_INET_DLG, aOptionsDlgOpt ) )
-    {
-        setGroupName("Internet", CuiResId(SID_INET_DLG_RES[0].first));
-        nGroup = AddGroup(CuiResId(SID_INET_DLG_RES[0].first), nullptr, nullptr, SID_INET_DLG );
+    if ( lcl_isOptionHidden( SID_INET_DLG, aOptionsDlgOpt ) )
+        return;
 
-        for ( size_t i = 1; i < SAL_N_ELEMENTS(SID_INET_DLG_RES); ++i )
-        {
-            nPageId = static_cast<sal_uInt16>(SID_INET_DLG_RES[i].second);
-            if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
-                continue;
+    setGroupName("Internet", CuiResId(SID_INET_DLG_RES[0].first));
+    nGroup = AddGroup(CuiResId(SID_INET_DLG_RES[0].first), nullptr, nullptr, SID_INET_DLG );
+
+    for ( size_t i = 1; i < SAL_N_ELEMENTS(SID_INET_DLG_RES); ++i )
+    {
+        nPageId = static_cast<sal_uInt16>(SID_INET_DLG_RES[i].second);
+        if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
+            continue;
 #if defined(_WIN32)
-            // Disable E-mail tab-page on Windows
-            if ( nPageId == RID_SVXPAGE_INET_MAIL )
-                continue;
+        // Disable E-mail tab-page on Windows
+        if ( nPageId == RID_SVXPAGE_INET_MAIL )
+            continue;
 #endif
-            AddTabPage( nPageId, CuiResId(SID_INET_DLG_RES[i].first), nGroup );
-        }
+        AddTabPage( nPageId, CuiResId(SID_INET_DLG_RES[i].first), nGroup );
     }
 }
 

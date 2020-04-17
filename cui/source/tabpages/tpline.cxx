@@ -1428,84 +1428,84 @@ IMPL_LINK_NOARG(SvxLineTabPage, MenuCreateHdl_Impl, weld::ToggleButton&, void)
             m_xSymbolMB->set_item_sensitive("gallery", false);
     }
 
-    if (!m_xSymbolsMenu && m_pSymbolList)
-    {
-        m_xSymbolsMenu = m_xBuilder->weld_menu("symbolssubmenu");
-        ScopedVclPtrInstance< VirtualDevice > pVDev;
-        pVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
-        std::unique_ptr<SdrModel> pModel(
-            new SdrModel(nullptr, nullptr, true));
-        pModel->GetItemPool().FreezeIdRanges();
-        // Page
-        SdrPage* pPage = new SdrPage( *pModel, false );
-        pPage->SetSize(Size(1000,1000));
-        pModel->InsertPage( pPage, 0 );
-        {
-            // 3D View
-            std::unique_ptr<SdrView> pView(new SdrView( *pModel, pVDev ));
-            pView->hideMarkHandles();
-            pView->ShowSdrPage(pPage);
+    if (!(!m_xSymbolsMenu && m_pSymbolList))
+        return;
 
-            // Generate invisible square to give all symbols a
-            // bitmap size, which is independent from specific glyph
-            SdrObject *pInvisibleSquare=m_pSymbolList->GetObj(0);
+    m_xSymbolsMenu = m_xBuilder->weld_menu("symbolssubmenu");
+    ScopedVclPtrInstance< VirtualDevice > pVDev;
+    pVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
+    std::unique_ptr<SdrModel> pModel(
+        new SdrModel(nullptr, nullptr, true));
+    pModel->GetItemPool().FreezeIdRanges();
+    // Page
+    SdrPage* pPage = new SdrPage( *pModel, false );
+    pPage->SetSize(Size(1000,1000));
+    pModel->InsertPage( pPage, 0 );
+    {
+        // 3D View
+        std::unique_ptr<SdrView> pView(new SdrView( *pModel, pVDev ));
+        pView->hideMarkHandles();
+        pView->ShowSdrPage(pPage);
+
+        // Generate invisible square to give all symbols a
+        // bitmap size, which is independent from specific glyph
+        SdrObject *pInvisibleSquare=m_pSymbolList->GetObj(0);
+
+        // directly clone to target SdrModel
+        pInvisibleSquare = pInvisibleSquare->CloneSdrObject(*pModel);
+
+        pPage->NbcInsertObject(pInvisibleSquare);
+        pInvisibleSquare->SetMergedItem(XFillTransparenceItem(100));
+        pInvisibleSquare->SetMergedItem(XLineTransparenceItem(100));
+
+        for(size_t i=0; i < m_pSymbolList->GetObjCount(); ++i)
+        {
+            SdrObject *pObj=m_pSymbolList->GetObj(i);
+            assert(pObj);
 
             // directly clone to target SdrModel
-            pInvisibleSquare = pInvisibleSquare->CloneSdrObject(*pModel);
+            pObj = pObj->CloneSdrObject(*pModel);
 
-            pPage->NbcInsertObject(pInvisibleSquare);
-            pInvisibleSquare->SetMergedItem(XFillTransparenceItem(100));
-            pInvisibleSquare->SetMergedItem(XLineTransparenceItem(100));
-
-            for(size_t i=0; i < m_pSymbolList->GetObjCount(); ++i)
+            m_aGrfNames.emplace_back("");
+            pPage->NbcInsertObject(pObj);
+            if(m_pSymbolAttr)
             {
-                SdrObject *pObj=m_pSymbolList->GetObj(i);
-                assert(pObj);
-
-                // directly clone to target SdrModel
-                pObj = pObj->CloneSdrObject(*pModel);
-
-                m_aGrfNames.emplace_back("");
-                pPage->NbcInsertObject(pObj);
-                if(m_pSymbolAttr)
-                {
-                    pObj->SetMergedItemSet(*m_pSymbolAttr);
-                }
-                else
-                {
-                    pObj->SetMergedItemSet(m_rOutAttrs);
-                }
-                pView->MarkAll();
-                BitmapEx aBitmapEx(pView->GetMarkedObjBitmapEx());
-                GDIMetaFile aMeta(pView->GetMarkedObjMetaFile());
-                pView->UnmarkAll();
-                pObj=pPage->RemoveObject(1);
-                SdrObject::Free(pObj);
-
-                SvxBmpItemInfo* pInfo = new SvxBmpItemInfo;
-                pInfo->pBrushItem.reset(new SvxBrushItem(Graphic(aMeta), GPOS_AREA, SID_ATTR_BRUSH));
-                pInfo->sItemId = "symbol" + OUString::number(i);
-                m_aSymbolBrushItems.emplace_back(pInfo);
-
-                Size aSize(aBitmapEx.GetSizePixel());
-                if(aSize.Width() > MAX_BMP_WIDTH || aSize.Height() > MAX_BMP_HEIGHT)
-                {
-                    bool bWidth = aSize.Width() > aSize.Height();
-                    double nScale = bWidth ?
-                                        double(MAX_BMP_WIDTH) / static_cast<double>(aSize.Width()):
-                                        double(MAX_BMP_HEIGHT) / static_cast<double>(aSize.Height());
-                    aBitmapEx.Scale(nScale, nScale);
-                }
-                pVD->SetOutputSizePixel(aBitmapEx.GetSizePixel());
-                pVD->DrawBitmapEx(Point(), aBitmapEx);
-                m_xSymbolsMenu->append(pInfo->sItemId, "", *pVD);
+                pObj->SetMergedItemSet(*m_pSymbolAttr);
             }
-            pInvisibleSquare=pPage->RemoveObject(0);
-            SdrObject::Free(pInvisibleSquare);
+            else
+            {
+                pObj->SetMergedItemSet(m_rOutAttrs);
+            }
+            pView->MarkAll();
+            BitmapEx aBitmapEx(pView->GetMarkedObjBitmapEx());
+            GDIMetaFile aMeta(pView->GetMarkedObjMetaFile());
+            pView->UnmarkAll();
+            pObj=pPage->RemoveObject(1);
+            SdrObject::Free(pObj);
 
-            if (m_aGrfNames.empty())
-                m_xSymbolMB->set_item_sensitive("symbols", false);
+            SvxBmpItemInfo* pInfo = new SvxBmpItemInfo;
+            pInfo->pBrushItem.reset(new SvxBrushItem(Graphic(aMeta), GPOS_AREA, SID_ATTR_BRUSH));
+            pInfo->sItemId = "symbol" + OUString::number(i);
+            m_aSymbolBrushItems.emplace_back(pInfo);
+
+            Size aSize(aBitmapEx.GetSizePixel());
+            if(aSize.Width() > MAX_BMP_WIDTH || aSize.Height() > MAX_BMP_HEIGHT)
+            {
+                bool bWidth = aSize.Width() > aSize.Height();
+                double nScale = bWidth ?
+                                    double(MAX_BMP_WIDTH) / static_cast<double>(aSize.Width()):
+                                    double(MAX_BMP_HEIGHT) / static_cast<double>(aSize.Height());
+                aBitmapEx.Scale(nScale, nScale);
+            }
+            pVD->SetOutputSizePixel(aBitmapEx.GetSizePixel());
+            pVD->DrawBitmapEx(Point(), aBitmapEx);
+            m_xSymbolsMenu->append(pInfo->sItemId, "", *pVD);
         }
+        pInvisibleSquare=pPage->RemoveObject(0);
+        SdrObject::Free(pInvisibleSquare);
+
+        if (m_aGrfNames.empty())
+            m_xSymbolMB->set_item_sensitive("symbols", false);
     }
 }
 

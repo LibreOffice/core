@@ -358,52 +358,52 @@ void SvxHyperlinkNewDocTp::DoApply()
 
     // create a real URL-String
     INetURLObject aURL;
-    if ( ImplGetURLObject( aStrNewName, m_xCbbPath->GetBaseURL(), aURL ) )
+    if ( !ImplGetURLObject( aStrNewName, m_xCbbPath->GetBaseURL(), aURL ) )
+        return;
+
+    // create Document
+    aStrNewName = aURL.GetURLPath( INetURLObject::DecodeMechanism::NONE );
+    bool bCreate = true;
+    try
     {
-        // create Document
-        aStrNewName = aURL.GetURLPath( INetURLObject::DecodeMechanism::NONE );
-        bool bCreate = true;
-        try
+        // check if file exists, warn before we overwrite it
+        std::unique_ptr<SvStream> pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ );
+
+        bool bOk = pIStm && ( pIStm->GetError() == ERRCODE_NONE);
+
+        pIStm.reset();
+
+        if( bOk )
         {
-            // check if file exists, warn before we overwrite it
-            std::unique_ptr<SvStream> pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ );
-
-            bool bOk = pIStm && ( pIStm->GetError() == ERRCODE_NONE);
-
-            pIStm.reset();
-
-            if( bOk )
-            {
-                std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(mpDialog->getDialog(),
-                                                           VclMessageType::Warning, VclButtonsType::YesNo,
-                                                           CuiResId(RID_SVXSTR_HYPERDLG_QUERYOVERWRITE)));
-                bCreate = xWarn->run() == RET_YES;
-            }
-        }
-        catch (const uno::Exception&)
-        {
-        }
-
-        if (bCreate && !aStrNewName.isEmpty())
-        {
-            ExecuteInfo* pExecuteInfo = new ExecuteInfo;
-
-            pExecuteInfo->bRbtEditLater = m_xRbtEditLater->get_active();
-            pExecuteInfo->bRbtEditNow = m_xRbtEditNow->get_active();
-            // get private-url
-            sal_Int32 nPos = m_xLbDocTypes->get_selected_index();
-            if (nPos == -1)
-                nPos = 0;
-            pExecuteInfo->aURL = aURL;
-            pExecuteInfo->aStrDocName = reinterpret_cast<DocumentTypeData*>(m_xLbDocTypes->get_id(nPos).toInt64())->aStrURL;
-
-            // current document
-            pExecuteInfo->xFrame = GetDispatcher()->GetFrame()->GetFrame().GetFrameInterface();
-            pExecuteInfo->pDispatcher = GetDispatcher();
-
-            Application::PostUserEvent(LINK(nullptr, SvxHyperlinkNewDocTp, DispatchDocument), pExecuteInfo);
+            std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(mpDialog->getDialog(),
+                                                       VclMessageType::Warning, VclButtonsType::YesNo,
+                                                       CuiResId(RID_SVXSTR_HYPERDLG_QUERYOVERWRITE)));
+            bCreate = xWarn->run() == RET_YES;
         }
     }
+    catch (const uno::Exception&)
+    {
+    }
+
+    if (!(bCreate && !aStrNewName.isEmpty()))
+        return;
+
+    ExecuteInfo* pExecuteInfo = new ExecuteInfo;
+
+    pExecuteInfo->bRbtEditLater = m_xRbtEditLater->get_active();
+    pExecuteInfo->bRbtEditNow = m_xRbtEditNow->get_active();
+    // get private-url
+    sal_Int32 nPos = m_xLbDocTypes->get_selected_index();
+    if (nPos == -1)
+        nPos = 0;
+    pExecuteInfo->aURL = aURL;
+    pExecuteInfo->aStrDocName = reinterpret_cast<DocumentTypeData*>(m_xLbDocTypes->get_id(nPos).toInt64())->aStrURL;
+
+    // current document
+    pExecuteInfo->xFrame = GetDispatcher()->GetFrame()->GetFrame().GetFrameInterface();
+    pExecuteInfo->pDispatcher = GetDispatcher();
+
+    Application::PostUserEvent(LINK(nullptr, SvxHyperlinkNewDocTp, DispatchDocument), pExecuteInfo);
 }
 
 /*************************************************************************
@@ -434,46 +434,46 @@ IMPL_LINK_NOARG(SvxHyperlinkNewDocTp, ClickNewHdl_Impl, weld::Button&, void)
     xFolderPicker->setDisplayDirectory( aStrPath );
     sal_Int16 nResult = xFolderPicker->execute();
     DisableClose( false );
-    if( ExecutableDialogResults::OK == nResult )
+    if( ExecutableDialogResults::OK != nResult )
+        return;
+
+    char const  sSlash[] = "/";
+
+    INetURLObject   aURL( aStrURL, INetProtocol::File );
+    OUString        aStrName;
+    if( bHandleFileName )
+        aStrName = bZeroPath? aTempStrURL : aURL.getName();
+
+    m_xCbbPath->SetBaseURL( xFolderPicker->getDirectory() );
+    OUString          aStrTmp( xFolderPicker->getDirectory() );
+
+    if( aStrTmp[ aStrTmp.getLength() - 1 ] != sSlash[0] )
+        aStrTmp += sSlash;
+
+    // append old file name
+    if( bHandleFileName )
+        aStrTmp += aStrName;
+
+    INetURLObject   aNewURL( aStrTmp );
+
+    if (!aStrName.isEmpty() && !aNewURL.getExtension().isEmpty() &&
+       m_xLbDocTypes->get_selected_index() != -1)
     {
-        char const  sSlash[] = "/";
-
-        INetURLObject   aURL( aStrURL, INetProtocol::File );
-        OUString        aStrName;
-        if( bHandleFileName )
-            aStrName = bZeroPath? aTempStrURL : aURL.getName();
-
-        m_xCbbPath->SetBaseURL( xFolderPicker->getDirectory() );
-        OUString          aStrTmp( xFolderPicker->getDirectory() );
-
-        if( aStrTmp[ aStrTmp.getLength() - 1 ] != sSlash[0] )
-            aStrTmp += sSlash;
-
-        // append old file name
-        if( bHandleFileName )
-            aStrTmp += aStrName;
-
-        INetURLObject   aNewURL( aStrTmp );
-
-        if (!aStrName.isEmpty() && !aNewURL.getExtension().isEmpty() &&
-           m_xLbDocTypes->get_selected_index() != -1)
-        {
-            // get private-url
-            const sal_Int32 nPos = m_xLbDocTypes->get_selected_index();
-            aNewURL.setExtension(reinterpret_cast<DocumentTypeData*>(m_xLbDocTypes->get_id(nPos).toInt64())->aStrExt);
-        }
-
-        if( aNewURL.GetProtocol() == INetProtocol::File )
-        {
-            osl::FileBase::getSystemPathFromFileURL(aNewURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aStrTmp);
-        }
-        else
-        {
-            aStrTmp = aNewURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous );
-        }
-
-        m_xCbbPath->set_entry_text( aStrTmp );
+        // get private-url
+        const sal_Int32 nPos = m_xLbDocTypes->get_selected_index();
+        aNewURL.setExtension(reinterpret_cast<DocumentTypeData*>(m_xLbDocTypes->get_id(nPos).toInt64())->aStrExt);
     }
+
+    if( aNewURL.GetProtocol() == INetProtocol::File )
+    {
+        osl::FileBase::getSystemPathFromFileURL(aNewURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aStrTmp);
+    }
+    else
+    {
+        aStrTmp = aNewURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous );
+    }
+
+    m_xCbbPath->set_entry_text( aStrTmp );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

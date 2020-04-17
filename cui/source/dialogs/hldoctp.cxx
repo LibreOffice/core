@@ -184,19 +184,19 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickFileopenHdl_Impl, weld::Button&, void)
     ErrCode nError = aDlg.Execute();
     DisableClose( false );
 
-    if ( ERRCODE_NONE == nError )
-    {
-        OUString aURL( aDlg.GetPath() );
-        OUString aPath;
+    if ( ERRCODE_NONE != nError )
+        return;
 
-        osl::FileBase::getSystemPathFromFileURL(aURL, aPath);
+    OUString aURL( aDlg.GetPath() );
+    OUString aPath;
 
-        m_xCbbPath->SetBaseURL( aURL );
-        m_xCbbPath->set_entry_text(aPath);
+    osl::FileBase::getSystemPathFromFileURL(aURL, aPath);
 
-        if ( aOldURL != GetCurrentURL() )
-            ModifiedPathHdl_Impl(*m_xCbbPath->getWidget());
-    }
+    m_xCbbPath->SetBaseURL( aURL );
+    m_xCbbPath->set_entry_text(aPath);
+
+    if ( aOldURL != GetCurrentURL() )
+        ModifiedPathHdl_Impl(*m_xCbbPath->getWidget());
 }
 
 /*************************************************************************

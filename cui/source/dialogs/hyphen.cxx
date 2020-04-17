@@ -312,24 +312,24 @@ IMPL_LINK_NOARG(SvxHyphenWordDialog, CutHdl_Impl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SvxHyphenWordDialog, HyphenateAllHdl_Impl, weld::Button&, void)
 {
-    if( !m_bBusy )
+    if( m_bBusy )
+        return;
+
+    try
     {
-        try
-        {
-            uno::Reference< linguistic2::XLinguProperties >  xProp( LinguMgr::GetLinguPropertySet() );
+        uno::Reference< linguistic2::XLinguProperties >  xProp( LinguMgr::GetLinguPropertySet() );
 
-            xProp->setIsHyphAuto( true );
+        xProp->setIsHyphAuto( true );
 
-            m_bBusy = true;
-            ContinueHyph_Impl( /*m_nHyphPos*/m_nOldPos );
-            m_bBusy = false;
+        m_bBusy = true;
+        ContinueHyph_Impl( /*m_nHyphPos*/m_nOldPos );
+        m_bBusy = false;
 
-            xProp->setIsHyphAuto( false );
-        }
-        catch (uno::Exception &)
-        {
-            SAL_WARN( "cui.dialogs", "Hyphenate All failed" );
-        }
+        xProp->setIsHyphAuto( false );
+    }
+    catch (uno::Exception &)
+    {
+        SAL_WARN( "cui.dialogs", "Hyphenate All failed" );
     }
 }
 

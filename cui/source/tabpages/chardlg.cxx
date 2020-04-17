@@ -535,19 +535,19 @@ void SvxCharNamePage::FillStyleBox_Impl(const weld::Widget& rNameBox)
 
     pStyleBox->Fill(sFontName, pFontList);
 
-    if ( m_pImpl->m_bInSearchMode )
-    {
-        // additional entries for the search:
-        // "not bold" and "not italic"
-        OUString aEntry = m_pImpl->m_aNoStyleText;
-        const char sS[] = "%1";
-        aEntry = aEntry.replaceFirst( sS, pFontList->GetBoldStr() );
-        m_pImpl->m_nExtraEntryPos = pStyleBox->get_count();
-        pStyleBox->append_text( aEntry );
-        aEntry = m_pImpl->m_aNoStyleText;
-        aEntry = aEntry.replaceFirst( sS, pFontList->GetItalicStr() );
-        pStyleBox->append_text(aEntry);
-    }
+    if ( !m_pImpl->m_bInSearchMode )
+        return;
+
+    // additional entries for the search:
+    // "not bold" and "not italic"
+    OUString aEntry = m_pImpl->m_aNoStyleText;
+    const char sS[] = "%1";
+    aEntry = aEntry.replaceFirst( sS, pFontList->GetBoldStr() );
+    m_pImpl->m_nExtraEntryPos = pStyleBox->get_count();
+    pStyleBox->append_text( aEntry );
+    aEntry = m_pImpl->m_aNoStyleText;
+    aEntry = aEntry.replaceFirst( sS, pFontList->GetItalicStr() );
+    pStyleBox->append_text(aEntry);
 }
 
 void SvxCharNamePage::FillSizeBox_Impl(const weld::Widget& rNameBox)
@@ -2439,20 +2439,20 @@ void SvxCharEffectsPage::PageCreated(const SfxAllItemSet& aSet)
     if (pDisableCtlItem)
         DisableControls(pDisableCtlItem->GetValue());
 
-    if (pFlagItem)
+    if (!pFlagItem)
+        return;
+
+    sal_uInt32 nFlags=pFlagItem->GetValue();
+    if ( ( nFlags & SVX_ENABLE_FLASH ) == SVX_ENABLE_FLASH )
+        m_xBlinkingBtn->show();
+    if ( ( nFlags & SVX_PREVIEW_CHARACTER ) == SVX_PREVIEW_CHARACTER )
+        // the writer uses SID_ATTR_BRUSH as font background
+        m_bPreviewBackgroundToCharacter = true;
+    if ((nFlags & SVX_ENABLE_CHAR_TRANSPARENCY) != SVX_ENABLE_CHAR_TRANSPARENCY)
     {
-        sal_uInt32 nFlags=pFlagItem->GetValue();
-        if ( ( nFlags & SVX_ENABLE_FLASH ) == SVX_ENABLE_FLASH )
-            m_xBlinkingBtn->show();
-        if ( ( nFlags & SVX_PREVIEW_CHARACTER ) == SVX_PREVIEW_CHARACTER )
-            // the writer uses SID_ATTR_BRUSH as font background
-            m_bPreviewBackgroundToCharacter = true;
-        if ((nFlags & SVX_ENABLE_CHAR_TRANSPARENCY) != SVX_ENABLE_CHAR_TRANSPARENCY)
-        {
-            // Only show these in case client code explicitly wants this.
-            m_xFontTransparencyFT->hide();
-            m_xFontTransparencyMtr->hide();
-        }
+        // Only show these in case client code explicitly wants this.
+        m_xFontTransparencyFT->hide();
+        m_xFontTransparencyMtr->hide();
     }
 }
 

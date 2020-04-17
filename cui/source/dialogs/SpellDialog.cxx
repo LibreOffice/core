@@ -349,35 +349,35 @@ void SpellDialog::SpellContinue_Impl(bool bUseSavedSentence, bool bIgnoreCurrent
     //then GetNextSentence() has to be called followed again by MarkNextError()
     //MarkNextError is not initially called if the UndoEdit mode is active
     bool bNextSentence = false;
-    if((!m_xSentenceED->IsUndoEditMode() && m_xSentenceED->MarkNextError( bIgnoreCurrentError, xSpell )) ||
-            ( bNextSentence = GetNextSentence_Impl(bUseSavedSentence, m_xSentenceED->IsUndoEditMode()) && m_xSentenceED->MarkNextError( false, xSpell )))
-    {
-        SpellErrorDescription aSpellErrorDescription;
-        bool bSpellErrorDescription = m_xSentenceED->GetAlternatives(aSpellErrorDescription);
-        if (bSpellErrorDescription)
-        {
-            UpdateBoxes_Impl();
-            weld::Widget* aControls[] =
-            {
-                m_xNotInDictFT.get(),
-                m_xSentenceED->GetDrawingArea(),
-                m_xLanguageFT.get(),
-                nullptr
-            };
-            sal_Int32 nIdx = 0;
-            do
-            {
-                aControls[nIdx]->set_sensitive(true);
-            }
-            while(aControls[++nIdx]);
+    if(!((!m_xSentenceED->IsUndoEditMode() && m_xSentenceED->MarkNextError( bIgnoreCurrentError, xSpell )) ||
+            ( bNextSentence = GetNextSentence_Impl(bUseSavedSentence, m_xSentenceED->IsUndoEditMode()) && m_xSentenceED->MarkNextError( false, xSpell ))))
+        return;
 
-        }
-        if( bNextSentence )
+    SpellErrorDescription aSpellErrorDescription;
+    bool bSpellErrorDescription = m_xSentenceED->GetAlternatives(aSpellErrorDescription);
+    if (bSpellErrorDescription)
+    {
+        UpdateBoxes_Impl();
+        weld::Widget* aControls[] =
         {
-            //remove undo if a new sentence is active
-            m_xSentenceED->ResetUndo();
-            m_xUndoPB->set_sensitive(false);
+            m_xNotInDictFT.get(),
+            m_xSentenceED->GetDrawingArea(),
+            m_xLanguageFT.get(),
+            nullptr
+        };
+        sal_Int32 nIdx = 0;
+        do
+        {
+            aControls[nIdx]->set_sensitive(true);
         }
+        while(aControls[++nIdx]);
+
+    }
+    if( bNextSentence )
+    {
+        //remove undo if a new sentence is active
+        m_xSentenceED->ResetUndo();
+        m_xUndoPB->set_sensitive(false);
     }
 }
 /* Initialize, asynchronous to prevent virtual calls
@@ -898,18 +898,18 @@ void SpellDialog::ToplevelFocusChanged()
     *   The only sensible thing would be to call the new Method differently,
     *   e.g. DialogGot/LostFocus or so.
     */
-    if (m_xDialog->get_visible() && !bFocusLocked)
+    if (!(m_xDialog->get_visible() && !bFocusLocked))
+        return;
+
+    if (m_xDialog->has_toplevel_focus())
     {
-        if (m_xDialog->has_toplevel_focus())
-        {
-            //notify the child window of the focus change
-            rParent.GetFocus();
-        }
-        else
-        {
-            //notify the child window of the focus change
-            rParent.LoseFocus();
-        }
+        //notify the child window of the focus change
+        rParent.GetFocus();
+    }
+    else
+    {
+        //notify the child window of the focus change
+        rParent.LoseFocus();
     }
 }
 

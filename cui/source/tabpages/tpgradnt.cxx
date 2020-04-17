@@ -128,44 +128,44 @@ void SvxGradientTabPage::Construct()
 
 void SvxGradientTabPage::ActivatePage( const SfxItemSet& rSet )
 {
-    if( m_pColorList.is() )
+    if( !m_pColorList.is() )
+        return;
+
+    // ColorList
+    if( *m_pnColorListState & ChangeType::CHANGED ||
+        *m_pnColorListState & ChangeType::MODIFIED )
     {
-        // ColorList
-        if( *m_pnColorListState & ChangeType::CHANGED ||
-            *m_pnColorListState & ChangeType::MODIFIED )
-        {
-            SvxAreaTabDialog* pArea = (*m_pnColorListState & ChangeType::CHANGED) ?
-                dynamic_cast<SvxAreaTabDialog*>(GetDialogController()) : nullptr;
-            if (pArea)
-                m_pColorList = pArea->GetNewColorList();
+        SvxAreaTabDialog* pArea = (*m_pnColorListState & ChangeType::CHANGED) ?
+            dynamic_cast<SvxAreaTabDialog*>(GetDialogController()) : nullptr;
+        if (pArea)
+            m_pColorList = pArea->GetNewColorList();
 
-            ModifiedHdl_Impl( this );
-        }
-
-        // determining (and possibly cutting) the name and
-        // displaying it in the GroupBox
-        OUString        aString = CuiResId( RID_SVXSTR_TABLE ) + ": ";
-        INetURLObject   aURL( m_pGradientList->GetPath() );
-
-        aURL.Append( m_pGradientList->GetName() );
-        SAL_WARN_IF( aURL.GetProtocol() == INetProtocol::NotValid, "cui.tabpages", "invalid URL" );
-
-        if ( aURL.getBase().getLength() > 18 )
-        {
-            aString += aURL.getBase().copy( 0, 15 ) + "...";
-        }
-        else
-            aString += aURL.getBase();
-
-        sal_Int32 nPos = SearchGradientList( rSet.Get(XATTR_FILLGRADIENT).GetName() );
-        if ( nPos != -1)
-        {
-            sal_uInt16 nId = m_xGradientLB->GetItemId( static_cast<size_t>( nPos ) );
-            m_xGradientLB->SelectItem( nId );
-        }
-        // colors could have been deleted
-        ChangeGradientHdl_Impl();
+        ModifiedHdl_Impl( this );
     }
+
+    // determining (and possibly cutting) the name and
+    // displaying it in the GroupBox
+    OUString        aString = CuiResId( RID_SVXSTR_TABLE ) + ": ";
+    INetURLObject   aURL( m_pGradientList->GetPath() );
+
+    aURL.Append( m_pGradientList->GetName() );
+    SAL_WARN_IF( aURL.GetProtocol() == INetProtocol::NotValid, "cui.tabpages", "invalid URL" );
+
+    if ( aURL.getBase().getLength() > 18 )
+    {
+        aString += aURL.getBase().copy( 0, 15 ) + "...";
+    }
+    else
+        aString += aURL.getBase();
+
+    sal_Int32 nPos = SearchGradientList( rSet.Get(XATTR_FILLGRADIENT).GetName() );
+    if ( nPos != -1)
+    {
+        sal_uInt16 nId = m_xGradientLB->GetItemId( static_cast<size_t>( nPos ) );
+        m_xGradientLB->SelectItem( nId );
+    }
+    // colors could have been deleted
+    ChangeGradientHdl_Impl();
 }
 
 
@@ -391,30 +391,30 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl, weld::Button&, void)
     sal_uInt16 nId = m_xGradientLB->GetSelectedItemId();
     size_t nPos = m_xGradientLB->GetSelectItemPos();
 
-    if ( nPos != VALUESET_ITEM_NOTFOUND )
-    {
-        OUString aName( m_pGradientList->GetGradient( static_cast<sal_uInt16>(nPos) )->GetName() );
+    if ( nPos == VALUESET_ITEM_NOTFOUND )
+        return;
 
-        XGradient aXGradient( m_xLbColorFrom->GetSelectEntryColor(),
-                              m_xLbColorTo->GetSelectEntryColor(),
-                              static_cast<css::awt::GradientStyle>(m_xLbGradientType->get_active()),
-                              static_cast<long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10), // should be changed in resource
-                              static_cast<sal_uInt16>(m_xMtrCenterX->get_value(FieldUnit::NONE)),
-                              static_cast<sal_uInt16>(m_xMtrCenterY->get_value(FieldUnit::NONE)),
-                              static_cast<sal_uInt16>(m_xMtrBorder->get_value(FieldUnit::NONE)),
-                              static_cast<sal_uInt16>(m_xMtrColorFrom->get_value(FieldUnit::NONE)),
-                              static_cast<sal_uInt16>(m_xMtrColorTo->get_value(FieldUnit::NONE)),
-                              static_cast<sal_uInt16>(m_xMtrIncrement->get_value()) );
+    OUString aName( m_pGradientList->GetGradient( static_cast<sal_uInt16>(nPos) )->GetName() );
 
-        m_pGradientList->Replace(std::make_unique<XGradientEntry>(aXGradient, aName), nPos);
+    XGradient aXGradient( m_xLbColorFrom->GetSelectEntryColor(),
+                          m_xLbColorTo->GetSelectEntryColor(),
+                          static_cast<css::awt::GradientStyle>(m_xLbGradientType->get_active()),
+                          static_cast<long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10), // should be changed in resource
+                          static_cast<sal_uInt16>(m_xMtrCenterX->get_value(FieldUnit::NONE)),
+                          static_cast<sal_uInt16>(m_xMtrCenterY->get_value(FieldUnit::NONE)),
+                          static_cast<sal_uInt16>(m_xMtrBorder->get_value(FieldUnit::NONE)),
+                          static_cast<sal_uInt16>(m_xMtrColorFrom->get_value(FieldUnit::NONE)),
+                          static_cast<sal_uInt16>(m_xMtrColorTo->get_value(FieldUnit::NONE)),
+                          static_cast<sal_uInt16>(m_xMtrIncrement->get_value()) );
 
-        BitmapEx aBitmap = m_pGradientList->GetBitmapForPreview( static_cast<sal_uInt16>(nPos), m_xGradientLB->GetIconSize() );
-        m_xGradientLB->RemoveItem( nId );
-        m_xGradientLB->InsertItem( nId, Image(aBitmap), aName, static_cast<sal_uInt16>(nPos) );
-        m_xGradientLB->SelectItem( nId );
+    m_pGradientList->Replace(std::make_unique<XGradientEntry>(aXGradient, aName), nPos);
 
-        *m_pnGradientListState |= ChangeType::MODIFIED;
-    }
+    BitmapEx aBitmap = m_pGradientList->GetBitmapForPreview( static_cast<sal_uInt16>(nPos), m_xGradientLB->GetIconSize() );
+    m_xGradientLB->RemoveItem( nId );
+    m_xGradientLB->InsertItem( nId, Image(aBitmap), aName, static_cast<sal_uInt16>(nPos) );
+    m_xGradientLB->SelectItem( nId );
+
+    *m_pnGradientListState |= ChangeType::MODIFIED;
 }
 
 IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
@@ -451,37 +451,37 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void
     sal_uInt16 nId = m_xGradientLB->GetSelectedItemId();
     size_t nPos = m_xGradientLB->GetSelectItemPos();
 
-    if ( nPos != VALUESET_ITEM_NOTFOUND )
+    if ( nPos == VALUESET_ITEM_NOTFOUND )
+        return;
+
+    OUString aDesc( CuiResId( RID_SVXSTR_DESC_GRADIENT ) );
+    OUString aName( m_pGradientList->GetGradient( nPos )->GetName() );
+
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
+
+    bool bLoop = true;
+    while( bLoop && pDlg->Execute() == RET_OK )
     {
-        OUString aDesc( CuiResId( RID_SVXSTR_DESC_GRADIENT ) );
-        OUString aName( m_pGradientList->GetGradient( nPos )->GetName() );
+        pDlg->GetName( aName );
+        sal_Int32 nGradientPos = SearchGradientList(aName);
+        bool bValidGradientName = (nGradientPos == static_cast<sal_Int32>(nPos) ) || (nGradientPos == -1);
 
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
-
-        bool bLoop = true;
-        while( bLoop && pDlg->Execute() == RET_OK )
+        if( bValidGradientName )
         {
-            pDlg->GetName( aName );
-            sal_Int32 nGradientPos = SearchGradientList(aName);
-            bool bValidGradientName = (nGradientPos == static_cast<sal_Int32>(nPos) ) || (nGradientPos == -1);
+            bLoop = false;
+            m_pGradientList->GetGradient(nPos)->SetName(aName);
 
-            if( bValidGradientName )
-            {
-                bLoop = false;
-                m_pGradientList->GetGradient(nPos)->SetName(aName);
+            m_xGradientLB->SetItemText( nId, aName );
+            m_xGradientLB->SelectItem( nId );
 
-                m_xGradientLB->SetItemText( nId, aName );
-                m_xGradientLB->SelectItem( nId );
-
-                *m_pnGradientListState |= ChangeType::MODIFIED;
-            }
-            else
-            {
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
-                std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
-                xBox->run();
-            }
+            *m_pnGradientListState |= ChangeType::MODIFIED;
+        }
+        else
+        {
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
+            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
+            xBox->run();
         }
     }
 }
@@ -518,50 +518,50 @@ void SvxGradientTabPage::ChangeGradientHdl_Impl()
         }
     }
 
-    if( pGradient )
+    if( !pGradient )
+        return;
+
+    css::awt::GradientStyle eXGS = pGradient->GetGradientStyle();
+    sal_uInt16 nValue = pGradient->GetSteps();
+    if( nValue == 0 )
     {
-        css::awt::GradientStyle eXGS = pGradient->GetGradientStyle();
-        sal_uInt16 nValue = pGradient->GetSteps();
-        if( nValue == 0 )
-        {
-            m_xCbIncrement->set_state(TRISTATE_TRUE);
-            m_xMtrIncrement->set_sensitive(false);
-        }
-        else
-        {
-            m_xCbIncrement->set_state(TRISTATE_FALSE);
-            m_xMtrIncrement->set_sensitive(true);
-            m_xMtrIncrement->set_value( nValue );
-        }
-        m_xLbGradientType->set_active(
-            sal::static_int_cast< sal_Int32 >( eXGS ) );
-        // if the entry is not in the listbox,
-        // colors are added temporarily
-        m_xLbColorFrom->SetNoSelection();
-        m_xLbColorFrom->SelectEntry( pGradient->GetStartColor() );
-
-        m_xLbColorTo->SetNoSelection();
-        m_xLbColorTo->SelectEntry( pGradient->GetEndColor() );
-
-        m_xMtrAngle->set_value(pGradient->GetAngle() / 10, FieldUnit::NONE); // should be changed in resource
-        m_xSliderAngle->set_value(pGradient->GetAngle() / 10);
-        m_xMtrBorder->set_value(pGradient->GetBorder(), FieldUnit::NONE);
-        m_xSliderBorder->set_value(pGradient->GetBorder());
-        m_xMtrCenterX->set_value(pGradient->GetXOffset(), FieldUnit::NONE);
-        m_xMtrCenterY->set_value(pGradient->GetYOffset(), FieldUnit::NONE);
-        m_xMtrColorFrom->set_value(pGradient->GetStartIntens(), FieldUnit::NONE);
-        m_xMtrColorTo->set_value(pGradient->GetEndIntens(), FieldUnit::NONE);
-
-        // disable/enable controls
-        SetControlState_Impl( eXGS );
-
-        // fill ItemSet and pass it on to aCtlPreview
-        m_rXFSet.Put( XFillGradientItem( OUString(), *pGradient ) );
-        m_rXFSet.Put( XGradientStepCountItem( nValue ) );
-        m_aCtlPreview.SetAttributes(m_aXFillAttr.GetItemSet());
-
-        m_aCtlPreview.Invalidate();
+        m_xCbIncrement->set_state(TRISTATE_TRUE);
+        m_xMtrIncrement->set_sensitive(false);
     }
+    else
+    {
+        m_xCbIncrement->set_state(TRISTATE_FALSE);
+        m_xMtrIncrement->set_sensitive(true);
+        m_xMtrIncrement->set_value( nValue );
+    }
+    m_xLbGradientType->set_active(
+        sal::static_int_cast< sal_Int32 >( eXGS ) );
+    // if the entry is not in the listbox,
+    // colors are added temporarily
+    m_xLbColorFrom->SetNoSelection();
+    m_xLbColorFrom->SelectEntry( pGradient->GetStartColor() );
+
+    m_xLbColorTo->SetNoSelection();
+    m_xLbColorTo->SelectEntry( pGradient->GetEndColor() );
+
+    m_xMtrAngle->set_value(pGradient->GetAngle() / 10, FieldUnit::NONE); // should be changed in resource
+    m_xSliderAngle->set_value(pGradient->GetAngle() / 10);
+    m_xMtrBorder->set_value(pGradient->GetBorder(), FieldUnit::NONE);
+    m_xSliderBorder->set_value(pGradient->GetBorder());
+    m_xMtrCenterX->set_value(pGradient->GetXOffset(), FieldUnit::NONE);
+    m_xMtrCenterY->set_value(pGradient->GetYOffset(), FieldUnit::NONE);
+    m_xMtrColorFrom->set_value(pGradient->GetStartIntens(), FieldUnit::NONE);
+    m_xMtrColorTo->set_value(pGradient->GetEndIntens(), FieldUnit::NONE);
+
+    // disable/enable controls
+    SetControlState_Impl( eXGS );
+
+    // fill ItemSet and pass it on to aCtlPreview
+    m_rXFSet.Put( XFillGradientItem( OUString(), *pGradient ) );
+    m_rXFSet.Put( XGradientStepCountItem( nValue ) );
+    m_aCtlPreview.SetAttributes(m_aXFillAttr.GetItemSet());
+
+    m_aCtlPreview.Invalidate();
 }
 
 void SvxGradientTabPage::SetControlState_Impl( css::awt::GradientStyle eXGS )

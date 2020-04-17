@@ -168,42 +168,42 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
     if (pPageTypeItem)
         SetPageType(static_cast<PageType>(pPageTypeItem->GetValue()));
 
-    if( m_nDlgType == 0 )
+    if( m_nDlgType != 0 )
+        return;
+
+    if( !m_pColorList.is() )
+        return;
+
+    // ColorList
+    if( *m_pnColorListState & ChangeType::CHANGED ||
+        *m_pnColorListState & ChangeType::MODIFIED )
     {
-        if( m_pColorList.is() )
+        if( *m_pnColorListState & ChangeType::CHANGED )
         {
-            // ColorList
-            if( *m_pnColorListState & ChangeType::CHANGED ||
-                *m_pnColorListState & ChangeType::MODIFIED )
+            SvxAreaTabDialog* pArea = dynamic_cast<SvxAreaTabDialog*>(GetDialogController());
+            if( pArea )
             {
-                if( *m_pnColorListState & ChangeType::CHANGED )
-                {
-                    SvxAreaTabDialog* pArea = dynamic_cast<SvxAreaTabDialog*>(GetDialogController());
-                    if( pArea )
-                    {
-                        m_pColorList = pArea->GetNewColorList();
-                    }
-                    else
-                    {
-                        SvxLineTabDialog* pLine = dynamic_cast<SvxLineTabDialog*>(GetDialogController());
-                        if( pLine )
-                            m_pColorList = pLine->GetNewColorList();
-                    }
-                }
-
-                SfxItemSet rAttribs( rSet );
-                // rSet contains shadow attributes too, but we want
-                // to use it for updating rectangle attributes only,
-                // so set the shadow to none here
-                SdrOnOffItem aItem( makeSdrShadowItem( false ));
-                rAttribs.Put( aItem );
-
-                m_aCtlXRectPreview.SetRectangleAttributes( rAttribs );
-                ModifyShadowHdl_Impl( *m_xMtrTransparent );
+                m_pColorList = pArea->GetNewColorList();
             }
-            m_nPageType = PageType::Shadow;
+            else
+            {
+                SvxLineTabDialog* pLine = dynamic_cast<SvxLineTabDialog*>(GetDialogController());
+                if( pLine )
+                    m_pColorList = pLine->GetNewColorList();
+            }
         }
+
+        SfxItemSet rAttribs( rSet );
+        // rSet contains shadow attributes too, but we want
+        // to use it for updating rectangle attributes only,
+        // so set the shadow to none here
+        SdrOnOffItem aItem( makeSdrShadowItem( false ));
+        rAttribs.Put( aItem );
+
+        m_aCtlXRectPreview.SetRectangleAttributes( rAttribs );
+        ModifyShadowHdl_Impl( *m_xMtrTransparent );
     }
+    m_nPageType = PageType::Shadow;
 }
 
 

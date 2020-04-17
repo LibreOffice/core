@@ -89,29 +89,29 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, AddHdl_Impl, weld::Button&, void)
     Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     Reference < XFolderPicker2 >  xFolderPicker = FolderPicker::create(xContext);
 
-    if ( xFolderPicker->execute() == ExecutableDialogResults::OK )
+    if ( xFolderPicker->execute() != ExecutableDialogResults::OK )
+        return;
+
+    INetURLObject aPath( xFolderPicker->getDirectory() );
+    aPath.removeFinalSlash();
+    OUString aURL = aPath.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+    OUString sInsPath;
+    osl::FileBase::getSystemPathFromFileURL(aURL, sInsPath);
+
+    if (m_xRadioLB->find_text(sInsPath) != -1)
     {
-        INetURLObject aPath( xFolderPicker->getDirectory() );
-        aPath.removeFinalSlash();
-        OUString aURL = aPath.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-        OUString sInsPath;
-        osl::FileBase::getSystemPathFromFileURL(aURL, sInsPath);
-
-        if (m_xRadioLB->find_text(sInsPath) != -1)
-        {
-            OUString sMsg( CuiResId( RID_MULTIPATH_DBL_ERR ) );
-            sMsg = sMsg.replaceFirst( "%1", sInsPath );
-            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
-                                                          VclMessageType::Info, VclButtonsType::Ok, sMsg));
-            xInfoBox->run();
-        }
-        else
-        {
-            AppendEntry(sInsPath, aURL);
-        }
-
-        SelectHdl_Impl(*m_xRadioLB);
+        OUString sMsg( CuiResId( RID_MULTIPATH_DBL_ERR ) );
+        sMsg = sMsg.replaceFirst( "%1", sInsPath );
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
+                                                      VclMessageType::Info, VclButtonsType::Ok, sMsg));
+        xInfoBox->run();
     }
+    else
+    {
+        AppendEntry(sInsPath, aURL);
+    }
+
+    SelectHdl_Impl(*m_xRadioLB);
 }
 
 IMPL_LINK_NOARG(SvxPathSelectDialog, AddHdl_Impl, weld::Button&, void)
@@ -119,29 +119,29 @@ IMPL_LINK_NOARG(SvxPathSelectDialog, AddHdl_Impl, weld::Button&, void)
     Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     Reference < XFolderPicker2 >  xFolderPicker = FolderPicker::create(xContext);
 
-    if ( xFolderPicker->execute() == ExecutableDialogResults::OK )
+    if ( xFolderPicker->execute() != ExecutableDialogResults::OK )
+        return;
+
+    INetURLObject aPath( xFolderPicker->getDirectory() );
+    aPath.removeFinalSlash();
+    OUString aURL = aPath.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+    OUString sInsPath;
+    osl::FileBase::getSystemPathFromFileURL(aURL, sInsPath);
+
+    if (m_xPathLB->find_text(sInsPath) != -1)
     {
-        INetURLObject aPath( xFolderPicker->getDirectory() );
-        aPath.removeFinalSlash();
-        OUString aURL = aPath.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-        OUString sInsPath;
-        osl::FileBase::getSystemPathFromFileURL(aURL, sInsPath);
-
-        if (m_xPathLB->find_text(sInsPath) != -1)
-        {
-            OUString sMsg( CuiResId( RID_MULTIPATH_DBL_ERR ) );
-            sMsg = sMsg.replaceFirst( "%1", sInsPath );
-            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
-                                                          VclMessageType::Info, VclButtonsType::Ok, sMsg));
-            xInfoBox->run();
-        }
-        else
-        {
-            m_xPathLB->append(aURL, sInsPath);
-        }
-
-        SelectHdl_Impl(*m_xPathLB);
+        OUString sMsg( CuiResId( RID_MULTIPATH_DBL_ERR ) );
+        sMsg = sMsg.replaceFirst( "%1", sInsPath );
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_xDialog.get(),
+                                                      VclMessageType::Info, VclButtonsType::Ok, sMsg));
+        xInfoBox->run();
     }
+    else
+    {
+        m_xPathLB->append(aURL, sInsPath);
+    }
+
+    SelectHdl_Impl(*m_xPathLB);
 }
 
 IMPL_LINK_NOARG(SvxMultiPathDialog, DelHdl_Impl, weld::Button&, void)

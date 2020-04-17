@@ -204,39 +204,39 @@ void SvxToolbarConfigPage::DeleteSelectedContent()
 {
     int nActEntry = m_xContentsListBox->get_selected_index();
 
-    if (nActEntry != -1)
+    if (nActEntry == -1)
+        return;
+
+    // get currently selected entry
+    SvxConfigEntry* pEntry =
+        reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(nActEntry).toInt64());
+
+    SvxConfigEntry* pToolbar = GetTopLevelSelection();
+
+    // remove entry from the list for this toolbar
+    SvxConfigPageHelper::RemoveEntry( pToolbar->GetEntries(), pEntry );
+
+    // remove toolbar entry from UI
+    m_xContentsListBox->remove(nActEntry);
+
+    // delete data for toolbar entry
+    delete pEntry;
+
+    static_cast<ToolbarSaveInData*>(GetSaveInData())->ApplyToolbar( pToolbar );
+    UpdateButtonStates();
+
+    // if this is the last entry in the toolbar and it is a user
+    // defined toolbar pop up a dialog asking the user if they
+    // want to delete the toolbar
+    if ( m_xContentsListBox->n_children() == 0 &&
+         GetTopLevelSelection()->IsDeletable() )
     {
-        // get currently selected entry
-        SvxConfigEntry* pEntry =
-            reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(nActEntry).toInt64());
-
-        SvxConfigEntry* pToolbar = GetTopLevelSelection();
-
-        // remove entry from the list for this toolbar
-        SvxConfigPageHelper::RemoveEntry( pToolbar->GetEntries(), pEntry );
-
-        // remove toolbar entry from UI
-        m_xContentsListBox->remove(nActEntry);
-
-        // delete data for toolbar entry
-        delete pEntry;
-
-        static_cast<ToolbarSaveInData*>(GetSaveInData())->ApplyToolbar( pToolbar );
-        UpdateButtonStates();
-
-        // if this is the last entry in the toolbar and it is a user
-        // defined toolbar pop up a dialog asking the user if they
-        // want to delete the toolbar
-        if ( m_xContentsListBox->n_children() == 0 &&
-             GetTopLevelSelection()->IsDeletable() )
+        std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                       VclMessageType::Question, VclButtonsType::YesNo,
+                                                       CuiResId(RID_SXVSTR_CONFIRM_DELETE_TOOLBAR)));
+        if (xQueryBox->run() == RET_YES)
         {
-            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
-                                                           VclMessageType::Question, VclButtonsType::YesNo,
-                                                           CuiResId(RID_SXVSTR_CONFIRM_DELETE_TOOLBAR)));
-            if (xQueryBox->run() == RET_YES)
-            {
-                DeleteSelectedTopLevel();
-            }
+            DeleteSelectedTopLevel();
         }
     }
 }

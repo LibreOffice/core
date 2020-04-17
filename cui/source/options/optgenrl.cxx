@@ -399,21 +399,21 @@ IMPL_LINK( SvxGeneralTabPage, ModifyHdl_Impl, weld::Entry&, rEdit, void )
             nField = i;
     }
     // updating the initial
-    if (nField < nInits && rShortName.xEdit->get_sensitive())
+    if (!(nField < nInits && rShortName.xEdit->get_sensitive()))
+        return;
+
+    OUString sShortName = rShortName.xEdit->get_text();
+    // clear short name if it contains more characters than the number of initials
+    if (o3tl::make_unsigned(sShortName.getLength()) > nInits)
     {
-        OUString sShortName = rShortName.xEdit->get_text();
-        // clear short name if it contains more characters than the number of initials
-        if (o3tl::make_unsigned(sShortName.getLength()) > nInits)
-        {
-            rShortName.xEdit->set_text(OUString());
-        }
-        while (o3tl::make_unsigned(sShortName.getLength()) < nInits)
-            sShortName += " ";
-        OUString sName = rEdit.get_text();
-        OUString sLetter = sName.isEmpty()
-            ? OUString(u' ') : sName.copy(0, 1);
-        rShortName.xEdit->set_text(sShortName.replaceAt(nField, 1, sLetter).trim());
+        rShortName.xEdit->set_text(OUString());
     }
+    while (o3tl::make_unsigned(sShortName.getLength()) < nInits)
+        sShortName += " ";
+    OUString sName = rEdit.get_text();
+    OUString sLetter = sName.isEmpty()
+        ? OUString(u' ') : sName.copy(0, 1);
+    rShortName.xEdit->set_text(sShortName.replaceAt(nField, 1, sLetter).trim());
 }
 
 

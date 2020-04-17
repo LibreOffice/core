@@ -828,48 +828,48 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperSizeSelect_Impl, weld::ComboBox&, void)
 {
     Paper ePaper = m_xPaperSizeBox->get_active_id();
 
-    if ( ePaper != PAPER_USER )
-    {
-        Size aSize( SvxPaperInfo::GetPaperSize( ePaper, MapUnit::Map100thMM ) );
+    if ( ePaper == PAPER_USER )
+        return;
 
-        if (m_xLandscapeBtn->get_active())
-            Swap( aSize );
+    Size aSize( SvxPaperInfo::GetPaperSize( ePaper, MapUnit::Map100thMM ) );
 
-        if ( aSize.Height() < m_xPaperHeightEdit->get_min( FieldUnit::MM_100TH ) )
-            m_xPaperHeightEdit->set_min(
-                m_xPaperHeightEdit->normalize( aSize.Height() ), FieldUnit::MM_100TH );
-        if ( aSize.Width() < m_xPaperWidthEdit->get_min( FieldUnit::MM_100TH ) )
-            m_xPaperWidthEdit->set_min(
-                m_xPaperWidthEdit->normalize( aSize.Width() ), FieldUnit::MM_100TH );
-        SetMetricValue( *m_xPaperHeightEdit, aSize.Height(), MapUnit::Map100thMM );
-        SetMetricValue( *m_xPaperWidthEdit, aSize.Width(), MapUnit::Map100thMM );
+    if (m_xLandscapeBtn->get_active())
+        Swap( aSize );
 
-        CalcMargin_Impl();
+    if ( aSize.Height() < m_xPaperHeightEdit->get_min( FieldUnit::MM_100TH ) )
+        m_xPaperHeightEdit->set_min(
+            m_xPaperHeightEdit->normalize( aSize.Height() ), FieldUnit::MM_100TH );
+    if ( aSize.Width() < m_xPaperWidthEdit->get_min( FieldUnit::MM_100TH ) )
+        m_xPaperWidthEdit->set_min(
+            m_xPaperWidthEdit->normalize( aSize.Width() ), FieldUnit::MM_100TH );
+    SetMetricValue( *m_xPaperHeightEdit, aSize.Height(), MapUnit::Map100thMM );
+    SetMetricValue( *m_xPaperWidthEdit, aSize.Width(), MapUnit::Map100thMM );
 
-        RangeHdl_Impl();
-        UpdateExample_Impl( true );
+    CalcMargin_Impl();
 
-        if ( eMode == SVX_PAGE_MODE_PRESENTATION )
-        {
-            // Draw: if paper format the margin shall be 1 cm
-            long nTmp = 0;
-            bool bScreen = (( PAPER_SCREEN_4_3 == ePaper )||( PAPER_SCREEN_16_9 == ePaper)||( PAPER_SCREEN_16_10 == ePaper));
+    RangeHdl_Impl();
+    UpdateExample_Impl( true );
 
-            if ( !bScreen )
-                // no margin if screen
-                nTmp = 1; // accordingly 1 cm
+    if ( eMode != SVX_PAGE_MODE_PRESENTATION )
+        return;
 
-            if ( bScreen || m_xRightMarginEdit->get_value(FieldUnit::NONE) == 0 )
-                SetMetricValue( *m_xRightMarginEdit, nTmp, MapUnit::MapCM );
-            if ( bScreen || m_xLeftMarginEdit->get_value(FieldUnit::NONE) == 0 )
-                SetMetricValue( *m_xLeftMarginEdit, nTmp, MapUnit::MapCM );
-            if ( bScreen || m_xBottomMarginEdit->get_value(FieldUnit::NONE) == 0 )
-                SetMetricValue( *m_xBottomMarginEdit, nTmp, MapUnit::MapCM );
-            if ( bScreen || m_xTopMarginEdit->get_value(FieldUnit::NONE) == 0 )
-                SetMetricValue( *m_xTopMarginEdit, nTmp, MapUnit::MapCM );
-            UpdateExample_Impl( true );
-        }
-    }
+    // Draw: if paper format the margin shall be 1 cm
+    long nTmp = 0;
+    bool bScreen = (( PAPER_SCREEN_4_3 == ePaper )||( PAPER_SCREEN_16_9 == ePaper)||( PAPER_SCREEN_16_10 == ePaper));
+
+    if ( !bScreen )
+        // no margin if screen
+        nTmp = 1; // accordingly 1 cm
+
+    if ( bScreen || m_xRightMarginEdit->get_value(FieldUnit::NONE) == 0 )
+        SetMetricValue( *m_xRightMarginEdit, nTmp, MapUnit::MapCM );
+    if ( bScreen || m_xLeftMarginEdit->get_value(FieldUnit::NONE) == 0 )
+        SetMetricValue( *m_xLeftMarginEdit, nTmp, MapUnit::MapCM );
+    if ( bScreen || m_xBottomMarginEdit->get_value(FieldUnit::NONE) == 0 )
+        SetMetricValue( *m_xBottomMarginEdit, nTmp, MapUnit::MapCM );
+    if ( bScreen || m_xTopMarginEdit->get_value(FieldUnit::NONE) == 0 )
+        SetMetricValue( *m_xTopMarginEdit, nTmp, MapUnit::MapCM );
+    UpdateExample_Impl( true );
 }
 
 IMPL_LINK_NOARG(SvxPageDescPage, PaperSizeModify_Impl, weld::MetricSpinButton&, void)
@@ -900,27 +900,27 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperSizeModify_Impl, weld::MetricSpinButton&, 
 IMPL_LINK(SvxPageDescPage, SwapOrientation_Impl, weld::Button&, rBtn, void)
 {
     if (
-        (!bLandscape && &rBtn == m_xLandscapeBtn.get()) ||
-        (bLandscape  && &rBtn == m_xPortraitBtn.get())
+        !((!bLandscape && &rBtn == m_xLandscapeBtn.get()) ||
+        (bLandscape  && &rBtn == m_xPortraitBtn.get()))
        )
-    {
-        bLandscape = m_xLandscapeBtn->get_active();
+        return;
 
-        const long lWidth = GetCoreValue( *m_xPaperWidthEdit, MapUnit::Map100thMM );
-        const long lHeight = GetCoreValue( *m_xPaperHeightEdit, MapUnit::Map100thMM );
+    bLandscape = m_xLandscapeBtn->get_active();
 
-        // swap width and height
-        SetMetricValue(*m_xPaperWidthEdit, lHeight, MapUnit::Map100thMM);
-        SetMetricValue(*m_xPaperHeightEdit, lWidth, MapUnit::Map100thMM);
+    const long lWidth = GetCoreValue( *m_xPaperWidthEdit, MapUnit::Map100thMM );
+    const long lHeight = GetCoreValue( *m_xPaperHeightEdit, MapUnit::Map100thMM );
 
-        // recalculate margins if necessary
-        CalcMargin_Impl();
+    // swap width and height
+    SetMetricValue(*m_xPaperWidthEdit, lHeight, MapUnit::Map100thMM);
+    SetMetricValue(*m_xPaperHeightEdit, lWidth, MapUnit::Map100thMM);
 
-        PaperSizeSelect_Impl(m_xPaperSizeBox->get_widget());
-        RangeHdl_Impl();
-        SwapFirstValues_Impl(bBorderModified);
-        UpdateExample_Impl(true);
-    }
+    // recalculate margins if necessary
+    CalcMargin_Impl();
+
+    PaperSizeSelect_Impl(m_xPaperSizeBox->get_widget());
+    RangeHdl_Impl();
+    SwapFirstValues_Impl(bBorderModified);
+    UpdateExample_Impl(true);
 }
 
 void SvxPageDescPage::SwapFirstValues_Impl( bool bSet )
@@ -965,21 +965,21 @@ void SvxPageDescPage::SwapFirstValues_Impl( bool bSet )
     nFirstTopMargin = m_xTopMarginEdit->convert_value_from(m_xTopMarginEdit->normalize(nNewT), FieldUnit::TWIP);
     nFirstBottomMargin = m_xBottomMarginEdit->convert_value_from(m_xBottomMarginEdit->normalize(nNewB), FieldUnit::TWIP);
 
-    if ( bSet )
-    {
-        if ( nSetL < nNewL )
-            m_xLeftMarginEdit->set_value( m_xLeftMarginEdit->normalize( nNewL ),
-                                      FieldUnit::TWIP );
-        if ( nSetR < nNewR )
-            m_xRightMarginEdit->set_value( m_xRightMarginEdit->normalize( nNewR ),
-                                       FieldUnit::TWIP );
-        if ( nSetT < nNewT )
-            m_xTopMarginEdit->set_value( m_xTopMarginEdit->normalize( nNewT ),
-                                     FieldUnit::TWIP );
-        if ( nSetB < nNewB )
-            m_xBottomMarginEdit->set_value( m_xBottomMarginEdit->normalize( nNewB ),
-                                        FieldUnit::TWIP );
-    }
+    if ( !bSet )
+        return;
+
+    if ( nSetL < nNewL )
+        m_xLeftMarginEdit->set_value( m_xLeftMarginEdit->normalize( nNewL ),
+                                  FieldUnit::TWIP );
+    if ( nSetR < nNewR )
+        m_xRightMarginEdit->set_value( m_xRightMarginEdit->normalize( nNewR ),
+                                   FieldUnit::TWIP );
+    if ( nSetT < nNewT )
+        m_xTopMarginEdit->set_value( m_xTopMarginEdit->normalize( nNewT ),
+                                 FieldUnit::TWIP );
+    if ( nSetB < nNewB )
+        m_xBottomMarginEdit->set_value( m_xBottomMarginEdit->normalize( nNewB ),
+                                    FieldUnit::TWIP );
 }
 
 IMPL_LINK_NOARG(SvxPageDescPage, BorderModify_Impl, weld::MetricSpinButton&, void)
@@ -1179,57 +1179,57 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
 
     // evaluate footer attributes
 
-    if ( SfxItemState::SET ==
+    if ( SfxItemState::SET !=
          rSet.GetItemState( GetWhich( SID_ATTR_PAGE_FOOTERSET ),
                             false, reinterpret_cast<const SfxPoolItem**>(&pSetItem) ) )
+        return;
+
+    const SfxItemSet& rFooterSet = pSetItem->GetItemSet();
+    const SfxBoolItem& rFooterOn =
+        static_cast<const SfxBoolItem&>(rFooterSet.Get( GetWhich( SID_ATTR_PAGE_ON ) ));
+
+    if ( rFooterOn.GetValue() )
     {
-        const SfxItemSet& rFooterSet = pSetItem->GetItemSet();
-        const SfxBoolItem& rFooterOn =
-            static_cast<const SfxBoolItem&>(rFooterSet.Get( GetWhich( SID_ATTR_PAGE_ON ) ));
-
-        if ( rFooterOn.GetValue() )
-        {
-            const SvxSizeItem& rSize = static_cast<const SvxSizeItem&>(
-                rFooterSet.Get( GetWhich( SID_ATTR_PAGE_SIZE ) ));
-            const SvxULSpaceItem& rUL = static_cast<const SvxULSpaceItem&>(
-                rFooterSet.Get( GetWhich( SID_ATTR_ULSPACE ) ));
-            long nDist = rUL.GetUpper();
-            m_aBspWin.SetFtHeight( rSize.GetSize().Height() - nDist );
-            m_aBspWin.SetFtDist( nDist );
-            const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>(
-                rFooterSet.Get( GetWhich( SID_ATTR_LRSPACE ) ));
-            m_aBspWin.SetFtLeft( rLR.GetLeft() );
-            m_aBspWin.SetFtRight( rLR.GetRight() );
-            m_aBspWin.SetFooter( true );
-        }
-        else
-            m_aBspWin.SetFooter( false );
-
-        // show background and border in the example
-        drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFooterFillAttributes;
-
-        if(mbEnableDrawingLayerFillStyles)
-        {
-            // create FillAttributes directly from DrawingLayer FillStyle entries
-            aFooterFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(rFooterSet);
-        }
-        else
-        {
-            const sal_uInt16 nWhich(GetWhich(SID_ATTR_BRUSH));
-
-            if(rFooterSet.GetItemState(nWhich) >= SfxItemState::DEFAULT)
-            {
-                // aBspWin.SetFtColor(rItem.GetColor());
-                const SvxBrushItem& rItem = static_cast<const SvxBrushItem&>(rFooterSet.Get(nWhich));
-                SfxItemSet aTempSet(*rFooterSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
-
-                setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
-                aFooterFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(aTempSet);
-            }
-        }
-
-        m_aBspWin.setFooterFillAttributes(aFooterFillAttributes);
+        const SvxSizeItem& rSize = static_cast<const SvxSizeItem&>(
+            rFooterSet.Get( GetWhich( SID_ATTR_PAGE_SIZE ) ));
+        const SvxULSpaceItem& rUL = static_cast<const SvxULSpaceItem&>(
+            rFooterSet.Get( GetWhich( SID_ATTR_ULSPACE ) ));
+        long nDist = rUL.GetUpper();
+        m_aBspWin.SetFtHeight( rSize.GetSize().Height() - nDist );
+        m_aBspWin.SetFtDist( nDist );
+        const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>(
+            rFooterSet.Get( GetWhich( SID_ATTR_LRSPACE ) ));
+        m_aBspWin.SetFtLeft( rLR.GetLeft() );
+        m_aBspWin.SetFtRight( rLR.GetRight() );
+        m_aBspWin.SetFooter( true );
     }
+    else
+        m_aBspWin.SetFooter( false );
+
+    // show background and border in the example
+    drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFooterFillAttributes;
+
+    if(mbEnableDrawingLayerFillStyles)
+    {
+        // create FillAttributes directly from DrawingLayer FillStyle entries
+        aFooterFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(rFooterSet);
+    }
+    else
+    {
+        const sal_uInt16 nWhich(GetWhich(SID_ATTR_BRUSH));
+
+        if(rFooterSet.GetItemState(nWhich) >= SfxItemState::DEFAULT)
+        {
+            // aBspWin.SetFtColor(rItem.GetColor());
+            const SvxBrushItem& rItem = static_cast<const SvxBrushItem&>(rFooterSet.Get(nWhich));
+            SfxItemSet aTempSet(*rFooterSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
+
+            setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
+            aFooterFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(aTempSet);
+        }
+    }
+
+    m_aBspWin.setFooterFillAttributes(aFooterFillAttributes);
 }
 
 void SvxPageDescPage::ActivatePage( const SfxItemSet& rSet )
@@ -1376,29 +1376,29 @@ void SvxPageDescPage::CalcMargin_Impl()
     long nWidth = nBL + nBR + MINBODY;
     long nHeight = nBT + nBB + MINBODY;
 
-    if ( nWidth > nW || nHeight > nH )
+    if ( !(nWidth > nW || nHeight > nH) )
+        return;
+
+    if ( nWidth > nW )
     {
-        if ( nWidth > nW )
-        {
-            long nTmp = nBL <= nBR ? nBR : nBL;
-            nTmp -= nWidth - nW;
+        long nTmp = nBL <= nBR ? nBR : nBL;
+        nTmp -= nWidth - nW;
 
-            if ( nBL <= nBR )
-                SetMetricValue( *m_xRightMarginEdit, nTmp, MapUnit::MapTwip );
-            else
-                SetMetricValue( *m_xLeftMarginEdit, nTmp, MapUnit::MapTwip );
-        }
+        if ( nBL <= nBR )
+            SetMetricValue( *m_xRightMarginEdit, nTmp, MapUnit::MapTwip );
+        else
+            SetMetricValue( *m_xLeftMarginEdit, nTmp, MapUnit::MapTwip );
+    }
 
-        if ( nHeight > nH )
-        {
-            long nTmp = nBT <= nBB ? nBB : nBT;
-            nTmp -= nHeight - nH;
+    if ( nHeight > nH )
+    {
+        long nTmp = nBT <= nBB ? nBB : nBT;
+        nTmp -= nHeight - nH;
 
-            if ( nBT <= nBB )
-                SetMetricValue( *m_xBottomMarginEdit, nTmp, MapUnit::MapTwip );
-            else
-                SetMetricValue( *m_xTopMarginEdit, nTmp, MapUnit::MapTwip );
-        }
+        if ( nBT <= nBB )
+            SetMetricValue( *m_xBottomMarginEdit, nTmp, MapUnit::MapTwip );
+        else
+            SetMetricValue( *m_xTopMarginEdit, nTmp, MapUnit::MapTwip );
     }
 }
 

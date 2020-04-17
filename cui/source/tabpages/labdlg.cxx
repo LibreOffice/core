@@ -410,18 +410,18 @@ IMPL_LINK(SvxCaptionTabPage, PositionSelectHdl_Impl, weld::ComboBox&, rListBox, 
 
 IMPL_LINK( SvxCaptionTabPage, LineOptHdl_Impl, weld::ToggleButton&, rButton, void )
 {
-    if (&rButton == m_xCB_OPTIMAL.get())
+    if (&rButton != m_xCB_OPTIMAL.get())
+        return;
+
+    if (m_xCB_OPTIMAL->get_active() || !m_xCB_OPTIMAL->get_sensitive())
     {
-        if (m_xCB_OPTIMAL->get_active() || !m_xCB_OPTIMAL->get_sensitive())
-        {
-            m_xFT_LENGTHFT->set_sensitive(false);
-            m_xMF_LENGTH->set_sensitive(false);
-        }
-        else
-        {
-            m_xFT_LENGTHFT->set_sensitive(true);
-            m_xMF_LENGTH->set_sensitive(true);
-        }
+        m_xFT_LENGTHFT->set_sensitive(false);
+        m_xMF_LENGTH->set_sensitive(false);
+    }
+    else
+    {
+        m_xFT_LENGTHFT->set_sensitive(true);
+        m_xMF_LENGTH->set_sensitive(true);
     }
 }
 

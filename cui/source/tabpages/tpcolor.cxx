@@ -185,29 +185,29 @@ void SvxColorTabPage::Construct()
 
 void SvxColorTabPage::ActivatePage( const SfxItemSet& )
 {
-    if( pColorList.is() )
+    if( !pColorList.is() )
+        return;
+
+    const SfxPoolItem* pPoolItem = nullptr;
+    if( SfxItemState::SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), true, &pPoolItem ) )
     {
-        const SfxPoolItem* pPoolItem = nullptr;
-        if( SfxItemState::SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), true, &pPoolItem ) )
-        {
-            SetColorModel( ColorModel::RGB );
-            ChangeColorModel();
+        SetColorModel( ColorModel::RGB );
+        ChangeColorModel();
 
-            const Color aColor = static_cast<const XFillColorItem*>(pPoolItem)->GetColorValue();
-            ChangeColor( aColor );
-            sal_Int32 nPos = FindInPalette( aColor );
+        const Color aColor = static_cast<const XFillColorItem*>(pPoolItem)->GetColorValue();
+        ChangeColor( aColor );
+        sal_Int32 nPos = FindInPalette( aColor );
 
-            if ( nPos != -1 )
-                m_xValSetColorList->SelectItem(m_xValSetColorList->GetItemId(nPos));
-            // else search in other palettes?
+        if ( nPos != -1 )
+            m_xValSetColorList->SelectItem(m_xValSetColorList->GetItemId(nPos));
+        // else search in other palettes?
 
-        }
-
-        m_aCtlPreviewOld.SetAttributes(aXFillAttr.GetItemSet());
-        m_aCtlPreviewOld.Invalidate();
-
-        SelectValSetHdl_Impl(m_xValSetColorList.get());
     }
+
+    m_aCtlPreviewOld.SetAttributes(aXFillAttr.GetItemSet());
+    m_aCtlPreviewOld.Invalidate();
+
+    SelectValSetHdl_Impl(m_xValSetColorList.get());
 }
 
 DeactivateRC SvxColorTabPage::DeactivatePage( SfxItemSet* _pSet )
@@ -396,32 +396,32 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl, weld::Button&, void)
 {
     sal_uInt16 nId = m_xValSetColorList->GetSelectedItemId();
     size_t nPos = m_xValSetColorList->GetSelectItemPos();
-    if (m_xSelectPalette->get_active() == 0 && nPos != VALUESET_ITEM_NOTFOUND )
+    if (!(m_xSelectPalette->get_active() == 0 && nPos != VALUESET_ITEM_NOTFOUND) )
+        return;
+
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_context));
+    css::uno::Sequence< sal_Int32 > aCustomColorList(officecfg::Office::Common::UserColors::CustomColor::get());
+    css::uno::Sequence< OUString > aCustomColorNameList(officecfg::Office::Common::UserColors::CustomColorName::get());
+    sal_Int32 nSize = aCustomColorList.getLength() - 1;
+    for(sal_Int32 nIndex = static_cast<sal_Int32>(nPos);nIndex < nSize;nIndex++)
     {
-        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_context));
-        css::uno::Sequence< sal_Int32 > aCustomColorList(officecfg::Office::Common::UserColors::CustomColor::get());
-        css::uno::Sequence< OUString > aCustomColorNameList(officecfg::Office::Common::UserColors::CustomColorName::get());
-        sal_Int32 nSize = aCustomColorList.getLength() - 1;
-        for(sal_Int32 nIndex = static_cast<sal_Int32>(nPos);nIndex < nSize;nIndex++)
-        {
-            aCustomColorList[nIndex] = aCustomColorList[nIndex+1];
-            aCustomColorNameList[nIndex] = aCustomColorNameList[nIndex+1];
-        }
-        aCustomColorList.realloc(nSize);
-        aCustomColorNameList.realloc(nSize);
-        officecfg::Office::Common::UserColors::CustomColor::set(aCustomColorList, batch);
-        officecfg::Office::Common::UserColors::CustomColorName::set(aCustomColorNameList, batch);
-        batch->commit();
-        m_xValSetColorList->RemoveItem(nId);
-        if (m_xValSetColorList->GetItemCount() != 0)
-        {
-            nId = m_xValSetColorList->GetItemId(0);
-            m_xValSetColorList->SelectItem(nId);
-            SelectValSetHdl_Impl(m_xValSetColorList.get());
-        }
-        else
-            m_xBtnDelete->set_sensitive(false);
+        aCustomColorList[nIndex] = aCustomColorList[nIndex+1];
+        aCustomColorNameList[nIndex] = aCustomColorNameList[nIndex+1];
     }
+    aCustomColorList.realloc(nSize);
+    aCustomColorNameList.realloc(nSize);
+    officecfg::Office::Common::UserColors::CustomColor::set(aCustomColorList, batch);
+    officecfg::Office::Common::UserColors::CustomColorName::set(aCustomColorNameList, batch);
+    batch->commit();
+    m_xValSetColorList->RemoveItem(nId);
+    if (m_xValSetColorList->GetItemCount() != 0)
+    {
+        nId = m_xValSetColorList->GetItemId(0);
+        m_xValSetColorList->SelectItem(nId);
+        SelectValSetHdl_Impl(m_xValSetColorList.get());
+    }
+    else
+        m_xBtnDelete->set_sensitive(false);
 }
 
 IMPL_LINK_NOARG(SvxColorTabPage, SelectPaletteLBHdl, weld::ComboBox&, void)
@@ -462,28 +462,28 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectPaletteLBHdl, weld::ComboBox&, void)
 IMPL_LINK(SvxColorTabPage, SelectValSetHdl_Impl, SvtValueSet*, pValSet, void)
 {
     sal_Int32 nPos = pValSet->GetSelectedItemId();
-    if( nPos != 0 )
+    if( nPos == 0 )
+        return;
+
+    Color aColor = pValSet->GetItemColor( nPos );
+
+    rXFSet.Put( XFillColorItem( OUString(), aColor ) );
+    m_aCtlPreviewNew.SetAttributes( aXFillAttr.GetItemSet() );
+    m_aCtlPreviewNew.Invalidate();
+    ChangeColor(aColor, false);
+
+    if (pValSet == m_xValSetColorList.get())
     {
-        Color aColor = pValSet->GetItemColor( nPos );
-
-        rXFSet.Put( XFillColorItem( OUString(), aColor ) );
-        m_aCtlPreviewNew.SetAttributes( aXFillAttr.GetItemSet() );
-        m_aCtlPreviewNew.Invalidate();
-        ChangeColor(aColor, false);
-
-        if (pValSet == m_xValSetColorList.get())
-        {
-            m_xValSetRecentList->SetNoSelection();
-            if (m_xSelectPalette->get_active() == 0 && m_xValSetColorList->GetSelectedItemId() != 0)
-                m_xBtnDelete->set_sensitive(true);
-            else
-                m_xBtnDelete->set_sensitive(false);
-        }
-        if (pValSet == m_xValSetRecentList.get())
-        {
-            m_xValSetColorList->SetNoSelection();
+        m_xValSetRecentList->SetNoSelection();
+        if (m_xSelectPalette->get_active() == 0 && m_xValSetColorList->GetSelectedItemId() != 0)
+            m_xBtnDelete->set_sensitive(true);
+        else
             m_xBtnDelete->set_sensitive(false);
-        }
+    }
+    if (pValSet == m_xValSetRecentList.get())
+    {
+        m_xValSetColorList->SetNoSelection();
+        m_xBtnDelete->set_sensitive(false);
     }
 }
 

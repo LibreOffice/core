@@ -271,20 +271,20 @@ void DbRegistrationOptionsPage::openLinkDialog(const OUString& sOldName, const O
     aDlg.setLink(sOldName, sOldLocation);
     aDlg.setNameValidator(LINK( this, DbRegistrationOptionsPage, NameValidator ) );
 
-    if (aDlg.run() == RET_OK)
+    if (aDlg.run() != RET_OK)
+        return;
+
+    OUString sNewName,sNewLocation;
+    aDlg.getLink(sNewName,sNewLocation);
+    if ( nEntry == -1 || sNewName != sOldName || sNewLocation != sOldLocation )
     {
-        OUString sNewName,sNewLocation;
-        aDlg.getLink(sNewName,sNewLocation);
-        if ( nEntry == -1 || sNewName != sOldName || sNewLocation != sOldLocation )
+        if (nEntry != -1)
         {
-            if (nEntry != -1)
-            {
-                delete reinterpret_cast<DatabaseRegistration*>(m_xPathBox->get_id(nEntry).toInt64());
-                m_xPathBox->remove(nEntry);
-            }
-            insertNewEntry( sNewName, sNewLocation, false );
-            m_bModified = true;
+            delete reinterpret_cast<DatabaseRegistration*>(m_xPathBox->get_id(nEntry).toInt64());
+            m_xPathBox->remove(nEntry);
         }
+        insertNewEntry( sNewName, sNewLocation, false );
+        m_bModified = true;
     }
 }
 

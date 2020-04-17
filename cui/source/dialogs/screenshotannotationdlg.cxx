@@ -297,53 +297,53 @@ IMPL_LINK_NOARG(ScreenshotAnnotationDlg_Impl, saveButtonHandler, weld::Button&, 
     xFilePicker->setDefaultName(OStringToOUString(aDerivedFileName, RTL_TEXTENCODING_UTF8));
     xFilePicker->setMultiSelectionMode(false);
 
-    if (xFilePicker->execute() == ui::dialogs::ExecutableDialogResults::OK)
+    if (xFilePicker->execute() != ui::dialogs::ExecutableDialogResults::OK)
+        return;
+
+    maLastFolderURL = xFilePicker->getDisplayDirectory();
+    const uno::Sequence< OUString > files(xFilePicker->getSelectedFiles());
+
+    if (!files.hasElements())
+        return;
+
+    OUString aConfirmedName = files[0];
+
+    if (aConfirmedName.isEmpty())
+        return;
+
+    INetURLObject aConfirmedURL(aConfirmedName);
+    OUString aCurrentExtension(aConfirmedURL.getExtension());
+
+    if (!aCurrentExtension.isEmpty() && aCurrentExtension != "png")
     {
-        maLastFolderURL = xFilePicker->getDisplayDirectory();
-        const uno::Sequence< OUString > files(xFilePicker->getSelectedFiles());
-
-        if (files.hasElements())
-        {
-            OUString aConfirmedName = files[0];
-
-            if (!aConfirmedName.isEmpty())
-            {
-                INetURLObject aConfirmedURL(aConfirmedName);
-                OUString aCurrentExtension(aConfirmedURL.getExtension());
-
-                if (!aCurrentExtension.isEmpty() && aCurrentExtension != "png")
-                {
-                    aConfirmedURL.removeExtension();
-                    aCurrentExtension.clear();
-                }
-
-                if (aCurrentExtension.isEmpty())
-                {
-                    aConfirmedURL.setExtension("png");
-                }
-
-                // open stream
-                SvFileStream aNew(aConfirmedURL.PathToFileName(), StreamMode::WRITE | StreamMode::TRUNC);
-
-                if (aNew.IsOpen())
-                {
-                    // prepare bitmap to save - do use the original screenshot here,
-                    // not the dimmed one
-                    RepaintToBuffer();
-
-                    // extract Bitmap
-                    const BitmapEx aTargetBitmap(
-                        mxVirtualBufferDevice->GetBitmapEx(
-                        Point(0, 0),
-                        mxVirtualBufferDevice->GetOutputSizePixel()));
-
-                    // write as PNG
-                    vcl::PNGWriter aPNGWriter(aTargetBitmap);
-                    aPNGWriter.Write(aNew);
-                }
-            }
-        }
+        aConfirmedURL.removeExtension();
+        aCurrentExtension.clear();
     }
+
+    if (aCurrentExtension.isEmpty())
+    {
+        aConfirmedURL.setExtension("png");
+    }
+
+    // open stream
+    SvFileStream aNew(aConfirmedURL.PathToFileName(), StreamMode::WRITE | StreamMode::TRUNC);
+
+    if (!aNew.IsOpen())
+        return;
+
+    // prepare bitmap to save - do use the original screenshot here,
+    // not the dimmed one
+    RepaintToBuffer();
+
+    // extract Bitmap
+    const BitmapEx aTargetBitmap(
+        mxVirtualBufferDevice->GetBitmapEx(
+        Point(0, 0),
+        mxVirtualBufferDevice->GetOutputSizePixel()));
+
+    // write as PNG
+    vcl::PNGWriter aPNGWriter(aTargetBitmap);
+    aPNGWriter.Write(aNew);
 }
 
 weld::ScreenShotEntry* ScreenshotAnnotationDlg_Impl::CheckHit(const basegfx::B2IPoint& rPosition)
@@ -378,42 +378,42 @@ void ScreenshotAnnotationDlg_Impl::PaintScreenShotEntry(
     double fLineWidth,
     double fTransparency)
 {
-    if (mxPicture && mxVirtualBufferDevice)
+    if (!(mxPicture && mxVirtualBufferDevice))
+        return;
+
+    basegfx::B2DRange aB2DRange(rEntry.getB2IRange());
+
+    // grow in pixels to be a little bit 'outside'. This also
+    // ensures that getWidth()/getHeight() ain't 0.0 (see division below)
+    static const double fGrowTopLeft(1.5);
+    static const double fGrowBottomRight(0.5);
+    aB2DRange.expand(aB2DRange.getMinimum() - basegfx::B2DPoint(fGrowTopLeft, fGrowTopLeft));
+    aB2DRange.expand(aB2DRange.getMaximum() + basegfx::B2DPoint(fGrowBottomRight, fGrowBottomRight));
+
+    // edge rounding in pixel. Need to convert, value for
+    // createPolygonFromRect is relative [0.0 .. 1.0]
+    static const double fEdgeRoundPixel(8.0);
+    const basegfx::B2DPolygon aPolygon(
+        basegfx::utils::createPolygonFromRect(
+        aB2DRange,
+        fEdgeRoundPixel / aB2DRange.getWidth(),
+        fEdgeRoundPixel / aB2DRange.getHeight()));
+
+    mxVirtualBufferDevice->SetLineColor(rColor);
+
+    // try to use transparency
+    if (!mxVirtualBufferDevice->DrawPolyLineDirect(
+        basegfx::B2DHomMatrix(),
+        aPolygon,
+        fLineWidth,
+        fTransparency,
+        nullptr, // MM01
+        basegfx::B2DLineJoin::Round))
     {
-        basegfx::B2DRange aB2DRange(rEntry.getB2IRange());
-
-        // grow in pixels to be a little bit 'outside'. This also
-        // ensures that getWidth()/getHeight() ain't 0.0 (see division below)
-        static const double fGrowTopLeft(1.5);
-        static const double fGrowBottomRight(0.5);
-        aB2DRange.expand(aB2DRange.getMinimum() - basegfx::B2DPoint(fGrowTopLeft, fGrowTopLeft));
-        aB2DRange.expand(aB2DRange.getMaximum() + basegfx::B2DPoint(fGrowBottomRight, fGrowBottomRight));
-
-        // edge rounding in pixel. Need to convert, value for
-        // createPolygonFromRect is relative [0.0 .. 1.0]
-        static const double fEdgeRoundPixel(8.0);
-        const basegfx::B2DPolygon aPolygon(
-            basegfx::utils::createPolygonFromRect(
-            aB2DRange,
-            fEdgeRoundPixel / aB2DRange.getWidth(),
-            fEdgeRoundPixel / aB2DRange.getHeight()));
-
-        mxVirtualBufferDevice->SetLineColor(rColor);
-
-        // try to use transparency
-        if (!mxVirtualBufferDevice->DrawPolyLineDirect(
-            basegfx::B2DHomMatrix(),
+        // no transparency, draw without
+        mxVirtualBufferDevice->DrawPolyLine(
             aPolygon,
-            fLineWidth,
-            fTransparency,
-            nullptr, // MM01
-            basegfx::B2DLineJoin::Round))
-        {
-            // no transparency, draw without
-            mxVirtualBufferDevice->DrawPolyLine(
-                aPolygon,
-                fLineWidth);
-        }
+            fLineWidth);
     }
 }
 
@@ -430,43 +430,43 @@ void ScreenshotAnnotationDlg_Impl::RepaintToBuffer(
     bool bUseDimmed,
     bool bPaintHilight)
 {
-    if (mxVirtualBufferDevice)
+    if (!mxVirtualBufferDevice)
+        return;
+
+    // reset with original screenshot bitmap
+    mxVirtualBufferDevice->DrawBitmapEx(
+        Point(0, 0),
+        bUseDimmed ? maDimmedDialogBitmap : maParentDialogBitmap);
+
+    // get various options
+    const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
+    const Color aHilightColor(aSvtOptionsDrawinglayer.getHilightColor());
+    const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
+    const bool bIsAntiAliasing(aSvtOptionsDrawinglayer.IsAntiAliasing());
+    const AntialiasingFlags nOldAA(mxVirtualBufferDevice->GetAntialiasing());
+
+    if (bIsAntiAliasing)
     {
-        // reset with original screenshot bitmap
-        mxVirtualBufferDevice->DrawBitmapEx(
-            Point(0, 0),
-            bUseDimmed ? maDimmedDialogBitmap : maParentDialogBitmap);
+        mxVirtualBufferDevice->SetAntialiasing(AntialiasingFlags::EnableB2dDraw);
+    }
 
-        // get various options
-        const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-        const Color aHilightColor(aSvtOptionsDrawinglayer.getHilightColor());
-        const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
-        const bool bIsAntiAliasing(aSvtOptionsDrawinglayer.IsAntiAliasing());
-        const AntialiasingFlags nOldAA(mxVirtualBufferDevice->GetAntialiasing());
+    // paint selected entries
+    for (auto&& rCandidate : maSelected)
+    {
+        static const double fLineWidthEntries(5.0);
+        PaintScreenShotEntry(*rCandidate, COL_LIGHTRED, fLineWidthEntries, fTransparence * 0.2);
+    }
 
-        if (bIsAntiAliasing)
-        {
-            mxVirtualBufferDevice->SetAntialiasing(AntialiasingFlags::EnableB2dDraw);
-        }
+    // paint highlighted entry
+    if (mpHilighted && bPaintHilight)
+    {
+        static const double fLineWidthHilight(7.0);
+        PaintScreenShotEntry(*mpHilighted, aHilightColor, fLineWidthHilight, fTransparence);
+    }
 
-        // paint selected entries
-        for (auto&& rCandidate : maSelected)
-        {
-            static const double fLineWidthEntries(5.0);
-            PaintScreenShotEntry(*rCandidate, COL_LIGHTRED, fLineWidthEntries, fTransparence * 0.2);
-        }
-
-        // paint highlighted entry
-        if (mpHilighted && bPaintHilight)
-        {
-            static const double fLineWidthHilight(7.0);
-            PaintScreenShotEntry(*mpHilighted, aHilightColor, fLineWidthHilight, fTransparence);
-        }
-
-        if (bIsAntiAliasing)
-        {
-            mxVirtualBufferDevice->SetAntialiasing(nOldAA);
-        }
+    if (bIsAntiAliasing)
+    {
+        mxVirtualBufferDevice->SetAntialiasing(nOldAA);
     }
 }
 

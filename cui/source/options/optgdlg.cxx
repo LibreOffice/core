@@ -139,20 +139,20 @@ void OpenGLCfg::reset()
 
 OpenGLCfg::~OpenGLCfg()
 {
-    if (mbModified)
+    if (!mbModified)
+        return;
+
+    try
     {
-        try
-        {
-            std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-            if (!officecfg::Office::Common::VCL::UseOpenGL::isReadOnly())
-                officecfg::Office::Common::VCL::UseOpenGL::set(mbUseOpenGL, batch);
-            if (!officecfg::Office::Common::VCL::ForceOpenGL::isReadOnly())
-                officecfg::Office::Common::VCL::ForceOpenGL::set(mbForceOpenGL, batch);
-            batch->commit();
-        }
-        catch (...)
-        {
-        }
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+        if (!officecfg::Office::Common::VCL::UseOpenGL::isReadOnly())
+            officecfg::Office::Common::VCL::UseOpenGL::set(mbUseOpenGL, batch);
+        if (!officecfg::Office::Common::VCL::ForceOpenGL::isReadOnly())
+            officecfg::Office::Common::VCL::ForceOpenGL::set(mbForceOpenGL, batch);
+        batch->commit();
+    }
+    catch (...)
+    {
     }
 }
 
@@ -223,22 +223,22 @@ void SkiaCfg::reset()
 
 SkiaCfg::~SkiaCfg()
 {
-    if (mbModified)
+    if (!mbModified)
+        return;
+
+    try
     {
-        try
-        {
-            std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-            if (!officecfg::Office::Common::VCL::UseSkia::isReadOnly())
-                officecfg::Office::Common::VCL::UseSkia::set(mbUseSkia, batch);
-            if (!officecfg::Office::Common::VCL::ForceSkia::isReadOnly())
-                officecfg::Office::Common::VCL::ForceSkia::set(mbForceSkia, batch);
-            if (!officecfg::Office::Common::VCL::ForceSkiaRaster::isReadOnly())
-                officecfg::Office::Common::VCL::ForceSkiaRaster::set(mbForceSkiaRaster, batch);
-            batch->commit();
-        }
-        catch (...)
-        {
-        }
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+        if (!officecfg::Office::Common::VCL::UseSkia::isReadOnly())
+            officecfg::Office::Common::VCL::UseSkia::set(mbUseSkia, batch);
+        if (!officecfg::Office::Common::VCL::ForceSkia::isReadOnly())
+            officecfg::Office::Common::VCL::ForceSkia::set(mbForceSkia, batch);
+        if (!officecfg::Office::Common::VCL::ForceSkiaRaster::isReadOnly())
+            officecfg::Office::Common::VCL::ForceSkiaRaster::set(mbForceSkiaRaster, batch);
+        batch->commit();
+    }
+    catch (...)
+    {
     }
 }
 

@@ -748,78 +748,78 @@ void SvxLinguData_Impl::Reconfigure( const OUString &rDisplayName, bool bEnable 
         }
     }
     DBG_ASSERT( pInfo, "DisplayName entry not found" );
-    if (pInfo)
+    if (!pInfo)
+        return;
+
+    pInfo->bConfigured = bEnable;
+
+    Sequence< Locale > aLocales;
+    const Locale *pLocale = nullptr;
+    sal_Int32 nLocales = 0;
+    sal_Int32 i;
+
+    // update configured spellchecker entries
+    if (pInfo->xSpell.is())
     {
-        pInfo->bConfigured = bEnable;
-
-        Sequence< Locale > aLocales;
-        const Locale *pLocale = nullptr;
-        sal_Int32 nLocales = 0;
-        sal_Int32 i;
-
-        // update configured spellchecker entries
-        if (pInfo->xSpell.is())
+        aLocales = pInfo->xSpell->getLocales();
+        pLocale = aLocales.getConstArray();
+        nLocales = aLocales.getLength();
+        for (i = 0;  i < nLocales;  ++i)
         {
-            aLocales = pInfo->xSpell->getLocales();
-            pLocale = aLocales.getConstArray();
-            nLocales = aLocales.getLength();
-            for (i = 0;  i < nLocales;  ++i)
-            {
-                LanguageType nLang = LanguageTag::convertToLanguageType( pLocale[i] );
-                if (!aCfgSpellTable.count( nLang ) && bEnable)
-                    aCfgSpellTable[ nLang ] = Sequence< OUString >();
-                if (aCfgSpellTable.count( nLang ))
-                    AddRemove( aCfgSpellTable[ nLang ], pInfo->sSpellImplName, bEnable );
-            }
+            LanguageType nLang = LanguageTag::convertToLanguageType( pLocale[i] );
+            if (!aCfgSpellTable.count( nLang ) && bEnable)
+                aCfgSpellTable[ nLang ] = Sequence< OUString >();
+            if (aCfgSpellTable.count( nLang ))
+                AddRemove( aCfgSpellTable[ nLang ], pInfo->sSpellImplName, bEnable );
         }
+    }
 
-        // update configured grammar checker entries
-        if (pInfo->xGrammar.is())
+    // update configured grammar checker entries
+    if (pInfo->xGrammar.is())
+    {
+        aLocales = pInfo->xGrammar->getLocales();
+        pLocale = aLocales.getConstArray();
+        nLocales = aLocales.getLength();
+        for (i = 0;  i < nLocales;  ++i)
         {
-            aLocales = pInfo->xGrammar->getLocales();
-            pLocale = aLocales.getConstArray();
-            nLocales = aLocales.getLength();
-            for (i = 0;  i < nLocales;  ++i)
-            {
-                LanguageType nLang = LanguageTag::convertToLanguageType( pLocale[i] );
-                if (!aCfgGrammarTable.count( nLang ) && bEnable)
-                    aCfgGrammarTable[ nLang ] = Sequence< OUString >();
-                if (aCfgGrammarTable.count( nLang ))
-                    AddRemove( aCfgGrammarTable[ nLang ], pInfo->sGrammarImplName, bEnable );
-            }
+            LanguageType nLang = LanguageTag::convertToLanguageType( pLocale[i] );
+            if (!aCfgGrammarTable.count( nLang ) && bEnable)
+                aCfgGrammarTable[ nLang ] = Sequence< OUString >();
+            if (aCfgGrammarTable.count( nLang ))
+                AddRemove( aCfgGrammarTable[ nLang ], pInfo->sGrammarImplName, bEnable );
         }
+    }
 
-        // update configured hyphenator entries
-        if (pInfo->xHyph.is())
+    // update configured hyphenator entries
+    if (pInfo->xHyph.is())
+    {
+        aLocales = pInfo->xHyph->getLocales();
+        pLocale = aLocales.getConstArray();
+        nLocales = aLocales.getLength();
+        for (i = 0;  i < nLocales;  ++i)
         {
-            aLocales = pInfo->xHyph->getLocales();
-            pLocale = aLocales.getConstArray();
-            nLocales = aLocales.getLength();
-            for (i = 0;  i < nLocales;  ++i)
-            {
-                LanguageType nLang = LanguageTag::convertToLanguageType( pLocale[i] );
-                if (!aCfgHyphTable.count( nLang ) && bEnable)
-                    aCfgHyphTable[ nLang ] = Sequence< OUString >();
-                if (aCfgHyphTable.count( nLang ))
-                    AddRemove( aCfgHyphTable[ nLang ], pInfo->sHyphImplName, bEnable );
-            }
+            LanguageType nLang = LanguageTag::convertToLanguageType( pLocale[i] );
+            if (!aCfgHyphTable.count( nLang ) && bEnable)
+                aCfgHyphTable[ nLang ] = Sequence< OUString >();
+            if (aCfgHyphTable.count( nLang ))
+                AddRemove( aCfgHyphTable[ nLang ], pInfo->sHyphImplName, bEnable );
         }
+    }
 
-        // update configured spellchecker entries
-        if (pInfo->xThes.is())
-        {
-            aLocales = pInfo->xThes->getLocales();
-            pLocale = aLocales.getConstArray();
-            nLocales = aLocales.getLength();
-            for (i = 0;  i < nLocales;  ++i)
-            {
-                LanguageType nLang = LanguageTag::convertToLanguageType( pLocale[i] );
-                if (!aCfgThesTable.count( nLang ) && bEnable)
-                    aCfgThesTable[ nLang ] = Sequence< OUString >();
-                if (aCfgThesTable.count( nLang ))
-                    AddRemove( aCfgThesTable[ nLang ], pInfo->sThesImplName, bEnable );
-            }
-        }
+    // update configured spellchecker entries
+    if (!pInfo->xThes.is())
+        return;
+
+    aLocales = pInfo->xThes->getLocales();
+    pLocale = aLocales.getConstArray();
+    nLocales = aLocales.getLength();
+    for (i = 0;  i < nLocales;  ++i)
+    {
+        LanguageType nLang = LanguageTag::convertToLanguageType( pLocale[i] );
+        if (!aCfgThesTable.count( nLang ) && bEnable)
+            aCfgThesTable[ nLang ] = Sequence< OUString >();
+        if (aCfgThesTable.count( nLang ))
+            AddRemove( aCfgThesTable[ nLang ], pInfo->sThesImplName, bEnable );
     }
 }
 
@@ -1125,28 +1125,28 @@ void SvxLinguTabPage::UpdateDicBox_Impl()
 
 void SvxLinguTabPage::UpdateModulesBox_Impl()
 {
-    if (pLinguData)
+    if (!pLinguData)
+        return;
+
+    const ServiceInfoArr &rAllDispSrvcArr = pLinguData->GetDisplayServiceArray();
+    const sal_uInt32 nDispSrvcCount = pLinguData->GetDisplayServiceCount();
+
+    m_xLinguModulesCLB->clear();
+
+    for (sal_uInt32 i = 0;  i < nDispSrvcCount;  ++i)
     {
-        const ServiceInfoArr &rAllDispSrvcArr = pLinguData->GetDisplayServiceArray();
-        const sal_uInt32 nDispSrvcCount = pLinguData->GetDisplayServiceCount();
-
-        m_xLinguModulesCLB->clear();
-
-        for (sal_uInt32 i = 0;  i < nDispSrvcCount;  ++i)
-        {
-            const ServiceInfo_Impl &rInfo = rAllDispSrvcArr[i];
-            m_xLinguModulesCLB->append();
-            m_xLinguModulesCLB->set_id(i, OUString::number(reinterpret_cast<sal_Int64>(&rInfo)));
-            m_xLinguModulesCLB->set_toggle(i, rInfo.bConfigured ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
-            m_xLinguModulesCLB->set_text(i, rInfo.sDisplayName, 1);
-        }
-        if (nDispSrvcCount)
-        {
-            m_xLinguModulesCLB->select(0);
-            SelectHdl_Impl(*m_xLinguModulesCLB);
-        }
-        m_xLinguModulesEditPB->set_sensitive( nDispSrvcCount > 0 );
+        const ServiceInfo_Impl &rInfo = rAllDispSrvcArr[i];
+        m_xLinguModulesCLB->append();
+        m_xLinguModulesCLB->set_id(i, OUString::number(reinterpret_cast<sal_Int64>(&rInfo)));
+        m_xLinguModulesCLB->set_toggle(i, rInfo.bConfigured ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
+        m_xLinguModulesCLB->set_text(i, rInfo.sDisplayName, 1);
     }
+    if (nDispSrvcCount)
+    {
+        m_xLinguModulesCLB->select(0);
+        SelectHdl_Impl(*m_xLinguModulesCLB);
+    }
+    m_xLinguModulesEditPB->set_sensitive( nDispSrvcCount > 0 );
 }
 
 void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
@@ -1606,42 +1606,42 @@ SvxEditModulesDlg::~SvxEditModulesDlg()
 IMPL_LINK( SvxEditModulesDlg, SelectHdl_Impl, weld::TreeView&, rBox, void )
 {
     int nCurPos = rBox.get_selected_index();
-    if (nCurPos != -1)
+    if (nCurPos == -1)
+        return;
+
+    bool bDisableUp = true;
+    bool bDisableDown = true;
+    ModuleUserData_Impl* pData = reinterpret_cast<ModuleUserData_Impl*>(rBox.get_id(nCurPos).toInt64());
+    if (!pData->IsParent() && pData->GetType() != TYPE_HYPH)
     {
-        bool bDisableUp = true;
-        bool bDisableDown = true;
-        ModuleUserData_Impl* pData = reinterpret_cast<ModuleUserData_Impl*>(rBox.get_id(nCurPos).toInt64());
-        if (!pData->IsParent() && pData->GetType() != TYPE_HYPH)
+        if (nCurPos < rBox.n_children() - 1)
         {
-            if (nCurPos < rBox.n_children() - 1)
-            {
-                bDisableDown = reinterpret_cast<ModuleUserData_Impl*>(rBox.get_id(nCurPos + 1).toInt64())->IsParent();
-            }
-            if (nCurPos > 1)
-            {
-                bDisableUp = reinterpret_cast<ModuleUserData_Impl*>(rBox.get_id(nCurPos - 1).toInt64())->IsParent();
-            }
+            bDisableDown = reinterpret_cast<ModuleUserData_Impl*>(rBox.get_id(nCurPos + 1).toInt64())->IsParent();
         }
-        m_xPrioUpPB->set_sensitive(!bDisableUp);
-        m_xPrioDownPB->set_sensitive(!bDisableDown);
+        if (nCurPos > 1)
+        {
+            bDisableUp = reinterpret_cast<ModuleUserData_Impl*>(rBox.get_id(nCurPos - 1).toInt64())->IsParent();
+        }
     }
+    m_xPrioUpPB->set_sensitive(!bDisableUp);
+    m_xPrioDownPB->set_sensitive(!bDisableDown);
 }
 
 IMPL_LINK( SvxEditModulesDlg, BoxCheckButtonHdl_Impl, const row_col&, rRowCol, void )
 {
     auto nPos = rRowCol.first;
     ModuleUserData_Impl* pData = reinterpret_cast<ModuleUserData_Impl*>(m_xModulesCLB->get_id(nPos).toInt64());
-    if (!pData->IsParent() && pData->GetType() == TYPE_HYPH)
+    if (!(!pData->IsParent() && pData->GetType() == TYPE_HYPH))
+        return;
+
+    // make hyphenator checkboxes function as radio-buttons
+    // (at most one box may be checked)
+    for (int i = 0, nEntryCount = m_xModulesCLB->n_children(); i < nEntryCount; ++i)
     {
-        // make hyphenator checkboxes function as radio-buttons
-        // (at most one box may be checked)
-        for (int i = 0, nEntryCount = m_xModulesCLB->n_children(); i < nEntryCount; ++i)
+        pData = reinterpret_cast<ModuleUserData_Impl*>(m_xModulesCLB->get_id(i).toInt64());
+        if (!pData->IsParent() && pData->GetType() == TYPE_HYPH && i != nPos)
         {
-            pData = reinterpret_cast<ModuleUserData_Impl*>(m_xModulesCLB->get_id(i).toInt64());
-            if (!pData->IsParent() && pData->GetType() == TYPE_HYPH && i != nPos)
-            {
-                m_xModulesCLB->set_toggle(i, TRISTATE_FALSE, 0);
-            }
+            m_xModulesCLB->set_toggle(i, TRISTATE_FALSE, 0);
         }
     }
 }
@@ -1932,27 +1932,27 @@ IMPL_LINK( SvxEditModulesDlg, UpDownHdl_Impl, weld::Button&, rBtn, void )
 {
     bool bUp = m_xPrioUpPB.get() == &rBtn;
     int nCurPos = m_xModulesCLB->get_selected_index();
-    if (nCurPos != -1)
-    {
-        m_xModulesCLB->freeze();
+    if (nCurPos == -1)
+        return;
 
-        OUString sId(m_xModulesCLB->get_id(nCurPos));
-        OUString sStr(m_xModulesCLB->get_text(nCurPos));
-        bool bIsChecked = m_xModulesCLB->get_toggle(nCurPos, nCurPos);
+    m_xModulesCLB->freeze();
 
-        m_xModulesCLB->remove(nCurPos);
+    OUString sId(m_xModulesCLB->get_id(nCurPos));
+    OUString sStr(m_xModulesCLB->get_text(nCurPos));
+    bool bIsChecked = m_xModulesCLB->get_toggle(nCurPos, nCurPos);
 
-        int nDestPos = bUp ? nCurPos - 1 : nCurPos + 1;
+    m_xModulesCLB->remove(nCurPos);
 
-        m_xModulesCLB->insert_text(nDestPos, sStr);
-        m_xModulesCLB->set_id(nDestPos, sId);
-        m_xModulesCLB->set_toggle(nDestPos, bIsChecked ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
+    int nDestPos = bUp ? nCurPos - 1 : nCurPos + 1;
 
-        m_xModulesCLB->thaw();
+    m_xModulesCLB->insert_text(nDestPos, sStr);
+    m_xModulesCLB->set_id(nDestPos, sId);
+    m_xModulesCLB->set_toggle(nDestPos, bIsChecked ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
 
-        m_xModulesCLB->select(nDestPos);
-        SelectHdl_Impl(*m_xModulesCLB);
-    }
+    m_xModulesCLB->thaw();
+
+    m_xModulesCLB->select(nDestPos);
+    SelectHdl_Impl(*m_xModulesCLB);
 }
 
 IMPL_LINK_NOARG(SvxEditModulesDlg, ClickHdl_Impl, weld::Button&, void)

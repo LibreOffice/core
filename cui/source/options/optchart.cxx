@@ -225,29 +225,29 @@ IMPL_LINK_NOARG( SvxDefaultColorOptPage, RemoveChartColor, weld::Button&, void )
     if (nIndex == -1)
         return;
 
-    if( m_SvxChartColorTableUniquePtr )
-    {
-        OSL_ENSURE(m_SvxChartColorTableUniquePtr->size() > 1, "don't delete the last chart color");
+    if( !m_SvxChartColorTableUniquePtr )
+        return;
 
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querydeletechartcolordialog.ui"));
-        std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("QueryDeleteChartColorDialog"));
+    OSL_ENSURE(m_SvxChartColorTableUniquePtr->size() > 1, "don't delete the last chart color");
 
-        if (RET_YES == xQuery->run())
-        {
-            m_SvxChartColorTableUniquePtr->remove(nIndex);
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querydeletechartcolordialog.ui"));
+    std::unique_ptr<weld::MessageDialog> xQuery(xBuilder->weld_message_dialog("QueryDeleteChartColorDialog"));
 
-            FillBoxChartColorLB();
+    if (RET_YES != xQuery->run())
+        return;
 
-            m_xLbChartColors->grab_focus();
+    m_SvxChartColorTableUniquePtr->remove(nIndex);
 
-            if (nIndex == m_xLbChartColors->n_children() && m_xLbChartColors->n_children() > 0)
-                m_xLbChartColors->select(m_SvxChartColorTableUniquePtr->size() - 1);
-            else if (m_xLbChartColors->n_children() > 0)
-                m_xLbChartColors->select( nIndex );
-            else
-                m_xPBRemove->set_sensitive(true);
-        }
-    }
+    FillBoxChartColorLB();
+
+    m_xLbChartColors->grab_focus();
+
+    if (nIndex == m_xLbChartColors->n_children() && m_xLbChartColors->n_children() > 0)
+        m_xLbChartColors->select(m_SvxChartColorTableUniquePtr->size() - 1);
+    else if (m_xLbChartColors->n_children() > 0)
+        m_xLbChartColors->select( nIndex );
+    else
+        m_xPBRemove->set_sensitive(true);
 }
 
 IMPL_LINK_NOARG( SvxDefaultColorOptPage, SelectPaletteLbHdl, weld::ComboBox&, void)
