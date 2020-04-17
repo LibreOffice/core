@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5884a259_08ee204d",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-04-17T16:59:29Z",
+      "side": 1,
+      "message": "Please drop these comments, keeping them actual would be an extra burden",
+      "range": {
+        "startLine": 40,
+        "startChar": 71,
+        "endLine": 40,
+        "endChar": 83
+      },
+      "revId": "daad7b87f763d935a4e33faa6b7066a0048beb78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c917fe53_af5aead3",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-04-17T16:59:29Z",
+      "side": 1,
+      "message": "css::uno::Reference\u003ccss::datatransfer::XTransferable\u003e xDataObj(new TETextDataObject(m_pVersionLabel-\u003eget_label()));",
+      "range": {
+        "startLine": 257,
+        "startChar": 8,
+        "endLine": 257,
+        "endChar": 25
+      },
+      "revId": "daad7b87f763d935a4e33faa6b7066a0048beb78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac7126e8_cf5d86dc",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-04-17T16:59:29Z",
+      "side": 1,
+      "message": "Likely you might log warning here using TOOLS_WARN_EXCEPTION?",
+      "range": {
+        "startLine": 268,
+        "startChar": 8,
+        "endLine": 269,
+        "endChar": 9
+      },
+      "revId": "daad7b87f763d935a4e33faa6b7066a0048beb78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
