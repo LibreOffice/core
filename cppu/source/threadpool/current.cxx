@@ -126,23 +126,23 @@ extern "C" {
 
 static void delete_IdContainer( void * p )
 {
-    if (p)
+    if (!p)
+        return;
+
+    IdContainer * pId = static_cast< IdContainer * >( p );
+    if (pId->pCurrentContext)
     {
-        IdContainer * pId = static_cast< IdContainer * >( p );
-        if (pId->pCurrentContext)
-        {
-            (*pId->pCurrentContextEnv->releaseInterface)(
-                pId->pCurrentContextEnv, pId->pCurrentContext );
-            (*pId->pCurrentContextEnv->aBase.release)(
-                &pId->pCurrentContextEnv->aBase );
-        }
-        if (pId->bInit)
-        {
-            ::rtl_byte_sequence_release( pId->pLocalThreadId );
-            ::rtl_byte_sequence_release( pId->pCurrentId );
-        }
-        delete pId;
+        (*pId->pCurrentContextEnv->releaseInterface)(
+            pId->pCurrentContextEnv, pId->pCurrentContext );
+        (*pId->pCurrentContextEnv->aBase.release)(
+            &pId->pCurrentContextEnv->aBase );
     }
+    if (pId->bInit)
+    {
+        ::rtl_byte_sequence_release( pId->pLocalThreadId );
+        ::rtl_byte_sequence_release( pId->pCurrentId );
+    }
+    delete pId;
 }
 
 }
