@@ -812,9 +812,8 @@ OutputDevice& FontNameBox::CachePreview(size_t nIndex, Point* pTopLeft)
     {
         if (nPage >= gFontPreviewVirDevs.size())
         {
-            gFontPreviewVirDevs.emplace_back(VclPtr<VirtualDevice>::Create());
+            gFontPreviewVirDevs.emplace_back(m_xComboBox->create_render_virtual_device());
             VirtualDevice& rDevice = *gFontPreviewVirDevs.back();
-            rDevice.SetBackground(COL_WHITE);
             rDevice.SetOutputSizePixel(Size(gUserItemSz.Width(), gUserItemSz.Height() * gPreviewsPerDevice));
             if (vcl::Window* pDefaultDevice = dynamic_cast<vcl::Window*>(Application::GetDefaultDevice()))
                 pDefaultDevice->SetPointFont(rDevice, m_xComboBox->get_font());

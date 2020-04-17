@@ -13856,6 +13856,11 @@ public:
         return signal_custom_get_size(rOutput, rId);
     }
 
+    VclPtr<VirtualDevice> create_render_virtual_device() const override
+    {
+        return create_virtual_device();
+    }
+
     virtual ~GtkInstanceComboBox() override
     {
         do_clear();
@@ -14205,6 +14210,11 @@ public:
     virtual void set_custom_renderer() override
     {
         assert(false && "not implemented");
+    }
+
+    VclPtr<VirtualDevice> create_render_virtual_device() const override
+    {
+        return create_virtual_device();
     }
 
     virtual ~GtkInstanceEntryTreeView() override
