@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "949ec132_8410404c",
+        "filename": "filter/source/msfilter/escherex.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 891,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-04-17T12:01:12Z",
+      "side": 1,
+      "message": "Could you change this to nPos, please? (I did it in patch set 10 [using gerrit\u0027s internal editor], as I mentioned before, but it seems, you hadn\u0027t cherry-picked my change, and your last push reverted it.)",
+      "range": {
+        "startLine": 891,
+        "startChar": 26,
+        "endLine": 891,
+        "endChar": 39
+      },
+      "revId": "d2cdd47e1db0cdce12bb78e6cded7158510f250c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
