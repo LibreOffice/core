@@ -999,6 +999,11 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
 
     // get the path from the dialog
     INetURLObject aURL( pFileDlg->GetPath() );
+
+    // check if the, in the case of "Export..." check if the file is a pdf and change the storing mode at convenience
+    //if ( !( nStoreMode & PDFEXPORT_REQUESTED ) && aURL.GetFileExtension().equalsAscii("pdf"))
+    //    nStoreMode = EXPORT_REQUESTED | PDFEXPORT_REQUESTED;
+
     // the path should be provided outside since it might be used for further calls to the dialog
     aSuggestedName = aURL.GetLastName(INetURLObject::DecodeMechanism::WithCharset);
     aSuggestedDir = pFileDlg->GetDisplayDirectory();
@@ -1600,12 +1605,17 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
                             aModelData.GetMediaDescr().find( OUString("FilterFlags") );
     bool bFilterFlagsSet = ( aIter != aModelData.GetMediaDescr().end() );
 
+    // check if the filter Dialog has not been called before
     if( !( nStoreMode & PDFEXPORT_REQUESTED ) && !( nStoreMode & EPUBEXPORT_REQUESTED ) && !bFilterFlagsSet
         && ( ( nStoreMode & EXPORT_REQUESTED ) || bUseFilterOptions ) )
     {
         // execute filter options dialog
-        if ( aModelData.ExecuteFilterDialog_Impl( aFilterName ) )
+        if ( aModelData.ExecuteFilterDialog_Impl( aFilterName ) ){
             bDialogUsed = true;
+            // check if the file is a pdf or not and change the storing mode at convenience
+            if (aURL.GetFileExtension().equalsAscii("pdf"))
+                nStoreMode = EXPORT_REQUESTED | PDFEXPORT_REQUESTED;
+        }
     }
 
     // so the arguments will not change any more and can be stored to the main location
