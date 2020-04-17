@@ -19,9 +19,6 @@ Any change in this header will cause a rebuild of almost everything.
 #define HAVE_GCC_DEPRECATED_MESSAGE 0
 #define HAVE_SYSLOG_H 0
 
-/* Guaranteed copy elision (C++17), __cpp_guaranteed_copy_elision (C++2a): */
-#define HAVE_CPP_GUARANTEED_COPY_ELISION 0
-
 // Compiler supports all of C++2a <https://wg21.link/P0202R3> "Add Constexpr Modifiers to Functions
 // in <algorithm> and <utility> Headers", <https://wg21.link/P1004R2> "Making std::vector
 // constexpr", and <https://wg21.link/P1143R2> "Adding the constinit keyword":
