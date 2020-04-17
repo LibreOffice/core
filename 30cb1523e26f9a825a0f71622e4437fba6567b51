@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b025ec88_4fcc321b",
+        "filename": "svtools/source/svhtml/parhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-04-17T16:32:17Z",
+      "side": 1,
+      "message": "Nice! I think it would be better to just remove all of the existing code that does\n    if (MAX_LEN \u003d\u003d )\n    {\n        aToken +\u003d ...\n        sTmpBuffer.setLength(0)\n    }\nbecause then the buffer will expand itself with a *2 factor.",
+      "revId": "30cb1523e26f9a825a0f71622e4437fba6567b51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
