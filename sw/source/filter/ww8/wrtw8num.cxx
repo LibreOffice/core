@@ -56,24 +56,6 @@ SwNumRule* MSWordExportBase::DuplicateNumRuleImpl(const SwNumRule *pRule)
     return pMyNumRule;
 }
 
-sal_uInt16 MSWordExportBase::DuplicateNumRule( const SwNumRule *pRule, sal_uInt8 nLevel, sal_uInt16 nVal )
-{
-    sal_uInt16 nNumId = USHRT_MAX;
-
-    SwNumRule *const pMyNumRule = DuplicateNumRuleImpl(pRule);
-
-    SwNumFormat aNumFormat( pMyNumRule->Get( nLevel ) );
-    aNumFormat.SetStart( nVal );
-    pMyNumRule->Set( nLevel, aNumFormat );
-
-    nNumId = GetNumberingId( *pMyNumRule );
-
-    // Map the old list to our new list
-    m_aRuleDuplicates[GetNumberingId( *pRule )] = nNumId;
-
-    return nNumId;
-}
-
 // multiple SwList can be based on the same SwNumRule; ensure one w:abstractNum
 // per SwList
 sal_uInt16 MSWordExportBase::DuplicateAbsNum(OUString const& rListId,
@@ -104,7 +86,6 @@ sal_uInt16 MSWordExportBase::OverrideNumRule(
         OUString const& rListId,
         SwNumRule const& rAbstractRule)
 {
-    assert(&rExistingRule != &rAbstractRule);
     auto const numdef = GetNumberingId(rExistingRule);
     auto const absnumdef = rListId == rAbstractRule.GetDefaultListId()
         ? GetNumberingId(rAbstractRule)
@@ -121,6 +102,13 @@ sal_uInt16 MSWordExportBase::OverrideNumRule(
         ++m_nUniqueList; // counter for DuplicateNumRule...
     }
     return it->second;
+}
+
+void MSWordExportBase::AddListLevelOverride(sal_uInt16 nListId,
+    sal_uInt16 nLevelNum,
+    sal_uInt16 nStartAt)
+{
+    m_ListLevelOverrides[nListId][nLevelNum] = nStartAt;
 }
 
 sal_uInt16 MSWordExportBase::GetNumberingId( const SwNumRule& rNumRule )
@@ -243,7 +231,7 @@ void MSWordExportBase::NumberingDefinitions()
             assert(it != m_OverridingNums.end());
             pRule = (*m_pUsedNumTable)[it->second.first];
             assert(pRule);
-            AttrOutput().OverrideNumberingDefinition(*pRule, n + 1, it->second.second + 1);
+            AttrOutput().OverrideNumberingDefinition(*pRule, n + 1, it->second.second + 1, m_ListLevelOverrides[n]);
         }
     }
 }

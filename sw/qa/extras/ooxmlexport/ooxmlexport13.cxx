@@ -178,6 +178,83 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95848_2, "tdf95848_2.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf108496, "tdf108496.docx")
+{
+    OUString listId;
+    OUString listStyle;
+    // Lists with override
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(2), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xPara->getPropertyValue("NumberingStyleName") >>= listStyle);
+        CPPUNIT_ASSERT(listStyle.startsWith("WWNum"));
+        CPPUNIT_ASSERT(xPara->getPropertyValue("ListId") >>= listId);
+        CPPUNIT_ASSERT_EQUAL(OUString("1"), getProperty<OUString>(xPara, "ListLabelString"));
+    }
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(3), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(listStyle, getProperty<OUString>(xPara, "NumberingStyleName"));
+        CPPUNIT_ASSERT_EQUAL(listId, getProperty<OUString>(xPara, "ListId"));
+        CPPUNIT_ASSERT_EQUAL(OUString("2"), getProperty<OUString>(xPara, "ListLabelString"));
+    }
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(5), uno::UNO_QUERY);
+        // different numbering style
+        OUString listStyle2;
+        CPPUNIT_ASSERT(xPara->getPropertyValue("NumberingStyleName") >>= listStyle2);
+        CPPUNIT_ASSERT(listStyle2.startsWith("WWNum"));
+        CPPUNIT_ASSERT(listStyle2 != listStyle);
+        // restarted numeration due to override
+        CPPUNIT_ASSERT_EQUAL(OUString("1"), getProperty<OUString>(xPara, "ListLabelString"));
+        CPPUNIT_ASSERT_EQUAL(listId, getProperty<OUString>(xPara, "ListId"));
+    }
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(6), uno::UNO_QUERY);
+        // different numbering style
+        OUString listStyle2;
+        CPPUNIT_ASSERT(xPara->getPropertyValue("NumberingStyleName") >>= listStyle2);
+        CPPUNIT_ASSERT(listStyle2.startsWith("WWNum"));
+        // restarted numeration due to override
+        CPPUNIT_ASSERT_EQUAL(OUString("2"), getProperty<OUString>(xPara, "ListLabelString"));
+        CPPUNIT_ASSERT_EQUAL(listId, getProperty<OUString>(xPara, "ListId"));
+    }
+
+    // Lists without override
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(8), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xPara->getPropertyValue("NumberingStyleName") >>= listStyle);
+        CPPUNIT_ASSERT(listStyle.startsWith("WWNum"));
+        CPPUNIT_ASSERT(xPara->getPropertyValue("ListId") >>= listId);
+        CPPUNIT_ASSERT_EQUAL(OUString("1"), getProperty<OUString>(xPara, "ListLabelString"));
+    }
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(9), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(listStyle, getProperty<OUString>(xPara, "NumberingStyleName"));
+        CPPUNIT_ASSERT_EQUAL(listId, getProperty<OUString>(xPara, "ListId"));
+        CPPUNIT_ASSERT_EQUAL(OUString("2"), getProperty<OUString>(xPara, "ListLabelString"));
+    }
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(11), uno::UNO_QUERY);
+        // different numbering style
+        OUString listStyle2;
+        CPPUNIT_ASSERT(xPara->getPropertyValue("NumberingStyleName") >>= listStyle2);
+        CPPUNIT_ASSERT(listStyle2.startsWith("WWNum"));
+        CPPUNIT_ASSERT(listStyle2 != listStyle);
+        // numeration is continued
+        CPPUNIT_ASSERT_EQUAL(OUString("3"), getProperty<OUString>(xPara, "ListLabelString"));
+        CPPUNIT_ASSERT_EQUAL(listId, getProperty<OUString>(xPara, "ListId"));
+    }
+    {
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(12), uno::UNO_QUERY);
+        // different numbering style
+        OUString listStyle2;
+        CPPUNIT_ASSERT(xPara->getPropertyValue("NumberingStyleName") >>= listStyle2);
+        CPPUNIT_ASSERT(listStyle2.startsWith("WWNum"));
+        // numeration is continued
+        CPPUNIT_ASSERT_EQUAL(OUString("4"), getProperty<OUString>(xPara, "ListLabelString"));
+        CPPUNIT_ASSERT_EQUAL(listId, getProperty<OUString>(xPara, "ListId"));
+    }
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf126723, "tdf126723.docx")
 {
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraph(2), "ParaLeftMargin"));

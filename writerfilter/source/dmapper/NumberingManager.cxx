@@ -100,6 +100,9 @@ void ListLevel::SetValue( Id nId, sal_Int32 nValue )
         case NS_ooxml::LN_CT_Lvl_start:
             m_nIStartAt = nValue;
         break;
+        case NS_ooxml::LN_CT_NumLvl_startOverride:
+            m_nStartOverride = nValue;
+            break;
         case NS_ooxml::LN_CT_NumFmt_val:
             m_nNFC = nValue;
         break;
@@ -633,7 +636,6 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
 
                 aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_POSITION_AND_SPACE_MODE), sal_Int16(text::PositionAndSpaceMode::LABEL_ALIGNMENT)));
 
-
                 // Replace the numbering rules for the level
                 m_xNumRules->replaceByIndex(nLevel, uno::makeAny(comphelper::containerToSequence(aLvlProps)));
 
@@ -1107,9 +1109,7 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                 {
                     if (ListLevel::Pointer pCurrentLevel = m_pCurrentDefinition->GetCurrentLevel())
                     {
-                        // <w:num> -> <w:lvlOverride> -> <w:startOverride> is the non-abstract equivalent of
-                        // <w:abstractNum> -> <w:lvl> -> <w:start>
-                        pCurrentLevel->SetValue(NS_ooxml::LN_CT_Lvl_start, nIntValue);
+                        pCurrentLevel->SetValue(NS_ooxml::LN_CT_NumLvl_startOverride, nIntValue);
                     }
                 }
             }
