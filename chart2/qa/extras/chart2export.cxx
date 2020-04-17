@@ -2068,11 +2068,19 @@ void Chart2ExportTest::testCombinedChartSecondaryAxisODS()
 
 void Chart2ExportTest::testCrossBetweenXLSX()
 {
-    // Original file was created with MS Office
-    load("/chart2/qa/extras/data/xlsx/", "tdf127777.xlsx");
-    xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
-    CPPUNIT_ASSERT(pXmlDoc);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:crossBetween", "val", "between");
+    // Original files were created with MS Office
+    {
+        load("/chart2/qa/extras/data/xlsx/", "tdf127777.xlsx");
+        xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+        CPPUNIT_ASSERT(pXmlDoc);
+        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:crossBetween", "val", "between");
+    }
+    {
+        load("/chart2/qa/extras/data/xlsx/", "tdf132076.xlsx");
+        xmlDocPtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+        CPPUNIT_ASSERT(pXmlDoc);
+        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:crossBetween", "val", "between");
+    }
 }
 
 void Chart2ExportTest::testCrossBetweenWithDeletedAxis()

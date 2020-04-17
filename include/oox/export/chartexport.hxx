@@ -106,7 +106,6 @@ private:
 
     // members filled by InitRangeSegmentationProperties (retrieved from DataProvider)
     bool mbHasCategoryLabels; //if the categories are only automatically generated this will be false
-    bool mbIsCategoryPositionShifted; //if the value axis crosses the category axis between tickmarks this will be true
 
     //css::uno::Reference< css::drawing::XShapes > mxAdditionalShapes;
     css::uno::Reference< css::chart2::data::XDataSequence > mxCategoriesValues;
