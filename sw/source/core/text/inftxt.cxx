@@ -850,17 +850,13 @@ void SwTextPaintInfo::CalcRect( const SwLinePortion& rPor,
             static_cast<const SwTextPortion&>(rPor).GetJoinBorderWithNext();
         const bool bIsVert = GetTextFrame()->IsVertical();
         const bool bIsVertLRBT = GetTextFrame()->IsVertLRBT();
-        aRect.Top(aRect.Top()
-                  + GetFont()->CalcShadowSpace(SvxShadowItemSide::TOP, bIsVert, bIsVertLRBT,
+        aRect.AddTop( GetFont()->CalcShadowSpace(SvxShadowItemSide::TOP, bIsVert, bIsVertLRBT,
                                                bJoinWithPrev, bJoinWithNext));
-        aRect.Bottom(aRect.Bottom()
-                     - GetFont()->CalcShadowSpace(SvxShadowItemSide::BOTTOM, bIsVert, bIsVertLRBT,
+        aRect.AddBottom( - GetFont()->CalcShadowSpace(SvxShadowItemSide::BOTTOM, bIsVert, bIsVertLRBT,
                                                   bJoinWithPrev, bJoinWithNext));
-        aRect.Left(aRect.Left()
-                   + GetFont()->CalcShadowSpace(SvxShadowItemSide::LEFT, bIsVert, bIsVertLRBT,
+        aRect.AddLeft( GetFont()->CalcShadowSpace(SvxShadowItemSide::LEFT, bIsVert, bIsVertLRBT,
                                                 bJoinWithPrev, bJoinWithNext));
-        aRect.Right(aRect.Right()
-                    - GetFont()->CalcShadowSpace(SvxShadowItemSide::RIGHT, bIsVert, bIsVertLRBT,
+        aRect.AddRight( - GetFont()->CalcShadowSpace(SvxShadowItemSide::RIGHT, bIsVert, bIsVertLRBT,
                                                  bJoinWithPrev, bJoinWithNext));
     }
 
