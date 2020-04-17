@@ -6457,7 +6457,6 @@ fi
 
 AC_SUBST(HAVE_GCC_AVX)
 AC_SUBST(HAVE_GCC_BUILTIN_ATOMIC)
-AC_SUBST(HAVE_GCC_BUILTIN_FFS)
 AC_SUBST(HAVE_GCC_STACK_CLASH_PROTECTION)
 
 dnl ===================================================================
