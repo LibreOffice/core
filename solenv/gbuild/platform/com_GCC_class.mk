@@ -52,13 +52,20 @@ endef
 
 # CObject class
 
-# $(call gb_CObject__command_pattern,object,flags,source,dep-file,compiler-plugins,symbols)
+# $(call gb_CObject__compiler,source,compiler)
+define gb_CObject__compiler
+	$(if $(filter %.c %.m,$(1)), \
+		$(if $(2), $(2), $(gb_CC)), \
+		$(if $(2), $(2), $(gb_CXX)))
+endef
+
+# $(call gb_CObject__command_pattern,object,flags,source,dep-file,compiler-plugins,symbols,compiler)
 define gb_CObject__command_pattern
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && cd $(SRCDIR) && \
 	$(gb_COMPILER_SETUP) \
 	$(if $(5),$(gb_COMPILER_PLUGINS_SETUP)) \
-	$(if $(filter %.c %.m,$(3)), $(gb_CC), $(gb_CXX)) \
+	$(call gb_CObject__compiler,$(3),$(7)) \
 		$(DEFS) \
 		$(gb_LTOFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
@@ -116,7 +123,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2),$(7))) && \
 	cd $(BUILDDIR)/ && \
 	CCACHE_DISABLE=1 $(gb_COMPILER_SETUP) \
-	$(gb_CXX) \
+	$(if $(8),$(8),$(gb_CXX)) \
 		-x c++-header \
 		$(4) $(5) \
 		$(if $(WARNINGS_DISABLED),$(gb_CXXFLAGS_DISABLE_WARNINGS)) \

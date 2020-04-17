@@ -23,7 +23,7 @@ skia_patches := \
     Wdeprecated-copy-dtor.patch.0 \
     fix-msvc.patch.1 \
     fix-gcc-x86.patch.1	\
-    msvc-vectorcall-sse.patch.1 \
+    fix-sse.patch.1 \
     clang11-flax-vector-conversion.patch.0 \
     clang-attributes-warning.patch.1 \
     fontconfig-get-typeface.patch.0 \

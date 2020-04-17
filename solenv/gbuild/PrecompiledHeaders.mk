@@ -36,7 +36,7 @@ ifneq ($(gb_ENABLE_PCH),)
 # for $(1)'s and things that are constant.
 # The defines are needed to get the right version of gb_PrecompiledHeader__get_debugdir.
 
-# $(call gb_PrecompiledHeader_generate_rules,pchtarget,linktarget,linktargetmakefilename,pchcxxfile)
+# $(call gb_PrecompiledHeader_generate_rules,pchtarget,linktarget,linktargetmakefilename,pchcxxfile,compiler)
 define gb_PrecompiledHeader_generate_rules
 
 $(call gb_PrecompiledHeader_get_dep_target,$(1),$(3)) :
@@ -50,7 +50,7 @@ $(call gb_PrecompiledHeader_get_target,$(1),$(3)) :
 	test "$$(PCH_LINKTARGETMAKEFILENAME)" = "$(3)" \
 		 || ( echo "Error, PCH $(1) built by $$(PCH_LINKTARGETMAKEFILENAME) instead of $(3)" >&2; exit 1)
 	rm -f $$@
-	$$(call gb_PrecompiledHeader__command,$$@,$(1),$$<,$$(PCH_DEFS),$$(PCH_CXXFLAGS) $$(gb_PrecompiledHeader_EXCEPTIONFLAGS),$$(INCLUDE),$(3))
+	$$(call gb_PrecompiledHeader__command,$$@,$(1),$$<,$$(PCH_DEFS),$$(PCH_CXXFLAGS) $$(gb_PrecompiledHeader_EXCEPTIONFLAGS),$$(INCLUDE),$(3),$(5))
 	$$(call gb_PrecompiledHeader__sum_command,$$@,$(1),$$<,$$(PCH_DEFS),$$(PCH_CXXFLAGS) $$(gb_PrecompiledHeader_EXCEPTIONFLAGS),$$(INCLUDE),$(3))
 	echo $$(sort $$(PCH_DEFS) $$(PCH_CXXFLAGS) $$(gb_PrecompiledHeader_EXCEPTIONFLAGS)) > $$(call gb_PrecompiledHeader_get_target,$(1),$(3)).flags
 ifeq ($(gb_FULLDEPS),$(true))
