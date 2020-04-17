@@ -2012,8 +2012,11 @@ TaskManager::copy_recursive( const OUString& srcUnqPath,
 
             osl::DirectoryItem aDirItem;
 
-            while( err == osl::FileBase::E_None && ( next = aDir.getNextItem( aDirItem ) ) == osl::FileBase::E_None )
+            while( err == osl::FileBase::E_None )
             {
+                next = aDir.getNextItem( aDirItem );
+                if (next != osl::FileBase::E_None )
+                    break;
                 bool IsDoc = false;
                 osl::FileStatus aFileStatus( n_Mask );
                 aDirItem.getFileStatus( aFileStatus );

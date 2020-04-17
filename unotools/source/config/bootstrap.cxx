@@ -385,7 +385,8 @@ static OUString getExecutableBaseName()
 
 static Bootstrap::PathStatus updateStatus(Bootstrap::Impl::PathData & _rResult)
 {
-    return _rResult.status = checkStatusAndNormalizeURL(_rResult.path);
+    _rResult.status = checkStatusAndNormalizeURL(_rResult.path);
+    return _rResult.status;
 }
 
 static Bootstrap::PathStatus implGetBootstrapFile(rtl::Bootstrap const & _rData, Bootstrap::Impl::PathData & _rBootstrapFile)

@@ -778,8 +778,8 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
             //add a new level to the level vector and make it the current one
             m_pCurrentDefinition->AddLevel();
 
-            writerfilter::Reference<Properties>::Pointer_t pProperties;
-            if((pProperties = rVal.getProperties()).get())
+            writerfilter::Reference<Properties>::Pointer_t pProperties = rVal.getProperties();
+            if(pProperties.get())
                 pProperties->resolve(*this);
         }
         break;
