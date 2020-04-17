@@ -907,28 +907,28 @@ void SvxEMailTabPage::Reset( const SfxItemSet* )
 
 IMPL_LINK_NOARG(SvxEMailTabPage, FileDialogHdl_Impl, weld::Button&, void)
 {
-    if (!pImpl->bROProgram)
+    if (pImpl->bROProgram)
+        return;
+
+    FileDialogHelper aHelper(css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, GetFrameWeld());
+    OUString sPath = m_xMailerURLED->get_text();
+    if ( sPath.isEmpty() )
+        sPath = "/usr/bin";
+
+    OUString sUrl;
+    osl::FileBase::getFileURLFromSystemPath(sPath, sUrl);
+    aHelper.SetDisplayDirectory(sUrl);
+    aHelper.AddFilter( m_sDefaultFilterName, "*");
+
+    if ( ERRCODE_NONE == aHelper.Execute() )
     {
-        FileDialogHelper aHelper(css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, GetFrameWeld());
-        OUString sPath = m_xMailerURLED->get_text();
-        if ( sPath.isEmpty() )
-            sPath = "/usr/bin";
-
-        OUString sUrl;
-        osl::FileBase::getFileURLFromSystemPath(sPath, sUrl);
-        aHelper.SetDisplayDirectory(sUrl);
-        aHelper.AddFilter( m_sDefaultFilterName, "*");
-
-        if ( ERRCODE_NONE == aHelper.Execute() )
+        sUrl = aHelper.GetPath();
+        if (osl::FileBase::getSystemPathFromFileURL(sUrl, sPath)
+            != osl::FileBase::E_None)
         {
-            sUrl = aHelper.GetPath();
-            if (osl::FileBase::getSystemPathFromFileURL(sUrl, sPath)
-                != osl::FileBase::E_None)
-            {
-                sPath.clear();
-            }
-            m_xMailerURLED->set_text(sPath);
+            sPath.clear();
         }
+        m_xMailerURLED->set_text(sPath);
     }
 }
 

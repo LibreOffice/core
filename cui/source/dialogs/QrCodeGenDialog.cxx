@@ -186,69 +186,69 @@ void QrCodeGenDialog::Apply()
     // Set QRCode properties
     xShapeProps->setPropertyValue("QRCodeProperties", Any(aQRCode));
 
-    if (!bIsExistingQRCode)
+    if (bIsExistingQRCode)
+        return;
+
+    // Default size
+    Reference<XShape> xShape(xShapeProps, UNO_QUERY);
+    awt::Size aShapeSize;
+    aShapeSize.Height = 4000;
+    aShapeSize.Width = 4000;
+    xShape->setSize(aShapeSize);
+
+    // Default anchoring
+    xShapeProps->setPropertyValue("AnchorType", Any(TextContentAnchorType_AT_PARAGRAPH));
+
+    const Reference<XServiceInfo> xServiceInfo(m_xModel, UNO_QUERY_THROW);
+
+    // Writer
+    if (xServiceInfo->supportsService("com.sun.star.text.TextDocument"))
     {
-        // Default size
-        Reference<XShape> xShape(xShapeProps, UNO_QUERY);
-        awt::Size aShapeSize;
-        aShapeSize.Height = 4000;
-        aShapeSize.Width = 4000;
-        xShape->setSize(aShapeSize);
+        Reference<XTextContent> xTextContent(xShape, UNO_QUERY_THROW);
+        Reference<XTextViewCursorSupplier> xViewCursorSupplier(m_xModel->getCurrentController(),
+                                                               UNO_QUERY_THROW);
+        Reference<XTextViewCursor> xCursor = xViewCursorSupplier->getViewCursor();
+        // use cursor's XText - it might be in table cell, frame, ...
+        Reference<XText> const xText(xCursor->getText());
+        assert(xText.is());
+        xText->insertTextContent(xCursor, xTextContent, true);
+        return;
+    }
 
-        // Default anchoring
-        xShapeProps->setPropertyValue("AnchorType", Any(TextContentAnchorType_AT_PARAGRAPH));
+    // Calc
+    else if (xServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
+    {
+        Reference<XPropertySet> xSheetCell(m_xModel->getCurrentSelection(), UNO_QUERY_THROW);
+        awt::Point aCellPosition;
+        xSheetCell->getPropertyValue("Position") >>= aCellPosition;
+        xShape->setPosition(aCellPosition);
 
-        const Reference<XServiceInfo> xServiceInfo(m_xModel, UNO_QUERY_THROW);
+        Reference<XSpreadsheetView> xView(m_xModel->getCurrentController(), UNO_QUERY_THROW);
+        Reference<XSpreadsheet> xSheet(xView->getActiveSheet(), UNO_SET_THROW);
+        Reference<XDrawPageSupplier> xDrawPageSupplier(xSheet, UNO_QUERY_THROW);
+        Reference<XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
+        Reference<XShapes> xShapes(xDrawPage, UNO_QUERY_THROW);
 
-        // Writer
-        if (xServiceInfo->supportsService("com.sun.star.text.TextDocument"))
-        {
-            Reference<XTextContent> xTextContent(xShape, UNO_QUERY_THROW);
-            Reference<XTextViewCursorSupplier> xViewCursorSupplier(m_xModel->getCurrentController(),
-                                                                   UNO_QUERY_THROW);
-            Reference<XTextViewCursor> xCursor = xViewCursorSupplier->getViewCursor();
-            // use cursor's XText - it might be in table cell, frame, ...
-            Reference<XText> const xText(xCursor->getText());
-            assert(xText.is());
-            xText->insertTextContent(xCursor, xTextContent, true);
-            return;
-        }
+        xShapes->add(xShape);
+        return;
+    }
 
-        // Calc
-        else if (xServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
-        {
-            Reference<XPropertySet> xSheetCell(m_xModel->getCurrentSelection(), UNO_QUERY_THROW);
-            awt::Point aCellPosition;
-            xSheetCell->getPropertyValue("Position") >>= aCellPosition;
-            xShape->setPosition(aCellPosition);
+    //Impress and Draw
+    else if (xServiceInfo->supportsService("com.sun.star.presentation.PresentationDocument")
+             || xServiceInfo->supportsService("com.sun.star.drawing.DrawingDocument"))
+    {
+        Reference<XDrawView> xView(m_xModel->getCurrentController(), UNO_QUERY_THROW);
+        Reference<XDrawPage> xPage(xView->getCurrentPage(), UNO_SET_THROW);
+        Reference<XShapes> xShapes(xPage, UNO_QUERY_THROW);
 
-            Reference<XSpreadsheetView> xView(m_xModel->getCurrentController(), UNO_QUERY_THROW);
-            Reference<XSpreadsheet> xSheet(xView->getActiveSheet(), UNO_SET_THROW);
-            Reference<XDrawPageSupplier> xDrawPageSupplier(xSheet, UNO_QUERY_THROW);
-            Reference<XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
-            Reference<XShapes> xShapes(xDrawPage, UNO_QUERY_THROW);
+        xShapes->add(xShape);
+        return;
+    }
 
-            xShapes->add(xShape);
-            return;
-        }
-
-        //Impress and Draw
-        else if (xServiceInfo->supportsService("com.sun.star.presentation.PresentationDocument")
-                 || xServiceInfo->supportsService("com.sun.star.drawing.DrawingDocument"))
-        {
-            Reference<XDrawView> xView(m_xModel->getCurrentController(), UNO_QUERY_THROW);
-            Reference<XDrawPage> xPage(xView->getCurrentPage(), UNO_SET_THROW);
-            Reference<XShapes> xShapes(xPage, UNO_QUERY_THROW);
-
-            xShapes->add(xShape);
-            return;
-        }
-
-        else
-        {
-            //Not implemented for math,base and other apps.
-            throw uno::RuntimeException("Not implemented");
-        }
+    else
+    {
+        //Not implemented for math,base and other apps.
+        throw uno::RuntimeException("Not implemented");
     }
 }
 

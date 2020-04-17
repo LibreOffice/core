@@ -148,32 +148,32 @@ void SvxLineDefTabPage::Construct()
 
 void SvxLineDefTabPage::ActivatePage( const SfxItemSet& )
 {
-    if( nDlgType == 0 ) // area dialog
-    {
-        // ActivatePage() is called before the dialog receives PageCreated() !!!
-        if( pDashList.is() )
-        {
-            if (*pPageType == PageType::Gradient &&
-                *pPosDashLb != -1)
-            {
-                m_xLbLineStyles->set_active(*pPosDashLb);
-            }
-            // so that a possibly existing line style is discarded
-            SelectLinestyleHdl_Impl( nullptr );
+    if( nDlgType != 0 ) // area dialog
+        return;
 
-            // determining (and possibly cutting) the name
-            // and displaying it in the GroupBox
+    // ActivatePage() is called before the dialog receives PageCreated() !!!
+    if( !pDashList.is() )
+        return;
+
+    if (*pPageType == PageType::Gradient &&
+        *pPosDashLb != -1)
+    {
+        m_xLbLineStyles->set_active(*pPosDashLb);
+    }
+    // so that a possibly existing line style is discarded
+    SelectLinestyleHdl_Impl( nullptr );
+
+    // determining (and possibly cutting) the name
+    // and displaying it in the GroupBox
 //             OUString        aString( CuiResId( RID_SVXSTR_TABLE ) );
 //             aString         += ": ";
-            INetURLObject   aURL( pDashList->GetPath() );
+    INetURLObject   aURL( pDashList->GetPath() );
 
-            aURL.Append( pDashList->GetName() );
-            DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
+    aURL.Append( pDashList->GetName() );
+    DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
 
-            *pPageType = PageType::Area; // 2
-            *pPosDashLb = -1;
-        }
-    }
+    *pPageType = PageType::Area; // 2
+    *pPosDashLb = -1;
 }
 
 
@@ -307,31 +307,31 @@ IMPL_LINK(SvxLineDefTabPage, SelectLinestyleListBoxHdl_Impl, weld::ComboBox&, rL
 
 void SvxLineDefTabPage::SelectLinestyleHdl_Impl(const weld::ComboBox* p)
 {
-    if(pDashList->Count())
+    if(!pDashList->Count())
+        return;
+
+    int nTmp = m_xLbLineStyles->get_active();
+    if (nTmp == -1)
     {
-        int nTmp = m_xLbLineStyles->get_active();
-        if (nTmp == -1)
-        {
-            OSL_ENSURE(false, "OOps, non-existent LineDash selected (!)");
-            nTmp = 1;
-        }
-
-        aDash = pDashList->GetDash( nTmp )->GetDash();
-
-        FillDialog_Impl();
-
-        rXLSet.Put( XLineDashItem( OUString(), aDash ) );
-
-        // #i34740#
-        m_aCtlPreview.SetLineAttributes(aXLineAttr.GetItemSet());
-        m_aCtlPreview.Invalidate();
-
-        // Is not set before, in order to take the new style
-        // only if there was an entry selected in the ListBox.
-        // If it was called via Reset(), then p is == NULL
-        if( p )
-            *pPageType = PageType::Hatch;
+        OSL_ENSURE(false, "OOps, non-existent LineDash selected (!)");
+        nTmp = 1;
     }
+
+    aDash = pDashList->GetDash( nTmp )->GetDash();
+
+    FillDialog_Impl();
+
+    rXLSet.Put( XLineDashItem( OUString(), aDash ) );
+
+    // #i34740#
+    m_aCtlPreview.SetLineAttributes(aXLineAttr.GetItemSet());
+    m_aCtlPreview.Invalidate();
+
+    // Is not set before, in order to take the new style
+    // only if there was an entry selected in the ListBox.
+    // If it was called via Reset(), then p is == NULL
+    if( p )
+        *pPageType = PageType::Hatch;
 }
 
 IMPL_LINK_NOARG(SvxLineDefTabPage, ChangePreviewHdl_Impl, weld::MetricSpinButton&, void)
@@ -565,59 +565,59 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl, weld::Button&, void)
 IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl, weld::Button&, void)
 {
     int nPos = m_xLbLineStyles->get_active();
-    if (nPos != -1)
+    if (nPos == -1)
+        return;
+
+    OUString aDesc(CuiResId(RID_SVXSTR_DESC_LINESTYLE));
+    OUString aName( pDashList->GetDash( nPos )->GetName() );
+    OUString aOldName = aName;
+
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
+
+    long nCount = pDashList->Count();
+    bool bLoop = true;
+
+    while ( bLoop && pDlg->Execute() == RET_OK )
     {
-        OUString aDesc(CuiResId(RID_SVXSTR_DESC_LINESTYLE));
-        OUString aName( pDashList->GetDash( nPos )->GetName() );
-        OUString aOldName = aName;
+        pDlg->GetName( aName );
+        bool bDifferent = true;
 
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
-
-        long nCount = pDashList->Count();
-        bool bLoop = true;
-
-        while ( bLoop && pDlg->Execute() == RET_OK )
+        for( long i = 0; i < nCount && bDifferent; i++ )
         {
-            pDlg->GetName( aName );
-            bool bDifferent = true;
+            if( aName == pDashList->GetDash( i )->GetName() &&
+                aName != aOldName )
+                bDifferent = false;
+        }
 
-            for( long i = 0; i < nCount && bDifferent; i++ )
-            {
-                if( aName == pDashList->GetDash( i )->GetName() &&
-                    aName != aOldName )
-                    bDifferent = false;
-            }
+        if ( bDifferent )
+        {
+            bLoop = false;
+            FillDash_Impl();
 
-            if ( bDifferent )
-            {
-                bLoop = false;
-                FillDash_Impl();
+            pDashList->Replace(std::make_unique<XDashEntry>(aDash, aName), nPos);
+            m_xLbLineStyles->Modify(*pDashList->GetDash(nPos), nPos, pDashList->GetUiBitmap(nPos));
 
-                pDashList->Replace(std::make_unique<XDashEntry>(aDash, aName), nPos);
-                m_xLbLineStyles->Modify(*pDashList->GetDash(nPos), nPos, pDashList->GetUiBitmap(nPos));
+            m_xLbLineStyles->set_active(nPos);
 
-                m_xLbLineStyles->set_active(nPos);
+            *pnDashListState |= ChangeType::MODIFIED;
 
-                *pnDashListState |= ChangeType::MODIFIED;
+            *pPageType = PageType::Hatch;
 
-                *pPageType = PageType::Hatch;
-
-                // save values for changes recognition (-> method)
-                m_xNumFldNumber1->save_value();
-                m_xMtrLength1->save_value();
-                m_xLbType1->save_value();
-                m_xNumFldNumber2->save_value();
-                m_xMtrLength2->save_value();
-                m_xLbType2->save_value();
-                m_xMtrDistance->save_value();
-            }
-            else
-            {
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
-                std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
-                xBox->run();
-            }
+            // save values for changes recognition (-> method)
+            m_xNumFldNumber1->save_value();
+            m_xMtrLength1->save_value();
+            m_xLbType1->save_value();
+            m_xNumFldNumber2->save_value();
+            m_xMtrLength2->save_value();
+            m_xLbType2->save_value();
+            m_xMtrDistance->save_value();
+        }
+        else
+        {
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
+            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
+            xBox->run();
         }
     }
 }
@@ -762,27 +762,27 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickSaveHdl_Impl, weld::Button&, void)
     }
 
     aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
-    if ( aDlg.Execute() == ERRCODE_NONE )
+    if ( aDlg.Execute() != ERRCODE_NONE )
+        return;
+
+    INetURLObject aURL( aDlg.GetPath() );
+    INetURLObject aPathURL( aURL );
+
+    aPathURL.removeSegment();
+    aPathURL.removeFinalSlash();
+
+    pDashList->SetName( aURL.getName() );
+    pDashList->SetPath( aPathURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+
+    if( pDashList->Save() )
     {
-        INetURLObject aURL( aDlg.GetPath() );
-        INetURLObject aPathURL( aURL );
-
-        aPathURL.removeSegment();
-        aPathURL.removeFinalSlash();
-
-        pDashList->SetName( aURL.getName() );
-        pDashList->SetPath( aPathURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
-
-        if( pDashList->Save() )
-        {
-            *pnDashListState &= ~ChangeType::MODIFIED;
-        }
-        else
-        {
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querynosavefiledialog.ui"));
-            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("NoSaveFileDialog"));
-            xBox->run();
-        }
+        *pnDashListState &= ~ChangeType::MODIFIED;
+    }
+    else
+    {
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querynosavefiledialog.ui"));
+        std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("NoSaveFileDialog"));
+        xBox->run();
     }
 }
 

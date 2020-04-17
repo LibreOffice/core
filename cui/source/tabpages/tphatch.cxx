@@ -434,26 +434,26 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, weld::Button&, void)
     }
     pDlg.disposeAndClear();
 
-    if( !nError )
-    {
-        XHatch aXHatch( m_xLbLineColor->GetSelectEntryColor(),
-                        static_cast<css::drawing::HatchStyle>(m_xLbLineType->get_active()),
-                        GetCoreValue( *m_xMtrDistance, m_ePoolUnit ),
-                        static_cast<long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10) );
+    if( nError )
+        return;
 
-        m_pHatchingList->Insert(std::make_unique<XHatchEntry>(aXHatch, aName), nCount);
+    XHatch aXHatch( m_xLbLineColor->GetSelectEntryColor(),
+                    static_cast<css::drawing::HatchStyle>(m_xLbLineType->get_active()),
+                    GetCoreValue( *m_xMtrDistance, m_ePoolUnit ),
+                    static_cast<long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10) );
 
-        sal_Int32 nId = m_xHatchLB->GetItemId(nCount - 1); // calculate the last ID
-        BitmapEx aBitmap = m_pHatchingList->GetBitmapForPreview( nCount, m_xHatchLB->GetIconSize() );
-        // Insert the new entry at the next ID
-        m_xHatchLB->InsertItem( nId + 1, Image(aBitmap), aName );
-        m_xHatchLB->SelectItem( nId + 1 );
-        m_xHatchLB->Resize();
+    m_pHatchingList->Insert(std::make_unique<XHatchEntry>(aXHatch, aName), nCount);
 
-        *m_pnHatchingListState |= ChangeType::MODIFIED;
+    sal_Int32 nId = m_xHatchLB->GetItemId(nCount - 1); // calculate the last ID
+    BitmapEx aBitmap = m_pHatchingList->GetBitmapForPreview( nCount, m_xHatchLB->GetIconSize() );
+    // Insert the new entry at the next ID
+    m_xHatchLB->InsertItem( nId + 1, Image(aBitmap), aName );
+    m_xHatchLB->SelectItem( nId + 1 );
+    m_xHatchLB->Resize();
 
-        ChangeHatchHdl_Impl();
-    }
+    *m_pnHatchingListState |= ChangeType::MODIFIED;
+
+    ChangeHatchHdl_Impl();
 }
 
 IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl, weld::Button&, void)
@@ -461,31 +461,31 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl, weld::Button&, void)
     sal_uInt16 nId = m_xHatchLB->GetSelectedItemId();
     size_t nPos = m_xHatchLB->GetSelectItemPos();
 
-    if( nPos != VALUESET_ITEM_NOTFOUND )
-    {
-        OUString aName( m_pHatchingList->GetHatch( static_cast<sal_uInt16>(nPos) )->GetName() );
+    if( nPos == VALUESET_ITEM_NOTFOUND )
+        return;
 
-        XHatch aXHatch( m_xLbLineColor->GetSelectEntryColor(),
-                        static_cast<css::drawing::HatchStyle>(m_xLbLineType->get_active()),
-                         GetCoreValue( *m_xMtrDistance, m_ePoolUnit ),
-                        static_cast<long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10) );
+    OUString aName( m_pHatchingList->GetHatch( static_cast<sal_uInt16>(nPos) )->GetName() );
 
-        m_pHatchingList->Replace(std::make_unique<XHatchEntry>(aXHatch, aName), nPos);
+    XHatch aXHatch( m_xLbLineColor->GetSelectEntryColor(),
+                    static_cast<css::drawing::HatchStyle>(m_xLbLineType->get_active()),
+                     GetCoreValue( *m_xMtrDistance, m_ePoolUnit ),
+                    static_cast<long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10) );
 
-        BitmapEx aBitmap = m_pHatchingList->GetBitmapForPreview( static_cast<sal_uInt16>(nPos), m_xHatchLB->GetIconSize() );
-        m_xHatchLB->RemoveItem( nId );
-        m_xHatchLB->InsertItem( nId, Image(aBitmap), aName, static_cast<sal_uInt16>(nPos) );
-        m_xHatchLB->SelectItem( nId );
+    m_pHatchingList->Replace(std::make_unique<XHatchEntry>(aXHatch, aName), nPos);
 
-        // save values for changes recognition (-> method)
-        m_xMtrDistance->save_value();
-        m_xMtrAngle->save_value();
-        m_xLbLineType->save_value();
-        m_xLbLineColor->SaveValue();
-        m_xLbBackgroundColor->SaveValue();
+    BitmapEx aBitmap = m_pHatchingList->GetBitmapForPreview( static_cast<sal_uInt16>(nPos), m_xHatchLB->GetIconSize() );
+    m_xHatchLB->RemoveItem( nId );
+    m_xHatchLB->InsertItem( nId, Image(aBitmap), aName, static_cast<sal_uInt16>(nPos) );
+    m_xHatchLB->SelectItem( nId );
 
-        *m_pnHatchingListState |= ChangeType::MODIFIED;
-    }
+    // save values for changes recognition (-> method)
+    m_xMtrDistance->save_value();
+    m_xMtrAngle->save_value();
+    m_xLbLineType->save_value();
+    m_xLbLineColor->SaveValue();
+    m_xLbBackgroundColor->SaveValue();
+
+    *m_pnHatchingListState |= ChangeType::MODIFIED;
 }
 
 IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
@@ -493,25 +493,25 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
     sal_uInt16 nId = m_xHatchLB->GetSelectedItemId();
     size_t nPos = m_xHatchLB->GetSelectItemPos();
 
-    if( nPos != VALUESET_ITEM_NOTFOUND )
-    {
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querydeletehatchdialog.ui"));
-        std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("AskDelHatchDialog"));
-        if (xQueryBox->run() == RET_YES)
-        {
-            m_pHatchingList->Remove(nPos);
-            m_xHatchLB->RemoveItem( nId );
-            nId = m_xHatchLB->GetItemId(0);
-            m_xHatchLB->SelectItem( nId );
-            m_xHatchLB->Resize();
+    if( nPos == VALUESET_ITEM_NOTFOUND )
+        return;
 
-            m_aCtlPreview.Invalidate();
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querydeletehatchdialog.ui"));
+    std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("AskDelHatchDialog"));
+    if (xQueryBox->run() != RET_YES)
+        return;
 
-            ChangeHatchHdl_Impl();
+    m_pHatchingList->Remove(nPos);
+    m_xHatchLB->RemoveItem( nId );
+    nId = m_xHatchLB->GetItemId(0);
+    m_xHatchLB->SelectItem( nId );
+    m_xHatchLB->Resize();
 
-            *m_pnHatchingListState |= ChangeType::MODIFIED;
-        }
-    }
+    m_aCtlPreview.Invalidate();
+
+    ChangeHatchHdl_Impl();
+
+    *m_pnHatchingListState |= ChangeType::MODIFIED;
 }
 
 IMPL_LINK_NOARG(SvxHatchTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void )
@@ -519,37 +519,37 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void )
     sal_uInt16 nId = m_xHatchLB->GetSelectedItemId();
     size_t nPos = m_xHatchLB->GetSelectItemPos();
 
-    if( nPos != VALUESET_ITEM_NOTFOUND )
+    if( nPos == VALUESET_ITEM_NOTFOUND )
+        return;
+
+    OUString aDesc( CuiResId( RID_SVXSTR_DESC_HATCH ) );
+    OUString aName( m_pHatchingList->GetHatch( nPos )->GetName() );
+
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
+
+    bool bLoop = true;
+    while( bLoop && pDlg->Execute() == RET_OK )
     {
-        OUString aDesc( CuiResId( RID_SVXSTR_DESC_HATCH ) );
-        OUString aName( m_pHatchingList->GetHatch( nPos )->GetName() );
+        pDlg->GetName( aName );
+        sal_Int32 nHatchPos = SearchHatchList( aName );
+        bool bValidHatchName = (nHatchPos == static_cast<sal_Int32>(nPos) ) || (nHatchPos == -1);
 
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
-
-        bool bLoop = true;
-        while( bLoop && pDlg->Execute() == RET_OK )
+        if(bValidHatchName)
         {
-            pDlg->GetName( aName );
-            sal_Int32 nHatchPos = SearchHatchList( aName );
-            bool bValidHatchName = (nHatchPos == static_cast<sal_Int32>(nPos) ) || (nHatchPos == -1);
+            bLoop = false;
+            m_pHatchingList->GetHatch(nPos)->SetName(aName);
 
-            if(bValidHatchName)
-            {
-                bLoop = false;
-                m_pHatchingList->GetHatch(nPos)->SetName(aName);
+            m_xHatchLB->SetItemText(nId, aName);
+            m_xHatchLB->SelectItem( nId );
 
-                m_xHatchLB->SetItemText(nId, aName);
-                m_xHatchLB->SelectItem( nId );
-
-                *m_pnHatchingListState |= ChangeType::MODIFIED;
-            }
-            else
-            {
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
-                std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
-                xBox->run();
-            }
+            *m_pnHatchingListState |= ChangeType::MODIFIED;
+        }
+        else
+        {
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
+            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
+            xBox->run();
         }
     }
 

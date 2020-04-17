@@ -157,55 +157,55 @@ void SvxHpLinkDlg::DeActivatePageImpl ()
 
     DeactivateRC nRet = DeactivateRC::LeavePage;
 
-    if ( pData )
+    if ( !pData )
+        return;
+
+    IconChoicePage * pPage = pData->xPage.get();
+
+    if ( !pExampleSet && pPage->HasExchangeSupport() && pSet )
+        pExampleSet = new SfxItemSet( *pSet->GetPool(), pSet->GetRanges() );
+
+    if ( pSet )
     {
-        IconChoicePage * pPage = pData->xPage.get();
+        SfxItemSet aTmp( *pSet->GetPool(), pSet->GetRanges() );
 
-        if ( !pExampleSet && pPage->HasExchangeSupport() && pSet )
-            pExampleSet = new SfxItemSet( *pSet->GetPool(), pSet->GetRanges() );
+        if ( pPage->HasExchangeSupport() )
+            nRet = pPage->DeactivatePage( &aTmp );
 
-        if ( pSet )
+        if ( ( DeactivateRC::LeavePage & nRet ) &&
+             aTmp.Count() )
         {
-            SfxItemSet aTmp( *pSet->GetPool(), pSet->GetRanges() );
-
-            if ( pPage->HasExchangeSupport() )
-                nRet = pPage->DeactivatePage( &aTmp );
-
-            if ( ( DeactivateRC::LeavePage & nRet ) &&
-                 aTmp.Count() )
+            if (pExampleSet)
+                pExampleSet->Put(aTmp);
+            pOutSet->Put( aTmp );
+        }
+    }
+    else
+    {
+        if ( pPage->HasExchangeSupport() ) //!!!
+        {
+            if ( !pExampleSet )
             {
-                if (pExampleSet)
-                    pExampleSet->Put(aTmp);
-                pOutSet->Put( aTmp );
+                SfxItemPool* pPool = pPage->GetItemSet().GetPool();
+                pExampleSet =
+                    new SfxItemSet( *pPool, GetInputRanges( *pPool ) );
             }
+            nRet = pPage->DeactivatePage( pExampleSet );
         }
         else
-        {
-            if ( pPage->HasExchangeSupport() ) //!!!
-            {
-                if ( !pExampleSet )
-                {
-                    SfxItemPool* pPool = pPage->GetItemSet().GetPool();
-                    pExampleSet =
-                        new SfxItemSet( *pPool, GetInputRanges( *pPool ) );
-                }
-                nRet = pPage->DeactivatePage( pExampleSet );
-            }
-            else
-                nRet = pPage->DeactivatePage( nullptr );
-        }
+            nRet = pPage->DeactivatePage( nullptr );
+    }
 
-        if ( nRet & DeactivateRC::RefreshSet )
+    if ( nRet & DeactivateRC::RefreshSet )
+    {
+        // TODO refresh input set
+        // flag all pages to be newly initialized
+        for (auto & pObj : maPageList)
         {
-            // TODO refresh input set
-            // flag all pages to be newly initialized
-            for (auto & pObj : maPageList)
-            {
-                if ( pObj->xPage.get() != pPage )
-                    pObj->bRefresh = true;
-                else
-                    pObj->bRefresh = false;
-            }
+            if ( pObj->xPage.get() != pPage )
+                pObj->bRefresh = true;
+            else
+                pObj->bRefresh = false;
         }
     }
 }

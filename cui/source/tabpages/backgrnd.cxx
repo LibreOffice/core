@@ -290,52 +290,52 @@ IMPL_LINK(SvxBkgTabPage, TblDestinationHdl_Impl, weld::ComboBox&, rBox, void)
     }
 
     sal_Int32 nSelPos = rBox.get_active();
-    if (m_nActPos != nSelPos)
-    {
-        m_nActPos = nSelPos;
+    if (m_nActPos == nSelPos)
+        return;
 
-        // fill local item set with XATTR_FILL created from SvxBushItem for table destination slot Which
-        sal_uInt16 nWhich = maSet.GetPool()->GetWhich(lcl_GetTableDestSlot(nSelPos));
-        if (SfxItemState::SET == maSet.GetItemState(nWhich))
-        {
-            SvxBrushItem aBrushItem(static_cast<const SvxBrushItem&>(maSet.Get(nWhich)));
-            setSvxBrushItemAsFillAttributesToTargetSet(aBrushItem, maSet);
-        }
-        else
+    m_nActPos = nSelPos;
+
+    // fill local item set with XATTR_FILL created from SvxBushItem for table destination slot Which
+    sal_uInt16 nWhich = maSet.GetPool()->GetWhich(lcl_GetTableDestSlot(nSelPos));
+    if (SfxItemState::SET == maSet.GetItemState(nWhich))
+    {
+        SvxBrushItem aBrushItem(static_cast<const SvxBrushItem&>(maSet.Get(nWhich)));
+        setSvxBrushItemAsFillAttributesToTargetSet(aBrushItem, maSet);
+    }
+    else
+    {
+        SelectFillType(*m_xBtnNone, &maSet);
+        return;
+    }
+
+    // show tab page
+    drawing::FillStyle eXFS = drawing::FillStyle_NONE;
+    if (maSet.GetItemState(XATTR_FILLSTYLE) != SfxItemState::DONTCARE)
+    {
+        XFillStyleItem aFillStyleItem(static_cast<const XFillStyleItem&>(maSet.Get(GetWhich( XATTR_FILLSTYLE))));
+        eXFS = aFillStyleItem.GetValue();
+    }
+    switch(eXFS)
+    {
+        default:
+        case drawing::FillStyle_NONE:
         {
             SelectFillType(*m_xBtnNone, &maSet);
-            return;
+            break;
         }
-
-        // show tab page
-        drawing::FillStyle eXFS = drawing::FillStyle_NONE;
-        if (maSet.GetItemState(XATTR_FILLSTYLE) != SfxItemState::DONTCARE)
+        case drawing::FillStyle_SOLID:
         {
-            XFillStyleItem aFillStyleItem(static_cast<const XFillStyleItem&>(maSet.Get(GetWhich( XATTR_FILLSTYLE))));
-            eXFS = aFillStyleItem.GetValue();
+            SelectFillType(*m_xBtnColor, &maSet);
+            // color tab page Active and New preview controls are same after SelectFillType
+            // hack to restore color tab page Active preview
+            setSvxBrushItemAsFillAttributesToTargetSet(static_cast<const SvxBrushItem&>(m_pResetSet->Get(nWhich)), *m_pResetSet);
+            static_cast<SvxColorTabPage*>(GetFillTabPage())->SetCtlPreviewOld(*m_pResetSet);
+            break;
         }
-        switch(eXFS)
+        case drawing::FillStyle_BITMAP:
         {
-            default:
-            case drawing::FillStyle_NONE:
-            {
-                SelectFillType(*m_xBtnNone, &maSet);
-                break;
-            }
-            case drawing::FillStyle_SOLID:
-            {
-                SelectFillType(*m_xBtnColor, &maSet);
-                // color tab page Active and New preview controls are same after SelectFillType
-                // hack to restore color tab page Active preview
-                setSvxBrushItemAsFillAttributesToTargetSet(static_cast<const SvxBrushItem&>(m_pResetSet->Get(nWhich)), *m_pResetSet);
-                static_cast<SvxColorTabPage*>(GetFillTabPage())->SetCtlPreviewOld(*m_pResetSet);
-                break;
-            }
-            case drawing::FillStyle_BITMAP:
-            {
-                SelectFillType(*m_xBtnBitmap, &maSet);
-                break;
-            }
+            SelectFillType(*m_xBtnBitmap, &maSet);
+            break;
         }
     }
 }

@@ -483,37 +483,37 @@ std::unique_ptr<SfxTabPage> SvxTextAttrPage::Create(weld::Container* pPage, weld
 */
 void SvxTextAttrPage::PointChanged(weld::DrawingArea*,  RectPoint eRP)
 {
-    if (m_xTsbFullWidth->get_state() == TRISTATE_TRUE)
-    {
-        // Depending on write direction and currently checked anchor we have
-        // to uncheck the "full width" button.
-        if (IsTextDirectionLeftToRight())
-            switch( eRP )
-            {
-                case RectPoint::LT:
-                case RectPoint::LM:
-                case RectPoint::LB:
-                case RectPoint::RT:
-                case RectPoint::RM:
-                case RectPoint::RB:
-                    m_xTsbFullWidth->set_state( TRISTATE_FALSE );
-                break;
-                default: ;//prevent warning
-            }
-        else
-            switch (eRP)
-            {
-                case RectPoint::LT:
-                case RectPoint::MT:
-                case RectPoint::RT:
-                case RectPoint::LB:
-                case RectPoint::MB:
-                case RectPoint::RB:
-                    m_xTsbFullWidth->set_state( TRISTATE_FALSE );
-                break;
-                default: ;//prevent warning
-            }
-    }
+    if (m_xTsbFullWidth->get_state() != TRISTATE_TRUE)
+        return;
+
+    // Depending on write direction and currently checked anchor we have
+    // to uncheck the "full width" button.
+    if (IsTextDirectionLeftToRight())
+        switch( eRP )
+        {
+            case RectPoint::LT:
+            case RectPoint::LM:
+            case RectPoint::LB:
+            case RectPoint::RT:
+            case RectPoint::RM:
+            case RectPoint::RB:
+                m_xTsbFullWidth->set_state( TRISTATE_FALSE );
+            break;
+            default: ;//prevent warning
+        }
+    else
+        switch (eRP)
+        {
+            case RectPoint::LT:
+            case RectPoint::MT:
+            case RectPoint::RT:
+            case RectPoint::LB:
+            case RectPoint::MB:
+            case RectPoint::RB:
+                m_xTsbFullWidth->set_state( TRISTATE_FALSE );
+            break;
+            default: ;//prevent warning
+        }
 }
 
 
@@ -529,51 +529,51 @@ void SvxTextAttrPage::PointChanged(weld::DrawingArea*,  RectPoint eRP)
 */
 IMPL_LINK_NOARG(SvxTextAttrPage, ClickFullWidthHdl_Impl, weld::Button&, void)
 {
-    if( m_xTsbFullWidth->get_state() == TRISTATE_TRUE )
+    if( m_xTsbFullWidth->get_state() != TRISTATE_TRUE )
+        return;
+
+    if (IsTextDirectionLeftToRight())
     {
-        if (IsTextDirectionLeftToRight())
+        // Move text anchor to horizontal middle axis.
+        switch( m_aCtlPosition.GetActualRP() )
         {
-            // Move text anchor to horizontal middle axis.
-            switch( m_aCtlPosition.GetActualRP() )
-            {
-                case RectPoint::LT:
-                case RectPoint::RT:
-                    m_aCtlPosition.SetActualRP( RectPoint::MT );
-                    break;
-
-                case RectPoint::LM:
-                case RectPoint::RM:
-                    m_aCtlPosition.SetActualRP( RectPoint::MM );
-                    break;
-
-                case RectPoint::LB:
-                case RectPoint::RB:
-                    m_aCtlPosition.SetActualRP( RectPoint::MB );
-                    break;
-                default: ;//prevent warning
-            }
-        }
-        else
-        {
-            // Move text anchor to vertical middle axis.
-            switch( m_aCtlPosition.GetActualRP() )
-            {
-                case RectPoint::LT:
-                case RectPoint::LB:
-                    m_aCtlPosition.SetActualRP( RectPoint::LM );
-                    break;
-
-                case RectPoint::MT:
-                case RectPoint::MB:
-                    m_aCtlPosition.SetActualRP( RectPoint::MM );
-                    break;
-
-                case RectPoint::RT:
-                case RectPoint::RB:
-                    m_aCtlPosition.SetActualRP( RectPoint::RM );
+            case RectPoint::LT:
+            case RectPoint::RT:
+                m_aCtlPosition.SetActualRP( RectPoint::MT );
                 break;
-                default: ;//prevent warning
-            }
+
+            case RectPoint::LM:
+            case RectPoint::RM:
+                m_aCtlPosition.SetActualRP( RectPoint::MM );
+                break;
+
+            case RectPoint::LB:
+            case RectPoint::RB:
+                m_aCtlPosition.SetActualRP( RectPoint::MB );
+                break;
+            default: ;//prevent warning
+        }
+    }
+    else
+    {
+        // Move text anchor to vertical middle axis.
+        switch( m_aCtlPosition.GetActualRP() )
+        {
+            case RectPoint::LT:
+            case RectPoint::LB:
+                m_aCtlPosition.SetActualRP( RectPoint::LM );
+                break;
+
+            case RectPoint::MT:
+            case RectPoint::MB:
+                m_aCtlPosition.SetActualRP( RectPoint::MM );
+                break;
+
+            case RectPoint::RT:
+            case RectPoint::RB:
+                m_aCtlPosition.SetActualRP( RectPoint::RM );
+            break;
+            default: ;//prevent warning
         }
     }
 }

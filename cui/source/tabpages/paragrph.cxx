@@ -632,36 +632,36 @@ void SvxStdParagraphTabPage::ActivatePage( const SfxItemSet& rSet )
     sal_uInt16 _nWhich = GetWhich( SID_ATTR_PARA_ADJUST );
     SfxItemState eItemState = rSet.GetItemState( _nWhich );
 
-    if ( eItemState >= SfxItemState::DEFAULT )
+    if ( eItemState < SfxItemState::DEFAULT )
+        return;
+
+    const SvxAdjustItem& rAdj = static_cast<const SvxAdjustItem&>( rSet.Get( _nWhich ) );
+    SvxAdjust eAdjust = rAdj.GetAdjust();
+    if ( eAdjust == SvxAdjust::Center || eAdjust == SvxAdjust::Block )
     {
-        const SvxAdjustItem& rAdj = static_cast<const SvxAdjustItem&>( rSet.Get( _nWhich ) );
-        SvxAdjust eAdjust = rAdj.GetAdjust();
-        if ( eAdjust == SvxAdjust::Center || eAdjust == SvxAdjust::Block )
+        _nWhich = GetWhich( SID_ATTR_FRAMEDIRECTION );
+        eItemState = rSet.GetItemState( _nWhich );
+
+        if ( eItemState >= SfxItemState::DEFAULT )
         {
-            _nWhich = GetWhich( SID_ATTR_FRAMEDIRECTION );
-            eItemState = rSet.GetItemState( _nWhich );
+            const SvxFrameDirectionItem& rFrameDirItem = static_cast<const SvxFrameDirectionItem&>( rSet.Get( _nWhich ) );
+            SvxFrameDirection eFrameDirection = rFrameDirItem.GetValue();
 
-            if ( eItemState >= SfxItemState::DEFAULT )
-            {
-                const SvxFrameDirectionItem& rFrameDirItem = static_cast<const SvxFrameDirectionItem&>( rSet.Get( _nWhich ) );
-                SvxFrameDirection eFrameDirection = rFrameDirItem.GetValue();
+            m_aExampleWin.EnableRTL( SvxFrameDirection::Horizontal_RL_TB == eFrameDirection );
 
-                m_aExampleWin.EnableRTL( SvxFrameDirection::Horizontal_RL_TB == eFrameDirection );
-
-                if ( eAdjust == SvxAdjust::Block )
-                    m_aExampleWin.SetLastLine( rAdj.GetLastBlock() );
-            }
+            if ( eAdjust == SvxAdjust::Block )
+                m_aExampleWin.SetLastLine( rAdj.GetLastBlock() );
         }
-        else
-        {
-            m_aExampleWin.EnableRTL( eAdjust == SvxAdjust::Right );
-            eAdjust = SvxAdjust::Left; //required for correct preview display
-            m_aExampleWin.SetLastLine( eAdjust );
-        }
-        m_aExampleWin.SetAdjust( eAdjust );
-
-        UpdateExample_Impl();
     }
+    else
+    {
+        m_aExampleWin.EnableRTL( eAdjust == SvxAdjust::Right );
+        eAdjust = SvxAdjust::Left; //required for correct preview display
+        m_aExampleWin.SetLastLine( eAdjust );
+    }
+    m_aExampleWin.SetAdjust( eAdjust );
+
+    UpdateExample_Impl();
 }
 
 DeactivateRC SvxStdParagraphTabPage::DeactivatePage( SfxItemSet* _pSet )
@@ -1977,22 +1977,22 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage(weld::Container* pPage, weld::Dia
     }
 
     sal_uInt16 nHtmlMode = GetHtmlMode_Impl( rAttr );
-    if ( nHtmlMode & HTMLMODE_ON )
-    {
-        bHtmlMode = true;
-        m_xHyphenBox->set_sensitive(false);
-        m_xHyphenNoCapsBox->set_sensitive(false);
-        m_xBeforeText->set_sensitive(false);
-        m_xExtHyphenBeforeBox->set_sensitive(false);
-        m_xAfterText->set_sensitive(false);
-        m_xExtHyphenAfterBox->set_sensitive(false);
-        m_xMaxHyphenLabel->set_sensitive(false);
-        m_xMaxHyphenEdit->set_sensitive(false);
-        m_xPageNumBox->set_sensitive(false);
-        m_xPagenumEdit->set_sensitive(false);
-        // no column break in HTML
-        m_xBreakTypeLB->remove(1);
-    }
+    if ( !(nHtmlMode & HTMLMODE_ON) )
+        return;
+
+    bHtmlMode = true;
+    m_xHyphenBox->set_sensitive(false);
+    m_xHyphenNoCapsBox->set_sensitive(false);
+    m_xBeforeText->set_sensitive(false);
+    m_xExtHyphenBeforeBox->set_sensitive(false);
+    m_xAfterText->set_sensitive(false);
+    m_xExtHyphenAfterBox->set_sensitive(false);
+    m_xMaxHyphenLabel->set_sensitive(false);
+    m_xMaxHyphenEdit->set_sensitive(false);
+    m_xPageNumBox->set_sensitive(false);
+    m_xPagenumEdit->set_sensitive(false);
+    // no column break in HTML
+    m_xBreakTypeLB->remove(1);
 }
 
 SvxExtParagraphTabPage::~SvxExtParagraphTabPage()

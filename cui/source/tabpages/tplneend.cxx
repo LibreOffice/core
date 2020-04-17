@@ -121,24 +121,24 @@ void SvxLineEndDefTabPage::Construct()
 
 void SvxLineEndDefTabPage::ActivatePage( const SfxItemSet& )
 {
-    if( nDlgType == 0 ) // area dialog
-    {
-        // ActivatePage() is called before the dialog receives PageCreated() !!!
-        if( pLineEndList.is() )
-        {
-            if( *pPosLineEndLb != -1)
-            {
-                m_xLbLineEnds->set_active(*pPosLineEndLb);
-                SelectLineEndHdl_Impl();
-            }
-            INetURLObject   aURL( pLineEndList->GetPath() );
+    if( nDlgType != 0 ) // area dialog
+        return;
 
-            aURL.Append( pLineEndList->GetName() );
-            DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
-            *pPageType = PageType::Area; // 3
-            *pPosLineEndLb = -1;
-        }
+    // ActivatePage() is called before the dialog receives PageCreated() !!!
+    if( !pLineEndList.is() )
+        return;
+
+    if( *pPosLineEndLb != -1)
+    {
+        m_xLbLineEnds->set_active(*pPosLineEndLb);
+        SelectLineEndHdl_Impl();
     }
+    INetURLObject   aURL( pLineEndList->GetPath() );
+
+    aURL.Append( pLineEndList->GetName() );
+    DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
+    *pPageType = PageType::Area; // 3
+    *pPosLineEndLb = -1;
 }
 
 
@@ -237,25 +237,25 @@ std::unique_ptr<SfxTabPage> SvxLineEndDefTabPage::Create(weld::Container* pPage,
 
 void SvxLineEndDefTabPage::SelectLineEndHdl_Impl()
 {
-    if( pLineEndList->Count() > 0 )
-    {
-        int nPos = m_xLbLineEnds->get_active();
+    if( pLineEndList->Count() <= 0 )
+        return;
 
-        const XLineEndEntry* pEntry = pLineEndList->GetLineEnd(nPos);
+    int nPos = m_xLbLineEnds->get_active();
 
-        m_xEdtName->set_text(m_xLbLineEnds->get_active_text());
+    const XLineEndEntry* pEntry = pLineEndList->GetLineEnd(nPos);
 
-        rXLSet.Put( XLineStartItem( OUString(), pEntry->GetLineEnd() ) );
-        rXLSet.Put( XLineEndItem( OUString(), pEntry->GetLineEnd() ) );
+    m_xEdtName->set_text(m_xLbLineEnds->get_active_text());
 
-        // #i34740#
-        m_aCtlPreview.SetLineAttributes(aXLineAttr.GetItemSet());
-        m_aCtlPreview.Invalidate();
+    rXLSet.Put( XLineStartItem( OUString(), pEntry->GetLineEnd() ) );
+    rXLSet.Put( XLineEndItem( OUString(), pEntry->GetLineEnd() ) );
 
-        // Is not set before, in order to only take the new style,
-        // if there is an entry selected in the ListBox
-        *pPageType = PageType::Bitmap;
-    }
+    // #i34740#
+    m_aCtlPreview.SetLineAttributes(aXLineAttr.GetItemSet());
+    m_aCtlPreview.Invalidate();
+
+    // Is not set before, in order to only take the new style,
+    // if there is an entry selected in the ListBox
+    *pPageType = PageType::Bitmap;
 }
 
 IMPL_LINK_NOARG(SvxLineEndDefTabPage, SelectLineEndHdl_Impl, weld::ComboBox&, void)
@@ -266,72 +266,72 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, SelectLineEndHdl_Impl, weld::ComboBox&, vo
 IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl, weld::Button&, void)
 {
     int nPos = m_xLbLineEnds->get_active();
-    if (nPos != -1)
+    if (nPos == -1)
+        return;
+
+    OUString aDesc(CuiResId(RID_SVXSTR_DESC_LINEEND));
+    OUString aName(m_xEdtName->get_text());
+    long nCount = pLineEndList->Count();
+    bool bDifferent = true;
+
+    // check whether the name is existing already
+    for ( long i = 0; i < nCount && bDifferent; i++ )
+        if ( aName == pLineEndList->GetLineEnd( i )->GetName() )
+            bDifferent = false;
+
+    // if yes, repeat and demand a new name
+    if ( !bDifferent )
     {
-        OUString aDesc(CuiResId(RID_SVXSTR_DESC_LINEEND));
-        OUString aName(m_xEdtName->get_text());
-        long nCount = pLineEndList->Count();
-        bool bDifferent = true;
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
+        std::unique_ptr<weld::MessageDialog> xWarningBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
+        xWarningBox->run();
 
-        // check whether the name is existing already
-        for ( long i = 0; i < nCount && bDifferent; i++ )
-            if ( aName == pLineEndList->GetLineEnd( i )->GetName() )
-                bDifferent = false;
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+        ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
+        bool bLoop = true;
 
-        // if yes, repeat and demand a new name
-        if ( !bDifferent )
+        while( !bDifferent && bLoop && pDlg->Execute() == RET_OK )
         {
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
-            std::unique_ptr<weld::MessageDialog> xWarningBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
-            xWarningBox->run();
+            pDlg->GetName( aName );
+            bDifferent = true;
 
-            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
-            bool bLoop = true;
-
-            while( !bDifferent && bLoop && pDlg->Execute() == RET_OK )
+            for( long i = 0; i < nCount && bDifferent; i++ )
             {
-                pDlg->GetName( aName );
-                bDifferent = true;
-
-                for( long i = 0; i < nCount && bDifferent; i++ )
-                {
-                    if( aName == pLineEndList->GetLineEnd( i )->GetName() )
-                        bDifferent = false;
-                }
-
-                if( bDifferent )
-                    bLoop = false;
-                else
-                    xWarningBox->run();
+                if( aName == pLineEndList->GetLineEnd( i )->GetName() )
+                    bDifferent = false;
             }
-        }
 
-        // if not existing, enter the entry
-        if( bDifferent )
-        {
-            const XLineEndEntry* pOldEntry = pLineEndList->GetLineEnd(nPos);
-
-            if(pOldEntry)
-            {
-                // #123497# Need to replace the existing entry with a new one
-                pLineEndList->Replace(std::make_unique<XLineEndEntry>(pOldEntry->GetLineEnd(), aName), nPos);
-
-                m_xEdtName->set_text(aName);
-
-                m_xLbLineEnds->Modify(*pLineEndList->GetLineEnd(nPos), nPos, pLineEndList->GetUiBitmap(nPos));
-                m_xLbLineEnds->set_active(nPos);
-
-                // set flag for modified
-                *pnLineEndListState |= ChangeType::MODIFIED;
-
-                *pPageType = PageType::Bitmap;
-            }
+            if( bDifferent )
+                bLoop = false;
             else
-            {
-                OSL_ENSURE(false, "LineEnd to be modified not existing (!)");
-            }
+                xWarningBox->run();
         }
+    }
+
+    // if not existing, enter the entry
+    if( !bDifferent )
+        return;
+
+    const XLineEndEntry* pOldEntry = pLineEndList->GetLineEnd(nPos);
+
+    if(pOldEntry)
+    {
+        // #123497# Need to replace the existing entry with a new one
+        pLineEndList->Replace(std::make_unique<XLineEndEntry>(pOldEntry->GetLineEnd(), aName), nPos);
+
+        m_xEdtName->set_text(aName);
+
+        m_xLbLineEnds->Modify(*pLineEndList->GetLineEnd(nPos), nPos, pLineEndList->GetUiBitmap(nPos));
+        m_xLbLineEnds->set_active(nPos);
+
+        // set flag for modified
+        *pnLineEndListState |= ChangeType::MODIFIED;
+
+        *pPageType = PageType::Bitmap;
+    }
+    else
+    {
+        OSL_ENSURE(false, "LineEnd to be modified not existing (!)");
     }
 }
 
@@ -582,27 +582,27 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickSaveHdl_Impl, weld::Button&, void)
     }
 
     aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
-    if ( aDlg.Execute() == ERRCODE_NONE )
+    if ( aDlg.Execute() != ERRCODE_NONE )
+        return;
+
+    INetURLObject   aURL( aDlg.GetPath() );
+    INetURLObject   aPathURL( aURL );
+
+    aPathURL.removeSegment();
+    aPathURL.removeFinalSlash();
+
+    pLineEndList->SetName( aURL.getName() );
+    pLineEndList->SetPath( aPathURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+
+    if( pLineEndList->Save() )
     {
-        INetURLObject   aURL( aDlg.GetPath() );
-        INetURLObject   aPathURL( aURL );
-
-        aPathURL.removeSegment();
-        aPathURL.removeFinalSlash();
-
-        pLineEndList->SetName( aURL.getName() );
-        pLineEndList->SetPath( aPathURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
-
-        if( pLineEndList->Save() )
-        {
-            *pnLineEndListState &= ~ChangeType::MODIFIED;
-        }
-        else
-        {
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querynosavefiledialog.ui"));
-            std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("NoSaveFileDialog"));
-            xBox->run();
-        }
+        *pnLineEndListState &= ~ChangeType::MODIFIED;
+    }
+    else
+    {
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querynosavefiledialog.ui"));
+        std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog("NoSaveFileDialog"));
+        xBox->run();
     }
 }
 

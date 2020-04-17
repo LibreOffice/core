@@ -433,21 +433,21 @@ void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
         !sNewPathStr.equalsIgnoreAsciiCase( sWritable );
 #endif
 
-    if ( bChanged )
+    if ( !bChanged )
+        return;
+
+    m_xPathBox->set_text(nEntry, Convert_Impl(sNewPathStr), 1);
+    pPathImpl->eState = SfxItemState::SET;
+    pPathImpl->sWritablePath = sNewPathStr;
+    if ( SvtPathOptions::PATH_WORK == pPathImpl->nRealId )
     {
-        m_xPathBox->set_text(nEntry, Convert_Impl(sNewPathStr), 1);
-        pPathImpl->eState = SfxItemState::SET;
-        pPathImpl->sWritablePath = sNewPathStr;
-        if ( SvtPathOptions::PATH_WORK == pPathImpl->nRealId )
-        {
-            // Remove view options entry so the new work path
-            // will be used for the next open dialog.
-            SvtViewOptions aDlgOpt( EViewType::Dialog, IODLG_CONFIGNAME );
-            aDlgOpt.Delete();
-            // Reset also last used dir in the sfx application instance
-            SfxApplication *pSfxApp = SfxGetpApp();
-            pSfxApp->ResetLastDir();
-        }
+        // Remove view options entry so the new work path
+        // will be used for the next open dialog.
+        SvtViewOptions aDlgOpt( EViewType::Dialog, IODLG_CONFIGNAME );
+        aDlgOpt.Delete();
+        // Reset also last used dir in the sfx application instance
+        SfxApplication *pSfxApp = SfxGetpApp();
+        pSfxApp->ResetLastDir();
     }
 }
 

@@ -493,19 +493,19 @@ void ColorFieldControl::Modify()
 void ColorFieldControl::SetValues( Color aColor, ColorMode eMode, double x, double y )
 {
     bool bUpdateBitmap = (maColor!= aColor) || (meMode != eMode);
-    if( bUpdateBitmap || (mdX != x) || (mdY != y) )
-    {
-        maColor = aColor;
-        meMode = eMode;
-        mdX = x;
-        mdY = y;
+    if( !(bUpdateBitmap || (mdX != x) || (mdY != y)) )
+        return;
 
-        if (bUpdateBitmap)
-            UpdateBitmap();
-        UpdatePosition();
-        if (bUpdateBitmap)
-            Invalidate();
-    }
+    maColor = aColor;
+    meMode = eMode;
+    mdX = x;
+    mdY = y;
+
+    if (bUpdateBitmap)
+        UpdateBitmap();
+    UpdatePosition();
+    if (bUpdateBitmap)
+        Invalidate();
 }
 
 void ColorFieldControl::UpdatePosition()

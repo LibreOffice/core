@@ -57,25 +57,25 @@ SvxTextTabDialog::SvxTextTabDialog(weld::Window* pParent, const SfxItemSet* pAtt
 
 void SvxTextTabDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
 {
-    if (rId == "RID_SVXPAGE_TEXTATTR")
+    if (rId != "RID_SVXPAGE_TEXTATTR")
+        return;
+
+    SdrObjKind eKind = OBJ_NONE;
+    if (pView)
     {
-        SdrObjKind eKind = OBJ_NONE;
-        if (pView)
+        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+        bool bHasMarked = rMarkList.GetMarkCount() > 0;
+        if (bHasMarked)
         {
-            const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-            bool bHasMarked = rMarkList.GetMarkCount() > 0;
-            if (bHasMarked)
+            if (rMarkList.GetMarkCount() == 1)
             {
-                if (rMarkList.GetMarkCount() == 1)
-                {
-                    const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                    eKind = static_cast<SdrObjKind>(pObj->GetObjIdentifier());
-                }
+                const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                eKind = static_cast<SdrObjKind>(pObj->GetObjIdentifier());
             }
         }
-        static_cast<SvxTextAttrPage&>(rPage).SetObjKind(eKind);
-        static_cast<SvxTextAttrPage&>(rPage).Construct();
     }
+    static_cast<SvxTextAttrPage&>(rPage).SetObjKind(eKind);
+    static_cast<SvxTextAttrPage&>(rPage).Construct();
 }
 
 /*************************************************************************
@@ -385,75 +385,74 @@ std::unique_ptr<SfxTabPage> SvxTextAnimationPage::Create(weld::Container* pPage,
 IMPL_LINK_NOARG(SvxTextAnimationPage, SelectEffectHdl_Impl, weld::ComboBox&, void)
 {
     int nPos = m_xLbEffect->get_active();
-    if (nPos != -1)
+    if (nPos == -1)
+        return;
+
+    eAniKind = static_cast<SdrTextAniKind>(nPos);
+    switch( eAniKind )
     {
-        eAniKind = static_cast<SdrTextAniKind>(nPos);
-        switch( eAniKind )
+        case SdrTextAniKind::NONE:
         {
-            case SdrTextAniKind::NONE:
+            m_xBoxDirection->set_sensitive(false);
+            m_xFlProperties->set_sensitive(false);
+        }
+        break;
+
+        case SdrTextAniKind::Blink:
+        case SdrTextAniKind::Scroll:
+        case SdrTextAniKind::Alternate:
+        case SdrTextAniKind::Slide:
+        {
+            m_xFlProperties->set_sensitive(true);
+            if( eAniKind == SdrTextAniKind::Slide )
+            {
+                m_xTsbStartInside->set_sensitive(false);
+                m_xTsbStopInside->set_sensitive(false);
+                m_xTsbEndless->set_sensitive(false);
+                m_xNumFldCount->set_sensitive(true);
+                m_xNumFldCount->set_value(m_xNumFldCount->get_value());
+            }
+            else
+            {
+                m_xTsbStartInside->set_sensitive(true);
+                m_xTsbStopInside->set_sensitive(true);
+                m_xTsbEndless->set_sensitive(true);
+                ClickEndlessHdl_Impl(*m_xTsbEndless);
+            }
+
+            m_xTsbAuto->set_sensitive(true);
+            ClickAutoHdl_Impl(*m_xTsbAuto);
+
+            if( eAniKind == SdrTextAniKind::Blink )
             {
                 m_xBoxDirection->set_sensitive(false);
-                m_xFlProperties->set_sensitive(false);
+                m_xBoxCount->set_sensitive(false);
             }
-            break;
-
-            case SdrTextAniKind::Blink:
-            case SdrTextAniKind::Scroll:
-            case SdrTextAniKind::Alternate:
-            case SdrTextAniKind::Slide:
+            else
             {
-                m_xFlProperties->set_sensitive(true);
-                if( eAniKind == SdrTextAniKind::Slide )
-                {
-                    m_xTsbStartInside->set_sensitive(false);
-                    m_xTsbStopInside->set_sensitive(false);
-                    m_xTsbEndless->set_sensitive(false);
-                    m_xNumFldCount->set_sensitive(true);
-                    m_xNumFldCount->set_value(m_xNumFldCount->get_value());
-                }
-                else
-                {
-                    m_xTsbStartInside->set_sensitive(true);
-                    m_xTsbStopInside->set_sensitive(true);
-                    m_xTsbEndless->set_sensitive(true);
-                    ClickEndlessHdl_Impl(*m_xTsbEndless);
-                }
-
-                m_xTsbAuto->set_sensitive(true);
-                ClickAutoHdl_Impl(*m_xTsbAuto);
-
-                if( eAniKind == SdrTextAniKind::Blink )
-                {
-                    m_xBoxDirection->set_sensitive(false);
-                    m_xBoxCount->set_sensitive(false);
-                }
-                else
-                {
-                    m_xBoxDirection->set_sensitive(true);
-                    m_xBoxCount->set_sensitive(true);
-                }
+                m_xBoxDirection->set_sensitive(true);
+                m_xBoxCount->set_sensitive(true);
             }
-            break;
         }
-
+        break;
     }
 }
 
 IMPL_LINK_NOARG(SvxTextAnimationPage, ClickEndlessHdl_Impl, weld::Button&, void)
 {
-    if( eAniKind != SdrTextAniKind::Slide )
+    if( eAniKind == SdrTextAniKind::Slide )
+        return;
+
+    TriState eState = m_xTsbEndless->get_state();
+    if( eState != TRISTATE_FALSE )
     {
-        TriState eState = m_xTsbEndless->get_state();
-        if( eState != TRISTATE_FALSE )
-        {
-            m_xNumFldCount->set_sensitive(false);
-            m_xNumFldCount->set_text("");
-        }
-        else
-        {
-            m_xNumFldCount->set_sensitive(true);
-            m_xNumFldCount->set_value(m_xNumFldCount->get_value());
-        }
+        m_xNumFldCount->set_sensitive(false);
+        m_xNumFldCount->set_text("");
+    }
+    else
+    {
+        m_xNumFldCount->set_sensitive(true);
+        m_xNumFldCount->set_value(m_xNumFldCount->get_value());
     }
 }
 

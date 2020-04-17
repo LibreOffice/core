@@ -172,31 +172,31 @@ SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(weld::Container* pPage, weld::D
     m_xExamplesVS->SetDoubleClickHdl(LINK(this, SvxSingleNumPickTabPage, DoubleClickHdl_Impl));
 
     Reference<XDefaultNumberingProvider> xDefNum = SvxNumOptionsTabPageHelper::GetNumberingProvider();
-    if(xDefNum.is())
+    if(!xDefNum.is())
+        return;
+
+    Sequence< Sequence< PropertyValue > > aNumberings;
+    const Locale& rLocale = Application::GetSettings().GetLanguageTag().getLocale();
+    try
     {
-        Sequence< Sequence< PropertyValue > > aNumberings;
-        const Locale& rLocale = Application::GetSettings().GetLanguageTag().getLocale();
-        try
+        aNumberings =
+            xDefNum->getDefaultContinuousNumberingLevels( rLocale );
+
+
+        sal_Int32 nLength = std::min<sal_Int32>(aNumberings.getLength(), NUM_VALUSET_COUNT);
+
+        const Sequence<PropertyValue>* pValuesArr = aNumberings.getConstArray();
+        for(sal_Int32 i = 0; i < nLength; i++)
         {
-            aNumberings =
-                xDefNum->getDefaultContinuousNumberingLevels( rLocale );
-
-
-            sal_Int32 nLength = std::min<sal_Int32>(aNumberings.getLength(), NUM_VALUSET_COUNT);
-
-            const Sequence<PropertyValue>* pValuesArr = aNumberings.getConstArray();
-            for(sal_Int32 i = 0; i < nLength; i++)
-            {
-                SvxNumSettings_Impl* pNew = lcl_CreateNumSettingsPtr(pValuesArr[i]);
-                aNumSettingsArr.push_back(std::unique_ptr<SvxNumSettings_Impl>(pNew));
-            }
+            SvxNumSettings_Impl* pNew = lcl_CreateNumSettingsPtr(pValuesArr[i]);
+            aNumSettingsArr.push_back(std::unique_ptr<SvxNumSettings_Impl>(pNew));
         }
-        catch(const Exception&)
-        {
-        }
-        Reference<XNumberingFormatter> xFormat(xDefNum, UNO_QUERY);
-        m_xExamplesVS->SetNumberingSettings(aNumberings, xFormat, rLocale);
     }
+    catch(const Exception&)
+    {
+    }
+    Reference<XNumberingFormatter> xFormat(xDefNum, UNO_QUERY);
+    m_xExamplesVS->SetNumberingSettings(aNumberings, xFormat, rLocale);
 }
 
 SvxSingleNumPickTabPage::~SvxSingleNumPickTabPage()
@@ -292,40 +292,40 @@ void  SvxSingleNumPickTabPage::Reset( const SfxItemSet* rSet )
 
 IMPL_LINK_NOARG(SvxSingleNumPickTabPage, NumSelectHdl_Impl, SvtValueSet*, void)
 {
-    if(pActNum)
-    {
-        bPreset = false;
-        bModified = true;
-        sal_uInt16 nIdx = m_xExamplesVS->GetSelectedItemId() - 1;
-        DBG_ASSERT(aNumSettingsArr.size() > nIdx, "wrong index");
-        if(aNumSettingsArr.size() <= nIdx)
-            return;
-        SvxNumSettings_Impl* _pSet = aNumSettingsArr[nIdx].get();
-        SvxNumType eNewType = _pSet->nNumberType;
-        const sal_Unicode cLocalPrefix = !_pSet->sPrefix.isEmpty() ? _pSet->sPrefix[0] : 0;
-        const sal_Unicode cLocalSuffix = !_pSet->sSuffix.isEmpty() ? _pSet->sSuffix[0] : 0;
+    if(!pActNum)
+        return;
 
-        sal_uInt16 nMask = 1;
-        for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
+    bPreset = false;
+    bModified = true;
+    sal_uInt16 nIdx = m_xExamplesVS->GetSelectedItemId() - 1;
+    DBG_ASSERT(aNumSettingsArr.size() > nIdx, "wrong index");
+    if(aNumSettingsArr.size() <= nIdx)
+        return;
+    SvxNumSettings_Impl* _pSet = aNumSettingsArr[nIdx].get();
+    SvxNumType eNewType = _pSet->nNumberType;
+    const sal_Unicode cLocalPrefix = !_pSet->sPrefix.isEmpty() ? _pSet->sPrefix[0] : 0;
+    const sal_Unicode cLocalSuffix = !_pSet->sSuffix.isEmpty() ? _pSet->sSuffix[0] : 0;
+
+    sal_uInt16 nMask = 1;
+    for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
+    {
+        if(nActNumLvl & nMask)
         {
-            if(nActNumLvl & nMask)
-            {
-                SvxNumberFormat aFmt(pActNum->GetLevel(i));
-                aFmt.SetNumberingType(eNewType);
-                if(cLocalPrefix == ' ')
-                    aFmt.SetPrefix( "" );
-                else
-                    aFmt.SetPrefix(_pSet->sPrefix);
-                if(cLocalSuffix == ' ')
-                    aFmt.SetSuffix( "" );
-                else
-                    aFmt.SetSuffix(_pSet->sSuffix);
-                aFmt.SetCharFormatName("");
-                aFmt.SetBulletRelSize(100);
-                pActNum->SetLevel(i, aFmt);
-            }
-            nMask <<= 1;
+            SvxNumberFormat aFmt(pActNum->GetLevel(i));
+            aFmt.SetNumberingType(eNewType);
+            if(cLocalPrefix == ' ')
+                aFmt.SetPrefix( "" );
+            else
+                aFmt.SetPrefix(_pSet->sPrefix);
+            if(cLocalSuffix == ' ')
+                aFmt.SetSuffix( "" );
+            else
+                aFmt.SetSuffix(_pSet->sSuffix);
+            aFmt.SetCharFormatName("");
+            aFmt.SetBulletRelSize(100);
+            pActNum->SetLevel(i, aFmt);
         }
+        nMask <<= 1;
     }
 }
 
@@ -442,31 +442,31 @@ void  SvxBulletPickTabPage::Reset( const SfxItemSet* rSet )
 
 IMPL_LINK_NOARG(SvxBulletPickTabPage, NumSelectHdl_Impl, SvtValueSet*, void)
 {
-    if(pActNum)
-    {
-        bPreset = false;
-        bModified = true;
-        sal_Unicode cChar = aBulletTypes[m_xExamplesVS->GetSelectedItemId() - 1];
-        const vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
+    if(!pActNum)
+        return;
 
-        sal_uInt16 nMask = 1;
-        for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
+    bPreset = false;
+    bModified = true;
+    sal_Unicode cChar = aBulletTypes[m_xExamplesVS->GetSelectedItemId() - 1];
+    const vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
+
+    sal_uInt16 nMask = 1;
+    for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
+    {
+        if(nActNumLvl & nMask)
         {
-            if(nActNumLvl & nMask)
-            {
-                SvxNumberFormat aFmt(pActNum->GetLevel(i));
-                aFmt.SetNumberingType( SVX_NUM_CHAR_SPECIAL );
-                // #i93908# clear suffix for bullet lists
-                aFmt.SetPrefix( OUString() );
-                aFmt.SetSuffix( OUString() );
-                aFmt.SetBulletFont(&rActBulletFont);
-                aFmt.SetBulletChar(cChar );
-                aFmt.SetCharFormatName(sBulletCharFormatName);
-                aFmt.SetBulletRelSize(45);
-                pActNum->SetLevel(i, aFmt);
-            }
-            nMask <<= 1;
+            SvxNumberFormat aFmt(pActNum->GetLevel(i));
+            aFmt.SetNumberingType( SVX_NUM_CHAR_SPECIAL );
+            // #i93908# clear suffix for bullet lists
+            aFmt.SetPrefix( OUString() );
+            aFmt.SetSuffix( OUString() );
+            aFmt.SetBulletFont(&rActBulletFont);
+            aFmt.SetBulletChar(cChar );
+            aFmt.SetCharFormatName(sBulletCharFormatName);
+            aFmt.SetBulletRelSize(45);
+            pActNum->SetLevel(i, aFmt);
         }
+        nMask <<= 1;
     }
 }
 
@@ -501,37 +501,37 @@ SvxNumPickTabPage::SvxNumPickTabPage(weld::Container* pPage, weld::DialogControl
     m_xExamplesVS->SetDoubleClickHdl(LINK(this, SvxNumPickTabPage, DoubleClickHdl_Impl));
 
     Reference<XDefaultNumberingProvider> xDefNum = SvxNumOptionsTabPageHelper::GetNumberingProvider();
-    if(xDefNum.is())
+    if(!xDefNum.is())
+        return;
+
+    Sequence<Reference<XIndexAccess> > aOutlineAccess;
+    const Locale& rLocale = Application::GetSettings().GetLanguageTag().getLocale();
+    try
     {
-        Sequence<Reference<XIndexAccess> > aOutlineAccess;
-        const Locale& rLocale = Application::GetSettings().GetLanguageTag().getLocale();
-        try
+        aOutlineAccess = xDefNum->getDefaultOutlineNumberings( rLocale );
+
+        for(sal_Int32 nItem = 0;
+            nItem < aOutlineAccess.getLength() && nItem < NUM_VALUSET_COUNT;
+            nItem++ )
         {
-            aOutlineAccess = xDefNum->getDefaultOutlineNumberings( rLocale );
+            SvxNumSettingsArr_Impl& rItemArr = aNumSettingsArrays[ nItem ];
 
-            for(sal_Int32 nItem = 0;
-                nItem < aOutlineAccess.getLength() && nItem < NUM_VALUSET_COUNT;
-                nItem++ )
+            Reference<XIndexAccess> xLevel = aOutlineAccess.getConstArray()[nItem];
+            for(sal_Int32 nLevel = 0; nLevel < xLevel->getCount() && nLevel < 5; nLevel++)
             {
-                SvxNumSettingsArr_Impl& rItemArr = aNumSettingsArrays[ nItem ];
-
-                Reference<XIndexAccess> xLevel = aOutlineAccess.getConstArray()[nItem];
-                for(sal_Int32 nLevel = 0; nLevel < xLevel->getCount() && nLevel < 5; nLevel++)
-                {
-                    Any aValueAny = xLevel->getByIndex(nLevel);
-                    Sequence<PropertyValue> aLevelProps;
-                    aValueAny >>= aLevelProps;
-                    SvxNumSettings_Impl* pNew = lcl_CreateNumSettingsPtr(aLevelProps);
-                    rItemArr.push_back( std::unique_ptr<SvxNumSettings_Impl>(pNew) );
-                }
+                Any aValueAny = xLevel->getByIndex(nLevel);
+                Sequence<PropertyValue> aLevelProps;
+                aValueAny >>= aLevelProps;
+                SvxNumSettings_Impl* pNew = lcl_CreateNumSettingsPtr(aLevelProps);
+                rItemArr.push_back( std::unique_ptr<SvxNumSettings_Impl>(pNew) );
             }
         }
-        catch(const Exception&)
-        {
-        }
-        Reference<XNumberingFormatter> xFormat(xDefNum, UNO_QUERY);
-        m_xExamplesVS->SetOutlineNumberingSettings(aOutlineAccess, xFormat, rLocale);
     }
+    catch(const Exception&)
+    {
+    }
+    Reference<XNumberingFormatter> xFormat(xDefNum, UNO_QUERY);
+    m_xExamplesVS->SetOutlineNumberingSettings(aOutlineAccess, xFormat, rLocale);
 }
 
 SvxNumPickTabPage::~SvxNumPickTabPage()
@@ -627,83 +627,83 @@ void  SvxNumPickTabPage::Reset( const SfxItemSet* rSet )
 // all levels are changed here
 IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl, SvtValueSet*, void)
 {
-    if(pActNum)
+    if(!pActNum)
+        return;
+
+    bPreset = false;
+    bModified = true;
+
+    const FontList*  pList = nullptr;
+
+    SvxNumSettingsArr_Impl& rItemArr = aNumSettingsArrays[m_xExamplesVS->GetSelectedItemId() - 1];
+
+    const vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
+    SvxNumSettings_Impl* pLevelSettings = nullptr;
+    for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
     {
-        bPreset = false;
-        bModified = true;
-
-        const FontList*  pList = nullptr;
-
-        SvxNumSettingsArr_Impl& rItemArr = aNumSettingsArrays[m_xExamplesVS->GetSelectedItemId() - 1];
-
-        const vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
-        SvxNumSettings_Impl* pLevelSettings = nullptr;
-        for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
+        if(rItemArr.size() > i)
+            pLevelSettings = rItemArr[i].get();
+        if(!pLevelSettings)
+            break;
+        SvxNumberFormat aFmt(pActNum->GetLevel(i));
+        aFmt.SetNumberingType( pLevelSettings->nNumberType );
+        sal_uInt16 nUpperLevelOrChar = static_cast<sal_uInt16>(pLevelSettings->nParentNumbering);
+        if(aFmt.GetNumberingType() == SVX_NUM_CHAR_SPECIAL)
         {
-            if(rItemArr.size() > i)
-                pLevelSettings = rItemArr[i].get();
-            if(!pLevelSettings)
-                break;
-            SvxNumberFormat aFmt(pActNum->GetLevel(i));
-            aFmt.SetNumberingType( pLevelSettings->nNumberType );
-            sal_uInt16 nUpperLevelOrChar = static_cast<sal_uInt16>(pLevelSettings->nParentNumbering);
-            if(aFmt.GetNumberingType() == SVX_NUM_CHAR_SPECIAL)
+            // #i93908# clear suffix for bullet lists
+            aFmt.SetPrefix(OUString());
+            aFmt.SetSuffix(OUString());
+            if( !pLevelSettings->sBulletFont.isEmpty() &&
+                pLevelSettings->sBulletFont != rActBulletFont.GetFamilyName())
             {
-                // #i93908# clear suffix for bullet lists
-                aFmt.SetPrefix(OUString());
-                aFmt.SetSuffix(OUString());
-                if( !pLevelSettings->sBulletFont.isEmpty() &&
-                    pLevelSettings->sBulletFont != rActBulletFont.GetFamilyName())
+                //search for the font
+                if(!pList)
                 {
-                    //search for the font
-                    if(!pList)
-                    {
-                        SfxObjectShell* pCurDocShell = SfxObjectShell::Current();
-                        const SvxFontListItem* pFontListItem =
-                                static_cast<const SvxFontListItem*>( pCurDocShell
-                                                    ->GetItem( SID_ATTR_CHAR_FONTLIST ));
-                        pList = pFontListItem ? pFontListItem->GetFontList() : nullptr;
-                    }
-                    if(pList && pList->IsAvailable( pLevelSettings->sBulletFont ) )
-                    {
-                        FontMetric aFontMetric = pList->Get(
-                            pLevelSettings->sBulletFont,WEIGHT_NORMAL, ITALIC_NONE);
-                        vcl::Font aFont(aFontMetric);
-                        aFmt.SetBulletFont(&aFont);
-                    }
-                    else
-                    {
-                        //if it cannot be found then create a new one
-                        vcl::Font aCreateFont( pLevelSettings->sBulletFont,
-                                                OUString(), Size( 0, 14 ) );
-                        aCreateFont.SetCharSet( RTL_TEXTENCODING_DONTKNOW );
-                        aCreateFont.SetFamily( FAMILY_DONTKNOW );
-                        aCreateFont.SetPitch( PITCH_DONTKNOW );
-                        aCreateFont.SetWeight( WEIGHT_DONTKNOW );
-                        aCreateFont.SetTransparent( true );
-                        aFmt.SetBulletFont( &aCreateFont );
-                    }
+                    SfxObjectShell* pCurDocShell = SfxObjectShell::Current();
+                    const SvxFontListItem* pFontListItem =
+                            static_cast<const SvxFontListItem*>( pCurDocShell
+                                                ->GetItem( SID_ATTR_CHAR_FONTLIST ));
+                    pList = pFontListItem ? pFontListItem->GetFontList() : nullptr;
+                }
+                if(pList && pList->IsAvailable( pLevelSettings->sBulletFont ) )
+                {
+                    FontMetric aFontMetric = pList->Get(
+                        pLevelSettings->sBulletFont,WEIGHT_NORMAL, ITALIC_NONE);
+                    vcl::Font aFont(aFontMetric);
+                    aFmt.SetBulletFont(&aFont);
                 }
                 else
-                    aFmt.SetBulletFont( &rActBulletFont );
-
-                aFmt.SetBulletChar( !pLevelSettings->sBulletChar.isEmpty()
-                                        ? pLevelSettings->sBulletChar[0]
-                                        : 0 );
-                aFmt.SetCharFormatName( sBulletCharFormatName );
-                aFmt.SetBulletRelSize(45);
+                {
+                    //if it cannot be found then create a new one
+                    vcl::Font aCreateFont( pLevelSettings->sBulletFont,
+                                            OUString(), Size( 0, 14 ) );
+                    aCreateFont.SetCharSet( RTL_TEXTENCODING_DONTKNOW );
+                    aCreateFont.SetFamily( FAMILY_DONTKNOW );
+                    aCreateFont.SetPitch( PITCH_DONTKNOW );
+                    aCreateFont.SetWeight( WEIGHT_DONTKNOW );
+                    aCreateFont.SetTransparent( true );
+                    aFmt.SetBulletFont( &aCreateFont );
+                }
             }
             else
-            {
-                aFmt.SetIncludeUpperLevels(sal::static_int_cast< sal_uInt8 >(0 != nUpperLevelOrChar ? pActNum->GetLevelCount() : 0));
-                aFmt.SetCharFormatName(sNumCharFmtName);
-                aFmt.SetBulletRelSize(100);
-                // #i93908#
-                aFmt.SetPrefix(pLevelSettings->sPrefix);
-                aFmt.SetSuffix(pLevelSettings->sSuffix);
-            }
-            pActNum->SetLevel(i, aFmt);
+                aFmt.SetBulletFont( &rActBulletFont );
+
+            aFmt.SetBulletChar( !pLevelSettings->sBulletChar.isEmpty()
+                                    ? pLevelSettings->sBulletChar[0]
+                                    : 0 );
+            aFmt.SetCharFormatName( sBulletCharFormatName );
+            aFmt.SetBulletRelSize(45);
         }
+        else
+        {
+            aFmt.SetIncludeUpperLevels(sal::static_int_cast< sal_uInt8 >(0 != nUpperLevelOrChar ? pActNum->GetLevelCount() : 0));
+            aFmt.SetCharFormatName(sNumCharFmtName);
+            aFmt.SetBulletRelSize(100);
+            // #i93908#
+            aFmt.SetPrefix(pLevelSettings->sPrefix);
+            aFmt.SetSuffix(pLevelSettings->sSuffix);
+        }
+        pActNum->SetLevel(i, aFmt);
     }
 }
 
@@ -869,38 +869,38 @@ void  SvxBitmapPickTabPage::Reset( const SfxItemSet* rSet )
 
 IMPL_LINK_NOARG(SvxBitmapPickTabPage, NumSelectHdl_Impl, SvtValueSet*, void)
 {
-    if(pActNum)
+    if(!pActNum)
+        return;
+
+    bPreset = false;
+    bModified = true;
+    sal_uInt16 nIdx = m_xExamplesVS->GetSelectedItemId() - 1;
+
+    sal_uInt16 nMask = 1;
+    for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
     {
-        bPreset = false;
-        bModified = true;
-        sal_uInt16 nIdx = m_xExamplesVS->GetSelectedItemId() - 1;
-
-        sal_uInt16 nMask = 1;
-        for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
+        if(nActNumLvl & nMask)
         {
-            if(nActNumLvl & nMask)
-            {
-                SvxNumberFormat aFmt(pActNum->GetLevel(i));
-                aFmt.SetNumberingType(SVX_NUM_BITMAP);
-                aFmt.SetPrefix( "" );
-                aFmt.SetSuffix( "" );
-                aFmt.SetCharFormatName( "" );
+            SvxNumberFormat aFmt(pActNum->GetLevel(i));
+            aFmt.SetNumberingType(SVX_NUM_BITMAP);
+            aFmt.SetPrefix( "" );
+            aFmt.SetSuffix( "" );
+            aFmt.SetCharFormatName( "" );
 
-                Graphic aGraphic;
-                if(GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, nIdx, &aGraphic))
-                {
-                    Size aSize = SvxNumberFormat::GetGraphicSizeMM100(&aGraphic);
-                    sal_Int16 eOrient = text::VertOrientation::LINE_CENTER;
-                    aSize = OutputDevice::LogicToLogic(aSize, MapMode(MapUnit::Map100thMM), MapMode(eCoreUnit));
-                    SvxBrushItem aBrush(aGraphic, GPOS_AREA, SID_ATTR_BRUSH );
-                    aFmt.SetGraphicBrush( &aBrush, &aSize, &eOrient );
-                }
-                else if(aGrfNames.size() > nIdx)
-                    aFmt.SetGraphic( aGrfNames[nIdx] );
-                pActNum->SetLevel(i, aFmt);
+            Graphic aGraphic;
+            if(GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, nIdx, &aGraphic))
+            {
+                Size aSize = SvxNumberFormat::GetGraphicSizeMM100(&aGraphic);
+                sal_Int16 eOrient = text::VertOrientation::LINE_CENTER;
+                aSize = OutputDevice::LogicToLogic(aSize, MapMode(MapUnit::Map100thMM), MapMode(eCoreUnit));
+                SvxBrushItem aBrush(aGraphic, GPOS_AREA, SID_ATTR_BRUSH );
+                aFmt.SetGraphicBrush( &aBrush, &aSize, &eOrient );
             }
-            nMask <<= 1;
+            else if(aGrfNames.size() > nIdx)
+                aFmt.SetGraphic( aGrfNames[nIdx] );
+            pActNum->SetLevel(i, aFmt);
         }
+        nMask <<= 1;
     }
 }
 
@@ -935,76 +935,74 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, weld::Button&, voi
     DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
 
     GraphicDescriptor aDescriptor(aURL);
-    if (aDescriptor.Detect())
+    if (!aDescriptor.Detect())
+        return;
+
+    uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+    uno::Reference<ucb::XSimpleFileAccess3> xSimpleFileAccess(
+                 ucb::SimpleFileAccess::create( ::comphelper::getComponentContext(xFactory) ) );
+    if ( !xSimpleFileAccess->exists( aUserImageURL ))
+        return;
+
+    xSimpleFileAccess->copy( aUserImageURL, aUserGalleryURL );
+    INetURLObject gURL( aUserGalleryURL );
+    std::unique_ptr<SvStream> pIn(::utl::UcbStreamHelper::CreateStream(
+                  gURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ ));
+    if ( !pIn )
+        return;
+
+    Graphic aGraphic;
+    GraphicConverter::Import( *pIn, aGraphic );
+
+    BitmapEx aBitmap = aGraphic.GetBitmapEx();
+    long nPixelX = aBitmap.GetSizePixel().Width();
+    long nPixelY = aBitmap.GetSizePixel().Height();
+    double ratio = nPixelY/static_cast<double>(nPixelX);
+    if(nPixelX > 30)
     {
-        uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-        uno::Reference<ucb::XSimpleFileAccess3> xSimpleFileAccess(
-                     ucb::SimpleFileAccess::create( ::comphelper::getComponentContext(xFactory) ) );
-        if ( xSimpleFileAccess->exists( aUserImageURL ))
-        {
-            xSimpleFileAccess->copy( aUserImageURL, aUserGalleryURL );
-            INetURLObject gURL( aUserGalleryURL );
-            std::unique_ptr<SvStream> pIn(::utl::UcbStreamHelper::CreateStream(
-                          gURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ ));
-            if ( pIn )
-            {
-                Graphic aGraphic;
-                GraphicConverter::Import( *pIn, aGraphic );
+        nPixelX = 30;
+        nPixelY = static_cast<long>(nPixelX*ratio);
+    }
+    if(nPixelY > 30)
+    {
+        nPixelY = 30;
+        nPixelX = static_cast<long>(nPixelY/ratio);
+    }
 
-                BitmapEx aBitmap = aGraphic.GetBitmapEx();
-                long nPixelX = aBitmap.GetSizePixel().Width();
-                long nPixelY = aBitmap.GetSizePixel().Height();
-                double ratio = nPixelY/static_cast<double>(nPixelX);
-                if(nPixelX > 30)
-                {
-                    nPixelX = 30;
-                    nPixelY = static_cast<long>(nPixelX*ratio);
-                }
-                if(nPixelY > 30)
-                {
-                    nPixelY = 30;
-                    nPixelX = static_cast<long>(nPixelY/ratio);
-                }
+    aBitmap.Scale( Size( nPixelX, nPixelY ), BmpScaleFlag::Fast );
+    Graphic aScaledGraphic( aBitmap );
+    GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
 
-                aBitmap.Scale( Size( nPixelX, nPixelY ), BmpScaleFlag::Fast );
-                Graphic aScaledGraphic( aBitmap );
-                GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+    Sequence< PropertyValue > aFilterData( 2 );
+    aFilterData[ 0 ].Name = "Compression";
+    aFilterData[ 0 ].Value <<= sal_Int32(-1) ;
+    aFilterData[ 1 ].Name = "Quality";
+    aFilterData[ 1 ].Value <<= sal_Int32(1);
 
-                Sequence< PropertyValue > aFilterData( 2 );
-                aFilterData[ 0 ].Name = "Compression";
-                aFilterData[ 0 ].Value <<= sal_Int32(-1) ;
-                aFilterData[ 1 ].Name = "Quality";
-                aFilterData[ 1 ].Value <<= sal_Int32(1);
+    sal_uInt16 nFilterFormat = rFilter.GetExportFormatNumberForShortName( gURL.GetFileExtension() );
+    rFilter.ExportGraphic( aScaledGraphic, gURL , nFilterFormat, &aFilterData );
+    GalleryExplorer::InsertURL( GALLERY_THEME_BULLETS, aUserGalleryURL );
 
-                sal_uInt16 nFilterFormat = rFilter.GetExportFormatNumberForShortName( gURL.GetFileExtension() );
-                rFilter.ExportGraphic( aScaledGraphic, gURL , nFilterFormat, &aFilterData );
-                GalleryExplorer::InsertURL( GALLERY_THEME_BULLETS, aUserGalleryURL );
+    aGrfNames.push_back(aUserGalleryURL);
+    size_t i = 0;
+    for (auto & grfName : aGrfNames)
+    {
+        m_xExamplesVS->InsertItem( i + 1, i);
+        INetURLObject aObj(grfName);
+        if(aObj.GetProtocol() == INetProtocol::File)
+            grfName = aObj.PathToFileName();
+        m_xExamplesVS->SetItemText( i + 1, grfName );
+        ++i;
+    }
 
-                aGrfNames.push_back(aUserGalleryURL);
-                size_t i = 0;
-                for (auto & grfName : aGrfNames)
-                {
-                    m_xExamplesVS->InsertItem( i + 1, i);
-                    INetURLObject aObj(grfName);
-                    if(aObj.GetProtocol() == INetProtocol::File)
-                        grfName = aObj.PathToFileName();
-                    m_xExamplesVS->SetItemText( i + 1, grfName );
-                    ++i;
-                }
-
-                if(aGrfNames.empty())
-                {
-                    m_xErrorText->show();
-                }
-                else
-                {
-                    m_xExamplesVS->Show();
-                    m_xExamplesVS->SetFormat();
-                }
-
-            }
-        }
-
+    if(aGrfNames.empty())
+    {
+        m_xErrorText->show();
+    }
+    else
+    {
+        m_xExamplesVS->Show();
+        m_xExamplesVS->SetFormat();
     }
 }
 
@@ -1151,27 +1149,26 @@ void    SvxNumOptionsTabPage::ActivatePage(const SfxItemSet& rSet)
     }
 
     bModified = (!pActNum->Get( 0 ) || bPreset);
-    if(*pActNum != *pSaveNum ||
-        nActNumLvl != nTmpNumLvl)
-    {
-        nActNumLvl = nTmpNumLvl;
-        sal_uInt16 nMask = 1;
-        m_xLevelLB->unselect_all();
-        if (nActNumLvl == SAL_MAX_UINT16)
-            m_xLevelLB->select(pActNum->GetLevelCount());
-        if(nActNumLvl != SAL_MAX_UINT16)
-        {
-            for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
-            {
-                if(nActNumLvl & nMask)
-                    m_xLevelLB->select(i);
-                nMask <<= 1 ;
-            }
-        }
-        *pActNum = *pSaveNum;
+    if(*pActNum == *pSaveNum && nActNumLvl == nTmpNumLvl)
+        return;
 
-        InitControls();
+    nActNumLvl = nTmpNumLvl;
+    sal_uInt16 nMask = 1;
+    m_xLevelLB->unselect_all();
+    if (nActNumLvl == SAL_MAX_UINT16)
+        m_xLevelLB->select(pActNum->GetLevelCount());
+    if(nActNumLvl != SAL_MAX_UINT16)
+    {
+        for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
+        {
+            if(nActNumLvl & nMask)
+                m_xLevelLB->select(i);
+            nMask <<= 1 ;
+        }
     }
+    *pActNum = *pSaveNum;
+
+    InitControls();
 }
 
 DeactivateRC SvxNumOptionsTabPage::DeactivatePage(SfxItemSet * _pSet)
@@ -1835,93 +1832,93 @@ IMPL_LINK(SvxNumOptionsTabPage, GraphicHdl_Impl, const OString&, rIdent, void)
             }
         }
     }
-    if(bSucc)
+    if(!bSucc)
+        return;
+
+    aSize = OutputDevice::LogicToLogic(aSize, MapMode(MapUnit::Map100thMM), MapMode(eCoreUnit));
+
+    sal_uInt16 nMask = 1;
+    for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
     {
-        aSize = OutputDevice::LogicToLogic(aSize, MapMode(MapUnit::Map100thMM), MapMode(eCoreUnit));
-
-        sal_uInt16 nMask = 1;
-        for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
+        if(nActNumLvl & nMask)
         {
-            if(nActNumLvl & nMask)
-            {
-                SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
-                aNumFmt.SetCharFormatName(m_sNumCharFmtName);
-                aNumFmt.SetGraphic(aGrfName);
+            SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
+            aNumFmt.SetCharFormatName(m_sNumCharFmtName);
+            aNumFmt.SetGraphic(aGrfName);
 
-                // set size for a later comparison
-                const SvxBrushItem* pBrushItem = aNumFmt.GetBrush();
-                // initiate asynchronous loading
-                sal_Int16 eOrient = aNumFmt.GetVertOrient();
-                aNumFmt.SetGraphicBrush( pBrushItem, &aSize, &eOrient );
-                aInitSize[i] = aNumFmt.GetGraphicSize();
+            // set size for a later comparison
+            const SvxBrushItem* pBrushItem = aNumFmt.GetBrush();
+            // initiate asynchronous loading
+            sal_Int16 eOrient = aNumFmt.GetVertOrient();
+            aNumFmt.SetGraphicBrush( pBrushItem, &aSize, &eOrient );
+            aInitSize[i] = aNumFmt.GetGraphicSize();
 
-                pActNum->SetLevel(i, aNumFmt);
-            }
-            nMask <<= 1;
+            pActNum->SetLevel(i, aNumFmt);
         }
-        m_xRatioCB->set_sensitive(true);
-        m_xWidthFT->set_sensitive(true);
-        m_xHeightFT->set_sensitive(true);
-        m_xWidthMF->set_sensitive(true);
-        m_xHeightMF->set_sensitive(true);
-        SetMetricValue(*m_xWidthMF, aSize.Width(), eCoreUnit);
-        SetMetricValue(*m_xHeightMF, aSize.Height(), eCoreUnit);
-        m_xOrientFT->set_sensitive(true);
-        m_xOrientLB->set_sensitive(true);
-        SetModified();
-        //needed due to asynchronous loading of graphics in the SvxBrushItem
-        aInvalidateTimer.Start();
+        nMask <<= 1;
     }
+    m_xRatioCB->set_sensitive(true);
+    m_xWidthFT->set_sensitive(true);
+    m_xHeightFT->set_sensitive(true);
+    m_xWidthMF->set_sensitive(true);
+    m_xHeightMF->set_sensitive(true);
+    SetMetricValue(*m_xWidthMF, aSize.Width(), eCoreUnit);
+    SetMetricValue(*m_xHeightMF, aSize.Height(), eCoreUnit);
+    m_xOrientFT->set_sensitive(true);
+    m_xOrientLB->set_sensitive(true);
+    SetModified();
+    //needed due to asynchronous loading of graphics in the SvxBrushItem
+    aInvalidateTimer.Start();
 }
 
 IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl, weld::ToggleButton&, void)
 {
-    if (!m_xGalleryMenu)
+    if (m_xGalleryMenu)
+        return;
+
+    m_xGalleryMenu = m_xBuilder->weld_menu("gallerysubmenu");
+    weld::WaitObject aWait(GetFrameWeld());
+
+    if (!GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, aGrfNames))
+        return;
+
+    GalleryExplorer::BeginLocking(GALLERY_THEME_BULLETS);
+
+    Graphic aGraphic;
+    OUString sGrfName;
+    ScopedVclPtrInstance< VirtualDevice > pVD;
+    size_t i = 0;
+    for (const auto & grfName : aGrfNames)
     {
-        m_xGalleryMenu = m_xBuilder->weld_menu("gallerysubmenu");
-        weld::WaitObject aWait(GetFrameWeld());
-
-        if (GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, aGrfNames))
+        sGrfName = grfName;
+        OUString sItemId = "gallery" + OUString::number(i);
+        INetURLObject aObj(sGrfName);
+        if(aObj.GetProtocol() == INetProtocol::File)
+            sGrfName = aObj.PathToFileName();
+        if(GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, i, &aGraphic))
         {
-            GalleryExplorer::BeginLocking(GALLERY_THEME_BULLETS);
-
-            Graphic aGraphic;
-            OUString sGrfName;
-            ScopedVclPtrInstance< VirtualDevice > pVD;
-            size_t i = 0;
-            for (const auto & grfName : aGrfNames)
+            BitmapEx aBitmap(aGraphic.GetBitmapEx());
+            Size aSize(aBitmap.GetSizePixel());
+            if(aSize.Width() > MAX_BMP_WIDTH ||
+                aSize.Height() > MAX_BMP_HEIGHT)
             {
-                sGrfName = grfName;
-                OUString sItemId = "gallery" + OUString::number(i);
-                INetURLObject aObj(sGrfName);
-                if(aObj.GetProtocol() == INetProtocol::File)
-                    sGrfName = aObj.PathToFileName();
-                if(GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, i, &aGraphic))
-                {
-                    BitmapEx aBitmap(aGraphic.GetBitmapEx());
-                    Size aSize(aBitmap.GetSizePixel());
-                    if(aSize.Width() > MAX_BMP_WIDTH ||
-                        aSize.Height() > MAX_BMP_HEIGHT)
-                    {
-                        bool bWidth = aSize.Width() > aSize.Height();
-                        double nScale = bWidth ?
-                                            double(MAX_BMP_WIDTH) / static_cast<double>(aSize.Width()):
-                                                double(MAX_BMP_HEIGHT) / static_cast<double>(aSize.Height());
-                        aBitmap.Scale(nScale, nScale);
-                    }
-                    pVD->SetOutputSizePixel(aBitmap.GetSizePixel(), false);
-                    pVD->DrawBitmapEx(Point(), aBitmap);
-                    m_xGalleryMenu->append(sItemId, sGrfName, *pVD);
-                }
-                else
-                {
-                    m_xGalleryMenu->append(sItemId, sGrfName);
-                }
-                ++i;
+                bool bWidth = aSize.Width() > aSize.Height();
+                double nScale = bWidth ?
+                                    double(MAX_BMP_WIDTH) / static_cast<double>(aSize.Width()):
+                                        double(MAX_BMP_HEIGHT) / static_cast<double>(aSize.Height());
+                aBitmap.Scale(nScale, nScale);
             }
-            GalleryExplorer::EndLocking(GALLERY_THEME_BULLETS);
+            pVD->SetOutputSizePixel(aBitmap.GetSizePixel(), false);
+            pVD->DrawBitmapEx(Point(), aBitmap);
+            m_xGalleryMenu->append(sItemId, sGrfName, *pVD);
         }
+        else
+        {
+            m_xGalleryMenu->append(sItemId, sGrfName);
+        }
+        ++i;
     }
+    GalleryExplorer::EndLocking(GALLERY_THEME_BULLETS);
 }
 
 IMPL_LINK_NOARG(SvxNumOptionsTabPage, BulletHdl_Impl, weld::Button&, void)
@@ -1961,26 +1958,26 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, BulletHdl_Impl, weld::Button&, void)
         aMap.SetCharFont(aActBulletFont);
     if (bSameBullet)
         aMap.SetChar(cBullet);
-    if (aMap.run() == RET_OK)
+    if (aMap.run() != RET_OK)
+        return;
+
+    // change Font Numrules
+    aActBulletFont = aMap.GetCharFont();
+
+    sal_uInt16 _nMask = 1;
+    for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
     {
-        // change Font Numrules
-        aActBulletFont = aMap.GetCharFont();
-
-        sal_uInt16 _nMask = 1;
-        for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
+        if(nActNumLvl & _nMask)
         {
-            if(nActNumLvl & _nMask)
-            {
-                SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
-                aNumFmt.SetBulletFont(&aActBulletFont);
-                aNumFmt.SetBulletChar( static_cast<sal_Unicode>(aMap.GetChar()) );
-                pActNum->SetLevel(i, aNumFmt);
-            }
-            _nMask <<= 1;
+            SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
+            aNumFmt.SetBulletFont(&aActBulletFont);
+            aNumFmt.SetBulletChar( static_cast<sal_Unicode>(aMap.GetChar()) );
+            pActNum->SetLevel(i, aNumFmt);
         }
-
-        SetModified();
+        _nMask <<= 1;
     }
+
+    SetModified();
 }
 
 IMPL_LINK( SvxNumOptionsTabPage, SizeHdl_Impl, weld::MetricSpinButton&, rField, void)

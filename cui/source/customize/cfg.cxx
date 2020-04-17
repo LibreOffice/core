@@ -1970,22 +1970,22 @@ void ToolbarSaveInData::SetSystemStyle(
         window = VCLUnoHelper::GetWindow( xWindow ).get();
     }
 
-    if ( window != nullptr && window->GetType() == WindowType::TOOLBOX )
-    {
-        ToolBox* toolbox = static_cast<ToolBox*>(window);
+    if ( !(window != nullptr && window->GetType() == WindowType::TOOLBOX) )
+        return;
 
-        if ( nStyle == 0 )
-        {
-            toolbox->SetButtonType( ButtonType::SYMBOLONLY );
-        }
-        else if ( nStyle == 1 )
-        {
-            toolbox->SetButtonType( ButtonType::TEXT );
-        }
-        if ( nStyle == 2 )
-        {
-            toolbox->SetButtonType( ButtonType::SYMBOLTEXT );
-        }
+    ToolBox* toolbox = static_cast<ToolBox*>(window);
+
+    if ( nStyle == 0 )
+    {
+        toolbox->SetButtonType( ButtonType::SYMBOLONLY );
+    }
+    else if ( nStyle == 1 )
+    {
+        toolbox->SetButtonType( ButtonType::TEXT );
+    }
+    if ( nStyle == 2 )
+    {
+        toolbox->SetButtonType( ButtonType::SYMBOLTEXT );
     }
 }
 
@@ -1993,38 +1993,38 @@ void ToolbarSaveInData::SetSystemStyle(
     const OUString& rResourceURL,
     sal_Int32 nStyle )
 {
-    if ( rResourceURL.startsWith( "private" ) &&
+    if ( !(rResourceURL.startsWith( "private" ) &&
          m_xPersistentWindowState.is() &&
-         m_xPersistentWindowState->hasByName( rResourceURL ) )
+         m_xPersistentWindowState->hasByName( rResourceURL )) )
+        return;
+
+    try
     {
-        try
+        uno::Sequence< beans::PropertyValue > aProps;
+
+        uno::Any a( m_xPersistentWindowState->getByName( rResourceURL ) );
+
+        if ( a >>= aProps )
         {
-            uno::Sequence< beans::PropertyValue > aProps;
-
-            uno::Any a( m_xPersistentWindowState->getByName( rResourceURL ) );
-
-            if ( a >>= aProps )
+            for ( sal_Int32 i = 0; i < aProps.getLength(); ++i )
             {
-                for ( sal_Int32 i = 0; i < aProps.getLength(); ++i )
+                if ( aProps[ i ].Name == ITEM_DESCRIPTOR_STYLE )
                 {
-                    if ( aProps[ i ].Name == ITEM_DESCRIPTOR_STYLE )
-                    {
-                        aProps[ i ].Value <<= nStyle;
-                        break;
-                    }
+                    aProps[ i ].Value <<= nStyle;
+                    break;
                 }
             }
-
-            uno::Reference< container::XNameReplace >
-                xNameReplace( m_xPersistentWindowState, uno::UNO_QUERY );
-
-            xNameReplace->replaceByName( rResourceURL, uno::Any( aProps ) );
         }
-        catch ( uno::Exception& )
-        {
-            // do nothing, a default value is returned
-            SAL_WARN("cui.customize", "Exception setting toolbar style");
-        }
+
+        uno::Reference< container::XNameReplace >
+            xNameReplace( m_xPersistentWindowState, uno::UNO_QUERY );
+
+        xNameReplace->replaceByName( rResourceURL, uno::Any( aProps ) );
+    }
+    catch ( uno::Exception& )
+    {
+        // do nothing, a default value is returned
+        SAL_WARN("cui.customize", "Exception setting toolbar style");
     }
 }
 
@@ -2856,18 +2856,18 @@ IMPL_LINK_NOARG(SvxIconSelectorDialog, DeleteHdl, weld::Button&, void)
     std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(m_xDialog.get(),
                                                VclMessageType::Warning, VclButtonsType::OkCancel,
                                                message));
-    if (xWarn->run() == RET_OK)
-    {
-        sal_uInt16 nId = m_xTbSymbol->GetSelectedItemId();
+    if (xWarn->run() != RET_OK)
+        return;
 
-        OUString aSelImageText = m_xTbSymbol->GetItemText( nId );
-        uno::Sequence< OUString > URLs { aSelImageText };
-        m_xTbSymbol->RemoveItem(nId);
-        m_xImportedImageManager->removeImages( SvxConfigPageHelper::GetImageType(), URLs );
-        if ( m_xImportedImageManager->isModified() )
-        {
-            m_xImportedImageManager->store();
-        }
+    sal_uInt16 nId = m_xTbSymbol->GetSelectedItemId();
+
+    OUString aSelImageText = m_xTbSymbol->GetItemText( nId );
+    uno::Sequence< OUString > URLs { aSelImageText };
+    m_xTbSymbol->RemoveItem(nId);
+    m_xImportedImageManager->removeImages( SvxConfigPageHelper::GetImageType(), URLs );
+    if ( m_xImportedImageManager->isModified() )
+    {
+        m_xImportedImageManager->store();
     }
 }
 
@@ -3066,20 +3066,20 @@ void SvxIconSelectorDialog::ImportGraphics(
         }
     }
 
-    if ( rejectedCount != 0 )
-    {
-        OUStringBuffer message;
-        OUString fPath;
-        if (rejectedCount > 1)
-              fPath = rPaths[0].copy(8) + "/";
-        for ( sal_Int32 i = 0; i < rejectedCount; ++i )
-        {
-            message.append(fPath).append(rejected[i]).append("\n");
-        }
+    if ( rejectedCount == 0 )
+        return;
 
-        SvxIconChangeDialog aDialog(m_xDialog.get(), message.makeStringAndClear());
-        aDialog.run();
+    OUStringBuffer message;
+    OUString fPath;
+    if (rejectedCount > 1)
+          fPath = rPaths[0].copy(8) + "/";
+    for ( sal_Int32 i = 0; i < rejectedCount; ++i )
+    {
+        message.append(fPath).append(rejected[i]).append("\n");
     }
+
+    SvxIconChangeDialog aDialog(m_xDialog.get(), message.makeStringAndClear());
+    aDialog.run();
 }
 
 bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )

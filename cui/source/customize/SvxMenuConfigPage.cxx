@@ -221,33 +221,33 @@ void SvxMenuConfigPage::DeleteSelectedContent()
 {
     int nActEntry = m_xContentsListBox->get_selected_index();
 
-    if (nActEntry != -1)
+    if (nActEntry == -1)
+        return;
+
+    // get currently selected menu entry
+    SvxConfigEntry* pMenuEntry =
+        reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(nActEntry).toInt64());
+
+    // get currently selected menu
+    SvxConfigEntry* pMenu = GetTopLevelSelection();
+
+    // remove menu entry from the list for this menu
+    SvxConfigPageHelper::RemoveEntry( pMenu->GetEntries(), pMenuEntry );
+
+    // remove menu entry from UI
+    m_xContentsListBox->remove(nActEntry);
+
+    // if this is a submenu entry, redraw the menus list box
+    if ( pMenuEntry->IsPopup() )
     {
-        // get currently selected menu entry
-        SvxConfigEntry* pMenuEntry =
-            reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(nActEntry).toInt64());
-
-        // get currently selected menu
-        SvxConfigEntry* pMenu = GetTopLevelSelection();
-
-        // remove menu entry from the list for this menu
-        SvxConfigPageHelper::RemoveEntry( pMenu->GetEntries(), pMenuEntry );
-
-        // remove menu entry from UI
-        m_xContentsListBox->remove(nActEntry);
-
-        // if this is a submenu entry, redraw the menus list box
-        if ( pMenuEntry->IsPopup() )
-        {
-            ReloadTopLevelListBox();
-        }
-
-        // delete data for menu entry
-        delete pMenuEntry;
-
-        GetSaveInData()->SetModified();
-        pMenu->SetModified();
+        ReloadTopLevelListBox();
     }
+
+    // delete data for menu entry
+    delete pMenuEntry;
+
+    GetSaveInData()->SetModified();
+    pMenu->SetModified();
 }
 
 short SvxMenuConfigPage::QueryReset()
@@ -489,23 +489,23 @@ IMPL_LINK_NOARG(SvxMenuConfigPage, ResetMenuHdl, weld::Button&, void)
 
     // Resetting individual top-level menus is not possible at the moment.
     // So we are resetting only if it is a context menu
-    if (!m_bIsMenuBar && xQueryBox->run() == RET_YES)
-    {
-        sal_Int32 nPos = m_xTopLevelListBox->get_active();
-        ContextMenuSaveInData* pSaveInData = static_cast< ContextMenuSaveInData* >(GetSaveInData());
+    if (!(!m_bIsMenuBar && xQueryBox->run() == RET_YES))
+        return;
 
-        pSaveInData->ResetContextMenu(pMenuData);
+    sal_Int32 nPos = m_xTopLevelListBox->get_active();
+    ContextMenuSaveInData* pSaveInData = static_cast< ContextMenuSaveInData* >(GetSaveInData());
 
-        // ensure that the UI is cleared before populating it
-        m_xTopLevelListBox->clear();
-        m_xContentsListBox->clear();
+    pSaveInData->ResetContextMenu(pMenuData);
 
-        ReloadTopLevelListBox();
+    // ensure that the UI is cleared before populating it
+    m_xTopLevelListBox->clear();
+    m_xContentsListBox->clear();
 
-        // Reselect the reset menu
-        m_xTopLevelListBox->set_active(nPos);
-        SelectElement();
-    }
+    ReloadTopLevelListBox();
+
+    // Reselect the reset menu
+    m_xTopLevelListBox->set_active(nPos);
+    SelectElement();
 }
 
 SaveInData* SvxMenuConfigPage::CreateSaveInData(

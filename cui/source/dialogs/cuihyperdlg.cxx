@@ -61,21 +61,21 @@ void SvxHlinkCtrl::dispose()
 void SvxHlinkCtrl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                  const SfxPoolItem* pState )
 {
-    if (eState == SfxItemState::DEFAULT && pParent)
+    if (!(eState == SfxItemState::DEFAULT && pParent))
+        return;
+
+    switch ( nSID )
     {
-        switch ( nSID )
+        case SID_HYPERLINK_GETLINK :
         {
-            case SID_HYPERLINK_GETLINK :
-            {
-                pParent->SetPage( static_cast<const SvxHyperlinkItem*>(pState) );
-            }
-            break;
-            case SID_READONLY_MODE :
-            {
-                pParent->SetReadOnlyMode( static_cast<const SfxBoolItem*>(pState)->GetValue() );
-            }
-            break;
+            pParent->SetPage( static_cast<const SvxHyperlinkItem*>(pState) );
         }
+        break;
+        case SID_READONLY_MODE :
+        {
+            pParent->SetReadOnlyMode( static_cast<const SfxBoolItem*>(pState)->GetValue() );
+        }
+        break;
     }
 }
 

@@ -132,24 +132,24 @@ IMPL_LINK_NOARG(SignSignatureLineDialog, loadImage, weld::Button&, void)
     Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
     Reference<XFilePicker3> xFilePicker
         = FilePicker::createWithMode(xContext, TemplateDescription::FILEOPEN_PREVIEW);
-    if (xFilePicker->execute())
-    {
-        Sequence<OUString> aSelectedFiles = xFilePicker->getSelectedFiles();
-        if (!aSelectedFiles.hasElements())
-            return;
+    if (!xFilePicker->execute())
+        return;
 
-        Reference<XGraphicProvider> xProvider = GraphicProvider::create(xContext);
-        Sequence<PropertyValue> aMediaProperties(1);
-        aMediaProperties[0].Name = "URL";
-        aMediaProperties[0].Value <<= aSelectedFiles[0];
-        m_xSignatureImage = xProvider->queryGraphic(aMediaProperties);
-        m_sOriginalImageBtnLabel = m_xBtnLoadImage->get_label();
+    Sequence<OUString> aSelectedFiles = xFilePicker->getSelectedFiles();
+    if (!aSelectedFiles.hasElements())
+        return;
 
-        INetURLObject aObj(aSelectedFiles[0]);
-        m_xBtnLoadImage->set_label(aObj.GetLastName());
+    Reference<XGraphicProvider> xProvider = GraphicProvider::create(xContext);
+    Sequence<PropertyValue> aMediaProperties(1);
+    aMediaProperties[0].Name = "URL";
+    aMediaProperties[0].Value <<= aSelectedFiles[0];
+    m_xSignatureImage = xProvider->queryGraphic(aMediaProperties);
+    m_sOriginalImageBtnLabel = m_xBtnLoadImage->get_label();
 
-        ValidateFields();
-    }
+    INetURLObject aObj(aSelectedFiles[0]);
+    m_xBtnLoadImage->set_label(aObj.GetLastName());
+
+    ValidateFields();
 }
 
 IMPL_LINK_NOARG(SignSignatureLineDialog, clearImage, weld::Button&, void)

@@ -160,52 +160,51 @@ void SignatureLineDialog::Apply()
     xShapeProps->setPropertyValue("SignatureLineShowSignDate", Any(bShowSignDate));
     xShapeProps->setPropertyValue("SignatureLineCanAddComment", Any(bCanAddComments));
 
-    if (!bIsExistingSignatureLine)
+    if (bIsExistingSignatureLine)
+        return;
+
+    // Default size
+    Reference<XShape> xShape(xShapeProps, UNO_QUERY);
+    awt::Size aShapeSize;
+    aShapeSize.Height = 3000;
+    aShapeSize.Width = 6000;
+    xShape->setSize(aShapeSize);
+
+    // Default anchoring
+    xShapeProps->setPropertyValue("AnchorType", Any(TextContentAnchorType_AT_PARAGRAPH));
+
+    // Writer
+    const Reference<XTextDocument> xTextDocument(m_xModel, UNO_QUERY);
+    if (xTextDocument.is())
     {
-        // Default size
-        Reference<XShape> xShape(xShapeProps, UNO_QUERY);
-        awt::Size aShapeSize;
-        aShapeSize.Height = 3000;
-        aShapeSize.Width = 6000;
-        xShape->setSize(aShapeSize);
-
-        // Default anchoring
-        xShapeProps->setPropertyValue("AnchorType", Any(TextContentAnchorType_AT_PARAGRAPH));
-
-        // Writer
-        const Reference<XTextDocument> xTextDocument(m_xModel, UNO_QUERY);
-        if (xTextDocument.is())
-        {
-            Reference<XTextContent> xTextContent(xShape, UNO_QUERY_THROW);
-            Reference<XTextViewCursorSupplier> xViewCursorSupplier(m_xModel->getCurrentController(),
-                                                                   UNO_QUERY_THROW);
-            Reference<XTextViewCursor> xCursor = xViewCursorSupplier->getViewCursor();
-            // use cursor's XText - it might be in table cell, frame, ...
-            Reference<XText> const xText(xCursor->getText());
-            assert(xText.is());
-            xText->insertTextContent(xCursor, xTextContent, true);
-            return;
-        }
-
-        // Calc
-        const Reference<XSpreadsheetDocument> xSpreadsheetDocument(m_xModel, UNO_QUERY);
-        if (xSpreadsheetDocument.is())
-        {
-            Reference<XPropertySet> xSheetCell(m_xModel->getCurrentSelection(), UNO_QUERY_THROW);
-            awt::Point aCellPosition;
-            xSheetCell->getPropertyValue("Position") >>= aCellPosition;
-            xShape->setPosition(aCellPosition);
-
-            Reference<XSpreadsheetView> xView(m_xModel->getCurrentController(), UNO_QUERY_THROW);
-            Reference<XSpreadsheet> xSheet(xView->getActiveSheet(), UNO_SET_THROW);
-            Reference<XDrawPageSupplier> xDrawPageSupplier(xSheet, UNO_QUERY_THROW);
-            Reference<XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
-            Reference<XShapes> xShapes(xDrawPage, UNO_QUERY_THROW);
-
-            xShapes->add(xShape);
-            return;
-        }
+        Reference<XTextContent> xTextContent(xShape, UNO_QUERY_THROW);
+        Reference<XTextViewCursorSupplier> xViewCursorSupplier(m_xModel->getCurrentController(),
+                                                               UNO_QUERY_THROW);
+        Reference<XTextViewCursor> xCursor = xViewCursorSupplier->getViewCursor();
+        // use cursor's XText - it might be in table cell, frame, ...
+        Reference<XText> const xText(xCursor->getText());
+        assert(xText.is());
+        xText->insertTextContent(xCursor, xTextContent, true);
+        return;
     }
+
+    // Calc
+    const Reference<XSpreadsheetDocument> xSpreadsheetDocument(m_xModel, UNO_QUERY);
+    if (!xSpreadsheetDocument.is())
+        return;
+
+    Reference<XPropertySet> xSheetCell(m_xModel->getCurrentSelection(), UNO_QUERY_THROW);
+    awt::Point aCellPosition;
+    xSheetCell->getPropertyValue("Position") >>= aCellPosition;
+    xShape->setPosition(aCellPosition);
+
+    Reference<XSpreadsheetView> xView(m_xModel->getCurrentController(), UNO_QUERY_THROW);
+    Reference<XSpreadsheet> xSheet(xView->getActiveSheet(), UNO_SET_THROW);
+    Reference<XDrawPageSupplier> xDrawPageSupplier(xSheet, UNO_QUERY_THROW);
+    Reference<XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
+    Reference<XShapes> xShapes(xDrawPage, UNO_QUERY_THROW);
+
+    xShapes->add(xShape);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

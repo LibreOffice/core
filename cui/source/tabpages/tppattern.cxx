@@ -128,47 +128,47 @@ void SvxPatternTabPage::Construct()
 
 void SvxPatternTabPage::ActivatePage( const SfxItemSet& rSet )
 {
-    if( m_pColorList.is() )
+    if( !m_pColorList.is() )
+        return;
+
+    // ColorList
+    if( *m_pnColorListState & ChangeType::CHANGED ||
+        *m_pnColorListState & ChangeType::MODIFIED )
     {
-        // ColorList
-        if( *m_pnColorListState & ChangeType::CHANGED ||
-            *m_pnColorListState & ChangeType::MODIFIED )
-        {
-            SvxAreaTabDialog* pArea = (*m_pnColorListState & ChangeType::CHANGED) ?
-                dynamic_cast<SvxAreaTabDialog*>(GetDialogController()) : nullptr;
-            if (pArea)
-                m_pColorList = pArea->GetNewColorList();
-        }
-
-        // determining (possibly cutting) the name and
-        // displaying it in the GroupBox
-        OUString        aString = CuiResId( RID_SVXSTR_TABLE ) + ": ";
-        INetURLObject   aURL( m_pPatternList->GetPath() );
-
-        aURL.Append( m_pPatternList->GetName() );
-        SAL_WARN_IF( aURL.GetProtocol() == INetProtocol::NotValid, "cui.tabpages", "invalid URL" );
-
-        if( aURL.getBase().getLength() > 18 )
-        {
-            aString += aURL.getBase().copy( 0, 15 ) + "...";
-        }
-        else
-            aString += aURL.getBase();
-
-        XFillBitmapItem aItem( rSet.Get( XATTR_FILLBITMAP ) );
-
-        if ( aItem.isPattern() )
-        {
-            sal_Int32 nPos = SearchPatternList( aItem.GetName() );
-            if ( nPos != -1)
-            {
-                sal_uInt16 nId = m_xPatternLB->GetItemId( static_cast<size_t>( nPos ) );
-                m_xPatternLB->SelectItem( nId );
-            }
-        }
-        else
-            m_xPatternLB->SelectItem( m_xPatternLB->GetItemId( static_cast<size_t>( 0 ) ) );
+        SvxAreaTabDialog* pArea = (*m_pnColorListState & ChangeType::CHANGED) ?
+            dynamic_cast<SvxAreaTabDialog*>(GetDialogController()) : nullptr;
+        if (pArea)
+            m_pColorList = pArea->GetNewColorList();
     }
+
+    // determining (possibly cutting) the name and
+    // displaying it in the GroupBox
+    OUString        aString = CuiResId( RID_SVXSTR_TABLE ) + ": ";
+    INetURLObject   aURL( m_pPatternList->GetPath() );
+
+    aURL.Append( m_pPatternList->GetName() );
+    SAL_WARN_IF( aURL.GetProtocol() == INetProtocol::NotValid, "cui.tabpages", "invalid URL" );
+
+    if( aURL.getBase().getLength() > 18 )
+    {
+        aString += aURL.getBase().copy( 0, 15 ) + "...";
+    }
+    else
+        aString += aURL.getBase();
+
+    XFillBitmapItem aItem( rSet.Get( XATTR_FILLBITMAP ) );
+
+    if ( aItem.isPattern() )
+    {
+        sal_Int32 nPos = SearchPatternList( aItem.GetName() );
+        if ( nPos != -1)
+        {
+            sal_uInt16 nId = m_xPatternLB->GetItemId( static_cast<size_t>( nPos ) );
+            m_xPatternLB->SelectItem( nId );
+        }
+    }
+    else
+        m_xPatternLB->SelectItem( m_xPatternLB->GetItemId( static_cast<size_t>( 0 ) ) );
 }
 
 
@@ -272,47 +272,47 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ChangePatternHdl_Impl, SvtValueSet*, void)
         }
     }
 
-    if(pGraphicObject)
+    if(!pGraphicObject)
+        return;
+
+    Color aBackColor;
+    Color aPixelColor;
+    bool bIs8x8(vcl::bitmap::isHistorical8x8(pGraphicObject->GetGraphic().GetBitmapEx(), aBackColor, aPixelColor));
+
+    m_xLbColor->SetNoSelection();
+    m_xLbBackgroundColor->SetNoSelection();
+
+    if(bIs8x8)
     {
-        Color aBackColor;
-        Color aPixelColor;
-        bool bIs8x8(vcl::bitmap::isHistorical8x8(pGraphicObject->GetGraphic().GetBitmapEx(), aBackColor, aPixelColor));
+        m_xCtlPixel->SetPaintable( true );
+        m_xBtnModify->set_sensitive(true);
+        m_xBtnAdd->set_sensitive(true);
 
-        m_xLbColor->SetNoSelection();
-        m_xLbBackgroundColor->SetNoSelection();
+        // setting the pixel control
 
-        if(bIs8x8)
-        {
-            m_xCtlPixel->SetPaintable( true );
-            m_xBtnModify->set_sensitive(true);
-            m_xBtnAdd->set_sensitive(true);
+        m_xCtlPixel->SetXBitmap(pGraphicObject->GetGraphic().GetBitmapEx());
 
-            // setting the pixel control
+        m_xLbColor->SelectEntry( aPixelColor );
+        m_xLbBackgroundColor->SelectEntry( aBackColor );
 
-            m_xCtlPixel->SetXBitmap(pGraphicObject->GetGraphic().GetBitmapEx());
-
-            m_xLbColor->SelectEntry( aPixelColor );
-            m_xLbBackgroundColor->SelectEntry( aBackColor );
-
-            // update m_xBitmapCtl, rXFSet and m_aCtlPreview
-            m_xBitmapCtl->SetPixelColor( aPixelColor );
-            m_xBitmapCtl->SetBackgroundColor( aBackColor );
-            m_rXFSet.ClearItem();
-            m_rXFSet.Put(XFillStyleItem(drawing::FillStyle_BITMAP));
-            m_rXFSet.Put(XFillBitmapItem(OUString(), Graphic(m_xBitmapCtl->GetBitmapEx())));
-            m_aCtlPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
-            m_aCtlPreview.Invalidate();
-        }
-        else
-        {
-            m_xCtlPixel->Reset();
-            m_xCtlPixel->SetPaintable( false );
-            m_xBtnModify->set_sensitive(false);
-            m_xBtnAdd->set_sensitive(false);
-        }
-
-        m_xCtlPixel->Invalidate();
+        // update m_xBitmapCtl, rXFSet and m_aCtlPreview
+        m_xBitmapCtl->SetPixelColor( aPixelColor );
+        m_xBitmapCtl->SetBackgroundColor( aBackColor );
+        m_rXFSet.ClearItem();
+        m_rXFSet.Put(XFillStyleItem(drawing::FillStyle_BITMAP));
+        m_rXFSet.Put(XFillBitmapItem(OUString(), Graphic(m_xBitmapCtl->GetBitmapEx())));
+        m_aCtlPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
+        m_aCtlPreview.Invalidate();
     }
+    else
+    {
+        m_xCtlPixel->Reset();
+        m_xCtlPixel->SetPaintable( false );
+        m_xBtnModify->set_sensitive(false);
+        m_xBtnAdd->set_sensitive(false);
+    }
+
+    m_xCtlPixel->Invalidate();
 }
 
 IMPL_LINK_NOARG(SvxPatternTabPage, ClickAddHdl_Impl, weld::Button&, void)
@@ -405,22 +405,22 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickModifyHdl_Impl, weld::Button&, void)
     sal_uInt16 nId = m_xPatternLB->GetSelectedItemId();
     size_t nPos = m_xPatternLB->GetSelectItemPos();
 
-    if ( nPos != VALUESET_ITEM_NOTFOUND )
-    {
-        OUString aName( m_pPatternList->GetBitmap( static_cast<sal_uInt16>(nPos) )->GetName() );
+    if ( nPos == VALUESET_ITEM_NOTFOUND )
+        return;
 
-        const BitmapEx aBitmapEx(m_xBitmapCtl->GetBitmapEx());
+    OUString aName( m_pPatternList->GetBitmap( static_cast<sal_uInt16>(nPos) )->GetName() );
 
-        // #i123497# Need to replace the existing entry with a new one (old returned needs to be deleted)
-        m_pPatternList->Replace(std::make_unique<XBitmapEntry>(Graphic(aBitmapEx), aName), nPos);
+    const BitmapEx aBitmapEx(m_xBitmapCtl->GetBitmapEx());
 
-        BitmapEx aBitmap = m_pPatternList->GetBitmapForPreview( static_cast<sal_uInt16>( nPos ), m_xPatternLB->GetIconSize() );
-        m_xPatternLB->RemoveItem(nId);
-        m_xPatternLB->InsertItem( nId, Image(aBitmap), aName, static_cast<sal_uInt16>(nPos) );
-        m_xPatternLB->SelectItem( nId );
+    // #i123497# Need to replace the existing entry with a new one (old returned needs to be deleted)
+    m_pPatternList->Replace(std::make_unique<XBitmapEntry>(Graphic(aBitmapEx), aName), nPos);
 
-        *m_pnPatternListState |= ChangeType::MODIFIED;
-    }
+    BitmapEx aBitmap = m_pPatternList->GetBitmapForPreview( static_cast<sal_uInt16>( nPos ), m_xPatternLB->GetIconSize() );
+    m_xPatternLB->RemoveItem(nId);
+    m_xPatternLB->InsertItem( nId, Image(aBitmap), aName, static_cast<sal_uInt16>(nPos) );
+    m_xPatternLB->SelectItem( nId );
+
+    *m_pnPatternListState |= ChangeType::MODIFIED;
 }
 
 
@@ -429,39 +429,39 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void)
     size_t nPos = m_xPatternLB->GetSelectItemPos();
     sal_Int32 nId = m_xPatternLB->GetSelectedItemId();
 
-    if ( nPos != VALUESET_ITEM_NOTFOUND )
+    if ( nPos == VALUESET_ITEM_NOTFOUND )
+        return;
+
+    OUString aDesc(CuiResId(RID_SVXSTR_DESC_NEW_PATTERN));
+    OUString aName(m_pPatternList->GetBitmap(nPos)->GetName());
+
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
+
+    bool bLoop = true;
+
+    while( bLoop && pDlg->Execute() == RET_OK )
     {
-        OUString aDesc(CuiResId(RID_SVXSTR_DESC_NEW_PATTERN));
-        OUString aName(m_pPatternList->GetBitmap(nPos)->GetName());
+        pDlg->GetName( aName );
+        sal_Int32 nPatternPos = SearchPatternList(aName);
+        bool bValidPatternName = (nPatternPos == static_cast<sal_Int32>(nPos) ) || (nPatternPos == -1);
 
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
-
-        bool bLoop = true;
-
-        while( bLoop && pDlg->Execute() == RET_OK )
+        if( bValidPatternName )
         {
-            pDlg->GetName( aName );
-            sal_Int32 nPatternPos = SearchPatternList(aName);
-            bool bValidPatternName = (nPatternPos == static_cast<sal_Int32>(nPos) ) || (nPatternPos == -1);
+            bLoop = false;
 
-            if( bValidPatternName )
-            {
-                bLoop = false;
+            m_pPatternList->GetBitmap(nPos)->SetName(aName);
 
-                m_pPatternList->GetBitmap(nPos)->SetName(aName);
+            m_xPatternLB->SetItemText( nId, aName );
+            m_xPatternLB->SelectItem( nId );
 
-                m_xPatternLB->SetItemText( nId, aName );
-                m_xPatternLB->SelectItem( nId );
-
-                *m_pnPatternListState |= ChangeType::MODIFIED;
-            }
-            else
-            {
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
-                std::unique_ptr<weld::MessageDialog> xWarnBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
-                xWarnBox->run();
-            }
+            *m_pnPatternListState |= ChangeType::MODIFIED;
+        }
+        else
+        {
+            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
+            std::unique_ptr<weld::MessageDialog> xWarnBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
+            xWarnBox->run();
         }
     }
 }

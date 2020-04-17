@@ -159,21 +159,21 @@ IMPL_LINK_NOARG(OfaAutoCorrDlg, SelectLanguageHdl, weld::ComboBox&, void)
 {
     LanguageType eNewLang = m_xLanguageLB->get_active_id();
     // save old settings and fill anew
-    if(eNewLang != eLastDialogLanguage)
+    if(eNewLang == eLastDialogLanguage)
+        return;
+
+    OString sPageId = GetCurPageId();
+    if (sPageId == "replace")
     {
-        OString sPageId = GetCurPageId();
-        if (sPageId == "replace")
-        {
-            OfaAutocorrReplacePage* pPage = static_cast<OfaAutocorrReplacePage*>(GetTabPage(sPageId));
-            assert(pPage);
-            pPage->SetLanguage(eNewLang);
-        }
-        else if (sPageId == "exceptions")
-        {
-            OfaAutocorrExceptPage* pPage = static_cast<OfaAutocorrExceptPage*>(GetTabPage(sPageId));
-            assert(pPage);
-            pPage->SetLanguage(eNewLang);
-        }
+        OfaAutocorrReplacePage* pPage = static_cast<OfaAutocorrReplacePage*>(GetTabPage(sPageId));
+        assert(pPage);
+        pPage->SetLanguage(eNewLang);
+    }
+    else if (sPageId == "exceptions")
+    {
+        OfaAutocorrExceptPage* pPage = static_cast<OfaAutocorrExceptPage*>(GetTabPage(sPageId));
+        assert(pPage);
+        pPage->SetLanguage(eNewLang);
     }
 }
 
@@ -1791,28 +1791,28 @@ IMPL_LINK(OfaQuoteTabPage, QuoteHdl, weld::Button&, rBtn, void)
     }
     aMap.SetChar(  cDlg );
     aMap.DisableFontSelection();
-    if (aMap.run() == RET_OK)
+    if (aMap.run() != RET_OK)
+        return;
+
+    sal_UCS4 cNewChar = aMap.GetChar();
+    switch( nMode )
     {
-        sal_UCS4 cNewChar = aMap.GetChar();
-        switch( nMode )
-        {
-            case SGL_START:
-                cSglStartQuote = cNewChar;
-                m_xSglStartExFT->set_label(ChangeStringExt_Impl(cNewChar));
-            break;
-            case SGL_END:
-                cSglEndQuote = cNewChar;
-                m_xSglEndExFT->set_label(ChangeStringExt_Impl(cNewChar));
-            break;
-            case DBL_START:
-                cStartQuote = cNewChar;
-                m_xDblStartExFT->set_label(ChangeStringExt_Impl(cNewChar));
-            break;
-            case DBL_END:
-                cEndQuote = cNewChar;
-                m_xDblEndExFT->set_label(ChangeStringExt_Impl(cNewChar));
-            break;
-        }
+        case SGL_START:
+            cSglStartQuote = cNewChar;
+            m_xSglStartExFT->set_label(ChangeStringExt_Impl(cNewChar));
+        break;
+        case SGL_END:
+            cSglEndQuote = cNewChar;
+            m_xSglEndExFT->set_label(ChangeStringExt_Impl(cNewChar));
+        break;
+        case DBL_START:
+            cStartQuote = cNewChar;
+            m_xDblStartExFT->set_label(ChangeStringExt_Impl(cNewChar));
+        break;
+        case DBL_END:
+            cEndQuote = cNewChar;
+            m_xDblEndExFT->set_label(ChangeStringExt_Impl(cNewChar));
+        break;
     }
 }
 
@@ -2065,26 +2065,26 @@ IMPL_LINK(OfaAutoCompleteTabPage, CheckHdl, weld::ToggleButton&, rBox, void)
 void OfaAutoCompleteTabPage::CopyToClipboard() const
 {
     auto rows = m_xLBEntries->get_selected_rows();
-    if (m_pAutoCompleteList && !rows.empty())
+    if (!(m_pAutoCompleteList && !rows.empty()))
+        return;
+
+    rtl::Reference<TransferDataContainer> pCntnr = new TransferDataContainer;
+
+    OStringBuffer sData;
+
+    rtl_TextEncoding nEncode = osl_getThreadTextEncoding();
+
+    for (auto a : rows)
     {
-        rtl::Reference<TransferDataContainer> pCntnr = new TransferDataContainer;
-
-        OStringBuffer sData;
-
-        rtl_TextEncoding nEncode = osl_getThreadTextEncoding();
-
-        for (auto a : rows)
-        {
-            sData.append(OUStringToOString(m_xLBEntries->get_text(a), nEncode));
+        sData.append(OUStringToOString(m_xLBEntries->get_text(a), nEncode));
 #if defined(_WIN32)
-            sData.append("\015\012");
+        sData.append("\015\012");
 #else
-            sData.append("\012");
+        sData.append("\012");
 #endif
-        }
-        pCntnr->CopyByteString( SotClipboardFormatId::STRING, sData.makeStringAndClear() );
-        pCntnr->CopyToClipboard(GetSystemClipboard());
     }
+    pCntnr->CopyByteString( SotClipboardFormatId::STRING, sData.makeStringAndClear() );
+    pCntnr->CopyToClipboard(GetSystemClipboard());
 }
 
 IMPL_LINK(OfaAutoCompleteTabPage, KeyReleaseHdl, const KeyEvent&, rEvent, bool)

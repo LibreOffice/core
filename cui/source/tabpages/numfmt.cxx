@@ -1534,52 +1534,52 @@ IMPL_LINK(SvxNumberFormatTabPage, OptEditHdl_Impl, weld::SpinButton&, rEdit, voi
 
 void SvxNumberFormatTabPage::OptHdl_Impl(const weld::Widget* pOptCtrl)
 {
-    if (   pOptCtrl == m_xEdLeadZeroes.get()
+    if (   !(pOptCtrl == m_xEdLeadZeroes.get()
         || pOptCtrl == m_xEdDecimals.get()
         || pOptCtrl == m_xEdDenominator.get()
         || pOptCtrl == m_xBtnNegRed.get()
         || pOptCtrl == m_xBtnThousand.get()
-        || pOptCtrl == m_xBtnEngineering.get())
+        || pOptCtrl == m_xBtnEngineering.get()))
+        return;
+
+    OUString          aFormat;
+    bool          bThousand  = ( m_xBtnThousand->get_visible() && m_xBtnThousand->get_sensitive() && m_xBtnThousand->get_active() )
+                            || ( m_xBtnEngineering->get_visible() && m_xBtnEngineering->get_sensitive() && m_xBtnEngineering->get_active() );
+    bool          bNegRed    =   m_xBtnNegRed->get_sensitive() && m_xBtnNegRed->get_active();
+    sal_uInt16    nPrecision = (m_xEdDecimals->get_sensitive() && m_xEdDecimals->get_visible())
+                             ? static_cast<sal_uInt16>(m_xEdDecimals->get_value())
+                             : ( (m_xEdDenominator->get_sensitive() && m_xEdDenominator->get_visible())
+                               ? static_cast<sal_uInt16>(m_xEdDenominator->get_value())
+                               : sal_uInt16(0) );
+    sal_uInt16    nLeadZeroes = (m_xEdLeadZeroes->get_sensitive())
+                             ? static_cast<sal_uInt16>(m_xEdLeadZeroes->get_value())
+                             : sal_uInt16(0);
+    if ( pNumFmtShell->GetStandardName() == m_xEdFormat->get_text() )
     {
-        OUString          aFormat;
-        bool          bThousand  = ( m_xBtnThousand->get_visible() && m_xBtnThousand->get_sensitive() && m_xBtnThousand->get_active() )
-                                || ( m_xBtnEngineering->get_visible() && m_xBtnEngineering->get_sensitive() && m_xBtnEngineering->get_active() );
-        bool          bNegRed    =   m_xBtnNegRed->get_sensitive() && m_xBtnNegRed->get_active();
-        sal_uInt16    nPrecision = (m_xEdDecimals->get_sensitive() && m_xEdDecimals->get_visible())
-                                 ? static_cast<sal_uInt16>(m_xEdDecimals->get_value())
-                                 : ( (m_xEdDenominator->get_sensitive() && m_xEdDenominator->get_visible())
-                                   ? static_cast<sal_uInt16>(m_xEdDenominator->get_value())
-                                   : sal_uInt16(0) );
-        sal_uInt16    nLeadZeroes = (m_xEdLeadZeroes->get_sensitive())
-                                 ? static_cast<sal_uInt16>(m_xEdLeadZeroes->get_value())
-                                 : sal_uInt16(0);
-        if ( pNumFmtShell->GetStandardName() == m_xEdFormat->get_text() )
-        {
-            m_xEdDecimals->set_value(nPrecision);
-        }
+        m_xEdDecimals->set_value(nPrecision);
+    }
 
-        pNumFmtShell->MakeFormat( aFormat,
-                                  bThousand, bNegRed,
-                                  nPrecision, nLeadZeroes,
-                                  static_cast<sal_uInt16>(m_xLbFormat->get_selected_index()) );
+    pNumFmtShell->MakeFormat( aFormat,
+                              bThousand, bNegRed,
+                              nPrecision, nLeadZeroes,
+                              static_cast<sal_uInt16>(m_xLbFormat->get_selected_index()) );
 
-        m_xEdFormat->set_text( aFormat );
-        MakePreviewText( aFormat );
+    m_xEdFormat->set_text( aFormat );
+    MakePreviewText( aFormat );
 
-        if ( pNumFmtShell->FindEntry( aFormat ) )
-        {
-            m_xIbAdd->set_sensitive(false );
-            bool bUserDef=pNumFmtShell->IsUserDefined( aFormat );
-            m_xIbRemove->set_sensitive(bUserDef);
-            m_xIbInfo->set_sensitive(bUserDef);
-            EditHdl_Impl(m_xEdFormat.get());
+    if ( pNumFmtShell->FindEntry( aFormat ) )
+    {
+        m_xIbAdd->set_sensitive(false );
+        bool bUserDef=pNumFmtShell->IsUserDefined( aFormat );
+        m_xIbRemove->set_sensitive(bUserDef);
+        m_xIbInfo->set_sensitive(bUserDef);
+        EditHdl_Impl(m_xEdFormat.get());
 
-        }
-        else
-        {
-            EditHdl_Impl( nullptr );
-            m_xLbFormat->select(-1);
-        }
+    }
+    else
+    {
+        EditHdl_Impl( nullptr );
+        m_xLbFormat->select(-1);
     }
 }
 

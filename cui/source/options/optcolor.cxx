@@ -414,41 +414,42 @@ void ColorConfigWindow_Impl::CreateEntries()
 
     // extended entries
     ExtendedColorConfig aExtConfig;
-    if (unsigned const nExtGroupCount = aExtConfig.GetComponentCount())
+    unsigned const nExtGroupCount = aExtConfig.GetComponentCount();
+    if (!nExtGroupCount)
+        return;
+
+    size_t nLineNum = vChapters.size() + vEntries.size() + 1;
+    for (unsigned j = 0; j != nExtGroupCount; ++j)
     {
-        size_t nLineNum = vChapters.size() + vEntries.size() + 1;
-        for (unsigned j = 0; j != nExtGroupCount; ++j)
+        vExtBuilders.emplace_back(Application::CreateBuilder(m_xGrid.get(), "cui/ui/chapterfragment.ui"));
+        vExtContainers.emplace_back(vExtBuilders.back()->weld_container("ChapterFragment"));
+
+        vExtContainers.back()->set_grid_width(3);
+        vExtContainers.back()->set_grid_left_attach(0);
+        vExtContainers.back()->set_grid_top_attach(nLineNum);
+
+        OUString const sComponentName = aExtConfig.GetComponentName(j);
+        vChapters.push_back(std::make_shared<Chapter>(
+            *vExtBuilders.back(), "chapter", true));
+        vChapters.back()->SetText(aExtConfig.GetComponentDisplayName(sComponentName));
+        ++nLineNum;
+        unsigned nColorCount = aExtConfig.GetComponentColorCount(sComponentName);
+        for (unsigned i = 0; i != nColorCount; ++i)
         {
-            vExtBuilders.emplace_back(Application::CreateBuilder(m_xGrid.get(), "cui/ui/chapterfragment.ui"));
-            vExtContainers.emplace_back(vExtBuilders.back()->weld_container("ChapterFragment"));
+            vExtBuilders.emplace_back(Application::CreateBuilder(m_xGrid.get(), "cui/ui/colorfragment.ui"));
+            vExtContainers.emplace_back(vExtBuilders.back()->weld_container("ColorFragment"));
 
             vExtContainers.back()->set_grid_width(3);
             vExtContainers.back()->set_grid_left_attach(0);
             vExtContainers.back()->set_grid_top_attach(nLineNum);
 
-            OUString const sComponentName = aExtConfig.GetComponentName(j);
-            vChapters.push_back(std::make_shared<Chapter>(
-                *vExtBuilders.back(), "chapter", true));
-            vChapters.back()->SetText(aExtConfig.GetComponentDisplayName(sComponentName));
+            ExtendedColorConfigValue const aColorEntry =
+                aExtConfig.GetComponentColorConfigValue(sComponentName, i);
+            vEntries.push_back(std::make_shared<Entry>(m_pTopLevel, *vExtBuilders.back(),
+                "label", "button", aColorEntry.getDefaultColor(),
+                nCheckBoxLabelOffset, false, true));
+            vEntries.back()->SetText(aColorEntry.getDisplayName());
             ++nLineNum;
-            unsigned nColorCount = aExtConfig.GetComponentColorCount(sComponentName);
-            for (unsigned i = 0; i != nColorCount; ++i)
-            {
-                vExtBuilders.emplace_back(Application::CreateBuilder(m_xGrid.get(), "cui/ui/colorfragment.ui"));
-                vExtContainers.emplace_back(vExtBuilders.back()->weld_container("ColorFragment"));
-
-                vExtContainers.back()->set_grid_width(3);
-                vExtContainers.back()->set_grid_left_attach(0);
-                vExtContainers.back()->set_grid_top_attach(nLineNum);
-
-                ExtendedColorConfigValue const aColorEntry =
-                    aExtConfig.GetComponentColorConfigValue(sComponentName, i);
-                vEntries.push_back(std::make_shared<Entry>(m_pTopLevel, *vExtBuilders.back(),
-                    "label", "button", aColorEntry.getDefaultColor(),
-                    nCheckBoxLabelOffset, false, true));
-                vEntries.back()->SetText(aColorEntry.getDisplayName());
-                ++nLineNum;
-            }
         }
     }
 }
@@ -673,22 +674,22 @@ IMPL_LINK(ColorConfigCtrl_Impl, ControlFocusHdl, weld::Widget&, rCtrl, void)
     bool const shouldScrollUp = nSelectedItemTop <= nWinTop;
     bool const isNeedToScroll = shouldScrollDown || shouldScrollUp || nCtrlPosY < 0;
 
-    if (isNeedToScroll)
+    if (!isNeedToScroll)
+        return;
+
+    if (shouldScrollDown)
     {
-        if (shouldScrollDown)
-        {
-            int nOffset = nSelectedItemBottom - nWinBottom;
-            nThumbPos += nOffset + 2;
-        }
-        else
-        {
-            int nOffset = nWinTop - nSelectedItemTop;
-            nThumbPos -= nOffset + 2;
-            if(nThumbPos < 0)
-                nThumbPos = 0;
-        }
-        m_xVScroll->vadjustment_set_value(nThumbPos);
+        int nOffset = nSelectedItemBottom - nWinBottom;
+        nThumbPos += nOffset + 2;
     }
+    else
+    {
+        int nOffset = nWinTop - nSelectedItemTop;
+        nThumbPos -= nOffset + 2;
+        if(nThumbPos < 0)
+            nThumbPos = 0;
+    }
+    m_xVScroll->vadjustment_set_value(nThumbPos);
 }
 
 // SvxColorOptionsTabPage
