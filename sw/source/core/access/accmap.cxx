@@ -869,20 +869,16 @@ void SwAccPreviewData::AdjustLogicPgRectToVisibleArea(
     SwTwips nTmpDiff;
     // left
     nTmpDiff = aVisPreviewPgSwRect.Left() - _rPreviewPgSwRect.Left();
-    if ( nTmpDiff > 0 )
-        _iorLogicPgSwRect.Left( _iorLogicPgSwRect.Left() + nTmpDiff );
+    _iorLogicPgSwRect.AddLeft( nTmpDiff );
     // top
     nTmpDiff = aVisPreviewPgSwRect.Top() - _rPreviewPgSwRect.Top();
-    if ( nTmpDiff > 0 )
-        _iorLogicPgSwRect.Top( _iorLogicPgSwRect.Top() + nTmpDiff );
+    _iorLogicPgSwRect.AddTop( nTmpDiff );
     // right
     nTmpDiff = _rPreviewPgSwRect.Right() - aVisPreviewPgSwRect.Right();
-    if ( nTmpDiff > 0 )
-        _iorLogicPgSwRect.Right( _iorLogicPgSwRect.Right() - nTmpDiff );
+    _iorLogicPgSwRect.AddRight( - nTmpDiff );
     // bottom
     nTmpDiff = _rPreviewPgSwRect.Bottom() - aVisPreviewPgSwRect.Bottom();
-    if ( nTmpDiff > 0 )
-        _iorLogicPgSwRect.Bottom( _iorLogicPgSwRect.Bottom() - nTmpDiff );
+    _iorLogicPgSwRect.AddBottom( - nTmpDiff );
 }
 
 static bool AreInSameTable( const uno::Reference< XAccessible >& rAcc,

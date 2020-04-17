@@ -861,22 +861,22 @@ static void lcl_correctlyAlignRect( SwRect& rAlignedGrfArea, const SwRect& rInAr
     tools::Rectangle aNewPxRect( aPxRect );
     while( aNewPxRect.Left() < aPxRect.Left() )
     {
-        rAlignedGrfArea.Left( rAlignedGrfArea.Left()+1 );
+        rAlignedGrfArea.AddLeft( 1 );
         aNewPxRect = pOut->LogicToPixel( rAlignedGrfArea.SVRect() );
     }
     while( aNewPxRect.Top() < aPxRect.Top() )
     {
-        rAlignedGrfArea.Top( rAlignedGrfArea.Top()+1 );
+        rAlignedGrfArea.AddTop(+1);
         aNewPxRect = pOut->LogicToPixel( rAlignedGrfArea.SVRect() );
     }
     while( aNewPxRect.Bottom() > aPxRect.Bottom() )
     {
-        rAlignedGrfArea.Bottom( rAlignedGrfArea.Bottom()-1 );
+        rAlignedGrfArea.AddBottom( -1 );
         aNewPxRect = pOut->LogicToPixel( rAlignedGrfArea.SVRect() );
     }
     while( aNewPxRect.Right() > aPxRect.Right() )
     {
-        rAlignedGrfArea.Right( rAlignedGrfArea.Right()-1 );
+        rAlignedGrfArea.AddRight(-1);
         aNewPxRect = pOut->LogicToPixel( rAlignedGrfArea.SVRect() );
     }
 }

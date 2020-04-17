@@ -3716,13 +3716,11 @@ SwRect SwPageFrame::PrtWithoutHeaderAndFooter() const
         //       always at top respectively at bottom of the page frame.
         if ( pLowerFrame->IsHeaderFrame() )
         {
-            aPrtWithoutHeaderFooter.Top( aPrtWithoutHeaderFooter.Top() +
-                                         pLowerFrame->getFrameArea().Height() );
+            aPrtWithoutHeaderFooter.AddTop( pLowerFrame->getFrameArea().Height() );
         }
         if ( pLowerFrame->IsFooterFrame() )
         {
-            aPrtWithoutHeaderFooter.Bottom( aPrtWithoutHeaderFooter.Bottom() -
-                                            pLowerFrame->getFrameArea().Height() );
+            aPrtWithoutHeaderFooter.AddBottom( - pLowerFrame->getFrameArea().Height() );
         }
 
         pLowerFrame = pLowerFrame->GetNext();

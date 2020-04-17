@@ -120,7 +120,9 @@ public:
     long Width_()   const;
     long Height_()  const;
     void SubTop(    const long nSub );
+    void AddTop(    const long nAdd );
     void AddBottom( const long nAdd );
+    void AddLeft(   const long nAdd );
     void SubLeft(   const long nSub );
     void AddRight(  const long nAdd );
     void AddWidth(  const long nAdd );
