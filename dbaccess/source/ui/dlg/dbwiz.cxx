@@ -19,18 +19,12 @@
 
 #include <core_resource.hxx>
 #include <dbwiz.hxx>
-#include <dbu_dlg.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
 #include <dsitems.hxx>
 #include "dsnItem.hxx"
-#include <svl/stritem.hxx>
-#include <svl/eitem.hxx>
-#include <svl/intitem.hxx>
-#include <stringconstants.hxx>
 #include "adminpages.hxx"
 #include "generalpage.hxx"
-#include <stringlistitem.hxx>
 #include <unotools/confignode.hxx>
 #include "ConnectionPage.hxx"
 #include "DriverSettings.hxx"

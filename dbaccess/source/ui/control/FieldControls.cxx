@@ -21,8 +21,6 @@
 #include <SqlNameEdit.hxx>
 #include <core_resource.hxx>
 
-#include <vcl/settings.hxx>
-
 namespace dbaui {
 
 OPropColumnEditCtrl::OPropColumnEditCtrl(std::unique_ptr<weld::Entry> xEntry,

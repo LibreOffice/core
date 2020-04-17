@@ -21,7 +21,6 @@
 #include <dbwizsetup.hxx>
 #include <dsmeta.hxx>
 #include "DBSetupConnectionPages.hxx"
-#include <dbu_dlg.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
 #include <dsitems.hxx>
@@ -29,14 +28,10 @@
 
 #include <unotools/pathoptions.hxx>
 #include <svl/stritem.hxx>
-#include <svl/eitem.hxx>
-#include <svl/intitem.hxx>
-#include <stringconstants.hxx>
 #include "adminpages.hxx"
 #include <sfx2/docfilt.hxx>
 #include <unotools/ucbhelper.hxx>
 #include "generalpage.hxx"
-#include <stringlistitem.hxx>
 #include <unotools/confignode.hxx>
 #include "DbAdminImpl.hxx"
 #include <helpids.h>
@@ -48,30 +43,22 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
-#include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
-#include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionHandler2.hpp>
-#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
-#include <svl/filenotation.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <tools/diagnose_ex.h>

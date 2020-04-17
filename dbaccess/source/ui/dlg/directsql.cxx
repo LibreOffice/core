@@ -19,7 +19,6 @@
 
 #include <core_resource.hxx>
 #include <directsql.hxx>
-#include <dbu_dlg.hxx>
 #include <strings.hrc>
 #include <comphelper/types.hxx>
 #include <editeng/colritem.hxx>
@@ -29,7 +28,6 @@
 #include <svl/itemset.hxx>
 #include <svtools/editsyntaxhighlighter.hxx>
 #include <tools/diagnose_ex.h>
-#include <rtl/strbuf.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>

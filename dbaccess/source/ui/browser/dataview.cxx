@@ -21,9 +21,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <dbaccess/dataview.hxx>
 #include <comphelper/namedvaluecollection.hxx>
-#include <sfx2/app.hxx>
 #include <dbaccess/IController.hxx>
-#include <UITools.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/event.hxx>

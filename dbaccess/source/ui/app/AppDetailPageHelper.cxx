@@ -18,15 +18,10 @@
  */
 
 #include "AppDetailPageHelper.hxx"
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <connectivity/dbtools.hxx>
 #include <tabletree.hxx>
-#include <UITools.hxx>
 #include <dbtreelistbox.hxx>
 #include <com/sun/star/awt/XTabController.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
@@ -35,13 +30,10 @@
 #include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/frame/XFrames.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
-#include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
 #include <com/sun/star/sdb/application/DatabaseObjectContainer.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <com/sun/star/ucb/Command.hpp>
@@ -52,9 +44,6 @@
 #include "AppView.hxx"
 #include <helpids.h>
 #include <strings.hxx>
-#include <callbacks.hxx>
-#include <dbaccess/IController.hxx>
-#include <stringconstants.hxx>
 #include <dbaccess_slotid.hrc>
 #include <databaseobjectview.hxx>
 #include <imageprovider.hxx>
@@ -81,7 +70,6 @@ using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdb::application;
 using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star;
 using ::com::sun::star::awt::XTabController;

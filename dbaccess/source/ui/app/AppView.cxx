@@ -19,28 +19,15 @@
 
 #include "AppView.hxx"
 #include <strings.hrc>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/toolbox.hxx>
 #include <vcl/event.hxx>
-#include <unotools/configmgr.hxx>
-#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
+#include <vcl/weld.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#include <unotools/syslocale.hxx>
-#include <UITools.hxx>
 #include "AppDetailView.hxx"
-#include <tabletree.hxx>
 #include "AppSwapWindow.hxx"
-#include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include "AppTitleWindow.hxx"
-#include <dsntypes.hxx>
-#include <stringconstants.hxx>
-#include <dbaccess/IController.hxx>
-#include <browserids.hxx>
-#include <unotools/pathoptions.hxx>
 #include "AppController.hxx"
 
 using namespace ::dbaui;

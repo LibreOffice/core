@@ -18,14 +18,10 @@
  */
 
 #include <dbtreelistbox.hxx>
-#include <browserids.hxx>
 #include <listviewitems.hxx>
 #include <callbacks.hxx>
 
-#include <com/sun/star/datatransfer/dnd/XDragGestureListener.hpp>
-#include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
 #include <com/sun/star/ui/XContextMenuInterceptor.hpp>
-#include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -38,7 +34,6 @@
 #include <framework/actiontriggerhelper.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/treelistentry.hxx>
 #include <vcl/event.hxx>
 

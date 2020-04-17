@@ -17,49 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sbagrid.hrc>
 #include <core_resource.hxx>
 #include <helpids.h>
 #include <uiservices.hxx>
 
 #include <sot/exchange.hxx>
-#include <svx/svxids.hrc>
 
-#include <svx/numinf.hxx>
 #include <svx/dbaexchange.hxx>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 
 #include <sbagrid.hxx>
-#include <dlgattr.hxx>
 #include <dlgsize.hxx>
 #include <com/sun/star/beans/XPropertyState.hpp>
-#include <com/sun/star/form/XLoadable.hpp>
-#include <com/sun/star/form/ControlFontDialog.hpp>
-#include <com/sun/star/sdb/CommandType.hpp>
-#include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
-#include <com/sun/star/sdb/XResultSetAccess.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
-#include <com/sun/star/util/NumberFormat.hpp>
 
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <com/sun/star/form/DataSelectionType.hpp>
-#include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
-#include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/util/Time.hpp>
-#include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <tools/diagnose_ex.h>
 
-#include <sal/log.hxx>
-#include <svl/intitem.hxx>
-#include <svx/algitem.hxx>
-#include <tools/multisel.hxx>
 #include <svl/numuno.hxx>
-#include <svl/itempool.hxx>
-#include <svl/itemset.hxx>
-#include <svl/rngitem.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <vcl/svapp.hxx>
@@ -67,24 +45,18 @@
 #include <svl/zforlist.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <connectivity/dbtools.hxx>
-#include <connectivity/dbconversion.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <browserids.hxx>
-#include <stringconstants.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
 #include <dbu_reghelper.hxx>
 #include <dbexchange.hxx>
 #include <TableRowExchange.hxx>
 #include <TableRow.hxx>
-#include <FieldDescriptions.hxx>
 #include <svtools/stringtransfer.hxx>
-#include <vcl/stdtext.hxx>
 #include <UITools.hxx>
 #include <TokenWriter.hxx>
 #include <osl/diagnose.h>

@@ -19,9 +19,7 @@
 
 #include <core_resource.hxx>
 #include <sqlmessage.hxx>
-#include <dbu_dlg.hxx>
 #include <strings.hrc>
-#include <bitmaps.hlst>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <vcl/stdtext.hxx>
@@ -31,8 +29,6 @@
 #include <connectivity/dbexception.hxx>
 #include <connectivity/sqlerror.hxx>
 #include <unotools/configmgr.hxx>
-#include <sfx2/sfxuno.hxx>
-#include <UITools.hxx>
 
 #include <tools/urlobj.hxx>
 

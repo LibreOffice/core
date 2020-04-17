@@ -30,15 +30,11 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <core_resource.hxx>
-#include <listviewitems.hxx>
 #include <vcl/event.hxx>
 #include <vcl/image.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/settings.hxx>
-#include <browserids.hxx>
 #include "AppDetailPageHelper.hxx"
-#include <vcl/svapp.hxx>
-#include <callbacks.hxx>
 #include <dbaccess/IController.hxx>
 #include <vcl/treelistentry.hxx>
 #include <vcl/viewdataentry.hxx>

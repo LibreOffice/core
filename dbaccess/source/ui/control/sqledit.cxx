@@ -28,10 +28,9 @@
 #include <QueryTextView.hxx>
 #include <querycontainerwindow.hxx>
 #include <helpids.h>
-#include <browserids.hxx>
-#include <querycontroller.hxx>
 #include <undosqledit.hxx>
 #include <QueryDesignView.hxx>
+#include <svx/svxids.hrc>
 #include <vcl/settings.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <i18nlangtag/languagetag.hxx>

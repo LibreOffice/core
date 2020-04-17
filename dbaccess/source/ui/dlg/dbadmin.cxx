@@ -22,12 +22,10 @@
 #include "DriverSettings.hxx"
 #include "adminpages.hxx"
 #include <dbadmin.hxx>
-#include <dbu_dlg.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <core_resource.hxx>
-#include <stringconstants.hxx>
 #include <strings.hrc>
 #include <dsitems.hxx>
 #include "dsnItem.hxx"

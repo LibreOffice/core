@@ -20,7 +20,6 @@
 #include "dbtreeview.hxx"
 #include <vcl/treelistbox.hxx>
 #include <dbtreelistbox.hxx>
-#include "dbtreemodel.hxx"
 #include <helpids.h>
 
 namespace dbaui

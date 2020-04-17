@@ -18,9 +18,7 @@
  */
 
 #include <core_resource.hxx>
-#include <indexcollection.hxx>
 #include <indexfieldscontrol.hxx>
-#include <dbu_dlg.hxx>
 #include <strings.hrc>
 #include <osl/diagnose.h>
 #include <helpids.h>

@@ -18,20 +18,9 @@
  */
 
 #include "dsselect.hxx"
-#include <dbu_dlg.hxx>
 
 #include <com/sun/star/sdbcx/XCreateCatalog.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <stringconstants.hxx>
-#include <dsitems.hxx>
-#include <svl/stritem.hxx>
-#include <svl/intitem.hxx>
-#include <svl/eitem.hxx>
-#include <svl/itemset.hxx>
-#include <sal/log.hxx>
 
 namespace dbaui
 {

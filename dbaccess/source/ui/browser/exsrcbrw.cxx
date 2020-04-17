@@ -19,19 +19,16 @@
 
 #include <exsrcbrw.hxx>
 #include <uiservices.hxx>
-#include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/form/XGridColumnFactory.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <formadapter.hxx>
 #include <comphelper/processfactory.hxx>
-#include <stringconstants.hxx>
 #include <strings.hxx>
 #include <dbu_reghelper.hxx>
 #include <o3tl/any.hxx>
 #include <tools/diagnose_ex.h>
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star::uno;

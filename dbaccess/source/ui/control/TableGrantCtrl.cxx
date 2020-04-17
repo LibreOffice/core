@@ -25,12 +25,12 @@
 #include <com/sun/star/sdbcx/PrivilegeObject.hpp>
 #include <com/sun/star/sdbcx/XUsersSupplier.hpp>
 #include <com/sun/star/sdbcx/XAuthorizable.hpp>
+#include <connectivity/dbtools.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/button.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/diagnose.h>
 #include <strings.hrc>
-#include <UITools.hxx>
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::container;

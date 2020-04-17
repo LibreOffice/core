@@ -20,8 +20,6 @@
 #include <TablesSingleDlg.hxx>
 #include "DbAdminImpl.hxx"
 #include "tablespage.hxx"
-#include <dsitems.hxx>
-#include <dbu_dlg.hxx>
 
 namespace dbaui
 {

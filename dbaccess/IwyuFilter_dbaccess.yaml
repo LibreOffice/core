@@ -82,3 +82,46 @@ blacklist:
     dbaccess/source/shared/dbu_reghelper.cxx:
     # Needed for weird included cxx file
     - comphelper/sequence.hxx
+    dbaccess/source/ui/app/AppDetailPageHelper.cxx:
+    # Actually used
+    - com/sun/star/sdbc/XConnection.hpp
+    dbaccess/source/ui/browser/brwview.cxx:
+    # Needed for direct member access
+    - com/sun/star/awt/XControlContainer.hpp
+    dbaccess/source/ui/browser/genericcontroller.cxx:
+    # Actually used
+    - com/sun/star/sdbc/XDataSource.hpp
+    - com/sun/star/ui/XSidebarProvider.hpp
+    dbaccess/source/ui/browser/sbagrid.cxx:
+    # Actually used
+    - com/sun/star/form/XForm.hpp
+    dbaccess/source/ui/control/TableGrantCtrl.cxx:
+    # Actually used
+    - com/sun/star/sdbcx/XTablesSupplier.hpp
+    dbaccess/source/ui/control/RelationControl.cxx:
+    # Actually used
+    - com/sun/star/awt/XWindow.hpp
+    dbaccess/source/ui/dlg/ConnectionHelper.cxx:
+    # Actually used
+    - com/sun/star/awt/XSystemDependentWindowPeer.hpp
+    - com/sun/star/lang/SystemDependent.hpp
+    dbaccess/source/ui/dlg/DbAdminImpl.cxx:
+    # Actually used
+    - com/sun/star/sdbc/XDriver.hpp
+    dbaccess/source/ui/dlg/dbfindex.cxx:
+    # Keep for osl_getThreadTextEncoding
+    - osl/thread.hxx
+    dbaccess/source/ui/dlg/odbcconfig.cxx:
+    # Needed for HAVE_ODBC_ADMINISTRATION on WIN32
+    - config_folders.h
+    - rtl/bootstrap.hxx
+    - osl/process.h
+    - osl/thread.hxx
+    - vcl/svapp.hxx
+    # Needed for platform-specific odbc headers
+    - connectivity/odbc.hxx
+    dbaccess/source/ui/dlg/queryfilter.cxx:
+    # Actually used
+    - com/sun/star/sdb/XSingleSelectQueryComposer.hpp
+    - com/sun/star/container/XNameAccess.hpp
+    - com/sun/star/sdbc/XConnection.hpp

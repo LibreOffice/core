@@ -18,25 +18,16 @@
  */
 
 #include <adtabdlg.hxx>
-#include <sqlmessage.hxx>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <core_resource.hxx>
-#include <dbu_dlg.hxx>
 #include <strings.hrc>
-#include <sfx2/sfxsids.hrc>
-#include <QueryTableView.hxx>
-#include <QueryDesignView.hxx>
-#include <querycontroller.hxx>
 #include <connectivity/dbtools.hxx>
-#include <browserids.hxx>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <UITools.hxx>
 #include <imageprovider.hxx>
 #include <comphelper/containermultiplexer.hxx>
 #include <cppuhelper/basemutex.hxx>
