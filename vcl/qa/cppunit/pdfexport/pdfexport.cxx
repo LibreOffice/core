@@ -144,6 +144,8 @@ public:
     void testReduceImage();
     void testLinkWrongPage();
     void testLargePage();
+    void testVersion15();
+    void testDefaultVersion();
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
     CPPUNIT_TEST(testTdf106059);
@@ -185,6 +187,8 @@ public:
     CPPUNIT_TEST(testReduceImage);
     CPPUNIT_TEST(testLinkWrongPage);
     CPPUNIT_TEST(testLargePage);
+    CPPUNIT_TEST(testVersion15);
+    CPPUNIT_TEST(testDefaultVersion);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -2099,6 +2103,55 @@ void PdfExportTest::testPdfImageResourceInlineXObjectRef()
     // - Actual  : 0
     // i.e. rotation was lost on pdf export.
     CPPUNIT_ASSERT_EQUAL(-90, nRotateDeg);
+}
+
+void PdfExportTest::testDefaultVersion()
+{
+    // Create an empty document.
+    mxComponent = loadFromDesktop("private:factory/swriter");
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    // Save as PDF.
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result.
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
+    maMemory.WriteStream(aFile);
+    DocumentHolder pPdfDocument(
+        FPDF_LoadMemDocument(maMemory.GetData(), maMemory.GetSize(), /*password=*/nullptr));
+    CPPUNIT_ASSERT(pPdfDocument.get());
+    int nFileVersion = 0;
+    FPDF_GetFileVersion(pPdfDocument.get(), &nFileVersion);
+    CPPUNIT_ASSERT_EQUAL(16, nFileVersion);
+}
+
+void PdfExportTest::testVersion15()
+{
+    // Create an empty document.
+    mxComponent = loadFromDesktop("private:factory/swriter");
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    // Save as PDF.
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+        { { "SelectPdfVersion", uno::makeAny(static_cast<sal_Int32>(15)) } }));
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    aMediaDescriptor["FilterData"] <<= aFilterData;
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result.
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
+    maMemory.WriteStream(aFile);
+    DocumentHolder pPdfDocument(
+        FPDF_LoadMemDocument(maMemory.GetData(), maMemory.GetSize(), /*password=*/nullptr));
+    CPPUNIT_ASSERT(pPdfDocument.get());
+    int nFileVersion = 0;
+    FPDF_GetFileVersion(pPdfDocument.get(), &nFileVersion);
+    CPPUNIT_ASSERT_EQUAL(15, nFileVersion);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PdfExportTest);

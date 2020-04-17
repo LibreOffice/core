@@ -548,6 +548,7 @@ PDFPage::PDFPage( PDFWriterImpl* pWriter, double nPageWidth, double nPageHeight,
         m_pWriter( pWriter ),
         m_nPageWidth( nPageWidth ),
         m_nPageHeight( nPageHeight ),
+        m_nUserUnit( 1 ),
         m_eOrientation( eOrientation ),
         m_nPageObject( 0 ),  // invalid object number
         m_nStreamLengthObject( 0 ),
@@ -557,7 +558,16 @@ PDFPage::PDFPage( PDFWriterImpl* pWriter, double nPageWidth, double nPageHeight,
 {
     // object ref must be only ever updated in emit()
     m_nPageObject = m_pWriter->createObject();
-    m_nUserUnit = std::ceil(std::max(nPageWidth, nPageHeight) / 14400.0);
+
+    switch (m_pWriter->m_aContext.Version)
+    {
+        case PDFWriter::PDFVersion::PDF_1_6:
+            m_nUserUnit = std::ceil(std::max(nPageWidth, nPageHeight) / 14400.0);
+            break;
+        default:
+            // 1.2 -> 1.5
+            break;
+    }
 }
 
 void PDFPage::beginStream()
@@ -1228,8 +1238,8 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
         case PDFWriter::PDFVersion::PDF_1_3: aBuffer.append( "1.3" );break;
         case PDFWriter::PDFVersion::PDF_A_1:
         case PDFWriter::PDFVersion::PDF_1_4: aBuffer.append( "1.4" );break;
-        default:
         case PDFWriter::PDFVersion::PDF_1_5: aBuffer.append( "1.5" );break;
+        default:
         case PDFWriter::PDFVersion::PDF_1_6: aBuffer.append( "1.6" );break;
     }
     // append something binary as comment (suggested in PDF Reference)
