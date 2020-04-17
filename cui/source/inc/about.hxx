@@ -29,6 +29,7 @@ private:
     std::unique_ptr<weld::LinkButton> m_pWebsiteButton;
     std::unique_ptr<weld::LinkButton> m_pReleaseNotesButton;
     std::unique_ptr<weld::Button> m_pCloseButton;
+    std::unique_ptr<weld::Button> m_pCopyButton;
 
     std::unique_ptr<weld::Image> m_pBrandImage;
     std::unique_ptr<weld::Image> m_pAboutImage;
@@ -40,6 +41,8 @@ private:
     static OUString GetCopyrightString();
     static OUString GetLocaleString();
     static bool IsStringValidGitHash(const OUString& hash);
+
+    DECL_LINK(HandleClick, weld::Button&, void);
 
 public:
     AboutDialog(weld::Window* pParent);
