@@ -438,16 +438,21 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
         // different directory.
         uno::Reference<sdb::XDatabaseContext> xDatabaseContext = sdb::DatabaseContext::create(comphelper::getProcessComponentContext());
 
-        const INetURLObject& rOldURLObject = GetMedium()->GetURLObject();
-        auto xContext(comphelper::getProcessComponentContext());
-        auto xUri = css::uri::UriReferenceFactory::create(xContext)
-            ->parse(rOldURLObject.GetMainURL(INetURLObject::DecodeMechanism::NONE));
-        assert(xUri.is());
-        xUri = css::uri::VndSunStarPkgUrlReferenceFactory::create(xContext)->createVndSunStarPkgUrlReference(xUri);
-        assert(xUri.is());
-        OUString const aURL = xUri->getUriReference() + "/"
-            + INetURLObject::encode(pMgr->getEmbeddedName(),
-                INetURLObject::PART_FPATH, INetURLObject::EncodeMechanism::All);
+        const OUString strOldURL = GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::NONE);
+        OUString aURL;
+        // the url may be empty when saving into a new file from a template file with embedded Datasource
+        if (!strOldURL.isEmpty())
+        {
+            auto xContext(comphelper::getProcessComponentContext());
+
+            auto xUri = css::uri::UriReferenceFactory::create(xContext)->parse(strOldURL);
+            assert(xUri.is());
+            xUri = css::uri::VndSunStarPkgUrlReferenceFactory::create(xContext)->createVndSunStarPkgUrlReference(xUri);
+            assert(xUri.is());
+            aURL = xUri->getUriReference() + "/"
+                + INetURLObject::encode(pMgr->getEmbeddedName(),
+                    INetURLObject::PART_FPATH, INetURLObject::EncodeMechanism::All);
+        }
 
         bool bCopyTo = GetCreateMode() == SfxObjectCreateMode::EMBEDDED;
         if (!bCopyTo)
@@ -457,11 +462,14 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
                 bCopyTo = pSaveToItem->GetValue();
         }
 
-        uno::Reference<sdb::XDocumentDataSource> xDataSource(xDatabaseContext->getByName(aURL), uno::UNO_QUERY);
-        uno::Reference<frame::XStorable> xStorable(xDataSource->getDatabaseDocument(), uno::UNO_QUERY);
-        SwDBManager::StoreEmbeddedDataSource(xStorable, rMedium.GetOutputStorage(),
-                                             pMgr->getEmbeddedName(),
-                                             rMedium.GetName(), bCopyTo);
+        if (!aURL.isEmpty())
+        {
+            uno::Reference<sdb::XDocumentDataSource> xDataSource(xDatabaseContext->getByName(aURL), uno::UNO_QUERY);
+            uno::Reference<frame::XStorable> xStorable(xDataSource->getDatabaseDocument(), uno::UNO_QUERY);
+            SwDBManager::StoreEmbeddedDataSource(xStorable, rMedium.GetOutputStorage(),
+                                                 pMgr->getEmbeddedName(),
+                                                 rMedium.GetName(), bCopyTo);
+        }
     }
 
     // #i62875#
