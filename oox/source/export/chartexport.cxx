@@ -219,46 +219,37 @@ static bool lcl_hasCategoryLabels( const Reference< chart2::XChartDocument >& xC
     return xCategories.is();
 }
 
-static bool lcl_isCategoryAxisShifted(const Reference< chart2::XChartDocument >& xChartDoc)
+static bool lcl_isCategoryAxisShifted( const Reference< chart2::XDiagram >& xDiagram )
 {
-    Reference< chart2::XDiagram > xDiagram(xChartDoc->getFirstDiagram());
-    bool isCategoryPositionShifted = false;
-
+    bool bCategoryPositionShifted = false;
     try
     {
         Reference< chart2::XCoordinateSystemContainer > xCooSysCnt(
             xDiagram, uno::UNO_QUERY_THROW);
         const Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq(
             xCooSysCnt->getCoordinateSystems());
-        for( const auto& xCooSys : aCooSysSeq )
+        for (const auto& xCooSys : aCooSysSeq)
         {
             OSL_ASSERT(xCooSys.is());
-            for( sal_Int32 nN = xCooSys->getDimension(); nN--; )
+            if( 0 < xCooSys->getDimension() && 0 <= xCooSys->getMaximumAxisIndexByDimension(0) )
             {
-                const sal_Int32 nMaxAxisIndex = xCooSys->getMaximumAxisIndexByDimension(nN);
-                for( sal_Int32 nI = 0; nI <= nMaxAxisIndex; ++nI )
+                Reference< chart2::XAxis > xAxis = xCooSys->getAxisByDimension(0, 0);
+                OSL_ASSERT(xAxis.is());
+                if (xAxis.is())
                 {
-                    Reference< chart2::XAxis > xAxis = xCooSys->getAxisByDimension(nN, nI);
-                    OSL_ASSERT(xAxis.is());
-                    if( xAxis.is())
-                    {
-                        chart2::ScaleData aScaleData = xAxis->getScaleData();
-                        if( aScaleData.AxisType == AXIS_PRIMARY_Y )
-                        {
-                            isCategoryPositionShifted = aScaleData.ShiftedCategoryPosition;
-                            break;
-                        }
-                    }
+                    chart2::ScaleData aScaleData = xAxis->getScaleData();
+                    bCategoryPositionShifted = aScaleData.ShiftedCategoryPosition;
+                    break;
                 }
             }
         }
     }
-    catch (const uno::Exception &)
+    catch (const uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("oox");
     }
 
-    return isCategoryPositionShifted;
+    return bCategoryPositionShifted;
 }
 
 static sal_Int32 lcl_getCategoryAxisType( const Reference< chart2::XDiagram >& xDiagram, sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex )
@@ -447,7 +438,6 @@ ChartExport::ChartExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, Reference< f
     , mxChartModel( xModel )
     , mpURLTransformer(std::make_shared<URLTransformer>())
     , mbHasCategoryLabels( false )
-    , mbIsCategoryPositionShifted( false )
     , mbHasZAxis( false )
     , mbIs3DChart( false )
     , mbStacked(false)
@@ -805,7 +795,6 @@ void ChartExport::InitRangeSegmentationProperties( const Reference< chart2::XCha
         if( xDataProvider.is())
         {
             mbHasCategoryLabels = lcl_hasCategoryLabels( xChartDoc );
-            mbIsCategoryPositionShifted = lcl_isCategoryAxisShifted( xChartDoc );
         }
     }
     catch( const uno::Exception & )
@@ -3095,7 +3084,7 @@ void ChartExport::_exportAxis(
     // crossBetween
     if( nAxisType == XML_valAx )
     {
-        if( mbIsCategoryPositionShifted )
+        if( lcl_isCategoryAxisShifted(mxNewDiagram) )
             pFS->singleElement(FSNS(XML_c, XML_crossBetween), XML_val, "between");
         else
             pFS->singleElement(FSNS(XML_c, XML_crossBetween), XML_val, "midCat");
