@@ -236,31 +236,31 @@ static void mediate_mapInterface(
     typelib_InterfaceTypeDescription * pInterfaceTypeDescr )
 {
     OSL_ENSURE( pMapping && ppOut, "### null ptr!" );
-    if (pMapping && ppOut)
-    {
-        uno_Mediate_Mapping * that = static_cast< uno_Mediate_Mapping * >( pMapping );
-        uno_Mapping * pFrom2Uno = that->aFrom2Uno.get();
+    if (!(pMapping && ppOut))
+        return;
 
-        uno_Interface * pUnoI = nullptr;
-        (*pFrom2Uno->mapInterface)( pFrom2Uno, reinterpret_cast<void **>(&pUnoI), pInterface, pInterfaceTypeDescr );
-        if (nullptr == pUnoI)
+    uno_Mediate_Mapping * that = static_cast< uno_Mediate_Mapping * >( pMapping );
+    uno_Mapping * pFrom2Uno = that->aFrom2Uno.get();
+
+    uno_Interface * pUnoI = nullptr;
+    (*pFrom2Uno->mapInterface)( pFrom2Uno, reinterpret_cast<void **>(&pUnoI), pInterface, pInterfaceTypeDescr );
+    if (nullptr == pUnoI)
+    {
+        void * pOut = *ppOut;
+        if (nullptr != pOut)
         {
-            void * pOut = *ppOut;
-            if (nullptr != pOut)
-            {
-                uno_ExtEnvironment * pTo = that->aTo.get()->pExtEnv;
-                OSL_ENSURE( nullptr != pTo, "### cannot release out interface: leaking!" );
-                if (nullptr != pTo)
-                    (*pTo->releaseInterface)( pTo, pOut );
-                *ppOut = nullptr; // set to 0 anyway, because mapping was not successful!
-            }
+            uno_ExtEnvironment * pTo = that->aTo.get()->pExtEnv;
+            OSL_ENSURE( nullptr != pTo, "### cannot release out interface: leaking!" );
+            if (nullptr != pTo)
+                (*pTo->releaseInterface)( pTo, pOut );
+            *ppOut = nullptr; // set to 0 anyway, because mapping was not successful!
         }
-        else
-        {
-            uno_Mapping * pUno2To = that->aUno2To.get();
-            (*pUno2To->mapInterface)( pUno2To, ppOut, pUnoI, pInterfaceTypeDescr );
-            (*pUnoI->release)( pUnoI );
-        }
+    }
+    else
+    {
+        uno_Mapping * pUno2To = that->aUno2To.get();
+        (*pUno2To->mapInterface)( pUno2To, ppOut, pUnoI, pInterfaceTypeDescr );
+        (*pUnoI->release)( pUnoI );
     }
 }
 }
