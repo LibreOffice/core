@@ -467,6 +467,10 @@ public:
     /// list-id -> abstractnumdef index
     std::map<OUString, size_t> m_Lists;
 
+    /// Map of maps for list levels overrides
+    /// listid -> level number -> restart value
+    std::map < size_t, std::map<size_t, size_t> > m_ListLevelOverrides;
+
     const SwTextNode *m_pTopNodeOfHdFtPage; ///< Top node of host page when in hd/ft
     std::map< sal_uInt16, sal_uInt16 > m_aRuleDuplicates; //map to Duplicated numrules
     std::stack< sal_Int32 > m_aCurrentCharPropStarts; ///< To remember the position in a run.
@@ -669,6 +673,11 @@ public:
     sal_uInt16 OverrideNumRule(SwNumRule const& rExistingRule,
                                OUString const& rListId,
                                SwNumRule const& rAbstractRule);
+
+    /// Store list level overrides (restart of list)
+    void AddListLevelOverride(sal_uInt16 nListId,
+                              sal_uInt16 nLevelNum,
+                              sal_uInt16 nStartAt);
 
     /// Access to the attribute output class.
     virtual AttributeOutputBase& AttrOutput() const = 0;

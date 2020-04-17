@@ -6701,7 +6701,7 @@ void DocxAttributeOutput::NumberingDefinition( sal_uInt16 nId, const SwNumRule &
 
 void DocxAttributeOutput::OverrideNumberingDefinition(
         SwNumRule const& rRule,
-        sal_uInt16 const nNum, sal_uInt16 const nAbstractNum)
+        sal_uInt16 const nNum, sal_uInt16 const nAbstractNum, const std::map< size_t, size_t > & rLevelOverrides )
 {
     m_pSerializer->startElementNS(XML_w, XML_num, FSNS(XML_w, XML_numId), OString::number(nNum));
 
@@ -6712,12 +6712,23 @@ void DocxAttributeOutput::OverrideNumberingDefinition(
         ? WW8ListManager::nMinLevel : WW8ListManager::nMaxLevel);
     for (sal_uInt8 nLevel = 0; nLevel < nLevels; ++nLevel)
     {
+        const auto levelOverride = rLevelOverrides.find(nLevel);
         // only export it if it differs from abstract numbering definition
-        if (rRule.Get(nLevel) != rAbstractRule.Get(nLevel))
+        if ( rRule.Get(nLevel) != rAbstractRule.Get(nLevel) ||
+            levelOverride != rLevelOverrides.end() )
         {
             m_pSerializer->startElementNS(XML_w, XML_lvlOverride, FSNS(XML_w, XML_ilvl), OString::number(nLevel));
 
-            GetExport().NumberingLevel(rRule, nLevel);
+            if (rRule.Get(nLevel) != rAbstractRule.Get(nLevel))
+            {
+                GetExport().NumberingLevel(rRule, nLevel);
+            }
+            if (levelOverride != rLevelOverrides.end())
+            {
+                // list numbering restart override
+                m_pSerializer->singleElementNS(XML_w, XML_startOverride,
+                    FSNS(XML_w, XML_val), OString::number(levelOverride->second));
+            }
 
             m_pSerializer->endElementNS(XML_w, XML_lvlOverride);
         }

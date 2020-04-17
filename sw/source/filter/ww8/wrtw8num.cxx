@@ -123,6 +123,13 @@ sal_uInt16 MSWordExportBase::OverrideNumRule(
     return it->second;
 }
 
+void MSWordExportBase::AddListLevelOverride(sal_uInt16 nListId,
+    sal_uInt16 nLevelNum,
+    sal_uInt16 nStartAt)
+{
+    m_ListLevelOverrides[nListId][nLevelNum] = nStartAt;
+}
+
 sal_uInt16 MSWordExportBase::GetNumberingId( const SwNumRule& rNumRule )
 {
     if ( !m_pUsedNumTable )
@@ -243,7 +250,7 @@ void MSWordExportBase::NumberingDefinitions()
             assert(it != m_OverridingNums.end());
             pRule = (*m_pUsedNumTable)[it->second.first];
             assert(pRule);
-            AttrOutput().OverrideNumberingDefinition(*pRule, n + 1, it->second.second + 1);
+            AttrOutput().OverrideNumberingDefinition(*pRule, n + 1, it->second.second + 1, m_ListLevelOverrides[n]);
         }
     }
 }
