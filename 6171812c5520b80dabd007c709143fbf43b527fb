@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7232698e_438b062b",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 6449,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-17T15:34:19Z",
+      "side": 1,
+      "message": "see \u003chttps://gerrit.libreoffice.org/c/core/+/92458\u003e \"Remove obsolete configure checks after libreoffice-7-0 branch off\"",
+      "range": {
+        "startLine": 6448,
+        "startChar": 59,
+        "endLine": 6449,
+        "endChar": 60
+      },
+      "revId": "6171812c5520b80dabd007c709143fbf43b527fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
