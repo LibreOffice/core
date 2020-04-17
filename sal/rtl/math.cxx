@@ -43,10 +43,6 @@
 
 #include <dtoa.h>
 
-#if !HAVE_GCC_BUILTIN_FFS && !defined _WIN32
-    #include <strings.h>
-#endif
-
 static int const n10Count = 16;
 static double const n10s[2][n10Count] = {
     { 1e1, 1e2, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8,
@@ -183,14 +179,12 @@ bool isRepresentableInteger(double fAbsValue)
 // Returns 1-based index of least significant bit in a number, or zero if number is zero
 int findFirstSetBit(unsigned n)
 {
-#if HAVE_GCC_BUILTIN_FFS
-    return __builtin_ffs(n);
-#elif defined _WIN32
+#if defined _WIN32
     unsigned long pos;
     unsigned char bNonZero = _BitScanForward(&pos, n);
     return (bNonZero == 0) ? 0 : pos + 1;
 #else
-    return ffs(n);
+    return __builtin_ffs(n);
 #endif
 }
 

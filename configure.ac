@@ -6304,15 +6304,6 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
         AC_MSG_RESULT([no])
     fi
 
-    AC_MSG_CHECKING([whether $CC_BASE supports __builtin_ffs])
-    AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return __builtin_ffs(1); ]])],[HAVE_GCC_BUILTIN_FFS=TRUE],[])
-    if test "$HAVE_GCC_BUILTIN_FFS" = "TRUE"; then
-        AC_MSG_RESULT([yes])
-        AC_DEFINE(HAVE_GCC_BUILTIN_FFS)
-    else
-        AC_MSG_RESULT([no])
-    fi
-
     AC_MSG_CHECKING([whether $CC_BASE supports __attribute__((deprecated(message)))])
     save_CFLAGS=$CFLAGS
     CFLAGS="$CFLAGS -Werror"
