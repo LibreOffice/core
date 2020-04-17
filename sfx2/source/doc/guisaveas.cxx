@@ -1600,12 +1600,18 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
                             aModelData.GetMediaDescr().find( OUString("FilterFlags") );
     bool bFilterFlagsSet = ( aIter != aModelData.GetMediaDescr().end() );
 
+    // check if the filter Dialog has not been called before
     if( !( nStoreMode & PDFEXPORT_REQUESTED ) && !( nStoreMode & EPUBEXPORT_REQUESTED ) && !bFilterFlagsSet
         && ( ( nStoreMode & EXPORT_REQUESTED ) || bUseFilterOptions ) )
     {
         // execute filter options dialog
         if ( aModelData.ExecuteFilterDialog_Impl( aFilterName ) )
+        {
             bDialogUsed = true;
+            // check if the file is a pdf or not and change the storing mode at convenience
+            if ( aURL.GetFileExtension().equalsIgnoreAsciiCase( "pdf" ) )
+                nStoreMode = EXPORT_REQUESTED | PDFEXPORT_REQUESTED;
+        }
     }
 
     // so the arguments will not change any more and can be stored to the main location
