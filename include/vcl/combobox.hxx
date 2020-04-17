@@ -180,6 +180,8 @@ public:
 
     void SetWidthInChars(sal_Int32 nWidthInChars);
 
+    long GetDropDownEntryHeight() const;
+
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
 
     virtual FactoryFunction GetUITestFactory() const override;
