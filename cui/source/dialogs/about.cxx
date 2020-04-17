@@ -37,6 +37,10 @@
 #include <sfx2/app.hxx> //SfxApplication::loadBrandSvg
 #include <strings.hrc>
 
+#include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp> //XClipboard
+#include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp> //SystemClipboard
+#include <vcl/textview.hxx> //TETextDataObject
+
 #include <config_feature_opencl.h>
 #if HAVE_FEATURE_OPENCL
 #include <opencl/openclwrapper.hxx>
@@ -52,6 +56,7 @@ AboutDialog::AboutDialog(weld::Window *pParent)
       m_pWebsiteButton(m_xBuilder->weld_link_button("btnWebsite")),
       m_pReleaseNotesButton(m_xBuilder->weld_link_button("btnReleaseNotes")),
       m_pCloseButton(m_xBuilder->weld_button("btnClose")),
+      m_pCopyButton(m_xBuilder->weld_button("btnCopyVersion")),
       m_pBrandImage(m_xBuilder->weld_image("imBrand")),
       m_pAboutImage(m_xBuilder->weld_image("imAbout")),
       m_pVersionLabel(m_xBuilder->weld_label("lbVersion")),
@@ -101,6 +106,7 @@ AboutDialog::AboutDialog(weld::Window *pParent)
   m_pReleaseNotesButton->set_uri(sURL);
 
   //Handler
+  m_pCopyButton->connect_clicked( LINK( this, AboutDialog, HandleClick ) );
   m_pCloseButton->grab_focus();
 }
 
@@ -241,4 +247,26 @@ OUString AboutDialog::GetCopyrightString() {
   return aCopyrightString;
 }
 
+IMPL_LINK_NOARG(AboutDialog, HandleClick, weld::Button&, void)
+{
+    css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
+        css::datatransfer::clipboard::SystemClipboard::create(comphelper::getProcessComponentContext());
+
+    if (xClipboard.is())
+    {
+        TETextDataObject* pDataObj = new TETextDataObject( m_pVersionLabel->get_label() );
+
+        try
+        {
+            xClipboard->setContents( pDataObj, nullptr );
+
+            css::uno::Reference<css::datatransfer::clipboard::XFlushableClipboard> xFlushableClipboard(xClipboard, css::uno::UNO_QUERY);
+            if( xFlushableClipboard.is() )
+                xFlushableClipboard->flushClipboard();
+        }
+        catch( const css::uno::Exception& )
+        {
+        }
+    }
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
