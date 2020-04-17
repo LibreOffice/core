@@ -492,38 +492,38 @@ ComponentContext::ComponentContext(
         }
     }
 
-    if (!m_xSMgr.is() && m_xDelegate.is())
+    if (!(!m_xSMgr.is() && m_xDelegate.is()))
+        return;
+
+    // wrap delegate's smgr XPropertySet into new smgr
+    Reference< lang::XMultiComponentFactory > xMgr( m_xDelegate->getServiceManager() );
+    if (!xMgr.is())
+        return;
+
+    osl_atomic_increment( &m_refCount );
+    try
     {
-        // wrap delegate's smgr XPropertySet into new smgr
-        Reference< lang::XMultiComponentFactory > xMgr( m_xDelegate->getServiceManager() );
-        if (xMgr.is())
+        // create new smgr based on delegate's one
+        m_xSMgr.set(
+            xMgr->createInstanceWithContext(
+                "com.sun.star.comp.stoc.OServiceManagerWrapper", xDelegate ),
+            UNO_QUERY );
+        // patch DefaultContext property of new one
+        Reference< beans::XPropertySet > xProps( m_xSMgr, UNO_QUERY );
+        OSL_ASSERT( xProps.is() );
+        if (xProps.is())
         {
-            osl_atomic_increment( &m_refCount );
-            try
-            {
-                // create new smgr based on delegate's one
-                m_xSMgr.set(
-                    xMgr->createInstanceWithContext(
-                        "com.sun.star.comp.stoc.OServiceManagerWrapper", xDelegate ),
-                    UNO_QUERY );
-                // patch DefaultContext property of new one
-                Reference< beans::XPropertySet > xProps( m_xSMgr, UNO_QUERY );
-                OSL_ASSERT( xProps.is() );
-                if (xProps.is())
-                {
-                    Reference< XComponentContext > xThis( this );
-                    xProps->setPropertyValue( "DefaultContext", Any( xThis ) );
-                }
-            }
-            catch (...)
-            {
-                osl_atomic_decrement( &m_refCount );
-                throw;
-            }
-            osl_atomic_decrement( &m_refCount );
-            OSL_ASSERT( m_xSMgr.is() );
+            Reference< XComponentContext > xThis( this );
+            xProps->setPropertyValue( "DefaultContext", Any( xThis ) );
         }
     }
+    catch (...)
+    {
+        osl_atomic_decrement( &m_refCount );
+        throw;
+    }
+    osl_atomic_decrement( &m_refCount );
+    OSL_ASSERT( m_xSMgr.is() );
 }
 
 

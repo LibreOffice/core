@@ -134,127 +134,128 @@ void Data::initProperties(
 {
     css::uno::Reference< css::reflection::XInterfaceTypeDescription2 > ifc(
         resolveTypedefs(type), css::uno::UNO_QUERY_THROW);
-    if (seen->insert(ifc->getName()).second) {
-        css::uno::Sequence<
-        css::uno::Reference< css::reflection::XTypeDescription > > bases(
-            ifc->getBaseTypes());
-        for (sal_Int32 i = 0; i < bases.getLength(); ++i) {
-            initProperties(bases[i], absentOptional, handleNames, seen);
-        }
-        css::uno::Sequence<
-        css::uno::Reference<
-        css::reflection::XInterfaceMemberTypeDescription > > members(
-            ifc->getMembers());
-        OUString const * absentBegin = absentOptional.getConstArray();
-        OUString const * absentEnd =
-            absentBegin + absentOptional.getLength();
-        for (sal_Int32 i = 0; i < members.getLength(); ++i) {
-            if (members[i]->getTypeClass()
-                == css::uno::TypeClass_INTERFACE_ATTRIBUTE)
-            {
-                css::uno::Reference<
-                css::reflection::XInterfaceAttributeTypeDescription2 > attr(
-                    members[i], css::uno::UNO_QUERY_THROW);
-                sal_Int16 attrAttribs = 0;
-                if (attr->isBound()) {
-                    attrAttribs |= css::beans::PropertyAttribute::BOUND;
+    if (!seen->insert(ifc->getName()).second)
+        return;
+
+    css::uno::Sequence<
+    css::uno::Reference< css::reflection::XTypeDescription > > bases(
+        ifc->getBaseTypes());
+    for (sal_Int32 i = 0; i < bases.getLength(); ++i) {
+        initProperties(bases[i], absentOptional, handleNames, seen);
+    }
+    css::uno::Sequence<
+    css::uno::Reference<
+    css::reflection::XInterfaceMemberTypeDescription > > members(
+        ifc->getMembers());
+    OUString const * absentBegin = absentOptional.getConstArray();
+    OUString const * absentEnd =
+        absentBegin + absentOptional.getLength();
+    for (sal_Int32 i = 0; i < members.getLength(); ++i) {
+        if (members[i]->getTypeClass()
+            == css::uno::TypeClass_INTERFACE_ATTRIBUTE)
+        {
+            css::uno::Reference<
+            css::reflection::XInterfaceAttributeTypeDescription2 > attr(
+                members[i], css::uno::UNO_QUERY_THROW);
+            sal_Int16 attrAttribs = 0;
+            if (attr->isBound()) {
+                attrAttribs |= css::beans::PropertyAttribute::BOUND;
+            }
+            bool bSetUnknown = false;
+            if (attr->isReadOnly()) {
+                attrAttribs |= css::beans::PropertyAttribute::READONLY;
+                bSetUnknown = true;
+            }
+            css::uno::Sequence<
+            css::uno::Reference<
+            css::reflection::XCompoundTypeDescription > > excs(
+                attr->getGetExceptions());
+            bool bGetUnknown = false;
+            //XXX  Special interpretation of getter/setter exceptions only
+            // works if the specified exceptions are of the exact type, not
+            // of a supertype:
+            for (sal_Int32 j = 0; j < excs.getLength(); ++j) {
+                if ( excs[j]->getName() == "com.sun.star.beans.UnknownPropertyException" )
+                {
+                    bGetUnknown = true;
+                    break;
                 }
-                bool bSetUnknown = false;
-                if (attr->isReadOnly()) {
-                    attrAttribs |= css::beans::PropertyAttribute::READONLY;
+            }
+            excs = attr->getSetExceptions();
+            for (sal_Int32 j = 0; j < excs.getLength(); ++j) {
+                if ( excs[j]->getName() == "com.sun.star.beans.UnknownPropertyException" )
+                {
                     bSetUnknown = true;
+                } else if ( excs[j]->getName() == "com.sun.star.beans.PropertyVetoException" )
+                {
+                    attrAttribs
+                        |= css::beans::PropertyAttribute::CONSTRAINED;
                 }
+            }
+            if (bGetUnknown && bSetUnknown) {
+                attrAttribs |= css::beans::PropertyAttribute::OPTIONAL;
+            }
+            css::uno::Reference< css::reflection::XTypeDescription > t(
+                attr->getType());
+            for (;;)
+            {
+                t = resolveTypedefs(t);
+                sal_Int16 n;
+                if (t->getName().startsWith(
+                        "com.sun.star.beans.Ambiguous<"))
+                {
+                    n = css::beans::PropertyAttribute::MAYBEAMBIGUOUS;
+                } else if (t->getName().startsWith(
+                               "com.sun.star.beans.Defaulted<"))
+                {
+                    n = css::beans::PropertyAttribute::MAYBEDEFAULT;
+                } else if (t->getName().startsWith(
+                               "com.sun.star.beans.Optional<"))
+                {
+                    n = css::beans::PropertyAttribute::MAYBEVOID;
+                } else {
+                    break;
+                }
+                if ((attrAttribs & n) != 0) {
+                    break;
+                }
+                attrAttribs |= n;
                 css::uno::Sequence<
-                css::uno::Reference<
-                css::reflection::XCompoundTypeDescription > > excs(
-                    attr->getGetExceptions());
-                bool bGetUnknown = false;
-                //XXX  Special interpretation of getter/setter exceptions only
-                // works if the specified exceptions are of the exact type, not
-                // of a supertype:
-                for (sal_Int32 j = 0; j < excs.getLength(); ++j) {
-                    if ( excs[j]->getName() == "com.sun.star.beans.UnknownPropertyException" )
-                    {
-                        bGetUnknown = true;
-                        break;
-                    }
-                }
-                excs = attr->getSetExceptions();
-                for (sal_Int32 j = 0; j < excs.getLength(); ++j) {
-                    if ( excs[j]->getName() == "com.sun.star.beans.UnknownPropertyException" )
-                    {
-                        bSetUnknown = true;
-                    } else if ( excs[j]->getName() == "com.sun.star.beans.PropertyVetoException" )
-                    {
-                        attrAttribs
-                            |= css::beans::PropertyAttribute::CONSTRAINED;
-                    }
-                }
-                if (bGetUnknown && bSetUnknown) {
-                    attrAttribs |= css::beans::PropertyAttribute::OPTIONAL;
-                }
-                css::uno::Reference< css::reflection::XTypeDescription > t(
-                    attr->getType());
-                for (;;)
-                {
-                    t = resolveTypedefs(t);
-                    sal_Int16 n;
-                    if (t->getName().startsWith(
-                            "com.sun.star.beans.Ambiguous<"))
-                    {
-                        n = css::beans::PropertyAttribute::MAYBEAMBIGUOUS;
-                    } else if (t->getName().startsWith(
-                                   "com.sun.star.beans.Defaulted<"))
-                    {
-                        n = css::beans::PropertyAttribute::MAYBEDEFAULT;
-                    } else if (t->getName().startsWith(
-                                   "com.sun.star.beans.Optional<"))
-                    {
-                        n = css::beans::PropertyAttribute::MAYBEVOID;
-                    } else {
-                        break;
-                    }
-                    if ((attrAttribs & n) != 0) {
-                        break;
-                    }
-                    attrAttribs |= n;
-                    css::uno::Sequence<
-                    css::uno::Reference< css::reflection::XTypeDescription > >
-                        args(
-                            css::uno::Reference<
-                            css::reflection::XStructTypeDescription >(
-                                t, css::uno::UNO_QUERY_THROW)->
-                            getTypeArguments());
-                    if (args.getLength() != 1) {
-                        throw css::uno::RuntimeException(
-                            "inconsistent UNO type registry");
-                    }
-                    t = args[0];
-                }
-                std::vector< OUString >::size_type handles
-                    = handleNames->size();
-                if (handles > SAL_MAX_INT32) {
-                    throw css::uno::RuntimeException(
-                        "interface type has too many attributes");
-                }
-                OUString name(members[i]->getMemberName());
-                if (!properties.emplace(
-                            name,
-                            PropertyData(
-                                css::beans::Property(
-                                    name, static_cast< sal_Int32 >(handles),
-                                    css::uno::Type(
-                                        t->getTypeClass(), t->getName()),
-                                    attrAttribs),
-                                (std::find(absentBegin, absentEnd, name)
-                                 == absentEnd))).
-                    second)
-                {
+                css::uno::Reference< css::reflection::XTypeDescription > >
+                    args(
+                        css::uno::Reference<
+                        css::reflection::XStructTypeDescription >(
+                            t, css::uno::UNO_QUERY_THROW)->
+                        getTypeArguments());
+                if (args.getLength() != 1) {
                     throw css::uno::RuntimeException(
                         "inconsistent UNO type registry");
                 }
-                handleNames->push_back(name);
+                t = args[0];
             }
+            std::vector< OUString >::size_type handles
+                = handleNames->size();
+            if (handles > SAL_MAX_INT32) {
+                throw css::uno::RuntimeException(
+                    "interface type has too many attributes");
+            }
+            OUString name(members[i]->getMemberName());
+            if (!properties.emplace(
+                        name,
+                        PropertyData(
+                            css::beans::Property(
+                                name, static_cast< sal_Int32 >(handles),
+                                css::uno::Type(
+                                    t->getTypeClass(), t->getName()),
+                                attrAttribs),
+                            (std::find(absentBegin, absentEnd, name)
+                             == absentEnd))).
+                second)
+            {
+                throw css::uno::RuntimeException(
+                    "inconsistent UNO type registry");
+            }
+            handleNames->push_back(name);
         }
     }
 }
