@@ -130,6 +130,8 @@ public:
     void testTdf121962();
     void testTdf121615();
     void testLargePage();
+    void testVersion15();
+    void testDefaultVersion();
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
     CPPUNIT_TEST(testTdf106059);
@@ -166,6 +168,8 @@ public:
     CPPUNIT_TEST(testTdf121962);
     CPPUNIT_TEST(testTdf121615);
     CPPUNIT_TEST(testLargePage);
+    CPPUNIT_TEST(testVersion15);
+    CPPUNIT_TEST(testDefaultVersion);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1750,6 +1754,55 @@ void PdfExportTest::testLargePage()
     // - Actual  : 17007.875
     // i.e. the value for 600 cm was larger than the 14 400 limit set in the spec.
     CPPUNIT_ASSERT_DOUBLES_EQUAL(8503.94, fWidth, 0.01);
+}
+
+void PdfExportTest::testDefaultVersion()
+{
+    // Create an empty document.
+    mxComponent = loadFromDesktop("private:factory/swriter");
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    // Save as PDF.
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result.
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
+    maMemory.WriteStream(aFile);
+    DocumentHolder pPdfDocument(
+        FPDF_LoadMemDocument(maMemory.GetData(), maMemory.GetSize(), /*password=*/nullptr));
+    CPPUNIT_ASSERT(pPdfDocument.get());
+    int nFileVersion = 0;
+    FPDF_GetFileVersion(pPdfDocument.get(), &nFileVersion);
+    CPPUNIT_ASSERT_EQUAL(16, nFileVersion);
+}
+
+void PdfExportTest::testVersion15()
+{
+    // Create an empty document.
+    mxComponent = loadFromDesktop("private:factory/swriter");
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    // Save as PDF.
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+        { { "SelectPdfVersion", uno::makeAny(static_cast<sal_Int32>(15)) } }));
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    aMediaDescriptor["FilterData"] <<= aFilterData;
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result.
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
+    maMemory.WriteStream(aFile);
+    DocumentHolder pPdfDocument(
+        FPDF_LoadMemDocument(maMemory.GetData(), maMemory.GetSize(), /*password=*/nullptr));
+    CPPUNIT_ASSERT(pPdfDocument.get());
+    int nFileVersion = 0;
+    FPDF_GetFileVersion(pPdfDocument.get(), &nFileVersion);
+    CPPUNIT_ASSERT_EQUAL(15, nFileVersion);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PdfExportTest);
