@@ -567,36 +567,36 @@ static void typelib_callback(
     void * pContext, typelib_TypeDescription ** ppRet, rtl_uString * pTypeName )
 {
     OSL_ENSURE( pContext && ppRet && pTypeName, "### null ptr!" );
-    if (ppRet)
+    if (!ppRet)
+        return;
+
+    if (*ppRet)
     {
-        if (*ppRet)
+        ::typelib_typedescription_release( *ppRet );
+        *ppRet = nullptr;
+    }
+    if (!(pContext && pTypeName))
+        return;
+
+    Reference< container::XHierarchicalNameAccess > access(
+        static_cast< container::XHierarchicalNameAccess * >(
+            pContext));
+    try
+    {
+        OUString const & rTypeName = OUString::unacquired( &pTypeName );
+        Reference< XTypeDescription > xTD;
+        if (access->getByHierarchicalName(rTypeName ) >>= xTD)
         {
-            ::typelib_typedescription_release( *ppRet );
-            *ppRet = nullptr;
+            *ppRet = createCTD( access, xTD );
         }
-        if (pContext && pTypeName)
-        {
-            Reference< container::XHierarchicalNameAccess > access(
-                static_cast< container::XHierarchicalNameAccess * >(
-                    pContext));
-            try
-            {
-                OUString const & rTypeName = OUString::unacquired( &pTypeName );
-                Reference< XTypeDescription > xTD;
-                if (access->getByHierarchicalName(rTypeName ) >>= xTD)
-                {
-                    *ppRet = createCTD( access, xTD );
-                }
-            }
-            catch (const container::NoSuchElementException & exc)
-            {
-                SAL_INFO("cppuhelper", "typelibrary type not available: " << exc );
-            }
-            catch (const Exception & exc)
-            {
-                SAL_INFO("cppuhelper", exc );
-            }
-        }
+    }
+    catch (const container::NoSuchElementException & exc)
+    {
+        SAL_INFO("cppuhelper", "typelibrary type not available: " << exc );
+    }
+    catch (const Exception & exc)
+    {
+        SAL_INFO("cppuhelper", exc );
     }
 }
 }

@@ -67,64 +67,65 @@ void WeakComponentImplHelperBase::acquire()
 void WeakComponentImplHelperBase::release()
     throw ()
 {
-    if (osl_atomic_decrement( &m_refCount ) == 0) {
-        // ensure no other references are created, via the weak connection point, from now on
-        disposeWeakConnectionPoint();
-        // restore reference count:
-        osl_atomic_increment( &m_refCount );
-        if (! rBHelper.bDisposed) {
-            try {
-                dispose();
-            }
-            catch (RuntimeException const& exc) { // don't break throw ()
-                SAL_WARN( "cppuhelper", exc );
-            }
-            OSL_ASSERT( rBHelper.bDisposed );
+    if (osl_atomic_decrement( &m_refCount ) != 0)
+        return;
+
+    // ensure no other references are created, via the weak connection point, from now on
+    disposeWeakConnectionPoint();
+    // restore reference count:
+    osl_atomic_increment( &m_refCount );
+    if (! rBHelper.bDisposed) {
+        try {
+            dispose();
         }
-        OWeakObject::release();
+        catch (RuntimeException const& exc) { // don't break throw ()
+            SAL_WARN( "cppuhelper", exc );
+        }
+        OSL_ASSERT( rBHelper.bDisposed );
     }
+    OWeakObject::release();
 }
 
 void WeakComponentImplHelperBase::dispose()
 {
     ClearableMutexGuard aGuard( rBHelper.rMutex );
-    if (!rBHelper.bDisposed && !rBHelper.bInDispose)
+    if (rBHelper.bDisposed || rBHelper.bInDispose)
+        return;
+
+    rBHelper.bInDispose = true;
+    aGuard.clear();
+    try
     {
-        rBHelper.bInDispose = true;
-        aGuard.clear();
+        // side effect: keeping a reference to this
+        lang::EventObject aEvt( static_cast< OWeakObject * >( this ) );
         try
         {
-            // side effect: keeping a reference to this
-            lang::EventObject aEvt( static_cast< OWeakObject * >( this ) );
-            try
-            {
-                rBHelper.aLC.disposeAndClear( aEvt );
-                disposing();
-            }
-            catch (...)
-            {
-                MutexGuard aGuard2( rBHelper.rMutex );
-                // bDisposed and bInDispose must be set in this order:
-                rBHelper.bDisposed = true;
-                rBHelper.bInDispose = false;
-                throw;
-            }
+            rBHelper.aLC.disposeAndClear( aEvt );
+            disposing();
+        }
+        catch (...)
+        {
             MutexGuard aGuard2( rBHelper.rMutex );
             // bDisposed and bInDispose must be set in this order:
             rBHelper.bDisposed = true;
             rBHelper.bInDispose = false;
-        }
-        catch (RuntimeException &)
-        {
             throw;
         }
-        catch (Exception & exc)
-        {
-            css::uno::Any anyEx = cppu::getCaughtException();
-            throw lang::WrappedTargetRuntimeException(
-                "unexpected UNO exception caught: " + exc.Message,
-                nullptr, anyEx );
-        }
+        MutexGuard aGuard2( rBHelper.rMutex );
+        // bDisposed and bInDispose must be set in this order:
+        rBHelper.bDisposed = true;
+        rBHelper.bInDispose = false;
+    }
+    catch (RuntimeException &)
+    {
+        throw;
+    }
+    catch (Exception & exc)
+    {
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw lang::WrappedTargetRuntimeException(
+            "unexpected UNO exception caught: " + exc.Message,
+            nullptr, anyEx );
     }
 }
 
@@ -214,43 +215,43 @@ void WeakAggComponentImplHelperBase::release()
 void WeakAggComponentImplHelperBase::dispose()
 {
     ClearableMutexGuard aGuard( rBHelper.rMutex );
-    if (!rBHelper.bDisposed && !rBHelper.bInDispose)
+    if (rBHelper.bDisposed || rBHelper.bInDispose)
+        return;
+
+    rBHelper.bInDispose = true;
+    aGuard.clear();
+    try
     {
-        rBHelper.bInDispose = true;
-        aGuard.clear();
+        // side effect: keeping a reference to this
+        lang::EventObject aEvt( static_cast< OWeakObject * >( this ) );
         try
         {
-            // side effect: keeping a reference to this
-            lang::EventObject aEvt( static_cast< OWeakObject * >( this ) );
-            try
-            {
-                rBHelper.aLC.disposeAndClear( aEvt );
-                disposing();
-            }
-            catch (...)
-            {
-                MutexGuard aGuard2( rBHelper.rMutex );
-                // bDisposed and bInDispose must be set in this order:
-                rBHelper.bDisposed = true;
-                rBHelper.bInDispose = false;
-                throw;
-            }
+            rBHelper.aLC.disposeAndClear( aEvt );
+            disposing();
+        }
+        catch (...)
+        {
             MutexGuard aGuard2( rBHelper.rMutex );
             // bDisposed and bInDispose must be set in this order:
             rBHelper.bDisposed = true;
             rBHelper.bInDispose = false;
-        }
-        catch (RuntimeException &)
-        {
             throw;
         }
-        catch (Exception & exc)
-        {
-            css::uno::Any anyEx = cppu::getCaughtException();
-            throw lang::WrappedTargetRuntimeException(
-                "unexpected UNO exception caught: " + exc.Message,
-                nullptr, anyEx );
-        }
+        MutexGuard aGuard2( rBHelper.rMutex );
+        // bDisposed and bInDispose must be set in this order:
+        rBHelper.bDisposed = true;
+        rBHelper.bInDispose = false;
+    }
+    catch (RuntimeException &)
+    {
+        throw;
+    }
+    catch (Exception & exc)
+    {
+        css::uno::Any anyEx = cppu::getCaughtException();
+        throw lang::WrappedTargetRuntimeException(
+            "unexpected UNO exception caught: " + exc.Message,
+            nullptr, anyEx );
     }
 }
 
