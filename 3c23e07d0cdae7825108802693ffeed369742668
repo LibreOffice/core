@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4226de4e_4c52b96a",
+        "filename": "oox/source/vml/vmlshapecontext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-04-17T09:05:37Z",
+      "side": 1,
+      "message": "remove typos:\n            // in DOCX shapes use r:id for the relationship id\n            // in XLSX they use o:relid",
+      "revId": "3c23e07d0cdae7825108802693ffeed369742668",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14e9a9d4_bc7bc454",
+        "filename": "oox/source/vml/vmlshapecontext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-04-17T09:05:37Z",
+      "side": 1,
+      "message": "Could you remove the irrelevant formatting changes, i.e. deletion of space characters, please?",
+      "range": {
+        "startLine": 360,
+        "startChar": 0,
+        "endLine": 372,
+        "endChar": 83
+      },
+      "revId": "3c23e07d0cdae7825108802693ffeed369742668",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
