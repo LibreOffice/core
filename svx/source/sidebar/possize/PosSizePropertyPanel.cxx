@@ -35,6 +35,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/button.hxx>
+#include <unotools/localedatawrapper.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
@@ -819,26 +820,28 @@ void PosSizePropertyPanel::NotifyItemUpdate(
 
 void PosSizePropertyPanel::GetControlState(const sal_uInt16 nSID, boost::property_tree::ptree& rState)
 {
-    weld::MetricSpinButton* pControl = nullptr;
+    VclPtr<MetricField> pControl = nullptr;
     switch (nSID)
     {
         case SID_ATTR_TRANSFORM_POS_X:
-            pControl = mxMtrPosX.get();
+            pControl = mpMtrPosX;
             break;
         case SID_ATTR_TRANSFORM_POS_Y:
-            pControl = mxMtrPosY.get();
+            pControl = mpMtrPosY;
             break;
         case SID_ATTR_TRANSFORM_WIDTH:
-            pControl = mxMtrWidth.get();
+            pControl = mpMtrWidth;
             break;
         case SID_ATTR_TRANSFORM_HEIGHT:
-            pControl = mxMtrHeight.get();
+            pControl = mpMtrHeight;
             break;
     }
 
-    if (pControl && !pControl->get_text().isEmpty())
+    if (pControl && !pControl->GetText().isEmpty())
     {
-        rState.put(pControl->get_buildable_name().getStr(), pControl->get_text().toUtf8().getStr());
+        OUString sValue = Application::GetSettings().GetNeutralLocaleDataWrapper().
+            getNum(pControl->GetValue(pControl->GetUnit()), pControl->GetDecimalDigits(), false, false);
+        rState.put(pControl->get_id().toUtf8().getStr(), sValue.toUtf8().getStr());
     }
 }
 
