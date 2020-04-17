@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "86bc7d67_f217a3f4",
+        "filename": "sw/source/uibase/app/docsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-04-17T07:48:04Z",
+      "side": 1,
+      "message": "At this point, the xURI should only contain the internal URI for the main document itself - no data source manipulation was performed yet. I don\u0027t understand why the call to createVndSunStarPkgUrlReference could return an empty reference. What was the xUri value that was passed to it?",
+      "range": {
+        "startLine": 447,
+        "startChar": 59,
+        "endLine": 447,
+        "endChar": 93
+      },
+      "revId": "4037ba0a4b37d284834a271e93239c4b0c024376",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
