@@ -230,16 +230,58 @@
   <block-list:block block-list:abbreviated-name="ezzane" block-list:name="eczane"/>
   <block-list:block block-list:abbreviated-name="Faide" block-list:name="Fayda"/>
   <block-list:block block-list:abbreviated-name="faide" block-list:name="fayda"/>
+  <block-list:block block-list:abbreviated-name="Faliyet" block-list:name="Faaliyet"/>
+  <block-list:block block-list:abbreviated-name="faliyet" block-list:name="faaliyet"/>
   <block-list:block block-list:abbreviated-name="Fantazi" block-list:name="Fantezi"/>
   <block-list:block block-list:abbreviated-name="fantazi" block-list:name="fantezi"/>
+  <block-list:block block-list:abbreviated-name="Fasülye" block-list:name="Fasulye"/>
+  <block-list:block block-list:abbreviated-name="fasülye" block-list:name="fasulye"/>
+  <block-list:block block-list:abbreviated-name="Fermar" block-list:name="Fermuar"/>
+  <block-list:block block-list:abbreviated-name="fermar" block-list:name="fermuar"/>
+  <block-list:block block-list:abbreviated-name="Fesetmek" block-list:name="Feshetmek"/>
+  <block-list:block block-list:abbreviated-name="fesetmek" block-list:name="feshetmek"/>
   <block-list:block block-list:abbreviated-name="Fiat" block-list:name="Fiyat"/>
   <block-list:block block-list:abbreviated-name="fiat" block-list:name="fiyat"/>
   <block-list:block block-list:abbreviated-name="Filim" block-list:name="Film"/>
   <block-list:block block-list:abbreviated-name="filim" block-list:name="film"/>
+  <block-list:block block-list:abbreviated-name="Fites" block-list:name="Vites"/>
+  <block-list:block block-list:abbreviated-name="fites" block-list:name="vites"/>
+  <block-list:block block-list:abbreviated-name="Florasan" block-list:name="Floresan"/>
+  <block-list:block block-list:abbreviated-name="florasan" block-list:name="floresan"/>
+  <block-list:block block-list:abbreviated-name="Gangaster" block-list:name="Gangster"/>
+  <block-list:block block-list:abbreviated-name="gangaster" block-list:name="gangster"/>
+  <block-list:block block-list:abbreviated-name="Gangren" block-list:name="Kangren"/>
+  <block-list:block block-list:abbreviated-name="gangren" block-list:name="kangren"/>
+  <block-list:block block-list:abbreviated-name="Gardolap" block-list:name="Gardırop"/>
+  <block-list:block block-list:abbreviated-name="gardolap" block-list:name="gardırop"/>
+  <block-list:block block-list:abbreviated-name="Gaste" block-list:name="Gazete"/>
+  <block-list:block block-list:abbreviated-name="gaste" block-list:name="gazete"/>
+  <block-list:block block-list:abbreviated-name="Gazte" block-list:name="Gazete"/>
+  <block-list:block block-list:abbreviated-name="gazte" block-list:name="gazete"/>
   <block-list:block block-list:abbreviated-name="Gider ayak" block-list:name="Giderayak"/>
   <block-list:block block-list:abbreviated-name="gider ayak" block-list:name="giderayak"/>
+  <block-list:block block-list:abbreviated-name="Gravat" block-list:name="Kravat"/>
+  <block-list:block block-list:abbreviated-name="gravat" block-list:name="kravat"/>
+  <block-list:block block-list:abbreviated-name="Hakkaten" block-list:name="Hakikaten"/>
+  <block-list:block block-list:abbreviated-name="hakkaten" block-list:name="hakikaten"/>
+  <block-list:block block-list:abbreviated-name="Halisinasyon" block-list:name="Halüsinasyon"/>
+  <block-list:block block-list:abbreviated-name="halisinasyon" block-list:name="halüsinasyon"/>
+  <block-list:block block-list:abbreviated-name="Halisünasyon" block-list:name="Halüsinasyon"/>
+  <block-list:block block-list:abbreviated-name="halisünasyon" block-list:name="halüsinasyon"/>
+  <block-list:block block-list:abbreviated-name="Haremlik selamlık" block-list:name="Harem selamlık"/>
+  <block-list:block block-list:abbreviated-name="haremlik selamlık" block-list:name="harem selamlık"/>
+  <block-list:block block-list:abbreviated-name="Harfiyat" block-list:name="Hafriyat"/>
+  <block-list:block block-list:abbreviated-name="harfiyat" block-list:name="hafriyat"/>
   <block-list:block block-list:abbreviated-name="Hegamonya" block-list:name="Hegemonya"/>
   <block-list:block block-list:abbreviated-name="hegamonya" block-list:name="hegemonya"/>
+  <block-list:block block-list:abbreviated-name="Herkez" block-list:name="Herkes"/>
+  <block-list:block block-list:abbreviated-name="herkez" block-list:name="herkes"/>
+  <block-list:block block-list:abbreviated-name="Herkeş" block-list:name="Herkes"/>
+  <block-list:block block-list:abbreviated-name="herkeş" block-list:name="herkes"/>
+  <block-list:block block-list:abbreviated-name="Heycan" block-list:name="Heyecan"/>
+  <block-list:block block-list:abbreviated-name="heycan" block-list:name="heyecan"/>
+  <block-list:block block-list:abbreviated-name="Hıristiyan" block-list:name="Hristiyan"/>
+  <block-list:block block-list:abbreviated-name="hıristiyan" block-list:name="hristiyan"/>
   <block-list:block block-list:abbreviated-name="Hiç bir" block-list:name="Hiçbir"/>
   <block-list:block block-list:abbreviated-name="hiç bir" block-list:name="hiçbir"/>
   <block-list:block block-list:abbreviated-name="Hoporlör" block-list:name="Hoparlör"/>
