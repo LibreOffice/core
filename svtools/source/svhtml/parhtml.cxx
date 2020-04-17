@@ -441,7 +441,7 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                                 RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |
                                 RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT;
 
-                            char cEncodedChar = static_cast<char>(cChar);
+                            sal_Char cEncodedChar = static_cast<sal_Char>(cChar);
                             cChar = OUString(&cEncodedChar, 1, eSrcEnc, convertFlags).toChar();
                             if( 0U == cChar )
                             {
@@ -593,11 +593,7 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                     // Space is protected because it's not a delimiter between
                     // options.
                     sTmpBuffer.append( '\\' );
-                    if( MAX_LEN == sTmpBuffer.getLength() )
-                    {
-                        aToken += sTmpBuffer;
-                        sTmpBuffer.setLength(0);
-                    }
+
                 }
                 if( IsParserWorking() )
                 {
@@ -634,11 +630,6 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
             {
                 // mark within tags
                 sTmpBuffer.append( '\\' );
-                if( MAX_LEN == sTmpBuffer.getLength() )
-                {
-                    aToken += sTmpBuffer;
-                    sTmpBuffer.setLength(0);
-                }
             }
             sTmpBuffer.append( '\\' );
             break;
@@ -727,8 +718,8 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
             {
                 // Reduce sequences of Blanks/Tabs/CR/LF to a single blank
                 do {
-                    nNextCh = GetNextChar();
-                    if( sal_Unicode(EOF) == nNextCh && rInput.eof() )
+                    if( sal_Unicode(EOF) == (nNextCh = GetNextChar()) &&
+                        rInput.eof() )
                     {
                         if( !aToken.isEmpty() || sTmpBuffer.getLength() > 1 )
                         {
@@ -761,13 +752,8 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                     // All remaining characters make their way into the text.
                         sTmpBuffer.appendUtf32( nNextCh );
                     }
-                    if( MAX_LEN == sTmpBuffer.getLength() )
-                    {
-                        aToken += sTmpBuffer;
-                        sTmpBuffer.setLength(0);
-                    }
-                    nNextCh = GetNextChar();
-                    if( ( sal_Unicode(EOF) == nNextCh && rInput.eof() ) ||
+                    if( ( sal_Unicode(EOF) == (nNextCh = GetNextChar()) &&
+                          rInput.eof() ) ||
                         !IsParserWorking() )
                     {
                         if( !sTmpBuffer.isEmpty() )
@@ -777,12 +763,6 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                 } while( rtl::isAsciiAlpha( nNextCh ) || rtl::isAsciiDigit( nNextCh ) );
                 bNextCh = false;
             }
-        }
-
-        if( MAX_LEN == sTmpBuffer.getLength() )
-        {
-            aToken += sTmpBuffer;
-            sTmpBuffer.setLength(0);
         }
 
         if( bContinue && bNextCh )
@@ -1451,13 +1431,9 @@ const HTMLOptions& HTMLParser::GetOptions( HtmlOptionId const *pNoConvertToken )
             // Actually only certain characters allowed.
             // Netscape only looks for "=" and white space (c.f.
             // Mozilla: PA_FetchRequestedNameValues in libparse/pa_mdl.c)
-            while( nPos < aToken.getLength() )
-            {
-                cChar = aToken[nPos];
-                if ( '=' == cChar ||!HTML_ISPRINTABLE(cChar) || rtl::isAsciiWhiteSpace(cChar) )
-                    break;
+            while( nPos < aToken.getLength() && '=' != (cChar=aToken[nPos]) &&
+                   HTML_ISPRINTABLE(cChar) && !rtl::isAsciiWhiteSpace(cChar) )
                 nPos++;
-            }
 
             OUString sName( aToken.copy( nStt, nPos-nStt ) );
 
@@ -1469,26 +1445,20 @@ const HTMLOptions& HTMLParser::GetOptions( HtmlOptionId const *pNoConvertToken )
                                nToken >= HtmlOptionId::SCRIPT_END) &&
                               (!pNoConvertToken || nToken != *pNoConvertToken);
 
-            while( nPos < aToken.getLength() )
-            {
-                cChar = aToken[nPos];
-                if ( HTML_ISPRINTABLE(cChar) && !rtl::isAsciiWhiteSpace(cChar) )
-                    break;
+            while( nPos < aToken.getLength() &&
+                   ( !HTML_ISPRINTABLE( (cChar=aToken[nPos]) ) ||
+                     rtl::isAsciiWhiteSpace(cChar) ) )
                 nPos++;
-            }
 
             // Option with value?
             if( nPos!=aToken.getLength() && '='==cChar )
             {
                 nPos++;
 
-                while( nPos < aToken.getLength() )
-                {
-                    cChar = aToken[nPos];
-                    if ( HTML_ISPRINTABLE(cChar) && ' ' != cChar && '\t' != cChar && '\r' != cChar && '\n' != cChar )
-                        break;
+                while( nPos < aToken.getLength() &&
+                        ( !HTML_ISPRINTABLE( (cChar=aToken[nPos]) ) ||
+                          ' '==cChar || '\t'==cChar || '\r'==cChar || '\n'==cChar ) )
                     nPos++;
-                }
 
                 if( nPos != aToken.getLength() )
                 {
@@ -1904,8 +1874,6 @@ bool HTMLParser::InternalImgToPrivateURL( OUString& rURL )
     return bFound;
 }
 
-namespace {
-
 enum class HtmlMeta {
     NONE = 0,
     Author,
@@ -1921,8 +1889,6 @@ enum class HtmlMeta {
     SDEndnote,
     ContentType
 };
-
-}
 
 // <META NAME=xxx>
 static HTMLOptionEnum<HtmlMeta> const aHTMLMetaNameTable[] =
