@@ -1540,11 +1540,10 @@ ImplTabItem* TabControl::ImplGetItem(const Point& rPt) const
 
 bool TabControl::PreNotify( NotifyEvent& rNEvt )
 {
-    const MouseEvent* pMouseEvt = nullptr;
-
-    if( (rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != nullptr )
+    if( rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE )
     {
-        if( !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
+        const MouseEvent* pMouseEvt = rNEvt.GetMouseEvent();
+        if( pMouseEvt && !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
         {
             // trigger redraw if mouse over state has changed
             if( IsNativeControlSupported(ControlType::TabItem, ControlPart::Entire) )

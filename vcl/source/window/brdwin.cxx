@@ -679,8 +679,11 @@ void ImplSmallBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, c
 
         bool bMouseOver = false;
         vcl::Window *pCtrlChild = pCtrl->GetWindow(GetWindowType::FirstChild);
-        while(pCtrlChild && !(bMouseOver = pCtrlChild->IsMouseOver()))
+        while(pCtrlChild)
         {
+            bMouseOver = pCtrlChild->IsMouseOver();
+            if (bMouseOver)
+                break;
             pCtrlChild = pCtrlChild->GetWindow(GetWindowType::Next);
         }
 

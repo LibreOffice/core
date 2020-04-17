@@ -813,50 +813,53 @@ void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, bool 
                 aSelection.Min() > 0 && /* first char needs not to be checked */
                 xBI.is() && i18n::ScriptType::COMPLEX == xBI->getScriptType( rStr, 0 );
 
-        uno::Reference < i18n::XExtendedInputSequenceChecker > xISC;
-        if (bIsInputSequenceChecking && (xISC = ImplGetInputSequenceChecker()).is())
+        if (bIsInputSequenceChecking)
         {
-            sal_Unicode cChar = rStr[0];
-            sal_Int32 nTmpPos = aSelection.Min();
-            sal_Int16 nCheckMode = officecfg::Office::Common::I18N::CTL::CTLSequenceCheckingRestricted::get()?
-                    i18n::InputSequenceCheckMode::STRICT : i18n::InputSequenceCheckMode::BASIC;
-
-            // the text that needs to be checked is only the one
-            // before the current cursor position
-            const OUString aOldText( maText.getStr(), nTmpPos);
-            OUString aTmpText( aOldText );
-            if (officecfg::Office::Common::I18N::CTL::CTLSequenceCheckingTypeAndReplace::get())
+            uno::Reference < i18n::XExtendedInputSequenceChecker > xISC = ImplGetInputSequenceChecker();
+            if (xISC.is())
             {
-                xISC->correctInputSequence( aTmpText, nTmpPos - 1, cChar, nCheckMode );
+                sal_Unicode cChar = rStr[0];
+                sal_Int32 nTmpPos = aSelection.Min();
+                sal_Int16 nCheckMode = officecfg::Office::Common::I18N::CTL::CTLSequenceCheckingRestricted::get()?
+                        i18n::InputSequenceCheckMode::STRICT : i18n::InputSequenceCheckMode::BASIC;
 
-                // find position of first character that has changed
-                sal_Int32 nOldLen = aOldText.getLength();
-                sal_Int32 nTmpLen = aTmpText.getLength();
-                const sal_Unicode *pOldTxt = aOldText.getStr();
-                const sal_Unicode *pTmpTxt = aTmpText.getStr();
-                sal_Int32 nChgPos = 0;
-                while ( nChgPos < nOldLen && nChgPos < nTmpLen &&
-                        pOldTxt[nChgPos] == pTmpTxt[nChgPos] )
-                    ++nChgPos;
-
-                const OUString aChgText( aTmpText.copy( nChgPos ) );
-
-                // remove text from first pos to be changed to current pos
-                maText.remove( nChgPos, nTmpPos - nChgPos );
-
-                if (!aChgText.isEmpty())
+                // the text that needs to be checked is only the one
+                // before the current cursor position
+                const OUString aOldText( maText.getStr(), nTmpPos);
+                OUString aTmpText( aOldText );
+                if (officecfg::Office::Common::I18N::CTL::CTLSequenceCheckingTypeAndReplace::get())
                 {
-                    aNewText = aChgText;
-                    aSelection.Min() = nChgPos; // position for new text to be inserted
+                    xISC->correctInputSequence( aTmpText, nTmpPos - 1, cChar, nCheckMode );
+
+                    // find position of first character that has changed
+                    sal_Int32 nOldLen = aOldText.getLength();
+                    sal_Int32 nTmpLen = aTmpText.getLength();
+                    const sal_Unicode *pOldTxt = aOldText.getStr();
+                    const sal_Unicode *pTmpTxt = aTmpText.getStr();
+                    sal_Int32 nChgPos = 0;
+                    while ( nChgPos < nOldLen && nChgPos < nTmpLen &&
+                            pOldTxt[nChgPos] == pTmpTxt[nChgPos] )
+                        ++nChgPos;
+
+                    const OUString aChgText( aTmpText.copy( nChgPos ) );
+
+                    // remove text from first pos to be changed to current pos
+                    maText.remove( nChgPos, nTmpPos - nChgPos );
+
+                    if (!aChgText.isEmpty())
+                    {
+                        aNewText = aChgText;
+                        aSelection.Min() = nChgPos; // position for new text to be inserted
+                    }
+                    else
+                        aNewText.clear();
                 }
                 else
-                    aNewText.clear();
-            }
-            else
-            {
-                // should the character be ignored (i.e. not get inserted) ?
-                if (!xISC->checkInputSequence( aOldText, nTmpPos - 1, cChar, nCheckMode ))
-                    aNewText.clear();
+                {
+                    // should the character be ignored (i.e. not get inserted) ?
+                    if (!xISC->checkInputSequence( aOldText, nTmpPos - 1, cChar, nCheckMode ))
+                        aNewText.clear();
+                }
             }
         }
 
@@ -1821,10 +1824,13 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawF
 void Edit::ImplInvalidateOutermostBorder( vcl::Window* pWin )
 {
     // allow control to show focused state
-    vcl::Window *pInvalWin = pWin, *pBorder = pWin;
-    while( ( pBorder = pInvalWin->GetWindow( GetWindowType::Border ) ) != pInvalWin && pBorder &&
-           pInvalWin->ImplGetFrame() == pBorder->ImplGetFrame() )
+    vcl::Window *pInvalWin = pWin;
+    for (;;)
     {
+        vcl::Window* pBorder = pInvalWin->GetWindow( GetWindowType::Border );
+        if (pBorder == pInvalWin || !pBorder ||
+           pInvalWin->ImplGetFrame() != pBorder->ImplGetFrame() )
+           break;
         pInvalWin = pBorder;
     }
 

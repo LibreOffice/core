@@ -1414,11 +1414,10 @@ void PushButton::DataChanged( const DataChangedEvent& rDCEvt )
 
 bool PushButton::PreNotify( NotifyEvent& rNEvt )
 {
-    const MouseEvent* pMouseEvt = nullptr;
-
-    if( (rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != nullptr )
+    if( rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE )
     {
-        if( pMouseEvt->IsEnterWindow() || pMouseEvt->IsLeaveWindow() )
+        const MouseEvent* pMouseEvt = rNEvt.GetMouseEvent();
+        if( pMouseEvt && (pMouseEvt->IsEnterWindow() || pMouseEvt->IsLeaveWindow()) )
         {
             // trigger redraw as mouse over state has changed
 
@@ -2507,11 +2506,10 @@ void RadioButton::DataChanged( const DataChangedEvent& rDCEvt )
 
 bool RadioButton::PreNotify( NotifyEvent& rNEvt )
 {
-    const MouseEvent* pMouseEvt = nullptr;
-
-    if( (rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != nullptr )
+    if( rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE )
     {
-        if( !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
+        const MouseEvent* pMouseEvt = rNEvt.GetMouseEvent();
+        if( pMouseEvt && !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
         {
             // trigger redraw if mouse over state has changed
             if( IsNativeControlSupported(ControlType::Radiobutton, ControlPart::Entire) )
@@ -3411,11 +3409,10 @@ void CheckBox::DataChanged( const DataChangedEvent& rDCEvt )
 
 bool CheckBox::PreNotify( NotifyEvent& rNEvt )
 {
-    const MouseEvent* pMouseEvt = nullptr;
-
-    if( (rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != nullptr )
+    if( rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE )
     {
-        if( !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
+        const MouseEvent* pMouseEvt = rNEvt.GetMouseEvent();
+        if( pMouseEvt && !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
         {
             // trigger redraw if mouse over state has changed
             if( IsNativeControlSupported(ControlType::Checkbox, ControlPart::Entire) )
