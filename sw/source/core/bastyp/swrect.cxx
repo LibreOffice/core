@@ -163,8 +163,10 @@ long SwRect::Bottom_() const{ return m_Point.getY() + m_Size.getHeight(); }
 
 void SwRect::AddWidth( const long nAdd ) { m_Size.AdjustWidth(nAdd ); }
 void SwRect::AddHeight( const long nAdd ) { m_Size.AdjustHeight(nAdd ); }
+void SwRect::AddLeft( const long nAdd ){ m_Size.AdjustWidth(-nAdd ); m_Point.setX(m_Point.getX() + nAdd); }
 void SwRect::SubLeft( const long nSub ){ m_Size.AdjustWidth(nSub ); m_Point.setX(m_Point.getX() - nSub); }
 void SwRect::AddRight( const long nAdd ){ m_Size.AdjustWidth(nAdd ); }
+void SwRect::AddTop( const long nAdd ){ m_Size.AdjustHeight(-nAdd ); m_Point.setY(m_Point.getY() + nAdd); }
 void SwRect::SubTop( const long nSub ){ m_Size.AdjustHeight(nSub ); m_Point.setY(m_Point.getY() - nSub); }
 void SwRect::AddBottom( const long nAdd ){ m_Size.AdjustHeight(nAdd ); }
 void SwRect::SetPosX( const long nNew ){ m_Point.setX(nNew); }

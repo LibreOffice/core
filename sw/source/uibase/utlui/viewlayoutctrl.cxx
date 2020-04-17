@@ -103,8 +103,8 @@ void SwViewLayoutControl::Paint( const UserDrawEvent& rUsrEvt )
     const long nXOffset = (aRect.GetWidth() - nImageWidthSum) / 2;
     const long nYOffset = (aControlRect.GetHeight() - mpImpl->maImageSingleColumn.GetSizePixel().Height()) / 2;
 
-    aRect.SetLeft( aRect.Left() + nXOffset );
-    aRect.SetTop( aRect.Top() + nYOffset );
+    aRect.AdjustLeft( nXOffset );
+    aRect.AdjustTop( nYOffset );
 
     // draw single column image:
     pDev->DrawImage( aRect.TopLeft(), bSingleColumn ? mpImpl->maImageSingleColumn_Active : mpImpl->maImageSingleColumn );

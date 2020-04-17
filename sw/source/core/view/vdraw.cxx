@@ -182,10 +182,10 @@ bool SwViewShellImp::IsDragPossible( const Point &rPoint )
     else
         aRect = GetShell()->GetLayout()->getFrameArea();
 
-    aRect.Top(    aRect.Top()    - FUZZY_EDGE );
-    aRect.Bottom( aRect.Bottom() + FUZZY_EDGE );
-    aRect.Left(   aRect.Left()   - FUZZY_EDGE );
-    aRect.Right(  aRect.Right()  + FUZZY_EDGE );
+    aRect.AddTop   (- FUZZY_EDGE );
+    aRect.AddBottom(  FUZZY_EDGE );
+    aRect.AddLeft  (- FUZZY_EDGE );
+    aRect.AddRight (  FUZZY_EDGE );
     return aRect.IsInside( rPoint );
 }
 
