@@ -223,7 +223,6 @@ public:
     void            Fill( const FontList* pList )
                         { FontNameBox::Fill( pList );
                           nFtCount = pList->GetFontNameCount(); }
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt ) override;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
     virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
     virtual Reference< css::accessibility::XAccessible > CreateAccessible() override;
@@ -1499,44 +1498,6 @@ void SvxFontNameBox_Impl::EnableControls_Impl()
 
     bEnable = aFontOpt.IsFontWYSIWYGEnabled();
     EnableWYSIWYG( bEnable );
-}
-
-void SvxFontNameBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
-{
-    FontNameBox::UserDraw( rUDEvt );
-
-    // Hack - GetStyle now contains the currently
-    // selected item in the list box
-    // ItemId contains the id of the current item to draw
-    // or select
-    if (  rUDEvt.GetItemId() == rUDEvt.GetStyle() )
-    {
-        OUString fontName(GetText());
-        if (IsInDropDown())
-        {
-            /*
-             * when in dropdown mode the selected item should be
-             * used and not the current selection
-             */
-             fontName = GetEntry(rUDEvt.GetItemId());
-        }
-        Sequence< PropertyValue > aArgs( 1 );
-        FontMetric aFontMetric( pFontList->Get( fontName,
-            aCurFont.GetWeight(),
-            aCurFont.GetItalic() ) );
-
-        SvxFontItem aFontItem( aFontMetric.GetFamilyType(),
-            aFontMetric.GetFamilyName(),
-            aFontMetric.GetStyleName(),
-            aFontMetric.GetPitch(),
-            aFontMetric.GetCharSet(),
-            SID_ATTR_CHAR_FONT );
-        aFontItem.QueryValue( aArgs[0].Value );
-        aArgs[0].Name   = "CharPreviewFontName";
-        SfxToolBoxControl::Dispatch( m_xDispatchProvider,
-            ".uno:CharPreviewFontName",
-                aArgs );
-    }
 }
 
 void SvxFontNameBox_Impl::Select()
