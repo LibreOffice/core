@@ -1773,6 +1773,10 @@ boost::property_tree::ptree MetricField::DumpAsPropertyTree()
     aTree.put("min", GetMin());
     aTree.put("max", GetMax());
     aTree.put("unit", FieldUnitToString(GetUnit()));
+    OUString sValue = Application::GetSettings().GetNeutroLocaleDataWrapper().
+        getNum(GetValue(), GetDecimalDigits(), false, false);
+    aTree.put("value", sValue.toUtf8().getStr());
+
     return aTree;
 }
 
