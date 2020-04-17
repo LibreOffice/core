@@ -3706,7 +3706,7 @@ bool X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
     // limit width and height if we are too large: #47757
     // olwm and fvwm need this, it doesn't harm the rest
 
-    // #i81311# do this only for sizable frames
+    // #i81311# do this only for sizeable frames
     if( nStyle_ & SalFrameStyleFlags::SIZEABLE )
     {
         Size aScreenSize = GetDisplay()->GetScreenSize( m_nXScreen );
