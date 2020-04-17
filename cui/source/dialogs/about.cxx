@@ -19,23 +19,28 @@
 
 #include <about.hxx>
 
-#include <osl/diagnose.h> //OSL_ENSURE
-#include <osl/process.h> //osl_getProcessLocale
-#include <rtl/character.hxx> //rtl::isAsciiHexDigit
-#include <sal/log.hxx> //SAL_WARN
-#include <vcl/settings.hxx> //GetSettings
+#include <osl/diagnose.h>
+#include <osl/process.h>
+#include <rtl/character.hxx>
+#include <sal/log.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/svapp.hxx> //Application::
-#include <vcl/virdev.hxx> //VirtualDevice
 
+#include <config_buildid.h>
+#include <dialmgr.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <svtools/langhelp.hxx>
-#include <unotools/bootstrap.hxx> //utl::Bootstrap::getBuildVersion
-#include <unotools/configmgr.hxx> //ConfigManager::
-#include <config_buildid.h> //EXTRA_BUILDID
-#include <dialmgr.hxx> //CuiResId
-#include <sfx2/app.hxx> //SfxApplication::loadBrandSvg
+#include <sfx2/app.hxx>
 #include <strings.hrc>
+#include <svtools/langhelp.hxx>
+#include <unotools/bootstrap.hxx>
+#include <unotools/configmgr.hxx>
+
+#include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
+#include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
+#include <tools/diagnose_ex.h>
+#include <vcl/textview.hxx>
 
 #include <config_feature_opencl.h>
 #if HAVE_FEATURE_OPENCL
@@ -52,6 +57,7 @@ AboutDialog::AboutDialog(weld::Window *pParent)
       m_pWebsiteButton(m_xBuilder->weld_link_button("btnWebsite")),
       m_pReleaseNotesButton(m_xBuilder->weld_link_button("btnReleaseNotes")),
       m_pCloseButton(m_xBuilder->weld_button("btnClose")),
+      m_pCopyButton(m_xBuilder->weld_button("btnCopyVersion")),
       m_pBrandImage(m_xBuilder->weld_image("imBrand")),
       m_pAboutImage(m_xBuilder->weld_image("imAbout")),
       m_pVersionLabel(m_xBuilder->weld_label("lbVersion")),
@@ -59,7 +65,7 @@ AboutDialog::AboutDialog(weld::Window *pParent)
   m_pVersionLabel->set_label(GetVersionString());
   m_pCopyrightLabel->set_label(GetCopyrightString());
 
-  //Images
+  // Images
   const Size nWidth(m_pVersionLabel->get_preferred_size());
   BitmapEx aBackgroundBitmap;
 
@@ -88,7 +94,7 @@ AboutDialog::AboutDialog(weld::Window *pParent)
     m_pVirDev.disposeAndClear();
   }
 
-  //Links
+  // Links
   m_pCreditsButton->set_uri(CuiResId(RID_SVXSTR_ABOUT_CREDITS_URL));
 
   OUString sURL(officecfg::Office::Common::Help::StartCenter::InfoURL::get());
@@ -100,7 +106,8 @@ AboutDialog::AboutDialog(weld::Window *pParent)
          LanguageTag(utl::ConfigManager::getUILocale()).getLanguage();
   m_pReleaseNotesButton->set_uri(sURL);
 
-  //Handler
+  // Handler
+  m_pCopyButton->connect_clicked(LINK(this, AboutDialog, HandleClick));
   m_pCloseButton->grab_focus();
 }
 
@@ -241,4 +248,24 @@ OUString AboutDialog::GetCopyrightString() {
   return aCopyrightString;
 }
 
+IMPL_LINK_NOARG(AboutDialog, HandleClick, weld::Button &, void) {
+  css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
+      css::datatransfer::clipboard::SystemClipboard::create(
+          comphelper::getProcessComponentContext());
+
+  if (xClipboard.is()) {
+    css::uno::Reference<css::datatransfer::XTransferable> xDataObj(
+        new TETextDataObject(m_pVersionLabel->get_label()));
+    try {
+      xClipboard->setContents(xDataObj, nullptr);
+
+      css::uno::Reference<css::datatransfer::clipboard::XFlushableClipboard>
+          xFlushableClipboard(xClipboard, css::uno::UNO_QUERY);
+      if (xFlushableClipboard.is())
+        xFlushableClipboard->flushClipboard();
+    } catch (const css::uno::Exception &) {
+      TOOLS_WARN_EXCEPTION("cui.dialogs", "Caught exception trying to copy");
+    }
+  }
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
