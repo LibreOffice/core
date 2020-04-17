@@ -111,7 +111,7 @@ static bool ensuredir( const OUString& rUnqPath )
     return bSuccess;
 }
 
-static OUString ConstructTempDir_Impl( const OUString* pParent )
+static OUString ConstructTempDir_Impl( const OUString* pParent, bool bCreateParentDirs )
 {
     OUString aName;
 
@@ -132,7 +132,7 @@ static OUString ConstructTempDir_Impl( const OUString* pParent )
             if ( aRet[i-1] == '/' )
                 i--;
 
-            if ( DirectoryItem::get( aRet.copy(0, i), aItem ) == FileBase::E_None )
+            if ( DirectoryItem::get( aRet.copy(0, i), aItem ) == FileBase::E_None || bCreateParentDirs )
                 aName = aRet;
         }
     }
@@ -251,18 +251,19 @@ static OUString lcl_createName(
     const OUString* pParent, bool bDirectory, bool bKeep, bool bLock,
     bool bCreateParentDirs )
 {
-    OUString aName = ConstructTempDir_Impl( pParent );
+    OUString aName = ConstructTempDir_Impl( pParent, bCreateParentDirs );
     if ( bCreateParentDirs )
     {
         sal_Int32 nOffset = rLeadingChars.lastIndexOf("/");
+        OUString aDirName;
         if (-1 != nOffset)
-        {
-            OUString aDirName = aName + rLeadingChars.copy( 0, nOffset );
-            TempDirCreatedObserver observer;
-            FileBase::RC err = Directory::createPath( aDirName, &observer );
-            if ( err != FileBase::E_None && err != FileBase::E_EXIST )
-                return OUString();
-        }
+            aDirName = aName + rLeadingChars.copy( 0, nOffset );
+        else
+            aDirName = aName;
+        TempDirCreatedObserver observer;
+        FileBase::RC err = Directory::createPath( aDirName, &observer );
+        if ( err != FileBase::E_None && err != FileBase::E_EXIST )
+            return OUString();
     }
     aName += rLeadingChars;
 
@@ -475,7 +476,7 @@ OUString TempFile::SetTempNameBaseDirectory( const OUString &rBaseName )
 
 OUString TempFile::GetTempNameBaseDirectory()
 {
-    return ConstructTempDir_Impl(nullptr);
+    return ConstructTempDir_Impl(nullptr, false);
 }
 
 }
