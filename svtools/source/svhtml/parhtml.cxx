@@ -380,7 +380,8 @@ constexpr bool HTML_ISPRINTABLE(sal_Unicode c) { return c >= 32 && c != 127; }
 
 HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
 {
-    OUStringBuffer sTmpBuffer( MAX_LEN );
+    sal_Int32 iBufferLen = MAX_LEN;
+    OUStringBuffer sTmpBuffer( iBufferLen );
     bool bContinue = true;
     bool bEqSignFound = false;
     sal_uInt32  cQuote = 0U;
@@ -593,10 +594,16 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                     // Space is protected because it's not a delimiter between
                     // options.
                     sTmpBuffer.append( '\\' );
-                    if( MAX_LEN == sTmpBuffer.getLength() )
+                    if( iBufferLen == sTmpBuffer.getLength() )
                     {
                         aToken += sTmpBuffer;
                         sTmpBuffer.setLength(0);
+
+                        if ( iBufferLen > 0 ) {
+                        	 iBufferLen *= 2;
+                        	 sTmpBuffer.ensureCapacity(iBufferLen);
+                        }
+
                     }
                 }
                 if( IsParserWorking() )
@@ -634,10 +641,16 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
             {
                 // mark within tags
                 sTmpBuffer.append( '\\' );
-                if( MAX_LEN == sTmpBuffer.getLength() )
+                if( iBufferLen == sTmpBuffer.getLength() )
                 {
                     aToken += sTmpBuffer;
                     sTmpBuffer.setLength(0);
+
+                    if ( iBufferLen > 0 ) {
+                         iBufferLen *= 2;
+                         sTmpBuffer.ensureCapacity(iBufferLen);
+                    }
+
                 }
             }
             sTmpBuffer.append( '\\' );
@@ -761,10 +774,16 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                     // All remaining characters make their way into the text.
                         sTmpBuffer.appendUtf32( nNextCh );
                     }
-                    if( MAX_LEN == sTmpBuffer.getLength() )
+                    if( iBufferLen == sTmpBuffer.getLength() )
                     {
                         aToken += sTmpBuffer;
                         sTmpBuffer.setLength(0);
+
+                        if ( iBufferLen > 0 ) {
+                        	 iBufferLen *= 2;
+                        	 sTmpBuffer.ensureCapacity(iBufferLen);
+                        }
+
                     }
                     nNextCh = GetNextChar();
                     if( ( sal_Unicode(EOF) == nNextCh && rInput.eof() ) ||
@@ -779,10 +798,16 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
             }
         }
 
-        if( MAX_LEN == sTmpBuffer.getLength() )
+        if( iBufferLen == sTmpBuffer.getLength() )
         {
             aToken += sTmpBuffer;
             sTmpBuffer.setLength(0);
+
+            if ( iBufferLen > 0 ) {
+                 iBufferLen *= 2;
+                 sTmpBuffer.ensureCapacity(iBufferLen);
+            }
+
         }
 
         if( bContinue && bNextCh )
