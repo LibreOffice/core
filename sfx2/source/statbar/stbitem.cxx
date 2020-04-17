@@ -285,9 +285,7 @@ void SAL_CALL SfxStatusBarControl::statusChanged( const frame::FeatureStateEvent
     }
 }
 
-
 // XStatusbarController
-
 sal_Bool SAL_CALL SfxStatusBarControl::mouseButtonDown(
     const awt::MouseEvent& rMouseEvent )
 {
@@ -303,7 +301,6 @@ sal_Bool SAL_CALL SfxStatusBarControl::mouseButtonDown(
     return MouseButtonDown( aMouseEvent );
 }
 
-
 sal_Bool SAL_CALL SfxStatusBarControl::mouseMove(
     const awt::MouseEvent& rMouseEvent )
 {
@@ -317,7 +314,6 @@ sal_Bool SAL_CALL SfxStatusBarControl::mouseMove(
                               0 );
     return MouseMove( aMouseEvent );
 }
-
 
 sal_Bool SAL_CALL SfxStatusBarControl::mouseButtonUp(
     const ::awt::MouseEvent& rMouseEvent )
@@ -333,7 +329,6 @@ sal_Bool SAL_CALL SfxStatusBarControl::mouseButtonUp(
     return MouseButtonUp( aMouseEvent );
 }
 
-
 void SAL_CALL SfxStatusBarControl::command(
     const awt::Point& rPos,
     ::sal_Int32 nCommand,
@@ -347,11 +342,10 @@ void SAL_CALL SfxStatusBarControl::command(
     Command( aCmdEvent );
 }
 
-
 void SAL_CALL SfxStatusBarControl::paint(
     const uno::Reference< awt::XGraphics >& xGraphics,
     const awt::Rectangle& rOutputRectangle,
-    ::sal_Int32 nStyle )
+    ::sal_Int32 /*nStyle*/ )
 {
     SolarMutexGuard aGuard;
 
@@ -359,11 +353,10 @@ void SAL_CALL SfxStatusBarControl::paint(
     if ( pOutDev )
     {
         ::tools::Rectangle aRect = VCLRectangle( rOutputRectangle );
-        UserDrawEvent aUserDrawEvent(nullptr, pOutDev, aRect, pBar->GetCurItemId(), static_cast<sal_uInt16>(nStyle));
+        UserDrawEvent aUserDrawEvent(nullptr, pOutDev, aRect, pBar->GetCurItemId());
         Paint( aUserDrawEvent );
     }
 }
-
 
 void SAL_CALL SfxStatusBarControl::click( const awt::Point& )
 {
@@ -371,15 +364,11 @@ void SAL_CALL SfxStatusBarControl::click( const awt::Point& )
     Click();
 }
 
-
 void SAL_CALL SfxStatusBarControl::doubleClick( const awt::Point& )
 {
 }
 
-
 // old sfx2 interface
-
-
 void SfxStatusBarControl::StateChanged
 (
     sal_uInt16              nSID,
