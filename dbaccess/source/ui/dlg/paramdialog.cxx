@@ -19,21 +19,15 @@
 
 #include <core_resource.hxx>
 #include <paramdialog.hxx>
-#include <dbu_dlg.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
-#include <commontypes.hxx>
 #include <com/sun/star/util/NumberFormatter.hpp>
-#include <com/sun/star/sdbc/DataType.hpp>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
-#include <stringconstants.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
-#include <unotools/syslocale.hxx>
 
 namespace dbaui
 {

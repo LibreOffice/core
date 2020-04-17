@@ -18,24 +18,22 @@
  */
 
 #include "UserAdmin.hxx"
-#include <UITools.hxx>
-#include <dbu_dlg.hxx>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #include <com/sun/star/sdbcx/XUsersSupplier.hpp>
 #include <com/sun/star/sdbcx/XDrop.hpp>
 #include <ucbhelper/interactionrequest.hxx>
-#include <ucbhelper/simpleauthenticationrequest.hxx>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbcx/XUser.hpp>
 #include <com/sun/star/sdbcx/XAppend.hpp>
-#include <stringconstants.hxx>
+#include <IItemSetHelper.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
 #include <core_resource.hxx>
-#include <dbadmin.hxx>
+#include <connectivity/dbexception.hxx>
+#include <connectivity/dbtools.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/passwd.hxx>

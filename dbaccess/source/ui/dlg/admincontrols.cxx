@@ -18,7 +18,6 @@
  */
 
 #include "admincontrols.hxx"
-#include <dbu_dlg.hxx>
 #include <dsitems.hxx>
 
 #include <svl/eitem.hxx>

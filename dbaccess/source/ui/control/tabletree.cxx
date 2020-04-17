@@ -21,24 +21,17 @@
 #include <tabletree.hxx>
 #include <imageprovider.hxx>
 #include <strings.hrc>
-#include <vcl/menu.hxx>
 #include <connectivity/dbtools.hxx>
-#include <comphelper/types.hxx>
-#include <stringconstants.hxx>
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
 #include <com/sun/star/sdb/application/DatabaseObjectContainer.hpp>
-#include <com/sun/star/sdbc/XDriverAccess.hpp>
-#include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include <com/sun/star/sdb/SQLContext.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <commontypes.hxx>
 #include <listviewitems.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
-#include <rtl/ustrbuf.hxx>
 #include <connectivity/dbmetadata.hxx>
 #include <vcl/treelistentry.hxx>
 

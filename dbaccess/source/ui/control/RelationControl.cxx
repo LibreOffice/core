@@ -28,9 +28,7 @@
 #include <TableWindow.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <UITools.hxx>
 #include <RelControliFace.hxx>
 #include <helpids.h>
 #include <o3tl/safeint.hxx>

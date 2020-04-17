@@ -18,39 +18,28 @@
  */
 
 #include <CollectionView.hxx>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <core_resource.hxx>
-#include <dbu_dlg.hxx>
 #include <strings.hrc>
 #include <comphelper/interaction.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <stringconstants.hxx>
-#include <bitmaps.hlst>
 #include <UITools.hxx>
 #include <com/sun/star/container/XHierarchicalNameContainer.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
-#include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/InteractionClassification.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/content.hxx>
-#include <unotools/viewoptions.hxx>
-#include <osl/thread.h>
 #include <connectivity/dbexception.hxx>
 
 namespace dbaui

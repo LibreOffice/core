@@ -19,16 +19,12 @@
 
 #include <dlgsave.hxx>
 #include <core_resource.hxx>
-#include <dbu_dlg.hxx>
 #include <strings.hrc>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
-#include <sqlmessage.hxx>
 #include <connectivity/dbtools.hxx>
 #include <UITools.hxx>
 #include <SqlNameEdit.hxx>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <objectnamecheck.hxx>
 #include <tools/diagnose_ex.h>

@@ -28,21 +28,18 @@
 #include "dbfindex.hxx"
 #include "dsnItem.hxx"
 
-#include <dbu_dlg.hxx>
+#include <IItemSetHelper.hxx>
 #include <strings.hrc>
 
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
-#include <vcl/mnemonic.hxx>
-#include <svl/cjkoptions.hxx>
 #if HAVE_FEATURE_JAVA
 #include <jvmaccess/virtualmachine.hxx>
 #endif
 #include <connectivity/CommonTools.hxx>
 #include "DriverSettings.hxx"
-#include <dbadmin.hxx>
 
 namespace dbaui
 {

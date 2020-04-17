@@ -19,13 +19,12 @@
 
 #include "adminpages.hxx"
 #include <core_resource.hxx>
-#include <dbadmin.hxx>
 #include <dbu_dlg.hxx>
+#include <IItemSetHelper.hxx>
 #include <strings.hrc>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
-#include <stringconstants.hxx>
 #include <dsitems.hxx>
 #include "dsselect.hxx"
 #include "odbcconfig.hxx"
@@ -33,12 +32,8 @@
 #include <sqlmessage.hxx>
 
 #include <comphelper/types.hxx>
-#include <osl/file.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-
-#include <algorithm>
-#include <stdlib.h>
 
 namespace dbaui
 {

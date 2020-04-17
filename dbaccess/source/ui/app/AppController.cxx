@@ -20,7 +20,6 @@
 #include <memory>
 #include "AppController.hxx"
 #include <core_resource.hxx>
-#include <stringconstants.hxx>
 #include <strings.hxx>
 #include <advancedsettingsdlg.hxx>
 #include "subcomponentmanager.hxx"
@@ -32,14 +31,12 @@
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameContainer.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/ErrorMessageDialog.hpp>
-#include <com/sun/star/sdb/SQLContext.hpp>
-#include <com/sun/star/sdb/XBookmarksSupplier.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
-#include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
+#include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/sdbcx/XAlterView.hpp>
 #include <com/sun/star/sdbcx/XAppend.hpp>
@@ -47,30 +44,25 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
-#include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
 #include <com/sun/star/sdb/application/DatabaseObjectContainer.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
-#include <com/sun/star/container/XHierarchicalName.hpp>
 #include <tools/diagnose_ex.h>
+#include <tools/urlobj.hxx>
 #include <osl/diagnose.h>
 
-#include <svl/urihelper.hxx>
 #include <svl/filenotation.hxx>
 #include <vcl/treelistbox.hxx>
 #include <vcl/transfer.hxx>
 #include <svtools/cliplistener.hxx>
-#include <svtools/insdlg.hxx>
 
 #include <comphelper/sequence.hxx>
 #include <comphelper/uno3.hxx>
@@ -78,14 +70,11 @@
 #include <comphelper/interaction.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/weld.hxx>
 
 #include <unotools/closeveto.hxx>
 #include <unotools/pathoptions.hxx>
-#include <unotools/tempfile.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/historyoptions.hxx>
 
@@ -94,7 +83,6 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/QuerySaveDocument.hxx>
 
-#include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <connectivity/dbtools.hxx>
@@ -111,16 +99,12 @@
 #include <strings.hrc>
 #include <defaultobjectnamecheck.hxx>
 #include <databaseobjectview.hxx>
-#include <listviewitems.hxx>
 #include "AppDetailView.hxx"
 #include <linkeddocuments.hxx>
-#include <sqlmessage.hxx>
 #include <UITools.hxx>
 #include <dsntypes.hxx>
 #include <dlgsave.hxx>
 #include <dbaccess_slotid.hrc>
-
-#include <functional>
 
 extern "C" void createRegistryInfo_ODBApplication()
 {

@@ -23,17 +23,13 @@
 
 #include <core_resource.hxx>
 #include <indexdialog.hxx>
-#include <dbu_dlg.hxx>
 #include <strings.hrc>
 #include <bitmaps.hlst>
 #include <indexfieldscontrol.hxx>
 #include <indexcollection.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <com/sun/star/sdb/SQLContext.hpp>
-#include <UITools.hxx>
-#include <browserids.hxx>
 #include <connectivity/dbtools.hxx>
 #include <osl/diagnose.h>
 

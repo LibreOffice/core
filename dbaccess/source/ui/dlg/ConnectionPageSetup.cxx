@@ -20,45 +20,20 @@
 #include "ConnectionPageSetup.hxx"
 #include <strings.hrc>
 #include <core_resource.hxx>
-#include <dbu_dlg.hxx>
+#include <IItemSetHelper.hxx>
 #include <svl/itemset.hxx>
-#include <unotools/pathoptions.hxx>
-#include <svl/stritem.hxx>
-#include <svl/eitem.hxx>
-#include <svl/intitem.hxx>
 #include <dsitems.hxx>
-#include <osl/process.h>
-#include <dbadmin.hxx>
-#include <vcl/stdtext.hxx>
-#include <sqlmessage.hxx>
-#include "odbcconfig.hxx"
-#include "dsselect.hxx"
 #include <svl/filenotation.hxx>
-#include <stringconstants.hxx>
-#include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
-#include <com/sun/star/sdbc/XConnection.hpp>
-#include <UITools.hxx>
-#include <unotools/localfilehelper.hxx>
-#include <unotools/ucbhelper.hxx>
-#include <ucbhelper/commandenvironment.hxx>
-#include "finteraction.hxx"
-#include <connectivity/CommonTools.hxx>
-#include <sfx2/docfilt.hxx>
-#include <vcl/mnemonic.hxx>
 
 namespace dbaui
 {
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::ucb;
     using namespace ::com::sun::star::ui::dialogs;
-    using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::container;
-    using namespace ::dbtools;
     using namespace ::svt;
 
     std::unique_ptr<OGenericAdministrationPage> OConnectionTabPageSetup::CreateDbaseTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet)

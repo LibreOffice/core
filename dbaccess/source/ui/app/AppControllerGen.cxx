@@ -23,7 +23,6 @@
 #include <core_resource.hxx>
 #include <dbaccess_slotid.hrc>
 #include <strings.hrc>
-#include <stringconstants.hxx>
 #include <strings.hxx>
 #include <defaultobjectnamecheck.hxx>
 #include <dlgsave.hxx>
@@ -34,21 +33,13 @@
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XHierarchicalNameContainer.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
-#include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/sdbcx/XRename.hpp>
 #include <com/sun/star/sdb/ErrorCondition.hpp>
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include <com/sun/star/sdbcx/XViewsSupplier.hpp>
-#include <com/sun/star/ucb/Command.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 
 #include <cppuhelper/exc_hlp.hxx>
@@ -61,7 +52,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
-#include <unotools/bootstrap.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>

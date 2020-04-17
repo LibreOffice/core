@@ -20,24 +20,18 @@
 #include <core_resource.hxx>
 #include "adminpages.hxx"
 #include "DbAdminImpl.hxx"
-#include <dbu_dlg.hxx>
 #include <strings.hrc>
-#include "DriverSettings.hxx"
-#include <dsitems.hxx>
-#include <UITools.hxx>
 #include "UserAdmin.hxx"
 #include <UserAdminDlg.hxx>
 
 #include <com/sun/star/sdbc/SQLException.hpp>
 
+#include <connectivity/dbexception.hxx>
 #include <connectivity/dbmetadata.hxx>
+#include <connectivity/dbtools.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <svl/eitem.hxx>
-#include <svl/intitem.hxx>
-#include <svl/stritem.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/stdtext.hxx>
 
 namespace dbaui
 {

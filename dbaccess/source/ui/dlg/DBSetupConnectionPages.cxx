@@ -22,7 +22,6 @@
 #include "DBSetupConnectionPages.hxx"
 #include <core_resource.hxx>
 #include <sqlmessage.hxx>
-#include <dbu_dlg.hxx>
 #include <strings.hrc>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
@@ -30,28 +29,12 @@
 #include <svl/intitem.hxx>
 #include <dsitems.hxx>
 #include "dsnItem.hxx"
-#include <vcl/mnemonic.hxx>
-#include <svl/cjkoptions.hxx>
 
 #if HAVE_FEATURE_JAVA
     #include <jvmaccess/virtualmachine.hxx>
 #endif
 
 #include <connectivity/CommonTools.hxx>
-#include "DriverSettings.hxx"
-#include <dbadmin.hxx>
-
-#include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/sdbc/XDriverAccess.hpp>
-#include <stringconstants.hxx>
-#include <svl/filenotation.hxx>
-
-#include <unotools/localfilehelper.hxx>
-#include <unotools/ucbhelper.hxx>
-#include <ucbhelper/commandenvironment.hxx>
-#include "finteraction.hxx"
-#include <unotools/pathoptions.hxx>
-#include <vcl/roadmapwizard.hxx>
 #include <dbwizsetup.hxx>
 #include "TextConnectionHelper.hxx"
 #include <osl/diagnose.h>

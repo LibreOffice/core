@@ -24,7 +24,6 @@
 #include <vcl/image.hxx>
 #include <callbacks.hxx>
 #include <AppElementType.hxx>
-#include <memory>
 
 using namespace ::dbaui;
 OApplicationIconControl::OApplicationIconControl(vcl::Window* _pParent)

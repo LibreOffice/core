@@ -29,14 +29,10 @@
 #include <com/sun/star/ui/XImageManager.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <vcl/graph.hxx>
-#include <vcl/help.hxx>
 #include <vcl/commandinfoprovider.hxx>
-#include <vcl/event.hxx>
 #include <unotools/historyoptions.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <tools/urlobj.hxx>
-#include <svl/filenotation.hxx>
 #include <osl/diagnose.h>
 
 namespace dbaui

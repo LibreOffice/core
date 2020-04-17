@@ -18,7 +18,6 @@
  */
 
 #include <dlgsize.hxx>
-#include <dbu_dlg.hxx>
 
 namespace dbaui
 {

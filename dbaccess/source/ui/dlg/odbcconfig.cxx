@@ -22,7 +22,6 @@
 
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include <osl/process.h>
 #include <osl/thread.hxx>
