@@ -3591,20 +3591,14 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
 
                         nLvl = static_cast< sal_uInt8 >(nLevel);
 
-                        if ( pTextNd->IsListRestart() )
-                        {
-                            sal_uInt16 nStartWith = static_cast< sal_uInt16 >( pTextNd->GetActualListStartValue() );
-                            nNumId = GetExport().DuplicateNumRule( pRule, nLvl, nStartWith );
-                            if ( USHRT_MAX != nNumId )
-                                ++nNumId;
-                        }
-                        else if (GetExport().GetExportFormat() == MSWordExportBase::DOCX) // FIXME
+                        if (GetExport().GetExportFormat() == MSWordExportBase::DOCX) // FIXME
                         {
                             // tdf#95848 find the abstract list definition
                             OUString const listId(pTextNd->GetListId());
                             if (!listId.isEmpty()
-                                // default list id uses the 1:1 mapping
-                                && listId != pRule->GetDefaultListId())
+                                && (listId != pRule->GetDefaultListId() // default list id uses the 1:1 mapping
+                                    || pTextNd->IsListRestart())    // or restarting previous list
+                                )
                             {
                                 SwList const*const pList(
                                     GetExport().m_pDoc->getIDocumentListsAccess().getListByName(listId));
@@ -3614,7 +3608,7 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
                                         GetExport().m_pDoc->FindNumRulePtr(
                                             pList->GetDefaultListStyleName()));
                                     assert(pAbstractRule);
-                                    if (pAbstractRule == pRule)
+                                    if (pAbstractRule == pRule && !pTextNd->IsListRestart())
                                     {
                                         // different list, but no override
                                         nNumId = GetExport().DuplicateAbsNum(listId, *pAbstractRule);
@@ -3623,6 +3617,14 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
                                     {
                                         nNumId = GetExport().OverrideNumRule(
                                                 *pRule, listId, *pAbstractRule);
+
+                                        if (pTextNd->IsListRestart())
+                                        {
+                                            // For restarted lists we should also keep value for
+                                            // future w:lvlOverride / w:startOverride
+                                            GetExport().AddListLevelOverride(nNumId, pTextNd->GetActualListLevel(),
+                                                pTextNd->GetActualListStartValue());
+                                        }
                                     }
                                     assert(nNumId != USHRT_MAX);
                                     ++nNumId;
