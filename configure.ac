@@ -6440,20 +6440,6 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
             AC_MSG_RESULT([yes])
         ], [AC_MSG_RESULT([no])])
     AC_LANG_POP([C++])
-
-    dnl Available in GCC 4.9 and at least since Clang 3.4; this check can eventually be removed
-    dnl completely (e.g., after libreoffice-6-5 branch off):
-    AC_MSG_CHECKING([that $CXX_BASE supports __attribute__((warn_unused))])
-    AC_LANG_PUSH([C++])
-    save_CXXFLAGS=$CXXFLAGS
-    CXXFLAGS="$CXXFLAGS -Werror"
-    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-            struct __attribute__((warn_unused)) dummy {};
-        ])], [
-            AC_MSG_RESULT([yes])
-        ], [AC_MSG_ERROR([no])])
-    CXXFLAGS=$save_CXXFLAGS
-AC_LANG_POP([C++])
 fi
 
 AC_SUBST(HAVE_GCC_AVX)
@@ -6679,30 +6665,6 @@ if test "$GCC" = yes; then
     fi
 fi
 AC_SUBST([HAVE_GCC_FNO_SIZED_DEALLOCATION])
-
-dnl This check can eventually be removed completely (e.g., after libreoffice-7-0 branch off):
-AC_MSG_CHECKING([that $CXX_BASE supports guaranteed copy elision])
-AC_LANG_PUSH([C++])
-save_CXXFLAGS=$CXXFLAGS
-CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
-AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-        // At least VS 2017 15.8.1 defines __cpp_guaranteed_copy_elision as 201606L without actually
-        // supporting it:
-        #if !defined __cpp_guaranteed_copy_elision || (defined _MSC_VER && !defined __clang__)
-        struct S {
-        private:
-            S(S const &);
-        public:
-            S();
-            ~S();
-        };
-        S copy();
-        void f() { S c(copy()); }
-        #endif
-    ])], [AC_MSG_RESULT([yes])
-    ], [AC_MSG_ERROR([no])])
-CXXFLAGS=$save_CXXFLAGS
-AC_LANG_POP([C++])
 
 AC_MSG_CHECKING([whether $CXX_BASE supports C++2a constinit sorted vectors])
 AC_LANG_PUSH([C++])
