@@ -94,9 +94,13 @@ bool SwCursorShell::GotoFootnoteText()
                                                  GetCursor_()->Start(), &tmp);
             const SwFootnoteBossFrame* pFootnoteBoss;
             bool bSkip = pFrame && pFrame->IsInFootnote();
-            while( pFrame && nullptr != ( pFootnoteBoss = pFrame->FindFootnoteBossFrame() ) )
+            while( pFrame )
             {
-                if( nullptr != ( pFrame = pFootnoteBoss->FindFootnoteCont() ) )
+                pFootnoteBoss = pFrame->FindFootnoteBossFrame();
+                if (!pFootnoteBoss)
+                    break;
+                pFrame = pFootnoteBoss->FindFootnoteCont();
+                if( pFrame )
                 {
                     if( bSkip )
                         bSkip = false;
@@ -134,10 +138,11 @@ bool SwCursor::GotoFootnoteAnchor()
     if( pSttNd )
     {
         // search in all footnotes in document for this StartIndex
-        const SwTextFootnote* pTextFootnote;
         const SwFootnoteIdxs& rFootnoteArr = pSttNd->GetDoc()->GetFootnoteIdxs();
         for( size_t n = 0; n < rFootnoteArr.size(); ++n )
-            if( nullptr != ( pTextFootnote = rFootnoteArr[ n ])->GetStartNode() &&
+        {
+            const SwTextFootnote* pTextFootnote = rFootnoteArr[ n ];
+            if( nullptr != pTextFootnote->GetStartNode() &&
                 pSttNd == &pTextFootnote->GetStartNode()->GetNode() )
             {
                 SwCursorSaveState aSaveState( *this );
@@ -149,6 +154,7 @@ bool SwCursor::GotoFootnoteAnchor()
                 return !IsSelOvr( SwCursorSelOverFlags::CheckNodeSection |
                                   SwCursorSelOverFlags::Toggle );
             }
+        }
     }
     return false;
 }

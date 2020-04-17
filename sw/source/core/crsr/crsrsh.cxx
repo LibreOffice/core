@@ -194,12 +194,18 @@ SwPaM* SwCursorShell::GetCursor( bool bMakeTableCursor ) const
             //don't re-create 'parked' cursors
             const SwContentNode* pCNd;
             if( m_pTableCursor->GetPoint()->nNode.GetIndex() &&
-                m_pTableCursor->GetMark()->nNode.GetIndex() &&
-                nullptr != ( pCNd = m_pTableCursor->GetContentNode() ) && pCNd->getLayoutFrame( GetLayout() ) &&
-                nullptr != ( pCNd = m_pTableCursor->GetContentNode(false) ) && pCNd->getLayoutFrame( GetLayout() ) )
+                m_pTableCursor->GetMark()->nNode.GetIndex() )
             {
-                SwShellTableCursor* pTC = m_pTableCursor;
-                GetLayout()->MakeTableCursors( *pTC );
+                pCNd = m_pTableCursor->GetContentNode();
+                if( pCNd && pCNd->getLayoutFrame( GetLayout() ) )
+                {
+                    pCNd = m_pTableCursor->GetContentNode(false);
+                    if( pCNd && pCNd->getLayoutFrame( GetLayout() ) )
+                    {
+                        SwShellTableCursor* pTC = m_pTableCursor;
+                        GetLayout()->MakeTableCursors( *pTC );
+                    }
+                }
             }
         }
 
@@ -637,13 +643,13 @@ bool SwCursorShell::MovePage( SwWhichPage fnWhichPage, SwPosPage fnPosPage )
         std::pair<Point, bool> tmp(rPt, false);
         SwContentFrame * pFrame = m_pCurrentCursor->GetContentNode()->
             getLayoutFrame(GetLayout(), m_pCurrentCursor->GetPoint(), &tmp);
-        if( pFrame && ( bRet = GetFrameInPage( pFrame, fnWhichPage,
-                                           fnPosPage, m_pCurrentCursor )  ) &&
+        if( pFrame && GetFrameInPage( pFrame, fnWhichPage, fnPosPage, m_pCurrentCursor ) &&
             !m_pCurrentCursor->IsSelOvr( SwCursorSelOverFlags::Toggle |
                                  SwCursorSelOverFlags::ChangePos ))
+        {
             UpdateCursor();
-        else
-            bRet = false;
+            bRet = true;
+        }
     }
     return bRet;
 }
@@ -1224,11 +1230,15 @@ sal_uInt16 SwCursorShell::GetPageNumSeqNonEmpty()
     const SwContentFrame* pCFrame = GetCurrFrame(/*bCalcFrame*/true);
     const SwPageFrame* pPg = nullptr;
 
-    if (!pCFrame || nullptr == (pPg = pCFrame->FindPageFrame()))
+    if (!pCFrame )
     {
-        pPg = Imp()->GetFirstVisPage(GetOut());
-        while (pPg && pPg->IsEmptyPage())
-            pPg = static_cast<const SwPageFrame*>(pPg->GetNext());
+        pPg = pCFrame->FindPageFrame();
+        if( !pPg )
+        {
+            pPg = Imp()->GetFirstVisPage(GetOut());
+            while (pPg && pPg->IsEmptyPage())
+                pPg = static_cast<const SwPageFrame*>(pPg->GetNext());
+        }
     }
 
     sal_uInt16 nPageNo = 0;
@@ -2850,7 +2860,8 @@ void SwCursorShell::ParkCursor( const SwNodeIndex &rIdx )
     std::unique_ptr<SwPaM> pNew( new SwPaM( *GetCursor()->GetPoint() ) );
     if( pNode->GetStartNode() )
     {
-        if( ( pNode = pNode->StartOfSectionNode())->IsTableNode() )
+        pNode = pNode->StartOfSectionNode();
+        if( pNode->IsTableNode() )
         {
             // the given node is in a table, thus park cursor to table node
             // (outside of the table)
@@ -3728,10 +3739,15 @@ void SwCursorShell::GetSmartTagRect( const Point& rPt, SwRect& rSelectRect )
     SwTextNode *pNode;
     const SwWrongList *pSmartTagList;
 
-    if( GetLayout()->GetModelPositionForViewPoint( &aPos, aPt, &eTmpState ) &&
-        nullptr != (pNode = aPos.nNode.GetNode().GetTextNode()) &&
-        nullptr != (pSmartTagList = pNode->GetSmartTags()) &&
-        !pNode->IsInProtectSect() )
+    if( !GetLayout()->GetModelPositionForViewPoint( &aPos, aPt, &eTmpState ) )
+        return;
+    pNode = aPos.nNode.GetNode().GetTextNode();
+    if( !pNode )
+        return;
+    pSmartTagList = pNode->GetSmartTags();
+    if( !pSmartTagList )
+        return;
+    if( !pNode->IsInProtectSect() )
     {
         sal_Int32 nBegin = aPos.nContent.GetIndex();
         sal_Int32 nLen = 1;
