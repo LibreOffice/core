@@ -5837,6 +5837,11 @@ public:
         return signal_custom_get_size(rOutput, rId);
     }
 
+    VclPtr<VirtualDevice> create_render_virtual_device() const override
+    {
+        return VclPtr<VirtualDevice>::Create();
+    }
+
     virtual void HandleEventListener(VclWindowEvent& rEvent) override
     {
         if (rEvent.GetId() == VclEventId::DropdownPreOpen
@@ -6186,6 +6191,11 @@ public:
     virtual void set_custom_renderer() override
     {
         assert(false && "not implemented");
+    }
+
+    VclPtr<VirtualDevice> create_render_virtual_device() const override
+    {
+        return VclPtr<VirtualDevice>::Create();
     }
 
     virtual ~SalInstanceEntryTreeView() override
