@@ -667,16 +667,18 @@ void ImplListBoxWindow::ImplUpdateEntryMetrics( ImplEntryType& rEntry )
         aMetrics.nEntryHeight = std::max( aMetrics.nImgHeight, aMetrics.nEntryHeight );
 
     }
-    if ( IsUserDrawEnabled() || aMetrics.bImage )
+
+    bool bIsUserDrawEnabled = IsUserDrawEnabled();
+    if (bIsUserDrawEnabled || aMetrics.bImage)
     {
         aMetrics.nEntryWidth = std::max( aMetrics.nImgWidth, maUserItemSize.Width() );
-        if ( aMetrics.bText )
+        if (!bIsUserDrawEnabled && aMetrics.bText)
             aMetrics.nEntryWidth += aMetrics.nTextWidth + IMG_TXT_DISTANCE;
         aMetrics.nEntryHeight = std::max( std::max( mnMaxImgHeight, maUserItemSize.Height() ) + 2,
                                      aMetrics.nEntryHeight );
     }
 
-    if ( !aMetrics.bText && !aMetrics.bImage && !IsUserDrawEnabled() )
+    if (!aMetrics.bText && !aMetrics.bImage && !bIsUserDrawEnabled)
     {
         // entries which have no (aka an empty) text, and no image,
         // and are not user-drawn, should be shown nonetheless
