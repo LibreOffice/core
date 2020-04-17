@@ -444,7 +444,7 @@ namespace drawinglayer::processor3d
 
                 if(mnAntiAlialize > 1)
                 {
-                    const bool bForceLineSnap(getOptionsDrawinglayer().IsAntiAliasing());
+                    const bool bForceLineSnap(getOptionsDrawinglayer().IsAntiAliasing() && getOptionsDrawinglayer().IsSnapHorVerLinesToDiscrete());
 
                     if(bForceLineSnap)
                     {

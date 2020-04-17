@@ -62,6 +62,12 @@ using namespace ::com::sun::star::uno   ;
 
 // primitives
 #define DEFAULT_ANTIALIASING                        true
+#define DEFAULT_SNAPHORVERLINESTODISCRETE           true
+#define DEFAULT_SOLIDDRAGCREATE                     true
+#define DEFAULT_RENDERDECORATEDTEXTDIRECT           true
+#define DEFAULT_RENDERSIMPLETEXTDIRECT              true
+#define DEFAULT_QUADRATIC3DRENDERLIMIT              1000000
+#define DEFAULT_QUADRATICFORMCONTROLRENDERLIMIT     45000
 
 // #i97672# selection settings
 #define DEFAULT_TRANSPARENTSELECTION                true
@@ -94,6 +100,12 @@ using namespace ::com::sun::star::uno   ;
 
 // primitives
 #define PROPERTYNAME_ANTIALIASING OUString("AntiAliasing")
+#define PROPERTYNAME_SNAPHORVERLINESTODISCRETE OUString("SnapHorVerLinesToDiscrete")
+#define PROPERTYNAME_SOLIDDRAGCREATE OUString("SolidDragCreate")
+#define PROPERTYNAME_RENDERDECORATEDTEXTDIRECT OUString("RenderDecoratedTextDirect")
+#define PROPERTYNAME_RENDERSIMPLETEXTDIRECT OUString("RenderSimpleTextDirect")
+#define PROPERTYNAME_QUADRATIC3DRENDERLIMIT OUString("Quadratic3DRenderLimit")
+#define PROPERTYNAME_QUADRATICFORMCONTROLRENDERLIMIT OUString("QuadraticFormControlRenderLimit")
 
 // #i97672# selection settings
 #define PROPERTYNAME_TRANSPARENTSELECTION OUString("TransparentSelection")
@@ -126,13 +138,19 @@ using namespace ::com::sun::star::uno   ;
 
 // primitives
 #define PROPERTYHANDLE_ANTIALIASING                     17
+#define PROPERTYHANDLE_SNAPHORVERLINESTODISCRETE        18
+#define PROPERTYHANDLE_SOLIDDRAGCREATE                  19
+#define PROPERTYHANDLE_RENDERDECORATEDTEXTDIRECT        20
+#define PROPERTYHANDLE_RENDERSIMPLETEXTDIRECT           21
+#define PROPERTYHANDLE_QUADRATIC3DRENDERLIMIT           22
+#define PROPERTYHANDLE_QUADRATICFORMCONTROLRENDERLIMIT  23
 
 // #i97672# selection settings
-#define PROPERTYHANDLE_TRANSPARENTSELECTION             18
-#define PROPERTYHANDLE_TRANSPARENTSELECTIONPERCENT      19
-#define PROPERTYHANDLE_SELECTIONMAXIMUMLUMINANCEPERCENT 20
+#define PROPERTYHANDLE_TRANSPARENTSELECTION             24
+#define PROPERTYHANDLE_TRANSPARENTSELECTIONPERCENT      25
+#define PROPERTYHANDLE_SELECTIONMAXIMUMLUMINANCEPERCENT 26
 
-#define PROPERTYCOUNT                               21
+#define PROPERTYCOUNT                               27
 
 class SvtOptionsDrawinglayer_Impl : public ConfigItem
 {
@@ -171,6 +189,12 @@ public:
 
     // primitives
     bool        IsAntiAliasing() const { return m_bAntiAliasing;}
+    bool        IsSnapHorVerLinesToDiscrete() const { return m_bSnapHorVerLinesToDiscrete;}
+    bool        IsSolidDragCreate() const { return m_bSolidDragCreate;}
+    bool        IsRenderDecoratedTextDirect() const { return m_bRenderDecoratedTextDirect;}
+    bool        IsRenderSimpleTextDirect() const { return m_bRenderSimpleTextDirect;}
+    sal_uInt32  GetQuadratic3DRenderLimit() const { return m_nQuadratic3DRenderLimit;}
+    sal_uInt32  GetQuadraticFormControlRenderLimit() const { return m_nQuadraticFormControlRenderLimit;}
 
     void        SetAntiAliasing( bool bState );
 
@@ -216,6 +240,12 @@ private:
 
         // primitives
         bool        m_bAntiAliasing;
+        bool        m_bSnapHorVerLinesToDiscrete;
+        bool        m_bSolidDragCreate;
+        bool        m_bRenderDecoratedTextDirect;
+        bool        m_bRenderSimpleTextDirect;
+        sal_uInt32  m_nQuadratic3DRenderLimit;
+        sal_uInt32  m_nQuadraticFormControlRenderLimit;
 
         // #i97672# selection settings
         sal_uInt16  m_nTransparentSelectionPercent;
@@ -255,6 +285,12 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
 
     // primitives
     m_bAntiAliasing(DEFAULT_ANTIALIASING),
+    m_bSnapHorVerLinesToDiscrete(DEFAULT_SNAPHORVERLINESTODISCRETE),
+    m_bSolidDragCreate(DEFAULT_SOLIDDRAGCREATE),
+    m_bRenderDecoratedTextDirect(DEFAULT_RENDERDECORATEDTEXTDIRECT),
+    m_bRenderSimpleTextDirect(DEFAULT_RENDERSIMPLETEXTDIRECT),
+    m_nQuadratic3DRenderLimit(DEFAULT_QUADRATIC3DRENDERLIMIT),
+    m_nQuadraticFormControlRenderLimit(DEFAULT_QUADRATICFORMCONTROLRENDERLIMIT),
 
     // #i97672# selection settings
     m_nTransparentSelectionPercent(DEFAULT_TRANSPARENTSELECTIONPERCENT),
@@ -413,6 +449,49 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
             }
             break;
 
+            // primitives
+            case PROPERTYHANDLE_SNAPHORVERLINESTODISCRETE:
+            {
+                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\SnapHorVerLinesToDiscrete\"?" );
+                seqValues[nProperty] >>= m_bSnapHorVerLinesToDiscrete;
+            }
+            break;
+
+            case PROPERTYHANDLE_SOLIDDRAGCREATE:
+            {
+                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\SolidDragCreate\"?" );
+                seqValues[nProperty] >>= m_bSolidDragCreate;
+            }
+            break;
+
+            case PROPERTYHANDLE_RENDERDECORATEDTEXTDIRECT:
+            {
+                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\RenderDecoratedTextDirect\"?" );
+                seqValues[nProperty] >>= m_bRenderDecoratedTextDirect;
+            }
+            break;
+
+            case PROPERTYHANDLE_RENDERSIMPLETEXTDIRECT:
+            {
+                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\RenderSimpleTextDirect\"?" );
+                seqValues[nProperty] >>= m_bRenderSimpleTextDirect;
+            }
+            break;
+
+            case PROPERTYHANDLE_QUADRATIC3DRENDERLIMIT:
+            {
+                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\Quadratic3DRenderLimit\"?" );
+                seqValues[nProperty] >>= m_nQuadratic3DRenderLimit;
+            }
+            break;
+
+            case PROPERTYHANDLE_QUADRATICFORMCONTROLRENDERLIMIT:
+            {
+                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\QuadraticFormControlRenderLimit\"?" );
+                seqValues[nProperty] >>= m_nQuadraticFormControlRenderLimit;
+            }
+            break;
+
             // #i97672# selection settings
             case PROPERTYHANDLE_TRANSPARENTSELECTION:
             {
@@ -531,6 +610,30 @@ void SvtOptionsDrawinglayer_Impl::ImplCommit()
                 aSeqValues[nProperty] <<= m_bAntiAliasing;
             break;
 
+            case PROPERTYHANDLE_SNAPHORVERLINESTODISCRETE:
+                aSeqValues[nProperty] <<= m_bSnapHorVerLinesToDiscrete;
+            break;
+
+            case PROPERTYHANDLE_SOLIDDRAGCREATE:
+                aSeqValues[nProperty] <<= m_bSolidDragCreate;
+            break;
+
+            case PROPERTYHANDLE_RENDERDECORATEDTEXTDIRECT:
+                aSeqValues[nProperty] <<= m_bRenderDecoratedTextDirect;
+            break;
+
+            case PROPERTYHANDLE_RENDERSIMPLETEXTDIRECT:
+                aSeqValues[nProperty] <<= m_bRenderSimpleTextDirect;
+            break;
+
+            case PROPERTYHANDLE_QUADRATIC3DRENDERLIMIT:
+                aSeqValues[nProperty] <<= m_nQuadratic3DRenderLimit;
+            break;
+
+            case PROPERTYHANDLE_QUADRATICFORMCONTROLRENDERLIMIT:
+                aSeqValues[nProperty] <<= m_nQuadraticFormControlRenderLimit;
+            break;
+
             // #i97672# selection settings
             case PROPERTYHANDLE_TRANSPARENTSELECTION:
                 aSeqValues[nProperty] <<= m_bTransparentSelection;
@@ -627,6 +730,12 @@ Sequence< OUString > SvtOptionsDrawinglayer_Impl::impl_GetPropertyNames()
 
         // primitives
         PROPERTYNAME_ANTIALIASING,
+        PROPERTYNAME_SNAPHORVERLINESTODISCRETE,
+        PROPERTYNAME_SOLIDDRAGCREATE,
+        PROPERTYNAME_RENDERDECORATEDTEXTDIRECT,
+        PROPERTYNAME_RENDERSIMPLETEXTDIRECT,
+        PROPERTYNAME_QUADRATIC3DRENDERLIMIT,
+        PROPERTYNAME_QUADRATICFORMCONTROLRENDERLIMIT,
 
         // #i97672# selection settings
         PROPERTYNAME_TRANSPARENTSELECTION,
@@ -791,6 +900,42 @@ bool SvtOptionsDrawinglayer::IsAntiAliasing() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pImpl->IsAntiAliasing() && IsAAPossibleOnThisSystem();
+}
+
+bool SvtOptionsDrawinglayer::IsSnapHorVerLinesToDiscrete() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pImpl->IsAntiAliasing() && m_pImpl->IsSnapHorVerLinesToDiscrete();
+}
+
+bool SvtOptionsDrawinglayer::IsSolidDragCreate() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pImpl->IsSolidDragCreate();
+}
+
+bool SvtOptionsDrawinglayer::IsRenderDecoratedTextDirect() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pImpl->IsRenderDecoratedTextDirect();
+}
+
+bool SvtOptionsDrawinglayer::IsRenderSimpleTextDirect() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pImpl->IsRenderSimpleTextDirect();
+}
+
+sal_uInt32 SvtOptionsDrawinglayer::GetQuadratic3DRenderLimit() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pImpl->GetQuadratic3DRenderLimit();
+}
+
+sal_uInt32 SvtOptionsDrawinglayer::GetQuadraticFormControlRenderLimit() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pImpl->GetQuadraticFormControlRenderLimit();
 }
 
 void SvtOptionsDrawinglayer::SetAntiAliasing( bool bState )

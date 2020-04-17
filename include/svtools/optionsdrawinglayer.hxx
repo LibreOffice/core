@@ -101,23 +101,12 @@ class SVT_DLLPUBLIC SvtOptionsDrawinglayer
 
         // primitives
         bool        IsAntiAliasing() const;
-    	/**
-          Defines a Limitation for the default raster conversion from
-          3D Scenes to Bitmaps. The number is the maximum number of pixels to
-          use, e.g. 1000x1000 Pixels is allowed as default. When Scenes would
-          need more Pixels than this, the Bitmap will be limited and scaled to
-          the needed pixel size at paint time.
-	     */
-        static sal_uInt32  GetQuadratic3DRenderLimit() { return 1000000; }
-        /**
-          Defines a Limitation for the default raster conversion of
-          FormControls in edit mode. These have the ability to be displayed
-          using this fallback to Bitmaps. The number is the maximum number of
-          pixels to use, e.g. 300x150 Pixels is allowed as default. When
-          FormControls would need more Pixels than this, the Bitmap will be
-          limited and scaled to the needed pixel size at paint time.
-         */
-        static sal_uInt32  GetQuadraticFormControlRenderLimit() { return 45000; }
+        bool        IsSnapHorVerLinesToDiscrete() const;
+        bool        IsSolidDragCreate() const;
+        bool        IsRenderDecoratedTextDirect() const;
+        bool        IsRenderSimpleTextDirect() const;
+        sal_uInt32  GetQuadratic3DRenderLimit() const;
+        sal_uInt32  GetQuadraticFormControlRenderLimit() const;
 
         void        SetAntiAliasing( bool bState );
 
