@@ -13,7 +13,6 @@ Any change in this header will cause a rebuild of almost everything.
 #define CONFIG_GLOBAL_H
 
 #define HAVE_GCC_BUILTIN_ATOMIC 0
-#define HAVE_GCC_DEPRECATED_MESSAGE 0
 #define HAVE_SYSLOG_H 0
 
 // Compiler supports all of C++2a <https://wg21.link/P0202R3> "Add Constexpr Modifiers to Functions
