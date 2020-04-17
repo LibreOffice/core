@@ -6059,10 +6059,19 @@ public:
 
     virtual void set_custom_renderer() override
     {
+        auto nOldEntryHeight = m_xComboBox->GetDropDownEntryHeight();
+        auto nDropDownLineCount = m_xComboBox->GetDropDownLineCount();
+
         m_xComboBox->EnableUserDraw(true);
         m_xComboBox->SetUserDrawHdl(LINK(this, SalInstanceComboBoxWithEdit, UserDrawHdl));
         Size aRowSize(signal_custom_get_size(*m_xComboBox, OUString()));
         m_xComboBox->SetUserItemSize(aRowSize);
+
+        // adjust the line count to fit approx the height it would have been before
+        // using a custom renderer
+        auto nNewEntryHeight = m_xComboBox->GetDropDownEntryHeight();
+        double fRatio = nOldEntryHeight / static_cast<double>(nNewEntryHeight);
+        m_xComboBox->SetDropDownLineCount(nDropDownLineCount * fRatio);
     }
 
     virtual ~SalInstanceComboBoxWithEdit() override

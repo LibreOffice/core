@@ -1119,6 +1119,11 @@ Size ComboBox::CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
     return aSz;
 }
 
+long ComboBox::GetDropDownEntryHeight() const
+{
+    return m_pImpl->m_pImplLB->GetEntryHeight();
+}
+
 void ComboBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const
 {
     long nCharWidth = GetTextWidth(OUString(u'x'));
@@ -1126,7 +1131,7 @@ void ComboBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines
     {
         Size aOutSz = m_pImpl->m_pImplLB->GetMainWindow()->GetOutputSizePixel();
         rnCols = (nCharWidth > 0) ? static_cast<sal_uInt16>(aOutSz.Width()/nCharWidth) : 1;
-        rnLines = static_cast<sal_uInt16>(aOutSz.Height()/m_pImpl->m_pImplLB->GetEntryHeight());
+        rnLines = static_cast<sal_uInt16>(aOutSz.Height()/GetDropDownEntryHeight());
     }
     else
     {
