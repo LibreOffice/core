@@ -1168,9 +1168,11 @@ bool ImplWriteRLE( SvStream& rOStm, BitmapReadAccess const & rAcc, bool bRLE4 )
                 nSaveIndex = nX - 1;
                 bFound = false;
 
-                while( ( nX < nWidth ) && ( nCount < 256 )
-                    && ( cPix = rAcc.GetIndexFromData( pScanline, nX ) ) != cLast )
+                while( ( nX < nWidth ) && ( nCount < 256 ) )
                 {
+                    cPix = rAcc.GetIndexFromData( pScanline, nX );
+                    if (cPix == cLast)
+                        break;
                     nX++; nCount++;
                     cLast = cPix;
                     bFound = true;

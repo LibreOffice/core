@@ -10017,7 +10017,8 @@ sal_Int32 PDFWriterImpl::createDest( const tools::Rectangle& rRect, sal_Int32 nP
 
 sal_Int32 PDFWriterImpl::registerDestReference( sal_Int32 nDestId, const tools::Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
 {
-    return m_aDestinationIdTranslation[ nDestId ] = createDest( rRect, nPageNr, eType );
+    m_aDestinationIdTranslation[ nDestId ] = createDest( rRect, nPageNr, eType );
+    return m_aDestinationIdTranslation[ nDestId ];
 }
 
 void PDFWriterImpl::setLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId )

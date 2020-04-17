@@ -2619,11 +2619,10 @@ void ImplWin::FillLayoutData() const
 
 bool ImplWin::PreNotify( NotifyEvent& rNEvt )
 {
-    const MouseEvent* pMouseEvt = nullptr;
-
-    if( (rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != nullptr )
+    if( rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE )
     {
-        if( pMouseEvt->IsEnterWindow() || pMouseEvt->IsLeaveWindow() )
+        const MouseEvent* pMouseEvt = rNEvt.GetMouseEvent();
+        if( pMouseEvt && (pMouseEvt->IsEnterWindow() || pMouseEvt->IsLeaveWindow()) )
         {
             // trigger redraw as mouse over state has changed
             if ( IsNativeControlSupported(ControlType::Listbox, ControlPart::Entire)
@@ -2674,8 +2673,13 @@ void ImplWin::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
 
             bool bMouseOver = false;
             vcl::Window *pChild = pWin->GetWindow( GetWindowType::FirstChild );
-            while( pChild && !(bMouseOver = pChild->IsMouseOver()) )
+            while( pChild )
+            {
+                bMouseOver = pChild->IsMouseOver();
+                if (bMouseOver)
+                    break;
                 pChild = pChild->GetWindow( GetWindowType::Next );
+            }
             if( bMouseOver )
                 nState |= ControlState::ROLLOVER;
 
