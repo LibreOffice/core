@@ -2202,60 +2202,7 @@ namespace {
 
 void getFormatString(SvNumberFormatter* pFormatter, sal_uLong nFormat, OUString& rFmtStr)
 {
-    bool        bAppendPrec = true;
-    sal_uInt16  nPrec, nLeading;
-    bool        bThousand, bIsRed;
-    pFormatter->GetFormatSpecialInfo( nFormat, bThousand, bIsRed, nPrec, nLeading );
-
-    switch( pFormatter->GetType( nFormat ) )
-    {
-        case SvNumFormatType::NUMBER:
-            if(bThousand) rFmtStr = ","; else rFmtStr = "F";
-            break;
-        case SvNumFormatType::CURRENCY:
-            rFmtStr = "C";
-            break;
-        case SvNumFormatType::SCIENTIFIC:
-            rFmtStr = "S";
-            break;
-        case SvNumFormatType::PERCENT:
-            rFmtStr = "P";
-            break;
-        default:
-        {
-            bAppendPrec = false;
-            switch( pFormatter->GetIndexTableOffset( nFormat ) )
-            {
-                case NF_DATE_SYSTEM_SHORT:
-                case NF_DATE_SYS_DMMMYY:
-                case NF_DATE_SYS_DDMMYY:
-                case NF_DATE_SYS_DDMMYYYY:
-                case NF_DATE_SYS_DMMMYYYY:
-                case NF_DATE_DIN_DMMMYYYY:
-                case NF_DATE_SYS_DMMMMYYYY:
-                case NF_DATE_DIN_DMMMMYYYY: rFmtStr = "D1"; break;
-                case NF_DATE_SYS_DDMMM:     rFmtStr = "D2"; break;
-                case NF_DATE_SYS_MMYY:      rFmtStr = "D3"; break;
-                case NF_DATETIME_SYSTEM_SHORT_HHMM:
-                case NF_DATETIME_SYS_DDMMYYYY_HHMM:
-                case NF_DATETIME_SYS_DDMMYYYY_HHMMSS:
-                                            rFmtStr = "D4"; break;
-                case NF_DATE_DIN_MMDD:      rFmtStr = "D5"; break;
-                case NF_TIME_HHMMSSAMPM:    rFmtStr = "D6"; break;
-                case NF_TIME_HHMMAMPM:      rFmtStr = "D7"; break;
-                case NF_TIME_HHMMSS:        rFmtStr = "D8"; break;
-                case NF_TIME_HHMM:          rFmtStr = "D9"; break;
-                default:                    rFmtStr = "G";
-            }
-        }
-    }
-    if( bAppendPrec )
-        rFmtStr += OUString::number(nPrec);
-    const SvNumberformat* pFormat = pFormatter->GetEntry( nFormat );
-    if( lcl_FormatHasNegColor( pFormat ) )
-        rFmtStr += "-";
-    if( lcl_FormatHasOpenPar( pFormat ) )
-        rFmtStr += "()";
+    rFmtStr = pFormatter->GetCalcCellReturn( nFormat);
 }
 
 }

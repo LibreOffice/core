@@ -2179,6 +2179,80 @@ sal_uInt32 SvNumberFormatter::GetFormatSpecialInfo( const OUString& rFormatStrin
     return nCheckPos;
 }
 
+OUString SvNumberFormatter::GetCalcCellReturn( sal_uInt32 nFormat ) const
+{
+    ::osl::MutexGuard aGuard( GetInstanceMutex() );
+    const SvNumberformat* pFormat = GetFormatEntry( nFormat );
+    if (!pFormat)
+        return "G";
+
+    OUString    aStr;
+    bool        bAppendPrec = true;
+    sal_uInt16  nPrec, nLeading;
+    bool        bThousand, bIsRed;
+    pFormat->GetFormatSpecialInfo( bThousand, bIsRed, nPrec, nLeading );
+
+    switch (pFormat->GetMaskedType())
+    {
+        case SvNumFormatType::NUMBER:
+            if (bThousand)
+                aStr = ",";
+            else
+                aStr = "F";
+        break;
+        case SvNumFormatType::CURRENCY:
+            aStr = "C";
+        break;
+        case SvNumFormatType::SCIENTIFIC:
+            aStr = "S";
+        break;
+        case SvNumFormatType::PERCENT:
+            aStr = "P";
+        break;
+        default:
+            {
+                bAppendPrec = false;
+                switch (GetIndexTableOffset( nFormat ))
+                {
+                    case NF_DATE_SYSTEM_SHORT:
+                    case NF_DATE_SYS_DMMMYY:
+                    case NF_DATE_SYS_DDMMYY:
+                    case NF_DATE_SYS_DDMMYYYY:
+                    case NF_DATE_SYS_DMMMYYYY:
+                    case NF_DATE_DIN_DMMMYYYY:
+                    case NF_DATE_SYS_DMMMMYYYY:
+                    case NF_DATE_DIN_DMMMMYYYY: aStr = "D1"; break;
+                    case NF_DATE_SYS_DDMMM:     aStr = "D2"; break;
+                    case NF_DATE_SYS_MMYY:      aStr = "D3"; break;
+                    case NF_DATETIME_SYSTEM_SHORT_HHMM:
+                    case NF_DATETIME_SYS_DDMMYYYY_HHMM:
+                    case NF_DATETIME_SYS_DDMMYYYY_HHMMSS:
+                                                aStr = "D4"; break;
+                    case NF_DATE_DIN_MMDD:      aStr = "D5"; break;
+                    case NF_TIME_HHMMSSAMPM:    aStr = "D6"; break;
+                    case NF_TIME_HHMMAMPM:      aStr = "D7"; break;
+                    case NF_TIME_HHMMSS:        aStr = "D8"; break;
+                    case NF_TIME_HHMM:          aStr = "D9"; break;
+                    default:                    aStr = "G";
+                }
+            }
+    }
+
+    if (bAppendPrec)
+        aStr += OUString::number(nPrec);
+
+    if (pFormat->GetColor( 1 ))
+        aStr += "-";    // negative color
+
+    /* FIXME: this probably should not match on literal strings and only be
+     * performed on number or currency formats, but it is what Calc originally
+     * implemented. */
+    if (pFormat->GetFormatstring().indexOf('(') != -1)
+        aStr += "()";
+
+    return aStr;
+}
+
 sal_Int32 SvNumberFormatter::ImpGetFormatCodeIndex(
             css::uno::Sequence< css::i18n::NumberFormatCode >& rSeq,
             const NfIndexTableOffset nTabOff )
