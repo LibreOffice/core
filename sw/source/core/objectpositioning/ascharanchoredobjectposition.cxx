@@ -153,10 +153,10 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
     }
 
     // enlarge bounding rectangle of object by its spacing.
-    aObjBoundRect.Left( aObjBoundRect.Left() - nLRSpaceLeft );
-    aObjBoundRect.Width( aObjBoundRect.Width() + nLRSpaceRight );
-    aObjBoundRect.Top( aObjBoundRect.Top() - nULSpaceUpper );
-    aObjBoundRect.Height( aObjBoundRect.Height() + nULSpaceLower );
+    aObjBoundRect.AddLeft( - nLRSpaceLeft );
+    aObjBoundRect.AddWidth( nLRSpaceRight );
+    aObjBoundRect.AddTop( - nULSpaceUpper );
+    aObjBoundRect.AddHeight( nULSpaceLower );
 
     // calculate relative position to given base line.
     const SwFormatVertOrient& rVert = rFrameFormat.GetVertOrient();
@@ -307,10 +307,10 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
             {
                 // recalculate object bound rectangle, if object width has changed.
                 aObjBoundRect = GetAnchoredObj().GetObjRect();
-                aObjBoundRect.Left( aObjBoundRect.Left() - rLRSpace.GetLeft() );
-                aObjBoundRect.Width( aObjBoundRect.Width() + rLRSpace.GetRight() );
-                aObjBoundRect.Top( aObjBoundRect.Top() - rULSpace.GetUpper() );
-                aObjBoundRect.Height( aObjBoundRect.Height() + rULSpace.GetLower() );
+                aObjBoundRect.AddLeft( - rLRSpace.GetLeft() );
+                aObjBoundRect.AddWidth( rLRSpace.GetRight() );
+                aObjBoundRect.AddTop( - rULSpace.GetUpper() );
+                aObjBoundRect.AddHeight( rULSpace.GetLower() );
             }
         }
         OSL_ENSURE( aRectFnSet.GetHeight(rFlyInContentFrame.getFrameArea()),

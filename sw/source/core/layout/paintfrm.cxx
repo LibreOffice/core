@@ -772,13 +772,13 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects, S
         SwRect aSubsRect( aSubsLineRect );
         if ( bVerticalSubs )
         {
-            aSubsRect.Left  ( aSubsRect.Left()  - (properties.nSPixelSzW+properties.nSHalfPixelSzW) );
-            aSubsRect.Right ( aSubsRect.Right() + (properties.nSPixelSzW+properties.nSHalfPixelSzW) );
+            aSubsRect.AddLeft  ( - (properties.nSPixelSzW+properties.nSHalfPixelSzW) );
+            aSubsRect.AddRight ( properties.nSPixelSzW+properties.nSHalfPixelSzW );
         }
         else
         {
-            aSubsRect.Top   ( aSubsRect.Top()    - (properties.nSPixelSzH+properties.nSHalfPixelSzH) );
-            aSubsRect.Bottom( aSubsRect.Bottom() + (properties.nSPixelSzH+properties.nSHalfPixelSzH) );
+            aSubsRect.AddTop   ( - (properties.nSPixelSzH+properties.nSHalfPixelSzH) );
+            aSubsRect.AddBottom( properties.nSPixelSzH+properties.nSHalfPixelSzH );
         }
         for (const_iterator itK = rRects.aLineRects.begin(); itK != rRects.aLineRects.end(); ++itK)
         {
@@ -1143,25 +1143,25 @@ void SwAlignRect( SwRect &rRect, const SwViewShell *pSh, const vcl::RenderContex
     if ( rRect.Top() > aPxCenterRect.Top() )
     {
         // 'leave pixel overlapping on top'
-        aAlignedPxRect.Top( aAlignedPxRect.Top() + 1 );
+        aAlignedPxRect.AddTop( 1 );
     }
 
     if ( rRect.Bottom() < aPxCenterRect.Bottom() )
     {
         // 'leave pixel overlapping on bottom'
-        aAlignedPxRect.Bottom( aAlignedPxRect.Bottom() - 1 );
+        aAlignedPxRect.AddBottom( - 1 );
     }
 
     if ( rRect.Left() > aPxCenterRect.Left() )
     {
         // 'leave pixel overlapping on left'
-        aAlignedPxRect.Left( aAlignedPxRect.Left() + 1 );
+        aAlignedPxRect.AddLeft( 1 );
     }
 
     if ( rRect.Right() < aPxCenterRect.Right() )
     {
         // 'leave pixel overlapping on right'
-        aAlignedPxRect.Right( aAlignedPxRect.Right() - 1 );
+        aAlignedPxRect.AddRight( - 1 );
     }
 
     // Consider negative width/height check, if aligned SwRect has negative width/height.
@@ -4243,8 +4243,8 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                 if ( bDrawFullShadowRectangle )
                 {
                     // draw full shadow rectangle
-                    aOut.Top( rOutRect.Top() + nHeight );
-                    aOut.Left( rOutRect.Left() + nWidth );
+                    aOut.AddTop( nHeight );
+                    aOut.AddLeft( nWidth );
                     aRegion.push_back( aOut );
                 }
                 else
@@ -4253,26 +4253,26 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                     {
                         aOut.Top( rOutRect.Bottom() - nHeight );
                         if( bLeft )
-                            aOut.Left( rOutRect.Left() + nWidth );
+                            aOut.AddLeft( nWidth );
                         aRegion.push_back( aOut );
                     }
                     if( bRight )
                     {
                         aOut.Left( rOutRect.Right() - nWidth );
                         if( bTop )
-                            aOut.Top( rOutRect.Top() + nHeight );
+                            aOut.AddTop( nHeight );
                         else
                             aOut.Top( rOutRect.Top() );
                         if( bBottom )
-                            aOut.Bottom( rOutRect.Bottom() - nHeight );
+                            aOut.AddBottom( - nHeight );
                         aRegion.push_back( aOut );
                     }
                 }
 
                 if( bRight )
-                    rOutRect.Right( rOutRect.Right() - nWidth );
+                    rOutRect.AddRight(- nWidth );
                 if( bBottom )
-                    rOutRect.Bottom( rOutRect.Bottom()- nHeight );
+                    rOutRect.AddBottom(- nHeight );
             }
             break;
         case SvxShadowLocation::TopLeft:
@@ -4280,8 +4280,8 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                 if ( bDrawFullShadowRectangle )
                 {
                     // draw full shadow rectangle
-                    aOut.Bottom( rOutRect.Bottom() - nHeight );
-                    aOut.Right( rOutRect.Right() - nWidth );
+                    aOut.AddBottom( - nHeight );
+                    aOut.AddRight( - nWidth );
                     aRegion.push_back( aOut );
                 }
                 else
@@ -4290,7 +4290,7 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                     {
                         aOut.Bottom( rOutRect.Top() + nHeight );
                         if( bRight )
-                            aOut.Right( rOutRect.Right() - nWidth );
+                            aOut.AddRight( - nWidth );
                         aRegion.push_back( aOut );
                     }
                     if( bLeft )
@@ -4307,9 +4307,9 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                 }
 
                 if( bLeft )
-                    rOutRect.Left( rOutRect.Left() + nWidth );
+                    rOutRect.AddLeft( nWidth );
                 if( bTop )
-                    rOutRect.Top( rOutRect.Top() + nHeight );
+                    rOutRect.AddTop( nHeight );
             }
             break;
         case SvxShadowLocation::TopRight:
@@ -4344,9 +4344,9 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                 }
 
                 if( bRight )
-                    rOutRect.Right( rOutRect.Right() - nWidth );
+                    rOutRect.AddRight( - nWidth );
                 if( bTop )
-                    rOutRect.Top( rOutRect.Top() + nHeight );
+                    rOutRect.AddTop( nHeight );
             }
             break;
         case SvxShadowLocation::BottomLeft:
@@ -4381,9 +4381,9 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                 }
 
                 if( bLeft )
-                    rOutRect.Left( rOutRect.Left() + nWidth );
+                    rOutRect.AddLeft( nWidth );
                 if( bBottom )
-                    rOutRect.Bottom( rOutRect.Bottom() - nHeight );
+                    rOutRect.AddBottom( - nHeight );
             }
             break;
         default:
@@ -5733,9 +5733,9 @@ bool SwPageFrame::IsLeftShadowNeeded() const
         // Notes are displayed, we've to extend borders
         SwTwips aSidebarTotalWidth = pMgr->GetSidebarWidth(true) + pMgr->GetSidebarBorderWidth(true);
         if(bRightSidebar)
-            _orHorizontalShadowRect.Right( _orHorizontalShadowRect.Right() + aSidebarTotalWidth );
+            _orHorizontalShadowRect.AddRight( aSidebarTotalWidth );
         else
-            _orHorizontalShadowRect.Left( _orHorizontalShadowRect.Left() - aSidebarTotalWidth );
+            _orHorizontalShadowRect.AddLeft( - aSidebarTotalWidth );
     }
 }
 
@@ -6087,8 +6087,8 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     SwRect aAlignedPageRect( _rPageRect );
     ::SwAlignRect( aAlignedPageRect, _pViewShell, pRenderContext );
     SwRect aPagePxRect = pRenderContext->LogicToPixel( aAlignedPageRect.SVRect() );
-    aPagePxRect.Bottom( aPagePxRect.Bottom() + mnShadowPxWidth + 1 );
-    aPagePxRect.Top( aPagePxRect.Top() - mnShadowPxWidth - 1 );
+    aPagePxRect.AddBottom( mnShadowPxWidth + 1 );
+    aPagePxRect.AddTop( - mnShadowPxWidth - 1 );
 
     SwRect aTmpRect;
 
