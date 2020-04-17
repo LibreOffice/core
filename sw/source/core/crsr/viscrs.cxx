@@ -579,9 +579,9 @@ void SwSelPaintRects::Invalidate( const SwRect& rRect )
         {
             SwRect& rRectIt = *it;
             if( rRectIt.Right() == GetShell()->m_aOldRBPos.X() )
-                rRectIt.Right( rRectIt.Right() + s_nPixPtX );
+                rRectIt.AddRight( s_nPixPtX );
             if( rRectIt.Bottom() == GetShell()->m_aOldRBPos.Y() )
-                rRectIt.Bottom( rRectIt.Bottom() + s_nPixPtY );
+                rRectIt.AddBottom( s_nPixPtY );
         }
     }
 }
