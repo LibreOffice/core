@@ -233,7 +233,8 @@ const ORowSetValue& ORowSetBase::impl_getValue(sal_Int32 columnIndex)
         ORowSetRow rRow = *m_aCurrentRow;
         OSL_ENSURE(rRow.is() && o3tl::make_unsigned(columnIndex) < rRow->size(),"Invalid size of vector!");
 #endif
-        return (**m_aCurrentRow)[m_nLastColumnIndex = columnIndex];
+        m_nLastColumnIndex = columnIndex;
+        return (**m_aCurrentRow)[m_nLastColumnIndex];
     }
 
     // we should normally never reach this
@@ -340,7 +341,10 @@ Reference< css::io::XInputStream > SAL_CALL ORowSetBase::getBinaryStream( sal_In
     }
 
     if ( bValidCurrentRow )
-        return new ::comphelper::SequenceInputStream((**m_aCurrentRow)[m_nLastColumnIndex = columnIndex].getSequence());
+    {
+        m_nLastColumnIndex = columnIndex;
+        return new ::comphelper::SequenceInputStream((**m_aCurrentRow)[m_nLastColumnIndex].getSequence());
+    }
 
     // we should normally never reach this
     return Reference< css::io::XInputStream >();

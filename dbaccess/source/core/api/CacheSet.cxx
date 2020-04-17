@@ -64,9 +64,9 @@ OCacheSet::OCacheSet(sal_Int32 i_nMaxRows)
 OUString OCacheSet::getIdentifierQuoteString() const
 {
     OUString sQuote;
-    Reference<XDatabaseMetaData> xMeta;
-    if ( m_xConnection.is() && (xMeta = m_xConnection->getMetaData()).is() )
-        sQuote = xMeta->getIdentifierQuoteString();
+    if ( m_xConnection.is() )
+        if (auto xMeta = m_xConnection->getMetaData())
+            sQuote = xMeta->getIdentifierQuoteString();
     return sQuote;
 }
 

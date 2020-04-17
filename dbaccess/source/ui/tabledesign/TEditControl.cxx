@@ -924,7 +924,8 @@ void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const css::uno
             break;
 
         case COLUMN_DESCRIPTION:
-            pFieldDescr->SetDescription( sValue = ::comphelper::getString(_rNewData) );
+            sValue = ::comphelper::getString(_rNewData);
+            pFieldDescr->SetDescription( sValue );
             break;
 
         case FIELD_PROPERTY_DEFAULT:

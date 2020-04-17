@@ -288,8 +288,11 @@ namespace dbaui
                 }
                 else
                     addOutputText(OUString::number(xMR->getUpdateCount()) + " rows updated\n");
-                while ((hasRS=xMR->getMoreResults()) || (xMR->getUpdateCount() != -1))
+                for (;;)
                 {
+                    hasRS = xMR->getMoreResults();
+                    if (!hasRS && xMR->getUpdateCount() == -1)
+                        break;
                     if(hasRS)
                     {
                         css::uno::Reference< css::sdbc::XResultSet > xRS (xMR->getResultSet());
