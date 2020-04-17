@@ -480,5 +480,7 @@ gb_CppunitTest_set_warnings_not_errors = $(call gb_CppunitTest__forward_to_Linkt
 gb_CppunitTest_set_warnings_disabled = $(call gb_CppunitTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_CppunitTest_set_external_code = $(call gb_CppunitTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_CppunitTest_set_generated_cxx_suffix = $(call gb_CppunitTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
+gb_CppunitTest_use_clang = $(call gb_CppunitTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
+gb_CppunitTest_set_clang_precompiled_header = $(call gb_CppunitTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 
 # vim: set noet sw=4:

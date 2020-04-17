@@ -11145,6 +11145,34 @@ else
 fi
 AC_SUBST(ENABLE_SKIA)
 
+if test "$COM_IS_CLANG" != TRUE; then
+    if test -n "$CLANG_C" -a -n "$CLANG_CXX"; then
+        AC_MSG_CHECKING([for Clang])
+        AC_MSG_RESULT([$CLANG_C / $CLANG_CXX])
+    else
+        if test "$_os" = "WINNT"; then
+            CLANG_C=`win_short_path_for_make "$VC_PRODUCT_DIR/Tools/Llvm/bin/clang-cl.exe"`
+            if test "$BITNESS_OVERRIDE" = ""; then
+                dnl match our MSVC default
+                CLANG_C="$CLANG_C -arch:SSE"
+            fi
+            CLANG_CXX="$CLANG_C"
+            AC_MSG_CHECKING([for Clang-cl])
+            AC_MSG_RESULT([$CLANG_C])
+        else
+            AC_CHECK_PROG(CLANG_C,clang,clang,[])
+            AC_CHECK_PROG(CLANG_CXX,clang++,clang++,[])
+        fi
+    fi
+    if test -z "$CLANG_C" -o -z "$CLANG_CXX"; then
+        # So far do not require this, but release builds with Skia should possibly
+        # do so.
+        AC_MSG_WARN([Clang compiler not found.])
+    fi
+fi
+AC_SUBST(CLANG_C)
+AC_SUBST(CLANG_CXX)
+
 SYSTEM_GPGMEPP=
 
 if test "$build_for_ios" = "YES"; then

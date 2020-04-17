@@ -236,5 +236,7 @@ gb_Library_set_warnings_not_errors = $(call gb_Library__forward_to_Linktarget,$(
 gb_Library_set_warnings_disabled = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Library_set_external_code = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Library_set_generated_cxx_suffix = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
+gb_Library_use_clang = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
+gb_Library_set_clang_precompiled_header = $(call gb_Library__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 
 # vim: set noet sw=4:

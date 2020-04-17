@@ -150,6 +150,8 @@ gb_Executable_set_warnings_not_errors = $(call gb_Executable__forward_to_Linktar
 gb_Executable_set_warnings_disabled = $(call gb_Executable__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Executable_set_external_code = $(call gb_Executable__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Executable_set_generated_cxx_suffix = $(call gb_Executable__forward_to_Linktarget,$(0),$(1),$(2),$(3))
+gb_Executable_use_clang = $(call gb_Executable__forward_to_Linktarget,$(0),$(1),$(2),$(3))
+gb_Executable_set_clang_precompiled_header = $(call gb_Executable__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 
 # Run-time use
 
