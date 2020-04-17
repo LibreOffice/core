@@ -43,6 +43,7 @@ class StyleSheetEntry;
 class ListLevel : public PropertyMap
 {
     sal_Int32                                     m_nIStartAt;       //LN_CT_Lvl_start
+    sal_Int32                                     m_nStartOverride;
     sal_Int32                                     m_nNFC;            //LN_CT_Lvl_numFmt
     /// LN_CT_NumFmt_format, in case m_nNFC is custom.
     OUString m_aCustomNumberFormat;
@@ -61,6 +62,7 @@ public:
 
     ListLevel() :
         m_nIStartAt(-1)
+        ,m_nStartOverride(-1)
         ,m_nNFC(-1)
         ,m_nXChFollow(SvxNumberFormat::LISTTAB)
         ,m_nTabstop( 0 )
@@ -80,7 +82,9 @@ public:
     // Getters
     const OUString& GetBulletChar( ) const { return m_sBulletChar; };
     const tools::SvRef< StyleSheetEntry >& GetParaStyle( ) const { return m_pParaStyle; };
+    sal_Int32 GetStartAt() const { return m_nIStartAt; };
     bool isOutlineNumbering() const { return m_outline; }
+    sal_Int32 GetStartOverride() const { return m_nStartOverride; };
     /// Determines if SetValue() was called at least once.
     bool HasValues() const;
 
