@@ -332,7 +332,7 @@ namespace drawinglayer::processor2d
             basegfx::B2DPolygon aLocalPolygon(rPolygonCandidate.getB2DPolygon());
             aLocalPolygon.transform(maCurrentTransformation);
 
-            if(bPixelBased && getOptionsDrawinglayer().IsAntiAliasing())
+            if(bPixelBased && getOptionsDrawinglayer().IsAntiAliasing() && getOptionsDrawinglayer().IsSnapHorVerLinesToDiscrete())
             {
                 // #i98289#
                 // when a Hairline is painted and AntiAliasing is on the option SnapHorVerLinesToDiscrete

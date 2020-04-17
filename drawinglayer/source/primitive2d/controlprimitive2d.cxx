@@ -96,7 +96,8 @@ namespace drawinglayer::primitive2d
                     basegfx::B2DVector aDiscreteSize(rViewInformation.getObjectToViewTransformation() * aScale);
 
                     // limit to a maximum square size, e.g. 300x150 pixels (45000)
-                    const double fDiscreteMax(SvtOptionsDrawinglayer::GetQuadraticFormControlRenderLimit());
+                    const SvtOptionsDrawinglayer aDrawinglayerOpt;
+                    const double fDiscreteMax(aDrawinglayerOpt.GetQuadraticFormControlRenderLimit());
                     const double fDiscreteQuadratic(aDiscreteSize.getX() * aDiscreteSize.getY());
                     const bool bScaleUsed(fDiscreteQuadratic > fDiscreteMax);
                     double fFactor(1.0);
