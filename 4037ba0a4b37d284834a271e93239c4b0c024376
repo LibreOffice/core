@@ -46,6 +46,30 @@
       "revId": "4037ba0a4b37d284834a271e93239c4b0c024376",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8ba4559_4123f294",
+        "filename": "sw/source/uibase/app/docsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-04-17T07:54:36Z",
+      "side": 1,
+      "message": "I understand that. But the question is what specifically is being passed to the function, so that it fails.",
+      "parentUuid": "a03a91a7_c93f42da",
+      "range": {
+        "startLine": 447,
+        "startChar": 59,
+        "endLine": 447,
+        "endChar": 93
+      },
+      "revId": "4037ba0a4b37d284834a271e93239c4b0c024376",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
