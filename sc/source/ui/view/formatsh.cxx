@@ -157,7 +157,7 @@ void ScFormatShell::GetStyleState( SfxItemSet& rSet )
 
     bool bProtected = false;
     SCTAB nTabCount = pDoc->GetTableCount();
-    for (SCTAB i=0; i<nTabCount; i++)
+    for (SCTAB i=0; i<nTabCount && !bProtected; i++)
         if (pDoc->IsTabProtected(i))                // look after protected table
             bProtected = true;
 
