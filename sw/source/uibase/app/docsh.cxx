@@ -444,10 +444,14 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
             ->parse(rOldURLObject.GetMainURL(INetURLObject::DecodeMechanism::NONE));
         assert(xUri.is());
         xUri = css::uri::VndSunStarPkgUrlReferenceFactory::create(xContext)->createVndSunStarPkgUrlReference(xUri);
-        assert(xUri.is());
-        OUString const aURL = xUri->getUriReference() + "/"
+        SAL_WARN_IF(!xUri.is(), "sw", "SwDocShell::SaveAs: no Uri found for embedded database");
+        OUString aURL;
+        if (xUri.is())
+        {
+            aURL = xUri->getUriReference() + "/"
             + INetURLObject::encode(pMgr->getEmbeddedName(),
                 INetURLObject::PART_FPATH, INetURLObject::EncodeMechanism::All);
+        }
 
         bool bCopyTo = GetCreateMode() == SfxObjectCreateMode::EMBEDDED;
         if (!bCopyTo)
@@ -457,11 +461,14 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
                 bCopyTo = pSaveToItem->GetValue();
         }
 
-        uno::Reference<sdb::XDocumentDataSource> xDataSource(xDatabaseContext->getByName(aURL), uno::UNO_QUERY);
-        uno::Reference<frame::XStorable> xStorable(xDataSource->getDatabaseDocument(), uno::UNO_QUERY);
-        SwDBManager::StoreEmbeddedDataSource(xStorable, rMedium.GetOutputStorage(),
-                                             pMgr->getEmbeddedName(),
-                                             rMedium.GetName(), bCopyTo);
+        if (!aURL.isEmpty())
+        {
+            uno::Reference<sdb::XDocumentDataSource> xDataSource(xDatabaseContext->getByName(aURL), uno::UNO_QUERY);
+            uno::Reference<frame::XStorable> xStorable(xDataSource->getDatabaseDocument(), uno::UNO_QUERY);
+            SwDBManager::StoreEmbeddedDataSource(xStorable, rMedium.GetOutputStorage(),
+                                                 pMgr->getEmbeddedName(),
+                                                 rMedium.GetName(), bCopyTo);
+        }
     }
 
     // #i62875#
