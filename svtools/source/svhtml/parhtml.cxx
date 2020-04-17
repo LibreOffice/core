@@ -593,11 +593,6 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                     // Space is protected because it's not a delimiter between
                     // options.
                     sTmpBuffer.append( '\\' );
-                    if( MAX_LEN == sTmpBuffer.getLength() )
-                    {
-                        aToken += sTmpBuffer;
-                        sTmpBuffer.setLength(0);
-                    }
                 }
                 if( IsParserWorking() )
                 {
@@ -634,11 +629,6 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
             {
                 // mark within tags
                 sTmpBuffer.append( '\\' );
-                if( MAX_LEN == sTmpBuffer.getLength() )
-                {
-                    aToken += sTmpBuffer;
-                    sTmpBuffer.setLength(0);
-                }
             }
             sTmpBuffer.append( '\\' );
             break;
@@ -761,11 +751,7 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                     // All remaining characters make their way into the text.
                         sTmpBuffer.appendUtf32( nNextCh );
                     }
-                    if( MAX_LEN == sTmpBuffer.getLength() )
-                    {
-                        aToken += sTmpBuffer;
-                        sTmpBuffer.setLength(0);
-                    }
+
                     nNextCh = GetNextChar();
                     if( ( sal_Unicode(EOF) == nNextCh && rInput.eof() ) ||
                         !IsParserWorking() )
@@ -777,12 +763,6 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                 } while( rtl::isAsciiAlpha( nNextCh ) || rtl::isAsciiDigit( nNextCh ) );
                 bNextCh = false;
             }
-        }
-
-        if( MAX_LEN == sTmpBuffer.getLength() )
-        {
-            aToken += sTmpBuffer;
-            sTmpBuffer.setLength(0);
         }
 
         if( bContinue && bNextCh )
