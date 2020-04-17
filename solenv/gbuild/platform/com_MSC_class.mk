@@ -34,13 +34,15 @@ endef
 
 # CObject class
 
-# $(call gb_CObject__compiler,flags,source)
+# $(call gb_CObject__compiler,flags,source,compiler)
 define gb_CObject__compiler
 	$(if $(filter YES,$(LIBRARY_X64)), $(CXX_X64_BINARY), \
 		$(if $(filter YES,$(PE_X86)), $(CXX_X86_BINARY), \
-			$(if $(filter %.c,$(2)), $(gb_CC), \
+			$(if $(filter %.c,$(2)), \
+				$(if $(3), $(3), $(gb_CC)), \
 				$(if $(filter -clr,$(1)), \
-					$(MSVC_CXX) -I$(SRCDIR)/solenv/clang-cl,$(gb_CXX)))))
+					$(MSVC_CXX) -I$(SRCDIR)/solenv/clang-cl,
+						$(if $(3), $(3), $(gb_CXX))))))
 endef
 
 # Avoid annoying warning D9025 about overriding command-line arguments.
@@ -50,12 +52,12 @@ gb_Helper_remove_overridden_flags = \
     $(lastword $(filter -Od -O2,$(1))) \
     $(lastword $(filter -arch:SSE -arch:SSE2 -arch:AVX -arch:AVX2,$(1)))
 
-# $(call gb_CObject__command_pattern,object,flags,source,dep-file,compiler-plugins,symbols)
+# $(call gb_CObject__command_pattern,object,flags,source,dep-file,compiler-plugins,symbols,compiler)
 define gb_CObject__command_pattern
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	unset INCLUDE && \
-	$(filter-out -arch:SSE,$(call gb_CObject__compiler,$(2),$(3))) \
+	$(filter-out -arch:SSE,$(call gb_CObject__compiler,$(2),$(3),$(7))) \
 		$(DEFS) \
 		$(gb_LTOFLAGS) \
 		$(call gb_Helper_remove_overridden_flags,$(filter -arch:SSE,$(call gb_CObject__compiler,$(2),$(3))) \
@@ -96,7 +98,7 @@ $(call gb_Output_announce,$(2),$(true),PCH,1)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2),$(7))) && \
 	unset INCLUDE && \
-	$(filter-out -arch:SSE,$(call gb_CObject__compiler,$(4) $(5),$(3))) \
+	$(filter-out -arch:SSE,$(call gb_CObject__compiler,$(4) $(5),$(3),$(8))) \
 		$(call gb_Helper_remove_overridden_flags,$(filter -arch:SSE,$(call gb_CObject__compiler,$(4) $(5),$(3))) \
 			$(4) $(5) $(if $(WARNINGS_DISABLED),$(gb_CXXFLAGS_DISABLE_WARNINGS))) \
 		-Fd$(PDBFILE) \
