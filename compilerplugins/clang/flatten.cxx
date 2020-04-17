@@ -48,7 +48,7 @@ private:
     SourceRange ignoreMacroExpansions(SourceRange range);
     SourceRange extendOverComments(SourceRange range);
     std::string getSourceAsString(SourceRange range);
-    std::string invertCondition(Expr const * condExpr, SourceRange conditionRange);
+    llvm::Optional<std::string> invertCondition(Expr const * condExpr, SourceRange conditionRange);
     bool isLargeCompoundStmt(Stmt const *);
 
     Stmt const * lastStmtInCompoundStmt = nullptr;
@@ -274,7 +274,7 @@ static std::vector<std::string> split(std::string s);
 static bool startswith(std::string const & rStr, char const * pSubStr);
 static int countLeadingSpaces(std::string const &);
 static std::string padSpace(int iNoSpaces);
-static void replace(std::string & s, std::string const & from, std::string const & to);
+static bool replace(std::string & s, std::string const & from, std::string const & to);
 
 bool Flatten::rewrite1(IfStmt const * ifStmt)
 {
@@ -301,7 +301,9 @@ bool Flatten::rewrite1(IfStmt const * ifStmt)
 
     // in adjusting the formatting I assume that "{" starts on a new line
 
-    std::string conditionString = invertCondition(ifStmt->getCond(), conditionRange);
+    llvm::Optional<std::string> conditionString = invertCondition(ifStmt->getCond(), conditionRange);
+    if (!conditionString)
+        return false;
 
     std::string thenString = getSourceAsString(thenRange);
     if (auto compoundStmt = dyn_cast<CompoundStmt>(ifStmt->getThen())) {
@@ -322,7 +324,7 @@ bool Flatten::rewrite1(IfStmt const * ifStmt)
     if (!replaceText(thenRange, elseString)) {
         return false;
     }
-    if (!replaceText(conditionRange, conditionString)) {
+    if (!replaceText(conditionRange, *conditionString)) {
         return false;
     }
 
@@ -389,7 +391,9 @@ bool Flatten::rewriteLargeIf(IfStmt const * ifStmt)
 
     // in adjusting the formatting I assume that "{" starts on a new line
 
-    std::string conditionString = invertCondition(ifStmt->getCond(), conditionRange);
+    llvm::Optional<std::string> conditionString = invertCondition(ifStmt->getCond(), conditionRange);
+    if (!conditionString)
+        return false;
 
     std::string thenString = getSourceAsString(thenRange);
     if (auto compoundStmt = dyn_cast<CompoundStmt>(ifStmt->getThen())) {
@@ -404,14 +408,14 @@ bool Flatten::rewriteLargeIf(IfStmt const * ifStmt)
     if (!replaceText(thenRange, thenString)) {
         return false;
     }
-    if (!replaceText(conditionRange, conditionString)) {
+    if (!replaceText(conditionRange, *conditionString)) {
         return false;
     }
 
     return true;
 }
 
-std::string Flatten::invertCondition(Expr const * condExpr, SourceRange conditionRange)
+llvm::Optional<std::string> Flatten::invertCondition(Expr const * condExpr, SourceRange conditionRange)
 {
     std::string s = getSourceAsString(conditionRange);
 
@@ -437,31 +441,37 @@ std::string Flatten::invertCondition(Expr const * condExpr, SourceRange conditio
     }
     else if (auto binaryOp = dyn_cast<BinaryOperator>(condExpr))
     {
+        bool ok = true;
         switch (binaryOp->getOpcode())
         {
-            case BO_LT: replace(s, "<", ">="); break;
-            case BO_GT: replace(s, ">", "<="); break;
-            case BO_LE: replace(s, "<=", ">"); break;
-            case BO_GE: replace(s, ">=", "<"); break;
-            case BO_EQ: replace(s, "==", "!="); break;
-            case BO_NE: replace(s, "!=", "=="); break;
+            case BO_LT: ok = replace(s, "<", ">="); break;
+            case BO_GT: ok = replace(s, ">", "<="); break;
+            case BO_LE: ok = replace(s, "<=", ">"); break;
+            case BO_GE: ok = replace(s, ">=", "<"); break;
+            case BO_EQ: ok = replace(s, "==", "!="); break;
+            case BO_NE: ok = replace(s, "!=", "=="); break;
             default:
                 s = "!(" + s + ")";
         }
+        if (!ok)
+           return {};
     }
     else if (auto opCallExpr = dyn_cast<CXXOperatorCallExpr>(condExpr))
     {
+        bool ok = true;
         switch (opCallExpr->getOperator())
         {
-            case OO_Less: replace(s, "<", ">="); break;
-            case OO_Greater: replace(s, ">", "<="); break;
-            case OO_LessEqual: replace(s, "<=", ">"); break;
-            case OO_GreaterEqual: replace(s, ">=", "<"); break;
-            case OO_EqualEqual: replace(s, "==", "!="); break;
-            case OO_ExclaimEqual: replace(s, "!=", "=="); break;
+            case OO_Less: ok = replace(s, "<", ">="); break;
+            case OO_Greater: ok = replace(s, ">", "<="); break;
+            case OO_LessEqual: ok = replace(s, "<=", ">"); break;
+            case OO_GreaterEqual: ok = replace(s, ">=", "<"); break;
+            case OO_EqualEqual: ok = replace(s, "==", "!="); break;
+            case OO_ExclaimEqual: ok = replace(s, "!=", "=="); break;
             default:
                 s = "!(" + s + ")";
         }
+        if (!ok)
+            return {};
     }
     else if (isa<DeclRefExpr>(condExpr) || isa<CallExpr>(condExpr) || isa<MemberExpr>(condExpr))
         s = "!" + s;
@@ -558,13 +568,13 @@ std::string stripTrailingEmptyLines(std::string s)
     return s;
 }
 
-void replace(std::string & s, std::string const & from, std::string const & to)
+bool replace(std::string & s, std::string const & from, std::string const & to)
 {
     auto i = s.find(from);
     assert (i != std::string::npos);
     s.replace(i, from.length(), to);
     // just in case we have something really weird, like the operator token is also present in the rest of the condition somehow
-    assert (s.find(from) == std::string::npos);
+   return s.find(from) == std::string::npos;
 }
 
 SourceRange Flatten::ignoreMacroExpansions(SourceRange range) {
