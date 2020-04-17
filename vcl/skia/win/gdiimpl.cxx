@@ -110,7 +110,7 @@ bool WinSkiaSalGraphicsImpl::RenderAndCacheNativeControl(CompatibleDC& rWhite, C
 }
 
 #ifdef SAL_LOG_INFO
-HRESULT checkResult(HRESULT hr, const char* file, size_t line)
+static HRESULT checkResult(HRESULT hr, const char* file, size_t line)
 {
     if (FAILED(hr))
     {
