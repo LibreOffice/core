@@ -22,7 +22,6 @@
 
 #include <sal/config.h>
 
-#include <config_global.h>
 #include <editeng/editengdllapi.h>
 #include <o3tl/sorted_vector.hxx>
 #include <rtl/ustring.hxx>
@@ -59,9 +58,6 @@ class SortedAutoCompleteStrings
 
     SortedAutoCompleteStrings& operator =(SortedAutoCompleteStrings const &) = delete;
 
-#if !HAVE_CPP_GUARANTEED_COPY_ELISION
-public:
-#endif
     // For createNonOwningCopy only:
     SortedAutoCompleteStrings(SortedAutoCompleteStrings const & other):
         sorted_vector(other), owning_(false) {}
