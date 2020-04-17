@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0408c5f4_2518aaf2",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5523,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-04-17T12:58:57Z",
+      "side": 1,
+      "message": "Simply \n\nOString aPos;\nOString aAnch;",
+      "range": {
+        "startLine": 5521,
+        "startChar": 4,
+        "endLine": 5523,
+        "endChar": 22
+      },
+      "revId": "24a1fa31133647214925958bcdd3c7581a1b09d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "daa15044_79d8740e",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5527,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-04-17T12:58:57Z",
+      "side": 1,
+      "message": "frame format or FlyFrameFormat",
+      "range": {
+        "startLine": 5527,
+        "startChar": 58,
+        "endLine": 5527,
+        "endChar": 69
+      },
+      "revId": "24a1fa31133647214925958bcdd3c7581a1b09d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5ee0042_519a0cb0",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5527,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-04-17T12:58:57Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 5527,
+        "startChar": 75,
+        "endLine": 5527,
+        "endChar": 81
+      },
+      "revId": "24a1fa31133647214925958bcdd3c7581a1b09d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad445587_8b1a81ab",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5530,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-04-17T12:58:57Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 5530,
+        "startChar": 38,
+        "endLine": 5530,
+        "endChar": 39
+      },
+      "revId": "24a1fa31133647214925958bcdd3c7581a1b09d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "933a14eb_b5e2d745",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5562,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-04-17T12:58:57Z",
+      "side": 1,
+      "message": "//Export anchor setting, if it exists",
+      "range": {
+        "startLine": 5562,
+        "startChar": 30,
+        "endLine": 5562,
+        "endChar": 31
+      },
+      "revId": "24a1fa31133647214925958bcdd3c7581a1b09d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1740512_f4177592",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5563,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-04-17T12:58:57Z",
+      "side": 1,
+      "message": "break it in a new line",
+      "range": {
+        "startLine": 5563,
+        "startChar": 44,
+        "endLine": 5563,
+        "endChar": 45
+      },
+      "revId": "24a1fa31133647214925958bcdd3c7581a1b09d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
