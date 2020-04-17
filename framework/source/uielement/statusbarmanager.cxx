@@ -545,7 +545,7 @@ void StatusBarManager::UserDraw( const UserDrawEvent& rUDEvt )
                               rUDEvt.GetRect().GetWidth(),
                               rUDEvt.GetRect().GetHeight() );
         aGuard.clear();
-        xController->paint( xGraphics, aRect, rUDEvt.GetStyle() );
+        xController->paint(xGraphics, aRect, 0);
     }
 }
 

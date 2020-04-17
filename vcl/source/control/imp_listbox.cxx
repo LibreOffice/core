@@ -1737,12 +1737,8 @@ void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 
         if (nPos < GetEntryList()->GetMRUCount())
             nPos = GetEntryList()->FindEntry(GetEntryList()->GetEntryText(nPos));
         nPos = nPos - GetEntryList()->GetMRUCount();
-        sal_Int32 nCurr = mnCurrentPos;
-        if (mnCurrentPos < GetEntryList()->GetMRUCount())
-            nCurr = GetEntryList()->FindEntry(GetEntryList()->GetEntryText(nCurr));
-        nCurr = sal::static_int_cast<sal_Int32>(nCurr - GetEntryList()->GetMRUCount());
 
-        UserDrawEvent aUDEvt(this, &rRenderContext, aRect, nPos, nCurr);
+        UserDrawEvent aUDEvt(this, &rRenderContext, aRect, nPos);
         maUserDrawHdl.Call( &aUDEvt );
         mbInUserDraw = false;
     }
@@ -2753,7 +2749,7 @@ void ImplWin::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
 
     if ( IsUserDrawEnabled() )
     {
-        UserDrawEvent aUDEvt(this, &rRenderContext, maFocusRect, mnItemPos, 0);
+        UserDrawEvent aUDEvt(this, &rRenderContext, maFocusRect, mnItemPos);
         maUserDrawHdl.Call( &aUDEvt );
     }
     else
