@@ -22,6 +22,30 @@
       "revId": "4037ba0a4b37d284834a271e93239c4b0c024376",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a03a91a7_c93f42da",
+        "filename": "sw/source/uibase/app/docsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-04-17T07:53:07Z",
+      "side": 1,
+      "message": "I thought it might be because database referenced can\u0027t be found. See https://bugs.documentfoundation.org/show_bug.cgi?id\u003d131621#c8",
+      "parentUuid": "86bc7d67_f217a3f4",
+      "range": {
+        "startLine": 447,
+        "startChar": 59,
+        "endLine": 447,
+        "endChar": 93
+      },
+      "revId": "4037ba0a4b37d284834a271e93239c4b0c024376",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
