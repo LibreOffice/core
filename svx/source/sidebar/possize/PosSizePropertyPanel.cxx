@@ -846,7 +846,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
 
 void PosSizePropertyPanel::GetControlState(const sal_uInt16 nSID, boost::property_tree::ptree& rState)
 {
-    VclPtr<vcl::Window> pControl;
+    VclPtr<MetricField> pControl;
     switch (nSID)
     {
         case SID_ATTR_TRANSFORM_POS_X:
@@ -865,7 +865,9 @@ void PosSizePropertyPanel::GetControlState(const sal_uInt16 nSID, boost::propert
 
     if (pControl && !pControl->GetText().isEmpty())
     {
-        rState.put(pControl->get_id().toUtf8().getStr(),pControl->GetText().toUtf8().getStr());
+        OUString sValue = comphelper::LibreOfficeKit::getNeutralLocale().
+            getNum(pControl->GetValue(), pControl->GetDecimalDigits(), false, false);
+        rState.put(pControl->get_id().toUtf8().getStr(), sValue.toUtf8().getStr());
     }
 }
 

@@ -14,6 +14,7 @@
 #include <rtl/ustring.hxx>
 
 class LanguageTag;
+class LocaleDataWrapper;
 
 // Interface between the LibreOfficeKit implementation called by LibreOfficeKit clients and other
 // LibreOffice code.
@@ -108,6 +109,8 @@ COMPHELPER_DLLPUBLIC void setViewIdForVisCursorInvalidation(bool bViewIdForVisCu
 COMPHELPER_DLLPUBLIC void setLocale(const LanguageTag& languageTag);
 /// Get the current LOK's locale.
 COMPHELPER_DLLPUBLIC const LanguageTag& getLocale();
+/// Get neutral locale for unit to string conversion.
+COMPHELPER_DLLPUBLIC const LocaleDataWrapper& getNeutralLocale();
 
 /// Update the current LOK's language.
 COMPHELPER_DLLPUBLIC void setLanguageTag(const LanguageTag& languageTag);

@@ -9,6 +9,7 @@
 
 #include <comphelper/lok.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <unotools/localedatawrapper.hxx>
 #include <sal/log.hxx>
 
 #include <iostream>
@@ -44,6 +45,7 @@ class LanguageAndLocale
 private:
     LanguageTag maLanguageTag;
     LanguageTag maLocaleLanguageTag;
+    std::unique_ptr<LocaleDataWrapper> mpNeutralLocale;
 
 public:
 
@@ -80,6 +82,14 @@ public:
         }
     }
 
+    LocaleDataWrapper& getNeutralLocale()
+    {
+        if ( !mpNeutralLocale )
+        {
+            mpNeutralLocale.reset(new LocaleDataWrapper(LanguageTag("en_US")));
+        }
+        return *mpNeutralLocale;
+    }
 };
 
 static LanguageAndLocale g_aLanguageAndLocale;
@@ -227,6 +237,11 @@ const LanguageTag& getLocale()
     const LanguageTag& rLocale = g_aLanguageAndLocale.getLocale();
     SAL_INFO_IF(rLocale.getLanguageType() == LANGUAGE_NONE, "comphelper.lok", "Locale not set");
     return rLocale;
+}
+
+const LocaleDataWrapper& getNeutralLocale()
+{
+    return g_aLanguageAndLocale.getNeutralLocale();
 }
 
 void setLanguageTag(const LanguageTag& rLanguageTag)

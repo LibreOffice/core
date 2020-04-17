@@ -22,7 +22,7 @@
 #include <osl/diagnose.h>
 
 #include <comphelper/string.hxx>
-
+#include <comphelper/lok.hxx>
 
 #include <vcl/dialog.hxx>
 #include <vcl/field.hxx>
@@ -1708,6 +1708,10 @@ boost::property_tree::ptree MetricField::DumpAsPropertyTree()
     aTree.put("min", GetMin());
     aTree.put("max", GetMax());
     aTree.put("unit", FieldUnitToString(GetUnit()));
+    OUString sValue = comphelper::LibreOfficeKit::getNeutralLocale().
+        getNum(GetValue(), GetDecimalDigits(), false, false);
+    aTree.put("text", sValue.toUtf8().getStr());
+
     return aTree;
 }
 
