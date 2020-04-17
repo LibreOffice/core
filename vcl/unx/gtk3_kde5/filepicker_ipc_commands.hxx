@@ -25,14 +25,9 @@
 
 #include <sal/types.h>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <rtl/ustring.hxx>
 
 // #define DEBUG_FILEPICKER_IPC
-
-namespace rtl
-{
-class OUString;
-}
-class QString;
 
 enum class Commands : uint16_t
 {
@@ -55,7 +50,6 @@ enum class Commands : uint16_t
     AddCheckBox,
     Initialize,
     Quit,
-    EnablePickFolderMode,
 };
 
 inline std::vector<char> readIpcStringArg(std::istream& stream)
@@ -69,7 +63,6 @@ inline std::vector<char> readIpcStringArg(std::istream& stream)
 }
 
 void readIpcArg(std::istream& stream, OUString& string);
-void readIpcArg(std::istream& stream, QString& string);
 void readIpcArg(std::istream& stream, css::uno::Sequence<OUString>& seq);
 
 inline void readIpcArg(std::istream& stream, Commands& value)
@@ -120,8 +113,26 @@ inline void readIpcArgs(std::istream& stream, T& arg, Args&... args)
     readIpcArgs(stream, args...);
 }
 
+inline void readIpcArg(std::istream& stream, OUString& string)
+{
+    const auto buffer = readIpcStringArg(stream);
+    string = OUString::fromUtf8(OString(buffer.data(), buffer.size()));
+}
+
+inline void readIpcArg(std::istream& stream, css::uno::Sequence<OUString>& seq)
+{
+    uint32_t numFiles = 0;
+    stream >> numFiles;
+    stream.ignore(); // skip space;
+    seq.realloc(numFiles);
+    for (size_t i = 0; i < numFiles; ++i)
+    {
+        readIpcArg(stream, seq[i]);
+    }
+}
+
 void sendIpcArg(std::ostream& stream, const OUString& string);
-void sendIpcArg(std::ostream& stream, const QString& string);
+void sendIpcArg(std::ostream& stream, const css::uno::Sequence<OUString>& seq);
 
 inline void sendIpcStringArg(std::ostream& stream, uint32_t length, const char* string)
 {
@@ -168,6 +179,21 @@ inline void sendIpcArgs(std::ostream& stream, const T& arg, const Args&... args)
     std::cerr << "IPC MSG: ";
     sendIpcArgsImpl(std::cerr, arg, args...);
 #endif
+}
+
+inline void sendIpcArg(std::ostream& stream, const OUString& string)
+{
+    const auto utf8 = string.toUtf8();
+    sendIpcStringArg(stream, utf8.getLength(), utf8.getStr());
+}
+
+inline void sendIpcArg(std::ostream& stream, const css::uno::Sequence<OUString>& seq)
+{
+    stream << static_cast<uint32_t>(seq.getLength()) << ' ';
+    for (const auto& entry : seq)
+    {
+        sendIpcArg(stream, entry);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

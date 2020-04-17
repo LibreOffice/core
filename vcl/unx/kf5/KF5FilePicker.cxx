@@ -30,6 +30,7 @@
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QWidget>
 #include <KFileWidget>
+#include <KWindowSystem>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION;
@@ -45,10 +46,9 @@ uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
 
 // KF5FilePicker
 
-KF5FilePicker::KF5FilePicker(css::uno::Reference<css::uno::XComponentContext> const& context,
-                             QFileDialog::FileMode eMode)
+KF5FilePicker::KF5FilePicker(QFileDialog::FileMode eMode)
     // Native kf5 filepicker does not add file extension automatically
-    : Qt5FilePicker(context, eMode, true)
+    : Qt5FilePicker(eMode, true)
     , _layout(new QGridLayout(m_pExtraControls))
 {
     // only columns 0 and 1 are used by controls (s. Qt5FilePicker::addCustomControl);
@@ -83,18 +83,6 @@ void SAL_CALL KF5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlAct
 
 uno::Any SAL_CALL KF5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction)
 {
-    SolarMutexGuard g;
-    auto* pSalInst(static_cast<Qt5Instance*>(GetSalData()->m_pInstance));
-    assert(pSalInst);
-    if (!pSalInst->IsMainThread())
-    {
-        uno::Any ret;
-        pSalInst->RunInMainThread([&ret, this, controlId, nControlAction]() {
-            ret = getValue(controlId, nControlAction);
-        });
-        return ret;
-    }
-
     if (CHECKBOX_AUTOEXTENSION == controlId)
         // We ignore this one and rely on QFileDialog to provide the function.
         // Always return false, to pretend we do not support this, otherwise
@@ -166,6 +154,9 @@ bool KF5FilePicker::eventFilter(QObject* o, QEvent* e)
         auto* w = static_cast<QWidget*>(o);
         if (!w->parentWidget() && w->isModal())
         {
+            if (m_parentWinId)
+                KWindowSystem::setMainWindow(w, m_parentWinId);
+
             if (auto* fileWidget = w->findChild<KFileWidget*>({}, Qt::FindDirectChildrenOnly))
             {
                 fileWidget->setCustomWidget(m_pExtraControls);

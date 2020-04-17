@@ -17,8 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "kde5_filepicker.hxx"
+#include "KF5FilePicker.hxx"
 #include "kde5_filepicker_ipc.hxx"
+
+#include <vcl/svapp.hxx>
 
 #include <QApplication>
 #include <QCommandLineParser>
@@ -42,10 +44,20 @@ int main(int argc, char** argv)
                     "the gtk3_kde5 VCL plugin (SAL_USE_VCLPLUGIN=gtk3_kde5)."));
     parser.addVersionOption();
     parser.addHelpOption();
+    QCommandLineOption folderOption("folder");
+    parser.addOption(folderOption);
     parser.process(app);
 
-    KDE5FilePicker filePicker;
-    FilePickerIpc ipc(&filePicker);
+
+    QFileDialog::FileMode fileMode = parser.isSet(folderOption) ? QFileDialog::Directory
+                                                                : QFileDialog::ExistingFiles;
+    std::unique_ptr<Qt5FilePicker> filePicker;
+    if (Application::GetDesktopEnvironment() == "PLASMA5")
+        filePicker.reset(new KF5FilePicker(fileMode));
+    else
+        filePicker.reset(new Qt5FilePicker(fileMode));
+
+    FilePickerIpc ipc(filePicker.get());
 
     return QApplication::exec();
 }
