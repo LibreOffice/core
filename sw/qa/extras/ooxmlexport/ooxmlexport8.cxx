@@ -85,6 +85,13 @@ DECLARE_OOXMLEXPORT_TEST(testN751054, "n751054.docx")
     CPPUNIT_ASSERT(eValue != text::TextContentAnchorType_AS_CHARACTER);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf48569, "tdf48569.odt")
+{
+    // File crashing while saving in LO
+    text::TextContentAnchorType eValue = getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType");
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, eValue);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testN750935, "n750935.docx")
 {
     // Some page break types were ignores, resulting in less pages.
