@@ -27,6 +27,7 @@
 #include <Qt5Data.hxx>
 #include <Qt5DragAndDrop.hxx>
 #include <Qt5FilePicker.hxx>
+#include <Qt5FilePickerSalAdaptor.hxx>
 #include <Qt5Frame.hxx>
 #include <Qt5Menu.hxx>
 #include <Qt5Object.hxx>
@@ -428,7 +429,7 @@ Qt5Instance::createPicker(css::uno::Reference<css::uno::XComponentContext> const
         return pPicker;
     }
 
-    return new Qt5FilePicker(context, eMode);
+    return new Qt5FilePickerSalAdaptor<Qt5FilePicker>(context, eMode);
 }
 
 css::uno::Reference<css::ui::dialogs::XFilePicker2>

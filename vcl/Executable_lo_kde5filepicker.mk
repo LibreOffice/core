@@ -23,6 +23,8 @@ $(eval $(call gb_Executable_Executable,lo_kde5filepicker))
 $(eval $(call gb_Executable_set_include,lo_kde5filepicker,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
+    -I$(SRCDIR)/vcl/inc/qt5 \
+    -I$(SRCDIR)/vcl/unx/kf5 \
     -I$(WORKDIR)/CustomTarget/vcl/unx/gtk3_kde5 \
 ))
 
@@ -48,6 +50,8 @@ $(eval $(call gb_Executable_add_libs,lo_kde5filepicker,\
 
 $(eval $(call gb_Executable_use_libraries,lo_kde5filepicker,\
     vclplug_gen \
+    vclplug_qt5 \
+    vclplug_kf5 \
     vcl \
     tl \
     utl \
@@ -80,7 +84,6 @@ $(eval $(call gb_Executable_add_libs,lo_kde5filepicker,\
 
 $(eval $(call gb_Executable_add_exception_objects,lo_kde5filepicker,\
 	vcl/unx/gtk3_kde5/kde5_lo_filepicker_main \
-	vcl/unx/gtk3_kde5/kde5_filepicker \
 	vcl/unx/gtk3_kde5/kde5_filepicker_ipc \
 ))
 

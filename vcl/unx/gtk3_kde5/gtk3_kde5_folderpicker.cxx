@@ -32,8 +32,8 @@ using namespace ::com::sun::star::uno;
 
 Gtk3KDE5FolderPicker::Gtk3KDE5FolderPicker(
     const uno::Reference<uno::XComponentContext>& /*xContext*/)
+    : m_ipc(true)
 {
-    m_ipc.sendCommand(Commands::EnablePickFolderMode);
     setTitle(getResString(STR_FPICKER_FOLDER_DEFAULT_TITLE));
 }
 

@@ -180,14 +180,6 @@ void SAL_CALL Gtk3KDE5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nContr
 
 uno::Any SAL_CALL Gtk3KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction)
 {
-    if (CHECKBOX_AUTOEXTENSION == controlId)
-        // We ignore this one and rely on QFileDialog to provide the function.
-        // Always return false, to pretend we do not support this, otherwise
-        // LO core would try to be smart and cut the extension in some places,
-        // interfering with QFileDialog's handling of it. QFileDialog also
-        // saves the value of the setting, so LO core is not needed for that either.
-        return uno::Any(false);
-
     auto id = m_ipc.sendCommand(Commands::GetValue, controlId, nControlAction);
 
     bool value = false;
@@ -278,11 +270,7 @@ void Gtk3KDE5FilePicker::addCustomControl(sal_Int16 controlId)
         case CHECKBOX_SELECTION:
         case CHECKBOX_GPGENCRYPTION:
         {
-            // the checkbox is created even for CHECKBOX_AUTOEXTENSION to simplify
-            // code, but the checkbox is hidden and ignored
-            bool hidden = controlId == CHECKBOX_AUTOEXTENSION;
-
-            m_ipc.sendCommand(Commands::AddCheckBox, controlId, hidden, getResString(resId));
+            m_ipc.sendCommand(Commands::AddCheckBox, controlId, getResString(resId));
 
             break;
         }
