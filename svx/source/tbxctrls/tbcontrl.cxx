@@ -1176,7 +1176,7 @@ IMPL_LINK(SvxStyleBox_Impl, CalcOptimalExtraUserWidth, VclWindowEvent&, event, v
         nMaxUserDrawFontWidth = std::max(nWidth, nMaxUserDrawFontWidth);
     }
 
-    SetUserItemSize(Size(nMaxUserDrawFontWidth - nMaxNormalFontWidth, ITEM_HEIGHT));
+    SetUserItemSize(Size(nMaxUserDrawFontWidth, ITEM_HEIGHT));
 }
 
 // test is the color between Font- and background-color to be identify
