@@ -591,7 +591,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             {
             default:
             case 0:
-                aContext.Version    = vcl::PDFWriter::PDFVersion::PDF_1_5;
+                aContext.Version = vcl::PDFWriter::PDFVersion::PDF_1_6;
                 break;
             case 1:
                 aContext.Version    = vcl::PDFWriter::PDFVersion::PDF_A_1;
@@ -613,6 +613,9 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 mbRemoveTransparencies = false; // does allow transparencies
                 mbEncrypt = false;              // no encryption
                 xEnc.clear();
+                break;
+            case 15:
+                aContext.Version = vcl::PDFWriter::PDFVersion::PDF_1_5;
                 break;
             case 16:
                 aContext.Version = vcl::PDFWriter::PDFVersion::PDF_1_6;

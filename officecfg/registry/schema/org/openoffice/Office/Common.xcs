@@ -5328,7 +5328,12 @@
             <constraints>
               <enumeration oor:value="0">
                 <info>
-                  <desc>PDF 1.5 (default selection).</desc>
+                  <desc>PDF 1.6 (default selection).</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="15">
+                <info>
+                  <desc>PDF 1.5</desc>
                 </info>
               </enumeration>
               <enumeration oor:value="16">
