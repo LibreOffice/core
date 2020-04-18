@@ -267,7 +267,8 @@ public:
 
     ImplEntryList*  GetEntryList() const { return mpEntryList.get(); }
 
-    sal_Int32       InsertEntry( sal_Int32  nPos, ImplEntryType* pNewEntry );
+    sal_Int32       InsertEntry( sal_Int32  nPos, ImplEntryType* pNewEntry ); // sorts using mbSort
+    sal_Int32       InsertEntry( sal_Int32  nPos, ImplEntryType* pNewEntry, bool bSort ); // to insert ignoring mbSort, e.g. mru
     void            RemoveEntry( sal_Int32  nPos );
     void            Clear();
     void            ResetCurrentPos()               { mnCurrentPos = LISTBOX_ENTRY_NOTFOUND; }
