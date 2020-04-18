@@ -293,56 +293,56 @@ void AccessibleGridControl::commitCellEvent(sal_Int16 _nEventId,const Any& _rNew
 
 void AccessibleGridControl::commitTableEvent(sal_Int16 _nEventId,const Any& _rNewValue,const Any& _rOldValue)
 {
-    if ( m_xTable.is() )
+    if ( !m_xTable.is() )
+        return;
+
+    if(_nEventId == AccessibleEventId::ACTIVE_DESCENDANT_CHANGED)
     {
-        if(_nEventId == AccessibleEventId::ACTIVE_DESCENDANT_CHANGED)
+        const sal_Int32 nCurrentRow = m_aTable.GetCurrentRow();
+        const sal_Int32 nCurrentCol = m_aTable.GetCurrentColumn();
+        css::uno::Reference< css::accessibility::XAccessible > xChild;
+        if (nCurrentRow > -1 && nCurrentCol > -1)
         {
-            const sal_Int32 nCurrentRow = m_aTable.GetCurrentRow();
-            const sal_Int32 nCurrentCol = m_aTable.GetCurrentColumn();
-            css::uno::Reference< css::accessibility::XAccessible > xChild;
-            if (nCurrentRow > -1 && nCurrentCol > -1)
-            {
-                sal_Int32 nColumnCount = m_aTable.GetColumnCount();
-                xChild = m_xTable->getAccessibleChild(nCurrentRow * nColumnCount + nCurrentCol);
-            }
-            m_xTable->commitEvent(_nEventId, Any(xChild),_rOldValue);
+            sal_Int32 nColumnCount = m_aTable.GetColumnCount();
+            xChild = m_xTable->getAccessibleChild(nCurrentRow * nColumnCount + nCurrentCol);
         }
-        else if(_nEventId == AccessibleEventId::TABLE_MODEL_CHANGED)
-        {
-            AccessibleTableModelChange aChange;
-            if(_rNewValue >>= aChange)
-            {
-                if(aChange.Type == AccessibleTableModelChangeType::DELETE)
-                {
-                    std::vector< AccessibleGridControlTableCell* >& rCells =
-                        m_xTable->getCellVector();
-                    std::vector< css::uno::Reference< css::accessibility::XAccessible > >& rAccCells =
-                        m_xTable->getAccessibleCellVector();
-                    int nColCount = m_aTable.GetColumnCount();
-                    // check valid index - entries are inserted lazily
-                    size_t const nStart = nColCount * aChange.FirstRow;
-                    size_t const nEnd   = nColCount * aChange.LastRow;
-                    if (nStart < rCells.size())
-                    {
-                        m_xTable->getCellVector().erase(
-                            rCells.begin() + nStart,
-                            rCells.begin() + std::min(rCells.size(), nEnd));
-                    }
-                    if (nStart < rAccCells.size())
-                    {
-                        m_xTable->getAccessibleCellVector().erase(
-                            rAccCells.begin() + nStart,
-                            rAccCells.begin() + std::min(rAccCells.size(), nEnd));
-                    }
-                    m_xTable->commitEvent(_nEventId,_rNewValue,_rOldValue);
-                }
-                else
-                    m_xTable->commitEvent(_nEventId,_rNewValue,_rOldValue);
-            }
-        }
-        else
-            m_xTable->commitEvent(_nEventId,_rNewValue,_rOldValue);
+        m_xTable->commitEvent(_nEventId, Any(xChild),_rOldValue);
     }
+    else if(_nEventId == AccessibleEventId::TABLE_MODEL_CHANGED)
+    {
+        AccessibleTableModelChange aChange;
+        if(_rNewValue >>= aChange)
+        {
+            if(aChange.Type == AccessibleTableModelChangeType::DELETE)
+            {
+                std::vector< AccessibleGridControlTableCell* >& rCells =
+                    m_xTable->getCellVector();
+                std::vector< css::uno::Reference< css::accessibility::XAccessible > >& rAccCells =
+                    m_xTable->getAccessibleCellVector();
+                int nColCount = m_aTable.GetColumnCount();
+                // check valid index - entries are inserted lazily
+                size_t const nStart = nColCount * aChange.FirstRow;
+                size_t const nEnd   = nColCount * aChange.LastRow;
+                if (nStart < rCells.size())
+                {
+                    m_xTable->getCellVector().erase(
+                        rCells.begin() + nStart,
+                        rCells.begin() + std::min(rCells.size(), nEnd));
+                }
+                if (nStart < rAccCells.size())
+                {
+                    m_xTable->getAccessibleCellVector().erase(
+                        rAccCells.begin() + nStart,
+                        rAccCells.begin() + std::min(rAccCells.size(), nEnd));
+                }
+                m_xTable->commitEvent(_nEventId,_rNewValue,_rOldValue);
+            }
+            else
+                m_xTable->commitEvent(_nEventId,_rNewValue,_rOldValue);
+        }
+    }
+    else
+        m_xTable->commitEvent(_nEventId,_rNewValue,_rOldValue);
 }
 
 // = AccessibleGridControlAccess

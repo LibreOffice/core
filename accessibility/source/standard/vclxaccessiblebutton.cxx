@@ -73,25 +73,25 @@ void VCLXAccessibleButton::FillAccessibleStateSet( utl::AccessibleStateSetHelper
     VCLXAccessibleTextComponent::FillAccessibleStateSet( rStateSet );
 
     VclPtr< PushButton > pButton = GetAs< PushButton >();
-    if ( pButton )
+    if ( !pButton )
+        return;
+
+    rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+
+    if ( pButton->GetState() == TRISTATE_TRUE )
+        rStateSet.AddState( AccessibleStateType::CHECKED );
+
+    if ( pButton->IsPressed() )
+        rStateSet.AddState( AccessibleStateType::PRESSED );
+
+    // IA2 CWS: if the button has a popup menu, it should has the state EXPANDABLE
+    if( pButton->GetType() == WindowType::MENUBUTTON )
     {
-        rStateSet.AddState( AccessibleStateType::FOCUSABLE );
-
-        if ( pButton->GetState() == TRISTATE_TRUE )
-            rStateSet.AddState( AccessibleStateType::CHECKED );
-
-        if ( pButton->IsPressed() )
-            rStateSet.AddState( AccessibleStateType::PRESSED );
-
-        // IA2 CWS: if the button has a popup menu, it should has the state EXPANDABLE
-        if( pButton->GetType() == WindowType::MENUBUTTON )
-        {
-            rStateSet.AddState( AccessibleStateType::EXPANDABLE );
-        }
-        if( pButton->GetStyle() & WB_DEFBUTTON )
-        {
-            rStateSet.AddState( AccessibleStateType::DEFAULT );
-        }
+        rStateSet.AddState( AccessibleStateType::EXPANDABLE );
+    }
+    if( pButton->GetStyle() & WB_DEFBUTTON )
+    {
+        rStateSet.AddState( AccessibleStateType::DEFAULT );
     }
 }
 

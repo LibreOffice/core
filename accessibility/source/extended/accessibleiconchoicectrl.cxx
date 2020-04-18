@@ -53,60 +53,60 @@ namespace accessibility
 
     void AccessibleIconChoiceCtrl::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     {
-        if ( isAlive() )
+        if ( !isAlive() )
+            return;
+
+        switch ( rVclWindowEvent.GetId() )
         {
-            switch ( rVclWindowEvent.GetId() )
+            case VclEventId::ListboxSelect :
             {
-                case VclEventId::ListboxSelect :
-                {
-                    // First send an event that tells the listeners of a
-                    // modified selection.  The active descendant event is
-                    // send after that so that the receiving AT has time to
-                    // read the text or name of the active child.
+                // First send an event that tells the listeners of a
+                // modified selection.  The active descendant event is
+                // send after that so that the receiving AT has time to
+                // read the text or name of the active child.
 //                  NotifyAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
 
-                    if ( getCtrl() && getCtrl()->HasFocus() )
-                    {
-                        SvxIconChoiceCtrlEntry* pEntry = static_cast< SvxIconChoiceCtrlEntry* >( rVclWindowEvent.GetData() );
-                        if ( pEntry )
-                        {
-                            sal_Int32 nPos = getCtrl()->GetEntryListPos( pEntry );
-                            Reference< XAccessible > xChild = new AccessibleIconChoiceCtrlEntry( *getCtrl(), nPos, this );
-                            uno::Any aOldValue, aNewValue;
-                            aNewValue <<= xChild;
-                            NotifyAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldValue, aNewValue );
-
-                            NotifyAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, aOldValue, aNewValue );
-
-                        }
-                    }
-                    break;
-                }
-                case VclEventId::WindowGetFocus :
+                if ( getCtrl() && getCtrl()->HasFocus() )
                 {
-                    VclPtr<SvtIconChoiceCtrl> pCtrl = getCtrl();
-                    if ( pCtrl && pCtrl->HasFocus() )
+                    SvxIconChoiceCtrlEntry* pEntry = static_cast< SvxIconChoiceCtrlEntry* >( rVclWindowEvent.GetData() );
+                    if ( pEntry )
                     {
-                        SvxIconChoiceCtrlEntry* pEntry = static_cast< SvxIconChoiceCtrlEntry* >( rVclWindowEvent.GetData() );
-                        if ( pEntry == nullptr )
-                        {
-                            pEntry = getCtrl()->GetSelectedEntry();
-                        }
-                        if ( pEntry )
-                        {
-                            sal_Int32 nPos = pCtrl->GetEntryListPos( pEntry );
-                            Reference< XAccessible > xChild = new AccessibleIconChoiceCtrlEntry( *pCtrl, nPos, this );
-                            uno::Any aOldValue, aNewValue;
-                            aNewValue <<= xChild;
-                            NotifyAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldValue, aNewValue );
-                            NotifyAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, aOldValue, aNewValue );
-                        }
+                        sal_Int32 nPos = getCtrl()->GetEntryListPos( pEntry );
+                        Reference< XAccessible > xChild = new AccessibleIconChoiceCtrlEntry( *getCtrl(), nPos, this );
+                        uno::Any aOldValue, aNewValue;
+                        aNewValue <<= xChild;
+                        NotifyAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldValue, aNewValue );
+
+                        NotifyAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, aOldValue, aNewValue );
+
                     }
-                    break;
                 }
-                default:
-                    VCLXAccessibleComponent::ProcessWindowChildEvent (rVclWindowEvent);
+                break;
             }
+            case VclEventId::WindowGetFocus :
+            {
+                VclPtr<SvtIconChoiceCtrl> pCtrl = getCtrl();
+                if ( pCtrl && pCtrl->HasFocus() )
+                {
+                    SvxIconChoiceCtrlEntry* pEntry = static_cast< SvxIconChoiceCtrlEntry* >( rVclWindowEvent.GetData() );
+                    if ( pEntry == nullptr )
+                    {
+                        pEntry = getCtrl()->GetSelectedEntry();
+                    }
+                    if ( pEntry )
+                    {
+                        sal_Int32 nPos = pCtrl->GetEntryListPos( pEntry );
+                        Reference< XAccessible > xChild = new AccessibleIconChoiceCtrlEntry( *pCtrl, nPos, this );
+                        uno::Any aOldValue, aNewValue;
+                        aNewValue <<= xChild;
+                        NotifyAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldValue, aNewValue );
+                        NotifyAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, aOldValue, aNewValue );
+                    }
+                }
+                break;
+            }
+            default:
+                VCLXAccessibleComponent::ProcessWindowChildEvent (rVclWindowEvent);
         }
     }
 

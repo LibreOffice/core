@@ -37,21 +37,21 @@ VCLXAccessibleTabPageWindow::VCLXAccessibleTabPageWindow( VCLXWindow* pVCLXWindo
     m_pTabPage = static_cast< TabPage* >( GetWindow().get() );
     m_pTabControl = nullptr;
     m_nPageId = 0;
-    if ( m_pTabPage )
+    if ( !m_pTabPage )
+        return;
+
+    vcl::Window* pParent = m_pTabPage->GetAccessibleParentWindow();
+    if ( !(pParent && pParent->GetType() == WindowType::TABCONTROL) )
+        return;
+
+    m_pTabControl = static_cast< TabControl* >( pParent );
+    if ( m_pTabControl )
     {
-        vcl::Window* pParent = m_pTabPage->GetAccessibleParentWindow();
-        if ( pParent && pParent->GetType() == WindowType::TABCONTROL )
+        for ( sal_uInt16 i = 0, nCount = m_pTabControl->GetPageCount(); i < nCount; ++i )
         {
-            m_pTabControl = static_cast< TabControl* >( pParent );
-            if ( m_pTabControl )
-            {
-                for ( sal_uInt16 i = 0, nCount = m_pTabControl->GetPageCount(); i < nCount; ++i )
-                {
-                    sal_uInt16 nPageId = m_pTabControl->GetPageId( i );
-                    if ( m_pTabControl->GetTabPage( nPageId ) == m_pTabPage.get() )
-                        m_nPageId = nPageId;
-                }
-            }
+            sal_uInt16 nPageId = m_pTabControl->GetPageId( i );
+            if ( m_pTabControl->GetTabPage( nPageId ) == m_pTabPage.get() )
+                m_nPageId = nPageId;
         }
     }
 }

@@ -268,21 +268,21 @@ void SAL_CALL AccessibleBrowseBoxBase::addAccessibleEventListener(
 void SAL_CALL AccessibleBrowseBoxBase::removeAccessibleEventListener(
         const css::uno::Reference< css::accessibility::XAccessibleEventListener>& _rxListener )
 {
-    if( _rxListener.is() && getClientId( ) )
-    {
-        ::osl::MutexGuard aGuard( getMutex() );
-        sal_Int32 nListenerCount = AccessibleEventNotifier::removeEventListener( getClientId( ), _rxListener );
-        if ( !nListenerCount )
-        {
-            // no listeners anymore
-            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-            // and at least to us not firing any events anymore, in case somebody calls
-            // NotifyAccessibleEvent, again
+    if( !(_rxListener.is() && getClientId( )) )
+        return;
 
-            AccessibleEventNotifier::TClientId nId( getClientId( ) );
-            setClientId( 0 );
-            AccessibleEventNotifier::revokeClient( nId );
-        }
+    ::osl::MutexGuard aGuard( getMutex() );
+    sal_Int32 nListenerCount = AccessibleEventNotifier::removeEventListener( getClientId( ), _rxListener );
+    if ( !nListenerCount )
+    {
+        // no listeners anymore
+        // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
+        // and at least to us not firing any events anymore, in case somebody calls
+        // NotifyAccessibleEvent, again
+
+        AccessibleEventNotifier::TClientId nId( getClientId( ) );
+        setClientId( 0 );
+        AccessibleEventNotifier::revokeClient( nId );
     }
 }
 

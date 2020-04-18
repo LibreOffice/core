@@ -64,137 +64,137 @@ namespace accessibility
 
     void AccessibleListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     {
-        if ( isAlive() )
-        {
-            switch ( rVclWindowEvent.GetId() )
-            {
-            case  VclEventId::CheckboxToggle :
-                {
-                    if ( !getListBox() || !getListBox()->HasFocus() )
-                    {
-                        return;
-                    }
-                    AccessibleListBoxEntry* pCurOpEntry = GetCurEventEntry(rVclWindowEvent);
-                    if(!pCurOpEntry)
-                    {
-                        return ;
-                    }
-                    uno::Any aValue;
-                    aValue <<= AccessibleStateType::CHECKED;
+        if ( !isAlive() )
+            return;
 
-                    if ( getListBox()->GetCheckButtonState( pCurOpEntry->GetSvLBoxEntry() ) == SvButtonState::Checked )
+        switch ( rVclWindowEvent.GetId() )
+        {
+        case  VclEventId::CheckboxToggle :
+            {
+                if ( !getListBox() || !getListBox()->HasFocus() )
+                {
+                    return;
+                }
+                AccessibleListBoxEntry* pCurOpEntry = GetCurEventEntry(rVclWindowEvent);
+                if(!pCurOpEntry)
+                {
+                    return ;
+                }
+                uno::Any aValue;
+                aValue <<= AccessibleStateType::CHECKED;
+
+                if ( getListBox()->GetCheckButtonState( pCurOpEntry->GetSvLBoxEntry() ) == SvButtonState::Checked )
+                {
+                    pCurOpEntry->NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, uno::Any(), aValue );
+                }
+                else
+                {
+                    pCurOpEntry->NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aValue,uno::Any() );
+                }
+                break;
+            }
+
+        case VclEventId::ListboxSelect :
+            {
+                OSL_FAIL("Debug: Treelist shouldn't use VclEventId::ListboxSelect");
+                break;
+            }
+
+        case VclEventId::ListboxTreeSelect:
+            {
+                if ( getListBox() && getListBox()->HasFocus() )
+                {
+                    AccessibleListBoxEntry* pEntry =static_cast< AccessibleListBoxEntry* >(m_xFocusedChild.get());
+                    if (pEntry)
                     {
-                        pCurOpEntry->NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, uno::Any(), aValue );
+                        pEntry->NotifyAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
+                    }
+                }
+            }
+            break;
+        case VclEventId::ListboxTreeFocus:
+            {
+                VclPtr<SvTreeListBox> pBox = getListBox();
+                if( pBox && pBox->HasFocus() )
+                {
+                    uno::Any aNewValue;
+                    SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
+                    if ( pEntry )
+                    {
+                        AccessibleListBoxEntry* pEntryFocus =static_cast< AccessibleListBoxEntry* >(m_xFocusedChild.get());
+                        if (pEntryFocus && pEntryFocus->GetSvLBoxEntry() == pEntry)
+                        {
+                            aNewValue <<= m_xFocusedChild;
+                            NotifyAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, uno::Any(), aNewValue );
+                            return ;
+                        }
+
+                        uno::Any aOldValue;
+                        aOldValue <<= m_xFocusedChild;
+
+                        m_xFocusedChild.set(implGetAccessible(*pEntry).get());
+
+                        aNewValue <<= m_xFocusedChild;
+                        NotifyAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldValue, aNewValue );
                     }
                     else
                     {
-                        pCurOpEntry->NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aValue,uno::Any() );
-                    }
-                    break;
-                }
-
-            case VclEventId::ListboxSelect :
-                {
-                    OSL_FAIL("Debug: Treelist shouldn't use VclEventId::ListboxSelect");
-                    break;
-                }
-
-            case VclEventId::ListboxTreeSelect:
-                {
-                    if ( getListBox() && getListBox()->HasFocus() )
-                    {
-                        AccessibleListBoxEntry* pEntry =static_cast< AccessibleListBoxEntry* >(m_xFocusedChild.get());
-                        if (pEntry)
-                        {
-                            pEntry->NotifyAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
-                        }
+                        aNewValue <<= AccessibleStateType::FOCUSED;
+                        NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, uno::Any(), aNewValue );
                     }
                 }
-                break;
-            case VclEventId::ListboxTreeFocus:
+            }
+            break;
+        case VclEventId::ListboxItemRemoved:
+            {
+                SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
+                if ( pEntry )
                 {
-                    VclPtr<SvTreeListBox> pBox = getListBox();
-                    if( pBox && pBox->HasFocus() )
+                    RemoveChildEntries(pEntry);
+                }
+                else
+                {
+                    // NULL means Clear()
+                    for (auto const& entry : m_mapEntry)
                     {
                         uno::Any aNewValue;
-                        SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
-                        if ( pEntry )
-                        {
-                            AccessibleListBoxEntry* pEntryFocus =static_cast< AccessibleListBoxEntry* >(m_xFocusedChild.get());
-                            if (pEntryFocus && pEntryFocus->GetSvLBoxEntry() == pEntry)
-                            {
-                                aNewValue <<= m_xFocusedChild;
-                                NotifyAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, uno::Any(), aNewValue );
-                                return ;
-                            }
-
-                            uno::Any aOldValue;
-                            aOldValue <<= m_xFocusedChild;
-
-                            m_xFocusedChild.set(implGetAccessible(*pEntry).get());
-
-                            aNewValue <<= m_xFocusedChild;
-                            NotifyAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldValue, aNewValue );
-                        }
-                        else
-                        {
-                            aNewValue <<= AccessibleStateType::FOCUSED;
-                            NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, uno::Any(), aNewValue );
-                        }
+                        uno::Any aOldValue;
+                        aOldValue <<= uno::Reference<XAccessible>(entry.second.get());
+                        NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
                     }
+                    for (auto const& entry : m_mapEntry)
+                    {   // release references ...
+                        entry.second->dispose();
+                    }
+                    m_mapEntry.clear();
                 }
-                break;
-            case VclEventId::ListboxItemRemoved:
-                {
-                    SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
-                    if ( pEntry )
-                    {
-                        RemoveChildEntries(pEntry);
-                    }
-                    else
-                    {
-                        // NULL means Clear()
-                        for (auto const& entry : m_mapEntry)
-                        {
-                            uno::Any aNewValue;
-                            uno::Any aOldValue;
-                            aOldValue <<= uno::Reference<XAccessible>(entry.second.get());
-                            NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
-                        }
-                        for (auto const& entry : m_mapEntry)
-                        {   // release references ...
-                            entry.second->dispose();
-                        }
-                        m_mapEntry.clear();
-                    }
-                }
-                break;
-
-                // #i92103#
-            case VclEventId::ItemExpanded :
-            case VclEventId::ItemCollapsed :
-                {
-                    SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
-                    if ( pEntry )
-                    {
-                        Reference<XAccessible> const xChild(implGetAccessible(*pEntry).get());
-                        const short nAccEvent =
-                                ( rVclWindowEvent.GetId() == VclEventId::ItemExpanded )
-                                ? AccessibleEventId::LISTBOX_ENTRY_EXPANDED
-                                : AccessibleEventId::LISTBOX_ENTRY_COLLAPSED;
-                        uno::Any aListBoxEntry;
-                        aListBoxEntry <<= xChild;
-                        NotifyAccessibleEvent( nAccEvent, Any(), aListBoxEntry );
-                        if ( getListBox() && getListBox()->HasFocus() )
-                        {
-                            NotifyAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, Any(), aListBoxEntry );
-                        }
-                    }
-                }
-                break;
-            default:
-                VCLXAccessibleComponent::ProcessWindowEvent (rVclWindowEvent);
             }
+            break;
+
+            // #i92103#
+        case VclEventId::ItemExpanded :
+        case VclEventId::ItemCollapsed :
+            {
+                SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
+                if ( pEntry )
+                {
+                    Reference<XAccessible> const xChild(implGetAccessible(*pEntry).get());
+                    const short nAccEvent =
+                            ( rVclWindowEvent.GetId() == VclEventId::ItemExpanded )
+                            ? AccessibleEventId::LISTBOX_ENTRY_EXPANDED
+                            : AccessibleEventId::LISTBOX_ENTRY_COLLAPSED;
+                    uno::Any aListBoxEntry;
+                    aListBoxEntry <<= xChild;
+                    NotifyAccessibleEvent( nAccEvent, Any(), aListBoxEntry );
+                    if ( getListBox() && getListBox()->HasFocus() )
+                    {
+                        NotifyAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, Any(), aListBoxEntry );
+                    }
+                }
+            }
+            break;
+        default:
+            VCLXAccessibleComponent::ProcessWindowEvent (rVclWindowEvent);
         }
     }
 

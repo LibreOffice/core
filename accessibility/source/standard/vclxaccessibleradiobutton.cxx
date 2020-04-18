@@ -75,18 +75,18 @@ void VCLXAccessibleRadioButton::FillAccessibleRelationSet( utl::AccessibleRelati
     VCLXAccessibleTextComponent::FillAccessibleRelationSet( rRelationSet );
 
     VclPtr< RadioButton > pRadioButton = GetAsDynamic< RadioButton >();
-    if ( pRadioButton )
+    if ( !pRadioButton )
+        return;
+
+    std::vector< VclPtr<RadioButton> > aGroup(pRadioButton->GetRadioButtonGroup());
+    if (!aGroup.empty())
     {
-        std::vector< VclPtr<RadioButton> > aGroup(pRadioButton->GetRadioButtonGroup());
-        if (!aGroup.empty())
-        {
-            std::vector< Reference< XInterface > > aVec;
-            aVec.reserve(aGroup.size());
-            std::transform(aGroup.begin(), aGroup.end(), std::back_inserter(aVec),
-                [](const VclPtr<RadioButton>& rxItem) { return rxItem->GetAccessible(); });
-            rRelationSet.AddRelation( AccessibleRelation( AccessibleRelationType::MEMBER_OF,
-                                                          comphelper::containerToSequence(aVec) ) );
-        }
+        std::vector< Reference< XInterface > > aVec;
+        aVec.reserve(aGroup.size());
+        std::transform(aGroup.begin(), aGroup.end(), std::back_inserter(aVec),
+            [](const VclPtr<RadioButton>& rxItem) { return rxItem->GetAccessible(); });
+        rRelationSet.AddRelation( AccessibleRelation( AccessibleRelationType::MEMBER_OF,
+                                                      comphelper::containerToSequence(aVec) ) );
     }
 }
 

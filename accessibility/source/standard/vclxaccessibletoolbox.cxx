@@ -197,35 +197,35 @@ void VCLXAccessibleToolBox::UpdateFocus_Impl()
             bHasFocus = true;
     }
 
-    if ( bHasFocus )
-    {
-        sal_uInt16 nHighlightItemId = pToolBox->GetHighlightItemId();
-        sal_uInt16 nFocusCount = 0;
-        for ( const auto& [rPos, rxChild] : m_aAccessibleChildren )
-        {
-            sal_uInt16 nItemId = pToolBox->GetItemId( rPos );
+    if ( !bHasFocus )
+        return;
 
-            if ( rxChild.is() )
+    sal_uInt16 nHighlightItemId = pToolBox->GetHighlightItemId();
+    sal_uInt16 nFocusCount = 0;
+    for ( const auto& [rPos, rxChild] : m_aAccessibleChildren )
+    {
+        sal_uInt16 nItemId = pToolBox->GetItemId( rPos );
+
+        if ( rxChild.is() )
+        {
+            VCLXAccessibleToolBoxItem* pItem =
+                static_cast< VCLXAccessibleToolBoxItem* >( rxChild.get() );
+            if ( pItem->HasFocus() && nItemId != nHighlightItemId )
             {
-                VCLXAccessibleToolBoxItem* pItem =
-                    static_cast< VCLXAccessibleToolBoxItem* >( rxChild.get() );
-                if ( pItem->HasFocus() && nItemId != nHighlightItemId )
-                {
-                    // reset the old focused item
-                    pItem->SetFocus( false );
-                    nFocusCount++;
-                }
-                if ( nItemId == nHighlightItemId )
-                {
-                    // set the new focused item
-                    pItem->SetFocus( true );
-                    nFocusCount++;
-                }
+                // reset the old focused item
+                pItem->SetFocus( false );
+                nFocusCount++;
             }
-            // both items changed?
-            if ( nFocusCount > 1 )
-                break;
+            if ( nItemId == nHighlightItemId )
+            {
+                // set the new focused item
+                pItem->SetFocus( true );
+                nFocusCount++;
+            }
         }
+        // both items changed?
+        if ( nFocusCount > 1 )
+            break;
     }
 }
 
@@ -249,43 +249,43 @@ void VCLXAccessibleToolBox::ReleaseFocus_Impl( ToolBox::ImplToolItems::size_type
 void VCLXAccessibleToolBox::UpdateChecked_Impl( ToolBox::ImplToolItems::size_type _nPos )
 {
     VclPtr< ToolBox > pToolBox = GetAs< ToolBox >();
-    if ( pToolBox )
+    if ( !pToolBox )
+        return;
+
+    sal_uInt16 nFocusId = pToolBox->GetItemId( _nPos );
+    VCLXAccessibleToolBoxItem* pFocusItem = nullptr;
+
+    for ( const auto& [rPos, rxChild] : m_aAccessibleChildren )
     {
-        sal_uInt16 nFocusId = pToolBox->GetItemId( _nPos );
-        VCLXAccessibleToolBoxItem* pFocusItem = nullptr;
+            sal_uInt16 nItemId = pToolBox->GetItemId( rPos );
 
-        for ( const auto& [rPos, rxChild] : m_aAccessibleChildren )
-        {
-                sal_uInt16 nItemId = pToolBox->GetItemId( rPos );
-
-                VCLXAccessibleToolBoxItem* pItem =
-                    static_cast< VCLXAccessibleToolBoxItem* >( rxChild.get() );
-                pItem->SetChecked( pToolBox->IsItemChecked( nItemId ) );
-                if ( nItemId == nFocusId )
-                    pFocusItem = pItem;
-        }
-        //Solution:If the position is not a child item,the focus should not be called
-        if ( pFocusItem && _nPos != ToolBox::ITEM_NOTFOUND )
-            pFocusItem->SetFocus( true );
+            VCLXAccessibleToolBoxItem* pItem =
+                static_cast< VCLXAccessibleToolBoxItem* >( rxChild.get() );
+            pItem->SetChecked( pToolBox->IsItemChecked( nItemId ) );
+            if ( nItemId == nFocusId )
+                pFocusItem = pItem;
     }
+    //Solution:If the position is not a child item,the focus should not be called
+    if ( pFocusItem && _nPos != ToolBox::ITEM_NOTFOUND )
+        pFocusItem->SetFocus( true );
 }
 
 void VCLXAccessibleToolBox::UpdateIndeterminate_Impl( ToolBox::ImplToolItems::size_type _nPos )
 {
     VclPtr< ToolBox > pToolBox = GetAs< ToolBox >();
-    if ( pToolBox )
-    {
-        sal_uInt16 nItemId = pToolBox->GetItemId( _nPos );
+    if ( !pToolBox )
+        return;
 
-        ToolBoxItemsMap::iterator aIter = m_aAccessibleChildren.find( _nPos );
-            //TODO: ToolBox::ImplToolItems::size_type -> sal_Int32!
-        if ( aIter != m_aAccessibleChildren.end() && aIter->second.is() )
-        {
-            VCLXAccessibleToolBoxItem* pItem =
-                static_cast< VCLXAccessibleToolBoxItem* >( aIter->second.get() );
-            if ( pItem )
-                pItem->SetIndeterminate( pToolBox->GetItemState( nItemId ) == TRISTATE_INDET );
-        }
+    sal_uInt16 nItemId = pToolBox->GetItemId( _nPos );
+
+    ToolBoxItemsMap::iterator aIter = m_aAccessibleChildren.find( _nPos );
+        //TODO: ToolBox::ImplToolItems::size_type -> sal_Int32!
+    if ( aIter != m_aAccessibleChildren.end() && aIter->second.is() )
+    {
+        VCLXAccessibleToolBoxItem* pItem =
+            static_cast< VCLXAccessibleToolBoxItem* >( aIter->second.get() );
+        if ( pItem )
+            pItem->SetIndeterminate( pToolBox->GetItemState( nItemId ) == TRISTATE_INDET );
     }
 }
 
@@ -323,90 +323,90 @@ void VCLXAccessibleToolBox::UpdateItem_Impl( ToolBox::ImplToolItems::size_type _
     }
 
     VclPtr< ToolBox > pToolBox = GetAs< ToolBox >();
-    if ( pToolBox )
+    if ( !pToolBox )
+        return;
+
+    // adjust the "index-in-parent"s
+    ToolBoxItemsMap::iterator aIndexAdjust = m_aAccessibleChildren.upper_bound( _nPos );
+        //TODO: ToolBox::ImplToolItems::size_type -> sal_Int32!
+    while ( m_aAccessibleChildren.end() != aIndexAdjust )
     {
-        // adjust the "index-in-parent"s
-        ToolBoxItemsMap::iterator aIndexAdjust = m_aAccessibleChildren.upper_bound( _nPos );
-            //TODO: ToolBox::ImplToolItems::size_type -> sal_Int32!
-        while ( m_aAccessibleChildren.end() != aIndexAdjust )
+        Reference< XAccessible > xItemAcc( aIndexAdjust->second );
+
+        auto pWindowItem = comphelper::getUnoTunnelImplementation<OToolBoxWindowItem>(xItemAcc);
+        if ( !pWindowItem )
         {
-            Reference< XAccessible > xItemAcc( aIndexAdjust->second );
-
-            auto pWindowItem = comphelper::getUnoTunnelImplementation<OToolBoxWindowItem>(xItemAcc);
-            if ( !pWindowItem )
+            VCLXAccessibleToolBoxItem* pItem = static_cast< VCLXAccessibleToolBoxItem* >( xItemAcc.get() );
+            if ( pItem )
             {
-                VCLXAccessibleToolBoxItem* pItem = static_cast< VCLXAccessibleToolBoxItem* >( xItemAcc.get() );
-                if ( pItem )
-                {
-                    sal_Int32 nIndex = pItem->getIndexInParent( );
-                    nIndex++;
-                    pItem->setIndexInParent( nIndex );
-                }
-            }
-            else
-            {
-                sal_Int32 nIndex = pWindowItem->getIndexInParent( );
+                sal_Int32 nIndex = pItem->getIndexInParent( );
                 nIndex++;
-                pWindowItem->setIndexInParent( nIndex );
+                pItem->setIndexInParent( nIndex );
             }
-
-            ++aIndexAdjust;
+        }
+        else
+        {
+            sal_Int32 nIndex = pWindowItem->getIndexInParent( );
+            nIndex++;
+            pWindowItem->setIndexInParent( nIndex );
         }
 
-        // TODO: we should make this dependent on the existence of event listeners
-        // with the current implementation, we always create accessible object
-        Any aNewChild( getAccessibleChild( static_cast<sal_Int32>(_nPos) ) );
-            //TODO: ToolBox::ImplToolItems::size_type -> sal_Int32!
-        NotifyAccessibleEvent( AccessibleEventId::CHILD, Any(), aNewChild );
+        ++aIndexAdjust;
     }
+
+    // TODO: we should make this dependent on the existence of event listeners
+    // with the current implementation, we always create accessible object
+    Any aNewChild( getAccessibleChild( static_cast<sal_Int32>(_nPos) ) );
+        //TODO: ToolBox::ImplToolItems::size_type -> sal_Int32!
+    NotifyAccessibleEvent( AccessibleEventId::CHILD, Any(), aNewChild );
 }
 
 void VCLXAccessibleToolBox::UpdateAllItems_Impl()
 {
     VclPtr< ToolBox > pToolBox = GetAs< ToolBox >();
-    if ( pToolBox )
-    {
-        // deregister the old items
-        for ( ToolBoxItemsMap::iterator aIter = m_aAccessibleChildren.begin();
-                aIter != m_aAccessibleChildren.end(); ++aIter )
-        {
-            implReleaseToolboxItem( aIter, true );
-        }
-        m_aAccessibleChildren.clear();
+    if ( !pToolBox )
+        return;
 
-        // register the new items
-        ToolBox::ImplToolItems::size_type i, nCount = pToolBox->GetItemCount();
-        for ( i = 0; i < nCount; ++i )
-        {
-            Any aNewValue;
-            aNewValue <<= getAccessibleChild( static_cast<sal_Int32>(i) );
-                //TODO: ToolBox::ImplToolItems::size_type -> sal_Int32!
-            NotifyAccessibleEvent( AccessibleEventId::CHILD, Any(), aNewValue );
-        }
+    // deregister the old items
+    for ( ToolBoxItemsMap::iterator aIter = m_aAccessibleChildren.begin();
+            aIter != m_aAccessibleChildren.end(); ++aIter )
+    {
+        implReleaseToolboxItem( aIter, true );
+    }
+    m_aAccessibleChildren.clear();
+
+    // register the new items
+    ToolBox::ImplToolItems::size_type i, nCount = pToolBox->GetItemCount();
+    for ( i = 0; i < nCount; ++i )
+    {
+        Any aNewValue;
+        aNewValue <<= getAccessibleChild( static_cast<sal_Int32>(i) );
+            //TODO: ToolBox::ImplToolItems::size_type -> sal_Int32!
+        NotifyAccessibleEvent( AccessibleEventId::CHILD, Any(), aNewValue );
     }
 }
 
 void VCLXAccessibleToolBox::UpdateCustomPopupItemp_Impl( vcl::Window* pWindow, bool bOpen )
 {
     VclPtr< ToolBox > pToolBox = GetAs< ToolBox >();
-    if( pWindow && pToolBox )
+    if( !(pWindow && pToolBox) )
+        return;
+
+    const sal_uInt16 nDownItem = pToolBox->GetDownItemId();
+    if ( !nDownItem )
+        // No item is currently in down state.
+        // Moreover, calling GetItemPos with 0 will find a separator if there is any.
+        return;
+
+    Reference< XAccessible > xChild( pWindow->GetAccessible() );
+    if( xChild.is() )
     {
-        const sal_uInt16 nDownItem = pToolBox->GetDownItemId();
-        if ( !nDownItem )
-            // No item is currently in down state.
-            // Moreover, calling GetItemPos with 0 will find a separator if there is any.
-            return;
+        Reference< XAccessible > xChildItem( getAccessibleChild( static_cast< sal_Int32 >( pToolBox->GetItemPos( nDownItem ) ) ) );
+            //TODO: ToolBox::ImplToolItems::size_type -> sal_Int32!
+        VCLXAccessibleToolBoxItem* pItem = static_cast< VCLXAccessibleToolBoxItem* >( xChildItem.get() );
 
-        Reference< XAccessible > xChild( pWindow->GetAccessible() );
-        if( xChild.is() )
-        {
-            Reference< XAccessible > xChildItem( getAccessibleChild( static_cast< sal_Int32 >( pToolBox->GetItemPos( nDownItem ) ) ) );
-                //TODO: ToolBox::ImplToolItems::size_type -> sal_Int32!
-            VCLXAccessibleToolBoxItem* pItem = static_cast< VCLXAccessibleToolBoxItem* >( xChildItem.get() );
-
-            pItem->SetChild( xChild );
-            pItem->NotifyChildEvent( xChild, bOpen );
-        }
+        pItem->SetChild( xChild );
+        pItem->NotifyChildEvent( xChild, bOpen );
     }
 }
 
@@ -428,28 +428,28 @@ void VCLXAccessibleToolBox::HandleSubToolBarEvent( const VclWindowEvent& rVclWin
 {
     vcl::Window* pChildWindow = static_cast<vcl::Window *>(rVclWindowEvent.GetData());
     VclPtr< ToolBox > pToolBox = GetAs< ToolBox >();
-    if ( pChildWindow
+    if ( !(pChildWindow
         && pToolBox
         && pToolBox == pChildWindow->GetParent()
-        && pChildWindow->GetType() == WindowType::TOOLBOX )
-    {
-        const sal_uInt16 nCurItemId( pToolBox->GetCurItemId() );
-        if ( !nCurItemId )
-            // No item is currently active (might happen when opening the overflow popup).
-            // Moreover, calling GetItemPos with 0 will find a separator if there is any.
-            return;
+        && pChildWindow->GetType() == WindowType::TOOLBOX) )
+        return;
 
-        ToolBox::ImplToolItems::size_type nIndex = pToolBox->GetItemPos( nCurItemId );
-        Reference< XAccessible > xItem = getAccessibleChild( nIndex );
-            //TODO: ToolBox::ImplToolItems::size_type -> sal_Int32!
-        if ( xItem.is() )
-        {
-            Reference< XAccessible > xChild = pChildWindow->GetAccessible();
-            VCLXAccessibleToolBoxItem* pItem =
-                static_cast< VCLXAccessibleToolBoxItem* >( xItem.get() );
-            pItem->SetChild( xChild );
-            pItem->NotifyChildEvent( xChild, true/*_bShow*/ );
-        }
+    const sal_uInt16 nCurItemId( pToolBox->GetCurItemId() );
+    if ( !nCurItemId )
+        // No item is currently active (might happen when opening the overflow popup).
+        // Moreover, calling GetItemPos with 0 will find a separator if there is any.
+        return;
+
+    ToolBox::ImplToolItems::size_type nIndex = pToolBox->GetItemPos( nCurItemId );
+    Reference< XAccessible > xItem = getAccessibleChild( nIndex );
+        //TODO: ToolBox::ImplToolItems::size_type -> sal_Int32!
+    if ( xItem.is() )
+    {
+        Reference< XAccessible > xChild = pChildWindow->GetAccessible();
+        VCLXAccessibleToolBoxItem* pItem =
+            static_cast< VCLXAccessibleToolBoxItem* >( xItem.get() );
+        pItem->SetChild( xChild );
+        pItem->NotifyChildEvent( xChild, true/*_bShow*/ );
     }
 }
 
