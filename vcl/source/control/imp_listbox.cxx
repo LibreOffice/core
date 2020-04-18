@@ -732,19 +732,24 @@ void ImplListBoxWindow::ImplCallSelect()
     mbSelectionChanged = false;
 }
 
-sal_Int32 ImplListBoxWindow::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEntry )
+sal_Int32 ImplListBoxWindow::InsertEntry(sal_Int32 nPos, ImplEntryType* pNewEntry, bool bSort)
 {
     assert(nPos >= 0);
     assert(mpEntryList->GetEntryCount() < LISTBOX_MAX_ENTRIES);
 
     ImplClearLayoutData();
-    sal_Int32 nNewPos = mpEntryList->InsertEntry( nPos, pNewEntry, mbSort );
+    sal_Int32 nNewPos = mpEntryList->InsertEntry( nPos, pNewEntry, bSort );
 
     if( GetStyle() & WB_WORDBREAK )
         pNewEntry->mnFlags |= ListBoxEntryFlags::MultiLine;
 
     ImplUpdateEntryMetrics( *pNewEntry );
     return nNewPos;
+}
+
+sal_Int32 ImplListBoxWindow::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEntry )
+{
+    return InsertEntry(nPos, pNewEntry, mbSort);
 }
 
 void ImplListBoxWindow::RemoveEntry( sal_Int32 nPos )
@@ -2551,7 +2556,7 @@ void ImplListBox::SetMRUEntries( const OUString& rEntries, sal_Unicode cSep )
         if ( GetEntryList()->FindEntry( aEntry ) != LISTBOX_ENTRY_NOTFOUND )
         {
             ImplEntryType* pNewEntry = new ImplEntryType( aEntry );
-            maLBWindow->GetEntryList()->InsertEntry( nMRUCount++, pNewEntry, false );
+            maLBWindow->InsertEntry(nMRUCount++, pNewEntry, false);
             bChanges = true;
         }
     }
