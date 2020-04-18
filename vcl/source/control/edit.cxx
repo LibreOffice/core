@@ -261,7 +261,6 @@ void Edit::ImplInitEditData()
     mbModified              = false;
     mbInternModified        = false;
     mbReadOnly              = false;
-    mbSelectAllSingleClick  = false;
     mbInsertMode            = true;
     mbClickedInSelection    = false;
     mbActivePopup           = false;
@@ -1844,11 +1843,6 @@ void Edit::GetFocus()
     else if ( !mbActivePopup )
     {
         maUndoText = maText.toString();
-        if(mbSelectAllSingleClick)
-        {
-            maSelection.Min() = 0;
-            maSelection.Max() = maText.getLength();
-        }
         SelectionOptions nSelOptions = GetSettings().GetStyleSettings().GetSelectionOptions();
         if ( !( GetStyle() & (WB_NOHIDESELECTION|WB_READONLY) )
                 && ( GetGetFocusFlags() & (GetFocusFlags::Init|GetFocusFlags::Tab|GetFocusFlags::CURSOR|GetFocusFlags::Mnemonic) ) )
@@ -2359,15 +2353,6 @@ void Edit::SetReadOnly( bool bReadOnly )
     }
 }
 
-void Edit::SetSelectAllSingleClick( bool bSelectAllSingleClick )
-{
-    if ( mbSelectAllSingleClick != bSelectAllSingleClick )
-    {
-        mbSelectAllSingleClick = bSelectAllSingleClick;
-        if ( mpSubEdit )
-            mpSubEdit->SetSelectAllSingleClick( bSelectAllSingleClick );
-    }
-}
 void Edit::SetInsertMode( bool bInsert )
 {
     if ( bInsert != mbInsertMode )

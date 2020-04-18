@@ -529,10 +529,6 @@ void ComboBox::EnableAutoSize( bool bAuto )
         }
     }
 }
-void ComboBox::EnableSelectAll()
-{
-    m_pImpl->m_pSubEdit->SetSelectAllSingleClick(true);
-}
 
 void ComboBox::SetDropDownLineCount( sal_uInt16 nLines )
 {

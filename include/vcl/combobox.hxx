@@ -89,7 +89,6 @@ public:
     void            RemoveEntryAt(sal_Int32  nPos);
 
     void            Clear();
-    void            EnableSelectAll();
     sal_Int32       GetEntryPos( const OUString& rStr ) const;
     Image           GetEntryImage( sal_Int32  nPos ) const;
     OUString        GetEntry( sal_Int32  nPos ) const;
