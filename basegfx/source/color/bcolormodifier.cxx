@@ -232,33 +232,33 @@ namespace basegfx
         mfBlueOff(0.0),
         mbUseIt(false)
     {
-        if(!basegfx::fTools::equalZero(mfRed)
+        if(!(!basegfx::fTools::equalZero(mfRed)
             || !basegfx::fTools::equalZero(mfGreen)
             || !basegfx::fTools::equalZero(mfBlue)
             || !basegfx::fTools::equalZero(mfLuminance)
-            || !basegfx::fTools::equalZero(mfContrast))
+            || !basegfx::fTools::equalZero(mfContrast)))
+            return;
+
+        // calculate slope
+        if(mfContrast >= 0.0)
         {
-            // calculate slope
-            if(mfContrast >= 0.0)
-            {
-                mfContrastOff = 128.0 / (128.0 - (mfContrast * 127.0));
-            }
-            else
-            {
-                mfContrastOff = ( 128.0 + (mfContrast * 127.0)) / 128.0;
-            }
-
-            // calculate unified contrast offset
-            const double fPreparedContrastOff((128.0 - mfContrastOff * 128.0) / 255.0);
-            const double fCombinedOffset(mfLuminance + fPreparedContrastOff);
-
-            // set full offsets
-            mfRedOff = mfRed + fCombinedOffset;
-            mfGreenOff = mfGreen + fCombinedOffset;
-            mfBlueOff = mfBlue + fCombinedOffset;
-
-            mbUseIt = true;
+            mfContrastOff = 128.0 / (128.0 - (mfContrast * 127.0));
         }
+        else
+        {
+            mfContrastOff = ( 128.0 + (mfContrast * 127.0)) / 128.0;
+        }
+
+        // calculate unified contrast offset
+        const double fPreparedContrastOff((128.0 - mfContrastOff * 128.0) / 255.0);
+        const double fCombinedOffset(mfLuminance + fPreparedContrastOff);
+
+        // set full offsets
+        mfRedOff = mfRed + fCombinedOffset;
+        mfGreenOff = mfGreen + fCombinedOffset;
+        mfBlueOff = mfBlue + fCombinedOffset;
+
+        mbUseIt = true;
     }
 
     BColorModifier_RGBLuminanceContrast::~BColorModifier_RGBLuminanceContrast()

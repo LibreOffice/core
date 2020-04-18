@@ -149,50 +149,50 @@ namespace basegfx
 
     void B3DHomMatrix::rotate(double fAngleX,double fAngleY,double fAngleZ)
     {
-        if(!fTools::equalZero(fAngleX) || !fTools::equalZero(fAngleY) || !fTools::equalZero(fAngleZ))
+        if(!(!fTools::equalZero(fAngleX) || !fTools::equalZero(fAngleY) || !fTools::equalZero(fAngleZ)))
+            return;
+
+        if(!fTools::equalZero(fAngleX))
         {
-            if(!fTools::equalZero(fAngleX))
-            {
-                Impl3DHomMatrix aRotMatX;
-                double fSin(sin(fAngleX));
-                double fCos(cos(fAngleX));
+            Impl3DHomMatrix aRotMatX;
+            double fSin(sin(fAngleX));
+            double fCos(cos(fAngleX));
 
-                aRotMatX.set(1, 1, fCos);
-                aRotMatX.set(2, 2, fCos);
-                aRotMatX.set(2, 1, fSin);
-                aRotMatX.set(1, 2, -fSin);
+            aRotMatX.set(1, 1, fCos);
+            aRotMatX.set(2, 2, fCos);
+            aRotMatX.set(2, 1, fSin);
+            aRotMatX.set(1, 2, -fSin);
 
-                mpImpl->doMulMatrix(aRotMatX);
-            }
-
-            if(!fTools::equalZero(fAngleY))
-            {
-                Impl3DHomMatrix aRotMatY;
-                double fSin(sin(fAngleY));
-                double fCos(cos(fAngleY));
-
-                aRotMatY.set(0, 0, fCos);
-                aRotMatY.set(2, 2, fCos);
-                aRotMatY.set(0, 2, fSin);
-                aRotMatY.set(2, 0, -fSin);
-
-                mpImpl->doMulMatrix(aRotMatY);
-            }
-
-            if(!fTools::equalZero(fAngleZ))
-            {
-                Impl3DHomMatrix aRotMatZ;
-                double fSin(sin(fAngleZ));
-                double fCos(cos(fAngleZ));
-
-                aRotMatZ.set(0, 0, fCos);
-                aRotMatZ.set(1, 1, fCos);
-                aRotMatZ.set(1, 0, fSin);
-                aRotMatZ.set(0, 1, -fSin);
-
-                mpImpl->doMulMatrix(aRotMatZ);
-            }
+            mpImpl->doMulMatrix(aRotMatX);
         }
+
+        if(!fTools::equalZero(fAngleY))
+        {
+            Impl3DHomMatrix aRotMatY;
+            double fSin(sin(fAngleY));
+            double fCos(cos(fAngleY));
+
+            aRotMatY.set(0, 0, fCos);
+            aRotMatY.set(2, 2, fCos);
+            aRotMatY.set(0, 2, fSin);
+            aRotMatY.set(2, 0, -fSin);
+
+            mpImpl->doMulMatrix(aRotMatY);
+        }
+
+        if(fTools::equalZero(fAngleZ))
+            return;
+
+        Impl3DHomMatrix aRotMatZ;
+        double fSin(sin(fAngleZ));
+        double fCos(cos(fAngleZ));
+
+        aRotMatZ.set(0, 0, fCos);
+        aRotMatZ.set(1, 1, fCos);
+        aRotMatZ.set(1, 0, fSin);
+        aRotMatZ.set(0, 1, -fSin);
+
+        mpImpl->doMulMatrix(aRotMatZ);
     }
 
     void B3DHomMatrix::rotate(const B3DTuple& rRotation)

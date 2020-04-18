@@ -43,39 +43,39 @@ namespace basegfx::utils
 {
         void openWithGeometryChange(B2DPolygon& rCandidate)
         {
-            if(rCandidate.isClosed())
+            if(!rCandidate.isClosed())
+                return;
+
+            if(rCandidate.count())
             {
-                if(rCandidate.count())
+                rCandidate.append(rCandidate.getB2DPoint(0));
+
+                if(rCandidate.areControlPointsUsed() && rCandidate.isPrevControlPointUsed(0))
                 {
-                    rCandidate.append(rCandidate.getB2DPoint(0));
-
-                    if(rCandidate.areControlPointsUsed() && rCandidate.isPrevControlPointUsed(0))
-                    {
-                        rCandidate.setPrevControlPoint(rCandidate.count() - 1, rCandidate.getPrevControlPoint(0));
-                        rCandidate.resetPrevControlPoint(0);
-                    }
+                    rCandidate.setPrevControlPoint(rCandidate.count() - 1, rCandidate.getPrevControlPoint(0));
+                    rCandidate.resetPrevControlPoint(0);
                 }
-
-                rCandidate.setClosed(false);
             }
+
+            rCandidate.setClosed(false);
         }
 
         void closeWithGeometryChange(B2DPolygon& rCandidate)
         {
-            if(!rCandidate.isClosed())
-            {
-                while(rCandidate.count() > 1 && rCandidate.getB2DPoint(0) == rCandidate.getB2DPoint(rCandidate.count() - 1))
-                {
-                    if(rCandidate.areControlPointsUsed() && rCandidate.isPrevControlPointUsed(rCandidate.count() - 1))
-                    {
-                        rCandidate.setPrevControlPoint(0, rCandidate.getPrevControlPoint(rCandidate.count() - 1));
-                    }
+            if(rCandidate.isClosed())
+                return;
 
-                    rCandidate.remove(rCandidate.count() - 1);
+            while(rCandidate.count() > 1 && rCandidate.getB2DPoint(0) == rCandidate.getB2DPoint(rCandidate.count() - 1))
+            {
+                if(rCandidate.areControlPointsUsed() && rCandidate.isPrevControlPointUsed(rCandidate.count() - 1))
+                {
+                    rCandidate.setPrevControlPoint(0, rCandidate.getPrevControlPoint(rCandidate.count() - 1));
                 }
 
-                rCandidate.setClosed(true);
+                rCandidate.remove(rCandidate.count() - 1);
             }
+
+            rCandidate.setClosed(true);
         }
 
         void checkClosed(B2DPolygon& rCandidate)
@@ -2178,22 +2178,22 @@ namespace basegfx::utils
         {
             const sal_uInt32 nCount(rCandidate.count());
 
-            if(nCount > 2)
+            if(nCount <= 2)
+                return;
+
+            const B2DPoint aStart(rCandidate.getB2DPoint(0));
+            B2DPoint aLast(rCandidate.getB2DPoint(1));
+
+            for(sal_uInt32 a(2); a < nCount; a++)
             {
-                const B2DPoint aStart(rCandidate.getB2DPoint(0));
-                B2DPoint aLast(rCandidate.getB2DPoint(1));
+                const B2DPoint aCurrent(rCandidate.getB2DPoint(a));
+                rTarget.emplace_back(
+                    aStart,
+                    aLast,
+                    aCurrent);
 
-                for(sal_uInt32 a(2); a < nCount; a++)
-                {
-                    const B2DPoint aCurrent(rCandidate.getB2DPoint(a));
-                    rTarget.emplace_back(
-                        aStart,
-                        aLast,
-                        aCurrent);
-
-                    // prepare next
-                    aLast = aCurrent;
-                }
+                // prepare next
+                aLast = aCurrent;
             }
         }
 

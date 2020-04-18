@@ -422,61 +422,61 @@ namespace basegfx::trapezoidhelper
 
             void solveHorizontalEdges(TrDeSimpleEdges& rTrDeSimpleEdges)
             {
-                if(!rTrDeSimpleEdges.empty() && !maTrDeEdgeEntries.empty())
+                if(rTrDeSimpleEdges.empty() || maTrDeEdgeEntries.empty())
+                    return;
+
+                // there were horizontal edges. These can be excluded, but
+                // cuts with other edges need to be solved and added before
+                // ignoring them
+                for(const TrDeSimpleEdge & rHorEdge : rTrDeSimpleEdges)
                 {
-                    // there were horizontal edges. These can be excluded, but
-                    // cuts with other edges need to be solved and added before
-                    // ignoring them
-                    for(const TrDeSimpleEdge & rHorEdge : rTrDeSimpleEdges)
+                    // get horizontal edge as candidate; prepare its range and fixed Y
+                    const B1DRange aRange(rHorEdge.getStart().getX(), rHorEdge.getEnd().getX());
+                    const double fFixedY(rHorEdge.getStart().getY());
+
+                    // loop over traversing edges
+                    TrDeEdgeEntries::iterator aCurrent(maTrDeEdgeEntries.begin());
+
+                    do
                     {
-                        // get horizontal edge as candidate; prepare its range and fixed Y
-                        const B1DRange aRange(rHorEdge.getStart().getX(), rHorEdge.getEnd().getX());
-                        const double fFixedY(rHorEdge.getStart().getY());
+                        // get compare edge
+                        TrDeEdgeEntries::reference aCompare(*aCurrent++);
 
-                        // loop over traversing edges
-                        TrDeEdgeEntries::iterator aCurrent(maTrDeEdgeEntries.begin());
-
-                        do
+                        if(fTools::lessOrEqual(aCompare.getEnd().getY(), fFixedY))
                         {
-                            // get compare edge
-                            TrDeEdgeEntries::reference aCompare(*aCurrent++);
+                            // edge ends above horizontal edge, continue
+                            continue;
+                        }
 
-                            if(fTools::lessOrEqual(aCompare.getEnd().getY(), fFixedY))
+                        if(fTools::moreOrEqual(aCompare.getStart().getY(), fFixedY))
+                        {
+                            // edge starts below horizontal edge, continue
+                            continue;
+                        }
+
+                        // vertical overlap, get horizontal range
+                        const B1DRange aCompareRange(aCompare.getStart().getX(), aCompare.getEnd().getX());
+
+                        if(aRange.overlaps(aCompareRange))
+                        {
+                            // possible cut, get cut point
+                            const B2DPoint aSplit(aCompare.getCutPointForGivenY(fFixedY));
+
+                            if(fTools::more(aSplit.getX(), aRange.getMinimum())
+                                && fTools::less(aSplit.getX(), aRange.getMaximum()))
                             {
-                                // edge ends above horizontal edge, continue
-                                continue;
-                            }
+                                // cut is in XRange of horizontal edge, potentially needed cut
+                                B2DPoint* pNewPoint = maNewPoints.allocatePoint(aSplit);
 
-                            if(fTools::moreOrEqual(aCompare.getStart().getY(), fFixedY))
-                            {
-                                // edge starts below horizontal edge, continue
-                                continue;
-                            }
-
-                            // vertical overlap, get horizontal range
-                            const B1DRange aCompareRange(aCompare.getStart().getX(), aCompare.getEnd().getX());
-
-                            if(aRange.overlaps(aCompareRange))
-                            {
-                                // possible cut, get cut point
-                                const B2DPoint aSplit(aCompare.getCutPointForGivenY(fFixedY));
-
-                                if(fTools::more(aSplit.getX(), aRange.getMinimum())
-                                    && fTools::less(aSplit.getX(), aRange.getMaximum()))
+                                if(!splitEdgeAtGivenPoint(aCompare, *pNewPoint, aCurrent))
                                 {
-                                    // cut is in XRange of horizontal edge, potentially needed cut
-                                    B2DPoint* pNewPoint = maNewPoints.allocatePoint(aSplit);
-
-                                    if(!splitEdgeAtGivenPoint(aCompare, *pNewPoint, aCurrent))
-                                    {
-                                        maNewPoints.freeIfLast(pNewPoint);
-                                    }
+                                    maNewPoints.freeIfLast(pNewPoint);
                                 }
                             }
                         }
-                        while(aCurrent != maTrDeEdgeEntries.end()
-                            && fTools::less(aCurrent->getStart().getY(), fFixedY));
                     }
+                    while(aCurrent != maTrDeEdgeEntries.end()
+                        && fTools::less(aCurrent->getStart().getY(), fFixedY));
                 }
             }
 

@@ -181,21 +181,21 @@ namespace basegfx
 
     void B2DHomMatrix::rotate(double fRadiant)
     {
-        if(!fTools::equalZero(fRadiant))
-        {
-            double fSin(0.0);
-            double fCos(1.0);
+        if(fTools::equalZero(fRadiant))
+            return;
 
-            utils::createSinCosOrthogonal(fSin, fCos, fRadiant);
-            Impl2DHomMatrix aRotMat;
+        double fSin(0.0);
+        double fCos(1.0);
 
-            aRotMat.set(0, 0, fCos);
-            aRotMat.set(1, 1, fCos);
-            aRotMat.set(1, 0, fSin);
-            aRotMat.set(0, 1, -fSin);
+        utils::createSinCosOrthogonal(fSin, fCos, fRadiant);
+        Impl2DHomMatrix aRotMat;
 
-            mpImpl->doMulMatrix(aRotMat);
-        }
+        aRotMat.set(0, 0, fCos);
+        aRotMat.set(1, 1, fCos);
+        aRotMat.set(1, 0, fSin);
+        aRotMat.set(0, 1, -fSin);
+
+        mpImpl->doMulMatrix(aRotMat);
     }
 
     void B2DHomMatrix::translate(double fX, double fY)

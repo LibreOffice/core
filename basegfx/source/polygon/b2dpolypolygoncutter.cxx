@@ -484,32 +484,32 @@ namespace basegfx
             {
                 const sal_uInt32 nOriginalCount(rOriginal.count());
 
-                if(nOriginalCount)
-                {
-                    B2DPolygon aGeometry(utils::addPointsAtCutsAndTouches(rOriginal));
-                    aGeometry.removeDoublePoints();
-                    aGeometry = utils::simplifyCurveSegments(aGeometry);
-                    mbIsCurve = aGeometry.areControlPointsUsed();
+                if(!nOriginalCount)
+                    return;
 
-                    const sal_uInt32 nPointCount(aGeometry.count());
+                B2DPolygon aGeometry(utils::addPointsAtCutsAndTouches(rOriginal));
+                aGeometry.removeDoublePoints();
+                aGeometry = utils::simplifyCurveSegments(aGeometry);
+                mbIsCurve = aGeometry.areControlPointsUsed();
 
-                    // If it's not a bezier polygon, at least four points are needed to create
-                    // a self-intersection. If it's a bezier polygon, the minimum point number
-                    // is two, since with a single point You get a curve, but no self-intersection
-                    if(nPointCount > 3 || (nPointCount > 1 && mbIsCurve))
-                    {
-                        // reserve space in point, control and sort vector.
-                        maSNV.reserve(nPointCount);
-                        maPNV.reserve(nPointCount);
-                        maVNV.reserve(mbIsCurve ? nPointCount : 0);
+                const sal_uInt32 nPointCount(aGeometry.count());
 
-                        // fill data
-                        impAddPolygon(0, aGeometry);
+                // If it's not a bezier polygon, at least four points are needed to create
+                // a self-intersection. If it's a bezier polygon, the minimum point number
+                // is two, since with a single point You get a curve, but no self-intersection
+                if(!(nPointCount > 3 || (nPointCount > 1 && mbIsCurve)))
+                    return;
 
-                        // solve common nodes
-                        impSolve();
-                    }
-                }
+                // reserve space in point, control and sort vector.
+                maSNV.reserve(nPointCount);
+                maPNV.reserve(nPointCount);
+                maVNV.reserve(mbIsCurve ? nPointCount : 0);
+
+                // fill data
+                impAddPolygon(0, aGeometry);
+
+                // solve common nodes
+                impSolve();
             }
 
             explicit solver(const B2DPolyPolygon& rOriginal)
@@ -519,65 +519,65 @@ namespace basegfx
             {
                 sal_uInt32 nOriginalCount(maOriginal.count());
 
-                if(nOriginalCount)
+                if(!nOriginalCount)
+                    return;
+
+                B2DPolyPolygon aGeometry(utils::addPointsAtCutsAndTouches(maOriginal));
+                aGeometry.removeDoublePoints();
+                aGeometry = utils::simplifyCurveSegments(aGeometry);
+                mbIsCurve = aGeometry.areControlPointsUsed();
+                nOriginalCount = aGeometry.count();
+
+                if(!nOriginalCount)
+                    return;
+
+                sal_uInt32 nPointCount(0);
+                sal_uInt32 a(0);
+
+                // count points
+                for(a = 0; a < nOriginalCount; a++)
                 {
-                    B2DPolyPolygon aGeometry(utils::addPointsAtCutsAndTouches(maOriginal));
-                    aGeometry.removeDoublePoints();
-                    aGeometry = utils::simplifyCurveSegments(aGeometry);
-                    mbIsCurve = aGeometry.areControlPointsUsed();
-                    nOriginalCount = aGeometry.count();
+                    const B2DPolygon& aCandidate(aGeometry.getB2DPolygon(a));
+                    const sal_uInt32 nCandCount(aCandidate.count());
 
-                    if(nOriginalCount)
+                    // If it's not a bezier curve, at least three points would be needed to have a
+                    // topological relevant (not empty) polygon. Since it's not known here if trivial
+                    // edges (dead ends) will be kept or sorted out, add non-bezier polygons with
+                    // more than one point.
+                    // For bezier curves, the minimum for defining an area is also one.
+                    if(nCandCount)
                     {
-                        sal_uInt32 nPointCount(0);
-                        sal_uInt32 a(0);
-
-                        // count points
-                        for(a = 0; a < nOriginalCount; a++)
-                        {
-                            const B2DPolygon& aCandidate(aGeometry.getB2DPolygon(a));
-                            const sal_uInt32 nCandCount(aCandidate.count());
-
-                            // If it's not a bezier curve, at least three points would be needed to have a
-                            // topological relevant (not empty) polygon. Since it's not known here if trivial
-                            // edges (dead ends) will be kept or sorted out, add non-bezier polygons with
-                            // more than one point.
-                            // For bezier curves, the minimum for defining an area is also one.
-                            if(nCandCount)
-                            {
-                                nPointCount += nCandCount;
-                            }
-                        }
-
-                        if(nPointCount)
-                        {
-                            // reserve space in point, control and sort vector.
-                            maSNV.reserve(nPointCount);
-                            maPNV.reserve(nPointCount);
-                            maVNV.reserve(mbIsCurve ? nPointCount : 0);
-
-                            // fill data
-                            sal_uInt32 nInsertIndex(0);
-
-                            for(a = 0; a < nOriginalCount; a++)
-                            {
-                                const B2DPolygon& aCandidate(aGeometry.getB2DPolygon(a));
-                                const sal_uInt32 nCandCount(aCandidate.count());
-
-                                // use same condition as above, the data vector is
-                                // pre-allocated
-                                if(nCandCount)
-                                {
-                                    impAddPolygon(nInsertIndex, aCandidate);
-                                    nInsertIndex += nCandCount;
-                                }
-                            }
-
-                            // solve common nodes
-                            impSolve();
-                        }
+                        nPointCount += nCandCount;
                     }
                 }
+
+                if(!nPointCount)
+                    return;
+
+                // reserve space in point, control and sort vector.
+                maSNV.reserve(nPointCount);
+                maPNV.reserve(nPointCount);
+                maVNV.reserve(mbIsCurve ? nPointCount : 0);
+
+                // fill data
+                sal_uInt32 nInsertIndex(0);
+
+                for(a = 0; a < nOriginalCount; a++)
+                {
+                    const B2DPolygon& aCandidate(aGeometry.getB2DPolygon(a));
+                    const sal_uInt32 nCandCount(aCandidate.count());
+
+                    // use same condition as above, the data vector is
+                    // pre-allocated
+                    if(nCandCount)
+                    {
+                        impAddPolygon(nInsertIndex, aCandidate);
+                        nInsertIndex += nCandCount;
+                    }
+                }
+
+                // solve common nodes
+                impSolve();
             }
 
             B2DPolyPolygon getB2DPolyPolygon()
