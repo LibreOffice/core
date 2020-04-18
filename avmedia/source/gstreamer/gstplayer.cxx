@@ -674,19 +674,20 @@ void SAL_CALL Player::setMediaTime( double fTime )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    if( mpPlaybin ) {
-        gint64 gst_position = llround (fTime * GST_SECOND);
+    if( !mpPlaybin )
+        return;
 
-        gst_element_seek( mpPlaybin, 1.0,
-                          GST_FORMAT_TIME,
-                          GST_SEEK_FLAG_FLUSH,
-                          GST_SEEK_TYPE_SET, gst_position,
-                          GST_SEEK_TYPE_NONE, 0 );
-        if( !isPlaying() )
-            gst_element_set_state( mpPlaybin, GST_STATE_PAUSED );
+    gint64 gst_position = llround (fTime * GST_SECOND);
 
-        SAL_INFO( "avmedia.gstreamer", AVVERSION "seek to: " << gst_position << " ns original: " << fTime << " s" );
-    }
+    gst_element_seek( mpPlaybin, 1.0,
+                      GST_FORMAT_TIME,
+                      GST_SEEK_FLAG_FLUSH,
+                      GST_SEEK_TYPE_SET, gst_position,
+                      GST_SEEK_TYPE_NONE, 0 );
+    if( !isPlaying() )
+        gst_element_set_state( mpPlaybin, GST_STATE_PAUSED );
+
+    SAL_INFO( "avmedia.gstreamer", AVVERSION "seek to: " << gst_position << " ns original: " << fTime << " s" );
 }
 
 

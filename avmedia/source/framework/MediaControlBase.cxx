@@ -38,20 +38,20 @@ MediaControlBase::MediaControlBase()
 
 void MediaControlBase::UpdateTimeField( MediaItem const & aMediaItem, double fTime )
 {
-    if( !aMediaItem.getURL().isEmpty())
-    {
-        OUString aTimeString;
+    if( aMediaItem.getURL().isEmpty())
+        return;
 
-        SvtSysLocale aSysLocale;
-        const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
+    OUString aTimeString;
 
-        aTimeString += rLocaleData.getDuration( tools::Time( 0, 0, static_cast< sal_uInt32 >( floor( fTime ) ) ) ) +
-            " / " +
-            rLocaleData.getDuration( tools::Time( 0, 0, static_cast< sal_uInt32 >( floor( aMediaItem.getDuration() ) )) );
+    SvtSysLocale aSysLocale;
+    const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
 
-        if( mxTimeEdit->get_text() != aTimeString )
-            mxTimeEdit->set_text( aTimeString );
-    }
+    aTimeString += rLocaleData.getDuration( tools::Time( 0, 0, static_cast< sal_uInt32 >( floor( fTime ) ) ) ) +
+        " / " +
+        rLocaleData.getDuration( tools::Time( 0, 0, static_cast< sal_uInt32 >( floor( aMediaItem.getDuration() ) )) );
+
+    if( mxTimeEdit->get_text() != aTimeString )
+        mxTimeEdit->set_text( aTimeString );
 }
 
 void MediaControlBase::UpdateVolumeSlider( MediaItem const & aMediaItem )

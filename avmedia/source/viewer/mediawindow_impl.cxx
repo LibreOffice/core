@@ -224,38 +224,38 @@ void MediaWindowImpl::setURL( const OUString& rURL,
         OUString const& rTempURL, OUString const& rReferer)
 {
     maReferer = rReferer;
-    if( rURL != getURL() )
+    if( rURL == getURL() )
+        return;
+
+    if( mxPlayer.is() )
+        mxPlayer->stop();
+
+    if( mxPlayerWindow.is() )
     {
-        if( mxPlayer.is() )
-            mxPlayer->stop();
-
-        if( mxPlayerWindow.is() )
-        {
-            mxPlayerWindow->setVisible( false );
-            mxPlayerWindow.clear();
-        }
-
-        mxPlayer.clear();
-        mTempFileURL.clear();
-
-        if (!rTempURL.isEmpty())
-        {
-            maFileURL = rURL;
-            mTempFileURL = rTempURL;
-        }
-        else
-        {
-            INetURLObject aURL( rURL );
-
-            if (aURL.GetProtocol() != INetProtocol::NotValid)
-                maFileURL = aURL.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
-            else
-                maFileURL = rURL;
-        }
-
-        mxPlayer = createPlayer((!mTempFileURL.isEmpty()) ? mTempFileURL : maFileURL, rReferer, &m_sMimeType );
-        onURLChanged();
+        mxPlayerWindow->setVisible( false );
+        mxPlayerWindow.clear();
     }
+
+    mxPlayer.clear();
+    mTempFileURL.clear();
+
+    if (!rTempURL.isEmpty())
+    {
+        maFileURL = rURL;
+        mTempFileURL = rTempURL;
+    }
+    else
+    {
+        INetURLObject aURL( rURL );
+
+        if (aURL.GetProtocol() != INetProtocol::NotValid)
+            maFileURL = aURL.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
+        else
+            maFileURL = rURL;
+    }
+
+    mxPlayer = createPlayer((!mTempFileURL.isEmpty()) ? mTempFileURL : maFileURL, rReferer, &m_sMimeType );
+    onURLChanged();
 }
 
 const OUString& MediaWindowImpl::getURL() const
@@ -332,35 +332,35 @@ void MediaWindowImpl::executeMediaItem( const MediaItem& rItem )
         mxPlayerWindow->setZoomLevel( rItem.getZoom() );
 
     // set play state at last
-    if (nMaskSet & AVMediaSetMask::STATE)
+    if (!(nMaskSet & AVMediaSetMask::STATE))
+        return;
+
+    switch (rItem.getState())
     {
-        switch (rItem.getState())
+        case MediaState::Play:
         {
-            case MediaState::Play:
-            {
-                if (!isPlaying())
-                    start();
-            }
-            break;
-
-            case MediaState::Pause:
-            {
-                if (isPlaying())
-                    stop();
-            }
-            break;
-
-            case MediaState::Stop:
-            {
-                if (isPlaying())
-                {
-                    setMediaTime( 0.0 );
-                    stop();
-                    setMediaTime( 0.0 );
-                }
-            }
-            break;
+            if (!isPlaying())
+                start();
         }
+        break;
+
+        case MediaState::Pause:
+        {
+            if (isPlaying())
+                stop();
+        }
+        break;
+
+        case MediaState::Stop:
+        {
+            if (isPlaying())
+            {
+                setMediaTime( 0.0 );
+                stop();
+                setMediaTime( 0.0 );
+            }
+        }
+        break;
     }
 }
 
@@ -472,31 +472,31 @@ void MediaWindowImpl::setPointer(PointerStyle aPointer)
     if (mpChildWindow)
         mpChildWindow->SetPointer(aPointer);
 
-    if (mxPlayerWindow.is())
+    if (!mxPlayerWindow.is())
+        return;
+
+    long nPointer;
+
+    switch (aPointer)
     {
-        long nPointer;
-
-        switch (aPointer)
-        {
-            case PointerStyle::Cross:
-                nPointer = awt::SystemPointer::CROSS;
-                break;
-            case PointerStyle::Hand:
-                nPointer = awt::SystemPointer::HAND;
-                break;
-            case PointerStyle::Move:
-                nPointer = awt::SystemPointer::MOVE;
-                break;
-            case PointerStyle::Wait:
-                nPointer = awt::SystemPointer::WAIT;
-                break;
-            default:
-                nPointer = awt::SystemPointer::ARROW;
-                break;
-        }
-
-        mxPlayerWindow->setPointerType(nPointer);
+        case PointerStyle::Cross:
+            nPointer = awt::SystemPointer::CROSS;
+            break;
+        case PointerStyle::Hand:
+            nPointer = awt::SystemPointer::HAND;
+            break;
+        case PointerStyle::Move:
+            nPointer = awt::SystemPointer::MOVE;
+            break;
+        case PointerStyle::Wait:
+            nPointer = awt::SystemPointer::WAIT;
+            break;
+        default:
+            nPointer = awt::SystemPointer::ARROW;
+            break;
     }
+
+    mxPlayerWindow->setPointerType(nPointer);
 }
 
 void MediaWindowImpl::Resize()
@@ -524,28 +524,28 @@ void MediaWindowImpl::Resize()
 
 void MediaWindowImpl::StateChanged(StateChangedType eType)
 {
-    if (mxPlayerWindow.is())
+    if (!mxPlayerWindow.is())
+        return;
+
+    // stop playing when going disabled or hidden
+    switch (eType)
     {
-        // stop playing when going disabled or hidden
-        switch (eType)
+        case StateChangedType::Visible:
         {
-            case StateChangedType::Visible:
-            {
-                stopPlayingInternal(!IsVisible());
-                mxPlayerWindow->setVisible(IsVisible());
-            }
-            break;
-
-            case StateChangedType::Enable:
-            {
-                stopPlayingInternal(!IsEnabled());
-                mxPlayerWindow->setEnable(IsEnabled());
-            }
-            break;
-
-            default:
-            break;
+            stopPlayingInternal(!IsVisible());
+            mxPlayerWindow->setVisible(IsVisible());
         }
+        break;
+
+        case StateChangedType::Enable:
+        {
+            stopPlayingInternal(!IsEnabled());
+            mxPlayerWindow->setEnable(IsEnabled());
+        }
+        break;
+
+        default:
+        break;
     }
 }
 
@@ -577,37 +577,37 @@ void MediaWindowImpl::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
     const Point aBasePos(mpChildWindow->GetPosPixel());
     const tools::Rectangle aVideoRect(aBasePos, mpChildWindow->GetSizePixel());
 
-    if (pLogo && !pLogo->IsEmpty() && !aVideoRect.IsEmpty())
+    if (!(pLogo && !pLogo->IsEmpty() && !aVideoRect.IsEmpty()))
+        return;
+
+    Size aLogoSize(pLogo->GetSizePixel());
+    const Color aBackgroundColor(67, 67, 67);
+
+    rRenderContext.SetLineColor(aBackgroundColor);
+    rRenderContext.SetFillColor(aBackgroundColor);
+    rRenderContext.DrawRect(aVideoRect);
+
+    if ((aLogoSize.Width() > aVideoRect.GetWidth() || aLogoSize.Height() > aVideoRect.GetHeight() ) &&
+        (aLogoSize.Height() > 0))
     {
-        Size aLogoSize(pLogo->GetSizePixel());
-        const Color aBackgroundColor(67, 67, 67);
+        const double fLogoWH = double(aLogoSize.Width()) / aLogoSize.Height();
 
-        rRenderContext.SetLineColor(aBackgroundColor);
-        rRenderContext.SetFillColor(aBackgroundColor);
-        rRenderContext.DrawRect(aVideoRect);
-
-        if ((aLogoSize.Width() > aVideoRect.GetWidth() || aLogoSize.Height() > aVideoRect.GetHeight() ) &&
-            (aLogoSize.Height() > 0))
+        if (fLogoWH < (double(aVideoRect.GetWidth()) / aVideoRect.GetHeight()))
         {
-            const double fLogoWH = double(aLogoSize.Width()) / aLogoSize.Height();
-
-            if (fLogoWH < (double(aVideoRect.GetWidth()) / aVideoRect.GetHeight()))
-            {
-                aLogoSize.setWidth( long(aVideoRect.GetHeight() * fLogoWH) );
-                aLogoSize.setHeight( aVideoRect.GetHeight() );
-            }
-            else
-            {
-                aLogoSize.setWidth( aVideoRect.GetWidth() );
-                aLogoSize.setHeight( long(aVideoRect.GetWidth() / fLogoWH) );
-            }
+            aLogoSize.setWidth( long(aVideoRect.GetHeight() * fLogoWH) );
+            aLogoSize.setHeight( aVideoRect.GetHeight() );
         }
-
-        Point aPoint(aBasePos.X() + ((aVideoRect.GetWidth() - aLogoSize.Width()) >> 1),
-                     aBasePos.Y() + ((aVideoRect.GetHeight() - aLogoSize.Height()) >> 1));
-
-        rRenderContext.DrawBitmapEx(aPoint, aLogoSize, *pLogo);
+        else
+        {
+            aLogoSize.setWidth( aVideoRect.GetWidth() );
+            aLogoSize.setHeight( long(aVideoRect.GetWidth() / fLogoWH) );
+        }
     }
+
+    Point aPoint(aBasePos.X() + ((aVideoRect.GetWidth() - aLogoSize.Width()) >> 1),
+                 aBasePos.Y() + ((aVideoRect.GetHeight() - aLogoSize.Height()) >> 1));
+
+    rRenderContext.DrawBitmapEx(aPoint, aLogoSize, *pLogo);
 }
 
 void MediaWindowImpl::GetFocus()
