@@ -120,6 +120,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,mwaw,\
 	UnpackedTarball/libmwaw/src/lib/MWAWSpreadsheetDecoder \
 	UnpackedTarball/libmwaw/src/lib/MWAWSpreadsheetEncoder \
 	UnpackedTarball/libmwaw/src/lib/MWAWSpreadsheetListener \
+	UnpackedTarball/libmwaw/src/lib/MWAWStream \
 	UnpackedTarball/libmwaw/src/lib/MWAWStringStream \
 	UnpackedTarball/libmwaw/src/lib/MWAWSubDocument \
 	UnpackedTarball/libmwaw/src/lib/MWAWTable \
@@ -173,10 +174,13 @@ $(eval $(call gb_Library_add_generated_exception_objects,mwaw,\
 	UnpackedTarball/libmwaw/src/lib/PowerPoint7Text \
 	UnpackedTarball/libmwaw/src/lib/RagTime5Chart \
 	UnpackedTarball/libmwaw/src/lib/RagTime5ClusterManager \
+	UnpackedTarball/libmwaw/src/lib/RagTime5Document \
+	UnpackedTarball/libmwaw/src/lib/RagTime5Formula \
 	UnpackedTarball/libmwaw/src/lib/RagTime5Graph \
 	UnpackedTarball/libmwaw/src/lib/RagTime5Layout \
 	UnpackedTarball/libmwaw/src/lib/RagTime5Parser \
 	UnpackedTarball/libmwaw/src/lib/RagTime5Pipeline \
+	UnpackedTarball/libmwaw/src/lib/RagTime5SSParser \
 	UnpackedTarball/libmwaw/src/lib/RagTime5Spreadsheet \
 	UnpackedTarball/libmwaw/src/lib/RagTime5StructManager \
 	UnpackedTarball/libmwaw/src/lib/RagTime5StyleManager \
