@@ -29,14 +29,4 @@ $(eval $(call gb_UnpackedTarball_add_patches,libstaroffice, \
 ))
 endif
 
-# * external/libstaroffice/0001-Fix-equality-operator-arguments.patch.1 is upstream at
-#   <https://github.com/fosnola/libstaroffice/pull/6> "Fix equality operator arguments":
-# * external/0001-text-send-lastname-should-be-text-sender-lastname.patch.1 is upstream at
-#   <https://github.com/fosnola/libstaroffice/pull/7> "text:send-lastname should be text:sender-lastname":
-$(eval $(call gb_UnpackedTarball_add_patches,libstaroffice,\
-	external/libstaroffice/0001-add-missing-include-for-std-max.patch.1 \
-	external/libstaroffice/0001-Fix-equality-operator-arguments.patch.1 \
-	external/libstaroffice/0001-text-send-lastname-should-be-text-sender-lastname.patch.1 \
-))
-
 # vim: set noet sw=4 ts=4:
