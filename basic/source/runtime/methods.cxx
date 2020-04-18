@@ -478,31 +478,31 @@ void SbRtl_ChDrive(StarBASIC *, SbxArray & rPar, bool)
 void implStepRenameUCB( const OUString& aSource, const OUString& aDest )
 {
     const uno::Reference< ucb::XSimpleFileAccess3 >& xSFI = getFileAccess();
-    if( xSFI.is() )
-    {
-        try
-        {
-            OUString aSourceFullPath = getFullPath( aSource );
-            if( !xSFI->exists( aSourceFullPath ) )
-            {
-                StarBASIC::Error( ERRCODE_BASIC_FILE_NOT_FOUND );
-                return;
-            }
+    if( !xSFI.is() )
+        return;
 
-            OUString aDestFullPath = getFullPath( aDest );
-            if( xSFI->exists( aDestFullPath ) )
-            {
-                StarBASIC::Error( ERRCODE_BASIC_FILE_EXISTS );
-            }
-            else
-            {
-                xSFI->move( aSourceFullPath, aDestFullPath );
-            }
-        }
-        catch(const Exception & )
+    try
+    {
+        OUString aSourceFullPath = getFullPath( aSource );
+        if( !xSFI->exists( aSourceFullPath ) )
         {
             StarBASIC::Error( ERRCODE_BASIC_FILE_NOT_FOUND );
+            return;
         }
+
+        OUString aDestFullPath = getFullPath( aDest );
+        if( xSFI->exists( aDestFullPath ) )
+        {
+            StarBASIC::Error( ERRCODE_BASIC_FILE_EXISTS );
+        }
+        else
+        {
+            xSFI->move( aSourceFullPath, aDestFullPath );
+        }
+    }
+    catch(const Exception & )
+    {
+        StarBASIC::Error( ERRCODE_BASIC_FILE_NOT_FOUND );
     }
 }
 
@@ -4241,19 +4241,19 @@ void SbRtl_Load(StarBASIC *, SbxArray & rPar, bool)
 
 
     SbxBase* pObj = rPar.Get32(1)->GetObject();
-    if ( pObj )
+    if ( !pObj )
+        return;
+
+    if (SbUserFormModule* pModule = dynamic_cast<SbUserFormModule*>(pObj))
     {
-        if (SbUserFormModule* pModule = dynamic_cast<SbUserFormModule*>(pObj))
+        pModule->Load();
+    }
+    else if (SbxObject* pSbxObj = dynamic_cast<SbxObject*>(pObj))
+    {
+        SbxVariable* pVar = pSbxObj->Find("Load", SbxClassType::Method);
+        if( pVar )
         {
-            pModule->Load();
-        }
-        else if (SbxObject* pSbxObj = dynamic_cast<SbxObject*>(pObj))
-        {
-            SbxVariable* pVar = pSbxObj->Find("Load", SbxClassType::Method);
-            if( pVar )
-            {
-                pVar->GetInteger();
-            }
+            pVar->GetInteger();
         }
     }
 }
@@ -4269,19 +4269,19 @@ void SbRtl_Unload(StarBASIC *, SbxArray & rPar, bool)
 
 
     SbxBase* pObj = rPar.Get32(1)->GetObject();
-    if ( pObj )
+    if ( !pObj )
+        return;
+
+    if (SbUserFormModule* pFormModule = dynamic_cast<SbUserFormModule*>(pObj))
     {
-        if (SbUserFormModule* pFormModule = dynamic_cast<SbUserFormModule*>(pObj))
+        pFormModule->Unload();
+    }
+    else if (SbxObject *pSbxObj = dynamic_cast<SbxObject*>(pObj))
+    {
+        SbxVariable* pVar = pSbxObj->Find("Unload", SbxClassType::Method);
+        if( pVar )
         {
-            pFormModule->Unload();
-        }
-        else if (SbxObject *pSbxObj = dynamic_cast<SbxObject*>(pObj))
-        {
-            SbxVariable* pVar = pSbxObj->Find("Unload", SbxClassType::Method);
-            if( pVar )
-            {
-                pVar->GetInteger();
-            }
+            pVar->GetInteger();
         }
     }
 }

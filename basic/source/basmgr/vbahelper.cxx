@@ -164,20 +164,20 @@ void enableContainerWindowsOfAllDocuments( const uno::Reference< frame::XModel >
 
 void registerCurrentDirectory( const uno::Reference< frame::XModel >& rxModel, const OUString& rPath )
 {
-    if( !rPath.isEmpty() )
+    if( rPath.isEmpty() )
+        return;
+
+    CurrDirPool& rPool = StaticCurrDirPool::get();
+    ::osl::MutexGuard aGuard( rPool.maMutex );
+    try
     {
-        CurrDirPool& rPool = StaticCurrDirPool::get();
-        ::osl::MutexGuard aGuard( rPool.maMutex );
-        try
-        {
-            uno::Reference< frame::XModuleManager2 > xModuleManager( lclCreateModuleManager() );
-            OUString aIdentifier = xModuleManager->identify( rxModel );
-            if( !aIdentifier.isEmpty() )
-                rPool.maCurrDirs[ aIdentifier ] = rPath;
-        }
-        catch(const uno::Exception& )
-        {
-        }
+        uno::Reference< frame::XModuleManager2 > xModuleManager( lclCreateModuleManager() );
+        OUString aIdentifier = xModuleManager->identify( rxModel );
+        if( !aIdentifier.isEmpty() )
+            rPool.maCurrDirs[ aIdentifier ] = rPath;
+    }
+    catch(const uno::Exception& )
+    {
     }
 }
 

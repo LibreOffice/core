@@ -838,37 +838,37 @@ void SbiStdObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 {
     const SbxHint* pHint = dynamic_cast<const SbxHint*>(&rHint);
-    if( pHint )
+    if( !pHint )
+        return;
+
+    SbxVariable* pVar = pHint->GetVar();
+    SbxArray* pPar_ = pVar->GetParameters();
+    const sal_uInt16 nCallId = static_cast<sal_uInt16>(pVar->GetUserData());
+    if( nCallId )
     {
-        SbxVariable* pVar = pHint->GetVar();
-        SbxArray* pPar_ = pVar->GetParameters();
-        const sal_uInt16 nCallId = static_cast<sal_uInt16>(pVar->GetUserData());
-        if( nCallId )
+        const SfxHintId t = pHint->GetId();
+        if( t == SfxHintId::BasicInfoWanted )
+            pVar->SetInfo( GetInfo( static_cast<short>(pVar->GetUserData()) ) );
+        else
         {
-            const SfxHintId t = pHint->GetId();
-            if( t == SfxHintId::BasicInfoWanted )
-                pVar->SetInfo( GetInfo( static_cast<short>(pVar->GetUserData()) ) );
-            else
+            bool bWrite = false;
+            if( t == SfxHintId::BasicDataChanged )
+                bWrite = true;
+            if( t == SfxHintId::BasicDataWanted || bWrite )
             {
-                bool bWrite = false;
-                if( t == SfxHintId::BasicDataChanged )
-                    bWrite = true;
-                if( t == SfxHintId::BasicDataWanted || bWrite )
+                RtlCall p = aMethods[ nCallId-1 ].pFunc;
+                SbxArrayRef rPar( pPar_ );
+                if( !pPar_ )
                 {
-                    RtlCall p = aMethods[ nCallId-1 ].pFunc;
-                    SbxArrayRef rPar( pPar_ );
-                    if( !pPar_ )
-                    {
-                        rPar = pPar_ = new SbxArray;
-                        pPar_->Put32( pVar, 0 );
-                    }
-                    p( static_cast<StarBASIC*>(GetParent()), *pPar_, bWrite );
-                    return;
+                    rPar = pPar_ = new SbxArray;
+                    pPar_->Put32( pVar, 0 );
                 }
+                p( static_cast<StarBASIC*>(GetParent()), *pPar_, bWrite );
+                return;
             }
         }
-        SbxObject::Notify( rBC, rHint );
     }
+    SbxObject::Notify( rBC, rHint );
 }
 
 // building the info-structure for single elements

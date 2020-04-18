@@ -740,19 +740,19 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
     }
 
     // ParamArray for missing parameter
-    if( pInfo )
+    if( !pInfo )
+        return;
+
+    // #111897 Check first missing parameter for ParamArray
+    const SbxParamInfo* p = pInfo->GetParam(sal::static_int_cast<sal_uInt16>(nParamCount));
+    if( p && (p->nUserData & PARAM_INFO_PARAMARRAY) != 0 )
     {
-        // #111897 Check first missing parameter for ParamArray
-        const SbxParamInfo* p = pInfo->GetParam(sal::static_int_cast<sal_uInt16>(nParamCount));
-        if( p && (p->nUserData & PARAM_INFO_PARAMARRAY) != 0 )
-        {
-            SbxDimArray* pArray = new SbxDimArray( SbxVARIANT );
-            pArray->unoAddDim32( 0, -1 );
-            SbxVariable* pArrayVar = new SbxVariable( SbxVARIANT );
-            pArrayVar->SetFlag( SbxFlagBits::ReadWrite );
-            pArrayVar->PutObject( pArray );
-            refParams->Put32( pArrayVar, nParamCount );
-        }
+        SbxDimArray* pArray = new SbxDimArray( SbxVARIANT );
+        pArray->unoAddDim32( 0, -1 );
+        SbxVariable* pArrayVar = new SbxVariable( SbxVARIANT );
+        pArrayVar->SetFlag( SbxFlagBits::ReadWrite );
+        pArrayVar->PutObject( pArray );
+        refParams->Put32( pArrayVar, nParamCount );
     }
 }
 
@@ -907,40 +907,40 @@ bool SbiRuntime::Step()
 
 void SbiRuntime::Error( ErrCode n, bool bVBATranslationAlreadyDone )
 {
-    if( n )
+    if( !n )
+        return;
+
+    nError = n;
+    if( !(isVBAEnabled() && !bVBATranslationAlreadyDone) )
+        return;
+
+    OUString aMsg = pInst->GetErrorMsg();
+    sal_Int32 nVBAErrorNumber = translateErrorToVba( nError, aMsg );
+    SbxVariable* pSbxErrObjVar = SbxErrObject::getErrObject().get();
+    SbxErrObject* pGlobErr = static_cast< SbxErrObject* >( pSbxErrObjVar );
+    if( pGlobErr != nullptr )
     {
-        nError = n;
-        if( isVBAEnabled() && !bVBATranslationAlreadyDone )
-        {
-            OUString aMsg = pInst->GetErrorMsg();
-            sal_Int32 nVBAErrorNumber = translateErrorToVba( nError, aMsg );
-            SbxVariable* pSbxErrObjVar = SbxErrObject::getErrObject().get();
-            SbxErrObject* pGlobErr = static_cast< SbxErrObject* >( pSbxErrObjVar );
-            if( pGlobErr != nullptr )
-            {
-                pGlobErr->setNumberAndDescription( nVBAErrorNumber, aMsg );
-            }
-            pInst->aErrorMsg = aMsg;
-            nError = ERRCODE_BASIC_COMPAT;
-        }
+        pGlobErr->setNumberAndDescription( nVBAErrorNumber, aMsg );
     }
+    pInst->aErrorMsg = aMsg;
+    nError = ERRCODE_BASIC_COMPAT;
 }
 
 void SbiRuntime::Error( ErrCode _errCode, const OUString& _details )
 {
-    if ( _errCode )
+    if ( !_errCode )
+        return;
+
+    // Not correct for class module usage, remove for now
+    //OSL_WARN_IF( pInst->pRun != this, "basic", "SbiRuntime::Error: can't propagate the error message details!" );
+    if ( pInst->pRun == this )
     {
-        // Not correct for class module usage, remove for now
-        //OSL_WARN_IF( pInst->pRun != this, "basic", "SbiRuntime::Error: can't propagate the error message details!" );
-        if ( pInst->pRun == this )
-        {
-            pInst->Error( _errCode, _details );
-            //OSL_WARN_IF( nError != _errCode, "basic", "SbiRuntime::Error: the instance is expected to propagate the error code back to me!" );
-        }
-        else
-        {
-            nError = _errCode;
-        }
+        pInst->Error( _errCode, _details );
+        //OSL_WARN_IF( nError != _errCode, "basic", "SbiRuntime::Error: the instance is expected to propagate the error code back to me!" );
+    }
+    else
+    {
+        nError = _errCode;
     }
 }
 
@@ -2928,19 +2928,19 @@ void SbiRuntime::StepPAD( sal_uInt32 nOp1 )
     SbxVariable* p = GetTOS();
     OUString s = p->GetOUString();
     sal_Int32 nLen(nOp1);
-    if( s.getLength() != nLen )
+    if( s.getLength() == nLen )
+        return;
+
+    OUStringBuffer aBuf(s);
+    if (aBuf.getLength() > nLen)
     {
-        OUStringBuffer aBuf(s);
-        if (aBuf.getLength() > nLen)
-        {
-            comphelper::string::truncateToLength(aBuf, nLen);
-        }
-        else
-        {
-            comphelper::string::padToLength(aBuf, nLen, ' ');
-        }
-        s = aBuf.makeStringAndClear();
+        comphelper::string::truncateToLength(aBuf, nLen);
     }
+    else
+    {
+        comphelper::string::padToLength(aBuf, nLen, ' ');
+    }
+    s = aBuf.makeStringAndClear();
 }
 
 // jump (+target)
@@ -4355,52 +4355,53 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         return;
     }
 
-    if (SbxDimArray* pArray = dynamic_cast<SbxDimArray*>(pObj))
+    SbxDimArray* pArray = dynamic_cast<SbxDimArray*>(pObj);
+    if (!pArray)
+        return;
+
+    const sal_Int32 nDims = pArray->GetDims32();
+    sal_Int32 nTotalSize = nDims > 0 ? 1 : 0;
+
+    // must be a one-dimensional array
+    sal_Int32 nLower, nUpper;
+    for( sal_Int32 i = 0 ; i < nDims ; ++i )
     {
-        const sal_Int32 nDims = pArray->GetDims32();
-        sal_Int32 nTotalSize = nDims > 0 ? 1 : 0;
+        pArray->GetDim32( i+1, nLower, nUpper );
+        const sal_Int32 nSize = nUpper - nLower + 1;
+        nTotalSize *= nSize;
+    }
 
-        // must be a one-dimensional array
-        sal_Int32 nLower, nUpper;
-        for( sal_Int32 i = 0 ; i < nDims ; ++i )
+    // Optimization: pre-allocate underlying container
+    if (nTotalSize > 0)
+        pArray->SbxArray::GetRef32(nTotalSize - 1);
+
+    // First, fill those parts of the array that are preserved
+    bool bWasError = false;
+    const bool bRestored = implRestorePreservedArray(pArray, refRedimpArray, &bWasError);
+    if (bWasError)
+        nTotalSize = 0; // on error, don't create objects
+
+    // create objects and insert them into the array
+    OUString aClass( pImg->GetString( static_cast<short>( nOp2 ) ) );
+    OUString aName;
+    for( sal_Int32 i = 0 ; i < nTotalSize ; ++i )
+    {
+        if (!bRestored || !pArray->SbxArray::GetRef32(i)) // For those left unset after preserve
         {
-            pArray->GetDim32( i+1, nLower, nUpper );
-            const sal_Int32 nSize = nUpper - nLower + 1;
-            nTotalSize *= nSize;
-        }
-
-        // Optimization: pre-allocate underlying container
-        if (nTotalSize > 0)
-            pArray->SbxArray::GetRef32(nTotalSize - 1);
-
-        // First, fill those parts of the array that are preserved
-        bool bWasError = false;
-        const bool bRestored = implRestorePreservedArray(pArray, refRedimpArray, &bWasError);
-        if (bWasError)
-            nTotalSize = 0; // on error, don't create objects
-
-        // create objects and insert them into the array
-        OUString aClass( pImg->GetString( static_cast<short>( nOp2 ) ) );
-        OUString aName;
-        for( sal_Int32 i = 0 ; i < nTotalSize ; ++i )
-        {
-            if (!bRestored || !pArray->SbxArray::GetRef32(i)) // For those left unset after preserve
+            SbxObject* pClassObj = SbxBase::CreateObject(aClass);
+            if (!pClassObj)
             {
-                SbxObject* pClassObj = SbxBase::CreateObject(aClass);
-                if (!pClassObj)
-                {
-                    Error(ERRCODE_BASIC_INVALID_OBJECT);
-                    break;
-                }
-                else
-                {
-                    if (aName.isEmpty())
-                        aName = pImg->GetString(static_cast<short>(nOp1));
-                    pClassObj->SetName(aName);
-                    // the object must be able to call the basic
-                    pClassObj->SetParent(&rBasic);
-                    pArray->SbxArray::Put32(pClassObj, i);
-                }
+                Error(ERRCODE_BASIC_INVALID_OBJECT);
+                break;
+            }
+            else
+            {
+                if (aName.isEmpty())
+                    aName = pImg->GetString(static_cast<short>(nOp1));
+                pClassObj->SetName(aName);
+                // the object must be able to call the basic
+                pClassObj->SetParent(&rBasic);
+                pArray->SbxArray::Put32(pClassObj, i);
             }
         }
     }

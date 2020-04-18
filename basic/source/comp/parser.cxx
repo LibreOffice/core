@@ -211,19 +211,19 @@ void SbiParser::OpenBlock( SbiToken eTok, SbiExprNode* pVar )
 
 void SbiParser::CloseBlock()
 {
-    if( pStack )
-    {
-        SbiParseStack* p = pStack;
+    if( !pStack )
+        return;
 
-        // #29955 service the for-loop level
-        if( p->eExitTok == FOR )
-            aGen.DecForLevel();
+    SbiParseStack* p = pStack;
 
-        aGen.BackChain( p->nChain );
-        pStack = p->pNext;
-        pWithVar = p->pWithVar;
-        delete p;
-    }
+    // #29955 service the for-loop level
+    if( p->eExitTok == FOR )
+        aGen.DecForLevel();
+
+    aGen.BackChain( p->nChain );
+    pStack = p->pNext;
+    pWithVar = p->pWithVar;
+    delete p;
 }
 
 // EXIT ...
@@ -525,37 +525,37 @@ void SbiParser::Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo )
         }
     }
     aVar.Gen( eRecMode );
-    if( !bSpecialMidHandling )
+    if( bSpecialMidHandling )
+        return;
+
+    if( !bEQ )
     {
-        if( !bEQ )
+        aGen.Gen( SbiOpcode::GET_ );
+    }
+    else
+    {
+        // so it must be an assignment!
+        if( !aVar.IsLvalue() )
+            Error( ERRCODE_BASIC_LVALUE_EXPECTED );
+        TestToken( EQ );
+        SbiExpression aExpr( this );
+        aExpr.Gen();
+        SbiOpcode eOp = SbiOpcode::PUT_;
+        if( pDef )
         {
-            aGen.Gen( SbiOpcode::GET_ );
-        }
-        else
-        {
-            // so it must be an assignment!
-            if( !aVar.IsLvalue() )
-                Error( ERRCODE_BASIC_LVALUE_EXPECTED );
-            TestToken( EQ );
-            SbiExpression aExpr( this );
-            aExpr.Gen();
-            SbiOpcode eOp = SbiOpcode::PUT_;
-            if( pDef )
+            if( pDef->GetConstDef() )
+                Error( ERRCODE_BASIC_DUPLICATE_DEF, pDef->GetName() );
+            if( pDef->GetType() == SbxOBJECT )
             {
-                if( pDef->GetConstDef() )
-                    Error( ERRCODE_BASIC_DUPLICATE_DEF, pDef->GetName() );
-                if( pDef->GetType() == SbxOBJECT )
+                eOp = SbiOpcode::SET_;
+                if( pDef->GetTypeId() )
                 {
-                    eOp = SbiOpcode::SET_;
-                    if( pDef->GetTypeId() )
-                    {
-                        aGen.Gen( SbiOpcode::SETCLASS_, pDef->GetTypeId() );
-                        return;
-                    }
+                    aGen.Gen( SbiOpcode::SETCLASS_, pDef->GetTypeId() );
+                    return;
                 }
             }
-            aGen.Gen( eOp );
         }
+        aGen.Gen( eOp );
     }
 }
 

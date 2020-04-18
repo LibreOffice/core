@@ -106,26 +106,26 @@ SbiStream::~SbiStream()
 
 void SbiStream::MapError()
 {
-    if( pStrm )
-    {
-        ErrCode nEC = pStrm->GetError();
-        if (nEC == ERRCODE_NONE)
-            nError = ERRCODE_NONE;
-        else if (nEC == SVSTREAM_FILE_NOT_FOUND)
-            nError = ERRCODE_BASIC_FILE_NOT_FOUND;
-        else if (nEC ==SVSTREAM_PATH_NOT_FOUND)
-            nError = ERRCODE_BASIC_PATH_NOT_FOUND;
-        else if (nEC ==SVSTREAM_TOO_MANY_OPEN_FILES)
-            nError = ERRCODE_BASIC_TOO_MANY_FILES;
-        else if (nEC ==SVSTREAM_ACCESS_DENIED)
-            nError = ERRCODE_BASIC_ACCESS_DENIED;
-        else if (nEC ==SVSTREAM_INVALID_PARAMETER)
-            nError = ERRCODE_BASIC_BAD_ARGUMENT;
-        else if (nEC ==SVSTREAM_OUTOFMEMORY)
-            nError = ERRCODE_BASIC_NO_MEMORY;
-        else
-            nError = ERRCODE_BASIC_IO_ERROR;
-    }
+    if( !pStrm )
+        return;
+
+    ErrCode nEC = pStrm->GetError();
+    if (nEC == ERRCODE_NONE)
+        nError = ERRCODE_NONE;
+    else if (nEC == SVSTREAM_FILE_NOT_FOUND)
+        nError = ERRCODE_BASIC_FILE_NOT_FOUND;
+    else if (nEC ==SVSTREAM_PATH_NOT_FOUND)
+        nError = ERRCODE_BASIC_PATH_NOT_FOUND;
+    else if (nEC ==SVSTREAM_TOO_MANY_OPEN_FILES)
+        nError = ERRCODE_BASIC_TOO_MANY_FILES;
+    else if (nEC ==SVSTREAM_ACCESS_DENIED)
+        nError = ERRCODE_BASIC_ACCESS_DENIED;
+    else if (nEC ==SVSTREAM_INVALID_PARAMETER)
+        nError = ERRCODE_BASIC_BAD_ARGUMENT;
+    else if (nEC ==SVSTREAM_OUTOFMEMORY)
+        nError = ERRCODE_BASIC_NO_MEMORY;
+    else
+        nError = ERRCODE_BASIC_IO_ERROR;
 }
 
 // Returns sal_True if UNO is available, otherwise the old file
@@ -543,23 +543,23 @@ ErrCode const & SbiStream::Read( char& ch )
 
 void SbiStream::ExpandFile()
 {
-    if ( nExpandOnWriteTo )
+    if ( !nExpandOnWriteTo )
+        return;
+
+    sal_uInt64 nCur = pStrm->Seek(STREAM_SEEK_TO_END);
+    if( nCur < nExpandOnWriteTo )
     {
-        sal_uInt64 nCur = pStrm->Seek(STREAM_SEEK_TO_END);
-        if( nCur < nExpandOnWriteTo )
+        sal_uInt64 nDiff = nExpandOnWriteTo - nCur;
+        while( nDiff-- )
         {
-            sal_uInt64 nDiff = nExpandOnWriteTo - nCur;
-            while( nDiff-- )
-            {
-                pStrm->WriteChar( 0 );
-            }
+            pStrm->WriteChar( 0 );
         }
-        else
-        {
-            pStrm->Seek( nExpandOnWriteTo );
-        }
-        nExpandOnWriteTo = 0;
     }
+    else
+    {
+        pStrm->Seek( nExpandOnWriteTo );
+    }
+    nExpandOnWriteTo = 0;
 }
 
 namespace
@@ -811,37 +811,37 @@ void SbiIoSystem::WriteCon(const OUString& rText)
     aOut += rText;
     sal_Int32 n1 = aOut.indexOf('\n');
     sal_Int32 n2 = aOut.indexOf('\r');
-    if( n1 != -1 || n2 != -1 )
-    {
-        if( n1 == -1 )
-        {
-            n1 = n2;
-        }
-        else if( n2 == -1 )
-        {
-            n2 = n1;
-        }
-        if( n1 > n2 )
-        {
-            n1 = n2;
-        }
-        OUString s(aOut.copy(0, n1));
-        aOut = aOut.copy(n1);
-        while ( !aOut.isEmpty() && (aOut[0] == '\n' || aOut[0] == '\r') )
-        {
-            aOut = aOut.copy(1);
-        }
-        {
-            SolarMutexGuard aSolarGuard;
+    if( n1 == -1 && n2 == -1 )
+        return;
 
-            vcl::Window* pParent = Application::GetDefDialogParent();
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent ? pParent->GetFrameWeld() : nullptr, VclMessageType::Warning,
-                VclButtonsType::OkCancel, s));
-            xBox->set_default_response(RET_OK);
-            if (!xBox->run())
-            {
-                nError = ERRCODE_BASIC_USER_ABORT;
-            }
+    if( n1 == -1 )
+    {
+        n1 = n2;
+    }
+    else if( n2 == -1 )
+    {
+        n2 = n1;
+    }
+    if( n1 > n2 )
+    {
+        n1 = n2;
+    }
+    OUString s(aOut.copy(0, n1));
+    aOut = aOut.copy(n1);
+    while ( !aOut.isEmpty() && (aOut[0] == '\n' || aOut[0] == '\r') )
+    {
+        aOut = aOut.copy(1);
+    }
+    {
+        SolarMutexGuard aSolarGuard;
+
+        vcl::Window* pParent = Application::GetDefDialogParent();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent ? pParent->GetFrameWeld() : nullptr, VclMessageType::Warning,
+            VclButtonsType::OkCancel, s));
+        xBox->set_default_response(RET_OK);
+        if (!xBox->run())
+        {
+            nError = ERRCODE_BASIC_USER_ABORT;
         }
     }
 }

@@ -146,42 +146,42 @@ SbxArray* SbxVariable::GetParameters() const
 
 void SbxVariable::Broadcast( SfxHintId nHintId )
 {
-    if( mpBroadcaster && !IsSet( SbxFlagBits::NoBroadcast ) )
+    if( !(mpBroadcaster && !IsSet( SbxFlagBits::NoBroadcast )) )
+        return;
+
+    // Because the method could be called from outside, check the
+    // rights here again
+    if( nHintId == SfxHintId::BasicDataWanted )
     {
-        // Because the method could be called from outside, check the
-        // rights here again
-        if( nHintId == SfxHintId::BasicDataWanted )
+        if( !CanRead() )
         {
-            if( !CanRead() )
-            {
-                return;
-            }
+            return;
         }
-        if( nHintId == SfxHintId::BasicDataChanged )
-        {
-            if( !CanWrite() )
-            {
-                return;
-            }
-        }
-
-        //fdo#86843 Add a ref during the following block to guard against
-        //getting deleted before completing this method
-        SbxVariableRef aBroadcastGuard(this);
-
-        // Avoid further broadcasting
-        std::unique_ptr<SfxBroadcaster> pSave = std::move(mpBroadcaster);
-        SbxFlagBits nSaveFlags = GetFlags();
-        SetFlag( SbxFlagBits::ReadWrite );
-        if( mpPar.is() )
-        {
-            // Register this as element 0, but don't change over the parent!
-            mpPar->GetRef32( 0 ) = this;
-        }
-        pSave->Broadcast( SbxHint( nHintId, this ) );
-        mpBroadcaster = std::move(pSave);
-        SetFlags( nSaveFlags );
     }
+    if( nHintId == SfxHintId::BasicDataChanged )
+    {
+        if( !CanWrite() )
+        {
+            return;
+        }
+    }
+
+    //fdo#86843 Add a ref during the following block to guard against
+    //getting deleted before completing this method
+    SbxVariableRef aBroadcastGuard(this);
+
+    // Avoid further broadcasting
+    std::unique_ptr<SfxBroadcaster> pSave = std::move(mpBroadcaster);
+    SbxFlagBits nSaveFlags = GetFlags();
+    SetFlag( SbxFlagBits::ReadWrite );
+    if( mpPar.is() )
+    {
+        // Register this as element 0, but don't change over the parent!
+        mpPar->GetRef32( 0 ) = this;
+    }
+    pSave->Broadcast( SbxHint( nHintId, this ) );
+    mpBroadcaster = std::move(pSave);
+    SetFlags( nSaveFlags );
 }
 
 SbxInfo* SbxVariable::GetInfo()

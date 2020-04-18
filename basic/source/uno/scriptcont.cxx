@@ -484,40 +484,40 @@ void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& 
         }
     }
 
-    if( bKillCryptedFiles || bKillUncryptedFiles )
+    if( !(bKillCryptedFiles || bKillUncryptedFiles) )
+        return;
+
+    Sequence< OUString > aElementNames = pImplLib->getElementNames();
+    sal_Int32 nNameCount = aElementNames.getLength();
+    const OUString* pNames = aElementNames.getConstArray();
+    OUString aLibDirPath = createAppLibraryFolder( pImplLib, Name );
+    try
     {
-        Sequence< OUString > aElementNames = pImplLib->getElementNames();
-        sal_Int32 nNameCount = aElementNames.getLength();
-        const OUString* pNames = aElementNames.getConstArray();
-        OUString aLibDirPath = createAppLibraryFolder( pImplLib, Name );
-        try
+        for( sal_Int32 i = 0 ; i < nNameCount ; i++ )
         {
-            for( sal_Int32 i = 0 ; i < nNameCount ; i++ )
+            OUString aElementName = pNames[ i ];
+
+            INetURLObject aElementInetObj( aLibDirPath );
+            aElementInetObj.insertName( aElementName, false,
+                                        INetURLObject::LAST_SEGMENT,
+                                        INetURLObject::EncodeMechanism::All );
+            if( bKillUncryptedFiles )
             {
-                OUString aElementName = pNames[ i ];
+                aElementInetObj.setExtension( maLibElementFileExtension );
+            }
+            else
+            {
+                aElementInetObj.setExtension( "pba" );
+            }
+            OUString aElementPath( aElementInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
-                INetURLObject aElementInetObj( aLibDirPath );
-                aElementInetObj.insertName( aElementName, false,
-                                            INetURLObject::LAST_SEGMENT,
-                                            INetURLObject::EncodeMechanism::All );
-                if( bKillUncryptedFiles )
-                {
-                    aElementInetObj.setExtension( maLibElementFileExtension );
-                }
-                else
-                {
-                    aElementInetObj.setExtension( "pba" );
-                }
-                OUString aElementPath( aElementInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
-
-                if( mxSFI->exists( aElementPath ) )
-                {
-                    mxSFI->kill( aElementPath );
-                }
+            if( mxSFI->exists( aElementPath ) )
+            {
+                mxSFI->kill( aElementPath );
             }
         }
-        catch(const Exception& ) {}
     }
+    catch(const Exception& ) {}
 }
 
 

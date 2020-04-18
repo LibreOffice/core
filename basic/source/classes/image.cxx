@@ -589,33 +589,33 @@ void SbiImage::AddString( const OUString& r )
     {
         bError = true;
     }
+    if( bError )
+        return;
+
+    sal_Int32  len = r.getLength() + 1;
+    sal_uInt32 needed = nStringOff + len;
+    if( needed > 0xFFFFFF00 )
+    {
+        bError = true;  // out of mem!
+    }
+    else if( needed > nStringSize )
+    {
+        sal_uInt32 nNewLen = needed + 1024;
+        nNewLen &= 0xFFFFFC00;  // trim to 1K border
+        std::unique_ptr<sal_Unicode[]> p(new sal_Unicode[nNewLen]);
+        memcpy( p.get(), pStrings.get(), nStringSize * sizeof( sal_Unicode ) );
+        pStrings = std::move(p);
+        nStringSize = sal::static_int_cast< sal_uInt16 >(nNewLen);
+    }
     if( !bError )
     {
-        sal_Int32  len = r.getLength() + 1;
-        sal_uInt32 needed = nStringOff + len;
-        if( needed > 0xFFFFFF00 )
+        mvStringOffsets[ nStringIdx++ ] = nStringOff;
+        memcpy( pStrings.get() + nStringOff, r.getStr(), len * sizeof( sal_Unicode ) );
+        nStringOff = nStringOff + len;
+        // Last String? The update the size of the buffer
+        if( nStringIdx >= short(mvStringOffsets.size()) )
         {
-            bError = true;  // out of mem!
-        }
-        else if( needed > nStringSize )
-        {
-            sal_uInt32 nNewLen = needed + 1024;
-            nNewLen &= 0xFFFFFC00;  // trim to 1K border
-            std::unique_ptr<sal_Unicode[]> p(new sal_Unicode[nNewLen]);
-            memcpy( p.get(), pStrings.get(), nStringSize * sizeof( sal_Unicode ) );
-            pStrings = std::move(p);
-            nStringSize = sal::static_int_cast< sal_uInt16 >(nNewLen);
-        }
-        if( !bError )
-        {
-            mvStringOffsets[ nStringIdx++ ] = nStringOff;
-            memcpy( pStrings.get() + nStringOff, r.getStr(), len * sizeof( sal_Unicode ) );
-            nStringOff = nStringOff + len;
-            // Last String? The update the size of the buffer
-            if( nStringIdx >= short(mvStringOffsets.size()) )
-            {
-                nStringSize = nStringOff;
-            }
+            nStringSize = nStringOff;
         }
     }
 }
