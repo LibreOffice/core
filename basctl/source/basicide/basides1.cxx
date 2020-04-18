@@ -1120,75 +1120,75 @@ bool Shell::HasUIFeature(SfxShellFeature nFeature) const
 
 void Shell::SetCurWindow( BaseWindow* pNewWin, bool bUpdateTabBar, bool bRememberAsCurrent )
 {
-    if ( pNewWin != pCurWin )
+    if ( pNewWin == pCurWin )
+        return;
+
+    pCurWin = pNewWin;
+    if (pLayout)
+        pLayout->Deactivating();
+    if (pCurWin)
     {
-        pCurWin = pNewWin;
-        if (pLayout)
-            pLayout->Deactivating();
-        if (pCurWin)
-        {
-            if (pCurWin->GetType() == TYPE_MODULE)
-                pLayout = pModulLayout.get();
-            else
-                pLayout = pDialogLayout.get();
-            AdjustPosSizePixel(Point(0, 0), GetViewFrame()->GetWindow().GetOutputSizePixel());
-            pLayout->Activating(*pCurWin);
-            GetViewFrame()->GetWindow().SetHelpId(pCurWin->GetHid());
-            if (bRememberAsCurrent)
-                pCurWin->InsertLibInfo();
-            if (GetViewFrame()->GetWindow().IsVisible()) // SFX will do it later otherwise
-                pCurWin->Show();
-            pCurWin->Init();
-            if (!GetExtraData()->ShellInCriticalSection())
-            {
-                vcl::Window* pFrameWindow = &GetViewFrame()->GetWindow();
-                vcl::Window* pFocusWindow = Application::GetFocusWindow();
-                while ( pFocusWindow && ( pFocusWindow != pFrameWindow ) )
-                    pFocusWindow = pFocusWindow->GetParent();
-                if ( pFocusWindow ) // Focus in BasicIDE
-                    pCurWin->GrabFocus();
-            }
-        }
+        if (pCurWin->GetType() == TYPE_MODULE)
+            pLayout = pModulLayout.get();
         else
+            pLayout = pDialogLayout.get();
+        AdjustPosSizePixel(Point(0, 0), GetViewFrame()->GetWindow().GetOutputSizePixel());
+        pLayout->Activating(*pCurWin);
+        GetViewFrame()->GetWindow().SetHelpId(pCurWin->GetHid());
+        if (bRememberAsCurrent)
+            pCurWin->InsertLibInfo();
+        if (GetViewFrame()->GetWindow().IsVisible()) // SFX will do it later otherwise
+            pCurWin->Show();
+        pCurWin->Init();
+        if (!GetExtraData()->ShellInCriticalSection())
         {
-            SetWindow(pLayout);
-            pLayout = nullptr;
+            vcl::Window* pFrameWindow = &GetViewFrame()->GetWindow();
+            vcl::Window* pFocusWindow = Application::GetFocusWindow();
+            while ( pFocusWindow && ( pFocusWindow != pFrameWindow ) )
+                pFocusWindow = pFocusWindow->GetParent();
+            if ( pFocusWindow ) // Focus in BasicIDE
+                pCurWin->GrabFocus();
         }
-        if ( bUpdateTabBar )
-        {
-            sal_uInt16 nKey = GetWindowId( pCurWin );
-            if ( pCurWin && ( pTabBar->GetPagePos( nKey ) == TabBar::PAGE_NOT_FOUND ) )
-                pTabBar->InsertPage( nKey, pCurWin->GetTitle() );   // has just been faded in
-            pTabBar->SetCurPageId( nKey );
-        }
-        if ( pCurWin && pCurWin->IsSuspended() )    // if the window is shown in the case of an error...
-            pCurWin->SetStatus( pCurWin->GetStatus() & ~BASWIN_SUSPENDED );
-        if ( pCurWin )
-        {
-            SetWindow( pCurWin );
-            if ( pCurWin->GetDocument().isDocument() )
-                SfxObjectShell::SetCurrentComponent( pCurWin->GetDocument().getDocument() );
-        }
-        else if (pLayout)
-        {
-            SetWindow(pLayout);
-            GetViewFrame()->GetWindow().SetHelpId( HID_BASICIDE_MODULWINDOW );
-            SfxObjectShell::SetCurrentComponent(nullptr);
-        }
-        aObjectCatalog->SetCurrentEntry(pCurWin);
-        SetUndoManager( pCurWin ? pCurWin->GetUndoManager() : nullptr );
-        InvalidateBasicIDESlots();
-        InvalidateControlSlots();
-        EnableScrollbars(pCurWin != nullptr);
-
-        if ( m_pCurLocalizationMgr )
-            m_pCurLocalizationMgr->handleTranslationbar();
-
-        ManageToolbars();
-
-        // fade out (in) property browser in module (dialog) windows
-        UIFeatureChanged();
     }
+    else
+    {
+        SetWindow(pLayout);
+        pLayout = nullptr;
+    }
+    if ( bUpdateTabBar )
+    {
+        sal_uInt16 nKey = GetWindowId( pCurWin );
+        if ( pCurWin && ( pTabBar->GetPagePos( nKey ) == TabBar::PAGE_NOT_FOUND ) )
+            pTabBar->InsertPage( nKey, pCurWin->GetTitle() );   // has just been faded in
+        pTabBar->SetCurPageId( nKey );
+    }
+    if ( pCurWin && pCurWin->IsSuspended() )    // if the window is shown in the case of an error...
+        pCurWin->SetStatus( pCurWin->GetStatus() & ~BASWIN_SUSPENDED );
+    if ( pCurWin )
+    {
+        SetWindow( pCurWin );
+        if ( pCurWin->GetDocument().isDocument() )
+            SfxObjectShell::SetCurrentComponent( pCurWin->GetDocument().getDocument() );
+    }
+    else if (pLayout)
+    {
+        SetWindow(pLayout);
+        GetViewFrame()->GetWindow().SetHelpId( HID_BASICIDE_MODULWINDOW );
+        SfxObjectShell::SetCurrentComponent(nullptr);
+    }
+    aObjectCatalog->SetCurrentEntry(pCurWin);
+    SetUndoManager( pCurWin ? pCurWin->GetUndoManager() : nullptr );
+    InvalidateBasicIDESlots();
+    InvalidateControlSlots();
+    EnableScrollbars(pCurWin != nullptr);
+
+    if ( m_pCurLocalizationMgr )
+        m_pCurLocalizationMgr->handleTranslationbar();
+
+    ManageToolbars();
+
+    // fade out (in) property browser in module (dialog) windows
+    UIFeatureChanged();
 }
 
 void Shell::ManageToolbars()
@@ -1203,33 +1203,33 @@ void Shell::ManageToolbars()
 
     Reference< beans::XPropertySet > xFrameProps
         ( GetViewFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
-    if ( xFrameProps.is() )
+    if ( !xFrameProps.is() )
+        return;
+
+    Reference< css::frame::XLayoutManager > xLayoutManager;
+    uno::Any a = xFrameProps->getPropertyValue( "LayoutManager" );
+    a >>= xLayoutManager;
+    if ( !xLayoutManager.is() )
+        return;
+
+    xLayoutManager->lock();
+    if (dynamic_cast<DialogWindow*>(pCurWin.get()))
     {
-        Reference< css::frame::XLayoutManager > xLayoutManager;
-        uno::Any a = xFrameProps->getPropertyValue( "LayoutManager" );
-        a >>= xLayoutManager;
-        if ( xLayoutManager.is() )
-        {
-            xLayoutManager->lock();
-            if (dynamic_cast<DialogWindow*>(pCurWin.get()))
-            {
-                xLayoutManager->destroyElement( aMacroBarResName );
+        xLayoutManager->destroyElement( aMacroBarResName );
 
-                xLayoutManager->requestElement( aDialogBarResName );
-                xLayoutManager->requestElement( aInsertControlsBarResName );
-                xLayoutManager->requestElement( aFormControlsBarResName );
-            }
-            else
-            {
-                xLayoutManager->destroyElement( aDialogBarResName );
-                xLayoutManager->destroyElement( aInsertControlsBarResName );
-                xLayoutManager->destroyElement( aFormControlsBarResName );
-
-                xLayoutManager->requestElement( aMacroBarResName );
-            }
-            xLayoutManager->unlock();
-        }
+        xLayoutManager->requestElement( aDialogBarResName );
+        xLayoutManager->requestElement( aInsertControlsBarResName );
+        xLayoutManager->requestElement( aFormControlsBarResName );
     }
+    else
+    {
+        xLayoutManager->destroyElement( aDialogBarResName );
+        xLayoutManager->destroyElement( aInsertControlsBarResName );
+        xLayoutManager->destroyElement( aFormControlsBarResName );
+
+        xLayoutManager->requestElement( aMacroBarResName );
+    }
+    xLayoutManager->unlock();
 }
 
 VclPtr<BaseWindow> Shell::FindApplicationWindow()

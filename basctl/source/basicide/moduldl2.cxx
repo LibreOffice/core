@@ -354,51 +354,51 @@ LibPage::~LibPage()
 void LibPage::CheckButtons()
 {
     std::unique_ptr<weld::TreeIter> xCur(m_xLibBox->make_iterator());
-    if (m_xLibBox->get_cursor(xCur.get()))
+    if (!m_xLibBox->get_cursor(xCur.get()))
+        return;
+
+    OUString aLibName = m_xLibBox->get_text(*xCur, 0);
+    Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
+    Reference< script::XLibraryContainer2 > xDlgLibContainer( m_aCurDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
+
+    if ( m_eCurLocation == LIBRARY_LOCATION_SHARE )
     {
-        OUString aLibName = m_xLibBox->get_text(*xCur, 0);
-        Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
-        Reference< script::XLibraryContainer2 > xDlgLibContainer( m_aCurDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
-
-        if ( m_eCurLocation == LIBRARY_LOCATION_SHARE )
-        {
-            m_xPasswordButton->set_sensitive(false);
-            m_xNewLibButton->set_sensitive(false);
-            m_xInsertLibButton->set_sensitive(false);
+        m_xPasswordButton->set_sensitive(false);
+        m_xNewLibButton->set_sensitive(false);
+        m_xInsertLibButton->set_sensitive(false);
+        m_xDelButton->set_sensitive(false);
+    }
+    else if ( aLibName.equalsIgnoreAsciiCase( "Standard" ) )
+    {
+        m_xPasswordButton->set_sensitive(false);
+        m_xNewLibButton->set_sensitive(true);
+        m_xInsertLibButton->set_sensitive(true);
+        m_xExportButton->set_sensitive(false);
+        m_xDelButton->set_sensitive(false);
+    }
+    else if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryReadOnly( aLibName ) ) ||
+              ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) ) )
+    {
+        m_xPasswordButton->set_sensitive(false);
+        m_xNewLibButton->set_sensitive(true);
+        m_xInsertLibButton->set_sensitive(true);
+        if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryReadOnly( aLibName ) && !xModLibContainer->isLibraryLink( aLibName ) ) ||
+             ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) && !xDlgLibContainer->isLibraryLink( aLibName ) ) )
             m_xDelButton->set_sensitive(false);
-        }
-        else if ( aLibName.equalsIgnoreAsciiCase( "Standard" ) )
-        {
-            m_xPasswordButton->set_sensitive(false);
-            m_xNewLibButton->set_sensitive(true);
-            m_xInsertLibButton->set_sensitive(true);
-            m_xExportButton->set_sensitive(false);
-            m_xDelButton->set_sensitive(false);
-        }
-        else if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryReadOnly( aLibName ) ) ||
-                  ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) ) )
-        {
-            m_xPasswordButton->set_sensitive(false);
-            m_xNewLibButton->set_sensitive(true);
-            m_xInsertLibButton->set_sensitive(true);
-            if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryReadOnly( aLibName ) && !xModLibContainer->isLibraryLink( aLibName ) ) ||
-                 ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) && !xDlgLibContainer->isLibraryLink( aLibName ) ) )
-                m_xDelButton->set_sensitive(false);
-            else
-                m_xDelButton->set_sensitive(true);
-        }
         else
-        {
-            if ( xModLibContainer.is() && !xModLibContainer->hasByName( aLibName ) )
-                m_xPasswordButton->set_sensitive(false);
-            else
-                m_xPasswordButton->set_sensitive(true);
-
-            m_xNewLibButton->set_sensitive(true);
-            m_xInsertLibButton->set_sensitive(true);
-            m_xExportButton->set_sensitive(true);
             m_xDelButton->set_sensitive(true);
-        }
+    }
+    else
+    {
+        if ( xModLibContainer.is() && !xModLibContainer->hasByName( aLibName ) )
+            m_xPasswordButton->set_sensitive(false);
+        else
+            m_xPasswordButton->set_sensitive(true);
+
+        m_xNewLibButton->set_sensitive(true);
+        m_xInsertLibButton->set_sensitive(true);
+        m_xExportButton->set_sensitive(true);
+        m_xDelButton->set_sensitive(true);
     }
 }
 
@@ -931,22 +931,22 @@ void LibPage::Export()
     }
 
     std::unique_ptr<ExportDialog> xNewDlg(new ExportDialog(m_pDialog->getDialog()));
-    if (xNewDlg->run() == RET_OK)
+    if (xNewDlg->run() != RET_OK)
+        return;
+
+    try
     {
-        try
-        {
-            bool bExportAsPackage = xNewDlg->isExportAsPackage();
-            //tdf#112063 ensure closing xNewDlg is not selected as
-            //parent of file dialog from ExportAs...
-            xNewDlg.reset();
-            if (bExportAsPackage)
-                ExportAsPackage( aLibName );
-            else
-                ExportAsBasic( aLibName );
-        }
-        catch(const util::VetoException& ) // user canceled operation
-        {
-        }
+        bool bExportAsPackage = xNewDlg->isExportAsPackage();
+        //tdf#112063 ensure closing xNewDlg is not selected as
+        //parent of file dialog from ExportAs...
+        xNewDlg.reset();
+        if (bExportAsPackage)
+            ExportAsPackage( aLibName );
+        else
+            ExportAsBasic( aLibName );
+    }
+    catch(const util::VetoException& ) // user canceled operation
+    {
     }
 }
 
@@ -1031,90 +1031,90 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
     }
     xFP->setCurrentFilter( aTitle );
 
-    if ( xFP->execute() == RET_OK )
-    {
-        GetExtraData()->SetAddLibPath(xFP->getDisplayDirectory());
+    if ( xFP->execute() != RET_OK )
+        return;
 
-        Sequence< OUString > aFiles = xFP->getSelectedFiles();
-        INetURLObject aURL( aFiles[0] );
-        if( aURL.getExtension().isEmpty() )
-            aURL.setExtension( "oxt" );
+    GetExtraData()->SetAddLibPath(xFP->getDisplayDirectory());
 
-        OUString aPackageURL( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+    Sequence< OUString > aFiles = xFP->getSelectedFiles();
+    INetURLObject aURL( aFiles[0] );
+    if( aURL.getExtension().isEmpty() )
+        aURL.setExtension( "oxt" );
 
-        OUString aTmpPath = SvtPathOptions().GetTempPath();
-        INetURLObject aInetObj( aTmpPath );
-        aInetObj.insertName( aLibName, true, INetURLObject::LAST_SEGMENT, INetURLObject::EncodeMechanism::All );
-        OUString aSourcePath = aInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-        if( xSFA->exists( aSourcePath ) )
-            xSFA->kill( aSourcePath );
-        Reference< task::XInteractionHandler > xDummyHandler( new DummyInteractionHandler( xHandler ) );
-        implExportLib( aLibName, aTmpPath, xDummyHandler );
+    OUString aPackageURL( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
-        Reference< XCommandEnvironment > xCmdEnv = new OLibCommandEnvironment(xHandler);
+    OUString aTmpPath = SvtPathOptions().GetTempPath();
+    INetURLObject aInetObj( aTmpPath );
+    aInetObj.insertName( aLibName, true, INetURLObject::LAST_SEGMENT, INetURLObject::EncodeMechanism::All );
+    OUString aSourcePath = aInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+    if( xSFA->exists( aSourcePath ) )
+        xSFA->kill( aSourcePath );
+    Reference< task::XInteractionHandler > xDummyHandler( new DummyInteractionHandler( xHandler ) );
+    implExportLib( aLibName, aTmpPath, xDummyHandler );
 
-        ::ucbhelper::Content sourceContent( aSourcePath, xCmdEnv, comphelper::getProcessComponentContext() );
+    Reference< XCommandEnvironment > xCmdEnv = new OLibCommandEnvironment(xHandler);
 
-        OUString destFolder = "vnd.sun.star.zip://" +
-                              ::rtl::Uri::encode( aPackageURL,
-                                                  rtl_UriCharClassRegName,
-                                                  rtl_UriEncodeIgnoreEscapes,
-                                                  RTL_TEXTENCODING_UTF8 ) +
-                              "/";
+    ::ucbhelper::Content sourceContent( aSourcePath, xCmdEnv, comphelper::getProcessComponentContext() );
 
-        if( xSFA->exists( aPackageURL ) )
-            xSFA->kill( aPackageURL );
+    OUString destFolder = "vnd.sun.star.zip://" +
+                          ::rtl::Uri::encode( aPackageURL,
+                                              rtl_UriCharClassRegName,
+                                              rtl_UriEncodeIgnoreEscapes,
+                                              RTL_TEXTENCODING_UTF8 ) +
+                          "/";
 
-        ::ucbhelper::Content destFolderContent( destFolder, xCmdEnv, comphelper::getProcessComponentContext() );
-        destFolderContent.transferContent(
-            sourceContent, ::ucbhelper::InsertOperation::Copy,
-            OUString(), NameClash::OVERWRITE );
+    if( xSFA->exists( aPackageURL ) )
+        xSFA->kill( aPackageURL );
 
-        INetURLObject aMetaInfInetObj( aTmpPath );
-        aMetaInfInetObj.insertName( "META-INF",
-            true, INetURLObject::LAST_SEGMENT, INetURLObject::EncodeMechanism::All );
-        OUString aMetaInfFolder = aMetaInfInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-        if( xSFA->exists( aMetaInfFolder ) )
-            xSFA->kill( aMetaInfFolder );
-        xSFA->createFolder( aMetaInfFolder );
+    ::ucbhelper::Content destFolderContent( destFolder, xCmdEnv, comphelper::getProcessComponentContext() );
+    destFolderContent.transferContent(
+        sourceContent, ::ucbhelper::InsertOperation::Copy,
+        OUString(), NameClash::OVERWRITE );
 
-        std::vector< Sequence<beans::PropertyValue> > manifest;
-        const OUString strMediaType = "MediaType" ;
-        const OUString strFullPath = "FullPath" ;
-        const OUString strBasicMediaType = "application/vnd.sun.star.basic-library" ;
+    INetURLObject aMetaInfInetObj( aTmpPath );
+    aMetaInfInetObj.insertName( "META-INF",
+        true, INetURLObject::LAST_SEGMENT, INetURLObject::EncodeMechanism::All );
+    OUString aMetaInfFolder = aMetaInfInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+    if( xSFA->exists( aMetaInfFolder ) )
+        xSFA->kill( aMetaInfFolder );
+    xSFA->createFolder( aMetaInfFolder );
 
-        OUString fullPath = aLibName
-                          + "/" ;
-        auto attribs(::comphelper::InitPropertySequence({
-            { strFullPath, Any(fullPath) },
-            { strMediaType, Any(strBasicMediaType) }
-        }));
-        manifest.push_back( attribs );
+    std::vector< Sequence<beans::PropertyValue> > manifest;
+    const OUString strMediaType = "MediaType" ;
+    const OUString strFullPath = "FullPath" ;
+    const OUString strBasicMediaType = "application/vnd.sun.star.basic-library" ;
 
-        // write into pipe:
-        Reference<packages::manifest::XManifestWriter> xManifestWriter = packages::manifest::ManifestWriter::create( xContext );
-        Reference<io::XOutputStream> xPipe( io::Pipe::create( xContext ), UNO_QUERY_THROW );
-        xManifestWriter->writeManifestSequence(
-            xPipe, Sequence< Sequence<beans::PropertyValue> >(
-                manifest.data(), manifest.size() ) );
+    OUString fullPath = aLibName
+                      + "/" ;
+    auto attribs(::comphelper::InitPropertySequence({
+        { strFullPath, Any(fullPath) },
+        { strMediaType, Any(strBasicMediaType) }
+    }));
+    manifest.push_back( attribs );
 
-        aMetaInfInetObj.insertName( "manifest.xml",
-            true, INetURLObject::LAST_SEGMENT, INetURLObject::EncodeMechanism::All );
+    // write into pipe:
+    Reference<packages::manifest::XManifestWriter> xManifestWriter = packages::manifest::ManifestWriter::create( xContext );
+    Reference<io::XOutputStream> xPipe( io::Pipe::create( xContext ), UNO_QUERY_THROW );
+    xManifestWriter->writeManifestSequence(
+        xPipe, Sequence< Sequence<beans::PropertyValue> >(
+            manifest.data(), manifest.size() ) );
 
-        // write buffered pipe data to content:
-        ::ucbhelper::Content manifestContent( aMetaInfInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xCmdEnv, comphelper::getProcessComponentContext() );
-        manifestContent.writeStream( Reference<io::XInputStream>( xPipe, UNO_QUERY_THROW ), true );
+    aMetaInfInetObj.insertName( "manifest.xml",
+        true, INetURLObject::LAST_SEGMENT, INetURLObject::EncodeMechanism::All );
 
-        ::ucbhelper::Content MetaInfContent( aMetaInfFolder, xCmdEnv, comphelper::getProcessComponentContext() );
-        destFolderContent.transferContent(
-            MetaInfContent, ::ucbhelper::InsertOperation::Copy,
-            OUString(), NameClash::OVERWRITE );
+    // write buffered pipe data to content:
+    ::ucbhelper::Content manifestContent( aMetaInfInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xCmdEnv, comphelper::getProcessComponentContext() );
+    manifestContent.writeStream( Reference<io::XInputStream>( xPipe, UNO_QUERY_THROW ), true );
 
-        if( xSFA->exists( aSourcePath ) )
-            xSFA->kill( aSourcePath );
-        if( xSFA->exists( aMetaInfFolder ) )
-            xSFA->kill( aMetaInfFolder );
-    }
+    ::ucbhelper::Content MetaInfContent( aMetaInfFolder, xCmdEnv, comphelper::getProcessComponentContext() );
+    destFolderContent.transferContent(
+        MetaInfContent, ::ucbhelper::InsertOperation::Copy,
+        OUString(), NameClash::OVERWRITE );
+
+    if( xSFA->exists( aSourcePath ) )
+        xSFA->kill( aSourcePath );
+    if( xSFA->exists( aMetaInfFolder ) )
+        xSFA->kill( aMetaInfFolder );
 }
 
 void LibPage::ExportAsBasic( const OUString& aLibName )
@@ -1161,24 +1161,24 @@ void LibPage::DeleteCurrent()
         bIsLibraryLink = true;
     }
 
-    if (QueryDelLib(aLibName, bIsLibraryLink, m_pDialog->getDialog()))
-    {
-        // inform BasicIDE
-        SfxUnoAnyItem aDocItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, Any( m_aCurDocument.getDocumentOrNull() ) );
-        SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
-        if (SfxDispatcher* pDispatcher = GetDispatcher())
-            pDispatcher->ExecuteList(SID_BASICIDE_LIBREMOVED,
-                      SfxCallMode::SYNCHRON, { &aDocItem, &aLibNameItem });
+    if (!QueryDelLib(aLibName, bIsLibraryLink, m_pDialog->getDialog()))
+        return;
 
-        // remove library from module and dialog library containers
-        if ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) )
-            xModLibContainer->removeLibrary( aLibName );
-        if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) )
-            xDlgLibContainer->removeLibrary( aLibName );
+    // inform BasicIDE
+    SfxUnoAnyItem aDocItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, Any( m_aCurDocument.getDocumentOrNull() ) );
+    SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
+    if (SfxDispatcher* pDispatcher = GetDispatcher())
+        pDispatcher->ExecuteList(SID_BASICIDE_LIBREMOVED,
+                  SfxCallMode::SYNCHRON, { &aDocItem, &aLibNameItem });
 
-        m_xLibBox->remove(*xCurEntry);
-        MarkDocumentModified( m_aCurDocument );
-    }
+    // remove library from module and dialog library containers
+    if ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) )
+        xModLibContainer->removeLibrary( aLibName );
+    if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) )
+        xDlgLibContainer->removeLibrary( aLibName );
+
+    m_xLibBox->remove(*xCurEntry);
+    MarkDocumentModified( m_aCurDocument );
 }
 
 void LibPage::EndTabDialog()
@@ -1208,38 +1208,38 @@ void LibPage::InsertListBoxEntry( const ScriptDocument& rDocument, LibraryLocati
 void LibPage::SetCurLib()
 {
     DocumentEntry* pEntry = reinterpret_cast<DocumentEntry*>(m_xBasicsBox->get_active_id().toInt64());
-    if (pEntry)
+    if (!pEntry)
+        return;
+
+    const ScriptDocument& aDocument( pEntry->GetDocument() );
+    DBG_ASSERT( aDocument.isAlive(), "LibPage::SetCurLib: no document, or document is dead!" );
+    if ( !aDocument.isAlive() )
+        return;
+    LibraryLocation eLocation = pEntry->GetLocation();
+    if ( aDocument == m_aCurDocument && eLocation == m_eCurLocation )
+        return;
+
+    m_aCurDocument = aDocument;
+    m_eCurLocation = eLocation;
+    m_xLibBox->clear();
+
+    // get a sorted list of library names
+    Sequence< OUString > aLibNames = aDocument.getLibraryNames();
+    sal_Int32 nLibCount = aLibNames.getLength();
+    const OUString* pLibNames = aLibNames.getConstArray();
+
+    int nEntry = 0;
+    for (int i = 0 ; i < nLibCount; ++i)
     {
-        const ScriptDocument& aDocument( pEntry->GetDocument() );
-        DBG_ASSERT( aDocument.isAlive(), "LibPage::SetCurLib: no document, or document is dead!" );
-        if ( !aDocument.isAlive() )
-            return;
-        LibraryLocation eLocation = pEntry->GetLocation();
-        if ( aDocument != m_aCurDocument || eLocation != m_eCurLocation )
-        {
-            m_aCurDocument = aDocument;
-            m_eCurLocation = eLocation;
-            m_xLibBox->clear();
-
-            // get a sorted list of library names
-            Sequence< OUString > aLibNames = aDocument.getLibraryNames();
-            sal_Int32 nLibCount = aLibNames.getLength();
-            const OUString* pLibNames = aLibNames.getConstArray();
-
-            int nEntry = 0;
-            for (int i = 0 ; i < nLibCount; ++i)
-            {
-                OUString aLibName(pLibNames[i]);
-                if (eLocation == aDocument.getLibraryLocation(aLibName))
-                    ImpInsertLibEntry(aLibName, nEntry++);
-            }
-
-            int nEntry_ = FindEntry(*m_xLibBox, "Standard");
-            if (nEntry_ == -1 && m_xLibBox->n_children())
-                nEntry_ = 0;
-            m_xLibBox->set_cursor(nEntry_);
-        }
+        OUString aLibName(pLibNames[i]);
+        if (eLocation == aDocument.getLibraryLocation(aLibName))
+            ImpInsertLibEntry(aLibName, nEntry++);
     }
+
+    int nEntry_ = FindEntry(*m_xLibBox, "Standard");
+    if (nEntry_ == -1 && m_xLibBox->n_children())
+        nEntry_ = 0;
+    m_xLibBox->set_cursor(nEntry_);
 }
 
 void LibPage::ImpInsertLibEntry( const OUString& rLibName, sal_uLong nPos )
@@ -1292,78 +1292,78 @@ void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
     NewObjectDialog aNewDlg(pWin, ObjectMode::Library);
     aNewDlg.SetObjectName(aLibName);
 
-    if (aNewDlg.run())
+    if (!aNewDlg.run())
+        return;
+
+    if (!aNewDlg.GetObjectName().isEmpty())
+        aLibName = aNewDlg.GetObjectName();
+
+    if ( aLibName.getLength() > 30 )
     {
-        if (!aNewDlg.GetObjectName().isEmpty())
-            aLibName = aNewDlg.GetObjectName();
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pWin,
+                                                       VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_LIBNAMETOLONG)));
+        xErrorBox->run();
+    }
+    else if ( !IsValidSbxName( aLibName ) )
+    {
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pWin,
+                                                       VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_BADSBXNAME)));
+        xErrorBox->run();
+    }
+    else if ( rDocument.hasLibrary( E_SCRIPTS, aLibName ) || rDocument.hasLibrary( E_DIALOGS, aLibName ) )
+    {
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pWin,
+                                                       VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_SBXNAMEALLREADYUSED2)));
+        xErrorBox->run();
+    }
+    else
+    {
+        try
+        {
+            // create module and dialog library
+            rDocument.getOrCreateLibrary( E_SCRIPTS, aLibName );
+            rDocument.getOrCreateLibrary( E_DIALOGS, aLibName );
 
-        if ( aLibName.getLength() > 30 )
-        {
-            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pWin,
-                                                           VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_LIBNAMETOLONG)));
-            xErrorBox->run();
-        }
-        else if ( !IsValidSbxName( aLibName ) )
-        {
-            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pWin,
-                                                           VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_BADSBXNAME)));
-            xErrorBox->run();
-        }
-        else if ( rDocument.hasLibrary( E_SCRIPTS, aLibName ) || rDocument.hasLibrary( E_DIALOGS, aLibName ) )
-        {
-            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pWin,
-                                                           VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_SBXNAMEALLREADYUSED2)));
-            xErrorBox->run();
-        }
-        else
-        {
-            try
+            if( pLibBox )
             {
-                // create module and dialog library
-                rDocument.getOrCreateLibrary( E_SCRIPTS, aLibName );
-                rDocument.getOrCreateLibrary( E_DIALOGS, aLibName );
+                pLibBox->append_text(aLibName);
+                pLibBox->set_cursor(pLibBox->find_text(aLibName));
+            }
 
-                if( pLibBox )
+            // create a module
+            OUString aModName = rDocument.createObjectName( E_SCRIPTS, aLibName );
+            OUString sModuleCode;
+            if ( !rDocument.createModule( aLibName, aModName, true, sModuleCode ) )
+                throw Exception("could not create module " + aModName, nullptr);
+
+            SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, TYPE_MODULE );
+            if (SfxDispatcher* pDispatcher = GetDispatcher())
+                pDispatcher->ExecuteList(SID_BASICIDE_SBXINSERTED,
+                                      SfxCallMode::SYNCHRON, { &aSbxItem });
+
+            if( pBasicBox )
+            {
+                std::unique_ptr<weld::TreeIter> xIter(pBasicBox->make_iterator(nullptr));
+                bool bValidIter = pBasicBox->get_cursor(xIter.get());
+                std::unique_ptr<weld::TreeIter> xRootEntry(pBasicBox->make_iterator(xIter.get()));
+                while (bValidIter)
                 {
-                    pLibBox->append_text(aLibName);
-                    pLibBox->set_cursor(pLibBox->find_text(aLibName));
+                    pBasicBox->copy_iterator(*xIter, *xRootEntry);
+                    bValidIter = pBasicBox->iter_parent(*xIter);
                 }
 
-                // create a module
-                OUString aModName = rDocument.createObjectName( E_SCRIPTS, aLibName );
-                OUString sModuleCode;
-                if ( !rDocument.createModule( aLibName, aModName, true, sModuleCode ) )
-                    throw Exception("could not create module " + aModName, nullptr);
-
-                SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, TYPE_MODULE );
-                if (SfxDispatcher* pDispatcher = GetDispatcher())
-                    pDispatcher->ExecuteList(SID_BASICIDE_SBXINSERTED,
-                                          SfxCallMode::SYNCHRON, { &aSbxItem });
-
-                if( pBasicBox )
-                {
-                    std::unique_ptr<weld::TreeIter> xIter(pBasicBox->make_iterator(nullptr));
-                    bool bValidIter = pBasicBox->get_cursor(xIter.get());
-                    std::unique_ptr<weld::TreeIter> xRootEntry(pBasicBox->make_iterator(xIter.get()));
-                    while (bValidIter)
-                    {
-                        pBasicBox->copy_iterator(*xIter, *xRootEntry);
-                        bValidIter = pBasicBox->iter_parent(*xIter);
-                    }
-
-                    BrowseMode nMode = pBasicBox->GetMode();
-                    bool bDlgMode = ( nMode & BrowseMode::Dialogs ) && !( nMode & BrowseMode::Modules );
-                    const OUString sId = bDlgMode ? OUStringLiteral(RID_BMP_DLGLIB) : OUStringLiteral(RID_BMP_MODLIB);
-                    pBasicBox->AddEntry(aLibName, sId, xRootEntry.get(), false, std::make_unique<Entry>(OBJ_TYPE_LIBRARY));
-                    pBasicBox->AddEntry(aModName, RID_BMP_MODULE, xRootEntry.get(), false, std::make_unique<Entry>(OBJ_TYPE_MODULE));
-                    pBasicBox->set_cursor(*xRootEntry);
-                    pBasicBox->select(*xRootEntry);
-                }
+                BrowseMode nMode = pBasicBox->GetMode();
+                bool bDlgMode = ( nMode & BrowseMode::Dialogs ) && !( nMode & BrowseMode::Modules );
+                const OUString sId = bDlgMode ? OUStringLiteral(RID_BMP_DLGLIB) : OUStringLiteral(RID_BMP_MODLIB);
+                pBasicBox->AddEntry(aLibName, sId, xRootEntry.get(), false, std::make_unique<Entry>(OBJ_TYPE_LIBRARY));
+                pBasicBox->AddEntry(aModName, RID_BMP_MODULE, xRootEntry.get(), false, std::make_unique<Entry>(OBJ_TYPE_MODULE));
+                pBasicBox->set_cursor(*xRootEntry);
+                pBasicBox->select(*xRootEntry);
             }
-            catch (const uno::Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION("basctl.basicide");
-            }
+        }
+        catch (const uno::Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION("basctl.basicide");
         }
     }
 }

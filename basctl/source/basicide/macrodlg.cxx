@@ -249,43 +249,43 @@ void MacroChooser::DeleteMacro()
 {
     SbMethod* pMethod = GetMacro();
     DBG_ASSERT( pMethod, "DeleteMacro: No Macro !" );
-    if (pMethod && QueryDelMacro(pMethod->GetName(), m_xDialog.get()))
+    if (!(pMethod && QueryDelMacro(pMethod->GetName(), m_xDialog.get())))
+        return;
+
+    if (SfxDispatcher* pDispatcher = GetDispatcher())
+        pDispatcher->Execute( SID_BASICIDE_STOREALLMODULESOURCES );
+
+    // mark current doc as modified:
+    StarBASIC* pBasic = FindBasic(pMethod);
+    assert(pBasic && "Basic?!");
+    BasicManager* pBasMgr = FindBasicManager( pBasic );
+    DBG_ASSERT( pBasMgr, "BasMgr?" );
+    ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
+    if ( aDocument.isDocument() )
     {
-        if (SfxDispatcher* pDispatcher = GetDispatcher())
-            pDispatcher->Execute( SID_BASICIDE_STOREALLMODULESOURCES );
-
-        // mark current doc as modified:
-        StarBASIC* pBasic = FindBasic(pMethod);
-        assert(pBasic && "Basic?!");
-        BasicManager* pBasMgr = FindBasicManager( pBasic );
-        DBG_ASSERT( pBasMgr, "BasMgr?" );
-        ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
-        if ( aDocument.isDocument() )
-        {
-            aDocument.setDocumentModified();
-            if (SfxBindings* pBindings = GetBindingsPtr())
-                pBindings->Invalidate( SID_SAVEDOC );
-        }
-
-        SbModule* pModule = pMethod->GetModule();
-        assert(pModule && "DeleteMacro: No Module?!");
-        OUString aSource( pModule->GetSource32() );
-        sal_uInt16 nStart, nEnd;
-        pMethod->GetLineRange( nStart, nEnd );
-        pModule->GetMethods()->Remove( pMethod );
-        CutLines( aSource, nStart-1, nEnd-nStart+1 );
-        pModule->SetSource32( aSource );
-
-        // update module in library
-        OUString aLibName = pBasic->GetName();
-        OUString aModName = pModule->GetName();
-        OSL_VERIFY( aDocument.updateModule( aLibName, aModName, aSource ) );
-
-        bool bSelected = m_xMacroBox->get_selected(m_xMacroBoxIter.get());
-        DBG_ASSERT(bSelected, "DeleteMacro: Entry ?!");
-        m_xMacroBox->remove(*m_xMacroBoxIter);
-        bForceStoreBasic = true;
+        aDocument.setDocumentModified();
+        if (SfxBindings* pBindings = GetBindingsPtr())
+            pBindings->Invalidate( SID_SAVEDOC );
     }
+
+    SbModule* pModule = pMethod->GetModule();
+    assert(pModule && "DeleteMacro: No Module?!");
+    OUString aSource( pModule->GetSource32() );
+    sal_uInt16 nStart, nEnd;
+    pMethod->GetLineRange( nStart, nEnd );
+    pModule->GetMethods()->Remove( pMethod );
+    CutLines( aSource, nStart-1, nEnd-nStart+1 );
+    pModule->SetSource32( aSource );
+
+    // update module in library
+    OUString aLibName = pBasic->GetName();
+    OUString aModName = pModule->GetName();
+    OSL_VERIFY( aDocument.updateModule( aLibName, aModName, aSource ) );
+
+    bool bSelected = m_xMacroBox->get_selected(m_xMacroBoxIter.get());
+    DBG_ASSERT(bSelected, "DeleteMacro: Entry ?!");
+    m_xMacroBox->remove(*m_xMacroBoxIter);
+    bForceStoreBasic = true;
 }
 
 SbMethod* MacroChooser::CreateMacro()

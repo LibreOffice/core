@@ -115,20 +115,20 @@ void Shell::SetMDITitle()
     }
 
     SfxViewFrame* pViewFrame = GetViewFrame();
-    if ( pViewFrame )
-    {
-        SfxObjectShell* pShell = pViewFrame->GetObjectShell();
-        if ( pShell && pShell->GetTitle( SFX_TITLE_CAPTION ) != aTitle )
-        {
-            pShell->SetTitle( aTitle );
-            pShell->SetModified(false);
-        }
+    if ( !pViewFrame )
+        return;
 
-        css::uno::Reference< css::frame::XController > xController = GetController ();
-        css::uno::Reference< css::frame::XTitle >      xTitle      (xController, css::uno::UNO_QUERY);
-        if (xTitle.is ())
-            xTitle->setTitle (aTitle);
+    SfxObjectShell* pShell = pViewFrame->GetObjectShell();
+    if ( pShell && pShell->GetTitle( SFX_TITLE_CAPTION ) != aTitle )
+    {
+        pShell->SetTitle( aTitle );
+        pShell->SetModified(false);
     }
+
+    css::uno::Reference< css::frame::XController > xController = GetController ();
+    css::uno::Reference< css::frame::XTitle >      xTitle      (xController, css::uno::UNO_QUERY);
+    if (xTitle.is ())
+        xTitle->setTitle (aTitle);
 }
 
 VclPtr<ModulWindow> Shell::CreateBasWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rModName )

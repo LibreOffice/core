@@ -473,69 +473,70 @@ SfxUndoManager* Shell::GetUndoManager()
 
 void Shell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if (GetShell())
+    if (!GetShell())
+        return;
+
+    if (rHint.GetId() == SfxHintId::Dying)
     {
-        if (rHint.GetId() == SfxHintId::Dying)
-        {
-            EndListening( rBC, true /* log off all */ );
-            aObjectCatalog->UpdateEntries();
-        }
+        EndListening( rBC, true /* log off all */ );
+        aObjectCatalog->UpdateEntries();
+    }
 
-        if (SbxHint const* pSbxHint = dynamic_cast<SbxHint const*>(&rHint))
-        {
-            const SfxHintId nHintId = pSbxHint->GetId();
-            if (    ( nHintId == SfxHintId::BasicStart ) ||
-                    ( nHintId == SfxHintId::BasicStop ) )
-            {
-                if (SfxBindings* pBindings = GetBindingsPtr())
-                {
-                    pBindings->Invalidate( SID_BASICRUN );
-                    pBindings->Update( SID_BASICRUN );
-                    pBindings->Invalidate( SID_BASICCOMPILE );
-                    pBindings->Update( SID_BASICCOMPILE );
-                    pBindings->Invalidate( SID_BASICSTEPOVER );
-                    pBindings->Update( SID_BASICSTEPOVER );
-                    pBindings->Invalidate( SID_BASICSTEPINTO );
-                    pBindings->Update( SID_BASICSTEPINTO );
-                    pBindings->Invalidate( SID_BASICSTEPOUT );
-                    pBindings->Update( SID_BASICSTEPOUT );
-                    pBindings->Invalidate( SID_BASICSTOP );
-                    pBindings->Update( SID_BASICSTOP );
-                    pBindings->Invalidate( SID_BASICIDE_TOGGLEBRKPNT );
-                    pBindings->Update( SID_BASICIDE_TOGGLEBRKPNT );
-                    pBindings->Invalidate( SID_BASICIDE_MANAGEBRKPNTS );
-                    pBindings->Update( SID_BASICIDE_MANAGEBRKPNTS );
-                    pBindings->Invalidate( SID_BASICIDE_MODULEDLG );
-                    pBindings->Update( SID_BASICIDE_MODULEDLG );
-                    pBindings->Invalidate( SID_BASICLOAD );
-                    pBindings->Update( SID_BASICLOAD );
-                }
+    SbxHint const* pSbxHint = dynamic_cast<SbxHint const*>(&rHint);
+    if (!pSbxHint)
+        return;
 
-                if ( nHintId == SfxHintId::BasicStop )
-                {
-                    // not only at error/break or explicit stoppage,
-                    // if the update is turned off due to a programming bug
-                    BasicStopped();
-                    if (pLayout)
-                        pLayout->UpdateDebug(true); // clear...
-                    if( m_pCurLocalizationMgr )
-                        m_pCurLocalizationMgr->handleBasicStopped();
-                }
-                else if( m_pCurLocalizationMgr )
-                {
-                    m_pCurLocalizationMgr->handleBasicStarted();
-                }
+    const SfxHintId nHintId = pSbxHint->GetId();
+    if (    !(( nHintId == SfxHintId::BasicStart ) ||
+            ( nHintId == SfxHintId::BasicStop )) )
+        return;
 
-                for (auto const& window : aWindowTable)
-                {
-                    BaseWindow* pWin = window.second;
-                    if ( nHintId == SfxHintId::BasicStart )
-                        pWin->BasicStarted();
-                    else
-                        pWin->BasicStopped();
-                }
-            }
-        }
+    if (SfxBindings* pBindings = GetBindingsPtr())
+    {
+        pBindings->Invalidate( SID_BASICRUN );
+        pBindings->Update( SID_BASICRUN );
+        pBindings->Invalidate( SID_BASICCOMPILE );
+        pBindings->Update( SID_BASICCOMPILE );
+        pBindings->Invalidate( SID_BASICSTEPOVER );
+        pBindings->Update( SID_BASICSTEPOVER );
+        pBindings->Invalidate( SID_BASICSTEPINTO );
+        pBindings->Update( SID_BASICSTEPINTO );
+        pBindings->Invalidate( SID_BASICSTEPOUT );
+        pBindings->Update( SID_BASICSTEPOUT );
+        pBindings->Invalidate( SID_BASICSTOP );
+        pBindings->Update( SID_BASICSTOP );
+        pBindings->Invalidate( SID_BASICIDE_TOGGLEBRKPNT );
+        pBindings->Update( SID_BASICIDE_TOGGLEBRKPNT );
+        pBindings->Invalidate( SID_BASICIDE_MANAGEBRKPNTS );
+        pBindings->Update( SID_BASICIDE_MANAGEBRKPNTS );
+        pBindings->Invalidate( SID_BASICIDE_MODULEDLG );
+        pBindings->Update( SID_BASICIDE_MODULEDLG );
+        pBindings->Invalidate( SID_BASICLOAD );
+        pBindings->Update( SID_BASICLOAD );
+    }
+
+    if ( nHintId == SfxHintId::BasicStop )
+    {
+        // not only at error/break or explicit stoppage,
+        // if the update is turned off due to a programming bug
+        BasicStopped();
+        if (pLayout)
+            pLayout->UpdateDebug(true); // clear...
+        if( m_pCurLocalizationMgr )
+            m_pCurLocalizationMgr->handleBasicStopped();
+    }
+    else if( m_pCurLocalizationMgr )
+    {
+        m_pCurLocalizationMgr->handleBasicStarted();
+    }
+
+    for (auto const& window : aWindowTable)
+    {
+        BaseWindow* pWin = window.second;
+        if ( nHintId == SfxHintId::BasicStart )
+            pWin->BasicStarted();
+        else
+            pWin->BasicStopped();
     }
 }
 
@@ -802,91 +803,93 @@ void Shell::InvalidateBasicIDESlots()
 {
     // only those that have an optic effect...
 
-    if (GetShell())
-    {
-        if (SfxBindings* pBindings = GetBindingsPtr())
-        {
-            pBindings->Invalidate( SID_COPY );
-            pBindings->Invalidate( SID_CUT );
-            pBindings->Invalidate( SID_PASTE );
-            pBindings->Invalidate( SID_UNDO );
-            pBindings->Invalidate( SID_REDO );
-            pBindings->Invalidate( SID_SAVEDOC );
-            pBindings->Invalidate( SID_SIGNATURE );
-            pBindings->Invalidate( SID_BASICIDE_CHOOSEMACRO );
-            pBindings->Invalidate( SID_BASICIDE_MODULEDLG );
-            pBindings->Invalidate( SID_BASICIDE_OBJCAT );
-            pBindings->Invalidate( SID_BASICSTOP );
-            pBindings->Invalidate( SID_BASICRUN );
-            pBindings->Invalidate( SID_BASICCOMPILE );
-            pBindings->Invalidate( SID_BASICLOAD );
-            pBindings->Invalidate( SID_BASICSAVEAS );
-            pBindings->Invalidate( SID_BASICIDE_MATCHGROUP );
-            pBindings->Invalidate( SID_BASICSTEPINTO );
-            pBindings->Invalidate( SID_BASICSTEPOVER );
-            pBindings->Invalidate( SID_BASICSTEPOUT );
-            pBindings->Invalidate( SID_BASICIDE_TOGGLEBRKPNT );
-            pBindings->Invalidate( SID_BASICIDE_MANAGEBRKPNTS );
-            pBindings->Invalidate( SID_BASICIDE_ADDWATCH );
-            pBindings->Invalidate( SID_BASICIDE_REMOVEWATCH );
+    if (!GetShell())
+        return;
 
-            pBindings->Invalidate( SID_PRINTDOC );
-            pBindings->Invalidate( SID_PRINTDOCDIRECT );
-            pBindings->Invalidate( SID_SETUPPRINTER );
-            pBindings->Invalidate( SID_DIALOG_TESTMODE );
+    SfxBindings* pBindings = GetBindingsPtr();
+    if (!pBindings)
+        return;
 
-            pBindings->Invalidate( SID_DOC_MODIFIED );
-            pBindings->Invalidate( SID_BASICIDE_STAT_TITLE );
-            pBindings->Invalidate( SID_BASICIDE_STAT_POS );
-            pBindings->Invalidate( SID_ATTR_INSERT );
-            pBindings->Invalidate( SID_ATTR_SIZE );
-        }
-    }
+    pBindings->Invalidate( SID_COPY );
+    pBindings->Invalidate( SID_CUT );
+    pBindings->Invalidate( SID_PASTE );
+    pBindings->Invalidate( SID_UNDO );
+    pBindings->Invalidate( SID_REDO );
+    pBindings->Invalidate( SID_SAVEDOC );
+    pBindings->Invalidate( SID_SIGNATURE );
+    pBindings->Invalidate( SID_BASICIDE_CHOOSEMACRO );
+    pBindings->Invalidate( SID_BASICIDE_MODULEDLG );
+    pBindings->Invalidate( SID_BASICIDE_OBJCAT );
+    pBindings->Invalidate( SID_BASICSTOP );
+    pBindings->Invalidate( SID_BASICRUN );
+    pBindings->Invalidate( SID_BASICCOMPILE );
+    pBindings->Invalidate( SID_BASICLOAD );
+    pBindings->Invalidate( SID_BASICSAVEAS );
+    pBindings->Invalidate( SID_BASICIDE_MATCHGROUP );
+    pBindings->Invalidate( SID_BASICSTEPINTO );
+    pBindings->Invalidate( SID_BASICSTEPOVER );
+    pBindings->Invalidate( SID_BASICSTEPOUT );
+    pBindings->Invalidate( SID_BASICIDE_TOGGLEBRKPNT );
+    pBindings->Invalidate( SID_BASICIDE_MANAGEBRKPNTS );
+    pBindings->Invalidate( SID_BASICIDE_ADDWATCH );
+    pBindings->Invalidate( SID_BASICIDE_REMOVEWATCH );
+
+    pBindings->Invalidate( SID_PRINTDOC );
+    pBindings->Invalidate( SID_PRINTDOCDIRECT );
+    pBindings->Invalidate( SID_SETUPPRINTER );
+    pBindings->Invalidate( SID_DIALOG_TESTMODE );
+
+    pBindings->Invalidate( SID_DOC_MODIFIED );
+    pBindings->Invalidate( SID_BASICIDE_STAT_TITLE );
+    pBindings->Invalidate( SID_BASICIDE_STAT_POS );
+    pBindings->Invalidate( SID_ATTR_INSERT );
+    pBindings->Invalidate( SID_ATTR_SIZE );
 }
 
 void Shell::InvalidateControlSlots()
 {
-    if (GetShell())
-    {
-        if (SfxBindings* pBindings = GetBindingsPtr())
-        {
-            pBindings->Invalidate( SID_INSERT_FORM_RADIO );
-            pBindings->Invalidate( SID_INSERT_FORM_CHECK );
-            pBindings->Invalidate( SID_INSERT_FORM_LIST );
-            pBindings->Invalidate( SID_INSERT_FORM_COMBO );
-            pBindings->Invalidate( SID_INSERT_FORM_VSCROLL );
-            pBindings->Invalidate( SID_INSERT_FORM_HSCROLL );
-            pBindings->Invalidate( SID_INSERT_FORM_SPIN );
+    if (!GetShell())
+        return;
 
-            pBindings->Invalidate( SID_INSERT_SELECT );
-            pBindings->Invalidate( SID_INSERT_PUSHBUTTON );
-            pBindings->Invalidate( SID_INSERT_RADIOBUTTON );
-            pBindings->Invalidate( SID_INSERT_CHECKBOX );
-            pBindings->Invalidate( SID_INSERT_LISTBOX );
-            pBindings->Invalidate( SID_INSERT_COMBOBOX );
-            pBindings->Invalidate( SID_INSERT_GROUPBOX );
-            pBindings->Invalidate( SID_INSERT_EDIT );
-            pBindings->Invalidate( SID_INSERT_FIXEDTEXT );
-            pBindings->Invalidate( SID_INSERT_IMAGECONTROL );
-            pBindings->Invalidate( SID_INSERT_PROGRESSBAR );
-            pBindings->Invalidate( SID_INSERT_HSCROLLBAR );
-            pBindings->Invalidate( SID_INSERT_VSCROLLBAR );
-            pBindings->Invalidate( SID_INSERT_HFIXEDLINE );
-            pBindings->Invalidate( SID_INSERT_VFIXEDLINE );
-            pBindings->Invalidate( SID_INSERT_DATEFIELD );
-            pBindings->Invalidate( SID_INSERT_TIMEFIELD );
-            pBindings->Invalidate( SID_INSERT_NUMERICFIELD );
-            pBindings->Invalidate( SID_INSERT_CURRENCYFIELD );
-            pBindings->Invalidate( SID_INSERT_FORMATTEDFIELD );
-            pBindings->Invalidate( SID_INSERT_PATTERNFIELD );
-            pBindings->Invalidate( SID_INSERT_FILECONTROL );
-            pBindings->Invalidate( SID_INSERT_SPINBUTTON );
-            pBindings->Invalidate( SID_INSERT_GRIDCONTROL );
-            pBindings->Invalidate( SID_INSERT_HYPERLINKCONTROL );
-            pBindings->Invalidate( SID_INSERT_TREECONTROL );
-            pBindings->Invalidate( SID_CHOOSE_CONTROLS );
-        }
-    }
+    SfxBindings* pBindings = GetBindingsPtr();
+    if (!pBindings)
+        return;
+
+    pBindings->Invalidate( SID_INSERT_FORM_RADIO );
+    pBindings->Invalidate( SID_INSERT_FORM_CHECK );
+    pBindings->Invalidate( SID_INSERT_FORM_LIST );
+    pBindings->Invalidate( SID_INSERT_FORM_COMBO );
+    pBindings->Invalidate( SID_INSERT_FORM_VSCROLL );
+    pBindings->Invalidate( SID_INSERT_FORM_HSCROLL );
+    pBindings->Invalidate( SID_INSERT_FORM_SPIN );
+
+    pBindings->Invalidate( SID_INSERT_SELECT );
+    pBindings->Invalidate( SID_INSERT_PUSHBUTTON );
+    pBindings->Invalidate( SID_INSERT_RADIOBUTTON );
+    pBindings->Invalidate( SID_INSERT_CHECKBOX );
+    pBindings->Invalidate( SID_INSERT_LISTBOX );
+    pBindings->Invalidate( SID_INSERT_COMBOBOX );
+    pBindings->Invalidate( SID_INSERT_GROUPBOX );
+    pBindings->Invalidate( SID_INSERT_EDIT );
+    pBindings->Invalidate( SID_INSERT_FIXEDTEXT );
+    pBindings->Invalidate( SID_INSERT_IMAGECONTROL );
+    pBindings->Invalidate( SID_INSERT_PROGRESSBAR );
+    pBindings->Invalidate( SID_INSERT_HSCROLLBAR );
+    pBindings->Invalidate( SID_INSERT_VSCROLLBAR );
+    pBindings->Invalidate( SID_INSERT_HFIXEDLINE );
+    pBindings->Invalidate( SID_INSERT_VFIXEDLINE );
+    pBindings->Invalidate( SID_INSERT_DATEFIELD );
+    pBindings->Invalidate( SID_INSERT_TIMEFIELD );
+    pBindings->Invalidate( SID_INSERT_NUMERICFIELD );
+    pBindings->Invalidate( SID_INSERT_CURRENCYFIELD );
+    pBindings->Invalidate( SID_INSERT_FORMATTEDFIELD );
+    pBindings->Invalidate( SID_INSERT_PATTERNFIELD );
+    pBindings->Invalidate( SID_INSERT_FILECONTROL );
+    pBindings->Invalidate( SID_INSERT_SPINBUTTON );
+    pBindings->Invalidate( SID_INSERT_GRIDCONTROL );
+    pBindings->Invalidate( SID_INSERT_HYPERLINKCONTROL );
+    pBindings->Invalidate( SID_INSERT_TREECONTROL );
+    pBindings->Invalidate( SID_CHOOSE_CONTROLS );
 }
 
 void Shell::EnableScrollbars( bool bEnable )
@@ -897,32 +900,32 @@ void Shell::EnableScrollbars( bool bEnable )
 
 void Shell::SetCurLib( const ScriptDocument& rDocument, const OUString& aLibName, bool bUpdateWindows, bool bCheck )
 {
-    if ( !bCheck || ( rDocument != m_aCurDocument || aLibName != m_aCurLibName ) )
+    if ( !(!bCheck || ( rDocument != m_aCurDocument || aLibName != m_aCurLibName )) )
+        return;
+
+    ContainerListenerImpl* pListener = static_cast< ContainerListenerImpl* >( m_xLibListener.get() );
+
+    m_aCurDocument = rDocument;
+    m_aCurLibName = aLibName;
+
+    if ( pListener )
     {
-        ContainerListenerImpl* pListener = static_cast< ContainerListenerImpl* >( m_xLibListener.get() );
+        pListener->removeContainerListener( m_aCurDocument, m_aCurLibName );
+        pListener->addContainerListener( m_aCurDocument, aLibName );
+    }
 
-        m_aCurDocument = rDocument;
-        m_aCurLibName = aLibName;
+    if ( bUpdateWindows )
+        UpdateWindows();
 
-        if ( pListener )
-        {
-            pListener->removeContainerListener( m_aCurDocument, m_aCurLibName );
-            pListener->addContainerListener( m_aCurDocument, aLibName );
-        }
+    SetMDITitle();
 
-        if ( bUpdateWindows )
-            UpdateWindows();
+    SetCurLibForLocalization( rDocument, aLibName );
 
-        SetMDITitle();
-
-        SetCurLibForLocalization( rDocument, aLibName );
-
-        if (SfxBindings* pBindings = GetBindingsPtr())
-        {
-            pBindings->Invalidate( SID_BASICIDE_LIBSELECTOR );
-            pBindings->Invalidate( SID_BASICIDE_CURRENT_LANG );
-            pBindings->Invalidate( SID_BASICIDE_MANAGE_LANG );
-        }
+    if (SfxBindings* pBindings = GetBindingsPtr())
+    {
+        pBindings->Invalidate( SID_BASICIDE_LIBSELECTOR );
+        pBindings->Invalidate( SID_BASICIDE_CURRENT_LANG );
+        pBindings->Invalidate( SID_BASICIDE_MANAGE_LANG );
     }
 }
 

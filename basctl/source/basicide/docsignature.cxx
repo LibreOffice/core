@@ -45,19 +45,19 @@ namespace basctl
     DocumentSignature::DocumentSignature (ScriptDocument const& rDocument) :
         m_pImpl(new Impl)
     {
-        if (rDocument.isDocument())
+        if (!rDocument.isDocument())
+            return;
+
+        Reference<XModel> xDocument(rDocument.getDocument());
+        // find object shell for document
+        SfxObjectShell* pShell = SfxObjectShell::GetFirst();
+        while ( pShell )
         {
-            Reference<XModel> xDocument(rDocument.getDocument());
-            // find object shell for document
-            SfxObjectShell* pShell = SfxObjectShell::GetFirst();
-            while ( pShell )
-            {
-                if ( pShell->GetModel() == xDocument )
-                    break;
-                pShell = SfxObjectShell::GetNext( *pShell );
-            }
-            m_pImpl->pShell = pShell;
+            if ( pShell->GetModel() == xDocument )
+                break;
+            pShell = SfxObjectShell::GetNext( *pShell );
         }
+        m_pImpl->pShell = pShell;
     }
 
     DocumentSignature::~DocumentSignature()

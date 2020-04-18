@@ -182,33 +182,33 @@ void SAL_CALL Renderable::render (
 {
     processProperties( i_xOptions );
 
-    if( mpWindow )
+    if( !mpWindow )
+        return;
+
+    VclPtr<Printer> pPrinter = getPrinter();
+    if (!pPrinter)
+        throw lang::IllegalArgumentException();
+
+    sal_Int64 nContent = getIntValue( "PrintContent", -1 );
+    if( nContent == 1 )
     {
-        VclPtr<Printer> pPrinter = getPrinter();
-        if (!pPrinter)
-            throw lang::IllegalArgumentException();
-
-        sal_Int64 nContent = getIntValue( "PrintContent", -1 );
-        if( nContent == 1 )
+        OUString aPageRange( getStringValue( "PageRange" ) );
+        if( !aPageRange.isEmpty() )
         {
-            OUString aPageRange( getStringValue( "PageRange" ) );
-            if( !aPageRange.isEmpty() )
-            {
-                sal_Int32 nPageCount = mpWindow->countPages( pPrinter );
-                StringRangeEnumerator aRangeEnum( aPageRange, 0, nPageCount-1 );
-                StringRangeEnumerator::Iterator it = aRangeEnum.begin();
-                for( ; it != aRangeEnum.end() && nRenderer; --nRenderer )
-                    ++it;
+            sal_Int32 nPageCount = mpWindow->countPages( pPrinter );
+            StringRangeEnumerator aRangeEnum( aPageRange, 0, nPageCount-1 );
+            StringRangeEnumerator::Iterator it = aRangeEnum.begin();
+            for( ; it != aRangeEnum.end() && nRenderer; --nRenderer )
+                ++it;
 
-                sal_Int32 nPage = ( it != aRangeEnum.end() ) ? *it : nRenderer;
-                mpWindow->printPage( nPage, pPrinter );
-            }
-            else
-                mpWindow->printPage( nRenderer, pPrinter );
+            sal_Int32 nPage = ( it != aRangeEnum.end() ) ? *it : nRenderer;
+            mpWindow->printPage( nPage, pPrinter );
         }
         else
-            mpWindow->printPage( maValidPages.at( nRenderer ), pPrinter );
+            mpWindow->printPage( nRenderer, pPrinter );
     }
+    else
+        mpWindow->printPage( maValidPages.at( nRenderer ), pPrinter );
 }
 
 } // namespace basctl

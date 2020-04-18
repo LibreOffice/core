@@ -505,52 +505,53 @@ struct TabBarSortHelper
 
 void TabBar::Sort()
 {
-    if (Shell* pShell = GetShell())
+    Shell* pShell = GetShell();
+    if (!pShell)
+        return;
+
+    Shell::WindowTable& aWindowTable = pShell->GetWindowTable();
+    TabBarSortHelper aTabBarSortHelper;
+    std::vector<TabBarSortHelper> aModuleList;
+    std::vector<TabBarSortHelper> aDialogList;
+    sal_uInt16 nPageCount = GetPageCount();
+    sal_uInt16 i;
+
+    // create module and dialog lists for sorting
+    for ( i = 0; i < nPageCount; i++)
     {
-        Shell::WindowTable& aWindowTable = pShell->GetWindowTable();
-        TabBarSortHelper aTabBarSortHelper;
-        std::vector<TabBarSortHelper> aModuleList;
-        std::vector<TabBarSortHelper> aDialogList;
-        sal_uInt16 nPageCount = GetPageCount();
-        sal_uInt16 i;
+        sal_uInt16 nId = GetPageId( i );
+        aTabBarSortHelper.nPageId = nId;
+        aTabBarSortHelper.aPageText = GetPageText( nId );
+        BaseWindow* pWin = aWindowTable[ nId ].get();
 
-        // create module and dialog lists for sorting
-        for ( i = 0; i < nPageCount; i++)
+        if (dynamic_cast<ModulWindow*>(pWin))
         {
-            sal_uInt16 nId = GetPageId( i );
-            aTabBarSortHelper.nPageId = nId;
-            aTabBarSortHelper.aPageText = GetPageText( nId );
-            BaseWindow* pWin = aWindowTable[ nId ].get();
-
-            if (dynamic_cast<ModulWindow*>(pWin))
-            {
-                aModuleList.push_back( aTabBarSortHelper );
-            }
-            else if (dynamic_cast<DialogWindow*>(pWin))
-            {
-                aDialogList.push_back( aTabBarSortHelper );
-            }
+            aModuleList.push_back( aTabBarSortHelper );
         }
-
-        // sort module and dialog lists by page text
-        std::sort( aModuleList.begin() , aModuleList.end() );
-        std::sort( aDialogList.begin() , aDialogList.end() );
-
-
-        sal_uInt16 nModules = sal::static_int_cast<sal_uInt16>( aModuleList.size() );
-        sal_uInt16 nDialogs = sal::static_int_cast<sal_uInt16>( aDialogList.size() );
-
-        // move module pages to new positions
-        for (i = 0; i < nModules; i++)
+        else if (dynamic_cast<DialogWindow*>(pWin))
         {
-            MovePage( aModuleList[i].nPageId , i );
+            aDialogList.push_back( aTabBarSortHelper );
         }
+    }
 
-        // move dialog pages to new positions
-        for (i = 0; i < nDialogs; i++)
-        {
-            MovePage( aDialogList[i].nPageId , nModules + i );
-        }
+    // sort module and dialog lists by page text
+    std::sort( aModuleList.begin() , aModuleList.end() );
+    std::sort( aDialogList.begin() , aDialogList.end() );
+
+
+    sal_uInt16 nModules = sal::static_int_cast<sal_uInt16>( aModuleList.size() );
+    sal_uInt16 nDialogs = sal::static_int_cast<sal_uInt16>( aDialogList.size() );
+
+    // move module pages to new positions
+    for (i = 0; i < nModules; i++)
+    {
+        MovePage( aModuleList[i].nPageId , i );
+    }
+
+    // move dialog pages to new positions
+    for (i = 0; i < nDialogs; i++)
+    {
+        MovePage( aDialogList[i].nPageId , nModules + i );
     }
 }
 

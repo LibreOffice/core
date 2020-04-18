@@ -78,22 +78,22 @@ void LocalizationMgr::handleTranslationbar ()
 
     Reference< beans::XPropertySet > xFrameProps
         ( m_pShell->GetViewFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
-    if ( xFrameProps.is() )
+    if ( !xFrameProps.is() )
+        return;
+
+    Reference< css::frame::XLayoutManager > xLayoutManager;
+    uno::Any a = xFrameProps->getPropertyValue( "LayoutManager" );
+    a >>= xLayoutManager;
+    if ( xLayoutManager.is() )
     {
-        Reference< css::frame::XLayoutManager > xLayoutManager;
-        uno::Any a = xFrameProps->getPropertyValue( "LayoutManager" );
-        a >>= xLayoutManager;
-        if ( xLayoutManager.is() )
+        if ( !isLibraryLocalized() )
         {
-            if ( !isLibraryLocalized() )
-            {
-                xLayoutManager->destroyElement( aToolBarResName );
-            }
-            else
-            {
-                xLayoutManager->createElement( aToolBarResName );
-                xLayoutManager->requestElement( aToolBarResName );
-            }
+            xLayoutManager->destroyElement( aToolBarResName );
+        }
+        else
+        {
+            xLayoutManager->createElement( aToolBarResName );
+            xLayoutManager->requestElement( aToolBarResName );
         }
     }
 }
@@ -716,44 +716,44 @@ void LocalizationMgr::handleRemoveLocales( const Sequence< Locale >& aLocaleSeq 
 
 void LocalizationMgr::handleSetDefaultLocale(const Locale& rLocale)
 {
-    if( m_xStringResourceManager.is() )
-    {
-        try
-        {
-            m_xStringResourceManager->setDefaultLocale(rLocale);
-        }
-        catch(const IllegalArgumentException&)
-        {
-            OSL_FAIL( "LocalizationMgr::handleSetDefaultLocale: Invalid locale" );
-        }
+    if( !m_xStringResourceManager.is() )
+        return;
 
-        // update locale toolbar
-        if (SfxBindings* pBindings = GetBindingsPtr())
-            pBindings->Invalidate( SID_BASICIDE_CURRENT_LANG );
+    try
+    {
+        m_xStringResourceManager->setDefaultLocale(rLocale);
     }
+    catch(const IllegalArgumentException&)
+    {
+        OSL_FAIL( "LocalizationMgr::handleSetDefaultLocale: Invalid locale" );
+    }
+
+    // update locale toolbar
+    if (SfxBindings* pBindings = GetBindingsPtr())
+        pBindings->Invalidate( SID_BASICIDE_CURRENT_LANG );
 }
 
 void LocalizationMgr::handleSetCurrentLocale(const css::lang::Locale& rLocale)
 {
-    if( m_xStringResourceManager.is() )
+    if( !m_xStringResourceManager.is() )
+        return;
+
+    try
     {
-        try
-        {
-            m_xStringResourceManager->setCurrentLocale(rLocale, false);
-        }
-        catch(const IllegalArgumentException&)
-        {
-            OSL_FAIL( "LocalizationMgr::handleSetCurrentLocale: Invalid locale" );
-        }
-
-        // update locale toolbar
-        if (SfxBindings* pBindings = GetBindingsPtr())
-            pBindings->Invalidate( SID_BASICIDE_CURRENT_LANG );
-
-        if (DialogWindow* pDlgWin = dynamic_cast<DialogWindow*>(m_pShell->GetCurWindow()))
-            if (!pDlgWin->IsSuspended())
-                pDlgWin->GetEditor().UpdatePropertyBrowserDelayed();
+        m_xStringResourceManager->setCurrentLocale(rLocale, false);
     }
+    catch(const IllegalArgumentException&)
+    {
+        OSL_FAIL( "LocalizationMgr::handleSetCurrentLocale: Invalid locale" );
+    }
+
+    // update locale toolbar
+    if (SfxBindings* pBindings = GetBindingsPtr())
+        pBindings->Invalidate( SID_BASICIDE_CURRENT_LANG );
+
+    if (DialogWindow* pDlgWin = dynamic_cast<DialogWindow*>(m_pShell->GetCurWindow()))
+        if (!pDlgWin->IsSuspended())
+            pDlgWin->GetEditor().UpdatePropertyBrowserDelayed();
 }
 
 void LocalizationMgr::handleBasicStarted()
@@ -885,23 +885,23 @@ void LocalizationMgr::setStringResourceAtDialog( const ScriptDocument& rDocument
         LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
 
     // Set resource property
-    if( xStringResourceManager.is() )
-    {
-        // Not very elegant as dialog may or may not be localized yet
-        // TODO: Find better place, where dialog is created
-        if( xStringResourceManager->getLocales().hasElements() )
-        {
-            Any aDialogCtrl;
-            aDialogCtrl <<= xDialogModel;
-            Reference< XStringResourceResolver > xDummyStringResolver;
-            implHandleControlResourceProperties( aDialogCtrl, aDlgName,
-                OUString(), xStringResourceManager,
-                xDummyStringResolver, SET_IDS );
-        }
+    if( !xStringResourceManager.is() )
+        return;
 
-        Reference< beans::XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY );
-        xDlgPSet->setPropertyValue( "ResourceResolver", Any(xStringResourceManager) );
+    // Not very elegant as dialog may or may not be localized yet
+    // TODO: Find better place, where dialog is created
+    if( xStringResourceManager->getLocales().hasElements() )
+    {
+        Any aDialogCtrl;
+        aDialogCtrl <<= xDialogModel;
+        Reference< XStringResourceResolver > xDummyStringResolver;
+        implHandleControlResourceProperties( aDialogCtrl, aDlgName,
+            OUString(), xStringResourceManager,
+            xDummyStringResolver, SET_IDS );
     }
+
+    Reference< beans::XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY );
+    xDlgPSet->setPropertyValue( "ResourceResolver", Any(xStringResourceManager) );
 }
 
 void LocalizationMgr::renameStringResourceIDs( const ScriptDocument& rDocument, const OUString& aLibName,
