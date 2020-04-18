@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "badd510d_3fb210e9",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-04-18T09:50:51Z",
+      "side": 0,
+      "message": "Dear Heiko!\n\nPlease don\u0027t modify lines that are not related to your change. When I asked you to avoid the comments at the includes, I only wrote about the new lines that you added; I explicitly marked such line, and didn\u0027t mark any pre-existing line. My words didn\u0027t mean that you should re-format other lines - be it removal of existing comments, or reordering of the headers, or adding spaces to comments. So please revert the formatting changes that are unrelated - i.e., all changes you made to lines 22-37, 62, 91, 103 in the old code. This will make your change neat and only containing what relates to your intended modification of behaviour. Thank you!",
+      "range": {
+        "startLine": 22,
+        "startChar": 25,
+        "endLine": 22,
+        "endChar": 38
+      },
+      "revId": "6287845eab339a8eb3c660d648d012e9f1dcce30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

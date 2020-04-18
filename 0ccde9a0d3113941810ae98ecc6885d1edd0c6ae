@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "78d369bf_27ece899",
+        "filename": "cui/source/inc/about.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-04-18T09:50:51Z",
+      "side": 1,
+      "message": "This can beautifully be in private section - we should only make public that is accessed from outside. Please move up to line 44.",
+      "range": {
+        "startLine": 49,
+        "startChar": 4,
+        "endLine": 49,
+        "endChar": 48
+      },
+      "revId": "0ccde9a0d3113941810ae98ecc6885d1edd0c6ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
