@@ -71,7 +71,6 @@ private:
     sal_Int32           mnMaxWidthChars;
     sal_Unicode         mcEchoChar;
     bool                mbModified:1,
-                        mbSelectAllSingleClick:1,
                         mbInternModified:1,
                         mbReadOnly:1,
                         mbInsertMode:1,
@@ -178,8 +177,6 @@ public:
 
     virtual void        SetReadOnly( bool bReadOnly = true );
     virtual bool        IsReadOnly() const { return mbReadOnly; }
-
-    void                SetSelectAllSingleClick( bool bSelectAllSingleClick );
 
     void                SetInsertMode( bool bInsert );
     bool                IsInsertMode() const;
