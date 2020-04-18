@@ -332,7 +332,6 @@ void DrawLine( OutputDevice& rDev, const basegfx::B2DPoint& rP1, const basegfx::
 FontNameBox::FontNameBox( vcl::Window* pParent, WinBits nWinStyle ) :
     ComboBox( pParent, nWinStyle )
 {
-    EnableSelectAll();
     mbWYSIWYG = false;
     InitFontMRUEntriesFile();
 }
