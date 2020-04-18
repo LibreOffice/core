@@ -1441,115 +1441,117 @@ void InterfaceType::addComprehensiveGetCppuTypeIncludes(
 
 void InterfaceType::dumpCppuAttributes(FileStream & out, sal_uInt32 & index)
 {
-    if (!entity_->getDirectAttributes().empty()) {
-        out << "\n" << indent()
-            << "typelib_InterfaceAttributeTypeDescription * pAttribute = 0;\n";
-        std::vector< unoidl::InterfaceTypeEntity::Attribute >::size_type n = 0;
-        for (const unoidl::InterfaceTypeEntity::Attribute& attr : entity_->getDirectAttributes()) {
-            OUString type(resolveAllTypedefs(attr.type));
-            out << indent() << "{\n";
-            inc();
-            out << indent() << "::rtl::OUString sAttributeType" << n << "( \""
-                << type << "\" );\n" << indent()
-                << "::rtl::OUString sAttributeName" << n << "( \"" << name_
-                << "::" << attr.name << "\" );\n";
-            sal_Int32 getExcn = dumpExceptionTypeNames(
-                                    out, "get", attr.getExceptions, false);
-            sal_Int32 setExcn = dumpExceptionTypeNames(
-                                    out, "set", attr.setExceptions, false);
-            out << indent()
-                << ("typelib_typedescription_newExtendedInterfaceAttribute("
-                    " &pAttribute,\n");
-            inc();
-            out << indent() << index++ << ", sAttributeName" << n
-                << ".pData,\n" << indent() << "(typelib_TypeClass)"
-                << getTypeClass(type) << ", sAttributeType" << n << ".pData,\n"
-                << indent() << "sal_" << (attr.readOnly ? "True" : "False")
-                << ", " << getExcn << ", "
-                << (getExcn == 0 ? "0" : "the_getExceptions") << ", " << setExcn
-                << ", " << (setExcn == 0 ? "0" : "the_setExceptions")
-                << " );\n";
-            dec();
-            out << indent()
-                << ("typelib_typedescription_register("
-                    " (typelib_TypeDescription**)&pAttribute );\n");
-            dec();
-            out << indent() << "}\n";
-            ++n;
-        }
+    if (entity_->getDirectAttributes().empty())
+        return;
+
+    out << "\n" << indent()
+        << "typelib_InterfaceAttributeTypeDescription * pAttribute = 0;\n";
+    std::vector< unoidl::InterfaceTypeEntity::Attribute >::size_type n = 0;
+    for (const unoidl::InterfaceTypeEntity::Attribute& attr : entity_->getDirectAttributes()) {
+        OUString type(resolveAllTypedefs(attr.type));
+        out << indent() << "{\n";
+        inc();
+        out << indent() << "::rtl::OUString sAttributeType" << n << "( \""
+            << type << "\" );\n" << indent()
+            << "::rtl::OUString sAttributeName" << n << "( \"" << name_
+            << "::" << attr.name << "\" );\n";
+        sal_Int32 getExcn = dumpExceptionTypeNames(
+                                out, "get", attr.getExceptions, false);
+        sal_Int32 setExcn = dumpExceptionTypeNames(
+                                out, "set", attr.setExceptions, false);
         out << indent()
-            << ("typelib_typedescription_release("
-                " (typelib_TypeDescription*)pAttribute );\n");
+            << ("typelib_typedescription_newExtendedInterfaceAttribute("
+                " &pAttribute,\n");
+        inc();
+        out << indent() << index++ << ", sAttributeName" << n
+            << ".pData,\n" << indent() << "(typelib_TypeClass)"
+            << getTypeClass(type) << ", sAttributeType" << n << ".pData,\n"
+            << indent() << "sal_" << (attr.readOnly ? "True" : "False")
+            << ", " << getExcn << ", "
+            << (getExcn == 0 ? "0" : "the_getExceptions") << ", " << setExcn
+            << ", " << (setExcn == 0 ? "0" : "the_setExceptions")
+            << " );\n";
+        dec();
+        out << indent()
+            << ("typelib_typedescription_register("
+                " (typelib_TypeDescription**)&pAttribute );\n");
+        dec();
+        out << indent() << "}\n";
+        ++n;
     }
+    out << indent()
+        << ("typelib_typedescription_release("
+            " (typelib_TypeDescription*)pAttribute );\n");
 }
 
 void InterfaceType::dumpCppuMethods(FileStream & out, sal_uInt32 & index)
 {
-    if (!entity_->getDirectMethods().empty()) {
-        out << "\n" << indent()
-            << "typelib_InterfaceMethodTypeDescription * pMethod = 0;\n";
-        std::vector< unoidl::InterfaceTypeEntity::Method >::size_type n = 0;
-        for (const unoidl::InterfaceTypeEntity::Method& method : entity_->getDirectMethods()) {
-            OUString returnType(resolveAllTypedefs(method.returnType));
-            out << indent() << "{\n";
-            inc();
-            if (!method.parameters.empty()) {
-                out << indent() << "typelib_Parameter_Init aParameters["
-                    << method.parameters.size() << "];\n";
-            }
-            std::vector< unoidl::InterfaceTypeEntity::Method::Parameter >::
-            size_type m = 0;
-            for (const unoidl::InterfaceTypeEntity::Method::Parameter& param : method.parameters) {
-                OUString type(resolveAllTypedefs(param.type));
-                out << indent() << "::rtl::OUString sParamName" << m << "( \""
-                    << param.name << "\" );\n" << indent()
-                    << "::rtl::OUString sParamType" << m << "( \"" << type
-                    << "\" );\n" << indent() << "aParameters[" << m
-                    << "].pParamName = sParamName" << m << ".pData;\n"
-                    << indent() << "aParameters[" << m
-                    << "].eTypeClass = (typelib_TypeClass)"
-                    << getTypeClass(type) << ";\n" << indent() << "aParameters["
-                    << m << "].pTypeName = sParamType" << m << ".pData;\n"
-                    << indent() << "aParameters[" << m << "].bIn = "
-                    << ((param.direction
-                         == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_OUT)
-                        ? "sal_False" : "sal_True")
-                    << ";\n" << indent() << "aParameters[" << m << "].bOut = "
-                    << ((param.direction
-                         == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN)
-                        ? "sal_False" : "sal_True")
-                    << ";\n";
-                ++m;
-            }
-            sal_Int32 excn = dumpExceptionTypeNames(
-                                 out, "", method.exceptions,
-                                 method.name != "acquire" && method.name != "release");
-            out << indent() << "::rtl::OUString sReturnType" << n << "( \""
-                << returnType << "\" );\n" << indent()
-                << "::rtl::OUString sMethodName" << n << "( \"" << name_ << "::"
-                << method.name << "\" );\n" << indent()
-                << "typelib_typedescription_newInterfaceMethod( &pMethod,\n";
-            inc();
-            out << indent() << index++ << ", sal_False,\n" << indent()
-                << "sMethodName" << n << ".pData,\n" << indent()
-                << "(typelib_TypeClass)" << getTypeClass(returnType)
-                << ", sReturnType" << n << ".pData,\n" << indent()
-                << method.parameters.size() << ", "
-                << (method.parameters.empty() ? "0" : "aParameters") << ",\n"
-                << indent() << excn << ", "
-                << (excn == 0 ? "0" : "the_Exceptions") << " );\n";
-            dec();
-            out << indent()
-                << ("typelib_typedescription_register("
-                    " (typelib_TypeDescription**)&pMethod );\n");
-            dec();
-            out << indent() << "}\n";
-            ++n;
+    if (entity_->getDirectMethods().empty())
+        return;
+
+    out << "\n" << indent()
+        << "typelib_InterfaceMethodTypeDescription * pMethod = 0;\n";
+    std::vector< unoidl::InterfaceTypeEntity::Method >::size_type n = 0;
+    for (const unoidl::InterfaceTypeEntity::Method& method : entity_->getDirectMethods()) {
+        OUString returnType(resolveAllTypedefs(method.returnType));
+        out << indent() << "{\n";
+        inc();
+        if (!method.parameters.empty()) {
+            out << indent() << "typelib_Parameter_Init aParameters["
+                << method.parameters.size() << "];\n";
         }
+        std::vector< unoidl::InterfaceTypeEntity::Method::Parameter >::
+        size_type m = 0;
+        for (const unoidl::InterfaceTypeEntity::Method::Parameter& param : method.parameters) {
+            OUString type(resolveAllTypedefs(param.type));
+            out << indent() << "::rtl::OUString sParamName" << m << "( \""
+                << param.name << "\" );\n" << indent()
+                << "::rtl::OUString sParamType" << m << "( \"" << type
+                << "\" );\n" << indent() << "aParameters[" << m
+                << "].pParamName = sParamName" << m << ".pData;\n"
+                << indent() << "aParameters[" << m
+                << "].eTypeClass = (typelib_TypeClass)"
+                << getTypeClass(type) << ";\n" << indent() << "aParameters["
+                << m << "].pTypeName = sParamType" << m << ".pData;\n"
+                << indent() << "aParameters[" << m << "].bIn = "
+                << ((param.direction
+                     == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_OUT)
+                    ? "sal_False" : "sal_True")
+                << ";\n" << indent() << "aParameters[" << m << "].bOut = "
+                << ((param.direction
+                     == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN)
+                    ? "sal_False" : "sal_True")
+                << ";\n";
+            ++m;
+        }
+        sal_Int32 excn = dumpExceptionTypeNames(
+                             out, "", method.exceptions,
+                             method.name != "acquire" && method.name != "release");
+        out << indent() << "::rtl::OUString sReturnType" << n << "( \""
+            << returnType << "\" );\n" << indent()
+            << "::rtl::OUString sMethodName" << n << "( \"" << name_ << "::"
+            << method.name << "\" );\n" << indent()
+            << "typelib_typedescription_newInterfaceMethod( &pMethod,\n";
+        inc();
+        out << indent() << index++ << ", sal_False,\n" << indent()
+            << "sMethodName" << n << ".pData,\n" << indent()
+            << "(typelib_TypeClass)" << getTypeClass(returnType)
+            << ", sReturnType" << n << ".pData,\n" << indent()
+            << method.parameters.size() << ", "
+            << (method.parameters.empty() ? "0" : "aParameters") << ",\n"
+            << indent() << excn << ", "
+            << (excn == 0 ? "0" : "the_Exceptions") << " );\n";
+        dec();
         out << indent()
-            << ("typelib_typedescription_release("
-                " (typelib_TypeDescription*)pMethod );\n");
+            << ("typelib_typedescription_register("
+                " (typelib_TypeDescription**)&pMethod );\n");
+        dec();
+        out << indent() << "}\n";
+        ++n;
     }
+    out << indent()
+        << ("typelib_typedescription_release("
+            " (typelib_TypeDescription*)pMethod );\n");
 }
 
 void InterfaceType::dumpAttributesCppuDecl(

@@ -63,27 +63,28 @@ void ExceptionTree::add(
             getDirectBase());
         assert(!n.isEmpty());
     }
-    if (!bRuntimeException) {
-        ExceptionTreeNode * node = &m_root;
-        for (std::vector< OString >::reverse_iterator i(list.rbegin());
-             !node->present; ++i)
+    if (bRuntimeException)
+        return;
+
+    ExceptionTreeNode * node = &m_root;
+    for (std::vector< OString >::reverse_iterator i(list.rbegin());
+         !node->present; ++i)
+    {
+        if (i == list.rend()) {
+            node->setPresent();
+            break;
+        }
+        for (ExceptionTreeNode::Children::iterator j(
+                 node->children.begin());;
+             ++j)
         {
-            if (i == list.rend()) {
-                node->setPresent();
+            if (j == node->children.end()) {
+                node = node->add(*i);
                 break;
             }
-            for (ExceptionTreeNode::Children::iterator j(
-                     node->children.begin());;
-                 ++j)
-            {
-                if (j == node->children.end()) {
-                    node = node->add(*i);
-                    break;
-                }
-                if ((*j)->name == *i) {
-                    node = j->get();
-                    break;
-                }
+            if ((*j)->name == *i) {
+                node = j->get();
+                break;
             }
         }
     }
