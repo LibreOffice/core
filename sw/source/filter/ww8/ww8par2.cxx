@@ -3751,6 +3751,7 @@ WW8RStyle::WW8RStyle(WW8Fib& _rFib, SwWW8ImplReader* pI)
     , mbFSizeChanged(false)
     , mbFCTLSizeChanged(false)
     , mbWidowsChanged(false)
+    , mbBidiChanged(false)
 {
     mpIo->m_vColl.resize(m_cstd);
 }
@@ -3795,6 +3796,14 @@ void WW8RStyle::Set1StyleDefaults()
         {
             mpIo->m_pCurrentColl->SetFormatAttr( SvxWidowsItem( 2, RES_PARATR_WIDOWS ) );
             mpIo->m_pCurrentColl->SetFormatAttr( SvxOrphansItem( 2, RES_PARATR_ORPHANS ) );
+        }
+
+        // Word defaults to ltr, not inheriting from the environment like Writer. Regardless of
+        // the page/sections rtl setting, the standard/no-inherit styles lack of rtl still means ltr
+        if( !mbBidiChanged )  // likely, since no UI to change LTR except in default style
+        {
+            mpIo->m_pCurrentColl->SetFormatAttr(
+                SvxFrameDirectionItem(SvxFrameDirection::Horizontal_LR_TB, RES_FRAMEDIR));
         }
     }
 }
@@ -4549,18 +4558,6 @@ void WW8RStyle::Import()
             aAttr.GetMaxHyphens() = 0;
 
             mpIo->m_pStandardFormatColl->SetFormatAttr( aAttr );
-        }
-
-        /*
-        Word defaults to ltr not from environment like writer. Regardless of
-        the page/sections rtl setting the standard style lack of rtl still
-        means ltr
-        */
-        if (SfxItemState::SET != mpIo->m_pStandardFormatColl->GetItemState(RES_FRAMEDIR,
-            false))
-        {
-           mpIo->m_pStandardFormatColl->SetFormatAttr(
-                SvxFrameDirectionItem(SvxFrameDirection::Horizontal_LR_TB, RES_FRAMEDIR));
         }
     }
 

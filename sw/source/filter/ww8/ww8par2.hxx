@@ -105,6 +105,7 @@ friend class SwWW8ImplReader;
     bool mbFSizeChanged;     // For Simulating Default-FontSize
     bool mbFCTLSizeChanged;  // For Simulating Default-CTL FontSize
     bool mbWidowsChanged;    // For Simulating Default-Widows / Orphans
+    bool mbBidiChanged;      // For Simulating Default-LTR
 
     void ImportSprms(std::size_t nPosFc, short nLen, bool bPap);
     void ImportSprms(sal_uInt8 *pSprms, short nLen, bool bPap);
