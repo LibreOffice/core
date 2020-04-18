@@ -298,28 +298,28 @@ namespace internal
     void PropertyForwarder::doForward( sal_Int32 _nHandle, const Any& _rValue )
     {
         OSL_ENSURE( m_rAggregationHelper.m_xAggregateSet.is(), "PropertyForwarder::doForward: no property set!" );
-        if ( m_rAggregationHelper.m_xAggregateSet.is() )
+        if ( !m_rAggregationHelper.m_xAggregateSet.is() )
+            return;
+
+        m_rAggregationHelper.forwardingPropertyValue( _nHandle );
+
+        OSL_ENSURE( m_nCurrentlyForwarding == -1, "PropertyForwarder::doForward: reentrance?" );
+        m_nCurrentlyForwarding = _nHandle;
+
+        try
         {
-            m_rAggregationHelper.forwardingPropertyValue( _nHandle );
-
-            OSL_ENSURE( m_nCurrentlyForwarding == -1, "PropertyForwarder::doForward: reentrance?" );
-            m_nCurrentlyForwarding = _nHandle;
-
-            try
-            {
-                m_rAggregationHelper.m_xAggregateSet->setPropertyValue( m_rAggregationHelper.getPropertyName( _nHandle ), _rValue );
-                    // TODO: cache the property name? (it's a O(log n) search)
-            }
-            catch( const Exception& )
-            {
-                m_rAggregationHelper.forwardedPropertyValue( _nHandle );
-                throw;
-            }
-
-            m_nCurrentlyForwarding = -1;
-
-            m_rAggregationHelper.forwardedPropertyValue( _nHandle );
+            m_rAggregationHelper.m_xAggregateSet->setPropertyValue( m_rAggregationHelper.getPropertyName( _nHandle ), _rValue );
+                // TODO: cache the property name? (it's a O(log n) search)
         }
+        catch( const Exception& )
+        {
+            m_rAggregationHelper.forwardedPropertyValue( _nHandle );
+            throw;
+        }
+
+        m_nCurrentlyForwarding = -1;
+
+        m_rAggregationHelper.forwardedPropertyValue( _nHandle );
     }
 }
 

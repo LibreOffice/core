@@ -208,30 +208,30 @@ OfficeInstallationDirectories::getSupportedServiceNames()
 
 void OfficeInstallationDirectories::initDirs()
 {
-    if ( !m_xOfficeBrandDir)
-    {
-        osl::MutexGuard aGuard( m_aMutex );
-        if ( !m_xOfficeBrandDir )
-        {
-            uno::Reference< util::XMacroExpander > xExpander = util::theMacroExpander::get(m_xCtx);
+    if ( m_xOfficeBrandDir)
+        return;
 
-            m_xOfficeBrandDir = xExpander->expandMacros( "$BRAND_BASE_DIR" );
+    osl::MutexGuard aGuard( m_aMutex );
+    if ( m_xOfficeBrandDir )
+        return;
 
-            OSL_ENSURE( !m_xOfficeBrandDir->isEmpty(),
-                        "Unable to obtain office brand installation directory!" );
+    uno::Reference< util::XMacroExpander > xExpander = util::theMacroExpander::get(m_xCtx);
 
-            makeCanonicalFileURL( *m_xOfficeBrandDir );
+    m_xOfficeBrandDir = xExpander->expandMacros( "$BRAND_BASE_DIR" );
 
-            m_xUserDir =
-                xExpander->expandMacros(
-                    "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap" ) ":UserInstallation}" );
+    OSL_ENSURE( !m_xOfficeBrandDir->isEmpty(),
+                "Unable to obtain office brand installation directory!" );
 
-            OSL_ENSURE( !m_xUserDir->isEmpty(),
-                        "Unable to obtain office user data directory!" );
+    makeCanonicalFileURL( *m_xOfficeBrandDir );
 
-            makeCanonicalFileURL( *m_xUserDir );
-        }
-    }
+    m_xUserDir =
+        xExpander->expandMacros(
+            "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap" ) ":UserInstallation}" );
+
+    OSL_ENSURE( !m_xUserDir->isEmpty(),
+                "Unable to obtain office user data directory!" );
+
+    makeCanonicalFileURL( *m_xUserDir );
 }
 
 }

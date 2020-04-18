@@ -99,23 +99,23 @@ GenericPropertySet::GenericPropertySet( PropertySetInfo* pInfo ) throw()
 void SAL_CALL GenericPropertySet::addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener )
 {
     Reference < XPropertySetInfo > xInfo = getPropertySetInfo(  );
-    if ( xInfo.is() )
+    if ( !xInfo.is() )
+        return;
+
+    if ( aPropertyName.isEmpty() )
     {
-        if ( aPropertyName.isEmpty() )
+        Sequence< Property> aSeq = xInfo->getProperties();
+        const Property* pIter = aSeq.getConstArray();
+        const Property* pEnd  = pIter + aSeq.getLength();
+        for( ; pIter != pEnd ; ++pIter)
         {
-            Sequence< Property> aSeq = xInfo->getProperties();
-            const Property* pIter = aSeq.getConstArray();
-            const Property* pEnd  = pIter + aSeq.getLength();
-            for( ; pIter != pEnd ; ++pIter)
-            {
-                m_aListener.addInterface(pIter->Name,xListener);
-            }
+            m_aListener.addInterface(pIter->Name,xListener);
         }
-        else if ( xInfo->hasPropertyByName(aPropertyName) )
-            m_aListener.addInterface(aPropertyName,xListener);
-        else
-            throw UnknownPropertyException( aPropertyName, *this );
     }
+    else if ( xInfo->hasPropertyByName(aPropertyName) )
+        m_aListener.addInterface(aPropertyName,xListener);
+    else
+        throw UnknownPropertyException( aPropertyName, *this );
 }
 
 void SAL_CALL GenericPropertySet::removePropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener )
@@ -123,23 +123,23 @@ void SAL_CALL GenericPropertySet::removePropertyChangeListener( const OUString& 
     ClearableMutexGuard aGuard( maMutex );
     Reference < XPropertySetInfo > xInfo = getPropertySetInfo(  );
     aGuard.clear();
-    if ( xInfo.is() )
+    if ( !xInfo.is() )
+        return;
+
+    if ( aPropertyName.isEmpty() )
     {
-        if ( aPropertyName.isEmpty() )
+        Sequence< Property> aSeq = xInfo->getProperties();
+        const Property* pIter = aSeq.getConstArray();
+        const Property* pEnd  = pIter + aSeq.getLength();
+        for( ; pIter != pEnd ; ++pIter)
         {
-            Sequence< Property> aSeq = xInfo->getProperties();
-            const Property* pIter = aSeq.getConstArray();
-            const Property* pEnd  = pIter + aSeq.getLength();
-            for( ; pIter != pEnd ; ++pIter)
-            {
-                m_aListener.removeInterface(pIter->Name,xListener);
-            }
+            m_aListener.removeInterface(pIter->Name,xListener);
         }
-        else if ( xInfo->hasPropertyByName(aPropertyName) )
-            m_aListener.removeInterface(aPropertyName,xListener);
-        else
-            throw UnknownPropertyException( aPropertyName, *this );
     }
+    else if ( xInfo->hasPropertyByName(aPropertyName) )
+        m_aListener.removeInterface(aPropertyName,xListener);
+    else
+        throw UnknownPropertyException( aPropertyName, *this );
 }
 
 void GenericPropertySet::_setPropertyValues( const PropertyMapEntry** ppEntries, const Any* pValues )

@@ -124,18 +124,18 @@ namespace comphelper
         if ( !isAlive() )
             return;
 
-        if ( _rxListener.is() && m_pImpl->getClientId() )
+        if ( !(_rxListener.is() && m_pImpl->getClientId()) )
+            return;
+
+        sal_Int32 nListenerCount = AccessibleEventNotifier::removeEventListener( m_pImpl->getClientId( ), _rxListener );
+        if ( !nListenerCount )
         {
-            sal_Int32 nListenerCount = AccessibleEventNotifier::removeEventListener( m_pImpl->getClientId( ), _rxListener );
-            if ( !nListenerCount )
-            {
-                // no listeners anymore
-                // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-                // and at least to us not firing any events anymore, in case somebody calls
-                // NotifyAccessibleEvent, again
-                AccessibleEventNotifier::revokeClient( m_pImpl->getClientId( ) );
-                m_pImpl->setClientId( 0 );
-            }
+            // no listeners anymore
+            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
+            // and at least to us not firing any events anymore, in case somebody calls
+            // NotifyAccessibleEvent, again
+            AccessibleEventNotifier::revokeClient( m_pImpl->getClientId( ) );
+            m_pImpl->setClientId( 0 );
         }
     }
 

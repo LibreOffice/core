@@ -594,26 +594,26 @@ void SAL_CALL ImplEventAttacherManager::detach(sal_Int32 nIndex, const Reference
     std::deque< AttacherIndex_Impl >::iterator aCurrentPosition = aIndex.begin() + nIndex;
     auto aObjIt = std::find_if(aCurrentPosition->aObjList.begin(), aCurrentPosition->aObjList.end(),
         [&xObject](const AttachedObject_Impl& rObj) { return rObj.xTarget == xObject; });
-    if (aObjIt != aCurrentPosition->aObjList.end())
+    if (aObjIt == aCurrentPosition->aObjList.end())
+        return;
+
+    sal_Int32 i = 0;
+    for( const auto& rEvt : aCurrentPosition->aEventList )
     {
-        sal_Int32 i = 0;
-        for( const auto& rEvt : aCurrentPosition->aEventList )
+        if( aObjIt->aAttachedListenerSeq[i].is() )
         {
-            if( aObjIt->aAttachedListenerSeq[i].is() )
+            try
             {
-                try
-                {
-                    xAttacher->removeListener( aObjIt->xTarget, rEvt.ListenerType,
-                                           rEvt.AddListenerParam, aObjIt->aAttachedListenerSeq[i] );
-                }
-                catch( Exception& )
-                {
-                }
+                xAttacher->removeListener( aObjIt->xTarget, rEvt.ListenerType,
+                                       rEvt.AddListenerParam, aObjIt->aAttachedListenerSeq[i] );
             }
-            ++i;
+            catch( Exception& )
+            {
+            }
         }
-        aCurrentPosition->aObjList.erase( aObjIt );
+        ++i;
     }
+    aCurrentPosition->aObjList.erase( aObjIt );
 }
 
 void SAL_CALL ImplEventAttacherManager::addScriptListener(const Reference< XScriptListener >& aListener)

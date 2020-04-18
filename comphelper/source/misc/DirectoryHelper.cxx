@@ -69,41 +69,41 @@ bool DirectoryHelper::dirExists(const OUString& rDirURL)
 void DirectoryHelper::scanDirsAndFiles(const OUString& rDirURL, std::set<OUString>& rDirs,
                                        std::set<std::pair<OUString, OUString>>& rFiles)
 {
-    if (!rDirURL.isEmpty())
+    if (rDirURL.isEmpty())
+        return;
+
+    osl::Directory aDirectory(rDirURL);
+
+    if (osl::FileBase::E_None != aDirectory.open())
+        return;
+
+    osl::DirectoryItem aDirectoryItem;
+
+    while (osl::FileBase::E_None == aDirectory.getNextItem(aDirectoryItem))
     {
-        osl::Directory aDirectory(rDirURL);
+        osl::FileStatus aFileStatus(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL
+                                    | osl_FileStatus_Mask_FileName);
 
-        if (osl::FileBase::E_None == aDirectory.open())
+        if (osl::FileBase::E_None == aDirectoryItem.getFileStatus(aFileStatus))
         {
-            osl::DirectoryItem aDirectoryItem;
-
-            while (osl::FileBase::E_None == aDirectory.getNextItem(aDirectoryItem))
+            if (aFileStatus.isDirectory())
             {
-                osl::FileStatus aFileStatus(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL
-                                            | osl_FileStatus_Mask_FileName);
+                const OUString aFileName(aFileStatus.getFileName());
 
-                if (osl::FileBase::E_None == aDirectoryItem.getFileStatus(aFileStatus))
+                if (!aFileName.isEmpty())
                 {
-                    if (aFileStatus.isDirectory())
-                    {
-                        const OUString aFileName(aFileStatus.getFileName());
+                    rDirs.insert(aFileName);
+                }
+            }
+            else if (aFileStatus.isRegular())
+            {
+                OUString aFileName(aFileStatus.getFileName());
+                OUString aExtension;
+                aFileName = splitAtLastToken(aFileName, '.', aExtension);
 
-                        if (!aFileName.isEmpty())
-                        {
-                            rDirs.insert(aFileName);
-                        }
-                    }
-                    else if (aFileStatus.isRegular())
-                    {
-                        OUString aFileName(aFileStatus.getFileName());
-                        OUString aExtension;
-                        aFileName = splitAtLastToken(aFileName, '.', aExtension);
-
-                        if (!aFileName.isEmpty())
-                        {
-                            rFiles.insert(std::pair<OUString, OUString>(aFileName, aExtension));
-                        }
-                    }
+                if (!aFileName.isEmpty())
+                {
+                    rFiles.insert(std::pair<OUString, OUString>(aFileName, aExtension));
                 }
             }
         }

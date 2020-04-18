@@ -118,25 +118,25 @@ void SAL_CALL ChainablePropertySet::setPropertyValues(const Sequence< OUString >
     if( nCount != rValues.getLength() )
         throw IllegalArgumentException();
 
-    if( nCount )
+    if( !nCount )
+        return;
+
+    _preSetValues();
+
+    const Any * pAny = rValues.getConstArray();
+    const OUString * pString = rPropertyNames.getConstArray();
+    PropertyInfoHash::const_iterator aEnd = mxInfo->maMap.end(), aIter;
+
+    for ( sal_Int32 i = 0; i < nCount; ++i, ++pString, ++pAny )
     {
-        _preSetValues();
+        aIter = mxInfo->maMap.find ( *pString );
+        if ( aIter == aEnd )
+            throw RuntimeException( *pString, static_cast< XPropertySet* >( this ) );
 
-        const Any * pAny = rValues.getConstArray();
-        const OUString * pString = rPropertyNames.getConstArray();
-        PropertyInfoHash::const_iterator aEnd = mxInfo->maMap.end(), aIter;
-
-        for ( sal_Int32 i = 0; i < nCount; ++i, ++pString, ++pAny )
-        {
-            aIter = mxInfo->maMap.find ( *pString );
-            if ( aIter == aEnd )
-                throw RuntimeException( *pString, static_cast< XPropertySet* >( this ) );
-
-            _setSingleValue ( *((*aIter).second), *pAny );
-        }
-
-        _postSetValues();
+        _setSingleValue ( *((*aIter).second), *pAny );
     }
+
+    _postSetValues();
 }
 
 Sequence< Any > SAL_CALL ChainablePropertySet::getPropertyValues(const Sequence< OUString >& rPropertyNames)

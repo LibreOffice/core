@@ -189,53 +189,53 @@ void SAL_CALL MasterPropertySet::setPropertyValues( const Sequence< OUString >& 
     if( nCount != aValues.getLength() )
         throw IllegalArgumentException();
 
-    if( nCount )
+    if( !nCount )
+        return;
+
+    _preSetValues();
+
+    const Any * pAny = aValues.getConstArray();
+    const OUString * pString = aPropertyNames.getConstArray();
+    PropertyDataHash::const_iterator aEnd = mxInfo->maMap.end(), aIter;
+
+    //!! have a unique_ptr to an array of OGuards in order to have the
+    //!! allocated memory properly freed (exception safe!).
+    //!! Since the array itself has unique_ptrs as members we have to use a
+    //!! helper class 'AutoOGuardArray' in order to have
+    //!! the acquired locks properly released.
+    AutoOGuardArray aOGuardArray( nCount );
+
+    for ( sal_Int32 i = 0; i < nCount; ++i, ++pString, ++pAny )
     {
-        _preSetValues();
+        aIter = mxInfo->maMap.find ( *pString );
+        if ( aIter == aEnd )
+            throw RuntimeException( *pString, static_cast< XPropertySet* >( this ) );
 
-        const Any * pAny = aValues.getConstArray();
-        const OUString * pString = aPropertyNames.getConstArray();
-        PropertyDataHash::const_iterator aEnd = mxInfo->maMap.end(), aIter;
-
-        //!! have a unique_ptr to an array of OGuards in order to have the
-        //!! allocated memory properly freed (exception safe!).
-        //!! Since the array itself has unique_ptrs as members we have to use a
-        //!! helper class 'AutoOGuardArray' in order to have
-        //!! the acquired locks properly released.
-        AutoOGuardArray aOGuardArray( nCount );
-
-        for ( sal_Int32 i = 0; i < nCount; ++i, ++pString, ++pAny )
+        if ( (*aIter).second->mnMapId == 0 ) // 0 means it's one of ours !
+            _setSingleValue( *((*aIter).second->mpInfo), *pAny );
+        else
         {
-            aIter = mxInfo->maMap.find ( *pString );
-            if ( aIter == aEnd )
-                throw RuntimeException( *pString, static_cast< XPropertySet* >( this ) );
-
-            if ( (*aIter).second->mnMapId == 0 ) // 0 means it's one of ours !
-                _setSingleValue( *((*aIter).second->mpInfo), *pAny );
-            else
+            SlaveData * pSlave = maSlaveMap [ (*aIter).second->mnMapId ];
+            if (!pSlave->IsInit())
             {
-                SlaveData * pSlave = maSlaveMap [ (*aIter).second->mnMapId ];
-                if (!pSlave->IsInit())
-                {
-                    // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-                    if (pSlave->mxSlave->mpMutex)
-                        aOGuardArray[i].reset( new osl::Guard< comphelper::SolarMutex >(pSlave->mxSlave->mpMutex) );
+                // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
+                if (pSlave->mxSlave->mpMutex)
+                    aOGuardArray[i].reset( new osl::Guard< comphelper::SolarMutex >(pSlave->mxSlave->mpMutex) );
 
-                    pSlave->mxSlave->_preSetValues();
-                    pSlave->SetInit ( true );
-                }
-                pSlave->mxSlave->_setSingleValue( *((*aIter).second->mpInfo), *pAny );
+                pSlave->mxSlave->_preSetValues();
+                pSlave->SetInit ( true );
             }
+            pSlave->mxSlave->_setSingleValue( *((*aIter).second->mpInfo), *pAny );
         }
+    }
 
-        _postSetValues();
-        for( const auto& rSlave : maSlaveMap )
+    _postSetValues();
+    for( const auto& rSlave : maSlaveMap )
+    {
+        if( rSlave.second->IsInit() )
         {
-            if( rSlave.second->IsInit() )
-            {
-                rSlave.second->mxSlave->_postSetValues();
-                rSlave.second->SetInit( false );
-            }
+            rSlave.second->mxSlave->_postSetValues();
+            rSlave.second->SetInit( false );
         }
     }
 }

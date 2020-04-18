@@ -98,21 +98,21 @@ namespace comphelper
 
     void OContainerListenerAdapter::dispose()
     {
-        if (m_xContainer.is())
+        if (!m_xContainer.is())
+            return;
+
+        try
         {
-            try
-            {
-                Reference< XContainerListener > xPreventDelete(this);
-                m_xContainer->removeContainerListener(xPreventDelete);
-                m_pListener->setAdapter(nullptr);
-            }
-            catch(const Exception&)
-            {
-                OSL_FAIL("Exception caught!");
-            }
-            m_xContainer = nullptr;
-            m_pListener = nullptr;
+            Reference< XContainerListener > xPreventDelete(this);
+            m_xContainer->removeContainerListener(xPreventDelete);
+            m_pListener->setAdapter(nullptr);
         }
+        catch(const Exception&)
+        {
+            OSL_FAIL("Exception caught!");
+        }
+        m_xContainer = nullptr;
+        m_pListener = nullptr;
     }
 
 
