@@ -79,116 +79,116 @@ SbiSymDef* SbiParser::VarDecl( SbiExprListPtr* ppDim, bool bStatic, bool bConst 
 void SbiParser::TypeDecl( SbiSymDef& rDef, bool bAsNewAlreadyParsed )
 {
     SbxDataType eType = rDef.GetType();
-    if( bAsNewAlreadyParsed || Peek() == AS )
-    {
-        short nSize = 0;
-        if( !bAsNewAlreadyParsed )
-            Next();
-        rDef.SetDefinedAs();
-        SbiToken eTok = Next();
-        if( !bAsNewAlreadyParsed && eTok == NEW )
-        {
-            rDef.SetNew();
-            eTok = Next();
-        }
-        switch( eTok )
-        {
-            case ANY:
-                if( rDef.IsNew() )
-                    Error( ERRCODE_BASIC_SYNTAX );
-                eType = SbxVARIANT; break;
-            case TINTEGER:
-            case TLONG:
-            case TSINGLE:
-            case TDOUBLE:
-            case TCURRENCY:
-            case TDATE:
-            case TSTRING:
-            case TOBJECT:
-            case ERROR_:
-            case TBOOLEAN:
-            case TVARIANT:
-            case TBYTE:
-                if( rDef.IsNew() )
-                    Error( ERRCODE_BASIC_SYNTAX );
-                eType = (eTok==TBYTE) ? SbxBYTE : SbxDataType( eTok - TINTEGER + SbxINTEGER );
-                if( eType == SbxSTRING )
-                {
-                    // STRING*n ?
-                    if( Peek() == MUL )
-                    {       // fixed size!
-                        Next();
-                        SbiConstExpression aSize( this );
-                        nSize = aSize.GetShortValue();
-                        if( nSize < 0 || (bVBASupportOn && nSize <= 0) )
-                            Error( ERRCODE_BASIC_OUT_OF_RANGE );
-                        else
-                            rDef.SetFixedStringLength( nSize );
-                    }
-                }
-                break;
-            case SYMBOL: // can only be a TYPE or an object class!
-                if( eScanType != SbxVARIANT )
-                    Error( ERRCODE_BASIC_SYNTAX );
-                else
-                {
-                    OUString aCompleteName = aSym;
+    if( !(bAsNewAlreadyParsed || Peek() == AS) )
+        return;
 
-                    // #52709 DIM AS NEW for Uno with full-qualified name
-                    if( Peek() == DOT )
+    short nSize = 0;
+    if( !bAsNewAlreadyParsed )
+        Next();
+    rDef.SetDefinedAs();
+    SbiToken eTok = Next();
+    if( !bAsNewAlreadyParsed && eTok == NEW )
+    {
+        rDef.SetNew();
+        eTok = Next();
+    }
+    switch( eTok )
+    {
+        case ANY:
+            if( rDef.IsNew() )
+                Error( ERRCODE_BASIC_SYNTAX );
+            eType = SbxVARIANT; break;
+        case TINTEGER:
+        case TLONG:
+        case TSINGLE:
+        case TDOUBLE:
+        case TCURRENCY:
+        case TDATE:
+        case TSTRING:
+        case TOBJECT:
+        case ERROR_:
+        case TBOOLEAN:
+        case TVARIANT:
+        case TBYTE:
+            if( rDef.IsNew() )
+                Error( ERRCODE_BASIC_SYNTAX );
+            eType = (eTok==TBYTE) ? SbxBYTE : SbxDataType( eTok - TINTEGER + SbxINTEGER );
+            if( eType == SbxSTRING )
+            {
+                // STRING*n ?
+                if( Peek() == MUL )
+                {       // fixed size!
+                    Next();
+                    SbiConstExpression aSize( this );
+                    nSize = aSize.GetShortValue();
+                    if( nSize < 0 || (bVBASupportOn && nSize <= 0) )
+                        Error( ERRCODE_BASIC_OUT_OF_RANGE );
+                    else
+                        rDef.SetFixedStringLength( nSize );
+                }
+            }
+            break;
+        case SYMBOL: // can only be a TYPE or an object class!
+            if( eScanType != SbxVARIANT )
+                Error( ERRCODE_BASIC_SYNTAX );
+            else
+            {
+                OUString aCompleteName = aSym;
+
+                // #52709 DIM AS NEW for Uno with full-qualified name
+                if( Peek() == DOT )
+                {
+                    OUString aDotStr( '.' );
+                    while( Peek() == DOT )
                     {
-                        OUString aDotStr( '.' );
-                        while( Peek() == DOT )
+                        aCompleteName += aDotStr;
+                        Next();
+                        SbiToken ePeekTok = Peek();
+                        if( ePeekTok == SYMBOL || IsKwd( ePeekTok ) )
                         {
-                            aCompleteName += aDotStr;
                             Next();
-                            SbiToken ePeekTok = Peek();
-                            if( ePeekTok == SYMBOL || IsKwd( ePeekTok ) )
-                            {
-                                Next();
-                                aCompleteName += aSym;
-                            }
-                            else
-                            {
-                                Next();
-                                Error( ERRCODE_BASIC_UNEXPECTED, SYMBOL );
-                                break;
-                            }
+                            aCompleteName += aSym;
+                        }
+                        else
+                        {
+                            Next();
+                            Error( ERRCODE_BASIC_UNEXPECTED, SYMBOL );
+                            break;
                         }
                     }
-                    else if( rEnumArray->Find( aCompleteName, SbxClassType::Object ) || ( IsVBASupportOn() && VBAConstantHelper::instance().isVBAConstantType( aCompleteName ) ) )
-                    {
-                        eType = SbxLONG;
-                        break;
-                    }
-
-                    // Take over in the string pool
-                    rDef.SetTypeId( aGblStrings.Add( aCompleteName ) );
-
-                    if( rDef.IsNew() && pProc == nullptr )
-                        aRequiredTypes.push_back( aCompleteName );
                 }
-                eType = SbxOBJECT;
-                break;
-            case FIXSTRING: // new syntax for complex UNO types
-                rDef.SetTypeId( aGblStrings.Add( aSym ) );
-                eType = SbxOBJECT;
-                break;
-            default:
-                Error( ERRCODE_BASIC_UNEXPECTED, eTok );
-                Next();
-        }
-        // The variable could have been declared with a suffix
-        if( rDef.GetType() != SbxVARIANT )
-        {
-            if( rDef.GetType() != eType )
-                Error( ERRCODE_BASIC_VAR_DEFINED, rDef.GetName() );
-            else if( eType == SbxSTRING && rDef.GetLen() != nSize )
-                Error( ERRCODE_BASIC_VAR_DEFINED, rDef.GetName() );
-        }
-        rDef.SetType( eType );
-        rDef.SetLen( nSize );
+                else if( rEnumArray->Find( aCompleteName, SbxClassType::Object ) || ( IsVBASupportOn() && VBAConstantHelper::instance().isVBAConstantType( aCompleteName ) ) )
+                {
+                    eType = SbxLONG;
+                    break;
+                }
+
+                // Take over in the string pool
+                rDef.SetTypeId( aGblStrings.Add( aCompleteName ) );
+
+                if( rDef.IsNew() && pProc == nullptr )
+                    aRequiredTypes.push_back( aCompleteName );
+            }
+            eType = SbxOBJECT;
+            break;
+        case FIXSTRING: // new syntax for complex UNO types
+            rDef.SetTypeId( aGblStrings.Add( aSym ) );
+            eType = SbxOBJECT;
+            break;
+        default:
+            Error( ERRCODE_BASIC_UNEXPECTED, eTok );
+            Next();
     }
+    // The variable could have been declared with a suffix
+    if( rDef.GetType() != SbxVARIANT )
+    {
+        if( rDef.GetType() != eType )
+            Error( ERRCODE_BASIC_VAR_DEFINED, rDef.GetName() );
+        else if( eType == SbxSTRING && rDef.GetLen() != nSize )
+            Error( ERRCODE_BASIC_VAR_DEFINED, rDef.GetName() );
+    }
+    rDef.SetType( eType );
+    rDef.SetLen( nSize );
 }
 
 // Here variables, arrays and structures were defined.

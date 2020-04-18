@@ -179,27 +179,27 @@ void BasMgrContainerListenerImpl::addLibraryModulesImpl( BasicManager const * pM
 
     StarBASIC* pLib = pMgr->GetLib( aLibName );
     DBG_ASSERT( pLib, "BasMgrContainerListenerImpl::addLibraryModulesImpl: Unknown lib!");
-    if( pLib )
-    {
-        const OUString* pNames = aModuleNames.getConstArray();
-        for( sal_Int32 j = 0 ; j < nModuleCount ; j++ )
-        {
-            OUString aModuleName = pNames[ j ];
-            uno::Any aElement = xLibNameAccess->getByName( aModuleName );
-            OUString aMod;
-            aElement >>= aMod;
-            uno::Reference< vba::XVBAModuleInfo > xVBAModuleInfo( xLibNameAccess, uno::UNO_QUERY );
-            if ( xVBAModuleInfo.is() && xVBAModuleInfo->hasModuleInfo( aModuleName ) )
-            {
-                ModuleInfo aInfo = xVBAModuleInfo->getModuleInfo( aModuleName );
-                pLib->MakeModule( aModuleName, aInfo, aMod );
-            }
-            else
-                pLib->MakeModule( aModuleName, aMod );
-        }
+    if( !pLib )
+        return;
 
-        pLib->SetModified( false );
+    const OUString* pNames = aModuleNames.getConstArray();
+    for( sal_Int32 j = 0 ; j < nModuleCount ; j++ )
+    {
+        OUString aModuleName = pNames[ j ];
+        uno::Any aElement = xLibNameAccess->getByName( aModuleName );
+        OUString aMod;
+        aElement >>= aMod;
+        uno::Reference< vba::XVBAModuleInfo > xVBAModuleInfo( xLibNameAccess, uno::UNO_QUERY );
+        if ( xVBAModuleInfo.is() && xVBAModuleInfo->hasModuleInfo( aModuleName ) )
+        {
+            ModuleInfo aInfo = xVBAModuleInfo->getModuleInfo( aModuleName );
+            pLib->MakeModule( aModuleName, aInfo, aMod );
+        }
+        else
+            pLib->MakeModule( aModuleName, aMod );
     }
+
+    pLib->SetModified( false );
 }
 
 
@@ -266,19 +266,19 @@ void SAL_CALL BasMgrContainerListenerImpl::elementReplaced( const container::Con
     DBG_ASSERT( !maLibName.isEmpty(), "library container fired elementReplaced()");
 
     StarBASIC* pLib = mpMgr->GetLib( maLibName );
-    if( pLib )
-    {
-        SbModule* pMod = pLib->FindModule( aName );
-        OUString aMod;
-        Event.Element >>= aMod;
+    if( !pLib )
+        return;
 
-        if( pMod )
-                pMod->SetSource32( aMod );
-        else
-                pLib->MakeModule( aName, aMod );
+    SbModule* pMod = pLib->FindModule( aName );
+    OUString aMod;
+    Event.Element >>= aMod;
 
-        pLib->SetModified( false );
-    }
+    if( pMod )
+            pMod->SetSource32( aMod );
+    else
+            pLib->MakeModule( aName, aMod );
+
+    pLib->SetModified( false );
 }
 
 
@@ -770,51 +770,51 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
     xManagerStream->SetBufferSize( 0 );
     xManagerStream.clear(); // Close stream
 
-    if ( !aLibs.isEmpty() )
-    {
-        INetURLObject aCurStorage( aStorName, INetProtocol::File );
-        sal_Int32 nLibPos {0};
-        do {
-            const OUString aLibInfo(aLibs.getToken(0, LIB_SEP, nLibPos));
-            sal_Int32 nInfoPos {0};
-            const OUString aLibName( aLibInfo.getToken( 0, LIBINFO_SEP, nInfoPos ) );
-            DBG_ASSERT( nInfoPos >= 0, "Invalid Lib-Info!" );
-            const OUString aLibAbsStorageName( aLibInfo.getToken( 0, LIBINFO_SEP, nInfoPos ) );
-            // TODO: fail also here if there are no more tokens?
-            const OUString aLibRelStorageName( aLibInfo.getToken( 0, LIBINFO_SEP, nInfoPos ) );
-            DBG_ASSERT( nInfoPos < 0, "Invalid Lib-Info!" );
-            INetURLObject aLibAbsStorage( aLibAbsStorageName, INetProtocol::File );
+    if ( aLibs.isEmpty() )
+        return;
 
-            INetURLObject aLibRelStorage( aStorName );
-            aLibRelStorage.removeSegment();
-            bool bWasAbsolute = false;
-            aLibRelStorage = aLibRelStorage.smartRel2Abs( aLibRelStorageName, bWasAbsolute);
-            DBG_ASSERT(!bWasAbsolute, "RelStorageName was absolute!" );
+    INetURLObject aCurStorage( aStorName, INetProtocol::File );
+    sal_Int32 nLibPos {0};
+    do {
+        const OUString aLibInfo(aLibs.getToken(0, LIB_SEP, nLibPos));
+        sal_Int32 nInfoPos {0};
+        const OUString aLibName( aLibInfo.getToken( 0, LIBINFO_SEP, nInfoPos ) );
+        DBG_ASSERT( nInfoPos >= 0, "Invalid Lib-Info!" );
+        const OUString aLibAbsStorageName( aLibInfo.getToken( 0, LIBINFO_SEP, nInfoPos ) );
+        // TODO: fail also here if there are no more tokens?
+        const OUString aLibRelStorageName( aLibInfo.getToken( 0, LIBINFO_SEP, nInfoPos ) );
+        DBG_ASSERT( nInfoPos < 0, "Invalid Lib-Info!" );
+        INetURLObject aLibAbsStorage( aLibAbsStorageName, INetProtocol::File );
 
-            tools::SvRef<SotStorage> xStorageRef;
-            if ( aLibAbsStorage == aCurStorage || aLibRelStorageName == szImbedded )
-            {
-                xStorageRef = &rStorage;
-            }
-            else
-            {
-                xStorageRef = new SotStorage( false, aLibAbsStorage.GetMainURL
-                    ( INetURLObject::DecodeMechanism::NONE ), eStorageReadMode );
-                if ( xStorageRef->GetError() != ERRCODE_NONE )
-                    xStorageRef = new SotStorage( false, aLibRelStorage.
-                    GetMainURL( INetURLObject::DecodeMechanism::NONE ), eStorageReadMode );
-            }
-            if ( xStorageRef.is() )
-            {
-                AddLib( *xStorageRef, aLibName, false );
-            }
-            else
-            {
-                StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_LIBLOAD, aStorName, DialogMask::ButtonsOk );
-                aErrors.emplace_back(*pErrInf, BasicErrorReason::STORAGENOTFOUND);
-            }
-        } while (nLibPos>=0);
-    }
+        INetURLObject aLibRelStorage( aStorName );
+        aLibRelStorage.removeSegment();
+        bool bWasAbsolute = false;
+        aLibRelStorage = aLibRelStorage.smartRel2Abs( aLibRelStorageName, bWasAbsolute);
+        DBG_ASSERT(!bWasAbsolute, "RelStorageName was absolute!" );
+
+        tools::SvRef<SotStorage> xStorageRef;
+        if ( aLibAbsStorage == aCurStorage || aLibRelStorageName == szImbedded )
+        {
+            xStorageRef = &rStorage;
+        }
+        else
+        {
+            xStorageRef = new SotStorage( false, aLibAbsStorage.GetMainURL
+                ( INetURLObject::DecodeMechanism::NONE ), eStorageReadMode );
+            if ( xStorageRef->GetError() != ERRCODE_NONE )
+                xStorageRef = new SotStorage( false, aLibRelStorage.
+                GetMainURL( INetURLObject::DecodeMechanism::NONE ), eStorageReadMode );
+        }
+        if ( xStorageRef.is() )
+        {
+            AddLib( *xStorageRef, aLibName, false );
+        }
+        else
+        {
+            StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_LIBLOAD, aStorName, DialogMask::ButtonsOk );
+            aErrors.emplace_back(*pErrInf, BasicErrorReason::STORAGENOTFOUND);
+        }
+    } while (nLibPos>=0);
 }
 
 BasicManager::~BasicManager()

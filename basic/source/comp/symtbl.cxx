@@ -132,39 +132,39 @@ SbiProcDef* SbiSymPool::AddProc( const OUString& rName )
 
 void SbiSymPool::Add( SbiSymDef* pDef )
 {
-    if( pDef && pDef->pIn != this )
+    if( !(pDef && pDef->pIn != this) )
+        return;
+
+    if( pDef->pIn )
     {
-        if( pDef->pIn )
-        {
 #ifdef DBG_UTIL
 
-            pParser->Error( ERRCODE_BASIC_INTERNAL_ERROR, "Dbl Pool" );
+        pParser->Error( ERRCODE_BASIC_INTERNAL_ERROR, "Dbl Pool" );
 #endif
-            return;
-        }
-
-        pDef->nPos = m_Data.size();
-        if( !pDef->nId )
-        {
-            // A unique name must be created in the string pool
-            // for static variables (Form ProcName:VarName)
-            OUString aName( pDef->aName );
-            if( pDef->IsStatic() )
-            {
-                aName = pParser->aGblStrings.Find( nProcId )
-                      + ":"
-                      + pDef->aName;
-            }
-            pDef->nId = rStrings.Add( aName );
-        }
-
-        if( !pDef->GetProcDef() )
-        {
-            pDef->nProcId = nProcId;
-        }
-        pDef->pIn = this;
-        m_Data.insert( m_Data.begin() + pDef->nPos, std::unique_ptr<SbiSymDef>(pDef) );
+        return;
     }
+
+    pDef->nPos = m_Data.size();
+    if( !pDef->nId )
+    {
+        // A unique name must be created in the string pool
+        // for static variables (Form ProcName:VarName)
+        OUString aName( pDef->aName );
+        if( pDef->IsStatic() )
+        {
+            aName = pParser->aGblStrings.Find( nProcId )
+                  + ":"
+                  + pDef->aName;
+        }
+        pDef->nId = rStrings.Add( aName );
+    }
+
+    if( !pDef->GetProcDef() )
+    {
+        pDef->nProcId = nProcId;
+    }
+    pDef->pIn = this;
+    m_Data.insert( m_Data.begin() + pDef->nPos, std::unique_ptr<SbiSymDef>(pDef) );
 }
 
 
@@ -454,24 +454,24 @@ void SbiProcDef::Match( SbiProcDef* pOld )
 void SbiProcDef::setPropertyMode( PropertyMode ePropMode )
 {
     mePropMode = ePropMode;
-    if( mePropMode != PropertyMode::NONE )
-    {
-        // Prop name = original scanned procedure name
-        maPropName = aName;
+    if( mePropMode == PropertyMode::NONE )
+        return;
 
-        // CompleteProcName includes "Property xxx "
-        // to avoid conflicts with other symbols
-        OUString aCompleteProcName = "Property ";
-        switch( mePropMode )
-        {
-        case PropertyMode::Get:  aCompleteProcName += "Get "; break;
-        case PropertyMode::Let:  aCompleteProcName += "Let "; break;
-        case PropertyMode::Set:  aCompleteProcName += "Set "; break;
-        case PropertyMode::NONE: OSL_FAIL( "Illegal PropertyMode PropertyMode::NONE" ); break;
-        }
-        aCompleteProcName += aName;
-        aName = aCompleteProcName;
+    // Prop name = original scanned procedure name
+    maPropName = aName;
+
+    // CompleteProcName includes "Property xxx "
+    // to avoid conflicts with other symbols
+    OUString aCompleteProcName = "Property ";
+    switch( mePropMode )
+    {
+    case PropertyMode::Get:  aCompleteProcName += "Get "; break;
+    case PropertyMode::Let:  aCompleteProcName += "Let "; break;
+    case PropertyMode::Set:  aCompleteProcName += "Set "; break;
+    case PropertyMode::NONE: OSL_FAIL( "Illegal PropertyMode PropertyMode::NONE" ); break;
     }
+    aCompleteProcName += aName;
+    aName = aCompleteProcName;
 }
 
 

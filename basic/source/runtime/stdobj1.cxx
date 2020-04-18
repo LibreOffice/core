@@ -126,28 +126,28 @@ void SbStdPicture::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     const SbxHint* pHint = dynamic_cast<const SbxHint*>(&rHint);
 
-    if( pHint )
+    if( !pHint )
+        return;
+
+    if( pHint->GetId() == SfxHintId::BasicInfoWanted )
     {
-        if( pHint->GetId() == SfxHintId::BasicInfoWanted )
-        {
-            SbxObject::Notify( rBC, rHint );
-            return;
-        }
-
-        SbxVariable* pVar   = pHint->GetVar();
-        const sal_uInt32 nWhich = pVar->GetUserData();
-        bool         bWrite = pHint->GetId() == SfxHintId::BasicDataChanged;
-
-        // Properties
-        switch( nWhich )
-        {
-            case ATTR_IMP_TYPE:     PropType( pVar, bWrite ); return;
-            case ATTR_IMP_WIDTH:    PropWidth( pVar, bWrite ); return;
-            case ATTR_IMP_HEIGHT:   PropHeight( pVar, bWrite ); return;
-        }
-
         SbxObject::Notify( rBC, rHint );
+        return;
     }
+
+    SbxVariable* pVar   = pHint->GetVar();
+    const sal_uInt32 nWhich = pVar->GetUserData();
+    bool         bWrite = pHint->GetId() == SfxHintId::BasicDataChanged;
+
+    // Properties
+    switch( nWhich )
+    {
+        case ATTR_IMP_TYPE:     PropType( pVar, bWrite ); return;
+        case ATTR_IMP_WIDTH:    PropWidth( pVar, bWrite ); return;
+        case ATTR_IMP_HEIGHT:   PropHeight( pVar, bWrite ); return;
+    }
+
+    SbxObject::Notify( rBC, rHint );
 }
 
 
@@ -243,31 +243,31 @@ void SbStdFont::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     const SbxHint* pHint = dynamic_cast<const SbxHint*>(&rHint);
 
-    if( pHint )
+    if( !pHint )
+        return;
+
+    if( pHint->GetId() == SfxHintId::BasicInfoWanted )
     {
-        if( pHint->GetId() == SfxHintId::BasicInfoWanted )
-        {
-            SbxObject::Notify( rBC, rHint );
-            return;
-        }
-
-        SbxVariable* pVar   = pHint->GetVar();
-        const sal_uInt32 nWhich = pVar->GetUserData();
-        bool         bWrite = pHint->GetId() == SfxHintId::BasicDataChanged;
-
-        // Properties
-        switch( nWhich )
-        {
-            case ATTR_IMP_BOLD:         PropBold( pVar, bWrite ); return;
-            case ATTR_IMP_ITALIC:       PropItalic( pVar, bWrite ); return;
-            case ATTR_IMP_STRIKETHROUGH:PropStrikeThrough(  pVar, bWrite ); return;
-            case ATTR_IMP_UNDERLINE:    PropUnderline( pVar, bWrite ); return;
-            case ATTR_IMP_SIZE:         PropSize( pVar, bWrite ); return;
-            case ATTR_IMP_NAME:         PropName( pVar, bWrite ); return;
-        }
-
         SbxObject::Notify( rBC, rHint );
+        return;
     }
+
+    SbxVariable* pVar   = pHint->GetVar();
+    const sal_uInt32 nWhich = pVar->GetUserData();
+    bool         bWrite = pHint->GetId() == SfxHintId::BasicDataChanged;
+
+    // Properties
+    switch( nWhich )
+    {
+        case ATTR_IMP_BOLD:         PropBold( pVar, bWrite ); return;
+        case ATTR_IMP_ITALIC:       PropItalic( pVar, bWrite ); return;
+        case ATTR_IMP_STRIKETHROUGH:PropStrikeThrough(  pVar, bWrite ); return;
+        case ATTR_IMP_UNDERLINE:    PropUnderline( pVar, bWrite ); return;
+        case ATTR_IMP_SIZE:         PropSize( pVar, bWrite ); return;
+        case ATTR_IMP_NAME:         PropName( pVar, bWrite ); return;
+    }
+
+    SbxObject::Notify( rBC, rHint );
 }
 
 
@@ -391,31 +391,31 @@ void SbStdClipboard::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     const SbxHint* pHint = dynamic_cast<const SbxHint*>(&rHint);
 
-    if( pHint )
+    if( !pHint )
+        return;
+
+    if( pHint->GetId() == SfxHintId::BasicInfoWanted )
     {
-        if( pHint->GetId() == SfxHintId::BasicInfoWanted )
-        {
-            SbxObject::Notify( rBC, rHint );
-            return;
-        }
-
-        SbxVariable* pVar   = pHint->GetVar();
-        SbxArray*    pPar_  = pVar->GetParameters();
-        const sal_uInt32 nWhich = pVar->GetUserData();
-
-        // Methods
-        switch( nWhich )
-        {
-            case METH_CLEAR:            MethClear( pPar_ ); return;
-            case METH_GETDATA:          MethGetData( pPar_ ); return;
-            case METH_GETFORMAT:        MethGetFormat( pVar, pPar_ ); return;
-            case METH_GETTEXT:          MethGetText( pVar, pPar_ ); return;
-            case METH_SETDATA:          MethSetData( pPar_ ); return;
-            case METH_SETTEXT:          MethSetText( pPar_ ); return;
-        }
-
         SbxObject::Notify( rBC, rHint );
+        return;
     }
+
+    SbxVariable* pVar   = pHint->GetVar();
+    SbxArray*    pPar_  = pVar->GetParameters();
+    const sal_uInt32 nWhich = pVar->GetUserData();
+
+    // Methods
+    switch( nWhich )
+    {
+        case METH_CLEAR:            MethClear( pPar_ ); return;
+        case METH_GETDATA:          MethGetData( pPar_ ); return;
+        case METH_GETFORMAT:        MethGetFormat( pVar, pPar_ ); return;
+        case METH_GETTEXT:          MethGetText( pVar, pPar_ ); return;
+        case METH_SETDATA:          MethSetData( pPar_ ); return;
+        case METH_SETTEXT:          MethSetText( pPar_ ); return;
+    }
+
+    SbxObject::Notify( rBC, rHint );
 }
 
 
