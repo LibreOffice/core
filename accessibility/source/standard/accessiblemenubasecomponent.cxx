@@ -107,28 +107,28 @@ void OAccessibleMenuBaseComponent::SetStates()
 
 void OAccessibleMenuBaseComponent::SetEnabled( bool bEnabled )
 {
-    if ( m_bEnabled != bEnabled )
+    if ( m_bEnabled == bEnabled )
+        return;
+
+    sal_Int16 nStateType=AccessibleStateType::ENABLED;
+    if (IsMenuHideDisabledEntries())
     {
-        sal_Int16 nStateType=AccessibleStateType::ENABLED;
-        if (IsMenuHideDisabledEntries())
-        {
-            nStateType = AccessibleStateType::VISIBLE;
-        }
-        std::array<Any, 2> aOldValue, aNewValue;
-        if ( m_bEnabled )
-        {
-            aOldValue[0] <<= AccessibleStateType::SENSITIVE;
-            aOldValue[1] <<= nStateType;
-        }
-        else
-        {
-            aNewValue[0] <<= nStateType;
-            aNewValue[1] <<= AccessibleStateType::SENSITIVE;
-        }
-        m_bEnabled = bEnabled;
-        NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue[0], aNewValue[0] );
-        NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue[1], aNewValue[1] );
+        nStateType = AccessibleStateType::VISIBLE;
     }
+    std::array<Any, 2> aOldValue, aNewValue;
+    if ( m_bEnabled )
+    {
+        aOldValue[0] <<= AccessibleStateType::SENSITIVE;
+        aOldValue[1] <<= nStateType;
+    }
+    else
+    {
+        aNewValue[0] <<= nStateType;
+        aNewValue[1] <<= AccessibleStateType::SENSITIVE;
+    }
+    m_bEnabled = bEnabled;
+    NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue[0], aNewValue[0] );
+    NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue[1], aNewValue[1] );
 }
 
 
@@ -378,68 +378,68 @@ void OAccessibleMenuBaseComponent::InsertChild( sal_Int32 i )
     if ( i > static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
         i = m_aAccessibleChildren.size();
 
-    if ( i >= 0 )
+    if ( i < 0 )
+        return;
+
+    // insert entry in child list
+    m_aAccessibleChildren.insert( m_aAccessibleChildren.begin() + i, Reference< XAccessible >() );
+
+    // update item position of accessible children
+    for ( sal_uInt32 j = i, nCount = m_aAccessibleChildren.size(); j < nCount; ++j )
     {
-        // insert entry in child list
-        m_aAccessibleChildren.insert( m_aAccessibleChildren.begin() + i, Reference< XAccessible >() );
-
-        // update item position of accessible children
-        for ( sal_uInt32 j = i, nCount = m_aAccessibleChildren.size(); j < nCount; ++j )
+        Reference< XAccessible > xAcc( m_aAccessibleChildren[j] );
+        if ( xAcc.is() )
         {
-            Reference< XAccessible > xAcc( m_aAccessibleChildren[j] );
-            if ( xAcc.is() )
-            {
-                OAccessibleMenuItemComponent* pComp = static_cast< OAccessibleMenuItemComponent* >( xAcc.get() );
-                if ( pComp )
-                    pComp->SetItemPos( static_cast<sal_uInt16>(j) );
-            }
+            OAccessibleMenuItemComponent* pComp = static_cast< OAccessibleMenuItemComponent* >( xAcc.get() );
+            if ( pComp )
+                pComp->SetItemPos( static_cast<sal_uInt16>(j) );
         }
+    }
 
-        // send accessible child event
-        Reference< XAccessible > xChild( GetChild( i ) );
-        if ( xChild.is() )
-        {
-            Any aOldValue, aNewValue;
-            aNewValue <<= xChild;
-            NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
-        }
+    // send accessible child event
+    Reference< XAccessible > xChild( GetChild( i ) );
+    if ( xChild.is() )
+    {
+        Any aOldValue, aNewValue;
+        aNewValue <<= xChild;
+        NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
     }
 }
 
 
 void OAccessibleMenuBaseComponent::RemoveChild( sal_Int32 i )
 {
-    if ( i >= 0 && i < static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
+    if ( !(i >= 0 && i < static_cast<sal_Int32>(m_aAccessibleChildren.size())) )
+        return;
+
+    // keep the accessible of the removed item
+    Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
+
+    // remove entry in child list
+    m_aAccessibleChildren.erase( m_aAccessibleChildren.begin() + i );
+
+    // update item position of accessible children
+    for ( sal_uInt32 j = i, nCount = m_aAccessibleChildren.size(); j < nCount; ++j )
     {
-        // keep the accessible of the removed item
-        Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
-
-        // remove entry in child list
-        m_aAccessibleChildren.erase( m_aAccessibleChildren.begin() + i );
-
-        // update item position of accessible children
-        for ( sal_uInt32 j = i, nCount = m_aAccessibleChildren.size(); j < nCount; ++j )
+        Reference< XAccessible > xAcc( m_aAccessibleChildren[j] );
+        if ( xAcc.is() )
         {
-            Reference< XAccessible > xAcc( m_aAccessibleChildren[j] );
-            if ( xAcc.is() )
-            {
-                OAccessibleMenuItemComponent* pComp = static_cast< OAccessibleMenuItemComponent* >( xAcc.get() );
-                if ( pComp )
-                    pComp->SetItemPos( static_cast<sal_uInt16>(j) );
-            }
+            OAccessibleMenuItemComponent* pComp = static_cast< OAccessibleMenuItemComponent* >( xAcc.get() );
+            if ( pComp )
+                pComp->SetItemPos( static_cast<sal_uInt16>(j) );
         }
+    }
 
-        // send accessible child event
-        if ( xChild.is() )
-        {
-            Any aOldValue, aNewValue;
-            aOldValue <<= xChild;
-            NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
+    // send accessible child event
+    if ( xChild.is() )
+    {
+        Any aOldValue, aNewValue;
+        aOldValue <<= xChild;
+        NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
 
-            Reference< XComponent > xComponent( xChild, UNO_QUERY );
-            if ( xComponent.is() )
-                xComponent->dispose();
-        }
+        Reference< XComponent > xComponent( xChild, UNO_QUERY );
+        if ( xComponent.is() )
+            xComponent->dispose();
     }
 }
 
@@ -641,21 +641,21 @@ void OAccessibleMenuBaseComponent::disposing()
 {
     OAccessibleExtendedComponentHelper::disposing();
 
-    if ( m_pMenu )
+    if ( !m_pMenu )
+        return;
+
+    m_pMenu->RemoveEventListener( LINK( this, OAccessibleMenuBaseComponent, MenuEventListener ) );
+
+    m_pMenu = nullptr;
+
+    // dispose all menu items
+    for (const Reference<XAccessible>& i : m_aAccessibleChildren)
     {
-        m_pMenu->RemoveEventListener( LINK( this, OAccessibleMenuBaseComponent, MenuEventListener ) );
-
-        m_pMenu = nullptr;
-
-        // dispose all menu items
-        for (const Reference<XAccessible>& i : m_aAccessibleChildren)
-        {
-            Reference< XComponent > xComponent( i, UNO_QUERY );
-            if ( xComponent.is() )
-                xComponent->dispose();
-        }
-        m_aAccessibleChildren.clear();
+        Reference< XComponent > xComponent( i, UNO_QUERY );
+        if ( xComponent.is() )
+            xComponent->dispose();
     }
+    m_aAccessibleChildren.clear();
 }
 
 

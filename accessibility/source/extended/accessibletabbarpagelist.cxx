@@ -88,17 +88,17 @@ namespace accessibility
 
     void AccessibleTabBarPageList::UpdatePageText( sal_Int32 i )
     {
-        if ( i >= 0 && i < static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
+        if ( !(i >= 0 && i < static_cast<sal_Int32>(m_aAccessibleChildren.size())) )
+            return;
+
+        Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
+        if ( xChild.is() )
         {
-            Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
-            if ( xChild.is() )
+            AccessibleTabBarPage* pAccessibleTabBarPage = static_cast< AccessibleTabBarPage* >( xChild.get() );
+            if ( pAccessibleTabBarPage && m_pTabBar )
             {
-                AccessibleTabBarPage* pAccessibleTabBarPage = static_cast< AccessibleTabBarPage* >( xChild.get() );
-                if ( pAccessibleTabBarPage && m_pTabBar )
-                {
-                    OUString sPageText = m_pTabBar->GetPageText( m_pTabBar->GetPageId( static_cast<sal_uInt16>(i) ) );
-                    pAccessibleTabBarPage->SetPageText( sPageText );
-                }
+                OUString sPageText = m_pTabBar->GetPageText( m_pTabBar->GetPageId( static_cast<sal_uInt16>(i) ) );
+                pAccessibleTabBarPage->SetPageText( sPageText );
             }
         }
     }
@@ -106,65 +106,65 @@ namespace accessibility
 
     void AccessibleTabBarPageList::InsertChild( sal_Int32 i )
     {
-        if ( i >= 0 && i <= static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
-        {
-            // insert entry in child list
-            m_aAccessibleChildren.insert( m_aAccessibleChildren.begin() + i, Reference< XAccessible >() );
+        if ( !(i >= 0 && i <= static_cast<sal_Int32>(m_aAccessibleChildren.size())) )
+            return;
 
-            // send accessible child event
-            Reference< XAccessible > xChild( getAccessibleChild( i ) );
-            if ( xChild.is() )
-            {
-                Any aOldValue, aNewValue;
-                aNewValue <<= xChild;
-                NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
-            }
+        // insert entry in child list
+        m_aAccessibleChildren.insert( m_aAccessibleChildren.begin() + i, Reference< XAccessible >() );
+
+        // send accessible child event
+        Reference< XAccessible > xChild( getAccessibleChild( i ) );
+        if ( xChild.is() )
+        {
+            Any aOldValue, aNewValue;
+            aNewValue <<= xChild;
+            NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
         }
     }
 
 
     void AccessibleTabBarPageList::RemoveChild( sal_Int32 i )
     {
-        if ( i >= 0 && i < static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
+        if ( !(i >= 0 && i < static_cast<sal_Int32>(m_aAccessibleChildren.size())) )
+            return;
+
+        // get the accessible of the removed page
+        Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
+
+        // remove entry in child list
+        m_aAccessibleChildren.erase( m_aAccessibleChildren.begin() + i );
+
+        // send accessible child event
+        if ( xChild.is() )
         {
-            // get the accessible of the removed page
-            Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
+            Any aOldValue, aNewValue;
+            aOldValue <<= xChild;
+            NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
 
-            // remove entry in child list
-            m_aAccessibleChildren.erase( m_aAccessibleChildren.begin() + i );
-
-            // send accessible child event
-            if ( xChild.is() )
-            {
-                Any aOldValue, aNewValue;
-                aOldValue <<= xChild;
-                NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
-
-                Reference< XComponent > xComponent( xChild, UNO_QUERY );
-                if ( xComponent.is() )
-                    xComponent->dispose();
-            }
+            Reference< XComponent > xComponent( xChild, UNO_QUERY );
+            if ( xComponent.is() )
+                xComponent->dispose();
         }
     }
 
 
     void AccessibleTabBarPageList::MoveChild( sal_Int32 i, sal_Int32 j )
     {
-        if ( i >= 0 && i < static_cast<sal_Int32>(m_aAccessibleChildren.size()) &&
-             j >= 0 && j <= static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
-        {
-            if ( i < j )
-                --j;
+        if ( !(i >= 0 && i < static_cast<sal_Int32>(m_aAccessibleChildren.size()) &&
+             j >= 0 && j <= static_cast<sal_Int32>(m_aAccessibleChildren.size())) )
+            return;
 
-            // get the accessible of the moved page
-            Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
+        if ( i < j )
+            --j;
 
-            // remove entry in child list at old position
-            m_aAccessibleChildren.erase( m_aAccessibleChildren.begin() + i );
+        // get the accessible of the moved page
+        Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
 
-            // insert entry in child list at new position
-            m_aAccessibleChildren.insert( m_aAccessibleChildren.begin() + j, xChild );
-        }
+        // remove entry in child list at old position
+        m_aAccessibleChildren.erase( m_aAccessibleChildren.begin() + i );
+
+        // insert entry in child list at new position
+        m_aAccessibleChildren.insert( m_aAccessibleChildren.begin() + j, xChild );
     }
 
 
@@ -296,19 +296,19 @@ namespace accessibility
 
     void AccessibleTabBarPageList::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
     {
-        if ( m_pTabBar )
+        if ( !m_pTabBar )
+            return;
+
+        if ( m_pTabBar->IsEnabled() )
         {
-            if ( m_pTabBar->IsEnabled() )
-            {
-                rStateSet.AddState( AccessibleStateType::ENABLED );
-                rStateSet.AddState( AccessibleStateType::SENSITIVE );
-            }
-
-            rStateSet.AddState( AccessibleStateType::VISIBLE );
-
-            if ( m_pTabBar->IsVisible() )
-                rStateSet.AddState( AccessibleStateType::SHOWING );
+            rStateSet.AddState( AccessibleStateType::ENABLED );
+            rStateSet.AddState( AccessibleStateType::SENSITIVE );
         }
+
+        rStateSet.AddState( AccessibleStateType::VISIBLE );
+
+        if ( m_pTabBar->IsVisible() )
+            rStateSet.AddState( AccessibleStateType::SHOWING );
     }
 
 

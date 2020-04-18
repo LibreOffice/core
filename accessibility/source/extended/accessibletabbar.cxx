@@ -113,27 +113,27 @@ namespace accessibility
 
     void AccessibleTabBar::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
     {
-        if ( m_pTabBar )
+        if ( !m_pTabBar )
+            return;
+
+        if ( m_pTabBar->IsEnabled() )
         {
-            if ( m_pTabBar->IsEnabled() )
-            {
-                rStateSet.AddState( AccessibleStateType::ENABLED );
-                rStateSet.AddState( AccessibleStateType::SENSITIVE );
-            }
-
-            rStateSet.AddState( AccessibleStateType::FOCUSABLE );
-
-            if ( m_pTabBar->HasFocus() )
-                rStateSet.AddState( AccessibleStateType::FOCUSED );
-
-            rStateSet.AddState( AccessibleStateType::VISIBLE );
-
-            if ( m_pTabBar->IsVisible() )
-                rStateSet.AddState( AccessibleStateType::SHOWING );
-
-            if ( m_pTabBar->GetStyle() & WB_SIZEABLE )
-                rStateSet.AddState( AccessibleStateType::RESIZABLE );
+            rStateSet.AddState( AccessibleStateType::ENABLED );
+            rStateSet.AddState( AccessibleStateType::SENSITIVE );
         }
+
+        rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+
+        if ( m_pTabBar->HasFocus() )
+            rStateSet.AddState( AccessibleStateType::FOCUSED );
+
+        rStateSet.AddState( AccessibleStateType::VISIBLE );
+
+        if ( m_pTabBar->IsVisible() )
+            rStateSet.AddState( AccessibleStateType::SHOWING );
+
+        if ( m_pTabBar->GetStyle() & WB_SIZEABLE )
+            rStateSet.AddState( AccessibleStateType::RESIZABLE );
     }
 
 

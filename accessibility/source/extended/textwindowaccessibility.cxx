@@ -570,21 +570,21 @@ void SAL_CALL Paragraph::addAccessibleEventListener(
     css::uno::Reference<
     css::accessibility::XAccessibleEventListener > const & rListener)
 {
-    if (rListener.is())
+    if (!rListener.is())
+        return;
+
+    ::osl::ClearableMutexGuard aGuard(rBHelper.rMutex);
+    if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
-        ::osl::ClearableMutexGuard aGuard(rBHelper.rMutex);
-        if (rBHelper.bDisposed || rBHelper.bInDispose)
-        {
-            aGuard.clear();
-            rListener->disposing(css::lang::EventObject(
-                                    static_cast< ::cppu::OWeakObject * >(this)));
-        }
-        else
-        {
-            if (!m_nClientId)
-                m_nClientId = comphelper::AccessibleEventNotifier::registerClient( );
-            comphelper::AccessibleEventNotifier::addEventListener( m_nClientId, rListener );
-        }
+        aGuard.clear();
+        rListener->disposing(css::lang::EventObject(
+                                static_cast< ::cppu::OWeakObject * >(this)));
+    }
+    else
+    {
+        if (!m_nClientId)
+            m_nClientId = comphelper::AccessibleEventNotifier::registerClient( );
+        comphelper::AccessibleEventNotifier::addEventListener( m_nClientId, rListener );
     }
 }
 
@@ -1396,101 +1396,101 @@ void SAL_CALL Document::disposing()
 void Document::Notify(::SfxBroadcaster &, ::SfxHint const & rHint)
 {
     const TextHint* pTextHint = dynamic_cast<const TextHint*>(&rHint);
-    if (pTextHint)
+    if (!pTextHint)
+        return;
+
+    ::TextHint const & rTextHint = *pTextHint;
+    switch (rTextHint.GetId())
     {
-        ::TextHint const & rTextHint = *pTextHint;
-        switch (rTextHint.GetId())
+    case SfxHintId::TextParaInserted:
+    case SfxHintId::TextParaRemoved:
+        // SfxHintId::TextParaInserted and SfxHintId::TextParaRemoved are sent at
+        // "unsafe" times (when the text engine has not yet re-formatted its
+        // content), so that for example calling ::TextEngine::GetTextHeight
+        // from within the code that handles SfxHintId::TextParaInserted causes
+        // trouble within the text engine.  Therefore, these hints are just
+        // buffered until a following ::TextEngine::FormatDoc causes a
+        // SfxHintId::TextFormatted to come in:
+    case SfxHintId::TextFormatPara:
+        // ::TextEngine::FormatDoc sends a sequence of
+        // SfxHintId::TextFormatParas, followed by an optional
+        // SfxHintId::TextHeightChanged, followed in all cases by one
+        // SfxHintId::TextFormatted.  Only the SfxHintId::TextFormatParas contain
+        // the numbers of the affected paragraphs, but they are sent
+        // before the changes are applied.  Therefore, SfxHintId::TextFormatParas
+        // are just buffered until another hint comes in:
         {
-        case SfxHintId::TextParaInserted:
-        case SfxHintId::TextParaRemoved:
-            // SfxHintId::TextParaInserted and SfxHintId::TextParaRemoved are sent at
-            // "unsafe" times (when the text engine has not yet re-formatted its
-            // content), so that for example calling ::TextEngine::GetTextHeight
-            // from within the code that handles SfxHintId::TextParaInserted causes
-            // trouble within the text engine.  Therefore, these hints are just
-            // buffered until a following ::TextEngine::FormatDoc causes a
-            // SfxHintId::TextFormatted to come in:
-        case SfxHintId::TextFormatPara:
-            // ::TextEngine::FormatDoc sends a sequence of
-            // SfxHintId::TextFormatParas, followed by an optional
-            // SfxHintId::TextHeightChanged, followed in all cases by one
-            // SfxHintId::TextFormatted.  Only the SfxHintId::TextFormatParas contain
-            // the numbers of the affected paragraphs, but they are sent
-            // before the changes are applied.  Therefore, SfxHintId::TextFormatParas
-            // are just buffered until another hint comes in:
-            {
-                ::osl::MutexGuard aInternalGuard(GetMutex());
-                if (!isAlive())
-                    break;
-
-                m_aParagraphNotifications.push(rTextHint);
+            ::osl::MutexGuard aInternalGuard(GetMutex());
+            if (!isAlive())
                 break;
-            }
-        case SfxHintId::TextFormatted:
-        case SfxHintId::TextHeightChanged:
-        case SfxHintId::TextModified:
-            {
-                ::osl::MutexGuard aInternalGuard(GetMutex());
-                if (!isAlive())
-                    break;
-                handleParagraphNotifications();
-                break;
-            }
-        case SfxHintId::TextViewScrolled:
-            {
-                ::osl::MutexGuard aInternalGuard(GetMutex());
-                if (!isAlive())
-                    break;
-                handleParagraphNotifications();
 
-                ::sal_Int32 nOffset = static_cast< ::sal_Int32 >(
-                    m_rView.GetStartDocPos().Y());
-                    // XXX  numeric overflow
-                if (nOffset != m_nViewOffset)
-                {
-                    m_nViewOffset = nOffset;
-
-                    Paragraphs::iterator aOldVisibleBegin(
-                        m_aVisibleBegin);
-                    Paragraphs::iterator aOldVisibleEnd(m_aVisibleEnd);
-
-                    determineVisibleRange();
-
-                    notifyVisibleRangeChanges(aOldVisibleBegin,
-                                                aOldVisibleEnd,
-                                                m_xParagraphs->end());
-                }
-                break;
-            }
-        case SfxHintId::TextViewSelectionChanged:
-        case SfxHintId::TextViewCaretChanged:
-            {
-                ::osl::MutexGuard aInternalGuard(GetMutex());
-                if (!isAlive())
-                    break;
-
-                if (m_aParagraphNotifications.empty())
-                {
-                    handleSelectionChangeNotification();
-                }
-                else
-                {
-                    // SfxHintId::TextViewSelectionChanged is sometimes sent at
-                    // "unsafe" times (when the text engine has not yet re-
-                    // formatted its content), so that for example calling
-                    // ::TextEngine::GetTextHeight from within the code that
-                    // handles a previous SfxHintId::TextParaInserted causes
-                    // trouble within the text engine.  Therefore, these
-                    // hints are just buffered (along with
-                    // SfxHintId::TextParaInserted/REMOVED/FORMATPARA) until a
-                    // following ::TextEngine::FormatDoc causes a
-                    // SfxHintId::TextFormatted to come in:
-                    m_bSelectionChangedNotification = true;
-                }
-                break;
-            }
-        default: break;
+            m_aParagraphNotifications.push(rTextHint);
+            break;
         }
+    case SfxHintId::TextFormatted:
+    case SfxHintId::TextHeightChanged:
+    case SfxHintId::TextModified:
+        {
+            ::osl::MutexGuard aInternalGuard(GetMutex());
+            if (!isAlive())
+                break;
+            handleParagraphNotifications();
+            break;
+        }
+    case SfxHintId::TextViewScrolled:
+        {
+            ::osl::MutexGuard aInternalGuard(GetMutex());
+            if (!isAlive())
+                break;
+            handleParagraphNotifications();
+
+            ::sal_Int32 nOffset = static_cast< ::sal_Int32 >(
+                m_rView.GetStartDocPos().Y());
+                // XXX  numeric overflow
+            if (nOffset != m_nViewOffset)
+            {
+                m_nViewOffset = nOffset;
+
+                Paragraphs::iterator aOldVisibleBegin(
+                    m_aVisibleBegin);
+                Paragraphs::iterator aOldVisibleEnd(m_aVisibleEnd);
+
+                determineVisibleRange();
+
+                notifyVisibleRangeChanges(aOldVisibleBegin,
+                                            aOldVisibleEnd,
+                                            m_xParagraphs->end());
+            }
+            break;
+        }
+    case SfxHintId::TextViewSelectionChanged:
+    case SfxHintId::TextViewCaretChanged:
+        {
+            ::osl::MutexGuard aInternalGuard(GetMutex());
+            if (!isAlive())
+                break;
+
+            if (m_aParagraphNotifications.empty())
+            {
+                handleSelectionChangeNotification();
+            }
+            else
+            {
+                // SfxHintId::TextViewSelectionChanged is sometimes sent at
+                // "unsafe" times (when the text engine has not yet re-
+                // formatted its content), so that for example calling
+                // ::TextEngine::GetTextHeight from within the code that
+                // handles a previous SfxHintId::TextParaInserted causes
+                // trouble within the text engine.  Therefore, these
+                // hints are just buffered (along with
+                // SfxHintId::TextParaInserted/REMOVED/FORMATPARA) until a
+                // following ::TextEngine::FormatDoc causes a
+                // SfxHintId::TextFormatted to come in:
+                m_bSelectionChangedNotification = true;
+            }
+            break;
+        }
+    default: break;
     }
 }
 
@@ -1575,31 +1575,31 @@ IMPL_LINK(Document, WindowEventHandler, ::VclWindowEvent&, rEvent, void)
 
 void Document::init()
 {
-    if (m_xParagraphs == nullptr)
-    {
-        const ::sal_uInt32 nCount = m_rEngine.GetParagraphCount();
-        m_xParagraphs.reset(new Paragraphs);
-        m_xParagraphs->reserve(static_cast< Paragraphs::size_type >(nCount));
-            // numeric overflow is harmless here
-        for (::sal_uInt32 i = 0; i < nCount; ++i)
-            m_xParagraphs->push_back(ParagraphInfo(static_cast< ::sal_Int32 >(
-                                           m_rEngine.GetTextHeight(i))));
-                // XXX  numeric overflow
-        m_nViewOffset = static_cast< ::sal_Int32 >(
-            m_rView.GetStartDocPos().Y()); // XXX  numeric overflow
-        m_nViewHeight = static_cast< ::sal_Int32 >(
-            m_rView.GetWindow()->GetOutputSizePixel().Height());
+    if (m_xParagraphs != nullptr)
+        return;
+
+    const ::sal_uInt32 nCount = m_rEngine.GetParagraphCount();
+    m_xParagraphs.reset(new Paragraphs);
+    m_xParagraphs->reserve(static_cast< Paragraphs::size_type >(nCount));
+        // numeric overflow is harmless here
+    for (::sal_uInt32 i = 0; i < nCount; ++i)
+        m_xParagraphs->push_back(ParagraphInfo(static_cast< ::sal_Int32 >(
+                                       m_rEngine.GetTextHeight(i))));
             // XXX  numeric overflow
-        determineVisibleRange();
-        m_nSelectionFirstPara = -1;
-        m_nSelectionFirstPos = -1;
-        m_nSelectionLastPara = -1;
-        m_nSelectionLastPos = -1;
-        m_aFocused = m_xParagraphs->end();
-        m_bSelectionChangedNotification = false;
-        m_aEngineListener.startListening(m_rEngine);
-        m_aViewListener.startListening(*m_rView.GetWindow());
-    }
+    m_nViewOffset = static_cast< ::sal_Int32 >(
+        m_rView.GetStartDocPos().Y()); // XXX  numeric overflow
+    m_nViewHeight = static_cast< ::sal_Int32 >(
+        m_rView.GetWindow()->GetOutputSizePixel().Height());
+        // XXX  numeric overflow
+    determineVisibleRange();
+    m_nSelectionFirstPara = -1;
+    m_nSelectionFirstPos = -1;
+    m_nSelectionLastPara = -1;
+    m_nSelectionLastPos = -1;
+    m_aFocused = m_xParagraphs->end();
+    m_bSelectionChangedNotification = false;
+    m_aEngineListener.startListening(m_rEngine);
+    m_aViewListener.startListening(*m_rView.GetWindow());
 }
 
 ::rtl::Reference< Paragraph >

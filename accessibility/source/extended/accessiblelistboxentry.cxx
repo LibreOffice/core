@@ -96,20 +96,20 @@ namespace accessibility
         OSL_ENSURE( rEvent.GetWindow() , "AccessibleListBoxEntry::WindowEventListener: no event window!" );
         OSL_ENSURE( rEvent.GetWindow() == m_pTreeListBox, "AccessibleListBoxEntry::WindowEventListener: where did this come from?" );
 
-        if ( m_pTreeListBox != nullptr )
+        if ( m_pTreeListBox == nullptr )
+            return;
+
+        switch ( rEvent.GetId() )
         {
-            switch ( rEvent.GetId() )
+            case  VclEventId::ObjectDying :
             {
-                case  VclEventId::ObjectDying :
-                {
-                    if ( m_pTreeListBox )
-                        m_pTreeListBox->RemoveEventListener( LINK( this, AccessibleListBoxEntry, WindowEventListener ) );
-                    m_pTreeListBox = nullptr;
-                    dispose();
-                    break;
-                }
-                default: break;
+                if ( m_pTreeListBox )
+                    m_pTreeListBox->RemoveEventListener( LINK( this, AccessibleListBoxEntry, WindowEventListener ) );
+                m_pTreeListBox = nullptr;
+                dispose();
+                break;
             }
+            default: break;
         }
     }
 
@@ -710,22 +710,22 @@ namespace accessibility
 
     void SAL_CALL AccessibleListBoxEntry::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )
     {
-        if (xListener.is())
+        if (!xListener.is())
+            return;
+
+        ::osl::MutexGuard aGuard( m_aMutex );
+
+        sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( m_nClientId, xListener );
+        if ( !nListenerCount )
         {
-            ::osl::MutexGuard aGuard( m_aMutex );
+            // no listeners anymore
+            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
+            // and at least to us not firing any events anymore, in case somebody calls
+            // NotifyAccessibleEvent, again
+            sal_Int32 nId = m_nClientId;
+            m_nClientId = 0;
+            comphelper::AccessibleEventNotifier::revokeClient( nId );
 
-            sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( m_nClientId, xListener );
-            if ( !nListenerCount )
-            {
-                // no listeners anymore
-                // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-                // and at least to us not firing any events anymore, in case somebody calls
-                // NotifyAccessibleEvent, again
-                sal_Int32 nId = m_nClientId;
-                m_nClientId = 0;
-                comphelper::AccessibleEventNotifier::revokeClient( nId );
-
-            }
         }
     }
 

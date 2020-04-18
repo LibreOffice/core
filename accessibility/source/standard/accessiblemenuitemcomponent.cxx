@@ -117,37 +117,37 @@ void OAccessibleMenuItemComponent::Click()
     }
 
     // click the menu item
-    if ( m_pParent )
+    if ( !m_pParent )
+        return;
+
+    vcl::Window* pWindow = m_pParent->GetWindow();
+    if ( !pWindow )
+        return;
+
+    // #102438# Menu items are not selectable
+    // Popup menus are executed asynchronously, triggered by a timer.
+    // As Menu::SelectItem only works, if the corresponding menu window is
+    // already created, we have to set the menu delay to 0, so
+    // that the popup menus are executed synchronously.
+    AllSettings aSettings = pWindow->GetSettings();
+    MouseSettings aMouseSettings = aSettings.GetMouseSettings();
+    sal_uLong nDelay = aMouseSettings.GetMenuDelay();
+    aMouseSettings.SetMenuDelay( 0 );
+    aSettings.SetMouseSettings( aMouseSettings );
+    pWindow->SetSettings( aSettings );
+
+    m_pParent->SelectItem( m_pParent->GetItemId( m_nItemPos ) );
+
+    // meanwhile the window pointer may be invalid
+    pWindow = m_pParent->GetWindow();
+    if ( pWindow )
     {
-        vcl::Window* pWindow = m_pParent->GetWindow();
-        if ( pWindow )
-        {
-            // #102438# Menu items are not selectable
-            // Popup menus are executed asynchronously, triggered by a timer.
-            // As Menu::SelectItem only works, if the corresponding menu window is
-            // already created, we have to set the menu delay to 0, so
-            // that the popup menus are executed synchronously.
-            AllSettings aSettings = pWindow->GetSettings();
-            MouseSettings aMouseSettings = aSettings.GetMouseSettings();
-            sal_uLong nDelay = aMouseSettings.GetMenuDelay();
-            aMouseSettings.SetMenuDelay( 0 );
-            aSettings.SetMouseSettings( aMouseSettings );
-            pWindow->SetSettings( aSettings );
-
-            m_pParent->SelectItem( m_pParent->GetItemId( m_nItemPos ) );
-
-            // meanwhile the window pointer may be invalid
-            pWindow = m_pParent->GetWindow();
-            if ( pWindow )
-            {
-                // set the menu delay back to the old value
-                aSettings = pWindow->GetSettings();
-                aMouseSettings = aSettings.GetMouseSettings();
-                aMouseSettings.SetMenuDelay( nDelay );
-                aSettings.SetMouseSettings( aMouseSettings );
-                pWindow->SetSettings( aSettings );
-            }
-        }
+        // set the menu delay back to the old value
+        aSettings = pWindow->GetSettings();
+        aMouseSettings = aSettings.GetMouseSettings();
+        aMouseSettings.SetMenuDelay( nDelay );
+        aSettings.SetMouseSettings( aMouseSettings );
+        pWindow->SetSettings( aSettings );
     }
 }
 

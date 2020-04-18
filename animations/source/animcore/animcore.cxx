@@ -700,75 +700,75 @@ void AnimationNode::initTypeProvider( sal_Int16 nNodeType ) throw()
 {
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
 
-    if(! mpTypes[nNodeType] )
+    if( mpTypes[nNodeType] )
+        return;
+
+    static constexpr std::array<sal_Int32, mpTypes.size()> type_numbers =
     {
-        static constexpr std::array<sal_Int32, mpTypes.size()> type_numbers =
-        {
-            7, // CUSTOM
-            9, // PAR
-            9, // SEQ
-            9, // ITERATE
-            8, // ANIMATE
-            8, // SET
-            8, // ANIMATEMOTION
-            8, // ANIMATECOLOR
-            8, // ANIMATETRANSFORM
-            8, // TRANSITIONFILTER
-            8, // AUDIO
-            8, // COMMAND
-        };
+        7, // CUSTOM
+        9, // PAR
+        9, // SEQ
+        9, // ITERATE
+        8, // ANIMATE
+        8, // SET
+        8, // ANIMATEMOTION
+        8, // ANIMATECOLOR
+        8, // ANIMATETRANSFORM
+        8, // TRANSITIONFILTER
+        8, // AUDIO
+        8, // COMMAND
+    };
 
-        // collect types
-        Sequence< Type > * types = new Sequence< Type >( type_numbers[nNodeType] );
-        Type * pTypeAr = types->getArray();
-        sal_Int32 nPos = 0;
+    // collect types
+    Sequence< Type > * types = new Sequence< Type >( type_numbers[nNodeType] );
+    Type * pTypeAr = types->getArray();
+    sal_Int32 nPos = 0;
 
-        pTypeAr[nPos++] = cppu::UnoType<XWeak>::get();
-        pTypeAr[nPos++] = cppu::UnoType<XChild>::get();
-        pTypeAr[nPos++] = cppu::UnoType<XCloneable>::get();
-        pTypeAr[nPos++] = cppu::UnoType<XTypeProvider>::get();
-        pTypeAr[nPos++] = cppu::UnoType<XServiceInfo>::get();
-        pTypeAr[nPos++] = cppu::UnoType<XUnoTunnel>::get();
-        pTypeAr[nPos++] = cppu::UnoType<XChangesNotifier>::get();
+    pTypeAr[nPos++] = cppu::UnoType<XWeak>::get();
+    pTypeAr[nPos++] = cppu::UnoType<XChild>::get();
+    pTypeAr[nPos++] = cppu::UnoType<XCloneable>::get();
+    pTypeAr[nPos++] = cppu::UnoType<XTypeProvider>::get();
+    pTypeAr[nPos++] = cppu::UnoType<XServiceInfo>::get();
+    pTypeAr[nPos++] = cppu::UnoType<XUnoTunnel>::get();
+    pTypeAr[nPos++] = cppu::UnoType<XChangesNotifier>::get();
 
-        switch( nNodeType )
-        {
-        case AnimationNodeType::PAR:
-        case AnimationNodeType::SEQ:
-            pTypeAr[nPos++] = cppu::UnoType<XTimeContainer>::get();
-            pTypeAr[nPos++] = cppu::UnoType<XEnumerationAccess>::get();
-            break;
-        case AnimationNodeType::ITERATE:
-            pTypeAr[nPos++] = cppu::UnoType<XIterateContainer>::get();
-            pTypeAr[nPos++] = cppu::UnoType<XEnumerationAccess>::get();
-            break;
-        case AnimationNodeType::ANIMATE:
-            pTypeAr[nPos++] = cppu::UnoType<XAnimate>::get();
-            break;
-        case AnimationNodeType::ANIMATEMOTION:
-            pTypeAr[nPos++] = cppu::UnoType<XAnimateMotion>::get();
-            break;
-        case AnimationNodeType::ANIMATECOLOR:
-            pTypeAr[nPos++] = cppu::UnoType<XAnimateColor>::get();
-            break;
-        case AnimationNodeType::ANIMATETRANSFORM:
-            pTypeAr[nPos++] = cppu::UnoType<XAnimateTransform>::get();
-            break;
-        case AnimationNodeType::SET:
-            pTypeAr[nPos++] = cppu::UnoType<XAnimateSet>::get();
-            break;
-        case AnimationNodeType::TRANSITIONFILTER:
-            pTypeAr[nPos++] = cppu::UnoType<XTransitionFilter>::get();
-            break;
-        case AnimationNodeType::AUDIO:
-            pTypeAr[nPos++] = cppu::UnoType<XAudio>::get();
-            break;
-        case AnimationNodeType::COMMAND:
-            pTypeAr[nPos++] = cppu::UnoType<XCommand>::get();
-            break;
-        }
-        mpTypes[nNodeType] = types;
+    switch( nNodeType )
+    {
+    case AnimationNodeType::PAR:
+    case AnimationNodeType::SEQ:
+        pTypeAr[nPos++] = cppu::UnoType<XTimeContainer>::get();
+        pTypeAr[nPos++] = cppu::UnoType<XEnumerationAccess>::get();
+        break;
+    case AnimationNodeType::ITERATE:
+        pTypeAr[nPos++] = cppu::UnoType<XIterateContainer>::get();
+        pTypeAr[nPos++] = cppu::UnoType<XEnumerationAccess>::get();
+        break;
+    case AnimationNodeType::ANIMATE:
+        pTypeAr[nPos++] = cppu::UnoType<XAnimate>::get();
+        break;
+    case AnimationNodeType::ANIMATEMOTION:
+        pTypeAr[nPos++] = cppu::UnoType<XAnimateMotion>::get();
+        break;
+    case AnimationNodeType::ANIMATECOLOR:
+        pTypeAr[nPos++] = cppu::UnoType<XAnimateColor>::get();
+        break;
+    case AnimationNodeType::ANIMATETRANSFORM:
+        pTypeAr[nPos++] = cppu::UnoType<XAnimateTransform>::get();
+        break;
+    case AnimationNodeType::SET:
+        pTypeAr[nPos++] = cppu::UnoType<XAnimateSet>::get();
+        break;
+    case AnimationNodeType::TRANSITIONFILTER:
+        pTypeAr[nPos++] = cppu::UnoType<XTransitionFilter>::get();
+        break;
+    case AnimationNodeType::AUDIO:
+        pTypeAr[nPos++] = cppu::UnoType<XAudio>::get();
+        break;
+    case AnimationNodeType::COMMAND:
+        pTypeAr[nPos++] = cppu::UnoType<XCommand>::get();
+        break;
     }
+    mpTypes[nNodeType] = types;
 }
 
 

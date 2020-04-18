@@ -489,21 +489,21 @@ namespace accessibility
 
     void SAL_CALL AccessibleIconChoiceCtrlEntry::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )
     {
-        if (xListener.is())
-        {
-            ::osl::MutexGuard aGuard( m_aMutex );
+        if (!xListener.is())
+            return;
 
-            sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( m_nClientId, xListener );
-            if ( !nListenerCount )
-            {
-                // no listeners anymore
-                // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-                // and at least to us not firing any events anymore, in case somebody calls
-                // NotifyAccessibleEvent, again
-                sal_Int32 nId = m_nClientId;
-                m_nClientId = 0;
-                comphelper::AccessibleEventNotifier::revokeClient( nId );
-            }
+        ::osl::MutexGuard aGuard( m_aMutex );
+
+        sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( m_nClientId, xListener );
+        if ( !nListenerCount )
+        {
+            // no listeners anymore
+            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
+            // and at least to us not firing any events anymore, in case somebody calls
+            // NotifyAccessibleEvent, again
+            sal_Int32 nId = m_nClientId;
+            m_nClientId = 0;
+            comphelper::AccessibleEventNotifier::revokeClient( nId );
         }
     }
 

@@ -116,44 +116,44 @@ void VCLXAccessibleTabControl::UpdateTabPage( sal_Int32 i, bool bNew )
 
 void VCLXAccessibleTabControl::InsertChild( sal_Int32 i )
 {
-    if ( i >= 0 && i <= static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
-    {
-        // insert entry in child list
-        m_aAccessibleChildren.insert( m_aAccessibleChildren.begin() + i, Reference< XAccessible >() );
+    if ( !(i >= 0 && i <= static_cast<sal_Int32>(m_aAccessibleChildren.size())) )
+        return;
 
-        // send accessible child event
-        Reference< XAccessible > xChild( getAccessibleChild( i ) );
-        if ( xChild.is() )
-        {
-            Any aOldValue, aNewValue;
-            aNewValue <<= xChild;
-            NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
-        }
+    // insert entry in child list
+    m_aAccessibleChildren.insert( m_aAccessibleChildren.begin() + i, Reference< XAccessible >() );
+
+    // send accessible child event
+    Reference< XAccessible > xChild( getAccessibleChild( i ) );
+    if ( xChild.is() )
+    {
+        Any aOldValue, aNewValue;
+        aNewValue <<= xChild;
+        NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
     }
 }
 
 
 void VCLXAccessibleTabControl::RemoveChild( sal_Int32 i )
 {
-    if ( i >= 0 && i < static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
+    if ( !(i >= 0 && i < static_cast<sal_Int32>(m_aAccessibleChildren.size())) )
+        return;
+
+    // get the accessible of the removed page
+    Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
+
+    // remove entry in child list
+    m_aAccessibleChildren.erase( m_aAccessibleChildren.begin() + i );
+
+    // send accessible child event
+    if ( xChild.is() )
     {
-        // get the accessible of the removed page
-        Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
+        Any aOldValue, aNewValue;
+        aOldValue <<= xChild;
+        NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
 
-        // remove entry in child list
-        m_aAccessibleChildren.erase( m_aAccessibleChildren.begin() + i );
-
-        // send accessible child event
-        if ( xChild.is() )
-        {
-            Any aOldValue, aNewValue;
-            aOldValue <<= xChild;
-            NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
-
-            Reference< XComponent > xComponent( xChild, UNO_QUERY );
-            if ( xComponent.is() )
-                xComponent->dispose();
-        }
+        Reference< XComponent > xComponent( xChild, UNO_QUERY );
+        if ( xComponent.is() )
+            xComponent->dispose();
     }
 }
 
@@ -309,19 +309,19 @@ void VCLXAccessibleTabControl::disposing()
 {
     VCLXAccessibleComponent::disposing();
 
-    if ( m_pTabControl )
-    {
-        m_pTabControl = nullptr;
+    if ( !m_pTabControl )
+        return;
 
-        // dispose all tab pages
-        for (const Reference<XAccessible>& i : m_aAccessibleChildren)
-        {
-            Reference< XComponent > xComponent( i, UNO_QUERY );
-            if ( xComponent.is() )
-                xComponent->dispose();
-        }
-        m_aAccessibleChildren.clear();
+    m_pTabControl = nullptr;
+
+    // dispose all tab pages
+    for (const Reference<XAccessible>& i : m_aAccessibleChildren)
+    {
+        Reference< XComponent > xComponent( i, UNO_QUERY );
+        if ( xComponent.is() )
+            xComponent->dispose();
     }
+    m_aAccessibleChildren.clear();
 }
 
 
