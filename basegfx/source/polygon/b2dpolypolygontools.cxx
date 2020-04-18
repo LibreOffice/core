@@ -215,23 +215,23 @@ namespace basegfx::utils
                 fFullDashDotLen = std::accumulate(rDotDashArray.begin(), rDotDashArray.end(), 0.0);
             }
 
-            if(rCandidate.count() && fFullDashDotLen > 0.0)
+            if(!(rCandidate.count() && fFullDashDotLen > 0.0))
+                return;
+
+            B2DPolyPolygon aLineTarget;
+
+            for(auto const& rPolygon : rCandidate)
             {
-                B2DPolyPolygon aLineTarget;
+                applyLineDashing(
+                    rPolygon,
+                    rDotDashArray,
+                    pLineTarget ? &aLineTarget : nullptr,
+                    nullptr,
+                    fFullDashDotLen);
 
-                for(auto const& rPolygon : rCandidate)
+                if(pLineTarget)
                 {
-                    applyLineDashing(
-                        rPolygon,
-                        rDotDashArray,
-                        pLineTarget ? &aLineTarget : nullptr,
-                        nullptr,
-                        fFullDashDotLen);
-
-                    if(pLineTarget)
-                    {
-                        pLineTarget->append(aLineTarget);
-                    }
+                    pLineTarget->append(aLineTarget);
                 }
             }
         }

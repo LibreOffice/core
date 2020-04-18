@@ -139,20 +139,20 @@ public:
 
     void flip(bool bIsClosed)
     {
-        if(maVector.size() > 1)
-        {
-            // to keep the same point at index 0, just flip all points except the
-            // first one when closed
-            const sal_uInt32 nHalfSize(bIsClosed ? (maVector.size() - 1) >> 1 : maVector.size() >> 1);
-            CoordinateData2DVector::iterator aStart(bIsClosed ? maVector.begin() + 1 : maVector.begin());
-            CoordinateData2DVector::iterator aEnd(maVector.end() - 1);
+        if(maVector.size() <= 1)
+            return;
 
-            for(sal_uInt32 a(0); a < nHalfSize; a++)
-            {
-                std::swap(*aStart, *aEnd);
-                ++aStart;
-                --aEnd;
-            }
+        // to keep the same point at index 0, just flip all points except the
+        // first one when closed
+        const sal_uInt32 nHalfSize(bIsClosed ? (maVector.size() - 1) >> 1 : maVector.size() >> 1);
+        CoordinateData2DVector::iterator aStart(bIsClosed ? maVector.begin() + 1 : maVector.begin());
+        CoordinateData2DVector::iterator aEnd(maVector.end() - 1);
+
+        for(sal_uInt32 a(0); a < nHalfSize; a++)
+        {
+            std::swap(*aStart, *aEnd);
+            ++aStart;
+            --aEnd;
         }
     }
 
@@ -359,101 +359,101 @@ public:
 
     void insert(sal_uInt32 nIndex, const ControlVectorPair2D& rValue, sal_uInt32 nCount)
     {
-        if(nCount)
-        {
-            // add nCount copies of rValue
-            ControlVectorPair2DVector::iterator aIndex(maVector.begin());
-            aIndex += nIndex;
-            maVector.insert(aIndex, nCount, rValue);
+        if(!nCount)
+            return;
 
-            if(!rValue.getPrevVector().equalZero())
-                mnUsedVectors += nCount;
+        // add nCount copies of rValue
+        ControlVectorPair2DVector::iterator aIndex(maVector.begin());
+        aIndex += nIndex;
+        maVector.insert(aIndex, nCount, rValue);
 
-            if(!rValue.getNextVector().equalZero())
-                mnUsedVectors += nCount;
-        }
+        if(!rValue.getPrevVector().equalZero())
+            mnUsedVectors += nCount;
+
+        if(!rValue.getNextVector().equalZero())
+            mnUsedVectors += nCount;
     }
 
     void insert(sal_uInt32 nIndex, const ControlVectorArray2D& rSource)
     {
         const sal_uInt32 nCount(rSource.maVector.size());
 
-        if(nCount)
+        if(!nCount)
+            return;
+
+        // insert data
+        ControlVectorPair2DVector::iterator aIndex(maVector.begin());
+        aIndex += nIndex;
+        ControlVectorPair2DVector::const_iterator aStart(rSource.maVector.begin());
+        ControlVectorPair2DVector::const_iterator aEnd(rSource.maVector.end());
+        maVector.insert(aIndex, aStart, aEnd);
+
+        for(; aStart != aEnd; ++aStart)
         {
-            // insert data
-            ControlVectorPair2DVector::iterator aIndex(maVector.begin());
-            aIndex += nIndex;
-            ControlVectorPair2DVector::const_iterator aStart(rSource.maVector.begin());
-            ControlVectorPair2DVector::const_iterator aEnd(rSource.maVector.end());
-            maVector.insert(aIndex, aStart, aEnd);
+            if(!aStart->getPrevVector().equalZero())
+                mnUsedVectors++;
 
-            for(; aStart != aEnd; ++aStart)
-            {
-                if(!aStart->getPrevVector().equalZero())
-                    mnUsedVectors++;
-
-                if(!aStart->getNextVector().equalZero())
-                    mnUsedVectors++;
-            }
+            if(!aStart->getNextVector().equalZero())
+                mnUsedVectors++;
         }
     }
 
     void remove(sal_uInt32 nIndex, sal_uInt32 nCount)
     {
-        if(nCount)
+        if(!nCount)
+            return;
+
+        const ControlVectorPair2DVector::iterator aDeleteStart(maVector.begin() + nIndex);
+        const ControlVectorPair2DVector::iterator aDeleteEnd(aDeleteStart + nCount);
+        ControlVectorPair2DVector::const_iterator aStart(aDeleteStart);
+
+        for(; mnUsedVectors && aStart != aDeleteEnd; ++aStart)
         {
-            const ControlVectorPair2DVector::iterator aDeleteStart(maVector.begin() + nIndex);
-            const ControlVectorPair2DVector::iterator aDeleteEnd(aDeleteStart + nCount);
-            ControlVectorPair2DVector::const_iterator aStart(aDeleteStart);
+            if(!aStart->getPrevVector().equalZero())
+                mnUsedVectors--;
 
-            for(; mnUsedVectors && aStart != aDeleteEnd; ++aStart)
-            {
-                if(!aStart->getPrevVector().equalZero())
-                    mnUsedVectors--;
-
-                if(mnUsedVectors && !aStart->getNextVector().equalZero())
-                    mnUsedVectors--;
-            }
-
-            // remove point data
-            maVector.erase(aDeleteStart, aDeleteEnd);
+            if(mnUsedVectors && !aStart->getNextVector().equalZero())
+                mnUsedVectors--;
         }
+
+        // remove point data
+        maVector.erase(aDeleteStart, aDeleteEnd);
     }
 
     void flip(bool bIsClosed)
     {
-        if(maVector.size() > 1)
+        if(maVector.size() <= 1)
+            return;
+
+        // to keep the same point at index 0, just flip all points except the
+        // first one when closed
+        const sal_uInt32 nHalfSize(bIsClosed ? (maVector.size() - 1) >> 1 : maVector.size() >> 1);
+        ControlVectorPair2DVector::iterator aStart(bIsClosed ? maVector.begin() + 1 : maVector.begin());
+        ControlVectorPair2DVector::iterator aEnd(maVector.end() - 1);
+
+        for(sal_uInt32 a(0); a < nHalfSize; a++)
         {
-            // to keep the same point at index 0, just flip all points except the
-            // first one when closed
-            const sal_uInt32 nHalfSize(bIsClosed ? (maVector.size() - 1) >> 1 : maVector.size() >> 1);
-            ControlVectorPair2DVector::iterator aStart(bIsClosed ? maVector.begin() + 1 : maVector.begin());
-            ControlVectorPair2DVector::iterator aEnd(maVector.end() - 1);
+            // swap Prev and Next
+            aStart->flip();
+            aEnd->flip();
 
-            for(sal_uInt32 a(0); a < nHalfSize; a++)
-            {
-                // swap Prev and Next
-                aStart->flip();
-                aEnd->flip();
+            // swap entries
+            std::swap(*aStart, *aEnd);
 
-                // swap entries
-                std::swap(*aStart, *aEnd);
+            ++aStart;
+            --aEnd;
+        }
 
-                ++aStart;
-                --aEnd;
-            }
+        if(aStart == aEnd)
+        {
+            // swap Prev and Next at middle element (if exists)
+            aStart->flip();
+        }
 
-            if(aStart == aEnd)
-            {
-                // swap Prev and Next at middle element (if exists)
-                aStart->flip();
-            }
-
-            if(bIsClosed)
-            {
-                // swap Prev and Next at start element
-                maVector.begin()->flip();
-            }
+        if(bIsClosed)
+        {
+            // swap Prev and Next at start element
+            maVector.begin()->flip();
         }
     }
 };
@@ -858,63 +858,63 @@ public:
     {
         const sal_uInt32 nCount(rSource.maPoints.count());
 
-        if(nCount)
+        if(!nCount)
+            return;
+
+        mpBufferedData.reset();
+
+        if(rSource.mpControlVector && rSource.mpControlVector->isUsed() && !mpControlVector)
         {
-            mpBufferedData.reset();
+            mpControlVector.reset( new ControlVectorArray2D(maPoints.count()) );
+        }
 
-            if(rSource.mpControlVector && rSource.mpControlVector->isUsed() && !mpControlVector)
-            {
-                mpControlVector.reset( new ControlVectorArray2D(maPoints.count()) );
-            }
+        maPoints.insert(nIndex, rSource.maPoints);
 
-            maPoints.insert(nIndex, rSource.maPoints);
+        if(rSource.mpControlVector)
+        {
+            mpControlVector->insert(nIndex, *rSource.mpControlVector);
 
-            if(rSource.mpControlVector)
-            {
-                mpControlVector->insert(nIndex, *rSource.mpControlVector);
-
-                if(!mpControlVector->isUsed())
-                    mpControlVector.reset();
-            }
-            else if(mpControlVector)
-            {
-                ControlVectorPair2D aVectorPair;
-                mpControlVector->insert(nIndex, aVectorPair, nCount);
-            }
+            if(!mpControlVector->isUsed())
+                mpControlVector.reset();
+        }
+        else if(mpControlVector)
+        {
+            ControlVectorPair2D aVectorPair;
+            mpControlVector->insert(nIndex, aVectorPair, nCount);
         }
     }
 
     void remove(sal_uInt32 nIndex, sal_uInt32 nCount)
     {
-        if(nCount)
+        if(!nCount)
+            return;
+
+        mpBufferedData.reset();
+        maPoints.remove(nIndex, nCount);
+
+        if(mpControlVector)
         {
-            mpBufferedData.reset();
-            maPoints.remove(nIndex, nCount);
+            mpControlVector->remove(nIndex, nCount);
 
-            if(mpControlVector)
-            {
-                mpControlVector->remove(nIndex, nCount);
-
-                if(!mpControlVector->isUsed())
-                    mpControlVector.reset();
-            }
+            if(!mpControlVector->isUsed())
+                mpControlVector.reset();
         }
     }
 
     void flip()
     {
-        if(maPoints.count() > 1)
+        if(maPoints.count() <= 1)
+            return;
+
+        mpBufferedData.reset();
+
+        // flip points
+        maPoints.flip(mbIsClosed);
+
+        if(mpControlVector)
         {
-            mpBufferedData.reset();
-
-            // flip points
-            maPoints.flip(mbIsClosed);
-
-            if(mpControlVector)
-            {
-                // flip control vector
-                mpControlVector->flip(mbIsClosed);
-            }
+            // flip control vector
+            mpControlVector->flip(mbIsClosed);
         }
     }
 
@@ -966,56 +966,56 @@ public:
     void removeDoublePointsAtBeginEnd()
     {
         // Only remove DoublePoints at Begin and End when poly is closed
-        if(mbIsClosed)
+        if(!mbIsClosed)
+            return;
+
+        mpBufferedData.reset();
+
+        if(mpControlVector)
         {
-            mpBufferedData.reset();
+            bool bRemove;
 
-            if(mpControlVector)
+            do
             {
-                bool bRemove;
+                bRemove = false;
 
-                do
+                if(maPoints.count() > 1)
                 {
-                    bRemove = false;
+                    const sal_uInt32 nIndex(maPoints.count() - 1);
 
-                    if(maPoints.count() > 1)
+                    if(maPoints.getCoordinate(0) == maPoints.getCoordinate(nIndex))
                     {
-                        const sal_uInt32 nIndex(maPoints.count() - 1);
-
-                        if(maPoints.getCoordinate(0) == maPoints.getCoordinate(nIndex))
+                        if(mpControlVector)
                         {
-                            if(mpControlVector)
-                            {
-                                if(mpControlVector->getNextVector(nIndex).equalZero() && mpControlVector->getPrevVector(0).equalZero())
-                                {
-                                    bRemove = true;
-                                }
-                            }
-                            else
+                            if(mpControlVector->getNextVector(nIndex).equalZero() && mpControlVector->getPrevVector(0).equalZero())
                             {
                                 bRemove = true;
                             }
                         }
-                    }
-
-                    if(bRemove)
-                    {
-                        const sal_uInt32 nIndex(maPoints.count() - 1);
-
-                        if(mpControlVector && !mpControlVector->getPrevVector(nIndex).equalZero())
+                        else
                         {
-                            mpControlVector->setPrevVector(0, mpControlVector->getPrevVector(nIndex));
+                            bRemove = true;
                         }
-
-                        remove(nIndex, 1);
                     }
                 }
-                while(bRemove);
+
+                if(bRemove)
+                {
+                    const sal_uInt32 nIndex(maPoints.count() - 1);
+
+                    if(mpControlVector && !mpControlVector->getPrevVector(nIndex).equalZero())
+                    {
+                        mpControlVector->setPrevVector(0, mpControlVector->getPrevVector(nIndex));
+                    }
+
+                    remove(nIndex, 1);
+                }
             }
-            else
-            {
-                maPoints.removeDoublePointsAtBeginEnd();
-            }
+            while(bRemove);
+        }
+        else
+        {
+            maPoints.removeDoublePointsAtBeginEnd();
         }
     }
 
@@ -1438,23 +1438,23 @@ namespace basegfx
 
     void B2DPolygon::append(const B2DPolygon& rPoly, sal_uInt32 nIndex, sal_uInt32 nCount)
     {
-        if(rPoly.count())
-        {
-            if(!nCount)
-            {
-                nCount = rPoly.count();
-            }
+        if(!rPoly.count())
+            return;
 
-            if(nIndex == 0 && nCount == rPoly.count())
-            {
-                mpPolygon->insert(mpPolygon->count(), *rPoly.mpPolygon);
-            }
-            else
-            {
-                OSL_ENSURE(nIndex + nCount <= rPoly.mpPolygon->count(), "B2DPolygon Append outside range (!)");
-                ImplB2DPolygon aTempPoly(*rPoly.mpPolygon, nIndex, nCount);
-                mpPolygon->insert(mpPolygon->count(), aTempPoly);
-            }
+        if(!nCount)
+        {
+            nCount = rPoly.count();
+        }
+
+        if(nIndex == 0 && nCount == rPoly.count())
+        {
+            mpPolygon->insert(mpPolygon->count(), *rPoly.mpPolygon);
+        }
+        else
+        {
+            OSL_ENSURE(nIndex + nCount <= rPoly.mpPolygon->count(), "B2DPolygon Append outside range (!)");
+            ImplB2DPolygon aTempPoly(*rPoly.mpPolygon, nIndex, nCount);
+            mpPolygon->insert(mpPolygon->count(), aTempPoly);
         }
     }
 
