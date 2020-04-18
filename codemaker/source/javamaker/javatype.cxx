@@ -64,22 +64,23 @@ void appendUnoName(
         buffer->append("[]");
     }
     buffer->append(nucleus);
-    if (!arguments.empty()) {
-        buffer->append('<');
-        for (std::vector< OUString >::const_iterator i(arguments.begin());
-             i != arguments.end(); ++i)
-        {
-            if (i != arguments.begin()) {
-                buffer->append(',');
-            }
-            OUString n;
-            sal_Int32 k;
-            std::vector< OUString > args;
-            manager->decompose(*i, false, &n, &k, &args, nullptr);
-            appendUnoName(manager, n, k, args, buffer);
+    if (arguments.empty())
+        return;
+
+    buffer->append('<');
+    for (std::vector< OUString >::const_iterator i(arguments.begin());
+         i != arguments.end(); ++i)
+    {
+        if (i != arguments.begin()) {
+            buffer->append(',');
         }
-        buffer->append('>');
+        OUString n;
+        sal_Int32 k;
+        std::vector< OUString > args;
+        manager->decompose(*i, false, &n, &k, &args, nullptr);
+        appendUnoName(manager, n, k, args, buffer);
     }
+    buffer->append('>');
 }
 
 // Translate the name of a UNOIDL entity (enum type, plain struct type,
@@ -643,39 +644,40 @@ void addTypeInfo(
         throw CannotDumpException(
             "UNOTYPEINFO array too big for Java class file format");
     }
-    if (typeInfos != 0) {
-        classFile->addField(
-            static_cast< ClassFile::AccessFlags >(
-                ClassFile::ACC_PUBLIC | ClassFile::ACC_STATIC
-                | ClassFile::ACC_FINAL),
-            "UNOTYPEINFO", "[Lcom/sun/star/lib/uno/typeinfo/TypeInfo;",
-            0, "");
-        std::unique_ptr< ClassFile::Code > code(classFile->newCode());
-        code->loadIntegerConstant(static_cast< sal_Int32 >(typeInfos));
-        code->instrAnewarray("com/sun/star/lib/uno/typeinfo/TypeInfo");
-        sal_Int32 index = 0;
-        sal_uInt16 stack = 0;
-        for (const TypeInfo& ti : typeInfo)
-        {
-            code->instrDup();
-            code->loadIntegerConstant(index++);
-            stack = std::max(stack, ti.generateCode(*code, dependencies));
-            code->instrAastore();
-        }
-        code->instrPutstatic(
-            className, "UNOTYPEINFO",
-            "[Lcom/sun/star/lib/uno/typeinfo/TypeInfo;");
-        code->instrReturn();
-        if (stack > SAL_MAX_UINT16 - 4) {
-            throw CannotDumpException(
-                "Stack too big for Java class file format");
-        }
-        code->setMaxStackAndLocals(static_cast< sal_uInt16 >(stack + 4), 0);
-        classFile->addMethod(
-            static_cast< ClassFile::AccessFlags >(
-                ClassFile::ACC_PRIVATE | ClassFile::ACC_STATIC),
-            "<clinit>", "()V", code.get(), std::vector< OString >(), "");
+    if (typeInfos == 0)
+        return;
+
+    classFile->addField(
+        static_cast< ClassFile::AccessFlags >(
+            ClassFile::ACC_PUBLIC | ClassFile::ACC_STATIC
+            | ClassFile::ACC_FINAL),
+        "UNOTYPEINFO", "[Lcom/sun/star/lib/uno/typeinfo/TypeInfo;",
+        0, "");
+    std::unique_ptr< ClassFile::Code > code(classFile->newCode());
+    code->loadIntegerConstant(static_cast< sal_Int32 >(typeInfos));
+    code->instrAnewarray("com/sun/star/lib/uno/typeinfo/TypeInfo");
+    sal_Int32 index = 0;
+    sal_uInt16 stack = 0;
+    for (const TypeInfo& ti : typeInfo)
+    {
+        code->instrDup();
+        code->loadIntegerConstant(index++);
+        stack = std::max(stack, ti.generateCode(*code, dependencies));
+        code->instrAastore();
     }
+    code->instrPutstatic(
+        className, "UNOTYPEINFO",
+        "[Lcom/sun/star/lib/uno/typeinfo/TypeInfo;");
+    code->instrReturn();
+    if (stack > SAL_MAX_UINT16 - 4) {
+        throw CannotDumpException(
+            "Stack too big for Java class file format");
+    }
+    code->setMaxStackAndLocals(static_cast< sal_uInt16 >(stack + 4), 0);
+    classFile->addMethod(
+        static_cast< ClassFile::AccessFlags >(
+            ClassFile::ACC_PRIVATE | ClassFile::ACC_STATIC),
+        "<clinit>", "()V", code.get(), std::vector< OString >(), "");
 }
 
 void handleEnumType(
