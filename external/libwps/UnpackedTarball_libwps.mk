@@ -15,13 +15,9 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libwps,1))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libwps))
 
-# * external/libwps/0001-Make-comparison-operator-member-functions-const.patch is upstream at
-#   <https://sourceforge.net/p/libwps/patches/6/> "Make comparison operator member functions const":
 $(eval $(call gb_UnpackedTarball_add_patches,libwps,\
 	$(if $(SYSTEM_REVENGE),,external/libwps/rpath.patch.0) \
 	external/libwps/libtool.patch.0 \
-	external/libwps/0001-Make-comparison-operator-member-functions-const.patch \
-	external/libwps/libwps-lotus-version-tdf127887-upstream.patch \
 ))
 
 ifneq ($(OS),MACOSX)

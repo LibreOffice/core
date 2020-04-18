@@ -93,6 +93,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,wps,\
 	UnpackedTarball/libwps/src/lib/WPSTable \
 	UnpackedTarball/libwps/src/lib/WPSTextParser \
 	UnpackedTarball/libwps/src/lib/WPSTextSubDocument \
+	UnpackedTarball/libwps/src/lib/XYWrite \
 	UnpackedTarball/libwps/src/lib/libwps_internal \
 	UnpackedTarball/libwps/src/lib/libwps_tools_win \
 ))
