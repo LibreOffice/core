@@ -93,7 +93,7 @@ void Manager::reduceGraphicMemory()
             return;
 
         sal_Int64 nCurrentGraphicSize = getGraphicSizeBytes(pEachImpGraphic);
-        if (!pEachImpGraphic->ImplIsSwapOut() && nCurrentGraphicSize > 1000000)
+        if (!pEachImpGraphic->isSwappedOut() && nCurrentGraphicSize > 1000000)
         {
             if (!pEachImpGraphic->mpContext)
             {
@@ -102,7 +102,7 @@ void Manager::reduceGraphicMemory()
                 auto aSeconds = std::chrono::duration_cast<std::chrono::seconds>(aDeltaTime);
 
                 if (aSeconds > mnAllowedIdleTime)
-                    pEachImpGraphic->ImplSwapOut();
+                    pEachImpGraphic->swapOut();
             }
         }
     }
@@ -141,7 +141,7 @@ void Manager::registerGraphic(const std::shared_ptr<ImpGraphic>& pImpGraphic,
     sal_Int64 calculatedSize = 0;
     for (ImpGraphic* pEachImpGraphic : m_pImpGraphicList)
     {
-        if (!pEachImpGraphic->ImplIsSwapOut())
+        if (!pEachImpGraphic->isSwappedOut())
         {
             calculatedSize += getGraphicSizeBytes(pEachImpGraphic);
         }

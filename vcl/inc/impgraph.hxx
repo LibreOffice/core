@@ -175,13 +175,14 @@ private:
     bool                ImplReadEmbedded( SvStream& rIStream );
     bool                ImplWriteEmbedded( SvStream& rOStream );
 
-    bool                ImplSwapIn();
-    bool                ImplSwapIn( SvStream* pIStm );
+    bool                swapIn();
+    bool                swapInFromStream(SvStream* pIStm);
 
-    bool                ImplSwapOut();
-    bool                ImplSwapOut( SvStream* pOStm );
+    bool                swapOut();
+    bool                swapOutToStream(SvStream* pOStm);
 
-    bool                ImplIsSwapOut() const { return mbSwapOut;}
+    bool                isSwappedOut() const { return mbSwapOut;}
+
     bool                ImplIsDummyContext() const { return mbDummyContext; }
     void                ImplSetLink( const std::shared_ptr<GfxLink>& );
     std::shared_ptr<GfxLink> ImplGetSharedGfxLink() const;
