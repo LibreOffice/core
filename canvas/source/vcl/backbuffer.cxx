@@ -31,19 +31,19 @@ namespace vclcanvas
         maVDev( VclPtr<VirtualDevice>::Create( rRefDevice,
                                    bMonochromeBuffer ? DeviceFormat::BITMASK : DeviceFormat::DEFAULT ) )
     {
-        if( !bMonochromeBuffer )
-        {
-            // #i95645#
+        if( bMonochromeBuffer )
+            return;
+
+        // #i95645#
 #if defined( MACOSX )
-            // use AA on VCLCanvas for Mac
-            maVDev->SetAntialiasing( AntialiasingFlags::EnableB2dDraw | maVDev->GetAntialiasing() );
+        // use AA on VCLCanvas for Mac
+        maVDev->SetAntialiasing( AntialiasingFlags::EnableB2dDraw | maVDev->GetAntialiasing() );
 #else
-            // switch off AA for WIN32 and UNIX, the VCLCanvas does not look good with it and
-            // is not required to do AA. It would need to be adapted to use it correctly
-            // (especially gradient painting). This will need extra work.
-            maVDev->SetAntialiasing( maVDev->GetAntialiasing() & ~AntialiasingFlags::EnableB2dDraw);
+        // switch off AA for WIN32 and UNIX, the VCLCanvas does not look good with it and
+        // is not required to do AA. It would need to be adapted to use it correctly
+        // (especially gradient painting). This will need extra work.
+        maVDev->SetAntialiasing( maVDev->GetAntialiasing() & ~AntialiasingFlags::EnableB2dDraw);
 #endif
-        }
     }
 
     BackBuffer::~BackBuffer()

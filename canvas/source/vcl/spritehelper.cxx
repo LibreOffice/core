@@ -98,248 +98,248 @@ namespace vclcanvas
 
         const double fAlpha( getAlpha() );
 
-        if( isActive() &&
-            !::basegfx::fTools::equalZero( fAlpha ) )
+        if( !(isActive() &&
+            !::basegfx::fTools::equalZero( fAlpha )) )
+            return;
+
+        const Point                 aEmptyPoint;
+        const ::basegfx::B2DVector& rOrigOutputSize( getSizePixel() );
+
+        // might get changed below (e.g. adapted for
+        // transformations). IMPORTANT: both position and size are
+        // rounded to integer values. From now on, only those
+        // rounded values are used, to keep clip and content in
+        // sync.
+        ::Size  aOutputSize( vcl::unotools::sizeFromB2DSize( rOrigOutputSize ) );
+        ::Point aOutPos( vcl::unotools::pointFromB2DPoint( rPos ) );
+
+
+        // TODO(F3): Support for alpha-VDev
+
+        // Do we have to update our bitmaps (necessary if virdev
+        // was painted to, or transformation changed)?
+        const bool bNeedBitmapUpdate( io_bSurfacesDirty ||
+                                      hasTransformChanged() ||
+                                      maContent->IsEmpty() );
+
+        // updating content of sprite cache - surface is no
+        // longer dirty in relation to our cache
+        io_bSurfacesDirty = false;
+        transformUpdated();
+
+        if( bNeedBitmapUpdate )
         {
-            const Point                 aEmptyPoint;
-            const ::basegfx::B2DVector& rOrigOutputSize( getSizePixel() );
+            BitmapEx aBmp( mpBackBuffer->getOutDev().GetBitmapEx( aEmptyPoint,
+                                                              aOutputSize ) );
 
-            // might get changed below (e.g. adapted for
-            // transformations). IMPORTANT: both position and size are
-            // rounded to integer values. From now on, only those
-            // rounded values are used, to keep clip and content in
-            // sync.
-            ::Size  aOutputSize( vcl::unotools::sizeFromB2DSize( rOrigOutputSize ) );
-            ::Point aOutPos( vcl::unotools::pointFromB2DPoint( rPos ) );
-
-
-            // TODO(F3): Support for alpha-VDev
-
-            // Do we have to update our bitmaps (necessary if virdev
-            // was painted to, or transformation changed)?
-            const bool bNeedBitmapUpdate( io_bSurfacesDirty ||
-                                          hasTransformChanged() ||
-                                          maContent->IsEmpty() );
-
-            // updating content of sprite cache - surface is no
-            // longer dirty in relation to our cache
-            io_bSurfacesDirty = false;
-            transformUpdated();
-
-            if( bNeedBitmapUpdate )
+            if( isContentFullyOpaque() )
             {
-                BitmapEx aBmp( mpBackBuffer->getOutDev().GetBitmapEx( aEmptyPoint,
-                                                                  aOutputSize ) );
-
-                if( isContentFullyOpaque() )
-                {
-                    // optimized case: content canvas is fully
-                    // opaque. Note: since we retrieved aBmp directly
-                    // from an OutDev, it's already a 'display bitmap'
-                    // on windows.
-                    maContent = aBmp;
-                }
-                else
-                {
-                    // sprite content might contain alpha, create
-                    // BmpEx, then.
-                    BitmapEx aMask( mpBackBufferMask->getOutDev().GetBitmapEx( aEmptyPoint,
-                                                                           aOutputSize ) );
-
-                    // bitmasks are much faster than alphamasks on some platforms
-                    // so convert to bitmask if useful
-                    bool convertTo1Bpp = aMask.GetBitCount() != 1;
-#ifdef MACOSX
-                    convertTo1Bpp = false;
-#endif
-                    if( SkiaHelper::isVCLSkiaEnabled())
-                        convertTo1Bpp = false;
-
-                    if( convertTo1Bpp )
-                    {
-                        OSL_FAIL("CanvasCustomSprite::redraw(): Mask bitmap is not "
-                                   "monochrome (performance!)");
-                        BitmapEx aMaskEx(aMask);
-                        BitmapFilter::Filter(aMaskEx, BitmapMonochromeFilter(255));
-                        aMask = aMaskEx.GetBitmap();
-                    }
-
-                    // Note: since we retrieved aBmp and aMask
-                    // directly from an OutDev, it's already a
-                    // 'display bitmap' on windows.
-                    if( aMask.GetBitCount() == 1 )
-                        maContent = BitmapEx( aBmp.GetBitmap(), aMask.GetBitmap() );
-                    else
-                        maContent = BitmapEx( aBmp.GetBitmap(), AlphaMask( aMask.GetBitmap()) );
-                }
+                // optimized case: content canvas is fully
+                // opaque. Note: since we retrieved aBmp directly
+                // from an OutDev, it's already a 'display bitmap'
+                // on windows.
+                maContent = aBmp;
             }
-
-            ::basegfx::B2DHomMatrix aTransform( getTransformation() );
-
-            // check whether matrix is "easy" to handle - pure
-            // translations or scales are handled by OutputDevice
-            // alone
-            const bool bIdentityTransform( aTransform.isIdentity() );
-
-            // make transformation absolute (put sprite to final
-            // output position). Need to happen here, as we also have
-            // to translate the clip polygon
-            aTransform.translate( aOutPos.X(),
-                                  aOutPos.Y() );
-
-            if( !bIdentityTransform )
+            else
             {
-                // Avoid the trick with the negative width in the OpenGL case,
-                // OutputDevice::DrawDeviceAlphaBitmap() doesn't like it.
-                if (!::basegfx::fTools::equalZero( aTransform.get(0,1) ) ||
-                    !::basegfx::fTools::equalZero( aTransform.get(1,0) )
-#if HAVE_FEATURE_UI
-                    || OpenGLHelper::isVCLOpenGLEnabled()
+                // sprite content might contain alpha, create
+                // BmpEx, then.
+                BitmapEx aMask( mpBackBufferMask->getOutDev().GetBitmapEx( aEmptyPoint,
+                                                                       aOutputSize ) );
+
+                // bitmasks are much faster than alphamasks on some platforms
+                // so convert to bitmask if useful
+                bool convertTo1Bpp = aMask.GetBitCount() != 1;
+#ifdef MACOSX
+                convertTo1Bpp = false;
 #endif
-                    || SkiaHelper::isVCLSkiaEnabled()
-                   )
+                if( SkiaHelper::isVCLSkiaEnabled())
+                    convertTo1Bpp = false;
+
+                if( convertTo1Bpp )
                 {
-                    // "complex" transformation, employ affine
-                    // transformator
+                    OSL_FAIL("CanvasCustomSprite::redraw(): Mask bitmap is not "
+                               "monochrome (performance!)");
+                    BitmapEx aMaskEx(aMask);
+                    BitmapFilter::Filter(aMaskEx, BitmapMonochromeFilter(255));
+                    aMask = aMaskEx.GetBitmap();
+                }
 
-                    // modify output position, to account for the fact
-                    // that transformBitmap() always normalizes its output
-                    // bitmap into the smallest enclosing box.
-                    ::basegfx::B2DRectangle aDestRect;
-                    ::canvas::tools::calcTransformedRectBounds( aDestRect,
-                                                                ::basegfx::B2DRectangle(0,
-                                                                                        0,
-                                                                                        rOrigOutputSize.getX(),
-                                                                                        rOrigOutputSize.getY()),
-                                                                aTransform );
+                // Note: since we retrieved aBmp and aMask
+                // directly from an OutDev, it's already a
+                // 'display bitmap' on windows.
+                if( aMask.GetBitCount() == 1 )
+                    maContent = BitmapEx( aBmp.GetBitmap(), aMask.GetBitmap() );
+                else
+                    maContent = BitmapEx( aBmp.GetBitmap(), AlphaMask( aMask.GetBitmap()) );
+            }
+        }
 
-                    aOutPos.setX( ::basegfx::fround( aDestRect.getMinX() ) );
-                    aOutPos.setY( ::basegfx::fround( aDestRect.getMinY() ) );
+        ::basegfx::B2DHomMatrix aTransform( getTransformation() );
 
-                    // TODO(P3): Use optimized bitmap transformation here.
+        // check whether matrix is "easy" to handle - pure
+        // translations or scales are handled by OutputDevice
+        // alone
+        const bool bIdentityTransform( aTransform.isIdentity() );
 
-                    // actually re-create the bitmap ONLY if necessary
-                    if( bNeedBitmapUpdate )
-                        maContent = tools::transformBitmap( *maContent,
+        // make transformation absolute (put sprite to final
+        // output position). Need to happen here, as we also have
+        // to translate the clip polygon
+        aTransform.translate( aOutPos.X(),
+                              aOutPos.Y() );
+
+        if( !bIdentityTransform )
+        {
+            // Avoid the trick with the negative width in the OpenGL case,
+            // OutputDevice::DrawDeviceAlphaBitmap() doesn't like it.
+            if (!::basegfx::fTools::equalZero( aTransform.get(0,1) ) ||
+                !::basegfx::fTools::equalZero( aTransform.get(1,0) )
+#if HAVE_FEATURE_UI
+                || OpenGLHelper::isVCLOpenGLEnabled()
+#endif
+                || SkiaHelper::isVCLSkiaEnabled()
+               )
+            {
+                // "complex" transformation, employ affine
+                // transformator
+
+                // modify output position, to account for the fact
+                // that transformBitmap() always normalizes its output
+                // bitmap into the smallest enclosing box.
+                ::basegfx::B2DRectangle aDestRect;
+                ::canvas::tools::calcTransformedRectBounds( aDestRect,
+                                                            ::basegfx::B2DRectangle(0,
+                                                                                    0,
+                                                                                    rOrigOutputSize.getX(),
+                                                                                    rOrigOutputSize.getY()),
                                                             aTransform );
 
-                    aOutputSize = maContent->GetSizePixel();
-                }
-                else
-                {
-                    // relatively 'simplistic' transformation -
-                    // retrieve scale and translational offset
-                    aOutputSize.setWidth (
-                        ::basegfx::fround( rOrigOutputSize.getX() * aTransform.get(0,0) ) );
-                    aOutputSize.setHeight(
-                        ::basegfx::fround( rOrigOutputSize.getY() * aTransform.get(1,1) ) );
+                aOutPos.setX( ::basegfx::fround( aDestRect.getMinX() ) );
+                aOutPos.setY( ::basegfx::fround( aDestRect.getMinY() ) );
 
-                    aOutPos.setX( ::basegfx::fround( aTransform.get(0,2) ) );
-                    aOutPos.setY( ::basegfx::fround( aTransform.get(1,2) ) );
-                }
+                // TODO(P3): Use optimized bitmap transformation here.
+
+                // actually re-create the bitmap ONLY if necessary
+                if( bNeedBitmapUpdate )
+                    maContent = tools::transformBitmap( *maContent,
+                                                        aTransform );
+
+                aOutputSize = maContent->GetSizePixel();
             }
-
-            // transformBitmap() might return empty bitmaps, for tiny
-            // scales.
-            if( !!(*maContent) )
+            else
             {
-                rTargetSurface.Push( PushFlags::CLIPREGION );
+                // relatively 'simplistic' transformation -
+                // retrieve scale and translational offset
+                aOutputSize.setWidth (
+                    ::basegfx::fround( rOrigOutputSize.getX() * aTransform.get(0,0) ) );
+                aOutputSize.setHeight(
+                    ::basegfx::fround( rOrigOutputSize.getY() * aTransform.get(1,1) ) );
 
-                // apply clip (if any)
-                if( getClip().is() )
-                {
-                    ::basegfx::B2DPolyPolygon aClipPoly(
-                        ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(
-                            getClip() ));
+                aOutPos.setX( ::basegfx::fround( aTransform.get(0,2) ) );
+                aOutPos.setY( ::basegfx::fround( aTransform.get(1,2) ) );
+            }
+        }
 
-                    if( aClipPoly.count() )
-                    {
-                        // aTransform already contains the
-                        // translational component, moving the clip to
-                        // the final sprite output position.
-                        aClipPoly.transform( aTransform );
+        // transformBitmap() might return empty bitmaps, for tiny
+        // scales.
+        if( !(*maContent) )
+            return;
 
-                        if( mbShowSpriteBounds )
-                        {
-                            // Paint green sprite clip area
-                            rTargetSurface.SetLineColor( Color( 0,255,0 ) );
-                            rTargetSurface.SetFillColor();
+        rTargetSurface.Push( PushFlags::CLIPREGION );
 
-                            rTargetSurface.DrawPolyPolygon(::tools::PolyPolygon(aClipPoly)); // #i76339#
-                        }
+        // apply clip (if any)
+        if( getClip().is() )
+        {
+            ::basegfx::B2DPolyPolygon aClipPoly(
+                ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(
+                    getClip() ));
 
-                        vcl::Region aClipRegion( aClipPoly );
-                        rTargetSurface.SetClipRegion( aClipRegion );
-                    }
-                }
-
-                if( ::rtl::math::approxEqual(fAlpha, 1.0) )
-                {
-                    // no alpha modulation -> just copy to output
-                    if( maContent->IsTransparent() )
-                        rTargetSurface.DrawBitmapEx( aOutPos, aOutputSize, *maContent );
-                    else
-                        rTargetSurface.DrawBitmap( aOutPos, aOutputSize, maContent->GetBitmap() );
-                }
-                else
-                {
-                    // TODO(P3): Switch to OutputDevice::DrawTransparent()
-                    // here
-
-                    // draw semi-transparent
-                    sal_uInt8 nColor( static_cast<sal_uInt8>( ::basegfx::fround( 255.0*(1.0 - fAlpha) + .5) ) );
-                    AlphaMask aAlpha( maContent->GetSizePixel(),
-                                      &nColor );
-
-                    // mask out fully transparent areas
-                    if( maContent->IsTransparent() )
-                        aAlpha.Replace( maContent->GetMask(), 255 );
-
-                    // alpha-blend to output
-                    rTargetSurface.DrawBitmapEx( aOutPos, aOutputSize,
-                                                 BitmapEx( maContent->GetBitmap(),
-                                                           aAlpha ) );
-                }
-
-                rTargetSurface.Pop();
+            if( aClipPoly.count() )
+            {
+                // aTransform already contains the
+                // translational component, moving the clip to
+                // the final sprite output position.
+                aClipPoly.transform( aTransform );
 
                 if( mbShowSpriteBounds )
                 {
-                    ::tools::PolyPolygon aMarkerPoly(
-                        ::canvas::tools::getBoundMarksPolyPolygon(
-                            ::basegfx::B2DRectangle(aOutPos.X(),
-                                                    aOutPos.Y(),
-                                                    aOutPos.X() + aOutputSize.Width()-1,
-                                                    aOutPos.Y() + aOutputSize.Height()-1) ) );
-
-                    // Paint little red sprite area markers
-                    rTargetSurface.SetLineColor( COL_RED );
+                    // Paint green sprite clip area
+                    rTargetSurface.SetLineColor( Color( 0,255,0 ) );
                     rTargetSurface.SetFillColor();
 
-                    for( int i=0; i<aMarkerPoly.Count(); ++i )
-                    {
-                        rTargetSurface.DrawPolyLine( aMarkerPoly.GetObject(static_cast<sal_uInt16>(i)) );
-                    }
-
-                    // paint sprite prio
-                    vcl::Font aVCLFont;
-                    aVCLFont.SetFontHeight( std::min(long(20),aOutputSize.Height()) );
-                    aVCLFont.SetColor( COL_RED );
-
-                    rTargetSurface.SetTextAlign(ALIGN_TOP);
-                    rTargetSurface.SetTextColor( COL_RED );
-                    rTargetSurface.SetFont( aVCLFont );
-
-                    OUString text( ::rtl::math::doubleToUString( getPriority(),
-                                                                        rtl_math_StringFormat_F,
-                                                                        2,'.',nullptr,' ') );
-
-                    rTargetSurface.DrawText( aOutPos+Point(2,2), text );
-                    SAL_INFO( "canvas.vcl",
-                              "sprite " << this << " has prio " << getPriority());
+                    rTargetSurface.DrawPolyPolygon(::tools::PolyPolygon(aClipPoly)); // #i76339#
                 }
+
+                vcl::Region aClipRegion( aClipPoly );
+                rTargetSurface.SetClipRegion( aClipRegion );
             }
         }
+
+        if( ::rtl::math::approxEqual(fAlpha, 1.0) )
+        {
+            // no alpha modulation -> just copy to output
+            if( maContent->IsTransparent() )
+                rTargetSurface.DrawBitmapEx( aOutPos, aOutputSize, *maContent );
+            else
+                rTargetSurface.DrawBitmap( aOutPos, aOutputSize, maContent->GetBitmap() );
+        }
+        else
+        {
+            // TODO(P3): Switch to OutputDevice::DrawTransparent()
+            // here
+
+            // draw semi-transparent
+            sal_uInt8 nColor( static_cast<sal_uInt8>( ::basegfx::fround( 255.0*(1.0 - fAlpha) + .5) ) );
+            AlphaMask aAlpha( maContent->GetSizePixel(),
+                              &nColor );
+
+            // mask out fully transparent areas
+            if( maContent->IsTransparent() )
+                aAlpha.Replace( maContent->GetMask(), 255 );
+
+            // alpha-blend to output
+            rTargetSurface.DrawBitmapEx( aOutPos, aOutputSize,
+                                         BitmapEx( maContent->GetBitmap(),
+                                                   aAlpha ) );
+        }
+
+        rTargetSurface.Pop();
+
+        if( !mbShowSpriteBounds )
+            return;
+
+        ::tools::PolyPolygon aMarkerPoly(
+            ::canvas::tools::getBoundMarksPolyPolygon(
+                ::basegfx::B2DRectangle(aOutPos.X(),
+                                        aOutPos.Y(),
+                                        aOutPos.X() + aOutputSize.Width()-1,
+                                        aOutPos.Y() + aOutputSize.Height()-1) ) );
+
+        // Paint little red sprite area markers
+        rTargetSurface.SetLineColor( COL_RED );
+        rTargetSurface.SetFillColor();
+
+        for( int i=0; i<aMarkerPoly.Count(); ++i )
+        {
+            rTargetSurface.DrawPolyLine( aMarkerPoly.GetObject(static_cast<sal_uInt16>(i)) );
+        }
+
+        // paint sprite prio
+        vcl::Font aVCLFont;
+        aVCLFont.SetFontHeight( std::min(long(20),aOutputSize.Height()) );
+        aVCLFont.SetColor( COL_RED );
+
+        rTargetSurface.SetTextAlign(ALIGN_TOP);
+        rTargetSurface.SetTextColor( COL_RED );
+        rTargetSurface.SetFont( aVCLFont );
+
+        OUString text( ::rtl::math::doubleToUString( getPriority(),
+                                                            rtl_math_StringFormat_F,
+                                                            2,'.',nullptr,' ') );
+
+        rTargetSurface.DrawText( aOutPos+Point(2,2), text );
+        SAL_INFO( "canvas.vcl",
+                  "sprite " << this << " has prio " << getPriority());
     }
 
     ::basegfx::B2DPolyPolygon SpriteHelper::polyPolygonFromXPolyPolygon2D( uno::Reference< rendering::XPolyPolygon2D >& xPoly ) const

@@ -216,25 +216,25 @@ namespace cairocanvas
     {
         SAL_INFO( "canvas.cairo", "clear whole area: " << maSize.getX() << " x " << maSize.getY() );
 
-        if( mpCairo )
-        {
-            cairo_save( mpCairo.get() );
+        if( !mpCairo )
+            return;
 
-            cairo_identity_matrix( mpCairo.get() );
-            // this does not really differ from all-zero, as cairo
-            // internally converts to premultiplied alpha. but anyway,
-            // this keeps it consistent with the other canvas impls
-            if( mbHaveAlpha )
-                cairo_set_source_rgba( mpCairo.get(), 1.0, 1.0, 1.0, 0.0 );
-            else
-                cairo_set_source_rgb( mpCairo.get(), 1.0, 1.0, 1.0 );
-            cairo_set_operator( mpCairo.get(), CAIRO_OPERATOR_SOURCE );
+        cairo_save( mpCairo.get() );
 
-            cairo_rectangle( mpCairo.get(), 0, 0, maSize.getX(), maSize.getY() );
-            cairo_fill( mpCairo.get() );
+        cairo_identity_matrix( mpCairo.get() );
+        // this does not really differ from all-zero, as cairo
+        // internally converts to premultiplied alpha. but anyway,
+        // this keeps it consistent with the other canvas impls
+        if( mbHaveAlpha )
+            cairo_set_source_rgba( mpCairo.get(), 1.0, 1.0, 1.0, 0.0 );
+        else
+            cairo_set_source_rgb( mpCairo.get(), 1.0, 1.0, 1.0 );
+        cairo_set_operator( mpCairo.get(), CAIRO_OPERATOR_SOURCE );
 
-            cairo_restore( mpCairo.get() );
-        }
+        cairo_rectangle( mpCairo.get(), 0, 0, maSize.getX(), maSize.getY() );
+        cairo_fill( mpCairo.get() );
+
+        cairo_restore( mpCairo.get() );
     }
 
     void CanvasHelper::drawLine( const rendering::XCanvas*      /*pCanvas*/,
@@ -243,20 +243,20 @@ namespace cairocanvas
                                  const rendering::ViewState&    viewState,
                                  const rendering::RenderState&  renderState )
     {
-        if( mpCairo )
-        {
-            cairo_save( mpCairo.get() );
+        if( !mpCairo )
+            return;
 
-            cairo_set_line_width( mpCairo.get(), 1 );
+        cairo_save( mpCairo.get() );
 
-            useStates( viewState, renderState, true );
+        cairo_set_line_width( mpCairo.get(), 1 );
 
-            cairo_move_to( mpCairo.get(), aStartPoint.X + 0.5, aStartPoint.Y + 0.5 );
-            cairo_line_to( mpCairo.get(), aEndPoint.X + 0.5, aEndPoint.Y + 0.5 );
-            cairo_stroke( mpCairo.get() );
+        useStates( viewState, renderState, true );
 
-            cairo_restore( mpCairo.get() );
-        }
+        cairo_move_to( mpCairo.get(), aStartPoint.X + 0.5, aStartPoint.Y + 0.5 );
+        cairo_line_to( mpCairo.get(), aEndPoint.X + 0.5, aEndPoint.Y + 0.5 );
+        cairo_stroke( mpCairo.get() );
+
+        cairo_restore( mpCairo.get() );
     }
 
     void CanvasHelper::drawBezier( const rendering::XCanvas*            ,
@@ -265,25 +265,25 @@ namespace cairocanvas
                                    const rendering::ViewState&          viewState,
                                    const rendering::RenderState&        renderState )
     {
-        if( mpCairo )
-        {
-            cairo_save( mpCairo.get() );
+        if( !mpCairo )
+            return;
 
-            cairo_set_line_width( mpCairo.get(), 1 );
+        cairo_save( mpCairo.get() );
 
-            useStates( viewState, renderState, true );
+        cairo_set_line_width( mpCairo.get(), 1 );
 
-            cairo_move_to( mpCairo.get(), aBezierSegment.Px + 0.5, aBezierSegment.Py + 0.5 );
-            // tdf#99165 correction of control points not needed here, only hairlines drawn
-            // (see cairo_set_line_width above)
-            cairo_curve_to( mpCairo.get(),
-                            aBezierSegment.C1x + 0.5, aBezierSegment.C1y + 0.5,
-                            aBezierSegment.C2x + 0.5, aBezierSegment.C2y + 0.5,
-                            aEndPoint.X + 0.5, aEndPoint.Y + 0.5 );
-            cairo_stroke( mpCairo.get() );
+        useStates( viewState, renderState, true );
 
-            cairo_restore( mpCairo.get() );
-        }
+        cairo_move_to( mpCairo.get(), aBezierSegment.Px + 0.5, aBezierSegment.Py + 0.5 );
+        // tdf#99165 correction of control points not needed here, only hairlines drawn
+        // (see cairo_set_line_width above)
+        cairo_curve_to( mpCairo.get(),
+                        aBezierSegment.C1x + 0.5, aBezierSegment.C1y + 0.5,
+                        aBezierSegment.C2x + 0.5, aBezierSegment.C2y + 0.5,
+                        aEndPoint.X + 0.5, aEndPoint.Y + 0.5 );
+        cairo_stroke( mpCairo.get() );
+
+        cairo_restore( mpCairo.get() );
     }
 
 #define PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME "Canvas::ParametricPolyPolygon"

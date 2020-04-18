@@ -232,21 +232,21 @@ namespace cairocanvas
     {
         static sal_Int32 nFilePostfixCount(0);
 
-        if( mpRefDevice )
-        {
-            OUString aFilename = "dbg_frontbuffer" + OUString::number(nFilePostfixCount) + ".bmp";
+        if( !mpRefDevice )
+            return;
 
-            SvFileStream aStream( aFilename, StreamMode::STD_READWRITE );
+        OUString aFilename = "dbg_frontbuffer" + OUString::number(nFilePostfixCount) + ".bmp";
 
-            const ::Point aEmptyPoint;
-            bool bOldMap( mpRefDevice->IsMapModeEnabled() );
-            mpRefDevice->EnableMapMode( false );
-            const ::BitmapEx aTempBitmap(mpRefDevice->GetBitmapEx(aEmptyPoint, mpRefDevice->GetOutputSizePixel()));
-            WriteDIB(aTempBitmap, aStream, false);
-            mpRefDevice->EnableMapMode( bOldMap );
+        SvFileStream aStream( aFilename, StreamMode::STD_READWRITE );
 
-            ++nFilePostfixCount;
-        }
+        const ::Point aEmptyPoint;
+        bool bOldMap( mpRefDevice->IsMapModeEnabled() );
+        mpRefDevice->EnableMapMode( false );
+        const ::BitmapEx aTempBitmap(mpRefDevice->GetBitmapEx(aEmptyPoint, mpRefDevice->GetOutputSizePixel()));
+        WriteDIB(aTempBitmap, aStream, false);
+        mpRefDevice->EnableMapMode( bOldMap );
+
+        ++nFilePostfixCount;
     }
 
     SurfaceSharedPtr DeviceHelper::createSurface( const ::basegfx::B2ISize& rSize, int aContent )

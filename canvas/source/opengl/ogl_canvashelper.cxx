@@ -400,21 +400,21 @@ namespace oglcanvas
                                    const rendering::ViewState&          viewState,
                                    const rendering::RenderState&        renderState )
     {
-        if( mpDevice )
-        {
-            mpRecordedActions->push_back( Action() );
-            Action& rAct=mpRecordedActions->back();
+        if( !mpDevice )
+            return;
 
-            setupGraphicsState( rAct, viewState, renderState );
+        mpRecordedActions->push_back( Action() );
+        Action& rAct=mpRecordedActions->back();
 
-            // TODO(F2): subdivide&render whole curve
-            rAct.maFunction = std::bind(&lcl_drawLine,
-                                            std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5,
-                                            geometry::RealPoint2D(
-                                                aBezierSegment.Px,
-                                                aBezierSegment.Py),
-                                            aEndPoint);
-        }
+        setupGraphicsState( rAct, viewState, renderState );
+
+        // TODO(F2): subdivide&render whole curve
+        rAct.maFunction = std::bind(&lcl_drawLine,
+                                        std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5,
+                                        geometry::RealPoint2D(
+                                            aBezierSegment.Px,
+                                            aBezierSegment.Py),
+                                        aEndPoint);
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawPolyPolygon( const rendering::XCanvas*                          /*pCanvas*/,

@@ -597,64 +597,64 @@ namespace vclcanvas
 
     void SpriteCanvasHelper::renderSpriteCount( OutputDevice& rOutDev )
     {
-        if( mpRedrawManager )
-        {
-            sal_Int32 nCount(0);
+        if( !mpRedrawManager )
+            return;
 
-            mpRedrawManager->forEachSprite( makeAdder(nCount,sal_Int32(1)) );
-            OUString text( OUString::number(nCount) );
+        sal_Int32 nCount(0);
 
-            // pad with leading space
-            while( text.getLength() < 3 )
-                text = " " + text;
+        mpRedrawManager->forEachSprite( makeAdder(nCount,sal_Int32(1)) );
+        OUString text( OUString::number(nCount) );
 
-            text = "Sprites: " + text;
+        // pad with leading space
+        while( text.getLength() < 3 )
+            text = " " + text;
 
-            renderInfoText( rOutDev,
-                            text,
-                            Point(0, 30) );
-        }
+        text = "Sprites: " + text;
+
+        renderInfoText( rOutDev,
+                        text,
+                        Point(0, 30) );
     }
 
     void SpriteCanvasHelper::renderMemUsage( OutputDevice& rOutDev )
     {
         BackBufferSharedPtr pBackBuffer( mpOwningSpriteCanvas->getBackBuffer() );
 
-        if( mpRedrawManager &&
-            pBackBuffer )
-        {
-            double nPixel(0.0);
+        if( !(mpRedrawManager &&
+            pBackBuffer) )
+            return;
 
-            // accumulate pixel count for each sprite into fCount
-            mpRedrawManager->forEachSprite(
-                    [&nPixel]( const ::canvas::Sprite::Reference& rSprite )
-                    { makeAdder( nPixel, 1.0 )( calcNumPixel(rSprite) ); }
-                    );
+        double nPixel(0.0);
 
-            static const int NUM_VIRDEV(2);
-            static const int BYTES_PER_PIXEL(3);
+        // accumulate pixel count for each sprite into fCount
+        mpRedrawManager->forEachSprite(
+                [&nPixel]( const ::canvas::Sprite::Reference& rSprite )
+                { makeAdder( nPixel, 1.0 )( calcNumPixel(rSprite) ); }
+                );
 
-            const Size& rVDevSize( maVDev->GetOutputSizePixel() );
-            const Size& rBackBufferSize( pBackBuffer->getOutDev().GetOutputSizePixel() );
+        static const int NUM_VIRDEV(2);
+        static const int BYTES_PER_PIXEL(3);
 
-            const double nMemUsage( nPixel * NUM_VIRDEV * BYTES_PER_PIXEL +
-                                    rVDevSize.Width()*rVDevSize.Height() * BYTES_PER_PIXEL +
-                                    rBackBufferSize.Width()*rBackBufferSize.Height() * BYTES_PER_PIXEL );
+        const Size& rVDevSize( maVDev->GetOutputSizePixel() );
+        const Size& rBackBufferSize( pBackBuffer->getOutDev().GetOutputSizePixel() );
 
-            OUString text( ::rtl::math::doubleToUString( nMemUsage / 1048576.0,
-                                                                rtl_math_StringFormat_F,
-                                                                2,'.',nullptr,' ') );
+        const double nMemUsage( nPixel * NUM_VIRDEV * BYTES_PER_PIXEL +
+                                rVDevSize.Width()*rVDevSize.Height() * BYTES_PER_PIXEL +
+                                rBackBufferSize.Width()*rBackBufferSize.Height() * BYTES_PER_PIXEL );
 
-            // pad with leading space
-            while( text.getLength() < 4 )
-                text = " " + text;
+        OUString text( ::rtl::math::doubleToUString( nMemUsage / 1048576.0,
+                                                            rtl_math_StringFormat_F,
+                                                            2,'.',nullptr,' ') );
 
-            text = "Mem: " + text + "MB";
+        // pad with leading space
+        while( text.getLength() < 4 )
+            text = " " + text;
 
-            renderInfoText( rOutDev,
-                            text,
-                            Point(0, 60) );
-        }
+        text = "Mem: " + text + "MB";
+
+        renderInfoText( rOutDev,
+                        text,
+                        Point(0, 60) );
     }
 }
 
