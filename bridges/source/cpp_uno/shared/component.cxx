@@ -67,47 +67,47 @@ static void s_stub_computeObjectIdentifier(va_list * pParam)
 
 
     assert(pEnv && ppOId && pInterface);
-    if (pEnv && ppOId && pInterface)
-    {
-        if (*ppOId)
-        {
-            rtl_uString_release( *ppOId );
-            *ppOId = nullptr;
-        }
+    if (!(pEnv && ppOId && pInterface))
+        return;
 
-        try
+    if (*ppOId)
+    {
+        rtl_uString_release( *ppOId );
+        *ppOId = nullptr;
+    }
+
+    try
+    {
+        ::com::sun::star::uno::Reference<
+              ::com::sun::star::uno::XInterface > xHome(
+                  static_cast< ::com::sun::star::uno::XInterface * >(
+                      pInterface ),
+                  ::com::sun::star::uno::UNO_QUERY );
+        assert(xHome.is() && "### query to XInterface failed!");
+        if (xHome.is())
         {
-            ::com::sun::star::uno::Reference<
-                  ::com::sun::star::uno::XInterface > xHome(
-                      static_cast< ::com::sun::star::uno::XInterface * >(
-                          pInterface ),
-                      ::com::sun::star::uno::UNO_QUERY );
-            assert(xHome.is() && "### query to XInterface failed!");
-            if (xHome.is())
-            {
-                // interface
-                OUStringBuffer oid( 64 );
-                oid.append( reinterpret_cast< sal_Int64 >(xHome.get()), 16 );
-                oid.append( ';' );
-                // ;environment[context]
-                oid.append( OUString::unacquired(&pEnv->aBase.pTypeName) );
-                oid.append( '[' );
-                oid.append(
-                    reinterpret_cast< sal_Int64 >(pEnv->aBase.pContext),
-                    16 );
-                // ];good guid
-                oid.append( cppu_cppenv_getStaticOIdPart() );
-                OUString aRet( oid.makeStringAndClear() );
-                *ppOId = aRet.pData;
-                ::rtl_uString_acquire( *ppOId );
-            }
+            // interface
+            OUStringBuffer oid( 64 );
+            oid.append( reinterpret_cast< sal_Int64 >(xHome.get()), 16 );
+            oid.append( ';' );
+            // ;environment[context]
+            oid.append( OUString::unacquired(&pEnv->aBase.pTypeName) );
+            oid.append( '[' );
+            oid.append(
+                reinterpret_cast< sal_Int64 >(pEnv->aBase.pContext),
+                16 );
+            // ];good guid
+            oid.append( cppu_cppenv_getStaticOIdPart() );
+            OUString aRet( oid.makeStringAndClear() );
+            *ppOId = aRet.pData;
+            ::rtl_uString_acquire( *ppOId );
         }
-        catch (const ::com::sun::star::uno::RuntimeException & e)
-        {
-            SAL_WARN("bridges",
-                "### RuntimeException occurred during queryInterface(): "
-                << e.Message);
-        }
+    }
+    catch (const ::com::sun::star::uno::RuntimeException & e)
+    {
+        SAL_WARN("bridges",
+            "### RuntimeException occurred during queryInterface(): "
+            << e.Message);
     }
 }
 
@@ -177,49 +177,49 @@ SAL_DLLPUBLIC_EXPORT void uno_ext_getMapping(
     SAL_THROW_EXTERN_C()
 {
     assert(ppMapping && pFrom && pTo);
-    if (ppMapping && pFrom && pTo && pFrom->pExtEnv && pTo->pExtEnv)
+    if (!(ppMapping && pFrom && pTo && pFrom->pExtEnv && pTo->pExtEnv))
+        return;
+
+    uno_Mapping * pMapping = nullptr;
+
+    OUString from_envTypeName(cppu::EnvDcp::getTypeName(pFrom->pTypeName));
+    OUString to_envTypeName(cppu::EnvDcp::getTypeName(pTo->pTypeName));
+
+    if (rtl_ustr_ascii_compare(
+            from_envTypeName.pData->buffer,
+            CPPU_CURRENT_LANGUAGE_BINDING_NAME ) == 0 &&
+        rtl_ustr_ascii_compare(
+            to_envTypeName.pData->buffer, UNO_LB_UNO ) == 0)
     {
-        uno_Mapping * pMapping = nullptr;
-
-        OUString from_envTypeName(cppu::EnvDcp::getTypeName(pFrom->pTypeName));
-        OUString to_envTypeName(cppu::EnvDcp::getTypeName(pTo->pTypeName));
-
-        if (rtl_ustr_ascii_compare(
-                from_envTypeName.pData->buffer,
-                CPPU_CURRENT_LANGUAGE_BINDING_NAME ) == 0 &&
-            rtl_ustr_ascii_compare(
-                to_envTypeName.pData->buffer, UNO_LB_UNO ) == 0)
-        {
-            // ref count initially 1
-            pMapping = bridges::cpp_uno::shared::Bridge::createMapping(
-                pFrom->pExtEnv, pTo->pExtEnv, true );
-            ::uno_registerMapping(
-                &pMapping, bridges::cpp_uno::shared::freeMapping,
-                &pFrom->pExtEnv->aBase,
-                &pTo->pExtEnv->aBase, nullptr );
-        }
-        else if (rtl_ustr_ascii_compare(
-                     to_envTypeName.pData->buffer,
-                     CPPU_CURRENT_LANGUAGE_BINDING_NAME ) == 0 &&
-                 rtl_ustr_ascii_compare(
-                     from_envTypeName.pData->buffer, UNO_LB_UNO ) == 0)
-        {
-            // ref count initially 1
-            pMapping = bridges::cpp_uno::shared::Bridge::createMapping(
-                pTo->pExtEnv, pFrom->pExtEnv, false );
-            ::uno_registerMapping(
-                &pMapping, bridges::cpp_uno::shared::freeMapping,
-                &pFrom->pExtEnv->aBase,
-                &pTo->pExtEnv->aBase, nullptr );
-        }
-
-        if (*ppMapping)
-        {
-            (*(*ppMapping)->release)( *ppMapping );
-        }
-        if (pMapping)
-            *ppMapping = pMapping;
+        // ref count initially 1
+        pMapping = bridges::cpp_uno::shared::Bridge::createMapping(
+            pFrom->pExtEnv, pTo->pExtEnv, true );
+        ::uno_registerMapping(
+            &pMapping, bridges::cpp_uno::shared::freeMapping,
+            &pFrom->pExtEnv->aBase,
+            &pTo->pExtEnv->aBase, nullptr );
     }
+    else if (rtl_ustr_ascii_compare(
+                 to_envTypeName.pData->buffer,
+                 CPPU_CURRENT_LANGUAGE_BINDING_NAME ) == 0 &&
+             rtl_ustr_ascii_compare(
+                 from_envTypeName.pData->buffer, UNO_LB_UNO ) == 0)
+    {
+        // ref count initially 1
+        pMapping = bridges::cpp_uno::shared::Bridge::createMapping(
+            pTo->pExtEnv, pFrom->pExtEnv, false );
+        ::uno_registerMapping(
+            &pMapping, bridges::cpp_uno::shared::freeMapping,
+            &pFrom->pExtEnv->aBase,
+            &pTo->pExtEnv->aBase, nullptr );
+    }
+
+    if (*ppMapping)
+    {
+        (*(*ppMapping)->release)( *ppMapping );
+    }
+    if (pMapping)
+        *ppMapping = pMapping;
 }
 
 }

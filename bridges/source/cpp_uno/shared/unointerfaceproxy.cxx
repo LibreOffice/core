@@ -50,23 +50,23 @@ void freeUnoInterfaceProxy(uno_ExtEnvironment * pEnv, void * pProxy)
 
 void acquireProxy(uno_Interface * pUnoI)
 {
-    if (++static_cast< UnoInterfaceProxy * >( pUnoI )->nRef == 1)
-    {
-        // rebirth of proxy zombie
-        // register at uno env
+    if (++static_cast< UnoInterfaceProxy * >( pUnoI )->nRef != 1)
+        return;
+
+    // rebirth of proxy zombie
+    // register at uno env
 #if OSL_DEBUG_LEVEL > 1
-        void * pThis = pUnoI;
+    void * pThis = pUnoI;
 #endif
-        (*static_cast< UnoInterfaceProxy * >( pUnoI )->pBridge->getUnoEnv()->
-         registerProxyInterface)(
-             static_cast< UnoInterfaceProxy * >( pUnoI )->pBridge->getUnoEnv(),
-             reinterpret_cast< void ** >( &pUnoI ), freeUnoInterfaceProxy,
-             static_cast< UnoInterfaceProxy * >( pUnoI )->oid.pData,
-             static_cast< UnoInterfaceProxy * >( pUnoI )->pTypeDescr );
+    (*static_cast< UnoInterfaceProxy * >( pUnoI )->pBridge->getUnoEnv()->
+     registerProxyInterface)(
+         static_cast< UnoInterfaceProxy * >( pUnoI )->pBridge->getUnoEnv(),
+         reinterpret_cast< void ** >( &pUnoI ), freeUnoInterfaceProxy,
+         static_cast< UnoInterfaceProxy * >( pUnoI )->oid.pData,
+         static_cast< UnoInterfaceProxy * >( pUnoI )->pTypeDescr );
 #if OSL_DEBUG_LEVEL > 1
-        assert(pThis == pUnoI);
+    assert(pThis == pUnoI);
 #endif
-    }
 }
 
 void releaseProxy(uno_Interface * pUnoI)
