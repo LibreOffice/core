@@ -415,27 +415,27 @@ void BarChart::adaptOverlapAndGapwidthForGroupBarsPerAxis()
     //thus the different series use the same settings
 
     VDataSeries* pFirstSeries = getFirstSeries();
-    if(pFirstSeries && !pFirstSeries->getGroupBarsPerAxis() )
-    {
-        sal_Int32 nAxisIndex = pFirstSeries->getAttachedAxisIndex();
-        sal_Int32 nN = 0;
-        sal_Int32 nUseThisIndex = nAxisIndex;
-        if( nUseThisIndex < 0 || nUseThisIndex >= m_aOverlapSequence.getLength() )
-            nUseThisIndex = 0;
-        for( nN = 0; nN < m_aOverlapSequence.getLength(); nN++ )
-        {
-            if(nN!=nUseThisIndex)
-                m_aOverlapSequence[nN] = m_aOverlapSequence[nUseThisIndex];
-        }
+    if(!(pFirstSeries && !pFirstSeries->getGroupBarsPerAxis()) )
+        return;
 
-        nUseThisIndex = nAxisIndex;
-        if( nUseThisIndex < 0 || nUseThisIndex >= m_aGapwidthSequence.getLength() )
-            nUseThisIndex = 0;
-        for( nN = 0; nN < m_aGapwidthSequence.getLength(); nN++ )
-        {
-            if(nN!=nUseThisIndex)
-                m_aGapwidthSequence[nN] = m_aGapwidthSequence[nUseThisIndex];
-        }
+    sal_Int32 nAxisIndex = pFirstSeries->getAttachedAxisIndex();
+    sal_Int32 nN = 0;
+    sal_Int32 nUseThisIndex = nAxisIndex;
+    if( nUseThisIndex < 0 || nUseThisIndex >= m_aOverlapSequence.getLength() )
+        nUseThisIndex = 0;
+    for( nN = 0; nN < m_aOverlapSequence.getLength(); nN++ )
+    {
+        if(nN!=nUseThisIndex)
+            m_aOverlapSequence[nN] = m_aOverlapSequence[nUseThisIndex];
+    }
+
+    nUseThisIndex = nAxisIndex;
+    if( nUseThisIndex < 0 || nUseThisIndex >= m_aGapwidthSequence.getLength() )
+        nUseThisIndex = 0;
+    for( nN = 0; nN < m_aGapwidthSequence.getLength(); nN++ )
+    {
+        if(nN!=nUseThisIndex)
+            m_aGapwidthSequence[nN] = m_aGapwidthSequence[nUseThisIndex];
     }
 }
 

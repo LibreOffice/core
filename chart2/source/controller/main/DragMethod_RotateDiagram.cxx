@@ -65,32 +65,32 @@ DragMethod_RotateDiagram::DragMethod_RotateDiagram( DrawViewWrapper& rDrawViewWr
 {
     m_pScene = SelectionHelper::getSceneToRotate( rDrawViewWrapper.getNamedSdrObject( rObjectCID ) );
     SdrObject* pObj = rDrawViewWrapper.getSelectedObject();
-    if(pObj && m_pScene)
+    if(!(pObj && m_pScene))
+        return;
+
+    m_aReferenceRect = pObj->GetLogicRect();
+
+    m_aWireframePolyPolygon = m_pScene->CreateWireframe();
+
+    uno::Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram(getChartModel()) );
+    uno::Reference< beans::XPropertySet > xDiagramProperties( xDiagram, uno::UNO_QUERY );
+    if( !xDiagramProperties.is() )
+        return;
+
+    ThreeDHelper::getRotationFromDiagram( xDiagramProperties
+        , m_nInitialHorizontalAngleDegree, m_nInitialVerticalAngleDegree );
+
+    ThreeDHelper::getRotationAngleFromDiagram( xDiagramProperties
+        , m_fInitialXAngleRad, m_fInitialYAngleRad, m_fInitialZAngleRad );
+
+    if( ChartTypeHelper::isSupportingRightAngledAxes(
+        DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) ) )
+        xDiagramProperties->getPropertyValue("RightAngledAxes") >>= m_bRightAngledAxes;
+    if(m_bRightAngledAxes)
     {
-        m_aReferenceRect = pObj->GetLogicRect();
-
-        m_aWireframePolyPolygon = m_pScene->CreateWireframe();
-
-        uno::Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram(getChartModel()) );
-        uno::Reference< beans::XPropertySet > xDiagramProperties( xDiagram, uno::UNO_QUERY );
-        if( xDiagramProperties.is() )
-        {
-            ThreeDHelper::getRotationFromDiagram( xDiagramProperties
-                , m_nInitialHorizontalAngleDegree, m_nInitialVerticalAngleDegree );
-
-            ThreeDHelper::getRotationAngleFromDiagram( xDiagramProperties
-                , m_fInitialXAngleRad, m_fInitialYAngleRad, m_fInitialZAngleRad );
-
-            if( ChartTypeHelper::isSupportingRightAngledAxes(
-                DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) ) )
-                xDiagramProperties->getPropertyValue("RightAngledAxes") >>= m_bRightAngledAxes;
-            if(m_bRightAngledAxes)
-            {
-                if( m_eRotationDirection==ROTATIONDIRECTION_Z )
-                    m_eRotationDirection=ROTATIONDIRECTION_FREE;
-                ThreeDHelper::adaptRadAnglesForRightAngledAxes( m_fInitialXAngleRad, m_fInitialYAngleRad );
-            }
-        }
+        if( m_eRotationDirection==ROTATIONDIRECTION_Z )
+            m_eRotationDirection=ROTATIONDIRECTION_FREE;
+        ThreeDHelper::adaptRadAnglesForRightAngledAxes( m_fInitialXAngleRad, m_fInitialYAngleRad );
     }
 }
 DragMethod_RotateDiagram::~DragMethod_RotateDiagram()
@@ -108,44 +108,44 @@ bool DragMethod_RotateDiagram::BeginSdrDrag()
 }
 void DragMethod_RotateDiagram::MoveSdrDrag(const Point& rPnt)
 {
-    if( DragStat().CheckMinMoved(rPnt) )
+    if( !DragStat().CheckMinMoved(rPnt) )
+        return;
+
+    Hide();
+
+    //calculate new angle
+    double fX = F_PI2 * static_cast<double>(rPnt.Y() - m_aStartPos.Y())
+        / (m_aReferenceRect.GetHeight() > 0 ? static_cast<double>(m_aReferenceRect.GetHeight()) : 1.0);
+    double fY = F_PI * static_cast<double>(rPnt.X() - m_aStartPos.X())
+        / (m_aReferenceRect.GetWidth() > 0 ? static_cast<double>(m_aReferenceRect.GetWidth()) : 1.0);
+
+    if( m_eRotationDirection != ROTATIONDIRECTION_Y )
+        m_fAdditionalYAngleRad = fY;
+    else
+        m_fAdditionalYAngleRad = 0.0;
+    if( m_eRotationDirection != ROTATIONDIRECTION_X )
+        m_fAdditionalXAngleRad = fX;
+    else
+        m_fAdditionalXAngleRad = 0.0;
+    m_fAdditionalZAngleRad = 0.0;
+
+    if( m_eRotationDirection == ROTATIONDIRECTION_Z )
     {
-        Hide();
+        m_fAdditionalXAngleRad = 0.0;
+        m_fAdditionalYAngleRad = 0.0;
 
-        //calculate new angle
-        double fX = F_PI2 * static_cast<double>(rPnt.Y() - m_aStartPos.Y())
-            / (m_aReferenceRect.GetHeight() > 0 ? static_cast<double>(m_aReferenceRect.GetHeight()) : 1.0);
-        double fY = F_PI * static_cast<double>(rPnt.X() - m_aStartPos.X())
-            / (m_aReferenceRect.GetWidth() > 0 ? static_cast<double>(m_aReferenceRect.GetWidth()) : 1.0);
+        double fCx = m_aReferenceRect.Center().X();
+        double fCy = m_aReferenceRect.Center().Y();
 
-        if( m_eRotationDirection != ROTATIONDIRECTION_Y )
-            m_fAdditionalYAngleRad = fY;
-        else
-            m_fAdditionalYAngleRad = 0.0;
-        if( m_eRotationDirection != ROTATIONDIRECTION_X )
-            m_fAdditionalXAngleRad = fX;
-        else
-            m_fAdditionalXAngleRad = 0.0;
-        m_fAdditionalZAngleRad = 0.0;
-
-        if( m_eRotationDirection == ROTATIONDIRECTION_Z )
-        {
-            m_fAdditionalXAngleRad = 0.0;
-            m_fAdditionalYAngleRad = 0.0;
-
-            double fCx = m_aReferenceRect.Center().X();
-            double fCy = m_aReferenceRect.Center().Y();
-
-            m_fAdditionalZAngleRad = atan((fCx - m_aStartPos.X())/(m_aStartPos.Y()-fCy))
-                + atan((fCx - rPnt.X())/(fCy-rPnt.Y()));
-        }
-
-        m_nAdditionalHorizontalAngleDegree = static_cast<sal_Int32>(basegfx::rad2deg(m_fAdditionalXAngleRad));
-        m_nAdditionalVerticalAngleDegree = -static_cast<sal_Int32>(basegfx::rad2deg(m_fAdditionalYAngleRad));
-
-        DragStat().NextMove(rPnt);
-        Show();
+        m_fAdditionalZAngleRad = atan((fCx - m_aStartPos.X())/(m_aStartPos.Y()-fCy))
+            + atan((fCx - rPnt.X())/(fCy-rPnt.Y()));
     }
+
+    m_nAdditionalHorizontalAngleDegree = static_cast<sal_Int32>(basegfx::rad2deg(m_fAdditionalXAngleRad));
+    m_nAdditionalVerticalAngleDegree = -static_cast<sal_Int32>(basegfx::rad2deg(m_fAdditionalYAngleRad));
+
+    DragStat().NextMove(rPnt);
+    Show();
 }
 bool DragMethod_RotateDiagram::EndSdrDrag(bool /*bCopy*/)
 {
@@ -200,28 +200,28 @@ void DragMethod_RotateDiagram::CreateOverlayGeometry(
         aCurrentTransform.shearXY(fResultY,-fResultX);
     }
 
-    if(m_aWireframePolyPolygon.count() && m_pScene)
-    {
-        const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(m_pScene->GetViewContact());
-        const drawinglayer::geometry::ViewInformation3D& aViewInfo3D(rVCScene.getViewInformation3D());
-        const basegfx::B3DHomMatrix aWorldToView(aViewInfo3D.getDeviceToView() * aViewInfo3D.getProjection() * aViewInfo3D.getOrientation());
-        const basegfx::B3DHomMatrix aTransform(aWorldToView * aCurrentTransform);
+    if(!(m_aWireframePolyPolygon.count() && m_pScene))
+        return;
 
-        // transform to relative scene coordinates
-        basegfx::B2DPolyPolygon aPolyPolygon(basegfx::utils::createB2DPolyPolygonFromB3DPolyPolygon(m_aWireframePolyPolygon, aTransform));
+    const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(m_pScene->GetViewContact());
+    const drawinglayer::geometry::ViewInformation3D& aViewInfo3D(rVCScene.getViewInformation3D());
+    const basegfx::B3DHomMatrix aWorldToView(aViewInfo3D.getDeviceToView() * aViewInfo3D.getProjection() * aViewInfo3D.getOrientation());
+    const basegfx::B3DHomMatrix aTransform(aWorldToView * aCurrentTransform);
 
-        // transform to 2D view coordinates
-        aPolyPolygon.transform(rVCScene.getObjectTransformation());
+    // transform to relative scene coordinates
+    basegfx::B2DPolyPolygon aPolyPolygon(basegfx::utils::createB2DPolyPolygonFromB3DPolyPolygon(m_aWireframePolyPolygon, aTransform));
 
-        std::unique_ptr<sdr::overlay::OverlayPolyPolygonStripedAndFilled> pNew(
-            new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
-                aPolyPolygon));
+    // transform to 2D view coordinates
+    aPolyPolygon.transform(rVCScene.getObjectTransformation());
 
-        insertNewlyCreatedOverlayObjectForSdrDragMethod(
-            std::move(pNew),
-            rObjectContact,
-            rOverlayManager);
-    }
+    std::unique_ptr<sdr::overlay::OverlayPolyPolygonStripedAndFilled> pNew(
+        new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
+            aPolyPolygon));
+
+    insertNewlyCreatedOverlayObjectForSdrDragMethod(
+        std::move(pNew),
+        rObjectContact,
+        rOverlayManager);
 }
 } //namespace chart
 

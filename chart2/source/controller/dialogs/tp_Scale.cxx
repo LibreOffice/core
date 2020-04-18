@@ -502,52 +502,52 @@ void ScaleTabPage::SetNumFormat()
 {
     const SfxPoolItem *pPoolItem = nullptr;
 
-    if( GetItemSet().GetItemState( SID_ATTR_NUMBERFORMAT_VALUE, true, &pPoolItem ) == SfxItemState::SET )
+    if( GetItemSet().GetItemState( SID_ATTR_NUMBERFORMAT_VALUE, true, &pPoolItem ) != SfxItemState::SET )
+        return;
+
+    sal_uLong nFmt = static_cast<const SfxUInt32Item*>(pPoolItem)->GetValue();
+
+    m_xFmtFldMax->set_format_key(nFmt);
+    m_xFmtFldMin->set_format_key(nFmt);
+    m_xFmtFldOrigin->set_format_key(nFmt);
+
+    if( pNumFormatter )
     {
-        sal_uLong nFmt = static_cast<const SfxUInt32Item*>(pPoolItem)->GetValue();
-
-        m_xFmtFldMax->set_format_key(nFmt);
-        m_xFmtFldMin->set_format_key(nFmt);
-        m_xFmtFldOrigin->set_format_key(nFmt);
-
-        if( pNumFormatter )
+        SvNumFormatType eType = pNumFormatter->GetType( nFmt );
+        if( eType == SvNumFormatType::DATE )
         {
-            SvNumFormatType eType = pNumFormatter->GetType( nFmt );
-            if( eType == SvNumFormatType::DATE )
-            {
-                // for intervals use standard format for dates (so you can enter a number of days)
-                const SvNumberformat* pFormat = pNumFormatter->GetEntry( nFmt );
-                if( pFormat )
-                    nFmt = pNumFormatter->GetStandardIndex( pFormat->GetLanguage());
-                else
-                    nFmt = pNumFormatter->GetStandardIndex();
-            }
-            else if( eType == SvNumFormatType::DATETIME )
-            {
-                // for intervals use time format for date times
-                const SvNumberformat* pFormat = pNumFormatter->GetEntry( nFmt );
-                if( pFormat )
-                    nFmt = pNumFormatter->GetStandardFormat( SvNumFormatType::TIME, pFormat->GetLanguage() );
-                else
-                    nFmt = pNumFormatter->GetStandardFormat( SvNumFormatType::TIME );
-            }
-
-            if( m_nAxisType == chart2::AxisType::DATE && ( eType != SvNumFormatType::DATE && eType != SvNumFormatType::DATETIME) )
-            {
-                const SvNumberformat* pFormat = pNumFormatter->GetEntry( nFmt );
-                if( pFormat )
-                    nFmt = pNumFormatter->GetStandardFormat( SvNumFormatType::DATE, pFormat->GetLanguage() );
-                else
-                    nFmt = pNumFormatter->GetStandardFormat( SvNumFormatType::DATE );
-
-                m_xFmtFldMax->set_format_key(nFmt);
-                m_xFmtFldMin->set_format_key(nFmt);
-                m_xFmtFldOrigin->set_format_key(nFmt);
-            }
+            // for intervals use standard format for dates (so you can enter a number of days)
+            const SvNumberformat* pFormat = pNumFormatter->GetEntry( nFmt );
+            if( pFormat )
+                nFmt = pNumFormatter->GetStandardIndex( pFormat->GetLanguage());
+            else
+                nFmt = pNumFormatter->GetStandardIndex();
+        }
+        else if( eType == SvNumFormatType::DATETIME )
+        {
+            // for intervals use time format for date times
+            const SvNumberformat* pFormat = pNumFormatter->GetEntry( nFmt );
+            if( pFormat )
+                nFmt = pNumFormatter->GetStandardFormat( SvNumFormatType::TIME, pFormat->GetLanguage() );
+            else
+                nFmt = pNumFormatter->GetStandardFormat( SvNumFormatType::TIME );
         }
 
-        m_xFmtFldStepMain->set_format_key(nFmt);
+        if( m_nAxisType == chart2::AxisType::DATE && ( eType != SvNumFormatType::DATE && eType != SvNumFormatType::DATETIME) )
+        {
+            const SvNumberformat* pFormat = pNumFormatter->GetEntry( nFmt );
+            if( pFormat )
+                nFmt = pNumFormatter->GetStandardFormat( SvNumFormatType::DATE, pFormat->GetLanguage() );
+            else
+                nFmt = pNumFormatter->GetStandardFormat( SvNumFormatType::DATE );
+
+            m_xFmtFldMax->set_format_key(nFmt);
+            m_xFmtFldMin->set_format_key(nFmt);
+            m_xFmtFldOrigin->set_format_key(nFmt);
+        }
     }
+
+    m_xFmtFldStepMain->set_format_key(nFmt);
 }
 
 void ScaleTabPage::ShowAxisOrigin( bool bShowOrigin )

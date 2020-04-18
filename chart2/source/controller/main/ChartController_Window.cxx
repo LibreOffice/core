@@ -241,46 +241,46 @@ void SAL_CALL ChartController::setPosSize(
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
     auto pChartWindow(GetChartWindow());
 
-    if(xWindow.is() && pChartWindow)
+    if(!(xWindow.is() && pChartWindow))
+        return;
+
+    Size aLogicSize = pChartWindow->PixelToLogic( Size( Width, Height ), MapMode( MapUnit::Map100thMM )  );
+
+    //todo: for standalone chart: detect whether we are standalone
+    //change map mode to fit new size
+    awt::Size aModelPageSize = ChartModelHelper::getPageSize( getModel() );
+    sal_Int32 nScaleXNumerator = aLogicSize.Width();
+    sal_Int32 nScaleXDenominator = aModelPageSize.Width;
+    sal_Int32 nScaleYNumerator = aLogicSize.Height();
+    sal_Int32 nScaleYDenominator = aModelPageSize.Height;
+    MapMode aNewMapMode(
+                MapUnit::Map100thMM,
+                Point(0,0),
+                Fraction(nScaleXNumerator, nScaleXDenominator),
+                Fraction(nScaleYNumerator, nScaleYDenominator) );
+    pChartWindow->SetMapMode(aNewMapMode);
+    pChartWindow->setPosSizePixel( X, Y, Width, Height, static_cast<PosSizeFlags>(Flags) );
+
+    //#i75867# poor quality of ole's alternative view with 3D scenes and zoomfactors besides 100%
+    uno::Reference< beans::XPropertySet > xProp( m_xChartView, uno::UNO_QUERY );
+    if( xProp.is() )
     {
-        Size aLogicSize = pChartWindow->PixelToLogic( Size( Width, Height ), MapMode( MapUnit::Map100thMM )  );
-
-        //todo: for standalone chart: detect whether we are standalone
-        //change map mode to fit new size
-        awt::Size aModelPageSize = ChartModelHelper::getPageSize( getModel() );
-        sal_Int32 nScaleXNumerator = aLogicSize.Width();
-        sal_Int32 nScaleXDenominator = aModelPageSize.Width;
-        sal_Int32 nScaleYNumerator = aLogicSize.Height();
-        sal_Int32 nScaleYDenominator = aModelPageSize.Height;
-        MapMode aNewMapMode(
-                    MapUnit::Map100thMM,
-                    Point(0,0),
-                    Fraction(nScaleXNumerator, nScaleXDenominator),
-                    Fraction(nScaleYNumerator, nScaleYDenominator) );
-        pChartWindow->SetMapMode(aNewMapMode);
-        pChartWindow->setPosSizePixel( X, Y, Width, Height, static_cast<PosSizeFlags>(Flags) );
-
-        //#i75867# poor quality of ole's alternative view with 3D scenes and zoomfactors besides 100%
-        uno::Reference< beans::XPropertySet > xProp( m_xChartView, uno::UNO_QUERY );
-        if( xProp.is() )
-        {
-            auto aZoomFactors(::comphelper::InitPropertySequence({
-                { "ScaleXNumerator", uno::Any( nScaleXNumerator ) },
-                { "ScaleXDenominator", uno::Any( nScaleXDenominator ) },
-                { "ScaleYNumerator", uno::Any( nScaleYNumerator ) },
-                { "ScaleYDenominator", uno::Any( nScaleYDenominator ) }
-            }));
-            xProp->setPropertyValue( "ZoomFactors", uno::Any( aZoomFactors ));
-        }
-
-        //a correct work area is at least necessary for correct values in the position and  size dialog and for dragging area
-        if(m_pDrawViewWrapper)
-        {
-            tools::Rectangle aRect(Point(0,0), pChartWindow->GetOutputSize());
-            m_pDrawViewWrapper->SetWorkArea( aRect );
-        }
-        pChartWindow->Invalidate();
+        auto aZoomFactors(::comphelper::InitPropertySequence({
+            { "ScaleXNumerator", uno::Any( nScaleXNumerator ) },
+            { "ScaleXDenominator", uno::Any( nScaleXDenominator ) },
+            { "ScaleYNumerator", uno::Any( nScaleYNumerator ) },
+            { "ScaleYDenominator", uno::Any( nScaleYDenominator ) }
+        }));
+        xProp->setPropertyValue( "ZoomFactors", uno::Any( aZoomFactors ));
     }
+
+    //a correct work area is at least necessary for correct values in the position and  size dialog and for dragging area
+    if(m_pDrawViewWrapper)
+    {
+        tools::Rectangle aRect(Point(0,0), pChartWindow->GetOutputSize());
+        m_pDrawViewWrapper->SetWorkArea( aRect );
+    }
+    pChartWindow->Invalidate();
 }
 
 awt::Rectangle SAL_CALL ChartController::getPosSize()
@@ -533,22 +533,22 @@ IMPL_LINK_NOARG(ChartController, DoubleClickWaitingHdl, Timer *, void)
 {
     m_bWaitingForDoubleClick = false;
 
-    if( !m_bWaitingForMouseUp && m_aSelection.maybeSwitchSelectionAfterSingleClickWasEnsured() )
+    if( !(!m_bWaitingForMouseUp && m_aSelection.maybeSwitchSelectionAfterSingleClickWasEnsured()) )
+        return;
+
+    impl_selectObjectAndNotiy();
+    SolarMutexGuard aGuard;
+    auto pChartWindow(GetChartWindow());
+    if( pChartWindow )
     {
-        impl_selectObjectAndNotiy();
-        SolarMutexGuard aGuard;
-        auto pChartWindow(GetChartWindow());
-        if( pChartWindow )
-        {
-            vcl::Window::PointerState aPointerState( pChartWindow->GetPointerState() );
-            MouseEvent aMouseEvent(
-                            aPointerState.maPos,
-                            1/*nClicks*/,
-                            MouseEventModifiers::NONE,
-                            static_cast< sal_uInt16 >( aPointerState.mnState )/*nButtons*/,
-                            0/*nModifier*/ );
-            impl_SetMousePointer( aMouseEvent );
-        }
+        vcl::Window::PointerState aPointerState( pChartWindow->GetPointerState() );
+        MouseEvent aMouseEvent(
+                        aPointerState.maPos,
+                        1/*nClicks*/,
+                        MouseEventModifiers::NONE,
+                        static_cast< sal_uInt16 >( aPointerState.mnState )/*nButtons*/,
+                        0/*nModifier*/ );
+        impl_SetMousePointer( aMouseEvent );
     }
 }
 

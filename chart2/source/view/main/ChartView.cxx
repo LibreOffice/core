@@ -605,21 +605,21 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
     }
 
     //transport seriesnames to the coordinatesystems if needed
-    if( !m_aSeriesPlotterList.empty() )
+    if( m_aSeriesPlotterList.empty() )
+        return;
+
+    uno::Sequence< OUString > aSeriesNames;
+    bool bSeriesNamesInitialized = false;
+    for(auto & pVCooSys : m_rVCooSysList)
     {
-        uno::Sequence< OUString > aSeriesNames;
-        bool bSeriesNamesInitialized = false;
-        for(auto & pVCooSys : m_rVCooSysList)
+        if( pVCooSys->needSeriesNamesForAxis() )
         {
-            if( pVCooSys->needSeriesNamesForAxis() )
+            if(!bSeriesNamesInitialized)
             {
-                if(!bSeriesNamesInitialized)
-                {
-                    aSeriesNames = m_aSeriesPlotterList[0]->getSeriesNames();
-                    bSeriesNamesInitialized = true;
-                }
-                pVCooSys->setSeriesNamesForAxis( aSeriesNames );
+                aSeriesNames = m_aSeriesPlotterList[0]->getSeriesNames();
+                bSeriesNamesInitialized = true;
             }
+            pVCooSys->setSeriesNamesForAxis( aSeriesNames );
         }
     }
 }
@@ -914,45 +914,45 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( ChartModel&
         }
     }
 
-    if( AxisHelper::isAxisPositioningEnabled() )
+    if( !AxisHelper::isAxisPositioningEnabled() )
+        return;
+
+    //correct origin for y main axis (the origin is where the other main axis crosses)
+    sal_Int32 nAxisIndex=0;
+    sal_Int32 nDimensionIndex=1;
+    for (auto & axisUsage : m_aAxisUsageList)
     {
-        //correct origin for y main axis (the origin is where the other main axis crosses)
-        sal_Int32 nAxisIndex=0;
-        sal_Int32 nDimensionIndex=1;
-        for (auto & axisUsage : m_aAxisUsageList)
+        AxisUsage& rAxisUsage = axisUsage.second;
+        std::vector< VCoordinateSystem* > aVCooSysList = rAxisUsage.getCoordinateSystems(nDimensionIndex,nAxisIndex);
+        size_t nC;
+        for( nC=0; nC < aVCooSysList.size(); nC++)
         {
-            AxisUsage& rAxisUsage = axisUsage.second;
-            std::vector< VCoordinateSystem* > aVCooSysList = rAxisUsage.getCoordinateSystems(nDimensionIndex,nAxisIndex);
-            size_t nC;
-            for( nC=0; nC < aVCooSysList.size(); nC++)
+            ExplicitScaleData aExplicitScale( aVCooSysList[nC]->getExplicitScale( nDimensionIndex, nAxisIndex ) );
+            ExplicitIncrementData aExplicitIncrement( aVCooSysList[nC]->getExplicitIncrement( nDimensionIndex, nAxisIndex ) );
+
+            Reference< chart2::XCoordinateSystem > xCooSys( aVCooSysList[nC]->getModel() );
+            Reference< XAxis > xAxis( xCooSys->getAxisByDimension( nDimensionIndex, nAxisIndex ) );
+            Reference< beans::XPropertySet > xCrossingMainAxis( AxisHelper::getCrossingMainAxis( xAxis, xCooSys ), uno::UNO_QUERY );
+
+            css::chart::ChartAxisPosition eCrossingMainAxisPos( css::chart::ChartAxisPosition_ZERO );
+            if( xCrossingMainAxis.is() )
             {
-                ExplicitScaleData aExplicitScale( aVCooSysList[nC]->getExplicitScale( nDimensionIndex, nAxisIndex ) );
-                ExplicitIncrementData aExplicitIncrement( aVCooSysList[nC]->getExplicitIncrement( nDimensionIndex, nAxisIndex ) );
-
-                Reference< chart2::XCoordinateSystem > xCooSys( aVCooSysList[nC]->getModel() );
-                Reference< XAxis > xAxis( xCooSys->getAxisByDimension( nDimensionIndex, nAxisIndex ) );
-                Reference< beans::XPropertySet > xCrossingMainAxis( AxisHelper::getCrossingMainAxis( xAxis, xCooSys ), uno::UNO_QUERY );
-
-                css::chart::ChartAxisPosition eCrossingMainAxisPos( css::chart::ChartAxisPosition_ZERO );
-                if( xCrossingMainAxis.is() )
+                xCrossingMainAxis->getPropertyValue("CrossoverPosition") >>= eCrossingMainAxisPos;
+                if( eCrossingMainAxisPos == css::chart::ChartAxisPosition_VALUE )
                 {
-                    xCrossingMainAxis->getPropertyValue("CrossoverPosition") >>= eCrossingMainAxisPos;
-                    if( eCrossingMainAxisPos == css::chart::ChartAxisPosition_VALUE )
-                    {
-                        double fValue = 0.0;
-                        xCrossingMainAxis->getPropertyValue("CrossoverValue") >>= fValue;
-                        aExplicitScale.Origin = fValue;
-                    }
-                    else if( eCrossingMainAxisPos == css::chart::ChartAxisPosition_ZERO )
-                        aExplicitScale.Origin = 0.0;
-                    else  if( eCrossingMainAxisPos == css::chart::ChartAxisPosition_START )
-                        aExplicitScale.Origin = aExplicitScale.Minimum;
-                    else  if( eCrossingMainAxisPos == css::chart::ChartAxisPosition_END )
-                        aExplicitScale.Origin = aExplicitScale.Maximum;
+                    double fValue = 0.0;
+                    xCrossingMainAxis->getPropertyValue("CrossoverValue") >>= fValue;
+                    aExplicitScale.Origin = fValue;
                 }
-
-                aVCooSysList[nC]->setExplicitScaleAndIncrement( nDimensionIndex, nAxisIndex, aExplicitScale, aExplicitIncrement );
+                else if( eCrossingMainAxisPos == css::chart::ChartAxisPosition_ZERO )
+                    aExplicitScale.Origin = 0.0;
+                else  if( eCrossingMainAxisPos == css::chart::ChartAxisPosition_START )
+                    aExplicitScale.Origin = aExplicitScale.Minimum;
+                else  if( eCrossingMainAxisPos == css::chart::ChartAxisPosition_END )
+                    aExplicitScale.Origin = aExplicitScale.Maximum;
             }
+
+            aVCooSysList[nC]->setExplicitScaleAndIncrement( nDimensionIndex, nAxisIndex, aExplicitScale, aExplicitIncrement );
         }
     }
 }
@@ -1278,135 +1278,135 @@ bool lcl_IsPieOrDonut( const uno::Reference< XDiagram >& xDiagram )
 void lcl_setDefaultWritingMode( const std::shared_ptr< DrawModelWrapper >& pDrawModelWrapper, ChartModel& rModel)
 {
     //get writing mode from parent document:
-    if( SvtLanguageOptions().IsCTLFontEnabled() )
+    if( !SvtLanguageOptions().IsCTLFontEnabled() )
+        return;
+
+    try
     {
-        try
+        sal_Int16 nWritingMode=-1;
+        uno::Reference< beans::XPropertySet > xParentProps( rModel.getParent(), uno::UNO_QUERY );
+        uno::Reference< style::XStyleFamiliesSupplier > xStyleFamiliesSupplier( xParentProps, uno::UNO_QUERY );
+        if( xStyleFamiliesSupplier.is() )
         {
-            sal_Int16 nWritingMode=-1;
-            uno::Reference< beans::XPropertySet > xParentProps( rModel.getParent(), uno::UNO_QUERY );
-            uno::Reference< style::XStyleFamiliesSupplier > xStyleFamiliesSupplier( xParentProps, uno::UNO_QUERY );
-            if( xStyleFamiliesSupplier.is() )
+            uno::Reference< container::XNameAccess > xStylesFamilies( xStyleFamiliesSupplier->getStyleFamilies() );
+            if( xStylesFamilies.is() )
             {
-                uno::Reference< container::XNameAccess > xStylesFamilies( xStyleFamiliesSupplier->getStyleFamilies() );
-                if( xStylesFamilies.is() )
+                if( !xStylesFamilies->hasByName( "PageStyles" ) )
                 {
-                    if( !xStylesFamilies->hasByName( "PageStyles" ) )
+                    //draw/impress is parent document
+                    uno::Reference< lang::XMultiServiceFactory > xFatcory( xParentProps, uno::UNO_QUERY );
+                    if( xFatcory.is() )
                     {
-                        //draw/impress is parent document
-                        uno::Reference< lang::XMultiServiceFactory > xFatcory( xParentProps, uno::UNO_QUERY );
-                        if( xFatcory.is() )
-                        {
-                            uno::Reference< beans::XPropertySet > xDrawDefaults( xFatcory->createInstance( "com.sun.star.drawing.Defaults" ), uno::UNO_QUERY );
-                            if( xDrawDefaults.is() )
-                                xDrawDefaults->getPropertyValue( "WritingMode" ) >>= nWritingMode;
-                        }
+                        uno::Reference< beans::XPropertySet > xDrawDefaults( xFatcory->createInstance( "com.sun.star.drawing.Defaults" ), uno::UNO_QUERY );
+                        if( xDrawDefaults.is() )
+                            xDrawDefaults->getPropertyValue( "WritingMode" ) >>= nWritingMode;
                     }
-                    else
+                }
+                else
+                {
+                    uno::Reference< container::XNameAccess > xPageStyles( xStylesFamilies->getByName( "PageStyles" ), uno::UNO_QUERY );
+                    if( xPageStyles.is() )
                     {
-                        uno::Reference< container::XNameAccess > xPageStyles( xStylesFamilies->getByName( "PageStyles" ), uno::UNO_QUERY );
-                        if( xPageStyles.is() )
+                        OUString aPageStyle;
+
+                        uno::Reference< text::XTextDocument > xTextDocument( xParentProps, uno::UNO_QUERY );
+                        if( xTextDocument.is() )
                         {
-                            OUString aPageStyle;
+                            //writer is parent document
+                            //retrieve the current page style from the text cursor property PageStyleName
 
-                            uno::Reference< text::XTextDocument > xTextDocument( xParentProps, uno::UNO_QUERY );
-                            if( xTextDocument.is() )
+                            uno::Reference< text::XTextEmbeddedObjectsSupplier > xTextEmbeddedObjectsSupplier( xTextDocument, uno::UNO_QUERY );
+                            if( xTextEmbeddedObjectsSupplier.is() )
                             {
-                                //writer is parent document
-                                //retrieve the current page style from the text cursor property PageStyleName
-
-                                uno::Reference< text::XTextEmbeddedObjectsSupplier > xTextEmbeddedObjectsSupplier( xTextDocument, uno::UNO_QUERY );
-                                if( xTextEmbeddedObjectsSupplier.is() )
+                                uno::Reference< container::XNameAccess > xEmbeddedObjects( xTextEmbeddedObjectsSupplier->getEmbeddedObjects() );
+                                if( xEmbeddedObjects.is() )
                                 {
-                                    uno::Reference< container::XNameAccess > xEmbeddedObjects( xTextEmbeddedObjectsSupplier->getEmbeddedObjects() );
-                                    if( xEmbeddedObjects.is() )
-                                    {
-                                        uno::Sequence< OUString > aNames( xEmbeddedObjects->getElementNames() );
+                                    uno::Sequence< OUString > aNames( xEmbeddedObjects->getElementNames() );
 
-                                        sal_Int32 nCount = aNames.getLength();
-                                        for( sal_Int32 nN=0; nN<nCount; nN++ )
+                                    sal_Int32 nCount = aNames.getLength();
+                                    for( sal_Int32 nN=0; nN<nCount; nN++ )
+                                    {
+                                        uno::Reference< beans::XPropertySet > xEmbeddedProps( xEmbeddedObjects->getByName( aNames[nN] ), uno::UNO_QUERY );
+                                        if( xEmbeddedProps.is() )
                                         {
-                                            uno::Reference< beans::XPropertySet > xEmbeddedProps( xEmbeddedObjects->getByName( aNames[nN] ), uno::UNO_QUERY );
-                                            if( xEmbeddedProps.is() )
+                                            static OUString aChartCLSID = SvGlobalName( SO3_SCH_CLASSID ).GetHexName();
+                                            OUString aCLSID;
+                                            xEmbeddedProps->getPropertyValue( "CLSID" ) >>= aCLSID;
+                                            if( aCLSID == aChartCLSID )
                                             {
-                                                static OUString aChartCLSID = SvGlobalName( SO3_SCH_CLASSID ).GetHexName();
-                                                OUString aCLSID;
-                                                xEmbeddedProps->getPropertyValue( "CLSID" ) >>= aCLSID;
-                                                if( aCLSID == aChartCLSID )
+                                                uno::Reference< text::XTextContent > xEmbeddedObject( xEmbeddedProps, uno::UNO_QUERY );
+                                                if( xEmbeddedObject.is() )
                                                 {
-                                                    uno::Reference< text::XTextContent > xEmbeddedObject( xEmbeddedProps, uno::UNO_QUERY );
-                                                    if( xEmbeddedObject.is() )
+                                                    uno::Reference< text::XTextRange > xAnchor( xEmbeddedObject->getAnchor() );
+                                                    if( xAnchor.is() )
                                                     {
-                                                        uno::Reference< text::XTextRange > xAnchor( xEmbeddedObject->getAnchor() );
-                                                        if( xAnchor.is() )
+                                                        uno::Reference< beans::XPropertySet > xAnchorProps( xAnchor, uno::UNO_QUERY );
+                                                        if( xAnchorProps.is() )
                                                         {
-                                                            uno::Reference< beans::XPropertySet > xAnchorProps( xAnchor, uno::UNO_QUERY );
-                                                            if( xAnchorProps.is() )
-                                                            {
-                                                                xAnchorProps->getPropertyValue( "WritingMode" ) >>= nWritingMode;
-                                                            }
-                                                            uno::Reference< text::XText > xText( xAnchor->getText() );
-                                                            if( xText.is() )
-                                                            {
-                                                                uno::Reference< beans::XPropertySet > xTextCursorProps( xText->createTextCursor(), uno::UNO_QUERY );
-                                                                if( xTextCursorProps.is() )
-                                                                    xTextCursorProps->getPropertyValue( "PageStyleName" ) >>= aPageStyle;
-                                                            }
+                                                            xAnchorProps->getPropertyValue( "WritingMode" ) >>= nWritingMode;
+                                                        }
+                                                        uno::Reference< text::XText > xText( xAnchor->getText() );
+                                                        if( xText.is() )
+                                                        {
+                                                            uno::Reference< beans::XPropertySet > xTextCursorProps( xText->createTextCursor(), uno::UNO_QUERY );
+                                                            if( xTextCursorProps.is() )
+                                                                xTextCursorProps->getPropertyValue( "PageStyleName" ) >>= aPageStyle;
                                                         }
                                                     }
-                                                    break;
                                                 }
+                                                break;
                                             }
                                         }
                                     }
                                 }
-                                if( aPageStyle.isEmpty() )
-                                {
-                                    uno::Reference< text::XText > xText( xTextDocument->getText() );
-                                    if( xText.is() )
-                                    {
-                                        uno::Reference< beans::XPropertySet > xTextCursorProps( xText->createTextCursor(), uno::UNO_QUERY );
-                                        if( xTextCursorProps.is() )
-                                            xTextCursorProps->getPropertyValue( "PageStyleName" ) >>= aPageStyle;
-                                    }
-                                }
-                                if(aPageStyle.isEmpty())
-                                    aPageStyle = "Standard";
                             }
-                            else
+                            if( aPageStyle.isEmpty() )
                             {
-                                //Calc is parent document
-                                Reference< com::sun::star::beans::XPropertySetInfo > xInfo = xParentProps->getPropertySetInfo();
-                                if (xInfo->hasPropertyByName("PageStyle"))
+                                uno::Reference< text::XText > xText( xTextDocument->getText() );
+                                if( xText.is() )
                                 {
-                                    xParentProps->getPropertyValue( "PageStyle" ) >>= aPageStyle;
+                                    uno::Reference< beans::XPropertySet > xTextCursorProps( xText->createTextCursor(), uno::UNO_QUERY );
+                                    if( xTextCursorProps.is() )
+                                        xTextCursorProps->getPropertyValue( "PageStyleName" ) >>= aPageStyle;
                                 }
-                                if(aPageStyle.isEmpty())
-                                    aPageStyle = "Default";
                             }
-                            if( nWritingMode == -1 || nWritingMode == text::WritingMode2::PAGE )
+                            if(aPageStyle.isEmpty())
+                                aPageStyle = "Standard";
+                        }
+                        else
+                        {
+                            //Calc is parent document
+                            Reference< com::sun::star::beans::XPropertySetInfo > xInfo = xParentProps->getPropertySetInfo();
+                            if (xInfo->hasPropertyByName("PageStyle"))
                             {
-                                uno::Reference< beans::XPropertySet > xPageStyle( xPageStyles->getByName( aPageStyle ), uno::UNO_QUERY );
-                                Reference< com::sun::star::beans::XPropertySetInfo > xInfo = xPageStyle->getPropertySetInfo();
-                                if (xInfo->hasPropertyByName("WritingMode"))
-                                {
-                                    if( xPageStyle.is() )
-                                        xPageStyle->getPropertyValue( "WritingMode" ) >>= nWritingMode;
-                                }
+                                xParentProps->getPropertyValue( "PageStyle" ) >>= aPageStyle;
+                            }
+                            if(aPageStyle.isEmpty())
+                                aPageStyle = "Default";
+                        }
+                        if( nWritingMode == -1 || nWritingMode == text::WritingMode2::PAGE )
+                        {
+                            uno::Reference< beans::XPropertySet > xPageStyle( xPageStyles->getByName( aPageStyle ), uno::UNO_QUERY );
+                            Reference< com::sun::star::beans::XPropertySetInfo > xInfo = xPageStyle->getPropertySetInfo();
+                            if (xInfo->hasPropertyByName("WritingMode"))
+                            {
+                                if( xPageStyle.is() )
+                                    xPageStyle->getPropertyValue( "WritingMode" ) >>= nWritingMode;
                             }
                         }
                     }
                 }
             }
-            if( nWritingMode != -1 && nWritingMode != text::WritingMode2::PAGE )
-            {
-                if( pDrawModelWrapper.get() )
-                    pDrawModelWrapper->GetItemPool().SetPoolDefaultItem(SvxFrameDirectionItem(static_cast<SvxFrameDirection>(nWritingMode), EE_PARA_WRITINGDIR) );
-            }
         }
-        catch( const uno::Exception& )
+        if( nWritingMode != -1 && nWritingMode != text::WritingMode2::PAGE )
         {
-            DBG_UNHANDLED_EXCEPTION("chart2" );
+            if( pDrawModelWrapper.get() )
+                pDrawModelWrapper->GetItemPool().SetPoolDefaultItem(SvxFrameDirectionItem(static_cast<SvxFrameDirection>(nWritingMode), EE_PARA_WRITINGDIR) );
         }
+    }
+    catch( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2" );
     }
 }
 
@@ -2284,33 +2284,33 @@ void lcl_createButtons(const uno::Reference<drawing::XShapes>& xPageShapes,
 
     aSize = awt::Size(3000, 700); // size of the button
 
-    if (xPivotTableDataProvider->getRowFields().hasElements())
-    {
-        x = 200;
-        const css::uno::Sequence<chart2::data::PivotTableFieldEntry> aPivotFieldEntries = xPivotTableDataProvider->getRowFields();
-        for (css::chart2::data::PivotTableFieldEntry const & rRowFieldEntry : aPivotFieldEntries)
-        {
+    if (!xPivotTableDataProvider->getRowFields().hasElements())
+        return;
 
-            std::unique_ptr<VButton> pButton(new VButton);
-            pButton->init(xPageShapes, xShapeFactory);
-            awt::Point aNewPosition(rRemainingSpace.X + x + 100,
-                                    rRemainingSpace.Y + rRemainingSpace.Height - aSize.Height - 100);
-            pButton->setLabel(rRowFieldEntry.Name);
-            pButton->setCID("FieldButton.Row." + OUString::number(rRowFieldEntry.DimensionIndex));
-            pButton->setPosition(aNewPosition);
-            pButton->setSize(aSize);
-            if ( rRowFieldEntry.Name == "Data" )
-            {
-                pButton->setBGColor( Color(0x00F6F6F6) );
-                pButton->showArrow( false );
-            }
-            else if (rRowFieldEntry.HasHiddenMembers)
-                pButton->setArrowColor(Color(0x0000FF));
-            pButton->createShapes(xModelPage);
-            x += aSize.Width + 100;
+    x = 200;
+    const css::uno::Sequence<chart2::data::PivotTableFieldEntry> aPivotFieldEntries = xPivotTableDataProvider->getRowFields();
+    for (css::chart2::data::PivotTableFieldEntry const & rRowFieldEntry : aPivotFieldEntries)
+    {
+
+        std::unique_ptr<VButton> pButton(new VButton);
+        pButton->init(xPageShapes, xShapeFactory);
+        awt::Point aNewPosition(rRemainingSpace.X + x + 100,
+                                rRemainingSpace.Y + rRemainingSpace.Height - aSize.Height - 100);
+        pButton->setLabel(rRowFieldEntry.Name);
+        pButton->setCID("FieldButton.Row." + OUString::number(rRowFieldEntry.DimensionIndex));
+        pButton->setPosition(aNewPosition);
+        pButton->setSize(aSize);
+        if ( rRowFieldEntry.Name == "Data" )
+        {
+            pButton->setBGColor( Color(0x00F6F6F6) );
+            pButton->showArrow( false );
         }
-        rRemainingSpace.Height -= (aSize.Height + 100 + 100);
+        else if (rRowFieldEntry.HasHiddenMembers)
+            pButton->setArrowColor(Color(0x0000FF));
+        pButton->createShapes(xModelPage);
+        x += aSize.Width + 100;
     }
+    rRemainingSpace.Height -= (aSize.Height + 100 + 100);
 }
 
 void formatPage(
@@ -2388,7 +2388,10 @@ void ChartView::impl_refreshAddIn()
         return;
 
     uno::Reference< beans::XPropertySet > xProp( static_cast< ::cppu::OWeakObject* >( &mrChartModel ), uno::UNO_QUERY );
-    if( xProp.is()) try
+    if( !xProp.is())
+        return;
+
+    try
     {
         uno::Reference< util::XRefreshable > xAddIn;
         xProp->getPropertyValue( "AddIn" ) >>= xAddIn;
@@ -2480,60 +2483,60 @@ void ChartView::impl_updateView( bool bCheckLockedCtrler )
     if (bCheckLockedCtrler && mrChartModel.hasControllersLocked())
         return;
 
-    if( m_bViewDirty && !m_bInViewUpdate )
+    if( !(m_bViewDirty && !m_bInViewUpdate) )
+        return;
+
+    m_bInViewUpdate = true;
+    //bool bOldRefreshAddIn = m_bRefreshAddIn;
+    //m_bRefreshAddIn = false;
+    try
     {
-        m_bInViewUpdate = true;
-        //bool bOldRefreshAddIn = m_bRefreshAddIn;
-        //m_bRefreshAddIn = false;
-        try
-        {
-            impl_notifyModeChangeListener("invalid");
+        impl_notifyModeChangeListener("invalid");
 
-            //prepare draw model
-            {
-                SolarMutexGuard aSolarGuard;
-                m_pDrawModelWrapper->lockControllers();
-            }
-
-            //create chart view
-            {
-                m_bViewDirty = false;
-                m_bViewUpdatePending = false;
-                createShapes();
-
-                if( m_bViewDirty )
-                {
-                    //avoid recursions due to add-in
-                    m_bRefreshAddIn = false;
-                    m_bViewDirty = false;
-                    m_bViewUpdatePending = false;
-                    //delete old chart view
-                    createShapes();
-                    m_bRefreshAddIn = true;
-                }
-            }
-
-            m_bViewDirty = m_bViewUpdatePending;
-            m_bViewUpdatePending = false;
-            m_bInViewUpdate = false;
-        }
-        catch( const uno::Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("chart2" );
-            m_bViewDirty = m_bViewUpdatePending;
-            m_bViewUpdatePending = false;
-            m_bInViewUpdate = false;
-        }
-
+        //prepare draw model
         {
             SolarMutexGuard aSolarGuard;
-            m_pDrawModelWrapper->unlockControllers();
+            m_pDrawModelWrapper->lockControllers();
         }
 
-        impl_notifyModeChangeListener("valid");
+        //create chart view
+        {
+            m_bViewDirty = false;
+            m_bViewUpdatePending = false;
+            createShapes();
 
-        //m_bRefreshAddIn = bOldRefreshAddIn;
+            if( m_bViewDirty )
+            {
+                //avoid recursions due to add-in
+                m_bRefreshAddIn = false;
+                m_bViewDirty = false;
+                m_bViewUpdatePending = false;
+                //delete old chart view
+                createShapes();
+                m_bRefreshAddIn = true;
+            }
+        }
+
+        m_bViewDirty = m_bViewUpdatePending;
+        m_bViewUpdatePending = false;
+        m_bInViewUpdate = false;
     }
+    catch( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2" );
+        m_bViewDirty = m_bViewUpdatePending;
+        m_bViewUpdatePending = false;
+        m_bInViewUpdate = false;
+    }
+
+    {
+        SolarMutexGuard aSolarGuard;
+        m_pDrawModelWrapper->unlockControllers();
+    }
+
+    impl_notifyModeChangeListener("valid");
+
+    //m_bRefreshAddIn = bOldRefreshAddIn;
 }
 
 // ____ XModifyListener ____

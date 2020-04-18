@@ -111,26 +111,26 @@ void lcl_getCooSysAndChartTypeOfSeries(
     Reference< chart2::XChartType > & xOutChartType )
 {
     Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY );
-    if( xCooSysCnt.is())
+    if( !xCooSysCnt.is())
+        return;
+
+    Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
+    for( sal_Int32 nCooSysIdx=0; nCooSysIdx<aCooSysSeq.getLength(); ++nCooSysIdx )
     {
-        Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
-        for( sal_Int32 nCooSysIdx=0; nCooSysIdx<aCooSysSeq.getLength(); ++nCooSysIdx )
+        Reference< chart2::XChartTypeContainer > xCTCnt( aCooSysSeq[nCooSysIdx], uno::UNO_QUERY_THROW );
+        Sequence< Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
+        for( sal_Int32 nCTIdx=0; nCTIdx<aChartTypes.getLength(); ++nCTIdx )
         {
-            Reference< chart2::XChartTypeContainer > xCTCnt( aCooSysSeq[nCooSysIdx], uno::UNO_QUERY_THROW );
-            Sequence< Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
-            for( sal_Int32 nCTIdx=0; nCTIdx<aChartTypes.getLength(); ++nCTIdx )
+            Reference< chart2::XDataSeriesContainer > xSeriesCnt( aChartTypes[nCTIdx], uno::UNO_QUERY );
+            if( xSeriesCnt.is())
             {
-                Reference< chart2::XDataSeriesContainer > xSeriesCnt( aChartTypes[nCTIdx], uno::UNO_QUERY );
-                if( xSeriesCnt.is())
+                Sequence< Reference< chart2::XDataSeries > > aSeries( xSeriesCnt->getDataSeries());
+                for( sal_Int32 nSeriesIdx=0; nSeriesIdx<aSeries.getLength(); ++nSeriesIdx )
                 {
-                    Sequence< Reference< chart2::XDataSeries > > aSeries( xSeriesCnt->getDataSeries());
-                    for( sal_Int32 nSeriesIdx=0; nSeriesIdx<aSeries.getLength(); ++nSeriesIdx )
+                    if( aSeries[nSeriesIdx] == xSeries )
                     {
-                        if( aSeries[nSeriesIdx] == xSeries )
-                        {
-                            xOutCooSys.set( aCooSysSeq[nCooSysIdx] );
-                            xOutChartType.set( aChartTypes[nCTIdx] );
-                        }
+                        xOutCooSys.set( aCooSysSeq[nCooSysIdx] );
+                        xOutChartType.set( aChartTypes[nCTIdx] );
                     }
                 }
             }
@@ -411,31 +411,31 @@ void setStackModeAtSeries(
         }
     }
 
-    if( xCorrespondingCoordinateSystem.is() &&
-        1 < xCorrespondingCoordinateSystem->getDimension() )
+    if( !(xCorrespondingCoordinateSystem.is() &&
+        1 < xCorrespondingCoordinateSystem->getDimension()) )
+        return;
+
+    if( aAxisIndexSet.empty() )
     {
-        if( aAxisIndexSet.empty() )
-        {
-            aAxisIndexSet.insert(0);
-        }
+        aAxisIndexSet.insert(0);
+    }
 
-        for (auto const& axisIndex : aAxisIndexSet)
+    for (auto const& axisIndex : aAxisIndexSet)
+    {
+        Reference< chart2::XAxis > xAxis(
+            xCorrespondingCoordinateSystem->getAxisByDimension(1, axisIndex));
+        if( xAxis.is())
         {
-            Reference< chart2::XAxis > xAxis(
-                xCorrespondingCoordinateSystem->getAxisByDimension(1, axisIndex));
-            if( xAxis.is())
+            bool bPercent = (eStackMode == StackMode::YStackedPercent);
+            chart2::ScaleData aScaleData = xAxis->getScaleData();
+
+            if( bPercent != (aScaleData.AxisType==chart2::AxisType::PERCENT) )
             {
-                bool bPercent = (eStackMode == StackMode::YStackedPercent);
-                chart2::ScaleData aScaleData = xAxis->getScaleData();
-
-                if( bPercent != (aScaleData.AxisType==chart2::AxisType::PERCENT) )
-                {
-                    if( bPercent )
-                        aScaleData.AxisType = chart2::AxisType::PERCENT;
-                    else
-                        aScaleData.AxisType = chart2::AxisType::REALNUMBER;
-                    xAxis->setScaleData( aScaleData );
-                }
+                if( bPercent )
+                    aScaleData.AxisType = chart2::AxisType::PERCENT;
+                else
+                    aScaleData.AxisType = chart2::AxisType::REALNUMBER;
+                xAxis->setScaleData( aScaleData );
             }
         }
     }

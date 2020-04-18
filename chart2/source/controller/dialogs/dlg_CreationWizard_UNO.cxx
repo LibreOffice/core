@@ -151,25 +151,25 @@ void SAL_CALL CreationWizardUnoDlg::setTitle( const OUString& /*rTitle*/ )
 void CreationWizardUnoDlg::createDialogOnDemand()
 {
     SolarMutexGuard aSolarGuard;
-    if (!m_xDialog)
+    if (m_xDialog)
+        return;
+
+    if( !m_xParentWindow.is() && m_xChartModel.is() )
     {
-        if( !m_xParentWindow.is() && m_xChartModel.is() )
+        uno::Reference< frame::XController > xController(
+            m_xChartModel->getCurrentController() );
+        if( xController.is() )
         {
-            uno::Reference< frame::XController > xController(
-                m_xChartModel->getCurrentController() );
-            if( xController.is() )
-            {
-                uno::Reference< frame::XFrame > xFrame(
-                    xController->getFrame() );
-                if(xFrame.is())
-                    m_xParentWindow = xFrame->getContainerWindow();
-            }
+            uno::Reference< frame::XFrame > xFrame(
+                xController->getFrame() );
+            if(xFrame.is())
+                m_xParentWindow = xFrame->getContainerWindow();
         }
-        uno::Reference< XComponent > xKeepAlive( this );
-        if( m_xChartModel.is() )
-        {
-            m_xDialog = std::make_unique<CreationWizard>(Application::GetFrameWeld(m_xParentWindow), m_xChartModel, m_xCC);
-        }
+    }
+    uno::Reference< XComponent > xKeepAlive( this );
+    if( m_xChartModel.is() )
+    {
+        m_xDialog = std::make_unique<CreationWizard>(Application::GetFrameWeld(m_xParentWindow), m_xChartModel, m_xCC);
     }
 }
 

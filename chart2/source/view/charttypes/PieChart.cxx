@@ -182,7 +182,10 @@ PieChart::PieChart( const uno::Reference<XChartType>& xChartTypeModel
     m_pPosHelper->m_fRingDistance = 0.0;
 
     uno::Reference< beans::XPropertySet > xChartTypeProps( xChartTypeModel, uno::UNO_QUERY );
-    if( xChartTypeProps.is() ) try
+    if( !xChartTypeProps.is() )
+        return;
+
+    try
     {
         xChartTypeProps->getPropertyValue( "UseRings") >>= m_bUseRings;
         if( m_bUseRings )
@@ -1573,21 +1576,21 @@ void PieChart::performLabelBestFit(ShapeParam& rShapeParam, PieLabelInfo const &
     if( m_bUseRings )
         return;
 
-    if( !performLabelBestFitInnerPlacement(rShapeParam, rPieLabelInfo) )
-    {
-        // If it does not fit inside, let's put it outside
-        PolarLabelPositionHelper aPolarPosHelper(m_pPosHelper.get(),m_nDimension,m_xLogicTarget,m_pShapeFactory);
-        auto eAlignment = LABEL_ALIGN_CENTER;
-        awt::Point aScreenPosition2D(
-        aPolarPosHelper.getLabelScreenPositionAndAlignmentForUnitCircleValues(eAlignment, css::chart::DataLabelPlacement::OUTSIDE
-        , rShapeParam.mfUnitCircleStartAngleDegree, rShapeParam.mfUnitCircleWidthAngleDegree
-        , rShapeParam.mfUnitCircleInnerRadius, rShapeParam.mfUnitCircleOuterRadius, rShapeParam.mfLogicZ+0.5, 0 ));
-        basegfx::B2IVector aTranslationVector = rPieLabelInfo.aFirstPosition - rPieLabelInfo.aOrigin;
-        aTranslationVector.setLength(150);
-        aScreenPosition2D.X += aTranslationVector.getX();
-        aScreenPosition2D.Y += aTranslationVector.getY();
-        rPieLabelInfo.xLabelGroupShape->setPosition(aScreenPosition2D);
-    }
+    if( performLabelBestFitInnerPlacement(rShapeParam, rPieLabelInfo) )
+        return;
+
+    // If it does not fit inside, let's put it outside
+    PolarLabelPositionHelper aPolarPosHelper(m_pPosHelper.get(),m_nDimension,m_xLogicTarget,m_pShapeFactory);
+    auto eAlignment = LABEL_ALIGN_CENTER;
+    awt::Point aScreenPosition2D(
+    aPolarPosHelper.getLabelScreenPositionAndAlignmentForUnitCircleValues(eAlignment, css::chart::DataLabelPlacement::OUTSIDE
+    , rShapeParam.mfUnitCircleStartAngleDegree, rShapeParam.mfUnitCircleWidthAngleDegree
+    , rShapeParam.mfUnitCircleInnerRadius, rShapeParam.mfUnitCircleOuterRadius, rShapeParam.mfLogicZ+0.5, 0 ));
+    basegfx::B2IVector aTranslationVector = rPieLabelInfo.aFirstPosition - rPieLabelInfo.aOrigin;
+    aTranslationVector.setLength(150);
+    aScreenPosition2D.X += aTranslationVector.getX();
+    aScreenPosition2D.Y += aTranslationVector.getY();
+    rPieLabelInfo.xLabelGroupShape->setPosition(aScreenPosition2D);
 }
 
 } //namespace chart

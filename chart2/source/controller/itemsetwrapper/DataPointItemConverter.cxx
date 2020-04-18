@@ -241,18 +241,18 @@ DataPointItemConverter::DataPointItemConverter(
 
     m_bForbidPercentValue = ChartTypeHelper::getAxisType( xChartType, 0 ) != AxisType::CATEGORY;
 
-    if (!bDataSeries)
+    if (bDataSeries)
+        return;
+
+    uno::Reference<beans::XPropertySet> xSeriesProp(xSeries, uno::UNO_QUERY);
+    uno::Sequence<sal_Int32> deletedLegendEntriesSeq;
+    xSeriesProp->getPropertyValue("DeletedLegendEntries") >>= deletedLegendEntriesSeq;
+    for (auto& deletedLegendEntry : deletedLegendEntriesSeq)
     {
-        uno::Reference<beans::XPropertySet> xSeriesProp(xSeries, uno::UNO_QUERY);
-        uno::Sequence<sal_Int32> deletedLegendEntriesSeq;
-        xSeriesProp->getPropertyValue("DeletedLegendEntries") >>= deletedLegendEntriesSeq;
-        for (auto& deletedLegendEntry : deletedLegendEntriesSeq)
+        if (nPointIndex == deletedLegendEntry)
         {
-            if (nPointIndex == deletedLegendEntry)
-            {
-                m_bHideLegendEntry = true;
-                break;
-            }
+            m_bHideLegendEntry = true;
+            break;
         }
     }
 }

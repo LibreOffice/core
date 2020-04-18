@@ -134,18 +134,18 @@ void VButton::createShapes(const uno::Reference<beans::XPropertySet>& xTextProp)
         xEntry->setSize(m_aSize);
     }
 
-    if (m_bShowArrow)
-    {
-        awt::Size aPolySize {280, 180};
+    if (!m_bShowArrow)
+        return;
 
-        uno::Reference<drawing::XShape> xPoly = createTriangle(aPolySize);
-        if (xPoly.is())
-        {
-            xPoly->setSize(aPolySize);
-            xPoly->setPosition({ sal_Int32(m_aPosition.X + m_aSize.Width - aPolySize.Width - 100),
-                                 sal_Int32(m_aPosition.Y + (m_aSize.Height / 2.0) - (aPolySize.Height / 2.0)) });
-            xContainer->add(xPoly);
-        }
+    awt::Size aPolySize {280, 180};
+
+    uno::Reference<drawing::XShape> xPoly = createTriangle(aPolySize);
+    if (xPoly.is())
+    {
+        xPoly->setSize(aPolySize);
+        xPoly->setPosition({ sal_Int32(m_aPosition.X + m_aSize.Width - aPolySize.Width - 100),
+                             sal_Int32(m_aPosition.Y + (m_aSize.Height / 2.0) - (aPolySize.Height / 2.0)) });
+        xContainer->add(xPoly);
     }
 }
 

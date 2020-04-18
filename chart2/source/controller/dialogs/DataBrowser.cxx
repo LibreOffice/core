@@ -960,88 +960,88 @@ void DataBrowser::MoveLeftColumn()
 {
     sal_Int32 nColIdx = lcl_getColumnInDataOrHeader( GetCurColumnId(), m_aSeriesHeaders );
 
-    if( nColIdx > 0 &&
-        m_apDataBrowserModel.get())
+    if( !(nColIdx > 0 &&
+        m_apDataBrowserModel.get()))
+        return;
+
+    // save changes made to edit-field
+    if( IsModified() )
+        SaveModified();
+
+    m_apDataBrowserModel->swapDataSeries( nColIdx - 1 );
+
+    // keep cursor in swapped column
+    if(( 0 < GetCurColumnId() ) && ( GetCurColumnId() <= ColCount() - 1 ))
     {
-        // save changes made to edit-field
-        if( IsModified() )
-            SaveModified();
-
-        m_apDataBrowserModel->swapDataSeries( nColIdx - 1 );
-
-        // keep cursor in swapped column
-        if(( 0 < GetCurColumnId() ) && ( GetCurColumnId() <= ColCount() - 1 ))
-        {
-            Dispatch( BROWSER_CURSORLEFT );
-        }
-        RenewTable();
+        Dispatch( BROWSER_CURSORLEFT );
     }
+    RenewTable();
 }
 
 void DataBrowser::MoveRightColumn()
 {
     sal_Int32 nColIdx = lcl_getColumnInDataOrHeader( GetCurColumnId(), m_aSeriesHeaders );
 
-    if( nColIdx >= 0 &&
-        m_apDataBrowserModel.get())
+    if( !(nColIdx >= 0 &&
+        m_apDataBrowserModel.get()))
+        return;
+
+    // save changes made to edit-field
+    if( IsModified() )
+        SaveModified();
+
+    m_apDataBrowserModel->swapDataSeries( nColIdx );
+
+    // keep cursor in swapped column
+    if( GetCurColumnId() < ColCount() - 1 )
     {
-        // save changes made to edit-field
-        if( IsModified() )
-            SaveModified();
-
-        m_apDataBrowserModel->swapDataSeries( nColIdx );
-
-        // keep cursor in swapped column
-        if( GetCurColumnId() < ColCount() - 1 )
-        {
-            Dispatch( BROWSER_CURSORRIGHT );
-        }
-        RenewTable();
+        Dispatch( BROWSER_CURSORRIGHT );
     }
+    RenewTable();
 }
 
 void DataBrowser::MoveUpRow()
 {
-     sal_Int32 nRowIdx = lcl_getRowInData( GetCurRow());
+    sal_Int32 nRowIdx = lcl_getRowInData( GetCurRow());
 
-     if( nRowIdx > 0 &&
-        m_apDataBrowserModel.get())
+    if( !(nRowIdx > 0 &&
+        m_apDataBrowserModel.get()))
+        return;
+
+    // save changes made to edit-field
+    if( IsModified() )
+        SaveModified();
+
+    m_apDataBrowserModel->swapDataPointForAllSeries( nRowIdx - 1 );
+
+    // keep cursor in swapped row
+    if(( 0 < GetCurRow() ) && ( GetCurRow() <= GetRowCount() - 1 ))
     {
-        // save changes made to edit-field
-        if( IsModified() )
-            SaveModified();
-
-        m_apDataBrowserModel->swapDataPointForAllSeries( nRowIdx - 1 );
-
-        // keep cursor in swapped row
-        if(( 0 < GetCurRow() ) && ( GetCurRow() <= GetRowCount() - 1 ))
-        {
-            Dispatch( BROWSER_CURSORUP );
-        }
-        RenewTable();
+        Dispatch( BROWSER_CURSORUP );
     }
+    RenewTable();
 }
 
 void DataBrowser::MoveDownRow()
 {
-     sal_Int32 nRowIdx = lcl_getRowInData( GetCurRow());
+    sal_Int32 nRowIdx = lcl_getRowInData( GetCurRow());
 
-     if( nRowIdx >= 0 &&
-        m_apDataBrowserModel.get())
+    if( !(nRowIdx >= 0 &&
+        m_apDataBrowserModel.get()))
+        return;
+
+    // save changes made to edit-field
+    if( IsModified() )
+        SaveModified();
+
+    m_apDataBrowserModel->swapDataPointForAllSeries( nRowIdx );
+
+    // keep cursor in swapped row
+    if( GetCurRow() < GetRowCount() - 1 )
     {
-        // save changes made to edit-field
-        if( IsModified() )
-            SaveModified();
-
-        m_apDataBrowserModel->swapDataPointForAllSeries( nRowIdx );
-
-        // keep cursor in swapped row
-        if( GetCurRow() < GetRowCount() - 1 )
-        {
-            Dispatch( BROWSER_CURSORDOWN );
-        }
-        RenewTable();
+        Dispatch( BROWSER_CURSORDOWN );
     }
+    RenewTable();
 }
 
 void DataBrowser::SetCursorMovedHdl( const Link<DataBrowser*,void>& rLink )
@@ -1385,21 +1385,21 @@ IMPL_LINK( DataBrowser, SeriesHeaderChanged, impl::SeriesHeaderEdit&, rEdit, voi
     Reference< chart2::XDataSeries > xSeries(
         m_apDataBrowserModel->getDataSeriesByColumn( rEdit.getStartColumn() - 1 ));
     Reference< chart2::data::XDataSource > xSource( xSeries, uno::UNO_QUERY );
-    if( xSource.is())
+    if( !xSource.is())
+        return;
+
+    Reference< chart2::XChartType > xChartType(
+        m_apDataBrowserModel->getHeaderForSeries( xSeries ).m_xChartType );
+    if( xChartType.is())
     {
-        Reference< chart2::XChartType > xChartType(
-            m_apDataBrowserModel->getHeaderForSeries( xSeries ).m_xChartType );
-        if( xChartType.is())
+        Reference< chart2::data::XLabeledDataSequence > xLabeledSeq(
+            DataSeriesHelper::getDataSequenceByRole( xSource, xChartType->getRoleOfSequenceForSeriesLabel()));
+        if( xLabeledSeq.is())
         {
-            Reference< chart2::data::XLabeledDataSequence > xLabeledSeq(
-                DataSeriesHelper::getDataSequenceByRole( xSource, xChartType->getRoleOfSequenceForSeriesLabel()));
-            if( xLabeledSeq.is())
-            {
-                Reference< container::XIndexReplace > xIndexReplace( xLabeledSeq->getLabel(), uno::UNO_QUERY );
-                if( xIndexReplace.is())
-                    xIndexReplace->replaceByIndex(
-                        0, uno::Any( rEdit.GetText()));
-            }
+            Reference< container::XIndexReplace > xIndexReplace( xLabeledSeq->getLabel(), uno::UNO_QUERY );
+            if( xIndexReplace.is())
+                xIndexReplace->replaceByIndex(
+                    0, uno::Any( rEdit.GetText()));
         }
     }
 }

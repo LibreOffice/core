@@ -903,25 +903,25 @@ void SAL_CALL ChartController::notifyClosing(
     //Listener should deregister himself and release all references to the closing object.
 
     TheModelRef aModelRef( m_aModel, m_aModelMutex);
-    if( impl_releaseThisModel( rSource.Source ) )
-    {
-        //--stop listening to the closing model
-        aModelRef->removeListener( this );
+    if( !impl_releaseThisModel( rSource.Source ) )
+        return;
 
-        // #i79087# If the model using this controller is closed, the frame is
-        // expected to be closed as well
-        Reference< util::XCloseable > xFrameCloseable( m_xFrame, uno::UNO_QUERY );
-        if( xFrameCloseable.is())
+    //--stop listening to the closing model
+    aModelRef->removeListener( this );
+
+    // #i79087# If the model using this controller is closed, the frame is
+    // expected to be closed as well
+    Reference< util::XCloseable > xFrameCloseable( m_xFrame, uno::UNO_QUERY );
+    if( xFrameCloseable.is())
+    {
+        try
         {
-            try
-            {
-                xFrameCloseable->close( false /* DeliverOwnership */ );
-                m_xFrame.clear();
-            }
-            catch( const util::CloseVetoException & )
-            {
-                // closing was vetoed
-            }
+            xFrameCloseable->close( false /* DeliverOwnership */ );
+            m_xFrame.clear();
+        }
+        catch( const util::CloseVetoException & )
+        {
+            // closing was vetoed
         }
     }
 }
@@ -1442,19 +1442,19 @@ void ChartController::NotifyUndoActionHdl( std::unique_ptr<SdrUndoAction> pUndoA
     ENSURE_OR_RETURN_VOID( pUndoAction, "invalid Undo action" );
 
     OUString aObjectCID = m_aSelection.getSelectedCID();
-    if ( aObjectCID.isEmpty() )
+    if ( !aObjectCID.isEmpty() )
+        return;
+
+    try
     {
-        try
-        {
-            const Reference< document::XUndoManagerSupplier > xSuppUndo( getModel(), uno::UNO_QUERY_THROW );
-            const Reference< document::XUndoManager > xUndoManager( xSuppUndo->getUndoManager(), uno::UNO_SET_THROW );
-            const Reference< document::XUndoAction > xAction( new impl::ShapeUndoElement( std::move(pUndoAction) ) );
-            xUndoManager->addUndoAction( xAction );
-        }
-        catch( const uno::Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("chart2");
-        }
+        const Reference< document::XUndoManagerSupplier > xSuppUndo( getModel(), uno::UNO_QUERY_THROW );
+        const Reference< document::XUndoManager > xUndoManager( xSuppUndo->getUndoManager(), uno::UNO_SET_THROW );
+        const Reference< document::XUndoAction > xAction( new impl::ShapeUndoElement( std::move(pUndoAction) ) );
+        xUndoManager->addUndoAction( xAction );
+    }
+    catch( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -1550,28 +1550,28 @@ void ChartController::impl_initializeAccessible()
 }
 void ChartController::impl_initializeAccessible( const uno::Reference< lang::XInitialization >& xInit )
 {
-    if(xInit.is())
-    {
-        uno::Sequence< uno::Any > aArguments(5);
-        aArguments[0] <<= uno::Reference<view::XSelectionSupplier>(this);
-        aArguments[1] <<= getModel();
-        aArguments[2] <<= m_xChartView;
-        uno::Reference< XAccessible > xParent;
-        {
-            SolarMutexGuard aGuard;
-            auto pChartWindow(GetChartWindow());
-            if( pChartWindow )
-            {
-                vcl::Window* pParentWin( pChartWindow->GetAccessibleParentWindow());
-                if( pParentWin )
-                    xParent.set( pParentWin->GetAccessible());
-            }
-        }
-        aArguments[3] <<= xParent;
-        aArguments[4] <<= m_xViewWindow;
+    if(!xInit.is())
+        return;
 
-        xInit->initialize(aArguments);
+    uno::Sequence< uno::Any > aArguments(5);
+    aArguments[0] <<= uno::Reference<view::XSelectionSupplier>(this);
+    aArguments[1] <<= getModel();
+    aArguments[2] <<= m_xChartView;
+    uno::Reference< XAccessible > xParent;
+    {
+        SolarMutexGuard aGuard;
+        auto pChartWindow(GetChartWindow());
+        if( pChartWindow )
+        {
+            vcl::Window* pParentWin( pChartWindow->GetAccessibleParentWindow());
+            if( pParentWin )
+                xParent.set( pParentWin->GetAccessible());
+        }
     }
+    aArguments[3] <<= xParent;
+    aArguments[4] <<= m_xViewWindow;
+
+    xInit->initialize(aArguments);
 }
 
 const o3tl::sorted_vector< OUString >& ChartController::impl_getAvailableCommands()

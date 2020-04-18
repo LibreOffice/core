@@ -531,27 +531,27 @@ void DiagramHelper::replaceCoordinateSystem(
 
     // update the coordinate-system container
     Reference< XCoordinateSystemContainer > xCont( xDiagram, uno::UNO_QUERY );
-    if( xCont.is())
+    if( !xCont.is())
+        return;
+
+    try
     {
-        try
-        {
-            Reference< chart2::data::XLabeledDataSequence > xCategories = DiagramHelper::getCategoriesFromDiagram( xDiagram );
+        Reference< chart2::data::XLabeledDataSequence > xCategories = DiagramHelper::getCategoriesFromDiagram( xDiagram );
 
-            // move chart types of xCooSysToReplace to xReplacement
-            Reference< XChartTypeContainer > xCTCntCooSys( xCooSysToReplace, uno::UNO_QUERY_THROW );
-            Reference< XChartTypeContainer > xCTCntReplacement( xReplacement, uno::UNO_QUERY_THROW );
-            xCTCntReplacement->setChartTypes( xCTCntCooSys->getChartTypes());
+        // move chart types of xCooSysToReplace to xReplacement
+        Reference< XChartTypeContainer > xCTCntCooSys( xCooSysToReplace, uno::UNO_QUERY_THROW );
+        Reference< XChartTypeContainer > xCTCntReplacement( xReplacement, uno::UNO_QUERY_THROW );
+        xCTCntReplacement->setChartTypes( xCTCntCooSys->getChartTypes());
 
-            xCont->removeCoordinateSystem( xCooSysToReplace );
-            xCont->addCoordinateSystem( xReplacement );
+        xCont->removeCoordinateSystem( xCooSysToReplace );
+        xCont->addCoordinateSystem( xReplacement );
 
-            if( xCategories.is() )
-                DiagramHelper::setCategoriesToDiagram( xCategories, xDiagram );
-        }
-        catch( const uno::Exception & )
-        {
-            DBG_UNHANDLED_EXCEPTION("chart2");
-        }
+        if( xCategories.is() )
+            DiagramHelper::setCategoriesToDiagram( xCategories, xDiagram );
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -923,25 +923,25 @@ static void lcl_generateAutomaticCategoriesFromChartType(
         return;
     OUString aMainSeq( xChartType->getRoleOfSequenceForSeriesLabel() );
     Reference< XDataSeriesContainer > xSeriesCnt( xChartType, uno::UNO_QUERY );
-    if( xSeriesCnt.is() )
+    if( !xSeriesCnt.is() )
+        return;
+
+    Sequence< Reference< XDataSeries > > aSeriesSeq( xSeriesCnt->getDataSeries() );
+    for( sal_Int32 nS = 0; nS < aSeriesSeq.getLength(); nS++ )
     {
-        Sequence< Reference< XDataSeries > > aSeriesSeq( xSeriesCnt->getDataSeries() );
-        for( sal_Int32 nS = 0; nS < aSeriesSeq.getLength(); nS++ )
-        {
-            Reference< data::XDataSource > xDataSource( aSeriesSeq[nS], uno::UNO_QUERY );
-            if( !xDataSource.is() )
-                continue;
-            Reference< chart2::data::XLabeledDataSequence > xLabeledSeq(
-                ::chart::DataSeriesHelper::getDataSequenceByRole( xDataSource, aMainSeq ));
-            if( !xLabeledSeq.is() )
-                continue;
-            Reference< chart2::data::XDataSequence > xValueSeq( xLabeledSeq->getValues() );
-            if( !xValueSeq.is() )
-                continue;
-            rRet = xValueSeq->generateLabel( chart2::data::LabelOrigin_LONG_SIDE );
-            if( rRet.hasElements() )
-                return;
-        }
+        Reference< data::XDataSource > xDataSource( aSeriesSeq[nS], uno::UNO_QUERY );
+        if( !xDataSource.is() )
+            continue;
+        Reference< chart2::data::XLabeledDataSequence > xLabeledSeq(
+            ::chart::DataSeriesHelper::getDataSequenceByRole( xDataSource, aMainSeq ));
+        if( !xLabeledSeq.is() )
+            continue;
+        Reference< chart2::data::XDataSequence > xValueSeq( xLabeledSeq->getValues() );
+        if( !xValueSeq.is() )
+            continue;
+        rRet = xValueSeq->generateLabel( chart2::data::LabelOrigin_LONG_SIDE );
+        if( rRet.hasElements() )
+            return;
     }
 }
 

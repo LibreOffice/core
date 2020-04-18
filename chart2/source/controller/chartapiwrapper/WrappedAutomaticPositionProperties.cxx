@@ -54,25 +54,25 @@ WrappedAutomaticPositionProperty::WrappedAutomaticPositionProperty()
 
 void WrappedAutomaticPositionProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
 {
-    if( xInnerPropertySet.is() )
-    {
-        bool bNewValue = true;
-        if( ! (rOuterValue >>= bNewValue) )
-            throw lang::IllegalArgumentException( "Property AutomaticPosition requires value of type boolean", nullptr, 0 );
+    if( !xInnerPropertySet.is() )
+        return;
 
-        try
+    bool bNewValue = true;
+    if( ! (rOuterValue >>= bNewValue) )
+        throw lang::IllegalArgumentException( "Property AutomaticPosition requires value of type boolean", nullptr, 0 );
+
+    try
+    {
+        if( bNewValue )
         {
-            if( bNewValue )
-            {
-                Any aRelativePosition( xInnerPropertySet->getPropertyValue( "RelativePosition" ) );
-                if( aRelativePosition.hasValue() )
-                    xInnerPropertySet->setPropertyValue( "RelativePosition", Any() );
-            }
+            Any aRelativePosition( xInnerPropertySet->getPropertyValue( "RelativePosition" ) );
+            if( aRelativePosition.hasValue() )
+                xInnerPropertySet->setPropertyValue( "RelativePosition", Any() );
         }
-        catch( const uno::Exception & )
-        {
-            DBG_UNHANDLED_EXCEPTION("chart2");
-        }
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 

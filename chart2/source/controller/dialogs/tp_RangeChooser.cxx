@@ -201,49 +201,49 @@ void RangeChooserTabPage::changeDialogModelAccordingToControls()
         }
     }
 
-    if( m_bIsDirty )
+    if( !m_bIsDirty )
+        return;
+
+    bool bFirstCellAsLabel = ( m_xCB_FirstColumnAsLabel->get_active() && !m_xRB_Columns->get_active() )
+        || ( m_xCB_FirstRowAsLabel->get_active()    && !m_xRB_Rows->get_active() );
+    bool bHasCategories = ( m_xCB_FirstColumnAsLabel->get_active() && m_xRB_Columns->get_active() )
+        || ( m_xCB_FirstRowAsLabel->get_active()    && m_xRB_Rows->get_active() );
+    bool bTimeBased = m_xCB_TimeBased->get_active();
+
+    Sequence< beans::PropertyValue > aArguments(
+        DataSourceHelper::createArguments(
+            m_xRB_Columns->get_active(), bFirstCellAsLabel, bHasCategories ) );
+
+    if(bTimeBased)
     {
-        bool bFirstCellAsLabel = ( m_xCB_FirstColumnAsLabel->get_active() && !m_xRB_Columns->get_active() )
-            || ( m_xCB_FirstRowAsLabel->get_active()    && !m_xRB_Rows->get_active() );
-        bool bHasCategories = ( m_xCB_FirstColumnAsLabel->get_active() && m_xRB_Columns->get_active() )
-            || ( m_xCB_FirstRowAsLabel->get_active()    && m_xRB_Rows->get_active() );
-        bool bTimeBased = m_xCB_TimeBased->get_active();
-
-        Sequence< beans::PropertyValue > aArguments(
-            DataSourceHelper::createArguments(
-                m_xRB_Columns->get_active(), bFirstCellAsLabel, bHasCategories ) );
-
-        if(bTimeBased)
-        {
-            aArguments.realloc( aArguments.getLength() + 1 );
-            aArguments[aArguments.getLength() - 1] =
-                beans::PropertyValue( "TimeBased", -1, uno::Any(bTimeBased),
-                        beans::PropertyState_DIRECT_VALUE );
-        }
-
-        // only if range is valid
-        if( m_aLastValidRangeString == m_xED_Range->get_text())
-        {
-            m_rDialogModel.setTemplate( m_xCurrentChartTypeTemplate );
-            aArguments.realloc( aArguments.getLength() + 1 );
-            aArguments[aArguments.getLength() - 1] =
-                beans::PropertyValue( "CellRangeRepresentation" , -1,
-                                      uno::Any( m_aLastValidRangeString ),
-                                      beans::PropertyState_DIRECT_VALUE );
-            m_rDialogModel.setData( aArguments );
-            m_bIsDirty = false;
-
-            if(bTimeBased)
-            {
-                sal_Int32 nStart = m_xEd_TimeStart->get_text().toInt32();
-                sal_Int32 nEnd = m_xEd_TimeEnd->get_text().toInt32();
-                m_rDialogModel.setTimeBasedRange(true, nStart, nEnd);
-            }
-        }
-
-        //@todo warn user that the selected range is not valid
-        //@todo better: disable OK-Button if range is invalid
+        aArguments.realloc( aArguments.getLength() + 1 );
+        aArguments[aArguments.getLength() - 1] =
+            beans::PropertyValue( "TimeBased", -1, uno::Any(bTimeBased),
+                    beans::PropertyState_DIRECT_VALUE );
     }
+
+    // only if range is valid
+    if( m_aLastValidRangeString != m_xED_Range->get_text())
+        return;
+
+    m_rDialogModel.setTemplate( m_xCurrentChartTypeTemplate );
+    aArguments.realloc( aArguments.getLength() + 1 );
+    aArguments[aArguments.getLength() - 1] =
+        beans::PropertyValue( "CellRangeRepresentation" , -1,
+                              uno::Any( m_aLastValidRangeString ),
+                              beans::PropertyState_DIRECT_VALUE );
+    m_rDialogModel.setData( aArguments );
+    m_bIsDirty = false;
+
+    if(bTimeBased)
+    {
+        sal_Int32 nStart = m_xEd_TimeStart->get_text().toInt32();
+        sal_Int32 nEnd = m_xEd_TimeEnd->get_text().toInt32();
+        m_rDialogModel.setTimeBasedRange(true, nStart, nEnd);
+    }
+
+    //@todo warn user that the selected range is not valid
+    //@todo better: disable OK-Button if range is invalid
 }
 
 bool RangeChooserTabPage::isValid()

@@ -79,28 +79,28 @@ void WrappedStockProperty::setPropertyValue( const css::uno::Any& rOuterValue, c
     Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
     Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
     sal_Int32 nDimension = ::chart::DiagramHelper::getDimension( xDiagram );
-    if( xChartDoc.is() && xDiagram.is() && nDimension==2 )
+    if( !(xChartDoc.is() && xDiagram.is() && nDimension==2) )
+        return;
+
+    Reference< lang::XMultiServiceFactory > xFactory( xChartDoc->getChartTypeManager(), uno::UNO_QUERY );
+    DiagramHelper::tTemplateWithServiceName aTemplateAndService =
+            DiagramHelper::getTemplateForDiagram( xDiagram, xFactory );
+
+    uno::Reference< chart2::XChartTypeTemplate > xTemplate =
+            getNewTemplate( bNewValue, aTemplateAndService.second, xFactory );
+
+    if(!xTemplate.is())
+        return;
+
+    try
     {
-        Reference< lang::XMultiServiceFactory > xFactory( xChartDoc->getChartTypeManager(), uno::UNO_QUERY );
-        DiagramHelper::tTemplateWithServiceName aTemplateAndService =
-                DiagramHelper::getTemplateForDiagram( xDiagram, xFactory );
-
-        uno::Reference< chart2::XChartTypeTemplate > xTemplate =
-                getNewTemplate( bNewValue, aTemplateAndService.second, xFactory );
-
-        if(xTemplate.is())
-        {
-            try
-            {
-                // locked controllers
-                ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
-                xTemplate->changeDiagram( xDiagram );
-            }
-            catch( const uno::Exception & )
-            {
-                DBG_UNHANDLED_EXCEPTION("chart2");
-            }
-        }
+        // locked controllers
+        ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
+        xTemplate->changeDiagram( xDiagram );
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 

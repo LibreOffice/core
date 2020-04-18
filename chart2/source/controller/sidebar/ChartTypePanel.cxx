@@ -405,34 +405,33 @@ void ChartTypePanel::selectMainType()
     }
 
     m_pCurrentMainType = getSelectedMainType();
-    if (m_pCurrentMainType)
+    if (!m_pCurrentMainType)
+        return;
+
+    showAllControls(*m_pCurrentMainType);
+
+    m_pCurrentMainType->adjustParameterToMainType(aParameter);
+    commitToModel(aParameter);
+    //detect the new ThreeDLookScheme
+    aParameter.eThreeDLookScheme
+        = ThreeDHelper::detectScheme(ChartModelHelper::findDiagram(m_xChartModel));
+    if (!aParameter.b3DLook && aParameter.eThreeDLookScheme != ThreeDLookScheme_Realistic)
+        aParameter.eThreeDLookScheme = ThreeDLookScheme_Realistic;
+
+    uno::Reference<css::chart2::XDiagram> xDiagram = ChartModelHelper::findDiagram(m_xChartModel);
+    try
     {
-        showAllControls(*m_pCurrentMainType);
-
-        m_pCurrentMainType->adjustParameterToMainType(aParameter);
-        commitToModel(aParameter);
-        //detect the new ThreeDLookScheme
-        aParameter.eThreeDLookScheme
-            = ThreeDHelper::detectScheme(ChartModelHelper::findDiagram(m_xChartModel));
-        if (!aParameter.b3DLook && aParameter.eThreeDLookScheme != ThreeDLookScheme_Realistic)
-            aParameter.eThreeDLookScheme = ThreeDLookScheme_Realistic;
-
-        uno::Reference<css::chart2::XDiagram> xDiagram
-            = ChartModelHelper::findDiagram(m_xChartModel);
-        try
-        {
-            uno::Reference<beans::XPropertySet> xPropSet(xDiagram, uno::UNO_QUERY_THROW);
-            xPropSet->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
-        }
-        catch (const uno::Exception&)
-        {
-            DBG_UNHANDLED_EXCEPTION("chart2");
-        }
-
-        fillAllControls(aParameter);
-        uno::Reference<beans::XPropertySet> xTemplateProps(getCurrentTemplate(), uno::UNO_QUERY);
-        m_pCurrentMainType->fillExtraControls(m_xChartModel, xTemplateProps);
+        uno::Reference<beans::XPropertySet> xPropSet(xDiagram, uno::UNO_QUERY_THROW);
+        xPropSet->getPropertyValue(CHART_UNONAME_SORT_BY_XVALUES) >>= aParameter.bSortByXValues;
     }
+    catch (const uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+
+    fillAllControls(aParameter);
+    uno::Reference<beans::XPropertySet> xTemplateProps(getCurrentTemplate(), uno::UNO_QUERY);
+    m_pCurrentMainType->fillExtraControls(m_xChartModel, xTemplateProps);
 }
 } // end of namespace ::chart::sidebar
 

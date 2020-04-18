@@ -62,29 +62,29 @@ void WrappedScaleTextProperty::setPropertyValue( const Any& rOuterValue, const R
 {
     static const char aRefSizeName[] = "ReferencePageSize";
 
-    if( xInnerPropertySet.is() )
-    {
-        bool bNewValue = false;
-        if( ! (rOuterValue >>= bNewValue) )
-        {
-            if( rOuterValue.hasValue() )
-                throw lang::IllegalArgumentException( "Property ScaleText requires value of type boolean", nullptr, 0 );
-        }
+    if( !xInnerPropertySet.is() )
+        return;
 
-        try
+    bool bNewValue = false;
+    if( ! (rOuterValue >>= bNewValue) )
+    {
+        if( rOuterValue.hasValue() )
+            throw lang::IllegalArgumentException( "Property ScaleText requires value of type boolean", nullptr, 0 );
+    }
+
+    try
+    {
+        if( bNewValue )
         {
-            if( bNewValue )
-            {
-                awt::Size aRefSize( m_spChart2ModelContact->GetPageSize() );
-                xInnerPropertySet->setPropertyValue( aRefSizeName, uno::Any( aRefSize ) );
-            }
-            else
-                xInnerPropertySet->setPropertyValue( aRefSizeName, Any() );
+            awt::Size aRefSize( m_spChart2ModelContact->GetPageSize() );
+            xInnerPropertySet->setPropertyValue( aRefSizeName, uno::Any( aRefSize ) );
         }
-        catch( const uno::Exception & )
-        {
-            DBG_UNHANDLED_EXCEPTION("chart2");
-        }
+        else
+            xInnerPropertySet->setPropertyValue( aRefSizeName, Any() );
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 

@@ -95,20 +95,22 @@ void AccessibleChartElement::InitTextEdit()
         }
     }
 
-    if( m_xTextHelper.is())
-        try
-        {
-            Reference< lang::XInitialization > xInit( m_xTextHelper, uno::UNO_QUERY_THROW );
-            Sequence< uno::Any > aArgs( 3 );
-            aArgs[0] <<= GetInfo().m_aOID.getObjectCID();
-            aArgs[1] <<= Reference< XAccessible >( this );
-            aArgs[2] <<= Reference< awt::XWindow >( GetInfo().m_xWindow );
-            xInit->initialize( aArgs );
-        }
-        catch( const uno::Exception & )
-        {
-            DBG_UNHANDLED_EXCEPTION("chart2");
-        }
+    if( !m_xTextHelper.is())
+        return;
+
+    try
+    {
+        Reference< lang::XInitialization > xInit( m_xTextHelper, uno::UNO_QUERY_THROW );
+        Sequence< uno::Any > aArgs( 3 );
+        aArgs[0] <<= GetInfo().m_aOID.getObjectCID();
+        aArgs[1] <<= Reference< XAccessible >( this );
+        aArgs[2] <<= Reference< awt::XWindow >( GetInfo().m_xWindow );
+        xInit->initialize( aArgs );
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
 }
 
 //             Interfaces

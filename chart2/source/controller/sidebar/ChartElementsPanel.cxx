@@ -175,21 +175,21 @@ bool isGridVisible(const css::uno::Reference<css::frame::XModel>& xModel, GridTy
 void setGridVisible(const css::uno::Reference<css::frame::XModel>& xModel, GridType eType, bool bVisible)
 {
     Reference< chart2::XDiagram > xDiagram(ChartModelHelper::findDiagram(xModel));
-    if(xDiagram.is())
-    {
-        sal_Int32 nDimensionIndex = 0;
-        if (eType == GridType::HOR_MAJOR || eType == GridType::HOR_MINOR)
-            nDimensionIndex = 1;
-        sal_Int32 nCooSysIndex = 0;
+    if(!xDiagram.is())
+        return;
 
-        bool bMajor = (eType == GridType::HOR_MAJOR || eType == GridType::VERT_MAJOR);
+    sal_Int32 nDimensionIndex = 0;
+    if (eType == GridType::HOR_MAJOR || eType == GridType::HOR_MINOR)
+        nDimensionIndex = 1;
+    sal_Int32 nCooSysIndex = 0;
 
-        if (bVisible)
-            AxisHelper::showGrid(nDimensionIndex, nCooSysIndex, bMajor,
-                    xDiagram);
-        else
-            AxisHelper::hideGrid(nDimensionIndex, nCooSysIndex, bMajor, xDiagram);
-    }
+    bool bMajor = (eType == GridType::HOR_MAJOR || eType == GridType::VERT_MAJOR);
+
+    if (bVisible)
+        AxisHelper::showGrid(nDimensionIndex, nCooSysIndex, bMajor,
+                xDiagram);
+    else
+        AxisHelper::hideGrid(nDimensionIndex, nCooSysIndex, bMajor, xDiagram);
 }
 
 bool isAxisVisible(const css::uno::Reference<css::frame::XModel>& xModel, AxisType eType)
@@ -214,21 +214,21 @@ bool isAxisVisible(const css::uno::Reference<css::frame::XModel>& xModel, AxisTy
 void setAxisVisible(const css::uno::Reference<css::frame::XModel>& xModel, AxisType eType, bool bVisible)
 {
     Reference< chart2::XDiagram > xDiagram(ChartModelHelper::findDiagram(xModel));
-    if(xDiagram.is())
-    {
-        sal_Int32 nDimensionIndex = 0;
-        if (eType == AxisType::Y_MAIN || eType == AxisType::Y_SECOND)
-            nDimensionIndex = 1;
-        else if (eType == AxisType::Z_MAIN)
-            nDimensionIndex = 2;
+    if(!xDiagram.is())
+        return;
 
-        bool bMajor = !(eType == AxisType::X_SECOND || eType == AxisType::Y_SECOND);
+    sal_Int32 nDimensionIndex = 0;
+    if (eType == AxisType::Y_MAIN || eType == AxisType::Y_SECOND)
+        nDimensionIndex = 1;
+    else if (eType == AxisType::Z_MAIN)
+        nDimensionIndex = 2;
 
-        if (bVisible)
-            AxisHelper::showAxis(nDimensionIndex, bMajor, xDiagram, comphelper::getProcessComponentContext());
-        else
-            AxisHelper::hideAxis(nDimensionIndex, bMajor, xDiagram);
-    }
+    bool bMajor = !(eType == AxisType::X_SECOND || eType == AxisType::Y_SECOND);
+
+    if (bVisible)
+        AxisHelper::showAxis(nDimensionIndex, bMajor, xDiagram, comphelper::getProcessComponentContext());
+    else
+        AxisHelper::hideAxis(nDimensionIndex, bMajor, xDiagram);
 }
 
 sal_Int32 getLegendPos(const css::uno::Reference<css::frame::XModel>& xModel)

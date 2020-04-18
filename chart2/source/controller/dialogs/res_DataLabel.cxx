@@ -196,21 +196,21 @@ IMPL_LINK(DataLabelResources, NumberFormatDialogHdl, weld::Button&, rButton, voi
     NumberFormatDialog aDlg(m_pWindow, aNumberSet);
     if( bPercent )
         aDlg.set_title(m_xFT_NumberFormatForPercent->get_label());
-    if (aDlg.run() == RET_OK)
+    if (aDlg.run() != RET_OK)
+        return;
+
+    const SfxItemSet* pResult = aDlg.GetOutputItemSet();
+    if( pResult )
     {
-        const SfxItemSet* pResult = aDlg.GetOutputItemSet();
-        if( pResult )
-        {
-            bool bOldSource = rUseSourceFormat;
-            sal_uLong nOldFormat = rnFormatKey;
-            bool bOldMixedState = rbMixedState || rbSourceMixedState;
+        bool bOldSource = rUseSourceFormat;
+        sal_uLong nOldFormat = rnFormatKey;
+        bool bOldMixedState = rbMixedState || rbSourceMixedState;
 
-            rbMixedState = !lcl_ReadNumberFormatFromItemSet( *pResult, SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_SOURCE, rnFormatKey, rUseSourceFormat, rbSourceMixedState );
+        rbMixedState = !lcl_ReadNumberFormatFromItemSet( *pResult, SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_SOURCE, rnFormatKey, rUseSourceFormat, rbSourceMixedState );
 
-            //todo this maybe can be removed when the numberformatter dialog does handle mixed state for source format correctly
-            if( bOldMixedState && bOldSource == rUseSourceFormat && nOldFormat == rnFormatKey )
-                rbMixedState = rbSourceMixedState = true;
-        }
+        //todo this maybe can be removed when the numberformatter dialog does handle mixed state for source format correctly
+        if( bOldMixedState && bOldSource == rUseSourceFormat && nOldFormat == rnFormatKey )
+            rbMixedState = rbSourceMixedState = true;
     }
 }
 

@@ -84,25 +84,25 @@ bool DragMethod_PieSegment::BeginSdrDrag()
 }
 void DragMethod_PieSegment::MoveSdrDrag(const Point& rPnt)
 {
-    if( DragStat().CheckMinMoved(rPnt) )
+    if( !DragStat().CheckMinMoved(rPnt) )
+        return;
+
+    //calculate new offset
+    B2DVector aShiftVector( B2DVector( rPnt.X(), rPnt.Y() ) - m_aStartVector );
+    m_fAdditionalOffset = m_aDragDirection.scalar( aShiftVector )/m_fDragRange; // projection
+
+    if( m_fAdditionalOffset < -m_fInitialOffset )
+        m_fAdditionalOffset = -m_fInitialOffset;
+    else if( m_fAdditionalOffset > (1.0-m_fInitialOffset) )
+        m_fAdditionalOffset = 1.0 - m_fInitialOffset;
+
+    B2DVector aNewPosVector = m_aStartVector + (m_aDragDirection * m_fAdditionalOffset);
+    Point aNewPos( static_cast<long>(aNewPosVector.getX()), static_cast<long>(aNewPosVector.getY()) );
+    if( aNewPos != DragStat().GetNow() )
     {
-        //calculate new offset
-        B2DVector aShiftVector( B2DVector( rPnt.X(), rPnt.Y() ) - m_aStartVector );
-        m_fAdditionalOffset = m_aDragDirection.scalar( aShiftVector )/m_fDragRange; // projection
-
-        if( m_fAdditionalOffset < -m_fInitialOffset )
-            m_fAdditionalOffset = -m_fInitialOffset;
-        else if( m_fAdditionalOffset > (1.0-m_fInitialOffset) )
-            m_fAdditionalOffset = 1.0 - m_fInitialOffset;
-
-        B2DVector aNewPosVector = m_aStartVector + (m_aDragDirection * m_fAdditionalOffset);
-        Point aNewPos( static_cast<long>(aNewPosVector.getX()), static_cast<long>(aNewPosVector.getY()) );
-        if( aNewPos != DragStat().GetNow() )
-        {
-            Hide();
-            DragStat().NextMove( aNewPos );
-            Show();
-        }
+        Hide();
+        DragStat().NextMove( aNewPos );
+        Show();
     }
 }
 bool DragMethod_PieSegment::EndSdrDrag(bool /*bCopy*/)

@@ -79,26 +79,26 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
                     , true //bDontDeleteOutliner
                     , true //bOnlyOneView
                     );
-    if(bEdit)
+    if(!bEdit)
+        return;
+
+    m_pDrawViewWrapper->SetEditMode();
+
+    // #i12587# support for shapes in chart
+    if ( pMousePixel )
     {
-        m_pDrawViewWrapper->SetEditMode();
-
-        // #i12587# support for shapes in chart
-        if ( pMousePixel )
+        OutlinerView* pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
+        if ( pOutlinerView )
         {
-            OutlinerView* pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
-            if ( pOutlinerView )
-            {
-                MouseEvent aEditEvt( *pMousePixel, 1, MouseEventModifiers::SYNTHETIC, MOUSE_LEFT, 0 );
-                pOutlinerView->MouseButtonDown( aEditEvt );
-                pOutlinerView->MouseButtonUp( aEditEvt );
-            }
+            MouseEvent aEditEvt( *pMousePixel, 1, MouseEventModifiers::SYNTHETIC, MOUSE_LEFT, 0 );
+            pOutlinerView->MouseButtonDown( aEditEvt );
+            pOutlinerView->MouseButtonUp( aEditEvt );
         }
-
-        //we invalidate the outliner region because the outliner has some
-        //paint problems (some characters are painted twice a little bit shifted)
-        GetChartWindow()->Invalidate( m_pDrawViewWrapper->GetMarkedObjBoundRect() );
     }
+
+    //we invalidate the outliner region because the outliner has some
+    //paint problems (some characters are painted twice a little bit shifted)
+    GetChartWindow()->Invalidate( m_pDrawViewWrapper->GetMarkedObjBoundRect() );
 }
 
 bool ChartController::EndTextEdit()
@@ -168,42 +168,42 @@ void ChartController::executeDispatch_InsertSpecialCharacter()
     aSet.Put( SvxFontItem( aCurFont.GetFamilyType(), aCurFont.GetFamilyName(), aCurFont.GetStyleName(), aCurFont.GetPitch(), aCurFont.GetCharSet(), SID_ATTR_CHAR_FONT ) );
 
     ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(GetChartFrame(), aSet, nullptr));
-    if( pDlg->Execute() == RET_OK )
-    {
-        const SfxItemSet* pSet = pDlg->GetOutputItemSet();
-        const SfxPoolItem* pItem=nullptr;
-        OUString aString;
-        if (pSet && pSet->GetItemState(SID_CHARMAP, true, &pItem) == SfxItemState::SET)
-            if (auto pStringItem = dynamic_cast<const SfxStringItem*>(pItem))
-                aString = pStringItem->GetValue();
+    if( pDlg->Execute() != RET_OK )
+        return;
 
-        OutlinerView* pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
-        SdrOutliner*  pOutliner = m_pDrawViewWrapper->getOutliner();
+    const SfxItemSet* pSet = pDlg->GetOutputItemSet();
+    const SfxPoolItem* pItem=nullptr;
+    OUString aString;
+    if (pSet && pSet->GetItemState(SID_CHARMAP, true, &pItem) == SfxItemState::SET)
+        if (auto pStringItem = dynamic_cast<const SfxStringItem*>(pItem))
+            aString = pStringItem->GetValue();
 
-        if(!pOutliner || !pOutlinerView)
-            return;
+    OutlinerView* pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
+    SdrOutliner*  pOutliner = m_pDrawViewWrapper->getOutliner();
 
-        // insert string to outliner
+    if(!pOutliner || !pOutlinerView)
+        return;
 
-        // prevent flicker
-        pOutlinerView->HideCursor();
-        pOutliner->SetUpdateMode(false);
+    // insert string to outliner
 
-        // delete current selection by inserting empty String, so current
-        // attributes become unique (sel. has to be erased anyway)
-        pOutlinerView->InsertText(OUString());
+    // prevent flicker
+    pOutlinerView->HideCursor();
+    pOutliner->SetUpdateMode(false);
 
-        pOutlinerView->InsertText(aString, true);
+    // delete current selection by inserting empty String, so current
+    // attributes become unique (sel. has to be erased anyway)
+    pOutlinerView->InsertText(OUString());
 
-        ESelection aSel = pOutlinerView->GetSelection();
-        aSel.nStartPara = aSel.nEndPara;
-        aSel.nStartPos = aSel.nEndPos;
-        pOutlinerView->SetSelection(aSel);
+    pOutlinerView->InsertText(aString, true);
 
-        // show changes
-        pOutliner->SetUpdateMode(true);
-        pOutlinerView->ShowCursor();
-    }
+    ESelection aSel = pOutlinerView->GetSelection();
+    aSel.nStartPara = aSel.nEndPara;
+    aSel.nStartPos = aSel.nEndPos;
+    pOutlinerView->SetSelection(aSel);
+
+    // show changes
+    pOutliner->SetUpdateMode(true);
+    pOutlinerView->ShowCursor();
 }
 
 uno::Reference< css::accessibility::XAccessibleContext >

@@ -673,24 +673,24 @@ void SAL_CALL DiagramWrapper::setPosition( const awt::Point& aPosition )
 {
     ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
     Reference< beans::XPropertySet > xProp( getInnerPropertySet() );
-    if( xProp.is() )
-    {
-        awt::Size aPageSize( m_spChart2ModelContact->GetPageSize() );
+    if( !xProp.is() )
+        return;
 
-        chart2::RelativePosition aRelativePosition;
-        aRelativePosition.Anchor = drawing::Alignment_TOP_LEFT;
-        aRelativePosition.Primary = double(aPosition.X)/double(aPageSize.Width);
-        aRelativePosition.Secondary = double(aPosition.Y)/double(aPageSize.Height);
-        if( aRelativePosition.Primary < 0 || aRelativePosition.Secondary < 0 || aRelativePosition.Primary > 1 || aRelativePosition.Secondary > 1 )
-        {
-            OSL_FAIL("DiagramWrapper::setPosition called with a position out of range -> automatic values are taken instead" );
-            uno::Any aEmpty;
-            xProp->setPropertyValue( "RelativePosition", aEmpty );
-            return;
-        }
-        xProp->setPropertyValue( "RelativePosition", uno::Any(aRelativePosition) );
-        xProp->setPropertyValue( "PosSizeExcludeAxes", uno::Any(false) );
+    awt::Size aPageSize( m_spChart2ModelContact->GetPageSize() );
+
+    chart2::RelativePosition aRelativePosition;
+    aRelativePosition.Anchor = drawing::Alignment_TOP_LEFT;
+    aRelativePosition.Primary = double(aPosition.X)/double(aPageSize.Width);
+    aRelativePosition.Secondary = double(aPosition.Y)/double(aPageSize.Height);
+    if( aRelativePosition.Primary < 0 || aRelativePosition.Secondary < 0 || aRelativePosition.Primary > 1 || aRelativePosition.Secondary > 1 )
+    {
+        OSL_FAIL("DiagramWrapper::setPosition called with a position out of range -> automatic values are taken instead" );
+        uno::Any aEmpty;
+        xProp->setPropertyValue( "RelativePosition", aEmpty );
+        return;
     }
+    xProp->setPropertyValue( "RelativePosition", uno::Any(aRelativePosition) );
+    xProp->setPropertyValue( "PosSizeExcludeAxes", uno::Any(false) );
 }
 
 awt::Size SAL_CALL DiagramWrapper::getSize()
@@ -703,25 +703,25 @@ void SAL_CALL DiagramWrapper::setSize( const awt::Size& aSize )
 {
     ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
     Reference< beans::XPropertySet > xProp( getInnerPropertySet() );
-    if( xProp.is() )
+    if( !xProp.is() )
+        return;
+
+    awt::Size aPageSize( m_spChart2ModelContact->GetPageSize() );
+
+    chart2::RelativeSize aRelativeSize;
+    aRelativeSize.Primary = double(aSize.Width)/double(aPageSize.Width);
+    aRelativeSize.Secondary = double(aSize.Height)/double(aPageSize.Height);
+
+    if( aRelativeSize.Primary > 1 || aRelativeSize.Secondary > 1 )
     {
-        awt::Size aPageSize( m_spChart2ModelContact->GetPageSize() );
-
-        chart2::RelativeSize aRelativeSize;
-        aRelativeSize.Primary = double(aSize.Width)/double(aPageSize.Width);
-        aRelativeSize.Secondary = double(aSize.Height)/double(aPageSize.Height);
-
-        if( aRelativeSize.Primary > 1 || aRelativeSize.Secondary > 1 )
-        {
-            OSL_FAIL("DiagramWrapper::setSize called with sizes bigger than page -> automatic values are taken instead" );
-            uno::Any aEmpty;
-            xProp->setPropertyValue( "RelativeSize", aEmpty );
-            return;
-        }
-
-        xProp->setPropertyValue( "RelativeSize", uno::Any(aRelativeSize) );
-        xProp->setPropertyValue( "PosSizeExcludeAxes", uno::Any(false) );
+        OSL_FAIL("DiagramWrapper::setSize called with sizes bigger than page -> automatic values are taken instead" );
+        uno::Any aEmpty;
+        xProp->setPropertyValue( "RelativeSize", aEmpty );
+        return;
     }
+
+    xProp->setPropertyValue( "RelativeSize", uno::Any(aRelativeSize) );
+    xProp->setPropertyValue( "PosSizeExcludeAxes", uno::Any(false) );
 }
 
 // ____ XShapeDescriptor (base of XShape) ____
@@ -1501,58 +1501,58 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
     uno::Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
     Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
     sal_Int32 nDimension = ::chart::DiagramHelper::getDimension( xDiagram );
-    if( xChartDoc.is() && xDiagram.is() && nDimension == 2 )
+    if( !(xChartDoc.is() && xDiagram.is() && nDimension == 2) )
+        return;
+
+    Reference< lang::XMultiServiceFactory > xFact( xChartDoc->getChartTypeManager(), uno::UNO_QUERY );
+    DiagramHelper::tTemplateWithServiceName aTemplateAndService =
+            DiagramHelper::getTemplateForDiagram( xDiagram, xFact );
+
+    uno::Reference< chart2::XChartTypeTemplate > xTemplate;
+    if( aTemplateAndService.second == "com.sun.star.chart2.template.ColumnWithLine" )
     {
-        Reference< lang::XMultiServiceFactory > xFact( xChartDoc->getChartTypeManager(), uno::UNO_QUERY );
-        DiagramHelper::tTemplateWithServiceName aTemplateAndService =
-                DiagramHelper::getTemplateForDiagram( xDiagram, xFact );
-
-        uno::Reference< chart2::XChartTypeTemplate > xTemplate;
-        if( aTemplateAndService.second == "com.sun.star.chart2.template.ColumnWithLine" )
+        if( nNewValue != 0 )
         {
-            if( nNewValue != 0 )
-            {
-                xTemplate.set( aTemplateAndService.first );
-                try
-                {
-                    sal_Int32 nOldValue = 0;
-                    uno::Reference< beans::XPropertySet > xProp( xTemplate, uno::UNO_QUERY );
-                    xProp->getPropertyValue( m_aOuterName ) >>= nOldValue;
-                    if( nOldValue == nNewValue )
-                        return;
-                }
-                catch( const uno::Exception & )
-                {
-                    DBG_UNHANDLED_EXCEPTION("chart2");
-                }
-            }
-            else
-            {
-                xTemplate.set( xFact->createInstance("com.sun.star.chart2.template.Column"), uno::UNO_QUERY );
-            }
-        }
-        else if( aTemplateAndService.second == "com.sun.star.chart2.template.Column" )
-        {
-            if( nNewValue == 0 )
-                return;
-            xTemplate.set( xFact->createInstance( "com.sun.star.chart2.template.ColumnWithLine" ), uno::UNO_QUERY );
-        }
-
-        if(xTemplate.is())
-        {
+            xTemplate.set( aTemplateAndService.first );
             try
             {
-                // locked controllers
-                ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
+                sal_Int32 nOldValue = 0;
                 uno::Reference< beans::XPropertySet > xProp( xTemplate, uno::UNO_QUERY );
-                xProp->setPropertyValue( "NumberOfLines", uno::Any(nNewValue) );
-                xTemplate->changeDiagram( xDiagram );
+                xProp->getPropertyValue( m_aOuterName ) >>= nOldValue;
+                if( nOldValue == nNewValue )
+                    return;
             }
             catch( const uno::Exception & )
             {
                 DBG_UNHANDLED_EXCEPTION("chart2");
             }
         }
+        else
+        {
+            xTemplate.set( xFact->createInstance("com.sun.star.chart2.template.Column"), uno::UNO_QUERY );
+        }
+    }
+    else if( aTemplateAndService.second == "com.sun.star.chart2.template.Column" )
+    {
+        if( nNewValue == 0 )
+            return;
+        xTemplate.set( xFact->createInstance( "com.sun.star.chart2.template.ColumnWithLine" ), uno::UNO_QUERY );
+    }
+
+    if(!xTemplate.is())
+        return;
+
+    try
+    {
+        // locked controllers
+        ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
+        uno::Reference< beans::XPropertySet > xProp( xTemplate, uno::UNO_QUERY );
+        xProp->setPropertyValue( "NumberOfLines", uno::Any(nNewValue) );
+        xTemplate->changeDiagram( xDiagram );
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -1611,29 +1611,29 @@ void WrappedAttributedDataPointsProperty::setPropertyValue( const Any& rOuterVal
     Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
     Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY );
 
-    if( xDiagram.is() && xDiaProp.is())
+    if( !(xDiagram.is() && xDiaProp.is()))
+        return;
+
+    std::vector< Reference< chart2::XDataSeries > > aSeriesVector(
+        ::chart::DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
+    sal_Int32 i = 0;
+    for (auto const& series : aSeriesVector)
     {
-        std::vector< Reference< chart2::XDataSeries > > aSeriesVector(
-            ::chart::DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
-        sal_Int32 i = 0;
-        for (auto const& series : aSeriesVector)
+        Reference< beans::XPropertySet > xProp(series, uno::UNO_QUERY);
+        if( xProp.is())
         {
-            Reference< beans::XPropertySet > xProp(series, uno::UNO_QUERY);
-            if( xProp.is())
+            uno::Any aVal;
+            if( i < aNewValue.getLength() )
+                aVal <<= aNewValue[i];
+            else
             {
-                uno::Any aVal;
-                if( i < aNewValue.getLength() )
-                    aVal <<= aNewValue[i];
-                else
-                {
-                    //set empty sequence
-                    uno::Sequence< sal_Int32 > aSeq;
-                    aVal <<= aSeq;
-                }
-                xProp->setPropertyValue( "AttributedDataPoints", aVal );
+                //set empty sequence
+                uno::Sequence< sal_Int32 > aSeq;
+                aVal <<= aSeq;
             }
-            ++i;
+            xProp->setPropertyValue( "AttributedDataPoints", aVal );
         }
+        ++i;
     }
 }
 
@@ -1766,25 +1766,25 @@ WrappedAutomaticSizeProperty::WrappedAutomaticSizeProperty()
 
 void WrappedAutomaticSizeProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
 {
-    if( xInnerPropertySet.is() )
-    {
-        bool bNewValue = true;
-        if( ! (rOuterValue >>= bNewValue) )
-            throw lang::IllegalArgumentException( "Property AutomaticSize requires value of type boolean", nullptr, 0 );
+    if( !xInnerPropertySet.is() )
+        return;
 
-        try
+    bool bNewValue = true;
+    if( ! (rOuterValue >>= bNewValue) )
+        throw lang::IllegalArgumentException( "Property AutomaticSize requires value of type boolean", nullptr, 0 );
+
+    try
+    {
+        if( bNewValue )
         {
-            if( bNewValue )
-            {
-                Any aRelativeSize( xInnerPropertySet->getPropertyValue( "RelativeSize" ) );
-                if( aRelativeSize.hasValue() )
-                    xInnerPropertySet->setPropertyValue( "RelativeSize", Any() );
-            }
+            Any aRelativeSize( xInnerPropertySet->getPropertyValue( "RelativeSize" ) );
+            if( aRelativeSize.hasValue() )
+                xInnerPropertySet->setPropertyValue( "RelativeSize", Any() );
         }
-        catch( const uno::Exception & )
-        {
-            DBG_UNHANDLED_EXCEPTION("chart2");
-        }
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 

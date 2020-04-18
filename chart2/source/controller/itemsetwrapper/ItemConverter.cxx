@@ -49,18 +49,18 @@ ItemConverter::~ItemConverter()
 void ItemConverter::resetPropertySet(
     const uno::Reference< beans::XPropertySet > & xPropSet )
 {
-    if( xPropSet.is())
-    {
-        stopAllComponentListening();
-        m_xPropertySet = xPropSet;
-        m_xPropertySetInfo = m_xPropertySet->getPropertySetInfo();
+    if( !xPropSet.is())
+        return;
 
-        uno::Reference< lang::XComponent > xComp( m_xPropertySet, uno::UNO_QUERY );
-        if( xComp.is())
-        {
-            // method of base class ::utl::OEventListenerAdapter
-            startComponentListening( xComp );
-        }
+    stopAllComponentListening();
+    m_xPropertySet = xPropSet;
+    m_xPropertySetInfo = m_xPropertySet->getPropertySetInfo();
+
+    uno::Reference< lang::XComponent > xComp( m_xPropertySet, uno::UNO_QUERY );
+    if( xComp.is())
+    {
+        // method of base class ::utl::OEventListenerAdapter
+        startComponentListening( xComp );
     }
 }
 

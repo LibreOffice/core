@@ -522,21 +522,21 @@ void ChartController::executeDispatch_InsertTrendlineEquation( bool bInsertR2 )
             ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel() ), uno::UNO_QUERY );
         xRegCurve.set( RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCurveCnt ) );
     }
-    if( xRegCurve.is())
+    if( !xRegCurve.is())
+        return;
+
+    uno::Reference< beans::XPropertySet > xEqProp( xRegCurve->getEquationProperties());
+    if( xEqProp.is())
     {
-        uno::Reference< beans::XPropertySet > xEqProp( xRegCurve->getEquationProperties());
-        if( xEqProp.is())
-        {
-            UndoGuard aUndoGuard(
-                ActionDescriptionProvider::createDescription(
-                    ActionDescriptionProvider::ActionType::Insert, SchResId( STR_OBJECT_CURVE_EQUATION )),
-                m_xUndoManager );
-            xEqProp->setPropertyValue( "ShowEquation", uno::Any( true ));
-            xEqProp->setPropertyValue( "XName", uno::Any( OUString("x") ));
-            xEqProp->setPropertyValue( "YName", uno::Any( OUString("f(x)") ));
-            xEqProp->setPropertyValue( "ShowCorrelationCoefficient", uno::Any( bInsertR2 ));
-            aUndoGuard.commit();
-        }
+        UndoGuard aUndoGuard(
+            ActionDescriptionProvider::createDescription(
+                ActionDescriptionProvider::ActionType::Insert, SchResId( STR_OBJECT_CURVE_EQUATION )),
+            m_xUndoManager );
+        xEqProp->setPropertyValue( "ShowEquation", uno::Any( true ));
+        xEqProp->setPropertyValue( "XName", uno::Any( OUString("x") ));
+        xEqProp->setPropertyValue( "YName", uno::Any( OUString("f(x)") ));
+        xEqProp->setPropertyValue( "ShowCorrelationCoefficient", uno::Any( bInsertR2 ));
+        aUndoGuard.commit();
     }
 }
 
