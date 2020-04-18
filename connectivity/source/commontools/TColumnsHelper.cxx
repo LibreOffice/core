@@ -186,21 +186,21 @@ sdbcx::ObjectType OColumnsHelper::appendObject( const OUString& _rForName, const
 void OColumnsHelper::dropObject(sal_Int32 /*_nPos*/, const OUString& _sElementName)
 {
     OSL_ENSURE(m_pTable,"OColumnsHelper::dropByName: Table is null!");
-    if ( m_pTable && !m_pTable->isNew() )
-    {
-        Reference<XDatabaseMetaData> xMetaData = m_pTable->getConnection()->getMetaData();
-        OUString aQuote  = xMetaData->getIdentifierQuoteString(  );
-        OUString aSql = "ALTER TABLE " +
-            ::dbtools::composeTableName( xMetaData, m_pTable, ::dbtools::EComposeRule::InTableDefinitions, true ) +
-            " DROP " +
-            ::dbtools::quoteName( aQuote,_sElementName);
+    if ( !(m_pTable && !m_pTable->isNew()) )
+        return;
 
-        Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
-        if ( xStmt.is() )
-        {
-            xStmt->execute(aSql);
-            ::comphelper::disposeComponent(xStmt);
-        }
+    Reference<XDatabaseMetaData> xMetaData = m_pTable->getConnection()->getMetaData();
+    OUString aQuote  = xMetaData->getIdentifierQuoteString(  );
+    OUString aSql = "ALTER TABLE " +
+        ::dbtools::composeTableName( xMetaData, m_pTable, ::dbtools::EComposeRule::InTableDefinitions, true ) +
+        " DROP " +
+        ::dbtools::quoteName( aQuote,_sElementName);
+
+    Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
+    if ( xStmt.is() )
+    {
+        xStmt->execute(aSql);
+        ::comphelper::disposeComponent(xStmt);
     }
 }
 

@@ -101,22 +101,22 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stora
 #endif
     TStorages::mapped_type aStoragePair = StorageContainer::getRegisteredStorage(StorageContainer::jstring2ustring(env,key));
     auto storage = aStoragePair.mapStorage();
-    if ( storage.is() )
+    if ( !storage.is() )
+        return;
+
+    try
     {
-        try
-        {
-            storage->removeElement(StorageContainer::removeURLPrefix(StorageContainer::jstring2ustring(env,name),aStoragePair.url));
-        }
-        catch(const NoSuchElementException&)
-        {
-            if (env->ExceptionCheck())
-                env->ExceptionClear();
-        }
-        catch(const Exception& e)
-        {
-            TOOLS_WARN_EXCEPTION("connectivity.hsqldb", "");
-            StorageContainer::throwJavaException(e,env);
-        }
+        storage->removeElement(StorageContainer::removeURLPrefix(StorageContainer::jstring2ustring(env,name),aStoragePair.url));
+    }
+    catch(const NoSuchElementException&)
+    {
+        if (env->ExceptionCheck())
+            env->ExceptionClear();
+    }
+    catch(const Exception& e)
+    {
+        TOOLS_WARN_EXCEPTION("connectivity.hsqldb", "");
+        StorageContainer::throwJavaException(e,env);
     }
 }
 
@@ -138,29 +138,29 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stora
 #endif
     TStorages::mapped_type aStoragePair = StorageContainer::getRegisteredStorage(StorageContainer::jstring2ustring(env,key));
     auto storage = aStoragePair.mapStorage();
-    if ( storage.is() )
+    if ( !storage.is() )
+        return;
+
+    try
     {
-        try
-        {
-            storage->renameElement(
-                StorageContainer::removeURLPrefix(StorageContainer::jstring2ustring(env,oldname),aStoragePair.url),
-                StorageContainer::removeURLPrefix(StorageContainer::jstring2ustring(env,newname),aStoragePair.url)
-            );
+        storage->renameElement(
+            StorageContainer::removeURLPrefix(StorageContainer::jstring2ustring(env,oldname),aStoragePair.url),
+            StorageContainer::removeURLPrefix(StorageContainer::jstring2ustring(env,newname),aStoragePair.url)
+        );
 #ifdef HSQLDB_DBG
-            {
-                OUString sNewName = StorageContainer::removeURLPrefix(StorageContainer::jstring2ustring(env,newname),aStoragePair.first.second);
-                OSL_ENSURE(aStoragePair.first.first->isStreamElement(sNewName),"Stream could not be renamed");
-            }
+        {
+            OUString sNewName = StorageContainer::removeURLPrefix(StorageContainer::jstring2ustring(env,newname),aStoragePair.first.second);
+            OSL_ENSURE(aStoragePair.first.first->isStreamElement(sNewName),"Stream could not be renamed");
+        }
 #endif
-        }
-        catch(const NoSuchElementException&)
-        {
-        }
-        catch(const Exception& e)
-        {
-            OSL_FAIL("Exception caught! : Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_renameElement");
-            StorageContainer::throwJavaException(e,env);
-        }
+    }
+    catch(const NoSuchElementException&)
+    {
+    }
+    catch(const Exception& e)
+    {
+        OSL_FAIL("Exception caught! : Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_renameElement");
+        StorageContainer::throwJavaException(e,env);
     }
 }
 

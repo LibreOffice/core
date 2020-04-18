@@ -153,21 +153,21 @@ void Blob::closeBlob()
 {
     MutexGuard aGuard(m_aMutex);
 
-    if (m_bBlobOpened)
-    {
-        ISC_STATUS aErr;
-        aErr = isc_close_blob(m_statusVector,
-                              &m_blobHandle);
-        if (aErr)
-            evaluateStatusVector(m_statusVector, "isc_close_blob", *this);
+    if (!m_bBlobOpened)
+        return;
 
-        m_bBlobOpened = false;
+    ISC_STATUS aErr;
+    aErr = isc_close_blob(m_statusVector,
+                          &m_blobHandle);
+    if (aErr)
+        evaluateStatusVector(m_statusVector, "isc_close_blob", *this);
+
+    m_bBlobOpened = false;
 #if SAL_TYPES_SIZEOFPOINTER == 8
-        m_blobHandle = 0;
+    m_blobHandle = 0;
 #else
-        m_blobHandle = nullptr;
+    m_blobHandle = nullptr;
 #endif
-    }
 }
 
 void SAL_CALL Blob::disposing()

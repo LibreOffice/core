@@ -611,40 +611,40 @@ namespace connectivity
 
         Reference< XStorage> xStorage(aEvent.Source,UNO_QUERY);
         OUString sKey = StorageContainer::getRegisteredKey(xStorage);
-        if ( !sKey.isEmpty() )
+        if ( sKey.isEmpty() )
+            return;
+
+        TWeakPairVector::const_iterator i = std::find_if(m_aConnections.begin(), m_aConnections.end(),
+            [&sKey] (const TWeakPairVector::value_type& conn) {
+                return conn.second.first == sKey;
+            });
+
+        OSL_ENSURE( i != m_aConnections.end(), "ODriverDelegator::preCommit: they're committing a storage which I do not know!" );
+        if ( i == m_aConnections.end() )
+            return;
+
+        try
         {
-            TWeakPairVector::const_iterator i = std::find_if(m_aConnections.begin(), m_aConnections.end(),
-                [&sKey] (const TWeakPairVector::value_type& conn) {
-                    return conn.second.first == sKey;
-                });
-
-            OSL_ENSURE( i != m_aConnections.end(), "ODriverDelegator::preCommit: they're committing a storage which I do not know!" );
-            if ( i != m_aConnections.end() )
+            Reference<XConnection> xConnection(i->first,UNO_QUERY);
+            if ( xConnection.is() )
             {
-                try
-                {
-                    Reference<XConnection> xConnection(i->first,UNO_QUERY);
-                    if ( xConnection.is() )
-                    {
-                        Reference< XStatement> xStmt = xConnection->createStatement();
-                        OSL_ENSURE( xStmt.is(), "ODriverDelegator::preCommit: no statement!" );
-                        if ( xStmt.is() )
-                            xStmt->execute( "SET WRITE_DELAY 0" );
+                Reference< XStatement> xStmt = xConnection->createStatement();
+                OSL_ENSURE( xStmt.is(), "ODriverDelegator::preCommit: no statement!" );
+                if ( xStmt.is() )
+                    xStmt->execute( "SET WRITE_DELAY 0" );
 
-                        bool bPreviousAutoCommit = xConnection->getAutoCommit();
-                        xConnection->setAutoCommit( false );
-                        xConnection->commit();
-                        xConnection->setAutoCommit( bPreviousAutoCommit );
+                bool bPreviousAutoCommit = xConnection->getAutoCommit();
+                xConnection->setAutoCommit( false );
+                xConnection->commit();
+                xConnection->setAutoCommit( bPreviousAutoCommit );
 
-                        if ( xStmt.is() )
-                            xStmt->execute( "SET WRITE_DELAY 60" );
-                    }
-                }
-                catch(Exception&)
-                {
-                    TOOLS_WARN_EXCEPTION( "connectivity.hsqldb", "ODriverDelegator::preCommit" );
-                }
+                if ( xStmt.is() )
+                    xStmt->execute( "SET WRITE_DELAY 60" );
             }
+        }
+        catch(Exception&)
+        {
+            TOOLS_WARN_EXCEPTION( "connectivity.hsqldb", "ODriverDelegator::preCommit" );
         }
     }
 

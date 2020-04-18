@@ -130,29 +130,29 @@ ONDXPagePtr const & ODbaseIndex::getRoot()
 
 void ODbaseIndex::openIndexFile()
 {
+    if(m_pFileStream)
+        return;
+
+    OUString sFile = getCompletePath();
+    if(UCBContentHelper::Exists(sFile))
+    {
+        m_pFileStream = OFileTable::createStream_simpleError(sFile, StreamMode::READWRITE | StreamMode::NOCREATE | StreamMode::SHARE_DENYWRITE);
+        if (!m_pFileStream)
+            m_pFileStream = OFileTable::createStream_simpleError(sFile, StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYNONE);
+        if(m_pFileStream)
+        {
+            m_pFileStream->SetEndian(SvStreamEndian::LITTLE);
+            m_pFileStream->SetBufferSize(DINDEX_PAGE_SIZE);
+            (*m_pFileStream) >> *this;
+        }
+    }
     if(!m_pFileStream)
     {
-        OUString sFile = getCompletePath();
-        if(UCBContentHelper::Exists(sFile))
-        {
-            m_pFileStream = OFileTable::createStream_simpleError(sFile, StreamMode::READWRITE | StreamMode::NOCREATE | StreamMode::SHARE_DENYWRITE);
-            if (!m_pFileStream)
-                m_pFileStream = OFileTable::createStream_simpleError(sFile, StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYNONE);
-            if(m_pFileStream)
-            {
-                m_pFileStream->SetEndian(SvStreamEndian::LITTLE);
-                m_pFileStream->SetBufferSize(DINDEX_PAGE_SIZE);
-                (*m_pFileStream) >> *this;
-            }
-        }
-        if(!m_pFileStream)
-        {
-            const OUString sError( m_pTable->getConnection()->getResources().getResourceStringWithSubstitution(
-                STR_COULD_NOT_LOAD_FILE,
-                "$filename$", sFile
-             ) );
-            ::dbtools::throwGenericSQLException( sError, *this );
-        }
+        const OUString sError( m_pTable->getConnection()->getResources().getResourceStringWithSubstitution(
+            STR_COULD_NOT_LOAD_FILE,
+            "$filename$", sFile
+         ) );
+        ::dbtools::throwGenericSQLException( sError, *this );
     }
 }
 

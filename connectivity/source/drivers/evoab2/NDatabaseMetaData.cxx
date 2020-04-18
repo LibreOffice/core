@@ -90,53 +90,53 @@ namespace connectivity::evoab
     static void
     initFields()
     {
-        if( !pFields )
+        if( pFields )
+            return;
+
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if( pFields )
+            return;
+
+        guint        nProps;
+        ColumnProperty **pToBeFields;
+        GParamSpec **pProps;
+        nFields = 0;
+        pProps = g_object_class_list_properties
+            ( static_cast<GObjectClass *>(g_type_class_ref( E_TYPE_CONTACT )),
+                 &nProps );
+        pToBeFields = g_new0(ColumnProperty  *, (nProps + OTHER_ZIP)/* new column(s)*/ );
+        for ( guint i = 0; i < nProps; i++ )
         {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if( !pFields )
+            switch (pProps[i]->value_type)
             {
-                guint        nProps;
-                ColumnProperty **pToBeFields;
-                GParamSpec **pProps;
-                nFields = 0;
-                pProps = g_object_class_list_properties
-                    ( static_cast<GObjectClass *>(g_type_class_ref( E_TYPE_CONTACT )),
-                         &nProps );
-                pToBeFields = g_new0(ColumnProperty  *, (nProps + OTHER_ZIP)/* new column(s)*/ );
-                for ( guint i = 0; i < nProps; i++ )
+                case G_TYPE_STRING:
+                case G_TYPE_BOOLEAN:
                 {
-                    switch (pProps[i]->value_type)
+                    bool bAdd = true;
+                    const char *pName = g_param_spec_get_name( pProps[i] );
+                    for (unsigned int j = 0; j < G_N_ELEMENTS( pBlackList ); j++ )
                     {
-                        case G_TYPE_STRING:
-                        case G_TYPE_BOOLEAN:
+                        if( !strcmp( pBlackList[j], pName ) )
                         {
-                            bool bAdd = true;
-                            const char *pName = g_param_spec_get_name( pProps[i] );
-                            for (unsigned int j = 0; j < G_N_ELEMENTS( pBlackList ); j++ )
-                            {
-                                if( !strcmp( pBlackList[j], pName ) )
-                                {
-                                    bAdd = false;
-                                    break;
-                                }
-                            }
-                            if( bAdd )
-                            {
-                                pToBeFields[nFields]= g_new0(ColumnProperty,1);
-                                pToBeFields[nFields]->bIsSplittedValue=false;
-                                pToBeFields[ nFields++ ]->pField = g_param_spec_ref( pProps[i] );
-                            }
+                            bAdd = false;
                             break;
                         }
-                        default:
-                            break;
                     }
+                    if( bAdd )
+                    {
+                        pToBeFields[nFields]= g_new0(ColumnProperty,1);
+                        pToBeFields[nFields]->bIsSplittedValue=false;
+                        pToBeFields[ nFields++ ]->pField = g_param_spec_ref( pProps[i] );
+                    }
+                    break;
                 }
-
-                splitColumn(pToBeFields);
-                pFields = pToBeFields;
+                default:
+                    break;
             }
         }
+
+        splitColumn(pToBeFields);
+        pFields = pToBeFields;
     }
 
 

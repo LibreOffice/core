@@ -70,24 +70,24 @@ Table::Table(Tables* pTables,
 void Table::construct()
 {
     OTableHelper::construct();
-    if (!isNew())
-    {
-        // TODO: get privileges when in non-embedded mode.
-        m_nPrivileges = Privilege::DROP         |
-                        Privilege::REFERENCE    |
-                        Privilege::ALTER        |
-                        Privilege::CREATE       |
-                        Privilege::READ         |
-                        Privilege::DELETE       |
-                        Privilege::UPDATE       |
-                        Privilege::INSERT       |
-                        Privilege::SELECT;
-        registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRIVILEGES),
-                         PROPERTY_ID_PRIVILEGES,
-                         PropertyAttribute::READONLY,
-                         &m_nPrivileges,
-                         cppu::UnoType<decltype(m_nPrivileges)>::get());
-    }
+    if (isNew())
+        return;
+
+    // TODO: get privileges when in non-embedded mode.
+    m_nPrivileges = Privilege::DROP         |
+                    Privilege::REFERENCE    |
+                    Privilege::ALTER        |
+                    Privilege::CREATE       |
+                    Privilege::READ         |
+                    Privilege::DELETE       |
+                    Privilege::UPDATE       |
+                    Privilege::INSERT       |
+                    Privilege::SELECT;
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRIVILEGES),
+                     PROPERTY_ID_PRIVILEGES,
+                     PropertyAttribute::READONLY,
+                     &m_nPrivileges,
+                     cppu::UnoType<decltype(m_nPrivileges)>::get());
 }
 //----- OTableHelper ---------------------------------------------------------
 OCollection* Table::createColumns(const ::std::vector< OUString>& rNames)

@@ -261,21 +261,21 @@ java_sql_Connection::java_sql_Connection( const java_sql_Driver& _rDriver )
 java_sql_Connection::~java_sql_Connection()
 {
     ::rtl::Reference< jvmaccess::VirtualMachine > xTest = java_lang_Object::getVM();
-    if ( xTest.is() )
-    {
-        SDBThreadAttach t;
-        clearObject(*t.pEnv);
+    if ( !xTest.is() )
+        return;
 
-        {
-            if ( m_pDriverobject )
-                t.pEnv->DeleteGlobalRef( m_pDriverobject );
-            m_pDriverobject = nullptr;
-            if ( m_Driver_theClass )
-                t.pEnv->DeleteGlobalRef( m_Driver_theClass );
-            m_Driver_theClass = nullptr;
-        }
-        SDBThreadAttach::releaseRef();
+    SDBThreadAttach t;
+    clearObject(*t.pEnv);
+
+    {
+        if ( m_pDriverobject )
+            t.pEnv->DeleteGlobalRef( m_pDriverobject );
+        m_pDriverobject = nullptr;
+        if ( m_Driver_theClass )
+            t.pEnv->DeleteGlobalRef( m_Driver_theClass );
+        m_Driver_theClass = nullptr;
     }
+    SDBThreadAttach::releaseRef();
 }
 
 void java_sql_Connection::disposing()

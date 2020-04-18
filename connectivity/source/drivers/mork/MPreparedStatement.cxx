@@ -431,17 +431,17 @@ void OPreparedStatement::describeParameter()
 {
     std::vector< OSQLParseNode*> aParseNodes;
     scanParameter(m_pParseTree.get(), aParseNodes);
-    if(!aParseNodes.empty())
+    if(aParseNodes.empty())
+        return;
+
+    m_xParamColumns = new OSQLColumns();
+    const OSQLTables& rTabs = m_pSQLIterator->getTables();
+    if(!rTabs.empty())
     {
-        m_xParamColumns = new OSQLColumns();
-        const OSQLTables& rTabs = m_pSQLIterator->getTables();
-        if(!rTabs.empty())
+        OSQLTable xTable = rTabs.begin()->second;
+        for (auto const& parseNode : aParseNodes)
         {
-            OSQLTable xTable = rTabs.begin()->second;
-            for (auto const& parseNode : aParseNodes)
-            {
-                describeColumn(parseNode,parseNode->getParent()->getChild(0),xTable);
-            }
+            describeColumn(parseNode,parseNode->getParent()->getChild(0),xTable);
         }
     }
 }

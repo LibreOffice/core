@@ -80,19 +80,19 @@ void OViews::dropObject(sal_Int32 _nPos, const OUString& /*_sElementName*/)
 
     Reference<XInterface> xObject(getObject(_nPos));
     bool bIsNew = connectivity::sdbcx::ODescriptor::isNew(xObject);
-    if (!bIsNew)
-    {
-        OUString aSql("DROP VIEW");
+    if (bIsNew)
+        return;
 
-        Reference<XPropertySet> xProp(xObject, UNO_QUERY);
-        aSql += ::dbtools::composeTableName(m_xMetaData, xProp,
-                                            ::dbtools::EComposeRule::InTableDefinitions, true);
+    OUString aSql("DROP VIEW");
 
-        Reference<XConnection> xConnection = static_cast<OMySQLCatalog&>(m_rParent).getConnection();
-        Reference<XStatement> xStmt = xConnection->createStatement();
-        xStmt->execute(aSql);
-        ::comphelper::disposeComponent(xStmt);
-    }
+    Reference<XPropertySet> xProp(xObject, UNO_QUERY);
+    aSql += ::dbtools::composeTableName(m_xMetaData, xProp,
+                                        ::dbtools::EComposeRule::InTableDefinitions, true);
+
+    Reference<XConnection> xConnection = static_cast<OMySQLCatalog&>(m_rParent).getConnection();
+    Reference<XStatement> xStmt = xConnection->createStatement();
+    xStmt->execute(aSql);
+    ::comphelper::disposeComponent(xStmt);
 }
 
 void OViews::dropByNameImpl(const OUString& elementName)

@@ -482,63 +482,63 @@ void ODbaseTable::construct()
         m_pFileStream = createStream_simpleError( sFileName, StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYNONE);
     }
 
-    if(m_pFileStream)
+    if(!m_pFileStream)
+        return;
+
+    readHeader();
+    if (HasMemoFields())
     {
-        readHeader();
-        if (HasMemoFields())
+    // Create Memo-Filename (.DBT):
+    // nyi: Ugly for Unix and Mac!
+
+        if ( m_aHeader.type == FoxProMemo || m_aHeader.type == VisualFoxPro || m_aHeader.type == VisualFoxProAuto) // foxpro uses another extension
+            aURL.SetExtension("fpt");
+        else
+            aURL.SetExtension("dbt");
+
+        // If the memo file isn't found, the data will be displayed anyhow.
+        // However, updates can't be done
+        // but the operation is executed
+        m_pMemoStream = createStream_simpleError( aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::READWRITE | StreamMode::NOCREATE | StreamMode::SHARE_DENYWRITE);
+        if ( !m_pMemoStream )
         {
-        // Create Memo-Filename (.DBT):
-        // nyi: Ugly for Unix and Mac!
-
-            if ( m_aHeader.type == FoxProMemo || m_aHeader.type == VisualFoxPro || m_aHeader.type == VisualFoxProAuto) // foxpro uses another extension
-                aURL.SetExtension("fpt");
-            else
-                aURL.SetExtension("dbt");
-
-            // If the memo file isn't found, the data will be displayed anyhow.
-            // However, updates can't be done
-            // but the operation is executed
-            m_pMemoStream = createStream_simpleError( aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::READWRITE | StreamMode::NOCREATE | StreamMode::SHARE_DENYWRITE);
-            if ( !m_pMemoStream )
-            {
-                m_pMemoStream = createStream_simpleError( aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYNONE);
-            }
-            if (m_pMemoStream)
-                ReadMemoHeader();
+            m_pMemoStream = createStream_simpleError( aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYNONE);
         }
-        fillColumns();
+        if (m_pMemoStream)
+            ReadMemoHeader();
+    }
+    fillColumns();
 
-        std::size_t nFileSize = lcl_getFileSize(*m_pFileStream);
-        m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
-        // seems to be empty or someone wrote bullshit into the dbase file
-        // try and recover if m_aHeader.db_slng is sane
-        if (m_aHeader.nbRecords == 0 && m_aHeader.recordLength)
-        {
-            std::size_t nRecords = (nFileSize-m_aHeader.headerLength)/m_aHeader.recordLength;
-            if (nRecords > 0)
-                m_aHeader.nbRecords = nRecords;
-        }
+    std::size_t nFileSize = lcl_getFileSize(*m_pFileStream);
+    m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
+    // seems to be empty or someone wrote bullshit into the dbase file
+    // try and recover if m_aHeader.db_slng is sane
+    if (m_aHeader.nbRecords == 0 && m_aHeader.recordLength)
+    {
+        std::size_t nRecords = (nFileSize-m_aHeader.headerLength)/m_aHeader.recordLength;
+        if (nRecords > 0)
+            m_aHeader.nbRecords = nRecords;
+    }
+
+    // Buffersize dependent on the file size
+    m_pFileStream->SetBufferSize(nFileSize > 1000000 ? 32768 :
+                              nFileSize > 100000 ? 16384 :
+                              nFileSize > 10000 ? 4096 : 1024);
+
+    if (m_pMemoStream)
+    {
+        // set the buffer exactly to the length of a record
+        nFileSize = m_pMemoStream->TellEnd();
+        m_pMemoStream->Seek(STREAM_SEEK_TO_BEGIN);
 
         // Buffersize dependent on the file size
-        m_pFileStream->SetBufferSize(nFileSize > 1000000 ? 32768 :
-                                  nFileSize > 100000 ? 16384 :
-                                  nFileSize > 10000 ? 4096 : 1024);
-
-        if (m_pMemoStream)
-        {
-            // set the buffer exactly to the length of a record
-            nFileSize = m_pMemoStream->TellEnd();
-            m_pMemoStream->Seek(STREAM_SEEK_TO_BEGIN);
-
-            // Buffersize dependent on the file size
-            m_pMemoStream->SetBufferSize(nFileSize > 1000000 ? 32768 :
-                                          nFileSize > 100000 ? 16384 :
-                                          nFileSize > 10000 ? 4096 :
-                                          m_aMemoHeader.db_size);
-        }
-
-        AllocBuffer();
+        m_pMemoStream->SetBufferSize(nFileSize > 1000000 ? 32768 :
+                                      nFileSize > 100000 ? 16384 :
+                                      nFileSize > 10000 ? 4096 :
+                                      m_aMemoHeader.db_size);
     }
+
+    AllocBuffer();
 }
 
 void ODbaseTable::ReadMemoHeader()

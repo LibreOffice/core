@@ -207,19 +207,19 @@ void Tables::dropObject(sal_Int32 nPosition, const OUString& sName)
 {
     uno::Reference< XPropertySet > xTable(getObject(nPosition));
 
-    if (!ODescriptor::isNew(xTable))
-    {
-        OUStringBuffer sSql("DROP ");
+    if (ODescriptor::isNew(xTable))
+        return;
 
-        OUString sType;
-        xTable->getPropertyValue("Type") >>= sType;
-        sSql.append(sType);
+    OUStringBuffer sSql("DROP ");
 
-        const OUString sQuoteString = m_xMetaData->getIdentifierQuoteString();
-        sSql.append(::dbtools::quoteName(sQuoteString,sName));
+    OUString sType;
+    xTable->getPropertyValue("Type") >>= sType;
+    sSql.append(sType);
 
-        m_xMetaData->getConnection()->createStatement()->execute(sSql.makeStringAndClear());
-    }
+    const OUString sQuoteString = m_xMetaData->getIdentifierQuoteString();
+    sSql.append(::dbtools::quoteName(sQuoteString,sName));
+
+    m_xMetaData->getConnection()->createStatement()->execute(sSql.makeStringAndClear());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

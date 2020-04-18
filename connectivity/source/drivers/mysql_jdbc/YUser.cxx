@@ -121,79 +121,79 @@ void OMySQLUser::findPrivilegesAndGrantPrivileges(const OUString& objName, sal_I
         break;
     }
 
-    if (xRes.is())
+    if (!xRes.is())
+        return;
+
+    static const char sYes[] = "YES";
+
+    nRightsWithGrant = nRights = 0;
+
+    Reference<XRow> xCurrentRow(xRes, UNO_QUERY);
+    while (xCurrentRow.is() && xRes->next())
     {
-        static const char sYes[] = "YES";
+        OUString sGrantee = xCurrentRow->getString(5);
+        OUString sPrivilege = xCurrentRow->getString(6);
+        OUString sGrantable = xCurrentRow->getString(7);
 
-        nRightsWithGrant = nRights = 0;
+        if (!m_Name.equalsIgnoreAsciiCase(sGrantee))
+            continue;
 
-        Reference<XRow> xCurrentRow(xRes, UNO_QUERY);
-        while (xCurrentRow.is() && xRes->next())
+        if (sPrivilege.equalsIgnoreAsciiCase("SELECT"))
         {
-            OUString sGrantee = xCurrentRow->getString(5);
-            OUString sPrivilege = xCurrentRow->getString(6);
-            OUString sGrantable = xCurrentRow->getString(7);
-
-            if (!m_Name.equalsIgnoreAsciiCase(sGrantee))
-                continue;
-
-            if (sPrivilege.equalsIgnoreAsciiCase("SELECT"))
-            {
-                nRights |= Privilege::SELECT;
-                if (sGrantable.equalsIgnoreAsciiCase(sYes))
-                    nRightsWithGrant |= Privilege::SELECT;
-            }
-            else if (sPrivilege.equalsIgnoreAsciiCase("INSERT"))
-            {
-                nRights |= Privilege::INSERT;
-                if (sGrantable.equalsIgnoreAsciiCase(sYes))
-                    nRightsWithGrant |= Privilege::INSERT;
-            }
-            else if (sPrivilege.equalsIgnoreAsciiCase("UPDATE"))
-            {
-                nRights |= Privilege::UPDATE;
-                if (sGrantable.equalsIgnoreAsciiCase(sYes))
-                    nRightsWithGrant |= Privilege::UPDATE;
-            }
-            else if (sPrivilege.equalsIgnoreAsciiCase("DELETE"))
-            {
-                nRights |= Privilege::DELETE;
-                if (sGrantable.equalsIgnoreAsciiCase(sYes))
-                    nRightsWithGrant |= Privilege::DELETE;
-            }
-            else if (sPrivilege.equalsIgnoreAsciiCase("READ"))
-            {
-                nRights |= Privilege::READ;
-                if (sGrantable.equalsIgnoreAsciiCase(sYes))
-                    nRightsWithGrant |= Privilege::READ;
-            }
-            else if (sPrivilege.equalsIgnoreAsciiCase("CREATE"))
-            {
-                nRights |= Privilege::CREATE;
-                if (sGrantable.equalsIgnoreAsciiCase(sYes))
-                    nRightsWithGrant |= Privilege::CREATE;
-            }
-            else if (sPrivilege.equalsIgnoreAsciiCase("ALTER"))
-            {
-                nRights |= Privilege::ALTER;
-                if (sGrantable.equalsIgnoreAsciiCase(sYes))
-                    nRightsWithGrant |= Privilege::ALTER;
-            }
-            else if (sPrivilege.equalsIgnoreAsciiCase("REFERENCES"))
-            {
-                nRights |= Privilege::REFERENCE;
-                if (sGrantable.equalsIgnoreAsciiCase(sYes))
-                    nRightsWithGrant |= Privilege::REFERENCE;
-            }
-            else if (sPrivilege.equalsIgnoreAsciiCase("DROP"))
-            {
-                nRights |= Privilege::DROP;
-                if (sGrantable.equalsIgnoreAsciiCase(sYes))
-                    nRightsWithGrant |= Privilege::DROP;
-            }
+            nRights |= Privilege::SELECT;
+            if (sGrantable.equalsIgnoreAsciiCase(sYes))
+                nRightsWithGrant |= Privilege::SELECT;
         }
-        ::comphelper::disposeComponent(xRes);
+        else if (sPrivilege.equalsIgnoreAsciiCase("INSERT"))
+        {
+            nRights |= Privilege::INSERT;
+            if (sGrantable.equalsIgnoreAsciiCase(sYes))
+                nRightsWithGrant |= Privilege::INSERT;
+        }
+        else if (sPrivilege.equalsIgnoreAsciiCase("UPDATE"))
+        {
+            nRights |= Privilege::UPDATE;
+            if (sGrantable.equalsIgnoreAsciiCase(sYes))
+                nRightsWithGrant |= Privilege::UPDATE;
+        }
+        else if (sPrivilege.equalsIgnoreAsciiCase("DELETE"))
+        {
+            nRights |= Privilege::DELETE;
+            if (sGrantable.equalsIgnoreAsciiCase(sYes))
+                nRightsWithGrant |= Privilege::DELETE;
+        }
+        else if (sPrivilege.equalsIgnoreAsciiCase("READ"))
+        {
+            nRights |= Privilege::READ;
+            if (sGrantable.equalsIgnoreAsciiCase(sYes))
+                nRightsWithGrant |= Privilege::READ;
+        }
+        else if (sPrivilege.equalsIgnoreAsciiCase("CREATE"))
+        {
+            nRights |= Privilege::CREATE;
+            if (sGrantable.equalsIgnoreAsciiCase(sYes))
+                nRightsWithGrant |= Privilege::CREATE;
+        }
+        else if (sPrivilege.equalsIgnoreAsciiCase("ALTER"))
+        {
+            nRights |= Privilege::ALTER;
+            if (sGrantable.equalsIgnoreAsciiCase(sYes))
+                nRightsWithGrant |= Privilege::ALTER;
+        }
+        else if (sPrivilege.equalsIgnoreAsciiCase("REFERENCES"))
+        {
+            nRights |= Privilege::REFERENCE;
+            if (sGrantable.equalsIgnoreAsciiCase(sYes))
+                nRightsWithGrant |= Privilege::REFERENCE;
+        }
+        else if (sPrivilege.equalsIgnoreAsciiCase("DROP"))
+        {
+            nRights |= Privilege::DROP;
+            if (sGrantable.equalsIgnoreAsciiCase(sYes))
+                nRightsWithGrant |= Privilege::DROP;
+        }
     }
+    ::comphelper::disposeComponent(xRes);
 }
 
 sal_Int32 SAL_CALL OMySQLUser::getGrantablePrivileges(const OUString& objName, sal_Int32 objType)
@@ -219,19 +219,19 @@ void SAL_CALL OMySQLUser::grantPrivileges(const OUString& objName, sal_Int32 obj
     ::osl::MutexGuard aGuard(m_aMutex);
 
     OUString sPrivs = getPrivilegeString(objPrivileges);
-    if (!sPrivs.isEmpty())
-    {
-        Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
-        OUString sGrant = "GRANT " + sPrivs + " ON "
-                          + ::dbtools::quoteTableName(xMeta, objName,
-                                                      ::dbtools::EComposeRule::InDataManipulation)
-                          + " TO " + m_Name;
+    if (sPrivs.isEmpty())
+        return;
 
-        Reference<XStatement> xStmt = m_xConnection->createStatement();
-        if (xStmt.is())
-            xStmt->execute(sGrant);
-        ::comphelper::disposeComponent(xStmt);
-    }
+    Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
+    OUString sGrant
+        = "GRANT " + sPrivs + " ON "
+          + ::dbtools::quoteTableName(xMeta, objName, ::dbtools::EComposeRule::InDataManipulation)
+          + " TO " + m_Name;
+
+    Reference<XStatement> xStmt = m_xConnection->createStatement();
+    if (xStmt.is())
+        xStmt->execute(sGrant);
+    ::comphelper::disposeComponent(xStmt);
 }
 
 void SAL_CALL OMySQLUser::revokePrivileges(const OUString& objName, sal_Int32 objType,
@@ -247,19 +247,19 @@ void SAL_CALL OMySQLUser::revokePrivileges(const OUString& objName, sal_Int32 ob
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE_RBHELPER::rBHelper.bDisposed);
     OUString sPrivs = getPrivilegeString(objPrivileges);
-    if (!sPrivs.isEmpty())
-    {
-        Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
-        OUString sGrant = "REVOKE " + sPrivs + " ON "
-                          + ::dbtools::quoteTableName(xMeta, objName,
-                                                      ::dbtools::EComposeRule::InDataManipulation)
-                          + " FROM " + m_Name;
+    if (sPrivs.isEmpty())
+        return;
 
-        Reference<XStatement> xStmt = m_xConnection->createStatement();
-        if (xStmt.is())
-            xStmt->execute(sGrant);
-        ::comphelper::disposeComponent(xStmt);
-    }
+    Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
+    OUString sGrant
+        = "REVOKE " + sPrivs + " ON "
+          + ::dbtools::quoteTableName(xMeta, objName, ::dbtools::EComposeRule::InDataManipulation)
+          + " FROM " + m_Name;
+
+    Reference<XStatement> xStmt = m_xConnection->createStatement();
+    if (xStmt.is())
+        xStmt->execute(sGrant);
+    ::comphelper::disposeComponent(xStmt);
 }
 
 // XUser

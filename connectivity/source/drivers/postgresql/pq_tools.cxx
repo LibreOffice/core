@@ -1036,44 +1036,44 @@ void bufferKey2TableConstraint(
     }
     buf.append( ") " );
 
-    if( foreign )
-    {
-        buf.append( "REFERENCES " );
-        OUString schema;
-        OUString tableName;
-        splitConcatenatedIdentifier( referencedTable, &schema, &tableName );
-        bufferQuoteQualifiedIdentifier(buf , schema, tableName, settings );
-        if(columns.is() )
-        {
-            Reference< XEnumerationAccess > colEnumAccess( columns->getColumns(), UNO_QUERY);
-            if( colEnumAccess.is() )
-            {
-                buf.append( " (" );
-                Reference< XEnumeration > colEnum(colEnumAccess->createEnumeration());
-                bool first = true;
-                while(colEnum.is() && colEnum->hasMoreElements() )
-                {
-                    if( first )
-                    {
-                        first = false;
-                    }
-                    else
-                    {
-                        buf.append( ", " );
-                    }
-                    Reference< XPropertySet > keyColumn( colEnum->nextElement(), UNO_QUERY_THROW );
-                    bufferQuoteIdentifier(
-                                          buf, extractStringProperty( keyColumn, st.RELATED_COLUMN ), settings );
-                }
-                buf.append( ") " );
-            }
-        }
+    if( !foreign )
+        return;
 
-        buf.append( "ON DELETE " );
-        keyType2String( buf, deleteRule );
-        buf.append( " ON UPDATE " );
-        keyType2String( buf, updateRule );
+    buf.append( "REFERENCES " );
+    OUString schema;
+    OUString tableName;
+    splitConcatenatedIdentifier( referencedTable, &schema, &tableName );
+    bufferQuoteQualifiedIdentifier(buf , schema, tableName, settings );
+    if(columns.is() )
+    {
+        Reference< XEnumerationAccess > colEnumAccess( columns->getColumns(), UNO_QUERY);
+        if( colEnumAccess.is() )
+        {
+            buf.append( " (" );
+            Reference< XEnumeration > colEnum(colEnumAccess->createEnumeration());
+            bool first = true;
+            while(colEnum.is() && colEnum->hasMoreElements() )
+            {
+                if( first )
+                {
+                    first = false;
+                }
+                else
+                {
+                    buf.append( ", " );
+                }
+                Reference< XPropertySet > keyColumn( colEnum->nextElement(), UNO_QUERY_THROW );
+                bufferQuoteIdentifier(
+                                      buf, extractStringProperty( keyColumn, st.RELATED_COLUMN ), settings );
+            }
+            buf.append( ") " );
+        }
     }
+
+    buf.append( "ON DELETE " );
+    keyType2String( buf, deleteRule );
+    buf.append( " ON UPDATE " );
+    keyType2String( buf, updateRule );
 
 }
 
@@ -1084,57 +1084,57 @@ void extractNameValuePairsFromInsert( String2StringMap & map, const OString & la
 
     int nSize = vec.size();
 //     printf( "1 %d\n", nSize );
-    if( nSize > 6  &&
+    if( !(nSize > 6  &&
         vec[0].equalsIgnoreAsciiCase( "insert" ) &&
-        vec[1].equalsIgnoreAsciiCase( "into" ) )
-    {
-        int n = 2;
+        vec[1].equalsIgnoreAsciiCase( "into" )) )
+        return;
+
+    int n = 2;
 
 //         printf( "1a\n" );
-        // skip table name
-        if( vec[n+1].equalsIgnoreAsciiCase( "." ) )
-        {
-            n +=2;
-        }
+    // skip table name
+    if( vec[n+1].equalsIgnoreAsciiCase( "." ) )
+    {
+        n +=2;
+    }
 
-        n ++;
-        if( vec[n].equalsIgnoreAsciiCase( "(" ) )
-        {
-            std::vector< OString> names;
+    n ++;
+    if( !vec[n].equalsIgnoreAsciiCase( "(" ) )
+        return;
+
+    std::vector< OString> names;
 //             printf( "2\n" );
-            // extract names
-            n++;
-            while( nSize > n && ! vec[n].equalsIgnoreAsciiCase( ")" ) )
-            {
-                names.push_back( vec[n] );
-                if( nSize > n+1 && vec[n+1].equalsIgnoreAsciiCase( "," ) )
-                {
-                    n ++;
-                }
-                n++;
-            }
-            n++;
-
-            // now read the values
-            if( nSize > n +1 && vec[n].equalsIgnoreAsciiCase("VALUES") &&
-                vec[n+1].equalsIgnoreAsciiCase( "(" ) )
-            {
-                n +=2;
-//                 printf( "3\n" );
-                for (auto& name : names)
-                {
-                    if (n >= nSize)
-                        break;
-
-                    map[name] = vec[n];
-                    if( nSize > n+1 && vec[n+1].equalsIgnoreAsciiCase(",") )
-                    {
-                        n ++;
-                    }
-                    n++;
-                }
-            }
+    // extract names
+    n++;
+    while( nSize > n && ! vec[n].equalsIgnoreAsciiCase( ")" ) )
+    {
+        names.push_back( vec[n] );
+        if( nSize > n+1 && vec[n+1].equalsIgnoreAsciiCase( "," ) )
+        {
+            n ++;
         }
+        n++;
+    }
+    n++;
+
+    // now read the values
+    if( !(nSize > n +1 && vec[n].equalsIgnoreAsciiCase("VALUES") &&
+        vec[n+1].equalsIgnoreAsciiCase( "(" )) )
+        return;
+
+    n +=2;
+//                 printf( "3\n" );
+    for (auto& name : names)
+    {
+        if (n >= nSize)
+            break;
+
+        map[name] = vec[n];
+        if( nSize > n+1 && vec[n+1].equalsIgnoreAsciiCase(",") )
+        {
+            n ++;
+        }
+        n++;
     }
 }
 

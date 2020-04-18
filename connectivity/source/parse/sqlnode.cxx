@@ -302,27 +302,27 @@ void OSQLParseNode::parseNodeToStr(OUString& rString,
 {
     OSL_ENSURE( _rxConnection.is(), "OSQLParseNode::parseNodeToStr: invalid connection!" );
 
-    if ( _rxConnection.is() )
+    if ( !_rxConnection.is() )
+        return;
+
+    OUStringBuffer sBuffer = rString;
+    try
     {
-        OUStringBuffer sBuffer = rString;
-        try
-        {
-            OSQLParseNode::impl_parseNodeToString_throw( sBuffer,
-                SQLParseNodeParameter(
-                     _rxConnection, xFormatter, _xField, _sPredicateTableAlias, rIntl, pContext,
-                    _bIntl, _bQuote, _sDecSep, _bPredicate, false
-                ) );
-        }
-        catch( const SQLException& )
-        {
-            SAL_WARN( "connectivity.parse", "OSQLParseNode::parseNodeToStr: this should not throw!" );
-            // our callers don't expect this method to throw anything. The only known situation
-            // where impl_parseNodeToString_throw can throw is when there is a cyclic reference
-            // in the sub queries, but this cannot be the case here, as we do not parse to
-            // SDBC level.
-        }
-        rString = sBuffer.makeStringAndClear();
+        OSQLParseNode::impl_parseNodeToString_throw( sBuffer,
+            SQLParseNodeParameter(
+                 _rxConnection, xFormatter, _xField, _sPredicateTableAlias, rIntl, pContext,
+                _bIntl, _bQuote, _sDecSep, _bPredicate, false
+            ) );
     }
+    catch( const SQLException& )
+    {
+        SAL_WARN( "connectivity.parse", "OSQLParseNode::parseNodeToStr: this should not throw!" );
+        // our callers don't expect this method to throw anything. The only known situation
+        // where impl_parseNodeToString_throw can throw is when there is a cyclic reference
+        // in the sub queries, but this cannot be the case here, as we do not parse to
+        // SDBC level.
+    }
+    rString = sBuffer.makeStringAndClear();
 }
 
 bool OSQLParseNode::parseNodeToExecutableStatement( OUString& _out_rString, const Reference< XConnection >& _rxConnection,
@@ -520,60 +520,51 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
         break;
     }   // switch ( getKnownRuleID() )
 
-    if ( !bHandled )
+    if ( bHandled )
+        return;
+
+    for (auto i = m_aChildren.begin(); i != m_aChildren.end();)
     {
-        for (auto i = m_aChildren.begin(); i != m_aChildren.end();)
+        const OSQLParseNode* pSubTree = i->get();
+        if ( !pSubTree )
         {
-            const OSQLParseNode* pSubTree = i->get();
-            if ( !pSubTree )
+            ++i;
+            continue;
+        }
+
+        SQLParseNodeParameter aNewParam(rParam);
+
+        // don't replace the field for subqueries
+        if (rParam.xField.is() && SQL_ISRULE(pSubTree,subquery))
+            aNewParam.xField = nullptr;
+
+        // When we are building a criterion inside a query view,
+        // simplify criterion display by removing:
+        //   "currentFieldName"
+        //   "currentFieldName" =
+        // but only in simple expressions.
+        // This means anything that is made of:
+        // (see the rules conditionalised by inPredicateCheck() in sqlbison.y).
+        //  - parentheses
+        //  - logical operators (and, or, not)
+        //  - comparison operators (IS, =, >, <, BETWEEN, LIKE, ...)
+        // but *not* e.g. in function arguments
+        if (bSimple && rParam.bPredicate && rParam.xField.is() && SQL_ISRULE(pSubTree,column_ref))
+        {
+            if (columnMatchP(pSubTree, rParam))
             {
+                // skip field
                 ++i;
-                continue;
-            }
-
-            SQLParseNodeParameter aNewParam(rParam);
-
-            // don't replace the field for subqueries
-            if (rParam.xField.is() && SQL_ISRULE(pSubTree,subquery))
-                aNewParam.xField = nullptr;
-
-            // When we are building a criterion inside a query view,
-            // simplify criterion display by removing:
-            //   "currentFieldName"
-            //   "currentFieldName" =
-            // but only in simple expressions.
-            // This means anything that is made of:
-            // (see the rules conditionalised by inPredicateCheck() in sqlbison.y).
-            //  - parentheses
-            //  - logical operators (and, or, not)
-            //  - comparison operators (IS, =, >, <, BETWEEN, LIKE, ...)
-            // but *not* e.g. in function arguments
-            if (bSimple && rParam.bPredicate && rParam.xField.is() && SQL_ISRULE(pSubTree,column_ref))
-            {
-                if (columnMatchP(pSubTree, rParam))
+                // if the following node is the comparison operator'=',
+                // we filter it as well
+                if (SQL_ISRULE(this, comparison_predicate))
                 {
-                    // skip field
-                    ++i;
-                    // if the following node is the comparison operator'=',
-                    // we filter it as well
-                    if (SQL_ISRULE(this, comparison_predicate))
+                    if(i != m_aChildren.end())
                     {
-                        if(i != m_aChildren.end())
-                        {
-                            pSubTree = i->get();
-                            if (pSubTree && pSubTree->getNodeType() == SQLNodeType::Equal)
-                                ++i;
-                        }
+                        pSubTree = i->get();
+                        if (pSubTree && pSubTree->getNodeType() == SQLNodeType::Equal)
+                            ++i;
                     }
-                }
-                else
-                {
-                    pSubTree->impl_parseNodeToString_throw( rString, aNewParam, bSimple );
-                    ++i;
-
-                    // In the comma lists, put commas in-between all subtrees
-                    if ((m_eNodeType == SQLNodeType::CommaListRule)     && (i != m_aChildren.end()))
-                        rString.append(",");
                 }
             }
             else
@@ -583,42 +574,51 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
 
                 // In the comma lists, put commas in-between all subtrees
                 if ((m_eNodeType == SQLNodeType::CommaListRule)     && (i != m_aChildren.end()))
-                {
-                    if (SQL_ISRULE(this,value_exp_commalist) && rParam.bPredicate)
-                        rString.append(";");
-                    else
-                        rString.append(",");
-                }
+                    rString.append(",");
             }
-            // The right hand-side of these operators is not simple
-            switch ( getKnownRuleID() )
+        }
+        else
+        {
+            pSubTree->impl_parseNodeToString_throw( rString, aNewParam, bSimple );
+            ++i;
+
+            // In the comma lists, put commas in-between all subtrees
+            if ((m_eNodeType == SQLNodeType::CommaListRule)     && (i != m_aChildren.end()))
             {
-            case general_set_fct:
-            case set_fct_spec:
-            case position_exp:
-            case extract_exp:
-            case length_exp:
-            case char_value_fct:
-            case odbc_call_spec:
-            case subquery:
-            case comparison_predicate:
-            case between_predicate:
-            case like_predicate:
-            case test_for_null:
-            case in_predicate:
-            case existence_test:
-            case unique_test:
-            case all_or_any_predicate:
-            case join_condition:
-            case comparison_predicate_part_2:
-            case parenthesized_boolean_value_expression:
-            case other_like_predicate_part_2:
-            case between_predicate_part_2:
-                bSimple=false;
-                break;
-            default:
-                break;
+                if (SQL_ISRULE(this,value_exp_commalist) && rParam.bPredicate)
+                    rString.append(";");
+                else
+                    rString.append(",");
             }
+        }
+        // The right hand-side of these operators is not simple
+        switch ( getKnownRuleID() )
+        {
+        case general_set_fct:
+        case set_fct_spec:
+        case position_exp:
+        case extract_exp:
+        case length_exp:
+        case char_value_fct:
+        case odbc_call_spec:
+        case subquery:
+        case comparison_predicate:
+        case between_predicate:
+        case like_predicate:
+        case test_for_null:
+        case in_predicate:
+        case existence_test:
+        case unique_test:
+        case all_or_any_predicate:
+        case join_condition:
+        case comparison_predicate_part_2:
+        case parenthesized_boolean_value_expression:
+        case other_like_predicate_part_2:
+        case between_predicate_part_2:
+            bSimple=false;
+            break;
+        default:
+            break;
         }
     }
 }
@@ -2033,19 +2033,19 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition, bool
 
 void OSQLParseNode::eraseBraces(OSQLParseNode*& pSearchCondition)
 {
-    if (pSearchCondition && (SQL_ISRULE(pSearchCondition,boolean_primary) || (pSearchCondition->count() == 3 && SQL_ISPUNCTUATION(pSearchCondition->getChild(0),"(") &&
-         SQL_ISPUNCTUATION(pSearchCondition->getChild(2),")"))))
+    if (!(pSearchCondition && (SQL_ISRULE(pSearchCondition,boolean_primary) || (pSearchCondition->count() == 3 && SQL_ISPUNCTUATION(pSearchCondition->getChild(0),"(") &&
+         SQL_ISPUNCTUATION(pSearchCondition->getChild(2),")")))))
+        return;
+
+    OSQLParseNode* pRight = pSearchCondition->getChild(1);
+    absorptions(pRight);
+    // if child is not an or and tree then delete () around child
+    if(!(SQL_ISRULE(pSearchCondition->getChild(1),boolean_term) || SQL_ISRULE(pSearchCondition->getChild(1),search_condition)) ||
+        SQL_ISRULE(pSearchCondition->getChild(1),boolean_term) || // and can always stand without ()
+        (SQL_ISRULE(pSearchCondition->getChild(1),search_condition) && SQL_ISRULE(pSearchCondition->getParent(),search_condition)))
     {
-        OSQLParseNode* pRight = pSearchCondition->getChild(1);
-        absorptions(pRight);
-        // if child is not an or and tree then delete () around child
-        if(!(SQL_ISRULE(pSearchCondition->getChild(1),boolean_term) || SQL_ISRULE(pSearchCondition->getChild(1),search_condition)) ||
-            SQL_ISRULE(pSearchCondition->getChild(1),boolean_term) || // and can always stand without ()
-            (SQL_ISRULE(pSearchCondition->getChild(1),search_condition) && SQL_ISRULE(pSearchCondition->getParent(),search_condition)))
-        {
-            OSQLParseNode* pNode = pSearchCondition->removeAt(1);
-            replaceAndReset(pSearchCondition,pNode);
-        }
+        OSQLParseNode* pNode = pSearchCondition->removeAt(1);
+        replaceAndReset(pSearchCondition,pNode);
     }
 }
 
@@ -2183,76 +2183,76 @@ void OSQLParseNode::compress(OSQLParseNode *&pSearchCondition)
     }
 
     // or with two and trees where one element of the and trees are equal
-    if(SQL_ISRULE(pSearchCondition,search_condition) && SQL_ISRULE(pSearchCondition->getChild(0),boolean_term) && SQL_ISRULE(pSearchCondition->getChild(2),boolean_term))
+    if(!(SQL_ISRULE(pSearchCondition,search_condition) && SQL_ISRULE(pSearchCondition->getChild(0),boolean_term) && SQL_ISRULE(pSearchCondition->getChild(2),boolean_term)))
+        return;
+
+    if(*pSearchCondition->getChild(0)->getChild(0) == *pSearchCondition->getChild(2)->getChild(0))
     {
-        if(*pSearchCondition->getChild(0)->getChild(0) == *pSearchCondition->getChild(2)->getChild(0))
-        {
-            OSQLParseNode* pLeft    = pSearchCondition->getChild(0)->removeAt(2);
-            OSQLParseNode* pRight = pSearchCondition->getChild(2)->removeAt(2);
-            OSQLParseNode* pNode    = MakeORNode(pLeft,pRight);
+        OSQLParseNode* pLeft    = pSearchCondition->getChild(0)->removeAt(2);
+        OSQLParseNode* pRight = pSearchCondition->getChild(2)->removeAt(2);
+        OSQLParseNode* pNode    = MakeORNode(pLeft,pRight);
 
-            OSQLParseNode* pNewRule = new OSQLParseNode(OUString(),SQLNodeType::Rule,OSQLParser::RuleID(OSQLParseNode::boolean_primary));
-            pNewRule->append(new OSQLParseNode("(",SQLNodeType::Punctuation));
-            pNewRule->append(pNode);
-            pNewRule->append(new OSQLParseNode(")",SQLNodeType::Punctuation));
+        OSQLParseNode* pNewRule = new OSQLParseNode(OUString(),SQLNodeType::Rule,OSQLParser::RuleID(OSQLParseNode::boolean_primary));
+        pNewRule->append(new OSQLParseNode("(",SQLNodeType::Punctuation));
+        pNewRule->append(pNode);
+        pNewRule->append(new OSQLParseNode(")",SQLNodeType::Punctuation));
 
-            OSQLParseNode::eraseBraces(pLeft);
-            OSQLParseNode::eraseBraces(pRight);
+        OSQLParseNode::eraseBraces(pLeft);
+        OSQLParseNode::eraseBraces(pRight);
 
-            pNode = MakeANDNode(pSearchCondition->getChild(0)->removeAt(sal_uInt32(0)),pNewRule);
-            replaceAndReset(pSearchCondition,pNode);
-        }
-        else if(*pSearchCondition->getChild(0)->getChild(2) == *pSearchCondition->getChild(2)->getChild(0))
-        {
-            OSQLParseNode* pLeft = pSearchCondition->getChild(0)->removeAt(sal_uInt32(0));
-            OSQLParseNode* pRight = pSearchCondition->getChild(2)->removeAt(2);
-            OSQLParseNode* pNode = MakeORNode(pLeft,pRight);
+        pNode = MakeANDNode(pSearchCondition->getChild(0)->removeAt(sal_uInt32(0)),pNewRule);
+        replaceAndReset(pSearchCondition,pNode);
+    }
+    else if(*pSearchCondition->getChild(0)->getChild(2) == *pSearchCondition->getChild(2)->getChild(0))
+    {
+        OSQLParseNode* pLeft = pSearchCondition->getChild(0)->removeAt(sal_uInt32(0));
+        OSQLParseNode* pRight = pSearchCondition->getChild(2)->removeAt(2);
+        OSQLParseNode* pNode = MakeORNode(pLeft,pRight);
 
-            OSQLParseNode* pNewRule = new OSQLParseNode(OUString(),SQLNodeType::Rule,OSQLParser::RuleID(OSQLParseNode::boolean_primary));
-            pNewRule->append(new OSQLParseNode("(",SQLNodeType::Punctuation));
-            pNewRule->append(pNode);
-            pNewRule->append(new OSQLParseNode(")",SQLNodeType::Punctuation));
+        OSQLParseNode* pNewRule = new OSQLParseNode(OUString(),SQLNodeType::Rule,OSQLParser::RuleID(OSQLParseNode::boolean_primary));
+        pNewRule->append(new OSQLParseNode("(",SQLNodeType::Punctuation));
+        pNewRule->append(pNode);
+        pNewRule->append(new OSQLParseNode(")",SQLNodeType::Punctuation));
 
-            OSQLParseNode::eraseBraces(pLeft);
-            OSQLParseNode::eraseBraces(pRight);
+        OSQLParseNode::eraseBraces(pLeft);
+        OSQLParseNode::eraseBraces(pRight);
 
-            pNode = MakeANDNode(pSearchCondition->getChild(0)->removeAt(1),pNewRule);
-            replaceAndReset(pSearchCondition,pNode);
-        }
-        else if(*pSearchCondition->getChild(0)->getChild(0) == *pSearchCondition->getChild(2)->getChild(2))
-        {
-            OSQLParseNode* pLeft    = pSearchCondition->getChild(0)->removeAt(2);
-            OSQLParseNode* pRight = pSearchCondition->getChild(2)->removeAt(sal_uInt32(0));
-            OSQLParseNode* pNode    = MakeORNode(pLeft,pRight);
+        pNode = MakeANDNode(pSearchCondition->getChild(0)->removeAt(1),pNewRule);
+        replaceAndReset(pSearchCondition,pNode);
+    }
+    else if(*pSearchCondition->getChild(0)->getChild(0) == *pSearchCondition->getChild(2)->getChild(2))
+    {
+        OSQLParseNode* pLeft    = pSearchCondition->getChild(0)->removeAt(2);
+        OSQLParseNode* pRight = pSearchCondition->getChild(2)->removeAt(sal_uInt32(0));
+        OSQLParseNode* pNode    = MakeORNode(pLeft,pRight);
 
-            OSQLParseNode* pNewRule = new OSQLParseNode(OUString(),SQLNodeType::Rule,OSQLParser::RuleID(OSQLParseNode::boolean_primary));
-            pNewRule->append(new OSQLParseNode("(",SQLNodeType::Punctuation));
-            pNewRule->append(pNode);
-            pNewRule->append(new OSQLParseNode(")",SQLNodeType::Punctuation));
+        OSQLParseNode* pNewRule = new OSQLParseNode(OUString(),SQLNodeType::Rule,OSQLParser::RuleID(OSQLParseNode::boolean_primary));
+        pNewRule->append(new OSQLParseNode("(",SQLNodeType::Punctuation));
+        pNewRule->append(pNode);
+        pNewRule->append(new OSQLParseNode(")",SQLNodeType::Punctuation));
 
-            OSQLParseNode::eraseBraces(pLeft);
-            OSQLParseNode::eraseBraces(pRight);
+        OSQLParseNode::eraseBraces(pLeft);
+        OSQLParseNode::eraseBraces(pRight);
 
-            pNode = MakeANDNode(pSearchCondition->getChild(0)->removeAt(sal_uInt32(0)),pNewRule);
-            replaceAndReset(pSearchCondition,pNode);
-        }
-        else if(*pSearchCondition->getChild(0)->getChild(2) == *pSearchCondition->getChild(2)->getChild(2))
-        {
-            OSQLParseNode* pLeft    = pSearchCondition->getChild(0)->removeAt(sal_uInt32(0));
-            OSQLParseNode* pRight = pSearchCondition->getChild(2)->removeAt(sal_uInt32(0));
-            OSQLParseNode* pNode    = MakeORNode(pLeft,pRight);
+        pNode = MakeANDNode(pSearchCondition->getChild(0)->removeAt(sal_uInt32(0)),pNewRule);
+        replaceAndReset(pSearchCondition,pNode);
+    }
+    else if(*pSearchCondition->getChild(0)->getChild(2) == *pSearchCondition->getChild(2)->getChild(2))
+    {
+        OSQLParseNode* pLeft    = pSearchCondition->getChild(0)->removeAt(sal_uInt32(0));
+        OSQLParseNode* pRight = pSearchCondition->getChild(2)->removeAt(sal_uInt32(0));
+        OSQLParseNode* pNode    = MakeORNode(pLeft,pRight);
 
-            OSQLParseNode* pNewRule = new OSQLParseNode(OUString(),SQLNodeType::Rule,OSQLParser::RuleID(OSQLParseNode::boolean_primary));
-            pNewRule->append(new OSQLParseNode("(",SQLNodeType::Punctuation));
-            pNewRule->append(pNode);
-            pNewRule->append(new OSQLParseNode(")",SQLNodeType::Punctuation));
+        OSQLParseNode* pNewRule = new OSQLParseNode(OUString(),SQLNodeType::Rule,OSQLParser::RuleID(OSQLParseNode::boolean_primary));
+        pNewRule->append(new OSQLParseNode("(",SQLNodeType::Punctuation));
+        pNewRule->append(pNode);
+        pNewRule->append(new OSQLParseNode(")",SQLNodeType::Punctuation));
 
-            OSQLParseNode::eraseBraces(pLeft);
-            OSQLParseNode::eraseBraces(pRight);
+        OSQLParseNode::eraseBraces(pLeft);
+        OSQLParseNode::eraseBraces(pRight);
 
-            pNode = MakeANDNode(pSearchCondition->getChild(0)->removeAt(1),pNewRule);
-            replaceAndReset(pSearchCondition,pNode);
-        }
+        pNode = MakeANDNode(pSearchCondition->getChild(0)->removeAt(1),pNewRule);
+        replaceAndReset(pSearchCondition,pNode);
     }
 }
 #if OSL_DEBUG_LEVEL > 1

@@ -262,63 +262,63 @@ void OSDBCDriverManager::bootstrapDrivers()
         xEnumDrivers = xEnumAccess->createContentEnumeration(SERVICE_SDBC_DRIVER);
 
     OSL_ENSURE( xEnumDrivers.is(), "OSDBCDriverManager::bootstrapDrivers: no enumeration for the drivers available!" );
-    if (xEnumDrivers.is())
+    if (!xEnumDrivers.is())
+        return;
+
+    Reference< XSingleComponentFactory > xFactory;
+    Reference< XServiceInfo > xSI;
+    while (xEnumDrivers->hasMoreElements())
     {
-        Reference< XSingleComponentFactory > xFactory;
-        Reference< XServiceInfo > xSI;
-        while (xEnumDrivers->hasMoreElements())
+        xFactory.set(xEnumDrivers->nextElement(), css::uno::UNO_QUERY);
+        OSL_ENSURE( xFactory.is(), "OSDBCDriverManager::bootstrapDrivers: no factory extracted" );
+
+        if ( xFactory.is() )
         {
-            xFactory.set(xEnumDrivers->nextElement(), css::uno::UNO_QUERY);
-            OSL_ENSURE( xFactory.is(), "OSDBCDriverManager::bootstrapDrivers: no factory extracted" );
+            // we got a factory for the driver
+            DriverAccess aDriverDescriptor;
+            bool bValidDescriptor = false;
 
-            if ( xFactory.is() )
+            // can it tell us something about the implementation name?
+            xSI.set(xFactory, css::uno::UNO_QUERY);
+            if ( xSI.is() )
+            {   // yes -> no need to load the driver immediately (load it later when needed)
+                aDriverDescriptor.sImplementationName = xSI->getImplementationName();
+                aDriverDescriptor.xComponentFactory = xFactory;
+                bValidDescriptor = true;
+
+                m_aEventLogger.log( LogLevel::CONFIG,
+                    "found SDBC driver $1$, no need to load it",
+                    aDriverDescriptor.sImplementationName
+                );
+            }
+            else
             {
-                // we got a factory for the driver
-                DriverAccess aDriverDescriptor;
-                bool bValidDescriptor = false;
+                // no -> create the driver
+                Reference< XDriver > xDriver( xFactory->createInstanceWithContext( m_xContext ), UNO_QUERY );
+                OSL_ENSURE( xDriver.is(), "OSDBCDriverManager::bootstrapDrivers: a driver which is no driver?!" );
 
-                // can it tell us something about the implementation name?
-                xSI.set(xFactory, css::uno::UNO_QUERY);
-                if ( xSI.is() )
-                {   // yes -> no need to load the driver immediately (load it later when needed)
-                    aDriverDescriptor.sImplementationName = xSI->getImplementationName();
-                    aDriverDescriptor.xComponentFactory = xFactory;
-                    bValidDescriptor = true;
-
-                    m_aEventLogger.log( LogLevel::CONFIG,
-                        "found SDBC driver $1$, no need to load it",
-                        aDriverDescriptor.sImplementationName
-                    );
-                }
-                else
+                if ( xDriver.is() )
                 {
-                    // no -> create the driver
-                    Reference< XDriver > xDriver( xFactory->createInstanceWithContext( m_xContext ), UNO_QUERY );
-                    OSL_ENSURE( xDriver.is(), "OSDBCDriverManager::bootstrapDrivers: a driver which is no driver?!" );
-
-                    if ( xDriver.is() )
+                    aDriverDescriptor.xDriver = xDriver;
+                    // and obtain it's implementation name
+                    xSI.set(xDriver, css::uno::UNO_QUERY);
+                    OSL_ENSURE( xSI.is(), "OSDBCDriverManager::bootstrapDrivers: a driver without service info?" );
+                    if ( xSI.is() )
                     {
-                        aDriverDescriptor.xDriver = xDriver;
-                        // and obtain it's implementation name
-                        xSI.set(xDriver, css::uno::UNO_QUERY);
-                        OSL_ENSURE( xSI.is(), "OSDBCDriverManager::bootstrapDrivers: a driver without service info?" );
-                        if ( xSI.is() )
-                        {
-                            aDriverDescriptor.sImplementationName = xSI->getImplementationName();
-                            bValidDescriptor = true;
+                        aDriverDescriptor.sImplementationName = xSI->getImplementationName();
+                        bValidDescriptor = true;
 
-                            m_aEventLogger.log( LogLevel::CONFIG,
-                                "found SDBC driver $1$, needed to load it",
-                                aDriverDescriptor.sImplementationName
-                            );
-                        }
+                        m_aEventLogger.log( LogLevel::CONFIG,
+                            "found SDBC driver $1$, needed to load it",
+                            aDriverDescriptor.sImplementationName
+                        );
                     }
                 }
+            }
 
-                if ( bValidDescriptor )
-                {
-                    m_aDriversBS.push_back( aDriverDescriptor );
-                }
+            if ( bValidDescriptor )
+            {
+                m_aDriversBS.push_back( aDriverDescriptor );
             }
         }
     }

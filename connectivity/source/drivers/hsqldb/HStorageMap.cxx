@@ -233,25 +233,25 @@ namespace connectivity::hsqldb
         {
             TStorages& rMap = lcl_getStorageMap();
             TStorages::iterator aFind = rMap.find(_sKey);
-            if ( aFind != rMap.end() )
+            if ( aFind == rMap.end() )
+                return;
+
+            try
             {
-                try
+                if ( _xListener.is() )
                 {
-                    if ( _xListener.is() )
-                    {
-                        Reference<XTransactionBroadcaster> xBroad(aFind->second.mapStorage(),UNO_QUERY);
-                        if ( xBroad.is() )
-                            xBroad->removeTransactionListener(_xListener);
-                        Reference<XTransactedObject> xTrans(aFind->second.mapStorage(),UNO_QUERY);
-                        if ( xTrans.is() )
-                            xTrans->commit();
-                    }
+                    Reference<XTransactionBroadcaster> xBroad(aFind->second.mapStorage(),UNO_QUERY);
+                    if ( xBroad.is() )
+                        xBroad->removeTransactionListener(_xListener);
+                    Reference<XTransactedObject> xTrans(aFind->second.mapStorage(),UNO_QUERY);
+                    if ( xTrans.is() )
+                        xTrans->commit();
                 }
-                catch(const Exception&)
-                {
-                }
-                rMap.erase(aFind);
             }
+            catch(const Exception&)
+            {
+            }
+            rMap.erase(aFind);
         }
 
         TStreamMap::mapped_type StorageContainer::registerStream(JNIEnv * env,jstring name, jstring key,sal_Int32 _nMode)

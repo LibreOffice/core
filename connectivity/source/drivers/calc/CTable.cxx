@@ -65,21 +65,21 @@ static void lcl_UpdateArea( const Reference<XCellRange>& xUsedRange, sal_Int32& 
     //  update rEndCol, rEndRow if any non-empty cell in xUsedRange is right/below
 
     const Reference<XCellRangesQuery> xUsedQuery( xUsedRange, UNO_QUERY );
-    if ( xUsedQuery.is() )
+    if ( !xUsedQuery.is() )
+        return;
+
+    const sal_Int16 nContentFlags =
+        CellFlags::STRING | CellFlags::VALUE | CellFlags::DATETIME | CellFlags::FORMULA | CellFlags::ANNOTATION;
+
+    const Reference<XSheetCellRanges> xUsedRanges = xUsedQuery->queryContentCells( nContentFlags );
+    const Sequence<CellRangeAddress> aAddresses = xUsedRanges->getRangeAddresses();
+
+    const sal_Int32 nCount = aAddresses.getLength();
+    const CellRangeAddress* pData = aAddresses.getConstArray();
+    for ( sal_Int32 i=0; i<nCount; i++ )
     {
-        const sal_Int16 nContentFlags =
-            CellFlags::STRING | CellFlags::VALUE | CellFlags::DATETIME | CellFlags::FORMULA | CellFlags::ANNOTATION;
-
-        const Reference<XSheetCellRanges> xUsedRanges = xUsedQuery->queryContentCells( nContentFlags );
-        const Sequence<CellRangeAddress> aAddresses = xUsedRanges->getRangeAddresses();
-
-        const sal_Int32 nCount = aAddresses.getLength();
-        const CellRangeAddress* pData = aAddresses.getConstArray();
-        for ( sal_Int32 i=0; i<nCount; i++ )
-        {
-            rEndCol = std::max(pData[i].EndColumn, rEndCol);
-            rEndRow = std::max(pData[i].EndRow, rEndRow);
-        }
+        rEndCol = std::max(pData[i].EndColumn, rEndCol);
+        rEndRow = std::max(pData[i].EndRow, rEndRow);
     }
 }
 
@@ -237,64 +237,64 @@ static void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Refe
     Reference<XCell> xDataCell = lcl_GetUsedCell( xSheet, nDocColumn, nDataRow );
 
     Reference<XPropertySet> xProp( xDataCell, UNO_QUERY );
-    if ( xProp.is() )
+    if ( !xProp.is() )
+        return;
+
+    rCurrency = false;          // set to true for currency below
+
+    const CellContentType eCellType = lcl_GetContentOrResultType( xDataCell );
+    // #i35178# use "text" type if there is any text cell in the column
+    if ( eCellType == CellContentType_TEXT || lcl_HasTextInColumn( xSheet, nDocColumn, nDataRow ) )
+        rDataType = DataType::VARCHAR;
+    else if ( eCellType == CellContentType_VALUE )
     {
-        rCurrency = false;          // set to true for currency below
+        //  get number format to distinguish between different types
 
-        const CellContentType eCellType = lcl_GetContentOrResultType( xDataCell );
-        // #i35178# use "text" type if there is any text cell in the column
-        if ( eCellType == CellContentType_TEXT || lcl_HasTextInColumn( xSheet, nDocColumn, nDataRow ) )
-            rDataType = DataType::VARCHAR;
-        else if ( eCellType == CellContentType_VALUE )
+        sal_Int16 nNumType = NumberFormat::NUMBER;
+        try
         {
-            //  get number format to distinguish between different types
+            sal_Int32 nKey = 0;
 
-            sal_Int16 nNumType = NumberFormat::NUMBER;
-            try
+            if ( xProp->getPropertyValue( "NumberFormat" ) >>= nKey )
             {
-                sal_Int32 nKey = 0;
-
-                if ( xProp->getPropertyValue( "NumberFormat" ) >>= nKey )
+                const Reference<XPropertySet> xFormat = xFormats->getByKey( nKey );
+                if ( xFormat.is() )
                 {
-                    const Reference<XPropertySet> xFormat = xFormats->getByKey( nKey );
-                    if ( xFormat.is() )
-                    {
-                        xFormat->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE) ) >>= nNumType;
-                    }
+                    xFormat->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE) ) >>= nNumType;
                 }
             }
-            catch ( Exception& )
-            {
-            }
-
-            if ( nNumType & NumberFormat::TEXT )
-                rDataType = DataType::VARCHAR;
-            else if ( nNumType & NumberFormat::NUMBER )
-                rDataType = DataType::DECIMAL;
-            else if ( nNumType & NumberFormat::CURRENCY )
-            {
-                rCurrency = true;
-                rDataType = DataType::DECIMAL;
-            }
-            else if ( ( nNumType & NumberFormat::DATETIME ) == NumberFormat::DATETIME )
-            {
-                //  NumberFormat::DATETIME is DATE | TIME
-                rDataType = DataType::TIMESTAMP;
-            }
-            else if ( nNumType & NumberFormat::DATE )
-                rDataType = DataType::DATE;
-            else if ( nNumType & NumberFormat::TIME )
-                rDataType = DataType::TIME;
-            else if ( nNumType & NumberFormat::LOGICAL )
-                rDataType = DataType::BIT;
-            else
-                rDataType = DataType::DECIMAL;
         }
-        else
+        catch ( Exception& )
         {
-            //  whole column empty
-            rDataType = DataType::VARCHAR;
         }
+
+        if ( nNumType & NumberFormat::TEXT )
+            rDataType = DataType::VARCHAR;
+        else if ( nNumType & NumberFormat::NUMBER )
+            rDataType = DataType::DECIMAL;
+        else if ( nNumType & NumberFormat::CURRENCY )
+        {
+            rCurrency = true;
+            rDataType = DataType::DECIMAL;
+        }
+        else if ( ( nNumType & NumberFormat::DATETIME ) == NumberFormat::DATETIME )
+        {
+            //  NumberFormat::DATETIME is DATE | TIME
+            rDataType = DataType::TIMESTAMP;
+        }
+        else if ( nNumType & NumberFormat::DATE )
+            rDataType = DataType::DATE;
+        else if ( nNumType & NumberFormat::TIME )
+            rDataType = DataType::TIME;
+        else if ( nNumType & NumberFormat::LOGICAL )
+            rDataType = DataType::BIT;
+        else
+            rDataType = DataType::DECIMAL;
+    }
+    else
+    {
+        //  whole column empty
+        rDataType = DataType::VARCHAR;
     }
 }
 
@@ -310,104 +310,104 @@ static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& x
         ++nDocRow;
 
     const Reference<XCell> xCell = xSheet->getCellByPosition( nDocColumn, nDocRow );
-    if ( xCell.is() )
+    if ( !xCell.is() )
+        return;
+
+    CellContentType eCellType = lcl_GetContentOrResultType( xCell );
+    switch (nType)
     {
-        CellContentType eCellType = lcl_GetContentOrResultType( xCell );
-        switch (nType)
-        {
-            case DataType::VARCHAR:
-                if ( eCellType == CellContentType_EMPTY )
-                    rValue.setNull();
-                else
+        case DataType::VARCHAR:
+            if ( eCellType == CellContentType_EMPTY )
+                rValue.setNull();
+            else
+            {
+                // #i25840# still let Calc convert numbers to text
+                const Reference<XText> xText( xCell, UNO_QUERY );
+                if ( xText.is() )
+                    rValue = xText->getString();
+            }
+            break;
+        case DataType::DECIMAL:
+            if ( eCellType == CellContentType_VALUE )
+                rValue = xCell->getValue();         // double
+            else
+                rValue.setNull();
+            break;
+        case DataType::BIT:
+            if ( eCellType == CellContentType_VALUE )
+                rValue = xCell->getValue() != 0.0;
+            else
+                rValue.setNull();
+            break;
+        case DataType::DATE:
+            if ( eCellType == CellContentType_VALUE )
+            {
+                ::Date aDate( rNullDate );
+                aDate.AddDays(::rtl::math::approxFloor( xCell->getValue() ));
+                rValue = aDate.GetUNODate();
+            }
+            else
+                rValue.setNull();
+            break;
+        case DataType::TIME:
+            if ( eCellType == CellContentType_VALUE )
+            {
+                double fCellVal = xCell->getValue();
+                double fTime = fCellVal - rtl::math::approxFloor( fCellVal );
+                sal_Int64 nIntTime = static_cast<sal_Int64>(rtl::math::round( fTime * static_cast<double>(::tools::Time::nanoSecPerDay) ));
+                if ( nIntTime ==  ::tools::Time::nanoSecPerDay)
+                    nIntTime = 0;                       // 23:59:59.9999999995 and above is 00:00:00.00
+                css::util::Time aTime;
+                aTime.NanoSeconds = static_cast<sal_uInt32>( nIntTime % ::tools::Time::nanoSecPerSec );
+                nIntTime /= ::tools::Time::nanoSecPerSec;
+                aTime.Seconds = static_cast<sal_uInt16>( nIntTime % 60 );
+                nIntTime /= 60;
+                aTime.Minutes = static_cast<sal_uInt16>( nIntTime % 60 );
+                nIntTime /= 60;
+                OSL_ENSURE( nIntTime < 24, "error in time calculation" );
+                aTime.Hours = static_cast<sal_uInt16>(nIntTime);
+                rValue = aTime;
+            }
+            else
+                rValue.setNull();
+            break;
+        case DataType::TIMESTAMP:
+            if ( eCellType == CellContentType_VALUE )
+            {
+                double fCellVal = xCell->getValue();
+                double fDays = ::rtl::math::approxFloor( fCellVal );
+                double fTime = fCellVal - fDays;
+                long nIntDays = static_cast<long>(fDays);
+                sal_Int64 nIntTime = ::rtl::math::round( fTime * static_cast<double>(::tools::Time::nanoSecPerDay) );
+                if ( nIntTime == ::tools::Time::nanoSecPerDay )
                 {
-                    // #i25840# still let Calc convert numbers to text
-                    const Reference<XText> xText( xCell, UNO_QUERY );
-                    if ( xText.is() )
-                        rValue = xText->getString();
+                    nIntTime = 0;                       // 23:59:59.9999999995 and above is 00:00:00.00
+                    ++nIntDays;                         // (next day)
                 }
-                break;
-            case DataType::DECIMAL:
-                if ( eCellType == CellContentType_VALUE )
-                    rValue = xCell->getValue();         // double
-                else
-                    rValue.setNull();
-                break;
-            case DataType::BIT:
-                if ( eCellType == CellContentType_VALUE )
-                    rValue = xCell->getValue() != 0.0;
-                else
-                    rValue.setNull();
-                break;
-            case DataType::DATE:
-                if ( eCellType == CellContentType_VALUE )
-                {
-                    ::Date aDate( rNullDate );
-                    aDate.AddDays(::rtl::math::approxFloor( xCell->getValue() ));
-                    rValue = aDate.GetUNODate();
-                }
-                else
-                    rValue.setNull();
-                break;
-            case DataType::TIME:
-                if ( eCellType == CellContentType_VALUE )
-                {
-                    double fCellVal = xCell->getValue();
-                    double fTime = fCellVal - rtl::math::approxFloor( fCellVal );
-                    sal_Int64 nIntTime = static_cast<sal_Int64>(rtl::math::round( fTime * static_cast<double>(::tools::Time::nanoSecPerDay) ));
-                    if ( nIntTime ==  ::tools::Time::nanoSecPerDay)
-                        nIntTime = 0;                       // 23:59:59.9999999995 and above is 00:00:00.00
-                    css::util::Time aTime;
-                    aTime.NanoSeconds = static_cast<sal_uInt32>( nIntTime % ::tools::Time::nanoSecPerSec );
-                    nIntTime /= ::tools::Time::nanoSecPerSec;
-                    aTime.Seconds = static_cast<sal_uInt16>( nIntTime % 60 );
-                    nIntTime /= 60;
-                    aTime.Minutes = static_cast<sal_uInt16>( nIntTime % 60 );
-                    nIntTime /= 60;
-                    OSL_ENSURE( nIntTime < 24, "error in time calculation" );
-                    aTime.Hours = static_cast<sal_uInt16>(nIntTime);
-                    rValue = aTime;
-                }
-                else
-                    rValue.setNull();
-                break;
-            case DataType::TIMESTAMP:
-                if ( eCellType == CellContentType_VALUE )
-                {
-                    double fCellVal = xCell->getValue();
-                    double fDays = ::rtl::math::approxFloor( fCellVal );
-                    double fTime = fCellVal - fDays;
-                    long nIntDays = static_cast<long>(fDays);
-                    sal_Int64 nIntTime = ::rtl::math::round( fTime * static_cast<double>(::tools::Time::nanoSecPerDay) );
-                    if ( nIntTime == ::tools::Time::nanoSecPerDay )
-                    {
-                        nIntTime = 0;                       // 23:59:59.9999999995 and above is 00:00:00.00
-                        ++nIntDays;                         // (next day)
-                    }
 
-                    css::util::DateTime aDateTime;
+                css::util::DateTime aDateTime;
 
-                    aDateTime.NanoSeconds = static_cast<sal_uInt16>( nIntTime % ::tools::Time::nanoSecPerSec );
-                    nIntTime /= ::tools::Time::nanoSecPerSec;
-                    aDateTime.Seconds = static_cast<sal_uInt16>( nIntTime % 60 );
-                    nIntTime /= 60;
-                    aDateTime.Minutes = static_cast<sal_uInt16>( nIntTime % 60 );
-                    nIntTime /= 60;
-                    OSL_ENSURE( nIntTime < 24, "error in time calculation" );
-                    aDateTime.Hours = static_cast<sal_uInt16>(nIntTime);
+                aDateTime.NanoSeconds = static_cast<sal_uInt16>( nIntTime % ::tools::Time::nanoSecPerSec );
+                nIntTime /= ::tools::Time::nanoSecPerSec;
+                aDateTime.Seconds = static_cast<sal_uInt16>( nIntTime % 60 );
+                nIntTime /= 60;
+                aDateTime.Minutes = static_cast<sal_uInt16>( nIntTime % 60 );
+                nIntTime /= 60;
+                OSL_ENSURE( nIntTime < 24, "error in time calculation" );
+                aDateTime.Hours = static_cast<sal_uInt16>(nIntTime);
 
-                    ::Date aDate( rNullDate );
-                    aDate.AddDays( nIntDays );
-                    aDateTime.Day = aDate.GetDay();
-                    aDateTime.Month = aDate.GetMonth();
-                    aDateTime.Year = aDate.GetYear();
+                ::Date aDate( rNullDate );
+                aDate.AddDays( nIntDays );
+                aDateTime.Day = aDate.GetDay();
+                aDateTime.Month = aDate.GetMonth();
+                aDateTime.Year = aDate.GetYear();
 
-                    rValue = aDateTime;
-                }
-                else
-                    rValue.setNull();
-                break;
-        } // switch (nType)
-    }
+                rValue = aDateTime;
+            }
+            else
+                rValue.setNull();
+            break;
+    } // switch (nType)
 
 //  rValue.setTypeKind(nType);
 }

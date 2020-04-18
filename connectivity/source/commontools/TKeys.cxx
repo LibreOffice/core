@@ -264,43 +264,43 @@ OUString OKeysHelper::getDropForeignKey() const
 void OKeysHelper::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
 {
     Reference< XConnection> xConnection = m_pTable->getConnection();
-    if ( xConnection.is() && !m_pTable->isNew() )
+    if ( !(xConnection.is() && !m_pTable->isNew()) )
+        return;
+
+    Reference<XPropertySet> xKey(getObject(_nPos),UNO_QUERY);
+    if ( m_pTable->getKeyService().is() )
     {
-        Reference<XPropertySet> xKey(getObject(_nPos),UNO_QUERY);
-        if ( m_pTable->getKeyService().is() )
+        m_pTable->getKeyService()->dropKey(m_pTable,xKey);
+    }
+    else
+    {
+        OUStringBuffer aSql;
+        aSql.append("ALTER TABLE ");
+
+        aSql.append( composeTableName( m_pTable->getConnection()->getMetaData(), m_pTable,::dbtools::EComposeRule::InTableDefinitions, true ));
+
+        sal_Int32 nKeyType = KeyType::PRIMARY;
+        if ( xKey.is() )
         {
-            m_pTable->getKeyService()->dropKey(m_pTable,xKey);
+            ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
+            xKey->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_TYPE)) >>= nKeyType;
+        }
+        if ( KeyType::PRIMARY == nKeyType )
+        {
+            aSql.append(" DROP PRIMARY KEY");
         }
         else
         {
-            OUStringBuffer aSql;
-            aSql.append("ALTER TABLE ");
+            aSql.append(getDropForeignKey());
+            const OUString aQuote    = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString();
+            aSql.append( ::dbtools::quoteName( aQuote,_sElementName) );
+        }
 
-            aSql.append( composeTableName( m_pTable->getConnection()->getMetaData(), m_pTable,::dbtools::EComposeRule::InTableDefinitions, true ));
-
-            sal_Int32 nKeyType = KeyType::PRIMARY;
-            if ( xKey.is() )
-            {
-                ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
-                xKey->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_TYPE)) >>= nKeyType;
-            }
-            if ( KeyType::PRIMARY == nKeyType )
-            {
-                aSql.append(" DROP PRIMARY KEY");
-            }
-            else
-            {
-                aSql.append(getDropForeignKey());
-                const OUString aQuote    = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString();
-                aSql.append( ::dbtools::quoteName( aQuote,_sElementName) );
-            }
-
-            Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
-            if ( xStmt.is() )
-            {
-                xStmt->execute(aSql.makeStringAndClear());
-                ::comphelper::disposeComponent(xStmt);
-            }
+        Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
+        if ( xStmt.is() )
+        {
+            xStmt->execute(aSql.makeStringAndClear());
+            ::comphelper::disposeComponent(xStmt);
         }
     }
 }

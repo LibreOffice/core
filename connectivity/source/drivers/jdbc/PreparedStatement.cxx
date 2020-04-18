@@ -655,41 +655,42 @@ void java_sql_PreparedStatement::createStatement(JNIEnv* _pEnv)
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
 
-    if( !object && _pEnv ){
-        // initialize temporary variable
-        static const char * const cMethodName = "prepareStatement";
+    if( !(!object && _pEnv) )
+        return;
 
-        jvalue args[1];
-        // convert Parameter
-        args[0].l = convertwchar_tToJavaString(_pEnv,m_sSqlStatement);
-        // Java-Call
-        jobject out = nullptr;
-        static jmethodID mID(nullptr);
-        if ( !mID )
+    // initialize temporary variable
+    static const char * const cMethodName = "prepareStatement";
+
+    jvalue args[1];
+    // convert Parameter
+    args[0].l = convertwchar_tToJavaString(_pEnv,m_sSqlStatement);
+    // Java-Call
+    jobject out = nullptr;
+    static jmethodID mID(nullptr);
+    if ( !mID )
+    {
+        static const char * const cSignature = "(Ljava/lang/String;II)Ljava/sql/PreparedStatement;";
+        mID  = _pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature );
+    }
+    if( mID )
+    {
+        out = _pEnv->CallObjectMethod( m_pConnection->getJavaObject(), mID, args[0].l ,m_nResultSetType,m_nResultSetConcurrency);
+    }
+    else
+    {
+        static jmethodID mID2 = nullptr;
+        if ( !mID2 )
         {
-            static const char * const cSignature = "(Ljava/lang/String;II)Ljava/sql/PreparedStatement;";
-            mID  = _pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature );
+            static const char * const cSignature2 = "(Ljava/lang/String;)Ljava/sql/PreparedStatement;";
+            mID2 = _pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature2 );
         }
-        if( mID )
-        {
-            out = _pEnv->CallObjectMethod( m_pConnection->getJavaObject(), mID, args[0].l ,m_nResultSetType,m_nResultSetConcurrency);
-        }
-        else
-        {
-            static jmethodID mID2 = nullptr;
-            if ( !mID2 )
-            {
-                static const char * const cSignature2 = "(Ljava/lang/String;)Ljava/sql/PreparedStatement;";
-                mID2 = _pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature2 );
-            }
-            if ( mID2 )
-                out = _pEnv->CallObjectMethod( m_pConnection->getJavaObject(), mID2, args[0].l );
-        }
-        _pEnv->DeleteLocalRef(static_cast<jstring>(args[0].l));
-        ThrowLoggedSQLException( m_aLogger, _pEnv, *this );
-        if ( out )
-            object = _pEnv->NewGlobalRef( out );
-    } //t.pEnv
+        if ( mID2 )
+            out = _pEnv->CallObjectMethod( m_pConnection->getJavaObject(), mID2, args[0].l );
+    }
+    _pEnv->DeleteLocalRef(static_cast<jstring>(args[0].l));
+    ThrowLoggedSQLException( m_aLogger, _pEnv, *this );
+    if ( out )
+        object = _pEnv->NewGlobalRef( out );
 }
 
 

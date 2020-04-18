@@ -348,54 +348,54 @@ void OTableHelper::refreshForeignKeys(::std::vector< OUString>& _rNames)
     Reference< XResultSet > xResult = getMetaData()->getImportedKeys(aCatalog,m_SchemaName,m_Name);
     Reference< XRow > xRow(xResult,UNO_QUERY);
 
-    if ( xRow.is() )
+    if ( !xRow.is() )
+        return;
+
+    std::shared_ptr<sdbcx::KeyProperties> pKeyProps;
+    OUString aName,sCatalog,aSchema,sOldFKName;
+    while( xResult->next() )
     {
-        std::shared_ptr<sdbcx::KeyProperties> pKeyProps;
-        OUString aName,sCatalog,aSchema,sOldFKName;
-        while( xResult->next() )
+        // this must be outside the "if" because we have to call in a right order
+        sCatalog    = xRow->getString(1);
+        if ( xRow->wasNull() )
+            sCatalog.clear();
+        aSchema     = xRow->getString(2);
+        aName       = xRow->getString(3);
+
+        const OUString sForeignKeyColumn = xRow->getString(8);
+        const sal_Int32 nUpdateRule = xRow->getInt(10);
+        const sal_Int32 nDeleteRule = xRow->getInt(11);
+        const OUString sFkName = xRow->getString(12);
+
+        if ( !sFkName.isEmpty() && !xRow->wasNull() )
         {
-            // this must be outside the "if" because we have to call in a right order
-            sCatalog    = xRow->getString(1);
-            if ( xRow->wasNull() )
-                sCatalog.clear();
-            aSchema     = xRow->getString(2);
-            aName       = xRow->getString(3);
-
-            const OUString sForeignKeyColumn = xRow->getString(8);
-            const sal_Int32 nUpdateRule = xRow->getInt(10);
-            const sal_Int32 nDeleteRule = xRow->getInt(11);
-            const OUString sFkName = xRow->getString(12);
-
-            if ( !sFkName.isEmpty() && !xRow->wasNull() )
+            if ( sOldFKName != sFkName )
             {
-                if ( sOldFKName != sFkName )
-                {
-                    if ( pKeyProps.get() )
-                        m_pImpl->m_aKeys.emplace(sOldFKName,pKeyProps);
+                if ( pKeyProps.get() )
+                    m_pImpl->m_aKeys.emplace(sOldFKName,pKeyProps);
 
-                    const OUString sReferencedName = ::dbtools::composeTableName(getMetaData(),sCatalog,aSchema,aName,false,::dbtools::EComposeRule::InDataManipulation);
-                    pKeyProps = std::make_shared<sdbcx::KeyProperties>(sReferencedName,KeyType::FOREIGN,nUpdateRule,nDeleteRule);
-                    pKeyProps->m_aKeyColumnNames.push_back(sForeignKeyColumn);
-                    _rNames.push_back(sFkName);
-                    if ( m_pTables->hasByName(sReferencedName) )
-                    {
-                        if ( !m_pImpl->m_xTablePropertyListener.is() )
-                            m_pImpl->m_xTablePropertyListener = new OTableContainerListener(this);
-                        m_pTables->addContainerListener(m_pImpl->m_xTablePropertyListener.get());
-                        m_pImpl->m_xTablePropertyListener->add(sReferencedName);
-                    } // if ( m_pTables->hasByName(sReferencedName) )
-                    sOldFKName = sFkName;
-                } // if ( sOldFKName != sFkName )
-                else if ( pKeyProps.get() )
+                const OUString sReferencedName = ::dbtools::composeTableName(getMetaData(),sCatalog,aSchema,aName,false,::dbtools::EComposeRule::InDataManipulation);
+                pKeyProps = std::make_shared<sdbcx::KeyProperties>(sReferencedName,KeyType::FOREIGN,nUpdateRule,nDeleteRule);
+                pKeyProps->m_aKeyColumnNames.push_back(sForeignKeyColumn);
+                _rNames.push_back(sFkName);
+                if ( m_pTables->hasByName(sReferencedName) )
                 {
-                    pKeyProps->m_aKeyColumnNames.push_back(sForeignKeyColumn);
-                }
+                    if ( !m_pImpl->m_xTablePropertyListener.is() )
+                        m_pImpl->m_xTablePropertyListener = new OTableContainerListener(this);
+                    m_pTables->addContainerListener(m_pImpl->m_xTablePropertyListener.get());
+                    m_pImpl->m_xTablePropertyListener->add(sReferencedName);
+                } // if ( m_pTables->hasByName(sReferencedName) )
+                sOldFKName = sFkName;
+            } // if ( sOldFKName != sFkName )
+            else if ( pKeyProps.get() )
+            {
+                pKeyProps->m_aKeyColumnNames.push_back(sForeignKeyColumn);
             }
-        } // while( xResult->next() )
-        if ( pKeyProps.get() )
-            m_pImpl->m_aKeys.emplace(sOldFKName,pKeyProps);
-        ::comphelper::disposeComponent(xResult);
-    }
+        }
+    } // while( xResult->next() )
+    if ( pKeyProps.get() )
+        m_pImpl->m_aKeys.emplace(sOldFKName,pKeyProps);
+    ::comphelper::disposeComponent(xResult);
 }
 
 void OTableHelper::refreshKeys()

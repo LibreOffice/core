@@ -378,26 +378,26 @@ void Container::removeContainerListener(
 void Container::fire( const EventBroadcastHelper &helper )
 {
     cppu::OInterfaceContainerHelper *container = rBHelper.getContainer( helper.getType() );
-    if( container )
+    if( !container )
+        return;
+
+    cppu::OInterfaceIteratorHelper iterator( * container );
+    while( iterator.hasMoreElements() )
     {
-        cppu::OInterfaceIteratorHelper iterator( * container );
-        while( iterator.hasMoreElements() )
+        try
         {
-            try
-            {
-                helper.fire( static_cast<XEventListener *>(iterator.next()) );
-            }
-            catch ( css::uno::RuntimeException & )
-            {
-                OSL_ENSURE( false, "exception caught" );
-                // loose coupling, a runtime exception shall not break anything
-                // TODO: log away as warning !
-            }
-            catch( css::uno::Exception & )
-            {
-                OSL_ENSURE( false, "exception from listener flying through" );
-                throw;
-            }
+            helper.fire( static_cast<XEventListener *>(iterator.next()) );
+        }
+        catch ( css::uno::RuntimeException & )
+        {
+            OSL_ENSURE( false, "exception caught" );
+            // loose coupling, a runtime exception shall not break anything
+            // TODO: log away as warning !
+        }
+        catch( css::uno::Exception & )
+        {
+            OSL_ENSURE( false, "exception from listener flying through" );
+            throw;
         }
     }
 

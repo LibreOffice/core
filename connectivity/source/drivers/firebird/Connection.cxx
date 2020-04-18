@@ -791,49 +791,48 @@ void SAL_CALL Connection::documentEventOccured( const DocumentEvent& Event )
     if (!m_bIsEmbedded)
         return;
 
-    if (Event.EventName == "OnSave" || Event.EventName == "OnSaveAs")
+    if (!(Event.EventName == "OnSave" || Event.EventName == "OnSaveAs"))
+        return;
+
+    commit(); // Commit and close transaction
+    if ( !(m_bIsEmbedded && m_xEmbeddedStorage.is()) )
+        return;
+
+    SAL_INFO("connectivity.firebird", "Writing .fbk from running db");
+    try
     {
-        commit(); // Commit and close transaction
-        if ( m_bIsEmbedded && m_xEmbeddedStorage.is() )
-        {
-            SAL_INFO("connectivity.firebird", "Writing .fbk from running db");
-            try
-            {
-                runBackupService(isc_action_svc_backup);
-            }
-            catch (const SQLException& e)
-            {
-                auto a = cppu::getCaughtException();
-                throw WrappedTargetRuntimeException(e.Message, e.Context, a);
-            }
-
-
-            Reference< XStream > xDBStream(m_xEmbeddedStorage->openStreamElement(our_sFBKLocation,
-                                                            ElementModes::WRITE));
-
-            // TODO: verify the backup actually exists -- the backup service
-            // can fail without giving any sane error messages / telling us
-            // that it failed.
-            using namespace ::comphelper;
-            Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
-            Reference< XInputStream > xInputStream;
-            if (xContext.is())
-            {
-                xInputStream =
-                        OStorageHelper::GetInputStreamFromURL(m_sFBKPath, xContext);
-                if (xInputStream.is())
-                    OStorageHelper::CopyInputToOutput( xInputStream,
-                                                xDBStream->getOutputStream());
-
-                // remove old fdb file if exists
-                uno::Reference< ucb::XSimpleFileAccess > xFileAccess =
-                    ucb::SimpleFileAccess::create(xContext);
-                if (xFileAccess->exists(m_sFirebirdURL))
-                    xFileAccess->kill(m_sFirebirdURL);
-            }
-        }
-
+        runBackupService(isc_action_svc_backup);
     }
+    catch (const SQLException& e)
+    {
+        auto a = cppu::getCaughtException();
+        throw WrappedTargetRuntimeException(e.Message, e.Context, a);
+    }
+
+
+    Reference< XStream > xDBStream(m_xEmbeddedStorage->openStreamElement(our_sFBKLocation,
+                                                    ElementModes::WRITE));
+
+    // TODO: verify the backup actually exists -- the backup service
+    // can fail without giving any sane error messages / telling us
+    // that it failed.
+    using namespace ::comphelper;
+    Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+    Reference< XInputStream > xInputStream;
+    if (!xContext.is())
+        return;
+
+    xInputStream =
+            OStorageHelper::GetInputStreamFromURL(m_sFBKPath, xContext);
+    if (xInputStream.is())
+        OStorageHelper::CopyInputToOutput( xInputStream,
+                                    xDBStream->getOutputStream());
+
+    // remove old fdb file if exists
+    uno::Reference< ucb::XSimpleFileAccess > xFileAccess =
+        ucb::SimpleFileAccess::create(xContext);
+    if (xFileAccess->exists(m_sFirebirdURL))
+        xFileAccess->kill(m_sFirebirdURL);
 }
 // XEventListener
 void SAL_CALL Connection::disposing(const EventObject& /*rSource*/)
