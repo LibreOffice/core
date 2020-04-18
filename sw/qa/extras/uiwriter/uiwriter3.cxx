@@ -23,6 +23,21 @@ class SwUiWriterTest3 : public SwModelTestBase
 {
 };
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf117039)
+{
+    load(DATA_DIRECTORY, "tdf117039.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // open print preview
+    dispatchCommand(mxComponent, ".uno:PrintPreview", {});
+    // close print preview
+    dispatchCommand(mxComponent, ".uno:ClosePreview", {});
+    // verify
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("Test digital signature"));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf129382)
 {
     load(DATA_DIRECTORY, "tdf129382.docx");
