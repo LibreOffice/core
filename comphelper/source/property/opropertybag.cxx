@@ -144,19 +144,20 @@ namespace comphelper
             ::osl::MutexGuard aGuard( m_aMutex );
             m_isModified = bModified;
         }
-        if (bModified) {
-            try {
-                Reference<XInterface> xThis(*this);
-                EventObject event(xThis);
-                m_NotifyListeners.notifyEach(
-                    &XModifyListener::modified, event);
-            } catch (RuntimeException &) {
-                if (!bIgnoreRuntimeExceptionsWhileFiring) {
-                    throw;
-                }
-            } catch (Exception &) {
-                // ignore
+        if (!bModified)
+            return;
+
+        try {
+            Reference<XInterface> xThis(*this);
+            EventObject event(xThis);
+            m_NotifyListeners.notifyEach(
+                &XModifyListener::modified, event);
+        } catch (RuntimeException &) {
+            if (!bIgnoreRuntimeExceptionsWhileFiring) {
+                throw;
             }
+        } catch (Exception &) {
+            // ignore
         }
     }
 
