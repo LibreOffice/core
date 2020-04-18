@@ -106,30 +106,30 @@ namespace vclcanvas
 
     void BitmapBackBuffer::createVDev() const
     {
-        if( !mpVDev )
-        {
-            // VDev not yet created, do it now. Create an alpha-VDev,
-            // if bitmap has transparency.
-            mpVDev = maBitmap->IsTransparent() ?
-                VclPtr<VirtualDevice>::Create( mrRefDevice, DeviceFormat::DEFAULT, DeviceFormat::DEFAULT ) :
-                VclPtr<VirtualDevice>::Create( mrRefDevice );
+        if( mpVDev )
+            return;
 
-            OSL_ENSURE( mpVDev,
-                        "BitmapBackBuffer::createVDev(): Unable to create VirtualDevice" );
+        // VDev not yet created, do it now. Create an alpha-VDev,
+        // if bitmap has transparency.
+        mpVDev = maBitmap->IsTransparent() ?
+            VclPtr<VirtualDevice>::Create( mrRefDevice, DeviceFormat::DEFAULT, DeviceFormat::DEFAULT ) :
+            VclPtr<VirtualDevice>::Create( mrRefDevice );
 
-            mpVDev->SetOutputSizePixel( maBitmap->GetSizePixel() );
+        OSL_ENSURE( mpVDev,
+                    "BitmapBackBuffer::createVDev(): Unable to create VirtualDevice" );
 
-            // #i95645#
+        mpVDev->SetOutputSizePixel( maBitmap->GetSizePixel() );
+
+        // #i95645#
 #if defined( MACOSX )
-            // use AA on VCLCanvas for Mac
-            mpVDev->SetAntialiasing( AntialiasingFlags::EnableB2dDraw | mpVDev->GetAntialiasing() );
+        // use AA on VCLCanvas for Mac
+        mpVDev->SetAntialiasing( AntialiasingFlags::EnableB2dDraw | mpVDev->GetAntialiasing() );
 #else
-            // switch off AA for WIN32 and UNIX, the VCLCanvas does not look good with it and
-            // is not required to do AA. It would need to be adapted to use it correctly
-            // (especially gradient painting). This will need extra work.
-            mpVDev->SetAntialiasing(mpVDev->GetAntialiasing() & ~AntialiasingFlags::EnableB2dDraw);
+        // switch off AA for WIN32 and UNIX, the VCLCanvas does not look good with it and
+        // is not required to do AA. It would need to be adapted to use it correctly
+        // (especially gradient painting). This will need extra work.
+        mpVDev->SetAntialiasing(mpVDev->GetAntialiasing() & ~AntialiasingFlags::EnableB2dDraw);
 #endif
-        }
     }
 
     void BitmapBackBuffer::updateVDev() const

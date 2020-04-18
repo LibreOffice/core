@@ -196,21 +196,21 @@ namespace vclcanvas
     {
         static sal_Int32 nFilePostfixCount(0);
 
-        if( mpOutDev )
-        {
-            OUString aFilename = "dbg_frontbuffer" + OUString::number(nFilePostfixCount) + ".bmp";
+        if( !mpOutDev )
+            return;
 
-            SvFileStream aStream( aFilename, StreamMode::STD_READWRITE );
+        OUString aFilename = "dbg_frontbuffer" + OUString::number(nFilePostfixCount) + ".bmp";
 
-            const ::Point aEmptyPoint;
-            OutputDevice& rOutDev = mpOutDev->getOutDev();
-            bool bOldMap( rOutDev.IsMapModeEnabled() );
-            rOutDev.EnableMapMode( false );
-            WriteDIB(rOutDev.GetBitmapEx(aEmptyPoint, rOutDev.GetOutputSizePixel()), aStream, false);
-            rOutDev.EnableMapMode( bOldMap );
+        SvFileStream aStream( aFilename, StreamMode::STD_READWRITE );
 
-            ++nFilePostfixCount;
-        }
+        const ::Point aEmptyPoint;
+        OutputDevice& rOutDev = mpOutDev->getOutDev();
+        bool bOldMap( rOutDev.IsMapModeEnabled() );
+        rOutDev.EnableMapMode( false );
+        WriteDIB(rOutDev.GetBitmapEx(aEmptyPoint, rOutDev.GetOutputSizePixel()), aStream, false);
+        rOutDev.EnableMapMode( bOldMap );
+
+        ++nFilePostfixCount;
     }
 
 }

@@ -56,41 +56,41 @@ namespace canvas
             {
                 // only deal with change events from the currently
                 // affected sprite
-                if( rSpriteRecord.mpAffectedSprite == mpAffectedSprite )
+                if( rSpriteRecord.mpAffectedSprite != mpAffectedSprite )
+                    return;
+
+                switch( rSpriteRecord.meChangeType )
                 {
-                    switch( rSpriteRecord.meChangeType )
-                    {
-                        case SpriteRedrawManager::SpriteChangeRecord::ChangeType::move:
-                            if( !mbIsMove )
-                            {
-                                // no move yet - this must be the first one
-                                maMoveStartArea = ::basegfx::B2DRectangle(
-                                    rSpriteRecord.maOldPos,
-                                    rSpriteRecord.maOldPos + rSpriteRecord.maUpdateArea.getRange() );
-                                mbIsMove        = true;
-                            }
+                    case SpriteRedrawManager::SpriteChangeRecord::ChangeType::move:
+                        if( !mbIsMove )
+                        {
+                            // no move yet - this must be the first one
+                            maMoveStartArea = ::basegfx::B2DRectangle(
+                                rSpriteRecord.maOldPos,
+                                rSpriteRecord.maOldPos + rSpriteRecord.maUpdateArea.getRange() );
+                            mbIsMove        = true;
+                        }
 
-                            maMoveEndArea   = rSpriteRecord.maUpdateArea;
-                            break;
+                        maMoveEndArea   = rSpriteRecord.maUpdateArea;
+                        break;
 
-                        case SpriteRedrawManager::SpriteChangeRecord::ChangeType::update:
-                            // update end update area of the
-                            // sprite. Thus, every update() action
-                            // _after_ the last move will correctly
-                            // update the final repaint area. And this
-                            // does not interfere with subsequent
-                            // moves, because moves always perform a
-                            // hard set of maMoveEndArea to their
-                            // stored value
-                            maMoveEndArea.expand( rSpriteRecord.maUpdateArea );
-                            mbIsGenericUpdate = true;
-                            break;
+                    case SpriteRedrawManager::SpriteChangeRecord::ChangeType::update:
+                        // update end update area of the
+                        // sprite. Thus, every update() action
+                        // _after_ the last move will correctly
+                        // update the final repaint area. And this
+                        // does not interfere with subsequent
+                        // moves, because moves always perform a
+                        // hard set of maMoveEndArea to their
+                        // stored value
+                        maMoveEndArea.expand( rSpriteRecord.maUpdateArea );
+                        mbIsGenericUpdate = true;
+                        break;
 
-                        default:
-                            ENSURE_OR_THROW( false,
-                                              "Unexpected case in SpriteUpdater::operator()" );
-                            break;
-                    }
+                    default:
+                        ENSURE_OR_THROW( false,
+                                          "Unexpected case in SpriteUpdater::operator()" );
+                        break;
                 }
             }
 

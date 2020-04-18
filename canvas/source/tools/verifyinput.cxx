@@ -295,20 +295,20 @@ namespace canvas::tools
 #endif
             }
 
-            if( renderState.CompositeOperation < rendering::CompositeOperation::CLEAR ||
-                renderState.CompositeOperation > rendering::CompositeOperation::SATURATE )
-            {
+            if( !(renderState.CompositeOperation < rendering::CompositeOperation::CLEAR ||
+                renderState.CompositeOperation > rendering::CompositeOperation::SATURATE) )
+                return;
+
 #if OSL_DEBUG_LEVEL > 0
-                throw lang::IllegalArgumentException(
-                    OUString::createFromAscii(pStr) +
-                    ": verifyInput(): render state's CompositeOperation value out of range (" +
-                    OUString::number(sal::static_int_cast<sal_Int32>(renderState.CompositeOperation)) +
-                    " not known)",
-                    xIf, nArgPos );
+            throw lang::IllegalArgumentException(
+                OUString::createFromAscii(pStr) +
+                ": verifyInput(): render state's CompositeOperation value out of range (" +
+                OUString::number(sal::static_int_cast<sal_Int32>(renderState.CompositeOperation)) +
+                " not known)",
+                xIf, nArgPos );
 #else
-                throw lang::IllegalArgumentException();
+            throw lang::IllegalArgumentException();
 #endif
-            }
         }
 
         void verifyInput( const rendering::Texture&                 texture,
@@ -361,20 +361,20 @@ namespace canvas::tools
 #endif
             }
 
-            if( texture.RepeatModeY < rendering::TexturingMode::NONE ||
-                texture.RepeatModeY > rendering::TexturingMode::REPEAT )
-            {
+            if( !(texture.RepeatModeY < rendering::TexturingMode::NONE ||
+                texture.RepeatModeY > rendering::TexturingMode::REPEAT) )
+                return;
+
 #if OSL_DEBUG_LEVEL > 0
-                throw lang::IllegalArgumentException(
-                    OUString::createFromAscii(pStr) +
-                    ": verifyInput(): textures' RepeatModeY value is out of range (" +
-                    OUString::number(sal::static_int_cast<sal_Int32>(texture.RepeatModeY)) +
-                    " not known)",
-                    xIf, nArgPos );
+            throw lang::IllegalArgumentException(
+                OUString::createFromAscii(pStr) +
+                ": verifyInput(): textures' RepeatModeY value is out of range (" +
+                OUString::number(sal::static_int_cast<sal_Int32>(texture.RepeatModeY)) +
+                " not known)",
+                xIf, nArgPos );
 #else
-                throw lang::IllegalArgumentException();
+            throw lang::IllegalArgumentException();
 #endif
-            }
         }
 
         namespace
@@ -483,20 +483,20 @@ namespace canvas::tools
 #endif
             }
 
-            if( strokeAttributes.JoinType < rendering::PathJoinType::NONE ||
-                strokeAttributes.JoinType > rendering::PathJoinType::BEVEL )
-            {
+            if( !(strokeAttributes.JoinType < rendering::PathJoinType::NONE ||
+                strokeAttributes.JoinType > rendering::PathJoinType::BEVEL) )
+                return;
+
 #if OSL_DEBUG_LEVEL > 0
-                throw lang::IllegalArgumentException(
-                    OUString::createFromAscii(pStr) +
-                    ": verifyInput(): stroke attributes' JoinType value is out of range (" +
-                    OUString::number(sal::static_int_cast<sal_Int32>(strokeAttributes.JoinType)) +
-                    " not known)",
-                    xIf, nArgPos );
+            throw lang::IllegalArgumentException(
+                OUString::createFromAscii(pStr) +
+                ": verifyInput(): stroke attributes' JoinType value is out of range (" +
+                OUString::number(sal::static_int_cast<sal_Int32>(strokeAttributes.JoinType)) +
+                " not known)",
+                xIf, nArgPos );
 #else
-                throw lang::IllegalArgumentException();
+            throw lang::IllegalArgumentException();
 #endif
-            }
         }
 
         void verifyInput( const rendering::IntegerBitmapLayout&     bitmapLayout,
@@ -552,20 +552,20 @@ namespace canvas::tools
 #endif
             }
 
-            if( bitmapLayout.ColorSpace->getEndianness() < util::Endianness::LITTLE ||
-                bitmapLayout.ColorSpace->getEndianness() > util::Endianness::BIG )
-            {
+            if( !(bitmapLayout.ColorSpace->getEndianness() < util::Endianness::LITTLE ||
+                bitmapLayout.ColorSpace->getEndianness() > util::Endianness::BIG) )
+                return;
+
 #if OSL_DEBUG_LEVEL > 0
-                throw lang::IllegalArgumentException(
-                    OUString::createFromAscii(pStr) +
-                    ": verifyInput(): bitmap layout's ColorSpace getEndianness() value is out of range (" +
-                    OUString::number(sal::static_int_cast<sal_Int32>(bitmapLayout.ColorSpace->getEndianness())) +
-                    " not known)",
-                    xIf, nArgPos );
+            throw lang::IllegalArgumentException(
+                OUString::createFromAscii(pStr) +
+                ": verifyInput(): bitmap layout's ColorSpace getEndianness() value is out of range (" +
+                OUString::number(sal::static_int_cast<sal_Int32>(bitmapLayout.ColorSpace->getEndianness())) +
+                " not known)",
+                xIf, nArgPos );
 #else
-                throw lang::IllegalArgumentException();
+            throw lang::IllegalArgumentException();
 #endif
-            }
         }
 
         void verifyInput( const rendering::FontRequest&             fontRequest,
@@ -660,19 +660,19 @@ namespace canvas::tools
 #endif
             }
 
-            if( size.Height <= 0 )
-            {
+            if( size.Height > 0 )
+                return;
+
 #if OSL_DEBUG_LEVEL > 0
-                throw lang::IllegalArgumentException(
-                    OUString::createFromAscii(pStr) +
-                    ": verifyBitmapSize(): size has 0 or negative height (value: " +
-                    OUString::number(size.Height) +
-                    ")",
-                    xIf, 0 );
+            throw lang::IllegalArgumentException(
+                OUString::createFromAscii(pStr) +
+                ": verifyBitmapSize(): size has 0 or negative height (value: " +
+                OUString::number(size.Height) +
+                ")",
+                xIf, 0 );
 #else
-                throw lang::IllegalArgumentException();
+            throw lang::IllegalArgumentException();
 #endif
-            }
         }
 
         void verifySpriteSize( const geometry::RealSize2D&              size,
