@@ -151,83 +151,83 @@ void Tables::refresh()
 static void appendColumnList(
     OUStringBuffer &buf, const Reference< XColumnsSupplier > & columnSupplier, ConnectionSettings *settings )
 {
-    if( columnSupplier.is() )
+    if( !columnSupplier.is() )
+        return;
+
+    Reference< XEnumerationAccess > columns( columnSupplier->getColumns(),UNO_QUERY );
+    if( !columns.is() )
+        return;
+
+    Reference< XEnumeration > xEnum( columns->createEnumeration() );
+    bool first = true;
+    Statics & st = getStatics();
+
+    while( xEnum.is() && xEnum->hasMoreElements() )
     {
-        Reference< XEnumerationAccess > columns( columnSupplier->getColumns(),UNO_QUERY );
-        if( columns.is() )
+        if( first )
         {
-            Reference< XEnumeration > xEnum( columns->createEnumeration() );
-            bool first = true;
-            Statics & st = getStatics();
-
-            while( xEnum.is() && xEnum->hasMoreElements() )
-            {
-                if( first )
-                {
-                    first = false;
-                }
-                else
-                {
-                    buf.append( ", " );
-                }
-                Reference< XPropertySet > column( xEnum->nextElement(), UNO_QUERY );
-                OUString name = extractStringProperty( column, st.NAME );
-                OUString defaultValue = extractStringProperty( column, st.DEFAULT_VALUE );
-                bool isNullable = extractBoolProperty( column, st.IS_NULLABLE );
-                bool isAutoIncrement = extractBoolProperty( column, st.IS_AUTO_INCREMENT );
-
-                bufferQuoteIdentifier( buf, name, settings );
-
-                OUString type = sqltype2string( column );
-                if( isAutoIncrement )
-                {
-                    sal_Int32 dataType = 0;
-                    column->getPropertyValue( st.TYPE ) >>= dataType;
-                    if( css::sdbc::DataType::INTEGER == dataType )
-                    {
-                        buf.append( " serial  ");
-                        isNullable = false;
-                    }
-                    else if( css::sdbc::DataType::BIGINT == dataType )
-                    {
-                        buf.append( " serial8 " );
-                        isNullable = false;
-                    }
-                    else
-                        buf.append( type );
-                }
-                else
-                {
-                    buf.append( type );
-                }
-                if( !defaultValue.isEmpty() )
-                {
-                    bufferQuoteConstant( buf, defaultValue, settings );
-                }
-
-                if( ! isNullable )
-                    buf.append( " NOT NULL " );
-
-            }
+            first = false;
         }
+        else
+        {
+            buf.append( ", " );
+        }
+        Reference< XPropertySet > column( xEnum->nextElement(), UNO_QUERY );
+        OUString name = extractStringProperty( column, st.NAME );
+        OUString defaultValue = extractStringProperty( column, st.DEFAULT_VALUE );
+        bool isNullable = extractBoolProperty( column, st.IS_NULLABLE );
+        bool isAutoIncrement = extractBoolProperty( column, st.IS_AUTO_INCREMENT );
+
+        bufferQuoteIdentifier( buf, name, settings );
+
+        OUString type = sqltype2string( column );
+        if( isAutoIncrement )
+        {
+            sal_Int32 dataType = 0;
+            column->getPropertyValue( st.TYPE ) >>= dataType;
+            if( css::sdbc::DataType::INTEGER == dataType )
+            {
+                buf.append( " serial  ");
+                isNullable = false;
+            }
+            else if( css::sdbc::DataType::BIGINT == dataType )
+            {
+                buf.append( " serial8 " );
+                isNullable = false;
+            }
+            else
+                buf.append( type );
+        }
+        else
+        {
+            buf.append( type );
+        }
+        if( !defaultValue.isEmpty() )
+        {
+            bufferQuoteConstant( buf, defaultValue, settings );
+        }
+
+        if( ! isNullable )
+            buf.append( " NOT NULL " );
+
     }
 }
 
 static void appendKeyList(
     OUStringBuffer & buf, const Reference< XKeysSupplier > &keySupplier, ConnectionSettings *settings )
 {
-    if( keySupplier.is() )
+    if( !keySupplier.is() )
+        return;
+
+    Reference< XEnumerationAccess > keys( keySupplier->getKeys(), UNO_QUERY );
+    if(keys.is() )
     {
-        Reference< XEnumerationAccess > keys( keySupplier->getKeys(), UNO_QUERY );
-        if(keys.is() )
+        Reference< XEnumeration > xEnum = keys->createEnumeration();
+        while( xEnum.is() && xEnum->hasMoreElements() )
         {
-            Reference< XEnumeration > xEnum = keys->createEnumeration();
-            while( xEnum.is() && xEnum->hasMoreElements() )
-            {
-                buf.append( ", " );
-                Reference< XPropertySet > key( xEnum->nextElement(), UNO_QUERY );
-                bufferKey2TableConstraint( buf, key, settings );
-            }
+            buf.append( ", " );
+            Reference< XPropertySet > key( xEnum->nextElement(), UNO_QUERY );
+            bufferKey2TableConstraint( buf, key, settings );
         }
     }
 }

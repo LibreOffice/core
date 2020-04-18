@@ -110,39 +110,39 @@ void OTables::dropObject(sal_Int32 _nPos,const OUString& _sElementName)
 {
     Reference< XInterface > xObject( getObject( _nPos ) );
     bool bIsNew = connectivity::sdbcx::ODescriptor::isNew( xObject );
-    if (!bIsNew)
+    if (bIsNew)
+        return;
+
+    Reference< XConnection > xConnection = static_cast<OHCatalog&>(m_rParent).getConnection();
+
+
+    OUString sCatalog,sSchema,sTable;
+    ::dbtools::qualifiedNameComponents(m_xMetaData,_sElementName,sCatalog,sSchema,sTable,::dbtools::EComposeRule::InDataManipulation);
+
+    OUString aSql(  "DROP " );
+
+    Reference<XPropertySet> xProp(xObject,UNO_QUERY);
+    bool bIsView;
+    if((bIsView = (xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == "VIEW"))) // here we have a view
+        aSql += "VIEW ";
+    else
+        aSql += "TABLE ";
+
+    OUString sComposedName(
+        ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, true, ::dbtools::EComposeRule::InDataManipulation ) );
+    aSql += sComposedName;
+    Reference< XStatement > xStmt = xConnection->createStatement(  );
+    if ( xStmt.is() )
     {
-        Reference< XConnection > xConnection = static_cast<OHCatalog&>(m_rParent).getConnection();
-
-
-        OUString sCatalog,sSchema,sTable;
-        ::dbtools::qualifiedNameComponents(m_xMetaData,_sElementName,sCatalog,sSchema,sTable,::dbtools::EComposeRule::InDataManipulation);
-
-        OUString aSql(  "DROP " );
-
-        Reference<XPropertySet> xProp(xObject,UNO_QUERY);
-        bool bIsView;
-        if((bIsView = (xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == "VIEW"))) // here we have a view
-            aSql += "VIEW ";
-        else
-            aSql += "TABLE ";
-
-        OUString sComposedName(
-            ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, true, ::dbtools::EComposeRule::InDataManipulation ) );
-        aSql += sComposedName;
-        Reference< XStatement > xStmt = xConnection->createStatement(  );
-        if ( xStmt.is() )
-        {
-            xStmt->execute(aSql);
-            ::comphelper::disposeComponent(xStmt);
-        }
-        // if no exception was thrown we must delete it from the views
-        if ( bIsView )
-        {
-            HViews* pViews = static_cast<HViews*>(static_cast<OHCatalog&>(m_rParent).getPrivateViews());
-            if ( pViews && pViews->hasByName(_sElementName) )
-                pViews->dropByNameImpl(_sElementName);
-        }
+        xStmt->execute(aSql);
+        ::comphelper::disposeComponent(xStmt);
+    }
+    // if no exception was thrown we must delete it from the views
+    if ( bIsView )
+    {
+        HViews* pViews = static_cast<HViews*>(static_cast<OHCatalog&>(m_rParent).getPrivateViews());
+        if ( pViews && pViews->hasByName(_sElementName) )
+            pViews->dropByNameImpl(_sElementName);
     }
 }
 

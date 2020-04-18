@@ -761,33 +761,34 @@ void java_sql_Statement::createStatement(JNIEnv* _pEnv)
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
 
-    if( _pEnv && !object ){
-        // initialize temporary variable
-        static const char * const cMethodName = "createStatement";
-        // Java-Call
-        jobject out = nullptr;
-        static jmethodID mID(nullptr);
-        if ( !mID )
-        {
-            static const char * const cSignature = "(II)Ljava/sql/Statement;";
-            mID  = _pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature );
-        }
-        if( mID ){
-            out = _pEnv->CallObjectMethod( m_pConnection->getJavaObject(), mID,m_nResultSetType,m_nResultSetConcurrency );
-        } //mID
-        else
-        {
-            static const char * const cSignature2 = "()Ljava/sql/Statement;";
-            static jmethodID mID2 = _pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature2 );OSL_ENSURE(mID2,"Unknown method id!");
-            if( mID2 ){
-                out = _pEnv->CallObjectMethod( m_pConnection->getJavaObject(), mID2);
-            } //mID
-        }
-        ThrowLoggedSQLException( m_aLogger, _pEnv, *this );
+    if( !(_pEnv && !object) )
+        return;
 
-        if ( out )
-            object = _pEnv->NewGlobalRef( out );
-    } //_pEnv
+    // initialize temporary variable
+    static const char * const cMethodName = "createStatement";
+    // Java-Call
+    jobject out = nullptr;
+    static jmethodID mID(nullptr);
+    if ( !mID )
+    {
+        static const char * const cSignature = "(II)Ljava/sql/Statement;";
+        mID  = _pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature );
+    }
+    if( mID ){
+        out = _pEnv->CallObjectMethod( m_pConnection->getJavaObject(), mID,m_nResultSetType,m_nResultSetConcurrency );
+    } //mID
+    else
+    {
+        static const char * const cSignature2 = "()Ljava/sql/Statement;";
+        static jmethodID mID2 = _pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature2 );OSL_ENSURE(mID2,"Unknown method id!");
+        if( mID2 ){
+            out = _pEnv->CallObjectMethod( m_pConnection->getJavaObject(), mID2);
+        } //mID
+    }
+    ThrowLoggedSQLException( m_aLogger, _pEnv, *this );
+
+    if ( out )
+        object = _pEnv->NewGlobalRef( out );
 }
 
 

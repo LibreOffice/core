@@ -482,17 +482,17 @@ void OPreparedStatement::describeParameter()
 {
     std::vector< OSQLParseNode*> aParseNodes;
     scanParameter(m_pParseTree,aParseNodes);
-    if ( !aParseNodes.empty() )
+    if ( aParseNodes.empty() )
+        return;
+
+    //  m_xParamColumns = new OSQLColumns();
+    const OSQLTables& rTabs = m_aSQLIterator.getTables();
+    if( !rTabs.empty() )
     {
-        //  m_xParamColumns = new OSQLColumns();
-        const OSQLTables& rTabs = m_aSQLIterator.getTables();
-        if( !rTabs.empty() )
+        OSQLTable xTable = rTabs.begin()->second;
+        for (auto const& parseNode : aParseNodes)
         {
-            OSQLTable xTable = rTabs.begin()->second;
-            for (auto const& parseNode : aParseNodes)
-            {
-                describeColumn(parseNode,parseNode->getParent()->getChild(0),xTable);
-            }
+            describeColumn(parseNode,parseNode->getParent()->getChild(0),xTable);
         }
     }
 }
@@ -501,36 +501,36 @@ void OPreparedStatement::initializeResultSet(OResultSet* pRS)
     OStatement_Base::initializeResultSet(pRS);
 
     // Substitute parameter (AssignValues and criteria):
-    if (!m_xParamColumns->empty())
+    if (m_xParamColumns->empty())
+        return;
+
+    // begin with AssignValues
+    sal_uInt16 nParaCount=0; // gives the current number of previously set Parameters
+
+    // search for parameters to be substituted:
+    size_t nCount = m_aAssignValues.is() ? m_aAssignValues->size() : 1; // 1 is important for the Criteria
+    for (size_t j = 1; j < nCount; j++)
     {
-        // begin with AssignValues
-        sal_uInt16 nParaCount=0; // gives the current number of previously set Parameters
+        sal_uInt32 nParameter = (*m_aAssignValues).getParameterIndex(j);
+        if (nParameter == SQL_NO_PARAMETER)
+            continue;   // this AssignValue is no Parameter
 
-        // search for parameters to be substituted:
-        size_t nCount = m_aAssignValues.is() ? m_aAssignValues->size() : 1; // 1 is important for the Criteria
-        for (size_t j = 1; j < nCount; j++)
-        {
-            sal_uInt32 nParameter = (*m_aAssignValues).getParameterIndex(j);
-            if (nParameter == SQL_NO_PARAMETER)
-                continue;   // this AssignValue is no Parameter
-
-            ++nParaCount; // now the Parameter is valid
-        }
-
-        if (m_aParameterRow.is() &&  (m_xParamColumns->size()+1) != m_aParameterRow->size() )
-        {
-            sal_Int32 i = m_aParameterRow->size();
-            sal_Int32 nParamColumns = m_xParamColumns->size()+1;
-            m_aParameterRow->resize(nParamColumns);
-            for ( ;i < nParamColumns; ++i )
-            {
-                if ( !(*m_aParameterRow)[i].is() )
-                    (*m_aParameterRow)[i] = new ORowSetValueDecorator;
-            }
-        }
-        if (m_aParameterRow.is() && nParaCount < m_aParameterRow->size() )
-            m_pSQLAnalyzer->bindParameterRow(m_aParameterRow);
+        ++nParaCount; // now the Parameter is valid
     }
+
+    if (m_aParameterRow.is() &&  (m_xParamColumns->size()+1) != m_aParameterRow->size() )
+    {
+        sal_Int32 i = m_aParameterRow->size();
+        sal_Int32 nParamColumns = m_xParamColumns->size()+1;
+        m_aParameterRow->resize(nParamColumns);
+        for ( ;i < nParamColumns; ++i )
+        {
+            if ( !(*m_aParameterRow)[i].is() )
+                (*m_aParameterRow)[i] = new ORowSetValueDecorator;
+        }
+    }
+    if (m_aParameterRow.is() && nParaCount < m_aParameterRow->size() )
+        m_pSQLAnalyzer->bindParameterRow(m_aParameterRow);
 }
 
 void OPreparedStatement::parseParamterElem(const OUString& _sColumnName, OSQLParseNode* pRow_Value_Constructor_Elem)

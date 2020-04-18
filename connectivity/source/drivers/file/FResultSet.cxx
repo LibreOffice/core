@@ -1472,40 +1472,40 @@ void OResultSet::setBoundedColumns(const OValueRefRow& _rRow,
         }
     }
     // in this case we got more select columns as columns exist in the table
-    if ( _bSetColumnMapping && aSelectIters.size() != _rColMapping.size() )
+    if ( !(_bSetColumnMapping && aSelectIters.size() != _rColMapping.size()) )
+        return;
+
+    Reference<XNameAccess> xNameAccess(_xNames,UNO_QUERY);
+    Sequence< OUString > aSelectColumns = xNameAccess->getElementNames();
+
+    for (   OSQLColumns::iterator aIter = _rxColumns->begin();
+            aIter != _rxColumns->end();
+                ++aIter
+            )
     {
-        Reference<XNameAccess> xNameAccess(_xNames,UNO_QUERY);
-        Sequence< OUString > aSelectColumns = xNameAccess->getElementNames();
-
-        for (   OSQLColumns::iterator aIter = _rxColumns->begin();
-                aIter != _rxColumns->end();
-                    ++aIter
-                )
+        if ( aSelectIters.end() == aSelectIters.find(aIter) )
         {
-            if ( aSelectIters.end() == aSelectIters.find(aIter) )
-            {
-                if ( (*aIter)->getPropertySetInfo()->hasPropertyByName(sRealName) )
-                    (*aIter)->getPropertyValue(sRealName) >>= sSelectColumnRealName;
-                else
-                    (*aIter)->getPropertyValue(sName) >>= sSelectColumnRealName;
+            if ( (*aIter)->getPropertySetInfo()->hasPropertyByName(sRealName) )
+                (*aIter)->getPropertyValue(sRealName) >>= sSelectColumnRealName;
+            else
+                (*aIter)->getPropertyValue(sName) >>= sSelectColumnRealName;
 
-                if ( xNameAccess->hasByName( sSelectColumnRealName ) )
+            if ( xNameAccess->hasByName( sSelectColumnRealName ) )
+            {
+                aSelectIters.emplace(aIter,true);
+                sal_Int32 nSelectColumnPos = aIter - _rxColumns->begin() + 1;
+                const OUString* pBegin = aSelectColumns.getConstArray();
+                const OUString* pEnd   = pBegin + aSelectColumns.getLength();
+                for(sal_Int32 i=0;pBegin != pEnd;++pBegin,++i)
                 {
-                    aSelectIters.emplace(aIter,true);
-                    sal_Int32 nSelectColumnPos = aIter - _rxColumns->begin() + 1;
-                    const OUString* pBegin = aSelectColumns.getConstArray();
-                    const OUString* pEnd   = pBegin + aSelectColumns.getLength();
-                    for(sal_Int32 i=0;pBegin != pEnd;++pBegin,++i)
+                    if ( aCase(*pBegin, sSelectColumnRealName) )
                     {
-                        if ( aCase(*pBegin, sSelectColumnRealName) )
-                        {
-                            // the getXXX methods are 1-based ...
-                            sal_Int32 nTableColumnPos = i + 1;
-                                // get first table column is the bookmark column ...
-                            _rColMapping[nSelectColumnPos] = nTableColumnPos;
-                            (*_rSelectRow)[nSelectColumnPos] = (*_rRow)[nTableColumnPos];
-                            break;
-                        }
+                        // the getXXX methods are 1-based ...
+                        sal_Int32 nTableColumnPos = i + 1;
+                            // get first table column is the bookmark column ...
+                        _rColMapping[nSelectColumnPos] = nTableColumnPos;
+                        (*_rSelectRow)[nSelectColumnPos] = (*_rRow)[nTableColumnPos];
+                        break;
                     }
                 }
             }

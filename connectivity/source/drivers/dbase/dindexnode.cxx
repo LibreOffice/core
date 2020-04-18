@@ -997,24 +997,24 @@ void ONDXPage::SearchAndReplace(const ONDXKey& rSearch,
                                   ONDXKey const & rReplace)
 {
     OSL_ENSURE(rSearch != rReplace,"Invalid here:rSearch == rReplace");
-    if (rSearch != rReplace)
+    if (rSearch == rReplace)
+        return;
+
+    sal_uInt16 nPos = NODE_NOTFOUND;
+    ONDXPage* pPage = this;
+
+    while (pPage)
     {
-        sal_uInt16 nPos = NODE_NOTFOUND;
-        ONDXPage* pPage = this;
+        nPos = pPage->Search(rSearch);
+        if (nPos != NODE_NOTFOUND)
+            break;
+        pPage = pPage->aParent;
+    }
 
-        while (pPage)
-        {
-            nPos = pPage->Search(rSearch);
-            if (nPos != NODE_NOTFOUND)
-                break;
-            pPage = pPage->aParent;
-        }
-
-        if (pPage)
-        {
-            (*pPage)[nPos].GetKey() = rReplace;
-            pPage->SetModified(true);
-        }
+    if (pPage)
+    {
+        (*pPage)[nPos].GetKey() = rReplace;
+        pPage->SetModified(true);
     }
 }
 

@@ -430,19 +430,19 @@ void OFlatTable::construct()
     if(!m_pFileStream)
         m_pFileStream = createStream_simpleError( aFileName, StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYNONE);
 
-    if(m_pFileStream)
-    {
-        sal_uInt64 const nSize = m_pFileStream->remainingSize();
+    if(!m_pFileStream)
+        return;
 
-        // Buffersize is dependent on the file-size
-        m_pFileStream->SetBufferSize(nSize > 1000000 ? 32768 :
-                                    nSize > 100000  ? 16384 :
-                                    nSize > 10000   ? 4096  : 1024);
+    sal_uInt64 const nSize = m_pFileStream->remainingSize();
 
-        fillColumns(aAppLocale);
+    // Buffersize is dependent on the file-size
+    m_pFileStream->SetBufferSize(nSize > 1000000 ? 32768 :
+                                nSize > 100000  ? 16384 :
+                                nSize > 10000   ? 4096  : 1024);
 
-        refreshColumns();
-    }
+    fillColumns(aAppLocale);
+
+    refreshColumns();
 }
 
 OUString OFlatTable::getEntry() const

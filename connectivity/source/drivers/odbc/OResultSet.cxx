@@ -1745,48 +1745,48 @@ bool OResultSet::moveImpl(IResultSetHelper::Movement _eCursorPosition, sal_Int32
 void OResultSet::fillNeededData(SQLRETURN _nRet)
 {
     SQLRETURN nRet = _nRet;
-    if( nRet == SQL_NEED_DATA)
+    if( nRet != SQL_NEED_DATA)
+        return;
+
+    void* pColumnIndex = nullptr;
+    nRet = N3SQLParamData(m_aStatementHandle,&pColumnIndex);
+
+    do
     {
-        void* pColumnIndex = nullptr;
-        nRet = N3SQLParamData(m_aStatementHandle,&pColumnIndex);
+        if (nRet != SQL_SUCCESS && nRet != SQL_SUCCESS_WITH_INFO && nRet != SQL_NEED_DATA)
+            break;
 
-        do
+        sal_IntPtr nColumnIndex ( reinterpret_cast<sal_IntPtr>(pColumnIndex));
+        Sequence< sal_Int8 > aSeq;
+        switch(m_aRow[nColumnIndex].getTypeKind())
         {
-            if (nRet != SQL_SUCCESS && nRet != SQL_SUCCESS_WITH_INFO && nRet != SQL_NEED_DATA)
+            case DataType::BINARY:
+            case DataType::VARBINARY:
+            case DataType::LONGVARBINARY:
+            case DataType::BLOB:
+                aSeq = m_aRow[nColumnIndex];
+                N3SQLPutData (m_aStatementHandle, aSeq.getArray(), aSeq.getLength());
                 break;
-
-            sal_IntPtr nColumnIndex ( reinterpret_cast<sal_IntPtr>(pColumnIndex));
-            Sequence< sal_Int8 > aSeq;
-            switch(m_aRow[nColumnIndex].getTypeKind())
+            case SQL_WLONGVARCHAR:
             {
-                case DataType::BINARY:
-                case DataType::VARBINARY:
-                case DataType::LONGVARBINARY:
-                case DataType::BLOB:
-                    aSeq = m_aRow[nColumnIndex];
-                    N3SQLPutData (m_aStatementHandle, aSeq.getArray(), aSeq.getLength());
-                    break;
-                case SQL_WLONGVARCHAR:
-                {
-                    OUString const & sRet = m_aRow[nColumnIndex].getString();
-                    N3SQLPutData (m_aStatementHandle, static_cast<SQLPOINTER>(const_cast<sal_Unicode *>(sRet.getStr())), sizeof(sal_Unicode)*sRet.getLength());
-                    break;
-                }
-                case DataType::LONGVARCHAR:
-                case DataType::CLOB:
-                {
-                    OUString sRet = m_aRow[nColumnIndex].getString();
-                    OString aString(OUStringToOString(sRet,m_nTextEncoding));
-                    N3SQLPutData (m_aStatementHandle, static_cast<SQLPOINTER>(const_cast<char *>(aString.getStr())), aString.getLength());
-                    break;
-                }
-                default:
-                    SAL_WARN( "connectivity.odbc", "Not supported at the moment!");
+                OUString const & sRet = m_aRow[nColumnIndex].getString();
+                N3SQLPutData (m_aStatementHandle, static_cast<SQLPOINTER>(const_cast<sal_Unicode *>(sRet.getStr())), sizeof(sal_Unicode)*sRet.getLength());
+                break;
             }
-            nRet = N3SQLParamData(m_aStatementHandle,&pColumnIndex);
+            case DataType::LONGVARCHAR:
+            case DataType::CLOB:
+            {
+                OUString sRet = m_aRow[nColumnIndex].getString();
+                OString aString(OUStringToOString(sRet,m_nTextEncoding));
+                N3SQLPutData (m_aStatementHandle, static_cast<SQLPOINTER>(const_cast<char *>(aString.getStr())), aString.getLength());
+                break;
+            }
+            default:
+                SAL_WARN( "connectivity.odbc", "Not supported at the moment!");
         }
-        while (nRet == SQL_NEED_DATA);
+        nRet = N3SQLParamData(m_aStatementHandle,&pColumnIndex);
     }
+    while (nRet == SQL_NEED_DATA);
 }
 
 SWORD OResultSet::impl_getColumnType_nothrow(sal_Int32 columnIndex)

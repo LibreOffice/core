@@ -41,48 +41,48 @@ namespace
     void lcl_fillValues(const ::utl::OConfigurationNode& _aURLPatternNode,const OUString& _sNode,::comphelper::NamedValueCollection& _rValues)
     {
         const ::utl::OConfigurationNode aPropertiesNode = _aURLPatternNode.openNode(_sNode);
-        if ( aPropertiesNode.isValid() )
+        if ( !aPropertiesNode.isValid() )
+            return;
+
+        uno::Sequence< OUString > aStringSeq;
+        const uno::Sequence< OUString > aProperties = aPropertiesNode.getNodeNames();
+        const OUString* pPropertiesIter = aProperties.getConstArray();
+        const OUString* pPropertiesEnd  = pPropertiesIter + aProperties.getLength();
+        for (;pPropertiesIter != pPropertiesEnd ; ++pPropertiesIter)
         {
-            uno::Sequence< OUString > aStringSeq;
-            const uno::Sequence< OUString > aProperties = aPropertiesNode.getNodeNames();
-            const OUString* pPropertiesIter = aProperties.getConstArray();
-            const OUString* pPropertiesEnd  = pPropertiesIter + aProperties.getLength();
-            for (;pPropertiesIter != pPropertiesEnd ; ++pPropertiesIter)
+            uno::Any aValue = aPropertiesNode.getNodeValue(*pPropertiesIter + "/Value");
+            if ( aValue >>= aStringSeq )
             {
-                uno::Any aValue = aPropertiesNode.getNodeValue(*pPropertiesIter + "/Value");
-                if ( aValue >>= aStringSeq )
-                {
-                    lcl_convert(aStringSeq,aValue);
-                }
-                _rValues.put(*pPropertiesIter,aValue);
-            } // for (;pPropertiesIter != pPropertiesEnd ; ++pPropertiesIter,++pNamedIter)
-        } // if ( aPropertiesNode.isValid() )
+                lcl_convert(aStringSeq,aValue);
+            }
+            _rValues.put(*pPropertiesIter,aValue);
+        } // for (;pPropertiesIter != pPropertiesEnd ; ++pPropertiesIter,++pNamedIter)
     }
     void lcl_readURLPatternNode(const ::utl::OConfigurationTreeRoot& _aInstalled,const OUString& _sEntry,TInstalledDriver& _rInstalledDriver)
     {
         const ::utl::OConfigurationNode aURLPatternNode = _aInstalled.openNode(_sEntry);
-        if ( aURLPatternNode.isValid() )
-        {
-            OUString sParentURLPattern;
-            aURLPatternNode.getNodeValue("ParentURLPattern") >>= sParentURLPattern;
-            if ( !sParentURLPattern.isEmpty() )
-                lcl_readURLPatternNode(_aInstalled,sParentURLPattern,_rInstalledDriver);
+        if ( !aURLPatternNode.isValid() )
+            return;
 
-            OUString sDriverFactory;
-            aURLPatternNode.getNodeValue("Driver") >>= sDriverFactory;
-            if ( !sDriverFactory.isEmpty() )
-                _rInstalledDriver.sDriverFactory = sDriverFactory;
+        OUString sParentURLPattern;
+        aURLPatternNode.getNodeValue("ParentURLPattern") >>= sParentURLPattern;
+        if ( !sParentURLPattern.isEmpty() )
+            lcl_readURLPatternNode(_aInstalled,sParentURLPattern,_rInstalledDriver);
 
-            OUString sDriverTypeDisplayName;
-            aURLPatternNode.getNodeValue("DriverTypeDisplayName") >>= sDriverTypeDisplayName;
-            OSL_ENSURE(!sDriverTypeDisplayName.isEmpty(),"No valid DriverTypeDisplayName property!");
-            if ( !sDriverTypeDisplayName.isEmpty() )
-                _rInstalledDriver.sDriverTypeDisplayName = sDriverTypeDisplayName;
+        OUString sDriverFactory;
+        aURLPatternNode.getNodeValue("Driver") >>= sDriverFactory;
+        if ( !sDriverFactory.isEmpty() )
+            _rInstalledDriver.sDriverFactory = sDriverFactory;
 
-            lcl_fillValues(aURLPatternNode,"Properties",_rInstalledDriver.aProperties);
-            lcl_fillValues(aURLPatternNode,"Features",_rInstalledDriver.aFeatures);
-            lcl_fillValues(aURLPatternNode,"MetaData",_rInstalledDriver.aMetaData);
-        }
+        OUString sDriverTypeDisplayName;
+        aURLPatternNode.getNodeValue("DriverTypeDisplayName") >>= sDriverTypeDisplayName;
+        OSL_ENSURE(!sDriverTypeDisplayName.isEmpty(),"No valid DriverTypeDisplayName property!");
+        if ( !sDriverTypeDisplayName.isEmpty() )
+            _rInstalledDriver.sDriverTypeDisplayName = sDriverTypeDisplayName;
+
+        lcl_fillValues(aURLPatternNode,"Properties",_rInstalledDriver.aProperties);
+        lcl_fillValues(aURLPatternNode,"Features",_rInstalledDriver.aFeatures);
+        lcl_fillValues(aURLPatternNode,"MetaData",_rInstalledDriver.aMetaData);
     }
 }
 

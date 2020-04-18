@@ -737,98 +737,98 @@ ORowSetValueDecoratorRef const & ODatabaseMetaDataResultSet::getQuoteValue()
 
 void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aArguments )
 {
-    if ( _aArguments.getLength() == 2 )
+    if ( _aArguments.getLength() != 2 )
+        return;
+
+    sal_Int32 nResultSetType = 0;
+    if ( !(_aArguments[0] >>= nResultSetType))
+        return;
+
+    setType(static_cast<MetaDataResultSetType>(nResultSetType));
+    Sequence< Sequence<Any> > aRows;
+    if ( !(_aArguments[1] >>= aRows) )
+        return;
+
+    ORows aRowsToSet;
+    const Sequence<Any>* pRowsIter = aRows.getConstArray();
+    const Sequence<Any>* pRowsEnd  = pRowsIter + aRows.getLength();
+    for (; pRowsIter != pRowsEnd;++pRowsIter)
     {
-        sal_Int32 nResultSetType = 0;
-        if ( _aArguments[0] >>= nResultSetType)
+        ORow aRowToSet;
+        const Any* pRowIter = pRowsIter->getConstArray();
+        const Any* pRowEnd = pRowIter + pRowsIter->getLength();
+        for (; pRowIter != pRowEnd;++pRowIter)
         {
-            setType(static_cast<MetaDataResultSetType>(nResultSetType));
-            Sequence< Sequence<Any> > aRows;
-            if ( _aArguments[1] >>= aRows )
+            ORowSetValueDecoratorRef aValue;
+            switch( pRowIter->getValueTypeClass() )
             {
-                ORows aRowsToSet;
-                const Sequence<Any>* pRowsIter = aRows.getConstArray();
-                const Sequence<Any>* pRowsEnd  = pRowsIter + aRows.getLength();
-                for (; pRowsIter != pRowsEnd;++pRowsIter)
-                {
-                    ORow aRowToSet;
-                    const Any* pRowIter = pRowsIter->getConstArray();
-                    const Any* pRowEnd = pRowIter + pRowsIter->getLength();
-                    for (; pRowIter != pRowEnd;++pRowIter)
+                case TypeClass_BOOLEAN:
                     {
-                        ORowSetValueDecoratorRef aValue;
-                        switch( pRowIter->getValueTypeClass() )
-                        {
-                            case TypeClass_BOOLEAN:
-                                {
-                                    bool bValue = false;
-                                    *pRowIter >>= bValue;
-                                    aValue = new ORowSetValueDecorator(ORowSetValue(bValue));
-                                }
-                                break;
-                            case TypeClass_BYTE:
-                                {
-                                    sal_Int8 nValue(0);
-                                    *pRowIter >>= nValue;
-                                    aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
-                                }
-                                break;
-                            case TypeClass_SHORT:
-                            case TypeClass_UNSIGNED_SHORT:
-                                {
-                                    sal_Int16 nValue(0);
-                                    *pRowIter >>= nValue;
-                                    aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
-                                }
-                                break;
-                            case TypeClass_LONG:
-                            case TypeClass_UNSIGNED_LONG:
-                                {
-                                    sal_Int32 nValue(0);
-                                    *pRowIter >>= nValue;
-                                    aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
-                                }
-                                break;
-                            case TypeClass_HYPER:
-                            case TypeClass_UNSIGNED_HYPER:
-                                {
-                                    sal_Int64 nValue(0);
-                                    *pRowIter >>= nValue;
-                                    aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
-                                }
-                                break;
-                            case TypeClass_FLOAT:
-                                {
-                                    float nValue(0.0);
-                                    *pRowIter >>= nValue;
-                                    aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
-                                }
-                                break;
-                            case TypeClass_DOUBLE:
-                                {
-                                    double nValue(0.0);
-                                    *pRowIter >>= nValue;
-                                    aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
-                                }
-                                break;
-                            case TypeClass_STRING:
-                                {
-                                    OUString sValue;
-                                    *pRowIter >>= sValue;
-                                    aValue = new ORowSetValueDecorator(ORowSetValue(sValue));
-                                }
-                                break;
-                            default:
-                                break;
-                        }
-                        aRowToSet.push_back(aValue);
+                        bool bValue = false;
+                        *pRowIter >>= bValue;
+                        aValue = new ORowSetValueDecorator(ORowSetValue(bValue));
                     }
-                    aRowsToSet.push_back(aRowToSet);
-                } // for (; pRowsIter != pRowsEnd;++pRowsIter
-                setRows(aRowsToSet);
+                    break;
+                case TypeClass_BYTE:
+                    {
+                        sal_Int8 nValue(0);
+                        *pRowIter >>= nValue;
+                        aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
+                    }
+                    break;
+                case TypeClass_SHORT:
+                case TypeClass_UNSIGNED_SHORT:
+                    {
+                        sal_Int16 nValue(0);
+                        *pRowIter >>= nValue;
+                        aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
+                    }
+                    break;
+                case TypeClass_LONG:
+                case TypeClass_UNSIGNED_LONG:
+                    {
+                        sal_Int32 nValue(0);
+                        *pRowIter >>= nValue;
+                        aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
+                    }
+                    break;
+                case TypeClass_HYPER:
+                case TypeClass_UNSIGNED_HYPER:
+                    {
+                        sal_Int64 nValue(0);
+                        *pRowIter >>= nValue;
+                        aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
+                    }
+                    break;
+                case TypeClass_FLOAT:
+                    {
+                        float nValue(0.0);
+                        *pRowIter >>= nValue;
+                        aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
+                    }
+                    break;
+                case TypeClass_DOUBLE:
+                    {
+                        double nValue(0.0);
+                        *pRowIter >>= nValue;
+                        aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
+                    }
+                    break;
+                case TypeClass_STRING:
+                    {
+                        OUString sValue;
+                        *pRowIter >>= sValue;
+                        aValue = new ORowSetValueDecorator(ORowSetValue(sValue));
+                    }
+                    break;
+                default:
+                    break;
             }
+            aRowToSet.push_back(aValue);
         }
-    }
+        aRowsToSet.push_back(aRowToSet);
+    } // for (; pRowsIter != pRowsEnd;++pRowsIter
+    setRows(aRowsToSet);
 }
 // XServiceInfo
 
