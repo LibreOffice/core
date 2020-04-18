@@ -406,28 +406,28 @@ void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
 void EditorWindow::Resize()
 {
     // ScrollBars, etc. happens in Adjust...
-    if ( pEditView )
-    {
-        long nVisY = pEditView->GetStartDocPos().Y();
+    if ( !pEditView )
+        return;
 
+    long nVisY = pEditView->GetStartDocPos().Y();
+
+    pEditView->ShowCursor();
+    Size aOutSz( GetOutputSizePixel() );
+    long nMaxVisAreaStart = pEditView->GetTextEngine()->GetTextHeight() - aOutSz.Height();
+    if ( nMaxVisAreaStart < 0 )
+        nMaxVisAreaStart = 0;
+    if ( pEditView->GetStartDocPos().Y() > nMaxVisAreaStart )
+    {
+        Point aStartDocPos( pEditView->GetStartDocPos() );
+        aStartDocPos.setY( nMaxVisAreaStart );
+        pEditView->SetStartDocPos( aStartDocPos );
         pEditView->ShowCursor();
-        Size aOutSz( GetOutputSizePixel() );
-        long nMaxVisAreaStart = pEditView->GetTextEngine()->GetTextHeight() - aOutSz.Height();
-        if ( nMaxVisAreaStart < 0 )
-            nMaxVisAreaStart = 0;
-        if ( pEditView->GetStartDocPos().Y() > nMaxVisAreaStart )
-        {
-            Point aStartDocPos( pEditView->GetStartDocPos() );
-            aStartDocPos.setY( nMaxVisAreaStart );
-            pEditView->SetStartDocPos( aStartDocPos );
-            pEditView->ShowCursor();
-            rModulWindow.GetBreakPointWindow().GetCurYOffset() = aStartDocPos.Y();
-            rModulWindow.GetLineNumberWindow().GetCurYOffset() = aStartDocPos.Y();
-        }
-        InitScrollBars();
-        if ( nVisY != pEditView->GetStartDocPos().Y() )
-            Invalidate();
+        rModulWindow.GetBreakPointWindow().GetCurYOffset() = aStartDocPos.Y();
+        rModulWindow.GetLineNumberWindow().GetCurYOffset() = aStartDocPos.Y();
     }
+    InitScrollBars();
+    if ( nVisY != pEditView->GetStartDocPos().Y() )
+        Invalidate();
 }
 
 
@@ -468,23 +468,23 @@ void EditorWindow::MouseButtonDown( const MouseEvent &rEvt )
 
 void EditorWindow::Command( const CommandEvent& rCEvt )
 {
-    if ( pEditView )
+    if ( !pEditView )
+        return;
+
+    pEditView->Command( rCEvt );
+    if ( ( rCEvt.GetCommand() == CommandEventId::Wheel ) ||
+         ( rCEvt.GetCommand() == CommandEventId::StartAutoScroll ) ||
+         ( rCEvt.GetCommand() == CommandEventId::AutoScroll ) )
     {
-        pEditView->Command( rCEvt );
-        if ( ( rCEvt.GetCommand() == CommandEventId::Wheel ) ||
-             ( rCEvt.GetCommand() == CommandEventId::StartAutoScroll ) ||
-             ( rCEvt.GetCommand() == CommandEventId::AutoScroll ) )
+        HandleScrollCommand( rCEvt, rModulWindow.GetHScrollBar(), &rModulWindow.GetEditVScrollBar() );
+    } else if ( rCEvt.GetCommand() == CommandEventId::ContextMenu ) {
+        SfxDispatcher* pDispatcher = GetDispatcher();
+        if ( pDispatcher )
         {
-            HandleScrollCommand( rCEvt, rModulWindow.GetHScrollBar(), &rModulWindow.GetEditVScrollBar() );
-        } else if ( rCEvt.GetCommand() == CommandEventId::ContextMenu ) {
-            SfxDispatcher* pDispatcher = GetDispatcher();
-            if ( pDispatcher )
-            {
-                SfxDispatcher::ExecutePopup();
-            }
-            if( pCodeCompleteWnd->IsVisible() ) // hide the code complete window
-                pCodeCompleteWnd->ClearAndHide();
+            SfxDispatcher::ExecutePopup();
         }
+        if( pCodeCompleteWnd->IsVisible() ) // hide the code complete window
+            pCodeCompleteWnd->ClearAndHide();
     }
 }
 
@@ -649,27 +649,28 @@ void EditorWindow::HandleAutoCorrect()
         pEditEngine->ReplaceText( sTextSelection, sStr );
         pEditView->SetSelection( aSel );
     }
-    if( r.tokenType == TokenType::Identifier )
-    {// correct variables
-        if( !aCodeCompleteCache.GetCorrectCaseVarName( sStr, sActSubName ).isEmpty() )
+    if( r.tokenType != TokenType::Identifier )
+        return;
+
+// correct variables
+    if( !aCodeCompleteCache.GetCorrectCaseVarName( sStr, sActSubName ).isEmpty() )
+    {
+        sStr = aCodeCompleteCache.GetCorrectCaseVarName( sStr, sActSubName );
+        pEditEngine->ReplaceText( sTextSelection, sStr );
+        pEditView->SetSelection( aSel );
+    }
+    else
+    {
+        //autocorrect procedures
+        SbxArray* pArr = rModulWindow.GetSbModule()->GetMethods().get();
+        for( sal_uInt32 i=0; i < pArr->Count32(); ++i )
         {
-            sStr = aCodeCompleteCache.GetCorrectCaseVarName( sStr, sActSubName );
-            pEditEngine->ReplaceText( sTextSelection, sStr );
-            pEditView->SetSelection( aSel );
-        }
-        else
-        {
-            //autocorrect procedures
-            SbxArray* pArr = rModulWindow.GetSbModule()->GetMethods().get();
-            for( sal_uInt32 i=0; i < pArr->Count32(); ++i )
+            if( pArr->Get32(i)->GetName().equalsIgnoreAsciiCase( sStr ) )
             {
-                if( pArr->Get32(i)->GetName().equalsIgnoreAsciiCase( sStr ) )
-                {
-                    sStr = pArr->Get32(i)->GetName(); //if found, get the correct case
-                    pEditEngine->ReplaceText( sTextSelection, sStr );
-                    pEditView->SetSelection( aSel );
-                    return;
-                }
+                sStr = pArr->Get32(i)->GetName(); //if found, get the correct case
+                pEditEngine->ReplaceText( sTextSelection, sStr );
+                pEditView->SetSelection( aSel );
+                return;
             }
         }
     }
@@ -844,55 +845,56 @@ void EditorWindow::HandleCodeCompletion()
     std::vector<HighlightPortion> aPortions;
     aLine = aLine.copy(0, aSel.GetEnd().GetIndex());
     aHighlighter.getHighlightPortions( aLine, aPortions );
-    if( !aPortions.empty() )
-    {//use the syntax highlighter to grab out nested reflection calls, eg. aVar.aMethod("aa").aOtherMethod ..
-        for( std::vector<HighlightPortion>::reverse_iterator i(
-                 aPortions.rbegin());
-             i != aPortions.rend(); ++i)
+    if( aPortions.empty() )
+        return;
+
+    //use the syntax highlighter to grab out nested reflection calls, eg. aVar.aMethod("aa").aOtherMethod ..
+    for( std::vector<HighlightPortion>::reverse_iterator i(
+             aPortions.rbegin());
+         i != aPortions.rend(); ++i)
+    {
+        if( i->tokenType == TokenType::Whitespace ) // a whitespace: stop; if there is no ws, it goes to the beginning of the line
+            break;
+        if( i->tokenType == TokenType::Identifier || i->tokenType == TokenType::Keywords ) // extract the identifiers(methods, base variable)
+        /* an example: Dim aLocVar2 as com.sun.star.beans.PropertyValue
+         * here, aLocVar2.Name, and PropertyValue's Name field is treated as a keyword(?!)
+         * */
+            aVect.insert( aVect.begin(), aLine.copy(i->nBegin, i->nEnd - i->nBegin) );
+    }
+
+    if( aVect.empty() )//nothing to do
+        return;
+
+    OUString sBaseName = aVect[aVect.size()-1];//variable name
+    OUString sVarType = aCodeCompleteCache.GetVarType( sBaseName );
+
+    if( !sVarType.isEmpty() && CodeCompleteOptions::IsAutoCorrectOn() )
+    {//correct variable name, if autocorrection on
+        const OUString& sStr = aCodeCompleteCache.GetCorrectCaseVarName( sBaseName, GetActualSubName(nLine) );
+        if( !sStr.isEmpty() )
         {
-            if( i->tokenType == TokenType::Whitespace ) // a whitespace: stop; if there is no ws, it goes to the beginning of the line
-                break;
-            if( i->tokenType == TokenType::Identifier || i->tokenType == TokenType::Keywords ) // extract the identifiers(methods, base variable)
-            /* an example: Dim aLocVar2 as com.sun.star.beans.PropertyValue
-             * here, aLocVar2.Name, and PropertyValue's Name field is treated as a keyword(?!)
-             * */
-                aVect.insert( aVect.begin(), aLine.copy(i->nBegin, i->nEnd - i->nBegin) );
-        }
-
-        if( aVect.empty() )//nothing to do
-            return;
-
-        OUString sBaseName = aVect[aVect.size()-1];//variable name
-        OUString sVarType = aCodeCompleteCache.GetVarType( sBaseName );
-
-        if( !sVarType.isEmpty() && CodeCompleteOptions::IsAutoCorrectOn() )
-        {//correct variable name, if autocorrection on
-            const OUString& sStr = aCodeCompleteCache.GetCorrectCaseVarName( sBaseName, GetActualSubName(nLine) );
-            if( !sStr.isEmpty() )
-            {
-                TextPaM aStart(nLine, aSel.GetStart().GetIndex() - sStr.getLength() );
-                TextSelection sTextSelection(aStart, TextPaM(nLine, aSel.GetStart().GetIndex()));
-                pEditEngine->ReplaceText( sTextSelection, sStr );
-                pEditView->SetSelection( aSel );
-            }
-        }
-
-        UnoTypeCodeCompletetor aTypeCompletor( aVect, sVarType );
-
-        if( aTypeCompletor.CanCodeComplete() )
-        {
-            std::vector< OUString > aEntryVect;//entries to be inserted into the list
-            std::vector< OUString > aFieldVect = aTypeCompletor.GetXIdlClassFields();//fields
-            aEntryVect.insert(aEntryVect.end(), aFieldVect.begin(), aFieldVect.end() );
-            if( CodeCompleteOptions::IsExtendedTypeDeclaration() )
-            {// if extended types on, reflect classes, else just the structs (XIdlClass without methods)
-                std::vector< OUString > aMethVect = aTypeCompletor.GetXIdlClassMethods();//methods
-                aEntryVect.insert(aEntryVect.end(), aMethVect.begin(), aMethVect.end() );
-            }
-            if( !aEntryVect.empty() )
-                SetupAndShowCodeCompleteWnd( aEntryVect, aSel );
+            TextPaM aStart(nLine, aSel.GetStart().GetIndex() - sStr.getLength() );
+            TextSelection sTextSelection(aStart, TextPaM(nLine, aSel.GetStart().GetIndex()));
+            pEditEngine->ReplaceText( sTextSelection, sStr );
+            pEditView->SetSelection( aSel );
         }
     }
+
+    UnoTypeCodeCompletetor aTypeCompletor( aVect, sVarType );
+
+    if( !aTypeCompletor.CanCodeComplete() )
+        return;
+
+    std::vector< OUString > aEntryVect;//entries to be inserted into the list
+    std::vector< OUString > aFieldVect = aTypeCompletor.GetXIdlClassFields();//fields
+    aEntryVect.insert(aEntryVect.end(), aFieldVect.begin(), aFieldVect.end() );
+    if( CodeCompleteOptions::IsExtendedTypeDeclaration() )
+    {// if extended types on, reflect classes, else just the structs (XIdlClass without methods)
+        std::vector< OUString > aMethVect = aTypeCompletor.GetXIdlClassMethods();//methods
+        aEntryVect.insert(aEntryVect.end(), aMethVect.begin(), aMethVect.end() );
+    }
+    if( !aEntryVect.empty() )
+        SetupAndShowCodeCompleteWnd( aEntryVect, aSel );
 }
 
 void EditorWindow::SetupAndShowCodeCompleteWnd( const std::vector< OUString >& aEntryVect, TextSelection aSel )
@@ -1047,70 +1049,71 @@ void EditorWindow::CreateEditEngine()
 
 void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    if (TextHint const* pTextHint = dynamic_cast<TextHint const*>(&rHint))
+    TextHint const* pTextHint = dynamic_cast<TextHint const*>(&rHint);
+    if (!pTextHint)
+        return;
+
+    TextHint const& rTextHint = *pTextHint;
+    if( rTextHint.GetId() == SfxHintId::TextViewScrolled )
     {
-        TextHint const& rTextHint = *pTextHint;
-        if( rTextHint.GetId() == SfxHintId::TextViewScrolled )
+        if ( rModulWindow.GetHScrollBar() )
+            rModulWindow.GetHScrollBar()->SetThumbPos( pEditView->GetStartDocPos().X() );
+        rModulWindow.GetEditVScrollBar().SetThumbPos( pEditView->GetStartDocPos().Y() );
+        rModulWindow.GetBreakPointWindow().DoScroll
+            ( rModulWindow.GetBreakPointWindow().GetCurYOffset() - pEditView->GetStartDocPos().Y() );
+        rModulWindow.GetLineNumberWindow().DoScroll
+            ( rModulWindow.GetLineNumberWindow().GetCurYOffset() - pEditView->GetStartDocPos().Y() );
+    }
+    else if( rTextHint.GetId() == SfxHintId::TextHeightChanged )
+    {
+        if ( pEditView->GetStartDocPos().Y() )
         {
-            if ( rModulWindow.GetHScrollBar() )
+            long nOutHeight = GetOutputSizePixel().Height();
+            long nTextHeight = pEditEngine->GetTextHeight();
+            if ( nTextHeight < nOutHeight )
+                pEditView->Scroll( 0, pEditView->GetStartDocPos().Y() );
+
+            rModulWindow.GetLineNumberWindow().Invalidate();
+        }
+
+        SetScrollBarRanges();
+    }
+    else if( rTextHint.GetId() == SfxHintId::TextFormatted )
+    {
+        if ( rModulWindow.GetHScrollBar() )
+        {
+            const long nWidth = pEditEngine->CalcTextWidth();
+            if ( nWidth != nCurTextWidth )
+            {
+                nCurTextWidth = nWidth;
+                rModulWindow.GetHScrollBar()->SetRange( Range( 0, nCurTextWidth-1) );
                 rModulWindow.GetHScrollBar()->SetThumbPos( pEditView->GetStartDocPos().X() );
-            rModulWindow.GetEditVScrollBar().SetThumbPos( pEditView->GetStartDocPos().Y() );
-            rModulWindow.GetBreakPointWindow().DoScroll
-                ( rModulWindow.GetBreakPointWindow().GetCurYOffset() - pEditView->GetStartDocPos().Y() );
-            rModulWindow.GetLineNumberWindow().DoScroll
-                ( rModulWindow.GetLineNumberWindow().GetCurYOffset() - pEditView->GetStartDocPos().Y() );
-        }
-        else if( rTextHint.GetId() == SfxHintId::TextHeightChanged )
-        {
-            if ( pEditView->GetStartDocPos().Y() )
-            {
-                long nOutHeight = GetOutputSizePixel().Height();
-                long nTextHeight = pEditEngine->GetTextHeight();
-                if ( nTextHeight < nOutHeight )
-                    pEditView->Scroll( 0, pEditView->GetStartDocPos().Y() );
-
-                rModulWindow.GetLineNumberWindow().Invalidate();
             }
-
+        }
+        long nPrevTextWidth = nCurTextWidth;
+        nCurTextWidth = pEditEngine->CalcTextWidth();
+        if ( nCurTextWidth != nPrevTextWidth )
             SetScrollBarRanges();
-        }
-        else if( rTextHint.GetId() == SfxHintId::TextFormatted )
+    }
+    else if( rTextHint.GetId() == SfxHintId::TextParaInserted )
+    {
+        ParagraphInsertedDeleted( rTextHint.GetValue(), true );
+        DoDelayedSyntaxHighlight( rTextHint.GetValue() );
+    }
+    else if( rTextHint.GetId() == SfxHintId::TextParaRemoved )
+    {
+        ParagraphInsertedDeleted( rTextHint.GetValue(), false );
+    }
+    else if( rTextHint.GetId() == SfxHintId::TextParaContentChanged )
+    {
+        DoDelayedSyntaxHighlight( rTextHint.GetValue() );
+    }
+    else if( rTextHint.GetId() == SfxHintId::TextViewSelectionChanged )
+    {
+        if (SfxBindings* pBindings = GetBindingsPtr())
         {
-            if ( rModulWindow.GetHScrollBar() )
-            {
-                const long nWidth = pEditEngine->CalcTextWidth();
-                if ( nWidth != nCurTextWidth )
-                {
-                    nCurTextWidth = nWidth;
-                    rModulWindow.GetHScrollBar()->SetRange( Range( 0, nCurTextWidth-1) );
-                    rModulWindow.GetHScrollBar()->SetThumbPos( pEditView->GetStartDocPos().X() );
-                }
-            }
-            long nPrevTextWidth = nCurTextWidth;
-            nCurTextWidth = pEditEngine->CalcTextWidth();
-            if ( nCurTextWidth != nPrevTextWidth )
-                SetScrollBarRanges();
-        }
-        else if( rTextHint.GetId() == SfxHintId::TextParaInserted )
-        {
-            ParagraphInsertedDeleted( rTextHint.GetValue(), true );
-            DoDelayedSyntaxHighlight( rTextHint.GetValue() );
-        }
-        else if( rTextHint.GetId() == SfxHintId::TextParaRemoved )
-        {
-            ParagraphInsertedDeleted( rTextHint.GetValue(), false );
-        }
-        else if( rTextHint.GetId() == SfxHintId::TextParaContentChanged )
-        {
-            DoDelayedSyntaxHighlight( rTextHint.GetValue() );
-        }
-        else if( rTextHint.GetId() == SfxHintId::TextViewSelectionChanged )
-        {
-            if (SfxBindings* pBindings = GetBindingsPtr())
-            {
-                pBindings->Invalidate( SID_CUT );
-                pBindings->Invalidate( SID_COPY );
-            }
+            pBindings->Invalidate( SID_CUT );
+            pBindings->Invalidate( SID_COPY );
         }
     }
 }
@@ -1171,22 +1174,22 @@ void EditorWindow::InitScrollBars()
 
 void EditorWindow::ImpDoHighlight( sal_uLong nLine )
 {
-    if ( bDoSyntaxHighlight )
+    if ( !bDoSyntaxHighlight )
+        return;
+
+    OUString aLine( pEditEngine->GetText( nLine ) );
+    bool const bWasModified = pEditEngine->IsModified();
+    pEditEngine->RemoveAttribs( nLine );
+    std::vector<HighlightPortion> aPortions;
+    aHighlighter.getHighlightPortions( aLine, aPortions );
+
+    for (auto const& portion : aPortions)
     {
-        OUString aLine( pEditEngine->GetText( nLine ) );
-        bool const bWasModified = pEditEngine->IsModified();
-        pEditEngine->RemoveAttribs( nLine );
-        std::vector<HighlightPortion> aPortions;
-        aHighlighter.getHighlightPortions( aLine, aPortions );
-
-        for (auto const& portion : aPortions)
-        {
-            Color const aColor = rModulWindow.GetLayout().GetSyntaxColor(portion.tokenType);
-            pEditEngine->SetAttrib(TextAttribFontColor(aColor), nLine, portion.nBegin, portion.nEnd);
-        }
-
-        pEditEngine->SetModified(bWasModified);
+        Color const aColor = rModulWindow.GetLayout().GetSyntaxColor(portion.tokenType);
+        pEditEngine->SetAttrib(TextAttribFontColor(aColor), nLine, portion.nBegin, portion.nEnd);
     }
+
+    pEditEngine->SetModified(bWasModified);
 }
 
 void EditorWindow::ChangeFontColor( Color aColor )
@@ -1459,44 +1462,44 @@ void BreakPointWindow::MouseButtonDown( const MouseEvent& rMEvt )
 
 void BreakPointWindow::Command( const CommandEvent& rCEvt )
 {
-    if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
-    {
-        if (!mpUIBuilder)
-            mpUIBuilder.reset(new VclBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/BasicIDE/ui/breakpointmenus.ui", ""));
+    if ( rCEvt.GetCommand() != CommandEventId::ContextMenu )
+        return;
 
-        Point aPos( rCEvt.IsMouseEvent() ? rCEvt.GetMousePosPixel() : Point(1,1) );
-        Point aEventPos( PixelToLogic( aPos ) );
-        BreakPoint* pBrk = rCEvt.IsMouseEvent() ? FindBreakPoint( aEventPos ) : nullptr;
-        if ( pBrk )
+    if (!mpUIBuilder)
+        mpUIBuilder.reset(new VclBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/BasicIDE/ui/breakpointmenus.ui", ""));
+
+    Point aPos( rCEvt.IsMouseEvent() ? rCEvt.GetMousePosPixel() : Point(1,1) );
+    Point aEventPos( PixelToLogic( aPos ) );
+    BreakPoint* pBrk = rCEvt.IsMouseEvent() ? FindBreakPoint( aEventPos ) : nullptr;
+    if ( pBrk )
+    {
+        // test if break point is enabled...
+        VclPtr<PopupMenu> xBrkPropMenu = mpUIBuilder->get_menu("breakmenu");
+        xBrkPropMenu->CheckItem("active", pBrk->bEnabled);
+        OString sCommand = xBrkPropMenu->GetItemIdent(xBrkPropMenu->Execute(this, aPos));
+        if (sCommand == "active")
         {
-            // test if break point is enabled...
-            VclPtr<PopupMenu> xBrkPropMenu = mpUIBuilder->get_menu("breakmenu");
-            xBrkPropMenu->CheckItem("active", pBrk->bEnabled);
-            OString sCommand = xBrkPropMenu->GetItemIdent(xBrkPropMenu->Execute(this, aPos));
-            if (sCommand == "active")
-            {
-                pBrk->bEnabled = !pBrk->bEnabled;
-                rModulWindow.UpdateBreakPoint( *pBrk );
-                Invalidate();
-            }
-            else if (sCommand == "properties")
-            {
-                BreakPointDialog aBrkDlg(GetFrameWeld(), GetBreakPoints());
-                aBrkDlg.SetCurrentBreakPoint( *pBrk );
-                aBrkDlg.run();
-                Invalidate();
-            }
+            pBrk->bEnabled = !pBrk->bEnabled;
+            rModulWindow.UpdateBreakPoint( *pBrk );
+            Invalidate();
         }
-        else
+        else if (sCommand == "properties")
         {
-            VclPtr<PopupMenu> xBrkListMenu = mpUIBuilder->get_menu("breaklistmenu");
-            OString sCommand = xBrkListMenu->GetItemIdent(xBrkListMenu->Execute(this, aPos));
-            if (sCommand == "manage")
-            {
-                BreakPointDialog aBrkDlg(GetFrameWeld(), GetBreakPoints());
-                aBrkDlg.run();
-                Invalidate();
-            }
+            BreakPointDialog aBrkDlg(GetFrameWeld(), GetBreakPoints());
+            aBrkDlg.SetCurrentBreakPoint( *pBrk );
+            aBrkDlg.run();
+            Invalidate();
+        }
+    }
+    else
+    {
+        VclPtr<PopupMenu> xBrkListMenu = mpUIBuilder->get_menu("breaklistmenu");
+        OString sCommand = xBrkListMenu->GetItemIdent(xBrkListMenu->Execute(this, aPos));
+        if (sCommand == "manage")
+        {
+            BreakPointDialog aBrkDlg(GetFrameWeld(), GetBreakPoints());
+            aBrkDlg.run();
+            Invalidate();
         }
     }
 }
@@ -2751,41 +2754,41 @@ void CodeCompleteWindow::SetTextSelection( const TextSelection& aSel )
 
 void CodeCompleteWindow::ResizeAndPositionListBox()
 {
-    if (m_xListBox->n_children() >= 1)
-    {
-        // if there is at least one element inside
-        // calculate basic position: under the current line
-        tools::Rectangle aRect = static_cast<TextEngine*>(pParent->GetEditEngine())->PaMtoEditCursor( pParent->GetEditView()->GetSelection().GetEnd() );
-        long nViewYOffset = pParent->GetEditView()->GetStartDocPos().Y();
-        Point aPos = aRect.BottomRight();// this variable will be used later (if needed)
-        aPos.setY( (aPos.Y() - nViewYOffset) + nBasePad );
+    if (m_xListBox->n_children() < 1)
+        return;
 
-        // get line count
-        const sal_uInt16 nLines = static_cast<sal_uInt16>(std::min(6, m_xListBox->n_children()));
+    // if there is at least one element inside
+    // calculate basic position: under the current line
+    tools::Rectangle aRect = static_cast<TextEngine*>(pParent->GetEditEngine())->PaMtoEditCursor( pParent->GetEditView()->GetSelection().GetEnd() );
+    long nViewYOffset = pParent->GetEditView()->GetStartDocPos().Y();
+    Point aPos = aRect.BottomRight();// this variable will be used later (if needed)
+    aPos.setY( (aPos.Y() - nViewYOffset) + nBasePad );
 
-        m_xListBox->set_size_request(-1, m_xListBox->get_height_rows(nLines));
+    // get line count
+    const sal_uInt16 nLines = static_cast<sal_uInt16>(std::min(6, m_xListBox->n_children()));
 
-        Size aSize = m_xContainer->get_preferred_size();
-        //set the size
-        SetSizePixel( aSize );
+    m_xListBox->set_size_request(-1, m_xListBox->get_height_rows(nLines));
 
-        //calculate position
-        const tools::Rectangle aVisArea( pParent->GetEditView()->GetStartDocPos(), pParent->GetOutputSizePixel() ); //the visible area
-        const Point& aBottomPoint = aVisArea.BottomRight();
+    Size aSize = m_xContainer->get_preferred_size();
+    //set the size
+    SetSizePixel( aSize );
 
-        if( aVisArea.TopRight().getY() + aPos.getY() + aSize.getHeight() > aBottomPoint.getY() )
-        {//clipped at the bottom: move it up
-            const long& nParentFontHeight = pParent->GetEditEngine()->GetFont().GetFontHeight(); //parent's font (in the IDE): needed for height
-            aPos.AdjustY( -(aSize.getHeight() + nParentFontHeight + nCursorPad) );
-        }
+    //calculate position
+    const tools::Rectangle aVisArea( pParent->GetEditView()->GetStartDocPos(), pParent->GetOutputSizePixel() ); //the visible area
+    const Point& aBottomPoint = aVisArea.BottomRight();
 
-        if( aVisArea.TopLeft().getX() + aPos.getX() + aSize.getWidth() > aBottomPoint.getX() )
-        {//clipped at the right side, move it a bit left
-            aPos.AdjustX( -(aSize.getWidth() + aVisArea.TopLeft().getX()) );
-        }
-        //set the position
-        SetPosPixel( aPos );
+    if( aVisArea.TopRight().getY() + aPos.getY() + aSize.getHeight() > aBottomPoint.getY() )
+    {//clipped at the bottom: move it up
+        const long& nParentFontHeight = pParent->GetEditEngine()->GetFont().GetFontHeight(); //parent's font (in the IDE): needed for height
+        aPos.AdjustY( -(aSize.getHeight() + nParentFontHeight + nCursorPad) );
     }
+
+    if( aVisArea.TopLeft().getX() + aPos.getX() + aSize.getWidth() > aBottomPoint.getX() )
+    {//clipped at the right side, move it a bit left
+        aPos.AdjustX( -(aSize.getWidth() + aVisArea.TopLeft().getX()) );
+    }
+    //set the position
+    SetPosPixel( aPos );
 }
 
 void CodeCompleteWindow::SelectFirstEntry()

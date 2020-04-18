@@ -616,25 +616,26 @@ void DlgEditor::CreateDefaultObject()
         pDlgEdView->GetCurrentObjInventor(),
         pDlgEdView->GetCurrentObjIdentifier());
 
-    if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pObj))
+    DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pObj);
+    if (!pDlgEdObj)
+        return;
+
+    // set position and size
+    Size aSize = rWindow.PixelToLogic( Size( 96, 24 ) );
+    Point aPoint = pDlgEdForm->GetSnapRect().Center();
+    aPoint.AdjustX( -(aSize.Width() / 2) );
+    aPoint.AdjustY( -(aSize.Height() / 2) );
+    pDlgEdObj->SetSnapRect( tools::Rectangle( aPoint, aSize ) );
+
+    // set default property values
+    pDlgEdObj->SetDefaults();
+
+    // insert object into drawing page
+    SdrPageView* pPageView = pDlgEdView->GetSdrPageView();
+    if (pDlgEdView->InsertObjectAtView(pDlgEdObj, *pPageView))
     {
-        // set position and size
-        Size aSize = rWindow.PixelToLogic( Size( 96, 24 ) );
-        Point aPoint = pDlgEdForm->GetSnapRect().Center();
-        aPoint.AdjustX( -(aSize.Width() / 2) );
-        aPoint.AdjustY( -(aSize.Height() / 2) );
-        pDlgEdObj->SetSnapRect( tools::Rectangle( aPoint, aSize ) );
-
-        // set default property values
-        pDlgEdObj->SetDefaults();
-
-        // insert object into drawing page
-        SdrPageView* pPageView = pDlgEdView->GetSdrPageView();
-        if (pDlgEdView->InsertObjectAtView(pDlgEdObj, *pPageView))
-        {
-            // start listening
-            pDlgEdObj->StartListening();
-        }
+        // start listening
+        pDlgEdObj->StartListening();
     }
 }
 
@@ -730,81 +731,81 @@ void DlgEditor::Copy()
 
     // set clipboard content
     Reference< datatransfer::clipboard::XClipboard > xClipboard = GetWindow().GetClipboard();
-    if ( xClipboard.is() )
+    if ( !xClipboard.is() )
+        return;
+
+    // With resource?
+    uno::Reference< beans::XPropertySet > xDialogModelPropSet( m_xUnoControlDialogModel, uno::UNO_QUERY );
+    uno::Reference< resource::XStringResourcePersistence > xStringResourcePersistence;
+    if( xDialogModelPropSet.is() )
     {
-        // With resource?
-        uno::Reference< beans::XPropertySet > xDialogModelPropSet( m_xUnoControlDialogModel, uno::UNO_QUERY );
-        uno::Reference< resource::XStringResourcePersistence > xStringResourcePersistence;
-        if( xDialogModelPropSet.is() )
+        try
         {
-            try
-            {
-                Any aResourceResolver = xDialogModelPropSet->getPropertyValue( aResourceResolverPropName );
-                aResourceResolver >>= xStringResourcePersistence;
-            }
-            catch(const UnknownPropertyException& )
-            {}
+            Any aResourceResolver = xDialogModelPropSet->getPropertyValue( aResourceResolverPropName );
+            aResourceResolver >>= xStringResourcePersistence;
         }
-
-        DlgEdTransferableImpl* pTrans = nullptr;
-        if( xStringResourcePersistence.is() )
-        {
-            // With resource, support old and new format
-
-            // Export xClipDialogModel another time with ids replaced by current language string
-            LocalizationMgr::resetResourceForDialog( xClipDialogModel, xStringResourcePersistence );
-            Reference< XInputStreamProvider > xISP2 = ::xmlscript::exportDialogModel( xClipDialogModel, xContext, m_xDocument );
-            Reference< XInputStream > xStream2( xISP2->createInputStream() );
-            Sequence< sal_Int8 > NoResourceDialogModelBytes;
-            implCopyStreamToByteSequence( xStream2, NoResourceDialogModelBytes );
-            xStream2->closeInput();
-
-            // Old format contains dialog with replaced ids
-            Sequence< Any > aSeqData(2);
-            Any aNoResourceDialogModelBytesAny;
-            aNoResourceDialogModelBytesAny <<= NoResourceDialogModelBytes;
-            aSeqData[0] = aNoResourceDialogModelBytesAny;
-
-            // New format contains dialog and resource
-            Sequence< sal_Int8 > aResData = xStringResourcePersistence->exportBinary();
-
-            // Create sequence for combined dialog and resource
-            sal_Int32 nDialogDataLen = DialogModelBytes.getLength();
-            sal_Int32 nResDataLen = aResData.getLength();
-
-            // Combined data = 4 Bytes 32Bit Offset to begin of resource data, lowest byte first
-            // + nDialogDataLen bytes dialog data + nResDataLen resource data
-            sal_Int32 nTotalLen = 4 + nDialogDataLen + nResDataLen;
-            sal_Int32 nResOffset = 4 + nDialogDataLen;
-            Sequence< sal_Int8 > aCombinedData( nTotalLen );
-            sal_Int8* pCombinedData = aCombinedData.getArray();
-
-            // Write offset
-            sal_Int32 n = nResOffset;
-            for( sal_Int16 i = 0 ; i < 4 ; i++ )
-            {
-                pCombinedData[i] = sal_Int8( n & 0xff );
-                n >>= 8;
-            }
-            memcpy( pCombinedData + 4, DialogModelBytes.getConstArray(), nDialogDataLen );
-            memcpy( pCombinedData + nResOffset, aResData.getConstArray(), nResDataLen );
-
-            aSeqData[1] <<= aCombinedData;
-
-            pTrans = new DlgEdTransferableImpl( m_ClipboardDataFlavorsResource, aSeqData );
-        }
-        else
-        {
-            // No resource, support only old format
-            Sequence< Any > aSeqData(1);
-            Any aDialogModelBytesAny;
-            aDialogModelBytesAny <<= DialogModelBytes;
-            aSeqData[0] = aDialogModelBytesAny;
-            pTrans = new DlgEdTransferableImpl( m_ClipboardDataFlavors , aSeqData );
-        }
-        SolarMutexReleaser aReleaser;
-        xClipboard->setContents( pTrans , pTrans );
+        catch(const UnknownPropertyException& )
+        {}
     }
+
+    DlgEdTransferableImpl* pTrans = nullptr;
+    if( xStringResourcePersistence.is() )
+    {
+        // With resource, support old and new format
+
+        // Export xClipDialogModel another time with ids replaced by current language string
+        LocalizationMgr::resetResourceForDialog( xClipDialogModel, xStringResourcePersistence );
+        Reference< XInputStreamProvider > xISP2 = ::xmlscript::exportDialogModel( xClipDialogModel, xContext, m_xDocument );
+        Reference< XInputStream > xStream2( xISP2->createInputStream() );
+        Sequence< sal_Int8 > NoResourceDialogModelBytes;
+        implCopyStreamToByteSequence( xStream2, NoResourceDialogModelBytes );
+        xStream2->closeInput();
+
+        // Old format contains dialog with replaced ids
+        Sequence< Any > aSeqData(2);
+        Any aNoResourceDialogModelBytesAny;
+        aNoResourceDialogModelBytesAny <<= NoResourceDialogModelBytes;
+        aSeqData[0] = aNoResourceDialogModelBytesAny;
+
+        // New format contains dialog and resource
+        Sequence< sal_Int8 > aResData = xStringResourcePersistence->exportBinary();
+
+        // Create sequence for combined dialog and resource
+        sal_Int32 nDialogDataLen = DialogModelBytes.getLength();
+        sal_Int32 nResDataLen = aResData.getLength();
+
+        // Combined data = 4 Bytes 32Bit Offset to begin of resource data, lowest byte first
+        // + nDialogDataLen bytes dialog data + nResDataLen resource data
+        sal_Int32 nTotalLen = 4 + nDialogDataLen + nResDataLen;
+        sal_Int32 nResOffset = 4 + nDialogDataLen;
+        Sequence< sal_Int8 > aCombinedData( nTotalLen );
+        sal_Int8* pCombinedData = aCombinedData.getArray();
+
+        // Write offset
+        sal_Int32 n = nResOffset;
+        for( sal_Int16 i = 0 ; i < 4 ; i++ )
+        {
+            pCombinedData[i] = sal_Int8( n & 0xff );
+            n >>= 8;
+        }
+        memcpy( pCombinedData + 4, DialogModelBytes.getConstArray(), nDialogDataLen );
+        memcpy( pCombinedData + nResOffset, aResData.getConstArray(), nResDataLen );
+
+        aSeqData[1] <<= aCombinedData;
+
+        pTrans = new DlgEdTransferableImpl( m_ClipboardDataFlavorsResource, aSeqData );
+    }
+    else
+    {
+        // No resource, support only old format
+        Sequence< Any > aSeqData(1);
+        Any aDialogModelBytesAny;
+        aDialogModelBytesAny <<= DialogModelBytes;
+        aSeqData[0] = aDialogModelBytesAny;
+        pTrans = new DlgEdTransferableImpl( m_ClipboardDataFlavors , aSeqData );
+    }
+    SolarMutexReleaser aReleaser;
+    xClipboard->setContents( pTrans , pTrans );
 }
 
 
@@ -818,168 +819,168 @@ void DlgEditor::Paste()
 
     // get clipboard
     Reference< datatransfer::clipboard::XClipboard > xClipboard = GetWindow().GetClipboard();
-    if ( xClipboard.is() )
+    if ( !xClipboard.is() )
+        return;
+
+    Reference< datatransfer::XTransferable > xTransf;
     {
-        Reference< datatransfer::XTransferable > xTransf;
-        {
-            SolarMutexReleaser aReleaser;
-            // get clipboard content
-            xTransf = xClipboard->getContents();
-        }
-        if ( xTransf.is() )
-        {
-            // Is target dialog (library) localized?
-            uno::Reference< beans::XPropertySet > xDialogModelPropSet( m_xUnoControlDialogModel, uno::UNO_QUERY );
-            uno::Reference< resource::XStringResourceManager > xStringResourceManager;
-            if( xDialogModelPropSet.is() )
-            {
-                try
-                {
-                    Any aResourceResolver = xDialogModelPropSet->getPropertyValue( aResourceResolverPropName );
-                    aResourceResolver >>= xStringResourceManager;
-                }
-                catch(const UnknownPropertyException& )
-                {}
-            }
-            bool bLocalized = false;
-            if( xStringResourceManager.is() )
-                bLocalized = xStringResourceManager->getLocales().hasElements();
-
-            if ( xTransf->isDataFlavorSupported( m_ClipboardDataFlavors[0] ) )
-            {
-                // create clipboard dialog model from xml
-                Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
-                Reference< container::XNameContainer > xClipDialogModel( xContext->getServiceManager()->createInstanceWithContext(
-                    "com.sun.star.awt.UnoControlDialogModel", xContext ), uno::UNO_QUERY );
-
-                bool bSourceIsLocalized = false;
-                Sequence< sal_Int8 > DialogModelBytes;
-                Sequence< sal_Int8 > aResData;
-                if( bLocalized && xTransf->isDataFlavorSupported( m_ClipboardDataFlavorsResource[1] ) )
-                {
-                    bSourceIsLocalized = true;
-
-                    Any aCombinedDataAny = xTransf->getTransferData( m_ClipboardDataFlavorsResource[1] );
-                    Sequence< sal_Int8 > aCombinedData;
-                    aCombinedDataAny >>= aCombinedData;
-                    const sal_Int8* pCombinedData = aCombinedData.getConstArray();
-
-                    sal_Int32 nTotalLen = aCombinedData.getLength();
-
-                    // Reading offset
-                    sal_Int32 nResOffset = 0;
-                    sal_Int32 nFactor = 1;
-                    for( sal_Int16 i = 0; i < 4; i++ )
-                    {
-                        nResOffset += nFactor * sal_uInt8( pCombinedData[i] );
-                        nFactor *= 256;
-                    }
-
-                    sal_Int32 nResDataLen = nTotalLen - nResOffset;
-                    sal_Int32 nDialogDataLen = nTotalLen - nResDataLen - 4;
-
-                    DialogModelBytes.realloc( nDialogDataLen );
-                    memcpy( DialogModelBytes.getArray(), pCombinedData + 4, nDialogDataLen );
-
-                    aResData.realloc( nResDataLen );
-                    memcpy( aResData.getArray(), pCombinedData + nResOffset, nResDataLen );
-                }
-                else
-                {
-                    Any aAny = xTransf->getTransferData( m_ClipboardDataFlavors[0] );
-                    aAny >>= DialogModelBytes;
-                }
-
-                if ( xClipDialogModel.is() )
-                {
-                    Reference<XInputStream> xIn = ::xmlscript::createInputStream( DialogModelBytes.getConstArray(), DialogModelBytes.getLength() );
-                    ::xmlscript::importDialogModel( xIn , xClipDialogModel, xContext, m_xDocument );
-                }
-
-                // get control models from clipboard dialog model
-                if ( xClipDialogModel.is() )
-                {
-                    Sequence< OUString > aNames = xClipDialogModel->getElementNames();
-                    const OUString* pNames = aNames.getConstArray();
-                    sal_uInt32 nCtrls = aNames.getLength();
-
-                    Reference< resource::XStringResourcePersistence > xStringResourcePersistence;
-                    if( nCtrls > 0 && bSourceIsLocalized )
-                    {
-                        xStringResourcePersistence = css::resource::StringResource::create( getProcessComponentContext() );
-                        xStringResourcePersistence->importBinary( aResData );
-                    }
-                    for( sal_uInt32 n = 0; n < nCtrls; n++ )
-                    {
-                        Any aA = xClipDialogModel->getByName( pNames[n] );
-                        Reference< css::awt::XControlModel > xCM;
-                        aA >>= xCM;
-
-                        // clone the control model
-                        Reference< util::XCloneable > xClone( xCM, uno::UNO_QUERY );
-                        Reference< awt::XControlModel > xCtrlModel( xClone->createClone(), uno::UNO_QUERY );
-
-                        DlgEdObj* pCtrlObj = new DlgEdObj(*pDlgEdModel);
-                        pCtrlObj->SetDlgEdForm(pDlgEdForm);         // set parent form
-                        pDlgEdForm->AddChild(pCtrlObj);             // add child to parent form
-                        pCtrlObj->SetUnoControlModel( xCtrlModel ); // set control model
-
-                        // set new name
-                        OUString aOUniqueName( pCtrlObj->GetUniqueName() );
-                        Reference< beans::XPropertySet > xPSet( xCtrlModel , UNO_QUERY );
-                        xPSet->setPropertyValue( DLGED_PROP_NAME, Any(aOUniqueName) );
-
-                        // set tabindex
-                        Sequence< OUString > aNames_ = m_xUnoControlDialogModel->getElementNames();
-                        xPSet->setPropertyValue( DLGED_PROP_TABINDEX, Any(static_cast<sal_Int16>(aNames_.getLength())) );
-
-                        if( bLocalized )
-                        {
-                            Any aControlAny;
-                            aControlAny <<= xCtrlModel;
-                            if( bSourceIsLocalized && xStringResourcePersistence.is() )
-                            {
-                                LocalizationMgr::copyResourcesForPastedEditorObject( this,
-                                    aControlAny, aOUniqueName, xStringResourcePersistence );
-                            }
-                            else
-                            {
-                                LocalizationMgr::setControlResourceIDsForNewEditorObject
-                                    ( this, aControlAny, aOUniqueName );
-                            }
-                        }
-
-                        // insert control model in editor dialog model
-                        Any aCtrlModel;
-                        aCtrlModel <<= xCtrlModel;
-                        m_xUnoControlDialogModel->insertByName( aOUniqueName , aCtrlModel );
-
-                        // insert object into drawing page
-                        pDlgEdModel->GetPage(0)->InsertObject( pCtrlObj );
-                        pCtrlObj->SetRectFromProps();
-                        pCtrlObj->UpdateStep();
-                        pDlgEdForm->UpdateTabOrderAndGroups();
-                        pCtrlObj->StartListening();                         // start listening
-
-                        // mark object
-                        SdrPageView* pPgView = pDlgEdView->GetSdrPageView();
-                        pDlgEdView->MarkObj( pCtrlObj, pPgView, false, true);
-                    }
-
-                    // center marked objects in dialog editor form
-                    Point aMarkCenter = pDlgEdView->GetMarkedObjRect().Center();
-                    Point aFormCenter = pDlgEdForm->GetSnapRect().Center();
-                    Point aPoint = aFormCenter - aMarkCenter;
-                    Size  aSize( aPoint.X() , aPoint.Y() );
-                    pDlgEdView->MoveMarkedObj( aSize );                     // update of control model properties (position + size) in NbcMove
-                    pDlgEdView->MarkListHasChanged();
-
-                    // dialog model changed
-                    SetDialogModelChanged();
-                }
-            }
-        }
+        SolarMutexReleaser aReleaser;
+        // get clipboard content
+        xTransf = xClipboard->getContents();
     }
+    if ( !xTransf.is() )
+        return;
+
+    // Is target dialog (library) localized?
+    uno::Reference< beans::XPropertySet > xDialogModelPropSet( m_xUnoControlDialogModel, uno::UNO_QUERY );
+    uno::Reference< resource::XStringResourceManager > xStringResourceManager;
+    if( xDialogModelPropSet.is() )
+    {
+        try
+        {
+            Any aResourceResolver = xDialogModelPropSet->getPropertyValue( aResourceResolverPropName );
+            aResourceResolver >>= xStringResourceManager;
+        }
+        catch(const UnknownPropertyException& )
+        {}
+    }
+    bool bLocalized = false;
+    if( xStringResourceManager.is() )
+        bLocalized = xStringResourceManager->getLocales().hasElements();
+
+    if ( !xTransf->isDataFlavorSupported( m_ClipboardDataFlavors[0] ) )
+        return;
+
+    // create clipboard dialog model from xml
+    Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+    Reference< container::XNameContainer > xClipDialogModel( xContext->getServiceManager()->createInstanceWithContext(
+        "com.sun.star.awt.UnoControlDialogModel", xContext ), uno::UNO_QUERY );
+
+    bool bSourceIsLocalized = false;
+    Sequence< sal_Int8 > DialogModelBytes;
+    Sequence< sal_Int8 > aResData;
+    if( bLocalized && xTransf->isDataFlavorSupported( m_ClipboardDataFlavorsResource[1] ) )
+    {
+        bSourceIsLocalized = true;
+
+        Any aCombinedDataAny = xTransf->getTransferData( m_ClipboardDataFlavorsResource[1] );
+        Sequence< sal_Int8 > aCombinedData;
+        aCombinedDataAny >>= aCombinedData;
+        const sal_Int8* pCombinedData = aCombinedData.getConstArray();
+
+        sal_Int32 nTotalLen = aCombinedData.getLength();
+
+        // Reading offset
+        sal_Int32 nResOffset = 0;
+        sal_Int32 nFactor = 1;
+        for( sal_Int16 i = 0; i < 4; i++ )
+        {
+            nResOffset += nFactor * sal_uInt8( pCombinedData[i] );
+            nFactor *= 256;
+        }
+
+        sal_Int32 nResDataLen = nTotalLen - nResOffset;
+        sal_Int32 nDialogDataLen = nTotalLen - nResDataLen - 4;
+
+        DialogModelBytes.realloc( nDialogDataLen );
+        memcpy( DialogModelBytes.getArray(), pCombinedData + 4, nDialogDataLen );
+
+        aResData.realloc( nResDataLen );
+        memcpy( aResData.getArray(), pCombinedData + nResOffset, nResDataLen );
+    }
+    else
+    {
+        Any aAny = xTransf->getTransferData( m_ClipboardDataFlavors[0] );
+        aAny >>= DialogModelBytes;
+    }
+
+    if ( xClipDialogModel.is() )
+    {
+        Reference<XInputStream> xIn = ::xmlscript::createInputStream( DialogModelBytes.getConstArray(), DialogModelBytes.getLength() );
+        ::xmlscript::importDialogModel( xIn , xClipDialogModel, xContext, m_xDocument );
+    }
+
+    // get control models from clipboard dialog model
+    if ( !xClipDialogModel.is() )
+        return;
+
+    Sequence< OUString > aNames = xClipDialogModel->getElementNames();
+    const OUString* pNames = aNames.getConstArray();
+    sal_uInt32 nCtrls = aNames.getLength();
+
+    Reference< resource::XStringResourcePersistence > xStringResourcePersistence;
+    if( nCtrls > 0 && bSourceIsLocalized )
+    {
+        xStringResourcePersistence = css::resource::StringResource::create( getProcessComponentContext() );
+        xStringResourcePersistence->importBinary( aResData );
+    }
+    for( sal_uInt32 n = 0; n < nCtrls; n++ )
+    {
+        Any aA = xClipDialogModel->getByName( pNames[n] );
+        Reference< css::awt::XControlModel > xCM;
+        aA >>= xCM;
+
+        // clone the control model
+        Reference< util::XCloneable > xClone( xCM, uno::UNO_QUERY );
+        Reference< awt::XControlModel > xCtrlModel( xClone->createClone(), uno::UNO_QUERY );
+
+        DlgEdObj* pCtrlObj = new DlgEdObj(*pDlgEdModel);
+        pCtrlObj->SetDlgEdForm(pDlgEdForm);         // set parent form
+        pDlgEdForm->AddChild(pCtrlObj);             // add child to parent form
+        pCtrlObj->SetUnoControlModel( xCtrlModel ); // set control model
+
+        // set new name
+        OUString aOUniqueName( pCtrlObj->GetUniqueName() );
+        Reference< beans::XPropertySet > xPSet( xCtrlModel , UNO_QUERY );
+        xPSet->setPropertyValue( DLGED_PROP_NAME, Any(aOUniqueName) );
+
+        // set tabindex
+        Sequence< OUString > aNames_ = m_xUnoControlDialogModel->getElementNames();
+        xPSet->setPropertyValue( DLGED_PROP_TABINDEX, Any(static_cast<sal_Int16>(aNames_.getLength())) );
+
+        if( bLocalized )
+        {
+            Any aControlAny;
+            aControlAny <<= xCtrlModel;
+            if( bSourceIsLocalized && xStringResourcePersistence.is() )
+            {
+                LocalizationMgr::copyResourcesForPastedEditorObject( this,
+                    aControlAny, aOUniqueName, xStringResourcePersistence );
+            }
+            else
+            {
+                LocalizationMgr::setControlResourceIDsForNewEditorObject
+                    ( this, aControlAny, aOUniqueName );
+            }
+        }
+
+        // insert control model in editor dialog model
+        Any aCtrlModel;
+        aCtrlModel <<= xCtrlModel;
+        m_xUnoControlDialogModel->insertByName( aOUniqueName , aCtrlModel );
+
+        // insert object into drawing page
+        pDlgEdModel->GetPage(0)->InsertObject( pCtrlObj );
+        pCtrlObj->SetRectFromProps();
+        pCtrlObj->UpdateStep();
+        pDlgEdForm->UpdateTabOrderAndGroups();
+        pCtrlObj->StartListening();                         // start listening
+
+        // mark object
+        SdrPageView* pPgView = pDlgEdView->GetSdrPageView();
+        pDlgEdView->MarkObj( pCtrlObj, pPgView, false, true);
+    }
+
+    // center marked objects in dialog editor form
+    Point aMarkCenter = pDlgEdView->GetMarkedObjRect().Center();
+    Point aFormCenter = pDlgEdForm->GetSnapRect().Center();
+    Point aPoint = aFormCenter - aMarkCenter;
+    Size  aSize( aPoint.X() , aPoint.Y() );
+    pDlgEdView->MoveMarkedObj( aSize );                     // update of control model properties (position + size) in NbcMove
+    pDlgEdView->MarkListHasChanged();
+
+    // dialog model changed
+    SetDialogModelChanged();
 }
 
 

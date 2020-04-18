@@ -330,37 +330,37 @@ void SbTreeListBox::ImpCreateLibSubEntries(const weld::TreeIter& rLibRootEntry, 
     }
 
     // dialogs
-    if ( nMode & BrowseMode::Dialogs )
+    if ( !(nMode & BrowseMode::Dialogs) )
+         return;
+
+    Reference< script::XLibraryContainer > xDlgLibContainer( rDocument.getLibraryContainer( E_DIALOGS ) );
+
+    if ( !(xDlgLibContainer.is() && xDlgLibContainer->hasByName( rLibName ) && xDlgLibContainer->isLibraryLoaded( rLibName )) )
+        return;
+
+    try
     {
-         Reference< script::XLibraryContainer > xDlgLibContainer( rDocument.getLibraryContainer( E_DIALOGS ) );
+        // get a sorted list of dialog names
+        Sequence< OUString > aDlgNames( rDocument.getObjectNames( E_DIALOGS, rLibName ) );
+        sal_Int32 nDlgCount = aDlgNames.getLength();
+        const OUString* pDlgNames = aDlgNames.getConstArray();
 
-         if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( rLibName ) && xDlgLibContainer->isLibraryLoaded( rLibName ) )
-         {
-            try
+        auto xTreeIter = m_xControl->make_iterator();
+
+        for ( sal_Int32 i = 0 ; i < nDlgCount ; i++ )
+        {
+            OUString aDlgName = pDlgNames[ i ];
+            m_xControl->copy_iterator(rLibRootEntry, *xTreeIter);
+            bool bDialogEntry = FindEntry(aDlgName, OBJ_TYPE_DIALOG, *xTreeIter);
+            if (!bDialogEntry)
             {
-                // get a sorted list of dialog names
-                Sequence< OUString > aDlgNames( rDocument.getObjectNames( E_DIALOGS, rLibName ) );
-                sal_Int32 nDlgCount = aDlgNames.getLength();
-                const OUString* pDlgNames = aDlgNames.getConstArray();
-
-                auto xTreeIter = m_xControl->make_iterator();
-
-                for ( sal_Int32 i = 0 ; i < nDlgCount ; i++ )
-                {
-                    OUString aDlgName = pDlgNames[ i ];
-                    m_xControl->copy_iterator(rLibRootEntry, *xTreeIter);
-                    bool bDialogEntry = FindEntry(aDlgName, OBJ_TYPE_DIALOG, *xTreeIter);
-                    if (!bDialogEntry)
-                    {
-                        AddEntry(aDlgName, RID_BMP_DIALOG, &rLibRootEntry, false, std::make_unique<Entry>(OBJ_TYPE_DIALOG));
-                    }
-                }
-            }
-            catch (const container::NoSuchElementException& )
-            {
-                DBG_UNHANDLED_EXCEPTION("basctl.basicide");
+                AddEntry(aDlgName, RID_BMP_DIALOG, &rLibRootEntry, false, std::make_unique<Entry>(OBJ_TYPE_DIALOG));
             }
         }
+    }
+    catch (const container::NoSuchElementException& )
+    {
+        DBG_UNHANDLED_EXCEPTION("basctl.basicide");
     }
 }
 

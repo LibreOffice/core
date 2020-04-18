@@ -80,28 +80,28 @@ AccessibleDialogWindow::AccessibleDialogWindow (basctl::DialogWindow* pDialogWin
     : m_pDialogWindow(pDialogWindow)
     , m_pDlgEdModel(nullptr)
 {
-    if ( m_pDialogWindow )
+    if ( !m_pDialogWindow )
+        return;
+
+    SdrPage& rPage = m_pDialogWindow->GetPage();
+    const size_t nCount = rPage.GetObjCount();
+
+    for ( size_t i = 0; i < nCount; ++i )
     {
-        SdrPage& rPage = m_pDialogWindow->GetPage();
-        const size_t nCount = rPage.GetObjCount();
-
-        for ( size_t i = 0; i < nCount; ++i )
+        if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(rPage.GetObj(i)))
         {
-            if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(rPage.GetObj(i)))
-            {
-                ChildDescriptor aDesc( pDlgEdObj );
-                if ( IsChildVisible( aDesc ) )
-                    m_aAccessibleChildren.push_back( aDesc );
-            }
+            ChildDescriptor aDesc( pDlgEdObj );
+            if ( IsChildVisible( aDesc ) )
+                m_aAccessibleChildren.push_back( aDesc );
         }
-
-        m_pDialogWindow->AddEventListener( LINK( this, AccessibleDialogWindow, WindowEventListener ) );
-
-        StartListening(m_pDialogWindow->GetEditor());
-
-        m_pDlgEdModel = &m_pDialogWindow->GetModel();
-        StartListening(*m_pDlgEdModel);
     }
+
+    m_pDialogWindow->AddEventListener( LINK( this, AccessibleDialogWindow, WindowEventListener ) );
+
+    StartListening(m_pDialogWindow->GetEditor());
+
+    m_pDlgEdModel = &m_pDialogWindow->GetModel();
+    StartListening(*m_pDlgEdModel);
 }
 
 
@@ -211,24 +211,24 @@ void AccessibleDialogWindow::InsertChild( const ChildDescriptor& rDesc )
     AccessibleChildren::iterator aIter = std::find( m_aAccessibleChildren.begin(), m_aAccessibleChildren.end(), rDesc );
 
     // if not found, insert in child list
-    if ( aIter == m_aAccessibleChildren.end() )
+    if ( aIter != m_aAccessibleChildren.end() )
+        return;
+
+    // insert entry in child list
+    m_aAccessibleChildren.push_back( rDesc );
+
+    // get the accessible of the inserted child
+    Reference< XAccessible > xChild( getAccessibleChild( m_aAccessibleChildren.size() - 1 ) );
+
+    // sort child list
+    SortChildren();
+
+    // send accessible child event
+    if ( xChild.is() )
     {
-        // insert entry in child list
-        m_aAccessibleChildren.push_back( rDesc );
-
-        // get the accessible of the inserted child
-        Reference< XAccessible > xChild( getAccessibleChild( m_aAccessibleChildren.size() - 1 ) );
-
-        // sort child list
-        SortChildren();
-
-        // send accessible child event
-        if ( xChild.is() )
-        {
-            Any aOldValue, aNewValue;
-            aNewValue <<= xChild;
-            NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
-        }
+        Any aOldValue, aNewValue;
+        aNewValue <<= xChild;
+        NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
     }
 }
 
@@ -239,25 +239,25 @@ void AccessibleDialogWindow::RemoveChild( const ChildDescriptor& rDesc )
     AccessibleChildren::iterator aIter = std::find( m_aAccessibleChildren.begin(), m_aAccessibleChildren.end(), rDesc );
 
     // if found, remove from child list
-    if ( aIter != m_aAccessibleChildren.end() )
+    if ( aIter == m_aAccessibleChildren.end() )
+        return;
+
+    // get the accessible of the removed child
+    Reference< XAccessible > xChild( aIter->rxAccessible );
+
+    // remove entry from child list
+    m_aAccessibleChildren.erase( aIter );
+
+    // send accessible child event
+    if ( xChild.is() )
     {
-        // get the accessible of the removed child
-        Reference< XAccessible > xChild( aIter->rxAccessible );
+        Any aOldValue, aNewValue;
+        aOldValue <<= xChild;
+        NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
 
-        // remove entry from child list
-        m_aAccessibleChildren.erase( aIter );
-
-        // send accessible child event
-        if ( xChild.is() )
-        {
-            Any aOldValue, aNewValue;
-            aOldValue <<= xChild;
-            NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
-
-            Reference< XComponent > xComponent( xChild, UNO_QUERY );
-            if ( xComponent.is() )
-                xComponent->dispose();
-        }
+        Reference< XComponent > xComponent( xChild, UNO_QUERY );
+        if ( xComponent.is() )
+            xComponent->dispose();
     }
 }
 
@@ -397,25 +397,25 @@ void AccessibleDialogWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindo
 
 void AccessibleDialogWindow::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
-    if ( m_pDialogWindow )
-    {
-        if ( m_pDialogWindow->IsEnabled() )
-            rStateSet.AddState( AccessibleStateType::ENABLED );
+    if ( !m_pDialogWindow )
+        return;
 
-        rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+    if ( m_pDialogWindow->IsEnabled() )
+        rStateSet.AddState( AccessibleStateType::ENABLED );
 
-        if ( m_pDialogWindow->HasFocus() )
-            rStateSet.AddState( AccessibleStateType::FOCUSED );
+    rStateSet.AddState( AccessibleStateType::FOCUSABLE );
 
-        rStateSet.AddState( AccessibleStateType::VISIBLE );
+    if ( m_pDialogWindow->HasFocus() )
+        rStateSet.AddState( AccessibleStateType::FOCUSED );
 
-        if ( m_pDialogWindow->IsVisible() )
-            rStateSet.AddState( AccessibleStateType::SHOWING );
+    rStateSet.AddState( AccessibleStateType::VISIBLE );
 
-        rStateSet.AddState( AccessibleStateType::OPAQUE );
+    if ( m_pDialogWindow->IsVisible() )
+        rStateSet.AddState( AccessibleStateType::SHOWING );
 
-        rStateSet.AddState( AccessibleStateType::RESIZABLE );
-    }
+    rStateSet.AddState( AccessibleStateType::OPAQUE );
+
+    rStateSet.AddState( AccessibleStateType::RESIZABLE );
 }
 
 
@@ -512,24 +512,24 @@ void AccessibleDialogWindow::disposing()
 {
     OAccessibleExtendedComponentHelper::disposing();
 
-    if ( m_pDialogWindow )
+    if ( !m_pDialogWindow )
+        return;
+
+    m_pDialogWindow->RemoveEventListener( LINK( this, AccessibleDialogWindow, WindowEventListener ) );
+    m_pDialogWindow = nullptr;
+
+    if ( m_pDlgEdModel )
+        EndListening( *m_pDlgEdModel );
+    m_pDlgEdModel = nullptr;
+
+    // dispose all children
+    for (const ChildDescriptor & i : m_aAccessibleChildren)
     {
-        m_pDialogWindow->RemoveEventListener( LINK( this, AccessibleDialogWindow, WindowEventListener ) );
-        m_pDialogWindow = nullptr;
-
-        if ( m_pDlgEdModel )
-            EndListening( *m_pDlgEdModel );
-        m_pDlgEdModel = nullptr;
-
-        // dispose all children
-        for (const ChildDescriptor & i : m_aAccessibleChildren)
-        {
-            Reference< XComponent > xComponent( i.rxAccessible, UNO_QUERY );
-            if ( xComponent.is() )
-                xComponent->dispose();
-        }
-        m_aAccessibleChildren.clear();
+        Reference< XComponent > xComponent( i.rxAccessible, UNO_QUERY );
+        if ( xComponent.is() )
+            xComponent->dispose();
     }
+    m_aAccessibleChildren.clear();
 }
 
 // XServiceInfo

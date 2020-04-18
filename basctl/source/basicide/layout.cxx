@@ -135,27 +135,27 @@ void Layout::Deactivating ()
 void Layout::DataChanged (DataChangedEvent const& rDCEvt)
 {
     Window::DataChanged(rDCEvt);
-    if (rDCEvt.GetType() == DataChangedEventType::SETTINGS && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))
+    if (!(rDCEvt.GetType() == DataChangedEventType::SETTINGS && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)))
+        return;
+
+    bool bInvalidate = false;
+    Color aColor = GetSettings().GetStyleSettings().GetWindowColor();
+    const AllSettings* pOldSettings = rDCEvt.GetOldSettings();
+    if (!pOldSettings || aColor != pOldSettings->GetStyleSettings().GetWindowColor())
     {
-        bool bInvalidate = false;
-        Color aColor = GetSettings().GetStyleSettings().GetWindowColor();
-        const AllSettings* pOldSettings = rDCEvt.GetOldSettings();
-        if (!pOldSettings || aColor != pOldSettings->GetStyleSettings().GetWindowColor())
-        {
-            SetBackground(Wallpaper(aColor));
-            bInvalidate = true;
-        }
-        aColor = GetSettings().GetStyleSettings().GetWindowTextColor();
-        if (!pOldSettings || aColor != pOldSettings->GetStyleSettings().GetWindowTextColor())
-        {
-            vcl::Font aFont(GetFont());
-            aFont.SetColor(aColor);
-            SetFont(aFont);
-            bInvalidate = true;
-        }
-        if (bInvalidate)
-            Invalidate();
+        SetBackground(Wallpaper(aColor));
+        bInvalidate = true;
     }
+    aColor = GetSettings().GetStyleSettings().GetWindowTextColor();
+    if (!pOldSettings || aColor != pOldSettings->GetStyleSettings().GetWindowTextColor())
+    {
+        vcl::Font aFont(GetFont());
+        aFont.SetColor(aColor);
+        SetFont(aFont);
+        bInvalidate = true;
+    }
+    if (bInvalidate)
+        Invalidate();
 }
 
 
@@ -346,19 +346,19 @@ void Layout::SplittedSide::ArrangeIn (tools::Rectangle const& rRect)
     }
 
     // filling the remaining space with the last docking window
-    if (!bEmpty && vItems[iLastWin].nEndPos != nLength)
-    {
-        Item& rItem = vItems[iLastWin];
-        Size aSize = rItem.pWin->GetDockingSize();
-        if (bVertical)
-            aSize.AdjustHeight( nLength - rItem.nEndPos );
-        else
-            aSize.AdjustWidth( nLength - rItem.nEndPos );
-        rItem.pWin->ResizeIfDocking(aSize);
-        // and hiding the split line after the window
-        if (iLastWin < vItems.size() - 1)
-            vItems[iLastWin + 1].pSplit->Hide();
-    }
+    if (bEmpty || vItems[iLastWin].nEndPos == nLength)
+        return;
+
+    Item& rItem = vItems[iLastWin];
+    Size aSize = rItem.pWin->GetDockingSize();
+    if (bVertical)
+        aSize.AdjustHeight( nLength - rItem.nEndPos );
+    else
+        aSize.AdjustWidth( nLength - rItem.nEndPos );
+    rItem.pWin->ResizeIfDocking(aSize);
+    // and hiding the split line after the window
+    if (iLastWin < vItems.size() - 1)
+        vItems[iLastWin + 1].pSplit->Hide();
 }
 
 IMPL_LINK(Layout::SplittedSide, SplitHdl, Splitter*, pSplitter, void)
@@ -397,20 +397,21 @@ void Layout::SplittedSide::CheckMarginsFor (Splitter* pSplitter)
     // The splitter line cannot be closer to the edges than nMargin pixels.
     static long const nMargin = 16;
     // Checking margins:
-    if (long const nLength = pSplitter->IsHorizontal() ?
-        aRect.GetWidth() : aRect.GetHeight()
-    ) {
-        // bounds
-        long const nLower = (pSplitter->IsHorizontal() ? aRect.Left() : aRect.Top()) + nMargin;
-        long const nUpper = nLower + nLength - 2*nMargin;
-        // split position
-        long const nPos = pSplitter->GetSplitPosPixel();
-        // checking bounds
-        if (nPos < nLower)
-            pSplitter->SetSplitPosPixel(nLower);
-        if (nPos > nUpper)
-            pSplitter->SetSplitPosPixel(nUpper);
-    }
+    long const nLength = pSplitter->IsHorizontal() ?
+        aRect.GetWidth() : aRect.GetHeight();
+    if (!nLength)
+        return;
+
+    // bounds
+    long const nLower = (pSplitter->IsHorizontal() ? aRect.Left() : aRect.Top()) + nMargin;
+    long const nUpper = nLower + nLength - 2*nMargin;
+    // split position
+    long const nPos = pSplitter->GetSplitPosPixel();
+    // checking bounds
+    if (nPos < nLower)
+        pSplitter->SetSplitPosPixel(nLower);
+    if (nPos > nUpper)
+        pSplitter->SetSplitPosPixel(nUpper);
 }
 
 void Layout::SplittedSide::InitSplitter (Splitter& rSplitter)
