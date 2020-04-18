@@ -59,39 +59,39 @@ void cpp2unoMapping(
             static_cast< uno_Interface * >( *ppUnoI ) );
         *ppUnoI = nullptr;
     }
-    if (pCppI)
+    if (!pCppI)
+        return;
+
+    Bridge * pBridge = static_cast< Bridge::Mapping * >( pMapping )->pBridge;
+
+    // get object id of interface to be wrapped
+    rtl_uString * pOId = nullptr;
+    (*pBridge->pCppEnv->getObjectIdentifier)(
+        pBridge->pCppEnv, &pOId, pCppI );
+    assert(pOId);
+
+    // try to get any known interface from target environment
+    (*pBridge->pUnoEnv->getRegisteredInterface)(
+        pBridge->pUnoEnv, ppUnoI, pOId, pTypeDescr );
+
+    if (! *ppUnoI) // no existing interface, register new proxy interface
     {
-        Bridge * pBridge = static_cast< Bridge::Mapping * >( pMapping )->pBridge;
+        // try to publish a new proxy (refcount initially 1)
+        uno_Interface * pSurrogate
+            = bridges::cpp_uno::shared::UnoInterfaceProxy::create(
+                pBridge,
+                static_cast< ::com::sun::star::uno::XInterface * >( pCppI ),
+                pTypeDescr, pOId );
 
-        // get object id of interface to be wrapped
-        rtl_uString * pOId = nullptr;
-        (*pBridge->pCppEnv->getObjectIdentifier)(
-            pBridge->pCppEnv, &pOId, pCppI );
-        assert(pOId);
+        // proxy may be exchanged during registration
+        (*pBridge->pUnoEnv->registerProxyInterface)(
+            pBridge->pUnoEnv, reinterpret_cast< void ** >( &pSurrogate ),
+            freeUnoInterfaceProxy, pOId,
+            pTypeDescr );
 
-        // try to get any known interface from target environment
-        (*pBridge->pUnoEnv->getRegisteredInterface)(
-            pBridge->pUnoEnv, ppUnoI, pOId, pTypeDescr );
-
-        if (! *ppUnoI) // no existing interface, register new proxy interface
-        {
-            // try to publish a new proxy (refcount initially 1)
-            uno_Interface * pSurrogate
-                = bridges::cpp_uno::shared::UnoInterfaceProxy::create(
-                    pBridge,
-                    static_cast< ::com::sun::star::uno::XInterface * >( pCppI ),
-                    pTypeDescr, pOId );
-
-            // proxy may be exchanged during registration
-            (*pBridge->pUnoEnv->registerProxyInterface)(
-                pBridge->pUnoEnv, reinterpret_cast< void ** >( &pSurrogate ),
-                freeUnoInterfaceProxy, pOId,
-                pTypeDescr );
-
-            *ppUnoI = pSurrogate;
-        }
-        ::rtl_uString_release( pOId );
+        *ppUnoI = pSurrogate;
     }
+    ::rtl_uString_release( pOId );
 }
 
 void uno2cppMapping(
@@ -105,38 +105,38 @@ void uno2cppMapping(
             release();
         *ppCppI = nullptr;
     }
-    if (pUnoI)
+    if (!pUnoI)
+        return;
+
+    Bridge * pBridge = static_cast< Bridge::Mapping * >( pMapping )->pBridge;
+
+    // get object id of uno interface to be wrapped
+    rtl_uString * pOId = nullptr;
+    (*pBridge->pUnoEnv->getObjectIdentifier)(
+        pBridge->pUnoEnv, &pOId, pUnoI );
+    assert(pOId);
+
+    // try to get any known interface from target environment
+    (*pBridge->pCppEnv->getRegisteredInterface)(
+        pBridge->pCppEnv, ppCppI, pOId, pTypeDescr );
+
+    if (! *ppCppI) // no existing interface, register new proxy interface
     {
-        Bridge * pBridge = static_cast< Bridge::Mapping * >( pMapping )->pBridge;
+        // try to publish a new proxy (ref count initially 1)
+        com::sun::star::uno::XInterface * pProxy
+            = bridges::cpp_uno::shared::CppInterfaceProxy::create(
+                pBridge, static_cast< uno_Interface * >( pUnoI ),
+                pTypeDescr, pOId );
 
-        // get object id of uno interface to be wrapped
-        rtl_uString * pOId = nullptr;
-        (*pBridge->pUnoEnv->getObjectIdentifier)(
-            pBridge->pUnoEnv, &pOId, pUnoI );
-        assert(pOId);
+        // proxy may be exchanged during registration
+        (*pBridge->pCppEnv->registerProxyInterface)(
+            pBridge->pCppEnv, reinterpret_cast< void ** >( &pProxy ),
+            freeCppInterfaceProxy, pOId,
+            pTypeDescr );
 
-        // try to get any known interface from target environment
-        (*pBridge->pCppEnv->getRegisteredInterface)(
-            pBridge->pCppEnv, ppCppI, pOId, pTypeDescr );
-
-        if (! *ppCppI) // no existing interface, register new proxy interface
-        {
-            // try to publish a new proxy (ref count initially 1)
-            com::sun::star::uno::XInterface * pProxy
-                = bridges::cpp_uno::shared::CppInterfaceProxy::create(
-                    pBridge, static_cast< uno_Interface * >( pUnoI ),
-                    pTypeDescr, pOId );
-
-            // proxy may be exchanged during registration
-            (*pBridge->pCppEnv->registerProxyInterface)(
-                pBridge->pCppEnv, reinterpret_cast< void ** >( &pProxy ),
-                freeCppInterfaceProxy, pOId,
-                pTypeDescr );
-
-            *ppCppI = pProxy;
-        }
-        ::rtl_uString_release( pOId );
+        *ppCppI = pProxy;
     }
+    ::rtl_uString_release( pOId );
 }
 
 uno_Mapping * Bridge::createMapping(
@@ -150,22 +150,22 @@ uno_Mapping * Bridge::createMapping(
 
 void Bridge::acquire()
 {
-    if (++nRef == 1)
+    if (++nRef != 1)
+        return;
+
+    if (bExportCpp2Uno)
     {
-        if (bExportCpp2Uno)
-        {
-            uno_Mapping * pMapping = &aCpp2Uno;
-            ::uno_registerMapping(
-                &pMapping, freeMapping, &pCppEnv->aBase,
-                &pUnoEnv->aBase, nullptr );
-        }
-        else
-        {
-            uno_Mapping * pMapping = &aUno2Cpp;
-            ::uno_registerMapping(
-                &pMapping, freeMapping, &pUnoEnv->aBase,
-                &pCppEnv->aBase, nullptr );
-        }
+        uno_Mapping * pMapping = &aCpp2Uno;
+        ::uno_registerMapping(
+            &pMapping, freeMapping, &pCppEnv->aBase,
+            &pUnoEnv->aBase, nullptr );
+    }
+    else
+    {
+        uno_Mapping * pMapping = &aUno2Cpp;
+        ::uno_registerMapping(
+            &pMapping, freeMapping, &pUnoEnv->aBase,
+            &pCppEnv->aBase, nullptr );
     }
 }
 

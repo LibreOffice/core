@@ -195,22 +195,22 @@ namespace jni_uno
 
 void Bridge::acquire() const
 {
-    if (++m_ref == 1)
+    if (++m_ref != 1)
+        return;
+
+    if (m_registered_java2uno)
     {
-        if (m_registered_java2uno)
-        {
-            uno_Mapping * mapping = const_cast< Mapping * >( &m_java2uno );
-            uno_registerMapping(
-                &mapping, Bridge_free,
-                m_java_env, &m_uno_env->aBase, nullptr );
-        }
-        else
-        {
-            uno_Mapping * mapping = const_cast< Mapping * >( &m_uno2java );
-            uno_registerMapping(
-                &mapping, Bridge_free,
-                &m_uno_env->aBase, m_java_env, nullptr );
-        }
+        uno_Mapping * mapping = const_cast< Mapping * >( &m_java2uno );
+        uno_registerMapping(
+            &mapping, Bridge_free,
+            m_java_env, &m_uno_env->aBase, nullptr );
+    }
+    else
+    {
+        uno_Mapping * mapping = const_cast< Mapping * >( &m_uno2java );
+        uno_registerMapping(
+            &mapping, Bridge_free,
+            &m_uno_env->aBase, m_java_env, nullptr );
     }
 }
 
@@ -425,34 +425,34 @@ extern "C" {
 static void java_env_dispose(uno_Environment * env) {
     auto * envData
         = static_cast<jni_uno::JniUnoEnvironmentData *>(env->pContext);
-    if (envData != nullptr) {
-        jobject async;
-        {
-            osl::MutexGuard g(envData->mutex);
-            async = envData->asynchronousFinalizer;
-            envData->asynchronousFinalizer = nullptr;
-        }
-        if (async != nullptr) {
-            try {
-                JNI_guarded_context jni(envData->info, envData->machine);
-                jni->CallObjectMethodA(
-                    async, envData->info->m_method_AsynchronousFinalizer_drain,
-                    nullptr);
-                jni.ensure_no_exception();
-                jni->DeleteGlobalRef(async);
-            } catch (const BridgeRuntimeError & e) {
-                SAL_WARN(
-                    "bridges",
-                    "ignoring BridgeRuntimeError \"" << e.m_message << "\"");
-            } catch (
-                jvmaccess::VirtualMachine::AttachGuard::CreationException &)
-            {
-                SAL_WARN(
-                    "bridges",
-                    ("ignoring jvmaccess::VirtualMachine::AttachGuard"
-                     "::CreationException"));
-            }
-        }
+    if (envData == nullptr)        return;
+
+    jobject async;
+    {
+        osl::MutexGuard g(envData->mutex);
+        async = envData->asynchronousFinalizer;
+        envData->asynchronousFinalizer = nullptr;
+    }
+    if (async == nullptr)        return;
+
+    try {
+        JNI_guarded_context jni(envData->info, envData->machine);
+        jni->CallObjectMethodA(
+            async, envData->info->m_method_AsynchronousFinalizer_drain,
+            nullptr);
+        jni.ensure_no_exception();
+        jni->DeleteGlobalRef(async);
+    } catch (const BridgeRuntimeError & e) {
+        SAL_WARN(
+            "bridges",
+            "ignoring BridgeRuntimeError \"" << e.m_message << "\"");
+    } catch (
+        jvmaccess::VirtualMachine::AttachGuard::CreationException &)
+    {
+        SAL_WARN(
+            "bridges",
+            ("ignoring jvmaccess::VirtualMachine::AttachGuard"
+             "::CreationException"));
     }
 }
 
