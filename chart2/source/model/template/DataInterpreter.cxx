@@ -215,21 +215,21 @@ struct lcl_LabeledSequenceEquals
             m_bHasLabels ( false ),
             m_bHasValues ( false )
     {
-        if( xLSeqToCmp.is())
-        {
-            Reference< data::XDataSequence > xSeq( xLSeqToCmp->getValues());
-            if( xSeq.is())
-            {
-                m_bHasValues = true;
-                m_aValuesRangeRep = xSeq->getSourceRangeRepresentation();
-            }
+        if( !xLSeqToCmp.is())
+            return;
 
-            xSeq.set( xLSeqToCmp->getLabel());
-            if( xSeq.is())
-            {
-                m_bHasLabels = true;
-                m_aLabelRangeRep = xSeq->getSourceRangeRepresentation();
-            }
+        Reference< data::XDataSequence > xSeq( xLSeqToCmp->getValues());
+        if( xSeq.is())
+        {
+            m_bHasValues = true;
+            m_aValuesRangeRep = xSeq->getSourceRangeRepresentation();
+        }
+
+        xSeq.set( xLSeqToCmp->getLabel());
+        if( xSeq.is())
+        {
+            m_bHasLabels = true;
+            m_aLabelRangeRep = xSeq->getSourceRangeRepresentation();
         }
     }
 

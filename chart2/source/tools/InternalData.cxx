@@ -249,42 +249,42 @@ vector< uno::Any > InternalData::getComplexRowLabel( sal_Int32 nRowIndex ) const
 
 void InternalData::swapRowWithNext( sal_Int32 nRowIndex )
 {
-    if( nRowIndex < m_nRowCount - 1 )
-    {
-        const sal_Int32 nMax = m_nColumnCount;
-        for( sal_Int32 nColIdx=0; nColIdx<nMax; ++nColIdx )
-        {
-            size_t nIndex1 = nColIdx + nRowIndex*m_nColumnCount;
-            size_t nIndex2 = nIndex1 + m_nColumnCount;
-            double fTemp = m_aData[nIndex1];
-            m_aData[nIndex1] = m_aData[nIndex2];
-            m_aData[nIndex2] = fTemp;
-        }
+    if( nRowIndex >= m_nRowCount - 1 )
+        return;
 
-        vector< uno::Any > aTemp( m_aRowLabels[nRowIndex] );
-        m_aRowLabels[nRowIndex] = m_aRowLabels[nRowIndex + 1];
-        m_aRowLabels[nRowIndex + 1] = aTemp;
+    const sal_Int32 nMax = m_nColumnCount;
+    for( sal_Int32 nColIdx=0; nColIdx<nMax; ++nColIdx )
+    {
+        size_t nIndex1 = nColIdx + nRowIndex*m_nColumnCount;
+        size_t nIndex2 = nIndex1 + m_nColumnCount;
+        double fTemp = m_aData[nIndex1];
+        m_aData[nIndex1] = m_aData[nIndex2];
+        m_aData[nIndex2] = fTemp;
     }
+
+    vector< uno::Any > aTemp( m_aRowLabels[nRowIndex] );
+    m_aRowLabels[nRowIndex] = m_aRowLabels[nRowIndex + 1];
+    m_aRowLabels[nRowIndex + 1] = aTemp;
 }
 
 void InternalData::swapColumnWithNext( sal_Int32 nColumnIndex )
 {
-    if( nColumnIndex < m_nColumnCount - 1 )
-    {
-        const sal_Int32 nMax = m_nRowCount;
-        for( sal_Int32 nRowIdx=0; nRowIdx<nMax; ++nRowIdx )
-        {
-            size_t nIndex1 = nColumnIndex + nRowIdx*m_nColumnCount;
-            size_t nIndex2 = nIndex1 + 1;
-            double fTemp = m_aData[nIndex1];
-            m_aData[nIndex1] = m_aData[nIndex2];
-            m_aData[nIndex2] = fTemp;
-        }
+    if( nColumnIndex >= m_nColumnCount - 1 )
+        return;
 
-        vector< uno::Any > aTemp( m_aColumnLabels[nColumnIndex] );
-        m_aColumnLabels[nColumnIndex] = m_aColumnLabels[nColumnIndex + 1];
-        m_aColumnLabels[nColumnIndex + 1] = aTemp;
+    const sal_Int32 nMax = m_nRowCount;
+    for( sal_Int32 nRowIdx=0; nRowIdx<nMax; ++nRowIdx )
+    {
+        size_t nIndex1 = nColumnIndex + nRowIdx*m_nColumnCount;
+        size_t nIndex2 = nIndex1 + 1;
+        double fTemp = m_aData[nIndex1];
+        m_aData[nIndex1] = m_aData[nIndex2];
+        m_aData[nIndex2] = fTemp;
     }
+
+    vector< uno::Any > aTemp( m_aColumnLabels[nColumnIndex] );
+    m_aColumnLabels[nColumnIndex] = m_aColumnLabels[nColumnIndex + 1];
+    m_aColumnLabels[nColumnIndex + 1] = aTemp;
 }
 
 bool InternalData::enlargeData( sal_Int32 nColumnCount, sal_Int32 nRowCount )

@@ -308,21 +308,21 @@ void TitleWrapper::setFastCharacterPropertyValue(
                 nHandle < CharacterProperties::FAST_PROPERTY_ID_END_CHAR_PROP );
 
     Reference< chart2::XTitle > xTitle( getTitleObject() );
-    if( xTitle.is())
+    if( !xTitle.is())
+        return;
+
+    Sequence< Reference< chart2::XFormattedString > > aStrings( xTitle->getText());
+    const WrappedProperty* pWrappedProperty = getWrappedProperty( nHandle );
+
+    for( sal_Int32 i = 0; i < aStrings.getLength(); ++i )
     {
-        Sequence< Reference< chart2::XFormattedString > > aStrings( xTitle->getText());
-        const WrappedProperty* pWrappedProperty = getWrappedProperty( nHandle );
+        Reference< beans::XFastPropertySet > xFastPropertySet( aStrings[ i ], uno::UNO_QUERY );
+        Reference< beans::XPropertySet > xPropSet( xFastPropertySet, uno::UNO_QUERY );
 
-        for( sal_Int32 i = 0; i < aStrings.getLength(); ++i )
-        {
-            Reference< beans::XFastPropertySet > xFastPropertySet( aStrings[ i ], uno::UNO_QUERY );
-            Reference< beans::XPropertySet > xPropSet( xFastPropertySet, uno::UNO_QUERY );
-
-            if( pWrappedProperty )
-                pWrappedProperty->setPropertyValue( rValue, xPropSet );
-            else if( xFastPropertySet.is() )
-                xFastPropertySet->setFastPropertyValue( nHandle, rValue );
-        }
+        if( pWrappedProperty )
+            pWrappedProperty->setPropertyValue( rValue, xPropSet );
+        else if( xFastPropertySet.is() )
+            xFastPropertySet->setFastPropertyValue( nHandle, rValue );
     }
 }
 

@@ -36,23 +36,23 @@ void lcl_fireModifyEvent(
 {
     ::cppu::OInterfaceContainerHelper * pCntHlp = rBroadcastHelper.getContainer(
         cppu::UnoType<util::XModifyListener>::get());
-    if( pCntHlp )
+    if( !pCntHlp )
+        return;
+
+    lang::EventObject aEventToSend;
+    if( pEvent )
+        aEventToSend = *pEvent;
+    else
+        aEventToSend.Source.set( xEventSource );
+    OSL_ENSURE( aEventToSend.Source.is(), "Sending event without source" );
+
+    ::cppu::OInterfaceIteratorHelper aIt( *pCntHlp );
+
+    while( aIt.hasMoreElements())
     {
-        lang::EventObject aEventToSend;
-        if( pEvent )
-            aEventToSend = *pEvent;
-        else
-            aEventToSend.Source.set( xEventSource );
-        OSL_ENSURE( aEventToSend.Source.is(), "Sending event without source" );
-
-        ::cppu::OInterfaceIteratorHelper aIt( *pCntHlp );
-
-        while( aIt.hasMoreElements())
-        {
-            Reference< util::XModifyListener > xModListener( aIt.next(), uno::UNO_QUERY );
-            if( xModListener.is())
-                xModListener->modified( aEventToSend );
-        }
+        Reference< util::XModifyListener > xModListener( aIt.next(), uno::UNO_QUERY );
+        if( xModListener.is())
+            xModListener->modified( aEventToSend );
     }
 }
 

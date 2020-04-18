@@ -252,79 +252,79 @@ void ChartController::executeDispatch_Paste()
 {
     SolarMutexGuard aGuard;
     auto pChartWindow(GetChartWindow());
-    if( pChartWindow )
+    if( !pChartWindow )
+        return;
+
+    Graphic aGraphic;
+    // paste location: center of window
+    Point aPos = pChartWindow->PixelToLogic( tools::Rectangle( {}, pChartWindow->GetSizePixel()).Center());
+
+    // handle different formats
+    TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pChartWindow ));
+    if( aDataHelper.GetTransferable().is())
     {
-        Graphic aGraphic;
-        // paste location: center of window
-        Point aPos = pChartWindow->PixelToLogic( tools::Rectangle( {}, pChartWindow->GetSizePixel()).Center());
-
-        // handle different formats
-        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pChartWindow ));
-        if( aDataHelper.GetTransferable().is())
+        if ( aDataHelper.HasFormat( SotClipboardFormatId::DRAWING ) )
         {
-            if ( aDataHelper.HasFormat( SotClipboardFormatId::DRAWING ) )
+            tools::SvRef<SotStorageStream> xStm;
+            if ( aDataHelper.GetSotStorageStream( SotClipboardFormatId::DRAWING, xStm ) )
             {
-                tools::SvRef<SotStorageStream> xStm;
-                if ( aDataHelper.GetSotStorageStream( SotClipboardFormatId::DRAWING, xStm ) )
+                xStm->Seek( 0 );
+                Reference< io::XInputStream > xInputStream( new utl::OInputStreamWrapper( *xStm ) );
+
+                std::unique_ptr< SdrModel > spModel(
+                    new SdrModel());
+
+                if ( SvxDrawingLayerImport( spModel.get(), xInputStream ) )
                 {
-                    xStm->Seek( 0 );
-                    Reference< io::XInputStream > xInputStream( new utl::OInputStreamWrapper( *xStm ) );
-
-                    std::unique_ptr< SdrModel > spModel(
-                        new SdrModel());
-
-                    if ( SvxDrawingLayerImport( spModel.get(), xInputStream ) )
-                    {
-                        impl_PasteShapes( spModel.get() );
-                    }
+                    impl_PasteShapes( spModel.get() );
                 }
             }
-            else if ( aDataHelper.HasFormat( SotClipboardFormatId::SVXB ) )
+        }
+        else if ( aDataHelper.HasFormat( SotClipboardFormatId::SVXB ) )
+        {
+            // graphic exchange format (graphic manager bitmap format?)
+            tools::SvRef<SotStorageStream> xStm;
+            if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::SVXB, xStm ))
+                ReadGraphic( *xStm, aGraphic );
+        }
+        else if( aDataHelper.HasFormat( SotClipboardFormatId::GDIMETAFILE ))
+        {
+            // meta file
+            GDIMetaFile aMetafile;
+            if( aDataHelper.GetGDIMetaFile( SotClipboardFormatId::GDIMETAFILE, aMetafile ))
+                aGraphic = Graphic( aMetafile );
+        }
+        else if( aDataHelper.HasFormat( SotClipboardFormatId::BITMAP ))
+        {
+            // bitmap (non-graphic-manager)
+            BitmapEx aBmpEx;
+            if( aDataHelper.GetBitmapEx( SotClipboardFormatId::BITMAP, aBmpEx ))
+                aGraphic = Graphic( aBmpEx );
+        }
+        else if( aDataHelper.HasFormat( SotClipboardFormatId::STRING ))
+        {
+            OUString aString;
+            if( aDataHelper.GetString( SotClipboardFormatId::STRING, aString ) && m_pDrawModelWrapper )
             {
-                // graphic exchange format (graphic manager bitmap format?)
-                tools::SvRef<SotStorageStream> xStm;
-                if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::SVXB, xStm ))
-                    ReadGraphic( *xStm, aGraphic );
-            }
-            else if( aDataHelper.HasFormat( SotClipboardFormatId::GDIMETAFILE ))
-            {
-                // meta file
-                GDIMetaFile aMetafile;
-                if( aDataHelper.GetGDIMetaFile( SotClipboardFormatId::GDIMETAFILE, aMetafile ))
-                    aGraphic = Graphic( aMetafile );
-            }
-            else if( aDataHelper.HasFormat( SotClipboardFormatId::BITMAP ))
-            {
-                // bitmap (non-graphic-manager)
-                BitmapEx aBmpEx;
-                if( aDataHelper.GetBitmapEx( SotClipboardFormatId::BITMAP, aBmpEx ))
-                    aGraphic = Graphic( aBmpEx );
-            }
-            else if( aDataHelper.HasFormat( SotClipboardFormatId::STRING ))
-            {
-                OUString aString;
-                if( aDataHelper.GetString( SotClipboardFormatId::STRING, aString ) && m_pDrawModelWrapper )
+                if( m_pDrawViewWrapper )
                 {
-                    if( m_pDrawViewWrapper )
+                    OutlinerView* pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
+                    if( pOutlinerView )//in case of edit mode insert into edited string
+                        pOutlinerView->InsertText( aString );
+                    else
                     {
-                        OutlinerView* pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
-                        if( pOutlinerView )//in case of edit mode insert into edited string
-                            pOutlinerView->InsertText( aString );
-                        else
-                        {
-                            impl_PasteStringAsTextShape( aString, awt::Point( 0, 0 ) );
-                        }
+                        impl_PasteStringAsTextShape( aString, awt::Point( 0, 0 ) );
                     }
                 }
             }
         }
+    }
 
-        if( aGraphic.GetType() != GraphicType::NONE )
-        {
-            Reference< graphic::XGraphic > xGraphic( aGraphic.GetXGraphic());
-            if( xGraphic.is())
-                impl_PasteGraphic( xGraphic, aPos );
-        }
+    if( aGraphic.GetType() != GraphicType::NONE )
+    {
+        Reference< graphic::XGraphic > xGraphic( aGraphic.GetXGraphic());
+        if( xGraphic.is())
+            impl_PasteGraphic( xGraphic, aPos );
     }
 }
 
@@ -345,146 +345,146 @@ void ChartController::impl_PasteGraphic(
     uno::Reference< drawing::XShape > xGraphicShape(
         xFact->createInstance( "com.sun.star.drawing.GraphicObjectShape" ), uno::UNO_QUERY );
     uno::Reference< beans::XPropertySet > xGraphicShapeProp( xGraphicShape, uno::UNO_QUERY );
-    if( xGraphicShapeProp.is() && xGraphicShape.is())
-    {
-        uno::Reference< drawing::XShapes > xPage = pDrawModelWrapper->getMainDrawPage();
-        if( xPage.is())
-        {
-            xPage->add( xGraphicShape );
-            //need to change the model state manually
-            {
-                uno::Reference< util::XModifiable > xModifiable( getModel(), uno::UNO_QUERY );
-                if( xModifiable.is() )
-                    xModifiable->setModified( true );
-            }
-            //select new shape
-            m_aSelection.setSelection( xGraphicShape );
-            m_aSelection.applySelection( m_pDrawViewWrapper.get() );
-        }
-        xGraphicShapeProp->setPropertyValue( "Graphic", uno::Any( xGraphic ));
-        uno::Reference< beans::XPropertySet > xGraphicProp( xGraphic, uno::UNO_QUERY );
+    if( !(xGraphicShapeProp.is() && xGraphicShape.is()))
+        return;
 
-        awt::Size aGraphicSize( 1000, 1000 );
-        auto pChartWindow(GetChartWindow());
-        // first try size in 100th mm, then pixel size
-        if( ! ( xGraphicProp->getPropertyValue( "Size100thMM") >>= aGraphicSize ) &&
-            ( ( xGraphicProp->getPropertyValue( "SizePixel") >>= aGraphicSize ) && pChartWindow ))
+    uno::Reference< drawing::XShapes > xPage = pDrawModelWrapper->getMainDrawPage();
+    if( xPage.is())
+    {
+        xPage->add( xGraphicShape );
+        //need to change the model state manually
         {
-            ::Size aVCLSize( pChartWindow->PixelToLogic( Size( aGraphicSize.Width, aGraphicSize.Height )));
-            aGraphicSize.Width = aVCLSize.getWidth();
-            aGraphicSize.Height = aVCLSize.getHeight();
+            uno::Reference< util::XModifiable > xModifiable( getModel(), uno::UNO_QUERY );
+            if( xModifiable.is() )
+                xModifiable->setModified( true );
         }
-        xGraphicShape->setSize( aGraphicSize );
-        xGraphicShape->setPosition( awt::Point( 0, 0 ) );
+        //select new shape
+        m_aSelection.setSelection( xGraphicShape );
+        m_aSelection.applySelection( m_pDrawViewWrapper.get() );
     }
+    xGraphicShapeProp->setPropertyValue( "Graphic", uno::Any( xGraphic ));
+    uno::Reference< beans::XPropertySet > xGraphicProp( xGraphic, uno::UNO_QUERY );
+
+    awt::Size aGraphicSize( 1000, 1000 );
+    auto pChartWindow(GetChartWindow());
+    // first try size in 100th mm, then pixel size
+    if( ! ( xGraphicProp->getPropertyValue( "Size100thMM") >>= aGraphicSize ) &&
+        ( ( xGraphicProp->getPropertyValue( "SizePixel") >>= aGraphicSize ) && pChartWindow ))
+    {
+        ::Size aVCLSize( pChartWindow->PixelToLogic( Size( aGraphicSize.Width, aGraphicSize.Height )));
+        aGraphicSize.Width = aVCLSize.getWidth();
+        aGraphicSize.Height = aVCLSize.getHeight();
+    }
+    xGraphicShape->setSize( aGraphicSize );
+    xGraphicShape->setPosition( awt::Point( 0, 0 ) );
 }
 
 void ChartController::impl_PasteShapes( SdrModel* pModel )
 {
     DrawModelWrapper* pDrawModelWrapper( GetDrawModelWrapper() );
-    if ( pDrawModelWrapper && m_pDrawViewWrapper )
+    if ( !(pDrawModelWrapper && m_pDrawViewWrapper) )
+        return;
+
+    Reference< drawing::XDrawPage > xDestPage( pDrawModelWrapper->getMainDrawPage() );
+    SdrPage* pDestPage = GetSdrPageFromXDrawPage( xDestPage );
+    if ( !pDestPage )
+        return;
+
+    Reference< drawing::XShape > xSelShape;
+    m_pDrawViewWrapper->BegUndo( SvxResId( RID_SVX_3D_UNDO_EXCHANGE_PASTE ) );
+    sal_uInt16 nCount = pModel->GetPageCount();
+    for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
-        Reference< drawing::XDrawPage > xDestPage( pDrawModelWrapper->getMainDrawPage() );
-        SdrPage* pDestPage = GetSdrPageFromXDrawPage( xDestPage );
-        if ( pDestPage )
+        const SdrPage* pPage = pModel->GetPage( i );
+        SdrObjListIter aIter( pPage, SdrIterMode::DeepNoGroups );
+        while ( aIter.IsMore() )
         {
-            Reference< drawing::XShape > xSelShape;
-            m_pDrawViewWrapper->BegUndo( SvxResId( RID_SVX_3D_UNDO_EXCHANGE_PASTE ) );
-            sal_uInt16 nCount = pModel->GetPageCount();
-            for ( sal_uInt16 i = 0; i < nCount; ++i )
+            SdrObject* pObj(aIter.Next());
+            // Clone to new SdrModel
+            SdrObject* pNewObj(pObj ? pObj->CloneSdrObject(pDrawModelWrapper->getSdrModel()) : nullptr);
+
+            if ( pNewObj )
             {
-                const SdrPage* pPage = pModel->GetPage( i );
-                SdrObjListIter aIter( pPage, SdrIterMode::DeepNoGroups );
-                while ( aIter.IsMore() )
+                // set position
+                Reference< drawing::XShape > xShape( pNewObj->getUnoShape(), uno::UNO_QUERY );
+                if ( xShape.is() )
                 {
-                    SdrObject* pObj(aIter.Next());
-                    // Clone to new SdrModel
-                    SdrObject* pNewObj(pObj ? pObj->CloneSdrObject(pDrawModelWrapper->getSdrModel()) : nullptr);
-
-                    if ( pNewObj )
-                    {
-                        // set position
-                        Reference< drawing::XShape > xShape( pNewObj->getUnoShape(), uno::UNO_QUERY );
-                        if ( xShape.is() )
-                        {
-                            xShape->setPosition( awt::Point( 0, 0 ) );
-                        }
-
-                        pDestPage->InsertObject( pNewObj );
-                        m_pDrawViewWrapper->AddUndo( std::make_unique<SdrUndoInsertObj>( *pNewObj ) );
-                        xSelShape = xShape;
-                    }
+                    xShape->setPosition( awt::Point( 0, 0 ) );
                 }
+
+                pDestPage->InsertObject( pNewObj );
+                m_pDrawViewWrapper->AddUndo( std::make_unique<SdrUndoInsertObj>( *pNewObj ) );
+                xSelShape = xShape;
             }
-
-            Reference< util::XModifiable > xModifiable( getModel(), uno::UNO_QUERY );
-            if ( xModifiable.is() )
-            {
-                xModifiable->setModified( true );
-            }
-
-            // select last inserted shape
-            m_aSelection.setSelection( xSelShape );
-            m_aSelection.applySelection( m_pDrawViewWrapper.get() );
-
-            m_pDrawViewWrapper->EndUndo();
-
-            impl_switchDiagramPositioningToExcludingPositioning();
         }
     }
+
+    Reference< util::XModifiable > xModifiable( getModel(), uno::UNO_QUERY );
+    if ( xModifiable.is() )
+    {
+        xModifiable->setModified( true );
+    }
+
+    // select last inserted shape
+    m_aSelection.setSelection( xSelShape );
+    m_aSelection.applySelection( m_pDrawViewWrapper.get() );
+
+    m_pDrawViewWrapper->EndUndo();
+
+    impl_switchDiagramPositioningToExcludingPositioning();
 }
 
 void ChartController::impl_PasteStringAsTextShape( const OUString& rString, const awt::Point& rPosition )
 {
     DrawModelWrapper* pDrawModelWrapper( GetDrawModelWrapper() );
-    if ( pDrawModelWrapper && m_pDrawViewWrapper )
+    if ( !(pDrawModelWrapper && m_pDrawViewWrapper) )
+        return;
+
+    const Reference< lang::XMultiServiceFactory >& xShapeFactory( pDrawModelWrapper->getShapeFactory() );
+    const Reference< drawing::XDrawPage >& xDrawPage( pDrawModelWrapper->getMainDrawPage() );
+    OSL_ASSERT( xShapeFactory.is() && xDrawPage.is() );
+
+    if ( !(xShapeFactory.is() && xDrawPage.is()) )
+        return;
+
+    try
     {
-        const Reference< lang::XMultiServiceFactory >& xShapeFactory( pDrawModelWrapper->getShapeFactory() );
-        const Reference< drawing::XDrawPage >& xDrawPage( pDrawModelWrapper->getMainDrawPage() );
-        OSL_ASSERT( xShapeFactory.is() && xDrawPage.is() );
+        Reference< drawing::XShape > xTextShape(
+            xShapeFactory->createInstance( "com.sun.star.drawing.TextShape" ), uno::UNO_QUERY_THROW );
+        xDrawPage->add( xTextShape );
 
-        if ( xShapeFactory.is() && xDrawPage.is() )
+        Reference< text::XTextRange > xRange( xTextShape, uno::UNO_QUERY_THROW );
+        xRange->setString( rString );
+
+        float fCharHeight = 10.0;
+        Reference< beans::XPropertySet > xProperties( xTextShape, uno::UNO_QUERY_THROW );
+        xProperties->setPropertyValue( "TextAutoGrowHeight", uno::Any( true ) );
+        xProperties->setPropertyValue( "TextAutoGrowWidth", uno::Any( true ) );
+        xProperties->setPropertyValue( "CharHeight", uno::Any( fCharHeight ) );
+        xProperties->setPropertyValue( "CharHeightAsian", uno::Any( fCharHeight ) );
+        xProperties->setPropertyValue( "CharHeightComplex", uno::Any( fCharHeight ) );
+        xProperties->setPropertyValue( "TextVerticalAdjust", uno::Any( drawing::TextVerticalAdjust_CENTER ) );
+        xProperties->setPropertyValue( "TextHorizontalAdjust", uno::Any( drawing::TextHorizontalAdjust_CENTER ) );
+        xProperties->setPropertyValue( "CharFontName", uno::Any( OUString("Albany") ) );
+
+        xTextShape->setPosition( rPosition );
+
+        m_aSelection.setSelection( xTextShape );
+        m_aSelection.applySelection( m_pDrawViewWrapper.get() );
+
+        SdrObject* pObj = DrawViewWrapper::getSdrObject( xTextShape );
+        if ( pObj )
         {
-            try
-            {
-                Reference< drawing::XShape > xTextShape(
-                    xShapeFactory->createInstance( "com.sun.star.drawing.TextShape" ), uno::UNO_QUERY_THROW );
-                xDrawPage->add( xTextShape );
+            m_pDrawViewWrapper->BegUndo( SvxResId( RID_SVX_3D_UNDO_EXCHANGE_PASTE ) );
+            m_pDrawViewWrapper->AddUndo( std::make_unique<SdrUndoInsertObj>( *pObj ) );
+            m_pDrawViewWrapper->EndUndo();
 
-                Reference< text::XTextRange > xRange( xTextShape, uno::UNO_QUERY_THROW );
-                xRange->setString( rString );
-
-                float fCharHeight = 10.0;
-                Reference< beans::XPropertySet > xProperties( xTextShape, uno::UNO_QUERY_THROW );
-                xProperties->setPropertyValue( "TextAutoGrowHeight", uno::Any( true ) );
-                xProperties->setPropertyValue( "TextAutoGrowWidth", uno::Any( true ) );
-                xProperties->setPropertyValue( "CharHeight", uno::Any( fCharHeight ) );
-                xProperties->setPropertyValue( "CharHeightAsian", uno::Any( fCharHeight ) );
-                xProperties->setPropertyValue( "CharHeightComplex", uno::Any( fCharHeight ) );
-                xProperties->setPropertyValue( "TextVerticalAdjust", uno::Any( drawing::TextVerticalAdjust_CENTER ) );
-                xProperties->setPropertyValue( "TextHorizontalAdjust", uno::Any( drawing::TextHorizontalAdjust_CENTER ) );
-                xProperties->setPropertyValue( "CharFontName", uno::Any( OUString("Albany") ) );
-
-                xTextShape->setPosition( rPosition );
-
-                m_aSelection.setSelection( xTextShape );
-                m_aSelection.applySelection( m_pDrawViewWrapper.get() );
-
-                SdrObject* pObj = DrawViewWrapper::getSdrObject( xTextShape );
-                if ( pObj )
-                {
-                    m_pDrawViewWrapper->BegUndo( SvxResId( RID_SVX_3D_UNDO_EXCHANGE_PASTE ) );
-                    m_pDrawViewWrapper->AddUndo( std::make_unique<SdrUndoInsertObj>( *pObj ) );
-                    m_pDrawViewWrapper->EndUndo();
-
-                    impl_switchDiagramPositioningToExcludingPositioning();
-                }
-            }
-            catch ( const uno::Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION("chart2");
-            }
+            impl_switchDiagramPositioningToExcludingPositioning();
         }
+    }
+    catch ( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -853,32 +853,32 @@ void ChartController::executeDispatch_ToggleGridHorizontal()
     UndoGuard aUndoGuard(
         SchResId( STR_ACTION_TOGGLE_GRID_HORZ ), m_xUndoManager );
     Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( getModel() ));
-    if( xDiagram.is())
+    if( !xDiagram.is())
+        return;
+
+    sal_Int32 nDimensionIndex = 1;
+    sal_Int32 nCooSysIndex = 0;
+
+    bool bHasMajorYGrid = AxisHelper::isGridShown( nDimensionIndex, nCooSysIndex, true,  xDiagram );
+    bool bHasMinorYGrid = AxisHelper::isGridShown( nDimensionIndex, nCooSysIndex, false, xDiagram );
+
+    if( bHasMajorYGrid )
     {
-        sal_Int32 nDimensionIndex = 1;
-        sal_Int32 nCooSysIndex = 0;
-
-        bool bHasMajorYGrid = AxisHelper::isGridShown( nDimensionIndex, nCooSysIndex, true,  xDiagram );
-        bool bHasMinorYGrid = AxisHelper::isGridShown( nDimensionIndex, nCooSysIndex, false, xDiagram );
-
-        if( bHasMajorYGrid )
+        if ( bHasMinorYGrid )
         {
-            if ( bHasMinorYGrid )
-            {
-                AxisHelper::hideGrid( nDimensionIndex, nCooSysIndex, true,  xDiagram );
-                AxisHelper::hideGrid( nDimensionIndex, nCooSysIndex, false, xDiagram );
-            }
-            else
-            {
-                AxisHelper::showGrid( nDimensionIndex, nCooSysIndex, false, xDiagram );
-            }
+            AxisHelper::hideGrid( nDimensionIndex, nCooSysIndex, true,  xDiagram );
+            AxisHelper::hideGrid( nDimensionIndex, nCooSysIndex, false, xDiagram );
         }
         else
         {
-            AxisHelper::showGrid( nDimensionIndex, nCooSysIndex, true, xDiagram );
+            AxisHelper::showGrid( nDimensionIndex, nCooSysIndex, false, xDiagram );
         }
-        aUndoGuard.commit();
     }
+    else
+    {
+        AxisHelper::showGrid( nDimensionIndex, nCooSysIndex, true, xDiagram );
+    }
+    aUndoGuard.commit();
 }
 
 void ChartController::executeDispatch_ToggleGridVertical()
@@ -886,62 +886,62 @@ void ChartController::executeDispatch_ToggleGridVertical()
     UndoGuard aUndoGuard(
         SchResId( STR_ACTION_TOGGLE_GRID_VERTICAL ), m_xUndoManager );
     Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( getModel() ));
-    if( xDiagram.is())
-    {
-        sal_Int32 nDimensionIndex = 0;
-        sal_Int32 nCooSysIndex = 0;
+    if( !xDiagram.is())
+        return;
 
-        bool bHasMajorXGrid = AxisHelper::isGridShown( nDimensionIndex, nCooSysIndex, true,  xDiagram );
-        bool bHasMinorXGrid = AxisHelper::isGridShown( nDimensionIndex, nCooSysIndex, false, xDiagram );
-        if( bHasMajorXGrid )
+    sal_Int32 nDimensionIndex = 0;
+    sal_Int32 nCooSysIndex = 0;
+
+    bool bHasMajorXGrid = AxisHelper::isGridShown( nDimensionIndex, nCooSysIndex, true,  xDiagram );
+    bool bHasMinorXGrid = AxisHelper::isGridShown( nDimensionIndex, nCooSysIndex, false, xDiagram );
+    if( bHasMajorXGrid )
+    {
+        if (bHasMinorXGrid)
         {
-            if (bHasMinorXGrid)
-            {
-                AxisHelper::hideGrid( nDimensionIndex, nCooSysIndex, true,  xDiagram );
-                AxisHelper::hideGrid( nDimensionIndex, nCooSysIndex, false, xDiagram );
-            }
-            else
-            {
-                AxisHelper::showGrid( nDimensionIndex, nCooSysIndex, false, xDiagram );
-            }
+            AxisHelper::hideGrid( nDimensionIndex, nCooSysIndex, true,  xDiagram );
+            AxisHelper::hideGrid( nDimensionIndex, nCooSysIndex, false, xDiagram );
         }
         else
         {
-            AxisHelper::showGrid( nDimensionIndex, nCooSysIndex, true, xDiagram );
+            AxisHelper::showGrid( nDimensionIndex, nCooSysIndex, false, xDiagram );
         }
-
-        aUndoGuard.commit();
     }
+    else
+    {
+        AxisHelper::showGrid( nDimensionIndex, nCooSysIndex, true, xDiagram );
+    }
+
+    aUndoGuard.commit();
 }
 
 void ChartController::executeDispatch_LOKSetTextSelection(int nType, int nX, int nY)
 {
-    if (m_pDrawViewWrapper)
+    if (!m_pDrawViewWrapper)
+        return;
+
+    if (!m_pDrawViewWrapper->IsTextEdit())
+        return;
+
+    OutlinerView* pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
+    if (!pOutlinerView)
+        return;
+
+    EditView& rEditView = pOutlinerView->GetEditView();
+    Point aPoint(convertTwipToMm100(nX), convertTwipToMm100(nY));
+    switch (nType)
     {
-        if (m_pDrawViewWrapper->IsTextEdit())
-        {
-            OutlinerView* pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
-            if (pOutlinerView)
-            {
-                EditView& rEditView = pOutlinerView->GetEditView();
-                Point aPoint(convertTwipToMm100(nX), convertTwipToMm100(nY));
-                switch (nType)
-                {
-                    case LOK_SETTEXTSELECTION_START:
-                        rEditView.SetCursorLogicPosition(aPoint, /*bPoint=*/false, /*bClearMark=*/false);
-                        break;
-                    case LOK_SETTEXTSELECTION_END:
-                        rEditView.SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/false);
-                        break;
-                    case LOK_SETTEXTSELECTION_RESET:
-                        rEditView.SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/true);
-                        break;
-                    default:
-                        assert(false);
-                        break;
-                }
-            }
-        }
+        case LOK_SETTEXTSELECTION_START:
+            rEditView.SetCursorLogicPosition(aPoint, /*bPoint=*/false, /*bClearMark=*/false);
+            break;
+        case LOK_SETTEXTSELECTION_END:
+            rEditView.SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/false);
+            break;
+        case LOK_SETTEXTSELECTION_RESET:
+            rEditView.SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/true);
+            break;
+        default:
+            assert(false);
+            break;
     }
 }
 

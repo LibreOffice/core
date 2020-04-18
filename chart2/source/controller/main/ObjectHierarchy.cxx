@@ -78,28 +78,28 @@ void lcl_getChildOIDs(
     ::chart::ObjectHierarchy::tChildContainer& rOutChildren,
     const Reference< container::XIndexAccess >& xShapes )
 {
-    if( xShapes.is())
+    if( !xShapes.is())
+        return;
+
+    sal_Int32 nCount = xShapes->getCount();
+    for( sal_Int32 i=0; i<nCount; ++i)
     {
-        sal_Int32 nCount = xShapes->getCount();
-        for( sal_Int32 i=0; i<nCount; ++i)
+        Reference< beans::XPropertySet > xShapeProp( xShapes->getByIndex( i ), uno::UNO_QUERY );
+        if( xShapeProp.is())
         {
-            Reference< beans::XPropertySet > xShapeProp( xShapes->getByIndex( i ), uno::UNO_QUERY );
-            if( xShapeProp.is())
+            Reference< beans::XPropertySetInfo > xInfo( xShapeProp->getPropertySetInfo());
+            OUString aName;
+            if( xInfo.is() &&
+                xInfo->hasPropertyByName( "Name") &&
+                (xShapeProp->getPropertyValue( "Name") >>= aName ) &&
+                !aName.isEmpty() &&
+                ::chart::ObjectIdentifier::isCID( aName ))
             {
-                Reference< beans::XPropertySetInfo > xInfo( xShapeProp->getPropertySetInfo());
-                OUString aName;
-                if( xInfo.is() &&
-                    xInfo->hasPropertyByName( "Name") &&
-                    (xShapeProp->getPropertyValue( "Name") >>= aName ) &&
-                    !aName.isEmpty() &&
-                    ::chart::ObjectIdentifier::isCID( aName ))
-                {
-                    rOutChildren.emplace_back( aName );
-                }
-                Reference< container::XIndexAccess > xNewShapes( xShapeProp, uno::UNO_QUERY );
-                if( xNewShapes.is())
-                    lcl_getChildOIDs( rOutChildren, xNewShapes );
+                rOutChildren.emplace_back( aName );
             }
+            Reference< container::XIndexAccess > xNewShapes( xShapeProp, uno::UNO_QUERY );
+            if( xNewShapes.is())
+                lcl_getChildOIDs( rOutChildren, xNewShapes );
         }
     }
 }
@@ -278,21 +278,21 @@ void ImplObjectHierarchy::createLegendTree(
     const Reference< XChartDocument > & xChartDoc,
     const Reference< XDiagram > & xDiagram  )
 {
-    if( xDiagram.is() && LegendHelper::hasLegend( xDiagram ) )
+    if( !(xDiagram.is() && LegendHelper::hasLegend( xDiagram )) )
+        return;
+
+    ObjectIdentifier aLegendOID( ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForObject( xDiagram->getLegend(), xChartDoc ) ) );
+    rContainer.push_back( aLegendOID );
+
+    // iterate over child shapes of legend and search for matching CIDs
+    if( m_pExplicitValueProvider )
     {
-        ObjectIdentifier aLegendOID( ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForObject( xDiagram->getLegend(), xChartDoc ) ) );
-        rContainer.push_back( aLegendOID );
+        Reference< container::XIndexAccess > xLegendShapeContainer(
+            m_pExplicitValueProvider->getShapeForCID( aLegendOID.getObjectCID() ), uno::UNO_QUERY );
+        ObjectHierarchy::tChildContainer aLegendEntryOIDs;
+        lcl_getChildOIDs( aLegendEntryOIDs, xLegendShapeContainer );
 
-        // iterate over child shapes of legend and search for matching CIDs
-        if( m_pExplicitValueProvider )
-        {
-            Reference< container::XIndexAccess > xLegendShapeContainer(
-                m_pExplicitValueProvider->getShapeForCID( aLegendOID.getObjectCID() ), uno::UNO_QUERY );
-            ObjectHierarchy::tChildContainer aLegendEntryOIDs;
-            lcl_getChildOIDs( aLegendEntryOIDs, xLegendShapeContainer );
-
-            m_aChildMap[ aLegendOID ] = aLegendEntryOIDs;
-        }
+        m_aChildMap[ aLegendOID ] = aLegendEntryOIDs;
     }
 }
 
@@ -305,58 +305,58 @@ void ImplObjectHierarchy::createAxesTree(
     sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
     uno::Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
     bool bSupportsAxesGrids = ChartTypeHelper::isSupportingMainAxis( xChartType, nDimensionCount, 0 );
-    if( bSupportsAxesGrids )
+    if( !bSupportsAxesGrids )
+        return;
+
+    Sequence< Reference< XAxis > > aAxes( AxisHelper::getAllAxesOfDiagram( xDiagram, /* bOnlyVisible = */ true ) );
+    if( !m_bOrderingForElementSelector )
+        std::transform( aAxes.begin(), aAxes.end(),
+                      std::back_inserter( rContainer ),
+                      lcl_ObjectToOID( xChartDoc ));
+
+    // get all axes, also invisible ones
+    aAxes = AxisHelper::getAllAxesOfDiagram( xDiagram );
+    // Grids
+    Reference< frame::XModel > xChartModel = xChartDoc;
+    for( sal_Int32 nA=0; nA<aAxes.getLength(); ++nA )
     {
-        Sequence< Reference< XAxis > > aAxes( AxisHelper::getAllAxesOfDiagram( xDiagram, /* bOnlyVisible = */ true ) );
-        if( !m_bOrderingForElementSelector )
-            std::transform( aAxes.begin(), aAxes.end(),
-                          std::back_inserter( rContainer ),
-                          lcl_ObjectToOID( xChartDoc ));
+        Reference< XAxis > xAxis( aAxes[nA] );
+        if(!xAxis.is())
+            continue;
 
-        // get all axes, also invisible ones
-        aAxes = AxisHelper::getAllAxesOfDiagram( xDiagram );
-        // Grids
-        Reference< frame::XModel > xChartModel = xChartDoc;
-        for( sal_Int32 nA=0; nA<aAxes.getLength(); ++nA )
+        sal_Int32 nCooSysIndex = 0;
+        sal_Int32 nDimensionIndex = 0;
+        sal_Int32 nAxisIndex = 0;
+        AxisHelper::getIndicesForAxis( xAxis, xDiagram, nCooSysIndex, nDimensionIndex, nAxisIndex );
+        if( nAxisIndex>0 && !ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimensionCount ) )
+            continue;
+
+        if( m_bOrderingForElementSelector )
         {
-            Reference< XAxis > xAxis( aAxes[nA] );
-            if(!xAxis.is())
-                continue;
+            // axis
+            if( AxisHelper::isAxisVisible( xAxis ) )
+                rContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifierForObject( xAxis, xChartModel ) );
 
-            sal_Int32 nCooSysIndex = 0;
-            sal_Int32 nDimensionIndex = 0;
-            sal_Int32 nAxisIndex = 0;
-            AxisHelper::getIndicesForAxis( xAxis, xDiagram, nCooSysIndex, nDimensionIndex, nAxisIndex );
-            if( nAxisIndex>0 && !ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimensionCount ) )
-                continue;
+            // axis title
+            lcl_addAxisTitle( aAxes[nA], rContainer, xChartModel );
+        }
 
-            if( m_bOrderingForElementSelector )
+        Reference< beans::XPropertySet > xGridProperties( xAxis->getGridProperties() );
+        if( AxisHelper::isGridVisible( xGridProperties ) )
+        {
+            //main grid
+            rContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifierForGrid( xAxis, xChartModel ) );
+        }
+
+        Sequence< Reference< beans::XPropertySet > > aSubGrids( xAxis->getSubGridProperties() );
+        sal_Int32 nSubGrid = 0;
+        for( nSubGrid = 0; nSubGrid < aSubGrids.getLength(); ++nSubGrid )
+        {
+            Reference< beans::XPropertySet > xSubGridProperties( aSubGrids[nSubGrid] );
+            if( AxisHelper::isGridVisible( xSubGridProperties ) )
             {
-                // axis
-                if( AxisHelper::isAxisVisible( xAxis ) )
-                    rContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifierForObject( xAxis, xChartModel ) );
-
-                // axis title
-                lcl_addAxisTitle( aAxes[nA], rContainer, xChartModel );
-            }
-
-            Reference< beans::XPropertySet > xGridProperties( xAxis->getGridProperties() );
-            if( AxisHelper::isGridVisible( xGridProperties ) )
-            {
-                //main grid
-                rContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifierForGrid( xAxis, xChartModel ) );
-            }
-
-            Sequence< Reference< beans::XPropertySet > > aSubGrids( xAxis->getSubGridProperties() );
-            sal_Int32 nSubGrid = 0;
-            for( nSubGrid = 0; nSubGrid < aSubGrids.getLength(); ++nSubGrid )
-            {
-                Reference< beans::XPropertySet > xSubGridProperties( aSubGrids[nSubGrid] );
-                if( AxisHelper::isGridVisible( xSubGridProperties ) )
-                {
-                    //sub grid
-                    rContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifierForGrid( xAxis, xChartModel, nSubGrid ) );
-                }
+                //sub grid
+                rContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifierForGrid( xAxis, xChartModel, nSubGrid ) );
             }
         }
     }

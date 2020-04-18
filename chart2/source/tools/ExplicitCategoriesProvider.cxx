@@ -463,32 +463,32 @@ static bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >&
 
 void ExplicitCategoriesProvider::init()
 {
-    if( m_bDirty )
-    {
-        m_aComplexCats.clear();//not one per index
-        m_aDateCategories.clear();
+    if( !m_bDirty )
+        return;
 
-        if( m_xOriginalCategories.is() )
+    m_aComplexCats.clear();//not one per index
+    m_aDateCategories.clear();
+
+    if( m_xOriginalCategories.is() )
+    {
+        if( !hasComplexCategories() )
         {
-            if( !hasComplexCategories() )
+            if(m_bIsDateAxis)
             {
-                if(m_bIsDateAxis)
-                {
-                    if( ChartTypeHelper::isSupportingDateAxis( AxisHelper::getChartTypeByIndex( m_xCooSysModel, 0 ), 0 ) )
-                        m_bIsDateAxis = lcl_fillDateCategories( m_xOriginalCategories->getValues(), m_aDateCategories, m_bIsAutoDate, mrModel );
-                    else
-                        m_bIsDateAxis = false;
-                }
-            }
-            else
-            {
-                m_bIsDateAxis = false;
+                if( ChartTypeHelper::isSupportingDateAxis( AxisHelper::getChartTypeByIndex( m_xCooSysModel, 0 ), 0 ) )
+                    m_bIsDateAxis = lcl_fillDateCategories( m_xOriginalCategories->getValues(), m_aDateCategories, m_bIsAutoDate, mrModel );
+                else
+                    m_bIsDateAxis = false;
             }
         }
         else
-            m_bIsDateAxis=false;
-        m_bDirty = false;
+        {
+            m_bIsDateAxis = false;
+        }
     }
+    else
+        m_bIsDateAxis=false;
+    m_bDirty = false;
 }
 
 Sequence< OUString > const & ExplicitCategoriesProvider::getSimpleCategories()

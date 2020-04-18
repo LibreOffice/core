@@ -417,34 +417,34 @@ void WrappedErrorCategoryProperty::setValueToSeries( const Reference< beans::XPr
         return;
 
     uno::Reference< beans::XPropertySet > xErrorBarProperties( getOrCreateErrorBarProperties(xSeriesPropertySet) );
-    if( xErrorBarProperties.is() )
+    if( !xErrorBarProperties.is() )
+        return;
+
+    sal_Int32 nNewStyle = css::chart::ErrorBarStyle::NONE;
+    switch(aNewValue)
     {
-        sal_Int32 nNewStyle = css::chart::ErrorBarStyle::NONE;
-        switch(aNewValue)
-        {
-            case css::chart::ChartErrorCategory_NONE:
-                nNewStyle = css::chart::ErrorBarStyle::NONE;
-                break;
-            case css::chart::ChartErrorCategory_VARIANCE:
-                nNewStyle = css::chart::ErrorBarStyle::VARIANCE;
-                break;
-            case css::chart::ChartErrorCategory_STANDARD_DEVIATION:
-                nNewStyle = css::chart::ErrorBarStyle::STANDARD_DEVIATION;
-                break;
-            case css::chart::ChartErrorCategory_CONSTANT_VALUE:
-                nNewStyle = css::chart::ErrorBarStyle::ABSOLUTE;
-                break;
-            case css::chart::ChartErrorCategory_PERCENT:
-                nNewStyle = css::chart::ErrorBarStyle::RELATIVE;
-                break;
-            case css::chart::ChartErrorCategory_ERROR_MARGIN:
-                nNewStyle = css::chart::ErrorBarStyle::ERROR_MARGIN;
-                break;
-            default:
-                break;
-        }
-        xErrorBarProperties->setPropertyValue( "ErrorBarStyle" , uno::Any(nNewStyle) );
+        case css::chart::ChartErrorCategory_NONE:
+            nNewStyle = css::chart::ErrorBarStyle::NONE;
+            break;
+        case css::chart::ChartErrorCategory_VARIANCE:
+            nNewStyle = css::chart::ErrorBarStyle::VARIANCE;
+            break;
+        case css::chart::ChartErrorCategory_STANDARD_DEVIATION:
+            nNewStyle = css::chart::ErrorBarStyle::STANDARD_DEVIATION;
+            break;
+        case css::chart::ChartErrorCategory_CONSTANT_VALUE:
+            nNewStyle = css::chart::ErrorBarStyle::ABSOLUTE;
+            break;
+        case css::chart::ChartErrorCategory_PERCENT:
+            nNewStyle = css::chart::ErrorBarStyle::RELATIVE;
+            break;
+        case css::chart::ChartErrorCategory_ERROR_MARGIN:
+            nNewStyle = css::chart::ErrorBarStyle::ERROR_MARGIN;
+            break;
+        default:
+            break;
     }
+    xErrorBarProperties->setPropertyValue( "ErrorBarStyle" , uno::Any(nNewStyle) );
 }
 
 namespace {
@@ -602,29 +602,29 @@ css::chart::ChartErrorIndicatorType WrappedErrorIndicatorProperty::getValueFromS
 void WrappedErrorIndicatorProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const css::chart::ChartErrorIndicatorType& aNewValue ) const
 {
     uno::Reference< beans::XPropertySet > xErrorBarProperties( getOrCreateErrorBarProperties(xSeriesPropertySet) );
-    if( xErrorBarProperties.is() )
-    {
-        bool bPositive = false;
-        bool bNegative = false;
-        switch( aNewValue )
-        {
-            case css::chart::ChartErrorIndicatorType_TOP_AND_BOTTOM:
-                bPositive = true;
-                bNegative = true;
-                break;
-            case css::chart::ChartErrorIndicatorType_UPPER:
-                bPositive = true;
-                break;
-            case css::chart::ChartErrorIndicatorType_LOWER:
-                bNegative = true;
-                break;
-            default:
-                break;
-        }
+    if( !xErrorBarProperties.is() )
+        return;
 
-        xErrorBarProperties->setPropertyValue( "ShowPositiveError" , uno::Any(bPositive) );
-        xErrorBarProperties->setPropertyValue( "ShowNegativeError" , uno::Any(bNegative) );
+    bool bPositive = false;
+    bool bNegative = false;
+    switch( aNewValue )
+    {
+        case css::chart::ChartErrorIndicatorType_TOP_AND_BOTTOM:
+            bPositive = true;
+            bNegative = true;
+            break;
+        case css::chart::ChartErrorIndicatorType_UPPER:
+            bPositive = true;
+            break;
+        case css::chart::ChartErrorIndicatorType_LOWER:
+            bNegative = true;
+            break;
+        default:
+            break;
     }
+
+    xErrorBarProperties->setPropertyValue( "ShowPositiveError" , uno::Any(bPositive) );
+    xErrorBarProperties->setPropertyValue( "ShowNegativeError" , uno::Any(bNegative) );
 }
 
 namespace {
@@ -721,20 +721,20 @@ OUString WrappedErrorBarRangePositiveProperty::getValueFromSeries( const Referen
 void WrappedErrorBarRangePositiveProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const OUString& aNewValue ) const
 {
     uno::Reference< beans::XPropertySet > xErrorBarProperties( getOrCreateErrorBarProperties(xSeriesPropertySet) );
-    if( xErrorBarProperties.is() )
+    if( !xErrorBarProperties.is() )
+        return;
+
+    uno::Reference< chart2::data::XDataProvider > xDataProvider(
+        lcl_getDataProviderFromContact( m_spChart2ModelContact ));
+    uno::Reference< chart2::data::XDataSource > xDataSource( xErrorBarProperties, uno::UNO_QUERY );
+    if( xDataSource.is() && xDataProvider.is())
     {
-        uno::Reference< chart2::data::XDataProvider > xDataProvider(
-            lcl_getDataProviderFromContact( m_spChart2ModelContact ));
-        uno::Reference< chart2::data::XDataSource > xDataSource( xErrorBarProperties, uno::UNO_QUERY );
-        if( xDataSource.is() && xDataProvider.is())
-        {
-            OUString aTmp( aNewValue );
-            OUString aXMLRange( aNewValue );
-            lcl_ConvertRangeFromXML( aTmp, m_spChart2ModelContact );
-            StatisticsHelper::setErrorDataSequence(
-                xDataSource, xDataProvider, aTmp, true /* positive */, true /* y-error */, &aXMLRange );
-            m_aOuterValue <<= aTmp;
-        }
+        OUString aTmp( aNewValue );
+        OUString aXMLRange( aNewValue );
+        lcl_ConvertRangeFromXML( aTmp, m_spChart2ModelContact );
+        StatisticsHelper::setErrorDataSequence(
+            xDataSource, xDataProvider, aTmp, true /* positive */, true /* y-error */, &aXMLRange );
+        m_aOuterValue <<= aTmp;
     }
 }
 
@@ -785,20 +785,20 @@ OUString WrappedErrorBarRangeNegativeProperty::getValueFromSeries( const Referen
 void WrappedErrorBarRangeNegativeProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const OUString& aNewValue ) const
 {
     uno::Reference< beans::XPropertySet > xErrorBarProperties( getOrCreateErrorBarProperties(xSeriesPropertySet) );
-    if( xErrorBarProperties.is() )
+    if( !xErrorBarProperties.is() )
+        return;
+
+    uno::Reference< chart2::data::XDataProvider > xDataProvider(
+        lcl_getDataProviderFromContact( m_spChart2ModelContact ));
+    uno::Reference< chart2::data::XDataSource > xDataSource( xErrorBarProperties, uno::UNO_QUERY );
+    if( xDataSource.is() && xDataProvider.is())
     {
-        uno::Reference< chart2::data::XDataProvider > xDataProvider(
-            lcl_getDataProviderFromContact( m_spChart2ModelContact ));
-        uno::Reference< chart2::data::XDataSource > xDataSource( xErrorBarProperties, uno::UNO_QUERY );
-        if( xDataSource.is() && xDataProvider.is())
-        {
-            OUString aTmp( aNewValue );
-            OUString aXMLRange( aNewValue );
-            lcl_ConvertRangeFromXML( aTmp, m_spChart2ModelContact );
-            StatisticsHelper::setErrorDataSequence(
-                xDataSource, xDataProvider, aTmp, false /* positive */, true /* y-error */, &aXMLRange );
-            m_aOuterValue <<= aTmp;
-        }
+        OUString aTmp( aNewValue );
+        OUString aXMLRange( aNewValue );
+        lcl_ConvertRangeFromXML( aTmp, m_spChart2ModelContact );
+        StatisticsHelper::setErrorDataSequence(
+            xDataSource, xDataProvider, aTmp, false /* positive */, true /* y-error */, &aXMLRange );
+        m_aOuterValue <<= aTmp;
     }
 }
 

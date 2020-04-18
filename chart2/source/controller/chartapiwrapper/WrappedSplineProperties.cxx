@@ -108,29 +108,29 @@ public:
 
         bool bHasAmbiguousValue = false;
         PROPERTYTYPE aOldValue = PROPERTYTYPE();
-        if( detectInnerValue( aOldValue, bHasAmbiguousValue ) )
+        if( !detectInnerValue( aOldValue, bHasAmbiguousValue ) )
+            return;
+
+        if( !(bHasAmbiguousValue || aNewValue != aOldValue) )
+            return;
+
+        Sequence< css::uno::Reference< css::chart2::XChartType > > aChartTypes(
+            ::chart::DiagramHelper::getChartTypesFromDiagram( m_spChart2ModelContact->getChart2Diagram() ) );
+        for( sal_Int32 nN = aChartTypes.getLength(); nN--; )
         {
-            if( bHasAmbiguousValue || aNewValue != aOldValue )
+            try
             {
-                Sequence< css::uno::Reference< css::chart2::XChartType > > aChartTypes(
-                    ::chart::DiagramHelper::getChartTypesFromDiagram( m_spChart2ModelContact->getChart2Diagram() ) );
-                for( sal_Int32 nN = aChartTypes.getLength(); nN--; )
+                css::uno::Reference< css::beans::XPropertySet > xChartTypePropertySet( aChartTypes[nN], css::uno::UNO_QUERY );
+                if( xChartTypePropertySet.is() )
                 {
-                    try
-                    {
-                        css::uno::Reference< css::beans::XPropertySet > xChartTypePropertySet( aChartTypes[nN], css::uno::UNO_QUERY );
-                        if( xChartTypePropertySet.is() )
-                        {
-                            xChartTypePropertySet->setPropertyValue(m_aOwnInnerName,convertOuterToInnerValue(uno::Any(aNewValue)));
-                        }
-                    }
-                    catch( uno::Exception & ex )
-                    {
-                        //spline properties are not supported by all charttypes
-                        //in that cases this exception is ok
-                        ex.Context.is();//to have debug information without compilation warnings
-                    }
+                    xChartTypePropertySet->setPropertyValue(m_aOwnInnerName,convertOuterToInnerValue(uno::Any(aNewValue)));
                 }
+            }
+            catch( uno::Exception & ex )
+            {
+                //spline properties are not supported by all charttypes
+                //in that cases this exception is ok
+                ex.Context.is();//to have debug information without compilation warnings
             }
         }
     }

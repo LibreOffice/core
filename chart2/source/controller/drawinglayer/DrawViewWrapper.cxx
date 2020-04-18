@@ -336,32 +336,32 @@ void DrawViewWrapper::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 
     E3dView::Notify(rBC, rHint);
 
-    if( pSdrHint != nullptr )
+    if( pSdrHint == nullptr )
+        return;
+
+    SdrHintKind eKind = pSdrHint->GetKind();
+    if( eKind == SdrHintKind::BeginEdit )
     {
-        SdrHintKind eKind = pSdrHint->GetKind();
-        if( eKind == SdrHintKind::BeginEdit )
+        // #i79965# remember map mode
+        OSL_ASSERT( ! m_bRestoreMapMode );
+        OutputDevice* pOutDev = GetFirstOutputDevice();
+        if( pOutDev )
         {
-            // #i79965# remember map mode
-            OSL_ASSERT( ! m_bRestoreMapMode );
+            m_aMapModeToRestore = pOutDev->GetMapMode();
+            m_bRestoreMapMode = true;
+        }
+    }
+    else if( eKind == SdrHintKind::EndEdit )
+    {
+        // #i79965# scroll back view when ending text edit
+        OSL_ASSERT( m_bRestoreMapMode );
+        if( m_bRestoreMapMode )
+        {
             OutputDevice* pOutDev = GetFirstOutputDevice();
             if( pOutDev )
             {
-                m_aMapModeToRestore = pOutDev->GetMapMode();
-                m_bRestoreMapMode = true;
-            }
-        }
-        else if( eKind == SdrHintKind::EndEdit )
-        {
-            // #i79965# scroll back view when ending text edit
-            OSL_ASSERT( m_bRestoreMapMode );
-            if( m_bRestoreMapMode )
-            {
-                OutputDevice* pOutDev = GetFirstOutputDevice();
-                if( pOutDev )
-                {
-                    pOutDev->SetMapMode( m_aMapModeToRestore );
-                    m_bRestoreMapMode = false;
-                }
+                pOutDev->SetMapMode( m_aMapModeToRestore );
+                m_bRestoreMapMode = false;
             }
         }
     }

@@ -105,18 +105,18 @@ static void lcl_ResizeTextShapeToFitAvailableSpace( Reference< drawing::XShape >
         nNewLen = ( rLabel.getLength() >= sDots.getLength() ) ? sDots.getLength() : rLabel.getLength();
 
     bool bCrop = nCharsToRemove > 0;
-    if( bCrop )
-    {
-        OUString aNewLabel = rLabel.copy( 0, nNewLen );
-        if( nNewLen > sDots.getLength() )
-            aNewLabel += sDots;
-        xTextRange->setString( aNewLabel );
+    if( !bCrop )
+        return;
 
-        uno::Reference< beans::XPropertySet > xProp( xTextRange, uno::UNO_QUERY );
-        if( xProp.is() )
-        {
-            PropertyMapper::setMultiProperties( rPropNames, rPropValues, xProp );
-        }
+    OUString aNewLabel = rLabel.copy( 0, nNewLen );
+    if( nNewLen > sDots.getLength() )
+        aNewLabel += sDots;
+    xTextRange->setString( aNewLabel );
+
+    uno::Reference< beans::XPropertySet > xProp( xTextRange, uno::UNO_QUERY );
+    if( xProp.is() )
+    {
+        PropertyMapper::setMultiProperties( rPropNames, rPropValues, xProp );
     }
 }
 
@@ -1448,65 +1448,65 @@ void VCartesianAxis::get2DAxisMainLine(
     if(m_nDimension==3 && !AxisHelper::isAxisPositioningEnabled() )
         rAlignment.mfInnerTickDirection = rAlignment.mfLabelDirection;//to behave like before
 
-    if(m_nDimension==3 && AxisHelper::isAxisPositioningEnabled() )
+    if(!(m_nDimension==3 && AxisHelper::isAxisPositioningEnabled()) )
+        return;
+
+    double fDeltaX = rEnd.getX() - rStart.getX();
+    double fDeltaY = rEnd.getY() - rStart.getY();
+
+    if( m_nDimensionIndex==2 )
     {
-        double fDeltaX = rEnd.getX() - rStart.getX();
-        double fDeltaY = rEnd.getY() - rStart.getY();
-
-        if( m_nDimensionIndex==2 )
+        if( m_eLeftWallPos != CuboidPlanePosition_Left )
         {
-            if( m_eLeftWallPos != CuboidPlanePosition_Left )
-            {
-                rAlignment.mfLabelDirection *= -1.0;
-                rAlignment.mfInnerTickDirection *= -1.0;
-            }
-
-            rAlignment.meAlignment =
-                (rAlignment.mfLabelDirection < 0) ?
-                    LABEL_ALIGN_LEFT :  LABEL_ALIGN_RIGHT;
-
-            if( ( fDeltaY<0 && m_aScale.Orientation == chart2::AxisOrientation_REVERSE ) ||
-                ( fDeltaY>0 && m_aScale.Orientation == chart2::AxisOrientation_MATHEMATICAL ) )
-                rAlignment.meAlignment =
-                    (rAlignment.meAlignment == LABEL_ALIGN_RIGHT) ?
-                        LABEL_ALIGN_LEFT : LABEL_ALIGN_RIGHT;
+            rAlignment.mfLabelDirection *= -1.0;
+            rAlignment.mfInnerTickDirection *= -1.0;
         }
-        else if( fabs(fDeltaY) > fabs(fDeltaX) )
-        {
-            if( m_eBackWallPos != CuboidPlanePosition_Back )
-            {
-                rAlignment.mfLabelDirection *= -1.0;
-                rAlignment.mfInnerTickDirection *= -1.0;
-            }
 
+        rAlignment.meAlignment =
+            (rAlignment.mfLabelDirection < 0) ?
+                LABEL_ALIGN_LEFT :  LABEL_ALIGN_RIGHT;
+
+        if( ( fDeltaY<0 && m_aScale.Orientation == chart2::AxisOrientation_REVERSE ) ||
+            ( fDeltaY>0 && m_aScale.Orientation == chart2::AxisOrientation_MATHEMATICAL ) )
             rAlignment.meAlignment =
-                (rAlignment.mfLabelDirection < 0) ?
+                (rAlignment.meAlignment == LABEL_ALIGN_RIGHT) ?
                     LABEL_ALIGN_LEFT : LABEL_ALIGN_RIGHT;
-
-            if( ( fDeltaY<0 && m_aScale.Orientation == chart2::AxisOrientation_REVERSE ) ||
-                ( fDeltaY>0 && m_aScale.Orientation == chart2::AxisOrientation_MATHEMATICAL ) )
-                rAlignment.meAlignment =
-                    (rAlignment.meAlignment == LABEL_ALIGN_RIGHT) ?
-                        LABEL_ALIGN_LEFT :  LABEL_ALIGN_RIGHT;
-        }
-        else
+    }
+    else if( fabs(fDeltaY) > fabs(fDeltaX) )
+    {
+        if( m_eBackWallPos != CuboidPlanePosition_Back )
         {
-            if( m_eBackWallPos != CuboidPlanePosition_Back )
-            {
-                rAlignment.mfLabelDirection *= -1.0;
-                rAlignment.mfInnerTickDirection *= -1.0;
-            }
-
-            rAlignment.meAlignment =
-                (rAlignment.mfLabelDirection < 0) ?
-                    LABEL_ALIGN_TOP : LABEL_ALIGN_BOTTOM;
-
-            if( ( fDeltaX>0 && m_aScale.Orientation == chart2::AxisOrientation_REVERSE ) ||
-                ( fDeltaX<0 && m_aScale.Orientation == chart2::AxisOrientation_MATHEMATICAL ) )
-                rAlignment.meAlignment =
-                    (rAlignment.meAlignment == LABEL_ALIGN_TOP) ?
-                        LABEL_ALIGN_BOTTOM : LABEL_ALIGN_TOP;
+            rAlignment.mfLabelDirection *= -1.0;
+            rAlignment.mfInnerTickDirection *= -1.0;
         }
+
+        rAlignment.meAlignment =
+            (rAlignment.mfLabelDirection < 0) ?
+                LABEL_ALIGN_LEFT : LABEL_ALIGN_RIGHT;
+
+        if( ( fDeltaY<0 && m_aScale.Orientation == chart2::AxisOrientation_REVERSE ) ||
+            ( fDeltaY>0 && m_aScale.Orientation == chart2::AxisOrientation_MATHEMATICAL ) )
+            rAlignment.meAlignment =
+                (rAlignment.meAlignment == LABEL_ALIGN_RIGHT) ?
+                    LABEL_ALIGN_LEFT :  LABEL_ALIGN_RIGHT;
+    }
+    else
+    {
+        if( m_eBackWallPos != CuboidPlanePosition_Back )
+        {
+            rAlignment.mfLabelDirection *= -1.0;
+            rAlignment.mfInnerTickDirection *= -1.0;
+        }
+
+        rAlignment.meAlignment =
+            (rAlignment.mfLabelDirection < 0) ?
+                LABEL_ALIGN_TOP : LABEL_ALIGN_BOTTOM;
+
+        if( ( fDeltaX>0 && m_aScale.Orientation == chart2::AxisOrientation_REVERSE ) ||
+            ( fDeltaX<0 && m_aScale.Orientation == chart2::AxisOrientation_MATHEMATICAL ) )
+            rAlignment.meAlignment =
+                (rAlignment.meAlignment == LABEL_ALIGN_TOP) ?
+                    LABEL_ALIGN_BOTTOM : LABEL_ALIGN_TOP;
     }
 }
 

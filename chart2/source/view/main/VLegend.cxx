@@ -95,54 +95,54 @@ void lcl_getProperties(
     const awt::Size & rReferenceSize )
 {
     // Get Line- and FillProperties from model legend
-    if( xLegendProp.is())
+    if( !xLegendProp.is())
+        return;
+
+    // set rOutLineFillProperties
+    ::chart::tPropertyNameValueMap aLineFillValueMap;
+    ::chart::PropertyMapper::getValueMap( aLineFillValueMap, ::chart::PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xLegendProp );
+
+    aLineFillValueMap[ "LineJoint" ] <<= drawing::LineJoint_ROUND;
+
+    ::chart::PropertyMapper::getMultiPropertyListsFromValueMap(
+        rOutLineFillProperties.first, rOutLineFillProperties.second, aLineFillValueMap );
+
+    // set rOutTextProperties
+    ::chart::tPropertyNameValueMap aTextValueMap;
+    ::chart::PropertyMapper::getValueMap( aTextValueMap, ::chart::PropertyMapper::getPropertyNameMapForCharacterProperties(), xLegendProp );
+
+    aTextValueMap[ "TextAutoGrowHeight" ] <<= true;
+    aTextValueMap[ "TextAutoGrowWidth" ] <<= true;
+    aTextValueMap[ "TextHorizontalAdjust" ] <<= drawing::TextHorizontalAdjust_LEFT;
+    aTextValueMap[ "TextMaximumFrameWidth" ] <<= rReferenceSize.Width; //needs to be overwritten by actual available space in the legend
+
+    // recalculate font size
+    awt::Size aPropRefSize;
+    float fFontHeight( 0.0 );
+    if( (xLegendProp->getPropertyValue( "ReferencePageSize") >>= aPropRefSize) &&
+        (aPropRefSize.Height > 0) &&
+        (aTextValueMap[ "CharHeight" ] >>= fFontHeight) )
     {
-        // set rOutLineFillProperties
-        ::chart::tPropertyNameValueMap aLineFillValueMap;
-        ::chart::PropertyMapper::getValueMap( aLineFillValueMap, ::chart::PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xLegendProp );
+        aTextValueMap[ "CharHeight" ] <<=
+            static_cast< float >(
+                ::chart::RelativeSizeHelper::calculate( fFontHeight, aPropRefSize, rReferenceSize ));
 
-        aLineFillValueMap[ "LineJoint" ] <<= drawing::LineJoint_ROUND;
-
-        ::chart::PropertyMapper::getMultiPropertyListsFromValueMap(
-            rOutLineFillProperties.first, rOutLineFillProperties.second, aLineFillValueMap );
-
-        // set rOutTextProperties
-        ::chart::tPropertyNameValueMap aTextValueMap;
-        ::chart::PropertyMapper::getValueMap( aTextValueMap, ::chart::PropertyMapper::getPropertyNameMapForCharacterProperties(), xLegendProp );
-
-        aTextValueMap[ "TextAutoGrowHeight" ] <<= true;
-        aTextValueMap[ "TextAutoGrowWidth" ] <<= true;
-        aTextValueMap[ "TextHorizontalAdjust" ] <<= drawing::TextHorizontalAdjust_LEFT;
-        aTextValueMap[ "TextMaximumFrameWidth" ] <<= rReferenceSize.Width; //needs to be overwritten by actual available space in the legend
-
-        // recalculate font size
-        awt::Size aPropRefSize;
-        float fFontHeight( 0.0 );
-        if( (xLegendProp->getPropertyValue( "ReferencePageSize") >>= aPropRefSize) &&
-            (aPropRefSize.Height > 0) &&
-            (aTextValueMap[ "CharHeight" ] >>= fFontHeight) )
+        if( aTextValueMap[ "CharHeightAsian" ] >>= fFontHeight )
         {
-            aTextValueMap[ "CharHeight" ] <<=
+            aTextValueMap[ "CharHeightAsian" ] <<=
                 static_cast< float >(
                     ::chart::RelativeSizeHelper::calculate( fFontHeight, aPropRefSize, rReferenceSize ));
-
-            if( aTextValueMap[ "CharHeightAsian" ] >>= fFontHeight )
-            {
-                aTextValueMap[ "CharHeightAsian" ] <<=
-                    static_cast< float >(
-                        ::chart::RelativeSizeHelper::calculate( fFontHeight, aPropRefSize, rReferenceSize ));
-            }
-            if( aTextValueMap[ "CharHeightComplex" ] >>= fFontHeight )
-            {
-                aTextValueMap[ "CharHeightComplex" ] <<=
-                    static_cast< float >(
-                        ::chart::RelativeSizeHelper::calculate( fFontHeight, aPropRefSize, rReferenceSize ));
-            }
         }
-
-        ::chart::PropertyMapper::getMultiPropertyListsFromValueMap(
-            rOutTextProperties.first, rOutTextProperties.second, aTextValueMap );
+        if( aTextValueMap[ "CharHeightComplex" ] >>= fFontHeight )
+        {
+            aTextValueMap[ "CharHeightComplex" ] <<=
+                static_cast< float >(
+                    ::chart::RelativeSizeHelper::calculate( fFontHeight, aPropRefSize, rReferenceSize ));
+        }
     }
+
+    ::chart::PropertyMapper::getMultiPropertyListsFromValueMap(
+        rOutTextProperties.first, rOutTextProperties.second, aTextValueMap );
 }
 
 awt::Size lcl_createTextShapes(

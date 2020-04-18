@@ -253,24 +253,24 @@ bool AccessibleBase::ImplUpdateChildren()
 void AccessibleBase::AddChild( AccessibleBase * pChild  )
 {
     OSL_ENSURE( pChild != nullptr, "Invalid Child" );
-    if( pChild )
+    if( !pChild )
+        return;
+
+    ClearableMutexGuard aGuard( m_aMutex );
+
+    Reference< XAccessible > xChild( pChild );
+    m_aChildList.push_back( xChild );
+
+    m_aChildOIDMap[ pChild->GetId() ] = xChild;
+
+    // inform listeners of new child
+    if( m_bChildrenInitialized )
     {
-        ClearableMutexGuard aGuard( m_aMutex );
+        Any aEmpty, aNew;
+        aNew <<= xChild;
 
-        Reference< XAccessible > xChild( pChild );
-        m_aChildList.push_back( xChild );
-
-        m_aChildOIDMap[ pChild->GetId() ] = xChild;
-
-        // inform listeners of new child
-        if( m_bChildrenInitialized )
-        {
-            Any aEmpty, aNew;
-            aNew <<= xChild;
-
-            aGuard.clear();
-            BroadcastAccEvent( AccessibleEventId::CHILD, aNew, aEmpty );
-        }
+        aGuard.clear();
+        BroadcastAccEvent( AccessibleEventId::CHILD, aNew, aEmpty );
     }
 }
 
@@ -282,41 +282,41 @@ void AccessibleBase::RemoveChildByOId( const ObjectIdentifier& rOId )
     ClearableMutexGuard aGuard( m_aMutex );
 
     ChildOIDMap::iterator aIt( m_aChildOIDMap.find( rOId ));
-    if( aIt != m_aChildOIDMap.end())
+    if( aIt == m_aChildOIDMap.end())
+        return;
+
+    Reference< XAccessible > xChild( aIt->second );
+
+    // remove from map
+    m_aChildOIDMap.erase( aIt );
+
+    // search child in vector
+    ChildListVectorType::iterator aVecIter =
+        std::find( m_aChildList.begin(), m_aChildList.end(), xChild );
+
+    OSL_ENSURE( aVecIter != m_aChildList.end(),
+                "Inconsistent ChildMap" );
+
+    // remove child from vector
+    m_aChildList.erase( aVecIter );
+    bool bInitialized = m_bChildrenInitialized;
+
+    // call listeners unguarded
+    aGuard.clear();
+
+    // inform listeners of removed child
+    if( bInitialized )
     {
-        Reference< XAccessible > xChild( aIt->second );
+        Any aEmpty, aOld;
+        aOld <<= xChild;
 
-        // remove from map
-        m_aChildOIDMap.erase( aIt );
-
-        // search child in vector
-        ChildListVectorType::iterator aVecIter =
-            std::find( m_aChildList.begin(), m_aChildList.end(), xChild );
-
-        OSL_ENSURE( aVecIter != m_aChildList.end(),
-                    "Inconsistent ChildMap" );
-
-        // remove child from vector
-        m_aChildList.erase( aVecIter );
-        bool bInitialized = m_bChildrenInitialized;
-
-        // call listeners unguarded
-        aGuard.clear();
-
-        // inform listeners of removed child
-        if( bInitialized )
-        {
-            Any aEmpty, aOld;
-            aOld <<= xChild;
-
-            BroadcastAccEvent( AccessibleEventId::CHILD, aEmpty, aOld );
-        }
-
-        // dispose the child
-        Reference< lang::XComponent > xComp( xChild, UNO_QUERY );
-        if( xComp.is())
-            xComp->dispose();
+        BroadcastAccEvent( AccessibleEventId::CHILD, aEmpty, aOld );
     }
+
+    // dispose the child
+    Reference< lang::XComponent > xComp( xChild, UNO_QUERY );
+    if( xComp.is())
+        xComp->dispose();
 }
 
 awt::Point AccessibleBase::GetUpperLeftOnScreen() const

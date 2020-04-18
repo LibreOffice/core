@@ -289,37 +289,37 @@ void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments
     if( bOldInvalid && bNewInvalid )
         bChanged = false;
 
-    if( bChanged )
-    {
-        {
-            //before notification we prepare for creation of new context
-            //the old context will be deleted after notification than
-            MutexGuard aGuard( m_aMutex);
-            Reference< chart2::XChartDocument > xChartDoc( xChartModel, uno::UNO_QUERY );
-            if( xChartDoc.is())
-                m_spObjectHierarchy =
-                    std::make_shared<ObjectHierarchy>( xChartDoc, comphelper::getUnoTunnelImplementation<ExplicitValueProvider>(m_xChartView) );
-            else
-                m_spObjectHierarchy.reset();
-        }
+    if( !bChanged )
+        return;
 
-        {
-            AccessibleElementInfo aAccInfo;
-            aAccInfo.m_aOID = ObjectIdentifier("ROOT");
-            aAccInfo.m_xChartDocument = uno::WeakReference< chart2::XChartDocument >(
-                uno::Reference< chart2::XChartDocument >( m_xChartModel.get(), uno::UNO_QUERY ));
-            aAccInfo.m_xSelectionSupplier = m_xSelectionSupplier;
-            aAccInfo.m_xView = m_xChartView;
-            aAccInfo.m_xWindow = m_xWindow;
-            aAccInfo.m_pParent = nullptr;
-            aAccInfo.m_spObjectHierarchy = m_spObjectHierarchy;
-            aAccInfo.m_pSdrView = m_pSdrView;
-            VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( m_xWindow );
-            m_pViewForwarder.reset( new AccessibleViewForwarder( this, pWindow ) );
-            aAccInfo.m_pViewForwarder = m_pViewForwarder.get();
-            // broadcasts an INVALIDATE_ALL_CHILDREN event globally
-            SetInfo( aAccInfo );
-        }
+    {
+        //before notification we prepare for creation of new context
+        //the old context will be deleted after notification than
+        MutexGuard aGuard( m_aMutex);
+        Reference< chart2::XChartDocument > xChartDoc( xChartModel, uno::UNO_QUERY );
+        if( xChartDoc.is())
+            m_spObjectHierarchy =
+                std::make_shared<ObjectHierarchy>( xChartDoc, comphelper::getUnoTunnelImplementation<ExplicitValueProvider>(m_xChartView) );
+        else
+            m_spObjectHierarchy.reset();
+    }
+
+    {
+        AccessibleElementInfo aAccInfo;
+        aAccInfo.m_aOID = ObjectIdentifier("ROOT");
+        aAccInfo.m_xChartDocument = uno::WeakReference< chart2::XChartDocument >(
+            uno::Reference< chart2::XChartDocument >( m_xChartModel.get(), uno::UNO_QUERY ));
+        aAccInfo.m_xSelectionSupplier = m_xSelectionSupplier;
+        aAccInfo.m_xView = m_xChartView;
+        aAccInfo.m_xWindow = m_xWindow;
+        aAccInfo.m_pParent = nullptr;
+        aAccInfo.m_spObjectHierarchy = m_spObjectHierarchy;
+        aAccInfo.m_pSdrView = m_pSdrView;
+        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( m_xWindow );
+        m_pViewForwarder.reset( new AccessibleViewForwarder( this, pWindow ) );
+        aAccInfo.m_pViewForwarder = m_pViewForwarder.get();
+        // broadcasts an INVALIDATE_ALL_CHILDREN event globally
+        SetInfo( aAccInfo );
     }
 }
 
@@ -333,19 +333,19 @@ void SAL_CALL AccessibleChartView::selectionChanged( const lang::EventObject& /*
         xSelectionSupplier.set(m_xSelectionSupplier);
     }
 
-    if( xSelectionSupplier.is() )
+    if( !xSelectionSupplier.is() )
+        return;
+
+    ObjectIdentifier aSelectedOID( xSelectionSupplier->getSelection() );
+    if ( m_aCurrentSelectionOID.isValid() )
     {
-        ObjectIdentifier aSelectedOID( xSelectionSupplier->getSelection() );
-        if ( m_aCurrentSelectionOID.isValid() )
-        {
-            NotifyEvent( EventType::LOST_SELECTION, m_aCurrentSelectionOID );
-        }
-        if( aSelectedOID.isValid() )
-        {
-            NotifyEvent( EventType::GOT_SELECTION, aSelectedOID );
-        }
-        m_aCurrentSelectionOID = aSelectedOID;
+        NotifyEvent( EventType::LOST_SELECTION, m_aCurrentSelectionOID );
     }
+    if( aSelectedOID.isValid() )
+    {
+        NotifyEvent( EventType::GOT_SELECTION, aSelectedOID );
+    }
+    m_aCurrentSelectionOID = aSelectedOID;
 }
 
 // XEventListener

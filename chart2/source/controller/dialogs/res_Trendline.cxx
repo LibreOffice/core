@@ -228,31 +228,31 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
             m_xCB_ShowCorrelationCoeff->set_active( static_cast< const SfxBoolItem * >( pPoolItem )->GetValue());
     }
 
-    if( m_bTrendLineUnique )
+    if( !m_bTrendLineUnique )
+        return;
+
+    switch( m_eTrendLineType )
     {
-        switch( m_eTrendLineType )
-        {
-            case SvxChartRegress::Linear :
-                m_xRB_Linear->set_active(true);
-                break;
-            case SvxChartRegress::Log :
-                m_xRB_Logarithmic->set_active(true);
-                break;
-            case SvxChartRegress::Exp :
-                m_xRB_Exponential->set_active(true);
-                break;
-            case SvxChartRegress::Power :
-                m_xRB_Power->set_active(true);
-                break;
-            case SvxChartRegress::Polynomial :
-                m_xRB_Polynomial->set_active(true);
-                break;
-            case SvxChartRegress::MovingAverage :
-                m_xRB_MovingAverage->set_active(true);
-                break;
-            default:
-                break;
-        }
+        case SvxChartRegress::Linear :
+            m_xRB_Linear->set_active(true);
+            break;
+        case SvxChartRegress::Log :
+            m_xRB_Logarithmic->set_active(true);
+            break;
+        case SvxChartRegress::Exp :
+            m_xRB_Exponential->set_active(true);
+            break;
+        case SvxChartRegress::Power :
+            m_xRB_Power->set_active(true);
+            break;
+        case SvxChartRegress::Polynomial :
+            m_xRB_Polynomial->set_active(true);
+            break;
+        case SvxChartRegress::MovingAverage :
+            m_xRB_MovingAverage->set_active(true);
+            break;
+        default:
+            break;
     }
 }
 

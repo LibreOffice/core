@@ -431,35 +431,35 @@ bool RegressionCurveHelper::removeAllExceptMeanValueLine(
 void RegressionCurveHelper::removeEquations(
         uno::Reference< chart2::XRegressionCurveContainer > const & xRegCnt )
 {
-    if( xRegCnt.is())
+    if( !xRegCnt.is())
+        return;
+
+    try
     {
-        try
+        uno::Sequence< uno::Reference< chart2::XRegressionCurve > > aCurves(
+            xRegCnt->getRegressionCurves());
+        for( sal_Int32 i = 0; i < aCurves.getLength(); ++i )
         {
-            uno::Sequence< uno::Reference< chart2::XRegressionCurve > > aCurves(
-                xRegCnt->getRegressionCurves());
-            for( sal_Int32 i = 0; i < aCurves.getLength(); ++i )
+            if( !isMeanValueLine( aCurves[i] ) )
             {
-                if( !isMeanValueLine( aCurves[i] ) )
+                uno::Reference< chart2::XRegressionCurve > xRegCurve( aCurves[ i ] );
+                if( xRegCurve.is() )
                 {
-                    uno::Reference< chart2::XRegressionCurve > xRegCurve( aCurves[ i ] );
-                    if( xRegCurve.is() )
+                    uno::Reference< beans::XPropertySet > xEqProp( xRegCurve->getEquationProperties() ) ;
+                    if( xEqProp.is())
                     {
-                        uno::Reference< beans::XPropertySet > xEqProp( xRegCurve->getEquationProperties() ) ;
-                        if( xEqProp.is())
-                        {
-                            xEqProp->setPropertyValue( "ShowEquation", uno::Any( false ));
-                            xEqProp->setPropertyValue( "XName", uno::Any( OUString("x") ));
-                            xEqProp->setPropertyValue( "YName", uno::Any( OUString("f(x) ") ));
-                            xEqProp->setPropertyValue( "ShowCorrelationCoefficient", uno::Any( false ));
-                        }
+                        xEqProp->setPropertyValue( "ShowEquation", uno::Any( false ));
+                        xEqProp->setPropertyValue( "XName", uno::Any( OUString("x") ));
+                        xEqProp->setPropertyValue( "YName", uno::Any( OUString("f(x) ") ));
+                        xEqProp->setPropertyValue( "ShowCorrelationCoefficient", uno::Any( false ));
                     }
                 }
             }
         }
-        catch( const uno::Exception & )
-        {
-            DBG_UNHANDLED_EXCEPTION("chart2");
-        }
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -707,19 +707,19 @@ std::vector< Reference< chart2::XRegressionCurve > >
 void RegressionCurveHelper::resetEquationPosition(
     const Reference< chart2::XRegressionCurve > & xCurve )
 {
-    if( xCurve.is())
+    if( !xCurve.is())
+        return;
+
+    try
     {
-        try
-        {
-            const OUString aPosPropertyName( "RelativePosition" );
-            Reference< beans::XPropertySet > xEqProp( xCurve->getEquationProperties()); // since m233: , uno::UNO_SET_THROW );
-            if( xEqProp->getPropertyValue( aPosPropertyName ).hasValue())
-                xEqProp->setPropertyValue( aPosPropertyName, uno::Any());
-        }
-        catch( const uno::Exception & )
-        {
-            DBG_UNHANDLED_EXCEPTION("chart2" );
-        }
+        const OUString aPosPropertyName( "RelativePosition" );
+        Reference< beans::XPropertySet > xEqProp( xCurve->getEquationProperties()); // since m233: , uno::UNO_SET_THROW );
+        if( xEqProp->getPropertyValue( aPosPropertyName ).hasValue())
+            xEqProp->setPropertyValue( aPosPropertyName, uno::Any());
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2" );
     }
 }
 

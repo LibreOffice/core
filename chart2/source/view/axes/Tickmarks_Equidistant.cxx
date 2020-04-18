@@ -105,23 +105,23 @@ EquidistantTickFactory::EquidistantTickFactory(
 
     m_fOuterMajorTickBorderMin_Scaled = m_fOuterMajorTickBorderMin;
     m_fOuterMajorTickBorderMax_Scaled = m_fOuterMajorTickBorderMax;
-    if(!m_rIncrement.PostEquidistant && m_xInverseScaling.is() )
-    {
-        m_fOuterMajorTickBorderMin_Scaled = m_rScale.Scaling->doScaling(m_fOuterMajorTickBorderMin);
-        m_fOuterMajorTickBorderMax_Scaled = m_rScale.Scaling->doScaling(m_fOuterMajorTickBorderMax);
+    if(!(!m_rIncrement.PostEquidistant && m_xInverseScaling.is()) )
+        return;
 
-        //check validity of new range: m_fOuterMajorTickBorderMin <-> m_fOuterMajorTickBorderMax
-        //it is assumed here, that the original range in the given Scale is valid
-        if( !std::isfinite(m_fOuterMajorTickBorderMin_Scaled) )
-        {
-            m_fOuterMajorTickBorderMin += m_rIncrement.Distance;
-            m_fOuterMajorTickBorderMin_Scaled = m_rScale.Scaling->doScaling(m_fOuterMajorTickBorderMin);
-        }
-        if( !std::isfinite(m_fOuterMajorTickBorderMax_Scaled) )
-        {
-            m_fOuterMajorTickBorderMax -= m_rIncrement.Distance;
-            m_fOuterMajorTickBorderMax_Scaled = m_rScale.Scaling->doScaling(m_fOuterMajorTickBorderMax);
-        }
+    m_fOuterMajorTickBorderMin_Scaled = m_rScale.Scaling->doScaling(m_fOuterMajorTickBorderMin);
+    m_fOuterMajorTickBorderMax_Scaled = m_rScale.Scaling->doScaling(m_fOuterMajorTickBorderMax);
+
+    //check validity of new range: m_fOuterMajorTickBorderMin <-> m_fOuterMajorTickBorderMax
+    //it is assumed here, that the original range in the given Scale is valid
+    if( !std::isfinite(m_fOuterMajorTickBorderMin_Scaled) )
+    {
+        m_fOuterMajorTickBorderMin += m_rIncrement.Distance;
+        m_fOuterMajorTickBorderMin_Scaled = m_rScale.Scaling->doScaling(m_fOuterMajorTickBorderMin);
+    }
+    if( !std::isfinite(m_fOuterMajorTickBorderMax_Scaled) )
+    {
+        m_fOuterMajorTickBorderMax -= m_rIncrement.Distance;
+        m_fOuterMajorTickBorderMax_Scaled = m_rScale.Scaling->doScaling(m_fOuterMajorTickBorderMax);
     }
 }
 

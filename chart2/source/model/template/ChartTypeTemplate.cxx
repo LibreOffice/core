@@ -69,25 +69,25 @@ void lcl_applyDefaultStyle(
 void lcl_ensureCorrectLabelPlacement( const Reference< beans::XPropertySet >& xProp, const uno::Sequence < sal_Int32 >& rAvailablePlacements )
 {
     sal_Int32 nLabelPlacement=0;
-    if( xProp.is() && (xProp->getPropertyValue( "LabelPlacement" ) >>= nLabelPlacement) )
+    if( !(xProp.is() && (xProp->getPropertyValue( "LabelPlacement" ) >>= nLabelPlacement)) )
+        return;
+
+    bool bValid = false;
+    for( sal_Int32 nN = 0; nN < rAvailablePlacements.getLength(); nN++ )
     {
-        bool bValid = false;
-        for( sal_Int32 nN = 0; nN < rAvailablePlacements.getLength(); nN++ )
+        if( rAvailablePlacements[nN] == nLabelPlacement )
         {
-            if( rAvailablePlacements[nN] == nLabelPlacement )
-            {
-                bValid = true;
-                break;
-            }
+            bValid = true;
+            break;
         }
-        if( !bValid )
-        {
-            uno::Any aNewValue;
-            //otherwise use the first supported one
-            if( rAvailablePlacements.hasElements() )
-                aNewValue <<=rAvailablePlacements[0];
-            xProp->setPropertyValue( "LabelPlacement", aNewValue );
-        }
+    }
+    if( !bValid )
+    {
+        uno::Any aNewValue;
+        //otherwise use the first supported one
+        if( rAvailablePlacements.hasElements() )
+            aNewValue <<=rAvailablePlacements[0];
+        xProp->setPropertyValue( "LabelPlacement", aNewValue );
     }
 }
 
@@ -381,36 +381,36 @@ void SAL_CALL ChartTypeTemplate::applyStyle(
 {
     // sset stacking mode
     Reference< beans::XPropertySet > xSeriesProp( xSeries, uno::UNO_QUERY );
-    if( xSeriesProp.is())
+    if( !xSeriesProp.is())
+        return;
+
+    try
     {
-        try
-        {
-            StackMode eStackMode = getStackMode( nChartTypeIndex );
-            const uno::Any aPropValue(
-                ( (eStackMode == StackMode::YStacked) ||
-                  (eStackMode == StackMode::YStackedPercent) )
-                ? chart2::StackingDirection_Y_STACKING
-                : (eStackMode == StackMode::ZStacked )
-                ? chart2::StackingDirection_Z_STACKING
-                : chart2::StackingDirection_NO_STACKING );
-            xSeriesProp->setPropertyValue( "StackingDirection", aPropValue );
+        StackMode eStackMode = getStackMode( nChartTypeIndex );
+        const uno::Any aPropValue(
+            ( (eStackMode == StackMode::YStacked) ||
+              (eStackMode == StackMode::YStackedPercent) )
+            ? chart2::StackingDirection_Y_STACKING
+            : (eStackMode == StackMode::ZStacked )
+            ? chart2::StackingDirection_Z_STACKING
+            : chart2::StackingDirection_NO_STACKING );
+        xSeriesProp->setPropertyValue( "StackingDirection", aPropValue );
 
-            //ensure valid label placement
-            {
-                uno::Sequence < sal_Int32 > aAvailablePlacements( ChartTypeHelper::getSupportedLabelPlacements(
-                            getChartTypeForIndex( nChartTypeIndex ), isSwapXAndY(), xSeries ) );
-                lcl_ensureCorrectLabelPlacement( xSeriesProp, aAvailablePlacements );
-
-                uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-                if( xSeriesProp->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
-                    for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
-                        lcl_ensureCorrectLabelPlacement( xSeries->getDataPointByIndex(aAttributedDataPointIndexList[nN]), aAvailablePlacements );
-            }
-        }
-        catch( const uno::Exception & )
+        //ensure valid label placement
         {
-            DBG_UNHANDLED_EXCEPTION("chart2");
+            uno::Sequence < sal_Int32 > aAvailablePlacements( ChartTypeHelper::getSupportedLabelPlacements(
+                        getChartTypeForIndex( nChartTypeIndex ), isSwapXAndY(), xSeries ) );
+            lcl_ensureCorrectLabelPlacement( xSeriesProp, aAvailablePlacements );
+
+            uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
+            if( xSeriesProp->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
+                for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
+                    lcl_ensureCorrectLabelPlacement( xSeries->getDataPointByIndex(aAttributedDataPointIndexList[nN]), aAvailablePlacements );
         }
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
@@ -685,30 +685,30 @@ void ChartTypeTemplate::createAxes(
     const Sequence< Reference< XCoordinateSystem > > & rCoordSys )
 {
     //create missing axes
-    if( rCoordSys.hasElements() )
-    {
-        Reference< XCoordinateSystem > xCooSys( rCoordSys[0] );
-        if(!xCooSys.is())
-            return;
+    if( !rCoordSys.hasElements() )
+        return;
 
-        //create main axis in first coordinate system
-        sal_Int32 nDimCount = xCooSys->getDimension();
-        sal_Int32 nDim=0;
-        for( nDim=0; nDim<nDimCount; ++nDim )
+    Reference< XCoordinateSystem > xCooSys( rCoordSys[0] );
+    if(!xCooSys.is())
+        return;
+
+    //create main axis in first coordinate system
+    sal_Int32 nDimCount = xCooSys->getDimension();
+    sal_Int32 nDim=0;
+    for( nDim=0; nDim<nDimCount; ++nDim )
+    {
+        sal_Int32 nAxisCount = getAxisCountByDimension( nDim );
+        if( nDim == 1 &&
+            nAxisCount < 2 && AxisHelper::isSecondaryYAxisNeeded( xCooSys ))
+            nAxisCount = 2;
+        for( sal_Int32 nAxisIndex = 0; nAxisIndex < nAxisCount; ++nAxisIndex )
         {
-            sal_Int32 nAxisCount = getAxisCountByDimension( nDim );
-            if( nDim == 1 &&
-                nAxisCount < 2 && AxisHelper::isSecondaryYAxisNeeded( xCooSys ))
-                nAxisCount = 2;
-            for( sal_Int32 nAxisIndex = 0; nAxisIndex < nAxisCount; ++nAxisIndex )
+            Reference< XAxis > xAxis = AxisHelper::getAxis( nDim, nAxisIndex, xCooSys );
+            if( !xAxis.is())
             {
-                Reference< XAxis > xAxis = AxisHelper::getAxis( nDim, nAxisIndex, xCooSys );
-                if( !xAxis.is())
-                {
-                    // create and add axis
-                    xAxis.set( AxisHelper::createAxis(
-                                   nDim, nAxisIndex, xCooSys, GetComponentContext() ));
-                }
+                // create and add axis
+                xAxis.set( AxisHelper::createAxis(
+                               nDim, nAxisIndex, xCooSys, GetComponentContext() ));
             }
         }
     }
@@ -719,36 +719,36 @@ void ChartTypeTemplate::adaptAxes(
 {
     //adapt properties of existing axes and remove superfluous axes
 
-    if( rCoordSys.hasElements() )
-    {
-        for( sal_Int32 nCooSysIdx=0; nCooSysIdx < rCoordSys.getLength(); ++nCooSysIdx )
-        {
-            Reference< XCoordinateSystem > xCooSys( rCoordSys[nCooSysIdx] );
-            if( !xCooSys.is() )
-                continue;
-            sal_Int32 nDimCount = xCooSys->getDimension();
-            for( sal_Int32 nDim=0; nDim<nDimCount; ++nDim )
-            {
-                sal_Int32 nMaxAxisIndex = xCooSys->getMaximumAxisIndexByDimension( nDim );
-                for( sal_Int32 nAxisIndex=0; nAxisIndex<=nMaxAxisIndex; nAxisIndex++ )
-                {
-                    Reference< XAxis > xAxis( AxisHelper::getAxis( nDim, nAxisIndex, xCooSys ) );
-                    if( !xAxis.is() )
-                        continue;
+    if( !rCoordSys.hasElements() )
+        return;
 
-                    if( nAxisIndex == MAIN_AXIS_INDEX || nAxisIndex == SECONDARY_AXIS_INDEX )
+    for( sal_Int32 nCooSysIdx=0; nCooSysIdx < rCoordSys.getLength(); ++nCooSysIdx )
+    {
+        Reference< XCoordinateSystem > xCooSys( rCoordSys[nCooSysIdx] );
+        if( !xCooSys.is() )
+            continue;
+        sal_Int32 nDimCount = xCooSys->getDimension();
+        for( sal_Int32 nDim=0; nDim<nDimCount; ++nDim )
+        {
+            sal_Int32 nMaxAxisIndex = xCooSys->getMaximumAxisIndexByDimension( nDim );
+            for( sal_Int32 nAxisIndex=0; nAxisIndex<=nMaxAxisIndex; nAxisIndex++ )
+            {
+                Reference< XAxis > xAxis( AxisHelper::getAxis( nDim, nAxisIndex, xCooSys ) );
+                if( !xAxis.is() )
+                    continue;
+
+                if( nAxisIndex == MAIN_AXIS_INDEX || nAxisIndex == SECONDARY_AXIS_INDEX )
+                {
+                    // adapt scales
+                    bool bPercent = (getStackMode(0) == StackMode::YStackedPercent);
+                    if( bPercent && nDim == 1 )
                     {
-                        // adapt scales
-                        bool bPercent = (getStackMode(0) == StackMode::YStackedPercent);
-                        if( bPercent && nDim == 1 )
+                        Reference< beans::XPropertySet > xAxisProp( xAxis, uno::UNO_QUERY );
+                        if( xAxisProp.is())
                         {
-                            Reference< beans::XPropertySet > xAxisProp( xAxis, uno::UNO_QUERY );
-                            if( xAxisProp.is())
-                            {
-                                // set number format to source format
-                                xAxisProp->setPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT, uno::Any(true));
-                                xAxisProp->setPropertyValue(CHART_UNONAME_NUMFMT, uno::Any());
-                            }
+                            // set number format to source format
+                            xAxisProp->setPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT, uno::Any(true));
+                            xAxisProp->setPropertyValue(CHART_UNONAME_NUMFMT, uno::Any());
                         }
                     }
                 }

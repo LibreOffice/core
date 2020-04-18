@@ -212,17 +212,17 @@ size_t VAxisBase::getIndexOfLongestLabel( const uno::Sequence<OUString>& rLabels
 
 void VAxisBase::removeTextShapesFromTicks()
 {
-    if( m_xTextTarget.is() )
+    if( !m_xTextTarget.is() )
+        return;
+
+    for (auto & tickInfos : m_aAllTickInfos)
     {
-        for (auto & tickInfos : m_aAllTickInfos)
+        for (auto & tickInfo : tickInfos)
         {
-            for (auto & tickInfo : tickInfos)
+            if(tickInfo.xTextShape.is())
             {
-                if(tickInfo.xTextShape.is())
-                {
-                    m_xTextTarget->remove(tickInfo.xTextShape);
-                    tickInfo.xTextShape = nullptr;
-                }
+                m_xTextTarget->remove(tickInfo.xTextShape);
+                tickInfo.xTextShape = nullptr;
             }
         }
     }

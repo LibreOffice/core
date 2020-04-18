@@ -260,35 +260,35 @@ void ChartModel::impl_notifyCloseListeners()
 void ChartModel::impl_adjustAdditionalShapesPositionAndSize( const awt::Size& aVisualAreaSize )
 {
     uno::Reference< beans::XPropertySet > xProperties( static_cast< ::cppu::OWeakObject* >( this ), uno::UNO_QUERY );
-    if ( xProperties.is() )
+    if ( !xProperties.is() )
+        return;
+
+    uno::Reference< drawing::XShapes > xShapes;
+    xProperties->getPropertyValue( "AdditionalShapes" ) >>= xShapes;
+    if ( !xShapes.is() )
+        return;
+
+    sal_Int32 nCount = xShapes->getCount();
+    for ( sal_Int32 i = 0; i < nCount; ++i )
     {
-        uno::Reference< drawing::XShapes > xShapes;
-        xProperties->getPropertyValue( "AdditionalShapes" ) >>= xShapes;
-        if ( xShapes.is() )
+        Reference< drawing::XShape > xShape;
+        if ( xShapes->getByIndex( i ) >>= xShape )
         {
-            sal_Int32 nCount = xShapes->getCount();
-            for ( sal_Int32 i = 0; i < nCount; ++i )
+            if ( xShape.is() )
             {
-                Reference< drawing::XShape > xShape;
-                if ( xShapes->getByIndex( i ) >>= xShape )
-                {
-                    if ( xShape.is() )
-                    {
-                        awt::Point aPos( xShape->getPosition() );
-                        awt::Size aSize( xShape->getSize() );
+                awt::Point aPos( xShape->getPosition() );
+                awt::Size aSize( xShape->getSize() );
 
-                        double fWidth = static_cast< double >( aVisualAreaSize.Width ) / m_aVisualAreaSize.Width;
-                        double fHeight = static_cast< double >( aVisualAreaSize.Height ) / m_aVisualAreaSize.Height;
+                double fWidth = static_cast< double >( aVisualAreaSize.Width ) / m_aVisualAreaSize.Width;
+                double fHeight = static_cast< double >( aVisualAreaSize.Height ) / m_aVisualAreaSize.Height;
 
-                        aPos.X = static_cast< long >( aPos.X * fWidth );
-                        aPos.Y = static_cast< long >( aPos.Y * fHeight );
-                        aSize.Width = static_cast< long >( aSize.Width * fWidth );
-                        aSize.Height = static_cast< long >( aSize.Height * fHeight );
+                aPos.X = static_cast< long >( aPos.X * fWidth );
+                aPos.Y = static_cast< long >( aPos.Y * fHeight );
+                aSize.Width = static_cast< long >( aSize.Width * fWidth );
+                aSize.Height = static_cast< long >( aSize.Height * fHeight );
 
-                        xShape->setPosition( aPos );
-                        xShape->setSize( aSize );
-                    }
-                }
+                xShape->setPosition( aPos );
+                xShape->setSize( aSize );
             }
         }
     }

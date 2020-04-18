@@ -290,20 +290,20 @@ void WrappedDataSourceLabelsInFirstRowProperty::setPropertyValue( const Any& rOu
     bool bHasCategories = true;
     uno::Sequence< sal_Int32 > aSequenceMapping;
 
-    if( DataSourceHelper::detectRangeSegmentation(
+    if( !DataSourceHelper::detectRangeSegmentation(
             m_spChart2ModelContact->getChartModel(), aRangeString, aSequenceMapping, bUseColumns
             , bFirstCellAsLabel, bHasCategories ) )
+        return;
+
+    if( bUseColumns && bNewValue != bFirstCellAsLabel )
     {
-        if( bUseColumns && bNewValue != bFirstCellAsLabel )
-        {
-            DataSourceHelper::setRangeSegmentation(
-                m_spChart2ModelContact->getChartModel(), aSequenceMapping, bUseColumns ,bNewValue, bHasCategories );
-        }
-        else if( !bUseColumns && bNewValue != bHasCategories )
-        {
-            DataSourceHelper::setRangeSegmentation(
-                m_spChart2ModelContact->getChartModel(), aSequenceMapping, bUseColumns , bFirstCellAsLabel, bNewValue );
-        }
+        DataSourceHelper::setRangeSegmentation(
+            m_spChart2ModelContact->getChartModel(), aSequenceMapping, bUseColumns ,bNewValue, bHasCategories );
+    }
+    else if( !bUseColumns && bNewValue != bHasCategories )
+    {
+        DataSourceHelper::setRangeSegmentation(
+            m_spChart2ModelContact->getChartModel(), aSequenceMapping, bUseColumns , bFirstCellAsLabel, bNewValue );
     }
 }
 
@@ -381,20 +381,20 @@ void WrappedDataSourceLabelsInFirstColumnProperty::setPropertyValue( const Any& 
     bool bHasCategories = true;
     uno::Sequence< sal_Int32 > aSequenceMapping;
 
-    if( DataSourceHelper::detectRangeSegmentation(
+    if( !DataSourceHelper::detectRangeSegmentation(
             m_spChart2ModelContact->getChartModel(), aRangeString, aSequenceMapping, bUseColumns
             , bFirstCellAsLabel, bHasCategories ) )
+        return;
+
+    if( bUseColumns && bNewValue != bHasCategories )
     {
-        if( bUseColumns && bNewValue != bHasCategories )
-        {
-            DataSourceHelper::setRangeSegmentation(
-                m_spChart2ModelContact->getChartModel(), aSequenceMapping, bUseColumns, bFirstCellAsLabel, bNewValue );
-        }
-        else if( !bUseColumns && bNewValue != bFirstCellAsLabel )
-        {
-            DataSourceHelper::setRangeSegmentation(
-                m_spChart2ModelContact->getChartModel(), aSequenceMapping, bUseColumns , bNewValue, bHasCategories );
-        }
+        DataSourceHelper::setRangeSegmentation(
+            m_spChart2ModelContact->getChartModel(), aSequenceMapping, bUseColumns, bFirstCellAsLabel, bNewValue );
+    }
+    else if( !bUseColumns && bNewValue != bFirstCellAsLabel )
+    {
+        DataSourceHelper::setRangeSegmentation(
+            m_spChart2ModelContact->getChartModel(), aSequenceMapping, bUseColumns , bNewValue, bHasCategories );
     }
 }
 
@@ -907,35 +907,35 @@ void ChartDocumentWrapper::impl_resetAddIn()
     Reference< util::XRefreshable > xAddIn( m_xAddIn );
     m_xAddIn.set( nullptr );
 
-    if( xAddIn.is() )
+    if( !xAddIn.is() )
+        return;
+
+    try
     {
-        try
+        //make sure that the add-in does not hold a references to us anymore:
+        Reference< lang::XComponent > xComp( xAddIn, uno::UNO_QUERY );
+        if( xComp.is())
+            xComp->dispose();
+        else
         {
-            //make sure that the add-in does not hold a references to us anymore:
-            Reference< lang::XComponent > xComp( xAddIn, uno::UNO_QUERY );
-            if( xComp.is())
-                xComp->dispose();
-            else
+            uno::Reference< lang::XInitialization > xInit( xAddIn, uno::UNO_QUERY );
+            if( xInit.is() )
             {
-                uno::Reference< lang::XInitialization > xInit( xAddIn, uno::UNO_QUERY );
-                if( xInit.is() )
-                {
-                    uno::Any aParam;
-                    uno::Reference< css::chart::XChartDocument > xDoc;
-                    aParam <<= xDoc;
-                    uno::Sequence< uno::Any > aSeq( &aParam, 1 );
-                    xInit->initialize( aSeq );
-                }
+                uno::Any aParam;
+                uno::Reference< css::chart::XChartDocument > xDoc;
+                aParam <<= xDoc;
+                uno::Sequence< uno::Any > aSeq( &aParam, 1 );
+                xInit->initialize( aSeq );
             }
         }
-        catch (const uno::RuntimeException&)
-        {
-            DBG_UNHANDLED_EXCEPTION("chart2");
-        }
-        catch (const uno::Exception&)
-        {
-            DBG_UNHANDLED_EXCEPTION("chart2");
-        }
+    }
+    catch (const uno::RuntimeException&)
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+    catch (const uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 

@@ -53,20 +53,20 @@ VDiagram::VDiagram(
     , m_fZAnglePi(0)
     , m_bRightAngledAxes(false)
 {
-    if( m_nDimensionCount == 3)
+    if( m_nDimensionCount != 3)
+        return;
+
+    uno::Reference< beans::XPropertySet > xSourceProp( m_xDiagram, uno::UNO_QUERY );
+    ThreeDHelper::getRotationAngleFromDiagram( xSourceProp, m_fXAnglePi, m_fYAnglePi, m_fZAnglePi );
+    if( ChartTypeHelper::isSupportingRightAngledAxes(
+            DiagramHelper::getChartTypeByIndex( m_xDiagram, 0 ) ) )
     {
-        uno::Reference< beans::XPropertySet > xSourceProp( m_xDiagram, uno::UNO_QUERY );
-        ThreeDHelper::getRotationAngleFromDiagram( xSourceProp, m_fXAnglePi, m_fYAnglePi, m_fZAnglePi );
-        if( ChartTypeHelper::isSupportingRightAngledAxes(
-                DiagramHelper::getChartTypeByIndex( m_xDiagram, 0 ) ) )
+        if(xSourceProp.is())
+            xSourceProp->getPropertyValue("RightAngledAxes") >>= m_bRightAngledAxes;
+        if( m_bRightAngledAxes )
         {
-            if(xSourceProp.is())
-                xSourceProp->getPropertyValue("RightAngledAxes") >>= m_bRightAngledAxes;
-            if( m_bRightAngledAxes )
-            {
-                ThreeDHelper::adaptRadAnglesForRightAngledAxes( m_fXAnglePi, m_fYAnglePi );
-                m_fZAnglePi=0.0;
-            }
+            ThreeDHelper::adaptRadAnglesForRightAngledAxes( m_fXAnglePi, m_fYAnglePi );
+            m_fZAnglePi=0.0;
         }
     }
 }
@@ -290,150 +290,150 @@ void lcl_ensureScaleValue( double& rfScale )
 void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
 {
     OSL_PRECOND(m_xAspectRatio3D.is(), "created shape offers no XPropertySet");
-    if( m_xAspectRatio3D.is())
+    if( !m_xAspectRatio3D.is())
+        return;
+
+    try
     {
-        try
+        double fScaleX = m_aPreferredAspectRatio.DirectionX;
+        double fScaleY = m_aPreferredAspectRatio.DirectionY;
+        double fScaleZ = m_aPreferredAspectRatio.DirectionZ;
+
+        //normalize scale factors
         {
-            double fScaleX = m_aPreferredAspectRatio.DirectionX;
-            double fScaleY = m_aPreferredAspectRatio.DirectionY;
-            double fScaleZ = m_aPreferredAspectRatio.DirectionZ;
+            double fMax = std::max( std::max( fScaleX, fScaleY) , fScaleZ );
+            fScaleX/=fMax;
+            fScaleY/=fMax;
+            fScaleZ/=fMax;
+        }
 
-            //normalize scale factors
+        if( fScaleX<0 || fScaleY<0 || fScaleZ<0 )
+        {
+            //calculate automatic 3D aspect ratio that fits good into the given 2D area
+            double fW = rAvailableSize.Width;
+            double fH = rAvailableSize.Height;
+
+            double sx = fabs(sin(m_fXAnglePi));
+            double sy = fabs(sin(m_fYAnglePi));
+            double cz = fabs(cos(m_fZAnglePi));
+            double sz = fabs(sin(m_fZAnglePi));
+
+            if(m_bRightAngledAxes)
             {
-                double fMax = std::max( std::max( fScaleX, fScaleY) , fScaleZ );
-                fScaleX/=fMax;
-                fScaleY/=fMax;
-                fScaleZ/=fMax;
-            }
+                //base equations:
+                //fH*zoomfactor == sx*fScaleZ + fScaleY;
+                //fW*zoomfactor == sy*fScaleZ + fScaleX;
 
-            if( fScaleX<0 || fScaleY<0 || fScaleZ<0 )
-            {
-                //calculate automatic 3D aspect ratio that fits good into the given 2D area
-                double fW = rAvailableSize.Width;
-                double fH = rAvailableSize.Height;
-
-                double sx = fabs(sin(m_fXAnglePi));
-                double sy = fabs(sin(m_fYAnglePi));
-                double cz = fabs(cos(m_fZAnglePi));
-                double sz = fabs(sin(m_fZAnglePi));
-
-                if(m_bRightAngledAxes)
+                if( fScaleX>0 && fScaleZ>0 )
                 {
-                    //base equations:
-                    //fH*zoomfactor == sx*fScaleZ + fScaleY;
-                    //fW*zoomfactor == sy*fScaleZ + fScaleX;
-
-                    if( fScaleX>0 && fScaleZ>0 )
+                    //calculate fScaleY:
+                    if( !::basegfx::fTools::equalZero(fW) )
                     {
-                        //calculate fScaleY:
-                        if( !::basegfx::fTools::equalZero(fW) )
-                        {
-                            fScaleY = (fH/fW)*(sy*fScaleZ+fScaleX)-(sx*fScaleZ);
-                            lcl_ensureScaleValue( fScaleY );
-                        }
-                        else
-                            fScaleY = 1.0;//looking from top or bottom the height is irrelevant
-                    }
-                    else if( fScaleY>0 && fScaleZ>0 )
-                    {
-                        //calculate fScaleX:
-                        if( !::basegfx::fTools::equalZero(fH) )
-                        {
-                            fScaleX = (fW/fH)*(sx*fScaleZ+fScaleY)-(sy*fScaleZ);
-                            lcl_ensureScaleValue(fScaleX);
-                        }
-                        else
-                            fScaleX = 1.0;//looking from top or bottom height is irrelevant
+                        fScaleY = (fH/fW)*(sy*fScaleZ+fScaleX)-(sx*fScaleZ);
+                        lcl_ensureScaleValue( fScaleY );
                     }
                     else
+                        fScaleY = 1.0;//looking from top or bottom the height is irrelevant
+                }
+                else if( fScaleY>0 && fScaleZ>0 )
+                {
+                    //calculate fScaleX:
+                    if( !::basegfx::fTools::equalZero(fH) )
                     {
-                        //todo
-                        OSL_FAIL("not implemented yet");
-
-                        if( fScaleX<0 )
-                            fScaleX = 1.0;
-                        if( fScaleY<0 )
-                            fScaleY = 1.0;
-                        if( fScaleZ<0 )
-                            fScaleZ = 1.0;
+                        fScaleX = (fW/fH)*(sx*fScaleZ+fScaleY)-(sy*fScaleZ);
+                        lcl_ensureScaleValue(fScaleX);
                     }
+                    else
+                        fScaleX = 1.0;//looking from top or bottom height is irrelevant
                 }
                 else
                 {
-                    //base equations:
-                    //fH*zoomfactor == cz*fScaleY + sz*fScaleX;
-                    //fW*zoomfactor == cz*fScaleX + sz*fScaleY;
-                    //==>  fScaleY*(fH*sz-fW*cz) == fScaleX*(fW*sz-fH*cz);
-                    if( fScaleX>0 && fScaleZ>0 )
-                    {
-                        //calculate fScaleY:
-                        double fDivide = fH*sz-fW*cz;
-                        if( !::basegfx::fTools::equalZero(fDivide) )
-                        {
-                            fScaleY = fScaleX*(fW*sz-fH*cz) / fDivide;
-                            lcl_ensureScaleValue(fScaleY);
-                        }
-                        else
-                            fScaleY = 1.0;//looking from top or bottom the height is irrelevant
+                    //todo
+                    OSL_FAIL("not implemented yet");
 
-                    }
-                    else if( fScaleY>0 && fScaleZ>0 )
-                    {
-                        //calculate fScaleX:
-                        double fDivide = fW*sz-fH*cz;
-                        if( !::basegfx::fTools::equalZero(fDivide) )
-                        {
-                            fScaleX = fScaleY*(fH*sz-fW*cz) / fDivide;
-                            lcl_ensureScaleValue(fScaleX);
-                        }
-                        else
-                            fScaleX = 1.0;//looking from top or bottom height is irrelevant
-                    }
-                    else
-                    {
-                        //todo
-                        OSL_FAIL("not implemented yet");
-
-                        if( fScaleX<0 )
-                            fScaleX = 1.0;
-                        if( fScaleY<0 )
-                            fScaleY = 1.0;
-                        if( fScaleZ<0 )
-                            fScaleZ = 1.0;
-                    }
+                    if( fScaleX<0 )
+                        fScaleX = 1.0;
+                    if( fScaleY<0 )
+                        fScaleY = 1.0;
+                    if( fScaleZ<0 )
+                        fScaleZ = 1.0;
                 }
             }
-
-            //normalize scale factors
+            else
             {
-                double fMax = std::max( std::max( fScaleX, fScaleY) , fScaleZ );
-                fScaleX/=fMax;
-                fScaleY/=fMax;
-                fScaleZ/=fMax;
+                //base equations:
+                //fH*zoomfactor == cz*fScaleY + sz*fScaleX;
+                //fW*zoomfactor == cz*fScaleX + sz*fScaleY;
+                //==>  fScaleY*(fH*sz-fW*cz) == fScaleX*(fW*sz-fH*cz);
+                if( fScaleX>0 && fScaleZ>0 )
+                {
+                    //calculate fScaleY:
+                    double fDivide = fH*sz-fW*cz;
+                    if( !::basegfx::fTools::equalZero(fDivide) )
+                    {
+                        fScaleY = fScaleX*(fW*sz-fH*cz) / fDivide;
+                        lcl_ensureScaleValue(fScaleY);
+                    }
+                    else
+                        fScaleY = 1.0;//looking from top or bottom the height is irrelevant
+
+                }
+                else if( fScaleY>0 && fScaleZ>0 )
+                {
+                    //calculate fScaleX:
+                    double fDivide = fW*sz-fH*cz;
+                    if( !::basegfx::fTools::equalZero(fDivide) )
+                    {
+                        fScaleX = fScaleY*(fH*sz-fW*cz) / fDivide;
+                        lcl_ensureScaleValue(fScaleX);
+                    }
+                    else
+                        fScaleX = 1.0;//looking from top or bottom height is irrelevant
+                }
+                else
+                {
+                    //todo
+                    OSL_FAIL("not implemented yet");
+
+                    if( fScaleX<0 )
+                        fScaleX = 1.0;
+                    if( fScaleY<0 )
+                        fScaleY = 1.0;
+                    if( fScaleZ<0 )
+                        fScaleZ = 1.0;
+                }
             }
-
-            // identity matrix
-            ::basegfx::B3DHomMatrix aResult;
-            aResult.translate( -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0,
-                            -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0,
-                            -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0 );
-            aResult.scale( fScaleX, fScaleY, fScaleZ );
-            aResult.translate( FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0,
-                            FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0,
-                            FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0 );
-
-            // To get the 3D aspect ratio's effect on the 2D scene size, the scene's 2D size needs to be adapted to
-            // 3D content changes here. The tooling class remembers the current 3D transformation stack
-            // and in its destructor, calculates a new 2D SnapRect for the scene and it's modified 3D geometry.
-            E3DModifySceneSnapRectUpdater aUpdater(lcl_getE3dScene(m_xOuterGroupShape));
-
-            m_xAspectRatio3D->setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX
-                , uno::Any(BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aResult )) );
         }
-        catch( const uno::Exception& )
+
+        //normalize scale factors
         {
-            TOOLS_WARN_EXCEPTION("chart2", "" );
+            double fMax = std::max( std::max( fScaleX, fScaleY) , fScaleZ );
+            fScaleX/=fMax;
+            fScaleY/=fMax;
+            fScaleZ/=fMax;
         }
+
+        // identity matrix
+        ::basegfx::B3DHomMatrix aResult;
+        aResult.translate( -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0,
+                        -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0,
+                        -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0 );
+        aResult.scale( fScaleX, fScaleY, fScaleZ );
+        aResult.translate( FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0,
+                        FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0,
+                        FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0 );
+
+        // To get the 3D aspect ratio's effect on the 2D scene size, the scene's 2D size needs to be adapted to
+        // 3D content changes here. The tooling class remembers the current 3D transformation stack
+        // and in its destructor, calculates a new 2D SnapRect for the scene and it's modified 3D geometry.
+        E3DModifySceneSnapRectUpdater aUpdater(lcl_getE3dScene(m_xOuterGroupShape));
+
+        m_xAspectRatio3D->setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX
+            , uno::Any(BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aResult )) );
+    }
+    catch( const uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
 }
 
@@ -669,20 +669,20 @@ basegfx::B2IRectangle VDiagram::getCurrentRectangle() const
 
 void VDiagram::reduceToMimimumSize()
 {
-    if( m_xOuterGroupShape.is() )
-    {
-        awt::Size aMaxSize( m_aAvailableSizeIncludingAxes );
-        awt::Point aMaxPos( m_aAvailablePosIncludingAxes );
+    if( !m_xOuterGroupShape.is() )
+        return;
 
-        sal_Int32 nNewWidth = aMaxSize.Width/3;
-        sal_Int32 nNewHeight = aMaxSize.Height/3;
-        awt::Size aNewSize( nNewWidth, nNewHeight );
-        awt::Point aNewPos( aMaxPos );
-        aNewPos.X += nNewWidth;
-        aNewPos.Y += nNewHeight;
+    awt::Size aMaxSize( m_aAvailableSizeIncludingAxes );
+    awt::Point aMaxPos( m_aAvailablePosIncludingAxes );
 
-        adjustPosAndSize( aNewPos, aNewSize );
-    }
+    sal_Int32 nNewWidth = aMaxSize.Width/3;
+    sal_Int32 nNewHeight = aMaxSize.Height/3;
+    awt::Size aNewSize( nNewWidth, nNewHeight );
+    awt::Point aNewPos( aMaxPos );
+    aNewPos.X += nNewWidth;
+    aNewPos.Y += nNewHeight;
+
+    adjustPosAndSize( aNewPos, aNewSize );
 }
 
 ::basegfx::B2IRectangle VDiagram::adjustInnerSize( const ::basegfx::B2IRectangle& rConsumedOuterRect )

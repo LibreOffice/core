@@ -38,27 +38,27 @@ AccessibleChartShape::AccessibleChartShape(
         const AccessibleElementInfo& rAccInfo )
     :impl::AccessibleChartShape_Base( rAccInfo, true/*bMayHaveChildren*/, false/*bAlwaysTransparent*/ )
 {
-    if ( rAccInfo.m_aOID.isAdditionalShape() )
+    if ( !rAccInfo.m_aOID.isAdditionalShape() )
+        return;
+
+    Reference< drawing::XShape > xShape( rAccInfo.m_aOID.getAdditionalShape() );
+    Reference< XAccessible > xParent;
+    if ( rAccInfo.m_pParent )
     {
-        Reference< drawing::XShape > xShape( rAccInfo.m_aOID.getAdditionalShape() );
-        Reference< XAccessible > xParent;
-        if ( rAccInfo.m_pParent )
-        {
-            xParent.set( rAccInfo.m_pParent );
-        }
-        ::accessibility::AccessibleShapeInfo aShapeInfo( xShape, xParent );
+        xParent.set( rAccInfo.m_pParent );
+    }
+    ::accessibility::AccessibleShapeInfo aShapeInfo( xShape, xParent );
 
-        m_aShapeTreeInfo.SetSdrView( rAccInfo.m_pSdrView );
-        m_aShapeTreeInfo.SetController( nullptr );
-        m_aShapeTreeInfo.SetDevice( VCLUnoHelper::GetWindow( rAccInfo.m_xWindow ) );
-        m_aShapeTreeInfo.SetViewForwarder( rAccInfo.m_pViewForwarder );
+    m_aShapeTreeInfo.SetSdrView( rAccInfo.m_pSdrView );
+    m_aShapeTreeInfo.SetController( nullptr );
+    m_aShapeTreeInfo.SetDevice( VCLUnoHelper::GetWindow( rAccInfo.m_xWindow ) );
+    m_aShapeTreeInfo.SetViewForwarder( rAccInfo.m_pViewForwarder );
 
-        ::accessibility::ShapeTypeHandler& rShapeHandler = ::accessibility::ShapeTypeHandler::Instance();
-        m_pAccShape = rShapeHandler.CreateAccessibleObject( aShapeInfo, m_aShapeTreeInfo );
-        if ( m_pAccShape.is() )
-        {
-            m_pAccShape->Init();
-        }
+    ::accessibility::ShapeTypeHandler& rShapeHandler = ::accessibility::ShapeTypeHandler::Instance();
+    m_pAccShape = rShapeHandler.CreateAccessibleObject( aShapeInfo, m_aShapeTreeInfo );
+    if ( m_pAccShape.is() )
+    {
+        m_pAccShape->Init();
     }
 }
 

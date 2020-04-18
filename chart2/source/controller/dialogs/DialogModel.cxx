@@ -626,23 +626,23 @@ Reference< data::XLabeledDataSequence > DialogModel::getCategories() const
 
 void DialogModel::setCategories( const Reference< chart2::data::XLabeledDataSequence > & xCategories )
 {
-    if( m_xChartDocument.is())
-    {
-        Reference< chart2::XDiagram > xDiagram( m_xChartDocument->getFirstDiagram());
-        if( xDiagram.is())
-        {
-            // categories
-            bool bSupportsCategories = true;
+    if( !m_xChartDocument.is())
+        return;
 
-            Reference< XChartType > xFirstChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
-            if( xFirstChartType.is() )
-            {
-                sal_Int32 nAxisType = ChartTypeHelper::getAxisType( xFirstChartType, 0 ); // x-axis
-                bSupportsCategories = (nAxisType == AxisType::CATEGORY);
-            }
-            DiagramHelper::setCategoriesToDiagram( xCategories, xDiagram, true, bSupportsCategories );
-        }
+    Reference< chart2::XDiagram > xDiagram( m_xChartDocument->getFirstDiagram());
+    if( !xDiagram.is())
+        return;
+
+    // categories
+    bool bSupportsCategories = true;
+
+    Reference< XChartType > xFirstChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
+    if( xFirstChartType.is() )
+    {
+        sal_Int32 nAxisType = ChartTypeHelper::getAxisType( xFirstChartType, 0 ); // x-axis
+        bSupportsCategories = (nAxisType == AxisType::CATEGORY);
     }
+    DiagramHelper::setCategoriesToDiagram( xCategories, xDiagram, true, bSupportsCategories );
 }
 
 OUString DialogModel::getCategoriesRange() const
@@ -780,66 +780,66 @@ void DialogModel::applyInterpretedData(
 
     m_aTimerTriggeredControllerLock.startTimer();
     Reference< XDiagram > xDiagram( m_xChartDocument->getFirstDiagram());
-    if( xDiagram.is())
-    {
-        // styles
-        if( m_xTemplate.is() )
-        {
-            sal_Int32 nGroup = 0;
-            sal_Int32 nSeriesCounter = 0;
-            sal_Int32 nNewSeriesIndex = static_cast< sal_Int32 >( rSeriesToReUse.size());
-            const sal_Int32 nOuterSize=rNewData.Series.getLength();
+    if( !xDiagram.is())
+        return;
 
-            for(; nGroup < nOuterSize; ++nGroup)
+    // styles
+    if( m_xTemplate.is() )
+    {
+        sal_Int32 nGroup = 0;
+        sal_Int32 nSeriesCounter = 0;
+        sal_Int32 nNewSeriesIndex = static_cast< sal_Int32 >( rSeriesToReUse.size());
+        const sal_Int32 nOuterSize=rNewData.Series.getLength();
+
+        for(; nGroup < nOuterSize; ++nGroup)
+        {
+            Sequence< Reference< XDataSeries > > aSeries( rNewData.Series[ nGroup ] );
+            const sal_Int32 nSeriesInGroup = aSeries.getLength();
+            for( sal_Int32 nSeries=0; nSeries<nSeriesInGroup; ++nSeries, ++nSeriesCounter )
             {
-                Sequence< Reference< XDataSeries > > aSeries( rNewData.Series[ nGroup ] );
-                const sal_Int32 nSeriesInGroup = aSeries.getLength();
-                for( sal_Int32 nSeries=0; nSeries<nSeriesInGroup; ++nSeries, ++nSeriesCounter )
+                if( std::find( rSeriesToReUse.begin(), rSeriesToReUse.end(), aSeries[nSeries] )
+                    == rSeriesToReUse.end())
                 {
-                    if( std::find( rSeriesToReUse.begin(), rSeriesToReUse.end(), aSeries[nSeries] )
-                        == rSeriesToReUse.end())
+                    Reference< beans::XPropertySet > xSeriesProp( aSeries[nSeries], uno::UNO_QUERY );
+                    if( xSeriesProp.is())
                     {
-                        Reference< beans::XPropertySet > xSeriesProp( aSeries[nSeries], uno::UNO_QUERY );
-                        if( xSeriesProp.is())
-                        {
-                            // @deprecated: correct default color should be found by view
-                            // without setting it as hard attribute
-                            Reference< XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme());
-                            if( xColorScheme.is())
-                                xSeriesProp->setPropertyValue( "Color" ,
-                                    uno::Any( xColorScheme->getColorByIndex( nSeriesCounter )));
-                        }
-                        m_xTemplate->applyStyle( aSeries[nSeries], nGroup, nNewSeriesIndex++, nSeriesInGroup );
+                        // @deprecated: correct default color should be found by view
+                        // without setting it as hard attribute
+                        Reference< XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme());
+                        if( xColorScheme.is())
+                            xSeriesProp->setPropertyValue( "Color" ,
+                                uno::Any( xColorScheme->getColorByIndex( nSeriesCounter )));
                     }
+                    m_xTemplate->applyStyle( aSeries[nSeries], nGroup, nNewSeriesIndex++, nSeriesInGroup );
                 }
             }
         }
-
-        // data series
-        std::vector< Reference< XDataSeriesContainer > > aSeriesCnt( getAllDataSeriesContainers());
-        auto aNewSeries(
-            comphelper::sequenceToContainer<std::vector< Sequence< Reference< XDataSeries > > >>( rNewData.Series ));
-
-        OSL_ASSERT( aSeriesCnt.size() == aNewSeries.size());
-
-        std::vector< Sequence< Reference< XDataSeries > > >::const_iterator aSrcIt( aNewSeries.begin());
-        std::vector< Reference< XDataSeriesContainer > >::iterator aDestIt( aSeriesCnt.begin());
-        for(; aSrcIt != aNewSeries.end() && aDestIt != aSeriesCnt.end();
-            ++aSrcIt, ++aDestIt )
-        {
-            try
-            {
-                OSL_ASSERT( (*aDestIt).is());
-                (*aDestIt)->setDataSeries( *aSrcIt );
-            }
-            catch( const uno::Exception & )
-            {
-                DBG_UNHANDLED_EXCEPTION("chart2");
-            }
-        }
-
-        DialogModel::setCategories(rNewData.Categories);
     }
+
+    // data series
+    std::vector< Reference< XDataSeriesContainer > > aSeriesCnt( getAllDataSeriesContainers());
+    auto aNewSeries(
+        comphelper::sequenceToContainer<std::vector< Sequence< Reference< XDataSeries > > >>( rNewData.Series ));
+
+    OSL_ASSERT( aSeriesCnt.size() == aNewSeries.size());
+
+    std::vector< Sequence< Reference< XDataSeries > > >::const_iterator aSrcIt( aNewSeries.begin());
+    std::vector< Reference< XDataSeriesContainer > >::iterator aDestIt( aSeriesCnt.begin());
+    for(; aSrcIt != aNewSeries.end() && aDestIt != aSeriesCnt.end();
+        ++aSrcIt, ++aDestIt )
+    {
+        try
+        {
+            OSL_ASSERT( (*aDestIt).is());
+            (*aDestIt)->setDataSeries( *aSrcIt );
+        }
+        catch( const uno::Exception & )
+        {
+            DBG_UNHANDLED_EXCEPTION("chart2");
+        }
+    }
+
+    DialogModel::setCategories(rNewData.Categories);
 }
 
 sal_Int32 DialogModel::countSeries() const
