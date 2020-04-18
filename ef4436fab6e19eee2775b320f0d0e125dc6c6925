@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c5d66efb_430b7ad9",
+        "filename": "cui/source/inc/about.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-04-18T17:16:22Z",
+      "side": 1,
+      "message": "And this new blank line should be reverted, too.",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 0
+      },
+      "revId": "ef4436fab6e19eee2775b320f0d0e125dc6c6925",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
