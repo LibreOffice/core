@@ -305,26 +305,26 @@ void ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
 {
     uno::Reference< lang::XMultiServiceFactory > xTemplateManager( xChartModel->getChartTypeManager(), uno::UNO_QUERY );
     uno::Reference< XChartTypeTemplate > xTemplate( getCurrentTemplate( rParameter, xTemplateManager ) );
-    if(xTemplate.is())
-    {
-        // locked controllers
-        ControllerLockGuardUNO aCtrlLockGuard( xChartModel );
-        uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
-        DiagramHelper::tTemplateWithServiceName aTemplateWithService(
-            DiagramHelper::getTemplateForDiagram( xDiagram, xTemplateManager ));
-        if( aTemplateWithService.first.is())
-            aTemplateWithService.first->resetStyles( xDiagram );
-        xTemplate->changeDiagram( xDiagram );
-        if( AllSettings::GetMathLayoutRTL() )
-            AxisHelper::setRTLAxisLayout( AxisHelper::getCoordinateSystemByIndex( xDiagram, 0 ) );
-        if( rParameter.b3DLook )
-            ThreeDHelper::setScheme( xDiagram, rParameter.eThreeDLookScheme );
+    if(!xTemplate.is())
+        return;
 
-        uno::Reference<beans::XPropertySet> xDiaProp(xDiagram, uno::UNO_QUERY);
-        if (xDiaProp.is())
-        {
-            xDiaProp->setPropertyValue(CHART_UNONAME_SORT_BY_XVALUES, uno::Any(rParameter.bSortByXValues));
-        }
+    // locked controllers
+    ControllerLockGuardUNO aCtrlLockGuard( xChartModel );
+    uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
+    DiagramHelper::tTemplateWithServiceName aTemplateWithService(
+        DiagramHelper::getTemplateForDiagram( xDiagram, xTemplateManager ));
+    if( aTemplateWithService.first.is())
+        aTemplateWithService.first->resetStyles( xDiagram );
+    xTemplate->changeDiagram( xDiagram );
+    if( AllSettings::GetMathLayoutRTL() )
+        AxisHelper::setRTLAxisLayout( AxisHelper::getCoordinateSystemByIndex( xDiagram, 0 ) );
+    if( rParameter.b3DLook )
+        ThreeDHelper::setScheme( xDiagram, rParameter.eThreeDLookScheme );
+
+    uno::Reference<beans::XPropertySet> xDiaProp(xDiagram, uno::UNO_QUERY);
+    if (xDiaProp.is())
+    {
+        xDiaProp->setPropertyValue(CHART_UNONAME_SORT_BY_XVALUES, uno::Any(rParameter.bSortByXValues));
     }
 }
 void ChartTypeDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )

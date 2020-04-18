@@ -257,75 +257,75 @@ void SAL_CALL OPropertySet::getFastPropertyValue
     ( Any& rValue,
       sal_Int32 nHandle ) const
 {
-    if( ! m_pImplProperties->GetPropertyValueByHandle( rValue, nHandle ))
+    if(  m_pImplProperties->GetPropertyValueByHandle( rValue, nHandle ))
+        return;
+
+    // property was not set -> try style
+    uno::Reference< beans::XFastPropertySet > xStylePropSet( m_pImplProperties->GetStyle(), uno::UNO_QUERY );
+    if( xStylePropSet.is() )
     {
-        // property was not set -> try style
-        uno::Reference< beans::XFastPropertySet > xStylePropSet( m_pImplProperties->GetStyle(), uno::UNO_QUERY );
-        if( xStylePropSet.is() )
-        {
 #ifdef DBG_UTIL
+        {
+            // check if the handle of the style points to the same property
+            // name as the handle in this property set
+            uno::Reference< beans::XPropertySet > xPropSet( xStylePropSet, uno::UNO_QUERY );
+            if( xPropSet.is())
             {
-                // check if the handle of the style points to the same property
-                // name as the handle in this property set
-                uno::Reference< beans::XPropertySet > xPropSet( xStylePropSet, uno::UNO_QUERY );
-                if( xPropSet.is())
+                uno::Reference< beans::XPropertySetInfo > xInfo = xPropSet->getPropertySetInfo();
+                if( xInfo.is() )
                 {
-                    uno::Reference< beans::XPropertySetInfo > xInfo = xPropSet->getPropertySetInfo();
-                    if( xInfo.is() )
+                    // for some reason the virtual method getInfoHelper() is
+                    // not const
+                    ::cppu::IPropertyArrayHelper & rPH =
+                          const_cast< OPropertySet * >( this )->getInfoHelper();
+
+                    // find the Property with Handle nHandle in Style
+                    Sequence< beans::Property > aProps( xInfo->getProperties() );
+                    sal_Int32 nI = aProps.getLength() - 1;
+                    while( ( nI >= 0 ) && nHandle != aProps[ nI ].Handle )
+                        --nI;
+
+                    if( nI >= 0 ) // => nHandle == aProps[nI].Handle
                     {
-                        // for some reason the virtual method getInfoHelper() is
-                        // not const
-                        ::cppu::IPropertyArrayHelper & rPH =
-                              const_cast< OPropertySet * >( this )->getInfoHelper();
+                        // check whether the handle in this property set is
+                        // the same as the one in the style
+                        beans::Property aProp( rPH.getPropertyByName( aProps[ nI ].Name ) );
+                        OSL_ENSURE( nHandle == aProp.Handle,
+                                    "HandleCheck: Handles for same property differ!" );
 
-                        // find the Property with Handle nHandle in Style
-                        Sequence< beans::Property > aProps( xInfo->getProperties() );
-                        sal_Int32 nI = aProps.getLength() - 1;
-                        while( ( nI >= 0 ) && nHandle != aProps[ nI ].Handle )
-                            --nI;
-
-                        if( nI >= 0 ) // => nHandle == aProps[nI].Handle
+                        if( nHandle == aProp.Handle )
                         {
-                            // check whether the handle in this property set is
-                            // the same as the one in the style
-                            beans::Property aProp( rPH.getPropertyByName( aProps[ nI ].Name ) );
-                            OSL_ENSURE( nHandle == aProp.Handle,
-                                        "HandleCheck: Handles for same property differ!" );
-
-                            if( nHandle == aProp.Handle )
-                            {
-                                OSL_ENSURE( aProp.Type == aProps[nI].Type,
-                                            "HandleCheck: Types differ!" );
-                                OSL_ENSURE( aProp.Attributes == aProps[nI].Attributes,
-                                            "HandleCheck: Attributes differ!" );
-                            }
-                        }
-                        else
-                        {
-                            OSL_FAIL(  "HandleCheck: Handle not found in Style" );
+                            OSL_ENSURE( aProp.Type == aProps[nI].Type,
+                                        "HandleCheck: Types differ!" );
+                            OSL_ENSURE( aProp.Attributes == aProps[nI].Attributes,
+                                        "HandleCheck: Attributes differ!" );
                         }
                     }
                     else
-                        OSL_FAIL( "HandleCheck: Invalid XPropertySetInfo returned" );
+                    {
+                        OSL_FAIL(  "HandleCheck: Handle not found in Style" );
+                    }
                 }
                 else
-                    OSL_FAIL( "HandleCheck: XPropertySet not supported" );
+                    OSL_FAIL( "HandleCheck: Invalid XPropertySetInfo returned" );
             }
-#endif
-            rValue = xStylePropSet->getFastPropertyValue( nHandle );
+            else
+                OSL_FAIL( "HandleCheck: XPropertySet not supported" );
         }
-        else
+#endif
+        rValue = xStylePropSet->getFastPropertyValue( nHandle );
+    }
+    else
+    {
+        // there is no style (or the style does not support XFastPropertySet)
+        // => take the default value
+        try
         {
-            // there is no style (or the style does not support XFastPropertySet)
-            // => take the default value
-            try
-            {
-                rValue = GetDefaultValue( nHandle );
-            }
-            catch( const beans::UnknownPropertyException& )
-            {
-                rValue.clear();
-            }
+            rValue = GetDefaultValue( nHandle );
+        }
+        catch( const beans::UnknownPropertyException& )
+        {
+            rValue.clear();
         }
     }
 }

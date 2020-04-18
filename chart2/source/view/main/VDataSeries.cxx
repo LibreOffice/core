@@ -242,23 +242,23 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
     }
 
     uno::Reference<beans::XPropertySet> xProp(xDataSeries, uno::UNO_QUERY );
-    if( xProp.is())
+    if( !xProp.is())
+        return;
+
+    try
     {
-        try
-        {
-            //get AttributedDataPoints
-            xProp->getPropertyValue("AttributedDataPoints") >>= m_aAttributedDataPointIndexList;
+        //get AttributedDataPoints
+        xProp->getPropertyValue("AttributedDataPoints") >>= m_aAttributedDataPointIndexList;
 
-            xProp->getPropertyValue("StackingDirection") >>= m_eStackingDirection;
+        xProp->getPropertyValue("StackingDirection") >>= m_eStackingDirection;
 
-            xProp->getPropertyValue("AttachedAxisIndex") >>= m_nAxisIndex;
-            if(m_nAxisIndex<0)
-                m_nAxisIndex=0;
-        }
-        catch( const uno::Exception& )
-        {
-            TOOLS_WARN_EXCEPTION("chart2", "" );
-        }
+        xProp->getPropertyValue("AttachedAxisIndex") >>= m_nAxisIndex;
+        if(m_nAxisIndex<0)
+            m_nAxisIndex=0;
+    }
+    catch( const uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
 }
 
@@ -268,33 +268,33 @@ VDataSeries::~VDataSeries()
 
 void VDataSeries::doSortByXValues()
 {
-    if( m_aValues_X.is() && m_aValues_X.Doubles.hasElements() )
+    if( !(m_aValues_X.is() && m_aValues_X.Doubles.hasElements()) )
+        return;
+
+    //prepare a vector for sorting
+    std::vector< std::vector< double > > aTmp;//outer vector are points, inner vector are the different values of the point
+    double fNan;
+    ::rtl::math::setNan( & fNan );
+    sal_Int32 nPointIndex = 0;
+    for( nPointIndex=0; nPointIndex < m_nPointCount; nPointIndex++ )
     {
-        //prepare a vector for sorting
-        std::vector< std::vector< double > > aTmp;//outer vector are points, inner vector are the different values of the point
-        double fNan;
-        ::rtl::math::setNan( & fNan );
-        sal_Int32 nPointIndex = 0;
-        for( nPointIndex=0; nPointIndex < m_nPointCount; nPointIndex++ )
-        {
-            std::vector< double > aSinglePoint;
-            aSinglePoint.push_back( (nPointIndex < m_aValues_X.Doubles.getLength()) ? m_aValues_X.Doubles[nPointIndex] : fNan );
-            aSinglePoint.push_back( (nPointIndex < m_aValues_Y.Doubles.getLength()) ? m_aValues_Y.Doubles[nPointIndex] : fNan );
-            aTmp.push_back( aSinglePoint );
-        }
+        std::vector< double > aSinglePoint;
+        aSinglePoint.push_back( (nPointIndex < m_aValues_X.Doubles.getLength()) ? m_aValues_X.Doubles[nPointIndex] : fNan );
+        aSinglePoint.push_back( (nPointIndex < m_aValues_Y.Doubles.getLength()) ? m_aValues_Y.Doubles[nPointIndex] : fNan );
+        aTmp.push_back( aSinglePoint );
+    }
 
-        //do sort
-        std::stable_sort( aTmp.begin(), aTmp.end(), lcl_LessXOfPoint() );
+    //do sort
+    std::stable_sort( aTmp.begin(), aTmp.end(), lcl_LessXOfPoint() );
 
-        //fill the sorted points back to the members
-        m_aValues_X.Doubles.realloc( m_nPointCount );
-        m_aValues_Y.Doubles.realloc( m_nPointCount );
+    //fill the sorted points back to the members
+    m_aValues_X.Doubles.realloc( m_nPointCount );
+    m_aValues_Y.Doubles.realloc( m_nPointCount );
 
-        for( nPointIndex=0; nPointIndex < m_nPointCount; nPointIndex++ )
-        {
-            m_aValues_X.Doubles[nPointIndex]=aTmp[nPointIndex][0];
-            m_aValues_Y.Doubles[nPointIndex]=aTmp[nPointIndex][1];
-        }
+    for( nPointIndex=0; nPointIndex < m_nPointCount; nPointIndex++ )
+    {
+        m_aValues_X.Doubles[nPointIndex]=aTmp[nPointIndex][0];
+        m_aValues_Y.Doubles[nPointIndex]=aTmp[nPointIndex][1];
     }
 }
 
@@ -498,25 +498,25 @@ void VDataSeries::getMinMaxXValue(double& fMin, double& fMax) const
 
     uno::Sequence< double > aValuesX = getAllX();
 
-    if(aValuesX.hasElements())
-    {
-        sal_Int32 i = 0;
-        while ( i < aValuesX.getLength() && std::isnan(aValuesX[i]) )
-            i++;
-        if ( i < aValuesX.getLength() )
-            fMax = fMin = aValuesX[i++];
+    if(!aValuesX.hasElements())
+        return;
 
-        for ( ; i < aValuesX.getLength(); i++)
+    sal_Int32 i = 0;
+    while ( i < aValuesX.getLength() && std::isnan(aValuesX[i]) )
+        i++;
+    if ( i < aValuesX.getLength() )
+        fMax = fMin = aValuesX[i++];
+
+    for ( ; i < aValuesX.getLength(); i++)
+    {
+        const double aValue = aValuesX[i];
+        if ( aValue > fMax)
         {
-            const double aValue = aValuesX[i];
-            if ( aValue > fMax)
-            {
-                fMax = aValue;
-            }
-            else if ( aValue < fMin)
-            {
-                fMin = aValue;
-            }
+            fMax = aValue;
+        }
+        else if ( aValue < fMin)
+        {
+            fMin = aValue;
         }
     }
 }

@@ -93,51 +93,51 @@ Any WrappedLegendAlignmentProperty::getPropertyValue( const Reference< beans::XP
 
 void WrappedLegendAlignmentProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
 {
-    if(xInnerPropertySet.is())
+    if(!xInnerPropertySet.is())
+        return;
+
+    bool bNewShowLegend = true;
+    bool bOldShowLegend = true;
     {
-        bool bNewShowLegend = true;
-        bool bOldShowLegend = true;
-        {
-            css::chart::ChartLegendPosition eOuterPos(css::chart::ChartLegendPosition_NONE);
-            if( (rOuterValue >>= eOuterPos)  && eOuterPos == css::chart::ChartLegendPosition_NONE )
-                bNewShowLegend = false;
-            xInnerPropertySet->getPropertyValue( "Show" ) >>= bOldShowLegend;
-        }
-        if(bNewShowLegend!=bOldShowLegend)
-        {
-            xInnerPropertySet->setPropertyValue( "Show", uno::Any(bNewShowLegend) );
-        }
-        if(!bNewShowLegend)
-            return;
+        css::chart::ChartLegendPosition eOuterPos(css::chart::ChartLegendPosition_NONE);
+        if( (rOuterValue >>= eOuterPos)  && eOuterPos == css::chart::ChartLegendPosition_NONE )
+            bNewShowLegend = false;
+        xInnerPropertySet->getPropertyValue( "Show" ) >>= bOldShowLegend;
+    }
+    if(bNewShowLegend!=bOldShowLegend)
+    {
+        xInnerPropertySet->setPropertyValue( "Show", uno::Any(bNewShowLegend) );
+    }
+    if(!bNewShowLegend)
+        return;
 
-        //set corresponding LegendPosition
-        Any aInnerValue = convertOuterToInnerValue( rOuterValue );
-        xInnerPropertySet->setPropertyValue( m_aInnerName, aInnerValue );
+    //set corresponding LegendPosition
+    Any aInnerValue = convertOuterToInnerValue( rOuterValue );
+    xInnerPropertySet->setPropertyValue( m_aInnerName, aInnerValue );
 
-        //correct LegendExpansion
-        chart2::LegendPosition eNewInnerPos(chart2::LegendPosition_LINE_END);
-        if( aInnerValue >>= eNewInnerPos )
-        {
-            css::chart::ChartLegendExpansion eNewExpansion =
-                ( eNewInnerPos == chart2::LegendPosition_LINE_END ||
-                  eNewInnerPos == chart2::LegendPosition_LINE_START )
-                ? css::chart::ChartLegendExpansion_HIGH
-                : css::chart::ChartLegendExpansion_WIDE;
+    //correct LegendExpansion
+    chart2::LegendPosition eNewInnerPos(chart2::LegendPosition_LINE_END);
+    if( aInnerValue >>= eNewInnerPos )
+    {
+        css::chart::ChartLegendExpansion eNewExpansion =
+            ( eNewInnerPos == chart2::LegendPosition_LINE_END ||
+              eNewInnerPos == chart2::LegendPosition_LINE_START )
+            ? css::chart::ChartLegendExpansion_HIGH
+            : css::chart::ChartLegendExpansion_WIDE;
 
-            css::chart::ChartLegendExpansion eOldExpansion( css::chart::ChartLegendExpansion_HIGH );
-            bool bExpansionWasSet(
-                xInnerPropertySet->getPropertyValue( "Expansion" ) >>= eOldExpansion );
+        css::chart::ChartLegendExpansion eOldExpansion( css::chart::ChartLegendExpansion_HIGH );
+        bool bExpansionWasSet(
+            xInnerPropertySet->getPropertyValue( "Expansion" ) >>= eOldExpansion );
 
-            if( !bExpansionWasSet || (eOldExpansion != eNewExpansion))
-                xInnerPropertySet->setPropertyValue( "Expansion", uno::Any( eNewExpansion ));
-        }
+        if( !bExpansionWasSet || (eOldExpansion != eNewExpansion))
+            xInnerPropertySet->setPropertyValue( "Expansion", uno::Any( eNewExpansion ));
+    }
 
-        //correct RelativePosition
-        Any aRelativePosition( xInnerPropertySet->getPropertyValue("RelativePosition") );
-        if(aRelativePosition.hasValue())
-        {
-            xInnerPropertySet->setPropertyValue( "RelativePosition", Any() );
-        }
+    //correct RelativePosition
+    Any aRelativePosition( xInnerPropertySet->getPropertyValue("RelativePosition") );
+    if(aRelativePosition.hasValue())
+    {
+        xInnerPropertySet->setPropertyValue( "RelativePosition", Any() );
     }
 }
 

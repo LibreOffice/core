@@ -390,32 +390,32 @@ void DataSourceTabPage::fillRoleListBox()
     bool bHasSelectedEntry = (pSeriesEntry != nullptr);
 
     int nRoleIndex = m_xLB_ROLE->get_selected_index();
-    if (bHasSelectedEntry)
+    if (!bHasSelectedEntry)
+        return;
+
+    DialogModel::tRolesWithRanges aRoles(
+        DialogModel::getRolesWithRanges(
+            pSeriesEntry->m_xDataSeries,
+            lcl_GetSequenceNameForLabel( pSeriesEntry ),
+            pSeriesEntry->m_xChartType ));
+
+    // fill role list
+    m_xLB_ROLE->freeze();
+    m_xLB_ROLE->clear();
+
+    for (auto const& elemRole : aRoles)
     {
-        DialogModel::tRolesWithRanges aRoles(
-            DialogModel::getRolesWithRanges(
-                pSeriesEntry->m_xDataSeries,
-                lcl_GetSequenceNameForLabel( pSeriesEntry ),
-                pSeriesEntry->m_xChartType ));
+        InsertRoleLBEntry(elemRole.first, elemRole.second);
+    }
 
-        // fill role list
-        m_xLB_ROLE->freeze();
-        m_xLB_ROLE->clear();
+    m_xLB_ROLE->thaw();
 
-        for (auto const& elemRole : aRoles)
-        {
-            InsertRoleLBEntry(elemRole.first, elemRole.second);
-        }
-
-        m_xLB_ROLE->thaw();
-
-        // series may contain no roles, check listbox size before selecting entries
-        if (m_xLB_ROLE->n_children() > 0)
-        {
-            if (nRoleIndex == -1 || nRoleIndex >= m_xLB_ROLE->n_children())
-                nRoleIndex = 0;
-            m_xLB_ROLE->select(nRoleIndex);
-        }
+    // series may contain no roles, check listbox size before selecting entries
+    if (m_xLB_ROLE->n_children() > 0)
+    {
+        if (nRoleIndex == -1 || nRoleIndex >= m_xLB_ROLE->n_children())
+            nRoleIndex = 0;
+        m_xLB_ROLE->select(nRoleIndex);
     }
 }
 
@@ -475,24 +475,24 @@ IMPL_LINK_NOARG(DataSourceTabPage, RoleSelectionChangedHdl, weld::TreeView&, voi
 {
     m_rDialogModel.startControllerLockTimer();
     int nEntry = m_xLB_ROLE->get_selected_index();
-    if (nEntry != -1)
+    if (nEntry == -1)
+        return;
+
+    OUString aSelectedRoleUI = lcl_GetSelectedRole( *m_xLB_ROLE, true );
+    OUString aSelectedRange = lcl_GetSelectedRolesRange( *m_xLB_ROLE );
+
+    // replace role in fixed text label
+    const OUString aReplacementStr( "%VALUETYPE" );
+    sal_Int32 nIndex = m_aFixedTextRange.indexOf( aReplacementStr );
+    if( nIndex != -1 )
     {
-        OUString aSelectedRoleUI = lcl_GetSelectedRole( *m_xLB_ROLE, true );
-        OUString aSelectedRange = lcl_GetSelectedRolesRange( *m_xLB_ROLE );
-
-        // replace role in fixed text label
-        const OUString aReplacementStr( "%VALUETYPE" );
-        sal_Int32 nIndex = m_aFixedTextRange.indexOf( aReplacementStr );
-        if( nIndex != -1 )
-        {
-            m_xFT_RANGE->set_label(
-                m_aFixedTextRange.replaceAt(
-                            nIndex, aReplacementStr.getLength(), aSelectedRoleUI ));
-        }
-
-        m_xEDT_RANGE->set_text(aSelectedRange);
-        isValid();
+        m_xFT_RANGE->set_label(
+            m_aFixedTextRange.replaceAt(
+                        nIndex, aReplacementStr.getLength(), aSelectedRoleUI ));
     }
+
+    m_xEDT_RANGE->set_text(aSelectedRange);
+    isValid();
 }
 
 IMPL_LINK_NOARG(DataSourceTabPage, MainRangeButtonClickedHdl, weld::Button&, void)
@@ -594,39 +594,39 @@ IMPL_LINK_NOARG(DataSourceTabPage, RemoveButtonClickedHdl, weld::Button&, void)
 {
     m_rDialogModel.startControllerLockTimer();
     int nEntry = m_xLB_SERIES->get_selected_index();
-    if (nEntry != -1)
+    if (nEntry == -1)
+        return;
+
+    SeriesEntry* pEntry = reinterpret_cast<::chart::SeriesEntry*>(m_xLB_SERIES->get_id(nEntry).toInt64());
+    Reference< XDataSeries > xNewSelSeries;
+    SeriesEntry * pNewSelEntry = nullptr;
+    if (nEntry + 1 < m_xLB_SERIES->n_children())
+        pNewSelEntry = reinterpret_cast<::chart::SeriesEntry*>(m_xLB_SERIES->get_id(nEntry + 1).toInt64());
+    else if (nEntry > 0)
+        pNewSelEntry = reinterpret_cast<::chart::SeriesEntry*>(m_xLB_SERIES->get_id(nEntry - 1).toInt64());
+    if (pNewSelEntry)
+        xNewSelSeries.set(pNewSelEntry->m_xDataSeries);
+
+    m_rDialogModel.deleteSeries( pEntry->m_xDataSeries, pEntry->m_xChartType );
+    setDirty();
+
+    m_xLB_SERIES->remove(nEntry);
+    fillSeriesListBox();
+
+    // select previous or next series
+    if (xNewSelSeries.is())
     {
-        SeriesEntry* pEntry = reinterpret_cast<::chart::SeriesEntry*>(m_xLB_SERIES->get_id(nEntry).toInt64());
-        Reference< XDataSeries > xNewSelSeries;
-        SeriesEntry * pNewSelEntry = nullptr;
-        if (nEntry + 1 < m_xLB_SERIES->n_children())
-            pNewSelEntry = reinterpret_cast<::chart::SeriesEntry*>(m_xLB_SERIES->get_id(nEntry + 1).toInt64());
-        else if (nEntry > 0)
-            pNewSelEntry = reinterpret_cast<::chart::SeriesEntry*>(m_xLB_SERIES->get_id(nEntry - 1).toInt64());
-        if (pNewSelEntry)
-            xNewSelSeries.set(pNewSelEntry->m_xDataSeries);
-
-        m_rDialogModel.deleteSeries( pEntry->m_xDataSeries, pEntry->m_xChartType );
-        setDirty();
-
-        m_xLB_SERIES->remove(nEntry);
-        fillSeriesListBox();
-
-        // select previous or next series
-        if (xNewSelSeries.is())
+        for (int i = 0; i < m_xLB_SERIES->n_children(); ++i)
         {
-            for (int i = 0; i < m_xLB_SERIES->n_children(); ++i)
+            pEntry = reinterpret_cast<::chart::SeriesEntry*>(m_xLB_SERIES->get_id(i).toInt64());
+            if (pEntry->m_xDataSeries == xNewSelSeries)
             {
-                pEntry = reinterpret_cast<::chart::SeriesEntry*>(m_xLB_SERIES->get_id(i).toInt64());
-                if (pEntry->m_xDataSeries == xNewSelSeries)
-                {
-                    m_xLB_SERIES->select(i);
-                    break;
-                }
+                m_xLB_SERIES->select(i);
+                break;
             }
         }
-        SeriesSelectionChangedHdl(*m_xLB_SERIES);
     }
+    SeriesSelectionChangedHdl(*m_xLB_SERIES);
 }
 
 IMPL_LINK_NOARG(DataSourceTabPage, UpButtonClickedHdl, weld::Button&, void)

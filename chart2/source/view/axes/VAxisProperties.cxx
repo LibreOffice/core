@@ -349,37 +349,37 @@ void AxisLabelProperties::init( const uno::Reference< XAxis >& xAxisModel )
 {
     uno::Reference< beans::XPropertySet > xProp =
         uno::Reference<beans::XPropertySet>::query( xAxisModel );
-    if(xProp.is())
-    {
-        try
-        {
-            xProp->getPropertyValue( "TextBreak" ) >>= bLineBreakAllowed;
-            xProp->getPropertyValue( "TextOverlap" ) >>= bOverlapAllowed;
-            xProp->getPropertyValue( "StackCharacters" ) >>= bStackCharacters;
-            xProp->getPropertyValue( "TextRotation" ) >>= fRotationAngleDegree;
+    if(!xProp.is())
+        return;
 
-            css::chart::ChartAxisArrangeOrderType eArrangeOrder;
-            xProp->getPropertyValue( "ArrangeOrder" ) >>= eArrangeOrder;
-            switch(eArrangeOrder)
-            {
-                case css::chart::ChartAxisArrangeOrderType_SIDE_BY_SIDE:
-                    eStaggering = AxisLabelStaggering::SideBySide;
-                    break;
-                case css::chart::ChartAxisArrangeOrderType_STAGGER_EVEN:
-                    eStaggering = AxisLabelStaggering::StaggerEven;
-                    break;
-                case css::chart::ChartAxisArrangeOrderType_STAGGER_ODD:
-                    eStaggering = AxisLabelStaggering::StaggerOdd;
-                    break;
-                default:
-                    eStaggering = AxisLabelStaggering::StaggerAuto;
-                    break;
-            }
-        }
-        catch( const uno::Exception& )
+    try
+    {
+        xProp->getPropertyValue( "TextBreak" ) >>= bLineBreakAllowed;
+        xProp->getPropertyValue( "TextOverlap" ) >>= bOverlapAllowed;
+        xProp->getPropertyValue( "StackCharacters" ) >>= bStackCharacters;
+        xProp->getPropertyValue( "TextRotation" ) >>= fRotationAngleDegree;
+
+        css::chart::ChartAxisArrangeOrderType eArrangeOrder;
+        xProp->getPropertyValue( "ArrangeOrder" ) >>= eArrangeOrder;
+        switch(eArrangeOrder)
         {
-            TOOLS_WARN_EXCEPTION("chart2", "" );
+            case css::chart::ChartAxisArrangeOrderType_SIDE_BY_SIDE:
+                eStaggering = AxisLabelStaggering::SideBySide;
+                break;
+            case css::chart::ChartAxisArrangeOrderType_STAGGER_EVEN:
+                eStaggering = AxisLabelStaggering::StaggerEven;
+                break;
+            case css::chart::ChartAxisArrangeOrderType_STAGGER_ODD:
+                eStaggering = AxisLabelStaggering::StaggerOdd;
+                break;
+            default:
+                eStaggering = AxisLabelStaggering::StaggerAuto;
+                break;
         }
+    }
+    catch( const uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
     }
 }
 

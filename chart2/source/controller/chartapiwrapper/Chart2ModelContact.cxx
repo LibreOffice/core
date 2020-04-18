@@ -57,19 +57,19 @@ void Chart2ModelContact::setModel( const css::uno::Reference< css::frame::XModel
     m_xChartModel = xChartModel;
     mpModel = dynamic_cast<ChartModel*>(xChartModel.get());
     uno::Reference< lang::XMultiServiceFactory > xTableFactory( xChartModel, uno::UNO_QUERY );
-    if( xTableFactory.is() )
-    {
-        uno::Reference< container::XNameContainer > xDashTable( xTableFactory->createInstance("com.sun.star.drawing.DashTable"), uno::UNO_QUERY );
-        uno::Reference< container::XNameContainer > xGradientTable( xTableFactory->createInstance("com.sun.star.drawing.GradientTable"), uno::UNO_QUERY );
-        uno::Reference< container::XNameContainer > xHatchTable( xTableFactory->createInstance("com.sun.star.drawing.HatchTable"), uno::UNO_QUERY );
-        uno::Reference< container::XNameContainer > xBitmapTable( xTableFactory->createInstance("com.sun.star.drawing.BitmapTable"), uno::UNO_QUERY );
-        uno::Reference< container::XNameContainer > xTransparencyGradientTable( xTableFactory->createInstance("com.sun.star.drawing.TransparencyGradientTable"), uno::UNO_QUERY );
-        m_aTableMap["LineDashName"] = xDashTable;
-        m_aTableMap["FillGradientName"] = xGradientTable;
-        m_aTableMap["FillHatchName"] = xHatchTable;
-        m_aTableMap["FillBitmapName"] = xBitmapTable;
-        m_aTableMap["FillTransparenceGradientName"] = xTransparencyGradientTable;
-    }
+    if( !xTableFactory.is() )
+        return;
+
+    uno::Reference< container::XNameContainer > xDashTable( xTableFactory->createInstance("com.sun.star.drawing.DashTable"), uno::UNO_QUERY );
+    uno::Reference< container::XNameContainer > xGradientTable( xTableFactory->createInstance("com.sun.star.drawing.GradientTable"), uno::UNO_QUERY );
+    uno::Reference< container::XNameContainer > xHatchTable( xTableFactory->createInstance("com.sun.star.drawing.HatchTable"), uno::UNO_QUERY );
+    uno::Reference< container::XNameContainer > xBitmapTable( xTableFactory->createInstance("com.sun.star.drawing.BitmapTable"), uno::UNO_QUERY );
+    uno::Reference< container::XNameContainer > xTransparencyGradientTable( xTableFactory->createInstance("com.sun.star.drawing.TransparencyGradientTable"), uno::UNO_QUERY );
+    m_aTableMap["LineDashName"] = xDashTable;
+    m_aTableMap["FillGradientName"] = xGradientTable;
+    m_aTableMap["FillHatchName"] = xHatchTable;
+    m_aTableMap["FillBitmapName"] = xBitmapTable;
+    m_aTableMap["FillTransparenceGradientName"] = xTransparencyGradientTable;
 }
 
 void Chart2ModelContact::clear()

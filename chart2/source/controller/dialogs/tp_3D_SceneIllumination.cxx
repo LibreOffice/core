@@ -131,23 +131,23 @@ namespace
         const ::chart::LightSource & rLightSource,
         sal_Int32 nIndex )
     {
-        if( 0 <= nIndex && nIndex < 8 )
-        {
-            OUString aIndex( OUString::number( nIndex + 1 ));
+        if( !(0 <= nIndex && nIndex < 8) )
+            return;
 
-            try
-            {
-                xSceneProperties->setPropertyValue( "D3DSceneLightColor" + aIndex,
-                                                    uno::makeAny( rLightSource.nDiffuseColor ));
-                xSceneProperties->setPropertyValue( "D3DSceneLightDirection" + aIndex,
-                                                    uno::Any( rLightSource.aDirection ));
-                xSceneProperties->setPropertyValue( "D3DSceneLightOn" + aIndex,
-                                                    uno::Any( rLightSource.bIsEnabled ));
-            }
-            catch( const uno::Exception & )
-            {
-                DBG_UNHANDLED_EXCEPTION("chart2");
-            }
+        OUString aIndex( OUString::number( nIndex + 1 ));
+
+        try
+        {
+            xSceneProperties->setPropertyValue( "D3DSceneLightColor" + aIndex,
+                                                uno::makeAny( rLightSource.nDiffuseColor ));
+            xSceneProperties->setPropertyValue( "D3DSceneLightDirection" + aIndex,
+                                                uno::Any( rLightSource.aDirection ));
+            xSceneProperties->setPropertyValue( "D3DSceneLightOn" + aIndex,
+                                                uno::Any( rLightSource.bIsEnabled ));
+        }
+        catch( const uno::Exception & )
+        {
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 
@@ -353,33 +353,33 @@ IMPL_LINK( ThreeD_SceneIllumination_TabPage, ColorDialogHdl, weld::Button&, rBut
 
     SvColorDialog aColorDlg;
     aColorDlg.SetColor( pListBox->GetSelectEntryColor() );
-    if( aColorDlg.Execute(m_pTopLevel) == RET_OK )
+    if( aColorDlg.Execute(m_pTopLevel) != RET_OK )
+        return;
+
+    Color aColor( aColorDlg.GetColor());
+    lcl_selectColor( *pListBox, aColor );
+    if( bIsAmbientLight )
     {
-        Color aColor( aColorDlg.GetColor());
-        lcl_selectColor( *pListBox, aColor );
-        if( bIsAmbientLight )
-        {
-            m_bInCommitToModel = true;
-            lcl_setAmbientColor( m_xSceneProperties, aColor );
-            m_bInCommitToModel = false;
-        }
-        else
-        {
-        //get active lightsource:
-            LightSourceInfo* pInfo = nullptr;
-            sal_Int32 nL=0;
-            for( nL=0; nL<8; nL++)
-            {
-                pInfo = &m_pLightSourceInfoList[nL];
-                if(pInfo->pButton->get_active())
-                    break;
-                pInfo = nullptr;
-            }
-            if(pInfo)
-                applyLightSourceToModel( nL );
-        }
-        SelectColorHdl( *pListBox );
+        m_bInCommitToModel = true;
+        lcl_setAmbientColor( m_xSceneProperties, aColor );
+        m_bInCommitToModel = false;
     }
+    else
+    {
+    //get active lightsource:
+        LightSourceInfo* pInfo = nullptr;
+        sal_Int32 nL=0;
+        for( nL=0; nL<8; nL++)
+        {
+            pInfo = &m_pLightSourceInfoList[nL];
+            if(pInfo->pButton->get_active())
+                break;
+            pInfo = nullptr;
+        }
+        if(pInfo)
+            applyLightSourceToModel( nL );
+    }
+    SelectColorHdl( *pListBox );
 }
 
 IMPL_LINK( ThreeD_SceneIllumination_TabPage, SelectColorHdl, ColorListBox&, rBox, void )

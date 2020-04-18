@@ -1076,69 +1076,69 @@ Reference< XChartType > AxisHelper::getChartTypeByIndex( const Reference< XCoord
 
 void AxisHelper::setRTLAxisLayout( const Reference< XCoordinateSystem >& xCooSys )
 {
-    if( xCooSys.is() )
+    if( !xCooSys.is() )
+        return;
+
+    bool bCartesian = xCooSys->getViewServiceName() == CHART2_COOSYSTEM_CARTESIAN_VIEW_SERVICE_NAME;
+    if( !bCartesian )
+        return;
+
+    bool bVertical = false;
+    Reference< beans::XPropertySet > xCooSysProp( xCooSys, uno::UNO_QUERY );
+    if( xCooSysProp.is() )
+        xCooSysProp->getPropertyValue( "SwapXAndYAxis" ) >>= bVertical;
+
+    sal_Int32 nHorizontalAxisDimension = bVertical ? 1 : 0;
+    sal_Int32 nVerticalAxisDimension = bVertical ? 0 : 1;
+
+    try
     {
-        bool bCartesian = xCooSys->getViewServiceName() == CHART2_COOSYSTEM_CARTESIAN_VIEW_SERVICE_NAME;
-        if( bCartesian )
+        //reverse direction for horizontal main axis
+        Reference< chart2::XAxis > xHorizontalMainAxis( AxisHelper::getAxis( nHorizontalAxisDimension, MAIN_AXIS_INDEX, xCooSys ) );
+        if( xHorizontalMainAxis.is() )
         {
-            bool bVertical = false;
-            Reference< beans::XPropertySet > xCooSysProp( xCooSys, uno::UNO_QUERY );
-            if( xCooSysProp.is() )
-                xCooSysProp->getPropertyValue( "SwapXAndYAxis" ) >>= bVertical;
-
-            sal_Int32 nHorizontalAxisDimension = bVertical ? 1 : 0;
-            sal_Int32 nVerticalAxisDimension = bVertical ? 0 : 1;
-
-            try
-            {
-                //reverse direction for horizontal main axis
-                Reference< chart2::XAxis > xHorizontalMainAxis( AxisHelper::getAxis( nHorizontalAxisDimension, MAIN_AXIS_INDEX, xCooSys ) );
-                if( xHorizontalMainAxis.is() )
-                {
-                    chart2::ScaleData aScale = xHorizontalMainAxis->getScaleData();
-                    aScale.Orientation = chart2::AxisOrientation_REVERSE;
-                    xHorizontalMainAxis->setScaleData(aScale);
-                }
-
-                //mathematical direction for vertical main axis
-                Reference< chart2::XAxis > xVerticalMainAxis( AxisHelper::getAxis( nVerticalAxisDimension, MAIN_AXIS_INDEX, xCooSys ) );
-                if( xVerticalMainAxis.is() )
-                {
-                    chart2::ScaleData aScale = xVerticalMainAxis->getScaleData();
-                    aScale.Orientation = chart2::AxisOrientation_MATHEMATICAL;
-                    xVerticalMainAxis->setScaleData(aScale);
-                }
-            }
-            catch( const uno::Exception & )
-            {
-                DBG_UNHANDLED_EXCEPTION("chart2" );
-            }
-
-            try
-            {
-                //reverse direction for horizontal secondary axis
-                Reference< chart2::XAxis > xHorizontalSecondaryAxis( AxisHelper::getAxis( nHorizontalAxisDimension, SECONDARY_AXIS_INDEX, xCooSys ) );
-                if( xHorizontalSecondaryAxis.is() )
-                {
-                    chart2::ScaleData aScale = xHorizontalSecondaryAxis->getScaleData();
-                    aScale.Orientation = chart2::AxisOrientation_REVERSE;
-                    xHorizontalSecondaryAxis->setScaleData(aScale);
-                }
-
-                //mathematical direction for vertical secondary axis
-                Reference< chart2::XAxis > xVerticalSecondaryAxis( AxisHelper::getAxis( nVerticalAxisDimension, SECONDARY_AXIS_INDEX, xCooSys ) );
-                if( xVerticalSecondaryAxis.is() )
-                {
-                    chart2::ScaleData aScale = xVerticalSecondaryAxis->getScaleData();
-                    aScale.Orientation = chart2::AxisOrientation_MATHEMATICAL;
-                    xVerticalSecondaryAxis->setScaleData(aScale);
-                }
-            }
-            catch( const uno::Exception & )
-            {
-                DBG_UNHANDLED_EXCEPTION("chart2");
-            }
+            chart2::ScaleData aScale = xHorizontalMainAxis->getScaleData();
+            aScale.Orientation = chart2::AxisOrientation_REVERSE;
+            xHorizontalMainAxis->setScaleData(aScale);
         }
+
+        //mathematical direction for vertical main axis
+        Reference< chart2::XAxis > xVerticalMainAxis( AxisHelper::getAxis( nVerticalAxisDimension, MAIN_AXIS_INDEX, xCooSys ) );
+        if( xVerticalMainAxis.is() )
+        {
+            chart2::ScaleData aScale = xVerticalMainAxis->getScaleData();
+            aScale.Orientation = chart2::AxisOrientation_MATHEMATICAL;
+            xVerticalMainAxis->setScaleData(aScale);
+        }
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2" );
+    }
+
+    try
+    {
+        //reverse direction for horizontal secondary axis
+        Reference< chart2::XAxis > xHorizontalSecondaryAxis( AxisHelper::getAxis( nHorizontalAxisDimension, SECONDARY_AXIS_INDEX, xCooSys ) );
+        if( xHorizontalSecondaryAxis.is() )
+        {
+            chart2::ScaleData aScale = xHorizontalSecondaryAxis->getScaleData();
+            aScale.Orientation = chart2::AxisOrientation_REVERSE;
+            xHorizontalSecondaryAxis->setScaleData(aScale);
+        }
+
+        //mathematical direction for vertical secondary axis
+        Reference< chart2::XAxis > xVerticalSecondaryAxis( AxisHelper::getAxis( nVerticalAxisDimension, SECONDARY_AXIS_INDEX, xCooSys ) );
+        if( xVerticalSecondaryAxis.is() )
+        {
+            chart2::ScaleData aScale = xVerticalSecondaryAxis->getScaleData();
+            aScale.Orientation = chart2::AxisOrientation_MATHEMATICAL;
+            xVerticalSecondaryAxis->setScaleData(aScale);
+        }
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 

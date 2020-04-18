@@ -160,26 +160,26 @@ void VPolarAngleAxis::createLabels()
 
     double fLogicRadius = m_pPosHelper->getOuterLogicRadius();
 
-    if( m_aAxisProperties.m_bDisplayLabels )
-    {
-        //create tick mark text shapes
-        //@todo: iterate through all tick depth which should be labeled
+    if( !m_aAxisProperties.m_bDisplayLabels )
+        return;
 
-        EquidistantTickIter aTickIter( m_aAllTickInfos, m_aIncrement, 0 );
-        updateUnscaledValuesAtTicks( aTickIter );
+    //create tick mark text shapes
+    //@todo: iterate through all tick depth which should be labeled
 
-        removeTextShapesFromTicks();
+    EquidistantTickIter aTickIter( m_aAllTickInfos, m_aIncrement, 0 );
+    updateUnscaledValuesAtTicks( aTickIter );
 
-        AxisLabelProperties aAxisLabelProperties( m_aAxisLabelProperties );
-        aAxisLabelProperties.bOverlapAllowed = true;
-        double const fLogicZ = 1.0;//as defined
-        createTextShapes_ForAngleAxis( m_xTextTarget, aTickIter
-                        , aAxisLabelProperties
-                        , fLogicRadius, fLogicZ
-                        );
+    removeTextShapesFromTicks();
 
-        //no staggering for polar angle axis
-    }
+    AxisLabelProperties aAxisLabelProperties( m_aAxisLabelProperties );
+    aAxisLabelProperties.bOverlapAllowed = true;
+    double const fLogicZ = 1.0;//as defined
+    createTextShapes_ForAngleAxis( m_xTextTarget, aTickIter
+                    , aAxisLabelProperties
+                    , fLogicRadius, fLogicZ
+                    );
+
+    //no staggering for polar angle axis
 }
 
 void VPolarAngleAxis::createShapes()

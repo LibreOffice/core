@@ -57,18 +57,18 @@ private:
 DocumentChartTypeTemplateProvider::DocumentChartTypeTemplateProvider(
     const Reference< chart2::XChartDocument > & xDoc )
 {
-    if( xDoc.is())
+    if( !xDoc.is())
+        return;
+
+    Reference< chart2::XDiagram > xDia( xDoc->getFirstDiagram());
+    if( xDia.is())
     {
-        Reference< chart2::XDiagram > xDia( xDoc->getFirstDiagram());
-        if( xDia.is())
-        {
-            DiagramHelper::tTemplateWithServiceName aResult(
-                DiagramHelper::getTemplateForDiagram(
-                    xDia,
-                    Reference< lang::XMultiServiceFactory >(
-                        xDoc->getChartTypeManager(), uno::UNO_QUERY ) ));
-            m_xTemplate.set( aResult.first );
-        }
+        DiagramHelper::tTemplateWithServiceName aResult(
+            DiagramHelper::getTemplateForDiagram(
+                xDia,
+                Reference< lang::XMultiServiceFactory >(
+                    xDoc->getChartTypeManager(), uno::UNO_QUERY ) ));
+        m_xTemplate.set( aResult.first );
     }
 }
 

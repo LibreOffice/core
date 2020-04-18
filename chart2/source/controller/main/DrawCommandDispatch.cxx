@@ -97,113 +97,113 @@ static ::basegfx::B2DPolyPolygon getPolygon(const char* pResId, const SdrModel& 
 
 void DrawCommandDispatch::setAttributes( SdrObject* pObj )
 {
-    if ( m_pChartController )
-    {
-        DrawModelWrapper* pDrawModelWrapper = m_pChartController->GetDrawModelWrapper();
-        DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
-        if ( pDrawModelWrapper && pDrawViewWrapper && pDrawViewWrapper->GetCurrentObjIdentifier() == OBJ_CUSTOMSHAPE )
-        {
-            bool bAttributesAppliedFromGallery = false;
-            if ( GalleryExplorer::GetSdrObjCount( GALLERY_THEME_POWERPOINT ) )
-            {
-                std::vector< OUString > aObjList;
-                if ( GalleryExplorer::FillObjListTitle( GALLERY_THEME_POWERPOINT, aObjList ) )
-                {
-                    for ( size_t i = 0; i < aObjList.size(); ++i )
-                    {
-                        if ( aObjList[ i ].equalsIgnoreAsciiCase( m_aCustomShapeType ) )
-                        {
-                            FmFormModel aModel;
-                            SfxItemPool& rPool(aModel.GetItemPool());
-                            rPool.FreezeIdRanges();
+    if ( !m_pChartController )
+        return;
 
-                            if ( GalleryExplorer::GetSdrObj( GALLERY_THEME_POWERPOINT, i, &aModel ) )
+    DrawModelWrapper* pDrawModelWrapper = m_pChartController->GetDrawModelWrapper();
+    DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
+    if ( !(pDrawModelWrapper && pDrawViewWrapper && pDrawViewWrapper->GetCurrentObjIdentifier() == OBJ_CUSTOMSHAPE) )
+        return;
+
+    bool bAttributesAppliedFromGallery = false;
+    if ( GalleryExplorer::GetSdrObjCount( GALLERY_THEME_POWERPOINT ) )
+    {
+        std::vector< OUString > aObjList;
+        if ( GalleryExplorer::FillObjListTitle( GALLERY_THEME_POWERPOINT, aObjList ) )
+        {
+            for ( size_t i = 0; i < aObjList.size(); ++i )
+            {
+                if ( aObjList[ i ].equalsIgnoreAsciiCase( m_aCustomShapeType ) )
+                {
+                    FmFormModel aModel;
+                    SfxItemPool& rPool(aModel.GetItemPool());
+                    rPool.FreezeIdRanges();
+
+                    if ( GalleryExplorer::GetSdrObj( GALLERY_THEME_POWERPOINT, i, &aModel ) )
+                    {
+                        const SdrObject* pSourceObj = aModel.GetPage( 0 )->GetObj( 0 );
+                        if ( pSourceObj )
+                        {
+                            const SfxItemSet& rSource = pSourceObj->GetMergedItemSet();
+                            SfxItemSet aDest(
+                                pObj->getSdrModelFromSdrObject().GetItemPool(),
+                                svl::Items<
+                                    // Ranges from SdrAttrObj:
+                                    SDRATTR_START, SDRATTR_SHADOW_LAST,
+                                    SDRATTR_MISC_FIRST,
+                                        SDRATTR_MISC_LAST,
+                                    SDRATTR_TEXTDIRECTION,
+                                        SDRATTR_TEXTDIRECTION,
+                                    // Graphic attributes, 3D
+                                    // properties, CustomShape
+                                    // properties:
+                                    SDRATTR_GRAF_FIRST,
+                                        SDRATTR_CUSTOMSHAPE_LAST,
+                                    // Range from SdrTextObj:
+                                    EE_ITEMS_START, EE_ITEMS_END>{});
+                            aDest.Set( rSource );
+                            pObj->SetMergedItemSet( aDest );
+                            sal_Int32 nAngle = pSourceObj->GetRotateAngle();
+                            if ( nAngle )
                             {
-                                const SdrObject* pSourceObj = aModel.GetPage( 0 )->GetObj( 0 );
-                                if ( pSourceObj )
-                                {
-                                    const SfxItemSet& rSource = pSourceObj->GetMergedItemSet();
-                                    SfxItemSet aDest(
-                                        pObj->getSdrModelFromSdrObject().GetItemPool(),
-                                        svl::Items<
-                                            // Ranges from SdrAttrObj:
-                                            SDRATTR_START, SDRATTR_SHADOW_LAST,
-                                            SDRATTR_MISC_FIRST,
-                                                SDRATTR_MISC_LAST,
-                                            SDRATTR_TEXTDIRECTION,
-                                                SDRATTR_TEXTDIRECTION,
-                                            // Graphic attributes, 3D
-                                            // properties, CustomShape
-                                            // properties:
-                                            SDRATTR_GRAF_FIRST,
-                                                SDRATTR_CUSTOMSHAPE_LAST,
-                                            // Range from SdrTextObj:
-                                            EE_ITEMS_START, EE_ITEMS_END>{});
-                                    aDest.Set( rSource );
-                                    pObj->SetMergedItemSet( aDest );
-                                    sal_Int32 nAngle = pSourceObj->GetRotateAngle();
-                                    if ( nAngle )
-                                    {
-                                        double a = nAngle * F_PI18000;
-                                        pObj->NbcRotate( pObj->GetSnapRect().Center(), nAngle, sin( a ), cos( a ) );
-                                    }
-                                    bAttributesAppliedFromGallery = true;
-                                }
+                                double a = nAngle * F_PI18000;
+                                pObj->NbcRotate( pObj->GetSnapRect().Center(), nAngle, sin( a ), cos( a ) );
                             }
-                            break;
+                            bAttributesAppliedFromGallery = true;
                         }
                     }
+                    break;
                 }
             }
-            if ( !bAttributesAppliedFromGallery )
-            {
-                pObj->SetMergedItem( SvxAdjustItem( SvxAdjust::Center, 0 ) );
-                pObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
-                pObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
-                pObj->SetMergedItem( makeSdrTextAutoGrowHeightItem( false ) );
-
-                o3tl::unsafe_downcast< SdrObjCustomShape* >( pObj )->MergeDefaultAttributes( &m_aCustomShapeType );
-            }
         }
+    }
+    if ( !bAttributesAppliedFromGallery )
+    {
+        pObj->SetMergedItem( SvxAdjustItem( SvxAdjust::Center, 0 ) );
+        pObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
+        pObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
+        pObj->SetMergedItem( makeSdrTextAutoGrowHeightItem( false ) );
+
+        o3tl::unsafe_downcast< SdrObjCustomShape* >( pObj )->MergeDefaultAttributes( &m_aCustomShapeType );
     }
 }
 
 void DrawCommandDispatch::setLineEnds( SfxItemSet& rAttr )
 {
-    if ( m_nFeatureId == COMMAND_ID_LINE_ARROW_END && m_pChartController )
+    if ( !(m_nFeatureId == COMMAND_ID_LINE_ARROW_END && m_pChartController) )
+        return;
+
+    DrawModelWrapper* pDrawModelWrapper = m_pChartController->GetDrawModelWrapper();
+    DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
+    if ( !(pDrawModelWrapper && pDrawViewWrapper) )
+        return;
+
+    ::basegfx::B2DPolyPolygon aArrow( getPolygon( RID_SVXSTR_ARROW, pDrawModelWrapper->getSdrModel() ) );
+    if ( !aArrow.count() )
     {
-        DrawModelWrapper* pDrawModelWrapper = m_pChartController->GetDrawModelWrapper();
-        DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
-        if ( pDrawModelWrapper && pDrawViewWrapper )
+        ::basegfx::B2DPolygon aNewArrow;
+        aNewArrow.append( ::basegfx::B2DPoint( 10.0, 0.0 ) );
+        aNewArrow.append( ::basegfx::B2DPoint( 0.0, 30.0) );
+        aNewArrow.append( ::basegfx::B2DPoint( 20.0, 30.0 ) );
+        aNewArrow.setClosed( true );
+        aArrow.append( aNewArrow );
+    }
+
+    SfxItemSet aSet( pDrawViewWrapper->GetModel()->GetItemPool() );
+    pDrawViewWrapper->GetAttributes( aSet );
+
+    long nWidth = 300; // (1/100th mm)
+    if ( aSet.GetItemState( XATTR_LINEWIDTH ) != SfxItemState::DONTCARE )
+    {
+        long nValue = aSet.Get( XATTR_LINEWIDTH ).GetValue();
+        if ( nValue > 0 )
         {
-            ::basegfx::B2DPolyPolygon aArrow( getPolygon( RID_SVXSTR_ARROW, pDrawModelWrapper->getSdrModel() ) );
-            if ( !aArrow.count() )
-            {
-                ::basegfx::B2DPolygon aNewArrow;
-                aNewArrow.append( ::basegfx::B2DPoint( 10.0, 0.0 ) );
-                aNewArrow.append( ::basegfx::B2DPoint( 0.0, 30.0) );
-                aNewArrow.append( ::basegfx::B2DPoint( 20.0, 30.0 ) );
-                aNewArrow.setClosed( true );
-                aArrow.append( aNewArrow );
-            }
-
-            SfxItemSet aSet( pDrawViewWrapper->GetModel()->GetItemPool() );
-            pDrawViewWrapper->GetAttributes( aSet );
-
-            long nWidth = 300; // (1/100th mm)
-            if ( aSet.GetItemState( XATTR_LINEWIDTH ) != SfxItemState::DONTCARE )
-            {
-                long nValue = aSet.Get( XATTR_LINEWIDTH ).GetValue();
-                if ( nValue > 0 )
-                {
-                    nWidth = nValue * 3;
-                }
-            }
-
-            rAttr.Put( XLineEndItem( SvxResId( RID_SVXSTR_ARROW ), aArrow ) );
-            rAttr.Put( XLineEndWidthItem( nWidth ) );
+            nWidth = nValue * 3;
         }
     }
+
+    rAttr.Put( XLineEndItem( SvxResId( RID_SVXSTR_ARROW ), aArrow ) );
+    rAttr.Put( XLineEndWidthItem( nWidth ) );
 }
 
 // WeakComponentImplHelperBase
@@ -268,115 +268,115 @@ void DrawCommandDispatch::execute( const OUString& rCommand, const Sequence< bea
     sal_uInt16 nFeatureId = 0;
     OUString aBaseCommand;
     OUString aCustomShapeType;
-    if ( parseCommandURL( rCommand, &nFeatureId, &aBaseCommand, &aCustomShapeType ) )
+    if ( !parseCommandURL( rCommand, &nFeatureId, &aBaseCommand, &aCustomShapeType ) )
+        return;
+
+    bool bCreate = false;
+    m_nFeatureId = nFeatureId;
+    m_aCustomShapeType = aCustomShapeType;
+
+    switch ( nFeatureId )
     {
-        bool bCreate = false;
-        m_nFeatureId = nFeatureId;
-        m_aCustomShapeType = aCustomShapeType;
-
-        switch ( nFeatureId )
-        {
-            case COMMAND_ID_OBJECT_SELECT:
-                {
-                    eDrawMode = CHARTDRAW_SELECT;
-                    eKind = OBJ_NONE;
-                }
-                break;
-            case COMMAND_ID_DRAW_LINE:
-            case COMMAND_ID_LINE_ARROW_END:
-                {
-                    eDrawMode = CHARTDRAW_INSERT;
-                    eKind = OBJ_LINE;
-                }
-                break;
-            case COMMAND_ID_DRAW_RECT:
-                {
-                    eDrawMode = CHARTDRAW_INSERT;
-                    eKind = OBJ_RECT;
-                }
-                break;
-            case COMMAND_ID_DRAW_ELLIPSE:
-                {
-                    eDrawMode = CHARTDRAW_INSERT;
-                    eKind = OBJ_CIRC;
-                }
-                break;
-            case COMMAND_ID_DRAW_FREELINE_NOFILL:
-                {
-                    eDrawMode = CHARTDRAW_INSERT;
-                    eKind = OBJ_FREELINE;
-                }
-                break;
-            case COMMAND_ID_DRAW_TEXT:
-                {
-                    eDrawMode = CHARTDRAW_INSERT;
-                    eKind = OBJ_TEXT;
-                    bCreate = true;
-                }
-                break;
-            case COMMAND_ID_DRAW_CAPTION:
-                {
-                    eDrawMode = CHARTDRAW_INSERT;
-                    eKind = OBJ_CAPTION;
-                }
-                break;
-            case COMMAND_ID_DRAWTBX_CS_BASIC:
-            case COMMAND_ID_DRAWTBX_CS_SYMBOL:
-            case COMMAND_ID_DRAWTBX_CS_ARROW:
-            case COMMAND_ID_DRAWTBX_CS_FLOWCHART:
-            case COMMAND_ID_DRAWTBX_CS_CALLOUT:
-            case COMMAND_ID_DRAWTBX_CS_STAR:
-                {
-                    eDrawMode = CHARTDRAW_INSERT;
-                    eKind = OBJ_CUSTOMSHAPE;
-                }
-                break;
-            default:
-                {
-                    eDrawMode = CHARTDRAW_SELECT;
-                    eKind = OBJ_NONE;
-                }
-                break;
-        }
-
-        if ( m_pChartController )
-        {
-            DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
-            if ( pDrawViewWrapper )
+        case COMMAND_ID_OBJECT_SELECT:
             {
-                SolarMutexGuard aGuard;
-                m_pChartController->setDrawMode( eDrawMode );
-                setInsertObj( sal::static_int_cast< sal_uInt16 >( eKind ) );
-                if ( bCreate )
-                {
-                    pDrawViewWrapper->SetCreateMode();
-                }
-
-                const OUString sKeyModifier( "KeyModifier" );
-                const beans::PropertyValue* pIter = rArgs.getConstArray();
-                const beans::PropertyValue* pEnd  = pIter + rArgs.getLength();
-                const beans::PropertyValue* pKeyModifier = std::find_if(pIter, pEnd,
-                                                                [&sKeyModifier](const beans::PropertyValue& lhs)
-                                                                {return lhs.Name == sKeyModifier;} );
-                sal_Int16 nKeyModifier = 0;
-                if ( pKeyModifier != pEnd && ( pKeyModifier->Value >>= nKeyModifier ) && nKeyModifier == KEY_MOD1 )
-                {
-                    if ( eDrawMode == CHARTDRAW_INSERT )
-                    {
-                        SdrObject* pObj = createDefaultObject( nFeatureId );
-                        if ( pObj )
-                        {
-                            SdrPageView* pPageView = pDrawViewWrapper->GetSdrPageView();
-                            if (pDrawViewWrapper->InsertObjectAtView(pObj, *pPageView))
-                                m_pChartController->SetAndApplySelection(Reference<drawing::XShape>(pObj->getUnoShape(), uno::UNO_QUERY));
-                            if ( nFeatureId == COMMAND_ID_DRAW_TEXT )
-                            {
-                                m_pChartController->StartTextEdit();
-                            }
-                        }
-                    }
-                }
+                eDrawMode = CHARTDRAW_SELECT;
+                eKind = OBJ_NONE;
             }
+            break;
+        case COMMAND_ID_DRAW_LINE:
+        case COMMAND_ID_LINE_ARROW_END:
+            {
+                eDrawMode = CHARTDRAW_INSERT;
+                eKind = OBJ_LINE;
+            }
+            break;
+        case COMMAND_ID_DRAW_RECT:
+            {
+                eDrawMode = CHARTDRAW_INSERT;
+                eKind = OBJ_RECT;
+            }
+            break;
+        case COMMAND_ID_DRAW_ELLIPSE:
+            {
+                eDrawMode = CHARTDRAW_INSERT;
+                eKind = OBJ_CIRC;
+            }
+            break;
+        case COMMAND_ID_DRAW_FREELINE_NOFILL:
+            {
+                eDrawMode = CHARTDRAW_INSERT;
+                eKind = OBJ_FREELINE;
+            }
+            break;
+        case COMMAND_ID_DRAW_TEXT:
+            {
+                eDrawMode = CHARTDRAW_INSERT;
+                eKind = OBJ_TEXT;
+                bCreate = true;
+            }
+            break;
+        case COMMAND_ID_DRAW_CAPTION:
+            {
+                eDrawMode = CHARTDRAW_INSERT;
+                eKind = OBJ_CAPTION;
+            }
+            break;
+        case COMMAND_ID_DRAWTBX_CS_BASIC:
+        case COMMAND_ID_DRAWTBX_CS_SYMBOL:
+        case COMMAND_ID_DRAWTBX_CS_ARROW:
+        case COMMAND_ID_DRAWTBX_CS_FLOWCHART:
+        case COMMAND_ID_DRAWTBX_CS_CALLOUT:
+        case COMMAND_ID_DRAWTBX_CS_STAR:
+            {
+                eDrawMode = CHARTDRAW_INSERT;
+                eKind = OBJ_CUSTOMSHAPE;
+            }
+            break;
+        default:
+            {
+                eDrawMode = CHARTDRAW_SELECT;
+                eKind = OBJ_NONE;
+            }
+            break;
+    }
+
+    if ( !m_pChartController )
+        return;
+
+    DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
+    if ( !pDrawViewWrapper )
+        return;
+
+    SolarMutexGuard aGuard;
+    m_pChartController->setDrawMode( eDrawMode );
+    setInsertObj( sal::static_int_cast< sal_uInt16 >( eKind ) );
+    if ( bCreate )
+    {
+        pDrawViewWrapper->SetCreateMode();
+    }
+
+    const OUString sKeyModifier( "KeyModifier" );
+    const beans::PropertyValue* pIter = rArgs.getConstArray();
+    const beans::PropertyValue* pEnd  = pIter + rArgs.getLength();
+    const beans::PropertyValue* pKeyModifier = std::find_if(pIter, pEnd,
+                                                    [&sKeyModifier](const beans::PropertyValue& lhs)
+                                                    {return lhs.Name == sKeyModifier;} );
+    sal_Int16 nKeyModifier = 0;
+    if ( !(pKeyModifier != pEnd && ( pKeyModifier->Value >>= nKeyModifier ) && nKeyModifier == KEY_MOD1) )
+        return;
+
+    if ( eDrawMode != CHARTDRAW_INSERT )
+        return;
+
+    SdrObject* pObj = createDefaultObject( nFeatureId );
+    if ( pObj )
+    {
+        SdrPageView* pPageView = pDrawViewWrapper->GetSdrPageView();
+        if (pDrawViewWrapper->InsertObjectAtView(pObj, *pPageView))
+            m_pChartController->SetAndApplySelection(Reference<drawing::XShape>(pObj->getUnoShape(), uno::UNO_QUERY));
+        if ( nFeatureId == COMMAND_ID_DRAW_TEXT )
+        {
+            m_pChartController->StartTextEdit();
         }
     }
 }

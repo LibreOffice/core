@@ -695,40 +695,40 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForDateTimeAxis(
         if( nDayCount/nIntervalDayCount > nMaxMainIncrementCount )
             bAutoMinor = true;
     }
-    if( bAutoMinor )
+    if( !bAutoMinor )
+        return;
+
+    rExplicitIncrement.MinorTimeInterval.TimeUnit = rExplicitIncrement.MajorTimeInterval.TimeUnit;
+    rExplicitIncrement.MinorTimeInterval.Number = 1;
+    if( nMainIncrementCount > 100 )
+        rExplicitIncrement.MinorTimeInterval.Number = rExplicitIncrement.MajorTimeInterval.Number;
+    else
     {
-        rExplicitIncrement.MinorTimeInterval.TimeUnit = rExplicitIncrement.MajorTimeInterval.TimeUnit;
-        rExplicitIncrement.MinorTimeInterval.Number = 1;
-        if( nMainIncrementCount > 100 )
-            rExplicitIncrement.MinorTimeInterval.Number = rExplicitIncrement.MajorTimeInterval.Number;
+        if( rExplicitIncrement.MajorTimeInterval.Number >= 2 )
+        {
+            if( !(rExplicitIncrement.MajorTimeInterval.Number%2) )
+                rExplicitIncrement.MinorTimeInterval.Number = rExplicitIncrement.MajorTimeInterval.Number/2;
+            else if( !(rExplicitIncrement.MajorTimeInterval.Number%3) )
+                rExplicitIncrement.MinorTimeInterval.Number = rExplicitIncrement.MajorTimeInterval.Number/3;
+            else if( !(rExplicitIncrement.MajorTimeInterval.Number%5) )
+                rExplicitIncrement.MinorTimeInterval.Number = rExplicitIncrement.MajorTimeInterval.Number/5;
+            else if( rExplicitIncrement.MajorTimeInterval.Number > 50 )
+                rExplicitIncrement.MinorTimeInterval.Number = rExplicitIncrement.MajorTimeInterval.Number;
+        }
         else
         {
-            if( rExplicitIncrement.MajorTimeInterval.Number >= 2 )
+            switch( rExplicitIncrement.MajorTimeInterval.TimeUnit )
             {
-                if( !(rExplicitIncrement.MajorTimeInterval.Number%2) )
-                    rExplicitIncrement.MinorTimeInterval.Number = rExplicitIncrement.MajorTimeInterval.Number/2;
-                else if( !(rExplicitIncrement.MajorTimeInterval.Number%3) )
-                    rExplicitIncrement.MinorTimeInterval.Number = rExplicitIncrement.MajorTimeInterval.Number/3;
-                else if( !(rExplicitIncrement.MajorTimeInterval.Number%5) )
-                    rExplicitIncrement.MinorTimeInterval.Number = rExplicitIncrement.MajorTimeInterval.Number/5;
-                else if( rExplicitIncrement.MajorTimeInterval.Number > 50 )
-                    rExplicitIncrement.MinorTimeInterval.Number = rExplicitIncrement.MajorTimeInterval.Number;
-            }
-            else
-            {
-                switch( rExplicitIncrement.MajorTimeInterval.TimeUnit )
-                {
-                    case DAY:
-                        break;
-                    case MONTH:
-                        if( rExplicitScale.TimeResolution == DAY )
-                            rExplicitIncrement.MinorTimeInterval.TimeUnit = DAY;
-                        break;
-                    case YEAR:
-                        if( rExplicitScale.TimeResolution <= MONTH )
-                            rExplicitIncrement.MinorTimeInterval.TimeUnit = MONTH;
-                        break;
-                }
+                case DAY:
+                    break;
+                case MONTH:
+                    if( rExplicitScale.TimeResolution == DAY )
+                        rExplicitIncrement.MinorTimeInterval.TimeUnit = DAY;
+                    break;
+                case YEAR:
+                    if( rExplicitScale.TimeResolution <= MONTH )
+                        rExplicitIncrement.MinorTimeInterval.TimeUnit = MONTH;
+                    break;
             }
         }
     }

@@ -70,27 +70,27 @@ Reference< sheet::XRangeSelection > const & RangeSelectionHelper::getRangeSelect
 void RangeSelectionHelper::raiseRangeSelectionDocument()
 {
     Reference< sheet::XRangeSelection > xRangeSel( getRangeSelection());
-    if( xRangeSel.is())
+    if( !xRangeSel.is())
+        return;
+
+    try
     {
-        try
+        // bring document to front
+        Reference< frame::XController > xCtrl( xRangeSel, uno::UNO_QUERY );
+        if( xCtrl.is())
         {
-            // bring document to front
-            Reference< frame::XController > xCtrl( xRangeSel, uno::UNO_QUERY );
-            if( xCtrl.is())
+            Reference< frame::XFrame > xFrame( xCtrl->getFrame());
+            if( xFrame.is())
             {
-                Reference< frame::XFrame > xFrame( xCtrl->getFrame());
-                if( xFrame.is())
-                {
-                    Reference< awt::XTopWindow > xWin( xFrame->getContainerWindow(),
-                                                       uno::UNO_QUERY_THROW );
-                    xWin->toFront();
-                }
+                Reference< awt::XTopWindow > xWin( xFrame->getContainerWindow(),
+                                                   uno::UNO_QUERY_THROW );
+                xWin->toFront();
             }
         }
-        catch( const uno::Exception & )
-        {
-            DBG_UNHANDLED_EXCEPTION("chart2");
-        }
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
 }
 
