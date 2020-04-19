@@ -622,7 +622,7 @@ static SwTextNode* lcl_FindOutlineNum(const SwOutlineNodes& rOutlNds,
 {
     // Valid numbers are (always just offsets!):
     //  ([Number]+\.)+  (as a regular expression!)
-    //  (Number follwed by a period, with 5 repetitions)
+    //  (Number followed by a period, with 5 repetitions)
     //  i.e.: "1.1.", "1.", "1.1.1."
     sal_Int32 nPos = 0;
     OUString sNum = rName.getToken( 0, '.', nPos );
