@@ -64,19 +64,18 @@ void GlowPrimitive2D::get2DDecomposition(
     Primitive2DDecompositionVisitor& rVisitor,
     const geometry::ViewInformation2D& /*rViewInformation*/) const
 {
-    if (!getChildren().empty())
-    {
-        // create a modifiedColorPrimitive containing the Glow color and the content
-        basegfx::BColorModifierSharedPtr aBColorModifier
-            = std::make_shared<basegfx::BColorModifier_replace>(getGlowColor());
+    if (getChildren().empty())
+        return;
 
-        const Primitive2DReference xRefA(
-            new ModifiedColorPrimitive2D(getChildren(), aBColorModifier));
-        const Primitive2DContainer aSequenceB{ xRefA };
+    // create a modifiedColorPrimitive containing the Glow color and the content
+    basegfx::BColorModifierSharedPtr aBColorModifier
+        = std::make_shared<basegfx::BColorModifier_replace>(getGlowColor());
 
-        // build transformed primitiveVector with Glow offset and add to target
-        rVisitor.append(new TransformPrimitive2D(getGlowTransform(), aSequenceB));
-    }
+    const Primitive2DReference xRefA(new ModifiedColorPrimitive2D(getChildren(), aBColorModifier));
+    const Primitive2DContainer aSequenceB{ xRefA };
+
+    // build transformed primitiveVector with Glow offset and add to target
+    rVisitor.append(new TransformPrimitive2D(getGlowTransform(), aSequenceB));
 }
 
 // provide unique ID

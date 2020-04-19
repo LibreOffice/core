@@ -45,33 +45,33 @@ namespace drawinglayer::primitive2d
 {
         void ControlPrimitive2D::createXControl()
         {
-            if(!mxXControl.is() && getControlModel().is())
+            if(!(!mxXControl.is() && getControlModel().is()))
+                return;
+
+            uno::Reference< beans::XPropertySet > xSet(getControlModel(), uno::UNO_QUERY);
+
+            if(!xSet.is())
+                return;
+
+            uno::Any aValue(xSet->getPropertyValue("DefaultControl"));
+            OUString aUnoControlTypeName;
+
+            if(!(aValue >>= aUnoControlTypeName))
+                return;
+
+            if(aUnoControlTypeName.isEmpty())
+                return;
+
+            uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+            uno::Reference< awt::XControl > xXControl(
+                xContext->getServiceManager()->createInstanceWithContext(aUnoControlTypeName, xContext), uno::UNO_QUERY);
+
+            if(xXControl.is())
             {
-                uno::Reference< beans::XPropertySet > xSet(getControlModel(), uno::UNO_QUERY);
+                xXControl->setModel(getControlModel());
 
-                if(xSet.is())
-                {
-                    uno::Any aValue(xSet->getPropertyValue("DefaultControl"));
-                    OUString aUnoControlTypeName;
-
-                    if(aValue >>= aUnoControlTypeName)
-                    {
-                        if(!aUnoControlTypeName.isEmpty())
-                        {
-                            uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-                            uno::Reference< awt::XControl > xXControl(
-                                xContext->getServiceManager()->createInstanceWithContext(aUnoControlTypeName, xContext), uno::UNO_QUERY);
-
-                            if(xXControl.is())
-                            {
-                                xXControl->setModel(getControlModel());
-
-                                // remember XControl
-                                mxXControl = xXControl;
-                            }
-                        }
-                    }
-                }
+                // remember XControl
+                mxXControl = xXControl;
             }
         }
 

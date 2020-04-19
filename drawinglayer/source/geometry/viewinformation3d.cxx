@@ -122,93 +122,93 @@ namespace drawinglayer::geometry
             // all ViewParameters using UNO API
             void impInterpretPropertyValues(const uno::Sequence< beans::PropertyValue >& rViewParameters)
             {
-                if(rViewParameters.hasElements())
+                if(!rViewParameters.hasElements())
+                    return;
+
+                const sal_Int32 nCount(rViewParameters.getLength());
+                sal_Int32 nExtendedInsert(0);
+
+                // prepare extended information for filtering. Maximum size is nCount
+                mxExtendedInformation.realloc(nCount);
+
+                for(sal_Int32 a(0); a < nCount; a++)
                 {
-                    const sal_Int32 nCount(rViewParameters.getLength());
-                    sal_Int32 nExtendedInsert(0);
+                    const beans::PropertyValue& rProp = rViewParameters[a];
 
-                    // prepare extended information for filtering. Maximum size is nCount
-                    mxExtendedInformation.realloc(nCount);
-
-                    for(sal_Int32 a(0); a < nCount; a++)
+                    if(rProp.Name == getNamePropertyObjectTransformation())
                     {
-                        const beans::PropertyValue& rProp = rViewParameters[a];
-
-                        if(rProp.Name == getNamePropertyObjectTransformation())
-                        {
-                            css::geometry::AffineMatrix3D aAffineMatrix3D;
-                            rProp.Value >>= aAffineMatrix3D;
-                            maObjectTransformation = basegfx::unotools::homMatrixFromAffineMatrix3D(aAffineMatrix3D);
-                        }
-                        else if(rProp.Name == getNamePropertyOrientation())
-                        {
-                            css::geometry::AffineMatrix3D aAffineMatrix3D;
-                            rProp.Value >>= aAffineMatrix3D;
-                            maOrientation = basegfx::unotools::homMatrixFromAffineMatrix3D(aAffineMatrix3D);
-                        }
-                        else if(rProp.Name == getNamePropertyProjection())
-                        {
-                            // projection may be defined using a frustum in which case the last line of
-                            // the 4x4 matrix is not (0,0,0,1). Since AffineMatrix3D does not support that,
-                            // these four values need to be treated extra
-                            const double f_30(maProjection.get(3, 0));
-                            const double f_31(maProjection.get(3, 1));
-                            const double f_32(maProjection.get(3, 2));
-                            const double f_33(maProjection.get(3, 3));
-
-                            css::geometry::AffineMatrix3D aAffineMatrix3D;
-                            rProp.Value >>= aAffineMatrix3D;
-                            maProjection = basegfx::unotools::homMatrixFromAffineMatrix3D(aAffineMatrix3D);
-
-                            maProjection.set(3, 0, f_30);
-                            maProjection.set(3, 1, f_31);
-                            maProjection.set(3, 2, f_32);
-                            maProjection.set(3, 3, f_33);
-                        }
-                        else if(rProp.Name == getNamePropertyProjection_30())
-                        {
-                            double f_30(0.0);
-                            rProp.Value >>= f_30;
-                            maProjection.set(3, 0, f_30);
-                        }
-                        else if(rProp.Name == getNamePropertyProjection_31())
-                        {
-                            double f_31(0.0);
-                            rProp.Value >>= f_31;
-                            maProjection.set(3, 1, f_31);
-                        }
-                        else if(rProp.Name == getNamePropertyProjection_32())
-                        {
-                            double f_32(0.0);
-                            rProp.Value >>= f_32;
-                            maProjection.set(3, 2, f_32);
-                        }
-                        else if(rProp.Name == getNamePropertyProjection_33())
-                        {
-                            double f_33(1.0);
-                            rProp.Value >>= f_33;
-                            maProjection.set(3, 3, f_33);
-                        }
-                        else if(rProp.Name == getNamePropertyDeviceToView())
-                        {
-                            css::geometry::AffineMatrix3D aAffineMatrix3D;
-                            rProp.Value >>= aAffineMatrix3D;
-                            maDeviceToView = basegfx::unotools::homMatrixFromAffineMatrix3D(aAffineMatrix3D);
-                        }
-                        else if(rProp.Name == getNamePropertyTime())
-                        {
-                            rProp.Value >>= mfViewTime;
-                        }
-                        else
-                        {
-                            // extra information; add to filtered information
-                            mxExtendedInformation[nExtendedInsert++] = rProp;
-                        }
+                        css::geometry::AffineMatrix3D aAffineMatrix3D;
+                        rProp.Value >>= aAffineMatrix3D;
+                        maObjectTransformation = basegfx::unotools::homMatrixFromAffineMatrix3D(aAffineMatrix3D);
                     }
+                    else if(rProp.Name == getNamePropertyOrientation())
+                    {
+                        css::geometry::AffineMatrix3D aAffineMatrix3D;
+                        rProp.Value >>= aAffineMatrix3D;
+                        maOrientation = basegfx::unotools::homMatrixFromAffineMatrix3D(aAffineMatrix3D);
+                    }
+                    else if(rProp.Name == getNamePropertyProjection())
+                    {
+                        // projection may be defined using a frustum in which case the last line of
+                        // the 4x4 matrix is not (0,0,0,1). Since AffineMatrix3D does not support that,
+                        // these four values need to be treated extra
+                        const double f_30(maProjection.get(3, 0));
+                        const double f_31(maProjection.get(3, 1));
+                        const double f_32(maProjection.get(3, 2));
+                        const double f_33(maProjection.get(3, 3));
 
-                    // extra information size is now known; realloc to final size
-                    mxExtendedInformation.realloc(nExtendedInsert);
+                        css::geometry::AffineMatrix3D aAffineMatrix3D;
+                        rProp.Value >>= aAffineMatrix3D;
+                        maProjection = basegfx::unotools::homMatrixFromAffineMatrix3D(aAffineMatrix3D);
+
+                        maProjection.set(3, 0, f_30);
+                        maProjection.set(3, 1, f_31);
+                        maProjection.set(3, 2, f_32);
+                        maProjection.set(3, 3, f_33);
+                    }
+                    else if(rProp.Name == getNamePropertyProjection_30())
+                    {
+                        double f_30(0.0);
+                        rProp.Value >>= f_30;
+                        maProjection.set(3, 0, f_30);
+                    }
+                    else if(rProp.Name == getNamePropertyProjection_31())
+                    {
+                        double f_31(0.0);
+                        rProp.Value >>= f_31;
+                        maProjection.set(3, 1, f_31);
+                    }
+                    else if(rProp.Name == getNamePropertyProjection_32())
+                    {
+                        double f_32(0.0);
+                        rProp.Value >>= f_32;
+                        maProjection.set(3, 2, f_32);
+                    }
+                    else if(rProp.Name == getNamePropertyProjection_33())
+                    {
+                        double f_33(1.0);
+                        rProp.Value >>= f_33;
+                        maProjection.set(3, 3, f_33);
+                    }
+                    else if(rProp.Name == getNamePropertyDeviceToView())
+                    {
+                        css::geometry::AffineMatrix3D aAffineMatrix3D;
+                        rProp.Value >>= aAffineMatrix3D;
+                        maDeviceToView = basegfx::unotools::homMatrixFromAffineMatrix3D(aAffineMatrix3D);
+                    }
+                    else if(rProp.Name == getNamePropertyTime())
+                    {
+                        rProp.Value >>= mfViewTime;
+                    }
+                    else
+                    {
+                        // extra information; add to filtered information
+                        mxExtendedInformation[nExtendedInsert++] = rProp;
+                    }
                 }
+
+                // extra information size is now known; realloc to final size
+                mxExtendedInformation.realloc(nExtendedInsert);
             }
 
             // central method to create a Sequence of PropertyValues containing he complete

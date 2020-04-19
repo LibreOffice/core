@@ -41,30 +41,30 @@ namespace drawinglayer::processor3d
 
         void BaseProcessor3D::process(const primitive3d::Primitive3DContainer& rSource)
         {
-            if(!rSource.empty())
+            if(rSource.empty())
+                return;
+
+            const size_t nCount(rSource.size());
+
+            for(size_t a(0); a < nCount; a++)
             {
-                const size_t nCount(rSource.size());
+                // get reference
+                const primitive3d::Primitive3DReference xReference(rSource[a]);
 
-                for(size_t a(0); a < nCount; a++)
+                if(xReference.is())
                 {
-                    // get reference
-                    const primitive3d::Primitive3DReference xReference(rSource[a]);
+                    // try to cast to BasePrimitive3D implementation
+                    const primitive3d::BasePrimitive3D* pBasePrimitive = dynamic_cast< const primitive3d::BasePrimitive3D* >(xReference.get());
 
-                    if(xReference.is())
+                    if(pBasePrimitive)
                     {
-                        // try to cast to BasePrimitive3D implementation
-                        const primitive3d::BasePrimitive3D* pBasePrimitive = dynamic_cast< const primitive3d::BasePrimitive3D* >(xReference.get());
-
-                        if(pBasePrimitive)
-                        {
-                            processBasePrimitive3D(*pBasePrimitive);
-                        }
-                        else
-                        {
-                            // unknown implementation, use UNO API call instead and process recursively
-                            const uno::Sequence< beans::PropertyValue >& rViewParameters(getViewInformation3D().getViewInformationSequence());
-                            process(comphelper::sequenceToContainer<primitive3d::Primitive3DContainer>(xReference->getDecomposition(rViewParameters)));
-                        }
+                        processBasePrimitive3D(*pBasePrimitive);
+                    }
+                    else
+                    {
+                        // unknown implementation, use UNO API call instead and process recursively
+                        const uno::Sequence< beans::PropertyValue >& rViewParameters(getViewInformation3D().getViewInformationSequence());
+                        process(comphelper::sequenceToContainer<primitive3d::Primitive3DContainer>(xReference->getDecomposition(rViewParameters)));
                     }
                 }
             }

@@ -30,220 +30,220 @@ namespace drawinglayer::primitive2d
 {
         void TextLinePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            if(TEXT_LINE_NONE != getTextLine())
+            if(TEXT_LINE_NONE == getTextLine())
+                return;
+
+            bool bDoubleLine(false);
+            bool bWaveLine(false);
+            bool bBoldLine(false);
+            const int* pDotDashArray(nullptr);
+            basegfx::B2DLineJoin eLineJoin(basegfx::B2DLineJoin::NONE);
+            double fOffset(getOffset());
+            double fHeight(getHeight());
+
+            static const int aDottedArray[]     = { 1, 1, 0};               // DOTTED LINE
+            static const int aDotDashArray[]    = { 1, 1, 4, 1, 0};         // DASHDOT
+            static const int aDashDotDotArray[] = { 1, 1, 1, 1, 4, 1, 0};   // DASHDOTDOT
+            static const int aDashedArray[]     = { 5, 2, 0};               // DASHED LINE
+            static const int aLongDashArray[]   = { 7, 2, 0};               // LONGDASH
+
+            // get decomposition
+            basegfx::B2DVector aScale, aTranslate;
+            double fRotate, fShearX;
+            getObjectTransformation().decompose(aScale, aTranslate, fRotate, fShearX);
+
+            switch(getTextLine())
             {
-                bool bDoubleLine(false);
-                bool bWaveLine(false);
-                bool bBoldLine(false);
-                const int* pDotDashArray(nullptr);
-                basegfx::B2DLineJoin eLineJoin(basegfx::B2DLineJoin::NONE);
-                double fOffset(getOffset());
-                double fHeight(getHeight());
-
-                static const int aDottedArray[]     = { 1, 1, 0};               // DOTTED LINE
-                static const int aDotDashArray[]    = { 1, 1, 4, 1, 0};         // DASHDOT
-                static const int aDashDotDotArray[] = { 1, 1, 1, 1, 4, 1, 0};   // DASHDOTDOT
-                static const int aDashedArray[]     = { 5, 2, 0};               // DASHED LINE
-                static const int aLongDashArray[]   = { 7, 2, 0};               // LONGDASH
-
-                // get decomposition
-                basegfx::B2DVector aScale, aTranslate;
-                double fRotate, fShearX;
-                getObjectTransformation().decompose(aScale, aTranslate, fRotate, fShearX);
-
-                switch(getTextLine())
+                default: // case TEXT_LINE_SINGLE:
                 {
-                    default: // case TEXT_LINE_SINGLE:
-                    {
-                        break;
-                    }
-                    case TEXT_LINE_DOUBLE:
-                    {
-                        bDoubleLine = true;
-                        break;
-                    }
-                    case TEXT_LINE_DOTTED:
-                    {
-                        pDotDashArray = aDottedArray;
-                        break;
-                    }
-                    case TEXT_LINE_DASH:
-                    {
-                        pDotDashArray = aDashedArray;
-                        break;
-                    }
-                    case TEXT_LINE_LONGDASH:
-                    {
-                        pDotDashArray = aLongDashArray;
-                        break;
-                    }
-                    case TEXT_LINE_DASHDOT:
-                    {
-                        pDotDashArray = aDotDashArray;
-                        break;
-                    }
-                    case TEXT_LINE_DASHDOTDOT:
-                    {
-                        pDotDashArray = aDashDotDotArray;
-                        break;
-                    }
-                    case TEXT_LINE_SMALLWAVE:
-                    {
-                        bWaveLine = true;
-                        break;
-                    }
-                    case TEXT_LINE_WAVE:
-                    {
-                        bWaveLine = true;
-                        break;
-                    }
-                    case TEXT_LINE_DOUBLEWAVE:
-                    {
-                        bDoubleLine = true;
-                        bWaveLine = true;
-                        break;
-                    }
-                    case TEXT_LINE_BOLD:
-                    {
-                        bBoldLine = true;
-                        break;
-                    }
-                    case TEXT_LINE_BOLDDOTTED:
-                    {
-                        bBoldLine = true;
-                        pDotDashArray = aDottedArray;
-                        break;
-                    }
-                    case TEXT_LINE_BOLDDASH:
-                    {
-                        bBoldLine = true;
-                        pDotDashArray = aDashedArray;
-                        break;
-                    }
-                    case TEXT_LINE_BOLDLONGDASH:
-                    {
-                        bBoldLine = true;
-                        pDotDashArray = aLongDashArray;
-                        break;
-                    }
-                    case TEXT_LINE_BOLDDASHDOT:
-                    {
-                        bBoldLine = true;
-                        pDotDashArray = aDotDashArray;
-                        break;
-                    }
-                    case TEXT_LINE_BOLDDASHDOTDOT:
-                    {
-                        bBoldLine = true;
-                        pDotDashArray = aDashDotDotArray;
-                        break;
-                    }
-                    case TEXT_LINE_BOLDWAVE:
-                    {
-                        bWaveLine = true;
-                        bBoldLine = true;
-                        break;
-                    }
+                    break;
                 }
-
-                if(bBoldLine)
+                case TEXT_LINE_DOUBLE:
                 {
-                    fHeight *= 2.0;
+                    bDoubleLine = true;
+                    break;
                 }
-
-                if(bDoubleLine)
+                case TEXT_LINE_DOTTED:
                 {
-                    fOffset -= 0.50 * fHeight;
-                    fHeight *= 0.64;
+                    pDotDashArray = aDottedArray;
+                    break;
                 }
-
-                if(bWaveLine)
+                case TEXT_LINE_DASH:
                 {
-                    eLineJoin = basegfx::B2DLineJoin::Round;
-                    fHeight *= 0.25;
+                    pDotDashArray = aDashedArray;
+                    break;
                 }
-
-                // prepare Line and Stroke Attributes
-                const attribute::LineAttribute aLineAttribute(getLineColor(), fHeight, eLineJoin);
-                attribute::StrokeAttribute aStrokeAttribute;
-
-                if(pDotDashArray)
+                case TEXT_LINE_LONGDASH:
                 {
-                    std::vector< double > aDoubleArray;
-
-                    for(const int* p = pDotDashArray; *p; ++p)
-                    {
-                        aDoubleArray.push_back(static_cast<double>(*p) * fHeight);
-                    }
-
-                    aStrokeAttribute = attribute::StrokeAttribute(aDoubleArray);
+                    pDotDashArray = aLongDashArray;
+                    break;
                 }
-
-                // create base polygon and new primitive
-                basegfx::B2DPolygon aLine;
-                Primitive2DReference aNewPrimitive;
-
-                aLine.append(basegfx::B2DPoint(0.0, fOffset));
-                aLine.append(basegfx::B2DPoint(getWidth(), fOffset));
-
-                const basegfx::B2DHomMatrix aUnscaledTransform(
-                    basegfx::utils::createShearXRotateTranslateB2DHomMatrix(
-                        fShearX, fRotate, aTranslate));
-
-                aLine.transform(aUnscaledTransform);
-
-                if(bWaveLine)
+                case TEXT_LINE_DASHDOT:
                 {
-                    double fWaveWidth(10.6 * fHeight);
-
-                    if(TEXT_LINE_SMALLWAVE == getTextLine())
-                    {
-                        fWaveWidth *= 0.7;
-                    }
-                    else if(TEXT_LINE_WAVE == getTextLine())
-                    {
-                        // extra multiply to get the same WaveWidth as with the bold version
-                        fWaveWidth *= 2.0;
-                    }
-
-                    aNewPrimitive = Primitive2DReference(new PolygonWavePrimitive2D(aLine, aLineAttribute, aStrokeAttribute, fWaveWidth, fWaveWidth * 0.5));
+                    pDotDashArray = aDotDashArray;
+                    break;
                 }
-                else
+                case TEXT_LINE_DASHDOTDOT:
                 {
-                    aNewPrimitive = Primitive2DReference(new PolygonStrokePrimitive2D(aLine, aLineAttribute, aStrokeAttribute));
+                    pDotDashArray = aDashDotDotArray;
+                    break;
                 }
-
-                // add primitive
-                rContainer.push_back(aNewPrimitive);
-
-                if(bDoubleLine)
+                case TEXT_LINE_SMALLWAVE:
                 {
-                    // double line, create 2nd primitive with offset using TransformPrimitive based on
-                    // already created NewPrimitive
-                    double fLineDist(2.3 * fHeight);
-
-                    if(bWaveLine)
-                    {
-                        fLineDist = 6.3 * fHeight;
-                    }
-
-                    // move base point of text to 0.0 and de-rotate
-                    basegfx::B2DHomMatrix aTransform(basegfx::utils::createTranslateB2DHomMatrix(
-                        -aTranslate.getX(), -aTranslate.getY()));
-                    aTransform.rotate(-fRotate);
-
-                    // translate in Y by offset
-                    aTransform.translate(0.0, fLineDist);
-
-                    // move back and rotate
-                    aTransform.rotate(fRotate);
-                    aTransform.translate(aTranslate.getX(), aTranslate.getY());
-
-                    // add transform primitive
-                    const Primitive2DContainer aContent { aNewPrimitive };
-                    rContainer.push_back( new TransformPrimitive2D(aTransform, aContent) );
+                    bWaveLine = true;
+                    break;
+                }
+                case TEXT_LINE_WAVE:
+                {
+                    bWaveLine = true;
+                    break;
+                }
+                case TEXT_LINE_DOUBLEWAVE:
+                {
+                    bDoubleLine = true;
+                    bWaveLine = true;
+                    break;
+                }
+                case TEXT_LINE_BOLD:
+                {
+                    bBoldLine = true;
+                    break;
+                }
+                case TEXT_LINE_BOLDDOTTED:
+                {
+                    bBoldLine = true;
+                    pDotDashArray = aDottedArray;
+                    break;
+                }
+                case TEXT_LINE_BOLDDASH:
+                {
+                    bBoldLine = true;
+                    pDotDashArray = aDashedArray;
+                    break;
+                }
+                case TEXT_LINE_BOLDLONGDASH:
+                {
+                    bBoldLine = true;
+                    pDotDashArray = aLongDashArray;
+                    break;
+                }
+                case TEXT_LINE_BOLDDASHDOT:
+                {
+                    bBoldLine = true;
+                    pDotDashArray = aDotDashArray;
+                    break;
+                }
+                case TEXT_LINE_BOLDDASHDOTDOT:
+                {
+                    bBoldLine = true;
+                    pDotDashArray = aDashDotDotArray;
+                    break;
+                }
+                case TEXT_LINE_BOLDWAVE:
+                {
+                    bWaveLine = true;
+                    bBoldLine = true;
+                    break;
                 }
             }
+
+            if(bBoldLine)
+            {
+                fHeight *= 2.0;
+            }
+
+            if(bDoubleLine)
+            {
+                fOffset -= 0.50 * fHeight;
+                fHeight *= 0.64;
+            }
+
+            if(bWaveLine)
+            {
+                eLineJoin = basegfx::B2DLineJoin::Round;
+                fHeight *= 0.25;
+            }
+
+            // prepare Line and Stroke Attributes
+            const attribute::LineAttribute aLineAttribute(getLineColor(), fHeight, eLineJoin);
+            attribute::StrokeAttribute aStrokeAttribute;
+
+            if(pDotDashArray)
+            {
+                std::vector< double > aDoubleArray;
+
+                for(const int* p = pDotDashArray; *p; ++p)
+                {
+                    aDoubleArray.push_back(static_cast<double>(*p) * fHeight);
+                }
+
+                aStrokeAttribute = attribute::StrokeAttribute(aDoubleArray);
+            }
+
+            // create base polygon and new primitive
+            basegfx::B2DPolygon aLine;
+            Primitive2DReference aNewPrimitive;
+
+            aLine.append(basegfx::B2DPoint(0.0, fOffset));
+            aLine.append(basegfx::B2DPoint(getWidth(), fOffset));
+
+            const basegfx::B2DHomMatrix aUnscaledTransform(
+                basegfx::utils::createShearXRotateTranslateB2DHomMatrix(
+                    fShearX, fRotate, aTranslate));
+
+            aLine.transform(aUnscaledTransform);
+
+            if(bWaveLine)
+            {
+                double fWaveWidth(10.6 * fHeight);
+
+                if(TEXT_LINE_SMALLWAVE == getTextLine())
+                {
+                    fWaveWidth *= 0.7;
+                }
+                else if(TEXT_LINE_WAVE == getTextLine())
+                {
+                    // extra multiply to get the same WaveWidth as with the bold version
+                    fWaveWidth *= 2.0;
+                }
+
+                aNewPrimitive = Primitive2DReference(new PolygonWavePrimitive2D(aLine, aLineAttribute, aStrokeAttribute, fWaveWidth, fWaveWidth * 0.5));
+            }
+            else
+            {
+                aNewPrimitive = Primitive2DReference(new PolygonStrokePrimitive2D(aLine, aLineAttribute, aStrokeAttribute));
+            }
+
+            // add primitive
+            rContainer.push_back(aNewPrimitive);
+
+            if(!bDoubleLine)
+                return;
+
+            // double line, create 2nd primitive with offset using TransformPrimitive based on
+            // already created NewPrimitive
+            double fLineDist(2.3 * fHeight);
+
+            if(bWaveLine)
+            {
+                fLineDist = 6.3 * fHeight;
+            }
+
+            // move base point of text to 0.0 and de-rotate
+            basegfx::B2DHomMatrix aTransform(basegfx::utils::createTranslateB2DHomMatrix(
+                -aTranslate.getX(), -aTranslate.getY()));
+            aTransform.rotate(-fRotate);
+
+            // translate in Y by offset
+            aTransform.translate(0.0, fLineDist);
+
+            // move back and rotate
+            aTransform.rotate(fRotate);
+            aTransform.translate(aTranslate.getX(), aTranslate.getY());
+
+            // add transform primitive
+            const Primitive2DContainer aContent { aNewPrimitive };
+            rContainer.push_back( new TransformPrimitive2D(aTransform, aContent) );
         }
 
         TextLinePrimitive2D::TextLinePrimitive2D(

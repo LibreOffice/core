@@ -708,57 +708,56 @@ namespace drawinglayer::processor2d
         // mask group. Force output to VDev and create mask from given mask
         void VclProcessor2D::RenderMaskPrimitive2DPixel(const primitive2d::MaskPrimitive2D& rMaskCandidate)
         {
-            if(!rMaskCandidate.getChildren().empty())
+            if(rMaskCandidate.getChildren().empty())
+                return;
+
+            basegfx::B2DPolyPolygon aMask(rMaskCandidate.getMask());
+
+            if(!aMask.count())
+                return;
+
+            aMask.transform(maCurrentTransformation);
+            const basegfx::B2DRange aRange(basegfx::utils::getRange(aMask));
+            impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
+
+            if(!aBufferDevice.isVisible())
+                return;
+
+            // remember last OutDev and set to content
+            OutputDevice* pLastOutputDevice = mpOutputDevice;
+            mpOutputDevice = &aBufferDevice.getContent();
+
+            // paint to it
+            process(rMaskCandidate.getChildren());
+
+            // back to old OutDev
+            mpOutputDevice = pLastOutputDevice;
+
+            // if the mask fills the whole area we can skip
+            // creating a transparent vd and filling it.
+            if (!basegfx::utils::isRectangle(aMask))
             {
-                basegfx::B2DPolyPolygon aMask(rMaskCandidate.getMask());
-
-                if(aMask.count())
+                // draw mask
+                if(getOptionsDrawinglayer().IsAntiAliasing())
                 {
-                    aMask.transform(maCurrentTransformation);
-                    const basegfx::B2DRange aRange(basegfx::utils::getRange(aMask));
-                    impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
-
-                    if(aBufferDevice.isVisible())
-                    {
-                        // remember last OutDev and set to content
-                        OutputDevice* pLastOutputDevice = mpOutputDevice;
-                        mpOutputDevice = &aBufferDevice.getContent();
-
-                        // paint to it
-                        process(rMaskCandidate.getChildren());
-
-                        // back to old OutDev
-                        mpOutputDevice = pLastOutputDevice;
-
-                        // if the mask fills the whole area we can skip
-                        // creating a transparent vd and filling it.
-                        if (!basegfx::utils::isRectangle(aMask))
-                        {
-                            // draw mask
-                            if(getOptionsDrawinglayer().IsAntiAliasing())
-                            {
-                                // with AA, use 8bit AlphaMask to get nice borders
-                                VirtualDevice& rTransparence = aBufferDevice.getTransparence();
-                                rTransparence.SetLineColor();
-                                rTransparence.SetFillColor(COL_BLACK);
-                                rTransparence.DrawPolyPolygon(aMask);
-                            }
-                            else
-                            {
-                                // No AA, use 1bit mask
-                                VirtualDevice& rMask = aBufferDevice.getMask();
-                                rMask.SetLineColor();
-                                rMask.SetFillColor(COL_BLACK);
-                                rMask.DrawPolyPolygon(aMask);
-                            }
-                        }
-
-                        // dump buffer to outdev
-                        aBufferDevice.paint();
-
-                    }
+                    // with AA, use 8bit AlphaMask to get nice borders
+                    VirtualDevice& rTransparence = aBufferDevice.getTransparence();
+                    rTransparence.SetLineColor();
+                    rTransparence.SetFillColor(COL_BLACK);
+                    rTransparence.DrawPolyPolygon(aMask);
+                }
+                else
+                {
+                    // No AA, use 1bit mask
+                    VirtualDevice& rMask = aBufferDevice.getMask();
+                    rMask.SetLineColor();
+                    rMask.SetFillColor(COL_BLACK);
+                    rMask.DrawPolyPolygon(aMask);
                 }
             }
+
+            // dump buffer to outdev
+            aBufferDevice.paint();
         }
 
         // modified color group. Force output to unified color.
@@ -775,44 +774,17 @@ namespace drawinglayer::processor2d
         // unified sub-transparence. Draw to VDev first.
         void VclProcessor2D::RenderUnifiedTransparencePrimitive2D(const primitive2d::UnifiedTransparencePrimitive2D& rTransCandidate)
         {
-            if(!rTransCandidate.getChildren().empty())
+            if(rTransCandidate.getChildren().empty())
+                return;
+
+            if(0.0 == rTransCandidate.getTransparence())
             {
-                if(0.0 == rTransCandidate.getTransparence())
-                {
-                    // no transparence used, so just use the content
-                    process(rTransCandidate.getChildren());
-                }
-                else if(rTransCandidate.getTransparence() > 0.0 && rTransCandidate.getTransparence() < 1.0)
-                {
-                    // transparence is in visible range
-                    basegfx::B2DRange aRange(rTransCandidate.getChildren().getB2DRange(getViewInformation2D()));
-                    aRange.transform(maCurrentTransformation);
-                    impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
-
-                    if(aBufferDevice.isVisible())
-                    {
-                        // remember last OutDev and set to content
-                        OutputDevice* pLastOutputDevice = mpOutputDevice;
-                        mpOutputDevice = &aBufferDevice.getContent();
-
-                        // paint content to it
-                        process(rTransCandidate.getChildren());
-
-                        // back to old OutDev
-                        mpOutputDevice = pLastOutputDevice;
-
-                        // dump buffer to outdev using given transparence
-                        aBufferDevice.paint(rTransCandidate.getTransparence());
-                    }
-                }
+                // no transparence used, so just use the content
+                process(rTransCandidate.getChildren());
             }
-        }
-
-        // sub-transparence group. Draw to VDev first.
-        void VclProcessor2D::RenderTransparencePrimitive2D(const primitive2d::TransparencePrimitive2D& rTransCandidate)
-        {
-            if(!rTransCandidate.getChildren().empty())
+            else if(rTransCandidate.getTransparence() > 0.0 && rTransCandidate.getTransparence() < 1.0)
             {
+                // transparence is in visible range
                 basegfx::B2DRange aRange(rTransCandidate.getChildren().getB2DRange(getViewInformation2D()));
                 aRange.transform(maCurrentTransformation);
                 impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
@@ -826,26 +798,53 @@ namespace drawinglayer::processor2d
                     // paint content to it
                     process(rTransCandidate.getChildren());
 
-                    // set to mask
-                    mpOutputDevice = &aBufferDevice.getTransparence();
-
-                    // when painting transparence masks, reset the color stack
-                    basegfx::BColorModifierStack aLastBColorModifierStack(maBColorModifierStack);
-                    maBColorModifierStack = basegfx::BColorModifierStack();
-
-                    // paint mask to it (always with transparence intensities, evtl. with AA)
-                    process(rTransCandidate.getTransparence());
-
-                    // back to old color stack
-                    maBColorModifierStack = aLastBColorModifierStack;
-
                     // back to old OutDev
                     mpOutputDevice = pLastOutputDevice;
 
-                    // dump buffer to outdev
-                    aBufferDevice.paint();
+                    // dump buffer to outdev using given transparence
+                    aBufferDevice.paint(rTransCandidate.getTransparence());
                 }
             }
+        }
+
+        // sub-transparence group. Draw to VDev first.
+        void VclProcessor2D::RenderTransparencePrimitive2D(const primitive2d::TransparencePrimitive2D& rTransCandidate)
+        {
+            if(rTransCandidate.getChildren().empty())
+                return;
+
+            basegfx::B2DRange aRange(rTransCandidate.getChildren().getB2DRange(getViewInformation2D()));
+            aRange.transform(maCurrentTransformation);
+            impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
+
+            if(!aBufferDevice.isVisible())
+                return;
+
+            // remember last OutDev and set to content
+            OutputDevice* pLastOutputDevice = mpOutputDevice;
+            mpOutputDevice = &aBufferDevice.getContent();
+
+            // paint content to it
+            process(rTransCandidate.getChildren());
+
+            // set to mask
+            mpOutputDevice = &aBufferDevice.getTransparence();
+
+            // when painting transparence masks, reset the color stack
+            basegfx::BColorModifierStack aLastBColorModifierStack(maBColorModifierStack);
+            maBColorModifierStack = basegfx::BColorModifierStack();
+
+            // paint mask to it (always with transparence intensities, evtl. with AA)
+            process(rTransCandidate.getTransparence());
+
+            // back to old color stack
+            maBColorModifierStack = aLastBColorModifierStack;
+
+            // back to old OutDev
+            mpOutputDevice = pLastOutputDevice;
+
+            // dump buffer to outdev
+            aBufferDevice.paint();
         }
 
         // transform group.
@@ -905,40 +904,40 @@ namespace drawinglayer::processor2d
             const std::vector< basegfx::B2DPoint >& rPositions = rMarkArrayCandidate.getPositions();
             const sal_uInt32 nCount(rPositions.size());
 
-            if(nCount && !rMarkArrayCandidate.getMarker().IsEmpty())
+            if(!(nCount && !rMarkArrayCandidate.getMarker().IsEmpty()))
+                return;
+
+            // get pixel size
+            const BitmapEx& rMarker(rMarkArrayCandidate.getMarker());
+            const Size aBitmapSize(rMarker.GetSizePixel());
+
+            if(!(aBitmapSize.Width() && aBitmapSize.Height()))
+                return;
+
+            // get discrete half size
+            const basegfx::B2DVector aDiscreteHalfSize(
+                (aBitmapSize.getWidth() - 1.0) * 0.5,
+                (aBitmapSize.getHeight() - 1.0) * 0.5);
+            const bool bWasEnabled(mpOutputDevice->IsMapModeEnabled());
+
+            // do not forget evtl. moved origin in target device MapMode when
+            // switching it off; it would be missing and lead to wrong positions.
+            // All his could be done using logic sizes and coordinates, too, but
+            // we want a 1:1 bitmap rendering here, so it's more safe and faster
+            // to work with switching off MapMode usage completely.
+            const Point aOrigin(mpOutputDevice->GetMapMode().GetOrigin());
+
+            mpOutputDevice->EnableMapMode(false);
+
+            for (auto const& pos : rPositions)
             {
-                // get pixel size
-                const BitmapEx& rMarker(rMarkArrayCandidate.getMarker());
-                const Size aBitmapSize(rMarker.GetSizePixel());
+                const basegfx::B2DPoint aDiscreteTopLeft((maCurrentTransformation * pos) - aDiscreteHalfSize);
+                const Point aDiscretePoint(basegfx::fround(aDiscreteTopLeft.getX()), basegfx::fround(aDiscreteTopLeft.getY()));
 
-                if(aBitmapSize.Width() && aBitmapSize.Height())
-                {
-                    // get discrete half size
-                    const basegfx::B2DVector aDiscreteHalfSize(
-                        (aBitmapSize.getWidth() - 1.0) * 0.5,
-                        (aBitmapSize.getHeight() - 1.0) * 0.5);
-                    const bool bWasEnabled(mpOutputDevice->IsMapModeEnabled());
-
-                    // do not forget evtl. moved origin in target device MapMode when
-                    // switching it off; it would be missing and lead to wrong positions.
-                    // All his could be done using logic sizes and coordinates, too, but
-                    // we want a 1:1 bitmap rendering here, so it's more safe and faster
-                    // to work with switching off MapMode usage completely.
-                    const Point aOrigin(mpOutputDevice->GetMapMode().GetOrigin());
-
-                    mpOutputDevice->EnableMapMode(false);
-
-                    for (auto const& pos : rPositions)
-                    {
-                        const basegfx::B2DPoint aDiscreteTopLeft((maCurrentTransformation * pos) - aDiscreteHalfSize);
-                        const Point aDiscretePoint(basegfx::fround(aDiscreteTopLeft.getX()), basegfx::fround(aDiscreteTopLeft.getY()));
-
-                        mpOutputDevice->DrawBitmapEx(aDiscretePoint + aOrigin, rMarker);
-                    }
-
-                    mpOutputDevice->EnableMapMode(bWasEnabled);
-                }
+                mpOutputDevice->DrawBitmapEx(aDiscretePoint + aOrigin, rMarker);
             }
+
+            mpOutputDevice->EnableMapMode(bWasEnabled);
         }
 
         // point
@@ -1182,29 +1181,29 @@ namespace drawinglayer::processor2d
             basegfx::B2DRange aRange(0.0, 0.0, 1.0, 1.0);
             aRange.transform(maCurrentTransformation * rEpsPrimitive2D.getEpsTransform());
 
-            if(!aRange.isEmpty())
+            if(aRange.isEmpty())
+                return;
+
+            const ::tools::Rectangle aRectangle(
+                static_cast<sal_Int32>(floor(aRange.getMinX())), static_cast<sal_Int32>(floor(aRange.getMinY())),
+                static_cast<sal_Int32>(ceil(aRange.getMaxX())), static_cast<sal_Int32>(ceil(aRange.getMaxY())));
+
+            if(aRectangle.IsEmpty())
+                return;
+
+            bool bWillReallyRender = mpOutputDevice->IsDeviceOutputNecessary();
+            // try to paint EPS directly without fallback visualisation
+            const bool bEPSPaintedDirectly = bWillReallyRender &&
+                mpOutputDevice->DrawEPS(
+                aRectangle.TopLeft(),
+                aRectangle.GetSize(),
+                rEpsPrimitive2D.getGfxLink());
+
+            if(!bEPSPaintedDirectly)
             {
-                const ::tools::Rectangle aRectangle(
-                    static_cast<sal_Int32>(floor(aRange.getMinX())), static_cast<sal_Int32>(floor(aRange.getMinY())),
-                    static_cast<sal_Int32>(ceil(aRange.getMaxX())), static_cast<sal_Int32>(ceil(aRange.getMaxY())));
-
-                if(!aRectangle.IsEmpty())
-                {
-                    bool bWillReallyRender = mpOutputDevice->IsDeviceOutputNecessary();
-                    // try to paint EPS directly without fallback visualisation
-                    const bool bEPSPaintedDirectly = bWillReallyRender &&
-                        mpOutputDevice->DrawEPS(
-                        aRectangle.TopLeft(),
-                        aRectangle.GetSize(),
-                        rEpsPrimitive2D.getGfxLink());
-
-                    if(!bEPSPaintedDirectly)
-                    {
-                        // use the decomposition which will correctly handle the
-                        // fallback visualisation using full transformation (e.g. rotation)
-                        process(rEpsPrimitive2D);
-                    }
-                }
+                // use the decomposition which will correctly handle the
+                // fallback visualisation using full transformation (e.g. rotation)
+                process(rEpsPrimitive2D);
             }
         }
 
@@ -1225,44 +1224,44 @@ namespace drawinglayer::processor2d
         {
             const double fDelta(rCandidate.getOffsetB() - rCandidate.getOffsetA());
 
-            if(basegfx::fTools::more(fDelta, 0.0))
+            if(!basegfx::fTools::more(fDelta, 0.0))
+                return;
+
+            const basegfx::BColor aColorA(maBColorModifierStack.getModifiedColor(rCandidate.getColorA()));
+            const basegfx::BColor aColorB(maBColorModifierStack.getModifiedColor(rCandidate.getColorB()));
+
+            // calculate discrete unit in WorldCoordinates; use diagonal (1.0, 1.0) and divide by sqrt(2)
+            const basegfx::B2DVector aDiscreteVector(getViewInformation2D().getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 1.0));
+            const double fDiscreteUnit(aDiscreteVector.getLength() * (1.0 / 1.414213562373));
+
+            // use color distance and discrete lengths to calculate step count
+            const sal_uInt32 nSteps(calculateStepsForSvgGradient(aColorA, aColorB, fDelta, fDiscreteUnit));
+
+            // switch off line painting
+            mpOutputDevice->SetLineColor();
+
+            // prepare polygon in needed width at start position (with discrete overlap)
+            const basegfx::B2DPolygon aPolygon(
+                basegfx::utils::createPolygonFromRect(
+                    basegfx::B2DRange(
+                        rCandidate.getOffsetA() - fDiscreteUnit,
+                        0.0,
+                        rCandidate.getOffsetA() + (fDelta / nSteps) + fDiscreteUnit,
+                        1.0)));
+
+
+            // prepare loop ([0.0 .. 1.0[)
+            double fUnitScale(0.0);
+            const double fUnitStep(1.0 / nSteps);
+
+            // loop and paint
+            for(sal_uInt32 a(0); a < nSteps; a++, fUnitScale += fUnitStep)
             {
-                const basegfx::BColor aColorA(maBColorModifierStack.getModifiedColor(rCandidate.getColorA()));
-                const basegfx::BColor aColorB(maBColorModifierStack.getModifiedColor(rCandidate.getColorB()));
+                basegfx::B2DPolygon aNew(aPolygon);
 
-                // calculate discrete unit in WorldCoordinates; use diagonal (1.0, 1.0) and divide by sqrt(2)
-                const basegfx::B2DVector aDiscreteVector(getViewInformation2D().getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 1.0));
-                const double fDiscreteUnit(aDiscreteVector.getLength() * (1.0 / 1.414213562373));
-
-                // use color distance and discrete lengths to calculate step count
-                const sal_uInt32 nSteps(calculateStepsForSvgGradient(aColorA, aColorB, fDelta, fDiscreteUnit));
-
-                // switch off line painting
-                mpOutputDevice->SetLineColor();
-
-                // prepare polygon in needed width at start position (with discrete overlap)
-                const basegfx::B2DPolygon aPolygon(
-                    basegfx::utils::createPolygonFromRect(
-                        basegfx::B2DRange(
-                            rCandidate.getOffsetA() - fDiscreteUnit,
-                            0.0,
-                            rCandidate.getOffsetA() + (fDelta / nSteps) + fDiscreteUnit,
-                            1.0)));
-
-
-                // prepare loop ([0.0 .. 1.0[)
-                double fUnitScale(0.0);
-                const double fUnitStep(1.0 / nSteps);
-
-                // loop and paint
-                for(sal_uInt32 a(0); a < nSteps; a++, fUnitScale += fUnitStep)
-                {
-                    basegfx::B2DPolygon aNew(aPolygon);
-
-                    aNew.transform(maCurrentTransformation * basegfx::utils::createTranslateB2DHomMatrix(fDelta * fUnitScale, 0.0));
-                    mpOutputDevice->SetFillColor(Color(basegfx::interpolate(aColorA, aColorB, fUnitScale)));
-                    mpOutputDevice->DrawPolyPolygon(basegfx::B2DPolyPolygon(aNew));
-                }
+                aNew.transform(maCurrentTransformation * basegfx::utils::createTranslateB2DHomMatrix(fDelta * fUnitScale, 0.0));
+                mpOutputDevice->SetFillColor(Color(basegfx::interpolate(aColorA, aColorB, fUnitScale)));
+                mpOutputDevice->DrawPolyPolygon(basegfx::B2DPolyPolygon(aNew));
             }
         }
 
@@ -1270,57 +1269,57 @@ namespace drawinglayer::processor2d
         {
             const double fDeltaScale(rCandidate.getScaleB() - rCandidate.getScaleA());
 
-            if(basegfx::fTools::more(fDeltaScale, 0.0))
+            if(!basegfx::fTools::more(fDeltaScale, 0.0))
+                return;
+
+            const basegfx::BColor aColorA(maBColorModifierStack.getModifiedColor(rCandidate.getColorA()));
+            const basegfx::BColor aColorB(maBColorModifierStack.getModifiedColor(rCandidate.getColorB()));
+
+            // calculate discrete unit in WorldCoordinates; use diagonal (1.0, 1.0) and divide by sqrt(2)
+            const basegfx::B2DVector aDiscreteVector(getViewInformation2D().getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 1.0));
+            const double fDiscreteUnit(aDiscreteVector.getLength() * (1.0 / 1.414213562373));
+
+            // use color distance and discrete lengths to calculate step count
+            const sal_uInt32 nSteps(calculateStepsForSvgGradient(aColorA, aColorB, fDeltaScale, fDiscreteUnit));
+
+            // switch off line painting
+            mpOutputDevice->SetLineColor();
+
+            // prepare loop ([0.0 .. 1.0[, full polygons, no polypolygons with holes)
+            double fUnitScale(0.0);
+            const double fUnitStep(1.0 / nSteps);
+
+            for(sal_uInt32 a(0); a < nSteps; a++, fUnitScale += fUnitStep)
             {
-                const basegfx::BColor aColorA(maBColorModifierStack.getModifiedColor(rCandidate.getColorA()));
-                const basegfx::BColor aColorB(maBColorModifierStack.getModifiedColor(rCandidate.getColorB()));
+                basegfx::B2DHomMatrix aTransform;
+                const double fEndScale(rCandidate.getScaleB() - (fDeltaScale * fUnitScale));
 
-                // calculate discrete unit in WorldCoordinates; use diagonal (1.0, 1.0) and divide by sqrt(2)
-                const basegfx::B2DVector aDiscreteVector(getViewInformation2D().getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 1.0));
-                const double fDiscreteUnit(aDiscreteVector.getLength() * (1.0 / 1.414213562373));
-
-                // use color distance and discrete lengths to calculate step count
-                const sal_uInt32 nSteps(calculateStepsForSvgGradient(aColorA, aColorB, fDeltaScale, fDiscreteUnit));
-
-                // switch off line painting
-                mpOutputDevice->SetLineColor();
-
-                // prepare loop ([0.0 .. 1.0[, full polygons, no polypolygons with holes)
-                double fUnitScale(0.0);
-                const double fUnitStep(1.0 / nSteps);
-
-                for(sal_uInt32 a(0); a < nSteps; a++, fUnitScale += fUnitStep)
+                if(rCandidate.isTranslateSet())
                 {
-                    basegfx::B2DHomMatrix aTransform;
-                    const double fEndScale(rCandidate.getScaleB() - (fDeltaScale * fUnitScale));
+                    const basegfx::B2DVector aTranslate(
+                        basegfx::interpolate(
+                            rCandidate.getTranslateB(),
+                            rCandidate.getTranslateA(),
+                            fUnitScale));
 
-                    if(rCandidate.isTranslateSet())
-                    {
-                        const basegfx::B2DVector aTranslate(
-                            basegfx::interpolate(
-                                rCandidate.getTranslateB(),
-                                rCandidate.getTranslateA(),
-                                fUnitScale));
-
-                        aTransform = basegfx::utils::createScaleTranslateB2DHomMatrix(
-                            fEndScale,
-                            fEndScale,
-                            aTranslate.getX(),
-                            aTranslate.getY());
-                    }
-                    else
-                    {
-                        aTransform = basegfx::utils::createScaleB2DHomMatrix(
-                            fEndScale,
-                            fEndScale);
-                    }
-
-                    basegfx::B2DPolygon aNew(basegfx::utils::createPolygonFromUnitCircle());
-
-                    aNew.transform(maCurrentTransformation * aTransform);
-                    mpOutputDevice->SetFillColor(Color(basegfx::interpolate(aColorB, aColorA, fUnitScale)));
-                    mpOutputDevice->DrawPolyPolygon(basegfx::B2DPolyPolygon(aNew));
+                    aTransform = basegfx::utils::createScaleTranslateB2DHomMatrix(
+                        fEndScale,
+                        fEndScale,
+                        aTranslate.getX(),
+                        aTranslate.getY());
                 }
+                else
+                {
+                    aTransform = basegfx::utils::createScaleB2DHomMatrix(
+                        fEndScale,
+                        fEndScale);
+                }
+
+                basegfx::B2DPolygon aNew(basegfx::utils::createPolygonFromUnitCircle());
+
+                aNew.transform(maCurrentTransformation * aTransform);
+                mpOutputDevice->SetFillColor(Color(basegfx::interpolate(aColorB, aColorA, fUnitScale)));
+                mpOutputDevice->DrawPolyPolygon(basegfx::B2DPolyPolygon(aNew));
             }
         }
 
@@ -1328,95 +1327,95 @@ namespace drawinglayer::processor2d
         {
             const DrawModeFlags nOriginalDrawMode(mpOutputDevice->GetDrawMode());
 
-            if(nOriginalDrawMode & (DrawModeFlags::BlackLine|DrawModeFlags::GrayLine|DrawModeFlags::WhiteLine|DrawModeFlags::SettingsLine))
+            if(!(nOriginalDrawMode & (DrawModeFlags::BlackLine|DrawModeFlags::GrayLine|DrawModeFlags::WhiteLine|DrawModeFlags::SettingsLine)))
+                return;
+
+            DrawModeFlags nAdaptedDrawMode(nOriginalDrawMode);
+
+            if(nOriginalDrawMode & DrawModeFlags::BlackLine)
             {
-                DrawModeFlags nAdaptedDrawMode(nOriginalDrawMode);
-
-                if(nOriginalDrawMode & DrawModeFlags::BlackLine)
-                {
-                    nAdaptedDrawMode |= DrawModeFlags::BlackFill;
-                }
-                else
-                {
-                    nAdaptedDrawMode &= ~DrawModeFlags::BlackFill;
-                }
-
-                if(nOriginalDrawMode & DrawModeFlags::GrayLine)
-                {
-                    nAdaptedDrawMode |= DrawModeFlags::GrayFill;
-                }
-                else
-                {
-                    nAdaptedDrawMode &= ~DrawModeFlags::GrayFill;
-                }
-
-                if(nOriginalDrawMode & DrawModeFlags::WhiteLine)
-                {
-                    nAdaptedDrawMode |= DrawModeFlags::WhiteFill;
-                }
-                else
-                {
-                    nAdaptedDrawMode &= ~DrawModeFlags::WhiteFill;
-                }
-
-                if(nOriginalDrawMode & DrawModeFlags::SettingsLine)
-                {
-                    nAdaptedDrawMode |= DrawModeFlags::SettingsFill;
-                }
-                else
-                {
-                    nAdaptedDrawMode &= ~DrawModeFlags::SettingsFill;
-                }
-
-                mpOutputDevice->SetDrawMode(nAdaptedDrawMode);
+                nAdaptedDrawMode |= DrawModeFlags::BlackFill;
             }
+            else
+            {
+                nAdaptedDrawMode &= ~DrawModeFlags::BlackFill;
+            }
+
+            if(nOriginalDrawMode & DrawModeFlags::GrayLine)
+            {
+                nAdaptedDrawMode |= DrawModeFlags::GrayFill;
+            }
+            else
+            {
+                nAdaptedDrawMode &= ~DrawModeFlags::GrayFill;
+            }
+
+            if(nOriginalDrawMode & DrawModeFlags::WhiteLine)
+            {
+                nAdaptedDrawMode |= DrawModeFlags::WhiteFill;
+            }
+            else
+            {
+                nAdaptedDrawMode &= ~DrawModeFlags::WhiteFill;
+            }
+
+            if(nOriginalDrawMode & DrawModeFlags::SettingsLine)
+            {
+                nAdaptedDrawMode |= DrawModeFlags::SettingsFill;
+            }
+            else
+            {
+                nAdaptedDrawMode &= ~DrawModeFlags::SettingsFill;
+            }
+
+            mpOutputDevice->SetDrawMode(nAdaptedDrawMode);
         }
 
         void VclProcessor2D::adaptTextToFillDrawMode() const
         {
             const DrawModeFlags nOriginalDrawMode(mpOutputDevice->GetDrawMode());
-            if(nOriginalDrawMode & (DrawModeFlags::BlackText|DrawModeFlags::GrayText|DrawModeFlags::WhiteText|DrawModeFlags::SettingsText))
+            if(!(nOriginalDrawMode & (DrawModeFlags::BlackText|DrawModeFlags::GrayText|DrawModeFlags::WhiteText|DrawModeFlags::SettingsText)))
+                return;
+
+            DrawModeFlags nAdaptedDrawMode(nOriginalDrawMode);
+
+            if(nOriginalDrawMode & DrawModeFlags::BlackText)
             {
-                DrawModeFlags nAdaptedDrawMode(nOriginalDrawMode);
-
-                if(nOriginalDrawMode & DrawModeFlags::BlackText)
-                {
-                    nAdaptedDrawMode |= DrawModeFlags::BlackFill;
-                }
-                else
-                {
-                    nAdaptedDrawMode &= ~DrawModeFlags::BlackFill;
-                }
-
-                if(nOriginalDrawMode & DrawModeFlags::GrayText)
-                {
-                    nAdaptedDrawMode |= DrawModeFlags::GrayFill;
-                }
-                else
-                {
-                    nAdaptedDrawMode &= ~DrawModeFlags::GrayFill;
-                }
-
-                if(nOriginalDrawMode & DrawModeFlags::WhiteText)
-                {
-                    nAdaptedDrawMode |= DrawModeFlags::WhiteFill;
-                }
-                else
-                {
-                    nAdaptedDrawMode &= ~DrawModeFlags::WhiteFill;
-                }
-
-                if(nOriginalDrawMode & DrawModeFlags::SettingsText)
-                {
-                    nAdaptedDrawMode |= DrawModeFlags::SettingsFill;
-                }
-                else
-                {
-                    nAdaptedDrawMode &= ~DrawModeFlags::SettingsFill;
-                }
-
-                mpOutputDevice->SetDrawMode(nAdaptedDrawMode);
+                nAdaptedDrawMode |= DrawModeFlags::BlackFill;
             }
+            else
+            {
+                nAdaptedDrawMode &= ~DrawModeFlags::BlackFill;
+            }
+
+            if(nOriginalDrawMode & DrawModeFlags::GrayText)
+            {
+                nAdaptedDrawMode |= DrawModeFlags::GrayFill;
+            }
+            else
+            {
+                nAdaptedDrawMode &= ~DrawModeFlags::GrayFill;
+            }
+
+            if(nOriginalDrawMode & DrawModeFlags::WhiteText)
+            {
+                nAdaptedDrawMode |= DrawModeFlags::WhiteFill;
+            }
+            else
+            {
+                nAdaptedDrawMode &= ~DrawModeFlags::WhiteFill;
+            }
+
+            if(nOriginalDrawMode & DrawModeFlags::SettingsText)
+            {
+                nAdaptedDrawMode |= DrawModeFlags::SettingsFill;
+            }
+            else
+            {
+                nAdaptedDrawMode &= ~DrawModeFlags::SettingsFill;
+            }
+
+            mpOutputDevice->SetDrawMode(nAdaptedDrawMode);
         }
 
         // process support

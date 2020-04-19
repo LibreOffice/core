@@ -35,37 +35,37 @@ namespace drawinglayer::primitive2d
             const std::vector< basegfx::B2DPoint >& rPositions = getPositions();
             const sal_uInt32 nMarkerCount(rPositions.size());
 
-            if(nMarkerCount && !getMarker().IsEmpty())
+            if(!(nMarkerCount && !getMarker().IsEmpty()))
+                return;
+
+            // get pixel size
+            Size aBitmapSize(getMarker().GetSizePixel());
+
+            if(!(aBitmapSize.Width() && aBitmapSize.Height()))
+                return;
+
+            // get logic half pixel size
+            basegfx::B2DVector aLogicHalfSize(rViewInformation.getInverseObjectToViewTransformation() *
+                basegfx::B2DVector(aBitmapSize.getWidth() - 1.0, aBitmapSize.getHeight() - 1.0));
+
+            // use half size for expand
+            aLogicHalfSize *= 0.5;
+
+            for(sal_uInt32 a(0); a < nMarkerCount; a++)
             {
-                // get pixel size
-                Size aBitmapSize(getMarker().GetSizePixel());
+                const basegfx::B2DPoint& rPosition(rPositions[a]);
+                const basegfx::B2DRange aRange(rPosition - aLogicHalfSize, rPosition + aLogicHalfSize);
+                basegfx::B2DHomMatrix aTransform;
 
-                if(aBitmapSize.Width() && aBitmapSize.Height())
-                {
-                    // get logic half pixel size
-                    basegfx::B2DVector aLogicHalfSize(rViewInformation.getInverseObjectToViewTransformation() *
-                        basegfx::B2DVector(aBitmapSize.getWidth() - 1.0, aBitmapSize.getHeight() - 1.0));
+                aTransform.set(0, 0, aRange.getWidth());
+                aTransform.set(1, 1, aRange.getHeight());
+                aTransform.set(0, 2, aRange.getMinX());
+                aTransform.set(1, 2, aRange.getMinY());
 
-                    // use half size for expand
-                    aLogicHalfSize *= 0.5;
-
-                    for(sal_uInt32 a(0); a < nMarkerCount; a++)
-                    {
-                        const basegfx::B2DPoint& rPosition(rPositions[a]);
-                        const basegfx::B2DRange aRange(rPosition - aLogicHalfSize, rPosition + aLogicHalfSize);
-                        basegfx::B2DHomMatrix aTransform;
-
-                        aTransform.set(0, 0, aRange.getWidth());
-                        aTransform.set(1, 1, aRange.getHeight());
-                        aTransform.set(0, 2, aRange.getMinX());
-                        aTransform.set(1, 2, aRange.getMinY());
-
-                        rContainer.push_back(
-                            new BitmapPrimitive2D(
-                                VCLUnoHelper::CreateVCLXBitmap(getMarker()),
-                                aTransform));
-                    }
-                }
+                rContainer.push_back(
+                    new BitmapPrimitive2D(
+                        VCLUnoHelper::CreateVCLXBitmap(getMarker()),
+                        aTransform));
             }
         }
 

@@ -61,21 +61,21 @@ namespace drawinglayer::primitive2d
 
         void ShadowPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            if(!getChildren().empty())
-            {
-                // create a modifiedColorPrimitive containing the shadow color and the content
-                const basegfx::BColorModifierSharedPtr aBColorModifier =
-                    std::make_shared<basegfx::BColorModifier_replace>(
-                        getShadowColor());
-                const Primitive2DReference xRefA(
-                    new ModifiedColorPrimitive2D(
-                        getChildren(),
-                        aBColorModifier));
-                const Primitive2DContainer aSequenceB { xRefA };
+            if(getChildren().empty())
+                return;
 
-                // build transformed primitiveVector with shadow offset and add to target
-                rVisitor.append(new TransformPrimitive2D(getShadowTransform(), aSequenceB));
-            }
+            // create a modifiedColorPrimitive containing the shadow color and the content
+            const basegfx::BColorModifierSharedPtr aBColorModifier =
+                std::make_shared<basegfx::BColorModifier_replace>(
+                    getShadowColor());
+            const Primitive2DReference xRefA(
+                new ModifiedColorPrimitive2D(
+                    getChildren(),
+                    aBColorModifier));
+            const Primitive2DContainer aSequenceB { xRefA };
+
+            // build transformed primitiveVector with shadow offset and add to target
+            rVisitor.append(new TransformPrimitive2D(getShadowTransform(), aSequenceB));
         }
 
         // provide unique ID

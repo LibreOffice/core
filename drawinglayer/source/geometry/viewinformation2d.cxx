@@ -86,66 +86,65 @@ protected:
 
     void impInterpretPropertyValues(const uno::Sequence<beans::PropertyValue>& rViewParameters)
     {
-        if (rViewParameters.hasElements())
+        if (!rViewParameters.hasElements())
+            return;
+
+        const sal_Int32 nCount(rViewParameters.getLength());
+        sal_Int32 nExtendedInsert(0);
+
+        // prepare extended information for filtering. Maximum size is nCount
+        mxExtendedInformation.realloc(nCount);
+
+        for (sal_Int32 a(0); a < nCount; a++)
         {
-            const sal_Int32 nCount(rViewParameters.getLength());
-            sal_Int32 nExtendedInsert(0);
+            const beans::PropertyValue& rProp = rViewParameters[a];
 
-            // prepare extended information for filtering. Maximum size is nCount
-            mxExtendedInformation.realloc(nCount);
-
-            for (sal_Int32 a(0); a < nCount; a++)
+            if (rProp.Name == g_PropertyName_ReducedDisplayQuality)
             {
-                const beans::PropertyValue& rProp = rViewParameters[a];
+                // extra information; add to filtered information
+                mxExtendedInformation[nExtendedInsert++] = rProp;
 
-                if (rProp.Name == g_PropertyName_ReducedDisplayQuality)
-                {
-                    // extra information; add to filtered information
-                    mxExtendedInformation[nExtendedInsert++] = rProp;
-
-                    // for performance reasons, also cache content locally
-                    bool bSalBool(false);
-                    rProp.Value >>= bSalBool;
-                    mbReducedDisplayQuality = bSalBool;
-                }
-                else if (rProp.Name == g_PropertyName_ObjectTransformation)
-                {
-                    css::geometry::AffineMatrix2D aAffineMatrix2D;
-                    rProp.Value >>= aAffineMatrix2D;
-                    basegfx::unotools::homMatrixFromAffineMatrix(maObjectTransformation,
-                                                                 aAffineMatrix2D);
-                }
-                else if (rProp.Name == g_PropertyName_ViewTransformation)
-                {
-                    css::geometry::AffineMatrix2D aAffineMatrix2D;
-                    rProp.Value >>= aAffineMatrix2D;
-                    basegfx::unotools::homMatrixFromAffineMatrix(maViewTransformation,
-                                                                 aAffineMatrix2D);
-                }
-                else if (rProp.Name == g_PropertyName_Viewport)
-                {
-                    css::geometry::RealRectangle2D aViewport;
-                    rProp.Value >>= aViewport;
-                    maViewport = basegfx::unotools::b2DRectangleFromRealRectangle2D(aViewport);
-                }
-                else if (rProp.Name == g_PropertyName_Time)
-                {
-                    rProp.Value >>= mfViewTime;
-                }
-                else if (rProp.Name == g_PropertyName_VisualizedPage)
-                {
-                    rProp.Value >>= mxVisualizedPage;
-                }
-                else
-                {
-                    // extra information; add to filtered information
-                    mxExtendedInformation[nExtendedInsert++] = rProp;
-                }
+                // for performance reasons, also cache content locally
+                bool bSalBool(false);
+                rProp.Value >>= bSalBool;
+                mbReducedDisplayQuality = bSalBool;
             }
-
-            // extra information size is now known; realloc to final size
-            mxExtendedInformation.realloc(nExtendedInsert);
+            else if (rProp.Name == g_PropertyName_ObjectTransformation)
+            {
+                css::geometry::AffineMatrix2D aAffineMatrix2D;
+                rProp.Value >>= aAffineMatrix2D;
+                basegfx::unotools::homMatrixFromAffineMatrix(maObjectTransformation,
+                                                             aAffineMatrix2D);
+            }
+            else if (rProp.Name == g_PropertyName_ViewTransformation)
+            {
+                css::geometry::AffineMatrix2D aAffineMatrix2D;
+                rProp.Value >>= aAffineMatrix2D;
+                basegfx::unotools::homMatrixFromAffineMatrix(maViewTransformation, aAffineMatrix2D);
+            }
+            else if (rProp.Name == g_PropertyName_Viewport)
+            {
+                css::geometry::RealRectangle2D aViewport;
+                rProp.Value >>= aViewport;
+                maViewport = basegfx::unotools::b2DRectangleFromRealRectangle2D(aViewport);
+            }
+            else if (rProp.Name == g_PropertyName_Time)
+            {
+                rProp.Value >>= mfViewTime;
+            }
+            else if (rProp.Name == g_PropertyName_VisualizedPage)
+            {
+                rProp.Value >>= mxVisualizedPage;
+            }
+            else
+            {
+                // extra information; add to filtered information
+                mxExtendedInformation[nExtendedInsert++] = rProp;
+            }
         }
+
+        // extra information size is now known; realloc to final size
+        mxExtendedInformation.realloc(nExtendedInsert);
     }
 
     void impFillViewInformationFromContent()

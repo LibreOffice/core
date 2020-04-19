@@ -138,44 +138,44 @@ namespace drawinglayer::texture
         {
             rOuterColor = maStart;
 
-            if(maGradientInfo.getSteps())
+            if(!maGradientInfo.getSteps())
+                return;
+
+            const double fStripeWidth(1.0 / maGradientInfo.getSteps());
+            B2DHomMatrixAndBColor aB2DHomMatrixAndBColor;
+            basegfx::B2DHomMatrix aPattern;
+
+            // bring from unit circle [-1, -1, 1, 1] to unit range [0, 0, 1, 1]
+            aPattern.scale(0.5, 0.5);
+            aPattern.translate(0.5, 0.5);
+
+            // scale and translate in X
+            aPattern.scale(mfUnitWidth, 1.0);
+            aPattern.translate(mfUnitMinX, 0.0);
+
+            for(sal_uInt32 a(1); a < maGradientInfo.getSteps(); a++)
             {
-                const double fStripeWidth(1.0 / maGradientInfo.getSteps());
-                B2DHomMatrixAndBColor aB2DHomMatrixAndBColor;
-                basegfx::B2DHomMatrix aPattern;
+                const double fPos(fStripeWidth * a);
+                basegfx::B2DHomMatrix aNew(aPattern);
 
-                // bring from unit circle [-1, -1, 1, 1] to unit range [0, 0, 1, 1]
-                aPattern.scale(0.5, 0.5);
-                aPattern.translate(0.5, 0.5);
+                // scale and translate in Y
+                double fHeight(1.0 - fPos);
 
-                // scale and translate in X
-                aPattern.scale(mfUnitWidth, 1.0);
-                aPattern.translate(mfUnitMinX, 0.0);
-
-                for(sal_uInt32 a(1); a < maGradientInfo.getSteps(); a++)
+                if(a + 1 == maGradientInfo.getSteps() && mfUnitMaxY > 1.0)
                 {
-                    const double fPos(fStripeWidth * a);
-                    basegfx::B2DHomMatrix aNew(aPattern);
-
-                    // scale and translate in Y
-                    double fHeight(1.0 - fPos);
-
-                    if(a + 1 == maGradientInfo.getSteps() && mfUnitMaxY > 1.0)
-                    {
-                        fHeight += mfUnitMaxY - 1.0;
-                    }
-
-                    aNew.scale(1.0, fHeight);
-                    aNew.translate(0.0, fPos);
-
-                    // set at target
-                    aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * aNew;
-
-                    // interpolate and set color
-                    aB2DHomMatrixAndBColor.maBColor = interpolate(maStart, maEnd, double(a) / double(maGradientInfo.getSteps() - 1));
-
-                    rEntries.push_back(aB2DHomMatrixAndBColor);
+                    fHeight += mfUnitMaxY - 1.0;
                 }
+
+                aNew.scale(1.0, fHeight);
+                aNew.translate(0.0, fPos);
+
+                // set at target
+                aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * aNew;
+
+                // interpolate and set color
+                aB2DHomMatrixAndBColor.maBColor = interpolate(maStart, maEnd, double(a) / double(maGradientInfo.getSteps() - 1));
+
+                rEntries.push_back(aB2DHomMatrixAndBColor);
             }
         }
 
@@ -224,35 +224,35 @@ namespace drawinglayer::texture
         {
             rOuterColor = maEnd;
 
-            if(maGradientInfo.getSteps())
+            if(!maGradientInfo.getSteps())
+                return;
+
+            const double fStripeWidth(1.0 / maGradientInfo.getSteps());
+            B2DHomMatrixAndBColor aB2DHomMatrixAndBColor;
+
+            for(sal_uInt32 a(1); a < maGradientInfo.getSteps(); a++)
             {
-                const double fStripeWidth(1.0 / maGradientInfo.getSteps());
-                B2DHomMatrixAndBColor aB2DHomMatrixAndBColor;
+                const double fPos(fStripeWidth * a);
+                basegfx::B2DHomMatrix aNew;
 
-                for(sal_uInt32 a(1); a < maGradientInfo.getSteps(); a++)
-                {
-                    const double fPos(fStripeWidth * a);
-                    basegfx::B2DHomMatrix aNew;
+                // bring in X from unit circle [-1, -1, 1, 1] to unit range [0, 0, 1, 1]
+                aNew.scale(0.5, 1.0);
+                aNew.translate(0.5, 0.0);
 
-                    // bring in X from unit circle [-1, -1, 1, 1] to unit range [0, 0, 1, 1]
-                    aNew.scale(0.5, 1.0);
-                    aNew.translate(0.5, 0.0);
+                // scale/translate in X
+                aNew.scale(mfUnitWidth, 1.0);
+                aNew.translate(mfUnitMinX, 0.0);
 
-                    // scale/translate in X
-                    aNew.scale(mfUnitWidth, 1.0);
-                    aNew.translate(mfUnitMinX, 0.0);
+                // already centered in Y on X-Axis, just scale in Y
+                aNew.scale(1.0, 1.0 - fPos);
 
-                    // already centered in Y on X-Axis, just scale in Y
-                    aNew.scale(1.0, 1.0 - fPos);
+                // set at target
+                aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * aNew;
 
-                    // set at target
-                    aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * aNew;
+                // interpolate and set color
+                aB2DHomMatrixAndBColor.maBColor = interpolate(maEnd, maStart, double(a) / double(maGradientInfo.getSteps() - 1));
 
-                    // interpolate and set color
-                    aB2DHomMatrixAndBColor.maBColor = interpolate(maEnd, maStart, double(a) / double(maGradientInfo.getSteps() - 1));
-
-                    rEntries.push_back(aB2DHomMatrixAndBColor);
-                }
+                rEntries.push_back(aB2DHomMatrixAndBColor);
             }
         }
 
@@ -291,18 +291,18 @@ namespace drawinglayer::texture
         {
             rOuterColor = maStart;
 
-            if(maGradientInfo.getSteps())
-            {
-                const double fStepSize(1.0 / maGradientInfo.getSteps());
-                B2DHomMatrixAndBColor aB2DHomMatrixAndBColor;
+            if(!maGradientInfo.getSteps())
+                return;
 
-                for(sal_uInt32 a(1); a < maGradientInfo.getSteps(); a++)
-                {
-                    const double fSize(1.0 - (fStepSize * a));
-                    aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * basegfx::utils::createScaleB2DHomMatrix(fSize, fSize);
-                    aB2DHomMatrixAndBColor.maBColor = interpolate(maStart, maEnd, double(a) / double(maGradientInfo.getSteps() - 1));
-                    rEntries.push_back(aB2DHomMatrixAndBColor);
-                }
+            const double fStepSize(1.0 / maGradientInfo.getSteps());
+            B2DHomMatrixAndBColor aB2DHomMatrixAndBColor;
+
+            for(sal_uInt32 a(1); a < maGradientInfo.getSteps(); a++)
+            {
+                const double fSize(1.0 - (fStepSize * a));
+                aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * basegfx::utils::createScaleB2DHomMatrix(fSize, fSize);
+                aB2DHomMatrixAndBColor.maBColor = interpolate(maStart, maEnd, double(a) / double(maGradientInfo.getSteps() - 1));
+                rEntries.push_back(aB2DHomMatrixAndBColor);
             }
         }
 
@@ -343,36 +343,36 @@ namespace drawinglayer::texture
         {
             rOuterColor = maStart;
 
-            if(maGradientInfo.getSteps())
+            if(!maGradientInfo.getSteps())
+                return;
+
+            double fWidth(1.0);
+            double fHeight(1.0);
+            double fIncrementX(0.0);
+            double fIncrementY(0.0);
+
+            if(maGradientInfo.getAspectRatio() > 1.0)
             {
-                double fWidth(1.0);
-                double fHeight(1.0);
-                double fIncrementX(0.0);
-                double fIncrementY(0.0);
+                fIncrementY = fHeight / maGradientInfo.getSteps();
+                fIncrementX = fIncrementY / maGradientInfo.getAspectRatio();
+            }
+            else
+            {
+                fIncrementX = fWidth / maGradientInfo.getSteps();
+                fIncrementY = fIncrementX * maGradientInfo.getAspectRatio();
+            }
 
-                if(maGradientInfo.getAspectRatio() > 1.0)
-                {
-                    fIncrementY = fHeight / maGradientInfo.getSteps();
-                    fIncrementX = fIncrementY / maGradientInfo.getAspectRatio();
-                }
-                else
-                {
-                    fIncrementX = fWidth / maGradientInfo.getSteps();
-                    fIncrementY = fIncrementX * maGradientInfo.getAspectRatio();
-                }
+            B2DHomMatrixAndBColor aB2DHomMatrixAndBColor;
 
-                B2DHomMatrixAndBColor aB2DHomMatrixAndBColor;
+            for(sal_uInt32 a(1); a < maGradientInfo.getSteps(); a++)
+            {
+                // next step
+                fWidth -= fIncrementX;
+                fHeight -= fIncrementY;
 
-                for(sal_uInt32 a(1); a < maGradientInfo.getSteps(); a++)
-                {
-                    // next step
-                    fWidth -= fIncrementX;
-                    fHeight -= fIncrementY;
-
-                    aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * basegfx::utils::createScaleB2DHomMatrix(fWidth, fHeight);
-                    aB2DHomMatrixAndBColor.maBColor = interpolate(maStart, maEnd, double(a) / double(maGradientInfo.getSteps() - 1));
-                    rEntries.push_back(aB2DHomMatrixAndBColor);
-                }
+                aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * basegfx::utils::createScaleB2DHomMatrix(fWidth, fHeight);
+                aB2DHomMatrixAndBColor.maBColor = interpolate(maStart, maEnd, double(a) / double(maGradientInfo.getSteps() - 1));
+                rEntries.push_back(aB2DHomMatrixAndBColor);
             }
         }
 
@@ -413,18 +413,18 @@ namespace drawinglayer::texture
         {
             rOuterColor = maStart;
 
-            if(maGradientInfo.getSteps())
-            {
-                const double fStepSize(1.0 / maGradientInfo.getSteps());
-                B2DHomMatrixAndBColor aB2DHomMatrixAndBColor;
+            if(!maGradientInfo.getSteps())
+                return;
 
-                for(sal_uInt32 a(1); a < maGradientInfo.getSteps(); a++)
-                {
-                    const double fSize(1.0 - (fStepSize * a));
-                    aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * basegfx::utils::createScaleB2DHomMatrix(fSize, fSize);
-                    aB2DHomMatrixAndBColor.maBColor = interpolate(maStart, maEnd, double(a) / double(maGradientInfo.getSteps() - 1));
-                    rEntries.push_back(aB2DHomMatrixAndBColor);
-                }
+            const double fStepSize(1.0 / maGradientInfo.getSteps());
+            B2DHomMatrixAndBColor aB2DHomMatrixAndBColor;
+
+            for(sal_uInt32 a(1); a < maGradientInfo.getSteps(); a++)
+            {
+                const double fSize(1.0 - (fStepSize * a));
+                aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * basegfx::utils::createScaleB2DHomMatrix(fSize, fSize);
+                aB2DHomMatrixAndBColor.maBColor = interpolate(maStart, maEnd, double(a) / double(maGradientInfo.getSteps() - 1));
+                rEntries.push_back(aB2DHomMatrixAndBColor);
             }
         }
 
@@ -465,36 +465,36 @@ namespace drawinglayer::texture
         {
             rOuterColor = maStart;
 
-            if(maGradientInfo.getSteps())
+            if(!maGradientInfo.getSteps())
+                return;
+
+            double fWidth(1.0);
+            double fHeight(1.0);
+            double fIncrementX(0.0);
+            double fIncrementY(0.0);
+
+            if(maGradientInfo.getAspectRatio() > 1.0)
             {
-                double fWidth(1.0);
-                double fHeight(1.0);
-                double fIncrementX(0.0);
-                double fIncrementY(0.0);
+                fIncrementY = fHeight / maGradientInfo.getSteps();
+                fIncrementX = fIncrementY / maGradientInfo.getAspectRatio();
+            }
+            else
+            {
+                fIncrementX = fWidth / maGradientInfo.getSteps();
+                fIncrementY = fIncrementX * maGradientInfo.getAspectRatio();
+            }
 
-                if(maGradientInfo.getAspectRatio() > 1.0)
-                {
-                    fIncrementY = fHeight / maGradientInfo.getSteps();
-                    fIncrementX = fIncrementY / maGradientInfo.getAspectRatio();
-                }
-                else
-                {
-                    fIncrementX = fWidth / maGradientInfo.getSteps();
-                    fIncrementY = fIncrementX * maGradientInfo.getAspectRatio();
-                }
+            B2DHomMatrixAndBColor aB2DHomMatrixAndBColor;
 
-                B2DHomMatrixAndBColor aB2DHomMatrixAndBColor;
+            for(sal_uInt32 a(1); a < maGradientInfo.getSteps(); a++)
+            {
+                // next step
+                fWidth -= fIncrementX;
+                fHeight -= fIncrementY;
 
-                for(sal_uInt32 a(1); a < maGradientInfo.getSteps(); a++)
-                {
-                    // next step
-                    fWidth -= fIncrementX;
-                    fHeight -= fIncrementY;
-
-                    aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * basegfx::utils::createScaleB2DHomMatrix(fWidth, fHeight);
-                    aB2DHomMatrixAndBColor.maBColor = interpolate(maStart, maEnd, double(a) / double(maGradientInfo.getSteps() - 1));
-                    rEntries.push_back(aB2DHomMatrixAndBColor);
-                }
+                aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * basegfx::utils::createScaleB2DHomMatrix(fWidth, fHeight);
+                aB2DHomMatrixAndBColor.maBColor = interpolate(maStart, maEnd, double(a) / double(maGradientInfo.getSteps() - 1));
+                rEntries.push_back(aB2DHomMatrixAndBColor);
             }
         }
 
@@ -699,67 +699,67 @@ namespace drawinglayer::texture
         {
             const double fWidth(maRange.getWidth());
 
-            if(!basegfx::fTools::equalZero(fWidth))
+            if(basegfx::fTools::equalZero(fWidth))
+                return;
+
+            const double fHeight(maRange.getHeight());
+
+            if(basegfx::fTools::equalZero(fHeight))
+                return;
+
+            double fStartX(maRange.getMinX());
+            double fStartY(maRange.getMinY());
+            sal_Int32 nPosX(0);
+            sal_Int32 nPosY(0);
+
+            if(basegfx::fTools::more(fStartX, 0.0))
             {
-                const double fHeight(maRange.getHeight());
+                const sal_Int32 nDiff(static_cast<sal_Int32>(floor(fStartX / fWidth)) + 1);
 
-                if(!basegfx::fTools::equalZero(fHeight))
+                nPosX -= nDiff;
+                fStartX -= nDiff * fWidth;
+            }
+
+            if(basegfx::fTools::less(fStartX + fWidth, 0.0))
+            {
+                const sal_Int32 nDiff(static_cast<sal_Int32>(floor(-fStartX / fWidth)));
+
+                nPosX += nDiff;
+                fStartX += nDiff * fWidth;
+            }
+
+            if(basegfx::fTools::more(fStartY, 0.0))
+            {
+                const sal_Int32 nDiff(static_cast<sal_Int32>(floor(fStartY / fHeight)) + 1);
+
+                nPosY -= nDiff;
+                fStartY -= nDiff * fHeight;
+            }
+
+            if(basegfx::fTools::less(fStartY + fHeight, 0.0))
+            {
+                const sal_Int32 nDiff(static_cast<sal_Int32>(floor(-fStartY / fHeight)));
+
+                nPosY += nDiff;
+                fStartY += nDiff * fHeight;
+            }
+
+            if(!basegfx::fTools::equalZero(mfOffsetY))
+            {
+                for(double fPosX(fStartX); basegfx::fTools::less(fPosX, 1.0); fPosX += fWidth, nPosX++)
                 {
-                    double fStartX(maRange.getMinX());
-                    double fStartY(maRange.getMinY());
-                    sal_Int32 nPosX(0);
-                    sal_Int32 nPosY(0);
-
-                    if(basegfx::fTools::more(fStartX, 0.0))
-                    {
-                        const sal_Int32 nDiff(static_cast<sal_Int32>(floor(fStartX / fWidth)) + 1);
-
-                        nPosX -= nDiff;
-                        fStartX -= nDiff * fWidth;
-                    }
-
-                    if(basegfx::fTools::less(fStartX + fWidth, 0.0))
-                    {
-                        const sal_Int32 nDiff(static_cast<sal_Int32>(floor(-fStartX / fWidth)));
-
-                        nPosX += nDiff;
-                        fStartX += nDiff * fWidth;
-                    }
-
-                    if(basegfx::fTools::more(fStartY, 0.0))
-                    {
-                        const sal_Int32 nDiff(static_cast<sal_Int32>(floor(fStartY / fHeight)) + 1);
-
-                        nPosY -= nDiff;
-                        fStartY -= nDiff * fHeight;
-                    }
-
-                    if(basegfx::fTools::less(fStartY + fHeight, 0.0))
-                    {
-                        const sal_Int32 nDiff(static_cast<sal_Int32>(floor(-fStartY / fHeight)));
-
-                        nPosY += nDiff;
-                        fStartY += nDiff * fHeight;
-                    }
-
-                    if(!basegfx::fTools::equalZero(mfOffsetY))
-                    {
-                        for(double fPosX(fStartX); basegfx::fTools::less(fPosX, 1.0); fPosX += fWidth, nPosX++)
-                        {
-                            for(double fPosY((nPosX % 2) ? fStartY - fHeight + (mfOffsetY * fHeight) : fStartY);
-                                basegfx::fTools::less(fPosY, 1.0); fPosY += fHeight)
-                                aFunc(fPosX, fPosY);
-                        }
-                    }
-                    else
-                    {
-                        for(double fPosY(fStartY); basegfx::fTools::less(fPosY, 1.0); fPosY += fHeight, nPosY++)
-                        {
-                            for(double fPosX((nPosY % 2) ? fStartX - fWidth + (mfOffsetX * fWidth) : fStartX);
-                                basegfx::fTools::less(fPosX, 1.0); fPosX += fWidth)
-                                aFunc(fPosX, fPosY);
-                        }
-                    }
+                    for(double fPosY((nPosX % 2) ? fStartY - fHeight + (mfOffsetY * fHeight) : fStartY);
+                        basegfx::fTools::less(fPosY, 1.0); fPosY += fHeight)
+                        aFunc(fPosX, fPosY);
+                }
+            }
+            else
+            {
+                for(double fPosY(fStartY); basegfx::fTools::less(fPosY, 1.0); fPosY += fHeight, nPosY++)
+                {
+                    for(double fPosX((nPosY % 2) ? fStartX - fWidth + (mfOffsetX * fWidth) : fStartX);
+                        basegfx::fTools::less(fPosX, 1.0); fPosX += fWidth)
+                        aFunc(fPosX, fPosY);
                 }
             }
 

@@ -35,69 +35,69 @@ namespace drawinglayer::primitive2d
         {
             Primitive2DContainer aContent(getPageContent());
 
-            if(!aContent.empty()
+            if(!(!aContent.empty()
                 && basegfx::fTools::more(getContentWidth(), 0.0)
-                && basegfx::fTools::more(getContentHeight(), 0.0))
+                && basegfx::fTools::more(getContentHeight(), 0.0)))
+                return;
+
+            // the decomposed matrix will be needed
+            basegfx::B2DVector aScale, aTranslate;
+            double fRotate, fShearX;
+            getTransform().decompose(aScale, aTranslate, fRotate, fShearX);
+
+            if(!(basegfx::fTools::more(aScale.getX(), 0.0) && basegfx::fTools::more(aScale.getY(), 0.0)))
+                return;
+
+            // check if content overlaps with target size and needs to be embedded with a
+            // clipping primitive
+            const basegfx::B2DRange aRealContentRange(aContent.getB2DRange(rViewInformation));
+            const basegfx::B2DRange aAllowedContentRange(0.0, 0.0, getContentWidth(), getContentHeight());
+
+            if(!aAllowedContentRange.isInside(aRealContentRange))
             {
-                // the decomposed matrix will be needed
-                basegfx::B2DVector aScale, aTranslate;
-                double fRotate, fShearX;
-                getTransform().decompose(aScale, aTranslate, fRotate, fShearX);
-
-                if(basegfx::fTools::more(aScale.getX(), 0.0) && basegfx::fTools::more(aScale.getY(), 0.0))
-                {
-                    // check if content overlaps with target size and needs to be embedded with a
-                    // clipping primitive
-                    const basegfx::B2DRange aRealContentRange(aContent.getB2DRange(rViewInformation));
-                    const basegfx::B2DRange aAllowedContentRange(0.0, 0.0, getContentWidth(), getContentHeight());
-
-                    if(!aAllowedContentRange.isInside(aRealContentRange))
-                    {
-                        const Primitive2DReference xReferenceA(
-                            new MaskPrimitive2D(
-                                basegfx::B2DPolyPolygon(
-                                    basegfx::utils::createPolygonFromRect(aAllowedContentRange)), aContent));
-                        aContent = Primitive2DContainer { xReferenceA };
-                    }
-
-                    // create a mapping from content to object.
-                    basegfx::B2DHomMatrix aPageTrans;
-
-                    // #i101075# when keeping the aspect ratio is wanted, it is necessary to calculate
-                    // an equidistant scaling in X and Y and a corresponding translation to
-                    // center the output. Calculate needed scale factors
-                    const double fScaleX(aScale.getX() / getContentWidth());
-                    const double fScaleY(aScale.getY() / getContentHeight());
-
-                    // to keep the aspect, use the smaller scale and adapt missing size by translation
-                    if(fScaleX < fScaleY)
-                    {
-                        // height needs to be adapted
-                        const double fNeededHeight(aScale.getY() / fScaleX);
-                        const double fSpaceToAdd(fNeededHeight - getContentHeight());
-
-                        aPageTrans.translate(0.0, fSpaceToAdd * 0.5);
-                        aPageTrans.scale(fScaleX, aScale.getY() / fNeededHeight);
-                    }
-                    else
-                    {
-                        // width needs to be adapted
-                        const double fNeededWidth(aScale.getX() / fScaleY);
-                        const double fSpaceToAdd(fNeededWidth - getContentWidth());
-
-                        aPageTrans.translate(fSpaceToAdd * 0.5, 0.0);
-                        aPageTrans.scale(aScale.getX() / fNeededWidth, fScaleY);
-                    }
-
-                    // add the missing object transformation aspects
-                    const basegfx::B2DHomMatrix aCombined(basegfx::utils::createShearXRotateTranslateB2DHomMatrix(
-                            fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
-                    aPageTrans = aCombined * aPageTrans;
-
-                    // embed in necessary transformation to map from SdrPage to SdrPageObject
-                    rContainer.push_back(new TransformPrimitive2D(aPageTrans, aContent));
-                }
+                const Primitive2DReference xReferenceA(
+                    new MaskPrimitive2D(
+                        basegfx::B2DPolyPolygon(
+                            basegfx::utils::createPolygonFromRect(aAllowedContentRange)), aContent));
+                aContent = Primitive2DContainer { xReferenceA };
             }
+
+            // create a mapping from content to object.
+            basegfx::B2DHomMatrix aPageTrans;
+
+            // #i101075# when keeping the aspect ratio is wanted, it is necessary to calculate
+            // an equidistant scaling in X and Y and a corresponding translation to
+            // center the output. Calculate needed scale factors
+            const double fScaleX(aScale.getX() / getContentWidth());
+            const double fScaleY(aScale.getY() / getContentHeight());
+
+            // to keep the aspect, use the smaller scale and adapt missing size by translation
+            if(fScaleX < fScaleY)
+            {
+                // height needs to be adapted
+                const double fNeededHeight(aScale.getY() / fScaleX);
+                const double fSpaceToAdd(fNeededHeight - getContentHeight());
+
+                aPageTrans.translate(0.0, fSpaceToAdd * 0.5);
+                aPageTrans.scale(fScaleX, aScale.getY() / fNeededHeight);
+            }
+            else
+            {
+                // width needs to be adapted
+                const double fNeededWidth(aScale.getX() / fScaleY);
+                const double fSpaceToAdd(fNeededWidth - getContentWidth());
+
+                aPageTrans.translate(fSpaceToAdd * 0.5, 0.0);
+                aPageTrans.scale(aScale.getX() / fNeededWidth, fScaleY);
+            }
+
+            // add the missing object transformation aspects
+            const basegfx::B2DHomMatrix aCombined(basegfx::utils::createShearXRotateTranslateB2DHomMatrix(
+                    fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
+            aPageTrans = aCombined * aPageTrans;
+
+            // embed in necessary transformation to map from SdrPage to SdrPageObject
+            rContainer.push_back(new TransformPrimitive2D(aPageTrans, aContent));
         }
 
         PagePreviewPrimitive2D::PagePreviewPrimitive2D(
