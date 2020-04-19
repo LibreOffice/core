@@ -1376,25 +1376,32 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
         maPolygons.insert(make_pair(mpCurrentSlide->getXDrawPage(),mpCurrentSlide->getPolygons()));
     }
 
-    //Creating the layer for shapes
+    //Creating the layer for shapes drawn during slideshow
     // query for the XLayerManager
     uno::Reference< drawing::XLayerSupplier > xLayerSupplier(xDocFactory, uno::UNO_QUERY);
     uno::Reference< container::XNameAccess > xNameAccess = xLayerSupplier->getLayerManager();
-
     uno::Reference< drawing::XLayerManager > xLayerManager(xNameAccess, uno::UNO_QUERY);
-    // create a layer and set its properties
-    uno::Reference< drawing::XLayer > xDrawnInSlideshow = xLayerManager->insertNewByIndex(xLayerManager->getCount());
 
-    //Layer Name which enables to catch annotations
-    OUString layerName = "DrawnInSlideshow";
+    // create layer
+    uno::Reference< drawing::XLayer > xDrawnInSlideshow;
     uno::Any aPropLayer;
+    OUString sLayerName = "DrawnInSlideshow";
+    if (xNameAccess->hasByName(sLayerName))
+    {
+        xNameAccess->getByName(sLayerName) >>= xDrawnInSlideshow;
+    }
+    else
+    {
+        xDrawnInSlideshow = xLayerManager->insertNewByIndex(xLayerManager->getCount());
+        aPropLayer <<= sLayerName;
+        xDrawnInSlideshow->setPropertyValue("Name", aPropLayer);
+    }
 
-    aPropLayer <<= layerName;
-    xDrawnInSlideshow->setPropertyValue("Name", aPropLayer);
-
+    // ODF defaults from ctor of SdrLayer are not automatically set on the here
+    // created XLayer. Need to be done explicitely here.
     aPropLayer <<= true;
     xDrawnInSlideshow->setPropertyValue("IsVisible", aPropLayer);
-
+    xDrawnInSlideshow->setPropertyValue("IsPrintable", aPropLayer);
     aPropLayer <<= false;
     xDrawnInSlideshow->setPropertyValue("IsLocked", aPropLayer);
 
