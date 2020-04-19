@@ -77,19 +77,15 @@ SwRect& SwRect::Intersection( const SwRect& rRect )
     return *this;
 }
 
-SwRect& SwRect::Intersection_( const SwRect& rRect )
+SwRect& SwRect::Intersection_( const SwRect& rOther )
 {
     // get smaller right and lower, and greater left and upper edge
-    if ( Left() < rRect.Left() )
-        Left( rRect.Left() );
-    if ( Top() < rRect.Top() )
-        Top( rRect.Top() );
-    long n = rRect.Right();
-    if ( Right() > n )
-        Right( n );
-    n = rRect.Bottom();
-    if ( Bottom() > n )
-        Bottom( n );
+    auto left   = std::max( m_Point.X(), rOther.m_Point.X() );
+    auto top    = std::max( m_Point.Y(), rOther.m_Point.Y() );
+    long right  = std::min( m_Point.X() + m_Size.Width(), rOther.m_Point.X() + rOther.m_Size.Width() );
+    auto bottom = std::min( m_Point.Y() + m_Size.Height(), rOther.m_Point.Y() + rOther.m_Size.Height() );
+
+    *this = SwRect( left, top, right - left, bottom - top );
 
     return *this;
 }
