@@ -93,6 +93,15 @@ void sendIpcArg(std::ostream& stream, const OUString& string)
     sendIpcStringArg(stream, utf8.getLength(), utf8.getStr());
 }
 
+void sendIpcArg(std::ostream& stream, const css::uno::Sequence<OUString>& seq)
+{
+    stream << static_cast<uint32_t>(seq.getLength()) << ' ';
+    for (const OUString& string : seq)
+    {
+        sendIpcArg(stream, string);
+    }
+}
+
 OUString getResString(const char* pResId)
 {
     if (pResId == nullptr)
