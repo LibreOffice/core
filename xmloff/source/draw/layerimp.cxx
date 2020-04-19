@@ -149,6 +149,15 @@ void SdXMLLayerContext::EndElement()
             if ( !msProtected.isEmpty() )
                 bIsLocked = (msProtected == "true");
             xLayer->setPropertyValue("IsLocked", Any( bIsLocked ) );
+
+            // tdf#129898 repair layer "DrawnInSlideshow", which was wrongly written
+            // in LO 6.2 to 6.4. It should always have ODF defaults.
+            if (msName == "DrawnInSlideshow")
+            {
+                xLayer->setPropertyValue("IsVisible", Any(true));
+                xLayer->setPropertyValue("IsPrintable", Any(true));
+                xLayer->setPropertyValue("IsLocked", Any(false));
+            }
         }
     }
     catch( Exception& )

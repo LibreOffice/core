@@ -82,6 +82,7 @@ public:
     void testTdf98839_ShearVFlipH();
     void testTdf130988();
     void testTdf131033();
+    void testTdf129898LayerDrawnInSlideshow();
 
     CPPUNIT_TEST_SUITE(SdMiscTest);
     CPPUNIT_TEST(testTdf96206);
@@ -102,6 +103,7 @@ public:
     CPPUNIT_TEST(testTdf98839_ShearVFlipH);
     CPPUNIT_TEST(testTdf130988);
     CPPUNIT_TEST(testTdf131033);
+    CPPUNIT_TEST(testTdf129898LayerDrawnInSlideshow);
     CPPUNIT_TEST_SUITE_END();
 
 virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
@@ -850,6 +852,29 @@ void SdMiscTest::testTdf131033()
     // rotation of the new scene around x-axis and therefore was not high enough.
     const double fSnapRectHeight = pObj->GetSnapRect().getHeight();
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("2D height", 7096.0, fSnapRectHeight, 1.0);
+
+    xDocShRef->DoClose();
+}
+
+void SdMiscTest::testTdf129898LayerDrawnInSlideshow()
+{
+    // Versions LO 6.2 to 6.4 have produced files, where the layer DrawnInSlideshow has
+    // got visible=false and printable=false attributes. Those files should be repaired now.
+    const OUString sURL = "sd/qa/unit/data/tdf129898_faulty_DrawnInSlideshow.odp";
+    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc(sURL), ODP);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
+
+    // Verify model
+    const OUString sName = "DrawnInSlideshow";
+    SdrLayerAdmin& rLayerAdmin = xDocShRef->GetDoc()->GetLayerAdmin();
+    SdrLayer* pLayer = rLayerAdmin.GetLayer(sName);
+    CPPUNIT_ASSERT_MESSAGE("No layer DrawnInSlideshow", pLayer);
+    CPPUNIT_ASSERT(pLayer->IsVisibleODF() && pLayer->IsPrintableODF());
+
+    // Verify view
+    sd::DrawViewShell* pViewShell = static_cast<sd::DrawViewShell*>(xDocShRef->GetViewShell());
+    SdrPageView* pPageView = pViewShell->GetView()->GetSdrPageView();
+    CPPUNIT_ASSERT(pPageView->IsLayerVisible(sName) && pPageView->IsLayerPrintable(sName));
 
     xDocShRef->DoClose();
 }

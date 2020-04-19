@@ -493,6 +493,23 @@ void DrawViewShell::ReadUserDataSequence ( const css::uno::Sequence < css::beans
         rLayerAdmin.getLockedLayersODF( aSdrLayerIDSet );
         mpFrameView -> SetLockedLayers( aSdrLayerIDSet );
     }
+    else
+    {
+        // tdf#129898 repair layer "DrawnInSlideshow", which was wrongly written
+        // in LO 6.2 to 6.4. The ODF defaults were corrected when reading draw:layer-set, but
+        // not in reading config settings, because there the name is not known.
+        const SdrLayerAdmin& rLayerAdmin = GetDocSh()->GetDoc()->GetLayerAdmin();
+        if (rLayerAdmin.GetLayer("DrawnInSlideshow"))
+        {
+            SdrLayerIDSet aSdrLayerIDSet;
+            rLayerAdmin.getVisibleLayersODF( aSdrLayerIDSet );
+            mpFrameView -> SetVisibleLayers( aSdrLayerIDSet );
+            rLayerAdmin.getPrintableLayersODF( aSdrLayerIDSet );
+            mpFrameView -> SetPrintableLayers( aSdrLayerIDSet );
+            rLayerAdmin.getLockedLayersODF( aSdrLayerIDSet );
+            mpFrameView -> SetLockedLayers( aSdrLayerIDSet );
+        }
+    }
 
 
     if( mpFrameView->GetPageKind() != mePageKind )
