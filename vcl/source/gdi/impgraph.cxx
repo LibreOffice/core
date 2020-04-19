@@ -56,6 +56,15 @@
 #define GRAPHIC_FORMAT_50           COMPAT_FORMAT( 'G', 'R', 'F', '5' )
 #define NATIVE_FORMAT_50            COMPAT_FORMAT( 'N', 'A', 'T', '5' )
 
+namespace {
+
+constexpr sal_uInt32 constSvgMagic((sal_uInt32('s') << 24) | (sal_uInt32('v') << 16) | (sal_uInt32('g') << 8) | sal_uInt32('0'));
+constexpr sal_uInt32 constWmfMagic((sal_uInt32('w') << 24) | (sal_uInt32('m') << 16) | (sal_uInt32('f') << 8) | sal_uInt32('0'));
+constexpr sal_uInt32 constEmfMagic((sal_uInt32('e') << 24) | (sal_uInt32('m') << 16) | (sal_uInt32('f') << 8) | sal_uInt32('0'));
+constexpr sal_uInt32 constPdfMagic((sal_uInt32('s') << 24) | (sal_uInt32('v') << 16) | (sal_uInt32('g') << 8) | sal_uInt32('0'));
+
+}
+
 using namespace com::sun::star;
 
 struct ImpSwapFile
@@ -1696,16 +1705,12 @@ void ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
             ErrCode nOrigError = rIStm.GetErrorCode();
             // try to stream in Svg defining data (length, byte array and evtl. path)
             // See below (operator<<) for more information
-            const sal_uInt32 nSvgMagic((sal_uInt32('s') << 24) | (sal_uInt32('v') << 16) | (sal_uInt32('g') << 8) | sal_uInt32('0'));
-            const sal_uInt32 nWmfMagic((sal_uInt32('w') << 24) | (sal_uInt32('m') << 16) | (sal_uInt32('f') << 8) | sal_uInt32('0'));
-            const sal_uInt32 nEmfMagic((sal_uInt32('e') << 24) | (sal_uInt32('m') << 16) | (sal_uInt32('f') << 8) | sal_uInt32('0'));
-            const sal_uInt32 nPdfMagic((sal_uInt32('s') << 24) | (sal_uInt32('v') << 16) | (sal_uInt32('g') << 8) | sal_uInt32('0'));
             sal_uInt32 nMagic;
             rIStm.Seek(nStmPos1);
             rIStm.ResetError();
             rIStm.ReadUInt32( nMagic );
 
-            if (nSvgMagic == nMagic || nWmfMagic == nMagic || nEmfMagic == nMagic || nPdfMagic == nMagic)
+            if (constSvgMagic == nMagic || constWmfMagic == nMagic || constEmfMagic == nMagic || constPdfMagic == nMagic)
             {
                 sal_uInt32 nVectorGraphicDataArrayLength(0);
                 rIStm.ReadUInt32(nVectorGraphicDataArrayLength);
@@ -1721,15 +1726,15 @@ void ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
                     {
                         VectorGraphicDataType aDataType(VectorGraphicDataType::Svg);
 
-                        if (nWmfMagic == nMagic)
+                        if (constWmfMagic == nMagic)
                         {
                             aDataType = VectorGraphicDataType::Wmf;
                         }
-                        else if (nEmfMagic == nMagic)
+                        else if (constEmfMagic == nMagic)
                         {
                             aDataType = VectorGraphicDataType::Emf;
                         }
-                        else if (nPdfMagic == nMagic)
+                        else if (constPdfMagic == nMagic)
                         {
                             aDataType = VectorGraphicDataType::Pdf;
                         }
@@ -1804,26 +1809,22 @@ void WriteImpGraphic(SvStream& rOStm, const ImpGraphic& rImpGraphic)
                     {
                         case VectorGraphicDataType::Wmf:
                         {
-                            const sal_uInt32 nWmfMagic((sal_uInt32('w') << 24) | (sal_uInt32('m') << 16) | (sal_uInt32('f') << 8) | sal_uInt32('0'));
-                            rOStm.WriteUInt32(nWmfMagic);
+                            rOStm.WriteUInt32(constWmfMagic);
                             break;
                         }
                         case VectorGraphicDataType::Emf:
                         {
-                            const sal_uInt32 nEmfMagic((sal_uInt32('e') << 24) | (sal_uInt32('m') << 16) | (sal_uInt32('f') << 8) | sal_uInt32('0'));
-                            rOStm.WriteUInt32(nEmfMagic);
+                            rOStm.WriteUInt32(constEmfMagic);
                             break;
                         }
                         case VectorGraphicDataType::Svg:
                         {
-                            const sal_uInt32 nSvgMagic((sal_uInt32('s') << 24) | (sal_uInt32('v') << 16) | (sal_uInt32('g') << 8) | sal_uInt32('0'));
-                            rOStm.WriteUInt32(nSvgMagic);
+                            rOStm.WriteUInt32(constSvgMagic);
                             break;
                         }
                         case VectorGraphicDataType::Pdf:
                         {
-                            const sal_uInt32 nSvgMagic((sal_uInt32('p') << 24) | (sal_uInt32('d') << 16) | (sal_uInt32('f') << 8) | sal_uInt32('0'));
-                            rOStm.WriteUInt32(nSvgMagic);
+                            rOStm.WriteUInt32(constPdfMagic);
                             break;
                         }
                     }
