@@ -925,12 +925,6 @@ HtmlTokenId HTMLParser::GetNextRawToken()
                 while( '-' == nNextCh && IsParserWorking() )
                 {
                     bTwoMinus = true;
-
-                    if( MAX_LEN == sTmpBuffer.getLength() )
-                    {
-                        aToken += sTmpBuffer;
-                        sTmpBuffer.setLength(0);
-                    }
                     sTmpBuffer.appendUtf32( nNextCh );
                     nNextCh = GetNextChar();
                 }
@@ -983,8 +977,7 @@ HtmlTokenId HTMLParser::GetNextRawToken()
             break;
         }
 
-        if( (!bContinue && !sTmpBuffer.isEmpty()) ||
-            MAX_LEN == sTmpBuffer.getLength() )
+        if( !bContinue && !sTmpBuffer.isEmpty() )
         {
             aToken += sTmpBuffer;
             sTmpBuffer.setLength(0);
@@ -1063,11 +1056,6 @@ HtmlTokenId HTMLParser::GetNextToken_()
                     OUStringBuffer sTmpBuffer;
                     do {
                         sTmpBuffer.appendUtf32( nNextCh );
-                        if( MAX_LEN == sTmpBuffer.getLength() )
-                        {
-                            aToken += sTmpBuffer;
-                            sTmpBuffer.setLength(0);
-                        }
                         nNextCh = GetNextChar();
                     } while( '>' != nNextCh && '/' != nNextCh && !rtl::isAsciiWhiteSpace( nNextCh ) &&
                              IsParserWorking() && !rInput.eof() );

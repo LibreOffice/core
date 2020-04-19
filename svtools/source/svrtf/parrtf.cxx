@@ -99,22 +99,12 @@ int SvRTFParser::GetNextToken_()
                     {
                         aToken = "\\";
                         {
-                            OUStringBuffer aStrBuffer;
-                            aStrBuffer.setLength( MAX_TOKEN_LEN );
-                            sal_Int32 nStrLen = 0;
+                            OUStringBuffer aStrBuffer( MAX_TOKEN_LEN );
                             do {
-                                aStrBuffer[nStrLen++] = nNextCh;
-                                if( MAX_TOKEN_LEN == nStrLen )
-                                {
-                                    aToken += aStrBuffer;
-                                    nStrLen = 0;
-                                }
+                                aStrBuffer.appendUtf32(nNextCh);
                                 nNextCh = GetNextChar();
                             } while( RTF_ISALPHA( nNextCh ) );
-                            if( nStrLen )
-                            {
-                                aToken += aStrBuffer;
-                            }
+                            aToken += aStrBuffer;
                         }
 
                         // minus before numeric parameters
