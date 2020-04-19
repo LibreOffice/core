@@ -300,7 +300,8 @@ public:
     template<typename T>
     OStringBuffer & operator =(OStringNumber<T> && n)
     {
-        return *this = OStringBuffer( std::move ( n ));
+        *this = OStringBuffer( std::move ( n ));
+        return *this;
     }
 #endif
 
