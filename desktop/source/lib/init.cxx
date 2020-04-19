@@ -1174,7 +1174,8 @@ rtl::Reference<LOKClipboard> forceSetClipboardForCurrentView(LibreOfficeKitDocum
 LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent)
     : mxComponent(xComponent)
 {
-    if (!(m_pDocumentClass = gDocumentClass.lock()))
+    m_pDocumentClass = gDocumentClass.lock();
+    if (!m_pDocumentClass)
     {
         m_pDocumentClass = std::make_shared<LibreOfficeKitDocumentClass>();
 
