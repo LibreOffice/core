@@ -86,7 +86,7 @@ ImpGraphic::ImpGraphic() :
 
 ImpGraphic::ImpGraphic(const ImpGraphic& rImpGraphic)
     : maMetaFile(rImpGraphic.maMetaFile)
-    , maEx(rImpGraphic.maEx)
+    , maBitmapEx(rImpGraphic.maBitmapEx)
     , maSwapInfo(rImpGraphic.maSwapInfo)
     , mpContext(rImpGraphic.mpContext)
     , mpSwapFile(rImpGraphic.mpSwapFile)
@@ -103,13 +103,13 @@ ImpGraphic::ImpGraphic(const ImpGraphic& rImpGraphic)
     if( rImpGraphic.mpAnimation )
     {
         mpAnimation = std::make_unique<Animation>( *rImpGraphic.mpAnimation );
-        maEx = mpAnimation->GetBitmapEx();
+        maBitmapEx = mpAnimation->GetBitmapEx();
     }
 }
 
 ImpGraphic::ImpGraphic(ImpGraphic&& rImpGraphic) noexcept
     : maMetaFile(std::move(rImpGraphic.maMetaFile))
-    , maEx(std::move(rImpGraphic.maEx))
+    , maBitmapEx(std::move(rImpGraphic.maBitmapEx))
     , maSwapInfo(std::move(rImpGraphic.maSwapInfo))
     , mpAnimation(std::move(rImpGraphic.mpAnimation))
     , mpContext(std::move(rImpGraphic.mpContext))
@@ -140,7 +140,7 @@ ImpGraphic::ImpGraphic(GraphicExternalLink const & rGraphicExternalLink) :
 }
 
 ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
-        maEx            ( rBitmap ),
+        maBitmapEx            ( rBitmap ),
         meType          ( !rBitmap.IsEmpty() ? GraphicType::Bitmap : GraphicType::NONE ),
         mnSizeBytes     ( 0 ),
         mbSwapOut       ( false ),
@@ -151,7 +151,7 @@ ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
 }
 
 ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
-        maEx            ( rBitmapEx ),
+        maBitmapEx            ( rBitmapEx ),
         meType          ( !rBitmapEx.IsEmpty() ? GraphicType::Bitmap : GraphicType::NONE ),
         mnSizeBytes     ( 0 ),
         mbSwapOut       ( false ),
@@ -173,7 +173,7 @@ ImpGraphic::ImpGraphic(const std::shared_ptr<VectorGraphicData>& rVectorGraphicD
 }
 
 ImpGraphic::ImpGraphic( const Animation& rAnimation ) :
-        maEx            ( rAnimation.GetBitmapEx() ),
+        maBitmapEx      ( rAnimation.GetBitmapEx() ),
         mpAnimation     ( std::make_unique<Animation>( rAnimation ) ),
         meType          ( GraphicType::Bitmap ),
         mnSizeBytes     ( 0 ),
@@ -220,11 +220,11 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
         if ( rImpGraphic.mpAnimation )
         {
             mpAnimation = std::make_unique<Animation>( *rImpGraphic.mpAnimation );
-            maEx = mpAnimation->GetBitmapEx();
+            maBitmapEx = mpAnimation->GetBitmapEx();
         }
         else
         {
-            maEx = rImpGraphic.maEx;
+            maBitmapEx = rImpGraphic.maBitmapEx;
         }
 
         mbSwapOut = rImpGraphic.mbSwapOut;
@@ -253,7 +253,7 @@ ImpGraphic& ImpGraphic::operator=(ImpGraphic&& rImpGraphic)
     mpContext = std::move(rImpGraphic.mpContext);
     mbDummyContext = rImpGraphic.mbDummyContext;
     mpAnimation = std::move(rImpGraphic.mpAnimation);
-    maEx = std::move(rImpGraphic.maEx);
+    maBitmapEx = std::move(rImpGraphic.maBitmapEx);
     mbSwapOut = rImpGraphic.mbSwapOut;
     mpSwapFile = std::move(rImpGraphic.mpSwapFile);
     mpGfxLink = std::move(rImpGraphic.mpGfxLink);
@@ -315,7 +315,7 @@ bool ImpGraphic::operator==( const ImpGraphic& rImpGraphic ) const
                     if( rImpGraphic.mpAnimation && ( *rImpGraphic.mpAnimation == *mpAnimation ) )
                         bRet = true;
                 }
-                else if( !rImpGraphic.mpAnimation && ( rImpGraphic.maEx == maEx ) )
+                else if( !rImpGraphic.mpAnimation && ( rImpGraphic.maBitmapEx == maBitmapEx ) )
                 {
                     bRet = true;
                 }
@@ -353,7 +353,7 @@ void ImpGraphic::ImplCreateSwapInfo()
 
 void ImpGraphic::ImplClearGraphics()
 {
-    maEx.Clear();
+    maBitmapEx.Clear();
     maMetaFile.Clear();
     mpAnimation.reset();
     mpGfxLink.reset();
@@ -449,7 +449,7 @@ bool ImpGraphic::ImplIsTransparent() const
     }
     else if (meType == GraphicType::Bitmap && !maVectorGraphicData.get())
     {
-        bRet = mpAnimation ? mpAnimation->IsTransparent() : maEx.IsTransparent();
+        bRet = mpAnimation ? mpAnimation->IsTransparent() : maBitmapEx.IsTransparent();
     }
 
     return bRet;
@@ -469,7 +469,7 @@ bool ImpGraphic::ImplIsAlpha() const
     }
     else if (meType == GraphicType::Bitmap)
     {
-        bRet = (nullptr == mpAnimation && maEx.IsAlpha());
+        bRet = (nullptr == mpAnimation && maBitmapEx.IsAlpha());
     }
 
     return bRet;
@@ -520,13 +520,13 @@ Bitmap ImpGraphic::ImplGetBitmap(const GraphicConversionParameters& rParameters)
 
     if( meType == GraphicType::Bitmap )
     {
-        if(maVectorGraphicData.get() && maEx.IsEmpty())
+        if(maVectorGraphicData.get() && maBitmapEx.IsEmpty())
         {
-            // use maEx as local buffer for rendered svg
-            const_cast< ImpGraphic* >(this)->maEx = getVectorGraphicReplacement();
+            // use maBitmapEx as local buffer for rendered svg
+            const_cast< ImpGraphic* >(this)->maBitmapEx = getVectorGraphicReplacement();
         }
 
-        const BitmapEx& rRetBmpEx = ( mpAnimation ? mpAnimation->GetBitmapEx() : maEx );
+        const BitmapEx& rRetBmpEx = ( mpAnimation ? mpAnimation->GetBitmapEx() : maBitmapEx );
 
         aRetBmp = rRetBmpEx.GetBitmap( COL_WHITE );
 
@@ -535,7 +535,7 @@ Bitmap ImpGraphic::ImplGetBitmap(const GraphicConversionParameters& rParameters)
     }
     else if( ( meType != GraphicType::Default ) && ImplIsSupportedGraphic() )
     {
-        if(maEx.IsEmpty())
+        if(maBitmapEx.IsEmpty())
         {
             // calculate size
             ScopedVclPtrInstance< VirtualDevice > aVDev;
@@ -604,12 +604,12 @@ Bitmap ImpGraphic::ImplGetBitmap(const GraphicConversionParameters& rParameters)
 
                 ImplDraw( aVDev.get(), Point(), aDrawSize );
 
-                // use maEx as local buffer for rendered metafile
-                const_cast< ImpGraphic* >(this)->maEx = aVDev->GetBitmapEx( Point(), aVDev->GetOutputSizePixel() );
+                // use maBitmapEx as local buffer for rendered metafile
+                const_cast< ImpGraphic* >(this)->maBitmapEx = aVDev->GetBitmapEx( Point(), aVDev->GetOutputSizePixel() );
             }
         }
 
-        aRetBmp = maEx.GetBitmap();
+        aRetBmp = maBitmapEx.GetBitmap();
     }
 
     if( !!aRetBmp )
@@ -629,13 +629,13 @@ BitmapEx ImpGraphic::ImplGetBitmapEx(const GraphicConversionParameters& rParamet
 
     if( meType == GraphicType::Bitmap )
     {
-        if(maVectorGraphicData.get() && maEx.IsEmpty())
+        if(maVectorGraphicData.get() && maBitmapEx.IsEmpty())
         {
-            // use maEx as local buffer for rendered svg
-            const_cast< ImpGraphic* >(this)->maEx = getVectorGraphicReplacement();
+            // use maBitmapEx as local buffer for rendered svg
+            const_cast< ImpGraphic* >(this)->maBitmapEx = getVectorGraphicReplacement();
         }
 
-        aRetBmpEx = ( mpAnimation ? mpAnimation->GetBitmapEx() : maEx );
+        aRetBmpEx = ( mpAnimation ? mpAnimation->GetBitmapEx() : maBitmapEx );
 
         if(rParameters.getSizePixel().Width() || rParameters.getSizePixel().Height())
         {
@@ -646,15 +646,15 @@ BitmapEx ImpGraphic::ImplGetBitmapEx(const GraphicConversionParameters& rParamet
     }
     else if( ( meType != GraphicType::Default ) && ImplIsSupportedGraphic() )
     {
-        if(maEx.IsEmpty())
+        if(maBitmapEx.IsEmpty())
         {
             const ImpGraphic aMonoMask( maMetaFile.GetMonochromeMtf( COL_BLACK ) );
 
-            // use maEx as local buffer for rendered metafile
-            const_cast< ImpGraphic* >(this)->maEx = BitmapEx(ImplGetBitmap(rParameters), aMonoMask.ImplGetBitmap(rParameters));
+            // use maBitmapEx as local buffer for rendered metafile
+            const_cast< ImpGraphic* >(this)->maBitmapEx = BitmapEx(ImplGetBitmap(rParameters), aMonoMask.ImplGetBitmap(rParameters));
         }
 
-        aRetBmpEx = maEx;
+        aRetBmpEx = maBitmapEx;
     }
 
     return aRetBmpEx;
@@ -674,7 +674,7 @@ Animation ImpGraphic::ImplGetAnimation() const
 const BitmapEx& ImpGraphic::ImplGetBitmapExRef() const
 {
     ensureAvailable();
-    return maEx;
+    return maBitmapEx;
 }
 
 const GDIMetaFile& ImpGraphic::ImplGetGDIMetaFile() const
@@ -716,27 +716,27 @@ const GDIMetaFile& ImpGraphic::ImplGetGDIMetaFile() const
         // survive copying (change this if not wanted)
         ImpGraphic* pThat = const_cast< ImpGraphic* >(this);
 
-        if(maVectorGraphicData.get() && !maEx)
+        if(maVectorGraphicData.get() && !maBitmapEx)
         {
-            // use maEx as local buffer for rendered svg
-            pThat->maEx = getVectorGraphicReplacement();
+            // use maBitmapEx as local buffer for rendered svg
+            pThat->maBitmapEx = getVectorGraphicReplacement();
         }
 
         // #123983# directly create a metafile with the same PrefSize and PrefMapMode
         // the bitmap has, this will be an always correct metafile
-        if(maEx.IsTransparent())
+        if(maBitmapEx.IsTransparent())
         {
-            pThat->maMetaFile.AddAction(new MetaBmpExScaleAction(Point(), maEx.GetPrefSize(), maEx));
+            pThat->maMetaFile.AddAction(new MetaBmpExScaleAction(Point(), maBitmapEx.GetPrefSize(), maBitmapEx));
         }
         else
         {
-            pThat->maMetaFile.AddAction(new MetaBmpScaleAction(Point(), maEx.GetPrefSize(), maEx.GetBitmap()));
+            pThat->maMetaFile.AddAction(new MetaBmpScaleAction(Point(), maBitmapEx.GetPrefSize(), maBitmapEx.GetBitmap()));
         }
 
         pThat->maMetaFile.Stop();
         pThat->maMetaFile.WindStart();
-        pThat->maMetaFile.SetPrefSize(maEx.GetPrefSize());
-        pThat->maMetaFile.SetPrefMapMode(maEx.GetPrefMapMode());
+        pThat->maMetaFile.SetPrefSize(maBitmapEx.GetPrefSize());
+        pThat->maMetaFile.SetPrefMapMode(maBitmapEx.GetPrefMapMode());
     }
 
     return maMetaFile;
@@ -772,11 +772,11 @@ Size ImpGraphic::ImplGetPrefSize() const
 
             case GraphicType::Bitmap:
             {
-                if(maVectorGraphicData.get() && maEx.IsEmpty())
+                if(maVectorGraphicData.get() && maBitmapEx.IsEmpty())
                 {
                     if (!maExPrefSize.getWidth() || !maExPrefSize.getHeight())
                     {
-                        // svg not yet buffered in maEx, return size derived from range
+                        // svg not yet buffered in maBitmapEx, return size derived from range
                         const basegfx::B2DRange& rRange = maVectorGraphicData->getRange();
 
                         aSize = Size(basegfx::fround(rRange.getWidth()), basegfx::fround(rRange.getHeight()));
@@ -788,11 +788,11 @@ Size ImpGraphic::ImplGetPrefSize() const
                 }
                 else
                 {
-                    aSize = maEx.GetPrefSize();
+                    aSize = maBitmapEx.GetPrefSize();
 
                     if( !aSize.Width() || !aSize.Height() )
                     {
-                        aSize = maEx.GetSizePixel();
+                        aSize = maBitmapEx.GetSizePixel();
                     }
                 }
             }
@@ -824,7 +824,7 @@ void ImpGraphic::ImplSetPrefSize( const Size& rPrefSize )
         {
             // used when importing a writer FlyFrame with SVG as graphic, added conversion
             // to allow setting the PrefSize at the BitmapEx to hold it
-            if(maVectorGraphicData.get() && maEx.IsEmpty())
+            if(maVectorGraphicData.get() && maBitmapEx.IsEmpty())
             {
                 maExPrefSize = rPrefSize;
             }
@@ -838,7 +838,7 @@ void ImpGraphic::ImplSetPrefSize( const Size& rPrefSize )
 
             if (!maExPrefSize.getWidth() || !maExPrefSize.getHeight())
             {
-                maEx.SetPrefSize( rPrefSize );
+                maBitmapEx.SetPrefSize( rPrefSize );
             }
         }
         break;
@@ -870,17 +870,17 @@ MapMode ImpGraphic::ImplGetPrefMapMode() const
 
             case GraphicType::Bitmap:
             {
-                if(maVectorGraphicData.get() && maEx.IsEmpty())
+                if(maVectorGraphicData.get() && maBitmapEx.IsEmpty())
                 {
-                    // svg not yet buffered in maEx, return default PrefMapMode
+                    // svg not yet buffered in maBitmapEx, return default PrefMapMode
                     aMapMode = MapMode(MapUnit::Map100thMM);
                 }
                 else
                 {
-                    const Size aSize( maEx.GetPrefSize() );
+                    const Size aSize( maBitmapEx.GetPrefSize() );
 
                     if ( aSize.Width() && aSize.Height() )
-                        aMapMode = maEx.GetPrefMapMode();
+                        aMapMode = maBitmapEx.GetPrefMapMode();
                 }
             }
             break;
@@ -912,7 +912,7 @@ void ImpGraphic::ImplSetPrefMapMode( const MapMode& rPrefMapMode )
             if(maVectorGraphicData.get())
             {
                 // ignore for Vector Graphic Data. If this is really used (except the grfcache)
-                // it can be extended by using maEx as buffer for getVectorGraphicReplacement()
+                // it can be extended by using maBitmapEx as buffer for getVectorGraphicReplacement()
             }
             else
             {
@@ -923,7 +923,7 @@ void ImpGraphic::ImplSetPrefMapMode( const MapMode& rPrefMapMode )
                     const_cast< BitmapEx& >(mpAnimation->GetBitmapEx()).SetPrefMapMode( rPrefMapMode );
                 }
 
-                maEx.SetPrefMapMode( rPrefMapMode );
+                maBitmapEx.SetPrefMapMode( rPrefMapMode );
             }
         }
         break;
@@ -958,7 +958,7 @@ sal_uLong ImpGraphic::ImplGetSizeBytes() const
         }
         else
         {
-            mnSizeBytes = mpAnimation ? mpAnimation->GetSizeBytes() : maEx.GetSizeBytes();
+            mnSizeBytes = mpAnimation ? mpAnimation->GetSizeBytes() : maBitmapEx.GetSizeBytes();
         }
     }
     else if( meType == GraphicType::GdiMetafile )
@@ -982,10 +982,10 @@ void ImpGraphic::ImplDraw( OutputDevice* pOutDev, const Point& rDestPt ) const
 
         case GraphicType::Bitmap:
         {
-            if(maVectorGraphicData.get() && !maEx)
+            if(maVectorGraphicData.get() && !maBitmapEx)
             {
                 // use maEx as local buffer for rendered svg
-                const_cast< ImpGraphic* >(this)->maEx = getVectorGraphicReplacement();
+                const_cast< ImpGraphic* >(this)->maBitmapEx = getVectorGraphicReplacement();
             }
 
             if ( mpAnimation )
@@ -994,7 +994,7 @@ void ImpGraphic::ImplDraw( OutputDevice* pOutDev, const Point& rDestPt ) const
             }
             else
             {
-                maEx.Draw( pOutDev, rDestPt );
+                maBitmapEx.Draw( pOutDev, rDestPt );
             }
         }
         break;
@@ -1019,10 +1019,10 @@ void ImpGraphic::ImplDraw( OutputDevice* pOutDev,
 
         case GraphicType::Bitmap:
         {
-            if(maVectorGraphicData.get() && maEx.IsEmpty())
+            if(maVectorGraphicData.get() && maBitmapEx.IsEmpty())
             {
                 // use maEx as local buffer for rendered svg
-                const_cast< ImpGraphic* >(this)->maEx = getVectorGraphicReplacement();
+                const_cast< ImpGraphic* >(this)->maBitmapEx = getVectorGraphicReplacement();
             }
 
             if( mpAnimation )
@@ -1031,7 +1031,7 @@ void ImpGraphic::ImplDraw( OutputDevice* pOutDev,
             }
             else
             {
-                maEx.Draw( pOutDev, rDestPt, rDestSize );
+                maBitmapEx.Draw( pOutDev, rDestPt, rDestSize );
             }
         }
         break;
@@ -1166,18 +1166,18 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
     {
         if( meType == GraphicType::Bitmap )
         {
-            if(maVectorGraphicData.get() && maEx.IsEmpty())
+            if(maVectorGraphicData.get() && maBitmapEx.IsEmpty())
             {
-                // use maEx as local buffer for rendered svg
-                maEx = getVectorGraphicReplacement();
+                // use maBitmapEx as local buffer for rendered svg
+                maBitmapEx = getVectorGraphicReplacement();
             }
 
-            maEx.SetSizePixel(aSize);
+            maBitmapEx.SetSizePixel(aSize);
 
             if( aMapMode != MapMode() )
             {
-                maEx.SetPrefMapMode( aMapMode );
-                maEx.SetPrefSize( aSize );
+                maBitmapEx.SetPrefMapMode( aMapMode );
+                maBitmapEx.SetPrefSize( aSize );
             }
         }
         else
@@ -1551,7 +1551,7 @@ BitmapChecksum ImpGraphic::ImplGetChecksum() const
                 else if( mpAnimation )
                     nRet = mpAnimation->GetChecksum();
                 else
-                    nRet = maEx.GetChecksum();
+                    nRet = maBitmapEx.GetChecksum();
             }
             break;
 
@@ -1841,7 +1841,7 @@ void WriteImpGraphic(SvStream& rOStm, const ImpGraphic& rImpGraphic)
                 }
                 else
                 {
-                    WriteDIBBitmapEx(rImpGraphic.maEx, rOStm);
+                    WriteDIBBitmapEx(rImpGraphic.maBitmapEx, rOStm);
                 }
             }
             break;
