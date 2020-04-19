@@ -29,6 +29,7 @@
 #include <basegfx/vector/b3dvector.hxx>
 #include <basegfx/point/b3dpoint.hxx>
 #include <sdr/contact/viewcontactofe3dsphere.hxx>
+#include <rtl/ustrbuf.hxx>
 
 // DrawContact section
 std::unique_ptr<sdr::contact::ViewContact> E3dSphereObj::CreateObjectSpecificViewContact()

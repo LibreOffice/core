@@ -32,6 +32,7 @@
 #include <editeng/editobj.hxx>
 #include <svx/svdocirc.hxx>
 #include <svx/svdpage.hxx>
+#include <rtl/math.hxx>
 
 void Test::testSort()
 {

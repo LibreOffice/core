@@ -20,6 +20,7 @@
 #define INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLPLOTAREACONTEXT_HXX
 
 #include "SchXMLChartContext.hxx"
+#include <rtl/ustrbuf.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/prstylei.hxx>
 #include <xmloff/shapeimport.hxx>

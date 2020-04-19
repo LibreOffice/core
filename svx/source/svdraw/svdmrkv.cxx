@@ -25,6 +25,7 @@
 #include <svx/svdotable.hxx>
 
 #include <osl/thread.h>
+#include <rtl/strbuf.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xfillit0.hxx>

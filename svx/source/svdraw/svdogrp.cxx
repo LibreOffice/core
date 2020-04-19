@@ -32,6 +32,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <libxml/xmlwriter.h>
+#include <rtl/ustrbuf.hxx>
 #include <vcl/canvastools.hxx>
 
 // BaseProperties section

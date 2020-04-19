@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <rtl/math.hxx>
 #include <svx/framelink.hxx>
 
 #include <editeng/borderline.hxx>

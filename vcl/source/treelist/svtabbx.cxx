@@ -25,6 +25,7 @@
 #include <vcl/treelistentry.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>

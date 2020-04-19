@@ -28,6 +28,7 @@
 #include <vcl/fontcharmap.hxx>
 #include <vcl/event.hxx>
 #include <font/FeatureCollector.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 
