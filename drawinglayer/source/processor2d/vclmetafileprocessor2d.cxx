@@ -19,6 +19,7 @@
 
 #include <memory>
 #include "vclmetafileprocessor2d.hxx"
+#include <rtl/math.hxx>
 #include <tools/gen.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/virdev.hxx>

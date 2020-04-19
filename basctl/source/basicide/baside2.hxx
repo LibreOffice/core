@@ -32,6 +32,7 @@
 
 #include <svtools/colorcfg.hxx>
 #include <o3tl/enumarray.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <set>
 

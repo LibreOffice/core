@@ -24,6 +24,7 @@
 #include <cstdlib>
 
 #include <hintids.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/eitem.hxx>
 #include <unotools/syslocale.hxx>

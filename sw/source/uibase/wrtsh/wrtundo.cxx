@@ -18,6 +18,7 @@
  */
 
 #include <svl/slstitm.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <wrtsh.hxx>
 #include <swundo.hxx>
 #include <IDocumentUndoRedo.hxx>

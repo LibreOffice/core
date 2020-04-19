@@ -36,6 +36,7 @@
 #include <svx/tabline.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/graph.hxx>
+#include <rtl/math.hxx>
 
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>

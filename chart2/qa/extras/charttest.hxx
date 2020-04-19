@@ -29,6 +29,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 
 #include <unotools/tempfile.hxx>
+#include <rtl/math.hxx>
 
 #include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>

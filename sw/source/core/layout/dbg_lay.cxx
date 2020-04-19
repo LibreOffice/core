@@ -106,6 +106,7 @@
 #include <frame.hxx>
 #include <swtable.hxx>
 #include <ndtxt.hxx>
+#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <tools/stream.hxx>
 

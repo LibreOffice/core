@@ -21,6 +21,7 @@
 #define INCLUDED_SD_SOURCE_FILTER_HTML_HTMLEX_HXX
 
 #include <resltn.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <tools/color.hxx>
 #include <tools/solar.h>
 #include <vcl/errinf.hxx>

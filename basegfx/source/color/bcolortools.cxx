@@ -20,6 +20,7 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/color/bcolortools.hxx>
+#include <rtl/math.hxx>
 
 namespace basegfx::utils
 {

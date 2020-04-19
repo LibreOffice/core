@@ -36,6 +36,7 @@
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
+#include <rtl/math.hxx>
 #include <sal/macros.h>
 #include <svl/itemset.hxx>
 #include <svx/xfillit0.hxx>

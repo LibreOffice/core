@@ -30,6 +30,7 @@
 #include <svx/svxerr.hxx>
 #include <unotools/resmgr.hxx>
 #include <osl/diagnose.h>
+#include <rtl/ustrbuf.hxx>
 
 #include <ids.hrc>
 #include "getcontinuations.hxx"

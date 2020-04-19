@@ -21,6 +21,7 @@
 
 #include <com/sun/star/rendering/TextDirection.hpp>
 
+#include <rtl/math.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/canvastools.hxx>

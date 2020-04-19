@@ -48,6 +48,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <sal/log.hxx>
+#include <rtl/math.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;

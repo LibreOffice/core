@@ -37,6 +37,7 @@
 #include <calbck.hxx>
 #include <hints.hxx>
 #include <pam.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 #include <unotextrange.hxx>
 

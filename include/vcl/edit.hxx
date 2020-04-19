@@ -25,6 +25,7 @@
 
 #include <memory>
 
+#include <rtl/ustrbuf.hxx>
 #include <o3tl/deleter.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>

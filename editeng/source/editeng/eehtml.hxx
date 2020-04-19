@@ -21,6 +21,7 @@
 
 #include <memory>
 #include <editdoc.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <svtools/parhtml.hxx>
 
 class EditEngine;
