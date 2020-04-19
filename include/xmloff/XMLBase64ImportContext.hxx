@@ -21,6 +21,7 @@
 #define INCLUDED_XMLOFF_XMLBASE64IMPORTCONTEXT_HXX
 
 #include <sal/config.h>
+#include <rtl/ustrbuf.hxx>
 #include <xmloff/dllapi.h>
 #include <xmloff/xmlictxt.hxx>
 

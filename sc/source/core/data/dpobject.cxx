@@ -69,6 +69,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <sal/macros.h>
+#include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
 #include <svl/zforlist.hxx>
 #include <vcl/svapp.hxx>

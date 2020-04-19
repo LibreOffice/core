@@ -27,6 +27,7 @@
 #include <com/sun/star/i18n/IndexEntrySupplier.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
+#include <rtl/ustrbuf.hxx>
 #include <i18nutil/searchopt.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>

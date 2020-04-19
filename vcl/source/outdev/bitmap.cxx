@@ -48,6 +48,7 @@
 #include <osl/diagnose.h>
 #include <tools/helpers.hxx>
 #include <tools/debug.hxx>
+#include <rtl/math.hxx>
 
 #include <vcl/dibtools.hxx>
 #include <tools/stream.hxx>

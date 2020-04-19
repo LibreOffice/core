@@ -19,7 +19,9 @@
 
 #pragma once
 
-#include <rtl/math.hxx>
+#include <rtl/math.h>
+#include <cmath>
+#include <math.h>
 #include <basegfx/basegfxdllapi.h>
 #include <limits>
 #include <algorithm>
@@ -194,7 +196,7 @@ namespace basegfx
         static bool equal(const double& rfValA, const double& rfValB)
         {
             // changed to approxEqual usage for better numerical correctness
-            return rtl::math::approxEqual(rfValA, rfValB);
+            return rtl_math_approxEqual(rfValA, rfValB);
         }
 
         static bool equal(const double& rfValA, const double& rfValB, const double& rfSmallValue)

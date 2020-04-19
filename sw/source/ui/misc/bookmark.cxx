@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <rtl/ustrbuf.hxx>
 #include <sfx2/request.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/weld.hxx>

@@ -26,6 +26,7 @@
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
+#include <rtl/math.hxx>
 #include <tools/wintypes.hxx>
 #include <unotools/charclass.hxx>
 

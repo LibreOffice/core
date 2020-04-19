@@ -286,9 +286,9 @@ namespace basegfx
     inline B3DTuple average(const B3DTuple& rOld1, const B3DTuple& rOld2)
     {
         return B3DTuple(
-            rtl::math::approxEqual(rOld1.getX(), rOld2.getX()) ? rOld1.getX() : (rOld1.getX() + rOld2.getX()) * 0.5,
-            rtl::math::approxEqual(rOld1.getY(), rOld2.getY()) ? rOld1.getY() : (rOld1.getY() + rOld2.getY()) * 0.5,
-            rtl::math::approxEqual(rOld1.getZ(), rOld2.getZ()) ? rOld1.getZ() : (rOld1.getZ() + rOld2.getZ()) * 0.5);
+            rtl_math_approxEqual(rOld1.getX(), rOld2.getX()) ? rOld1.getX() : (rOld1.getX() + rOld2.getX()) * 0.5,
+            rtl_math_approxEqual(rOld1.getY(), rOld2.getY()) ? rOld1.getY() : (rOld1.getY() + rOld2.getY()) * 0.5,
+            rtl_math_approxEqual(rOld1.getZ(), rOld2.getZ()) ? rOld1.getZ() : (rOld1.getZ() + rOld2.getZ()) * 0.5);
     }
 
     inline B3DTuple operator+(const B3DTuple& rTupA, const B3DTuple& rTupB)

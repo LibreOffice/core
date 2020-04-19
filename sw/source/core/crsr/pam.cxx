@@ -45,6 +45,7 @@
 #include <hints.hxx>
 #include <txatbase.hxx>
 #include <xmloff/odffields.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <editsh.hxx>
 

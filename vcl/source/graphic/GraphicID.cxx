@@ -20,6 +20,7 @@
 #include <graphic/GraphicID.hxx>
 
 #include <impgraph.hxx>
+#include <rtl/strbuf.hxx>
 
 GraphicID::GraphicID(ImpGraphic const& rGraphic)
 {

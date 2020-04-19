@@ -22,6 +22,7 @@
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
 #include <osl/module.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <sal/log.hxx>
 
