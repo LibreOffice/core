@@ -172,7 +172,7 @@ private:
 };
 
 SvxFontSizeBox_Base::SvxFontSizeBox_Base(std::unique_ptr<weld::ComboBox> xWidget,
-                                         const uno::Reference< frame::XFrame >& rFrame,
+                                         const uno::Reference<frame::XFrame>& rFrame,
                                          FontHeightToolBoxControl& rCtrl)
     : m_rCtrl(rCtrl)
     , m_bRelease(true)
