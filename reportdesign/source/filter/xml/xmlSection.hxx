@@ -21,7 +21,6 @@
 
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/report/XSection.hpp>
-#include <vector>
 
 namespace rptxml
 {

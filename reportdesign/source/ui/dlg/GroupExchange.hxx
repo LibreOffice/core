@@ -19,9 +19,7 @@
 #ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_DLG_GROUPEXCHANGE_HXX
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_DLG_GROUPEXCHANGE_HXX
 
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/transfer.hxx>
-#include <GroupsSorting.hxx>
 
 namespace rptui
 {

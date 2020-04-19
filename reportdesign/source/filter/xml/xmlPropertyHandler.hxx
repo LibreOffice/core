@@ -19,8 +19,6 @@
 #ifndef INCLUDED_REPORTDESIGN_SOURCE_FILTER_XML_XMLPROPERTYHANDLER_HXX
 #define INCLUDED_REPORTDESIGN_SOURCE_FILTER_XML_XMLPROPERTYHANDLER_HXX
 
-#include <xmloff/xmlprmap.hxx>
-#include <xmloff/contextid.hxx>
 #include <xmloff/prhdlfac.hxx>
 
 namespace rptxml

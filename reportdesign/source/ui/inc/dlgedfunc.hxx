@@ -19,7 +19,10 @@
 #ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DLGEDFUNC_HXX
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DLGEDFUNC_HXX
 
+#include <tools/gen.hxx>
+#include <vcl/event.hxx>
 #include <vcl/timer.hxx>
+#include <com/sun/star/uno/XInterface.hpp>
 
 class Timer;
 class MouseEvent;

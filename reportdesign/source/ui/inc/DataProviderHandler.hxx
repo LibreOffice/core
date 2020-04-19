@@ -33,8 +33,6 @@
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <memory>
-
 
 namespace rptui
 {

@@ -21,19 +21,11 @@
 
 #include "dllapi.h"
 
-#include "RptModel.hxx"
-
-#include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/container/ContainerEvent.hpp>
 #include <com/sun/star/report/XReportDefinition.hpp>
 #include <com/sun/star/report/XGroup.hpp>
-#include <com/sun/star/document/XUndoManager.hpp>
 
-#include <svl/lstner.hxx>
-#include <svx/svdouno.hxx>
 #include <svx/svdundo.hxx>
 
 #include <functional>

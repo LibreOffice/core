@@ -22,7 +22,6 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#include <com/sun/star/container/XContainerListener.hpp>
 
 namespace rptui
 {

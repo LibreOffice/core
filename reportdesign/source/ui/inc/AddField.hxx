@@ -30,7 +30,6 @@
 #include <svx/dbaexchange.hxx>
 #include <cppuhelper/basemutex.hxx>
 
-#include <vcl/transfer.hxx>
 #include <vcl/weld.hxx>
 
 #include <rtl/ref.hxx>

@@ -28,7 +28,7 @@
 #include "dllapi.h"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <svx/fmglob.hxx>
-#include <svx/svdobj.hxx>
+#include <svx/svdtypes.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace report {

@@ -27,8 +27,6 @@
 #include <com/sun/star/inspection/XPropertyHandler.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <memory>
-
 
 namespace rptui
 {

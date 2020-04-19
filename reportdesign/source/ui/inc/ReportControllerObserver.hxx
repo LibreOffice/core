@@ -24,10 +24,8 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <memory>
-#include <dllapi.h>
-#include <vector>
 
-#include <vcl/svapp.hxx>
+#include <vcl/vclevent.hxx>
 #include <tools/link.hxx>
 
 #include "FormattedFieldBeautifier.hxx"

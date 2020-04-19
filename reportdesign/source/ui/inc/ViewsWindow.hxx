@@ -23,13 +23,8 @@
 #include <vcl/window.hxx>
 #include <svtools/colorcfg.hxx>
 #include "ReportDefines.hxx"
-#include "ReportSection.hxx"
-#include <cppuhelper/basemutex.hxx>
-#include <com/sun/star/beans/NamedValue.hpp>
-#include <svx/svdedtv.hxx>
 #include "SectionView.hxx"
 #include <unotools/options.hxx>
-#include <list>
 #include <vector>
 
 #include "MarkedSection.hxx"

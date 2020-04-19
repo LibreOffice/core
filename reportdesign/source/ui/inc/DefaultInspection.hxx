@@ -25,8 +25,6 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/implbase3.hxx>
 
-#include <memory>
-
 
 namespace rptui
 {

@@ -28,6 +28,7 @@
 #include "xmlReportElement.hxx"
 #include "xmlComponent.hxx"
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 
 namespace rptxml

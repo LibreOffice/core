@@ -28,6 +28,7 @@
 #include "xmlTable.hxx"
 #include <comphelper/property.hxx>
 #include <com/sun/star/report/XReportControlModel.hpp>
+#include <osl/diagnose.h>
 
 namespace rptxml
 {

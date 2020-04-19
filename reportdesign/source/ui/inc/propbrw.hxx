@@ -20,8 +20,6 @@
 #ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_PROPBRW_HXX
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_PROPBRW_HXX
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/frame/XFrame2.hpp>
 #include <com/sun/star/inspection/XObjectInspector.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

@@ -22,8 +22,8 @@
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/propertysetmixin.hxx>
 #include <com/sun/star/report/XFunction.hpp>
+#include <com/sun/star/report/XFunctions.hpp>
 #include <cppuhelper/basemutex.hxx>
-#include "ReportControlModel.hxx"
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 

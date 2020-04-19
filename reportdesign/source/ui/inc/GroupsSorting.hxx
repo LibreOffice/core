@@ -22,14 +22,11 @@
 #include <com/sun/star/report/XGroups.hpp>
 #include <com/sun/star/report/XGroup.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <GroupProperties.hxx>
 #include <comphelper/propmultiplex.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <rtl/ref.hxx>
 #include <vcl/weld.hxx>
 #include <osl/diagnose.h>
-
-#include <vector>
 
 class Control;
 

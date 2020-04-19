@@ -26,11 +26,13 @@
 #include "xmlReportElement.hxx"
 #include "xmlCell.hxx"
 #include <strings.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/report/XFormattedField.hpp>
 #include <com/sun/star/report/XFixedText.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include "xmlTable.hxx"
 #include <xmloff/XMLCharContext.hxx>
+#include <osl/diagnose.h>
 
 namespace rptxml
 {

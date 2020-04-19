@@ -31,7 +31,6 @@
 #include <rtl/ref.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <comphelper/stl_types.hxx>
-#include <functional>
 
 class SdrPage;
 class SdrObject;

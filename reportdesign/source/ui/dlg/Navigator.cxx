@@ -39,12 +39,14 @@
 #include <comphelper/containermultiplexer.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/SelectionMultiplex.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/commandevent.hxx>
 #include <svl/solar.hrc>
 #include <ReportVisitor.hxx>
 #include <core_resource.hxx>
 #include <rtl/ref.hxx>
+#include <svx/svxids.hrc>
 
 #include <memory>
 #include <algorithm>

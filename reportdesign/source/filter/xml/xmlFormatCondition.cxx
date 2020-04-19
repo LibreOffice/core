@@ -29,6 +29,7 @@
 #include <strings.hxx>
 #include "xmlStyleImport.hxx"
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 namespace rptxml
 {
