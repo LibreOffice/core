@@ -1357,7 +1357,7 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissing( const MissingConvention &
                 // Omit everything except a trailing separator, the leading
                 // separator is omitted below. The other way around would leave
                 // an extraneous separator if no parameter followed.
-                if (!(pOcas[ i ] == nFn && pCur->GetOpCode() == ocSep))
+                if (pOcas[ i ] != nFn || pCur->GetOpCode() != ocSep)
                     bAdd = false;
             }
         }

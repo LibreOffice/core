@@ -585,7 +585,7 @@ void FormulaDlg_Impl::CalcStruct( const OUString& rStrExp, bool bForceRecalcStru
 void FormulaDlg_Impl::MakeTree(StructPage* _pTree, weld::TreeIter* pParent, const FormulaToken* pFuncToken,
                                const FormulaToken* _pToken, long Count)
 {
-    if ( !(_pToken != nullptr && Count > 0) )
+    if ( _pToken == nullptr || Count <= 0 )
         return;
 
     long nParas = _pToken->GetParamCount();

@@ -1106,7 +1106,7 @@ bool xpdf_ImportFromFile(const OUString& rURL,
                 for (;;)
                 {
                     nRes = aBuffering.read(&aChar, 1, &nBytesRead);
-                    if (osl_File_E_None != nRes || nBytesRead != 1 || !(aChar == '\n' || aChar == '\r') )
+                    if (osl_File_E_None != nRes || nBytesRead != 1 || (aChar != '\n' && aChar != '\r') )
                         break;
                 }
                 if ( osl_File_E_None != nRes )

@@ -196,7 +196,7 @@ namespace svgio::svgreader
             const double fWidth(getWidth().solve(*this, xcoordinate));
             const double fHeight(getHeight().solve(*this, ycoordinate));
 
-            if(!(fWidth > 0.0 && fHeight > 0.0))
+            if(fWidth <= 0.0 || fHeight <= 0.0)
                 return;
 
             BitmapEx aBitmapEx;

@@ -128,7 +128,7 @@ bool Bookmark::Read(HWPFile & hwpf)
      {
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
-    if (!(hh == dummy && dummy == CH_BOOKMARK)){
+    if (hh != dummy || dummy != CH_BOOKMARK) {
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
 
@@ -143,7 +143,7 @@ bool DateFormat::Read(HWPFile & hwpf)
     hwpf.Read2b(format, DATE_SIZE);
     if (!hwpf.Read2b(dummy))
         return false;
-    if (!(hh == dummy && CH_DATE_FORM == dummy)){
+    if (hh != dummy || CH_DATE_FORM != dummy) {
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
     return true;
@@ -156,7 +156,7 @@ bool DateCode::Read(HWPFile & hwpf)
     hwpf.Read2b(date, 6);
     if (!hwpf.Read2b(dummy))
         return false;
-    if (!(hh == dummy && CH_DATE_CODE == dummy)){
+    if (hh != dummy || CH_DATE_CODE != dummy) {
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
     hwpf.AddDateFormat(this);
@@ -174,7 +174,7 @@ bool Tab::Read(HWPFile & hwpf)
         return false;
     if (!hwpf.Read2b(dummy))
         return false;
-    if (!(hh == dummy && CH_TAB == dummy)){
+    if (hh != dummy || CH_TAB != dummy) {
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
     return true;
@@ -215,7 +215,7 @@ bool TxtBox::Read(HWPFile & hwpf)
     hwpf.Read2b(reserved, 2);
     hwpf.Read2b(&dummy, 1);
 
-    if (!(hh == dummy && CH_TEXT_BOX == dummy)){
+    if (hh != dummy || CH_TEXT_BOX != dummy) {
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
     hwpf.AddBox(this);
@@ -393,7 +393,7 @@ bool Picture::Read(HWPFile & hwpf)
     hwpf.Read2b(reserved, 2);
     hwpf.Read2b(&dummy, 1);
 
-    if (!(hh == dummy && CH_PICTURE == dummy)) {
+    if (hh != dummy || CH_PICTURE != dummy) {
         return hwpf.SetState(HWP_InvalidFileFormat);
     }
     hwpf.AddBox(this);
@@ -536,7 +536,7 @@ bool Line::Read(HWPFile & hwpf)
     hwpf.Read2b(reserved, 2);
     hwpf.Read2b(&dummy, 1);
 
-    if (!(hh == dummy && CH_LINE == dummy)){
+    if (hh != dummy || CH_LINE != dummy) {
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
     hwpf.AddBox(this);
@@ -595,7 +595,7 @@ bool Hidden::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(reserved, 2);
     hwpf.Read2b(&dummy, 1);
-    if (!(hh == dummy && CH_HIDDEN == dummy)){
+    if (hh != dummy || CH_HIDDEN != dummy) {
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
 
@@ -620,7 +620,7 @@ bool HeaderFooter::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(reserved, 2);
     hwpf.Read2b(&dummy, 1);
-    if (!(hh == dummy && CH_HEADER_FOOTER == dummy)){
+    if (hh != dummy || CH_HEADER_FOOTER != dummy) {
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
 
@@ -652,7 +652,7 @@ bool Footnote::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(reserved, 2);
     hwpf.Read2b(&dummy, 1);
-    if (!(hh == dummy && CH_FOOTNOTE == dummy)){
+    if (hh != dummy || CH_FOOTNOTE != dummy) {
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
 

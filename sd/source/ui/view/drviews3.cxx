@@ -148,7 +148,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 
                     sal_Int32 nWhatPage = static_cast<sal_Int32>(pWhatPage->GetValue ());
                     PageKind nWhatKind = static_cast<PageKind>(pWhatKind->GetValue ());
-                    if (! (nWhatKind >= PageKind::Standard && nWhatKind <= PageKind::Handout))
+                    if (nWhatKind < PageKind::Standard || nWhatKind > PageKind::Handout)
                     {
 #if HAVE_FEATURE_SCRIPTING
                         StarBASIC::FatalError (ERRCODE_BASIC_BAD_PROP_VALUE);

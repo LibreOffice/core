@@ -1003,7 +1003,7 @@ bool ScChangeActionDel::Reject( ScDocument* pDoc )
             switch ( GetType() )
             {
                 case SC_CAT_DELETE_COLS :
-                    if ( !(aRange.aStart.Col() == 0 && aRange.aEnd.Col() == pDoc->MaxCol()) )
+                    if ( aRange.aStart.Col() != 0 || aRange.aEnd.Col() != pDoc->MaxCol() )
                     {   // Only if not TabDelete
                         bOk = pDoc->CanInsertCol( aRange ) && pDoc->InsertCol( aRange );
                     }

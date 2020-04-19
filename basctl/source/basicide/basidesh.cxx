@@ -487,8 +487,8 @@ void Shell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         return;
 
     const SfxHintId nHintId = pSbxHint->GetId();
-    if (    !(( nHintId == SfxHintId::BasicStart ) ||
-            ( nHintId == SfxHintId::BasicStop )) )
+    if ( ( nHintId != SfxHintId::BasicStart ) &&
+         ( nHintId != SfxHintId::BasicStop ) )
         return;
 
     if (SfxBindings* pBindings = GetBindingsPtr())

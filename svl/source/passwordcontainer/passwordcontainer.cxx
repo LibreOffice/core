@@ -92,7 +92,7 @@ static std::vector< OUString > getInfoFromInd( const OUString& aInd )
         else
             aStart = false;
 
-        while( *pLine && !( pLine[0] == '_' && pLine[1] == '_' ))
+        while( *pLine && ( pLine[0] != '_' || pLine[1] != '_' ))
             if( *pLine != '_' )
             {
                 newItem.append( *pLine );

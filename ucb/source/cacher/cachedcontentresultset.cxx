@@ -979,8 +979,7 @@ void SAL_CALL CachedContentResultSet
         {
             nNew = COMSUNSTARUCBCCRS_DEFAULT_FETCH_DIRECTION;
         }
-        else if( !( nNew == FetchDirection::FORWARD
-                || nNew == FetchDirection::REVERSE ) )
+        else if( nNew != FetchDirection::FORWARD && nNew != FetchDirection::REVERSE )
         {
             throw IllegalArgumentException();
         }

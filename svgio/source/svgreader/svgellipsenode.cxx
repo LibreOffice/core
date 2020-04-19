@@ -134,7 +134,7 @@ namespace svgio::svgreader
             const double fRx(getRx().solve(*this, xcoordinate));
             const double fRy(getRy().solve(*this, ycoordinate));
 
-            if(!(fRx > 0.0 && fRy > 0.0))
+            if(fRx <= 0.0 || fRy <= 0.0)
                 return;
 
             const basegfx::B2DPolygon aPath(

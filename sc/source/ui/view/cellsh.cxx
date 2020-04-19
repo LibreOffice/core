@@ -1117,7 +1117,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     else
                     {
                          CommentCaptionState eState = pDoc->GetAllNoteCaptionsState( aRanges );
-                         bool bAllNotesInShown = !(eState == ALLHIDDEN || eState == MIXED);
+                         bool bAllNotesInShown = (eState != ALLHIDDEN && eState != MIXED);
                          rSet.Put( SfxBoolItem( SID_TOGGLE_NOTES, bAllNotesInShown) );
                     }
                 }

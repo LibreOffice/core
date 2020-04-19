@@ -642,8 +642,8 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                         // which are anchored inside a table, doesn't follow
                         // the text flow.
                         if ( DoesObjFollowsTextFlow() &&
-                             !( aVert.GetRelationOrient() == text::RelOrientation::PAGE_FRAME ||
-                                aVert.GetRelationOrient() == text::RelOrientation::PAGE_PRINT_AREA ) &&
+                             ( aVert.GetRelationOrient() != text::RelOrientation::PAGE_FRAME &&
+                                aVert.GetRelationOrient() != text::RelOrientation::PAGE_PRINT_AREA ) &&
                              !GetAnchorFrame().IsInTab() )
                         {
                             if ( bMoveable )
@@ -799,8 +799,8 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
         }
 
         if ( DoesObjFollowsTextFlow() &&
-             !( aVert.GetRelationOrient() == text::RelOrientation::PAGE_FRAME ||
-                aVert.GetRelationOrient() == text::RelOrientation::PAGE_PRINT_AREA ) )
+             ( aVert.GetRelationOrient() != text::RelOrientation::PAGE_FRAME &&
+                aVert.GetRelationOrient() != text::RelOrientation::PAGE_PRINT_AREA ) )
         {
 
             nDist = aRectFnSet.BottomDist( GetAnchoredObj().GetObjRect(),

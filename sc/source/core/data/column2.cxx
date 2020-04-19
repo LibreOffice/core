@@ -3518,7 +3518,7 @@ public:
         const SCROW nRow1 = node.position;
         const SCROW nRow2 = nRow1 + 1;
 
-        if (! ((nRow2 < mnStartRow) || (nRow1 > mnEndRow)))
+        if ((nRow2 >= mnStartRow) && (nRow1 <= mnEndRow))
         {
             mnCount += WeightedCounter::getWeight(node);
         }

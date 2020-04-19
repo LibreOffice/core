@@ -965,7 +965,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         if ( nSpacePos<0 )
             nSpacePos = aStr.getLength();
 
-        if ( !( aStr.getLength()>1 && aStr[1]=='=') &&
+        if ( ( aStr.getLength() <= 1 || aStr[1] != '=') &&
             (( nDotPos>=0 && nDotPos < nSpacePos ) ||
              ( nSlashPos>=0 && nSlashPos < nSpacePos )))
             return aF.nLen;

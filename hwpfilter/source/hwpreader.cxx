@@ -2467,7 +2467,7 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
         padd("fo:padding", sXML_CDATA, "0cm");
     }
 
-    if( !(fstyle->boxtype == 'G' && fstyle->cap_len > 0 ))
+    if( fstyle->boxtype != 'G' || fstyle->cap_len <= 0 )
     {
         padd("fo:margin-left", sXML_CDATA,
             Double2Str(WTMM(fstyle->margin[0][0]) ) + "mm");

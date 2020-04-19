@@ -2135,7 +2135,7 @@ WW8PLCFspecial::WW8PLCFspecial(SvStream* pSt, sal_uInt32 nFilePos,
 
     bool bValid = checkSeek(*pSt, nFilePos);
     std::size_t nRemainingSize = pSt->remainingSize();
-    if( !(nRemainingSize >= nValidMin && nPLCF >= nValidMin ))
+    if( nRemainingSize < nValidMin || nPLCF < nValidMin )
         bValid = false;
     nPLCF = bValid ? std::min(nRemainingSize, static_cast<std::size_t>(nPLCF)) : nValidMin;
 
@@ -2502,7 +2502,7 @@ WW8PLCFpcd::WW8PLCFpcd(SvStream* pSt, sal_uInt32 nFilePos,
 
     bool bValid = checkSeek(*pSt, nFilePos);
     std::size_t nRemainingSize = pSt->remainingSize();
-    if( !(nRemainingSize >= nValidMin && nPLCF >= nValidMin ))
+    if( nRemainingSize < nValidMin || nPLCF < nValidMin )
         bValid = false;
     nPLCF = bValid ? std::min(nRemainingSize, static_cast<std::size_t>(nPLCF)) : nValidMin;
 

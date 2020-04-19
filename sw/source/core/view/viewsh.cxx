@@ -1616,8 +1616,8 @@ bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
     const SwTwips nBottom = VisArea().Bottom();
     const SwTwips nRight  = VisArea().Right();
     bool bRet = false;
-    while ( !bRet && pPage && !((pPage->getFrameArea().Top()  > nBottom) ||
-                                   (pPage->getFrameArea().Left() > nRight)))
+    while ( !bRet && pPage && ((pPage->getFrameArea().Top() <= nBottom) &&
+                                (pPage->getFrameArea().Left() <= nRight)))
     {
         if ( pPage->IsInvalid() || pPage->IsInvalidFly() )
             bRet = true;

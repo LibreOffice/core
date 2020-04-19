@@ -228,7 +228,7 @@ void ValueSet::ImplFormatItem(vcl::RenderContext& rRenderContext, ValueSetItem* 
     if (pItem == mpNoneItem.get())
         pItem->maText = GetText();
 
-    if (!((aRect.GetHeight() > 0) && (aRect.GetWidth() > 0)))
+    if ((aRect.GetHeight() <= 0) || (aRect.GetWidth() <= 0))
         return;
 
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
@@ -3104,7 +3104,7 @@ void SvtValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, SvtV
     if (pItem == mpNoneItem.get())
         pItem->maText = GetText();
 
-    if (!((aRect.GetHeight() > 0) && (aRect.GetWidth() > 0)))
+    if ((aRect.GetHeight() <= 0) || (aRect.GetWidth() <= 0))
         return;
 
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();

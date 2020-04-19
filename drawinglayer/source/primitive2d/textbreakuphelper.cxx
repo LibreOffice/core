@@ -55,7 +55,7 @@ namespace drawinglayer::primitive2d
 
         void TextBreakupHelper::breakupPortion(Primitive2DContainer& rTempResult, sal_Int32 nIndex, sal_Int32 nLength, bool bWordLineMode)
         {
-            if(nLength && !(nIndex == mrSource.getTextPosition() && nLength == mrSource.getTextLength()))
+            if(nLength && (nIndex != mrSource.getTextPosition() || nLength != mrSource.getTextLength()))
             {
                 // prepare values for new portion
                 basegfx::B2DHomMatrix aNewTransform;

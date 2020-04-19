@@ -1376,7 +1376,7 @@ void SvxPageDescPage::CalcMargin_Impl()
     long nWidth = nBL + nBR + MINBODY;
     long nHeight = nBT + nBB + MINBODY;
 
-    if ( !(nWidth > nW || nHeight > nH) )
+    if ( nWidth <= nW && nHeight <= nH )
         return;
 
     if ( nWidth > nW )

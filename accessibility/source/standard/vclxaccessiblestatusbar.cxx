@@ -62,7 +62,7 @@ void VCLXAccessibleStatusBar::UpdateShowing( sal_Int32 i, bool bShowing )
 
 void VCLXAccessibleStatusBar::UpdateItemName( sal_Int32 i )
 {
-    if ( !(i >= 0 && i < static_cast<sal_Int32>(m_aAccessibleChildren.size())) )
+    if ( i < 0 || i >= static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
         return;
 
     Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
@@ -80,7 +80,7 @@ void VCLXAccessibleStatusBar::UpdateItemName( sal_Int32 i )
 
 void VCLXAccessibleStatusBar::UpdateItemText( sal_Int32 i )
 {
-    if ( !(i >= 0 && i < static_cast<sal_Int32>(m_aAccessibleChildren.size())) )
+    if ( i < 0 || i >= static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
         return;
 
     Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
@@ -98,7 +98,7 @@ void VCLXAccessibleStatusBar::UpdateItemText( sal_Int32 i )
 
 void VCLXAccessibleStatusBar::InsertChild( sal_Int32 i )
 {
-    if ( !(i >= 0 && i <= static_cast<sal_Int32>(m_aAccessibleChildren.size())) )
+    if ( i < 0 || i > static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
         return;
 
     // insert entry in child list
@@ -117,7 +117,7 @@ void VCLXAccessibleStatusBar::InsertChild( sal_Int32 i )
 
 void VCLXAccessibleStatusBar::RemoveChild( sal_Int32 i )
 {
-    if ( !(i >= 0 && i < static_cast<sal_Int32>(m_aAccessibleChildren.size())) )
+    if ( i < 0 || i >= static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
         return;
 
     // get the accessible of the removed page

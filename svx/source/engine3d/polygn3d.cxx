@@ -107,7 +107,7 @@ void E3dPolygonObj::CreateDefaultTexture()
         sal_uInt16 nSourceMode = 0;
 
         // Determine the greatest degree of freedom
-        if(!(aNormal.getX() > aNormal.getY() && aNormal.getX() > aNormal.getZ()))
+        if(aNormal.getX() <= aNormal.getY() || aNormal.getX() <= aNormal.getZ())
         {
             if(aNormal.getY() > aNormal.getZ())
             {

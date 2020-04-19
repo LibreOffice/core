@@ -160,7 +160,7 @@ static void lcl_translateTwips(vcl::Window const & rParent, vcl::Window& rChild)
     // This prevents multiple translate calls that negate
     // one another.
     const Point aOrigin = rChild.GetMapMode().GetOrigin();
-    if (!(aOrigin.getX() == 0 && aOrigin.getY() == 0))
+    if (aOrigin.getX() != 0 || aOrigin.getY() != 0)
         return;
 
     // Set map mode, so that callback payloads will contain absolute coordinates instead of relative ones.

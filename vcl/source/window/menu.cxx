@@ -1487,7 +1487,7 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
             {
                 nCheckWidth = aMaxSize.Width();
                 // checks / images take the same place
-                if( ! ( ( pData->eType == MenuItemType::IMAGE ) || ( pData->eType == MenuItemType::STRINGIMAGE ) ) )
+                if( ( pData->eType != MenuItemType::IMAGE ) && ( pData->eType != MenuItemType::STRINGIMAGE ) )
                     nWidth += nCheckWidth + nExtra * 2;
             }
 
@@ -1848,7 +1848,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
                     // however do not do this if native checks will be painted since
                     // the selection color too often does not fit the theme's check and/or radio
 
-                    if( !((pData->eType == MenuItemType::IMAGE) || (pData->eType == MenuItemType::STRINGIMAGE)))
+                    if( (pData->eType != MenuItemType::IMAGE) && (pData->eType != MenuItemType::STRINGIMAGE))
                     {
                         if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup,
                                                                     (pData->nBits & MenuItemBits::RADIOCHECK)

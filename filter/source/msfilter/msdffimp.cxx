@@ -3634,7 +3634,7 @@ void SvxMSDffManager::ReadObjText( SvStream& rStream, SdrObject* pObj )
     DffRecordHeader aRecHd;
     if (!ReadDffRecordHeader(rStream, aRecHd))
         return;
-    if( !(aRecHd.nRecType == DFF_msofbtClientTextbox || aRecHd.nRecType == 0x1022) )
+    if( aRecHd.nRecType != DFF_msofbtClientTextbox && aRecHd.nRecType != 0x1022 )
         return;
 
     while (rStream.good() && rStream.Tell() < aRecHd.GetRecEndFilePos())

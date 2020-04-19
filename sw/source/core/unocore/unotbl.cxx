@@ -3954,7 +3954,7 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     SwFrameFormat* pFrameFormat(lcl_EnsureCoreConnected(GetFrameFormat(), static_cast<cppu::OWeakObject*>(this)));
     SwTable* pTable = lcl_EnsureTableNotComplex(SwTable::FindTable(pFrameFormat), static_cast<cppu::OWeakObject*>(this));
     const size_t nRowCount = pTable->GetTabLines().size();
-    if (nCount <= 0 || !(0 <= nIndex && o3tl::make_unsigned(nIndex) <= nRowCount))
+    if (nCount <= 0 || 0 > nIndex || o3tl::make_unsigned(nIndex) > nRowCount)
         throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
     const OUString sTLName = sw_GetCellName(0, nIndex);
     const SwTableBox* pTLBox = pTable->GetTableBox(sTLName);
@@ -4113,7 +4113,7 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     SwTableLines& rLines = pTable->GetTabLines();
     SwTableLine* pLine = rLines.front();
     const size_t nColCount = pLine->GetTabBoxes().size();
-    if (nCount <= 0 || !(0 <= nIndex && o3tl::make_unsigned(nIndex) <= nColCount))
+    if (nCount <= 0 || 0 > nIndex || o3tl::make_unsigned(nIndex) > nColCount)
         throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
     const OUString sTLName = sw_GetCellName(nIndex, 0);
     const SwTableBox* pTLBox = pTable->GetTableBox( sTLName );

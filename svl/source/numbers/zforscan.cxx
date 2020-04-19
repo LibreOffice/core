@@ -796,7 +796,7 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
             // "$U" (symbol) of "[$UYU]" (abbreviation).
             if ( nCurrPos >= 0 && sCurString.getLength() > 1 &&
                  nPos-1 + sCurString.getLength() <= rStr.getLength() &&
-                 !(nPos > 1 && rStr[nPos-2] == '[') )
+                 (nPos <= 1 || rStr[nPos-2] != '[') )
             {
                 OUString aTest = pChrCls->uppercase( rStr.copy( nPos-1, sCurString.getLength() ) );
                 if ( aTest == sCurString )

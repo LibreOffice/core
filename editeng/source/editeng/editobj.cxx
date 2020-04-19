@@ -444,7 +444,7 @@ void EditTextObject::dumpAsXml(xmlTextWriterPtr pWriter) const
 // from SfxItemPoolUser
 void EditTextObjectImpl::ObjectInDestruction(const SfxItemPool& rSfxItemPool)
 {
-    if(!(!bOwnerOfPool && pPool == &rSfxItemPool))
+    if(bOwnerOfPool || pPool != &rSfxItemPool)
         return;
 
     // The pool we are based on gets destructed; get owner of pool by creating own one.

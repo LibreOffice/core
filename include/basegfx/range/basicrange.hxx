@@ -120,7 +120,7 @@ namespace basegfx
                 }
                 else
                 {
-                    return !((rRange.mnMaximum < mnMinimum) || (rRange.mnMinimum > mnMaximum));
+                    return (rRange.mnMaximum >= mnMinimum) && (rRange.mnMinimum <= mnMaximum);
                 }
             }
         }

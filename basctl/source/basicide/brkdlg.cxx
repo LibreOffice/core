@@ -47,7 +47,7 @@ bool lcl_ParseText(OUString const &rText, size_t& rLineNr )
     if (aText.isEmpty())
         return false;
     sal_Unicode cFirst = aText[0];
-    if (cFirst != '#' && !(cFirst >= '0' && cFirst <= '9'))
+    if (cFirst != '#' && (cFirst < '0' || cFirst > '9'))
         return false;
     if (cFirst == '#')
         aText = aText.copy(1);

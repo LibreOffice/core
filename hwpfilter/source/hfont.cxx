@@ -42,7 +42,7 @@ void HWPFont::AddFont(int lang, const char *font)
 {
     int nfonts;
 
-    if (!(lang >= 0 && lang < NLanguage))
+    if (lang < 0 || lang >= NLanguage)
         return;
     nfonts = nFonts[lang];
     if (MAXFONTS <= nfonts)
@@ -56,7 +56,7 @@ void HWPFont::AddFont(int lang, const char *font)
 
 const char *HWPFont::GetFontName(int lang, int id)
 {
-    if (!(lang >= 0 && lang < NLanguage))
+    if (lang < 0 || lang >= NLanguage)
         return nullptr;
     if (id < 0 || nFonts[lang] <= id)
         return nullptr;
@@ -75,7 +75,7 @@ void HWPFont::Read(HWPFile & hwpf)
     for(lang = 0; lang < NLanguage; lang++)
     {
         hwpf.Read2b(&nfonts, 1);
-        if (!(nfonts > 0 && nfonts < MAXFONTS))
+        if (nfonts <= 0 || nfonts >= MAXFONTS)
         {
             (void)hwpf.SetState(HWP_InvalidFileFormat);
             return;

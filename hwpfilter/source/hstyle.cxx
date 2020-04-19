@@ -59,7 +59,7 @@ HWPStyle::~HWPStyle()
 
 char *HWPStyle::GetName(int n) const
 {
-    if (!(n >= 0 && n < nstyles))
+    if (n < 0 || n >= nstyles)
         return nullptr;
     return DATA[n].name;
 }
@@ -67,7 +67,7 @@ char *HWPStyle::GetName(int n) const
 
 void HWPStyle::SetName(int n, char const *name)
 {
-    if (!(n >= 0 && n < nstyles))
+    if (n < 0 || n >= nstyles)
         return;
 
     if (name)
@@ -90,7 +90,7 @@ void HWPStyle::SetName(int n, char const *name)
 
 CharShape *HWPStyle::GetCharShape(int n) const
 {
-    if (!(n >= 0 && n < nstyles))
+    if (n < 0 || n >= nstyles)
         return nullptr;
     return &DATA[n].cshape;
 }
@@ -110,7 +110,7 @@ void HWPStyle::SetCharShape(int n, CharShape const * cshapep)
 
 ParaShape *HWPStyle::GetParaShape(int n) const
 {
-    if (!(n >= 0 && n < nstyles))
+    if (n < 0 || n >= nstyles)
         return nullptr;
     return &DATA[n].pshape;
 }

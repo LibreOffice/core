@@ -1986,7 +1986,7 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
                     {
                         const sal_Unicode *pBuf = aCellName.getStr();
                         const sal_Unicode *pEnd = pBuf + nLen;
-                        while (pBuf < pEnd && !('0' <= *pBuf && *pBuf <= '9'))
+                        while (pBuf < pEnd && ('0' > *pBuf || *pBuf > '9'))
                             ++pBuf;
                         // start of number found?
                         if (pBuf < pEnd && ('0' <= *pBuf && *pBuf <= '9'))

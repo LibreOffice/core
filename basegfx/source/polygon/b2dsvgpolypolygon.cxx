@@ -93,7 +93,7 @@ namespace basegfx::utils
                 bool bRelative(false);
                 const sal_Unicode aCurrChar(rSvgDStatement[nPos]);
 
-                if(o_rPolyPolygon.count() && !aCurrPoly.count() && !(aCurrChar == 'm' || aCurrChar == 'M'))
+                if(o_rPolyPolygon.count() && !aCurrPoly.count() && (aCurrChar != 'm' && aCurrChar == 'M'))
                 {
                     // we have a new sub-polygon starting, but without a 'moveto' command.
                     // this requires to add the current point as start point to the polygon

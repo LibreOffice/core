@@ -673,7 +673,7 @@ SdNavigatorControllerItem::SdNavigatorControllerItem(
 void SdNavigatorControllerItem::StateChanged( sal_uInt16 nSId,
                         SfxItemState eState, const SfxPoolItem* pItem )
 {
-    if( !(eState >= SfxItemState::DEFAULT && nSId == SID_NAVIGATOR_STATE) )
+    if( eState < SfxItemState::DEFAULT || nSId != SID_NAVIGATOR_STATE )
         return;
 
     const SfxUInt32Item& rStateItem = dynamic_cast<const SfxUInt32Item&>(*pItem);
@@ -739,7 +739,7 @@ SdPageNameControllerItem::SdPageNameControllerItem(
 void SdPageNameControllerItem::StateChanged( sal_uInt16 nSId,
                         SfxItemState eState, const SfxPoolItem* pItem )
 {
-    if( !(eState >= SfxItemState::DEFAULT && nSId == SID_NAVIGATOR_PAGENAME) )
+    if( eState < SfxItemState::DEFAULT || nSId != SID_NAVIGATOR_PAGENAME )
         return;
 
     // only if doc in LB is the active

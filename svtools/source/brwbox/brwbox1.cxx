@@ -514,7 +514,7 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
         return;
 
     // does the state change?
-    if ( !(nWidth >= LONG_MAX || mvCols[ nItemPos ]->Width() != nWidth) )
+    if ( nWidth < LONG_MAX && mvCols[ nItemPos ]->Width() == nWidth )
         return;
 
     long nOldWidth = mvCols[ nItemPos ]->Width();
