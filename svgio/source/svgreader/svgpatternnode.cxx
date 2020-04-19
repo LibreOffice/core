@@ -196,7 +196,7 @@ namespace svgio::svgreader
             double fTargetWidth(rGeoRange.getWidth());
             double fTargetHeight(rGeoRange.getHeight());
 
-            if(!(fTargetWidth > 0.0 && fTargetHeight > 0.0))
+            if(fTargetWidth <= 0.0 || fTargetHeight <= 0.0)
                 return;
 
             const SvgUnits aPatternUnits(getPatternUnits() ? *getPatternUnits() : objectBoundingBox);
@@ -226,7 +226,7 @@ namespace svgio::svgreader
                 rfH /= fTargetHeight;
             }
 
-            if(!(rfW > 0.0 && rfH > 0.0))
+            if(rfW <= 0.0 || rfH <= 0.0)
                 return;
 
             if(objectBoundingBox == aPatternUnits)

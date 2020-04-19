@@ -165,7 +165,7 @@ storeError OStoreDirectory_Impl::iterate (storeFindData &rFindData)
     {
         OStorePageLink aLink;
         eErrCode = m_xManager->iterate (aKey, aLink, rFindData.m_nAttrib);
-        if (!((eErrCode == store_E_None) && (aKey.m_nHigh == store::htonl(m_nPath))))
+        if (eErrCode != store_E_None || aKey.m_nHigh != store::htonl(m_nPath))
             break;
 
         if (!(rFindData.m_nAttrib & STORE_ATTRIB_ISLINK))

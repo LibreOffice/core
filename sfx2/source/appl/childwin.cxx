@@ -122,7 +122,7 @@ bool GetPosSizeFromString( const OUString& rStr, Point& rPos, Size& rSize )
     rSize.setHeight( rStr.getToken(0, '/', nIdx).toInt32() );
 
     // negative sizes are invalid
-    return !(rSize.Width() < 0 || rSize.Height() < 0);
+    return rSize.Width() >= 0 && rSize.Height() >= 0;
 }
 
 bool GetSplitSizeFromString( const OUString& rStr, Size& rSize )
@@ -141,7 +141,7 @@ bool GetSplitSizeFromString( const OUString& rStr, Size& rSize )
         rSize.setHeight( aStr.getToken(0, ';', nIdx ).toInt32() );
 
         // negative sizes are invalid
-        return !(rSize.Width() < 0 || rSize.Height() < 0);
+        return rSize.Width() >= 0 && rSize.Height() >= 0;
     }
 
     return false;

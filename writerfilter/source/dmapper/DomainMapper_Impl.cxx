@@ -1864,7 +1864,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     const bool bTopSet = pParaContext->isSet(PROP_PARA_TOP_MARGIN);
                     const bool bBottomSet = pParaContext->isSet(PROP_PARA_BOTTOM_MARGIN);
                     const bool bContextSet = pParaContext->isSet(PROP_PARA_CONTEXT_MARGIN);
-                    if ( !(bTopSet == bBottomSet && bBottomSet == bContextSet) )
+                    if ( bTopSet != bBottomSet || bBottomSet != bContextSet )
                     {
 
                         if ( !bTopSet )
@@ -1894,7 +1894,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     const bool bLeftSet  = pParaContext->isSet(PROP_PARA_LEFT_MARGIN);
                     const bool bRightSet = pParaContext->isSet(PROP_PARA_RIGHT_MARGIN);
                     const bool bFirstSet = pParaContext->isSet(PROP_PARA_FIRST_LINE_INDENT);
-                    if ( !(bLeftSet == bRightSet && bRightSet == bFirstSet) )
+                    if ( bLeftSet != bRightSet || bRightSet != bFirstSet )
                     {
                         if ( !bLeftSet )
                         {

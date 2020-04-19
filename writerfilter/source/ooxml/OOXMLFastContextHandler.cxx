@@ -1937,7 +1937,7 @@ OOXMLFastContextHandlerWrapper::lcl_createFastChildContext
     bool bIsWrap = Element == static_cast<sal_Int32>(NMSP_vmlWord | XML_wrap);
     bool bIsSignatureLine = Element == static_cast<sal_Int32>(NMSP_vmlOffice | XML_signatureline);
     bool bSkipImages = getDocument()->IsSkipImages() && oox::getNamespace(Element) == NMSP_dml &&
-        !((oox::getBaseToken(Element) == XML_linkedTxbx) || (oox::getBaseToken(Element) == XML_txbx));
+        (oox::getBaseToken(Element) != XML_linkedTxbx) && (oox::getBaseToken(Element) != XML_txbx);
 
     if ( bInNamespaces && ((!bIsWrap && !bIsSignatureLine)
                            || mxShapeHandler->isShapeSent()) )

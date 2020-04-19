@@ -2658,7 +2658,7 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
             static const sal_Unicode cUppercaseOmega = 0x03A9;
             sal_Unicode cChar = rTmp[0];
             // uppercase letters should be straight and lowercase letters italic
-            bItalic = !(cUppercaseAlpha <= cChar && cChar <= cUppercaseOmega);
+            bItalic = (cUppercaseAlpha > cChar || cChar > cUppercaseOmega);
         }
     }
 

@@ -59,7 +59,7 @@ bool XMLFrameOASISTransformerContext::IsLinkedEmbeddedObject(
                 return false;
             }
             GetTransformer().ConvertURIToOOo( sHRef, true );
-            return !(!sHRef.isEmpty() && '#'==sHRef[0]);
+            return sHRef.isEmpty() || '#' != sHRef[0];
         }
     }
 

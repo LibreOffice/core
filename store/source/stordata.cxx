@@ -244,7 +244,7 @@ storeError OStoreIndirectionPageObject::read (
 
     // Check arguments.
     sal_uInt16 const nLimit = rPage.capacityCount();
-    if (!((nDouble < nLimit) && (nSingle < nLimit)))
+    if ((nDouble >= nLimit) || (nSingle >= nLimit))
         return store_E_InvalidAccess;
 
     // Check single indirect page location.
@@ -347,7 +347,7 @@ storeError OStoreIndirectionPageObject::write (
 
     // Check arguments.
     sal_uInt16 const nLimit = rPage.capacityCount();
-    if (!((nDouble < nLimit) && (nSingle < nLimit)))
+    if ((nDouble >= nLimit) || (nSingle >= nLimit))
         return store_E_InvalidAccess;
 
     // Load or create single indirect page.
@@ -462,7 +462,7 @@ storeError OStoreIndirectionPageObject::truncate (
 
     // Check arguments.
     sal_uInt16 const nLimit = rPage.capacityCount();
-    if (!((nDouble < nLimit) && (nSingle < nLimit)))
+    if ((nDouble >= nLimit) || (nSingle >= nLimit))
         return store_E_InvalidAccess;
 
     // Truncate.
