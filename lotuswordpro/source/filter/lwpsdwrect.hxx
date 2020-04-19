@@ -61,7 +61,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWRECT_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWRECT_HXX
 
-#include <lwpheader.hxx>
+#include <config_lgpl.h>
 #include <tools/gen.hxx>
 #include <array>
 

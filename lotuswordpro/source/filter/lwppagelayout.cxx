@@ -73,6 +73,7 @@
 #include <xfilter/xffooter.hxx>
 #include <sfx2/printer.hxx>
 #include <lwpchangemgr.hxx>
+#include <lwpfilehdr.hxx>
 #include <lwpglobalmgr.hxx>
 #include <sal/log.hxx>
 

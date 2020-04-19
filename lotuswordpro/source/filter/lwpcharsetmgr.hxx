@@ -61,7 +61,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPCHARSETMGR_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPCHARSETMGR_HXX
 
-#include <lwpfilehdr.hxx>
+#include <rtl/textenc.h>
 #include <map>
 
 class LwpCharSetMgr

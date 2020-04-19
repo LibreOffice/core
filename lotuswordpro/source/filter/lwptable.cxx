@@ -62,6 +62,7 @@
 
 #include <algorithm>
 
+#include <lwpfilehdr.hxx>
  #include "lwptable.hxx"
 
  LwpSuperTable::LwpSuperTable(LwpObjectHeader const &objHdr, LwpSvStream* pStrm):LwpContent(objHdr, pStrm)

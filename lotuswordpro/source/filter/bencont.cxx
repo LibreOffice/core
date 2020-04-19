@@ -54,6 +54,7 @@
  *
  ************************************************************************/
 #include "first.hxx"
+#include "tocread.hxx"
 #include <assert.h>
 #include <stdio.h>
 #include <osl/diagnose.h>

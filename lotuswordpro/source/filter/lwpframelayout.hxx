@@ -65,6 +65,9 @@
 #include "lwplayout.hxx"
 #include "lwpstory.hxx"
 #include "lwpmarker.hxx"
+#include <xfilter/xfframestyle.hxx>
+#include <xfilter/xfframe.hxx>
+
 /**
  * @brief       For register frame style and parse frame
  *

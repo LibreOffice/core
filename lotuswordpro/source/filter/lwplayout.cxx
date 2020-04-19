@@ -71,6 +71,7 @@
 #include "lwppagehint.hxx"
 #include "lwpdivinfo.hxx"
 #include "lwpgrfobj.hxx"
+#include <lwpfilehdr.hxx>
 #include <osl/thread.h>
 #include <sal/log.hxx>
 #include <o3tl/sorted_vector.hxx>

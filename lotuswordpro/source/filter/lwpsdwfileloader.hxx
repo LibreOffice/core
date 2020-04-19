@@ -58,13 +58,11 @@
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWFILELOADER_HXX
 
 #include <sal/config.h>
+#include <config_lgpl.h>
 
 #include <vector>
 
 #include <rtl/ref.hxx>
-
-#include <lwpheader.hxx>
-#include <xfilter/ixfstream.hxx>
 
 class SvStream;
 class XFFrame;

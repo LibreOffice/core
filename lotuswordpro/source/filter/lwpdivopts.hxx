@@ -61,11 +61,9 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDIVOPTS_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDIVOPTS_HXX
 
+#include <config_lgpl.h>
+
 #include <lwpobj.hxx>
-#include <lwpobjid.hxx>
-#include <lwpatomholder.hxx>
-#include <lwpcolor.hxx>
-#include <lwpheader.hxx>
 
 class LwpHyphenOptions
 {

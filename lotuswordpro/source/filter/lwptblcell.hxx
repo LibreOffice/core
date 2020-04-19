@@ -62,8 +62,7 @@
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTBLCELL_HXX
 
 #include <lwpobj.hxx>
-#include <lwpatomholder.hxx>
-#include "lwpstory.hxx"
+#include "lwpdlvlist.hxx"
 
 #include <xfilter/xfcell.hxx>
 

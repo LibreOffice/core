@@ -62,6 +62,7 @@
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFNLAYOUT_HXX
 
 #include "lwptablelayout.hxx"
+#include "lwprowlayout.hxx"
 
 /**
  * @brief   VO_FOOTNOTELAYOUT object

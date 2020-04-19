@@ -62,11 +62,14 @@
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPARAPROPERTY_HXX
 
 #include <memory>
-#include <lwpobj.hxx>
 #include <lwpobjstrm.hxx>
 
 #include <lwpoverride.hxx>
-#include "lwppiece.hxx"
+#include "lwpbackgroundoverride.hxx"
+#include "lwpbreaksoverride.hxx"
+#include "lwpnumberingoverride.hxx"
+#include "lwpparaborderoverride.hxx"
+#include "lwptaboverride.hxx"
 
 /* paragraph property ID's */
 #define PP_OUTLINE_SHOW         0x53484f4cUL    /* "SHOW" */

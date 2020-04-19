@@ -62,23 +62,19 @@
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPARA_HXX
 
 #include <memory>
+#include <config_lgpl.h>
 
-#include "lwpfribheader.hxx"
 #include <lwpobj.hxx>
 #include <lwpobjstrm.hxx>
 
 #include <vector>
-#include <lwpheader.hxx>
 #include "lwpdlvlist.hxx"
 #include <lwpbasetype.hxx>
 #include <lwpoverride.hxx>
 #include <lwpfoundry.hxx>
 #include "lwplayout.hxx"
-#include <lwpfrib.hxx>
 #include "lwpfribptr.hxx"
 #include "lwpfribtext.hxx"
-#include <xfilter/xfparagraph.hxx>
-#include <xfilter/xfdefs.hxx>
 #include <xfilter/xfparastyle.hxx>
 #include <xfilter/xfsection.hxx>
 

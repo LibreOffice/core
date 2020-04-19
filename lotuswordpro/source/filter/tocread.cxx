@@ -60,6 +60,9 @@
 #include <cstring>
 
 #include "first.hxx"
+#include "bentoid.hxx"
+#include "tocread.hxx"
+#include "ut.hxx"
 #include <assert.h>
 namespace OpenStormBento
 {

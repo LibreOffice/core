@@ -63,8 +63,12 @@
 #include "lwpstory.hxx"
 #include "lwppara.hxx"
 #include "lwpsilverbullet.hxx"
+#include "lwpsortopt.hxx"
 #include "lwplayout.hxx"
 #include "lwppagelayout.hxx"
+#include "lwpuidoc.hxx"
+#include "lwpusrdicts.hxx"
+#include "lwpprtinfo.hxx"
 #include "lwpverdocument.hxx"
 #include <xfilter/xftextstyle.hxx>
 #include <xfilter/xfstylemanager.hxx>

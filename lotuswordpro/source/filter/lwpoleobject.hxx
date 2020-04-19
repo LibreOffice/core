@@ -61,15 +61,10 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOLEOBJECT_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOLEOBJECT_HXX
 
-#include <lwpobj.hxx>
+#include "lwpcontent.hxx"
 #include <lwpobjhdr.hxx>
 #include <lwpobjid.hxx>
-#include "lwpstory.hxx"
 #include <tools/gen.hxx>
-#include <svx/svdoole2.hxx>
-#include <svx/svdpage.hxx>
-#include <sfx2/objsh.hxx>
-#include <sot/storinfo.hxx>
 
 typedef struct tagAFID_CACHE
 {

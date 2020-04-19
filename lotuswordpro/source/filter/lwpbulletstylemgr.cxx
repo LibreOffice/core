@@ -59,6 +59,7 @@
  ************************************************************************/
 
 #include "lwpbulletstylemgr.hxx"
+#include "lwpfribheader.hxx"
 #include "lwpdoc.hxx"
 #include "lwpstory.hxx"
 #include "lwpdivinfo.hxx"

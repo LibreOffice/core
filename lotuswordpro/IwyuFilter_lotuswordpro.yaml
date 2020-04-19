@@ -1,18 +1,6 @@
 ---
 assumeFilename: lotuswordpro/source/filter/lwplayout.cxx
 blacklist:
-    lotuswordpro/inc/lwpheader.hxx:
-    # pass-through header; keep it for now
-    - config_lgpl.h
-    - math.h
-    - memory
-    - map
-    - vector
-    - assert.h
-    - string
-    - sal/types.h
-    - rtl/ustring.hxx
-    - memory.h
     lotuswordpro/inc/lwpatomholder.hxx:
     # Needed for MPL subset
     - config_lgpl.h
@@ -65,5 +53,62 @@ blacklist:
     # Needed for MPL subset
     - config_lgpl.h
     lotuswordpro/inc/lwptools.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwp9reader.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwpbulletstylemgr.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwpcontent.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwpdivinfo.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwpdivopts.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwpdoc.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwplayout.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwpgrfobj.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwppara.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwprowlayout.hxx:
+    # Complete type is needed for dynamic_cast
+    - lwptablelayout.hxx
+    lotuswordpro/source/filter/lwpsdwdrawheader.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwpsdwfileloader.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwpsdwrect.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwpsdwgrouploaderv0102.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwpsortopt.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwpsilverbullet.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwpuidoc.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwpusewhen.hxx:
+    # Needed for MPL subset
+    - config_lgpl.h
+    lotuswordpro/source/filter/lwpusrdicts.hxx:
     # Needed for MPL subset
     - config_lgpl.h

@@ -61,11 +61,9 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPMARKER_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPMARKER_HXX
 
-#include <lwpobj.hxx>
 #include <lwpobjid.hxx>
 #include "lwpdlvlist.hxx"
 #include <lwpfrib.hxx>
-#include <xfilter/xftextspan.hxx>
 
 class LwpMarker : public LwpDLNFPVList
 {

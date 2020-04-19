@@ -68,6 +68,8 @@
 #include "lwpnumericfmt.hxx"
 #include "lwpdlvlist.hxx"
 #include "lwppara.hxx"
+#include "lwprowlayout.hxx"
+#include <lwpfilehdr.hxx>
 
 #include <xfilter/xfstylemanager.hxx>
 #include <xfilter/xftablestyle.hxx>

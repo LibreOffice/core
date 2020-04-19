@@ -60,6 +60,7 @@
  */
 
 #include "lwpsdwrect.hxx"
+#include <cmath>
 
 /**************************************************************************
  * @short:  Default constructor

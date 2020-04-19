@@ -61,8 +61,9 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPNUMERICFMT_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPNUMERICFMT_HXX
 
+#include <map>
+
 #include <lwpatomholder.hxx>
-#include "lwptblcell.hxx"
 #include <lwpcolor.hxx>
 #include "lwppiece.hxx"
 

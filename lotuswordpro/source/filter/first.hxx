@@ -71,9 +71,6 @@ CBenIDListElmt * FindID(CUtList * pList, BenObjectID ObjectID,
   CUtListElmt ** ppPrev);
 } // end namespace
 
-// Private headers
-#include "bentoid.hxx"
-#include "tocread.hxx"
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

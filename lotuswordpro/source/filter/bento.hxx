@@ -60,7 +60,6 @@
 
 #include <cstring>
 #include <memory>
-#include <string>
 #include <vector>
 #include <lwpsvstream.hxx>
 
@@ -71,10 +70,9 @@
 #define BEN_EXPORT
 #endif
 
-#include "ut.hxx"
 #include "utlist.hxx"
 #include <tools/stream.hxx>
-#include <sot/storage.hxx>
+#include <tools/solar.h>
 
 namespace OpenStormBento
 {

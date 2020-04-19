@@ -60,10 +60,9 @@
 
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPCELLLAYOUT_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPCELLLAYOUT_HXX
-#include <vector>
-#include <map>
+
 #include "lwplayout.hxx"
-#include "lwptablelayout.hxx"
+#include <xfilter/xfcell.hxx>
 
 typedef enum
 {
