@@ -271,86 +271,86 @@ public:
 
 void ZBufferRasterConverter3D::processLineSpan(const basegfx::RasterConversionLineEntry3D& rA, const basegfx::RasterConversionLineEntry3D& rB, sal_Int32 nLine, sal_uInt32 nSpanCount)
 {
-    if(!(nSpanCount & 0x0001))
+    if(nSpanCount & 0x0001)
+        return;
+
+    if(!(nLine >= 0 && nLine < static_cast<sal_Int32>(mrBuffer.getHeight())))
+        return;
+
+    sal_uInt32 nXA(std::min(mrBuffer.getWidth(), static_cast<sal_uInt32>(std::max(sal_Int32(0), basegfx::fround(rA.getX().getVal())))));
+    const sal_uInt32 nXB(std::min(mrBuffer.getWidth(), static_cast<sal_uInt32>(std::max(sal_Int32(0), basegfx::fround(rB.getX().getVal())))));
+
+    if(nXA >= nXB)
+        return;
+
+    // prepare the span interpolators
+    setupLineSpanInterpolators(rA, rB);
+
+    // bring span interpolators to start condition by incrementing with the possible difference of
+    // clamped and non-clamped XStart. Interpolators are setup relying on double precision
+    // X-values, so that difference is the correct value to compensate for possible clampings
+    incrementLineSpanInterpolators(static_cast<double>(nXA) - rA.getX().getVal());
+
+    // prepare scanline index
+    sal_uInt32 nScanlineIndex(mrBuffer.getIndexFromXY(nXA, static_cast<sal_uInt32>(nLine)));
+    basegfx::BColor aNewColor;
+
+    while(nXA < nXB)
     {
-        if(nLine >= 0 && nLine < static_cast<sal_Int32>(mrBuffer.getHeight()))
+        // early-test Z values if we need to do anything at all
+        const double fNewZ(std::max(0.0, std::min(double(0xffff), maIntZ.getVal())));
+        const sal_uInt16 nNewZ(static_cast< sal_uInt16 >(fNewZ));
+        sal_uInt16& rOldZ(mrBuffer.getZ(nScanlineIndex));
+
+        if(nNewZ > rOldZ)
         {
-            sal_uInt32 nXA(std::min(mrBuffer.getWidth(), static_cast<sal_uInt32>(std::max(sal_Int32(0), basegfx::fround(rA.getX().getVal())))));
-            const sal_uInt32 nXB(std::min(mrBuffer.getWidth(), static_cast<sal_uInt32>(std::max(sal_Int32(0), basegfx::fround(rB.getX().getVal())))));
+            // detect color and opacity for this pixel
+            const sal_uInt16 nOpacity(std::max(sal_Int16(0), static_cast< sal_Int16 >(decideColorAndOpacity(aNewColor) * 255.0)));
 
-            if(nXA < nXB)
+            if(nOpacity > 0)
             {
-                // prepare the span interpolators
-                setupLineSpanInterpolators(rA, rB);
+                // avoid color overrun
+                aNewColor.clamp();
 
-                // bring span interpolators to start condition by incrementing with the possible difference of
-                // clamped and non-clamped XStart. Interpolators are setup relying on double precision
-                // X-values, so that difference is the correct value to compensate for possible clampings
-                incrementLineSpanInterpolators(static_cast<double>(nXA) - rA.getX().getVal());
-
-                // prepare scanline index
-                sal_uInt32 nScanlineIndex(mrBuffer.getIndexFromXY(nXA, static_cast<sal_uInt32>(nLine)));
-                basegfx::BColor aNewColor;
-
-                while(nXA < nXB)
+                if(nOpacity >= 0x00ff)
                 {
-                    // early-test Z values if we need to do anything at all
-                    const double fNewZ(std::max(0.0, std::min(double(0xffff), maIntZ.getVal())));
-                    const sal_uInt16 nNewZ(static_cast< sal_uInt16 >(fNewZ));
-                    sal_uInt16& rOldZ(mrBuffer.getZ(nScanlineIndex));
+                    // full opacity (not transparent), set z and color
+                    rOldZ = nNewZ;
+                    mrBuffer.getBPixel(nScanlineIndex) = basegfx::BPixel(aNewColor, 0xff);
+                }
+                else
+                {
+                    basegfx::BPixel& rDest = mrBuffer.getBPixel(nScanlineIndex);
 
-                    if(nNewZ > rOldZ)
+                    if(rDest.getOpacity())
                     {
-                        // detect color and opacity for this pixel
-                        const sal_uInt16 nOpacity(std::max(sal_Int16(0), static_cast< sal_Int16 >(decideColorAndOpacity(aNewColor) * 255.0)));
+                        // mix new color by using
+                        // color' = color * (1 - opacity) + newcolor * opacity
+                        const sal_uInt16 nTransparence(0x0100 - nOpacity);
+                        rDest.setRed(static_cast<sal_uInt8>(((rDest.getRed() * nTransparence) + (static_cast<sal_uInt16>(255.0 * aNewColor.getRed()) * nOpacity)) >> 8));
+                        rDest.setGreen(static_cast<sal_uInt8>(((rDest.getGreen() * nTransparence) + (static_cast<sal_uInt16>(255.0 * aNewColor.getGreen()) * nOpacity)) >> 8));
+                        rDest.setBlue(static_cast<sal_uInt8>(((rDest.getBlue() * nTransparence) + (static_cast<sal_uInt16>(255.0 * aNewColor.getBlue()) * nOpacity)) >> 8));
 
-                        if(nOpacity > 0)
+                        if(0xff != rDest.getOpacity())
                         {
-                            // avoid color overrun
-                            aNewColor.clamp();
-
-                            if(nOpacity >= 0x00ff)
-                            {
-                                // full opacity (not transparent), set z and color
-                                rOldZ = nNewZ;
-                                mrBuffer.getBPixel(nScanlineIndex) = basegfx::BPixel(aNewColor, 0xff);
-                            }
-                            else
-                            {
-                                basegfx::BPixel& rDest = mrBuffer.getBPixel(nScanlineIndex);
-
-                                if(rDest.getOpacity())
-                                {
-                                    // mix new color by using
-                                    // color' = color * (1 - opacity) + newcolor * opacity
-                                    const sal_uInt16 nTransparence(0x0100 - nOpacity);
-                                    rDest.setRed(static_cast<sal_uInt8>(((rDest.getRed() * nTransparence) + (static_cast<sal_uInt16>(255.0 * aNewColor.getRed()) * nOpacity)) >> 8));
-                                    rDest.setGreen(static_cast<sal_uInt8>(((rDest.getGreen() * nTransparence) + (static_cast<sal_uInt16>(255.0 * aNewColor.getGreen()) * nOpacity)) >> 8));
-                                    rDest.setBlue(static_cast<sal_uInt8>(((rDest.getBlue() * nTransparence) + (static_cast<sal_uInt16>(255.0 * aNewColor.getBlue()) * nOpacity)) >> 8));
-
-                                    if(0xff != rDest.getOpacity())
-                                    {
-                                        // both are transparent, mix new opacity by using
-                                        // opacity = newopacity * (1 - oldopacity) + oldopacity
-                                        rDest.setOpacity(static_cast<sal_uInt8>((nOpacity * (0x0100 - rDest.getOpacity())) >> 8) + rDest.getOpacity());
-                                    }
-                                }
-                                else
-                                {
-                                    // dest is unused, set color
-                                    rDest = basegfx::BPixel(aNewColor, static_cast<sal_uInt8>(nOpacity));
-                                }
-                            }
+                            // both are transparent, mix new opacity by using
+                            // opacity = newopacity * (1 - oldopacity) + oldopacity
+                            rDest.setOpacity(static_cast<sal_uInt8>((nOpacity * (0x0100 - rDest.getOpacity())) >> 8) + rDest.getOpacity());
                         }
                     }
-
-                    // increments
-                    nScanlineIndex++;
-                    nXA++;
-                    incrementLineSpanInterpolators(1.0);
+                    else
+                    {
+                        // dest is unused, set color
+                        rDest = basegfx::BPixel(aNewColor, static_cast<sal_uInt8>(nOpacity));
+                    }
                 }
             }
         }
+
+        // increments
+        nScanlineIndex++;
+        nXA++;
+        incrementLineSpanInterpolators(1.0);
     }
 }
 
@@ -605,47 +605,47 @@ namespace drawinglayer::processor3d
 
         void ZBufferProcessor3D::finish()
         {
-            if(mpRasterPrimitive3Ds)
+            if(!mpRasterPrimitive3Ds)
+                return;
+
+            // there are transparent rasterprimitives
+            const sal_uInt32 nSize(mpRasterPrimitive3Ds->size());
+
+            if(nSize > 1)
             {
-                // there are transparent rasterprimitives
-                const sal_uInt32 nSize(mpRasterPrimitive3Ds->size());
-
-                if(nSize > 1)
-                {
-                    // sort them from back to front
-                    std::sort(mpRasterPrimitive3Ds->begin(), mpRasterPrimitive3Ds->end());
-                }
-
-                for(sal_uInt32 a(0); a < nSize; a++)
-                {
-                    // paint each one by setting the remembered data and calling
-                    // the render method
-                    const RasterPrimitive3D& rCandidate = (*mpRasterPrimitive3Ds)[a];
-
-                    mpGeoTexSvx = rCandidate.getGeoTexSvx();
-                    mpTransparenceGeoTexSvx = rCandidate.getTransparenceGeoTexSvx();
-                    mbModulate = rCandidate.getModulate();
-                    mbFilter = rCandidate.getFilter();
-                    mbSimpleTextureActive = rCandidate.getSimpleTextureActive();
-
-                    if(rCandidate.getIsLine())
-                    {
-                        rasterconvertB3DPolygon(
-                            rCandidate.getMaterial(),
-                            rCandidate.getPolyPolygon().getB3DPolygon(0));
-                    }
-                    else
-                    {
-                        rasterconvertB3DPolyPolygon(
-                            rCandidate.getMaterial(),
-                            rCandidate.getPolyPolygon());
-                    }
-                }
-
-                // delete them to signal the destructor that all is done and
-                // to allow asserting there
-                mpRasterPrimitive3Ds.reset();
+                // sort them from back to front
+                std::sort(mpRasterPrimitive3Ds->begin(), mpRasterPrimitive3Ds->end());
             }
+
+            for(sal_uInt32 a(0); a < nSize; a++)
+            {
+                // paint each one by setting the remembered data and calling
+                // the render method
+                const RasterPrimitive3D& rCandidate = (*mpRasterPrimitive3Ds)[a];
+
+                mpGeoTexSvx = rCandidate.getGeoTexSvx();
+                mpTransparenceGeoTexSvx = rCandidate.getTransparenceGeoTexSvx();
+                mbModulate = rCandidate.getModulate();
+                mbFilter = rCandidate.getFilter();
+                mbSimpleTextureActive = rCandidate.getSimpleTextureActive();
+
+                if(rCandidate.getIsLine())
+                {
+                    rasterconvertB3DPolygon(
+                        rCandidate.getMaterial(),
+                        rCandidate.getPolyPolygon().getB3DPolygon(0));
+                }
+                else
+                {
+                    rasterconvertB3DPolyPolygon(
+                        rCandidate.getMaterial(),
+                        rCandidate.getPolyPolygon());
+                }
+            }
+
+            // delete them to signal the destructor that all is done and
+            // to allow asserting there
+            mpRasterPrimitive3Ds.reset();
         }
 
 } // end of namespace

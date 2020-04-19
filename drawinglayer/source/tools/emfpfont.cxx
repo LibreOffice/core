@@ -56,19 +56,19 @@ namespace emfplushelper
         SAL_INFO("drawinglayer", "EMF+\tReserved: 0x" << reserved << std::dec);
         SAL_INFO("drawinglayer", "EMF+\tLength: " << length);
 
-        if (length > 0 && length < 0x4000)
+        if (!(length > 0 && length < 0x4000))
+            return;
+
+        rtl_uString *pStr = rtl_uString_alloc(length);
+        sal_Unicode *chars = pStr->buffer;
+
+        for (sal_uInt32 i = 0; i < length; ++i)
         {
-            rtl_uString *pStr = rtl_uString_alloc(length);
-            sal_Unicode *chars = pStr->buffer;
-
-            for (sal_uInt32 i = 0; i < length; ++i)
-            {
-                s.ReadUtf16(chars[i]);
-            }
-
-            family = OUString(pStr, SAL_NO_ACQUIRE);
-            SAL_INFO("drawinglayer", "EMF+\tFamily: " << family);
+            s.ReadUtf16(chars[i]);
         }
+
+        family = OUString(pStr, SAL_NO_ACQUIRE);
+        SAL_INFO("drawinglayer", "EMF+\tFamily: " << family);
     }
 }
 

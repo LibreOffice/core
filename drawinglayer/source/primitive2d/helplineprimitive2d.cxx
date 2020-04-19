@@ -32,93 +32,93 @@ namespace drawinglayer::primitive2d
 {
         void HelplinePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
         {
-            if(!rViewInformation.getViewport().isEmpty() && !getDirection().equalZero())
+            if(rViewInformation.getViewport().isEmpty() || getDirection().equalZero())
+                return;
+
+            // position to view coordinates, DashLen and DashLen in logic
+            const basegfx::B2DPoint aViewPosition(rViewInformation.getObjectToViewTransformation() * getPosition());
+
+            switch(getStyle())
             {
-                // position to view coordinates, DashLen and DashLen in logic
-                const basegfx::B2DPoint aViewPosition(rViewInformation.getObjectToViewTransformation() * getPosition());
-
-                switch(getStyle())
+                default : // HelplineStyle2D::Point
                 {
-                    default : // HelplineStyle2D::Point
+                    const double fViewFixValue(15.0);
+                    basegfx::B2DVector aNormalizedDirection(getDirection());
+                    aNormalizedDirection.normalize();
+                    aNormalizedDirection *= fViewFixValue;
+                    const basegfx::B2DPoint aStartA(aViewPosition - aNormalizedDirection);
+                    const basegfx::B2DPoint aEndA(aViewPosition + aNormalizedDirection);
+                    basegfx::B2DPolygon aLineA;
+                    aLineA.append(aStartA);
+                    aLineA.append(aEndA);
+                    aLineA.transform(rViewInformation.getInverseObjectToViewTransformation());
+                    PolygonMarkerPrimitive2D* pNewA = new PolygonMarkerPrimitive2D(aLineA, getRGBColA(), getRGBColB(), getDiscreteDashLength());
+                    rContainer.push_back(pNewA);
+
+                    const basegfx::B2DVector aPerpendicularNormalizedDirection(basegfx::getPerpendicular(aNormalizedDirection));
+                    const basegfx::B2DPoint aStartB(aViewPosition - aPerpendicularNormalizedDirection);
+                    const basegfx::B2DPoint aEndB(aViewPosition + aPerpendicularNormalizedDirection);
+                    basegfx::B2DPolygon aLineB;
+                    aLineB.append(aStartB);
+                    aLineB.append(aEndB);
+                    aLineB.transform(rViewInformation.getInverseObjectToViewTransformation());
+                    PolygonMarkerPrimitive2D* pNewB = new PolygonMarkerPrimitive2D(aLineB, getRGBColA(), getRGBColB(), getDiscreteDashLength());
+                    rContainer.push_back(pNewB);
+
+                    break;
+                }
+                case HelplineStyle2D::Line :
+                {
+                    basegfx::B2DPolygon aLine;
+
+                    if(basegfx::areParallel(getDirection(), basegfx::B2DVector(1.0, 0.0)))
                     {
-                        const double fViewFixValue(15.0);
-                        basegfx::B2DVector aNormalizedDirection(getDirection());
-                        aNormalizedDirection.normalize();
-                        aNormalizedDirection *= fViewFixValue;
-                        const basegfx::B2DPoint aStartA(aViewPosition - aNormalizedDirection);
-                        const basegfx::B2DPoint aEndA(aViewPosition + aNormalizedDirection);
-                        basegfx::B2DPolygon aLineA;
-                        aLineA.append(aStartA);
-                        aLineA.append(aEndA);
-                        aLineA.transform(rViewInformation.getInverseObjectToViewTransformation());
-                        PolygonMarkerPrimitive2D* pNewA = new PolygonMarkerPrimitive2D(aLineA, getRGBColA(), getRGBColB(), getDiscreteDashLength());
-                        rContainer.push_back(pNewA);
+                        // parallel to X-Axis, get cuts with Y-Axes
+                        const double fCutA((rViewInformation.getDiscreteViewport().getMinX() - aViewPosition.getX()) / getDirection().getX());
+                        const double fCutB((rViewInformation.getDiscreteViewport().getMaxX() - aViewPosition.getX()) / getDirection().getX());
+                        const basegfx::B2DPoint aPosA(aViewPosition + (fCutA * getDirection()));
+                        const basegfx::B2DPoint aPosB(aViewPosition + (fCutB * getDirection()));
+                        const bool bBothLeft(aPosA.getX() < rViewInformation.getDiscreteViewport().getMinX() && aPosB.getX() < rViewInformation.getDiscreteViewport().getMinX());
+                        const bool bBothRight(aPosA.getX() > rViewInformation.getDiscreteViewport().getMaxX() && aPosB.getX() < rViewInformation.getDiscreteViewport().getMaxX());
 
-                        const basegfx::B2DVector aPerpendicularNormalizedDirection(basegfx::getPerpendicular(aNormalizedDirection));
-                        const basegfx::B2DPoint aStartB(aViewPosition - aPerpendicularNormalizedDirection);
-                        const basegfx::B2DPoint aEndB(aViewPosition + aPerpendicularNormalizedDirection);
-                        basegfx::B2DPolygon aLineB;
-                        aLineB.append(aStartB);
-                        aLineB.append(aEndB);
-                        aLineB.transform(rViewInformation.getInverseObjectToViewTransformation());
-                        PolygonMarkerPrimitive2D* pNewB = new PolygonMarkerPrimitive2D(aLineB, getRGBColA(), getRGBColB(), getDiscreteDashLength());
-                        rContainer.push_back(pNewB);
-
-                        break;
+                        if(!bBothLeft && !bBothRight)
+                        {
+                            aLine.append(aPosA);
+                            aLine.append(aPosB);
+                        }
                     }
-                    case HelplineStyle2D::Line :
+                    else
                     {
-                        basegfx::B2DPolygon aLine;
+                        // get cuts with X-Axes
+                        const double fCutA((rViewInformation.getDiscreteViewport().getMinY() - aViewPosition.getY()) / getDirection().getY());
+                        const double fCutB((rViewInformation.getDiscreteViewport().getMaxY() - aViewPosition.getY()) / getDirection().getY());
+                        const basegfx::B2DPoint aPosA(aViewPosition + (fCutA * getDirection()));
+                        const basegfx::B2DPoint aPosB(aViewPosition + (fCutB * getDirection()));
+                        const bool bBothAbove(aPosA.getY() < rViewInformation.getDiscreteViewport().getMinY() && aPosB.getY() < rViewInformation.getDiscreteViewport().getMinY());
+                        const bool bBothBelow(aPosA.getY() > rViewInformation.getDiscreteViewport().getMaxY() && aPosB.getY() < rViewInformation.getDiscreteViewport().getMaxY());
 
-                        if(basegfx::areParallel(getDirection(), basegfx::B2DVector(1.0, 0.0)))
+                        if(!bBothAbove && !bBothBelow)
                         {
-                            // parallel to X-Axis, get cuts with Y-Axes
-                            const double fCutA((rViewInformation.getDiscreteViewport().getMinX() - aViewPosition.getX()) / getDirection().getX());
-                            const double fCutB((rViewInformation.getDiscreteViewport().getMaxX() - aViewPosition.getX()) / getDirection().getX());
-                            const basegfx::B2DPoint aPosA(aViewPosition + (fCutA * getDirection()));
-                            const basegfx::B2DPoint aPosB(aViewPosition + (fCutB * getDirection()));
-                            const bool bBothLeft(aPosA.getX() < rViewInformation.getDiscreteViewport().getMinX() && aPosB.getX() < rViewInformation.getDiscreteViewport().getMinX());
-                            const bool bBothRight(aPosA.getX() > rViewInformation.getDiscreteViewport().getMaxX() && aPosB.getX() < rViewInformation.getDiscreteViewport().getMaxX());
-
-                            if(!bBothLeft && !bBothRight)
-                            {
-                                aLine.append(aPosA);
-                                aLine.append(aPosB);
-                            }
+                            aLine.append(aPosA);
+                            aLine.append(aPosB);
                         }
-                        else
-                        {
-                            // get cuts with X-Axes
-                            const double fCutA((rViewInformation.getDiscreteViewport().getMinY() - aViewPosition.getY()) / getDirection().getY());
-                            const double fCutB((rViewInformation.getDiscreteViewport().getMaxY() - aViewPosition.getY()) / getDirection().getY());
-                            const basegfx::B2DPoint aPosA(aViewPosition + (fCutA * getDirection()));
-                            const basegfx::B2DPoint aPosB(aViewPosition + (fCutB * getDirection()));
-                            const bool bBothAbove(aPosA.getY() < rViewInformation.getDiscreteViewport().getMinY() && aPosB.getY() < rViewInformation.getDiscreteViewport().getMinY());
-                            const bool bBothBelow(aPosA.getY() > rViewInformation.getDiscreteViewport().getMaxY() && aPosB.getY() < rViewInformation.getDiscreteViewport().getMaxY());
-
-                            if(!bBothAbove && !bBothBelow)
-                            {
-                                aLine.append(aPosA);
-                                aLine.append(aPosB);
-                            }
-                        }
-
-                        if(aLine.count())
-                        {
-                            // clip against visible area
-                            const basegfx::B2DPolyPolygon aResult(basegfx::utils::clipPolygonOnRange(aLine, rViewInformation.getDiscreteViewport(), true, true));
-
-                            for(sal_uInt32 a(0); a < aResult.count(); a++)
-                            {
-                                basegfx::B2DPolygon aPart(aResult.getB2DPolygon(a));
-                                aPart.transform(rViewInformation.getInverseObjectToViewTransformation());
-                                PolygonMarkerPrimitive2D* pNew = new PolygonMarkerPrimitive2D(aPart, getRGBColA(), getRGBColB(), getDiscreteDashLength());
-                                rContainer.push_back(pNew);
-                            }
-                        }
-
-                        break;
                     }
+
+                    if(aLine.count())
+                    {
+                        // clip against visible area
+                        const basegfx::B2DPolyPolygon aResult(basegfx::utils::clipPolygonOnRange(aLine, rViewInformation.getDiscreteViewport(), true, true));
+
+                        for(sal_uInt32 a(0); a < aResult.count(); a++)
+                        {
+                            basegfx::B2DPolygon aPart(aResult.getB2DPolygon(a));
+                            aPart.transform(rViewInformation.getInverseObjectToViewTransformation());
+                            PolygonMarkerPrimitive2D* pNew = new PolygonMarkerPrimitive2D(aPart, getRGBColA(), getRGBColB(), getDiscreteDashLength());
+                            rContainer.push_back(pNew);
+                        }
+                    }
+
+                    break;
                 }
             }
         }

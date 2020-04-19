@@ -48,31 +48,31 @@ namespace drawinglayer::processor2d
 
         void BaseProcessor2D::process(const primitive2d::Primitive2DContainer& rSource)
         {
-            if(!rSource.empty())
+            if(rSource.empty())
+                return;
+
+            const sal_Int32 nCount(rSource.size());
+
+            for(sal_Int32 a(0); a < nCount; a++)
             {
-                const sal_Int32 nCount(rSource.size());
+                // get reference
+                const primitive2d::Primitive2DReference xReference(rSource[a]);
 
-                for(sal_Int32 a(0); a < nCount; a++)
+                if(xReference.is())
                 {
-                    // get reference
-                    const primitive2d::Primitive2DReference xReference(rSource[a]);
+                    // try to cast to BasePrimitive2D implementation
+                    const primitive2d::BasePrimitive2D* pBasePrimitive = dynamic_cast< const primitive2d::BasePrimitive2D* >(xReference.get());
 
-                    if(xReference.is())
+                    if(pBasePrimitive)
                     {
-                        // try to cast to BasePrimitive2D implementation
-                        const primitive2d::BasePrimitive2D* pBasePrimitive = dynamic_cast< const primitive2d::BasePrimitive2D* >(xReference.get());
-
-                        if(pBasePrimitive)
-                        {
-                            // it is a BasePrimitive2D implementation, use local processor
-                            processBasePrimitive2D(*pBasePrimitive);
-                        }
-                        else
-                        {
-                            // unknown implementation, use UNO API call instead and process recursively
-                            const uno::Sequence< beans::PropertyValue >& rViewParameters(getViewInformation2D().getViewInformationSequence());
-                            process(comphelper::sequenceToContainer<primitive2d::Primitive2DContainer>(xReference->getDecomposition(rViewParameters)));
-                        }
+                        // it is a BasePrimitive2D implementation, use local processor
+                        processBasePrimitive2D(*pBasePrimitive);
+                    }
+                    else
+                    {
+                        // unknown implementation, use UNO API call instead and process recursively
+                        const uno::Sequence< beans::PropertyValue >& rViewParameters(getViewInformation2D().getViewInformationSequence());
+                        process(comphelper::sequenceToContainer<primitive2d::Primitive2DContainer>(xReference->getDecomposition(rViewParameters)));
                     }
                 }
             }

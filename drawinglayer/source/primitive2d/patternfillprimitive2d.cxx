@@ -64,32 +64,32 @@ namespace drawinglayer::primitive2d
             const double fH(basegfx::B2DVector(aY - aTopLeft).getLength());
             const double fSquare(fW * fH);
 
-            if(fSquare > 0.0)
+            if(fSquare <= 0.0)
+                return;
+
+            // check if less than a maximum square pixels is used
+            static const sal_uInt32 fMaximumSquare(MAXIMUM_SQUARE_LENGTH * MAXIMUM_SQUARE_LENGTH);
+
+            if(fSquare >= fMaximumSquare)
+                return;
+
+            // calculate needed number of tiles and check if used more than a minimum count
+            const texture::GeoTexSvxTiled aTiling(getReferenceRange());
+            const sal_uInt32 nTiles(aTiling.getNumberOfTiles());
+            static const sal_uInt32 nMinimumTiles(MINIMUM_TILES_LENGTH * MINIMUM_TILES_LENGTH);
+
+            if(nTiles < nMinimumTiles)
+                return;
+
+            rWidth = basegfx::fround(ceil(fW));
+            rHeight = basegfx::fround(ceil(fH));
+            static const sal_uInt32 fMinimumSquare(MINIMUM_SQUARE_LENGTH * MINIMUM_SQUARE_LENGTH);
+
+            if(fSquare < fMinimumSquare)
             {
-                // check if less than a maximum square pixels is used
-                static const sal_uInt32 fMaximumSquare(MAXIMUM_SQUARE_LENGTH * MAXIMUM_SQUARE_LENGTH);
-
-                if(fSquare < fMaximumSquare)
-                {
-                    // calculate needed number of tiles and check if used more than a minimum count
-                    const texture::GeoTexSvxTiled aTiling(getReferenceRange());
-                    const sal_uInt32 nTiles(aTiling.getNumberOfTiles());
-                    static const sal_uInt32 nMinimumTiles(MINIMUM_TILES_LENGTH * MINIMUM_TILES_LENGTH);
-
-                    if(nTiles >= nMinimumTiles)
-                    {
-                        rWidth = basegfx::fround(ceil(fW));
-                        rHeight = basegfx::fround(ceil(fH));
-                        static const sal_uInt32 fMinimumSquare(MINIMUM_SQUARE_LENGTH * MINIMUM_SQUARE_LENGTH);
-
-                        if(fSquare < fMinimumSquare)
-                        {
-                            const double fRel(fW/fH);
-                            rWidth = basegfx::fround(sqrt(fMinimumSquare * fRel));
-                            rHeight = basegfx::fround(sqrt(fMinimumSquare / fRel));
-                        }
-                    }
-                }
+                const double fRel(fW/fH);
+                rWidth = basegfx::fround(sqrt(fMinimumSquare * fRel));
+                rHeight = basegfx::fround(sqrt(fMinimumSquare / fRel));
             }
         }
 
@@ -162,59 +162,58 @@ namespace drawinglayer::primitive2d
         {
             Primitive2DContainer aRetval;
 
-            if(!getChildren().empty())
+            if(getChildren().empty())
+                return;
+
+            if(!(!getReferenceRange().isEmpty() && getReferenceRange().getWidth() > 0.0 && getReferenceRange().getHeight() > 0.0))
+                return;
+
+            const basegfx::B2DRange aMaskRange(getMask().getB2DRange());
+
+            if(!(!aMaskRange.isEmpty() && aMaskRange.getWidth() > 0.0 && aMaskRange.getHeight() > 0.0))
+                return;
+
+            // create tiling matrices
+            std::vector< basegfx::B2DHomMatrix > aMatrices;
+            texture::GeoTexSvxTiled aTiling(getReferenceRange());
+
+            aTiling.appendTransformations(aMatrices);
+
+            // create content
+            const Primitive2DContainer aContent(createContent(rViewInformation));
+
+            // resize result
+            aRetval.resize(aMatrices.size());
+
+            // create one primitive for each matrix
+            for(size_t a(0); a < aMatrices.size(); a++)
             {
-                if(!getReferenceRange().isEmpty() && getReferenceRange().getWidth() > 0.0 && getReferenceRange().getHeight() > 0.0)
-                {
-                    const basegfx::B2DRange aMaskRange(getMask().getB2DRange());
+                aRetval[a] = new TransformPrimitive2D(
+                    aMatrices[a],
+                    aContent);
+            }
 
-                    if(!aMaskRange.isEmpty() && aMaskRange.getWidth() > 0.0 && aMaskRange.getHeight() > 0.0)
-                    {
-                        // create tiling matrices
-                        std::vector< basegfx::B2DHomMatrix > aMatrices;
-                        texture::GeoTexSvxTiled aTiling(getReferenceRange());
+            // transform result which is in unit coordinates to mask's object coordinates
+            {
+                const basegfx::B2DHomMatrix aMaskTransform(
+                    basegfx::utils::createScaleTranslateB2DHomMatrix(
+                        aMaskRange.getRange(),
+                        aMaskRange.getMinimum()));
 
-                        aTiling.appendTransformations(aMatrices);
+                const Primitive2DReference xRef(
+                    new TransformPrimitive2D(
+                        aMaskTransform,
+                        aRetval));
 
-                        // create content
-                        const Primitive2DContainer aContent(createContent(rViewInformation));
+                aRetval = Primitive2DContainer { xRef };
+            }
 
-                        // resize result
-                        aRetval.resize(aMatrices.size());
-
-                        // create one primitive for each matrix
-                        for(size_t a(0); a < aMatrices.size(); a++)
-                        {
-                            aRetval[a] = new TransformPrimitive2D(
-                                aMatrices[a],
-                                aContent);
-                        }
-
-                        // transform result which is in unit coordinates to mask's object coordinates
-                        {
-                            const basegfx::B2DHomMatrix aMaskTransform(
-                                basegfx::utils::createScaleTranslateB2DHomMatrix(
-                                    aMaskRange.getRange(),
-                                    aMaskRange.getMinimum()));
-
-                            const Primitive2DReference xRef(
-                                new TransformPrimitive2D(
-                                    aMaskTransform,
-                                    aRetval));
-
-                            aRetval = Primitive2DContainer { xRef };
-                        }
-
-                        // embed result in mask
-                        {
-                            rContainer.push_back(
-                                new MaskPrimitive2D(
-                                    getMask(),
-                                    aRetval));
-                        }
-
-                    }
-                }
+            // embed result in mask
+            {
+                rContainer.push_back(
+                    new MaskPrimitive2D(
+                        getMask(),
+                        aRetval));
             }
         }
 

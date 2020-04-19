@@ -181,97 +181,97 @@ namespace wmfemfhelper
         OSL_ENSURE(maPropertyHolders.size(), "PropertyHolders: POP with no property holders (!)");
         const sal_uInt32 nSize(maPropertyHolders.size());
 
-        if (nSize)
+        if (!nSize)
+            return;
+
+        const PropertyHolder* pTip = maPropertyHolders.back();
+        const PushFlags nPushFlags(pTip->getPushFlags());
+
+        if (nPushFlags != PushFlags::NONE)
         {
-            const PropertyHolder* pTip = maPropertyHolders.back();
-            const PushFlags nPushFlags(pTip->getPushFlags());
-
-            if (nPushFlags != PushFlags::NONE)
+            if (nSize > 1)
             {
-                if (nSize > 1)
-                {
-                    // copy back content for all non-set flags
-                    PropertyHolder* pLast = maPropertyHolders[nSize - 2];
+                // copy back content for all non-set flags
+                PropertyHolder* pLast = maPropertyHolders[nSize - 2];
 
-                    if (PushFlags::ALL != nPushFlags)
+                if (PushFlags::ALL != nPushFlags)
+                {
+                    if (!(nPushFlags & PushFlags::LINECOLOR))
                     {
-                        if (!(nPushFlags & PushFlags::LINECOLOR))
+                        pLast->setLineColor(pTip->getLineColor());
+                        pLast->setLineColorActive(pTip->getLineColorActive());
+                    }
+                    if (!(nPushFlags & PushFlags::FILLCOLOR))
+                    {
+                        pLast->setFillColor(pTip->getFillColor());
+                        pLast->setFillColorActive(pTip->getFillColorActive());
+                    }
+                    if (!(nPushFlags & PushFlags::FONT))
+                    {
+                        pLast->setFont(pTip->getFont());
+                    }
+                    if (!(nPushFlags & PushFlags::TEXTCOLOR))
+                    {
+                        pLast->setTextColor(pTip->getTextColor());
+                        pLast->setTextColorActive(pTip->getTextColorActive());
+                    }
+                    if (!(nPushFlags & PushFlags::MAPMODE))
+                    {
+                        pLast->setTransformation(pTip->getTransformation());
+                        pLast->setMapUnit(pTip->getMapUnit());
+                    }
+                    if (!(nPushFlags & PushFlags::CLIPREGION))
+                    {
+                        pLast->setClipPolyPolygon(pTip->getClipPolyPolygon());
+                        pLast->setClipPolyPolygonActive(pTip->getClipPolyPolygonActive());
+                    }
+                    if (!(nPushFlags & PushFlags::RASTEROP))
+                    {
+                        pLast->setRasterOp(pTip->getRasterOp());
+                    }
+                    if (!(nPushFlags & PushFlags::TEXTFILLCOLOR))
+                    {
+                        pLast->setTextFillColor(pTip->getTextFillColor());
+                        pLast->setTextFillColorActive(pTip->getTextFillColorActive());
+                    }
+                    if (!(nPushFlags & PushFlags::TEXTALIGN))
+                    {
+                        if (pLast->getFont().GetAlignment() != pTip->getFont().GetAlignment())
                         {
-                            pLast->setLineColor(pTip->getLineColor());
-                            pLast->setLineColorActive(pTip->getLineColorActive());
+                            vcl::Font aFont(pLast->getFont());
+                            aFont.SetAlignment(pTip->getFont().GetAlignment());
+                            pLast->setFont(aFont);
                         }
-                        if (!(nPushFlags & PushFlags::FILLCOLOR))
-                        {
-                            pLast->setFillColor(pTip->getFillColor());
-                            pLast->setFillColorActive(pTip->getFillColorActive());
-                        }
-                        if (!(nPushFlags & PushFlags::FONT))
-                        {
-                            pLast->setFont(pTip->getFont());
-                        }
-                        if (!(nPushFlags & PushFlags::TEXTCOLOR))
-                        {
-                            pLast->setTextColor(pTip->getTextColor());
-                            pLast->setTextColorActive(pTip->getTextColorActive());
-                        }
-                        if (!(nPushFlags & PushFlags::MAPMODE))
-                        {
-                            pLast->setTransformation(pTip->getTransformation());
-                            pLast->setMapUnit(pTip->getMapUnit());
-                        }
-                        if (!(nPushFlags & PushFlags::CLIPREGION))
-                        {
-                            pLast->setClipPolyPolygon(pTip->getClipPolyPolygon());
-                            pLast->setClipPolyPolygonActive(pTip->getClipPolyPolygonActive());
-                        }
-                        if (!(nPushFlags & PushFlags::RASTEROP))
-                        {
-                            pLast->setRasterOp(pTip->getRasterOp());
-                        }
-                        if (!(nPushFlags & PushFlags::TEXTFILLCOLOR))
-                        {
-                            pLast->setTextFillColor(pTip->getTextFillColor());
-                            pLast->setTextFillColorActive(pTip->getTextFillColorActive());
-                        }
-                        if (!(nPushFlags & PushFlags::TEXTALIGN))
-                        {
-                            if (pLast->getFont().GetAlignment() != pTip->getFont().GetAlignment())
-                            {
-                                vcl::Font aFont(pLast->getFont());
-                                aFont.SetAlignment(pTip->getFont().GetAlignment());
-                                pLast->setFont(aFont);
-                            }
-                        }
-                        if (!(nPushFlags & PushFlags::REFPOINT))
-                        {
-                            // not supported
-                        }
-                        if (!(nPushFlags & PushFlags::TEXTLINECOLOR))
-                        {
-                            pLast->setTextLineColor(pTip->getTextLineColor());
-                            pLast->setTextLineColorActive(pTip->getTextLineColorActive());
-                        }
-                        if (!(nPushFlags & PushFlags::TEXTLAYOUTMODE))
-                        {
-                            pLast->setLayoutMode(pTip->getLayoutMode());
-                        }
-                        if (!(nPushFlags & PushFlags::TEXTLANGUAGE))
-                        {
-                            pLast->setLanguageType(pTip->getLanguageType());
-                        }
-                        if (!(nPushFlags & PushFlags::OVERLINECOLOR))
-                        {
-                            pLast->setOverlineColor(pTip->getOverlineColor());
-                            pLast->setOverlineColorActive(pTip->getOverlineColorActive());
-                        }
+                    }
+                    if (!(nPushFlags & PushFlags::REFPOINT))
+                    {
+                        // not supported
+                    }
+                    if (!(nPushFlags & PushFlags::TEXTLINECOLOR))
+                    {
+                        pLast->setTextLineColor(pTip->getTextLineColor());
+                        pLast->setTextLineColorActive(pTip->getTextLineColorActive());
+                    }
+                    if (!(nPushFlags & PushFlags::TEXTLAYOUTMODE))
+                    {
+                        pLast->setLayoutMode(pTip->getLayoutMode());
+                    }
+                    if (!(nPushFlags & PushFlags::TEXTLANGUAGE))
+                    {
+                        pLast->setLanguageType(pTip->getLanguageType());
+                    }
+                    if (!(nPushFlags & PushFlags::OVERLINECOLOR))
+                    {
+                        pLast->setOverlineColor(pTip->getOverlineColor());
+                        pLast->setOverlineColorActive(pTip->getOverlineColorActive());
                     }
                 }
             }
-
-            // execute the pop
-            delete maPropertyHolders.back();
-            maPropertyHolders.pop_back();
         }
+
+        // execute the pop
+        delete maPropertyHolders.back();
+        maPropertyHolders.pop_back();
     }
 
     PropertyHolder& PropertyHolders::Current()
@@ -453,29 +453,29 @@ namespace wmfemfhelper
         PropertyHolder const & rProperties,
         const basegfx::BColor& rBColor)
     {
-        if(!rPositions.empty())
+        if(rPositions.empty())
+            return;
+
+        if(rProperties.getTransformation().isIdentity())
         {
-            if(rProperties.getTransformation().isIdentity())
-            {
-                rTarget.append(
-                    std::make_unique<drawinglayer::primitive2d::PointArrayPrimitive2D>(
-                        rPositions,
-                        rBColor));
-            }
-            else
-            {
-                std::vector< basegfx::B2DPoint > aPositions(rPositions);
+            rTarget.append(
+                std::make_unique<drawinglayer::primitive2d::PointArrayPrimitive2D>(
+                    rPositions,
+                    rBColor));
+        }
+        else
+        {
+            std::vector< basegfx::B2DPoint > aPositions(rPositions);
 
-                for(basegfx::B2DPoint & aPosition : aPositions)
-                {
-                    aPosition = rProperties.getTransformation() * aPosition;
-                }
-
-                rTarget.append(
-                    std::make_unique<drawinglayer::primitive2d::PointArrayPrimitive2D>(
-                        aPositions,
-                        rBColor));
+            for(basegfx::B2DPoint & aPosition : aPositions)
+            {
+                aPosition = rProperties.getTransformation() * aPosition;
             }
+
+            rTarget.append(
+                std::make_unique<drawinglayer::primitive2d::PointArrayPrimitive2D>(
+                    aPositions,
+                    rBColor));
         }
     }
 
@@ -520,63 +520,63 @@ namespace wmfemfhelper
         TargetHolder& rTarget,
         PropertyHolder const & rProperties)
     {
-        if(rLinePolygon.count())
+        if(!rLinePolygon.count())
+            return;
+
+        const bool bDashDotUsed(LineStyle::Dash == rLineInfo.GetStyle());
+        const bool bWidthUsed(rLineInfo.GetWidth() > 1);
+
+        if(bDashDotUsed || bWidthUsed)
         {
-            const bool bDashDotUsed(LineStyle::Dash == rLineInfo.GetStyle());
-            const bool bWidthUsed(rLineInfo.GetWidth() > 1);
+            basegfx::B2DPolygon aLinePolygon(rLinePolygon);
+            aLinePolygon.transform(rProperties.getTransformation());
+            const drawinglayer::attribute::LineAttribute aLineAttribute(
+                rProperties.getLineColor(),
+                bWidthUsed ? rLineInfo.GetWidth() : 0.0,
+                rLineInfo.GetLineJoin(),
+                rLineInfo.GetLineCap());
 
-            if(bDashDotUsed || bWidthUsed)
+            if(bDashDotUsed)
             {
-                basegfx::B2DPolygon aLinePolygon(rLinePolygon);
-                aLinePolygon.transform(rProperties.getTransformation());
-                const drawinglayer::attribute::LineAttribute aLineAttribute(
-                    rProperties.getLineColor(),
-                    bWidthUsed ? rLineInfo.GetWidth() : 0.0,
-                    rLineInfo.GetLineJoin(),
-                    rLineInfo.GetLineCap());
+                std::vector< double > fDotDashArray;
+                const double fDashLen(rLineInfo.GetDashLen());
+                const double fDotLen(rLineInfo.GetDotLen());
+                const double fDistance(rLineInfo.GetDistance());
 
-                if(bDashDotUsed)
+                for(sal_uInt16 a(0); a < rLineInfo.GetDashCount(); a++)
                 {
-                    std::vector< double > fDotDashArray;
-                    const double fDashLen(rLineInfo.GetDashLen());
-                    const double fDotLen(rLineInfo.GetDotLen());
-                    const double fDistance(rLineInfo.GetDistance());
-
-                    for(sal_uInt16 a(0); a < rLineInfo.GetDashCount(); a++)
-                    {
-                        fDotDashArray.push_back(fDashLen);
-                        fDotDashArray.push_back(fDistance);
-                    }
-
-                    for(sal_uInt16 b(0); b < rLineInfo.GetDotCount(); b++)
-                    {
-                        fDotDashArray.push_back(fDotLen);
-                        fDotDashArray.push_back(fDistance);
-                    }
-
-                    const double fAccumulated(std::accumulate(fDotDashArray.begin(), fDotDashArray.end(), 0.0));
-                    const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(
-                        fDotDashArray,
-                        fAccumulated);
-
-                    rTarget.append(
-                        std::make_unique<drawinglayer::primitive2d::PolygonStrokePrimitive2D>(
-                            aLinePolygon,
-                            aLineAttribute,
-                            aStrokeAttribute));
+                    fDotDashArray.push_back(fDashLen);
+                    fDotDashArray.push_back(fDistance);
                 }
-                else
+
+                for(sal_uInt16 b(0); b < rLineInfo.GetDotCount(); b++)
                 {
-                    rTarget.append(
-                        std::make_unique<drawinglayer::primitive2d::PolygonStrokePrimitive2D>(
-                            aLinePolygon,
-                            aLineAttribute));
+                    fDotDashArray.push_back(fDotLen);
+                    fDotDashArray.push_back(fDistance);
                 }
+
+                const double fAccumulated(std::accumulate(fDotDashArray.begin(), fDotDashArray.end(), 0.0));
+                const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(
+                    fDotDashArray,
+                    fAccumulated);
+
+                rTarget.append(
+                    std::make_unique<drawinglayer::primitive2d::PolygonStrokePrimitive2D>(
+                        aLinePolygon,
+                        aLineAttribute,
+                        aStrokeAttribute));
             }
             else
             {
-                createHairlinePrimitive(rLinePolygon, rTarget, rProperties);
+                rTarget.append(
+                    std::make_unique<drawinglayer::primitive2d::PolygonStrokePrimitive2D>(
+                        aLinePolygon,
+                        aLineAttribute));
             }
+        }
+        else
+        {
+            createHairlinePrimitive(rLinePolygon, rTarget, rProperties);
         }
     }
 
@@ -649,22 +649,22 @@ namespace wmfemfhelper
         TargetHolder& rTarget,
         PropertyHolder const & rProperties)
     {
-        if(!rBitmapEx.IsEmpty())
-        {
-            basegfx::B2DHomMatrix aObjectTransform;
+        if(rBitmapEx.IsEmpty())
+            return;
 
-            aObjectTransform.set(0, 0, rSize.Width());
-            aObjectTransform.set(1, 1, rSize.Height());
-            aObjectTransform.set(0, 2, rPoint.X());
-            aObjectTransform.set(1, 2, rPoint.Y());
+        basegfx::B2DHomMatrix aObjectTransform;
 
-            aObjectTransform = rProperties.getTransformation() * aObjectTransform;
+        aObjectTransform.set(0, 0, rSize.Width());
+        aObjectTransform.set(1, 1, rSize.Height());
+        aObjectTransform.set(0, 2, rPoint.X());
+        aObjectTransform.set(1, 2, rPoint.Y());
 
-            rTarget.append(
-                std::make_unique<drawinglayer::primitive2d::BitmapPrimitive2D>(
-                    VCLUnoHelper::CreateVCLXBitmap(rBitmapEx),
-                    aObjectTransform));
-        }
+        aObjectTransform = rProperties.getTransformation() * aObjectTransform;
+
+        rTarget.append(
+            std::make_unique<drawinglayer::primitive2d::BitmapPrimitive2D>(
+                VCLUnoHelper::CreateVCLXBitmap(rBitmapEx),
+                aObjectTransform));
     }
 
     /** helper to create a regular BotmapEx from a MaskAction (definitions
@@ -1288,23 +1288,23 @@ namespace wmfemfhelper
             }
         }
 
-        if(pResult)
-        {
-            // add created text primitive to target
-            if(rProperty.getTransformation().isIdentity())
-            {
-                rTarget.append(std::unique_ptr<drawinglayer::primitive2d::BasePrimitive2D>(pResult));
-            }
-            else
-            {
-                // when a transformation is set, embed to it
-                const drawinglayer::primitive2d::Primitive2DReference aReference(pResult);
+        if(!pResult)
+            return;
 
-                rTarget.append(
-                    std::make_unique<drawinglayer::primitive2d::TransformPrimitive2D>(
-                        rProperty.getTransformation(),
-                        drawinglayer::primitive2d::Primitive2DContainer { aReference }));
-            }
+        // add created text primitive to target
+        if(rProperty.getTransformation().isIdentity())
+        {
+            rTarget.append(std::unique_ptr<drawinglayer::primitive2d::BasePrimitive2D>(pResult));
+        }
+        else
+        {
+            // when a transformation is set, embed to it
+            const drawinglayer::primitive2d::Primitive2DReference aReference(pResult);
+
+            rTarget.append(
+                std::make_unique<drawinglayer::primitive2d::TransformPrimitive2D>(
+                    rProperty.getTransformation(),
+                    drawinglayer::primitive2d::Primitive2DContainer { aReference }));
         }
     }
 
@@ -1316,125 +1316,125 @@ namespace wmfemfhelper
     {
         const double fLineWidth(fabs(static_cast<double>(rAction.GetWidth())));
 
-        if(fLineWidth > 0.0)
+        if(fLineWidth <= 0.0)
+            return;
+
+        const drawinglayer::primitive2d::TextLine aOverlineMode(drawinglayer::primitive2d::mapFontLineStyleToTextLine(rAction.GetOverline()));
+        const drawinglayer::primitive2d::TextLine aUnderlineMode(drawinglayer::primitive2d::mapFontLineStyleToTextLine(rAction.GetUnderline()));
+        const drawinglayer::primitive2d::TextStrikeout aTextStrikeout(drawinglayer::primitive2d::mapFontStrikeoutToTextStrikeout(rAction.GetStrikeout()));
+
+        const bool bOverlineUsed(drawinglayer::primitive2d::TEXT_LINE_NONE != aOverlineMode);
+        const bool bUnderlineUsed(drawinglayer::primitive2d::TEXT_LINE_NONE != aUnderlineMode);
+        const bool bStrikeoutUsed(drawinglayer::primitive2d::TEXT_STRIKEOUT_NONE != aTextStrikeout);
+
+        if(!(bUnderlineUsed || bStrikeoutUsed || bOverlineUsed))
+            return;
+
+        std::vector< drawinglayer::primitive2d::BasePrimitive2D* > aTargetVector;
+        basegfx::B2DVector aAlignmentOffset(0.0, 0.0);
+        drawinglayer::attribute::FontAttribute aFontAttribute;
+        basegfx::B2DHomMatrix aTextTransform;
+
+        // fill parameters derived from current font
+        createFontAttributeTransformAndAlignment(
+            aFontAttribute,
+            aTextTransform,
+            aAlignmentOffset,
+            rProperty);
+
+        // add TextStartPosition
+        aTextTransform.translate(rAction.GetStartPoint().X(), rAction.GetStartPoint().Y());
+
+        // prepare TextLayouter (used in most cases)
+        drawinglayer::primitive2d::TextLayouterDevice aTextLayouter;
+        aTextLayouter.setFont(rProperty.getFont());
+
+        if(bOverlineUsed)
         {
-            const drawinglayer::primitive2d::TextLine aOverlineMode(drawinglayer::primitive2d::mapFontLineStyleToTextLine(rAction.GetOverline()));
-            const drawinglayer::primitive2d::TextLine aUnderlineMode(drawinglayer::primitive2d::mapFontLineStyleToTextLine(rAction.GetUnderline()));
-            const drawinglayer::primitive2d::TextStrikeout aTextStrikeout(drawinglayer::primitive2d::mapFontStrikeoutToTextStrikeout(rAction.GetStrikeout()));
-
-            const bool bOverlineUsed(drawinglayer::primitive2d::TEXT_LINE_NONE != aOverlineMode);
-            const bool bUnderlineUsed(drawinglayer::primitive2d::TEXT_LINE_NONE != aUnderlineMode);
-            const bool bStrikeoutUsed(drawinglayer::primitive2d::TEXT_STRIKEOUT_NONE != aTextStrikeout);
-
-            if(bUnderlineUsed || bStrikeoutUsed || bOverlineUsed)
-            {
-                std::vector< drawinglayer::primitive2d::BasePrimitive2D* > aTargetVector;
-                basegfx::B2DVector aAlignmentOffset(0.0, 0.0);
-                drawinglayer::attribute::FontAttribute aFontAttribute;
-                basegfx::B2DHomMatrix aTextTransform;
-
-                // fill parameters derived from current font
-                createFontAttributeTransformAndAlignment(
-                    aFontAttribute,
+            // create primitive geometry for overline
+            aTargetVector.push_back(
+                new drawinglayer::primitive2d::TextLinePrimitive2D(
                     aTextTransform,
-                    aAlignmentOffset,
-                    rProperty);
+                    fLineWidth,
+                    aTextLayouter.getOverlineOffset(),
+                    aTextLayouter.getOverlineHeight(),
+                    aOverlineMode,
+                    rProperty.getOverlineColor()));
+        }
 
-                // add TextStartPosition
-                aTextTransform.translate(rAction.GetStartPoint().X(), rAction.GetStartPoint().Y());
+        if(bUnderlineUsed)
+        {
+            // create primitive geometry for underline
+            aTargetVector.push_back(
+                new drawinglayer::primitive2d::TextLinePrimitive2D(
+                    aTextTransform,
+                    fLineWidth,
+                    aTextLayouter.getUnderlineOffset(),
+                    aTextLayouter.getUnderlineHeight(),
+                    aUnderlineMode,
+                    rProperty.getTextLineColor()));
+        }
 
-                // prepare TextLayouter (used in most cases)
-                drawinglayer::primitive2d::TextLayouterDevice aTextLayouter;
-                aTextLayouter.setFont(rProperty.getFont());
+        if(bStrikeoutUsed)
+        {
+            // create primitive geometry for strikeout
+            if(drawinglayer::primitive2d::TEXT_STRIKEOUT_SLASH == aTextStrikeout
+                || drawinglayer::primitive2d::TEXT_STRIKEOUT_X == aTextStrikeout)
+            {
+                // strikeout with character
+                const sal_Unicode aStrikeoutChar(
+                    drawinglayer::primitive2d::TEXT_STRIKEOUT_SLASH == aTextStrikeout ? '/' : 'X');
+                const css::lang::Locale aLocale(LanguageTag(
+                    rProperty.getLanguageType()).getLocale());
 
-                if(bOverlineUsed)
-                {
-                    // create primitive geometry for overline
-                    aTargetVector.push_back(
-                        new drawinglayer::primitive2d::TextLinePrimitive2D(
-                            aTextTransform,
-                            fLineWidth,
-                            aTextLayouter.getOverlineOffset(),
-                            aTextLayouter.getOverlineHeight(),
-                            aOverlineMode,
-                            rProperty.getOverlineColor()));
-                }
-
-                if(bUnderlineUsed)
-                {
-                    // create primitive geometry for underline
-                    aTargetVector.push_back(
-                        new drawinglayer::primitive2d::TextLinePrimitive2D(
-                            aTextTransform,
-                            fLineWidth,
-                            aTextLayouter.getUnderlineOffset(),
-                            aTextLayouter.getUnderlineHeight(),
-                            aUnderlineMode,
-                            rProperty.getTextLineColor()));
-                }
-
-                if(bStrikeoutUsed)
-                {
-                    // create primitive geometry for strikeout
-                    if(drawinglayer::primitive2d::TEXT_STRIKEOUT_SLASH == aTextStrikeout
-                        || drawinglayer::primitive2d::TEXT_STRIKEOUT_X == aTextStrikeout)
-                    {
-                        // strikeout with character
-                        const sal_Unicode aStrikeoutChar(
-                            drawinglayer::primitive2d::TEXT_STRIKEOUT_SLASH == aTextStrikeout ? '/' : 'X');
-                        const css::lang::Locale aLocale(LanguageTag(
-                            rProperty.getLanguageType()).getLocale());
-
-                        aTargetVector.push_back(
-                            new drawinglayer::primitive2d::TextCharacterStrikeoutPrimitive2D(
-                                aTextTransform,
-                                fLineWidth,
-                                rProperty.getTextColor(),
-                                aStrikeoutChar,
-                                aFontAttribute,
-                                aLocale));
-                    }
-                    else
-                    {
-                        // strikeout with geometry
-                        aTargetVector.push_back(
-                            new drawinglayer::primitive2d::TextGeometryStrikeoutPrimitive2D(
-                                aTextTransform,
-                                fLineWidth,
-                                rProperty.getTextColor(),
-                                aTextLayouter.getUnderlineHeight(),
-                                aTextLayouter.getStrikeoutOffset(),
-                                aTextStrikeout));
-                    }
-                }
-
-                if(!aTargetVector.empty())
-                {
-                    // add created text primitive to target
-                    if(rProperty.getTransformation().isIdentity())
-                    {
-                        for(drawinglayer::primitive2d::BasePrimitive2D* a : aTargetVector)
-                        {
-                            rTarget.append(std::unique_ptr<drawinglayer::primitive2d::BasePrimitive2D>(a));
-                        }
-                    }
-                    else
-                    {
-                        // when a transformation is set, embed to it
-                        drawinglayer::primitive2d::Primitive2DContainer xTargets(aTargetVector.size());
-
-                        for(size_t a(0); a < aTargetVector.size(); a++)
-                        {
-                            xTargets[a] = drawinglayer::primitive2d::Primitive2DReference(aTargetVector[a]);
-                        }
-
-                        rTarget.append(
-                            std::make_unique<drawinglayer::primitive2d::TransformPrimitive2D>(
-                                rProperty.getTransformation(),
-                                xTargets));
-                    }
-                }
+                aTargetVector.push_back(
+                    new drawinglayer::primitive2d::TextCharacterStrikeoutPrimitive2D(
+                        aTextTransform,
+                        fLineWidth,
+                        rProperty.getTextColor(),
+                        aStrikeoutChar,
+                        aFontAttribute,
+                        aLocale));
             }
+            else
+            {
+                // strikeout with geometry
+                aTargetVector.push_back(
+                    new drawinglayer::primitive2d::TextGeometryStrikeoutPrimitive2D(
+                        aTextTransform,
+                        fLineWidth,
+                        rProperty.getTextColor(),
+                        aTextLayouter.getUnderlineHeight(),
+                        aTextLayouter.getStrikeoutOffset(),
+                        aTextStrikeout));
+            }
+        }
+
+        if(aTargetVector.empty())
+            return;
+
+        // add created text primitive to target
+        if(rProperty.getTransformation().isIdentity())
+        {
+            for(drawinglayer::primitive2d::BasePrimitive2D* a : aTargetVector)
+            {
+                rTarget.append(std::unique_ptr<drawinglayer::primitive2d::BasePrimitive2D>(a));
+            }
+        }
+        else
+        {
+            // when a transformation is set, embed to it
+            drawinglayer::primitive2d::Primitive2DContainer xTargets(aTargetVector.size());
+
+            for(size_t a(0); a < aTargetVector.size(); a++)
+            {
+                xTargets[a] = drawinglayer::primitive2d::Primitive2DReference(aTargetVector[a]);
+            }
+
+            rTarget.append(
+                std::make_unique<drawinglayer::primitive2d::TransformPrimitive2D>(
+                    rProperty.getTransformation(),
+                    xTargets));
         }
     }
 

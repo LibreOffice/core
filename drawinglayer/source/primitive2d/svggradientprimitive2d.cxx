@@ -313,31 +313,31 @@ namespace drawinglayer::primitive2d
             const Primitive2DContainer aTargetColorEntries(rTargetColor.maybeInvert(bInvert));
             const Primitive2DContainer aTargetOpacityEntries(rTargetOpacity.maybeInvert(bInvert));
 
-            if(!aTargetColorEntries.empty())
+            if(aTargetColorEntries.empty())
+                return;
+
+            Primitive2DReference xRefContent;
+
+            if(!aTargetOpacityEntries.empty())
             {
-                Primitive2DReference xRefContent;
+                const Primitive2DReference xRefOpacity = new TransparencePrimitive2D(
+                    aTargetColorEntries,
+                    aTargetOpacityEntries);
 
-                if(!aTargetOpacityEntries.empty())
-                {
-                    const Primitive2DReference xRefOpacity = new TransparencePrimitive2D(
-                        aTargetColorEntries,
-                        aTargetOpacityEntries);
-
-                    xRefContent = new TransformPrimitive2D(
-                        rUnitGradientToObject,
-                        Primitive2DContainer { xRefOpacity });
-                }
-                else
-                {
-                    xRefContent = new TransformPrimitive2D(
-                        rUnitGradientToObject,
-                        aTargetColorEntries);
-                }
-
-                rContainer.push_back(new MaskPrimitive2D(
-                    getPolyPolygon(),
-                    Primitive2DContainer { xRefContent }));
+                xRefContent = new TransformPrimitive2D(
+                    rUnitGradientToObject,
+                    Primitive2DContainer { xRefOpacity });
             }
+            else
+            {
+                xRefContent = new TransformPrimitive2D(
+                    rUnitGradientToObject,
+                    aTargetColorEntries);
+            }
+
+            rContainer.push_back(new MaskPrimitive2D(
+                getPolyPolygon(),
+                Primitive2DContainer { xRefContent }));
         }
 
         SvgGradientHelper::SvgGradientHelper(
@@ -377,21 +377,21 @@ namespace drawinglayer::primitive2d
 
         void SvgGradientHelper::createMirroredGradientEntries()
         {
-            if(maMirroredGradientEntries.empty() && !getGradientEntries().empty())
+            if(!(maMirroredGradientEntries.empty() && !getGradientEntries().empty()))
+                return;
+
+            const sal_uInt32 nCount(getGradientEntries().size());
+            maMirroredGradientEntries.clear();
+            maMirroredGradientEntries.reserve(nCount);
+
+            for(sal_uInt32 a(0); a < nCount; a++)
             {
-                const sal_uInt32 nCount(getGradientEntries().size());
-                maMirroredGradientEntries.clear();
-                maMirroredGradientEntries.reserve(nCount);
+                const SvgGradientEntry& rCandidate = getGradientEntries()[nCount - 1 - a];
 
-                for(sal_uInt32 a(0); a < nCount; a++)
-                {
-                    const SvgGradientEntry& rCandidate = getGradientEntries()[nCount - 1 - a];
-
-                    maMirroredGradientEntries.emplace_back(
-                            1.0 - rCandidate.getOffset(),
-                            rCandidate.getColor(),
-                            rCandidate.getOpacity());
-                }
+                maMirroredGradientEntries.emplace_back(
+                        1.0 - rCandidate.getOffset(),
+                        rCandidate.getColor(),
+                        rCandidate.getOpacity());
             }
         }
 
@@ -859,43 +859,43 @@ namespace drawinglayer::primitive2d
         {
             const double fDelta(getOffsetB() - getOffsetA());
 
-            if(!basegfx::fTools::equalZero(fDelta))
+            if(basegfx::fTools::equalZero(fDelta))
+                return;
+
+            // use one discrete unit for overlap (one pixel)
+            const double fDiscreteUnit(getDiscreteUnit());
+
+            // use color distance and discrete lengths to calculate step count
+            const sal_uInt32 nSteps(calculateStepsForSvgGradient(getColorA(), getColorB(), fDelta, fDiscreteUnit));
+
+            // tdf#117949 Use a small amount of discrete overlap at the edges. Usually this
+            // should be exactly 0.0 and 1.0, but there were cases when this gets clipped
+            // against the mask polygon which got numerically problematic.
+            // This change is unnecessary in that respect, but avoids that numerical havoc
+            // by at the same time doing no real harm AFAIK
+            // TTTT: Remove again when clipping is fixed (!)
+
+            // prepare polygon in needed width at start position (with discrete overlap)
+            const basegfx::B2DPolygon aPolygon(
+                basegfx::utils::createPolygonFromRect(
+                    basegfx::B2DRange(
+                        getOffsetA() - fDiscreteUnit,
+                        -0.0001, // TTTT -> should be 0.0, see comment above
+                        getOffsetA() + (fDelta / nSteps) + fDiscreteUnit,
+                        1.0001))); // TTTT -> should be 1.0, see comment above
+
+            // prepare loop (inside to outside, [0.0 .. 1.0[)
+            double fUnitScale(0.0);
+            const double fUnitStep(1.0 / nSteps);
+
+            for(sal_uInt32 a(0); a < nSteps; a++, fUnitScale += fUnitStep)
             {
-                // use one discrete unit for overlap (one pixel)
-                const double fDiscreteUnit(getDiscreteUnit());
+                basegfx::B2DPolygon aNew(aPolygon);
 
-                // use color distance and discrete lengths to calculate step count
-                const sal_uInt32 nSteps(calculateStepsForSvgGradient(getColorA(), getColorB(), fDelta, fDiscreteUnit));
-
-                // tdf#117949 Use a small amount of discrete overlap at the edges. Usually this
-                // should be exactly 0.0 and 1.0, but there were cases when this gets clipped
-                // against the mask polygon which got numerically problematic.
-                // This change is unnecessary in that respect, but avoids that numerical havoc
-                // by at the same time doing no real harm AFAIK
-                // TTTT: Remove again when clipping is fixed (!)
-
-                // prepare polygon in needed width at start position (with discrete overlap)
-                const basegfx::B2DPolygon aPolygon(
-                    basegfx::utils::createPolygonFromRect(
-                        basegfx::B2DRange(
-                            getOffsetA() - fDiscreteUnit,
-                            -0.0001, // TTTT -> should be 0.0, see comment above
-                            getOffsetA() + (fDelta / nSteps) + fDiscreteUnit,
-                            1.0001))); // TTTT -> should be 1.0, see comment above
-
-                // prepare loop (inside to outside, [0.0 .. 1.0[)
-                double fUnitScale(0.0);
-                const double fUnitStep(1.0 / nSteps);
-
-                for(sal_uInt32 a(0); a < nSteps; a++, fUnitScale += fUnitStep)
-                {
-                    basegfx::B2DPolygon aNew(aPolygon);
-
-                    aNew.transform(basegfx::utils::createTranslateB2DHomMatrix(fDelta * fUnitScale, 0.0));
-                    rContainer.push_back(new PolyPolygonColorPrimitive2D(
-                        basegfx::B2DPolyPolygon(aNew),
-                        basegfx::interpolate(getColorA(), getColorB(), fUnitScale)));
-                }
+                aNew.transform(basegfx::utils::createTranslateB2DHomMatrix(fDelta * fUnitScale, 0.0));
+                rContainer.push_back(new PolyPolygonColorPrimitive2D(
+                    basegfx::B2DPolyPolygon(aNew),
+                    basegfx::interpolate(getColorA(), getColorB(), fUnitScale)));
             }
         }
 
@@ -944,51 +944,51 @@ namespace drawinglayer::primitive2d
         {
             const double fDeltaScale(getScaleB() - getScaleA());
 
-            if(!basegfx::fTools::equalZero(fDeltaScale))
+            if(basegfx::fTools::equalZero(fDeltaScale))
+                return;
+
+            // use one discrete unit for overlap (one pixel)
+            const double fDiscreteUnit(getDiscreteUnit());
+
+            // use color distance and discrete lengths to calculate step count
+            const sal_uInt32 nSteps(calculateStepsForSvgGradient(getColorA(), getColorB(), fDeltaScale, fDiscreteUnit));
+
+            // prepare loop ([0.0 .. 1.0[, full polygons, no polypolygons with holes)
+            double fUnitScale(0.0);
+            const double fUnitStep(1.0 / nSteps);
+
+            for(sal_uInt32 a(0); a < nSteps; a++, fUnitScale += fUnitStep)
             {
-                // use one discrete unit for overlap (one pixel)
-                const double fDiscreteUnit(getDiscreteUnit());
+                basegfx::B2DHomMatrix aTransform;
+                const double fEndScale(getScaleB() - (fDeltaScale * fUnitScale));
 
-                // use color distance and discrete lengths to calculate step count
-                const sal_uInt32 nSteps(calculateStepsForSvgGradient(getColorA(), getColorB(), fDeltaScale, fDiscreteUnit));
-
-                // prepare loop ([0.0 .. 1.0[, full polygons, no polypolygons with holes)
-                double fUnitScale(0.0);
-                const double fUnitStep(1.0 / nSteps);
-
-                for(sal_uInt32 a(0); a < nSteps; a++, fUnitScale += fUnitStep)
+                if(isTranslateSet())
                 {
-                    basegfx::B2DHomMatrix aTransform;
-                    const double fEndScale(getScaleB() - (fDeltaScale * fUnitScale));
+                    const basegfx::B2DVector aTranslate(
+                        basegfx::interpolate(
+                            getTranslateB(),
+                            getTranslateA(),
+                            fUnitScale));
 
-                    if(isTranslateSet())
-                    {
-                        const basegfx::B2DVector aTranslate(
-                            basegfx::interpolate(
-                                getTranslateB(),
-                                getTranslateA(),
-                                fUnitScale));
-
-                        aTransform = basegfx::utils::createScaleTranslateB2DHomMatrix(
-                            fEndScale,
-                            fEndScale,
-                            aTranslate.getX(),
-                            aTranslate.getY());
-                    }
-                    else
-                    {
-                        aTransform = basegfx::utils::createScaleB2DHomMatrix(
-                            fEndScale,
-                            fEndScale);
-                    }
-
-                    basegfx::B2DPolygon aNew(basegfx::utils::createPolygonFromUnitCircle());
-
-                    aNew.transform(aTransform);
-                    rContainer.push_back(new PolyPolygonColorPrimitive2D(
-                        basegfx::B2DPolyPolygon(aNew),
-                        basegfx::interpolate(getColorB(), getColorA(), fUnitScale)));
+                    aTransform = basegfx::utils::createScaleTranslateB2DHomMatrix(
+                        fEndScale,
+                        fEndScale,
+                        aTranslate.getX(),
+                        aTranslate.getY());
                 }
+                else
+                {
+                    aTransform = basegfx::utils::createScaleB2DHomMatrix(
+                        fEndScale,
+                        fEndScale);
+                }
+
+                basegfx::B2DPolygon aNew(basegfx::utils::createPolygonFromUnitCircle());
+
+                aNew.transform(aTransform);
+                rContainer.push_back(new PolyPolygonColorPrimitive2D(
+                    basegfx::B2DPolyPolygon(aNew),
+                    basegfx::interpolate(getColorB(), getColorA(), fUnitScale)));
             }
         }
 

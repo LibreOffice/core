@@ -129,86 +129,86 @@ namespace
     {
         const sal_uInt32 nPolyCount(rPolyPolygon.count());
 
-        if(nPolyCount)
+        if(!nPolyCount)
+            return;
+
+        basegfx::B2DPolyPolygon aSplitted;
+
+        for(sal_uInt32 a(0); a < nPolyCount; a++)
         {
-            basegfx::B2DPolyPolygon aSplitted;
+            const basegfx::B2DPolygon& aCandidate(rPolyPolygon.getB2DPolygon(a));
+            const sal_uInt32 nPointCount(aCandidate.count());
+            bool bNeedToSplit(false);
 
-            for(sal_uInt32 a(0); a < nPolyCount; a++)
+            if(aCandidate.areControlPointsUsed())
             {
-                const basegfx::B2DPolygon& aCandidate(rPolyPolygon.getB2DPolygon(a));
-                const sal_uInt32 nPointCount(aCandidate.count());
-                bool bNeedToSplit(false);
+                // compare with the maximum for bezier curved polygons
+                bNeedToSplit = nPointCount > ((MAX_POLYGON_POINT_COUNT_METAFILE / 3L) - 1);
+            }
+            else
+            {
+                // compare with the maximum for simple point polygons
+                bNeedToSplit = nPointCount > (MAX_POLYGON_POINT_COUNT_METAFILE - 1);
+            }
 
-                if(aCandidate.areControlPointsUsed())
+            if(bNeedToSplit)
+            {
+                // need to split the partial polygon
+                const basegfx::B2DRange aRange(aCandidate.getB2DRange());
+                const basegfx::B2DPoint aCenter(aRange.getCenter());
+
+                if(aRange.getWidth() > aRange.getHeight())
                 {
-                    // compare with the maximum for bezier curved polygons
-                    bNeedToSplit = nPointCount > ((MAX_POLYGON_POINT_COUNT_METAFILE / 3L) - 1);
+                    // clip in left and right
+                    const basegfx::B2DPolyPolygon aLeft(
+                        basegfx::utils::clipPolygonOnParallelAxis(
+                            aCandidate,
+                            false,
+                            true,
+                            aCenter.getX(),
+                            false));
+                    const basegfx::B2DPolyPolygon aRight(
+                        basegfx::utils::clipPolygonOnParallelAxis(
+                            aCandidate,
+                            false,
+                            false,
+                            aCenter.getX(),
+                            false));
+
+                    aSplitted.append(aLeft);
+                    aSplitted.append(aRight);
                 }
                 else
                 {
-                    // compare with the maximum for simple point polygons
-                    bNeedToSplit = nPointCount > (MAX_POLYGON_POINT_COUNT_METAFILE - 1);
-                }
+                    // clip in top and bottom
+                    const basegfx::B2DPolyPolygon aTop(
+                        basegfx::utils::clipPolygonOnParallelAxis(
+                            aCandidate,
+                            true,
+                            true,
+                            aCenter.getY(),
+                            false));
+                    const basegfx::B2DPolyPolygon aBottom(
+                        basegfx::utils::clipPolygonOnParallelAxis(
+                            aCandidate,
+                            true,
+                            false,
+                            aCenter.getY(),
+                            false));
 
-                if(bNeedToSplit)
-                {
-                    // need to split the partial polygon
-                    const basegfx::B2DRange aRange(aCandidate.getB2DRange());
-                    const basegfx::B2DPoint aCenter(aRange.getCenter());
-
-                    if(aRange.getWidth() > aRange.getHeight())
-                    {
-                        // clip in left and right
-                        const basegfx::B2DPolyPolygon aLeft(
-                            basegfx::utils::clipPolygonOnParallelAxis(
-                                aCandidate,
-                                false,
-                                true,
-                                aCenter.getX(),
-                                false));
-                        const basegfx::B2DPolyPolygon aRight(
-                            basegfx::utils::clipPolygonOnParallelAxis(
-                                aCandidate,
-                                false,
-                                false,
-                                aCenter.getX(),
-                                false));
-
-                        aSplitted.append(aLeft);
-                        aSplitted.append(aRight);
-                    }
-                    else
-                    {
-                        // clip in top and bottom
-                        const basegfx::B2DPolyPolygon aTop(
-                            basegfx::utils::clipPolygonOnParallelAxis(
-                                aCandidate,
-                                true,
-                                true,
-                                aCenter.getY(),
-                                false));
-                        const basegfx::B2DPolyPolygon aBottom(
-                            basegfx::utils::clipPolygonOnParallelAxis(
-                                aCandidate,
-                                true,
-                                false,
-                                aCenter.getY(),
-                                false));
-
-                        aSplitted.append(aTop);
-                        aSplitted.append(aBottom);
-                    }
-                }
-                else
-                {
-                    aSplitted.append(aCandidate);
+                    aSplitted.append(aTop);
+                    aSplitted.append(aBottom);
                 }
             }
-
-            if(aSplitted.count() != nPolyCount)
+            else
             {
-                rPolyPolygon = aSplitted;
+                aSplitted.append(aCandidate);
             }
+        }
+
+        if(aSplitted.count() != nPolyCount)
+        {
+            rPolyPolygon = aSplitted;
         }
     }
 
@@ -975,97 +975,97 @@ namespace drawinglayer::processor2d
             // process recursively and add MetaFile comment
             process(rGraphicPrimitive);
 
-            if(bUsingPDFExtOutDevData)
+            if(!bUsingPDFExtOutDevData)
+                return;
+
+            // emulate data handling from UnoControlPDFExportContact, original see
+            // svtools/source/graphic/grfmgr.cxx
+            const basegfx::B2DRange aCurrentRange(
+                aTranslate.getX(), aTranslate.getY(),
+                aTranslate.getX() + aScale.getX(), aTranslate.getY() + aScale.getY());
+            const ::tools::Rectangle aCurrentRect(
+                sal_Int32(floor(aCurrentRange.getMinX())), sal_Int32(floor(aCurrentRange.getMinY())),
+                sal_Int32(ceil(aCurrentRange.getMaxX())), sal_Int32(ceil(aCurrentRange.getMaxY())));
+            const GraphicAttr& rAttr = rGraphicPrimitive.getGraphicAttr();
+            // fdo#72530 don't pass empty Rectangle to EndGroup
+            ::tools::Rectangle aCropRect(aCurrentRect);
+
+            if(rAttr.IsCropped())
             {
-                // emulate data handling from UnoControlPDFExportContact, original see
-                // svtools/source/graphic/grfmgr.cxx
-                const basegfx::B2DRange aCurrentRange(
-                    aTranslate.getX(), aTranslate.getY(),
-                    aTranslate.getX() + aScale.getX(), aTranslate.getY() + aScale.getY());
-                const ::tools::Rectangle aCurrentRect(
-                    sal_Int32(floor(aCurrentRange.getMinX())), sal_Int32(floor(aCurrentRange.getMinY())),
-                    sal_Int32(ceil(aCurrentRange.getMaxX())), sal_Int32(ceil(aCurrentRange.getMaxY())));
-                const GraphicAttr& rAttr = rGraphicPrimitive.getGraphicAttr();
-                // fdo#72530 don't pass empty Rectangle to EndGroup
-                ::tools::Rectangle aCropRect(aCurrentRect);
+                // calculate scalings between real image size and logic object size. This
+                // is necessary since the crop values are relative to original bitmap size
+                double fFactorX(1.0);
+                double fFactorY(1.0);
 
-                if(rAttr.IsCropped())
                 {
-                    // calculate scalings between real image size and logic object size. This
-                    // is necessary since the crop values are relative to original bitmap size
-                    double fFactorX(1.0);
-                    double fFactorY(1.0);
+                    const MapMode aMapMode100thmm(MapUnit::Map100thMM);
+                    const Size aBitmapSize(OutputDevice::LogicToLogic(
+                        rGraphicPrimitive.getGraphicObject().GetPrefSize(),
+                        rGraphicPrimitive.getGraphicObject().GetPrefMapMode(), aMapMode100thmm));
+                    const double fDivX(aBitmapSize.Width() - rAttr.GetLeftCrop() - rAttr.GetRightCrop());
+                    const double fDivY(aBitmapSize.Height() - rAttr.GetTopCrop() - rAttr.GetBottomCrop());
 
+                    if(!basegfx::fTools::equalZero(fDivX))
                     {
-                        const MapMode aMapMode100thmm(MapUnit::Map100thMM);
-                        const Size aBitmapSize(OutputDevice::LogicToLogic(
-                            rGraphicPrimitive.getGraphicObject().GetPrefSize(),
-                            rGraphicPrimitive.getGraphicObject().GetPrefMapMode(), aMapMode100thmm));
-                        const double fDivX(aBitmapSize.Width() - rAttr.GetLeftCrop() - rAttr.GetRightCrop());
-                        const double fDivY(aBitmapSize.Height() - rAttr.GetTopCrop() - rAttr.GetBottomCrop());
-
-                        if(!basegfx::fTools::equalZero(fDivX))
-                        {
-                            fFactorX = aScale.getX() / fDivX;
-                        }
-
-                        if(!basegfx::fTools::equalZero(fDivY))
-                        {
-                            fFactorY = aScale.getY() / fDivY;
-                        }
+                        fFactorX = aScale.getX() / fDivX;
                     }
 
-                    // calculate crop range and rect
-                    basegfx::B2DRange aCropRange;
-                    aCropRange.expand(aCurrentRange.getMinimum() - basegfx::B2DPoint(rAttr.GetLeftCrop() * fFactorX, rAttr.GetTopCrop() * fFactorY));
-                    aCropRange.expand(aCurrentRange.getMaximum() + basegfx::B2DPoint(rAttr.GetRightCrop() * fFactorX, rAttr.GetBottomCrop() * fFactorY));
-
-                    aCropRect = ::tools::Rectangle(
-                        sal_Int32(floor(aCropRange.getMinX())), sal_Int32(floor(aCropRange.getMinY())),
-                        sal_Int32(ceil(aCropRange.getMaxX())), sal_Int32(ceil(aCropRange.getMaxY())));
+                    if(!basegfx::fTools::equalZero(fDivY))
+                    {
+                        fFactorY = aScale.getY() / fDivY;
+                    }
                 }
 
-                // Create image alternative description from ObjectInfoPrimitive2D info
-                // for PDF export
-                if(mpPDFExtOutDevData->GetIsExportTaggedPDF() && nullptr != getObjectInfoPrimitive2D())
+                // calculate crop range and rect
+                basegfx::B2DRange aCropRange;
+                aCropRange.expand(aCurrentRange.getMinimum() - basegfx::B2DPoint(rAttr.GetLeftCrop() * fFactorX, rAttr.GetTopCrop() * fFactorY));
+                aCropRange.expand(aCurrentRange.getMaximum() + basegfx::B2DPoint(rAttr.GetRightCrop() * fFactorX, rAttr.GetBottomCrop() * fFactorY));
+
+                aCropRect = ::tools::Rectangle(
+                    sal_Int32(floor(aCropRange.getMinX())), sal_Int32(floor(aCropRange.getMinY())),
+                    sal_Int32(ceil(aCropRange.getMaxX())), sal_Int32(ceil(aCropRange.getMaxY())));
+            }
+
+            // Create image alternative description from ObjectInfoPrimitive2D info
+            // for PDF export
+            if(mpPDFExtOutDevData->GetIsExportTaggedPDF() && nullptr != getObjectInfoPrimitive2D())
+            {
+                OUString aAlternateDescription;
+
+                if(!getObjectInfoPrimitive2D()->getTitle().isEmpty())
                 {
-                    OUString aAlternateDescription;
+                    aAlternateDescription += getObjectInfoPrimitive2D()->getTitle();
+                }
 
-                    if(!getObjectInfoPrimitive2D()->getTitle().isEmpty())
-                    {
-                        aAlternateDescription += getObjectInfoPrimitive2D()->getTitle();
-                    }
-
-                    if(!getObjectInfoPrimitive2D()->getDesc().isEmpty())
-                    {
-                        if(!aAlternateDescription.isEmpty())
-                        {
-                            aAlternateDescription += " - ";
-                        }
-
-                        aAlternateDescription += getObjectInfoPrimitive2D()->getDesc();
-                    }
-
-                    // Use SetAlternateText to set it. This will work as long as some
-                    // structure is used (see PDFWriterImpl::setAlternateText and
-                    // m_nCurrentStructElement - tagged PDF export works with this in
-                    // Draw/Impress/Writer, but not in Calc due to too less structure...)
-                    //Z maybe add structure to Calc PDF export, may need some BeginGroup/EndGroup stuff ..?
+                if(!getObjectInfoPrimitive2D()->getDesc().isEmpty())
+                {
                     if(!aAlternateDescription.isEmpty())
                     {
-                        mpPDFExtOutDevData->SetAlternateText(aAlternateDescription);
+                        aAlternateDescription += " - ";
                     }
+
+                    aAlternateDescription += getObjectInfoPrimitive2D()->getDesc();
                 }
 
-                // #i123295# 3rd param is uncropped rect, 4th is cropped. The primitive has the cropped
-                // object transformation, thus aCurrentRect *is* the clip region while aCropRect is the expanded,
-                // uncropped region. Thus, correct order is aCropRect, aCurrentRect
-                mpPDFExtOutDevData->EndGroup(
-                    rGraphicPrimitive.getGraphicObject().GetGraphic(),
-                    rAttr.GetTransparency(),
-                    aCropRect,
-                    aCurrentRect);
+                // Use SetAlternateText to set it. This will work as long as some
+                // structure is used (see PDFWriterImpl::setAlternateText and
+                // m_nCurrentStructElement - tagged PDF export works with this in
+                // Draw/Impress/Writer, but not in Calc due to too less structure...)
+                //Z maybe add structure to Calc PDF export, may need some BeginGroup/EndGroup stuff ..?
+                if(!aAlternateDescription.isEmpty())
+                {
+                    mpPDFExtOutDevData->SetAlternateText(aAlternateDescription);
+                }
             }
+
+            // #i123295# 3rd param is uncropped rect, 4th is cropped. The primitive has the cropped
+            // object transformation, thus aCurrentRect *is* the clip region while aCropRect is the expanded,
+            // uncropped region. Thus, correct order is aCropRect, aCurrentRect
+            mpPDFExtOutDevData->EndGroup(
+                rGraphicPrimitive.getGraphicObject().GetGraphic(),
+                rAttr.GetTransparency(),
+                aCropRect,
+                aCurrentRect);
         }
 
         void VclMetafileProcessor2D::processControlPrimitive2D(const primitive2d::ControlPrimitive2D& rControlPrimitive)
@@ -1096,87 +1096,87 @@ namespace drawinglayer::processor2d
             }
 
             // PDF export and printing only for printable controls
-            if(bIsPrintableControl)
+            if(!bIsPrintableControl)
+                return;
+
+            const bool bPDFExport(mpPDFExtOutDevData && mpPDFExtOutDevData->GetIsExportFormFields());
+            bool bDoProcessRecursively(true);
+
+            if(bPDFExport)
             {
-                const bool bPDFExport(mpPDFExtOutDevData && mpPDFExtOutDevData->GetIsExportFormFields());
-                bool bDoProcessRecursively(true);
+                // PDF export. Emulate data handling from UnoControlPDFExportContact
+                // I have now moved describePDFControl to toolkit, thus i can implement the PDF
+                // form control support now as follows
+                std::unique_ptr< vcl::PDFWriter::AnyWidget > pPDFControl(
+                    ::toolkitform::describePDFControl( rXControl, *mpPDFExtOutDevData ) );
 
-                if(bPDFExport)
+                if (pPDFControl)
                 {
-                    // PDF export. Emulate data handling from UnoControlPDFExportContact
-                    // I have now moved describePDFControl to toolkit, thus i can implement the PDF
-                    // form control support now as follows
-                    std::unique_ptr< vcl::PDFWriter::AnyWidget > pPDFControl(
-                        ::toolkitform::describePDFControl( rXControl, *mpPDFExtOutDevData ) );
+                    // still need to fill in the location (is a class Rectangle)
+                    const basegfx::B2DRange aRangeLogic(rControlPrimitive.getB2DRange(getViewInformation2D()));
+                    const ::tools::Rectangle aRectLogic(
+                        static_cast<sal_Int32>(floor(aRangeLogic.getMinX())), static_cast<sal_Int32>(floor(aRangeLogic.getMinY())),
+                        static_cast<sal_Int32>(ceil(aRangeLogic.getMaxX())), static_cast<sal_Int32>(ceil(aRangeLogic.getMaxY())));
+                    pPDFControl->Location = aRectLogic;
 
-                    if (pPDFControl)
+                    Size aFontSize(pPDFControl->TextFont.GetFontSize());
+                    aFontSize = OutputDevice::LogicToLogic(aFontSize, MapMode(MapUnit::MapPoint), mpOutputDevice->GetMapMode());
+                    pPDFControl->TextFont.SetFontSize(aFontSize);
+
+                    mpPDFExtOutDevData->BeginStructureElement(vcl::PDFWriter::Form);
+                    mpPDFExtOutDevData->CreateControl(*pPDFControl);
+                    mpPDFExtOutDevData->EndStructureElement();
+
+                    // no normal paint needed (see original UnoControlPDFExportContact::do_PaintObject);
+                    // do not process recursively
+                    bDoProcessRecursively = false;
+                }
+                else
+                {
+                    // PDF export did not work, try simple output.
+                    // Fallback to printer output by not setting bDoProcessRecursively
+                    // to false.
+                }
+            }
+
+            // #i93169# used flag the wrong way; true means that nothing was done yet
+            if(bDoProcessRecursively)
+            {
+                // printer output
+                try
+                {
+                    // remember old graphics and create new
+                    uno::Reference< awt::XView > xControlView(rXControl, uno::UNO_QUERY_THROW);
+                    const uno::Reference< awt::XGraphics > xOriginalGraphics(xControlView->getGraphics());
+                    const uno::Reference< awt::XGraphics > xNewGraphics(mpOutputDevice->CreateUnoGraphics());
+
+                    if(xNewGraphics.is())
                     {
-                        // still need to fill in the location (is a class Rectangle)
-                        const basegfx::B2DRange aRangeLogic(rControlPrimitive.getB2DRange(getViewInformation2D()));
-                        const ::tools::Rectangle aRectLogic(
-                            static_cast<sal_Int32>(floor(aRangeLogic.getMinX())), static_cast<sal_Int32>(floor(aRangeLogic.getMinY())),
-                            static_cast<sal_Int32>(ceil(aRangeLogic.getMaxX())), static_cast<sal_Int32>(ceil(aRangeLogic.getMaxY())));
-                        pPDFControl->Location = aRectLogic;
+                        // link graphics and view
+                        xControlView->setGraphics(xNewGraphics);
 
-                        Size aFontSize(pPDFControl->TextFont.GetFontSize());
-                        aFontSize = OutputDevice::LogicToLogic(aFontSize, MapMode(MapUnit::MapPoint), mpOutputDevice->GetMapMode());
-                        pPDFControl->TextFont.SetFontSize(aFontSize);
+                        // get position
+                        const basegfx::B2DHomMatrix aObjectToDiscrete(getViewInformation2D().getObjectToViewTransformation() * rControlPrimitive.getTransform());
+                        const basegfx::B2DPoint aTopLeftDiscrete(aObjectToDiscrete * basegfx::B2DPoint(0.0, 0.0));
 
-                        mpPDFExtOutDevData->BeginStructureElement(vcl::PDFWriter::Form);
-                        mpPDFExtOutDevData->CreateControl(*pPDFControl);
-                        mpPDFExtOutDevData->EndStructureElement();
-
-                        // no normal paint needed (see original UnoControlPDFExportContact::do_PaintObject);
-                        // do not process recursively
+                        // draw it
+                        xControlView->draw(basegfx::fround(aTopLeftDiscrete.getX()), basegfx::fround(aTopLeftDiscrete.getY()));
                         bDoProcessRecursively = false;
-                    }
-                    else
-                    {
-                        // PDF export did not work, try simple output.
-                        // Fallback to printer output by not setting bDoProcessRecursively
-                        // to false.
+
+                        // restore original graphics
+                        xControlView->setGraphics(xOriginalGraphics);
                     }
                 }
-
-                // #i93169# used flag the wrong way; true means that nothing was done yet
-                if(bDoProcessRecursively)
+                catch( const uno::Exception& )
                 {
-                    // printer output
-                    try
-                    {
-                        // remember old graphics and create new
-                        uno::Reference< awt::XView > xControlView(rXControl, uno::UNO_QUERY_THROW);
-                        const uno::Reference< awt::XGraphics > xOriginalGraphics(xControlView->getGraphics());
-                        const uno::Reference< awt::XGraphics > xNewGraphics(mpOutputDevice->CreateUnoGraphics());
-
-                        if(xNewGraphics.is())
-                        {
-                            // link graphics and view
-                            xControlView->setGraphics(xNewGraphics);
-
-                            // get position
-                            const basegfx::B2DHomMatrix aObjectToDiscrete(getViewInformation2D().getObjectToViewTransformation() * rControlPrimitive.getTransform());
-                            const basegfx::B2DPoint aTopLeftDiscrete(aObjectToDiscrete * basegfx::B2DPoint(0.0, 0.0));
-
-                            // draw it
-                            xControlView->draw(basegfx::fround(aTopLeftDiscrete.getX()), basegfx::fround(aTopLeftDiscrete.getY()));
-                            bDoProcessRecursively = false;
-
-                            // restore original graphics
-                            xControlView->setGraphics(xOriginalGraphics);
-                        }
-                    }
-                    catch( const uno::Exception& )
-                    {
-                        TOOLS_WARN_EXCEPTION("drawinglayer", "VclMetafileProcessor2D: Printing of Control failed");
-                    }
+                    TOOLS_WARN_EXCEPTION("drawinglayer", "VclMetafileProcessor2D: Printing of Control failed");
                 }
+            }
 
-                // process recursively if not done yet to export as decomposition (bitmap)
-                if(bDoProcessRecursively)
-                {
-                    process(rControlPrimitive);
-                }
+            // process recursively if not done yet to export as decomposition (bitmap)
+            if(bDoProcessRecursively)
+            {
+                process(rControlPrimitive);
             }
         }
 
@@ -1222,19 +1222,19 @@ namespace drawinglayer::processor2d
             // for the end comment the type is not relevant yet, they are all the same. Just add.
             mpMetaFile->AddAction(new MetaCommentAction(aCommentStringEnd));
 
-            if(mpPDFExtOutDevData && drawinglayer::primitive2d::FIELD_TYPE_URL == rFieldPrimitive.getType())
-            {
-                // emulate data handling from ImpEditEngine::Paint
-                const basegfx::B2DRange aViewRange(rContent.getB2DRange(getViewInformation2D()));
-                const ::tools::Rectangle aRectLogic(
-                    static_cast<sal_Int32>(floor(aViewRange.getMinX())), static_cast<sal_Int32>(floor(aViewRange.getMinY())),
-                    static_cast<sal_Int32>(ceil(aViewRange.getMaxX())), static_cast<sal_Int32>(ceil(aViewRange.getMaxY())));
-                vcl::PDFExtOutDevBookmarkEntry aBookmark;
-                aBookmark.nLinkId = mpPDFExtOutDevData->CreateLink(aRectLogic);
-                aBookmark.aBookmark = aURL;
-                std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks = mpPDFExtOutDevData->GetBookmarks();
-                rBookmarks.push_back( aBookmark );
-            }
+            if(!(mpPDFExtOutDevData && drawinglayer::primitive2d::FIELD_TYPE_URL == rFieldPrimitive.getType()))
+                return;
+
+            // emulate data handling from ImpEditEngine::Paint
+            const basegfx::B2DRange aViewRange(rContent.getB2DRange(getViewInformation2D()));
+            const ::tools::Rectangle aRectLogic(
+                static_cast<sal_Int32>(floor(aViewRange.getMinX())), static_cast<sal_Int32>(floor(aViewRange.getMinY())),
+                static_cast<sal_Int32>(ceil(aViewRange.getMaxX())), static_cast<sal_Int32>(ceil(aViewRange.getMaxY())));
+            vcl::PDFExtOutDevBookmarkEntry aBookmark;
+            aBookmark.nLinkId = mpPDFExtOutDevData->CreateLink(aRectLogic);
+            aBookmark.aBookmark = aURL;
+            std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks = mpPDFExtOutDevData->GetBookmarks();
+            rBookmarks.push_back( aBookmark );
         }
 
         void VclMetafileProcessor2D::processTextHierarchyLinePrimitive2D(const primitive2d::TextHierarchyLinePrimitive2D& rLinePrimitive)
@@ -1969,57 +1969,57 @@ namespace drawinglayer::processor2d
         void VclMetafileProcessor2D::processMaskPrimitive2D(const primitive2d::MaskPrimitive2D& rMaskCandidate)
         {
             // mask group. Special handling for MetaFiles.
-            if(!rMaskCandidate.getChildren().empty())
+            if(rMaskCandidate.getChildren().empty())
+                return;
+
+            basegfx::B2DPolyPolygon aMask(rMaskCandidate.getMask());
+
+            if(aMask.count())
             {
-                basegfx::B2DPolyPolygon aMask(rMaskCandidate.getMask());
+                // prepare new mask polygon and rescue current one
+                aMask.transform(maCurrentTransformation);
+                const basegfx::B2DPolyPolygon aLastClipPolyPolygon(maClipPolyPolygon);
 
-                if(aMask.count())
+                if(maClipPolyPolygon.count())
                 {
-                    // prepare new mask polygon and rescue current one
-                    aMask.transform(maCurrentTransformation);
-                    const basegfx::B2DPolyPolygon aLastClipPolyPolygon(maClipPolyPolygon);
-
-                    if(maClipPolyPolygon.count())
-                    {
-                        // there is already a clip polygon set; build clipped union of
-                        // current mask polygon and new one
-                        maClipPolyPolygon = basegfx::utils::clipPolyPolygonOnPolyPolygon(
-                            aMask,
-                            maClipPolyPolygon,
-                            true, // #i106516# we want the inside of aMask, not the outside
-                            false);
-                    }
-                    else
-                    {
-                        // use mask directly
-                        maClipPolyPolygon = aMask;
-                    }
-
-                    if(maClipPolyPolygon.count())
-                    {
-                        // set VCL clip region; subdivide before conversion to tools polygon. Subdivision necessary (!)
-                        // Removed subdivision and fixed in vcl::Region::ImplPolyPolyRegionToBandRegionFunc() in VCL where
-                        // the ClipRegion is built from the Polygon. An AdaptiveSubdivide on the source polygon was missing there
-                        mpOutputDevice->Push(PushFlags::CLIPREGION);
-                        mpOutputDevice->SetClipRegion(vcl::Region(maClipPolyPolygon));
-
-                        // recursively paint content
-                        // #i121267# Only need to process sub-content when clip polygon is *not* empty.
-                        // If it is empty, the clip is empty and there can be nothing inside.
-                        process(rMaskCandidate.getChildren());
-
-                        // restore VCL clip region
-                        mpOutputDevice->Pop();
-                    }
-
-                    // restore to rescued clip polygon
-                    maClipPolyPolygon = aLastClipPolyPolygon;
+                    // there is already a clip polygon set; build clipped union of
+                    // current mask polygon and new one
+                    maClipPolyPolygon = basegfx::utils::clipPolyPolygonOnPolyPolygon(
+                        aMask,
+                        maClipPolyPolygon,
+                        true, // #i106516# we want the inside of aMask, not the outside
+                        false);
                 }
                 else
                 {
-                    // no mask, no clipping. recursively paint content
-                    process(rMaskCandidate.getChildren());
+                    // use mask directly
+                    maClipPolyPolygon = aMask;
                 }
+
+                if(maClipPolyPolygon.count())
+                {
+                    // set VCL clip region; subdivide before conversion to tools polygon. Subdivision necessary (!)
+                    // Removed subdivision and fixed in vcl::Region::ImplPolyPolyRegionToBandRegionFunc() in VCL where
+                    // the ClipRegion is built from the Polygon. An AdaptiveSubdivide on the source polygon was missing there
+                    mpOutputDevice->Push(PushFlags::CLIPREGION);
+                    mpOutputDevice->SetClipRegion(vcl::Region(maClipPolyPolygon));
+
+                    // recursively paint content
+                    // #i121267# Only need to process sub-content when clip polygon is *not* empty.
+                    // If it is empty, the clip is empty and there can be nothing inside.
+                    process(rMaskCandidate.getChildren());
+
+                    // restore VCL clip region
+                    mpOutputDevice->Pop();
+                }
+
+                // restore to rescued clip polygon
+                maClipPolyPolygon = aLastClipPolyPolygon;
+            }
+            else
+            {
+                // no mask, no clipping. recursively paint content
+                process(rMaskCandidate.getChildren());
             }
         }
 
@@ -2133,126 +2133,126 @@ namespace drawinglayer::processor2d
             const primitive2d::Primitive2DContainer& rContent = rTransparenceCandidate.getChildren();
             const primitive2d::Primitive2DContainer& rTransparence = rTransparenceCandidate.getTransparence();
 
-            if(!rContent.empty() && !rTransparence.empty())
+            if(rContent.empty() || rTransparence.empty())
+                return;
+
+            // try to identify a single FillGradientPrimitive2D in the
+            // transparence part of the primitive
+            const primitive2d::FillGradientPrimitive2D* pFiGradient = nullptr;
+            static bool bForceToBigTransparentVDev(false); // loplugin:constvars:ignore
+
+            if(!bForceToBigTransparentVDev && 1 == rTransparence.size())
             {
-                // try to identify a single FillGradientPrimitive2D in the
-                // transparence part of the primitive
-                const primitive2d::FillGradientPrimitive2D* pFiGradient = nullptr;
-                static bool bForceToBigTransparentVDev(false); // loplugin:constvars:ignore
+                const primitive2d::Primitive2DReference xReference(rTransparence[0]);
+                pFiGradient = dynamic_cast< const primitive2d::FillGradientPrimitive2D* >(xReference.get());
+            }
 
-                if(!bForceToBigTransparentVDev && 1 == rTransparence.size())
+            // Check also for correct ID to exclude derived implementations
+            if(pFiGradient && PRIMITIVE2D_ID_FILLGRADIENTPRIMITIVE2D == pFiGradient->getPrimitive2DID())
+            {
+                // various content, create content-metafile
+                GDIMetaFile aContentMetafile;
+                const ::tools::Rectangle aPrimitiveRectangle(impDumpToMetaFile(rContent, aContentMetafile));
+
+                // re-create a VCL-gradient from FillGradientPrimitive2D
+                Gradient aVCLGradient;
+                impConvertFillGradientAttributeToVCLGradient(aVCLGradient, pFiGradient->getFillGradient(), true);
+
+                // render it to VCL
+                mpOutputDevice->DrawTransparent(
+                    aContentMetafile, aPrimitiveRectangle.TopLeft(),
+                    aPrimitiveRectangle.GetSize(), aVCLGradient);
+            }
+            else
+            {
+                // sub-transparence group. Draw to VDev first.
+                // this may get refined to tiling when resolution is too big here
+
+                // need to avoid switching off MapMode stuff here; maybe need another
+                // tooling class, cannot just do the same as with the pixel renderer.
+                // Need to experiment...
+
+                // Okay, basic implementation finished and tested. The DPI stuff was hard
+                // and not easy to find out that it's needed.
+                // Since this will not yet happen normally (as long as no one constructs
+                // transparence primitives with non-trivial transparence content) i will for now not
+                // refine to tiling here.
+
+                basegfx::B2DRange aViewRange(rContent.getB2DRange(getViewInformation2D()));
+                aViewRange.transform(maCurrentTransformation);
+                const ::tools::Rectangle aRectLogic(
+                    static_cast<sal_Int32>(floor(aViewRange.getMinX())), static_cast<sal_Int32>(floor(aViewRange.getMinY())),
+                    static_cast<sal_Int32>(ceil(aViewRange.getMaxX())), static_cast<sal_Int32>(ceil(aViewRange.getMaxY())));
+                const ::tools::Rectangle aRectPixel(mpOutputDevice->LogicToPixel(aRectLogic));
+                Size aSizePixel(aRectPixel.GetSize());
+                const Point aEmptyPoint;
+                ScopedVclPtrInstance< VirtualDevice > aBufferDevice;
+                const sal_uInt32 nMaxQuadratPixels(500000);
+                const sal_uInt32 nViewVisibleArea(aSizePixel.getWidth() * aSizePixel.getHeight());
+                double fReduceFactor(1.0);
+
+                if(nViewVisibleArea > nMaxQuadratPixels)
                 {
-                    const primitive2d::Primitive2DReference xReference(rTransparence[0]);
-                    pFiGradient = dynamic_cast< const primitive2d::FillGradientPrimitive2D* >(xReference.get());
+                    // reduce render size
+                    fReduceFactor = sqrt(double(nMaxQuadratPixels) / static_cast<double>(nViewVisibleArea));
+                    aSizePixel = Size(basegfx::fround(static_cast<double>(aSizePixel.getWidth()) * fReduceFactor),
+                        basegfx::fround(static_cast<double>(aSizePixel.getHeight()) * fReduceFactor));
                 }
 
-                // Check also for correct ID to exclude derived implementations
-                if(pFiGradient && PRIMITIVE2D_ID_FILLGRADIENTPRIMITIVE2D == pFiGradient->getPrimitive2DID())
+                if(aBufferDevice->SetOutputSizePixel(aSizePixel))
                 {
-                    // various content, create content-metafile
-                    GDIMetaFile aContentMetafile;
-                    const ::tools::Rectangle aPrimitiveRectangle(impDumpToMetaFile(rContent, aContentMetafile));
+                    // create and set MapModes for target devices
+                    MapMode aNewMapMode(mpOutputDevice->GetMapMode());
+                    aNewMapMode.SetOrigin(Point(-aRectLogic.Left(), -aRectLogic.Top()));
+                    aBufferDevice->SetMapMode(aNewMapMode);
 
-                    // re-create a VCL-gradient from FillGradientPrimitive2D
-                    Gradient aVCLGradient;
-                    impConvertFillGradientAttributeToVCLGradient(aVCLGradient, pFiGradient->getFillGradient(), true);
+                    // prepare view transformation for target renderers
+                    // ATTENTION! Need to apply another scaling because of the potential DPI differences
+                    // between Printer and VDev (mpOutputDevice and aBufferDevice here).
+                    // To get the DPI, LogicToPixel from (1,1) from MapUnit::MapInch needs to be used.
+                    basegfx::B2DHomMatrix aViewTransform(aBufferDevice->GetViewTransformation());
+                    const Size aDPIOld(mpOutputDevice->LogicToPixel(Size(1, 1), MapMode(MapUnit::MapInch)));
+                    const Size aDPINew(aBufferDevice->LogicToPixel(Size(1, 1), MapMode(MapUnit::MapInch)));
+                    const double fDPIXChange(static_cast<double>(aDPIOld.getWidth()) / static_cast<double>(aDPINew.getWidth()));
+                    const double fDPIYChange(static_cast<double>(aDPIOld.getHeight()) / static_cast<double>(aDPINew.getHeight()));
 
-                    // render it to VCL
-                    mpOutputDevice->DrawTransparent(
-                        aContentMetafile, aPrimitiveRectangle.TopLeft(),
-                        aPrimitiveRectangle.GetSize(), aVCLGradient);
-                }
-                else
-                {
-                    // sub-transparence group. Draw to VDev first.
-                    // this may get refined to tiling when resolution is too big here
-
-                    // need to avoid switching off MapMode stuff here; maybe need another
-                    // tooling class, cannot just do the same as with the pixel renderer.
-                    // Need to experiment...
-
-                    // Okay, basic implementation finished and tested. The DPI stuff was hard
-                    // and not easy to find out that it's needed.
-                    // Since this will not yet happen normally (as long as no one constructs
-                    // transparence primitives with non-trivial transparence content) i will for now not
-                    // refine to tiling here.
-
-                    basegfx::B2DRange aViewRange(rContent.getB2DRange(getViewInformation2D()));
-                    aViewRange.transform(maCurrentTransformation);
-                    const ::tools::Rectangle aRectLogic(
-                        static_cast<sal_Int32>(floor(aViewRange.getMinX())), static_cast<sal_Int32>(floor(aViewRange.getMinY())),
-                        static_cast<sal_Int32>(ceil(aViewRange.getMaxX())), static_cast<sal_Int32>(ceil(aViewRange.getMaxY())));
-                    const ::tools::Rectangle aRectPixel(mpOutputDevice->LogicToPixel(aRectLogic));
-                    Size aSizePixel(aRectPixel.GetSize());
-                    const Point aEmptyPoint;
-                    ScopedVclPtrInstance< VirtualDevice > aBufferDevice;
-                    const sal_uInt32 nMaxQuadratPixels(500000);
-                    const sal_uInt32 nViewVisibleArea(aSizePixel.getWidth() * aSizePixel.getHeight());
-                    double fReduceFactor(1.0);
-
-                    if(nViewVisibleArea > nMaxQuadratPixels)
+                    if(!basegfx::fTools::equal(fDPIXChange, 1.0) || !basegfx::fTools::equal(fDPIYChange, 1.0))
                     {
-                        // reduce render size
-                        fReduceFactor = sqrt(double(nMaxQuadratPixels) / static_cast<double>(nViewVisibleArea));
-                        aSizePixel = Size(basegfx::fround(static_cast<double>(aSizePixel.getWidth()) * fReduceFactor),
-                            basegfx::fround(static_cast<double>(aSizePixel.getHeight()) * fReduceFactor));
+                        aViewTransform.scale(fDPIXChange, fDPIYChange);
                     }
 
-                    if(aBufferDevice->SetOutputSizePixel(aSizePixel))
+                    // also take scaling from Size reduction into account
+                    if(!basegfx::fTools::equal(fReduceFactor, 1.0))
                     {
-                        // create and set MapModes for target devices
-                        MapMode aNewMapMode(mpOutputDevice->GetMapMode());
-                        aNewMapMode.SetOrigin(Point(-aRectLogic.Left(), -aRectLogic.Top()));
-                        aBufferDevice->SetMapMode(aNewMapMode);
-
-                        // prepare view transformation for target renderers
-                        // ATTENTION! Need to apply another scaling because of the potential DPI differences
-                        // between Printer and VDev (mpOutputDevice and aBufferDevice here).
-                        // To get the DPI, LogicToPixel from (1,1) from MapUnit::MapInch needs to be used.
-                        basegfx::B2DHomMatrix aViewTransform(aBufferDevice->GetViewTransformation());
-                        const Size aDPIOld(mpOutputDevice->LogicToPixel(Size(1, 1), MapMode(MapUnit::MapInch)));
-                        const Size aDPINew(aBufferDevice->LogicToPixel(Size(1, 1), MapMode(MapUnit::MapInch)));
-                        const double fDPIXChange(static_cast<double>(aDPIOld.getWidth()) / static_cast<double>(aDPINew.getWidth()));
-                        const double fDPIYChange(static_cast<double>(aDPIOld.getHeight()) / static_cast<double>(aDPINew.getHeight()));
-
-                        if(!basegfx::fTools::equal(fDPIXChange, 1.0) || !basegfx::fTools::equal(fDPIYChange, 1.0))
-                        {
-                            aViewTransform.scale(fDPIXChange, fDPIYChange);
-                        }
-
-                        // also take scaling from Size reduction into account
-                        if(!basegfx::fTools::equal(fReduceFactor, 1.0))
-                        {
-                            aViewTransform.scale(fReduceFactor, fReduceFactor);
-                        }
-
-                        // create view information and pixel renderer. Reuse known ViewInformation
-                        // except new transformation and range
-                        const geometry::ViewInformation2D aViewInfo(
-                            getViewInformation2D().getObjectTransformation(),
-                            aViewTransform,
-                            aViewRange,
-                            getViewInformation2D().getVisualizedPage(),
-                            getViewInformation2D().getViewTime(),
-                            getViewInformation2D().getExtendedInformationSequence());
-
-                        VclPixelProcessor2D aBufferProcessor(aViewInfo, *aBufferDevice);
-
-                        // draw content using pixel renderer
-                        aBufferProcessor.process(rContent);
-                        const Bitmap aBmContent(aBufferDevice->GetBitmap(aEmptyPoint, aSizePixel));
-
-                        // draw transparence using pixel renderer
-                        aBufferDevice->Erase();
-                        aBufferProcessor.process(rTransparence);
-                        const AlphaMask aBmAlpha(aBufferDevice->GetBitmap(aEmptyPoint, aSizePixel));
-
-                        // paint
-                        mpOutputDevice->DrawBitmapEx(
-                            aRectLogic.TopLeft(),
-                            aRectLogic.GetSize(),
-                            BitmapEx(aBmContent, aBmAlpha));
+                        aViewTransform.scale(fReduceFactor, fReduceFactor);
                     }
+
+                    // create view information and pixel renderer. Reuse known ViewInformation
+                    // except new transformation and range
+                    const geometry::ViewInformation2D aViewInfo(
+                        getViewInformation2D().getObjectTransformation(),
+                        aViewTransform,
+                        aViewRange,
+                        getViewInformation2D().getVisualizedPage(),
+                        getViewInformation2D().getViewTime(),
+                        getViewInformation2D().getExtendedInformationSequence());
+
+                    VclPixelProcessor2D aBufferProcessor(aViewInfo, *aBufferDevice);
+
+                    // draw content using pixel renderer
+                    aBufferProcessor.process(rContent);
+                    const Bitmap aBmContent(aBufferDevice->GetBitmap(aEmptyPoint, aSizePixel));
+
+                    // draw transparence using pixel renderer
+                    aBufferDevice->Erase();
+                    aBufferProcessor.process(rTransparence);
+                    const AlphaMask aBmAlpha(aBufferDevice->GetBitmap(aEmptyPoint, aSizePixel));
+
+                    // paint
+                    mpOutputDevice->DrawBitmapEx(
+                        aRectLogic.TopLeft(),
+                        aRectLogic.GetSize(),
+                        BitmapEx(aBmContent, aBmAlpha));
                 }
             }
         }

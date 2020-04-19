@@ -27,37 +27,37 @@ namespace drawinglayer::processor2d
 {
         void ObjectInfoPrimitiveExtractor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
         {
-            if(!mpFound)
+            if(mpFound)
+                return;
+
+            switch(rCandidate.getPrimitive2DID())
             {
-                switch(rCandidate.getPrimitive2DID())
+                case PRIMITIVE2D_ID_OBJECTINFOPRIMITIVE2D :
                 {
-                    case PRIMITIVE2D_ID_OBJECTINFOPRIMITIVE2D :
-                    {
-                        mpFound = dynamic_cast< const primitive2d::ObjectInfoPrimitive2D* >(&rCandidate);
-                        break;
-                    }
-                    default :
-                    {
-                        // we look for an encapsulated primitive, so do not decompose primitives
-                        // based on GroupPrimitive2D, just visit their children. It may be that more
-                        // group-like primitives need to be added here, but all primitives with
-                        // grouping functionality should be implemented based on the GroupPrimitive2D
-                        // class and have their main content accessible as children
-                        const primitive2d::GroupPrimitive2D* pGroupPrimitive2D = dynamic_cast< const primitive2d::GroupPrimitive2D* >(&rCandidate);
+                    mpFound = dynamic_cast< const primitive2d::ObjectInfoPrimitive2D* >(&rCandidate);
+                    break;
+                }
+                default :
+                {
+                    // we look for an encapsulated primitive, so do not decompose primitives
+                    // based on GroupPrimitive2D, just visit their children. It may be that more
+                    // group-like primitives need to be added here, but all primitives with
+                    // grouping functionality should be implemented based on the GroupPrimitive2D
+                    // class and have their main content accessible as children
+                    const primitive2d::GroupPrimitive2D* pGroupPrimitive2D = dynamic_cast< const primitive2d::GroupPrimitive2D* >(&rCandidate);
 
-                        if(pGroupPrimitive2D)
-                        {
-                            // process group children recursively
-                            process(pGroupPrimitive2D->getChildren());
-                        }
-                        else
-                        {
-                            // do not process recursively, we *only* want to find existing
-                            // ObjectInfoPrimitive2D entries
-                        }
-
-                        break;
+                    if(pGroupPrimitive2D)
+                    {
+                        // process group children recursively
+                        process(pGroupPrimitive2D->getChildren());
                     }
+                    else
+                    {
+                        // do not process recursively, we *only* want to find existing
+                        // ObjectInfoPrimitive2D entries
+                    }
+
+                    break;
                 }
             }
         }

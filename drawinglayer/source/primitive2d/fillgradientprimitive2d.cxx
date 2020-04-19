@@ -201,35 +201,35 @@ namespace drawinglayer::primitive2d
                     aCombinedPolyPoly,
                     rOuterColor));
 
-            if(!rEntries.empty())
+            if(rEntries.empty())
+                return;
+
+            // reuse first polygon, it's the second one
+            aCombinedPolyPoly.remove(0);
+
+            for(size_t a(0); a < rEntries.size() - 1; a++)
             {
-                // reuse first polygon, it's the second one
-                aCombinedPolyPoly.remove(0);
+                // create next inner polygon, combined with last one
+                basegfx::B2DPolygon aNextPoly(rUnitPolygon);
 
-                for(size_t a(0); a < rEntries.size() - 1; a++)
-                {
-                    // create next inner polygon, combined with last one
-                    basegfx::B2DPolygon aNextPoly(rUnitPolygon);
+                aNextPoly.transform(rEntries[a + 1].maB2DHomMatrix);
+                aCombinedPolyPoly.append(aNextPoly);
 
-                    aNextPoly.transform(rEntries[a + 1].maB2DHomMatrix);
-                    aCombinedPolyPoly.append(aNextPoly);
-
-                    // create primitive with correct color
-                    rContainer.push_back(
-                        new PolyPolygonColorPrimitive2D(
-                            aCombinedPolyPoly,
-                            rEntries[a].maBColor));
-
-                    // reuse inner polygon, it's the 2nd one
-                    aCombinedPolyPoly.remove(0);
-                }
-
-                // add last inner polygon with last color
+                // create primitive with correct color
                 rContainer.push_back(
                     new PolyPolygonColorPrimitive2D(
                         aCombinedPolyPoly,
-                        rEntries[rEntries.size() - 1].maBColor));
+                        rEntries[a].maBColor));
+
+                // reuse inner polygon, it's the 2nd one
+                aCombinedPolyPoly.remove(0);
             }
+
+            // add last inner polygon with last color
+            rContainer.push_back(
+                new PolyPolygonColorPrimitive2D(
+                    aCombinedPolyPoly,
+                    rEntries[rEntries.size() - 1].maBColor));
         }
 
         void FillGradientPrimitive2D::createFill(Primitive2DContainer& rContainer, bool bOverlapping) const

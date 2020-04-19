@@ -33,70 +33,66 @@ namespace drawinglayer::primitive2d
 void PolyPolygonGraphicPrimitive2D::create2DDecomposition(
     Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
 {
-    if (!getFillGraphic().isDefault())
+    if (getFillGraphic().isDefault())
+        return;
+
+    const Graphic& rGraphic = getFillGraphic().getGraphic();
+    const GraphicType aType(rGraphic.GetType());
+
+    // is there a bitmap or a metafile (do we have content)?
+    if (!(GraphicType::Bitmap == aType || GraphicType::GdiMetafile == aType))
+        return;
+
+    const Size aPrefSize(rGraphic.GetPrefSize());
+
+    // does content have a size?
+    if (!(aPrefSize.Width() && aPrefSize.Height()))
+        return;
+
+    // create SubSequence with FillGraphicPrimitive2D based on polygon range
+    const basegfx::B2DRange aOutRange(getB2DPolyPolygon().getB2DRange());
+    const basegfx::B2DHomMatrix aNewObjectTransform(
+        basegfx::utils::createScaleTranslateB2DHomMatrix(aOutRange.getRange(),
+                                                         aOutRange.getMinimum()));
+    Primitive2DReference xSubRef;
+
+    if (aOutRange != getDefinitionRange())
     {
-        const Graphic& rGraphic = getFillGraphic().getGraphic();
-        const GraphicType aType(rGraphic.GetType());
+        // we want to paint (tiled) content which is defined relative to DefinitionRange
+        // with the same tiling and offset(s) in the target range of the geometry (the
+        // polygon). The range given in the local FillGraphicAttribute defines the position
+        // of the graphic in unit coordinates relative to the DefinitionRange. Transform
+        // this using DefinitionRange to get to the global definition and then with the
+        // inverse transformation from the target range to go to unit coordinates relative
+        // to that target coordinate system.
+        basegfx::B2DRange aAdaptedRange(getFillGraphic().getGraphicRange());
 
-        // is there a bitmap or a metafile (do we have content)?
-        if (GraphicType::Bitmap == aType || GraphicType::GdiMetafile == aType)
-        {
-            const Size aPrefSize(rGraphic.GetPrefSize());
+        const basegfx::B2DHomMatrix aFromDefinitionRangeToGlobal(
+            basegfx::utils::createScaleTranslateB2DHomMatrix(getDefinitionRange().getRange(),
+                                                             getDefinitionRange().getMinimum()));
 
-            // does content have a size?
-            if (aPrefSize.Width() && aPrefSize.Height())
-            {
-                // create SubSequence with FillGraphicPrimitive2D based on polygon range
-                const basegfx::B2DRange aOutRange(getB2DPolyPolygon().getB2DRange());
-                const basegfx::B2DHomMatrix aNewObjectTransform(
-                    basegfx::utils::createScaleTranslateB2DHomMatrix(aOutRange.getRange(),
-                                                                     aOutRange.getMinimum()));
-                Primitive2DReference xSubRef;
+        aAdaptedRange.transform(aFromDefinitionRangeToGlobal);
 
-                if (aOutRange != getDefinitionRange())
-                {
-                    // we want to paint (tiled) content which is defined relative to DefinitionRange
-                    // with the same tiling and offset(s) in the target range of the geometry (the
-                    // polygon). The range given in the local FillGraphicAttribute defines the position
-                    // of the graphic in unit coordinates relative to the DefinitionRange. Transform
-                    // this using DefinitionRange to get to the global definition and then with the
-                    // inverse transformation from the target range to go to unit coordinates relative
-                    // to that target coordinate system.
-                    basegfx::B2DRange aAdaptedRange(getFillGraphic().getGraphicRange());
+        basegfx::B2DHomMatrix aFromGlobalToOutRange(
+            basegfx::utils::createScaleTranslateB2DHomMatrix(aOutRange.getRange(),
+                                                             aOutRange.getMinimum()));
+        aFromGlobalToOutRange.invert();
 
-                    const basegfx::B2DHomMatrix aFromDefinitionRangeToGlobal(
-                        basegfx::utils::createScaleTranslateB2DHomMatrix(
-                            getDefinitionRange().getRange(), getDefinitionRange().getMinimum()));
+        aAdaptedRange.transform(aFromGlobalToOutRange);
 
-                    aAdaptedRange.transform(aFromDefinitionRangeToGlobal);
+        const drawinglayer::attribute::FillGraphicAttribute aAdaptedFillGraphicAttribute(
+            getFillGraphic().getGraphic(), aAdaptedRange, getFillGraphic().getTiling(),
+            getFillGraphic().getOffsetX(), getFillGraphic().getOffsetY());
 
-                    basegfx::B2DHomMatrix aFromGlobalToOutRange(
-                        basegfx::utils::createScaleTranslateB2DHomMatrix(aOutRange.getRange(),
-                                                                         aOutRange.getMinimum()));
-                    aFromGlobalToOutRange.invert();
-
-                    aAdaptedRange.transform(aFromGlobalToOutRange);
-
-                    const drawinglayer::attribute::FillGraphicAttribute
-                        aAdaptedFillGraphicAttribute(getFillGraphic().getGraphic(), aAdaptedRange,
-                                                     getFillGraphic().getTiling(),
-                                                     getFillGraphic().getOffsetX(),
-                                                     getFillGraphic().getOffsetY());
-
-                    xSubRef = new FillGraphicPrimitive2D(aNewObjectTransform,
-                                                         aAdaptedFillGraphicAttribute);
-                }
-                else
-                {
-                    xSubRef = new FillGraphicPrimitive2D(aNewObjectTransform, getFillGraphic());
-                }
-
-                // embed to mask primitive
-                rContainer.push_back(
-                    new MaskPrimitive2D(getB2DPolyPolygon(), Primitive2DContainer{ xSubRef }));
-            }
-        }
+        xSubRef = new FillGraphicPrimitive2D(aNewObjectTransform, aAdaptedFillGraphicAttribute);
     }
+    else
+    {
+        xSubRef = new FillGraphicPrimitive2D(aNewObjectTransform, getFillGraphic());
+    }
+
+    // embed to mask primitive
+    rContainer.push_back(new MaskPrimitive2D(getB2DPolyPolygon(), Primitive2DContainer{ xSubRef }));
 }
 
 PolyPolygonGraphicPrimitive2D::PolyPolygonGraphicPrimitive2D(

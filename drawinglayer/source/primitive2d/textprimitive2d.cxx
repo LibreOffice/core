@@ -85,80 +85,80 @@ namespace drawinglayer::primitive2d
 {
         void TextSimplePortionPrimitive2D::getTextOutlinesAndTransformation(basegfx::B2DPolyPolygonVector& rTarget, basegfx::B2DHomMatrix& rTransformation) const
         {
-            if(getTextLength())
+            if(!getTextLength())
+                return;
+
+            // decompose object transformation to single values
+            basegfx::B2DVector aScale, aTranslate;
+            double fRotate, fShearX;
+
+            // if decomposition returns false, create no geometry since e.g. scaling may
+            // be zero
+            if (!(getTextTransform().decompose(aScale, aTranslate, fRotate, fShearX) && aScale.getX() != 0.0))
+                return;
+
+            // handle special case: If scale is negative in (x,y) (3rd quadrant), it can
+            // be expressed as rotation by PI
+            if(basegfx::fTools::less(aScale.getX(), 0.0) && basegfx::fTools::less(aScale.getY(), 0.0))
             {
-                // decompose object transformation to single values
-                basegfx::B2DVector aScale, aTranslate;
-                double fRotate, fShearX;
+                aScale = basegfx::absolute(aScale);
+                fRotate += F_PI;
+            }
 
-                // if decomposition returns false, create no geometry since e.g. scaling may
-                // be zero
-                if (getTextTransform().decompose(aScale, aTranslate, fRotate, fShearX) && aScale.getX() != 0.0)
+            // for the TextLayouterDevice, it is necessary to have a scaling representing
+            // the font size. Since we want to extract polygons here, it is okay to
+            // work just with scaling and to ignore shear, rotation and translation,
+            // all that can be applied to the polygons later
+            const basegfx::B2DVector aFontScale(getCorrectedScaleAndFontScale(aScale));
+
+            // prepare textlayoutdevice
+            TextLayouterDevice aTextLayouter;
+            aTextLayouter.setFontAttribute(
+                getFontAttribute(),
+                aFontScale.getX(),
+                aFontScale.getY(),
+                getLocale());
+
+            // When getting outlines from stretched text (aScale.getX() != 1.0) it
+            // is necessary to inverse-scale the DXArray (if used) to not get the
+            // outlines already aligned to given, but wrong DXArray
+            if(!getDXArray().empty() && !basegfx::fTools::equal(aScale.getX(), 1.0))
+            {
+                std::vector< double > aScaledDXArray = getDXArray();
+                const double fDXArrayScale(1.0 / aScale.getX());
+
+                for(double & a : aScaledDXArray)
                 {
-                    // handle special case: If scale is negative in (x,y) (3rd quadrant), it can
-                    // be expressed as rotation by PI
-                    if(basegfx::fTools::less(aScale.getX(), 0.0) && basegfx::fTools::less(aScale.getY(), 0.0))
-                    {
-                        aScale = basegfx::absolute(aScale);
-                        fRotate += F_PI;
-                    }
-
-                    // for the TextLayouterDevice, it is necessary to have a scaling representing
-                    // the font size. Since we want to extract polygons here, it is okay to
-                    // work just with scaling and to ignore shear, rotation and translation,
-                    // all that can be applied to the polygons later
-                    const basegfx::B2DVector aFontScale(getCorrectedScaleAndFontScale(aScale));
-
-                    // prepare textlayoutdevice
-                    TextLayouterDevice aTextLayouter;
-                    aTextLayouter.setFontAttribute(
-                        getFontAttribute(),
-                        aFontScale.getX(),
-                        aFontScale.getY(),
-                        getLocale());
-
-                    // When getting outlines from stretched text (aScale.getX() != 1.0) it
-                    // is necessary to inverse-scale the DXArray (if used) to not get the
-                    // outlines already aligned to given, but wrong DXArray
-                    if(!getDXArray().empty() && !basegfx::fTools::equal(aScale.getX(), 1.0))
-                    {
-                        std::vector< double > aScaledDXArray = getDXArray();
-                        const double fDXArrayScale(1.0 / aScale.getX());
-
-                        for(double & a : aScaledDXArray)
-                        {
-                            a *= fDXArrayScale;
-                        }
-
-                        // get the text outlines
-                        aTextLayouter.getTextOutlines(
-                            rTarget,
-                            getText(),
-                            getTextPosition(),
-                            getTextLength(),
-                            aScaledDXArray);
-                    }
-                    else
-                    {
-                        // get the text outlines
-                        aTextLayouter.getTextOutlines(
-                            rTarget,
-                            getText(),
-                            getTextPosition(),
-                            getTextLength(),
-                            getDXArray());
-                    }
-
-                    // create primitives for the outlines
-                    const sal_uInt32 nCount(rTarget.size());
-
-                    if(nCount)
-                    {
-                        // prepare object transformation for polygons
-                        rTransformation = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
-                            aScale, fShearX, fRotate, aTranslate);
-                    }
+                    a *= fDXArrayScale;
                 }
+
+                // get the text outlines
+                aTextLayouter.getTextOutlines(
+                    rTarget,
+                    getText(),
+                    getTextPosition(),
+                    getTextLength(),
+                    aScaledDXArray);
+            }
+            else
+            {
+                // get the text outlines
+                aTextLayouter.getTextOutlines(
+                    rTarget,
+                    getText(),
+                    getTextPosition(),
+                    getTextLength(),
+                    getDXArray());
+            }
+
+            // create primitives for the outlines
+            const sal_uInt32 nCount(rTarget.size());
+
+            if(nCount)
+            {
+                // prepare object transformation for polygons
+                rTransformation = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
+                    aScale, fShearX, fRotate, aTranslate);
             }
         }
 

@@ -267,40 +267,40 @@ namespace drawinglayer
         maDestPixel = ::tools::Rectangle(aEmptyPoint, mrOutDev.GetOutputSizePixel());
         maDestPixel.Intersection(aRectPixel);
 
-        if(isVisible())
-        {
+        if(!isVisible())
+            return;
+
 #ifdef IOS
-            // Exact mechanism unknown, but for some reason SmartArt
-            // rendering, especially shadows, is broken on iOS unless
-            // we pass 'true' here. Are virtual devices always de
-            // facto cleared when created on other platforms?
-            mpContent = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, false);
+        // Exact mechanism unknown, but for some reason SmartArt
+        // rendering, especially shadows, is broken on iOS unless
+        // we pass 'true' here. Are virtual devices always de
+        // facto cleared when created on other platforms?
+        mpContent = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, false);
 #else
-            mpContent = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), false, false);
+        mpContent = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), false, false);
 #endif
 
-            // #i93485# assert when copying from window to VDev is used
-            OSL_ENSURE(mrOutDev.GetOutDevType() != OUTDEV_WINDOW,
-                "impBufferDevice render helper: Copying from Window to VDev, this should be avoided (!)");
+        // #i93485# assert when copying from window to VDev is used
+        OSL_ENSURE(mrOutDev.GetOutDevType() != OUTDEV_WINDOW,
+            "impBufferDevice render helper: Copying from Window to VDev, this should be avoided (!)");
 
-            const bool bWasEnabledSrc(mrOutDev.IsMapModeEnabled());
-            mrOutDev.EnableMapMode(false);
-            mpContent->DrawOutDev(aEmptyPoint, maDestPixel.GetSize(), maDestPixel.TopLeft(), maDestPixel.GetSize(), mrOutDev);
-            mrOutDev.EnableMapMode(bWasEnabledSrc);
+        const bool bWasEnabledSrc(mrOutDev.IsMapModeEnabled());
+        mrOutDev.EnableMapMode(false);
+        mpContent->DrawOutDev(aEmptyPoint, maDestPixel.GetSize(), maDestPixel.TopLeft(), maDestPixel.GetSize(), mrOutDev);
+        mrOutDev.EnableMapMode(bWasEnabledSrc);
 
-            MapMode aNewMapMode(mrOutDev.GetMapMode());
+        MapMode aNewMapMode(mrOutDev.GetMapMode());
 
-            const Point aLogicTopLeft(mrOutDev.PixelToLogic(maDestPixel.TopLeft()));
-            aNewMapMode.SetOrigin(Point(-aLogicTopLeft.X(), -aLogicTopLeft.Y()));
+        const Point aLogicTopLeft(mrOutDev.PixelToLogic(maDestPixel.TopLeft()));
+        aNewMapMode.SetOrigin(Point(-aLogicTopLeft.X(), -aLogicTopLeft.Y()));
 
-            mpContent->SetMapMode(aNewMapMode);
+        mpContent->SetMapMode(aNewMapMode);
 
-            // copy AA flag for new target
-            mpContent->SetAntialiasing(mrOutDev.GetAntialiasing());
+        // copy AA flag for new target
+        mpContent->SetAntialiasing(mrOutDev.GetAntialiasing());
 
-            // copy RasterOp (e.g. may be RasterOp::Xor on destination)
-            mpContent->SetRasterOp(mrOutDev.GetRasterOp());
-        }
+        // copy RasterOp (e.g. may be RasterOp::Xor on destination)
+        mpContent->SetRasterOp(mrOutDev.GetRasterOp());
     }
 
     impBufferDevice::~impBufferDevice()
@@ -323,98 +323,98 @@ namespace drawinglayer
 
     void impBufferDevice::paint(double fTrans)
     {
-        if(isVisible())
-        {
-            const Point aEmptyPoint;
-            const Size aSizePixel(maDestPixel.GetSize());
-            const bool bWasEnabledDst(mrOutDev.IsMapModeEnabled());
+        if(!isVisible())
+            return;
+
+        const Point aEmptyPoint;
+        const Size aSizePixel(maDestPixel.GetSize());
+        const bool bWasEnabledDst(mrOutDev.IsMapModeEnabled());
 #ifdef DBG_UTIL
-            static bool bDoSaveForVisualControl(false); // loplugin:constvars:ignore
+        static bool bDoSaveForVisualControl(false); // loplugin:constvars:ignore
 #endif
 
-            mrOutDev.EnableMapMode(false);
-            mpContent->EnableMapMode(false);
+        mrOutDev.EnableMapMode(false);
+        mpContent->EnableMapMode(false);
+
+#ifdef DBG_UTIL
+        if(bDoSaveForVisualControl)
+        {
+            SvFileStream aNew(
+#ifdef _WIN32
+                "c:\\content.bmp",
+#else
+                "~/content.bmp",
+#endif
+                StreamMode::WRITE|StreamMode::TRUNC);
+            Bitmap aContent(mpContent->GetBitmap(aEmptyPoint, aSizePixel));
+            WriteDIB(aContent, aNew, false, true);
+        }
+#endif
+
+        // during painting the buffer, disable evtl. set RasterOp (may be RasterOp::Xor)
+        const RasterOp aOrigRasterOp(mrOutDev.GetRasterOp());
+        mrOutDev.SetRasterOp(RasterOp::OverPaint);
+
+        if(mpAlpha)
+        {
+            mpAlpha->EnableMapMode(false);
+            const AlphaMask aAlphaMask(mpAlpha->GetBitmap(aEmptyPoint, aSizePixel));
 
 #ifdef DBG_UTIL
             if(bDoSaveForVisualControl)
             {
                 SvFileStream aNew(
 #ifdef _WIN32
-                    "c:\\content.bmp",
+                    "c:\\transparence.bmp",
 #else
-                    "~/content.bmp",
+                    "~/transparence.bmp",
 #endif
                     StreamMode::WRITE|StreamMode::TRUNC);
-                Bitmap aContent(mpContent->GetBitmap(aEmptyPoint, aSizePixel));
-                WriteDIB(aContent, aNew, false, true);
+                WriteDIB(aAlphaMask.GetBitmap(), aNew, false, true);
             }
 #endif
 
-            // during painting the buffer, disable evtl. set RasterOp (may be RasterOp::Xor)
-            const RasterOp aOrigRasterOp(mrOutDev.GetRasterOp());
-            mrOutDev.SetRasterOp(RasterOp::OverPaint);
-
-            if(mpAlpha)
-            {
-                mpAlpha->EnableMapMode(false);
-                const AlphaMask aAlphaMask(mpAlpha->GetBitmap(aEmptyPoint, aSizePixel));
-
-#ifdef DBG_UTIL
-                if(bDoSaveForVisualControl)
-                {
-                    SvFileStream aNew(
-#ifdef _WIN32
-                        "c:\\transparence.bmp",
-#else
-                        "~/transparence.bmp",
-#endif
-                        StreamMode::WRITE|StreamMode::TRUNC);
-                    WriteDIB(aAlphaMask.GetBitmap(), aNew, false, true);
-                }
-#endif
-
-                Bitmap aContent(mpContent->GetBitmap(aEmptyPoint, aSizePixel));
-                mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aAlphaMask));
-            }
-            else if(mpMask)
-            {
-                mpMask->EnableMapMode(false);
-                const Bitmap aMask(mpMask->GetBitmap(aEmptyPoint, aSizePixel));
-
-#ifdef DBG_UTIL
-                if(bDoSaveForVisualControl)
-                {
-                    SvFileStream aNew(
-#ifdef _WIN32
-                        "c:\\mask.bmp",
-#else
-                        "~/mask.bmp",
-#endif
-                        StreamMode::WRITE|StreamMode::TRUNC);
-                    WriteDIB(aMask, aNew, false, true);
-                }
-#endif
-
-                Bitmap aContent(mpContent->GetBitmap(aEmptyPoint, aSizePixel));
-                mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aMask));
-            }
-            else if(0.0 != fTrans)
-            {
-                sal_uInt8 nMaskValue(static_cast<sal_uInt8>(basegfx::fround(fTrans * 255.0)));
-                const AlphaMask aAlphaMask(aSizePixel, &nMaskValue);
-                Bitmap aContent(mpContent->GetBitmap(aEmptyPoint, aSizePixel));
-                mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aAlphaMask));
-            }
-            else
-            {
-                mrOutDev.DrawOutDev(maDestPixel.TopLeft(), aSizePixel,
-                                    aEmptyPoint, aSizePixel,
-                                    *mpContent);
-            }
-
-            mrOutDev.SetRasterOp(aOrigRasterOp);
-            mrOutDev.EnableMapMode(bWasEnabledDst);
+            Bitmap aContent(mpContent->GetBitmap(aEmptyPoint, aSizePixel));
+            mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aAlphaMask));
         }
+        else if(mpMask)
+        {
+            mpMask->EnableMapMode(false);
+            const Bitmap aMask(mpMask->GetBitmap(aEmptyPoint, aSizePixel));
+
+#ifdef DBG_UTIL
+            if(bDoSaveForVisualControl)
+            {
+                SvFileStream aNew(
+#ifdef _WIN32
+                    "c:\\mask.bmp",
+#else
+                    "~/mask.bmp",
+#endif
+                    StreamMode::WRITE|StreamMode::TRUNC);
+                WriteDIB(aMask, aNew, false, true);
+            }
+#endif
+
+            Bitmap aContent(mpContent->GetBitmap(aEmptyPoint, aSizePixel));
+            mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aMask));
+        }
+        else if(0.0 != fTrans)
+        {
+            sal_uInt8 nMaskValue(static_cast<sal_uInt8>(basegfx::fround(fTrans * 255.0)));
+            const AlphaMask aAlphaMask(aSizePixel, &nMaskValue);
+            Bitmap aContent(mpContent->GetBitmap(aEmptyPoint, aSizePixel));
+            mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aAlphaMask));
+        }
+        else
+        {
+            mrOutDev.DrawOutDev(maDestPixel.TopLeft(), aSizePixel,
+                                aEmptyPoint, aSizePixel,
+                                *mpContent);
+        }
+
+        mrOutDev.SetRasterOp(aOrigRasterOp);
+        mrOutDev.EnableMapMode(bWasEnabledDst);
     }
 
     VirtualDevice& impBufferDevice::getContent()

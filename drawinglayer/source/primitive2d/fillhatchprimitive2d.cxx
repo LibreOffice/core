@@ -34,96 +34,96 @@ namespace drawinglayer::primitive2d
 {
         void FillHatchPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            if(!getFillHatch().isDefault())
+            if(getFillHatch().isDefault())
+                return;
+
+            // create hatch
+            const basegfx::BColor aHatchColor(getFillHatch().getColor());
+            const double fAngle(getFillHatch().getAngle());
+            std::vector< basegfx::B2DHomMatrix > aMatrices;
+            double fDistance(getFillHatch().getDistance());
+            const bool bAdaptDistance(0 != getFillHatch().getMinimalDiscreteDistance());
+
+            // #i120230# evtl. adapt distance
+            if(bAdaptDistance)
             {
-                // create hatch
-                const basegfx::BColor aHatchColor(getFillHatch().getColor());
-                const double fAngle(getFillHatch().getAngle());
-                std::vector< basegfx::B2DHomMatrix > aMatrices;
-                double fDistance(getFillHatch().getDistance());
-                const bool bAdaptDistance(0 != getFillHatch().getMinimalDiscreteDistance());
+                const double fDiscreteDistance(getFillHatch().getDistance() / getDiscreteUnit());
 
-                // #i120230# evtl. adapt distance
-                if(bAdaptDistance)
+                if(fDiscreteDistance < static_cast<double>(getFillHatch().getMinimalDiscreteDistance()))
                 {
-                    const double fDiscreteDistance(getFillHatch().getDistance() / getDiscreteUnit());
-
-                    if(fDiscreteDistance < static_cast<double>(getFillHatch().getMinimalDiscreteDistance()))
-                    {
-                        fDistance = static_cast<double>(getFillHatch().getMinimalDiscreteDistance()) * getDiscreteUnit();
-                    }
+                    fDistance = static_cast<double>(getFillHatch().getMinimalDiscreteDistance()) * getDiscreteUnit();
                 }
+            }
 
-                // get hatch transformations
-                switch(getFillHatch().getStyle())
+            // get hatch transformations
+            switch(getFillHatch().getStyle())
+            {
+                case attribute::HatchStyle::Triple:
                 {
-                    case attribute::HatchStyle::Triple:
-                    {
-                        // rotated 45 degrees
-                        texture::GeoTexSvxHatch aHatch(
-                            getDefinitionRange(),
-                            getOutputRange(),
-                            fDistance,
-                            fAngle - F_PI4);
+                    // rotated 45 degrees
+                    texture::GeoTexSvxHatch aHatch(
+                        getDefinitionRange(),
+                        getOutputRange(),
+                        fDistance,
+                        fAngle - F_PI4);
 
-                        aHatch.appendTransformations(aMatrices);
+                    aHatch.appendTransformations(aMatrices);
 
-                        [[fallthrough]];
-                    }
-                    case attribute::HatchStyle::Double:
-                    {
-                        // rotated 90 degrees
-                        texture::GeoTexSvxHatch aHatch(
-                            getDefinitionRange(),
-                            getOutputRange(),
-                            fDistance,
-                            fAngle - F_PI2);
-
-                        aHatch.appendTransformations(aMatrices);
-
-                        [[fallthrough]];
-                    }
-                    case attribute::HatchStyle::Single:
-                    {
-                        // angle as given
-                        texture::GeoTexSvxHatch aHatch(
-                            getDefinitionRange(),
-                            getOutputRange(),
-                            fDistance,
-                            fAngle);
-
-                        aHatch.appendTransformations(aMatrices);
-                    }
+                    [[fallthrough]];
                 }
-
-                // prepare return value
-                const bool bFillBackground(getFillHatch().isFillBackground());
-
-                // evtl. create filled background
-                if(bFillBackground)
+                case attribute::HatchStyle::Double:
                 {
-                    // create primitive for background
-                    rContainer.push_back(
-                        new PolyPolygonColorPrimitive2D(
-                            basegfx::B2DPolyPolygon(
-                                basegfx::utils::createPolygonFromRect(getOutputRange())), getBColor()));
+                    // rotated 90 degrees
+                    texture::GeoTexSvxHatch aHatch(
+                        getDefinitionRange(),
+                        getOutputRange(),
+                        fDistance,
+                        fAngle - F_PI2);
+
+                    aHatch.appendTransformations(aMatrices);
+
+                    [[fallthrough]];
                 }
-
-                // create primitives
-                const basegfx::B2DPoint aStart(0.0, 0.0);
-                const basegfx::B2DPoint aEnd(1.0, 0.0);
-
-                for(size_t a(0); a < aMatrices.size(); a++)
+                case attribute::HatchStyle::Single:
                 {
-                    const basegfx::B2DHomMatrix& rMatrix = aMatrices[a];
-                    basegfx::B2DPolygon aNewLine;
+                    // angle as given
+                    texture::GeoTexSvxHatch aHatch(
+                        getDefinitionRange(),
+                        getOutputRange(),
+                        fDistance,
+                        fAngle);
 
-                    aNewLine.append(rMatrix * aStart);
-                    aNewLine.append(rMatrix * aEnd);
-
-                    // create hairline
-                    rContainer.push_back(new PolygonHairlinePrimitive2D(aNewLine, aHatchColor));
+                    aHatch.appendTransformations(aMatrices);
                 }
+            }
+
+            // prepare return value
+            const bool bFillBackground(getFillHatch().isFillBackground());
+
+            // evtl. create filled background
+            if(bFillBackground)
+            {
+                // create primitive for background
+                rContainer.push_back(
+                    new PolyPolygonColorPrimitive2D(
+                        basegfx::B2DPolyPolygon(
+                            basegfx::utils::createPolygonFromRect(getOutputRange())), getBColor()));
+            }
+
+            // create primitives
+            const basegfx::B2DPoint aStart(0.0, 0.0);
+            const basegfx::B2DPoint aEnd(1.0, 0.0);
+
+            for(size_t a(0); a < aMatrices.size(); a++)
+            {
+                const basegfx::B2DHomMatrix& rMatrix = aMatrices[a];
+                basegfx::B2DPolygon aNewLine;
+
+                aNewLine.append(rMatrix * aStart);
+                aNewLine.append(rMatrix * aEnd);
+
+                // create hairline
+                rContainer.push_back(new PolygonHairlinePrimitive2D(aNewLine, aHatchColor));
             }
         }
 

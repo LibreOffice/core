@@ -47,160 +47,160 @@ namespace drawinglayer::processor3d
         {
             const primitive3d::Primitive3DContainer& rSubSequence = rPrimitive.getChildren();
 
-            if(!rSubSequence.empty())
+            if(rSubSequence.empty())
+                return;
+
+            // rescue values
+            const bool bOldModulate(getModulate()); mbModulate = rPrimitive.getModulate();
+            const bool bOldFilter(getFilter()); mbFilter = rPrimitive.getFilter();
+            const bool bOldSimpleTextureActive(getSimpleTextureActive());
+            std::shared_ptr< texture::GeoTexSvx > pOldTex = bTransparence ? mpTransparenceGeoTexSvx : mpGeoTexSvx;
+
+            // create texture
+            const attribute::FillGradientAttribute& rFillGradient = rPrimitive.getGradient();
+            const basegfx::B2DRange aOutlineRange(0.0, 0.0, rPrimitive.getTextureSize().getX(), rPrimitive.getTextureSize().getY());
+            const attribute::GradientStyle aGradientStyle(rFillGradient.getStyle());
+            sal_uInt32 nSteps(rFillGradient.getSteps());
+            const basegfx::BColor& aStart(rFillGradient.getStartColor());
+            const basegfx::BColor& aEnd(rFillGradient.getEndColor());
+            const sal_uInt32 nMaxSteps(sal_uInt32((aStart.getMaximumDistance(aEnd) * 127.5) + 0.5));
+            std::shared_ptr< texture::GeoTexSvx > pNewTex;
+
+            if(nMaxSteps)
             {
-                // rescue values
-                const bool bOldModulate(getModulate()); mbModulate = rPrimitive.getModulate();
-                const bool bOldFilter(getFilter()); mbFilter = rPrimitive.getFilter();
-                const bool bOldSimpleTextureActive(getSimpleTextureActive());
-                std::shared_ptr< texture::GeoTexSvx > pOldTex = bTransparence ? mpTransparenceGeoTexSvx : mpGeoTexSvx;
-
-                // create texture
-                const attribute::FillGradientAttribute& rFillGradient = rPrimitive.getGradient();
-                const basegfx::B2DRange aOutlineRange(0.0, 0.0, rPrimitive.getTextureSize().getX(), rPrimitive.getTextureSize().getY());
-                const attribute::GradientStyle aGradientStyle(rFillGradient.getStyle());
-                sal_uInt32 nSteps(rFillGradient.getSteps());
-                const basegfx::BColor& aStart(rFillGradient.getStartColor());
-                const basegfx::BColor& aEnd(rFillGradient.getEndColor());
-                const sal_uInt32 nMaxSteps(sal_uInt32((aStart.getMaximumDistance(aEnd) * 127.5) + 0.5));
-                std::shared_ptr< texture::GeoTexSvx > pNewTex;
-
-                if(nMaxSteps)
+                // there IS a color distance
+                if(nSteps == 0)
                 {
-                    // there IS a color distance
-                    if(nSteps == 0)
+                    nSteps = nMaxSteps;
+                }
+
+                if(nSteps < 2)
+                {
+                    nSteps = 2;
+                }
+
+                if(nSteps > nMaxSteps)
+                {
+                    nSteps = nMaxSteps;
+                }
+
+                switch(aGradientStyle)
+                {
+                    case attribute::GradientStyle::Linear:
                     {
-                        nSteps = nMaxSteps;
+                        pNewTex = std::make_shared<texture::GeoTexSvxGradientLinear>(
+                                aOutlineRange,
+                                aOutlineRange,
+                                aStart,
+                                aEnd,
+                                nSteps,
+                                rFillGradient.getBorder(),
+                                rFillGradient.getAngle());
+                        break;
                     }
-
-                    if(nSteps < 2)
+                    case attribute::GradientStyle::Axial:
                     {
-                        nSteps = 2;
+                        pNewTex = std::make_shared<texture::GeoTexSvxGradientAxial>(
+                                aOutlineRange,
+                                aOutlineRange,
+                                aStart,
+                                aEnd,
+                                nSteps,
+                                rFillGradient.getBorder(),
+                                rFillGradient.getAngle());
+                        break;
                     }
-
-                    if(nSteps > nMaxSteps)
+                    case attribute::GradientStyle::Radial:
                     {
-                        nSteps = nMaxSteps;
+                        pNewTex =
+                            std::make_shared<texture::GeoTexSvxGradientRadial>(
+                                aOutlineRange,
+                                aStart,
+                                aEnd,
+                                nSteps,
+                                rFillGradient.getBorder(),
+                                rFillGradient.getOffsetX(),
+                                rFillGradient.getOffsetY());
+                        break;
                     }
-
-                    switch(aGradientStyle)
+                    case attribute::GradientStyle::Elliptical:
                     {
-                        case attribute::GradientStyle::Linear:
-                        {
-                            pNewTex = std::make_shared<texture::GeoTexSvxGradientLinear>(
-                                    aOutlineRange,
-                                    aOutlineRange,
-                                    aStart,
-                                    aEnd,
-                                    nSteps,
-                                    rFillGradient.getBorder(),
-                                    rFillGradient.getAngle());
-                            break;
-                        }
-                        case attribute::GradientStyle::Axial:
-                        {
-                            pNewTex = std::make_shared<texture::GeoTexSvxGradientAxial>(
-                                    aOutlineRange,
-                                    aOutlineRange,
-                                    aStart,
-                                    aEnd,
-                                    nSteps,
-                                    rFillGradient.getBorder(),
-                                    rFillGradient.getAngle());
-                            break;
-                        }
-                        case attribute::GradientStyle::Radial:
-                        {
-                            pNewTex =
-                                std::make_shared<texture::GeoTexSvxGradientRadial>(
-                                    aOutlineRange,
-                                    aStart,
-                                    aEnd,
-                                    nSteps,
-                                    rFillGradient.getBorder(),
-                                    rFillGradient.getOffsetX(),
-                                    rFillGradient.getOffsetY());
-                            break;
-                        }
-                        case attribute::GradientStyle::Elliptical:
-                        {
-                            pNewTex =
-                                std::make_shared<texture::GeoTexSvxGradientElliptical>(
-                                    aOutlineRange,
-                                    aStart,
-                                    aEnd,
-                                    nSteps,
-                                    rFillGradient.getBorder(),
-                                    rFillGradient.getOffsetX(),
-                                    rFillGradient.getOffsetY(),
-                                    rFillGradient.getAngle());
-                            break;
-                        }
-                        case attribute::GradientStyle::Square:
-                        {
-                            pNewTex =
-                                std::make_shared<texture::GeoTexSvxGradientSquare>(
-                                    aOutlineRange,
-                                    aStart,
-                                    aEnd,
-                                    nSteps,
-                                    rFillGradient.getBorder(),
-                                    rFillGradient.getOffsetX(),
-                                    rFillGradient.getOffsetY(),
-                                    rFillGradient.getAngle());
-                            break;
-                        }
-                        case attribute::GradientStyle::Rect:
-                        {
-                            pNewTex =
-                                std::make_shared<texture::GeoTexSvxGradientRect>(
-                                    aOutlineRange,
-                                    aStart,
-                                    aEnd,
-                                    nSteps,
-                                    rFillGradient.getBorder(),
-                                    rFillGradient.getOffsetX(),
-                                    rFillGradient.getOffsetY(),
-                                    rFillGradient.getAngle());
-                            break;
-                        }
+                        pNewTex =
+                            std::make_shared<texture::GeoTexSvxGradientElliptical>(
+                                aOutlineRange,
+                                aStart,
+                                aEnd,
+                                nSteps,
+                                rFillGradient.getBorder(),
+                                rFillGradient.getOffsetX(),
+                                rFillGradient.getOffsetY(),
+                                rFillGradient.getAngle());
+                        break;
                     }
+                    case attribute::GradientStyle::Square:
+                    {
+                        pNewTex =
+                            std::make_shared<texture::GeoTexSvxGradientSquare>(
+                                aOutlineRange,
+                                aStart,
+                                aEnd,
+                                nSteps,
+                                rFillGradient.getBorder(),
+                                rFillGradient.getOffsetX(),
+                                rFillGradient.getOffsetY(),
+                                rFillGradient.getAngle());
+                        break;
+                    }
+                    case attribute::GradientStyle::Rect:
+                    {
+                        pNewTex =
+                            std::make_shared<texture::GeoTexSvxGradientRect>(
+                                aOutlineRange,
+                                aStart,
+                                aEnd,
+                                nSteps,
+                                rFillGradient.getBorder(),
+                                rFillGradient.getOffsetX(),
+                                rFillGradient.getOffsetY(),
+                                rFillGradient.getAngle());
+                        break;
+                    }
+                }
 
-                    mbSimpleTextureActive = false;
-                }
-                else
-                {
-                    // no color distance -> same color, use simple texture
-                    pNewTex = std::make_shared<texture::GeoTexSvxMono>(aStart, 1.0 - aStart.luminance());
-                    mbSimpleTextureActive = true;
-                }
+                mbSimpleTextureActive = false;
+            }
+            else
+            {
+                // no color distance -> same color, use simple texture
+                pNewTex = std::make_shared<texture::GeoTexSvxMono>(aStart, 1.0 - aStart.luminance());
+                mbSimpleTextureActive = true;
+            }
 
-                // set created texture
-                if(bTransparence)
-                {
-                    mpTransparenceGeoTexSvx = pNewTex;
-                }
-                else
-                {
-                    mpGeoTexSvx = pNewTex;
-                }
+            // set created texture
+            if(bTransparence)
+            {
+                mpTransparenceGeoTexSvx = pNewTex;
+            }
+            else
+            {
+                mpGeoTexSvx = pNewTex;
+            }
 
-                // process sub-list
-                process(rSubSequence);
+            // process sub-list
+            process(rSubSequence);
 
-                // restore values
-                mbModulate = bOldModulate;
-                mbFilter = bOldFilter;
-                mbSimpleTextureActive = bOldSimpleTextureActive;
+            // restore values
+            mbModulate = bOldModulate;
+            mbFilter = bOldFilter;
+            mbSimpleTextureActive = bOldSimpleTextureActive;
 
-                if(bTransparence)
-                {
-                    mpTransparenceGeoTexSvx = pOldTex;
-                }
-                else
-                {
-                    mpGeoTexSvx = pOldTex;
-                }
+            if(bTransparence)
+            {
+                mpTransparenceGeoTexSvx = pOldTex;
+            }
+            else
+            {
+                mpGeoTexSvx = pOldTex;
             }
         }
 
@@ -208,92 +208,92 @@ namespace drawinglayer::processor3d
         {
             const primitive3d::Primitive3DContainer& rSubSequence = rPrimitive.getChildren();
 
-            if(!rSubSequence.empty())
-            {
-                // rescue values
-                const bool bOldModulate(getModulate()); mbModulate = rPrimitive.getModulate();
-                const bool bOldFilter(getFilter()); mbFilter = rPrimitive.getFilter();
-                std::shared_ptr< texture::GeoTexSvx > pOldTex = mpGeoTexSvx;
+            if(rSubSequence.empty())
+                return;
 
-                // calculate logic pixel size in object coordinates. Create transformation view
-                // to object by inverting ObjectToView
-                basegfx::B3DHomMatrix aInvObjectToView(getViewInformation3D().getObjectToView());
-                aInvObjectToView.invert();
+            // rescue values
+            const bool bOldModulate(getModulate()); mbModulate = rPrimitive.getModulate();
+            const bool bOldFilter(getFilter()); mbFilter = rPrimitive.getFilter();
+            std::shared_ptr< texture::GeoTexSvx > pOldTex = mpGeoTexSvx;
 
-                // back-project discrete coordinates to object coordinates and extract
-                // maximum distance
-                const basegfx::B3DPoint aZero(aInvObjectToView * basegfx::B3DPoint(0.0, 0.0, 0.0));
-                const basegfx::B3DPoint aOne(aInvObjectToView * basegfx::B3DPoint(1.0, 1.0, 1.0));
-                const basegfx::B3DVector aLogicPixel(aOne - aZero);
-                double fLogicPixelSizeWorld(std::max(std::max(fabs(aLogicPixel.getX()), fabs(aLogicPixel.getY())), fabs(aLogicPixel.getZ())));
+            // calculate logic pixel size in object coordinates. Create transformation view
+            // to object by inverting ObjectToView
+            basegfx::B3DHomMatrix aInvObjectToView(getViewInformation3D().getObjectToView());
+            aInvObjectToView.invert();
 
-                // calculate logic pixel size in texture coordinates
-                const double fLogicTexSizeX(fLogicPixelSizeWorld / rPrimitive.getTextureSize().getX());
-                const double fLogicTexSizeY(fLogicPixelSizeWorld / rPrimitive.getTextureSize().getY());
-                const double fLogicTexSize(std::max(fLogicTexSizeX, fLogicTexSizeY));
+            // back-project discrete coordinates to object coordinates and extract
+            // maximum distance
+            const basegfx::B3DPoint aZero(aInvObjectToView * basegfx::B3DPoint(0.0, 0.0, 0.0));
+            const basegfx::B3DPoint aOne(aInvObjectToView * basegfx::B3DPoint(1.0, 1.0, 1.0));
+            const basegfx::B3DVector aLogicPixel(aOne - aZero);
+            double fLogicPixelSizeWorld(std::max(std::max(fabs(aLogicPixel.getX()), fabs(aLogicPixel.getY())), fabs(aLogicPixel.getZ())));
 
-                // create texture and set
-                mpGeoTexSvx = std::make_shared<texture::GeoTexSvxMultiHatch>(rPrimitive, fLogicTexSize);
+            // calculate logic pixel size in texture coordinates
+            const double fLogicTexSizeX(fLogicPixelSizeWorld / rPrimitive.getTextureSize().getX());
+            const double fLogicTexSizeY(fLogicPixelSizeWorld / rPrimitive.getTextureSize().getY());
+            const double fLogicTexSize(std::max(fLogicTexSizeX, fLogicTexSizeY));
 
-                // process sub-list
-                process(rSubSequence);
+            // create texture and set
+            mpGeoTexSvx = std::make_shared<texture::GeoTexSvxMultiHatch>(rPrimitive, fLogicTexSize);
 
-                // restore values
-                mbModulate = bOldModulate;
-                mbFilter = bOldFilter;
-                mpGeoTexSvx = pOldTex;
-            }
+            // process sub-list
+            process(rSubSequence);
+
+            // restore values
+            mbModulate = bOldModulate;
+            mbFilter = bOldFilter;
+            mpGeoTexSvx = pOldTex;
         }
 
         void DefaultProcessor3D::impRenderBitmapTexturePrimitive3D(const primitive3d::BitmapTexturePrimitive3D& rPrimitive)
         {
             const primitive3d::Primitive3DContainer& rSubSequence = rPrimitive.getChildren();
 
-            if(!rSubSequence.empty())
+            if(rSubSequence.empty())
+                return;
+
+            // rescue values
+            const bool bOldModulate(getModulate()); mbModulate = rPrimitive.getModulate();
+            const bool bOldFilter(getFilter()); mbFilter = rPrimitive.getFilter();
+            std::shared_ptr< texture::GeoTexSvx > pOldTex = mpGeoTexSvx;
+
+            // create texture
+            const attribute::FillGraphicAttribute& rFillGraphicAttribute = rPrimitive.getFillGraphicAttribute();
+
+            // #121194# For 3D texture we will use the BitmapRex representation
+            const BitmapEx aBitmapEx(rFillGraphicAttribute.getGraphic().GetBitmapEx());
+
+            // create range scaled by texture size
+            basegfx::B2DRange aGraphicRange(rFillGraphicAttribute.getGraphicRange());
+
+            aGraphicRange.transform(
+                basegfx::utils::createScaleB2DHomMatrix(
+                    rPrimitive.getTextureSize()));
+
+            if(rFillGraphicAttribute.getTiling())
             {
-                // rescue values
-                const bool bOldModulate(getModulate()); mbModulate = rPrimitive.getModulate();
-                const bool bOldFilter(getFilter()); mbFilter = rPrimitive.getFilter();
-                std::shared_ptr< texture::GeoTexSvx > pOldTex = mpGeoTexSvx;
-
-                // create texture
-                const attribute::FillGraphicAttribute& rFillGraphicAttribute = rPrimitive.getFillGraphicAttribute();
-
-                // #121194# For 3D texture we will use the BitmapRex representation
-                const BitmapEx aBitmapEx(rFillGraphicAttribute.getGraphic().GetBitmapEx());
-
-                // create range scaled by texture size
-                basegfx::B2DRange aGraphicRange(rFillGraphicAttribute.getGraphicRange());
-
-                aGraphicRange.transform(
-                    basegfx::utils::createScaleB2DHomMatrix(
-                        rPrimitive.getTextureSize()));
-
-                if(rFillGraphicAttribute.getTiling())
-                {
-                    mpGeoTexSvx =
-                        std::make_shared<texture::GeoTexSvxBitmapExTiled>(
-                            aBitmapEx,
-                            aGraphicRange,
-                            rFillGraphicAttribute.getOffsetX(),
-                            rFillGraphicAttribute.getOffsetY());
-                }
-                else
-                {
-                    mpGeoTexSvx =
-                        std::make_shared<texture::GeoTexSvxBitmapEx>(
-                            aBitmapEx,
-                            aGraphicRange);
-                }
-
-                // process sub-list
-                process(rSubSequence);
-
-                // restore values
-                mbModulate = bOldModulate;
-                mbFilter = bOldFilter;
-                mpGeoTexSvx = pOldTex;
+                mpGeoTexSvx =
+                    std::make_shared<texture::GeoTexSvxBitmapExTiled>(
+                        aBitmapEx,
+                        aGraphicRange,
+                        rFillGraphicAttribute.getOffsetX(),
+                        rFillGraphicAttribute.getOffsetY());
             }
+            else
+            {
+                mpGeoTexSvx =
+                    std::make_shared<texture::GeoTexSvxBitmapEx>(
+                        aBitmapEx,
+                        aGraphicRange);
+            }
+
+            // process sub-list
+            process(rSubSequence);
+
+            // restore values
+            mbModulate = bOldModulate;
+            mbFilter = bOldFilter;
+            mpGeoTexSvx = pOldTex;
         }
 
         void DefaultProcessor3D::impRenderModifiedColorPrimitive3D(const primitive3d::ModifiedColorPrimitive3D& rModifiedCandidate)
@@ -317,24 +317,24 @@ namespace drawinglayer::processor3d
         {
             basegfx::B3DPolygon aHairline(rPrimitive.getB3DPolygon());
 
-            if(aHairline.count())
+            if(!aHairline.count())
+                return;
+
+            // hairlines need no extra data, clear it
+            aHairline.clearTextureCoordinates();
+            aHairline.clearNormals();
+            aHairline.clearBColors();
+
+            // transform to device coordinates (-1.0 .. 1.0) and check for visibility
+            aHairline.transform(getViewInformation3D().getObjectToView());
+            const basegfx::B3DRange a3DRange(basegfx::utils::getRange(aHairline));
+            const basegfx::B2DRange a2DRange(a3DRange.getMinX(), a3DRange.getMinY(), a3DRange.getMaxX(), a3DRange.getMaxY());
+
+            if(a2DRange.overlaps(maRasterRange))
             {
-                // hairlines need no extra data, clear it
-                aHairline.clearTextureCoordinates();
-                aHairline.clearNormals();
-                aHairline.clearBColors();
+                const attribute::MaterialAttribute3D aMaterial(maBColorModifierStack.getModifiedColor(rPrimitive.getBColor()));
 
-                // transform to device coordinates (-1.0 .. 1.0) and check for visibility
-                aHairline.transform(getViewInformation3D().getObjectToView());
-                const basegfx::B3DRange a3DRange(basegfx::utils::getRange(aHairline));
-                const basegfx::B2DRange a2DRange(a3DRange.getMinX(), a3DRange.getMinY(), a3DRange.getMaxX(), a3DRange.getMaxY());
-
-                if(a2DRange.overlaps(maRasterRange))
-                {
-                    const attribute::MaterialAttribute3D aMaterial(maBColorModifierStack.getModifiedColor(rPrimitive.getBColor()));
-
-                    rasterconvertB3DPolygon(aMaterial, aHairline);
-                }
+                rasterconvertB3DPolygon(aMaterial, aHairline);
             }
         }
 
@@ -385,95 +385,95 @@ namespace drawinglayer::processor3d
                 }
             }
 
-            if(bPaintIt)
+            if(!bPaintIt)
+                return;
+
+            // prepare ObjectToEye in NormalTransform
+            basegfx::B3DHomMatrix aNormalTransform(getViewInformation3D().getOrientation() * getViewInformation3D().getObjectTransformation());
+
+            if(getSdrSceneAttribute().getTwoSidedLighting())
             {
-                // prepare ObjectToEye in NormalTransform
-                basegfx::B3DHomMatrix aNormalTransform(getViewInformation3D().getOrientation() * getViewInformation3D().getObjectTransformation());
+                // get plane normal of polygon in view coordinates (with ZBuffer values),
+                // left-handed coordinate system
+                const basegfx::B3DVector aPlaneNormal(aFill.getB3DPolygon(0).getNormal());
 
-                if(getSdrSceneAttribute().getTwoSidedLighting())
+                if(aPlaneNormal.getZ() > 0.0)
                 {
-                    // get plane normal of polygon in view coordinates (with ZBuffer values),
-                    // left-handed coordinate system
-                    const basegfx::B3DVector aPlaneNormal(aFill.getB3DPolygon(0).getNormal());
-
-                    if(aPlaneNormal.getZ() > 0.0)
-                    {
-                        // mirror normals
-                        aNormalTransform.scale(-1.0, -1.0, -1.0);
-                    }
+                    // mirror normals
+                    aNormalTransform.scale(-1.0, -1.0, -1.0);
                 }
-
-                switch(aShadeMode)
-                {
-                    case css::drawing::ShadeMode_PHONG:
-                    {
-                        // phong shading. Transform normals to eye coor
-                        aFill.transformNormals(aNormalTransform);
-                        break;
-                    }
-                    case css::drawing::ShadeMode_SMOOTH:
-                    {
-                        // gouraud shading. Transform normals to eye coor
-                        aFill.transformNormals(aNormalTransform);
-
-                        // prepare color model parameters, evtl. use blend color
-                        const basegfx::BColor aColor(getModulate() ? basegfx::BColor(1.0, 1.0, 1.0) : rPrimitive.getMaterial().getColor());
-                        const basegfx::BColor& rSpecular(rPrimitive.getMaterial().getSpecular());
-                        const basegfx::BColor& rEmission(rPrimitive.getMaterial().getEmission());
-                        const sal_uInt16 nSpecularIntensity(rPrimitive.getMaterial().getSpecularIntensity());
-
-                        // solve color model for each normal vector, set colors at points. Clear normals.
-                        for(sal_uInt32 a(0); a < aFill.count(); a++)
-                        {
-                            basegfx::B3DPolygon aPartFill(aFill.getB3DPolygon(a));
-
-                            for(sal_uInt32 b(0); b < aPartFill.count(); b++)
-                            {
-                                // solve color model. Transform normal to eye coor
-                                const basegfx::B3DVector aNormal(aPartFill.getNormal(b));
-                                const basegfx::BColor aSolvedColor(getSdrLightingAttribute().solveColorModel(aNormal, aColor, rSpecular, rEmission, nSpecularIntensity));
-                                aPartFill.setBColor(b, aSolvedColor);
-                            }
-
-                            // clear normals on this part polygon and write it back
-                            aPartFill.clearNormals();
-                            aFill.setB3DPolygon(a, aPartFill);
-                        }
-                        break;
-                    }
-                    case css::drawing::ShadeMode_FLAT:
-                    {
-                        // flat shading. Get plane vector in eye coordinates
-                        const basegfx::B3DVector aPlaneEyeNormal(aNormalTransform * rPrimitive.getB3DPolyPolygon().getB3DPolygon(0).getNormal());
-
-                        // prepare color model parameters, evtl. use blend color
-                        const basegfx::BColor aColor(getModulate() ? basegfx::BColor(1.0, 1.0, 1.0) : rPrimitive.getMaterial().getColor());
-                        const basegfx::BColor& rSpecular(rPrimitive.getMaterial().getSpecular());
-                        const basegfx::BColor& rEmission(rPrimitive.getMaterial().getEmission());
-                        const sal_uInt16 nSpecularIntensity(rPrimitive.getMaterial().getSpecularIntensity());
-
-                        // solve color model for plane vector and use that color for whole plane
-                        aObjectColor = getSdrLightingAttribute().solveColorModel(aPlaneEyeNormal, aColor, rSpecular, rEmission, nSpecularIntensity);
-                        break;
-                    }
-                    default: // case css::drawing::ShadeMode_DRAFT:
-                    {
-                        // draft, just use object color which is already set. Delete all other infos
-                        aFill.clearNormals();
-                        aFill.clearBColors();
-                        break;
-                    }
-                }
-
-                // draw it to ZBuffer
-                const attribute::MaterialAttribute3D aMaterial(
-                    maBColorModifierStack.getModifiedColor(aObjectColor),
-                    rPrimitive.getMaterial().getSpecular(),
-                    rPrimitive.getMaterial().getEmission(),
-                    rPrimitive.getMaterial().getSpecularIntensity());
-
-                rasterconvertB3DPolyPolygon(aMaterial, aFill);
             }
+
+            switch(aShadeMode)
+            {
+                case css::drawing::ShadeMode_PHONG:
+                {
+                    // phong shading. Transform normals to eye coor
+                    aFill.transformNormals(aNormalTransform);
+                    break;
+                }
+                case css::drawing::ShadeMode_SMOOTH:
+                {
+                    // gouraud shading. Transform normals to eye coor
+                    aFill.transformNormals(aNormalTransform);
+
+                    // prepare color model parameters, evtl. use blend color
+                    const basegfx::BColor aColor(getModulate() ? basegfx::BColor(1.0, 1.0, 1.0) : rPrimitive.getMaterial().getColor());
+                    const basegfx::BColor& rSpecular(rPrimitive.getMaterial().getSpecular());
+                    const basegfx::BColor& rEmission(rPrimitive.getMaterial().getEmission());
+                    const sal_uInt16 nSpecularIntensity(rPrimitive.getMaterial().getSpecularIntensity());
+
+                    // solve color model for each normal vector, set colors at points. Clear normals.
+                    for(sal_uInt32 a(0); a < aFill.count(); a++)
+                    {
+                        basegfx::B3DPolygon aPartFill(aFill.getB3DPolygon(a));
+
+                        for(sal_uInt32 b(0); b < aPartFill.count(); b++)
+                        {
+                            // solve color model. Transform normal to eye coor
+                            const basegfx::B3DVector aNormal(aPartFill.getNormal(b));
+                            const basegfx::BColor aSolvedColor(getSdrLightingAttribute().solveColorModel(aNormal, aColor, rSpecular, rEmission, nSpecularIntensity));
+                            aPartFill.setBColor(b, aSolvedColor);
+                        }
+
+                        // clear normals on this part polygon and write it back
+                        aPartFill.clearNormals();
+                        aFill.setB3DPolygon(a, aPartFill);
+                    }
+                    break;
+                }
+                case css::drawing::ShadeMode_FLAT:
+                {
+                    // flat shading. Get plane vector in eye coordinates
+                    const basegfx::B3DVector aPlaneEyeNormal(aNormalTransform * rPrimitive.getB3DPolyPolygon().getB3DPolygon(0).getNormal());
+
+                    // prepare color model parameters, evtl. use blend color
+                    const basegfx::BColor aColor(getModulate() ? basegfx::BColor(1.0, 1.0, 1.0) : rPrimitive.getMaterial().getColor());
+                    const basegfx::BColor& rSpecular(rPrimitive.getMaterial().getSpecular());
+                    const basegfx::BColor& rEmission(rPrimitive.getMaterial().getEmission());
+                    const sal_uInt16 nSpecularIntensity(rPrimitive.getMaterial().getSpecularIntensity());
+
+                    // solve color model for plane vector and use that color for whole plane
+                    aObjectColor = getSdrLightingAttribute().solveColorModel(aPlaneEyeNormal, aColor, rSpecular, rEmission, nSpecularIntensity);
+                    break;
+                }
+                default: // case css::drawing::ShadeMode_DRAFT:
+                {
+                    // draft, just use object color which is already set. Delete all other infos
+                    aFill.clearNormals();
+                    aFill.clearBColors();
+                    break;
+                }
+            }
+
+            // draw it to ZBuffer
+            const attribute::MaterialAttribute3D aMaterial(
+                maBColorModifierStack.getModifiedColor(aObjectColor),
+                rPrimitive.getMaterial().getSpecular(),
+                rPrimitive.getMaterial().getEmission(),
+                rPrimitive.getMaterial().getSpecularIntensity());
+
+            rasterconvertB3DPolyPolygon(aMaterial, aFill);
         }
 
         void DefaultProcessor3D::impRenderTransformPrimitive3D(const primitive3d::TransformPrimitive3D& rTransformCandidate)

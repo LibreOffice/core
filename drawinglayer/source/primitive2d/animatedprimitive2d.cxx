@@ -64,20 +64,20 @@ namespace drawinglayer::primitive2d
 
         void AnimatedSwitchPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
         {
-            if(!getChildren().empty())
+            if(getChildren().empty())
+                return;
+
+            const double fState(getAnimationEntry().getStateAtTime(rViewInformation.getViewTime()));
+            const sal_uInt32 nLen(getChildren().size());
+            sal_uInt32 nIndex(basegfx::fround(fState * static_cast<double>(nLen)));
+
+            if(nIndex >= nLen)
             {
-                const double fState(getAnimationEntry().getStateAtTime(rViewInformation.getViewTime()));
-                const sal_uInt32 nLen(getChildren().size());
-                sal_uInt32 nIndex(basegfx::fround(fState * static_cast<double>(nLen)));
-
-                if(nIndex >= nLen)
-                {
-                    nIndex = nLen - 1;
-                }
-
-                const Primitive2DReference xRef(getChildren()[nIndex], uno::UNO_SET_THROW);
-                rVisitor.append(xRef);
+                nIndex = nLen - 1;
             }
+
+            const Primitive2DReference xRef(getChildren()[nIndex], uno::UNO_SET_THROW);
+            rVisitor.append(xRef);
         }
 
         // provide unique ID

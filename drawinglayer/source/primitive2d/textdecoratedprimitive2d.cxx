@@ -55,95 +55,95 @@ namespace drawinglayer::primitive2d
             const bool bUnderlineUsed(TEXT_LINE_NONE != getFontUnderline());
             const bool bStrikeoutUsed(TEXT_STRIKEOUT_NONE != getTextStrikeout());
 
-            if(bUnderlineUsed || bStrikeoutUsed || bOverlineUsed)
+            if(!(bUnderlineUsed || bStrikeoutUsed || bOverlineUsed))
+                return;
+
+            // common preparations
+            TextLayouterDevice aTextLayouter;
+
+            // TextLayouterDevice is needed to get metrics for text decorations like
+            // underline/strikeout/emphasis marks from it. For setup, the font size is needed
+            aTextLayouter.setFontAttribute(
+                getFontAttribute(),
+                rDecTrans.getScale().getX(),
+                rDecTrans.getScale().getY(),
+                getLocale());
+
+            // get text width
+            double fTextWidth(0.0);
+
+            if(rDXArray.empty())
             {
-                // common preparations
-                TextLayouterDevice aTextLayouter;
+                fTextWidth = aTextLayouter.getTextWidth(rText, nTextPosition, nTextLength);
+            }
+            else
+            {
+                fTextWidth = rDXArray.back() * rDecTrans.getScale().getX();
+                const double fFontScaleX(rDecTrans.getScale().getX());
 
-                // TextLayouterDevice is needed to get metrics for text decorations like
-                // underline/strikeout/emphasis marks from it. For setup, the font size is needed
-                aTextLayouter.setFontAttribute(
-                    getFontAttribute(),
-                    rDecTrans.getScale().getX(),
-                    rDecTrans.getScale().getY(),
-                    getLocale());
-
-                // get text width
-                double fTextWidth(0.0);
-
-                if(rDXArray.empty())
+                if(!basegfx::fTools::equal(fFontScaleX, 1.0)
+                    && !basegfx::fTools::equalZero(fFontScaleX))
                 {
-                    fTextWidth = aTextLayouter.getTextWidth(rText, nTextPosition, nTextLength);
+                    // need to take FontScaling out of the DXArray
+                    fTextWidth /= fFontScaleX;
                 }
-                else
-                {
-                    fTextWidth = rDXArray.back() * rDecTrans.getScale().getX();
-                    const double fFontScaleX(rDecTrans.getScale().getX());
+            }
 
-                    if(!basegfx::fTools::equal(fFontScaleX, 1.0)
-                        && !basegfx::fTools::equalZero(fFontScaleX))
-                    {
-                        // need to take FontScaling out of the DXArray
-                        fTextWidth /= fFontScaleX;
-                    }
-                }
+            if(bOverlineUsed)
+            {
+                // create primitive geometry for overline
+                rTarget.push_back(Primitive2DReference(
+                    new TextLinePrimitive2D(
+                        rDecTrans.getB2DHomMatrix(),
+                        fTextWidth,
+                        aTextLayouter.getOverlineOffset(),
+                        aTextLayouter.getOverlineHeight(),
+                        getFontOverline(),
+                        getOverlineColor())));
+            }
 
-                if(bOverlineUsed)
-                {
-                    // create primitive geometry for overline
-                    rTarget.push_back(Primitive2DReference(
-                        new TextLinePrimitive2D(
-                            rDecTrans.getB2DHomMatrix(),
-                            fTextWidth,
-                            aTextLayouter.getOverlineOffset(),
-                            aTextLayouter.getOverlineHeight(),
-                            getFontOverline(),
-                            getOverlineColor())));
-                }
+            if(bUnderlineUsed)
+            {
+                // create primitive geometry for underline
+                rTarget.push_back(Primitive2DReference(
+                    new TextLinePrimitive2D(
+                        rDecTrans.getB2DHomMatrix(),
+                        fTextWidth,
+                        aTextLayouter.getUnderlineOffset(),
+                        aTextLayouter.getUnderlineHeight(),
+                        getFontUnderline(),
+                        getTextlineColor())));
+            }
 
-                if(bUnderlineUsed)
-                {
-                    // create primitive geometry for underline
-                    rTarget.push_back(Primitive2DReference(
-                        new TextLinePrimitive2D(
-                            rDecTrans.getB2DHomMatrix(),
-                            fTextWidth,
-                            aTextLayouter.getUnderlineOffset(),
-                            aTextLayouter.getUnderlineHeight(),
-                            getFontUnderline(),
-                            getTextlineColor())));
-                }
+            if(!bStrikeoutUsed)
+                return;
 
-                if(bStrikeoutUsed)
-                {
-                    // create primitive geometry for strikeout
-                    if(TEXT_STRIKEOUT_SLASH == getTextStrikeout() || TEXT_STRIKEOUT_X == getTextStrikeout())
-                    {
-                        // strikeout with character
-                        const sal_Unicode aStrikeoutChar(TEXT_STRIKEOUT_SLASH == getTextStrikeout() ? '/' : 'X');
+            // create primitive geometry for strikeout
+            if(TEXT_STRIKEOUT_SLASH == getTextStrikeout() || TEXT_STRIKEOUT_X == getTextStrikeout())
+            {
+                // strikeout with character
+                const sal_Unicode aStrikeoutChar(TEXT_STRIKEOUT_SLASH == getTextStrikeout() ? '/' : 'X');
 
-                        rTarget.push_back(Primitive2DReference(
-                            new TextCharacterStrikeoutPrimitive2D(
-                                rDecTrans.getB2DHomMatrix(),
-                                fTextWidth,
-                                getFontColor(),
-                                aStrikeoutChar,
-                                getFontAttribute(),
-                                getLocale())));
-                    }
-                    else
-                    {
-                        // strikeout with geometry
-                        rTarget.push_back(Primitive2DReference(
-                            new TextGeometryStrikeoutPrimitive2D(
-                                rDecTrans.getB2DHomMatrix(),
-                                fTextWidth,
-                                getFontColor(),
-                                aTextLayouter.getUnderlineHeight(),
-                                aTextLayouter.getStrikeoutOffset(),
-                                getTextStrikeout())));
-                    }
-                }
+                rTarget.push_back(Primitive2DReference(
+                    new TextCharacterStrikeoutPrimitive2D(
+                        rDecTrans.getB2DHomMatrix(),
+                        fTextWidth,
+                        getFontColor(),
+                        aStrikeoutChar,
+                        getFontAttribute(),
+                        getLocale())));
+            }
+            else
+            {
+                // strikeout with geometry
+                rTarget.push_back(Primitive2DReference(
+                    new TextGeometryStrikeoutPrimitive2D(
+                        rDecTrans.getB2DHomMatrix(),
+                        fTextWidth,
+                        getFontColor(),
+                        aTextLayouter.getUnderlineHeight(),
+                        aTextLayouter.getStrikeoutOffset(),
+                        getTextStrikeout())));
             }
 
             // TODO: Handle Font Emphasis Above/Below

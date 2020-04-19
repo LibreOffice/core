@@ -31,43 +31,43 @@ namespace drawinglayer::primitive2d
             // ObjectAndViewTransformationDependentPrimitive2D to create a BitmapPrimitive2D
             // with the correct mapping
 
-            if(!getBitmapEx().IsEmpty())
-            {
-                // get discrete size
-                const Size& rSizePixel = getBitmapEx().GetSizePixel();
-                const basegfx::B2DVector aDiscreteSize(rSizePixel.Width(), rSizePixel.Height());
+            if(getBitmapEx().IsEmpty())
+                return;
 
-                // get inverse ViewTransformation
-                basegfx::B2DHomMatrix aInverseViewTransformation(getViewTransformation());
-                aInverseViewTransformation.invert();
+            // get discrete size
+            const Size& rSizePixel = getBitmapEx().GetSizePixel();
+            const basegfx::B2DVector aDiscreteSize(rSizePixel.Width(), rSizePixel.Height());
 
-                // get size and position in world coordinates
-                const basegfx::B2DVector aWorldSize(aInverseViewTransformation * aDiscreteSize);
-                const basegfx::B2DPoint  aWorldTopLeft(getObjectTransformation() * getTopLeft());
+            // get inverse ViewTransformation
+            basegfx::B2DHomMatrix aInverseViewTransformation(getViewTransformation());
+            aInverseViewTransformation.invert();
 
-                // build object matrix in world coordinates so that the top-left
-                // position remains, but possible transformations (e.g. rotations)
-                // in the ObjectToView stack remain and get correctly applied
-                basegfx::B2DHomMatrix aObjectTransform;
+            // get size and position in world coordinates
+            const basegfx::B2DVector aWorldSize(aInverseViewTransformation * aDiscreteSize);
+            const basegfx::B2DPoint  aWorldTopLeft(getObjectTransformation() * getTopLeft());
 
-                aObjectTransform.set(0, 0, aWorldSize.getX());
-                aObjectTransform.set(1, 1, aWorldSize.getY());
-                aObjectTransform.set(0, 2, aWorldTopLeft.getX());
-                aObjectTransform.set(1, 2, aWorldTopLeft.getY());
+            // build object matrix in world coordinates so that the top-left
+            // position remains, but possible transformations (e.g. rotations)
+            // in the ObjectToView stack remain and get correctly applied
+            basegfx::B2DHomMatrix aObjectTransform;
 
-                // get inverse ObjectTransformation
-                basegfx::B2DHomMatrix aInverseObjectTransformation(getObjectTransformation());
-                aInverseObjectTransformation.invert();
+            aObjectTransform.set(0, 0, aWorldSize.getX());
+            aObjectTransform.set(1, 1, aWorldSize.getY());
+            aObjectTransform.set(0, 2, aWorldTopLeft.getX());
+            aObjectTransform.set(1, 2, aWorldTopLeft.getY());
 
-                // transform to object coordinate system
-                aObjectTransform = aInverseObjectTransformation * aObjectTransform;
+            // get inverse ObjectTransformation
+            basegfx::B2DHomMatrix aInverseObjectTransformation(getObjectTransformation());
+            aInverseObjectTransformation.invert();
 
-                // create BitmapPrimitive2D with now object-local coordinate data
-                rContainer.push_back(
-                    new BitmapPrimitive2D(
-                        VCLUnoHelper::CreateVCLXBitmap(getBitmapEx()),
-                        aObjectTransform));
-            }
+            // transform to object coordinate system
+            aObjectTransform = aInverseObjectTransformation * aObjectTransform;
+
+            // create BitmapPrimitive2D with now object-local coordinate data
+            rContainer.push_back(
+                new BitmapPrimitive2D(
+                    VCLUnoHelper::CreateVCLXBitmap(getBitmapEx()),
+                    aObjectTransform));
         }
 
         DiscreteBitmapPrimitive2D::DiscreteBitmapPrimitive2D(
