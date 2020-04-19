@@ -22,6 +22,7 @@
 #endif
 
 #include <unotools/viewoptions.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 

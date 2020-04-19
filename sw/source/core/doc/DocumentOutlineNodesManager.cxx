@@ -22,6 +22,7 @@
 #include <txtfrm.hxx>
 #include <rootfrm.hxx>
 #include <modeltoviewhelper.hxx>
+#include <rtl/ustrbuf.hxx>
 
 namespace sw
 {

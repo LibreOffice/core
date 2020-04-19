@@ -19,6 +19,7 @@
 
 #include <config_java.h>
 
+#include <rtl/strbuf.hxx>
 #include <tools/debug.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>

@@ -25,6 +25,7 @@
 #include <basegfx/range/b3drange.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/tuple/b3ituple.hxx>
+#include <rtl/math.hxx>
 #include <numeric>
 
 namespace basegfx::utils

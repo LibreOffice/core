@@ -21,6 +21,7 @@
 #include <osl/diagnose.h>
 #include <editeng/paperinf.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <unotools/useroptions.hxx>
 #include <swmodule.hxx>
 #include <swtypes.hxx>

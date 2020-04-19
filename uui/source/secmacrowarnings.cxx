@@ -21,6 +21,7 @@
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <comphelper/processfactory.hxx>
 #include <osl/file.h>
+#include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include <unotools/securityoptions.hxx>
 

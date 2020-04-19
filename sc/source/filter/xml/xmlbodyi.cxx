@@ -49,6 +49,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <sal/types.h>
 #include <sal/log.hxx>
+#include <rtl/math.hxx>
 
 #include <memory>
 

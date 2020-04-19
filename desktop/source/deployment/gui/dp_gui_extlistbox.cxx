@@ -36,6 +36,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <osl/diagnose.h>
+#include <rtl/ustrbuf.hxx>
 #include <vcl/event.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/svapp.hxx>

@@ -20,6 +20,7 @@
 #include <hintids.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nutil/transliteration.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/stritem.hxx>
 #include <editeng/fontitem.hxx>

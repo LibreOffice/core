@@ -18,6 +18,7 @@
  */
 
 #include <sal/log.hxx>
+#include <rtl/math.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <osl/diagnose.h>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>

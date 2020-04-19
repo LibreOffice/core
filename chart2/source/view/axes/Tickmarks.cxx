@@ -26,7 +26,6 @@
 #include <com/sun/star/chart2/AxisType.hpp>
 
 using namespace ::com::sun::star;
-using namespace ::rtl::math;
 using ::basegfx::B2DVector;
 
 namespace chart {

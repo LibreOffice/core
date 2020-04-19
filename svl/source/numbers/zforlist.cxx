@@ -51,6 +51,7 @@
 #include <unotools/digitgroupingiterator.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/math.hxx>
 
 #include <math.h>
 #include <limits>

@@ -39,6 +39,7 @@
 #include <com/sun/star/chart2/XFormattedString2.hpp>
 #include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
 #include <com/sun/star/chart2/data/PivotTableFieldEntry.hpp>
+#include <rtl/math.hxx>
 #include <svl/languageoptions.hxx>
 #include <tools/diagnose_ex.h>
 

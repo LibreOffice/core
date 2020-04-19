@@ -44,6 +44,7 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <canvas/canvastools.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
