@@ -165,17 +165,51 @@ void SAL_CALL Gtk3KDE5FilePicker::appendFilterGroup(const OUString& /*rGroupTitl
     }
 }
 
+template <typename T>
+static void setValueHelper(Gtk3KDE5FilePickerIpc& ipc, sal_Int16 controlId,
+                           sal_Int16 nControlAction, const uno::Any& value)
+{
+    if (value.has<T>())
+        ipc.sendCommand(Commands::SetValue, controlId, nControlAction, value.get<T>());
+    else
+        OSL_TRACE("set value of unhandled type %d", controlId);
+}
+
 void SAL_CALL Gtk3KDE5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlAction,
                                            const uno::Any& value)
 {
-    if (value.has<bool>())
+    switch (nControlAction)
     {
-        m_ipc.sendCommand(Commands::SetValue, controlId, nControlAction, value.get<bool>());
+        case 0: // check box
+            setValueHelper<bool>(m_ipc, controlId, nControlAction, value);
+            break;
+        case ControlActions::ADD_ITEM:
+            setValueHelper<OUString>(m_ipc, controlId, nControlAction, value);
+            break;
+        case ControlActions::ADD_ITEMS:
+            setValueHelper<Sequence<OUString>>(m_ipc, controlId, nControlAction, value);
+            break;
+        case ControlActions::DELETE_ITEM:
+        case ControlActions::SET_SELECT_ITEM:
+            setValueHelper<sal_Int32>(m_ipc, controlId, nControlAction, value);
+            break;
+        case ControlActions::DELETE_ITEMS:
+            m_ipc.sendCommand(Commands::SetValue, controlId, nControlAction);
+            break;
+        default:
+            OSL_TRACE("set value with unhandled action %d", nControlAction);
+            break;
     }
-    else
-    {
-        SAL_INFO("vcl.gtkkde5", "set value of unhandled type " << controlId);
-    }
+}
+
+template <typename T>
+static void getValueHelper(Gtk3KDE5FilePickerIpc& ipc, sal_Int16 controlId,
+                           sal_Int16 nControlAction, uno::Any& any)
+{
+    const auto id = ipc.sendCommand(Commands::GetValue, controlId, nControlAction);
+    T value;
+    ipc.readResponse(id, value);
+    any <<= value;
 }
 
 uno::Any SAL_CALL Gtk3KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction)
@@ -188,12 +222,28 @@ uno::Any SAL_CALL Gtk3KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nC
         // saves the value of the setting, so LO core is not needed for that either.
         return uno::Any(false);
 
-    auto id = m_ipc.sendCommand(Commands::GetValue, controlId, nControlAction);
+    uno::Any any;
 
-    bool value = false;
-    m_ipc.readResponse(id, value);
+    switch (nControlAction)
+    {
+        case 0: // check box
+            getValueHelper<bool>(m_ipc, controlId, nControlAction, any);
+            break;
+        case ControlActions::GET_ITEMS:
+            getValueHelper<Sequence<OUString>>(m_ipc, controlId, nControlAction, any);
+            break;
+        case ControlActions::GET_SELECTED_ITEM:
+            getValueHelper<OUString>(m_ipc, controlId, nControlAction, any);
+            break;
+        case ControlActions::GET_SELECTED_ITEM_INDEX:
+            getValueHelper<sal_Int32>(m_ipc, controlId, nControlAction, any);
+            break;
+        default:
+            OSL_TRACE("get value with unhandled action %d", nControlAction);
+            break;
+    }
 
-    return uno::Any(value);
+    return any;
 }
 
 void SAL_CALL Gtk3KDE5FilePicker::enableControl(sal_Int16 controlId, sal_Bool enable)
@@ -286,16 +336,20 @@ void Gtk3KDE5FilePicker::addCustomControl(sal_Int16 controlId)
 
             break;
         }
-        case PUSHBUTTON_PLAY:
         case LISTBOX_VERSION:
         case LISTBOX_TEMPLATE:
         case LISTBOX_IMAGE_TEMPLATE:
         case LISTBOX_IMAGE_ANCHOR:
+        case LISTBOX_FILTER_SELECTOR:
+        {
+            m_ipc.sendCommand(Commands::AddComboBox, controlId, false, getResString(resId));
+            break;
+        }
         case LISTBOX_VERSION_LABEL:
         case LISTBOX_TEMPLATE_LABEL:
         case LISTBOX_IMAGE_TEMPLATE_LABEL:
         case LISTBOX_IMAGE_ANCHOR_LABEL:
-        case LISTBOX_FILTER_SELECTOR:
+        case PUSHBUTTON_PLAY:
             break;
     }
 }
