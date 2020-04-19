@@ -2062,13 +2062,6 @@ sc/res/time.png cmd/sc_timefield.png
 # ==============================================
 sd/res/breakplayingblue_16.png cmd/sc_mediapause.png
 sd/res/comments_indicator.png cmd/sc_shownote.png
-sd/res/displaymode_handoutmaster.png cmd/32/handoutmode.png
-sd/res/displaymode_notes.png cmd/32/notesmode.png
-sd/res/displaymode_notesmaster.png cmd/32/notesmasterpage.png
-sd/res/displaymode_outline.png cmd/32/outlinemode.png
-sd/res/displaymode_slide.png cmd/32/normalmultipanegui.png
-sd/res/displaymode_slidemaster.png cmd/32/slidemasterpage.png
-sd/res/displaymode_slidesorter.png cmd/32/diamode.png
 sd/res/fade_effect_indicator.png sd/res/effect_16.png
 sd/res/graphic.png cmd/sc_graphic.png
 sd/res/group.png cmd/sc_formatgroup.png
