@@ -20,10 +20,9 @@
 #define INCLUDED_SVX_SOURCE_SIDEBAR_TEXT_TEXTPROPERTYPANEL_HXX
 
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
+#include <sfx2/weldutils.hxx>
 #include <vcl/EnumContext.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
-
-class ToolBox;
 
 namespace svx { namespace sidebar {
 
@@ -47,9 +46,26 @@ public:
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
 private:
-    VclPtr<ToolBox> mpToolBoxFontColorSw;
-    VclPtr<ToolBox> mpToolBoxFontColor;
-    VclPtr<ToolBox> mpToolBoxBackgroundColor;
+    std::unique_ptr<weld::Toolbar> mxFont;
+    std::unique_ptr<ToolbarUnoDispatcher> mxFontDispatch;
+    std::unique_ptr<weld::Toolbar> mxFontHeight;
+    std::unique_ptr<ToolbarUnoDispatcher> mxFontHeightDispatch;
+    std::unique_ptr<weld::Toolbar> mxFontEffects;
+    std::unique_ptr<ToolbarUnoDispatcher> mxFontEffectsDispatch;
+    std::unique_ptr<weld::Toolbar> mxFontAdjust;
+    std::unique_ptr<ToolbarUnoDispatcher> mxFontAdjustDispatch;
+    std::unique_ptr<weld::Toolbar> mxToolBoxFontColorSw;
+    std::unique_ptr<ToolbarUnoDispatcher> mxToolBoxFontColorSwDispatch;
+    std::unique_ptr<weld::Toolbar> mxToolBoxFontColor;
+    std::unique_ptr<ToolbarUnoDispatcher> mxToolBoxFontColorDispatch;
+    std::unique_ptr<weld::Toolbar> mxToolBoxBackgroundColor;
+    std::unique_ptr<ToolbarUnoDispatcher> mxToolBoxBackgroundColorDispatch;
+    std::unique_ptr<weld::Toolbar> mxResetBar;
+    std::unique_ptr<ToolbarUnoDispatcher> mxResetBarDispatch;
+    std::unique_ptr<weld::Toolbar> mxPositionBar;
+    std::unique_ptr<ToolbarUnoDispatcher> mxPositionBarDispatch;
+    std::unique_ptr<weld::Toolbar> mxSpacingBar;
+    std::unique_ptr<ToolbarUnoDispatcher> mxSpacingBarDispatch;
 
     vcl::EnumContext maContext;
 };
