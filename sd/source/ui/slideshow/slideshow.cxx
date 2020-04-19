@@ -28,6 +28,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svx/svdpool.hxx>
+#include <svx/svdlayer.hxx>
 #include <svl/itemprop.hxx>
 
 #include <sfx2/bindings.hxx>
@@ -766,10 +767,33 @@ void SAL_CALL SlideShow::end()
                 }
             }
 
+            // In case mbMouseAsPen was set, a new layer DrawnInSlideshow might have been generated
+            // during slideshow, which is not known to FrameView yet.
+            if (pViewShell->GetDoc()->GetLayerAdmin().GetLayer("DrawnInSlideshow"))
+            {
+                SdrLayerIDSet aDocLayerIDSet;
+                pViewShell->GetDoc()->GetLayerAdmin().getVisibleLayersODF(aDocLayerIDSet);
+                if (pViewShell->GetFrameView()->GetVisibleLayers() != aDocLayerIDSet)
+                {
+                    pViewShell->GetFrameView()->SetVisibleLayers(aDocLayerIDSet);
+                }
+                pViewShell->GetDoc()->GetLayerAdmin().getPrintableLayersODF(aDocLayerIDSet);
+                if (pViewShell->GetFrameView()->GetPrintableLayers() != aDocLayerIDSet)
+                {
+                    pViewShell->GetFrameView()->SetPrintableLayers(aDocLayerIDSet);
+                }
+                pViewShell->GetDoc()->GetLayerAdmin().getLockedLayersODF(aDocLayerIDSet);
+                if (pViewShell->GetFrameView()->GetLockedLayers() != aDocLayerIDSet)
+                {
+                    pViewShell->GetFrameView()->SetLockedLayers(aDocLayerIDSet);
+                }
+            }
+
             // Fire the acc focus event when focus is switched back. The above method
             // mpCurrentViewShellBase->GetWindow()->GrabFocus() will set focus to WorkWindow
             // instead of the sd::window, so here call Shell's method to fire the focus event
             pViewShell->SwitchActiveViewFireFocus();
+
         }
     }
     mpCurrentViewShellBase = nullptr;
