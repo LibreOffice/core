@@ -818,7 +818,7 @@ bool VCartesianAxis::createTextShapes(
         if( pLastVisibleNeighbourTickInfo && !rAxisLabelProperties.bOverlapAllowed )
         {
             // Overlapping is not allowed.  If the label overlaps with its
-            // neighbering label, try increasing the tick interval (or rhythm
+            // neighboring label, try increasing the tick interval (or rhythm
             // as it's called) and start over.
 
             if( lcl_doesShapeOverlapWithTickmark( pLastVisibleNeighbourTickInfo->xTextShape
@@ -903,7 +903,7 @@ bool VCartesianAxis::createTextShapes(
         //if NO OVERLAP -> remove overlapping shapes
         if( pLastVisibleNeighbourTickInfo && !rAxisLabelProperties.bOverlapAllowed )
         {
-            // Check if the label still overlaps with its neighber.
+            // Check if the label still overlaps with its neighbor.
             if( doesOverlap( pLastVisibleNeighbourTickInfo->xTextShape, pTickInfo->xTextShape, rAxisLabelProperties.fRotationAngleDegree ) )
             {
                 // It overlaps.  Check if staggering helps.
@@ -1007,7 +1007,7 @@ bool VCartesianAxis::createTextShapesSimple(
         if( pLastVisibleNeighbourTickInfo && !rAxisLabelProperties.bOverlapAllowed )
         {
             // Overlapping is not allowed.  If the label overlaps with its
-            // neighbering label, try increasing the tick interval (or rhythm
+            // neighboring label, try increasing the tick interval (or rhythm
             // as it's called) and start over.
 
             if( lcl_doesShapeOverlapWithTickmark( pLastVisibleNeighbourTickInfo->xTextShape
@@ -1055,7 +1055,7 @@ bool VCartesianAxis::createTextShapesSimple(
         //if NO OVERLAP -> remove overlapping shapes
         if( pLastVisibleNeighbourTickInfo && !rAxisLabelProperties.bOverlapAllowed )
         {
-            // Check if the label still overlaps with its neighber.
+            // Check if the label still overlaps with its neighbor.
             if( doesOverlap( pLastVisibleNeighbourTickInfo->xTextShape, pTickInfo->xTextShape, rAxisLabelProperties.fRotationAngleDegree ) )
             {
                 // It overlaps.
