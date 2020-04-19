@@ -579,15 +579,16 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
         // also copy the defaults
         if( bCheckSdrDflt )
         {
-            sal_uInt16 nEdtWhich, nSlotId;
-            if( 0 != (nSlotId = GetAttrPool().GetSlotId( nWhich ) ) &&
-                nSlotId != nWhich &&
-                0 != (nEdtWhich = pSdrPool->GetWhich( nSlotId )) &&
-                nSlotId != nEdtWhich )
+            sal_uInt16 nSlotId = GetAttrPool().GetSlotId( nWhich );
+            if( 0 != nSlotId && nSlotId != nWhich )
             {
-                std::unique_ptr<SfxPoolItem> pCpy(pItem->Clone());
-                pCpy->SetWhich( nEdtWhich );
-                pSdrPool->SetPoolDefaultItem( *pCpy );
+                sal_uInt16 nEdtWhich = pSdrPool->GetWhich( nSlotId );
+                if( 0 != nEdtWhich && nSlotId != nEdtWhich )
+                {
+                    std::unique_ptr<SfxPoolItem> pCpy(pItem->Clone());
+                    pCpy->SetWhich( nEdtWhich );
+                    pSdrPool->SetPoolDefaultItem( *pCpy );
+                }
             }
         }
 
@@ -1209,17 +1210,18 @@ SwTextFormatColl* SwDoc::CopyTextColl( const SwTextFormatColl& rColl )
         if( SfxItemState::SET == pNewColl->GetItemState( RES_PARATR_NUMRULE,
             false, &pItem ))
         {
-            const SwNumRule* pRule;
             const OUString& rName = static_cast<const SwNumRuleItem*>(pItem)->GetValue();
-            if( !rName.isEmpty() &&
-                nullptr != ( pRule = rColl.GetDoc()->FindNumRulePtr( rName )) &&
-                !pRule->IsAutoRule() )
+            if( !rName.isEmpty() )
             {
-                SwNumRule* pDestRule = FindNumRulePtr( rName );
-                if( pDestRule )
-                    pDestRule->SetInvalidRule( true );
-                else
-                    MakeNumRule( rName, pRule );
+                const SwNumRule* pRule = rColl.GetDoc()->FindNumRulePtr( rName );
+                if( pRule && !pRule->IsAutoRule() )
+                {
+                    SwNumRule* pDestRule = FindNumRulePtr( rName );
+                    if( pDestRule )
+                        pDestRule->SetInvalidRule( true );
+                    else
+                        MakeNumRule( rName, pRule );
+                }
             }
         }
     }
@@ -1731,11 +1733,14 @@ SwTableNumFormatMerge::SwTableNumFormatMerge( const SwDoc& rSrc, SwDoc& rDest )
     : pNFormat( nullptr )
 {
     // a different Doc -> Number formatter needs to be merged
-    SvNumberFormatter* pN;
-    if( &rSrc != &rDest && nullptr != ( pN = const_cast<SwDoc&>(rSrc).GetNumberFormatter( false ) ))
+    if( &rSrc != &rDest )
     {
-        pNFormat = rDest.GetNumberFormatter();
-        pNFormat->MergeFormatter( *pN );
+        SvNumberFormatter* pN = const_cast<SwDoc&>(rSrc).GetNumberFormatter( false );
+        if( pN )
+        {
+            pNFormat = rDest.GetNumberFormatter();
+            pNFormat->MergeFormatter( *pN );
+        }
     }
 
     if( &rSrc != &rDest )
