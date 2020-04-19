@@ -40,6 +40,7 @@
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <sfx2/app.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <vcl/specialchars.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>

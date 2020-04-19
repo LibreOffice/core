@@ -30,6 +30,7 @@
 #include <osl/file.h>
 #include <osl/conditn.hxx>
 
+#include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 

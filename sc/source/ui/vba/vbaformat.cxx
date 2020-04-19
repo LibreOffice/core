@@ -36,6 +36,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 
 #include <basic/sberrors.hxx>
+#include <rtl/math.hxx>
 
 #include "excelvbahelper.hxx"
 #include "vbaborders.hxx"

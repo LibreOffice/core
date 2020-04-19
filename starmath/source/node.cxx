@@ -35,6 +35,7 @@
 #include <vcl/outdev.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <rtl/math.hxx>
 
 #include <cassert>
 #include <math.h>

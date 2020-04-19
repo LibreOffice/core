@@ -24,6 +24,7 @@
 #include <view.hxx>
 #include <swwait.hxx>
 #include <wrtsh.hxx>
+#include <rtl/math.hxx>
 #include <svl/cjkoptions.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/settings.hxx>

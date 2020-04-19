@@ -22,6 +22,7 @@
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
+#include <rtl/ustrbuf.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sot/exchange.hxx>
 #include <doc.hxx>

@@ -77,6 +77,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <editeng/outlobj.hxx>
 #include <svx/svdpage.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <rtl/ref.hxx>
 #include <bitmaps.hlst>
 

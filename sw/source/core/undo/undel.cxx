@@ -19,6 +19,7 @@
 
 #include <UndoDelete.hxx>
 #include <hintids.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <unotools/charclass.hxx>
 #include <frmfmt.hxx>
 #include <fmtanchr.hxx>

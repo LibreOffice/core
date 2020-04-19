@@ -25,6 +25,7 @@
 #include <vcl/syswin.hxx>
 #include <vcl/window.hxx>
 #include <comphelper/processfactory.hxx>
+#include <rtl/math.hxx>
 #include <rtl/uri.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/lokhelper.hxx>

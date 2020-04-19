@@ -25,6 +25,7 @@
 
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <editeng/brushitem.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <vcl/font.hxx>
 #include <vcl/settings.hxx>
 #include <editeng/editids.hrc>

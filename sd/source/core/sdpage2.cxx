@@ -28,6 +28,7 @@
 #include <com/sun/star/text/XTextCopy.hpp>
 #include <tools/debug.hxx>
 #include <svx/svddef.hxx>
+#include <rtl/math.hxx>
 
 #include <Annotation.hxx>
 #include <notifydocumentevent.hxx>

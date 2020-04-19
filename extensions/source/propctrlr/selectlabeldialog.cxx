@@ -33,6 +33,7 @@
 #include <comphelper/types.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
+#include <rtl/ustrbuf.hxx>
 
 
 namespace pcr

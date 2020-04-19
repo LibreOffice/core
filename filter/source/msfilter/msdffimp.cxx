@@ -29,6 +29,7 @@
 #include <osl/file.hxx>
 #include <tools/solar.h>
 #include <sal/log.hxx>
+#include <rtl/math.hxx>
 
 #include <comphelper/classids.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

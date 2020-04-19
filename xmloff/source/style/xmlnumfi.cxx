@@ -24,6 +24,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/color.hxx>
 #include <osl/diagnose.h>
+#include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
