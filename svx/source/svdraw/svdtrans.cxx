@@ -21,6 +21,7 @@
 #include <svx/svdtrans.hxx>
 #include <math.h>
 #include <svx/xpoly.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <vcl/virdev.hxx>
 #include <tools/bigint.hxx>

@@ -21,6 +21,7 @@
 #include "xmlfilter.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <strings.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
 
 namespace dbaxml

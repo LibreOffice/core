@@ -31,6 +31,7 @@
 #include <Window.hxx>
 
 #include <o3tl/safeint.hxx>
+#include <rtl/math.hxx>
 #include <vcl/virdev.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

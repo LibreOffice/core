@@ -42,6 +42,7 @@
 #include <vcl/GraphicObject.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/memberid.h>
+#include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/mapunit.hxx>
 #include <vcl/graphicfilter.hxx>

@@ -62,6 +62,7 @@
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xpoly.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/ptrstyle.hxx>

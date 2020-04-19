@@ -34,6 +34,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
+#include <rtl/ustrbuf.hxx>
 
 
 // DrawContact section

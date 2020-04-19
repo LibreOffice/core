@@ -32,6 +32,7 @@
 #include <svx/svdview.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdviter.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <rtl/ref.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <tools/diagnose_ex.h>

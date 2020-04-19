@@ -35,6 +35,7 @@
 #include <editeng/editrids.hrc>
 #include <tools/mapunit.hxx>
 
+#include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <svl/itemset.hxx>

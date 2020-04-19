@@ -9,6 +9,7 @@
  */
 
 #include <FontFeaturesDialog.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <vcl/font/FeatureParser.hxx>
 #include <vcl/virdev.hxx>
 #include <svtools/colorcfg.hxx>

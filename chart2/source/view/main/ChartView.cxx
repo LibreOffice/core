@@ -54,6 +54,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <rtl/math.hxx>
 #include <unotools/streamwrap.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/unopage.hxx>

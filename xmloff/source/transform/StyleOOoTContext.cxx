@@ -37,6 +37,7 @@
 
 #include "StyleOOoTContext.hxx"
 #include <xmloff/xmluconv.hxx>
+#include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>

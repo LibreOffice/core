@@ -28,6 +28,7 @@
 
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <osl/diagnose.h>
+#include <rtl/math.hxx>
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/CharacterClassification.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
