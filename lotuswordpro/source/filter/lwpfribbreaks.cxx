@@ -59,6 +59,7 @@
  ************************************************************************/
 
 #include "lwpfribbreaks.hxx"
+#include "lwpfribheader.hxx"
 #include "lwpstory.hxx"
 #include <xfilter/xfstylemanager.hxx>
 #include <xfilter/xfsectionstyle.hxx>

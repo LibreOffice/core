@@ -277,7 +277,6 @@ protected:
 };
 
 #include "lwpcelllayout.hxx"
-#include "lwprowlayout.hxx"
 
 #endif
 

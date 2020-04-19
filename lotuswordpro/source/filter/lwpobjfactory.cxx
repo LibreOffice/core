@@ -95,6 +95,7 @@
 #include "lwpnotes.hxx"
 #include "lwpverdocument.hxx"
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 //LwpObjectFactory* LwpObjectFactory::m_pMgr = NULL;
 

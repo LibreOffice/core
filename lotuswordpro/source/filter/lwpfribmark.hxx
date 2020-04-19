@@ -64,7 +64,6 @@
 #include <lwpfrib.hxx>
 #include "lwpstory.hxx"
 #include "lwpmarker.hxx"
-#include <xfilter/xftextspan.hxx>
 #include <xfilter/xfbookmark.hxx>
 
 class LwpFribCHBlock : public LwpFrib

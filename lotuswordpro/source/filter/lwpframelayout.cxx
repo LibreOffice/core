@@ -59,6 +59,7 @@
  ************************************************************************/
 
 #include <memory>
+#include <lwpfilehdr.hxx>
 #include "lwpframelayout.hxx"
 #include "lwppara.hxx"
 #include <xfilter/xfstylemanager.hxx>

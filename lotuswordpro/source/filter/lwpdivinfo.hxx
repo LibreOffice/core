@@ -61,12 +61,12 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDIVINFO_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDIVINFO_HXX
 
+#include <config_lgpl.h>
+
 #include <lwpobj.hxx>
 #include <lwpobjid.hxx>
 #include <lwpatomholder.hxx>
 #include <lwpcolor.hxx>
-#include <lwpheader.hxx>
-#include "lwpdoc.hxx"
 
 #define STR_OleDivisionClassName    "OLEDivision"
 

@@ -59,6 +59,7 @@
  */
 
 #include <memory>
+#include <lwpfilehdr.hxx>
 #include "lwpnumericfmt.hxx"
 
 LwpCurrencyPool  LwpNumericFormat::m_aCurrencyInfo;

@@ -56,8 +56,6 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_UTLIST_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_UTLIST_HXX
 
-#include "ut.hxx"
-
 namespace OpenStormBento
 {
 

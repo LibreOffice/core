@@ -65,6 +65,7 @@
 
 #include <memory>
 #include "lwpcontent.hxx"
+#include "lwphyperlinkmgr.hxx"
 
 class LwpPageLayout;
 class LwpStory final : public LwpContent

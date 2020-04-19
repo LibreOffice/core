@@ -61,12 +61,9 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTABLE_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTABLE_HXX
 
-#include <lwpobj.hxx>
 #include <lwpobjhdr.hxx>
 #include <lwpobjid.hxx>
-#include "lwpstory.hxx"
 #include "lwppara.hxx"
-#include "lwppagehint.hxx"
 #include <lwptools.hxx>
 #include "lwptablelayout.hxx"
 

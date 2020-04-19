@@ -58,6 +58,7 @@
  * Image object.
  ************************************************************************/
 #include <xfilter/xfimage.hxx>
+#include <xfilter/xfglobal.hxx>
 #include <xfilter/ixfattrlist.hxx>
 #include "xfbase64.hxx"
 

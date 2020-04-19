@@ -63,6 +63,7 @@
 #include "lwpsilverbullet.hxx"
 #include "lwpdoc.hxx"
 #include "lwpdivinfo.hxx"
+#include "lwpfribheader.hxx"
 #include <lwpfoundry.hxx>
 #include "lwpstory.hxx"
 #include "lwppara.hxx"

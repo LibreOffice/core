@@ -61,6 +61,11 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTBLFORMULA_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTBLFORMULA_HXX
 
+#include <rtl/ustring.hxx>
+#include <memory>
+#include <vector>
+#include "lwptblcell.hxx"
+
 /* These token types are written to the file.  Don't change their
 values unless you filter them.
 */

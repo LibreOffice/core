@@ -67,6 +67,8 @@
 #include "lwpholder.hxx"
 #include "lwpnumericfmt.hxx"
 #include "lwptable.hxx"
+#include "lwprowlayout.hxx"
+#include <lwpfilehdr.hxx>
 #include <lwpglobalmgr.hxx>
 
 #include <xfilter/xfstylemanager.hxx>

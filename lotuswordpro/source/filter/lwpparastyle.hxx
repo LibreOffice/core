@@ -62,7 +62,6 @@
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPARASTYLE_HXX
 
 #include "lwpcharacterstyle.hxx"
-#include "lwppiece.hxx"
 #include "lwpborderstuff.hxx"
 #include "lwppara.hxx"
 

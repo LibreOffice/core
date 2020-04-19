@@ -61,7 +61,8 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFONTWORKSTYLE_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFONTWORKSTYLE_HXX
 
-#include <xfilter/xfstyle.hxx>
+#include <sal/types.h>
+#include <xfilter/xfdefs.hxx>
 
 class XFFontWorkStyle
 {

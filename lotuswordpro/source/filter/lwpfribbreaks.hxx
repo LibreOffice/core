@@ -62,7 +62,6 @@
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBBREAKS_HXX
 
 #include <lwpfrib.hxx>
-#include <xfilter/xfparastyle.hxx>
 #include "lwppara.hxx"
 #include "lwpfribsection.hxx"
 

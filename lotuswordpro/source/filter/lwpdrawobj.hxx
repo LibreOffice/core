@@ -65,8 +65,11 @@
 #include <sal/config.h>
 
 #include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
 
 #include "lwpsdwdrawheader.hxx"
+
+#include <memory>
 
 class SvStream;
 class XFFrame;

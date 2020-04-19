@@ -54,6 +54,7 @@
  *
  ************************************************************************/
 #include "lwpprtinfo.hxx"
+#include <lwpatomholder.hxx>
 
 LwpPrinterInfo::LwpPrinterInfo(LwpObjectStream* pStrm)
 {

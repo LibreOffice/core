@@ -61,7 +61,6 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPAGEHINT_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPAGEHINT_HXX
 
-#include <lwpobj.hxx>
 #include <lwpobjid.hxx>
 #include <lwpatomholder.hxx>
 #include "lwpdlvlist.hxx"

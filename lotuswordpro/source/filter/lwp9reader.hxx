@@ -56,7 +56,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWP9READER_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWP9READER_HXX
 
-#include <lwpheader.hxx>
+#include <config_lgpl.h>
 #include <lwpsvstream.hxx>
 #include <lwpfilehdr.hxx>
 #include <lwpobjfactory.hxx>

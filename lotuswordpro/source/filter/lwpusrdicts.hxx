@@ -61,7 +61,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPUSRDICTS_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPUSRDICTS_HXX
 
-#include <lwpheader.hxx>
+#include <config_lgpl.h>
 #include <lwpobjstrm.hxx>
 /**
  * @brief   User defined words used in VO_DOCUMENT

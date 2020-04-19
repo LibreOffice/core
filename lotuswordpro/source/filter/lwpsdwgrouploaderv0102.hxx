@@ -58,10 +58,10 @@
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWGROUPLOADERV0102_HXX
 
 #include <sal/config.h>
+#include <config_lgpl.h>
 
 #include <rtl/ref.hxx>
 
-#include <lwpheader.hxx>
 #include "lwpsdwdrawheader.hxx"
 
 class SvStream;

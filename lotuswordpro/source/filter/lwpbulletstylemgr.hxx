@@ -63,10 +63,9 @@
 
 #include <memory>
 
-#include <lwpheader.hxx>
+#include <config_lgpl.h>
 #include <lwpfoundry.hxx>
 #include <lwpobjid.hxx>
-#include "lwpnumberingoverride.hxx"
 #include <utility>
 #include <xfilter/xfcontentcontainer.hxx>
 

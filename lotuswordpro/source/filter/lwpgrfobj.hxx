@@ -62,10 +62,9 @@
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPGRFOBJ_HXX
 
 #include <sal/types.h>
+#include <config_lgpl.h>
 
 #include "lwpoleobject.hxx"
-#include <lwpheader.hxx>
-#include <xfilter/xfrect.hxx>
 
 struct ImageProcessingData
 {

@@ -82,6 +82,7 @@
 #include <xfilter/xfcolor.hxx>
 #include <xfilter/xfhyperlink.hxx>
 #include "lwpcharsetmgr.hxx"
+#include "lwpfribheader.hxx"
 #include "lwpsection.hxx"
 #include "lwplayout.hxx"
 #include "lwpusewhen.hxx"

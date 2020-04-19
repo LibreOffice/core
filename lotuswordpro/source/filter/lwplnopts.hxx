@@ -62,9 +62,6 @@
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPLNOPTS_HXX
 
 #include <lwpobjstrm.hxx>
-#include <lwptools.hxx>
-#include <xfilter/xflinenumberconfig.hxx>
-#include <xfilter/xfstylemanager.hxx>
 
 /**
  * @brief   line number options

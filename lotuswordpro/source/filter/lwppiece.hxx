@@ -61,9 +61,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPIECE_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPIECE_HXX
 
-#include <lwpobj.hxx>
 #include <lwpoverride.hxx>
-#include <lwpobjstrm.hxx>
 #include "lwpdlvlist.hxx"
 #include "lwpbreaksoverride.hxx"
 #include "lwpparaborderoverride.hxx"
