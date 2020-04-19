@@ -20,6 +20,7 @@
 #include <sfx2/passwd.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/strings.hrc>
+#include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 

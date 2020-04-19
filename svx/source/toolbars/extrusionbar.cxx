@@ -39,6 +39,7 @@
 #include <svx/chrtitem.hxx>
 #include <svx/sdasitm.hxx>
 #include <svl/intitem.hxx>
+#include <rtl/math.hxx>
 
 #include <svx/extrusionbar.hxx>
 #include <extrusiondepthdialog.hxx>

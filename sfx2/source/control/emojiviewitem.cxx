@@ -14,6 +14,7 @@
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <com/sun/star/lang/Locale.hpp>
+#include <rtl/ustrbuf.hxx>
 #include <tools/poly.hxx>
 
 using namespace basegfx;

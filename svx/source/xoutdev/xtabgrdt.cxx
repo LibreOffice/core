@@ -24,6 +24,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/xtable.hxx>
 
+#include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 

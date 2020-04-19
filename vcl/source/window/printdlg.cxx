@@ -37,6 +37,7 @@
 
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 

@@ -216,6 +216,9 @@ blacklist:
     include/sot/exchange.hxx:
     # Used in a macro #define
     - com/sun/star/datatransfer/dnd/DNDConstants.hpp
+    include/tools/color.hxx:
+    # OSL_BIGENDIAN is being checked
+    - osl/endian.h
     include/tools/debug.hxx:
     # Used behind #ifndef
     - tools/toolsdllapi.h

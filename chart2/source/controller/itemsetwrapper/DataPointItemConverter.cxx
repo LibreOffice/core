@@ -48,6 +48,7 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/graph.hxx>
 #include <oox/helper/containerhelper.hxx>
+#include <rtl/math.hxx>
 
 #include <svx/tabline.hxx>
 

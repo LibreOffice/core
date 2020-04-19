@@ -32,6 +32,7 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <svl/lstner.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <sfx2/request.hxx>
 

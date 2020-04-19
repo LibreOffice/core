@@ -23,6 +23,7 @@
 
 #include <osl/conditn.hxx>
 #include <osl/file.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <tools/time.hxx>

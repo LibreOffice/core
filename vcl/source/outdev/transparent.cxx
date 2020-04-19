@@ -21,6 +21,7 @@
 
 #include <sal/types.h>
 #include <tools/helpers.hxx>
+#include <rtl/math.hxx>
 
 #include <memory>
 

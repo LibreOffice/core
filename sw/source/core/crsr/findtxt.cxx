@@ -23,6 +23,7 @@
 #include <com/sun/star/util/SearchResult.hpp>
 #include <comphelper/lok.hxx>
 #include <o3tl/safeint.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <svx/svdview.hxx>
 #include <svl/srchitem.hxx>
 #include <sfx2/sfxsids.hrc>

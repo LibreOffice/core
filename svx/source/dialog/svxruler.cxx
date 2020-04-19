@@ -41,6 +41,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/protitem.hxx>
 #include <osl/diagnose.h>
+#include <rtl/math.hxx>
 
 #include "rlrcitem.hxx"
 #include <memory>
