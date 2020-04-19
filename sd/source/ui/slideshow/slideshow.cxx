@@ -28,6 +28,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svx/svdpool.hxx>
+#include <svx/svdlayer.hxx>
 #include <svl/itemprop.hxx>
 
 #include <sfx2/bindings.hxx>
@@ -35,6 +36,7 @@
 #include <sfx2/sfxsids.hrc>
 
 #include <framework/FrameworkHelper.hxx>
+#include <comphelper/extract.hxx>
 
 #include <FrameView.hxx>
 #include <createpresentation.hxx>
@@ -764,6 +766,30 @@ void SAL_CALL SlideShow::end()
                                             uno::Sequence< beans::PropertyValue >());
                     }
                 }
+            }
+
+            // In case mbMouseAsPen was set, a new layer DrawnInSlideshow might have been generated
+            // during slideshow, which is not known to FrameView yet.
+            if (any2bool(getPropertyValue("UsePen"))
+                && pViewShell->GetDoc()->GetLayerAdmin().GetLayer("DrawnInSlideshow"))
+            {
+                SdrLayerIDSet aDocLayerIDSet;
+                pViewShell->GetDoc()->GetLayerAdmin().getVisibleLayersODF(aDocLayerIDSet);
+                if (pViewShell->GetFrameView()->GetVisibleLayers() != aDocLayerIDSet)
+                {
+                    pViewShell->GetFrameView()->SetVisibleLayers(aDocLayerIDSet);
+                }
+                pViewShell->GetDoc()->GetLayerAdmin().getPrintableLayersODF(aDocLayerIDSet);
+                if (pViewShell->GetFrameView()->GetPrintableLayers() != aDocLayerIDSet)
+                {
+                    pViewShell->GetFrameView()->SetPrintableLayers(aDocLayerIDSet);
+                }
+                pViewShell->GetDoc()->GetLayerAdmin().getLockedLayersODF(aDocLayerIDSet);
+                if (pViewShell->GetFrameView()->GetLockedLayers() != aDocLayerIDSet)
+                {
+                    pViewShell->GetFrameView()->SetLockedLayers(aDocLayerIDSet);
+                }
+                pViewShell->InvalidateWindows();
             }
 
             // Fire the acc focus event when focus is switched back. The above method
