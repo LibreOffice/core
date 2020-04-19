@@ -831,8 +831,10 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
         for (SwSectionFormats::size_type n = rArr.size(); n; )
         {
             SwSection* pSect = rArr[ --n ]->GetSection();
-            if( pSect && pSect->IsHidden() && !pSect->GetCondition().isEmpty() &&
-                nullptr != ( pSectNd = pSect->GetFormat()->GetSectionNode() ))
+            if( !pSect || !pSect->IsHidden() || pSect->GetCondition().isEmpty() )
+                continue;
+            pSectNd = pSect->GetFormat()->GetSectionNode();
+            if( pSectNd )
             {
                 sal_uLong nIdx = pSectNd->GetIndex();
                 aTmpArr.push_back( nIdx );
