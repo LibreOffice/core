@@ -23,6 +23,7 @@
 #include <tools/toolsdllapi.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <basegfx/color/bcolor.hxx>
+#include <osl/endian.h>
 
 namespace color
 {

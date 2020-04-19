@@ -31,6 +31,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/math.hxx>
 #include <vcl/introwin.hxx>
 #include <vcl/virdev.hxx>
 

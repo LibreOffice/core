@@ -21,6 +21,7 @@
 #include <cassert>
 #include <math.h>
 #include <sal/log.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>

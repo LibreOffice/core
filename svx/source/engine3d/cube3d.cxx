@@ -25,6 +25,7 @@
 #include <svx/globl3d.hxx>
 #include <basegfx/point/b3dpoint.hxx>
 #include <sdr/contact/viewcontactofe3dcube.hxx>
+#include <rtl/ustrbuf.hxx>
 
 
 // DrawContact section

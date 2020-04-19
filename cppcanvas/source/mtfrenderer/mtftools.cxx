@@ -26,6 +26,7 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <canvas/canvastools.hxx>
+#include <rtl/math.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/metric.hxx>

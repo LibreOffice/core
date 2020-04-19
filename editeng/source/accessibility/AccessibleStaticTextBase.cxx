@@ -25,6 +25,7 @@
 #include <memory>
 #include <vector>
 #include <algorithm>
+#include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>

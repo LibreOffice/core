@@ -23,6 +23,7 @@
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/vector/b2ivector.hxx>
+#include <rtl/ustrbuf.hxx>
 #include "svgpaint.hxx"
 #include <vector>
 

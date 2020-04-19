@@ -29,6 +29,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/settings.hxx>
 
+#include <rtl/ustrbuf.hxx>
 #include <svl/stritem.hxx>
 #include <editeng/fontitem.hxx>
 #include <sfx2/dialoghelper.hxx>

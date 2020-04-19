@@ -28,6 +28,7 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <tools/bigint.hxx>
 #include <tools/helpers.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>

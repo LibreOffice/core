@@ -23,6 +23,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <svl/hint.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <sdr/contact/viewcontactofsdredgeobj.hxx>
 #include <sdr/properties/connectorproperties.hxx>

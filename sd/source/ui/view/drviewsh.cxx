@@ -20,6 +20,7 @@
 #include <DrawViewShell.hxx>
 
 #include <sal/log.hxx>
+#include <rtl/math.hxx>
 #include <comphelper/lok.hxx>
 
 #include <DrawDocShell.hxx>

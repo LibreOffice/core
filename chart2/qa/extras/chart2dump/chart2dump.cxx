@@ -20,6 +20,7 @@
 #include <editeng/unoprnms.hxx>
 #include <test/xmltesttools.hxx>
 #include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <fstream>
 

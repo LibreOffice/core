@@ -49,6 +49,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <vcl/toolkit/unowrap.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <configsettings.hxx>
 

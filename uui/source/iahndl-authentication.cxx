@@ -32,6 +32,7 @@
 
 #include <osl/diagnose.h>
 #include <rtl/digest.h>
+#include <rtl/ustrbuf.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/abstdlg.hxx>
