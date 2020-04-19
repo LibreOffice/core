@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ad658fb2_bda784fc",
+        "filename": "vcl/unx/generic/app/i18n_cb.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1002519
+      },
+      "writtenOn": "2020-04-19T13:21:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ea11bc9_1b931b2c",
+      "range": {
+        "startLine": 510,
+        "startChar": 52,
+        "endLine": 510,
+        "endChar": 61
+      },
+      "revId": "0130be4137d3934730398e4c505241fd6deb3fab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7025a11f_607fc198",
         "filename": "vcl/unx/generic/fontmanager/fontconfig.cxx",
         "patchSetId": 4
@@ -69,6 +93,30 @@
       "revId": "0130be4137d3934730398e4c505241fd6deb3fab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01be7d2f_f2e238c6",
+        "filename": "vcl/unx/generic/fontmanager/fontconfig.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1002519
+      },
+      "writtenOn": "2020-04-19T13:21:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2472eb7b_5e8f16d7",
+      "range": {
+        "startLine": 664,
+        "startChar": 16,
+        "endLine": 664,
+        "endChar": 37
+      },
+      "revId": "0130be4137d3934730398e4c505241fd6deb3fab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
