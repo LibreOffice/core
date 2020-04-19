@@ -1410,12 +1410,16 @@ sal_uLong CompareData::NextIdx( const SwNode* pNd )
 {
     if( pNd->IsStartNode() )
     {
-        const SwSectionNode* pSNd;
-        if( pNd->IsTableNode() ||
-            ( nullptr != (pSNd = pNd->GetSectionNode() ) &&
-                ( SectionType::Content != pSNd->GetSection().GetType() ||
-                    pSNd->GetSection().IsProtect() ) ) )
+        if( pNd->IsTableNode() )
             pNd = pNd->EndOfSectionNode();
+        else
+        {
+            const SwSectionNode* pSNd = pNd->GetSectionNode();
+            if( pSNd &&
+                ( SectionType::Content != pSNd->GetSection().GetType() ||
+                    pSNd->GetSection().IsProtect() ) )
+                pNd = pNd->EndOfSectionNode();
+        }
     }
     return pNd->GetIndex() + 1;
 }
@@ -1424,12 +1428,16 @@ sal_uLong CompareData::PrevIdx( const SwNode* pNd )
 {
     if( pNd->IsEndNode() )
     {
-        const SwSectionNode* pSNd;
-        if( pNd->StartOfSectionNode()->IsTableNode() ||
-            ( nullptr != (pSNd = pNd->StartOfSectionNode()->GetSectionNode() ) &&
-                ( SectionType::Content != pSNd->GetSection().GetType() ||
-                    pSNd->GetSection().IsProtect() ) ) )
+        if( pNd->StartOfSectionNode()->IsTableNode() )
             pNd = pNd->StartOfSectionNode();
+        else
+        {
+            const SwSectionNode* pSNd = pNd->StartOfSectionNode()->GetSectionNode();
+            if( pSNd &&
+                ( SectionType::Content != pSNd->GetSection().GetType() ||
+                    pSNd->GetSection().IsProtect() ) )
+                pNd = pNd->StartOfSectionNode();
+        }
     }
     return pNd->GetIndex() - 1;
 }

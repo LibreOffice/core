@@ -1818,7 +1818,9 @@ void DelBookmarks(
             {
                 bool bStt = true;
                 SwContentNode* pCNd = pRStt->nNode.GetNode().GetContentNode();
-                if( !pCNd && nullptr == ( pCNd = pDoc->GetNodes().GoNext( &pRStt->nNode )) )
+                if( !pCNd )
+                    pCNd = pDoc->GetNodes().GoNext( &pRStt->nNode );
+                if (!pCNd)
                 {
                     bStt = false;
                     pRStt->nNode = rStt;
@@ -1840,7 +1842,9 @@ void DelBookmarks(
             {
                 bool bStt = false;
                 SwContentNode* pCNd = pREnd->nNode.GetNode().GetContentNode();
-                if( !pCNd && nullptr == ( pCNd = SwNodes::GoPrevious( &pREnd->nNode )) )
+                if( !pCNd )
+                    pCNd = SwNodes::GoPrevious( &pREnd->nNode );
+                if( !pCNd )
                 {
                     bStt = true;
                     pREnd->nNode = rEnd;
