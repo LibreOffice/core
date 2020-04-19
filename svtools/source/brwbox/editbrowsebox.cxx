@@ -947,7 +947,7 @@ namespace svt
             return;
         }
 
-        if (!(nEditRow >= 0 && nEditCol > HandleColumnId))
+        if (nEditRow < 0 || nEditCol <= HandleColumnId)
             return;
 
         aController = GetController(nRow, nCol);

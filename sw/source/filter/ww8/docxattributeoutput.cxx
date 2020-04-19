@@ -6845,7 +6845,7 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
     // start with the nStart value. Do not write w:start if Numbered Lists
     // starts from zero.As it's an optional parameter.
     // refer ECMA 376 Second edition Part-1
-    if(!(0 == nLevel && 0 == nStart))
+    if(0 != nLevel || 0 != nStart)
     {
         m_pSerializer->singleElementNS( XML_w, XML_start,
                 FSNS( XML_w, XML_val ), OString::number(nStart) );

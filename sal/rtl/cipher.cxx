@@ -718,7 +718,7 @@ static rtlCipherError BF_update(
     if (!pData || !pBuffer)
         return rtl_Cipher_E_Argument;
 
-    if (!((nDatLen > 0) && (nDatLen <= nBufLen)))
+    if ((nDatLen <= 0) || (nDatLen > nBufLen))
         return rtl_Cipher_E_BufferSize;
 
     /* Update. */
@@ -1265,7 +1265,7 @@ static rtlCipherError rtl_cipherARCFOUR_update_Impl(
     if (!pData || !pBuffer)
         return rtl_Cipher_E_Argument;
 
-    if (!((0 < nDatLen) && (nDatLen <= nBufLen)))
+    if ((0 >= nDatLen) || (nDatLen > nBufLen))
         return rtl_Cipher_E_BufferSize;
 
 #if defined LIBO_CIPHER_OPENSSL_BACKEND

@@ -356,7 +356,7 @@ SbxVariable* SbxObject::Make( const OUString& rName, SbxClassType ct, SbxDataTyp
         return nullptr;
     }
     // Collections may contain objects of the same name
-    if( !( ct == SbxClassType::Object && dynamic_cast<const SbxCollection*>( this ) != nullptr ) )
+    if( ct != SbxClassType::Object || dynamic_cast<const SbxCollection*>( this ) == nullptr )
     {
         SbxVariable* pRes = pArray->Find( rName, ct );
         if( pRes )

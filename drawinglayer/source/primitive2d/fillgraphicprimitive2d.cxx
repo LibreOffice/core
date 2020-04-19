@@ -41,7 +41,7 @@ namespace drawinglayer::primitive2d
 
             const Graphic& rGraphic = rAttribute.getGraphic();
 
-            if(!(GraphicType::Bitmap == rGraphic.GetType() || GraphicType::GdiMetafile == rGraphic.GetType()))
+            if(GraphicType::Bitmap != rGraphic.GetType() && GraphicType::GdiMetafile != rGraphic.GetType())
                 return;
 
             const Size aSize(rGraphic.GetPrefSize());

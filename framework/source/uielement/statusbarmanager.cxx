@@ -532,7 +532,7 @@ void StatusBarManager::UserDraw( const UserDrawEvent& rUDEvt )
 
     sal_uInt16 nId( rUDEvt.GetItemId() );
     StatusBarControllerMap::const_iterator it = m_aControllerMap.find( nId );
-    if (!(( nId > 0 ) && ( it != m_aControllerMap.end() )))
+    if (( nId <= 0 ) || ( it == m_aControllerMap.end() ))
         return;
 
     uno::Reference< frame::XStatusbarController > xController( it->second );
@@ -588,7 +588,7 @@ void StatusBarManager::MouseButton( const MouseEvent& rMEvt ,sal_Bool ( SAL_CALL
 
     sal_uInt16 nId = m_pStatusBar->GetItemId( rMEvt.GetPosPixel() );
     StatusBarControllerMap::const_iterator it = m_aControllerMap.find( nId );
-    if (!(( nId > 0 ) && ( it != m_aControllerMap.end() )))
+    if (( nId <= 0 ) || ( it == m_aControllerMap.end() ))
         return;
 
     uno::Reference< frame::XStatusbarController > xController( it->second );

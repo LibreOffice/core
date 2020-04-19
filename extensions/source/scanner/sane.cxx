@@ -388,8 +388,8 @@ bool Sane::GetOptionValue( int n, double& rRet, int nElement )
 
 bool Sane::GetOptionValue( int n, double* pSet )
 {
-    if( ! maHandle  || ! ( mppOptions[n]->type == SANE_TYPE_FIXED ||
-                           mppOptions[n]->type == SANE_TYPE_INT ) )
+    if( ! maHandle  || ( mppOptions[n]->type != SANE_TYPE_FIXED &&
+                         mppOptions[n]->type != SANE_TYPE_INT ) )
         return false;
 
     std::unique_ptr<SANE_Word[]> pFixedSet(new SANE_Word[mppOptions[n]->size/sizeof(SANE_Word)]);

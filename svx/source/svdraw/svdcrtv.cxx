@@ -805,7 +805,7 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
                     // there are still untested divisions by that sizes
                     tools::Rectangle aCurrentSnapRect(pCurrentCreate->GetSnapRect());
 
-                    if(!(aCurrentSnapRect.GetWidth() > 1 && aCurrentSnapRect.GetHeight() > 1))
+                    if(aCurrentSnapRect.GetWidth() <= 1 || aCurrentSnapRect.GetHeight() <= 1)
                     {
                         tools::Rectangle aNewRect(maDragStat.GetStart(), maDragStat.GetStart() + Point(2, 2));
                         pCurrentCreate->NbcSetSnapRect(aNewRect);

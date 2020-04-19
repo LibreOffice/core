@@ -402,7 +402,7 @@ OUString GetEnglishSearchFontName(const OUString& rInName)
             }
         }
         // not lowercase Ascii
-        else if ( !((c >= 'a') && (c <= 'z')) )
+        else if ( (c < 'a') || (c > 'z') )
         {
             // To Lowercase-Ascii
             if ( (c >= 'A') && (c <= 'Z') )

@@ -657,7 +657,7 @@ namespace drawinglayer::primitive2d
         {
             Graphic aGraphic(rSet.Get(XATTR_FILLBITMAP).GetGraphicObject().GetGraphic());
 
-            if(!(GraphicType::Bitmap == aGraphic.GetType() || GraphicType::GdiMetafile == aGraphic.GetType()))
+            if(GraphicType::Bitmap != aGraphic.GetType() && GraphicType::GdiMetafile != aGraphic.GetType())
             {
                 // no content if not bitmap or metafile
                 OSL_ENSURE(false, "No fill graphic in SfxItemSet (!)");

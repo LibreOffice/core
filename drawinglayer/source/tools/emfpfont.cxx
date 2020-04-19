@@ -56,7 +56,7 @@ namespace emfplushelper
         SAL_INFO("drawinglayer", "EMF+\tReserved: 0x" << reserved << std::dec);
         SAL_INFO("drawinglayer", "EMF+\tLength: " << length);
 
-        if (!(length > 0 && length < 0x4000))
+        if (length <= 0 || length >= 0x4000)
             return;
 
         rtl_uString *pStr = rtl_uString_alloc(length);

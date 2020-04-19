@@ -433,7 +433,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                                        INetURLObject::EncodeMechanism eMechanism,
                                        rtl_TextEncoding eCharset)
 {
-    if (!(rBegin <= rEnd && rEnd <= rText.getLength()))
+    if (rBegin > rEnd || rEnd > rText.getLength())
         return OUString();
 
     // Search for the first substring of [rBegin..rEnd[ that matches any of the

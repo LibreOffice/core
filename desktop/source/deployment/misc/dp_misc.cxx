@@ -79,8 +79,8 @@ OUString OfficePipeId::operator () ()
     OUString userPath;
     ::utl::Bootstrap::PathStatus aLocateResult =
     ::utl::Bootstrap::locateUserInstallation( userPath );
-    if (!(aLocateResult == ::utl::Bootstrap::PATH_EXISTS ||
-        aLocateResult == ::utl::Bootstrap::PATH_VALID))
+    if (aLocateResult != ::utl::Bootstrap::PATH_EXISTS &&
+        aLocateResult != ::utl::Bootstrap::PATH_VALID)
     {
         throw Exception("Extension Manager: Could not obtain path for UserInstallation.", nullptr);
     }

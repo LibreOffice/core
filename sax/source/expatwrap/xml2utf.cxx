@@ -117,7 +117,7 @@ sal_Int32 XMLFile2UTFConverter::readAndConvert( Sequence<sal_Int8> &seq , sal_In
 void XMLFile2UTFConverter::removeEncoding( Sequence<sal_Int8> &seq )
 {
     const sal_Int8 *pSource = seq.getArray();
-    if (!(seq.getLength() >= 5 && !strncmp(reinterpret_cast<const char *>(pSource), "<?xml", 5)))
+    if (seq.getLength() < 5 || strncmp(reinterpret_cast<const char *>(pSource), "<?xml", 5))
         return;
 
     // scan for encoding

@@ -983,7 +983,7 @@ namespace
                 if( i != i_end &&
                     pData->GetIndex( start ) == pData->GetIndex( i ) &&
                     !pOtherData->GetChanged( j ) &&
-                    !( start == preceding || other_start == other_preceding ))
+                    start != preceding && other_start != other_preceding )
                 {
                     pData->SetChanged( start++, false );
                     pData->SetChanged(  i );

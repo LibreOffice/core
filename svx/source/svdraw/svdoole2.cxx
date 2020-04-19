@@ -346,7 +346,7 @@ sal_Bool SAL_CALL SdrLightEmbeddedClient_Impl::canInplaceActivate()
         if ( !xObject.is() )
             throw uno::RuntimeException();
         // we don't want to switch directly from outplace to inplace mode
-        bRet = !( xObject->getCurrentState() == embed::EmbedStates::ACTIVE || mpObj->GetAspect() == embed::Aspects::MSOLE_ICON );
+        bRet = ( xObject->getCurrentState() != embed::EmbedStates::ACTIVE && mpObj->GetAspect() != embed::Aspects::MSOLE_ICON );
     } // if ( mpObj )
     return bRet;
 }

@@ -384,7 +384,7 @@ AccessController::AccessController( Reference< XComponentContext > const & xComp
     }
 
     // switch on caching for Mode::DynamicOnly and Mode::On (shareable multi-user process)
-    if (!(Mode::On == m_mode || Mode::DynamicOnly == m_mode))
+    if (Mode::On != m_mode && Mode::DynamicOnly != m_mode)
         return;
 
     sal_Int32 cacheSize = 0; // multi-user cache size

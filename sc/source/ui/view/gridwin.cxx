@@ -6099,7 +6099,7 @@ void ScGridWindow::UpdateCursorOverlay()
         SCCOL nX2 = nX + rMerge.GetColMerge() - 1;
         SCROW nY2 = nY + rMerge.GetRowMerge() - 1;
         // Check if the middle or tail of the merged range is visible.
-        if (!(maVisibleRange.mnCol1 <= nX2 && maVisibleRange.mnRow1 <= nY2))
+        if (maVisibleRange.mnCol1 > nX2 || maVisibleRange.mnRow1 > nY2)
             return;     // no visible part
     }
 

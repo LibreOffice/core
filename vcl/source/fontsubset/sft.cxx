@@ -756,7 +756,7 @@ static int BSplineToPSPath(ControlPoint const *srcA, int srcCount, PSPathElement
             }
             else
             {
-                if (!(x0 == curx && y0 == cury))
+                if (x0 != curx || y0 != cury)
                 {                              /* eliminate empty lines */
                     p = PSPathElement(PS_LINETO);
                     p.x1 = curx;
@@ -1814,7 +1814,7 @@ SFErrCodes CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname
 
     const char * const h41 = "(%s) cvn exch definefont pop\n";
 
-    if (!((nGlyphs > 0) && (nGlyphs <= 256))) return SFErrCodes::GlyphNum;
+    if ((nGlyphs <= 0) || (nGlyphs > 256)) return SFErrCodes::GlyphNum;
     if (!glyphArray) return SFErrCodes::BadArg;
     if (!fname) fname = ttf->psname;
 

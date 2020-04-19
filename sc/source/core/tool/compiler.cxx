@@ -3559,8 +3559,8 @@ bool ScCompiler::IsColRowName( const OUString& rName )
             {
                 const ScRangePair & rR = (*pRL)[iPair];
                 const ScRange& rNameRange = rR.GetRange(0);
-                if ( jThisTab && !(rNameRange.aStart.Tab() <= nThisTab &&
-                        nThisTab <= rNameRange.aEnd.Tab()) )
+                if ( jThisTab && (rNameRange.aStart.Tab() > nThisTab ||
+                        nThisTab > rNameRange.aEnd.Tab()) )
                     continue;   // for
                 ScCellIterator aIter( pDoc, rNameRange );
                 for (bool bHas = aIter.first(); bHas && !bInList; bHas = aIter.next())
@@ -3645,7 +3645,7 @@ bool ScCompiler::IsColRowName( const OUString& rName )
                                 nMax = std::max( nMyCol + std::abs( nC ), nMyRow + std::abs( nR ) );
                                 nDistance = nD;
                             }
-                            else if ( !(nRow < aOne.Row() && nMyRow >= static_cast<long>(aOne.Row())) )
+                            else if ( nRow >= aOne.Row() || nMyRow < static_cast<long>(aOne.Row()) )
                             {
                                 // upper left, only if not further up than the
                                 // current entry and nMyRow is below (CellIter
@@ -3709,7 +3709,7 @@ bool ScCompiler::IsColRowName( const OUString& rName )
                                     nMax = std::max( nMyCol + std::abs( nC ), nMyRow + std::abs( nR ) );
                                     nDistance = nD;
                                 }
-                                else if ( !(nRow < aOne.Row() && nMyRow >= static_cast<long>(aOne.Row())) )
+                                else if ( nRow >= aOne.Row() || nMyRow < static_cast<long>(aOne.Row()) )
                                 {
                                     // upper left, only if not further up than the
                                     // current entry and nMyRow is below (CellIter
@@ -4621,7 +4621,7 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
             default:
             break;
         }
-        if (!(eLastOp == ocOpen && eOp == ocClose) &&
+        if ((eLastOp != ocOpen || eOp != ocClose) &&
                 (eLastOp == ocOpen ||
                  eLastOp == ocSep ||
                  eLastOp == ocArrayRowSep ||

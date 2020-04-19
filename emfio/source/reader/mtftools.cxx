@@ -1386,7 +1386,7 @@ namespace emfio
     void MtfTools::DrawPolyBezier( tools::Polygon rPolygon, bool bTo, bool bRecordPath )
     {
         sal_uInt16 nPoints = rPolygon.GetSize();
-        if ( !(( nPoints >= 4 ) && ( ( ( nPoints - 4 ) % 3 ) == 0 )) )
+        if ( ( nPoints < 4 ) || ( ( ( nPoints - 4 ) % 3 ) != 0 ) )
             return;
 
         UpdateClipRegion();

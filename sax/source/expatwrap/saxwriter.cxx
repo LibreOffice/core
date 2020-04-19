@@ -464,7 +464,7 @@ bool SaxWriterHelper::convertToXML( const sal_Unicode * pStr,
             rPos = writeSequence();
 
         // reset left-over surrogate
-        if( ( nSurrogate != 0 ) && !( c >= 0xd800 && c < 0xdc00 ) )
+        if( ( nSurrogate != 0 ) && ( c < 0xd800 || c >= 0xdc00 ) )
         {
             OSL_ENSURE( nSurrogate != 0, "left-over Unicode surrogate" );
             nSurrogate = 0;
@@ -901,7 +901,7 @@ sal_Int32 calcXMLByteLength( const OUString& rStr,
         }
 
         // surrogate processing
-        if( ( nSurrogate != 0 ) && !( c >= 0xd800 && c < 0xdc00 ) )
+        if( ( nSurrogate != 0 ) && ( c < 0xd800 || c >= 0xdc00 ) )
             nSurrogate = 0;
     }
 

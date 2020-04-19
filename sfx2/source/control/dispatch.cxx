@@ -709,7 +709,7 @@ bool SfxDispatcher::GetShellAndSlot_Impl(sal_uInt16 nSlot, SfxShell** ppShell,
         if ( nullptr == (*ppSlot)->GetExecFnc() && bRealSlot )
             *ppSlot = (*ppShell)->GetInterface()->GetRealSlot(*ppSlot);
         // Check only real slots as enum slots don't have an execute function!
-        return !bRealSlot || !((nullptr == *ppSlot) || (nullptr == (*ppSlot)->GetExecFnc()) );
+        return !bRealSlot || ((nullptr != *ppSlot) && (nullptr != (*ppSlot)->GetExecFnc()) );
     }
 
     return false;

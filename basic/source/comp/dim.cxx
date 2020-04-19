@@ -316,7 +316,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
             if( pOld )
                 bRtlSym = true;
         }
-        if( pOld && !(eOp == SbiOpcode::REDIM_ || eOp == SbiOpcode::REDIMP_) )
+        if( pOld && eOp != SbiOpcode::REDIM_ && eOp != SbiOpcode::REDIMP_ )
         {
             if( pDef->GetScope() == SbLOCAL )
                 if (auto eOldScope = pOld->GetScope(); eOldScope != SbLOCAL && eOldScope != SbPARAM)
@@ -337,7 +337,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
                 }
                 else if( pOld->GetType() != ( eDefType = pDef->GetType() ) )
                 {
-                    if( !( eDefType == SbxVARIANT && !pDef->IsDefinedAs() ) )
+                    if( eDefType != SbxVARIANT || pDef->IsDefinedAs() )
                         bError_ = true;
                 }
                 if( bError_ )
@@ -352,7 +352,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
 
         // #36374: Create the variable in front of the distinction IsNew()
         // Otherwise error at Dim Identifier As New Type and option explicit
-        if( !bDefined && !(eOp == SbiOpcode::REDIM_ || eOp == SbiOpcode::REDIMP_)
+        if( !bDefined && eOp != SbiOpcode::REDIM_ && eOp != SbiOpcode::REDIMP_
                       && ( !bConst || pDef->GetScope() == SbGLOBAL ) )
         {
             // Declare variable or global constant

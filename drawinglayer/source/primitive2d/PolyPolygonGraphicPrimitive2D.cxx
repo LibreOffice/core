@@ -40,7 +40,7 @@ void PolyPolygonGraphicPrimitive2D::create2DDecomposition(
     const GraphicType aType(rGraphic.GetType());
 
     // is there a bitmap or a metafile (do we have content)?
-    if (!(GraphicType::Bitmap == aType || GraphicType::GdiMetafile == aType))
+    if (GraphicType::Bitmap != aType && GraphicType::GdiMetafile != aType)
         return;
 
     const Size aPrefSize(rGraphic.GetPrefSize());

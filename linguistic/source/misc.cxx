@@ -691,7 +691,7 @@ bool IsNumeric( const OUString &rText )
         for(sal_Int32 i = 0; i < nLen; ++i)
         {
             sal_Unicode cChar = rText[ i ];
-            if ( !('0' <= cChar  &&  cChar <= '9') )
+            if ( '0' > cChar  ||  cChar > '9' )
             {
                 bRes = false;
                 break;

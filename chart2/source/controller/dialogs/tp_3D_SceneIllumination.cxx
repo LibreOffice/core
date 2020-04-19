@@ -131,7 +131,7 @@ namespace
         const ::chart::LightSource & rLightSource,
         sal_Int32 nIndex )
     {
-        if( !(0 <= nIndex && nIndex < 8) )
+        if( 0 > nIndex || nIndex >= 8 )
             return;
 
         OUString aIndex( OUString::number( nIndex + 1 ));

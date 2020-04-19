@@ -1788,7 +1788,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                 if ( SfxItemState::SET == pArgs->GetItemState(SID_ATTR_VIEWLAYOUT, true, &pItem ))
                 {
                     const sal_uInt16 nColumns = static_cast<const SvxViewLayoutItem *>(pItem)->GetValue();
-                    const bool bBookMode  = !(0 == nColumns || 0 != (nColumns % 2)) &&
+                    const bool bBookMode  = (0 != nColumns && 0 == (nColumns % 2)) &&
                                             static_cast<const SvxViewLayoutItem *>(pItem)->IsBookMode();
 
                     SetViewLayout( nColumns, bBookMode );

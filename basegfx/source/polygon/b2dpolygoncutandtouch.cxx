@@ -278,7 +278,7 @@ namespace basegfx
             const sal_uInt32 nPointCountA(rCandidateA.count());
             const sal_uInt32 nPointCountB(rCandidateB.count());
 
-            if(!(nPointCountA > 1 && nPointCountB > 1))
+            if(nPointCountA <= 1 || nPointCountB <= 1)
                 return;
 
             const sal_uInt32 nEdgeCountA(nPointCountA - 1);

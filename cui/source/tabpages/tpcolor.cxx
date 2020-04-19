@@ -398,7 +398,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl, weld::Button&, void)
 {
     sal_uInt16 nId = m_xValSetColorList->GetSelectedItemId();
     size_t nPos = m_xValSetColorList->GetSelectItemPos();
-    if (!(m_xSelectPalette->get_active() == 0 && nPos != VALUESET_ITEM_NOTFOUND) )
+    if (m_xSelectPalette->get_active() != 0 || nPos == VALUESET_ITEM_NOTFOUND)
         return;
 
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_context));

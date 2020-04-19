@@ -606,7 +606,7 @@ void SdrEscherImport::RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic
        .ReadUInt16( nX )
        .ReadUInt16( nX );
 
-    if ( !(( nGlobalColorsCount <= 64 ) && ( nFillColorsCount <= 64 )) )
+    if ( ( nGlobalColorsCount > 64 ) || ( nFillColorsCount > 64 ) )
         return;
 
     if ( static_cast<sal_uInt32>( ( nGlobalColorsCount + nFillColorsCount ) * 44 + 12 ) != nRecLen )

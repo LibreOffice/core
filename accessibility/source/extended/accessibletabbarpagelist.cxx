@@ -88,7 +88,7 @@ namespace accessibility
 
     void AccessibleTabBarPageList::UpdatePageText( sal_Int32 i )
     {
-        if ( !(i >= 0 && i < static_cast<sal_Int32>(m_aAccessibleChildren.size())) )
+        if ( i < 0 || i >= static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
             return;
 
         Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
@@ -106,7 +106,7 @@ namespace accessibility
 
     void AccessibleTabBarPageList::InsertChild( sal_Int32 i )
     {
-        if ( !(i >= 0 && i <= static_cast<sal_Int32>(m_aAccessibleChildren.size())) )
+        if ( i < 0 || i > static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
             return;
 
         // insert entry in child list
@@ -125,7 +125,7 @@ namespace accessibility
 
     void AccessibleTabBarPageList::RemoveChild( sal_Int32 i )
     {
-        if ( !(i >= 0 && i < static_cast<sal_Int32>(m_aAccessibleChildren.size())) )
+        if ( i < 0 || i >= static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
             return;
 
         // get the accessible of the removed page

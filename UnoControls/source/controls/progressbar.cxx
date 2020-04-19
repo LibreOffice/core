@@ -221,7 +221,7 @@ void SAL_CALL ProgressBar::setRange ( sal_Int32 nMin, sal_Int32 nMax )
     }
 
     // assure that m_nValue is within the range
-    if (!(m_nMinRange < m_nValue  &&  m_nValue < m_nMaxRange))
+    if (m_nMinRange >= m_nValue  ||  m_nValue >= m_nMaxRange)
         m_nValue = m_nMinRange;
 
     impl_recalcRange ();

@@ -2810,7 +2810,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
         pNextTab = nNextTab < nTabCount ? aTabs[nNextTab].get() : nullptr;
     } while (pNextTab && pNextTab->IsDynamic());
 
-    if (!(!pNextTab || (GetTabPos( &rEntry, pNextTab ) > nDynTabPos)))
+    if (pNextTab && (GetTabPos( &rEntry, pNextTab ) <= nDynTabPos))
         return;
 
     if (!((nWindowStyle & WB_HASBUTTONSATROOT) || pModel->GetDepth(&rEntry) > 0))

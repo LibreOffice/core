@@ -1382,9 +1382,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                     pOwnClip->GetDocument()->GetClipStart( nClipStartX, nClipStartY );
                                     pOwnClip->GetDocument()->GetClipArea( nClipSizeX, nClipSizeY, true );
 
-                                    if ( !( pData->GetSimpleArea( nStartX, nStartY, nStartTab,
-                                                   nEndX, nEndY, nEndTab ) == SC_MARK_SIMPLE &&
-                                                   nStartTab == nEndTab ) )
+                                    if ( pData->GetSimpleArea( nStartX, nStartY, nStartTab,
+                                                   nEndX, nEndY, nEndTab ) != SC_MARK_SIMPLE ||
+                                                   nStartTab != nEndTab )
                                     {
                                         // the destination is not a simple range,
                                         // assume the destination as the current cell
