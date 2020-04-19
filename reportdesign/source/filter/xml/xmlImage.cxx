@@ -29,6 +29,7 @@
 #include "xmlHelper.hxx"
 #include <unotools/pathoptions.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <com/sun/star/awt/ImageScaleMode.hpp>
 

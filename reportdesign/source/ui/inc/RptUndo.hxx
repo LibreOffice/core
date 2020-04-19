@@ -19,6 +19,7 @@
 #ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_RPTUNDO_HXX
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_RPTUNDO_HXX
 
+#include <RptModel.hxx>
 #include <UndoActions.hxx>
 #include <functional>
 

@@ -30,6 +30,7 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 namespace rptxml
 {

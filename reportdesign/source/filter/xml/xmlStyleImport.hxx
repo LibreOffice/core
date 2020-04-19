@@ -21,16 +21,8 @@
 #define INCLUDED_REPORTDESIGN_SOURCE_FILTER_XML_XMLSTYLEIMPORT_HXX
 
 #include <rtl/ustring.hxx>
-#include <xmloff/xmlimp.hxx>
-#include <xmloff/xmlictxt.hxx>
-#include <xmloff/maptype.hxx>
 #include <xmloff/prstylei.hxx>
 #include <xmloff/xmlimppr.hxx>
-#include <xmloff/XMLTextMasterPageContext.hxx>
-#include <xmloff/XMLTextMasterStylesContext.hxx>
-#include <xmloff/contextid.hxx>
-#include <xmloff/controlpropertyhdl.hxx>
-#include <vector>
 
 namespace rptxml
 {

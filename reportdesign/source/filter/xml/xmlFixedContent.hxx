@@ -20,7 +20,6 @@
 #define INCLUDED_REPORTDESIGN_SOURCE_FILTER_XML_XMLFIXEDCONTENT_HXX
 
 #include "xmlReportElementBase.hxx"
-#include <com/sun/star/drawing/XShapes.hpp>
 
 
 namespace rptxml

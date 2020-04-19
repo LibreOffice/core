@@ -26,6 +26,7 @@
 #include "xmlComponent.hxx"
 #include <strings.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 namespace rptxml
 {

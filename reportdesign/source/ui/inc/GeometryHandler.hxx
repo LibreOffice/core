@@ -33,10 +33,10 @@
 #include <com/sun/star/report/XFunctionsSupplier.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
+#include <map>
 #include <memory>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/listenernotification.hxx>
-#include "metadata.hxx"
 
 
 namespace rptui

@@ -25,7 +25,6 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/report/XFormatCondition.hpp>
 #include <com/sun/star/container/XContainer.hpp>
-#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <comphelper/interfacecontainer2.hxx>

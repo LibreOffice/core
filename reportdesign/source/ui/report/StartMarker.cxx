@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <StartMarker.hxx>
+#include <UITools.hxx>
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
 #include <bitmaps.hlst>

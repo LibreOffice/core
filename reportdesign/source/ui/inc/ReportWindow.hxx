@@ -21,10 +21,8 @@
 
 #include <com/sun/star/report/XSection.hpp>
 #include "ReportDefines.hxx"
-#include "StartMarker.hxx"
 #include <o3tl/deleter.hxx>
 #include <svtools/ruler.hxx>
-#include <svx/svdedtv.hxx>
 #include <sfx2/zoomitem.hxx>
 
 #include <memory>

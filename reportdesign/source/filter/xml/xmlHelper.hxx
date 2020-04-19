@@ -22,7 +22,7 @@
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/contextid.hxx>
 #include <xmloff/controlpropertyhdl.hxx>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <memory>
 

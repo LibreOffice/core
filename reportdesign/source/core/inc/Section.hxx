@@ -23,7 +23,6 @@
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/uno3.hxx>
-#include <comphelper/types.hxx>
 #include <cppuhelper/propertysetmixin.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -33,7 +32,6 @@
 #include <com/sun/star/form/XFormsSupplier2.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <rtl/ref.hxx>
 
 namespace reportdesign
 {

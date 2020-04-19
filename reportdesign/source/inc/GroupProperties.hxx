@@ -19,6 +19,8 @@
 #ifndef INCLUDED_REPORTDESIGN_SOURCE_INC_GROUPPROPERTIES_HXX
 #define INCLUDED_REPORTDESIGN_SOURCE_INC_GROUPPROPERTIES_HXX
 
+#include <rtl/ustring.hxx>
+
 namespace rptshared
 {
     /** struct for the group properties

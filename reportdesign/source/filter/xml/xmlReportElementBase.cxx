@@ -24,6 +24,7 @@
 #include "xmlReportElement.hxx"
 #include "xmlEnums.hxx"
 #include "xmlTable.hxx"
+#include <osl/diagnose.h>
 
 namespace rptxml
 {

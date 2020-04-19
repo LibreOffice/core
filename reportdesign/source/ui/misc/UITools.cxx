@@ -78,6 +78,7 @@
 #include <svx/svxdlg.hxx>
 #include <svx/unomid.hxx>
 #include <svx/unoprov.hxx>
+#include <svx/svxids.hrc>
 
 #include <unotools/pathoptions.hxx>
 #include <unotools/charclass.hxx>

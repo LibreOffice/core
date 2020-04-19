@@ -54,6 +54,7 @@
 #include <RptDef.hxx>
 #include <vcl/svapp.hxx>
 #include <sal/macros.h>
+#include <osl/diagnose.h>
 
 #include <iterator>
 

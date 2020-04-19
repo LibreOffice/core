@@ -19,6 +19,7 @@
 #include <ReportControlModel.hxx>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 namespace reportdesign
 {
 using namespace com::sun::star;

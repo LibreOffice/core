@@ -27,6 +27,7 @@
 #include <core_resource.hxx>
 #include <Tools.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/types.hxx>
 #include <Functions.hxx>
 
 

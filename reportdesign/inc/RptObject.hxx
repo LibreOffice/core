@@ -26,11 +26,8 @@
 
 
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/report/XReportComponent.hpp>
 #include <com/sun/star/report/XSection.hpp>
-#include <svx/svdocirc.hxx>
-#include <svx/svdogrp.hxx>
 #include <svx/svdoashp.hxx>
 
 #include <map>

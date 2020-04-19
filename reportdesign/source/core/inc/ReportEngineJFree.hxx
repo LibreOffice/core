@@ -21,18 +21,13 @@
 
 #include <sal/config.h>
 
-#include <map>
-
 #include <com/sun/star/report/XReportEngine.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/uno3.hxx>
-#include <comphelper/types.hxx>
 #include <cppuhelper/propertysetmixin.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <rtl/ref.hxx>
 
 namespace reportdesign
 {

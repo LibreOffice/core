@@ -20,6 +20,8 @@
 #ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_MARKEDSECTION_HXX
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_MARKEDSECTION_HXX
 
+#include <sal/types.h>
+
 namespace rptui
 {
     class OSectionWindow;

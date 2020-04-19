@@ -22,18 +22,13 @@
 #include <com/sun/star/report/XSection.hpp>
 #include <vcl/window.hxx>
 #include <vcl/split.hxx>
-#include <svtools/colorcfg.hxx>
 #include <comphelper/propmultiplex.hxx>
 #include <cppuhelper/basemutex.hxx>
 
-#include "UITools.hxx"
 #include <UndoActions.hxx>
 #include "StartMarker.hxx"
 #include "EndMarker.hxx"
 #include "ReportSection.hxx"
-
-#include <list>
-#include <map>
 
 namespace comphelper
 {

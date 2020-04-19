@@ -21,15 +21,12 @@
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_FIXEDTEXTCOLOR_HXX
 
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
-#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/awt/XControl.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/report/XFixedText.hpp>
 #include <tools/color.hxx>
 
 #include "IReportControllerObserver.hxx"
-#include <vector>
 
 namespace rptui
 {

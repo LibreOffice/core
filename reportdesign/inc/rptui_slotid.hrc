@@ -20,7 +20,7 @@
 #ifndef INCLUDED_REPORTDESIGN_INC_RPTUI_SLOTID_HRC
 #define INCLUDED_REPORTDESIGN_INC_RPTUI_SLOTID_HRC
 
-#include <svx/svxids.hrc>
+#include <svl/solar.hrc>
 
 #define SID_PAGEHEADERFOOTER                    ( SID_RPTUI_START +   0 )
 #define SID_REPORTHEADERFOOTER                  ( SID_RPTUI_START +   1 )

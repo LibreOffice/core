@@ -51,6 +51,7 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
+#include <xmloff/XMLTextMasterStylesContext.hxx>
 #include <sfx2/docfile.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>

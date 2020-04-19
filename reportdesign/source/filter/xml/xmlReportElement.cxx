@@ -27,7 +27,7 @@
 #include "xmlCondPrtExpr.hxx"
 #include "xmlFormatCondition.hxx"
 #include <sal/log.hxx>
-
+#include <osl/diagnose.h>
 
 namespace rptxml
 {

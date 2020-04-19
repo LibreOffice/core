@@ -23,12 +23,12 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 
-#include "Section.hxx"
 #include <strings.hxx>
+#include <osl/diagnose.h>
+#include <comphelper/uno3.hxx>
 
 namespace reportdesign
 {

@@ -21,12 +21,10 @@
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_FORMATTEDFIELDBEAUTIFIER_HXX
 
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
-#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/report/XReportComponent.hpp>
 #include <tools/color.hxx>
 
-#include <vector>
 #include "IReportControllerObserver.hxx"
 
 namespace rptui

@@ -32,6 +32,7 @@
 #include <strings.hxx>
 #include "xmlTable.hxx"
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 
 namespace rptxml
