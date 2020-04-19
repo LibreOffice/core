@@ -662,6 +662,15 @@ DECLARE_OOXMLEXPORT_TEST(testDropDownFieldEntryLimit, "tdf126792.odt" )
         CPPUNIT_ASSERT_EQUAL(sal_Int32(25), vListEntries.getLength());
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf132185, "tdf132185.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/footer1.xml");
+    // Since the default (without xml:space attribute) is to ignore leading and trailing spaces,
+    // " PAGE \\* roman " will get imported as "PAGE \\* roman". This is also valid, and must be
+    // treated accordingly. "roman" was ignored before the fix, exporting only " PAGE ".
+    assertXPathContent(pXmlDoc, "/w:ftr/w:p/w:r[2]/w:instrText", " PAGE \\* roman ");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
