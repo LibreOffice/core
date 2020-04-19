@@ -22,6 +22,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <rtl/math.hxx>
 
 #include <math.h>
 

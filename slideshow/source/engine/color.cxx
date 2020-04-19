@@ -22,6 +22,7 @@
 #include <rgbcolor.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
+#include <rtl/math.hxx>
 
 #include <cmath>
 #include <algorithm>

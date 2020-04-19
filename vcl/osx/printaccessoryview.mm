@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 
 #include <i18nlangtag/languagetag.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <vcl/print.hxx>
 #include <vcl/image.hxx>
 #include <vcl/virdev.hxx>

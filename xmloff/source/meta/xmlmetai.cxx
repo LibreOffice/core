@@ -31,6 +31,7 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/character.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>

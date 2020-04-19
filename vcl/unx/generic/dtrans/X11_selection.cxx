@@ -64,6 +64,7 @@
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <rtl/tencinfo.h>
+#include <rtl/ustrbuf.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/solarmutex.hxx>

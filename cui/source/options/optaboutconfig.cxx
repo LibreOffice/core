@@ -20,6 +20,7 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
+#include <rtl/ustrbuf.hxx>
 #include <unotools/textsearch.hxx>
 #include <vcl/event.hxx>
 #include <sal/log.hxx>

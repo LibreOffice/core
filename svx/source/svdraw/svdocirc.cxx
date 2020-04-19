@@ -23,6 +23,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <math.h>
+#include <rtl/ustrbuf.hxx>
 
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>

@@ -23,6 +23,7 @@
 #include <boost/cast.hpp>
 
 #include <basegfx/range/b2drectangle.hxx>
+#include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/canvastools.hxx>
 #include <vcl/outdev.hxx>

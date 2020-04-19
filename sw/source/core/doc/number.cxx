@@ -44,6 +44,7 @@
 #include <unordered_map>
 #include <libxml/xmlwriter.h>
 
+#include <rtl/ustrbuf.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/saveopt.hxx>
 #include <osl/diagnose.h>

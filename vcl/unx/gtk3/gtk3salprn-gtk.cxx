@@ -27,6 +27,7 @@
 
 #include <officecfg/Office/Common.hxx>
 
+#include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 

@@ -24,6 +24,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <rtl/math.hxx>
 #include <vector>
 #include <algorithm>
 

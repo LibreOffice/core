@@ -24,6 +24,7 @@
 #include <editeng/svxenum.hxx>
 #include <editeng/editids.hrc>
 #include <osl/diagnose.h>
+#include <rtl/ustrbuf.hxx>
 
 #include <tools/mapunit.hxx>
 #include <tools/globname.hxx>

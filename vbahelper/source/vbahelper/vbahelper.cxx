@@ -60,6 +60,7 @@
 #include <basic/sbmod.hxx>
 #include <basic/sbuno.hxx>
 #include <basic/sberrors.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sal/log.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

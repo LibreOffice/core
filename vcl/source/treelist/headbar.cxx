@@ -18,6 +18,7 @@
  */
 
 #include <vcl/headbar.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 
 #include <vcl/svapp.hxx>

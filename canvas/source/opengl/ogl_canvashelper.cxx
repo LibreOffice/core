@@ -19,6 +19,7 @@
 #include <basegfx/utils/canvastools.hxx>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <rtl/crc.h>
+#include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/font.hxx>
 #include <vcl/metric.hxx>

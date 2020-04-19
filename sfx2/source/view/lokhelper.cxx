@@ -12,6 +12,8 @@
 #include <com/sun/star/frame/Desktop.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <vcl/lok.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/commandevent.hxx>

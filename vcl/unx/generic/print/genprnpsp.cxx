@@ -36,6 +36,7 @@
 
 #include <comphelper/fileurl.hxx>
 #include <o3tl/safeint.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 

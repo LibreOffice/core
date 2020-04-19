@@ -30,6 +30,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 
+#include <rtl/math.hxx>
 #include <tools/color.hxx>
 #include <sal/log.hxx>
 

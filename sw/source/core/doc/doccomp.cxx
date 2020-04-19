@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <rtl/ustrbuf.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>

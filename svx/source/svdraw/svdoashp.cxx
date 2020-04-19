@@ -81,6 +81,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <svdobjplusdata.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include "presetooxhandleadjustmentrelations.hxx"
 

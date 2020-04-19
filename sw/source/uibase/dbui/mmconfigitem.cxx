@@ -34,6 +34,7 @@
 #include <comphelper/types.hxx>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <comphelper/sequence.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <unotools/configitem.hxx>
 #include <tools/diagnose_ex.h>

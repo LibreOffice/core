@@ -39,6 +39,7 @@
 
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <svtools/restartdialog.hxx>
 

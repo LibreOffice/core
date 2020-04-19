@@ -28,6 +28,7 @@
 #include <svx/strings.hrc>
 #include <sdr/properties/rectangleproperties.hxx>
 #include <sdr/contact/viewcontactofsdrrectobj.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include <vcl/ptrstyle.hxx>
 

@@ -29,6 +29,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/image.hxx>
 #include <vcl/virdev.hxx>
+#include <rtl/math.hxx>
 #include <sal/macros.h>
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>

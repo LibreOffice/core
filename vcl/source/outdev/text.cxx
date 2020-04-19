@@ -26,6 +26,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <osl/file.h>
+#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <tools/lineend.hxx>
 #include <tools/debug.hxx>

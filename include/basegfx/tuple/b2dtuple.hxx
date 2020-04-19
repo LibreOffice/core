@@ -229,8 +229,8 @@ namespace basegfx
     inline B2DTuple average(const B2DTuple& rOld1, const B2DTuple& rOld2)
     {
         return B2DTuple(
-            rtl::math::approxEqual(rOld1.getX(), rOld2.getX()) ? rOld1.getX() : (rOld1.getX() + rOld2.getX()) * 0.5,
-            rtl::math::approxEqual(rOld1.getY(), rOld2.getY()) ? rOld1.getY() : (rOld1.getY() + rOld2.getY()) * 0.5);
+            rtl_math_approxEqual(rOld1.getX(), rOld2.getX()) ? rOld1.getX() : (rOld1.getX() + rOld2.getX()) * 0.5,
+            rtl_math_approxEqual(rOld1.getY(), rOld2.getY()) ? rOld1.getY() : (rOld1.getY() + rOld2.getY()) * 0.5);
     }
 
     inline B2DTuple operator+(const B2DTuple& rTupA, const B2DTuple& rTupB)

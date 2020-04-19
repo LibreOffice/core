@@ -20,6 +20,7 @@
 #include <unotools/streamwrap.hxx>
 
 #include <sfx2/lnkbase.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <tools/helpers.hxx>
 #include <tools/stream.hxx>
 #include <sot/exchange.hxx>
