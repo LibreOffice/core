@@ -55,7 +55,7 @@ class ImpGraphic final
 private:
 
     GDIMetaFile                  maMetaFile;
-    BitmapEx                     maEx;
+    BitmapEx                     maBitmapEx;
     /// If maEx is empty, this preferred size will be set on it when it gets initialized.
     Size                         maExPrefSize;
     ImpSwapInfo                  maSwapInfo;
