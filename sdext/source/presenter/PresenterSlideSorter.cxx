@@ -497,7 +497,7 @@ void SAL_CALL PresenterSlideSorter::mouseReleased (const css::awt::MouseEvent& r
     const geometry::RealPoint2D aPosition(rTemp.X, rEvent.Y);
     const sal_Int32 nSlideIndex (mpLayout->GetSlideIndexForPosition(aPosition));
 
-    if (!(nSlideIndex == mnSlideIndexMousePressed && mnSlideIndexMousePressed >= 0))
+    if (nSlideIndex != mnSlideIndexMousePressed || mnSlideIndexMousePressed < 0)
         return;
 
     switch (rEvent.ClickCount)

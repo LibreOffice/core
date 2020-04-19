@@ -2984,7 +2984,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
         bRes |= ImpNumberFillWithThousands(sStr, fNumber, k, j, nIx,
                                            rInfo.nCntPre);
     }
-    if (bSign && !(nFrac == 0 && fNum == 0.0))
+    if (bSign && (nFrac != 0 || fNum != 0.0))
     {
         sBuff.insert(0, '-'); // Not -0
     }
@@ -5561,8 +5561,8 @@ OUString SvNumberformat::impTransliterateImpl(const OUString& rStr,
         nField = rNum.GetParams().indexOf(rKeywords[nDateKey] + "=", ++nField);
     }
     while (nField != -1 && nField != 0 &&
-            !(rNum.GetParams()[nField - 1] == ',' ||
-              rNum.GetParams()[nField - 1] == ' '));
+            (rNum.GetParams()[nField - 1] != ',' &&
+              rNum.GetParams()[nField - 1] != ' '));
 
     // no format specified for actual keyword
     if (nField == -1)
