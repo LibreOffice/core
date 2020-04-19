@@ -27,10 +27,27 @@
 
 #include "kde5_filepicker.hxx"
 
+#include <com/sun/star/ui/dialogs/ControlActions.hpp>
+
+using namespace ::com::sun::star::ui::dialogs;
+
 void readIpcArg(std::istream& stream, QString& string)
 {
     const auto buffer = readIpcStringArg(stream);
     string = QString::fromUtf8(buffer.data(), buffer.size());
+}
+
+void readIpcArg(std::istream& stream, QStringList& strings)
+{
+    uint32_t numStrings = 0;
+    stream >> numStrings;
+    stream.ignore(); // skip space;
+    for (size_t i = 0; i < numStrings; ++i)
+    {
+        QString str;
+        readIpcArg(stream, str);
+        strings.append(str);
+    }
 }
 
 void sendIpcArg(std::ostream& stream, const QString& string)
@@ -108,11 +125,44 @@ static void readCommandArgs(Commands command, QList<QVariant>& args)
         {
             sal_Int16 controlId = 0;
             sal_Int16 nControlAction = 0;
-            bool value = false;
-            readIpcArgs(std::cin, controlId, nControlAction, value);
+            readIpcArgs(std::cin, controlId, nControlAction);
             args.append(controlId);
             args.append(nControlAction);
-            args.append(value);
+            switch (nControlAction)
+            {
+                case ControlActions::ADD_ITEM:
+                {
+                    QString string;
+                    readIpcArg(std::cin, string);
+                    args.append(string);
+                    break;
+                }
+                case ControlActions::ADD_ITEMS:
+                {
+                    QStringList strings;
+                    readIpcArg(std::cin, strings);
+                    args.append(strings);
+                    break;
+                }
+                case ControlActions::DELETE_ITEM:
+                case ControlActions::SET_SELECT_ITEM:
+                {
+                    sal_Int32 nPos;
+                    readIpcArg(std::cin, nPos);
+                    args.append(nPos);
+                    break;
+                }
+                case ControlActions::DELETE_ITEMS:
+                    args.append(QVariant());
+                    break;
+                default:
+                {
+                    bool value = false;
+                    readIpcArg(std::cin, value);
+                    args.append(value);
+                    break;
+                }
+            }
             break;
         }
         case Commands::GetValue:
@@ -150,6 +200,7 @@ static void readCommandArgs(Commands command, QList<QVariant>& args)
             break;
         }
         case Commands::AddCheckBox:
+        case Commands::AddComboBox:
         {
             sal_Int16 controlId = 0;
             bool hidden = false;
@@ -308,16 +359,26 @@ bool FilePickerIpc::handleCommand(uint64_t messageId, Commands command, QList<QV
         {
             sal_Int16 controlId = args.takeFirst().value<sal_Int16>();
             sal_Int16 nControlAction = args.takeFirst().value<sal_Int16>();
-            bool value = args.takeFirst().toBool();
-            m_filePicker->setValue(controlId, nControlAction, value);
+            m_filePicker->setValue(controlId, nControlAction, args.takeFirst());
             return true;
         }
         case Commands::GetValue:
         {
             sal_Int16 controlId = args.takeFirst().value<sal_Int16>();
             sal_Int16 nControlAction = args.takeFirst().value<sal_Int16>();
-            sendIpcArgs(std::cout, messageId, m_filePicker->getValue(controlId, nControlAction));
-            return true;
+            const QVariant value = m_filePicker->getValue(controlId, nControlAction);
+            const auto type = static_cast<QMetaType::Type>(value.type());
+
+            if (type == QMetaType::Bool)
+                sendIpcArgs(std::cout, messageId, value.toBool());
+            else if (type == QMetaType::QString)
+                sendIpcArgs(std::cout, messageId, value.toString());
+            else if (type == QMetaType::QStringList)
+                sendIpcArgs(std::cout, messageId, value.toStringList());
+            else if (value.canConvert<sal_Int32>())
+                sendIpcArgs(std::cout, messageId, value.value<sal_Int32>());
+            else
+                sendIpcArgs(std::cout, messageId, false);
         }
         case Commands::EnableControl:
         {
@@ -340,11 +401,15 @@ bool FilePickerIpc::handleCommand(uint64_t messageId, Commands command, QList<QV
             return true;
         }
         case Commands::AddCheckBox:
+        case Commands::AddComboBox:
         {
             sal_Int16 controlId = args.takeFirst().value<sal_Int16>();
             bool hidden = args.takeFirst().toBool();
             QString label = args.takeFirst().toString();
-            m_filePicker->addCheckBox(controlId, label, hidden);
+            if (command == Commands::AddCheckBox)
+                m_filePicker->addCheckBox(controlId, label, hidden);
+            else
+                m_filePicker->addComboBox(controlId, label, hidden);
             return true;
         }
         case Commands::Initialize:

@@ -27,10 +27,16 @@
 #include <QtCore/QDebug>
 #include <QtCore/QUrl>
 #include <QtWidgets/QCheckBox>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QApplication>
+
+#include <com/sun/star/ui/dialogs/ControlActions.hpp>
+
+using namespace ::com::sun::star::ui::dialogs;
 
 // KDE5FilePicker
 
@@ -144,26 +150,109 @@ QString KDE5FilePicker::getCurrentFilter() const
     return filter;
 }
 
-void KDE5FilePicker::setValue(sal_Int16 controlId, sal_Int16 /*nControlAction*/, bool value)
+static void handleSetListValue(QComboBox* pWidget, sal_Int16 nControlAction, const QVariant& rValue)
+{
+    switch (nControlAction)
+    {
+        case ControlActions::ADD_ITEM:
+        {
+            pWidget->addItem(rValue.toString());
+            break;
+        }
+        case ControlActions::ADD_ITEMS:
+        {
+            pWidget->addItems(rValue.toStringList());
+            break;
+        }
+        case ControlActions::DELETE_ITEM:
+        {
+            pWidget->removeItem(rValue.value<sal_Int32>());
+            break;
+        }
+        case ControlActions::DELETE_ITEMS:
+        {
+            pWidget->clear();
+            break;
+        }
+        case ControlActions::SET_SELECT_ITEM:
+        {
+            pWidget->setCurrentIndex(rValue.value<sal_Int32>());
+            break;
+        }
+        default:
+            qWarning() << "undocumented/unimplemented ControlAction for a list " << nControlAction;
+            break;
+    }
+
+    pWidget->setEnabled(pWidget->count() > 1);
+}
+
+void KDE5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlAction, const QVariant& value)
 {
     if (_customWidgets.contains(controlId))
     {
-        QCheckBox* cb = dynamic_cast<QCheckBox*>(_customWidgets.value(controlId));
+        QWidget* widget = _customWidgets.value(controlId);
+        QCheckBox* cb = dynamic_cast<QCheckBox*>(widget);
         if (cb)
-            cb->setChecked(value);
+            cb->setChecked(value.toBool());
+        else
+        {
+            QComboBox* combo = dynamic_cast<QComboBox*>(widget);
+            if (combo)
+                handleSetListValue(combo, nControlAction, value);
+        }
     }
     else
         qWarning() << "set value on unknown control" << controlId;
 }
 
-bool KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 /*nControlAction*/) const
+static QVariant handleGetListValue(QComboBox* pWidget, sal_Int16 nControlAction)
 {
-    bool ret = false;
+    QVariant ret;
+    switch (nControlAction)
+    {
+        case ControlActions::GET_ITEMS:
+        {
+            QStringList items;
+            for (int i = 0; i < pWidget->count(); ++i)
+                items.append(pWidget->itemText(i));
+            ret = items;
+            break;
+        }
+        case ControlActions::GET_SELECTED_ITEM:
+        {
+            if (!pWidget->currentText().isEmpty())
+                ret = pWidget->currentText();
+            break;
+        }
+        case ControlActions::GET_SELECTED_ITEM_INDEX:
+        {
+            if (pWidget->currentIndex() >= 0)
+                ret = static_cast<sal_Int32>(pWidget->currentIndex());
+            break;
+        }
+        default:
+            qWarning() << "undocumented/unimplemented ControlAction for a list " << nControlAction;
+            break;
+    }
+    return ret;
+}
+
+QVariant KDE5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction) const
+{
+    QVariant ret = false;
     if (_customWidgets.contains(controlId))
     {
-        QCheckBox* cb = dynamic_cast<QCheckBox*>(_customWidgets.value(controlId));
+        QWidget* widget = _customWidgets.value(controlId);
+        QCheckBox* cb = dynamic_cast<QCheckBox*>(widget);
         if (cb)
             ret = cb->isChecked();
+        else
+        {
+            QComboBox* combo = dynamic_cast<QComboBox*>(widget);
+            if (combo)
+                ret = handleGetListValue(combo, nControlAction);
+        }
     }
     else
         qWarning() << "get value on unknown control" << controlId;
@@ -216,6 +305,25 @@ void KDE5FilePicker::addCheckBox(sal_Int16 controlId, const QString& label, bool
     if (!hidden)
     {
         _layout->addWidget(widget);
+    }
+    _customWidgets.insert(controlId, widget);
+}
+
+void KDE5FilePicker::addComboBox(sal_Int16 controlId, const QString& text, bool hidden)
+{
+    auto resString = text;
+    resString.replace('~', '&');
+
+    auto label = new QLabel(resString, _extraControls);
+    auto widget = new QComboBox(_extraControls);
+    label->setBuddy(widget);
+    label->setHidden(hidden);
+    widget->setHidden(hidden);
+    if (!hidden)
+    {
+        const int row = _layout->rowCount();
+        _layout->addWidget(label, row, 0);
+        _layout->addWidget(widget, row, 1);
     }
     _customWidgets.insert(controlId, widget);
 }

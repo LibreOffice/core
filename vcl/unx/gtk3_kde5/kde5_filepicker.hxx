@@ -77,8 +77,8 @@ public:
     QString getCurrentFilter() const;
 
     // XFilePickerControlAccess functions
-    void setValue(sal_Int16 nControlId, sal_Int16 nControlAction, bool rValue);
-    bool getValue(sal_Int16 nControlId, sal_Int16 nControlAction) const;
+    void setValue(sal_Int16 nControlId, sal_Int16 nControlAction, const QVariant& rValue);
+    QVariant getValue(sal_Int16 nControlId, sal_Int16 nControlAction) const;
     void enableControl(sal_Int16 nControlId, bool bEnable);
     void setLabel(sal_Int16 nControlId, const QString& rLabel);
     QString getLabel(sal_Int16 nControlId) const;
@@ -91,6 +91,7 @@ public:
 
     //add a custom control widget to the file dialog
     void addCheckBox(sal_Int16 nControlId, const QString& label, bool hidden);
+    void addComboBox(sal_Int16 nControlId, const QString& text, bool hidden);
 
     void setWinId(sal_uInt64 winId);
 

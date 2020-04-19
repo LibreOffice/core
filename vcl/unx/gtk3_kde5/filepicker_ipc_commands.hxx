@@ -53,6 +53,7 @@ enum class Commands : uint16_t
     SetLabel,
     GetLabel,
     AddCheckBox,
+    AddComboBox,
     Initialize,
     Quit,
     EnablePickFolderMode,
@@ -94,6 +95,12 @@ inline void readIpcArg(std::istream& stream, sal_Int16& value)
     stream.ignore(); // skip space
 }
 
+inline void readIpcArg(std::istream& stream, sal_Int32& value)
+{
+    stream >> value;
+    stream.ignore(); // skip space
+}
+
 inline void readIpcArg(std::istream& stream, sal_uIntPtr& value)
 {
     stream >> value;
@@ -122,6 +129,7 @@ inline void readIpcArgs(std::istream& stream, T& arg, Args&... args)
 
 void sendIpcArg(std::ostream& stream, const OUString& string);
 void sendIpcArg(std::ostream& stream, const QString& string);
+void sendIpcArg(std::ostream& stream, const css::uno::Sequence<OUString>& seq);
 
 inline void sendIpcStringArg(std::ostream& stream, uint32_t length, const char* string)
 {
@@ -140,6 +148,8 @@ void sendIpcArg(std::ostream&, sal_Bool) = delete;
 inline void sendIpcArg(std::ostream& stream, bool value) { stream << value << ' '; }
 
 inline void sendIpcArg(std::ostream& stream, sal_Int16 value) { stream << value << ' '; }
+
+inline void sendIpcArg(std::ostream& stream, sal_Int32 value) { stream << value << ' '; }
 
 inline void sendIpcArg(std::ostream& stream, sal_uIntPtr value) { stream << value << ' '; }
 
