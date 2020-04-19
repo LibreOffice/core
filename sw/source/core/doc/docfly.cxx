@@ -79,10 +79,10 @@ size_t SwDoc::GetFlyCount( FlyCntType eType, bool bIgnoreTextBoxes ) const
         if (bIgnoreTextBoxes && SwTextBoxHelper::isTextBox(pFlyFormat, RES_FLYFRMFMT))
             continue;
 
-        if( RES_FLYFRMFMT == pFlyFormat->Which()
-            && nullptr != ( pIdx = pFlyFormat->GetContent().GetContentIdx() )
-            && pIdx->GetNodes().IsDocNodes()
-            )
+        if( RES_FLYFRMFMT != pFlyFormat->Which() )
+            continue;
+        pIdx = pFlyFormat->GetContent().GetContentIdx();
+        if( pIdx && pIdx->GetNodes().IsDocNodes() )
         {
             const SwNode* pNd = GetNodes()[ pIdx->GetIndex() + 1 ];
 
@@ -127,10 +127,10 @@ SwFrameFormat* SwDoc::GetFlyNum( size_t nIdx, FlyCntType eType, bool bIgnoreText
         if (bIgnoreTextBoxes && SwTextBoxHelper::isTextBox(pFlyFormat, RES_FLYFRMFMT))
             continue;
 
-        if( RES_FLYFRMFMT == pFlyFormat->Which()
-            && nullptr != ( pIdx = pFlyFormat->GetContent().GetContentIdx() )
-            && pIdx->GetNodes().IsDocNodes()
-            )
+        if( RES_FLYFRMFMT != pFlyFormat->Which() )
+            continue;
+        pIdx = pFlyFormat->GetContent().GetContentIdx();
+        if( pIdx && pIdx->GetNodes().IsDocNodes() )
         {
             const SwNode* pNd = GetNodes()[ pIdx->GetIndex() + 1 ];
             switch( eType )
@@ -1014,14 +1014,14 @@ SwChainRet SwDoc::Chainable( const SwFrameFormat &rSource, const SwFrameFormat &
     for( auto pSpzFrameFm : *GetSpzFrameFormats() )
     {
         const SwFormatAnchor& rAnchor = pSpzFrameFm->GetAnchor();
-        sal_uLong nTstSttNd;
         // #i20622# - to-frame anchored objects are allowed.
-        if ( ((rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA) ||
-              (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR)) &&
-             nullptr != rAnchor.GetContentAnchor() &&
-             nFlySttNd <= ( nTstSttNd =
-                         rAnchor.GetContentAnchor()->nNode.GetIndex() ) &&
-             nTstSttNd < nFlySttNd + 2 )
+        if ( (rAnchor.GetAnchorId() != RndStdIds::FLY_AT_PARA) &&
+             (rAnchor.GetAnchorId() != RndStdIds::FLY_AT_CHAR) )
+            continue;
+        if ( nullptr == rAnchor.GetContentAnchor() )
+            continue;
+        sal_uLong nTstSttNd = rAnchor.GetContentAnchor()->nNode.GetIndex();
+        if( nFlySttNd <= nTstSttNd && nTstSttNd < nFlySttNd + 2 )
         {
             return SwChainRet::NOT_EMPTY;
         }
