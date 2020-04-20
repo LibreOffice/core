@@ -57,6 +57,7 @@ public:
     virtual void            SetFormulaMode( bool bSet ) = 0;
     virtual bool            IsInputActive() = 0;
     virtual void            TextGrabFocus() = 0;
+    virtual long            GetNumLines() const = 0;
 };
 
 class ScTextWnd : public ScTextWndBase, public DragSourceHelper     // edit window
@@ -95,7 +96,7 @@ public:
     long GetPixelHeightForLines(long nLines);
     long GetEditEngTxtHeight() const;
 
-    long GetNumLines() const { return mnLines; }
+    virtual long GetNumLines() const override { return mnLines; }
     void SetNumLines(long nLines);
     long GetLastNumExpandedLines() const { return mnLastExpandedLines; }
 
@@ -198,7 +199,7 @@ public:
     virtual void            InsertAccessibleTextData(ScAccessibleEditLineTextData& rTextData) override;
     virtual EditView*       GetEditView() override;
     long                    GetLastNumExpandedLines() const;
-    long                    GetNumLines() const;
+    virtual long            GetNumLines() const override;
     long                    GetPixelHeightForLines(long nLines);
     ScrollBar&              GetScrollBar();
     virtual const OUString& GetTextString() const override;
@@ -243,7 +244,7 @@ public:
     bool                    IsInputActive() override;
     void                    IncrementVerticalSize();
     void                    DecrementVerticalSize();
-    long                    GetNumLines() const { return maTextWndGroup->GetNumLines(); }
+    virtual long            GetNumLines() const override { return maTextWndGroup->GetNumLines(); }
     long                    GetVertOffset() const { return  mnVertOffset; }
 
 private:
