@@ -1987,7 +1987,7 @@ void Desktop::OpenClients()
 #endif
 
 #if HAVE_FEATURE_BREAKPAD
-    if (CrashReporter::crashReportInfoExists())
+    if (CrashReporter::IsDumpEnable() && CrashReporter::crashReportInfoExists())
         handleCrashReport();
 #endif
 
