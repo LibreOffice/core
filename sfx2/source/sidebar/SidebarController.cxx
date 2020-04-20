@@ -1222,7 +1222,8 @@ void SidebarController::RequestCloseDeck()
     {
         const vcl::ILibreOfficeKitNotifier* pNotifier = mpCurrentDeck->GetLOKNotifier();
         auto pMobileNotifier = SfxViewShell::Current();
-        if (pMobileNotifier && comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView()))
+        const SfxViewShell* pViewShell = SfxViewShell::Current();
+        if (pMobileNotifier && pViewShell && pViewShell->isLOKMobilePhone())
         {
             // Mobile phone.
             std::stringstream aStream;

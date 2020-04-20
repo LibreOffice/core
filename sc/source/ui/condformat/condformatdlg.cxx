@@ -518,7 +518,7 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
     vcl::Window* pParent, ScViewData* pViewData,
     const ScCondFormatDlgItem* pItem)
         : ScAnyRefDlg(pB, pCW, pParent, "ConditionalFormatDialog",
-                        (comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView())?OUString("modules/scalc/ui/conditionalformatdialogmobile.ui"):OUString("modules/scalc/ui/conditionalformatdialog.ui")))
+                        ((SfxViewShell::Current() && SfxViewShell::Current()->isLOKMobilePhone())?OUString("modules/scalc/ui/conditionalformatdialogmobile.ui"):OUString("modules/scalc/ui/conditionalformatdialog.ui")))
     , mpViewData(pViewData)
     , mpLastEdit(nullptr)
     , mpDlgItem(static_cast<ScCondFormatDlgItem*>(pItem->Clone()))
