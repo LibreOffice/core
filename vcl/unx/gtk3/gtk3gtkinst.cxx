@@ -12782,7 +12782,7 @@ private:
         // if we're using a custom renderer, limit the height to the height nMaxRows would be
         // for a normal renderer, and then round down to how many custom rows fit in that
         // space
-        if (m_nNonCustomLineHeight != -1)
+        if (m_nNonCustomLineHeight != -1 && nRowHeight)
         {
             gint nNormalHeight = get_height_rows(m_nNonCustomLineHeight, nSeparatorHeight, nMaxRows);
             if (nHeight > nNormalHeight)
