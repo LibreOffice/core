@@ -71,7 +71,11 @@ struct ImpSwapFile
 {
     INetURLObject aSwapURL;
     OUString maOriginURL;
-    ~ImpSwapFile() COVERITY_NOEXCEPT_FALSE;
+
+    ~ImpSwapFile() COVERITY_NOEXCEPT_FALSE
+    {
+        utl::UCBContentHelper::Kill(aSwapURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+    }
 };
 
 ImpGraphic::ImpGraphic() :
@@ -358,11 +362,6 @@ void ImpGraphic::ImplClearGraphics()
     mpAnimation.reset();
     mpGfxLink.reset();
     maVectorGraphicData.reset();
-}
-
-ImpSwapFile::~ImpSwapFile() COVERITY_NOEXCEPT_FALSE
-{
-    utl::UCBContentHelper::Kill(aSwapURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
 }
 
 void ImpGraphic::ImplSetPrepared(bool bAnimated, const Size* pSizeHint)
