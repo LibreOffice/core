@@ -109,6 +109,13 @@ namespace o3tl
     <SfxViewShell>.
 */
 
+enum class LOKDeviceFormFactor
+{
+    UNKNOWN     = 0,
+    DESKTOP     = 1,
+    TABLET      = 2,
+    MOBILE      = 3
+};
 
 class SfxViewFactory;
 #define SFX_DECL_VIEWFACTORY(Class) \
@@ -152,6 +159,7 @@ friend class SfxPrinterController;
     bool                        mbPrinterSettingsModified;
     LanguageTag                 maLOKLanguageTag;
     LanguageTag                 maLOKLocale;
+    LOKDeviceFormFactor         maLOKDeviceFormFactor;
 
 protected:
     virtual void                Activate(bool IsMDIActivate) override;
@@ -347,6 +355,14 @@ public:
     void SetLOKLocale(const OUString& rBcp47LanguageTag);
     /// Get the LibreOfficeKit locale of this view.
     const LanguageTag& GetLOKLocale() const { return maLOKLocale; }
+    /// Get the form factor of the device where the lok client is running.
+    LOKDeviceFormFactor GetLOKDeviceFormFactor() const { return maLOKDeviceFormFactor; }
+    /// Check if the lok client is running on a desktop machine.
+    bool isLOKDesktop() const { return maLOKDeviceFormFactor == LOKDeviceFormFactor::DESKTOP; }
+    /// Check if the lok client is running on a tablet.
+    bool isLOKTablet() const  { return maLOKDeviceFormFactor == LOKDeviceFormFactor::TABLET; }
+    /// Check if the lok client is running on a mobile device.
+    bool isLOKMobilePhone() const { return maLOKDeviceFormFactor == LOKDeviceFormFactor::MOBILE; }
 };
 
 

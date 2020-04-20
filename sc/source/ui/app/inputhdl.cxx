@@ -1308,11 +1308,11 @@ namespace {
 
 void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec )
 {
+    const SfxViewShell* pViewShell = SfxViewShell::Current();
     if (comphelper::LibreOfficeKit::isActive() &&
-        comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView()))
+            pViewShell && pViewShell->isLOKMobilePhone())
     {
-        SfxViewShell* pViewShell = SfxViewShell::Current();
-        if (pViewShell && rFuncStrVec.size())
+        if (rFuncStrVec.size())
         {
             OUString aFuncNameStr;
             OUString aDescFuncNameStr;
