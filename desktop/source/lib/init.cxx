@@ -2157,6 +2157,9 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
             SvNumberFormatter::resetTheCurrencyTable();
         }
 
+        const OUString aDeviceFormFactor = extractParameter(aOptions, "DeviceFormFactor");
+        SfxLokHelper::setDeviceFormFactor(aDeviceFormFactor);
+
         uno::Sequence<css::beans::PropertyValue> aFilterOptions(2);
         aFilterOptions[0] = css::beans::PropertyValue( "FilterOptions",
                                                        0,
@@ -3631,17 +3634,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     if (nView < 0)
         return;
 
-    if (gImpl && (aCommand == ".uno:LOKSetMobile" || aCommand == ".uno:LOKSetMobilePhone"))
-    {
-        comphelper::LibreOfficeKit::setMobilePhone(nView);
-        return;
-    }
-    else if (gImpl && aCommand == ".uno:LOKSetTablet")
-    {
-        comphelper::LibreOfficeKit::setTablet(nView);
-        return;
-    }
-    else if (gImpl && aCommand == ".uno:ToggleOrientation")
+    if (gImpl && aCommand == ".uno:ToggleOrientation")
     {
         ExecuteOrientationChange();
         return;
@@ -4891,6 +4884,9 @@ static int doc_createViewWithOptions(LibreOfficeKitDocument* pThis,
         comphelper::LibreOfficeKit::setLanguageTag(LanguageTag(aLanguage));
         comphelper::LibreOfficeKit::setLocale(LanguageTag(aLanguage));
     }
+
+    const OUString aDeviceFormFactor = extractParameter(aOptions, "DeviceFormFactor");
+    SfxLokHelper::setDeviceFormFactor(aDeviceFormFactor);
 
     int nId = SfxLokHelper::createView();
 
