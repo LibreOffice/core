@@ -1671,12 +1671,12 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
         {
             {
                 SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*pUp);
-                aFrm.SSize().AdjustHeight(nChg );
+                aFrm.AddHeight(nChg );
             }
 
             {
                 SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*pUp);
-                aPrt.SSize().AdjustHeight(nChg );
+                aPrt.AddHeight(nChg );
             }
 
             if ( pViewShell )
@@ -1707,7 +1707,7 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
                 if ( IsBodyFrame() )
                 {
                     SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
-                    aPrt.SSize().setHeight( nOldFrameHeight );
+                    aPrt.Height( nOldFrameHeight );
                 }
 
                 if ( pUp->GetUpper() )
@@ -1716,10 +1716,10 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
                 }
 
                 SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-                aFrm.SSize().setHeight( nOldFrameHeight );
+                aFrm.Height( nOldFrameHeight );
 
                 SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
-                aPrt.SSize().setHeight( nOldPrtHeight );
+                aPrt.Height( nOldPrtHeight );
 
                 mbCompletePaint = bOldComplete;
             }

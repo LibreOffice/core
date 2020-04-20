@@ -383,7 +383,7 @@ void SwHeadFootFrame::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                         aFrm.Bottom( nDeadLine );
 
                         SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
-                        aPrt.SSize().setHeight( getFrameArea().Height() - nBorder );
+                        aPrt.Height( getFrameArea().Height() - nBorder );
                     }
                 }
 

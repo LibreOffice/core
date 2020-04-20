@@ -400,11 +400,11 @@ void SwTextFrame::AdjustFrame( const SwTwips nChgHght, bool bHasToFit )
 
                         if( aRectFnSet.IsVert() )
                         {
-                            aPrt.SSize().AdjustWidth(nChgHght );
+                            aPrt.AddWidth(nChgHght );
                         }
                         else
                         {
-                            aPrt.SSize().AdjustHeight(nChgHght );
+                            aPrt.AddHeight(nChgHght );
                         }
 
                         return;

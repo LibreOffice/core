@@ -1133,7 +1133,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
                 if ( bBookMode )
                 {
                     const SwPageFrame& rFormatPage = pPage->GetFormatPage();
-                    aPageRect.SSize() = rFormatPage.GetBoundRect(GetWin()).SSize();
+                    aPageRect.SSize( rFormatPage.GetBoundRect(GetWin()).SSize() );
                 }
 
                 // #i9719# - consider new border and shadow width
@@ -1298,12 +1298,12 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const tools::Rectangle
                 aRect.Right( std::min(aRect.Right()+2*aPixSz.Width(), pRect->Right()+aPixSz.Width()));
             }
             else
-                aRect.SSize().AdjustWidth(2*aPixSz.Width() );
+                aRect.AddWidth(2*aPixSz.Width() );
             aRect.Pos().setY( lYDiff < 0 ? aOldVis.Bottom() - aPixSz.Height()
                                          : aRect.Top() - aSize.Height() + aPixSz.Height() );
             aRect.Pos().setX( std::max( 0L, aRect.Left()-aPixSz.Width() ) );
             aRect.Pos()  = GetWin()->PixelToLogic( GetWin()->LogicToPixel( aRect.Pos()));
-            aRect.SSize()= GetWin()->PixelToLogic( GetWin()->LogicToPixel( aRect.SSize()));
+            aRect.SSize( GetWin()->PixelToLogic( GetWin()->LogicToPixel( aRect.SSize())) );
             maVisArea = aRect;
             const Point aPt( -aRect.Left(), -aRect.Top() );
             aMapMode.SetOrigin( aPt );
@@ -1537,13 +1537,13 @@ void SwViewShell::PaintDesktop(vcl::RenderContext& rRenderContext, const SwRect 
             if ( bBookMode )
             {
                 const SwPageFrame& rFormatPage = static_cast<const SwPageFrame*>(pPage)->GetFormatPage();
-                aPageRect.SSize() = rFormatPage.getFrameArea().SSize();
+                aPageRect.SSize( rFormatPage.getFrameArea().SSize() );
             }
 
             const bool bSidebarRight =
                 static_cast<const SwPageFrame*>(pPage)->SidebarPosition() == sw::sidebarwindows::SidebarPosition::RIGHT;
             aPageRect.Pos().AdjustX( -(bSidebarRight ? 0 : nSidebarWidth) );
-            aPageRect.SSize().AdjustWidth(nSidebarWidth );
+            aPageRect.AddWidth(nSidebarWidth );
 
             if ( aPageRect.IsOver( rRect ) )
                 aRegion -= aPageRect;

@@ -822,7 +822,7 @@ bool SwTextFrame::UnitUp_( SwPaM *pPam, const SwTwips nOffset,
 
             if ( bPrevLine || bSecondOfDouble )
             {
-                aCharBox.SSize().setWidth( aCharBox.SSize().Width() / 2 );
+                aCharBox.Width( aCharBox.SSize().Width() / 2 );
                 aCharBox.Pos().setX( aCharBox.Pos().X() - 150 );
 
                 // See comment in SwTextFrame::GetModelPositionForViewPoint()
@@ -850,7 +850,7 @@ bool SwTextFrame::UnitUp_( SwPaM *pPam, const SwTwips nOffset,
             if ( IsFollow() )
             {
                 aLine.GetCharRect( &aCharBox, nPos );
-                aCharBox.SSize().setWidth( aCharBox.SSize().Width() / 2 );
+                aCharBox.Width( aCharBox.SSize().Width() / 2 );
             }
             break;
         } while ( true );
@@ -1185,7 +1185,7 @@ bool SwTextFrame::UnitDown_(SwPaM *pPam, const SwTwips nOffset,
 
             if( pNextLine || bFirstOfDouble )
             {
-                aCharBox.SSize().setWidth( aCharBox.SSize().Width() / 2 );
+                aCharBox.Width( aCharBox.SSize().Width() / 2 );
 #if OSL_DEBUG_LEVEL > 0
                 // See comment in SwTextFrame::GetModelPositionForViewPoint()
                 const sal_uLong nOldNode = pPam->GetPoint()->nNode.GetIndex();
@@ -1230,7 +1230,7 @@ bool SwTextFrame::UnitDown_(SwPaM *pPam, const SwTwips nOffset,
                 }
 
                 aLine.GetCharRect( &aCharBox, nPos );
-                aCharBox.SSize().setWidth( aCharBox.SSize().Width() / 2 );
+                aCharBox.Width( aCharBox.SSize().Width() / 2 );
             }
             else if( !IsFollow() )
             {

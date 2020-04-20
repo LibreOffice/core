@@ -3228,7 +3228,7 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
 
             // code from vprint.cxx
             const SwPageFrame& rFormatPage = pPage->GetFormatPage();
-            aEmptyPageRect.SSize() = rFormatPage.getFrameArea().SSize();
+            aEmptyPageRect.SSize( rFormatPage.getFrameArea().SSize() );
 
             SwPageFrame::GetBorderAndShadowBoundRect( aEmptyPageRect, pSh, &rRenderContext, aPaintRect,
                 bPaintLeftShadow, bPaintRightShadow, bRightSidebar );
@@ -7413,9 +7413,9 @@ Graphic SwFlyFrameFormat::MakeGraphic( ImageMap* pMap )
         SwBorderAttrAccess aAccess( SwFrame::GetCache(), pFly );
         const SwBorderAttrs &rAttrs = *aAccess.Get();
         if ( rAttrs.CalcRightLine() )
-            aOut.SSize().AdjustWidth(2*gProp.nSPixelSzW );
+            aOut.AddWidth(2*gProp.nSPixelSzW );
         if ( rAttrs.CalcBottomLine() )
-            aOut.SSize().AdjustHeight(2*gProp.nSPixelSzH );
+            aOut.AddHeight(2*gProp.nSPixelSzH );
 
         // #i92711# start Pre/PostPaint encapsulation before pOut is changed to the buffering VDev
         const vcl::Region aRepaintRegion(aOut.SVRect());
