@@ -137,10 +137,10 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 		&& echo 'ProgressBarColor=0,0,0' \
 		&& echo 'ProgressFrameColor=102,102,102' \
 		&& echo 'ProgressPosition=30,145' \
-		&& echo 'ProgressSize=265,8' \
-		&& echo 'ProgressPositionHigh=46,212' \
-		&& echo 'ProgressSizeHigh=617,12' \
-		&& echo 'ProgressTextBaseline=160' \
+		&& echo 'ProgressSize=385,8' \
+		&& echo 'ProgressPositionHigh=30,200' \
+		&& echo 'ProgressSizeHigh=650,12' \
+		&& echo 'ProgressTextBaseline=150' \
 		&& echo 'ProgressTextColor=0,0,0' \
 		&& echo 'SecureUserConfig=true' \
 		&& echo 'SecureUserConfigCompress=true' \
