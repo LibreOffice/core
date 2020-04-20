@@ -20,7 +20,7 @@ namespace vcl
 {
 namespace font
 {
-class OpenTypeFeatureDefinitonListPrivate
+class OpenTypeFeatureDefinitionListPrivate
 {
 private:
     std::vector<FeatureDefinition> m_aFeatureDefinition;
@@ -33,13 +33,13 @@ private:
     static FeatureDefinition handleSpecialFeatureCode(sal_uInt32 nFeatureCode);
 
 public:
-    OpenTypeFeatureDefinitonListPrivate();
+    OpenTypeFeatureDefinitionListPrivate();
     FeatureDefinition getDefinition(sal_uInt32 nFeatureCode);
     bool isRequired(sal_uInt32 nFeatureCode);
 };
 
-class VCL_DLLPUBLIC OpenTypeFeatureDefinitonList
-    : public rtl::Static<OpenTypeFeatureDefinitonListPrivate, OpenTypeFeatureDefinitonList>
+class VCL_DLLPUBLIC OpenTypeFeatureDefinitionList
+    : public rtl::Static<OpenTypeFeatureDefinitionListPrivate, OpenTypeFeatureDefinitionList>
 {
 };
 

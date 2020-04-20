@@ -8,7 +8,7 @@
  */
 
 #include <font/FeatureCollector.hxx>
-#include <font/OpenTypeFeatureDefinitonList.hxx>
+#include <font/OpenTypeFeatureDefinitionList.hxx>
 
 #include <hb-ot.h>
 #include <hb-graphite2.h>
@@ -93,7 +93,7 @@ void FeatureCollector::collectForLanguage(hb_tag_t aTableTag, sal_uInt32 nScript
 
     for (hb_tag_t aFeatureTag : aFeatureTags)
     {
-        if (OpenTypeFeatureDefinitonList::get().isRequired(aFeatureTag))
+        if (OpenTypeFeatureDefinitionList::get().isRequired(aFeatureTag))
             continue;
 
         m_rFontFeatures.emplace_back();
@@ -101,7 +101,7 @@ void FeatureCollector::collectForLanguage(hb_tag_t aTableTag, sal_uInt32 nScript
         rFeature.m_aID = { aFeatureTag, aScriptTag, aLanguageTag };
 
         FeatureDefinition aDefinition
-            = OpenTypeFeatureDefinitonList::get().getDefinition(aFeatureTag);
+            = OpenTypeFeatureDefinitionList::get().getDefinition(aFeatureTag);
         if (aDefinition)
         {
             rFeature.m_aDefinition = aDefinition;
