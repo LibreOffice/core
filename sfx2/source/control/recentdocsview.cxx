@@ -136,7 +136,7 @@ RecentDocsView::RecentDocsView( vcl::Window* pParent )
     setItemMaxTextLength( 30 );
     setItemDimensions( mnItemMaxSize, mnItemMaxSize, gnTextHeight, gnItemPadding );
 
-    maWelcomeImage = SfxApplication::GetApplicationLogo(500);
+    maWelcomeImage = SfxApplication::GetApplicationLogo(400);
 
     maFillColor = Color(officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsBackgroundColor::get());
     maTextColor = Color(officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsTextColor::get());
