@@ -129,6 +129,8 @@ class SVT_DLLPUBLIC ToolboxController :
 
         void enable( bool bEnable );
 
+        bool IsInSidebar() const { return m_bSidebar; }
+
     protected:
         bool getToolboxId( sal_uInt16& rItemId, ToolBox** ppToolBox );
         struct Listener
