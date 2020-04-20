@@ -954,9 +954,9 @@ void DrawDocShell::OpenBookmark( const OUString& rBookmarkURL )
     ( mpViewShell ? mpViewShell->GetViewFrame() : SfxViewFrame::Current() )->GetBindings().Execute( SID_OPENHYPERLINK, ppArgs );
 }
 
-std::unique_ptr<SfxDocumentInfoDialog> DrawDocShell::CreateDocumentInfoDialog(weld::Window* pParent, const SfxItemSet &rSet)
+std::shared_ptr<SfxDocumentInfoDialog> DrawDocShell::CreateDocumentInfoDialog(weld::Window* pParent, const SfxItemSet &rSet)
 {
-    std::unique_ptr<SfxDocumentInfoDialog> xDlg = std::make_unique<SfxDocumentInfoDialog>(pParent, rSet);
+    std::shared_ptr<SfxDocumentInfoDialog> xDlg = std::make_shared<SfxDocumentInfoDialog>(pParent, rSet);
     DrawDocShell* pDocSh = dynamic_cast<DrawDocShell*>(SfxObjectShell::Current());
     if( pDocSh == this )
     {

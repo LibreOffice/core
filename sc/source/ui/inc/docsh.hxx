@@ -215,7 +215,7 @@ public:
 
     void            SetVisAreaOrSize( const tools::Rectangle& rVisArea );
 
-    virtual std::unique_ptr<SfxDocumentInfoDialog> CreateDocumentInfoDialog(weld::Window* pParent, const SfxItemSet &rSet) override;
+    virtual std::shared_ptr<SfxDocumentInfoDialog> CreateDocumentInfoDialog(weld::Window* pParent, const SfxItemSet &rSet) override;
 
     void    GetDocStat( ScDocStat& rDocStat );
 

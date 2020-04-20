@@ -126,9 +126,9 @@ using namespace ::com::sun::star;
 using namespace ::sfx2;
 
 // create DocInfo (virtual)
-std::unique_ptr<SfxDocumentInfoDialog> SwDocShell::CreateDocumentInfoDialog(weld::Window* pParent, const SfxItemSet &rSet)
+std::shared_ptr<SfxDocumentInfoDialog> SwDocShell::CreateDocumentInfoDialog(weld::Window* pParent, const SfxItemSet &rSet)
 {
-    std::unique_ptr<SfxDocumentInfoDialog> xDlg = std::make_unique<SfxDocumentInfoDialog>(pParent, rSet);
+    std::shared_ptr<SfxDocumentInfoDialog> xDlg = std::make_shared<SfxDocumentInfoDialog>(pParent, rSet);
     //only with statistics, when this document is being shown, not
     //from within the Doc-Manager
     SwDocShell* pDocSh = static_cast<SwDocShell*>( SfxObjectShell::Current());
