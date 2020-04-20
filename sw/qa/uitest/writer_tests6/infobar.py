@@ -14,7 +14,7 @@ from com.sun.star.container import NoSuchElementException
 
 # Test for Infobar API
 
-class tdf126627(UITestCase):
+class tdf97926(UITestCase):
     def test_infobar_add(self):
         self.ui_test.create_doc_in_start_center("writer")
         controller = self.ui_test.get_component().getCurrentController()
