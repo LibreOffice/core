@@ -62,6 +62,10 @@ public:
     static void setDefaultLanguage(const OUString& rBcp47LanguageTag);
     /// Set the locale for the given view.
     static void setViewLocale(int nId, const OUString& rBcp47LanguageTag);
+    /// Get the device form factor that should be used for a new view.
+    static LOKDeviceFormFactor getDeviceFormFactor();
+    /// Set the device form factor that should be used for a new view.
+    static void setDeviceFormFactor(const OUString& rDeviceFormFactor);
     /// Iterate over any view shell, except pThisViewShell, passing it to the f function.
     template<typename ViewShellType, typename FunctionType>
     static void forEachOtherView(ViewShellType* pThisViewShell, FunctionType f);

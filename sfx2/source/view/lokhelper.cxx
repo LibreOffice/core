@@ -68,6 +68,7 @@ int DisableCallbacks::m_nDisabled = 0;
 namespace
 {
 static LanguageTag g_defaultLanguageTag("en-US", true);
+static LOKDeviceFormFactor g_deviceFormFactor = LOKDeviceFormFactor::UNKNOWN;
 }
 
 int SfxLokHelper::createView()
@@ -210,6 +211,23 @@ void SfxLokHelper::setViewLocale(int nId, const OUString& rBcp47LanguageTag)
             return;
         }
     }
+}
+
+LOKDeviceFormFactor SfxLokHelper::getDeviceFormFactor()
+{
+    return g_deviceFormFactor;
+}
+
+void SfxLokHelper::setDeviceFormFactor(const OUString& rDeviceFormFactor)
+{
+    if (rDeviceFormFactor == "desktop")
+        g_deviceFormFactor = LOKDeviceFormFactor::DESKTOP;
+    else if (rDeviceFormFactor == "tablet")
+        g_deviceFormFactor = LOKDeviceFormFactor::TABLET;
+    else if (rDeviceFormFactor == "mobile")
+        g_deviceFormFactor = LOKDeviceFormFactor::MOBILE;
+    else
+        g_deviceFormFactor = LOKDeviceFormFactor::UNKNOWN;
 }
 
 static OString lcl_escapeQuotes(const OString &rStr)

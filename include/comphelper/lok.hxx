@@ -49,12 +49,6 @@ COMPHELPER_DLLPUBLIC void setStatusIndicatorCallback(void (*callback)(void *data
 // Check whether the code is running as invoked through LibreOfficeKit.
 COMPHELPER_DLLPUBLIC bool isActive();
 
-// Check whether we are serving to a mobile phone
-COMPHELPER_DLLPUBLIC bool isMobilePhone(int nViewId);
-
-// Check whether we are serving to a tablet
-COMPHELPER_DLLPUBLIC bool isTablet(int nViewId);
-
 /// Shift the coordinates before rendering each bitmap.
 /// Used by Calc to render each tile separately.
 /// This should be unnecessary (and removed) once Calc
