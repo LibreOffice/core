@@ -327,71 +327,10 @@ void SkiaSalGraphicsImpl::preDraw()
     assert(comphelper::SolarMutex::get()->IsCurrentThread());
     SkiaZone::enter(); // matched in postDraw()
     checkSurface();
-    assert(!mXorMode || mXorExtents.isEmpty()); // must be reset in postDraw()
 }
 
 void SkiaSalGraphicsImpl::postDraw()
 {
-    if (mXorMode)
-    {
-        // Apply the result from the temporary bitmap manually. This is indeed
-        // slow, but it doesn't seem to be needed often and can be optimized
-        // in each operation by setting mXorExtents to the area that should be
-        // updated.
-        if (mXorExtents.isEmpty())
-            mXorExtents = SkRect::MakeXYWH(0, 0, mSurface->width(), mSurface->height());
-        else
-        {
-            // Make slightly larger, just in case (rounding, antialiasing,...).
-            mXorExtents.outset(2, 2);
-            if (!mXorExtents.intersect(
-                    SkRect::MakeXYWH(0, 0, mSurface->width(), mSurface->height())))
-                mXorExtents.setEmpty();
-        }
-        SAL_INFO("vcl.skia.trace",
-                 "applyxor(" << this << "): "
-                             << tools::Rectangle(mXorExtents.left(), mXorExtents.top(),
-                                                 mXorExtents.right(), mXorExtents.bottom()));
-        if (!mXorExtents.isEmpty()) // the intersection above may be empty
-        {
-            // Copy the surface contents to another pixmap.
-            SkBitmap surfaceBitmap;
-            // Use unpremultiplied alpha format, so that we do not have to do the conversions to get
-            // the RGB and back (Skia will do it when converting, but it'll be presumably faster at it).
-            if (!surfaceBitmap.tryAllocPixels(
-                    mSurface->imageInfo().makeAlphaType(kUnpremul_SkAlphaType)))
-                abort();
-            SkPaint paint;
-            paint.setBlendMode(SkBlendMode::kSrc); // copy as is
-            SkCanvas canvas(surfaceBitmap);
-            canvas.drawImageRect(mSurface->makeImageSnapshot(), mXorExtents, mXorExtents, &paint);
-            // xor to surfaceBitmap
-            assert(surfaceBitmap.info().alphaType() == kUnpremul_SkAlphaType);
-            assert(mXorBitmap.info().alphaType() == kUnpremul_SkAlphaType);
-            assert(surfaceBitmap.bytesPerPixel() == 4);
-            assert(mXorBitmap.bytesPerPixel() == 4);
-            for (int y = mXorExtents.top(); y < mXorExtents.bottom(); ++y)
-            {
-                uint8_t* data = static_cast<uint8_t*>(surfaceBitmap.getAddr(mXorExtents.x(), y));
-                const uint8_t* xordata
-                    = static_cast<uint8_t*>(mXorBitmap.getAddr(mXorExtents.x(), y));
-                for (int x = 0; x < mXorExtents.width(); ++x)
-                {
-                    *data++ ^= *xordata++;
-                    *data++ ^= *xordata++;
-                    *data++ ^= *xordata++;
-                    // alpha is not xor-ed
-                    data++;
-                    xordata++;
-                }
-            }
-            surfaceBitmap.notifyPixelsChanged();
-            mSurface->getCanvas()->drawBitmapRect(surfaceBitmap, mXorExtents, mXorExtents, &paint);
-        }
-        mXorCanvas.reset();
-        mXorBitmap.reset();
-        mXorExtents.setEmpty();
-    }
     if (!isOffscreen())
     {
         if (!Application::IsInExecute())
@@ -440,7 +379,10 @@ void SkiaSalGraphicsImpl::checkSurface()
             // will be usually repainted anyway.
             sk_sp<SkImage> snapshot;
             if (!isOffscreen())
+            {
+                flushDrawing();
                 snapshot = mSurface->makeImageSnapshot();
+            }
             recreateSurface();
             if (snapshot)
             {
@@ -454,6 +396,13 @@ void SkiaSalGraphicsImpl::checkSurface()
                                                    << Size(GetWidth(), GetHeight()));
         }
     }
+}
+
+void SkiaSalGraphicsImpl::flushDrawing()
+{
+    if (mXorMode)
+        applyXor();
+    mSurface->flush();
 }
 
 bool SkiaSalGraphicsImpl::setClipRegion(const vcl::Region& region)
@@ -520,9 +469,14 @@ void SkiaSalGraphicsImpl::SetFillColor(Color nColor) { mFillColor = nColor; }
 
 void SkiaSalGraphicsImpl::SetXORMode(bool set, bool)
 {
+    if (mXorMode == set)
+        return;
+    SAL_INFO("vcl.skia.trace", "setxormode(" << this << "): " << set);
+    if (set)
+        mXorRegion.setEmpty();
+    else
+        applyXor();
     mXorMode = set;
-    if (mXorMode)
-        mXorExtents.setEmpty();
 }
 
 SkCanvas* SkiaSalGraphicsImpl::getXorCanvas()
@@ -534,7 +488,7 @@ SkCanvas* SkiaSalGraphicsImpl::getXorCanvas()
     // There's no point in using SkSurface for GPU, we'd immediately need to get the pixels back.
     if (!mXorCanvas)
     {
-        // Use unpremultiplied alpha (see xor applying in PostDraw()).
+        // Use unpremultiplied alpha (see xor applying in applyXor()).
         if (!mXorBitmap.tryAllocPixels(mSurface->imageInfo().makeAlphaType(kUnpremul_SkAlphaType)))
             abort();
         mXorBitmap.eraseARGB(0, 0, 0, 0);
@@ -542,6 +496,61 @@ SkCanvas* SkiaSalGraphicsImpl::getXorCanvas()
         setCanvasClipRegion(mXorCanvas.get(), mClipRegion);
     }
     return mXorCanvas.get();
+}
+
+void SkiaSalGraphicsImpl::applyXor()
+{
+    // Apply the result from the temporary bitmap manually. This is indeed
+    // slow, but it doesn't seem to be needed often and is optimized
+    // in each operation by extending mXorRegion with the area that should be
+    // updated.
+    assert(mXorMode);
+    if (!mXorRegion.op(SkIRect::MakeXYWH(0, 0, mSurface->width(), mSurface->height()),
+                       SkRegion::kIntersect_Op))
+    {
+        mXorRegion.setEmpty();
+        return;
+    }
+    SAL_INFO("vcl.skia.trace", "applyxor(" << this << "): " << mXorRegion);
+    // Copy the surface contents to another pixmap.
+    SkBitmap surfaceBitmap;
+    // Use unpremultiplied alpha format, so that we do not have to do the conversions to get
+    // the RGB and back (Skia will do it when converting, but it'll be presumably faster at it).
+    if (!surfaceBitmap.tryAllocPixels(mSurface->imageInfo().makeAlphaType(kUnpremul_SkAlphaType)))
+        abort();
+    SkPaint paint;
+    paint.setBlendMode(SkBlendMode::kSrc); // copy as is
+    SkCanvas canvas(surfaceBitmap);
+    canvas.drawImageRect(mSurface->makeImageSnapshot(), mXorRegion.getBounds(),
+                         SkRect::Make(mXorRegion.getBounds()), &paint);
+    // xor to surfaceBitmap
+    assert(surfaceBitmap.info().alphaType() == kUnpremul_SkAlphaType);
+    assert(mXorBitmap.info().alphaType() == kUnpremul_SkAlphaType);
+    assert(surfaceBitmap.bytesPerPixel() == 4);
+    assert(mXorBitmap.bytesPerPixel() == 4);
+    for (SkRegion::Iterator it(mXorRegion); !it.done(); it.next())
+    {
+        for (int y = it.rect().top(); y < it.rect().bottom(); ++y)
+        {
+            uint8_t* data = static_cast<uint8_t*>(surfaceBitmap.getAddr(it.rect().x(), y));
+            const uint8_t* xordata = static_cast<uint8_t*>(mXorBitmap.getAddr(it.rect().x(), y));
+            for (int x = 0; x < it.rect().width(); ++x)
+            {
+                *data++ ^= *xordata++;
+                *data++ ^= *xordata++;
+                *data++ ^= *xordata++;
+                // alpha is not xor-ed
+                data++;
+                xordata++;
+            }
+        }
+    }
+    surfaceBitmap.notifyPixelsChanged();
+    mSurface->getCanvas()->drawBitmapRect(surfaceBitmap, mXorRegion.getBounds(),
+                                          SkRect::Make(mXorRegion.getBounds()), &paint);
+    mXorCanvas.reset();
+    mXorBitmap.reset();
+    mXorRegion.setEmpty();
 }
 
 void SkiaSalGraphicsImpl::SetROPLineColor(SalROPColor nROPColor)
@@ -589,8 +598,7 @@ void SkiaSalGraphicsImpl::drawPixel(long nX, long nY, Color nColor)
     // Apparently drawPixel() is actually expected to set the pixel and not draw it.
     paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
     getDrawCanvas()->drawPoint(toSkX(nX), toSkY(nY), paint);
-    if (mXorMode) // limit xor area update
-        mXorExtents = SkRect::MakeXYWH(nX, nY, 1, 1);
+    addXorRegion(SkRect::MakeXYWH(nX, nY, 1, 1));
     postDraw();
 }
 
@@ -609,8 +617,7 @@ void SkiaSalGraphicsImpl::drawLine(long nX1, long nY1, long nX2, long nY2)
         getDrawCanvas()->drawLine(nX1 + 0.25, nY1 + 0.25, nX2 + 0.25, nY2 + 0.25, paint);
     else
         getDrawCanvas()->drawLine(toSkX(nX1), toSkY(nY1), toSkX(nX2), toSkY(nY2), paint);
-    if (mXorMode) // limit xor area update
-        mXorExtents = SkRect::MakeLTRB(nX1, nY1, nX2 + 1, nY2 + 1);
+    addXorRegion(SkRect::MakeLTRB(nX1, nY1, nX2 + 1, nY2 + 1));
     postDraw();
 }
 
@@ -636,8 +643,7 @@ void SkiaSalGraphicsImpl::privateDrawAlphaRect(long nX, long nY, long nWidth, lo
         paint.setStyle(SkPaint::kStroke_Style);
         canvas->drawIRect(SkIRect::MakeXYWH(nX, nY, nWidth - 1, nHeight - 1), paint);
     }
-    if (mXorMode) // limit xor area update
-        mXorExtents = SkRect::MakeXYWH(nX, nY, nWidth, nHeight);
+    addXorRegion(SkRect::MakeXYWH(nX, nY, nWidth, nHeight));
     postDraw();
 }
 
@@ -732,8 +738,7 @@ bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectTo
         aPaint.setStyle(SkPaint::kStroke_Style);
         getDrawCanvas()->drawPath(aPath, aPaint);
     }
-    if (mXorMode) // limit xor area update
-        mXorExtents = aPath.getBounds();
+    addXorRegion(aPath.getBounds());
     postDraw();
 #if defined LINUX
     // WORKAROUND: The logo in the about dialog has drawing errors. This seems to happen
@@ -861,8 +866,7 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
     // case as it seems to produce better results.
     aPath.offset(0.5, 0.5, nullptr);
     getDrawCanvas()->drawPath(aPath, aPaint);
-    if (mXorMode) // limit xor area update
-        mXorExtents = aPath.getBounds();
+    addXorRegion(aPath.getBounds());
     postDraw();
 
     return true;
@@ -910,9 +914,9 @@ void SkiaSalGraphicsImpl::copyArea(long nDestX, long nDestY, long nSrcX, long nS
     SAL_INFO("vcl.skia.trace", "copyarea(" << this << "): " << Point(nSrcX, nSrcY) << "->"
                                            << Point(nDestX, nDestY) << "/"
                                            << Size(nSrcWidth, nSrcHeight));
+    assert(!mXorMode);
     ::copyArea(getDrawCanvas(), mSurface, nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight);
-    if (mXorMode) // limit xor area update
-        mXorExtents = SkRect::MakeXYWH(nDestX, nDestY, nSrcWidth, nSrcHeight);
+    addXorRegion(SkRect::MakeXYWH(nDestX, nDestY, nSrcWidth, nSrcHeight));
     postDraw();
 }
 
@@ -925,9 +929,13 @@ void SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcG
         assert(dynamic_cast<SkiaSalGraphicsImpl*>(pSrcGraphics->GetImpl()));
         src = static_cast<SkiaSalGraphicsImpl*>(pSrcGraphics->GetImpl());
         src->checkSurface();
+        src->flushDrawing();
     }
     else
+    {
         src = this;
+        assert(!mXorMode);
+    }
     if (rPosAry.mnSrcWidth == rPosAry.mnDestWidth && rPosAry.mnSrcHeight == rPosAry.mnDestHeight)
     {
         auto srcDebug = [&]() -> std::string {
@@ -959,9 +967,8 @@ void SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcG
                                                         rPosAry.mnDestWidth, rPosAry.mnDestHeight),
                                        &paint);
     }
-    if (mXorMode) // limit xor area update
-        mXorExtents = SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
-                                       rPosAry.mnDestHeight);
+    addXorRegion(SkRect::MakeXYWH(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth,
+                                  rPosAry.mnDestHeight));
     postDraw();
 }
 
@@ -1078,7 +1085,7 @@ std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(long nX, long nY, long
     checkSurface();
     SAL_INFO("vcl.skia.trace",
              "getbitmap(" << this << "): " << Point(nX, nY) << "/" << Size(nWidth, nHeight));
-    mSurface->getCanvas()->flush();
+    flushDrawing();
     // TODO makeImageSnapshot(rect) may copy the data, which may be a waste if this is used
     // e.g. for VirtualDevice's lame alpha blending, in which case the image will eventually end up
     // in blendAlphaBitmap(), where we could simply use the proper rect of the image.
@@ -1105,6 +1112,7 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
 {
     preDraw();
     SAL_INFO("vcl.skia.trace", "invert(" << this << "): " << rPoly << ":" << int(eFlags));
+    assert(!mXorMode);
     // Intel Vulkan drivers (up to current 0.401.3889) have a problem
     // with SkBlendMode::kDifference(?) and surfaces wider than 1024 pixels, resulting
     // in drawing errors. Work that around by fetching the relevant part of the surface
@@ -1139,13 +1147,12 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
             sk_sp<SkSurface> surface = SkSurface::MakeRasterN32Premul(area.width(), area.height());
             SkPaint copy;
             copy.setBlendMode(SkBlendMode::kSrc);
+            flushDrawing();
             surface->getCanvas()->drawImageRect(mSurface->makeImageSnapshot(), area, size, &copy);
             aPath.offset(-area.x(), -area.y());
             surface->getCanvas()->drawPath(aPath, aPaint);
             getDrawCanvas()->drawImageRect(surface->makeImageSnapshot(), size, area, &copy);
         }
-        if (mXorMode) // limit xor area update
-            mXorExtents = aPath.getBounds();
     }
     else
     {
@@ -1188,13 +1195,13 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
             sk_sp<SkSurface> surface = SkSurface::MakeRasterN32Premul(area.width(), area.height());
             SkPaint copy;
             copy.setBlendMode(SkBlendMode::kSrc);
+            flushDrawing();
             surface->getCanvas()->drawImageRect(mSurface->makeImageSnapshot(), area, size, &copy);
             aPath.offset(-area.x(), -area.y());
             surface->getCanvas()->drawPath(aPath, aPaint);
             getDrawCanvas()->drawImageRect(surface->makeImageSnapshot(), size, area, &copy);
         }
-        if (mXorMode) // limit xor area update
-            mXorExtents = aPath.getBounds();
+        addXorRegion(aPath.getBounds());
     }
     postDraw();
 }
@@ -1258,8 +1265,7 @@ void SkiaSalGraphicsImpl::drawImage(const SalTwoRect& rPosAry, const sk_sp<SkIma
     preDraw();
     SAL_INFO("vcl.skia.trace", "drawimage(" << this << "): " << rPosAry << ":" << int(eBlendMode));
     getDrawCanvas()->drawImageRect(aImage, aSourceRect, aDestinationRect, &aPaint);
-    if (mXorMode) // limit xor area update
-        mXorExtents = aDestinationRect;
+    addXorRegion(aDestinationRect);
     postDraw();
 }
 
@@ -1277,8 +1283,7 @@ void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SkBitmap& 
     preDraw();
     SAL_INFO("vcl.skia.trace", "drawbitmap(" << this << "): " << rPosAry << ":" << int(eBlendMode));
     getDrawCanvas()->drawBitmapRect(aBitmap, aSourceRect, aDestinationRect, &aPaint);
-    if (mXorMode) // limit xor area update
-        mXorExtents = aDestinationRect;
+    addXorRegion(aDestinationRect);
     mPendingPixelsToFlush += aBitmap.width() * aBitmap.height();
     postDraw();
 }
@@ -1332,6 +1337,7 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
         getDrawCanvas()->concat(aMatrix);
         getDrawCanvas()->drawImage(tmpSurface->makeImageSnapshot(), 0, 0);
     }
+    assert(!mXorMode);
     postDraw();
 
     return true;
@@ -1385,14 +1391,11 @@ void SkiaSalGraphicsImpl::drawGenericLayout(const GenericSalLayout& layout, Colo
                                       glyphForms.data(), font, SkTextEncoding::kGlyphID);
     preDraw();
     SAL_INFO("vcl.skia.trace",
-             "drawtextblob(" << this << "): "
-                             << tools::Rectangle(
-                                    Point(textBlob->bounds().x(), textBlob->bounds().y()),
-                                    Size(textBlob->bounds().width(), textBlob->bounds().height()))
-                             << ":" << textColor);
+             "drawtextblob(" << this << "): " << textBlob->bounds() << ":" << textColor);
     SkPaint paint;
     paint.setColor(toSkColor(textColor));
     getDrawCanvas()->drawTextBlob(textBlob, 0, 0, paint);
+    addXorRegion(textBlob->bounds());
     postDraw();
 }
 
