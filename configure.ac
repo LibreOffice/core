@@ -11130,9 +11130,11 @@ if test "$ENABLE_SKIA" = TRUE -a "$COM_IS_CLANG" != TRUE; then
             AC_MSG_CHECKING([for clang-cl])
             if test -x "$VC_PRODUCT_DIR/Tools/Llvm/bin/clang-cl.exe"; then
                 CLANG_C=`win_short_path_for_make "$VC_PRODUCT_DIR/Tools/Llvm/bin/clang-cl.exe"`
+                dnl match our MSVC default, also explicitly set -m32/-m64
                 if test "$BITNESS_OVERRIDE" = ""; then
-                    dnl match our MSVC default
-                    CLANG_C="$CLANG_C -arch:SSE"
+                    CLANG_C="$CLANG_C -m32 -arch:SSE"
+                else
+                    CLANG_C="$CLANG_C -m64"
                 fi
                 CLANG_CXX="$CLANG_C"
                 AC_MSG_RESULT([$CLANG_C])
