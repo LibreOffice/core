@@ -21,6 +21,8 @@
 
 #include <string.h>
 #include <libxml/xmlwriter.h>
+#include <editeng/colritem.hxx>
+#include <editeng/brushitem.hxx>
 
 #include <tools/solar.h>
 #include <osl/diagnose.h>
@@ -607,8 +609,17 @@ const SfxPoolItem& SfxItemPool::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nW
         return *pPoolItem;
     }
 
-    assert(!pImpl->mpStaticDefaults ||
-            typeid(rItem) == typeid(GetDefaultItem(nWhich)));
+    const auto& rDefItem = GetDefaultItem(nWhich);
+    const SfxPoolItem* item = &rItem;
+    std::unique_ptr<const SvxBackgroundColorItem> item_ptr;
+    if (typeid(rDefItem) == typeid(SvxBackgroundColorItem) && typeid(rItem) == typeid(SvxBrushItem))
+    {
+        item_ptr = std::make_unique<const SvxBackgroundColorItem>(static_cast<const SvxBrushItem&>(rDefItem).GetColor(), nWhich);
+        item = item_ptr.get();
+    }
+
+    assert(!pImpl->mpStaticDefaults
+        || typeid(*item) == typeid(rDefItem));
 
     const sal_uInt16 nIndex = GetIndex_Impl(nWhich);
     SfxPoolItemArray_Impl& rItemArr = pImpl->maPoolItemArrays[nIndex];
@@ -642,7 +653,15 @@ const SfxPoolItem& SfxItemPool::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nW
         {
             for (auto itr = rItemArr.begin(); itr != rItemArr.end(); ++itr)
             {
-                if (**itr == rItem)
+                if (typeid(**itr) == typeid(SvxBrushItem) && typeid(*item) == typeid(SvxBackgroundColorItem))
+                {
+                    item = &rItem;
+                }
+                else if (typeid(**itr) == typeid(SvxBrushItem))
+                {
+                    item = item_ptr.get();
+                }
+                if (**itr == *item)
                 {
                     pFoundItem = *itr;
                     break;

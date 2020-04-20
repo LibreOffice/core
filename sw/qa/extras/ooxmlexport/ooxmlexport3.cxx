@@ -1135,6 +1135,46 @@ DECLARE_OOXMLEXPORT_TEST(testArrowMarker, "tdf123346_ArrowMarker.docx")
         "/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:tailEnd", "type", "arrow");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testHighlightColorGroupedShape, "tdf131841_HighlightColorGroupedShape.docx")
+{
+    // tdf#132374: Check that the correct highlight color is exported.
+
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+
+    // These are the possible highlight colors in MSO Word. Check that we export them properly.
+    const std::vector<OUString> xColors{
+        "yellow",
+        "green",
+        "cyan",
+        "magenta",
+        "blue",
+        "red",
+        "darkBlue",
+        "darkCyan",
+        "darkGreen",
+        "darkMagenta",
+        "darkRed",
+        "darkYellow",
+        "lightGray", // FIXME: Wrong color, this should be darkGray.
+        "lightGray",
+        "black"
+    };
+
+    // Getting the paths.
+    OString coreRoot = "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
+        "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[";
+    OString endRoot = "]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:highlight";
+
+    // Doing the checks.
+    for (size_t ind = 0; ind < xColors.size(); ++ind)
+    {
+        OString actualPath = coreRoot + OString::number(ind + 1) + endRoot;
+        assertXPath(pXmlDocument, actualPath, "val", xColors[ind]);
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

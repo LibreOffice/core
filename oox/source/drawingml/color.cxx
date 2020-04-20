@@ -296,8 +296,9 @@ void Color::setPrstClr( sal_Int32 nToken )
 
 void Color::setHighlight(sal_Int32 nToken)
 {
+    OSL_ENSURE(nToken != XML_TOKEN_INVALID, "Color::setHighlight - invalid color token");
     ::Color nRgbValue = getHighlightColor(nToken, API_RGB_TRANSPARENT);
-    OSL_ENSURE( sal_Int32(nRgbValue) >= 0, "Color::setPrstClr - invalid preset color token" );
+    OSL_ENSURE( sal_Int32(nRgbValue) >= 0, "Color::setHighlight - invalid preset color token" );
     if ( sal_Int32(nRgbValue) >= 0 )
         setSrgbClr( nRgbValue );
 }
