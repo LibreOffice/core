@@ -43,7 +43,7 @@ struct ImpSwapInfo
 
 class OutputDevice;
 class GfxLink;
-struct ImpSwapFile;
+class ImpSwapFile;
 class GraphicConversionParameters;
 class ImpGraphic;
 

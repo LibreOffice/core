@@ -67,21 +67,32 @@ constexpr sal_uInt32 constPdfMagic((sal_uInt32('s') << 24) | (sal_uInt32('v') <<
 
 using namespace com::sun::star;
 
-struct ImpSwapFile
+class ImpSwapFile
 {
-    INetURLObject aSwapURL;
+private:
+    INetURLObject maSwapURL;
     OUString maOriginURL;
+
+public:
+    ImpSwapFile(INetURLObject const & aSwapURL, OUString const & rOriginURL)
+        : maSwapURL(aSwapURL)
+        , maOriginURL(rOriginURL)
+    {
+    }
 
     ~ImpSwapFile() COVERITY_NOEXCEPT_FALSE
     {
-        utl::UCBContentHelper::Kill(aSwapURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+        utl::UCBContentHelper::Kill(maSwapURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
     }
+
+    INetURLObject getSwapURL() { return maSwapURL; }
+    OUString const & getOriginURL() { return maOriginURL; }
 };
 
 OUString ImpGraphic::getSwapFileURL()
 {
     if (mpSwapFile)
-        return mpSwapFile->aSwapURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+        return mpSwapFile->getSwapURL().GetMainURL(INetURLObject::DecodeMechanism::NONE);
     return OUString();
 }
 
@@ -1344,9 +1355,7 @@ bool ImpGraphic::swapOut()
     bool bRet = swapOutToStream( xOStm.get() );
     if( bRet )
     {
-        mpSwapFile.reset(new ImpSwapFile, o3tl::default_delete<ImpSwapFile>());
-        mpSwapFile->aSwapURL = aTmpURL;
-        mpSwapFile->maOriginURL = getOriginURL();
+        mpSwapFile.reset(new ImpSwapFile(aTmpURL, getOriginURL()), o3tl::default_delete<ImpSwapFile>());
     }
     else
     {
@@ -1436,7 +1445,7 @@ bool ImpGraphic::swapIn()
         OUString aSwapURL;
 
         if( mpSwapFile )
-            aSwapURL = mpSwapFile->aSwapURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+            aSwapURL = mpSwapFile->getSwapURL().GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
         if( !aSwapURL.isEmpty() )
         {
@@ -1457,7 +1466,7 @@ bool ImpGraphic::swapIn()
                 bRet = swapInFromStream(xIStm.get());
                 xIStm.reset();
                 if (mpSwapFile)
-                    setOriginURL(mpSwapFile->maOriginURL);
+                    setOriginURL(mpSwapFile->getOriginURL());
                 mpSwapFile.reset();
             }
         }
