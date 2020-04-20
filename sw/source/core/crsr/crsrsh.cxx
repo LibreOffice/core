@@ -1230,15 +1230,11 @@ sal_uInt16 SwCursorShell::GetPageNumSeqNonEmpty()
     const SwContentFrame* pCFrame = GetCurrFrame(/*bCalcFrame*/true);
     const SwPageFrame* pPg = nullptr;
 
-    if (!pCFrame )
+    if (pCFrame == nullptr || nullptr == (pPg = pCFrame->FindPageFrame()))
     {
-        pPg = pCFrame->FindPageFrame();
-        if( !pPg )
-        {
-            pPg = Imp()->GetFirstVisPage(GetOut());
-            while (pPg && pPg->IsEmptyPage())
-                pPg = static_cast<const SwPageFrame*>(pPg->GetNext());
-        }
+        pPg = Imp()->GetFirstVisPage(GetOut());
+        while (pPg && pPg->IsEmptyPage())
+            pPg = static_cast<const SwPageFrame*>(pPg->GetNext());
     }
 
     sal_uInt16 nPageNo = 0;
