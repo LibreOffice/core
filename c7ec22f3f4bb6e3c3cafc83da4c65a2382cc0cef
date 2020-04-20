@@ -22,6 +22,30 @@
       "revId": "c7ec22f3f4bb6e3c3cafc83da4c65a2382cc0cef",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d11c06b6_90afdceb",
+        "filename": "sw/source/core/crsr/crsrsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1232,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-04-20T07:08:41Z",
+      "side": 1,
+      "message": "good catch",
+      "parentUuid": "b4c711cb_8cfe2b7c",
+      "range": {
+        "startLine": 1232,
+        "startChar": 8,
+        "endLine": 1232,
+        "endChar": 15
+      },
+      "revId": "c7ec22f3f4bb6e3c3cafc83da4c65a2382cc0cef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
