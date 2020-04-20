@@ -2030,25 +2030,29 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                             pTextNode = pTextNd->GetTextNode();
                             if (pTextNode && pDelNode != pTextNode )
                             {
-                                bCompress = true;
-
-                                // split redline to store ExtraData per paragraphs
                                 SwPosition aPos(aIdx);
-                                SwRangeRedline* pPar = new SwRangeRedline( *pNewRedl );
-                                pPar->SetStart( aPos );
-                                pNewRedl->SetEnd( aPos );
 
-                                // get extradata for reset formatting of the modified paragraph
-                                SwRedlineExtraData_FormatColl* pExtraData = lcl_CopyStyle(aPos, *pStt, false);
-                                if (pExtraData)
+                                if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
                                 {
-                                    std::unique_ptr<SwRedlineExtraData_FormatColl> xRedlineExtraData;
-                                    if (!bFirst)
-                                        pExtraData->SetFormatAll(false);
-                                    xRedlineExtraData.reset(pExtraData);
-                                    pPar->SetExtraData( xRedlineExtraData.get() );
+                                    bCompress = true;
+
+                                    // split redline to store ExtraData per paragraphs
+                                    SwRangeRedline* pPar = new SwRangeRedline( *pNewRedl );
+                                    pPar->SetStart( aPos );
+                                    pNewRedl->SetEnd( aPos );
+
+                                    // get extradata for reset formatting of the modified paragraph
+                                    SwRedlineExtraData_FormatColl* pExtraData = lcl_CopyStyle(aPos, *pStt, false);
+                                    if (pExtraData)
+                                    {
+                                        std::unique_ptr<SwRedlineExtraData_FormatColl> xRedlineExtraData;
+                                        if (!bFirst)
+                                            pExtraData->SetFormatAll(false);
+                                        xRedlineExtraData.reset(pExtraData);
+                                        pPar->SetExtraData( xRedlineExtraData.get() );
+                                    }
+                                    mpRedlineTable->Insert( pPar );
                                 }
-                                mpRedlineTable->Insert( pPar );
 
                                 // modify paragraph formatting
                                 lcl_CopyStyle(*pStt, aPos);
