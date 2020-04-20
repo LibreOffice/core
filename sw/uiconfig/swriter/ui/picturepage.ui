@@ -40,19 +40,20 @@
                     <property name="receives_default">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkEntry" id="entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
                   </packing>
                 </child>
                 <child>
@@ -67,7 +68,6 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">2</property>
                   </packing>
                 </child>
               </object>
@@ -88,6 +88,7 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">1</property>
+        <property name="width">2</property>
       </packing>
     </child>
     <child>
@@ -110,7 +111,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="row_spacing">3</property>
-                <property name="column_spacing">24</property>
+                <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkCheckButton" id="vert">
                     <property name="label" translatable="yes" context="picturepage|vert">_Vertically</property>
@@ -267,7 +268,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
-                    <property name="spacing">6</property>
+                    <property name="spacing">12</property>
                     <child>
                       <object class="GtkLabel" id="FT_ANGLE">
                         <property name="visible">True</property>
@@ -365,13 +366,8 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">2</property>
+        <property name="width">2</property>
       </packing>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
@@ -384,6 +380,17 @@
     <widgets>
       <widget name="box6"/>
       <widget name="browse"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup3">
+    <widgets>
+      <widget name="vert"/>
+      <widget name="hori"/>
+      <widget name="allpages"/>
+      <widget name="leftpages"/>
+      <widget name="rightpages"/>
+      <widget name="label1"/>
+      <widget name="FT_ANGLE"/>
     </widgets>
   </object>
 </interface>
