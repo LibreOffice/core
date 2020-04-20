@@ -62,7 +62,6 @@
 #include <vcl/keycodes.hxx>
 #include <unx/salbmp.h>
 #include <osl/diagnose.h>
-#include <sal/log.hxx>
 #include <unx/salobj.h>
 #include <unx/sm.hxx>
 #include <unx/wmadaptor.hxx>
