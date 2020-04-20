@@ -36,9 +36,9 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
               SwUndoId::RENAME_PAGEDESC :
               SwUndoId::CHANGE_PAGEDESC,
               _pDoc ),
-      aOld(_aOld, _pDoc), aNew(_aNew, _pDoc), pDoc(_pDoc), bExchange( false )
+      m_aOld(_aOld, _pDoc), m_aNew(_aNew, _pDoc), m_pDoc(_pDoc), m_bExchange( false )
 {
-    OSL_ENSURE(nullptr != pDoc, "no document?");
+    OSL_ENSURE(nullptr != m_pDoc, "no document?");
 
     /*
     The page description changes.
@@ -47,8 +47,8 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
     But this happens, this Undo Ctor will destroy the unnecessary duplicate and manipulate the
     content pointer of the both page descriptions.
     */
-    SwPageDesc &rOldDesc = aOld.m_PageDesc;
-    SwPageDesc &rNewDesc = aNew.m_PageDesc;
+    SwPageDesc &rOldDesc = m_aOld.m_PageDesc;
+    SwPageDesc &rNewDesc = m_aNew.m_PageDesc;
     const SwFormatHeader& rOldHead = rOldDesc.GetMaster().GetHeader();
     const SwFormatHeader& rNewHead = rNewDesc.GetMaster().GetHeader();
     const SwFormatFooter& rOldFoot = rOldDesc.GetMaster().GetFooter();
@@ -59,17 +59,17 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
     #i67334#: changing the follow style
     If header/footer will be activated or deactivated, this undo will not work.
     */
-    bExchange = ( aOld.GetName() == aNew.GetName() ) &&
+    m_bExchange = ( m_aOld.GetName() == m_aNew.GetName() ) &&
         ( _aOld.GetFollow() == _aNew.GetFollow() ) &&
         ( rOldHead.IsActive() == rNewHead.IsActive() ) &&
         ( rOldFoot.IsActive() == rNewFoot.IsActive() );
     if( rOldHead.IsActive() && ( rOldDesc.IsHeaderShared() != rNewDesc.IsHeaderShared() ) )
-        bExchange = false;
+        m_bExchange = false;
     if( rOldFoot.IsActive() && ( rOldDesc.IsFooterShared() != rNewDesc.IsFooterShared() ) )
-        bExchange = false;
+        m_bExchange = false;
     if( ( rOldHead.IsActive() || rOldFoot.IsActive() ) && ( rOldDesc.IsFirstShared() != rNewDesc.IsFirstShared() ) )
-        bExchange = false;
-    if( bExchange )
+        m_bExchange = false;
+    if( m_bExchange )
     {
         if( rNewHead.IsActive() )
         {
@@ -117,7 +117,7 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
 
         // After this exchange method the old page description will point to zero,
         // the new one will point to the node position of the original content nodes.
-        ExchangeContentNodes( aOld.m_PageDesc, aNew.m_PageDesc );
+        ExchangeContentNodes( m_aOld.m_PageDesc, m_aNew.m_PageDesc );
     }
 }
 
@@ -127,7 +127,7 @@ SwUndoPageDesc::~SwUndoPageDesc()
 
 void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDest )
 {
-    OSL_ENSURE( bExchange, "You shouldn't do that." );
+    OSL_ENSURE( m_bExchange, "You shouldn't do that." );
     const SwFormatHeader& rDestHead = rDest.GetMaster().GetHeader();
     const SwFormatHeader& rSourceHead = rSource.GetMaster().GetHeader();
     if( rDestHead.IsActive() )
@@ -220,36 +220,36 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
 void SwUndoPageDesc::UndoImpl(::sw::UndoRedoContext &)
 {
     // Move (header/footer)content node responsibility from new page descriptor to old one again.
-    if( bExchange )
-        ExchangeContentNodes( aNew.m_PageDesc, aOld.m_PageDesc );
-    pDoc->ChgPageDesc(aOld.GetName(), aOld);
+    if( m_bExchange )
+        ExchangeContentNodes( m_aNew.m_PageDesc, m_aOld.m_PageDesc );
+    m_pDoc->ChgPageDesc(m_aOld.GetName(), m_aOld);
 }
 
 void SwUndoPageDesc::RedoImpl(::sw::UndoRedoContext &)
 {
     // Move (header/footer)content node responsibility from old page descriptor to new one again.
-    if( bExchange )
-        ExchangeContentNodes( aOld.m_PageDesc, aNew.m_PageDesc );
-    pDoc->ChgPageDesc(aNew.GetName(), aNew);
+    if( m_bExchange )
+        ExchangeContentNodes( m_aOld.m_PageDesc, m_aNew.m_PageDesc );
+    m_pDoc->ChgPageDesc(m_aNew.GetName(), m_aNew);
 }
 
 SwRewriter SwUndoPageDesc::GetRewriter() const
 {
     SwRewriter aResult;
 
-    aResult.AddRule(UndoArg1, aOld.GetName());
+    aResult.AddRule(UndoArg1, m_aOld.GetName());
     aResult.AddRule(UndoArg2, SwResId(STR_YIELDS));
-    aResult.AddRule(UndoArg3, aNew.GetName());
+    aResult.AddRule(UndoArg3, m_aNew.GetName());
 
     return aResult;
 }
 
 SwUndoPageDescCreate::SwUndoPageDescCreate(const SwPageDesc * pNew,
                                            SwDoc * _pDoc)
-    : SwUndo(SwUndoId::CREATE_PAGEDESC, _pDoc), pDesc(pNew), aNew(*pNew, _pDoc),
-      pDoc(_pDoc)
+    : SwUndo(SwUndoId::CREATE_PAGEDESC, _pDoc), m_pDesc(pNew), m_aNew(*pNew, _pDoc),
+      m_pDoc(_pDoc)
 {
-    OSL_ENSURE(nullptr != pDoc, "no document?");
+    OSL_ENSURE(nullptr != m_pDoc, "no document?");
 }
 
 SwUndoPageDescCreate::~SwUndoPageDescCreate()
@@ -258,19 +258,19 @@ SwUndoPageDescCreate::~SwUndoPageDescCreate()
 
 void SwUndoPageDescCreate::UndoImpl(::sw::UndoRedoContext &)
 {
-    if (pDesc)
+    if (m_pDesc)
     {
-        aNew = *pDesc;
-        pDesc = nullptr;
+        m_aNew = *m_pDesc;
+        m_pDesc = nullptr;
     }
 
-    pDoc->DelPageDesc(aNew.GetName(), true);
+    m_pDoc->DelPageDesc(m_aNew.GetName(), true);
 }
 
 void SwUndoPageDescCreate::DoImpl()
 {
-    SwPageDesc aPageDesc = aNew;
-    pDoc->MakePageDesc(aNew.GetName(), &aPageDesc, false, true);
+    SwPageDesc aPageDesc = m_aNew;
+    m_pDoc->MakePageDesc(m_aNew.GetName(), &aPageDesc, false, true);
 }
 
 void SwUndoPageDescCreate::RedoImpl(::sw::UndoRedoContext &)
@@ -280,7 +280,7 @@ void SwUndoPageDescCreate::RedoImpl(::sw::UndoRedoContext &)
 
 void SwUndoPageDescCreate::RepeatImpl(::sw::RepeatContext &)
 {
-    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
+    ::sw::UndoGuard const undoGuard(m_pDoc->GetIDocumentUndoRedo());
     DoImpl();
 }
 
@@ -288,19 +288,19 @@ SwRewriter SwUndoPageDescCreate::GetRewriter() const
 {
     SwRewriter aResult;
 
-    if (pDesc)
-        aResult.AddRule(UndoArg1, pDesc->GetName());
+    if (m_pDesc)
+        aResult.AddRule(UndoArg1, m_pDesc->GetName());
     else
-        aResult.AddRule(UndoArg1, aNew.GetName());
+        aResult.AddRule(UndoArg1, m_aNew.GetName());
 
     return aResult;
 }
 
 SwUndoPageDescDelete::SwUndoPageDescDelete(const SwPageDesc & _aOld,
                                            SwDoc * _pDoc)
-    : SwUndo(SwUndoId::DELETE_PAGEDESC, _pDoc), aOld(_aOld, _pDoc), pDoc(_pDoc)
+    : SwUndo(SwUndoId::DELETE_PAGEDESC, _pDoc), m_aOld(_aOld, _pDoc), m_pDoc(_pDoc)
 {
-    OSL_ENSURE(nullptr != pDoc, "no document?");
+    OSL_ENSURE(nullptr != m_pDoc, "no document?");
 }
 
 SwUndoPageDescDelete::~SwUndoPageDescDelete()
@@ -309,13 +309,13 @@ SwUndoPageDescDelete::~SwUndoPageDescDelete()
 
 void SwUndoPageDescDelete::UndoImpl(::sw::UndoRedoContext &)
 {
-    SwPageDesc aPageDesc = aOld;
-    pDoc->MakePageDesc(aOld.GetName(), &aPageDesc, false, true);
+    SwPageDesc aPageDesc = m_aOld;
+    m_pDoc->MakePageDesc(m_aOld.GetName(), &aPageDesc, false, true);
 }
 
 void SwUndoPageDescDelete::DoImpl()
 {
-    pDoc->DelPageDesc(aOld.GetName(), true);
+    m_pDoc->DelPageDesc(m_aOld.GetName(), true);
 }
 
 void SwUndoPageDescDelete::RedoImpl(::sw::UndoRedoContext &)
@@ -325,7 +325,7 @@ void SwUndoPageDescDelete::RedoImpl(::sw::UndoRedoContext &)
 
 void SwUndoPageDescDelete::RepeatImpl(::sw::RepeatContext &)
 {
-    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
+    ::sw::UndoGuard const undoGuard(m_pDoc->GetIDocumentUndoRedo());
     DoImpl();
 }
 
@@ -333,7 +333,7 @@ SwRewriter SwUndoPageDescDelete::GetRewriter() const
 {
     SwRewriter aResult;
 
-    aResult.AddRule(UndoArg1, aOld.GetName());
+    aResult.AddRule(UndoArg1, m_aOld.GetName());
 
     return aResult;
 }
