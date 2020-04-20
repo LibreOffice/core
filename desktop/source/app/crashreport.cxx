@@ -112,8 +112,17 @@ void CrashReporter::writeCommonInfo()
     ucbhelper::InternetProxyDecider proxy_decider(::comphelper::getProcessComponentContext());
 
     const OUString protocol = "https";
-    const OUString url = "crashreport.libreoffice.org";
     const sal_Int32 port = 443;
+
+    // read configuration item 'CrashDumpUrl'
+    OUString url;
+    rtl::Bootstrap::get("CrashDumpUrl", url);
+    if (url.isEmpty())
+    {
+        // no url in config, bail out
+        mbInit = false;
+        return;
+    }
 
     const ucbhelper::InternetProxyServer proxy_server = proxy_decider.getProxy(protocol, url, port);
 
