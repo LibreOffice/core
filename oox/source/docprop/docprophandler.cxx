@@ -315,9 +315,19 @@ void SAL_CALL OOXMLDocPropHandler::startFastElement( ::sal_Int32 nElement, const
     {
         m_nType = nElement;
     }
+    // variant tags in vector
+    else if ( m_nState && m_nInBlock == 3 && getNamespace( nElement ) == NMSP_officeDocPropsVT )
+    {
+        m_nType = nElement;
+    }
+    // lpstr or i4 tags in vector
+    else if ( m_nState && m_nInBlock == 4 && getNamespace( nElement ) == NMSP_officeDocPropsVT )
+    {
+        m_nType = nElement;
+    }
     else
     {
-        SAL_WARN("oox", "OOXMLDocPropHandler::startFastElement: unknown element " << getBaseToken(nElement));
+        SAL_WARN("oox", "OOXMLDocPropHandler::startFastElement: unknown element " << getBaseToken(nElement) << " m_nState=" << m_nState << " m_nInBlock=" << m_nInBlock);
     }
 
     if ( m_nInBlock == SAL_MAX_INT32 )
