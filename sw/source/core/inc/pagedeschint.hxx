@@ -26,13 +26,13 @@ class SwPageDesc;
 
 class SwPageDescHint : public SfxHint
 {
-    SwPageDesc* pPageDesc;
+    SwPageDesc* m_pPageDesc;
 public:
     SwPageDescHint( SwPageDesc* p )
-        : pPageDesc(p)
+        : m_pPageDesc(p)
     {}
 
-    SwPageDesc* GetPageDesc() const { return pPageDesc; }
+    SwPageDesc* GetPageDesc() const { return m_pPageDesc; }
 };
 
 #endif

@@ -154,7 +154,7 @@ void SwUndoRedline::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 
 SwUndoRedlineDelete::SwUndoRedlineDelete( const SwPaM& rRange, SwUndoId nUsrId )
     : SwUndoRedline( nUsrId != SwUndoId::EMPTY ? nUsrId : SwUndoId::DELETE, rRange ),
-    bCanGroup( false ), bIsDelim( false ), bIsBackspace( false )
+    m_bCanGroup( false ), m_bIsDelim( false ), m_bIsBackspace( false )
 {
     const SwTextNode* pTNd;
     SetRedlineText(rRange.GetText());
@@ -165,10 +165,10 @@ SwUndoRedlineDelete::SwUndoRedlineDelete( const SwPaM& rRange, SwUndoId nUsrId )
         sal_Unicode const cCh = pTNd->GetText()[m_nSttContent];
         if( CH_TXTATR_BREAKWORD != cCh && CH_TXTATR_INWORD != cCh )
         {
-            bCanGroup = true;
-            bIsDelim = !GetAppCharClass().isLetterNumeric( pTNd->GetText(),
+            m_bCanGroup = true;
+            m_bIsDelim = !GetAppCharClass().isLetterNumeric( pTNd->GetText(),
                                                             m_nSttContent );
-            bIsBackspace = m_nSttContent == rRange.GetPoint()->nContent.GetIndex();
+            m_bIsBackspace = m_nSttContent == rRange.GetPoint()->nContent.GetIndex();
         }
     }
 
@@ -211,9 +211,9 @@ bool SwUndoRedlineDelete::CanGrouping( const SwUndoRedlineDelete& rNext )
 {
     bool bRet = false;
     if( SwUndoId::DELETE == mnUserId && mnUserId == rNext.mnUserId &&
-        bCanGroup == rNext.bCanGroup &&
-        bIsDelim == rNext.bIsDelim &&
-        bIsBackspace == rNext.bIsBackspace &&
+        m_bCanGroup == rNext.m_bCanGroup &&
+        m_bIsDelim == rNext.m_bIsDelim &&
+        m_bIsBackspace == rNext.m_bIsBackspace &&
         m_nSttNode == m_nEndNode &&
         rNext.m_nSttNode == m_nSttNode &&
         rNext.m_nEndNode == m_nEndNode )
@@ -244,8 +244,8 @@ bool SwUndoRedlineDelete::CanGrouping( const SwUndoRedlineDelete& rNext )
 SwUndoRedlineSort::SwUndoRedlineSort( const SwPaM& rRange,
                                     const SwSortOptions& rOpt )
     : SwUndoRedline( SwUndoId::SORT_TXT, rRange ),
-    pOpt( new SwSortOptions( rOpt ) ),
-    nSaveEndNode( m_nEndNode ), nSaveEndContent( m_nEndContent )
+    m_pOpt( new SwSortOptions( rOpt ) ),
+    m_nSaveEndNode( m_nEndNode ), m_nSaveEndContent( m_nEndContent )
 {
 }
 
@@ -282,8 +282,8 @@ void SwUndoRedlineSort::UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
         SwPaM aTmp( *rPam.GetMark() );
         aTmp.GetMark()->nContent = 0;
         aTmp.SetMark();
-        aTmp.GetPoint()->nNode = nSaveEndNode;
-        aTmp.GetPoint()->nContent.Assign( aTmp.GetContentNode(), nSaveEndContent );
+        aTmp.GetPoint()->nNode = m_nSaveEndNode;
+        aTmp.GetPoint()->nContent.Assign( aTmp.GetContentNode(), m_nSaveEndContent );
         rDoc.getIDocumentRedlineAccess().DeleteRedline( aTmp, true, RedlineType::Any );
     }
 
@@ -315,7 +315,7 @@ void SwUndoRedlineSort::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
     sal_uLong nOffsetTemp = pEnd->nNode.GetIndex() - pStart->nNode.GetIndex();
     const sal_Int32 nCntStt  = pStart->nContent.GetIndex();
 
-    rDoc.SortText(rPam, *pOpt);
+    rDoc.SortText(rPam, *m_pOpt);
 
     pPam->DeleteMark();
     pPam->GetPoint()->nNode.Assign( aPrevIdx.GetNode(), +1 );
@@ -333,20 +333,20 @@ void SwUndoRedlineSort::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
     SetValues( rPam );
 
     SetPaM( rPam );
-    rPam.GetPoint()->nNode = nSaveEndNode;
-    rPam.GetPoint()->nContent.Assign( rPam.GetContentNode(), nSaveEndContent );
+    rPam.GetPoint()->nNode = m_nSaveEndNode;
+    rPam.GetPoint()->nContent.Assign( rPam.GetContentNode(), m_nSaveEndContent );
 }
 
 void SwUndoRedlineSort::RepeatImpl(::sw::RepeatContext & rContext)
 {
-    rContext.GetDoc().SortText( rContext.GetRepeatPaM(), *pOpt );
+    rContext.GetDoc().SortText( rContext.GetRepeatPaM(), *m_pOpt );
 }
 
 void SwUndoRedlineSort::SetSaveRange( const SwPaM& rRange )
 {
     const SwPosition& rPos = *rRange.End();
-    nSaveEndNode = rPos.nNode.GetIndex();
-    nSaveEndContent = rPos.nContent.GetIndex();
+    m_nSaveEndNode = rPos.nNode.GetIndex();
+    m_nSaveEndContent = rPos.nContent.GetIndex();
 }
 
 SwUndoAcceptRedline::SwUndoAcceptRedline( const SwPaM& rRange )

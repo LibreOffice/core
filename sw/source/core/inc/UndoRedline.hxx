@@ -52,9 +52,9 @@ public:
 
 class SwUndoRedlineDelete : public SwUndoRedline
 {
-    bool bCanGroup : 1;
-    bool bIsDelim : 1;
-    bool bIsBackspace : 1;
+    bool m_bCanGroup : 1;
+    bool m_bIsDelim : 1;
+    bool m_bIsBackspace : 1;
 
     OUString m_sRedlineText;
 
@@ -76,9 +76,9 @@ public:
 
 class SwUndoRedlineSort : public SwUndoRedline
 {
-    std::unique_ptr<SwSortOptions> pOpt;
-    sal_uLong nSaveEndNode;
-    sal_Int32 nSaveEndContent;
+    std::unique_ptr<SwSortOptions> m_pOpt;
+    sal_uLong m_nSaveEndNode;
+    sal_Int32 m_nSaveEndContent;
 
     virtual void UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) override;
     virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) override;
