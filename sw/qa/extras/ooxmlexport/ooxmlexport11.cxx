@@ -161,6 +161,15 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121561_tocTitle, "tdf121456_tabsOffse
     assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:docPartObj/w:docPartUnique", 1);
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf129525, "tdf129525.rtf")
+{
+    xmlDocPtr pXmlDoc = parseExport();
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[4]/w:t", "Overview");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[5]/w:t", "3");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[2]/w:r[1]/w:t", "More detailed description");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[2]/w:r[2]/w:t", "4");
+}
+
 // Related issue tdf#121561: w:sdt/w:sdtContent around TOC
 DECLARE_OOXMLEXPORT_TEST(testTdf124106, "tdf121456.docx")
 {
