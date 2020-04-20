@@ -25,6 +25,7 @@
 #include <tools/gen.hxx>
 #include <driverblocklist.hxx>
 
+#include <SkRegion.h>
 #include <tools/sk_app/VulkanWindowContext.h>
 
 namespace SkiaHelper
@@ -66,6 +67,42 @@ inline DriverBlocklist::DeviceVendor getVendor()
 }
 
 } // namespace
+
+template <typename charT, typename traits>
+inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,
+                                                     const SkRect& rectangle)
+{
+    if (rectangle.isEmpty())
+        return stream << "EMPTY";
+    else
+        return stream << rectangle.width() << 'x' << rectangle.height() << "@(" << rectangle.x()
+                      << ',' << rectangle.y() << ")";
+}
+
+template <typename charT, typename traits>
+inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,
+                                                     const SkIRect& rectangle)
+{
+    if (rectangle.isEmpty())
+        return stream << "EMPTY";
+    else
+        return stream << rectangle.width() << 'x' << rectangle.height() << "@(" << rectangle.x()
+                      << ',' << rectangle.y() << ")";
+}
+
+template <typename charT, typename traits>
+inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,
+                                                     const SkRegion& region)
+{
+    if (region.isEmpty())
+        return stream << "EMPTY";
+    stream << "(";
+    SkRegion::Iterator it(region);
+    for (int i = 0; !it.done(); it.next(), ++i)
+        stream << "[" << i << "] " << it.rect();
+    stream << ")";
+    return stream;
+}
 
 #endif // INCLUDED_VCL_INC_SKIA_UTILS_H
 

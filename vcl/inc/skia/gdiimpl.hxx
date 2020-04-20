@@ -26,6 +26,7 @@
 #include <salgeom.hxx>
 
 #include <SkSurface.h>
+#include <SkRegion.h>
 
 #include <prewin.h>
 #include <tools/sk_app/WindowContext.h>
@@ -219,6 +220,8 @@ protected:
     void postDraw();
     // The canvas to draw to. Will be diverted to a temporary for Xor mode.
     SkCanvas* getDrawCanvas() { return mXorMode ? getXorCanvas() : mSurface->getCanvas(); }
+    // Call before makeImageSnapshot(), ensures the content is up to date.
+    void flushDrawing();
 
     virtual void createSurface();
     // Call to ensure that mSurface is valid. If mSurface is going to be modified,
@@ -254,6 +257,15 @@ protected:
     void drawMask(const SalTwoRect& rPosAry, const sk_sp<SkImage>& rImage, Color nMaskColor);
 
     SkCanvas* getXorCanvas();
+    void applyXor();
+    void addXorRegion(const SkRect& rect)
+    {
+        if (mXorMode)
+        {
+            // Make slightly larger, just in case (rounding, antialiasing,...).
+            mXorRegion.op(rect.makeOutset(2, 2).round(), SkRegion::kUnion_Op);
+        }
+    }
     static void setCanvasClipRegion(SkCanvas* canvas, const vcl::Region& region);
 
     // When drawing using GPU, rounding errors may result in off-by-one errors,
@@ -286,7 +298,7 @@ protected:
     bool mXorMode;
     SkBitmap mXorBitmap;
     std::unique_ptr<SkCanvas> mXorCanvas;
-    SkRect mXorExtents; // the area that needs updating for the xor operation (or empty for all)
+    SkRegion mXorRegion; // the area that needs updating for the xor operation
     std::unique_ptr<SkiaFlushIdle> mFlush;
     int mPendingPixelsToFlush;
 };
