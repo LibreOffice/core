@@ -1327,7 +1327,7 @@ bool ImpGraphic::ImplSwapOut()
                 bRet = ImplSwapOut( xOStm.get() );
                 if( bRet )
                 {
-                    mpSwapFile = std::make_unique<ImpSwapFile>();
+                    mpSwapFile = std::make_shared<ImpSwapFile>();
                     mpSwapFile->aSwapURL = aTmpURL;
                     mpSwapFile->maOriginURL = getOriginURL();
                 }
