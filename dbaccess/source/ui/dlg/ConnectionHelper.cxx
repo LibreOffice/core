@@ -49,6 +49,7 @@
 #include <tools/diagnose_ex.h>
 
 #if defined _WIN32
+#include <rtl/process.h>
 #include <vcl/sysdata.hxx>
 #include "adodatalinks.hxx"
 #endif
