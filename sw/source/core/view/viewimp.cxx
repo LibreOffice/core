@@ -184,7 +184,7 @@ void SwViewShellImp::SetFirstVisPage(OutputDevice const * pRenderContext)
                 if ( bBookMode && pPage->IsEmptyPage() )
                 {
                     const SwPageFrame& rFormatPage = pPage->GetFormatPage();
-                    aPageRect.SSize() = rFormatPage.GetBoundRect(pRenderContext).SSize();
+                    aPageRect.SSize( rFormatPage.GetBoundRect(pRenderContext).SSize() );
                 }
             }
         }

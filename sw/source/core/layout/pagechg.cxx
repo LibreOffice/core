@@ -1394,7 +1394,7 @@ SwTwips SwRootFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
     if ( !bTst )
     {
         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-        aFrm.SSize().AdjustHeight(nDist );
+        aFrm.AddHeight(nDist );
     }
 
     return nDist;
@@ -1408,7 +1408,7 @@ SwTwips SwRootFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool )
     if ( !bTst )
     {
         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-        aFrm.SSize().AdjustHeight( -nDist );
+        aFrm.AddHeight( -nDist );
     }
 
     return nDist;
@@ -1698,7 +1698,7 @@ Size SwRootFrame::ChgSize( const Size& aNewSize )
 {
     {
         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-        aFrm.SSize() = aNewSize;
+        aFrm.SSize(aNewSize);
     }
 
     InvalidatePrt_();

@@ -72,7 +72,6 @@ public:
 
     // In order to be able to access the members of Pos and SSize from the layout side.
     inline Point &Pos();
-    inline Size  &SSize();
 
     Point Center() const;
 
@@ -222,10 +221,6 @@ inline Point &SwRect::Pos()
     return m_Point;
 }
 inline const Size  &SwRect::SSize() const
-{
-    return m_Size;
-}
-inline Size  &SwRect::SSize()
 {
     return m_Size;
 }

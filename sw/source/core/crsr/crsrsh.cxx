@@ -3070,8 +3070,8 @@ void SwCursorShell::MakeSelVisible()
         }
         if( !aTmp.HasArea() )
         {
-            aTmp.SSize().AdjustHeight(1 );
-            aTmp.SSize().AdjustWidth(1 );
+            aTmp.AddHeight(1 );
+            aTmp.AddWidth(1 );
         }
         MakeVisible( aTmp );
     }
@@ -3082,7 +3082,8 @@ void SwCursorShell::MakeSelVisible()
         else
         {
             SwRect aTmp( m_aCharRect );
-            aTmp.SSize().AdjustHeight(1 ); aTmp.SSize().AdjustWidth(1 );
+            aTmp.AddHeight(1 );
+            aTmp.AddWidth(1 );
             MakeVisible( aTmp );
         }
     }

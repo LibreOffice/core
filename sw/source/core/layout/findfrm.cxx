@@ -577,7 +577,7 @@ const SwPageFrame* SwRootFrame::GetPageAtPos( const Point& rPt, const Size* pSiz
     if ( pSize )
     {
         aRect.Pos()  = rPt;
-        aRect.SSize() = *pSize;
+        aRect.SSize( *pSize );
     }
 
     const SwFrame* pPage = Lower();

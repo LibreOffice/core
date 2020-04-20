@@ -1271,8 +1271,8 @@ SdrObject* SwVirtFlyDrawObj::CheckMacroHit( const SdrObjMacroHitRec& rRec ) cons
         {
             aRect.Pos().setX(aRect.Pos().getX() + rRec.nTol);
             aRect.Pos().setY(aRect.Pos().getY() + rRec.nTol);
-            aRect.SSize().AdjustHeight( -(2 * rRec.nTol) );
-            aRect.SSize().AdjustWidth( -(2 * rRec.nTol) );
+            aRect.AddHeight( -(2 * rRec.nTol) );
+            aRect.AddWidth( -(2 * rRec.nTol) );
 
             if( aRect.IsInside( rRec.aPos ) )
             {

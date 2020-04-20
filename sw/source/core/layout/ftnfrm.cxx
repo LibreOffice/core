@@ -430,7 +430,7 @@ SwTwips SwFootnoteContFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
 
             // We can only respect the boundless wish so much
             SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-            aFrm.SSize().AdjustHeight( -nDist );
+            aFrm.AddHeight( -nDist );
 
             if( IsVertical() && !IsVertLR() )
             {
