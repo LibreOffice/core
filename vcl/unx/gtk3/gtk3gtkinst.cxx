@@ -7662,7 +7662,7 @@ class GtkInstanceToolbar : public GtkInstanceWidget, public virtual weld::Toolba
 private:
     GtkToolbar* m_pToolbar;
 
-    std::map<OString, GtkToolButton*> m_aMap;
+    std::map<OString, GtkToolItem*> m_aMap;
     std::map<OString, std::unique_ptr<GtkInstanceMenuButton>> m_aMenuButtonMap;
 
     // at the time of writing there is no gtk_menu_tool_button_set_popover available
@@ -7692,9 +7692,9 @@ private:
 
     static void collect(GtkWidget* pItem, gpointer widget)
     {
-        if (GTK_IS_TOOL_BUTTON(pItem))
+        if (GTK_IS_TOOL_ITEM(pItem))
         {
-            GtkToolButton* pToolItem = GTK_TOOL_BUTTON(pItem);
+            GtkToolItem* pToolItem = GTK_TOOL_ITEM(pItem);
             GtkInstanceToolbar* pThis = static_cast<GtkInstanceToolbar*>(widget);
 
             GtkMenuButton* pMenuButton = nullptr;
@@ -7705,7 +7705,7 @@ private:
         }
     }
 
-    void add_to_map(GtkToolButton* pToolItem, GtkMenuButton* pMenuButton)
+    void add_to_map(GtkToolItem* pToolItem, GtkMenuButton* pMenuButton)
     {
         const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pToolItem));
         OString id(pStr, pStr ? strlen(pStr) : 0);
@@ -7719,6 +7719,8 @@ private:
             gtk_button_set_focus_on_click(GTK_BUTTON(pMenuButton), false);
             g_signal_connect(pMenuButton, "toggled", G_CALLBACK(signalItemToggled), this);
         }
+        if (!GTK_IS_TOOL_BUTTON(pToolItem))
+            return;
         g_signal_connect(pToolItem, "clicked", G_CALLBACK(signalItemClicked), this);
     }
 
@@ -7839,7 +7841,7 @@ public:
     {
         disable_item_notify_events();
 
-        GtkToolButton* pToolButton = m_aMap.find(rIdent)->second;
+        GtkToolItem* pToolButton = m_aMap.find(rIdent)->second;
 
         assert(GTK_IS_TOGGLE_TOOL_BUTTON(pToolButton) || GTK_IS_MENU_TOOL_BUTTON(pToolButton) || !bActive);
         if (GTK_IS_MENU_TOOL_BUTTON(pToolButton))
@@ -7864,7 +7866,7 @@ public:
 
     virtual bool get_item_active(const OString& rIdent) const override
     {
-        GtkToolButton* pToolButton = m_aMap.find(rIdent)->second;
+        GtkToolItem* pToolButton = m_aMap.find(rIdent)->second;
 
         assert(GTK_IS_TOGGLE_TOOL_BUTTON(pToolButton) || GTK_IS_MENU_TOOL_BUTTON(pToolButton));
         if (GTK_IS_MENU_TOOL_BUTTON(pToolButton))
@@ -7948,22 +7950,22 @@ public:
 
     virtual void set_item_label(const OString& rIdent, const OUString& rLabel) override
     {
-        GtkToolButton* pItem = m_aMap[rIdent];
-        if (!pItem)
+        GtkToolItem* pItem = m_aMap[rIdent];
+        if (!pItem || !GTK_IS_TOOL_BUTTON(pItem))
             return;
         gtk_tool_button_set_label(GTK_TOOL_BUTTON(pItem), MapToGtkAccelerator(rLabel).getStr());
     }
 
     OUString get_item_label(const OString& rIdent) const override
     {
-        const gchar* pText = gtk_tool_button_get_label(m_aMap.find(rIdent)->second);
+        const gchar* pText = gtk_tool_button_get_label(GTK_TOOL_BUTTON(m_aMap.find(rIdent)->second));
         return OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
     }
 
     virtual void set_item_icon_name(const OString& rIdent, const OUString& rIconName) override
     {
-        GtkToolButton* pItem = m_aMap[rIdent];
-        if (!pItem)
+        GtkToolItem* pItem = m_aMap[rIdent];
+        if (!pItem || !GTK_IS_TOOL_BUTTON(pItem))
             return;
 
         GtkWidget* pImage = nullptr;
@@ -7975,23 +7977,23 @@ public:
             gtk_widget_show(pImage);
         }
 
-        gtk_tool_button_set_icon_widget(pItem, pImage);
+        gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(pItem), pImage);
     }
 
     virtual void set_item_image(const OString& rIdent, const css::uno::Reference<css::graphic::XGraphic>& rIcon) override
     {
-        GtkToolButton* pItem = m_aMap[rIdent];
-        if (!pItem)
+        GtkToolItem* pItem = m_aMap[rIdent];
+        if (!pItem || !GTK_IS_TOOL_BUTTON(pItem))
             return;
-        set_item_image(pItem, rIcon);
+        set_item_image(GTK_TOOL_BUTTON(pItem), rIcon);
     }
 
     virtual void set_item_image(const OString& rIdent, VirtualDevice* pDevice) override
     {
-        GtkToolButton* pItem = m_aMap[rIdent];
-        if (!pItem)
+        GtkToolItem* pItem = m_aMap[rIdent];
+        if (!pItem || !GTK_IS_TOOL_BUTTON(pItem))
             return;
-        set_item_image(pItem, pDevice);
+        set_item_image(GTK_TOOL_BUTTON(pItem), pDevice);
     }
 
     virtual void set_item_image(int nIndex, const css::uno::Reference<css::graphic::XGraphic>& rIcon) override
@@ -8010,13 +8012,13 @@ public:
 
     virtual void set_item_tooltip_text(const OString& rIdent, const OUString& rTip) override
     {
-        GtkToolButton* pItem = m_aMap[rIdent];
+        GtkToolItem* pItem = m_aMap[rIdent];
         gtk_widget_set_tooltip_text(GTK_WIDGET(pItem), OUStringToOString(rTip, RTL_TEXTENCODING_UTF8).getStr());
     }
 
     virtual OUString get_item_tooltip_text(const OString& rIdent) const override
     {
-        GtkToolButton* pItem = m_aMap.find(rIdent)->second;
+        GtkToolItem* pItem = m_aMap.find(rIdent)->second;
         const gchar* pStr = gtk_widget_get_tooltip_text(GTK_WIDGET(pItem));
         return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
     }
