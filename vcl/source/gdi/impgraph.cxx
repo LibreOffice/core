@@ -1328,44 +1328,46 @@ bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
 
 bool ImpGraphic::swapOut()
 {
-
-    if( isSwappedOut() )
+    if (isSwappedOut())
         return false;
 
-    ::utl::TempFile     aTempFile;
-    const INetURLObject aTmpURL( aTempFile.GetURL() );
+    utl::TempFile aTempFile;
+    const INetURLObject aTempFileURL(aTempFile.GetURL());
+    OUString sTempFileURLString = aTempFileURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 
-    if( aTmpURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ).isEmpty() )
+    if (sTempFileURLString.isEmpty())
         return false;
+    std::unique_ptr<SvStream> xOutputStream;
 
-    std::unique_ptr<SvStream> xOStm;
     try
     {
-        xOStm = ::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE );
+        xOutputStream = utl::UcbStreamHelper::CreateStream(sTempFileURLString, StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE);
     }
-    catch( const css::uno::Exception& )
+    catch (const css::uno::Exception&)
     {
     }
-    if( !xOStm )
+
+    if (!xOutputStream)
         return false;
+    xOutputStream->SetVersion(SOFFICE_FILEFORMAT_50);
+    xOutputStream->SetCompressMode(SvStreamCompressFlags::NATIVE);
 
-    xOStm->SetVersion( SOFFICE_FILEFORMAT_50 );
-    xOStm->SetCompressMode( SvStreamCompressFlags::NATIVE );
+    bool bResult = swapOutToStream(xOutputStream.get());
 
-    bool bRet = swapOutToStream( xOStm.get() );
-    if( bRet )
+    if (bResult)
     {
-        mpSwapFile.reset(new ImpSwapFile(aTmpURL, getOriginURL()), o3tl::default_delete<ImpSwapFile>());
+        mpSwapFile.reset(new ImpSwapFile(aTempFileURL, getOriginURL()), o3tl::default_delete<ImpSwapFile>());
     }
     else
     {
-        xOStm.reset();
-        utl::UCBContentHelper::Kill(aTmpURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+        xOutputStream.reset();
+        utl::UCBContentHelper::Kill(sTempFileURLString);
     }
 
-    if (bRet)
+    if (bResult)
         vcl::graphic::Manager::get().swappedOut(this);
-    return bRet;
+
+    return bResult;
 }
 
 bool ImpGraphic::swapOutToStream(SvStream* xOStm)
