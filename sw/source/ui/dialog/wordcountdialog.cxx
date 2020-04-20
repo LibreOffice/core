@@ -32,7 +32,7 @@
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
 
-#define IS_MOBILE_PHONE (comphelper::LibreOfficeKit::isActive() && comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView()))
+#define IS_MOBILE_PHONE (comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current() && SfxViewShell::Current()->isLOKMobilePhone())
 
 SwWordCountFloatDlg::~SwWordCountFloatDlg()
 {
