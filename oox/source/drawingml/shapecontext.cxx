@@ -116,6 +116,7 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 aElementToken, const 
     case XML_cNvPicPr:
         break;
     case XML_nvPicPr:
+    case XML_picLocks:
         break;
     case XML_relIds:
         break;
