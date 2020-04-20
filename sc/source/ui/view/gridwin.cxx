@@ -2227,11 +2227,10 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                 }
                 // On a mobile device view there is no ctrl+click and for hyperlink popup
                 // the cell coordinates must be sent along with click position for elegance
-                if (isTiledRendering &&
-                    (comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView()) ||
-                     comphelper::LibreOfficeKit::isTablet(SfxLokHelper::getView())))
+                ScTabViewShell* pViewShell = pViewData->GetViewShell();
+                if (isTiledRendering && pViewShell &&
+                    (pViewShell->isLOKMobilePhone() || pViewShell->isLOKTablet()))
                 {
-                    ScTabViewShell* pViewShell = pViewData->GetViewShell();
                     Point aPos = rMEvt.GetPosPixel();
                     SCCOL nPosX;
                     SCROW nPosY;

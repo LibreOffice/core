@@ -65,7 +65,7 @@ public:
 
         try
         {
-            if (pMobileNotifier && comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView()))
+            if (pMobileNotifier && pMobileNotifier->isLOKMobilePhone())
             {
                 // Mobile phone.
                 std::stringstream aStream;
