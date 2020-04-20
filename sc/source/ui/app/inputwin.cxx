@@ -557,6 +557,7 @@ void ScInputWindow::Resize()
     {
         std::vector<vcl::LOKPayloadItem> aItems;
         aItems.emplace_back("size", GetSizePixel().toString());
+        aItems.emplace_back("lines", OString::number(aTextWindow.GetNumLines()));
         pNotifier->notifyWindow(GetLOKWindowId(), "size_changed", aItems);
     }
 
@@ -577,6 +578,7 @@ void ScInputWindow::NotifyLOKClient()
             aItems.emplace_back("type", "calc-input-win");
             aItems.emplace_back(std::make_pair("position", Point(0, 0).toString()));
             aItems.emplace_back(std::make_pair("size", aSize.toString()));
+            aItems.emplace_back("lines", OString::number(aTextWindow.GetNumLines()));
             pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
         }
 

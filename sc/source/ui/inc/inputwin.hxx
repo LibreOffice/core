@@ -55,6 +55,7 @@ public:
     virtual void            SetFormulaMode( bool bSet ) = 0;
     virtual bool            IsInputActive() = 0;
     virtual void            TextGrabFocus() = 0;
+    virtual long            GetNumLines() = 0;
 };
 
 class ScTextWnd : public ScTextWndBase, public DragSourceHelper     // edit window
@@ -93,7 +94,7 @@ public:
     long GetPixelHeightForLines(long nLines);
     long GetEditEngTxtHeight();
 
-    long GetNumLines() { return mnLines; }
+    virtual long GetNumLines() override { return mnLines; }
     void SetNumLines(long nLines);
     long GetLastNumExpandedLines() { return mnLastExpandedLines; }
 
