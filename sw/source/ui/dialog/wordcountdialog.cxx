@@ -34,7 +34,7 @@
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
 
-#define IS_MOBILE (comphelper::LibreOfficeKit::isActive() && comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView()))
+#define IS_MOBILE_PHONE (comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current() && SfxViewShell::Current()->isLOKMobilePhone())
 
 SwWordCountFloatDlg::~SwWordCountFloatDlg()
 {
@@ -107,7 +107,7 @@ SwWordCountFloatDlg::SwWordCountFloatDlg(SfxBindings* _pBindings,
                                          SfxChildWindow* pChild,
                                          weld::Window *pParent,
                                          SfxChildWinInfo const * pInfo)
-    : SfxModelessDialogController(_pBindings, pChild, pParent, IS_MOBILE ? OUString("modules/swriter/ui/wordcount-mobile.ui") : OUString("modules/swriter/ui/wordcount.ui"), "WordCountDialog")
+    : SfxModelessDialogController(_pBindings, pChild, pParent, IS_MOBILE_PHONE ? OUString("modules/swriter/ui/wordcount-mobile.ui") : OUString("modules/swriter/ui/wordcount.ui"), "WordCountDialog")
     , m_xCurrentWordFT(m_xBuilder->weld_label("selectwords"))
     , m_xCurrentCharacterFT(m_xBuilder->weld_label("selectchars"))
     , m_xCurrentCharacterExcludingSpacesFT(m_xBuilder->weld_label("selectcharsnospaces"))

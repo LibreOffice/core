@@ -1083,8 +1083,8 @@ SfxViewShell::SfxViewShell
 ,   mbPrinterSettingsModified(false)
 ,   maLOKLanguageTag(LANGUAGE_NONE)
 ,   maLOKLocale(LANGUAGE_NONE)
+,   maLOKDeviceFormFactor(LOKDeviceFormFactor::UNKNOWN)
 {
-
     SetMargin( pViewFrame->GetMargin_Impl() );
 
     SetPool( &pViewFrame->GetObjectShell()->GetPool() );
@@ -1098,6 +1098,8 @@ SfxViewShell::SfxViewShell
     {
         maLOKLanguageTag = SfxLokHelper::getDefaultLanguage();
         maLOKLocale = SfxLokHelper::getDefaultLanguage();
+
+        maLOKDeviceFormFactor = SfxLokHelper::getDeviceFormFactor();
 
         vcl::Window* pFrameWin = pViewFrame->GetWindow().GetFrameWindow();
         if (pFrameWin && !pFrameWin->GetLOKNotifier())

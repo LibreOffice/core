@@ -50,8 +50,9 @@ TextPropertyPanel::TextPropertyPanel ( vcl::Window* pParent, const css::uno::Ref
     get(mpSetDefault, "defaultattr");
 
     bool isMobilePhone = false;
+    const SfxViewShell* pViewShell = SfxViewShell::Current();
     if (comphelper::LibreOfficeKit::isActive() &&
-        comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView()))
+            pViewShell && pViewShell->isLOKMobilePhone())
         isMobilePhone = true;
     VclPtr<ToolBox> xSpacingBar;
     get(xSpacingBar, "spacingbar");

@@ -609,7 +609,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
         if( xChartModel.is() )
             xChartModel->unlockControllers();
     }
-    else if (!comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView()))
+    else if (!rViewSh.isLOKMobilePhone())
     {
         //the controller will be unlocked by the dialog when the dialog is told to do so
 

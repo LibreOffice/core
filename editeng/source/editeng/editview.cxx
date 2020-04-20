@@ -1083,11 +1083,11 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
         EPaM aP = pImpEditView->pEditEngine->pImpEditEngine->CreateEPaM(aPaM);
         EPaM aP2 = pImpEditView->pEditEngine->pImpEditEngine->CreateEPaM(aPaM2);
 
-
         if (comphelper::LibreOfficeKit::isActive())
         {
-            // For mobile phone, send the context menu structure
-            if (comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView()))
+            // For mobile phones, send the context menu structure
+            const SfxViewShell* pViewShell = SfxViewShell::Current();
+            if (pViewShell && pViewShell->isLOKMobilePhone())
             {
                 LOKSendSpellPopupMenu(aPopupMenu, nGuessLangWord, nGuessLangPara, nWords);
                 return;

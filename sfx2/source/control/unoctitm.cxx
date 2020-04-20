@@ -1147,7 +1147,8 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
              aEvent.FeatureURL.Path == "TransformWidth" ||
              aEvent.FeatureURL.Path == "TransformHeight")
     {
-        if (aEvent.IsEnabled && comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView()))
+        const SfxViewShell* pViewShell = SfxViewShell::Current();
+        if (aEvent.IsEnabled && pViewShell && pViewShell->isLOKMobilePhone())
         {
             boost::property_tree::ptree aTree;
             boost::property_tree::ptree aState;
