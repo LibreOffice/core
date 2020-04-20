@@ -897,6 +897,16 @@ static void copyArea(SkCanvas* canvas, sk_sp<SkSurface> surface, long nDestX, lo
     // Using SkSurface::draw() should be more efficient than SkSurface::makeImageSnapshot(),
     // because it may detect copying to itself and avoid some needless copies.
     // It cannot do a subrectangle though, so clip.
+    if (canvas == surface->getCanvas())
+    {
+        // TODO: Currently copy-to-self is buggy with SkSurface::draw().
+        SkPaint paint;
+        paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
+        canvas->drawImageRect(surface->makeImageSnapshot(),
+                              SkIRect::MakeXYWH(nSrcX, nSrcY, nSrcWidth, nSrcHeight),
+                              SkRect::MakeXYWH(nDestX, nDestY, nSrcWidth, nSrcHeight), &paint);
+        return;
+    }
     canvas->save();
     canvas->clipRect(SkRect::MakeXYWH(nDestX, nDestY, nSrcWidth, nSrcHeight));
     SkPaint paint;
