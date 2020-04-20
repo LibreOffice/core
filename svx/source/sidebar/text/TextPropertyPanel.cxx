@@ -63,8 +63,9 @@ TextPropertyPanel::TextPropertyPanel ( vcl::Window* pParent, const css::uno::Ref
     , mxSpacingBarDispatch(new ToolbarUnoDispatcher(*mxSpacingBar, *m_xBuilder, rxFrame))
 {
     bool isMobilePhone = false;
+    const SfxViewShell* pViewShell = SfxViewShell::Current();
     if (comphelper::LibreOfficeKit::isActive() &&
-        comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView()))
+            pViewShell && pViewShell->isLOKMobilePhone())
         isMobilePhone = true;
     mxSpacingBar->set_visible(!isMobilePhone);
 }

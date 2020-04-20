@@ -88,12 +88,6 @@ static LanguageAndLocale g_aLanguageAndLocale;
 /// Scaling of the cairo canvas painting for hi-dpi
 static double g_fDPIScale(1.0);
 
-/// Which views are on mobile phones?
-static std::map<int, bool> g_vIsViewMobilePhone;
-
-/// Which views are on tablets?
-static std::map<int, bool> g_vIsViewTablet;
-
 void setActive(bool bActive)
 {
     g_bActive = bActive;
@@ -102,36 +96,6 @@ void setActive(bool bActive)
 bool isActive()
 {
     return g_bActive;
-}
-
-void setMobilePhone(int nViewId)
-{
-    assert(!isMobilePhone(nViewId));
-    assert(!isTablet(nViewId));
-    g_vIsViewMobilePhone[nViewId] = true;
-}
-
-bool isMobilePhone(int nViewId)
-{
-    if (g_vIsViewMobilePhone.find(nViewId) != g_vIsViewMobilePhone.end())
-        return g_vIsViewMobilePhone[nViewId];
-    else
-        return false;
-}
-
-void setTablet(int nViewId)
-{
-    assert(!isMobilePhone(nViewId));
-    assert(!isTablet(nViewId));
-    g_vIsViewTablet[nViewId] = true;
-}
-
-bool isTablet(int nViewId)
-{
-    if (g_vIsViewTablet.find(nViewId) != g_vIsViewTablet.end())
-        return g_vIsViewTablet[nViewId];
-    else
-        return false;
 }
 
 void setPartInInvalidation(bool bPartInInvalidation)
