@@ -31,6 +31,12 @@ void TextCharacterSpacingPopup::initialize( const css::uno::Sequence< css::uno::
 {
     PopupWindowController::initialize(rArguments);
 
+    if (m_pToolbar)
+    {
+        mxPopoverContainer.reset(new ToolbarPopupContainer(m_pToolbar));
+        m_pToolbar->set_item_popover(m_aCommandURL.toUtf8(), mxPopoverContainer->getTopLevel());
+    }
+
     ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
     if (getToolboxId(nId, &pToolBox) && pToolBox->GetItemCommand(nId) == m_aCommandURL)
