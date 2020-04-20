@@ -23,6 +23,7 @@
 #include "typelib/uik.h"
 #include "typelib/typeclass.h"
 #include "rtl/ustring.h"
+#include <assert.h>
 
 #ifdef __cplusplus
 extern "C"
@@ -1012,7 +1013,10 @@ inline void TYPELIB_DANGER_GET( typelib_TypeDescription** ppMacroTypeDescr,
     {
         typelib_typedescriptionreference_getDescription( ppMacroTypeDescr, pMacroTypeRef );
         if (*ppMacroTypeDescr)
+        {
+            assert(static_cast<void*>(*ppMacroTypeDescr) != static_cast<void*>(pMacroTypeRef));
             typelib_typedescription_release( *ppMacroTypeDescr );
+        }
     }
     else
     {
