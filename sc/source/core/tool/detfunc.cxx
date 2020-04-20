@@ -509,7 +509,7 @@ void ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
         *pModel,
         OBJ_LINE,
         basegfx::B2DPolyPolygon(aTempPoly));
-    pArrow->NbcSetLogicRect(tools::Rectangle(aStartPos,aEndPos));  //TODO: needed ???
+    pArrow->NbcSetLogicRect(tools::Rectangle::Justify(aStartPos,aEndPos));  //TODO: needed ???
     pArrow->SetMergedItemSetAndBroadcast(rAttrSet);
 
     pArrow->SetLayer( SC_LAYER_INTERN );
@@ -578,7 +578,7 @@ void ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
         *pModel,
         OBJ_LINE,
         basegfx::B2DPolyPolygon(aTempPoly));
-    pArrow->NbcSetLogicRect(tools::Rectangle(aStartPos,aEndPos));  //TODO: needed ???
+    pArrow->NbcSetLogicRect(tools::Rectangle::Justify(aStartPos,aEndPos));  //TODO: needed ???
 
     pArrow->SetMergedItemSetAndBroadcast(rAttrSet);
 
