@@ -496,6 +496,7 @@ cmd/32/ko/fontheight.png cmd/32/ko/scaletext.png
 cmd/32/ko/formatobjectmenu.png cmd/32/ko/text.png
 cmd/32/ko/formattextmenu.png cmd/32/ko/charfontname.png
 cmd/32/ko/ordercrit.png cmd/32/ko/datasort.png
+cmd/32/ko/setdefault.png cmd/32/ko/resetattributes.png
 cmd/32/ko/sortdown.png cmd/32/ko/sortdescending.png
 cmd/32/ko/sortup.png cmd/32/ko/sortascending.png
 cmd/32/ko/tablesort.png cmd/32/ko/datasort.png
@@ -723,6 +724,7 @@ cmd/ko/lc_fontheight.png cmd/ko/lc_scaletext.png
 cmd/ko/lc_formatobjectmenu.png cmd/ko/lc_text.png
 cmd/ko/lc_formattextmenu.png cmd/ko/lc_charfontname.png
 cmd/ko/lc_ordercrit.png cmd/ko/lc_datasort.png
+cmd/ko/lc_setdefault.png cmd/ko/lc_resetattributes.png
 cmd/ko/lc_sortdown.png cmd/ko/lc_sortdescending.png
 cmd/ko/lc_sortup.png cmd/ko/lc_sortascending.png
 cmd/ko/lc_tablesort.png cmd/ko/lc_datasort.png
@@ -736,6 +738,7 @@ cmd/ko/sc_fontheight.png cmd/ko/sc_scaletext.png
 cmd/ko/sc_formatobjectmenu.png cmd/ko/sc_text.png
 cmd/ko/sc_formattextmenu.png cmd/ko/sc_charfontname.png
 cmd/ko/sc_ordercrit.png cmd/ko/sc_datasort.png
+cmd/ko/sc_setdefault.png cmd/ko/sc_resetattributes.png
 cmd/ko/sc_sortdown.png cmd/ko/sc_sortdescending.png
 cmd/ko/sc_sortup.png cmd/ko/sc_sortascending.png
 cmd/ko/sc_tablesort.png cmd/ko/sc_datasort.png
