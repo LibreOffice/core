@@ -34,7 +34,6 @@
 #include <svx/svdpage.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
-#include <editeng/brushitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -91,6 +90,8 @@
 #include <o3tl/enumrange.hxx>
 #include <o3tl/enumarray.hxx>
 #include <sfx2/docfile.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/brushitem.hxx>
 
 #include <algorithm>
 
@@ -1264,7 +1265,15 @@ void MSWord_SdrAttrIter::SetItemsThatDifferFromStandard(bool bCharAttr, SfxItemS
 
             const SfxPoolItem& rDrawItem = rSet.Get(nEEWhich);
             const SfxPoolItem& rStandardItem = pC->GetFormatAttr(nSwWhich);
-            if (rDrawItem != rStandardItem)
+
+            // This is hack to force the export of highlight color of text in group shapes.
+            if (typeid(rDrawItem) == typeid(SvxBackgroundColorItem) && typeid(rStandardItem) == typeid(SvxBrushItem))
+            {
+                SvxBrushItem drawItem(dynamic_cast<const SvxBackgroundColorItem&>(rDrawItem).GetValue(), nSwWhich);
+                if (drawItem != rStandardItem)
+                    rSet.Put(drawItem);
+            }
+            else if (rDrawItem != rStandardItem)
                 rSet.Put(rDrawItem);
         }
     }
