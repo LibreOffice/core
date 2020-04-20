@@ -50,7 +50,7 @@ ScCondFrmtEntry::ScCondFrmtEntry(vcl::Window* pParent, ScDocument* pDoc, const S
     , mpDoc(pDoc)
     , maPos(rPos)
 {
-    m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), (comphelper::LibreOfficeKit::isMobilePhone(SfxLokHelper::getView())?OUString("modules/scalc/ui/conditionalentrymobile.ui"):OUString("modules/scalc/ui/conditionalentry.ui"))));
+    m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), ((SfxViewShell::Current() && SfxViewShell::Current()->isLOKMobilePhone())?OUString("modules/scalc/ui/conditionalentrymobile.ui"):OUString("modules/scalc/ui/conditionalentry.ui"))));
 
     get(maGrid, "grid");
     get(maFtCondNr, "number");
