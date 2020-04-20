@@ -454,7 +454,7 @@ llvm::Optional<std::string> Flatten::invertCondition(Expr const * condExpr, Sour
                 s = "!(" + s + ")";
         }
         if (!ok)
-           return {};
+           return llvm::Optional<std::string>();
     }
     else if (auto opCallExpr = dyn_cast<CXXOperatorCallExpr>(condExpr))
     {
@@ -471,7 +471,7 @@ llvm::Optional<std::string> Flatten::invertCondition(Expr const * condExpr, Sour
                 s = "!(" + s + ")";
         }
         if (!ok)
-            return {};
+            return llvm::Optional<std::string>();
     }
     else if (isa<DeclRefExpr>(condExpr) || isa<CallExpr>(condExpr) || isa<MemberExpr>(condExpr))
         s = "!" + s;
