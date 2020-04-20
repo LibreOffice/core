@@ -1253,6 +1253,28 @@ void SectionPropertyMap::HandleIncreasedAnchoredObjectSpacing(DomainMapper_Impl&
         if (rAnchor.m_aAnchoredObjects.size() < 4)
             continue;
 
+        // Ignore this paragraph if none of the objects are wrapped in the background.
+        sal_Int32 nOpaqueCount = 0;
+        for (const auto& rAnchored : rAnchor.m_aAnchoredObjects)
+        {
+            uno::Reference<beans::XPropertySet> xShape(rAnchored.m_xAnchoredObject, uno::UNO_QUERY);
+            if (!xShape.is())
+            {
+                continue;
+            }
+
+            bool bOpaque = true;
+            xShape->getPropertyValue("Opaque") >>= bOpaque;
+            if (!bOpaque)
+            {
+                ++nOpaqueCount;
+            }
+        }
+        if (nOpaqueCount < 1)
+        {
+            continue;
+        }
+
         // Analyze the anchored objects of this paragraph, now that we know the
         // page width.
         sal_Int32 nShapesWidth = 0;
