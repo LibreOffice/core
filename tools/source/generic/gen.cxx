@@ -37,6 +37,15 @@ OString Pair::toString() const
     return ss.str().c_str();
 }
 
+tools::Rectangle tools::Rectangle::Justify( const Point& rLT, const Point& rRB )
+{
+    long nLeft   = std::min(rLT.X(), rRB.X());
+    long nTop    = std::min(rLT.Y(), rRB.Y());
+    long nRight  = std::max(rLT.X(), rRB.X());
+    long nBottom = std::max(rLT.Y(), rRB.Y());
+    return Rectangle( nLeft, nTop, nRight, nBottom );
+}
+
 void tools::Rectangle::SetSize( const Size& rSize )
 {
     if ( rSize.Width() < 0 )
