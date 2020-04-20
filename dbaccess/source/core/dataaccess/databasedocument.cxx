@@ -1026,22 +1026,6 @@ void ODatabaseDocument::impl_storeAs_throw( const OUString& _rURL, const ::comph
         _rGuard.reset();
     }
 
-    bool bTryToPreserveScriptSignature = false;
-    utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
-    OUString aTmpFileURL = aTempFile.GetURL();
-    if (m_pImpl->getScriptingSignatureState() == SignatureState::OK
-        || m_pImpl->getScriptingSignatureState() == SignatureState::NOTVALIDATED
-        || m_pImpl->getScriptingSignatureState() == SignatureState::INVALID)
-    {
-        bTryToPreserveScriptSignature = true;
-        // We need to first save the file (which removes the macro signature), then add the macro signature again.
-        // For that, we need a temporary copy of the original file.
-        osl::File::RC rc = osl::File::copy(m_pImpl->getDocFileLocation(), aTmpFileURL);
-        if (rc != osl::FileBase::E_None)
-            throw uno::RuntimeException("Could not create temp file");
-    }
-
     Reference< XStorage > xNewRootStorage;
         // will be non-NULL if our storage changed
 
@@ -1084,80 +1068,8 @@ void ODatabaseDocument::impl_storeAs_throw( const OUString& _rURL, const ::comph
 
         // store to current storage
         Reference< XStorage > xCurrentStorage( m_pImpl->getOrCreateRootStorage(), UNO_SET_THROW );
-        OUString aODFVersion(comphelper::OStorageHelper::GetODFVersionFromStorage(xCurrentStorage));
         Sequence< PropertyValue > aMediaDescriptor( lcl_appendFileNameToDescriptor( _rArguments, _rURL ) );
         impl_storeToStorage_throw( xCurrentStorage, aMediaDescriptor, _rGuard );
-
-        // Preserve script signature if the script has not changed
-        if (bTryToPreserveScriptSignature)
-        {
-            // Need to close this storage, otherwise we can't open it for signing below
-            // (Windows needs exclusive file access)
-            uno::Reference < lang::XComponent > xComp = xCurrentStorage;
-            xComp->dispose();
-            uno::Reference<security::XDocumentDigitalSignatures> xDDSigns;
-            try
-            {
-                xDDSigns = security::DocumentDigitalSignatures::createWithVersion(
-                    comphelper::getProcessComponentContext(), aODFVersion);
-
-                const OUString aScriptSignName
-                    = xDDSigns->getScriptingContentSignatureDefaultStreamName();
-
-                if (!aScriptSignName.isEmpty())
-                {
-                    Reference<XStorage> xReadOrig
-                        = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
-                            ZIP_STORAGE_FORMAT_STRING, aTmpFileURL, ElementModes::READ);
-                    if (!xReadOrig.is())
-                        throw uno::RuntimeException("Could not read " + aTmpFileURL);
-                    uno::Reference<embed::XStorage> xMetaInf
-                        = xReadOrig->openStorageElement("META-INF", embed::ElementModes::READ);
-
-                    Reference<XStorage> xTarget
-                        = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
-                            ZIP_STORAGE_FORMAT_STRING, _rURL, ElementModes::READWRITE);
-                    if (!xTarget.is())
-                        throw uno::RuntimeException("Could not read " + _rURL);
-                    uno::Reference<embed::XStorage> xTargetMetaInf
-                        = xTarget->openStorageElement("META-INF", embed::ElementModes::READWRITE);
-
-                    if (xMetaInf.is() && xTargetMetaInf.is())
-                    {
-                        xMetaInf->copyElementTo(aScriptSignName, xTargetMetaInf, aScriptSignName);
-
-                        uno::Reference<embed::XTransactedObject> xTransact(xTargetMetaInf,
-                                                                           uno::UNO_QUERY);
-                        if (xTransact.is())
-                            xTransact->commit();
-
-                        xTargetMetaInf->dispose();
-
-                        // now check the copied signature
-                        uno::Sequence<security::DocumentSignatureInformation> aInfos
-                            = xDDSigns->verifyScriptingContentSignatures(
-                                xTarget, uno::Reference<io::XInputStream>());
-                        SignatureState nState = DocumentSignatures::getSignatureState(aInfos);
-                        if (nState == SignatureState::OK || nState == SignatureState::NOTVALIDATED
-                            || nState == SignatureState::PARTIAL_OK)
-                        {
-                            // commit the ZipStorage from target medium
-                            xTransact.set(xTarget, uno::UNO_QUERY);
-                            if (xTransact.is())
-                                xTransact->commit();
-                        }
-                        else
-                        {
-                            SAL_WARN("dbaccess", "An invalid signature was copied!");
-                        }
-                    }
-                }
-            }
-            catch (uno::Exception&)
-            {
-                TOOLS_WARN_EXCEPTION("dbaccess", "");
-            }
-        }
 
         // success - tell our impl
         m_pImpl->setDocFileLocation( _rURL );
@@ -1317,7 +1229,7 @@ void ODatabaseDocument::impl_storeToStorage_throw( const Reference< XStorage >& 
         lcl_triggerStatusIndicator_throw( aWriteArgs, _rDocGuard, false );
 
         // commit target storage
-        OSL_VERIFY( tools::stor::commitStorageIfWriteable( _rxTargetStorage ) );
+        m_pImpl->commitStorageIfWriteable_ignoreErrors(_rxTargetStorage);
     }
     catch( const IOException& ) { throw; }
     catch( const RuntimeException& ) { throw; }
