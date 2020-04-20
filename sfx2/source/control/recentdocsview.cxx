@@ -136,8 +136,6 @@ RecentDocsView::RecentDocsView( vcl::Window* pParent )
     setItemMaxTextLength( 30 );
     setItemDimensions( mnItemMaxSize, mnItemMaxSize, gnTextHeight, gnItemPadding );
 
-    maWelcomeImage = SfxApplication::GetApplicationLogo(500);
-
     maFillColor = Color(officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsBackgroundColor::get());
     maTextColor = Color(officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsTextColor::get());
     maHighlightColor = Color(officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsHighlightColor::get());
@@ -355,6 +353,12 @@ void RecentDocsView::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
 
     if (mItemList.empty())
     {
+        if (maWelcomeImage.IsEmpty())
+        {
+            const long aWidth(aRect.GetWidth() > aRect.getHeight() ? aRect.GetHeight()/2 : aRect.GetWidth()/2);
+            maWelcomeImage = SfxApplication::GetApplicationLogo(aWidth);
+        }
+
         // No recent files to be shown yet. Show a welcome screen.
         rRenderContext.Push(PushFlags::FONT | PushFlags::TEXTCOLOR);
         SetMessageFont(rRenderContext);
