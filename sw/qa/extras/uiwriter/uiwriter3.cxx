@@ -343,9 +343,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130685)
     dispatchCommand(mxComponent, ".uno:Undo", {});
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    //FIXME: See tdf#131147
-    //dispatchCommand(mxComponent, ".uno:Undo", {});
-    //CPPUNIT_ASSERT_EQUAL(2, getPages());
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130680)
@@ -367,11 +366,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130680)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
     dispatchCommand(mxComponent, ".uno:Paste", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
-    //FIXME: See tdf#131147
-    //dispatchCommand(mxComponent, ".uno:Undo", {});
-    //CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
-    //dispatchCommand(mxComponent, ".uno:Undo", {});
-    //CPPUNIT_ASSERT_EQUAL(sal_Int32(23), xIndexAccess->getCount());
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(23), xIndexAccess->getCount());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf131684)
