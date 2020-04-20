@@ -309,7 +309,9 @@ SfxItemInfo aSlotTab[] =
     { 0, true },                           // RES_CHRATR_RSID
     { SID_ATTR_CHAR_BOX, true },           // RES_CHRATR_BOX
     { SID_ATTR_CHAR_SHADOW, true },        // RES_CHRATR_SHADOW
-    { 0, true },                           // RES_CHRATR_HIGHLIGHT
+
+    // This is a hack to allow the export of highligh color in grouped shapes.
+    { SID_ATTR_CHAR_BACK_COLOR, true },    // RES_CHRATR_HIGHLIGHT
     { SID_ATTR_CHAR_GRABBAG, true },       // RES_CHRATR_GRABBAG
     { 0, true },                           // RES_CHRATR_BIDIRTL
     { 0, true },                           // RES_CHRATR_IDCTHINT
