@@ -1658,11 +1658,11 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
     xProp->setPropertyValue( INFO_MEDIATYPE, makeAny( OUString(MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII) ) );
 
     OUString aVersion;
-    SvtSaveOptions::ODFDefaultVersion const nDefVersion =
-        aSaveOpt.GetODFDefaultVersion();
+    SvtSaveOptions::ODFSaneDefaultVersion const nDefVersion =
+        aSaveOpt.GetODFSaneDefaultVersion();
     // older versions can not have this property set,
     // it exists only starting from ODF1.2
-    if (nDefVersion >= SvtSaveOptions::ODFVER_012)
+    if (nDefVersion >= SvtSaveOptions::ODFSVER_012)
         aVersion = ODFVER_012_TEXT;
 
     if (!aVersion.isEmpty())

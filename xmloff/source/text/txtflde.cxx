@@ -1619,7 +1619,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                           GetInt16Property(gsPropertySequenceNumber, rPropSet),
                           GetStringProperty(gsPropertySourceName, rPropSet) ) );
         if (xPropSetInfo->hasPropertyByName(gsPropertyReferenceFieldLanguage) &&
-            SvtSaveOptions().GetODFDefaultVersion() > SvtSaveOptions::ODFVER_012)
+            SvtSaveOptions().GetODFSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
         {
             // export text:reference-language attribute, if not empty
             ProcessString(XML_REFERENCE_LANGUAGE,
@@ -1641,7 +1641,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         ProcessString(XML_REF_NAME,
                       GetStringProperty(gsPropertySourceName, rPropSet));
         if (xPropSetInfo->hasPropertyByName(gsPropertyReferenceFieldLanguage) &&
-            SvtSaveOptions().GetODFDefaultVersion() > SvtSaveOptions::ODFVER_012)
+            SvtSaveOptions().GetODFSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
         {
             // export text:reference-language attribute, if not empty
             ProcessString(XML_REFERENCE_LANGUAGE,
@@ -1666,7 +1666,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                       MakeFootnoteRefName(GetInt16Property(
                           gsPropertySequenceNumber, rPropSet)));
         if (xPropSetInfo->hasPropertyByName(gsPropertyReferenceFieldLanguage) &&
-            SvtSaveOptions().GetODFDefaultVersion() > SvtSaveOptions::ODFVER_012)
+            SvtSaveOptions().GetODFSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
         {
             // export text:reference-language attribute, if not empty
             ProcessString(XML_REFERENCE_LANGUAGE,
@@ -1694,7 +1694,7 @@ void XMLTextFieldExport::ExportFieldHelper(
 
     case FIELD_ID_PAGENAME:
     {
-        if (SvtSaveOptions().GetODFDefaultVersion() > SvtSaveOptions::ODFVER_012)
+        if (SvtSaveOptions().GetODFSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
         {
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_LO_EXT, XML_PAGE_NAME, false, false );
             GetExport().Characters( sPresentation );
@@ -1794,7 +1794,7 @@ void XMLTextFieldExport::ExportFieldHelper(
             GetExport().Characters(aBuffer.makeStringAndClear());
         }
 
-        if (SvtSaveOptions().GetODFDefaultVersion() > SvtSaveOptions::ODFVER_012)
+        if (SvtSaveOptions().GetODFSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
         {
             // initials
             OUString aInitials( GetStringProperty(gsPropertyInitials, rPropSet) );
@@ -2312,9 +2312,9 @@ void XMLTextFieldExport::ExportMetaField(
 {
     bool doExport(!i_bAutoStyles); // do not export element if autostyles
     // check version >= 1.2
-    switch (GetExport().getDefaultVersion()) {
-        case SvtSaveOptions::ODFVER_011: // fall through
-        case SvtSaveOptions::ODFVER_010: doExport = false; break;
+    switch (GetExport().getSaneDefaultVersion()) {
+        case SvtSaveOptions::ODFSVER_011: // fall through
+        case SvtSaveOptions::ODFSVER_010: doExport = false; break;
         default: break;
     }
 

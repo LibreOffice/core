@@ -2674,7 +2674,7 @@ ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, 
         OString const utf8Pwd(OUStringToOString(pPasswordRequest->getPassword(), RTL_TEXTENCODING_UTF8));
         OString const utf8Ptm(OUStringToOString(pPasswordRequest->getPasswordToModify(), RTL_TEXTENCODING_UTF8));
         if (!(52 <= utf8Pwd.getLength() && utf8Pwd.getLength() <= 55
-                && SvtSaveOptions().GetODFDefaultVersion() < SvtSaveOptions::ODFVER_012)
+                && SvtSaveOptions().GetODFSaneDefaultVersion() < SvtSaveOptions::ODFSVER_012)
             && !(52 <= utf8Ptm.getLength() && utf8Ptm.getLength() <= 55))
         {
             break;

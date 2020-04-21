@@ -233,7 +233,7 @@ bool XMLCharScriptHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue
     if (!aLanguageTag.hasScript())
         return false;
 
-    if (SvtSaveOptions().GetODFDefaultVersion() < SvtSaveOptions::ODFVER_012)
+    if (SvtSaveOptions().GetODFSaneDefaultVersion() < SvtSaveOptions::ODFSVER_012)
         return false;
 
     OUString aLanguage, aCountry;
@@ -356,7 +356,7 @@ bool XMLCharRfcLanguageTagHdl::exportXML( OUString& rStrExpValue, const uno::Any
     if (aLocale.Variant.isEmpty())
         return false;
 
-    if (SvtSaveOptions().GetODFDefaultVersion() < SvtSaveOptions::ODFVER_012)
+    if (SvtSaveOptions().GetODFSaneDefaultVersion() < SvtSaveOptions::ODFSVER_012)
         return false;
 
     rStrExpValue = aLocale.Variant;

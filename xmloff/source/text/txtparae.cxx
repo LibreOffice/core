@@ -922,8 +922,8 @@ void XMLTextParagraphExport::exportListChange(
 
     const bool bExportODF =
                 bool( GetExport().getExportFlags() & SvXMLExportFlags::OASIS );
-    const SvtSaveOptions::ODFDefaultVersion eODFDefaultVersion =
-                                    GetExport().getDefaultVersion();
+    const SvtSaveOptions::ODFSaneDefaultVersion eODFDefaultVersion =
+                                    GetExport().getSaneDefaultVersion();
 
     // start a new list
     if ( rNextInfo.GetLevel() > 0 )
@@ -964,7 +964,7 @@ void XMLTextParagraphExport::exportListChange(
                     if ( !mpTextListsHelper->IsListProcessed( sListId ) )
                     {
                         if ( bExportODF &&
-                             eODFDefaultVersion >= SvtSaveOptions::ODFVER_012 &&
+                            eODFDefaultVersion >= SvtSaveOptions::ODFSVER_012 &&
                              !sListId.isEmpty() )
                         {
                             /* Property text:id at element <text:list> has to be
@@ -983,7 +983,7 @@ void XMLTextParagraphExport::exportListChange(
                         const OUString sNewListId(
                                         mpTextListsHelper->GenerateNewListId() );
                         if ( bExportODF &&
-                             eODFDefaultVersion >= SvtSaveOptions::ODFVER_012 &&
+                            eODFDefaultVersion >= SvtSaveOptions::ODFSVER_012 &&
                              !sListId.isEmpty() )
                         {
                             /* Property text:id at element <text:list> has to be
@@ -1014,7 +1014,7 @@ void XMLTextParagraphExport::exportListChange(
                         else
                         {
                             if ( bExportODF &&
-                                 eODFDefaultVersion >= SvtSaveOptions::ODFVER_012 &&
+                                eODFDefaultVersion >= SvtSaveOptions::ODFSVER_012 &&
                                  !sListId.isEmpty() )
                             {
                                 GetExport().AddAttribute( XML_NAMESPACE_TEXT,
@@ -1182,7 +1182,7 @@ void XMLTextParagraphExport::exportListChange(
                                   aBuffer.makeStringAndClear() );
     }
     if ( ( GetExport().getExportFlags() & SvXMLExportFlags::OASIS ) &&
-         GetExport().getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
+        GetExport().getSaneDefaultVersion() >= SvtSaveOptions::ODFSVER_012)
     {
         const OUString& sListStyleName( rNextInfo.GetNumRulesName() );
         if ( !mpTextListsHelper->EqualsToTopListStyleOnStack( sListStyleName ) )
@@ -2244,7 +2244,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                 /* As of now, textmarks are a proposed extension to the OpenDocument standard. */
                 if (!bAutoStyles)
                 {
-                    if (GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012)
+                    if (GetExport().getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
                     {
                         Reference<XNamed> xBookmark(xPropSet->getPropertyValue(gsBookmark), UNO_QUERY);
                         if (xBookmark.is())
@@ -2310,7 +2310,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                 {
                     Reference< css::text::XFormField > xFormField(xPropSet->getPropertyValue(gsBookmark), UNO_QUERY);
 
-                    if ( GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
+                    if (GetExport().getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
                     {
                         SvXMLElementExport aElem( GetExport(), !bAutoStyles,
                             XML_NAMESPACE_FIELD, XML_FIELDMARK_END,
@@ -2346,7 +2346,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             {
                 if (!bAutoStyles)
                 {
-                    if (GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012)
+                    if (GetExport().getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
                     {
                         Reference<XNamed> xBookmark(xPropSet->getPropertyValue(gsBookmark), UNO_QUERY);
                         if (xBookmark.is())
@@ -3160,7 +3160,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
             GetExport().AddAttribute( XML_NAMESPACE_DRAW, XML_FILTER_NAME,
                                       sGrfFilter );
 
-        if (GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012)
+        if (GetExport().getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
         {
             if (sOutMimeType.isEmpty())
             {
@@ -3208,7 +3208,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
             GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD);
         }
 
-        if (GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012)
+        if (GetExport().getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
         {
             if (sOutMimeType.isEmpty())
             {
@@ -3785,9 +3785,9 @@ void XMLTextParagraphExport::exportMeta(
 {
     bool doExport(!i_bAutoStyles); // do not export element if autostyles
     // check version >= 1.2
-    switch (GetExport().getDefaultVersion()) {
-        case SvtSaveOptions::ODFVER_011: // fall through
-        case SvtSaveOptions::ODFVER_010: doExport = false; break;
+    switch (GetExport().getSaneDefaultVersion()) {
+        case SvtSaveOptions::ODFSVER_011: // fall through
+        case SvtSaveOptions::ODFSVER_010: doExport = false; break;
         default: break;
     }
 

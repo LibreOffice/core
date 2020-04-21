@@ -609,8 +609,8 @@ void exportRangeToSomewhere( SvXMLExport& rExport, const OUString& rValue )
     //#i113950# first the range was exported to attribute text:id, but that attribute does not allow arbitrary strings anymore within ODF 1.2
     //as an alternative the range info is now saved into the description at an empty group element (not very nice, but ODF conform)
 
-    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
-    if( nCurrentODFVersion == SvtSaveOptions::ODFVER_010 || nCurrentODFVersion == SvtSaveOptions::ODFVER_011 )
+    const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
+    if (nCurrentODFVersion == SvtSaveOptions::ODFSVER_010 || nCurrentODFVersion == SvtSaveOptions::ODFSVER_011)
         return;//svg:desc is not allowed at draw:g in ODF1.0; but as the ranges for error bars are anyhow not allowed within ODF1.0 nor ODF1.1 we do not need the information
 
     SvXMLElementExport aEmptyShapeGroup( rExport, XML_NAMESPACE_DRAW,
