@@ -175,11 +175,6 @@ OfaMiscTabPage::OfaMiscTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xYearValueField(m_xBuilder->weld_spin_button("year"))
     , m_xToYearFT(m_xBuilder->weld_label("toyear"))
     , m_xYearFrameImg(m_xBuilder->weld_widget("lockyears"))
-#if HAVE_FEATURE_BREAKPAD
-    , m_xPrivacyFrame(m_xBuilder->weld_widget("privacyframe"))
-    , m_xCrashReport(m_xBuilder->weld_check_button("crashreport"))
-    , m_xCrashReportImg(m_xBuilder->weld_widget("lockcrashreport"))
-#endif
 #if defined(_WIN32)
     , m_xQuickStarterFrame(m_xBuilder->weld_widget("quickstarter"))
     , m_xQuickLaunchCB(m_xBuilder->weld_check_button("quicklaunch"))
@@ -190,10 +185,6 @@ OfaMiscTabPage::OfaMiscTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xPerformFileExtImg(m_xBuilder->weld_widget("lockcbPerformFileExtCheck"))
 #endif
 {
-#if HAVE_FEATURE_BREAKPAD
-    m_xPrivacyFrame->show();
-#endif
-
 #if defined(_WIN32)
     // Store-packaged apps (located under the protected Program Files\WindowsApps) can't use normal
     // shell shortcuts to their exe. TODO: show a button to open "Startup Apps" system applet?
@@ -284,14 +275,6 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
         rSet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, nNum ) );
     }
 
-#if HAVE_FEATURE_BREAKPAD
-    if (m_xCrashReport->get_state_changed_from_saved())
-    {
-        officecfg::Office::Common::Misc::CrashReport::set(m_xCrashReport->get_active(), batch);
-        bModified = true;
-    }
-#endif
-
 #if defined(_WIN32)
     if (m_xPerformFileExtCheck->get_state_changed_from_saved())
     {
@@ -363,13 +346,6 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     }
     else
         m_xYearFrame->set_sensitive(false);
-
-#if HAVE_FEATURE_BREAKPAD
-    m_xCrashReport->set_active(officecfg::Office::Common::Misc::CrashReport::get() && CrashReporter::IsDumpEnable());
-    m_xCrashReport->set_sensitive(!officecfg::Office::Common::Misc::CrashReport::isReadOnly() && CrashReporter::IsDumpEnable());
-    m_xCrashReportImg->set_visible(officecfg::Office::Common::Misc::CrashReport::isReadOnly() && CrashReporter::IsDumpEnable());
-    m_xCrashReport->save_state();
-#endif
 
 #if defined(_WIN32)
     const SfxPoolItem* pItem = nullptr;
