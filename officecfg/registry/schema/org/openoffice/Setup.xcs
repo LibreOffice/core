@@ -307,6 +307,17 @@
           </info>
           <value>0</value>
       </prop>
+      <prop oor:name="DisabledInfobars" oor:type="oor:string-list" oor:nillable="false">
+          <info>
+              <desc>List of Infobar identifiers which should be disabled (No infobar with this ID will be added)
+              Example IDs:
+                Readonly infobar: 'readonly'
+                Donate Infobar: 'donate'
+                Get involved Infobar: 'getinvolved'
+              </desc>
+          </info>
+          <value/>
+      </prop>
     </group>
     <group oor:name="Office">
       <!--The default must be written by the setup.-->
