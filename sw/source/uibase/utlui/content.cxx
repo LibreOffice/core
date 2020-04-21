@@ -2700,6 +2700,25 @@ void SwContentTree::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
     }
     switch (rHint.GetId())
     {
+        case SfxHintId::SwNavigatorSelectOutlinesWithSelections:
+        {
+            if (m_nRootType == ContentTypeId::OUTLINE)
+            {
+                SelectOutlinesWithSelection();
+                GetParentWindow()->GrabFocus(); // required to prevent selection loss when parent window is floating
+                /*
+                    Because set_cursor clears selections and then selects it can't be used here.
+                    IMHO this isn't the correct behavoir for set_cursor.
+                    Instead, just have treeview grab_focus.
+                */
+                //// Set focus to first selected entry
+                //std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
+                //if (xEntry && m_xTreeView->get_selected(xEntry.get()))
+                //m_xTreeView->set_cursor(*xEntry);
+                m_xTreeView->grab_focus();
+            }
+            break;
+        }
         case SfxHintId::DocChanged:
             if (!m_bIgnoreViewChange)
             {
@@ -3157,6 +3176,53 @@ IMPL_LINK_NOARG(SwContentTree, TimerUpdate, Timer *, void)
         }
         clear();
         m_bIsIdleClear = true;
+    }
+}
+
+void SwContentTree::SelectOutlinesWithSelection()
+{
+    SwCursor* pFirstCursor = m_pActiveShell->GetSwCursor();
+    SwCursor* pCursor = pFirstCursor;
+    std::vector<SwOutlineNodes::size_type> aOutlinePositions;
+    do
+    {
+        if (pCursor)
+        {
+            if (pCursor->HasMark())
+            {
+                aOutlinePositions.push_back(m_pActiveShell->GetOutlinePos(UCHAR_MAX, pCursor));
+            }
+            pCursor = pCursor->GetNext();
+        }
+    } while (pCursor && pCursor != pFirstCursor);
+
+    if (!aOutlinePositions.empty())
+    {
+        // remove duplicates before selecting
+        aOutlinePositions.erase(std::unique(aOutlinePositions.begin(), aOutlinePositions.end()), aOutlinePositions.end());
+
+        m_xTreeView->unselect_all();
+
+        for (auto nOutlinePosition : aOutlinePositions)
+        {
+            m_xTreeView->all_foreach([this, nOutlinePosition](const weld::TreeIter& rEntry){
+                if (lcl_IsContent(rEntry, *m_xTreeView) &&
+                    reinterpret_cast<SwContent*>(m_xTreeView->get_id(rEntry).toInt64())->GetParent()->GetType() == ContentTypeId::OUTLINE)
+                {
+                    if (reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(rEntry).toInt64())->GetOutlinePos() == nOutlinePosition)
+                    {
+                        std::unique_ptr<weld::TreeIter> xParent = m_xTreeView->make_iterator(&rEntry);
+                        if (m_xTreeView->iter_parent(*xParent) && !m_xTreeView->get_row_expanded(*xParent))
+                            m_xTreeView->expand_row(*xParent);
+                        m_xTreeView->select(rEntry);
+                        return true;
+                    }
+                }
+                return false;
+            });
+        }
+
+        Select();
     }
 }
 
