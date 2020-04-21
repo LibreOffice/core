@@ -33,5 +33,29 @@ shell SwGrfShell : SwBaseShell
         StateMethod = GetAttrState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
+
+    SID_ATTR_GLOW
+    [
+        Export = FALSE;
+        ExecMethod = ExecAttr ;
+        StateMethod = GetAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_GLOW_COLOR
+    [
+        Export = FALSE;
+        ExecMethod = ExecAttr ;
+        StateMethod = GetAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_GLOW_RADIUS
+    [
+        Export = FALSE;
+        ExecMethod = ExecAttr ;
+        StateMethod = GetAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
 }
 
