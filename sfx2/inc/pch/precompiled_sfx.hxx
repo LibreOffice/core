@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-02 13:40:55 using:
+ Generated on 2020-04-21 11:16:49 using:
  ./bin/update_pch sfx2 sfx --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -52,6 +52,7 @@
 #include <osl/endian.h>
 #include <osl/file.hxx>
 #include <osl/interlck.h>
+#include <osl/module.h>
 #include <osl/module.hxx>
 #include <osl/mutex.hxx>
 #include <osl/process.h>
@@ -78,6 +79,7 @@
 #include <rtl/textenc.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <rtl/uuid.h>
 #include <sal/config.h>
