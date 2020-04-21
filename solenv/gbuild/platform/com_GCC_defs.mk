@@ -194,6 +194,7 @@ ifeq ($(gb_ENABLE_DBGUTIL),$(false))
 ifeq ($(HAVE_GCC_FNO_ENFORCE_EH_SPECS),TRUE)
 gb_LinkTarget_EXCEPTIONFLAGS += \
 	-fno-enforce-eh-specs
+gb_FilterOutClangCFLAGS += -fno-enforce-eh-specs
 endif
 endif
 
