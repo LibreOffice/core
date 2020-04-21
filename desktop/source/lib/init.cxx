@@ -5524,7 +5524,7 @@ static void aBasicErrorFunc(const OUString& rError, const OUString& rAction)
         " Error: " +
         OUStringToOString(rError, RTL_TEXTENCODING_ASCII_US);
 
-    fprintf(stderr, "Unexpected basic error dialog '%s'\n", aBuffer.getStr());
+    SAL_WARN("desktop.lib", "unexpected basic error dialog '" << aBuffer << "'.");
 }
 
 static bool initialize_uno(const OUString& aAppProgramURL)
@@ -6041,8 +6041,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     }
     catch (css::uno::Exception& exception)
     {
-        fprintf(stderr, "Bootstrapping exception '%s'\n",
-                 OUStringToOString(exception.Message, RTL_TEXTENCODING_UTF8).getStr());
+        SAL_WARN("desktop.lib", "bootstrapping exception '" << exception.Message << "'.");
     }
 
     if (eStage == PRE_INIT)
