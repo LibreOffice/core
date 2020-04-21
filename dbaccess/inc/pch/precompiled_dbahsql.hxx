@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-04-29 21:18:37 using:
+ Generated on 2020-04-21 11:14:14 using:
  ./bin/update_pch dbaccess dbahsql --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -21,7 +21,6 @@
 */
 
 #if PCH_LEVEL >= 1
-#include <vector>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
@@ -32,16 +31,13 @@
 #if PCH_LEVEL >= 3
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/io/TextInputStream.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
-#include <com/sun/star/io/XConnectable.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Time.hpp>
@@ -49,7 +45,6 @@
 #include <comphelper/string.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
-#include <cppuhelper/implbase.hxx>
 #include <tools/stream.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #endif // PCH_LEVEL >= 3

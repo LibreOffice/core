@@ -179,9 +179,9 @@ bool ShapePropertyMap::setFillHatch( sal_Int32 nPropId, const Any& rValue )
         return setAnyProperty( nPropId, rValue );
 
     // create named hatch and push its name
-    if( rValue.has< Hatch >() )
+    if (rValue.has<drawing::Hatch>())
     {
-        OUString aHatchName = mrModelObjHelper.insertFillHatch( rValue.get< Hatch >() );
+        OUString aHatchName = mrModelObjHelper.insertFillHatch(rValue.get<drawing::Hatch>());
         return !aHatchName.isEmpty() && setProperty( nPropId, aHatchName );
     }
 

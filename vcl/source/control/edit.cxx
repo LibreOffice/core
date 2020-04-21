@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/builder.hxx>
 #include <vcl/event.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/menu.hxx>

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-01-22 15:59:03 using:
+ Generated on 2020-04-21 11:17:43 using:
  ./bin/update_pch vbahelper msforms --cutoff=3 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -25,7 +25,6 @@
 #include <cassert>
 #include <cstddef>
 #include <cstring>
-#include <deque>
 #include <float.h>
 #include <functional>
 #include <initializer_list>
@@ -35,6 +34,7 @@
 #include <math.h>
 #include <memory>
 #include <new>
+#include <optional>
 #include <ostream>
 #include <stddef.h>
 #include <string.h>
@@ -49,7 +49,6 @@
 #include <osl/diagnose.h>
 #include <osl/endian.h>
 #include <osl/interlck.h>
-#include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/math.h>
 #include <rtl/math.hxx>
@@ -63,7 +62,6 @@
 #include <rtl/tencinfo.h>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
-#include <rtl/unload.h>
 #include <rtl/ustrbuf.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
@@ -113,16 +111,10 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/utils/common.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
-#include <basic/basicdllapi.h>
-#include <basic/sbdef.hxx>
-#include <basic/sbx.hxx>
-#include <basic/sbxcore.hxx>
-#include <basic/sbxdef.hxx>
-#include <basic/sbxobj.hxx>
-#include <basic/sbxvar.hxx>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/awt/SystemPointer.hpp>
@@ -141,9 +133,11 @@
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hdl>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/genfunc.h>
 #include <com/sun/star/uno/genfunc.hxx>
+#include <comphelper/comphelperdllapi.h>
 #include <comphelper/sequence.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
@@ -151,12 +145,10 @@
 #include <cppuhelper/implbase.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
-#include <optional>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <svl/hint.hxx>
-#include <svl/lstner.hxx>
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <tools/color.hxx>
@@ -178,7 +170,6 @@
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
-#include <vbahelper/helperdecl.hxx>
 #include <vbahelper/vbadllapi.h>
 #endif // PCH_LEVEL >= 4
 
