@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-17 15:17:33 using:
+ Generated on 2020-04-21 11:17:43 using:
  ./bin/update_pch uui uui --cutoff=4 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -37,8 +37,7 @@
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/interlck.h>
-#include <osl/thread.hxx>
-#include <osl/time.h>
+#include <rtl/alloc.h>
 #include <rtl/digest.h>
 #include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
@@ -56,17 +55,14 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
-#include <vcl/dllapi.h>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
-#include <com/sun/star/task/XInteractionRetry.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>

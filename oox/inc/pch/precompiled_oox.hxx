@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-01 10:57:44 using:
+ Generated on 2020-04-21 11:15:57 using:
  ./bin/update_pch oox oox --cutoff=6 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -23,27 +23,32 @@
 #if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
-#include <cmath>
 #include <cstddef>
 #include <functional>
 #include <iomanip>
 #include <limits.h>
 #include <limits>
 #include <map>
+#include <math.h>
 #include <memory>
 #include <new>
+#include <optional>
 #include <ostream>
 #include <set>
 #include <string.h>
 #include <string_view>
 #include <type_traits>
+#include <unordered_set>
 #include <utility>
 #include <vector>
 #include <boost/algorithm/string.hpp>
+#include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
+#include <osl/doublecheckedlocking.h>
 #include <osl/file.hxx>
+#include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
@@ -51,7 +56,9 @@
 #include <rtl/character.hxx>
 #include <rtl/cipher.h>
 #include <rtl/digest.h>
+#include <rtl/instance.hxx>
 #include <rtl/locale.h>
+#include <rtl/math.h>
 #include <rtl/math.hxx>
 #include <rtl/random.h>
 #include <rtl/ref.hxx>
@@ -63,59 +70,61 @@
 #include <rtl/tencinfo.h>
 #include <rtl/textenc.h>
 #include <rtl/uri.hxx>
-#include <rtl/ustrbuf.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/log.hxx>
+#include <sal/mathconf.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
-#include <vcl/GraphicExternalLink.hxx>
-#include <vcl/animate/Animation.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
+#include <vcl/cairo.hxx>
+#include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/gfxlink.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/fntstyle.hxx>
+#include <vcl/font.hxx>
 #include <vcl/mapmod.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/vectorgraphicdata.hxx>
+#include <vcl/metaactiontypes.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/outdevmap.hxx>
+#include <vcl/outdevstate.hxx>
+#include <vcl/region.hxx>
+#include <vcl/salnativewidgets.hxx>
+#include <vcl/vclreferencebase.hxx>
+#include <vcl/wall.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
-#include <basegfx/vector/b2dsize.hxx>
+#include <basegfx/vector/b2enums.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
-#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
-#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
-#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
-#include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -126,26 +135,26 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/genfunc.hxx>
-#include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
+#include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
-#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/implbase_ex.hxx>
+#include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <drawingml/chart/chartcontextbase.hxx>
 #include <drawingml/chart/chartspacemodel.hxx>
@@ -153,7 +162,6 @@
 #include <drawingml/chart/objectformatter.hxx>
 #include <drawingml/chart/titlemodel.hxx>
 #include <drawingml/colorchoicecontext.hxx>
-#include <drawingml/customshapegeometry.hxx>
 #include <drawingml/customshapeproperties.hxx>
 #include <drawingml/fillproperties.hxx>
 #include <drawingml/lineproperties.hxx>
@@ -164,37 +172,37 @@
 #include <drawingml/textbodycontext.hxx>
 #include <drawingml/textcharacterproperties.hxx>
 #include <drawingml/textfont.hxx>
-#include <drawingml/textliststyle.hxx>
 #include <drawingml/textparagraph.hxx>
-#include <drawingml/textparagraphproperties.hxx>
 #include <drawingml/textspacing.hxx>
 #include <filter/msfilter/msfilterdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
-#include <optional>
 #include <o3tl/safeint.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <sax/fshelper.hxx>
 #include <sax/saxdllapi.h>
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
+#include <svl/typedwhich.hxx>
 #include <svx/msdffdef.hxx>
+#include <svx/svdtypes.hxx>
 #include <svx/svxdllapi.h>
 #include <tools/color.hxx>
-#include <tools/date.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fldunit.hxx>
+#include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <tools/mapunit.hxx>
+#include <tools/poly.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
-#include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
 #include <typelib/typedescription.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>
+#include <unotools/fontdefs.hxx>
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
@@ -202,6 +210,7 @@
 #include <oox/core/contexthandler2.hxx>
 #include <oox/core/fragmenthandler.hxx>
 #include <oox/core/fragmenthandler2.hxx>
+#include <oox/core/relations.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/dllapi.h>
 #include <oox/drawingml/chart/chartconverter.hxx>
@@ -210,9 +219,8 @@
 #include <oox/drawingml/clrscheme.hxx>
 #include <oox/drawingml/color.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
-#include <oox/drawingml/graphicshapecontext.hxx>
 #include <oox/drawingml/shape.hxx>
-#include <oox/drawingml/shapegroupcontext.hxx>
+#include <oox/drawingml/shapecontext.hxx>
 #include <oox/drawingml/shapepropertymap.hxx>
 #include <oox/drawingml/theme.hxx>
 #include <oox/helper/attributelist.hxx>
@@ -231,8 +239,6 @@
 #include <oox/ole/olestorage.hxx>
 #include <oox/ppt/comments.hxx>
 #include <oox/ppt/headerfooter.hxx>
-#include <oox/ppt/pptfilterhelpers.hxx>
-#include <oox/ppt/pptimport.hxx>
 #include <oox/ppt/pptshape.hxx>
 #include <oox/ppt/slidepersist.hxx>
 #include <oox/token/namespaces.hxx>

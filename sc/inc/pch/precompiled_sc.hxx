@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-26 17:29:13 using:
+ Generated on 2020-04-21 11:16:42 using:
  ./bin/update_pch sc sc --cutoff=12 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -122,7 +122,6 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/dockwin.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/event.hxx>
 #include <vcl/floatwin.hxx>
@@ -170,6 +169,7 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/utils/common.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
@@ -528,10 +528,12 @@
 #include <hints.hxx>
 #include <inputhdl.hxx>
 #include <inputopt.hxx>
+#include <inputwin.hxx>
 #include <interpre.hxx>
 #include <listenercontext.hxx>
 #include <markdata.hxx>
 #include <miscuno.hxx>
+#include <mtvelements.hxx>
 #include <olinetab.hxx>
 #include <output.hxx>
 #include <patattr.hxx>

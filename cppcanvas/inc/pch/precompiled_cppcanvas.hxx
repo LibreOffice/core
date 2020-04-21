@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-01-22 15:57:37 using:
+ Generated on 2020-04-21 11:14:04 using:
  ./bin/update_pch cppcanvas cppcanvas --cutoff=11 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -27,13 +27,13 @@
 #include <cstring>
 #include <float.h>
 #include <functional>
-#include <initializer_list>
 #include <iomanip>
 #include <limits.h>
 #include <limits>
 #include <math.h>
 #include <memory>
 #include <new>
+#include <optional>
 #include <ostream>
 #include <stddef.h>
 #include <string.h>
@@ -96,6 +96,7 @@
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <basegfx/utils/canvastools.hxx>
+#include <basegfx/utils/common.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
@@ -116,7 +117,6 @@
 #include <cppu/unotype.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
-#include <optional>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
@@ -134,6 +134,7 @@
 #include <uno/sequence2.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
+#include <cppcanvas/canvas.hxx>
 #endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

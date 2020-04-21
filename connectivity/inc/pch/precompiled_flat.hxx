@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-01-22 15:57:36 using:
+ Generated on 2020-04-21 11:13:54 using:
  ./bin/update_pch connectivity flat --cutoff=2 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -186,6 +186,7 @@
 #include <o3tl/underlyingenumvalue.hxx>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
+#include <sdbcx/VCatalog.hxx>
 #include <tools/toolsdllapi.h>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
@@ -201,7 +202,6 @@
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/sdbcx/IRefreshable.hxx>
-#include <sdbcx/VCatalog.hxx>
 #include <connectivity/sdbcx/VDescriptor.hxx>
 #endif // PCH_LEVEL >= 4
 
