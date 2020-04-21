@@ -1243,9 +1243,9 @@ DECLARE_OOXMLEXPORT_TEST(testNonBMPChar, "nonbmpchar.docx")
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange1->getString());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testSpaceingGroupShapeText, "tdf131775_SpacingGroupShapeText.docx")
+DECLARE_OOXMLEXPORT_TEST(testSpacingGroupShapeText, "tdf131775_SpacingGroupShapeText.docx")
 {
-    // tdf#131775: Check if correct spaceing.
+    // tdf#131775: Check if correct spacing.
 
     xmlDocPtr pXmlDocument = parseExport("word/document.xml");
     if (!pXmlDocument)
