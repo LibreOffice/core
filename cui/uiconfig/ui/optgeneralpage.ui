@@ -267,53 +267,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkFrame" id="privacyframe">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label_xalign">0</property>
-        <property name="shadow_type">none</property>
-        <child>
-          <!-- n-columns=1 n-rows=1 -->
-          <object class="GtkGrid">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin-start">12</property>
-            <property name="margin-top">6</property>
-            <child>
-              <object class="GtkCheckButton" id="crashreport">
-                <property name="label" translatable="yes" context="optgeneralpage|crashreport">Sen_d crash reports to The Document Foundation</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="halign">start</property>
-                <property name="use_underline">True</property>
-                <property name="active">True</property>
-                <property name="draw_indicator">True</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
-              </packing>
-            </child>
-          </object>
-        </child>
-        <child type="label">
-          <object class="GtkLabel" id="label7">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="optgeneralpage|label7">Help Improve %PRODUCTNAME</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-            </attributes>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">5</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkFrame" id="quickstarter">
         <property name="visible">True</property>
         <property name="can_focus">False</property>

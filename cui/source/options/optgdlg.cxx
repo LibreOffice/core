@@ -164,7 +164,6 @@ OfaMiscTabPage::OfaMiscTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xYearFrame(m_xBuilder->weld_widget("yearframe"))
     , m_xYearValueField(m_xBuilder->weld_spin_button("year"))
     , m_xToYearFT(m_xBuilder->weld_label("toyear"))
-    , m_xCrashReport(m_xBuilder->weld_check_button("crashreport"))
     , m_xQuickStarterFrame(m_xBuilder->weld_widget("quickstarter"))
     , m_xHelpImproveLabel(m_xBuilder->weld_label("label7")) //"Help Improve"
 #if defined(UNX)
@@ -252,14 +251,6 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
         rSet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, nNum ) );
     }
 
-#if HAVE_FEATURE_BREAKPAD
-    if (m_xCrashReport->get_state_changed_from_saved())
-    {
-        officecfg::Office::Common::Misc::CrashReport::set(m_xCrashReport->get_active(), batch);
-        bModified = true;
-    }
-#endif
-
 #if defined(_WIN32)
     if (m_xPerformFileExtCheck->get_state_changed_from_saved())
     {
@@ -302,14 +293,6 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     }
     else
         m_xYearFrame->set_sensitive(false);
-
-#if HAVE_FEATURE_BREAKPAD
-    m_xCrashReport->set_active(officecfg::Office::Common::Misc::CrashReport::get() && CrashReporter::IsDumpEnable());
-    m_xCrashReport->set_sensitive(!officecfg::Office::Common::Misc::CrashReport::isReadOnly() && CrashReporter::IsDumpEnable());
-    m_xCrashReport->save_state();
-#else
-    m_xCrashReport->hide();
-#endif
 
     const SfxPoolItem* pItem = nullptr;
     SfxItemState eState = rSet->GetItemState( SID_ATTR_QUICKLAUNCHER, false, &pItem );
