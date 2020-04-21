@@ -3842,7 +3842,7 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
     // tdf#54819 current redlining needs also modification of paragraph style and
     // attributes added to the same grouped Undo
     if (m_rDoc.GetIDocumentUndoRedo().DoesGroupUndo())
-        m_rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::DELETE, nullptr);
+        m_rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
 
     auto & rDMA(*m_rDoc.getIDocumentMarkAccess());
     std::vector<std::unique_ptr<SwUndo>> MarkUndos;
@@ -3946,7 +3946,7 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
     }
 
     if (m_rDoc.GetIDocumentUndoRedo().DoesGroupUndo())
-        m_rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::DELETE, nullptr);
+        m_rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::EMPTY, nullptr);
 
     return true;
 }
