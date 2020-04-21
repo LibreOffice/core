@@ -278,13 +278,21 @@ bool CrashReporter::IsDumpEnable()
     if (env != nullptr && env[0] != '\0') {
         return true;
     }
+
+    static bool bConfigRead = false;
+    static bool bEnable = true; // default, always on
+
+    if (bConfigRead)
+        return bEnable;
+
     // read configuration item 'CrashDumpEnable' -> bool on/off
     OUString sToken;
     if (rtl::Bootstrap::get("CrashDumpEnable", sToken))
     {
-        return sToken.toBoolean();
+        bEnable = sToken.toBoolean();
     }
-    return true; // default, always on
+    bConfigRead = true;
+    return bEnable;
 }
 
 

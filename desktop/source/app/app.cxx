@@ -2022,7 +2022,8 @@ void Desktop::OpenClients()
 #endif
 
 #if HAVE_FEATURE_BREAKPAD
-    if (officecfg::Office::Common::Misc::CrashReport::get() && CrashReporter::crashReportInfoExists())
+    if (CrashReporter::IsDumpEnable() &&
+        officecfg::Office::Common::Misc::CrashReport::get() && CrashReporter::crashReportInfoExists())
         handleCrashReport();
 #endif
 
