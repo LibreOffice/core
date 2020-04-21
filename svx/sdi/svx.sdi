@@ -2667,7 +2667,7 @@ XFillGradientItem FillGradient SID_ATTR_FILL_GRADIENT
 ]
 
 XFillGradientItem FillPageGradient SID_ATTR_PAGE_GRADIENT
-
+(SfxStringItem FillPageGradientJSON SID_FILL_GRADIENT_JSON)
 [
     /* flags: */
     AutoUpdate = TRUE,
