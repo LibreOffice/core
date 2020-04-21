@@ -123,6 +123,7 @@ public:
     void testTdf112333();
     void testTdf112552();
     void testTdf112557();
+    void testTdf128049();
     void testTdf106026();
     void testTdf112334();
     void testTdf112089();
@@ -233,6 +234,7 @@ public:
     CPPUNIT_TEST(testTdf112333);
     CPPUNIT_TEST(testTdf112552);
     CPPUNIT_TEST(testTdf112557);
+    CPPUNIT_TEST(testTdf128049);
     CPPUNIT_TEST(testTdf106026);
     CPPUNIT_TEST(testTdf112334);
     CPPUNIT_TEST(testTdf112089);
@@ -1385,6 +1387,20 @@ void SdOOXMLExportTest2::testTdf112557()
 
     xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slideMasters/slideMaster1.xml");
     assertXPath(pXmlDocContent, "/p:sldMaster/p:cSld/p:spTree/p:sp", 2); // title and object
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf128049()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/tdf128049.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:spPr/a:custGeom", 0);
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:spPr/a:prstGeom", "prst", "noSmoking");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:spPr/a:prstGeom/a:avLst/a:gd", "name", "adj");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:spPr/a:prstGeom/a:avLst/a:gd", "fmla", "val 12500");
     xDocShRef->DoClose();
 }
 
