@@ -59,6 +59,12 @@ define gb_CObject__compiler
 		$(if $(2), $(2), $(gb_CXX)))
 endef
 
+# When gb_LinkTarget_use_clang is used, filter out GCC flags that Clang doesn't know.
+# $(call gb_CObject__filter_out_clang_cflags,cflags)
+define gb_CObject__filter_out_clang_cflags
+    $(filter-out $(gb_FilterOutClangCFLAGS),$(1))
+endef
+
 # $(call gb_CObject__command_pattern,object,flags,source,dep-file,compiler-plugins,symbols,compiler)
 define gb_CObject__command_pattern
 $(call gb_Helper_abbreviate_dirs,\
@@ -72,7 +78,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
 		$(if $(5),$(gb_COMPILER_PLUGINS)) \
 		$(if $(COMPILER_TEST),-fsyntax-only -ferror-limit=0 -Xclang -verify) \
-		$(2) \
+		$(if $(7), $(call gb_CObject__filter_out_clang_cflags,$(2)),$(2)) \
 		$(if $(WARNINGS_DISABLED),$(gb_CXXFLAGS_DISABLE_WARNINGS)) \
 		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
 		-c $(3) \
@@ -125,7 +131,8 @@ $(call gb_Helper_abbreviate_dirs,\
 	CCACHE_DISABLE=1 $(gb_COMPILER_SETUP) \
 	$(if $(8),$(8),$(gb_CXX)) \
 		-x c++-header \
-		$(4) $(5) \
+		$(4) \
+		$(if $(7), $(call gb_CObject__filter_out_clang_cflags,$(5)),$(5)) \
 		$(if $(WARNINGS_DISABLED),$(gb_CXXFLAGS_DISABLE_WARNINGS)) \
 		$(gb_COMPILERDEPFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
