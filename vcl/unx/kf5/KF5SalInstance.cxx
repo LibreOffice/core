@@ -31,6 +31,8 @@
 #include "KF5SalFrame.hxx"
 #include "KF5SalInstance.hxx"
 
+#include "Qt5FilePickerSalAdaptor.hxx"
+
 using namespace com::sun::star;
 
 KF5SalInstance::KF5SalInstance(std::unique_ptr<QApplication>& pQApp)
@@ -74,7 +76,7 @@ KF5SalInstance::createPicker(css::uno::Reference<css::uno::XComponentContext> co
     // being used in the native file picker, which is only the case for KDE Plasma.
     // Therefore, return the plain qt5 one in order to not lose custom controls.
     if (Application::GetDesktopEnvironment() == "PLASMA5")
-        return new KF5FilePicker(context, eMode);
+        return new Qt5FilePickerSalAdaptor<KF5FilePicker>(context, eMode);
     return Qt5Instance::createPicker(context, eMode);
 }
 

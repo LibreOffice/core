@@ -25,28 +25,9 @@
 
 #include <iostream>
 
-#include "kde5_filepicker.hxx"
+#include "Qt5FilePicker.hxx"
 
-void readIpcArg(std::istream& stream, QString& string)
-{
-    const auto buffer = readIpcStringArg(stream);
-    string = QString::fromUtf8(buffer.data(), buffer.size());
-}
-
-void sendIpcArg(std::ostream& stream, const QString& string)
-{
-    const auto utf8 = string.toUtf8();
-    sendIpcStringArg(stream, utf8.size(), utf8.data());
-}
-
-static void sendIpcArg(std::ostream& stream, const QStringList& list)
-{
-    stream << static_cast<uint32_t>(list.size()) << ' ';
-    for (const auto& entry : list)
-    {
-        sendIpcArg(stream, entry);
-    }
-}
+Q_DECLARE_METATYPE(OUString)
 
 static void readCommandArgs(Commands command, QList<QVariant>& args)
 {
@@ -54,9 +35,9 @@ static void readCommandArgs(Commands command, QList<QVariant>& args)
     {
         case Commands::SetTitle:
         {
-            QString title;
+            OUString title;
             readIpcArgs(std::cin, title);
-            args.append(title);
+            args.append(QVariant::fromValue(title));
             break;
         }
         case Commands::SetWinId:
@@ -77,31 +58,31 @@ static void readCommandArgs(Commands command, QList<QVariant>& args)
         }
         case Commands::SetDefaultName:
         {
-            QString name;
+            OUString name;
             readIpcArgs(std::cin, name);
-            args.append(name);
+            args.append(QVariant::fromValue(name));
             break;
         }
         case Commands::SetDisplayDirectory:
         {
-            QString dir;
+            OUString dir;
             readIpcArgs(std::cin, dir);
-            args.append(dir);
+            args.append(QVariant::fromValue(dir));
             break;
         }
         case Commands::AppendFilter:
         {
-            QString title, filter;
+            OUString title, filter;
             readIpcArgs(std::cin, title, filter);
-            args.append(title);
-            args.append(filter);
+            args.append(QVariant::fromValue(title));
+            args.append(QVariant::fromValue(filter));
             break;
         }
         case Commands::SetCurrentFilter:
         {
-            QString title;
+            OUString title;
             readIpcArgs(std::cin, title);
-            args.append(title);
+            args.append(QVariant::fromValue(title));
             break;
         }
         case Commands::SetValue:
@@ -136,10 +117,10 @@ static void readCommandArgs(Commands command, QList<QVariant>& args)
         case Commands::SetLabel:
         {
             sal_Int16 controlId = 0;
-            QString label;
+            OUString label;
             readIpcArgs(std::cin, controlId, label);
             args.append(controlId);
-            args.append(label);
+            args.append(QVariant::fromValue(label));
             break;
         }
         case Commands::GetLabel:
@@ -152,12 +133,10 @@ static void readCommandArgs(Commands command, QList<QVariant>& args)
         case Commands::AddCheckBox:
         {
             sal_Int16 controlId = 0;
-            bool hidden = false;
-            QString label;
-            readIpcArgs(std::cin, controlId, hidden, label);
+            OUString label;
+            readIpcArgs(std::cin, controlId, label);
             args.append(controlId);
-            args.append(hidden);
-            args.append(label);
+            args.append(QVariant::fromValue(label));
             break;
         }
         case Commands::Initialize:
@@ -197,13 +176,14 @@ static void readCommands(FilePickerIpc* ipc)
     }
 }
 
-FilePickerIpc::FilePickerIpc(KDE5FilePicker* filePicker, QObject* parent)
+FilePickerIpc::FilePickerIpc(Qt5FilePicker* filePicker, QObject* parent)
     : QObject(parent)
     , m_filePicker(filePicker)
 {
     // required to be able to pass those via signal/slot
     qRegisterMetaType<uint64_t>("uint64_t");
     qRegisterMetaType<Commands>("Commands");
+    qRegisterMetaType<OUString>();
 
     connect(this, &FilePickerIpc::commandReceived, this, &FilePickerIpc::handleCommand);
 
@@ -225,14 +205,14 @@ bool FilePickerIpc::handleCommand(uint64_t messageId, Commands command, QList<QV
     {
         case Commands::SetTitle:
         {
-            QString title = args.takeFirst().toString();
+            OUString title = args.takeFirst().value<OUString>();
             m_filePicker->setTitle(title);
             return true;
         }
         case Commands::SetWinId:
         {
             sal_uIntPtr winId = args.takeFirst().value<sal_uIntPtr>();
-            m_filePicker->setWinId(winId);
+            m_filePicker->setParentWinId(winId);
             return true;
         }
         case Commands::Execute:
@@ -248,13 +228,13 @@ bool FilePickerIpc::handleCommand(uint64_t messageId, Commands command, QList<QV
         }
         case Commands::SetDefaultName:
         {
-            QString name = args.takeFirst().toString();
+            OUString name = args.takeFirst().value<OUString>();
             m_filePicker->setDefaultName(name);
             return true;
         }
         case Commands::SetDisplayDirectory:
         {
-            QString dir = args.takeFirst().toString();
+            OUString dir = args.takeFirst().value<OUString>();
             m_filePicker->setDisplayDirectory(dir);
             return true;
         }
@@ -265,37 +245,19 @@ bool FilePickerIpc::handleCommand(uint64_t messageId, Commands command, QList<QV
         }
         case Commands::GetSelectedFiles:
         {
-            QStringList files;
-            for (auto const& url_ : m_filePicker->getSelectedFiles())
-            {
-                auto url = url_;
-                if (url.scheme() == QLatin1String("webdav")
-                    || url.scheme() == QLatin1String("webdavs"))
-                {
-                    // translate webdav and webdavs URLs into a format supported by LO
-                    url.setScheme(QLatin1String("vnd.sun.star.") + url.scheme());
-                }
-                else if (url.scheme() == QLatin1String("smb"))
-                {
-                    // clear the user name - the GIO backend does not support this apparently
-                    // when no username is available, it will ask for the password
-                    url.setUserName({});
-                }
-                files << url.toString();
-            }
-            sendIpcArgs(std::cout, messageId, files);
+            sendIpcArgs(std::cout, messageId, m_filePicker->getSelectedFiles());
             return true;
         }
         case Commands::AppendFilter:
         {
-            QString title = args.takeFirst().toString();
-            QString filter = args.takeFirst().toString();
+            OUString title = args.takeFirst().value<OUString>();
+            OUString filter = args.takeFirst().value<OUString>();
             m_filePicker->appendFilter(title, filter);
             return true;
         }
         case Commands::SetCurrentFilter:
         {
-            QString title = args.takeFirst().toString();
+            OUString title = args.takeFirst().value<OUString>();
             m_filePicker->setCurrentFilter(title);
             return true;
         }
@@ -309,14 +271,18 @@ bool FilePickerIpc::handleCommand(uint64_t messageId, Commands command, QList<QV
             sal_Int16 controlId = args.takeFirst().value<sal_Int16>();
             sal_Int16 nControlAction = args.takeFirst().value<sal_Int16>();
             bool value = args.takeFirst().toBool();
-            m_filePicker->setValue(controlId, nControlAction, value);
+            m_filePicker->setValue(controlId, nControlAction, uno::Any(value));
             return true;
         }
         case Commands::GetValue:
         {
             sal_Int16 controlId = args.takeFirst().value<sal_Int16>();
             sal_Int16 nControlAction = args.takeFirst().value<sal_Int16>();
-            sendIpcArgs(std::cout, messageId, m_filePicker->getValue(controlId, nControlAction));
+            bool ret = false;
+            uno::Any value = m_filePicker->getValue(controlId, nControlAction);
+            if (value.has<bool>())
+                ret = value.get<bool>();
+            sendIpcArgs(std::cout, messageId, ret);
             return true;
         }
         case Commands::EnableControl:
@@ -329,7 +295,7 @@ bool FilePickerIpc::handleCommand(uint64_t messageId, Commands command, QList<QV
         case Commands::SetLabel:
         {
             sal_Int16 controlId = args.takeFirst().value<sal_Int16>();
-            QString label = args.takeFirst().toString();
+            OUString label = args.takeFirst().value<OUString>();
             m_filePicker->setLabel(controlId, label);
             return true;
         }
@@ -342,20 +308,15 @@ bool FilePickerIpc::handleCommand(uint64_t messageId, Commands command, QList<QV
         case Commands::AddCheckBox:
         {
             sal_Int16 controlId = args.takeFirst().value<sal_Int16>();
-            bool hidden = args.takeFirst().toBool();
-            QString label = args.takeFirst().toString();
-            m_filePicker->addCheckBox(controlId, label, hidden);
+            OUString label = args.takeFirst().value<OUString>();
+            m_filePicker->addCustomControl(controlId);
+            m_filePicker->setLabel(controlId, label);
             return true;
         }
         case Commands::Initialize:
         {
             bool saveDialog = args.takeFirst().toBool();
-            m_filePicker->initialize(saveDialog);
-            return true;
-        }
-        case Commands::EnablePickFolderMode:
-        {
-            m_filePicker->enableFolderMode();
+            m_filePicker->setAcceptMode(saveDialog ? QFileDialog::AcceptSave : QFileDialog::AcceptOpen);
             return true;
         }
         case Commands::Quit:
