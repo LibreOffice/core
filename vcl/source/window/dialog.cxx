@@ -41,6 +41,7 @@
 #include <sal/log.hxx>
 
 #include <vcl/abstdlg.hxx>
+#include <vcl/accel.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
