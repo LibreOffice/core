@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <sal/alloca.h>
+#include <sal/log.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -213,7 +214,7 @@ HwpImportFilter::HwpImportFilter(const Reference< XMultiServiceFactory >& rFact)
     }
     catch( Exception & )
     {
-        printf(" fail to instantiate %s\n", WRITER_IMPORTER_NAME );
+        SAL_WARN("hwpfilter", "fail to instantiate " << WRITER_IMPORTER_NAME);
         exit( 1 );
     }
 }
