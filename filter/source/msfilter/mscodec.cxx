@@ -20,6 +20,7 @@
 #include <filter/msfilter/mscodec.hxx>
 
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <algorithm>
 #include <string.h>
 #include <tools/solar.h>
@@ -28,12 +29,6 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/docpasswordhelper.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
-
-#define DEBUG_MSO_ENCRYPTION_STD97 0
-
-#if DEBUG_MSO_ENCRYPTION_STD97
-#include <stdio.h>
-#endif
 
 using namespace ::com::sun::star;
 
@@ -113,6 +108,20 @@ sal_uInt16 lclGetHash( const sal_uInt8* pnPassData, std::size_t nBufferSize )
     return nHash;
 }
 
+std::string lcl_DigestString(const sal_uInt8* pDigest, const char* msg)
+{
+    std::ostringstream oss;
+
+    oss << std::hex
+        << std::setprecision(2);
+
+    oss << "digest: (" << msg << ")\n";
+    for (int i = 0; i < 16; ++i) {
+        oss << std::setw(2) << pDigest[i] << " ";
+    }
+
+    return oss.str();
+}
 
 } // namespace
 
@@ -279,25 +288,10 @@ MSCodec_Std97::~MSCodec_Std97()
     rtl_digest_destroy(m_hDigest);
 }
 
-#if DEBUG_MSO_ENCRYPTION_STD97
-static void lcl_PrintDigest(const sal_uInt8* pDigest, const char* msg)
-{
-    printf("digest: (%s)\n", msg);
-    for (int i = 0; i < 16; ++i)
-        printf("%2.2x ", pDigest[i]);
-    printf("\n");
-}
-#else
-static void lcl_PrintDigest(const sal_uInt8* /*pDigest*/, const char* /*msg*/)
-{
-}
-#endif
-
 bool MSCodec97::InitCodec( const uno::Sequence< beans::NamedValue >& aData )
 {
-#if DEBUG_MSO_ENCRYPTION_STD97
-    fprintf(stdout, "MSCodec_Std97::InitCodec: --begin\n");fflush(stdout);
-#endif
+    SAL_INFO("filter.ms", "MSCodec_Std97::InitCodec: --begin.");
+
     bool bResult = false;
 
     ::comphelper::SequenceAsHashMap aHashData( aData );
@@ -313,8 +307,8 @@ bool MSCodec97::InitCodec( const uno::Sequence< beans::NamedValue >& aData )
             assert(m_aDocId.size() == static_cast<size_t>(aUniqueID.getLength()));
             (void)memcpy(m_aDocId.data(), aUniqueID.getConstArray(), m_aDocId.size());
             bResult = true;
-            lcl_PrintDigest(m_aDigestValue.data(), "digest value");
-            lcl_PrintDigest(m_aDocId.data(), "DocId value");
+            SAL_INFO("filter.ms", lcl_DigestString(m_aDigestValue.data(), "digest value"));
+            SAL_INFO("filter.ms", lcl_DigestString(m_aDocId.data(), "DocId value"));
         }
         else
             OSL_FAIL( "Unexpected document ID!" );
@@ -339,9 +333,8 @@ void MSCodec_Std97::InitKey (
     const sal_uInt16 pPassData[16],
     const sal_uInt8  pDocId[16])
 {
-#if DEBUG_MSO_ENCRYPTION_STD97
-    fprintf(stdout, "MSCodec_Std97::InitKey: --begin\n");fflush(stdout);
-#endif
+    SAL_INFO("filter.ms", "MSCodec_Std97::InitKey: --begin.");
+
     uno::Sequence< sal_Int8 > aKey = ::comphelper::DocPasswordHelper::GenerateStd97Key(pPassData, pDocId);
     // Fill raw digest of above updates into DigestValue.
 
@@ -351,11 +344,11 @@ void MSCodec_Std97::InitKey (
     else
         memset(m_aDigestValue.data(), 0, m_aDigestValue.size());
 
-    lcl_PrintDigest(m_aDigestValue.data(), "digest value");
+    SAL_INFO("filter.ms", lcl_DigestString(m_aDigestValue.data(), "digest value"));
 
     (void)memcpy (m_aDocId.data(), pDocId, 16);
 
-    lcl_PrintDigest(m_aDocId.data(), "DocId value");
+    SAL_INFO("filter.ms", lcl_DigestString(m_aDocId.data(), "DocId value"));
 }
 
 void MSCodec_CryptoAPI::InitKey (
@@ -380,11 +373,11 @@ void MSCodec_CryptoAPI::InitKey (
             ::comphelper::HashType::SHA1));
     m_aDigestValue = sha1;
 
-    lcl_PrintDigest(m_aDigestValue.data(), "digest value");
+    SAL_INFO("filter.ms", lcl_DigestString(m_aDigestValue.data(), "digest value"));
 
     (void)memcpy(m_aDocId.data(), pDocId, 16);
 
-    lcl_PrintDigest(m_aDocId.data(), "DocId value");
+    SAL_INFO("filter.ms", lcl_DigestString(m_aDocId.data(), "DocId value"));
 
     //generate the old format key while we have the required data
     m_aStd97Key = ::comphelper::DocPasswordHelper::GenerateStd97Key(pPassData, pDocId);
@@ -394,11 +387,10 @@ bool MSCodec97::VerifyKey(const sal_uInt8* pSaltData, const sal_uInt8* pSaltDige
 {
     // both the salt data and salt digest (hash) come from the document being imported.
 
-#if DEBUG_MSO_ENCRYPTION_STD97
-    fprintf(stdout, "MSCodec97::VerifyKey: \n");
-    lcl_PrintDigest(pSaltData, "salt data");
-    lcl_PrintDigest(pSaltDigest, "salt hash");
-#endif
+    SAL_INFO("filter.ms", "MSCodec97::VerifyKey:");
+    SAL_INFO("filter.ms", lcl_DigestString(pSaltData, "salt data"));
+    SAL_INFO("filter.ms", lcl_DigestString(pSaltDigest, "salt hash"));
+
     bool result = false;
 
     if (InitCipher(0))
@@ -495,9 +487,8 @@ uno::Sequence<beans::NamedValue> MSCodec_CryptoAPI::GetEncryptionData()
 
 void MSCodec_Std97::CreateSaltDigest( const sal_uInt8 nSaltData[16], sal_uInt8 nSaltDigest[16] )
 {
-#if DEBUG_MSO_ENCRYPTION_STD97
-    lcl_PrintDigest(nSaltData, "salt data");
-#endif
+    SAL_INFO("filter.ms", lcl_DigestString(nSaltData, "salt data"));
+
     if (InitCipher(0))
     {
         sal_uInt8 pDigest[RTL_DIGEST_LENGTH_MD5];

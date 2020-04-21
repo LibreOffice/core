@@ -21,6 +21,7 @@
 #define INCLUDED_HWPFILTER_SOURCE_NODES_H
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <memory>
 #include <vector>
@@ -73,7 +74,7 @@ public:
           next = nullptr;
 #ifdef NODE_DEBUG
           count++;
-          printf("Node count : [%d]\n",count);
+          SAL_INFO("hwpfilter", "node count : [" << count << "].");
 #endif
      }
      ~Node()
@@ -85,7 +86,7 @@ public:
           child = nullptr;
 #ifdef NODE_DEBUG
           count--;
-          printf("Node count : [%d]\n",count);
+          SAL_INFO("hwpfilter", "node count : [" << count << "].");
 #endif
      }
 public:
