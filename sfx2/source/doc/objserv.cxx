@@ -1615,7 +1615,7 @@ bool SfxObjectShell::PrepareForSigning(weld::Window* pDialogParent)
 
     // the target ODF version on saving (only valid when signing ODF of course)
     SvtSaveOptions aSaveOpt;
-    SvtSaveOptions::ODFDefaultVersion nVersion = aSaveOpt.GetODFDefaultVersion();
+    SvtSaveOptions::ODFSaneDefaultVersion nVersion = aSaveOpt.GetODFSaneDefaultVersion();
 
     // the document is not new and is not modified
     OUString aODFVersion(comphelper::OStorageHelper::GetODFVersionFromStorage(GetStorage()));
@@ -1625,7 +1625,7 @@ bool SfxObjectShell::PrepareForSigning(weld::Window* pDialogParent)
     {
         // the document might need saving ( new, modified or in ODF1.1 format without signature )
 
-        if ( nVersion >= SvtSaveOptions::ODFVER_012 )
+        if (nVersion >= SvtSaveOptions::ODFSVER_012)
         {
             OUString sQuestion(bHasSign ? SfxResId(STR_XMLSEC_QUERY_SAVESIGNEDBEFORESIGN) : SfxResId(RID_SVXSTR_XMLSEC_QUERY_SAVEBEFORESIGN));
             std::unique_ptr<weld::MessageDialog> xQuestion(Application::CreateMessageDialog(pDialogParent,
@@ -1797,7 +1797,7 @@ bool SfxObjectShell::SignDocumentContentUsingCertificate(const Reference<XCertif
 
     // the target ODF version on saving (only valid when signing ODF of course)
     SvtSaveOptions aSaveOpt;
-    SvtSaveOptions::ODFDefaultVersion nVersion = aSaveOpt.GetODFDefaultVersion();
+    SvtSaveOptions::ODFSaneDefaultVersion nVersion = aSaveOpt.GetODFSaneDefaultVersion();
 
     // the document is not new and is not modified
     OUString aODFVersion(comphelper::OStorageHelper::GetODFVersionFromStorage(GetStorage()));
@@ -1805,7 +1805,7 @@ bool SfxObjectShell::SignDocumentContentUsingCertificate(const Reference<XCertif
     if (IsModified() || !GetMedium() || GetMedium()->GetName().isEmpty()
       || (GetMedium()->GetFilter()->IsOwnFormat() && aODFVersion != ODFVER_012_TEXT && !bHasSign))
     {
-        if ( nVersion >= SvtSaveOptions::ODFVER_012 )
+        if (nVersion >= SvtSaveOptions::ODFSVER_012)
         {
             sal_uInt16 nId = SID_SAVEDOC;
             if ( !GetMedium() || GetMedium()->GetName().isEmpty() )

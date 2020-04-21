@@ -1176,8 +1176,8 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                     if (mpExport
 #if 1
 // TODO: remove in a couple releases, when users have the import of style:shrink-to-fit
-                            && (mpExport->getDefaultVersion()
-                                        <= SvtSaveOptions::ODFVER_012)
+                            && (mpExport->getSaneDefaultVersion()
+                                        <= SvtSaveOptions::ODFSVER_012)
 #endif
                         )
                     {

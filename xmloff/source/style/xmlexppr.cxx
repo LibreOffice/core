@@ -789,7 +789,7 @@ void SvXMLExportPropertyMapper::exportXML(
                 aPropTokens[i].eToken == xmloff::token::XML_GRAPHIC_PROPERTIES)
             {
                 nNamespace = XML_NAMESPACE_LO_EXT;
-                if (rExport.getDefaultVersion() <= SvtSaveOptions::ODFVER_012)
+                if (rExport.getSaneDefaultVersion() <= SvtSaveOptions::ODFSVER_012)
                 {
                     continue; // don't write for ODF <= 1.2
                 }

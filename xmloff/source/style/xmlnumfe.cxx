@@ -1699,7 +1699,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                     break;
                 case NF_SYMBOLTYPE_STAR :
                     // export only if ODF 1.2 extensions are enabled
-                    if( rExport.getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
+                    if (rExport.getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)
                     {
                         if ( pElemStr && pElemStr->getLength() > 1 )
                             WriteRepeatedElement_Impl( (*pElemStr)[1] );

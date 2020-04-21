@@ -424,8 +424,8 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                     {
                         if( ( nValue & chart::ChartDataCaption::PERCENT ) == chart::ChartDataCaption::PERCENT )
                         {
-                            const SvtSaveOptions::ODFDefaultVersion nCurrentVersion( SvtSaveOptions().GetODFDefaultVersion() );
-                            if( nCurrentVersion < SvtSaveOptions::ODFVER_012 )
+                            const SvtSaveOptions::ODFSaneDefaultVersion nCurrentVersion( SvtSaveOptions().GetODFSaneDefaultVersion() );
+                            if (nCurrentVersion < SvtSaveOptions::ODFSVER_012)
                                 sValueBuffer.append( GetXMLToken( XML_PERCENTAGE ));
                             else
                                 sValueBuffer.append( GetXMLToken( XML_VALUE_AND_PERCENTAGE ));
@@ -476,7 +476,7 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                 break;
             case XML_SCH_CONTEXT_SPECIAL_REGRESSION_TYPE:
                 {
-                    const SvtSaveOptions::ODFDefaultVersion nCurrentVersion( SvtSaveOptions().GetODFDefaultVersion() );
+                    const SvtSaveOptions::ODFSaneDefaultVersion nCurrentVersion( SvtSaveOptions().GetODFSaneDefaultVersion() );
 
                     OUString aServiceName;
                     rProperty.maValue >>= aServiceName;
@@ -488,9 +488,9 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                         sValueBuffer.append( GetXMLToken( XML_EXPONENTIAL ));
                     else if (aServiceName == "com.sun.star.chart2.PotentialRegressionCurve")
                         sValueBuffer.append( GetXMLToken( XML_POWER ));
-                    else if (nCurrentVersion > SvtSaveOptions::ODFVER_012 && aServiceName == "com.sun.star.chart2.PolynomialRegressionCurve")
+                    else if (nCurrentVersion > SvtSaveOptions::ODFSVER_012 && aServiceName == "com.sun.star.chart2.PolynomialRegressionCurve")
                         sValueBuffer.append( GetXMLToken( XML_POLYNOMIAL ));
-                    else if (nCurrentVersion > SvtSaveOptions::ODFVER_012 && aServiceName == "com.sun.star.chart2.MovingAverageRegressionCurve")
+                    else if (nCurrentVersion > SvtSaveOptions::ODFSVER_012 && aServiceName == "com.sun.star.chart2.MovingAverageRegressionCurve")
                         sValueBuffer.append( GetXMLToken( XML_MOVING_AVERAGE ));
                 }
                 break;

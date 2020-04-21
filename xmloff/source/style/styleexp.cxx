@@ -231,7 +231,7 @@ bool XMLStyleExport::exportStyle(
                    since ODF 1.2. Thus, suppress its export for former versions. (#i104889#)
                 */
                 if ( ( GetExport().getExportFlags() & SvXMLExportFlags::OASIS ) &&
-                     GetExport().getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
+                    GetExport().getSaneDefaultVersion() >= SvtSaveOptions::ODFSVER_012)
                 {
                     GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                               XML_DEFAULT_OUTLINE_LEVEL,

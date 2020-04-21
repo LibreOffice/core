@@ -236,7 +236,7 @@ ORptExport::ORptExport(const Reference< XComponentContext >& _rxContext, OUStrin
     {
         GetNamespaceMap_().Add( GetXMLToken(XML_NP_XHTML),GetXMLToken(XML_N_XHTML), XML_NAMESPACE_XHTML );
         // loext, needed for paragraphs inside shapes
-        if (getDefaultVersion() > SvtSaveOptions::ODFVER_012)
+        if (getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
         {
             GetNamespaceMap_().Add(
                 GetXMLToken(XML_NP_LO_EXT), GetXMLToken(XML_N_LO_EXT),

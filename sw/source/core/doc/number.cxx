@@ -1439,15 +1439,15 @@ namespace numfunc
 
         SvxNumberFormat::SvxNumPositionAndSpaceMode ePosAndSpaceMode;
         SvtSaveOptions aSaveOptions;
-        switch ( aSaveOptions.GetODFDefaultVersion() )
+        switch (aSaveOptions.GetODFSaneDefaultVersion())
         {
-            case SvtSaveOptions::ODFVER_010:
-            case SvtSaveOptions::ODFVER_011:
+            case SvtSaveOptions::ODFSVER_010:
+            case SvtSaveOptions::ODFSVER_011:
             {
                 ePosAndSpaceMode = SvxNumberFormat::LABEL_WIDTH_AND_POSITION;
             }
             break;
-            default: // ODFVER_UNKNOWN or ODFVER_012
+            default: // >= ODFSVER_012
             {
                 ePosAndSpaceMode = SvxNumberFormat::LABEL_ALIGNMENT;
             }

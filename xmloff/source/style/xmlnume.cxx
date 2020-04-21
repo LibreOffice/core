@@ -614,15 +614,15 @@ SvxXMLNumRuleExport::SvxXMLNumRuleExport( SvXMLExport& rExp ) :
     // Let list style creation depend on Load/Save option "ODF format version" (#i89178#)
     mbExportPositionAndSpaceModeLabelAlignment( true )
 {
-    switch ( GetExport().getDefaultVersion() )
+    switch (GetExport().getSaneDefaultVersion())
     {
-        case SvtSaveOptions::ODFVER_010:
-        case SvtSaveOptions::ODFVER_011:
+        case SvtSaveOptions::ODFSVER_010:
+        case SvtSaveOptions::ODFSVER_011:
         {
             mbExportPositionAndSpaceModeLabelAlignment = false;
         }
         break;
-        default: // ODFVER_UNKNOWN or ODFVER_012
+        default: // >= ODFSVER_012
         {
             mbExportPositionAndSpaceModeLabelAlignment = true;
         }
@@ -736,18 +736,18 @@ void SvxXMLNumRuleExport::exportOutline()
                     xNumRulePropSet->getPropertyValue( sName ) >>= sOutlineStyleName;
                 }
             }
-            const SvtSaveOptions::ODFDefaultVersion nODFVersion =
-                                                GetExport().getDefaultVersion();
-            if ( ( nODFVersion == SvtSaveOptions::ODFVER_010 ||
-                   nODFVersion == SvtSaveOptions::ODFVER_011 ) &&
-                 GetExport().writeOutlineStyleAsNormalListStyle() )
+            const SvtSaveOptions::ODFSaneDefaultVersion nODFVersion =
+                                                GetExport().getSaneDefaultVersion();
+            if ((nODFVersion == SvtSaveOptions::ODFSVER_010 ||
+                 nODFVersion == SvtSaveOptions::ODFSVER_011)
+                && GetExport().writeOutlineStyleAsNormalListStyle())
             {
                 exportNumberingRule( sOutlineStyleName, false, xNumRule );
             }
             else
             {
-                if ( nODFVersion != SvtSaveOptions::ODFVER_010 &&
-                     nODFVersion != SvtSaveOptions::ODFVER_011 )
+                if (nODFVersion != SvtSaveOptions::ODFSVER_010 &&
+                    nODFVersion != SvtSaveOptions::ODFSVER_011)
                 {
                     // style:name="..."
                     GetExport().CheckAttrList();

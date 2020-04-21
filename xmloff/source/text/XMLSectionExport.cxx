@@ -397,7 +397,7 @@ void XMLSectionExport::ExportRegularSectionStart(
         // in ODF 1.0/1.1 the algorithm was left unspecified so we can write anything
         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_PROTECTION_KEY,
                                  aBuffer.makeStringAndClear());
-        if (aPassword.getLength() == 32 && GetExport().getDefaultVersion() >= SvtSaveOptions::ODFVER_012)
+        if (aPassword.getLength() == 32 && GetExport().getSaneDefaultVersion() >= SvtSaveOptions::ODFSVER_012)
         {
             // attribute exists in ODF 1.2 or later; default is SHA1 so no need to write that
             GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_PROTECTION_KEY_DIGEST_ALGORITHM,
@@ -1180,7 +1180,7 @@ void XMLSectionExport::ExportIndexTemplateElement(
     bool bWithTabStopOK = false;
 
     //i90246, the ODF version being written to is:
-    const SvtSaveOptions::ODFDefaultVersion aODFVersion = rExport.getDefaultVersion();
+    const SvtSaveOptions::ODFSaneDefaultVersion aODFVersion = rExport.getSaneDefaultVersion();
     //the above version cannot be used for old OOo (OOo 1.0) formats!
 
     // token type
@@ -1310,7 +1310,7 @@ void XMLSectionExport::ExportIndexTemplateElement(
         {
             case TOK_TTYPE_HYPERLINK_START:
             case TOK_TTYPE_HYPERLINK_END:
-                if (SvtSaveOptions::ODFVER_012 < aODFVersion)
+                if (SvtSaveOptions::ODFSVER_012 < aODFVersion)
                 {
                     assert(eType == TEXT_SECTION_TYPE_ILLUSTRATION
                         || eType == TEXT_SECTION_TYPE_OBJECT
@@ -1330,8 +1330,8 @@ void XMLSectionExport::ExportIndexTemplateElement(
 
     //--->i90246
     //check the ODF version being exported
-    if( aODFVersion == SvtSaveOptions::ODFVER_011
-        || aODFVersion == SvtSaveOptions::ODFVER_010)
+    if (aODFVersion == SvtSaveOptions::ODFSVER_011
+        || aODFVersion == SvtSaveOptions::ODFSVER_010)
     {
         bLevelOK = false;
         if (TOK_TTYPE_CHAPTER_INFO == nTokenType)

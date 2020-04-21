@@ -353,7 +353,7 @@ void SvXMLExport::InitCtor_()
         mpNamespaceMap->Add( GetXMLToken(XML_NP_OOOC),  GetXMLToken(XML_N_OOOC),    XML_NAMESPACE_OOOC );
         mpNamespaceMap->Add( GetXMLToken(XML_NP_OF),    GetXMLToken(XML_N_OF),      XML_NAMESPACE_OF );
 
-        if (getDefaultVersion() > SvtSaveOptions::ODFVER_012)
+        if (getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
         {
             mpNamespaceMap->Add(
                 GetXMLToken(XML_NP_TABLE_EXT), GetXMLToken(XML_N_TABLE_EXT), XML_NAMESPACE_TABLE_EXT);
@@ -1005,7 +1005,7 @@ void SvXMLExport::AddLanguageTagAttributes( sal_uInt16 nPrefix, sal_uInt16 nPref
         if (bWriteEmpty || !rLanguageTag.isSystemLocale())
         {
             AddAttribute( nPrefix, XML_LANGUAGE, rLanguageTag.getLanguage());
-            if (rLanguageTag.hasScript() && getDefaultVersion() >= SvtSaveOptions::ODFVER_012)
+            if (rLanguageTag.hasScript() && getSaneDefaultVersion() >= SvtSaveOptions::ODFSVER_012)
                 AddAttribute( nPrefix, XML_SCRIPT, rLanguageTag.getScript());
             if (bWriteEmpty || !rLanguageTag.getCountry().isEmpty())
                 AddAttribute( nPrefix, XML_COUNTRY, rLanguageTag.getCountry());
@@ -1013,7 +1013,7 @@ void SvXMLExport::AddLanguageTagAttributes( sal_uInt16 nPrefix, sal_uInt16 nPref
     }
     else
     {
-        if (getDefaultVersion() >= SvtSaveOptions::ODFVER_012)
+        if (getSaneDefaultVersion() >= SvtSaveOptions::ODFSVER_012)
             AddAttribute( nPrefixRfc, XML_RFC_LANGUAGE_TAG, rLanguageTag.getBcp47());
         // Also in case of non-pure-ISO tag store best matching fo: attributes
         // for consumers not handling *:rfc-language-tag, ensuring that only
@@ -1024,7 +1024,7 @@ void SvXMLExport::AddLanguageTagAttributes( sal_uInt16 nPrefix, sal_uInt16 nPref
         if (!aLanguage.isEmpty())
         {
             AddAttribute( nPrefix, XML_LANGUAGE, aLanguage);
-            if (!aScript.isEmpty() && getDefaultVersion() >= SvtSaveOptions::ODFVER_012)
+            if (!aScript.isEmpty() && getSaneDefaultVersion() >= SvtSaveOptions::ODFSVER_012)
                 AddAttribute( nPrefix, XML_SCRIPT, aScript);
             if (!aCountry.isEmpty())
                 AddAttribute( nPrefix, XML_COUNTRY, aCountry);
@@ -1203,9 +1203,9 @@ static void
 lcl_AddGrddl(SvXMLExport const & rExport, const SvXMLExportFlags /*nExportMode*/)
 {
     // check version >= 1.2
-    switch (rExport.getDefaultVersion()) {
-        case SvtSaveOptions::ODFVER_011: // fall through
-        case SvtSaveOptions::ODFVER_010: return;
+    switch (rExport.getSaneDefaultVersion()) {
+        case SvtSaveOptions::ODFSVER_011: // fall through
+        case SvtSaveOptions::ODFSVER_010: return;
         default: break;
     }
 
@@ -2322,9 +2322,9 @@ void
 SvXMLExport::AddAttributeIdLegacy(
         sal_uInt16 const nLegacyPrefix, OUString const& rValue)
 {
-    switch (getDefaultVersion()) {
-        case SvtSaveOptions::ODFVER_011: // fall through
-        case SvtSaveOptions::ODFVER_010: break;
+    switch (getSaneDefaultVersion()) {
+        case SvtSaveOptions::ODFSVER_011: // fall through
+        case SvtSaveOptions::ODFSVER_010: break;
         default: // ODF 1.2: xml:id
             AddAttribute(XML_NAMESPACE_XML, XML_ID, rValue);
     }
@@ -2338,9 +2338,9 @@ void
 SvXMLExport::AddAttributeXmlId(uno::Reference<uno::XInterface> const & i_xIfc)
 {
     // check version >= 1.2
-    switch (getDefaultVersion()) {
-        case SvtSaveOptions::ODFVER_011: // fall through
-        case SvtSaveOptions::ODFVER_010: return;
+    switch (getSaneDefaultVersion()) {
+        case SvtSaveOptions::ODFSVER_011: // fall through
+        case SvtSaveOptions::ODFSVER_010: return;
         default: break;
     }
     const uno::Reference<rdf::XMetadatable> xMeta(i_xIfc,
@@ -2389,9 +2389,9 @@ SvXMLExport::AddAttributesRDFa(
     uno::Reference<text::XTextContent> const & i_xTextContent)
 {
     // check version >= 1.2
-    switch (getDefaultVersion()) {
-        case SvtSaveOptions::ODFVER_011: // fall through
-        case SvtSaveOptions::ODFVER_010: return;
+    switch (getSaneDefaultVersion()) {
+        case SvtSaveOptions::ODFSVER_011: // fall through
+        case SvtSaveOptions::ODFSVER_010: return;
         default: break;
     }
 
