@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-01 10:57:24 using:
+ Generated on 2020-04-21 11:13:02 using:
  ./bin/update_pch accessibility acc --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -38,6 +38,7 @@
 #include <math.h>
 #include <memory>
 #include <new>
+#include <optional>
 #include <ostream>
 #include <stddef.h>
 #include <string.h>
@@ -98,7 +99,6 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
-#include <vcl/button.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/ctrl.hxx>
@@ -162,6 +162,7 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/utils/common.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
@@ -285,7 +286,6 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/deleter.hxx>
-#include <optional>
 #include <o3tl/safeint.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>

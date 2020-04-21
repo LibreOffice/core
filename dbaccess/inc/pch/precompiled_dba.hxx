@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-17 16:58:06 using:
+ Generated on 2020-04-21 11:14:19 using:
  ./bin/update_pch dbaccess dba --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -38,8 +38,8 @@
 #include <math.h>
 #include <memory>
 #include <new>
+#include <optional>
 #include <ostream>
-#include <set>
 #include <stddef.h>
 #include <string.h>
 #include <string>
@@ -77,6 +77,7 @@
 #include <rtl/textenc.h>
 #include <rtl/unload.h>
 #include <rtl/uri.hxx>
+#include <rtl/ustrbuf.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
@@ -113,6 +114,7 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/utils/common.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
@@ -136,15 +138,11 @@
 #include <com/sun/star/beans/XVetoableChangeListener.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XContainer.hpp>
-#include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -152,27 +150,23 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
-#include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/sdbcx/XAppend.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/sdbcx/XDrop.hpp>
 #include <com/sun/star/sdbcx/XRename.hpp>
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/uno/Any.h>
@@ -213,7 +207,6 @@
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/IParseContext.hxx>
 #include <connectivity/dbexception.hxx>
-#include <connectivity/dbmetadata.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/sdbcx/VDescriptor.hxx>
@@ -233,7 +226,6 @@
 #include <cppuhelper/implbase_ex_pre.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>
@@ -241,7 +233,6 @@
 #include <cppuhelper/weakref.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
-#include <optional>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
@@ -249,10 +240,11 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/singletonref.hxx>
 #include <salhelper/thread.hxx>
+#include <sfx2/dllapi.h>
+#include <svl/hint.hxx>
 #include <svl/lstner.hxx>
 #include <svl/svldllapi.h>
 #include <tools/color.hxx>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
@@ -263,18 +255,16 @@
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/uik.h>
-#include <ucbhelper/ucbhelperdllapi.h>
 #include <uno/any2.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>
-#include <unotools/sharedunocomponent.hxx>
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #include <ContainerMediator.hxx>
 #include <apitools.hxx>
+#include <column.hxx>
 #include <core_resource.hxx>
-#include <definitioncolumn.hxx>
 #include <sdbcoretools.hxx>
 #include <stringconstants.hxx>
 #include <strings.hxx>

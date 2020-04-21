@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-01 10:57:27 using:
+ Generated on 2020-04-21 11:13:45 using:
  ./bin/update_pch connectivity dbtools --cutoff=2 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -27,7 +27,6 @@
 #include <functional>
 #include <iterator>
 #include <limits>
-#include <map>
 #include <memory>
 #include <new>
 #include <ostream>
@@ -163,6 +162,9 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <resource/sharedresources.hxx>
 #include <salhelper/simplereferenceobject.hxx>
+#include <sdbcx/VIndexColumn.hxx>
+#include <sdbcx/VKey.hxx>
+#include <sdbcx/VKeyColumn.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/toolsdllapi.h>
 #include <unotools/resmgr.hxx>
@@ -172,19 +174,19 @@
 #if PCH_LEVEL >= 4
 #include <FDatabaseMetaDataResultSet.hxx>
 #include <FDatabaseMetaDataResultSetMetaData.hxx>
+#include <ParameterCont.hxx>
 #include <ParameterSubstitution.hxx>
 #include <RowFunctionParser.hxx>
 #include <TConnection.hxx>
+#include <TIndex.hxx>
+#include <TIndexColumns.hxx>
+#include <TKey.hxx>
+#include <TKeyColumns.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/DriversConfig.hxx>
 #include <connectivity/FValue.hxx>
 #include <connectivity/IParseContext.hxx>
 #include <connectivity/PColumn.hxx>
-#include <connectivity/ParameterCont.hxx>
-#include <connectivity/TIndex.hxx>
-#include <connectivity/TIndexColumns.hxx>
-#include <connectivity/TKey.hxx>
-#include <connectivity/TKeyColumns.hxx>
 #include <connectivity/TTableHelper.hxx>
 #include <connectivity/conncleanup.hxx>
 #include <connectivity/dbcharset.hxx>
@@ -200,9 +202,6 @@
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <connectivity/sdbcx/VColumn.hxx>
 #include <connectivity/sdbcx/VDescriptor.hxx>
-#include <connectivity/sdbcx/VIndexColumn.hxx>
-#include <connectivity/sdbcx/VKey.hxx>
-#include <connectivity/sdbcx/VKeyColumn.hxx>
 #include <connectivity/sdbcx/VTable.hxx>
 #include <connectivity/sqlerror.hxx>
 #include <connectivity/sqlnode.hxx>
