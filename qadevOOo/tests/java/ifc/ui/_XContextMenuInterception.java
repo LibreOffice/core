@@ -152,7 +152,7 @@ public class _XContextMenuInterception extends MultiMethodTest {
 
     private void openContextMenu(XModel xModel){
 
-        log.println("try to open contex menu...");
+        log.println("try to open context menu...");
 
         xWindow = AccessibilityTools.getCurrentWindow(xModel);
 

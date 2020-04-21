@@ -167,7 +167,7 @@ void SAL_CALL MasterScriptProvider::initialize( const Sequence < Any >& args )
         OUString pkgSpec = "uno_packages";
         sal_Int32 indexOfPkgSpec = m_sCtxString.lastIndexOf( pkgSpec );
 
-        // if contex string ends with "uno_packages"
+        // if context string ends with "uno_packages"
         if ( indexOfPkgSpec > -1 && m_sCtxString.match( pkgSpec, indexOfPkgSpec ) )
         {
             m_bIsPkgMSP = true;

@@ -246,7 +246,7 @@ public class CheckContextMenuInterceptor
     private void openContextMenu(XModel aModel)
     {
 
-        System.out.println("try to open contex menu...");
+        System.out.println("try to open context menu...");
 
         xWindow = AccessibilityTools.getCurrentWindow(aModel);
 
