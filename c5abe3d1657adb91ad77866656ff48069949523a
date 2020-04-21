@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "92805a37_9870b686",
+        "filename": "sw/qa/uitest/writer_tests5/tdf117039.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-21T18:40:44Z",
+      "side": 1,
+      "message": "throw",
+      "range": {
+        "startLine": 30,
+        "startChar": 49,
+        "endLine": 30,
+        "endChar": 56
+      },
+      "revId": "c5abe3d1657adb91ad77866656ff48069949523a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8689b642_2d7f4c52",
+        "filename": "sw/qa/uitest/writer_tests5/tdf117039.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-21T18:40:44Z",
+      "side": 1,
+      "message": "throw",
+      "range": {
+        "startLine": 44,
+        "startChar": 49,
+        "endLine": 44,
+        "endChar": 56
+      },
+      "revId": "c5abe3d1657adb91ad77866656ff48069949523a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
