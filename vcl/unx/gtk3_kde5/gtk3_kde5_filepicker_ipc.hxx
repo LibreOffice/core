@@ -45,7 +45,7 @@ protected:
     std::stringstream m_responseStream;
 
 public:
-    explicit Gtk3KDE5FilePickerIpc();
+    explicit Gtk3KDE5FilePickerIpc(bool folderMode = false);
     ~Gtk3KDE5FilePickerIpc();
 
     sal_Int16 execute();
