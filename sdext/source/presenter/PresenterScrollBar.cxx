@@ -241,7 +241,8 @@ void PresenterScrollBar::SetCanvas (const Reference<css::rendering::XCanvas>& rx
 
     if (mpBitmaps == nullptr)
     {
-        if (mpSharedBitmaps.expired())
+        mpBitmaps = mpSharedBitmaps.lock();
+        if (!mpBitmaps)
         {
             try
             {
@@ -257,8 +258,6 @@ void PresenterScrollBar::SetCanvas (const Reference<css::rendering::XCanvas>& rx
                 OSL_ASSERT(false);
             }
         }
-        else
-            mpBitmaps = std::shared_ptr<PresenterBitmapContainer>(mpSharedBitmaps);
         UpdateBitmaps();
         UpdateBorders();
     }
