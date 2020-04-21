@@ -116,7 +116,7 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
 
     PLMAP( "UserDefinedAttributes",    XML_NAMESPACE_TEXT,        XML_XMLNS,                        XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
 
-    //Index 65: fill attributes; use PLMAP macro here instead of GMAP, tis list is ordered and it's order is used
+    //Index 65: fill attributes; use PLMAP macro here instead of GMAP, this list is ordered and its order is used
     // to decide in which section in ODF to export the contained stuff (the PageMasterStyle creates several XML
     // sections, for Page, Header and Footer). The needed order seems to rely not on filtering, but using sections
     // based on the order used in this list.
