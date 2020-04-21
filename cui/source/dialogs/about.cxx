@@ -37,10 +37,8 @@
 #include <sfx2/app.hxx> //SfxApplication::loadBrandSvg
 #include <strings.hrc>
 
-#include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
-#include <vcl/textview.hxx>
-#include <tools/diagnose_ex.h>
+#include <vcl/unohelp2.hxx>
 
 #include <config_feature_opencl.h>
 #if HAVE_FEATURE_OPENCL
@@ -252,20 +250,6 @@ IMPL_LINK_NOARG(AboutDialog, HandleClick, weld::Button &, void) {
   css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
       css::datatransfer::clipboard::SystemClipboard::create(
           comphelper::getProcessComponentContext());
-
-  if (xClipboard.is()) {
-    css::uno::Reference<css::datatransfer::XTransferable> xDataObj(
-        new TETextDataObject(m_pVersionLabel->get_label()));
-    try {
-      xClipboard->setContents(xDataObj, nullptr);
-
-      css::uno::Reference<css::datatransfer::clipboard::XFlushableClipboard>
-          xFlushableClipboard(xClipboard, css::uno::UNO_QUERY);
-      if (xFlushableClipboard.is())
-        xFlushableClipboard->flushClipboard();
-    } catch (const css::uno::Exception &) {
-      TOOLS_WARN_EXCEPTION("cui.dialogs", "Caught exception trying to copy");
-    }
-  }
+  vcl::unohelper::TextDataObject::CopyStringTo(m_pVersionLabel->get_label(), xClipboard);
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
