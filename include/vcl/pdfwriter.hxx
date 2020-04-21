@@ -262,7 +262,7 @@ public:
 
         WidgetType getType() const { return Type; }
 
-        virtual std::unique_ptr<AnyWidget> Clone() const = 0;
+        virtual std::shared_ptr<AnyWidget> Clone() const = 0;
 
     protected:
         // note that this equals the default compiler-generated copy-ctor, but we want to have it
@@ -321,9 +321,9 @@ public:
                   Dest( -1 ), Submit( false ), SubmitGet( false )
         {}
 
-        virtual std::unique_ptr<AnyWidget> Clone() const override
+        virtual std::shared_ptr<AnyWidget> Clone() const override
         {
-            return std::unique_ptr<AnyWidget>(new PushButtonWidget( *this ));
+            return std::make_shared<PushButtonWidget>( *this );
         }
     };
 
@@ -336,9 +336,9 @@ public:
                   Checked( false )
         {}
 
-        virtual std::unique_ptr<AnyWidget> Clone() const override
+        virtual std::shared_ptr<AnyWidget> Clone() const override
         {
-            return std::unique_ptr<AnyWidget>(new CheckBoxWidget( *this ));
+            return std::make_shared<CheckBoxWidget>( *this );
         }
     };
 
@@ -354,9 +354,9 @@ public:
                   RadioGroup( 0 )
         {}
 
-        virtual std::unique_ptr<AnyWidget> Clone() const override
+        virtual std::shared_ptr<AnyWidget> Clone() const override
         {
-            return std::unique_ptr<AnyWidget>(new RadioButtonWidget( *this ));
+            return std::make_shared<RadioButtonWidget>( *this );
         }
         // radio buttons having the same RadioGroup id comprise one
         // logical radio button group, that is at most one of the RadioButtons
@@ -383,9 +383,9 @@ public:
                   MaxLen( 0 )
         {}
 
-        virtual std::unique_ptr<AnyWidget> Clone() const override
+        virtual std::shared_ptr<AnyWidget> Clone() const override
         {
-            return std::unique_ptr<AnyWidget>(new EditWidget( *this ));
+            return std::make_shared<EditWidget>( *this );
         }
     };
 
@@ -405,9 +405,9 @@ public:
                   MultiSelect( false )
         {}
 
-        virtual std::unique_ptr<AnyWidget> Clone() const override
+        virtual std::shared_ptr<AnyWidget> Clone() const override
         {
-            return std::unique_ptr<AnyWidget>(new ListBoxWidget( *this ));
+            return std::make_shared<ListBoxWidget>( *this );
         }
     };
 
@@ -421,9 +421,9 @@ public:
                 : AnyWidget( vcl::PDFWriter::ComboBox )
         {}
 
-        virtual std::unique_ptr<AnyWidget> Clone() const override
+        virtual std::shared_ptr<AnyWidget> Clone() const override
         {
-            return std::unique_ptr<AnyWidget>(new ComboBoxWidget( *this ));
+            return std::make_shared<ComboBoxWidget>( *this );
         }
     };
 
@@ -433,9 +433,9 @@ public:
                 : AnyWidget( vcl::PDFWriter::Signature )
         {}
 
-        virtual std::unique_ptr<AnyWidget> Clone() const override
+        virtual std::shared_ptr<AnyWidget> Clone() const override
         {
-            return std::unique_ptr<AnyWidget>(new SignatureWidget( *this ));
+            return std::make_shared<SignatureWidget>( *this );
         }
     };
 
