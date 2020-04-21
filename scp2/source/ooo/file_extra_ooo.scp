@@ -36,8 +36,6 @@ End
 
 #endif
 
-GALLERY_FILELIST(bullets)
-
 #if defined (WITH_GALLERY_BUILD)
 
 GALLERY_FILELIST(arrows)
