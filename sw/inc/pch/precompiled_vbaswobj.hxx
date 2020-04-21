@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-03-04 21:22:17 using:
+ Generated on 2020-04-21 11:17:43 using:
  ./bin/update_pch sw vbaswobj --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -153,6 +153,7 @@
 #include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/utils/common.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
@@ -188,6 +189,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/rdf/XMetadatable.hpp>
+#include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>

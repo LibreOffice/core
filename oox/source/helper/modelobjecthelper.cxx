@@ -140,7 +140,7 @@ OUString ModelObjectHelper::insertFillBitmapXGraphic(uno::Reference<graphic::XGr
     return OUString();
 }
 
-OUString ModelObjectHelper::insertFillHatch( const Hatch& rHatch )
+OUString ModelObjectHelper::insertFillHatch(const drawing::Hatch& rHatch)
 {
     return maHatchContainer.insertObject( gaHatchNameBase, Any( rHatch ), true );
 }

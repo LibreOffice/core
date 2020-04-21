@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-01-22 15:57:52 using:
+ Generated on 2020-04-21 11:16:14 using:
  ./bin/update_pch reportdesign rpt --cutoff=9 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -39,6 +39,7 @@
 #include <math.h>
 #include <memory>
 #include <new>
+#include <optional>
 #include <ostream>
 #include <sstream>
 #include <stddef.h>
@@ -150,11 +151,11 @@
 #include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/utils/common.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
-#include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/GradientStyle.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
@@ -164,12 +165,9 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
-#include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetOption.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
-#include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/drawing/DashStyle.hpp>
 #include <com/sun/star/drawing/HatchStyle.hpp>
@@ -180,21 +178,15 @@
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
-#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/report/XFormatCondition.hpp>
-#include <com/sun/star/report/XReportComponent.hpp>
-#include <com/sun/star/style/ParagraphAdjust.hpp>
-#include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -231,7 +223,6 @@
 #include <cppuhelper/implbase_ex_post.hxx>
 #include <cppuhelper/implbase_ex_pre.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/propertysetmixin.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
@@ -244,11 +235,10 @@
 #include <editeng/editengdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
-#include <o3tl/deleter.hxx>
-#include <optional>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/cenumitm.hxx>
@@ -298,7 +288,6 @@
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
-#include <ReportComponent.hxx>
 #include <RptModel.hxx>
 #include <RptObject.hxx>
 #include <Tools.hxx>

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-02 13:54:02 using:
+ Generated on 2020-04-21 11:17:11 using:
  ./bin/update_pch svx svxcore --cutoff=7 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -95,10 +95,8 @@
 #include <vcl/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/GraphicExternalLink.hxx>
-#include <vcl/IContext.hxx>
 #include <vcl/NotebookBarAddonsMerger.hxx>
 #include <vcl/Scanline.hxx>
-#include <vcl/accel.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationBitmap.hxx>
@@ -107,7 +105,6 @@
 #include <vcl/builder.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/checksum.hxx>
-#include <vcl/combobox.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/customweld.hxx>
@@ -129,13 +126,10 @@
 #include <vcl/image.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/mnemonicengine.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/ptrstyle.hxx>
-#include <vcl/quickselectionengine.hxx>
 #include <vcl/region.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/settings.hxx>
@@ -147,8 +141,6 @@
 #include <vcl/timer.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/transfer.hxx>
-#include <vcl/treelist.hxx>
-#include <vcl/treelistentries.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
@@ -305,16 +297,12 @@
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
-#include <drawinglayer/attribute/fillgraphicattribute.hxx>
-#include <drawinglayer/attribute/fillhatchattribute.hxx>
-#include <drawinglayer/attribute/lineattribute.hxx>
 #include <drawinglayer/attribute/sdrallattribute3d.hxx>
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 #include <drawinglayer/attribute/sdrlinestartendattribute.hxx>
 #include <drawinglayer/attribute/sdrobjectattribute3d.hxx>
 #include <drawinglayer/attribute/sdrshadowattribute.hxx>
-#include <drawinglayer/attribute/strokeattribute.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/CommonTypes.hxx>
@@ -390,7 +378,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/bigint.hxx>
 #include <tools/color.hxx>
-#include <tools/contnr.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>

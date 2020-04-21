@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-01 10:57:43 using:
+ Generated on 2020-04-21 11:13:20 using:
  ./bin/update_pch chart2 chartcore --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -110,6 +110,7 @@
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+#include <com/sun/star/chart2/XRegressionCurveCalculator.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/XTransformation.hpp>
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
@@ -200,7 +201,6 @@
 #include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
 #include <tools/helpers.hxx>
-#include <tools/link.hxx>
 #include <tools/ref.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/weakbase.h>

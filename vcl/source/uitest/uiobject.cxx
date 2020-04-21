@@ -9,10 +9,12 @@
 
 #include <vcl/uitest/uiobject.hxx>
 
-#include <vcl/event.hxx>
-#include <vcl/tabpage.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
+#include <vcl/event.hxx>
+#include <vcl/floatwin.hxx>
+#include <vcl/tabpage.hxx>
+#include <vcl/tabctrl.hxx>
+#include <vcl/lstbox.hxx>
 #include <vcl/toolkit/spin.hxx>
 #include <vcl/spinfld.hxx>
 #include <vcl/button.hxx>
