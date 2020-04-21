@@ -2670,11 +2670,6 @@ void DesktopLOKTest::testShowHideDialog()
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(std::string("hide"), aView.m_aCallbackWindowResult.get<std::string>("action"));
-
-    pWindow->Show();
-    Scheduler::ProcessEventsToIdle();
-
-    CPPUNIT_ASSERT_EQUAL(std::string("invalidate"), aView.m_aCallbackWindowResult.get<std::string>("action"));
 }
 
 void DesktopLOKTest::testComplexSelection()
