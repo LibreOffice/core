@@ -5,7 +5,6 @@
 #
 
 from uitest.framework import UITestCase
-import time
 
 class tdf92611(UITestCase):
 
@@ -13,14 +12,9 @@ class tdf92611(UITestCase):
 
         self.ui_test.create_doc_in_start_center("writer")
 
-
         self.xUITest.executeCommand(".uno:BibliographyComponent")
 
-        time.sleep(2)
-
         self.xUITest.executeCommand(".uno:CloseWin")
-
-        time.sleep(2)
 
         self.ui_test.close_doc()
 
