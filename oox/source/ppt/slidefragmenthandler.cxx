@@ -164,7 +164,10 @@ SlideFragmentHandler::~SlideFragmentHandler()
             const FillProperties *pFillProperties = nullptr;
             if( mpSlidePersistPtr->getTheme() )
                 pFillProperties = mpSlidePersistPtr->getTheme()->getFillStyle( rAttribs.getInteger( XML_idx, -1 ) );
-            FillPropertiesPtr pFillPropertiesPtr( pFillProperties ? new FillProperties( *pFillProperties ) : new FillProperties );
+            FillPropertiesPtr pFillPropertiesPtr =
+                pFillProperties
+                ? std::make_shared<FillProperties>( *pFillProperties )
+                : std::make_shared<FillProperties>();
             mpSlidePersistPtr->setBackgroundProperties( pFillPropertiesPtr );
             ContextHandlerRef ret = new ColorContext( *this, mpSlidePersistPtr->getBackgroundColor() );
             return ret;
@@ -174,7 +177,10 @@ SlideFragmentHandler::~SlideFragmentHandler()
     case A_TOKEN( overrideClrMapping ):
     case PPT_TOKEN( clrMap ):           // CT_ColorMapping
         {
-            oox::drawingml::ClrMapPtr pClrMapPtr( ( aElementToken == PPT_TOKEN( clrMap ) || !mpSlidePersistPtr.get() || !mpSlidePersistPtr->getClrMap().get() ) ? new oox::drawingml::ClrMap : new oox::drawingml::ClrMap( *mpSlidePersistPtr->getClrMap() ) );
+            oox::drawingml::ClrMapPtr pClrMapPtr =
+                ( aElementToken == PPT_TOKEN( clrMap ) || !mpSlidePersistPtr.get() || !mpSlidePersistPtr->getClrMap().get() )
+                ? std::make_shared<oox::drawingml::ClrMap>()
+                : std::make_shared<oox::drawingml::ClrMap>( *mpSlidePersistPtr->getClrMap() );
             ContextHandlerRef ret = new oox::drawingml::clrMapContext( *this, rAttribs, *pClrMapPtr );
             mpSlidePersistPtr->setClrMap( pClrMapPtr );
             return ret;

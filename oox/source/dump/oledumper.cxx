@@ -1726,7 +1726,7 @@ void VbaOStreamObject::implDump()
             writeDecItem( "control-id", siteInfo.mnId );
             writeInfoItem( "prog-id", siteInfo.maProgId );
             IndentGuard aIndGuard( mxOut );
-            BinaryInputStreamRef xRelStrm( new RelativeInputStream( *mxStrm, siteInfo.mnLength ) );
+            BinaryInputStreamRef xRelStrm( std::make_shared<RelativeInputStream>( *mxStrm, siteInfo.mnLength ) );
             FormControlStreamObject( *this, xRelStrm, &siteInfo.maProgId ).dump();
         }
     }
@@ -1861,7 +1861,7 @@ VbaDirStreamObject::VbaDirStreamObject( const ObjectBase& rParent,
     mxInStrm = rxStrm;
     if( mxInStrm.get() )
     {
-        BinaryInputStreamRef xVbaStrm( new ::oox::ole::VbaInputStream( *mxInStrm ) );
+        BinaryInputStreamRef xVbaStrm( std::make_shared<::oox::ole::VbaInputStream>( *mxInStrm ) );
         SequenceRecordObjectBase::construct( rParent, xVbaStrm, rSysFileName, "VBA-DIR-RECORD-NAMES", "VBA-DIR-SIMPLE-RECORDS" );
     }
 }
@@ -2006,7 +2006,7 @@ void VbaModuleStreamObject::implDump()
     mxOut->emptyLine();
     writeEmptyItem( "source-code" );
     IndentGuard aIndGuard( mxOut );
-    BinaryInputStreamRef xVbaStrm( new ::oox::ole::VbaInputStream( *mxStrm ) );
+    BinaryInputStreamRef xVbaStrm( std::make_shared<::oox::ole::VbaInputStream>( *mxStrm ) );
     TextLineStreamObject( *this, xVbaStrm, mrVbaData.meTextEnc ).dump();
 }
 
