@@ -58,8 +58,6 @@ class VCLPLUG_QT5_PUBLIC Qt5FilePicker : public QObject, public Qt5FilePicker_Ba
     Q_OBJECT
 
 private:
-    css::uno::Reference<css::uno::XComponentContext> m_context;
-
     css::uno::Reference<css::ui::dialogs::XFilePickerListener> m_xListener;
 
     osl::Mutex m_aHelperMutex; ///< mutex used by the WeakComponentImplHelper
@@ -80,12 +78,12 @@ private:
 protected:
     std::unique_ptr<QFileDialog> m_pFileDialog; ///< the file picker dialog
     QWidget* m_pExtraControls; ///< widget to contain extra custom controls
+    sal_uInt64 m_parentWinId;
 
 public:
     // use non-native file dialog by default; there's no easy way to add custom widgets
     // in a generic way in the native one
-    explicit Qt5FilePicker(css::uno::Reference<css::uno::XComponentContext> const& context,
-                           QFileDialog::FileMode, bool bUseNative = false);
+    explicit Qt5FilePicker(QFileDialog::FileMode, bool bUseNative = false);
     virtual ~Qt5FilePicker() override;
 
     // XFilePickerNotifier
@@ -150,15 +148,21 @@ public:
     void SAL_CALL queryTermination(const css::lang::EventObject& aEvent) override;
     void SAL_CALL notifyTermination(const css::lang::EventObject& aEvent) override;
 
-protected:
     virtual void addCustomControl(sal_Int16 controlId);
+
+    virtual int execFileDialog(QWidget* pParentWidget);
+    void setAcceptMode(QFileDialog::AcceptMode mode);
+    void setParentWinId(sal_uInt64 winId);
+
+protected:
     void setCustomControlWidgetLayout(QGridLayout* pLayout) { m_pLayout = pLayout; }
+
+    virtual QString getResString(const char* pResId);
 
 private:
     Qt5FilePicker(const Qt5FilePicker&) = delete;
     Qt5FilePicker& operator=(const Qt5FilePicker&) = delete;
 
-    static QString getResString(const char* pRedId);
     static css::uno::Any handleGetListValue(const QComboBox* pWidget, sal_Int16 nControlAction);
     static void handleSetListValue(QComboBox* pQComboBox, sal_Int16 nAction,
                                    const css::uno::Any& rValue);
