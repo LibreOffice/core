@@ -650,7 +650,7 @@ void writeLine(
                     }
                     else
                     {
-                        SAL_WARN("cppu", pLine );
+                        SAL_WARN("cppu", pLine);
                     }
                 }
             }
@@ -665,7 +665,7 @@ void writeLine(
         }
         else
         {
-            fprintf( stderr, "%s\n", pLine );
+            SAL_WARN("cppu", pLine);
         }
     }
 }

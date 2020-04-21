@@ -21,6 +21,7 @@
 
 #include <comphelper/newarray.hxx>
 #include <unotools/configmgr.hxx>
+#include <sal/log.hxx>
 
 #include <assert.h>
 #include <list>
@@ -502,7 +503,7 @@ bool Picture::Read(HWPFile & hwpf)
             }
         }
         else
-            fprintf(stderr, "arse\n");
+            SAL_INFO("hwpfilter", "arse.");
     }
 
     if( pictype != 3 )

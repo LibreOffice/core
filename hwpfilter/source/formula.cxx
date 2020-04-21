@@ -38,9 +38,8 @@
 #define padd(x,y,z)  mxList->addAttribute(x,y,z)
 #else
 static int indent = 0;
-#define inds indent++; for(int i = 0 ; i < indent ; i++) fprintf(stderr," ")
-#define inde for(int i = 0 ; i < indent ; i++) fprintf(stderr," "); indent--
-#define indo indent--;
+#define INDENTED_PRINT(indentLevel, message) \
+    SAL_INFO("hwpfilter", std::string(indentLevel, ' ') << message);
 #endif
 
 void Formula::makeMathML(Node *res)
@@ -48,8 +47,7 @@ void Formula::makeMathML(Node *res)
      Node *tmp = res;
      if( !tmp ) return;
 #ifdef DEBUG
-     inds;
-     fprintf(stderr,"<math:math xmlns:math=\"http://www.w3.org/1998/Math/MathML\">\n");
+     INDENTED_PRINT(++indent, "<math:math xmlns:math=\"http://www.w3.org/1998/Math/MathML\">");
 #else
      padd("xmlns:math", "CDATA", "http://www.w3.org/1998/Math/MathML");
      rstartEl("math:math", mxList.get());
@@ -60,11 +58,9 @@ void Formula::makeMathML(Node *res)
           makeLines( tmp->child );
 
 #ifdef DEBUG
-     inds;
-     fprintf(stderr,"<math:semantics/>\n");
-     indo;
-     inde;
-     fprintf(stderr,"</math:math>\n");
+     INDENTED_PRINT(++indent, "<math:semantics/>");
+     INDENTED_PRINT(--indent, "</math:math>");
+     --indent;
 #else
      rendEl("math:semantics");
      rendEl("math:math");
@@ -90,14 +86,14 @@ void Formula::makeLine(Node *res)
 {
     if( !res ) return;
 #ifdef DEBUG
-    inds; fprintf(stderr,"<math:mrow>\n");
+    INDENTED_PRINT(++indent, "<math:mrow>");
 #else
     rstartEl("math:mrow", mxList.get());
 #endif
     if( res->child )
          makeExprList( res->child );
 #ifdef DEBUG
-    inde; fprintf(stderr,"</math:mrow>\n");
+    INDENTED_PRINT(indent--, "<math:mrow>");
 #else
     rendEl("math:mrow");
 #endif
@@ -128,8 +124,7 @@ void Formula::makeExpr(Node *res)
         case ID_PRIMARYEXPR:
              if( tmp->next ){
 #ifdef DEBUG
-                 inds;
-                 fprintf(stderr,"<math:mrow>\n");
+                 INDENTED_PRINT(++indent, "<math:mrow>");
 #else
                  rstartEl("math:mrow", mxList.get());
 #endif
@@ -139,7 +134,7 @@ void Formula::makeExpr(Node *res)
 
              if( tmp->next ){
 #ifdef DEBUG
-                 inde; fprintf(stderr,"</math:mrow>\n");
+                 INDENTED_PRINT(indent--, "</math:mrow>");
 #else
                  rendEl("math:mrow");
 #endif
@@ -190,9 +185,8 @@ void Formula::makeIdentifier(Node *res)
     switch( tmp->id ){
      case ID_CHARACTER :
 #ifdef DEBUG
-          inds;
-          fprintf(stderr,"<math:mi>%s</math:mi>\n",tmp->value);
-          indo;
+          INDENTED_PRINT(++indent, "<math:mi>" << tmp->value << "</math:mi>");
+          --indent;
 #else
           rstartEl("math:mi", mxList.get());
           rchars(OUString::createFromAscii(tmp->value));
@@ -211,10 +205,8 @@ void Formula::makeIdentifier(Node *res)
           break;
      case ID_IDENTIFIER :
 #ifdef DEBUG
-          inds;
-          fprintf(stderr,"<math:mi>%s</math:mi>\n",
-                  getMathMLEntity(tmp->value).c_str());
-          indo;
+          INDENTED_PRINT(++indent, "<math:mi>" << getMathMLEntity(tmp->value) << "</math:mi>");
+          --indent;
 #else
           rstartEl("math:mi", mxList.get());
           runistr(reinterpret_cast<sal_Unicode const *>(getMathMLEntity(tmp->value).c_str()));
@@ -223,9 +215,8 @@ void Formula::makeIdentifier(Node *res)
           break;
      case ID_NUMBER :
 #ifdef DEBUG
-          inds;
-          fprintf(stderr,"<math:mn>%s</math:mn>\n",tmp->value);
-          indo;
+          INDENTED_PRINT(++indent, "<math:mn>" << tmp->value << "</math:mn>");
+          --indent;
 #else
           rstartEl("math:mn", mxList.get());
           rchars(OUString::createFromAscii(tmp->value));
@@ -236,7 +227,8 @@ void Formula::makeIdentifier(Node *res)
      case ID_DELIMITER :
         {
 #ifdef DEBUG
-          inds; fprintf(stderr,"<math:mo>%s</math:mo>\n",tmp->value); indo;
+          INDENTED_PRINT(++indent, "<math:mo>" << tmp->value << "</math:mo>");
+          --indent;
 #else
           rstartEl("math:mo", mxList.get());
           runistr(reinterpret_cast<sal_Unicode const *>(getMathMLEntity(tmp->value).c_str()));
@@ -269,13 +261,13 @@ void Formula::makeSubSup(Node *res)
      if( !tmp ) return;
 
 #ifdef DEBUG
-     inds;
+     ++indent;
      if( res->id == ID_SUBEXPR )
-          fprintf(stderr,"<math:msub>\n");
+          INDENTED_PRINT(indent, "<math:msub>");
      else if( res->id == ID_SUPEXPR )
-          fprintf(stderr,"<math:msup>\n");
+          INDENTED_PRINT(indent, "<math:msup>");
      else
-          fprintf(stderr,"<math:msubsup>\n");
+          INDENTED_PRINT(indent, "<math:msubsup>");
 #else
      if( res->id == ID_SUBEXPR )
           rstartEl("math:msub", mxList.get());
@@ -297,13 +289,13 @@ void Formula::makeSubSup(Node *res)
      }
 
 #ifdef DEBUG
-     inde;
      if( res->id == ID_SUBEXPR )
-          fprintf(stderr,"</math:msub>\n");
+          INDENTED_PRINT(indent, "<math:msub>");
      else if( res->id == ID_SUPEXPR )
-          fprintf(stderr,"</math:msup>\n");
+          INDENTED_PRINT(indent, "<math:msup>");
      else
-          fprintf(stderr,"</math:msubsup>\n");
+          INDENTED_PRINT(indent, "<math:msubsup>");
+     --indent;
 #else
      if( res->id == ID_SUBEXPR )
           rendEl("math:msub");
@@ -320,16 +312,14 @@ void Formula::makeFraction(Node *res)
      if( !tmp ) return;
 
 #ifdef DEBUG
-     inds;
-     fprintf(stderr,"<math:mfrac>\n");
+     INDENTED_PRINT(++indent, "<math:mfrac>");
 #else
      rstartEl("math:mfrac", mxList.get());
 #endif
 
      tmp = tmp->child;
 #ifdef DEBUG
-     inds;
-     fprintf(stderr,"<math:mrow>\n");
+     INDENTED_PRINT(++indent, "<math:mrow>");
 #else
      rstartEl("math:mrow", mxList.get());
 #endif
@@ -340,10 +330,8 @@ void Formula::makeFraction(Node *res)
           makeExprList(tmp);
 
 #ifdef DEBUG
-     inde;
-     fprintf(stderr,"</math:mrow>\n");
-     inds;
-     fprintf(stderr,"<math:mrow>\n");
+     INDENTED_PRINT(indent, "</math:mrow>");
+     INDENTED_PRINT(indent, "<math:mrow>");
 #else
      rendEl("math:mrow");
      rstartEl("math:mrow", mxList.get());
@@ -355,10 +343,8 @@ void Formula::makeFraction(Node *res)
           makeExprList(tmp->next);
 
 #ifdef DEBUG
-     inde;
-     fprintf(stderr,"</math:mrow>\n");
-     inde;
-     fprintf(stderr,"</math:mfrac>\n");
+     INDENTED_PRINT(indent--, "</math:mrow>");
+     INDENTED_PRINT(indent--, "</math:mfrac>");
 #else
      rendEl("math:mrow");
      rendEl("math:mfrac");
@@ -373,11 +359,11 @@ void Formula::makeDecoration(Node *res)
      if( !strncmp(tmp->value,"under", 5) )
           isover = 0;
 #ifdef DEBUG
-     inds;
+     ++indent;
      if( isover )
-          fprintf(stderr,"<math:mover>\n");
+          INDENTED_PRINT(indent, "<math:mover>");
      else
-          fprintf(stderr,"<math:munder>\n");
+          INDENTED_PRINT(indent, "<math:munder>");
 #else
      /* FIXME: no idea when 'accent' is true or false. */
      if( isover ){
@@ -394,10 +380,8 @@ void Formula::makeDecoration(Node *res)
      makeBlock(tmp->next);
 
 #ifdef DEBUG
-     inds;
-     fprintf(stderr,"<math:mo>%s</math:mo>\n",
-             getMathMLEntity(tmp->value).c_str());
-     indo;
+     INDENTED_PRINT(++indent, "<math:mo>" << getMathMLEntity(tmp->value) << "</math:mo>");
+     --indent;
 #else
      rstartEl("math:mo", mxList.get());
      runistr(reinterpret_cast<sal_Unicode const *>(getMathMLEntity(tmp->value).c_str()));
@@ -405,11 +389,11 @@ void Formula::makeDecoration(Node *res)
 #endif
 
 #ifdef DEBUG
-     inde;
      if( isover )
-          fprintf(stderr,"</math:mover>\n");
+          INDENTED_PRINT(indent, "</math:mover>");
      else
-          fprintf(stderr,"</math:munder>\n");
+          INDENTED_PRINT(indent, "</math:munder>");
+     --indent;
 #else
      if( isover )
           rendEl("math:mover");
@@ -423,11 +407,11 @@ void Formula::makeRoot(Node *res)
      Node *tmp = res;
      if( !tmp ) return;
 #ifdef DEBUG
-     inds;
+     ++indent;
      if( tmp->id == ID_SQRTEXPR )
-          fprintf(stderr,"<math:msqrt>\n");
+          INDENTED_PRINT(indent, "<math:msqrt>");
      else
-          fprintf(stderr,"<math:mroot>\n");
+          INDENTED_PRINT(indent, "<math:mroot>");
 #else
      if( tmp->id == ID_SQRTEXPR )
           rstartEl("math:msqrt", mxList.get());
@@ -444,11 +428,11 @@ void Formula::makeRoot(Node *res)
      }
 
 #ifdef DEBUG
-     inde;
      if( tmp->id == ID_SQRTEXPR )
-          fprintf(stderr,"</math:msqrt>\n");
+          INDENTED_PRINT(indent, "</math:msqrt>");
      else
-          fprintf(stderr,"</math:mroot>\n");
+          INDENTED_PRINT(indent, "</math:mroot>");
+     --indent;
 #else
      if( tmp->id == ID_SQRTEXPR )
           rendEl("math:msqrt");
@@ -465,16 +449,14 @@ void Formula::makeParenth(Node *res)
      Node *tmp = res;
      if( !tmp ) return;
 #ifdef DEBUG
-     inds;
-     fprintf(stderr,"<math:mrow>\n");
-     inds;
+     INDENTED_PRINT(++indent, "<math:mrow>");
+     ++indent;
      if( tmp->id == ID_PARENTH ){
-          fprintf(stderr,"<math:mo>(</math:mo>\n");
+          INDENTED_PRINT(indent, "<math:mo>(</math:mo>");
      }
      else
-          fprintf(stderr,"<math:mo>|</math:mo>\n");
-     indo; inds;
-     fprintf(stderr,"<math:mrow>\n");
+          INDENTED_PRINT(indent, "<math:mo>|</math:mo>");
+     INDENTED_PRINT(indent, "<math:mrow>");
 #else
      rstartEl("math:mrow", mxList.get());
      rstartEl("math:mo", mxList.get());
@@ -490,16 +472,15 @@ void Formula::makeParenth(Node *res)
           makeExprList(tmp->child);
 
 #ifdef DEBUG
-     inde;
-     fprintf(stderr,"</math:mrow>\n");
-     inds;
+     INDENTED_PRINT(indent, "</math:mrow>");
+
      if( tmp->id == ID_PARENTH )
-          fprintf(stderr,"<math:mo>)</math:mo>\n");
+          INDENTED_PRINT(indent, "<math:mo>)</math:mo>");
      else
-          fprintf(stderr,"<math:mo>|</math:mo>\n");
-     indo;
-     inde;
-     fprintf(stderr,"</math:mrow>\n");
+          INDENTED_PRINT(indent, "<math:mo>|</math:mo>");
+
+     INDENTED_PRINT(--indent, "</math:mrow>");
+     --indent;
 #else
      rendEl("math:mrow");
      rstartEl("math:mo", mxList.get());
@@ -516,10 +497,11 @@ void Formula::makeFence(Node *res)
 {
      Node *tmp = res->child;
 #ifdef DEBUG
-     inds;
-     fprintf(stderr,"<math:mfenced open=\"%s\" close=\"%s\">\n",
-                getMathMLEntity(tmp->value).c_str(),
-                getMathMLEntity(tmp->next->next->value).c_str());
+     INDENTED_PRINT(++indent, "<math:mfenced open=\""
+             << getMathMLEntity(tmp->value)
+             << "\" close=\""
+             << getMathMLEntity(tmp->next->next->value)
+             << "\">");
 #else
      padd("open", "CDATA",
              OUString(reinterpret_cast<sal_Unicode const *>(getMathMLEntity(tmp->value).c_str())));
@@ -532,8 +514,7 @@ void Formula::makeFence(Node *res)
      makeExprList(tmp->next);
 
 #ifdef DEBUG
-     inde;
-     fprintf(stderr,"</math:mfenced>\n");
+     INDENTED_PRINT(indent--, "</math:mfenced>");
 #else
      rendEl("math:mfenced");
 #endif
@@ -547,8 +528,7 @@ void Formula::makeBracket(Node *res)
 void Formula::makeBlock(Node *res)
 {
 #ifdef DEBUG
-     inds;
-     fprintf(stderr,"<math:mrow>\n");
+     INDENTED_PRINT(++indent, "<math:mrow>");
 #else
      rstartEl("math:mrow", mxList.get());
 #endif
@@ -557,8 +537,7 @@ void Formula::makeBlock(Node *res)
           makeExprList(res->child);
 
 #ifdef DEBUG
-     inde;
-     fprintf(stderr,"</math:mrow>\n");
+     INDENTED_PRINT(indent--, "</math:mrow>");
 #else
      rendEl("math:mrow");
 #endif

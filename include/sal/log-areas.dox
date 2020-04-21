@@ -613,6 +613,7 @@ certain functionality.
 @li @c cppcanvas.emf
 @li @c dtrans
 @li @c helpcompiler
+@li @c hwpfilter
 @li @c idl
 @li @c javaunohelper
 @li @c jvmaccess
