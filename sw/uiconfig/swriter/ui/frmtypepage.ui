@@ -20,40 +20,26 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkAdjustment" id="adjustment4">
-    <property name="lower">-99.989999999999995</property>
-    <property name="upper">99.989999999999995</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
   <object class="GtkGrid" id="FrameTypePage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="valign">start</property>
-    <property name="hexpand">True</property>
     <property name="border_width">6</property>
-    <property name="row_spacing">18</property>
+    <property name="row_spacing">12</property>
+    <property name="column_spacing">18</property>
     <child>
       <object class="GtkGrid" id="grid3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="hexpand">True</property>
-        <property name="vexpand">True</property>
-        <property name="row_spacing">3</property>
-        <property name="column_spacing">18</property>
         <child>
           <object class="GtkFrame" id="frame2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="valign">start</property>
-            <property name="hexpand">True</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
               <object class="GtkAlignment" id="alignment2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
                 <property name="top_padding">6</property>
                 <property name="left_padding">12</property>
                 <child>
@@ -86,15 +72,13 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="margin_left">12</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                           </object>
                           <packing>
-                            <property name="left_attach">0</property>
+                            <property name="left_attach">1</property>
                             <property name="top_attach">2</property>
-                            <property name="width">2</property>
                           </packing>
                         </child>
                         <child>
@@ -140,6 +124,7 @@
                           <object class="GtkBox" id="box1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkCheckButton" id="relwidth">
@@ -147,7 +132,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="margin_left">12</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
@@ -175,10 +159,15 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="left_attach">0</property>
+                            <property name="left_attach">1</property>
                             <property name="top_attach">1</property>
-                            <property name="width">2</property>
                           </packing>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
                         </child>
                       </object>
                       <packing>
@@ -211,15 +200,13 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="margin_left">12</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                           </object>
                           <packing>
-                            <property name="left_attach">0</property>
+                            <property name="left_attach">1</property>
                             <property name="top_attach">2</property>
-                            <property name="width">2</property>
                           </packing>
                         </child>
                         <child>
@@ -265,6 +252,7 @@
                           <object class="GtkBox" id="box2">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkCheckButton" id="relheight">
@@ -272,7 +260,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="margin_left">12</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
@@ -300,10 +287,15 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="left_attach">0</property>
+                            <property name="left_attach">1</property>
                             <property name="top_attach">1</property>
-                            <property name="width">2</property>
                           </packing>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
                         </child>
                       </object>
                       <packing>
@@ -360,152 +352,10 @@
             <property name="top_attach">0</property>
           </packing>
         </child>
-        <child>
-          <object class="GtkGrid" id="grid1">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <object class="GtkDrawingArea" id="preview">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">center</property>
-                <property name="valign">center</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="left_attach">2</property>
-            <property name="top_attach">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkFrame" id="anchorframe">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="valign">start</property>
-            <property name="hexpand">True</property>
-            <property name="label_xalign">0</property>
-            <property name="shadow_type">none</property>
-            <child>
-              <object class="GtkAlignment" id="alignment1">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
-                <property name="top_padding">6</property>
-                <property name="left_padding">12</property>
-                <child>
-                  <object class="GtkGrid" id="grid2">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="row_spacing">6</property>
-                    <child>
-                      <object class="GtkRadioButton" id="topage">
-                        <property name="label" translatable="yes" context="frmtypepage|topage">To _page</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkRadioButton" id="topara">
-                        <property name="label" translatable="yes" context="frmtypepage|topara">To paragrap_h</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="group">topage</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkRadioButton" id="tochar">
-                        <property name="label" translatable="yes" context="frmtypepage|tochar">To cha_racter</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="group">topage</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkRadioButton" id="aschar">
-                        <property name="label" translatable="yes" context="frmtypepage|aschar">_As character</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="group">topage</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkRadioButton" id="toframe">
-                        <property name="label" translatable="yes" context="frmtypepage|toframe">To _frame</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="group">topage</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">4</property>
-                      </packing>
-                    </child>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child type="label">
-              <object class="GtkLabel" id="label1">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="frmtypepage|label1">Anchor</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">0</property>
-          </packing>
-        </child>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">0</property>
+        <property name="left_attach">1</property>
+        <property name="top_attach">1</property>
       </packing>
     </child>
     <child>
@@ -530,6 +380,7 @@
                   <object class="GtkLabel" id="horiposft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">center</property>
                     <property name="label" translatable="yes" context="frmtypepage|horiposft">Hori_zontal</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">horipos</property>
@@ -547,11 +398,11 @@
                     <property name="label" translatable="yes" context="frmtypepage|horibyft">b_y</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">byhori</property>
-                    <property name="xalign">0</property>
+                    <property name="xalign">1</property>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">0</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
                   </packing>
                 </child>
                 <child>
@@ -561,11 +412,11 @@
                     <property name="label" translatable="yes" context="frmtypepage|vertbyft">by</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">byvert</property>
-                    <property name="xalign">0</property>
+                    <property name="xalign">1</property>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">2</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">5</property>
                   </packing>
                 </child>
                 <child>
@@ -575,11 +426,11 @@
                     <property name="label" translatable="yes" context="frmtypepage|horitoft">_to</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">horianchor</property>
-                    <property name="xalign">0</property>
+                    <property name="xalign">1</property>
                   </object>
                   <packing>
-                    <property name="left_attach">4</property>
-                    <property name="top_attach">0</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
                   </packing>
                 </child>
                 <child>
@@ -591,8 +442,8 @@
                     <property name="digits">2</property>
                   </object>
                   <packing>
-                    <property name="left_attach">3</property>
-                    <property name="top_attach">0</property>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">1</property>
                   </packing>
                 </child>
                 <child>
@@ -601,8 +452,8 @@
                     <property name="can_focus">False</property>
                   </object>
                   <packing>
-                    <property name="left_attach">5</property>
-                    <property name="top_attach">0</property>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">2</property>
                   </packing>
                 </child>
                 <child>
@@ -619,6 +470,7 @@
                   <object class="GtkLabel" id="vertposft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">center</property>
                     <property name="label" translatable="yes" context="frmtypepage|vertposft">_Vertical</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">vertpos</property>
@@ -626,7 +478,7 @@
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
+                    <property name="top_attach">4</property>
                   </packing>
                 </child>
                 <child>
@@ -636,7 +488,7 @@
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">2</property>
+                    <property name="top_attach">4</property>
                   </packing>
                 </child>
                 <child>
@@ -648,8 +500,8 @@
                     <property name="digits">2</property>
                   </object>
                   <packing>
-                    <property name="left_attach">3</property>
-                    <property name="top_attach">2</property>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">5</property>
                   </packing>
                 </child>
                 <child>
@@ -659,11 +511,11 @@
                     <property name="label" translatable="yes" context="frmtypepage|verttoft">t_o</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">vertanchor</property>
-                    <property name="xalign">0</property>
+                    <property name="xalign">1</property>
                   </object>
                   <packing>
-                    <property name="left_attach">4</property>
-                    <property name="top_attach">2</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">6</property>
                   </packing>
                 </child>
                 <child>
@@ -672,8 +524,8 @@
                     <property name="can_focus">False</property>
                   </object>
                   <packing>
-                    <property name="left_attach">5</property>
-                    <property name="top_attach">2</property>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">6</property>
                   </packing>
                 </child>
                 <child>
@@ -682,15 +534,13 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="margin_left">12</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                    <property name="width">6</property>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">3</property>
                   </packing>
                 </child>
                 <child>
@@ -699,16 +549,18 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="margin_left">12</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">3</property>
-                    <property name="width">6</property>
+                    <property name="top_attach">7</property>
+                    <property name="width">2</property>
                   </packing>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
               </object>
             </child>
@@ -730,6 +582,147 @@
         <property name="top_attach">1</property>
       </packing>
     </child>
+    <child>
+      <object class="GtkGrid" id="grid1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkDrawingArea" id="preview">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">2</property>
+        <property name="top_attach">0</property>
+        <property name="height">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkFrame" id="anchorframe">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label_xalign">0</property>
+        <property name="shadow_type">none</property>
+        <child>
+          <object class="GtkAlignment" id="alignment1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="top_padding">6</property>
+            <property name="left_padding">12</property>
+            <child>
+              <object class="GtkGrid" id="grid2">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="row_spacing">3</property>
+                <child>
+                  <object class="GtkRadioButton" id="topage">
+                    <property name="label" translatable="yes" context="frmtypepage|topage">To _page</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="topara">
+                    <property name="label" translatable="yes" context="frmtypepage|topara">To paragrap_h</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">topage</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="tochar">
+                    <property name="label" translatable="yes" context="frmtypepage|tochar">To cha_racter</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">topage</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="aschar">
+                    <property name="label" translatable="yes" context="frmtypepage|aschar">_As character</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">topage</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="toframe">
+                    <property name="label" translatable="yes" context="frmtypepage|toframe">To _frame</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">topage</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">4</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="label1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes" context="frmtypepage|label1">Anchor</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
+        <property name="width">2</property>
+      </packing>
+    </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>
@@ -738,5 +731,11 @@
       <widget name="heightft"/>
       <widget name="autoheightft"/>
     </widgets>
+  </object>
+  <object class="GtkAdjustment" id="adjustment4">
+    <property name="lower">-99.989999999999995</property>
+    <property name="upper">99.989999999999995</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
   </object>
 </interface>
