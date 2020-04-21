@@ -125,6 +125,12 @@ namespace drawinglayer::primitive2d
                     aTranslateGrf.getY());
             }
 
+            if (!aRetval.empty() && !getSdrLFSTAttribute().getGlow().isDefault())
+            {
+                // glow
+                aRetval = createEmbeddedGlowPrimitive(aRetval, getSdrLFSTAttribute().getGlow());
+            }
+
             rContainer.insert(rContainer.end(), aRetval.begin(), aRetval.end());
         }
 
