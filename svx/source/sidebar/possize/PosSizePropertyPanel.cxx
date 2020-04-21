@@ -76,6 +76,10 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     mxArrangeDispatch(new ToolbarUnoDispatcher(*mxArrangeTbx, *m_xBuilder, rxFrame)),
     mxArrangeTbx2(m_xBuilder->weld_toolbar("arrangetoolbar2")),
     mxArrangeDispatch2(new ToolbarUnoDispatcher(*mxArrangeTbx2, *m_xBuilder, rxFrame)),
+    mxAlignTbx(m_xBuilder->weld_toolbar("aligntoolbar")),
+    mxAlignDispatch(new ToolbarUnoDispatcher(*mxAlignTbx, *m_xBuilder, rxFrame)),
+    mxAlignTbx2(m_xBuilder->weld_toolbar("aligntoolbar2")),
+    mxAlignDispatch2(new ToolbarUnoDispatcher(*mxAlignTbx2, *m_xBuilder, rxFrame)),
     mxBtnEditChart(m_xBuilder->weld_button("btnEditChart")),
     maRect(),
     mpView(nullptr),
@@ -138,6 +142,10 @@ void PosSizePropertyPanel::dispose()
     mxFtFlip.reset();
     mxFlipDispatch.reset();
     mxFlipTbx.reset();
+    mxAlignDispatch.reset();
+    mxAlignDispatch2.reset();
+    mxAlignTbx.reset();
+    mxAlignTbx2.reset();
     mxArrangeDispatch.reset();
     mxArrangeDispatch2.reset();
     mxArrangeTbx.reset();

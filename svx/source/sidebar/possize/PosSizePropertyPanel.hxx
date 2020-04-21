@@ -112,6 +112,11 @@ private:
     std::unique_ptr<weld::Toolbar> mxArrangeTbx2;
     std::unique_ptr<ToolbarUnoDispatcher> mxArrangeDispatch2;
 
+    std::unique_ptr<weld::Toolbar> mxAlignTbx;
+    std::unique_ptr<ToolbarUnoDispatcher> mxAlignDispatch;
+    std::unique_ptr<weld::Toolbar> mxAlignTbx2;
+    std::unique_ptr<ToolbarUnoDispatcher> mxAlignDispatch2;
+
     //edit charts button for online's mobile view
     std::unique_ptr<weld::Button> mxBtnEditChart;
 
