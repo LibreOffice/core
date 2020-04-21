@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-01-22 15:59:07 using:
+ Generated on 2020-04-21 11:17:54 using:
  ./bin/update_pch xmlscript xmlscript --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -34,7 +34,6 @@
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <tools/diagnose_ex.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
