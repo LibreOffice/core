@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "41f58839_27b776a6",
+        "filename": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-04-21T08:44:55Z",
+      "side": 1,
+      "message": "Given that we\u0027re adding this item here, is it useful to still keep .uno:RemoveBullets in the same sub menu?",
+      "revId": "53f6e2ef1ff13133dafaa293de3dd20d838c64df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
