@@ -32,7 +32,7 @@
 
  */
 
-class UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) SvxTextRotateItem : public SfxUInt16Item
+class EDITENG_DLLPUBLIC SvxTextRotateItem : public SfxUInt16Item
 {
 public:
     SvxTextRotateItem(sal_uInt16 nValue, const sal_uInt16 nId);
