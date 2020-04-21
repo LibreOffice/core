@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3626a984_9d4f5d9b",
+        "filename": "framework/source/uielement/toolbarmanager.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1458,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-04-21T07:26:54Z",
+      "side": 1,
+      "message": "This condition is never true, as ToolBarManager::MenuItemAllowed just returns true unconditionally.",
+      "revId": "4f2d9ef75e2b729cbf64dbc86a3e56946eea70ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed95816b_a2e388d8",
+        "filename": "framework/source/uielement/toolbarmanager.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 1465,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2020-04-21T07:26:54Z",
+      "side": 1,
+      "message": "Why? This prevents all the following code from executing, breaking the visible buttons sub menu, and a few other items.",
+      "revId": "4f2d9ef75e2b729cbf64dbc86a3e56946eea70ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
