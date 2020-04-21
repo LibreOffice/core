@@ -117,7 +117,7 @@
                 <property name="show_arrow">False</property>
                 <property name="icon_size">2</property>
                 <child>
-                  <object class="GtkToolButton" id=".uno:Bold">
+                  <object class="GtkToggleToolButton" id=".uno:Bold">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="use_underline">True</property>
@@ -128,7 +128,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolButton" id=".uno:Italic">
+                  <object class="GtkToggleToolButton" id=".uno:Italic">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="use_underline">True</property>
@@ -150,7 +150,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolButton" id=".uno:Strikeout">
+                  <object class="GtkToggleToolButton" id=".uno:Strikeout">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="use_underline">True</property>
@@ -161,7 +161,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolButton" id=".uno:Shadowed">
+                  <object class="GtkToggleToolButton" id=".uno:Shadowed">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="use_underline">True</property>
@@ -345,7 +345,7 @@
                 <property name="show_arrow">False</property>
                 <property name="icon_size">2</property>
                 <child>
-                  <object class="GtkToolButton" id=".uno:SuperScript">
+                  <object class="GtkToggleToolButton" id=".uno:SuperScript">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="use_underline">True</property>
@@ -356,7 +356,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolButton" id=".uno:SubScript">
+                  <object class="GtkToggleToolButton" id=".uno:SubScript">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="use_underline">True</property>
