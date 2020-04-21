@@ -2318,10 +2318,10 @@ void SdOOXMLExportTest2::testTdf44223()
         = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf44223.pptx"), PPTX);
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
 
-    std::shared_ptr<SvStream> const pStream1(parseExportStream(tempFile, "ppt/media/audio1.wav"));
+    std::unique_ptr<SvStream> const pStream1(parseExportStream(tempFile, "ppt/media/audio1.wav"));
     CPPUNIT_ASSERT_EQUAL(sal_uInt64(11140), pStream1->remainingSize());
 
-    std::shared_ptr<SvStream> const pStream2(parseExportStream(tempFile, "ppt/media/audio2.wav"));
+    std::unique_ptr<SvStream> const pStream2(parseExportStream(tempFile, "ppt/media/audio2.wav"));
     CPPUNIT_ASSERT_EQUAL(sal_uInt64(28074), pStream2->remainingSize());
 
     xmlDocPtr pXmlContentType = parseExport(tempFile, "[Content_Types].xml");

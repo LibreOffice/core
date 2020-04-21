@@ -809,7 +809,7 @@ private:
     css::uno::Reference<css::task::XStatusIndicator> const& m_xStatusIndicator;
     css::uno::Reference<css::lang::XMultiServiceFactory> m_xModelFactory;
     css::uno::Reference<css::document::XDocumentProperties> m_xDocumentProperties;
-    std::shared_ptr<SvStream> m_pInStream;
+    std::unique_ptr<SvStream> m_pInStream;
     Stream* m_pMapperStream;
     tools::SvRef<RTFSdrImport> m_pSdrImport;
     tools::SvRef<RTFTokenizer> m_pTokenizer;

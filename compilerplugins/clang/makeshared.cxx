@@ -47,6 +47,43 @@ public:
             return false;
         if (loplugin::isSamePathname(fn, SRCDIR "/sc/source/filter/excel/xecontent.cxx"))
             return false;
+        // no idea what is going on here
+        if (loplugin::isSamePathname(fn, SRCDIR "/svx/source/sidebar/nbdtmg.cxx"))
+            return false;
+
+        // legitimate use of moving std::unique_ptr to std::shared_ptr
+        if (loplugin::isSamePathname(fn, SRCDIR "/comphelper/source/container/enumerablemap.cxx"))
+            return false;
+        if (loplugin::isSamePathname(fn, SRCDIR "/svl/source/items/style.cxx"))
+            return false;
+        if (loplugin::isSamePathname(fn, SRCDIR "/vcl/source/app/weldutils.cxx"))
+            return false;
+        if (loplugin::isSamePathname(fn, SRCDIR "/sfx2/source/appl/appopen.cxx"))
+            return false;
+        if (loplugin::isSamePathname(fn, SRCDIR "/svx/source/table/tablertfimporter.cxx"))
+            return false;
+        if (loplugin::isSamePathname(fn, SRCDIR "/sc/source/ui/docshell/externalrefmgr.cxx"))
+            return false;
+        if (loplugin::isSamePathname(fn, SRCDIR "/sw/source/core/attr/swatrset.cxx"))
+            return false;
+        if (loplugin::isSamePathname(fn, SRCDIR "/sc/source/ui/condformat/condformatdlg.cxx"))
+            return false;
+        if (loplugin::isSamePathname(fn, SRCDIR "/sw/source/core/layout/frmtool.cxx"))
+            return false;
+        if (loplugin::isSamePathname(fn, SRCDIR "/sc/source/filter/excel/xihelper.cxx"))
+            return false;
+        if (loplugin::isSamePathname(fn, SRCDIR "/sc/source/filter/excel/xeformula.cxx"))
+            return false;
+        if (loplugin::isSamePathname(fn, SRCDIR "/sc/source/filter/excel/xichart.cxx"))
+            return false;
+        if (loplugin::isSamePathname(fn, SRCDIR "/sc/source/filter/html/htmlpars.cxx"))
+            return false;
+        if (loplugin::isSamePathname(fn, SRCDIR "/sc/source/ui/view/cellsh1.cxx"))
+            return false;
+        if (loplugin::isSamePathname(fn, SRCDIR "/sw/source/filter/html/htmltab.cxx"))
+            return false;
+        if (loplugin::isSamePathname(fn, SRCDIR "/sw/source/filter/ww8/docxattributeoutput.cxx"))
+            return false;
         return true;
     }
 
@@ -60,6 +97,8 @@ public:
 
     bool VisitCXXConstructExpr(CXXConstructExpr const*);
     bool VisitCXXMemberCallExpr(CXXMemberCallExpr const*);
+    bool VisitCXXOperatorCallExpr(CXXOperatorCallExpr const*);
+    bool VisitVarDecl(VarDecl const*);
 };
 
 bool MakeShared::VisitCXXConstructExpr(CXXConstructExpr const* constructExpr)
@@ -71,25 +110,39 @@ bool MakeShared::VisitCXXConstructExpr(CXXConstructExpr const* constructExpr)
     if (!(constructExpr->getNumArgs() == 1
           || (constructExpr->getNumArgs() > 1 && isa<CXXDefaultArgExpr>(constructExpr->getArg(1)))))
         return true;
-    auto cxxNewExpr = dyn_cast<CXXNewExpr>(constructExpr->getArg(0)->IgnoreParenImpCasts());
-    if (!cxxNewExpr)
-        return true;
-    auto construct2 = cxxNewExpr->getConstructExpr();
-    if (construct2)
+    auto arg0 = constructExpr->getArg(0)->IgnoreParenImpCasts();
+    auto cxxNewExpr = dyn_cast<CXXNewExpr>(arg0);
+    if (cxxNewExpr)
     {
-        if (construct2->getConstructor()->getAccess() != AS_public)
-            return true;
-        if (construct2->getNumArgs() == 1 && isa<CXXStdInitializerListExpr>(construct2->getArg(0)))
-            return true;
+        auto construct2 = cxxNewExpr->getConstructExpr();
+        if (construct2)
+        {
+            if (construct2->getConstructor()->getAccess() != AS_public)
+                return true;
+            if (construct2->getNumArgs() == 1
+                && isa<CXXStdInitializerListExpr>(construct2->getArg(0)))
+                return true;
+        }
     }
+    else if (loplugin::TypeCheck(arg0->getType()).ClassOrStruct("shared_ptr").StdNamespace())
+        return true;
+    else if (loplugin::TypeCheck(arg0->getType()).ClassOrStruct("weak_ptr").StdNamespace())
+        return true;
+    else if (arg0->getType()->isDependentType())
+        return true;
+    else if (isa<CXXNullPtrLiteralExpr>(arg0))
+        return true;
 
     StringRef fn = getFilenameOfLocation(
         compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(constructExpr)));
     if (loplugin::isSamePathname(fn, SRCDIR "/include/o3tl/make_shared.hxx"))
         return true;
+    if (loplugin::isSamePathname(fn, SRCDIR "/svl/source/items/stylepool.cxx"))
+        return true;
 
-    report(DiagnosticsEngine::Warning, "rather use make_shared", compat::getBeginLoc(cxxNewExpr))
-        << cxxNewExpr->getSourceRange();
+    report(DiagnosticsEngine::Warning, "rather use make_shared than constructing from %0",
+           compat::getBeginLoc(constructExpr))
+        << arg0->getType() << constructExpr->getSourceRange();
     return true;
 }
 
@@ -97,6 +150,7 @@ bool MakeShared::VisitCXXMemberCallExpr(CXXMemberCallExpr const* cxxMemberCallEx
 {
     if (ignoreLocation(cxxMemberCallExpr))
         return true;
+
     if (cxxMemberCallExpr->getNumArgs() != 1)
         return true;
 
@@ -128,6 +182,54 @@ bool MakeShared::VisitCXXMemberCallExpr(CXXMemberCallExpr const* cxxMemberCallEx
 
     report(DiagnosticsEngine::Warning, "rather use make_shared", compat::getBeginLoc(cxxNewExpr))
         << cxxNewExpr->getSourceRange();
+
+    return true;
+}
+
+bool MakeShared::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* operCallExpr)
+{
+    if (ignoreLocation(operCallExpr))
+        return true;
+    if (!operCallExpr->isAssignmentOp())
+        return true;
+
+    if (!loplugin::TypeCheck(operCallExpr->getType()).ClassOrStruct("shared_ptr").StdNamespace())
+        return true;
+
+    if (loplugin::TypeCheck(operCallExpr->getArg(1)->getType())
+            .ClassOrStruct("shared_ptr")
+            .StdNamespace())
+        return true;
+
+    report(DiagnosticsEngine::Warning, "rather use make_shared than constructing from %0",
+           compat::getBeginLoc(operCallExpr))
+        << operCallExpr->getArg(1)->getType() << operCallExpr->getSourceRange();
+
+    return true;
+}
+
+bool MakeShared::VisitVarDecl(VarDecl const* varDecl)
+{
+    if (ignoreLocation(varDecl))
+        return true;
+    if (!varDecl->hasInit())
+        return true;
+
+    if (!loplugin::TypeCheck(varDecl->getType()).ClassOrStruct("shared_ptr").StdNamespace())
+        return true;
+
+    if (varDecl->getInit()->getType().isNull())
+        return true;
+    if (varDecl->getInit()->getType()->isDependentType())
+        return true;
+    if (loplugin::TypeCheck(varDecl->getInit()->IgnoreParenImpCasts()->getType())
+            .ClassOrStruct("shared_ptr")
+            .StdNamespace())
+        return true;
+
+    report(DiagnosticsEngine::Warning, "rather use make_shared than constructing from %0",
+           compat::getBeginLoc(varDecl))
+        << varDecl->getInit()->getType() << varDecl->getSourceRange();
 
     return true;
 }
