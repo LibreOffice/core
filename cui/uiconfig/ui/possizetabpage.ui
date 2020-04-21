@@ -124,20 +124,6 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkLabel" id="FT_POSREFERENCE">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="possizetabpage|FT_POSREFERENCE">_Base point:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">CTL_POSRECT</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -163,7 +149,21 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="FT_POSREFERENCE">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes" context="possizetabpage|FT_POSREFERENCE">_Base point:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">CTL_POSRECT</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
@@ -305,20 +305,6 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkLabel" id="FT_SIZEREFERENCE">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="possizetabpage|FT_SIZEREFERENCE">Base _point:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">CTL_SIZERECT</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -340,6 +326,20 @@
                             </child>
                           </object>
                         </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="FT_SIZEREFERENCE">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes" context="possizetabpage|FT_SIZEREFERENCE">Base _point:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">CTL_SIZERECT</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
