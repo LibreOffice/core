@@ -882,7 +882,7 @@ void SdOOXMLExportTest1::testCustomXml()
     assertXPath(pRelsDoc, "/rels:Relationships/rels:Relationship", 1);
     assertXPath(pRelsDoc, "/rels:Relationships/rels:Relationship[@Id='rId1']", "Target", "itemProps1.xml");
 
-    std::shared_ptr<SvStream> pStream = parseExportStream(tempFile, "ddp/ddpfile.xen");
+    std::unique_ptr<SvStream> pStream = parseExportStream(tempFile, "ddp/ddpfile.xen");
     CPPUNIT_ASSERT(pStream);
 }
 

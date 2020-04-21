@@ -133,7 +133,7 @@ public:
 
 protected:
     /// Load the document.
-    sd::DrawDocShellRef loadURL( const OUString &rURL, sal_Int32 nFormat, std::unique_ptr<SfxAllItemSet> pParams = nullptr )
+    sd::DrawDocShellRef loadURL( const OUString &rURL, sal_Int32 nFormat, std::shared_ptr<SfxAllItemSet> pParams = nullptr )
     {
         FileFormat *pFmt = getFormat(nFormat);
         CPPUNIT_ASSERT_MESSAGE( "missing filter info", pFmt->pName != nullptr );
@@ -142,7 +142,7 @@ protected:
             SotClipboardFormatId nOptions = SotClipboardFormatId::NONE;
             if (pFmt->nFormatType != SfxFilterFlags::NONE)
                 nOptions = SotClipboardFormatId::STARDRAW_8;
-            SfxFilter* pFilter = new SfxFilter(
+            auto pFilter = std::make_shared<SfxFilter>(
                 OUString::createFromAscii( pFmt->pFilterName ),
                 OUString(), pFmt->nFormatType, nOptions,
                 OUString::createFromAscii( pFmt->pTypeName ),
@@ -150,10 +150,9 @@ protected:
                 OUString::createFromAscii( pFmt->pUserData ),
                 "private:factory/sdraw*" );
             pFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
-            std::shared_ptr<const SfxFilter> pFilt(pFilter);
 
             ::sd::DrawDocShellRef xDocShRef = new ::sd::GraphicDocShell(SfxObjectCreateMode::EMBEDDED);
-            SfxMedium* pSrcMed = new SfxMedium(rURL, StreamMode::STD_READ, pFilt, std::move(pParams));
+            SfxMedium* pSrcMed = new SfxMedium(rURL, StreamMode::STD_READ, pFilter, std::move(pParams));
             if ( !xDocShRef->DoLoad(pSrcMed) || !xDocShRef.is() )
             {
                 if (xDocShRef.is())
@@ -168,7 +167,7 @@ protected:
             SotClipboardFormatId nOptions = SotClipboardFormatId::NONE;
             if (pFmt->nFormatType != SfxFilterFlags::NONE)
                 nOptions = SotClipboardFormatId::STARIMPRESS_8;
-            SfxFilter* pFilter = new SfxFilter(
+            auto pFilter = std::make_shared<SfxFilter>(
                 OUString::createFromAscii( pFmt->pFilterName ),
                 OUString(), pFmt->nFormatType, nOptions,
                 OUString::createFromAscii( pFmt->pTypeName ),
@@ -176,10 +175,9 @@ protected:
                 OUString::createFromAscii( pFmt->pUserData ),
                 "private:factory/simpress*" );
             pFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
-            std::shared_ptr<const SfxFilter> pFilt(pFilter);
 
             ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false, DocumentType::Impress);
-            SfxMedium* pSrcMed = new SfxMedium(rURL, StreamMode::STD_READ, pFilt, std::move(pParams));
+            SfxMedium* pSrcMed = new SfxMedium(rURL, StreamMode::STD_READ, pFilter, std::move(pParams));
             if ( !xDocShRef->DoLoad(pSrcMed) || !xDocShRef.is() )
             {
                 if (xDocShRef.is())
@@ -445,20 +443,20 @@ class SdModelTestBaseXML
 {
 
 public:
-    std::shared_ptr<SvStream> parseExportStream(utl::TempFile const & rTempFile, const OUString& rStreamName)
+    std::unique_ptr<SvStream> parseExportStream(utl::TempFile const & rTempFile, const OUString& rStreamName)
     {
         // Read the stream we're interested in.
         OUString const url(rTempFile.GetURL());
         uno::Reference<packages::zip::XZipFileAccess2> const xZipNames(packages::zip::ZipFileAccess::createWithURL(
                                                                         comphelper::getComponentContext(m_xSFactory), url));
         uno::Reference<io::XInputStream> const xInputStream(xZipNames->getByName(rStreamName), uno::UNO_QUERY);
-        std::shared_ptr<SvStream> const pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+        std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
         return pStream;
     }
 
     xmlDocPtr parseExport(utl::TempFile const & rTempFile, OUString const& rStreamName)
     {
-        std::shared_ptr<SvStream> const pStream(parseExportStream(rTempFile, rStreamName));
+        std::unique_ptr<SvStream> const pStream(parseExportStream(rTempFile, rStreamName));
         xmlDocPtr const pXmlDoc = parseXmlStream(pStream.get());
         OUString const url(rTempFile.GetURL());
         pXmlDoc->name = reinterpret_cast<char *>(xmlStrdup(

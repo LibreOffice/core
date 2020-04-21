@@ -638,12 +638,12 @@ VclPtr<AbstractSdCustomShowDlg> SdAbstractDialogFactory_Impl::CreateSdCustomShow
 
 VclPtr<SfxAbstractTabDialog>  SdAbstractDialogFactory_Impl::CreateSdTabCharDialog(weld::Window* pParent, const SfxItemSet* pAttr, SfxObjectShell* pDocShell)
 {
-    return VclPtr<SdAbstractTabController_Impl>::Create(std::make_unique<SdCharDlg>(pParent, pAttr, pDocShell));
+    return VclPtr<SdAbstractTabController_Impl>::Create(std::make_shared<SdCharDlg>(pParent, pAttr, pDocShell));
 }
 
 VclPtr<SfxAbstractTabDialog>  SdAbstractDialogFactory_Impl::CreateSdTabPageDialog(weld::Window* pParent, const SfxItemSet* pAttr, SfxObjectShell* pDocShell, bool bAreaPage, bool bIsImpressDoc )
 {
-    return VclPtr<SdAbstractTabController_Impl>::Create(std::make_unique<SdPageDlg>(pDocShell, pParent, pAttr, bAreaPage, bIsImpressDoc));
+    return VclPtr<SdAbstractTabController_Impl>::Create(std::make_shared<SdPageDlg>(pDocShell, pParent, pAttr, bAreaPage, bIsImpressDoc));
 }
 
 VclPtr<AbstractSdModifyFieldDlg> SdAbstractDialogFactory_Impl::CreateSdModifyFieldDlg(weld::Window* pParent, const SvxFieldData* pInField, const SfxItemSet& rSet)
@@ -673,12 +673,12 @@ VclPtr<AbstractMorphDlg> SdAbstractDialogFactory_Impl::CreateMorphDlg(weld::Wind
 
 VclPtr<SfxAbstractTabDialog>  SdAbstractDialogFactory_Impl::CreateSdOutlineBulletTabDlg(weld::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView)
 {
-    return VclPtr<AbstractBulletDialog_Impl>::Create(std::make_unique<::sd::OutlineBulletDlg>(pParent, pAttr, pView));
+    return VclPtr<AbstractBulletDialog_Impl>::Create(std::make_shared<::sd::OutlineBulletDlg>(pParent, pAttr, pView));
 }
 
 VclPtr<SfxAbstractTabDialog> SdAbstractDialogFactory_Impl::CreateSdParagraphTabDlg(weld::Window* pParent, const SfxItemSet* pAttr )
 {
-    return VclPtr<SdAbstractTabController_Impl>::Create(std::make_unique<SdParagraphDlg>(pParent, pAttr));
+    return VclPtr<SdAbstractTabController_Impl>::Create(std::make_shared<SdParagraphDlg>(pParent, pAttr));
 }
 
 VclPtr<AbstractSdStartPresDlg> SdAbstractDialogFactory_Impl::CreateSdStartPresentationDlg(weld::Window* pParent,
@@ -694,7 +694,7 @@ VclPtr<VclAbstractDialog> SdAbstractDialogFactory_Impl::CreateRemoteDialog(weld:
 
 VclPtr<SfxAbstractTabDialog>  SdAbstractDialogFactory_Impl::CreateSdPresLayoutTemplateDlg(SfxObjectShell* pDocSh, weld::Window* pParent, bool bBackgroundDlg, SfxStyleSheetBase& rStyleBase, PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool)
 {
-    return VclPtr<SdPresLayoutTemplateDlg_Impl>::Create(std::make_unique<SdPresLayoutTemplateDlg>(pDocSh, pParent, bBackgroundDlg, rStyleBase, ePO, pSSPool));
+    return VclPtr<SdPresLayoutTemplateDlg_Impl>::Create(std::make_shared<SdPresLayoutTemplateDlg>(pDocSh, pParent, bBackgroundDlg, rStyleBase, ePO, pSSPool));
 }
 
 VclPtr<AbstractSdPresLayoutDlg> SdAbstractDialogFactory_Impl::CreateSdPresLayoutDlg(weld::Window* pParent, ::sd::DrawDocShell* pDocShell, const SfxItemSet& rInAttrs)
@@ -704,7 +704,7 @@ VclPtr<AbstractSdPresLayoutDlg> SdAbstractDialogFactory_Impl::CreateSdPresLayout
 
 VclPtr<SfxAbstractTabDialog>  SdAbstractDialogFactory_Impl::CreateSdTabTemplateDlg(weld::Window* pParent, const SfxObjectShell* pDocShell, SfxStyleSheetBase& rStyleBase, SdrModel* pModel, SdrView* pView)
 {
-    return VclPtr<SdAbstractTabController_Impl>::Create(std::make_unique<SdTabTemplateDlg>(pParent, pDocShell, rStyleBase, pModel, pView));
+    return VclPtr<SdAbstractTabController_Impl>::Create(std::make_shared<SdTabTemplateDlg>(pParent, pDocShell, rStyleBase, pModel, pView));
 }
 
 VclPtr<SfxAbstractDialog> SdAbstractDialogFactory_Impl::CreatSdActionDialog(weld::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView )
@@ -751,7 +751,7 @@ VclPtr<VclAbstractDialog> SdAbstractDialogFactory_Impl::CreateMasterLayoutDialog
 VclPtr<AbstractHeaderFooterDialog> SdAbstractDialogFactory_Impl::CreateHeaderFooterDialog(sd::ViewShell* pViewShell,
     weld::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage)
 {
-    return VclPtr<AbstractHeaderFooterDialog_Impl>::Create(std::make_unique<::sd::HeaderFooterDialog>(pViewShell, pParent, pDoc, pCurrentPage));
+    return VclPtr<AbstractHeaderFooterDialog_Impl>::Create(std::make_shared<::sd::HeaderFooterDialog>(pViewShell, pParent, pDoc, pCurrentPage));
 }
 
 VclPtr<VclAbstractDialog> SdAbstractDialogFactory_Impl::CreateSdPhotoAlbumDialog(weld::Window* pParent, SdDrawDocument* pDoc)

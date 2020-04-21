@@ -101,7 +101,7 @@ VLCFrameGrabber::VLCFrameGrabber( wrapper::EventHandler& eh, const OUString& url
 
     OUString url;
     osl::FileBase::getFileURLFromSystemPath( fileName, url );
-    std::shared_ptr<SvStream> stream( utl::UcbStreamHelper::CreateStream( url,
+    std::unique_ptr<SvStream> stream( utl::UcbStreamHelper::CreateStream( url,
                                                                             StreamMode::STD_READ ) );
 
     vcl::PNGReader reader( *stream );

@@ -745,7 +745,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testXAdESNotype)
     uno::Reference<io::XInputStream> xInputStream(
         xMetaInf->openStreamElement("documentsignatures.xml", embed::ElementModes::READ),
         uno::UNO_QUERY);
-    std::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
     xmlDocPtr pXmlDoc = parseXmlStream(pStream.get());
 
     // Without the accompanying fix in place, this test would have failed with "unexpected 'Type'
@@ -805,7 +805,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testXAdES)
     uno::Reference<io::XInputStream> xInputStream(
         xMetaInf->openStreamElement("documentsignatures.xml", embed::ElementModes::READ),
         uno::UNO_QUERY);
-    std::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
     xmlDocPtr pXmlDoc = parseXmlStream(pStream.get());
 
     // Assert that the digest algorithm is SHA-256 in the bAdESCompliant case, not SHA-1.

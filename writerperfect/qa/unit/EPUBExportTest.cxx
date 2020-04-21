@@ -111,7 +111,7 @@ void EPUBExportTest::createDoc(const OUString& rFile,
 xmlDocPtr EPUBExportTest::parseExport(const OUString& rName)
 {
     uno::Reference<io::XInputStream> xInputStream(mxZipFile->getByName(rName), uno::UNO_QUERY);
-    std::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
     return parseXmlStream(pStream.get());
 }
 
@@ -120,7 +120,7 @@ std::map<OUString, std::vector<OUString>> EPUBExportTest::parseCss(const OUStrin
     std::map<OUString, std::vector<OUString>> aRet;
 
     uno::Reference<io::XInputStream> xInputStream(mxZipFile->getByName(rName), uno::UNO_QUERY);
-    std::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
 
     // Minimal CSS handler till orcus is up to our needs.
     OString aLine;
@@ -797,7 +797,7 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testSVG)
     CPPUNIT_ASSERT(mxZipFile->hasByName("OEBPS/images/image0001.svg"));
     uno::Reference<io::XInputStream> xInputStream(
         mxZipFile->getByName("OEBPS/images/image0001.svg"), uno::UNO_QUERY);
-    std::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
 
     SvMemoryStream aMemoryStream;
     aMemoryStream.WriteStream(*pStream);

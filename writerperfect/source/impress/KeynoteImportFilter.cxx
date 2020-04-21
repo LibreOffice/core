@@ -97,8 +97,8 @@ KeynoteImportFilter::detect(css::uno::Sequence<css::beans::PropertyValue>& Descr
     if (!xInputStream.is())
         return OUString();
 
-    std::shared_ptr<librevenge::RVNGInputStream> input
-        = std::make_shared<WPXSvInputStream>(xInputStream);
+    std::unique_ptr<librevenge::RVNGInputStream> input
+        = std::make_unique<WPXSvInputStream>(xInputStream);
 
     /* Apple Keynote documents come in two variants:
      * * actual files (zip), only produced by Keynote 5 (at least with
@@ -121,7 +121,7 @@ KeynoteImportFilter::detect(css::uno::Sequence<css::beans::PropertyValue>& Descr
         {
             if (aContent.isFolder())
             {
-                input = std::make_shared<writerperfect::DirectoryStream>(xContent);
+                input = std::make_unique<writerperfect::DirectoryStream>(xContent);
                 bIsPackage = true;
             }
         }
@@ -143,9 +143,10 @@ KeynoteImportFilter::detect(css::uno::Sequence<css::beans::PropertyValue>& Descr
         if (bIsPackage) // we passed a directory stream, but the filter claims it's APXL file?
             return OUString();
 
-        const std::shared_ptr<writerperfect::DirectoryStream> pDir
+        std::unique_ptr<writerperfect::DirectoryStream> xDir
             = writerperfect::DirectoryStream::createForParent(xContent);
-        input = pDir;
+        auto pDir = xDir.get();
+        input = std::move(xDir);
         if (bool(input))
         {
             if (libetonyek::EtonyekDocument::CONFIDENCE_EXCELLENT
