@@ -1346,7 +1346,9 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
     {
         SkAutoCanvasRestore autoRestore(getDrawCanvas(), true);
         getDrawCanvas()->concat(aMatrix);
-        getDrawCanvas()->drawImage(tmpSurface->makeImageSnapshot(), 0, 0);
+        SkPaint paint;
+        paint.setFilterQuality(kHigh_SkFilterQuality);
+        getDrawCanvas()->drawImage(tmpSurface->makeImageSnapshot(), 0, 0, &paint);
     }
     assert(!mXorMode);
     postDraw();
