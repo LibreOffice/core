@@ -244,7 +244,10 @@ bool VtableFactory::createBlock(Block &block, sal_Int32 slotCount) const
         strncpy(tmpfname.get(), aTmpName.getStr(), aTmpName.getLength()+1);
         // coverity[secure_temp] - https://communities.coverity.com/thread/3179
         if ((block.fd = mkstemp(tmpfname.get())) == -1)
-            fprintf(stderr, "mkstemp(\"%s\") failed: %s\n", tmpfname.get(), strerror(errno));
+        {
+            int e = errno;
+            SAL_WARN("bridges", "mkstemp(\"" << tmpfname.get() << "\") failed: " << strerror(e) << "(" << e << ")");
+        }
         if (block.fd == -1)
         {
             break;
