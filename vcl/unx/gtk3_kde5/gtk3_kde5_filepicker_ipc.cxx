@@ -69,30 +69,6 @@ OUString findPickerExecutable()
 }
 }
 
-void readIpcArg(std::istream& stream, OUString& str)
-{
-    const auto buffer = readIpcStringArg(stream);
-    str = OUString::fromUtf8(OString(buffer.data(), buffer.size()));
-}
-
-void readIpcArg(std::istream& stream, css::uno::Sequence<OUString>& seq)
-{
-    uint32_t numFiles = 0;
-    stream >> numFiles;
-    stream.ignore(); // skip space;
-    seq.realloc(numFiles);
-    for (size_t i = 0; i < numFiles; ++i)
-    {
-        readIpcArg(stream, seq[i]);
-    }
-}
-
-void sendIpcArg(std::ostream& stream, const OUString& string)
-{
-    const auto utf8 = string.toUtf8();
-    sendIpcStringArg(stream, utf8.getLength(), utf8.getStr());
-}
-
 OUString getResString(const char* pResId)
 {
     if (pResId == nullptr)
@@ -114,12 +90,15 @@ static void handleIpcForExecute(Gtk3KDE5FilePickerIpc* pFilePickerIpc, GtkWidget
 
 // Gtk3KDE5FilePicker
 
-Gtk3KDE5FilePickerIpc::Gtk3KDE5FilePickerIpc()
+Gtk3KDE5FilePickerIpc::Gtk3KDE5FilePickerIpc(bool folderMode)
 {
     const auto exe = findPickerExecutable();
     oslProcessError result;
     oslSecurity pSecurity = osl_getCurrentSecurity();
-    result = osl_executeProcess_WithRedirectedIO(exe.pData, nullptr, 0, osl_Process_NORMAL,
+    OUString folderOpt("--folder");
+    rtl_uString* args[] = { folderOpt.pData };
+    sal_Int32 nArgs = folderMode ? 1 : 0;
+    result = osl_executeProcess_WithRedirectedIO(exe.pData, args, nArgs, osl_Process_NORMAL,
                                                  pSecurity, nullptr, nullptr, 0, &m_process,
                                                  &m_inputWrite, &m_outputRead, nullptr);
     osl_freeSecurityHandle(pSecurity);

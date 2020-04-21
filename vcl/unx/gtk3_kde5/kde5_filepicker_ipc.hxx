@@ -26,7 +26,7 @@
 
 #include "filepicker_ipc_commands.hxx"
 
-class KDE5FilePicker;
+class Qt5FilePicker;
 class WinIdEmbedder;
 class QSocketNotifier;
 
@@ -34,11 +34,11 @@ class FilePickerIpc : public QObject
 {
     Q_OBJECT
 public:
-    explicit FilePickerIpc(KDE5FilePicker* filePicker, QObject* parent = nullptr);
+    explicit FilePickerIpc(Qt5FilePicker* filePicker, QObject* parent = nullptr);
     ~FilePickerIpc() override;
 
 private:
-    KDE5FilePicker* m_filePicker = nullptr;
+    Qt5FilePicker* m_filePicker = nullptr;
     std::unique_ptr<std::thread> m_ipcReaderThread;
 
 private Q_SLOTS:
