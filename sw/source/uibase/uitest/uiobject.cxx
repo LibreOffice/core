@@ -139,6 +139,7 @@ StringMap SwNavigationPIUIObject::get_state()
     StringMap aMap = WindowUIObject::get_state();
 
     aMap["selectioncount"] = OUString::number(mxSwNavigationPI->m_xContentTree->count_selected_rows());
+    aMap["selectedtext"] = mxSwNavigationPI->m_xContentTree->get_selected_text();
 
     return aMap;
 }
