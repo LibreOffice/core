@@ -153,10 +153,10 @@
                     "dest-filename": "external/tarballs/EmojiOneColor-SVGinOT-1.3.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/boost_1_71_0.tar.bz2",
-                    "sha256": "d73a8da01e8bf8c7eda40b4c84915071a8c8a0df4a6734537ddde4a8580524ee",
+                    "url": "https://dev-www.libreoffice.org/src/boost_1_71_0.tar.xz",
+                    "sha256": "35e06a3bd7cd8f66be822c7d64e80c2b6051a181e9e897006917cb8e7988a543",
                     "type": "file",
-                    "dest-filename": "external/tarballs/boost_1_71_0.tar.bz2"
+                    "dest-filename": "external/tarballs/boost_1_71_0.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/48d647fbd8ef8889e5a7f422c1bfda94-clucene-core-2.3.3.4.tar.gz",
@@ -249,10 +249,10 @@
                     "dest-filename": "external/tarballs/libfreehand-0.1.2.tar.xz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/language-subtag-registry-2019-09-16.tar.bz2",
-                    "sha256": "07b66bc0f2786fde55f6bbcbcb4a455a846eb8e2351c8ce3d0a219a73693736a",
+                    "url": "https://dev-www.libreoffice.org/src/language-subtag-registry-2020-04-01.tar.bz2",
+                    "sha256": "fb1ee0dabfd956a445fbe9f351e86a52767808558f20f4256e67fbbb3768e9da",
                     "type": "file",
-                    "dest-filename": "external/tarballs/language-subtag-registry-2019-09-16.tar.bz2"
+                    "dest-filename": "external/tarballs/language-subtag-registry-2020-04-01.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/liblangtag-0.6.2.tar.bz2",
@@ -369,10 +369,10 @@
                     "dest-filename": "external/tarballs/openldap-2.4.45.tgz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/liborcus-0.15.3.tar.gz",
-                    "sha256": "0dd26f3f2e611c51df9ee02d6dbf08887989eaa417b73f6877cd0d94df795fc2",
+                    "url": "https://dev-www.libreoffice.org/src/liborcus-0.15.4.tar.bz2",
+                    "sha256": "cfb2aa60825f2a78589ed030c07f46a1ee16ef8a2d1bf2279192fbc1ae5a5f61",
                     "type": "file",
-                    "dest-filename": "external/tarballs/liborcus-0.15.3.tar.gz"
+                    "dest-filename": "external/tarballs/liborcus-0.15.4.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/poppler-0.82.0.tar.xz",
@@ -573,10 +573,10 @@
                     "dest-filename": "external/tarballs/libatomic_ops-7.6.8.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/skia-m81-3e98c0e1d11516347ecc594959af2c1da4d04fc9.tar.xz",
-                    "sha256": "af190451976580081b0133a37ea6fa1434a8f3056f76d42ffb65ac8c79b223b7",
+                    "url": "https://dev-www.libreoffice.org/src/skia-m83-8ce842d38d0b32149e874d6855c91e8c68ba65a7.tar.xz",
+                    "sha256": "d724dd60d4375359aa4751ea39950ad833592f01774914873f6d033f14e1c63f",
                     "type": "file",
-                    "dest-filename": "external/tarballs/skia-m81-3e98c0e1d11516347ecc594959af2c1da4d04fc9.tar.xz"
+                    "dest-filename": "external/tarballs/skia-m83-8ce842d38d0b32149e874d6855c91e8c68ba65a7.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/dtoa-20180411.tgz",
