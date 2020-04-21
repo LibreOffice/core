@@ -610,7 +610,7 @@ public:
     // to the next/previous or the given OutlineNode
     void GotoOutline( SwOutlineNodes::size_type nIdx );
     // find the "outline position" in the nodes array of the current chapter
-    SwOutlineNodes::size_type GetOutlinePos( sal_uInt8 nLevel = UCHAR_MAX );
+    SwOutlineNodes::size_type GetOutlinePos(sal_uInt8 nLevel = UCHAR_MAX, SwPaM* pPaM = nullptr);
     // select the given range of OutlineNodes. Optionally including the children
     // the sal_uInt16s are the positions in OutlineNodes-Array (EditShell)
     bool MakeOutlineSel(SwOutlineNodes::size_type nSttPos, SwOutlineNodes::size_type nEndPos,

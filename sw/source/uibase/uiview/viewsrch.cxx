@@ -235,6 +235,8 @@ void SwView::ExecSearch(SfxRequest& rReq)
                         lcl_emitSearchResultCallbacks(s_pSrchItem, m_pWrtShell.get(), /* bHighlightAll = */ false);
                 }
                 rReq.SetReturnValue(SfxBoolItem(nSlot, bRet));
+
+                m_pEditWin->GrabFocus();
             }
             break;
             case SvxSearchCmd::FIND_ALL:
@@ -243,6 +245,9 @@ void SwView::ExecSearch(SfxRequest& rReq)
                 m_pWrtShell->GetSfxViewShell()->setTiledSearching(true);
                 bool bRet = SearchAll();
                 m_pWrtShell->GetSfxViewShell()->setTiledSearching(false);
+
+                GetDocShell()->Broadcast(
+                            SfxHint(SfxHintId::SwNavigatorSelectOutlinesWithSelections));
 
                 if( !bRet )
                 {
