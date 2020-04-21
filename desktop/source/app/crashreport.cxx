@@ -143,7 +143,10 @@ void CrashReporter::writeCommonInfo()
     rtl::Bootstrap::get("CrashDumpUrl", url);
     if (url.isEmpty())
     {
-        // no url in config, bail out
+        // no url in config, bail out, but still set proper crash
+        // directory for local dump generation (incase CrashDumpEnable
+        // is on
+        updateMinidumpLocation();
         mbInit = false;
         return;
     }
