@@ -186,6 +186,7 @@ public:
                                         const OUString& sSecondaryMessage,
                                         sal_Int32 aInfobarType) override;
     virtual void SAL_CALL removeInfobar(const OUString& sId) override;
+    virtual sal_Bool SAL_CALL hasInfobar(const OUString& sId) override;
 
     // FIXME: TL needs this in sw/source/ui/uno/unotxdoc.cxx now;
     // either the _Impl name should vanish or there should be an "official" API

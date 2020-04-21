@@ -10,14 +10,13 @@ from uitest.uihelper.common import select_pos
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, type_text
+from uitest.uihelper.common import get_state_as_dict
 from uitest.debug import sleep
-# import org.libreoffice.unotest
-# import pathlib
-from uitest.path import get_srcdir_url
+import org.libreoffice.unotest
+import pathlib
+
 def get_url_for_data_file(file_name):
-#    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
-    return get_srcdir_url() + "/sw/qa/uitest/writer_tests/data/" + file_name
+    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
 #TSCP: add advanced classification dialog https://cgit.freedesktop.org/libreoffice/core/commit/?id=71ee09947d5a71105d64fd225bb3672dfa7ce834
 # This adds an advanced classification dialog, which enables the user
@@ -69,6 +68,13 @@ class classification(UITestCase):
         # self.assertEqual(get_state_as_dict(classificationEditWindow)["Text"], "Conf")
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
+
+        header = document.StyleFamilies.PageStyles.Standard.HeaderText.createEnumeration().nextElement()
+        self.assertEqual(header.String, "Confidential")
+
+        controller = self.ui_test.get_component().getCurrentController()
+        self.assertTrue(controller.hasInfobar("classification"))
+
         #verify watermark
         #Bug 122586 - Classification: by using the dialog, Watermark text from policy is not placed in the document
         self.ui_test.execute_dialog_through_command(".uno:Watermark")
@@ -103,13 +109,15 @@ class classification(UITestCase):
         #verify International is set too
         self.assertEqual(get_state_as_dict(internationalClassificationCB)["SelectEntryText"], "Confidential")
         #verify textBox Content  TODO textbox not supported
-#        self.assertEqual(get_state_as_dict(classificationEditWindow)["Text"], "Conf")
+        #self.assertEqual(get_state_as_dict(classificationEditWindow)["Text"], "Conf")
         # print(get_state_as_dict(classificationEditWindow))
 
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
-        # verify the text on characters 0-6 : "(Conf)"
+
         self.assertEqual(document.Text.String[0:6], "(Conf)")
+        self.assertEqual(header.String, "Confidential")
+        self.assertTrue(controller.hasInfobar("classification"))
 
         self.ui_test.close_doc()
 
@@ -138,8 +146,11 @@ class classification(UITestCase):
 
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
-        # verify the text on characters 0-6 : "(Conf)"
+
+        controller = self.ui_test.get_component().getCurrentController()
         self.assertEqual(document.Text.String[0:6], "(Conf)")
+        self.assertFalse(controller.hasInfobar("classification"))
+        self.assertFalse(document.StyleFamilies.PageStyles.Standard.HeaderIsOn)
 
         self.ui_test.close_doc()
 
@@ -169,8 +180,11 @@ class classification(UITestCase):
 
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
-        # verify the text on characters 0-6 : "(AAIO)"
+
+        controller = self.ui_test.get_component().getCurrentController()
         self.assertEqual(document.Text.String[0:6], "(AAIO)")
+        self.assertFalse(controller.hasInfobar("classification"))
+        self.assertFalse(document.StyleFamilies.PageStyles.Standard.HeaderIsOn)
 
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
