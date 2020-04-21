@@ -351,7 +351,7 @@ xmlDocPtr Chart2ExportTest::parseExport(const OUString& rDir, const OUString& rF
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), pTempFile->GetURL());
     uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName(findChartFile(rDir, xNameAccess)), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xInputStream.is());
-    std::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
 
     return parseXmlStream(pStream.get());
 }

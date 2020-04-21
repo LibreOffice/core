@@ -31,6 +31,7 @@ namespace ucb = com::sun::star::ucb;
 namespace uno = com::sun::star::uno;
 
 using std::shared_ptr;
+using std::unique_ptr;
 
 using librevenge::RVNGInputStream;
 using librevenge::RVNG_SEEK_CUR;
@@ -303,7 +304,7 @@ void WPXSvStreamTest::testStructured()
 
         // check for existing substream
         CPPUNIT_ASSERT(pInput->existsSubStream("WordDocument"));
-        shared_ptr<RVNGInputStream> pSubStream(pInput->getSubStreamByName("WordDocument"));
+        unique_ptr<RVNGInputStream> pSubStream(pInput->getSubStreamByName("WordDocument"));
         CPPUNIT_ASSERT(bool(pSubStream));
         CPPUNIT_ASSERT(!pSubStream->isEnd());
 
@@ -325,7 +326,7 @@ void WPXSvStreamTest::testStructured()
 
         // check for existing substream
         CPPUNIT_ASSERT(pInput->existsSubStream("content.xml"));
-        shared_ptr<RVNGInputStream> pSubStream(pInput->getSubStreamByName("content.xml"));
+        unique_ptr<RVNGInputStream> pSubStream(pInput->getSubStreamByName("content.xml"));
         CPPUNIT_ASSERT(bool(pSubStream));
         CPPUNIT_ASSERT(!pSubStream->isEnd());
 

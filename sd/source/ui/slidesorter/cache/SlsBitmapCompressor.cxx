@@ -102,7 +102,7 @@ sal_Int32 ResolutionReduction::ResolutionReducedReplacement::GetMemorySize() con
 std::shared_ptr<BitmapReplacement> ResolutionReduction::Compress (
     const BitmapEx& rBitmap) const
 {
-    ResolutionReducedReplacement* pResult = new ResolutionReducedReplacement;
+    auto pResult = std::make_shared<ResolutionReducedReplacement>();
     pResult->maPreview = rBitmap;
     Size aSize (rBitmap.GetSizePixel());
     pResult->maOriginalSize = aSize;
@@ -112,7 +112,7 @@ std::shared_ptr<BitmapReplacement> ResolutionReduction::Compress (
         pResult->maPreview.Scale(Size(mnWidth,nHeight));
     }
 
-    return std::shared_ptr<BitmapReplacement>(pResult);
+    return pResult;
 }
 
 BitmapEx ResolutionReduction::Decompress (const BitmapReplacement& rBitmapData) const
@@ -164,12 +164,12 @@ std::shared_ptr<BitmapReplacement> PngCompression::Compress (const BitmapEx& rBi
     SvMemoryStream aStream (32768, 32768);
     aWriter.Write(aStream);
 
-    PngReplacement* pResult = new PngReplacement();
+    auto pResult = std::make_shared<PngReplacement>();
     pResult->mnDataSize = aStream.Tell();
     pResult->mpData = new char[pResult->mnDataSize];
     memcpy(pResult->mpData, aStream.GetData(), pResult->mnDataSize);
 
-    return std::shared_ptr<BitmapReplacement>(pResult);
+    return pResult;
 }
 
 BitmapEx PngCompression::Decompress (

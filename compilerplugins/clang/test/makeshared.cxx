@@ -23,11 +23,11 @@ private:
 
 void test1()
 {
-    std::shared_ptr<int> x(
-        new int); // expected-error {{rather use make_shared [loplugin:makeshared]}}
+    // expected-error@+1 {{rather use make_shared [loplugin:makeshared]}}
+    std::shared_ptr<int> x(new int);
     x.reset(new int); // expected-error {{rather use make_shared [loplugin:makeshared]}}
-    x = std::shared_ptr<int>(
-        new int); // expected-error {{rather use make_shared [loplugin:makeshared]}}
+    // expected-error@+1 {{rather use make_shared [loplugin:makeshared]}}
+    x = std::shared_ptr<int>(new int);
 
     // no warning expected
     std::shared_ptr<int> y(new int, o3tl::default_delete<int>());
@@ -39,5 +39,22 @@ void test1()
     // no warning expected - this constructor takes an initializer-list, which make_shared does not support
     auto a = std::shared_ptr<o3tl::sorted_vector<int>>(new o3tl::sorted_vector<int>({ 1, 2 }));
 };
+
+void test2()
+{
+    std::shared_ptr<int> x = std::make_unique<int>(
+        1); // expected-error {{rather use make_shared [loplugin:makeshared]}}
+    x = std::make_unique<int>(1); // expected-error {{rather use make_shared [loplugin:makeshared]}}
+    (void)x;
+
+    std::shared_ptr<int> y(std::make_unique<int>(
+        1)); // expected-error {{rather use make_shared [loplugin:makeshared]}}
+    (void)y;
+
+    std::unique_ptr<int> u1;
+    std::shared_ptr<int> z
+        = std::move(u1); // expected-error {{rather use make_shared [loplugin:makeshared]}}
+    z = std::move(u1); // expected-error {{rather use make_shared [loplugin:makeshared]}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

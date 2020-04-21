@@ -146,7 +146,7 @@ class SdAbstractTabController_Impl : public SfxAbstractTabDialog
 {
     std::shared_ptr<SfxTabDialogController> m_xDlg;
 public:
-    explicit SdAbstractTabController_Impl(std::unique_ptr<SfxTabDialogController> p)
+    explicit SdAbstractTabController_Impl(std::shared_ptr<SfxTabDialogController> p)
         : m_xDlg(std::move(p))
     {
     }
@@ -167,7 +167,7 @@ class AbstractBulletDialog_Impl : public SfxAbstractTabDialog
 {
     std::shared_ptr<SfxTabDialogController> m_xDlg;
 public:
-    explicit AbstractBulletDialog_Impl(std::unique_ptr<SfxTabDialogController> p)
+    explicit AbstractBulletDialog_Impl(std::shared_ptr<SfxTabDialogController> p)
         : m_xDlg(std::move(p))
     {
     }
@@ -188,7 +188,7 @@ class SdPresLayoutTemplateDlg_Impl : public SfxAbstractTabDialog
 {
     std::shared_ptr<SdPresLayoutTemplateDlg> m_xDlg;
 public:
-    explicit SdPresLayoutTemplateDlg_Impl(std::unique_ptr<SdPresLayoutTemplateDlg> p)
+    explicit SdPresLayoutTemplateDlg_Impl(std::shared_ptr<SdPresLayoutTemplateDlg> p)
         : m_xDlg(std::move(p))
     {
     }
@@ -388,7 +388,7 @@ class AbstractHeaderFooterDialog_Impl :public AbstractHeaderFooterDialog
 private:
     std::shared_ptr<::sd::HeaderFooterDialog> m_xDlg;
 public:
-    AbstractHeaderFooterDialog_Impl(std::unique_ptr<::sd::HeaderFooterDialog> pDlg)
+    AbstractHeaderFooterDialog_Impl(std::shared_ptr<::sd::HeaderFooterDialog> pDlg)
         : m_xDlg(std::move(pDlg))
     {
     }

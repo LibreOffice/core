@@ -30,7 +30,7 @@ class PolarPlottingPositionHelper;
 class VPolarAxis : public VAxisBase
 {
 public:
-    static VPolarAxis* createAxis( const AxisProperties& rAxisProperties
+    static std::shared_ptr<VPolarAxis> createAxis( const AxisProperties& rAxisProperties
            , const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier
            , sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount );
 

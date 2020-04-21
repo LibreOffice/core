@@ -425,11 +425,11 @@ void NumberingTypeMgr::Init()
         for(sal_Int32 i = 0; i < nLength; i++)
         {
             NumSettings_Impl* pNew = lcl_CreateNumberingSettingsPtr(pValuesArr[i]);
-            NumberSettings_Impl* pNumEntry = new NumberSettings_Impl;
+            std::shared_ptr<NumberSettings_Impl> pNumEntry = std::make_shared<NumberSettings_Impl>();
             pNumEntry->pNumSetting = pNew;
             if ( i < 8 )
                 pNumEntry->sDescription = SvxResId(RID_SVXSTR_SINGLENUM_DESCRIPTIONS[i]);
-            maNumberSettingsArr.push_back(std::shared_ptr<NumberSettings_Impl>(pNumEntry));
+            maNumberSettingsArr.push_back(pNumEntry);
         }
     }
     catch(Exception&)
