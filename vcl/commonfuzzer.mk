@@ -156,6 +156,7 @@ fuzzer_writer_libraries = \
     sw \
     swd \
     writerfilter \
+    wpftwriter
     textfd \
     guesslang \
 
