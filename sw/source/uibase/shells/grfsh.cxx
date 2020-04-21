@@ -560,12 +560,12 @@ void SwGrfShell::ExecAttr( SfxRequest const &rReq )
     if (GraphicType::Bitmap == nGrfType ||
         GraphicType::GdiMetafile == nGrfType)
     {
-        SfxItemSet aGrfSet( GetShell().GetAttrPool(), svl::Items<RES_GRFATR_BEGIN,
-                                                      RES_GRFATR_END -1>{} );
-        const SfxItemSet *pArgs = rReq.GetArgs();
+        SfxItemPool& rPool = GetShell().GetAttrPool();
+        SfxItemSet aGrfSet(rPool, svl::Items<RES_GRFATR_BEGIN, RES_GRFATR_END - 1>{});
         const SfxPoolItem* pItem;
         sal_uInt16 nSlot = rReq.GetSlot();
-        if( !pArgs || SfxItemState::SET != pArgs->GetItemState( nSlot, false, &pItem ))
+        if (const SfxItemSet* args = rReq.GetArgs();
+            !args || SfxItemState::SET != args->GetItemState(rPool.GetWhich(nSlot), false, &pItem))
             pItem = nullptr;
 
         switch( nSlot )
@@ -605,6 +605,16 @@ void SwGrfShell::ExecAttr( SfxRequest const &rReq )
                 aGrfSet.Put( aMirror );
             }
             break;
+
+            case SID_ATTR_GLOW:
+            case SID_ATTR_GLOW_COLOR:
+            case SID_ATTR_GLOW_RADIUS:
+                if (rReq.GetArgs())
+                {
+                    SdrView* pView = GetShell().GetDrawView();
+                    pView->SetAttrToMarked(*rReq.GetArgs(), false);
+                }
+                break;
 
         case SID_ATTR_GRAF_LUMINANCE:
             if( pItem )
@@ -896,6 +906,20 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
                     bDisable = true;
             }
             break;
+
+        case SID_ATTR_GLOW:
+        case SID_ATTR_GLOW_COLOR:
+        case SID_ATTR_GLOW_RADIUS:
+        case SDRATTR_GLOW:
+        case SDRATTR_GLOW_RAD:
+        case SDRATTR_GLOW_COLOR:
+        {
+            const sal_uInt16 whichPairs[] = { nWhich, nWhich, 0, 0 };
+            SfxItemSet aSet(rSh.GetAttrPool(), whichPairs);
+            rSh.GetDrawView()->GetAttributes(aSet);
+            rSet.Put(aSet);
+            break;
+        }
 
         default:
             bDisable = false;
