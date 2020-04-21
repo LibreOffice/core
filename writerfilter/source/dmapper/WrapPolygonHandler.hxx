@@ -28,6 +28,7 @@
 namespace writerfilter {
 namespace dmapper {
 
+/// Handles <wp:wrapPolygon> from DOCX and the pWrapPolygonVertices shape property from RTF.
 class WrapPolygon final : public virtual SvRefBase
 {
 public:
