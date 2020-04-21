@@ -11132,40 +11132,40 @@ CLANG_CXXFLAGS_INTRINSICS_F16C=
 CLANG_CXXFLAGS_INTRINSICS_FMA=
 
 if test "$ENABLE_SKIA" = TRUE -a "$COM_IS_CLANG" != TRUE; then
-    if test -n "$CLANG_C" -a -n "$CLANG_CXX"; then
+    if test -n "$CLANG_CC" -a -n "$CLANG_CXX"; then
         AC_MSG_CHECKING([for Clang])
-        AC_MSG_RESULT([$CLANG_C / $CLANG_CXX])
+        AC_MSG_RESULT([$CLANG_CC / $CLANG_CXX])
     else
         if test "$_os" = "WINNT"; then
             AC_MSG_CHECKING([for clang-cl])
             if test -x "$VC_PRODUCT_DIR/Tools/Llvm/bin/clang-cl.exe"; then
-                CLANG_C=`win_short_path_for_make "$VC_PRODUCT_DIR/Tools/Llvm/bin/clang-cl.exe"`
+                CLANG_CC=`win_short_path_for_make "$VC_PRODUCT_DIR/Tools/Llvm/bin/clang-cl.exe"`
                 dnl match our MSVC default, also explicitly set -m32/-m64
                 if test "$BITNESS_OVERRIDE" = ""; then
-                    CLANG_C="$CLANG_C -m32 -arch:SSE"
+                    CLANG_CC="$CLANG_CC -m32 -arch:SSE"
                 else
-                    CLANG_C="$CLANG_C -m64"
+                    CLANG_CC="$CLANG_CC -m64"
                 fi
-                CLANG_CXX="$CLANG_C"
-                AC_MSG_RESULT([$CLANG_C])
+                CLANG_CXX="$CLANG_CC"
+                AC_MSG_RESULT([$CLANG_CC])
             else
                 AC_MSG_RESULT([no])
             fi
         else
-            AC_CHECK_PROG(CLANG_C,clang,clang,[])
+            AC_CHECK_PROG(CLANG_CC,clang,clang,[])
             AC_CHECK_PROG(CLANG_CXX,clang++,clang++,[])
         fi
     fi
-    if test -n "$CLANG_C" -a -n "$CLANG_CXX"; then
-        clang2_version=`echo __clang_major__.__clang_minor__.__clang_patchlevel__ | $CLANG_C -E - | tail -1 | sed 's/ //g'`
+    if test -n "$CLANG_CC" -a -n "$CLANG_CXX"; then
+        clang2_version=`echo __clang_major__.__clang_minor__.__clang_patchlevel__ | $CLANG_CC -E - | tail -1 | sed 's/ //g'`
         clang2_ver=`echo "$clang2_version" | $AWK -F. '{ print \$1*10000+(\$2<100?\$2:99)*100+(\$3<100?\$3:99) }'`
         if test "$clang2_ver" -lt 50002; then
             AC_MSG_WARN(["$clang2_version" is too old or unrecognized, must be at least Clang 5.0.2])
-            CLANG_C=
+            CLANG_CC=
             CLANG_CXX=
         fi
     fi
-    if test -z "$CLANG_C" -o -z "$CLANG_CXX"; then
+    if test -z "$CLANG_CC" -o -z "$CLANG_CXX"; then
         # So far do not require this, but release builds with Skia should possibly
         # do so.
         AC_MSG_WARN([Clang compiler not found.])
@@ -11355,7 +11355,7 @@ if test "$ENABLE_SKIA" = TRUE -a "$COM_IS_CLANG" != TRUE; then
         CXX="$save_CXX"
     fi
 fi
-AC_SUBST(CLANG_C)
+AC_SUBST(CLANG_CC)
 AC_SUBST(CLANG_CXX)
 AC_SUBST(CLANG_CXXFLAGS_INTRINSICS_SSE2)
 AC_SUBST(CLANG_CXXFLAGS_INTRINSICS_SSSE3)
