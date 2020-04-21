@@ -231,15 +231,21 @@ void CrashReporter::removeExceptionHandler()
 
 bool CrashReporter::IsDumpEnable()
 {
+    static bool bConfigRead = false;
+    static bool bEnable = true; // default, always on
+
+    if (bConfigRead)
+        return bEnable;
+
     OUString sToken;
     OString  sEnvVar(std::getenv("CRASH_DUMP_ENABLE"));
-    bool     bEnable = true;   // default, always on
     // read configuration item 'CrashDumpEnable' -> bool on/off
     if (rtl::Bootstrap::get("CrashDumpEnable", sToken) && sEnvVar.isEmpty())
     {
         bEnable = sToken.toBoolean();
     }
 
+    bConfigRead = true;
     return bEnable;
 }
 
