@@ -748,20 +748,21 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/src/opts/SkOpts_avx, $(CXXFLAGS_INTRINSICS_AVX) \
+    UnpackedTarball/skia/src/opts/SkOpts_avx, $(CXXFLAGS_INTRINSICS_AVX) $(CLANG_CXXFLAGS_INTRINSICS_AVX) \
 ))
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/opts/SkOpts_hsw, \
-        $(CXXFLAGS_INTRINSICS_AVX2) $(CXXFLAGS_INTRINSICS_F16C) $(CXXFLAGS_INTRINSICS_FMA)\
+        $(CXXFLAGS_INTRINSICS_AVX2) $(CXXFLAGS_INTRINSICS_F16C) $(CXXFLAGS_INTRINSICS_FMA) \
+        $(CLANG_CXXFLAGS_INTRINSICS_AVX2) $(CLANG_CXXFLAGS_INTRINSICS_F16C) $(CLANG_CXXFLAGS_INTRINSICS_FMA) \
 ))
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/src/opts/SkOpts_sse41, $(CXXFLAGS_INTRINSICS_SSE41) \
+    UnpackedTarball/skia/src/opts/SkOpts_sse41, $(CXXFLAGS_INTRINSICS_SSE41) $(CLANG_CXXFLAGS_INTRINSICS_SSE41) \
 ))
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/src/opts/SkOpts_sse42, $(CXXFLAGS_INTRINSICS_SSE42) \
+    UnpackedTarball/skia/src/opts/SkOpts_sse42, $(CXXFLAGS_INTRINSICS_SSE42) $(CLANG_CXXFLAGS_INTRINSICS_SSE42) \
 ))
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/src/opts/SkOpts_ssse3, $(CXXFLAGS_INTRINSICS_SSSE3) \
+    UnpackedTarball/skia/src/opts/SkOpts_ssse3, $(CXXFLAGS_INTRINSICS_SSSE3) $(CLANG_CXXFLAGS_INTRINSICS_SSSE3) \
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
