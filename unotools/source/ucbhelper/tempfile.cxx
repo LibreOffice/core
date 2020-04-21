@@ -138,6 +138,7 @@ static OUString ConstructTempDir_Impl( const OUString* pParent, bool bCreatePare
     }
 #else
     (void) pParent;
+    (void) bCreateParentDirs;
 #endif
 
     if ( aName.isEmpty() )
