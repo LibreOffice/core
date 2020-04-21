@@ -270,9 +270,8 @@ namespace pdfi
     struct DocumentElement : public Element
     {
         friend class ElementFactory;
-    protected:
-        DocumentElement() : Element( nullptr ) {}
     public:
+        DocumentElement() : Element( nullptr ) {}
         virtual ~DocumentElement() override;
 
         virtual void visitedBy( ElementTreeVisitor&, const std::list< std::unique_ptr<Element> >::const_iterator& ) override;
@@ -307,8 +306,8 @@ namespace pdfi
         static PageElement* createPageElement( Element* pParent,
                                                 sal_Int32 nPageNr )
         { return new PageElement( pParent, nPageNr ); }
-        static DocumentElement* createDocumentElement()
-        { return new DocumentElement(); }
+        static std::shared_ptr<DocumentElement> createDocumentElement()
+        { return std::make_shared<DocumentElement>(); }
     };
 }
 
