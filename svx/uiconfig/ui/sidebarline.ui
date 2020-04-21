@@ -116,6 +116,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarline|width|tooltip_text">Select the width of the line.</property>
+                    <property name="halign">end</property>
                     <property name="hexpand">True</property>
                     <property name="toolbar_style">icons</property>
                     <property name="show_arrow">False</property>
@@ -158,6 +159,8 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="tooltip_text" translatable="yes" context="sidebarline|color|tooltip_text">Select the color of the line.</property>
+                    <property name="halign">end</property>
+                    <property name="hexpand">True</property>
                     <property name="toolbar_style">icons</property>
                     <property name="show_arrow">False</property>
                     <property name="icon_size">2</property>
