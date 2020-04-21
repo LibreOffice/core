@@ -25,6 +25,7 @@
 #include <svx/svdotable.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
+#include <svx/xflgrit.hxx>
 #include <svl/stritem.hxx>
 #include <undo/undomanager.hxx>
 
@@ -242,6 +243,37 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPageFillColor)
 
     Color aColor = rPageAttr.GetItem(XATTR_FILLCOLOR)->GetColorValue();
     CPPUNIT_ASSERT_EQUAL(OUString("ff0000"), aColor.AsRGBHexString());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPageFillGradient)
+{
+    // Load the document and create two new windows.
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc("sd/qa/unit/data/tdf126197.odp"));
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+
+    // Set FillPageColor
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
+        { "FillPageGradientJSON",
+          uno::makeAny(
+              OUString("{\"style\":\"LINEAR\",\"startcolor\":\"ff0000\",\"endcolor\":\"0000ff\","
+                       "\"angle\":\"300\",\"border\":\"0\",\"x\":\"0\",\"y\":\"0\",\"intensstart\":"
+                       "\"100\",\"intensend\":\"100\",\"stepcount\":\"0\"}")) },
+    }));
+
+    dispatchCommand(mxComponent, ".uno:FillPageGradient", aPropertyValues);
+
+    SdPage* pPage = pViewShell->getCurrentPage();
+    const SfxItemSet& rPageAttr = pPage->getSdrPageProperties().GetItemSet();
+
+    const XFillStyleItem* pFillStyle = rPageAttr.GetItem(XATTR_FILLSTYLE);
+    drawing::FillStyle eXFS = pFillStyle->GetValue();
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, eXFS);
+
+    XGradient aGradient = rPageAttr.GetItem(XATTR_FILLGRADIENT)->GetGradientValue();
+    CPPUNIT_ASSERT_EQUAL(OUString("ff0000"), aGradient.GetStartColor().AsRGBHexString());
+    CPPUNIT_ASSERT_EQUAL(OUString("0000ff"), aGradient.GetEndColor().AsRGBHexString());
 }
 CPPUNIT_PLUGIN_IMPLEMENT();
 
