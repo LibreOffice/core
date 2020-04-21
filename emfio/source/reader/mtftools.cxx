@@ -39,12 +39,6 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/wincodepage.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
-#define EMFP_DEBUG(x) x
-#else
-#define EMFP_DEBUG(x)
-#endif
-
 namespace emfio
 {
     SvStream& operator >> (SvStream& rInStream, XForm& rXForm)
@@ -2199,7 +2193,9 @@ namespace emfio
 
     void MtfTools::PassEMFPlusHeaderInfo()
     {
-        EMFP_DEBUG(printf ("\t\t\tadd EMF_PLUS header info\n"));
+#if OSL_DEBUG_LEVEL > 1
+        SAL_INFO("emfio", "add EMF_PLUS header info.");
+#endif
 
         SvMemoryStream mem;
         sal_Int32 nLeft, nRight, nTop, nBottom;
@@ -2232,7 +2228,12 @@ namespace emfio
 
     void MtfTools::PassEMFPlus( void const * pBuffer, sal_uInt32 nLength )
     {
-        EMFP_DEBUG(printf ("\t\t\tadd EMF_PLUS comment length %04x\n",(unsigned int) nLength));
+#if OSL_DEBUG_LEVEL > 1
+        SAL_INFO("emfio", "add EMF_PLUS comment length "
+                << std::setfill('0') << std::setw(4)
+                << std::hex
+                << (unsigned int) nLength);
+#endif
         mpGDIMetaFile->AddAction( new MetaCommentAction( "EMF_PLUS", 0, static_cast<const sal_uInt8*>(pBuffer), nLength ) );
     }
 }

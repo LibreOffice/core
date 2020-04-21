@@ -25,6 +25,7 @@
 
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>
+#include <sal/log.hxx>
 
 #include <command.hxx>
 #include <globals.hxx>
@@ -209,16 +210,13 @@ SvCommand::SvCommand( int argc, char ** argv )
                     }
                     else
                     {
-                        printf(
-                            "unknown switch: %s\n",
-                            OUStringToOString(
-                                aParam, RTL_TEXTENCODING_UTF8).getStr());
+                        SAL_WARN("idl", "unknown switch: " << aParam);
                         exit( -1 );
                     }
                 }
                 else if( aParam.equalsIgnoreAsciiCase( "help" ) || aParam.equalsIgnoreAsciiCase( "?" ) )
                 { // help
-                    printf( "%s", CommandLineSyntax );
+                    SAL_INFO("idl", CommandLineSyntax);
                 }
                 else if( aParam.equalsIgnoreAsciiCase( "quiet" ) )
                 {
@@ -232,7 +230,7 @@ SvCommand::SvCommand( int argc, char ** argv )
                 { // help
                     int j = 0;
                     while(SyntaxStrings[j])
-                        printf("%s\n",SyntaxStrings[j++]);
+                        SAL_INFO("idl", SyntaxStrings[j++]);
                 }
                 else if (aParam == "isystem")
                 {
@@ -264,10 +262,7 @@ SvCommand::SvCommand( int argc, char ** argv )
                 else
                 {
                     // temporary compatibility hack
-                    printf(
-                        "unknown switch: %s\n",
-                        OUStringToOString(
-                            aParam, RTL_TEXTENCODING_UTF8).getStr());
+                    SAL_WARN("idl", "unknown switch: " << aParam);
                     exit( -1 );
                 }
             }
@@ -279,7 +274,7 @@ SvCommand::SvCommand( int argc, char ** argv )
     }
     else
     {
-        printf( "%s", CommandLineSyntax );
+        SAL_INFO("idl", CommandLineSyntax);
     }
 
     aList.clear();
