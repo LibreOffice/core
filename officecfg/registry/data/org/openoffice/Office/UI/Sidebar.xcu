@@ -548,8 +548,11 @@
         <prop oor:name="ContextList">
           <value oor:separator=";">
             Calc,           Draw,       hidden  ;
+            Calc,           Graphic,    hidden  ;
             DrawImpress,    Draw,       hidden  ;
+            DrawImpress,    Graphic,    hidden  ;
             WriterVariants, Draw,       hidden  ;
+            WriterVariants, Graphic,    hidden  ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
