@@ -24,7 +24,6 @@
 #include <helpids.h>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/weld.hxx>
 #include <unotools/syslocale.hxx>
 #include <sfx2/viewfrm.hxx>
