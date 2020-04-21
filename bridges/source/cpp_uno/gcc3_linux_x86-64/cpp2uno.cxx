@@ -427,9 +427,11 @@ static unsigned char * codeSnippet( unsigned char * code,
     *reinterpret_cast<sal_uInt32 *>( code + 20 ) = 0x00e3ff49;
 
 #if OSL_DEBUG_LEVEL > 1
-    fprintf(stderr,
-            "==> codeSnippet, functionIndex=%d%s, vtableOffset=%d\n",
-            nFunctionIndex, (bHasHiddenParam ? "|0x80000000":""), nVtableOffset);
+    SAL_INFO("bridges.x8664", "codeSnippet, functionIndex="
+            << nFunctionIndex
+            << (bHasHiddenParam ? "|0x80000000":"")
+            << ", vtableOffset="
+            << nVtableOffset);
 #endif
 
     return code + codeSnippetSize;
