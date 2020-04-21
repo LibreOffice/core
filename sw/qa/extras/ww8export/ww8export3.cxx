@@ -162,6 +162,19 @@ DECLARE_WW8EXPORT_TEST(testFdo53985, "fdo53985.doc")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Section4 is protected", false, getProperty<bool>(xSect, "IsProtected"));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf73056_cellMargins, "tdf73056_cellMargins.doc")
+{
+    uno::Reference< text::XTextTablesSupplier > xTablesSupplier( mxComponent, uno::UNO_QUERY );
+    uno::Reference< container::XIndexAccess >   xTables( xTablesSupplier->getTextTables(), uno::UNO_QUERY );
+    uno::Reference< text::XTextTable > xTable1( xTables->getByIndex( 0 ), uno::UNO_QUERY );
+    uno::Reference< table::XCell > xCell = xTable1->getCellByName( "B4" );
+
+    // only the first cell with specific margins was processed, leaving the rest at table defaults. Was 0.
+    uno::Reference< beans::XPropertySet > xPropSet( xCell, uno::UNO_QUERY_THROW );
+    if ( !mbExported )
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "bottom cell spacing to contents",
+            sal_Int32(101), getProperty<sal_Int32>(xPropSet, "BottomBorderDistance" ) );
+}
 DECLARE_WW8EXPORT_TEST(testTdf79435_legacyInputFields, "tdf79435_legacyInputFields.docx")
 {
     //using .docx input file to verify cross-format compatibility.
