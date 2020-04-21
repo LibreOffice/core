@@ -22,7 +22,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/combobox.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
@@ -184,8 +183,8 @@ void ToggleButtonToolbarController::executeControlCommand( const css::frame::Con
     }
     else if ( rControlCommand.Command == "InsertEntry" )
     {
-        sal_Int32      nPos( COMBOBOX_APPEND );
-        sal_Int32      nSize = sal_Int32( m_aDropdownMenuList.size() );
+        sal_Int32 nPos(0);
+        sal_Int32 nSize = sal_Int32( m_aDropdownMenuList.size() );
         OUString  aText;
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
