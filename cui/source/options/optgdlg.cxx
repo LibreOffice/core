@@ -279,7 +279,6 @@ OfaMiscTabPage::OfaMiscTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     get(m_pYearFrame, "yearframe");
     get(m_pYearValueField, "year");
     get(m_pToYearFT, "toyear");
-    get(m_pCollectUsageInfo, "collectusageinfo");
     get(m_pQuickStarterFrame, "quickstarter");
 
 #if defined(UNX)
@@ -323,7 +322,6 @@ void OfaMiscTabPage::dispose()
     m_pYearFrame.clear();
     m_pYearValueField.clear();
     m_pToYearFT.clear();
-    m_pCollectUsageInfo.clear();
     m_pQuickStarterFrame.clear();
     m_pQuickLaunchCB.clear();
     SfxTabPage::dispose();
@@ -372,12 +370,6 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
         rSet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, nNum ) );
     }
 
-    if (m_pCollectUsageInfo->IsValueChangedFromSaved())
-    {
-        officecfg::Office::Common::Misc::CollectUsageInformation::set(m_pCollectUsageInfo->IsChecked(), batch);
-        bModified = true;
-    }
-
     batch->commit();
 
     if( m_pQuickLaunchCB->IsValueChangedFromSaved())
@@ -413,10 +405,6 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     }
     else
         m_pYearFrame->Enable(false);
-
-    m_pCollectUsageInfo->Check(officecfg::Office::Common::Misc::CollectUsageInformation::get());
-    m_pCollectUsageInfo->Enable(!officecfg::Office::Common::Misc::CollectUsageInformation::isReadOnly());
-    m_pCollectUsageInfo->SaveValue();
 
     SfxItemState eState = rSet->GetItemState( SID_ATTR_QUICKLAUNCHER, false, &pItem );
     if ( SfxItemState::SET == eState )

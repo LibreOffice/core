@@ -56,8 +56,6 @@ private:
 
     OUString             m_aStrDateInfo;
 
-    VclPtr<CheckBox>     m_pCollectUsageInfo;
-
     VclPtr<VclContainer> m_pQuickStarterFrame;
     VclPtr<CheckBox>     m_pQuickLaunchCB;
 
