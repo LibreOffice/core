@@ -20,11 +20,14 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
+#include <officecfg/Setup.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+
+#include <com/sun/star/uno/Sequence.hxx>
 
 using namespace std;
 using namespace drawinglayer::geometry;
@@ -33,6 +36,7 @@ using namespace drawinglayer::primitive2d;
 using namespace drawinglayer::attribute;
 using namespace basegfx;
 using namespace css::frame;
+using namespace css::uno;
 
 namespace
 {
@@ -393,6 +397,18 @@ SfxInfoBarContainerWindow::appendInfoBar(const OUString& sId, const OUString& sP
                                          const OUString& sSecondaryMessage, InfobarType ibType,
                                          WinBits nMessageStyle, bool bShowCloseButton)
 {
+    const Sequence<OUString> aDisabledInfobars(officecfg::Setup::Product::DisabledInfobars::get());
+    for (const auto& aDisabledInfobar : aDisabledInfobars)
+    {
+        if (aDisabledInfobar == sId)
+        {
+            SAL_INFO("sfx", "Not adding '" << sId
+                                           << "' Infobar since it has been disabled via config "
+                                              "setting 'DisabledInfobars'");
+            return nullptr;
+        }
+    }
+
     auto pInfoBar = VclPtr<SfxInfoBarWindow>::Create(this, sId, sPrimaryMessage, sSecondaryMessage,
                                                      ibType, nMessageStyle, bShowCloseButton);
 
