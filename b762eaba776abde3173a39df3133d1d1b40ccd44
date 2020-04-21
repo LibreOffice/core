@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5916f880_a5d4b941",
+        "filename": "accessibility/source/extended/accessibleiconchoicectrl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-21T07:16:32Z",
+      "side": 1,
+      "message": "(Common usage these days is to just not bother with a \"context\" argument to the UNO *Exception classes and use the default of an empty XInterface reference.  Turned out that those contexts are less useful in practice than initially anticipated.)",
+      "range": {
+        "startLine": 167,
+        "startChar": 16,
+        "endLine": 168,
+        "endChar": 69
+      },
+      "revId": "b762eaba776abde3173a39df3133d1d1b40ccd44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
