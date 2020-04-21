@@ -1499,29 +1499,33 @@ void WW8TabBandDesc::ProcessSpecificSpacing(const sal_uInt8* pParams)
     OSL_ENSURE(nLen == 6, "Unexpected spacing len");
     if (nLen != 6)
         return;
-    sal_uInt8 nWhichCell = *pParams++;
-    OSL_ENSURE(nWhichCell < MAX_COL + 1, "Cell out of range in spacings");
-    if (nWhichCell >= MAX_COL + 1)
+
+    const sal_uInt8 nStartCell = *pParams++; // The first cell these margins could apply to.
+    const sal_uInt8 nEndCell = *pParams++;   // The cell that does NOT apply these margins.
+    OSL_ENSURE(nStartCell < MAX_COL + 1, "Cell out of range in spacings");
+    if ( nStartCell >= nEndCell || nEndCell > MAX_COL+1 )
         return;
 
-    ++pParams; //unknown byte
     sal_uInt8 nSideBits = *pParams++;
     OSL_ENSURE(nSideBits < 0x10, "Unexpected value for nSideBits");
-    nOverrideSpacing[nWhichCell] |= nSideBits;
 
-    OSL_ENSURE(nOverrideSpacing[nWhichCell] < 0x10,
-        "Unexpected value for nSideBits");
-#if OSL_DEBUG_LEVEL > 0
-    sal_uInt8 nUnknown2 = *pParams;
-    OSL_ENSURE(nUnknown2 == 0x3, "Unexpected value for spacing2");
-#endif
-    ++pParams;
+    const sal_uInt8 nSizeType = *pParams++; // Fts: FtsDxa(0x3) is the only type that mentions cellMargin
+    OSL_ENSURE(nSizeType == 0x3, "Unexpected non-twip value for margin width");
+    if ( nSizeType != 0x3 )           // i.e FtsNil: The size is wrong (or unconverted) and MUST be ignored
+        return;
+
     sal_uInt16 nValue =  SVBT16ToUInt16( pParams );
 
-    for (int i=0; i < 4; i++)
+    for (int nCell = nStartCell; nCell < nEndCell; ++nCell)
     {
-        if (nSideBits & (1 << i))
-            nOverrideValues[nWhichCell][i] = nValue;
+        nOverrideSpacing[ nCell ] |= nSideBits;
+        OSL_ENSURE(nOverrideSpacing[ nCell ] < 0x10, "Unexpected value for nSideBits");
+
+        for (int i=0; i < 4; i++)
+        {
+            if (nSideBits & (1 << i))
+                nOverrideValues[ nCell ][ i ] = nValue;
+        }
     }
 }
 
