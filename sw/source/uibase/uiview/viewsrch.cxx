@@ -253,6 +253,8 @@ void SwView::ExecSearch(SfxRequest& rReq)
                 bool bRet = SearchAll();
                 m_pWrtShell->GetSfxViewShell()->setTiledSearching(false);
 
+                GetDocShell()->Broadcast(SfxHint(SfxHintId::SwNavigatorSelectOutlinesWithSelections));
+
                 if( !bRet )
                 {
 #if HAVE_FEATURE_DESKTOP
