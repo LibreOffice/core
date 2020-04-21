@@ -287,8 +287,8 @@ CustomLabelSeq lcl_getCustomLabelField(sal_Int32 nDataPointIndex,
     if( !rSeries.is() )
         return CustomLabelSeq();
 
-    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
-    if( nCurrentODFVersion <= SvtSaveOptions::ODFVER_012 )//do not export to ODF 1.2 or older
+    const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
+    if (nCurrentODFVersion <= SvtSaveOptions::ODFSVER_012) //do not export to ODF 1.2 or older
         return CustomLabelSeq();
 
     if(Reference<beans::XPropertySet> xLabels = rSeries->getDataPointByIndex(nDataPointIndex); xLabels.is())
@@ -1178,8 +1178,8 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
     if( bExportContent )
     {
         //export data provider in xlink:href attribute
-        const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
-        if( nCurrentODFVersion >= SvtSaveOptions::ODFVER_012 )
+        const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
+        if (nCurrentODFVersion >= SvtSaveOptions::ODFSVER_012)
         {
             OUString aDataProviderURL(  ".."  );
             if( xNewDoc->hasInternalDataProvider() )
@@ -1195,7 +1195,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
         }
 
         Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider(xNewDoc->getDataProvider(), uno::UNO_QUERY);
-        if (xPivotTableDataProvider.is() && nCurrentODFVersion > SvtSaveOptions::ODFVER_012)
+        if (xPivotTableDataProvider.is() && nCurrentODFVersion > SvtSaveOptions::ODFSVER_012)
         {
             OUString sPivotTableName = xPivotTableDataProvider->getPivotTableName();
             mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_DATA_PILOT_SOURCE, sPivotTableName);
@@ -1368,8 +1368,8 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
                 addPosition( xLegendShape );
 
                 // export legend size
-                const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
-                if( xLegendShape.is() && nCurrentODFVersion >= SvtSaveOptions::ODFVER_012 )
+                const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFSaneDefaultVersion() );
+                if( xLegendShape.is() && nCurrentODFVersion >= SvtSaveOptions::ODFSVER_012 )
                 {
                     try
                     {
@@ -1384,7 +1384,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
                             {
                                 awt::Size aSize( xLegendShape->getSize() );
                                 // tdf#131966: chart legend attributes width and height shouldn't be exported to ODF 1.2 (strict)
-                                if (nCurrentODFVersion > SvtSaveOptions::ODFVER_012)
+                                if (nCurrentODFVersion > SvtSaveOptions::ODFSVER_012)
                                     addSize( aSize, true );
                                 OUStringBuffer aAspectRatioString;
                                 ::sax::Converter::convertDouble(
@@ -2070,8 +2070,8 @@ void SchXMLExportHelper_Impl::exportPlotArea(
 
 void SchXMLExportHelper_Impl::exportCoordinateRegion( const uno::Reference< chart::XDiagram >& xDiagram )
 {
-    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
-    if( nCurrentODFVersion <= SvtSaveOptions::ODFVER_012 )//do not export to ODF 1.2 or older
+    const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
+    if (nCurrentODFVersion <= SvtSaveOptions::ODFSVER_012) //do not export to ODF 1.2 or older
         return;
 
     Reference< chart::XDiagramPositioning > xDiaPos( xDiagram, uno::UNO_QUERY );
@@ -2190,8 +2190,8 @@ bool lcl_exportAxisType( const Reference< chart2::XAxis >& rChart2Axis, SvXMLExp
     if( !rChart2Axis.is() )
         return bExportDateScale;
 
-    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
-    if( nCurrentODFVersion <= SvtSaveOptions::ODFVER_012 )//do not export to ODF 1.2 or older
+    const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
+    if (nCurrentODFVersion <= SvtSaveOptions::ODFSVER_012) //do not export to ODF 1.2 or older
         return bExportDateScale;
 
     chart2::ScaleData aScale( rChart2Axis->getScaleData() );
@@ -2614,8 +2614,8 @@ void SchXMLExportHelper_Impl::exportSeries(
                                     TOOLS_INFO_EXCEPTION("xmloff.chart", "Required property not found in DataRowProperties" );
                                 }
 
-                                const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
-                                if( nCurrentODFVersion >= SvtSaveOptions::ODFVER_012 )
+                                const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
+                                if (nCurrentODFVersion >= SvtSaveOptions::ODFSVER_012)
                                 {
                                     lcl_exportNumberFormat( "NumberFormat", xPropSet, mrExport );
                                     lcl_exportNumberFormat( "PercentageNumberFormat", xPropSet, mrExport );
@@ -2647,8 +2647,8 @@ void SchXMLExportHelper_Impl::exportSeries(
                                     // #i75297# allow empty series, export empty range to have all ranges on import
                                     mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_VALUES_CELL_RANGE_ADDRESS, OUString());
 
-                                const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
-                                if( nCurrentODFVersion >= SvtSaveOptions::ODFVER_012 )
+                                const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFSaneDefaultVersion() );
+                                if( nCurrentODFVersion >= SvtSaveOptions::ODFSVER_012 )
                                 {
                                     if (xPropSet.is())
                                     {
@@ -2818,8 +2818,8 @@ void SchXMLExportHelper_Impl::exportSeries(
                         uno::Reference< beans::XPropertySet >( aSeriesSeq[nSeriesIdx], uno::UNO_QUERY ),
                         nSeriesLength, xNewDiagram, bExportContent );
 
-                    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
-                    if( bExportContent && nCurrentODFVersion > SvtSaveOptions::ODFVER_012 )//do not export to ODF 1.2 or older
+                    const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
+                    if (bExportContent && nCurrentODFVersion > SvtSaveOptions::ODFSVER_012) //do not export to ODF 1.2 or older
                     {
                         Sequence< OUString > aSupportedMappings = rChartType->getSupportedPropertyRoles();
                         exportPropertyMapping( xSource, aSupportedMappings );
@@ -2911,8 +2911,8 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
                 xEquationProperties->getPropertyValue( "ShowCorrelationCoefficient") >>= bShowRSquared;
 
                 bExportEquation = ( bShowEquation || bShowRSquared );
-                const SvtSaveOptions::ODFDefaultVersion nCurrentVersion( SvtSaveOptions().GetODFDefaultVersion() );
-                if( nCurrentVersion < SvtSaveOptions::ODFVER_012 )
+                const SvtSaveOptions::ODFSaneDefaultVersion nCurrentVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
+                if (nCurrentVersion < SvtSaveOptions::ODFSVER_012)
                 {
                     bExportEquation=false;
                 }
@@ -2987,10 +2987,10 @@ void SchXMLExportHelper_Impl::exportErrorBar( const Reference<beans::XPropertySe
 {
     assert(mxExpPropMapper.is());
 
-    const SvtSaveOptions::ODFDefaultVersion nCurrentVersion( SvtSaveOptions().GetODFDefaultVersion() );
+    const SvtSaveOptions::ODFSaneDefaultVersion nCurrentVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
 
     /// Don't export X ErrorBars for older ODF versions.
-    if ( !bYError && nCurrentVersion < SvtSaveOptions::ODFVER_012 )
+    if (!bYError && nCurrentVersion < SvtSaveOptions::ODFSVER_012)
         return;
 
     if (xSeriesProp.is())
@@ -3045,7 +3045,7 @@ void SchXMLExportHelper_Impl::exportErrorBar( const Reference<beans::XPropertySe
                     // add style name attribute
                     AddAutoStyleAttribute( aPropertyStates );
 
-                    if( nCurrentVersion >= SvtSaveOptions::ODFVER_012 )
+                    if (nCurrentVersion >= SvtSaveOptions::ODFSVER_012)
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DIMENSION, bYError ? XML_Y : XML_X );//#i114149#
                     SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_ERROR_INDICATOR, true, true );
                 }
@@ -3249,8 +3249,8 @@ void SchXMLExportHelper_Impl::exportDataPoints(
             SAL_WARN_IF( !xPropSet.is(), "xmloff.chart", "Pie Segments should have properties" );
             if( xPropSet.is())
             {
-                const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
-                if( nCurrentODFVersion >= SvtSaveOptions::ODFVER_012 && bExportNumFmt )
+                const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
+                if (nCurrentODFVersion >= SvtSaveOptions::ODFSVER_012 && bExportNumFmt)
                 {
                     lcl_exportNumberFormat( "NumberFormat", xPropSet, mrExport );
                     lcl_exportNumberFormat( "PercentageNumberFormat", xPropSet, mrExport );
@@ -3311,8 +3311,8 @@ void SchXMLExportHelper_Impl::exportDataPoints(
             }
             if( xPropSet.is())
             {
-                const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
-                if( nCurrentODFVersion >= SvtSaveOptions::ODFVER_012 )
+                const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
+                if (nCurrentODFVersion >= SvtSaveOptions::ODFSVER_012)
                 {
                     lcl_exportNumberFormat( "NumberFormat", xPropSet, mrExport );
                     lcl_exportNumberFormat( "PercentageNumberFormat", xPropSet, mrExport );
@@ -3499,7 +3499,7 @@ SchXMLExport::SchXMLExport(const Reference<uno::XComponentContext>& xContext,
     , maAutoStylePool(new SchXMLAutoStylePoolP(*this))
     , maExportHelper(new SchXMLExportHelper(*this, *maAutoStylePool))
 {
-    if( getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
+    if (getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
         GetNamespaceMap_().Add( GetXMLToken(XML_NP_CHART_EXT), GetXMLToken(XML_N_CHART_EXT), XML_NAMESPACE_CHART_EXT);
 }
 
