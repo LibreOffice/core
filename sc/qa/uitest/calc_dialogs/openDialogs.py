@@ -36,7 +36,8 @@ dialogs = [
     {"command": ".uno:FontworkGalleryFloater", "closeButton": "cancel"},
     # {"command": ".uno:HyperlinkDialog", "closeButton": "ok"},
         # dialog opens but is not recognised by execute_dialog_through_command
-    {"command": ".uno:InsertSymbol", "closeButton": "cancel"},
+    #{"command": ".uno:InsertSymbol", "closeButton": "cancel"},
+        # Tested in uitest/demo_ui/char_dialog.py
     {"command": ".uno:EditHeaderAndFooter", "closeButton": "cancel"},
     # {"command": ".uno:InsertSignatureLine", "closeButton": "cancel"},
         # tested in sc/qa/uitest/signatureLine/insertSignatureLine.py
