@@ -1871,6 +1871,7 @@ public:
     tools::Rectangle m_aOwnCursor;
     boost::property_tree::ptree m_aCommentCallbackResult;
     boost::property_tree::ptree m_aCallbackWindowResult;
+    bool m_bWindowHidden;
 
     ViewCallback(LibLODocument_Impl* pDocument)
         : mpDocument(pDocument),
@@ -1926,6 +1927,10 @@ public:
             m_aCallbackWindowResult.clear();
             std::stringstream aStream(pPayload);
             boost::property_tree::read_json(aStream, m_aCallbackWindowResult);
+
+            std::string sAction = m_aCallbackWindowResult.get<std::string>("action");
+            if (sAction == "hide")
+                m_bWindowHidden = true;
         }
         break;
         case LOK_CALLBACK_CELL_FORMULA:
@@ -2666,15 +2671,15 @@ void DesktopLOKTest::testShowHideDialog()
     VclPtr<vcl::Window> pWindow(Application::GetActiveTopWindow());
     CPPUNIT_ASSERT(pWindow);
 
+    aView.m_bWindowHidden = false;
+
     pWindow->Hide();
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(std::string("hide"), aView.m_aCallbackWindowResult.get<std::string>("action"));
+    CPPUNIT_ASSERT_EQUAL(true, aView.m_bWindowHidden);
 
-    pWindow->Show();
+    static_cast<SystemWindow*>(pWindow.get())->Close();
     Scheduler::ProcessEventsToIdle();
-
-    CPPUNIT_ASSERT_EQUAL(std::string("invalidate"), aView.m_aCallbackWindowResult.get<std::string>("action"));
 }
 
 void DesktopLOKTest::testComplexSelection()
