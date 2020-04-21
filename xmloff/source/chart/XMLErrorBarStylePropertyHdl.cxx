@@ -38,8 +38,8 @@ bool XMLErrorBarStylePropertyHdl::exportXML( OUString& rStrExpValue,
                                               const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     uno::Any aValue(rValue);
-    const SvtSaveOptions::ODFDefaultVersion nCurrentVersion( SvtSaveOptions().GetODFDefaultVersion() );
-    if( nCurrentVersion < SvtSaveOptions::ODFVER_012 )
+    const SvtSaveOptions::ODFSaneDefaultVersion nCurrentVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
+    if (nCurrentVersion < SvtSaveOptions::ODFSVER_012)
     {
         sal_Int32 nValue = 0;
         if(rValue >>= nValue )

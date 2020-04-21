@@ -315,11 +315,11 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
         const_cast<SfxObjectShell*>( this )->SetError(ERRCODE_IO_GENERAL);
     }
 
-    SvtSaveOptions::ODFDefaultVersion nDefVersion = SvtSaveOptions::ODFVER_012;
+    SvtSaveOptions::ODFSaneDefaultVersion nDefVersion = SvtSaveOptions::ODFSVER_012;
     if (!utl::ConfigManager::IsFuzzing())
     {
         SvtSaveOptions aSaveOpt;
-        nDefVersion = aSaveOpt.GetODFDefaultVersion();
+        nDefVersion = aSaveOpt.GetODFSaneDefaultVersion();
     }
 
     // the default values, that should be used for ODF1.1 and older formats
@@ -330,7 +330,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
         { "ChecksumAlgorithm", css::uno::makeAny(xml::crypto::DigestID::SHA1_1K) }
     };
 
-    if ( nDefVersion >= SvtSaveOptions::ODFVER_012 )
+    if (nDefVersion >= SvtSaveOptions::ODFSVER_012)
     {
         try
         {
@@ -1142,7 +1142,7 @@ bool SfxObjectShell::SaveTo_Impl
         {
             // check that the storage format stays the same
             SvtSaveOptions aSaveOpt;
-            SvtSaveOptions::ODFDefaultVersion nVersion = aSaveOpt.GetODFDefaultVersion();
+            SvtSaveOptions::ODFSaneDefaultVersion nVersion = aSaveOpt.GetODFSaneDefaultVersion();
 
             OUString aODFVersion;
             try
@@ -1163,8 +1163,8 @@ bool SfxObjectShell::SaveTo_Impl
             // document, but technically this is not correct, so this prevents old
             // signatures to be copied over to a version 1.2 document
             bNoPreserveForOasis = (
-                                   (aODFVersion == ODFVER_012_TEXT && nVersion < SvtSaveOptions::ODFVER_012) ||
-                                   (aODFVersion.isEmpty() && nVersion >= SvtSaveOptions::ODFVER_012)
+                                   (aODFVersion == ODFVER_012_TEXT && nVersion < SvtSaveOptions::ODFSVER_012) ||
+                                   (aODFVersion.isEmpty() && nVersion >= SvtSaveOptions::ODFSVER_012)
                                   );
         }
     }
