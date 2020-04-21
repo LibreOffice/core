@@ -819,8 +819,10 @@ void FormulaDlg_Impl::FillListboxes()
     if ( m_pFuncDesc && m_pFuncDesc->getCategory() )
     {
         // We'll never have more than int32 max categories so this is safe ...
-        if ( m_xFuncPage->GetCategory() != static_cast<sal_Int32>(m_pFuncDesc->getCategory()->getNumber() + 1) )
-            m_xFuncPage->SetCategory(m_pFuncDesc->getCategory()->getNumber() + 1);
+        // m_xFuncPage->GetCategory() takes into account "Last Used" + "All" so 13 categories (0 -> 12)
+        // whereas m_pFuncDesc->getCategory()->getNumber() doesn't take into account the 2 first (so only 0->10)
+        if ( m_xFuncPage->GetCategory() != static_cast<sal_Int32>(m_pFuncDesc->getCategory()->getNumber() + 2) )
+            m_xFuncPage->SetCategory(m_pFuncDesc->getCategory()->getNumber() + 2);
 
         sal_Int32 nPos = m_xFuncPage->GetFuncPos(m_pFuncDesc);
 
@@ -1382,7 +1384,6 @@ void FormulaDlg_Impl::FormulaCursor()
         nStartPos = 1;
         m_xMEdit->select_region(nStartPos, nEndPos);
     }
-
     if (nStartPos != aString.getLength())
     {
         sal_Int32 nPos = nStartPos;
