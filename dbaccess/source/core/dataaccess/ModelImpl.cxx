@@ -873,10 +873,6 @@ bool ODatabaseModelImpl::commitStorageIfWriteable_ignoreErrors( const Reference<
     // Preserve script signature if the script has not changed
     if (bTryToPreserveScriptSignature)
     {
-        // Need to close this storage, otherwise we can't open it for signing below
-        // (Windows needs exclusive file access)
-        //uno::Reference < lang::XComponent > xComp = xCurrentStorage;
-        //xComp->dispose();
         OUString aODFVersion(comphelper::OStorageHelper::GetODFVersionFromStorage(_rxStorage));
         uno::Reference<security::XDocumentDigitalSignatures> xDDSigns;
         try
@@ -897,15 +893,8 @@ bool ODatabaseModelImpl::commitStorageIfWriteable_ignoreErrors( const Reference<
                 uno::Reference<embed::XStorage> xMetaInf
                     = xReadOrig->openStorageElement("META-INF", embed::ElementModes::READ);
 
-                OUString aURL = getDocFileLocation();
-                Reference<XStorage> xTarget
-                    = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
-                        ZIP_STORAGE_FORMAT_STRING, aURL, ElementModes::READWRITE);
-                if (!xTarget.is())
-                    throw uno::RuntimeException("Could not read " + aURL);
                 uno::Reference<embed::XStorage> xTargetMetaInf
-                    = xTarget->openStorageElement("META-INF", embed::ElementModes::READWRITE);
-
+                    = _rxStorage->openStorageElement("META-INF", embed::ElementModes::READWRITE);
                 if (xMetaInf.is() && xTargetMetaInf.is())
                 {
                     xMetaInf->copyElementTo(aScriptSignName, xTargetMetaInf, aScriptSignName);
@@ -920,13 +909,13 @@ bool ODatabaseModelImpl::commitStorageIfWriteable_ignoreErrors( const Reference<
                     // now check the copied signature
                     uno::Sequence<security::DocumentSignatureInformation> aInfos
                         = xDDSigns->verifyScriptingContentSignatures(
-                            xTarget, uno::Reference<io::XInputStream>());
+                            _rxStorage, uno::Reference<io::XInputStream>());
                     SignatureState nState = DocumentSignatures::getSignatureState(aInfos);
                     if (nState == SignatureState::OK || nState == SignatureState::NOTVALIDATED
                         || nState == SignatureState::PARTIAL_OK)
                     {
                         // commit the ZipStorage from target medium
-                        xTransact.set(xTarget, uno::UNO_QUERY);
+                        xTransact.set(_rxStorage, uno::UNO_QUERY);
                         if (xTransact.is())
                             xTransact->commit();
                     }
