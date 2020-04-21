@@ -225,6 +225,8 @@ public:
 
     void Select();
 
+    void SelectOutlinesWithSelection();
+
     // return true if it has any children
     bool RequestingChildren(const weld::TreeIter& rParent);
 

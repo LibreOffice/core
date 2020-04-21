@@ -141,7 +141,13 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
             {
                 FindTextFieldControl* pItemWin = static_cast<FindTextFieldControl*>(pToolBox->GetItemWindow(id));
                 if (pItemWin)
+                {
                     sFindText = pItemWin->get_active_text();
+                    if (aFindAll)
+                        pItemWin->GrabFocus();
+                    else
+                        pItemWin->GrabFocusToDocument();
+                }
             } else if ( sItemCommand == COMMAND_MATCHCASE )
             {
                 CheckButtonItemWindow* pItemWin = static_cast<CheckButtonItemWindow*>(pToolBox->GetItemWindow(id));

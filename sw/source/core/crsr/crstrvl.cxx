@@ -1132,9 +1132,9 @@ bool SwCursorShell::GotoPrevOutline()
 }
 
 /// search "outline position" before previous outline node at given level
-SwOutlineNodes::size_type SwCursorShell::GetOutlinePos( sal_uInt8 nLevel )
+SwOutlineNodes::size_type SwCursorShell::GetOutlinePos(sal_uInt8 nLevel, SwPaM* pPaM)
 {
-    SwPaM* pCursor = getShellCursor( true );
+    SwPaM* pCursor = pPaM ? pPaM : getShellCursor(true);
     const SwNodes& rNds = GetDoc()->GetNodes();
 
     SwNode* pNd = &(pCursor->GetNode());
