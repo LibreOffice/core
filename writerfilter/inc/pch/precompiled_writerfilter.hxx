@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-01 11:41:16 using:
+ Generated on 2020-04-21 11:17:46 using:
  ./bin/update_pch writerfilter writerfilter --cutoff=5 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -26,7 +26,6 @@
 #include <cstddef>
 #include <functional>
 #include <iomanip>
-#include <iostream>
 #include <memory>
 #include <ostream>
 #include <utility>
@@ -36,9 +35,7 @@
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>
-#include <osl/doublecheckedlocking.h>
 #include <osl/file.hxx>
-#include <osl/getglobalmutex.hxx>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <rtl/character.hxx>
@@ -57,7 +54,6 @@
 #include <sal/macros.h>
 #include <sal/types.h>
 #include <vcl/dllapi.h>
-#include <vcl/svapp.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -84,7 +80,9 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/genfunc.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -92,12 +90,9 @@
 #include <cppuhelper/weak.hxx>
 #include <editeng/editengdllapi.h>
 #include <filter/msfilter/util.hxx>
-#include <i18nlangtag/lang.h>
-#include <o3tl/cow_wrapper.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <oox/dllapi.h>
 #include <oox/drawingml/drawingmltypes.hxx>
-#include <oox/token/tokens.hxx>
 #include <ooxml/resourceids.hxx>
 #include <sfx2/dllapi.h>
 #include <tools/color.hxx>
@@ -105,7 +100,6 @@
 #include <tools/gen.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
-#include <tools/toolsdllapi.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>
 #include <unotools/mediadescriptor.hxx>

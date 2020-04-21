@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-01 10:57:37 using:
+ Generated on 2020-04-21 11:15:38 using:
  ./bin/update_pch forms frm --cutoff=2 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -23,32 +23,38 @@
 #if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
+#include <climits>
 #include <cstddef>
 #include <functional>
 #include <iterator>
+#include <limits.h>
 #include <map>
 #include <memory>
+#include <new>
+#include <ostream>
 #include <set>
 #include <string.h>
-#include <unordered_map>
+#include <string_view>
 #include <utility>
 #include <vector>
 #include <boost/lexical_cast.hpp>
+#include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
-#include <osl/doublecheckedlocking.h>
-#include <osl/file.hxx>
-#include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
 #include <rtl/alloc.h>
 #include <rtl/character.hxx>
 #include <rtl/instance.hxx>
+#include <rtl/math.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/string.h>
 #include <rtl/string.hxx>
+#include <rtl/stringconcat.hxx>
+#include <rtl/stringutils.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/textenc.h>
 #include <rtl/ustrbuf.hxx>
@@ -56,7 +62,6 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
-#include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
@@ -68,14 +73,13 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/window.hxx>
+#include <vcl/vclenum.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <basegfx/color/bcolor.hxx>
-#include <com/sun/star/awt/Key.hpp>
-#include <com/sun/star/awt/KeyGroup.hpp>
+#include <com/sun/star/awt/FontDescriptor.hpp>
+#include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
@@ -88,15 +92,13 @@
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
-#include <com/sun/star/form/XLoadable.hpp>
+#include <com/sun/star/form/XResetListener.hpp>
 #include <com/sun/star/form/XSubmit.hpp>
 #include <com/sun/star/form/binding/IncompatibleTypesException.hpp>
 #include <com/sun/star/form/runtime/FormFeature.hpp>
@@ -108,16 +110,17 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/graphic/GraphicObject.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/i18n/ForbiddenCharacters.hpp>
+#include <com/sun/star/i18n/LanguageCountryInfo.hpp>
+#include <com/sun/star/i18n/LocaleDataItem2.hpp>
+#include <com/sun/star/i18n/LocaleItem.hpp>
+#include <com/sun/star/i18n/reservedWords.hpp>
 #include <com/sun/star/io/Pipe.hpp>
-#include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XMarkableStream.hpp>
-#include <com/sun/star/io/XObjectInputStream.hpp>
-#include <com/sun/star/io/XObjectOutputStream.hpp>
 #include <com/sun/star/io/XPersistObject.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -125,10 +128,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/sdb/CommandType.hpp>
-#include <com/sun/star/sdb/SQLContext.hpp>
-#include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
@@ -159,9 +158,7 @@
 #include <com/sun/star/util/VetoException.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/xforms/XModel.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/NodeType.hpp>
@@ -172,7 +169,7 @@
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/xpath/XPathObjectType.hpp>
 #include <com/sun/star/xml/xpath/XXPathObject.hpp>
-#include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>
+#include <com/sun/star/xsd/DataTypeClass.hpp>
 #include <comphelper/basicio.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/enumhelper.hxx>
@@ -201,18 +198,15 @@
 #include <cppuhelper/weakref.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editengdllapi.h>
-#include <editeng/editobj.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <editeng/fontitem.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/svxenum.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/any.hxx>
-#include <o3tl/functional.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <sfx2/dllapi.h>
@@ -229,7 +223,6 @@
 #include <svl/typedwhich.hxx>
 #include <svtools/imageresourceaccess.hxx>
 #include <svx/svxdllapi.h>
-#include <toolkit/helper/emptyfontdescriptor.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
@@ -248,13 +241,11 @@
 #include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/urlobj.hxx>
-#include <tools/wintypes.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <unotools/options.hxx>
+#include <unotools/readwritemutexguard.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <unotools/syslocale.hxx>
-#include <unotools/textsearch.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
@@ -266,7 +257,6 @@
 #include <featuredispatcher.hxx>
 #include <frm_resource.hxx>
 #include <frm_strings.hxx>
-#include <listenercontainers.hxx>
 #include <navtoolbar.hxx>
 #include <property.hxx>
 #include <propertybaghelper.hxx>

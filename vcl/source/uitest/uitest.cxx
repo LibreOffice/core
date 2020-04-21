@@ -8,6 +8,7 @@
  */
 
 #include <memory>
+#include <vcl/floatwin.hxx>
 #include <vcl/uitest/uitest.hxx>
 #include <vcl/uitest/uiobject.hxx>
 
