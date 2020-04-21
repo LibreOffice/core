@@ -272,7 +272,6 @@ OfaMiscTabPage::OfaMiscTabPage(TabPageParent pParent, const SfxItemSet& rSet)
     , m_xYearFrame(m_xBuilder->weld_widget("yearframe"))
     , m_xYearValueField(m_xBuilder->weld_spin_button("year"))
     , m_xToYearFT(m_xBuilder->weld_label("toyear"))
-    , m_xCollectUsageInfo(m_xBuilder->weld_check_button("collectusageinfo"))
     , m_xQuickStarterFrame(m_xBuilder->weld_widget("quickstarter"))
 #if defined(UNX)
     , m_xQuickLaunchCB(m_xBuilder->weld_check_button("systray"))
@@ -367,12 +366,6 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
         rSet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, nNum ) );
     }
 
-    if (m_xCollectUsageInfo->get_state_changed_from_saved())
-    {
-        officecfg::Office::Common::Misc::CollectUsageInformation::set(m_xCollectUsageInfo->get_active(), batch);
-        bModified = true;
-    }
-
     batch->commit();
 
     if( m_xQuickLaunchCB->get_state_changed_from_saved())
@@ -411,10 +404,6 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     }
     else
         m_xYearFrame->set_sensitive(false);
-
-    m_xCollectUsageInfo->set_active(officecfg::Office::Common::Misc::CollectUsageInformation::get());
-    m_xCollectUsageInfo->set_sensitive(!officecfg::Office::Common::Misc::CollectUsageInformation::isReadOnly());
-    m_xCollectUsageInfo->save_state();
 
     SfxItemState eState = rSet->GetItemState( SID_ATTR_QUICKLAUNCHER, false, &pItem );
     if ( SfxItemState::SET == eState )
