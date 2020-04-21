@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-04-02 22:28:40 using:
+ Generated on 2020-04-21 11:15:30 using:
  ./bin/update_pch drawinglayer drawinglayer --cutoff=4 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -116,6 +116,7 @@
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <salhelper/simplereferenceobject.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>

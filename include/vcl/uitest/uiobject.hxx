@@ -15,20 +15,25 @@
 #include <memory>
 
 #include <vcl/window.hxx>
-#include <vcl/button.hxx>
-#include <vcl/tabpage.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/combobox.hxx>
-#include <vcl/tabctrl.hxx>
-#include <vcl/treelistbox.hxx>
 
 #include <vcl/dllapi.h>
 
 #include <set>
 
+class Button;
+class CheckBox;
+class ComboBox;
+class Dialog;
 class Edit;
+class ListBox;
+class RadioButton;
+class TabControl;
+class TabPage;
+class SvTreeListBox;
+class SvTreeListEntry;
 class SpinButton;
 class SpinField;
+class VclMultiLineEdit;
 
 typedef std::map<const OUString, OUString> StringMap;
 

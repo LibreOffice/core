@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-01 10:57:37 using:
+ Generated on 2020-04-21 11:15:33 using:
  ./bin/update_pch editeng editeng --cutoff=5 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -38,6 +38,7 @@
 #include <math.h>
 #include <memory>
 #include <new>
+#include <optional>
 #include <ostream>
 #include <set>
 #include <stddef.h>
@@ -48,6 +49,7 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
+#include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
@@ -102,8 +104,10 @@
 #include <vcl/font.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/mapmod.hxx>
+#include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/region.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
@@ -113,6 +117,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/vclreferencebase.hxx>
 #include <vcl/vectorgraphicdata.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/window.hxx>
@@ -130,6 +135,7 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/utils/common.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
@@ -203,7 +209,6 @@
 #include <i18nutil/transliteration.hxx>
 #include <libxml/xmlwriter.h>
 #include <o3tl/cow_wrapper.hxx>
-#include <optional>
 #include <o3tl/safeint.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -213,6 +218,7 @@
 #include <sax/fastattribs.hxx>
 #include <sax/saxdllapi.h>
 #include <sfx2/dllapi.h>
+#include <sfx2/shell.hxx>
 #include <sot/formats.hxx>
 #include <sot/sotdllapi.h>
 #include <svl/SfxBroadcaster.hxx>

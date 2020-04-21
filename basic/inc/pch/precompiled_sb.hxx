@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-01 10:57:25 using:
+ Generated on 2020-04-21 11:13:12 using:
  ./bin/update_pch basic sb --cutoff=2 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -109,11 +109,8 @@
 #include <basic/sbstar.hxx>
 #include <basic/sbuno.hxx>
 #include <basic/sbx.hxx>
-#include <sbxfac.hxx>
-#include <sbxform.hxx>
 #include <basic/sbxmeth.hxx>
 #include <basic/sbxobj.hxx>
-#include <sbxprop.hxx>
 #include <basic/sbxvar.hxx>
 #include <date.hxx>
 #include <iosys.hxx>
@@ -123,6 +120,9 @@
 #include <sbobjmod.hxx>
 #include <sbunoobj.hxx>
 #include <sbxbase.hxx>
+#include <sbxfac.hxx>
+#include <sbxform.hxx>
+#include <sbxprop.hxx>
 #endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
