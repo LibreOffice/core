@@ -307,7 +307,7 @@ private:
     }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) VclGrid final : public VclContainer
+class VCL_DLLPUBLIC VclGrid final : public VclContainer
 {
 private:
     bool m_bRowHomogeneous;
