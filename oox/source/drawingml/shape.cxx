@@ -329,7 +329,7 @@ void Shape::applyShapeReference( const Shape& rReferencedShape, bool bUseText )
     mpShapeRefLinePropPtr = std::make_shared<LineProperties>( rReferencedShape.getActualLineProperties(nullptr) );
     mpShapeRefFillPropPtr = std::make_shared<FillProperties>( rReferencedShape.getActualFillProperties(nullptr, nullptr) );
     mpCustomShapePropertiesPtr = std::make_shared<CustomShapeProperties>( *rReferencedShape.mpCustomShapePropertiesPtr );
-    mpTablePropertiesPtr = table::TablePropertiesPtr( rReferencedShape.mpTablePropertiesPtr.get() ? new table::TableProperties( *rReferencedShape.mpTablePropertiesPtr ) : nullptr );
+    mpTablePropertiesPtr = rReferencedShape.mpTablePropertiesPtr ? std::make_shared<table::TableProperties>( *rReferencedShape.mpTablePropertiesPtr ) : nullptr;
     mpShapeRefEffectPropPtr = std::make_shared<EffectProperties>( rReferencedShape.getActualEffectProperties(nullptr) );
     mpMasterTextListStyle = std::make_shared<TextListStyle>( *rReferencedShape.mpMasterTextListStyle );
     maSize = rReferencedShape.maSize;

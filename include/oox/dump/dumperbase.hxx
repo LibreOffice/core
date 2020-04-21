@@ -138,7 +138,7 @@ class BinaryInputStreamRef : public ::oox::BinaryInputStreamRef
 public:
     BinaryInputStreamRef() {}
 
-    /*implicit*/ BinaryInputStreamRef( BinaryInputStream* pInStrm ) :
+    /*implicit*/ BinaryInputStreamRef( std::shared_ptr<BinaryInputStream> const & pInStrm ) :
                             ::oox::BinaryInputStreamRef( pInStrm ) {}
 
     /*implicit*/ BinaryInputStreamRef( const css::uno::Reference< css::io::XInputStream >& rxInStrm ) :

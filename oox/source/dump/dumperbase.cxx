@@ -1806,7 +1806,7 @@ void StorageObjectBase::implDump()
     }
     else if( xBaseStrm.is() )
     {
-        BinaryInputStreamRef xInStrm( new BinaryXInputStream( xBaseStrm, false ) );
+        BinaryInputStreamRef xInStrm( std::make_shared<BinaryXInputStream>( xBaseStrm, false ) );
         xInStrm->seekToStart();
         implDumpBaseStream( xInStrm, aSysOutPath );
     }
@@ -2521,7 +2521,7 @@ void SequenceRecordObjectBase::construct( const ObjectBase& rParent,
         const BinaryInputStreamRef& rxBaseStrm, const OUString& rSysFileName,
         const String& rRecNames, const String& rSimpleRecs )
 {
-    BinaryInputStreamRef xRecStrm( new SequenceInputStream( *mxRecData ) );
+    BinaryInputStreamRef xRecStrm( std::make_shared<SequenceInputStream>( *mxRecData ) );
     RecordObjectBase::construct( rParent, rxBaseStrm, rSysFileName, xRecStrm, rRecNames, rSimpleRecs );
 }
 
