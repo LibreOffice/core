@@ -10,7 +10,6 @@ from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_pos
-from uitest.debug import sleep
 
 class ConfigureDialog(UITestCase):
 
@@ -39,17 +38,25 @@ class ConfigureDialog(UITestCase):
         xSearch.executeAction("SET", mkPropertyValues({"TEXT":"format"}))
 
         # Wait for the search/filter op to be completed
-        time.sleep(1)
+        timeout = time.time() + 1
+        while time.time() < timeout:
+            filteredEntryCount = get_state_as_dict(xfunc)["Children"]
+            if filteredEntryCount != initialEntryCount:
+                break
+            time.sleep(0.1)
 
-        filteredEntryCount = get_state_as_dict(xfunc)["Children"]
         self.assertTrue(filteredEntryCount < initialEntryCount)
 
         xSearch.executeAction("CLEAR", tuple())
 
         # Wait for the search/filter op to be completed
-        time.sleep(1)
+        timeout = time.time() + 1
+        while time.time() < timeout:
+            finalEntryCount = get_state_as_dict(xfunc)["Children"]
+            if finalEntryCount != filteredEntryCount:
+                break
+            time.sleep(0.1)
 
-        finalEntryCount = get_state_as_dict(xfunc)["Children"]
         self.assertEqual(initialEntryCount, finalEntryCount)
 
 
