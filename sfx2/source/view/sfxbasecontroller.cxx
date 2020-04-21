@@ -1535,4 +1535,11 @@ void SAL_CALL SfxBaseController::removeInfobar(const OUString& sId)
     pViewFrame->RemoveInfoBar(sId);
 }
 
+sal_Bool SAL_CALL SfxBaseController::hasInfobar(const OUString& sId)
+{
+    SolarMutexGuard aGuard;
+    SfxViewFrame* pViewFrame = m_pData->m_pViewShell->GetFrame();
+    return pViewFrame->HasInfoBarWithID(sId);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

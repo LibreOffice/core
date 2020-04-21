@@ -94,6 +94,15 @@ interface XInfobarProvider: uno::XInterface
             If no such Infobar exists (it might have been closed by the user already)
      */
     void removeInfobar([in] string id) raises(com::sun::star::container::NoSuchElementException);
+
+    /** Check if Infobar exists.
+
+        @param id
+            The ID which was used when creating this Infobar.
+
+        @since LibreOffice 7.0
+     */
+    boolean hasInfobar([in] string id);
 };
 
 
