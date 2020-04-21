@@ -14,13 +14,13 @@
 set -e
 
 cp -r "${PREFIXDIR?}"/lib/libreoffice /app/
+ln -s /app/libreoffice/program/soffice /app/bin/libreoffice
 
 ## libreoffice-*.desktop -> org.libreoffice.LibreOffice.*.desktop:
 mkdir -p /app/share/applications
 for i in "${PREFIXDIR?}"/share/applications/libreoffice-*.desktop
 do
- sed -e 's,^Exec=libreoffice,Exec=/app/libreoffice/program/soffice,' \
-  -e 's/^Icon=libreoffice-/Icon=org.libreoffice.LibreOffice./' "$i" \
+ sed -e 's/^Icon=libreoffice-/Icon=org.libreoffice.LibreOffice./' "$i" \
   >/app/share/applications/org.libreoffice.LibreOffice."${i#"${PREFIXDIR?}"/share/applications/libreoffice-}"
 done
 mv /app/share/applications/org.libreoffice.LibreOffice.startcenter.desktop \

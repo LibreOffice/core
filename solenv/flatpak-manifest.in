@@ -6,7 +6,7 @@
     "sdk-extensions": [
         "org.freedesktop.Sdk.Extension.openjdk11"
     ],
-    "command": "/app/libreoffice/program/soffice",
+    "command": "libreoffice",
     "modules": [
         {
             "name": "openjdk",
