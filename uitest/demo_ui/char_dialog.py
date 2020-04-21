@@ -6,10 +6,7 @@
 #
 
 from libreoffice.uno.propertyvalue import mkPropertyValues
-
 from uitest.framework import UITestCase
-
-from uitest.debug import sleep
 
 class CharDialogText(UITestCase):
 
@@ -18,15 +15,10 @@ class CharDialogText(UITestCase):
 
         self.ui_test.execute_dialog_through_command(".uno:InsertSymbol")
         xCharDialog = self.xUITest.getTopFocusWindow()
-        print(xCharDialog.getChildren())
-
-        sleep(5)
 
         xCharSet = xCharDialog.getChild("showcharset")
 
         xCharSet.executeAction("SELECT", mkPropertyValues({"COLUMN": "2", "ROW": "2"}))
-
-        sleep(5)
 
         xCancelBtn = xCharDialog.getChild("cancel")
         self.ui_test.close_dialog_through_button(xCancelBtn)
