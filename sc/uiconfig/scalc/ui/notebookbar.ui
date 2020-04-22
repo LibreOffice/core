@@ -6932,7 +6932,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="VclOptionalBox" id="Layout-Section-Allign">
+                      <object class="VclOptionalBox" id="Layout-Section-Align">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>

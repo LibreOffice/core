@@ -1705,7 +1705,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                 sal_Int16 nOverrideLevel = pList->GetCurrentLevel()->GetStartOverride();
                                 if (nOverrideLevel != -1)
                                 {
-                                    // Restart list, it is overriden
+                                    // Restart list, it is overridden
                                     m_xPreviousParagraph->setPropertyValue("ParaIsNumberingRestart", uno::makeAny(true));
                                     m_xPreviousParagraph->setPropertyValue("NumberingStartValue", uno::makeAny(nOverrideLevel));
                                 }

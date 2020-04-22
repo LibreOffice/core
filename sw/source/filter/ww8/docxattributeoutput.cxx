@@ -6699,7 +6699,7 @@ void DocxAttributeOutput::NumberingDefinition( sal_uInt16 nId, const SwNumRule &
     m_pSerializer->endElementNS( XML_w, XML_num );
 }
 
-// Not all attibutes of SwNumFormat are important for export, so can't just use embedded in
+// Not all attributes of SwNumFormat are important for export, so can't just use embedded in
 // that classes comparison.
 static bool lcl_ListLevelsAreDifferentForExport(const SwNumFormat & rFormat1, const SwNumFormat & rFormat2)
 {
