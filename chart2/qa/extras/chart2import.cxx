@@ -158,6 +158,7 @@ public:
     void testDataPointLabelCustomPos();
     void testTdf130032();
     void testTdf119138MissingAutoTitleDeleted();
+    void testStockChartShiftedCategoryPosition();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -264,6 +265,7 @@ public:
     CPPUNIT_TEST(testDataPointLabelCustomPos);
     CPPUNIT_TEST(testTdf130032);
     CPPUNIT_TEST(testTdf119138MissingAutoTitleDeleted);
+    CPPUNIT_TEST(testStockChartShiftedCategoryPosition);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2463,6 +2465,21 @@ void Chart2ImportTest::testTdf119138MissingAutoTitleDeleted()
     Reference<chart2::XTitled> xTitled(xChartDoc, uno::UNO_QUERY_THROW);
     uno::Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
     CPPUNIT_ASSERT_MESSAGE("Missing autoTitleDeleted is implied to be True if title text is present", xTitle.is());
+}
+
+void Chart2ImportTest::testStockChartShiftedCategoryPosition()
+{
+    load("/chart2/qa/extras/data/odt/", "stock_chart_LO_6_2.odt");
+
+    uno::Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference<chart2::XAxis> xAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
+    CPPUNIT_ASSERT(xAxis.is());
+
+    chart2::ScaleData aScaleData = xAxis->getScaleData();
+    CPPUNIT_ASSERT(aScaleData.Categories.is());
+    CPPUNIT_ASSERT(aScaleData.ShiftedCategoryPosition);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);

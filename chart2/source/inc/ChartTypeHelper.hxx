@@ -46,7 +46,6 @@ public:
     static bool isSupportingStartingAngle(       const css::uno::Reference< css::chart2::XChartType >& xChartType );
     //starting value for bars or baseline for areas for example
     static bool isSupportingBaseValue(           const css::uno::Reference< css::chart2::XChartType >& xChartType );
-    static bool shiftCategoryPosAtXAxisPerDefault(     const css::uno::Reference< css::chart2::XChartType >& xChartType );
     static bool isSupportingAxisPositioning(     const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount, sal_Int32 nDimensionIndex );
     static bool isSupportingDateAxis( const css::uno::Reference< css::chart2::XChartType >& xChartType, sal_Int32 nDimensionIndex );
     static bool isSupportingComplexCategory( const css::uno::Reference< css::chart2::XChartType >& xChartType );
