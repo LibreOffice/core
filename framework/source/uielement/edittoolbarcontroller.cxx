@@ -40,7 +40,7 @@ namespace framework
 // Unfortunaltly the events are notified through virtual methods instead
 // of Listeners.
 
-class EditControl : public InterimItemWindow
+class EditControl final : public InterimItemWindow
 {
 public:
     EditControl(vcl::Window* pParent, EditToolbarController* pEditToolbarController);
