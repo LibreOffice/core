@@ -318,7 +318,11 @@ void ComboboxToolbarController::executeControlCommand( const css::frame::Control
             {
                 OUString aText;
                 if ( rControlCommand.Arguments[i].Value >>= aText )
-                    m_pComboBox->RemoveEntry( aText );
+                {
+                    auto nPos = m_pComboBox->GetEntryPos(aText);
+                    if (nPos != COMBOBOX_ENTRY_NOTFOUND)
+                        m_pComboBox->RemoveEntryAt(nPos);
+                }
                 break;
             }
         }
