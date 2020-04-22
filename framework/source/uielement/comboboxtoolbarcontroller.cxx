@@ -22,10 +22,10 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/util/Color.hpp>
 
+#include <svtools/InterimItemWindow.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/combobox.hxx>
 
 using namespace ::com::sun::star;
 using namespace css::uno;
@@ -41,27 +41,54 @@ namespace framework
 // Unfortunately the events are notified through virtual methods instead
 // of Listeners.
 
-class ComboBoxControl : public ComboBox
+class ComboBoxControl final : public InterimItemWindow
 {
-    public:
-        ComboBoxControl( vcl::Window* pParent, WinBits nStyle, ComboboxToolbarController* pComboboxToolbarController );
-        virtual ~ComboBoxControl() override;
-        virtual void dispose() override;
+public:
+    ComboBoxControl(vcl::Window* pParent, ComboboxToolbarController* pComboboxToolbarController);
+    virtual ~ComboBoxControl() override;
+    virtual void dispose() override;
 
-        virtual void Select() override;
-        virtual void Modify() override;
-        virtual void GetFocus() override;
-        virtual void LoseFocus() override;
-        virtual bool PreNotify( NotifyEvent& rNEvt ) override;
+    void set_active_or_entry_text(const OUString& rText);
+    OUString get_active_text() const { return m_xWidget->get_active_text(); }
 
-    private:
-        ComboboxToolbarController* m_pComboboxToolbarController;
+    void clear() { m_xWidget->clear(); }
+    void remove(int nIndex) { m_xWidget->remove(nIndex); }
+    void append_text(const OUString& rStr) { m_xWidget->append_text(rStr); }
+    void insert_text(int pos, const OUString& rStr) { m_xWidget->insert_text(pos, rStr); }
+    int get_count() const { return m_xWidget->get_count(); }
+    int find_text(const OUString& rStr) const { return m_xWidget->find_text(rStr); }
+
+    DECL_LINK(FocusInHdl, weld::Widget&, void);
+    DECL_LINK(FocusOutHdl, weld::Widget&, void);
+    DECL_LINK(ModifyHdl, weld::ComboBox&, void);
+    DECL_LINK(ActivateHdl, weld::ComboBox&, bool);
+
+private:
+    std::unique_ptr<weld::ComboBox> m_xWidget;
+    ComboboxToolbarController* m_pComboboxToolbarController;
 };
 
-ComboBoxControl::ComboBoxControl( vcl::Window* pParent, WinBits nStyle, ComboboxToolbarController* pComboboxToolbarController ) :
-    ComboBox( pParent, nStyle )
-    , m_pComboboxToolbarController( pComboboxToolbarController )
+ComboBoxControl::ComboBoxControl(vcl::Window* pParent, ComboboxToolbarController* pComboboxToolbarController)
+    : InterimItemWindow(pParent, "svt/ui/combocontrol.ui", "ComboControl")
+    , m_xWidget(m_xBuilder->weld_combo_box("combobox"))
+    , m_pComboboxToolbarController(pComboboxToolbarController)
 {
+    m_xWidget->connect_focus_in(LINK(this, ComboBoxControl, FocusInHdl));
+    m_xWidget->connect_focus_out(LINK(this, ComboBoxControl, FocusOutHdl));
+    m_xWidget->connect_changed(LINK(this, ComboBoxControl, ModifyHdl));
+    m_xWidget->connect_entry_activate(LINK(this, ComboBoxControl, ActivateHdl));
+
+    m_xWidget->set_entry_width_chars(1); // so a smaller that default width can be used by ComboboxToolbarController
+    SetSizePixel(get_preferred_size());
+}
+
+void ComboBoxControl::set_active_or_entry_text(const OUString& rText)
+{
+    const int nFound = m_xWidget->find_text(rText);
+    if (nFound != -1)
+        m_xWidget->set_active(nFound);
+    else
+        m_xWidget->set_entry_text(rText);
 }
 
 ComboBoxControl::~ComboBoxControl()
@@ -72,46 +99,38 @@ ComboBoxControl::~ComboBoxControl()
 void ComboBoxControl::dispose()
 {
     m_pComboboxToolbarController = nullptr;
-    ComboBox::dispose();
+    m_xWidget.reset();
+    InterimItemWindow::dispose();
 }
 
-void ComboBoxControl::Select()
+IMPL_LINK_NOARG(ComboBoxControl, ModifyHdl, weld::ComboBox&, void)
 {
-    ComboBox::Select();
-    if ( m_pComboboxToolbarController )
-        m_pComboboxToolbarController->Select();
+    if (m_pComboboxToolbarController)
+    {
+        if (m_xWidget->get_count() && m_xWidget->changed_by_direct_pick())
+            m_pComboboxToolbarController->Select();
+        else
+            m_pComboboxToolbarController->Modify();
+    }
 }
 
-void ComboBoxControl::Modify()
+IMPL_LINK_NOARG(ComboBoxControl, FocusInHdl, weld::Widget&, void)
 {
-    ComboBox::Modify();
-    if ( m_pComboboxToolbarController )
-        m_pComboboxToolbarController->Modify();
-}
-
-void ComboBoxControl::GetFocus()
-{
-    ComboBox::GetFocus();
-    if ( m_pComboboxToolbarController )
+    if (m_pComboboxToolbarController)
         m_pComboboxToolbarController->GetFocus();
 }
 
-void ComboBoxControl::LoseFocus()
+IMPL_LINK_NOARG(ComboBoxControl, FocusOutHdl, weld::Widget&, void)
 {
-    ComboBox::LoseFocus();
-    if ( m_pComboboxToolbarController )
+    if (m_pComboboxToolbarController)
         m_pComboboxToolbarController->LoseFocus();
 }
 
-bool ComboBoxControl::PreNotify( NotifyEvent& rNEvt )
+IMPL_LINK_NOARG(ComboBoxControl, ActivateHdl, weld::ComboBox&, bool)
 {
-    bool bRet = false;
-    if ( m_pComboboxToolbarController )
-        bRet = m_pComboboxToolbarController->PreNotify( rNEvt );
-    if ( !bRet )
-        bRet = ComboBox::PreNotify( rNEvt );
-
-    return bRet;
+    if (m_pComboboxToolbarController)
+        m_pComboboxToolbarController->Activate();
+    return true;
 }
 
 ComboboxToolbarController::ComboboxToolbarController(
@@ -124,15 +143,14 @@ ComboboxToolbarController::ComboboxToolbarController(
     ComplexToolbarController( rxContext, rFrame, pToolbar, nID, aCommand )
     ,   m_pComboBox( nullptr )
 {
-    m_pComboBox = VclPtr<ComboBoxControl>::Create( m_xToolbar, WB_DROPDOWN, this );
+    m_pComboBox = VclPtr<ComboBoxControl>::Create(m_xToolbar, this);
     if ( nWidth == 0 )
         nWidth = 100;
 
-    // default dropdown size
-    ::Size aLogicalSize( 8, 160 );
-    ::Size aPixelSize = m_pComboBox->LogicToPixel(aLogicalSize, MapMode(MapUnit::MapAppFont));
+    // ComboBoxControl ctor has set a suitable height already
+    auto nHeight = m_pComboBox->GetSizePixel().Height();
 
-    m_pComboBox->SetSizePixel( ::Size( nWidth, aPixelSize.Height() ));
+    m_pComboBox->SetSizePixel( ::Size( nWidth, nHeight ));
     m_xToolbar->SetItemWindow( m_nID, m_pComboBox );
 }
 
@@ -153,7 +171,7 @@ void SAL_CALL ComboboxToolbarController::dispose()
 Sequence<PropertyValue> ComboboxToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
 {
     Sequence<PropertyValue> aArgs( 2 );
-    OUString aSelectedText = m_pComboBox->GetText();
+    OUString aSelectedText = m_pComboBox->get_active_text();
 
     // Add key modifier to argument list
     aArgs[0].Name = "KeyModifier";
@@ -165,18 +183,15 @@ Sequence<PropertyValue> ComboboxToolbarController::getExecuteArgs(sal_Int16 KeyM
 
 void ComboboxToolbarController::Select()
 {
-    if ( m_pComboBox->GetEntryCount() > 0 )
-    {
-        vcl::Window::PointerState aState = m_pComboBox->GetPointerState();
+    vcl::Window::PointerState aState = m_pComboBox->GetPointerState();
 
-        sal_uInt16 nKeyModifier = sal_uInt16( aState.mnState & KEY_MODIFIERS_MASK );
-        execute( nKeyModifier );
-    }
+    sal_uInt16 nKeyModifier = sal_uInt16( aState.mnState & KEY_MODIFIERS_MASK );
+    execute( nKeyModifier );
 }
 
 void ComboboxToolbarController::Modify()
 {
-    notifyTextChanged( m_pComboBox->GetText() );
+    notifyTextChanged(m_pComboBox->get_active_text());
 }
 
 void ComboboxToolbarController::GetFocus()
@@ -189,33 +204,11 @@ void ComboboxToolbarController::LoseFocus()
     notifyFocusLost();
 }
 
-bool ComboboxToolbarController::PreNotify( NotifyEvent const & rNEvt )
+void ComboboxToolbarController::Activate()
 {
-    switch ( rNEvt.GetType() )
-    {
-        case MouseNotifyEvent::KEYINPUT :
-            {
-                const ::KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
-                const vcl::KeyCode& rKeyCode = pKeyEvent->GetKeyCode();
-                if(( rKeyCode.GetModifier() | rKeyCode.GetCode()) == KEY_RETURN )
-                {
-                    // Call execute only with non-empty text
-                    if ( !m_pComboBox->GetText().isEmpty() )
-                        execute( rKeyCode.GetModifier() );
-                    return true;
-                }
-            }
-            break;
-        case MouseNotifyEvent::GETFOCUS :
-            notifyFocusGet();
-            break;
-        case MouseNotifyEvent::LOSEFOCUS :
-            notifyFocusLost();
-            break;
-        default :
-            break;
-    }
-    return false;
+    // Call execute only with non-empty text
+    if (!m_pComboBox->get_active_text().isEmpty())
+        execute(0);
 }
 
 void ComboboxToolbarController::executeControlCommand( const css::frame::ControlCommand& rControlCommand )
@@ -228,7 +221,7 @@ void ComboboxToolbarController::executeControlCommand( const css::frame::Control
             {
                 OUString aText;
                 rControlCommand.Arguments[i].Value >>= aText;
-                m_pComboBox->SetText( aText );
+                m_pComboBox->set_active_or_entry_text(aText);
 
                 // send notification
                 notifyTextChanged( aText );
@@ -243,11 +236,11 @@ void ComboboxToolbarController::executeControlCommand( const css::frame::Control
             if ( rControlCommand.Arguments[i].Name == "List" )
             {
                 Sequence< OUString > aList;
-                m_pComboBox->Clear();
+                m_pComboBox->clear();
 
                 rControlCommand.Arguments[i].Value >>= aList;
-                for ( sal_Int32 j = 0; j < aList.getLength(); j++ )
-                    m_pComboBox->InsertEntry( aList[j] );
+                for (sal_Int32 j = 0; j < aList.getLength(); ++j)
+                    m_pComboBox->append_text(aList[j]);
 
                 // send notification
                 uno::Sequence< beans::NamedValue > aInfo { { "List", css::uno::makeAny(aList) } };
@@ -267,14 +260,14 @@ void ComboboxToolbarController::executeControlCommand( const css::frame::Control
             if ( rControlCommand.Arguments[i].Name == "Text" )
             {
                 if ( rControlCommand.Arguments[i].Value >>= aText )
-                    m_pComboBox->InsertEntry( aText, COMBOBOX_APPEND );
+                    m_pComboBox->append_text(aText);
                 break;
             }
         }
     }
     else if ( rControlCommand.Command == "InsertEntry" )
     {
-        sal_Int32      nPos( COMBOBOX_APPEND );
+        sal_Int32 nPos(-1);
         OUString   aText;
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
@@ -284,7 +277,7 @@ void ComboboxToolbarController::executeControlCommand( const css::frame::Control
                 if ( rControlCommand.Arguments[i].Value >>= nTmpPos )
                 {
                     if (( nTmpPos >= 0 ) &&
-                        ( nTmpPos < m_pComboBox->GetEntryCount() ))
+                        ( nTmpPos < m_pComboBox->get_count() ))
                         nPos = nTmpPos;
                 }
             }
@@ -292,7 +285,7 @@ void ComboboxToolbarController::executeControlCommand( const css::frame::Control
                 rControlCommand.Arguments[i].Value >>= aText;
         }
 
-        m_pComboBox->InsertEntry( aText, nPos );
+        m_pComboBox->insert_text(nPos, aText);
     }
     else if ( rControlCommand.Command == "RemoveEntryPos" )
     {
@@ -303,8 +296,8 @@ void ComboboxToolbarController::executeControlCommand( const css::frame::Control
                 sal_Int32 nPos( -1 );
                 if ( rControlCommand.Arguments[i].Value >>= nPos )
                 {
-                    if ( 0 <= nPos && nPos <  m_pComboBox->GetEntryCount() )
-                        m_pComboBox->RemoveEntryAt(nPos);
+                    if (0 <= nPos && nPos < m_pComboBox->get_count())
+                        m_pComboBox->remove(nPos);
                 }
                 break;
             }
@@ -319,9 +312,9 @@ void ComboboxToolbarController::executeControlCommand( const css::frame::Control
                 OUString aText;
                 if ( rControlCommand.Arguments[i].Value >>= aText )
                 {
-                    auto nPos = m_pComboBox->GetEntryPos(aText);
-                    if (nPos != COMBOBOX_ENTRY_NOTFOUND)
-                        m_pComboBox->RemoveEntryAt(nPos);
+                    auto nPos = m_pComboBox->find_text(aText);
+                    if (nPos != -1)
+                        m_pComboBox->remove(nPos);
                 }
                 break;
             }
