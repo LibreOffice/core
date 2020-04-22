@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "29ddde83_3d4c8046",
+        "filename": "uitest/writer_tests5/tdf114724.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-22T05:56:30Z",
+      "side": 0,
+      "message": "What makes you sure that this sleep is not necessary?  My local Linux ASan+UBSan build (which executes somewhat slowly) now keeps failing UITest_writer_demo5 with\n\n  \u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n  FAIL: test_track_headings_outline (tdf114724.tdf114724)\n  ----------------------------------------------------------------------\n  Traceback (most recent call last):\n    File \"/home/sbergman/lo/core/uitest/writer_tests5/tdf114724.py\", line 29, in test_track_headings_outline\n      self.assertEqual(get_state_as_dict(xNavigatorPanel)[\"selectioncount\"], \"1\")\n  AssertionError: \u00270\u0027 !\u003d \u00271\u0027\n  - 0\n  + 1\n\nand putting this sleep back makes it get past that, at least until\n\n  \u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n  FAIL: test_track_headings_outline (tdf114724.tdf114724)\n  ----------------------------------------------------------------------\n  Traceback (most recent call last):\n    File \"/home/sbergman/lo/core/uitest/writer_tests5/tdf114724.py\", line 41, in test_track_headings_outline\n      self.assertEqual(get_state_as_dict(xNavigatorPanel)[\"selectedtext\"], \"HEADING 4\")\n  AssertionError: \u0027Headings\u0027 !\u003d \u0027HEADING 4\u0027\n  - Headings\n  + HEADING 4\n\n(An alternative approach that has proven useful to test timing dependent UITest behavior is to take advantage of the slowdown caused by running under Valgrind, see \u003chttps://gerrit.libreoffice.org/c/core/+/72230/3#message-77d9dc03c28aa69772505aa2de4fdfec5fe5e603\u003e.)",
+      "revId": "c65d94abaf15e8b9b1054bf1850188d683459805",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
