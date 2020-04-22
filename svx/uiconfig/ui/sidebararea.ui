@@ -120,19 +120,19 @@
               </packing>
             </child>
             <child>
-              <object class="svxlo-SvxFillTypeBox" id="fillstyle">
+              <object class="svxlo-SvxFillTypeBox" id="fillstylearea">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes" context="sidebararea|fillstyle|tooltip_text">Select the fill type to apply.</property>
+                <property name="tooltip_text" translatable="yes" context="sidebararea|fillstylearea|tooltip_text">Select the fill type to apply.</property>
                 <property name="entry_text_column">0</property>
                 <property name="id_column">1</property>
                 <accessibility>
-                  <relation type="labelled-by" target="fillstyle"/>
+                  <relation type="labelled-by" target="fillstylearea"/>
                 </accessibility>
                 <child internal-child="accessible">
-                  <object class="AtkObject" id="fillstyle-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes" context="sidebararea|fillstyle-atkobject">Fill Type</property>
+                  <object class="AtkObject" id="fillstylearea-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="sidebararea|fillstylearea-atkobject">Fill Type</property>
                   </object>
                 </child>
               </object>
