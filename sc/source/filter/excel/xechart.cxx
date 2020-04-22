@@ -561,11 +561,11 @@ namespace {
 XclExpChLineFormatRef lclCreateLineFormat( const XclExpChRoot& rRoot,
         const ScfPropertySet& rPropSet, XclChObjectType eObjType )
 {
-    XclExpChLineFormatRef xLineFmt = std::make_shared<XclExpChLineFormat>( rRoot );
+    XclExpChLineFormatRef xLineFmt = new XclExpChLineFormat( rRoot );
     xLineFmt->Convert( rRoot, rPropSet, eObjType );
     const XclChFormatInfo& rFmtInfo = rRoot.GetFormatInfo( eObjType );
     if( rFmtInfo.mbDeleteDefFrame && xLineFmt->IsDefault( rFmtInfo.meDefFrameType ) )
-        xLineFmt.reset();
+        xLineFmt.clear();
     return xLineFmt;
 }
 
@@ -731,21 +731,21 @@ void XclExpChFrameBase::ConvertFrameBase( const XclExpChRoot& rRoot,
         const ScfPropertySet& rPropSet, XclChObjectType eObjType )
 {
     // line format
-    mxLineFmt = std::make_shared<XclExpChLineFormat>( rRoot );
+    mxLineFmt = new XclExpChLineFormat( rRoot );
     mxLineFmt->Convert( rRoot, rPropSet, eObjType );
     // area format (only for frame objects)
     if( rRoot.GetFormatInfo( eObjType ).mbIsFrame )
     {
-        mxAreaFmt = std::make_shared<XclExpChAreaFormat>( rRoot );
+        mxAreaFmt = new XclExpChAreaFormat( rRoot );
         bool bComplexFill = mxAreaFmt->Convert( rRoot, rPropSet, eObjType );
         if( (rRoot.GetBiff() == EXC_BIFF8) && bComplexFill )
         {
-            mxEscherFmt = std::make_shared<XclExpChEscherFormat>( rRoot );
+            mxEscherFmt = new XclExpChEscherFormat( rRoot );
             mxEscherFmt->Convert( rPropSet, eObjType );
             if( mxEscherFmt->IsValid() )
                 mxAreaFmt->SetAuto( false );
             else
-                mxEscherFmt.reset();
+                mxEscherFmt.clear();
         }
     }
 }
@@ -754,14 +754,14 @@ void XclExpChFrameBase::SetDefaultFrameBase( const XclExpChRoot& rRoot,
         XclChFrameType eDefFrameType, bool bIsFrame )
 {
     // line format
-    mxLineFmt = std::make_shared<XclExpChLineFormat>( rRoot );
+    mxLineFmt = new XclExpChLineFormat( rRoot );
     mxLineFmt->SetDefault( eDefFrameType );
     // area format (only for frame objects)
     if( bIsFrame )
     {
-        mxAreaFmt = std::make_shared<XclExpChAreaFormat>( rRoot );
+        mxAreaFmt = new XclExpChAreaFormat( rRoot );
         mxAreaFmt->SetDefault( eDefFrameType );
-        mxEscherFmt.reset();
+        mxEscherFmt.clear();
     }
 }
 
@@ -836,10 +836,10 @@ namespace {
 XclExpChFrameRef lclCreateFrame( const XclExpChRoot& rRoot,
         const ScfPropertySet& rPropSet, XclChObjectType eObjType )
 {
-    XclExpChFrameRef xFrame = std::make_shared<XclExpChFrame>( rRoot, eObjType );
+    XclExpChFrameRef xFrame = new XclExpChFrame( rRoot, eObjType );
     xFrame->Convert( rPropSet );
     if( xFrame->IsDeleteable() )
-        xFrame.reset();
+        xFrame.clear();
     return xFrame;
 }
 
@@ -1131,7 +1131,7 @@ void XclExpChFontBase::ConvertFontBase( const XclExpChRoot& rRoot, sal_uInt16 nF
 {
     if( const XclExpFont* pFont = rRoot.GetFontBuffer().GetFont( nFontIdx ) )
     {
-        XclExpChFontRef xFont = std::make_shared<XclExpChFont>( nFontIdx );
+        XclExpChFontRef xFont = new XclExpChFont( nFontIdx );
         SetFont( xFont, pFont->GetFontData().maColor, pFont->GetFontColorId() );
     }
 }
@@ -1177,8 +1177,8 @@ void XclExpChText::ConvertTitle( Reference< XTitle > const & xTitle, sal_uInt16 
         case EXC_CHOBJLINK_ZAXIS:   SetFutureRecordContext( EXC_CHFRBLOCK_TEXT_AXISTITLE, 2 );  break;
     }
 
-    mxSrcLink.reset();
-    mxObjLink = std::make_shared<XclExpChObjectLink>( nTarget, XclChDataPointPos( 0, 0 ) );
+    mxSrcLink.clear();
+    mxObjLink = new XclExpChObjectLink( nTarget, XclChDataPointPos( 0, 0 ) );
 
     if( xTitle.is() )
     {
@@ -1187,7 +1187,7 @@ void XclExpChText::ConvertTitle( Reference< XTitle > const & xTitle, sal_uInt16 
         mxFrame = lclCreateFrame( GetChRoot(), aTitleProp, EXC_CHOBJTYPE_TEXT );
 
         // string sequence
-        mxSrcLink = std::make_shared<XclExpChSourceLink>( GetChRoot(), EXC_CHSRCLINK_TITLE );
+        mxSrcLink = new XclExpChSourceLink( GetChRoot(), EXC_CHSRCLINK_TITLE );
         sal_uInt16 nFontIdx = mxSrcLink->ConvertStringSequence( xTitle->getText() );
         if (pSubTitle)
         {
@@ -1202,7 +1202,7 @@ void XclExpChText::ConvertTitle( Reference< XTitle > const & xTitle, sal_uInt16 
         ConvertRotationBase( aTitleProp, true );
 
         // manual text position - only for main title
-        mxFramePos = std::make_shared<XclExpChFramePos>( EXC_CHFRAMEPOS_PARENT );
+        mxFramePos = new XclExpChFramePos( EXC_CHFRAMEPOS_PARENT );
         if( nTarget == EXC_CHOBJLINK_TITLE )
         {
             Any aRelPos;
@@ -1269,7 +1269,7 @@ bool XclExpChText::ConvertDataLabel( const ScfPropertySet& rPropSet,
     // create the CHFRLABELPROPS record for extended settings in BIFF8
     if( bShowAny && (GetBiff() == EXC_BIFF8) )
     {
-        mxLabelProps = std::make_shared<XclExpChFrLabelProps>( GetChRoot() );
+        mxLabelProps = new XclExpChFrLabelProps( GetChRoot() );
         mxLabelProps->Convert( rPropSet, bShowCateg, bShowValue, bShowPercent, bShowBubble );
     }
 
@@ -1323,12 +1323,12 @@ bool XclExpChText::ConvertDataLabel( const ScfPropertySet& rPropSet,
         }
         ::insert_value( maData.mnFlags2, nLabelPos, 0, 4 );
         // source link (contains number format)
-        mxSrcLink = std::make_shared<XclExpChSourceLink>( GetChRoot(), EXC_CHSRCLINK_TITLE );
+        mxSrcLink = new XclExpChSourceLink( GetChRoot(), EXC_CHSRCLINK_TITLE );
         if( bShowValue || bShowPercent )
             // percentage format wins over value format
             mxSrcLink->ConvertNumFmt( rPropSet, bShowPercent );
         // object link
-        mxObjLink = std::make_shared<XclExpChObjectLink>( EXC_CHOBJLINK_DATA, rPointPos );
+        mxObjLink = new XclExpChObjectLink( EXC_CHOBJLINK_DATA, rPointPos );
     }
 
     /*  Return true to indicate valid label settings:
@@ -1350,10 +1350,10 @@ void XclExpChText::ConvertTrendLineEquation( const ScfPropertySet& rPropSet, con
     maData.mnVAlign = EXC_CHTEXT_ALIGN_TOPLEFT;
     ConvertFontBase( GetChRoot(), rPropSet );
     // source link (contains number format)
-    mxSrcLink = std::make_shared<XclExpChSourceLink>( GetChRoot(), EXC_CHSRCLINK_TITLE );
+    mxSrcLink = new XclExpChSourceLink( GetChRoot(), EXC_CHSRCLINK_TITLE );
     mxSrcLink->ConvertNumFmt( rPropSet, false );
     // object link
-    mxObjLink = std::make_shared<XclExpChObjectLink>( EXC_CHOBJLINK_DATA, rPointPos );
+    mxObjLink = new XclExpChObjectLink( EXC_CHOBJLINK_DATA, rPointPos );
 }
 
 sal_uInt16 XclExpChText::GetAttLabelFlags() const
@@ -1409,13 +1409,13 @@ XclExpChTextRef lclCreateTitle( const XclExpChRoot& rRoot, Reference< XTitled > 
     if( xTitled.is() )
         xTitle = xTitled->getTitleObject();
 
-    XclExpChTextRef xText = std::make_shared<XclExpChText>( rRoot );
+    XclExpChTextRef xText = new XclExpChText( rRoot );
     xText->ConvertTitle( xTitle, nTarget, pSubTitle );
     /*  Do not delete the CHTEXT group for the main title. A missing CHTEXT
         will be interpreted as auto-generated title showing the series title in
         charts that contain exactly one data series. */
     if( (nTarget != EXC_CHOBJLINK_TITLE) && !xText->HasString() )
-        xText.reset();
+        xText.clear();
 
     return xText;
 }
@@ -1565,35 +1565,35 @@ void XclExpChDataFormat::ConvertDataSeries( const ScfPropertySet& rPropSet, cons
     bool bIsFrame = rTypeInfo.IsSeriesFrameFormat();
     if( !bIsFrame )
     {
-        mxMarkerFmt = std::make_shared<XclExpChMarkerFormat>( GetChRoot() );
+        mxMarkerFmt = new XclExpChMarkerFormat( GetChRoot() );
         mxMarkerFmt->Convert( GetChRoot(), rPropSet, maData.mnFormatIdx );
     }
 
     // pie segments
     if( rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_PIE )
     {
-        mxPieFmt = std::make_shared<XclExpChPieFormat>();
+        mxPieFmt = new XclExpChPieFormat();
         mxPieFmt->Convert( rPropSet );
     }
 
     // 3D bars (only allowed for entire series in BIFF8)
     if( IsSeriesFormat() && (GetBiff() == EXC_BIFF8) && rTypeInfo.mb3dChart && (rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_BAR) )
     {
-        mx3dDataFmt = std::make_shared<XclExpCh3dDataFormat>();
+        mx3dDataFmt = new XclExpCh3dDataFormat();
         mx3dDataFmt->Convert( rPropSet );
     }
 
     // spline
     if( IsSeriesFormat() && rTypeInfo.mbSpline && !bIsFrame )
-        mxSeriesFmt = std::make_shared<XclExpUInt16Record>( EXC_ID_CHSERIESFORMAT, EXC_CHSERIESFORMAT_SMOOTHED );
+        mxSeriesFmt = new XclExpUInt16Record( EXC_ID_CHSERIESFORMAT, EXC_CHSERIESFORMAT_SMOOTHED );
 
     // data point labels
-    XclExpChTextRef xLabel = std::make_shared<XclExpChText>( GetChRoot() );
+    XclExpChTextRef xLabel = new XclExpChText( GetChRoot() );
     if( xLabel->ConvertDataLabel( rPropSet, rTypeInfo, maData.maPointPos ) )
     {
         // CHTEXT groups for data labels are stored in global CHCHART group
         GetChartData().SetDataLabel( xLabel );
-        mxAttLabel = std::make_shared<XclExpChAttachedLabel>( xLabel->GetAttLabelFlags() );
+        mxAttLabel = new XclExpChAttachedLabel( xLabel->GetAttLabelFlags() );
     }
 }
 
@@ -1602,7 +1602,7 @@ void XclExpChDataFormat::ConvertStockSeries( const ScfPropertySet& rPropSet, boo
     // set line format to invisible
     SetDefaultFrameBase( GetChRoot(), EXC_CHFRAMETYPE_INVISIBLE, false );
     // set symbols to invisible or to 'close' series symbol
-    mxMarkerFmt = std::make_shared<XclExpChMarkerFormat>( GetChRoot() );
+    mxMarkerFmt = new XclExpChMarkerFormat( GetChRoot() );
     mxMarkerFmt->ConvertStockSymbol( GetChRoot(), rPropSet, bCloseSymbol );
 }
 
@@ -1689,7 +1689,7 @@ bool XclExpChSerTrendLine::Convert( Reference< XRegressionCurve > const & xRegCu
 
     // line formatting
     XclChDataPointPos aPointPos( nSeriesIdx );
-    mxDataFmt = std::make_shared<XclExpChDataFormat>( GetChRoot(), aPointPos, 0 );
+    mxDataFmt = new XclExpChDataFormat( GetChRoot(), aPointPos, 0 );
     mxDataFmt->ConvertLine( aCurveProp, EXC_CHOBJTYPE_TRENDLINE );
 
     // #i83100# show equation and correlation coefficient
@@ -1700,7 +1700,7 @@ bool XclExpChSerTrendLine::Convert( Reference< XRegressionCurve > const & xRegCu
     // #i83100# formatting of the equation text box
     if( (maData.mnShowEquation != 0) || (maData.mnShowRSquared != 0) )
     {
-        mxLabel = std::make_shared<XclExpChText>( GetChRoot() );
+        mxLabel = new XclExpChText( GetChRoot() );
         mxLabel->ConvertTrendLineEquation( aEquationProp, aPointPos );
     }
 
@@ -1826,11 +1826,11 @@ XclExpChSeries::XclExpChSeries( const XclExpChRoot& rRoot, sal_uInt16 nSeriesIdx
     mnParentIdx( EXC_CHSERIES_INVALID )
 {
     // CHSOURCELINK records are always required, even if unused
-    mxTitleLink = std::make_shared<XclExpChSourceLink>( GetChRoot(), EXC_CHSRCLINK_TITLE );
-    mxValueLink = std::make_shared<XclExpChSourceLink>( GetChRoot(), EXC_CHSRCLINK_VALUES );
-    mxCategLink = std::make_shared<XclExpChSourceLink>( GetChRoot(), EXC_CHSRCLINK_CATEGORY );
+    mxTitleLink = new XclExpChSourceLink( GetChRoot(), EXC_CHSRCLINK_TITLE );
+    mxValueLink = new XclExpChSourceLink( GetChRoot(), EXC_CHSRCLINK_VALUES );
+    mxCategLink = new XclExpChSourceLink( GetChRoot(), EXC_CHSRCLINK_CATEGORY );
     if( GetBiff() == EXC_BIFF8 )
-        mxBubbleLink = std::make_shared<XclExpChSourceLink>( GetChRoot(), EXC_CHSRCLINK_BUBBLES );
+        mxBubbleLink = new XclExpChSourceLink( GetChRoot(), EXC_CHSRCLINK_BUBBLES );
 }
 
 bool XclExpChSeries::ConvertDataSeries(
@@ -1890,7 +1890,7 @@ bool XclExpChSeries::ConvertDataSeries(
             // series formatting
             XclChDataPointPos aPointPos( mnSeriesIdx );
             ScfPropertySet aSeriesProp( xDataSeries );
-            mxSeriesFmt = std::make_shared<XclExpChDataFormat>( GetChRoot(), aPointPos, nFormatIdx );
+            mxSeriesFmt = new XclExpChDataFormat( GetChRoot(), aPointPos, nFormatIdx );
             mxSeriesFmt->ConvertDataSeries( aSeriesProp, rTypeInfo );
 
             // trend lines
@@ -1941,7 +1941,7 @@ bool XclExpChSeries::ConvertDataSeries(
                             break;
                         aPointPos.mnPointIdx = static_cast< sal_uInt16 >( nPointIndex );
                         ScfPropertySet aPointProp = lclGetPointPropSet( xDataSeries, nPointIndex );
-                        XclExpChDataFormatRef xPointFmt = std::make_shared<XclExpChDataFormat>( GetChRoot(), aPointPos, nFormatIdx );
+                        XclExpChDataFormatRef xPointFmt = new XclExpChDataFormat( GetChRoot(), aPointPos, nFormatIdx );
                         xPointFmt->ConvertDataSeries( aPointProp, rTypeInfo );
                         maPointFmts.AppendRecord( xPointFmt );
                     }
@@ -1986,7 +1986,7 @@ bool XclExpChSeries::ConvertStockSeries( css::uno::Reference< css::chart2::XData
             mxTitleLink->ConvertDataSequence( xTitleSeq, true );
             // series formatting
             ScfPropertySet aSeriesProp( xDataSeries );
-            mxSeriesFmt = std::make_shared<XclExpChDataFormat>( GetChRoot(), XclChDataPointPos( mnSeriesIdx ), nFormatIdx );
+            mxSeriesFmt = new XclExpChDataFormat( GetChRoot(), XclChDataPointPos( mnSeriesIdx ), nFormatIdx );
             mxSeriesFmt->ConvertStockSeries( aSeriesProp, bCloseSymbol );
         }
     }
@@ -1997,7 +1997,7 @@ bool XclExpChSeries::ConvertTrendLine( const XclExpChSeries& rParent, Reference<
 {
     InitFromParent( rParent );
 
-    mxTrendLine = std::make_shared<XclExpChSerTrendLine>( GetChRoot() );
+    mxTrendLine = new XclExpChSerTrendLine( GetChRoot() );
     bool bOk = mxTrendLine->Convert( xRegCurve, mnSeriesIdx );
     if( bOk )
     {
@@ -2016,12 +2016,12 @@ bool XclExpChSeries::ConvertErrorBar( const XclExpChSeries& rParent, const ScfPr
 {
     InitFromParent( rParent );
     // error bar settings
-    mxErrorBar = std::make_shared<XclExpChSerErrorBar>( GetChRoot(), nBarId );
+    mxErrorBar = new XclExpChSerErrorBar( GetChRoot(), nBarId );
     bool bOk = mxErrorBar->Convert( *mxValueLink, maData.mnValueCount, rPropSet );
     if( bOk )
     {
         // error bar formatting
-        mxSeriesFmt = std::make_shared<XclExpChDataFormat>( GetChRoot(), XclChDataPointPos( mnSeriesIdx ), 0 );
+        mxSeriesFmt = new XclExpChDataFormat( GetChRoot(), XclChDataPointPos( mnSeriesIdx ), 0 );
         mxSeriesFmt->ConvertLine( rPropSet, EXC_CHOBJTYPE_ERRORBAR );
     }
     return bOk;
@@ -2271,7 +2271,7 @@ void XclExpChLegend::Convert( const ScfPropertySet& rPropSet )
     // frame properties
     mxFrame = lclCreateFrame( GetChRoot(), rPropSet, EXC_CHOBJTYPE_LEGEND );
     // text properties
-    mxText = std::make_shared<XclExpChText>( GetChRoot() );
+    mxText = new XclExpChText( GetChRoot() );
     mxText->ConvertLegend( rPropSet );
 
     // legend position and size
@@ -2293,7 +2293,7 @@ void XclExpChLegend::Convert( const ScfPropertySet& rPropSet )
             Reference< cssc::XChartDocument > xChart1Doc( GetChartDocument(), UNO_QUERY_THROW );
             Reference< XShape > xChart1Legend( xChart1Doc->getLegend(), UNO_SET_THROW );
             // coordinates in CHLEGEND record written but not used by Excel
-            mxFramePos = std::make_shared<XclExpChFramePos>( EXC_CHFRAMEPOS_CHARTSIZE );
+            mxFramePos = new XclExpChFramePos( EXC_CHFRAMEPOS_CHARTSIZE );
             XclChFramePos& rFramePos = mxFramePos->GetFramePosData();
             rFramePos.mnTLMode = EXC_CHFRAMEPOS_CHARTSIZE;
             css::awt::Point aLegendPos = xChart1Legend->getPosition();
@@ -2312,7 +2312,7 @@ void XclExpChLegend::Convert( const ScfPropertySet& rPropSet )
             maData.mnDockMode = EXC_CHLEGEND_NOTDOCKED;
             // a CHFRAME record with cleared auto flags is needed
             if( !mxFrame )
-                mxFrame = std::make_shared<XclExpChFrame>( GetChRoot(), EXC_CHOBJTYPE_LEGEND );
+                mxFrame = new XclExpChFrame( GetChRoot(), EXC_CHOBJTYPE_LEGEND );
             mxFrame->SetAutoFlags( false, false );
         }
         catch( Exception& )
@@ -2409,7 +2409,7 @@ void XclExpChTypeGroup::ConvertType(
     // 3d chart settings
     if( maTypeInfo.mb3dChart )  // only true, if Excel chart supports 3d mode
     {
-        mxChart3d = std::make_shared<XclExpChChart3d>();
+        mxChart3d = new XclExpChChart3d();
         ScfPropertySet aDiaProp( xDiagram );
         mxChart3d->Convert( aDiaProp, Is3dWallChart() );
     }
@@ -2494,7 +2494,7 @@ void XclExpChTypeGroup::ConvertLegend( const ScfPropertySet& rPropSet )
 {
     if( rPropSet.GetBoolProperty( EXC_CHPROP_SHOW ) )
     {
-        mxLegend = std::make_shared<XclExpChLegend>( GetChRoot() );
+        mxLegend = new XclExpChLegend( GetChRoot() );
         mxLegend->Convert( rPropSet );
     }
 }
@@ -2546,7 +2546,7 @@ void XclExpChTypeGroup::CreateAllStockSeries(
     if( bHasHigh && bHasLow && aTypeProp.GetBoolProperty( EXC_CHPROP_SHOWHIGHLOW ) )
     {
         ScfPropertySet aSeriesProp( xDataSeries );
-        XclExpChLineFormatRef xLineFmt = std::make_shared<XclExpChLineFormat>( GetChRoot() );
+        XclExpChLineFormatRef xLineFmt = new XclExpChLineFormat( GetChRoot() );
         xLineFmt->Convert( GetChRoot(), aSeriesProp, EXC_CHOBJTYPE_HILOLINE );
         sal_uInt16 nKey = EXC_CHCHARTLINE_HILO;
         m_ChartLines.insert(std::make_pair(nKey, std::make_unique<XclExpChLineFormat>(GetChRoot())));
@@ -2559,12 +2559,12 @@ void XclExpChTypeGroup::CreateAllStockSeries(
         // white dropbar format
         aTypeProp.GetProperty( xWhitePropSet, EXC_CHPROP_WHITEDAY );
         ScfPropertySet aWhiteProp( xWhitePropSet );
-        mxUpBar = std::make_shared<XclExpChDropBar>( GetChRoot(), EXC_CHOBJTYPE_WHITEDROPBAR );
+        mxUpBar = new XclExpChDropBar( GetChRoot(), EXC_CHOBJTYPE_WHITEDROPBAR );
         mxUpBar->Convert( aWhiteProp );
         // black dropbar format
         aTypeProp.GetProperty( xBlackPropSet, EXC_CHPROP_BLACKDAY );
         ScfPropertySet aBlackProp( xBlackPropSet );
-        mxDownBar = std::make_shared<XclExpChDropBar>( GetChRoot(), EXC_CHOBJTYPE_BLACKDROPBAR );
+        mxDownBar = new XclExpChDropBar( GetChRoot(), EXC_CHOBJTYPE_BLACKDROPBAR );
         mxDownBar->Convert( aBlackProp );
     }
 }
@@ -2945,7 +2945,7 @@ void XclExpChAxis::Convert( Reference< XAxis > const & xAxis, Reference< XAxis >
 
     // axis line format -------------------------------------------------------
 
-    mxAxisLine = std::make_shared<XclExpChLineFormat>( GetChRoot() );
+    mxAxisLine = new XclExpChLineFormat( GetChRoot() );
     mxAxisLine->Convert( GetChRoot(), aAxisProp, EXC_CHOBJTYPE_AXISLINE );
     // #i58688# axis enabled
     mxAxisLine->SetShowAxis( aAxisProp.GetBoolProperty( EXC_CHPROP_SHOW ) );
@@ -2955,7 +2955,7 @@ void XclExpChAxis::Convert( Reference< XAxis > const & xAxis, Reference< XAxis >
     ScfPropertySet aCrossingProp( xCrossingAxis );
     if( bCategoryAxis )
     {
-        mxLabelRange = std::make_shared<XclExpChLabelRange>( GetChRoot() );
+        mxLabelRange = new XclExpChLabelRange( GetChRoot() );
         mxLabelRange->SetTicksBetweenCateg( rTypeInfo.mbTicksBetweenCateg );
         if( xAxis.is() )
         {
@@ -2969,7 +2969,7 @@ void XclExpChAxis::Convert( Reference< XAxis > const & xAxis, Reference< XAxis >
     }
     else
     {
-        mxValueRange = std::make_shared<XclExpChValueRange>( GetChRoot() );
+        mxValueRange = new XclExpChValueRange( GetChRoot() );
         if( xAxis.is() )
             mxValueRange->Convert( xAxis->getScaleData() );
         // get position of crossing axis on this axis from passed axis object
@@ -2980,7 +2980,7 @@ void XclExpChAxis::Convert( Reference< XAxis > const & xAxis, Reference< XAxis >
     // axis caption text ------------------------------------------------------
 
     // axis ticks properties
-    mxTick = std::make_shared<XclExpChTick>( GetChRoot() );
+    mxTick = new XclExpChTick( GetChRoot() );
     mxTick->Convert( aAxisProp, rTypeInfo, GetAxisType() );
 
     // axis label formatting and rotation
@@ -3032,7 +3032,7 @@ void XclExpChAxis::ConvertWall( css::uno::Reference< css::chart2::XDiagram > con
         }
         break;
         default:
-            mxWallFrame.reset();
+            mxWallFrame.clear();
     }
 }
 
@@ -3117,7 +3117,7 @@ sal_uInt16 XclExpChAxesSet::Convert( Reference< XDiagram > const & xDiagram, sal
                 const Sequence< Reference< XChartType > > aChartTypeSeq = xChartTypeCont->getChartTypes();
                 for( const Reference< XChartType >& rChartType : aChartTypeSeq )
                 {
-                    XclExpChTypeGroupRef xTypeGroup = std::make_shared<XclExpChTypeGroup>( GetChRoot(), nGroupIdx );
+                    XclExpChTypeGroupRef xTypeGroup = new XclExpChTypeGroup( GetChRoot(), nGroupIdx );
                     xTypeGroup->ConvertType( xDiagram, rChartType, nApiAxesSetIdx, b3dChart, bSwappedAxesSet, bHasXLabels );
                     /*  If new chart type group cannot be inserted into a combination
                         chart with existing type groups, insert all series into last
@@ -3205,7 +3205,7 @@ sal_uInt16 XclExpChAxesSet::Convert( Reference< XDiagram > const & xDiagram, sal
         // the CHAXESSET record contains the inner plot area
         maData.maRect = CalcChartRectFromHmm( xPositioning->calculateDiagramPositionExcludingAxes() );
         // the embedded CHFRAMEPOS record contains the outer plot area
-        mxFramePos = std::make_shared<XclExpChFramePos>( EXC_CHFRAMEPOS_PARENT );
+        mxFramePos = new XclExpChFramePos( EXC_CHFRAMEPOS_PARENT );
         // for pie charts, always use inner plot area size to exclude the data labels as Excel does
         const XclExpChTypeGroup* pFirstTypeGroup = GetFirstTypeGroup().get();
         bool bPieChart = pFirstTypeGroup && (pFirstTypeGroup->GetTypeInfo().meTypeCateg == EXC_CHTYPECATEG_PIE);
@@ -3260,7 +3260,7 @@ void XclExpChAxesSet::ConvertAxis(
         sal_Int32 nCrossingAxisDim )
 {
     // create and convert axis object
-    rxChAxis = std::make_shared<XclExpChAxis>( GetChRoot(), nAxisType );
+    rxChAxis = new XclExpChAxis( GetChRoot(), nAxisType );
     sal_Int32 nApiAxisDim = rxChAxis->GetApiAxisDimension();
     sal_Int32 nApiAxesSetIdx = GetApiAxesSetIndex();
     Reference< XAxis > xAxis = lclGetApiAxis( xCoordSystem, nApiAxisDim, nApiAxesSetIdx );
@@ -3369,7 +3369,7 @@ XclExpChSeriesRef XclExpChChart::CreateSeries()
     sal_uInt16 nSeriesIdx = static_cast< sal_uInt16 >( maSeries.GetSize() );
     if( nSeriesIdx <= EXC_CHSERIES_MAXSERIES )
     {
-        xSeries = std::make_shared<XclExpChSeries>( GetChRoot(), nSeriesIdx );
+        xSeries = new XclExpChSeries( GetChRoot(), nSeriesIdx );
         maSeries.AppendRecord( xSeries );
     }
     return xSeries;

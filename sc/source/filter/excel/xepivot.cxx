@@ -265,7 +265,7 @@ sal_uInt16 XclExpPCField::GetItemCount() const
 
 const XclExpPCItem* XclExpPCField::GetItem( sal_uInt16 nItemIdx ) const
 {
-    return GetVisItemList().GetRecord( nItemIdx ).get();
+    return GetVisItemList().GetRecord( nItemIdx );
 }
 
 sal_uInt16 XclExpPCField::GetItemIndex( const OUString& rItemName ) const
@@ -684,7 +684,7 @@ sal_uInt16 XclExpPivotCache::GetFieldCount() const
 
 const XclExpPCField* XclExpPivotCache::GetField( sal_uInt16 nFieldIdx ) const
 {
-    return maFieldList.GetRecord( nFieldIdx ).get();
+    return maFieldList.GetRecord( nFieldIdx );
 }
 
 bool XclExpPivotCache::HasAddFields() const
@@ -758,14 +758,14 @@ void XclExpPivotCache::AddGroupFields( const ScDPObject& rDPObj )
             // loop over all existing standard fields to find their group fields
             for( sal_uInt16 nFieldIdx = 0; nFieldIdx < maPCInfo.mnStdFields; ++nFieldIdx )
             {
-                if( XclExpPCField* pCurrStdField = maFieldList.GetRecord( nFieldIdx ).get() )
+                if( XclExpPCField* pCurrStdField = maFieldList.GetRecord( nFieldIdx ) )
                 {
                     const ScDPSaveGroupDimension* pGroupDim = pSaveDimData->GetGroupDimForBase( pCurrStdField->GetFieldName() );
                     XclExpPCField* pLastGroupField = pCurrStdField;
                     while( pGroupDim )
                     {
                         // insert the new grouping field
-                        XclExpPCFieldRef xNewGroupField = std::make_shared<XclExpPCField>(
+                        XclExpPCFieldRef xNewGroupField = new XclExpPCField(
                             GetRoot(), GetFieldCount(), rDPObj, *pGroupDim, *pCurrStdField );
                         maFieldList.AppendRecord( xNewGroupField );
 
@@ -1146,7 +1146,7 @@ XclExpPTItem* XclExpPTField::GetItemAcc( const OUString& rName )
     XclExpPTItem* pItem = nullptr;
     for( size_t nPos = 0, nSize = maItemList.GetSize(); !pItem && (nPos < nSize); ++nPos )
         if( maItemList.GetRecord( nPos )->GetItemName() == rName )
-            pItem = maItemList.GetRecord( nPos ).get();
+            pItem = maItemList.GetRecord( nPos );
     return pItem;
 }
 
@@ -1233,7 +1233,7 @@ const XclExpPCField* XclExpPivotTable::GetCacheField( sal_uInt16 nCacheIdx ) con
 
 const XclExpPTField* XclExpPivotTable::GetField( sal_uInt16 nFieldIdx ) const
 {
-    return (nFieldIdx == EXC_SXIVD_DATA) ? &maDataOrientField : maFieldList.GetRecord( nFieldIdx ).get();
+    return (nFieldIdx == EXC_SXIVD_DATA) ? &maDataOrientField : maFieldList.GetRecord( nFieldIdx );
 }
 
 const XclExpPTField* XclExpPivotTable::GetField( const OUString& rName ) const
@@ -1285,7 +1285,7 @@ XclExpPTField* XclExpPivotTable::GetFieldAcc( const OUString& rName )
     XclExpPTField* pField = nullptr;
     for( size_t nPos = 0, nSize = maFieldList.GetSize(); !pField && (nPos < nSize); ++nPos )
         if( maFieldList.GetRecord( nPos )->GetFieldName() == rName )
-            pField = maFieldList.GetRecord( nPos ).get();
+            pField = maFieldList.GetRecord( nPos );
     return pField;
 }
 
@@ -1630,12 +1630,12 @@ void XclExpPivotTableManager::CreatePivotTables()
 
 XclExpRecordRef XclExpPivotTableManager::CreatePivotCachesRecord()
 {
-    return std::make_shared<XclExpPivotRecWrapper>( *this, EXC_PTMGR_PIVOTCACHES );
+    return new XclExpPivotRecWrapper( *this, EXC_PTMGR_PIVOTCACHES );
 }
 
 XclExpRecordRef XclExpPivotTableManager::CreatePivotTablesRecord( SCTAB nScTab )
 {
-    return std::make_shared<XclExpPivotRecWrapper>( *this, nScTab );
+    return new XclExpPivotRecWrapper( *this, nScTab );
 }
 
 void XclExpPivotTableManager::WritePivotCaches( XclExpStream& rStrm )
@@ -1669,20 +1669,20 @@ const XclExpPivotCache* XclExpPivotTableManager::CreatePivotCache( const ScDPObj
             // check all existing pivot caches
             for( size_t nPos = 0, nSize = maPCacheList.GetSize(); nPos < nSize; ++nPos )
             {
-                XclExpPivotCacheRef xPCache = maPCacheList.GetRecord( nPos );
+                XclExpPivotCache* pPCache = maPCacheList.GetRecord( nPos );
                 // pivot cache does not have grouping info and source data is equal
-                if( !xPCache->HasAddFields() && xPCache->HasEqualDataSource( rDPObj ) )
-                    return xPCache.get();
+                if( !pPCache->HasAddFields() && pPCache->HasEqualDataSource( rDPObj ) )
+                    return pPCache;
             }
         }
     }
 
     // create a new pivot cache
     sal_uInt16 nNewCacheIdx = static_cast< sal_uInt16 >( maPCacheList.GetSize() );
-    XclExpPivotCacheRef xNewPCache = std::make_shared<XclExpPivotCache>( GetRoot(), rDPObj, nNewCacheIdx );
+    XclExpPivotCacheRef xNewPCache = new XclExpPivotCache( GetRoot(), rDPObj, nNewCacheIdx );
     if( xNewPCache->IsValid() )
     {
-        maPCacheList.AppendRecord( xNewPCache );
+        maPCacheList.AppendRecord( xNewPCache.get() );
         return xNewPCache.get();
     }
 

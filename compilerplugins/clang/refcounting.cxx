@@ -255,6 +255,17 @@ bool containsSalhelperReferenceObjectSubclass(const clang::Type* pType0) {
         // for performance reasons we sometimes allocate temporaries on the stack
         if (loplugin::DeclCheck(pRecordDecl).Struct("ScSheetLimits").GlobalNamespace())
             return false;
+
+        // the calc excel filter likes storing lots of classes either by reference or by value
+        if (loplugin::isDerivedFrom(pRecordDecl,
+                [](Decl const * decl) -> bool
+                {
+                    return
+                        bool(loplugin::DeclCheck(decl).Class("XclExpRecordBase").GlobalNamespace())
+                        || bool(loplugin::DeclCheck(decl).Class("XclImpChLineFormat").GlobalNamespace());
+                }))
+            return false;
+
         const ClassTemplateSpecializationDecl* pTemplate = dyn_cast<ClassTemplateSpecializationDecl>(pRecordDecl);
         if (pTemplate) {
             auto const dc = loplugin::DeclCheck(pTemplate);

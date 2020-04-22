@@ -561,7 +561,7 @@ XclImpChFrameBase::XclImpChFrameBase( const XclChFormatInfo& rFmtInfo )
     if( rFmtInfo.mbCreateDefFrame ) switch( rFmtInfo.meDefFrameType )
     {
         case EXC_CHFRAMETYPE_AUTO:
-            mxLineFmt = std::make_shared<XclImpChLineFormat>();
+            mxLineFmt = new XclImpChLineFormat();
             if( rFmtInfo.mbIsFrame )
                 mxAreaFmt = std::make_shared<XclImpChAreaFormat>();
         break;
@@ -570,7 +570,7 @@ XclImpChFrameBase::XclImpChFrameBase( const XclChFormatInfo& rFmtInfo )
             XclChLineFormat aLineFmt;
             ::set_flag( aLineFmt.mnFlags, EXC_CHLINEFORMAT_AUTO, false );
             aLineFmt.mnPattern = EXC_CHLINEFORMAT_NONE;
-            mxLineFmt = std::make_shared<XclImpChLineFormat>( aLineFmt );
+            mxLineFmt = new XclImpChLineFormat( aLineFmt );
             if( rFmtInfo.mbIsFrame )
             {
                 XclChAreaFormat aAreaFmt;
@@ -590,7 +590,7 @@ void XclImpChFrameBase::ReadSubRecord( XclImpStream& rStrm )
     switch( rStrm.GetRecId() )
     {
         case EXC_ID_CHLINEFORMAT:
-            mxLineFmt = std::make_shared<XclImpChLineFormat>();
+            mxLineFmt = new XclImpChLineFormat();
             mxLineFmt->ReadChLineFormat( rStrm );
         break;
         case EXC_ID_CHAREAFORMAT:
@@ -675,7 +675,7 @@ void XclImpChFrame::UpdateObjFrame( const XclObjLineData& rLineData, const XclOb
             default:                    aLineFmt.mnWeight = EXC_CHLINEFORMAT_HAIR;
         }
         ::set_flag( aLineFmt.mnFlags, EXC_CHLINEFORMAT_AUTO, rLineData.IsAuto() );
-        mxLineFmt = std::make_shared<XclImpChLineFormat>( aLineFmt );
+        mxLineFmt = new XclImpChLineFormat( aLineFmt );
     }
 
     if( rFillData.IsFilled() && (!mxAreaFmt || !mxAreaFmt->HasArea()) && !mxEscherFmt )
@@ -1460,7 +1460,7 @@ void XclImpChDataFormat::UpdateSeriesFormat( const XclChExtTypeInfo& rTypeInfo, 
     /*  Create missing but required formats. Existing line, area, and marker
         format objects are needed to create automatic series formatting. */
     if( !mxLineFmt )
-        mxLineFmt = std::make_shared<XclImpChLineFormat>();
+        mxLineFmt = new XclImpChLineFormat();
     if( !mxAreaFmt && !mxEscherFmt )
         mxAreaFmt = std::make_shared<XclImpChAreaFormat>();
     if( !mxMarkerFmt )
@@ -1478,7 +1478,7 @@ void XclImpChDataFormat::UpdatePointFormat( const XclChExtTypeInfo& rTypeInfo, c
     if( pSeriesFmt )
     {
         if( IsAutoLine() && pSeriesFmt->IsAutoLine() )
-            mxLineFmt.reset();
+            mxLineFmt.clear();
         if( IsAutoArea() && pSeriesFmt->IsAutoArea() )
             mxAreaFmt.reset();
         if( IsAutoMarker() && pSeriesFmt->IsAutoMarker() )
@@ -1490,7 +1490,7 @@ void XclImpChDataFormat::UpdatePointFormat( const XclChExtTypeInfo& rTypeInfo, c
     mx3dDataFmt.reset();
     // remove point line formats for linear chart types, TODO: implement in OOChart
     if( !rTypeInfo.IsSeriesFrameFormat() )
-        mxLineFmt.reset();
+        mxLineFmt.clear();
 
     // remove formats not used for the current chart type
     RemoveUnusedFormats( rTypeInfo );
@@ -1501,7 +1501,7 @@ void XclImpChDataFormat::UpdatePointFormat( const XclChExtTypeInfo& rTypeInfo, c
 void XclImpChDataFormat::UpdateTrendLineFormat()
 {
     if( !mxLineFmt )
-        mxLineFmt = std::make_shared<XclImpChLineFormat>();
+        mxLineFmt = new XclImpChLineFormat();
     mxAreaFmt.reset();
     mxEscherFmt.reset();
     mxMarkerFmt.reset();
@@ -3279,9 +3279,9 @@ void XclImpChAxis::Finalize()
         mxValueRange = std::make_shared<XclImpChValueRange>( GetChRoot() );
     // remove invisible grid lines completely
     if( mxMajorGrid && !mxMajorGrid->HasLine() )
-        mxMajorGrid.reset();
+        mxMajorGrid.clear();
     if( mxMinorGrid && !mxMinorGrid->HasLine() )
-        mxMinorGrid.reset();
+        mxMinorGrid.clear();
     // default tick settings different in OOChart and Excel
     if( !mxTick )
         mxTick = std::make_shared<XclImpChTick>( GetChRoot() );
@@ -3291,7 +3291,7 @@ void XclImpChAxis::Finalize()
         XclChLineFormat aLineFmt;
         // set "show axis" flag, default if line format record is missing
         ::set_flag( aLineFmt.mnFlags, EXC_CHLINEFORMAT_SHOWAXIS );
-        mxAxisLine = std::make_shared<XclImpChLineFormat>( aLineFmt );
+        mxAxisLine = new XclImpChLineFormat( aLineFmt );
     }
     // add wall/floor frame for 3d charts
     if( !mxWallFrame )
@@ -3490,7 +3490,7 @@ void XclImpChAxis::ReadChAxisLine( XclImpStream& rStrm )
         {
             if( pxLineFmt && (nRecId == EXC_ID_CHLINEFORMAT) )
             {
-                (*pxLineFmt) = std::make_shared<XclImpChLineFormat>();
+                (*pxLineFmt) = new XclImpChLineFormat();
                 (*pxLineFmt)->ReadChLineFormat( rStrm );
             }
             else if( bWallFrame && mxWallFrame )

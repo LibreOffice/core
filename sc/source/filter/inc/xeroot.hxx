@@ -23,6 +23,7 @@
 #include "xlroot.hxx"
 #include <compiler.hxx>
 #include <memory>
+#include <rtl/ref.hxx>
 
 // Forward declarations of objects in public use ==============================
 
@@ -31,8 +32,8 @@ namespace com { namespace sun { namespace star { namespace beans { struct NamedV
 class XclExpRecordBase;
 class XclExpString;
 
-typedef std::shared_ptr< XclExpRecordBase >  XclExpRecordRef;
-typedef std::shared_ptr< XclExpString >      XclExpStringRef;
+typedef rtl::Reference< XclExpRecordBase >  XclExpRecordRef;
+typedef std::shared_ptr< XclExpString >     XclExpStringRef;
 
 // Global data ================================================================
 
@@ -63,17 +64,17 @@ struct XclExpRootData : public XclRootData
     typedef std::shared_ptr< XclExpFormulaCompiler >     XclExpFmlaCompRef;
     typedef std::shared_ptr< XclExpProgressBar >         XclExpProgressRef;
 
-    typedef std::shared_ptr< XclExpSst >                 XclExpSstRef;
-    typedef std::shared_ptr< XclExpPalette >             XclExpPaletteRef;
-    typedef std::shared_ptr< XclExpFontBuffer >          XclExpFontBfrRef;
-    typedef std::shared_ptr< XclExpNumFmtBuffer >        XclExpNumFmtBfrRef;
-    typedef std::shared_ptr< XclExpXFBuffer >            XclExpXFBfrRef;
-    typedef std::shared_ptr< XclExpNameManager >         XclExpNameMgrRef;
-    typedef std::shared_ptr< XclExpLinkManager >         XclExpLinkMgrRef;
+    typedef rtl::Reference< XclExpSst >                  XclExpSstRef;
+    typedef rtl::Reference< XclExpPalette >              XclExpPaletteRef;
+    typedef rtl::Reference< XclExpFontBuffer >           XclExpFontBfrRef;
+    typedef rtl::Reference< XclExpNumFmtBuffer >         XclExpNumFmtBfrRef;
+    typedef rtl::Reference< XclExpXFBuffer >             XclExpXFBfrRef;
+    typedef rtl::Reference< XclExpNameManager >          XclExpNameMgrRef;
+    typedef rtl::Reference< XclExpLinkManager >          XclExpLinkMgrRef;
     typedef std::shared_ptr< XclExpObjectManager >       XclExpObjectMgrRef;
     typedef std::shared_ptr< XclExpFilterManager >       XclExpFilterMgrRef;
     typedef std::shared_ptr< XclExpPivotTableManager >   XclExpPTableMgrRef;
-    typedef std::shared_ptr< XclExpDxfs >                XclExpDxfsRef;
+    typedef rtl::Reference< XclExpDxfs >                 XclExpDxfsRef;
 
     XclExpTabInfoRef    mxTabInfo;          /// Calc->Excel sheet index conversion.
     XclExpAddrConvRef   mxAddrConv;         /// The address converter.
