@@ -592,6 +592,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     mbUnixForceZeroExtLeading = rSource.mbUnixForceZeroExtLeading;
     mbTabRelativeToIndent = rSource.mbTabRelativeToIndent;
     mbTabAtLeftIndentForParagraphsInList = rSource.mbTabAtLeftIndentForParagraphsInList;
+    mbSubtractFlys = rSource.mbSubtractFlys;
     mbMsWordCompTrailingBlanks = rSource.mbMsWordCompTrailingBlanks;
     mbEmptyDbFieldHidesPara = rSource.mbEmptyDbFieldHidesPara;
 }
