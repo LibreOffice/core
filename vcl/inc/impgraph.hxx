@@ -116,7 +116,7 @@ private:
         return mpGraphicID->getIDString();
     }
 
-    void                ImplCreateSwapInfo();
+    void                createSwapInfo();
     void                ImplClearGraphics();
     void                ImplClear();
 

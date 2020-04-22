@@ -384,18 +384,18 @@ const std::shared_ptr<VectorGraphicData>& ImpGraphic::getVectorGraphicData() con
     return maVectorGraphicData;
 }
 
-void ImpGraphic::ImplCreateSwapInfo()
+void ImpGraphic::createSwapInfo()
 {
-    if (!isSwappedOut())
-    {
-        maSwapInfo.maPrefMapMode = ImplGetPrefMapMode();
-        maSwapInfo.maPrefSize = ImplGetPrefSize();
-        maSwapInfo.mbIsAnimated = ImplIsAnimated();
-        maSwapInfo.mbIsEPS = ImplIsEPS();
-        maSwapInfo.mbIsTransparent = ImplIsTransparent();
-        maSwapInfo.mbIsAlpha = ImplIsAlpha();
-        maSwapInfo.mnAnimationLoopCount = ImplGetAnimationLoopCount();
-    }
+    if (isSwappedOut())
+        return;
+
+    maSwapInfo.maPrefMapMode = ImplGetPrefMapMode();
+    maSwapInfo.maPrefSize = ImplGetPrefSize();
+    maSwapInfo.mbIsAnimated = ImplIsAnimated();
+    maSwapInfo.mbIsEPS = ImplIsEPS();
+    maSwapInfo.mbIsTransparent = ImplIsTransparent();
+    maSwapInfo.mbIsAlpha = ImplIsAlpha();
+    maSwapInfo.mnAnimationLoopCount = ImplGetAnimationLoopCount();
 }
 
 void ImpGraphic::ImplClearGraphics()
@@ -1387,11 +1387,12 @@ bool ImpGraphic::swapOut()
     // Check if writing was successfull
     if (bResult)
     {
-        // We have swapped out, so can clean memory
-        mbSwapOut = true;
-        mpSwapFile = std::move(pSwapFile);
-        ImplCreateSwapInfo();
+        // We have swapped out, so can clean memory and prepare swap info
+        createSwapInfo();
         ImplClearGraphics();
+
+        mpSwapFile = std::move(pSwapFile);
+        mbSwapOut = true;
 
         // Signal to manager that we have swapped out
         vcl::graphic::Manager::get().swappedOut(this);
