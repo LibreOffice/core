@@ -31,6 +31,7 @@
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/uitest/uiobject.hxx>
 
 #include <svdata.hxx>
 
@@ -663,6 +664,22 @@ sal_Int64 NumericFormatter::GetValueFromString(const OUString& rStr) const
     }
     else
         return mnLastValue;
+}
+
+// currently used by online
+void NumericFormatter::SetValueFromString(const OUString& rStr)
+{
+    sal_Int64 nValue;
+
+    if (ImplNumericGetValue(rStr, nValue, GetDecimalDigits(),
+        Application::GetSettings().GetNeutroLocaleDataWrapper()))
+    {
+        SetValue(nValue);
+    }
+    else
+    {
+        SAL_WARN("vcl", "fail to convert the value: " << rStr );
+    }
 }
 
 sal_Int64 NumericFormatter::GetValue() const
@@ -1778,6 +1795,11 @@ boost::property_tree::ptree MetricField::DumpAsPropertyTree()
     aTree.put("value", sValue.toUtf8().getStr());
 
     return aTree;
+}
+
+FactoryFunction MetricField::GetUITestFactory() const
+{
+    return MetricFieldUIObject::create;
 }
 
 MetricBox::MetricBox(vcl::Window* pParent, WinBits nWinStyle)

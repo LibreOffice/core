@@ -1287,6 +1287,44 @@ std::unique_ptr<UIObject> SpinFieldUIObject::create(vcl::Window* pWindow)
     return std::unique_ptr<UIObject>(new SpinFieldUIObject(pSpinField));
 }
 
+
+MetricFieldUIObject::MetricFieldUIObject(const VclPtr<MetricField>& xMetricField):
+    SpinFieldUIObject(xMetricField),
+    mxMetricField(xMetricField)
+{
+}
+
+MetricFieldUIObject::~MetricFieldUIObject()
+{
+}
+
+void MetricFieldUIObject::execute(const OUString& rAction,
+        const StringMap& rParameters)
+{
+    if (rAction == "VALUE")
+    {
+        auto itPos = rParameters.find("VALUE");
+        if (itPos != rParameters.end())
+        {
+            mxMetricField->SetValueFromString(itPos->second);
+        }
+    }
+    else
+        SpinFieldUIObject::execute(rAction, rParameters);
+}
+
+OUString MetricFieldUIObject::get_name() const
+{
+    return OUString("MetricFieldUIObject");
+}
+
+std::unique_ptr<UIObject> MetricFieldUIObject::create(vcl::Window* pWindow)
+{
+    MetricField* pMetricField = dynamic_cast<MetricField*>(pWindow);
+    assert(pMetricField);
+    return std::unique_ptr<UIObject>(new MetricFieldUIObject(pMetricField));
+}
+
 TabControlUIObject::TabControlUIObject(const VclPtr<TabControl>& xTabControl):
     WindowUIObject(xTabControl),
     mxTabControl(xTabControl)
