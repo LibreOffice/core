@@ -178,7 +178,6 @@ private:
     std::unique_ptr<weld::ComboBox> m_xReliefLB;
     std::unique_ptr<weld::CheckButton> m_xOutlineBtn;
     std::unique_ptr<weld::CheckButton> m_xShadowBtn;
-    std::unique_ptr<weld::CheckButton> m_xBlinkingBtn;
     std::unique_ptr<weld::CheckButton> m_xHiddenBtn;
     std::unique_ptr<weld::ComboBox> m_xOverlineLB;
     std::unique_ptr<weld::Label> m_xOverlineColorFT;
