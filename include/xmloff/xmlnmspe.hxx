@@ -45,6 +45,7 @@ constexpr sal_uInt16 XML_NAMESPACE_SCRIPT =          16;
 constexpr sal_uInt16 XML_NAMESPACE_BLOCKLIST =       17;
 constexpr sal_uInt16 XML_NAMESPACE_FRAMEWORK =       18;
 constexpr sal_uInt16 XML_NAMESPACE_CONFIG =          19;
+// note: following 3 namespaces are used for attribute values and non-ODF XML
 constexpr sal_uInt16 XML_NAMESPACE_OOO =             20;
 constexpr sal_uInt16 XML_NAMESPACE_OOOW =            21;
 constexpr sal_uInt16 XML_NAMESPACE_OOOC =            22;

@@ -65,6 +65,7 @@ SchXMLPropertyMappingContext::SchXMLPropertyMappingContext( SchXMLImportHelper& 
         tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
         uno::Reference<
         chart2::XDataSeries > const & xSeries ):
+                                            // TODO import 1.4
     SvXMLImportContext( rImport, XML_NAMESPACE_LO_EXT, rLocalName ),
     mrImportHelper( rImpHelper ),
     mxDataSeries(xSeries),

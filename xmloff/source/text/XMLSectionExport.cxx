@@ -1317,6 +1317,7 @@ void XMLSectionExport::ExportIndexTemplateElement(
                         || eType == TEXT_SECTION_TYPE_OBJECT
                         || eType == TEXT_SECTION_TYPE_TABLE
                         || eType == TEXT_SECTION_TYPE_USER);
+                    // TODO 1.3 OFFICE-3941
                     nNamespace = XML_NAMESPACE_LO_EXT;
                 }
                 else

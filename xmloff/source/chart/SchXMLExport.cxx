@@ -1217,6 +1217,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
         if (xPivotTableDataProvider.is() && nCurrentODFVersion & SvtSaveOptions::ODFSVER_EXTENDED)
         {
             OUString sPivotTableName = xPivotTableDataProvider->getPivotTableName();
+            // TODO 1.4
             mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_DATA_PILOT_SOURCE, sPivotTableName);
         }
 
@@ -1391,6 +1392,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
                     {
                         Any aAny( xProp->getPropertyValue("Overlay"));
                         if(aAny.get<bool>())
+                            // TODO 1.4
                             mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_OVERLAY, OUString::boolean(true));
                     }
                 }
@@ -2173,6 +2175,7 @@ void SchXMLExportHelper_Impl::exportDateScale( const Reference< beans::XProperty
             mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_MINOR_INTERVAL_UNIT, lcl_getTimeUnitToken( aInterval.TimeUnit ) );
         }
 
+    // TODO 1.4
         SvXMLElementExport aDateScale( mrExport, XML_NAMESPACE_CHART_EXT, XML_DATE_SCALE, true, true );//#i25706#todo: change namespace for next ODF version
     }
 }
@@ -2239,6 +2242,7 @@ bool lcl_exportAxisType( const Reference< chart2::XAxis >& rChart2Axis, SvXMLExp
 
     chart2::ScaleData aScale( rChart2Axis->getScaleData() );
     //#i25706#todo: change namespace for next ODF version
+    // TODO 1.4
     sal_uInt16 nNameSpace = XML_NAMESPACE_CHART_EXT;
 
     switch(aScale.AxisType)
@@ -2714,6 +2718,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                                         Any aAny = xPropSet->getPropertyValue("ShowLegendEntry");
                                         if (!aAny.get<bool>())
                                         {
+                                            // TODO 1.4
                                             mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_HIDE_LEGEND, OUString::boolean(true));
                                         }
                                     }
@@ -2738,6 +2743,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                                     if (bHasString)
                                     {
                                         mrExport.AddAttribute(
+                                            // TODO 1.4
                                             XML_NAMESPACE_LO_EXT, XML_LABEL_STRING, aRange);
                                     }
                                     else
@@ -2908,6 +2914,7 @@ void SchXMLExportHelper_Impl::exportPropertyMapping(
             Reference< chart2::data::XDataSequence > xValues( xSequence->getValues() );
             if( xValues.is())
             {
+                                            // TODO 1.4
                 mrExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_PROPERTY, rSupportedMapping);
                 mrExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_CELL_RANGE_ADDRESS,
                         lcl_ConvertRange(
@@ -3454,6 +3461,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
             {
                 if (nIndex == deletedLegendEntry)
                 {
+                                            // TODO 1.4
                     mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_HIDE_LEGEND, OUString::boolean(true));
                     break;
                 }
@@ -3479,6 +3487,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
         {
             if (nIndex == deletedLegendEntry)
             {
+                                            // TODO 1.4
                 mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_HIDE_LEGEND, OUString::boolean(true));
                 break;
             }
@@ -3512,6 +3521,7 @@ void SchXMLExportHelper_Impl::exportCustomLabelPosition( const chart2::RelativeP
 
     OUStringBuffer aCustomLabelPosString;
     ::sax::Converter::convertDouble(aCustomLabelPosString, xCustomLabelPosition.Primary);
+                                            // TODO 1.4
     mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_CUSTOM_LABEL_POS_X, aCustomLabelPosString.makeStringAndClear());
 
     ::sax::Converter::convertDouble(aCustomLabelPosString, xCustomLabelPosition.Secondary);
@@ -3542,11 +3552,13 @@ void SchXMLExportHelper_Impl::addSize( const awt::Size & rSize, bool bIsOOoNames
     mrExport.GetMM100UnitConverter().convertMeasureToXML(
             msStringBuffer, rSize.Width );
     msString = msStringBuffer.makeStringAndClear();
+    // TODO 1.3
     mrExport.AddAttribute( bIsOOoNamespace ? XML_NAMESPACE_CHART_EXT : XML_NAMESPACE_SVG , XML_WIDTH,  msString );
 
     mrExport.GetMM100UnitConverter().convertMeasureToXML(
             msStringBuffer, rSize.Height);
     msString = msStringBuffer.makeStringAndClear();
+    // TODO 1.3
     mrExport.AddAttribute( bIsOOoNamespace ? XML_NAMESPACE_CHART_EXT : XML_NAMESPACE_SVG, XML_HEIGHT, msString );
 }
 

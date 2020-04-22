@@ -1708,6 +1708,7 @@ void ScXMLExport::SetBodyAttributes()
                     AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM,
                                  ScPassHashHelper::getHashURI(PASSHASH_XL));
                     if (getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
+                        // TODO 1.4
                         AddAttribute(XML_NAMESPACE_LO_EXT, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2,
                                 ScPassHashHelper::getHashURI(PASSHASH_SHA1));
                 }
@@ -2831,6 +2832,7 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const uno::Reference<sheet::XSpre
                             AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM,
                                          ScPassHashHelper::getHashURI(PASSHASH_XL));
                             if (getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
+                        // TODO 1.4
                                 AddAttribute(XML_NAMESPACE_LO_EXT, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2,
                                         ScPassHashHelper::getHashURI(PASSHASH_SHA1));
                         }
@@ -2862,21 +2864,28 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const uno::Reference<sheet::XSpre
     if (pProtect && pProtect->isProtected() && getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
     {
         if (pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS))
+                        // TODO 1.4
             AddAttribute(XML_NAMESPACE_LO_EXT, XML_SELECT_PROTECTED_CELLS, XML_TRUE);
         if (pProtect->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS))
+                        // TODO 1.4
             AddAttribute(XML_NAMESPACE_LO_EXT, XML_SELECT_UNPROTECTED_CELLS, XML_TRUE);
 
         if (pProtect->isOptionEnabled(ScTableProtection::INSERT_COLUMNS))
+                        // TODO 1.4
             AddAttribute(XML_NAMESPACE_LO_EXT, XML_INSERT_COLUMNS, XML_TRUE);
         if (pProtect->isOptionEnabled(ScTableProtection::INSERT_ROWS))
+                        // TODO 1.4
             AddAttribute(XML_NAMESPACE_LO_EXT, XML_INSERT_ROWS, XML_TRUE);
 
         if (pProtect->isOptionEnabled(ScTableProtection::DELETE_COLUMNS))
+                        // TODO 1.4
             AddAttribute(XML_NAMESPACE_LO_EXT, XML_DELETE_COLUMNS, XML_TRUE);
         if (pProtect->isOptionEnabled(ScTableProtection::DELETE_ROWS))
+                        // TODO 1.4
             AddAttribute(XML_NAMESPACE_LO_EXT, XML_DELETE_ROWS, XML_TRUE);
 
         OUString aElemName = GetNamespaceMap().GetQNameByKey(
+                        // TODO 1.4
             XML_NAMESPACE_LO_EXT, GetXMLToken(XML_TABLE_PROTECTION));
 
         SvXMLElementExport aElemProtected(*this, aElemName, true, true);
@@ -3140,6 +3149,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                     aCell.nNumberFormat, aCell.maBaseCell.mfValue);
                 if (getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
                     GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
+                            // TODO 1.4
                             aCell.nNumberFormat, aCell.maBaseCell.mfValue, false, XML_NAMESPACE_CALC_EXT, false);
             }
             break;
@@ -3151,6 +3161,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                         sCellString, sFormattedString);
                 if (getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
                     GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
+                            // TODO 1.4
                             sCellString, sFormattedString, false, XML_NAMESPACE_CALC_EXT);
             }
             break;
@@ -3188,6 +3199,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                         if (getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
                         {
                             //export calcext:value-type="error"
+                            // TODO 1.4
                             AddAttribute(XML_NAMESPACE_CALC_EXT,XML_VALUE_TYPE, OUString("error"));
                         }
                     }
@@ -3203,6 +3215,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                             if (getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
                             {
                                 GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
+                            // TODO 1.4
                                         aCell.nNumberFormat, pDoc->GetValue(aCell.maCellAddress), false, XML_NAMESPACE_CALC_EXT, false );
                             }
                         }
@@ -3215,6 +3228,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                             AddAttribute(sAttrStringValue, aCell.maBaseCell.getString(pDoc));
                             if (getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
                             {
+                            // TODO 1.4
                                 AddAttribute(XML_NAMESPACE_CALC_EXT,XML_VALUE_TYPE, XML_STRING);
                             }
                         }
@@ -4007,6 +4021,7 @@ void ScXMLExport::WriteExternalDataMapping()
 
     if (!rDataSources.empty())
     {
+// TODO 1.4
         SvXMLElementExport aMappings(*this, XML_NAMESPACE_CALC_EXT, XML_DATA_MAPPINGS, true, true);
         for (const auto& itr : rDataSources)
         {
@@ -4025,6 +4040,7 @@ void ScXMLExport::WriteExternalDataMapping()
 
 void ScXMLExport::WriteExternalDataTransformations(const std::vector<std::shared_ptr<sc::DataTransformation>>& aDataTransformations)
 {
+// TODO 1.4
     SvXMLElementExport aTransformations(*this, XML_NAMESPACE_CALC_EXT, XML_DATA_TRANSFORMATIONS, true, true);
     for (auto& itr : aDataTransformations)
     {
@@ -4352,6 +4368,7 @@ void ScXMLExport::WriteDataStream()
     AddAttribute(XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, aRangeStr);
 
     // Empty line refresh option.
+    // TODO 1.4
     AddAttribute(XML_NAMESPACE_CALC_EXT, XML_EMPTY_LINE_REFRESH, pStrm->IsRefreshOnEmptyLine() ? XML_TRUE : XML_FALSE);
 
     // New data insertion position. Either top of bottom. Default to bottom.
@@ -4359,6 +4376,7 @@ void ScXMLExport::WriteDataStream()
     if (pStrm->GetMove() == sc::DataStream::MOVE_DOWN)
         eInsertPosition = XML_TOP;
 
+    // TODO 1.4
     AddAttribute(XML_NAMESPACE_CALC_EXT, XML_INSERTION_POSITION, eInsertPosition);
 
     SvXMLElementExport aElem(*this, XML_NAMESPACE_CALC_EXT, XML_DATA_STREAM_SOURCE, true, true);
@@ -4498,6 +4516,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
     if (pCondFormatList->empty())
         return;
 
+// TODO 1.4
     SvXMLElementExport aElementCondFormats(*this, XML_NAMESPACE_CALC_EXT, XML_CONDITIONAL_FORMATS, true, true);
 
     for(const auto& rxCondFormat : *pCondFormatList)

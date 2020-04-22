@@ -447,6 +447,7 @@ void ScXMLExportDataPilot::WriteSubTotals(const ScDPSaveDimension* pDim)
             ScXMLConverter::GetStringFromFunction( sFunction, nFunc);
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FUNCTION, sFunction);
             if (pLayoutName && nFunc == sheet::GeneralFunction2::AUTO)
+                // TODO 1.4
                 rExport.AddAttribute(XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, *pLayoutName);
             SvXMLElementExport aElemST(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_SUBTOTAL, true, true);
         }
@@ -469,6 +470,7 @@ void ScXMLExportDataPilot::WriteMembers(const ScDPSaveDimension* pDim)
                 // Export display names only for ODF 1.2 extended or later.
                 const std::optional<OUString> & pLayoutName = rpMember->GetLayoutName();
                 if (pLayoutName)
+                    // TODO 1.4
                     rExport.AddAttribute(XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, *pLayoutName);
             }
 
@@ -496,6 +498,7 @@ void ScXMLExportDataPilot::WriteLevels(const ScDPSaveDimension* pDim)
     {
         OUStringBuffer sBuffer;
         ::sax::Converter::convertBool(sBuffer, pDim->GetRepeatItemLabels());
+        // TODO 1.4
         rExport.AddAttribute(XML_NAMESPACE_CALC_EXT, XML_REPEAT_ITEM_LABELS, sBuffer.makeStringAndClear());
     }
     SvXMLElementExport aElemDPL(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_LEVEL, true, true);
@@ -680,6 +683,7 @@ void ScXMLExportDataPilot::WriteDimension(const ScDPSaveDimension* pDim, const S
         // Export display names only for ODF 1.2 extended or later.
         const std::optional<OUString> & pLayoutName = pDim->GetLayoutName();
         if (pLayoutName)
+                    // TODO 1.4
             rExport.AddAttribute(XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, *pLayoutName);
     }
 
@@ -702,6 +706,7 @@ void ScXMLExportDataPilot::WriteDimension(const ScDPSaveDimension* pDim, const S
     {
         if (rExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
         {
+            // TODO 1.4
             rExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_IGNORE_SELECTED_PAGE, "true");
         }
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SELECTED_PAGE, pDim->GetCurrentPage());
@@ -729,8 +734,10 @@ void ScXMLExportDataPilot::WriteGrandTotal(::xmloff::token::XMLTokenEnum eOrient
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY, bVisible ? XML_TRUE : XML_FALSE);
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORIENTATION, eOrient);
     if (pGrandTotal)
+                    // TODO 1.4
         rExport.AddAttribute(XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, *pGrandTotal);
 
+                // TODO 1.4
     SvXMLElementExport aElemGrandTotal(rExport, XML_NAMESPACE_TABLE_EXT, XML_DATA_PILOT_GRAND_TOTAL, true, true);
 }
 

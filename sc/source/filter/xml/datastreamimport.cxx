@@ -44,9 +44,11 @@ ScXMLDataStreamContext::ScXMLDataStreamContext(
                         maRange.SetInvalid();
                 }
                 break;
+                // TODO import 1.4
                 case XML_ELEMENT( CALC_EXT, XML_EMPTY_LINE_REFRESH ):
                     mbRefreshOnEmpty = IsXMLToken( aIter, XML_TRUE );
                 break;
+                // TODO import 1.4
                 case XML_ELEMENT( CALC_EXT, XML_INSERTION_POSITION ):
                     meInsertPos = IsXMLToken( aIter, XML_TOP ) ?
                         sc::ImportPostProcessData::DataStream::InsertTop :

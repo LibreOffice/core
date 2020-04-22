@@ -324,6 +324,7 @@ void SvXMLNumFmtExport::FinishTextElement_Impl(bool bUseExtensionNS)
 {
     if ( !sTextContent.isEmpty() )
     {
+        // TODO 1.3 OFFICE-3765
         sal_uInt16 nNS = bUseExtensionNS ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_NUMBER;
         SvXMLElementExport aElem( rExport, nNS, XML_TEXT,
                                   true, false );
@@ -494,6 +495,7 @@ void SvXMLNumFmtExport::WriteRepeatedElement_Impl( sal_Unicode nChar )
     {
         FinishTextElement_Impl(true);
         // For 1.2+ use loext namespace, for 1.3 use number namespace.
+        // TODO 1.3 OFFICE-3765
         SvXMLElementExport aElem( rExport,
                                   ((eVersion < SvtSaveOptions::ODFSVER_013) ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_NUMBER),
                                   XML_FILL_CHARACTER, true, false );
@@ -548,6 +550,7 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
         if (eVersion > SvtSaveOptions::ODFSVER_012)
         {
             // For 1.2+ use loext namespace, for 1.3 use number namespace.
+            // TODO 1.3 OFFICE-3860
             rExport.AddAttribute(
                 ((eVersion < SvtSaveOptions::ODFSVER_013) ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_NUMBER),
                                  XML_MIN_DECIMAL_PLACES,
@@ -637,6 +640,7 @@ void SvXMLNumFmtExport::WriteScientificElement_Impl(
         if (eVersion > SvtSaveOptions::ODFSVER_012)
         {
             // For 1.2+ use loext namespace, for 1.3 use number namespace.
+            // TODO 1.3 OFFICE-3860
             rExport.AddAttribute(
                 ((eVersion < SvtSaveOptions::ODFSVER_013) ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_NUMBER),
                                  XML_MIN_DECIMAL_PLACES,
@@ -671,6 +675,7 @@ void SvXMLNumFmtExport::WriteScientificElement_Impl(
         if (eVersion > SvtSaveOptions::ODFSVER_012)
         {
             // For 1.2+ use loext namespace, for 1.3 use number namespace.
+            // TODO 1.3 OFFICE-1828
             rExport.AddAttribute(
                     ((eVersion < SvtSaveOptions::ODFSVER_013) ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_NUMBER),
                     XML_EXPONENT_INTERVAL, OUString::number( nExpInterval ) );
@@ -683,6 +688,7 @@ void SvXMLNumFmtExport::WriteScientificElement_Impl(
     {
         // For 1.2+ use loext namespace, for 1.3 use number namespace.
         rExport.AddAttribute(
+            // TODO 1.3 OFFICE-3860
             ((eVersion < SvtSaveOptions::ODFSVER_013) ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_NUMBER),
                              XML_FORCED_EXPONENT_SIGN,
                              bExpSign? XML_TRUE : XML_FALSE );
@@ -744,6 +750,7 @@ void SvXMLNumFmtExport::WriteFractionElement_Impl(
     if ( !aIntegerFractionDelimiterString.isEmpty() && aIntegerFractionDelimiterString != " "
         && ((eVersion & SvtSaveOptions::ODFSVER_EXTENDED) != 0) )
     {   // Export only for 1.2 with extensions or 1.3 and later.
+        // TODO 1.4
         rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_INTEGER_FRACTION_DELIMITER,
                               aIntegerFractionDelimiterString );
     }
@@ -757,10 +764,12 @@ void SvXMLNumFmtExport::WriteFractionElement_Impl(
     if ((eVersion & SvtSaveOptions::ODFSVER_EXTENDED) != 0)
     {
         // For extended ODF use loext namespace
+        // TODO 1.3 ??? OFFICE-3695 related but lacks this ??? erAck says 1.4
         rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_MAX_NUMERATOR_DIGITS,
                               OUString::number( nMaxNumeratorDigits ) );
     }
     if ( nZerosNumeratorDigits && ((eVersion & SvtSaveOptions::ODFSVER_EXTENDED) != 0) )
+        // TODO 1.4
         rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_ZEROS_NUMERATOR_DIGITS,
                               OUString::number( nZerosNumeratorDigits ) );
 
@@ -781,11 +790,13 @@ void SvXMLNumFmtExport::WriteFractionElement_Impl(
         {
             // For 1.2+ use loext namespace, for 1.3 use number namespace.
             rExport.AddAttribute(
+        // TODO 1.3 OFFICE-3695
                 ((eVersion < SvtSaveOptions::ODFSVER_013) ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_NUMBER),
                                  XML_MAX_DENOMINATOR_VALUE,
                                  OUString::number( pow ( 10.0, nMaxDenominatorDigits ) - 1 ) ); // 9, 99 or 999
         }
         if ( nZerosDenominatorDigits && ((eVersion & SvtSaveOptions::ODFSVER_EXTENDED) != 0) )
+            // TODO 1.4
             rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_ZEROS_DENOMINATOR_DIGITS,
                                   OUString::number( nZerosDenominatorDigits ) );
     }
@@ -1213,6 +1224,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
             aLanguageTag.getIsoLanguageScriptCountry( aLanguage, aScript, aCountry);
             // For 1.2+ use loext namespace, for 1.3 use number namespace.
             rExport.AddAttribute( ((eVersion < SvtSaveOptions::ODFSVER_013) ?
+                        // TODO 1.4
                         XML_NAMESPACE_LO_EXT : XML_NAMESPACE_NUMBER),
                     XML_TRANSLITERATION_SPELLOUT, aAttr.Spellout );
             rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_LANGUAGE,

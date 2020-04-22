@@ -1098,6 +1098,7 @@ void SwXMLExport::ExportTable( const SwTableNode& rTableNd )
     if (const SwFrameFormat* pFlyFormat = rTableNd.GetFlyFormat())
     {
         if (SwTextBoxHelper::isTextBox(pFlyFormat, RES_FLYFRMFMT))
+            // TODO 1.4
             nPrefix = XML_NAMESPACE_LO_EXT;
     }
 

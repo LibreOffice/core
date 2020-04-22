@@ -107,6 +107,7 @@ void XMLTextImageContext::startElement(
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
         const OUString& rAttributeName = xAttribs->getNameByIndex(i);
+        // 1.3 ???
         if (rAttributeName == "loext:mime-type")
             m_aMimeType = OUStringToOString(xAttribs->getValueByIndex(i), RTL_TEXTENCODING_UTF8);
     }
