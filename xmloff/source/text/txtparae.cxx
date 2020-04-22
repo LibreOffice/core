@@ -521,6 +521,7 @@ void FieldParamExporter::Export()
 
 void FieldParamExporter::ExportParameter(const OUString& sKey, const OUString& sValue)
 {
+    // TODO 1.4
     m_pExport->AddAttribute(XML_NAMESPACE_FIELD, XML_NAME, sKey);
     m_pExport->AddAttribute(XML_NAMESPACE_FIELD, XML_VALUE, sValue);
     m_pExport->StartElement(XML_NAMESPACE_FIELD, XML_PARAM, false);
@@ -2123,6 +2124,7 @@ void XMLTextParagraphExport::exportParagraph(
     {
         enum XMLTokenEnum eElem =
             0 < nOutlineLevel ? XML_H : XML_P;
+        // TODO 1.4 text on embedded object
         SvXMLElementExport aElem( GetExport(), eExtensionNS == TextPNS::EXTENSION ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_TEXT, eElem,
                                   true, false );
         if( bHasContentEnum )
@@ -2257,6 +2259,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                             GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_TYPE, xFormField->getFieldType());
                         }
 
+                        // TODO 1.4
                         GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_START, false);
                         if (xFormField.is())
                         {
@@ -2313,6 +2316,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                     if (GetExport().getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
                     {
                         SvXMLElementExport aElem( GetExport(), !bAutoStyles,
+    // TODO 1.4
                             XML_NAMESPACE_FIELD, XML_FIELDMARK_END,
                             false, false );
                     }
@@ -2358,6 +2362,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                         {
                             GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_TYPE, xFormField->getFieldType());
                         }
+    // TODO 1.4
                         GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK, false);
                         if (xFormField.is())
                         {
@@ -2509,12 +2514,14 @@ void XMLTextParagraphExport::exportTextMark(
                 bkmkProps->getPropertyValue(sHidden) >>= bHidden;
                 if (bHidden)
                 {
+                    // TODO 1.4
                     GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "hidden", "true");
                     OUString sCondition("BookmarkCondition");
                     if (bkmkPropInfo->hasPropertyByName(sCondition))
                     {
                         OUString sBookmarkCondition;
                         bkmkProps->getPropertyValue(sCondition) >>= sBookmarkCondition;
+                    // TODO 1.4
                         GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "condition", sBookmarkCondition);
                     }
                 }

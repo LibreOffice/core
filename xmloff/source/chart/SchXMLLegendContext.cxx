@@ -55,12 +55,14 @@ enum LegendAttributeTokens
 const SvXMLTokenMapEntry aLegendAttributeTokenMap[] =
 {
     { XML_NAMESPACE_CHART,      XML_LEGEND_POSITION,    XML_TOK_LEGEND_POSITION     },
+                                            // TODO import 1.4
     { XML_NAMESPACE_LO_EXT,     XML_OVERLAY,            XML_TOK_LEGEND_OVERLAY      },
     { XML_NAMESPACE_SVG,        XML_X,                  XML_TOK_LEGEND_X            },
     { XML_NAMESPACE_SVG,        XML_Y,                  XML_TOK_LEGEND_Y            },
     { XML_NAMESPACE_CHART,      XML_STYLE_NAME,         XML_TOK_LEGEND_STYLE_NAME   },
     { XML_NAMESPACE_STYLE,      XML_LEGEND_EXPANSION,   XML_TOK_LEGEND_EXPANSION    },
     { XML_NAMESPACE_STYLE,      XML_LEGEND_EXPANSION_ASPECT_RATIO,   XML_TOK_LEGEND_EXPANSION_ASPECT_RATIO    },
+    // DONE
     { XML_NAMESPACE_SVG,        XML_WIDTH,              XML_TOK_LEGEND_WIDTH        },
     { XML_NAMESPACE_CHART_EXT,  XML_WIDTH,              XML_TOK_LEGEND_WIDTH_EXT    },
     { XML_NAMESPACE_SVG,        XML_HEIGHT,             XML_TOK_LEGEND_HEIGHT       },

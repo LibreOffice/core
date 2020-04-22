@@ -181,6 +181,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                     nColsRepeated = static_cast<SCCOL>(std::min<sal_Int32>( MAXCOLCOUNT,
                                 std::max( it.toInt32(), static_cast<sal_Int32>(1) ) ));
                 break;
+        // TODO import 1.4
                 case XML_ELEMENT( OFFICE, XML_VALUE_TYPE ):
                     nCellType = ScXMLImport::GetCellType(it.toCString(), it.getLength());
                     bIsEmpty = false;

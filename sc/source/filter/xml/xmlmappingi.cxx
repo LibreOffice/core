@@ -42,11 +42,13 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLMappingsContext::c
 
     switch( nElement )
     {
+        // TODO import 1.4
         case XML_ELEMENT( CALC_EXT, XML_DATA_MAPPING ):
         {
             pContext = new ScXMLMappingContext( GetScImport(), pAttribList );
         }
         break;
+        // TODO import 1.4
         case XML_ELEMENT( CALC_EXT, XML_DATA_TRANSFORMATIONS):
         {
              pContext = new ScXMLTransformationsContext( GetScImport() );
@@ -128,6 +130,7 @@ uno::Reference<xml::sax::XFastContextHandler>
 
     switch( nElement )
     {
+        // TODO import 1.4
         case XML_ELEMENT( CALC_EXT, XML_DATA_TRANSFORMATIONS):
         {
              pContext = new ScXMLTransformationsContext( GetScImport() );
