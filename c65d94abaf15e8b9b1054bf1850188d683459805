@@ -16,6 +16,24 @@
       "revId": "c65d94abaf15e8b9b1054bf1850188d683459805",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ddec36c_76a05f75",
+        "filename": "uitest/writer_tests5/tdf114724.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-22T08:31:28Z",
+      "side": 0,
+      "message": "\u003chttps://ci.libreoffice.org//job/lo_tb_master_linux_dbg/29503/\u003e and following are failing in the same way, too.",
+      "parentUuid": "29ddde83_3d4c8046",
+      "revId": "c65d94abaf15e8b9b1054bf1850188d683459805",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
