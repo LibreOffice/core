@@ -39,6 +39,7 @@
 #include <svdata.hxx>
 #include <window.h>
 
+#include <deque>
 #include <unordered_map>
 #include <vector>
 
