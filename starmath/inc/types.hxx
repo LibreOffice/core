@@ -135,6 +135,7 @@ sal_Unicode const MS_TILDE = 0x007E;
 sal_Unicode const MS_COMBTILDE = 0x0303;
 sal_Unicode const MS_BAR = 0x00AF;
 sal_Unicode const MS_COMBBAR = 0x0304;
+sal_Unicode const MS_COMBOVERLINE = 0x0305;
 sal_Unicode const MS_BREVE = 0x02D8;
 sal_Unicode const MS_COMBBREVE = 0x0306;
 sal_Unicode const MS_CIRCLE = 0x02DA;
