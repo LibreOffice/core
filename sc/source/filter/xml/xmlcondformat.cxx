@@ -43,6 +43,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLConditio
 
     switch (nElement)
     {
+        // TODO import 1.4 - all of this file
         case XML_ELEMENT( CALC_EXT, XML_CONDITIONAL_FORMAT ):
             pContext = new ScXMLConditionalFormatContext( GetScImport(), pAttribList, *this );
             break;

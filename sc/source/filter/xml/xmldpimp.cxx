@@ -222,6 +222,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotTableCont
             nSourceType = SERVICE;
         }
         break;
+        // DONE
         case XML_ELEMENT( TABLE, XML_DATA_PILOT_GRAND_TOTAL ):
         case XML_ELEMENT( TABLE_EXT, XML_DATA_PILOT_GRAND_TOTAL ):
         {
@@ -694,6 +695,7 @@ ScXMLDataPilotGrandTotalContext::ScXMLDataPilotGrandTotalContext(
                     else if (IsXMLToken(aIter, XML_COLUMN))
                         meOrientation = COLUMN;
                 break;
+        // DONE
                 case XML_ELEMENT( TABLE, XML_DISPLAY_NAME ):
                 case XML_ELEMENT( TABLE_EXT, XML_DISPLAY_NAME ):
                     maDisplayName = aIter.toString();
@@ -812,6 +814,7 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
                     sName = aIter.toString();
                     bHasName = true;
                 break;
+        // DONE
                 case XML_ELEMENT( TABLE, XML_DISPLAY_NAME ):
                 case XML_ELEMENT( TABLE_EXT, XML_DISPLAY_NAME ):
                     aDisplayName = aIter.toString();
@@ -829,6 +832,7 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
                     sSelectedPage = aIter.toString();
                     bSelectedPage = true;
                 break;
+                        // TODO 1.4 import
                 case XML_ELEMENT( LO_EXT, XML_IGNORE_SELECTED_PAGE ):
                     bIgnoreSelectedPage = true;
                 break;
@@ -1036,6 +1040,7 @@ ScXMLDataPilotLevelContext::ScXMLDataPilotLevelContext( ScXMLImport& rImport,
                 case XML_ELEMENT( TABLE, XML_SHOW_EMPTY ):
                     pDataPilotField->SetShowEmpty(IsXMLToken(aIter, XML_TRUE));
                 break;
+        // TODO import 1.4
                 case XML_ELEMENT( CALC_EXT, XML_REPEAT_ITEM_LABELS ):
                     pDataPilotField->SetRepeatItemLabels(IsXMLToken(aIter, XML_TRUE));
                 break;
@@ -1257,6 +1262,7 @@ ScXMLDataPilotSubTotalContext::ScXMLDataPilotSubTotalContext( ScXMLImport& rImpo
                 case XML_ELEMENT( TABLE, XML_FUNCTION ):
                     pDataPilotSubTotals->AddFunction( ScXMLConverter::GetFunctionFromString2( aIter.toString() ) );
                 break;
+        // DONE
                 case XML_ELEMENT( TABLE, XML_DISPLAY_NAME ):
                 case XML_ELEMENT( TABLE_EXT, XML_DISPLAY_NAME ):
                     pDataPilotSubTotals->SetDisplayName(aIter.toString());
@@ -1318,6 +1324,7 @@ ScXMLDataPilotMemberContext::ScXMLDataPilotMemberContext( ScXMLImport& rImport,
                     sName = aIter.toString();
                     bHasName = true;
                 break;
+        // DONE
                 case XML_ELEMENT( TABLE, XML_DISPLAY_NAME ):
                 case XML_ELEMENT( TABLE_EXT, XML_DISPLAY_NAME ):
                     maDisplayName = aIter.toString();

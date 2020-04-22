@@ -79,6 +79,15 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
     const OUString sAlgorithmAttribute          ( ATTRIBUTE_ALGORITHM );
     const OUString sCipherDataElement           ( ELEMENT_CIPHERDATA );
     const OUString sCipherValueElement          ( ELEMENT_CIPHERVALUE );
+    const OUString sManifestKeyInfoElement13    ( ELEMENT_MANIFEST13_KEYINFO );
+    const OUString sEncryptedKeyElement13       ( ELEMENT_ENCRYPTEDKEY13 );
+    const OUString sEncryptionMethodElement13   ( ELEMENT_ENCRYPTIONMETHOD13 );
+    const OUString sPgpDataElement13            ( ELEMENT_PGPDATA13 );
+    const OUString sPgpKeyIDElement13           ( ELEMENT_PGPKEYID13 );
+    const OUString sPGPKeyPacketElement13       ( ELEMENT_PGPKEYPACKET13 );
+    const OUString sAlgorithmAttribute13        ( ATTRIBUTE_ALGORITHM13 );
+    const OUString sCipherDataElement13         ( ELEMENT_CIPHERDATA13 );
+    const OUString sCipherValueElement13        ( ELEMENT_CIPHERVALUE13 );
     const OUString sKeyInfo                     ( "KeyInfo" );
     const OUString sPgpKeyIDProperty            ( "KeyId" );
     const OUString sPgpKeyPacketProperty        ( "KeyPacket" );
@@ -252,6 +261,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                         rNValue.Value >>= aCipherValue;
                 }
 
+                // TODO 1.3 export
                 if (aPgpKeyID.hasElements() && aCipherValue.hasElements() )
                 {
                     // ==== manifest:encrypted-key & children - one for each recipient

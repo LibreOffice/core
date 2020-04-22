@@ -54,6 +54,7 @@ QRCodeContext::QRCodeContext(SvXMLImport& rImport, sal_uInt16 nPrfx, const OUStr
 
         switch (nPrefix)
         {
+            // TODO import 1.4
             case XML_NAMESPACE_LO_EXT:
                 if (IsXMLToken(aLocalName, XML_QRCODE_ERROR_CORRECTION))
                 {

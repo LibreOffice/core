@@ -167,6 +167,7 @@ void XMLTextMasterPageExport::exportMasterPageContent(
             if (bHeaderFirstShared)
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                           XML_DISPLAY, XML_FALSE );
+            // TODO 1.3 OFFICE-3789
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_LO_EXT,
                                         XML_HEADER_FIRST, true, true );
             exportHeaderFooterContent( xHeaderTextFirst, false );
@@ -215,6 +216,7 @@ void XMLTextMasterPageExport::exportMasterPageContent(
             if (bFooterFirstShared)
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                           XML_DISPLAY, XML_FALSE );
+            // TODO 1.3 OFFICE-3789
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_LO_EXT,
                                         XML_FOOTER_FIRST, true, true );
             exportHeaderFooterContent( xFooterTextFirst, false );

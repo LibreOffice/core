@@ -189,6 +189,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetPlotAreaElemTokenMap()
     {
         static const SvXMLTokenMapEntry aPlotAreaElemTokenMap[] =
 {
+    // DONE
     { XML_NAMESPACE_CHART_EXT,  XML_COORDINATE_REGION,      XML_TOK_PA_COORDINATE_REGION_EXT },
     { XML_NAMESPACE_CHART,  XML_COORDINATE_REGION,      XML_TOK_PA_COORDINATE_REGION },
     { XML_NAMESPACE_CHART,  XML_AXIS,                   XML_TOK_PA_AXIS             },
@@ -219,6 +220,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetSeriesElemTokenMap()
     { XML_NAMESPACE_CHART,  XML_MEAN_VALUE,       XML_TOK_SERIES_MEAN_VALUE_LINE  },
     { XML_NAMESPACE_CHART,  XML_REGRESSION_CURVE, XML_TOK_SERIES_REGRESSION_CURVE },
     { XML_NAMESPACE_CHART,  XML_ERROR_INDICATOR,  XML_TOK_SERIES_ERROR_INDICATOR  },
+                                            // TODO import 1.4
     { XML_NAMESPACE_LO_EXT, XML_PROPERTY_MAPPING, XML_TOK_SERIES_PROPERTY_MAPPING },
     { XML_NAMESPACE_CHART, XML_DATA_LABEL,       XML_TOK_SERIES_DATA_LABEL       },
     XML_TOKEN_MAP_END
@@ -243,6 +245,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetChartAttrTokenMap()
     { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_CHART_STYLE_NAME    },
     { XML_NAMESPACE_CHART,  XML_COLUMN_MAPPING,         XML_TOK_CHART_COL_MAPPING   },
     { XML_NAMESPACE_CHART,  XML_ROW_MAPPING,            XML_TOK_CHART_ROW_MAPPING   },
+                                            // TODO import 1.4
     { XML_NAMESPACE_LO_EXT, XML_DATA_PILOT_SOURCE,      XML_TOK_CHART_DATA_PILOT_SOURCE },
     XML_TOKEN_MAP_END
 };
@@ -311,10 +314,12 @@ const SvXMLTokenMap& SchXMLImportHelper::GetSeriesAttrTokenMap()
 {
     { XML_NAMESPACE_CHART,  XML_VALUES_CELL_RANGE_ADDRESS,  XML_TOK_SERIES_CELL_RANGE    },
     { XML_NAMESPACE_CHART,  XML_LABEL_CELL_ADDRESS,         XML_TOK_SERIES_LABEL_ADDRESS },
+                                            // TODO import 1.4
     { XML_NAMESPACE_LO_EXT, XML_LABEL_STRING,               XML_TOK_SERIES_LABEL_STRING  },
     { XML_NAMESPACE_CHART,  XML_ATTACHED_AXIS,              XML_TOK_SERIES_ATTACHED_AXIS },
     { XML_NAMESPACE_CHART,  XML_STYLE_NAME,                 XML_TOK_SERIES_STYLE_NAME    },
     { XML_NAMESPACE_CHART,  XML_CLASS,                      XML_TOK_SERIES_CHART_CLASS   },
+                                            // TODO import 1.4
     { XML_NAMESPACE_LO_EXT, XML_HIDE_LEGEND,                XML_TOK_SERIES_HIDE_LEGEND   },
     XML_TOKEN_MAP_END
 };
@@ -331,6 +336,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetPropMappingAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aPropMappingAttrTokenMap[] =
         {
+                                            // TODO import 1.4
             { XML_NAMESPACE_LO_EXT, XML_PROPERTY, XML_TOK_PROPERTY_MAPPING_PROPERTY },
             { XML_NAMESPACE_LO_EXT, XML_CELL_RANGE_ADDRESS, XML_TOK_PROPERTY_MAPPING_RANGE },
             XML_TOKEN_MAP_END

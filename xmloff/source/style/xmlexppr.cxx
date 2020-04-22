@@ -789,6 +789,7 @@ void SvXMLExportPropertyMapper::exportXML(
             if (bUseExtensionNamespaceForGraphicProperties &&
                 aPropTokens[i].eToken == xmloff::token::XML_GRAPHIC_PROPERTIES)
             {
+    // TODO for graphic-properties -> alg fillstyle
                 nNamespace = XML_NAMESPACE_LO_EXT;
                 if (rExport.getSaneDefaultVersion() <= SvtSaveOptions::ODFSVER_012)
                 {
@@ -1038,6 +1039,7 @@ void SvXMLExportPropertyMapper::_exportXML(
                 if (IsXMLToken(aValue, XML_BT_LR))
                 {
                     sName = rNamespaceMap.GetQNameByKey(
+                            // TODO 1.4
                             XML_NAMESPACE_LO_EXT,
                             mpImpl->mxPropMapper->GetEntryXMLName(rProperty.mnIndex));
                 }

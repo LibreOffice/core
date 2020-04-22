@@ -87,8 +87,10 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     PLMAP( "FirstPageNumber",            XML_NAMESPACE_STYLE,    XML_FIRST_PAGE_NUMBER,            XML_PM_TYPE_FIRSTPAGENUMBER,                            0 ),
     PLMAP( "PageScale",                XML_NAMESPACE_STYLE,    XML_SCALE_TO,                    XML_TYPE_PERCENT16,                                        CTF_PM_SCALETO ),
     PLMAP( "ScaleToPages",            XML_NAMESPACE_STYLE,    XML_SCALE_TO_PAGES,             XML_TYPE_NUMBER16,                                        CTF_PM_SCALETOPAGES ),
+    // TODO import
     PLMAP_EXT_IMPORT( "ScaleToPagesX",            XML_NAMESPACE_STYLE,    XML_SCALE_TO_X,                  XML_TYPE_NUMBER16,                                        CTF_PM_SCALETOX ),
     PLMAP_EXT_IMPORT( "ScaleToPagesY",            XML_NAMESPACE_STYLE,    XML_SCALE_TO_Y,                 XML_TYPE_NUMBER16,                                        CTF_PM_SCALETOY ),
+    // TODO 1.3
     PLMAP_EXT( "ScaleToPagesX",            XML_NAMESPACE_LO_EXT,    XML_SCALE_TO_X,                  XML_TYPE_NUMBER16,                                        CTF_PM_SCALETOX ),
     PLMAP_EXT( "ScaleToPagesY",            XML_NAMESPACE_LO_EXT,    XML_SCALE_TO_Y,                 XML_TYPE_NUMBER16,                                        CTF_PM_SCALETOY ),
     PLMAP( "CenterHorizontally",        XML_NAMESPACE_STYLE,    XML_TABLE_CENTERING,            XML_PM_TYPE_CENTER_HORIZONTAL | MID_FLAG_MULTI_PROPERTY | MID_FLAG_MERGE_ATTRIBUTE, 0 ),

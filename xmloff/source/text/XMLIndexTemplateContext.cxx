@@ -221,6 +221,7 @@ SvXMLImportContextRef XMLIndexTemplateContext::CreateChildContext(
 {
     SvXMLImportContext* pContext = nullptr;
 
+    // DONE OFFICE-3941
     if (XML_NAMESPACE_TEXT == nPrefix || XML_NAMESPACE_LO_EXT == nPrefix)
     {
         TemplateTokenType nToken;
