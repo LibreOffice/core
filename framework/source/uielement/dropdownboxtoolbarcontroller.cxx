@@ -268,19 +268,6 @@ void DropdownToolbarController::executeControlCommand( const css::frame::Control
             }
         }
     }
-    else if ( rControlCommand.Command == "SetDropDownLines" )
-    {
-        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
-        {
-            if ( rControlCommand.Arguments[i].Name == "Lines" )
-            {
-                sal_Int32 nValue( 5 );
-                rControlCommand.Arguments[i].Value >>= nValue;
-                m_pListBoxControl->SetDropDownLineCount( sal_uInt16( nValue ));
-                break;
-            }
-        }
-    }
 }
 
 } // namespace
