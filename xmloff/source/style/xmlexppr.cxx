@@ -573,7 +573,8 @@ vector<XMLPropertyState> SvXMLExportPropertyMapper::Filter_(
     bool bDelInfo = false;
     if( !pFilterInfo )
     {
-        const SvtSaveOptions::ODFDefaultVersion nCurrentVersion( SvtSaveOptions().GetODFDefaultVersion() );
+        assert(SvtSaveOptions().GetODFDefaultVersion() != SvtSaveOptions::ODFVER_UNKNOWN);
+        const SvtSaveOptions::ODFSaneDefaultVersion nCurrentVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
         pFilterInfo = new FilterPropertiesInfo_Impl;
         for( sal_Int32 i=0; i < nProps; i++ )
         {
@@ -585,12 +586,13 @@ vector<XMLPropertyState> SvXMLExportPropertyMapper::Filter_(
                 ( (0 != (nFlags & MID_FLAG_MUST_EXIST)) ||
                   xInfo->hasPropertyByName( rAPIName ) ) )
             {
-                const SvtSaveOptions::ODFDefaultVersion nEarliestODFVersionForExport(
+                const std::optional<SvtSaveOptions::ODFSaneDefaultVersion> oEarliestODFVersionForExport(
                         mpImpl->mxPropMapper->GetEarliestODFVersionForExport(i));
-                if( nCurrentVersion >= nEarliestODFVersionForExport
-                        || nCurrentVersion == SvtSaveOptions::ODFVER_UNKNOWN
-                        || nEarliestODFVersionForExport == SvtSaveOptions::ODFVER_UNKNOWN )
+                if (!oEarliestODFVersionForExport
+                    || nCurrentVersion >= *oEarliestODFVersionForExport)
+                {
                     pFilterInfo->AddProperty(rAPIName, i);
+                }
             }
         }
 

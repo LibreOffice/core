@@ -67,7 +67,7 @@ using ::com::sun::star::uno::Any;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-#define MAP_(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_010, false }
+#define MAP_(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFSVER_010, false }
 #define MAPV_(name,prefix,token,type,context,version)  { name, sizeof(name)-1, prefix, token, type, context, version, false }
 #define GMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_GRAPHIC,context)
 #define GMAP_D(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_GRAPHIC|MID_FLAG_DEFAULT_ITEM_EXPORT,context)
@@ -75,7 +75,7 @@ using namespace ::xmloff::token;
 #define DPMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_DRAWING_PAGE,context)
 #define TMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_TEXT,context)
 #define PMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_PARAGRAPH,context)
-#define MAP_END() { nullptr, 0, 0, XML_EMPTY, 0 ,0, SvtSaveOptions::ODFVER_010, false }
+#define MAP_END() { nullptr, 0, 0, XML_EMPTY, 0 ,0, SvtSaveOptions::ODFSVER_010, false }
 
 // entry list for graphic properties
 
@@ -129,7 +129,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "TextAutoGrowHeight",             XML_NAMESPACE_DRAW, XML_AUTO_GROW_HEIGHT,       XML_TYPE_BOOL, 0 ),
     GMAP( "TextAutoGrowWidth",              XML_NAMESPACE_DRAW, XML_AUTO_GROW_WIDTH,        XML_TYPE_BOOL, 0 ),
     GMAP( "TextFitToSize",                  XML_NAMESPACE_DRAW, XML_FIT_TO_SIZE,            XML_SD_TYPE_FITTOSIZE|MID_FLAG_MERGE_PROPERTY, 0),
-    GMAPV( "TextFitToSize",                 XML_NAMESPACE_STYLE, XML_SHRINK_TO_FIT,         XML_SD_TYPE_FITTOSIZE_AUTOFIT|MID_FLAG_MERGE_PROPERTY, 0, SvtSaveOptions::ODFVER_012 ),
+    GMAPV( "TextFitToSize",                 XML_NAMESPACE_STYLE, XML_SHRINK_TO_FIT,         XML_SD_TYPE_FITTOSIZE_AUTOFIT|MID_FLAG_MERGE_PROPERTY, 0, SvtSaveOptions::ODFSVER_012 ),
     GMAP( "TextContourFrame",               XML_NAMESPACE_DRAW, XML_FIT_TO_CONTOUR,         XML_TYPE_BOOL, 0 ),
     GMAP( "TextMaximumFrameHeight",         XML_NAMESPACE_FO,   XML_MAX_HEIGHT,             XML_TYPE_MEASURE, 0 ),
     GMAP( "TextMaximumFrameWidth",          XML_NAMESPACE_FO,   XML_MAX_WIDTH,              XML_TYPE_MEASURE, 0 ),
@@ -160,7 +160,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "AdjustRed",                      XML_NAMESPACE_DRAW, XML_RED,                    XML_TYPE_PERCENT16, 0 ), // signed? exists in SW, too, with same property name
     GMAP( "AdjustGreen",                    XML_NAMESPACE_DRAW, XML_GREEN,                  XML_TYPE_PERCENT16, 0 ), // signed? exists in SW, too, with same property name
     GMAP( "AdjustBlue",                     XML_NAMESPACE_DRAW, XML_BLUE,                   XML_TYPE_PERCENT16, 0 ), // signed? exists in SW, too, with same property name
-    GMAPV( "GraphicCrop",                   XML_NAMESPACE_FO,   XML_CLIP,                   XML_TYPE_TEXT_CLIP, CTF_TEXT_CLIP, SvtSaveOptions::ODFVER_012 ), // exists in SW, too, with same property name
+    GMAPV( "GraphicCrop",                   XML_NAMESPACE_FO,   XML_CLIP,                   XML_TYPE_TEXT_CLIP, CTF_TEXT_CLIP, SvtSaveOptions::ODFSVER_012), // exists in SW, too, with same property name
     GMAP( "GraphicCrop",                    XML_NAMESPACE_FO,   XML_CLIP,                   XML_TYPE_TEXT_CLIP11, CTF_TEXT_CLIP11 ), // exists in SW, too, with same property name
     GMAP( "Transparency",                   XML_NAMESPACE_DRAW, XML_IMAGE_OPACITY,          XML_TYPE_NEG_PERCENT16|MID_FLAG_MULTI_PROPERTY, 0 ), // exists in SW, too, with same property name // #i25616#
     GMAP( "IsMirrored",                     XML_NAMESPACE_STYLE,    XML_MIRROR,             XML_TYPE_SD_MIRROR|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too // #i40214#

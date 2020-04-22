@@ -50,12 +50,12 @@ using namespace com::sun::star;
 using namespace ::xmloff::token;
 using namespace ::formula;
 
-#define MAP(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_010, false }
+#define MAP(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFSVER_010, false }
 // extensions import/export
-#define MAP_EXT(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_012_EXT_COMPAT, false }
+#define MAP_EXT(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFSVER_012_EXT_COMPAT, false }
 // extensions import only
-#define MAP_EXT_I(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_012_EXT_COMPAT, true }
-#define MAP_END()   { nullptr, 0, 0, XML_TOKEN_INVALID, 0, 0, SvtSaveOptions::ODFVER_010, false }
+#define MAP_EXT_I(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFSVER_012_EXT_COMPAT, true }
+#define MAP_END()   { nullptr, 0, 0, XML_TOKEN_INVALID, 0, 0, SvtSaveOptions::ODFSVER_010, false }
 
 const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
 {
