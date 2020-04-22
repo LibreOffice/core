@@ -28,6 +28,8 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,clucene,0))
 #  http://sourceforge.net/mailarchive/message.php?msg_id=32367781
 # see msvc14.0 error report on:
 # https://connect.microsoft.com/VisualStudio/feedback/details/1424082/vs2015-rc-c-compiler-mixes-up-template-parameter-with-identical-named-inherited-typedef
+# ostream-wchar_t.patch was proposed upstream, see
+#  <https://sourceforge.net/p/clucene/mailman/message/36989348/>
 $(eval $(call gb_UnpackedTarball_add_patches,clucene,\
 	external/clucene/patches/clucene-debug.patch \
 	external/clucene/patches/clucene-multimap-put.patch \
