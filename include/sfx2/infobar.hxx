@@ -114,6 +114,7 @@ public:
     VclPtr<SfxInfoBarWindow> getInfoBar(const OUString& sId);
     bool hasInfoBarWithID(const OUString& sId);
     void removeInfoBar(VclPtr<SfxInfoBarWindow> const& pInfoBar);
+    static bool isInfobarEnabled(const OUString& sId);
 
     virtual void Resize() override;
 };
