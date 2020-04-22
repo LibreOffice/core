@@ -103,7 +103,6 @@ IMPL_LINK_NOARG(EditControl, FocusOutHdl, weld::Widget&, void)
         m_pEditToolbarController->LoseFocus();
 }
 
-
 IMPL_LINK_NOARG(EditControl, ActivateHdl, weld::Entry&, bool)
 {
     if (m_pEditToolbarController)
