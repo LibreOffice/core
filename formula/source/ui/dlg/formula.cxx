@@ -819,10 +819,11 @@ void FormulaDlg_Impl::FillListboxes()
     if ( m_pFuncDesc && m_pFuncDesc->getCategory() )
     {
         // We'll never have more than int32 max categories so this is safe ...
-        // m_xFuncPage->GetCategory() takes into account "Last Used" + "All" so 13 categories (0 -> 12)
-        // whereas m_pFuncDesc->getCategory()->getNumber() doesn't take into account the 2 first (so only 0->10)
-        if ( m_xFuncPage->GetCategory() != static_cast<sal_Int32>(m_pFuncDesc->getCategory()->getNumber() + 2) )
-            m_xFuncPage->SetCategory(m_pFuncDesc->getCategory()->getNumber() + 2);
+        // Category listbox holds additional entries for Last Used and All, so
+        // the offset should be two but hard coded numbers are ugly...
+        const sal_Int32 nCategoryOffset = m_xFuncPage->GetCategoryEntryCount() - m_aFormulaHelper.GetCategoryCount();
+        if ( m_xFuncPage->GetCategory() != static_cast<sal_Int32>(m_pFuncDesc->getCategory()->getNumber() + nCategoryOffset) )
+            m_xFuncPage->SetCategory(m_pFuncDesc->getCategory()->getNumber() + nCategoryOffset);
 
         sal_Int32 nPos = m_xFuncPage->GetFuncPos(m_pFuncDesc);
 

@@ -71,6 +71,11 @@ FormulaHelper::FormulaHelper(const IFunctionManager* _pFunctionManager)
     m_pCharClass = m_pSysLocale->GetCharClassPtr();
 }
 
+sal_Int32 FormulaHelper::GetCategoryCount() const
+{
+    return m_pFunctionManager->getCount();
+}
+
 bool FormulaHelper::GetNextFunc( const OUString&  rFormula,
                                      bool             bBack,
                                      sal_Int32&       rFStart,   // Input and output
