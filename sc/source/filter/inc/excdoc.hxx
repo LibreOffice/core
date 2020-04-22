@@ -40,9 +40,9 @@ class ExcTable : public XclExpRecordBase, public XclExpRoot
 {
 private:
     typedef XclExpRecordList< ExcBundlesheetBase >  ExcBoundsheetList;
-    typedef std::shared_ptr< XclExpCellTable >    XclExpCellTableRef;
-    typedef XclExpRecordList< XclExpNote >      XclExpNoteList;
-    typedef std::shared_ptr< XclExpNoteList >     XclExpNoteListRef;
+    typedef rtl::Reference< XclExpCellTable >       XclExpCellTableRef;
+    typedef XclExpRecordList< XclExpNote >          XclExpNoteList;
+    typedef rtl::Reference< XclExpNoteList >        XclExpNoteListRef;
 
     XclExpRecordList<>          aRecList;
     XclExpCellTableRef          mxCellTable;

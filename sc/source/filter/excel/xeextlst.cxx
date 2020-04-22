@@ -365,21 +365,21 @@ XclExpExtCfRule::XclExpExtCfRule( const XclExpRoot& rRoot, const ScFormatEntry& 
         case ScFormatEntry::Type::Databar:
         {
             const ScDataBarFormat& rDataBar = static_cast<const ScDataBarFormat&>(rFormat);
-            mxEntry.reset( new XclExpExtDataBar( *this, rDataBar, rPos ) );
+            mxEntry = new XclExpExtDataBar( *this, rDataBar, rPos );
             pType = "dataBar";
         }
         break;
         case ScFormatEntry::Type::Iconset:
         {
             const ScIconSetFormat& rIconSet = static_cast<const ScIconSetFormat&>(rFormat);
-            mxEntry.reset(new XclExpExtIconSet(*this, rIconSet, rPos));
+            mxEntry = new XclExpExtIconSet(*this, rIconSet, rPos);
             pType = "iconSet";
         }
         break;
         case ScFormatEntry::Type::ExtCondition:
         {
             const ScCondFormatEntry& rCondFormat = static_cast<const ScCondFormatEntry&>(rFormat);
-            mxEntry.reset(new XclExpExtCF(*this, rCondFormat));
+            mxEntry = new XclExpExtCF(*this, rCondFormat);
             pType = "cellIs";
             mOperator = GetOperatorString( rCondFormat.GetOperation() );
         }
@@ -533,9 +533,9 @@ void XclExpExtCondFormat::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElement( XML_ext );
 }
 
-void XclExpExtCondFormat::AddRecord( const XclExpExtConditionalFormattingRef& aEntry )
+void XclExpExtCondFormat::AddRecord( XclExpExtConditionalFormatting* pEntry )
 {
-    maCF.AppendRecord( aEntry );
+    maCF.AppendRecord( pEntry );
 }
 
 void XclExtLst::SaveXml( XclExpXmlStream& rStrm )
@@ -551,12 +551,12 @@ void XclExtLst::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElement( XML_extLst );
 }
 
-void XclExtLst::AddRecord( const XclExpExtRef& aEntry )
+void XclExtLst::AddRecord( XclExpExt* pEntry )
 {
-    maExtEntries.AppendRecord( aEntry );
+    maExtEntries.AppendRecord( pEntry );
 }
 
-XclExpExtRef XclExtLst::GetItem( XclExpExtType eType )
+XclExpExt* XclExtLst::GetItem( XclExpExtType eType )
 {
     size_t n = maExtEntries.GetSize();
     for( size_t i = 0; i < n; ++i )
@@ -565,7 +565,7 @@ XclExpExtRef XclExtLst::GetItem( XclExpExtType eType )
             return maExtEntries.GetRecord( i );
     }
 
-    return XclExpExtRef();
+    return nullptr;
 }
 
 
