@@ -117,7 +117,7 @@ for template in templates:
     for line in template_file:
         keyline = line
         if keyline.startswith(o.key):
-            keyline = keyline[len(o.key):] + outkey
+            keyline = outkey + keyline[len(o.key):]
         outfile.write(keyline)
         if o.key in line:
             translations = templates[template]['translations']
