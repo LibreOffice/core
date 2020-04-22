@@ -171,9 +171,8 @@ DECLARE_WW8EXPORT_TEST(testTdf73056_cellMargins, "tdf73056_cellMargins.doc")
 
     // only the first cell with specific margins was processed, leaving the rest at table defaults. Was 0.
     uno::Reference< beans::XPropertySet > xPropSet( xCell, uno::UNO_QUERY_THROW );
-    if ( !mbExported )
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "bottom cell spacing to contents",
-            sal_Int32(101), getProperty<sal_Int32>(xPropSet, "BottomBorderDistance" ) );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "bottom cell spacing to contents",
+        sal_Int32(101), getProperty<sal_Int32>(xPropSet, "BottomBorderDistance" ) );
 }
 DECLARE_WW8EXPORT_TEST(testTdf79435_legacyInputFields, "tdf79435_legacyInputFields.docx")
 {
