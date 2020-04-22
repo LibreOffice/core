@@ -112,7 +112,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_osx,\
     vcl/osx/DropTarget \
     vcl/osx/HtmlFmtFlt \
     vcl/osx/OSXTransferable \
-    vcl/osx/PictToBmpFlt \
     vcl/osx/a11yfocuslistener \
     vcl/osx/a11yfocustracker \
     vcl/osx/a11ylistener \

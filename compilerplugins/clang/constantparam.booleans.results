@@ -466,10 +466,6 @@ filter/qa/cppunit/filters-pcx-test.cxx:19
     _Bool ipxGraphicImport(class SvStream &,class Graphic &,class FilterConfigItem *)
     class FilterConfigItem * 
     0
-filter/qa/cppunit/filters-pict-test.cxx:24
-    _Bool iptGraphicImport(class SvStream &,class Graphic &,class FilterConfigItem *)
-    class FilterConfigItem * 
-    0
 filter/qa/cppunit/filters-ppm-test.cxx:19
     _Bool ipbGraphicImport(class SvStream &,class Graphic &,class FilterConfigItem *)
     class FilterConfigItem * 

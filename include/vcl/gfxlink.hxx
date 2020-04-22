@@ -35,19 +35,18 @@ class SvStream;
  */
 enum class GfxLinkType
 {
-    NONE         = 0,
-    EpsBuffer    = 1,
-    NativeGif    = 2,
-    NativeJpg    = 3,
-    NativePng    = 4,
-    NativeTif    = 5,
-    NativeWmf    = 6,
-    NativeMet    = 7,
-    NativePct    = 8,
-    NativeSvg    = 9,
-    NativeMov    = 10,
-    NativeBmp    = 11,
-    NativePdf    = 12, // If a new type is added, make sure to change NativeLast too
+    NONE,
+    EpsBuffer,
+    NativeGif,
+    NativeJpg,
+    NativePng,
+    NativeTif,
+    NativeWmf,
+    NativeMet,
+    NativeSvg,
+    NativeMov,
+    NativeBmp,
+    NativePdf, // If a new type is added, make sure to change NativeLast too
 
     // Alias for when the first native type starts and last native
     // type ends.

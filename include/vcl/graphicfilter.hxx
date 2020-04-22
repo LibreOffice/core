@@ -90,7 +90,6 @@ namespace o3tl
 #define GIF_SHORTNAME           "GIF"
 #define JPG_SHORTNAME           "JPG"
 #define MET_SHORTNAME           "MET"
-#define PCT_SHORTNAME           "PCT"
 #define PNG_SHORTNAME           "PNG"
 #define SVM_SHORTNAME           "SVM"
 #define TIF_SHORTNAME           "TIF"
@@ -122,7 +121,7 @@ enum class GraphicFileFormat
     EPS = 0x0010,
     DXF = 0x00f1,
     MET = 0x00f2,
-    PCT = 0x00f3,
+    // retired PCT = 0x00f3,
     // retired SGF = 0x00f4,
     SVM = 0x00f5,
     WMF = 0x00f6,

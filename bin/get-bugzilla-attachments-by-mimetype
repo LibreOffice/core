@@ -496,7 +496,6 @@ mimetypes = {
     'image/x-svm': 'svm',
     'image/wmf': 'wmf',
     'image/x-wmf': 'wmf',
-    'image/x-pict': 'pict',
     'image/x-cmx': 'cmx',
     'image/svg+xml': 'svg',
     'image/bmp': 'bmp',

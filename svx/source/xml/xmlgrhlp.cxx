@@ -650,7 +650,6 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
                         aExtension = ".wmf";
                     break;
                 case GfxLinkType::NativeMet: aExtension = ".met"; break;
-                case GfxLinkType::NativePct: aExtension = ".pct"; break;
                 case GfxLinkType::NativeSvg:
                     // backward-compat kludge: since no released OOo
                     // version to date can handle svg properly, wrap it up

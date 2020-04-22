@@ -2174,7 +2174,6 @@ res/lx03140.png res/lx03125.png
 res/lx03145.png res/lx03144.png
 res/lx03150.png cmd/32/showsinglepage.png
 res/lx03152.png res/lx03125.png
-res/lx03153.png res/lx03125.png
 res/lx03154.png res/lx03125.png
 res/lx03155.png res/lx03125.png
 res/lx03156.png res/odt_32_8.png
@@ -2198,7 +2197,6 @@ res/sx03139.png cmd/sc_questionanswers.png
 res/sx03140.png res/sx03125.png
 res/sx03145.png res/sx03144.png
 res/sx03152.png res/sx03125.png
-res/sx03153.png res/sx03125.png
 res/sx03154.png res/sx03125.png
 res/sx03155.png res/sx03125.png
 res/sx03158.png res/sx03125.png

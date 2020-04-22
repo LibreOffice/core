@@ -45,7 +45,6 @@
 #define MIMETYPE_EPS        "image/x-eps"
 #define MIMETYPE_DXF        "image/vnd.dxf"
 #define MIMETYPE_MET        "image/x-met"
-#define MIMETYPE_PCT        "image/x-pict"
 #define MIMETYPE_SVM        "image/x-svm"
 #define MIMETYPE_WMF        "image/x-wmf"
 #define MIMETYPE_EMF        "image/x-emf"

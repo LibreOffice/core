@@ -1353,11 +1353,6 @@
                 <desc>OS/2 Metafile</desc>
               </info>
             </enumeration>
-            <enumeration oor:value="PCT - Mac Pict">
-              <info>
-                <desc>Mac Pict</desc>
-              </info>
-            </enumeration>
             <enumeration oor:value="PBM - Portable Bitmap">
               <info>
                 <desc>Portable Bitmap</desc>

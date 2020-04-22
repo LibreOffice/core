@@ -1359,7 +1359,6 @@
 #define STR_IMAGE_TIFF                                      NC_("STR_IMAGE_TIFF", "TIFF image")
 #define STR_IMAGE_WMF                                       NC_("STR_IMAGE_WMF", "WMF image")
 #define STR_IMAGE_MET                                       NC_("STR_IMAGE_MET", "MET image")
-#define STR_IMAGE_PCT                                       NC_("STR_IMAGE_PCT", "PCT image")
 #define STR_IMAGE_SVG                                       NC_("STR_IMAGE_SVG", "SVG image")
 #define STR_IMAGE_BMP                                       NC_("STR_IMAGE_BMP", "BMP image")
 #define STR_IMAGE_UNKNOWN                                   NC_("STR_IMAGE_UNKNOWN", "Unknown")

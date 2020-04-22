@@ -48,7 +48,7 @@ OUString GraphicMimeTypeHelper::GetMimeTypeForExtension(const OString& rExt)
         = { { "gif", "image/gif" },   { "png", "image/png" },     { "jpg", "image/jpeg" },
             { "tif", "image/tiff" },  { "svg", "image/svg+xml" }, { "pdf", "application/pdf" },
             { "wmf", "image/x-wmf" }, { "emf", "image/x-emf" },   { "eps", "image/x-eps" },
-            { "bmp", "image/bmp" },   { "pct", "image/x-pict" },  { "svm", "image/x-svm" } };
+            { "bmp", "image/bmp" },   { "svm", "image/x-svm" } };
 
     OUString aMimeType;
 
@@ -99,8 +99,6 @@ OUString GraphicMimeTypeHelper::GetMimeTypeForConvertDataFormat(ConvertDataForma
             return "image/gif";
         case ConvertDataFormat::JPG:
             return "image/jpeg";
-        case ConvertDataFormat::PCT:
-            return "image/x-pict";
         case ConvertDataFormat::PNG:
             return "image/png";
         case ConvertDataFormat::SVM:

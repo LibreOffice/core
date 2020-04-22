@@ -341,16 +341,6 @@ bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension, bool b
         }
     }
 
-    if (!bTest || rFormatExtension.startsWith("PCT"))
-    {
-        bSomethingTested = true;
-        if (aDetector.checkPCT())
-        {
-            rFormatExtension = aDetector.msDetectedFormat;
-            return true;
-        }
-    }
-
     if (!bTest ||
         rFormatExtension.startsWith("PBM") ||
         rFormatExtension.startsWith("PGM") ||
@@ -1328,8 +1318,6 @@ Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 size
                     eLinkType = GfxLinkType::NativeTif;
                 else if( aShortName.startsWith(MET_SHORTNAME))
                     eLinkType = GfxLinkType::NativeMet;
-                else if( aShortName.startsWith(PCT_SHORTNAME))
-                    eLinkType = GfxLinkType::NativePct;
             }
         }
     }
@@ -1736,8 +1724,6 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
                             eLinkType = GfxLinkType::NativeTif;
                         else if( aShortName.startsWith( MET_SHORTNAME ) )
                             eLinkType = GfxLinkType::NativeMet;
-                        else if( aShortName.startsWith( PCT_SHORTNAME ) )
-                            eLinkType = GfxLinkType::NativePct;
                     }
                 }
             }
@@ -2184,7 +2170,6 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData&, rData, bool )
         case ConvertDataFormat::GIF: aShortName = GIF_SHORTNAME; break;
         case ConvertDataFormat::JPG: aShortName = JPG_SHORTNAME; break;
         case ConvertDataFormat::MET: aShortName = MET_SHORTNAME; break;
-        case ConvertDataFormat::PCT: aShortName = PCT_SHORTNAME; break;
         case ConvertDataFormat::PNG: aShortName = PNG_SHORTNAME; break;
         case ConvertDataFormat::SVM: aShortName = SVM_SHORTNAME; break;
         case ConvertDataFormat::TIF: aShortName = TIF_SHORTNAME; break;

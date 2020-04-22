@@ -110,8 +110,6 @@ static SvtExtensionResIdMapping_Impl const ExtensionMap_Impl[] =
     { "ott",   false, STR_DESCRIPTION_OO_WRITER_TEMPLATE,    SvImageId::OO_WriterTemplate },
     { "pas",   true,  STR_DESCRIPTION_SOURCEFILE,            SvImageId::NONE },
     { "pcd",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           SvImageId::PCD },
-    { "pct",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           SvImageId::PCT },
-    { "pict",  true,  STR_DESCRIPTION_GRAPHIC_DOC,           SvImageId::PCT },
     { "pcx",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           SvImageId::PCX },
     { "pl",    true,  STR_DESCRIPTION_SOURCEFILE,            SvImageId::NONE },
     { "png",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           SvImageId::PNG },
@@ -514,8 +512,6 @@ static OUString GetImageNameFromList_Impl( SvImageId nImageId, bool bBig )
                 return BMP_FILE_LC;
             case SvImageId::PCD:
                 return BMP_PCD_LC;
-            case SvImageId::PCT:
-                return BMP_PCT_LC;
             case SvImageId::PCX:
                 return BMP_PCX_LC;
             case SvImageId::SIM:
@@ -613,8 +609,6 @@ static OUString GetImageNameFromList_Impl( SvImageId nImageId, bool bBig )
                 return BMP_FILE_SC;
             case SvImageId::PCD:
                 return BMP_PCD_SC;
-            case SvImageId::PCT:
-                return BMP_PCT_SC;
             case SvImageId::PCX:
                 return BMP_PCX_SC;
             case SvImageId::SIM:
