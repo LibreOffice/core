@@ -229,7 +229,6 @@ int getFlatTypeRank(const OUString& rType)
         "gif_Graphics_Interchange",
         "bmp_MS_Windows",
         "pcx_Zsoft_Paintbrush",
-        "pct_Mac_Pict",
         "pcd_Photo_CD_Base",
         "pcd_Photo_CD_Base4",
         "pcd_Photo_CD_Base16",

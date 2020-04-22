@@ -41,7 +41,7 @@ enum class SvImageId {
     MathTemplate           = START + 69,
     File                   = START + 74,
     PCD                    = START + 76,
-    PCT                    = START + 77,
+    // used to be PCT i.e. Mac PICT format
     PCX                    = START + 78,
     SIM                    = START + 79,
     TextFile               = START + 80,

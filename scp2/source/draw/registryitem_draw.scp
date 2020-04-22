@@ -1069,7 +1069,6 @@ CONDITIONAL_REGISTER_DOC_EXTENSION( Dxf,  gid_Module_Prg_Draw_Other_Reg, dxf,  D
 CONDITIONAL_REGISTER_DOC_EXTENSION( Emf,  gid_Module_Prg_Draw_Other_Reg, emf,  EMF,  MS_ENHANCED_METAFILE, 5, sdraw.exe, open, Draw )
 CONDITIONAL_REGISTER_DOC_EXTENSION( Eps,  gid_Module_Prg_Draw_Other_Reg, eps,  EPS,  ENCAPSULATED_POSTSCRIPT, 5, sdraw.exe, open, Draw )
 CONDITIONAL_REGISTER_DOC_EXTENSION( Met,  gid_Module_Prg_Draw_Other_Reg, met,  MET,  OS2_METAFILE, 5, sdraw.exe, open, Draw )
-CONDITIONAL_REGISTER_DOC_EXTENSION( Pct,  gid_Module_Prg_Draw_Other_Reg, pct,  PCT,  MACINTOSH_PICTURE_METAFILE, 5, sdraw.exe, open, Draw )
 CONDITIONAL_REGISTER_DOC_EXTENSION( Wmf,  gid_Module_Prg_Draw_Other_Reg, wmf,  WMF,  MS_WINDOWS_METAFILE, 5, sdraw.exe, open, Draw )
 CONDITIONAL_REGISTER_DOC_EXTENSION( Bmp,  gid_Module_Prg_Draw_Other_Reg, bmp,  BMP,  MS_WINDOWS_BITMAP, 5, sdraw.exe, open, Draw )
 CONDITIONAL_REGISTER_DOC_EXTENSION( Cdr,  gid_Module_Prg_Draw_Other_Reg, cdr,  CDR,  CORELDRAW_FILE_FORMAT, 5, sdraw.exe, open, Draw )

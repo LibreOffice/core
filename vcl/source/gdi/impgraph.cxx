@@ -1192,7 +1192,7 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
                 case SYS_WINMETAFILE:
                 case SYS_WNTMETAFILE: nCvtType = ConvertDataFormat::WMF; break;
                 case SYS_OS2METAFILE: nCvtType = ConvertDataFormat::MET; break;
-                case SYS_MACMETAFILE: nCvtType = ConvertDataFormat::PCT; break;
+                case SYS_MACMETAFILE: nCvtType = ConvertDataFormat::PNG; break;
 
                 default:
                     nCvtType = ConvertDataFormat::Unknown;

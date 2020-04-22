@@ -700,7 +700,6 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_drawgraphics_typ
 	pcd_Photo_CD_Base \
 	pcd_Photo_CD_Base16 \
 	pcd_Photo_CD_Base4 \
-	pct_Mac_Pict \
 	pcx_Zsoft_Paintbrush \
 	pgm_Portable_Graymap \
 	png_Portable_Network_Graphic \
@@ -727,7 +726,6 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_drawgraphics_f
 	MET___OS_2_Metafile \
 	mov__MOV \
 	PBM___Portable_Bitmap \
-	PCT___Mac_Pict \
 	PCX___Zsoft_Paintbrush \
 	PGM___Portable_Graymap \
 	PNG___Portable_Network_Graphic \
@@ -770,7 +768,6 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_impressgraphics_
 	jpg_JPEG \
 	met_OS2_Metafile \
 	pbm_Portable_Bitmap \
-	pct_Mac_Pict \
 	pgm_Portable_Graymap \
 	png_Portable_Network_Graphic \
 	ppm_Portable_Pixelmap \
@@ -837,7 +834,6 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_internalgraphics
 	pcd_Photo_CD_Base \
 	pcd_Photo_CD_Base16 \
 	pcd_Photo_CD_Base4 \
-	pct_Mac_Pict \
 	pcx_Zsoft_Paintbrush \
 	pgm_Portable_Graymap \
 	png_Portable_Network_Graphic \
@@ -870,7 +866,6 @@ $(eval $(call filter_Configuration_add_internal_filters,fcfg_langpack,fcfg_inter
 	pcd_Import_Base \
 	pcd_Import_Base4 \
 	pcd_Import_Base16 \
-	pct_Import \
 	pcx_Import \
 	pdf_Export \
 	pdf_Import \

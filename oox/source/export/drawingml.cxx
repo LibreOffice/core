@@ -1118,10 +1118,6 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
             sMediaType = "image/x-met";
             pExtension = ".met";
             break;
-        case GfxLinkType::NativePct:
-            sMediaType = "image/x-pict";
-            pExtension = ".pct";
-            break;
         case GfxLinkType::NativeMov:
             sMediaType = "application/movie";
             pExtension = ".MOV";

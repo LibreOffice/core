@@ -133,7 +133,6 @@ bool GfxLink::LoadNative( Graphic& rGraphic )
                 case GfxLinkType::NativeTif: aShortName = TIF_SHORTNAME; break;
                 case GfxLinkType::NativeWmf: aShortName = WMF_SHORTNAME; break;
                 case GfxLinkType::NativeMet: aShortName = MET_SHORTNAME; break;
-                case GfxLinkType::NativePct: aShortName = PCT_SHORTNAME; break;
                 case GfxLinkType::NativeSvg: aShortName = SVG_SHORTNAME; break;
                 case GfxLinkType::NativeBmp: aShortName = BMP_SHORTNAME; break;
                 case GfxLinkType::NativePdf: aShortName = PDF_SHORTNAME; break;
