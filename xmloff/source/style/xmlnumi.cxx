@@ -932,6 +932,7 @@ static const SvXMLTokenMapEntry* lcl_getStyleAlignmentAttributesAttrTokenMap()
     {
         { XML_NAMESPACE_TEXT, XML_LABEL_FOLLOWED_BY,
                 XML_TOK_STYLE_ATTRIBUTES_ATTR_LABEL_FOLLOWED_BY },
+        // DONE
         { XML_NAMESPACE_LO_EXT, XML_LABEL_FOLLOWED_BY,
                 XML_TOK_STYLE_ATTRIBUTES_ATTR_LABEL_FOLLOWED_BY },
         { XML_NAMESPACE_TEXT, XML_LIST_TAB_STOP_POSITION,

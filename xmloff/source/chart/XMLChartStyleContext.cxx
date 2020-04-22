@@ -116,6 +116,7 @@ SvXMLImportContextRef XMLChartStyleContext::CreateChildContext(
 {
     SvXMLImportContextRef xContext;
 
+    // TODO for graphic-properties -> alg fillstyle
     if( XML_NAMESPACE_STYLE == nPrefix || XML_NAMESPACE_LO_EXT == nPrefix )
     {
         sal_uInt32 nFamily = 0;

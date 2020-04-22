@@ -183,10 +183,12 @@ SvXMLImportContextRef SdXMLShapeContext::CreateChildContext( sal_uInt16 p_nPrefi
     {
         xContext = new SdXMLDescriptionContext( GetImport(), p_nPrefix, rLocalName, xAttrList, mxShape );
     }
+    // TODO import 1.4
     else if( p_nPrefix == XML_NAMESPACE_LO_EXT && IsXMLToken( rLocalName, XML_SIGNATURELINE ) )
     {
         xContext = new SignatureLineContext( GetImport(), p_nPrefix, rLocalName, xAttrList, mxShape );
     }
+    // TODO import 1.4
     else if( p_nPrefix == XML_NAMESPACE_LO_EXT && IsXMLToken( rLocalName, XML_QRCODE ) )
     {
         xContext = new QRCodeContext( GetImport(), p_nPrefix, rLocalName, xAttrList, mxShape );
@@ -804,6 +806,7 @@ void SdXMLShapeContext::SetThumbnail()
 // this is called from the parent group for each unparsed attribute in the attribute list
 void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
 {
+    // DONE
     if( (XML_NAMESPACE_DRAW == nPrefix) || (XML_NAMESPACE_DRAW_EXT == nPrefix) )
     {
         if( IsXMLToken( rLocalName, XML_ZINDEX ) )
@@ -3530,6 +3533,7 @@ SvXMLImportContextRef SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPr
             }
         }
     }
+    // TODO import 1.4
     else if ((XML_NAMESPACE_LO_EXT == nPrefix) && IsXMLToken(rLocalName, XML_SIGNATURELINE))
     {
         SdXMLShapeContext* pSContext = dynamic_cast<SdXMLShapeContext*>(mxImplContext.get());
@@ -3543,6 +3547,7 @@ SvXMLImportContextRef SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPr
             }
         }
     }
+    // TODO import 1.4
     else if ((XML_NAMESPACE_LO_EXT == nPrefix) && IsXMLToken(rLocalName, XML_QRCODE))
     {
         SdXMLShapeContext* pSContext = dynamic_cast<SdXMLShapeContext*>(mxImplContext.get());
@@ -3646,6 +3651,7 @@ void SdXMLFrameShapeContext::processAttribute( sal_uInt16 nPrefix,
 
     switch ( nPrefix )
     {
+        // DONE
         case XML_NAMESPACE_DRAW :
         case XML_NAMESPACE_DRAW_EXT :
             bId = IsXMLToken( rLocalName, XML_ID );

@@ -3314,6 +3314,7 @@ SvXMLImportContextRef XMLAnnotationImportContext::CreateChildContext(
     }
     else if (((XML_NAMESPACE_TEXT == nPrefix || XML_NAMESPACE_LO_EXT == nPrefix)
                  && IsXMLToken(rLocalName, XML_SENDER_INITIALS))
+    // DONE
              || (XML_NAMESPACE_META == nPrefix
                  && IsXMLToken(rLocalName, XML_CREATOR_INITIALS)))
     {

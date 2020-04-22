@@ -503,6 +503,7 @@ void XMLFontAutoStylePool::exportXML()
 
                         // Help consumers of our output by telling them which
                         // font file is which one.
+                        // TODO 1.4
                         GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_FONT_STYLE,
                                                  FontItalicToString(rEmbeddedFont.eItalic));
                         GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_FONT_WEIGHT,

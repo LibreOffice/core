@@ -169,6 +169,7 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
                 case XML_ELEMENT( TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM ):
                     aProtectData.meHash1 = ScPassHashHelper::getHashTypeFromURI( it.toString() );
                 break;
+                // DONE
                 case XML_ELEMENT( TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2 ):
                 case XML_ELEMENT( LO_EXT, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2 ):
                     aProtectData.meHash2 = ScPassHashHelper::getHashTypeFromURI( it.toString() );
@@ -297,6 +298,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     case XML_ELEMENT( TABLE, XML_TABLE_COLUMN ):
         pContext = new ScXMLTableColContext( GetScImport(), pAttribList );
         break;
+    //DONE
     case XML_ELEMENT( TABLE, XML_TABLE_PROTECTION ):
     case XML_ELEMENT( LO_EXT, XML_TABLE_PROTECTION ):
     case XML_ELEMENT( OFFICE_EXT, XML_TABLE_PROTECTION ):
@@ -326,9 +328,11 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     case XML_ELEMENT( TABLE, XML_SHAPES ):
         pContext = new ScXMLTableShapesContext( GetScImport() );
         break;
+        // TODO import 1.4
     case XML_ELEMENT( CALC_EXT, XML_CONDITIONAL_FORMATS ):
         pContext = new ScXMLConditionalFormatsContext( GetScImport() );
         break;
+    //DONE
     case XML_ELEMENT(OFFICE, XML_EVENT_LISTENERS):
     case XML_ELEMENT(OFFICE_EXT, XML_EVENT_LISTENERS):
         {
@@ -439,25 +443,31 @@ ScXMLTableProtectionContext::ScXMLTableProtectionContext(
             sal_Int32 nToken = aIter.getToken();
             switch (nToken)
             {
+                //DONE
             case XML_ELEMENT( TABLE, XML_SELECT_PROTECTED_CELLS ):
             case XML_ELEMENT( OFFICE_EXT, XML_SELECT_PROTECTED_CELLS ):
             case XML_ELEMENT( LO_EXT, XML_SELECT_PROTECTED_CELLS ):
                 bSelectProtectedCells = IsXMLToken(aIter, XML_TRUE);
                 break;
+                //DONE
             case XML_ELEMENT( TABLE, XML_SELECT_UNPROTECTED_CELLS ):
             case XML_ELEMENT( OFFICE_EXT, XML_SELECT_UNPROTECTED_CELLS ):
             case XML_ELEMENT( LO_EXT, XML_SELECT_UNPROTECTED_CELLS ):
                 bSelectUnprotectedCells = IsXMLToken(aIter, XML_TRUE);
                 break;
+                // TODO import 1.4
             case XML_ELEMENT( LO_EXT, XML_INSERT_COLUMNS ):
                 bInsertColumns = IsXMLToken(aIter, XML_TRUE);
                 break;
+                // TODO import 1.4
             case XML_ELEMENT( LO_EXT,  XML_INSERT_ROWS ):
                 bInsertRows = IsXMLToken(aIter, XML_TRUE);
                 break;
+                // TODO import 1.4
             case XML_ELEMENT( LO_EXT, XML_DELETE_COLUMNS ):
                 bDeleteColumns = IsXMLToken(aIter, XML_TRUE);
                 break;
+                // TODO import 1.4
             case XML_ELEMENT( LO_EXT, XML_DELETE_ROWS ):
                 bDeleteRows = IsXMLToken(aIter, XML_TRUE);
                 break;

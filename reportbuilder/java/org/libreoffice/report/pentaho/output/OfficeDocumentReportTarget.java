@@ -142,7 +142,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     private static final String ZERO_CM = "0cm";
     /** the version of the ODF specification to which generated documents
      *  shall conform. */
-    public static final String ODF_VERSION = "1.2";
+    public static final String ODF_VERSION = "1.2"; // no need to adjust this?
 
     protected static class BufferState
     {

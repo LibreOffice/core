@@ -2538,6 +2538,14 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
 
                 // annotation element + content
                 SvXMLElementExport aElem(*this, XML_NAMESPACE_OFFICE_EXT, XML_ANNOTATION, false, true);
+                // ODF 1.4 OFFICE-3022
+#if 0
+                SvXMLElementExport aElem(*this,
+                        (getSaneDefaultVersion() < SvtSaveOptions::ODFSVER_013)
+                            ? XML_NAMESPACE_OFFICE_EXT
+                            : XML_NAMESPACE_OFFICE,
+                        XML_ANNOTATION, false, true);
+#endif
 
                 // author
                 OUString aAuthor( xAnnotation->getAuthor() );

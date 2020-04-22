@@ -232,6 +232,7 @@ void XMLEventExport::StartElement(bool bWhitespace)
     {
         rExport.IgnorableWhitespace();
     }
+    // TODO 1.4
     sal_uInt16 nNamespace = bExtNamespace ? XML_NAMESPACE_OFFICE_EXT
                                           : XML_NAMESPACE_OFFICE;
     rExport.StartElement( nNamespace, XML_EVENT_LISTENERS,
@@ -240,6 +241,7 @@ void XMLEventExport::StartElement(bool bWhitespace)
 
 void XMLEventExport::EndElement(bool bWhitespace)
 {
+    // TODO 1.4
     sal_uInt16 nNamespace = bExtNamespace ? XML_NAMESPACE_OFFICE_EXT
                                           : XML_NAMESPACE_OFFICE;
     rExport.EndElement(nNamespace, XML_EVENT_LISTENERS, bWhitespace);

@@ -281,6 +281,7 @@ SvXMLItemMapEntry const aXMLTableCellItemMap[] =
 
     // RES_FRAMEDIR
     MAP_ENTRY( STYLE, WRITING_MODE, RES_FRAMEDIR, 0 ),
+    // TODO 1.4 how does that import? overwriting ? yes, depending on XML attribute order :(
     MAP_ENTRY( LO_EXT, WRITING_MODE, RES_FRAMEDIR, 0 ),
 
     M_END

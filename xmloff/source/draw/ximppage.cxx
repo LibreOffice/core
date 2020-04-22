@@ -152,6 +152,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > DrawAnnotationContext:
                 return new XMLStringBufferImportContext(GetImport(), maDateBuffer);
         }
         else if ( nElement == XML_ELEMENT(TEXT, XML_SENDER_INITIALS)
+                // DONE
                 || nElement == XML_ELEMENT(LO_EXT, XML_SENDER_INITIALS)
                 || nElement == XML_ELEMENT(META, XML_CREATOR_INITIALS))
         {
@@ -171,6 +172,7 @@ SvXMLImportContextRef DrawAnnotationContext::CreateChildContext( sal_uInt16 nPre
         {
             // handled in createFastChildContext
         }
+                // DONE
         else if (((XML_NAMESPACE_TEXT == nPrefix || XML_NAMESPACE_LO_EXT == nPrefix)
                     && IsXMLToken(rLocalName, XML_SENDER_INITIALS))
                  || (XML_NAMESPACE_META == nPrefix
@@ -275,6 +277,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLGenericPageContex
     {
         return new XMLAnimationsContext( GetImport() );
     }
+    // DONE
     else if( nElement == XML_ELEMENT(OFFICE, XML_ANNOTATION) || nElement == XML_ELEMENT(OFFICE_EXT, XML_ANNOTATION) )
     {
         if( mxAnnotationAccess.is() )
@@ -298,6 +301,7 @@ SvXMLImportContextRef SdXMLGenericPageContext::CreateChildContext( sal_uInt16 nP
         if( GetImport().IsFormsSupported() )
             xContext = xmloff::OFormLayerXMLImport::createOfficeFormsContext( GetImport(), nPrefix, rLocalName );
     }
+    // DONE
     else if( ((nPrefix == XML_NAMESPACE_OFFICE) || (nPrefix == XML_NAMESPACE_OFFICE_EXT)) && IsXMLToken( rLocalName, XML_ANNOTATION ) )
     {
         // handled in createFastChildContext

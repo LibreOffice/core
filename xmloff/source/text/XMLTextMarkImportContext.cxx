@@ -79,11 +79,13 @@ void XMLFieldParamImportContext::StartElement(const css::uno::Reference< css::xm
             GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
                               &sLocalName );
 
+        // TODO import 1.4
         if ( (XML_NAMESPACE_FIELD == nPrefix) &&
              IsXMLToken(sLocalName, XML_NAME)   )
         {
             sName = xAttrList->getValueByIndex(nAttr);
         }
+        // TODO import 1.4
         if ( (XML_NAMESPACE_FIELD == nPrefix) &&
              IsXMLToken(sLocalName, XML_VALUE)   )
         {

@@ -324,6 +324,7 @@ void SvXMLNumFmtExport::FinishTextElement_Impl(bool bUseExtensionNS)
 {
     if ( !sTextContent.isEmpty() )
     {
+        // DONE 1.3 OFFICE-3765
         sal_uInt16 nNS = bUseExtensionNS ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_NUMBER;
         SvXMLElementExport aElem( rExport, nNS, XML_TEXT,
                                   true, false );
@@ -744,6 +745,7 @@ void SvXMLNumFmtExport::WriteFractionElement_Impl(
     if ( !aIntegerFractionDelimiterString.isEmpty() && aIntegerFractionDelimiterString != " "
         && ((eVersion & SvtSaveOptions::ODFSVER_EXTENDED) != 0) )
     {   // Export only for 1.2/1.3 with extensions.
+        // TODO 1.4
         rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_INTEGER_FRACTION_DELIMITER,
                               aIntegerFractionDelimiterString );
     }
@@ -757,10 +759,12 @@ void SvXMLNumFmtExport::WriteFractionElement_Impl(
     if ((eVersion & SvtSaveOptions::ODFSVER_EXTENDED) != 0)
     {
         // For extended ODF use loext namespace
+        // TODO 1.3 ??? OFFICE-3695 related but lacks this ??? erAck says 1.4
         rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_MAX_NUMERATOR_DIGITS,
                               OUString::number( nMaxNumeratorDigits ) );
     }
     if ( nZerosNumeratorDigits && ((eVersion & SvtSaveOptions::ODFSVER_EXTENDED) != 0) )
+        // TODO 1.4
         rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_ZEROS_NUMERATOR_DIGITS,
                               OUString::number( nZerosNumeratorDigits ) );
 
@@ -786,6 +790,7 @@ void SvXMLNumFmtExport::WriteFractionElement_Impl(
                                  OUString::number( pow ( 10.0, nMaxDenominatorDigits ) - 1 ) ); // 9, 99 or 999
         }
         if ( nZerosDenominatorDigits && ((eVersion & SvtSaveOptions::ODFSVER_EXTENDED) != 0) )
+            // TODO 1.4
             rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_ZEROS_DENOMINATOR_DIGITS,
                                   OUString::number( nZerosDenominatorDigits ) );
     }
@@ -1213,6 +1218,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
             aLanguageTag.getIsoLanguageScriptCountry( aLanguage, aScript, aCountry);
             // For 1.2/1.3+ use loext namespace.
             rExport.AddAttribute( /*((eVersion < SvtSaveOptions::ODFSVER_)
+                        // TODO 1.4
                         ? */ XML_NAMESPACE_LO_EXT /*: XML_NAMESPACE_NUMBER)*/,
                     XML_TRANSLITERATION_SPELLOUT, aAttr.Spellout );
             rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_LANGUAGE,

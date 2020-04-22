@@ -36,6 +36,7 @@ uno::Reference<xml::sax::XFastContextHandler>
 
     switch (nElement)
     {
+        // TODO import 1.4
         case XML_ELEMENT(CALC_EXT, XML_COLUMN_REMOVE_TRANSFORMATION):
         {
             pContext = new ScXMLColumnRemoveContext(GetScImport(), pAttribList);

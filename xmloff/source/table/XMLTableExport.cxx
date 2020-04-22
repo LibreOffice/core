@@ -657,6 +657,7 @@ void XMLTableExport::exportTableTemplates()
                         if(xStyle.is())
                         {
                             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_STYLE_NAME, GetExport().EncodeStyleName(xStyle->getName()));
+                            // TODO 1.4
                             SvXMLElementExport element(mrExport, XML_NAMESPACE_LO_EXT, pElements->meElement, true, true);
                         }
                     }

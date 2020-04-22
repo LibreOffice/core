@@ -70,6 +70,7 @@ SvXMLImportContextRef XMLChangeInfoContext::CreateChildContext(
                                             rLocalName, sDateTimeBuffer);
     }
     else if ( ( XML_NAMESPACE_TEXT == nPrefix ||
+                // 6acc6c011d3afd6834efeee1b2efe43652a86f2e ?
                 XML_NAMESPACE_LO_EXT == nPrefix ) &&
          IsXMLToken( rLocalName, XML_P )       )
     {

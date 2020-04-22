@@ -478,6 +478,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
                 if (eLabelFollowedBy == LabelFollow::NEWLINE)
                 {
                     eValue = XML_NEWLINE;
+                    // TODO 1.4
                     GetExport().AddAttribute( XML_NAMESPACE_LO_EXT,
                                           XML_LABEL_FOLLOWED_BY, eValue );
                 }

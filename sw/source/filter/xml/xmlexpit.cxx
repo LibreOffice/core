@@ -196,6 +196,7 @@ void SvXMLExportItemMapper::exportXML(const SvXMLExport&,
                 // Write bt-lr to the extension namespace, handle other values
                 // below.
                 auto pDirection = static_cast<const SvxFrameDirectionItem*>(&rItem);
+                // TODO 1.4
                 if (rEntry.nNameSpace == XML_NAMESPACE_LO_EXT
                     && pDirection->GetValue() == SvxFrameDirection::Vertical_LR_BT)
                 {
