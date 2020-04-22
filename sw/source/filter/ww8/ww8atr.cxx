@@ -4510,6 +4510,9 @@ void WW8Export::Out_SwFormatTableBox( ww::bytes& rO, const SvxBoxItem * pBox )
 void WW8Export::Out_CellRangeBorders( const SvxBoxItem * pBox, sal_uInt8 nStart,
        sal_uInt8 nLimit )
 {
+    if ( !pBox )
+        return;
+
     static const SvxBoxItemLine aBorders[] =
     {
         SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT, SvxBoxItemLine::BOTTOM, SvxBoxItemLine::RIGHT
@@ -4517,9 +4520,7 @@ void WW8Export::Out_CellRangeBorders( const SvxBoxItem * pBox, sal_uInt8 nStart,
 
     for( int i = 0; i < 4; ++i )
     {
-        const SvxBorderLine* pLn = nullptr;
-        if (pBox != nullptr)
-            pLn = pBox->GetLine( aBorders[i] );
+        const SvxBorderLine* pLn = pBox->GetLine( aBorders[i] );
         if (!pLn)
             continue;
 

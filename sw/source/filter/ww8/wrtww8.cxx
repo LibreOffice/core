@@ -2043,16 +2043,19 @@ void WW8AttributeOutput::TableInfoRow( ww8::WW8TableNodeInfoInner::Pointer_t pTa
                 m_rWW8Export.pO->push_back( sal_uInt8(0x1) );
             }
 
-            TableDefinition( pTableTextNodeInfoInner );
-            TableHeight( pTableTextNodeInfoInner );
-            TableBackgrounds( pTableTextNodeInfoInner );
-            TableDefaultBorders( pTableTextNodeInfoInner );
-            TableCanSplit( pTableTextNodeInfoInner );
+            // Most of these are per-row definitions, not per-table,
+            // so likely some the per-table functions are unnecessarily re-defined...
             TableBidi( pTableTextNodeInfoInner );
-            TableVerticalCell( pTableTextNodeInfoInner );
             TableOrientation( pTableTextNodeInfoInner );
             TableSpacing( pTableTextNodeInfoInner );
-            TableCellBorders( pTableTextNodeInfoInner );
+            TableDefinition( pTableTextNodeInfoInner );     //per row definitions
+            TableHeight( pTableTextNodeInfoInner );         //per row definitions
+            TableBackgrounds( pTableTextNodeInfoInner );    //per row definitions
+            // Since this isEndOfLine, cell margin defaults for each row come from last column.
+            TableDefaultBorders( pTableTextNodeInfoInner ); //per row definitions
+            TableCanSplit( pTableTextNodeInfoInner );       //per row definitions
+            TableVerticalCell( pTableTextNodeInfoInner );   //per row definitions
+            TableCellBorders( pTableTextNodeInfoInner );    //per row definitions
         }
     }
 }
@@ -2526,20 +2529,22 @@ void AttributeOutputBase::GetTablePageSize( ww8::WW8TableNodeInfoInner const * p
 
 void WW8AttributeOutput::TableDefaultBorders( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
 {
+    // This function name is misleading because it is not a table default, but a row default,
+    // and it also only sets default cell margins (aka border padding).
+    // The specs suggest there is no way to define default border lines/colors.
     const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
     const SwFrameFormat * pFrameFormat = pTabBox->GetFrameFormat();
 
-    //Set Default, just taken from the first cell of the first
-    //row
     static const SvxBoxItemLine aBorders[] =
     {
         SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT,
         SvxBoxItemLine::BOTTOM, SvxBoxItemLine::RIGHT
     };
 
+    // Set row default cell margins using this last cell in the row
     for ( int i = 0; i < 4; ++i )
     {
-        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, 0xD634 );
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmTCellPaddingDefault );
         m_rWW8Export.pO->push_back( sal_uInt8(6) );
         m_rWW8Export.pO->push_back( sal_uInt8(0) );
         m_rWW8Export.pO->push_back( sal_uInt8(1) );
