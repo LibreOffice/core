@@ -74,8 +74,8 @@ private:
     OUString maOriginURL;
 
 public:
-    ImpSwapFile(INetURLObject const & aSwapURL, OUString const & rOriginURL)
-        : maSwapURL(aSwapURL)
+    ImpSwapFile(INetURLObject const & rSwapURL, OUString const & rOriginURL)
+        : maSwapURL(rSwapURL)
         , maOriginURL(rOriginURL)
     {
     }
@@ -85,8 +85,33 @@ public:
         utl::UCBContentHelper::Kill(maSwapURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
     }
 
-    INetURLObject getSwapURL() { return maSwapURL; }
+    INetURLObject getSwapURL()
+    {
+        return maSwapURL;
+    }
+
+    OUString getSwapURLString()
+    {
+        return maSwapURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+    }
+
     OUString const & getOriginURL() { return maOriginURL; }
+
+    std::unique_ptr<SvStream> openOutputStream()
+    {
+        OUString sSwapURL = getSwapURLString();
+        if (!sSwapURL.isEmpty())
+        {
+            try
+            {
+                return utl::UcbStreamHelper::CreateStream(sSwapURL, StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE);
+            }
+            catch (const css::uno::Exception&)
+            {
+            }
+        }
+        return std::unique_ptr<SvStream>();
+    }
 };
 
 OUString ImpGraphic::getSwapFileURL()
@@ -1333,39 +1358,26 @@ bool ImpGraphic::swapOut()
 
     utl::TempFile aTempFile;
     const INetURLObject aTempFileURL(aTempFile.GetURL());
-    OUString sTempFileURLString = aTempFileURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 
-    if (sTempFileURLString.isEmpty())
-        return false;
-    std::unique_ptr<SvStream> xOutputStream;
+    std::shared_ptr<ImpSwapFile> pSwapFile(new ImpSwapFile(aTempFileURL, getOriginURL()), o3tl::default_delete<ImpSwapFile>());
 
-    try
-    {
-        xOutputStream = utl::UcbStreamHelper::CreateStream(sTempFileURLString, StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE);
-    }
-    catch (const css::uno::Exception&)
-    {
-    }
+    std::unique_ptr<SvStream> xOutputStream = pSwapFile->openOutputStream();
 
     if (!xOutputStream)
         return false;
+
     xOutputStream->SetVersion(SOFFICE_FILEFORMAT_50);
     xOutputStream->SetCompressMode(SvStreamCompressFlags::NATIVE);
 
     bool bResult = swapOutToStream(xOutputStream.get());
 
-    if (bResult)
-    {
-        mpSwapFile.reset(new ImpSwapFile(aTempFileURL, getOriginURL()), o3tl::default_delete<ImpSwapFile>());
-    }
-    else
-    {
-        xOutputStream.reset();
-        utl::UCBContentHelper::Kill(sTempFileURLString);
-    }
+    xOutputStream.reset();
 
     if (bResult)
+    {
+        mpSwapFile = pSwapFile;
         vcl::graphic::Manager::get().swappedOut(this);
+    }
 
     return bResult;
 }
