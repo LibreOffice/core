@@ -626,7 +626,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     // No mbTreatSingleColumnBreakAsPageBreak
     // No mbSurroundTextWrapSmall
     // No mbPropLineSpacingShrinksFirstLine
-    // No mbSubtractFlys
+    mbSubtractFlys = rSource.mbSubtractFlys;
     // No mbLastBrowseMode
     mbDisableOffPagePositioning = rSource.mbDisableOffPagePositioning;
     // No mbEmptyDbFieldHidesPara
