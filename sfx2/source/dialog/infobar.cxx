@@ -14,6 +14,7 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <memory>
+#include <officecfg/Office/UI/Infobar.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/infobar.hxx>
@@ -393,6 +394,9 @@ SfxInfoBarContainerWindow::appendInfoBar(const OUString& sId, const OUString& sP
                                          const OUString& sSecondaryMessage, InfobarType ibType,
                                          WinBits nMessageStyle, bool bShowCloseButton)
 {
+    if (!isInfobarEnabled(sId))
+        return nullptr;
+
     auto pInfoBar = VclPtr<SfxInfoBarWindow>::Create(this, sId, sPrimaryMessage, sSecondaryMessage,
                                                      ibType, nMessageStyle, bShowCloseButton);
 
@@ -436,6 +440,22 @@ void SfxInfoBarContainerWindow::removeInfoBar(VclPtr<SfxInfoBarWindow> const& pI
     Resize();
 
     m_pChildWin->Update();
+}
+
+bool SfxInfoBarContainerWindow::isInfobarEnabled(const OUString& sId)
+{
+    if (sId == "readonly")
+        return officecfg::Office::UI::Infobar::Enabled::Readonly::get();
+    if (sId == "signature")
+        return officecfg::Office::UI::Infobar::Enabled::Signature::get();
+    if (sId == "donate")
+        return officecfg::Office::UI::Infobar::Enabled::Donate::get();
+    if (sId == "getinvolved")
+        return officecfg::Office::UI::Infobar::Enabled::GetInvolved::get();
+    if (sId == "hyphenationmissing")
+        return officecfg::Office::UI::Infobar::Enabled::HyphenationMissing::get();
+
+    return true;
 }
 
 void SfxInfoBarContainerWindow::Resize()
