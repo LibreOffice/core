@@ -1356,57 +1356,48 @@ bool ImpGraphic::swapOut()
     if (isSwappedOut())
         return false;
 
+    // Create a temp filename for the swap file
     utl::TempFile aTempFile;
     const INetURLObject aTempFileURL(aTempFile.GetURL());
 
+    // Create a swap file
     std::shared_ptr<ImpSwapFile> pSwapFile(new ImpSwapFile(aTempFileURL, getOriginURL()), o3tl::default_delete<ImpSwapFile>());
 
-    std::unique_ptr<SvStream> xOutputStream = pSwapFile->openOutputStream();
+    bool bResult = false;
 
-    if (!xOutputStream)
-        return false;
+    // Open a stream to write the swap file to
+    {
+        std::unique_ptr<SvStream> xOutputStream = pSwapFile->openOutputStream();
 
-    xOutputStream->SetVersion(SOFFICE_FILEFORMAT_50);
-    xOutputStream->SetCompressMode(SvStreamCompressFlags::NATIVE);
+        if (!xOutputStream)
+            return false;
 
-    bool bResult = swapOutToStream(xOutputStream.get());
+        // Write to stream
+        xOutputStream->SetVersion(SOFFICE_FILEFORMAT_50);
+        xOutputStream->SetCompressMode(SvStreamCompressFlags::NATIVE);
+        xOutputStream->SetBufferSize(GRAPHIC_STREAMBUFSIZE);
 
-    xOutputStream.reset();
+        if (!xOutputStream->GetError() && ImplWriteEmbedded(*xOutputStream))
+        {
+            xOutputStream->Flush();
+            bResult = !xOutputStream->GetError();
+        }
+    }
 
+    // Check if writing was successfull
     if (bResult)
     {
-        mpSwapFile = pSwapFile;
+        // We have swapped out, so can clean memory
+        mbSwapOut = true;
+        mpSwapFile = std::move(pSwapFile);
+        ImplCreateSwapInfo();
+        ImplClearGraphics();
+
+        // Signal to manager that we have swapped out
         vcl::graphic::Manager::get().swappedOut(this);
     }
 
     return bResult;
-}
-
-bool ImpGraphic::swapOutToStream(SvStream* xOStm)
-{
-    if( !xOStm )
-    {
-        SAL_WARN("vcl.gdi", "Graphic SwapOut: No stream for swap out!");
-        return false;
-    }
-
-    xOStm->SetBufferSize( GRAPHIC_STREAMBUFSIZE );
-
-    bool bRet = false;
-
-    if( !xOStm->GetError() && ImplWriteEmbedded( *xOStm ) )
-    {
-        xOStm->Flush();
-
-        if( !xOStm->GetError() )
-        {
-            ImplCreateSwapInfo();
-            ImplClearGraphics();
-            bRet = mbSwapOut = true;
-        }
-    }
-
-    return bRet;
 }
 
 bool ImpGraphic::ensureAvailable() const
