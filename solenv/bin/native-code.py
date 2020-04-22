@@ -374,6 +374,7 @@ edit_constructor_list = [
     "Calc_XMLOasisSettingsExporter_get_implementation",
     "Calc_XMLOasisStylesExporter_get_implementation",
 # starmath/util/sm.component
+    "Math_XMLContentExporter_get_implementation",
     "Math_XMLOasisMetaExporter_get_implementation",
     "Math_XMLOasisSettingsExporter_get_implementation",
     "Math_XMLImporter_get_implementation",
@@ -470,6 +471,7 @@ writer_factory_list = [
 
 writer_constructor_list = [
 # basic/util/sb.component
+    ("com_sun_star_comp_sfx2_DialogLibraryContainer_get_implementation","#if HAVE_FEATURE_SCRIPTING"),
     ("com_sun_star_comp_sfx2_ScriptLibraryContainer_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
 # filter/source/textfilterdetect/textfd.component
     "com_sun_star_comp_filters_PlainTextFilterDetect_get_implementation",
