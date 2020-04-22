@@ -586,10 +586,9 @@ vector<XMLPropertyState> SvXMLExportPropertyMapper::Filter_(
                 ( (0 != (nFlags & MID_FLAG_MUST_EXIST)) ||
                   xInfo->hasPropertyByName( rAPIName ) ) )
             {
-                const std::optional<SvtSaveOptions::ODFSaneDefaultVersion> oEarliestODFVersionForExport(
+                const SvtSaveOptions::ODFSaneDefaultVersion nEarliestODFVersionForExport(
                         mpImpl->mxPropMapper->GetEarliestODFVersionForExport(i));
-                if (!oEarliestODFVersionForExport
-                    || nCurrentVersion >= *oEarliestODFVersionForExport)
+                if (nEarliestODFVersionForExport <= nCurrentVersion)
                 {
                     pFilterInfo->AddProperty(rAPIName, i);
                 }
