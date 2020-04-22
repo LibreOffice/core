@@ -15,7 +15,6 @@
 #include <memory>
 
 #include <vcl/window.hxx>
-
 #include <vcl/dllapi.h>
 
 #include <set>
@@ -364,7 +363,7 @@ private:
     virtual OUString get_name() const override;
 };
 
-class SpinFieldUIObject final : public EditUIObject
+class SpinFieldUIObject : public EditUIObject
 {
     VclPtr<SpinField> mxSpinField;
 
