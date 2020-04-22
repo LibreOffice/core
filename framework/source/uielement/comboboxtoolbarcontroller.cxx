@@ -327,51 +327,6 @@ void ComboboxToolbarController::executeControlCommand( const css::frame::Control
             }
         }
     }
-    else if ( rControlCommand.Command == "SetDropDownLines" )
-    {
-        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
-        {
-            if ( rControlCommand.Arguments[i].Name == "Lines" )
-            {
-                sal_Int32 nValue( 5 );
-                rControlCommand.Arguments[i].Value >>= nValue;
-                m_pComboBox->SetDropDownLineCount( sal_uInt16( nValue ));
-                break;
-            }
-        }
-    }
-    else if ( rControlCommand.Command == "SetBackgroundColor" )
-    {
-        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
-        {
-            if ( rControlCommand.Arguments[i].Name == "Color" )
-            {
-                css::util::Color aColor(0);
-                if ( rControlCommand.Arguments[i].Value >>= aColor )
-                {
-                    ::Color aBackColor( static_cast< sal_uInt32 >( aColor ));
-                    m_pComboBox->SetControlBackground( aBackColor );
-                }
-                break;
-            }
-        }
-    }
-    else if ( rControlCommand.Command == "SetTextColor" )
-    {
-        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
-        {
-            if ( rControlCommand.Arguments[i].Name == "Color" )
-            {
-                css::util::Color aColor(0);
-                if ( rControlCommand.Arguments[i].Value >>= aColor )
-                {
-                    ::Color aForeColor( static_cast< sal_uInt32 >( aColor ));
-                    m_pComboBox->SetControlForeground( aForeColor );
-                }
-                break;
-            }
-        }
-    }
 }
 
 } // namespace
