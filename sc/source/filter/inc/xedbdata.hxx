@@ -57,10 +57,10 @@ public:
     virtual             ~XclExpTablesManager() override;
 
     void                Initialize();
-    ::std::shared_ptr< XclExpTables > GetTablesBySheet( SCTAB nTab );
+    rtl::Reference< XclExpTables > GetTablesBySheet( SCTAB nTab );
 
 private:
-    typedef ::std::map< SCTAB, ::std::shared_ptr< XclExpTables > > TablesMapType;
+    typedef ::std::map< SCTAB, rtl::Reference< XclExpTables > > TablesMapType;
     TablesMapType maTablesMap;
 };
 

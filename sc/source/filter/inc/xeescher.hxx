@@ -391,17 +391,17 @@ public:
 
     /** Creates and returns the MSODRAWINGGROUP record containing global DFF
         data in the DGGCONTAINER. */
-    std::shared_ptr< XclExpRecordBase > CreateDrawingGroup();
+    rtl::Reference< XclExpRecordBase > CreateDrawingGroup();
 
     /** Initializes the object manager for a new sheet. */
     void                StartSheet();
 
     /** Processes a drawing page and returns the record block containing all
         related records (MSODRAWING, OBJ, TXO, charts, etc.). */
-    std::shared_ptr< XclExpRecordBase > ProcessDrawing( const SdrPage* pSdrPage );
+    rtl::Reference< XclExpRecordBase > ProcessDrawing( const SdrPage* pSdrPage );
     /** Processes a collection of UNO shapes and returns the record block
         containing all related records (MSODRAWING, OBJ, TXO, charts, etc.). */
-    std::shared_ptr< XclExpRecordBase > ProcessDrawing( const css::uno::Reference< css::drawing::XShapes >& rxShapes );
+    rtl::Reference< XclExpRecordBase > ProcessDrawing( const css::uno::Reference< css::drawing::XShapes >& rxShapes );
 
     /** Finalizes the object manager after conversion of all sheets. */
     void                EndDocument();
@@ -422,7 +422,7 @@ private:
     std::shared_ptr< ::utl::TempFile > mxTempFile;
     std::shared_ptr< SvStream >  mxDffStrm;
     std::shared_ptr< XclEscherEx > mxEscherEx;
-    std::shared_ptr< XclExpObjList > mxObjList;
+    rtl::Reference< XclExpObjList > mxObjList;
 };
 
 class XclExpEmbeddedObjectManager : public XclExpObjectManager

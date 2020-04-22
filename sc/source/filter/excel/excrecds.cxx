@@ -879,7 +879,7 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab, const
                     rNameMgr.InsertBuiltInName( EXC_BUILTIN_EXTRACT, aDestRange );
             }
 
-            m_pFilterMode.reset(new XclExpFiltermode);
+            m_pFilterMode = new XclExpFiltermode;
         }
         // AutoFilter
         else
@@ -922,8 +922,8 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab, const
                 maFilterList.RemoveAllRecords();
 
             if( !maFilterList.IsEmpty() )
-                m_pFilterMode.reset(new XclExpFiltermode);
-            m_pFilterInfo.reset(new XclExpAutofilterinfo( aRange.aStart, nColCnt ));
+                m_pFilterMode = new XclExpFiltermode;
+            m_pFilterInfo = new XclExpAutofilterinfo( aRange.aStart, nColCnt );
 
             if (maFilterList.IsEmpty () && !bConflict)
                 mbAutoFilter = true;
@@ -944,7 +944,7 @@ XclExpAutofilter* ExcAutoFilterRecs::GetByCol( SCCOL nCol )
         if( xFilter->GetCol() == static_cast<sal_uInt16>(nCol) )
             return xFilter.get();
     }
-    xFilter = std::make_shared<XclExpAutofilter>( GetRoot(), static_cast<sal_uInt16>(nCol) );
+    xFilter = new XclExpAutofilter( GetRoot(), static_cast<sal_uInt16>(nCol) );
     maFilterList.AppendRecord( xFilter );
     return xFilter.get();
 }
@@ -1005,7 +1005,7 @@ XclExpFilterManager::XclExpFilterManager( const XclExpRoot& rRoot ) :
 
 void XclExpFilterManager::InitTabFilter( SCTAB nScTab )
 {
-    maFilterMap[ nScTab ] = std::make_shared<ExcAutoFilterRecs>( GetRoot(), nScTab, nullptr );
+    maFilterMap[ nScTab ] = new ExcAutoFilterRecs( GetRoot(), nScTab, nullptr );
 }
 
 XclExpRecordRef XclExpFilterManager::CreateRecord( SCTAB nScTab )

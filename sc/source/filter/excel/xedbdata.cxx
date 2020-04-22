@@ -124,14 +124,14 @@ void XclExpTablesManager::Initialize()
         TablesMapType::iterator it = maTablesMap.find( nTab);
         if (it == maTablesMap.end())
         {
-            ::std::shared_ptr< XclExpTables > pNew;
+            rtl::Reference< XclExpTables > pNew;
             switch( GetBiff() )
             {
                 case EXC_BIFF5:
-                    pNew = std::make_shared<XclExpTablesImpl5>( GetRoot());
+                    pNew = new XclExpTablesImpl5( GetRoot());
                     break;
                 case EXC_BIFF8:
-                    pNew = std::make_shared<XclExpTablesImpl8>( GetRoot());
+                    pNew = new XclExpTablesImpl8( GetRoot());
                     break;
                 default:
                     assert(!"Unknown BIFF type!");
@@ -149,7 +149,7 @@ void XclExpTablesManager::Initialize()
     }
 }
 
-::std::shared_ptr< XclExpTables > XclExpTablesManager::GetTablesBySheet( SCTAB nTab )
+rtl::Reference< XclExpTables > XclExpTablesManager::GetTablesBySheet( SCTAB nTab )
 {
     TablesMapType::iterator it = maTablesMap.find(nTab);
     return it == maTablesMap.end() ? nullptr : it->second;
