@@ -2566,6 +2566,21 @@ void WW8AttributeOutput::TableCellBorders(
     const SvxBoxItem * pLastBox = nullptr;
     sal_uInt8 nSeqStart = 0; // start of sequence of cells with same borders
 
+    static const SvxBoxItemLine aBorders[] =
+    {
+        SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT,
+        SvxBoxItemLine::BOTTOM, SvxBoxItemLine::RIGHT
+    };
+
+    sal_uInt16 nDefaultMargin[4] = {31681, 31681, 31681, 31681};  // outside of documented valid range
+    // last column in each row defines the row default in TableRowDefaultBorders()
+    if ( nBoxes && rTabBoxes.size() == nBoxes )
+    {
+        const SvxBoxItem& rBox = rTabBoxes[ nBoxes-1 ]->GetFrameFormat()->GetBox();
+        for ( int i = 0; i < 4; ++i )
+            nDefaultMargin[i] = rBox.GetDistance( aBorders[i] );
+    }
+
     // Detect sequences of cells which have the same borders, and output
     // a border description for each such cell range.
     for ( unsigned n = 0; n <= nBoxes; ++n )
@@ -2576,9 +2591,66 @@ void WW8AttributeOutput::TableCellBorders(
             pLastBox = pBox;
         else if( !pBox || *pLastBox != *pBox )
         {
+            if ( !pLastBox )
+                break;
+
             // This cell has different borders than the previous cell,
             // so output the borders for the preceding cell range.
             m_rWW8Export.Out_CellRangeBorders(pLastBox, nSeqStart, n);
+
+            // The last column is used as the row default, so we can ignore these matching margins
+            if ( !pBox )
+                break;
+
+            // Output cell margins.
+            // One CSSA can define up to all four margins if they are the same size value.
+            // Without going crazy, at minimum consolidate for the (common) synchronized case.
+            // Also added a common case for size 0, since GetSmallestDistance() doesn't normally return 0.
+            const sal_uInt16 nSmallestSize = std::min(sal_uInt16(31680), pLastBox->GetSmallestDistance());
+            sal_uInt8 nSideBits = 0;
+            sal_uInt8 nSideBitsZero = 0;
+            for ( int i = 0; i < 4; ++i )  // top, left, bottom, right
+            {
+                const sal_uInt16 nMargin = std::min(sal_uInt16(31680), pLastBox->GetDistance( aBorders[i] ));
+                if ( nMargin == nDefaultMargin[i] )
+                    continue;
+
+                if ( !nMargin )
+                    nSideBitsZero |= 1 << i;
+                else if ( nMargin == nSmallestSize )
+                    nSideBits |= 1 << i;
+                else
+                {
+                    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmTCellPadding );
+                    m_rWW8Export.pO->push_back( sal_uInt8(6) );
+                    m_rWW8Export.pO->push_back( sal_uInt8(nSeqStart) );
+                    m_rWW8Export.pO->push_back( sal_uInt8(n) );
+                    m_rWW8Export.pO->push_back( sal_uInt8(1 << i) );  // describe a single side
+                    m_rWW8Export.pO->push_back( sal_uInt8(3) );
+                    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, nMargin );
+                }
+            }
+            if ( nSideBitsZero )
+            {
+                SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmTCellPadding );
+                m_rWW8Export.pO->push_back( sal_uInt8(6) );
+                m_rWW8Export.pO->push_back( sal_uInt8(nSeqStart) );
+                m_rWW8Export.pO->push_back( sal_uInt8(n) );
+                m_rWW8Export.pO->push_back( sal_uInt8(nSideBitsZero) ); // all sides with size zero
+                m_rWW8Export.pO->push_back( sal_uInt8(3) );
+                SwWW8Writer::InsUInt16( *m_rWW8Export.pO, 0 );
+            }
+            if ( nSideBits )
+            {
+                SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmTCellPadding );
+                m_rWW8Export.pO->push_back( sal_uInt8(6) );
+                m_rWW8Export.pO->push_back( sal_uInt8(nSeqStart) );
+                m_rWW8Export.pO->push_back( sal_uInt8(n) );
+                m_rWW8Export.pO->push_back( sal_uInt8(nSideBits) ); // all sides sharing smallest size
+                m_rWW8Export.pO->push_back( sal_uInt8(3) );
+                SwWW8Writer::InsUInt16( *m_rWW8Export.pO, nSmallestSize );
+            }
+
             nSeqStart = n;
             pLastBox = pBox;
         }
