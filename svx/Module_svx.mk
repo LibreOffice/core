@@ -32,6 +32,7 @@ $(eval $(call gb_Module_add_l10n_targets,svx,\
 
 $(eval $(call gb_Module_add_check_targets,svx,\
 	CppunitTest_svx_unit \
+	CppunitTest_svx_gallery_test \
 ))
 
 # screenshots
