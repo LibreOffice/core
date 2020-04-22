@@ -2571,6 +2571,21 @@ void WW8AttributeOutput::TableCellBorders(
     const SvxBoxItem * pLastBox = nullptr;
     sal_uInt8 nSeqStart = 0; // start of sequence of cells with same borders
 
+    static const SvxBoxItemLine aBorders[] =
+    {
+        SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT,
+        SvxBoxItemLine::BOTTOM, SvxBoxItemLine::RIGHT
+    };
+
+    sal_uInt16 nDefaultMargin[4] = {31681, 31681, 31681, 31681};  // outside of documented valid range
+    // last column in each row defines the row default in TableRowDefaultBorders()
+    if ( nBoxes && rTabBoxes.size() == nBoxes )
+    {
+        const SvxBoxItem& rBox = rTabBoxes[ nBoxes-1 ]->GetFrameFormat()->GetBox();
+        for ( int i = 0; i < 4; ++i )
+            nDefaultMargin[i] = rBox.GetDistance( aBorders[i] );
+    }
+
     // Detect sequences of cells which have the same borders, and output
     // a border description for each such cell range.
     for ( unsigned n = 0; n <= nBoxes; ++n )
@@ -2581,9 +2596,53 @@ void WW8AttributeOutput::TableCellBorders(
             pLastBox = pBox;
         else if( !pBox || *pLastBox != *pBox )
         {
+            if ( !pLastBox )
+                break;
+
             // This cell has different borders than the previous cell,
             // so output the borders for the preceding cell range.
             m_rWW8Export.Out_CellRangeBorders(pLastBox, nSeqStart, n);
+
+            // The last column is used as the row default for margins, so we can ignore these matching ones
+            if ( n == nBoxes )
+                break;
+
+            // Output cell margins.
+            // One CSSA can define up to all four margins if they are the same size value.
+            sal_uInt16 nMargin[4];
+            sal_uInt8 nSideBits[4] = {0, 0, 0, 0}; // 0001:top, 0010:left, 0100:bottom, 1000:right
+            for ( int i = 0; i < 4; ++i )  // sides: top, left, bottom, right
+            {
+                nMargin[i] = std::min(sal_uInt16(31680), pLastBox->GetDistance( aBorders[i] ));
+                if ( nMargin[i] == nDefaultMargin[i] )
+                    continue;
+
+                // join a previous side's definition if it shares the same value
+                for ( int p = 0; p < 4; ++p )
+                {
+                    if ( nMargin[i] == nMargin[p] )
+                    {
+                        nSideBits[p] |= 1 << i;
+                        break;
+                    }
+                }
+            }
+
+            // write out the cell margins definitions that were used
+            for ( int i = 0; i < 4; ++i )
+            {
+                if ( nSideBits[i] )
+                {
+                    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmTCellPadding );
+                    m_rWW8Export.pO->push_back( sal_uInt8(6) );            // 6 bytes
+                    m_rWW8Export.pO->push_back( sal_uInt8(nSeqStart) );    // first cell: apply margin
+                    m_rWW8Export.pO->push_back( sal_uInt8(n) );            // end cell: do not apply margin
+                    m_rWW8Export.pO->push_back( sal_uInt8(nSideBits[i]) );
+                    m_rWW8Export.pO->push_back( sal_uInt8(3) );            // FtsDxa: size in twips
+                    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, nMargin[i] );
+                }
+            }
+
             nSeqStart = n;
             pLastBox = pBox;
         }
