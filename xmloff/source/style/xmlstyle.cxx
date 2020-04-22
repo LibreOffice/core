@@ -123,6 +123,13 @@ void SvXMLStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
             mbHidden = rValue.toBoolean();
         }
     }
+    else if (XML_NAMESPACE_LO_EXT == nPrefixKey)
+    {
+        if (IsXMLToken(rLocalName, XML_HIDDEN))
+        {
+            mbHidden = rValue.toBoolean();
+        }
+    }
 }
 
 
