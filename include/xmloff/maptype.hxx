@@ -86,7 +86,8 @@ struct XMLPropertyMapEntry
     sal_uInt32 mnType;
 
     sal_Int16       mnContextId;    /// User defined id for context filtering
-    SvtSaveOptions::ODFDefaultVersion   mnEarliestODFVersionForExport;// no export when the used ODF version is lower than this
+    /// no export when the used ODF version is lower than this
+    SvtSaveOptions::ODFSaneDefaultVersion mnEarliestODFVersionForExport;
 
     /** Flag to specify whether entry is only used during import.
 

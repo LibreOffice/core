@@ -85,14 +85,14 @@
 #define XML_SCH_CONTEXT_SPECIAL_REGRESSION_TYPE     ( XML_SCH_CTF_START + 26 )
 
 #define MAP_FULL( ApiName, NameSpace, XMLTokenName, XMLType, ContextId, EarliestODFVersionForExport ) { ApiName, sizeof(ApiName)-1, XML_NAMESPACE_##NameSpace, xmloff::token::XMLTokenName, XMLType|XML_TYPE_PROP_CHART, ContextId, EarliestODFVersionForExport, false }
-#define MAP_ENTRY( a, ns, nm, t )            { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, 0, SvtSaveOptions::ODFVER_010, false }
-#define MAP_ENTRY_ODF12( a, ns, nm, t )      { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, 0, SvtSaveOptions::ODFVER_012, false }
-#define MAP_ENTRY_ODF_EXT( a, ns, nm, t )    { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, 0, SvtSaveOptions::ODFVER_012_EXT_COMPAT, false }
-#define MAP_ENTRY_ODF_EXT_IMPORT( a, ns, nm, t )    { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, 0, SvtSaveOptions::ODFVER_012_EXT_COMPAT, true }
-#define MAP_CONTEXT( a, ns, nm, t, c )       { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, c, SvtSaveOptions::ODFVER_010, false }
-#define MAP_SPECIAL( a, ns, nm, t, c )       { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART | MID_FLAG_SPECIAL_ITEM, c, SvtSaveOptions::ODFVER_010, false }
-#define MAP_SPECIAL_ODF12( a, ns, nm, t, c ) { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART | MID_FLAG_SPECIAL_ITEM, c, SvtSaveOptions::ODFVER_012, false }
-#define MAP_ENTRY_END { nullptr,0,0,xmloff::token::XML_TOKEN_INVALID,0,0,SvtSaveOptions::ODFVER_010, false }
+#define MAP_ENTRY( a, ns, nm, t )            { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, 0, SvtSaveOptions::ODFSVER_010, false }
+#define MAP_ENTRY_ODF12( a, ns, nm, t )      { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, 0, SvtSaveOptions::ODFSVER_012, false }
+#define MAP_ENTRY_ODF_EXT( a, ns, nm, t )    { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, 0, SvtSaveOptions::ODFSVER_012_EXT_COMPAT, false }
+#define MAP_ENTRY_ODF_EXT_IMPORT( a, ns, nm, t )    { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, 0, SvtSaveOptions::ODFSVER_012_EXT_COMPAT, true }
+#define MAP_CONTEXT( a, ns, nm, t, c )       { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, c, SvtSaveOptions::ODFSVER_010, false }
+#define MAP_SPECIAL( a, ns, nm, t, c )       { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART | MID_FLAG_SPECIAL_ITEM, c, SvtSaveOptions::ODFSVER_010, false }
+#define MAP_SPECIAL_ODF12( a, ns, nm, t, c ) { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART | MID_FLAG_SPECIAL_ITEM, c, SvtSaveOptions::ODFSVER_012, false }
+#define MAP_ENTRY_END { nullptr,0,0,xmloff::token::XML_TOKEN_INVALID,0,0,SvtSaveOptions::ODFSVER_010, false }
 
 // PropertyMap for Chart properties drawing- and
 // textproperties are added later using the chaining
@@ -191,10 +191,10 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     MAP_ENTRY( "LinkNumberFormatToSource", CHART, XML_LINK_DATA_STYLE_TO_SOURCE, XML_TYPE_BOOL ),
     MAP_ENTRY( "Visible", CHART, XML_VISIBLE, XML_TYPE_BOOL ),
 
-    MAP_FULL( "CrossoverPosition", CHART, XML_AXIS_POSITION, XML_SCH_TYPE_AXIS_POSITION|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0, SvtSaveOptions::ODFVER_012 ),
-    MAP_FULL( "CrossoverValue", CHART, XML_AXIS_POSITION, XML_SCH_TYPE_AXIS_POSITION_VALUE|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0, SvtSaveOptions::ODFVER_012 ),
-    MAP_FULL( "LabelPosition", CHART, XML_AXIS_LABEL_POSITION, XML_SCH_TYPE_AXIS_LABEL_POSITION, 0, SvtSaveOptions::ODFVER_012 ),
-    MAP_FULL( "MarkPosition", CHART, XML_TICK_MARK_POSITION, XML_SCH_TYPE_TICK_MARK_POSITION, 0, SvtSaveOptions::ODFVER_012 ),
+    MAP_FULL( "CrossoverPosition", CHART, XML_AXIS_POSITION, XML_SCH_TYPE_AXIS_POSITION|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0, SvtSaveOptions::ODFSVER_012 ),
+    MAP_FULL( "CrossoverValue", CHART, XML_AXIS_POSITION, XML_SCH_TYPE_AXIS_POSITION_VALUE|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0, SvtSaveOptions::ODFSVER_012 ),
+    MAP_FULL( "LabelPosition", CHART, XML_AXIS_LABEL_POSITION, XML_SCH_TYPE_AXIS_LABEL_POSITION, 0, SvtSaveOptions::ODFSVER_012 ),
+    MAP_FULL( "MarkPosition", CHART, XML_TICK_MARK_POSITION, XML_SCH_TYPE_TICK_MARK_POSITION, 0, SvtSaveOptions::ODFSVER_012 ),
 
     // statistical properties
 
