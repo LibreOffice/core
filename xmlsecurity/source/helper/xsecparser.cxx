@@ -355,6 +355,7 @@ void SAL_CALL XSecParser::endElement( const OUString& aName )
             m_pXSecController->setGpgCertificate( m_ouGpgCertificate );
             m_bInGpgCertificate = false;
         }
+        // TODO 1.4 what namespace?
         else if (aName == "loext:PGPOwner")
         {
             m_pXSecController->setGpgOwner( m_ouGpgOwner );
@@ -388,6 +389,7 @@ void SAL_CALL XSecParser::endElement( const OUString& aName )
             m_pXSecController->setDescription( m_ouDescription );
             m_bInDescription = false;
         }
+        // TODO 1.4 what namespace?
         else if (aName == "loext:SignatureLineId")
         {
             m_pXSecController->setSignatureLineId( m_ouSignatureLineId );

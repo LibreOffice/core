@@ -1623,6 +1623,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         {
             // export text:reference-language attribute, if not empty
             ProcessString(XML_REFERENCE_LANGUAGE,
+                    // TODO 1.4
                     GetStringProperty(gsPropertyReferenceFieldLanguage, rPropSet), true, XML_NAMESPACE_LO_EXT);
         }
         ExportElement(
@@ -1645,6 +1646,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         {
             // export text:reference-language attribute, if not empty
             ProcessString(XML_REFERENCE_LANGUAGE,
+                    // TODO 1.4
                       GetStringProperty(gsPropertyReferenceFieldLanguage, rPropSet), true, XML_NAMESPACE_LO_EXT);
         }
         ExportElement(
@@ -1670,6 +1672,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         {
             // export text:reference-language attribute, if not empty
             ProcessString(XML_REFERENCE_LANGUAGE,
+                    // TODO 1.4
                       GetStringProperty(gsPropertyReferenceFieldLanguage, rPropSet), true, XML_NAMESPACE_LO_EXT);
         }
         ExportElement(
@@ -1696,6 +1699,7 @@ void XMLTextFieldExport::ExportFieldHelper(
     {
         if (GetExport().getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
         {
+                    // TODO 1.4
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_LO_EXT, XML_PAGE_NAME, false, false );
             GetExport().Characters( sPresentation );
         }
@@ -1766,6 +1770,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                 ::sax::Converter::convertBool(aResolvedTextBuffer, b);
                 aResolvedText = aResolvedTextBuffer.makeStringAndClear();
 
+                    // TODO 1.4
                 GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_RESOLVED,
                         aResolvedText);
             }
