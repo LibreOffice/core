@@ -449,6 +449,12 @@ DECLARE_ODFEXPORT_TEST(testredlineTextFrame, "redlineTextFrame.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf131621, "tdf131621.ott")
+{
+    //Crash test, Check number of pages
+    CPPUNIT_ASSERT_EQUAL( 1, getPages() );
+}
+
 DECLARE_ODFEXPORT_TEST(testFdo38244, "fdo38244.odt")
 {
     // See ooxmlexport's testFdo38244().
