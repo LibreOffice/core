@@ -237,6 +237,9 @@ public:
     static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) override;
+
+    static void SelectPasteFormat(TransferableDataHelper& rData, sal_uInt8& nAction,
+                                  SotClipboardFormatId& nFormat);
 };
 
 #endif
