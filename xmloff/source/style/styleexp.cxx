@@ -168,8 +168,12 @@ bool XMLStyleExport::exportStyle(
     {
         aAny = xPropSet->getPropertyValue( "Hidden" );
         bool bHidden = false;
-        if ( ( aAny >>= bHidden ) && bHidden && GetExport( ).getDefaultVersion( ) == SvtSaveOptions::ODFVER_LATEST )
-            GetExport( ).AddAttribute( XML_NAMESPACE_STYLE, XML_HIDDEN, "true" );
+        if ((aAny >>= bHidden) && bHidden
+            && GetExport().getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
+        {
+            GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_HIDDEN, "true");
+            GetExport().AddAttribute(XML_NAMESPACE_STYLE, XML_HIDDEN, "true"); // FIXME for compatibility
+        }
     }
 
     // style:parent-style-name="..."

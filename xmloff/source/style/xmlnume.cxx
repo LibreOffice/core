@@ -654,8 +654,12 @@ void SvxXMLNumRuleExport::exportNumberingRule(
     }
 
     // style:hidden="..."
-    if ( bIsHidden && GetExport( ).getDefaultVersion( ) == SvtSaveOptions::ODFVER_LATEST )
-        GetExport( ).AddAttribute( XML_NAMESPACE_STYLE, XML_HIDDEN, "true" );
+    if (bIsHidden
+        && GetExport().getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
+    {
+        GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_HIDDEN, "true");
+        GetExport().AddAttribute(XML_NAMESPACE_STYLE, XML_HIDDEN, "true"); // FIXME for compatibility
+    }
 
     // text:consecutive-numbering="..."
     bool bContNumbering = false;
