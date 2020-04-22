@@ -21,7 +21,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <sfx2/InterimItemWindow.hxx>
+#include <svtools/InterimItemWindow.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 

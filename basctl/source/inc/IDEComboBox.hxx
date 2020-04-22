@@ -22,7 +22,7 @@
 
 #include <svl/stritem.hxx>
 #include <sfx2/tbxctrl.hxx>
-#include <sfx2/InterimItemWindow.hxx>
+#include <svtools/InterimItemWindow.hxx>
 
 #include "doceventnotifier.hxx"
 #include "scriptdocument.hxx"

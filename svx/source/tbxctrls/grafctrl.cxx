@@ -26,7 +26,7 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <sfx2/InterimItemWindow.hxx>
+#include <svtools/InterimItemWindow.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <tools/urlobj.hxx>
 

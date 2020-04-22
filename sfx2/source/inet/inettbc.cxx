@@ -34,7 +34,7 @@
 
 #include <svtools/inettbc.hxx>
 
-#include <sfx2/InterimItemWindow.hxx>
+#include <svtools/InterimItemWindow.hxx>
 #include <sfx2/sfxsids.hrc>
 
 using namespace ::com::sun::star::uno;

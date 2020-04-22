@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_CBNUMBERFORMAT_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_CBNUMBERFORMAT_HXX
 
-#include <sfx2/InterimItemWindow.hxx>
+#include <svtools/InterimItemWindow.hxx>
 
 class ScNumberFormat final : public InterimItemWindow
 {

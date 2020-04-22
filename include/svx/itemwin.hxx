@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVX_ITEMWIN_HXX
 #define INCLUDED_SVX_ITEMWIN_HXX
 
-#include <sfx2/InterimItemWindow.hxx>
+#include <svtools/InterimItemWindow.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <svx/dlgctrl.hxx>
 #include <svx/svxdllapi.h>
