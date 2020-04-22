@@ -23,6 +23,7 @@
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
 #include <com/sun/star/chart2/DataPointCustomLabelField.hpp>
 #include <com/sun/star/chart2/DataPointCustomLabelFieldType.hpp>
@@ -323,6 +324,9 @@ void DataLabelsConverter::convertFromModel( const Reference< XDataSeries >& rxDa
     if( !mrModel.mbDeleted )
     {
         bool bMSO2007Doc = getFilter().isMSO2007Document();
+        // tdf#132174: the inner data table has no own cell number format.
+        if( getChartDocument()->hasInternalDataProvider() )
+            mrModel.maNumberFormat.mbSourceLinked = false;
         lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, true, bMSO2007Doc );
 
         if (mrModel.mxShapeProp)
