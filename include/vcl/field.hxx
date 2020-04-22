@@ -150,6 +150,8 @@ public:
     sal_Int64               Normalize( sal_Int64 nValue ) const;
     sal_Int64               Denormalize( sal_Int64 nValue ) const;
 
+    virtual void            SetValueFromString(const OUString& rStr);
+
 protected:
     sal_Int64               mnLastValue;
     sal_Int64               mnMin;
@@ -364,6 +366,7 @@ public:
     virtual void            dispose() override;
 
     virtual boost::property_tree::ptree DumpAsPropertyTree() override;
+    virtual FactoryFunction GetUITestFactory() const override;
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) DateField : public SpinField, public DateFormatter
