@@ -29,6 +29,7 @@
 class Edit;
 class SpinButton;
 class SpinField;
+class MetricField;
 
 typedef std::map<const OUString, OUString> StringMap;
 
@@ -359,7 +360,7 @@ private:
     virtual OUString get_name() const override;
 };
 
-class SpinFieldUIObject final : public EditUIObject
+class SpinFieldUIObject : public EditUIObject
 {
     VclPtr<SpinField> mxSpinField;
 
@@ -378,6 +379,25 @@ public:
     virtual OUString get_action(VclEventId nEvent) const override;
 
 private:
+
+    virtual OUString get_name() const override;
+};
+
+class MetricFieldUIObject : public SpinFieldUIObject
+{
+    VclPtr<MetricField> mxMetricField;
+
+public:
+
+    MetricFieldUIObject(const VclPtr<MetricField>& xEdit);
+    virtual ~MetricFieldUIObject() override;
+
+    virtual void execute(const OUString& rAction,
+            const StringMap& rParameters) override;
+
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
+
+protected:
 
     virtual OUString get_name() const override;
 };
