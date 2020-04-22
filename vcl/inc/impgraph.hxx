@@ -177,7 +177,6 @@ private:
     bool                ImplWriteEmbedded( SvStream& rOStream );
 
     bool                swapInFromStream(SvStream* pIStm);
-    bool                swapOutToStream(SvStream* pOStm);
 
     bool                ImplIsDummyContext() const { return mbDummyContext; }
     void                ImplSetLink( const std::shared_ptr<GfxLink>& );
