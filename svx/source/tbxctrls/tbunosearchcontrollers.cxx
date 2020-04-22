@@ -47,7 +47,7 @@
 #include <com/sun/star/util/SearchAlgorithms.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 
-#include <sfx2/InterimItemWindow.hxx>
+#include <svtools/InterimItemWindow.hxx>
 #include <svl/ctloptions.hxx>
 #include <svl/srchitem.hxx>
 #include <svtools/acceleratorexecute.hxx>

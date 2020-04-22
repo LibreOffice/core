@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sfx2/InterimItemWindow.hxx>
+#include <svtools/InterimItemWindow.hxx>
 
 InterimItemWindow::InterimItemWindow(vcl::Window* pParent, const OUString& rUIXMLDescription,
                                      const OString& rID)

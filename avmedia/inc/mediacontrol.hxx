@@ -21,7 +21,7 @@
 
 #include <avmedia/mediaitem.hxx>
 
-#include <sfx2/InterimItemWindow.hxx>
+#include <svtools/InterimItemWindow.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/weld.hxx>

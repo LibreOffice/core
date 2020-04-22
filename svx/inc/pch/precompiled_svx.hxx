@@ -263,7 +263,6 @@
 #include <o3tl/underlyingenumvalue.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <salhelper/simplereferenceobject.hxx>
-#include <sfx2/InterimItemWindow.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/bindings.hxx>
@@ -305,6 +304,7 @@
 #include <svl/typedwhich.hxx>
 #include <svl/undo.hxx>
 #include <svl/zforlist.hxx>
+#include <svtools/InterimItemWindow.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/popupwindowcontroller.hxx>

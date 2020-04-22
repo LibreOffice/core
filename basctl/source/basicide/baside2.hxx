@@ -26,7 +26,7 @@
 
 #include <basic/sbmod.hxx>
 #include <basic/sbstar.hxx>
-#include <sfx2/InterimItemWindow.hxx>
+#include <svtools/InterimItemWindow.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/weld.hxx>
 

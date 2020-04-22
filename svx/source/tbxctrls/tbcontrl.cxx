@@ -37,7 +37,7 @@
 #include <svl/style.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/borderhelper.hxx>
-#include <sfx2/InterimItemWindow.hxx>
+#include <svtools/InterimItemWindow.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/sfxstatuslistener.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

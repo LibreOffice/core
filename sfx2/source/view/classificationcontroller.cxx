@@ -16,7 +16,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
-#include <sfx2/InterimItemWindow.hxx>
+#include <svtools/InterimItemWindow.hxx>
 #include <sfx2/classificationhelper.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/strings.hrc>

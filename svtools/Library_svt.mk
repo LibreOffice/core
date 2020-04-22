@@ -90,6 +90,7 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/contnr/DocumentInfoPreview \
     svtools/source/contnr/querydelete \
     svtools/source/contnr/templwin \
+    svtools/source/control/InterimItemWindow \
     svtools/source/control/accessibleruler \
     svtools/source/control/asynclink \
     svtools/source/control/calendar \

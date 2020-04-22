@@ -22,7 +22,7 @@
 #include <vcl/customweld.hxx>
 #include <vcl/window.hxx>
 #include <svl/poolitem.hxx>
-#include <sfx2/InterimItemWindow.hxx>
+#include <svtools/InterimItemWindow.hxx>
 #include <sfx2/tbxctrl.hxx>
 
 namespace com { namespace sun { namespace star { namespace frame { class XDispatchProvider; } } } }

@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include <sfx2/InterimItemWindow.hxx>
+#include <svtools/InterimItemWindow.hxx>
 
 class LabelItemWindow final : public InterimItemWindow
 {

@@ -334,6 +334,7 @@
 #include <svl/urihelper.hxx>
 #include <svl/visitem.hxx>
 #include <svl/whiter.hxx>
+#include <svtools/InterimItemWindow.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/helpopt.hxx>
 #include <svtools/imagemgr.hxx>
@@ -399,7 +400,6 @@
 #include <openflag.hxx>
 #include <openuriexternally.hxx>
 #include <openurlhint.hxx>
-#include <sfx2/InterimItemWindow.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/bindings.hxx>
