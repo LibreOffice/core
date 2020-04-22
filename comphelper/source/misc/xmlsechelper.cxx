@@ -258,25 +258,16 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
 
 #endif
 
-    OUString GetContentPart( const OUString& _rRawString )
+    OUString GetContentPart( const OUString& _rRawString, const css::security::CertificateKind &rKind )
     {
         char const * aIDs[] = { "CN", "OU", "O", "E", nullptr };
-        bool shouldBeParsed = false;
-        int i = 0;
-        while ( aIDs[i] )
-        {
-            if (_rRawString.startsWith(OUString::createFromAscii(aIDs[i++])))
-            {
-                shouldBeParsed = true;
-                break;
-            }
-        }
 
-        if (!shouldBeParsed)
+        // tdf#131733 Don't process OpenPGP certs, only X509
+        if (rKind == css::security::CertificateKind_OPENPGP )
             return _rRawString;
 
         OUString retVal;
-        i = 0;
+        int i = 0;
         vector< pair< OUString, OUString > > vecAttrValueOfDN = parseDN(_rRawString);
         while ( aIDs[i] )
         {

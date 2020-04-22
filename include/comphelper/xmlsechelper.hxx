@@ -36,7 +36,8 @@ COMPHELPER_DLLPUBLIC OUString GetCertificateKind(const css::security::Certificat
 COMPHELPER_DLLPUBLIC std::vector<std::pair<OUString, OUString>> parseDN(const OUString& rRawString);
 COMPHELPER_DLLPUBLIC std::pair<OUString, OUString>
 GetDNForCertDetailsView(const OUString& rRawString);
-COMPHELPER_DLLPUBLIC OUString GetContentPart(const OUString& _rRawString);
+COMPHELPER_DLLPUBLIC OUString GetContentPart(const OUString& _rRawString,
+                                             const css::security::CertificateKind& rKind);
 
 COMPHELPER_DLLPUBLIC OUString GetHexString(const css::uno::Sequence<sal_Int8>& _rSeq,
                                            const char* _pSep, sal_uInt16 _nLineBreak = 0xFFFF);

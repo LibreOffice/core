@@ -204,11 +204,11 @@ void CertificateChooser::ImplInitialize()
             userData->xSecurityEnvironment = secEnvironment;
             mvUserData.push_back(userData);
 
-            OUString sIssuer = xmlsec::GetContentPart( xCert->getIssuerName() );
+            OUString sIssuer = xmlsec::GetContentPart( xCert->getIssuerName(), xCert->getCertificateKind());
 
             m_xCertLB->append();
             int nRow = m_xCertLB->n_children() - 1;
-            m_xCertLB->set_text(nRow, xmlsec::GetContentPart(xCert->getSubjectName()), 0);
+            m_xCertLB->set_text(nRow, xmlsec::GetContentPart(xCert->getSubjectName(), xCert->getCertificateKind()), 0);
             m_xCertLB->set_text(nRow, sIssuer, 1);
             m_xCertLB->set_text(nRow, xmlsec::GetCertificateKind(xCert->getCertificateKind()), 2);
             m_xCertLB->set_text(nRow, utl::GetDateString(xCert->getNotValidAfter()), 3);

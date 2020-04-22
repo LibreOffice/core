@@ -568,8 +568,8 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
                     bCertValid = false;
                 }
 
-                aSubject = xmlsec::GetContentPart( xCert->getSubjectName() );
-                aIssuer = xmlsec::GetContentPart( xCert->getIssuerName() );
+                aSubject = xmlsec::GetContentPart( xCert->getSubjectName(), xCert->getCertificateKind() );
+                aIssuer = xmlsec::GetContentPart( xCert->getIssuerName(), xCert->getCertificateKind() );
             }
             else if (!rInfo.ouGpgCertificate.isEmpty())
             {
