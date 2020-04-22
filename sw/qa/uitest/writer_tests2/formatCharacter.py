@@ -77,7 +77,6 @@ class formatCharacter(UITestCase):
 
         xEffects = xDialog.getChild("effectslb")
         xRelief = xDialog.getChild("relieflb")
-        xBlinking = xDialog.getChild("blinkingcb")
         xHidden = xDialog.getChild("hiddencb")
         xOverline = xDialog.getChild("overlinelb")
         xStrikeout = xDialog.getChild("strikeoutlb")
@@ -87,7 +86,6 @@ class formatCharacter(UITestCase):
 
         select_pos(xEffects, "1")
         select_pos(xRelief, "1")
-        xBlinking.executeAction("CLICK", tuple())
         xHidden.executeAction("CLICK", tuple())
         select_pos(xOverline, "1")
         select_pos(xStrikeout, "1")
@@ -105,7 +103,6 @@ class formatCharacter(UITestCase):
 
         xEffects = xDialog.getChild("effectslb")
         xRelief = xDialog.getChild("relieflb")
-        xBlinking = xDialog.getChild("blinkingcb")
         xHidden = xDialog.getChild("hiddencb")
         xOverline = xDialog.getChild("overlinelb")
         xStrikeout = xDialog.getChild("strikeoutlb")
@@ -115,7 +112,6 @@ class formatCharacter(UITestCase):
 
         self.assertEqual(get_state_as_dict(xEffects)["SelectEntryText"], "UPPERCASE")
         self.assertEqual(get_state_as_dict(xRelief)["SelectEntryText"], "Embossed")
-        self.assertEqual(get_state_as_dict(xBlinking)["Selected"], "true")
         self.assertEqual(get_state_as_dict(xHidden)["Selected"], "true")
         self.assertEqual(get_state_as_dict(xOverline)["SelectEntryText"], "Single")
         self.assertEqual(get_state_as_dict(xStrikeout)["SelectEntryText"], "Single")
