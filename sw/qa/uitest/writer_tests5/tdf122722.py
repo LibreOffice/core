@@ -38,7 +38,6 @@ class tdf122722(UITestCase):
 
         xEffects = xDialog.getChild("effectslb")
         xRelief = xDialog.getChild("relieflb")
-        xBlinking = xDialog.getChild("blinkingcb")
         xHidden = xDialog.getChild("hiddencb")
         xOverline = xDialog.getChild("overlinelb")
         xStrikeout = xDialog.getChild("strikeoutlb")
@@ -58,7 +57,6 @@ class tdf122722(UITestCase):
 
         xEffects = xDialog.getChild("effectslb")
         xRelief = xDialog.getChild("relieflb")
-        xBlinking = xDialog.getChild("blinkingcb")
         xHidden = xDialog.getChild("hiddencb")
         xOverline = xDialog.getChild("overlinelb")
         xStrikeout = xDialog.getChild("strikeoutlb")

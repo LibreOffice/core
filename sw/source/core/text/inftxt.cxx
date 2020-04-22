@@ -50,13 +50,11 @@
 #include <paratr.hxx>
 #include <rootfrm.hxx>
 #include "inftxt.hxx"
-#include <blink.hxx>
 #include <noteurl.hxx>
 #include "porftn.hxx"
 #include "porrst.hxx"
 #include "itratr.hxx"
 #include "portab.hxx"
-#include <accessibilityoptions.hxx>
 #include <wrong.hxx>
 #include <doc.hxx>
 #include <pam.hxx>
@@ -629,39 +627,6 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
 {
     if( !nLength )
         return;
-
-    if( GetFont()->IsBlink() && OnWin() && rPor.Width() )
-    {
-        // check if accessibility options allow blinking portions:
-        const SwViewShell* pSh = GetTextFrame()->getRootFrame()->GetCurrShell();
-        if ( pSh && ! pSh->GetAccessibilityOptions()->IsStopAnimatedText() &&
-             ! pSh->IsPreview() )
-        {
-            if( !pBlink )
-                pBlink = new SwBlink();
-
-            Point aPoint( aPos );
-
-            if ( GetTextFrame()->IsRightToLeft() )
-                GetTextFrame()->SwitchLTRtoRTL( aPoint );
-
-            if ( ComplexTextLayoutFlags::BiDiStrong != GetOut()->GetLayoutMode() )
-                aPoint.AdjustX( -(rPor.Width()) );
-
-            if ( GetTextFrame()->IsVertical() )
-                GetTextFrame()->SwitchHorizontalToVertical( aPoint );
-
-            pBlink->Insert( aPoint, &rPor, GetTextFrame(), m_pFnt->GetOrientation() );
-
-            if( !pBlink->IsVisible() )
-                return;
-        }
-        else
-        {
-            delete pBlink;
-            pBlink = nullptr;
-        }
-    }
 
     // The SwScriptInfo is useless if we are inside a field portion
     SwScriptInfo* pSI = nullptr;
