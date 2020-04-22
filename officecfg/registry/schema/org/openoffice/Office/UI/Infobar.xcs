@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+<!DOCTYPE oor:component-schema SYSTEM "../../../../../component-schema.dtd">
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Infobar" oor:package="org.openoffice.Office.UI" xml:lang="en-US">
+  <info>
+    <desc>Infobar configuration.</desc>
+  </info>
+  <template></template>
+  <component>
+    <group oor:name="Enabled">
+      <info>
+        <desc>Which Infobars are enabled.</desc>
+      </info>
+      <prop oor:name="Readonly" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Whether the Infobar shown in read-only docs is enabled</desc>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="Signature" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Whether the Infobar showing the Digital Signature state is enabled</desc>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="Donate" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Whether the Infobar showing the call for donations is enabled</desc>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="GetInvolved" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Whether the Infobar showing the call to 'Get Involved' is enabled</desc>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="HyphenationMissing" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Whether an Infobar is shown when Hyphenation Info is missing for a document</desc>
+        </info>
+        <value>true</value>
+      </prop>
+    </group>
+  </component>
+</oor:component-schema>
