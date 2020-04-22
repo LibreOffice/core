@@ -3568,6 +3568,7 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
         const OUString sTypeAction("TYPE");
         const OUString sUpAction("UP");
         const OUString sDownAction("DOWN");
+        const OUString sValue("VALUE");
 
         try
         {
@@ -3598,6 +3599,11 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
 
                         pUIWindow->execute(sClearAction, aMap);
                         pUIWindow->execute(sTypeAction, aMap);
+                    }
+                    else if (aMap["cmd"] == "value")
+                    {
+                        aMap["VALUE"] = aMap["data"];
+                        pUIWindow->execute(sValue, aMap);
                     }
                     else
                         bIsClickAction = true;
