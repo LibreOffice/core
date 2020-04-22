@@ -76,6 +76,7 @@ officecfg_XCSFILES := \
     Office/UI/GenericCommands \
     Office/UI/GlobalSettings \
     Office/UI/ImpressWindowState \
+    Office/UI/Infobar \
     Office/UI/MathCommands \
     Office/UI/MathWindowState \
     Office/UI/ReportCommands \
