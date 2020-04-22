@@ -180,6 +180,9 @@ OUString SmOoxmlImport::handleAcc()
         case MS_COMBACUTE:
             acc = "acute";
             break;
+        case MS_COMBOVERLINE:
+            acc = "overline";
+            break;
         case MS_GRAVE:
         case MS_COMBGRAVE:
             acc = "grave";
