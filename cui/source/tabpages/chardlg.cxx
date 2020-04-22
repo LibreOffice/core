@@ -1326,7 +1326,6 @@ SvxCharEffectsPage::SvxCharEffectsPage(weld::Container* pPage, weld::DialogContr
     , m_xReliefLB(m_xBuilder->weld_combo_box("relieflb"))
     , m_xOutlineBtn(m_xBuilder->weld_check_button("outlinecb"))
     , m_xShadowBtn(m_xBuilder->weld_check_button("shadowcb"))
-    , m_xBlinkingBtn(m_xBuilder->weld_check_button("blinkingcb"))
     , m_xHiddenBtn(m_xBuilder->weld_check_button("hiddencb"))
     , m_xOverlineLB(m_xBuilder->weld_combo_box("overlinelb"))
     , m_xOverlineColorFT(m_xBuilder->weld_label("overlinecolorft"))
@@ -2004,33 +2003,6 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
         }
     }
 
-    // Blinking
-    nWhich = GetWhich( SID_ATTR_FLASH );
-    eState = rSet->GetItemState( nWhich );
-
-    switch ( eState )
-    {
-        case SfxItemState::UNKNOWN:
-            m_xBlinkingBtn->hide();
-            break;
-
-        case SfxItemState::DISABLED:
-        case SfxItemState::READONLY:
-            m_xBlinkingBtn->set_sensitive(false);
-            break;
-
-        case SfxItemState::DONTCARE:
-            m_xBlinkingBtn->set_state( TRISTATE_INDET );
-            break;
-
-        case SfxItemState::DEFAULT:
-        case SfxItemState::SET:
-        {
-            const SvxBlinkItem& rItem = static_cast<const SvxBlinkItem&>(rSet->Get( nWhich ));
-            m_xBlinkingBtn->set_state( static_cast<TriState>(rItem.GetValue()) );
-            break;
-        }
-    }
     // Hidden
     nWhich = GetWhich( SID_ATTR_CHAR_HIDDEN );
     eState = rSet->GetItemState( nWhich );
@@ -2081,7 +2053,6 @@ void SvxCharEffectsPage::ChangesApplied()
     m_xReliefLB->save_value();
     m_xOutlineBtn->save_state();
     m_xShadowBtn->save_state();
-    m_xBlinkingBtn->save_state();
     m_xHiddenBtn->save_state();
     m_xFontTransparencyMtr->save_value();
 }
@@ -2355,30 +2326,6 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
 
     bChanged = true;
 
-    // Blinking
-    nWhich = GetWhich( SID_ATTR_FLASH );
-    pOld = GetOldItem( *rSet, SID_ATTR_FLASH );
-    eState = m_xBlinkingBtn->get_state();
-
-    if ( pOld )
-    {
-        const SvxBlinkItem& rItem = *static_cast<const SvxBlinkItem*>(pOld);
-        if ( rItem.GetValue() == StateToAttr( eState ) && m_xBlinkingBtn->get_saved_state() == eState )
-            bChanged = false;
-    }
-
-    if ( !bChanged && pExampleSet && pExampleSet->GetItemState( nWhich, false, &pItem ) == SfxItemState::SET &&
-         !StateToAttr( eState ) && static_cast<const SvxBlinkItem*>(pItem)->GetValue() )
-        bChanged = true;
-
-    if ( bChanged && eState != TRISTATE_INDET )
-    {
-        rSet->Put( SvxBlinkItem( StateToAttr( eState ), nWhich ) );
-        bModified = true;
-    }
-    else if ( SfxItemState::DEFAULT == rOldSet.GetItemState( nWhich, false ) )
-        rSet->InvalidateItem(nWhich);
-
     // Hidden
     nWhich = GetWhich( SID_ATTR_CHAR_HIDDEN );
     pOld = GetOldItem( *rSet, SID_ATTR_CHAR_HIDDEN );
@@ -2420,9 +2367,6 @@ void SvxCharEffectsPage::DisableControls( sal_uInt16 nDisable )
     if ( ( DISABLE_WORDLINE & nDisable ) == DISABLE_WORDLINE )
         m_xIndividualWordsBtn->set_sensitive(false);
 
-    if ( ( DISABLE_BLINK & nDisable ) == DISABLE_BLINK )
-        m_xBlinkingBtn->set_sensitive(false);
-
     if ( ( DISABLE_UNDERLINE_COLOR & nDisable ) == DISABLE_UNDERLINE_COLOR )
     {
         // disable the controls
@@ -2443,8 +2387,6 @@ void SvxCharEffectsPage::PageCreated(const SfxAllItemSet& aSet)
         return;
 
     sal_uInt32 nFlags=pFlagItem->GetValue();
-    if ( ( nFlags & SVX_ENABLE_FLASH ) == SVX_ENABLE_FLASH )
-        m_xBlinkingBtn->show();
     if ( ( nFlags & SVX_PREVIEW_CHARACTER ) == SVX_PREVIEW_CHARACTER )
         // the writer uses SID_ATTR_BRUSH as font background
         m_bPreviewBackgroundToCharacter = true;
