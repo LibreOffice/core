@@ -188,13 +188,11 @@ sal_Int16 XMLPropertySetMapper::GetEntryContextId( sal_Int32 nIndex ) const
     return nIndex == -1 ? 0 : mpImpl->maMapEntries[nIndex].nContextId;
 }
 
-std::optional<SvtSaveOptions::ODFSaneDefaultVersion>
+SvtSaveOptions::ODFSaneDefaultVersion
 XMLPropertySetMapper::GetEarliestODFVersionForExport(sal_Int32 const nIndex) const
 {
-    assert((-1 <= nIndex) && (nIndex < static_cast<sal_Int32>(mpImpl->maMapEntries.size())));
-    return nIndex == -1
-        ? std::optional<SvtSaveOptions::ODFSaneDefaultVersion>()
-        : std::optional<SvtSaveOptions::ODFSaneDefaultVersion>(mpImpl->maMapEntries[nIndex].nEarliestODFVersionForExport);
+    assert((0 <= nIndex) && (nIndex < static_cast<sal_Int32>(mpImpl->maMapEntries.size())));
+    return mpImpl->maMapEntries[nIndex].nEarliestODFVersionForExport;
 }
 
 const XMLPropertyHandler* XMLPropertySetMapper::GetPropertyHandler( sal_Int32 nIndex ) const
