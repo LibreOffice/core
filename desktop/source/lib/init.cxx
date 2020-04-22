@@ -3671,6 +3671,11 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
                         else
                             bIsClickAction = true;
                     }
+                    else if (aMap["cmd"] == "value")
+                    {
+                        aMap["VALUE"] = aMap["data"];
+                        pUIWindow->execute(sValue, aMap);
+                    }
                     else
                         bIsClickAction = true;
 

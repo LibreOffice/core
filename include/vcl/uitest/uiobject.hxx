@@ -382,6 +382,25 @@ private:
     virtual OUString get_name() const override;
 };
 
+class UITEST_DLLPUBLIC MetricFieldUIObject : public SpinFieldUIObject
+{
+    VclPtr<MetricField> mxMetricField;
+
+public:
+
+    MetricFieldUIObject(const VclPtr<MetricField>& xEdit);
+    virtual ~MetricFieldUIObject() override;
+
+    virtual void execute(const OUString& rAction,
+            const StringMap& rParameters) override;
+
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
+
+protected:
+
+    virtual OUString get_name() const override;
+};
+
 class TabControlUIObject final : public WindowUIObject
 {
 private:
