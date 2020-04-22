@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a867d401_f681a8ce",
+        "filename": "cui/uiconfig/ui/aboutdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-04-22T07:34:56Z",
+      "side": 0,
+      "message": "Dialogs should be non-resizable, so this flag must be kept.",
+      "revId": "945cb6336d1e4c9d88b121c3be78930d9a950198",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef9ca472_de921aec",
+        "filename": "cui/uiconfig/ui/aboutdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-04-22T07:34:56Z",
+      "side": 0,
+      "message": "Maybe some more space; wanted to add at least 24px around the about image myself. This change is however related to the other positioning attributes such as margin_top that you reduce to 12px.",
+      "range": {
+        "startLine": 20,
+        "startChar": 33,
+        "endLine": 20,
+        "endChar": 35
+      },
+      "revId": "945cb6336d1e4c9d88b121c3be78930d9a950198",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02d16d18_2252e050",
+        "filename": "cui/uiconfig/ui/aboutdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-04-22T07:34:56Z",
+      "side": 0,
+      "message": "h/vexpand\u003dTrue and h/valign\u003dcenter are needed for tdf#132180",
+      "revId": "945cb6336d1e4c9d88b121c3be78930d9a950198",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d40165c7_229e6bed",
+        "filename": "cui/uiconfig/ui/aboutdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-04-22T07:34:56Z",
+      "side": 0,
+      "message": "Don\u0027t see the \"simplification\" of moving the text around. That\u0027s up to marketing for me.",
+      "range": {
+        "startLine": 145,
+        "startChar": 44,
+        "endLine": 145,
+        "endChar": 45
+      },
+      "revId": "945cb6336d1e4c9d88b121c3be78930d9a950198",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "353f234f_c360bc87",
+        "filename": "cui/uiconfig/ui/aboutdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-04-22T07:34:56Z",
+      "side": 0,
+      "message": "IIRC, this was the only way to make text left-aligned. And I disagree with centered info text.",
+      "range": {
+        "startLine": 181,
+        "startChar": 44,
+        "endLine": 181,
+        "endChar": 45
+      },
+      "revId": "945cb6336d1e4c9d88b121c3be78930d9a950198",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
