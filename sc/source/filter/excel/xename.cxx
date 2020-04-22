@@ -169,7 +169,8 @@ private:
 
     /** Appends a new NAME record to the record list.
         @return  The 1-based NAME record index used elsewhere in the Excel file. */
-    sal_uInt16          Append( const XclExpNameRef& xName );
+    sal_uInt16          Append( XclExpName* pName );
+    sal_uInt16          Append( XclExpNameRef const & rxName ) { return Append(rxName.get()); }
     /** Creates a new NAME record for the passed user-defined name.
         @return  The 1-based NAME record index used elsewhere in the Excel file. */
     sal_uInt16          CreateName( SCTAB nTab, const ScRangeData& rRangeData );
@@ -447,7 +448,7 @@ sal_uInt16 XclExpNameManagerImpl::InsertName( SCTAB nTab, sal_uInt16 nScNameIdx,
 
 sal_uInt16 XclExpNameManagerImpl::InsertBuiltInName( sal_Unicode cBuiltIn, const XclTokenArrayRef& xTokArr, const ScRange& aRange )
 {
-    XclExpNameRef xName = std::make_shared<XclExpName>( GetRoot(), cBuiltIn );
+    XclExpNameRef xName = new XclExpName( GetRoot(), cBuiltIn );
     xName->SetTokenArray( xTokArr );
     xName->SetLocalTab( aRange.aStart.Tab() );
     OUString sSymbol(aRange.Format(GetDoc(), ScRefFlags::RANGE_ABS_3D, ScAddress::Details( ::formula::FormulaGrammar::CONV_XL_A1)));
@@ -457,7 +458,7 @@ sal_uInt16 XclExpNameManagerImpl::InsertBuiltInName( sal_Unicode cBuiltIn, const
 
 sal_uInt16 XclExpNameManagerImpl::InsertBuiltInName( sal_Unicode cBuiltIn, const XclTokenArrayRef& xTokArr, SCTAB nScTab, const ScRangeList& rRangeList )
 {
-    XclExpNameRef xName = std::make_shared<XclExpName>( GetRoot(), cBuiltIn );
+    XclExpNameRef xName = new XclExpName( GetRoot(), cBuiltIn );
     xName->SetTokenArray( xTokArr );
     xName->SetLocalTab( nScTab );
     OUString sSymbol;
@@ -470,7 +471,7 @@ sal_uInt16 XclExpNameManagerImpl::InsertUniqueName(
         const OUString& rName, const XclTokenArrayRef& xTokArr, SCTAB nScTab )
 {
     OSL_ENSURE( !rName.isEmpty(), "XclExpNameManagerImpl::InsertUniqueName - empty name" );
-    XclExpNameRef xName = std::make_shared<XclExpName>( GetRoot(), GetUnusedName( rName ) );
+    XclExpNameRef xName = new XclExpName( GetRoot(), GetUnusedName( rName ) );
     xName->SetTokenArray( xTokArr );
     xName->SetLocalTab( nScTab );
     return Append( xName );
@@ -491,7 +492,7 @@ sal_uInt16 XclExpNameManagerImpl::InsertRawName( const OUString& rName )
     }
 
     // create a new NAME record
-    XclExpNameRef xName = std::make_shared<XclExpName>( GetRoot(), rName );
+    XclExpNameRef xName = new XclExpName( GetRoot(), rName );
     return Append( xName );
 }
 
@@ -510,7 +511,7 @@ sal_uInt16 XclExpNameManagerImpl::InsertMacroCall( const OUString& rMacroName, b
     }
 
     // create a new NAME record
-    XclExpNameRef xName = std::make_shared<XclExpName>( GetRoot(), rMacroName );
+    XclExpNameRef xName = new XclExpName( GetRoot(), rMacroName );
     xName->SetMacroCall( bVBasic, bFunc );
     xName->SetHidden( bHidden );
 
@@ -524,7 +525,7 @@ sal_uInt16 XclExpNameManagerImpl::InsertMacroCall( const OUString& rMacroName, b
 const XclExpName* XclExpNameManagerImpl::GetName( sal_uInt16 nNameIdx ) const
 {
     OSL_ENSURE( maNameList.HasRecord( nNameIdx - 1 ), "XclExpNameManagerImpl::GetName - wrong record index" );
-    return maNameList.GetRecord( nNameIdx - 1 ).get();
+    return maNameList.GetRecord( nNameIdx - 1 );
 }
 
 void XclExpNameManagerImpl::Save( XclExpStream& rStrm )
@@ -600,11 +601,11 @@ OUString XclExpNameManagerImpl::GetUnusedName( const OUString& rName ) const
     return aNewName;
 }
 
-sal_uInt16 XclExpNameManagerImpl::Append( const XclExpNameRef& xName )
+sal_uInt16 XclExpNameManagerImpl::Append( XclExpName* pName )
 {
     if( maNameList.GetSize() == 0xFFFF )
         return 0;
-    maNameList.AppendRecord( xName );
+    maNameList.AppendRecord( pName );
     return static_cast< sal_uInt16 >( maNameList.GetSize() );  // 1-based
 }
 
@@ -616,7 +617,7 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( SCTAB nTab, const ScRangeData& rRa
         otherwise a recursive call of this function from the formula compiler
         with the same defined name will not find it and will create it again. */
     size_t nOldListSize = maNameList.GetSize();
-    XclExpNameRef xName = std::make_shared<XclExpName>( GetRoot(), rName );
+    XclExpNameRef xName = new XclExpName( GetRoot(), rName );
     if (nTab != SCTAB_GLOBAL)
         xName->SetLocalTab(nTab);
     sal_uInt16 nNameIdx = Append( xName );

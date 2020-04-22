@@ -413,8 +413,8 @@ private:
     typedef XclExpAutofilterList::RecordRefType     XclExpAutofilterRef;
 
     XclExpAutofilterList maFilterList;
-    std::unique_ptr<XclExpFiltermode> m_pFilterMode;
-    std::unique_ptr<XclExpAutofilterinfo> m_pFilterInfo;
+    rtl::Reference<XclExpFiltermode> m_pFilterMode;
+    rtl::Reference<XclExpAutofilterinfo> m_pFilterInfo;
     ScRange                 maRef;
     bool mbAutoFilter;
 };
@@ -439,7 +439,7 @@ public:
 private:
     using               XclExpRoot::CreateRecord;
 
-    typedef std::shared_ptr< ExcAutoFilterRecs >  XclExpTabFilterRef;
+    typedef rtl::Reference< ExcAutoFilterRecs >  XclExpTabFilterRef;
     typedef ::std::map< SCTAB, XclExpTabFilterRef > XclExpTabFilterMap;
 
     XclExpTabFilterMap  maFilterMap;
