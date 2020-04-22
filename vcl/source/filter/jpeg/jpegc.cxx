@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 #include <sal/log.hxx>
+#include <o3tl/float_int_conversion.hxx>
 #include <o3tl/safeint.hxx>
 
 #include <stdio.h>
@@ -366,9 +367,16 @@ bool WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
     jpeg_set_defaults( &cinfo );
     jpeg_set_quality( &cinfo, static_cast<int>(nQualityPercent), FALSE );
 
-    cinfo.density_unit = 1;
-    cinfo.X_density = rPPI.getX();
-    cinfo.Y_density = rPPI.getY();
+    if (o3tl::convertsToAtMost(rPPI.getX(), 65535) && o3tl::convertsToAtMost(rPPI.getY(), 65535))
+    {
+        cinfo.density_unit = 1;
+        cinfo.X_density = rPPI.getX();
+        cinfo.Y_density = rPPI.getY();
+    }
+    else
+    {
+        SAL_WARN("vcl.filter", "ignoring too large PPI " << rPPI);
+    }
 
     if ( ( nWidth > 128 ) || ( nHeight > 128 ) )
         jpeg_simple_progression( &cinfo );
