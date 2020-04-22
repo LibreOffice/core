@@ -25,6 +25,9 @@
 #include <cassert>
 #include <cstddef>
 #include <functional>
+#ifdef LIBO_INTERNAL_ONLY
+#include <type_traits>
+#endif
 
 #include "sal/types.h"
 
@@ -81,6 +84,24 @@ public:
         : m_pBody (handle.m_pBody)
     {
         handle.m_pBody = nullptr;
+    }
+#endif
+
+#if defined LIBO_INTERNAL_ONLY
+    /** Up-casting conversion constructor: Copies interface reference.
+
+        Does not work for up-casts to ambiguous bases.
+
+        @param rRef another reference
+    */
+    template< class derived_type >
+    inline Reference(
+        const Reference< derived_type > & rRef,
+        std::enable_if_t<std::is_base_of_v<reference_type, derived_type>, int> = 0 )
+        : m_pBody (rRef.get())
+    {
+        if (m_pBody)
+            m_pBody->acquire();
     }
 #endif
 
