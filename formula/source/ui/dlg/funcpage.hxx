@@ -68,6 +68,7 @@ public:
     void            SetFunction(sal_Int32  nFunc);
     void            SetFocus();
     sal_Int32       GetCategory() const;
+    sal_Int32       GetCategoryEntryCount() const;
     sal_Int32       GetFunction() const;
     sal_Int32       GetFunctionEntryCount() const;
 

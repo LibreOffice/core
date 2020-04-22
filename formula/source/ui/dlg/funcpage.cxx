@@ -242,6 +242,11 @@ sal_Int32 FuncPage::GetCategory() const
     return m_xLbCategory->get_active();
 }
 
+sal_Int32 FuncPage::GetCategoryEntryCount() const
+{
+    return m_xLbCategory->get_count();
+}
+
 sal_Int32 FuncPage::GetFunction() const
 {
     return m_xLbFunction->get_selected_index();

@@ -50,6 +50,8 @@ namespace formula
 
         const CharClass* GetCharClass() const { return m_pCharClass; }
 
+        sal_Int32           GetCategoryCount() const;
+
         bool                GetNextFunc( const OUString&     rFormula,
                                                bool          bBack,
                                                sal_Int32&    rFStart, // input and output
