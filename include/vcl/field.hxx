@@ -155,6 +155,8 @@ public:
     sal_Int64               Normalize( sal_Int64 nValue ) const;
     sal_Int64               Denormalize( sal_Int64 nValue ) const;
 
+    virtual void            SetValueFromString(const OUString& rStr);
+
 protected:
     sal_Int64               mnFieldValue;
     sal_Int64               mnLastValue;
@@ -519,6 +521,7 @@ public:
     virtual void            dispose() override;
 
     virtual boost::property_tree::ptree DumpAsPropertyTree() override;
+    virtual FactoryFunction GetUITestFactory() const override;
 };
 
 
