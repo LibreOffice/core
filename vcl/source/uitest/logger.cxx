@@ -12,6 +12,7 @@
 #include <vcl/uitest/logger.hxx>
 
 #include <rtl/bootstrap.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <osl/file.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/event.hxx>
