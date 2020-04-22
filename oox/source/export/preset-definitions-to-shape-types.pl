@@ -767,7 +767,7 @@ sub start_element( $% )
 
     #print "element: $element\n";
 
-    if ( @levels > 1 && ( $levels[-2] eq "presetShapeDefinitons" ||
+    if ( @levels > 1 && ( $levels[-2] eq "presetShapeDefinitions" ||
 			  $levels[-2] eq "presetTextWarpDefinitions" ) ) {
         $shape_name = $element;
 
