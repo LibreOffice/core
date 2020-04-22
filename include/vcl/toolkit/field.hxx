@@ -101,6 +101,7 @@ public:
     virtual void            dispose() override;
 
     virtual boost::property_tree::ptree DumpAsPropertyTree() override;
+    virtual FactoryFunction GetUITestFactory() const override;
 };
 
 class VCL_DLLPUBLIC MetricBox : public ComboBox, public MetricFormatter

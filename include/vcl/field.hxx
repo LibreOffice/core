@@ -150,6 +150,8 @@ public:
     sal_Int64               Normalize( sal_Int64 nValue ) const;
     sal_Int64               Denormalize( sal_Int64 nValue ) const;
 
+    virtual void            SetValueFromString(const OUString& rStr);
+
 protected:
     sal_Int64               mnLastValue;
     sal_Int64               mnMin;
