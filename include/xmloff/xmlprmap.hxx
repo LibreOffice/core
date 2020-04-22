@@ -25,7 +25,6 @@
 #include <rtl/ustring.hxx>
 
 #include <salhelper/simplereferenceobject.hxx>
-#include <optional>
 #include <memory>
 
 namespace rtl { template <class reference_type> class Reference; }
@@ -83,7 +82,7 @@ public:
     sal_Int16 GetEntryContextId( sal_Int32 nIndex ) const;
 
     /** returns the earliest odf version for which this property should be exported. */
-    std::optional<SvtSaveOptions::ODFSaneDefaultVersion> GetEarliestODFVersionForExport(sal_Int32 nIndex) const;
+    SvtSaveOptions::ODFSaneDefaultVersion GetEarliestODFVersionForExport(sal_Int32 nIndex) const;
 
     /** Returns the index of an entry with the given XML-name and namespace
         If there is no matching entry the method returns -1 */
