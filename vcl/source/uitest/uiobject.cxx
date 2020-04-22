@@ -8,6 +8,7 @@
  */
 
 #include <vcl/uitest/uiobject.hxx>
+#include <vcl/uitest/metricfielduiobject.hxx>
 
 #include <vcl/combobox.hxx>
 #include <vcl/event.hxx>
@@ -19,6 +20,7 @@
 #include <vcl/spinfld.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/dialog.hxx>
+#include <vcl/toolkit/field.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/vclmedit.hxx>
 #include <vcl/uitest/logger.hxx>
@@ -1287,6 +1289,44 @@ std::unique_ptr<UIObject> SpinFieldUIObject::create(vcl::Window* pWindow)
     SpinField* pSpinField = dynamic_cast<SpinField*>(pWindow);
     assert(pSpinField);
     return std::unique_ptr<UIObject>(new SpinFieldUIObject(pSpinField));
+}
+
+
+MetricFieldUIObject::MetricFieldUIObject(const VclPtr<MetricField>& xMetricField):
+    SpinFieldUIObject(xMetricField),
+    mxMetricField(xMetricField)
+{
+}
+
+MetricFieldUIObject::~MetricFieldUIObject()
+{
+}
+
+void MetricFieldUIObject::execute(const OUString& rAction,
+        const StringMap& rParameters)
+{
+    if (rAction == "VALUE")
+    {
+        auto itPos = rParameters.find("VALUE");
+        if (itPos != rParameters.end())
+        {
+            mxMetricField->SetValueFromString(itPos->second);
+        }
+    }
+    else
+        SpinFieldUIObject::execute(rAction, rParameters);
+}
+
+OUString MetricFieldUIObject::get_name() const
+{
+    return "MetricFieldUIObject";
+}
+
+std::unique_ptr<UIObject> MetricFieldUIObject::create(vcl::Window* pWindow)
+{
+    MetricField* pMetricField = dynamic_cast<MetricField*>(pWindow);
+    assert(pMetricField);
+    return std::unique_ptr<UIObject>(new MetricFieldUIObject(pMetricField));
 }
 
 TabControlUIObject::TabControlUIObject(const VclPtr<TabControl>& xTabControl):
