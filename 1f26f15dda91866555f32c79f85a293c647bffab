@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "66cfd190_597cebfe",
+        "filename": "sw/source/filter/ww8/wrtww8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2050,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-04-22T17:04:28Z",
+      "side": 1,
+      "message": "Unless I am wrong, re-arranging these should have no impact. I only did that to highlight that they are different from the others. They seem completely independent and are still in the same relative order.",
+      "range": {
+        "startLine": 2048,
+        "startChar": 12,
+        "endLine": 2050,
+        "endChar": 52
+      },
+      "revId": "1f26f15dda91866555f32c79f85a293c647bffab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
