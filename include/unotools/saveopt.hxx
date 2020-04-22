@@ -81,8 +81,8 @@ public:
         ODFSVER_013_EXTENDED = 13,  ///< ODF 1.3 extended
 
         // The latest defined standard. Adapt when a new one is published.
-        ODFSVER_LATEST = ODFSVER_012,                               ///< @internal DO NOT USE in comparisons
-        ODFSVER_LATEST_EXTENDED = ODFSVER_LATEST | ODFSVER_EXTENDED ///< @internal DO NOT USE in comparisons
+        ODFSVER_LATEST = ODFSVER_012,                   ///< @internal DO NOT USE in comparisons
+        ODFSVER_LATEST_EXTENDED = ODFSVER_012_EXTENDED  ///< @internal DO NOT USE in comparisons
     };
 
     SvtSaveOptions();
