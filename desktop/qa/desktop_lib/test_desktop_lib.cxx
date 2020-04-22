@@ -2674,7 +2674,8 @@ void DesktopLOKTest::testShowHideDialog()
     pWindow->Show();
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(std::string("invalidate"), aView.m_aCallbackWindowResult.get<std::string>("action"));
+    std::string aAction = aView.m_aCallbackWindowResult.get<std::string>("action");
+    CPPUNIT_ASSERT(aAction == "invalidate" || aAction == "cursor_visible");
 }
 
 void DesktopLOKTest::testComplexSelection()
