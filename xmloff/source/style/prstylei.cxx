@@ -183,6 +183,7 @@ SvXMLImportContextRef XMLPropStyleContext::CreateChildContext(
     SvXMLImportContextRef xContext;
 
     sal_uInt32 nFamily = 0;
+    // TODO for graphic-properties -> alg fillstyle
     if( XML_NAMESPACE_STYLE == nPrefix || XML_NAMESPACE_LO_EXT == nPrefix )
     {
         if( IsXMLToken( rLocalName, XML_GRAPHIC_PROPERTIES ) )

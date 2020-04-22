@@ -45,6 +45,8 @@ SignatureLineContext::SignatureLineContext(SvXMLImport& rImport, sal_uInt16 nPrf
 
     xPropSet->setPropertyValue("IsSignatureLine", Any(true));
 
+    // FIXME prefix abuse
+    // TODO 1.4 what namespace?
     xPropSet->setPropertyValue("SignatureLineId", Any(xAttrList->getValueByName("loext:id")));
     xPropSet->setPropertyValue("SignatureLineSuggestedSignerName",
                                Any(xAttrList->getValueByName("loext:suggested-signer-name")));
@@ -95,6 +97,8 @@ SignatureLineContext::SignatureLineContext(SvXMLImport& rImport, sal_uInt16 nPrf
         auto pSignatureInfo = std::find_if(
             xSignatureInfo.begin(), xSignatureInfo.end(),
             [&xAttrList](const DocumentSignatureInformation& rSignatureInfo) {
+                // FIXME prefix abuse
+                // TODO 1.4 what namespace?
                 return rSignatureInfo.SignatureLineId == xAttrList->getValueByName("loext:id");
             });
         if (pSignatureInfo != xSignatureInfo.end())

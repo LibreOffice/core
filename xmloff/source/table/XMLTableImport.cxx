@@ -797,6 +797,7 @@ SvXMLImportContextRef XMLTableTemplateContext::CreateChildContext( sal_uInt16 nP
                 }
             }
         }
+        // TODO import 1.4
     } else if (nPrefix == XML_NAMESPACE_LO_EXT) // Writer specific cell styles
     {
         const TableStyleElement* pElements = getWriterSpecificTableStyleMap();

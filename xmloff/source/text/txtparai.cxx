@@ -2367,6 +2367,7 @@ SvXMLImportContextRef XMLNumberedParaContext::CreateChildContext(
     SvXMLImportContextRef xContext;
 
     if ( XML_NAMESPACE_TEXT == i_nPrefix ||
+                // 6acc6c011d3afd6834efeee1b2efe43652a86f2e ?
             XML_NAMESPACE_LO_EXT == i_nPrefix )
     {
         bool bIsHeader( IsXMLToken( i_rLocalName, XML_H ) );

@@ -744,6 +744,7 @@ rtl::Reference<XMLTransformerContext> XMLStyleOASISTContext::CreateChildContext(
 {
     rtl::Reference<XMLTransformerContext> pContext;
 
+    // fillstyle; irrelevant (OOoXML)
     if( XML_NAMESPACE_STYLE == nPrefix || XML_NAMESPACE_LO_EXT == nPrefix )
     {
         XMLPropType ePropType =

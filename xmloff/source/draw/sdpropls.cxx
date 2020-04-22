@@ -153,6 +153,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "ShadowTransparence",             XML_NAMESPACE_DRAW, XML_SHADOW_OPACITY, XML_TYPE_NEG_PERCENT, 0 ),
 
     // glow attributes
+    // TODO import 1.4
     GMAPV( "GlowEffect",                       XML_NAMESPACE_LO_EXT, XML_GLOW,                 XML_SD_TYPE_GLOW  , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
     GMAPV( "GlowEffectRad",                    XML_NAMESPACE_LO_EXT, XML_GLOW_RADIUS,          XML_TYPE_MEASURE  , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
     GMAPV( "GlowEffectColor",                  XML_NAMESPACE_LO_EXT, XML_GLOW_COLOR,           XML_TYPE_COLOR    , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
@@ -249,6 +250,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "FontWorkHideForm",               XML_NAMESPACE_DRAW, XML_FONTWORK_HIDE_FORM,             XML_TYPE_BOOL | MID_FLAG_ELEMENT_ITEM_EXPORT,              CTF_FONTWORK_HIDEFORM   ),
     GMAP( "FontWorkShadowTransparence",     XML_NAMESPACE_DRAW, XML_FONTWORK_SHADOW_TRANSPARENCE,   XML_TYPE_PERCENT | MID_FLAG_ELEMENT_ITEM_EXPORT,           CTF_FONTWORK_SHADOWTRANSPARENCE ),
 
+    // TODO tdf#114400
     // #FontWork# attributes
     GMAPV("FontWorkStyle",              XML_NAMESPACE_DRAW_EXT, XML_FONTWORK_STYLE,                 XML_SD_TYPE_FONTWORK_STYLE, CTF_FONTWORK_STYLE,         SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
     GMAPV("FontWorkAdjust",             XML_NAMESPACE_DRAW_EXT, XML_FONTWORK_ADJUST,                XML_SD_TYPE_FONTWORK_ADJUST,CTF_FONTWORK_ADJUST,        SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),

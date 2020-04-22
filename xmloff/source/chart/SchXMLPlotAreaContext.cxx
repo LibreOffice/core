@@ -701,6 +701,7 @@ void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttr
                 mDataPoint.m_nPointRepeat = nRepeat;
             }
         }
+                                            // TODO import 1.4
         else if( nPrefix == XML_NAMESPACE_LO_EXT)
         {
             // Deprecated. New documents use the chart:data-label element

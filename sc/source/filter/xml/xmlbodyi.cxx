@@ -107,6 +107,7 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
             else if (  nLocalToken == XML_PROTECTION_KEY_DIGEST_ALGORITHM_2 )
                 meHash2 = ScPassHashHelper::getHashTypeFromURI( it.toString() );
         }
+                        // TODO 1.4 import
         else if ( nToken == XML_ELEMENT( LO_EXT, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2 ) )
         {
             meHash2 = ScPassHashHelper::getHashTypeFromURI( it.toString() );
@@ -170,6 +171,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     case XML_ELEMENT( TABLE, XML_DATABASE_RANGES ):
         pContext = new ScXMLDatabaseRangesContext ( GetScImport() );
         break;
+        // TODO import 1.4
     case XML_ELEMENT( CALC_EXT, XML_DATA_MAPPINGS ):
         pContext = new ScXMLMappingsContext(GetScImport());
         break;
@@ -186,6 +188,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     case XML_ELEMENT( TABLE, XML_DDE_LINKS ):
         pContext = new ScXMLDDELinksContext ( GetScImport() );
         break;
+        // TODO import 1.4
     case XML_ELEMENT( CALC_EXT, XML_DATA_STREAM_SOURCE ):
         pContext = new ScXMLDataStreamContext(GetScImport(), pAttribList);
         break;

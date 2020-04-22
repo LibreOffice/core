@@ -79,6 +79,7 @@ void XMLStringBufferImportContext::Characters(
 void XMLStringBufferImportContext::endFastElement(sal_Int32 nElement)
 {
     // add return for paragraph elements
+                // 6acc6c011d3afd6834efeee1b2efe43652a86f2e ?
     if ( nElement == XML_ELEMENT(TEXT, XML_P) || nElement == XML_ELEMENT(LO_EXT, XML_P))
     {
         rTextBuffer.append(u'\x000a');
@@ -94,6 +95,7 @@ void XMLStringBufferImportContext::EndElement()
 {
     // add return for paragraph elements
     if ( (XML_NAMESPACE_TEXT == GetPrefix() ||
+                // 6acc6c011d3afd6834efeee1b2efe43652a86f2e ?
                 XML_NAMESPACE_LO_EXT == GetPrefix()) &&
          (IsXMLToken(GetLocalName(), XML_P))    )
     {

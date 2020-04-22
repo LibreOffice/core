@@ -1230,6 +1230,7 @@ SvXMLImportContextRef SchXMLTitleContext::CreateChildContext(
     SvXMLImportContext* pContext = nullptr;
 
     if( (nPrefix == XML_NAMESPACE_TEXT ||
+                // ? this looks like its never exported 6acc6c011d3afd6834efeee1b2efe43652a86f2e
                 nPrefix == XML_NAMESPACE_LO_EXT) &&
         IsXMLToken( rLocalName, XML_P ) )
     {

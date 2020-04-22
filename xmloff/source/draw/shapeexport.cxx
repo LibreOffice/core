@@ -751,6 +751,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
                 }
 
                 if( eDisplayToken != XML_TOKEN_INVALID )
+                    // TODO 1.4
                     mrExport.AddAttribute(XML_NAMESPACE_DRAW_EXT, XML_DISPLAY, eDisplayToken );
             }
             catch(const uno::Exception&)
@@ -1242,6 +1243,7 @@ void XMLShapeExport::ImpExportSignatureLine(const uno::Reference<drawing::XShape
 
     OUString aSignatureLineId;
     xPropSet->getPropertyValue("SignatureLineId") >>= aSignatureLineId;
+    // TODO 1.4
     mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_ID, aSignatureLineId);
 
     OUString aSuggestedSignerName;
@@ -1304,6 +1306,7 @@ void XMLShapeExport::ImpExportQRCode(const uno::Reference<drawing::XShape>& xSha
                 temp = "high";
                 break;
         }
+        // TODO 1.4
         mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_QRCODE_ERROR_CORRECTION, temp);
         mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_QRCODE_BORDER, OUStringBuffer(20).append(aQRCode.Border).makeStringAndClear());
 
@@ -2938,6 +2941,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
         if (!bIsEmptyPresObj && supportsText(eShapeType))
         {
             // #i118485# Add text export, the draw OLE shape allows text now
+            // TODO 1.4
             ImpExportText( xShape, TextPNS::EXTENSION );
         }
 
@@ -4125,6 +4129,7 @@ static void ImpExportEnhancedPath( SvXMLExport& rExport,
         }
     }
     aStr = aStrBuffer.makeStringAndClear();
+    // TODO 1.4
     rExport.AddAttribute( bExtended ? XML_NAMESPACE_DRAW_EXT : XML_NAMESPACE_DRAW, XML_ENHANCED_PATH, aStr );
     if (!bExtended && bNeedExtended && (rExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED))
         ImpExportEnhancedPath( rExport, rCoordinates, rSegments, true );
@@ -4605,6 +4610,7 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                                             aStrBuffer.append( aSubViewSizes[nIdx].Height );
                                         }
                                         aStr = aStrBuffer.makeStringAndClear();
+                                        // TODO 1.4
                                         rExport.AddAttribute( XML_NAMESPACE_DRAW_EXT, XML_SUB_VIEW_SIZE, aStr );
                                     }
                                     break;

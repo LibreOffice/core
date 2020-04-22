@@ -1670,6 +1670,7 @@ SvXMLImportContextRef XMLTextFrameContext::CreateChildContext(
         }
         xContext = m_xImplContext->CreateChildContext( p_nPrefix, rLocalName, xAttrList );
     }
+    // TODO import 1.4
     else if (p_nPrefix == XML_NAMESPACE_LO_EXT && (IsXMLToken(rLocalName, XML_SIGNATURELINE)))
     {
         if (getSupportsMultipleContents())
@@ -1679,6 +1680,7 @@ SvXMLImportContextRef XMLTextFrameContext::CreateChildContext(
         }
         xContext = m_xImplContext->CreateChildContext(p_nPrefix, rLocalName, xAttrList);
     }
+    // TODO import 1.4
     else if (p_nPrefix == XML_NAMESPACE_LO_EXT && (IsXMLToken(rLocalName, XML_QRCODE)))
     {
         if (getSupportsMultipleContents())
