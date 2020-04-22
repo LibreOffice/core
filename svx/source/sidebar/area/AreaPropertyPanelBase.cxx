@@ -92,7 +92,7 @@ AreaPropertyPanelBase::AreaPropertyPanelBase(
       mpTransparanceItem()
 {
     get(mpColorTextFT,    "filllabel");
-    get(mpLbFillType,     "fillstyle");
+    get(mpLbFillType,     "fillstylearea");
     get(mpLbFillAttr,     "fillattr");
     get(mpTrspTextFT,     "transparencylabel");
     get(mpToolBoxColor,   "selectcolor");
