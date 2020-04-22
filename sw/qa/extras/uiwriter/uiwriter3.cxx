@@ -335,6 +335,23 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130746)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf129805)
+{
+    load(DATA_DIRECTORY, "tdf129805.docx");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("x"), getParagraph(1)->getString());
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    // without the fix in place, it would crash here
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(OUString("x"), getParagraph(1)->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130685)
 {
     load(DATA_DIRECTORY, "tdf130685.odt");
