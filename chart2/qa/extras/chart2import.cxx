@@ -153,6 +153,7 @@ public:
     void testTdf121991();
     void testTdf125444PercentageCustomLabel();
     void testTdf123206CustomLabelField();
+    void testStockChartShiftedCategoryPosition();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -255,6 +256,8 @@ public:
     CPPUNIT_TEST(testTdf121991);
     CPPUNIT_TEST(testTdf125444PercentageCustomLabel);
     CPPUNIT_TEST(testTdf123206CustomLabelField);
+    CPPUNIT_TEST(testStockChartShiftedCategoryPosition);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2378,6 +2381,21 @@ void Chart2ImportTest::testTdf123206CustomLabelField()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aLabelFields.getLength());
     CPPUNIT_ASSERT_EQUAL(OUString("Kiskacsa"), aLabelFields[0]->getString());
 
+}
+
+void Chart2ImportTest::testStockChartShiftedCategoryPosition()
+{
+    load("/chart2/qa/extras/data/odt/", "stock_chart_LO_6_2.odt");
+
+    uno::Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference<chart2::XAxis> xAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
+    CPPUNIT_ASSERT(xAxis.is());
+
+    chart2::ScaleData aScaleData = xAxis->getScaleData();
+    CPPUNIT_ASSERT(aScaleData.Categories.is());
+    CPPUNIT_ASSERT(aScaleData.ShiftedCategoryPosition);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
