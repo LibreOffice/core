@@ -1,4 +1,4 @@
-From [http://tagoh.bitbucket.org/liblangtag/]. An interface for BCP47 language tags.
+From [https://bitbucket.org/tagoh/liblangtag]. An interface for BCP47 language tags.
 
 Updated IANA Language Subtag Registry files are available as
 [https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry]
