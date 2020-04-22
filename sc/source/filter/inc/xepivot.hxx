@@ -153,7 +153,7 @@ private:
     sal_uInt16          mnTypeFlags;        /// Collected item data type flags.
 };
 
-class XclExpPivotCache : protected XclExpRoot
+class XclExpPivotCache : public salhelper::SimpleReferenceObject, protected XclExpRoot
 {
 public:
     explicit            XclExpPivotCache( const XclExpRoot& rRoot,
@@ -218,6 +218,8 @@ private:
     sal_uInt16          mnListIdx;          /// List index in pivot cache buffer.
     bool                mbValid;            /// true = The cache is valid for export.
 };
+
+typedef rtl::Reference<XclExpPivotCache>       XclExpPivotCacheRef;
 
 // Pivot table
 
@@ -426,7 +428,6 @@ private:
 
 private:
     typedef XclExpRecordList< XclExpPivotCache >    XclExpPivotCacheList;
-    typedef XclExpPivotCacheList::RecordRefType     XclExpPivotCacheRef;
     typedef XclExpRecordList< XclExpPivotTable >    XclExpPivotTableList;
     typedef XclExpPivotTableList::RecordRefType     XclExpPivotTableRef;
 

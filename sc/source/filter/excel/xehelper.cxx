@@ -308,7 +308,7 @@ OUString XclExpHyperlinkHelper::ProcessUrlField( const SvxURLField& rUrlField )
         // there was/is already a HLINK record
         mbMultipleUrls = static_cast< bool >(mxLinkRec);
 
-        mxLinkRec = std::make_shared<XclExpHyperlink>( GetRoot(), rUrlField, maScPos );
+        mxLinkRec = new XclExpHyperlink( GetRoot(), rUrlField, maScPos );
 
         if( const OUString* pRepr = mxLinkRec->GetRepr() )
             aUrlRepr = *pRepr;
