@@ -31,6 +31,46 @@
 namespace rtl
 {
 
+#if defined LIBO_INTERNAL_ONLY
+/// @cond INTERNAL
+namespace detail {
+
+// A mechanism to enable up-casts, used by the Reference conversion constructor;
+// heavily borrowed from boost::is_base_and_derived
+// (which manages to avoid compilation problems with ambiguous bases and cites
+// comp.lang.c++.moderated mail <http://groups.google.com/groups?
+// selm=df893da6.0301280859.522081f7%40posting.google.com> "SuperSubclass
+// (is_base_and_derived) complete implementation!" by Rani Sharoni and cites
+// Aleksey Gurtovoy for the workaround for MSVC), to avoid including Boost
+// headers in URE headers (could ultimately be based on C++11 std::is_base_of):
+
+template< typename T1, typename T2 > struct UpCast {
+private:
+    template< bool, typename U1, typename > struct C
+    { typedef U1 t; };
+
+    template< typename U1, typename U2 > struct C< false, U1, U2 >
+    { typedef U2 t; };
+
+    struct S { char c[2]; };
+
+    template< typename U > static char f(T2 *, U);
+    static S f(T1 *, int);
+
+    struct H {
+        H(); // avoid C2514 "class has no constructors" from MSVC
+        operator T1 * () const;
+        operator T2 * ();
+    };
+
+public:
+    typedef typename C< sizeof (f(H(), 0)) == 1, void *, void >::t t;
+};
+
+}
+/// @endcond
+#endif
+
 /** Template reference class for reference type.
 */
 template <class reference_type>
@@ -81,6 +121,24 @@ public:
         : m_pBody (handle.m_pBody)
     {
         handle.m_pBody = nullptr;
+    }
+#endif
+
+#if defined LIBO_INTERNAL_ONLY
+    /** Up-casting conversion constructor: Copies interface reference.
+
+        Does not work for up-casts to ambiguous bases.
+
+        @param rRef another reference
+    */
+    template< class derived_type >
+    inline Reference(
+        const Reference< derived_type > & rRef,
+        typename detail::UpCast< reference_type, derived_type >::t = 0 )
+        : m_pBody (rRef.get())
+    {
+        if (m_pBody)
+            m_pBody->acquire();
     }
 #endif
 
