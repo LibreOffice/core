@@ -175,7 +175,7 @@ class XclExpHyperlink;
 class XclExpHyperlinkHelper : protected XclExpRoot
 {
 public:
-    typedef std::shared_ptr< XclExpHyperlink > XclExpHyperlinkRef;
+    typedef rtl::Reference< XclExpHyperlink > XclExpHyperlinkRef;
 
     explicit            XclExpHyperlinkHelper( const XclExpRoot& rRoot, const ScAddress& rScPos );
                         virtual ~XclExpHyperlinkHelper() override;

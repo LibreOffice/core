@@ -147,7 +147,7 @@ private:
     const char* mOperator;
 };
 
-typedef std::shared_ptr<XclExpExt> XclExpExtRef;
+typedef rtl::Reference<XclExpExt> XclExpExtRef;
 
 class XclExpExtConditionalFormatting : public XclExpRecordBase, protected XclExpRoot
 {
@@ -160,7 +160,7 @@ private:
     ScRangeList maRange;
 };
 
-typedef std::shared_ptr<XclExpExtConditionalFormatting> XclExpExtConditionalFormattingRef;
+typedef rtl::Reference<XclExpExtConditionalFormatting> XclExpExtConditionalFormattingRef;
 
 class XclExpExtCondFormat : public XclExpExt
 {
@@ -170,7 +170,7 @@ public:
 
     virtual XclExpExtType GetType() override { return XclExpExtDataBarType; }
 
-    void AddRecord( const XclExpExtConditionalFormattingRef& aFormat );
+    void AddRecord( XclExpExtConditionalFormatting* pFormat );
 
 private:
     XclExpRecordList< XclExpExtConditionalFormatting > maCF;
@@ -194,15 +194,16 @@ public:
     explicit XclExtLst( const XclExpRoot& rRoot);
     virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 
-    void AddRecord( const XclExpExtRef& aEntry );
+    void AddRecord( XclExpExt* pEntry );
+    void AddRecord( XclExpExtRef& aEntry ) { AddRecord(aEntry.get()); }
 
-    XclExpExtRef GetItem( XclExpExtType eType );
+    XclExpExt* GetItem( XclExpExtType eType );
 
 private:
     XclExpRecordList< XclExpExt > maExtEntries;
 };
 
-typedef std::shared_ptr< XclExtLst > XclExtLstRef;
+typedef rtl::Reference< XclExtLst > XclExtLstRef;
 
 #endif
 

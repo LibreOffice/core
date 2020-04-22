@@ -91,7 +91,7 @@ protected:
     XclAddress          maBaseXclPos;   /// Address of base cell (first FORMULA record).
 };
 
-typedef std::shared_ptr< XclExpRangeFmlaBase > XclExpRangeFmlaRef;
+typedef rtl::Reference< XclExpRangeFmlaBase > XclExpRangeFmlaRef;
 
 // Array formulas =============================================================
 
@@ -121,7 +121,7 @@ private:
     XclTokenArrayRef    mxTokArr;       /// The token array of a matrix formula.
 };
 
-typedef std::shared_ptr< XclExpArray > XclExpArrayRef;
+typedef rtl::Reference< XclExpArray > XclExpArrayRef;
 
 /** Caches all ARRAY records. */
 class XclExpArrayBuffer : protected XclExpRoot
@@ -170,7 +170,7 @@ private:
     sal_uInt8           mnUsedCount;    /// Number of FORMULA records referring to this record.
 };
 
-typedef std::shared_ptr< XclExpShrfmla > XclExpShrfmlaRef;
+typedef rtl::Reference< XclExpShrfmla > XclExpShrfmlaRef;
 
 /** Caches all SHRFMLA records and provides functions to update their ranges. */
 class XclExpShrfmlaBuffer : protected XclExpRoot
@@ -241,7 +241,7 @@ private:
     bool                mbValid;        /// true = Contains valid references.
 };
 
-typedef std::shared_ptr< XclExpTableop > XclExpTableopRef;
+typedef rtl::Reference< XclExpTableop > XclExpTableopRef;
 
 /** Contains all created TABLEOP records and supports creating or updating them. */
 class XclExpTableopBuffer : protected XclExpRoot
@@ -311,7 +311,7 @@ private:
     XclAddress          maXclPos;       /// Address of the cell.
 };
 
-typedef std::shared_ptr< XclExpCellBase > XclExpCellRef;
+typedef rtl::Reference< XclExpCellBase > XclExpCellRef;
 
 // Single cell records ========================================================
 
@@ -994,12 +994,12 @@ private:
     typedef XclExpRecordList< XclExpNote >      XclExpNoteList;
     typedef XclExpRecordList< XclExpHyperlink > XclExpHyperlinkList;
 
-    typedef std::shared_ptr< XclExpDefrowheight >        XclExpDefrowhRef;
-    typedef std::shared_ptr< XclExpNoteList >            XclExpNoteListRef;
-    typedef std::shared_ptr< XclExpMergedcells >         XclExpMergedcellsRef;
-    typedef std::shared_ptr< XclExpHyperlinkList >       XclExpHyperlinkRef;
-    typedef std::shared_ptr< XclExpDval >                XclExpDvalRef;
-    typedef std::shared_ptr< XclExtLst >                 XclExtLstRef;
+    typedef rtl::Reference< XclExpDefrowheight >       XclExpDefrowhRef;
+    typedef rtl::Reference< XclExpNoteList >           XclExpNoteListRef;
+    typedef rtl::Reference< XclExpMergedcells >        XclExpMergedcellsRef;
+    typedef rtl::Reference< XclExpHyperlinkList >      XclExpHyperlinkRef;
+    typedef rtl::Reference< XclExpDval >               XclExpDvalRef;
+    typedef rtl::Reference< XclExtLst >                XclExtLstRef;
 
     XclExpColinfoBuffer maColInfoBfr;       /// Buffer for column formatting.
     XclExpRowBuffer     maRowBfr;           /// Rows and cell records.

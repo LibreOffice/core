@@ -1364,14 +1364,14 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
 
         if(!aExtEntries.empty() && xExtLst.get())
         {
-            XclExpExtRef pParent = xExtLst->GetItem( XclExpExtDataBarType );
-            if( !pParent.get() )
+            XclExpExt* pParent = xExtLst->GetItem( XclExpExtDataBarType );
+            if( !pParent )
             {
-                xExtLst->AddRecord( XclExpExtRef(new XclExpExtCondFormat( *xExtLst )) );
+                xExtLst->AddRecord( new XclExpExtCondFormat( *xExtLst ) );
                 pParent = xExtLst->GetItem( XclExpExtDataBarType );
             }
-            static_cast<XclExpExtCondFormat*>(xExtLst->GetItem( XclExpExtDataBarType ).get())->AddRecord(
-                    std::make_shared<XclExpExtConditionalFormatting>( *pParent, aExtEntries, aScRanges));
+            static_cast<XclExpExtCondFormat*>(xExtLst->GetItem( XclExpExtDataBarType ))->AddRecord(
+                    new XclExpExtConditionalFormatting( *pParent, aExtEntries, aScRanges));
         }
     }
 }
@@ -1961,7 +1961,7 @@ XclExpDV& XclExpDval::SearchOrCreateDv( sal_uLong nScHandle )
     }
 
     // create new DV record
-    mxLastFoundDV.reset( new XclExpDV( *this, nScHandle ) );
+    mxLastFoundDV = new XclExpDV( *this, nScHandle );
     maDVList.InsertRecord( mxLastFoundDV, nCurrPos );
     return *mxLastFoundDV;
 }

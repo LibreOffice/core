@@ -1179,7 +1179,7 @@ XclExpFontBuffer::XclExpFontBuffer( const XclExpRoot& rRoot ) :
 
 const XclExpFont* XclExpFontBuffer::GetFont( sal_uInt16 nXclFont ) const
 {
-    return maFontList.GetRecord( nXclFont ).get();
+    return maFontList.GetRecord( nXclFont );
 }
 
 const XclFontData& XclExpFontBuffer::GetAppFontData() const
@@ -1192,7 +1192,7 @@ sal_uInt16 XclExpFontBuffer::Insert(
 {
     if( bAppFont )
     {
-        XclExpFontRef xFont = std::make_shared<XclExpFont>( GetRoot(), rFontData, eColorType );
+        XclExpFontRef xFont = new XclExpFont( GetRoot(), rFontData, eColorType );
         maFontList.ReplaceRecord( xFont, EXC_FONT_APP );
         // set width of '0' character for column width export
         SetCharWidth( xFont->GetFontData() );
@@ -1284,7 +1284,7 @@ void XclExpFontBuffer::InitDefaultFonts()
         break;
         case EXC_BIFF8:
         {
-            XclExpFontRef xFont = std::make_shared<XclExpFont>( GetRoot(), aFontData, EXC_COLOR_CELLTEXT );
+            XclExpFontRef xFont = new XclExpFont( GetRoot(), aFontData, EXC_COLOR_CELLTEXT );
             maFontList.AppendRecord( xFont );
             maFontList.AppendRecord( xFont );
             maFontList.AppendRecord( xFont );
@@ -2452,7 +2452,7 @@ sal_uInt32 XclExpXFBuffer::GetDefCellXFId()
 
 const XclExpXF* XclExpXFBuffer::GetXFById( sal_uInt32 nXFId ) const
 {
-    return maXFList.GetRecord( nXFId ).get();
+    return maXFList.GetRecord( nXFId );
 }
 
 void XclExpXFBuffer::Finalize()
@@ -2771,7 +2771,7 @@ sal_uInt32 XclExpXFBuffer::InsertCellXF( const ScPatternAttr* pPattern, sal_Int1
             auto it = std::find(rPositions.begin(), rPositions.end(), EXC_XF_DEFAULTCELL);
             rPositions.erase(it);
             // replace default cell pattern
-            XclExpXFRef xNewXF = std::make_shared<XclExpXF>( GetRoot(), *pPattern, nScript );
+            XclExpXFRef xNewXF = new XclExpXF( GetRoot(), *pPattern, nScript );
             maXFList.ReplaceRecord( xNewXF, EXC_XF_DEFAULTCELL );
             // and add new entry in find-map
             maXFFindMap[ToFindKey(*xNewXF)].push_back(EXC_XF_DEFAULTCELL);
@@ -2814,7 +2814,7 @@ sal_uInt32 XclExpXFBuffer::InsertStyleXF( const SfxStyleSheetBase& rStyleSheet )
         if( nXFId == EXC_XFID_NOTFOUND )
         {
             // built-in style XF not yet created - do it now
-            XclExpXFRef xXF = std::make_shared<XclExpXF>( GetRoot(), rStyleSheet );
+            XclExpXFRef xXF = new XclExpXF( GetRoot(), rStyleSheet );
             nXFId = AppendBuiltInXFWithStyle( xXF, nStyleId, nLevel );
             // this new XF record is not predefined
             maBuiltInMap[ nXFId ].mbPredefined = false;
@@ -2831,7 +2831,7 @@ sal_uInt32 XclExpXFBuffer::InsertStyleXF( const SfxStyleSheetBase& rStyleSheet )
                 auto it = std::find(rPositions.begin(), rPositions.end(), nXFId);
                 rPositions.erase(it);
                 // replace predefined built-in style (ReplaceRecord() deletes old record)
-                auto pNewExp = std::make_shared<XclExpXF>( GetRoot(), rStyleSheet );
+                XclExpXFRef pNewExp = new XclExpXF( GetRoot(), rStyleSheet );
                 maXFList.ReplaceRecord( pNewExp, nXFId );
                 // and add new entry in find-map
                 maXFFindMap[ToFindKey(*pNewExp)].push_back(nXFId);
@@ -2925,7 +2925,7 @@ void XclExpXFBuffer::InsertDefaultRecords()
     // index 0: default style
     if( SfxStyleSheetBase* pDefStyleSheet = GetStyleSheetPool().Find( ScResId( STR_STYLENAME_STANDARD ), SfxStyleFamily::Para ) )
     {
-        XclExpXFRef xDefStyle = std::make_shared<XclExpXF>( GetRoot(), *pDefStyleSheet );
+        XclExpXFRef xDefStyle = new XclExpXF( GetRoot(), *pDefStyleSheet );
         sal_uInt32 nXFId = AppendBuiltInXFWithStyle( xDefStyle, EXC_STYLE_NORMAL );
         // mark this XF as not predefined, prevents overwriting
         maBuiltInMap[ nXFId ].mbPredefined = false;
@@ -2933,7 +2933,7 @@ void XclExpXFBuffer::InsertDefaultRecords()
     else
     {
         OSL_FAIL( "XclExpXFBuffer::InsertDefaultRecords - default style not found" );
-        XclExpXFRef xDefStyle = std::make_shared<XclExpDefaultXF>( GetRoot(), false );
+        XclExpXFRef xDefStyle = new XclExpDefaultXF( GetRoot(), false );
         xDefStyle->SetAllUsedFlags( true );
         AppendBuiltInXFWithStyle( xDefStyle, EXC_STYLE_NORMAL );
     }
@@ -2942,18 +2942,18 @@ void XclExpXFBuffer::InsertDefaultRecords()
     XclExpDefaultXF aLevelStyle( GetRoot(), false );
     // RowLevel_1, ColLevel_1
     aLevelStyle.SetFont( 1 );
-    AppendBuiltInXF( std::make_shared<XclExpDefaultXF>( aLevelStyle ), EXC_STYLE_ROWLEVEL, 0 );
-    AppendBuiltInXF( std::make_shared<XclExpDefaultXF>( aLevelStyle ), EXC_STYLE_COLLEVEL, 0 );
+    AppendBuiltInXF( new XclExpDefaultXF( aLevelStyle ), EXC_STYLE_ROWLEVEL, 0 );
+    AppendBuiltInXF( new XclExpDefaultXF( aLevelStyle ), EXC_STYLE_COLLEVEL, 0 );
     // RowLevel_2, ColLevel_2
     aLevelStyle.SetFont( 2 );
-    AppendBuiltInXF( std::make_shared<XclExpDefaultXF>( aLevelStyle ), EXC_STYLE_ROWLEVEL, 1 );
-    AppendBuiltInXF( std::make_shared<XclExpDefaultXF>( aLevelStyle ), EXC_STYLE_COLLEVEL, 1 );
+    AppendBuiltInXF( new XclExpDefaultXF( aLevelStyle ), EXC_STYLE_ROWLEVEL, 1 );
+    AppendBuiltInXF( new XclExpDefaultXF( aLevelStyle ), EXC_STYLE_COLLEVEL, 1 );
     // RowLevel_3, ColLevel_3 ... RowLevel_7, ColLevel_7
     aLevelStyle.SetFont( 0 );
     for( sal_uInt8 nLevel = 2; nLevel < EXC_STYLE_LEVELCOUNT; ++nLevel )
     {
-        AppendBuiltInXF( std::make_shared<XclExpDefaultXF>( aLevelStyle ), EXC_STYLE_ROWLEVEL, nLevel );
-        AppendBuiltInXF( std::make_shared<XclExpDefaultXF>( aLevelStyle ), EXC_STYLE_COLLEVEL, nLevel );
+        AppendBuiltInXF( new XclExpDefaultXF( aLevelStyle ), EXC_STYLE_ROWLEVEL, nLevel );
+        AppendBuiltInXF( new XclExpDefaultXF( aLevelStyle ), EXC_STYLE_COLLEVEL, nLevel );
     }
 
     // index 15: default hard cell format, placeholder to be able to add more built-in styles
@@ -2965,15 +2965,15 @@ void XclExpXFBuffer::InsertDefaultRecords()
     XclExpDefaultXF aFormatStyle( GetRoot(), false );
     aFormatStyle.SetFont( 1 );
     aFormatStyle.SetNumFmt( 43 );
-    AppendBuiltInXFWithStyle( std::make_shared<XclExpDefaultXF>( aFormatStyle ), EXC_STYLE_COMMA );
+    AppendBuiltInXFWithStyle( new XclExpDefaultXF( aFormatStyle ), EXC_STYLE_COMMA );
     aFormatStyle.SetNumFmt( 41 );
-    AppendBuiltInXFWithStyle( std::make_shared<XclExpDefaultXF>( aFormatStyle ), EXC_STYLE_COMMA_0 );
+    AppendBuiltInXFWithStyle( new XclExpDefaultXF( aFormatStyle ), EXC_STYLE_COMMA_0 );
     aFormatStyle.SetNumFmt( 44 );
-    AppendBuiltInXFWithStyle( std::make_shared<XclExpDefaultXF>( aFormatStyle ), EXC_STYLE_CURRENCY );
+    AppendBuiltInXFWithStyle( new XclExpDefaultXF( aFormatStyle ), EXC_STYLE_CURRENCY );
     aFormatStyle.SetNumFmt( 42 );
-    AppendBuiltInXFWithStyle( std::make_shared<XclExpDefaultXF>( aFormatStyle ), EXC_STYLE_CURRENCY_0 );
+    AppendBuiltInXFWithStyle( new XclExpDefaultXF( aFormatStyle ), EXC_STYLE_CURRENCY_0 );
     aFormatStyle.SetNumFmt( 9 );
-    AppendBuiltInXFWithStyle( std::make_shared<XclExpDefaultXF>( aFormatStyle ), EXC_STYLE_PERCENT );
+    AppendBuiltInXFWithStyle( new XclExpDefaultXF( aFormatStyle ), EXC_STYLE_PERCENT );
 
     // other built-in style XF records (i.e. Hyperlink styles) are created on demand
 
