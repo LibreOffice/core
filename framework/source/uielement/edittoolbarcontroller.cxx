@@ -20,12 +20,11 @@
 #include <uielement/edittoolbarcontroller.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
-
+#include <svtools/InterimItemWindow.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/event.hxx>
-#include <vcl/edit.hxx>
 
 using namespace ::com::sun::star;
 using namespace css::uno;
@@ -41,26 +40,37 @@ namespace framework
 // Unfortunaltly the events are notified through virtual methods instead
 // of Listeners.
 
-class EditControl : public Edit
+class EditControl : public InterimItemWindow
 {
-    public:
-        EditControl( vcl::Window* pParent, WinBits nStyle, EditToolbarController* pEditToolbarController );
-        virtual ~EditControl() override;
-        virtual void dispose() override;
+public:
+    EditControl(vcl::Window* pParent, EditToolbarController* pEditToolbarController);
+    virtual ~EditControl() override;
+    virtual void dispose() override;
 
-        virtual void Modify() override;
-        virtual void GetFocus() override;
-        virtual void LoseFocus() override;
-        virtual bool PreNotify( NotifyEvent& rNEvt ) override;
+    OUString get_text() const { return m_xWidget->get_text(); }
+    void set_text(const OUString& rText) { m_xWidget->set_text(rText); }
 
-    private:
-        EditToolbarController* m_pEditToolbarController;
+private:
+    std::unique_ptr<weld::Entry> m_xWidget;
+    EditToolbarController* m_pEditToolbarController;
+
+    DECL_LINK(FocusInHdl, weld::Widget&, void);
+    DECL_LINK(FocusOutHdl, weld::Widget&, void);
+    DECL_LINK(ModifyHdl, weld::Entry&, void);
+    DECL_LINK(ActivateHdl, weld::Entry&, bool);
 };
 
-EditControl::EditControl( vcl::Window* pParent, WinBits nStyle, EditToolbarController* pEditToolbarController ) :
-    Edit( pParent, nStyle )
-    , m_pEditToolbarController( pEditToolbarController )
+EditControl::EditControl(vcl::Window* pParent, EditToolbarController* pEditToolbarController)
+    : InterimItemWindow(pParent, "svt/ui/editcontrol.ui", "EditControl")
+    , m_xWidget(m_xBuilder->weld_entry("entry"))
+    , m_pEditToolbarController(pEditToolbarController)
 {
+    m_xWidget->connect_focus_in(LINK(this, EditControl, FocusInHdl));
+    m_xWidget->connect_focus_out(LINK(this, EditControl, FocusOutHdl));
+    m_xWidget->connect_changed(LINK(this, EditControl, ModifyHdl));
+    m_xWidget->connect_activate(LINK(this, EditControl, ActivateHdl));
+
+    SetSizePixel(get_preferred_size());
 }
 
 EditControl::~EditControl()
@@ -71,39 +81,34 @@ EditControl::~EditControl()
 void EditControl::dispose()
 {
     m_pEditToolbarController = nullptr;
-    Edit::dispose();
+    m_xWidget.reset();
+    InterimItemWindow::dispose();
 }
 
-void EditControl::Modify()
+IMPL_LINK_NOARG(EditControl, ModifyHdl, weld::Entry&, void)
 {
-    Edit::Modify();
-    if ( m_pEditToolbarController )
+    if (m_pEditToolbarController)
         m_pEditToolbarController->Modify();
 }
 
-void EditControl::GetFocus()
+IMPL_LINK_NOARG(EditControl, FocusInHdl, weld::Widget&, void)
 {
-    Edit::GetFocus();
-    if ( m_pEditToolbarController )
+    if (m_pEditToolbarController)
         m_pEditToolbarController->GetFocus();
 }
 
-void EditControl::LoseFocus()
+IMPL_LINK_NOARG(EditControl, FocusOutHdl, weld::Widget&, void)
 {
-    Edit::LoseFocus();
     if ( m_pEditToolbarController )
         m_pEditToolbarController->LoseFocus();
 }
 
-bool EditControl::PreNotify( NotifyEvent& rNEvt )
-{
-    bool bRet = false;
-    if ( m_pEditToolbarController )
-        bRet = m_pEditToolbarController->PreNotify( rNEvt );
-    if ( !bRet )
-        bRet = Edit::PreNotify( rNEvt );
 
-    return bRet;
+IMPL_LINK_NOARG(EditControl, ActivateHdl, weld::Entry&, bool)
+{
+    if (m_pEditToolbarController)
+        m_pEditToolbarController->Activate();
+    return true;
 }
 
 EditToolbarController::EditToolbarController(
@@ -116,12 +121,12 @@ EditToolbarController::EditToolbarController(
     ComplexToolbarController( rxContext, rFrame, pToolbar, nID, aCommand )
     ,   m_pEditControl( nullptr )
 {
-    m_pEditControl = VclPtr<EditControl>::Create( m_xToolbar, WB_BORDER, this );
+    m_pEditControl = VclPtr<EditControl>::Create(m_xToolbar, this);
     if ( nWidth == 0 )
         nWidth = 100;
 
-    // Calculate height of the edit field according to the application font height
-    sal_Int32 nHeight = getFontSizePixel( m_pEditControl ) + 6 + 1;
+    // EditControl ctor has set a suitable height already
+    auto nHeight = m_pEditControl->GetSizePixel().Height();
 
     m_pEditControl->SetSizePixel( ::Size( nWidth, nHeight ));
     m_xToolbar->SetItemWindow( m_nID, m_pEditControl );
@@ -144,7 +149,7 @@ void SAL_CALL EditToolbarController::dispose()
 Sequence<PropertyValue> EditToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
 {
     Sequence<PropertyValue> aArgs( 2 );
-    OUString aSelectedText = m_pEditControl->GetText();
+    OUString aSelectedText = m_pEditControl->get_text();
 
     // Add key modifier to argument list
     aArgs[0].Name = "KeyModifier";
@@ -156,7 +161,7 @@ Sequence<PropertyValue> EditToolbarController::getExecuteArgs(sal_Int16 KeyModif
 
 void EditToolbarController::Modify()
 {
-    notifyTextChanged( m_pEditControl->GetText() );
+    notifyTextChanged(m_pEditControl->get_text());
 }
 
 void EditToolbarController::GetFocus()
@@ -169,22 +174,11 @@ void EditToolbarController::LoseFocus()
     notifyFocusLost();
 }
 
-bool EditToolbarController::PreNotify( NotifyEvent const & rNEvt )
+void EditToolbarController::Activate()
 {
-    if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
-    {
-        const ::KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
-        const vcl::KeyCode& rKeyCode = pKeyEvent->GetKeyCode();
-        if(( rKeyCode.GetModifier() | rKeyCode.GetCode()) == KEY_RETURN )
-        {
-            // Call execute only with non-empty text
-            if ( !m_pEditControl->GetText().isEmpty() )
-                execute( rKeyCode.GetModifier() );
-            return true;
-        }
-    }
-
-    return false;
+    // Call execute only with non-empty text
+    if (!m_pEditControl->get_text().isEmpty())
+        execute(0);
 }
 
 void EditToolbarController::executeControlCommand( const css::frame::ControlCommand& rControlCommand )
@@ -198,7 +192,7 @@ void EditToolbarController::executeControlCommand( const css::frame::ControlComm
         {
             OUString aText;
             rControlCommand.Arguments[i].Value >>= aText;
-            m_pEditControl->SetText( aText );
+            m_pEditControl->set_text(aText);
 
             // send notification
             notifyTextChanged( aText );
