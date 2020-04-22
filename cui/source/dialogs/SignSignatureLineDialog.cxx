@@ -180,8 +180,8 @@ IMPL_LINK_NOARG(SignSignatureLineDialog, chooseCertificate, weld::Button&, void)
     if (xSignCertificate.is())
     {
         m_xSelectedCertifate = xSignCertificate;
-        m_xBtnChooseCertificate->set_label(
-            xmlsec::GetContentPart(xSignCertificate->getSubjectName()));
+        m_xBtnChooseCertificate->set_label(xmlsec::GetContentPart(
+            xSignCertificate->getSubjectName(), xSignCertificate->getCertificateKind()));
     }
     ValidateFields();
 }
@@ -223,7 +223,9 @@ css::uno::Reference<css::graphic::XGraphic> SignSignatureLineDialog::getSignedGr
 
     OUString aIssuerLine
         = CuiResId(RID_SVXSTR_SIGNATURELINE_SIGNED_BY)
-              .replaceFirst("%1", xmlsec::GetContentPart(m_xSelectedCertifate->getSubjectName()));
+              .replaceFirst("%1",
+                            xmlsec::GetContentPart(m_xSelectedCertifate->getSubjectName(),
+                                                   m_xSelectedCertifate->getCertificateKind()));
     aSvgImage = aSvgImage.replaceAll("[SIGNED_BY]", getCDataString(aIssuerLine));
     if (bValid)
         aSvgImage = aSvgImage.replaceAll("[INVALID_SIGNATURE]", "");
