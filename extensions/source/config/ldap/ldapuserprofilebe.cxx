@@ -89,7 +89,7 @@ bool LdapUserProfileBe::readLdapConfiguration(
     OSL_ASSERT(context.is() && definition != nullptr && loggedOnUser != nullptr);
     const OUString kReadOnlyViewService("com.sun.star.configuration.ConfigurationAccess") ;
     const OUString kComponent("org.openoffice.LDAP/UserDirectory");
-    const OUString kServerDefiniton("ServerDefinition");
+    const OUString kServerDefinition("ServerDefinition");
     const OUString kServer("Server");
     const OUString kPort("Port");
     const OUString kBaseDN("BaseDN");
@@ -112,7 +112,7 @@ bool LdapUserProfileBe::readLdapConfiguration(
         xIface = xCfgProvider->createInstanceWithArguments(kReadOnlyViewService, aArgs);
 
         uno::Reference<container::XNameAccess > xAccess(xIface, uno::UNO_QUERY_THROW);
-        xAccess->getByName(kServerDefiniton) >>= xIface;
+        xAccess->getByName(kServerDefinition) >>= xIface;
 
         uno::Reference<container::XNameAccess > xChildAccess(xIface, uno::UNO_QUERY_THROW);
 
