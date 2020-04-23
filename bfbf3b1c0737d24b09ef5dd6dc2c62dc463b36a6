@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f8f950de_c346d820",
+        "filename": "vcl/skia/gdiimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-04-23T14:27:38Z",
+      "side": 1,
+      "message": "I think that alg uses it to sneak hairline information down. I was of the opinion that it would be to simplify represent hairlines as their own explicit objects/classes and pass down through the layers explicitly, rather than hiding them inside other stuff, but perhaps that was too much work.",
+      "revId": "bfbf3b1c0737d24b09ef5dd6dc2c62dc463b36a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
