@@ -1313,6 +1313,9 @@ namespace //local functions originally from docfmt.cxx
                         (pCurrentNode->GetIndex() < nEndIndex || pEnd->nContent.GetIndex() == pEndNode->Len()))
                     {
                         pCurrentNode->ResetAttr(RES_PARATR_LIST_AUTOFMT);
+                        // reset also paragraph marker
+                        SwIndex nIdx( pCurrentNode, pCurrentNode->Len() );
+                        pCurrentNode->GetTextNode()->RstTextAttr(nIdx, 1);
                     }
                     pCurrentNode = SwNodes::GoPrevious( &aIdx );
                 }
