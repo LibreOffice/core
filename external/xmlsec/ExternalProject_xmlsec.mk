@@ -37,7 +37,7 @@ else
 $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 	$(call gb_Trace_StartRange,xmlsec,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		$(if $(filter iOS MACOSX,$(OS)),ACLOCAL="aclocal -I $(SRCDIR)/m4/mac") \
+		$(if $(filter iOS MACOSX,$(OS_FOR_BUILD)),ACLOCAL="aclocal -I $(SRCDIR)/m4/mac") \
 		$(if $(filter AIX,$(OS)),ACLOCAL="aclocal -I /opt/freeware/share/aclocal") \
 		autoreconf \
 		&& ./configure \
@@ -46,7 +46,7 @@ $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 			CFLAGS="$(CFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) $(if $(debug),$(gb_DEBUGINFO_FLAGS)) $(gb_VISIBILITY_FLAGS)" \
 			--without-openssl \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
-			$(if $(SYSTEM_NSS),,$(if $(filter MACOSX,$(OS)),--disable-pkgconfig)) \
+			$(if $(SYSTEM_NSS),,$(if $(filter MACOSX,$(OS_FOR_BUILD)),--disable-pkgconfig)) \
 			$(if $(SYSTEM_NSS),,NSPR_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,nss)/dist/out/include" NSPR_LIBS="-L$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib -lnspr4") \
 			$(if $(SYSTEM_NSS),,NSS_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,nss)/dist/public/nss" NSS_LIBS="-L$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib -lsmime3 -lnss3 -lnssutil3") \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
