@@ -82,7 +82,6 @@ public:
     // Getters
     const OUString& GetBulletChar( ) const { return m_sBulletChar; };
     const tools::SvRef< StyleSheetEntry >& GetParaStyle( ) const { return m_pParaStyle; };
-    sal_Int32 GetStartAt() const { return m_nIStartAt; };
     bool isOutlineNumbering() const { return m_outline; }
     sal_Int32 GetStartOverride() const { return m_nStartOverride; };
     /// Determines if SetValue() was called at least once.

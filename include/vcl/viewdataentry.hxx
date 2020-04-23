@@ -72,7 +72,6 @@ public:
     void SetFocus( bool bFocus );
     void SetSelected( bool bSelected );
     void SetExpanded( bool bExpanded );
-    void SetSelectable( bool bSelectable );
     void SetDragTarget( bool bDragTarget )
     {
         mbDragTarget = bDragTarget;

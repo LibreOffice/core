@@ -269,21 +269,6 @@ void StgReader::SetFltName( const OUString& rFltNm )
         m_aFltName = rFltNm;
 }
 
-SwRelNumRuleSpaces::SwRelNumRuleSpaces( SwDoc const & rDoc, bool bNDoc )
-{
-    pNumRuleTable.reset(new SwNumRuleTable);
-    pNumRuleTable->reserve(8);
-    if( !bNDoc )
-        pNumRuleTable->insert( pNumRuleTable->begin(),
-            rDoc.GetNumRuleTable().begin(), rDoc.GetNumRuleTable().end() );
-}
-
-SwRelNumRuleSpaces::~SwRelNumRuleSpaces()
-{
-    if( pNumRuleTable )
-        pNumRuleTable->clear();
-}
-
 void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
         SwTwips nPageWidth)
 {

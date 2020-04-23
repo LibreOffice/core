@@ -95,11 +95,6 @@ public:
     sal_uLong           GetSizeBytes() const;
     BitmapChecksum      GetChecksum() const;
 
-    /**
-     * @brief extract the bitmap and alpha data separately. Used by the SWF filter.
-     */
-    void GetSplitData( std::vector<sal_uInt8>& rvColorData, std::vector<sal_uInt8>& rvAlphaData ) const;
-
     /** Convert bitmap format
 
         @param eConversion

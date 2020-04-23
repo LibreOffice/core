@@ -920,11 +920,6 @@ sal_Int32 ComboBox::InsertEntryWithImage(
     return nRealPos;
 }
 
-void ComboBox::RemoveEntry( const OUString& rStr )
-{
-    RemoveEntryAt(GetEntryPos(rStr));
-}
-
 void ComboBox::RemoveEntryAt(sal_Int32 const nPos)
 {
     const sal_Int32 nMRUCount = m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount();

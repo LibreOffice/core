@@ -919,46 +919,6 @@ void OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivity::OSQLTa
     }
 }
 
-Reference<XNameAccess> OKeySet::getKeyColumns() const
-{
-    // use keys and indexes for exact positioning
-    // first the keys
-
-    Reference<XIndexAccess> xKeys = m_xTableKeys;
-    if ( !xKeys.is() )
-    {
-        Reference<XPropertySet> xSet(m_xTable,UNO_QUERY);
-        const Reference<XNameAccess> xPrimaryKeyColumns = getPrimaryKeyColumns_throw(xSet);
-        return xPrimaryKeyColumns;
-    }
-
-    Reference<XColumnsSupplier> xKeyColsSup;
-    Reference<XNameAccess> xKeyColumns;
-    if(xKeys.is())
-    {
-        Reference<XPropertySet> xProp;
-        sal_Int32 nCount = xKeys->getCount();
-        for(sal_Int32 i = 0;i< nCount;++i)
-        {
-            xProp.set(xKeys->getByIndex(i),UNO_QUERY);
-            if ( xProp.is() )
-            {
-                sal_Int32 nKeyType = 0;
-                xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
-                if(KeyType::PRIMARY == nKeyType)
-                {
-                    xKeyColsSup.set(xProp,UNO_QUERY);
-                    OSL_ENSURE(xKeyColsSup.is(),"Columnsupplier is null!");
-                    xKeyColumns = xKeyColsSup->getColumns();
-                    break;
-                }
-            }
-        }
-    }
-
-    return xKeyColumns;
-}
-
 bool OKeySet::next()
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;

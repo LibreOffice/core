@@ -40,7 +40,6 @@ private:
     static OUString GetVersionString();
     static OUString GetCopyrightString();
     static OUString GetLocaleString();
-    static bool IsStringValidGitHash(const OUString& hash);
 
     DECL_LINK(HandleClick, weld::Button&, void);
 

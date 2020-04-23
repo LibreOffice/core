@@ -63,7 +63,6 @@ public:
     virtual void dispose() override;
 
 protected:
-    bool IsInPopupMode() const;
     void EndPopupMode();
 
 private:

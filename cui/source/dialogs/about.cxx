@@ -146,16 +146,6 @@ OUString AboutDialog::GetLocaleString() {
   return aLocaleStr;
 }
 
-bool AboutDialog::IsStringValidGitHash(const OUString &hash) {
-  for (int i = 0; i < hash.getLength(); i++) {
-    if (!rtl::isAsciiHexDigit(hash[i])) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
 OUString AboutDialog::GetVersionString() {
   OUString sVersion = CuiResId(RID_SVXSTR_ABOUT_VERSION);
 

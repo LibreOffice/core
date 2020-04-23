@@ -85,7 +85,6 @@ public:
     sal_Int32       InsertEntry(const OUString& rStr, sal_Int32  nPos = COMBOBOX_APPEND);
     sal_Int32       InsertEntryWithImage( const OUString& rStr, const Image& rImage, sal_Int32  nPos = COMBOBOX_APPEND );
 
-    void            RemoveEntry( const OUString& rStr );
     void            RemoveEntryAt(sal_Int32  nPos);
 
     void            Clear();
