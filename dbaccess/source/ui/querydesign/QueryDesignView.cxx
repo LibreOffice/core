@@ -132,25 +132,24 @@ namespace
 
         if ( !pConn )
         {
-            OQueryTableConnectionData* pInfoData = new OQueryTableConnectionData();
-            TTableConnectionData::value_type aInfoData(pInfoData);
-            pInfoData->InitFromDrag(_aDragLeft, _aDragRight);
-            pInfoData->SetJoinType(_eJoinType);
+            auto xInfoData = std::make_shared<OQueryTableConnectionData>();
+            xInfoData->InitFromDrag(_aDragLeft, _aDragRight);
+            xInfoData->SetJoinType(_eJoinType);
 
             if ( _bNatural )
             {
-                aInfoData->ResetConnLines();
-                pInfoData->setNatural(_bNatural);
+                xInfoData->ResetConnLines();
+                xInfoData->setNatural(_bNatural);
                 try
                 {
-                    Reference<XNameAccess> xReferencedTableColumns(aInfoData->getReferencedTable()->getColumns());
-                    Sequence< OUString> aSeq = aInfoData->getReferencingTable()->getColumns()->getElementNames();
+                    Reference<XNameAccess> xReferencedTableColumns(xInfoData->getReferencedTable()->getColumns());
+                    Sequence< OUString> aSeq = xInfoData->getReferencingTable()->getColumns()->getElementNames();
                     const OUString* pIter = aSeq.getConstArray();
                     const OUString* pEnd   = pIter + aSeq.getLength();
                     for(;pIter != pEnd;++pIter)
                     {
                         if ( xReferencedTableColumns->hasByName(*pIter) )
-                            aInfoData->AppendConnLine(*pIter,*pIter);
+                            xInfoData->AppendConnLine(*pIter,*pIter);
                     }
                 }
                 catch( const Exception& )
@@ -159,9 +158,9 @@ namespace
                 }
             }
 
-            ScopedVclPtrInstance< OQueryTableConnection > aInfo(pTableView, aInfoData);
+            ScopedVclPtrInstance< OQueryTableConnection > aInfo(pTableView, xInfoData);
             // Because OQueryTableConnection never takes ownership of the data passed to it, but only remembers the pointer,
-            // this pointer to a local variable is not critical, as aInfoData and aInfo have the same lifetime
+            // this pointer to a local variable is not critical, as xInfoData and aInfo have the same lifetime
             pTableView->NotifyTabConnection( *aInfo );
         }
         else

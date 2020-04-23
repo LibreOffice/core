@@ -398,8 +398,8 @@ namespace
                 OUString sKeyName;
                 xKey->getPropertyValue(PROPERTY_NAME) >>= sKeyName;
                 // insert connection
-                ORelationTableConnectionData* pTabConnData = new ORelationTableConnectionData( pReferencingTable, pReferencedTable, sKeyName );
-                m_vTableConnectionData.push_back(TTableConnectionData::value_type(pTabConnData));
+                auto xTabConnData = std::make_shared<ORelationTableConnectionData>( pReferencingTable, pReferencedTable, sKeyName );
+                m_vTableConnectionData.push_back(xTabConnData);
                 // insert columns
                 const Reference<XColumnsSupplier> xColsSup(xKey,UNO_QUERY);
                 OSL_ENSURE(xColsSup.is(),"Key is no XColumnsSupplier!");
@@ -415,7 +415,7 @@ namespace
                         xPropSet->getPropertyValue(PROPERTY_NAME)           >>= sColumnName;
                         xPropSet->getPropertyValue(PROPERTY_RELATEDCOLUMN)  >>= sRelatedName;
                     }
-                    pTabConnData->SetConnLine( j, sColumnName, sRelatedName );
+                    xTabConnData->SetConnLine( j, sColumnName, sRelatedName );
                 }
                 // set update/del flags
                 sal_Int32   nUpdateRule = 0;
@@ -423,11 +423,11 @@ namespace
                 xKey->getPropertyValue(PROPERTY_UPDATERULE) >>= nUpdateRule;
                 xKey->getPropertyValue(PROPERTY_DELETERULE) >>= nDeleteRule;
 
-                pTabConnData->SetUpdateRules( nUpdateRule );
-                pTabConnData->SetDeleteRules( nDeleteRule );
+                xTabConnData->SetUpdateRules( nUpdateRule );
+                xTabConnData->SetDeleteRules( nDeleteRule );
 
                 // set cardinality
-                pTabConnData->SetCardinality();
+                xTabConnData->SetCardinality();
             }
         }
     }
