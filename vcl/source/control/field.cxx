@@ -1566,7 +1566,7 @@ sal_Int64 MetricFormatter::GetCorrectedValue( FieldUnit eOutUnit ) const
 }
 
 MetricField::MetricField(vcl::Window* pParent, WinBits nWinStyle)
-    : SpinField(pParent, nWinStyle)
+    : SpinField(pParent, nWinStyle, WindowType::METRICFIELD)
     , MetricFormatter(this)
 {
     Reformat();
