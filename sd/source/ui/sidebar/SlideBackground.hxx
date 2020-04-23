@@ -86,7 +86,8 @@ private:
     std::unique_ptr<weld::ComboBox> mxFillStyle;
     std::unique_ptr<ColorListBox> mxFillLB;
     std::unique_ptr<weld::ComboBox> mxFillAttr;
-    std::unique_ptr<ColorListBox> mxFillGrad;
+    std::unique_ptr<ColorListBox> mxFillGrad1;
+    std::unique_ptr<ColorListBox> mxFillGrad2;
     std::unique_ptr<weld::Button> mxInsertImage;
     std::unique_ptr<weld::CheckButton> mxDspMasterBackground;
     std::unique_ptr<weld::CheckButton> mxDspMasterObjects;
