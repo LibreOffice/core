@@ -3980,7 +3980,7 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
             }
             else
             {
-                std::shared_ptr<SvxBrushItem> aBack = GetFormat()->makeBackgroundBrushItem();
+                std::unique_ptr<SvxBrushItem> aBack = GetFormat()->makeBackgroundBrushItem();
                 //     to determine, if background has to be painted, by checking, if
                 //     background color is not COL_TRANSPARENT ("no fill"/"auto fill")
                 //     or a background graphic exists.

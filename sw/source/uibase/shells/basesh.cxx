@@ -2259,7 +2259,7 @@ void SwBaseShell::GetBckColState(SfxItemSet &rSet)
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich(aIter.FirstWhich());
     SelectionType nSelType(rSh.GetSelectionType());
-    std::shared_ptr<SvxBrushItem> aBrushItem(std::make_shared<SvxBrushItem>(RES_BACKGROUND));
+    std::unique_ptr<SvxBrushItem> aBrushItem(std::make_unique<SvxBrushItem>(RES_BACKGROUND));
 
     if( nWhich == SID_TABLE_CELL_BACKGROUND_COLOR )
     {
@@ -2323,7 +2323,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         return;
     }
 
-    std::shared_ptr<SvxBrushItem> aBrushItem(std::make_shared<SvxBrushItem>(RES_BACKGROUND));
+    std::unique_ptr<SvxBrushItem> aBrushItem(std::make_unique<SvxBrushItem>(RES_BACKGROUND));
 
     if ( nSlot == SID_TABLE_CELL_BACKGROUND_COLOR )
     {
@@ -2614,7 +2614,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
             if ( rSh.IsTableMode() )
             {
                 // Get background attributes of the table and put it in the set
-                std::shared_ptr<SvxBrushItem> aBrush;
+                std::unique_ptr<SvxBrushItem> aBrush;
                 rSh.GetBoxBackground( aBrush );
                 pDlg.disposeAndReset(pFact->CreateSwBackgroundDialog(pMDI, aSet));
                 aSet.Put( *aBrush );

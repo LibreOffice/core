@@ -100,7 +100,7 @@ SwReadOnlyPopup::SwReadOnlyPopup(const Point &rDPos, SwView &rV)
     , m_nReadonlyFullscreen(m_xMenu->GetItemId("fullscreen"))
     , m_nReadonlyCopy(m_xMenu->GetItemId("copy"))
     , m_rView(rV)
-    , m_aBrushItem(std::make_shared<SvxBrushItem>(RES_BACKGROUND))
+    , m_xBrushItem(std::make_unique<SvxBrushItem>(RES_BACKGROUND))
 {
     m_bGrfToGalleryAsLnk = SW_MOD()->GetModuleConfig()->IsGrfToGalleryAsLnk();
     SwWrtShell &rSh = m_rView.GetWrtShell();
@@ -149,14 +149,14 @@ SwReadOnlyPopup::SwReadOnlyPopup(const Point &rDPos, SwView &rV)
     SfxViewFrame * pVFrame = rV.GetViewFrame();
     SfxDispatcher &rDis = *pVFrame->GetDispatcher();
     const SwPageDesc &rDesc = rSh.GetPageDesc( rSh.GetCurPageDesc() );
-    m_aBrushItem = rDesc.GetMaster().makeBackgroundBrushItem();
+    m_xBrushItem = rDesc.GetMaster().makeBackgroundBrushItem();
     bool bEnableBackGallery = false,
          bEnableBack = false;
 
-    if ( m_aBrushItem && GPOS_NONE != m_aBrushItem->GetGraphicPos() )
+    if ( m_xBrushItem && GPOS_NONE != m_xBrushItem->GetGraphicPos() )
     {
         bEnableBack = true;
-        if ( !m_aBrushItem->GetGraphicLink().isEmpty() )
+        if ( !m_xBrushItem->GetGraphicLink().isEmpty() )
         {
             if ( m_aThemeList.empty() )
                 GalleryExplorer::FillThemeList( m_aThemeList );
@@ -234,11 +234,11 @@ void SwReadOnlyPopup::Execute( vcl::Window* pWin, sal_uInt16 nId )
     {
         OUString sTmp;
         sal_uInt16 nSaveId;
-        if (m_aBrushItem && nId >= MN_READONLY_BACKGROUNDTOGALLERY)
+        if (m_xBrushItem && nId >= MN_READONLY_BACKGROUNDTOGALLERY)
         {
             nId -= MN_READONLY_BACKGROUNDTOGALLERY;
             nSaveId = m_nReadonlySaveBackground;
-            sTmp = m_aBrushItem->GetGraphicLink();
+            sTmp = m_xBrushItem->GetGraphicLink();
         }
         else
         {
@@ -325,14 +325,14 @@ OUString SwReadOnlyPopup::SaveGraphic(sal_uInt16 nId)
     // fish out the graphic's name
     if (nId == m_nReadonlySaveBackground)
     {
-        if ( m_aBrushItem && !m_aBrushItem->GetGraphicLink().isEmpty() )
-            m_sGrfName = m_aBrushItem->GetGraphicLink();
-        const Graphic *pGrf = m_aBrushItem ? m_aBrushItem->GetGraphic() : nullptr;
+        if ( m_xBrushItem && !m_xBrushItem->GetGraphicLink().isEmpty() )
+            m_sGrfName = m_xBrushItem->GetGraphicLink();
+        const Graphic *pGrf = m_xBrushItem ? m_xBrushItem->GetGraphic() : nullptr;
         if ( pGrf )
         {
             m_aGraphic = *pGrf;
-            if ( !m_aBrushItem->GetGraphicLink().isEmpty() )
-                m_sGrfName = m_aBrushItem->GetGraphicLink();
+            if ( !m_xBrushItem->GetGraphicLink().isEmpty() )
+                m_sGrfName = m_xBrushItem->GetGraphicLink();
         }
         else
             return OUString();

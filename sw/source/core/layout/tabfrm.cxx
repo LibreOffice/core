@@ -3200,7 +3200,7 @@ SwTwips SwTabFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
         InvalidatePage( pPage );
         SetComplete();
 
-        std::shared_ptr<SvxBrushItem> aBack = GetFormat()->makeBackgroundBrushItem();
+        std::unique_ptr<SvxBrushItem> aBack = GetFormat()->makeBackgroundBrushItem();
         const SvxGraphicPosition ePos = aBack ? aBack->GetGraphicPos() : GPOS_NONE;
         if ( GPOS_NONE != ePos && GPOS_TILED != ePos )
             SetCompletePaint();

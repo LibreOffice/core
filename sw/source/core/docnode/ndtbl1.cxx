@@ -504,7 +504,7 @@ void SwDoc::SetRowBackground( const SwCursor& rCursor, const SvxBrushItem &rNew 
     }
 }
 
-bool SwDoc::GetRowBackground( const SwCursor& rCursor, std::shared_ptr<SvxBrushItem>& rToFill )
+bool SwDoc::GetRowBackground( const SwCursor& rCursor, std::unique_ptr<SvxBrushItem>& rToFill )
 {
     bool bRet = false;
     SwTableNode* pTableNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
@@ -520,9 +520,9 @@ bool SwDoc::GetRowBackground( const SwCursor& rCursor, std::shared_ptr<SvxBrushI
             bRet = true;
             for ( std::vector<SwTableLine*>::size_type i = 1; i < aRowArr.size(); ++i )
             {
-                std::shared_ptr<SvxBrushItem> aAlternative(aRowArr[i]->GetFrameFormat()->makeBackgroundBrushItem());
+                std::unique_ptr<SvxBrushItem> aAlternative(aRowArr[i]->GetFrameFormat()->makeBackgroundBrushItem());
 
-                if ( rToFill != aAlternative && rToFill && aAlternative && *rToFill != *aAlternative )
+                if ( rToFill && aAlternative && *rToFill != *aAlternative )
                 {
                     bRet = false;
                     break;
@@ -1190,7 +1190,7 @@ void SwDoc::SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew )
     }
 }
 
-bool SwDoc::GetBoxAttr( const SwCursor& rCursor, std::shared_ptr<SfxPoolItem>& rToFill )
+bool SwDoc::GetBoxAttr( const SwCursor& rCursor, std::unique_ptr<SfxPoolItem>& rToFill )
 {
     bool bRet = false;
     SwTableNode* pTableNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
@@ -1206,14 +1206,14 @@ bool SwDoc::GetBoxAttr( const SwCursor& rCursor, std::shared_ptr<SfxPoolItem>& r
             {
                 case RES_BACKGROUND:
                 {
-                    std::shared_ptr<SvxBrushItem> aBack =
+                    std::unique_ptr<SvxBrushItem> xBack =
                         aBoxes[i]->GetFrameFormat()->makeBackgroundBrushItem();
                     if( !bOneFound )
                     {
-                        rToFill.reset(aBack->Clone());
+                        rToFill = std::move(xBack);
                         bOneFound = true;
                     }
-                    else if( rToFill != aBack )
+                    else if( *rToFill != *xBack )
                         bRet = false;
                 }
                 break;

@@ -447,7 +447,7 @@ void SwXParagraph::Impl::GetSinglePropertyValue_Impl(
     {
         case RES_BACKGROUND:
         {
-            const std::shared_ptr<SvxBrushItem> aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND));
+            const std::unique_ptr<SvxBrushItem> aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND));
 
             if(!aOriginalBrushItem->QueryValue(rAny, rEntry.nMemberId))
             {

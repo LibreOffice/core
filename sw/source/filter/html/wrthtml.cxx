@@ -1083,7 +1083,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
         const SfxItemSet& rItemSet = pPageDesc->GetMaster().GetAttrSet();
 
         // fdo#86857 page styles now contain the XATTR_*, not RES_BACKGROUND
-        std::shared_ptr<SvxBrushItem> const aBrushItem(getSvxBrushItemFromSourceSet(rItemSet, RES_BACKGROUND));
+        std::unique_ptr<SvxBrushItem> const aBrushItem(getSvxBrushItemFromSourceSet(rItemSet, RES_BACKGROUND));
         OutBackground(aBrushItem.get(), true);
 
         m_nDirection = GetHTMLDirection( rItemSet );

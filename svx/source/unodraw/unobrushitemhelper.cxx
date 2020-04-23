@@ -167,7 +167,7 @@ static sal_uInt16 getTransparenceForSvxBrushItem(const SfxItemSet& rSourceSet, b
     return nFillTransparence;
 }
 
-static std::shared_ptr<SvxBrushItem> getSvxBrushItemForSolid(const SfxItemSet& rSourceSet, bool bSearchInParents, sal_uInt16 nBackgroundID)
+static std::unique_ptr<SvxBrushItem> getSvxBrushItemForSolid(const SfxItemSet& rSourceSet, bool bSearchInParents, sal_uInt16 nBackgroundID)
 {
     Color aFillColor(rSourceSet.Get(XATTR_FILLCOLOR, bSearchInParents).GetColorValue());
 
@@ -184,10 +184,10 @@ static std::shared_ptr<SvxBrushItem> getSvxBrushItemForSolid(const SfxItemSet& r
         aFillColor.SetTransparency(aTargetTrans);
     }
 
-    return std::make_shared<SvxBrushItem>(aFillColor, nBackgroundID);
+    return std::make_unique<SvxBrushItem>(aFillColor, nBackgroundID);
 }
 
-std::shared_ptr<SvxBrushItem> getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_uInt16 nBackgroundID, bool bSearchInParents, bool bXMLImportHack)
+std::unique_ptr<SvxBrushItem> getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_uInt16 nBackgroundID, bool bSearchInParents, bool bXMLImportHack)
 {
     const XFillStyleItem* pXFillStyleItem(rSourceSet.GetItem<XFillStyleItem>(XATTR_FILLSTYLE, bSearchInParents));
 
@@ -202,10 +202,10 @@ std::shared_ptr<SvxBrushItem> getSvxBrushItemFromSourceSet(const SfxItemSet& rSo
 
         aFillColor.SetTransparency(0xff);
 
-        return std::make_shared<SvxBrushItem>(aFillColor, nBackgroundID);
+        return std::make_unique<SvxBrushItem>(aFillColor, nBackgroundID);
     }
 
-    auto aRetval = std::make_shared<SvxBrushItem>(nBackgroundID);
+    auto aRetval = std::make_unique<SvxBrushItem>(nBackgroundID);
 
     switch(pXFillStyleItem->GetValue())
     {
@@ -244,7 +244,7 @@ std::shared_ptr<SvxBrushItem> getSvxBrushItemFromSourceSet(const SfxItemSet& rSo
                 aMixedColor.SetTransparency(aTargetTrans);
             }
 
-            aRetval = std::make_shared<SvxBrushItem>(aMixedColor, nBackgroundID);
+            aRetval = std::make_unique<SvxBrushItem>(aMixedColor, nBackgroundID);
             break;
         }
         case drawing::FillStyle_HATCH:
@@ -276,7 +276,7 @@ std::shared_ptr<SvxBrushItem> getSvxBrushItemFromSourceSet(const SfxItemSet& rSo
                 const sal_uInt8 aTargetTrans(std::min(sal_uInt8(0xfe), static_cast< sal_uInt8 >((nFillTransparence * 254) / 100)));
 
                 aHatchColor.SetTransparency(aTargetTrans);
-                aRetval = std::make_shared<SvxBrushItem>(aHatchColor, nBackgroundID);
+                aRetval = std::make_unique<SvxBrushItem>(aHatchColor, nBackgroundID);
             }
 
             break;
@@ -319,7 +319,7 @@ std::shared_ptr<SvxBrushItem> getSvxBrushItemFromSourceSet(const SfxItemSet& rSo
             }
 
             // create with given graphic and position
-            aRetval = std::make_shared<SvxBrushItem>(aGraphic, aSvxGraphicPosition, nBackgroundID);
+            aRetval = std::make_unique<SvxBrushItem>(aGraphic, aSvxGraphicPosition, nBackgroundID);
 
             // get evtl. mixed transparence
             const sal_uInt16 nFillTransparence(getTransparenceForSvxBrushItem(rSourceSet, bSearchInParents));

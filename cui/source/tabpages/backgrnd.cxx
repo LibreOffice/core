@@ -181,7 +181,7 @@ bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
         }
         case drawing::FillStyle_BITMAP:
         {
-            std::shared_ptr<SvxBrushItem> aBrushItem( getSvxBrushItemFromSourceSet( maSet, nWhich ) );
+            std::unique_ptr<SvxBrushItem> aBrushItem( getSvxBrushItemFromSourceSet( maSet, nWhich ) );
             if ( GraphicType::NONE != aBrushItem->GetGraphicObject()->GetType() )
                 rCoreSet->Put( *aBrushItem );
             break;

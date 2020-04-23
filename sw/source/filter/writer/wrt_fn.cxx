@@ -112,7 +112,7 @@ Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
         // existing mechanisms.
         // This is the right place in the future if the adapted fill attributes
         // may be handled more directly in HTML export to handle them.
-        const std::shared_ptr<SvxBrushItem> aSvxBrushItem(getSvxBrushItemFromSourceSet(*pSet, RES_BACKGROUND, bDeep));
+        const std::unique_ptr<SvxBrushItem> aSvxBrushItem(getSvxBrushItemFromSourceSet(*pSet, RES_BACKGROUND, bDeep));
 
         if( nullptr != ( pOut = pTab[RES_BACKGROUND - RES_CHRATR_BEGIN] ))
         {

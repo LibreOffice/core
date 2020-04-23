@@ -153,7 +153,7 @@ static std::shared_ptr<SwTableRep> lcl_TableParamToItemSet( SfxItemSet& rSet, Sw
 
     const sal_uInt16  nBackgroundDestination = rSh.GetViewOptions()->GetTableDest();
     rSet.Put(SfxUInt16Item(SID_BACKGRND_DESTINATION, nBackgroundDestination ));
-    std::shared_ptr<SvxBrushItem> aBrush(std::make_shared<SvxBrushItem>(RES_BACKGROUND));
+    std::unique_ptr<SvxBrushItem> aBrush(std::make_unique<SvxBrushItem>(RES_BACKGROUND));
     if(rSh.GetRowBackground(aBrush))
     {
         aBrush->SetWhich(SID_ATTR_BRUSH_ROW);
@@ -166,7 +166,7 @@ static std::shared_ptr<SwTableRep> lcl_TableParamToItemSet( SfxItemSet& rSet, Sw
     rSet.Put( *aBrush );
 
     // text direction in boxes
-    std::shared_ptr<SvxFrameDirectionItem> aBoxDirection(std::make_shared<SvxFrameDirectionItem>(SvxFrameDirection::Environment, RES_FRAMEDIR));
+    std::unique_ptr<SvxFrameDirectionItem> aBoxDirection(std::make_unique<SvxFrameDirectionItem>(SvxFrameDirection::Environment, RES_FRAMEDIR));
     if(rSh.GetBoxDirection( aBoxDirection ))
     {
         aBoxDirection->SetWhich(FN_TABLE_BOX_TEXTORIENTATION);
@@ -579,7 +579,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
             rSh.GetTableAttr(aCoreSet);
             // GetTableAttr overwrites the background!
-            std::shared_ptr<SvxBrushItem> aBrush(std::make_shared<SvxBrushItem>(RES_BACKGROUND));
+            std::unique_ptr<SvxBrushItem> aBrush(std::make_unique<SvxBrushItem>(RES_BACKGROUND));
             if(rSh.GetBoxBackground(aBrush))
                 aCoreSet.Put( *aBrush );
             else

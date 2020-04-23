@@ -56,8 +56,8 @@ class SwReadOnlyPopup
     sal_uInt16 m_nReadonlyFullscreen;
     sal_uInt16 m_nReadonlyCopy;
 
-    SwView &m_rView;
-    std::shared_ptr<SvxBrushItem> m_aBrushItem;
+    SwView &    m_rView;
+    std::unique_ptr<SvxBrushItem> m_xBrushItem;
                 Graphic m_aGraphic;
     OUString    m_sURL,
                 m_sTargetFrameName;
