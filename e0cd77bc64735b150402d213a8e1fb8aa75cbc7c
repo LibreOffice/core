@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "ec8d398f_08b9d9bb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-23T14:20:40Z",
+      "side": 1,
+      "message": "Then if it is not actually cut\u0027n\u0027paste, why claim so?",
+      "parentUuid": "f21e102d_c809be07",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 40
+      },
+      "revId": "e0cd77bc64735b150402d213a8e1fb8aa75cbc7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ba00c0ce_2ebb159e",
         "filename": "include/rtl/ref.hxx",
         "patchSetId": 2
@@ -78,6 +102,24 @@
       "side": 1,
       "message": "forward decl of the Reference class, used in detail.",
       "parentUuid": "ba00c0ce_2ebb159e",
+      "revId": "e0cd77bc64735b150402d213a8e1fb8aa75cbc7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "116af0a0_4b62009d",
+        "filename": "include/rtl/ref.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-23T14:20:40Z",
+      "side": 1,
+      "message": "but it is not used in detail?",
+      "parentUuid": "62b65335_1e49fffe",
       "revId": "e0cd77bc64735b150402d213a8e1fb8aa75cbc7c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
@@ -166,6 +208,30 @@
     },
     {
       "key": {
+        "uuid": "7f82eb26_ac406738",
+        "filename": "include/rtl/ref.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-23T14:20:40Z",
+      "side": 1,
+      "message": "It\u0027s a matter of just not copy\u0027n\u0027paste\u0027ing the UpCast\u003cXInterface, T2\u003e specialization, as you already did.  So just update the documentation?",
+      "parentUuid": "213342f6_49c6880c",
+      "range": {
+        "startLine": 40,
+        "startChar": 3,
+        "endLine": 42,
+        "endChar": 29
+      },
+      "revId": "e0cd77bc64735b150402d213a8e1fb8aa75cbc7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6a53dfcb_f00f1fde",
         "filename": "include/rtl/ref.hxx",
         "patchSetId": 2
@@ -210,6 +276,30 @@
       "revId": "e0cd77bc64735b150402d213a8e1fb8aa75cbc7c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cacd23b_0af36621",
+        "filename": "include/rtl/ref.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-23T14:20:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ef6fe6d_ab2961f6",
+      "range": {
+        "startLine": 140,
+        "startChar": 56,
+        "endLine": 142,
+        "endChar": 17
+      },
+      "revId": "e0cd77bc64735b150402d213a8e1fb8aa75cbc7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
