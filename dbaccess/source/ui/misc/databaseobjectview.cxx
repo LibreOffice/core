@@ -18,7 +18,6 @@
  */
 
 #include <databaseobjectview.hxx>
-#include <stringconstants.hxx>
 #include <strings.hxx>
 #include <asyncmodaldialog.hxx>
 
@@ -28,7 +27,6 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/application/XTableUIProvider.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/awt/Rectangle.hpp>
 
 #include <connectivity/dbtools.hxx>
 #include <osl/diagnose.h>

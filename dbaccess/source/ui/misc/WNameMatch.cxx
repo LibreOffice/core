@@ -24,7 +24,6 @@
 #include <core_resource.hxx>
 #include <strings.hrc>
 #include <bitmaps.hlst>
-#include <vcl/settings.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 
 using namespace ::dbaui;

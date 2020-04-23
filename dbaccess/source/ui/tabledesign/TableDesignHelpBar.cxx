@@ -22,7 +22,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/vclmedit.hxx>
 #include <helpids.h>
-#include <memory>
+
 using namespace dbaui;
 #define STANDARD_MARGIN                 6
 OTableDesignHelpBar::OTableDesignHelpBar( vcl::Window* pParent ) :

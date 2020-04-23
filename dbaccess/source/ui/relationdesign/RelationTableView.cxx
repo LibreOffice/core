@@ -18,20 +18,15 @@
  */
 
 #include <RelationTableView.hxx>
-#include <JoinExchange.hxx>
 #include <core_resource.hxx>
 #include <browserids.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
-#include <com/sun/star/sdbcx/XKeysSupplier.hpp>
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <stringconstants.hxx>
 #include <connectivity/dbtools.hxx>
 #include <helpids.h>
 #include <RelationDesignView.hxx>
@@ -43,11 +38,9 @@
 #include <RelationDlg.hxx>
 #include <sqlmessage.hxx>
 #include <strings.hrc>
-#include <UITools.hxx>
 #include <connectivity/dbexception.hxx>
 #include "RTableWindow.hxx"
 #include <JAccess.hxx>
-#include <svl/undo.hxx>
 #include <vcl/stdtext.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 

@@ -20,15 +20,12 @@
 #include <core_resource.hxx>
 #include <datasourceconnector.hxx>
 #include <osl/diagnose.h>
-#include <stringconstants.hxx>
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
-#include <osl/thread.h>
 #include <comphelper/namedvaluecollection.hxx>
 #include <connectivity/dbexception.hxx>
 #include <com/sun/star/sdbc/XDataSource.hpp>
@@ -36,8 +33,6 @@
 #include <vcl/outdev.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/weld.hxx>
-#include <svl/filenotation.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <cppuhelper/exc_hlp.hxx>
 #include <strings.hrc>

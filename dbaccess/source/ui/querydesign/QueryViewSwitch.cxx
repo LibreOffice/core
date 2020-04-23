@@ -21,7 +21,6 @@
 #include <QueryDesignView.hxx>
 #include <QueryTextView.hxx>
 #include <querycontainerwindow.hxx>
-#include <browserids.hxx>
 #include <adtabdlg.hxx>
 #include <querycontroller.hxx>
 #include <sqledit.hxx>

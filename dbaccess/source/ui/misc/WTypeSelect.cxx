@@ -18,7 +18,6 @@
  */
 
 #include <WTypeSelect.hxx>
-#include <stringconstants.hxx>
 #include <bitmaps.hlst>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
@@ -26,14 +25,10 @@
 #include <WCopyTable.hxx>
 #include <strings.hrc>
 #include <tools/stream.hxx>
-#include <svtools/svparser.hxx>
 #include <vcl/commandevent.hxx>
 #include <UITools.hxx>
 #include <core_resource.hxx>
-#include <sqlmessage.hxx>
 #include <FieldControls.hxx>
-
-#include <dbaccess_slotid.hrc>
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;

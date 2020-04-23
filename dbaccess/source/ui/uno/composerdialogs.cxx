@@ -24,12 +24,10 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <stringconstants.hxx>
 #include <queryfilter.hxx>
 #include <queryorder.hxx>
 #include <comphelper/processfactory.hxx>
 #include <connectivity/dbtools.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>

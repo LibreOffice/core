@@ -23,16 +23,13 @@
 #include <vcl/settings.hxx>
 #include <JoinController.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <stringconstants.hxx>
 #include <strings.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <vcl/event.hxx>
-#include <vcl/fixed.hxx>
 #include <UITools.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
-#include <memory>
 
 namespace dbaui
 {

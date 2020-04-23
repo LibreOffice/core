@@ -20,19 +20,7 @@
 #include <RelationDesignView.hxx>
 #include <RelationTableView.hxx>
 #include <RelationController.hxx>
-#include <svl/undo.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
-#include <browserids.hxx>
-#include <connectivity/dbtools.hxx>
-#include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include "RTableConnection.hxx"
-#include <ConnectionLine.hxx>
-#include <ConnectionLineData.hxx>
-#include <RTableConnectionData.hxx>
-#include <stringconstants.hxx>
-#include <UITools.hxx>
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;

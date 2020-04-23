@@ -36,7 +36,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <memory>
-#include <vector>
 
 namespace dbaui
 {

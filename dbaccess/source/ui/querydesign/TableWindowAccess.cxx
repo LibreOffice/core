@@ -18,16 +18,11 @@
  */
 
 #include <TableWindowAccess.hxx>
-#include <JAccess.hxx>
 #include <TableWindow.hxx>
 #include <TableWindowListBox.hxx>
-#include <JoinDesignView.hxx>
-#include <JoinController.hxx>
 #include <JoinTableView.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
-#include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <comphelper/sequence.hxx>
 

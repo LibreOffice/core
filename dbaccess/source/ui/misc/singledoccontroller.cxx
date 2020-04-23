@@ -23,7 +23,6 @@
 #include <singledoccontroller.hxx>
 #include <browserids.hxx>
 #include <strings.hrc>
-#include <stringconstants.hxx>
 
 #include <svl/undo.hxx>
 

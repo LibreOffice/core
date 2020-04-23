@@ -20,9 +20,7 @@
 #include "QueryTabWinUndoAct.hxx"
 #include <osl/diagnose.h>
 #include "QTableWindow.hxx"
-#include "QTableWindowData.hxx"
 #include <TableConnection.hxx>
-#include <TableConnectionData.hxx>
 #include "QueryDesignFieldUndoAct.hxx"
 #include <QueryTableView.hxx>
 

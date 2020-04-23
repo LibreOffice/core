@@ -22,16 +22,10 @@
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/sdbcx/XAlterTable.hpp>
-#include <com/sun/star/sdbcx/XDrop.hpp>
-#include <com/sun/star/sdbcx/XAppend.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <core_resource.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
-#include <stringconstants.hxx>
-#include <browserids.hxx>
 #include <helpids.h>
 #include <comphelper/types.hxx>
 #include <FieldDescControl.hxx>
@@ -43,13 +37,12 @@
 #include <SqlNameEdit.hxx>
 #include <TableRowExchange.hxx>
 #include <sot/storage.hxx>
+#include <svx/svxids.hrc>
 #include <UITools.hxx>
 #include "TableFieldControl.hxx"
 #include <dsntypes.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
-
-#include <dbaccess_slotid.hrc>
 
 using namespace ::dbaui;
 using namespace ::comphelper;

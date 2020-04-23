@@ -18,7 +18,6 @@
  */
 
 #include <imageprovider.hxx>
-#include <stringconstants.hxx>
 #include <bitmaps.hlst>
 
 #include <com/sun/star/graphic/GraphicColorMode.hpp>

@@ -19,12 +19,13 @@
 
 #include <TableWindowListBox.hxx>
 #include <TableWindow.hxx>
-#include <QueryDesignView.hxx>
-#include <QueryTableView.hxx>
-#include <querycontroller.hxx>
+#include <JoinController.hxx>
 #include <JoinExchange.hxx>
+#include <JoinTableView.hxx>
+#include <JoinDesignView.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <vcl/svapp.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>

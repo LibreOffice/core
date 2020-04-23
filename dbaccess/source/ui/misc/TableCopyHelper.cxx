@@ -19,45 +19,28 @@
 
 #include <TableCopyHelper.hxx>
 #include <core_resource.hxx>
-#include <stringconstants.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
-#include <sqlmessage.hxx>
-#include <WCopyTable.hxx>
 #include <dbaccess/genericcontroller.hxx>
-#include <WCPage.hxx>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/sdb/application/CopyTableOperation.hpp>
 #include <com/sun/star/sdb/application/CopyTableWizard.hpp>
 #include <com/sun/star/sdb/DataAccessDescriptorFactory.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 
-#include <RtfReader.hxx>
-#include <HtmlReader.hxx>
 #include <TokenWriter.hxx>
 #include <UITools.hxx>
 #include <dbaccess/dataview.hxx>
+#include <svx/dbaexchange.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include <com/sun/star/sdbcx/XViewsSupplier.hpp>
-#include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>
-#include <com/sun/star/sdb/SQLContext.hpp>
-#include <com/sun/star/sdbc/XParameters.hpp>
-#include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#include <com/sun/star/sdbc/XColumnLocate.hpp>
-#include <com/sun/star/sdbcx/XRowLocate.hpp>
-#include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
 #include <unotools/tempfile.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
-#include <dbexchange.hxx>
 namespace dbaui
 {
 using namespace ::dbtools;

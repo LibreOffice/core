@@ -20,7 +20,6 @@
 #include "ColumnPeer.hxx"
 #include <ColumnControlWindow.hxx>
 #include <vcl/svapp.hxx>
-#include <stringconstants.hxx>
 #include <strings.hxx>
 #include <FieldDescriptions.hxx>
 

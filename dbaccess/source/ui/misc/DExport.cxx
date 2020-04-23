@@ -21,10 +21,7 @@
 #include <core_resource.hxx>
 
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/sdbcx/XAppend.hpp>
-#include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -33,11 +30,9 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#include <stringconstants.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
 #include <connectivity/dbconversion.hxx>
-#include <osl/thread.h>
 #include <sal/log.hxx>
 #include <sfx2/sfxhtml.hxx>
 #include <svl/numuno.hxx>
@@ -45,20 +40,13 @@
 #include <TypeInfo.hxx>
 #include <FieldDescriptions.hxx>
 #include <UITools.hxx>
-#include <unotools/configmgr.hxx>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <i18nlangtag/mslangid.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <WCopyTable.hxx>
-#include <WExtendPages.hxx>
-#include <WCPage.hxx>
 #include <unotools/syslocale.hxx>
 #include <svl/zforlist.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/FValue.hxx>
-#include <com/sun/star/sdbc/SQLWarning.hpp>
-#include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdb/application/CopyTableOperation.hpp>
 #include <sqlmessage.hxx>
 #include "UpdateHelperImpl.hxx"

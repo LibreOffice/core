@@ -21,10 +21,10 @@
 #include <strings.hrc>
 #include "TEditControl.hxx"
 #include <TableRow.hxx>
-#include <browserids.hxx>
 #include <TableController.hxx>
 #include <TableDesignView.hxx>
 #include <FieldDescriptions.hxx>
+#include <svx/svxids.hrc>
 
 using namespace dbaui;
 using namespace ::svt;

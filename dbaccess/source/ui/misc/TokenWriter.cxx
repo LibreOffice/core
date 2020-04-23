@@ -18,7 +18,6 @@
  */
 
 #include <TokenWriter.hxx>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/stream.hxx>
 #include <osl/diagnose.h>
@@ -27,7 +26,6 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <RtfReader.hxx>
 #include <HtmlReader.hxx>
-#include <stringconstants.hxx>
 #include <strings.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
@@ -39,7 +37,6 @@
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
@@ -59,7 +56,6 @@
 #include <svtools/rtfout.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>
-#include <unotools/syslocale.hxx>
 #include <memory>
 
 using namespace dbaui;

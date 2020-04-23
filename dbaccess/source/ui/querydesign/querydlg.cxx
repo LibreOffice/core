@@ -18,17 +18,16 @@
  */
 
 #include "querydlg.hxx"
+#include <JoinController.hxx>
+#include <JoinDesignView.hxx>
 #include <strings.hrc>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include "QTableConnectionData.hxx"
 #include <core_resource.hxx>
-#include <querycontroller.hxx>
 #include <QueryTableView.hxx>
-#include <QueryDesignView.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <RelationControl.hxx>
-#include <vcl/settings.hxx>
 
 #define ID_INNER_JOIN       1
 #define ID_LEFT_JOIN        2

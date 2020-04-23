@@ -20,7 +20,6 @@
 #include <TableRow.hxx>
 #include <tools/stream.hxx>
 #include <FieldDescriptions.hxx>
-#include <algorithm>
 #include <comphelper/types.hxx>
 
 using namespace dbaui;
