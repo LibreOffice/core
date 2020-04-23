@@ -626,9 +626,9 @@ void SkiaSalGraphicsImpl::privateDrawAlphaRect(long nX, long nY, long nWidth, lo
                                                double fTransparency, bool blockAA)
 {
     preDraw();
-    SAL_INFO("vcl.skia.trace", "privatedrawrect(" << this << "): " << Point(nX, nY) << "/"
-                                                  << Size(nWidth, nHeight) << ":" << mLineColor
-                                                  << ":" << mFillColor << ":" << fTransparency);
+    SAL_INFO("vcl.skia.trace",
+             "privatedrawrect(" << this << "): " << SkIRect::MakeXYWH(nX, nY, nWidth, nHeight)
+                                << ":" << mLineColor << ":" << mFillColor << ":" << fTransparency);
     SkCanvas* canvas = getDrawCanvas();
     SkPaint paint;
     paint.setAntiAlias(!blockAA && mParent.getAntiAliasB2DDraw());
@@ -922,9 +922,9 @@ void SkiaSalGraphicsImpl::copyArea(long nDestX, long nDestY, long nSrcX, long nS
     if (nDestX == nSrcX && nDestY == nSrcY)
         return;
     preDraw();
-    SAL_INFO("vcl.skia.trace", "copyarea(" << this << "): " << Point(nSrcX, nSrcY) << "->"
-                                           << Point(nDestX, nDestY) << "/"
-                                           << Size(nSrcWidth, nSrcHeight));
+    SAL_INFO("vcl.skia.trace", "copyarea("
+                                   << this << "): " << Point(nSrcX, nSrcY) << "->"
+                                   << SkIRect::MakeXYWH(nDestX, nDestY, nSrcWidth, nSrcHeight));
     assert(!mXorMode);
     ::copyArea(getDrawCanvas(), mSurface, nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight);
     addXorRegion(SkRect::MakeXYWH(nDestX, nDestY, nSrcWidth, nSrcHeight));
@@ -1095,7 +1095,7 @@ std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(long nX, long nY, long
     SkiaZone zone;
     checkSurface();
     SAL_INFO("vcl.skia.trace",
-             "getbitmap(" << this << "): " << Point(nX, nY) << "/" << Size(nWidth, nHeight));
+             "getbitmap(" << this << "): " << SkIRect::MakeXYWH(nX, nY, nWidth, nHeight));
     flushDrawing();
     // TODO makeImageSnapshot(rect) may copy the data, which may be a waste if this is used
     // e.g. for VirtualDevice's lame alpha blending, in which case the image will eventually end up
