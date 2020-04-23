@@ -9,9 +9,11 @@
 
 $(eval $(call gb_Module_Module,owncloud_android_lib))
 
+ifneq ($(ENABLE_JAVA),)
 $(eval $(call gb_Module_add_targets,owncloud_android_lib, \
 	ExternalProject_owncloud_android_lib \
 	UnpackedTarball_owncloud_android_lib \
 ))
+endif
 
 # vim: set noet sw=4 ts=4:
