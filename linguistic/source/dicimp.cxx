@@ -107,7 +107,7 @@ static bool getTag(const OString &rLine, const char *pTagName,
 }
 
 
-sal_Int16 ReadDicVersion( SvStreamPtr const &rpStream, LanguageType &nLng, bool &bNeg, OUString &aDicName )
+sal_Int16 ReadDicVersion( SvStream& rStream, LanguageType &nLng, bool &bNeg, OUString &aDicName )
 {
     // Sniff the header
     sal_Int16 nDicVersion = DIC_VERSION_DONTKNOW;
@@ -116,13 +116,13 @@ sal_Int16 ReadDicVersion( SvStreamPtr const &rpStream, LanguageType &nLng, bool 
     nLng = LANGUAGE_NONE;
     bNeg = false;
 
-    if (!rpStream.get() || rpStream->GetError())
+    if (rStream.GetError())
         return -1;
 
-    sal_uInt64 const nSniffPos = rpStream->Tell();
+    sal_uInt64 const nSniffPos = rStream.Tell();
     static std::size_t nVerOOo7Len = sal::static_int_cast< std::size_t >(strlen( pVerOOo7 ));
     pMagicHeader[ nVerOOo7Len ] = '\0';
-    if ((rpStream->ReadBytes(static_cast<void *>(pMagicHeader), nVerOOo7Len) == nVerOOo7Len) &&
+    if ((rStream.ReadBytes(static_cast<void *>(pMagicHeader), nVerOOo7Len) == nVerOOo7Len) &&
         !strcmp(pMagicHeader, pVerOOo7))
     {
         bool bSuccess;
@@ -131,10 +131,10 @@ sal_Int16 ReadDicVersion( SvStreamPtr const &rpStream, LanguageType &nLng, bool 
         nDicVersion = DIC_VERSION_7;
 
         // 1st skip magic / header line
-        rpStream->ReadLine(aLine);
+        rStream.ReadLine(aLine);
 
         // 2nd line: language all | en-US | pt-BR ...
-        while ((bSuccess = rpStream->ReadLine(aLine)))
+        while ((bSuccess = rStream.ReadLine(aLine)))
         {
             OString aTagValue;
 
@@ -177,13 +177,13 @@ sal_Int16 ReadDicVersion( SvStreamPtr const &rpStream, LanguageType &nLng, bool 
     {
         sal_uInt16 nLen;
 
-        rpStream->Seek (nSniffPos );
+        rStream.Seek (nSniffPos );
 
-        rpStream->ReadUInt16( nLen );
+        rStream.ReadUInt16( nLen );
         if (nLen >= MAX_HEADER_LENGTH)
             return -1;
 
-        rpStream->ReadBytes(pMagicHeader, nLen);
+        rStream.ReadBytes(pMagicHeader, nLen);
         pMagicHeader[nLen] = '\0';
 
         // Check version magic
@@ -202,13 +202,13 @@ sal_Int16 ReadDicVersion( SvStreamPtr const &rpStream, LanguageType &nLng, bool 
         {
             // The language of the dictionary
             sal_uInt16 nTmp = 0;
-            rpStream->ReadUInt16( nTmp );
+            rStream.ReadUInt16( nTmp );
             nLng = LanguageType(nTmp);
             if (VERS2_NOLANGUAGE == static_cast<sal_uInt16>(nLng))
                 nLng = LANGUAGE_NONE;
 
             // Negative Flag
-            rpStream->ReadCharAsBool( bNeg );
+            rStream.ReadCharAsBool( bNeg );
         }
     }
 
@@ -290,12 +290,12 @@ ErrCode DictionaryNeo::loadEntries(const OUString &rMainURL)
     if (!xStream.is())
         return ErrCode(sal_uInt32(-1));
 
-    SvStreamPtr pStream( utl::UcbStreamHelper::CreateStream( xStream ) );
+    std::unique_ptr<SvStream> pStream( utl::UcbStreamHelper::CreateStream( xStream ) );
 
     // read header
     bool bNegativ;
     LanguageType nLang;
-    nDicVersion = ReadDicVersion(pStream, nLang, bNegativ, aDicName);
+    nDicVersion = ReadDicVersion(*pStream, nLang, bNegativ, aDicName);
     ErrCode nErr = pStream->GetError();
     if (nErr != ERRCODE_NONE)
         return nErr;
@@ -424,7 +424,7 @@ ErrCode DictionaryNeo::saveEntries(const OUString &rURL)
     if (!xStream.is())
         return ErrCode(sal_uInt32(-1));
 
-    SvStreamPtr pStream( utl::UcbStreamHelper::CreateStream( xStream ) );
+    std::unique_ptr<SvStream> pStream( utl::UcbStreamHelper::CreateStream( xStream ) );
 
     // Always write as the latest version, i.e. DIC_VERSION_7
 

@@ -224,7 +224,7 @@ void ConvDic::Save()
     if (!xStream.is())
         return;
 
-    SvStreamPtr pStream( utl::UcbStreamHelper::CreateStream( xStream ) );
+    std::unique_ptr<SvStream> pStream( utl::UcbStreamHelper::CreateStream( xStream ) );
 
     // get XML writer
     uno::Reference< xml::sax::XWriter > xSaxWriter = xml::sax::Writer::create(xContext);

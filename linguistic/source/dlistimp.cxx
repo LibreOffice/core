@@ -809,9 +809,9 @@ static bool IsVers2OrNewer( const OUString& rFileURL, LanguageType& nLng, bool& 
     if (!xStream.is())
         return false;
 
-    SvStreamPtr pStream( utl::UcbStreamHelper::CreateStream( xStream ) );
+    std::unique_ptr<SvStream> pStream( utl::UcbStreamHelper::CreateStream( xStream ) );
 
-    int nDicVersion = ReadDicVersion(pStream, nLng, bNeg, aDicName);
+    int nDicVersion = ReadDicVersion(*pStream, nLng, bNeg, aDicName);
     return 2 == nDicVersion || nDicVersion >= 5;
 }
 
