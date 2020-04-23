@@ -161,6 +161,24 @@
     },
     {
       "key": {
+        "uuid": "71f6c765_38450fa8",
+        "filename": "include/rtl/ref.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-04-23T15:36:41Z",
+      "side": 1,
+      "message": "Re \"might even enable the \u0027could ultimately be based on C++11 std::is_base_of\u0027 part\":  At least with the uses in \u003chttps://gerrit.libreoffice.org/c/core/+/92694/3\u003e \"convert excel filter in calc from shared_ptr to rtl::Reference\" it should work to use\n\n  std::enable_if_t\u003cstd::is_base_of_v\u003creference_type, derived_type\u003e, int\u003e \u003d 0\n\ninstead of\n\n  typename detail::UpCast\u003c reference_type, derived_type \u003e::t \u003d 0\n\nin the definition of the new rtl::Reference ctor below.  (But where std::is_base_of requires the derived type to be complete in most scenarios, something that the UpCast variant appears to avoid.)",
+      "parentUuid": "3ede6527_9fdf6419",
+      "revId": "e0cd77bc64735b150402d213a8e1fb8aa75cbc7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7883587c_69981bed",
         "filename": "include/rtl/ref.hxx",
         "patchSetId": 2
