@@ -1497,14 +1497,14 @@ extern "C" void SAL_CALL typelib_typedescription_register(
                     *ppNewDescription +1,
                     nSize - sizeof(typelib_TypeDescription) );
 
-                pTDR->pType->bComplete = (*ppNewDescription)->bComplete;
-                pTDR->pType->nSize = (*ppNewDescription)->nSize;
-                pTDR->pType->nAlignment = (*ppNewDescription)->nAlignment;
-
                 memset(
                     *ppNewDescription +1,
                     0,
                     nSize - sizeof( typelib_TypeDescription ) );
+
+                pTDR->pType->bComplete = (*ppNewDescription)->bComplete;
+                pTDR->pType->nSize = (*ppNewDescription)->nSize;
+                pTDR->pType->nAlignment = (*ppNewDescription)->nAlignment;
 
                 if( pTDR->pType->bOnDemand && !(*ppNewDescription)->bOnDemand )
                 {
