@@ -2919,6 +2919,7 @@ VclPtr<vcl::Window> SvxStyleToolBoxControl::CreateItemWindow( vcl::Window *pPare
 }
 
 SvxFontNameToolBoxControl::SvxFontNameToolBoxControl()
+    : m_pBox(nullptr)
 {
 }
 
