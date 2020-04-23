@@ -1,6 +1,7 @@
 --- src/lib/Makefile.in.orig	2016-01-12 19:21:24.000000000 +0100
 +++ src/lib/Makefile.in	2016-03-02 18:19:52.214551270 +0100
-@@ -538,6 +538,6 @@
+@@ -538,7 +538,7 @@
+ 	$(XML_CFLAGS) $(ZLIB_CFLAGS) $(DEBUG_CXXFLAGS) $(am__append_1)
  libetonyek_@ETONYEK_MAJOR_VERSION@_@ETONYEK_MINOR_VERSION@_la_LIBADD = libetonyek_internal.la $(REVENGE_LIBS) $(LANGTAG_LIBS) $(XML_LIBS) $(ZLIB_LIBS) @LIBETONYEK_WIN32_RESOURCE@
  libetonyek_@ETONYEK_MAJOR_VERSION@_@ETONYEK_MINOR_VERSION@_la_DEPENDENCIES = libetonyek_internal.la @LIBETONYEK_WIN32_RESOURCE@
 -libetonyek_@ETONYEK_MAJOR_VERSION@_@ETONYEK_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic -no-undefined
