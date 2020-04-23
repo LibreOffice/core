@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 
 #include <comphelper/fileformat.h>
+#include <o3tl/deleter.hxx>
 #include <tools/fract.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/urlobj.hxx>
@@ -1328,7 +1329,7 @@ bool ImpGraphic::ImplSwapOut()
     bool bRet = ImplSwapOut( xOStm.get() );
     if( bRet )
     {
-        mpSwapFile = std::make_shared<ImpSwapFile>();
+        mpSwapFile.reset(new ImpSwapFile, o3tl::default_delete<ImpSwapFile>());
         mpSwapFile->aSwapURL = aTmpURL;
         mpSwapFile->maOriginURL = getOriginURL();
     }
