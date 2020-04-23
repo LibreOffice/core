@@ -83,15 +83,12 @@ class Image;
 class VCL_DLLPUBLIC Graphic
 {
 private:
-
     std::shared_ptr<ImpGraphic> mxImpGraphic;
+    SAL_DLLPRIVATE void ImplTestRefCount();
 
 public:
-
-    SAL_DLLPRIVATE void ImplTestRefCount();
     SAL_DLLPRIVATE ImpGraphic* ImplGetImpGraphic() const { return mxImpGraphic.get(); }
 
-public:
                     Graphic();
                     Graphic( const GraphicExternalLink& rGraphicLink );
                     Graphic( const Graphic& rGraphic );
@@ -180,16 +177,11 @@ public:
 
     OString getUniqueID() const;
 
-public:
-
     std::shared_ptr<GraphicReader>& GetReaderContext();
     void                            SetReaderContext( const std::shared_ptr<GraphicReader> &pReader );
     void                            SetDummyContext(bool value);
     bool                            IsDummyContext() const;
-private:
-    friend class GraphicObject;
 
-public:
     void            SetGfxLink(const std::shared_ptr<GfxLink>& rGfxLink);
     std::shared_ptr<GfxLink> GetSharedGfxLink() const;
     GfxLink         GetGfxLink() const;
@@ -199,8 +191,6 @@ public:
 
     friend VCL_DLLPUBLIC void WriteGraphic(SvStream& rOStream, const Graphic& rGraphic);
     friend VCL_DLLPUBLIC void ReadGraphic(SvStream& rIStream, Graphic& rGraphic);
-
-public:
 
     const std::shared_ptr<VectorGraphicData>& getVectorGraphicData() const;
 
