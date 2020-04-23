@@ -13,6 +13,7 @@
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
+#include <officecfg/Office/UI/Infobar.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/infobar.hxx>
@@ -343,6 +344,9 @@ VclPtr<SfxInfoBarWindow> SfxInfoBarContainerWindow::appendInfoBar(const OUString
                                                            InfoBarType ibType,
                                                            WinBits nMessageStyle)
 {
+    if (!isInfobarEnabled(sId))
+        return nullptr;
+
     Size aSize = GetSizePixel();
 
     auto pInfoBar = VclPtr<SfxInfoBarWindow>::Create(this, sId, sMessage, ibType, nMessageStyle);
@@ -405,6 +409,20 @@ void SfxInfoBarContainerWindow::removeInfoBar(VclPtr<SfxInfoBarWindow> const & p
     SetSizePixel(aSize);
 
     m_pChildWin->Update();
+}
+
+bool SfxInfoBarContainerWindow::isInfobarEnabled(const OUString& sId)
+{
+    if (sId == "readonly")
+        return officecfg::Office::UI::Infobar::Enabled::Readonly::get();
+    if (sId == "signature")
+        return officecfg::Office::UI::Infobar::Enabled::Signature::get();
+    if (sId == "getdonate")
+        return officecfg::Office::UI::Infobar::Enabled::Donate::get();
+    if (sId == "getinvolved")
+        return officecfg::Office::UI::Infobar::Enabled::GetInvolved::get();
+
+    return true;
 }
 
 void SfxInfoBarContainerWindow::Resize()
