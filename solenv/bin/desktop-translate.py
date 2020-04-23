@@ -24,6 +24,29 @@
 
 import os, sys, argparse, io
 
+def encodeDesktopString(s):
+    # <https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-1.1.html#
+    # value-types> says "The escape sequences \s, \n, \t, \r, and \\ are supported for values of
+    # type string and localestring, meaning ASCII space, newline, tab, carriage return, and
+    # backslash, respectively."  <https://specifications.freedesktop.org/desktop-entry-spec/
+    # desktop-entry-spec-1.1.html#basic-format> says "A file is interpreted as a series of lines
+    # that are separated by linefeed characters", so it is apparently necessary to escape at least
+    # linefeed and backslash characters.  It is unclear why that spec talks about "linefeed" in
+    # one place and about "newline" ("\n") and "carriage return" ("\r") in another, and how they are
+    # supposed to relate, so just escape any U+000A LINE FEED as "\n" and any U+000D CARRIAGE RETURN
+    # as "\r"; it is unclear exactly which occurrences of U+0020 SPACE and U+0009 CHARACTER
+    # TABULATION would need to be escaped, so they are mostly left unescaped, for readability:
+    s = s.replace('\\', '\\\\').replace('\n', '\\n').replace('\r', '\\r');
+    if s.startswith(' '):
+        # <https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-1.1.html#
+        # entries> says "Space before and after the equals sign should be ignored", so escape a
+        # leading U+0020 SPACE as "\s" (while it is not clear whether "space" there means just
+        # U+0020 SPACE or any kind of white space, in which case at least a leading U+0009 CHARACTER
+        # TABULATION should similarly be escaped as "\t"; also, it is unclear whether such
+        # characters should also be escaped at the end):
+        s = '\\s' + s[1:]
+    return s
+
 parser = argparse.ArgumentParser()
 parser.add_argument('-p', dest='productname', default='LibreOffice')
 parser.add_argument('-d', dest='workdir', default='.')
@@ -127,6 +150,8 @@ for template in templates:
                 # print "value is $value\n";
                 if value:
                     if o.ext == "desktop" or o.ext == "str":
+                        if o.ext == "desktop":
+                            value = encodeDesktopString(value)
                         outfile.write(u"""{}[{}]={}\n""".format(outkey, locale, value))
                     else:
                         outfile.write(u"""\t[{}]{}={}\n""".format(locale, outkey, value))
