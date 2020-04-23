@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f21e102d_c809be07",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-04-23T09:48:59Z",
+      "side": 1,
+      "message": "given the need to change names, and drop one overload, I don\u0027t see it being practical",
+      "parentUuid": "960adcb0_5ed348ab",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 40
+      },
+      "revId": "e0cd77bc64735b150402d213a8e1fb8aa75cbc7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ba00c0ce_2ebb159e",
         "filename": "include/rtl/ref.hxx",
         "patchSetId": 2
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "62b65335_1e49fffe",
+        "filename": "include/rtl/ref.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-04-23T09:48:59Z",
+      "side": 1,
+      "message": "forward decl of the Reference class, used in detail.",
+      "parentUuid": "ba00c0ce_2ebb159e",
+      "revId": "e0cd77bc64735b150402d213a8e1fb8aa75cbc7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3803f914_8a2e4f40",
         "filename": "include/rtl/ref.hxx",
         "patchSetId": 2
@@ -53,6 +95,24 @@
       "writtenOn": "2020-04-23T08:54:10Z",
       "side": 1,
       "message": "make all this LIBO_INTERNAL_ONLY? (which also removes the need for the _MSC_VER\u003c1800 code below, and might even enable the \"could ultimately be based on C++11 std::is_base_of\" part)",
+      "revId": "e0cd77bc64735b150402d213a8e1fb8aa75cbc7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ede6527_9fdf6419",
+        "filename": "include/rtl/ref.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-04-23T09:48:59Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "3803f914_8a2e4f40",
       "revId": "e0cd77bc64735b150402d213a8e1fb8aa75cbc7c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
@@ -82,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "213342f6_49c6880c",
+        "filename": "include/rtl/ref.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-04-23T09:48:59Z",
+      "side": 1,
+      "message": "no, but I\u0027d have no idea how to fix that, this whole thing is magic to me",
+      "parentUuid": "7883587c_69981bed",
+      "range": {
+        "startLine": 40,
+        "startChar": 3,
+        "endLine": 42,
+        "endChar": 29
+      },
+      "revId": "e0cd77bc64735b150402d213a8e1fb8aa75cbc7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6a53dfcb_f00f1fde",
         "filename": "include/rtl/ref.hxx",
         "patchSetId": 2
@@ -93,6 +177,30 @@
       "writtenOn": "2020-04-23T08:54:10Z",
       "side": 1,
       "message": "see above",
+      "range": {
+        "startLine": 140,
+        "startChar": 56,
+        "endLine": 142,
+        "endChar": 17
+      },
+      "revId": "e0cd77bc64735b150402d213a8e1fb8aa75cbc7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ef6fe6d_ab2961f6",
+        "filename": "include/rtl/ref.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-04-23T09:48:59Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "6a53dfcb_f00f1fde",
       "range": {
         "startLine": 140,
         "startChar": 56,
