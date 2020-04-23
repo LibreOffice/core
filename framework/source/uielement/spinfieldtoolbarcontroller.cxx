@@ -127,9 +127,9 @@ void SpinfieldControl::GetFocus()
 
 void SpinfieldControl::LoseFocus()
 {
-    SpinField::GetFocus();
+    SpinField::LoseFocus();
     if ( m_pSpinfieldToolbarController )
-        m_pSpinfieldToolbarController->GetFocus();
+        m_pSpinfieldToolbarController->LoseFocus();
 }
 
 bool SpinfieldControl::PreNotify( NotifyEvent& rNEvt )
@@ -259,6 +259,11 @@ void SpinfieldToolbarController::Modify()
 void SpinfieldToolbarController::GetFocus()
 {
     notifyFocusGet();
+}
+
+void SpinfieldToolbarController::LoseFocus()
+{
+    notifyFocusLost();
 }
 
 bool SpinfieldToolbarController::PreNotify( NotifyEvent const & rNEvt )
