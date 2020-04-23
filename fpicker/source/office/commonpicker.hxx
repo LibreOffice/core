@@ -87,7 +87,7 @@ namespace svt
         // overridables
 
         // will be called with locked SolarMutex
-        virtual std::unique_ptr<SvtFileDialog_Base> implCreateDialog( weld::Window* pParent ) = 0;
+        virtual std::shared_ptr<SvtFileDialog_Base> implCreateDialog( weld::Window* pParent ) = 0;
         virtual sal_Int16       implExecutePicker( ) = 0;
             // do NOT override XExecutableDialog::execute! We need to do some stuff there ourself ...
 

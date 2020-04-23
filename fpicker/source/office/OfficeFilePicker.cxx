@@ -431,11 +431,11 @@ sal_Int16 SvtFilePicker::implExecutePicker( )
     return nRet;
 }
 
-std::unique_ptr<SvtFileDialog_Base> SvtFilePicker::implCreateDialog( weld::Window* pParent )
+std::shared_ptr<SvtFileDialog_Base> SvtFilePicker::implCreateDialog( weld::Window* pParent )
 {
     PickerFlags nBits = getPickerFlags();
 
-    auto dialog = std::make_unique<SvtFileDialog>(pParent, nBits);
+    auto dialog = std::make_shared<SvtFileDialog>(pParent, nBits);
 
     // Set StandardDir if present
     if ( !m_aStandardDir.isEmpty())
@@ -1067,11 +1067,11 @@ SvtRemoteFilePicker::SvtRemoteFilePicker()
 {
 }
 
-std::unique_ptr<SvtFileDialog_Base> SvtRemoteFilePicker::implCreateDialog(weld::Window* pParent)
+std::shared_ptr<SvtFileDialog_Base> SvtRemoteFilePicker::implCreateDialog(weld::Window* pParent)
 {
     PickerFlags nBits = getPickerFlags();
 
-    auto dialog = std::make_unique<RemoteFilesDialog>(pParent, nBits);
+    auto dialog = std::make_shared<RemoteFilesDialog>(pParent, nBits);
 
     // Set StandardDir if present
     if ( !m_aStandardDir.isEmpty())
