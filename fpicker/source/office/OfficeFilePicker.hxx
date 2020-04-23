@@ -203,7 +203,7 @@ protected:
 
     // OCommonPicker overridables
 
-    virtual std::unique_ptr<SvtFileDialog_Base> implCreateDialog( weld::Window* pParent ) override;
+    virtual std::shared_ptr<SvtFileDialog_Base> implCreateDialog( weld::Window* pParent ) override;
     virtual sal_Int16       implExecutePicker( ) override;
     virtual bool            implHandleInitializationArgument(
                                 const OUString& _rName,
@@ -231,7 +231,7 @@ class SvtRemoteFilePicker : public SvtFilePicker
 public:
     SvtRemoteFilePicker();
 
-    virtual std::unique_ptr<SvtFileDialog_Base> implCreateDialog( weld::Window* pParent ) override;
+    virtual std::shared_ptr<SvtFileDialog_Base> implCreateDialog( weld::Window* pParent ) override;
 
     // disambiguate XInterface
 
