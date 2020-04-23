@@ -6721,7 +6721,7 @@ static bool lcl_ListLevelsAreDifferentForExport(const SwNumFormat & rFormat1, co
             return true;
     }
 
-    // Compare numformats with emoty charformats
+    // Compare numformats with empty charformats
     SwNumFormat modified1 = rFormat1;
     SwNumFormat modified2 = rFormat2;
     modified1.SetCharFormatName(OUString());
@@ -6745,13 +6745,15 @@ void DocxAttributeOutput::OverrideNumberingDefinition(
     for (sal_uInt8 nLevel = 0; nLevel < nLevels; ++nLevel)
     {
         const auto levelOverride = rLevelOverrides.find(nLevel);
-        // only export it if it differs from abstract numbering definition
-        if ( lcl_ListLevelsAreDifferentForExport(rRule.Get(nLevel),rAbstractRule.Get(nLevel)) ||
-            levelOverride != rLevelOverrides.end() )
+        bool bListsAreDifferent = lcl_ListLevelsAreDifferentForExport(rRule.Get(nLevel), rAbstractRule.Get(nLevel));
+
+        // Export list override only if it is different to abstract one
+        // or we have a level numbering override
+        if (bListsAreDifferent || levelOverride != rLevelOverrides.end())
         {
             m_pSerializer->startElementNS(XML_w, XML_lvlOverride, FSNS(XML_w, XML_ilvl), OString::number(nLevel));
 
-            if (rRule.Get(nLevel) != rAbstractRule.Get(nLevel))
+            if (bListsAreDifferent)
             {
                 GetExport().NumberingLevel(rRule, nLevel);
             }
