@@ -20,6 +20,7 @@
 #pragma once
 
 #include <vcl/graph.hxx>
+#include <tools/stream.hxx>
 
 class VCL_DLLPUBLIC GraphicNativeMetadata final
 {
@@ -30,6 +31,9 @@ public:
     ~GraphicNativeMetadata();
 
     bool read(Graphic const& rGraphic);
+    bool read(SvStream& rStream);
+
+    // counter-clock-wise rotation in permille
     sal_uInt16 getRotation() const { return mRotation; }
 };
 

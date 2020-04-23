@@ -13,6 +13,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_graphic_test, \
     vcl/qa/cppunit/GraphicTest \
     vcl/qa/cppunit/GraphicDescriptorTest \
     vcl/qa/cppunit/GraphicFormatDetectorTest \
+    vcl/qa/cppunit/GraphicNativeMetadataTest \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,vcl_graphic_test,\
