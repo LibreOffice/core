@@ -16,6 +16,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/frame/XDispatchHelper.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 
 #include <svtools/htmlcfg.hxx>
 #include <swmodule.hxx>
@@ -852,6 +853,34 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifFontNameSize)
     // - Actual  : 3
     // i.e. font name and size was written, even if that's not relevant for ReqIF.
     assertXPath(pDoc, "//reqif-xhtml:span", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifParagraphAlignment)
+{
+    // Create a document with an explicitly aligned paragraph.
+    loadURL("private:factory/swriter", nullptr);
+    uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
+    xParagraph->setPropertyValue(
+        "ParaAdjust", uno::makeAny(static_cast<sal_Int16>(style::ParagraphAdjust_RIGHT)));
+
+    // Export it.
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    SvMemoryStream aStream;
+    HtmlExportTest::wrapFragment(maTempFile, aStream);
+    xmlDocPtr pDoc = parseXmlStream(&aStream);
+
+    // Make sure the output is well-formed.
+    CPPUNIT_ASSERT(pDoc);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected:
+    // - Actual  : right
+    // i.e. the <reqif-xhtml:p align="..."> markup was used, which is invalid.
+    assertXPathNoAttribute(pDoc, "//reqif-xhtml:p", "align");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

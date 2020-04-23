@@ -163,6 +163,11 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL, const OUString& rFilterOpt
     }
 
     SetupFilterOptions(rFilterOptions);
+
+    if (mbXHTML)
+    {
+        m_bNoAlign = true;
+    }
 }
 
 SwHTMLWriter::~SwHTMLWriter()
