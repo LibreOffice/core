@@ -2472,6 +2472,7 @@ bool SwWW8ImplReader::IsObjectLayoutInTableCell( const sal_uInt32 nLayoutInTable
             case 0x6000: // version 11 aka Microsoft Word 2003
             case 0x8000: // version 12 aka Microsoft Word 2007
             case 0xC000: // version 14 aka Microsoft Word 2010
+            case 0xE000: // version 15 aka Microsoft Word 2013
             {
                 // #i98037#
                 // adjustment of conditions needed after deeper analysis of
