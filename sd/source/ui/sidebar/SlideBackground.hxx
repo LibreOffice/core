@@ -90,7 +90,8 @@ private:
     VclPtr<SvxFillTypeBox> mpFillStyle;
     VclPtr<SvxColorListBox> mpFillLB;
     VclPtr<SvxFillAttrBox> mpFillAttr;
-    VclPtr<SvxColorListBox> mpFillGrad;
+    VclPtr<SvxColorListBox> mpFillGrad1;
+    VclPtr<SvxColorListBox> mpFillGrad2;
     VclPtr<Button> mpInsertImage;
     VclPtr<CheckBox> mpDspMasterBackground;
     VclPtr<CheckBox> mpDspMasterObjects;

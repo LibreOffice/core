@@ -134,7 +134,8 @@ SlideBackground::SlideBackground(
     mpMasterSlide->set_width_request(0);
     get(mpBackgroundLabel, "label3");
     get(mpFillAttr, "fillattr1");
-    get(mpFillGrad, "fillattr2");
+    get(mpFillGrad1, "fillattr2");
+    get(mpFillGrad2, "fillattr3");
     get(mpFillStyle, "fillstyle");
     get(mpFillLB, "fillattr");
     get(mpInsertImage, "button2");
@@ -225,7 +226,8 @@ void SlideBackground::Initialize()
 
     mpFillStyle->SetSelectHdl(LINK(this, SlideBackground, FillStyleModifyHdl));
     mpFillLB->SetSelectHdl(LINK(this, SlideBackground, FillColorHdl));
-    mpFillGrad->SetSelectHdl(LINK(this, SlideBackground, FillColorHdl));
+    mpFillGrad1->SetSelectHdl(LINK(this, SlideBackground, FillColorHdl));
+    mpFillGrad2->SetSelectHdl(LINK(this, SlideBackground, FillColorHdl));
     mpFillAttr->SetSelectHdl(LINK(this, SlideBackground, FillBackgroundHdl));
 
     ViewShell* pMainViewShell = mrBase.GetMainViewShell().get();
@@ -366,13 +368,15 @@ void SlideBackground::Update()
         {
             mpFillLB->Hide();
             mpFillAttr->Hide();
-            mpFillGrad->Hide();
+            mpFillGrad1->Hide();
+            mpFillGrad2->Hide();
         }
         break;
         case SOLID:
         {
             mpFillAttr->Hide();
-            mpFillGrad->Hide();
+            mpFillGrad1->Hide();
+            mpFillGrad2->Hide();
             mpFillLB->Show();
             const Color aColor = GetColorSetOrDefault();
             mpFillLB->SelectEntry(aColor);
@@ -380,15 +384,16 @@ void SlideBackground::Update()
         break;
         case GRADIENT:
         {
-            mpFillLB->Show();
+            mpFillLB->Hide();
             mpFillAttr->Hide();
-            mpFillGrad->Show();
+            mpFillGrad1->Show();
+            mpFillGrad2->Show();
 
             const XGradient xGradient = GetGradientSetOrDefault();
             const Color aStartColor = xGradient.GetStartColor();
-            mpFillLB->SelectEntry(aStartColor);
+            mpFillGrad1->SelectEntry(aStartColor);
             const Color aEndColor = xGradient.GetEndColor();
-            mpFillGrad->SelectEntry(aEndColor);
+            mpFillGrad2->SelectEntry(aEndColor);
         }
         break;
 
@@ -398,7 +403,8 @@ void SlideBackground::Update()
             mpFillAttr->Show();
             mpFillAttr->Clear();
             mpFillAttr->Fill(pSh->GetItem(SID_HATCH_LIST)->GetHatchList());
-            mpFillGrad->Hide();
+            mpFillGrad1->Hide();
+            mpFillGrad2->Hide();
 
             const OUString aHatchName = GetHatchingSetOrDefault();
             mpFillAttr->SelectEntry( aHatchName );
@@ -411,7 +417,8 @@ void SlideBackground::Update()
             mpFillLB->Hide();
             mpFillAttr->Show();
             mpFillAttr->Clear();
-            mpFillGrad->Hide();
+            mpFillGrad1->Hide();
+            mpFillGrad2->Hide();
             OUString aName;
             if(nPos == BITMAP)
             {
@@ -661,7 +668,8 @@ void SlideBackground::dispose()
     mpMasterSlide.clear();
     mpBackgroundLabel.clear();
     mpFillAttr.clear();
-    mpFillGrad.clear();
+    mpFillGrad1.clear();
+    mpFillGrad2.clear();
     mpFillStyle.clear();
     mpFillLB.clear();
     mpInsertImage.clear();
@@ -1076,8 +1084,8 @@ IMPL_LINK_NOARG(SlideBackground, FillColorHdl, SvxColorListBox&, void)
         case drawing::FillStyle_GRADIENT:
         {
             XGradient aGradient;
-            aGradient.SetStartColor(mpFillLB->GetSelectEntryColor());
-            aGradient.SetEndColor(mpFillGrad->GetSelectEntryColor());
+            aGradient.SetStartColor(mpFillGrad1->GetSelectEntryColor());
+            aGradient.SetEndColor(mpFillGrad2->GetSelectEntryColor());
 
             // the name doesn't really matter, it'll be converted to unique one eventually,
             // but it has to be non-empty
