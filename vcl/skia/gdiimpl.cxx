@@ -642,7 +642,11 @@ void SkiaSalGraphicsImpl::privateDrawAlphaRect(long nX, long nY, long nWidth, lo
     {
         paint.setColor(toSkColorWithTransparency(mLineColor, fTransparency));
         paint.setStyle(SkPaint::kStroke_Style);
-        canvas->drawIRect(SkIRect::MakeXYWH(nX, nY, nWidth - 1, nHeight - 1), paint);
+        // The obnoxious "-1 DrawRect()" hack that I don't understand the purpose of (and I'm not sure
+        // if anybody does), but without it some cases do not work. The max() is needed because Skia
+        // will not drawn anything if width or height is 0.
+        canvas->drawIRect(
+            SkIRect::MakeXYWH(nX, nY, std::max(1L, nWidth - 1), std::max(1L, nHeight - 1)), paint);
     }
     addXorRegion(SkRect::MakeXYWH(nX, nY, nWidth, nHeight));
     postDraw();
