@@ -756,7 +756,6 @@ namespace drawinglayer::primitive2d
             attribute::SdrLineAttribute aLine;
             attribute::SdrLineStartEndAttribute aLineStartEnd;
             attribute::SdrTextAttribute aText;
-            attribute::SdrGlowAttribute aGlow;
             bool bFontworkHideContour(false);
 
             // look for text first
@@ -790,7 +789,7 @@ namespace drawinglayer::primitive2d
             {
                 // try shadow
                 const attribute::SdrShadowAttribute aShadow(createNewSdrShadowAttribute(rSet));
-                aGlow = createNewSdrGlowAttribute(rSet);
+                attribute::SdrGlowAttribute aGlow = createNewSdrGlowAttribute(rSet);
 
                 return attribute::SdrLineShadowTextAttribute(aLine, aLineStartEnd, aShadow, aText, aGlow);
             }
@@ -806,10 +805,8 @@ namespace drawinglayer::primitive2d
             attribute::SdrLineAttribute aLine;
             attribute::SdrFillAttribute aFill;
             attribute::SdrLineStartEndAttribute aLineStartEnd;
-            attribute::SdrShadowAttribute aShadow;
             attribute::FillGradientAttribute aFillFloatTransGradient;
             attribute::SdrTextAttribute aText;
-            attribute::SdrGlowAttribute aGlow;
             bool bFontworkHideContour(false);
 
             // look for text first
@@ -853,10 +850,10 @@ namespace drawinglayer::primitive2d
             if(bHasContent || !aLine.isDefault() || !aFill.isDefault() || !aText.isDefault())
             {
                 // try shadow
-                aShadow = createNewSdrShadowAttribute(rSet);
+                attribute::SdrShadowAttribute aShadow = createNewSdrShadowAttribute(rSet);
 
                 // glow
-                aGlow = createNewSdrGlowAttribute(rSet);
+                attribute::SdrGlowAttribute aGlow = createNewSdrGlowAttribute(rSet);
 
                 return attribute::SdrLineFillShadowTextAttribute(
                     aLine, aFill, aLineStartEnd, aShadow, aFillFloatTransGradient, aText, aGlow);
