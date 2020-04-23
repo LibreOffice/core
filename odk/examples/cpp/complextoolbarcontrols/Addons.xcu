@@ -79,7 +79,7 @@
                         <value>Spinfield</value>
                     </prop>
                     <prop oor:name="Width" oor:type="xs:long">
-                        <value>70</value>
+                        <value>150</value>
                     </prop>
                 </node>
                 <node oor:name="m5" oor:op="replace">
