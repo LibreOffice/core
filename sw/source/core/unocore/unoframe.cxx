@@ -1746,8 +1746,8 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             if(RES_BACKGROUND == pEntry->nWID)
             {
                 const SwAttrSet& rSet = pFormat->GetAttrSet();
-                const std::shared_ptr<SvxBrushItem> aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND, true, pDoc->IsInXMLImport()));
-                std::shared_ptr<SvxBrushItem> aChangedBrushItem(aOriginalBrushItem->Clone());
+                const std::unique_ptr<SvxBrushItem> aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND, true, pDoc->IsInXMLImport()));
+                std::unique_ptr<SvxBrushItem> aChangedBrushItem(aOriginalBrushItem->Clone());
 
                 aChangedBrushItem->PutValue(aValue, nMemberId);
 
@@ -2238,7 +2238,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
 
             if(RES_BACKGROUND == pEntry->nWID)
             {
-                const std::shared_ptr<SvxBrushItem> aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND));
+                const std::unique_ptr<SvxBrushItem> aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND));
 
                 if(!aOriginalBrushItem->QueryValue(aAny, nMemberId))
                 {

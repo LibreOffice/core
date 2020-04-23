@@ -43,7 +43,7 @@ SVXCORE_DLLPUBLIC void setSvxBrushItemAsFillAttributesToTargetSet(
 // items in the range [XATTR_FILL_FIRST .. XATTR_FILL_LAST]. Since this is not 100%
 // representable this may lead to reduced data. With nBackgroundID a Which-ID for the
 // to-be-created SvxBrushItem has to be given (default should be 99 as in RES_BACKGROUND).
-SVXCORE_DLLPUBLIC std::shared_ptr<SvxBrushItem> getSvxBrushItemFromSourceSet(
+SVXCORE_DLLPUBLIC std::unique_ptr<SvxBrushItem> getSvxBrushItemFromSourceSet(
     const SfxItemSet& rSourceSet,
     sal_uInt16 nBackgroundID,
     bool bSearchInParents = true,

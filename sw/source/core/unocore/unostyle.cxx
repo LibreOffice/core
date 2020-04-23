@@ -1682,8 +1682,8 @@ template<>
 void SwXStyle::SetPropertyValue<sal_uInt16(RES_BACKGROUND)>(const SfxItemPropertySimpleEntry& rEntry, const SfxItemPropertySet&, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
     SfxItemSet& rStyleSet = o_rStyleBase.GetItemSet();
-    const std::shared_ptr<SvxBrushItem> aOriginalBrushItem(getSvxBrushItemFromSourceSet(rStyleSet, RES_BACKGROUND, true, m_pDoc->IsInXMLImport()));
-    std::shared_ptr<SvxBrushItem> aChangedBrushItem(aOriginalBrushItem->Clone());
+    const std::unique_ptr<SvxBrushItem> aOriginalBrushItem(getSvxBrushItemFromSourceSet(rStyleSet, RES_BACKGROUND, true, m_pDoc->IsInXMLImport()));
+    std::unique_ptr<SvxBrushItem> aChangedBrushItem(aOriginalBrushItem->Clone());
 
     uno::Any aValue(rValue);
     const auto nMemberId(lcl_TranslateMetric(rEntry, m_pDoc, aValue));
@@ -2317,7 +2317,7 @@ uno::Any SwXStyle::GetStyleProperty<sal_uInt16(RES_BACKGROUND)>(const SfxItemPro
 {
     PrepareStyleBase(rBase);
     const SfxItemSet& rSet = rBase.GetItemSet();
-    const std::shared_ptr<SvxBrushItem> aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND));
+    const std::unique_ptr<SvxBrushItem> aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND));
     uno::Any aResult;
     if(!aOriginalBrushItem->QueryValue(aResult, rEntry.nMemberId))
         SAL_WARN("sw.uno", "error getting attribute from RES_BACKGROUND.");
@@ -3675,8 +3675,8 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
                 }
                 case RES_BACKGROUND:
                 {
-                    const std::shared_ptr<SvxBrushItem> aOriginalBrushItem(getSvxBrushItemFromSourceSet(aSet, RES_BACKGROUND, true, m_pDocShell->GetDoc()->IsInXMLImport()));
-                    std::shared_ptr<SvxBrushItem> aChangedBrushItem(aOriginalBrushItem->Clone());
+                    const std::unique_ptr<SvxBrushItem> aOriginalBrushItem(getSvxBrushItemFromSourceSet(aSet, RES_BACKGROUND, true, m_pDocShell->GetDoc()->IsInXMLImport()));
+                    std::unique_ptr<SvxBrushItem> aChangedBrushItem(aOriginalBrushItem->Clone());
 
                     aChangedBrushItem->PutValue(aValue, nMemberId);
 
@@ -4003,7 +4003,7 @@ uno::Sequence< uno::Any > SwXAutoStyle::GetPropertyValues_Impl(
             {
                 case RES_BACKGROUND:
                 {
-                    const std::shared_ptr<SvxBrushItem> aOriginalBrushItem(getSvxBrushItemFromSourceSet(*mpSet, RES_BACKGROUND));
+                    const std::unique_ptr<SvxBrushItem> aOriginalBrushItem(getSvxBrushItemFromSourceSet(*mpSet, RES_BACKGROUND));
 
                     if(!aOriginalBrushItem->QueryValue(aTarget, pEntry->nMemberId))
                     {

@@ -142,7 +142,7 @@ class SectRepr
 private:
     SwSectionData           m_SectionData;
     SwFormatCol                m_Col;
-    std::shared_ptr<SvxBrushItem>            m_Brush;
+    std::unique_ptr<SvxBrushItem>            m_Brush;
     SwFormatFootnoteAtTextEnd        m_FootnoteNtAtEnd;
     SwFormatEndAtTextEnd        m_EndNtAtEnd;
     SwFormatNoBalancedColumns  m_Balance;
@@ -160,7 +160,7 @@ public:
 
     SwSectionData &     GetSectionData()        { return m_SectionData; }
     SwFormatCol&               GetCol()            { return m_Col; }
-    std::shared_ptr<SvxBrushItem>&           GetBackground()     { return m_Brush; }
+    std::unique_ptr<SvxBrushItem>&   GetBackground()     { return m_Brush; }
     SwFormatFootnoteAtTextEnd&       GetFootnoteNtAtEnd()     { return m_FootnoteNtAtEnd; }
     SwFormatEndAtTextEnd&       GetEndNtAtEnd()     { return m_EndNtAtEnd; }
     SwFormatNoBalancedColumns& GetBalance()        { return m_Balance; }
@@ -187,7 +187,7 @@ public:
 
 SectRepr::SectRepr( size_t nPos, SwSection& rSect )
     : m_SectionData( rSect )
-    , m_Brush(std::make_shared<SvxBrushItem>(RES_BACKGROUND))
+    , m_Brush(std::make_unique<SvxBrushItem>(RES_BACKGROUND))
     , m_FrameDirItem(std::make_shared<SvxFrameDirectionItem>(SvxFrameDirection::Environment, RES_FRAMEDIR))
     , m_LRSpaceItem(std::make_shared<SvxLRSpaceItem>(RES_LR_SPACE))
     , m_nArrPos(nPos)
@@ -775,8 +775,8 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl, weld::Button&, void)
                 if( pFormat->GetCol() != pRepr->GetCol() )
                     pSet->Put( pRepr->GetCol() );
 
-                std::shared_ptr<SvxBrushItem> aBrush(pFormat->makeBackgroundBrushItem(false));
-                if( aBrush != pRepr->GetBackground() || (aBrush && pRepr->GetBackground() && *aBrush != *pRepr->GetBackground()))
+                std::unique_ptr<SvxBrushItem> aBrush(pFormat->makeBackgroundBrushItem(false));
+                if( aBrush && pRepr->GetBackground() && *aBrush != *pRepr->GetBackground() )
                     pSet->Put( *pRepr->GetBackground() );
 
                 if( pFormat->GetFootnoteAtTextEnd(false) != pRepr->GetFootnoteNtAtEnd() )

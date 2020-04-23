@@ -2033,7 +2033,7 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat,
     // and neither should the commonly seen backgrounds anchored in headers.
     if (bIsInHeader || bIsThrough)
     {
-        std::shared_ptr<SvxBrushItem> aBrush(rFormat.makeBackgroundBrushItem());
+        std::unique_ptr<SvxBrushItem> aBrush(rFormat.makeBackgroundBrushItem());
 
         if(aBrush)
         {

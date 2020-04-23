@@ -545,7 +545,7 @@ void SwCSS1Parser::SetPageDescAttrs( const SwPageDesc *pPageDesc,
         ChgPageDesc( pPageDesc, aNewPageDesc );
 }
 
-std::shared_ptr<SvxBrushItem> SwCSS1Parser::makePageDescBackground() const
+std::unique_ptr<SvxBrushItem> SwCSS1Parser::makePageDescBackground() const
 {
     return m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_HTML, false )
         ->GetMaster().makeBackgroundBrushItem();

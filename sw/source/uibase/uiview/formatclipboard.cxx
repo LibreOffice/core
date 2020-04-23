@@ -97,7 +97,7 @@ std::unique_ptr<SfxItemSet> lcl_CreateEmptyItemSet( SelectionType nSelectionType
 
 void lcl_getTableAttributes( SfxItemSet& rSet, SwWrtShell &rSh )
 {
-    std::shared_ptr<SvxBrushItem> aBrush(std::make_shared<SvxBrushItem>(RES_BACKGROUND));
+    std::unique_ptr<SvxBrushItem> aBrush(std::make_unique<SvxBrushItem>(RES_BACKGROUND));
     rSh.GetBoxBackground(aBrush);
     rSet.Put( *aBrush );
     if(rSh.GetRowBackground(aBrush))
@@ -115,7 +115,7 @@ void lcl_getTableAttributes( SfxItemSet& rSet, SwWrtShell &rSh )
     rSet.Put(aBoxInfo);
     rSh.GetTabBorders( rSet );
 
-    std::shared_ptr<SvxFrameDirectionItem> aBoxDirection(std::make_shared<SvxFrameDirectionItem>(SvxFrameDirection::Environment, RES_FRAMEDIR));
+    std::unique_ptr<SvxFrameDirectionItem> aBoxDirection(std::make_unique<SvxFrameDirectionItem>(SvxFrameDirection::Environment, RES_FRAMEDIR));
     if(rSh.GetBoxDirection( aBoxDirection ))
     {
         aBoxDirection->SetWhich(FN_TABLE_BOX_TEXTORIENTATION);

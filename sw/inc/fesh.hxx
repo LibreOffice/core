@@ -675,16 +675,16 @@ public:
     void SetTabLineStyle(const Color* pColor, bool bSetLine = false, const editeng::SvxBorderLine* pBorderLine = nullptr);
 
     void SetTabBackground( const SvxBrushItem &rNew );
-    void GetTabBackground( std::shared_ptr<SvxBrushItem>& rToFill ) const;
+    void GetTabBackground( std::unique_ptr<SvxBrushItem>& rToFill ) const;
 
     void SetBoxBackground( const SvxBrushItem &rNew );
-    bool GetBoxBackground( std::shared_ptr<SvxBrushItem>& rToFill ) const; ///< FALSE ambiguous.
+    bool GetBoxBackground( std::unique_ptr<SvxBrushItem>& rToFill ) const; ///< FALSE ambiguous.
 
     void SetBoxDirection( const SvxFrameDirectionItem& rNew );
-    bool GetBoxDirection( std::shared_ptr<SvxFrameDirectionItem>& rToFill ) const; ///< FALSE ambiguous.
+    bool GetBoxDirection( std::unique_ptr<SvxFrameDirectionItem>& rToFill ) const; ///< FALSE ambiguous.
 
     void SetRowBackground( const SvxBrushItem &rNew );
-    bool GetRowBackground( std::shared_ptr<SvxBrushItem>& rToFill ) const; ///< FALSE ambiguous.
+    bool GetRowBackground( std::unique_ptr<SvxBrushItem>& rToFill ) const; ///< FALSE ambiguous.
 
     SwTab WhichMouseTabCol( const Point &rPt ) const;
     void GetTabCols( SwTabCols &rToFill ) const; ///< Info about columns and margins.

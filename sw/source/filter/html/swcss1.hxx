@@ -151,7 +151,7 @@ public:
     void SetBodyLinkSet() { m_bBodyLinkSet = true; }
     void SetBodyVLinkSet() { m_bBodyVLinkSet = true; }
 
-    std::shared_ptr<SvxBrushItem> makePageDescBackground() const;
+    std::unique_ptr<SvxBrushItem> makePageDescBackground() const;
 
     inline void SetTHTagStyles();
     inline void SetTDTagStyles();

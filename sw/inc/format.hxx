@@ -203,7 +203,7 @@ public:
     inline const SvxFormatKeepItem         &GetKeep( bool = true ) const;
 
     // Create SvxBrushItem for Background fill (partially for backwards compatibility)
-    std::shared_ptr<SvxBrushItem> makeBackgroundBrushItem( bool = true ) const;
+    std::unique_ptr<SvxBrushItem> makeBackgroundBrushItem( bool = true ) const;
 
     inline const SvxShadowItem            &GetShadow( bool = true ) const;
     inline const SwFormatPageDesc            &GetPageDesc( bool = true ) const;

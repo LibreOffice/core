@@ -779,7 +779,7 @@ void SwFormat::SetGrabBagItem(const uno::Any& rVal)
     m_pGrabBagItem->PutValue(rVal, 0);
 }
 
-std::shared_ptr<SvxBrushItem> SwFormat::makeBackgroundBrushItem(bool bInP) const
+std::unique_ptr<SvxBrushItem> SwFormat::makeBackgroundBrushItem(bool bInP) const
 {
     if (supportsFullDrawingLayerFillAttributeSet())
     {
@@ -792,7 +792,7 @@ std::shared_ptr<SvxBrushItem> SwFormat::makeBackgroundBrushItem(bool bInP) const
         return getSvxBrushItemFromSourceSet(m_aSet, RES_BACKGROUND, bInP);
     }
 
-    return std::shared_ptr<SvxBrushItem>(m_aSet.GetBackground(bInP).Clone());
+    return std::unique_ptr<SvxBrushItem>(m_aSet.GetBackground(bInP).Clone());
 }
 
 drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwFormat::getSdrAllFillAttributesHelper() const
