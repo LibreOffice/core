@@ -158,11 +158,6 @@ void ToolbarPopupBase::statusChanged( const css::frame::FeatureStateEvent& /*Eve
 {
 }
 
-bool ToolbarPopup::IsInPopupMode() const
-{
-    return GetDockingManager()->IsInPopupMode(this);
-}
-
 void ToolbarPopup::EndPopupMode()
 {
     GetDockingManager()->EndPopupMode(this);

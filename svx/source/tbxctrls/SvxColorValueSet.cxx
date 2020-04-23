@@ -162,34 +162,6 @@ Size ColorValueSet::layoutAllVisible(sal_uInt32 nEntryCount)
     return CalcWindowSizePixel(aItemSize);
 }
 
-Size SvxColorValueSet::layoutAllVisible(sal_uInt32 nEntryCount)
-{
-    if(!nEntryCount)
-    {
-        nEntryCount++;
-    }
-
-    const sal_uInt32 nRowCount(ceil(double(nEntryCount)/getColumnCount()));
-    const Size aItemSize(getEntryEdgeLength() - 2, getEntryEdgeLength() - 2);
-    const WinBits aWinBits(GetStyle() & ~WB_VSCROLL);
-
-    if(nRowCount > getMaxRowCount())
-    {
-        SetStyle(aWinBits|WB_VSCROLL);
-    }
-    else
-    {
-        SetStyle(aWinBits);
-    }
-
-    SetColCount(getColumnCount());
-    SetLineCount(std::min(nRowCount, getMaxRowCount()));
-    SetItemWidth(aItemSize.Width());
-    SetItemHeight(aItemSize.Height());
-
-    return CalcWindowSizePixel(aItemSize);
-}
-
 void SvxColorValueSet::Resize()
 {
     layoutToGivenHeight(GetSizePixel().Height(), GetItemCount());

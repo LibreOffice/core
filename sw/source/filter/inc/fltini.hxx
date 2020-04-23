@@ -62,21 +62,6 @@ public:
 
 void GetWW8Writer( const OUString&, const OUString&, WriterRef& );
 
-// Mapping of the LRSpaces in the currently imported document.
-// The foreign filters always provide absolute values for the levels of
-// a NumRule. We are now processing relative values related to the LR-Space-Item
-// though. The consequence of this is that, for all paragraphs, the indentations
-// of the NumRule must be subtracted from the paragraph indentation.
-class SW_DLLPUBLIC SwRelNumRuleSpaces
-{
-    std::unique_ptr<SwNumRuleTable> pNumRuleTable;  // list of all named NumRules
-
-public:
-    SwRelNumRuleSpaces( SwDoc const & rDoc, bool bNewDoc );
-    ~SwRelNumRuleSpaces();
-};
-
-
 // Get size of fly (if 'automatic' in WW) and check if not too small
 SW_DLLPUBLIC void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
     SwTwips nPageWidth);

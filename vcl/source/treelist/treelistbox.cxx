@@ -3397,11 +3397,6 @@ void SvTreeListBox::EndSelection()
     pImpl->EndSelection();
 }
 
-ScrollBar *SvTreeListBox::GetVScroll()
-{
-    return pImpl->m_aVerSBar.get();
-}
-
 SvTreeListEntry* SvTreeListBox::GetFirstEntryInView() const
 {
     return GetEntry( Point() );
@@ -3420,27 +3415,6 @@ SvTreeListEntry* SvTreeListBox::GetNextEntryInView(SvTreeListEntry* pEntry ) con
     return pNext;
 }
 
-SvTreeListEntry* SvTreeListBox::GetLastEntryInView() const
-{
-    SvTreeListEntry* pEntry = GetFirstEntryInView();
-    SvTreeListEntry* pNext = nullptr;
-    while( pEntry )
-    {
-        pNext = NextVisible( pEntry );
-        if( pNext )
-        {
-          Point aPos( GetEntryPosition(pNext) );
-          const Size& rSize = pImpl->GetOutputSize();
-          if( aPos.Y() < 0 || aPos.Y() + GetEntryHeight() >= rSize.Height() )
-              break;
-          else
-              pEntry = pNext;
-        }
-        else
-            break;
-    }
-    return pEntry;
-}
 
 void SvTreeListBox::ShowFocusRect( const SvTreeListEntry* pEntry )
 {

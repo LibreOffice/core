@@ -952,11 +952,6 @@ sal_Int32 ListBox::InsertEntry( const OUString& rStr, const Image& rImage, sal_I
     return nRealPos;
 }
 
-void ListBox::RemoveEntry( const OUString& rStr )
-{
-    RemoveEntry( GetEntryPos( rStr ) );
-}
-
 void ListBox::RemoveEntry( sal_Int32 nPos )
 {
     mpImplLB->RemoveEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
@@ -1093,11 +1088,6 @@ void* ListBox::GetEntryData( sal_Int32 nPos ) const
 void ListBox::SetEntryFlags( sal_Int32 nPos, ListBoxEntryFlags nFlags )
 {
     mpImplLB->SetEntryFlags( nPos + mpImplLB->GetEntryList()->GetMRUCount(), nFlags );
-}
-
-ListBoxEntryFlags ListBox::GetEntryFlags( sal_Int32 nPos ) const
-{
-    return mpImplLB->GetEntryList()->GetEntryFlags( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
 }
 
 void ListBox::SetTopEntry( sal_Int32 nPos )
@@ -1336,21 +1326,6 @@ IMPL_LINK( ListBox, ImplUserDrawHdl, UserDrawEvent*, pEvent, void )
 
 void ListBox::UserDraw( const UserDrawEvent& )
 {
-}
-
-void ListBox::DrawEntry(const UserDrawEvent& rEvt)
-{
-    if (rEvt.GetWindow() == mpImplLB->GetMainWindow())
-        mpImplLB->GetMainWindow()->DrawEntry(*rEvt.GetRenderContext(), rEvt.GetItemId(), true/*bDrawImage*/, true/*bDrawText*/, false/*bDrawTextAtImagePos*/ );
-    else if (rEvt.GetWindow() == mpImplWin)
-        mpImplWin->DrawEntry(*rEvt.GetRenderContext(), false/*layout*/);
-}
-
-void ListBox::EnableUserDraw( bool bUserDraw )
-{
-    mpImplLB->GetMainWindow()->EnableUserDraw( bUserDraw );
-    if ( mpImplWin )
-        mpImplWin->EnableUserDraw( bUserDraw );
 }
 
 void ListBox::SetReadOnly( bool bReadOnly )

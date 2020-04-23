@@ -1786,13 +1786,6 @@ void MetricBox::ReformatAll()
     SetUpdateMode( true );
 }
 
-void MetricBox::InsertValue( sal_Int64 nValue, FieldUnit eInUnit, sal_Int32 nPos )
-{
-    // convert to previously configured units
-    nValue = vcl::ConvertValue(nValue, 0, GetDecimalDigits(), eInUnit, meUnit);
-    ComboBox::InsertEntry( CreateFieldText( nValue ), nPos );
-}
-
 static bool ImplCurrencyProcessKeyInput( const KeyEvent& rKEvt,
                                          bool bUseThousandSep, const LocaleDataWrapper& rWrapper )
 {

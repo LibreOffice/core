@@ -708,11 +708,9 @@ public:
                         SvTreeListEntry* pEntry2, sal_uLong nPos ) override;
 
     void            EndSelection();
-    ScrollBar*      GetVScroll();
 
     SvTreeListEntry*    GetFirstEntryInView() const;
     SvTreeListEntry*    GetNextEntryInView(SvTreeListEntry*) const;
-    SvTreeListEntry*    GetLastEntryInView() const;
     void            ScrollToAbsPos( long nPos );
 
     void            ShowFocusRect( const SvTreeListEntry* pEntry );

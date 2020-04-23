@@ -336,7 +336,6 @@ private:
     OUString        maFontMRUEntriesFile;
     Idle            maUpdateIdle;
 
-    SVT_DLLPRIVATE void         ImplCalcUserItemSize();
     SVT_DLLPRIVATE void         ImplDestroyFontList();
 
     DECL_LINK(CustomRenderHdl, weld::ComboBox::render_args, void);

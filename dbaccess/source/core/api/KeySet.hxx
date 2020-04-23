@@ -114,7 +114,6 @@ namespace dbaccess
         */
         void copyRowValue(const ORowSetRow& _rInsertRow, ORowSetRow const & _rKeyRow, sal_Int32 i_nBookmark);
 
-        css::uno::Reference< css::container::XNameAccess > getKeyColumns() const;
         // returns true if it did any work
         bool fillAllRows();
         bool fetchRow();

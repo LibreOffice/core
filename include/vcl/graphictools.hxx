@@ -321,8 +321,7 @@ public:
 
      */
     void            getTransform        ( Transform& ) const;
-    /// deprecated
-    bool            IsTiling            () const { return mbTiling;}
+
     /** Query state of texture tiling
 
         @return true, if texture is tiled, false, if output only once.

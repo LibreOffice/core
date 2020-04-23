@@ -64,7 +64,6 @@
 #include <desktop/crashreport.hxx>
 #include <salinst.hxx>
 #include <strings.hrc>
-#include <aboutdialog.hxx>
 #include <treeglue.hxx>
 #include <tools/diagnose_ex.h>
 #include <wizdlg.hxx>

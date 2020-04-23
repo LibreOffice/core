@@ -69,7 +69,6 @@
 #include <vcl/vclmedit.hxx>
 #include <vcl/viewdataentry.hxx>
 #include <vcl/virdev.hxx>
-#include <aboutdialog.hxx>
 #include <bitmaps.hlst>
 #include <wizdlg.hxx>
 #include <salvtables.hxx>
@@ -5830,11 +5829,6 @@ public:
         auto nPos = pEvent->GetItemId();
         signal_custom_render(*pRenderContext, pEvent->GetRect(), pEvent->IsSelected(), get_id(nPos));
         m_xComboBox->DrawEntry(*pEvent, false, false);  // draw separator
-    }
-
-    Size call_signal_custom_get_size(VirtualDevice& rOutput, const OUString& rId)
-    {
-        return signal_custom_get_size(rOutput, rId);
     }
 
     VclPtr<VirtualDevice> create_render_virtual_device() const override

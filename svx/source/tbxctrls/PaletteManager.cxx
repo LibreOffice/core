@@ -125,39 +125,6 @@ void PaletteManager::LoadPalettes()
     }
 }
 
-void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
-{
-    if( mnCurrentPalette == 0)
-    {
-        rColorSet.Clear();
-        css::uno::Sequence< sal_Int32 > CustomColorList( officecfg::Office::Common::UserColors::CustomColor::get() );
-        css::uno::Sequence< OUString > CustomColorNameList( officecfg::Office::Common::UserColors::CustomColorName::get() );
-        int nIx = 1;
-        for (int i = 0; i < CustomColorList.getLength(); ++i)
-        {
-            Color aColor(CustomColorList[i]);
-            rColorSet.InsertItem(nIx, aColor, CustomColorNameList[i]);
-            ++nIx;
-        }
-    }
-    else if( mnCurrentPalette == mnNumOfPalettes - 1 )
-    {
-        rColorSet.Clear();
-        // Add doc colors to palette
-        SfxObjectShell* pDocSh = SfxObjectShell::Current();
-        if (pDocSh)
-        {
-            std::set<Color> aColors = pDocSh->GetDocColors();
-            mnColorCount = aColors.size();
-            rColorSet.addEntriesForColorSet(aColors, SvxResId( RID_SVXSTR_DOC_COLOR_PREFIX ) + " " );
-        }
-    }
-    else
-    {
-        m_Palettes[mnCurrentPalette - 1]->LoadColorSet( rColorSet );
-        mnColorCount = rColorSet.GetItemCount();
-    }
-}
 
 void PaletteManager::ReloadColorSet(ColorValueSet &rColorSet)
 {
@@ -190,24 +157,6 @@ void PaletteManager::ReloadColorSet(ColorValueSet &rColorSet)
     {
         m_Palettes[mnCurrentPalette - 1]->LoadColorSet( rColorSet );
         mnColorCount = rColorSet.GetItemCount();
-    }
-}
-
-void PaletteManager::ReloadRecentColorSet(SvxColorValueSet& rColorSet)
-{
-    maRecentColors.clear();
-    rColorSet.Clear();
-    css::uno::Sequence< sal_Int32 > Colorlist(officecfg::Office::Common::UserColors::RecentColor::get());
-    css::uno::Sequence< OUString > ColorNamelist(officecfg::Office::Common::UserColors::RecentColorName::get());
-    int nIx = 1;
-    const bool bHasColorNames = Colorlist.getLength() == ColorNamelist.getLength();
-    for (int i = 0; i < Colorlist.getLength(); ++i)
-    {
-        Color aColor(Colorlist[i]);
-        OUString sColorName = bHasColorNames ? ColorNamelist[i] : ("#" + aColor.AsRGBHexString().toAsciiUpperCase());
-        maRecentColors.emplace_back(aColor, sColorName);
-        rColorSet.InsertItem(nIx, aColor, sColorName);
-        ++nIx;
     }
 }
 

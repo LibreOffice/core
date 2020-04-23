@@ -118,9 +118,6 @@ public:
 
     virtual void            ReformatAll() override;
 
-    void                    InsertValue( sal_Int64 nValue, FieldUnit eInUnit = FieldUnit::NONE,
-                                         sal_Int32  nPos = COMBOBOX_APPEND );
-
     // Needed, because GetValue() with nPos hide these functions
     using MetricFormatter::GetValue;
 

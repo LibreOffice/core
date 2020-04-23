@@ -321,10 +321,6 @@ public:
         return !mbNoSelection && (nItemId == mnSelItemId);
     }
     void SetNoSelection();
-    bool IsNoSelection() const
-    {
-        return mbNoSelection;
-    }
 
     Color           GetItemColor( sal_uInt16 nItemId ) const;
     OUString        GetItemText( sal_uInt16 nItemId ) const;

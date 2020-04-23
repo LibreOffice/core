@@ -152,7 +152,6 @@ public:
 
     sal_Int32           InsertEntry( const OUString& rStr, sal_Int32  nPos = LISTBOX_APPEND );
     sal_Int32           InsertEntry( const OUString& rStr, const Image& rImage, sal_Int32  nPos = LISTBOX_APPEND );
-    void                RemoveEntry( const OUString& rStr );
     void                RemoveEntry( sal_Int32  nPos );
 
     void                Clear();
@@ -186,13 +185,6 @@ public:
         for specific entries.
     */
     void                SetEntryFlags( sal_Int32  nPos, ListBoxEntryFlags nFlags );
-
-    /** this methods gets the current combination of flags from the
-        ListBoxEntryFlags::* defines from the given entry.
-        See description of the possible ListBoxEntryFlags::* flags
-        for details.
-    */
-    ListBoxEntryFlags   GetEntryFlags( sal_Int32  nPos ) const;
 
     void                SetTopEntry( sal_Int32  nPos );
     sal_Int32           GetTopEntry() const;
@@ -228,10 +220,6 @@ public:
     bool                IsReadOnly() const;
 
     tools::Rectangle           GetBoundingRectangle( sal_Int32  nItem ) const;
-
-    void                EnableUserDraw( bool bUserDraw );
-
-    void                DrawEntry( const UserDrawEvent& rEvt );
 
     void                SetSelectHdl( const Link<ListBox&,void>& rLink )     { maSelectHdl = rLink; }
     void                SetDoubleClickHdl( const Link<ListBox&,void>& rLink ) { maDoubleClickHdl = rLink; }
