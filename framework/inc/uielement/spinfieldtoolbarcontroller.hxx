@@ -55,6 +55,7 @@ class SpinfieldToolbarController final : public ComplexToolbarController
         void Last();
         void Modify();
         void GetFocus();
+        void LoseFocus();
         bool PreNotify( NotifyEvent const & rNEvt );
 
     private:
