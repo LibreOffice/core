@@ -19,6 +19,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svt,\
 	svtools/uiconfig/ui/graphicexport \
 	svtools/uiconfig/ui/inputbox \
 	svtools/uiconfig/ui/javadisableddialog \
+	svtools/uiconfig/ui/listcontrol \
 	svtools/uiconfig/ui/linewindow \
 	svtools/uiconfig/ui/placeedit \
 	svtools/uiconfig/ui/printersetupdialog \
