@@ -167,6 +167,7 @@ enum UnoReference_SetThrow
     UNO_SET_THROW
 };
 
+#if defined LIBO_INTERNAL_ONLY
 /// @cond INTERNAL
 namespace detail {
 
@@ -179,7 +180,8 @@ namespace detail {
 // selm=df893da6.0301280859.522081f7%40posting.google.com> "SuperSubclass
 // (is_base_and_derived) complete implementation!" by Rani Sharoni and cites
 // Aleksey Gurtovoy for the workaround for MSVC), to avoid including Boost
-// headers in URE headers (could ultimately be based on C++11 std::is_base_of):
+// headers in URE headers (basing on C++11 std::is_base_of does not work when the types are
+// incomplete):
 
 template< typename T1, typename T2 > struct UpCast {
 private:
@@ -191,21 +193,12 @@ private:
 
     struct S { char c[2]; };
 
-#if defined _MSC_VER && _MSC_VER < 1800
-    static char f(T2 *, long);
-    static S f(T1 * const &, int);
-#else
     template< typename U > static char f(T2 *, U);
     static S f(T1 *, int);
-#endif
 
     struct H {
         H(); // avoid C2514 "class has no constructors" from MSVC
-#if defined _MSC_VER && _MSC_VER < 1800
-        operator T1 * const & () const;
-#else
         operator T1 * () const;
-#endif
         operator T2 * ();
     };
 
@@ -217,6 +210,7 @@ template< typename T2 > struct UpCast< XInterface, T2 > {};
 
 }
 /// @endcond
+#endif
 
 /** Template reference class for interface type derived from BaseReference.
     A special constructor given the UNO_QUERY identifier queries interfaces
@@ -308,7 +302,6 @@ public:
         @param rRef another reference
     */
     inline Reference( Reference< interface_type > && rRef ) noexcept;
-#endif
 
     /** Up-casting conversion constructor: Copies interface reference.
 
@@ -322,6 +315,7 @@ public:
     inline Reference(
         const Reference< derived_type > & rRef,
         typename detail::UpCast< interface_type, derived_type >::t = 0 );
+#endif
 
     /** Constructor: Sets given interface pointer.
 

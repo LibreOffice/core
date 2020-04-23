@@ -131,7 +131,6 @@ inline Reference< interface_type >::Reference( Reference< interface_type > && rR
     _pInterface = rRef._pInterface;
     rRef._pInterface = nullptr;
 }
-#endif
 
 template< class interface_type > template< class derived_type >
 inline Reference< interface_type >::Reference(
@@ -143,6 +142,7 @@ inline Reference< interface_type >::Reference(
     if (_pInterface)
         _pInterface->acquire();
 }
+#endif
 
 template< class interface_type >
 inline Reference< interface_type >::Reference( interface_type * pInterface )
