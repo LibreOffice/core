@@ -195,6 +195,25 @@
           </object>
           <packing>
             <property name="left_attach">1</property>
+            <property name="top_attach">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkMenuButton" id="fillattr3">
+            <property name="width_request">150</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="valign">center</property>
+            <property name="hexpand">True</property>
+            <property name="draw_indicator">True</property>
+            <property name="label" translatable="no"></property>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
             <property name="top_attach">5</property>
           </packing>
         </child>

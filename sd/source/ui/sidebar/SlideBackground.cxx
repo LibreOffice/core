@@ -102,7 +102,8 @@ SlideBackground::SlideBackground(
     mxFillStyle(m_xBuilder->weld_combo_box("fillstyle")),
     mxFillLB(new ColorListBox(m_xBuilder->weld_menu_button("fillattr"), GetFrameWeld())),
     mxFillAttr(m_xBuilder->weld_combo_box("fillattr1")),
-    mxFillGrad(new ColorListBox(m_xBuilder->weld_menu_button("fillattr2"), GetFrameWeld())),
+    mxFillGrad1(new ColorListBox(m_xBuilder->weld_menu_button("fillattr2"), GetFrameWeld())),
+    mxFillGrad2(new ColorListBox(m_xBuilder->weld_menu_button("fillattr3"), GetFrameWeld())),
     mxInsertImage(m_xBuilder->weld_button("button2")),
     mxDspMasterBackground(m_xBuilder->weld_check_button("displaymasterbackground")),
     mxDspMasterObjects(m_xBuilder->weld_check_button("displaymasterobjects")),
@@ -240,7 +241,8 @@ void SlideBackground::Initialize()
 
     mxFillStyle->connect_changed(LINK(this, SlideBackground, FillStyleModifyHdl));
     mxFillLB->SetSelectHdl(LINK(this, SlideBackground, FillColorHdl));
-    mxFillGrad->SetSelectHdl(LINK(this, SlideBackground, FillColorHdl));
+    mxFillGrad1->SetSelectHdl(LINK(this, SlideBackground, FillColorHdl));
+    mxFillGrad2->SetSelectHdl(LINK(this, SlideBackground, FillColorHdl));
     mxFillAttr->connect_changed(LINK(this, SlideBackground, FillBackgroundHdl));
 
     ViewShell* pMainViewShell = mrBase.GetMainViewShell().get();
@@ -378,13 +380,15 @@ void SlideBackground::Update()
         {
             mxFillLB->hide();
             mxFillAttr->hide();
-            mxFillGrad->hide();
+            mxFillGrad1->hide();
+            mxFillGrad2->hide();
         }
         break;
         case SOLID:
         {
             mxFillAttr->hide();
-            mxFillGrad->hide();
+            mxFillGrad1->hide();
+            mxFillGrad2->hide();
             mxFillLB->show();
             const Color aColor = GetColorSetOrDefault();
             mxFillLB->SelectEntry(aColor);
@@ -392,15 +396,16 @@ void SlideBackground::Update()
         break;
         case GRADIENT:
         {
-            mxFillLB->show();
+            mxFillLB->hide();
             mxFillAttr->hide();
-            mxFillGrad->show();
+            mxFillGrad1->show();
+            mxFillGrad2->show();
 
             const XGradient xGradient = GetGradientSetOrDefault();
             const Color aStartColor = xGradient.GetStartColor();
-            mxFillLB->SelectEntry(aStartColor);
+            mxFillGrad1->SelectEntry(aStartColor);
             const Color aEndColor = xGradient.GetEndColor();
-            mxFillGrad->SelectEntry(aEndColor);
+            mxFillGrad2->SelectEntry(aEndColor);
         }
         break;
 
@@ -410,7 +415,8 @@ void SlideBackground::Update()
             mxFillAttr->show();
             mxFillAttr->clear();
             SvxFillAttrBox::Fill(*mxFillAttr, pSh->GetItem(SID_HATCH_LIST)->GetHatchList());
-            mxFillGrad->hide();
+            mxFillGrad1->hide();
+            mxFillGrad2->hide();
 
             const OUString aHatchName = GetHatchingSetOrDefault();
             mxFillAttr->set_active_text( aHatchName );
@@ -423,7 +429,8 @@ void SlideBackground::Update()
             mxFillLB->hide();
             mxFillAttr->show();
             mxFillAttr->clear();
-            mxFillGrad->hide();
+            mxFillGrad1->hide();
+            mxFillGrad2->hide();
             OUString aName;
             if(nPos == BITMAP)
             {
@@ -684,7 +691,8 @@ void SlideBackground::dispose()
     mxMasterSlide.reset();
     mxBackgroundLabel.reset();
     mxFillAttr.reset();
-    mxFillGrad.reset();
+    mxFillGrad1.reset();
+    mxFillGrad2.reset();
     mxFillStyle.reset();
     mxFillLB.reset();
     mxInsertImage.reset();
@@ -1097,8 +1105,8 @@ IMPL_LINK_NOARG(SlideBackground, FillColorHdl, ColorListBox&, void)
         case drawing::FillStyle_GRADIENT:
         {
             XGradient aGradient;
-            aGradient.SetStartColor(mxFillLB->GetSelectEntryColor());
-            aGradient.SetEndColor(mxFillGrad->GetSelectEntryColor());
+            aGradient.SetStartColor(mxFillGrad1->GetSelectEntryColor());
+            aGradient.SetEndColor(mxFillGrad2->GetSelectEntryColor());
 
             // the name doesn't really matter, it'll be converted to unique one eventually,
             // but it has to be non-empty
