@@ -505,8 +505,9 @@ void SkiaSalGraphicsImpl::applyXor()
     // in each operation by extending mXorRegion with the area that should be
     // updated.
     assert(mXorMode);
-    if (!mXorRegion.op(SkIRect::MakeXYWH(0, 0, mSurface->width(), mSurface->height()),
-                       SkRegion::kIntersect_Op))
+    if (!mSurface
+        || !mXorRegion.op(SkIRect::MakeXYWH(0, 0, mSurface->width(), mSurface->height()),
+                          SkRegion::kIntersect_Op))
     {
         mXorRegion.setEmpty();
         return;
