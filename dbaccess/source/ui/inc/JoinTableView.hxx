@@ -280,7 +280,7 @@ namespace dbaui
         ///     resizing) is used, as no scrolling can take place while resizing
         virtual void Command(const CommandEvent& rEvt) override;
 
-        virtual OTableWindowData* CreateImpl(const OUString& _rComposedName
+        virtual std::shared_ptr<OTableWindowData> CreateImpl(const OUString& _rComposedName
                                             ,const OUString& _sTableName
                                             ,const OUString& _rWinName);
 

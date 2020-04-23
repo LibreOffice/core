@@ -306,11 +306,11 @@ TTableWindowData::value_type OJoinTableView::createTableWindowData(const OUStrin
     return pData;
 }
 
-OTableWindowData* OJoinTableView::CreateImpl(const OUString& _rComposedName
+std::shared_ptr<OTableWindowData> OJoinTableView::CreateImpl(const OUString& _rComposedName
                                              ,const OUString& _sTableName
                                              ,const OUString& _rWinName)
 {
-    return new OTableWindowData( nullptr,_rComposedName,_sTableName, _rWinName );
+    return std::make_shared<OTableWindowData>( nullptr,_rComposedName,_sTableName, _rWinName );
 }
 
 void OJoinTableView::AddTabWin(const OUString& _rComposedName, const OUString& rWinName, bool /*bNewTable*/)

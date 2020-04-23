@@ -102,7 +102,7 @@ namespace dbaui
 
         bool ExistsAVisitedConn(const OQueryTableWindow* pFrom) const;
 
-        virtual OTableWindowData* CreateImpl(const OUString& _rComposedName
+        virtual std::shared_ptr<OTableWindowData> CreateImpl(const OUString& _rComposedName
                                             ,const OUString& _sTableName
                                             ,const OUString& _rWinName) override;
 
