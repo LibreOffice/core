@@ -1400,7 +1400,7 @@ SvxFontNameBox_Base::SvxFontNameBox_Base(std::unique_ptr<weld::ComboBox> xWidget
                                          const Reference<XFrame>& rFrame,
                                          SvxFontNameToolBoxControl& rCtrl)
     : m_rCtrl(rCtrl)
-    , m_nCharWidth(xWidget->get_approximate_digit_width() * 15)
+    , m_nCharWidth(xWidget->get_approximate_digit_width() * 16)
     , m_xWidget(new FontNameBox(std::move(xWidget)))
     , pFontList(nullptr)
     , nFtCount(0)
