@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d9e1a1c5_8574bf88",
+        "filename": "sw/source/core/text/txtfld.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-04-23T09:33:50Z",
+      "side": 1,
+      "message": "that\u0027s a bit of a heuristic :)",
+      "revId": "b9e8161edf6e3cd3c36e1fc2afb39e5271303b9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
