@@ -325,7 +325,8 @@ const sc::CellStoreType* ScDBQueryDataIterator::GetColumnCellStore(ScDocument& r
     ScTable* pTab = rDoc.FetchTable(nTab);
     if (!pTab)
         return nullptr;
-
+    if (nCol >= pTab->GetAllocatedColumnsCount())
+        return nullptr;
     return &pTab->aCol[nCol].maCells;
 }
 
