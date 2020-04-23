@@ -436,6 +436,12 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     bool bNoEndTag = false;         // don't output an end tag
 
     rHWrt.m_bNoAlign = false;       // no ALIGN=... possible
+
+    if (rHWrt.mbXHTML)
+    {
+        rHWrt.m_bNoAlign = true;
+    }
+
     bool bNoStyle = false;          // no STYLE=... possible
     sal_uInt8 nBulletGrfLvl = 255;  // The bullet graphic we want to output
 

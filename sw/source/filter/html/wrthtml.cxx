@@ -216,6 +216,11 @@ void SwHTMLWriter::SetupFilterOptions(SfxMedium& rMedium)
         }
     }
 
+    if (mbXHTML)
+    {
+        m_bNoAlign = true;
+    }
+
     comphelper::SequenceAsHashMap aStoreMap(rMedium.GetArgs());
     auto it = aStoreMap.find("RTFOLEMimeType");
     if (it == aStoreMap.end())
