@@ -3794,19 +3794,11 @@ com_sun_star_comp_Chart_XMLOasisExporter_get_implementation(uno::XComponentConte
 
 // multiple storage version: one for content / styles / meta
 
-Sequence< OUString > SchXMLExport_Styles_getSupportedServiceNames() throw()
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_comp_Chart_XMLStylesExporter_get_implementation(
+    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
 {
-    return Sequence< OUString > { "com.sun.star.comp.Chart.XMLStylesExporter" };
-}
-
-OUString SchXMLExport_Styles_getImplementationName() throw()
-{
-    return "SchXMLExport.Styles";
-}
-
-Reference< uno::XInterface > SchXMLExport_Styles_createInstance(const Reference< lang::XMultiServiceFactory >& rSMgr)
-{
-    return static_cast<cppu::OWeakObject*>(new SchXMLExport( comphelper::getComponentContext(rSMgr), SchXMLExport_Styles_getImplementationName(), SvXMLExportFlags::STYLES ));
+    return cppu::acquire(new SchXMLExport(pCtx, "SchXMLExport.Styles", SvXMLExportFlags::STYLES));
 }
 
 // Oasis format

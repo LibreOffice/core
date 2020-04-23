@@ -42,7 +42,8 @@
       constructor="com_sun_star_comp_Chart_XMLOasisStylesExporter_get_implementation">
     <service name="com.sun.star.comp.Chart.XMLOasisStylesExporter"/>
   </implementation>
-  <implementation name="SchXMLExport.Styles">
+  <implementation name="SchXMLExport.Styles"
+      constructor="com_sun_star_comp_Chart_XMLStylesExporter_get_implementation">
     <service name="com.sun.star.comp.Chart.XMLStylesExporter"/>
   </implementation>
   <implementation name="SchXMLImport"
