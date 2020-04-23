@@ -125,3 +125,37 @@ blacklist:
     - com/sun/star/sdb/XSingleSelectQueryComposer.hpp
     - com/sun/star/container/XNameAccess.hpp
     - com/sun/star/sdbc/XConnection.hpp
+    dbaccess/source/ui/misc/DExport.cxx:
+    # Actually used
+    - com/sun/star/awt/FontDescriptor.hpp
+    - com/sun/star/uno/XComponentContext.hpp
+    dbaccess/source/ui/misc/UITools.cxx:
+    # Actually used
+    - com/sun/star/container/XHierarchicalNameContainer.hpp
+    dbaccess/source/ui/misc/indexcollection.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    dbaccess/source/ui/querydesign/QTableWindow.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySet.hpp
+    dbaccess/source/ui/querydesign/JoinTableView.cxx:
+    # Actually used
+    - com/sun/star/accessibility/XAccessible.hpp
+    dbaccess/source/ui/querydesign/TableWindow.cxx:
+    # Actually used
+    - com/sun/star/container/XNameAccess.hpp
+    dbaccess/source/ui/querydesign/limitboxcontroller.cxx:
+    # Actually used
+    - com/sun/star/beans/PropertyValue.hpp
+    dbaccess/source/ui/querydesign/SelectionBrowseBox.cxx:
+    # Actually used
+    - com/sun/star/sdbc/XDatabaseMetaData.hpp
+    dbaccess/source/ui/tabledesign/TableFieldControl.cxx:
+    # Actually used
+    - com/sun/star/sdbc/XDatabaseMetaData.hpp
+    dbaccess/source/ui/uno/composerdialogs.cxx:
+    # Actually used
+    - com/sun/star/awt/XWindow.hpp
+    dbaccess/source/ui/uno/unoDirectSql.cxx:
+    # Actually used
+    - com/sun/star/connection/XConnection.hpp

@@ -19,7 +19,6 @@
 
 #include <strings.hrc>
 #include <strings.hxx>
-#include <stringconstants.hxx>
 #include <core_resource.hxx>
 #include <sqlmessage.hxx>
 #include <UITools.hxx>
@@ -47,7 +46,6 @@
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 
-#include <comphelper/types.hxx>
 #include <comphelper/interaction.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbmetadata.hxx>
@@ -55,10 +53,7 @@
 #include <o3tl/safeint.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-
-#include <functional>
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;

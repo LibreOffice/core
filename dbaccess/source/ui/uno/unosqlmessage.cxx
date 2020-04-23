@@ -25,7 +25,6 @@
 #include <strings.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <connectivity/dbexception.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/awt/XWindow.hpp>

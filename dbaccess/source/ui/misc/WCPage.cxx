@@ -19,22 +19,15 @@
 
 #include <WCPage.hxx>
 #include <WCopyTable.hxx>
-#include <WColumnSelect.hxx>
-#include <WExtendPages.hxx>
 
 #include <defaultobjectnamecheck.hxx>
 #include <strings.hrc>
 #include <core_resource.hxx>
-#include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
-#include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 #include <com/sun/star/sdb/application/CopyTableOperation.hpp>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
-#include <UITools.hxx>
-#include <cppuhelper/exc_hlp.hxx>
 
 using namespace ::dbaui;
 using namespace ::dbtools;

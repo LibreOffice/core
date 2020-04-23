@@ -19,7 +19,6 @@
 
 #include "QueryTabConnUndoAction.hxx"
 #include "QTableConnection.hxx"
-#include "QTableWindow.hxx"
 #include <QueryTableView.hxx>
 #include "QueryAddTabConnUndoAction.hxx"
 #include "QueryTabWinShowUndoAct.hxx"

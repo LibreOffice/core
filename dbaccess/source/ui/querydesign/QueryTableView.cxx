@@ -18,7 +18,6 @@
  */
 
 #include <QueryTableView.hxx>
-#include "TableFieldInfo.hxx"
 #include <TableFieldDescription.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
@@ -27,24 +26,19 @@
 #include "QTableConnection.hxx"
 #include "QTableConnectionData.hxx"
 #include <QueryDesignView.hxx>
-#include <querycontroller.hxx>
 #include "QueryAddTabConnUndoAction.hxx"
 #include "QueryTabWinShowUndoAct.hxx"
 #include <browserids.hxx>
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/sdbcx/XKeysSupplier.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <JAccess.hxx>
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <stringconstants.hxx>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/sequence.hxx>
 #include "querydlg.hxx"
-#include <JoinExchange.hxx>
 #include <core_resource.hxx>
 #include <strings.hrc>
 #include <strings.hxx>

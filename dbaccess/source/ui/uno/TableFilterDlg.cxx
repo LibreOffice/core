@@ -22,7 +22,6 @@
 #include "TableFilterDlg.hxx"
 #include <TablesSingleDlg.hxx>
 #include <comphelper/processfactory.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace dbaui;

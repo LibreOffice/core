@@ -19,20 +19,14 @@
 
 #include <TableWindowTitle.hxx>
 #include <TableWindow.hxx>
-#include <QueryTableView.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
-#include <stringconstants.hxx>
 #include <TableWindowListBox.hxx>
 #include <TableConnection.hxx>
-#include <QueryDesignView.hxx>
 #include <JoinController.hxx>
-
-#include <algorithm>
 
 using namespace dbaui;
 using namespace ::com::sun::star::beans;

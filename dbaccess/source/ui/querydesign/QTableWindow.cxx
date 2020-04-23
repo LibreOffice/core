@@ -19,28 +19,21 @@
 
 #include "QTableWindow.hxx"
 #include <QueryTableView.hxx>
-#include <stringconstants.hxx>
+#include <JoinController.hxx>
+#include <JoinDesignView.hxx>
 #include <osl/diagnose.h>
 #include <helpids.h>
-#include <QueryDesignView.hxx>
 #include <browserids.hxx>
-#include <querycontroller.hxx>
-#include <vcl/image.hxx>
 #include <TableWindowListBox.hxx>
 #include <strings.hxx>
-#include <com/sun/star/sdbcx/XKeysSupplier.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/sdbcx/KeyType.hpp>
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include "TableFieldInfo.hxx"
-#include <UITools.hxx>
+#include <comphelper/stl_types.hxx>
 #include <vcl/treelistentry.hxx>
 #include <comphelper/types.hxx>
 
 using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;

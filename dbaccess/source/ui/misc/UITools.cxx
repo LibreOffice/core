@@ -19,11 +19,8 @@
 
 #include <UITools.hxx>
 #include <sfx2/docfilt.hxx>
-#include <callbacks.hxx>
 #include <core_resource.hxx>
-#include <stringconstants.hxx>
 #include <dlgsave.hxx>
-#include <dbtreelistbox.hxx>
 #include <defaultobjectnamecheck.hxx>
 #include <strings.hxx>
 #include <comphelper/extract.hxx>
@@ -32,7 +29,6 @@
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
-#include <com/sun/star/sdbcx/XKeysSupplier.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
@@ -46,28 +42,19 @@
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
-#include <toolkit/helper/vclunohelper.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
-#include <vcl/stdtext.hxx>
+#include <vcl/syswin.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XHierarchicalNameContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/awt/TextAlign.hpp>
-#include <com/sun/star/awt/FontDescriptor.hpp>
-#include <com/sun/star/awt/FontWeight.hpp>
-#include <com/sun/star/awt/FontRelief.hpp>
-#include <com/sun/star/awt/FontWidth.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
 #include <TypeInfo.hxx>
 #include <FieldDescriptions.hxx>
 #include <comphelper/stl_types.hxx>
@@ -83,7 +70,6 @@
 #include <sbagrid.hrc>
 #include <svl/rngitem.hxx>
 #include <svl/intitem.hxx>
-#include <svx/algitem.hxx>
 #include <svx/numinf.hxx>
 #include <svl/zforlist.hxx>
 #include <dlgattr.hxx>
@@ -93,18 +79,11 @@
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <strings.hrc>
 #include <sqlmessage.hxx>
-#include <com/sun/star/util/NumberFormat.hpp>
-#include <com/sun/star/util/URL.hpp>
-#include <vcl/toolbox.hxx>
 #include <dlgsize.hxx>
 #include <svtools/editbrowsebox.hxx>
-#include <unotools/configmgr.hxx>
-#include <svtools/helpopt.hxx>
-#include <ucbhelper/content.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <svl/numuno.hxx>
-#include <unotools/pathoptions.hxx>
 #include <svl/filenotation.hxx>
 #include <connectivity/FValue.hxx>
 

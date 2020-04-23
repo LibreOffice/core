@@ -28,7 +28,6 @@
 #include <strings.hrc>
 #include <strings.hxx>
 #include <sqlmessage.hxx>
-#include <stringconstants.hxx>
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
 
 using namespace dbaui;

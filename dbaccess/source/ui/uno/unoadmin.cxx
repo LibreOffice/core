@@ -17,16 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stringconstants.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
-#include <dbu_reghelper.hxx>
 #include <unoadmin.hxx>
 #include <dbadmin.hxx>
-#include <cppuhelper/typeprovider.hxx>
 
-// --- needed because of the solar mutex
 #include <osl/mutex.hxx>
-#include <vcl/svapp.hxx>
 
 
 namespace dbaui

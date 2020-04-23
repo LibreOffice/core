@@ -26,7 +26,6 @@
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <comphelper/extract.hxx>
 #include <com/sun/star/sdbcx/XDrop.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 
 namespace dbaui
 {

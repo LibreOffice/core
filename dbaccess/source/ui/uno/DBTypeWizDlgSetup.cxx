@@ -19,13 +19,9 @@
 
 #include <dbu_reghelper.hxx>
 #include <uiservices.hxx>
-#include <com/sun/star/document/XEventListener.hpp>
-#include <com/sun/star/container/XSet.hpp>
 #include "DBTypeWizDlgSetup.hxx"
 #include <dbwizsetup.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
-#include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
@@ -43,7 +39,6 @@ namespace dbaui
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
-    using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::sdbc;
 
 ODBTypeWizDialogSetup::ODBTypeWizDialogSetup(const Reference< XComponentContext >& _rxORB)

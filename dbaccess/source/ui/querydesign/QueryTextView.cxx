@@ -19,14 +19,8 @@
 
 #include <QueryTextView.hxx>
 #include <querycontainerwindow.hxx>
-#include <QueryViewSwitch.hxx>
 #include <sqledit.hxx>
 #include <undosqledit.hxx>
-#include <browserids.hxx>
-#include <querycontroller.hxx>
-#include <stringconstants.hxx>
-#include <vcl/split.hxx>
-#include <vcl/svapp.hxx>
 #include <QueryDesignView.hxx>
 
 using namespace dbaui;

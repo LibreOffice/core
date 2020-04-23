@@ -19,7 +19,7 @@
 
 #include <JoinTableView.hxx>
 #include <osl/diagnose.h>
-#include <querycontroller.hxx>
+#include <JoinController.hxx>
 #include <JoinDesignView.hxx>
 #include <TableWindow.hxx>
 #include <TableWindowListBox.hxx>
@@ -28,8 +28,8 @@
 #include <ConnectionLine.hxx>
 #include <ConnectionLineData.hxx>
 #include <browserids.hxx>
-#include <svl/urlbmk.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include "QueryMoveTabWinUndoAct.hxx"
 #include "QuerySizeTabWinUndoAct.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
@@ -38,13 +38,14 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <vcl/builder.hxx>
 #include <TableWindowData.hxx>
 #include <JAccess.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <UITools.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <connectivity/dbtools.hxx>
 #include <tools/diagnose_ex.h>
 #include <algorithm>
 #include <functional>

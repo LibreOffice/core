@@ -19,11 +19,11 @@
 
 #include <TableWindow.hxx>
 #include <TableWindowListBox.hxx>
-#include <QueryTableView.hxx>
-#include <QueryDesignView.hxx>
 #include <TableWindowData.hxx>
 #include <imageprovider.hxx>
-#include <tools/diagnose_ex.h>
+#include <JoinController.hxx>
+#include <JoinTableView.hxx>
+#include <JoinDesignView.hxx>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 #include <vcl/wall.hxx>
@@ -32,21 +32,15 @@
 #include <vcl/event.hxx>
 #include <vcl/ptrstyle.hxx>
 
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
-#include <querycontroller.hxx>
-#include <stringconstants.hxx>
 #include <bitmaps.hlst>
-#include <UITools.hxx>
 #include <TableWindowAccess.hxx>
-#include <browserids.hxx>
 #include <connectivity/dbtools.hxx>
 #include <vcl/treelistentry.hxx>
+#include <vcl/builder.hxx>
 
 using namespace dbaui;
 using namespace ::utl;

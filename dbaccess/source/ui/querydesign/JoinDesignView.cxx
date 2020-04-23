@@ -20,19 +20,7 @@
 #include <JoinDesignView.hxx>
 #include <JoinTableView.hxx>
 #include <JoinController.hxx>
-#include <svl/undo.hxx>
-#include <adtabdlg.hxx>
 #include <vcl/svapp.hxx>
-#include <browserids.hxx>
-#include <connectivity/dbtools.hxx>
-#include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <TableConnection.hxx>
-#include <ConnectionLine.hxx>
-#include <ConnectionLineData.hxx>
-#include <TableConnectionData.hxx>
-#include <stringconstants.hxx>
-#include <UITools.hxx>
 #include <vcl/settings.hxx>
 
 using namespace ::com::sun::star::uno;

@@ -22,38 +22,27 @@
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 #include <unotools/confignode.hxx>
-#include <stringconstants.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/util/URL.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <comphelper/types.hxx>
-#include <ucbhelper/content.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
 #include <svl/filenotation.hxx>
 #include <browserids.hxx>
-#include <sfx2/new.hxx>
-#include <sfx2/app.hxx>
-#include <basic/sbx.hxx>
-#include <basic/sbuno.hxx>
-#include <svtools/ehdl.hxx>
-#include <svx/dataaccessdescriptor.hxx>
 #include <com/sun/star/container/XHierarchicalNameContainer.hpp>
 #include <comphelper/mimeconfighelper.hxx>
+#include <vcl/weld.hxx>
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <connectivity/dbtools.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/io/WrongFormatException.hpp>
-#include <com/sun/star/sdb/RowSetVetoException.hpp>
 
 namespace dbaui
 {

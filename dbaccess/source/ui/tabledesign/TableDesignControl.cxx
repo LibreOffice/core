@@ -20,7 +20,6 @@
 #include <TableDesignControl.hxx>
 #include <TableDesignView.hxx>
 #include <TableController.hxx>
-#include <browserids.hxx>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/builder.hxx>

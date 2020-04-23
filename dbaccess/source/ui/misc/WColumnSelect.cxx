@@ -21,16 +21,9 @@
 #include <strings.hrc>
 #include <osl/diagnose.h>
 #include <WCopyTable.hxx>
-#include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/sdbcx/XAppend.hpp>
 #include <core_resource.hxx>
-#include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdb/application/CopyTableOperation.hpp>
-#include <vcl/svapp.hxx>
-#include <stringconstants.hxx>
-#include <functional>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;

@@ -21,9 +21,7 @@
 #include <dbu_reghelper.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
-#include <stringconstants.hxx>
 #include <core_resource.hxx>
-#include <sqlmessage.hxx>
 #include <uiservices.hxx>
 #include <WCopyTable.hxx>
 

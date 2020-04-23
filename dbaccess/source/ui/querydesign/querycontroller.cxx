@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <adtabdlg.hxx>
 #include <browserids.hxx>
 #include <core_resource.hxx>
 #include <strings.hrc>
@@ -28,14 +27,10 @@
 #include <defaultobjectnamecheck.hxx>
 #include <dlgsave.hxx>
 #include <uiservices.hxx>
-#include "QTableWindow.hxx"
-#include "QTableWindowData.hxx"
 #include <querycontainerwindow.hxx>
 #include <querycontroller.hxx>
 #include <QueryDesignView.hxx>
 #include <QueryTableView.hxx>
-#include <QueryTextView.hxx>
-#include <QueryViewSwitch.hxx>
 #include <sqlmessage.hxx>
 #include <TableConnectionData.hxx>
 #include <TableFieldDescription.hxx>
@@ -43,18 +38,13 @@
 #include <QueryPropertiesDialog.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/io/XActiveDataSink.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
-#include <com/sun/star/sdbc/SQLWarning.hpp>
-#include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbcx/XAppend.hpp>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/sdbcx/XDrop.hpp>
@@ -72,7 +62,6 @@
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <sfx2/sfxsids.hrc>
 #include <svl/undo.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
@@ -81,7 +70,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <osl/mutex.hxx>
-#include <rtl/strbuf.hxx>
 #include <memory>
 #include <vector>
 

@@ -23,12 +23,9 @@
 #include "unoDirectSql.hxx"
 #include <dbu_reghelper.hxx>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/connection/XConnection.hpp>
-#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <directsql.hxx>
-#include <stringconstants.hxx>
 #include <datasourceconnector.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>

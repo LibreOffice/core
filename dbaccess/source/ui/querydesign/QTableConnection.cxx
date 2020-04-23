@@ -20,7 +20,7 @@
 #include "QTableConnection.hxx"
 #include <osl/diagnose.h>
 #include <QueryTableView.hxx>
-#include <ConnectionLine.hxx>
+
 using namespace dbaui;
 
 OQueryTableConnection::OQueryTableConnection(OQueryTableView* pContainer, const TTableConnectionData::value_type& pTabConnData)

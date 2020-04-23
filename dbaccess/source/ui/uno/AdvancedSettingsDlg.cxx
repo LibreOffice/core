@@ -25,7 +25,6 @@
 #include <advancedsettingsdlg.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/proparrhlp.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 
 namespace dbaui
