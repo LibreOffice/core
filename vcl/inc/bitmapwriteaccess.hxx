@@ -32,8 +32,6 @@ public:
     void CopyScanline(long nY, ConstScanline aSrcScanline, ScanlineFormat nSrcScanlineFormat,
                       sal_uInt32 nSrcScanlineSize);
 
-    void CopyBuffer(const BitmapReadAccess& rReadAcc);
-
     void SetPalette(const BitmapPalette& rPalette)
     {
         assert(mpBuffer && "Access is not valid!");

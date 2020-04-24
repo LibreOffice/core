@@ -113,27 +113,6 @@ void ColorValueSet::addEntriesForColorSet(const std::set<Color>& rColorSet, cons
     }
 }
 
-void SvxColorValueSet::addEntriesForColorSet(const std::set<Color>& rColorSet, const OUString& rNamePrefix)
-{
-    sal_uInt32 nStartIndex = 1;
-    if(rNamePrefix.getLength() != 0)
-    {
-        for(const auto& rColor : rColorSet)
-        {
-            InsertItem(nStartIndex, rColor, rNamePrefix + OUString::number(nStartIndex));
-            nStartIndex++;
-        }
-    }
-    else
-    {
-        for(const auto& rColor : rColorSet)
-        {
-            InsertItem(nStartIndex, rColor, "");
-            nStartIndex++;
-        }
-    }
-}
-
 Size ColorValueSet::layoutAllVisible(sal_uInt32 nEntryCount)
 {
     if(!nEntryCount)

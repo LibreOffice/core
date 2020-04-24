@@ -363,12 +363,6 @@ void ImplEntryList::SetEntryFlags( sal_Int32 nPos, ListBoxEntryFlags nFlags )
         pImplEntry->mnFlags = nFlags;
 }
 
-ListBoxEntryFlags ImplEntryList::GetEntryFlags( sal_Int32 nPos ) const
-{
-    ImplEntryType* pImplEntry = GetEntry( nPos );
-    return pImplEntry ? pImplEntry->mnFlags : ListBoxEntryFlags::NONE;
-}
-
 sal_Int32 ImplEntryList::GetSelectedEntryCount() const
 {
     sal_Int32 nSelCount = 0;
@@ -2601,7 +2595,6 @@ ImplWin::ImplWin( vcl::Window* pParent, WinBits nWinStyle ) :
 
     ImplGetWindowImpl()->mbUseNativeFocus = ImplGetSVData()->maNWFData.mbNoFocusRects;
 
-    mbUserDrawEnabled = false;
     mbEdgeBlending = false;
     mnItemPos = LISTBOX_ENTRY_NOTFOUND;
 }
@@ -2750,15 +2743,7 @@ void ImplWin::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
         }
     }
 
-    if ( IsUserDrawEnabled() )
-    {
-        UserDrawEvent aUDEvt(this, &rRenderContext, maFocusRect, mnItemPos);
-        maUserDrawHdl.Call( &aUDEvt );
-    }
-    else
-    {
-        DrawEntry(rRenderContext, bLayout);
-    }
+    DrawEntry(rRenderContext, bLayout);
 }
 
 void ImplWin::ApplySettings(vcl::RenderContext& rRenderContext)
@@ -2837,7 +2822,7 @@ void ImplWin::DrawEntry(vcl::RenderContext& rRenderContext, bool bLayout)
 
         tools::Rectangle aTextRect( Point( nBorder, 0 ), Size( aOutSz.Width()-2*nBorder, aOutSz.Height() ) );
 
-        if ( bImage || IsUserDrawEnabled() )
+        if ( bImage )
         {
             aTextRect.AdjustLeft(maImage.GetSizePixel().Width() + IMG_TXT_DISTANCE );
         }

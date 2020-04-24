@@ -104,8 +104,6 @@ connectivity/source/inc/OTypeInfo.hxx:47
     _Bool connectivity::OTypeInfo::operator!=(const struct connectivity::OTypeInfo &) const
 cui/source/dialogs/SpellAttrib.hxx:72
     _Bool svx::SpellErrorDescription::operator==(const struct svx::SpellErrorDescription &) const
-cui/source/inc/about.hxx:43
-    _Bool AboutDialog::IsStringValidGitHash(const class rtl::OUString &)
 cui/source/inc/cfg.hxx:336
     class rtl::OUString SvxMenuEntriesListBox::get_text(int)
 cui/source/inc/cfg.hxx:337
@@ -134,8 +132,6 @@ cui/source/inc/hangulhanjadlg.hxx:244
     class rtl::OUString svx::SuggestionEdit::get_text() const
 cui/source/inc/SvxNotebookbarConfigPage.hxx:40
     void SvxNotebookbarConfigPage::SetElement()
-dbaccess/source/core/api/KeySet.hxx:117
-    class com::sun::star::uno::Reference<class com::sun::star::container::XNameAccess> dbaccess::OKeySet::getKeyColumns() const
 dbaccess/source/filter/hsqldb/fbalterparser.hxx:20
     void dbahsql::FbAlterStmtParser::ensureProperTableLengths() const
 dbaccess/source/filter/hsqldb/parseschema.hxx:81
@@ -632,7 +628,7 @@ include/sfx2/charwin.hxx:63
     void SvxCharView::connect_focus_in(const class Link<class weld::Widget &, void> &)
 include/sfx2/charwin.hxx:64
     void SvxCharView::connect_focus_out(const class Link<class weld::Widget &, void> &)
-include/sfx2/childwin.hxx:164
+include/sfx2/childwin.hxx:163
     void SfxChildWindow::ClearController()
 include/sfx2/docfilt.hxx:80
     _Bool SfxFilter::GetGpgEncryption() const
@@ -650,20 +646,14 @@ include/svl/lockfilecommon.hxx:58
     void svt::LockFileCommon::SetURL(const class rtl::OUString &)
 include/svtools/asynclink.hxx:44
     void svtools::AsynchronLink::LinkStubHandleCall_Idle(void *,class Timer *)
-include/svtools/ctrlbox.hxx:339
-    void FontNameBox::ImplCalcUserItemSize()
-include/svtools/ctrlbox.hxx:384
+include/svtools/ctrlbox.hxx:383
     class vcl::Font FontNameBox::get_font()
 include/svtools/DocumentToGraphicRenderer.hxx:106
     _Bool DocumentToGraphicRenderer::isImpress() const
-include/svtools/toolbarmenu.hxx:66
-    _Bool svtools::ToolbarPopup::IsInPopupMode() const
-include/svtools/toolbarmenu.hxx:113
+include/svtools/toolbarmenu.hxx:112
     class weld::Container * ToolbarPopupContainer::getContainer()
-include/svtools/toolbarmenu.hxx:130
+include/svtools/toolbarmenu.hxx:129
     class weld::Container * InterimToolbarPopup::getContainer()
-include/svtools/valueset.hxx:324
-    _Bool ValueSet::IsNoSelection() const
 include/svx/autoformathelper.hxx:145
     _Bool AutoFormatBase::operator==(const class AutoFormatBase &) const
 include/svx/ClassificationDialog.hxx:78
@@ -690,10 +680,8 @@ include/svx/pagenumberlistbox.hxx:36
     int SvxPageNumberListBox::get_active() const
 include/svx/pagenumberlistbox.hxx:37
     void SvxPageNumberListBox::set_active(int)
-include/svx/PaletteManager.hxx:57
-    void PaletteManager::ReloadColorSet(class SvxColorValueSet &)
-include/svx/PaletteManager.hxx:59
-    void PaletteManager::ReloadRecentColorSet(class SvxColorValueSet &)
+include/svx/Palette.hxx:38
+    void Palette::LoadColorSet(class SvxColorValueSet &)
 include/svx/relfld.hxx:61
     void SvxRelativeField::set_size_request(int,int)
 include/svx/relfld.hxx:63
@@ -702,8 +690,8 @@ include/svx/svdlayer.hxx:74
     _Bool SdrLayer::operator==(const class SdrLayer &) const
 include/svx/svdpntv.hxx:455
     _Bool SdrPaintView::IsSwapAsynchron() const
-include/svx/SvxColorValueSet.hxx:41
-    class Size SvxColorValueSet::layoutAllVisible(unsigned int)
+include/svx/SvxColorValueSet.hxx:40
+    void SvxColorValueSet::addEntriesForColorSet(const class std::__debug::set<class Color, struct std::less<class Color>, class std::allocator<class Color> > &,const class rtl::OUString &)
 include/svx/txencbox.hxx:92
     void SvxTextEncodingBox::grab_focus()
 include/svx/txencbox.hxx:146
@@ -802,8 +790,6 @@ include/vcl/animate/AnimationBitmap.hxx:69
     _Bool AnimationBitmap::operator!=(const struct AnimationBitmap &) const
 include/vcl/BitmapColor.hxx:39
     void BitmapColor::SetAlpha(unsigned char)
-include/vcl/bitmapex.hxx:101
-    void BitmapEx::GetSplitData(class std::__debug::vector<unsigned char, class std::allocator<unsigned char> > &,class std::__debug::vector<unsigned char, class std::allocator<unsigned char> > &) const
 include/vcl/builderpage.hxx:36
     void BuilderPage::SetHelpId(const class rtl::OString &)
 include/vcl/ColorMask.hxx:113
@@ -812,8 +798,6 @@ include/vcl/ColorMask.hxx:114
     void ColorMask::SetColorFor16BitMSB(const class BitmapColor &,unsigned char *) const
 include/vcl/ColorMask.hxx:116
     void ColorMask::SetColorFor16BitLSB(const class BitmapColor &,unsigned char *) const
-include/vcl/combobox.hxx:88
-    void ComboBox::RemoveEntry(const class rtl::OUString &)
 include/vcl/commandevent.hxx:249
      CommandMediaData::CommandMediaData(enum MediaCommand)
 include/vcl/commandevent.hxx:256
@@ -844,8 +828,6 @@ include/vcl/gdimtf.hxx:202
     void GDIMetaFile::dumpAsXml(const char *) const
 include/vcl/gradient.hxx:82
     _Bool Gradient::operator!=(const class Gradient &) const
-include/vcl/graphictools.hxx:325
-    _Bool SvtGraphicFill::IsTiling() const
 include/vcl/hatch.hxx:55
     _Bool Hatch::operator!=(const class Hatch &) const
 include/vcl/inputctx.hxx:62
@@ -854,14 +836,6 @@ include/vcl/ITiledRenderable.hxx:187
     enum PointerStyle vcl::ITiledRenderable::getPointer()
 include/vcl/lok.hxx:24
     void vcl::lok::unregisterPollCallbacks()
-include/vcl/lstbox.hxx:155
-    void ListBox::RemoveEntry(const class rtl::OUString &)
-include/vcl/lstbox.hxx:195
-    enum ListBoxEntryFlags ListBox::GetEntryFlags(int) const
-include/vcl/lstbox.hxx:232
-    void ListBox::EnableUserDraw(_Bool)
-include/vcl/lstbox.hxx:234
-    void ListBox::DrawEntry(const class UserDrawEvent &)
 include/vcl/menu.hxx:459
     unsigned short MenuBar::AddMenuBarButton(const class Image &,const class Link<struct MenuBar::MenuBarButtonCallbackArg &, _Bool> &,const class rtl::OUString &)
 include/vcl/menu.hxx:463
@@ -872,8 +846,6 @@ include/vcl/menu.hxx:468
     void MenuBar::RemoveMenuBarButton(unsigned short)
 include/vcl/menu.hxx:520
     void PopupMenu::SetSelectedEntry(unsigned short)
-include/vcl/menubtn.hxx:83
-    unsigned short MenuButton::GetCurItemId() const
 include/vcl/NotebookBarAddonsMerger.hxx:64
      NotebookBarAddonsMerger::NotebookBarAddonsMerger()
 include/vcl/opengl/OpenGLHelper.hxx:67
@@ -922,16 +894,10 @@ include/vcl/TaskStopwatch.hxx:118
     void TaskStopwatch::setTimeSlice(unsigned int)
 include/vcl/textrectinfo.hxx:45
     _Bool TextRectInfo::operator!=(const class TextRectInfo &) const
-include/vcl/toolkit/field.hxx:121
-    void MetricBox::InsertValue(long,enum FieldUnit,int)
 include/vcl/treelist.hxx:171
     const class SvTreeListEntry * SvTreeList::GetParent(const class SvTreeListEntry *) const
-include/vcl/treelistbox.hxx:370
+include/vcl/treelistbox.hxx:368
     void SvTreeListBox::RemoveSelection()
-include/vcl/treelistbox.hxx:711
-    class ScrollBar * SvTreeListBox::GetVScroll()
-include/vcl/treelistbox.hxx:715
-    class SvTreeListEntry * SvTreeListBox::GetLastEntryInView() const
 include/vcl/txtattr.hxx:56
     _Bool TextAttrib::operator!=(const class TextAttrib &) const
 include/vcl/uitest/uiobject.hxx:279
@@ -942,8 +908,6 @@ include/vcl/uitest/uiobject.hxx:350
      SpinUIObject::SpinUIObject(const class VclPtr<class SpinButton> &)
 include/vcl/uitest/uiobject.hxx:358
     class std::unique_ptr<class UIObject, struct std::default_delete<class UIObject> > SpinUIObject::create(class vcl::Window *)
-include/vcl/viewdataentry.hxx:75
-    void SvViewDataEntry::SetSelectable(_Bool)
 include/vcl/weld.hxx:135
     _Bool weld::Widget::get_hexpand() const
 include/vcl/weld.hxx:137
@@ -1078,10 +1042,10 @@ libreofficekit/qa/gtktiledviewer/gtv-application-window.cxx:72
     void ::operator()(struct _GtkBuilder *) const
 libreofficekit/qa/gtktiledviewer/gtv-comments-sidebar.cxx:31
     void * gtv_comments_sidebar_get_instance_private(struct GtvCommentsSidebar *)
+libreofficekit/qa/gtktiledviewer/gtv-comments-sidebar.cxx:49
+    void ::operator()(struct _GList *) const
 libreofficekit/qa/gtktiledviewer/gtv-helpers.cxx:80
     void ::operator()(struct _GtkTargetList *) const
-libreofficekit/qa/gtktiledviewer/gtv-signal-handlers.cxx:183
-    void ::operator()(struct _GList *) const
 libreofficekit/qa/gtktiledviewer/gtv-signal-handlers.hxx:35
     void openLokDialog(struct _GtkWidget *,void *)
 lotuswordpro/source/filter/clone.hxx:28
@@ -1497,9 +1461,9 @@ sw/inc/dbgoutsw.hxx:107
 sw/inc/docary.hxx:94
     void SwVectorModifyBase::insert(class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwTextFormatColl **, class std::__cxx1998::vector<class SwTextFormatColl *, class std::allocator<class SwTextFormatColl *> > >, class std::__debug::vector<class SwTextFormatColl *, class std::allocator<class SwTextFormatColl *> >, struct std::random_access_iterator_tag>,type-parameter-?-?,type-parameter-?-?)
 sw/inc/docary.hxx:94
-    void SwVectorModifyBase::insert(class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwSectionFormat **, class std::__cxx1998::vector<class SwSectionFormat *, class std::allocator<class SwSectionFormat *> > >, class std::__debug::vector<class SwSectionFormat *, class std::allocator<class SwSectionFormat *> >, struct std::random_access_iterator_tag>,type-parameter-?-?,type-parameter-?-?)
-sw/inc/docary.hxx:94
     void SwVectorModifyBase::insert(class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwGrfFormatColl **, class std::__cxx1998::vector<class SwGrfFormatColl *, class std::allocator<class SwGrfFormatColl *> > >, class std::__debug::vector<class SwGrfFormatColl *, class std::allocator<class SwGrfFormatColl *> >, struct std::random_access_iterator_tag>,type-parameter-?-?,type-parameter-?-?)
+sw/inc/docary.hxx:94
+    void SwVectorModifyBase::insert(class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwSectionFormat **, class std::__cxx1998::vector<class SwSectionFormat *, class std::allocator<class SwSectionFormat *> > >, class std::__debug::vector<class SwSectionFormat *, class std::allocator<class SwSectionFormat *> >, struct std::random_access_iterator_tag>,type-parameter-?-?,type-parameter-?-?)
 sw/inc/docary.hxx:94
     void SwVectorModifyBase::insert(class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwCharFormat **, class std::__cxx1998::vector<class SwCharFormat *, class std::allocator<class SwCharFormat *> > >, class std::__debug::vector<class SwCharFormat *, class std::allocator<class SwCharFormat *> >, struct std::random_access_iterator_tag>,type-parameter-?-?,type-parameter-?-?)
 sw/inc/docary.hxx:94
@@ -1624,8 +1588,6 @@ sw/source/core/text/txtpaint.hxx:71
      DbgBackColor::DbgBackColor(class OutputDevice *,const _Bool)
 sw/source/core/text/txtpaint.hxx:78
      DbgRect::DbgRect(class OutputDevice *,const class tools::Rectangle &,const _Bool,class Color)
-sw/source/filter/inc/fltini.hxx:75
-     SwRelNumRuleSpaces::SwRelNumRuleSpaces(const class SwDoc &,_Bool)
 sw/source/ui/dbui/createaddresslistdialog.hxx:98
     void SwFindEntryDialog::hide()
 sw/source/uibase/inc/bookmark.hxx:45
@@ -1662,24 +1624,10 @@ ucb/source/ucp/gio/gio_mount.cxx:37
     void * ooo_mount_operation_get_instance_private(struct OOoMountOperation *)
 ucb/source/ucp/webdav-neon/NeonUri.hxx:64
     _Bool webdav_ucp::NeonUri::operator!=(const class webdav_ucp::NeonUri &) const
-vcl/inc/aboutdialog.hxx:43
-     vcl::AboutDialog::AboutDialog(class vcl::Window *,long,enum Dialog::InitFlag)
-vcl/inc/aboutdialog.hxx:48
-    void vcl::AboutDialog::SetLogo(const class Image &)
-vcl/inc/aboutdialog.hxx:49
-    void vcl::AboutDialog::SetBackground(const class Image &)
-vcl/inc/aboutdialog.hxx:50
-    void vcl::AboutDialog::SetVersion(const class rtl::OUString &)
-vcl/inc/aboutdialog.hxx:51
-    void vcl::AboutDialog::SetCopyright(const class rtl::OUString &)
-vcl/inc/aboutdialog.hxx:52
-    void vcl::AboutDialog::SetWebsiteLink(const class rtl::OUString &)
-vcl/inc/aboutdialog.hxx:53
-    void vcl::AboutDialog::SetWebsiteLabel(const class rtl::OUString &)
-vcl/inc/aboutdialog.hxx:55
-    class rtl::OUString vcl::AboutDialog::GetWebsiteLabel() const
 vcl/inc/bitmap/ScanlineTools.hxx:23
     void vcl::bitmap::ScanlineTransformer::skipPixel(unsigned int)
+vcl/inc/bitmapwriteaccess.hxx:35
+    void BitmapWriteAccess::CopyBuffer(const class BitmapReadAccess &)
 vcl/inc/bitmapwriteaccess.hxx:75
     void BitmapWriteAccess::SetFillColor()
 vcl/inc/ControlCacheKey.hxx:35
@@ -1702,6 +1650,10 @@ vcl/inc/fontselect.hxx:48
     _Bool FontSelectPattern::operator!=(const class FontSelectPattern &) const
 vcl/inc/graphic/GraphicID.hxx:39
     _Bool GraphicID::operator==(const class GraphicID &) const
+vcl/inc/listbox.hxx:139
+    enum ListBoxEntryFlags ImplEntryList::GetEntryFlags(int) const
+vcl/inc/listbox.hxx:583
+    void ImplWin::EnableUserDraw(_Bool)
 vcl/inc/opengl/BufferObject.hxx:50
     void vcl::BufferObject::unbind()
 vcl/inc/opengl/gdiimpl.hxx:108
@@ -1806,8 +1758,6 @@ vcl/qa/cppunit/lifecycle.cxx:234
      (anonymous namespace)::LeakTestClass::LeakTestClass(_Bool &,type-parameter-?-? &&...)
 vcl/skia/salbmp.cxx:436
     void ::operator()(void *,void *) const
-vcl/source/app/salvtables.cxx:5835
-    class Size (anonymous namespace)::SalInstanceComboBox::call_signal_custom_get_size(class VirtualDevice &,const class rtl::OUString &)
 vcl/source/app/scheduler.cxx:83
     basic_ostream<type-parameter-?-?, type-parameter-?-?> & (anonymous namespace)::operator<<(basic_ostream<type-parameter-?-?, type-parameter-?-?> &,const class Idle &)
 vcl/source/bitmap/BitmapColorQuantizationFilter.cxx:113
@@ -1832,8 +1782,6 @@ vcl/unx/gtk3/gtk3gloactiongroup.cxx:51
     void * g_lo_action_get_instance_private(struct (anonymous namespace)::GLOAction *)
 vcl/unx/gtk3/gtk3glomenu.cxx:30
     void * g_lo_menu_get_instance_private(struct GLOMenu *)
-writerfilter/source/dmapper/NumberingManager.hxx:85
-    int writerfilter::dmapper::ListLevel::GetStartAt() const
 writerfilter/source/ooxml/OOXMLPropertySet.hxx:176
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const class tools::SvRef<class writerfilter::ooxml::OOXMLProperty> *, class std::__cxx1998::vector<class tools::SvRef<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class tools::SvRef<class writerfilter::ooxml::OOXMLProperty> > > >, class std::__debug::vector<class tools::SvRef<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class tools::SvRef<class writerfilter::ooxml::OOXMLProperty> > >, struct std::random_access_iterator_tag> writerfilter::ooxml::OOXMLPropertySet::begin() const
 writerfilter/source/ooxml/OOXMLPropertySet.hxx:177
