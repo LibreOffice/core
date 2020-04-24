@@ -486,7 +486,7 @@ void IndexBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
         rUDEvt.GetRenderContext()->DrawText(aPos, (nPos !=-1) ? aEntry.copy(nPos + 1) : aEntry);
     }
     else
-        DrawEntry( rUDEvt, false, true, true );
+        DrawEntry( rUDEvt, true, true );
 }
 
 

@@ -1741,7 +1741,7 @@ void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 
     }
     else
     {
-        DrawEntry(rRenderContext, nPos, true, true);
+        DrawEntry(rRenderContext, nPos, true, true, /*bDrawTextAtImagePos*/false);
     }
 }
 
