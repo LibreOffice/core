@@ -2537,7 +2537,12 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
                 }
 
                 // annotation element + content
-                SvXMLElementExport aElem(*this, XML_NAMESPACE_OFFICE_EXT, XML_ANNOTATION, false, true);
+                // ODF 1.3 OFFICE-3022
+                SvXMLElementExport aElem(*this,
+                        (getSaneDefaultVersion() < SvtSaveOptions::ODFSVER_013)
+                            ? XML_NAMESPACE_OFFICE_EXT
+                            : XML_NAMESPACE_OFFICE,
+                        XML_ANNOTATION, false, true);
 
                 // author
                 OUString aAuthor( xAnnotation->getAuthor() );
@@ -2551,8 +2556,11 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
                 OUString aInitials( xAnnotation->getInitials() );
                 if( !aInitials.isEmpty() )
                 {
-                    // TODO: see OFFICE-3776 export meta:creator-initials for ODF 1.3
-                    SvXMLElementExport aInitialsElem( *this, XML_NAMESPACE_LO_EXT,
+                    // OFFICE-3776 export meta:creator-initials for ODF 1.3
+                    SvXMLElementExport aInitialsElem( *this,
+                            (SvtSaveOptions::ODFSVER_013 <= getSaneDefaultVersion())
+                                ? XML_NAMESPACE_META
+                                : XML_NAMESPACE_LO_EXT,
                             XML_SENDER_INITIALS, true, false );
                     Characters(aInitials);
                 }
