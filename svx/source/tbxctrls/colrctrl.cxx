@@ -28,6 +28,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/image.hxx>
+#include <vcl/transfer.hxx>
 
 #include <colrctrl.hxx>
 
@@ -48,27 +49,20 @@
 
 using namespace com::sun::star;
 
-namespace {
-
-class SvxColorValueSetData : public TransferableHelper
+class SvxColorValueSetData final : public TransferDataContainer
 {
 private:
 
     uno::Sequence<beans::NamedValue> m_Data;
 
-protected:
-
-    virtual void            AddSupportedFormats() override;
-    virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
+    virtual void AddSupportedFormats() override;
+    virtual bool GetData(const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc) override;
 
 public:
-
     explicit SvxColorValueSetData(const uno::Sequence<beans::NamedValue>& rProps)
         : m_Data(rProps)
     {}
 };
-
-}
 
 void SvxColorValueSetData::AddSupportedFormats()
 {
@@ -88,21 +82,28 @@ bool SvxColorValueSetData::GetData( const css::datatransfer::DataFlavor& rFlavor
     return bRet;
 }
 
-SvxColorValueSet_docking::SvxColorValueSet_docking( vcl::Window* _pParent ) :
-    SvxColorValueSet( _pParent ),
-    DragSourceHelper( this ),
-    mbLeftButton(true)
+void SvxColorValueSet_docking::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
+    ColorValueSet::SetDrawingArea(pDrawingArea);
     SetAccessibleName(SvxResId(STR_COLORTABLE));
+    SetStyle(GetStyle() | WB_ITEMBORDER);
 }
 
-void SvxColorValueSet_docking::MouseButtonDown( const MouseEvent& rMEvt )
+SvxColorValueSet_docking::SvxColorValueSet_docking(std::unique_ptr<weld::ScrolledWindow> xWindow)
+    : ColorValueSet(std::move(xWindow))
+    , mbLeftButton(true)
 {
+}
+
+bool SvxColorValueSet_docking::MouseButtonDown( const MouseEvent& rMEvt )
+{
+    bool bRet;
+
     // For Mac still handle differently!
     if( rMEvt.IsLeft() )
     {
         mbLeftButton = true;
-        SvxColorValueSet::MouseButtonDown( rMEvt );
+        bRet = ColorValueSet::MouseButtonDown( rMEvt );
     }
     else
     {
@@ -112,19 +113,21 @@ void SvxColorValueSet_docking::MouseButtonDown( const MouseEvent& rMEvt )
                           rMEvt.GetMode(),
                           MOUSE_LEFT,
                           rMEvt.GetModifier() );
-        SvxColorValueSet::MouseButtonDown( aMEvt );
+        bRet = ColorValueSet::MouseButtonDown( aMEvt );
     }
 
-    aDragPosPixel = GetPointerPosPixel();
+    return bRet;
 }
 
-void SvxColorValueSet_docking::MouseButtonUp( const MouseEvent& rMEvt )
+bool SvxColorValueSet_docking::MouseButtonUp( const MouseEvent& rMEvt )
 {
+    bool bRet;
+
     // For Mac still handle differently!
     if( rMEvt.IsLeft() )
     {
         mbLeftButton = true;
-        SvxColorValueSet::MouseButtonUp( rMEvt );
+        bRet = ColorValueSet::MouseButtonUp( rMEvt );
     }
     else
     {
@@ -134,72 +137,48 @@ void SvxColorValueSet_docking::MouseButtonUp( const MouseEvent& rMEvt )
                           rMEvt.GetMode(),
                           MOUSE_LEFT,
                           rMEvt.GetModifier() );
-        SvxColorValueSet::MouseButtonUp( aMEvt );
+        bRet = ColorValueSet::MouseButtonUp( aMEvt );
     }
     SetNoSelection();
+
+    return bRet;
 }
 
-void SvxColorValueSet_docking::StartDrag( sal_Int8 , const Point&  )
+void SvxColorDockingWindow::SetupDrag(const OUString& rItemText, const Color& rItemColor, drawing::FillStyle eStyle)
 {
-    Application::PostUserEvent(LINK(this, SvxColorValueSet_docking, ExecDragHdl), nullptr, true);
-}
+    uno::Sequence<beans::NamedValue> props(2);
+    XFillColorItem const color(rItemText, rItemColor);
+    props[0].Name = "FillColor";
+    color.QueryValue(props[0].Value, 0);
+    XFillStyleItem const style(eStyle);
+    props[1].Name = "FillStyle";
+    style.QueryValue(props[1].Value, 0);
 
-void SvxColorValueSet_docking::DoDrag()
-{
-    SfxObjectShell* pDocSh = SfxObjectShell::Current();
-    sal_uInt16          nItemId = GetItemId( aDragPosPixel );
-
-    if( pDocSh && nItemId )
-    {
-        uno::Sequence<beans::NamedValue> props(2);
-        XFillColorItem const color(GetItemText(nItemId), GetItemColor(nItemId));
-        props[0].Name = "FillColor";
-        color.QueryValue(props[0].Value, 0);
-        XFillStyleItem const style((1 == nItemId)
-                ? drawing::FillStyle_NONE
-                : drawing::FillStyle_SOLID);
-        props[1].Name = "FillStyle";
-        style.QueryValue(props[1].Value, 0);
-
-        EndSelection();
-        ( new SvxColorValueSetData(props) )->StartDrag( this, DND_ACTION_COPY );
-        ReleaseMouse();
-    }
-}
-
-IMPL_LINK_NOARG(SvxColorValueSet_docking, ExecDragHdl, void*, void)
-{
-    // As a link, so that asynchronously without ImpMouseMoveMsg on the
-    // stack the color bar may also be deleted
-    DoDrag();
+    m_xHelper.set(new SvxColorValueSetData(props));
+    rtl::Reference<TransferDataContainer> xHelper(m_xHelper.get());
+    xColorSet->SetDragDataTransferrable(xHelper, DND_ACTION_COPY);
 }
 
 static constexpr sal_uInt16 gnLeftSlot = SID_ATTR_FILL_COLOR;
 static constexpr sal_uInt16 gnRightSlot = SID_ATTR_LINE_COLOR;
 
-SvxColorDockingWindow::SvxColorDockingWindow
-(
-    SfxBindings* _pBindings,
-    SfxChildWindow* pCW,
-    vcl::Window* _pParent
-) :
-
-    SfxDockingWindow( _pBindings, pCW, _pParent, WB_MOVEABLE|WB_CLOSEABLE|WB_SIZEABLE|WB_DOCKABLE ),
-    pColorList      (),
-    aColorSet       ( VclPtr<SvxColorValueSet_docking>::Create(this) ),
-    nCols           ( 20 ),
-    nLines          ( 1 ),
-    nCount          ( 0 )
+SvxColorDockingWindow::SvxColorDockingWindow(SfxBindings* _pBindings, SfxChildWindow* pCW, vcl::Window* _pParent)
+    : SfxDockingWindow(_pBindings, pCW, _pParent,
+        "DockingColorWindow", "svx/ui/dockingcolorwindow.ui")
+    , pColorList()
+    , xColorSet(new SvxColorValueSet_docking(m_xBuilder->weld_scrolled_window("valuesetwin")))
+    , xColorSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *xColorSet))
+    , nCols(20)
+    , nLines(1)
+    , nCount(0)
 {
     SetText(SvxResId(STR_COLORTABLE));
     SetQuickHelpText(SvxResId(RID_SVXSTR_COLORBAR));
     SetSizePixel(LogicToPixel(Size(150, 22), MapMode(MapUnit::MapAppFont)));
     SetHelpId(HID_CTRL_COLOR);
 
-    aColorSet->SetSelectHdl( LINK( this, SvxColorDockingWindow, SelectHdl ) );
-    aColorSet->SetHelpId(HID_COLOR_CTL_COLORS);
-    aColorSet->SetPosSizePixel(LogicToPixel(Point(2, 2), MapMode(MapUnit::MapAppFont)),
-                              LogicToPixel(Size(146, 18), MapMode(MapUnit::MapAppFont)));
+    xColorSet->SetSelectHdl( LINK( this, SvxColorDockingWindow, SelectHdl ) );
+    xColorSet->SetHelpId(HID_COLOR_CTL_COLORS);
 
     // Get the model from the view shell.  Using SfxObjectShell::Current()
     // is unreliable when called at the wrong times.
@@ -229,14 +208,14 @@ SvxColorDockingWindow::SvxColorDockingWindow
         }
     }
 
-    aItemSize = aColorSet->CalcItemSizePixel(Size(SvxColorValueSet::getEntryEdgeLength(), SvxColorValueSet::getEntryEdgeLength()));
+    aItemSize = xColorSet->CalcItemSizePixel(Size(SvxColorValueSet::getEntryEdgeLength(), SvxColorValueSet::getEntryEdgeLength()));
     aItemSize.setWidth( aItemSize.Width() + SvxColorValueSet::getEntryEdgeLength() );
     aItemSize.setWidth( aItemSize.Width() / 2 );
     aItemSize.setHeight( aItemSize.Height() + SvxColorValueSet::getEntryEdgeLength() );
     aItemSize.setHeight( aItemSize.Height() / 2 );
 
-    SetSize();
-    aColorSet->Show();
+    fprintf(stderr, "size is %ld %ld\n", aItemSize.Width(), aItemSize.Height());
+
     if (_pBindings != nullptr)
         StartListening(*_pBindings, DuplicateHandling::Prevent);
 }
@@ -249,7 +228,8 @@ SvxColorDockingWindow::~SvxColorDockingWindow()
 void SvxColorDockingWindow::dispose()
 {
     EndListening( GetBindings() );
-    aColorSet.disposeAndClear();
+    xColorSetWin.reset();
+    xColorSet.reset();
     SfxDockingWindow::dispose();
 }
 
@@ -271,9 +251,9 @@ void SvxColorDockingWindow::FillValueSet()
         return;
 
     nCount = pColorList->Count();
-    aColorSet->Clear();
+    xColorSet->Clear();
 
-    aColorSet->addEntriesForXColorList(*pColorList, 2);
+    xColorSet->addEntriesForXColorList(*pColorList, 2);
 
     // create the last entry for 'invisible/none'
     const Size aColorSize(SvxColorValueSet::getEntryEdgeLength(), SvxColorValueSet::getEntryEdgeLength());
@@ -289,49 +269,7 @@ void SvxColorDockingWindow::FillValueSet()
 
     BitmapEx aBmp( pVD->GetBitmapEx( Point(), aColorSize ) );
 
-    aColorSet->InsertItem( sal_uInt16(1), Image(aBmp), SvxResId( RID_SVXSTR_INVISIBLE ) );
-
-}
-
-void SvxColorDockingWindow::SetSize()
-{
-    // calculate the size for ValueSet
-    Size aSize = GetOutputSizePixel();
-    aSize.AdjustWidth( -4 );
-    aSize.AdjustHeight( -4 );
-
-    // calculate rows and columns
-    nCols = static_cast<sal_uInt16>( aSize.Width() / aItemSize.Width() );
-    nLines = static_cast<sal_uInt16>( static_cast<float>(aSize.Height()) / static_cast<float>(aItemSize.Height()) /*+ 0.35*/ );
-    if( nLines == 0 )
-        nLines++;
-
-    // set/remove scroll bar
-    WinBits nBits = aColorSet->GetStyle();
-    if ( static_cast<long>(nLines) * nCols >= nCount )
-        nBits &= ~WB_VSCROLL;
-    else
-        nBits |= WB_VSCROLL;
-    aColorSet->SetStyle( nBits );
-
-    // scroll bar?
-    long nScrollWidth = aColorSet->GetScrollWidth();
-    if( nScrollWidth > 0 )
-    {
-        // calculate columns with scroll bar
-        nCols = static_cast<sal_uInt16>( ( aSize.Width() - nScrollWidth ) / aItemSize.Width() );
-    }
-    aColorSet->SetColCount( nCols );
-
-    if( IsFloatingMode() )
-        aColorSet->SetLineCount( nLines );
-    else
-    {
-        aColorSet->SetLineCount(); // otherwise line height is ignored
-        aColorSet->SetItemHeight( aItemSize.Height() );
-    }
-
-    aColorSet->SetPosSizePixel( Point( 2, 2 ), aSize );
+    xColorSet->InsertItem( sal_uInt16(1), Image(aBmp), SvxResId( RID_SVXSTR_INVISIBLE ) );
 }
 
 bool SvxColorDockingWindow::Close()
@@ -343,14 +281,18 @@ bool SvxColorDockingWindow::Close()
     return true;
 }
 
-IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl, ValueSet*, void)
+IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl, SvtValueSet*, void)
 {
     SfxDispatcher* pDispatcher = GetBindings().GetDispatcher();
-    sal_uInt16 nPos = aColorSet->GetSelectedItemId();
-    Color  aColor( aColorSet->GetItemColor( nPos ) );
-    OUString aStr( aColorSet->GetItemText( nPos ) );
+    sal_uInt16 nPos = xColorSet->GetSelectedItemId();
+    Color  aColor( xColorSet->GetItemColor( nPos ) );
+    OUString aStr( xColorSet->GetItemText( nPos ) );
 
-    if (aColorSet->IsLeftButton())
+    SetupDrag(aStr, aColor, ((1 == nPos)
+                            ? drawing::FillStyle_NONE
+                            : drawing::FillStyle_SOLID));
+
+    if (xColorSet->IsLeftButton())
     {
         if ( gnLeftSlot == SID_ATTR_FILL_COLOR )
         {
@@ -443,64 +385,14 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl, ValueSet*, void)
     }
 }
 
-void SvxColorDockingWindow::Resizing( Size& rNewSize )
-{
-    rNewSize.AdjustWidth( -4 );
-    rNewSize.AdjustHeight( -4 );
-
-    // determine columns and rows
-    nCols = static_cast<sal_uInt16>( static_cast<float>(rNewSize.Width()) / static_cast<float>(aItemSize.Width()) + 0.5 );
-    nLines = static_cast<sal_uInt16>( static_cast<float>(rNewSize.Height()) / static_cast<float>(aItemSize.Height()) + 0.5 );
-    if( nLines == 0 )
-        nLines = 1;
-
-    // set/remove scroll bar
-    WinBits nBits = aColorSet->GetStyle();
-    if ( static_cast<long>(nLines) * nCols >= nCount )
-        nBits &= ~WB_VSCROLL;
-    else
-        nBits |= WB_VSCROLL;
-    aColorSet->SetStyle( nBits );
-
-    // scroll bar?
-    long nScrollWidth = aColorSet->GetScrollWidth();
-    if( nScrollWidth > 0 )
-    {
-        // calculate columns with scroll bar
-        nCols = static_cast<sal_uInt16>( ( static_cast<float>(rNewSize.Width()) - static_cast<float>(nScrollWidth) )
-                               / static_cast<float>(aItemSize.Width()) + 0.5 );
-    }
-    if( nCols <= 1 )
-        nCols = 2;
-
-    // calculate max. rows using the given columns
-    long nMaxLines = nCount / nCols;
-    if( nCount %  nCols )
-        nMaxLines++;
-
-    nLines = sal::static_int_cast< sal_uInt16 >(
-        std::min< long >( nLines, nMaxLines ) );
-
-    // set size of the window
-    rNewSize.setWidth( nCols * aItemSize.Width() + nScrollWidth + 4 );
-    rNewSize.setHeight( nLines * aItemSize.Height() + 4 );
-}
-
-void SvxColorDockingWindow::Resize()
-{
-    if ( !IsFloatingMode() || !GetFloatingWindow()->IsRollUp() )
-        SetSize();
-    SfxDockingWindow::Resize();
-}
-
 void SvxColorDockingWindow::GetFocus()
 {
     SfxDockingWindow::GetFocus();
-    if (aColorSet)
+    if (xColorSet)
     {
         // Grab the focus to the color value set so that it can be controlled
         // with the keyboard.
-        aColorSet->GrabFocus();
+        xColorSet->GrabFocus();
     }
 }
 

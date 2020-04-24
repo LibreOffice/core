@@ -21,12 +21,12 @@
 #include <sal/types.h>
 #include <sfx2/dockwin.hxx>
 #include <svl/lstner.hxx>
-#include <vcl/transfer.hxx>
 #include <svx/SvxColorValueSet.hxx>
 #include <svx/xtable.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <vcl/vclptr.hxx>
+#include <com/sun/star/drawing/FillStyle.hpp>
 
 namespace vcl { class Window; }
 
@@ -34,6 +34,7 @@ class SfxBindings;
 class SfxBroadcaster;
 class SfxChildWindow;
 class SfxHint;
+class SvxColorValueSetData;
 
 /*************************************************************************
 |*
@@ -41,24 +42,17 @@ class SfxHint;
 |*
 \************************************************************************/
 
-class SAL_WARN_UNUSED SvxColorValueSet_docking final : public SvxColorValueSet, public DragSourceHelper
+class SAL_WARN_UNUSED SvxColorValueSet_docking final : public ColorValueSet
 {
     bool            mbLeftButton;
-    Point           aDragPosPixel;
-
-    void            DoDrag();
 
     // ValueSet
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
-
-    // DragSourceHelper
-    virtual void    StartDrag( sal_Int8 nAction, const Point& rPtPixel ) override;
-
-                    DECL_LINK(ExecDragHdl, void*, void);
+    virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
+    virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
 public:
-    SvxColorValueSet_docking( vcl::Window* pParent );
+    SvxColorValueSet_docking(std::unique_ptr<weld::ScrolledWindow> pWindow);
 
     bool IsLeftButton() const { return mbLeftButton; }
 };
@@ -75,15 +69,17 @@ friend class SvxColorChildWindow;
 
 private:
     XColorListRef       pColorList;
-    VclPtr<SvxColorValueSet_docking> aColorSet;
+    rtl::Reference<SvxColorValueSetData> m_xHelper;
+    std::unique_ptr<SvxColorValueSet_docking> xColorSet;
+    std::unique_ptr<weld::CustomWeld> xColorSetWin;
     sal_uInt16          nCols;
     sal_uInt16          nLines;
     long                nCount;
     Size                aItemSize;
 
     void                FillValueSet();
-    void                SetSize();
-       DECL_LINK( SelectHdl, ValueSet*, void );
+
+    DECL_LINK(SelectHdl, SvtValueSet*, void);
 
     /** This function is called when the window gets the focus.  It grabs
         the focus to the color value set so that it can be controlled with
@@ -92,8 +88,8 @@ private:
     virtual void GetFocus() override;
 
     virtual bool    Close() override;
-    virtual void    Resize() override;
-    virtual void    Resizing( Size& rSize ) override;
+
+    void SetupDrag(const OUString& rItemText, const Color& rItemColor, css::drawing::FillStyle eStyle);
 
 public:
     SvxColorDockingWindow(SfxBindings* pBindings,
